@@ -1,18 +1,16 @@
-const existingEventsService = require('../../services/existingEventsService')
-
-module.exports = ({ elite2Api, logError }) => async (req, res) => {
+module.exports = ({ elite2Api, logError, existingEventsService }) => async (req, res) => {
   const { activeCaseLoadId: agencyId } = req.session.userDetails
   const { date, locationId } = req.query
 
   try {
     const [locationDetails, events] = await Promise.all([
       elite2Api.getLocation(res.locals, locationId),
-      existingEventsService(elite2Api).getExistingEventsForLocation(res.locals, agencyId, locationId, date),
+      existingEventsService.getExistingEventsForLocation(res.locals, agencyId, locationId, date),
     ])
 
     return res.render('components/scheduledEvents/scheduledEvents.njk', {
       events,
-      name: locationDetails.userDescription,
+      header: `Schedule for ${locationDetails.userDescription}`,
       type: 'location',
     })
   } catch (error) {

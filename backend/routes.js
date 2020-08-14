@@ -62,6 +62,8 @@ const getLocationExistingEventsController = require('./controllers/attendance/ge
 const endDateController = require('./controllers/appointments/endDate')
 const amendCaseNNoteRouter = require('./routes/caseNoteAmendmentRouter')
 
+const existingEventsService = require('./services/existingEventsService')
+
 const currentUser = require('./middleware/currentUser')
 
 const controllerFactory = require('./controllers/controller').factory
@@ -163,8 +165,18 @@ const setup = ({
   router.get('/bulk-appointments/csv-template', controller.bulkAppointmentsCsvTemplate)
   router.get('/api/prisoners-unaccounted-for', controller.getPrisonersUnaccountedFor)
   router.get('/api/get-case-note/:offenderNumber/:caseNoteId', handleErrors(controller.getCaseNote))
-  router.get('/api/get-offender-events', getExistingEventsController({ elite2Api, logError }))
-  router.get('/api/get-location-events', getLocationExistingEventsController({ elite2Api, logError }))
+  router.get(
+    '/api/get-offender-events',
+    getExistingEventsController({ elite2Api, existingEventsService: existingEventsService(elite2Api), logError })
+  )
+  router.get(
+    '/api/get-location-events',
+    getLocationExistingEventsController({
+      elite2Api,
+      logError,
+      existingEventsService: existingEventsService(elite2Api),
+    })
+  )
   router.get('/api/get-recurring-end-date', endDateController)
   router.get(
     '/edit-alert',

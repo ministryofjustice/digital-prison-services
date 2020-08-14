@@ -76,6 +76,8 @@ describe('Add appointment', () => {
           errors: undefined,
           dpsUrl: 'http://localhost:3000/',
           offenderName: 'Smith, Barry',
+          firstName: 'Barry',
+          lastName: 'Smith',
           repeatTypes,
         })
       })
@@ -119,6 +121,9 @@ describe('Add appointment', () => {
         firstName: 'BARRY',
         lastName: 'SMITH',
       })
+
+      elite2Api.getLocation = jest.fn().mockResolvedValue({ userDescription: 'Gym' })
+      existingEventsService.getExistingEventsForLocation = jest.fn().mockResolvedValue([{ eventId: 1 }, { eventId: 2 }])
     })
 
     describe('when there are no errors', () => {
@@ -221,9 +226,9 @@ describe('Add appointment', () => {
           'addAppointment/addAppointment.njk',
           expect.objectContaining({
             errors: [
-              { href: '#appointment-type', text: 'Select an appointment type' },
-              { href: '#location', text: 'Select a location' },
-              { href: '#start-time-hours', text: 'Select a start time' },
+              { href: '#appointment-type', text: 'Select the type of appointment' },
+              { href: '#location', text: 'Select the location' },
+              { href: '#start-time-hours', text: 'Select the appointment start time' },
             ],
             endOfPeriod: 'Friday 26 April 2019',
           })
@@ -263,7 +268,7 @@ describe('Add appointment', () => {
           'addAppointment/addAppointment.njk',
           expect.objectContaining({
             errors: expect.arrayContaining([
-              { text: 'Select a start time that is not in the past', href: '#start-time-hours' },
+              { text: 'Select an appointment start time that is not in the past', href: '#start-time-hours' },
             ]),
           })
         )
@@ -292,7 +297,7 @@ describe('Add appointment', () => {
           'addAppointment/addAppointment.njk',
           expect.objectContaining({
             errors: expect.arrayContaining([
-              { text: 'Select an end time that is not in the past', href: '#end-time-hours' },
+              { text: 'Select an appointment end time that is not in the past', href: '#end-time-hours' },
             ]),
           })
         )
@@ -325,7 +330,7 @@ describe('Add appointment', () => {
         expect(res.render).toHaveBeenCalledWith(
           'addAppointment/addAppointment.njk',
           expect.objectContaining({
-            errors: expect.arrayContaining([{ href: '#end-time-hours', text: 'Select an end time' }]),
+            errors: expect.arrayContaining([{ href: '#end-time-hours', text: 'Select an appointment end time' }]),
           })
         )
       })
@@ -341,6 +346,44 @@ describe('Add appointment', () => {
           'addAppointment/addAppointment.njk',
           expect.objectContaining({
             errors: expect.not.arrayContaining([{ href: '#end-time-hours', text: 'Select an end time' }]),
+          })
+        )
+      })
+
+      it('should return events at location on validation error', async () => {
+        await controller.post(req, res)
+
+        expect(res.render).toHaveBeenCalledWith(
+          'addAppointment/addAppointment.njk',
+          expect.objectContaining({
+            locationName: 'Gym',
+            locationEvents: [{ eventId: 1 }, { eventId: 2 }],
+          })
+        )
+      })
+
+      it('should return prisoner name for John Smith', async () => {
+        elite2Api.getDetails = jest.fn().mockResolvedValue({ firstName: 'John', lastName: 'Smith' })
+
+        await controller.post(req, res)
+
+        expect(res.render).toHaveBeenCalledWith(
+          'addAppointment/addAppointment.njk',
+          expect.objectContaining({
+            prisonerName: ['John Smith', 's'],
+          })
+        )
+      })
+
+      it('should return prisoner name for John Jones', async () => {
+        elite2Api.getDetails = jest.fn().mockResolvedValue({ firstName: 'John', lastName: 'Jones' })
+
+        await controller.post(req, res)
+
+        expect(res.render).toHaveBeenCalledWith(
+          'addAppointment/addAppointment.njk',
+          expect.objectContaining({
+            prisonerName: ['John Jones'],
           })
         )
       })
@@ -397,7 +440,7 @@ describe('Add appointment', () => {
             expect.objectContaining({
               locationName: 'Test location',
               errors: expect.arrayContaining([
-                { text: 'Select a start time that is not in the past', href: '#start-time-hours' },
+                { text: 'Select an appointment start time that is not in the past', href: '#start-time-hours' },
               ]),
               offenderEvents,
               locationEvents,

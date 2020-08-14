@@ -10,12 +10,12 @@ const DayOfTheWeek = dateTime => moment(dateTime, DATE_TIME_FORMAT_SPEC).format(
 const DayMonthYear = dateTime => moment(dateTime, DATE_TIME_FORMAT_SPEC).format(DAY_MONTH_YEAR)
 const Time = dateTime => moment(dateTime, DATE_TIME_FORMAT_SPEC).format(MOMENT_TIME)
 
-const buildDateTime = ({ date, hours, minutes }) => {
+const buildDateTime = ({ date, hours, minutes, dateFormat = DAY_MONTH_YEAR }) => {
   const time =
     date &&
     Number.isSafeInteger(Number.parseInt(hours, 10)) &&
     Number.isSafeInteger(Number.parseInt(minutes, 10)) &&
-    moment(date, DAY_MONTH_YEAR)
+    moment(date, dateFormat)
   return time ? time.hour(Number(hours)).minutes(Number(minutes)) : ''
 }
 

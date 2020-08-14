@@ -1,4 +1,5 @@
 const moment = require('moment')
+
 const offenderBasicDetails = require('../../mockApis/responses/offenderBasicDetails.json')
 const AddAppointmentPage = require('../../pages/appointments/addAppointmentPage')
 const ConfirmSingleAppointmentPage = require('../../pages/appointments/confirmSingleAppointmentPage')
@@ -88,8 +89,9 @@ context('A user can add an appointment', () => {
   })
 
   it('A user can successfully add an appointment', () => {
-    const addAppointmentPage = AddAppointmentPage.verifyOnPage()
+    const addAppointmentPage = AddAppointmentPage.verifyOnPage('John Smith')
     const form = addAppointmentPage.form()
+
     form.date().type(moment().format('DD/MM/yyyy'))
     addAppointmentPage.activeDate().click()
     form.appointmentType().select('ACTI')
@@ -105,24 +107,31 @@ context('A user can add an appointment', () => {
   })
 
   it('Schedules remain after validation error', () => {
-    const addAppointmentPage = AddAppointmentPage.verifyOnPage()
+    const today = moment().format('DD/MM/yyyy')
+    const addAppointmentPage = AddAppointmentPage.verifyOnPage('John Smith')
     const form = addAppointmentPage.form()
-    form.date().type(moment().format('DD/MM/yyyy'))
+
+    form.date().type(today)
     addAppointmentPage.activeDate().click()
+
     form.appointmentType().select('ACTI')
     form.location().select('1')
+
     addAppointmentPage.offenderEvents().contains('Visiting room - Visits - Friends')
     addAppointmentPage.locationEvents().contains('Medical Room1 - Medical - Dentist - Appt details')
+
     form.recurringNo().click()
     form.comments().type('Test comment')
     form.submitButton().click()
-    addAppointmentPage.errorSummary().contains('Select a start time')
+
+    addAppointmentPage.errorSummary().contains('Select the appointment start time')
     addAppointmentPage.offenderEvents().contains('Visiting room - Visits - Friends')
   })
 
   it('A user can successfully add a recurring appointment', () => {
-    const addAppointmentPage = AddAppointmentPage.verifyOnPage()
+    const addAppointmentPage = AddAppointmentPage.verifyOnPage('John Smith')
     const form = addAppointmentPage.form()
+
     form.appointmentType().select('ACTI')
     form.location().select('1')
     form.startTimeHours().select('23')
@@ -152,8 +161,9 @@ context('A user can add an appointment', () => {
   })
 
   it('A user can successfully add a video link booking', () => {
-    const addAppointmentPage = AddAppointmentPage.verifyOnPage()
+    const addAppointmentPage = AddAppointmentPage.verifyOnPage('John Smith')
     const form = addAppointmentPage.form()
+
     form.appointmentType().select('VLB')
     form.location().select('1')
     form.startTimeHours().select('22')
@@ -168,18 +178,21 @@ context('A user can add an appointment', () => {
 
     const prePostAppointmentsPage = PrePostAppointmentsPage.verifyOnPage()
     const prePostForm = prePostAppointmentsPage.form()
+
     prePostForm.preAppointmentLocation().select('1')
     prePostForm.preAppointmentDuration().select('20')
     prePostForm.postAppointmentNo().click()
     prePostForm.court().select('Leeds')
     prePostForm.submitButton().click()
+
     const confirmVideoLinkPrisonPage = ConfirmVideoLinkPrisonPage.verifyOnPage()
     confirmVideoLinkPrisonPage.courtLocation().contains('Leeds')
   })
 
   it('Correct validation errors for video link bookings', () => {
-    const addAppointmentPage = AddAppointmentPage.verifyOnPage()
+    const addAppointmentPage = AddAppointmentPage.verifyOnPage('John Smith')
     const form = addAppointmentPage.form()
+
     form.appointmentType().select('VLB')
     form.location().select('1')
     form.startTimeHours().select('22')
@@ -194,6 +207,7 @@ context('A user can add an appointment', () => {
 
     const prePostAppointmentsPage = PrePostAppointmentsPage.verifyOnPage()
     const prePostForm = prePostAppointmentsPage.form()
+
     prePostForm.submitButton().click()
     prePostAppointmentsPage
       .errorSummary()
@@ -206,8 +220,9 @@ context('A user can add an appointment', () => {
   })
 
   it('Should allow the user to enter custom court entry', () => {
-    const addAppointmentPage = AddAppointmentPage.verifyOnPage()
+    const addAppointmentPage = AddAppointmentPage.verifyOnPage('John Smith')
     const form = addAppointmentPage.form()
+
     form.appointmentType().select('VLB')
     form.location().select('1')
     form.startTimeHours().select('22')
@@ -222,6 +237,7 @@ context('A user can add an appointment', () => {
 
     const prePostAppointmentsPage = PrePostAppointmentsPage.verifyOnPage()
     const prePostForm = prePostAppointmentsPage.form()
+
     prePostForm.preAppointmentLocation().select('1')
     prePostForm.preAppointmentDuration().select('20')
     prePostForm.postAppointmentNo().click()
@@ -230,6 +246,7 @@ context('A user can add an appointment', () => {
 
     const otherCourtPage = OtherCourtPage.verifyOnPage()
     const otherCourtForm = otherCourtPage.form()
+
     otherCourtForm.otherCourt().type('test')
     otherCourtForm.submitButton().click()
 
@@ -238,8 +255,9 @@ context('A user can add an appointment', () => {
   })
 
   it('Should display correct error messages on other court form page', () => {
-    const addAppointmentPage = AddAppointmentPage.verifyOnPage()
+    const addAppointmentPage = AddAppointmentPage.verifyOnPage('John Smith')
     const form = addAppointmentPage.form()
+
     form.appointmentType().select('VLB')
     form.location().select('1')
     form.startTimeHours().select('22')
@@ -254,6 +272,7 @@ context('A user can add an appointment', () => {
 
     const prePostAppointmentsPage = PrePostAppointmentsPage.verifyOnPage()
     const prePostForm = prePostAppointmentsPage.form()
+
     prePostForm.preAppointmentLocation().select('1')
     prePostForm.preAppointmentDuration().select('20')
     prePostForm.postAppointmentNo().click()
@@ -262,6 +281,7 @@ context('A user can add an appointment', () => {
 
     const otherCourtPage = OtherCourtPage.verifyOnPage()
     const otherCourtForm = otherCourtPage.form()
+
     otherCourtForm.submitButton().click()
 
     otherCourtPage
@@ -273,8 +293,9 @@ context('A user can add an appointment', () => {
   })
 
   it('Should retain previously entered information', () => {
-    const addAppointmentPage = AddAppointmentPage.verifyOnPage()
+    const addAppointmentPage = AddAppointmentPage.verifyOnPage('John Smith')
     const form = addAppointmentPage.form()
+
     form.appointmentType().select('VLB')
     form.location().select('1')
     form.startTimeHours().select('22')
@@ -289,6 +310,7 @@ context('A user can add an appointment', () => {
 
     const prePostAppointmentsPage = PrePostAppointmentsPage.verifyOnPage()
     const prePostForm = prePostAppointmentsPage.form()
+
     prePostForm.preAppointmentLocation().select('1')
     prePostForm.preAppointmentDuration().select('20')
     prePostForm.postAppointmentNo().click()
@@ -297,8 +319,10 @@ context('A user can add an appointment', () => {
 
     const otherCourtPage = OtherCourtPage.verifyOnPage()
     const otherCourtForm = otherCourtPage.form()
+
     otherCourtForm.cancelButton().click()
     const returnPrePostAppointmentsPage = PrePostAppointmentsPage.verifyOnPage()
+
     returnPrePostAppointmentsPage
       .form()
       .preAppointmentYes()

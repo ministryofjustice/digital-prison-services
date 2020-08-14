@@ -66,11 +66,7 @@ module.exports = elite2Api => {
         elite2Api.getActivityList(context, { ...searchCriteria, usage: 'APP' }),
       ]).then(events => events.reduce((flattenedEvents, event) => flattenedEvents.concat(event), []))
 
-      const formattedEvents = eventsAtLocationByUsage
-        .sort((left, right) => sortByDateTime(left.startTime, right.startTime))
-        .map(toEvent)
-
-      return formattedEvents
+      return eventsAtLocationByUsage.sort((left, right) => sortByDateTime(left.startTime, right.startTime)).map(toEvent)
     } catch (error) {
       return error
     }
