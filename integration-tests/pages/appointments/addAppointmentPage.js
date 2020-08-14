@@ -1,7 +1,7 @@
 const page = require('../page')
 
-const addAppointmentPage = () =>
-  page('Add new appointment', {
+const addAppointmentPage = name =>
+  page(`Add an appointment for ${name}`, {
     form: () => ({
       appointmentType: () => cy.get('#appointment-type'),
       location: () => cy.get('#location'),

@@ -1,19 +1,29 @@
-{% macro scheduledEvents(events, type, name) %}
-  <div class="{{'scheduled-events-container govuk-list scheduled-events-container--' + type}}">
-    <h2 class="govuk-heading-m">{{name}} - schedule</h2>
-    <ul class="govuk-list" data-qa="{{type + '-events'}}">
-      {% if events.length %}
-        {% for event in events %}
-          <li class="scheduled-event">
-            <span class="scheduled-event__time">{{ event.startTime + ' - ' + event.endTime if event.endTime else event.startTime }}</span>
-            <strong>{{event.eventDescription}}</strong>
-          </li>
-        {% endfor %}
-      {% else %}
-        <li>Nothing scheduled on this date</li>
-      {% endif %}
-    </ul>
-  </div>
+{% from "govuk/components/inset-text/macro.njk" import govukInsetText %}
+
+{% macro scheduledEvents(events, type, header, prisonerName) %}
+    {% set eventsHtml %}
+        {% if prisonerName != null %}
+            <h2 class="govuk-heading-m">{{ prisonerName[0] }}&rsquo;{{ prisonerName[1] }} schedule</h2>
+        {% else %}
+            <h2 class="govuk-heading-m">{{ header }}</h2>
+        {% endif %}
+
+        {% if events.length %}
+            {% for event in events %}
+                <div class="scheduled-event govuk-!-margin-bottom-3" data-qa="{{type + '-events'}}">
+                    <div class="scheduled-event__time">{{ event.startTime + ' to ' + event.endTime if event.endTime else event.startTime }}</div>
+                    <div>{{event.eventDescription}}</div>
+                </div>
+            {% endfor %}
+        {% else %}
+            <p class="govuk-body">Nothing scheduled on this date </p>
+        {% endif %}
+    {% endset %}
+
+  {{ govukInsetText({
+      html: eventsHtml
+  }) }}
 {% endmacro %}
 
-{{ scheduledEvents(events, type, name) }}
+{#  Used when rendering events via controller  #}
+{{ scheduledEvents(events, type, header, prisonerName) }}

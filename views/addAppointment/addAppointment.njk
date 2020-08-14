@@ -10,7 +10,7 @@
 {% from "components/timePicker/timePicker.njk" import timePicker %}
 {% from "components/scheduledEvents/scheduledEvents.njk" import scheduledEvents %}
 
-{% set title = 'Add new appointment' %}
+{% set title = 'Add an appointment' %}
 {% set offenderUrl = '/prisoner/' + offenderNo %}
 {% set recurringHtml %}
   <div data-qa="recurring-inputs">
@@ -34,6 +34,9 @@
           label: {
               text: "How many appointments do you want to add?"
           },
+          hint: {
+              text: "This includes the first appointment you have already added above. You can add appointments up to a maximum of 1 year."
+          },
           classes: "govuk-input--width-3 js-appointment-repeats-times"
       }) }}
 
@@ -41,7 +44,7 @@
     <div class="govuk-form-group js-appointment-last-appointment">
         <span class="govuk-body">Last appointment on</span>
         <div id="appointment-end-date" class=" govuk-body govuk-!-font-weight-bold">
-            {{ endOfPeriod or '--' }}
+            {{ endOfPeriod }}
         </div>
     </div>
   </div>
@@ -69,9 +72,12 @@
   <div class="govuk-grid-row">
     <div class="govuk-grid-column-full">
       <h1 class="govuk-heading-l">
-        <span class="govuk-caption-l">{{offenderName}} (<span id="offenderNo">{{offenderNo}}</span>)</span>
-        {{title}}
+          Add an appointment for {{ firstName }} {{ lastName }}
       </h1>
+        <div class="govuk-body">
+            <span class="govuk-!-font-weight-bold">Prison number:</span> <span
+                    id="offenderNo">{{ offenderNo }}</span>
+        </div>
 
       {% if errors.length > 0 %}
         {{ govukErrorSummary({
@@ -88,7 +94,7 @@
             id: "appointment-type",
             name: "appointmentType",
             label: {
-                text: "Appointment type"
+                text: "Type of appointment"
             },
             classes: 'js-appointment-type',
             items: appointmentTypes | addDefaultSelectedVale('Select') | setSelected(formValues.appointmentType),
@@ -116,18 +122,16 @@
               attributes: {'data-disable-past-date':'true', 'data-add-appointment-date': 'true'}
           }) }}
 
-          <div class="govuk-grid-row">
-            <div id="location-events" class="govuk-grid-column-one-half">
+            <div id="location-events">
                 {% if formValues.date and formValues.location %}
-                    {{scheduledEvents(locationEvents, 'location', locationName)}}
+                    {{scheduledEvents(locationEvents, 'location', 'Schedule for ' + locationName)}}
                 {% endif %}
             </div>
-            <div id="offender-events" class="govuk-grid-column-one-half">
+            <div id="offender-events">
                 {% if formValues.date %}
-                    {{scheduledEvents(offenderEvents, 'offender', offenderName)}}
+                    {{scheduledEvents(offenderEvents, 'offender', null, prisonerName)}}
                 {% endif %}
             </div>
-          </div>
 
           {{ timePicker({
               id: 'start-time',
@@ -196,4 +200,8 @@
       </form>
     </div>
   </div>
+{% endblock %}
+
+{% block pageScripts %}
+    <script src="/js/addAppointment.js"></script>
 {% endblock %}

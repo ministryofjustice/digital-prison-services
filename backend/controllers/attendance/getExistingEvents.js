@@ -1,20 +1,23 @@
-const existingEventsService = require('../../services/existingEventsService')
-const { properCaseName } = require('../../utils')
+const { formatName } = require('../../utils')
 
-module.exports = ({ elite2Api, logError }) => async (req, res) => {
+module.exports = ({ elite2Api, logError, existingEventsService }) => async (req, res) => {
   const { activeCaseLoadId: agencyId } = req.session.userDetails
   const { date, offenderNo } = req.query
 
   try {
     const [offenderDetails, events] = await Promise.all([
       elite2Api.getDetails(res.locals, offenderNo),
-      existingEventsService(elite2Api).getExistingEventsForOffender(res.locals, agencyId, date, offenderNo),
+      existingEventsService.getExistingEventsForOffender(res.locals, agencyId, date, offenderNo),
     ])
-    const name = `${properCaseName(offenderDetails.lastName)}, ${properCaseName(offenderDetails.firstName)}`
+
+    const formattedName = formatName(offenderDetails.firstName, offenderDetails.lastName)
+
+    const prisonerName =
+      formattedName && formattedName[formattedName.length - 1] !== 's' ? [formattedName, 's'] : [formattedName]
 
     return res.render('components/scheduledEvents/scheduledEvents.njk', {
       events,
-      name,
+      prisonerName,
       type: 'offender',
     })
   } catch (error) {

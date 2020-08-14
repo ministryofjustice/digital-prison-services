@@ -1,10 +1,91 @@
+const moment = require('moment')
+
 const {
   app: { notmEndpointUrl: dpsUrl },
 } = require('../../config')
-const { properCaseName } = require('../../utils')
-const { buildDateTime, DATE_TIME_FORMAT_SPEC } = require('../../../src/dateHelpers')
+const { properCaseName, formatName } = require('../../utils')
+const { buildDateTime, DATE_TIME_FORMAT_SPEC, DAY_MONTH_YEAR } = require('../../../src/dateHelpers')
 const { serviceUnavailableMessage } = require('../../common-messages')
-const { repeatTypes, getValidationMessages, endRecurringEndingDate } = require('../../shared/appointmentConstants')
+const { repeatTypes, endRecurringEndingDate, validateComments } = require('../../shared/appointmentConstants')
+
+const validateDate = (date, errors) => {
+  const now = moment()
+  if (!date) errors.push({ text: 'Select the appointment date', href: '#date' })
+
+  if (date && !moment(date, DAY_MONTH_YEAR).isValid())
+    errors.push({ text: 'Enter the date in DD/MM/YYYY format', href: '#date' })
+
+  if (date && moment(date, DAY_MONTH_YEAR).isBefore(now, 'day'))
+    errors.push({ text: 'Select a date that is not in the past', href: '#date' })
+}
+
+const validateStartEndTime = (date, startTime, endTime, errors) => {
+  const now = moment()
+  const isToday = date ? moment(date, DAY_MONTH_YEAR).isSame(now, 'day') : false
+  const startTimeDuration = moment.duration(now.diff(startTime))
+  const endTimeDuration = endTime && moment.duration(startTime.diff(endTime))
+
+  if (!startTime) errors.push({ text: 'Select the appointment start time', href: '#start-time-hours' })
+
+  if (isToday && startTimeDuration.asMinutes() > 1)
+    errors.push({ text: 'Select an appointment start time that is not in the past', href: '#start-time-hours' })
+
+  if (endTime && endTimeDuration.asMinutes() > 1) {
+    errors.push({ text: 'Select an appointment end time that is not in the past', href: '#end-time-hours' })
+  }
+}
+
+const getValidationMessages = fields => {
+  const { appointmentType, location, date, startTime, endTime, comments, recurring, repeats, times } = fields
+  const errors = []
+
+  if (!appointmentType) errors.push({ text: 'Select the type of appointment', href: '#appointment-type' })
+
+  if (!location) errors.push({ text: 'Select the location', href: '#location' })
+
+  validateDate(date, errors)
+  validateStartEndTime(date, startTime, endTime, errors)
+
+  // Video link appointments require an end time so we can show availability
+  if (appointmentType === 'VLB' && !endTime)
+    errors.push({ text: 'Select an appointment end time', href: '#end-time-hours' })
+
+  validateComments(comments, errors)
+
+  if (!recurring) errors.push({ href: '#recurring', text: 'Select yes if this is a recurring appointment' })
+
+  if (recurring === 'yes' && !repeats)
+    errors.push({ href: '#repeats', text: 'Select when you want the appointment to repeat' })
+
+  if (recurring === 'yes') {
+    if (Number(times) <= 0 || !Number(times))
+      errors.push({ href: '#times', text: 'Enter how many appointments you want to add' })
+
+    if (repeats && times) {
+      const { recurringStartTime, endOfPeriod } = endRecurringEndingDate({ date, startTime, repeats, times })
+
+      if (endOfPeriod && endOfPeriod.isSameOrAfter(recurringStartTime.startOf('day').add(1, 'years'))) {
+        errors.push({
+          href: '#times',
+          text: 'Select fewer number of appointments - you can only add them for a maximum of 1 year',
+        })
+      }
+    }
+
+    if (repeats === 'WEEKDAYS') {
+      const SATURDAY = 6
+      const SUNDAY = 0
+      if (moment(date, DAY_MONTH_YEAR).day() === SATURDAY || moment(date, DAY_MONTH_YEAR).day() === SUNDAY) {
+        errors.push({
+          href: '#date',
+          text: 'The date must be a week day',
+        })
+      }
+    }
+  }
+
+  return errors
+}
 
 const addAppointmentFactory = (appointmentsService, existingEventsService, elite2Api, logError) => {
   const getAppointmentTypesAndLocations = async (locals, activeCaseLoadId) => {
@@ -71,6 +152,8 @@ const addAppointmentFactory = (appointmentsService, existingEventsService, elite
         ...prePopulatedData,
         offenderNo,
         offenderName,
+        firstName: properCaseName(firstName),
+        lastName: properCaseName(lastName),
         dpsUrl,
         appointmentTypes,
         appointmentLocations,
@@ -86,6 +169,8 @@ const addAppointmentFactory = (appointmentsService, existingEventsService, elite
 
   const post = async (req, res) => {
     const { offenderNo } = req.params
+    const { activeCaseLoadId } = req.session.userDetails
+
     const {
       appointmentType,
       location,
@@ -101,7 +186,11 @@ const addAppointmentFactory = (appointmentsService, existingEventsService, elite
       bookingId,
     } = req.body
 
-    const startTime = buildDateTime({ date, hours: startTimeHours, minutes: startTimeMinutes })
+    const startTime = buildDateTime({
+      date,
+      hours: startTimeHours,
+      minutes: startTimeMinutes,
+    })
     const endTime = buildDateTime({ date, hours: endTimeHours, minutes: endTimeMinutes })
 
     const errors = [
@@ -124,8 +213,22 @@ const addAppointmentFactory = (appointmentsService, existingEventsService, elite
     if (errors.length > 0) {
       const { endOfPeriod } = endRecurringEndingDate({ date, startTime, repeats, times })
 
+      const offenderDetails = await elite2Api.getDetails(res.locals, offenderNo)
+      const formattedName = formatName(offenderDetails.firstName, offenderDetails.lastName)
+
+      const prisonerName =
+        formattedName && formattedName[formattedName.length - 1] !== 's' ? [formattedName, 's'] : [formattedName]
+
+      const [locationDetails, locationEvents] = await Promise.all([
+        elite2Api.getLocation(res.locals, Number(location)),
+        existingEventsService.getExistingEventsForLocation(res.locals, activeCaseLoadId, Number(location), date),
+      ])
+
       return renderTemplate(req, res, {
         errors,
+        prisonerName,
+        locationName: locationDetails.userDescription,
+        locationEvents,
         formValues: { ...req.body, location: Number(location) },
         endOfPeriod: endOfPeriod && endOfPeriod.format('dddd D MMMM YYYY'),
       })
