@@ -2,6 +2,7 @@ version: 2.1
 
 orbs:
   hmpps: ministryofjustice/hmpps@1.1.1
+  cypress: cypress-io/cypress@1.25.1
 
 executors:
   builder:
@@ -120,9 +121,16 @@ workflows:
       - integration_tests:
           requires:
             - build
-      - cypress_integration_tests:
+      - cypress/run:
           requires:
             - build
+          store_artifacts: true
+          start: npm run start-feature --env=cypress.env
+          wait-on: 'http://localhost:3008'
+          filters:
+            branches:
+              ignore:
+                - main
       - hmpps/build_docker:
           name: build_docker
           image_name: "quay.io/hmpps/prisonstaffhub"
@@ -138,7 +146,7 @@ workflows:
           requires:
             - build_docker
             - integration_tests
-            - cypress_integration_tests
+            - cypress/run
           filters:
             branches:
               only: main
