@@ -2,7 +2,6 @@ version: 2.1
 
 orbs:
   hmpps: ministryofjustice/hmpps@1.1.1
-  cypress: cypress-io/cypress@1.25.1
 
 executors:
   builder:
@@ -78,7 +77,7 @@ jobs:
   cypress_integration_tests:
     working_directory: ~/app
     docker:
-      - image: circleci/node:12-buster-browsers
+      - image: cypress/base:12.16.1
       - image: circleci/redis:buster
     steps:
       - checkout
@@ -91,17 +90,14 @@ jobs:
           name: Run auth wiremock
           command: java -jar wiremock.jar --port 9191
           background: true
-      # - restore_cache:
-      #     key: node_modules-{{ checksum "package-lock.json" }}-{{ checksum "package.json" }}
-      - run:
-          name: Install cypress.
-          command: npm install cypress
+      - restore_cache:
+          key: node_modules-{{ checksum "package-lock.json" }}-{{ checksum "package.json" }}
       - run:
           name: Run the node app.
           command: npm run start-feature --env=cypress.env
           background: true
       - run:
-          name: integration tests
+          name: Run Cypress Integration tests
           command: npm run int-test
       - store_test_results:
           path: test-results
@@ -121,12 +117,13 @@ workflows:
       - integration_tests:
           requires:
             - build
-      - cypress/run:
+          filters:
+            branches:
+              ignore:
+                - main
+      - cypress_integration_tests:
           requires:
             - build
-          store_artifacts: true
-          start: npm run start-feature --env=cypress.env
-          wait-on: 'http://localhost:3008'
           filters:
             branches:
               ignore:
@@ -146,7 +143,7 @@ workflows:
           requires:
             - build_docker
             - integration_tests
-            - cypress/run
+            - cypress_integration_tests
           filters:
             branches:
               only: main
