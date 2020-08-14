@@ -7,7 +7,7 @@ const BulkAppointmentsInvalidNumbersPage = require('../../pages/appointments/bul
 const BulkAppointmentsNotAddedPage = require('../../pages/appointments/bulkAppointmentsNotAddedPage')
 const BulkAppointmentUploadCSVPage = require('../../pages/appointments/bulkAppointmentsUploadCSVPage')
 
-context('A user can add an appointment', () => {
+context('A user can add a bulk appointment', () => {
   before(() => {
     cy.clearCookies()
     cy.task('reset')
