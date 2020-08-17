@@ -101,7 +101,7 @@ context('A user can view the protective isolation list', () => {
       prisoner().contains('Read, Donna')
       prisonNumber().contains('BB1234A')
       location().contains('1-2-018')
-      arrivalDate().contains('5 Jan 2020')
+      arrivalDate().contains('5 January 2020')
     }
 
     {
@@ -110,7 +110,7 @@ context('A user can view the protective isolation list', () => {
       prisoner().contains('Stewart, James')
       prisonNumber().contains('AA1234A')
       location().contains('1-2-017')
-      arrivalDate().contains('4 Jan 2020')
+      arrivalDate().contains('4 January 2020')
     }
   })
 })

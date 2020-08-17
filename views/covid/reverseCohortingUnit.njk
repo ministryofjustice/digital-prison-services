@@ -36,13 +36,13 @@
           text: result.assignedLivingUnitDesc
         },
         {
-          text: result.alertCreated | formatDate('D MMM YYYY'),
+          text: result.alertCreated | formatDate('D MMMM YYYY'),
           attributes: {
             "data-sort-value": result.alertCreated | formatDate('X')
           }
         },
         {
-          text: result.expectedMoveDate | formatDate('D MMM YYYY'),
+          text: result.expectedMoveDate | formatDate('D MMMM YYYY'),
           attributes: {
             "data-sort-value": result.expectedMoveDate | formatDate('X')
           }
