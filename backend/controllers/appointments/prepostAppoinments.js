@@ -432,6 +432,7 @@ const prepostAppointmentsFactory = ({
       }
       return res.redirect(`/offenders/${offenderNo}/confirm-appointment`)
     } catch (error) {
+      console.error(error)
       logError(req.originalUrl, error, serviceUnavailableMessage)
       return res.render('error.njk', {
         url: authSource === 'nomis' ? `/offenders/${offenderNo}/add-appointment` : '/videolink/prisoner-search',

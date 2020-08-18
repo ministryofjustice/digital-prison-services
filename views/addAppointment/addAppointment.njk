@@ -124,12 +124,12 @@
 
             <div id="location-events">
                 {% if formValues.date and formValues.location %}
-                    {{scheduledEvents(locationEvents, 'location', 'Schedule for ' + locationName)}}
+                    {{scheduledEvents(locationEvents, 'location', 'Schedule for ' + locationName, null, date)}}
                 {% endif %}
             </div>
             <div id="offender-events">
                 {% if formValues.date %}
-                    {{scheduledEvents(offenderEvents, 'offender', null, prisonerName)}}
+                    {{scheduledEvents(offenderEvents, 'offender', null, prisonerName, date)}}
                 {% endif %}
             </div>
 

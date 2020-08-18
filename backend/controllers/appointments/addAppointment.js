@@ -227,6 +227,7 @@ const addAppointmentFactory = (appointmentsService, existingEventsService, elite
       return renderTemplate(req, res, {
         errors,
         prisonerName,
+        date: moment(date, 'DD/MM/YYYY').format('D MMMM YYYY'),
         locationName: locationDetails.userDescription,
         locationEvents,
         formValues: { ...req.body, location: Number(location) },

@@ -8,10 +8,17 @@
 {% block content %}
     <div class="govuk-grid-row">
         <div class="govuk-grid-column-two-thirds">
-            {{ govukPanel({
-                titleText: title,
-                classes: "govuk-!-margin-bottom-9"
-            }) }}
+            {% if titleHtml %}
+                {{ govukPanel({
+                    titleHtml: titleHtml ,
+                    classes: "govuk-!-margin-bottom-9"
+                }) }}
+            {% else %}
+                {{ govukPanel({
+                    titleText: title,
+                    classes: "govuk-!-margin-bottom-9"
+                }) }}
+            {% endif %}
 
             <h3 class="govuk-heading-m">Appointment details</h3>
 

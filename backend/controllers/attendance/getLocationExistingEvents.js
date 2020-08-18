@@ -1,3 +1,5 @@
+const moment = require('moment')
+
 module.exports = ({ elite2Api, logError, existingEventsService }) => async (req, res) => {
   const { activeCaseLoadId: agencyId } = req.session.userDetails
   const { date, locationId } = req.query
@@ -10,6 +12,7 @@ module.exports = ({ elite2Api, logError, existingEventsService }) => async (req,
 
     return res.render('components/scheduledEvents/scheduledEvents.njk', {
       events,
+      date: moment(date, 'DD/MM/YYYY').format('D MMMM YYYY'),
       header: `Schedule for ${locationDetails.userDescription}`,
       type: 'location',
     })
