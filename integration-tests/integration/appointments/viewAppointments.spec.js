@@ -1,6 +1,6 @@
 const ViewAppointmentsPage = require('../../pages/appointments/viewAppointmentsPage')
 
-context('A user can add an appointment', () => {
+context('A user can view list of appointments', () => {
   before(() => {
     cy.clearCookies()
     cy.task('reset')

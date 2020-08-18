@@ -100,7 +100,7 @@ jobs:
           command: npm run start-feature --env=cypress.env
           background: true
       - run:
-          name: integration tests
+          name: Run Cypress Integration tests
           command: npm run int-test
       - store_test_results:
           path: test-results

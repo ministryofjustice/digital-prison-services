@@ -351,6 +351,7 @@ describe('Add appointment', () => {
       })
 
       it('should return events at location on validation error', async () => {
+        req.body.location = 12
         await controller.post(req, res)
 
         expect(res.render).toHaveBeenCalledWith(
@@ -360,6 +361,22 @@ describe('Add appointment', () => {
             locationEvents: [{ eventId: 1 }, { eventId: 2 }],
           })
         )
+      })
+
+      it('should not make a request for events at location on validation error', async () => {
+        req.body.location = 0
+        await controller.post(req, res)
+
+        expect(res.render).toHaveBeenCalledWith(
+          'addAppointment/addAppointment.njk',
+          expect.objectContaining({
+            locationName: undefined,
+            locationEvents: [],
+          })
+        )
+
+        expect(elite2Api.getLocation.mock.calls.length).toBe(0)
+        expect(existingEventsService.getExistingEventsForOffender.mock.calls.length).toBe(0)
       })
 
       it('should return prisoner name for John Smith', async () => {
