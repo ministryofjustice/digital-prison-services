@@ -36,15 +36,24 @@ context('A user can add a case note', () => {
       totalElements: 1,
       content: [],
     })
+
+    cy.server()
+
+    cy.route({
+      method: 'GET',
+      url: '/prisoner/A12345/add-case-note?typeCode=OBSERVE',
+    }).as('getTypes')
+
     const createCaseNotePage = CreateCaseNotePage.verifyOnPage()
     const form = createCaseNotePage.form()
     form.type().select('OBSERVE')
-    // eslint-disable-next-line cypress/no-unnecessary-waiting
-    cy.wait(50)
-    cy.get('#sub-type').select('test')
-    form.text().type('Test comment')
-    form.submitButton().click()
-    PrisonerCaseNotePage.verifyOnPage('Smith, John')
+
+    cy.wait('@getTypes').then(() => {
+      cy.get('#sub-type').select('test')
+      form.text().type('Test comment')
+      form.submitButton().click()
+      PrisonerCaseNotePage.verifyOnPage('Smith, John')
+    })
   })
 
   it('Should show correct error messages', () => {

@@ -219,10 +219,11 @@ const addAppointmentFactory = (appointmentsService, existingEventsService, elite
       const prisonerName =
         formattedName && formattedName[formattedName.length - 1] !== 's' ? [formattedName, 's'] : [formattedName]
 
-      const [locationDetails, locationEvents] = await Promise.all([
-        elite2Api.getLocation(res.locals, Number(location)),
-        existingEventsService.getExistingEventsForLocation(res.locals, activeCaseLoadId, Number(location), date),
-      ])
+      const [locationDetails, locationEvents] = (location &&
+        (await Promise.all([
+          elite2Api.getLocation(res.locals, Number(location)),
+          existingEventsService.getExistingEventsForLocation(res.locals, activeCaseLoadId, Number(location), date),
+        ]))) || [{}, []]
 
       return renderTemplate(req, res, {
         errors,

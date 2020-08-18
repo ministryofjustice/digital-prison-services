@@ -33,15 +33,22 @@ context('A user can add an appointment', () => {
       caseNoteSummary: {},
     })
     cy.task('stubAlertsForBooking', [])
+    cy.server()
+
+    cy.route({
+      method: 'GET',
+      url: '/offenders/A12345/create-alert?typeCode=F1',
+    }).as('getTypes')
+
     const createAlertPage = CreateAlertPage.verifyOnPage()
     const form = createAlertPage.form()
     form.alertType().select('F1')
-    // eslint-disable-next-line cypress/no-unnecessary-waiting
-    cy.wait(50)
-    cy.get('#alert-code').select('F1')
-    form.comments().type('Test comment')
-    form.submitButton().click()
-    PrisonerAlertsPage.verifyOnPage('Smith, John')
+    cy.wait('@getTypes').then(() => {
+      cy.get('#alert-code').select('F1')
+      form.comments().type('Test comment')
+      form.submitButton().click()
+      PrisonerAlertsPage.verifyOnPage('Smith, John')
+    })
   })
 
   it('Should show correct error messages', () => {
