@@ -4,7 +4,7 @@ const RequestCourtBookingSelectCourtPage = require('../../pages/appointments/req
 const RequestCourtBookingEnterOffenderDetailsPage = require('../../pages/appointments/requestCourtBookingEnterOffenderDetailsPage')
 const RequestCourtBookingConfirmationPage = require('../../pages/appointments/requestCourtBookingConfirmationPage')
 
-context('A user can add an appointment', () => {
+context('A user can request a booking', () => {
   before(() => {
     cy.clearCookies()
     cy.task('reset')
