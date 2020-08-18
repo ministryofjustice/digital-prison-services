@@ -71,6 +71,12 @@
     }
   }
 
+  &__options {
+    margin-top: -10px;
+    display: flex;
+    justify-content: flex-end;
+  }
+
   &__results {
     &-list {
       overflow: auto;

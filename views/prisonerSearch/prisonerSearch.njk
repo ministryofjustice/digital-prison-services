@@ -46,6 +46,14 @@
 
     {{ mojPagination(pagination) }}
 
+    {% if totalRecords > pageLimit  %}
+      <div class="prisoner-search__options">
+        <a href="{{ searchUrl + '&viewAll=true' + '&pageLimitOption=' + totalRecords }}" class="govuk-body govuk-link govuk-link--no-visited-state">
+          View all results
+        </a>
+      </div>
+    {% endif %}
+
     {% if view === 'grid' %}
       {% include './partials/prisonerSearchGrid.njk' %}
     {% else %}
