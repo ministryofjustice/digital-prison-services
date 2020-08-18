@@ -77,7 +77,7 @@ jobs:
   cypress_integration_tests:
     working_directory: ~/app
     docker:
-      - image: cypress/base:12.16.1
+      - image: circleci/node:12-buster-browsers
       - image: circleci/redis:buster
     steps:
       - checkout
@@ -92,6 +92,9 @@ jobs:
           background: true
       - restore_cache:
           key: node_modules-{{ checksum "package-lock.json" }}-{{ checksum "package.json" }}
+      - run:
+          name: Install cypress.
+          command: npm install cypress
       - run:
           name: Run the node app.
           command: npm run start-feature --env=cypress.env
@@ -117,17 +120,9 @@ workflows:
       - integration_tests:
           requires:
             - build
-          filters:
-            branches:
-              ignore:
-                - main
       - cypress_integration_tests:
           requires:
             - build
-          filters:
-            branches:
-              ignore:
-                - main
       - hmpps/build_docker:
           name: build_docker
           image_name: "quay.io/hmpps/prisonstaffhub"
