@@ -94,7 +94,7 @@ jobs:
           key: node_modules-{{ checksum "package-lock.json" }}-{{ checksum "package.json" }}
       - run:
           name: Install cypress.
-          command: npm install cypress
+          command: npx cypress install
       - run:
           name: Run the node app.
           command: npm run start-feature --env=cypress.env
