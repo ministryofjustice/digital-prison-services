@@ -43,7 +43,6 @@ context('A user can add an appointment', () => {
     const createAlertPage = CreateAlertPage.verifyOnPage()
     const form = createAlertPage.form()
     form.alertType().select('F1')
-    // eslint-disable-next-line cypress/no-unnecessary-waiting
     cy.wait('@getTypes').then(() => {
       cy.get('#alert-code').select('F1')
       form.comments().type('Test comment')
