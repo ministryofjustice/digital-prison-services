@@ -97,8 +97,8 @@ context('A user can view the reverse cohorting list', () => {
       prisoner().contains('Stewart, James')
       prisonNumber().contains('BB1234A')
       location().contains('1-2-017')
-      dateAdded().contains('3 Jan 2020')
-      dateOverdue().contains('17 Jan 2020')
+      dateAdded().contains('3 January 2020')
+      dateOverdue().contains('17 January 2020')
       overdue().should('be.visible')
     }
 
@@ -108,8 +108,8 @@ context('A user can view the reverse cohorting list', () => {
       prisoner().contains('Read, Donna')
       prisonNumber().contains('AA1234A')
       location().contains('1-2-018')
-      dateAdded().contains(dayBeforeYesterday.format('D MMM YYYY'))
-      dateOverdue().contains(dayBeforeYesterdayOverDue.format('D MMM YYYY'))
+      dateAdded().contains(dayBeforeYesterday.format('D MMMM YYYY'))
+      dateOverdue().contains(dayBeforeYesterdayOverDue.format('D MMMM YYYY'))
       overdue().should('not.be.visible')
     }
   })
