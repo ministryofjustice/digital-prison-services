@@ -1,40 +1,56 @@
 %status-style {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  border: 3px solid;
-  padding: 5px 10px;
-  margin-left: 0;
-  margin-right: 5px;
-  margin-bottom: 5px;
-  font-size: 14px;
-  font-weight: bold;
-  text-align: center;
-  line-height: 1;
-  min-width: 100px;
-  user-select: none;
+  @media screen {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    border: 3px solid;
+    padding: 5px 10px;
+    margin-left: 0;
+    margin-right: 5px;
+    margin-bottom: 5px;
+    font-size: 14px;
+    font-weight: bold;
+    text-align: center;
+    line-height: 1;
+    min-width: 100px;
+    user-select: none;
+  }
 
   @media print {
     padding-top: 0.7em;
-    font-size: 10px;
+    font-size: 12px;
+    color: black !important;
+    border: none;
+    background: none !important;
+    min-width: auto;
   }
 }
 
 .alerts-list {
   @extend %govuk-list;
   margin-bottom: 0;
-  display: flex;
-  flex-wrap: wrap;
+
+  @media screen {
+    display: flex;
+    flex-wrap: wrap;
+  }
 }
 
 .alert-status {
   @extend %status-style;
-  text-transform: uppercase;
-  height: 30px;
+
+  @media screen {
+    text-transform: uppercase;
+    height: 30px;
+  }
 
   img {
     height: 14px;
     margin-right: 3px;
+
+    @media print {
+      display: none;
+    }
   }
 
   &--acct {
@@ -149,27 +165,27 @@
   }
 
   &--reverse-cohorting-unit {
-    color: #FFF;
-    border-color: mix(white, #00703C, 20%);
-    background-color: mix(white, #00703C, 20%);
+    color: #fff;
+    border-color: mix(white, #00703c, 20%);
+    background-color: mix(white, #00703c, 20%);
   }
-  
+
   &--protective-isolation-unit {
-    color: #FFF;
+    color: #fff;
     border-color: #006637;
     background-color: #006637;
   }
-  
+
   &--shielding-unit {
-    color: #FFF;
+    color: #fff;
     border-color: #004424;
     background-color: #004424;
   }
-  
+
   &--refusing-to-shield {
-    color: #FFF;
-    border-color: #B58840;
-    background-color: #B58840;
+    color: #fff;
+    border-color: #b58840;
+    background-color: #b58840;
   }
 }
 
