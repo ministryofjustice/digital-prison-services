@@ -48,7 +48,7 @@
 
     {% if totalRecords > pageLimit  %}
       <div class="prisoner-search__options">
-        <a href="{{ searchUrl + '&viewAll=true' + '&pageLimitOption=' + totalRecords }}" class="govuk-body govuk-link govuk-link--no-visited-state" data-test="prisoner-search-view-all-link">
+        <a href="{{ searchUrl + '&viewAll=true' + '&pageLimitOption=' + totalRecords }}" class="govuk-body govuk-link govuk-link--no-visited-state govuk-!-display-none-print" data-test="prisoner-search-view-all-link">
           View all results
         </a>
       </div>
@@ -60,7 +60,10 @@
       {% include './partials/prisonerSearchList.njk' %}
     {% endif %}
     
-    {{ mojPagination(pagination) }}
+
+    <div class="govuk-!-display-none-print">
+      {{ mojPagination(pagination) }}
+    </div>
   {% else %}
   <p class="govuk-body">No records found matching search criteria.</p>
   {% endif %}

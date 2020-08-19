@@ -113,7 +113,7 @@ $govuk-page-width: 1170px;
 
 // Print
 @page {
-  margin: 0;
+  margin: 1cm 0;
 }
 
 @include govuk-media-query($media-type: print) {
@@ -196,7 +196,7 @@ $govuk-page-width: 1170px;
 }
 
 .moj-pagination__results {
-  font-family: 'GDS Transport', Arial, sans-serif;
+  font-family: $govuk-font-family;
 }
 
 .case-note-entry {

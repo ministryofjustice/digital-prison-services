@@ -66,6 +66,9 @@
   }
 
   &__summary {
+    margin: -10px 0 10px;
+    font-size: 14px;
+
     @media screen {
       display: none;
     }
@@ -83,6 +86,10 @@
 
       &__image {
         width: 90px;
+
+        @media print {
+          width: 60px;
+        }
       }
 
       .govuk-table__header {
