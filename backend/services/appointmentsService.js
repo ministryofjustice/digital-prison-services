@@ -26,6 +26,7 @@ const toAppointmentDetailsSummary = ({
       howOften: repeatTypes.find(repeat => repeat.value === repeats).text,
       numberOfAppointments: times,
       endDate: endRecurringEndingDate({ startTime, repeats, times }).endOfPeriod.format('dddd D MMMM YYYY'),
+      endDateShortFormat: endRecurringEndingDate({ startTime, repeats, times }).endOfPeriod.format('D MMMM YYYY'),
     }
 
   const appointmentInfo = {

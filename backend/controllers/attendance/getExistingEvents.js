@@ -1,3 +1,4 @@
+const moment = require('moment')
 const { formatName } = require('../../utils')
 
 module.exports = ({ elite2Api, logError, existingEventsService }) => async (req, res) => {
@@ -17,6 +18,7 @@ module.exports = ({ elite2Api, logError, existingEventsService }) => async (req,
 
     return res.render('components/scheduledEvents/scheduledEvents.njk', {
       events,
+      date: moment(date, 'DD/MM/YYYY').format('D MMMM YYYY'),
       prisonerName,
       type: 'offender',
     })

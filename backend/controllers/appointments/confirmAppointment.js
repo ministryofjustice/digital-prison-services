@@ -1,11 +1,13 @@
 const moment = require('moment')
+const sanitizer = require('sanitizer')
+
 const { DATE_TIME_FORMAT_SPEC } = require('../../../src/dateHelpers')
 const {
   app: { notmEndpointUrl: dpsUrl },
 } = require('../../config')
 const { raiseAnalyticsEvent } = require('../../raiseAnalyticsEvent')
 
-const { properCaseName } = require('../../utils')
+const { properCaseName, formatName } = require('../../utils')
 const { serviceUnavailableMessage } = require('../../common-messages')
 
 const { prepostDurations } = require('../../shared/appointmentConstants')
@@ -71,8 +73,6 @@ const confirmAppointmentFactory = ({ elite2Api, appointmentsService, logError })
           },
         ],
       }
-
-      const title = recurring === 'yes' ? 'Appointments booked' : 'Appointment booked'
 
       const details = toAppointmentDetailsSummary({
         firstName,
@@ -169,13 +169,29 @@ const confirmAppointmentFactory = ({ elite2Api, appointmentsService, logError })
           `Pre: ${preAppointment ? 'Yes' : 'No'} | Post: ${postAppointment ? 'Yes' : 'No'}`
         )
       } else {
+        const recurringData = details.recurring === 'Yes' && {
+          recurring: 'Yes',
+          repeats: details.howOften,
+          numberAdded: details.numberOfAppointments,
+          lastAppointment: details.endDateShortFormat,
+        }
+        const formattedName = sanitizer.sanitize(formatName(firstName, lastName))
+
+        const prisonerName =
+          formattedName && formattedName[formattedName.length - 1] !== 's' ? [formattedName, 's'] : [formattedName]
+
         res.render('confirmAppointments.njk', {
-          title,
+          titleHtml: `${prisonerName[0]}&rsquo;${prisonerName[1] || ''} appointment has been added`,
           addAppointmentsLink: `/offenders/${offenderNo}/add-appointment`,
           prisonerProfileLink: `${dpsUrl}offenders/${offenderNo}`,
           details: {
-            ...details,
-            ...prepostData,
+            type: details.appointmentType,
+            location: details.location,
+            date: details.date,
+            startTime: details.startTime,
+            endTime: details.endTime,
+            ...recurringData,
+            comment: details.comment,
           },
         })
       }

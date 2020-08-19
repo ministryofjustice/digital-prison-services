@@ -60,6 +60,7 @@ describe('Get location existing events', () => {
     await controller(req, res)
 
     expect(res.render).toHaveBeenCalledWith('components/scheduledEvents/scheduledEvents.njk', {
+      date: '10 December 2020',
       header: 'Schedule for Gym',
       events: [{ eventId: 1 }, { eventId: 2 }],
       type: 'location',

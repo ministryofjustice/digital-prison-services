@@ -13,6 +13,6 @@
     "configFile": "cypress-reporter-config.json"
   },
   "videoUploadOnPasses": false,
-  "taskTimeout": 90000,
-  "pageLoadTimeout": 90000
+  "taskTimeout": 200000,
+  "pageLoadTimeout": 200000
 }

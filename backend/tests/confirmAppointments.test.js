@@ -63,17 +63,34 @@ describe('Confirm appointments', () => {
       expect.objectContaining({
         addAppointmentsLink: '/offenders/A12345/add-appointment',
         prisonerProfileLink: `http://localhost:3000/offenders/A12345`,
+        titleHtml: 'John Doe&rsquo;s appointment has been added',
         details: {
-          prisonerName: `Doe, John (A12345)`,
-          appointmentType: 'Appointment 1',
-          location: 'Room 3',
           date: '10 October 2017',
-          startTime: '11:00',
           endTime: '14:00',
-          recurring: 'No',
+          location: 'Room 3',
+          startTime: '11:00',
+          type: 'Appointment 1',
           comment: 'Test',
-          court: 'London',
         },
+      })
+    )
+  })
+
+  it('should strip out unsafe tags when creating titleHtml', async () => {
+    const { index } = confirmAppointments.confirmAppointmentFactory({
+      elite2Api,
+      appointmentsService,
+      logError: () => {},
+    })
+
+    elite2Api.getDetails.mockResolvedValue({ firstName: 'John', lastName: `<script> alert('hello') </script> Doe` })
+
+    await index(req, res)
+
+    expect(res.render).toHaveBeenCalledWith(
+      'confirmAppointments.njk',
+      expect.objectContaining({
+        titleHtml: 'John  doe&rsquo;s appointment has been added',
       })
     )
   })
@@ -208,18 +225,16 @@ describe('Confirm appointments', () => {
       'confirmAppointments.njk',
       expect.objectContaining({
         details: {
-          prisonerName: `Doe, John (A12345)`,
-          appointmentType: 'Appointment 1',
-          location: 'Room 3',
-          date: '10 October 2017',
-          startTime: '11:00',
-          endTime: '14:00',
           comment: 'Test',
+          date: '10 October 2017',
+          endTime: '14:00',
+          lastAppointment: '24 October 2017',
+          location: 'Room 3',
+          numberAdded: '2',
           recurring: 'Yes',
-          howOften: 'Fortnightly',
-          numberOfAppointments: '2',
-          endDate: 'Tuesday 24 October 2017',
-          court: 'London',
+          repeats: 'Fortnightly',
+          startTime: '11:00',
+          type: 'Appointment 1',
         },
       })
     )
