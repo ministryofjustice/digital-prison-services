@@ -1,6 +1,6 @@
 {% from "govuk/components/inset-text/macro.njk" import govukInsetText %}
 
-{% macro scheduledEvents(events, type, header, prisonerName) %}
+{% macro scheduledEvents(events, type, header, prisonerName, date) %}
     {% set eventsHtml %}
         {% if prisonerName != null %}
             <h2 class="govuk-heading-m">{{ prisonerName[0] }}&rsquo;{{ prisonerName[1] }} schedule</h2>
@@ -16,7 +16,7 @@
                 </div>
             {% endfor %}
         {% else %}
-            <p class="govuk-body">Nothing scheduled on this date </p>
+            <p class="govuk-body">Nothing scheduled on {{ date }} </p>
         {% endif %}
     {% endset %}
 
@@ -26,4 +26,4 @@
 {% endmacro %}
 
 {#  Used when rendering events via controller  #}
-{{ scheduledEvents(events, type, header, prisonerName) }}
+{{ scheduledEvents(events, type, header, prisonerName, date) }}

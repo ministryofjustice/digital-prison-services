@@ -103,7 +103,7 @@ context('A user can add an appointment', () => {
     form.recurringNo().click()
     form.comments().type('Test comment')
     form.submitButton().click()
-    ConfirmSingleAppointmentPage.verifyOnPage()
+    ConfirmSingleAppointmentPage.verifyOnPage(`John Smith’s`)
   })
 
   it('Schedules remain after validation error', () => {
@@ -157,7 +157,7 @@ context('A user can add an appointment', () => {
       )
 
     form.submitButton().click()
-    ConfirmRecurringAppointmentPage.verifyOnPage()
+    ConfirmSingleAppointmentPage.verifyOnPage(`John Smith’s`)
   })
 
   it('A user can successfully add a video link booking', () => {

@@ -1,11 +1,11 @@
 const page = require('../page')
 
-const confirmSingleAppointmentPage = () => page('Appointment booked', {})
+const confirmSingleAppointmentPage = name => page(`${name} appointment has been added`, {})
 
 export default {
-  verifyOnPage: confirmSingleAppointmentPage,
-  goTo: offenderNo => {
+  verifyOnPage: name => confirmSingleAppointmentPage(name),
+  goTo: (offenderNo, name) => {
     cy.visit(`/offenders/${offenderNo}/confirm-appointment`)
-    return confirmSingleAppointmentPage()
+    return confirmSingleAppointmentPage(name)
   },
 }
