@@ -359,6 +359,22 @@ describe('Prisoner search', () => {
 
       expect(req.session).toEqual({ prisonerSearchUrl: req.originalUrl })
     })
+
+    it('should set the Page-Limit in the request header if pageLimitOption is specified in the url', async () => {
+      req.query.pageLimitOption = '500'
+
+      await controller.index(req, res)
+
+      expect(elite2Api.getInmates).toHaveBeenCalledWith(
+        expect.objectContaining({
+          requestHeaders: expect.objectContaining({
+            'Page-Limit': 500,
+          }),
+        }),
+        'MDI',
+        { alerts: undefined, keywords: undefined, returnAlerts: 'true', returnCategory: 'true', returnIep: 'true' }
+      )
+    })
   })
 
   describe('post', () => {

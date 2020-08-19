@@ -1,7 +1,7 @@
 const qs = require('querystring')
 const { serviceUnavailableMessage } = require('../../common-messages')
 const alertFlagValues = require('../../shared/alertFlagValues')
-const { putLastNameFirst } = require('../../utils')
+const { putLastNameFirst, hasLength } = require('../../utils')
 const config = require('../../config')
 
 module.exports = ({ paginationService, elite2Api, logError }) => {
@@ -14,15 +14,16 @@ module.exports = ({ paginationService, elite2Api, logError }) => {
       location,
       keywords,
       alerts,
+      pageLimitOption,
       pageOffsetOption,
       view,
       sortFieldsWithOrder = 'lastName,firstName:ASC',
+      viewAll,
     } = req.query
 
     const selectedAlerts = alerts && alerts.map(alert => alert.split(',')).flat()
-
-    const pageOffset = (pageOffsetOption && parseInt(pageOffsetOption, 10)) || 0
-    const pageLimit = 50
+    const pageLimit = (pageLimitOption && parseInt(pageLimitOption, 10)) || 50
+    const pageOffset = (pageOffsetOption && !viewAll && parseInt(pageOffsetOption, 10)) || 0
     const [sortFields, sortOrder] = sortFieldsWithOrder.split(':')
 
     const currentUserCaseLoad = activeCaseLoad && activeCaseLoad.caseLoadId
@@ -74,9 +75,10 @@ module.exports = ({ paginationService, elite2Api, logError }) => {
           text: label,
           checked: Boolean(selectedAlerts) && selectedAlerts.some(alert => alertCodes.includes(alert)),
         })),
-        formValues: req.query,
+        formValues: { ...req.query, alerts: hasLength(alerts) && alerts.filter(alert => alert.length) },
         locationOptions,
         notmUrl: config.app.notmEndpointUrl,
+        pageLimit,
         pagination: paginationService.getPagination(totalRecords, pageOffset, pageLimit, fullUrl),
         printedValues: {
           location: locationOptions.find(loc => loc.value === req.query.location),

@@ -151,6 +151,22 @@ context('Prisoner search', () => {
       })
     })
 
+    it('should show view all results link and then hide when clicked', () => {
+      cy.task('stubInmates', {
+        locationId: 'MDI',
+        count: 2,
+        data: [inmate1, inmate2],
+      })
+      cy.visit(`/prisoner-search?pageLimitOption=1`)
+
+      cy.get('[data-test="prisoner-search-view-all-link"]').then($link => {
+        cy.get($link)
+          .should('contain.text', 'View all results')
+          .click()
+        cy.get($link).should('not.exist')
+      })
+    })
+
     it('should show correct order options for grid view', () => {
       cy.task('stubInmates', {
         locationId: 'MDI',

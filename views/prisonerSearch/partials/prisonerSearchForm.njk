@@ -63,7 +63,7 @@
   {{ govukDetails({
     summaryText: "View by alerts",
     classes: 'govuk-!-margin-bottom-0',
-    open: formValues.alerts.length,
+    open: formValues.alerts.length > 0,
     html: alertCheckboxes,
     attributes: {
       'data-test': 'prisoner-search-alerts-container'
