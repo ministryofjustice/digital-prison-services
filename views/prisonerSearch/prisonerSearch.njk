@@ -48,7 +48,7 @@
 
     {% if totalRecords > pageLimit  %}
       <div class="prisoner-search__options">
-        <a href="{{ searchUrl + '&viewAll=true' + '&pageLimitOption=' + totalRecords }}" class="govuk-body govuk-link govuk-link--no-visited-state">
+        <a href="{{ searchUrl + '&viewAll=true' + '&pageLimitOption=' + totalRecords }}" class="govuk-body govuk-link govuk-link--no-visited-state" data-test="prisoner-search-view-all-link">
           View all results
         </a>
       </div>
