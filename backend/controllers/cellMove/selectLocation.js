@@ -1,8 +1,7 @@
-const moment = require('moment')
-
 const { serviceUnavailableMessage } = require('../../common-messages')
 const { alertFlagLabels, cellMoveAlertCodes } = require('../../shared/alertFlagValues')
 const { putLastNameFirst } = require('../../utils')
+const { showNonAssociationsLink, showCsraLink } = require('./cellMoveUtils')
 const {
   app: { notmEndpointUrl: dpsUrl },
 } = require('../../config')
@@ -17,6 +16,7 @@ module.exports = ({ elite2Api, whereaboutsApi, logError }) => async (req, res) =
     const locationsData = await whereaboutsApi.searchGroups(res.locals, prisonerDetails.agencyId)
 
     const locations = locationsData.map(location => ({ text: location.name, value: location.key }))
+    locations.unshift({ text: 'All locations', value: 'ALL' })
     const cellAttributes = cellAttributesData
       .filter(cellAttribute => 'Y'.includes(cellAttribute.activeFlag))
       .map(cellAttribute => ({ text: cellAttribute.description, value: cellAttribute.code }))
@@ -30,31 +30,11 @@ module.exports = ({ elite2Api, whereaboutsApi, logError }) => async (req, res) =
       )
     )
 
-    const showCsraLink =
-      prisonerDetails.assessments &&
-      prisonerDetails.assessments.some(
-        assessment => assessment.assessmentCode === 'CSR' && assessment.assessmentComment
-      )
-
-    // The link should only appear if there are active non-associations in the same establishment
-    // Active means the effective date is not in the future and the expiry date is not in the past
-    const showNonAssociationsLink =
-      nonAssociations &&
-      nonAssociations.nonAssociations &&
-      nonAssociations.nonAssociations.some(
-        nonAssociation =>
-          nonAssociation.offenderNonAssociation &&
-          prisonerDetails.assignedLivingUnit &&
-          nonAssociation.offenderNonAssociation.agencyDescription.toLowerCase() ===
-            prisonerDetails.assignedLivingUnit.agencyName.toLowerCase() &&
-          (!nonAssociation.expiryDate || moment(nonAssociation.expiryDate, 'YYYY-MM-DDTHH:mm:ss') > moment()) &&
-          (nonAssociation.effectiveDate && moment(nonAssociation.effectiveDate, 'YYYY-MM-DDTHH:mm:ss') <= moment())
-      )
-
     return res.render('cellMove/selectLocation.njk', {
       breadcrumbPrisonerName: putLastNameFirst(prisonerDetails.firstName, prisonerDetails.lastName),
-      showNonAssociationsLink,
-      showCsraLink,
+      showNonAssociationsLink:
+        nonAssociations && showNonAssociationsLink(nonAssociations, prisonerDetails.assignedLivingUnit),
+      showCsraLink: prisonerDetails.assessments && showCsraLink(prisonerDetails.assessments),
       alerts: alertsToShow,
       locations,
       cellAttributes,

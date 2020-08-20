@@ -1,0 +1,35 @@
+{% extends "../partials/layout.njk" %}
+{% from "govuk/components/select/macro.njk" import govukSelect %}
+{% from "govuk/components/button/macro.njk" import govukButton %}
+{% from "../macros/alertFlags.njk" import alertFlags %}
+
+{% set title = "Select an available cell" %}
+
+{% block beforeContent %}
+  {{ govukBreadcrumbs({
+    items: [
+      {
+        text: "Home",
+        href: dpsUrl
+      },
+      {
+        text: breadcrumbPrisonerName,
+        href: '/prisoner/' + offenderNo
+      },
+      {
+        text: 'Select a cell'
+      }
+    ]
+}) }}
+{% endblock %}
+
+{% block content %}
+  <h1 class="govuk-heading-l">{{title}}</h1>
+
+  {% include "./partials/prisonerInformation.njk" %}
+
+  <p class="govuk-body">The selected location is {{location}}.</p>
+  {% for cell in cells %}
+    <p class="govuk-body">{{cell.description}}</p>
+  {% endfor %}
+{% endblock %}

@@ -320,6 +320,8 @@ const elite2ApiFactory = client => {
 
   const getNonAssociations = (context, bookingId) => get(context, `/api/bookings/${bookingId}/non-association-details`)
 
+  const getCellsWithCapacity = (context, agencyId) => get(context, `/api/agencies/${agencyId}/cellsWithCapacity`)
+
   return {
     userLocations,
     userCaseLoads,
@@ -420,6 +422,7 @@ const elite2ApiFactory = client => {
     getScheduledEventsForNextWeek,
     getNonAssociations,
     getCellAttributes,
+    getCellsWithCapacity,
   }
 }
 
