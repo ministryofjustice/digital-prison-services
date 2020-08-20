@@ -8,6 +8,11 @@ const {
 
 module.exports = ({ elite2Api, whereaboutsApi, logError }) => async (req, res) => {
   const { offenderNo } = req.params
+  const { missingLocation } = req.query
+  const errors = []
+  if (missingLocation) {
+    errors.push({ text: 'Select residential unit', href: '#location' })
+  }
 
   try {
     const prisonerDetails = await elite2Api.getDetails(res.locals, offenderNo, true)
@@ -37,6 +42,7 @@ module.exports = ({ elite2Api, whereaboutsApi, logError }) => async (req, res) =
       showCsraLink: prisonerDetails.assessments && showCsraLink(prisonerDetails.assessments),
       alerts: alertsToShow,
       locations,
+      errors,
       cellAttributes,
       prisonerDetails,
       offenderNo,
@@ -44,6 +50,7 @@ module.exports = ({ elite2Api, whereaboutsApi, logError }) => async (req, res) =
       nonAssociationLink: `/prisoner/${offenderNo}/cell-move/non-associations`,
       selectLocationRootUrl: `/prisoner/${offenderNo}/cell-move/select-location`,
       formAction: `/prisoner/${offenderNo}/cell-move/select-cell`,
+      profileUrl: `/prisoner/${offenderNo}`,
     })
   } catch (error) {
     if (error) logError(req.originalUrl, error, serviceUnavailableMessage)
