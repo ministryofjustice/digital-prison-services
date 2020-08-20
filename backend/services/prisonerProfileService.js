@@ -1,6 +1,6 @@
 const moment = require('moment')
 const { putLastNameFirst, hasLength, formatName } = require('../utils')
-const alertFlagValues = require('../shared/alertFlagValues')
+const { alertFlagLabels, profileAlertCodes } = require('../shared/alertFlagValues')
 const {
   apis: {
     categorisation: { ui_url: categorisationUrl },
@@ -70,8 +70,8 @@ module.exports = ({
     )
 
     const prisonersActiveAlertCodes = alerts.filter(alert => !alert.expired).map(alert => alert.alertCode)
-    const alertsToShow = alertFlagValues.filter(alertFlag =>
-      alertFlag.alertCodes.some(alert => prisonersActiveAlertCodes.includes(alert))
+    const alertsToShow = alertFlagLabels.filter(alertFlag =>
+      alertFlag.alertCodes.some(alert => prisonersActiveAlertCodes.includes(alert) && profileAlertCodes.includes(alert))
     )
 
     const canViewInactivePrisoner = userRoles && userRoles.some(role => role.roleCode === 'INACTIVE_BOOKINGS')

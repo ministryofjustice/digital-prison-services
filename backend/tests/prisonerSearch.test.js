@@ -134,6 +134,16 @@ describe('Prisoner search', () => {
           notmUrl: 'http://localhost:3000/',
         })
       )
+
+      expect(res.render).toHaveBeenCalledWith(
+        'prisonerSearch/prisonerSearch.njk',
+        expect.objectContaining({
+          alertOptions: expect.not.arrayContaining([
+            { checked: false, text: 'Isolated', value: ['VIP'] },
+            { checked: false, text: 'Risk to known adults', value: ['RKS'] },
+          ]),
+        })
+      )
     })
 
     it('should return correctly checked alert options when there is only one alert in the query', async () => {

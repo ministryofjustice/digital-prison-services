@@ -1,6 +1,6 @@
 const qs = require('querystring')
 const { serviceUnavailableMessage } = require('../../common-messages')
-const alertFlagValues = require('../../shared/alertFlagValues')
+const { alertFlagLabels, profileAlertCodes } = require('../../shared/alertFlagValues')
 const { putLastNameFirst, hasLength } = require('../../utils')
 const config = require('../../config')
 
@@ -64,17 +64,22 @@ module.exports = ({ paginationService, elite2Api, logError }) => {
         prisoners.map(prisoner => ({
           ...prisoner,
           name: putLastNameFirst(prisoner.firstName, prisoner.lastName),
-          alerts: alertFlagValues.filter(alertFlag =>
-            alertFlag.alertCodes.some(alert => prisoner.alertsDetails && prisoner.alertsDetails.includes(alert))
+          alerts: alertFlagLabels.filter(alertFlag =>
+            alertFlag.alertCodes.some(
+              alert =>
+                prisoner.alertsDetails && prisoner.alertsDetails.includes(alert) && profileAlertCodes.includes(alert)
+            )
           ),
         }))
 
       return res.render('prisonerSearch/prisonerSearch.njk', {
-        alertOptions: alertFlagValues.map(({ alertCodes, label }) => ({
-          value: alertCodes,
-          text: label,
-          checked: Boolean(selectedAlerts) && selectedAlerts.some(alert => alertCodes.includes(alert)),
-        })),
+        alertOptions: alertFlagLabels
+          .filter(({ alertCodes }) => profileAlertCodes.includes(...alertCodes))
+          .map(({ alertCodes, label }) => ({
+            value: alertCodes,
+            text: label,
+            checked: Boolean(selectedAlerts) && selectedAlerts.some(alert => alertCodes.includes(alert)),
+          })),
         formValues: { ...req.query, alerts: hasLength(alerts) && alerts.filter(alert => alert.length) },
         locationOptions,
         notmUrl: config.app.notmEndpointUrl,
@@ -82,9 +87,11 @@ module.exports = ({ paginationService, elite2Api, logError }) => {
         pagination: paginationService.getPagination(totalRecords, pageOffset, pageLimit, fullUrl),
         printedValues: {
           location: locationOptions.find(loc => loc.value === req.query.location),
-          alerts: alertFlagValues
+          alerts: alertFlagLabels
             .filter(
-              ({ alertCodes }) => Boolean(selectedAlerts) && selectedAlerts.find(alert => alertCodes.includes(alert))
+              ({ alertCodes }) =>
+                Boolean(selectedAlerts) &&
+                selectedAlerts.find(alert => alertCodes.includes(alert) && profileAlertCodes.includes(alert))
             )
             .map(({ label }) => label),
         },
