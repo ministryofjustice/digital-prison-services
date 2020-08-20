@@ -1,29 +1,11 @@
 const moment = require('moment')
 
 const { serviceUnavailableMessage } = require('../../common-messages')
-const alertFlagValues = require('../../shared/alertFlagValues')
+const { alertFlagLabels, cellMoveAlertCodes } = require('../../shared/alertFlagValues')
 const { putLastNameFirst } = require('../../utils')
 const {
   app: { notmEndpointUrl: dpsUrl },
 } = require('../../config')
-
-const cellMoveAlertCodes = [
-  'PEEP',
-  'XTACT',
-  'RTP',
-  'RLG',
-  'RCON',
-  'XHT',
-  'XGANG',
-  'XR',
-  'XA',
-  'XEL',
-  'CSIP',
-  'URCU',
-  'UPIU',
-  'USU',
-  'URS',
-]
 
 module.exports = ({ elite2Api, whereaboutsApi, logError }) => async (req, res) => {
   const { offenderNo } = req.params
@@ -42,7 +24,7 @@ module.exports = ({ elite2Api, whereaboutsApi, logError }) => async (req, res) =
     const prisonersActiveAlertCodes = prisonerDetails.alerts
       .filter(alert => !alert.expired)
       .map(alert => alert.alertCode)
-    const alertsToShow = alertFlagValues.filter(alertFlag =>
+    const alertsToShow = alertFlagLabels.filter(alertFlag =>
       alertFlag.alertCodes.some(
         alert => prisonersActiveAlertCodes.includes(alert) && cellMoveAlertCodes.includes(alert)
       )

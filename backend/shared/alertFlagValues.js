@@ -1,4 +1,4 @@
-module.exports = [
+const alertFlagLabels = [
   { alertCodes: ['HA'], classes: 'alert-status alert-status--acct', label: 'ACCT open' },
   {
     alertCodes: ['HA1'],
@@ -96,4 +96,62 @@ module.exports = [
   },
   { alertCodes: ['USU'], classes: 'alert-status alert-status--shielding-unit', label: 'Shielding Unit' },
   { alertCodes: ['URS'], classes: 'alert-status alert-status--refusing-to-shield', label: 'Refusing to shield' },
+  { alertCodes: ['RKS'], classes: 'alert-status alert-status--risk-to-known-adults', label: 'Risk to known adults' },
+  { alertCodes: ['VIP'], classes: 'alert-status alert-status--isolated-prisoner', label: 'Isolated' },
 ].sort((a, b) => a.label.localeCompare(b.label))
+
+const cellMoveAlertCodes = [
+  'PEEP',
+  'XTACT',
+  'RTP',
+  'RLG',
+  'RCON',
+  'XHT',
+  'XGANG',
+  'XR',
+  'XA',
+  'XEL',
+  'CSIP',
+  'URCU',
+  'UPIU',
+  'USU',
+  'URS',
+  'RKS',
+  'VIP',
+]
+
+const profileAlertCodes = [
+  'HA',
+  'HA1',
+  'XSA',
+  'XA',
+  'PEEP',
+  'XEL',
+  'XRF',
+  'XTACT',
+  'XCO',
+  'XCA',
+  'XCI',
+  'XR',
+  'RTP',
+  'RLG',
+  'XHT',
+  'XCU',
+  'XGANG',
+  'CSIP',
+  'F1',
+  'LCE',
+  'RNO121',
+  'RCON',
+  'RCDR',
+  'URCU',
+  'UPIU',
+  'USU',
+  'URS',
+]
+
+module.exports = {
+  alertFlagLabels,
+  cellMoveAlertCodes,
+  profileAlertCodes,
+}

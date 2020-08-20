@@ -82,6 +82,19 @@ describe('prisoner profile service', () => {
           addedByFirstName: 'OFFICER',
           addedByLastName: 'TWO',
         },
+        {
+          alertId: 3,
+          alertType: 'V',
+          alertTypeDescription: 'Vulnerability',
+          alertCode: 'VIP',
+          alertCodeDescription: 'Isolated Prisoner',
+          comment: 'test',
+          dateCreated: '2020-08-20',
+          expired: false,
+          active: true,
+          addedByFirstName: 'John',
+          addedByLastName: 'Smith',
+        },
       ],
       assignedLivingUnit: {
         description: 'CELL-123',
@@ -178,6 +191,14 @@ describe('prisoner profile service', () => {
         staffName: undefined,
         writtenLanguage: undefined,
       })
+
+      expect(getPrisonerProfileData).toEqual(
+        expect.objectContaining({
+          alerts: expect.not.arrayContaining([
+            { alertCodes: ['VIP'], classes: 'alert-status alert-status--isolated-prisoner', label: 'Isolated' },
+          ]),
+        })
+      )
     })
 
     it('should return the correct prisoner information when some data is missing', async () => {

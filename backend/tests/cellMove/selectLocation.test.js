@@ -60,6 +60,19 @@ describe('select location', () => {
         expiredByLastName: 'Smith',
         offenderNo,
       },
+      {
+        alertId: 3,
+        alertType: 'V',
+        alertTypeDescription: 'Vulnerability',
+        alertCode: 'VIP',
+        alertCodeDescription: 'Isolated Prisoner',
+        comment: 'test',
+        dateCreated: '2020-08-20',
+        expired: false,
+        active: true,
+        addedByFirstName: 'John',
+        addedByLastName: 'Smith',
+      },
     ],
   }
 
@@ -114,7 +127,10 @@ describe('select location', () => {
           breadcrumbPrisonerName: 'User, Test',
           showNonAssociationsLink: false,
           showCsraLink: false,
-          alerts: [{ alertCodes: ['XGANG'], classes: 'alert-status alert-status--gang-member', label: 'Gang member' }],
+          alerts: [
+            { alertCodes: ['XGANG'], classes: 'alert-status alert-status--gang-member', label: 'Gang member' },
+            { alertCodes: ['VIP'], classes: 'alert-status alert-status--isolated-prisoner', label: 'Isolated' },
+          ],
           offenderNo,
         })
       )
