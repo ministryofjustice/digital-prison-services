@@ -299,7 +299,7 @@ const setup = ({
     retentionReasonsRouter({ elite2Api, dataComplianceApi, logError })
   )
 
-  router.use('/prisoner/:offenderNo/cell-move', cellMoveRouter({ elite2Api, logError }))
+  router.use('/prisoner/:offenderNo/cell-move', cellMoveRouter({ elite2Api, whereaboutsApi, logError }))
 
   router.use(
     '/prisoner/:offenderNo',

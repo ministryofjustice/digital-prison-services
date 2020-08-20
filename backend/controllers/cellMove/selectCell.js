@@ -8,10 +8,10 @@ const {
 
 module.exports = ({ elite2Api, whereaboutsApi, logError }) => async (req, res) => {
   const { offenderNo } = req.params
-  const { missingLocation } = req.query
-  const errors = []
-  if (missingLocation) {
-    errors.push({ text: 'Select residential unit', href: '#location' })
+  const { location, attribute } = req.query
+
+  if (!location) {
+    res.redirect(`/prisoner/${offenderNo}/cell-move/select-location?missingLocation=true`)
   }
 
   try {
@@ -20,7 +20,7 @@ module.exports = ({ elite2Api, whereaboutsApi, logError }) => async (req, res) =
     const cellAttributesData = await elite2Api.getCellAttributes(res.locals)
     const locationsData = await whereaboutsApi.searchGroups(res.locals, prisonerDetails.agencyId)
 
-    const locations = locationsData.map(location => ({ text: location.name, value: location.key }))
+    const locations = locationsData.map(loc => ({ text: loc.name, value: loc.key }))
     locations.unshift({ text: 'All locations', value: 'ALL' })
     const cellAttributes = cellAttributesData
       .filter(cellAttribute => 'Y'.includes(cellAttribute.activeFlag))
@@ -34,23 +34,33 @@ module.exports = ({ elite2Api, whereaboutsApi, logError }) => async (req, res) =
         alert => prisonersActiveAlertCodes.includes(alert) && cellMoveAlertCodes.includes(alert)
       )
     )
+    // If the location is 'ALL' we do not need to call the whereabouts API,
+    // we can directly call prisonApi.
+    const cells =
+      location === 'ALL'
+        ? await elite2Api.getCellsWithCapacity(res.locals, prisonerDetails.agencyId)
+        : await whereaboutsApi.getCellsWithCapacity(res.locals, {
+            agencyId: prisonerDetails.agencyId,
+            groupName: location,
+          })
 
-    return res.render('cellMove/selectLocation.njk', {
+    return res.render('cellMove/selectCell.njk', {
       breadcrumbPrisonerName: putLastNameFirst(prisonerDetails.firstName, prisonerDetails.lastName),
       showNonAssociationsLink:
         nonAssociations && showNonAssociationsLink(nonAssociations, prisonerDetails.assignedLivingUnit),
       showCsraLink: prisonerDetails.assessments && showCsraLink(prisonerDetails.assessments),
       alerts: alertsToShow,
+      cells,
       locations,
-      errors,
       cellAttributes,
+      location,
+      attribute,
       prisonerDetails,
       offenderNo,
       dpsUrl,
       nonAssociationLink: `/prisoner/${offenderNo}/cell-move/non-associations`,
       selectLocationRootUrl: `/prisoner/${offenderNo}/cell-move/select-location`,
       formAction: `/prisoner/${offenderNo}/cell-move/select-cell`,
-      profileUrl: `/prisoner/${offenderNo}`,
     })
   } catch (error) {
     if (error) logError(req.originalUrl, error, serviceUnavailableMessage)

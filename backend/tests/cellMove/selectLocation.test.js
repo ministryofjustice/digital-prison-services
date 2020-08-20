@@ -12,6 +12,8 @@ describe('select location', () => {
 
   const elite2Api = {}
 
+  const whereaboutsApi = {}
+
   const offenderNo = 'ABC123'
 
   const getDetailsResponse = {
@@ -19,6 +21,7 @@ describe('select location', () => {
     firstName: 'Test',
     lastName: 'User',
     csra: 'High',
+    agencyId: 'MDI',
     assessments: [],
     assignedLivingUnit: {},
     alerts: [
@@ -88,8 +91,145 @@ describe('select location', () => {
 
     elite2Api.getDetails = jest.fn().mockResolvedValue(getDetailsResponse)
     elite2Api.getNonAssociations = jest.fn().mockResolvedValue({ nonAssociations: [] })
+    elite2Api.getCellAttributes = jest.fn().mockResolvedValue([
+      {
+        domain: 'HOU_UNIT_ATT',
+        code: 'A',
+        description: 'Cat A Cell',
+        activeFlag: 'Y',
+        listSeq: 99,
+        systemDataFlag: 'N',
+        subCodes: [],
+      },
+      {
+        domain: 'HOU_UNIT_ATT',
+        code: 'DO',
+        description: 'Double Occupancy',
+        activeFlag: 'Y',
+        listSeq: 99,
+        systemDataFlag: 'N',
+        subCodes: [],
+      },
+      {
+        domain: 'HOU_UNIT_ATT',
+        code: 'ELC',
+        description: 'E List Cell',
+        activeFlag: 'Y',
+        listSeq: 99,
+        systemDataFlag: 'N',
+        subCodes: [],
+      },
+      {
+        domain: 'HOU_UNIT_ATT',
+        code: 'GC',
+        description: 'Gated Cell',
+        activeFlag: 'Y',
+        listSeq: 99,
+        systemDataFlag: 'N',
+        subCodes: [],
+      },
+      {
+        domain: 'HOU_UNIT_ATT',
+        code: 'LC',
+        description: 'Listener Cell',
+        activeFlag: 'Y',
+        listSeq: 99,
+        systemDataFlag: 'N',
+        subCodes: [],
+      },
+      {
+        domain: 'HOU_UNIT_ATT',
+        code: 'LF',
+        description: 'Locate Flat',
+        activeFlag: 'Y',
+        listSeq: 99,
+        systemDataFlag: 'N',
+        subCodes: [],
+      },
+      {
+        domain: 'HOU_UNIT_ATT',
+        code: 'MO',
+        description: 'Multiple Occupancy',
+        activeFlag: 'Y',
+        listSeq: 99,
+        systemDataFlag: 'N',
+        subCodes: [],
+      },
+      {
+        domain: 'HOU_UNIT_ATT',
+        code: 'NSMC',
+        description: 'Non Smoker Cell',
+        activeFlag: 'Y',
+        listSeq: 99,
+        systemDataFlag: 'N',
+        subCodes: [],
+      },
+      {
+        domain: 'HOU_UNIT_ATT',
+        code: 'OC',
+        description: 'Observation Cell',
+        activeFlag: 'Y',
+        listSeq: 99,
+        systemDataFlag: 'N',
+        subCodes: [],
+      },
+      {
+        domain: 'HOU_UNIT_ATT',
+        code: 'SC',
+        description: 'Safe Cell',
+        activeFlag: 'Y',
+        listSeq: 99,
+        systemDataFlag: 'N',
+        subCodes: [],
+      },
+      {
+        domain: 'HOU_UNIT_ATT',
+        code: 'SO',
+        description: 'Single Occupancy',
+        activeFlag: 'Y',
+        listSeq: 99,
+        systemDataFlag: 'N',
+        subCodes: [],
+      },
+      {
+        domain: 'HOU_UNIT_ATT',
+        code: 'SPC',
+        description: 'Special Cell',
+        activeFlag: 'Y',
+        listSeq: 99,
+        systemDataFlag: 'N',
+        subCodes: [],
+      },
+      {
+        domain: 'HOU_UNIT_ATT',
+        code: 'WA',
+        description: 'Wheelchair Access',
+        activeFlag: 'Y',
+        listSeq: 99,
+        systemDataFlag: 'N',
+        subCodes: [],
+      },
+    ])
 
-    controller = selectLocation({ elite2Api, logError })
+    whereaboutsApi.searchGroups = jest.fn().mockResolvedValue([
+      { name: 'Casu', key: 'Casu', children: [] },
+      {
+        name: 'Houseblock 1',
+        key: 'Houseblock 1',
+        children: [],
+      },
+      {
+        name: 'Houseblock 2',
+        key: 'Houseblock 2',
+      },
+      {
+        name: 'Houseblock 3',
+        key: 'Houseblock 3',
+        children: [],
+      },
+    ])
+
+    controller = selectLocation({ elite2Api, whereaboutsApi, logError })
   })
 
   it('Makes the expected API calls', async () => {
@@ -97,6 +237,8 @@ describe('select location', () => {
 
     expect(elite2Api.getDetails).toHaveBeenCalledWith(res.locals, offenderNo, true)
     expect(elite2Api.getNonAssociations).toHaveBeenCalledWith(res.locals, 1234)
+    expect(elite2Api.getCellAttributes).toHaveBeenCalledWith(res.locals)
+    expect(whereaboutsApi.searchGroups).toHaveBeenCalledWith(res.locals, 'MDI')
   })
 
   it('Should render error template when there is an API error', async () => {
@@ -274,6 +416,38 @@ describe('select location', () => {
         'cellMove/selectLocation.njk',
         expect.objectContaining({
           showCsraLink: true,
+        })
+      )
+    })
+
+    it('populates the dropdowns correctly', async () => {
+      await controller(req, res)
+
+      expect(res.render).toHaveBeenCalledWith(
+        'cellMove/selectLocation.njk',
+        expect.objectContaining({
+          locations: [
+            { text: 'All locations', value: 'ALL' },
+            { text: 'Casu', value: 'Casu' },
+            { text: 'Houseblock 1', value: 'Houseblock 1' },
+            { text: 'Houseblock 2', value: 'Houseblock 2' },
+            { text: 'Houseblock 3', value: 'Houseblock 3' },
+          ],
+          cellAttributes: [
+            { text: 'Cat A Cell', value: 'A' },
+            { text: 'Double Occupancy', value: 'DO' },
+            { text: 'E List Cell', value: 'ELC' },
+            { text: 'Gated Cell', value: 'GC' },
+            { text: 'Listener Cell', value: 'LC' },
+            { text: 'Locate Flat', value: 'LF' },
+            { text: 'Multiple Occupancy', value: 'MO' },
+            { text: 'Non Smoker Cell', value: 'NSMC' },
+            { text: 'Observation Cell', value: 'OC' },
+            { text: 'Safe Cell', value: 'SC' },
+            { text: 'Single Occupancy', value: 'SO' },
+            { text: 'Special Cell', value: 'SPC' },
+            { text: 'Wheelchair Access', value: 'WA' },
+          ],
         })
       )
     })

@@ -324,5 +324,6 @@ module.exports = on => {
         allocationManager.stubGetPomForOffender(prisonOffenderManagers),
       ]),
     stubUserCaseLoads: caseloads => elite2api.stubUserCaseloads(caseloads),
+    stubCellAttributes: elite2api.stubCellAttributes,
   })
 }
