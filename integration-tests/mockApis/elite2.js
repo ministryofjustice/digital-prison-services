@@ -1,5 +1,6 @@
 const { stubFor, postFor } = require('./wiremock')
 const alertTypes = require('./responses/alertTypes')
+const cellAttributes = require('./responses/cellAttributes')
 const assessmentsResponse = require('./responses/assessmentsResponse')
 const activity3 = require('./responses/activity3')
 
@@ -1291,6 +1292,20 @@ module.exports = {
           'Content-Type': 'application/json;charset=UTF-8',
         },
         jsonBody: response || {},
+      },
+    }),
+  stubCellAttributes: () =>
+    stubFor({
+      request: {
+        method: 'GET',
+        urlPattern: '/api/reference-domains/domains/HOU_UNIT_ATT',
+      },
+      response: {
+        status: 200,
+        headers: {
+          'Content-Type': 'application/json;charset=UTF-8',
+        },
+        jsonBody: cellAttributes,
       },
     }),
 }

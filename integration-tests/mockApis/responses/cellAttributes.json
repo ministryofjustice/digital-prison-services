@@ -1,0 +1,119 @@
+[
+  {
+    "domain": "HOU_UNIT_ATT",
+    "code": "A",
+    "description": "Cat A Cell",
+    "activeFlag": "Y",
+    "listSeq": 99,
+    "systemDataFlag": "N",
+    "subCodes": []
+  },
+  {
+    "domain": "HOU_UNIT_ATT",
+    "code": "DO",
+    "description": "Double Occupancy",
+    "activeFlag": "Y",
+    "listSeq": 99,
+    "systemDataFlag": "N",
+    "subCodes": []
+  },
+  {
+    "domain": "HOU_UNIT_ATT",
+    "code": "ELC",
+    "description": "E List Cell",
+    "activeFlag": "Y",
+    "listSeq": 99,
+    "systemDataFlag": "N",
+    "subCodes": []
+  },
+  {
+    "domain": "HOU_UNIT_ATT",
+    "code": "GC",
+    "description": "Gated Cell",
+    "activeFlag": "Y",
+    "listSeq": 99,
+    "systemDataFlag": "N",
+    "subCodes": []
+  },
+  {
+    "domain": "HOU_UNIT_ATT",
+    "code": "LC",
+    "description": "Listener Cell",
+    "activeFlag": "Y",
+    "listSeq": 99,
+    "systemDataFlag": "N",
+    "subCodes": []
+  },
+  {
+    "domain": "HOU_UNIT_ATT",
+    "code": "LF",
+    "description": "Locate Flat",
+    "activeFlag": "Y",
+    "listSeq": 99,
+    "systemDataFlag": "N",
+    "subCodes": []
+  },
+  {
+    "domain": "HOU_UNIT_ATT",
+    "code": "MO",
+    "description": "Multiple Occupancy",
+    "activeFlag": "Y",
+    "listSeq": 99,
+    "systemDataFlag": "N",
+    "subCodes": []
+  },
+  {
+    "domain": "HOU_UNIT_ATT",
+    "code": "NSMC",
+    "description": "Non Smoker Cell",
+    "activeFlag": "Y",
+    "listSeq": 99,
+    "systemDataFlag": "N",
+    "subCodes": []
+  },
+  {
+    "domain": "HOU_UNIT_ATT",
+    "code": "OC",
+    "description": "Observation Cell",
+    "activeFlag": "Y",
+    "listSeq": 99,
+    "systemDataFlag": "N",
+    "subCodes": []
+  },
+  {
+    "domain": "HOU_UNIT_ATT",
+    "code": "SC",
+    "description": "Safe Cell",
+    "activeFlag": "Y",
+    "listSeq": 99,
+    "systemDataFlag": "N",
+    "subCodes": []
+  },
+  {
+    "domain": "HOU_UNIT_ATT",
+    "code": "SO",
+    "description": "Single Occupancy",
+    "activeFlag": "Y",
+    "listSeq": 99,
+    "systemDataFlag": "N",
+    "subCodes": []
+  },
+  {
+    "domain": "HOU_UNIT_ATT",
+    "code": "SPC",
+    "description": "Special Cell",
+    "activeFlag": "Y",
+    "listSeq": 99,
+    "systemDataFlag": "N",
+    "subCodes": []
+  },
+  {
+    "domain": "HOU_UNIT_ATT",
+    "code": "WA",
+    "description": "Wheelchair Access",
+    "activeFlag": "Y",
+    "listSeq": 99,
+    "systemDataFlag": "N",
+    "subCodes": []
+  }
+]

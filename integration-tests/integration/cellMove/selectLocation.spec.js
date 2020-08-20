@@ -16,6 +16,8 @@ context('A user can select a cell', () => {
     cy.task('resetAndStubTokenVerification')
     cy.task('stubOffenderFullDetails', offenderFullDetails)
     cy.task('stubBookingNonAssociations', {})
+    cy.task('stubGroups', { id: 'MDI' })
+    cy.task('stubCellAttributes')
   })
 
   it('Shows the correct data for no non-associations and no csra comment', () => {
@@ -109,5 +111,15 @@ context('A user can select a cell', () => {
     selectLocationPage.alerts().contains('Gang member')
     selectLocationPage.nonAssociationsLink().contains('View non-associations')
     selectLocationPage.nonAssociationsMessage().should('not.be.visible')
+  })
+
+  it('Passes the correct data to the select a cell page', () => {
+    cy.visit(`/prisoner/${offenderNo}/cell-move/select-location`)
+    const selectLocationPage = SelectLocationPage.verifyOnPage()
+    const form = selectLocationPage.form()
+    form.location().select('1')
+    form.attribute().select('Listener Cell')
+    form.submitButton().click()
+    cy.url().should('include', 'select-cell?location=1&attribute=LC')
   })
 })

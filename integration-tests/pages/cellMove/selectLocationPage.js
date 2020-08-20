@@ -2,6 +2,11 @@ const page = require('../page')
 
 const selectLocationPage = () =>
   page('Select a location', {
+    form: () => ({
+      location: () => cy.get('#location'),
+      attribute: () => cy.get('#attribute'),
+      submitButton: () => cy.get('button[type="submit"]'),
+    }),
     name: () => cy.get("[data-test='name']"),
     detailsLink: () => cy.get("[data-test='name-link']"),
     livingUnit: () => cy.get("[data-test='living-unit']"),
