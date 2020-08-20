@@ -297,6 +297,8 @@ const elite2ApiFactory = client => {
 
   const getVisitTypes = context => get(context, '/api/reference-domains/domains/VISIT_TYPE', 1000)
 
+  const getCellAttributes = context => get(context, '/api/reference-domains/domains/HOU_UNIT_ATT', 1000)
+
   const getSentenceAdjustments = (context, bookingId) => get(context, `/api/bookings/${bookingId}/sentenceAdjustments`)
 
   const getCourtCases = (context, bookingId) => get(context, `/api/bookings/${bookingId}/court-cases`)
@@ -417,6 +419,7 @@ const elite2ApiFactory = client => {
     getScheduledEventsForThisWeek,
     getScheduledEventsForNextWeek,
     getNonAssociations,
+    getCellAttributes,
   }
 }
 

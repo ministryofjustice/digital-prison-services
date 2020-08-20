@@ -59,6 +59,11 @@ const whereaboutsApiFactory = client => {
   const getAttendanceChanges = (context, { fromDateTime, toDateTime }) =>
     get(context, `/attendances/changes?fromDateTime=${fromDateTime}&toDateTime=${toDateTime}`)
 
+  const getCellsWithCapacity = (context, { agencyId, groupName, attribute }) => {
+    const attributeQuery = attribute ? `?attribute=${attribute}` : ''
+    return get(context, `/locations/cellsWithCapacity/${agencyId}/${groupName}${attributeQuery}`)
+  }
+
   return {
     getAttendance,
     getAttendanceForBookings,
@@ -76,6 +81,7 @@ const whereaboutsApiFactory = client => {
     addVideoLinkAppointment,
     getVideoLinkAppointments,
     getAttendanceChanges,
+    getCellsWithCapacity,
   }
 }
 

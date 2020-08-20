@@ -25,12 +25,19 @@ const cellMoveAlertCodes = [
   'URS',
 ]
 
-module.exports = ({ elite2Api, logError }) => async (req, res) => {
+module.exports = ({ elite2Api, whereaboutsApi, logError }) => async (req, res) => {
   const { offenderNo } = req.params
 
   try {
     const prisonerDetails = await elite2Api.getDetails(res.locals, offenderNo, true)
     const nonAssociations = await elite2Api.getNonAssociations(res.locals, prisonerDetails.bookingId)
+    const cellAttributesData = await elite2Api.getCellAttributes(res.locals)
+    const locationsData = await whereaboutsApi.searchGroups(res.locals, prisonerDetails.agencyId)
+
+    const locations = locationsData.map(location => ({ text: location.name, value: location.key }))
+    const cellAttributes = cellAttributesData
+      .filter(cellAttribute => 'Y'.includes(cellAttribute.activeFlag))
+      .map(cellAttribute => ({ text: cellAttribute.description, value: cellAttribute.code }))
 
     const prisonersActiveAlertCodes = prisonerDetails.alerts
       .filter(alert => !alert.expired)
@@ -67,10 +74,14 @@ module.exports = ({ elite2Api, logError }) => async (req, res) => {
       showNonAssociationsLink,
       showCsraLink,
       alerts: alertsToShow,
+      locations,
+      cellAttributes,
       prisonerDetails,
       offenderNo,
       dpsUrl,
       nonAssociationLink: `/prisoner/${offenderNo}/cell-move/non-associations`,
+      selectLocationRootUrl: `/prisoner/${offenderNo}/cell-move/select-location`,
+      formAction: `/prisoner/${offenderNo}/cell-move/select-cell`,
     })
   } catch (error) {
     if (error) logError(req.originalUrl, error, serviceUnavailableMessage)

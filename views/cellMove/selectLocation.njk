@@ -1,4 +1,6 @@
 {% extends "../partials/layout.njk" %}
+{% from "govuk/components/select/macro.njk" import govukSelect %}
+{% from "govuk/components/button/macro.njk" import govukButton %}
 {% from "../macros/alertFlags.njk" import alertFlags %}
 
 {% set title = "Select a location" %}
@@ -24,72 +26,36 @@
 {% block content %}
   <h1 class="govuk-heading-l">{{title}}</h1>
 
-  <div class="cell-move-header">
-    <div class="govuk-grid-row govuk-!-margin-top-2">
-      <div class="govuk-grid-column-one-half">
-        <div class="govuk-grid-row">
-          <div class="govuk-grid-column-one-third">
-            <h2 class="govuk-heading-m govuk-!-margin-bottom-1">Name</h2>
-          </div>
-          <div class="govuk-grid-column-one-third">
-            <h2 class="govuk-heading-m govuk-!-margin-bottom-1">Current location</h2>
-          </div>
-          <div class="govuk-grid-column-one-third">
-            <h2 class="govuk-heading-m govuk-!-margin-bottom-1">CSRA rating</h2>
-          </div>
-        </div>
-      </div>
-      <div class="govuk-grid-column-one-half">
-        <div class="govuk-grid-row">
-          <div class="govuk-grid-column-one-half">
-            <h2 class="govuk-heading-m govuk-!-margin-bottom-1">Relevant alerts</h2>
-          </div>
-          <div class="govuk-grid-column-one-half">
-            <h2 class="govuk-heading-m govuk-!-margin-bottom-1">Non-associations</h2>
-          </div>
-        </div>
-      </div>
-    </div>
-    <div class="govuk-grid-row govuk-!-margin-bottom-2">
-      <div class="govuk-grid-column-one-half">
-        <div class="govuk-grid-row">
-          <div class="govuk-grid-column-one-third">
-            <p class="govuk-body govuk-!-margin-bottom-1" data-test="name"> {{ breadcrumbPrisonerName }} </p>
-            <a href="#" class="govuk-link" data-test="name-link">View details <span class="govuk-visually-hidden">for {{ breadcrumbPrisonerName }}</span> </a>
-          </div>
-          <div class="govuk-grid-column-one-third">
-            <p class="govuk-body govuk-!-margin-bottom-1" data-test="living-unit"> {{ prisonerDetails.assignedLivingUnit.description }} </p>
-          </div>
-          <div class="govuk-grid-column-one-third">
-            <p class="govuk-body govuk-!-margin-bottom-1" data-test="csra"> {{ prisonerDetails.csra }} </p>
-            {% if showCsraLink %}
-            <a href="#" class="govuk-link" data-test="csra-link">View details <span class="govuk-visually-hidden">for {{ breadcrumbPrisonerName }}</span></a>
-            {% endif %}
-          </div>
-        </div>
-      </div>
-      
-      <div class="govuk-grid-column-one-half">
-        <div class="govuk-grid-row">
-          <div class="govuk-grid-column-one-half" data-test="alerts">
-            {% if alerts.length %}
-              {{ alertFlags(alerts) }}
-            {% else %}
-              <p class="govuk-body govuk-!-margin-bottom-1">None</p>
-            {% endif %}
-          </div>
-          {% if showNonAssociationsLink %}
-          <div class="govuk-grid-column-one-half">
-            <a href={{ nonAssociationLink }} class="govuk-link" data-test="non-associations-link">View non-associations <span class="govuk-visually-hidden">for {{ breadcrumbPrisonerName }}</span></a>
-          </div>
-          {% else %}
-            <div class="govuk-grid-column-one-half">
-              <p class="govuk-body govuk-!-margin-bottom-1" data-test="non-associations-message">You must also check any local processes</p>
-            </div>
-          {% endif %}
-        </div>
-      </div>
-    </div>
+  {% include "./partials/prisonerInformation.njk" %}
+
+  <div class="govuk-grid-row govuk-!-margin-top-4">
+    <div class="govuk-grid-column-full">
+      <form class="horizontal-form" method="GET" action="{{ formAction }}">
+        <p class="govuk-body govuk-!-font-weight-bold govuk-!-margin-right-2 govuk-!-margin-top-2">View by:</p>
+
+          {{ govukSelect({
+              name: 'location',
+              id: 'location',
+              items: locations | addDefaultSelectedVale('Select residential unit', true) | setSelected(formValues.location),
+              errorMessage: errors | findError(type)
+          }) }}
+
+          {{ govukSelect({
+              name: 'attribute',
+              id: 'attribute',
+              items: cellAttributes | addDefaultSelectedVale('Select cell type', true) | setSelected(formValues.attribute)
+          }) }}
+
+          {{ govukButton({
+              text: "Search",
+              preventDoubleClick: true,
+              type: "submit"
+          }) }}
+
+          <a href="{{ selectLocationRootUrl }}" class="govuk-link">Clear</a>
+      </form>
+    </div<
   </div>
+      
   
 {% endblock %}

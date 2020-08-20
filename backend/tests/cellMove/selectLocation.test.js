@@ -12,6 +12,8 @@ describe('select location', () => {
 
   const elite2Api = {}
 
+  const whereaboutsApi = {}
+
   const offenderNo = 'ABC123'
 
   const getDetailsResponse = {
@@ -75,8 +77,11 @@ describe('select location', () => {
 
     elite2Api.getDetails = jest.fn().mockResolvedValue(getDetailsResponse)
     elite2Api.getNonAssociations = jest.fn().mockResolvedValue({ nonAssociations: [] })
+    elite2Api.getCellAttributes = jest.fn().mockResolvedValue([])
 
-    controller = selectLocation({ elite2Api, logError })
+    whereaboutsApi.searchGroups = jest.fn().mockResolvedValue([])
+
+    controller = selectLocation({ elite2Api, whereaboutsApi, logError })
   })
 
   it('Makes the expected API calls', async () => {
