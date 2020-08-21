@@ -41,7 +41,6 @@ describe('prisoner personal', () => {
     personService.getPersonContactDetails = jest.fn().mockResolvedValue({})
 
     elite2Api.getDetails = jest.fn().mockResolvedValue({})
-    elite2Api.getPrisonerDetail = jest.fn().mockResolvedValue({})
     elite2Api.getIdentifiers = jest.fn().mockResolvedValue([])
     elite2Api.getOffenderAliases = jest.fn().mockResolvedValue([])
     elite2Api.getPrisonerProperty = jest.fn().mockResolvedValue([])
@@ -239,7 +238,8 @@ describe('prisoner personal', () => {
 
     describe('when there is physical characteristic data', () => {
       beforeEach(() => {
-        elite2Api.getPrisonerDetail.mockResolvedValue({
+        prisonerProfileService.getPrisonerProfileData = jest.fn().mockResolvedValue({
+          ...prisonerProfileData,
           physicalAttributes: {
             heightMetres: 1.91,
             weightKilograms: 86,
@@ -299,7 +299,8 @@ describe('prisoner personal', () => {
 
     describe('when there is distinguishing physical marks data', () => {
       beforeEach(() => {
-        elite2Api.getPrisonerDetail.mockResolvedValue({
+        prisonerProfileService.getPrisonerProfileData = jest.fn().mockResolvedValue({
+          ...prisonerProfileData,
           physicalMarks: [
             { type: 'Tattoo', side: 'Left', bodyPart: 'Arm', comment: 'Childs name', orentiation: 'Facing up' },
             {
@@ -378,7 +379,8 @@ describe('prisoner personal', () => {
 
       describe('when there is primary data', () => {
         beforeEach(() => {
-          elite2Api.getPrisonerDetail.mockResolvedValue({
+          prisonerProfileService.getPrisonerProfileData = jest.fn().mockResolvedValue({
+            ...prisonerProfileData,
             dateOfBirth: '1990-10-12',
             age: 29,
             birthPlace: 'DONCASTER',
@@ -437,7 +439,8 @@ describe('prisoner personal', () => {
 
       describe('when there is secondary data', () => {
         beforeEach(() => {
-          elite2Api.getPrisonerDetail.mockResolvedValue({
+          prisonerProfileService.getPrisonerProfileData = jest.fn().mockResolvedValue({
+            ...prisonerProfileData,
             profileInformation: [
               { type: 'SEXO', resultValue: 'Hetrosexual' },
               { type: 'MARITAL', resultValue: 'Single-not married/in civil partnership' },
@@ -488,7 +491,8 @@ describe('prisoner personal', () => {
       describe('when there is tertiary data', () => {
         describe('when travel restrictions does not have a value and other values are No', () => {
           beforeEach(() => {
-            elite2Api.getPrisonerDetail.mockResolvedValue({
+            prisonerProfileService.getPrisonerProfileData = jest.fn().mockResolvedValue({
+              ...prisonerProfileData,
               profileInformation: [
                 { type: 'IMM', resultValue: 'No' },
                 { type: 'TRAVEL', resultValue: '' },
@@ -515,7 +519,8 @@ describe('prisoner personal', () => {
 
         describe('when travel restrictions does have a value and other values are Yes', () => {
           beforeEach(() => {
-            elite2Api.getPrisonerDetail.mockResolvedValue({
+            prisonerProfileService.getPrisonerProfileData = jest.fn().mockResolvedValue({
+              ...prisonerProfileData,
               profileInformation: [
                 { type: 'IMM', resultValue: 'Yes' },
                 { type: 'TRAVEL', resultValue: 'Cannot travel to Sheffield' },
@@ -569,7 +574,8 @@ describe('prisoner personal', () => {
 
       describe('when the prisoner has been warned about tattooing and their appearance', () => {
         beforeEach(() => {
-          elite2Api.getPrisonerDetail.mockResolvedValue({
+          prisonerProfileService.getPrisonerProfileData = jest.fn().mockResolvedValue({
+            ...prisonerProfileData,
             profileInformation: [{ type: 'TAT', resultValue: 'Yes' }, { type: 'APPEAR', resultValue: 'Yes' }],
           })
         })
@@ -593,7 +599,8 @@ describe('prisoner personal', () => {
 
       describe('when the prisoner has not been warned about tattooing and their appearance', () => {
         beforeEach(() => {
-          elite2Api.getPrisonerDetail.mockResolvedValue({
+          prisonerProfileService.getPrisonerProfileData = jest.fn().mockResolvedValue({
+            ...prisonerProfileData,
             profileInformation: [{ type: 'TAT', resultValue: 'No' }, { type: 'APPEAR', resultValue: 'No' }],
           })
         })
@@ -635,7 +642,8 @@ describe('prisoner personal', () => {
       describe('listener suitable and recognised', () => {
         describe('when suitable is No and recognised is No', () => {
           beforeEach(() => {
-            elite2Api.getPrisonerDetail.mockResolvedValue({
+            prisonerProfileService.getPrisonerProfileData = jest.fn().mockResolvedValue({
+              ...prisonerProfileData,
               profileInformation: [{ type: 'LIST_SUIT', resultValue: 'No' }, { type: 'LIST_REC', resultValue: 'No' }],
             })
           })
@@ -656,7 +664,8 @@ describe('prisoner personal', () => {
 
         describe('when suitable is Yes and recognised is No', () => {
           beforeEach(() => {
-            elite2Api.getPrisonerDetail.mockResolvedValue({
+            prisonerProfileService.getPrisonerProfileData = jest.fn().mockResolvedValue({
+              ...prisonerProfileData,
               profileInformation: [{ type: 'LIST_SUIT', resultValue: 'Yes' }, { type: 'LIST_REC', resultValue: 'No' }],
             })
           })
@@ -680,7 +689,8 @@ describe('prisoner personal', () => {
 
         describe('when suitable is Yes and recognised is Yes', () => {
           beforeEach(() => {
-            elite2Api.getPrisonerDetail.mockResolvedValue({
+            prisonerProfileService.getPrisonerProfileData = jest.fn().mockResolvedValue({
+              ...prisonerProfileData,
               profileInformation: [{ type: 'LIST_SUIT', resultValue: 'Yes' }, { type: 'LIST_REC', resultValue: 'Yes' }],
             })
           })
@@ -701,7 +711,8 @@ describe('prisoner personal', () => {
 
         describe('when suitable is Yes and recognised is empty', () => {
           beforeEach(() => {
-            elite2Api.getPrisonerDetail.mockResolvedValue({
+            prisonerProfileService.getPrisonerProfileData = jest.fn().mockResolvedValue({
+              ...prisonerProfileData,
               profileInformation: [{ type: 'LIST_SUIT', resultValue: 'Yes' }],
             })
           })
@@ -725,7 +736,8 @@ describe('prisoner personal', () => {
 
         describe('when suitable is No and recognised is Yes', () => {
           beforeEach(() => {
-            elite2Api.getPrisonerDetail.mockResolvedValue({
+            prisonerProfileService.getPrisonerProfileData = jest.fn().mockResolvedValue({
+              ...prisonerProfileData,
               profileInformation: [{ type: 'LIST_SUIT', resultValue: 'No' }, { type: 'LIST_REC', resultValue: 'Yes' }],
             })
           })
@@ -746,7 +758,8 @@ describe('prisoner personal', () => {
 
         describe('when suitable has no value and recognised is Yes', () => {
           beforeEach(() => {
-            elite2Api.getPrisonerDetail.mockResolvedValue({
+            prisonerProfileService.getPrisonerProfileData = jest.fn().mockResolvedValue({
+              ...prisonerProfileData,
               profileInformation: [{ type: 'LIST_REC', resultValue: 'Yes' }],
             })
           })
@@ -785,7 +798,8 @@ describe('prisoner personal', () => {
 
       describe('when the domestic abuse values are YES', () => {
         beforeEach(() => {
-          elite2Api.getPrisonerDetail.mockResolvedValue({
+          prisonerProfileService.getPrisonerProfileData = jest.fn().mockResolvedValue({
+            ...prisonerProfileData,
             profileInformation: [{ type: 'DOMESTIC', resultValue: 'YES' }, { type: 'DOMVIC', resultValue: 'YES' }],
           })
         })
@@ -809,7 +823,8 @@ describe('prisoner personal', () => {
 
       describe('when the domestic abuse values are NO', () => {
         beforeEach(() => {
-          elite2Api.getPrisonerDetail.mockResolvedValue({
+          prisonerProfileService.getPrisonerProfileData = jest.fn().mockResolvedValue({
+            ...prisonerProfileData,
             profileInformation: [{ type: 'DOMESTIC', resultValue: 'NO' }, { type: 'DOMVIC', resultValue: 'NO' }],
           })
         })
@@ -1818,7 +1833,6 @@ describe('prisoner personal', () => {
   describe('when there are errors with retrieving information', () => {
     beforeEach(() => {
       req.params.offenderNo = offenderNo
-      elite2Api.getPrisonerDetail.mockRejectedValue(new Error('Network error'))
       elite2Api.getIdentifiers.mockRejectedValue(new Error('Network error'))
       elite2Api.getOffenderAliases.mockRejectedValue(new Error('Network error'))
       elite2Api.getPrisonerProperty.mockRejectedValue(new Error('Network error'))

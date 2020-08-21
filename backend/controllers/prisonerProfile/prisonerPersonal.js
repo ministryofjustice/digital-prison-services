@@ -38,7 +38,6 @@ module.exports = ({ prisonerProfileService, personService, elite2Api, allocation
 
   const [
     prisonerProfileData,
-    fullPrisonerDetails,
     identifiers,
     aliases,
     property,
@@ -52,7 +51,6 @@ module.exports = ({ prisonerProfileService, personService, elite2Api, allocation
   ] = await Promise.all(
     [
       prisonerProfileService.getPrisonerProfileData(res.locals, offenderNo),
-      elite2Api.getPrisonerDetail(res.locals, bookingId),
       elite2Api.getIdentifiers(res.locals, bookingId),
       elite2Api.getOffenderAliases(res.locals, bookingId),
       elite2Api.getPrisonerProperty(res.locals, bookingId),
@@ -122,7 +120,7 @@ module.exports = ({ prisonerProfileService, personService, elite2Api, allocation
     return 0
   })
 
-  const { physicalAttributes, physicalCharacteristics, physicalMarks } = fullPrisonerDetails || {}
+  const { physicalAttributes, physicalCharacteristics, physicalMarks } = prisonerProfileData || {}
   const { language, writtenLanguage, interpreterRequired } = prisonerProfileData
 
   return res.render('prisonerProfile/prisonerPersonal/prisonerPersonal.njk', {
@@ -131,7 +129,7 @@ module.exports = ({ prisonerProfileService, personService, elite2Api, allocation
     aliases: aliasesViewModel({ aliases }),
     distinguishingMarks: distinguishingMarksViewModel({ physicalMarks }),
     identifiers: identifiersViewModel({ identifiers }),
-    personalDetails: personalDetailsViewModel({ prisonerDetails: fullPrisonerDetails, property }),
+    personalDetails: personalDetailsViewModel({ prisonerDetails: prisonerProfileData, property }),
     physicalCharacteristics: physicalCharacteristicsViewModel({ physicalAttributes, physicalCharacteristics }),
     ...activeContactsViewModel({
       personal: nextOfKinsWithContact,

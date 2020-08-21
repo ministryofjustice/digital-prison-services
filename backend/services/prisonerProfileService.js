@@ -45,6 +45,10 @@ module.exports = ({
       interpreterRequired,
       writtenLanguage,
       language,
+      profileInformation,
+      physicalAttributes,
+      physicalCharacteristics,
+      physicalMarks,
     } = prisonerDetails
 
     const [
@@ -151,6 +155,10 @@ module.exports = ({
       language,
       interpreterRequired,
       writtenLanguage,
+      profileInformation,
+      physicalAttributes,
+      physicalCharacteristics,
+      physicalMarks,
       staffId: currentUser.staffId,
       staffName: currentUser.name,
     }
