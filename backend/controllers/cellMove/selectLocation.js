@@ -8,7 +8,7 @@ const {
 
 module.exports = ({ elite2Api, whereaboutsApi, logError }) => async (req, res) => {
   const { offenderNo } = req.params
-  const { missingLocation } = req.query
+  const { missingLocation, attribute } = req.query
   const errors = []
   if (missingLocation) {
     errors.push({ text: 'Select residential unit', href: '#location' })
@@ -45,6 +45,7 @@ module.exports = ({ elite2Api, whereaboutsApi, logError }) => async (req, res) =
       errors,
       cellAttributes,
       prisonerDetails,
+      attribute,
       offenderNo,
       dpsUrl,
       nonAssociationLink: `/prisoner/${offenderNo}/cell-move/non-associations`,
