@@ -10,10 +10,6 @@ module.exports = ({ elite2Api, whereaboutsApi, logError }) => async (req, res) =
   const { offenderNo } = req.params
   const { location, attribute } = req.query
 
-  if (!location) {
-    res.redirect(`/prisoner/${offenderNo}/cell-move/select-location?missingLocation=true`)
-  }
-
   try {
     const prisonerDetails = await elite2Api.getDetails(res.locals, offenderNo, true)
     const nonAssociations = await elite2Api.getNonAssociations(res.locals, prisonerDetails.bookingId)
