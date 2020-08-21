@@ -122,14 +122,4 @@ context('A user can select a cell', () => {
     form.submitButton().click()
     cy.url().should('include', 'select-cell?location=1&attribute=LC')
   })
-
-  it('Shows error when no residential unit has been selected', () => {
-    cy.visit(`/prisoner/${offenderNo}/cell-move/select-location`)
-    const selectLocationPage = SelectLocationPage.verifyOnPage()
-    const form = selectLocationPage.form()
-    form.attribute().select('Listener Cell')
-    form.submitButton().click()
-    selectLocationPage.errorSummary().contains('Select residential unit')
-    cy.url().should('include', 'select-location?missingLocation=true&attribute=LC')
-  })
 })

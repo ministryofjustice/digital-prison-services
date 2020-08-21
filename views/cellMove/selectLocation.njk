@@ -24,14 +24,6 @@
 }) }}
 {% endblock %}
 
-{% block content %}
-    {% if errors.length > 0 %}
-      {{ govukErrorSummary({
-          titleText: "There is a problem",
-          errorList: errors,
-          attributes: { 'data-qa-errors': true }
-      }) }}
-    {% endif %}
   <h1 class="govuk-heading-l">{{title}}</h1>
 
   {% include "./partials/prisonerInformation.njk" %}
@@ -48,8 +40,7 @@
                 text: 'Select residential unit',
                 classes: 'govuk-visually-hidden'
               },
-              items: locations | addDefaultSelectedVale('Select residential unit', true) | setSelected(location),
-              errorMessage: errors | findError('location')
+              items: locations | addDefaultSelectedVale('Select residential unit', true) | setSelected(location)
           }) }}
 
           {{ govukSelect({
