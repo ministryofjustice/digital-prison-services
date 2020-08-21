@@ -10,6 +10,9 @@ module.exports = ({ elite2Api, whereaboutsApi, logError }) => async (req, res) =
   const { offenderNo } = req.params
   const { location, attribute } = req.query
 
+  console.log(location)
+  console.log(attribute)
+
   if (!location) {
     res.redirect(`/prisoner/${offenderNo}/cell-move/select-location?missingLocation=true`)
   }
