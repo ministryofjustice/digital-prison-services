@@ -40,7 +40,7 @@
                 text: 'Select residential unit',
                 classes: 'govuk-visually-hidden'
               },
-              items: locations | addDefaultSelectedVale('Select residential unit', true) | setSelected(location)
+              items: locations | addDefaultSelectedVale('Select residential unit', true)
           }) }}
 
           {{ govukSelect({
@@ -50,7 +50,7 @@
                 text: 'Select cell type',
                 classes: 'govuk-visually-hidden'
               },
-              items: cellAttributes | addDefaultSelectedVale('Select cell type', true) | setSelected(attribute)
+              items: cellAttributes | addDefaultSelectedVale('Select cell type', true)
           }) }}
 
           {{ govukButton({

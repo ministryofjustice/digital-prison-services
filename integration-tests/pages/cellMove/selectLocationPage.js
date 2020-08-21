@@ -15,7 +15,6 @@ const selectLocationPage = () =>
     alerts: () => cy.get("[data-test='alerts']"),
     nonAssociationsLink: () => cy.get("[data-test='non-associations-link']"),
     nonAssociationsMessage: () => cy.get("[data-test='non-associations-message']"),
-    errorSummary: () => cy.get('.govuk-error-summary'),
   })
 
 export default {
