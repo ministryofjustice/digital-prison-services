@@ -197,7 +197,6 @@ module.exports = on => {
         elite2api.stubProfileInformation(null, 500),
       ]),
     stubPersonal: ({
-      prisonerDetail,
       identifiers,
       aliases,
       property,
@@ -215,7 +214,6 @@ module.exports = on => {
       prisonOffenderManagers,
     }) =>
       Promise.all([
-        elite2api.stubPrisonerDetail(prisonerDetail),
         elite2api.stubIdentifiers(identifiers),
         elite2api.stubOffenderAliases(aliases),
         elite2api.stubPrisonerProperty(property),

@@ -52,7 +52,6 @@ module.exports = ({ prisonerProfileService, elite2Api, logError }) => async (req
         nextVisitResponse,
         visitBalancesResponse,
         todaysEventsResponse,
-        profileInformationResponse,
       ] = await Promise.all(
         [
           prisonerProfileService.getPrisonerProfileData(res.locals, offenderNo, username),
@@ -67,7 +66,6 @@ module.exports = ({ prisonerProfileService, elite2Api, logError }) => async (req
           elite2Api.getNextVisit(res.locals, bookingId),
           elite2Api.getPrisonerVisitBalances(res.locals, offenderNo),
           elite2Api.getEventsForToday(res.locals, bookingId),
-          elite2Api.getProfileInformation(res.locals, bookingId),
         ].map(apiCall => captureErrorAndContinue(apiCall))
       )
 
@@ -84,7 +82,6 @@ module.exports = ({ prisonerProfileService, elite2Api, logError }) => async (req
         nextVisit,
         visitBalances,
         todaysEvents,
-        profileInformation,
       ] = [
         prisonerProfileDataResponse,
         offenceDataResponse,
@@ -98,10 +95,10 @@ module.exports = ({ prisonerProfileService, elite2Api, logError }) => async (req
         nextVisitResponse,
         visitBalancesResponse,
         todaysEventsResponse,
-        profileInformationResponse,
       ].map(response => extractResponse(response))
 
       const prisoner = prisonerData && prisonerData[0]
+      const { profileInformation } = prisonerProfileData || {}
       const { morningActivities, afternoonActivities, eveningActivities } = filterActivitiesByPeriod(todaysEvents)
       const unableToShowDetailMessage = 'Unable to show this detail'
 
@@ -197,7 +194,7 @@ module.exports = ({ prisonerProfileService, elite2Api, logError }) => async (req
             }),
           },
         },
-        personalDetailsSectionError: Boolean(prisonerDataResponse.error && profileInformationResponse.error),
+        personalDetailsSectionError: Boolean(prisonerDataResponse.error && prisonerProfileDataResponse.error),
         personalDetails: [
           {
             label: 'Age',
@@ -207,7 +204,7 @@ module.exports = ({ prisonerProfileService, elite2Api, logError }) => async (req
           },
           {
             label: 'Nationality',
-            value: profileInformationResponse.error
+            value: prisonerProfileDataResponse.error
               ? unableToShowDetailMessage
               : getValueByType('NAT', profileInformation, 'resultValue') || 'Not entered',
           },

@@ -224,7 +224,7 @@ context('Prisoner quick look', () => {
       Cypress.Cookies.preserveOnce('hmpps-session-dev')
       cy.task('stubPrisonerProfileHeaderData', {
         offenderBasicDetails,
-        offenderFullDetails,
+        offenderFullDetails: { ...offenderFullDetails, profileInformation: [{ type: 'NAT', resultValue: 'British' }] },
         iepSummary: {},
         caseNoteSummary: {},
       })

@@ -45,6 +45,13 @@ module.exports = ({
       interpreterRequired,
       writtenLanguage,
       language,
+      profileInformation,
+      physicalAttributes,
+      physicalCharacteristics,
+      physicalMarks,
+      age,
+      birthPlace,
+      dateOfBirth,
     } = prisonerDetails
 
     const [
@@ -117,6 +124,9 @@ module.exports = ({
     return {
       activeAlertCount,
       agencyName: assignedLivingUnit.agencyName,
+      age,
+      birthPlace,
+      dateOfBirth,
       alerts: alertsToShow,
       canViewProbationDocuments,
       canViewPathfinderLink,
@@ -151,6 +161,10 @@ module.exports = ({
       language,
       interpreterRequired,
       writtenLanguage,
+      profileInformation,
+      physicalAttributes,
+      physicalCharacteristics,
+      physicalMarks,
       staffId: currentUser.staffId,
       staffName: currentUser.name,
     }

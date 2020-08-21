@@ -16,6 +16,7 @@ describe('prisoner profile quick look', () => {
     location: 'CELL-123',
     offenderName: 'Prisoner, Test',
     offenderNo,
+    profileInformation: [{ type: 'NAT', resultValue: 'British' }],
   }
   const bookingId = '123'
   const elite2Api = {}
@@ -54,7 +55,6 @@ describe('prisoner profile quick look', () => {
     elite2Api.getNextVisit = jest.fn().mockResolvedValue({})
     elite2Api.getPrisonerVisitBalances = jest.fn().mockResolvedValue({})
     elite2Api.getEventsForToday = jest.fn().mockResolvedValue([])
-    elite2Api.getProfileInformation = jest.fn().mockResolvedValue([])
 
     controller = prisonerQuickLook({ prisonerProfileService, elite2Api, logError })
   })
@@ -197,7 +197,7 @@ describe('prisoner profile quick look', () => {
           expect.objectContaining({
             personalDetails: [
               { label: 'Age', value: undefined },
-              { label: 'Nationality', value: 'Not entered' },
+              { label: 'Nationality', value: 'British' },
               { label: 'PNC number', value: 'Not entered' },
               { label: 'CRO number', value: 'Not entered' },
             ],
@@ -212,7 +212,6 @@ describe('prisoner profile quick look', () => {
         elite2Api.getPrisonerDetails.mockResolvedValue([
           { dateOfBirth: '1998-12-01', pncNumber: '12/3456A', croNumber: '12345/57B' },
         ])
-        elite2Api.getProfileInformation.mockResolvedValue([{ type: 'NAT', resultValue: 'British' }])
       })
 
       it('should render the quick look template with the correctly formatted personal details', async () => {
@@ -591,6 +590,7 @@ describe('prisoner profile quick look', () => {
   describe('when there are errors with retrieving information', () => {
     beforeEach(() => {
       req.params.offenderNo = offenderNo
+      prisonerProfileService.getPrisonerProfileData = jest.fn().mockRejectedValue(new Error('Network error'))
       elite2Api.getMainOffence.mockRejectedValue(new Error('Network error'))
       elite2Api.getPrisonerBalances.mockRejectedValue(new Error('Network error'))
       elite2Api.getPrisonerDetails.mockRejectedValue(new Error('Network error'))
@@ -602,7 +602,6 @@ describe('prisoner profile quick look', () => {
       elite2Api.getNextVisit.mockRejectedValue(new Error('Network error'))
       elite2Api.getPrisonerVisitBalances.mockRejectedValue(new Error('Network error'))
       elite2Api.getEventsForToday.mockRejectedValue(new Error('Network error'))
-      elite2Api.getProfileInformation.mockRejectedValue(new Error('Network error'))
     })
 
     it('should handle api errors when requesting main offence', async () => {
@@ -919,8 +918,6 @@ describe('prisoner profile quick look', () => {
     })
 
     it('should handle errors when requesting prisoner data', async () => {
-      elite2Api.getProfileInformation.mockResolvedValue([{ type: 'NAT', resultValue: 'British' }])
-
       await controller(req, res)
 
       expect(res.render).toHaveBeenCalledWith(
@@ -931,7 +928,7 @@ describe('prisoner profile quick look', () => {
               label: 'Age',
               value: 'Unable to show this detail',
             },
-            { label: 'Nationality', value: 'British' },
+            { label: 'Nationality', value: 'Unable to show this detail' },
             { label: 'PNC number', value: 'Unable to show this detail' },
             { label: 'CRO number', value: 'Unable to show this detail' },
           ],
@@ -1172,6 +1169,9 @@ describe('prisoner profile quick look', () => {
     })
 
     it('should display correct default personal details', async () => {
+      prisonerProfileService.getPrisonerProfileData = jest
+        .fn()
+        .mockResolvedValue({ ...prisonerProfileData, profileInformation: [] })
       await controller(req, res)
 
       expect(res.render).toHaveBeenCalledWith(
@@ -1194,6 +1194,7 @@ describe('prisoner profile quick look', () => {
         keyWorkerLastSession: null,
         category: null,
         csra: null,
+        profileInformation: [],
       })
 
       await controller(req, res)
@@ -1214,6 +1215,7 @@ describe('prisoner profile quick look', () => {
             location: 'CELL-123',
             offenderName: 'Prisoner, Test',
             offenderNo: 'ABC123',
+            profileInformation: [],
           },
         })
       )
