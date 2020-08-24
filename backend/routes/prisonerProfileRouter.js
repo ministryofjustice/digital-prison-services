@@ -38,6 +38,7 @@ const controller = ({
     pathfinderApi,
     systemOauthClient,
     socApi,
+    allocationManagerApi,
   })
   const personService = personServiceFactory(elite2Api)
   const referenceCodesService = referenceCodesServiceFactory(elite2Api)

@@ -73,13 +73,14 @@
 
     <ul class="prisoner-header__details__information">
       {{ headerItem('Prison number', prisonerProfileData.offenderNo) }}
+      {{ headerItem('Category', categoryHtml) }}
+      {{ headerItem('Incentive level', incentiveLevelHtml) }}
+      {{ headerItem('Location', locationHtml) }}
+      {{ headerItem('CSRA', prisonerProfileData.csra) }}
+      {{ headerItem('Alerts', alertNumbersHtml) }}
       {{ headerItem('Key worker', prisonerProfileData.keyWorkerName, 'None assigned', 'govuk-!-margin-bottom-0') }}
       {{ headerItem('Last session', prisonerProfileData.keyWorkerLastSession, 'No previous session') }}
-      {{ headerItem('Incentive level', incentiveLevelHtml) }}
-      {{ headerItem('CSRA', prisonerProfileData.csra) }}
-      {{ headerItem('Category', categoryHtml) }}
-      {{ headerItem('Alerts', alertNumbersHtml) }}
-      {{ headerItem('Location', locationHtml) }}
+      {{ headerItem('Prison Offender Manager', prisonerProfileData.pomStaff, 'None assigned', 'govuk-!-margin-bottom-0') }}
     </ul>
 
     <div class="prisoner-header__details__actions">

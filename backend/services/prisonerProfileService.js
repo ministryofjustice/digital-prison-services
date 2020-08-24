@@ -1,5 +1,5 @@
 const moment = require('moment')
-const { putLastNameFirst, hasLength, formatName } = require('../utils')
+const { putLastNameFirst, hasLength, formatName, getNamesFromString } = require('../utils')
 const { alertFlagLabels, profileAlertCodes } = require('../shared/alertFlagValues')
 const {
   apis: {
@@ -20,12 +20,20 @@ module.exports = ({
   pathfinderApi,
   socApi,
   systemOauthClient,
+  allocationManagerApi,
 }) => {
   const getPrisonerProfileData = async (context, offenderNo, username) => {
     const [currentUser, prisonerDetails] = await Promise.all([
       oauthApi.currentUser(context),
       elite2Api.getDetails(context, offenderNo, true),
     ])
+
+    const allocationManager = await allocationManagerApi.getPomByOffenderNo(context, offenderNo)
+
+    const pomStaff =
+      allocationManager &&
+      allocationManager.primary_pom &&
+      getNamesFromString(allocationManager.primary_pom.name).join(' ')
 
     const offenderRetentionRecord =
       displayRetentionLink && (await dataComplianceApi.getOffenderRetentionRecord(context, offenderNo))
@@ -167,6 +175,7 @@ module.exports = ({
       physicalMarks,
       staffId: currentUser.staffId,
       staffName: currentUser.name,
+      pomStaff,
     }
   }
 

@@ -20,6 +20,7 @@ describe('prisoner profile service', () => {
   const pathfinderApi = {}
   const dataComplianceApi = {}
   const systemOauthClient = {}
+  const allocationManagerApi = {}
   const socApi = {}
   let service
 
@@ -33,6 +34,7 @@ describe('prisoner profile service', () => {
     oauthApi.userRoles = jest.fn()
     oauthApi.currentUser = jest.fn()
     dataComplianceApi.getOffenderRetentionRecord = jest.fn()
+    allocationManagerApi.getPomByOffenderNo = jest.fn()
     pathfinderApi.getPathfinderDetails = jest.fn().mockRejectedValue(new Error('not found'))
     socApi.getSocDetails = jest.fn().mockRejectedValue(new Error('not found'))
 
@@ -46,6 +48,7 @@ describe('prisoner profile service', () => {
       pathfinderApi,
       systemOauthClient,
       socApi,
+      allocationManagerApi,
     })
   })
 
@@ -118,6 +121,7 @@ describe('prisoner profile service', () => {
       oauthApi.userRoles.mockResolvedValue([])
       oauthApi.currentUser.mockReturnValue({ staffId: 111, activeCaseLoadId: 'MDI' })
       dataComplianceApi.getOffenderRetentionRecord.mockReturnValue({})
+      allocationManagerApi.getPomByOffenderNo.mockReturnValue({ primary_pom: { name: 'SMITH, JANE' } })
     })
 
     it('should make a call for the full details for a prisoner and the current user', async () => {
@@ -141,6 +145,7 @@ describe('prisoner profile service', () => {
       expect(oauthApi.userRoles).toHaveBeenCalledWith(context)
       expect(elite2Api.userCaseLoads).toHaveBeenCalledWith(context)
       expect(elite2Api.getStaffRoles).toHaveBeenCalledWith(context, 111, 'MDI')
+      expect(allocationManagerApi.getPomByOffenderNo).toHaveBeenCalledWith(context, offenderNo)
     })
 
     it('should return the correct prisoner information', async () => {
@@ -168,6 +173,9 @@ describe('prisoner profile service', () => {
             label: 'Arsonist',
           },
         ],
+        age: undefined,
+        dateOfBirth: undefined,
+        birthPlace: undefined,
         category: 'Cat C',
         csra: 'High',
         displayRetentionLink: true,
@@ -190,6 +198,11 @@ describe('prisoner profile service', () => {
         language: undefined,
         staffName: undefined,
         writtenLanguage: undefined,
+        pomStaff: 'Jane Smith',
+        physicalAttributes: undefined,
+        physicalCharacteristics: undefined,
+        physicalMarks: undefined,
+        profileInformation: undefined,
       })
 
       expect(getPrisonerProfileData).toEqual(
