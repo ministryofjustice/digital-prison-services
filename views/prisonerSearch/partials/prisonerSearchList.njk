@@ -14,7 +14,7 @@
     { text: prisoner.assignedLivingUnitDesc },
     { text: prisoner.iepLevel },
     { text: prisoner.age },
-    { html: alertFlags(prisoner.alerts) }
+    { html: alertFlags(prisoner.alerts, newLine=true) }
   ]), rows) %}
 {% endfor %}
 
@@ -48,8 +48,7 @@
         }
       },
       {
-        text: "Relevant alerts",
-        classes: "govuk-!-width-one-quarter"
+        text: "Relevant alerts"
       }
     ],
     rows: rows,

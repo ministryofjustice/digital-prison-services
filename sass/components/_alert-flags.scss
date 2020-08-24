@@ -36,6 +36,11 @@
   }
 }
 
+.alerts-list-no-flex {
+  @extend %govuk-list;
+  margin-bottom: 0;
+}
+
 .alert-status {
   @extend %status-style;
 
