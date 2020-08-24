@@ -144,6 +144,7 @@ module.exports = on => {
         elite2api.stubOffenderImage(),
         keyworker.stubKeyworkerByCaseloadAndOffenderNo(),
         dataComplianceApi.stubRetentionRecord(retentionRecord),
+        allocationManager.stubGetPomForOffender({ primary_pom: { name: 'SMITH, JANE' } }),
       ]),
 
     stubAlertTypes: () => Promise.all([elite2api.stubAlertTypes()]),
