@@ -1827,6 +1827,33 @@ describe('prisoner personal', () => {
           })
         )
       })
+
+      it('should not return NR records', async () => {
+        elite2Api.getPersonalCareNeeds = jest.fn().mockResolvedValue({
+          personalCareNeeds: [
+            {
+              problemType: 'DISAB',
+              problemCode: 'NR',
+              problemStatus: 'ON',
+              problemDescription: 'No Disability Recorded',
+              commentText: 'No disability recorded details go here',
+              startDate: '2020-07-22',
+              endDate: null,
+            },
+          ],
+        })
+
+        await controller(req, res)
+
+        expect(res.render).toHaveBeenCalledWith(
+          'prisonerProfile/prisonerPersonal/prisonerPersonal.njk',
+          expect.objectContaining({
+            careNeedsAndAdjustments: expect.objectContaining({
+              personalCareNeeds: [],
+            }),
+          })
+        )
+      })
     })
   })
 
