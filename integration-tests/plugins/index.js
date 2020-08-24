@@ -325,5 +325,9 @@ module.exports = on => {
     stubUserCaseLoads: caseloads => elite2api.stubUserCaseloads(caseloads),
     stubCellAttributes: elite2api.stubCellAttributes,
     stubMainOffence: offence => elite2api.stubMainOffence(offence),
+    stubNoExistingOffenderRecord: () => dataComplianceApi.stubNoExistingOffenderRecord,
+    stubRetentionRecord: ({ offenderNo, record }) => dataComplianceApi.stubRetentionRecord(offenderNo, record),
+    stubGetOffenderRetentionReasons: dataComplianceApi.stubGetOffenderRetentionReasons,
+    stubCreateRecord: offenderNo => dataComplianceApi.stubCreateRecord(offenderNo),
   })
 }
