@@ -43,6 +43,7 @@ module.exports = ({ elite2Api, whereaboutsApi, logError }) => async (req, res) =
       dpsUrl,
       nonAssociationLink: `/prisoner/${offenderNo}/cell-move/non-associations`,
       selectLocationRootUrl: `/prisoner/${offenderNo}/cell-move/select-location`,
+      offenderDetailsUrl: `/prisoner/${offenderNo}/cell-move/offender-details`,
       formAction: `/prisoner/${offenderNo}/cell-move/select-cell`,
       profileUrl: `/prisoner/${offenderNo}`,
     })

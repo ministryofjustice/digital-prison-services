@@ -323,5 +323,6 @@ module.exports = on => {
       ]),
     stubUserCaseLoads: caseloads => elite2api.stubUserCaseloads(caseloads),
     stubCellAttributes: elite2api.stubCellAttributes,
+    stubMainOffence: offence => elite2api.stubMainOffence(offence),
   })
 }

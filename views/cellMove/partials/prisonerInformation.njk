@@ -29,7 +29,7 @@
         <div class="govuk-grid-row">
             <div class="govuk-grid-column-one-third">
             <p class="govuk-body govuk-!-margin-bottom-1" data-test="name"> {{ breadcrumbPrisonerName }} </p>
-            <a href="#" class="govuk-link" data-test="name-link">View details <span class="govuk-visually-hidden">for {{ breadcrumbPrisonerName }}</span> </a>
+            <a href={{ offenderDetailsUrl }} class="govuk-link" data-test="name-link">View details <span class="govuk-visually-hidden">for {{ breadcrumbPrisonerName }}</span> </a>
             </div>
             <div class="govuk-grid-column-one-third">
             <p class="govuk-body govuk-!-margin-bottom-1" data-test="living-unit"> {{ prisonerDetails.assignedLivingUnit.description }} </p>
