@@ -86,7 +86,7 @@ describe('view offender details', () => {
         sexualOrientation: 'Heterosexual',
         smokerOrVaper: 'No',
         mainOffence: '13 hours over work',
-        backLink: `/prisoner/${offenderNo}/select-location`,
+        backLink: `/prisoner/${offenderNo}/cell-move/select-location`,
         backLinkText: 'Return to select a location',
         profileUrl: `/prisoner/${offenderNo}`,
       })

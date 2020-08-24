@@ -4,7 +4,7 @@ const getValueByType = require('../../shared/getValueByType')
 
 module.exports = ({ elite2Api, logError }) => async (req, res) => {
   const { offenderNo } = req.params
-  const backLink = req.headers.referer || `/prisoner/${offenderNo}/select-location`
+  const backLink = req.headers.referer || `/prisoner/${offenderNo}/cell-move/select-location`
   const backLinkText = backLink.includes('select-location')
     ? 'Return to select a location'
     : 'Return to select an available cell'
