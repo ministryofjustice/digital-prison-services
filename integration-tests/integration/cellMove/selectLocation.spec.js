@@ -1,6 +1,7 @@
 const moment = require('moment')
 const offenderFullDetails = require('../../mockApis/responses/offenderFullDetails.json')
 const SelectLocationPage = require('../../pages/cellMove/selectLocationPage')
+const OffenderDetailsPage = require('../../pages/cellMove/offenderDetailsPage')
 
 const offenderNo = 'A12345'
 
@@ -121,5 +122,25 @@ context('A user can select a cell', () => {
     form.attribute().select('Listener Cell')
     form.submitButton().click()
     cy.url().should('include', 'select-cell?location=1&attribute=LC')
+  })
+
+  it('Correctly navigates between this page and offender details', () => {
+    cy.visit(`/prisoner/${offenderNo}/cell-move/select-location`)
+    cy.task('stubOffenderFullDetails', {
+      ...offenderFullDetails,
+      age: 29,
+      religion: 'Some religion',
+      physicalAttributes: {
+        ethnicity: 'White',
+        raceCode: 'W1',
+      },
+      profileInformation: [{ type: 'SEXO', resultValue: 'Heterosexual' }, { type: 'SMOKE', resultValue: 'No' }],
+    })
+    cy.task('stubMainOffence', [{ offenceDescription: '13 hours overwork' }])
+    const selectLocationPage = SelectLocationPage.verifyOnPage()
+    selectLocationPage.detailsLink().click()
+    const offenderDetailsPage = OffenderDetailsPage.verifyOnPage()
+    offenderDetailsPage.backLink().click()
+    SelectLocationPage.verifyOnPage()
   })
 })
