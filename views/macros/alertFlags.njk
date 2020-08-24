@@ -1,13 +1,20 @@
-{% macro alertFlags(alerts) %}
+{% macro alertFlags(alerts, newLine = false) %}
+  {% set alertClass %}
+    {% if newLine %}
+      alerts-list-no-flex
+    {% else %}
+      alerts-list
+    {% endif %}
+  {% endset %}
   {% if alerts.length %}
-    <ul class="alerts-list">
+    <ul class={{alertClass}}>
         {% for alert in alerts %}
           <li class="{{ alert.classes }}">
             {% if alert.img %}
               <img src="{{ alert.img }}" class="{{ alert.imgClass }}" alt="{{ alert.label }}"/>
             {% endif %}
             {{ alert.label }}
-          </li>
+          </li>{% if newLine %}<br>{% endif %}
         {% endfor %}
       </ul>
   {% endif %}
