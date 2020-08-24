@@ -8,7 +8,12 @@ module.exports = ({ personalCareNeeds, reasonableAdjustments, treatmentTypes, he
     personalCareNeeds:
       personalCareNeeds &&
       personalCareNeeds
-        .filter(careNeed => careNeed.problemStatus === 'ON' && healthTypeCodes.includes(careNeed.problemType))
+        .filter(
+          careNeed =>
+            careNeed.problemStatus === 'ON' &&
+            healthTypeCodes.includes(careNeed.problemType) &&
+            careNeed.problemCode !== 'NR'
+        )
         .sort((left, right) => sortByDateTime(left.startDate, right.startDate))
         .map(careNeed => ({
           type: healthTypes.find(healthType => healthType.code === careNeed.problemType).description,
