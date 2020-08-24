@@ -97,6 +97,7 @@ class RetentionReasonsSpecification extends BrowserReportingSpec {
         setupTests()
         dataComplianceApi.stubExistingOffenderRecord()
         dataComplianceApi.stubUpdateOffenderRecord()
+        allocationManagerApi.stubGetAllocation(offenderNo)
 
         given: "I am on the retention reasons page"
         to RetentionReasonsPage
@@ -120,6 +121,7 @@ class RetentionReasonsSpecification extends BrowserReportingSpec {
     def "should be able to cancel an update of retention reasons"() {
 
         setupTests()
+        allocationManagerApi.stubGetAllocation(offenderNo)
 
         given: "I am on the retention reasons page"
         to RetentionReasonsPage
@@ -139,6 +141,7 @@ class RetentionReasonsSpecification extends BrowserReportingSpec {
 
         setupTests()
         dataComplianceApi.stubExistingOffenderRecord()
+        allocationManagerApi.stubGetAllocation(offenderNo)
 
         given: "I am on the retention reasons page"
         to RetentionReasonsPage
@@ -200,8 +203,6 @@ class RetentionReasonsSpecification extends BrowserReportingSpec {
         dataComplianceApi.stubNoExistingOffenderRecord()
 
         newNomisWebServer.stubLandingPage()
-
-        allocationManagerApi.stubGetAllocation(offenderNo)
     }
 
     def assertInitialPageContent() {

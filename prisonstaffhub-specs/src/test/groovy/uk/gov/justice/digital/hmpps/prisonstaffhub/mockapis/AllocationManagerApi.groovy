@@ -10,10 +10,10 @@ import static com.github.tomakehurst.wiremock.client.WireMock.get
 class AllocationManagerApi extends WireMockRule {
 
     AllocationManagerApi() {
-        super(18084)
+        super(18085)
     }
 
-    void stubGetAllocation(Long bookingId, response = []) {
+    void stubGetAllocation(String bookingId, response = []) {
         this.stubFor(
                 get(urlPathEqualTo("/api/allocation/${bookingId}"))
                         .willReturn(
