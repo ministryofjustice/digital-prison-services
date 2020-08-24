@@ -32,7 +32,10 @@ class RetentionReasonsSpecification extends BrowserReportingSpec {
     @Rule
     NewNomisWebServer newNomisWebServer = new NewNomisWebServer()
 
-    TestFixture fixture = new TestFixture(browser, elite2api, oauthApi, whereaboutsApi)
+    @Rule
+    AllocationManagerApi allocationManagerApi = new AllocationManagerApi()
+
+    TestFixture fixture = new TestFixture(browser, elite2api, oauthApi, whereaboutsApi, allocationManagerApi)
 
     def "should load the retention reasons page"() {
 
@@ -197,6 +200,8 @@ class RetentionReasonsSpecification extends BrowserReportingSpec {
         dataComplianceApi.stubNoExistingOffenderRecord()
 
         newNomisWebServer.stubLandingPage()
+
+        allocationManagerApi.stubGetAllocation(offenderNo)
     }
 
     def assertInitialPageContent() {
