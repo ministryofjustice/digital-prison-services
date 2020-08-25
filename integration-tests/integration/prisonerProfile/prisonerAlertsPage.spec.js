@@ -64,6 +64,7 @@ context('A user can view alerts for a prisoner', () => {
         offenderFullDetails: { ...offenderFullDetails, agencyId: 'MDI' },
         iepSummary,
         caseNoteSummary,
+        offenderNo: 'A12345',
       })
       cy.task('stubAlertTypes')
       cy.task('stubPathFinderOffenderDetails', null)
@@ -128,6 +129,7 @@ context('A user can view alerts for a prisoner', () => {
         offenderFullDetails: { ...offenderFullDetails, agencyId: 'LEI' },
         iepSummary,
         caseNoteSummary,
+        offenderNo: 'A12345',
       })
       cy.task('stubAlertTypes')
       cy.task('stubPathFinderOffenderDetails', null)

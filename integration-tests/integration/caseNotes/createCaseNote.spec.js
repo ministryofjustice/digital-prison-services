@@ -30,6 +30,7 @@ context('A user can add a case note', () => {
       offenderFullDetails,
       iepSummary: {},
       caseNoteSummary: {},
+      offenderNo: 'A12345',
     })
     cy.task('stubCaseNoteTypes')
     cy.task('stubCaseNotes', {

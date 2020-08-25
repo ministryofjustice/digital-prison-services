@@ -49,6 +49,7 @@ context('A user can view prisoner case notes', () => {
       offenderFullDetails,
       iepSummary: {},
       caseNoteSummary: {},
+      offenderNo,
     })
   })
 

@@ -254,6 +254,7 @@ context('Prisoner search', () => {
         offenderFullDetails,
         iepSummary: {},
         caseNoteSummary: {},
+        offenderNo: 'A12345',
       })
       cy.task('stubQuickLook', quickLookFullDetails)
       cy.task('stubPathFinderOffenderDetails', null)

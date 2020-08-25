@@ -31,6 +31,7 @@ context('A user can add an appointment', () => {
       offenderFullDetails,
       iepSummary: {},
       caseNoteSummary: {},
+      offenderNo: 'A12345',
     })
     cy.task('stubAlertsForBooking', [])
     cy.server()
