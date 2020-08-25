@@ -147,6 +147,7 @@ context('Prisoner quick look data retrieval errors', () => {
       offenderFullDetails,
       iepSummary: {},
       caseNoteSummary: {},
+      offenderNo,
     })
 
     cy.task('stubQuickLookApiErrors')
@@ -227,6 +228,7 @@ context('Prisoner quick look', () => {
         offenderFullDetails: { ...offenderFullDetails, profileInformation: [{ type: 'NAT', resultValue: 'British' }] },
         iepSummary: {},
         caseNoteSummary: {},
+        offenderNo,
       })
     })
 
@@ -341,6 +343,7 @@ context('Prisoner quick look', () => {
         offenderFullDetails: { ...offenderFullDetails, agencyId: 'LEI' },
         iepSummary: {},
         caseNoteSummary: {},
+        offenderNo,
       })
     })
 
@@ -361,6 +364,7 @@ context('Prisoner quick look', () => {
         iepSummary: {},
         caseNoteSummary: {},
         userRoles: [{ roleCode: 'INACTIVE_BOOKINGS' }],
+        offenderNo,
       })
     })
 
@@ -380,6 +384,7 @@ context('Prisoner quick look', () => {
         offenderFullDetails: { ...offenderFullDetails, agencyId: 'OUT' },
         iepSummary: {},
         caseNoteSummary: {},
+        offenderNo,
       })
     })
 
@@ -399,6 +404,7 @@ context('Prisoner quick look', () => {
         offenderFullDetails,
         iepSummary: {},
         caseNoteSummary: {},
+        offenderNo,
       })
     })
 
@@ -418,6 +424,7 @@ context('Prisoner quick look', () => {
         iepSummary: {},
         caseNoteSummary: {},
         userRoles: [{ roleCode: 'VIEW_PROBATION_DOCUMENTS' }],
+        offenderNo,
       })
     })
 
@@ -437,6 +444,7 @@ context('Prisoner quick look', () => {
         iepSummary: {},
         caseNoteSummary: {},
         userRoles: [{ roleCode: 'POM' }],
+        offenderNo,
       })
     })
 
@@ -455,6 +463,7 @@ context('Prisoner quick look', () => {
         offenderFullDetails: { ...offenderFullDetails, agencyId: 'LEI' },
         iepSummary: {},
         caseNoteSummary: {},
+        offenderNo,
       })
     })
 
@@ -485,6 +494,7 @@ context('Prisoner quick look', () => {
           offenderNo,
           retentionReasons: ['Reason1'],
         },
+        offenderNo,
       })
     })
 
@@ -512,6 +522,7 @@ context('Prisoner quick look', () => {
         iepSummary: {},
         caseNoteSummary: {},
         userRoles: [{ roleCode: 'SOC_CUSTODY' }],
+        offenderNo,
       })
     })
 

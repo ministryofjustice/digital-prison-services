@@ -65,6 +65,7 @@ context('Case note amendments', () => {
       offenderFullDetails,
       iepSummary: {},
       caseNoteSummary: {},
+      offenderNo: 'A12345',
     })
 
     const page = amendmentPage.verifyOnPage('Bob Smith')

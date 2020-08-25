@@ -163,6 +163,7 @@ context('Prisoner personal', () => {
         offenderFullDetails,
         iepSummary: {},
         caseNoteSummary: {},
+        offenderNo,
       })
       cy.task('stubPersonal', {})
       visitPersonalAndExpandAccordions()
@@ -358,6 +359,7 @@ context('Prisoner personal', () => {
             offenderFullDetails,
             iepSummary: {},
             caseNoteSummary: {},
+            offenderNo,
           })
 
           cy.task('stubPersonal', {
@@ -442,6 +444,7 @@ context('Prisoner personal', () => {
             offenderFullDetails,
             iepSummary: {},
             caseNoteSummary: {},
+            offenderNo,
           })
 
           cy.task('stubPersonal', {
@@ -614,6 +617,7 @@ context('Prisoner personal', () => {
       },
       iepSummary: {},
       caseNoteSummary: {},
+      offenderNo,
     }
 
     context('When each section is correctly populated', () => {

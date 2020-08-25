@@ -19,6 +19,7 @@ context('Prisoner sentence and release', () => {
       offenderFullDetails,
       iepSummary: {},
       caseNoteSummary: {},
+      offenderNo: 'A12345',
     })
     cy.task('stubOffenderBasicDetails', { bookingId: 1 })
     cy.task('stubClientCredentialsRequest')

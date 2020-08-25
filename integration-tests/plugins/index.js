@@ -131,6 +131,7 @@ module.exports = on => {
       caseNoteSummary,
       userRoles = [],
       retentionRecord,
+      offenderNo,
     }) =>
       Promise.all([
         auth.stubUserMe(),
@@ -143,7 +144,8 @@ module.exports = on => {
         elite2api.stubStaffRoles(),
         elite2api.stubOffenderImage(),
         keyworker.stubKeyworkerByCaseloadAndOffenderNo(),
-        dataComplianceApi.stubRetentionRecord(retentionRecord),
+        dataComplianceApi.stubRetentionRecord(offenderNo, retentionRecord),
+        allocationManager.stubGetPomForOffender({ primary_pom: { name: 'SMITH, JANE' } }),
       ]),
 
     stubAlertTypes: () => Promise.all([elite2api.stubAlertTypes()]),
@@ -324,5 +326,9 @@ module.exports = on => {
     stubUserCaseLoads: caseloads => elite2api.stubUserCaseloads(caseloads),
     stubCellAttributes: elite2api.stubCellAttributes,
     stubMainOffence: offence => elite2api.stubMainOffence(offence),
+    stubNoExistingOffenderRecord: ({ offenderNo }) => dataComplianceApi.stubNoExistingOffenderRecord(offenderNo),
+    stubRetentionRecord: ({ offenderNo, record }) => dataComplianceApi.stubRetentionRecord(offenderNo, record),
+    stubGetOffenderRetentionReasons: dataComplianceApi.stubGetOffenderRetentionReasons,
+    stubCreateRecord: ({ offenderNo }) => dataComplianceApi.stubCreateRecord(offenderNo),
   })
 }
