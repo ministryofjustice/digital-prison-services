@@ -76,7 +76,8 @@
       {{ headerItem('Category', categoryHtml) }}
       {{ headerItem('Incentive level', incentiveLevelHtml) }}
       {{ headerItem('Location', locationHtml) }}
-      {{ headerItem('CSRA', prisonerProfileData.csra) }}
+      {{ headerItem('CSRA', prisonerProfileData.csra, 'No previous review', 'govuk-!-margin-bottom-0') }}
+      {{ headerItem('Last review', prisonerProfileData.lastReviewDate, classes='govuk-!-margin-bottom-4') }}
       {{ headerItem('Alerts', alertNumbersHtml) }}
       {{ headerItem('Key worker', prisonerProfileData.keyWorkerName, 'None assigned', 'govuk-!-margin-bottom-0') }}
       {{ headerItem('Last session', prisonerProfileData.keyWorkerLastSession, 'No previous session') }}
