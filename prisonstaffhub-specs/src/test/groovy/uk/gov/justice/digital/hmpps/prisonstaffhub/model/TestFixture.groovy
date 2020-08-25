@@ -1,7 +1,6 @@
 package uk.gov.justice.digital.hmpps.prisonstaffhub.model
 
 import geb.Browser
-import uk.gov.justice.digital.hmpps.prisonstaffhub.mockapis.AllocationManagerApi
 import uk.gov.justice.digital.hmpps.prisonstaffhub.mockapis.Elite2Api
 import uk.gov.justice.digital.hmpps.prisonstaffhub.mockapis.OauthApi
 import uk.gov.justice.digital.hmpps.prisonstaffhub.mockapis.WhereaboutsApi
@@ -18,21 +17,18 @@ class TestFixture {
     Elite2Api elite2Api
     OauthApi oauthApi
     WhereaboutsApi whereaboutsApi
-    AllocationManagerApi allocationManagerApi
 
     UserAccount currentUser
 
     TestFixture(Browser browser,
                 Elite2Api elite2Api,
                 OauthApi oauthApi,
-                WhereaboutsApi whereaboutsApi,
-                AllocationManagerApi allocationManagerApi) {
+                WhereaboutsApi whereaboutsApi) {
 
         this.browser = browser
         this.elite2Api = elite2Api
         this.oauthApi = oauthApi
         this.whereaboutsApi = whereaboutsApi
-        this.allocationManagerApi = allocationManagerApi
     }
 
     def loginAs(UserAccount user) {
