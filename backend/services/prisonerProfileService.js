@@ -60,6 +60,7 @@ module.exports = ({
       age,
       birthPlace,
       dateOfBirth,
+      assessments,
     } = prisonerDetails
 
     const [
@@ -129,6 +130,9 @@ module.exports = ({
 
     const canViewSocLink = Boolean(isSocUser && socDetails)
 
+    const mostRecentAssessment =
+      hasLength(assessments) && assessments.sort((a, b) => b.assessmentDate.localeCompare(a.assessmentDate))[0]
+
     return {
       activeAlertCount,
       agencyName: assignedLivingUnit.agencyName,
@@ -157,6 +161,10 @@ module.exports = ({
         keyworkerSessions && keyworkerSessions[0] && moment(keyworkerSessions[0].latestCaseNote).format('D MMMM YYYY'),
       keyWorkerName: keyworkerDetails && formatName(keyworkerDetails.firstName, keyworkerDetails.lastName),
       inactiveAlertCount,
+      lastReviewDate:
+        mostRecentAssessment &&
+        mostRecentAssessment.assessmentDate &&
+        moment(mostRecentAssessment.assessmentDate).format('D MMMM YYYY'),
       location: assignedLivingUnit.description,
       notmEndpointUrl,
       offenderName: putLastNameFirst(prisonerDetails.firstName, prisonerDetails.lastName),

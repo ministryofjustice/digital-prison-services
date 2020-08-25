@@ -109,6 +109,26 @@ describe('prisoner profile service', () => {
       firstName: 'TEST',
       inactiveAlertCount: 2,
       lastName: 'PRISONER',
+      assessments: [
+        {
+          classification: 'High',
+          assessmentCode: 'CSRREV',
+          assessmentDescription: 'CSR Review',
+          assessmentDate: '2016-11-23',
+        },
+        {
+          classification: 'Standard',
+          assessmentCode: 'CSR',
+          assessmentDescription: 'CSR Rating',
+          assessmentDate: '2020-08-18',
+        },
+        {
+          classification: 'Cat C',
+          assessmentCode: 'CATEGORY',
+          assessmentDescription: 'Categorisation',
+          assessmentDate: '2017-02-21',
+        },
+      ],
     }
 
     beforeEach(() => {
@@ -183,6 +203,7 @@ describe('prisoner profile service', () => {
         incentiveLevel: 'Standard',
         keyWorkerLastSession: '7 April 2020',
         keyWorkerName: 'Staff Member',
+        lastReviewDate: '18 August 2020',
         location: 'CELL-123',
         notmEndpointUrl: 'http://localhost:3000/',
         offenderName: 'Prisoner, Test',
@@ -215,6 +236,7 @@ describe('prisoner profile service', () => {
     })
 
     it('should return the correct prisoner information when some data is missing', async () => {
+      elite2Api.getDetails.mockReturnValue({ ...prisonerDetails, assessments: [] })
       elite2Api.getIepSummary.mockResolvedValue([])
       elite2Api.getCaseNoteSummaryByTypes.mockResolvedValue([])
       keyworkerApi.getKeyworkerByCaseloadAndOffenderNo.mockResolvedValue(null)
@@ -226,6 +248,7 @@ describe('prisoner profile service', () => {
           incentiveLevel: undefined,
           keyWorkerLastSession: undefined,
           keyWorkerName: null,
+          lastReviewDate: false,
         })
       )
     })
