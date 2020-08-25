@@ -131,7 +131,10 @@ module.exports = ({
     const canViewSocLink = Boolean(isSocUser && socDetails)
 
     const mostRecentAssessment =
-      hasLength(assessments) && assessments.sort((a, b) => b.assessmentDate.localeCompare(a.assessmentDate))[0]
+      hasLength(assessments) &&
+      assessments
+        .filter(assessment => assessment.assessmentDescription.includes('CSR'))
+        .sort((a, b) => b.assessmentDate.localeCompare(a.assessmentDate))[0]
 
     return {
       activeAlertCount,

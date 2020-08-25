@@ -126,7 +126,7 @@ describe('prisoner profile service', () => {
           classification: 'Cat C',
           assessmentCode: 'CATEGORY',
           assessmentDescription: 'Categorisation',
-          assessmentDate: '2017-02-21',
+          assessmentDate: '2020-08-20',
         },
       ],
     }
