@@ -71,7 +71,7 @@ describe('view offender details', () => {
     })
   })
 
-  it('populates the data correctly when no non-associations and no assessments', async () => {
+  it('populates the data correctly', async () => {
     await controller(req, res)
 
     expect(res.render).toHaveBeenCalledWith(
@@ -89,6 +89,19 @@ describe('view offender details', () => {
         backLink: `/prisoner/${offenderNo}/cell-move/select-location`,
         backLinkText: 'Return to select a location',
         profileUrl: `/prisoner/${offenderNo}`,
+      })
+    )
+  })
+
+  it('sets the back link and text correctly when referer data is present', async () => {
+    req = { ...req, headers: { referer: `/prisoner/${offenderNo}/cell-move/select-cell` } }
+    await controller(req, res)
+
+    expect(res.render).toHaveBeenCalledWith(
+      'cellMove/offenderDetails.njk',
+      expect.objectContaining({
+        backLink: `/prisoner/${offenderNo}/cell-move/select-cell`,
+        backLinkText: 'Return to select an available cell',
       })
     )
   })

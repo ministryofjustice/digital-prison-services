@@ -21,7 +21,18 @@ const showCsraLink = assessments => {
   return assessments.some(assessment => assessment.assessmentCode === 'CSR' && assessment.assessmentComment)
 }
 
+const getBackLinkData = (referer, offenderNo) => {
+  const backLink = referer || `/prisoner/${offenderNo}/cell-move/select-location`
+  return {
+    backLink,
+    backLinkText: backLink.includes('select-location')
+      ? 'Return to select a location'
+      : 'Return to select an available cell',
+  }
+}
+
 module.exports = {
   showNonAssociationsLink,
   showCsraLink,
+  getBackLinkData,
 }

@@ -3,28 +3,6 @@
 
 {% set title = "Active non-association details for " + prisonerName %}
 
-{% block beforeContent %}
-  {{ govukBreadcrumbs({
-    items: [
-      {
-        text: "Home",
-        href: dpsUrl
-      },
-      {
-        text: breadcrumbPrisonerName,
-        href: '/prisoner/' + offenderNo
-      },
-      {
-        text: "Select a location",
-        href: '/prisoner/' + offenderNo +'/cell-move/select-location'
-      },
-      {
-        text: 'Active non-association details'
-      }
-    ]
-}) }}
-{% endblock %}
-
 {% block content %}
   <h1 class="govuk-heading-l">{{title}}</h1>
 
@@ -103,7 +81,7 @@
   {% endfor %}
 
   <p class="govuk-body govuk-!-margin-top-4">
-    <a class="govuk-link" href={{ selectLocationLink }}>Return to select an available cell</a>
+    <a class="govuk-link" href={{ backLink }} data-test="back-link">{{ backLinkText }}</a>
   </p>
   
 {% endblock %}
