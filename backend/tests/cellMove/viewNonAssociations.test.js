@@ -29,6 +29,7 @@ describe('view non associations', () => {
       originalUrl: 'http://localhost',
       params: { offenderNo },
       query: {},
+      headers: {},
       protocol: 'http',
       get: jest.fn().mockReturnValue('localhost'),
     }
@@ -145,7 +146,7 @@ describe('view non associations', () => {
     })
   })
 
-  it('populates the data correctly when no non-associations and no assessments', async () => {
+  it('populates the data correctly', async () => {
     await controller(req, res)
 
     expect(res.render).toHaveBeenCalledWith(
@@ -180,9 +181,23 @@ describe('view non associations', () => {
           },
         ],
         prisonerName: 'Test User',
-        selectLocationLink: '/prisoner/ABC123/cell-move/select-location',
         breadcrumbPrisonerName: 'User, Test',
         dpsUrl: 'http://localhost:3000/',
+        backLink: `/prisoner/${offenderNo}/cell-move/select-location`,
+        backLinkText: 'Return to select a location',
+      })
+    )
+  })
+
+  it('sets the back link and text correctly when referer data is present', async () => {
+    req = { ...req, headers: { referer: `/prisoner/${offenderNo}/cell-move/select-cell` } }
+    await controller(req, res)
+
+    expect(res.render).toHaveBeenCalledWith(
+      'cellMove/nonAssociations.njk',
+      expect.objectContaining({
+        backLink: `/prisoner/${offenderNo}/cell-move/select-cell`,
+        backLinkText: 'Return to select an available cell',
       })
     )
   })

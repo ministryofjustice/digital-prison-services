@@ -2,6 +2,7 @@ const moment = require('moment')
 
 const { serviceUnavailableMessage } = require('../../common-messages')
 const { putLastNameFirst, formatName } = require('../../utils')
+const { getBackLinkData } = require('./cellMoveUtils')
 const {
   app: { notmEndpointUrl: dpsUrl },
 } = require('../../config')
@@ -65,6 +66,7 @@ module.exports = ({ elite2Api, logError }) => async (req, res) => {
       dpsUrl,
       selectLocationLink: `/prisoner/${offenderNo}/cell-move/select-location`,
       offenderNo,
+      ...getBackLinkData(req.headers.referer, offenderNo),
     })
   } catch (error) {
     if (error) logError(req.originalUrl, error, serviceUnavailableMessage)

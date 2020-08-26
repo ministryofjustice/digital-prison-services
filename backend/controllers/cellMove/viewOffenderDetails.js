@@ -1,13 +1,10 @@
 const { serviceUnavailableMessage } = require('../../common-messages')
 const { putLastNameFirst } = require('../../utils')
+const { getBackLinkData } = require('./cellMoveUtils')
 const getValueByType = require('../../shared/getValueByType')
 
 module.exports = ({ elite2Api, logError }) => async (req, res) => {
   const { offenderNo } = req.params
-  const backLink = req.headers.referer || `/prisoner/${offenderNo}/cell-move/select-location`
-  const backLinkText = backLink.includes('select-location')
-    ? 'Return to select a location'
-    : 'Return to select an available cell'
 
   try {
     const {
@@ -33,8 +30,7 @@ module.exports = ({ elite2Api, logError }) => async (req, res) => {
       sexualOrientation: getValueByType('SEXO', profileInformation, 'resultValue'),
       smokerOrVaper: getValueByType('SMOKE', profileInformation, 'resultValue'),
       mainOffence: mainOffence && mainOffence[0] && mainOffence[0].offenceDescription,
-      backLink,
-      backLinkText,
+      ...getBackLinkData(req.headers.referer, offenderNo),
       profileUrl: `/prisoner/${offenderNo}`,
     })
   } catch (error) {
