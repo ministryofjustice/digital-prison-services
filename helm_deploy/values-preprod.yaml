@@ -41,7 +41,7 @@ env:
   PATHFINDER_ENDPOINT_API_URL: https://preprod-api.pathfinder.service.justice.gov.uk/
   REDIS_ENABLED: true
   SOC_URL: https://manage-soc-cases-preprod.hmpps.service.justice.gov.uk
-  SOC_API_ENABLED: false
+  SOC_API_ENABLED: true
   OFFENDER_SEARCH_API_URL: https://prisoner-offender-search-preprod.prison.service.justice.gov.uk
   OFFENDER_SEARCH_API_ENABLED: true
 
