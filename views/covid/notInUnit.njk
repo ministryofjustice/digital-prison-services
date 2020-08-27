@@ -43,19 +43,24 @@
           }
         },
         {
-          html: '<a class="govuk-link govuk-link--no-visited-state" href="/prisoner/' + result.offenderNo +'/alerts">Change alert</a>'
+          html: '<a class="govuk-link govuk-link--no-visited-state" href="/prisoner/' + result.offenderNo +'/alerts">Create alert</a>'
         }
       ]), rows) %}
     {% endfor %}
 
 {% block content %}
-    <h1 class="govuk-heading-l">
-        {{ title }}
-    </h1>
-    <p class="govuk-body">
-      These prisoners should all be added to the Reverse Cohorting Unit by creating an alert. If any of these prisoners have been assessed by healthcare 
-      and have to be moved to the Protective Isolation Unit or the Shielding Unit, you first must create that relevant alert for each prisoner.
-    </p>
+  <div class="govuk-grid-row">
+    <div class="govuk-grid-column-two-thirds">
+      <h1 class="govuk-heading-l">
+          {{ title }}
+      </h1>
+      <p class="govuk-body">
+        These prisoners have all arrived in the last 14 days.<br/>
+        You should add an alert to any who need to be added to the Reverse Cohorting Unit<br/>
+        You do not need to add an alert for any of these prisoners who have just arrived after a short visit outside of prison and who are not being added to the Reverse Cohorting Unit.
+      </p>
+    </div>
+    <div class="govuk-grid-column-full">
     
   {% if rows.length %}
     <p class="govuk-body right-content">Prisoners listed: <strong><span data-qa="prisonerCount">{{ rows.length }}</span></strong></p>
@@ -94,7 +99,8 @@
     <p class="govuk-body" data-qa="no-results-message">There are no results.</p>
   {% endif %}
 {% endblock %}
-
+    </div>
+  </div>
 {% block bodyEnd %}
 {{ super() }}
 <script src="/assets/moj/components/sortable-table/sortable-table.js"></script>
