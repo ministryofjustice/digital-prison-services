@@ -387,6 +387,7 @@ describe('select location', () => {
         assessments: [
           {
             assessmentCode: 'CSR',
+            assessmentDescription: 'CSR Rating',
           },
         ],
       })
@@ -407,6 +408,7 @@ describe('select location', () => {
           {
             assessmentCode: 'CSR',
             assessmentComment: 'Test comment',
+            assessmentDescription: 'CSR Rating',
           },
         ],
       })
