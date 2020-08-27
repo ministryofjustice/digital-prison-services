@@ -84,6 +84,9 @@ jobs:
       - attach_workspace:
           at: ~/app
       - run:
+          name: Install missing OS dependency
+          command: sudo apt-get install libxss1
+      - run:
           name: Get wiremock
           command: curl -o wiremock.jar https://repo1.maven.org/maven2/com/github/tomakehurst/wiremock-standalone/2.27.1/wiremock-standalone-2.27.1.jar
       - run:
