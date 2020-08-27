@@ -1,0 +1,84 @@
+<h3 class="govuk-heading-m">Incentives and adjudications in last 3 months</h3>
+{% set incentivesRows = [] %}
+{% set adjudicationsRows = [] %}
+
+<div data-test="incentives-and-adjudications">
+    {% if incentives.incentivesSectionError %}
+        <p class="govuk-body">
+            Unable to show any of these details. You can try reloading the page.
+        </p>
+    {% endif %}
+
+    {% if incentives.incentivesSectionError == false %}
+        {% for detail in incentives.details %}
+            {% set incentivesRows = (incentivesRows.push(
+                {
+                    key: {
+                        text: detail.label
+                    },
+                    value: {
+                      text: detail.value | showDefault
+                    }
+                }
+                ), incentivesRows) %}
+        {% endfor %}
+
+        {{ govukSummaryList({
+            rows: incentivesRows,
+            classes: "govuk-!-margin-bottom-2",
+            attributes: { "data-test": "incentives-summary" }
+        }) }}
+        {% if prisonerProfileData.userCanEdit %}
+            <a href="{{ '/offenders/' + prisonerProfileData.offenderNo + '/incentive-level-details' }}" class="govuk-link govuk-body govuk-!-margin-bottom-2 govuk-!-display-inline-block" data-test="incentive-details-link">View incentive level details</a>
+        {% endif %}
+    {% endif %}
+
+    {% if adjudications.adjudicationsSectionError %}
+        <p class="govuk-body">
+            Unable to show any of these details. You can try reloading the page.
+        </p>
+    {% endif %}
+
+    {% if adjudications.adjudicationsSectionError == false %}
+        {% set activeAdjudicationsHtml %}
+            {% if adjudications.active.value.length %}
+                {% for activeAdjudication in adjudications.active.value %}
+                    <div class="govuk-!-margin-bottom-6">
+                        <strong>{{ activeAdjudication.durationText + ' ' + activeAdjudication.sanctionCodeDescription }}</strong>
+                        <div>{{ activeAdjudication.comment }}</div>
+                        <div>{{ activeAdjudication.effectiveDate }}</div>
+                    </div>
+                {% endfor %}
+            {% else %}
+                <p class="govuk-body">No active awards</p>
+            {% endif %}
+        {% endset %}
+
+        {{ govukSummaryList({
+            rows: [
+                {
+                    key: {
+                        text: adjudications.proven.label
+                    },
+                    value: {
+                        text: adjudications.proven.value
+                    }
+                },
+                {
+                    key: {
+                        text: adjudications.active.label
+                    },
+                    value: {
+                        html: activeAdjudicationsHtml
+                    }
+                }
+            ],
+            classes: "govuk-!-margin-bottom-2",
+            attributes: { "data-test": "adjudications-summary" }
+        }) }}
+
+        {% if prisonerProfileData.userCanEdit %}
+            <a href="{{ '/offenders/' + prisonerProfileData.offenderNo + '/adjudications' }}" class="govuk-link govuk-body" data-test="adjudication-history-link">View adjudication history</a>
+        {% endif%}
+    {% endif %}
+</div>

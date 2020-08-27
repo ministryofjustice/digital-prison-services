@@ -253,16 +253,18 @@ describe('prisoner profile quick look', () => {
         expect(res.render).toHaveBeenCalledWith(
           'prisonerProfile/prisonerQuickLook/prisonerQuickLook.njk',
           expect.objectContaining({
-            caseNoteAdjudications: {
-              caseNoteAdjudicationsSectionError: false,
+            adjudications: {
+              adjudicationsSectionError: false,
+              active: { label: 'Active adjudications', value: undefined },
+              proven: { label: 'Proven adjudications', value: 0 },
+            },
+            incentives: {
+              incentivesSectionError: false,
               details: [
                 { label: 'Incentive level warnings', value: 0 },
                 { label: 'Incentive encouragements', value: 0 },
                 { label: 'Last incentive level review', value: '0 days ago' },
-                { label: 'Proven adjudications', value: 0 },
               ],
-              activeAdjudicationsDetailsSectionError: false,
-              activeAdjudicationsDetails: { label: 'Active adjudications', value: undefined },
             },
           })
         )
@@ -323,16 +325,9 @@ describe('prisoner profile quick look', () => {
         expect(res.render).toHaveBeenCalledWith(
           'prisonerProfile/prisonerQuickLook/prisonerQuickLook.njk',
           expect.objectContaining({
-            caseNoteAdjudications: {
-              caseNoteAdjudicationsSectionError: false,
-              details: [
-                { label: 'Incentive level warnings', value: 1 },
-                { label: 'Incentive encouragements', value: 2 },
-                { label: 'Last incentive level review', value: '40 days ago' },
-                { label: 'Proven adjudications', value: 3 },
-              ],
-              activeAdjudicationsDetailsSectionError: false,
-              activeAdjudicationsDetails: {
+            adjudications: {
+              adjudicationsSectionError: false,
+              active: {
                 label: 'Active adjudications',
                 value: [
                   {
@@ -358,6 +353,15 @@ describe('prisoner profile quick look', () => {
                   },
                 ],
               },
+              proven: { label: 'Proven adjudications', value: 3 },
+            },
+            incentives: {
+              incentivesSectionError: false,
+              details: [
+                { label: 'Incentive level warnings', value: 1 },
+                { label: 'Incentive encouragements', value: 2 },
+                { label: 'Last incentive level review', value: '40 days ago' },
+              ],
             },
           })
         )
@@ -715,10 +719,9 @@ describe('prisoner profile quick look', () => {
       expect(res.render).toHaveBeenCalledWith(
         'prisonerProfile/prisonerQuickLook/prisonerQuickLook.njk',
         expect.objectContaining({
-          caseNoteAdjudications: {
-            caseNoteAdjudicationsSectionError: false,
-            activeAdjudicationsDetailsSectionError: false,
-            activeAdjudicationsDetails: {
+          adjudications: {
+            adjudicationsSectionError: false,
+            active: {
               label: 'Active adjudications',
               value: [
                 {
@@ -733,11 +736,14 @@ describe('prisoner profile quick look', () => {
                 },
               ],
             },
+            proven: { label: 'Proven adjudications', value: 2 },
+          },
+          incentives: {
+            incentivesSectionError: false,
             details: [
               { label: 'Incentive level warnings', value: 'Unable to show this detail' },
               { label: 'Incentive encouragements', value: 10 },
               { label: 'Last incentive level review', value: '10 days ago' },
-              { label: 'Proven adjudications', value: 2 },
             ],
           },
         })
@@ -767,10 +773,9 @@ describe('prisoner profile quick look', () => {
       expect(res.render).toHaveBeenCalledWith(
         'prisonerProfile/prisonerQuickLook/prisonerQuickLook.njk',
         expect.objectContaining({
-          caseNoteAdjudications: {
-            caseNoteAdjudicationsSectionError: false,
-            activeAdjudicationsDetailsSectionError: false,
-            activeAdjudicationsDetails: {
+          adjudications: {
+            adjudicationsSectionError: false,
+            active: {
               label: 'Active adjudications',
               value: [
                 {
@@ -785,11 +790,14 @@ describe('prisoner profile quick look', () => {
                 },
               ],
             },
+            proven: { label: 'Proven adjudications', value: 2 },
+          },
+          incentives: {
+            incentivesSectionError: false,
             details: [
               { label: 'Incentive level warnings', value: 10 },
               { label: 'Incentive encouragements', value: 'Unable to show this detail' },
               { label: 'Last incentive level review', value: '10 days ago' },
-              { label: 'Proven adjudications', value: 2 },
             ],
           },
         })
@@ -819,10 +827,9 @@ describe('prisoner profile quick look', () => {
       expect(res.render).toHaveBeenCalledWith(
         'prisonerProfile/prisonerQuickLook/prisonerQuickLook.njk',
         expect.objectContaining({
-          caseNoteAdjudications: {
-            caseNoteAdjudicationsSectionError: false,
-            activeAdjudicationsDetailsSectionError: false,
-            activeAdjudicationsDetails: {
+          adjudications: {
+            adjudicationsSectionError: false,
+            active: {
               label: 'Active adjudications',
               value: [
                 {
@@ -837,11 +844,14 @@ describe('prisoner profile quick look', () => {
                 },
               ],
             },
+            proven: { label: 'Proven adjudications', value: 2 },
+          },
+          incentives: {
+            incentivesSectionError: false,
             details: [
               { label: 'Incentive level warnings', value: 10 },
               { label: 'Incentive encouragements', value: 10 },
               { label: 'Last incentive level review', value: 'Unable to show this detail' },
-              { label: 'Proven adjudications', value: 2 },
             ],
           },
         })
@@ -858,15 +868,17 @@ describe('prisoner profile quick look', () => {
       expect(res.render).toHaveBeenCalledWith(
         'prisonerProfile/prisonerQuickLook/prisonerQuickLook.njk',
         expect.objectContaining({
-          caseNoteAdjudications: {
-            caseNoteAdjudicationsSectionError: false,
-            activeAdjudicationsDetailsSectionError: true,
-            activeAdjudicationsDetails: { label: 'Active adjudications' },
+          adjudications: {
+            adjudicationsSectionError: true,
+            active: { label: 'Active adjudications' },
+            proven: { label: 'Proven adjudications', value: 'Unable to show this detail' },
+          },
+          incentives: {
+            incentivesSectionError: false,
             details: [
               { label: 'Incentive level warnings', value: 10 },
               { label: 'Incentive encouragements', value: 10 },
               { label: 'Last incentive level review', value: '10 days ago' },
-              { label: 'Proven adjudications', value: 'Unable to show this detail' },
             ],
           },
         })
@@ -879,12 +891,15 @@ describe('prisoner profile quick look', () => {
       expect(res.render).toHaveBeenCalledWith(
         'prisonerProfile/prisonerQuickLook/prisonerQuickLook.njk',
         expect.objectContaining({
-          caseNoteAdjudications: {
-            caseNoteAdjudicationsSectionError: true,
-            activeAdjudicationsDetailsSectionError: true,
-            activeAdjudicationsDetails: {
+          adjudications: {
+            adjudicationsSectionError: true,
+            active: {
               label: 'Active adjudications',
             },
+            proven: { label: 'Proven adjudications', value: 'Unable to show this detail' },
+          },
+          incentives: {
+            incentivesSectionError: true,
             details: [
               {
                 label: 'Incentive level warnings',
@@ -898,7 +913,6 @@ describe('prisoner profile quick look', () => {
                 label: 'Last incentive level review',
                 value: 'Unable to show this detail',
               },
-              { label: 'Proven adjudications', value: 'Unable to show this detail' },
             ],
           },
           dpsUrl: 'http://localhost:3000/',
@@ -1153,15 +1167,17 @@ describe('prisoner profile quick look', () => {
       expect(res.render).toHaveBeenCalledWith(
         'prisonerProfile/prisonerQuickLook/prisonerQuickLook.njk',
         expect.objectContaining({
-          caseNoteAdjudications: {
-            activeAdjudicationsDetails: { label: 'Active adjudications', value: undefined },
-            activeAdjudicationsDetailsSectionError: false,
-            caseNoteAdjudicationsSectionError: false,
+          adjudications: {
+            adjudicationsSectionError: false,
+            active: { label: 'Active adjudications', value: undefined },
+            proven: { label: 'Proven adjudications', value: 0 },
+          },
+          incentives: {
+            incentivesSectionError: false,
             details: [
               { label: 'Incentive level warnings', value: 1 },
               { label: 'Incentive encouragements', value: 0 },
               { label: 'Last incentive level review', value: '0 days ago' },
-              { label: 'Proven adjudications', value: 0 },
             ],
           },
         })

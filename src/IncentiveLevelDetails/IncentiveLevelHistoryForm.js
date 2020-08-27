@@ -85,7 +85,7 @@ export const FormFields = ({ now, errors, establishments, levels, submitting, va
               errors={errors}
               name="level"
               component={FullWidthSelect}
-              label="Incentive Level"
+              label="Incentive level"
               id="iep-level-select"
               value={values.iepLevel}
             >

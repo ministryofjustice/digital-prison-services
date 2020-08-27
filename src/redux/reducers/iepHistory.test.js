@@ -1,7 +1,7 @@
 import reducer from './iepHistory'
 import * as Actions from '../actions'
 
-describe('Incentive Level history reducer', () => {
+describe('Incentive level history reducer', () => {
   const initialState = {
     establishments: [],
     levels: [],

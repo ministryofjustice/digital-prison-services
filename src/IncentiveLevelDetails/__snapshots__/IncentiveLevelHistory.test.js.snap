@@ -1,11 +1,11 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`Incentive Level history should render the Incentive Level history table correctly 1`] = `
+exports[`Incentive level history should render the Incentive level history table correctly 1`] = `
 Array [
   <h2
     className="sc-bZQynM fOThUN"
   >
-    Incentive Level history
+    Incentive level history
   </h2>,
   <div
     className="sc-htoDjs xQRkw"
@@ -27,7 +27,7 @@ Array [
           <th
             className="sc-bxivhb hgtSCp"
           >
-            Incentive Level
+            Incentive level
           </th>
           <th
             className="sc-bxivhb gCiqwu"

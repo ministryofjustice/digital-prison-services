@@ -29,7 +29,7 @@ const initialState = {
   },
 }
 
-describe('Incentive Level history Form', () => {
+describe('Incentive level history Form', () => {
   Date.now = jest.fn(() => new Date(Date.UTC(2017, 0, 1)).valueOf())
   const store = {}
   const history = {}
@@ -42,7 +42,7 @@ describe('Incentive Level history Form', () => {
     store.getState.mockReturnValue(initialState)
   })
 
-  it('should render the Incentive Level history table correctly', () => {
+  it('should render the Incentive level history table correctly', () => {
     const wrapper = testRenderer
       .create(<IncentiveLevelHistoryForm store={store} search={jest.fn()} reset={jest.fn()} />)
       .toJSON()

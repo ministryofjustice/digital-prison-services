@@ -1,6 +1,6 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`Current Incentive Level should render the current Incentive Level correctly when user can maintain Incentive Level 1`] = `
+exports[`Current incentive level should render the current Incentive Level correctly when user can maintain Incentive Level 1`] = `
 <div
   className="sc-ifAKCX kQggjh current-iep"
 >
@@ -13,7 +13,7 @@ exports[`Current Incentive Level should render the current Incentive Level corre
       <strong
         className="label"
       >
-        Current Incentive Level
+        Current incentive level
       </strong>
       <p>
         Standard
@@ -61,7 +61,7 @@ exports[`Current Incentive Level should render the current Incentive Level corre
 </div>
 `;
 
-exports[`Current Incentive Level should render the current Incentive Level correctly when user can't maintain Incentive Level 1`] = `
+exports[`Current incentive level should render the current Incentive Level correctly when user can't maintain Incentive Level 1`] = `
 <div
   className="sc-ifAKCX kQggjh current-iep"
 >
@@ -74,7 +74,7 @@ exports[`Current Incentive Level should render the current Incentive Level corre
       <strong
         className="label"
       >
-        Current Incentive Level
+        Current incentive level
       </strong>
       <p>
         Standard

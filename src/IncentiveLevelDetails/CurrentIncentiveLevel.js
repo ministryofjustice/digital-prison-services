@@ -11,7 +11,7 @@ const CurrentIncentiveLevel = ({ level, days, nextReviewDate, userCanMaintainIep
   <CurrentIncentiveLevelArea className="current-iep">
     <GridRow>
       <GridCol setWidth="one-quarter">
-        <strong className="label">Current Incentive Level</strong>
+        <strong className="label">Current incentive level</strong>
         <p>{level}</p>
       </GridCol>
       <GridCol setWidth="one-quarter">
