@@ -23,14 +23,15 @@ module.exports = ({ elite2Api, logError }) => async (req, res) => {
 
     return res.render('cellMove/cellSharingRiskAssessmentDetails.njk', {
       prisonerName: putLastNameFirst(firstName, lastName),
-      cellLocation: assignedLivingUnit.description,
-      location: location.description || 'Not entered',
-      level: mostRecentAssessment.classification,
+      cellLocation: (assignedLivingUnit && assignedLivingUnit.description) || 'Not entered',
+      location: (location && location.description) || 'Not entered',
+      level: mostRecentAssessment && mostRecentAssessment.classification,
       date:
-        (mostRecentAssessment.assessmentDate &&
+        (mostRecentAssessment &&
+          mostRecentAssessment.assessmentDate &&
           moment(mostRecentAssessment.assessmentDate, 'YYYY-MM-DD').format('D MMMM YYYY')) ||
         'Not entered',
-      comment: mostRecentAssessment.assessmentComment || 'Not entered',
+      comment: (mostRecentAssessment && mostRecentAssessment.assessmentComment) || 'Not entered',
       ...getBackLinkData(req.headers.referer, offenderNo),
     })
   } catch (error) {
