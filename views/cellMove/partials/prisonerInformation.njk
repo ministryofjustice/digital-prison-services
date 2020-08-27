@@ -37,7 +37,7 @@
             <div class="govuk-grid-column-one-third">
             <p class="govuk-body govuk-!-margin-bottom-1" data-test="csra"> {{ prisonerDetails.csra }} </p>
             {% if showCsraLink %}
-            <a href="#" class="govuk-link" data-test="csra-link">View details <span class="govuk-visually-hidden">for {{ breadcrumbPrisonerName }}</span></a>
+            <a href={{ csraDetailsUrl }} class="govuk-link" data-test="csra-link">View details <span class="govuk-visually-hidden">for {{ breadcrumbPrisonerName }}</span></a>
             {% endif %}
             </div>
         </div>

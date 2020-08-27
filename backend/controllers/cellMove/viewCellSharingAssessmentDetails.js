@@ -1,3 +1,4 @@
+const moment = require('moment')
 const { serviceUnavailableMessage } = require('../../common-messages')
 const { putLastNameFirst, hasLength } = require('../../utils')
 const { getBackLinkData } = require('./cellMoveUtils')
@@ -6,22 +7,23 @@ module.exports = ({ elite2Api, logError }) => async (req, res) => {
   const { offenderNo } = req.params
 
   try {
-    const { firstName, lastName, assignedLivingUnit, assessments } = await elite2Api.getDetails(
-      res.locals,
-      offenderNo,
-      true
-    )
-    const mostRecentAssessment =
-      hasLength(assessments) &&
-      assessments
-        .filter(assessment => assessment.assessmentDescription.includes('CSR'))
-        .sort((a, b) => b.assessmentDate.localeCompare(a.assessmentDate))[0]
+    const { firstName, lastName, assignedLivingUnit } = await elite2Api.getDetails(res.locals, offenderNo, true)
 
-    return res.render('cellMove/offenderDetails.njk', {
+    const assessments = await elite2Api.getAssessments(res.locals, { offenderNumbers: [offenderNo], code: 'CSR' })
+    const mostRecentAssessment =
+      hasLength(assessments) && assessments.sort((a, b) => b.assessmentDate.localeCompare(a.assessmentDate))[0]
+
+    return res.render('cellMove/cellSharingRiskAssessmentDetails.njk', {
       prisonerName: putLastNameFirst(firstName, lastName),
       cellLocation: assignedLivingUnit.description,
-      assessmentLocation: mostRecentAssessment.assessmentAgencyId,
-      offenderNo,
+      location: mostRecentAssessment.assessmentAgencyId || 'Not entered',
+      level: mostRecentAssessment.classification,
+      date:
+        (mostRecentAssessment.approvalDate &&
+          moment(mostRecentAssessment.approvalDate, 'YYYY-MM-DD').format('D MMMM YYYY')) ||
+        (mostRecentAssessment.assessmentDate &&
+          moment(mostRecentAssessment.assessmentDat, 'YYYY-MM-DD').format('D MMMM YYYY')),
+      comment: mostRecentAssessment.assessmentComment || 'Not entered',
       ...getBackLinkData(req.headers.referer, offenderNo),
     })
   } catch (error) {
