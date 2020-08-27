@@ -26,7 +26,7 @@ context('A user can view non associations', () => {
           assessmentCode: 'CSR',
           assessmentDescription: 'CSR Rating',
           cellSharingAlertFlag: true,
-          assessmentDate: '2020-08-18',
+          assessmentDate: '2020-08-17',
           nextReviewDate: '2020-08-19',
           approvalDate: '2020-08-18',
           assessmentAgencyId: 'MDI',
@@ -38,6 +38,7 @@ context('A user can view non associations', () => {
         },
       ],
     })
+    cy.task('stubAgencyDetails', { agencyId: 'MDI', details: { description: 'HMP Moorland' } })
   })
 
   it('Shows the correct data for non-associations', () => {
@@ -68,8 +69,8 @@ context('A user can view non associations', () => {
           expect($summaryValues.get(1).innerText).to.contain('Smith, John')
           expect($summaryValues.get(2).innerText).to.contain('Standard')
           expect($summaryValues.get(3).innerText).to.contain('Some comment')
-          expect($summaryValues.get(4).innerText).to.contain('18 August 2020')
-          expect($summaryValues.get(5).innerText).to.contain('MDI')
+          expect($summaryValues.get(4).innerText).to.contain('17 August 2020')
+          expect($summaryValues.get(5).innerText).to.contain('HMP Moorland')
         })
     })
     cellSharingRiskAssessmentDetailsPage.backLink().contains('Return to select a location')
