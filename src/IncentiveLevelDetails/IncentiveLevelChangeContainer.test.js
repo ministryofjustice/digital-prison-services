@@ -60,7 +60,7 @@ describe('Incentive Level change container', () => {
     history.replace = jest.fn()
   })
 
-  it('should render the Incentive Level history table correctly', () => {
+  it('should render the Incentive level history table correctly', () => {
     store.getState.mockReturnValue(initialState)
 
     const wrapper = shallow(

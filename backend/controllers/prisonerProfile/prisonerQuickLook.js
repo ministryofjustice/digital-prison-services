@@ -149,12 +149,9 @@ module.exports = ({ prisonerProfileService, elite2Api, logError }) => async (req
             value: formatCurrency((balanceData && balanceData.savings) || 0, balanceData && balanceData.currency),
           },
         ],
-        caseNoteAdjudications: {
-          caseNoteAdjudicationsSectionError: Boolean(
-            negativeCaseNotesResponse.error &&
-              positiveCaseNotesResponse.error &&
-              iepSummaryResponse.error &&
-              adjudicationsResponse.error
+        incentives: {
+          incentivesSectionError: Boolean(
+            negativeCaseNotesResponse.error && positiveCaseNotesResponse.error && iepSummaryResponse.error
           ),
           details: [
             {
@@ -175,15 +172,11 @@ module.exports = ({ prisonerProfileService, elite2Api, logError }) => async (req
                 ? unableToShowDetailMessage
                 : `${daysSinceReview} ${daysSinceReview === 1 ? 'day' : 'days'} ago`,
             },
-            {
-              label: 'Proven adjudications',
-              value: adjudicationsResponse.error
-                ? unableToShowDetailMessage
-                : (adjudications && adjudications.adjudicationCount) || 0,
-            },
           ],
-          activeAdjudicationsDetailsSectionError: Boolean(adjudicationsResponse.error),
-          activeAdjudicationsDetails: {
+        },
+        adjudications: {
+          adjudicationsSectionError: Boolean(adjudicationsResponse.error),
+          active: {
             label: 'Active adjudications',
             ...(adjudications && {
               value:
@@ -192,6 +185,12 @@ module.exports = ({ prisonerProfileService, elite2Api, logError }) => async (req
                   .map(award => formatAward(award))
                   .filter(({ status }) => status && !status.startsWith('SUSP') && status !== 'QUASHED'),
             }),
+          },
+          proven: {
+            label: 'Proven adjudications',
+            value: adjudicationsResponse.error
+              ? unableToShowDetailMessage
+              : (adjudications && adjudications.adjudicationCount) || 0,
           },
         },
         personalDetailsSectionError: Boolean(prisonerDataResponse.error && prisonerProfileDataResponse.error),

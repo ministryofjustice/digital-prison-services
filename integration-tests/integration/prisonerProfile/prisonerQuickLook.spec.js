@@ -177,7 +177,7 @@ context('Prisoner quick look data retrieval errors', () => {
   it('Should display the appropriate message when there was an error requesting case note adjudications', () => {
     prisonerQuickLookPage.verifyOnPage('Smith, John')
 
-    cy.get('[data-test="case-note-adjudications"]')
+    cy.get('[data-test="incentives-and-adjudications"]')
       .find('p')
       .then($element => {
         expect($element.get(0).innerText).to.eq('Unable to show any of these details. You can try reloading the page.')
@@ -273,14 +273,19 @@ context('Prisoner quick look', () => {
     })
 
     it('Should show correct Case notes and adjudications details', () => {
-      cy.get('[data-test="case-notes-summary"]')
+      cy.get('[data-test="incentives-summary"]')
         .find('dd')
         .then($summaryValues => {
           expect($summaryValues.get(0).innerText).to.eq('1')
           expect($summaryValues.get(1).innerText).to.eq('2')
           expect($summaryValues.get(2).innerText).to.eq('40 days ago')
-          expect($summaryValues.get(3).innerText).to.eq('3')
-          expect($summaryValues.get(4).innerText).to.eq(
+        })
+
+      cy.get('[data-test="adjudications-summary"]')
+        .find('dd')
+        .then($summaryValues => {
+          expect($summaryValues.get(0).innerText).to.eq('3')
+          expect($summaryValues.get(1).innerText).to.eq(
             '14 days Stoppage of Earnings (50%)\n16/04/2020\n14 days Stoppage of Earnings (£50.00)\n14x SOE 50%, 14x LOC, 14x LOA 14x LOGYM, 14x LOTV 14x CC\n16/04/2020'
           )
         })
@@ -332,6 +337,7 @@ context('Prisoner quick look', () => {
       cy.get('[data-test="adjudication-history-link"]').should('contain.text', 'View adjudication history')
       cy.get('[data-test="view-alerts-link"]').should('contain.text', 'View alerts')
       cy.get('[data-test="iep-details-link"]').should('contain.text', 'View details for Incentive Level')
+      cy.get('[data-test="incentive-details-link"]').should('contain.text', 'View incentive level details')
     })
   })
 
@@ -352,6 +358,7 @@ context('Prisoner quick look', () => {
 
       cy.get('[data-test="tabs-case-notes"]').should('not.be.visible')
       cy.get('[data-test="adjudication-history-link"]').should('not.be.visible')
+      cy.get('[data-test="incentive-details-link"]').should('not.be.visible')
     })
   })
 
@@ -373,6 +380,7 @@ context('Prisoner quick look', () => {
 
       cy.get('[data-test="tabs-case-notes"]').should('contain.text', 'Case notes')
       cy.get('[data-test="adjudication-history-link"]').should('contain.text', 'View adjudication history')
+      cy.get('[data-test="incentive-details-link"]').should('contain.text', 'View incentive level details')
     })
   })
 

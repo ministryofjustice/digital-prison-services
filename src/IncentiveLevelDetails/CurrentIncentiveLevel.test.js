@@ -27,7 +27,7 @@ const initialState = {
   },
 }
 
-describe('Current Incentive Level', () => {
+describe('Current incentive level', () => {
   const store = {}
   const history = {}
   beforeEach(() => {
