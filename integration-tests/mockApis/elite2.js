@@ -185,6 +185,21 @@ module.exports = {
       },
     })
   },
+  stubCsraAssessments: (offenderNumbers, assessments = []) => {
+    return stubFor({
+      request: {
+        method: 'POST',
+        urlPattern: '/api/offender-assessments/CSR',
+      },
+      response: {
+        status: 200,
+        headers: {
+          'Content-Type': 'application/json;charset=UTF-8',
+        },
+        jsonBody: assessments,
+      },
+    })
+  },
   stubIepSummaryForBookingIds: results => {
     return stubFor({
       request: {

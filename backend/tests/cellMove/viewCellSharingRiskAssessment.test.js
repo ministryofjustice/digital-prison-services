@@ -17,8 +17,6 @@ describe('view CSRA details', () => {
     bookingId: 1234,
     firstName: 'Test',
     lastName: 'User',
-    age: 21,
-    religion: 'Some religion',
     assignedLivingUnit: {
       description: 'A-1-12',
     },
