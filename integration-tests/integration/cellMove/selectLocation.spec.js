@@ -74,6 +74,7 @@ context('A user can select a cell', () => {
         {
           assessmentCode: 'CSR',
           assessmentComment: 'Test comment',
+          assessmentDescription: 'CSR',
         },
       ],
     })

@@ -17,8 +17,9 @@ module.exports = ({ elite2Api, whereaboutsApi, logError }) => async (req, res) =
 
     const locations = locationsData.map(location => ({ text: location.name, value: location.key }))
     locations.unshift({ text: 'All locations', value: 'ALL' })
+    locations.unshift({ text: 'Select residential unit', value: 'ALL' })
     const cellAttributes = cellAttributesData
-      .filter(cellAttribute => 'Y'.includes(cellAttribute.activeFlag))
+      .filter(cellAttribute => cellAttribute.activeFlag === 'Y')
       .map(cellAttribute => ({ text: cellAttribute.description, value: cellAttribute.code }))
 
     const prisonersActiveAlertCodes = prisonerDetails.alerts
@@ -44,6 +45,7 @@ module.exports = ({ elite2Api, whereaboutsApi, logError }) => async (req, res) =
       nonAssociationLink: `/prisoner/${offenderNo}/cell-move/non-associations`,
       selectLocationRootUrl: `/prisoner/${offenderNo}/cell-move/select-location`,
       offenderDetailsUrl: `/prisoner/${offenderNo}/cell-move/offender-details`,
+      csraDetailsUrl: `/prisoner/${offenderNo}/cell-move/cell-sharing-risk-assessment-details`,
       formAction: `/prisoner/${offenderNo}/cell-move/select-cell`,
       profileUrl: `/prisoner/${offenderNo}`,
     })
