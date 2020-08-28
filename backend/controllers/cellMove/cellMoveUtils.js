@@ -18,7 +18,7 @@ const showNonAssociationsLink = (nonAssociations, assignedLivingUnit) => {
 }
 
 const showCsraLink = assessments => {
-  return assessments.some(assessment => assessment.assessmentCode === 'CSR' && assessment.assessmentComment)
+  return assessments.some(assessment => assessment.assessmentCode.includes('CSR') && assessment.assessmentComment)
 }
 
 const getBackLinkData = (referer, offenderNo) => {

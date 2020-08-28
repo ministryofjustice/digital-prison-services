@@ -189,7 +189,7 @@ module.exports = {
     return stubFor({
       request: {
         method: 'POST',
-        urlPattern: '/api/offender-assessments/CSR',
+        urlPattern: '/api/offender-assessments/csra/list',
       },
       response: {
         status: 200,

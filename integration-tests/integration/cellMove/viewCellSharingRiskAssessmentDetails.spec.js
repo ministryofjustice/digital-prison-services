@@ -16,7 +16,6 @@ context('A user can view non associations', () => {
     cy.task('stubOffenderFullDetails', offenderFullDetails)
     cy.task('stubCsraAssessments', {
       offenderNumbers: [offenderNo],
-      code: 'CSR',
       assessments: [
         {
           bookingId: 1234,
