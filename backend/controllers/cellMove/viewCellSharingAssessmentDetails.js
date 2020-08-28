@@ -16,17 +16,22 @@ module.exports = ({ elite2Api, logError }) => async (req, res) => {
     const mostRecentAssessment =
       hasLength(assessments) && assessments.sort((a, b) => b.assessmentDate.localeCompare(a.assessmentDate))[0]
 
+    const location =
+      mostRecentAssessment &&
+      mostRecentAssessment.assessmentAgencyId &&
+      (await elite2Api.getAgencyDetails(res.locals, mostRecentAssessment.assessmentAgencyId))
+
     return res.render('cellMove/cellSharingRiskAssessmentDetails.njk', {
       prisonerName: putLastNameFirst(firstName, lastName),
-      cellLocation: assignedLivingUnit.description,
-      location: mostRecentAssessment.assessmentAgencyId || 'Not entered',
-      level: mostRecentAssessment.classification,
+      cellLocation: (assignedLivingUnit && assignedLivingUnit.description) || 'Not entered',
+      location: (location && location.description) || 'Not entered',
+      level: mostRecentAssessment && mostRecentAssessment.classification,
       date:
-        (mostRecentAssessment.approvalDate &&
-          moment(mostRecentAssessment.approvalDate, 'YYYY-MM-DD').format('D MMMM YYYY')) ||
-        (mostRecentAssessment.assessmentDate &&
-          moment(mostRecentAssessment.assessmentDat, 'YYYY-MM-DD').format('D MMMM YYYY')),
-      comment: mostRecentAssessment.assessmentComment || 'Not entered',
+        (mostRecentAssessment &&
+          mostRecentAssessment.assessmentDate &&
+          moment(mostRecentAssessment.assessmentDate, 'YYYY-MM-DD').format('D MMMM YYYY')) ||
+        'Not entered',
+      comment: (mostRecentAssessment && mostRecentAssessment.assessmentComment) || 'Not entered',
       ...getBackLinkData(req.headers.referer, offenderNo),
     })
   } catch (error) {

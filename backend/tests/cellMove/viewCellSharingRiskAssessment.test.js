@@ -45,7 +45,7 @@ describe('view CSRA details', () => {
         assessmentCode: 'CSR',
         assessmentDescription: 'CSR Rating',
         cellSharingAlertFlag: true,
-        assessmentDate: '2020-08-18',
+        assessmentDate: '2020-08-17',
         nextReviewDate: '2020-08-19',
         approvalDate: '2020-08-18',
         assessmentAgencyId: 'MDI',
@@ -56,6 +56,9 @@ describe('view CSRA details', () => {
         assessorUser: 'TEST_USER',
       },
     ])
+    elite2Api.getAgencyDetails = jest.fn().mockResolvedValue({
+      description: 'HMP Moorland',
+    })
 
     controller = viewCellSharingRiskAssessmentDetails({ elite2Api, logError })
   })
@@ -65,6 +68,7 @@ describe('view CSRA details', () => {
 
     expect(elite2Api.getDetails).toHaveBeenCalledWith(res.locals, offenderNo, true)
     expect(elite2Api.getAssessments).toHaveBeenCalledWith(res.locals, { offenderNumbers: [offenderNo], code: 'CSR' })
+    expect(elite2Api.getAgencyDetails).toHaveBeenCalledWith(res.locals, 'MDI')
   })
 
   it('Should render error template when there is an API error', async () => {
@@ -87,9 +91,9 @@ describe('view CSRA details', () => {
       expect.objectContaining({
         prisonerName: 'User, Test',
         cellLocation: 'A-1-12',
-        location: 'MDI',
+        location: 'HMP Moorland',
         comment: 'Some comment',
-        date: '18 August 2020',
+        date: '17 August 2020',
         level: 'Standard',
         backLink: `/prisoner/${offenderNo}/cell-move/select-location`,
         backLinkText: 'Return to select a location',
