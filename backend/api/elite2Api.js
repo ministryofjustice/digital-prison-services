@@ -107,6 +107,9 @@ const elite2ApiFactory = client => {
   const getAssessments = (context, { code, offenderNumbers }) =>
     post(context, `/api/offender-assessments/${code}`, offenderNumbers)
 
+  const getCsraAssessments = (context, offenderNumbers) =>
+    post(context, `/api/offender-assessments/csra/list`, offenderNumbers)
+
   const getEstablishmentRollBlocksCount = (context, agencyId, unassigned) =>
     get(context, `/api/movements/rollcount/${agencyId}?unassigned=${unassigned}`)
 
@@ -423,6 +426,7 @@ const elite2ApiFactory = client => {
     getNonAssociations,
     getCellAttributes,
     getCellsWithCapacity,
+    getCsraAssessments,
   }
 }
 

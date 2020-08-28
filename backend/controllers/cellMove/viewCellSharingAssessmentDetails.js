@@ -9,9 +9,10 @@ module.exports = ({ elite2Api, logError }) => async (req, res) => {
   try {
     const [offenderDetails, assessments] = await Promise.all([
       elite2Api.getDetails(res.locals, offenderNo, true),
-      elite2Api.getAssessments(res.locals, { offenderNumbers: [offenderNo], code: 'CSR' }),
+      elite2Api.getCsraAssessments(res.locals, [offenderNo]),
     ])
-    const { firstName, lastName, assignedLivingUnit } = offenderDetails
+
+    const { firstName, lastName, assignedLivingUnit } = offenderDetails || {}
 
     const mostRecentAssessment =
       hasLength(assessments) && assessments.sort((a, b) => b.assessmentDate.localeCompare(a.assessmentDate))[0]

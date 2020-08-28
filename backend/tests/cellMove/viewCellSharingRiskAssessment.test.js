@@ -36,7 +36,25 @@ describe('view CSRA details', () => {
     res = { locals: {}, render: jest.fn() }
 
     elite2Api.getDetails = jest.fn().mockResolvedValue(getDetailsResponse)
-    elite2Api.getAssessments = jest.fn().mockResolvedValue([
+    elite2Api.getCsraAssessments = jest.fn().mockResolvedValue([
+      {
+        bookingId: 1234,
+        offenderNo,
+        classificationCode: 'HIGH',
+        classification: 'High',
+        assessmentCode: 'CSRF',
+        assessmentDescription: 'CSR Full',
+        cellSharingAlertFlag: true,
+        assessmentDate: '2020-08-27',
+        nextReviewDate: '2020-08-29',
+        approvalDate: '2020-08-28',
+        assessmentAgencyId: 'MDI',
+        assessmentStatus: 'A',
+        assessmentSeq: 1,
+        assessmentComment: 'Some comment for full assessment',
+        assessorId: 1,
+        assessorUser: 'TEST_USER',
+      },
       {
         bookingId: 1234,
         offenderNo,
@@ -67,7 +85,7 @@ describe('view CSRA details', () => {
     await controller(req, res)
 
     expect(elite2Api.getDetails).toHaveBeenCalledWith(res.locals, offenderNo, true)
-    expect(elite2Api.getAssessments).toHaveBeenCalledWith(res.locals, { offenderNumbers: [offenderNo], code: 'CSR' })
+    expect(elite2Api.getCsraAssessments).toHaveBeenCalledWith(res.locals, [offenderNo])
     expect(elite2Api.getAgencyDetails).toHaveBeenCalledWith(res.locals, 'MDI')
   })
 
@@ -92,9 +110,9 @@ describe('view CSRA details', () => {
         prisonerName: 'User, Test',
         cellLocation: 'A-1-12',
         location: 'HMP Moorland',
-        comment: 'Some comment',
-        date: '17 August 2020',
-        level: 'Standard',
+        comment: 'Some comment for full assessment',
+        date: '27 August 2020',
+        level: 'High',
         backLink: `/prisoner/${offenderNo}/cell-move/select-location`,
         backLinkText: 'Return to select a location',
       })
