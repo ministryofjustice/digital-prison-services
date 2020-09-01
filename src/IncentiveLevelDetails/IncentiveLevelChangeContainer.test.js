@@ -77,7 +77,7 @@ describe('Incentive Level change container', () => {
     const page = wrapper.dive().find(OffenderPage)
 
     expect(page.length).toBe(1)
-    expect(page.getElement().props.title()).toBe('Change Incentive Level')
+    expect(page.getElement().props.title()).toBe('Change incentive level')
     expect(page.find('Connect(IncentiveLevelChangeForm)').length).toBe(1)
   })
 })

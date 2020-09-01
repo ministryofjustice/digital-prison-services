@@ -30,7 +30,7 @@ const CurrentIncentiveLevel = ({ level, days, nextReviewDate, userCanMaintainIep
               onClick={() => history.push(`incentive-level-details/change-incentive-level`)}
               data-qa="change-incentive-level"
             >
-              Change Incentive Level
+              Change incentive level
             </Button>
           </div>
         </GridCol>
