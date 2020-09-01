@@ -1,5 +1,5 @@
 const { getActivityLocationsFactory } = require('../controllers/attendance/activityLocations')
-const { makeError, makeResetError } = require('./helpers')
+const { makeError, makeResetError, makeResetErrorWithStack } = require('./helpers')
 
 describe('Activity locations', () => {
   let getActivityLocations
@@ -41,6 +41,15 @@ describe('Activity locations', () => {
 
   it('should not log connection reset API errors', async () => {
     elite2Api.searchActivityLocations.mockRejectedValue(makeResetError())
+    await getActivityLocations(req, res)
+
+    expect(logError.mock.calls.length).toBe(0)
+    expect(res.status.mock.calls.length).toBe(0)
+    expect(res.end).toHaveBeenCalled()
+  })
+
+  it('should not log connection reset API errors with Timout in stack', async () => {
+    elite2Api.searchActivityLocations.mockRejectedValue(makeResetErrorWithStack())
     await getActivityLocations(req, res)
 
     expect(logError.mock.calls.length).toBe(0)

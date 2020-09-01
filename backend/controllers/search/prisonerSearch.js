@@ -101,7 +101,8 @@ module.exports = ({ paginationService, elite2Api, logError }) => {
         view,
       })
     } catch (error) {
-      if (error && error.code !== 'ECONNRESET') logError(req.originalUrl, error, serviceUnavailableMessage)
+      if (error && (error.code !== 'ECONNRESET' && !(error.stack && error.stack.toLowerCase().includes('timeout'))))
+        logError(req.originalUrl, error, serviceUnavailableMessage)
 
       return res.render('error.njk', { url: '/', homeUrl: '/' })
     }
