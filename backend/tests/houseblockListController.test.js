@@ -1,6 +1,6 @@
 import { factory } from '../controllers/controller'
 
-const { makeResetError, makeError } = require('./helpers')
+const { makeResetError, makeError, makeResetErrorWithStack } = require('./helpers')
 
 describe('Activity list controller', () => {
   const houseblockListService = {}
@@ -27,8 +27,18 @@ describe('Activity list controller', () => {
     res.status = jest.fn()
   })
   describe('Error handling', () => {
-    it('should NOT log timeout error', async () => {
+    it('should NOT log timeout error when code ECONNRESET', async () => {
       houseblockListService.getHouseblockList.mockRejectedValue(makeResetError())
+
+      await getHouseblockList(req, res)
+
+      expect(logError.mock.calls.length).toBe(0)
+      expect(res.json.mock.calls.length).toBe(0)
+      expect(res.end).toHaveBeenCalled()
+    })
+
+    it('should NOT log timeout error when Timeout in stack', async () => {
+      houseblockListService.getHouseblockList.mockRejectedValue(makeResetErrorWithStack())
 
       await getHouseblockList(req, res)
 

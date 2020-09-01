@@ -1,7 +1,7 @@
 const prisonerSearchController = require('../controllers/search/prisonerSearch')
 const { serviceUnavailableMessage } = require('../common-messages')
 
-const { makeResetError } = require('./helpers')
+const { makeResetError, makeResetErrorWithStack } = require('./helpers')
 
 describe('Prisoner search', () => {
   const elite2Api = {}
@@ -350,6 +350,14 @@ describe('Prisoner search', () => {
 
     it('should not log connection reset API errors', async () => {
       elite2Api.getInmates.mockImplementation(() => Promise.reject(makeResetError()))
+
+      await controller.index(req, res)
+
+      expect(logError.mock.calls.length).toBe(0)
+    })
+
+    it('should not log connection reset API errors with timeout in stack', async () => {
+      elite2Api.getInmates.mockImplementation(() => Promise.reject(makeResetErrorWithStack()))
 
       await controller.index(req, res)
 

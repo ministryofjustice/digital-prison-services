@@ -23,7 +23,8 @@ const factory = ({
       const viewModel = await activityListService.getActivityList(res.locals, agencyId, locationId, date, timeSlot)
       return res.json(viewModel)
     } catch (error) {
-      if (error.code === 'ECONNRESET') return res.end()
+      if (error.code === 'ECONNRESET' || (error.stack && error.stack.toLowerCase().includes('timeout')))
+        return res.end()
       logError(req.originalUrl, error, 'getActivityList()')
       const errorStatusCode = (error && error.status) || (error.response && error.response.status) || 500
       res.status(errorStatusCode)
@@ -61,7 +62,8 @@ const factory = ({
       )
       return res.json(viewModel)
     } catch (error) {
-      if (error.code === 'ECONNRESET') return res.end()
+      if (error.code === 'ECONNRESET' || (error.stack && error.stack.toLowerCase().includes('timeout')))
+        return res.end()
       logError(req.originalUrl, error, 'getHouseblockList()')
       const errorStatusCode = (error && error.status) || (error.response && error.response.status) || 500
       res.status(errorStatusCode)
