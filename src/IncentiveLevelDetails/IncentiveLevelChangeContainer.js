@@ -89,7 +89,7 @@ class IncentiveLevelChangeContainer extends Component {
 
     return (
       <OffenderPage
-        title={() => `Change Incentive Level`}
+        title={() => `Change incentive level`}
         handleError={handleError}
         offenderNumber={offenderNo}
         setLoaded={setLoadedDispatch}

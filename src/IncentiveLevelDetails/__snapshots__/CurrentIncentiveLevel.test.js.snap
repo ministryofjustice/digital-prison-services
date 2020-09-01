@@ -53,7 +53,7 @@ exports[`Current incentive level should render the current Incentive Level corre
           disabled={false}
           onClick={[Function]}
         >
-          Change Incentive Level
+          Change incentive level
         </button>
       </div>
     </div>
