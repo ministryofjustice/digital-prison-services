@@ -107,9 +107,8 @@ const setup = ({
     csvParserService: csvParserService({ fs, isBinaryFileSync }),
     offenderService: offenderServiceFactory(elite2Api),
     offenderActivitesService: offenderActivitesFactory(elite2Api, whereaboutsApi),
-    referenceCodesService: referenceCodesService(elite2Api),
-    elite2Api,
     caseNotesApi,
+    logError,
   })
 
   router.use(currentUser({ elite2Api, oauthApi }))

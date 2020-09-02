@@ -139,7 +139,7 @@ class IncentiveLevelDetailsSpecification extends BrowserReportingSpec {
         when: "I view the Incentive level history page as a use with the MAINTAIN_IEP role"
         to IncentiveLevelDetails
 
-        then: "I should see the Change Incentive Level button"
+        then: "I should see the Change incentive level button"
 
         assert(($('button[data-qa="change-incentive-level"]').isDisplayed()))
     }

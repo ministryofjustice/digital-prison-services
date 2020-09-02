@@ -6,7 +6,7 @@ class IncentiveLevelChangePage extends Page {
     static url = '/offenders/A1234AC/incentive-level-details/change-incentive-level'
 
     static at = {
-        pageTitle == 'Change Incentive Level'
+        pageTitle == 'Change incentive level'
     }
 
     static content = {
