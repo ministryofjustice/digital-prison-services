@@ -14,15 +14,23 @@ const factory = ({
   csvParserService,
   offenderService,
   offenderActivitesService,
-  referenceCodesService,
-  elite2Api,
   caseNotesApi,
+  logError,
 }) => {
-  const getActivityList = asyncMiddleware(async (req, res) => {
+  const getActivityList = async (req, res) => {
     const { agencyId, locationId, date, timeSlot } = req.query
-    const viewModel = await activityListService.getActivityList(res.locals, agencyId, locationId, date, timeSlot)
-    res.json(viewModel)
-  })
+    try {
+      const viewModel = await activityListService.getActivityList(res.locals, agencyId, locationId, date, timeSlot)
+      return res.json(viewModel)
+    } catch (error) {
+      if (error.code === 'ECONNRESET' || (error.stack && error.stack.toLowerCase().includes('timeout')))
+        return res.end()
+      logError(req.originalUrl, error, 'getActivityList()')
+      const errorStatusCode = (error && error.status) || (error.response && error.response.status) || 500
+      res.status(errorStatusCode)
+      return res.end()
+    }
+  }
 
   const getAdjudications = asyncMiddleware(async (req, res) => {
     const { offenderNumber } = req.params
@@ -41,18 +49,27 @@ const factory = ({
     res.json(viewModel)
   })
 
-  const getHouseblockList = asyncMiddleware(async (req, res) => {
+  const getHouseblockList = async (req, res) => {
     const { agencyId, groupName, date, timeSlot, wingStatus } = req.query
-    const viewModel = await houseblockListService.getHouseblockList(
-      res.locals,
-      agencyId,
-      groupName,
-      date,
-      timeSlot,
-      wingStatus
-    )
-    res.json(viewModel)
-  })
+    try {
+      const viewModel = await houseblockListService.getHouseblockList(
+        res.locals,
+        agencyId,
+        groupName,
+        date,
+        timeSlot,
+        wingStatus
+      )
+      return res.json(viewModel)
+    } catch (error) {
+      if (error.code === 'ECONNRESET' || (error.stack && error.stack.toLowerCase().includes('timeout')))
+        return res.end()
+      logError(req.originalUrl, error, 'getHouseblockList()')
+      const errorStatusCode = (error && error.status) || (error.response && error.response.status) || 500
+      res.status(errorStatusCode)
+      return res.end()
+    }
+  }
 
   const getIepDetails = asyncMiddleware(async (req, res) => {
     const { offenderNo } = req.params

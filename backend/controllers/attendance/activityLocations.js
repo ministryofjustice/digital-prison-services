@@ -8,7 +8,8 @@ const getActivityLocationsFactory = ({ elite2Api, logError }) => {
 
       return res.json(response)
     } catch (error) {
-      if (error.code === 'ECONNRESET') return res.end()
+      if (error.code === 'ECONNRESET' || (error.stack && error.stack.toLowerCase().includes('timeout')))
+        return res.end()
       logError(req.originalUrl, error, 'getActivityLocations()')
 
       const errorStatusCode = (error && error.status) || (error.response && error.response.status) || 500
