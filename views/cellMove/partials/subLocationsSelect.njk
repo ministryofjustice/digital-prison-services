@@ -1,0 +1,11 @@
+{% from "govuk/components/select/macro.njk" import govukSelect %}
+
+{{ govukSelect({
+    name: 'subLocation',
+    id: 'subLocation',
+    label: {
+        text: 'Select area in residential unit',
+        classes: 'govuk-visually-hidden'
+    },
+    items: subLocations  | addDefaultSelectedVale('Select area in residential unit', true)
+}) }}

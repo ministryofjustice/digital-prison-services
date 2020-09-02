@@ -171,6 +171,7 @@
   },
   "scripts": {
     "start": "node backend/index.js",
+    "start-with-simple-logging": "node backend/index | bunyan -o simple",
     "start:dev": "nodemon --watch backend --watch views backend/index.js",
     "start-feature": "export $(cat $npm_config_env) && node backend/index.js",
     "start-feature-no-webpack": "export $(cat $npm_config_env) && DISABLE_WEBPACK=true node backend/index.js",
