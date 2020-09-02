@@ -77,7 +77,7 @@ module.exports = ({ elite2Api, whereaboutsApi, logError }) => async (req, res) =
         nonAssociations && showNonAssociationsLink(nonAssociations, prisonerDetails.assignedLivingUnit),
       showCsraLink: prisonerDetails.assessments && showCsraLink(prisonerDetails.assessments),
       alerts: alertsToShow,
-      cells, // : subLocations.length ? cells.filter(cell => cell.description ),
+      cells,
       locations,
       subLocations: subLocations.map(loc => ({ text: loc.name, value: loc.key })),
       cellAttributes,
