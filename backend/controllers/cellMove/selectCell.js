@@ -6,9 +6,19 @@ const {
   app: { notmEndpointUrl: dpsUrl },
 } = require('../../config')
 
+const extractQueryParameters = query => {
+  const { location, subLocation, attribute, locationId } = query
+
+  return {
+    location: location || 'ALL',
+    attribute: attribute || 'ALL',
+    subLocation,
+    locationId,
+  }
+}
 module.exports = ({ elite2Api, whereaboutsApi, logError }) => async (req, res) => {
   const { offenderNo } = req.params
-  const { location, attribute } = req.query
+  const { location, subLocation, attribute, locationId } = extractQueryParameters(req.query)
 
   try {
     const prisonerDetails = await elite2Api.getDetails(res.locals, offenderNo, true)
@@ -16,15 +26,31 @@ module.exports = ({ elite2Api, whereaboutsApi, logError }) => async (req, res) =
     const cellAttributesData = await elite2Api.getCellAttributes(res.locals)
     const locationsData = await whereaboutsApi.searchGroups(res.locals, prisonerDetails.agencyId)
 
-    const locations = locationsData.map(loc => ({ text: loc.name, value: loc.key }))
-    locations.unshift({ text: 'All locations', value: 'ALL' })
+    if (req.xhr) {
+      return res.render('cellMove/partials/subLocationsSelect.njk', {
+        subLocations: locationsData
+          .find(loc => loc.key.toLowerCase() === locationId.toLowerCase())
+          .children.map(loc => ({ text: loc.name, value: loc.key })),
+      })
+    }
+
+    const locations = [
+      { text: 'All locations', value: 'ALL' },
+      ...locationsData.map(loc => ({ text: loc.name, value: loc.key })),
+    ]
+
     const cellAttributes = cellAttributesData
       .filter(cellAttribute => 'Y'.includes(cellAttribute.activeFlag))
       .map(cellAttribute => ({ text: cellAttribute.description, value: cellAttribute.code }))
 
+    const subLocations = (
+      locationsData.find(loc => loc.key.toLowerCase() === location.toLowerCase()) || { children: [] }
+    ).children
+
     const prisonersActiveAlertCodes = prisonerDetails.alerts
       .filter(alert => !alert.expired)
       .map(alert => alert.alertCode)
+
     const alertsToShow = alertFlagLabels.filter(alertFlag =>
       alertFlag.alertCodes.some(
         alert => prisonersActiveAlertCodes.includes(alert) && cellMoveAlertCodes.includes(alert)
@@ -37,10 +63,15 @@ module.exports = ({ elite2Api, whereaboutsApi, logError }) => async (req, res) =
         ? await elite2Api.getCellsWithCapacity(res.locals, prisonerDetails.agencyId)
         : await whereaboutsApi.getCellsWithCapacity(res.locals, {
             agencyId: prisonerDetails.agencyId,
-            groupName: location,
+            groupName: subLocation ? `${location}_${subLocation}` : location,
           })
 
     return res.render('cellMove/selectCell.njk', {
+      formValues: {
+        location,
+        subLocation,
+        attribute,
+      },
       breadcrumbPrisonerName: putLastNameFirst(prisonerDetails.firstName, prisonerDetails.lastName),
       showNonAssociationsLink:
         nonAssociations && showNonAssociationsLink(nonAssociations, prisonerDetails.assignedLivingUnit),
@@ -48,9 +79,8 @@ module.exports = ({ elite2Api, whereaboutsApi, logError }) => async (req, res) =
       alerts: alertsToShow,
       cells,
       locations,
+      subLocations: subLocations.map(loc => ({ text: loc.name, value: loc.key })),
       cellAttributes,
-      location,
-      attribute,
       prisonerDetails,
       offenderNo,
       dpsUrl,
@@ -58,6 +88,7 @@ module.exports = ({ elite2Api, whereaboutsApi, logError }) => async (req, res) =
       offenderDetailsUrl: `/prisoner/${offenderNo}/cell-move/offender-details`,
       csraDetailsUrl: `/prisoner/${offenderNo}/cell-move/cell-sharing-risk-assessment-details`,
       selectLocationRootUrl: `/prisoner/${offenderNo}/cell-move/select-location`,
+      selectCellRootUrl: `/prisoner/${offenderNo}/cell-move/select-cell`,
       formAction: `/prisoner/${offenderNo}/cell-move/select-cell`,
     })
   } catch (error) {
