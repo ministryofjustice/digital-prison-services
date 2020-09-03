@@ -1,6 +1,7 @@
 {% extends "../partials/layout.njk" %}
 {% from "govuk/components/select/macro.njk" import govukSelect %}
 {% from "govuk/components/button/macro.njk" import govukButton %}
+{% from "govuk/components/table/macro.njk" import govukTable %}
 {% from "../macros/alertFlags.njk" import alertFlags %}
 
 {% set title = "Select an available cell" %}
@@ -28,7 +29,7 @@
 
   {% include "./partials/prisonerInformation.njk" %}
 
-  <div class="govuk-grid-row govuk-!-margin-top-6">
+  <div class="govuk-grid-row govuk-!-margin-bottom-6">
     <div class="govuk-grid-column-full">
       <form class="horizontal-form" method="GET">
         <h2 class="govuk-heading-m govuk-!-margin-right-2 govuk-!-margin-top-1">View by:</h2>
@@ -74,12 +75,47 @@
     </div>
   </div>
 
-  <p class="govuk-body">The selected location is {{formValues.location}}.</p>
-  {% for cell in cells %}
-    <p class="govuk-body">{{cell.description}}</p>
-  {% endfor %}
+  <table class="govuk-table">
+    <thead class="govuk-table__head">
+      <tr class="govuk-table__row">
+        <th scope="col" class="govuk-table__header" aria-sort="ascending">Location</th>
+        <th scope="col" class="govuk-table__header">Cell type</th>
+        <th scope="col" class="govuk-table__header" aria-sort="none">Capacity</th>
+        <th scope="col" class="govuk-table__header" aria-sort="none">Spaces</th>
+        <th scope="col" class="govuk-table__header"><span class="govuk-visually-hidden">Select cell</span></th>
+      </tr>
+    </thead>
+    <tbody class="govuk-table__body">
+      {% for cell in cells %}
+        <tr class="govuk-table__row">
+          <td class="govuk-table__cell">{{ cell.description }}</th>
+          <td class="govuk-table__cell">{{ cell.type | join('<br>', 'description') if cell.type.length else '--' }}</td>
+          <td class="govuk-table__cell">{{ cell.capacity }}</td>
+          <td class="govuk-table__cell">{{ cell.spaces }}</td>
+          <td class="govuk-table__cell"><a href="#" class="govuk-link">Select cell</a></td>
+        </tr>
+      {% endfor %}
+    </tbody>
+    <tfoot>
+      <tr>
+        <td class="govuk-table__cell" colspan="4">Cell swap</td>
+        <td class="govuk-table__cell"><a href="#" class="govuk-link">Select</a></td>
+      </tr>
+    </tfoot>
+  </table>
+
 {% endblock %}
 
 {% block pageScripts %}
   <script src="/js/selectCell.js"></script>
+{% endblock %}
+
+{% block bodyEnd %}
+  {{ super() }}
+  <script src="/assets/moj/components/sortable-table/sortable-table.js"></script>
+  <script>
+  new MOJFrontend.SortableTable({
+    table: $('table')[0],
+  })
+  </script>
 {% endblock %}
