@@ -223,4 +223,60 @@ describe('Select a cell', () => {
       }
     )
   })
+
+  it('should return the correctly formatted cell details', async () => {
+    elite2Api.getCellsWithCapacity.mockResolvedValue([
+      {
+        description: 'MDI-1-3',
+        capacity: 4,
+        noOfOccupants: 1,
+        attributes: [{ description: 'Single occupancy', code: 'SO' }, { description: 'Listener Cell', code: 'LC' }],
+      },
+      {
+        description: 'MDI-1-2',
+        capacity: 5,
+        noOfOccupants: 1,
+        attributes: [{ description: 'Special Cell', code: 'SPC' }, { description: 'Gated Cell', code: 'GC' }],
+      },
+      {
+        description: 'MDI-1-1',
+        capacity: 3,
+        noOfOccupants: 1,
+        attributes: [{ description: 'Wheelchair Access', code: 'WA' }],
+      },
+    ])
+    await controller(req, res)
+
+    expect(res.render).toHaveBeenCalledWith(
+      'cellMove/selectCell.njk',
+      expect.objectContaining({
+        cells: [
+          {
+            attributes: [{ code: 'WA', description: 'Wheelchair Access' }],
+            capacity: 3,
+            description: 'MDI-1-1',
+            noOfOccupants: 1,
+            spaces: 2,
+            type: [{ code: 'WA', description: 'Wheelchair Access' }],
+          },
+          {
+            attributes: [{ code: 'GC', description: 'Gated Cell' }, { code: 'SPC', description: 'Special Cell' }],
+            capacity: 5,
+            description: 'MDI-1-2',
+            noOfOccupants: 1,
+            spaces: 4,
+            type: [{ code: 'GC', description: 'Gated Cell' }, { code: 'SPC', description: 'Special Cell' }],
+          },
+          {
+            attributes: [{ code: 'LC', description: 'Listener Cell' }, { code: 'SO', description: 'Single occupancy' }],
+            capacity: 4,
+            description: 'MDI-1-3',
+            noOfOccupants: 1,
+            spaces: 3,
+            type: [{ code: 'LC', description: 'Listener Cell' }, { code: 'SO', description: 'Single occupancy' }],
+          },
+        ],
+      })
+    )
+  })
 })

@@ -1,6 +1,6 @@
 const { serviceUnavailableMessage } = require('../../common-messages')
 const { alertFlagLabels, cellMoveAlertCodes } = require('../../shared/alertFlagValues')
-const { putLastNameFirst } = require('../../utils')
+const { putLastNameFirst, hasLength } = require('../../utils')
 const { showNonAssociationsLink, showCsraLink } = require('./cellMoveUtils')
 const {
   app: { notmEndpointUrl: dpsUrl },
@@ -84,6 +84,8 @@ module.exports = ({ elite2Api, whereaboutsApi, logError }) => async (req, res) =
             attribute,
           })
 
+    const sortByDescription = (a, b) => a.description.localeCompare(b.description)
+
     return res.render('cellMove/selectCell.njk', {
       formValues: {
         location,
@@ -95,7 +97,15 @@ module.exports = ({ elite2Api, whereaboutsApi, logError }) => async (req, res) =
         nonAssociations && showNonAssociationsLink(nonAssociations, prisonerDetails.assignedLivingUnit),
       showCsraLink: prisonerDetails.assessments && showCsraLink(prisonerDetails.assessments),
       alerts: alertsToShow,
-      cells,
+      cells:
+        hasLength(cells) &&
+        cells
+          .map(cell => ({
+            ...cell,
+            spaces: cell.capacity - cell.noOfOccupants,
+            type: hasLength(cell.attributes) && cell.attributes.sort(sortByDescription),
+          }))
+          .sort(sortByDescription),
       locations,
       subLocations,
       cellAttributes,
