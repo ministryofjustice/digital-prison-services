@@ -325,6 +325,11 @@ const elite2ApiFactory = client => {
 
   const getCellsWithCapacity = (context, agencyId) => get(context, `/api/agencies/${agencyId}/cellsWithCapacity`)
 
+  const getOffenderCellHistory = (context, bookingId, params) =>
+    get(context, `/api/bookings/${bookingId}/cell-history?${mapToQueryString(params)}`)
+
+  const getAttributesForLocation = (context, locationId) => get(context, `/api/cell/${locationId}/attributes`)
+
   return {
     userLocations,
     userCaseLoads,
@@ -427,6 +432,8 @@ const elite2ApiFactory = client => {
     getCellAttributes,
     getCellsWithCapacity,
     getCsraAssessments,
+    getOffenderCellHistory,
+    getAttributesForLocation,
   }
 }
 

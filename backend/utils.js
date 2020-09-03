@@ -247,6 +247,8 @@ const times = number => func => {
   return iter(0)
 }
 
+const possessive = string => (string.toLowerCase().endsWith('s') ? '&rsquo;' : '&rsquo;s')
+
 module.exports = {
   isBeforeToday,
   isToday,
@@ -285,4 +287,5 @@ module.exports = {
   getNamesFromString,
   groupBy,
   times,
+  possessive,
 }
