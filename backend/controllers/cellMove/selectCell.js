@@ -6,12 +6,16 @@ const {
   app: { notmEndpointUrl: dpsUrl },
 } = require('../../config')
 
+const defaultSubLocationsValue = { text: 'Select area in residential unit', value: '' }
+const noAreasSelectedDropDownValue = { text: 'No areas to select', value: '' }
+const toDropDownValue = entry => ({ text: entry.name, value: entry.key })
+
 const extractQueryParameters = query => {
   const { location, subLocation, attribute, locationId } = query
 
   return {
     location: location || 'ALL',
-    attribute: attribute || 'ALL',
+    attribute,
     subLocation,
     locationId,
   }
@@ -28,9 +32,15 @@ module.exports = ({ elite2Api, whereaboutsApi, logError }) => async (req, res) =
 
     if (req.xhr) {
       return res.render('cellMove/partials/subLocationsSelect.njk', {
-        subLocations: locationsData
-          .find(loc => loc.key.toLowerCase() === locationId.toLowerCase())
-          .children.map(loc => ({ text: loc.name, value: loc.key })),
+        subLocations:
+          locationId === 'ALL'
+            ? [noAreasSelectedDropDownValue]
+            : [
+                defaultSubLocationsValue,
+                ...locationsData
+                  .find(loc => loc.key.toLowerCase() === locationId.toLowerCase())
+                  .children.map(toDropDownValue),
+              ],
       })
     }
 
@@ -43,9 +53,15 @@ module.exports = ({ elite2Api, whereaboutsApi, logError }) => async (req, res) =
       .filter(cellAttribute => 'Y'.includes(cellAttribute.activeFlag))
       .map(cellAttribute => ({ text: cellAttribute.description, value: cellAttribute.code }))
 
-    const subLocations = (
-      locationsData.find(loc => loc.key.toLowerCase() === location.toLowerCase()) || { children: [] }
-    ).children
+    const subLocations =
+      location === 'ALL'
+        ? [noAreasSelectedDropDownValue]
+        : [
+            defaultSubLocationsValue,
+            ...(
+              locationsData.find(loc => loc.key.toLowerCase() === location.toLowerCase()) || { children: [] }
+            ).children.map(toDropDownValue),
+          ]
 
     const prisonersActiveAlertCodes = prisonerDetails.alerts
       .filter(alert => !alert.expired)
@@ -56,14 +72,16 @@ module.exports = ({ elite2Api, whereaboutsApi, logError }) => async (req, res) =
         alert => prisonersActiveAlertCodes.includes(alert) && cellMoveAlertCodes.includes(alert)
       )
     )
+
     // If the location is 'ALL' we do not need to call the whereabouts API,
     // we can directly call prisonApi.
     const cells =
       location === 'ALL'
-        ? await elite2Api.getCellsWithCapacity(res.locals, prisonerDetails.agencyId)
+        ? await elite2Api.getCellsWithCapacity(res.locals, prisonerDetails.agencyId, attribute)
         : await whereaboutsApi.getCellsWithCapacity(res.locals, {
             agencyId: prisonerDetails.agencyId,
             groupName: subLocation ? `${location}_${subLocation}` : location,
+            attribute,
           })
 
     return res.render('cellMove/selectCell.njk', {
@@ -79,7 +97,7 @@ module.exports = ({ elite2Api, whereaboutsApi, logError }) => async (req, res) =
       alerts: alertsToShow,
       cells,
       locations,
-      subLocations: subLocations.map(loc => ({ text: loc.name, value: loc.key })),
+      subLocations,
       cellAttributes,
       prisonerDetails,
       offenderNo,

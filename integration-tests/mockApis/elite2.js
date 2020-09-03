@@ -1323,4 +1323,18 @@ module.exports = {
         jsonBody: cellAttributes,
       },
     }),
+  stubCellsWithCapacity: cells =>
+    stubFor({
+      request: {
+        method: 'GET',
+        urlPathPattern: '/api/agencies/.+?/cellsWithCapacity',
+      },
+      response: {
+        status: 200,
+        headers: {
+          'Content-Type': 'application/json;charset=UTF-8',
+        },
+        jsonBody: cells,
+      },
+    }),
 }
