@@ -78,10 +78,10 @@
         <div class="govuk-grid-column-one-half">
         <div class="govuk-grid-row">
           <div class="govuk-grid-column-one-half">
-            {% if isSingleOccupancy %}
-              <p class="govuk-body">Single occupancy cell</p>
-            {% else %}
+            {% if occupants.length %}
               <h3 class="govuk-heading-s govuk-!-margin-bottom-1">Currently sharing with</h3>
+            {% else %}
+              <p class="govuk-body">Single occupancy cell</p>
             {% endif %}
           </div>
             <div class="govuk-grid-column-one-half">
@@ -108,14 +108,10 @@
         <div class="govuk-grid-column-one-half">
         <div class="govuk-grid-row">
           <div class="govuk-grid-column-one-half" data-test="occupiers">
-            {% if occupiers.length %}
-                {% for occupier in occupiers %}
-                  <p class="govuk-body"><a class="govuk-link" href={{occupier.profileUrl}}>{{ occupier.name }}</a></p>
+            {% if occupants.length %}
+                {% for occupant in occupants %}
+                  <p class="govuk-body"><a class="govuk-link" href={{occupant.profileUrl}}>{{ occupant.name }}</a></p>
                 {% endfor %}
-            {% elif isSingleOccupancy %}
-                <p class="govuk-body"></p>
-            {% else %}
-                <p class="govuk-body">None</p>
             {% endif %}
           </div>
           <div class="govuk-grid-column-one-half">

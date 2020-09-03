@@ -37,14 +37,13 @@ module.exports = ({ elite2Api, logError, page = 0 }) => async (req, res) => {
       size: 10000,
     })
 
+    // Collect a list of the unique agencies, to remove
+    // the need to make duplicate API calls
     const agencyData = await getAgencyDetails(cells)
 
     const currentLocation = cells.find(cell => cell.assignmentEndDateTime === undefined)
-    const occupiers =
-      (currentLocation && (await elite2Api.getInmates(res.locals, currentLocation.description, {}))) || []
-
-    const attributes = await elite2Api.getAttributesForLocation(res.locals, currentLocation.livingUnitId)
-    const isSingleOccupancy = attributes && attributes.capacity === 1
+    const occupants =
+      (currentLocation && (await elite2Api.getInmatesAtLocation(res.locals, currentLocation.livingUnitId, {}))) || []
 
     const cellData = cells
       .sort((left, right) => sortByDateTime(right.assignmentDateTime, left.assignmentDateTime))
@@ -69,14 +68,13 @@ module.exports = ({ elite2Api, logError, page = 0 }) => async (req, res) => {
         location: extractLocation(currentLocation.description, currentLocation.agencyId),
         movedIn: currentLocation.assignmentDateTime && formatTimestampToDateTime(currentLocation.assignmentDateTime),
       },
-      occupiers: occupiers.map(occupier => {
+      occupants: occupants.filter(occupant => occupant.offenderNo !== offenderNo).map(occupant => {
         return {
-          name: putLastNameFirst(occupier.firstName, occupier.lastName),
-          profileUrl: `/prisoner/${occupier.offenderNo}`,
+          name: putLastNameFirst(occupant.firstName, occupant.lastName),
+          profileUrl: `/prisoner/${occupant.offenderNo}`,
         }
       }),
       titleWithName,
-      isSingleOccupancy,
       profileUrl: `/prisoner/${offenderNo}`,
       breadcrumbPrisonerName: putLastNameFirst(firstName, lastName),
       changeCellLink: `/prisoner/${offenderNo}/cell-move/select-location`,
