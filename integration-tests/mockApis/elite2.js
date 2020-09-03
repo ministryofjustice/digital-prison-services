@@ -1337,4 +1337,34 @@ module.exports = {
         jsonBody: cells,
       },
     }),
+
+  stubInmatesAtLocation: inmates =>
+    stubFor({
+      request: {
+        method: 'GET',
+        urlPathPattern: '/api/locations/.+?/inmates',
+      },
+      response: {
+        status: 200,
+        headers: {
+          'Content-Type': 'application/json;charset=UTF-8',
+        },
+        jsonBody: inmates || [],
+      },
+    }),
+
+  stubOffenderCellHistory: history =>
+    stubFor({
+      request: {
+        method: 'GET',
+        urlPathPattern: '/api/bookings/[0-9]+?/cell-history',
+      },
+      response: {
+        status: 200,
+        headers: {
+          'Content-Type': 'application/json;charset=UTF-8',
+        },
+        jsonBody: history || { content: [] },
+      },
+    }),
 }

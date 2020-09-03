@@ -333,5 +333,7 @@ module.exports = on => {
     stubGetOffenderRetentionReasons: dataComplianceApi.stubGetOffenderRetentionReasons,
     stubCreateRecord: ({ offenderNo }) => dataComplianceApi.stubCreateRecord(offenderNo),
     stubCellsWithCapacity: ({ cells }) => elite2api.stubCellsWithCapacity(cells),
+    stubInmatesAtLocation: ({ inmates }) => elite2api.stubInmatesAtLocation(inmates),
+    stubOffenderCellHistory: ({ history }) => elite2api.stubOffenderCellHistory(history),
   })
 }
