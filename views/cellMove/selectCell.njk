@@ -75,10 +75,10 @@
     </div>
   </div>
 
-  <table class="govuk-table">
+  <table class="govuk-table" data-test="cell-results-table">
     <thead class="govuk-table__head">
       <tr class="govuk-table__row">
-        <th scope="col" class="govuk-table__header" aria-sort="ascending">Location</th>
+        <th scope="col" class="govuk-table__header" aria-sort="ascending" data-test="location-table-header">Location</th>
         <th scope="col" class="govuk-table__header">Cell type</th>
         <th scope="col" class="govuk-table__header" aria-sort="none">Capacity</th>
         <th scope="col" class="govuk-table__header" aria-sort="none">Spaces</th>
@@ -89,7 +89,7 @@
       {% for cell in cells %}
         <tr class="govuk-table__row">
           <td class="govuk-table__cell">{{ cell.description }}</th>
-          <td class="govuk-table__cell">{{ cell.type | join('<br>', 'description') if cell.type.length else '--' }}</td>
+          <td class="govuk-table__cell">{{ cell.type | join('<br>', 'description') | safe if cell.type.length else '--' }}</td>
           <td class="govuk-table__cell">{{ cell.capacity }}</td>
           <td class="govuk-table__cell">{{ cell.spaces }}</td>
           <td class="govuk-table__cell"><a href="#" class="govuk-link">Select cell</a></td>
@@ -97,7 +97,7 @@
       {% endfor %}
     </tbody>
     <tfoot>
-      <tr>
+      <tr class="govuk-table__row">
         <td class="govuk-table__cell" colspan="4">Cell swap</td>
         <td class="govuk-table__cell"><a href="#" class="govuk-link">Select</a></td>
       </tr>
