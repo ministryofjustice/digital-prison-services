@@ -6,6 +6,10 @@ const {
   app: { notmEndpointUrl: dpsUrl },
 } = require('../../config')
 
+const defaultSubLocationsValue = { text: 'Select area in residential unit', value: '' }
+const noAreasSelectedDropDownValue = { text: 'No areas to select', value: '' }
+const toDropDownValue = entry => ({ text: entry.name, value: entry.key })
+
 const extractQueryParameters = query => {
   const { location, subLocation, attribute, locationId } = query
 
@@ -30,10 +34,13 @@ module.exports = ({ elite2Api, whereaboutsApi, logError }) => async (req, res) =
       return res.render('cellMove/partials/subLocationsSelect.njk', {
         subLocations:
           locationId === 'ALL'
-            ? []
-            : locationsData
-                .find(loc => loc.key.toLowerCase() === locationId.toLowerCase())
-                .children.map(loc => ({ text: loc.name, value: loc.key })),
+            ? [noAreasSelectedDropDownValue]
+            : [
+                defaultSubLocationsValue,
+                ...locationsData
+                  .find(loc => loc.key.toLowerCase() === locationId.toLowerCase())
+                  .children.map(toDropDownValue),
+              ],
       })
     }
 
@@ -46,9 +53,15 @@ module.exports = ({ elite2Api, whereaboutsApi, logError }) => async (req, res) =
       .filter(cellAttribute => 'Y'.includes(cellAttribute.activeFlag))
       .map(cellAttribute => ({ text: cellAttribute.description, value: cellAttribute.code }))
 
-    const subLocations = (
-      locationsData.find(loc => loc.key.toLowerCase() === location.toLowerCase()) || { children: [] }
-    ).children
+    const subLocations =
+      location === 'ALL'
+        ? [noAreasSelectedDropDownValue]
+        : [
+            defaultSubLocationsValue,
+            ...(
+              locationsData.find(loc => loc.key.toLowerCase() === location.toLowerCase()) || { children: [] }
+            ).children.map(toDropDownValue),
+          ]
 
     const prisonersActiveAlertCodes = prisonerDetails.alerts
       .filter(alert => !alert.expired)
@@ -84,7 +97,7 @@ module.exports = ({ elite2Api, whereaboutsApi, logError }) => async (req, res) =
       alerts: alertsToShow,
       cells,
       locations,
-      subLocations: (subLocations && subLocations.map(loc => ({ text: loc.name, value: loc.key }))) || [],
+      subLocations,
       cellAttributes,
       prisonerDetails,
       offenderNo,

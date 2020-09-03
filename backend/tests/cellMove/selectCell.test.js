@@ -140,7 +140,7 @@ describe('Select a cell', () => {
         selectLocationRootUrl: '/prisoner/A12345/cell-move/select-location',
         showCsraLink: undefined,
         showNonAssociationsLink: undefined,
-        subLocations: [],
+        subLocations: [{ text: 'No areas to select', value: '' }],
       })
     )
   })
@@ -166,7 +166,7 @@ describe('Select a cell', () => {
     expect(res.render).toHaveBeenCalledWith(
       'cellMove/selectCell.njk',
       expect.objectContaining({
-        subLocations: [{ text: 'Sub value', value: 'sl' }],
+        subLocations: [{ text: 'Select area in residential unit', value: '' }, { text: 'Sub value', value: 'sl' }],
       })
     )
   })
@@ -183,7 +183,7 @@ describe('Select a cell', () => {
     expect(res.render).toHaveBeenCalledWith(
       'cellMove/partials/subLocationsSelect.njk',
       expect.objectContaining({
-        subLocations: [{ text: 'Sub value', value: 'sl' }],
+        subLocations: [{ text: 'Select area in residential unit', value: '' }, { text: 'Sub value', value: 'sl' }],
       })
     )
   })
@@ -200,7 +200,7 @@ describe('Select a cell', () => {
     expect(res.render).toHaveBeenCalledWith(
       'cellMove/partials/subLocationsSelect.njk',
       expect.objectContaining({
-        subLocations: [],
+        subLocations: [{ text: 'No areas to select', value: '' }],
       })
     )
   })
