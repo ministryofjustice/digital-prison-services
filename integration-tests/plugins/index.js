@@ -332,5 +332,6 @@ module.exports = on => {
     stubRetentionRecord: ({ offenderNo, record }) => dataComplianceApi.stubRetentionRecord(offenderNo, record),
     stubGetOffenderRetentionReasons: dataComplianceApi.stubGetOffenderRetentionReasons,
     stubCreateRecord: ({ offenderNo }) => dataComplianceApi.stubCreateRecord(offenderNo),
+    stubCellsWithCapacity: ({ cells }) => elite2api.stubCellsWithCapacity(cells),
   })
 }

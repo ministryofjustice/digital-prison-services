@@ -11,7 +11,7 @@ const extractQueryParameters = query => {
 
   return {
     location: location || 'ALL',
-    attribute: attribute || 'ALL',
+    attribute,
     subLocation,
     locationId,
   }
@@ -28,9 +28,12 @@ module.exports = ({ elite2Api, whereaboutsApi, logError }) => async (req, res) =
 
     if (req.xhr) {
       return res.render('cellMove/partials/subLocationsSelect.njk', {
-        subLocations: locationsData
-          .find(loc => loc.key.toLowerCase() === locationId.toLowerCase())
-          .children.map(loc => ({ text: loc.name, value: loc.key })),
+        subLocations:
+          locationId === 'ALL'
+            ? []
+            : locationsData
+                .find(loc => loc.key.toLowerCase() === locationId.toLowerCase())
+                .children.map(loc => ({ text: loc.name, value: loc.key })),
       })
     }
 
@@ -56,14 +59,16 @@ module.exports = ({ elite2Api, whereaboutsApi, logError }) => async (req, res) =
         alert => prisonersActiveAlertCodes.includes(alert) && cellMoveAlertCodes.includes(alert)
       )
     )
+
     // If the location is 'ALL' we do not need to call the whereabouts API,
     // we can directly call prisonApi.
     const cells =
       location === 'ALL'
-        ? await elite2Api.getCellsWithCapacity(res.locals, prisonerDetails.agencyId)
+        ? await elite2Api.getCellsWithCapacity(res.locals, prisonerDetails.agencyId, attribute)
         : await whereaboutsApi.getCellsWithCapacity(res.locals, {
             agencyId: prisonerDetails.agencyId,
             groupName: subLocation ? `${location}_${subLocation}` : location,
+            attribute,
           })
 
     return res.render('cellMove/selectCell.njk', {
@@ -79,7 +84,7 @@ module.exports = ({ elite2Api, whereaboutsApi, logError }) => async (req, res) =
       alerts: alertsToShow,
       cells,
       locations,
-      subLocations: subLocations.map(loc => ({ text: loc.name, value: loc.key })),
+      subLocations: (subLocations && subLocations.map(loc => ({ text: loc.name, value: loc.key }))) || [],
       cellAttributes,
       prisonerDetails,
       offenderNo,

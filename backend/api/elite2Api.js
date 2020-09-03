@@ -323,7 +323,13 @@ const elite2ApiFactory = client => {
 
   const getNonAssociations = (context, bookingId) => get(context, `/api/bookings/${bookingId}/non-association-details`)
 
-  const getCellsWithCapacity = (context, agencyId) => get(context, `/api/agencies/${agencyId}/cellsWithCapacity`)
+  const getCellsWithCapacity = (context, agencyId, attribute) =>
+    get(
+      context,
+      attribute
+        ? `/api/agencies/${agencyId}/cellsWithCapacity?attribute=${attribute}`
+        : `/api/agencies/${agencyId}/cellsWithCapacity`
+    )
 
   return {
     userLocations,

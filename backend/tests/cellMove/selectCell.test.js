@@ -51,7 +51,7 @@ describe('Select a cell', () => {
       },
       query: {
         location: 'ALL',
-        attribute: 'ALL',
+        attribute: 'A',
       },
     }
   })
@@ -72,13 +72,14 @@ describe('Select a cell', () => {
     }
     await controller(req, res)
 
-    expect(elite2Api.getCellsWithCapacity).toHaveBeenCalledWith({}, someAgency)
+    expect(elite2Api.getCellsWithCapacity).toHaveBeenCalledWith({}, someAgency, 'A')
   })
 
   it('should call get cells with capacity for leeds and house block 1', async () => {
     req.query = {
       ...req.query,
       location: 'hb1',
+      attribute: 'A',
     }
     await controller(req, res)
 
@@ -87,6 +88,7 @@ describe('Select a cell', () => {
       {
         agencyId: someAgency,
         groupName: 'hb1',
+        attribute: 'A',
       }
     )
   })
@@ -121,7 +123,7 @@ describe('Select a cell', () => {
         csraDetailsUrl: '/prisoner/A12345/cell-move/cell-sharing-risk-assessment-details',
         dpsUrl: 'http://localhost:3000/',
         formAction: '/prisoner/A12345/cell-move/select-cell',
-        formValues: { attribute: 'ALL', location: 'ALL', subLocation: undefined },
+        formValues: { attribute: 'A', location: 'ALL', subLocation: undefined },
         locations: [{ text: 'All locations', value: 'ALL' }, { text: 'Houseblock 1', value: 'hb1' }],
         nonAssociationLink: '/prisoner/A12345/cell-move/non-associations',
         offenderDetailsUrl: '/prisoner/A12345/cell-move/offender-details',
@@ -186,11 +188,29 @@ describe('Select a cell', () => {
     )
   })
 
+  it('should render subLocations template on ajax request when the subLocationId is ALL', async () => {
+    req.xhr = true
+    req.query = {
+      ...req.query,
+      locationId: 'ALL',
+    }
+
+    await controller(req, res)
+
+    expect(res.render).toHaveBeenCalledWith(
+      'cellMove/partials/subLocationsSelect.njk',
+      expect.objectContaining({
+        subLocations: [],
+      })
+    )
+  })
+
   it('should make a call to retrieve sub locations', async () => {
     req.query = {
       ...req.query,
       location: 'hb1',
       subLocation: 'sub1',
+      attribute: 'A',
     }
     await controller(req, res)
 
@@ -199,6 +219,7 @@ describe('Select a cell', () => {
       {
         agencyId: someAgency,
         groupName: 'hb1_sub1',
+        attribute: 'A',
       }
     )
   })
