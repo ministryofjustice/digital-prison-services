@@ -1,7 +1,7 @@
 const moment = require('moment')
 const { serviceUnavailableMessage } = require('../../common-messages')
 const { alertFlagLabels, cellMoveAlertCodes } = require('../../shared/alertFlagValues')
-const { putLastNameFirst, hasLength, groupBy, pascalToString, properCaseName } = require('../../utils')
+const { putLastNameFirst, hasLength, groupBy, properCaseName } = require('../../utils')
 const { showNonAssociationsLink, showCsraLink } = require('./cellMoveUtils')
 const {
   app: { notmEndpointUrl: dpsUrl },
@@ -33,7 +33,7 @@ const sortByLatestAssessmentDateDesc = (left, right) => {
   return 0
 }
 
-const getCellOccupants = async (res, { elite2Api, activeCaseLoadId, cells, alertsToShow }) => {
+const getCellOccupants = async (res, { elite2Api, activeCaseLoadId, cells }) => {
   const currentCellOccupants = (await Promise.all(
     cells.map(cell => cell.id).map(cellId => elite2Api.getInmatesAtLocation(res.locals, cellId, {}))
   )).flatMap(occupant => occupant)
@@ -62,19 +62,18 @@ const getCellOccupants = async (res, { elite2Api, activeCaseLoadId, cells, alert
     return occupants.map(occupant => {
       const csraInfo = cellSharingAssessments.find(rating => rating.offenderNo === occupant.offenderNo)
 
+      const alertCodes = occupantAlerts
+        .filter(
+          alert =>
+            alert.offenderNo === occupant.offenderNo && !alert.expired && cellMoveAlertCodes.includes(alert.alertCode)
+        )
+        .map(alert => alert.alertCode)
+
       return {
         cellId: cell.id,
         name: `${properCaseName(occupant.lastName)}, ${properCaseName(occupant.firstName)}`,
-        alerts:
-          alertsToShow &&
-          alertsToShow.filter(als =>
-            als.alertCodes.filter(code =>
-              occupantAlerts
-                .filter(alert => alert.offenderNo === occupant.offenderNo && !alert.expired)
-                .map(alert => alert.code)
-                .includes(code)
-            )
-          ),
+        viewOffenderDetails: `/prisoner/${occupant.offenderNo}/cell-move/offender-details`,
+        alerts: alertFlagLabels.filter(label => label.alertCodes.some(code => alertCodes.includes(code))),
         showCsraLink: showCsraLink(
           occupantAssessments.filter(assessment => assessment.offenderNo === occupant.offenderNo)
         ),
@@ -150,7 +149,7 @@ module.exports = ({ elite2Api, whereaboutsApi, logError }) => async (req, res) =
             attribute,
           })
 
-    const cellOccupants = await getCellOccupants(res, { activeCaseLoadId, elite2Api, cells, alertsToShow })
+    const cellOccupants = await getCellOccupants(res, { activeCaseLoadId, elite2Api, cells })
 
     return res.render('cellMove/selectCell.njk', {
       formValues: {
@@ -168,7 +167,7 @@ module.exports = ({ elite2Api, whereaboutsApi, logError }) => async (req, res) =
         cells
           .map(cell => ({
             ...cell,
-            occupants: cellOccupants.filter(occupant => occupant.cellId === cell.id).filter(entry => Boolean(entry)),
+            occupants: cellOccupants.filter(occupant => occupant.cellId === cell.id).filter(Boolean),
             spaces: cell.capacity - cell.noOfOccupants,
             type: hasLength(cell.attributes) && cell.attributes.sort(sortByDescription),
           }))

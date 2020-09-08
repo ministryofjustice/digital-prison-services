@@ -355,10 +355,9 @@ describe('Select a cell', () => {
                 {
                   alerts: [
                     {
-                      alertCodes: ['PEEP'],
-                      classes: 'alert-status alert-status--disability',
-                      img: '/images/Disability_icon.png',
-                      label: 'PEEP',
+                      alertCodes: ['URS'],
+                      classes: 'alert-status alert-status--refusing-to-shield',
+                      label: 'Refusing to shield',
                     },
                   ],
                   cellId: 3,
@@ -366,6 +365,7 @@ describe('Select a cell', () => {
                   csraDetailsUrl: '/prisoner/A333333/cell-move/cell-sharing-risk-assessment-details',
                   name: 'Doe3, Bob3',
                   showCsraLink: true,
+                  viewOffenderDetails: '/prisoner/A333333/cell-move/offender-details',
                 },
               ],
               spaces: 2,
@@ -387,10 +387,9 @@ describe('Select a cell', () => {
                 {
                   alerts: [
                     {
-                      alertCodes: ['PEEP'],
-                      classes: 'alert-status alert-status--disability',
-                      img: '/images/Disability_icon.png',
-                      label: 'PEEP',
+                      alertCodes: ['XEL'],
+                      classes: 'alert-status alert-status--elist',
+                      label: 'E-list',
                     },
                   ],
                   cellId: 2,
@@ -398,6 +397,7 @@ describe('Select a cell', () => {
                   csraDetailsUrl: '/prisoner/A222222/cell-move/cell-sharing-risk-assessment-details',
                   name: 'Doe2, Bob2',
                   showCsraLink: true,
+                  viewOffenderDetails: '/prisoner/A222222/cell-move/offender-details',
                 },
               ],
               spaces: 4,
@@ -430,6 +430,7 @@ describe('Select a cell', () => {
                   csraDetailsUrl: '/prisoner/A111111/cell-move/cell-sharing-risk-assessment-details',
                   name: 'Doe1, Bob1',
                   showCsraLink: false,
+                  viewOffenderDetails: '/prisoner/A111111/cell-move/offender-details',
                 },
               ],
               spaces: 3,
@@ -498,19 +499,13 @@ describe('Select a cell', () => {
               noOfOccupants: 1,
               occupants: [
                 {
-                  alerts: [
-                    {
-                      alertCodes: ['PEEP'],
-                      classes: 'alert-status alert-status--disability',
-                      img: '/images/Disability_icon.png',
-                      label: 'PEEP',
-                    },
-                  ],
+                  alerts: [],
                   cellId: 1,
                   csra: 'High',
                   csraDetailsUrl: '/prisoner/A111111/cell-move/cell-sharing-risk-assessment-details',
                   name: 'Doe1, Bob1',
                   showCsraLink: true,
+                  viewOffenderDetails: '/prisoner/A111111/cell-move/offender-details',
                 },
               ],
               spaces: 3,
