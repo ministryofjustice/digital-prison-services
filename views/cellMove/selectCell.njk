@@ -6,6 +6,64 @@
 
 {% set title = "Select an available cell" %}
 
+
+{% macro makeRow(cell, first, occupier) %}
+  {% if first %}
+    <td class="govuk-table__cell">{{ cell.description }}</th>
+    <td class="govuk-table__cell">{{ cell.type | join('<br>', 'description') | safe if cell.type.length else '--' }}</td>
+    <td class="govuk-table__cell">{{ cell.capacity }}</td>
+    <td class="govuk-table__cell">{{ cell.spaces }}</td>
+  {% else %}
+    <td class="govuk-table__cell">
+    </td>
+    <td class="govuk-table__cell">
+    </td>
+    <td class="govuk-table__cell">
+    </td>
+    <td class="govuk-table__cell">
+    </td>
+  {% endif %}
+
+  {%  if occupier != null %}
+  <td class="govuk-table__cell">
+    {{ occupier.name }}
+  </td>
+  <td class="govuk-table__cell">
+    <p class="govuk-body govuk-!-margin-bottom-1">
+      {{ occupier.csra }}
+    </p>
+
+    {% if occupier.showCsraLink %}
+      <div>
+        <a href="{{ occupier.csraDetailsUrl }}" class="govuk-link" data-test="csra-link">View details <span class="govuk-visually-hidden">for {{ occupier.name }}</span></a>
+      </div>
+    {% endif %}
+  </td>
+  <td class="govuk-table__cell">
+    {% if occupier.alerts.length %}
+      {{ alertFlags(occupier.alerts) }}
+    {% else %}
+      <p class="govuk-body govuk-!-margin-bottom-1">None</p>
+    {% endif %}
+  </td>
+  {% else %}
+    <td class="govuk-table__cell">
+    </td>
+    <td class="govuk-table__cell">
+    </td>
+    <td class="govuk-table__cell">
+    </td>
+  {% endif %}
+
+  {% if first %}
+    <td class="govuk-table__cell"><a href="#" class="govuk-link">Select cell</a></td>
+  {% else %}
+    <td class="govuk-table__cell">
+    </td>
+  {% endif %}
+
+{% endmacro %}
+
 {% block beforeContent %}
   {{ govukBreadcrumbs({
     items: [
@@ -78,22 +136,30 @@
   <table class="govuk-table" data-test="cell-results-table">
     <thead class="govuk-table__head">
       <tr class="govuk-table__row">
-        <th scope="col" class="govuk-table__header" aria-sort="ascending" data-test="location-table-header">Location</th>
+        <th scope="col" class="govuk-table__header" data-test="location-table-header">Location</th>
         <th scope="col" class="govuk-table__header">Cell type</th>
-        <th scope="col" class="govuk-table__header" aria-sort="none">Capacity</th>
-        <th scope="col" class="govuk-table__header" aria-sort="none">Spaces</th>
+        <th scope="col" class="govuk-table__header">Capacity</th>
+        <th scope="col" class="govuk-table__header">Spaces</th>
+        <th scope="col" class="govuk-table__header">Occupier</th>
+
+        <th scope="col" class="govuk-table__header">CSRA</th>
+        <th scope="col" class="govuk-table__header">Relevant alerts</th>
         <th scope="col" class="govuk-table__header"><span class="govuk-visually-hidden">Select cell</span></th>
       </tr>
     </thead>
     <tbody class="govuk-table__body">
       {% for cell in cells %}
+        {% if cell.occupants.length > 0 %}
+             {% for occupier in cell.occupants %}
+               <tr class="govuk-table__row">
+                 {{ makeRow(cell, loop.index === 1, occupier) }}
+               </tr>
+              {% endfor %}
+        {% else %}
         <tr class="govuk-table__row">
-          <td class="govuk-table__cell">{{ cell.description }}</th>
-          <td class="govuk-table__cell">{{ cell.type | join('<br>', 'description') | safe if cell.type.length else '--' }}</td>
-          <td class="govuk-table__cell">{{ cell.capacity }}</td>
-          <td class="govuk-table__cell">{{ cell.spaces }}</td>
-          <td class="govuk-table__cell"><a href="#" class="govuk-link">Select cell</a></td>
+          {{ makeRow(cell, true, null) }}
         </tr>
+        {% endif%}
       {% endfor %}
     </tbody>
     <tfoot>

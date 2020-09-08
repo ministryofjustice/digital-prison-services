@@ -342,6 +342,20 @@ module.exports = {
       },
     })
   },
+  stubGetAlerts: ({ agencyId, alerts }) =>
+    stubFor({
+      request: {
+        method: 'POST',
+        urlPathPattern: `/api/bookings/offenderNo/${agencyId}/alerts`,
+      },
+      response: {
+        status: 200,
+        headers: {
+          'Content-Type': 'application/json;charset=UTF-8',
+        },
+        jsonBody: alerts || [],
+      },
+    }),
   stubCreateAlert: () => {
     return stubFor({
       request: {
