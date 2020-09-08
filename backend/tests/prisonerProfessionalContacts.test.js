@@ -1,7 +1,7 @@
 const prisonerProfessionalContacts = require('../controllers/prisonerProfile/prisonerProfessionalContacts')
 const { serviceUnavailableMessage } = require('../common-messages')
 
-describe('Prisoner schedule', () => {
+describe('Prisoner professional contacts', () => {
   const offenderNo = 'ABC123'
   const bookingId = '123'
   const elite2Api = {}
