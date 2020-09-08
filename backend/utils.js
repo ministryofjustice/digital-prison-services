@@ -113,11 +113,12 @@ const formatMonthsAndDays = (months, days) => {
 }
 
 const pascalToString = value =>
+  value &&
   value.substring(0, 1) +
-  value
-    .substring(1)
-    .replace(/([A-Z])/g, ' $1')
-    .toLowerCase()
+    value
+      .substring(1)
+      .replace(/([A-Z])/g, ' $1')
+      .toLowerCase()
 
 const merge = (left, right) => ({
   ...left,
@@ -231,11 +232,14 @@ const getNamesFromString = string => {
 }
 
 const groupBy = (array, key) => {
-  return array.reduce((acc, current) => {
-    const group = current[key]
+  return (
+    array &&
+    array.reduce((acc, current) => {
+      const group = current[key]
 
-    return { ...acc, [group]: [...(acc[group] || []), current] }
-  }, {})
+      return { ...acc, [group]: [...(acc[group] || []), current] }
+    }, {})
+  )
 }
 
 const times = number => func => {
