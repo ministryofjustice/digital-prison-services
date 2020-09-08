@@ -1,11 +1,11 @@
 const { serviceUnavailableMessage } = require('../../common-messages')
 const {
   formatName,
-  stripAgencyPrefix,
   formatTimestampToDateTime,
   possessive,
   sortByDateTime,
   putLastNameFirst,
+  extractLocation,
 } = require('../../utils')
 const {
   app: { notmEndpointUrl: dpsUrl },
@@ -21,13 +21,6 @@ module.exports = ({ elite2Api, logError, page = 0 }) => async (req, res) => {
         .filter((v, i, a) => a.indexOf(v) === i)
         .map(agencyId => elite2Api.getAgencyDetails(res.locals, agencyId))
     )
-  }
-
-  const extractLocation = (location, agencyId) => {
-    const withoutAgency = stripAgencyPrefix(location, agencyId)
-    if (withoutAgency.includes('RECP')) return 'Reception'
-    if (withoutAgency.includes('CSWAP')) return 'Cell swap'
-    return withoutAgency
   }
 
   try {
@@ -67,6 +60,9 @@ module.exports = ({ elite2Api, logError, page = 0 }) => async (req, res) => {
           .description,
         location: extractLocation(currentLocation.description, currentLocation.agencyId),
         movedIn: currentLocation.assignmentDateTime && formatTimestampToDateTime(currentLocation.assignmentDateTime),
+        assignmentDate: currentLocation.assignmentDate,
+        livingUnitId: currentLocation.livingUnitId,
+        agencyId: currentLocation.agencyId,
       },
       occupants: occupants.filter(occupant => occupant.offenderNo !== offenderNo).map(occupant => {
         return {

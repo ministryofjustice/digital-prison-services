@@ -249,6 +249,14 @@ const times = number => func => {
 
 const possessive = string => (string.toLowerCase().endsWith('s') ? '&rsquo;' : '&rsquo;s')
 
+const extractLocation = (location, agencyId) => {
+  if (!location || !agencyId) return undefined
+  const withoutAgency = stripAgencyPrefix(location, agencyId)
+  if (withoutAgency.includes('RECP')) return 'Reception'
+  if (withoutAgency.includes('CSWAP')) return 'Cell swap'
+  return withoutAgency
+}
+
 module.exports = {
   isBeforeToday,
   isToday,
@@ -288,4 +296,5 @@ module.exports = {
   groupBy,
   times,
   possessive,
+  extractLocation,
 }

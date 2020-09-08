@@ -1,6 +1,6 @@
 const prisonerCellHistory = require('../controllers/prisonerProfile/prisonerCellHistory')
 
-describe('Prisoner schedule', () => {
+describe('Prisoner cell history', () => {
   const offenderNo = 'ABC123'
   const bookingId = '123'
   const elite2Api = {}
@@ -94,7 +94,10 @@ describe('Prisoner schedule', () => {
             },
           ],
           currentLocation: {
+            agencyId: 'MDI',
+            assignmentDate: '2020-09-01',
             establishment: 'Moorland',
+            livingUnitId: 1,
             location: '1-02',
             movedIn: '01/09/2020 - 12:48',
           },
