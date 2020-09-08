@@ -335,5 +335,6 @@ module.exports = on => {
     stubCellsWithCapacity: ({ cells }) => elite2api.stubCellsWithCapacity(cells),
     stubInmatesAtLocation: ({ inmates }) => elite2api.stubInmatesAtLocation(inmates),
     stubOffenderCellHistory: ({ history }) => elite2api.stubOffenderCellHistory(history),
+    stubGetAlerts: ({ agencyId, alerts }) => elite2api.stubGetAlerts({ agencyId, alerts }),
   })
 }

@@ -4,6 +4,22 @@ const SelectCellPage = require('../../pages/cellMove/selectCellPage')
 const offenderNo = 'A12345'
 
 context('A user can select a cell', () => {
+  const assertRow = (
+    rowIndex,
+    columns,
+    { location, cellType, capacity, spaces, occupier, csra, relevantAlerts, selectCell }
+  ) => {
+    const index = rowIndex * 8
+
+    expect(columns[index].innerText).to.contain(location)
+    expect(columns[index + 1].innerText).to.contain(cellType)
+    expect(columns[index + 2].innerText).to.contain(capacity)
+    expect(columns[index + 3].innerText).to.contain(spaces)
+    expect(columns[index + 4].innerText).to.contain(occupier)
+    expect(columns[index + 5].innerText).to.contain(csra)
+    expect(columns[index + 6].innerText).to.contain(relevantAlerts)
+    expect(columns[index + 7].innerText).to.contain(selectCell)
+  }
   before(() => {
     cy.clearCookies()
     cy.task('reset')
@@ -17,6 +33,22 @@ context('A user can select a cell', () => {
     cy.task('stubBookingNonAssociations', {})
     cy.task('stubGroups', { id: 'MDI' })
     cy.task('stubCellAttributes')
+    cy.task('stubInmatesAtLocation', {
+      inmates: [{ offenderNo: 'A12345', firstName: 'Bob', lastName: 'Doe', assignedLivingUnitId: 1 }],
+    })
+    cy.task('stubGetAlerts', { agencyId: 'MDI', alerts: [{ offenderNo: 'A12345', alertCode: 'PEEP' }] })
+    cy.task('stubCsraAssessments', {
+      offenderNumbers: ['A12345'],
+      assessments: [
+        {
+          offenderNo: 'A12345',
+          assessmentCode: 'CSRA',
+          assessmentComment: 'test',
+          assessmentDate: '2020-01-10',
+          classification: 'Standard',
+        },
+      ],
+    })
   })
 
   context('with cell data', () => {
@@ -58,28 +90,98 @@ context('A user can select a cell', () => {
           .then($tableRows => {
             cy.get($tableRows)
               .its('length')
-              .should('eq', 4) // 2 results plus header and cell swap rows
-            expect($tableRows.get(1).innerText).to.contain('LEI-1-1\tListener Cell\t3\t1\tSelect cell')
-            expect($tableRows.get(2).innerText).to.contain('LEI-1-2\tGated Cell\nSpecial Cell\t2\t0\tSelect cell')
-            expect($tableRows.last().get(0).innerText).to.contain('Cell swap\tSelect')
-          })
-      })
-    })
+              .should('eq', 10)
 
-    it('should sort correctly when sorting by location and also keep cell swap at the bottom', () => {
-      const page = SelectCellPage.goTo(offenderNo)
+            const columns = $tableRows.find('td')
 
-      page.locationTableHeader().click()
+            assertRow(0, columns, {
+              location: 'LEI-1-1',
+              cellType: 'Listener Cell',
+              capacity: 3,
+              spaces: 1,
+              occupier: 'Doe, Bob',
+              csra: 'Standard\n\nView details\nfor Doe, Bob',
+              relevantAlerts: 'None',
+              selectCell: 'Select cell',
+            })
 
-      page.cellResults().then($table => {
-        cy.get($table)
-          .find('tr')
-          .then($tableRows => {
-            cy.get($tableRows)
-              .its('length')
-              .should('eq', 4) // 2 results plus header and cell swap rows
-            expect($tableRows.get(1).innerText).to.contain('LEI-1-2\tGated Cell\nSpecial Cell\t2\t0\tSelect cell')
-            expect($tableRows.get(2).innerText).to.contain('LEI-1-1\tListener Cell\t3\t1\tSelect cell')
+            assertRow(1, columns, {
+              location: '',
+              cellType: '',
+              capacity: '',
+              spaces: '',
+              occupier: 'Doe, Bob',
+              csra: 'Standard\n\nView details\nfor Doe, Bob',
+              relevantAlerts: 'None',
+              selectCell: '',
+            })
+
+            assertRow(2, columns, {
+              location: '',
+              cellType: '',
+              capacity: '',
+              spaces: '',
+              occupier: 'Doe, Bob',
+              csra: 'Standard\n\nView details\nfor Doe, Bob',
+              relevantAlerts: 'None',
+              selectCell: '',
+            })
+
+            assertRow(3, columns, {
+              location: '',
+              cellType: '',
+              capacity: '',
+              spaces: '',
+              occupier: 'Doe, Bob',
+              csra: 'Standard\n\nView details\nfor Doe, Bob',
+              relevantAlerts: 'None',
+              selectCell: '',
+            })
+
+            assertRow(4, columns, {
+              location: 'LEI-1-2',
+              cellType: 'Gated Cell',
+              capacity: 2,
+              spaces: 0,
+              occupier: 'Doe, Bob',
+              csra: 'Standard\n\nView details\nfor Doe, Bob',
+              relevantAlerts: 'None',
+              selectCell: 'Select cell',
+            })
+
+            assertRow(5, columns, {
+              location: '',
+              cellType: '',
+              capacity: '',
+              spaces: '',
+              occupier: 'Doe, Bob',
+              csra: 'Standard\n\nView details\nfor Doe, Bob',
+              relevantAlerts: 'None',
+              selectCell: '',
+            })
+
+            assertRow(6, columns, {
+              location: '',
+              cellType: '',
+              capacity: '',
+              spaces: '',
+              occupier: 'Doe, Bob',
+              csra: 'Standard\n\nView details\nfor Doe, Bob',
+              relevantAlerts: 'None',
+              selectCell: '',
+            })
+
+            assertRow(7, columns, {
+              location: '',
+              cellType: '',
+              capacity: '',
+              spaces: '',
+              occupier: 'Doe, Bob',
+              csra: 'Standard\n\nView details\nfor Doe, Bob',
+              relevantAlerts: 'None',
+              selectCell: '',
+            })
+
             expect($tableRows.last().get(0).innerText).to.contain('Cell swap\tSelect')
           })
       })
