@@ -7,39 +7,45 @@
 {% set title = "Select an available cell" %}
 
 
-{% macro makeRow(cell, first, occupier) %}
-  {% if first %}
-    <td class="govuk-table__cell">{{ cell.description }}</th>
-    <td class="govuk-table__cell">{{ cell.type | join('<br>', 'description') | safe if cell.type.length else '--' }}</td>
-    <td class="govuk-table__cell">{{ cell.capacity }}</td>
-    <td class="govuk-table__cell">{{ cell.spaces }}</td>
+{% macro makeRow(cell, index, last, occupier) %}
+
+  {% set cellClass = 'govuk-table__cell govuk-table__cell--last' if last else 'govuk-table__cell' %}
+
+  {% if index === 1 %}
+    <td class="{{ cellClass }}">{{ cell.description }}</th>
+    <td class="{{ cellClass }}">{{ cell.type | join('<br>', 'description') | safe if cell.type.length else '--' }}</td>
+    <td class="{{ cellClass }}">{{ cell.capacity }}</td>
+    <td class="{{ cellClass }}">{{ cell.spaces }}</td>
   {% else %}
-    <td class="govuk-table__cell">
+    <td class="{{ cellClass }}">
     </td>
-    <td class="govuk-table__cell">
+    <td class="{{ cellClass }}">
     </td>
-    <td class="govuk-table__cell">
+    <td class="{{ cellClass }}">
     </td>
-    <td class="govuk-table__cell">
+    <td class="{{ cellClass }}">
     </td>
   {% endif %}
 
-  {%  if occupier != null %}
-  <td class="govuk-table__cell">
+  {% if occupier != null %}
+  <td class="{{ cellClass }}">
     {{ occupier.name }}
+    <div>
+      <a href="{{ occupier.viewOffenderDetails }}" class="govuk-link" data-test="csra-link">View details <span class="govuk-visually-hidden">for {{ occupier.name }}</span></a>
+    </div>
   </td>
-  <td class="govuk-table__cell">
+  <td class="{{ cellClass }}">
     <p class="govuk-body govuk-!-margin-bottom-1">
       {{ occupier.csra }}
     </p>
 
     {% if occupier.showCsraLink %}
       <div>
-        <a href="{{ occupier.csraDetailsUrl }}" class="govuk-link" data-test="csra-link">View details <span class="govuk-visually-hidden">for {{ occupier.name }}</span></a>
+        <a href="{{ occupier.csraDetailsUrl }}" class="govuk-link" data-test="csra-link">View details <span class="govuk-visually-hidden">for {{ occupier.name }} CSRA</span></a>
       </div>
     {% endif %}
   </td>
-  <td class="govuk-table__cell">
+  <td class="{{ cellClass }}">
     {% if occupier.alerts.length %}
       {{ alertFlags(occupier.alerts) }}
     {% else %}
@@ -47,19 +53,19 @@
     {% endif %}
   </td>
   {% else %}
-    <td class="govuk-table__cell">
+    <td class="{{ cellClass }}">
     </td>
-    <td class="govuk-table__cell">
+    <td class="{{ cellClass }}">
     </td>
-    <td class="govuk-table__cell">
+    <td class="{{ cellClass }}">
     </td>
   {% endif %}
 
-  {% if first %}
-    <td class="govuk-table__cell"><a href="#" class="govuk-link">Select cell</a></td>
+  {% if index === 1 %}
+     <td class="{{ cellClass }}"><a href="#" class="govuk-link">Select cell</a></td>
   {% else %}
-    <td class="govuk-table__cell">
-    </td>
+      <td class="{{ cellClass }}">
+      </td>
   {% endif %}
 
 {% endmacro %}
@@ -133,7 +139,7 @@
     </div>
   </div>
 
-  <table class="govuk-table" data-test="cell-results-table">
+  <table class="govuk-table govuk-table--with-child-rows" data-test="cell-results-table">
     <thead class="govuk-table__head">
       <tr class="govuk-table__row">
         <th scope="col" class="govuk-table__header" data-test="location-table-header">Location</th>
@@ -152,12 +158,12 @@
         {% if cell.occupants.length > 0 %}
              {% for occupier in cell.occupants %}
                <tr class="govuk-table__row">
-                 {{ makeRow(cell, loop.index === 1, occupier) }}
+                 {{ makeRow(cell, loop.index, cell.occupants.length === loop.index, occupier) }}
                </tr>
               {% endfor %}
         {% else %}
         <tr class="govuk-table__row">
-          {{ makeRow(cell, true, null) }}
+          {{ makeRow(cell, 1, true, null) }}
         </tr>
         {% endif%}
       {% endfor %}

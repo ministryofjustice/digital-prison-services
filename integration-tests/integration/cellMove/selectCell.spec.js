@@ -101,7 +101,7 @@ context('A user can select a cell', () => {
               spaces: 1,
               occupier: 'Doe, Bob',
               csra: 'Standard\n\nView details\nfor Doe, Bob',
-              relevantAlerts: 'None',
+              relevantAlerts: 'PEEP',
               selectCell: 'Select cell',
             })
 
@@ -112,7 +112,7 @@ context('A user can select a cell', () => {
               spaces: '',
               occupier: 'Doe, Bob',
               csra: 'Standard\n\nView details\nfor Doe, Bob',
-              relevantAlerts: 'None',
+              relevantAlerts: 'PEEP',
               selectCell: '',
             })
 
@@ -123,7 +123,7 @@ context('A user can select a cell', () => {
               spaces: '',
               occupier: 'Doe, Bob',
               csra: 'Standard\n\nView details\nfor Doe, Bob',
-              relevantAlerts: 'None',
+              relevantAlerts: 'PEEP',
               selectCell: '',
             })
 
@@ -134,7 +134,7 @@ context('A user can select a cell', () => {
               spaces: '',
               occupier: 'Doe, Bob',
               csra: 'Standard\n\nView details\nfor Doe, Bob',
-              relevantAlerts: 'None',
+              relevantAlerts: 'PEEP',
               selectCell: '',
             })
 
@@ -145,7 +145,7 @@ context('A user can select a cell', () => {
               spaces: 0,
               occupier: 'Doe, Bob',
               csra: 'Standard\n\nView details\nfor Doe, Bob',
-              relevantAlerts: 'None',
+              relevantAlerts: 'PEEP',
               selectCell: 'Select cell',
             })
 
@@ -156,7 +156,7 @@ context('A user can select a cell', () => {
               spaces: '',
               occupier: 'Doe, Bob',
               csra: 'Standard\n\nView details\nfor Doe, Bob',
-              relevantAlerts: 'None',
+              relevantAlerts: 'PEEP',
               selectCell: '',
             })
 
@@ -167,7 +167,7 @@ context('A user can select a cell', () => {
               spaces: '',
               occupier: 'Doe, Bob',
               csra: 'Standard\n\nView details\nfor Doe, Bob',
-              relevantAlerts: 'None',
+              relevantAlerts: 'PEEP',
               selectCell: '',
             })
 
@@ -178,7 +178,7 @@ context('A user can select a cell', () => {
               spaces: '',
               occupier: 'Doe, Bob',
               csra: 'Standard\n\nView details\nfor Doe, Bob',
-              relevantAlerts: 'None',
+              relevantAlerts: 'PEEP',
               selectCell: '',
             })
 
