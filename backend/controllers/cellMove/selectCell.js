@@ -150,7 +150,7 @@ module.exports = ({ elite2Api, whereaboutsApi, logError }) => async (req, res) =
             attribute,
           })
 
-    const cellOccupants = await getCellOccupants(res, { activeCaseLoadId, elite2Api, cells })
+    const cellOccupants = await getCellOccupants(res, { activeCaseLoadId, elite2Api, cells, alertsToShow })
 
     return res.render('cellMove/selectCell.njk', {
       formValues: {
