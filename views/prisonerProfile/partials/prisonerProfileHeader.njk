@@ -43,6 +43,10 @@
   {{ prisonerProfileData.location}}
   <br>
   {{ prisonerProfileData.agencyName}}
+  <br>
+  <a data-qa="cell-history-link" class="govuk-link" href="{{ '/prisoner/' + prisonerProfileData.offenderNo + '/cell-history' }}">
+      View details
+    </a>
 {% endset %}
 
 <div class="header-with-link">
@@ -86,13 +90,13 @@
 
     <div class="prisoner-header__details__actions">
         {% if prisonerProfileData.showPathfinderReferButton %}
-            <a  href="{{ prisonerProfileData.pathfinderReferUrl }}" class="govuk-button govuk-button--link govuk-!-margin-bottom-3" data-module="govuk-button" target="_blank">
+            <a  href="{{ prisonerProfileData.pathfinderReferUrl }}" class="govuk-button govuk-button--link govuk-!-margin-bottom-3" data-module="govuk-button" target="_blank" rel="noopener noreferrer">
                 Refer to Pathfinder
             </a>
         {% endif %}
 
         {% if prisonerProfileData.showSocReferButton %}
-            <a  href="{{ prisonerProfileData.socReferUrl }}" class="govuk-button govuk-button--link govuk-!-margin-bottom-3" data-module="govuk-button" target="_blank" data-test="soc-referral-button">
+            <a  href="{{ prisonerProfileData.socReferUrl }}" class="govuk-button govuk-button--link govuk-!-margin-bottom-3" data-module="govuk-button" target="_blank"  rel="noopener noreferrer" data-test="soc-referral-button">
                 Refer to SOC
             </a>
         {% endif %}

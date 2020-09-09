@@ -62,7 +62,7 @@
   {% for prisoner in locationSharingHistory %}
     {% set rows = (rows.push([  
       {
-        html: '<a href="/prisoner/' + prisoner.number + '" class="govuk-link" target="_blank">' + prisoner.name + ' (opens in a new tab)</a>' if prisoner.shouldLink,
+        html: '<a href="/prisoner/' + prisoner.number + '" class="govuk-link" target="_blank" rel="noopener noreferrer">' + prisoner.name + ' (opens in a new tab)</a>' if prisoner.shouldLink,
         text: prisoner.name
       },
       {

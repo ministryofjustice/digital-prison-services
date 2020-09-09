@@ -511,7 +511,8 @@ describe('Attendance reason statistics', () => {
         offenders: [
           [
             {
-              html: '<a href=/prisoner/G8974UK class="govuk-link" target="_blank">Smith, Adam</a>',
+              html:
+                '<a href=/prisoner/G8974UK class="govuk-link" target="_blank" rel="noopener noreferrer">Smith, Adam</a>',
             },
             { text: 'G8974UK' },
             { text: '1' },

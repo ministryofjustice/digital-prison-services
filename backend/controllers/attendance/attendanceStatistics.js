@@ -76,7 +76,9 @@ const absentReasonTableViewModel = offenderData => ({
       return [
         {
           html: data.location
-            ? `<a href=${quickLookUrl} class="govuk-link" target="_blank">${data.offenderName}</a>`
+            ? `<a href=${quickLookUrl} class="govuk-link" target="_blank" rel="noopener noreferrer">${
+                data.offenderName
+              }</a>`
             : data.offenderName,
         },
         {
