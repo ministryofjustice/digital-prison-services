@@ -43,6 +43,10 @@
   {{ prisonerProfileData.location}}
   <br>
   {{ prisonerProfileData.agencyName}}
+  <br>
+  <a data-qa="cell-history-link" class="govuk-link" href="{{ '/prisoner/' + prisonerProfileData.offenderNo + '/cell-history' }}">
+      View details
+    </a>
 {% endset %}
 
 <div class="header-with-link">
