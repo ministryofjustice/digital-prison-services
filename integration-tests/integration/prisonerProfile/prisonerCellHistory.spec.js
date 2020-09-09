@@ -2,7 +2,7 @@ const moment = require('moment')
 const offenderBasicDetails = require('../../mockApis/responses/offenderBasicDetails.json')
 const PrisonerCellHistoryPage = require('../../pages/prisonerProfile/prisonerCellHistoryPage')
 
-context('Prisoner visits', () => {
+context('Prisoner cell history', () => {
   const offenderNo = 'A1234A'
 
   before(() => {
