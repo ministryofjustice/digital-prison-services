@@ -23,7 +23,7 @@
 {% endblock %}
 
 {% block content %}
-  <h1 class="govuk-heading-l">{{titleWithName | safe}}</h1>
+  <h1 class="govuk-heading-l" data-test="title">{{titleWithName | safe}}</h1>
 
   <h2 class="govuk-heading-m">Location details</h2>
 
@@ -32,7 +32,7 @@
   <div class="govuk-grid-row">
     <div class="govuk-grid-column-one-quarter">
       <h3 class="govuk-heading-s govuk-!-margin-bottom-1">Location</h3>
-      <p class="govuk-body govuk-!-margin-bottom-0" data-test="location">
+      <p class="govuk-body govuk-!-margin-bottom-0" data-test="establishment">
         {{ locationDetails.description }}
       </p>
     </div>
@@ -91,7 +91,7 @@
       attributes: { "data-test": "prisoner-location-history" }
     }) }}
   {% else %}
-    <p class="govuk-body">{{ formattedName }} has not shared this cell with anyone else.</p>
+    <p class="govuk-body" data-test="no-history-message">{{ formattedName }} has not shared this cell with anyone else.</p>
   {% endif %}
 
   <a href="{{ profileUrl + '/cell-history' }}" class="govuk-link govuk-body">
