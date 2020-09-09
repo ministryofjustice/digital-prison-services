@@ -54,7 +54,10 @@ const getCellOccupants = async (res, { elite2Api, activeCaseLoadId, cells }) => 
     .map(
       offenderNumber =>
         assessmentsGroupedByOffenderNo[offenderNumber]
-          .filter(assessment => assessment.assessmentDescription.includes('CSR'))
+          .filter(
+            assessment =>
+              assessment && assessment.assessmentDescription && assessment.assessmentDescription.includes('CSR')
+          )
           .sort(sortByLatestAssessmentDateDesc)[0]
     )
     .filter(Boolean)
@@ -188,6 +191,7 @@ module.exports = ({ elite2Api, whereaboutsApi, logError }) => async (req, res) =
       formAction: `/prisoner/${offenderNo}/cell-move/select-cell`,
     })
   } catch (error) {
+    console.error(error)
     if (error) logError(req.originalUrl, error, serviceUnavailableMessage)
 
     return res.render('error.njk', {
