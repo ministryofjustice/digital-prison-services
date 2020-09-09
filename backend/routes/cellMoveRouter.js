@@ -4,6 +4,7 @@ const selectCellController = require('../controllers/cellMove/selectCell')
 const nonAssociationsController = require('../controllers/cellMove/viewNonAssociations')
 const offenderDetailsController = require('../controllers/cellMove/viewOffenderDetails')
 const cellSharingRiskAssessmentController = require('../controllers/cellMove/viewCellSharingAssessmentDetails')
+const moveValidationController = require('../controllers/cellMove/moveValidation')
 
 const router = express.Router({ mergeParams: true })
 
@@ -13,6 +14,7 @@ const controller = ({ elite2Api, whereaboutsApi, logError }) => {
   router.get('/offender-details', offenderDetailsController({ elite2Api, logError }))
   router.get('/cell-sharing-risk-assessment-details', cellSharingRiskAssessmentController({ elite2Api, logError }))
   router.get('/select-cell', selectCellController({ elite2Api, whereaboutsApi, logError }))
+  router.get('/move-validation', moveValidationController({ elite2Api, logError }))
 
   return router
 }

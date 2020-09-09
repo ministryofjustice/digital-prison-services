@@ -1,0 +1,123 @@
+{% extends "../partials/layout.njk" %}
+{% from "govuk/components/summary-list/macro.njk" import govukSummaryList %}
+{% from "govuk/components/inset-text/macro.njk" import govukInsetText %}
+{% from "govuk/components/details/macro.njk" import govukDetails %}
+{% from "govuk/components/inset-text/macro.njk" import govukInsetText %}
+{%- from "moj/components/banner/macro.njk" import mojBanner -%}
+
+
+{% set title = "Are you sure you want to select this cell?" %}
+{% macro nonAssociationHtml(nonAssociation) %}
+  {{ govukSummaryList({
+        classes: "govuk-summary-list--no-border govuk-body",
+        attributes: {'data-test': 'non-association-summary-' + nonAssociation.prisonNumber},
+        rows: [
+          {
+            key: {
+              text: "Name"
+            },
+            value: {
+              text: nonAssociation.name
+            }
+          },
+          {
+            key: {
+              text: "Prison number"
+            },
+            value: {
+              text: nonAssociation.prisonNumber
+            }
+          },
+          {
+            key: {
+              text: "Location"
+            },
+            value: {
+              text: nonAssociation.location
+            }
+          },
+          {
+            key: {
+              text: "Type"
+            },
+            value: {
+              text: nonAssociation.type
+            }
+          },
+          {
+            key: {
+              text: "Reason"
+            },
+            value: {
+              text: nonAssociation.reason
+            }
+          },
+          {
+            key: {
+              text: "Comment"
+            },
+            value: {
+              text: nonAssociation.comment
+            }
+          }
+        ] | removePaddingBottom
+    }) }}
+{% endmacro %}
+
+{% macro alertDetails(alert) %}
+  <p class="govuk-body"> {{ alert.subTitle | safe}}</p>
+  {% if alert.comment %}
+    <p class="govuk-body"> {{ alert.comment | safe }}</p>
+  {% endif %}
+  <p class="govuk-body"> {{ alert.date}} </p>
+{% endmacro %}
+
+{% block content %}
+  <h1 class="govuk-heading-l">{{title}}</h1>
+
+  {% if nonAssociations.length %}
+    <h2 class="govuk-heading-m">{{ offenderName }} has non-associations </h2>
+    <h3 class="govuk-heading-s"><svg class="moj-banner__icon" fill="currentColor" role="presentation" focusable="false" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 25 25" height="25" width="25">
+<path d="M13.7,18.5h-2.4v-2.4h2.4V18.5z M12.5,13.7c-0.7,0-1.2-0.5-1.2-1.2V7.7c0-0.7,0.5-1.2,1.2-1.2s1.2,0.5,1.2,1.2v4.8
+C13.7,13.2,13.2,13.7,12.5,13.7z M12.5,0.5c-6.6,0-12,5.4-12,12s5.4,12,12,12s12-5.4,12-12S19.1,0.5,12.5,0.5z" /></svg>There is a non-association with a prisoner on this wing</h3>
+    {% for nonAssociation in nonAssociations %}
+      {{ govukInsetText({
+      html: nonAssociationHtml(nonAssociation),
+      classes: 'govuk-!-padding-top-0 govuk-!-padding-bottom-0'
+    }) }}
+    {% endfor %}
+  {% endif %}
+
+  {% if csraWarningMessage %}
+    <h2 class="govuk-heading-m">You must consider the CSRA of the prisoners involved</h2>
+    <p class="govuk-body">You are moving a prisoner:</p>
+    <ul>
+      <li class="govuk-body">{{ csraWarningMessage }}</li>
+    </ul>
+  {% endif %}
+
+
+  {% if currentOffenderActiveAlerts.length or currentOccupantsActiveAlerts.length %}
+      <h2 class="govuk-heading-m">You must consider the risks of the prisoners involved</h2>
+      <p class="govuk-body">You are moving a prisoner:</p>
+      <ul>
+        {% for alert in currentOffenderActiveAlerts %}
+          <li class="govuk-body"> {{ alert.title }}
+          {{ govukInsetText({
+            html: alertDetails(alert),
+            classes: 'govuk-body govuk-!-margin-bottom-0 govuk-body govuk-!-margin-top-0 govuk-!-padding-top-0 govuk-!-padding-bottom-0' 
+          }) }}
+          </li>
+        {% endfor %}
+        {% for alert in currentOccupantsActiveAlerts %}
+          <li class="govuk-body"> {{ alert.title }}
+          {{ govukInsetText({
+            html: alertDetails(alert),
+            classes: 'govuk-body govuk-!-margin-bottom-0 govuk-body govuk-!-margin-top-1 govuk-!-padding-top-0 govuk-!-padding-bottom-0'
+          }) }}
+          </li>
+        {% endfor %}
+      </ul>
+  {% endif %}
+  
+{% endblock %}

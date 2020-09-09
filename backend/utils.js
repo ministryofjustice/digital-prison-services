@@ -253,6 +253,8 @@ const times = number => func => {
 
 const possessive = string => (string.toLowerCase().endsWith('s') ? '&rsquo;' : '&rsquo;s')
 
+const indefiniteArticle = string => (string.toLowerCase().startsWith('a') ? 'an' : 'a')
+
 const extractLocation = (location, agencyId) => {
   if (!location || !agencyId) return undefined
   const withoutAgency = stripAgencyPrefix(location, agencyId)
@@ -301,4 +303,5 @@ module.exports = {
   times,
   possessive,
   extractLocation,
+  indefiniteArticle,
 }
