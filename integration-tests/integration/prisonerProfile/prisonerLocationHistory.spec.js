@@ -82,7 +82,7 @@ context('Prisoner location history', () => {
       prisonerLocationHistoryPage.establishment().contains('Moorland')
       prisonerLocationHistoryPage.movedIn().contains('28/08/2020 - 11:20')
       prisonerLocationHistoryPage.movedOut().contains('Current cell')
-      prisonerLocationHistoryPage.attributes().contains('Double occupancy')
+      prisonerLocationHistoryPage.type().contains('Double occupancy')
 
       prisonerLocationHistoryPage.results().then($table => {
         cy.get($table)
