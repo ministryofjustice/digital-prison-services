@@ -417,11 +417,11 @@ module.exports = {
       },
     })
   },
-  stubPrisonerDetail: prisonerDetail => {
+  stubPrisonerDetail: (prisonerDetail, bookingId = '[0-9]+?') => {
     return stubFor({
       request: {
         method: 'GET',
-        urlPattern: '/api/bookings/[0-9]+?',
+        urlPattern: `/api/bookings/${bookingId}`,
       },
       response: {
         status: 200,
@@ -1379,6 +1379,34 @@ module.exports = {
           'Content-Type': 'application/json;charset=UTF-8',
         },
         jsonBody: history || { content: [] },
+      },
+    }),
+  stubHistoryForLocation: locationHistory =>
+    stubFor({
+      request: {
+        method: 'GET',
+        urlPathPattern: '/api/cell/[0-9]+?/history',
+      },
+      response: {
+        status: 200,
+        headers: {
+          'Content-Type': 'application/json;charset=UTF-8',
+        },
+        jsonBody: locationHistory || [],
+      },
+    }),
+  stubAttributesForLocation: locationAttributes =>
+    stubFor({
+      request: {
+        method: 'GET',
+        urlPathPattern: '/api/cell/[0-9]+?/attributes',
+      },
+      response: {
+        status: 200,
+        headers: {
+          'Content-Type': 'application/json;charset=UTF-8',
+        },
+        jsonBody: locationAttributes || {},
       },
     }),
 }

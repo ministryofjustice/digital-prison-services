@@ -336,5 +336,8 @@ module.exports = on => {
     stubInmatesAtLocation: ({ inmates }) => elite2api.stubInmatesAtLocation(inmates),
     stubOffenderCellHistory: ({ history }) => elite2api.stubOffenderCellHistory(history),
     stubGetAlerts: ({ agencyId, alerts }) => elite2api.stubGetAlerts({ agencyId, alerts }),
+    stubHistoryForLocation: locationHistory => elite2api.stubHistoryForLocation(locationHistory),
+    stubAttributesForLocation: locationAttributes => elite2api.stubAttributesForLocation(locationAttributes),
+    stubPrisonerDetail: ({ prisonerDetail, bookingId }) => elite2api.stubPrisonerDetail(prisonerDetail, bookingId),
   })
 }
