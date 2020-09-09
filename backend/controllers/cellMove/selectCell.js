@@ -38,6 +38,8 @@ const getCellOccupants = async (res, { elite2Api, activeCaseLoadId, cells }) => 
     cells.map(cell => cell.id).map(cellId => elite2Api.getInmatesAtLocation(res.locals, cellId, {}))
   )).flatMap(occupant => occupant)
 
+  if (!hasLength(currentCellOccupants)) return []
+
   const occupantOffenderNos = Array.from(new Set(currentCellOccupants.map(occupant => occupant.offenderNo)))
 
   const occupantAlerts = await elite2Api.getAlerts(res.locals, {
@@ -52,7 +54,10 @@ const getCellOccupants = async (res, { elite2Api, activeCaseLoadId, cells }) => 
     .map(
       offenderNumber =>
         assessmentsGroupedByOffenderNo[offenderNumber]
-          .filter(assessment => assessment.assessmentCode.includes('CSR') && assessment.assessmentComment)
+          .filter(
+            assessment =>
+              assessment && assessment.assessmentDescription && assessment.assessmentDescription.includes('CSR')
+          )
           .sort(sortByLatestAssessmentDateDesc)[0]
     )
     .filter(Boolean)
@@ -186,6 +191,7 @@ module.exports = ({ elite2Api, whereaboutsApi, logError }) => async (req, res) =
       formAction: `/prisoner/${offenderNo}/cell-move/select-cell`,
     })
   } catch (error) {
+    console.error(error)
     if (error) logError(req.originalUrl, error, serviceUnavailableMessage)
 
     return res.render('error.njk', {
