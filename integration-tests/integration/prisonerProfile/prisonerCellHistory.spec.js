@@ -71,9 +71,10 @@ context('Prisoner visits', () => {
             expect($tableCells.get(1)).to.contain('1-03')
             expect($tableCells.get(2)).to.contain(moment('2020-08-01T12:48:33.375Z').format('DD/MM/YYYY - HH:mm'))
             expect($tableCells.get(3)).to.contain(moment('2020-09-01T12:48:33.375Z').format('DD/MM/YYYY - HH:mm'))
-            expect($tableCells.get(4).innerHTML).to.contain(
-              '<a href="./location-history?fromDate=2020-08-01&amp;locationId=3&amp;agencyId=MDI" class="govuk-link">View details</a>'
-            )
+            cy.get($tableCells.get(4))
+              .find('a')
+              .should('have.attr', 'href')
+              .and('include', '/location-history?fromDate=2020-08-01&locationId=3&agencyId=MDI')
           })
       })
     })
