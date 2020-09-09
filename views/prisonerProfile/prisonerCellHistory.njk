@@ -44,10 +44,10 @@
 
 {% block content %}
   <div class="govuk-grid-row">
-    <div class="govuk-grid-column-one-half">
+    <div class="govuk-grid-column-three-quarters">
       <h1 class="govuk-heading-l">{{titleWithName | safe}}</h1>
     </div>
-    <div class="govuk-grid-column-one-half pull-right">
+    {# <div class="govuk-grid-column-one-quarter pull-right">
       {{ govukButton({
         href: changeCellLink,
         text: "Change cell",
@@ -57,7 +57,7 @@
           "data-test": 'cell-move-button'
         }
         }) }}
-    </div>
+    </div> #}
   </div>
   <h2 class="govuk-heading-m">Current location</h2>
     <div class="cell-history-header govuk-!-margin-bottom-7">
@@ -116,9 +116,9 @@
           </div>
           <div class="govuk-grid-column-one-half">
           <p class="govuk-body">
-            <a href="{{ './location-history?fromDate=' + currentLocation.assignmentDate + '&locationId=' + currentLocation.livingUnitId + '&agencyId=' + currentLocation.agencyId }}" class="govuk-link" data-test="cell-details-link">
+            {# <a href="{{ './location-history?fromDate=' + currentLocation.assignmentDate + '&locationId=' + currentLocation.livingUnitId + '&agencyId=' + currentLocation.agencyId }}" class="govuk-link" data-test="cell-details-link">
               View details
-            </a>
+            </a> #}
           </p>
           </div>
         </div>
