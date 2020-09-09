@@ -43,6 +43,7 @@ context('A user can select a cell', () => {
         {
           offenderNo: 'A12345',
           assessmentCode: 'CSRA',
+          assessmentDescription: 'CSRA',
           assessmentComment: 'test',
           assessmentDate: '2020-01-10',
           classification: 'Standard',

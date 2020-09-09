@@ -334,9 +334,21 @@ describe('Select a cell', () => {
       ])
 
       elite2Api.getCsraAssessments.mockResolvedValue([
-        { offenderNo: 'A111111', assessmentCode: 'TEST', assessmentComment: 'test' },
-        { offenderNo: 'A222222', assessmentCode: 'CSR', assessmentComment: 'test', classification: 'High' },
-        { offenderNo: 'A333333', assessmentCode: 'CSR', assessmentComment: 'test', classification: 'Standard' },
+        { offenderNo: 'A111111', assessmentDescription: 'TEST', assessmentCode: 'TEST', assessmentComment: 'test' },
+        {
+          offenderNo: 'A222222',
+          assessmentDescription: 'CSR',
+          assessmentCode: 'CSR',
+          assessmentComment: 'test',
+          classification: 'High',
+        },
+        {
+          offenderNo: 'A333333',
+          assessmentDescription: 'CSR',
+          assessmentCode: 'CSR',
+          assessmentComment: 'test',
+          classification: 'Standard',
+        },
       ])
 
       await controller(req, res)
@@ -472,6 +484,7 @@ describe('Select a cell', () => {
         {
           offenderNo: 'A111111',
           assessmentCode: 'CSR',
+          assessmentDescription: 'CSR',
           assessmentComment: 'test',
           classification: 'High',
           assessmentDate: '1980-01-01',
@@ -479,6 +492,7 @@ describe('Select a cell', () => {
         {
           offenderNo: 'A111111',
           assessmentCode: 'CSR',
+          assessmentDescription: 'CSR',
           assessmentComment: 'test',
           classification: 'Standard',
           assessmentDate: '2020-01-01',
@@ -514,6 +528,24 @@ describe('Select a cell', () => {
           ],
         })
       )
+    })
+
+    it('should not make a call for assessments or alerts when there are no cell occupants', async () => {
+      elite2Api.getCellsWithCapacity.mockResolvedValue([
+        {
+          id: 1,
+          description: 'MDI-1-3',
+          capacity: 4,
+          noOfOccupants: 1,
+          attributes: [],
+        },
+      ])
+      elite2Api.getInmatesAtLocation.mockResolvedValue([])
+
+      await controller(req, res)
+
+      expect(elite2Api.getCsraAssessments.mock.calls.length).toBe(0)
+      expect(elite2Api.getAlerts.mock.calls.length).toBe(0)
     })
   })
 })
