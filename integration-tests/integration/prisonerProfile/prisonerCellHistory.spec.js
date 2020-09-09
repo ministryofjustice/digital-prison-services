@@ -54,6 +54,10 @@ context('Prisoner visits', () => {
       prisonerCellHistoryPage.establishment().contains('Moorland')
       prisonerCellHistoryPage.location().contains('1-02')
       prisonerCellHistoryPage.occupants().contains('Offender, Test')
+      prisonerCellHistoryPage
+        .cellDetailsLink()
+        .should('have.attr', 'href')
+        .and('include', '/location-history?fromDate=2020-09-01&locationId=1&agencyId=MDI')
 
       prisonerCellHistoryPage.results().then($table => {
         cy.get($table)
@@ -61,12 +65,15 @@ context('Prisoner visits', () => {
           .then($tableCells => {
             cy.get($tableCells)
               .its('length')
-              .should('eq', 4) // results plus table header
+              .should('eq', 5) // 1 row with 5 cells
 
             expect($tableCells.get(0)).to.contain('Moorland')
             expect($tableCells.get(1)).to.contain('1-03')
             expect($tableCells.get(2)).to.contain(moment('2020-08-01T12:48:33.375Z').format('DD/MM/YYYY - HH:mm'))
             expect($tableCells.get(3)).to.contain(moment('2020-09-01T12:48:33.375Z').format('DD/MM/YYYY - HH:mm'))
+            expect($tableCells.get(4).innerHTML).to.contain(
+              '<a href="./location-history?fromDate=2020-08-01&amp;locationId=3&amp;agencyId=MDI" class="govuk-link">View details</a>'
+            )
           })
       })
     })
