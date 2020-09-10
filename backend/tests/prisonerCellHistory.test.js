@@ -83,6 +83,7 @@ describe('Prisoner cell history', () => {
             {
               agencyId: 'RNI',
               assignmentDate: '2020-08-01',
+              assignmentEndDate: '2020-09-01',
               establishment: 'Ranby',
               livingUnitId: 3,
               location: '1-03',
@@ -99,6 +100,7 @@ describe('Prisoner cell history', () => {
           currentLocation: {
             agencyId: 'MDI',
             assignmentDate: '2020-09-01',
+            assignmentEndDate: '2020-09-10',
             establishment: 'Moorland',
             livingUnitId: 1,
             location: '1-02',
