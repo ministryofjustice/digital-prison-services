@@ -6,6 +6,7 @@ const selectCellPage = () =>
     backLink: () => cy.get('a.govuk-link'),
     cellResults: () => cy.get('[data-test="cell-results-table"]'),
     locationTableHeader: () => cy.get('[data-test="location-table-header"]').find('button'),
+    nonAssociationWarning: () => cy.get('#non-association-warning'),
   })
 
 export default {

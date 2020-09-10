@@ -33,7 +33,7 @@ const sortByLatestAssessmentDateDesc = (left, right) => {
   return 0
 }
 
-const getCellOccupants = async (res, { elite2Api, activeCaseLoadId, cells }) => {
+const getCellOccupants = async (res, { elite2Api, activeCaseLoadId, cells, nonAssociations }) => {
   const currentCellOccupants = (await Promise.all(
     cells.map(cell => cell.id).map(cellId => elite2Api.getInmatesAtLocation(res.locals, cellId, {}))
   )).flatMap(occupant => occupant)
@@ -79,6 +79,11 @@ const getCellOccupants = async (res, { elite2Api, activeCaseLoadId, cells }) => 
         name: `${properCaseName(occupant.lastName)}, ${properCaseName(occupant.firstName)}`,
         viewOffenderDetails: `/prisoner/${occupant.offenderNo}/cell-move/offender-details`,
         alerts: alertFlagLabels.filter(label => label.alertCodes.some(code => alertCodes.includes(code))),
+        nonAssociation: Boolean(
+          nonAssociations &&
+            nonAssociations.nonAssociations &&
+            nonAssociations.nonAssociations.find(na => na.offenderNonAssociation.offenderNo === occupant.offenderNo)
+        ),
         showCsraLink: showCsraLink(
           occupantAssessments.filter(assessment => assessment.offenderNo === occupant.offenderNo)
         ),
@@ -154,7 +159,7 @@ module.exports = ({ elite2Api, whereaboutsApi, logError }) => async (req, res) =
             attribute,
           })
 
-    const cellOccupants = await getCellOccupants(res, { activeCaseLoadId, elite2Api, cells })
+    const cellOccupants = await getCellOccupants(res, { activeCaseLoadId, elite2Api, cells, nonAssociations })
 
     return res.render('cellMove/selectCell.njk', {
       formValues: {
@@ -167,6 +172,7 @@ module.exports = ({ elite2Api, whereaboutsApi, logError }) => async (req, res) =
         nonAssociations && showNonAssociationsLink(nonAssociations, prisonerDetails.assignedLivingUnit),
       showCsraLink: prisonerDetails.assessments && showCsraLink(prisonerDetails.assessments),
       alerts: alertsToShow,
+      showNonAssociationWarning: Boolean(cellOccupants.find(cellOccupant => cellOccupant.nonAssociation)),
       cells:
         hasLength(cells) &&
         cells
@@ -191,7 +197,6 @@ module.exports = ({ elite2Api, whereaboutsApi, logError }) => async (req, res) =
       formAction: `/prisoner/${offenderNo}/cell-move/select-cell`,
     })
   } catch (error) {
-    console.error(error)
     if (error) logError(req.originalUrl, error, serviceUnavailableMessage)
 
     return res.render('error.njk', {

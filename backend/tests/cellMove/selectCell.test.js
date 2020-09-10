@@ -296,6 +296,7 @@ describe('Select a cell', () => {
         }
       )
     })
+
     it('should return the correctly formatted cell details', async () => {
       elite2Api.getInmatesAtLocation.mockImplementation((context, cellId) => {
         if (cellId === 1)
@@ -372,6 +373,7 @@ describe('Select a cell', () => {
                       label: 'Refusing to shield',
                     },
                   ],
+                  nonAssociation: false,
                   cellId: 3,
                   csra: 'Standard',
                   csraDetailsUrl: '/prisoner/A333333/cell-move/cell-sharing-risk-assessment-details',
@@ -404,6 +406,7 @@ describe('Select a cell', () => {
                       label: 'E-list',
                     },
                   ],
+                  nonAssociation: false,
                   cellId: 2,
                   csra: 'High',
                   csraDetailsUrl: '/prisoner/A222222/cell-move/cell-sharing-risk-assessment-details',
@@ -437,6 +440,7 @@ describe('Select a cell', () => {
                       label: 'PEEP',
                     },
                   ],
+                  nonAssociation: false,
                   cellId: 1,
                   csra: undefined,
                   csraDetailsUrl: '/prisoner/A111111/cell-move/cell-sharing-risk-assessment-details',
@@ -514,6 +518,7 @@ describe('Select a cell', () => {
               occupants: [
                 {
                   alerts: [],
+                  nonAssociation: false,
                   cellId: 1,
                   csra: 'High',
                   csraDetailsUrl: '/prisoner/A111111/cell-move/cell-sharing-risk-assessment-details',
@@ -546,6 +551,86 @@ describe('Select a cell', () => {
 
       expect(elite2Api.getCsraAssessments.mock.calls.length).toBe(0)
       expect(elite2Api.getAlerts.mock.calls.length).toBe(0)
+    })
+
+    it('should mark an occupant with the no association badge', async () => {
+      elite2Api.getCellsWithCapacity.mockResolvedValue([
+        {
+          id: 1,
+          description: 'MDI-1-3',
+          capacity: 4,
+          noOfOccupants: 1,
+          attributes: [],
+        },
+      ])
+      elite2Api.getInmatesAtLocation.mockResolvedValue([
+        {
+          firstName: 'bob1',
+          lastName: 'doe1',
+          offenderNo: 'A111111',
+          assignedLivingUnitId: 1,
+        },
+      ])
+      elite2Api.getAlerts.mockResolvedValue([])
+      elite2Api.getCsraAssessments.mockResolvedValue([])
+      elite2Api.getNonAssociations = jest.fn().mockResolvedValue({
+        offenderNo: 'G6123VU',
+        firstName: 'JOHN',
+        lastName: 'SAUNDERS',
+        agencyDescription: 'MOORLAND (HMP & YOI)',
+        assignedLivingUnitDescription: 'MDI-1-1-015',
+        nonAssociations: [
+          {
+            reasonCode: 'RIV',
+            reasonDescription: 'Rival Gang',
+            typeCode: 'LAND',
+            typeDescription: 'Do Not Locate on Same Landing',
+            effectiveDate: '2020-06-17T00:00:00',
+            expiryDate: '2020-07-17T00:00:00',
+            comments: 'Gang violence',
+            offenderNonAssociation: {
+              offenderNo: 'A111111',
+              firstName: 'bob1',
+              lastName: 'doe1',
+              reasonCode: 'RIV',
+              reasonDescription: 'Rival Gang',
+              agencyDescription: 'MOORLAND (HMP & YOI)',
+              assignedLivingUnitDescription: 'MDI-1-3-026',
+            },
+          },
+        ],
+      })
+
+      await controller(req, res)
+
+      expect(res.render).toHaveBeenCalledWith(
+        'cellMove/selectCell.njk',
+        expect.objectContaining({
+          cells: [
+            {
+              attributes: [],
+              capacity: 4,
+              description: 'MDI-1-3',
+              id: 1,
+              noOfOccupants: 1,
+              occupants: [
+                {
+                  alerts: [],
+                  nonAssociation: true,
+                  cellId: 1,
+                  csra: undefined,
+                  csraDetailsUrl: '/prisoner/A111111/cell-move/cell-sharing-risk-assessment-details',
+                  name: 'Doe1, Bob1',
+                  showCsraLink: false,
+                  viewOffenderDetails: '/prisoner/A111111/cell-move/offender-details',
+                },
+              ],
+              spaces: 3,
+              type: false,
+            },
+          ],
+        })
+      )
     })
   })
 })
