@@ -432,6 +432,21 @@ module.exports = {
       },
     })
   },
+  stubPrisonerFullDetail: (prisonerDetail, offenderNo) => {
+    return stubFor({
+      request: {
+        method: 'GET',
+        url: `/api/bookings/offenderNo/${offenderNo}?fullInfo=true`,
+      },
+      response: {
+        status: 200,
+        headers: {
+          'Content-Type': 'application/json;charset=UTF-8',
+        },
+        jsonBody: prisonerDetail || {},
+      },
+    })
+  },
   stubPrisonerDetails: (prisonerDetails, status = 200) => {
     return stubFor({
       request: {
@@ -892,7 +907,7 @@ module.exports = {
     return stubFor({
       request: {
         method: 'GET',
-        urlPattern: '/api/locations/[0-9]+?',
+        url: `/api/locations/${locationId}`,
       },
       response: {
         status,
