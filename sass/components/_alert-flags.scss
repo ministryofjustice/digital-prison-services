@@ -225,3 +225,12 @@
     border-color: #00437b;
   }
 }
+
+.non-association {
+  @extend %status-style;
+
+  background: lighten(#D4351C,40);
+  border-color: lighten(#D4351C,40);
+  font-weight: bold;
+  color: #D4351C;
+}
