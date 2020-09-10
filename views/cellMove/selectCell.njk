@@ -70,7 +70,7 @@
   {% endif %}
 
   {% if index === 1 %}
-     <td class="{{ cellClass }}"><a href="#" class="govuk-link">Select cell</a></td>
+     <td class="{{ cellClass }}"><a href="{{ '/prisoner/' + offenderNo + '/cell-move/move-validation?cellId=' + cell.id }}" class="govuk-link">Select cell</a></td>
   {% else %}
       <td class="{{ cellClass }}">
       </td>

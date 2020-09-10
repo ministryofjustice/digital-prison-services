@@ -33,7 +33,7 @@ context('A user can add a bulk appointment', () => {
       visits: [],
       activities: [],
     })
-    cy.task('stubLocation', 123456)
+    cy.task('stubLocation', { locationId: 123456 })
     cy.task('stubAppointmentLocations', {
       agency: 'MDI',
       locations: [
