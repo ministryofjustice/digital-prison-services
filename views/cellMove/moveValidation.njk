@@ -68,11 +68,11 @@
 {% endmacro %}
 
 {% macro alertDetails(alert) %}
-  <p class="govuk-body"> {{ alert.subTitle | safe}}</p>
+  <p class="govuk-body" data-test="alert-details"> {{ alert.subTitle | safe}}</p>
   {% if alert.comment %}
-    <p class="govuk-body"> {{ alert.comment | safe }}</p>
+    <p class="govuk-body" data-test="alert-comment"> {{ alert.comment | safe }}</p>
   {% endif %}
-  <p class="govuk-body"> {{ alert.date}} </p>
+  <p class="govuk-body" data-test="alert-date"> {{ alert.date}} </p>
 {% endmacro %}
 
 {% block content %}
@@ -114,20 +114,18 @@ C13.7,13.2,13.2,13.7,12.5,13.7z M12.5,0.5c-6.6,0-12,5.4-12,12s5.4,12,12,12s12-5.
       <p class="govuk-body" data-test="alerts-sub-heading">You are moving a prisoner:</p>
       <ul>
         {% for alert in currentOffenderActiveAlerts %}
-          <li class="govuk-body"> {{ alert.title }}
+          <li class="govuk-body" data-test="offender-alert-message"> {{ alert.title }}
           {{ govukInsetText({
             html: alertDetails(alert),
-            classes: 'govuk-body govuk-!-margin-bottom-0 govuk-body govuk-!-margin-top-2 govuk-!-padding-top-0 govuk-!-padding-bottom-0',
-            attributes: { 'data-test': 'offender-alert-detail'}
+            classes: 'govuk-body govuk-!-margin-bottom-0 govuk-body govuk-!-margin-top-2 govuk-!-padding-top-0 govuk-!-padding-bottom-0'
           }) }}
           </li>
         {% endfor %}
         {% for alert in currentOccupantsActiveAlerts %}
-          <li class="govuk-body"> {{ alert.title }}
+          <li class="govuk-body" data-test="occupant-alert-message"> {{ alert.title }}
           {{ govukInsetText({
             html: alertDetails(alert),
-            classes: 'govuk-body govuk-!-margin-bottom-0 govuk-body govuk-!-margin-top-2 govuk-!-padding-top-0 govuk-!-padding-bottom-0',
-            attributes: { 'data-test': 'occupant-alert-detail'}
+            classes: 'govuk-body govuk-!-margin-bottom-0 govuk-body govuk-!-margin-top-2 govuk-!-padding-top-0 govuk-!-padding-bottom-0'
           }) }}
           </li>
         {% endfor %}

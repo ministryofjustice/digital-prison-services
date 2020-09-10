@@ -50,7 +50,6 @@ context('A user can see conflicts in cell', () => {
             alertType: 'X',
             alertTypeDescription: 'Security',
             bookingId: 14,
-            comment: 'has a large poster on cell wall',
             dateCreated: '2019-08-20',
             dateExpires: null,
             expired: false,
@@ -180,10 +179,107 @@ context('A user can see conflicts in cell', () => {
     const page = MoveValidationPage.goTo(offenderNo, 1)
     page.nonAssociationsTitle().contains('Test User has non-associations')
     page.nonAssociationsSubTitle().contains('There is a non-association with a prisoner in this location')
+    page.nonAssociationsSummary().then($summary => {
+      cy.get($summary)
+        .find('dt')
+        .then($summaryLabels => {
+          cy.get($summaryLabels)
+            .its('length')
+            .should('eq', 6)
+          expect($summaryLabels.get(0).innerText).to.contain('Name')
+          expect($summaryLabels.get(1).innerText).to.contain('Prison number')
+          expect($summaryLabels.get(2).innerText).to.contain('Location')
+          expect($summaryLabels.get(3).innerText).to.contain('Type')
+          expect($summaryLabels.get(4).innerText).to.contain('Reason')
+          expect($summaryLabels.get(5).innerText).to.contain('Comment')
+        })
+
+      cy.get($summary)
+        .find('dd')
+        .then($summaryContent => {
+          cy.get($summaryContent)
+            .its('length')
+            .should('eq', 6)
+          expect($summaryContent.get(0).innerText).to.contain('Doe1, Bob1')
+          expect($summaryContent.get(1).innerText).to.contain('A12345')
+          expect($summaryContent.get(2).innerText).to.contain('MDI-1-3-026')
+          expect($summaryContent.get(3).innerText).to.contain('Do Not Locate on Same Landing')
+          expect($summaryContent.get(4).innerText).to.contain('Rival Gang')
+          expect($summaryContent.get(5).innerText).to.contain('Gang violence')
+        })
+    })
     page.csraTitle().contains('You must consider the CSRA of the prisoners involved')
     page.csraSubTitle().contains('You are moving a prisoner:')
     page.csraMessage().contains('who is CSRA high into a cell with a prisoner who is CSRA high')
     page.alertsTitle().contains('You must consider the risks of the prisoners involved')
     page.alertsSubTitle().contains('You are moving a prisoner:')
+    page.offenderAlertMessages().then($messages => {
+      cy.get($messages)
+        .its('length')
+        .should('eq', 3)
+      expect($messages.get(0)).to.contain(
+        'who has a Risk to LGB alert into a cell with a prisoner who has a sexual orientation of Homosexual'
+      )
+      expect($messages.get(1)).to.contain('who has a Gang member alert into a cell with another prisoner')
+      expect($messages.get(2)).to.contain('who has an Isolated Prisoner alert into a cell with another prisoner')
+    })
+    page.occupantAlertMessages().then($messages => {
+      cy.get($messages)
+        .its('length')
+        .should('eq', 2)
+      expect($messages.get(0)).to.contain('into a cell with a prisoner who has a Gang member alert')
+      expect($messages.get(1)).to.contain('into a cell with a prisoner who has an Isolated Prisoner alert')
+    })
+    page.alertsDetails().then($messages => {
+      cy.get($messages)
+        .its('length')
+        .should('eq', 5)
+      expect($messages.get(0)).to.contain('The details of Test User’s alert are')
+      expect($messages.get(1)).to.contain(' ')
+      expect($messages.get(2)).to.contain('The details of Test User’s alert are')
+      expect($messages.get(3)).to.contain('The details of Occupant User’s alert are')
+      expect($messages.get(4)).to.contain('The details of Occupant User’s alert are')
+    })
+    page.alertsComments().then($messages => {
+      cy.get($messages)
+        .its('length')
+        .should('eq', 4)
+      expect($messages.get(0)).to.contain('has a large poster on cell wall')
+      expect($messages.get(1)).to.contain('test')
+      expect($messages.get(2)).to.contain('has a large poster on cell wall')
+      expect($messages.get(3)).to.contain('test')
+    })
+    page.alertsDates().then($dates => {
+      cy.get($dates)
+        .its('length')
+        .should('eq', 5)
+      expect($dates.get(0)).to.contain('Date added: 20 August 2019')
+      expect($dates.get(1)).to.contain('Date added: 20 August 2019')
+      expect($dates.get(2)).to.contain('Date added: 20 August 2020')
+      expect($dates.get(3)).to.contain('Date added: 20 August 2019')
+      expect($dates.get(4)).to.contain('Date added: 20 August 2020')
+    })
+  })
+
+  it('should show error when nothing is selected', () => {
+    const page = MoveValidationPage.goTo(offenderNo, 1)
+    page
+      .form()
+      .submitButton()
+      .click()
+    page.errorSummary().contains('Select yes if you are sure you want to select the cell')
+  })
+
+  it('should redirect to select cell if no is selected', () => {
+    const page = MoveValidationPage.goTo(offenderNo, 1)
+    page
+      .form()
+      .confirmationNo()
+      .click()
+    page
+      .form()
+      .submitButton()
+      .click()
+    cy.url().should('include', '/select-cell')
   })
 })
