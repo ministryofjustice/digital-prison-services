@@ -3,6 +3,7 @@
 {% from "govuk/components/button/macro.njk" import govukButton %}
 {% from "govuk/components/table/macro.njk" import govukTable %}
 {% from "../macros/alertFlags.njk" import alertFlags %}
+{% from "govuk/components/warning-text/macro.njk" import govukWarningText %}
 
 {% set title = "Select an available cell" %}
 
@@ -32,6 +33,13 @@
     {{ occupier.name }}
     <div>
       <a href="{{ occupier.viewOffenderDetails }}" class="govuk-link" data-test="csra-link">View details <span class="govuk-visually-hidden">for {{ occupier.name }}</span></a>
+    </div>
+    <div>
+      {% if occupier.nonAssociation %}
+        <div class="non-association govuk-!-margin-top-1">
+          NON-ASSOCIATION
+        </div>
+      {% endif %}
     </div>
   </td>
   <td class="{{ cellClass }}">
@@ -138,6 +146,16 @@
       </form>
     </div>
   </div>
+
+  {% if showNonAssociationWarning %}
+    {{ govukWarningText({
+      attributes: {
+        id: 'non-association-warning'
+      },
+      text: breadcrumbPrisonerName + " has a non-association with a prisoner in this location.",
+      iconFallbackText: "Warning"
+    }) }}
+  {% endif %}
 
   <table class="govuk-table govuk-table--with-child-rows" data-test="cell-results-table">
     <thead class="govuk-table__head">

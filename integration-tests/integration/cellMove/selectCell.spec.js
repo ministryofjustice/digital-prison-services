@@ -50,6 +50,33 @@ context('A user can select a cell', () => {
         },
       ],
     })
+    cy.task('stubBookingNonAssociations', {
+      offenderNo: 'G6123VU',
+      firstName: 'JOHN',
+      lastName: 'SAUNDERS',
+      agencyDescription: 'MOORLAND (HMP & YOI)',
+      assignedLivingUnitDescription: 'MDI-1-1-015',
+      nonAssociations: [
+        {
+          reasonCode: 'RIV',
+          reasonDescription: 'Rival Gang',
+          typeCode: 'LAND',
+          typeDescription: 'Do Not Locate on Same Landing',
+          effectiveDate: '2020-06-17T00:00:00',
+          expiryDate: '2020-07-17T00:00:00',
+          comments: 'Gang violence',
+          offenderNonAssociation: {
+            offenderNo: 'A12345',
+            firstName: 'bob1',
+            lastName: 'doe1',
+            reasonCode: 'RIV',
+            reasonDescription: 'Rival Gang',
+            agencyDescription: 'MOORLAND (HMP & YOI)',
+            assignedLivingUnitDescription: 'MDI-1-3-026',
+          },
+        },
+      ],
+    })
   })
 
   context('with cell data', () => {
@@ -100,7 +127,7 @@ context('A user can select a cell', () => {
               cellType: 'Listener Cell',
               capacity: 3,
               spaces: 1,
-              occupier: 'Doe, Bob',
+              occupier: 'Doe, Bob\nView details\nfor Doe, Bob\nNON-ASSOCIATION',
               csra: 'Standard\n\nView details\nfor Doe, Bob',
               relevantAlerts: 'PEEP',
               selectCell: 'Select cell',
@@ -111,7 +138,7 @@ context('A user can select a cell', () => {
               cellType: '',
               capacity: '',
               spaces: '',
-              occupier: 'Doe, Bob',
+              occupier: 'Doe, Bob\nView details\nfor Doe, Bob\nNON-ASSOCIATION',
               csra: 'Standard\n\nView details\nfor Doe, Bob',
               relevantAlerts: 'PEEP',
               selectCell: '',
@@ -122,7 +149,7 @@ context('A user can select a cell', () => {
               cellType: '',
               capacity: '',
               spaces: '',
-              occupier: 'Doe, Bob',
+              occupier: 'Doe, Bob\nView details\nfor Doe, Bob\nNON-ASSOCIATION',
               csra: 'Standard\n\nView details\nfor Doe, Bob',
               relevantAlerts: 'PEEP',
               selectCell: '',
@@ -133,7 +160,7 @@ context('A user can select a cell', () => {
               cellType: '',
               capacity: '',
               spaces: '',
-              occupier: 'Doe, Bob',
+              occupier: 'Doe, Bob\nView details\nfor Doe, Bob\nNON-ASSOCIATION',
               csra: 'Standard\n\nView details\nfor Doe, Bob',
               relevantAlerts: 'PEEP',
               selectCell: '',
@@ -144,7 +171,7 @@ context('A user can select a cell', () => {
               cellType: 'Gated Cell',
               capacity: 2,
               spaces: 0,
-              occupier: 'Doe, Bob',
+              occupier: 'Doe, Bob\nView details\nfor Doe, Bob\nNON-ASSOCIATION',
               csra: 'Standard\n\nView details\nfor Doe, Bob',
               relevantAlerts: 'PEEP',
               selectCell: 'Select cell',
@@ -155,7 +182,7 @@ context('A user can select a cell', () => {
               cellType: '',
               capacity: '',
               spaces: '',
-              occupier: 'Doe, Bob',
+              occupier: 'Doe, Bob\nView details\nfor Doe, Bob\nNON-ASSOCIATION',
               csra: 'Standard\n\nView details\nfor Doe, Bob',
               relevantAlerts: 'PEEP',
               selectCell: '',
@@ -166,7 +193,7 @@ context('A user can select a cell', () => {
               cellType: '',
               capacity: '',
               spaces: '',
-              occupier: 'Doe, Bob',
+              occupier: 'Doe, Bob\nView details\nfor Doe, Bob\nNON-ASSOCIATION',
               csra: 'Standard\n\nView details\nfor Doe, Bob',
               relevantAlerts: 'PEEP',
               selectCell: '',
@@ -177,7 +204,7 @@ context('A user can select a cell', () => {
               cellType: '',
               capacity: '',
               spaces: '',
-              occupier: 'Doe, Bob',
+              occupier: 'Doe, Bob\nView details\nfor Doe, Bob\nNON-ASSOCIATION',
               csra: 'Standard\n\nView details\nfor Doe, Bob',
               relevantAlerts: 'PEEP',
               selectCell: '',
@@ -186,6 +213,17 @@ context('A user can select a cell', () => {
             expect($tableRows.last().get(0).innerText).to.contain('Cell swap\tSelect')
           })
       })
+    })
+
+    it('should show non association warning', () => {
+      const page = SelectCellPage.goTo(offenderNo)
+      page.nonAssociationWarning().contains('Smith, John has a non-association with a prisoner in this location.')
+    })
+
+    it('should NOT show the non association warning', () => {
+      cy.task('stubBookingNonAssociations', {})
+      const page = SelectCellPage.goTo(offenderNo)
+      page.nonAssociationWarning().should('not.be.visible')
     })
   })
 })
