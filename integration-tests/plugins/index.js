@@ -265,7 +265,7 @@ module.exports = on => {
         elite2api.stubActivities(activities),
       ]),
     stubSentenceData: details => Promise.all([elite2api.stubSentenceData(details)]),
-    stubLocation: (locationId, locationData) => Promise.all([elite2api.stubLocation(locationId, locationData)]),
+    stubLocation: ({ locationId, locationData }) => Promise.all([elite2api.stubLocation(locationId, locationData)]),
     stubAgencyDetails: ({ agencyId, details }) => Promise.all([elite2api.stubAgencyDetails(agencyId, details)]),
     stubAppointmentLocations: ({ agency, locations }) =>
       Promise.all([elite2api.stubAppointmentLocations(agency, locations)]),
@@ -339,5 +339,7 @@ module.exports = on => {
     stubHistoryForLocation: locationHistory => elite2api.stubHistoryForLocation(locationHistory),
     stubAttributesForLocation: locationAttributes => elite2api.stubAttributesForLocation(locationAttributes),
     stubPrisonerDetail: ({ prisonerDetail, bookingId }) => elite2api.stubPrisonerDetail(prisonerDetail, bookingId),
+    stubPrisonerFullDetail: ({ prisonerDetail, offenderNo }) =>
+      elite2api.stubPrisonerFullDetail(prisonerDetail, offenderNo),
   })
 }

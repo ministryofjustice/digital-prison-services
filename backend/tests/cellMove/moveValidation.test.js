@@ -2,13 +2,11 @@ Reflect.deleteProperty(process.env, 'APPINSIGHTS_INSTRUMENTATIONKEY')
 const moment = require('moment')
 
 const { moveValidationFactory } = require('../../controllers/cellMove/moveValidation')
-const { serviceUnavailableMessage } = require('../../common-messages')
 
 describe('move validation', () => {
   let req
   let res
   let logError
-  let factory
   let controller
 
   const elite2Api = {}

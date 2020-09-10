@@ -79,7 +79,7 @@ context('A user can add an appointment', () => {
       ],
     })
     cy.task('stubSentenceData')
-    cy.task('stubLocation', 1)
+    cy.task('stubLocation', { locationId: 1 })
     cy.task('stubCourts')
     cy.task('stubAddVideoLinkAppointment')
     cy.task('stubAgencyDetails', { agencyId: 'MDI', details: {} })

@@ -81,15 +81,15 @@
     {{ govukErrorSummary({
         titleText: "There is a problem",
         errorList: errors,
-        attributes: { 'data-qa-errors': true }
+        attributes: { 'data-test-errors': true }
     }) }}
   {% endif %}
 
   <h1 class="govuk-heading-l">{{title}}</h1>
 
   {% if nonAssociations.length %}
-    <h2 class="govuk-heading-m">{{ offenderName }} has non-associations </h2>
-    <h3 class="govuk-heading-s"><svg class="moj-banner__icon" fill="currentColor" role="presentation" focusable="false" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 25 25" height="25" width="25">
+    <h2 class="govuk-heading-m" data-test="non-associations-heading">{{ offenderName }} has non-associations </h2>
+    <h3 class="govuk-heading-s" data-test="non-associations-sub-heading"><svg class="moj-banner__icon" fill="currentColor" role="presentation" focusable="false" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 25 25" height="25" width="25">
 <path d="M13.7,18.5h-2.4v-2.4h2.4V18.5z M12.5,13.7c-0.7,0-1.2-0.5-1.2-1.2V7.7c0-0.7,0.5-1.2,1.2-1.2s1.2,0.5,1.2,1.2v4.8
 C13.7,13.2,13.2,13.7,12.5,13.7z M12.5,0.5c-6.6,0-12,5.4-12,12s5.4,12,12,12s12-5.4,12-12S19.1,0.5,12.5,0.5z" /></svg>There is a non-association with a prisoner in this location</h3>
     {% for nonAssociation in nonAssociations %}
@@ -101,23 +101,24 @@ C13.7,13.2,13.2,13.7,12.5,13.7z M12.5,0.5c-6.6,0-12,5.4-12,12s5.4,12,12,12s12-5.
   {% endif %}
 
   {% if csraWarningMessage %}
-    <h2 class="govuk-heading-m">You must consider the CSRA of the prisoners involved</h2>
-    <p class="govuk-body">You are moving a prisoner:</p>
+    <h2 class="govuk-heading-m" data-test="csra-heading">You must consider the CSRA of the prisoners involved</h2>
+    <p class="govuk-body" data-test="csra-sub-heading">You are moving a prisoner:</p>
     <ul>
-      <li class="govuk-body">{{ csraWarningMessage }}</li>
+      <li class="govuk-body" data-test="csra-message">{{ csraWarningMessage }}</li>
     </ul>
   {% endif %}
 
 
   {% if currentOffenderActiveAlerts.length or currentOccupantsActiveAlerts.length %}
-      <h2 class="govuk-heading-m">You must consider the risks of the prisoners involved</h2>
-      <p class="govuk-body">You are moving a prisoner:</p>
+      <h2 class="govuk-heading-m" data-test="alerts-heading">You must consider the risks of the prisoners involved</h2>
+      <p class="govuk-body" data-test="alerts-sub-heading">You are moving a prisoner:</p>
       <ul>
         {% for alert in currentOffenderActiveAlerts %}
           <li class="govuk-body"> {{ alert.title }}
           {{ govukInsetText({
             html: alertDetails(alert),
-            classes: 'govuk-body govuk-!-margin-bottom-0 govuk-body govuk-!-margin-top-2 govuk-!-padding-top-0 govuk-!-padding-bottom-0' 
+            classes: 'govuk-body govuk-!-margin-bottom-0 govuk-body govuk-!-margin-top-2 govuk-!-padding-top-0 govuk-!-padding-bottom-0',
+            attributes: { 'data-test': 'offender-alert-detail'}
           }) }}
           </li>
         {% endfor %}
@@ -125,7 +126,8 @@ C13.7,13.2,13.2,13.7,12.5,13.7z M12.5,0.5c-6.6,0-12,5.4-12,12s5.4,12,12,12s12-5.
           <li class="govuk-body"> {{ alert.title }}
           {{ govukInsetText({
             html: alertDetails(alert),
-            classes: 'govuk-body govuk-!-margin-bottom-0 govuk-body govuk-!-margin-top-2 govuk-!-padding-top-0 govuk-!-padding-bottom-0'
+            classes: 'govuk-body govuk-!-margin-bottom-0 govuk-body govuk-!-margin-top-2 govuk-!-padding-top-0 govuk-!-padding-bottom-0',
+            attributes: { 'data-test': 'occupant-alert-detail'}
           }) }}
           </li>
         {% endfor %}
