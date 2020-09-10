@@ -15,6 +15,7 @@ const moveValidationPage = () =>
     alertsDetails: () => cy.get("[data-test='alert-details']"),
     alertsDates: () => cy.get("[data-test='alert-date']"),
     alertsComments: () => cy.get("[data-test='alert-comment']"),
+    errorSummary: () => cy.get('.govuk-error-summary'),
     form: () => ({
       confirmationYes: () => cy.get('#confirmation'),
       confirmationNo: () => cy.get('#confirmation-2'),

@@ -260,4 +260,26 @@ context('A user can see conflicts in cell', () => {
       expect($dates.get(4)).to.contain('Date added: 20 August 2020')
     })
   })
+
+  it('should show error when nothing is selected', () => {
+    const page = MoveValidationPage.goTo(offenderNo, 1)
+    page
+      .form()
+      .submitButton()
+      .click()
+    page.errorSummary().contains('Select yes if you are sure you want to select the cell')
+  })
+
+  it('should redirect to select cell if no is selected', () => {
+    const page = MoveValidationPage.goTo(offenderNo, 1)
+    page
+      .form()
+      .confirmationNo()
+      .click()
+    page
+      .form()
+      .submitButton()
+      .click()
+    cy.url().should('include', '/select-cell')
+  })
 })
