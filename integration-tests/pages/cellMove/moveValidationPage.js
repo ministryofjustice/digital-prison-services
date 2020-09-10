@@ -6,11 +6,15 @@ const moveValidationPage = () =>
     csraTitle: () => cy.get("[data-test='csra-heading']"),
     alertsTitle: () => cy.get("[data-test='alerts-heading']"),
     nonAssociationsSubTitle: () => cy.get("[data-test='non-associations-sub-heading']"),
+    nonAssociationsSummary: () => cy.get("[data-test*='non-association-summary']"),
     csraSubTitle: () => cy.get("[data-test='csra-sub-heading']"),
     csraMessage: () => cy.get("[data-test='csra-message']"),
     alertsSubTitle: () => cy.get("[data-test='alerts-sub-heading']"),
-    offenderAlerts: () => cy.get("[data-test='offender-alert-detail']"),
-    occupantAlerts: () => cy.get("[data-test='occupant-alert-detail']"),
+    offenderAlertMessages: () => cy.get("[data-test='offender-alert-message']"),
+    occupantAlertMessages: () => cy.get("[data-test='occupant-alert-message']"),
+    alertsDetails: () => cy.get("[data-test='alert-details']"),
+    alertsDates: () => cy.get("[data-test='alert-date']"),
+    alertsComments: () => cy.get("[data-test='alert-comment']"),
     form: () => ({
       confirmationYes: () => cy.get('#confirmation'),
       confirmationNo: () => cy.get('#confirmation-2'),
@@ -21,7 +25,6 @@ const moveValidationPage = () =>
 export default {
   verifyOnPage: moveValidationPage,
   goTo: (offenderNo, cellId) => {
-    console.log(cellId)
     cy.visit(`/prisoner/${offenderNo}/cell-move/move-validation?cellId=${cellId}`)
     return moveValidationPage()
   },
