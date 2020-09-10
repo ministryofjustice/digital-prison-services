@@ -71,7 +71,7 @@ describe('view offender details', () => {
     })
   })
 
-  it('populates the data correctly', async () => {
+  it('populates the data correctly when all present', async () => {
     await controller(req, res)
 
     expect(res.render).toHaveBeenCalledWith(
@@ -85,6 +85,29 @@ describe('view offender details', () => {
         ethnicity: 'White (W1)',
         sexualOrientation: 'Heterosexual',
         smokerOrVaper: 'No',
+        mainOffence: '13 hours over work',
+        backLink: `/prisoner/${offenderNo}/cell-move/select-location`,
+        backLinkText: 'Return to select a location',
+        profileUrl: `/prisoner/${offenderNo}`,
+      })
+    )
+  })
+
+  it('populates the data correctly when optional missing', async () => {
+    elite2Api.getDetails = jest.fn().mockResolvedValue({ ...getDetailsResponse, profileInformation: [] })
+    await controller(req, res)
+
+    expect(res.render).toHaveBeenCalledWith(
+      'cellMove/offenderDetails.njk',
+      expect.objectContaining({
+        prisonerName: 'User, Test',
+        age: 21,
+        religion: 'Some religion',
+        offenderNo,
+        cellLocation: 'A-1-12',
+        ethnicity: 'White (W1)',
+        sexualOrientation: 'Not entered',
+        smokerOrVaper: 'Not entered',
         mainOffence: '13 hours over work',
         backLink: `/prisoner/${offenderNo}/cell-move/select-location`,
         backLinkText: 'Return to select a location',
