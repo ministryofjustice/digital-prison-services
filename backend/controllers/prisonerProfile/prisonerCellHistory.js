@@ -48,6 +48,9 @@ module.exports = ({ elite2Api, logError, page = 0 }) => async (req, res) => {
           location: extractLocation(cell.description, cell.agencyId),
           movedIn: cell.assignmentDateTime && formatTimestampToDateTime(cell.assignmentDateTime),
           movedOut: cell.assignmentEndDateTime && formatTimestampToDateTime(cell.assignmentEndDateTime),
+          assignmentDate: cell.assignmentDate,
+          livingUnitId: cell.livingUnitId,
+          agencyId: cell.agencyId,
         }
       })
 

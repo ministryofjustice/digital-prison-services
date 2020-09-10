@@ -81,7 +81,10 @@ describe('Prisoner cell history', () => {
         expect.objectContaining({
           cellData: [
             {
+              agencyId: 'RNI',
+              assignmentDate: '2020-08-01',
               establishment: 'Ranby',
+              livingUnitId: 3,
               location: '1-03',
               movedIn: '01/08/2020 - 12:48',
               movedOut: '01/09/2020 - 12:48',

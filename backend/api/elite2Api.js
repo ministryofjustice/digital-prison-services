@@ -342,6 +342,9 @@ const elite2ApiFactory = client => {
   const getHistoryForLocation = (context, { locationId, fromDate, toDate }) =>
     get(context, `/api/cell/${locationId}/history?fromDate=${fromDate}&toDate=${toDate}`)
 
+  const moveToCell = (context, { bookingId, internalLocationDescription }) =>
+    put(`/api/bookings/${bookingId}/living-unit/${internalLocationDescription}`)
+
   return {
     userLocations,
     userCaseLoads,
@@ -448,6 +451,7 @@ const elite2ApiFactory = client => {
     getAttributesForLocation,
     getHistoryForLocation,
     getInmatesAtLocation,
+    moveToCell,
   }
 }
 
