@@ -253,7 +253,8 @@ const times = number => func => {
 
 const possessive = string => (string.toLowerCase().endsWith('s') ? '&rsquo;' : '&rsquo;s')
 
-const indefiniteArticle = string => (string.toLowerCase().startsWith('a') ? 'an' : 'a')
+const indefiniteArticle = string =>
+  ['a', 'e', 'i', 'o', 'u'].some(vowel => string.toLowerCase().startsWith(vowel)) ? 'an' : 'a'
 
 const extractLocation = (location, agencyId) => {
   if (!location || !agencyId) return undefined

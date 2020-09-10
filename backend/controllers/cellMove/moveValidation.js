@@ -37,10 +37,11 @@ const moveValidationFactory = ({ elite2Api, logError }) => {
     }
 
     try {
+      const currentOffenderDetails = await elite2Api.getDetails(res.locals, offenderNo, true)
+
       const occupants = await elite2Api.getInmatesAtLocation(res.locals, cellId, {})
       const currentOccupantsOffenderNos = occupants.map(occupant => occupant.offenderNo)
       const currentOccupantsDetails = occupants && (await getOccupantsDetails(currentOccupantsOffenderNos))
-      const currentOffenderDetails = await elite2Api.getDetails(res.locals, offenderNo, true)
 
       // Get the residential unit level prefix for the selected cell by traversing up the
       // parent location tree
@@ -81,12 +82,11 @@ const moveValidationFactory = ({ elite2Api, logError }) => {
       const csraWarningMessage = getCellSharingRiskAssessmentMessage(currentOffenderDetails, currentOccupantsDetails)
 
       // Get a list of sexualities involved
-      const currentOffenderSexuality =
-        getValueByType('SEXO', currentOffenderDetails.profileInformation, 'resultValue') || 'Unknown'
+      const currentOffenderSexuality = getValueByType('SEXO', currentOffenderDetails.profileInformation, 'resultValue')
       const currentOccupantsSexualities = [
         ...new Set(
-          currentOccupantsDetails.map(
-            currentOccupant => getValueByType('SEXO', currentOccupant.profileInformation, 'resultValue') || 'Unknown'
+          currentOccupantsDetails.map(currentOccupant =>
+            getValueByType('SEXO', currentOccupant.profileInformation, 'resultValue')
           )
         ),
       ]
@@ -100,9 +100,7 @@ const moveValidationFactory = ({ elite2Api, logError }) => {
             .join(', ')
           const title =
             alert.alertCode === 'RLG' &&
-            currentOccupantsSexualities.some(
-              sexuality => (sexuality && !sexuality.toLowerCase().includes('hetero')) || !sexuality
-            )
+            currentOccupantsSexualities.some(sexuality => sexuality && !sexuality.toLowerCase().includes('hetero'))
               ? `who has ${indefiniteArticle(alert.alertCodeDescription)} ${
                   alert.alertCodeDescription
                 } alert into a cell with a prisoner who has a sexual orientation of ${sexualitiesString}`
@@ -130,8 +128,7 @@ const moveValidationFactory = ({ elite2Api, logError }) => {
             .map(alert => {
               const title =
                 alert.alertCode === 'RLG' &&
-                ((currentOffenderSexuality && !currentOffenderSexuality.toLowerCase().includes('hetero')) ||
-                  !currentOffenderSexuality)
+                (currentOffenderSexuality && !currentOffenderSexuality.toLowerCase().includes('hetero'))
                   ? `who has a sexual orientation of ${currentOffenderSexuality} into a cell with a prisoner who has ${indefiniteArticle(
                       alert.alertCodeDescription
                     )} ${alert.alertCodeDescription} alert`
@@ -139,7 +136,6 @@ const moveValidationFactory = ({ elite2Api, logError }) => {
                       alert.alertCodeDescription
                     } alert`
               return {
-                code: alert.alertCode,
                 subTitle:
                   alert.comment &&
                   `The details of ${formatName(currentOccupant.firstName, currentOccupant.lastName)}${possessive(
@@ -154,8 +150,6 @@ const moveValidationFactory = ({ elite2Api, logError }) => {
         .flatMap(alert => alert)
 
       return res.render('cellMove/moveValidation.njk', {
-        breadcrumbPrisonerName: putLastNameFirst(currentOffenderDetails.firstName, currentOffenderDetails.lastName),
-        currentOffenderDetails,
         offenderNo,
         offenderName: `${formatName(currentOffenderDetails.firstName, currentOffenderDetails.lastName)}`,
         csraWarningMessage,
