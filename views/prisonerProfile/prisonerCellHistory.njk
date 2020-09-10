@@ -21,7 +21,7 @@
       text: cell.movedOut
     },
     {
-      html: '<a href="' + './location-history?fromDate=' + cell.assignmentDate + '&locationId=' + cell.livingUnitId + '&agencyId=' + cell.agencyId + '" class="govuk-link">View details</a>'
+      html: '<a href="' + './location-history?fromDate=' + cell.assignmentDate + '&toDate=' + cell.assignmentEndDate + '&locationId=' + cell.livingUnitId + '&agencyId=' + cell.agencyId + '" class="govuk-link">View details</a>'
     }
   ]), rows) %}
 {% endfor %}
@@ -119,7 +119,7 @@
           </div>
           <div class="govuk-grid-column-one-half">
           <p class="govuk-body">
-            <a href="{{ './location-history?fromDate=' + currentLocation.assignmentDate + '&locationId=' + currentLocation.livingUnitId + '&agencyId=' + currentLocation.agencyId }}" class="govuk-link" data-test="cell-details-link">
+            <a href="{{ './location-history?fromDate=' + currentLocation.assignmentDate + '&toDate=' + currentLocation.assignmentEndDate + '&locationId=' + currentLocation.livingUnitId + '&agencyId=' + currentLocation.agencyId }}" class="govuk-link" data-test="cell-details-link">
               View details
             </a>
           </p>

@@ -1,3 +1,4 @@
+const moment = require('moment')
 const { serviceUnavailableMessage } = require('../../common-messages')
 const {
   formatName,
@@ -38,6 +39,8 @@ module.exports = ({ elite2Api, logError, page = 0 }) => async (req, res) => {
     const occupants =
       (currentLocation && (await elite2Api.getInmatesAtLocation(res.locals, currentLocation.livingUnitId, {}))) || []
 
+    const today = moment().format('YYYY-MM-DD')
+
     const cellData = cells
       .sort((left, right) => sortByDateTime(right.assignmentDateTime, left.assignmentDateTime))
       .filter(cell => cell.assignmentEndDateTime)
@@ -49,6 +52,7 @@ module.exports = ({ elite2Api, logError, page = 0 }) => async (req, res) => {
           movedIn: cell.assignmentDateTime && formatTimestampToDateTime(cell.assignmentDateTime),
           movedOut: cell.assignmentEndDateTime && formatTimestampToDateTime(cell.assignmentEndDateTime),
           assignmentDate: cell.assignmentDate,
+          assignmentEndDate: cell.assignmentEndDate ? cell.assignmentEndDate : today,
           livingUnitId: cell.livingUnitId,
           agencyId: cell.agencyId,
         }
@@ -64,6 +68,7 @@ module.exports = ({ elite2Api, logError, page = 0 }) => async (req, res) => {
         location: extractLocation(currentLocation.description, currentLocation.agencyId),
         movedIn: currentLocation.assignmentDateTime && formatTimestampToDateTime(currentLocation.assignmentDateTime),
         assignmentDate: currentLocation.assignmentDate,
+        assignmentEndDate: currentLocation.assignmentEndDate ? currentLocation.assignmentEndDate : today,
         livingUnitId: currentLocation.livingUnitId,
         agencyId: currentLocation.agencyId,
       },

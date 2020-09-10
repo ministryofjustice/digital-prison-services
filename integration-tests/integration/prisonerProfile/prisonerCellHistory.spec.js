@@ -57,7 +57,10 @@ context('Prisoner cell history', () => {
       prisonerCellHistoryPage
         .cellDetailsLink()
         .should('have.attr', 'href')
-        .and('include', '/location-history?fromDate=2020-09-01&locationId=1&agencyId=MDI')
+        .and(
+          'include',
+          `/location-history?fromDate=2020-09-01&toDate=${moment().format('YYYY-MM-DD')}&locationId=1&agencyId=MDI`
+        )
 
       prisonerCellHistoryPage.results().then($table => {
         cy.get($table)
@@ -74,7 +77,7 @@ context('Prisoner cell history', () => {
             cy.get($tableCells.get(4))
               .find('a')
               .should('have.attr', 'href')
-              .and('include', '/location-history?fromDate=2020-08-01&locationId=3&agencyId=MDI')
+              .and('include', '/location-history?fromDate=2020-08-01&toDate=2020-09-01&locationId=3&agencyId=MDI')
           })
       })
     })
