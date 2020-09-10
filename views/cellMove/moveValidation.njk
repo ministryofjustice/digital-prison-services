@@ -1,8 +1,11 @@
 {% extends "../partials/layout.njk" %}
 {% from "govuk/components/summary-list/macro.njk" import govukSummaryList %}
+{% from "govuk/components/error-summary/macro.njk" import govukErrorSummary %}
 {% from "govuk/components/inset-text/macro.njk" import govukInsetText %}
 {% from "govuk/components/details/macro.njk" import govukDetails %}
 {% from "govuk/components/inset-text/macro.njk" import govukInsetText %}
+{% from "govuk/components/radios/macro.njk" import govukRadios %}
+{% from "govuk/components/button/macro.njk" import govukButton %}
 {%- from "moj/components/banner/macro.njk" import mojBanner -%}
 
 
@@ -73,6 +76,15 @@
 {% endmacro %}
 
 {% block content %}
+
+  {% if errors.length > 0 %}
+    {{ govukErrorSummary({
+        titleText: "There is a problem",
+        errorList: errors,
+        attributes: { 'data-qa-errors': true }
+    }) }}
+  {% endif %}
+
   <h1 class="govuk-heading-l">{{title}}</h1>
 
   {% if nonAssociations.length %}
@@ -105,7 +117,7 @@ C13.7,13.2,13.2,13.7,12.5,13.7z M12.5,0.5c-6.6,0-12,5.4-12,12s5.4,12,12,12s12-5.
           <li class="govuk-body"> {{ alert.title }}
           {{ govukInsetText({
             html: alertDetails(alert),
-            classes: 'govuk-body govuk-!-margin-bottom-0 govuk-body govuk-!-margin-top-0 govuk-!-padding-top-0 govuk-!-padding-bottom-0' 
+            classes: 'govuk-body govuk-!-margin-bottom-0 govuk-body govuk-!-margin-top-2 govuk-!-padding-top-0 govuk-!-padding-bottom-0' 
           }) }}
           </li>
         {% endfor %}
@@ -113,11 +125,32 @@ C13.7,13.2,13.2,13.7,12.5,13.7z M12.5,0.5c-6.6,0-12,5.4-12,12s5.4,12,12,12s12-5.
           <li class="govuk-body"> {{ alert.title }}
           {{ govukInsetText({
             html: alertDetails(alert),
-            classes: 'govuk-body govuk-!-margin-bottom-0 govuk-body govuk-!-margin-top-1 govuk-!-padding-top-0 govuk-!-padding-bottom-0'
+            classes: 'govuk-body govuk-!-margin-bottom-0 govuk-body govuk-!-margin-top-2 govuk-!-padding-top-0 govuk-!-padding-bottom-0'
           }) }}
           </li>
         {% endfor %}
       </ul>
   {% endif %}
+
+  <form method="POST" novalidate="novalidate">
+    {{ govukRadios({
+    classes: "govuk-radios--inline",
+    idPrefix: "confirmation",
+    name: "confirmation",
+    errorMessage: errors | findError('confirmation'),
+    items: [
+      {
+        value: "yes",
+        text: "Yes"
+      },
+      {
+        value: "no",
+        text: "No"
+      }
+      ]
+    }) }}
+
+    {{ govukButton({ text: "Continue", type: "submit" }) }}
+  </form>
   
 {% endblock %}
