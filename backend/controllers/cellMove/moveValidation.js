@@ -108,7 +108,9 @@ const moveValidationFactory = ({ elite2Api, logError }) => {
           }))
 
       // Get Cell Sharing Risk Assessment warnings of any
-      const csraWarningMessage = getCellSharingRiskAssessmentMessage(currentOffenderDetails, currentOccupantsDetails)
+      const csraWarningMessage =
+        currentOccupantsDetails.length > 0 &&
+        getCellSharingRiskAssessmentMessage(currentOffenderDetails, currentOccupantsDetails)
 
       // Get a list of sexualities involved
       const currentOffenderSexuality = getValueByType('SEXO', currentOffenderDetails.profileInformation, 'resultValue')
@@ -121,12 +123,14 @@ const moveValidationFactory = ({ elite2Api, logError }) => {
       ]
 
       // Get the list of relevant offender alerts
-      const currentOffenderActiveAlerts = currentOffenderDetails.alerts
-        .filter(alert => !alert.expired && cellMoveAlertCodes.includes(alert.alertCode))
-        .map(alert => {
-          const title = getCurrentOffenderAlertTitle(alert, currentOccupantsSexualities)
-          return getOffenderAlertBody(alert, title, currentOffenderDetails.firstName, currentOffenderDetails.lastName)
-        })
+      const currentOffenderActiveAlerts =
+        currentOccupantsDetails.length > 0 &&
+        currentOffenderDetails.alerts
+          .filter(alert => !alert.expired && cellMoveAlertCodes.includes(alert.alertCode))
+          .map(alert => {
+            const title = getCurrentOffenderAlertTitle(alert, currentOccupantsSexualities)
+            return getOffenderAlertBody(alert, title, currentOffenderDetails.firstName, currentOffenderDetails.lastName)
+          })
 
       // Get the list of relevant occupant alerts
       const currentOccupantsActiveAlerts = currentOccupantsDetails

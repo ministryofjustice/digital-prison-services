@@ -431,6 +431,25 @@ describe('move validation', () => {
     )
   })
 
+  it('Does not pass alerts and CSRA when there are no occupants', async () => {
+    elite2Api.getDetails.mockResolvedValueOnce({ ...getCurrentOffenderDetailsResponse, csra: 'Standard' })
+    elite2Api.getLocation
+      .mockResolvedValueOnce(cellLocationData)
+      .mockResolvedValueOnce(parentLocationData)
+      .mockResolvedValueOnce(superParentLocationData)
+    elite2Api.getInmatesAtLocation.mockResolvedValue([])
+    await controller.index(req, res)
+
+    expect(res.render).toHaveBeenCalledWith(
+      'cellMove/moveValidation.njk',
+      expect.objectContaining({
+        csraWarningMessage: false,
+        currentOffenderActiveAlerts: false,
+        currentOccupantsActiveAlerts: [],
+      })
+    )
+  })
+
   it('Redirects when form has been triggered with no data', async () => {
     elite2Api.getDetails
       .mockResolvedValueOnce(getCurrentOffenderDetailsResponse)
