@@ -22,14 +22,14 @@ module.exports = ({ elite2Api, logError }) => async (req, res) => {
 
     return res.render('cellMove/offenderDetails.njk', {
       prisonerName: putLastNameFirst(firstName, lastName),
-      cellLocation: assignedLivingUnit.description,
+      cellLocation: assignedLivingUnit.description || 'Not entered',
       offenderNo,
-      age,
-      religion,
-      ethnicity: ethnicity && raceCode && `${ethnicity} (${raceCode})`,
+      age: age || 'Not entered',
+      religion: religion || 'Not entered',
+      ethnicity: (ethnicity && raceCode && `${ethnicity} (${raceCode})`) || 'Not entered',
       sexualOrientation: getValueByType('SEXO', profileInformation, 'resultValue') || 'Not entered',
       smokerOrVaper: getValueByType('SMOKE', profileInformation, 'resultValue') || 'Not entered',
-      mainOffence: mainOffence && mainOffence[0] && mainOffence[0].offenceDescription,
+      mainOffence: (mainOffence && mainOffence[0] && mainOffence[0].offenceDescription) || 'Not entered',
       ...getBackLinkData(req.headers.referer, offenderNo),
       profileUrl: `/prisoner/${offenderNo}`,
     })

@@ -1,3 +1,4 @@
+const moment = require('moment')
 const prisonerCellHistory = require('../controllers/prisonerProfile/prisonerCellHistory')
 
 describe('Prisoner cell history', () => {
@@ -100,7 +101,7 @@ describe('Prisoner cell history', () => {
           currentLocation: {
             agencyId: 'MDI',
             assignmentDate: '2020-09-01',
-            assignmentEndDate: '2020-09-10',
+            assignmentEndDate: moment().format('YYYY-MM-DD'),
             establishment: 'Moorland',
             livingUnitId: 1,
             location: '1-02',

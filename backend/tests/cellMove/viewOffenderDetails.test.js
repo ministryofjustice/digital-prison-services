@@ -94,21 +94,28 @@ describe('view offender details', () => {
   })
 
   it('populates the data correctly when optional missing', async () => {
-    elite2Api.getDetails = jest.fn().mockResolvedValue({ ...getDetailsResponse, profileInformation: [] })
+    elite2Api.getDetails = jest.fn().mockResolvedValue({
+      ...getDetailsResponse,
+      profileInformation: [],
+      age: undefined,
+      physicalAttributes: {},
+      religion: undefined,
+    })
+    elite2Api.getMainOffence = jest.fn().mockResolvedValue([])
     await controller(req, res)
 
     expect(res.render).toHaveBeenCalledWith(
       'cellMove/offenderDetails.njk',
       expect.objectContaining({
         prisonerName: 'User, Test',
-        age: 21,
-        religion: 'Some religion',
+        age: 'Not entered',
+        religion: 'Not entered',
         offenderNo,
         cellLocation: 'A-1-12',
-        ethnicity: 'White (W1)',
+        ethnicity: 'Not entered',
         sexualOrientation: 'Not entered',
         smokerOrVaper: 'Not entered',
-        mainOffence: '13 hours over work',
+        mainOffence: 'Not entered',
         backLink: `/prisoner/${offenderNo}/cell-move/select-location`,
         backLinkText: 'Return to select a location',
         profileUrl: `/prisoner/${offenderNo}`,
