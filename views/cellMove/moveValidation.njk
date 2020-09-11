@@ -68,11 +68,11 @@
 {% endmacro %}
 
 {% macro alertDetails(alert) %}
-  <p class="govuk-body" data-test="alert-details"> {{ alert.subTitle | safe}}</p>
   {% if alert.comment %}
-    <p class="govuk-body" data-test="alert-comment"> {{ alert.comment | safe }}</p>
+    <p class="govuk-body" data-test="alert-details">{{ alert.subTitle | safe}}</p>
+    <p class="govuk-body" data-test="alert-comment">{{ alert.comment | safe }}</p>
   {% endif %}
-  <p class="govuk-body" data-test="alert-date"> {{ alert.date}} </p>
+  <p class="govuk-body" data-test="alert-date">{{ alert.date}}</p>
 {% endmacro %}
 
 {% block content %}
@@ -121,6 +121,9 @@ C13.7,13.2,13.2,13.7,12.5,13.7z M12.5,0.5c-6.6,0-12,5.4-12,12s5.4,12,12,12s12-5.
           }) }}
           </li>
         {% endfor %}
+        {% if categoryWarning %}
+          <li class="govuk-body" data-test="category-warning">who is a Cat A prisoner into a cell with another prisoner</li>
+        {% endif %}
         {% for alert in currentOccupantsActiveAlerts %}
           <li class="govuk-body" data-test="occupant-alert-message"> {{ alert.title }}
           {{ govukInsetText({
