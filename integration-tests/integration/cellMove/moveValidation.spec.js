@@ -19,6 +19,7 @@ context('A user can see conflicts in cell', () => {
         lastName: 'User',
         csra: 'High',
         agencyId: 'MDI',
+        categoryCode: 'A',
         assessments: [],
         assignedLivingUnit: {},
         alerts: [
@@ -31,6 +32,24 @@ context('A user can see conflicts in cell', () => {
             alertId: 1,
             alertType: 'X',
             alertTypeDescription: 'Risk to LGB',
+            bookingId: 14,
+            comment: 'has a large poster on cell wall',
+            dateCreated: '2019-08-20',
+            dateExpires: null,
+            expired: false,
+            expiredByFirstName: 'John',
+            expiredByLastName: 'Smith',
+            offenderNo,
+          },
+          {
+            active: true,
+            addedByFirstName: 'John',
+            addedByLastName: 'Smith',
+            alertCode: 'XEL',
+            alertCodeDescription: 'E-List',
+            alertId: 1,
+            alertType: 'X',
+            alertTypeDescription: 'Security',
             bookingId: 14,
             comment: 'has a large poster on cell wall',
             dateCreated: '2019-08-20',
@@ -216,13 +235,15 @@ context('A user can see conflicts in cell', () => {
     page.offenderAlertMessages().then($messages => {
       cy.get($messages)
         .its('length')
-        .should('eq', 3)
+        .should('eq', 4)
       expect($messages.get(0)).to.contain(
         'who has a Risk to LGB alert into a cell with a prisoner who has a sexual orientation of Homosexual'
       )
-      expect($messages.get(1)).to.contain('who has a Gang member alert into a cell with another prisoner')
-      expect($messages.get(2)).to.contain('who has an Isolated Prisoner alert into a cell with another prisoner')
+      expect($messages.get(1)).to.contain('who is an E-List prisoner into a cell with another prisoner')
+      expect($messages.get(2)).to.contain('who has a Gang member alert into a cell with another prisoner')
+      expect($messages.get(3)).to.contain('who has an Isolated Prisoner alert into a cell with another prisoner')
     })
+    page.categoryWarning().contains('who is a Cat A prisoner into a cell with another prisoner')
     page.occupantAlertMessages().then($messages => {
       cy.get($messages)
         .its('length')
@@ -235,7 +256,7 @@ context('A user can see conflicts in cell', () => {
         .its('length')
         .should('eq', 5)
       expect($messages.get(0)).to.contain('The details of Test User’s alert are')
-      expect($messages.get(1)).to.contain(' ')
+      expect($messages.get(1)).to.contain('The details of Test User’s alert are')
       expect($messages.get(2)).to.contain('The details of Test User’s alert are')
       expect($messages.get(3)).to.contain('The details of Occupant User’s alert are')
       expect($messages.get(4)).to.contain('The details of Occupant User’s alert are')
@@ -243,21 +264,23 @@ context('A user can see conflicts in cell', () => {
     page.alertsComments().then($messages => {
       cy.get($messages)
         .its('length')
-        .should('eq', 4)
+        .should('eq', 5)
       expect($messages.get(0)).to.contain('has a large poster on cell wall')
-      expect($messages.get(1)).to.contain('test')
-      expect($messages.get(2)).to.contain('has a large poster on cell wall')
-      expect($messages.get(3)).to.contain('test')
+      expect($messages.get(1)).to.contain('has a large poster on cell wall')
+      expect($messages.get(2)).to.contain('test')
+      expect($messages.get(3)).to.contain('has a large poster on cell wall')
+      expect($messages.get(4)).to.contain('test')
     })
     page.alertsDates().then($dates => {
       cy.get($dates)
         .its('length')
-        .should('eq', 5)
+        .should('eq', 6)
       expect($dates.get(0)).to.contain('Date added: 20 August 2019')
       expect($dates.get(1)).to.contain('Date added: 20 August 2019')
-      expect($dates.get(2)).to.contain('Date added: 20 August 2020')
-      expect($dates.get(3)).to.contain('Date added: 20 August 2019')
-      expect($dates.get(4)).to.contain('Date added: 20 August 2020')
+      expect($dates.get(2)).to.contain('Date added: 20 August 2019')
+      expect($dates.get(3)).to.contain('Date added: 20 August 2020')
+      expect($dates.get(4)).to.contain('Date added: 20 August 2019')
+      expect($dates.get(5)).to.contain('Date added: 20 August 2020')
     })
   })
 

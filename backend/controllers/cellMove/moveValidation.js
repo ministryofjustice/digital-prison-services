@@ -8,40 +8,69 @@ const {
 const getValueByType = require('../../shared/getValueByType')
 
 const moveValidationFactory = ({ elite2Api, logError }) => {
+  const getOccupantsDetails = async (context, offenders) => {
+    return Promise.all(offenders.map(offender => elite2Api.getDetails(context, offender, true)))
+  }
+
+  const getCellSharingRiskAssessmentMessage = (offender, currentOccupants) => {
+    const occupantsCsraValues = currentOccupants
+      .filter(currentOccupant => currentOccupant.csra)
+      .map(currentOccupant => currentOccupant.csra)
+    if (offender.csra && offender.csra === 'High' && occupantsCsraValues.includes('High')) {
+      return 'who is CSRA high into a cell with a prisoner who is CSRA high'
+    }
+
+    if (offender.csra && offender.csra === 'High' && !occupantsCsraValues.includes('High')) {
+      return 'who is CSRA high into a cell with a prisoner who is CSRA standard'
+    }
+
+    if (offender.csra && offender.csra === 'Standard' && occupantsCsraValues.includes('High')) {
+      return 'who is CSRA standard into a cell with a prisoner who is CSRA high'
+    }
+
+    return null
+  }
+
+  const getCurrentOffenderAlertTitle = (alert, sexualities) => {
+    const sexualitiesString = sexualities
+      .filter(sexuality => sexuality && !sexuality.toLowerCase().includes('hetero'))
+      .join(', ')
+    if (
+      alert.alertCode === 'RLG' &&
+      sexualities.some(sexuality => sexuality && !sexuality.toLowerCase().includes('hetero'))
+    ) {
+      return `who has ${indefiniteArticle(alert.alertCodeDescription)} ${
+        alert.alertCodeDescription
+      } alert into a cell with a prisoner who has a sexual orientation of ${sexualitiesString}`
+    }
+
+    if (alert.alertCode === 'XEL') return 'who is an E-List prisoner into a cell with another prisoner'
+
+    return `who has ${indefiniteArticle(alert.alertCodeDescription)} ${
+      alert.alertCodeDescription
+    } alert into a cell with another prisoner`
+  }
+
+  const getOffenderAlertBody = (alert, title, firstName, lastName) => {
+    return {
+      subTitle: alert.comment && `The details of ${formatName(firstName, lastName)}${possessive(lastName)} alert are`,
+      title,
+      comment: alert.comment,
+      date: `Date added: ${moment(alert.dateCreated, 'YYYY-MM-DD').format('D MMMM YYYY')}`,
+    }
+  }
+
   const renderTemplate = async (req, res, pageData) => {
     const { offenderNo } = req.params
     const { cellId } = req.query
     const { errors } = pageData || {}
-
-    const getOccupantsDetails = async offenders => {
-      return Promise.all(offenders.map(offender => elite2Api.getDetails(res.locals, offender, true)))
-    }
-
-    const getCellSharingRiskAssessmentMessage = (offender, currentOccupants) => {
-      const occupantsCsraValues = currentOccupants
-        .filter(currentOccupant => currentOccupant.csra)
-        .map(currentOccupant => currentOccupant.csra)
-      if (offender.csra && offender.csra === 'High' && occupantsCsraValues.includes('High')) {
-        return 'who is CSRA high into a cell with a prisoner who is CSRA high'
-      }
-
-      if (offender.csra && offender.csra === 'High' && !occupantsCsraValues.includes('High')) {
-        return 'who is CSRA high into a cell with a prisoner who is CSRA standard'
-      }
-
-      if (offender.csra && offender.csra === 'Standard' && occupantsCsraValues.includes('High')) {
-        return 'who is CSRA standard into a cell with a prisoner who is CSRA high'
-      }
-
-      return null
-    }
 
     try {
       const currentOffenderDetails = await elite2Api.getDetails(res.locals, offenderNo, true)
 
       const occupants = await elite2Api.getInmatesAtLocation(res.locals, cellId, {})
       const currentOccupantsOffenderNos = occupants.map(occupant => occupant.offenderNo)
-      const currentOccupantsDetails = occupants && (await getOccupantsDetails(currentOccupantsOffenderNos))
+      const currentOccupantsDetails = occupants && (await getOccupantsDetails(res.locals, currentOccupantsOffenderNos))
 
       // Get the residential unit level prefix for the selected cell by traversing up the
       // parent location tree
@@ -79,7 +108,9 @@ const moveValidationFactory = ({ elite2Api, logError }) => {
           }))
 
       // Get Cell Sharing Risk Assessment warnings of any
-      const csraWarningMessage = getCellSharingRiskAssessmentMessage(currentOffenderDetails, currentOccupantsDetails)
+      const csraWarningMessage =
+        currentOccupantsDetails.length > 0 &&
+        getCellSharingRiskAssessmentMessage(currentOffenderDetails, currentOccupantsDetails)
 
       // Get a list of sexualities involved
       const currentOffenderSexuality = getValueByType('SEXO', currentOffenderDetails.profileInformation, 'resultValue')
@@ -92,33 +123,14 @@ const moveValidationFactory = ({ elite2Api, logError }) => {
       ]
 
       // Get the list of relevant offender alerts
-      const currentOffenderActiveAlerts = currentOffenderDetails.alerts
-        .filter(alert => !alert.expired && cellMoveAlertCodes.includes(alert.alertCode))
-        .map(alert => {
-          const sexualitiesString = currentOccupantsSexualities
-            .filter(sexuality => sexuality && !sexuality.toLowerCase().includes('hetero'))
-            .join(', ')
-          const title =
-            alert.alertCode === 'RLG' &&
-            currentOccupantsSexualities.some(sexuality => sexuality && !sexuality.toLowerCase().includes('hetero'))
-              ? `who has ${indefiniteArticle(alert.alertCodeDescription)} ${
-                  alert.alertCodeDescription
-                } alert into a cell with a prisoner who has a sexual orientation of ${sexualitiesString}`
-              : `who has ${indefiniteArticle(alert.alertCodeDescription)} ${
-                  alert.alertCodeDescription
-                } alert into a cell with another prisoner`
-          return {
-            subTitle:
-              alert.comment &&
-              `The details of ${formatName(
-                currentOffenderDetails.firstName,
-                currentOffenderDetails.lastName
-              )}${possessive(currentOffenderDetails.lastName)} alert are`,
-            title,
-            comment: alert.comment,
-            date: `Date added: ${moment(alert.dateCreated, 'YYYY-MM-DD').format('D MMMM YYYY')}`,
-          }
-        })
+      const currentOffenderActiveAlerts =
+        currentOccupantsDetails.length > 0 &&
+        currentOffenderDetails.alerts
+          .filter(alert => !alert.expired && cellMoveAlertCodes.includes(alert.alertCode))
+          .map(alert => {
+            const title = getCurrentOffenderAlertTitle(alert, currentOccupantsSexualities)
+            return getOffenderAlertBody(alert, title, currentOffenderDetails.firstName, currentOffenderDetails.lastName)
+          })
 
       // Get the list of relevant occupant alerts
       const currentOccupantsActiveAlerts = currentOccupantsDetails
@@ -135,19 +147,12 @@ const moveValidationFactory = ({ elite2Api, logError }) => {
                   : `into a cell with a prisoner who has ${indefiniteArticle(alert.alertCodeDescription)} ${
                       alert.alertCodeDescription
                     } alert`
-              return {
-                subTitle:
-                  alert.comment &&
-                  `The details of ${formatName(currentOccupant.firstName, currentOccupant.lastName)}${possessive(
-                    currentOccupant.lastName
-                  )} alert are`,
-                title,
-                comment: alert.comment,
-                date: `Date added: ${moment(alert.dateCreated, 'YYYY-MM-DD').format('D MMMM YYYY')}`,
-              }
+              return getOffenderAlertBody(alert, title, currentOccupant.firstName, currentOccupant.lastName)
             })
         )
         .flatMap(alert => alert)
+
+      const categoryWarning = currentOffenderDetails.categoryCode === 'A'
 
       return res.render('cellMove/moveValidation.njk', {
         offenderNo,
@@ -156,6 +161,7 @@ const moveValidationFactory = ({ elite2Api, logError }) => {
         nonAssociations,
         currentOffenderActiveAlerts,
         currentOccupantsActiveAlerts,
+        categoryWarning,
         errors,
         dpsUrl,
       })
