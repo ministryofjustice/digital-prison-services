@@ -38,6 +38,8 @@ context('A user can confirm the cell move', () => {
       .click()
 
     cy.task('verifyMoveToCell', { bookingId: 1234, locationPrefix: 'MDI-1' }).then(assertHasRequestCount(1))
+
+    cy.location('pathname').should('eq', '/prisoner/A12345/cell-move/confirmation')
   })
 
   it('should navigate back to select cell', () => {

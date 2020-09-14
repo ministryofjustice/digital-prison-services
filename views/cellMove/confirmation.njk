@@ -1,7 +1,43 @@
 {% extends "../partials/layout.njk" %}
+{% from "govuk/components/button/macro.njk" import govukButton %}
+{% from "govuk/components/panel/macro.njk" import govukPanel %}
 
-{% set title = "Things are confirmed" %}
+{% block beforeContent %}
+    {{ govukBreadcrumbs({
+        items: [
+            {
+                text: "Home",
+                href: dpsUrl
+            },
+            {
+                text: breadcrumbPrisonerName,
+                href: '/prisoner/' + offenderNo
+            },
+            {
+                text: 'Change Cell'
+            }
+        ]
+    }) }}
+{% endblock %}
 
 {% block content %}
-  <h1 class="govuk-heading-l">{{title}}</h1>
+    {{ govukPanel({
+        titleText: title,
+        classes: "govuk-!-margin-bottom-9"
+    }) }}
+
+    {{ govukButton({
+        text: "Return to prisoner's profile",
+        element: 'a',
+        href: prisonerProfileLink,
+        attributes: {
+            'data-test': 'back-to-profile'
+        }
+    }) }}
+
+  <div>
+    <p class="govuk-body govuk-!-margin-top-4">
+      <a class="govuk-link" href="{{ prisonerSearchLink }}" data-test="back-to-search">Select another prisoner</a>
+    </p>
+  </div>
 {% endblock %}
