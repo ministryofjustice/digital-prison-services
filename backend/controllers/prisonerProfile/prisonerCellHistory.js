@@ -39,7 +39,7 @@ module.exports = ({ elite2Api, logError, page = 0 }) => async (req, res) => {
     const occupants =
       (currentLocation && (await elite2Api.getInmatesAtLocation(res.locals, currentLocation.livingUnitId, {}))) || []
 
-    const today = moment().format('YYYY-MM-DD')
+    const today = moment().format('YYYY-MM-DDTHH:mm:ss')
 
     const cellData = cells
       .sort((left, right) => sortByDateTime(right.assignmentDateTime, left.assignmentDateTime))
@@ -51,8 +51,10 @@ module.exports = ({ elite2Api, logError, page = 0 }) => async (req, res) => {
           location: extractLocation(cell.description, cell.agencyId),
           movedIn: cell.assignmentDateTime && formatTimestampToDateTime(cell.assignmentDateTime),
           movedOut: cell.assignmentEndDateTime && formatTimestampToDateTime(cell.assignmentEndDateTime),
-          assignmentDate: cell.assignmentDate,
-          assignmentEndDate: cell.assignmentEndDate ? cell.assignmentEndDate : today,
+          assignmentDateTime: moment(cell.assignmentDateTime).format('YYYY-MM-DDTHH:mm:ss'),
+          assignmentEndDateTime: cell.assignmentEndDateTime
+            ? moment(cell.assignmentEndDateTime).format('YYYY-MM-DDTHH:mm:ss')
+            : today,
           livingUnitId: cell.livingUnitId,
           agencyId: cell.agencyId,
         }
@@ -67,8 +69,10 @@ module.exports = ({ elite2Api, logError, page = 0 }) => async (req, res) => {
           .description,
         location: extractLocation(currentLocation.description, currentLocation.agencyId),
         movedIn: currentLocation.assignmentDateTime && formatTimestampToDateTime(currentLocation.assignmentDateTime),
-        assignmentDate: currentLocation.assignmentDate,
-        assignmentEndDate: currentLocation.assignmentEndDate ? currentLocation.assignmentEndDate : today,
+        assignmentDateTime: moment(currentLocation.assignmentDateTime).format('YYYY-MM-DDTHH:mm:ss'),
+        assignmentEndDateTime: currentLocation.assignmentEndDateTime
+          ? moment(currentLocation.assignmentEndDate).format('YYYY-MM-DDTHH:mm:ss')
+          : today,
         livingUnitId: currentLocation.livingUnitId,
         agencyId: currentLocation.agencyId,
       },
