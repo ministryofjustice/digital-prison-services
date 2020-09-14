@@ -2,9 +2,9 @@ const { properCaseName, putLastNameFirst } = require('../../utils')
 
 module.exports = ({ elite2Api, logError }) => async (req, res) => {
   const { offenderNo } = req.params
-  const { cellId } = req.query
 
   try {
+    const { cellId } = req.query
     const { firstName, lastName } = await elite2Api.getDetails(res.locals, offenderNo)
     const { description } = await elite2Api.getLocation(res.locals, cellId)
 
