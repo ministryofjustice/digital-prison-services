@@ -35,6 +35,8 @@ describe('Cell move confirmation', () => {
       title: 'Bob Doe has been moved to cell A-1-012',
       breadcrumbPrisonerName: `Doe, Bob`,
       offenderNo: 'A12345',
+      prisonerProfileLink: '/prisoner/A12345',
+      prisonerSearchLink: '/prisoner-search',
     })
   })
 
