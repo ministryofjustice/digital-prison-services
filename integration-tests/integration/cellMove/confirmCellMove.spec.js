@@ -47,4 +47,4 @@ context('A user can confirm the cell move', () => {
 
     cy.location('pathname').should('eq', '/prisoner/A12345/cell-move/select-cell')
   })
-})con
+})
