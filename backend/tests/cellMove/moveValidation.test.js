@@ -482,7 +482,7 @@ describe('move validation', () => {
     req.body = { confirmation: 'yes' }
     await controller.post(req, res)
 
-    expect(res.redirect).toHaveBeenCalledWith(`/prisoner/${offenderNo}/cell-move/confirmation?cellId=1`)
+    expect(res.redirect).toHaveBeenCalledWith(`/prisoner/${offenderNo}/cell-move/confirm-cell-move?cellId=1`)
   })
 
   it('Redirects when the user has changed their mind', async () => {
@@ -498,5 +498,19 @@ describe('move validation', () => {
     await controller.post(req, res)
 
     expect(res.redirect).toHaveBeenCalledWith(`/prisoner/${offenderNo}/cell-move/select-cell`)
+  })
+
+  it('Redirects to confirm cell move when there are no warnings', async () => {
+    elite2Api.getNonAssociations = jest.fn().mockResolvedValue({})
+    elite2Api.getDetails = jest.fn().mockResolvedValue({ firstName: 'Bob', lastName: 'Doe' })
+    elite2Api.getLocation
+      .mockResolvedValueOnce(cellLocationData)
+      .mockResolvedValueOnce(parentLocationData)
+      .mockResolvedValueOnce(superParentLocationData)
+    elite2Api.getInmatesAtLocation.mockResolvedValue([])
+
+    await controller.index(req, res)
+
+    expect(res.redirect).toHaveBeenCalledWith('/prisoner/ABC123/cell-move/confirm-cell-move?cellId=1')
   })
 })

@@ -1,7 +1,7 @@
 const moment = require('moment')
 const { serviceUnavailableMessage } = require('../../common-messages')
 const { cellMoveAlertCodes } = require('../../shared/alertFlagValues')
-const { putLastNameFirst, formatName, possessive, indefiniteArticle } = require('../../utils')
+const { putLastNameFirst, formatName, possessive, indefiniteArticle, hasLength } = require('../../utils')
 const {
   app: { notmEndpointUrl: dpsUrl },
 } = require('../../config')
@@ -154,6 +154,16 @@ const moveValidationFactory = ({ elite2Api, logError }) => {
 
       const categoryWarning = currentOffenderDetails.categoryCode === 'A'
 
+      if (
+        !categoryWarning &&
+        !hasLength(nonAssociations) &&
+        !hasLength(currentOccupantsActiveAlerts) &&
+        !hasLength(currentOccupantsActiveAlerts) &&
+        !csraWarningMessage
+      ) {
+        return res.redirect(`/prisoner/${offenderNo}/cell-move/confirm-cell-move?cellId=${cellId}`)
+      }
+
       return res.render('cellMove/moveValidation.njk', {
         offenderNo,
         offenderName: `${formatName(currentOffenderDetails.firstName, currentOffenderDetails.lastName)}`,
@@ -194,7 +204,7 @@ const moveValidationFactory = ({ elite2Api, logError }) => {
     }
 
     if (confirmation === 'yes') {
-      return res.redirect(`/prisoner/${offenderNo}/cell-move/confirmation?cellId=${cellId}`)
+      return res.redirect(`/prisoner/${offenderNo}/cell-move/confirm-cell-move?cellId=${cellId}`)
     }
 
     return res.redirect(`/prisoner/${offenderNo}/cell-move/select-cell`)
