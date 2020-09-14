@@ -1,0 +1,46 @@
+{% extends "../partials/layout.njk" %}
+{% from "govuk/components/button/macro.njk" import govukButton %}
+{% from "govuk/components/inset-text/macro.njk" import govukInsetText %}
+
+
+{% set title = "Change cell" %}
+
+{% block beforeContent %}
+    {{ govukBreadcrumbs({
+        items: [
+            {
+                text: "Home",
+                href: dpsUrl
+            },
+            {
+                text: breadcrumbPrisonerName,
+                href: '/prisoner/' + offenderNo
+            },
+            {
+                text: 'Change cell'
+            }
+        ]
+    }) }}
+{% endblock %}
+
+{% block content %}
+    <div class="govuk-grid-row govuk-!-margin-bottom-6">
+        <h1  class="govuk-heading-l">
+            You are moving {{ name }} to cell {{ description }}
+        </h1>
+        {{ govukInsetText({
+            text: "You must have checked any local processes for non-associations."
+        }) }}
+        <div class="govuk-grid-column-full">
+            <form method="POST">
+                <input type="hidden" name="cellId" value="{{ cellId }}"/>
+                {{ govukButton({ text: "Confirm move", type: "submit" }) }}
+            </form>
+
+            <a href="{{ selectCellUrl }}" class="govuk-link" data-qa="back-to-select-cell">Select another cell</a>
+        </div>
+    </div>
+
+
+{% endblock %}
+

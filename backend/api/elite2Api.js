@@ -342,8 +342,11 @@ const elite2ApiFactory = client => {
   const getHistoryForLocation = (context, { locationId, fromDate, toDate }) =>
     get(context, `/api/cell/${locationId}/history?fromDate=${fromDate}&toDate=${toDate}`)
 
-  const moveToCell = (context, { bookingId, internalLocationDescription }) =>
-    put(`/api/bookings/${bookingId}/living-unit/${internalLocationDescription}`)
+  const moveToCell = (context, { bookingId, internalLocationDescription, reasonCode }) =>
+    put(
+      context,
+      `/api/bookings/${bookingId}/living-unit/${internalLocationDescription}?reasonCode=${reasonCode || 'ADM'}`
+    )
 
   return {
     userLocations,

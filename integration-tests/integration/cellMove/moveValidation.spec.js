@@ -1,17 +1,10 @@
 const MoveValidationPage = require('../../pages/cellMove/moveValidationPage')
+const ConfirmCellMovePage = require('../../pages/cellMove/confirmCellMovePage')
 
 const offenderNo = 'A1234A'
 
 context('A user can see conflicts in cell', () => {
-  before(() => {
-    cy.clearCookies()
-    cy.task('reset')
-    cy.task('stubLogin', { username: 'ITAG_USER', caseload: 'MDI' })
-    cy.login()
-  })
-  beforeEach(() => {
-    Cypress.Cookies.preserveOnce('hmpps-session-dev')
-    cy.task('resetAndStubTokenVerification')
+  const stubPrisonDetails = () => {
     cy.task('stubPrisonerFullDetail', {
       prisonerDetail: {
         bookingId: 1234,
@@ -159,6 +152,16 @@ context('A user can see conflicts in cell', () => {
       },
       offenderNo: 'A12345',
     })
+  }
+  before(() => {
+    cy.clearCookies()
+    cy.task('reset')
+    cy.task('stubLogin', { username: 'ITAG_USER', caseload: 'MDI' })
+    cy.login()
+  })
+  beforeEach(() => {
+    Cypress.Cookies.preserveOnce('hmpps-session-dev')
+    cy.task('resetAndStubTokenVerification')
     cy.task('stubInmatesAtLocation', {
       inmates: [{ offenderNo: 'A12345', firstName: 'Bob', lastName: 'Doe', assignedLivingUnitId: 1 }],
     })
@@ -189,12 +192,13 @@ context('A user can see conflicts in cell', () => {
         },
       ],
     })
-    cy.task('stubLocation', { locationId: 1, locationData: { parentLocationId: 2 } })
+    cy.task('stubLocation', { locationId: 1, locationData: { parentLocationId: 2, description: 'MDI-1-1' } })
     cy.task('stubLocation', { locationId: 2, locationData: { parentLocationId: 3 } })
     cy.task('stubLocation', { locationId: 3, locationData: { locationPrefix: 'MDI-1' } })
   })
 
   it('should load with correct data', () => {
+    stubPrisonDetails()
     const page = MoveValidationPage.goTo(offenderNo, 1)
     page.nonAssociationsTitle().contains('Test User has non-associations')
     page.nonAssociationsSubTitle().contains('There is a non-association with a prisoner in this location')
@@ -285,6 +289,7 @@ context('A user can see conflicts in cell', () => {
   })
 
   it('should show error when nothing is selected', () => {
+    stubPrisonDetails()
     const page = MoveValidationPage.goTo(offenderNo, 1)
     page
       .form()
@@ -294,6 +299,7 @@ context('A user can see conflicts in cell', () => {
   })
 
   it('should redirect to select cell if no is selected', () => {
+    stubPrisonDetails()
     const page = MoveValidationPage.goTo(offenderNo, 1)
     page
       .form()
@@ -304,5 +310,42 @@ context('A user can see conflicts in cell', () => {
       .submitButton()
       .click()
     cy.url().should('include', '/select-cell')
+  })
+
+  it('should redirect to confirm cell move on continue', () => {
+    stubPrisonDetails()
+    const page = MoveValidationPage.goTo(offenderNo, 1)
+
+    cy.task('stubBookingDetails', { firstName: 'Bob', lastName: 'Doe' })
+    cy.task('stubLocation', { locationId: 1, locationDetails: { description: 'MDI-1-1' } })
+
+    page
+      .form()
+      .confirmationYes()
+      .click()
+
+    page
+      .form()
+      .submitButton()
+      .click()
+
+    ConfirmCellMovePage.verifyOnPage('Bob Doe', 'HB1')
+  })
+  it('should redirect to confirm cell when there are no warnings', () => {
+    cy.task('stubInmatesAtLocation', {
+      inmates: [],
+    })
+    cy.task('stubBookingNonAssociations', {})
+
+    cy.task('stubBookingDetails', {
+      firstName: 'Bob',
+      lastName: 'Doe',
+      offenderNo,
+      bookingId: 1234,
+    })
+
+    cy.visit(`/prisoner/${offenderNo}/cell-move/move-validation?cellId=1`)
+
+    ConfirmCellMovePage.verifyOnPage('Bob Doe', 'MDI-1-1')
   })
 })
