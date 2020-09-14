@@ -3,7 +3,6 @@ $(document).ready(function () {
     $('#location').change(function (e) {
         const locationId = e.target.value
 
-        console.error({locationId})
         if (locationId) {
             $.ajax({
                 headers: {
