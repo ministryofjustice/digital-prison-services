@@ -1,4 +1,4 @@
-const { stubFor, postFor } = require('./wiremock')
+const { stubFor, postFor, verifyPut } = require('./wiremock')
 const alertTypes = require('./responses/alertTypes')
 const cellAttributes = require('./responses/cellAttributes')
 const assessmentsResponse = require('./responses/assessmentsResponse')
@@ -432,11 +432,11 @@ module.exports = {
       },
     })
   },
-  stubPrisonerFullDetail: (prisonerDetail, offenderNo) => {
+  stubPrisonerFullDetail: (prisonerDetail, offenderNo, fullInfo = true) => {
     return stubFor({
       request: {
         method: 'GET',
-        url: `/api/bookings/offenderNo/${offenderNo}?fullInfo=true`,
+        url: `/api/bookings/offenderNo/${offenderNo}?fullInfo=${fullInfo}`,
       },
       response: {
         status: 200,
@@ -1424,4 +1424,20 @@ module.exports = {
         jsonBody: locationAttributes || {},
       },
     }),
+  stubMoveToCell: () =>
+    stubFor({
+      request: {
+        method: 'PUT',
+        urlPathPattern: '/api/bookings/[0-9]+?/living-unit/.+?',
+      },
+      response: {
+        status: 200,
+        headers: {
+          'Content-Type': 'application/json;charset=UTF-8',
+        },
+        jsonBody: {},
+      },
+    }),
+  verifyMoveToCell: ({ bookingId, locationPrefix }) =>
+    verifyPut(`/api/bookings/${bookingId}/living-unit/${locationPrefix}?reasonCode=ADM`),
 }
