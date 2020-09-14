@@ -83,8 +83,8 @@ describe('Prisoner cell history', () => {
           cellData: [
             {
               agencyId: 'RNI',
-              assignmentDate: '2020-08-01',
-              assignmentEndDate: '2020-09-01',
+              assignmentDateTime: '2020-08-01T12:48:33',
+              assignmentEndDateTime: '2020-09-01T12:48:33',
               establishment: 'Ranby',
               livingUnitId: 3,
               location: '1-03',
@@ -100,8 +100,8 @@ describe('Prisoner cell history', () => {
           ],
           currentLocation: {
             agencyId: 'MDI',
-            assignmentDate: '2020-09-01',
-            assignmentEndDate: moment().format('YYYY-MM-DD'),
+            assignmentDateTime: '2020-09-01T12:48:33',
+            assignmentEndDateTime: moment().format('YYYY-MM-DDTHH:mm:ss'),
             establishment: 'Moorland',
             livingUnitId: 1,
             location: '1-02',
