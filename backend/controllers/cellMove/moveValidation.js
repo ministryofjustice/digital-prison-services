@@ -210,11 +210,7 @@ const moveValidationFactory = ({ elite2Api, logError }) => {
     return res.redirect(`/prisoner/${offenderNo}/cell-move/select-cell`)
   }
 
-  const confirm = async (req, res) => {
-    return res.render('cellMove/confirmation.njk')
-  }
-
-  return { index, post, confirm }
+  return { index, post }
 }
 
 module.exports = {

@@ -1,4 +1,5 @@
 const express = require('express')
+
 const selectLocationController = require('../controllers/cellMove/selectLocation')
 const selectCellController = require('../controllers/cellMove/selectCell')
 const nonAssociationsController = require('../controllers/cellMove/viewNonAssociations')
@@ -6,15 +7,12 @@ const offenderDetailsController = require('../controllers/cellMove/viewOffenderD
 const cellSharingRiskAssessmentController = require('../controllers/cellMove/viewCellSharingAssessmentDetails')
 const { moveValidationFactory } = require('../controllers/cellMove/moveValidation')
 const confirmCellMoveController = require('../controllers/cellMove/confirmCellMove')
+const cellMoveConfirmationController = require('../controllers/cellMove/cellMoveConfirmation')
 
 const router = express.Router({ mergeParams: true })
 
 const controller = ({ elite2Api, whereaboutsApi, logError }) => {
-  const {
-    index: moveValidationIndex,
-    post: moveValidationPost,
-    confirm: moveValidationConfirmation,
-  } = moveValidationFactory({ elite2Api, logError })
+  const { index: moveValidationIndex, post: moveValidationPost } = moveValidationFactory({ elite2Api, logError })
 
   const { index: confirmCellMoveIndex, post: confirmCellMovePost } = confirmCellMoveController({ elite2Api, logError })
 
@@ -27,7 +25,7 @@ const controller = ({ elite2Api, whereaboutsApi, logError }) => {
   router.post('/confirm-cell-move', confirmCellMovePost)
   router.get('/move-validation', moveValidationIndex)
   router.post('/move-validation', moveValidationPost)
-  router.get('/confirmation', moveValidationConfirmation)
+  router.get('/confirmation', cellMoveConfirmationController({ elite2Api, logError }))
 
   return router
 }
