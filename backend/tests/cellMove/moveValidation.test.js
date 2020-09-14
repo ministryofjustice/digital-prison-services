@@ -32,6 +32,7 @@ describe('move validation', () => {
     lastName: 'User',
     csra: 'High',
     agencyId: 'MDI',
+    categoryCode: 'A',
     assessments: [],
     assignedLivingUnit: {},
     alerts: [
@@ -44,6 +45,24 @@ describe('move validation', () => {
         alertId: 1,
         alertType: 'X',
         alertTypeDescription: 'Risk to LGB',
+        bookingId: 14,
+        comment: 'has a large poster on cell wall',
+        dateCreated: '2019-08-20',
+        dateExpires: null,
+        expired: false,
+        expiredByFirstName: 'John',
+        expiredByLastName: 'Smith',
+        offenderNo,
+      },
+      {
+        active: true,
+        addedByFirstName: 'John',
+        addedByLastName: 'Smith',
+        alertCode: 'XEL',
+        alertCodeDescription: 'E-List',
+        alertId: 1,
+        alertType: 'X',
+        alertTypeDescription: 'Security',
         bookingId: 14,
         comment: 'has a large poster on cell wall',
         dateCreated: '2019-08-20',
@@ -293,6 +312,7 @@ describe('move validation', () => {
         offenderName: 'Test User',
         offenderNo,
         csraWarningMessage: 'who is CSRA high into a cell with a prisoner who is CSRA high',
+        categoryWarning: true,
         nonAssociations: [
           {
             name: 'Bloggs, Jim',
@@ -309,6 +329,12 @@ describe('move validation', () => {
             date: 'Date added: 20 August 2019',
             subTitle: 'The details of Test User&rsquo;s alert are',
             title: 'who has a Risk to LGB alert into a cell with a prisoner who has a sexual orientation of Homosexual',
+          },
+          {
+            comment: 'has a large poster on cell wall',
+            date: 'Date added: 20 August 2019',
+            subTitle: 'The details of Test User&rsquo;s alert are',
+            title: 'who is an E-List prisoner into a cell with another prisoner',
           },
           {
             comment: 'has a large poster on cell wall',
@@ -367,6 +393,12 @@ describe('move validation', () => {
             comment: 'has a large poster on cell wall',
             date: 'Date added: 20 August 2019',
             subTitle: 'The details of Test User&rsquo;s alert are',
+            title: 'who is an E-List prisoner into a cell with another prisoner',
+          },
+          {
+            comment: 'has a large poster on cell wall',
+            date: 'Date added: 20 August 2019',
+            subTitle: 'The details of Test User&rsquo;s alert are',
             title: 'who has a Gang member alert into a cell with another prisoner',
           },
           {
@@ -395,6 +427,25 @@ describe('move validation', () => {
       'cellMove/moveValidation.njk',
       expect.objectContaining({
         csraWarningMessage: null,
+      })
+    )
+  })
+
+  it('Does not pass alerts and CSRA when there are no occupants', async () => {
+    elite2Api.getDetails.mockResolvedValueOnce({ ...getCurrentOffenderDetailsResponse, csra: 'Standard' })
+    elite2Api.getLocation
+      .mockResolvedValueOnce(cellLocationData)
+      .mockResolvedValueOnce(parentLocationData)
+      .mockResolvedValueOnce(superParentLocationData)
+    elite2Api.getInmatesAtLocation.mockResolvedValue([])
+    await controller.index(req, res)
+
+    expect(res.render).toHaveBeenCalledWith(
+      'cellMove/moveValidation.njk',
+      expect.objectContaining({
+        csraWarningMessage: false,
+        currentOffenderActiveAlerts: false,
+        currentOccupantsActiveAlerts: [],
       })
     )
   })
