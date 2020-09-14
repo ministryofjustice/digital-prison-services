@@ -102,7 +102,6 @@ exports[`Adjudication History Form should render correctly 1`] = `
                     className="sc-jTzLTM iTXUSb form-control"
                     name="fromDate"
                     onChange={[Function]}
-                    onClick={[Function]}
                     onFocus={[Function]}
                     onKeyDown={[Function]}
                     placeholder=""
@@ -188,49 +187,63 @@ exports[`Adjudication History Form should render correctly 1`] = `
                       <tr>
                         <td
                           className="rdtDay rdtOld"
+                          data-month={1}
                           data-value={27}
+                          data-year={2017}
                           onClick={[Function]}
                         >
                           27
                         </td>
                         <td
                           className="rdtDay rdtOld"
+                          data-month={1}
                           data-value={28}
+                          data-year={2017}
                           onClick={[Function]}
                         >
                           28
                         </td>
                         <td
                           className="rdtDay"
+                          data-month={2}
                           data-value={1}
+                          data-year={2017}
                           onClick={[Function]}
                         >
                           1
                         </td>
                         <td
                           className="rdtDay"
+                          data-month={2}
                           data-value={2}
+                          data-year={2017}
                           onClick={[Function]}
                         >
                           2
                         </td>
                         <td
                           className="rdtDay"
+                          data-month={2}
                           data-value={3}
+                          data-year={2017}
                           onClick={[Function]}
                         >
                           3
                         </td>
                         <td
                           className="rdtDay"
+                          data-month={2}
                           data-value={4}
+                          data-year={2017}
                           onClick={[Function]}
                         >
                           4
                         </td>
                         <td
                           className="rdtDay"
+                          data-month={2}
                           data-value={5}
+                          data-year={2017}
                           onClick={[Function]}
                         >
                           5
@@ -239,49 +252,63 @@ exports[`Adjudication History Form should render correctly 1`] = `
                       <tr>
                         <td
                           className="rdtDay"
+                          data-month={2}
                           data-value={6}
+                          data-year={2017}
                           onClick={[Function]}
                         >
                           6
                         </td>
                         <td
                           className="rdtDay"
+                          data-month={2}
                           data-value={7}
+                          data-year={2017}
                           onClick={[Function]}
                         >
                           7
                         </td>
                         <td
                           className="rdtDay"
+                          data-month={2}
                           data-value={8}
+                          data-year={2017}
                           onClick={[Function]}
                         >
                           8
                         </td>
                         <td
                           className="rdtDay"
+                          data-month={2}
                           data-value={9}
+                          data-year={2017}
                           onClick={[Function]}
                         >
                           9
                         </td>
                         <td
                           className="rdtDay"
+                          data-month={2}
                           data-value={10}
+                          data-year={2017}
                           onClick={[Function]}
                         >
                           10
                         </td>
                         <td
                           className="rdtDay"
+                          data-month={2}
                           data-value={11}
+                          data-year={2017}
                           onClick={[Function]}
                         >
                           11
                         </td>
                         <td
                           className="rdtDay"
+                          data-month={2}
                           data-value={12}
+                          data-year={2017}
                           onClick={[Function]}
                         >
                           12
@@ -290,49 +317,63 @@ exports[`Adjudication History Form should render correctly 1`] = `
                       <tr>
                         <td
                           className="rdtDay"
+                          data-month={2}
                           data-value={13}
+                          data-year={2017}
                           onClick={[Function]}
                         >
                           13
                         </td>
                         <td
                           className="rdtDay"
+                          data-month={2}
                           data-value={14}
+                          data-year={2017}
                           onClick={[Function]}
                         >
                           14
                         </td>
                         <td
                           className="rdtDay"
+                          data-month={2}
                           data-value={15}
+                          data-year={2017}
                           onClick={[Function]}
                         >
                           15
                         </td>
                         <td
                           className="rdtDay"
+                          data-month={2}
                           data-value={16}
+                          data-year={2017}
                           onClick={[Function]}
                         >
                           16
                         </td>
                         <td
                           className="rdtDay"
+                          data-month={2}
                           data-value={17}
+                          data-year={2017}
                           onClick={[Function]}
                         >
                           17
                         </td>
                         <td
                           className="rdtDay"
+                          data-month={2}
                           data-value={18}
+                          data-year={2017}
                           onClick={[Function]}
                         >
                           18
                         </td>
                         <td
                           className="rdtDay"
+                          data-month={2}
                           data-value={19}
+                          data-year={2017}
                           onClick={[Function]}
                         >
                           19
@@ -341,45 +382,59 @@ exports[`Adjudication History Form should render correctly 1`] = `
                       <tr>
                         <td
                           className="rdtDay"
+                          data-month={2}
                           data-value={20}
+                          data-year={2017}
                           onClick={[Function]}
                         >
                           20
                         </td>
                         <td
                           className="rdtDay"
+                          data-month={2}
                           data-value={21}
+                          data-year={2017}
                           onClick={[Function]}
                         >
                           21
                         </td>
                         <td
                           className="rdtDay rdtDisabled"
+                          data-month={2}
                           data-value={22}
+                          data-year={2017}
                         >
                           22
                         </td>
                         <td
                           className="rdtDay rdtDisabled"
+                          data-month={2}
                           data-value={23}
+                          data-year={2017}
                         >
                           23
                         </td>
                         <td
                           className="rdtDay rdtDisabled"
+                          data-month={2}
                           data-value={24}
+                          data-year={2017}
                         >
                           24
                         </td>
                         <td
                           className="rdtDay rdtDisabled"
+                          data-month={2}
                           data-value={25}
+                          data-year={2017}
                         >
                           25
                         </td>
                         <td
                           className="rdtDay rdtDisabled"
+                          data-month={2}
                           data-value={26}
+                          data-year={2017}
                         >
                           26
                         </td>
@@ -387,43 +442,57 @@ exports[`Adjudication History Form should render correctly 1`] = `
                       <tr>
                         <td
                           className="rdtDay rdtDisabled"
+                          data-month={2}
                           data-value={27}
+                          data-year={2017}
                         >
                           27
                         </td>
                         <td
                           className="rdtDay rdtDisabled"
+                          data-month={2}
                           data-value={28}
+                          data-year={2017}
                         >
                           28
                         </td>
                         <td
                           className="rdtDay rdtActive rdtDisabled"
+                          data-month={2}
                           data-value={29}
+                          data-year={2017}
                         >
                           29
                         </td>
                         <td
                           className="rdtDay rdtDisabled"
+                          data-month={2}
                           data-value={30}
+                          data-year={2017}
                         >
                           30
                         </td>
                         <td
                           className="rdtDay rdtDisabled"
+                          data-month={2}
                           data-value={31}
+                          data-year={2017}
                         >
                           31
                         </td>
                         <td
                           className="rdtDay rdtNew rdtDisabled"
+                          data-month={3}
                           data-value={1}
+                          data-year={2017}
                         >
                           1
                         </td>
                         <td
                           className="rdtDay rdtNew rdtDisabled"
+                          data-month={3}
                           data-value={2}
+                          data-year={2017}
                         >
                           2
                         </td>
@@ -431,43 +500,57 @@ exports[`Adjudication History Form should render correctly 1`] = `
                       <tr>
                         <td
                           className="rdtDay rdtNew rdtDisabled"
+                          data-month={3}
                           data-value={3}
+                          data-year={2017}
                         >
                           3
                         </td>
                         <td
                           className="rdtDay rdtNew rdtDisabled"
+                          data-month={3}
                           data-value={4}
+                          data-year={2017}
                         >
                           4
                         </td>
                         <td
                           className="rdtDay rdtNew rdtDisabled"
+                          data-month={3}
                           data-value={5}
+                          data-year={2017}
                         >
                           5
                         </td>
                         <td
                           className="rdtDay rdtNew rdtDisabled"
+                          data-month={3}
                           data-value={6}
+                          data-year={2017}
                         >
                           6
                         </td>
                         <td
                           className="rdtDay rdtNew rdtDisabled"
+                          data-month={3}
                           data-value={7}
+                          data-year={2017}
                         >
                           7
                         </td>
                         <td
                           className="rdtDay rdtNew rdtDisabled"
+                          data-month={3}
                           data-value={8}
+                          data-year={2017}
                         >
                           8
                         </td>
                         <td
                           className="rdtDay rdtNew rdtDisabled"
+                          data-month={3}
                           data-value={9}
+                          data-year={2017}
                         >
                           9
                         </td>
@@ -500,7 +583,6 @@ exports[`Adjudication History Form should render correctly 1`] = `
                     className="sc-jTzLTM iTXUSb form-control"
                     name="toDate"
                     onChange={[Function]}
-                    onClick={[Function]}
                     onFocus={[Function]}
                     onKeyDown={[Function]}
                     placeholder=""
@@ -586,49 +668,63 @@ exports[`Adjudication History Form should render correctly 1`] = `
                       <tr>
                         <td
                           className="rdtDay rdtOld"
+                          data-month={1}
                           data-value={27}
+                          data-year={2017}
                           onClick={[Function]}
                         >
                           27
                         </td>
                         <td
                           className="rdtDay rdtOld"
+                          data-month={1}
                           data-value={28}
+                          data-year={2017}
                           onClick={[Function]}
                         >
                           28
                         </td>
                         <td
                           className="rdtDay"
+                          data-month={2}
                           data-value={1}
+                          data-year={2017}
                           onClick={[Function]}
                         >
                           1
                         </td>
                         <td
                           className="rdtDay"
+                          data-month={2}
                           data-value={2}
+                          data-year={2017}
                           onClick={[Function]}
                         >
                           2
                         </td>
                         <td
                           className="rdtDay"
+                          data-month={2}
                           data-value={3}
+                          data-year={2017}
                           onClick={[Function]}
                         >
                           3
                         </td>
                         <td
                           className="rdtDay"
+                          data-month={2}
                           data-value={4}
+                          data-year={2017}
                           onClick={[Function]}
                         >
                           4
                         </td>
                         <td
                           className="rdtDay"
+                          data-month={2}
                           data-value={5}
+                          data-year={2017}
                           onClick={[Function]}
                         >
                           5
@@ -637,49 +733,63 @@ exports[`Adjudication History Form should render correctly 1`] = `
                       <tr>
                         <td
                           className="rdtDay"
+                          data-month={2}
                           data-value={6}
+                          data-year={2017}
                           onClick={[Function]}
                         >
                           6
                         </td>
                         <td
                           className="rdtDay"
+                          data-month={2}
                           data-value={7}
+                          data-year={2017}
                           onClick={[Function]}
                         >
                           7
                         </td>
                         <td
                           className="rdtDay"
+                          data-month={2}
                           data-value={8}
+                          data-year={2017}
                           onClick={[Function]}
                         >
                           8
                         </td>
                         <td
                           className="rdtDay"
+                          data-month={2}
                           data-value={9}
+                          data-year={2017}
                           onClick={[Function]}
                         >
                           9
                         </td>
                         <td
                           className="rdtDay"
+                          data-month={2}
                           data-value={10}
+                          data-year={2017}
                           onClick={[Function]}
                         >
                           10
                         </td>
                         <td
                           className="rdtDay"
+                          data-month={2}
                           data-value={11}
+                          data-year={2017}
                           onClick={[Function]}
                         >
                           11
                         </td>
                         <td
                           className="rdtDay"
+                          data-month={2}
                           data-value={12}
+                          data-year={2017}
                           onClick={[Function]}
                         >
                           12
@@ -688,49 +798,63 @@ exports[`Adjudication History Form should render correctly 1`] = `
                       <tr>
                         <td
                           className="rdtDay"
+                          data-month={2}
                           data-value={13}
+                          data-year={2017}
                           onClick={[Function]}
                         >
                           13
                         </td>
                         <td
                           className="rdtDay"
+                          data-month={2}
                           data-value={14}
+                          data-year={2017}
                           onClick={[Function]}
                         >
                           14
                         </td>
                         <td
                           className="rdtDay"
+                          data-month={2}
                           data-value={15}
+                          data-year={2017}
                           onClick={[Function]}
                         >
                           15
                         </td>
                         <td
                           className="rdtDay"
+                          data-month={2}
                           data-value={16}
+                          data-year={2017}
                           onClick={[Function]}
                         >
                           16
                         </td>
                         <td
                           className="rdtDay"
+                          data-month={2}
                           data-value={17}
+                          data-year={2017}
                           onClick={[Function]}
                         >
                           17
                         </td>
                         <td
                           className="rdtDay"
+                          data-month={2}
                           data-value={18}
+                          data-year={2017}
                           onClick={[Function]}
                         >
                           18
                         </td>
                         <td
                           className="rdtDay"
+                          data-month={2}
                           data-value={19}
+                          data-year={2017}
                           onClick={[Function]}
                         >
                           19
@@ -739,45 +863,59 @@ exports[`Adjudication History Form should render correctly 1`] = `
                       <tr>
                         <td
                           className="rdtDay"
+                          data-month={2}
                           data-value={20}
+                          data-year={2017}
                           onClick={[Function]}
                         >
                           20
                         </td>
                         <td
                           className="rdtDay"
+                          data-month={2}
                           data-value={21}
+                          data-year={2017}
                           onClick={[Function]}
                         >
                           21
                         </td>
                         <td
                           className="rdtDay rdtDisabled"
+                          data-month={2}
                           data-value={22}
+                          data-year={2017}
                         >
                           22
                         </td>
                         <td
                           className="rdtDay rdtDisabled"
+                          data-month={2}
                           data-value={23}
+                          data-year={2017}
                         >
                           23
                         </td>
                         <td
                           className="rdtDay rdtDisabled"
+                          data-month={2}
                           data-value={24}
+                          data-year={2017}
                         >
                           24
                         </td>
                         <td
                           className="rdtDay rdtDisabled"
+                          data-month={2}
                           data-value={25}
+                          data-year={2017}
                         >
                           25
                         </td>
                         <td
                           className="rdtDay rdtDisabled"
+                          data-month={2}
                           data-value={26}
+                          data-year={2017}
                         >
                           26
                         </td>
@@ -785,43 +923,57 @@ exports[`Adjudication History Form should render correctly 1`] = `
                       <tr>
                         <td
                           className="rdtDay rdtDisabled"
+                          data-month={2}
                           data-value={27}
+                          data-year={2017}
                         >
                           27
                         </td>
                         <td
                           className="rdtDay rdtDisabled"
+                          data-month={2}
                           data-value={28}
+                          data-year={2017}
                         >
                           28
                         </td>
                         <td
                           className="rdtDay rdtActive rdtDisabled"
+                          data-month={2}
                           data-value={29}
+                          data-year={2017}
                         >
                           29
                         </td>
                         <td
                           className="rdtDay rdtDisabled"
+                          data-month={2}
                           data-value={30}
+                          data-year={2017}
                         >
                           30
                         </td>
                         <td
                           className="rdtDay rdtDisabled"
+                          data-month={2}
                           data-value={31}
+                          data-year={2017}
                         >
                           31
                         </td>
                         <td
                           className="rdtDay rdtNew rdtDisabled"
+                          data-month={3}
                           data-value={1}
+                          data-year={2017}
                         >
                           1
                         </td>
                         <td
                           className="rdtDay rdtNew rdtDisabled"
+                          data-month={3}
                           data-value={2}
+                          data-year={2017}
                         >
                           2
                         </td>
@@ -829,43 +981,57 @@ exports[`Adjudication History Form should render correctly 1`] = `
                       <tr>
                         <td
                           className="rdtDay rdtNew rdtDisabled"
+                          data-month={3}
                           data-value={3}
+                          data-year={2017}
                         >
                           3
                         </td>
                         <td
                           className="rdtDay rdtNew rdtDisabled"
+                          data-month={3}
                           data-value={4}
+                          data-year={2017}
                         >
                           4
                         </td>
                         <td
                           className="rdtDay rdtNew rdtDisabled"
+                          data-month={3}
                           data-value={5}
+                          data-year={2017}
                         >
                           5
                         </td>
                         <td
                           className="rdtDay rdtNew rdtDisabled"
+                          data-month={3}
                           data-value={6}
+                          data-year={2017}
                         >
                           6
                         </td>
                         <td
                           className="rdtDay rdtNew rdtDisabled"
+                          data-month={3}
                           data-value={7}
+                          data-year={2017}
                         >
                           7
                         </td>
                         <td
                           className="rdtDay rdtNew rdtDisabled"
+                          data-month={3}
                           data-value={8}
+                          data-year={2017}
                         >
                           8
                         </td>
                         <td
                           className="rdtDay rdtNew rdtDisabled"
+                          data-month={3}
                           data-value={9}
+                          data-year={2017}
                         >
                           9
                         </td>
