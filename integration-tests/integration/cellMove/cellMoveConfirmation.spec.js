@@ -3,7 +3,7 @@ const cellConfirmationPage = require('../../pages/cellMove/cellMoveConfirmationP
 const offenderNo = 'A1234A'
 const cellId = 1
 
-context('A user can confirm the cell move', () => {
+context('A user get confirmation of a cell move', () => {
   before(() => {
     cy.clearCookies()
     cy.task('reset')
