@@ -64,9 +64,6 @@ const whereaboutsApiFactory = client => {
     return get(context, `/locations/cellsWithCapacity/${agencyId}/${groupName}${attributeQuery}`)
   }
 
-  const getLocationPrefix = (context, { agencyId, groupName }) =>
-    get(context, `/locations/${agencyId}/${groupName}/location-prefix`)
-
   return {
     getAttendance,
     getAttendanceForBookings,
@@ -85,7 +82,6 @@ const whereaboutsApiFactory = client => {
     getVideoLinkAppointments,
     getAttendanceChanges,
     getCellsWithCapacity,
-    getLocationPrefix,
   }
 }
 

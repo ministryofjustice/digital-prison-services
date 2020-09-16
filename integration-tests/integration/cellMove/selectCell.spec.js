@@ -77,13 +77,9 @@ context('A user can select a cell', () => {
       ],
     })
 
-    cy.task('stubGetLocationPrefix', {
-      agencyId: 'MDI',
-      groupName: '1',
-      response: {
-        locationPrefix: 'MDI-1',
-      },
-    })
+    cy.task('stubLocation', { locationId: 1, locationData: { parentLocationId: 2, description: 'MDI-1-1' } })
+    cy.task('stubLocation', { locationId: 2, locationData: { parentLocationId: 3 } })
+    cy.task('stubLocation', { locationId: 3, locationData: { locationPrefix: 'MDI-1' } })
   })
 
   context('with cell data', () => {
