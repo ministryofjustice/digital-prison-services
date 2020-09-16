@@ -95,7 +95,7 @@ context('Prisoner cell history', () => {
       const prisonerCellHistoryPage = PrisonerCellHistoryPage.verifyOnPage()
       prisonerCellHistoryPage.establishment().contains('Moorland')
       prisonerCellHistoryPage.location().contains('1-02')
-      prisonerCellHistoryPage.occupants().contains('Single occupancy cell')
+      prisonerCellHistoryPage.occupants().should('not.be.visible')
     })
 
     it('should load the data correcly when multiple other occupants', () => {
