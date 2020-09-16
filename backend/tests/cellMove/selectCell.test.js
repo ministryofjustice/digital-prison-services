@@ -13,6 +13,18 @@ describe('Select a cell', () => {
   let controller
   let req
 
+  const cellLocationData = {
+    parentLocationId: 2,
+  }
+
+  const parentLocationData = {
+    parentLocationId: 3,
+  }
+
+  const superParentLocationData = {
+    locationPrefix: 'MDI-1',
+  }
+
   beforeEach(() => {
     elite2Api.getDetails = jest.fn().mockResolvedValue({
       firstName: 'John',
@@ -26,6 +38,7 @@ describe('Select a cell', () => {
     elite2Api.getCsraAssessments = jest.fn()
     elite2Api.getAlerts = jest.fn()
     elite2Api.getNonAssociations = jest.fn()
+    elite2Api.getLocation = jest.fn().mockResolvedValue({})
     elite2Api.getCellsWithCapacity = jest.fn().mockResolvedValue([])
     elite2Api.getInmatesAtLocation = jest.fn().mockResolvedValue([])
     elite2Api.getCellAttributes = jest.fn().mockResolvedValue([
@@ -35,7 +48,6 @@ describe('Select a cell', () => {
       },
     ])
 
-    whereaboutsApi.getLocationPrefix = jest.fn().mockResolvedValue({})
     whereaboutsApi.getCellsWithCapacity = jest.fn().mockResolvedValue([])
     whereaboutsApi.searchGroups = jest.fn().mockResolvedValue([
       {
@@ -262,6 +274,10 @@ describe('Select a cell', () => {
           attributes: [{ description: 'Single occupancy', code: 'SO' }, { description: 'Listener Cell', code: 'LC' }],
         },
       ])
+      elite2Api.getLocation
+        .mockResolvedValueOnce(cellLocationData)
+        .mockResolvedValueOnce(parentLocationData)
+        .mockResolvedValueOnce(superParentLocationData)
       elite2Api.getInmatesAtLocation = jest
         .fn()
         .mockResolvedValue([
@@ -655,38 +671,37 @@ describe('Select a cell', () => {
       )
     })
 
-    it('should make a call to request the location prefix for a residential unit', async () => {
-      await controller(req, res)
-
-      expect(whereaboutsApi.getLocationPrefix).toHaveBeenCalledWith(
-        {},
-        {
-          agencyId: 'LEI',
-          groupName: 'Houseblock 1',
-        }
-      )
-    })
-
     it('should not request the location prefix when there are no non-associations', async () => {
       elite2Api.getNonAssociations = jest.fn().mockResolvedValue(null)
       await controller(req, res)
 
-      expect(whereaboutsApi.getLocationPrefix.mock.calls.length).toBe(0)
-    })
-
-    it('should not request the location prefix when location is null', async () => {
-      req.query = {
-        ...req.query,
-        location: null,
-      }
-      await controller(req, res)
-
-      expect(whereaboutsApi.getLocationPrefix.mock.calls.length).toBe(0)
+      expect(elite2Api.getLocation.mock.calls.length).toBe(0)
     })
 
     it('should set show non association value to true when there are res unit level non-associations', async () => {
-      whereaboutsApi.getLocationPrefix = jest.fn().mockResolvedValue({ locationPrefix: 'MDI-1' })
+      elite2Api.getDetails = jest.fn().mockResolvedValue({
+        firstName: 'John',
+        lastName: 'Doe',
+        offenderNo: someOffenderNumber,
+        bookingId: someBookingId,
+        agencyId: 'MDI',
+        alerts: [],
+      })
+      elite2Api.getLocation
+        .mockResolvedValueOnce(cellLocationData)
+        .mockResolvedValueOnce(parentLocationData)
+        .mockResolvedValueOnce(superParentLocationData)
+      whereaboutsApi.getCellsWithCapacity.mockResolvedValue([
+        {
+          id: 1,
+          description: 'MDI-1-3',
+          capacity: 4,
+          noOfOccupants: 1,
+          attributes: [{ description: 'Single occupancy', code: 'SO' }, { description: 'Listener Cell', code: 'LC' }],
+        },
+      ])
 
+      req.query = { location: 'Houseblock 1' }
       await controller(req, res)
 
       expect(res.render).toHaveBeenCalledWith(

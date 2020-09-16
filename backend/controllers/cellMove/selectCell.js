@@ -94,16 +94,19 @@ const getCellOccupants = async (res, { elite2Api, activeCaseLoadId, cells, nonAs
   })
 }
 
-const getResidentialLevelNonAssociations = async (res, { whereaboutsApi, nonAssociations, agencyId, location }) => {
-  if (!nonAssociations) return []
+const getResidentialLevelNonAssociations = async (res, { elite2Api, nonAssociations, cellId, agencyId, location }) => {
+  if (!nonAssociations || !cellId) return []
 
-  const { locationPrefix } =
-    !location || location === 'ALL'
-      ? { locationPrefix: agencyId }
-      : await whereaboutsApi.getLocationPrefix(res.locals, {
-          agencyId,
-          groupName: location,
-        })
+  if (!location || location === 'ALL') {
+    return nonAssociations.nonAssociations.filter(nonAssociation =>
+      nonAssociation.offenderNonAssociation.assignedLivingUnitDescription.includes(agencyId)
+    )
+  }
+  // Get the residential unit level prefix for the selected cell by traversing up the
+  // parent location tree
+  const locationDetail = await elite2Api.getLocation(res.locals, cellId)
+  const parentLocationDetail = await elite2Api.getLocation(res.locals, locationDetail.parentLocationId)
+  const { locationPrefix } = await elite2Api.getLocation(res.locals, parentLocationDetail.parentLocationId)
 
   return nonAssociations.nonAssociations.filter(nonAssociation =>
     nonAssociation.offenderNonAssociation.assignedLivingUnitDescription.includes(locationPrefix)
@@ -120,13 +123,6 @@ module.exports = ({ elite2Api, whereaboutsApi, logError }) => async (req, res) =
     const nonAssociations = await elite2Api.getNonAssociations(res.locals, prisonerDetails.bookingId)
     const cellAttributesData = await elite2Api.getCellAttributes(res.locals)
     const locationsData = await whereaboutsApi.searchGroups(res.locals, prisonerDetails.agencyId)
-
-    const residentialLevelNonAssociations = await getResidentialLevelNonAssociations(res, {
-      whereaboutsApi,
-      location,
-      agencyId: prisonerDetails.agencyId,
-      nonAssociations,
-    })
 
     if (req.xhr) {
       return res.render('cellMove/partials/subLocationsSelect.njk', {
@@ -182,6 +178,14 @@ module.exports = ({ elite2Api, whereaboutsApi, logError }) => async (req, res) =
             attribute,
           })
 
+    const residentialLevelNonAssociations = await getResidentialLevelNonAssociations(res, {
+      elite2Api,
+      nonAssociations,
+      cellId: hasLength(cells) && cells[0].id,
+      agencyId: prisonerDetails.agencyId,
+      location,
+    })
+
     const cellOccupants = await getCellOccupants(res, { activeCaseLoadId, elite2Api, cells, nonAssociations })
 
     return res.render('cellMove/selectCell.njk', {
@@ -220,6 +224,7 @@ module.exports = ({ elite2Api, whereaboutsApi, logError }) => async (req, res) =
       formAction: `/prisoner/${offenderNo}/cell-move/select-cell`,
     })
   } catch (error) {
+    console.log(error)
     if (error) logError(req.originalUrl, error, serviceUnavailableMessage)
 
     return res.render('error.njk', {
