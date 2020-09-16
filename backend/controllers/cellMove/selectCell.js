@@ -95,13 +95,15 @@ const getCellOccupants = async (res, { elite2Api, activeCaseLoadId, cells, nonAs
 }
 
 const getResidentialLevelNonAssociations = async (res, { whereaboutsApi, nonAssociations, agencyId, location }) => {
-  if (!location || location === 'ALL') return []
   if (!nonAssociations) return []
 
-  const { locationPrefix } = await whereaboutsApi.getLocationPrefix(res.locals, {
-    agencyId,
-    groupName: location,
-  })
+  const { locationPrefix } =
+    !location || location === 'ALL'
+      ? { locationPrefix: agencyId }
+      : await whereaboutsApi.getLocationPrefix(res.locals, {
+          agencyId,
+          groupName: location,
+        })
 
   return nonAssociations.nonAssociations.filter(nonAssociation =>
     nonAssociation.offenderNonAssociation.assignedLivingUnitDescription.includes(locationPrefix)

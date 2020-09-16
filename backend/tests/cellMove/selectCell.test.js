@@ -684,8 +684,30 @@ describe('Select a cell', () => {
       expect(whereaboutsApi.getLocationPrefix.mock.calls.length).toBe(0)
     })
 
-    it('should set show non association value to false', async () => {
+    it('should set show non association value to true when there are res unit level non-associations', async () => {
       whereaboutsApi.getLocationPrefix = jest.fn().mockResolvedValue({ locationPrefix: 'MDI-1' })
+
+      await controller(req, res)
+
+      expect(res.render).toHaveBeenCalledWith(
+        'cellMove/selectCell.njk',
+        expect.objectContaining({
+          showNonAssociationWarning: true,
+        })
+      )
+    })
+
+    it('should set show non association value to true when there are non-associations within the establishment', async () => {
+      elite2Api.getDetails = jest.fn().mockResolvedValue({
+        firstName: 'John',
+        lastName: 'Doe',
+        offenderNo: someOffenderNumber,
+        bookingId: someBookingId,
+        agencyId: 'MDI',
+        alerts: [],
+      })
+
+      req.query = { location: null }
 
       await controller(req, res)
 
