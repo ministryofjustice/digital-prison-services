@@ -43,6 +43,13 @@ module.exports = ({ elite2Api, logError }) => async (req, res) => {
         }))
       ))
 
+    const getMovedOutText = sharingOffenderEndTime => {
+      if (!currentPrisonerDetails.assignmentEndDateTime && !sharingOffenderEndTime) return 'Currently sharing'
+      if (currentPrisonerDetails.assignmentEndDateTime && !sharingOffenderEndTime) return `${formattedName} moved out`
+      if (sharingOffenderEndTime) return formatTimestampToDateTime(sharingOffenderEndTime)
+      return null
+    }
+
     return res.render('prisonerProfile/prisonerLocationHistory.njk', {
       breadcrumbPrisonerName: putLastNameFirst(firstName, lastName),
       dpsUrl,
@@ -67,9 +74,7 @@ module.exports = ({ elite2Api, logError }) => async (req, res) => {
             name: putLastNameFirst(prisoner.firstName, prisoner.lastName),
             number: prisoner.offenderNo,
             movedIn: prisoner.assignmentDateTime && formatTimestampToDateTime(prisoner.assignmentDateTime),
-            movedOut: prisoner.assignmentEndDateTime
-              ? formatTimestampToDateTime(prisoner.assignmentEndDateTime)
-              : 'Currently sharing',
+            movedOut: getMovedOutText(prisoner.assignmentEndDateTime),
           })),
       profileUrl: `/prisoner/${offenderNo}`,
       titleWithName: `${formattedName}${possessive(lastName)} history in location ${extractLocation(
