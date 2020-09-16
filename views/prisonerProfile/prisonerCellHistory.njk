@@ -80,11 +80,11 @@
         </div>
         <div class="govuk-grid-column-one-half">
         <div class="govuk-grid-row">
-          <div class="govuk-grid-column-one-half">
-            {% if occupants.length %}
+          {% if occupants.length %}
+            <div class="govuk-grid-column-one-half">
               <h3 class="govuk-heading-s govuk-!-margin-bottom-1">Currently sharing with</h3>
-            {% endif %}
-          </div>
+            </div>
+          {% endif %}
             <div class="govuk-grid-column-one-half">
             <h3 class="govuk-heading-s govuk-!-margin-bottom-1"></h3>
             </div>
@@ -108,15 +108,13 @@
         
         <div class="govuk-grid-column-one-half">
         <div class="govuk-grid-row">
+        {% if occupants.length %}
           <div class="govuk-grid-column-one-half" data-test="occupants">
-            {% if occupants.length %}
-                {% for occupant in occupants %}
-                  <p class="govuk-body"><a class="govuk-link" href={{occupant.profileUrl}}>{{ occupant.name }}</a></p>
-                {% endfor %}
-            {% else %}
-              <p class="govuk-body">Single occupancy cell</p>
-            {% endif %}
-          </div>
+            {% for occupant in occupants %}
+              <p class="govuk-body"><a class="govuk-link" href={{occupant.profileUrl}}>{{ occupant.name }}</a></p>
+            {% endfor %}
+            </div>
+        {% endif %}
           <div class="govuk-grid-column-one-half">
           <p class="govuk-body">
             <a href="{{ './location-history?fromDate=' + currentLocation.assignmentDateTime + '&toDate=' + currentLocation.assignmentEndDateTime + '&locationId=' + currentLocation.livingUnitId + '&agencyId=' + currentLocation.agencyId }}" class="govuk-link" data-test="cell-details-link">
