@@ -157,7 +157,7 @@ const moveValidationFactory = ({ elite2Api, logError }) => {
       if (
         !categoryWarning &&
         !hasLength(nonAssociations) &&
-        !hasLength(currentOccupantsActiveAlerts) &&
+        !hasLength(currentOffenderActiveAlerts) &&
         !hasLength(currentOccupantsActiveAlerts) &&
         !csraWarningMessage
       ) {

@@ -502,7 +502,7 @@ describe('move validation', () => {
 
   it('Redirects to confirm cell move when there are no warnings', async () => {
     elite2Api.getNonAssociations = jest.fn().mockResolvedValue({})
-    elite2Api.getDetails = jest.fn().mockResolvedValue({ firstName: 'Bob', lastName: 'Doe' })
+    elite2Api.getDetails = jest.fn().mockResolvedValue({ firstName: 'Bob', lastName: 'Doe', alerts: [] })
     elite2Api.getLocation
       .mockResolvedValueOnce(cellLocationData)
       .mockResolvedValueOnce(parentLocationData)
