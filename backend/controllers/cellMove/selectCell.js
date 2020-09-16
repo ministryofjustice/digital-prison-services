@@ -94,6 +94,20 @@ const getCellOccupants = async (res, { elite2Api, activeCaseLoadId, cells, nonAs
   })
 }
 
+const getResidentialLevelNonAssociations = async (res, { whereaboutsApi, nonAssociations, agencyId, location }) => {
+  if (!location || location === 'ALL') return []
+  if (!nonAssociations) return []
+
+  const { locationPrefix } = await whereaboutsApi.getLocationPrefix(res.locals, {
+    agencyId,
+    groupName: location,
+  })
+
+  return nonAssociations.nonAssociations.filter(nonAssociation =>
+    nonAssociation.offenderNonAssociation.assignedLivingUnitDescription.includes(locationPrefix)
+  )
+}
+
 module.exports = ({ elite2Api, whereaboutsApi, logError }) => async (req, res) => {
   const { offenderNo } = req.params
   const { location, subLocation, attribute, locationId } = extractQueryParameters(req.query)
@@ -104,6 +118,13 @@ module.exports = ({ elite2Api, whereaboutsApi, logError }) => async (req, res) =
     const nonAssociations = await elite2Api.getNonAssociations(res.locals, prisonerDetails.bookingId)
     const cellAttributesData = await elite2Api.getCellAttributes(res.locals)
     const locationsData = await whereaboutsApi.searchGroups(res.locals, prisonerDetails.agencyId)
+
+    const residentialLevelNonAssociations = await getResidentialLevelNonAssociations(res, {
+      whereaboutsApi,
+      location,
+      agencyId: prisonerDetails.agencyId,
+      nonAssociations,
+    })
 
     if (req.xhr) {
       return res.render('cellMove/partials/subLocationsSelect.njk', {
@@ -172,7 +193,7 @@ module.exports = ({ elite2Api, whereaboutsApi, logError }) => async (req, res) =
         nonAssociations && showNonAssociationsLink(nonAssociations, prisonerDetails.assignedLivingUnit),
       showCsraLink: prisonerDetails.assessments && showCsraLink(prisonerDetails.assessments),
       alerts: alertsToShow,
-      showNonAssociationWarning: Boolean(cellOccupants.find(cellOccupant => cellOccupant.nonAssociation)),
+      showNonAssociationWarning: Boolean(residentialLevelNonAssociations.length),
       cells:
         hasLength(cells) &&
         cells

@@ -35,6 +35,7 @@ describe('Select a cell', () => {
       },
     ])
 
+    whereaboutsApi.getLocationPrefix = jest.fn().mockResolvedValue({})
     whereaboutsApi.getCellsWithCapacity = jest.fn().mockResolvedValue([])
     whereaboutsApi.searchGroups = jest.fn().mockResolvedValue([
       {
@@ -64,180 +65,190 @@ describe('Select a cell', () => {
     }
   })
 
-  it('should make the correct api calls', async () => {
-    await controller(req, res)
+  describe('Default page state', () => {
+    it('should make the correct api calls to display default data', async () => {
+      await controller(req, res)
 
-    expect(elite2Api.getDetails).toHaveBeenCalledWith({}, someOffenderNumber, true)
-    expect(elite2Api.getNonAssociations).toHaveBeenCalledWith({}, someBookingId)
-    expect(elite2Api.getCellAttributes).toHaveBeenCalledWith({})
-    expect(whereaboutsApi.searchGroups).toHaveBeenCalledWith({}, someAgency)
-  })
+      expect(elite2Api.getDetails).toHaveBeenCalledWith({}, someOffenderNumber, true)
+      expect(elite2Api.getNonAssociations).toHaveBeenCalledWith({}, someBookingId)
+      expect(elite2Api.getCellAttributes).toHaveBeenCalledWith({})
+      expect(whereaboutsApi.searchGroups).toHaveBeenCalledWith({}, someAgency)
+    })
 
-  it('should call get cells with capacity for leeds', async () => {
-    req.query = {
-      ...req.query,
-      location: 'ALL',
-    }
-    await controller(req, res)
+    it('should call get cells with capacity for leeds', async () => {
+      req.query = {
+        ...req.query,
+        location: 'ALL',
+      }
+      await controller(req, res)
 
-    expect(elite2Api.getCellsWithCapacity).toHaveBeenCalledWith({}, someAgency, 'A')
-  })
+      expect(elite2Api.getCellsWithCapacity).toHaveBeenCalledWith({}, someAgency, 'A')
+    })
 
-  it('should call get cells with capacity for leeds and house block 1', async () => {
-    req.query = {
-      ...req.query,
-      location: 'hb1',
-      attribute: 'A',
-    }
-    await controller(req, res)
-
-    expect(whereaboutsApi.getCellsWithCapacity).toHaveBeenCalledWith(
-      {},
-      {
-        agencyId: someAgency,
-        groupName: 'hb1',
+    it('should call get cells with capacity for leeds and house block 1', async () => {
+      req.query = {
+        ...req.query,
+        location: 'hb1',
         attribute: 'A',
       }
-    )
-  })
+      await controller(req, res)
 
-  it('should populate view model with active cell move specific alerts', async () => {
-    await controller(req, res)
+      expect(whereaboutsApi.getCellsWithCapacity).toHaveBeenCalledWith(
+        {},
+        {
+          agencyId: someAgency,
+          groupName: 'hb1',
+          attribute: 'A',
+        }
+      )
+    })
 
-    expect(res.render).toHaveBeenCalledWith(
-      'cellMove/selectCell.njk',
-      expect.objectContaining({
-        alerts: [
-          {
-            alertCodes: ['PEEP'],
-            classes: 'alert-status alert-status--disability',
-            img: '/images/Disability_icon.png',
-            label: 'PEEP',
-          },
-        ],
-      })
-    )
-  })
+    it('should populate view model with active cell move specific alerts', async () => {
+      await controller(req, res)
 
-  it('should populate view model with breadcrumbs, links and offender details', async () => {
-    await controller(req, res)
+      expect(res.render).toHaveBeenCalledWith(
+        'cellMove/selectCell.njk',
+        expect.objectContaining({
+          alerts: [
+            {
+              alertCodes: ['PEEP'],
+              classes: 'alert-status alert-status--disability',
+              img: '/images/Disability_icon.png',
+              label: 'PEEP',
+            },
+          ],
+        })
+      )
+    })
 
-    expect(res.render).toHaveBeenCalledWith(
-      'cellMove/selectCell.njk',
-      expect.objectContaining({
-        alerts: [
-          {
-            alertCodes: ['PEEP'],
-            classes: 'alert-status alert-status--disability',
-            img: '/images/Disability_icon.png',
-            label: 'PEEP',
-          },
-        ],
-        breadcrumbPrisonerName: 'Doe, John',
-        cellAttributes: [],
-        cells: false,
-        csraDetailsUrl: '/prisoner/A12345/cell-move/cell-sharing-risk-assessment-details',
-        dpsUrl: 'http://localhost:3000/',
-        formAction: '/prisoner/A12345/cell-move/select-cell',
-        formValues: { attribute: 'A', location: 'ALL', subLocation: undefined },
-        locations: [{ text: 'All locations', value: 'ALL' }, { text: 'Houseblock 1', value: 'hb1' }],
-        nonAssociationLink: '/prisoner/A12345/cell-move/non-associations',
-        offenderDetailsUrl: '/prisoner/A12345/cell-move/offender-details',
-        offenderNo: 'A12345',
-        prisonerDetails: {
-          agencyId: 'LEI',
-          alerts: [{ alertCode: 'PEEP', expired: false }, { alertCode: 'DCC', expired: true }],
-          bookingId: -10,
-          firstName: 'John',
-          lastName: 'Doe',
+    it('should populate view model with form values', async () => {
+      await controller(req, res)
+
+      expect(res.render).toHaveBeenCalledWith(
+        'cellMove/selectCell.njk',
+        expect.objectContaining({
+          formValues: { attribute: 'A', location: 'ALL', subLocation: undefined },
+        })
+      )
+    })
+
+    it('should populate view model with urls', async () => {
+      await controller(req, res)
+
+      expect(res.render).toHaveBeenCalledWith(
+        'cellMove/selectCell.njk',
+        expect.objectContaining({
+          csraDetailsUrl: '/prisoner/A12345/cell-move/cell-sharing-risk-assessment-details',
+          dpsUrl: 'http://localhost:3000/',
+          formAction: '/prisoner/A12345/cell-move/select-cell',
+          nonAssociationLink: '/prisoner/A12345/cell-move/non-associations',
+          offenderDetailsUrl: '/prisoner/A12345/cell-move/offender-details',
+          selectCellRootUrl: '/prisoner/A12345/cell-move/select-cell',
+          selectLocationRootUrl: '/prisoner/A12345/cell-move/select-location',
+          showCsraLink: undefined,
+          showNonAssociationsLink: undefined,
+        })
+      )
+    })
+
+    it('should populate view model with breadcrumbs offender details', async () => {
+      await controller(req, res)
+
+      expect(res.render).toHaveBeenCalledWith(
+        'cellMove/selectCell.njk',
+        expect.objectContaining({
+          breadcrumbPrisonerName: 'Doe, John',
           offenderNo: 'A12345',
-        },
-        selectCellRootUrl: '/prisoner/A12345/cell-move/select-cell',
-        selectLocationRootUrl: '/prisoner/A12345/cell-move/select-location',
-        showCsraLink: undefined,
-        showNonAssociationsLink: undefined,
-        subLocations: [{ text: 'No areas to select', value: '' }],
-      })
-    )
-  })
+          prisonerDetails: {
+            agencyId: 'LEI',
+            alerts: [{ alertCode: 'PEEP', expired: false }, { alertCode: 'DCC', expired: true }],
+            bookingId: -10,
+            firstName: 'John',
+            lastName: 'Doe',
+            offenderNo: 'A12345',
+          },
+        })
+      )
+    })
 
-  it('should populate view model with locations', async () => {
-    await controller(req, res)
+    it('should populate view model with locations', async () => {
+      await controller(req, res)
 
-    expect(res.render).toHaveBeenCalledWith(
-      'cellMove/selectCell.njk',
-      expect.objectContaining({
-        locations: [{ text: 'All locations', value: 'ALL' }, { text: 'Houseblock 1', value: 'hb1' }],
-      })
-    )
-  })
+      expect(res.render).toHaveBeenCalledWith(
+        'cellMove/selectCell.njk',
+        expect.objectContaining({
+          locations: [{ text: 'All locations', value: 'ALL' }, { text: 'Houseblock 1', value: 'hb1' }],
+        })
+      )
+    })
 
-  it('should populate view model with sub locations', async () => {
-    req.query = {
-      ...req.query,
-      location: 'hb1',
-    }
-    await controller(req, res)
+    it('should populate view model with sub locations', async () => {
+      req.query = {
+        ...req.query,
+        location: 'hb1',
+      }
+      await controller(req, res)
 
-    expect(res.render).toHaveBeenCalledWith(
-      'cellMove/selectCell.njk',
-      expect.objectContaining({
-        subLocations: [{ text: 'Select area in residential unit', value: '' }, { text: 'Sub value', value: 'sl' }],
-      })
-    )
-  })
+      expect(res.render).toHaveBeenCalledWith(
+        'cellMove/selectCell.njk',
+        expect.objectContaining({
+          subLocations: [{ text: 'Select area in residential unit', value: '' }, { text: 'Sub value', value: 'sl' }],
+        })
+      )
+    })
 
-  it('should render subLocations template on ajax request', async () => {
-    req.xhr = true
-    req.query = {
-      ...req.query,
-      locationId: 'hb1',
-    }
+    it('should render subLocations template on ajax request', async () => {
+      req.xhr = true
+      req.query = {
+        ...req.query,
+        locationId: 'hb1',
+      }
 
-    await controller(req, res)
+      await controller(req, res)
 
-    expect(res.render).toHaveBeenCalledWith(
-      'cellMove/partials/subLocationsSelect.njk',
-      expect.objectContaining({
-        subLocations: [{ text: 'Select area in residential unit', value: '' }, { text: 'Sub value', value: 'sl' }],
-      })
-    )
-  })
+      expect(res.render).toHaveBeenCalledWith(
+        'cellMove/partials/subLocationsSelect.njk',
+        expect.objectContaining({
+          subLocations: [{ text: 'Select area in residential unit', value: '' }, { text: 'Sub value', value: 'sl' }],
+        })
+      )
+    })
 
-  it('should render subLocations template on ajax request when the subLocationId is ALL', async () => {
-    req.xhr = true
-    req.query = {
-      ...req.query,
-      locationId: 'ALL',
-    }
+    it('should render subLocations template on ajax request when the subLocationId is ALL', async () => {
+      req.xhr = true
+      req.query = {
+        ...req.query,
+        locationId: 'ALL',
+      }
 
-    await controller(req, res)
+      await controller(req, res)
 
-    expect(res.render).toHaveBeenCalledWith(
-      'cellMove/partials/subLocationsSelect.njk',
-      expect.objectContaining({
-        subLocations: [{ text: 'No areas to select', value: '' }],
-      })
-    )
-  })
+      expect(res.render).toHaveBeenCalledWith(
+        'cellMove/partials/subLocationsSelect.njk',
+        expect.objectContaining({
+          subLocations: [{ text: 'No areas to select', value: '' }],
+        })
+      )
+    })
 
-  it('should make a call to retrieve sub locations', async () => {
-    req.query = {
-      ...req.query,
-      location: 'hb1',
-      subLocation: 'sub1',
-      attribute: 'A',
-    }
-    await controller(req, res)
-
-    expect(whereaboutsApi.getCellsWithCapacity).toHaveBeenCalledWith(
-      {},
-      {
-        agencyId: someAgency,
-        groupName: 'hb1_sub1',
+    it('should make a call to retrieve sub locations', async () => {
+      req.query = {
+        ...req.query,
+        location: 'hb1',
+        subLocation: 'sub1',
         attribute: 'A',
       }
-    )
+      await controller(req, res)
+
+      expect(whereaboutsApi.getCellsWithCapacity).toHaveBeenCalledWith(
+        {},
+        {
+          agencyId: someAgency,
+          groupName: 'hb1_sub1',
+          attribute: 'A',
+        }
+      )
+    })
   })
 
   describe('Cell view model data', () => {
@@ -552,27 +563,10 @@ describe('Select a cell', () => {
       expect(elite2Api.getCsraAssessments.mock.calls.length).toBe(0)
       expect(elite2Api.getAlerts.mock.calls.length).toBe(0)
     })
+  })
 
-    it('should mark an occupant with the no association badge', async () => {
-      elite2Api.getCellsWithCapacity.mockResolvedValue([
-        {
-          id: 1,
-          description: 'MDI-1-3',
-          capacity: 4,
-          noOfOccupants: 1,
-          attributes: [],
-        },
-      ])
-      elite2Api.getInmatesAtLocation.mockResolvedValue([
-        {
-          firstName: 'bob1',
-          lastName: 'doe1',
-          offenderNo: 'A111111',
-          assignedLivingUnitId: 1,
-        },
-      ])
-      elite2Api.getAlerts.mockResolvedValue([])
-      elite2Api.getCsraAssessments.mockResolvedValue([])
+  describe('Non associations', () => {
+    beforeEach(() => {
       elite2Api.getNonAssociations = jest.fn().mockResolvedValue({
         offenderNo: 'G6123VU',
         firstName: 'JOHN',
@@ -600,6 +594,34 @@ describe('Select a cell', () => {
           },
         ],
       })
+
+      elite2Api.getCellsWithCapacity.mockResolvedValue([
+        {
+          id: 1,
+          description: 'MDI-1-3',
+          capacity: 4,
+          noOfOccupants: 1,
+          attributes: [],
+        },
+      ])
+      elite2Api.getInmatesAtLocation.mockResolvedValue([
+        {
+          firstName: 'bob1',
+          lastName: 'doe1',
+          offenderNo: 'A111111',
+          assignedLivingUnitId: 1,
+        },
+      ])
+      elite2Api.getAlerts.mockResolvedValue([])
+      elite2Api.getCsraAssessments.mockResolvedValue([])
+
+      req.query = {
+        location: 'Houseblock 1',
+      }
+    })
+
+    it('should mark an occupant with the no association badge', async () => {
+      req.query = { location: 'ALL' }
 
       await controller(req, res)
 
@@ -629,6 +651,43 @@ describe('Select a cell', () => {
               type: false,
             },
           ],
+        })
+      )
+    })
+
+    it('should make a call to request the location prefix for a residential unit', async () => {
+      await controller(req, res)
+
+      expect(whereaboutsApi.getLocationPrefix).toHaveBeenCalledWith(
+        {},
+        {
+          agencyId: 'LEI',
+          groupName: 'Houseblock 1',
+        }
+      )
+    })
+
+    it('should set show non association value to false', async () => {
+      whereaboutsApi.getLocationPrefix = jest.fn().mockResolvedValue({ locationPrefix: 'MDI-1' })
+
+      await controller(req, res)
+
+      expect(res.render).toHaveBeenCalledWith(
+        'cellMove/selectCell.njk',
+        expect.objectContaining({
+          showNonAssociationWarning: true,
+        })
+      )
+    })
+
+    it('should set show non association value to false', async () => {
+      elite2Api.nonAssociations = jest.fn().mockResolvedValue({})
+      await controller(req, res)
+
+      expect(res.render).toHaveBeenCalledWith(
+        'cellMove/selectCell.njk',
+        expect.objectContaining({
+          showNonAssociationWarning: false,
         })
       )
     })

@@ -11,8 +11,12 @@ const selectCellPage = () =>
 
 export default {
   verifyOnPage: selectCellPage,
-  goTo: offenderNo => {
-    cy.visit(`/prisoner/${offenderNo}/cell-move/select-cell`)
+  goTo: (offenderNo, location) => {
+    if (location) {
+      cy.visit(`/prisoner/${offenderNo}/cell-move/select-cell?location=${location}`)
+    } else {
+      cy.visit(`/prisoner/${offenderNo}/cell-move/select-cell?location`)
+    }
     return selectCellPage()
   },
 }

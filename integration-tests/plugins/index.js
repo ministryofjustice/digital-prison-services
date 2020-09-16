@@ -333,6 +333,8 @@ module.exports = on => {
     stubGetOffenderRetentionReasons: dataComplianceApi.stubGetOffenderRetentionReasons,
     stubCreateRecord: ({ offenderNo }) => dataComplianceApi.stubCreateRecord(offenderNo),
     stubCellsWithCapacity: ({ cells }) => elite2api.stubCellsWithCapacity(cells),
+    stubCellsWithCapacityByGroupName: ({ agencyId, groupName, response }) =>
+      whereabouts.stubCellsWithCapacityByGroupName({ agencyId, groupName, response }),
     stubInmatesAtLocation: ({ inmates }) => elite2api.stubInmatesAtLocation(inmates),
     stubOffenderCellHistory: ({ history }) => elite2api.stubOffenderCellHistory(history),
     stubGetAlerts: ({ agencyId, alerts }) => elite2api.stubGetAlerts({ agencyId, alerts }),
@@ -343,5 +345,7 @@ module.exports = on => {
       elite2api.stubPrisonerFullDetail(prisonerDetail, offenderNo, fullInfo),
     stubMoveToCell: () => elite2api.stubMoveToCell(),
     verifyMoveToCell: ({ bookingId, locationPrefix }) => elite2api.verifyMoveToCell({ bookingId, locationPrefix }),
+    stubGetLocationPrefix: ({ agencyId, groupName, response }) =>
+      whereabouts.stubGetLocationPrefix({ agencyId, groupName, response }),
   })
 }

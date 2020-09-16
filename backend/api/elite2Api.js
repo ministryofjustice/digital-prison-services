@@ -285,6 +285,9 @@ const elite2ApiFactory = client => {
   const getInmatesAtLocation = (context, locationId, params) =>
     get(context, `/api/locations/${locationId}/inmates?${mapToQueryString(params)}`)
 
+  const getInmatesAtLocationPrefix = (context, locationPrefix) =>
+    get(context, `/api/locations/description/${locationPrefix}/inmates`, 1000)
+
   const getProfileInformation = (context, bookingId) => get(context, `/api/bookings/${bookingId}/profileInformation`)
 
   const getSecondaryLanguages = (context, bookingId) => get(context, `/api/bookings/${bookingId}/secondary-languages`)
@@ -454,6 +457,7 @@ const elite2ApiFactory = client => {
     getAttributesForLocation,
     getHistoryForLocation,
     getInmatesAtLocation,
+    getInmatesAtLocationPrefix,
     moveToCell,
   }
 }
