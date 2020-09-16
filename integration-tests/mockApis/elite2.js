@@ -1335,7 +1335,7 @@ module.exports = {
         headers: {
           'Content-Type': 'application/json;charset=UTF-8',
         },
-        jsonBody: response || {},
+        jsonBody: response,
       },
     }),
   stubCellAttributes: () =>
