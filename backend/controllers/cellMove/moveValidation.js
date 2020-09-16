@@ -126,7 +126,7 @@ const moveValidationFactory = ({ elite2Api, logError }) => {
       const currentOffenderActiveAlerts =
         currentOccupantsDetails.length > 0 &&
         currentOffenderDetails.alerts
-          .filter(alert => !alert.expired && cellMoveAlertCodes.includes(alert.alertCode))
+          .filter(alert => !alert.expired && cellMoveAlertCodes.includes(alert.alertCode) && alert.alertCode !== 'PEEP')
           .map(alert => {
             const title = getCurrentOffenderAlertTitle(alert, currentOccupantsSexualities)
             return getOffenderAlertBody(alert, title, currentOffenderDetails.firstName, currentOffenderDetails.lastName)
@@ -136,7 +136,9 @@ const moveValidationFactory = ({ elite2Api, logError }) => {
       const currentOccupantsActiveAlerts = currentOccupantsDetails
         .map(currentOccupant =>
           currentOccupant.alerts
-            .filter(alert => !alert.expired && cellMoveAlertCodes.includes(alert.alertCode))
+            .filter(
+              alert => !alert.expired && cellMoveAlertCodes.includes(alert.alertCode) && alert.alertCode !== 'PEEP'
+            )
             .map(alert => {
               const title =
                 alert.alertCode === 'RLG' &&
