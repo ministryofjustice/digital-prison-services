@@ -30,7 +30,6 @@ context('A user can select a cell', () => {
     Cypress.Cookies.preserveOnce('hmpps-session-dev')
     cy.task('resetAndStubTokenVerification')
     cy.task('stubOffenderFullDetails', offenderFullDetails)
-    cy.task('stubBookingNonAssociations', {})
     cy.task('stubGroups', { id: 'MDI' })
     cy.task('stubCellAttributes')
     cy.task('stubInmatesAtLocation', {
@@ -77,30 +76,39 @@ context('A user can select a cell', () => {
         },
       ],
     })
+
+    cy.task('stubGetLocationPrefix', {
+      agencyId: 'MDI',
+      groupName: '1',
+      response: {
+        locationPrefix: 'MDI-1',
+      },
+    })
   })
 
   context('with cell data', () => {
+    const response = [
+      {
+        attributes: [{ description: 'Special Cell', code: 'SPC' }, { description: 'Gated Cell', code: 'GC' }],
+        capacity: 2,
+        description: 'LEI-1-2',
+        id: 1,
+        noOfOccupants: 2,
+        userDescription: 'LEI-1-1',
+      },
+      {
+        attributes: [{ code: 'LC', description: 'Listener Cell' }],
+        capacity: 3,
+        description: 'LEI-1-1',
+        id: 1,
+        noOfOccupants: 2,
+        userDescription: 'LEI-1-1',
+      },
+    ]
+
     beforeEach(() => {
-      cy.task('stubCellsWithCapacity', {
-        cells: [
-          {
-            attributes: [{ description: 'Special Cell', code: 'SPC' }, { description: 'Gated Cell', code: 'GC' }],
-            capacity: 2,
-            description: 'LEI-1-2',
-            id: 1,
-            noOfOccupants: 2,
-            userDescription: 'LEI-1-1',
-          },
-          {
-            attributes: [{ code: 'LC', description: 'Listener Cell' }],
-            capacity: 3,
-            description: 'LEI-1-1',
-            id: 1,
-            noOfOccupants: 2,
-            userDescription: 'LEI-1-1',
-          },
-        ],
-      })
+      cy.task('stubCellsWithCapacity', { cells: response })
+      cy.task('stubCellsWithCapacityByGroupName', { agencyId: 'MDI', groupName: 1, response })
     })
 
     it('should load without error', () => {
@@ -216,7 +224,7 @@ context('A user can select a cell', () => {
     })
 
     it('should show non association warning', () => {
-      const page = SelectCellPage.goTo(offenderNo)
+      const page = SelectCellPage.goTo(offenderNo, '1')
       page.nonAssociationWarning().contains('Smith, John has a non-association with a prisoner in this location.')
     })
 
