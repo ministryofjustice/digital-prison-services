@@ -1,12 +1,20 @@
 const { properCaseName, putLastNameFirst } = require('../../utils')
+const { raiseAnalyticsEvent } = require('../../raiseAnalyticsEvent')
 
 module.exports = ({ elite2Api, logError }) => async (req, res) => {
   const { offenderNo } = req.params
 
   try {
     const { cellId } = req.query
-    const { firstName, lastName } = await elite2Api.getDetails(res.locals, offenderNo)
+    const { firstName, lastName, agencyId } = await elite2Api.getDetails(res.locals, offenderNo)
     const { description } = await elite2Api.getLocation(res.locals, cellId)
+    const { capacity } = await elite2Api.getAttributesForLocation(res.locals, cellId)
+
+    raiseAnalyticsEvent(
+      'Cell move',
+      `Cell move for ${agencyId}`,
+      `Cell type - ${capacity === 1 ? 'Single occupancy' : 'Multi occupancy'}`
+    )
 
     return res.render('cellMove/confirmation.njk', {
       title: `${properCaseName(firstName)} ${properCaseName(lastName)} has been moved to cell ${description}`,
