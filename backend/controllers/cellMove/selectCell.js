@@ -224,7 +224,6 @@ module.exports = ({ elite2Api, whereaboutsApi, logError }) => async (req, res) =
       formAction: `/prisoner/${offenderNo}/cell-move/select-cell`,
     })
   } catch (error) {
-    console.log(error)
     if (error) logError(req.originalUrl, error, serviceUnavailableMessage)
 
     return res.render('error.njk', {
