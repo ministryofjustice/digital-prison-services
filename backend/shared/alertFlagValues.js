@@ -102,7 +102,6 @@ const alertFlagLabels = [
 
 const cellMoveAlertCodes = [
   'PEEP',
-  'XTACT',
   'RTP',
   'RLG',
   'RCON',
