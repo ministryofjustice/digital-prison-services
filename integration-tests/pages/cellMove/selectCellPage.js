@@ -15,7 +15,7 @@ export default {
     if (location) {
       cy.visit(`/prisoner/${offenderNo}/cell-move/select-cell?location=${location}`)
     } else {
-      cy.visit(`/prisoner/${offenderNo}/cell-move/select-cell?location`)
+      cy.visit(`/prisoner/${offenderNo}/cell-move/select-cell`)
     }
     return selectCellPage()
   },
