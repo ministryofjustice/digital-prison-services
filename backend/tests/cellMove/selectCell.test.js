@@ -667,6 +667,23 @@ describe('Select a cell', () => {
       )
     })
 
+    it('should not request the location prefix when there are no non-associations', async () => {
+      elite2Api.getNonAssociations = jest.fn().mockResolvedValue(null)
+      await controller(req, res)
+
+      expect(whereaboutsApi.getLocationPrefix.mock.calls.length).toBe(0)
+    })
+
+    it('should not request the location prefix when location is null', async () => {
+      req.query = {
+        ...req.query,
+        location: null,
+      }
+      await controller(req, res)
+
+      expect(whereaboutsApi.getLocationPrefix.mock.calls.length).toBe(0)
+    })
+
     it('should set show non association value to false', async () => {
       whereaboutsApi.getLocationPrefix = jest.fn().mockResolvedValue({ locationPrefix: 'MDI-1' })
 
