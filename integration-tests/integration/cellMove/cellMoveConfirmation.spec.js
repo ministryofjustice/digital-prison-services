@@ -23,6 +23,9 @@ context('A user get confirmation of a cell move', () => {
       locationId: 1,
       locationData: { parentLocationId: 2, description: 'MDI-1-1', locationPrefix: 'MDI-1' },
     })
+    cy.task('stubAttributesForLocation', {
+      capacity: 2,
+    })
     cy.task('stubMoveToCell')
   })
 
