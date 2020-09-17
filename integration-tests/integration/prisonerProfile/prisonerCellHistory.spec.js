@@ -15,6 +15,7 @@ context('Prisoner cell history', () => {
   context('Basic page functionality', () => {
     beforeEach(() => {
       Cypress.Cookies.preserveOnce('hmpps-session-dev')
+      cy.task('stubUserMeRoles', [])
       cy.task('stubOffenderBasicDetails', offenderBasicDetails)
       cy.task('stubAgencyDetails', { agencyId: 'MDI', details: { agencyId: 'MDI', description: 'Moorland' } })
       cy.task('stubInmatesAtLocation', {
@@ -54,6 +55,7 @@ context('Prisoner cell history', () => {
       prisonerCellHistoryPage.establishment().contains('Moorland')
       prisonerCellHistoryPage.location().contains('1-02')
       prisonerCellHistoryPage.occupants().contains('Offender, Test')
+      prisonerCellHistoryPage.cellMoveButton().should('not.be.visible')
       prisonerCellHistoryPage
         .cellDetailsLink()
         .should('have.attr', 'href')
@@ -111,6 +113,13 @@ context('Prisoner cell history', () => {
       prisonerCellHistoryPage.location().contains('1-02')
       prisonerCellHistoryPage.occupants().contains('Offender, Test')
       prisonerCellHistoryPage.occupants().contains('Offender2, Test2')
+    })
+
+    it('should show the cell move button when correct role is present', () => {
+      cy.task('stubUserMeRoles', [{ roleCode: 'CELL_MOVE' }])
+      cy.visit(`/prisoner/${offenderNo}/cell-history`)
+      const prisonerCellHistoryPage = PrisonerCellHistoryPage.verifyOnPage()
+      prisonerCellHistoryPage.cellMoveButton().should('be.visible')
     })
   })
 })

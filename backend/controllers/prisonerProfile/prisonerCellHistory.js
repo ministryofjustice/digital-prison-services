@@ -12,7 +12,7 @@ const {
   app: { notmEndpointUrl: dpsUrl },
 } = require('../../config')
 
-module.exports = ({ elite2Api, logError, page = 0 }) => async (req, res) => {
+module.exports = ({ oauthApi, elite2Api, logError, page = 0 }) => async (req, res) => {
   const { offenderNo } = req.params
 
   const getAgencyDetails = async cells => {
@@ -30,6 +30,8 @@ module.exports = ({ elite2Api, logError, page = 0 }) => async (req, res) => {
       page,
       size: 10000,
     })
+    const userRoles = await oauthApi.userRoles(res.locals)
+    const canViewCellMoveButton = userRoles && userRoles.some(role => role.roleCode === 'CELL_MOVE')
 
     // Collect a list of the unique agencies, to remove
     // the need to make duplicate API calls
@@ -86,6 +88,7 @@ module.exports = ({ elite2Api, logError, page = 0 }) => async (req, res) => {
       profileUrl: `/prisoner/${offenderNo}`,
       breadcrumbPrisonerName: putLastNameFirst(firstName, lastName),
       changeCellLink: `/prisoner/${offenderNo}/cell-move/select-location`,
+      canViewCellMoveButton,
       dpsUrl,
     })
   } catch (error) {
