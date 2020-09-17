@@ -461,12 +461,6 @@ describe('move validation', () => {
             comment: 'has a large poster on cell wall',
             date: 'Date added: 20 August 2019',
             subTitle: 'The details of Test User&rsquo;s alert are',
-            title: 'who has a Risk to LGB alert into a cell with another prisoner',
-          },
-          {
-            comment: 'has a large poster on cell wall',
-            date: 'Date added: 20 August 2019',
-            subTitle: 'The details of Test User&rsquo;s alert are',
             title: 'who is an E-List prisoner into a cell with another prisoner',
           },
           {
