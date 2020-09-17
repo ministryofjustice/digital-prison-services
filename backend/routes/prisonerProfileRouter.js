@@ -70,7 +70,7 @@ const controller = ({
     prisonerProfessionalContacts({ elite2Api, personService, allocationManagerApi, logError })
   )
 
-  router.get('/cell-history', prisonerCellHistory({ elite2Api, logError }))
+  router.get('/cell-history', prisonerCellHistory({ oauthApi, elite2Api, logError }))
   router.get('/location-history', prisonerLocationHistory({ elite2Api, logError }))
 
   return router
