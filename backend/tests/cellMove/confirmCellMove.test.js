@@ -15,6 +15,7 @@ describe('Change cell play back details', () => {
   const res = { locals: {} }
 
   beforeEach(() => {
+    jest.clearAllMocks()
     logError = jest.fn()
 
     elite2Api.getDetails = jest.fn().mockResolvedValue({
