@@ -5,6 +5,7 @@ describe('Prisoner cell history', () => {
   const offenderNo = 'ABC123'
   const bookingId = '123'
   const elite2Api = {}
+  const oauthApi = {}
 
   let req
   let res
@@ -23,6 +24,7 @@ describe('Prisoner cell history', () => {
 
     logError = jest.fn()
 
+    oauthApi.userRoles = jest.fn().mockResolvedValue([])
     elite2Api.getDetails = jest.fn().mockResolvedValue({ bookingId, firstName: 'John', lastName: 'Smith ' })
     elite2Api.getOffenderCellHistory = jest.fn().mockResolvedValue({
       content: [
@@ -51,7 +53,7 @@ describe('Prisoner cell history', () => {
     elite2Api.getAgencyDetails = jest.fn().mockResolvedValue([])
     elite2Api.getInmatesAtLocation = jest.fn().mockResolvedValue([])
 
-    controller = prisonerCellHistory({ elite2Api, logError })
+    controller = prisonerCellHistory({ oauthApi, elite2Api, logError })
   })
 
   it('should make the expected API calls', async () => {
@@ -107,6 +109,19 @@ describe('Prisoner cell history', () => {
             location: '1-02',
             movedIn: '01/09/2020 - 12:48',
           },
+          canViewCellMoveButton: false,
+        })
+      )
+    })
+
+    it('sets the cell move correctly if role exists', async () => {
+      oauthApi.userRoles = jest.fn().mockReturnValue([{ roleCode: 'CELL_MOVE' }])
+      await controller(req, res)
+
+      expect(res.render).toHaveBeenCalledWith(
+        'prisonerProfile/prisonerCellHistory.njk',
+        expect.objectContaining({
+          canViewCellMoveButton: true,
         })
       )
     })

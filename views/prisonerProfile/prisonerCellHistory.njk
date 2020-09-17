@@ -50,17 +50,19 @@
     <div class="govuk-grid-column-three-quarters">
       <h1 class="govuk-heading-l">{{titleWithName | safe}}</h1>
     </div>
-    {# <div class="govuk-grid-column-one-quarter pull-right">
-      {{ govukButton({
-        href: changeCellLink,
-        text: "Change cell",
-        preventDoubleClick: true,
-        classes: "govuk-button",
-        attributes: {
-          "data-test": 'cell-move-button'
-        }
-        }) }}
-    </div> #}
+    {% if canViewCellMoveButton %}
+      <div class="govuk-grid-column-one-quarter pull-right">
+        {{ govukButton({
+          href: changeCellLink,
+          text: "Change cell",
+          preventDoubleClick: true,
+          classes: "govuk-button",
+          attributes: {
+            "data-test": 'cell-move-button'
+          }
+          }) }}
+      </div>
+    {% endif %}
   </div>
   <h2 class="govuk-heading-m">Current location</h2>
     <div class="cell-history-header govuk-!-margin-bottom-7">
