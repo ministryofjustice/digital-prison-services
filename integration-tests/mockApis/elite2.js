@@ -1438,6 +1438,21 @@ module.exports = {
         jsonBody: {},
       },
     }),
+  stubMoveToCellSwap: () =>
+    stubFor({
+      request: {
+        method: 'PUT',
+        urlPathPattern: '/api/bookings/[0-9]+?/move-to-cell-swap',
+      },
+      response: {
+        status: 200,
+        headers: {
+          'Content-Type': 'application/json;charset=UTF-8',
+        },
+        jsonBody: {},
+      },
+    }),
   verifyMoveToCell: ({ bookingId, locationPrefix }) =>
     verifyPut(`/api/bookings/${bookingId}/living-unit/${locationPrefix}?reasonCode=ADM`),
+  verifyMoveToCellSwap: ({ bookingId }) => verifyPut(`/api/bookings/${bookingId}/move-to-cell-swap`),
 }

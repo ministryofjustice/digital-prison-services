@@ -1,4 +1,4 @@
-const cellConfirmationPage = require('../../pages/cellMove/cellMoveConfirmationPage')
+const cswapConfirmationPage = require('../../pages/cellMove/cswapConfirmationPage')
 
 const offenderNo = 'A1234A'
 const cellId = 1
@@ -23,11 +23,14 @@ context('A user get confirmation of a cell move', () => {
       locationId: 1,
       locationData: { parentLocationId: 2, description: 'MDI-1-1', locationPrefix: 'MDI-1' },
     })
+    cy.task('stubAttributesForLocation', {
+      capacity: 2,
+    })
     cy.task('stubMoveToCell')
   })
 
   it('should page with the correct offender name and cell description', () => {
-    const page = cellConfirmationPage.goTo({ offenderNo, cellId, cellDescription: 'MDI-1-1', name: 'Bob Doe' })
+    const page = cswapConfirmationPage.goTo({ offenderNo, cellDescription: 'C-SWAP', name: 'Bob Doe' })
 
     page.backLink().should('be.visible')
     page
