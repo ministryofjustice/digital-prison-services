@@ -12,16 +12,16 @@ const cswapConfirmationController = require('../controllers/cellMove/cswapConfir
 
 const router = express.Router({ mergeParams: true })
 
-const controller = ({ elite2Api, whereaboutsApi, logError }) => {
+const controller = ({ oauthApi, elite2Api, whereaboutsApi, logError }) => {
   const { index: moveValidationIndex, post: moveValidationPost } = moveValidationFactory({ elite2Api, logError })
 
   const { index: confirmCellMoveIndex, post: confirmCellMovePost } = confirmCellMoveController({ elite2Api, logError })
 
-  router.get('/select-location', selectLocationController({ elite2Api, whereaboutsApi, logError }))
+  router.get('/select-location', selectLocationController({ oauthApi, elite2Api, whereaboutsApi, logError }))
   router.get('/non-associations', nonAssociationsController({ elite2Api, logError }))
   router.get('/offender-details', offenderDetailsController({ elite2Api, logError }))
   router.get('/cell-sharing-risk-assessment-details', cellSharingRiskAssessmentController({ elite2Api, logError }))
-  router.get('/select-cell', selectCellController({ elite2Api, whereaboutsApi, logError }))
+  router.get('/select-cell', selectCellController({ oauthApi, elite2Api, whereaboutsApi, logError }))
   router.get('/confirm-cell-move', confirmCellMoveIndex)
   router.post('/confirm-cell-move', confirmCellMovePost)
   router.get('/move-validation', moveValidationIndex)
