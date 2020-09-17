@@ -1,0 +1,48 @@
+{% extends "../partials/layout.njk" %}
+{% from "govuk/components/button/macro.njk" import govukButton %}
+{% from "govuk/components/panel/macro.njk" import govukPanel %}
+
+{% block beforeContent %}
+    {{ govukBreadcrumbs({
+        items: [
+            {
+                text: "Home",
+                href: dpsUrl
+            },
+            {
+                text: breadcrumbPrisonerName,
+                href: '/prisoner/' + offenderNo
+            },
+            {
+                text: 'Change Cell'
+            }
+        ]
+    }) }}
+{% endblock %}
+
+{% block content %}
+    <div class="govuk-blue-background-confirm-override">
+        {{ govukPanel({
+            titleText: title,
+            classes: "govuk-!-margin-bottom-9"
+        }) }}
+    </div>
+
+
+    <h3 class="govuk-heading-s">What happens next</h3>
+    <p class="govuk-body">
+        You must move {{ name }} into a cell location as soon as possible today.
+    </p>
+
+
+
+    {{ govukButton({
+        text: "Search for another prisoner",
+        element: 'a',
+        href: prisonerSearchLink,
+        attributes: {
+            'data-test': 'back-to-search'
+        }
+    }) }}
+
+{% endblock %}

@@ -8,6 +8,7 @@ const cellSharingRiskAssessmentController = require('../controllers/cellMove/vie
 const { moveValidationFactory } = require('../controllers/cellMove/moveValidation')
 const confirmCellMoveController = require('../controllers/cellMove/confirmCellMove')
 const cellMoveConfirmationController = require('../controllers/cellMove/cellMoveConfirmation')
+const cswapConfirmationController = require('../controllers/cellMove/cswapConfirmation')
 
 const router = express.Router({ mergeParams: true })
 
@@ -26,7 +27,7 @@ const controller = ({ elite2Api, whereaboutsApi, logError }) => {
   router.get('/move-validation', moveValidationIndex)
   router.post('/move-validation', moveValidationPost)
   router.get('/confirmation', cellMoveConfirmationController({ elite2Api, logError }))
-
+  router.get('/cswap-confirmation', cswapConfirmationController({ elite2Api, logError }))
   return router
 }
 

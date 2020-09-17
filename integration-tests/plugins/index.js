@@ -344,8 +344,10 @@ module.exports = on => {
     stubPrisonerFullDetail: ({ prisonerDetail, offenderNo, fullInfo }) =>
       elite2api.stubPrisonerFullDetail(prisonerDetail, offenderNo, fullInfo),
     stubMoveToCell: () => elite2api.stubMoveToCell(),
+    stubMoveToCellSwap: () => elite2api.stubMoveToCellSwap(),
     verifyMoveToCell: ({ bookingId, locationPrefix }) => elite2api.verifyMoveToCell({ bookingId, locationPrefix }),
     stubGetLocationPrefix: ({ agencyId, groupName, response }) =>
       whereabouts.stubGetLocationPrefix({ agencyId, groupName, response }),
+    verifyMoveToCellSwap: ({ bookingId }) => elite2api.verifyMoveToCellSwap({ bookingId }),
   })
 }
