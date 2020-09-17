@@ -93,7 +93,7 @@ describe('Change cell play back details', () => {
       expect(res.render).toHaveBeenCalledWith('cellMove/confirmCellMove.njk', {
         breadcrumbPrisonerName: 'Doe, Bob',
         cellId: 'C-SWAP',
-        description: 'C-SWAP',
+        description: 'swap',
         locationPrefix: undefined,
         name: 'Bob Doe',
         offenderNo: 'A12345',

@@ -66,7 +66,6 @@ module.exports = ({ elite2Api, logError }) => {
 
       return await makeCellMove(res, { cellId, bookingId, agencyId, offenderNo })
     } catch (error) {
-      console.error(error)
       if (error) logError(req.originalUrl, error, `Failed to make cell move to ${cellId}`)
 
       return res.render('error.njk', {
