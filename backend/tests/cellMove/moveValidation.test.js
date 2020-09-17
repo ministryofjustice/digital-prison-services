@@ -522,6 +522,23 @@ describe('move validation', () => {
     )
   })
 
+  it('Does not pass category warning if no inmates', async () => {
+    elite2Api.getDetails.mockResolvedValueOnce({ ...getCurrentOffenderDetailsResponse, csra: 'Standard' })
+    elite2Api.getLocation
+      .mockResolvedValueOnce(cellLocationData)
+      .mockResolvedValueOnce(parentLocationData)
+      .mockResolvedValueOnce(superParentLocationData)
+    elite2Api.getInmatesAtLocation.mockResolvedValue([])
+    await controller.index(req, res)
+
+    expect(res.render).toHaveBeenCalledWith(
+      'cellMove/moveValidation.njk',
+      expect.objectContaining({
+        categoryWarning: false,
+      })
+    )
+  })
+
   it('Redirects when form has been triggered with no data', async () => {
     elite2Api.getDetails
       .mockResolvedValueOnce(getCurrentOffenderDetailsResponse)
