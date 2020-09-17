@@ -154,7 +154,7 @@ const moveValidationFactory = ({ elite2Api, logError }) => {
         )
         .flatMap(alert => alert)
 
-      const categoryWarning = currentOffenderDetails.categoryCode === 'A'
+      const categoryWarning = currentOccupantsDetails.length > 0 && currentOffenderDetails.categoryCode === 'A'
 
       if (
         !categoryWarning &&
@@ -174,6 +174,7 @@ const moveValidationFactory = ({ elite2Api, logError }) => {
         currentOffenderActiveAlerts,
         currentOccupantsActiveAlerts,
         categoryWarning,
+        showRisks: currentOffenderActiveAlerts.length > 0 || currentOccupantsActiveAlerts.length > 0 || categoryWarning,
         errors,
         dpsUrl,
       })
