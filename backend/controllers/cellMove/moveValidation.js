@@ -31,14 +31,11 @@ const moveValidationFactory = ({ elite2Api, logError }) => {
     return null
   }
 
-  const getCurrentOffenderAlertTitle = (alert, sexualities) => {
-    const sexualitiesString = sexualities
-      .filter(sexuality => sexuality && !sexuality.toLowerCase().includes('hetero'))
-      .join(', ')
-    if (
-      alert.alertCode === 'RLG' &&
-      sexualities.some(sexuality => sexuality && !sexuality.toLowerCase().includes('hetero'))
-    ) {
+  const getCurrentOffenderAlertTitle = (alert, sexualities, anyNonHetero) => {
+    if (alert.alertCode === 'RLG' && anyNonHetero) {
+      const sexualitiesString = sexualities
+        .filter(sexuality => sexuality && !sexuality.toLowerCase().includes('hetero'))
+        .join(', ')
       return `who has ${indefiniteArticle(alert.alertCodeDescription)} ${
         alert.alertCodeDescription
       } alert into a cell with a prisoner who has a sexual orientation of ${sexualitiesString}`
@@ -114,6 +111,7 @@ const moveValidationFactory = ({ elite2Api, logError }) => {
 
       // Get a list of sexualities involved
       const currentOffenderSexuality = getValueByType('SEXO', currentOffenderDetails.profileInformation, 'resultValue')
+      const currentOffenderNonHetero = currentOffenderSexuality && currentOffenderSexuality.includes('hetero')
       const currentOccupantsSexualities = [
         ...new Set(
           currentOccupantsDetails.map(currentOccupant =>
@@ -121,14 +119,18 @@ const moveValidationFactory = ({ elite2Api, logError }) => {
           )
         ),
       ]
+      const anyNonHetero = currentOccupantsSexualities.some(
+        sexuality => sexuality && !sexuality.toLowerCase().includes('hetero')
+      )
 
       // Get the list of relevant offender alerts
       const currentOffenderActiveAlerts =
         currentOccupantsDetails.length > 0 &&
         currentOffenderDetails.alerts
           .filter(alert => !alert.expired && cellMoveAlertCodes.includes(alert.alertCode) && alert.alertCode !== 'PEEP')
+          .filter(alert => alert.alertCode !== 'RLG' || (alert.alertCode === 'RLG' && anyNonHetero))
           .map(alert => {
-            const title = getCurrentOffenderAlertTitle(alert, currentOccupantsSexualities)
+            const title = getCurrentOffenderAlertTitle(alert, currentOccupantsSexualities, anyNonHetero)
             return getOffenderAlertBody(alert, title, currentOffenderDetails.firstName, currentOffenderDetails.lastName)
           })
 
@@ -139,10 +141,10 @@ const moveValidationFactory = ({ elite2Api, logError }) => {
             .filter(
               alert => !alert.expired && cellMoveAlertCodes.includes(alert.alertCode) && alert.alertCode !== 'PEEP'
             )
+            .filter(alert => alert.alertCode !== 'RLG' || (alert.alertCode === 'RLG' && currentOffenderNonHetero))
             .map(alert => {
               const title =
-                alert.alertCode === 'RLG' &&
-                (currentOffenderSexuality && !currentOffenderSexuality.toLowerCase().includes('hetero'))
+                alert.alertCode === 'RLG' && currentOffenderNonHetero
                   ? `who has a sexual orientation of ${currentOffenderSexuality} into a cell with a prisoner who has ${indefiniteArticle(
                       alert.alertCodeDescription
                     )} ${alert.alertCodeDescription} alert`
