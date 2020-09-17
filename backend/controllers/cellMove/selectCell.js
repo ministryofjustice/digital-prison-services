@@ -123,7 +123,6 @@ module.exports = ({ oauthApi, elite2Api, whereaboutsApi, logError }) => async (r
       elite2Api.userCaseLoads(res.locals),
       oauthApi.userRoles(res.locals),
     ])
-
     const prisonerDetails = await elite2Api.getDetails(res.locals, offenderNo, true)
 
     if (!userHasAccess({ userRoles, userCaseLoads, offenderCaseload: prisonerDetails.agencyId })) {

@@ -9,7 +9,7 @@ context('A user can select a cell', () => {
   before(() => {
     cy.clearCookies()
     cy.task('reset')
-    cy.task('stubLogin', { username: 'ITAG_USER', caseload: 'MDI', roles: [{ roleCode: 'CELL_MOVE' }] })
+    cy.task('stubLogin', { username: 'ITAG_USER', caseload: 'MDI' })
     cy.login()
   })
   beforeEach(() => {
@@ -19,6 +19,8 @@ context('A user can select a cell', () => {
     cy.task('stubBookingNonAssociations', {})
     cy.task('stubGroups', { id: 'MDI' })
     cy.task('stubCellAttributes')
+    cy.task('stubUserMeRoles', [{ roleCode: 'CELL_MOVE' }])
+    cy.task('stubUserCaseLoads')
   })
 
   it('Shows the correct data for no non-associations and no csra comment', () => {

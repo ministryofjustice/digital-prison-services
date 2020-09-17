@@ -23,7 +23,7 @@ context('A user can select a cell', () => {
   before(() => {
     cy.clearCookies()
     cy.task('reset')
-    cy.task('stubLogin', { username: 'ITAG_USER', caseload: 'MDI', roles: [{ roleCode: 'CELL_MOVE' }] })
+    cy.task('stubLogin', { username: 'ITAG_USER', caseload: 'MDI' })
     cy.login()
   })
   beforeEach(() => {
@@ -80,6 +80,8 @@ context('A user can select a cell', () => {
     cy.task('stubLocation', { locationId: 1, locationData: { parentLocationId: 2, description: 'MDI-1-1' } })
     cy.task('stubLocation', { locationId: 2, locationData: { parentLocationId: 3 } })
     cy.task('stubLocation', { locationId: 3, locationData: { locationPrefix: 'MDI-1' } })
+    cy.task('stubUserMeRoles', [{ roleCode: 'CELL_MOVE' }])
+    cy.task('stubUserCaseLoads')
   })
 
   context('with cell data', () => {
