@@ -174,6 +174,7 @@ const moveValidationFactory = ({ elite2Api, logError }) => {
         currentOffenderActiveAlerts,
         currentOccupantsActiveAlerts,
         categoryWarning,
+        showRisks: currentOffenderActiveAlerts.length > 0 || currentOccupantsActiveAlerts.length > 0 || categoryWarning,
         errors,
         dpsUrl,
       })

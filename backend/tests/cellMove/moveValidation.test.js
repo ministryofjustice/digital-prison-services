@@ -385,6 +385,7 @@ describe('move validation', () => {
         offenderNo,
         csraWarningMessage: 'who is CSRA high into a cell with a prisoner who is CSRA high',
         categoryWarning: true,
+        showRisks: true,
         nonAssociations: [
           {
             name: 'Bloggs, Jim',
@@ -454,6 +455,7 @@ describe('move validation', () => {
       'cellMove/moveValidation.njk',
       expect.objectContaining({
         csraWarningMessage: 'who is CSRA standard into a cell with a prisoner who is CSRA high',
+        showRisks: true,
         currentOffenderActiveAlerts: [
           {
             comment: 'has a large poster on cell wall',
@@ -499,12 +501,17 @@ describe('move validation', () => {
       'cellMove/moveValidation.njk',
       expect.objectContaining({
         csraWarningMessage: null,
+        showRisks: true,
       })
     )
   })
 
   it('Does not pass alerts and CSRA when there are no occupants', async () => {
-    elite2Api.getDetails.mockResolvedValueOnce({ ...getCurrentOffenderDetailsResponse, csra: 'Standard' })
+    elite2Api.getDetails.mockResolvedValueOnce({
+      ...getCurrentOffenderDetailsResponse,
+      csra: 'Standard',
+      categoryCode: 'C',
+    })
     elite2Api.getLocation
       .mockResolvedValueOnce(cellLocationData)
       .mockResolvedValueOnce(parentLocationData)
@@ -518,6 +525,8 @@ describe('move validation', () => {
         csraWarningMessage: false,
         currentOffenderActiveAlerts: false,
         currentOccupantsActiveAlerts: [],
+        categoryWarning: false,
+        showRisks: false,
       })
     )
   })
@@ -535,6 +544,7 @@ describe('move validation', () => {
       'cellMove/moveValidation.njk',
       expect.objectContaining({
         categoryWarning: false,
+        showRisks: false,
       })
     )
   })
