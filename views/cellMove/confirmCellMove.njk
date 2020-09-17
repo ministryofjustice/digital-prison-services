@@ -25,13 +25,16 @@
 
 {% block content %}
     <div class="govuk-grid-row govuk-!-margin-bottom-6">
-        <h1  class="govuk-heading-l">
-            You are moving {{ name }} to cell {{ description }}
-        </h1>
-        {{ govukInsetText({
-            text: "You must have checked any local processes for non-associations."
-        }) }}
         <div class="govuk-grid-column-full">
+            <h1  class="govuk-heading-l">
+                You are moving {{ name }} to cell {{ description }}
+            </h1>
+            {% if showWarning %}
+                {{ govukInsetText({
+                    text: "You must have checked any local processes for non-associations."
+                }) }}
+            {% endif %}
+
             <form method="POST">
                 <input type="hidden" name="cellId" value="{{ cellId }}"/>
                 {{ govukButton({ text: "Confirm move", type: "submit" }) }}
@@ -42,7 +45,5 @@
             </p>
         </div>
     </div>
-
-
 {% endblock %}
 

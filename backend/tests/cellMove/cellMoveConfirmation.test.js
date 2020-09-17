@@ -1,9 +1,4 @@
 const cellMoveConfirmation = require('../../controllers/cellMove/cellMoveConfirmation')
-const { raiseAnalyticsEvent } = require('../../raiseAnalyticsEvent')
-
-jest.mock('../../raiseAnalyticsEvent', () => ({
-  raiseAnalyticsEvent: jest.fn(),
-}))
 
 describe('Cell move confirmation', () => {
   let controller
@@ -16,7 +11,6 @@ describe('Cell move confirmation', () => {
     logError = jest.fn()
     elite2Api.getDetails = jest.fn().mockResolvedValue({ firstName: 'Bob', lastName: 'Doe', agencyId: 'MDI' })
     elite2Api.getLocation = jest.fn().mockResolvedValue({ description: 'A-1-012' })
-    elite2Api.getAttributesForLocation = jest.fn().mockResolvedValue({ capacity: 1 })
     controller = cellMoveConfirmation({ elite2Api, logError })
 
     res.render = jest.fn()
@@ -32,20 +26,6 @@ describe('Cell move confirmation', () => {
     await controller(req, res)
 
     expect(elite2Api.getLocation).toHaveBeenCalledWith({}, 1)
-  })
-
-  it('should render confirmation page with the correct data', async () => {
-    await controller(req, res)
-
-    expect(raiseAnalyticsEvent).toBeCalledWith('Cell move', 'Cell move for MDI', 'Cell type - Single occupancy')
-
-    expect(res.render).toHaveBeenCalledWith('cellMove/confirmation.njk', {
-      title: 'Bob Doe has been moved to cell A-1-012',
-      breadcrumbPrisonerName: `Doe, Bob`,
-      offenderNo: 'A12345',
-      prisonerProfileLink: '/prisoner/A12345',
-      prisonerSearchLink: '/prisoner-search',
-    })
   })
 
   it('should handle api errors', async () => {
