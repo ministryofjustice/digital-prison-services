@@ -351,7 +351,7 @@ const elite2ApiFactory = client => {
       `/api/bookings/${bookingId}/living-unit/${internalLocationDescription}?reasonCode=${reasonCode || 'ADM'}`
     )
 
-  const moveToCellSwap = (context, { bookingId }) => put(context, `/api/bookings/${bookingId}/move-to-cell-swap`)
+  const moveToCellSwap = (context, { bookingId }) => put(context, `/api/bookings/${bookingId}/move-to-cell-swap`, {})
 
   return {
     userLocations,

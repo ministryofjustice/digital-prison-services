@@ -229,5 +229,16 @@ context('A user can select a cell', () => {
       const page = SelectCellPage.goTo(offenderNo)
       page.nonAssociationWarning().should('not.be.visible')
     })
+
+    it('should navigate to the confirm cell move page on select c-swap', () => {
+      const page = SelectCellPage.goTo(offenderNo, '1')
+
+      page
+        .selectCswapLink()
+        .invoke('attr', 'href')
+        .then(href => {
+          expect(href).to.equal('/prisoner/A12345/cell-move/confirm-cell-move?cellId=C-SWAP')
+        })
+    })
   })
 })
