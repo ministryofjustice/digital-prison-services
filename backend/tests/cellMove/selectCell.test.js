@@ -7,6 +7,7 @@ const someAgency = 'LEI'
 describe('Select a cell', () => {
   const elite2Api = {}
   const whereaboutsApi = {}
+  const oauthApi = {}
 
   const res = { locals: {} }
   let logError
@@ -26,6 +27,8 @@ describe('Select a cell', () => {
   }
 
   beforeEach(() => {
+    oauthApi.userRoles = jest.fn().mockResolvedValue([{ roleCode: 'CELL_MOVE' }])
+    elite2Api.userCaseLoads = jest.fn().mockResolvedValue([{ caseLoadId: 'LEI' }])
     elite2Api.getDetails = jest.fn().mockResolvedValue({
       firstName: 'John',
       lastName: 'Doe',
@@ -59,7 +62,7 @@ describe('Select a cell', () => {
 
     res.render = jest.fn()
     logError = jest.fn()
-    controller = selectCellFactory({ elite2Api, whereaboutsApi, logError })
+    controller = selectCellFactory({ oauthApi, elite2Api, whereaboutsApi, logError })
 
     req = {
       params: {
@@ -85,6 +88,13 @@ describe('Select a cell', () => {
       expect(elite2Api.getNonAssociations).toHaveBeenCalledWith({}, someBookingId)
       expect(elite2Api.getCellAttributes).toHaveBeenCalledWith({})
       expect(whereaboutsApi.searchGroups).toHaveBeenCalledWith({}, someAgency)
+    })
+
+    it('Redirects when offender not in user caseloads', async () => {
+      elite2Api.userCaseLoads = jest.fn().mockResolvedValue([{ caseLoadId: 'BWY' }])
+      await controller(req, res)
+
+      expect(res.render).toHaveBeenCalledWith('notFound.njk', { url: '/prisoner-search' })
     })
 
     it('should call get cells with capacity for leeds', async () => {
@@ -684,7 +694,7 @@ describe('Select a cell', () => {
         lastName: 'Doe',
         offenderNo: someOffenderNumber,
         bookingId: someBookingId,
-        agencyId: 'MDI',
+        agencyId: someAgency,
         alerts: [],
       })
       elite2Api.getLocation
@@ -713,6 +723,7 @@ describe('Select a cell', () => {
     })
 
     it('should set show non association value to true when there are non-associations within the establishment', async () => {
+      elite2Api.userCaseLoads = jest.fn().mockResolvedValue([{ caseLoadId: 'MDI' }])
       elite2Api.getDetails = jest.fn().mockResolvedValue({
         firstName: 'John',
         lastName: 'Doe',

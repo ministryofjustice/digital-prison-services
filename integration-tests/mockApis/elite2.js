@@ -62,7 +62,7 @@ module.exports = {
     return stubFor({
       request: {
         method: 'GET',
-        urlPattern: '/api/users/me/caseLoads',
+        url: '/api/users/me/caseLoads',
       },
       response: {
         status: 200,
