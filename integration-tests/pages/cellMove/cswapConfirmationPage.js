@@ -1,8 +1,7 @@
 const page = require('../page')
 
 const cswapMoveConfirmationPage = (name, cellDescription) =>
-  page(`${name} has been moved to cell ${cellDescription}`, {
-    backLink: () => cy.get("[data-test='back-to-profile']"),
+  page(`${name} has been moved to ${cellDescription}`, {
     backToSearchLink: () => cy.get("[data-test='back-to-search']"),
   })
 

@@ -30,17 +30,8 @@ context('A user get confirmation of a cell move', () => {
   })
 
   it('should page with the correct offender name and cell description', () => {
-    const page = cswapConfirmationPage.goTo({ offenderNo, cellDescription: 'C-SWAP', name: 'Bob Doe' })
+    const page = cswapConfirmationPage.goTo({ offenderNo, cellDescription: 'cell swap', name: 'Bob Doe' })
 
-    page.backLink().should('be.visible')
-    page
-      .backLink()
-      .invoke('attr', 'href')
-      .then(href => {
-        expect(href).to.equal('/prisoner/A1234A')
-      })
-
-    page.backToSearchLink().should('be.visible')
     page
       .backToSearchLink()
       .invoke('attr', 'href')

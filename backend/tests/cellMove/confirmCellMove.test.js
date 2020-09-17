@@ -147,6 +147,15 @@ describe('Change cell play back details', () => {
 
       expect(raiseAnalyticsEvent).toBeCalledWith('Cell move', 'Cell move for MDI', 'Cell type - Single occupancy')
     })
+
+    it('should not raise an analytics event on api failures', async () => {
+      elite2Api.moveToCell.mockRejectedValue(new Error('Internal server error'))
+      req.body = { cellId: 123 }
+
+      await controller.post(req, res)
+
+      expect(raiseAnalyticsEvent.mock.calls.length).toBe(0)
+    })
   })
 
   describe('Post handle C-SWAP cell move', () => {
@@ -166,6 +175,15 @@ describe('Change cell play back details', () => {
       await controller.post(req, res)
 
       expect(raiseAnalyticsEvent).toBeCalledWith('Cell move', 'Cell move for MDI', 'Cell type - C-SWAP')
+    })
+
+    it('should not raise an analytics event on api failures', async () => {
+      elite2Api.moveToCellSwap.mockRejectedValue(new Error('Internal server error'))
+      req.body = { cellId: 'C-SWAP' }
+
+      await controller.post(req, res)
+
+      expect(raiseAnalyticsEvent.mock.calls.length).toBe(0)
     })
   })
 })
