@@ -98,8 +98,10 @@ const getResidentialLevelNonAssociations = async (res, { elite2Api, nonAssociati
   if (!nonAssociations || !cellId) return []
 
   if (!location || location === 'ALL') {
-    return nonAssociations.nonAssociations.filter(nonAssociation =>
-      nonAssociation.offenderNonAssociation.assignedLivingUnitDescription.includes(agencyId)
+    return nonAssociations.nonAssociations.filter(
+      nonAssociation =>
+        nonAssociation.offenderNonAssociation.assignedLivingUnitDescription &&
+        nonAssociation.offenderNonAssociation.assignedLivingUnitDescription.includes(agencyId)
     )
   }
   // Get the residential unit level prefix for the selected cell by traversing up the
@@ -108,8 +110,10 @@ const getResidentialLevelNonAssociations = async (res, { elite2Api, nonAssociati
   const parentLocationDetail = await elite2Api.getLocation(res.locals, locationDetail.parentLocationId)
   const { locationPrefix } = await elite2Api.getLocation(res.locals, parentLocationDetail.parentLocationId)
 
-  return nonAssociations.nonAssociations.filter(nonAssociation =>
-    nonAssociation.offenderNonAssociation.assignedLivingUnitDescription.includes(locationPrefix)
+  return nonAssociations.nonAssociations.filter(
+    nonAssociation =>
+      nonAssociation.offenderNonAssociation.assignedLivingUnitDescription &&
+      nonAssociation.offenderNonAssociation.assignedLivingUnitDescription.includes(locationPrefix)
   )
 }
 
