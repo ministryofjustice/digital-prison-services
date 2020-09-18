@@ -31,8 +31,15 @@ const getBackLinkData = (referer, offenderNo) => {
   }
 }
 
+const userHasAccess = ({ userRoles, userCaseLoads, offenderCaseload }) => {
+  const hasCellMoveRole = userRoles && userRoles.some(role => role.roleCode === 'CELL_MOVE')
+  const offenderInCaseload = userCaseLoads && userCaseLoads.some(caseload => caseload.caseLoadId === offenderCaseload)
+  return hasCellMoveRole && offenderInCaseload
+}
+
 module.exports = {
   showNonAssociationsLink,
   showCsraLink,
   getBackLinkData,
+  userHasAccess,
 }

@@ -13,6 +13,7 @@ describe('select location', () => {
   const elite2Api = {}
 
   const whereaboutsApi = {}
+  const oauthApi = {}
 
   const offenderNo = 'ABC123'
 
@@ -229,7 +230,10 @@ describe('select location', () => {
       },
     ])
 
-    controller = selectLocation({ elite2Api, whereaboutsApi, logError })
+    oauthApi.userRoles = jest.fn().mockResolvedValue([{ roleCode: 'CELL_MOVE' }])
+    elite2Api.userCaseLoads = jest.fn().mockResolvedValue([{ caseLoadId: 'MDI' }])
+
+    controller = selectLocation({ oauthApi, elite2Api, whereaboutsApi, logError })
   })
 
   it('Makes the expected API calls', async () => {
@@ -239,6 +243,13 @@ describe('select location', () => {
     expect(elite2Api.getNonAssociations).toHaveBeenCalledWith(res.locals, 1234)
     expect(elite2Api.getCellAttributes).toHaveBeenCalledWith(res.locals)
     expect(whereaboutsApi.searchGroups).toHaveBeenCalledWith(res.locals, 'MDI')
+  })
+
+  it('Redirects when offender not in user caseloads', async () => {
+    elite2Api.userCaseLoads = jest.fn().mockResolvedValue([{ caseLoadId: 'BWY' }])
+    await controller(req, res)
+
+    expect(res.render).toHaveBeenCalledWith('notFound.njk', { url: '/prisoner-search' })
   })
 
   it('Should render error template when there is an API error', async () => {

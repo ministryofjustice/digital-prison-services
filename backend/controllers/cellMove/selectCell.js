@@ -2,7 +2,7 @@ const moment = require('moment')
 const { serviceUnavailableMessage } = require('../../common-messages')
 const { alertFlagLabels, cellMoveAlertCodes } = require('../../shared/alertFlagValues')
 const { putLastNameFirst, hasLength, groupBy, properCaseName } = require('../../utils')
-const { showNonAssociationsLink, showCsraLink } = require('./cellMoveUtils')
+const { showNonAssociationsLink, showCsraLink, userHasAccess } = require('./cellMoveUtils')
 const {
   app: { notmEndpointUrl: dpsUrl },
 } = require('../../config')
@@ -113,13 +113,22 @@ const getResidentialLevelNonAssociations = async (res, { elite2Api, nonAssociati
   )
 }
 
-module.exports = ({ elite2Api, whereaboutsApi, logError }) => async (req, res) => {
+module.exports = ({ oauthApi, elite2Api, whereaboutsApi, logError }) => async (req, res) => {
   const { offenderNo } = req.params
   const { location, subLocation, attribute, locationId } = extractQueryParameters(req.query)
   const { activeCaseLoadId } = req.session.userDetails
 
   try {
+    const [userCaseLoads, userRoles] = await Promise.all([
+      elite2Api.userCaseLoads(res.locals),
+      oauthApi.userRoles(res.locals),
+    ])
     const prisonerDetails = await elite2Api.getDetails(res.locals, offenderNo, true)
+
+    if (!userHasAccess({ userRoles, userCaseLoads, offenderCaseload: prisonerDetails.agencyId })) {
+      return res.render('notFound.njk', { url: '/prisoner-search' })
+    }
+
     const nonAssociations = await elite2Api.getNonAssociations(res.locals, prisonerDetails.bookingId)
     const cellAttributesData = await elite2Api.getCellAttributes(res.locals)
     const locationsData = await whereaboutsApi.searchGroups(res.locals, prisonerDetails.agencyId)
