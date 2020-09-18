@@ -40,8 +40,8 @@ context('Retention reasons', () => {
     retentionReasonsPage.offenderNumber().contains(offenderNo)
     retentionReasonsPage.offenderDob().contains('01/02/1990')
     retentionReasonsPage.offenderAgency().contains('Moorland')
-    retentionReasonsPage.lastUpdateTimestamp().should('be', 'empty')
-    retentionReasonsPage.lastUpdateUser().should('be', 'empty')
+    retentionReasonsPage.lastUpdateTimestamp().should('not.be.visible')
+    retentionReasonsPage.lastUpdateUser().should('not.be.visible')
   })
 
   it('Should load the retention reasons page with existing reason', () => {
@@ -65,7 +65,7 @@ context('Retention reasons', () => {
     retentionReasonsPage.offenderNumber().contains(offenderNo)
     retentionReasonsPage.offenderDob().contains('01/02/1990')
     retentionReasonsPage.offenderAgency().contains('Moorland')
-    retentionReasonsPage.checkBoxOther().should('be', 'selected')
+    retentionReasonsPage.checkBoxOther().should('be.checked')
     retentionReasonsPage.moreDetailOther().contains('Some other reason')
     retentionReasonsPage.lastUpdateTimestamp().contains('01/02/2020 - 03:04 (UTC)')
     retentionReasonsPage.lastUpdateUser().contains('SOME_USER')
