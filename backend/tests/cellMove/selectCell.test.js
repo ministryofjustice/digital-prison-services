@@ -756,5 +756,42 @@ describe('Select a cell', () => {
         })
       )
     })
+
+    it('should set show non association value to false when non association offender does not have assigned living unit', async () => {
+      elite2Api.getNonAssociations = jest.fn().mockResolvedValue({
+        offenderNo: 'G6123VU',
+        firstName: 'JOHN',
+        lastName: 'SAUNDERS',
+        agencyDescription: 'MOORLAND (HMP & YOI)',
+        assignedLivingUnitDescription: 'MDI-1-1-015',
+        nonAssociations: [
+          {
+            reasonCode: 'RIV',
+            reasonDescription: 'Rival Gang',
+            typeCode: 'LAND',
+            typeDescription: 'Do Not Locate on Same Landing',
+            effectiveDate: '2020-06-17T00:00:00',
+            expiryDate: '2020-07-17T00:00:00',
+            comments: 'Gang violence',
+            offenderNonAssociation: {
+              offenderNo: 'A111111',
+              firstName: 'bob1',
+              lastName: 'doe1',
+              reasonCode: 'RIV',
+              reasonDescription: 'Rival Gang',
+              agencyDescription: 'OUTSIDE',
+            },
+          },
+        ],
+      })
+      await controller(req, res)
+
+      expect(res.render).toHaveBeenCalledWith(
+        'cellMove/selectCell.njk',
+        expect.objectContaining({
+          showNonAssociationWarning: false,
+        })
+      )
+    })
   })
 })
