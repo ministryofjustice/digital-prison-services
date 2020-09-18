@@ -208,8 +208,10 @@ describe('Attendance reason statistics', () => {
     it('should validate that the date range does not exceed two weeks', async () => {
       const { attendanceStatistics } = attendanceStatisticsFactory(oauthApi, elite2Api, whereaboutsApi, jest.fn())
 
-      const today = moment()
-      const threeWeeksAgo = moment().subtract(3, 'week')
+      const today = moment().format('DD/MM/YYYY')
+      const threeWeeksAgo = moment()
+        .subtract(3, 'weeks')
+        .format('DD/MM/YYYY')
 
       const req = { query: { agencyId, toDate: today, fromDate: threeWeeksAgo, period } }
       const res = { render: jest.fn(), locals: context }
