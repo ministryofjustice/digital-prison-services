@@ -17,6 +17,7 @@
   <h1 class="govuk-heading-l">{{title}}</h1>
 
   <form class="horizontal-form govuk-!-display-none-print">
+    <input type="hidden" name="_csrf" value="{{ csrfToken }}" />
     {{ datePicker({
       id: 'date',
       label: 'Date',

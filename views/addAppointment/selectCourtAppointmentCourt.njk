@@ -47,6 +47,7 @@
 </div>
 
 <form method="post">
+    <input type="hidden" name="_csrf" value="{{ csrfToken }}" />
   {{ govukSelect({
     name: "court",
     id: "court",

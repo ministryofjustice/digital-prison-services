@@ -93,6 +93,7 @@
             {% endif %}
 
             <form action="/bulk-appointments/add-appointment-details" method="POST" novalidate="novalidate">
+                <input type="hidden" name="_csrf" value="{{ csrfToken }}" />
 
                 {{ govukSelect({
                         id: "appointment-type",

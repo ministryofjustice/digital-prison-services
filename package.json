@@ -49,6 +49,7 @@
     "connect-redis": "^4.0.3",
     "contentful": "^7.3.0",
     "cookie-session": "^2.0.0-beta.3",
+    "csurf": "^1.11.0",
     "csv-parse": "^4.4.6",
     "debug": "~2.6.9",
     "dotenv": "^5.0.1",

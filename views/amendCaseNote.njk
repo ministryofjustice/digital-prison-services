@@ -58,6 +58,7 @@
     {% endfor %}
 
     <form action="{{ postAmendment }}" method="post">
+        <input type="hidden" name="_csrf" value="{{ csrfToken }}" />
         {{ govukTextarea({
             name: "moreDetail",
             id: "moreDetail",

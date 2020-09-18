@@ -80,6 +80,7 @@
         </div>
 
         <form method="post" about="{{ links.postAppointments }}">
+            <input type="hidden" name="_csrf" value="{{ csrfToken }}" />
             <input type="hidden" id="appointment-date" value="{{ date }}"/>
 
             <div class="govuk-grid-row">

@@ -28,6 +28,7 @@
             {% endif %}
 
             <form method="POST" novalidate="novalidate" action="/request-booking/create-booking-request">
+                <input type="hidden" name="_csrf" value="{{ csrfToken }}" />
 
                 {{ govukInput({
                     label: {

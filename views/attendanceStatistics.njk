@@ -45,6 +45,7 @@
   {% endif %}
 
   <form action="/manage-prisoner-whereabouts/attendance-reason-statistics" class="horizontal-form govuk-!-display-none-print govuk-!-margin-bottom-6">
+      <input type="hidden" name="_csrf" value="{{ csrfToken }}" />
       <input type="hidden" name="agencyId" value="{{caseLoadId}}"/>
 
         {{ datePicker({

@@ -44,6 +44,7 @@
   <input type="hidden" name="subTypeUrl" value="{{ subTypesRootUrl }}"/>
 
   <form method="POST" novalidate="novalidate">
+    <input type="hidden" name="_csrf" value="{{ csrfToken }}" />
     {{ govukSelect({
           id: "type",
           name: "type",

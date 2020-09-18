@@ -5,6 +5,7 @@ require('dotenv').config()
 require('./azure-appinsights')
 
 const express = require('express')
+const csrf = require('csurf')
 
 const app = express()
 
@@ -39,6 +40,7 @@ app.use(setupStaticContent())
 app.use(setupWebSession())
 app.use(setupAuth({ oauthApi: apis.oauthApi, tokenVerificationApi: apis.tokenVerificationApi }))
 app.use(setupWebpackForDev())
+app.use(csrf())
 app.use(routes({ ...apis }))
 
 // These are routes defined in the react router
