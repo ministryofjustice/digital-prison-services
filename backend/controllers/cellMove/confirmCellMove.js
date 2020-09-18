@@ -12,7 +12,7 @@ module.exports = ({ elite2Api, logError }) => {
     const { locationPrefix, description } =
       cellId === 'C-SWAP'
         ? {
-            description: cellId,
+            description: 'swap',
           }
         : await elite2Api.getLocation(res.locals, cellId)
 
