@@ -59,13 +59,13 @@ context('A user can confirm the cell move', () => {
   })
 
   it('should display C-SWAP location', () => {
-    const page = ConfirmCellMovePage.goTo('A12345', 'C-SWAP', 'Bob Doe', 'C-SWAP')
+    const page = ConfirmCellMovePage.goTo('A12345', 'C-SWAP', 'Bob Doe', 'swap')
 
     page.warning().should('not.be.visible')
   })
 
   it('should the move to C-SWAP', () => {
-    const page = ConfirmCellMovePage.goTo('A12345', 'C-SWAP', 'Bob Doe', 'C-SWAP')
+    const page = ConfirmCellMovePage.goTo('A12345', 'C-SWAP', 'Bob Doe', 'swap')
 
     page
       .form()
