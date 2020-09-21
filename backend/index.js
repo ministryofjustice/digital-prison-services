@@ -24,6 +24,8 @@ const setupStaticContent = require('./setupStaticContent')
 const nunjucksSetup = require('./utils/nunjucksSetup')
 const setupWebpackForDev = require('./setupWebpackForDev')
 const setupRedirects = require('./setupRedirects')
+const setupApiRoutes = require('./setupApiRoutes')
+const setupReactRoutes = require('./setupReactRoutes')
 
 app.set('trust proxy', 1) // trust first proxy
 app.set('view engine', 'ejs')
@@ -40,40 +42,10 @@ app.use(setupStaticContent())
 app.use(setupWebSession())
 app.use(setupAuth({ oauthApi: apis.oauthApi, tokenVerificationApi: apis.tokenVerificationApi }))
 app.use(setupWebpackForDev())
+app.use(setupApiRoutes({ ...apis }))
+app.use(setupReactRoutes())
 app.use(csrf())
 app.use(routes({ ...apis }))
-
-// These are routes defined in the react router
-// They are listed here so the express app also knows about
-// them and knows to pass them onto the react router
-// This is needed in order to implement a page not found behaviour.
-app.get('/establishment-roll*', (req, res) => {
-  res.sendFile(path.join(__dirname, '../build/index.html'))
-})
-
-app.get('/manage-prisoner-whereabouts*', (req, res) => {
-  res.sendFile(path.join(__dirname, '../build/index.html'))
-})
-
-app.get('/offenders/:offenderNo/*', (req, res) => {
-  res.sendFile(path.join(__dirname, '../build/index.html'))
-})
-
-app.use('/content*', (req, res) => {
-  res.sendFile(path.join(__dirname, '../build/index.html'))
-})
-
-app.get('/global-search*', (req, res) => {
-  res.sendFile(path.join(__dirname, '../build/index.html'))
-})
-
-app.get('/iep-slip', (req, res) => {
-  res.sendFile(path.join(__dirname, '../build/index.html'))
-})
-
-app.get('/', (req, res) => {
-  res.sendFile(path.join(__dirname, '../build/index.html'))
-})
 
 app.use((req, res) => {
   res.redirect(config.app.notmEndpointUrl)
