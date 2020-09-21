@@ -42,10 +42,32 @@ app.use(setupStaticContent())
 app.use(setupWebSession())
 app.use(setupAuth({ oauthApi: apis.oauthApi, tokenVerificationApi: apis.tokenVerificationApi }))
 app.use(setupWebpackForDev())
-app.use(setupApiRoutes({ ...apis }))
-app.use(setupReactRoutes())
+app.use(
+  setupApiRoutes({
+    elite2Api: apis.elite2Api,
+    whereaboutsApi: apis.whereaboutsApi,
+    oauthApi: apis.oauthApi,
+    caseNotesApi: apis.caseNotesApi,
+    offenderSearchApi: apis.offenderSearchApi,
+  })
+)
 app.use(csrf())
-app.use(routes({ ...apis }))
+app.use(
+  routes({
+    elite2Api: apis.elite2Api,
+    whereaboutsApi: apis.whereaboutsApi,
+    oauthApi: apis.oauthApi,
+    communityApi: apis.communityApi,
+    dataComplianceApi: apis.dataComplianceApi,
+    keyworkerApi: apis.keyworkerApi,
+    caseNotesApi: apis.caseNotesApi,
+    allocationManagerApi: apis.allocationManagerApi,
+    pathfinderApi: apis.pathfinderApi,
+    socApi: apis.socApi,
+  })
+)
+
+app.use(setupReactRoutes())
 
 app.use((req, res) => {
   res.redirect(config.app.notmEndpointUrl)
