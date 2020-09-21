@@ -43,6 +43,7 @@
   <input type="hidden" name="subTypeUrl" value="{{ alertsRootUrl }}"/>
 
   <form method="POST" novalidate="novalidate">
+      <input type="hidden" name="_csrf" value="{{ csrfToken }}" />
       <input type="hidden" name="bookingId" value={{bookingId}} />
       <input type="hidden" name="existingAlerts" value="{{ prisonersActiveAlertCodes }}"/>
       {{ govukSelect({

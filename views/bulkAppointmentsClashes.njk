@@ -31,6 +31,7 @@
   </p>
 
   <form method="POST" id="bulkAppointmentsClashes">
+    <input type="hidden" name="_csrf" value="{{ csrfToken }}" />
     <table class="govuk-table" data-qa="prisoners-with-clashes">
       <thead class="govuk-table__head">
         <tr class="govuk-table__row">

@@ -19,6 +19,7 @@
     <div class="govuk-grid-row">
         <div id="location-events" class="govuk-grid-column-one-third">
             <form method="post" about="{{ links.postAppointments }}">
+                <input type="hidden" name="_csrf" value="{{ csrfToken }}" />
                 <input type="hidden" name="preAppointment" value="{{  formValues.preAppointment }}"/>
                 <input type="hidden" name="postAppointment" value="{{ formValues.postAppointment }}"/>
 

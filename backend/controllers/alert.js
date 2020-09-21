@@ -50,7 +50,7 @@ const getValidationErrors = ({ alertStatus, comment }) => {
 const alertFactory = (oauthApi, elite2Api, referenceCodesService) => {
   const renderTemplate = (req, res, pageData) => {
     const { alert, pageErrors, offenderDetails, ...rest } = pageData
-    const formAction = offenderDetails && alert && `/api/edit-alert/${offenderDetails.bookingId}/${alert.alertId}`
+    const formAction = offenderDetails && alert && `/edit-alert/${offenderDetails.bookingId}/${alert.alertId}`
 
     const {
       active,

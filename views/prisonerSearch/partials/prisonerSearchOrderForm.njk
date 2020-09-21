@@ -16,6 +16,7 @@
 {% endif %}
 
 <form method="POST" class="horizontal-form" data-test="prisoner-search-order-form">
+  <input type="hidden" name="_csrf" value="{{ csrfToken }}" />
   {{ govukSelect({
     id: "sortFieldsWithOrder",
     name: "sortFieldsWithOrder",

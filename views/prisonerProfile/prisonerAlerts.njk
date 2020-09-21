@@ -28,6 +28,7 @@
   <div class="govuk-width-container govuk-!-padding-3 govuk-!-margin-bottom-5 form-background">
     <h2 class="govuk-heading-m">View by</h2>
     <form class="horizontal-form govuk-!-display-none-print govuk-body govuk-!-margin-bottom-3">
+      <input type="hidden" name="_csrf" value="{{ csrfToken }}" />
       {{ govukSelect({
           name: 'active',
           id: 'active',

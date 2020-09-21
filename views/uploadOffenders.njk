@@ -41,6 +41,7 @@
       }) }}
       
       <form action="/bulk-appointments/upload-file" method="POST" enctype="multipart/form-data">
+        <input type="hidden" name="_csrf" value="{{ csrfToken }}" />
 
         {{ govukFileUpload({
           id: "file",

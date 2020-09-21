@@ -68,7 +68,7 @@
     <div class="govuk-grid-row">
         <div class="govuk-grid-column-two-thirds">
             <form method="POST" novalidate="novalidate" action="/request-booking/validate-court">
-
+                <input type="hidden" name="_csrf" value="{{ csrfToken }}" />
 
                 {{ govukSelect({
                     id: "hearing-location",

@@ -5,6 +5,7 @@
 
 
 <form novalidate="novalidate" class="prisoner-visits__form" data-test="prisoner-visits-form">
+  <input type="hidden" name="_csrf" value="{{ csrfToken }}" />
   {% call govukFieldset({
     legend: {
       text: "View by",

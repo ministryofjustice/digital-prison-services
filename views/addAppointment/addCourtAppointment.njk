@@ -53,6 +53,7 @@
             </div>
 
             <form method="POST" novalidate="novalidate">
+                <input type="hidden" name="_csrf" value="{{ csrfToken }}" />
                 <input type="hidden" name="bookingId" value={{bookingId}} />
 
                 <input type="hidden" name="appointmentType" value="{{ formValues.appointmentType }}">

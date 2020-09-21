@@ -8,6 +8,10 @@ module.exports = ({ elite2Api, oauthApi }) => async (req, res, next) => {
       req.session.allCaseloads = allCaseloads
     }
 
+    if (typeof req.csrfToken === 'function') {
+      res.locals.csrfToken = req.csrfToken()
+    }
+
     const caseloads = req.session.allCaseloads
     const { name, activeCaseLoadId } = req.session.userDetails
 

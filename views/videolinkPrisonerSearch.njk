@@ -31,6 +31,7 @@
   </p>
 
   <form novalidate="novalidate">
+    <input type="hidden" name="_csrf" value="{{ csrfToken }}" />
     {{ govukInput({
       id: "firstName",
       name: "firstName",

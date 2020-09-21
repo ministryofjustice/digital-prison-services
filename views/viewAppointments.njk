@@ -22,6 +22,7 @@
   {{ printLink() }}
 
   <form class="horizontal-form govuk-!-display-none-print">
+    <input type="hidden" name="_csrf" value="{{ csrfToken }}" />
     {{ datePicker({
       id: 'date',
       label: 'Date',

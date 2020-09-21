@@ -29,6 +29,7 @@
             {% endif %}
 
             <form method="POST" novalidate="novalidate" action="/request-booking/check-availability">
+                <input type="hidden" name="_csrf" value="{{ csrfToken }}" />
                 {{ govukSelect({
                     id: "prison",
                     name: "prison",

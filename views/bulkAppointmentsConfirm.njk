@@ -41,6 +41,7 @@
     Appointments will be created for these prisoners.
   </p>
   <form method="POST" id="confirmBulkAppointments">
+    <input type="hidden" name="_csrf" value="{{ csrfToken }}" />
     <table class="govuk-table table-compact" data-qa="prisoners-found">
       <thead class="govuk-table__head">
         <tr class="govuk-table__row">

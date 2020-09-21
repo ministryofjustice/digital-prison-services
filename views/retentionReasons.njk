@@ -105,6 +105,7 @@
       {% endfor %}
 
       <form action={{ formAction }} method="POST">
+        <input type="hidden" name="_csrf" value="{{ csrfToken }}" />
 
         {% if lastUpdate %}
           <input type="hidden" name="version" value="{{ lastUpdate.version }}"/>
