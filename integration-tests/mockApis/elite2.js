@@ -1030,6 +1030,7 @@ module.exports = {
     })
   },
   stubAppointmentsGet: (appointments, status = 200) => {
+    console.log(appointments)
     return stubFor({
       request: {
         method: 'GET',
