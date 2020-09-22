@@ -79,6 +79,9 @@ jobs:
     docker:
       - image: circleci/node:12-buster-browsers
       - image: circleci/redis:buster
+      - image: rodolpheche/wiremock
+        ports:
+          - "9191:8080"
     steps:
       - checkout
       - attach_workspace:
@@ -86,9 +89,6 @@ jobs:
       - run:
           name: Install missing OS dependency
           command: sudo apt-get install libxss1
-      - run:
-          name: Get wiremock
-          command: docker run -it --rm -p 9191:8080 rodolpheche/wiremock
       - restore_cache:
           key: node_modules-{{ checksum "package-lock.json" }}-{{ checksum "package.json" }}
       - run:
