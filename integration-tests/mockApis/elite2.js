@@ -356,6 +356,34 @@ module.exports = {
         jsonBody: alerts || [],
       },
     }),
+  stubGetAlert: ({ bookingId, alertId, alert }) =>
+    stubFor({
+      request: {
+        method: 'GET',
+        url: `/api/bookings/${bookingId}/alerts/${alertId}`,
+      },
+      response: {
+        status: 200,
+        headers: {
+          'Content-Type': 'application/json;charset=UTF-8',
+        },
+        jsonBody: alert || {},
+      },
+    }),
+  stubPutAlert: ({ bookingId, alertId, alert }) =>
+    stubFor({
+      request: {
+        method: 'PUT',
+        url: `/api/bookings/${bookingId}/alert/${alertId}`,
+      },
+      response: {
+        status: 200,
+        headers: {
+          'Content-Type': 'application/json;charset=UTF-8',
+        },
+        jsonBody: alert || {},
+      },
+    }),
   stubCreateAlert: () => {
     return stubFor({
       request: {

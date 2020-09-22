@@ -278,6 +278,7 @@ module.exports = on => {
     stubSentenceTerms: sentenceTerms => elite2api.stubSentenceTerms(sentenceTerms),
     stubClientCredentialsRequest: () => auth.stubClientCredentialsRequest(),
     stubUserMeRoles: roles => auth.stubUserMeRoles(roles),
+    stubUserMe: () => auth.stubUserMe(),
     stubPathFinderOffenderDetails: details => pathfinder.getOffenderDetails(details),
     stubSocOffenderDetails: details => socApi.stubGetOffenderDetails(details),
     stubVisitsWithVisitors: ({ visitsWithVisitors, offenderBasicDetails, visitTypes }) =>
@@ -338,6 +339,8 @@ module.exports = on => {
     stubInmatesAtLocation: ({ inmates }) => elite2api.stubInmatesAtLocation(inmates),
     stubOffenderCellHistory: ({ history }) => elite2api.stubOffenderCellHistory(history),
     stubGetAlerts: ({ agencyId, alerts }) => elite2api.stubGetAlerts({ agencyId, alerts }),
+    stubGetAlert: ({ bookingId, alertId, alert }) => elite2api.stubGetAlert({ bookingId, alertId, alert }),
+    stubPutAlert: ({ bookingId, alertId, alert }) => elite2api.stubPutAlert({ bookingId, alertId, alert }),
     stubHistoryForLocation: locationHistory => elite2api.stubHistoryForLocation(locationHistory),
     stubAttributesForLocation: locationAttributes => elite2api.stubAttributesForLocation(locationAttributes),
     stubPrisonerDetail: ({ prisonerDetail, bookingId }) => elite2api.stubPrisonerDetail(prisonerDetail, bookingId),
