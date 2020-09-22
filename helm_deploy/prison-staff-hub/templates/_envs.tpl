@@ -158,6 +158,9 @@ env:
   - name: ALLOCATION_MANAGER_ENDPOINT_URL
     value: {{ .Values.env.ALLOCATION_MANAGER_ENDPOINT_URL | quote }}
 
+  - name: SUPPORT_URL
+    value: {{ .Values.env.SUPPORT_URL | quote }}
+
   - name: NODE_ENV
     value: production
 
