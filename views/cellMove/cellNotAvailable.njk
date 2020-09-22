@@ -1,0 +1,47 @@
+{% extends "../partials/layout.njk" %}
+{% from "govuk/components/button/macro.njk" import govukButton %}
+{% from "govuk/components/panel/macro.njk" import govukPanel %}
+
+{% set title = 'Cell not available' %}
+
+{% block beforeContent %}
+    {{ govukBreadcrumbs({
+        items: [
+            {
+                text: "Home",
+                href: dpsUrl
+            },
+            {
+                text: breadcrumbPrisonerName,
+                href: '/prisoner/' + offenderNo
+            },
+            {
+                text: 'Select cell',
+                href: selectCellUrl
+            },
+            {
+                text: 'Cell not available'
+            }
+        ]
+    }) }}
+{% endblock %}
+
+{% block content %}
+    <h1 class="govuk-heading-l">
+        {{ header }}
+    </h1>
+
+    <p class="govuk-body">
+        This cell is no longer available. You must select another cell.
+    </p>
+
+    {{ govukButton({
+        text: "Select another cell",
+        element: 'a',
+        href: selectCellUrl,
+        attributes: {
+            'data-test': 'select-another-cell-link'
+        }
+    }) }}
+
+{% endblock %}

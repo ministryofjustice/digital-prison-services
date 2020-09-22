@@ -32,9 +32,15 @@ module.exports = ({ elite2Api, logError }) => {
 
   const makeCellMove = async (res, { cellId, bookingId, agencyId, offenderNo }) => {
     const { capacity } = await elite2Api.getAttributesForLocation(res.locals, cellId)
-    const { locationPrefix } = await elite2Api.getLocation(res.locals, cellId)
+    const { locationPrefix, description } = await elite2Api.getLocation(res.locals, cellId)
 
-    await elite2Api.moveToCell(res.locals, { bookingId, internalLocationDescription: locationPrefix })
+    try {
+      await elite2Api.moveToCell(res.locals, { bookingId, internalLocationDescription: locationPrefix })
+    } catch (error) {
+      if (error.status === 400)
+        return res.redirect(`/prisoner/${offenderNo}/cell-move/cell-not-available?cellDescription=${description}`)
+      throw error
+    }
 
     raiseAnalyticsEvent(
       'Cell move',

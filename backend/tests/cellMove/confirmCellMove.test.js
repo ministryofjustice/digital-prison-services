@@ -1,4 +1,5 @@
 const confirmCellMove = require('../../controllers/cellMove/confirmCellMove')
+const { makeError } = require('../helpers')
 
 const { raiseAnalyticsEvent } = require('../../raiseAnalyticsEvent')
 
@@ -28,6 +29,7 @@ describe('Change cell play back details', () => {
     elite2Api.moveToCellSwap = jest.fn()
     elite2Api.getLocation = jest.fn().mockResolvedValue({
       locationPrefix: 'MDI-10-19',
+      description: 'MDI-10',
     })
 
     elite2Api.getAttributesForLocation = jest.fn().mockResolvedValue({ capacity: 1 })
@@ -69,6 +71,7 @@ describe('Change cell play back details', () => {
       expect(res.render).toHaveBeenCalledWith('cellMove/confirmCellMove.njk', {
         breadcrumbPrisonerName: 'Doe, Bob',
         cellId: 223,
+        description: 'MDI-10',
         locationPrefix: 'MDI-10-19',
         name: 'Bob Doe',
         offenderNo: 'A12345',
@@ -157,6 +160,20 @@ describe('Change cell play back details', () => {
 
       expect(raiseAnalyticsEvent.mock.calls.length).toBe(0)
     })
+
+    it('should redirect to cell not available on a http 400 bad request when attempting a cell move', async () => {
+      req.body = { cellId: 223 }
+
+      elite2Api.moveToCell.mockRejectedValue(makeError('status', 400))
+
+      await controller.post(req, res)
+
+      expect(res.redirect).toHaveBeenCalledWith('/prisoner/A12345/cell-move/cell-not-available?cellDescription=MDI-10')
+      expect(raiseAnalyticsEvent.mock.calls.length).toBe(0)
+      expect(logError.mock.calls.length).toBe(0)
+    })
+
+    it('should redirect to error page when the cell is no longer available', () => {})
   })
 
   describe('Post handle C-SWAP cell move', () => {
