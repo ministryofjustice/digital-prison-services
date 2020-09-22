@@ -79,8 +79,6 @@ jobs:
     docker:
       - image: circleci/node:12-buster-browsers
       - image: circleci/redis:buster
-      - image: rodolpheche/wiremock
-        command: [--ports 9191:8080]
     steps:
       - checkout
       - attach_workspace:
@@ -88,6 +86,13 @@ jobs:
       - run:
           name: Install missing OS dependency
           command: sudo apt-get install libxss1
+      - run:
+          name: Get wiremock
+          command: curl -o wiremock.jar https://repo1.maven.org/maven2/com/github/tomakehurst/wiremock-standalone/2.27.1/wiremock-standalone-2.27.1.jar
+      - run:
+          name: Run auth wiremock
+          command: java -jar wiremock.jar --port 9191
+          background: true
       - restore_cache:
           key: node_modules-{{ checksum "package-lock.json" }}-{{ checksum "package.json" }}
       - run:
