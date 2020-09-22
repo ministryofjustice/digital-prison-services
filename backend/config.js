@@ -12,6 +12,7 @@ module.exports = {
     featureFlags: {},
     videoLinkEnabledFor: (process.env.VIDEO_LINK_ENABLED_FOR || '').split(','),
     displayRetentionLink: process.env.DISPLAY_RETENTION_LINK === 'true' || false,
+    supportUrl: process.env.SUPPORT_URL || 'http://localhost:3000/',
   },
   analytics: {
     googleAnalyticsId: process.env.GOOGLE_ANALYTICS_ID,
