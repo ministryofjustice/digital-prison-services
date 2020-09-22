@@ -52,25 +52,6 @@ class Elite2Api extends WireMockRule {
                         ))
     }
 
-    void stubHealth() {
-        this.stubFor(
-                get('/health/ping')
-                        .willReturn(
-                                aResponse()
-                                        .withStatus(200)
-                                        .withHeader('Content-Type', 'text/plain')
-                                        .withBody('ping')))
-    }
-
-    void stubDelayedError(url, status) {
-        this.stubFor(
-                get(url)
-                        .willReturn(
-                                aResponse()
-                                        .withStatus(status)
-                                        .withFixedDelay(3000)))
-    }
-
     void stubActivityLocations() {
         this.stubFor(
                 get(urlMatching(".+eventLocationsBooked\\?bookedOnDay=....-..-..&timeSlot=.."))
@@ -184,52 +165,6 @@ class Elite2Api extends WireMockRule {
 
     }
 
-    void stubProgEventsAtLocation(int locationId, String timeSlot, String date, def data = JsonOutput.toJson([]), Boolean suspended = true) {
-        this.stubFor(
-                get("/api/schedules/locations/${locationId}/activities?${timeSlot ? 'timeSlot=' + timeSlot + '&' : ''}date=${date}&includeSuspended=${suspended}")
-                        .willReturn(
-                                aResponse()
-                                        .withBody(data)
-                                        .withHeader('Content-Type', 'application/json')
-                                        .withStatus(200))
-        )
-    }
-
-    void stubUsageAtLocation(Caseload caseload, int locationId, String timeSlot, String date, String usage, String json = '[]') {
-        this.stubFor(
-                get("/api/schedules/${caseload.id}/locations/${locationId}/usage/${usage}?${timeSlot ? 'timeSlot=' + timeSlot + '&' : ''}date=${date}")
-                        .willReturn(
-                                aResponse()
-                                        .withBody(json)
-                                        .withHeader('Content-Type', 'application/json')
-                                        .withStatus(200))
-        )
-    }
-
-    void stubVisits(Caseload caseload, String timeSlot, String date, def offenderNumbers, data = JsonOutput.toJson([])) {
-        this.stubFor(
-                post("/api/schedules/${caseload.id}/visits?${timeSlot ? 'timeSlot=' + timeSlot + '&' : ''}date=${date}")
-                        .withRequestBody(equalToJson(JsonOutput.toJson(offenderNumbers)))
-                        .willReturn(
-                                aResponse()
-                                        .withBody(data)
-                                        .withHeader('Content-Type', 'application/json')
-                                        .withStatus(200))
-        )
-    }
-
-    void stubAppointments(Caseload caseload, String timeSlot, String date, def offenderNumbers, data = JsonOutput.toJson([])) {
-        this.stubFor(
-                post("/api/schedules/${caseload.id}/appointments?${timeSlot ? 'timeSlot=' + timeSlot + '&' : ''}date=${date}")
-                        .withRequestBody(equalToJson(JsonOutput.toJson(offenderNumbers)))
-                        .willReturn(
-                                aResponse()
-                                        .withBody(data)
-                                        .withHeader('Content-Type', 'application/json')
-                                        .withStatus(200))
-        )
-    }
-
     void stubActivities(Caseload caseload, String timeSlot, String date, def offenderNumbers, data = JsonOutput.toJson([])) {
         this.stubFor(
                 post("/api/schedules/${caseload.id}/activities?${timeSlot ? 'timeSlot=' + timeSlot + '&' : ''}date=${date}")
@@ -251,40 +186,6 @@ class Elite2Api extends WireMockRule {
                                         .withBody(data)
                                         .withHeader('Content-Type', 'application/json')
                                         .withStatus(200)))
-    }
-
-    void stubGetActivityList(Caseload caseload, int locationId, String timeSlot, String date, Boolean inThePast = false) {
-
-        def activityResponse = inThePast ? ActivityResponse.pastActivities : ActivityResponse.activities
-
-        stubProgEventsAtLocation(locationId, timeSlot, date, activityResponse)
-
-        def offenderNumbers = extractOffenderNumbers(activityResponse)
-
-        stubUsageAtLocation(caseload, locationId, timeSlot, date, 'APP')
-        stubUsageAtLocation(caseload, locationId, timeSlot, date, 'VISIT')
-
-        stubVisits(caseload, timeSlot, date, offenderNumbers, ActivityResponse.visits)
-        stubAppointments(caseload, timeSlot, date, offenderNumbers, ActivityResponse.appointments)
-        stubActivities(caseload, timeSlot, date, offenderNumbers, activityResponse)
-        stubCourtEvents(caseload, offenderNumbers, date, HouseblockResponse.courtEventsWithDifferentStatuesResponse)
-        stubExternalTransfers(caseload, offenderNumbers, date)
-        stubAlerts(offenderNumbers)
-        stubAssessments(offenderNumbers)
-
-        this.stubFor(
-                post("/api/offender-sentences")
-                        .withRequestBody(equalToJson(JsonOutput.toJson(offenderNumbers)))
-                        .willReturn(
-                                aResponse()
-                                        .withBody(JsonOutput.toJson([[
-                                                                             "offenderNo"    : ActivityResponse.activity3.offenderNo,
-                                                                             "sentenceDetail": ["releaseDate": date]
-                                                                     ]]))
-                                        .withHeader('Content-Type', 'application/json')
-                                        .withStatus(200))
-        )
-
     }
 
     def stubSentenceData(List offenderNumbers, String formattedReleaseDate, Boolean emptyResponse = false) {
@@ -568,18 +469,6 @@ class Elite2Api extends WireMockRule {
         )
     }
 
-    void stubAllOtherEventsOnActivityLists(caseload, timeSlot, date, offenders) {
-        stubVisits(caseload, timeSlot, date, offenders)
-        stubAppointments(caseload, timeSlot, date, offenders)
-        stubActivities(caseload, timeSlot, date, offenders)
-        stubSentenceData(offenders, date)
-        stubCourtEvents(caseload, offenders, date)
-
-        stubExternalTransfers(caseload, offenders, date)
-        stubAlerts(offenders)
-        stubAssessments(offenders)
-    }
-
     void stubImage() {
         this.stubFor(
                 get(urlPathMatching("/api/bookings/offenderNo/.+/image/data"))
@@ -782,19 +671,6 @@ class Elite2Api extends WireMockRule {
         )
     }
 
-    void stubAppointmentLocations(String agencyId, def response) {
-        this.stubJsonGetRequest("/api/agencies/${agencyId}/locations?eventType=APP", response)
-    }
-
-
-    void stubAppointmentTypes(def response) {
-        this.stubJsonGetRequest("/api/reference-domains/scheduleReasons?eventType=APP", response)
-    }
-
-    void stubBookingOffenders(def response) {
-        this.stubJsonPostRequest("/api/bookings/offenders", response)
-    }
-
     void stubOffenderDetails(offenderNo, response) {
         this.stubFor(
                 get(urlPathEqualTo("/api/bookings/offenderNo/${offenderNo}"))
@@ -843,52 +719,6 @@ class Elite2Api extends WireMockRule {
         )
     }
 
-    void stubJsonGetRequest(String url, def response) {
-        this.stubFor(
-                get(url)
-                        .willReturn(
-                                aResponse()
-                                        .withStatus(200)
-                                        .withHeader('Content-Type', 'application/json')
-                                        .withBody(JsonOutput.toJson(response))
-
-                        )
-        )
-    }
-
-    void stubJsonPostRequest(String url, def response) {
-        this.stubFor(
-                post(url)
-                        .willReturn(
-                                aResponse()
-                                        .withStatus(200)
-                                        .withHeader('Content-Type', 'application/json')
-                                        .withBody(JsonOutput.toJson(response))
-
-                        )
-        )
-    }
-
-    void stubPostAppointments() {
-        this.stubFor(
-                post("/api/appointments")
-                        .willReturn(
-                                aResponse()
-                                        .withStatus(200)
-                        )
-        )
-    }
-
-    void stubSingleAppointment(bookingId) {
-        this.stubFor(
-                post("/api/bookings/${bookingId}/appointments")
-                        .willReturn(
-                                aResponse()
-                                        .withStatus(200)
-                        )
-        )
-    }
-
     void stubGetAgencyIepLevels(agencyId, response) {
         this.stubFor(
                 get("/api/agencies/${agencyId}/iepLevels")
@@ -898,19 +728,6 @@ class Elite2Api extends WireMockRule {
                                         .withHeader('Content-Type', 'application/json')
                                         .withBody(JsonOutput.toJson(response))
                         )
-        )
-    }
-
-    void stubGetAlert(bookingId, alertId, alert) {
-        this.stubFor(
-                get("/api/bookings/${bookingId}/alerts/${alertId}")
-                        .willReturn(
-                                aResponse()
-                                        .withStatus(200)
-                                        .withHeader('Content-Type', 'application/json')
-                                        .withBody(JsonOutput.toJson(alert))
-                        )
-
         )
     }
 
@@ -927,16 +744,6 @@ class Elite2Api extends WireMockRule {
         )
     }
 
-    void stubPutAlert(bookingId, alertId) {
-        this.stubFor(
-                put("/api/bookings/${bookingId}/alert/${alertId}")
-                        .willReturn(
-                                aResponse()
-                                        .withStatus(200)
-                                        .withHeader('Content-Type', 'application/json'))
-                        )
-    }
-
     void stubScheduledActivities(agencyId, response) {
         this.stubFor(
                 post(urlPathEqualTo("/api/schedules/${agencyId}/activities-by-event-ids"))
@@ -949,188 +756,5 @@ class Elite2Api extends WireMockRule {
 
         )
     }
-
-    void stubAlertTypes(response = []) {
-        this.stubFor(
-                get(urlPathEqualTo("/api/reference-domains/alertTypes"))
-                        .willReturn(
-                        aResponse()
-                                .withStatus(200)
-                                .withHeader('Content-Type', 'application/json')
-                                .withBody(JsonOutput.toJson(response))
-                )
-
-        )
-    }
-
-    void stubStaffRoles(staffId, agencyId, response = []) {
-        this.stubFor(
-                get(urlPathEqualTo("/api/staff/${staffId}/${agencyId}/roles"))
-                        .willReturn(
-                        aResponse()
-                                .withStatus(200)
-                                .withHeader('Content-Type', 'application/json')
-                                .withBody(JsonOutput.toJson(response))
-                )
-
-        )
-    }
-
-    void stubCaseNotesSummary(response = []) {
-        this.stubFor(
-                get(urlPathEqualTo("/api/case-notes/summary"))
-                        .willReturn(
-                        aResponse()
-                                .withStatus(200)
-                                .withHeader('Content-Type', 'application/json')
-                                .withBody(JsonOutput.toJson(response))
-                )
-
-        )
-    }
-
-    void stubMainOffence(bookingId, response = []) {
-        this.stubFor(
-                get(urlPathEqualTo("/api/bookings/${bookingId}/mainOffence"))
-                        .willReturn(
-                        aResponse()
-                                .withStatus(200)
-                                .withHeader('Content-Type', 'application/json')
-                                .withBody(JsonOutput.toJson(response))
-                )
-
-        )
-    }
-
-    void stubPrisonerBalances(bookingId, response = []) {
-        this.stubFor(
-                get(urlPathEqualTo("/api/bookings/${bookingId}/balances"))
-                        .willReturn(
-                        aResponse()
-                                .withStatus(200)
-                                .withHeader('Content-Type', 'application/json')
-                                .withBody(JsonOutput.toJson(response))
-                )
-
-        )
-    }
-
-    void stubPrisonerDetails(offenderNo, response = []) {
-        this.stubFor(
-                get(urlPathEqualTo("/api/prisoners/${offenderNo}"))
-                        .willReturn(
-                        aResponse()
-                                .withStatus(200)
-                                .withHeader('Content-Type', 'application/json')
-                                .withBody(JsonOutput.toJson(response))
-                )
-
-        )
-    }
-
-    void stubPrisonerSentences(offenderNo, response = []) {
-        this.stubFor(
-                get(urlPathEqualTo("/api/offenders/${offenderNo}/sentences"))
-                        .willReturn(
-                        aResponse()
-                                .withStatus(200)
-                                .withHeader('Content-Type', 'application/json')
-                                .withBody(JsonOutput.toJson(response))
-                )
-
-        )
-    }
-
-    void stubPositiveCaseNotes(bookingId, response = []) {
-        this.stubFor(
-                get(urlPathEqualTo("/api/bookings/${bookingId}/caseNotes/POS/IEP_ENC/count"))
-                        .willReturn(
-                        aResponse()
-                                .withStatus(200)
-                                .withHeader('Content-Type', 'application/json')
-                                .withBody(JsonOutput.toJson(response))
-                )
-
-        )
-    }
-
-    void stubNegativeCaseNotes(bookingId, response = []) {
-        this.stubFor(
-                get(urlPathEqualTo("/api/bookings/${bookingId}/caseNotes/NEG/IEP_WARN/count"))
-                        .willReturn(
-                        aResponse()
-                                .withStatus(200)
-                                .withHeader('Content-Type', 'application/json')
-                                .withBody(JsonOutput.toJson(response))
-                )
-
-        )
-    }
-
-    void stubAdjudications(bookingId, response = []) {
-        this.stubFor(
-                get(urlPathEqualTo("/api/bookings/${bookingId}/adjudications"))
-                        .willReturn(
-                        aResponse()
-                                .withStatus(200)
-                                .withHeader('Content-Type', 'application/json')
-                                .withBody(JsonOutput.toJson(response))
-                )
-
-        )
-    }
-
-    void stubNextVisit(bookingId, response = []) {
-        this.stubFor(
-                get(urlPathEqualTo("/api/bookings/${bookingId}/visits/next"))
-                        .willReturn(
-                        aResponse()
-                                .withStatus(200)
-                                .withHeader('Content-Type', 'application/json')
-                                .withBody(JsonOutput.toJson(response))
-                )
-
-        )
-    }
-
-    void stubPrisonerVisitBalances(offenderNo, response = []) {
-        this.stubFor(
-                get(urlPathEqualTo("/api/bookings/offenderNo/${offenderNo}/visit/balances"))
-                        .willReturn(
-                        aResponse()
-                                .withStatus(200)
-                                .withHeader('Content-Type', 'application/json')
-                                .withBody(JsonOutput.toJson(response))
-                )
-
-        )
-    }
-
-    void stubEventsForToday(bookingId, response = []) {
-        this.stubFor(
-                get(urlPathEqualTo("/api/bookings/${bookingId}/events/today"))
-                        .willReturn(
-                        aResponse()
-                                .withStatus(200)
-                                .withHeader('Content-Type', 'application/json')
-                                .withBody(JsonOutput.toJson(response))
-                )
-
-        )
-    }
-
-    void stubProfileInformation(bookingId, response = []) {
-        this.stubFor(
-                get(urlPathEqualTo("/api/bookings/${bookingId}/profileInformation"))
-                        .willReturn(
-                        aResponse()
-                                .withStatus(200)
-                                .withHeader('Content-Type', 'application/json')
-                                .withBody(JsonOutput.toJson(response))
-                )
-
-        )
-    }
-
 
 }

@@ -150,30 +150,9 @@ public class WhereaboutsApi extends WireMockRule {
                         .withBody(JsonOutput.toJson(absenceReasons))))
     }
 
-
-    void stubHealth() {
-        this.stubFor(
-                get('/health/ping')
-                        .willReturn(
-                                aResponse()
-                                        .withStatus(200)
-                                        .withHeader('Content-Type', 'text/plain')
-                                        .withBody('ping')))
-    }
-
     void stubPostAttendance(attendanceToReturn = []) {
         this.stubFor(
                 post('/attendance')
-                        .willReturn(aResponse()
-                                .withStatus(200)
-                                .withHeader('Content-Type', 'application/json')
-                                .withBody(JsonOutput.toJson(attendanceToReturn)))
-        )
-    }
-
-    void stubPutAttendance(attendanceToReturn) {
-        this.stubFor(
-                put("/attendance/${attendanceToReturn.id}")
                         .willReturn(aResponse()
                                 .withStatus(200)
                                 .withHeader('Content-Type', 'application/json')
@@ -235,16 +214,6 @@ public class WhereaboutsApi extends WireMockRule {
         )
     }
 
-    void stubAddVideoLinkAppointment() {
-        this.stubFor(
-                post("/court/add-video-link-appointment")
-                        .willReturn(
-                        aResponse()
-                                .withStatus(200)
-                )
-        )
-    }
-
     void getVideoLinkAppointments(def response) {
         this.stubFor(
                 post("/court/video-link-appointments")
@@ -291,9 +260,5 @@ public class WhereaboutsApi extends WireMockRule {
 
     void verifyPostAttendance() {
         this.verify(postRequestedFor(urlEqualTo('/attendance')))
-    }
-
-    void verifyPutAttendance(int id) {
-        this.verify(putRequestedFor(urlEqualTo("/attendance/${id}")))
     }
 }
