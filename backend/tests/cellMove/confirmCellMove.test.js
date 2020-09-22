@@ -161,7 +161,7 @@ describe('Change cell play back details', () => {
       expect(raiseAnalyticsEvent.mock.calls.length).toBe(0)
     })
 
-    it('should make a request for the cell details when a 400 bad request is returned', async () => {
+    it('should redirect to cell not available on a http 400 bad request when attempting a cell move', async () => {
       req.body = { cellId: 223 }
 
       elite2Api.moveToCell.mockRejectedValue(makeError('status', 400))
@@ -169,6 +169,8 @@ describe('Change cell play back details', () => {
       await controller.post(req, res)
 
       expect(res.redirect).toHaveBeenCalledWith('/prisoner/A12345/cell-move/cell-not-available?cellDescription=MDI-10')
+      expect(raiseAnalyticsEvent.mock.calls.length).toBe(0)
+      expect(logError.mock.calls.length).toBe(0)
     })
 
     it('should redirect to error page when the cell is no longer available', () => {})
