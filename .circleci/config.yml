@@ -80,7 +80,7 @@ jobs:
       - image: circleci/node:12-buster-browsers
       - image: circleci/redis:buster
       - image: rodolpheche/wiremock
-        command: docker run -it --rm -p 9191:8080 rodolpheche/wiremock
+        command: [-p 9191:8080]
     steps:
       - checkout
       - attach_workspace:
