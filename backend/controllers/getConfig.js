@@ -8,6 +8,7 @@ const getConfiguration = asyncMiddleware(async (req, res) =>
     googleAnalyticsId: config.analytics.googleAnalyticsId,
     licencesUrl: config.app.licencesUrl,
     flags: config.app.featureFlags,
+    supportUrl: config.app.supportUrl,
   })
 )
 
