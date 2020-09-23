@@ -430,45 +430,6 @@ class Elite2Api extends WireMockRule {
                                         .withStatus(200)))
     }
 
-
-    def stubEstablishmentRollCount(String agencyId) {
-        this.stubFor(
-                get("/api/movements/rollcount/${agencyId}?unassigned=false")
-                        .willReturn(
-                                aResponse()
-                                        .withBody(JsonOutput.toJson(EstablishmentRollResponses.assignedResponse))
-                                        .withHeader('Content-Type', 'application/json')
-                                        .withStatus(200))
-        )
-
-        this.stubFor(
-                get("/api/movements/rollcount/${agencyId}?unassigned=true")
-                        .willReturn(
-                                aResponse()
-                                        .withBody(JsonOutput.toJson(EstablishmentRollResponses.unassignedResponse))
-                                        .withHeader('Content-Type', 'application/json')
-                                        .withStatus(200))
-        )
-
-        this.stubFor(
-                get("/api/movements/rollcount/${agencyId}/movements")
-                        .willReturn(
-                                aResponse()
-                                        .withBody(JsonOutput.toJson(EstablishmentRollResponses.movementBlockResponse))
-                                        .withHeader('Content-Type', 'application/json')
-                                        .withStatus(200))
-        )
-
-        this.stubFor(
-                get("/api/movements/rollcount/${agencyId}/enroute")
-                        .willReturn(
-                                aResponse()
-                                        .withBody('6')
-                                        .withHeader('Content-Type', 'application/json')
-                                        .withStatus(200))
-        )
-    }
-
     void stubImage() {
         this.stubFor(
                 get(urlPathMatching("/api/bookings/offenderNo/.+/image/data"))

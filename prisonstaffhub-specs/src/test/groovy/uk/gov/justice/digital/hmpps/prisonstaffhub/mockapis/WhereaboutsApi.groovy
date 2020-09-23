@@ -105,14 +105,6 @@ public class WhereaboutsApi extends WireMockRule {
             triggersIEPWarning: [ 'Refused', 'UnacceptableAbsence' ]
     ]
 
-    def courtLocations = [
-            courtLocations: [
-                    "London",
-                    "Sheffield",
-                    "Leeds"
-            ]
-    ]
-
     void stubGetAttendance(Caseload caseload, int locationId, String timeSlot, String date, data = attendance) {
         this.stubFor(
                 get("/attendances/${caseload.id}/${locationId}?date=${date}&period=${timeSlot}")
@@ -120,15 +112,6 @@ public class WhereaboutsApi extends WireMockRule {
                         .withStatus(200)
                         .withHeader('Content-Type', 'application/json')
                         .withBody(JsonOutput.toJson(data))))
-    }
-
-    void stubGetAttendanceForBookingsOverDateRange(agencyId, String timeSlot, String fromDate, String toDate, data = attendance) {
-        this.stubFor(
-                post("/attendances/${agencyId}/attendance-over-date-range?fromDate=${fromDate}&toDate=${toDate}&period=${timeSlot}")
-                        .willReturn(aResponse()
-                                .withStatus(200)
-                                .withHeader('Content-Type', 'application/json')
-                                .withBody(JsonOutput.toJson(data))))
     }
 
 
@@ -200,62 +183,6 @@ public class WhereaboutsApi extends WireMockRule {
                         )
         )
 
-    }
-
-    void stubCourtLocations() {
-        this.stubFor(
-                get("/court/all-courts")
-                    .willReturn(aResponse()
-                        .withStatus(200)
-                        .withHeader('Content-Type', 'application/json')
-                        .withBody(JsonOutput.toJson(courtLocations))
-
-                )
-        )
-    }
-
-    void getVideoLinkAppointments(def response) {
-        this.stubFor(
-                post("/court/video-link-appointments")
-                        .willReturn(
-                        aResponse()
-                                .withStatus(200)
-                                .withHeader('Content-Type', 'application/json')
-                                .withBody(JsonOutput.toJson(response))
-                )
-        )
-    }
-
-    void stubAttendanceChanges(fromDateTime, toDateTime, response) {
-        this.stubFor(
-                get("/attendances/changes?fromDateTime=${fromDateTime}&toDateTime=${toDateTime}")
-                .willReturn(
-                        aResponse()
-                        .withStatus(200)
-                                .withHeader('Content-Type', 'application/json')
-                                .withBody(JsonOutput.toJson(response))
-                )
-        )
-    }
-
-    void verifyAttendanceChanges(fromDateTime, toDateTime) {
-        this.verify(getRequestedFor(urlEqualTo("/attendances/changes?fromDateTime=${fromDateTime}&toDateTime=${toDateTime}")))
-    }
-
-    void verifyAttendanceSuspended(agencyId, period, fromDate, toDate) {
-        this.verify(postRequestedFor(urlEqualTo("/attendances/${agencyId}/attendance-over-date-range?fromDate=${fromDate}&toDate=${toDate}&period=${period}")))
-    }
-
-    void stubAttendanceStats(agencyId, period, fromDate, response) {
-        this.stubFor(
-                get("/attendance-statistics/${agencyId}/over-date-range?fromDate=${fromDate}&toDate=${fromDate}&period=${period}")
-                        .willReturn(
-                                aResponse()
-                                        .withStatus(200)
-                                        .withHeader('Content-Type', 'application/json')
-                                        .withBody(JsonOutput.toJson(response))
-                        )
-        )
     }
 
     void verifyPostAttendance() {

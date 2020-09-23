@@ -354,5 +354,12 @@ module.exports = on => {
     verifyMoveToCellSwap: ({ bookingId }) => elite2api.verifyMoveToCellSwap({ bookingId }),
     stubAttendanceStats: ({ agencyId, fromDate, period, stats }) =>
       whereabouts.stubAttendanceStats(agencyId, fromDate, period, stats),
+    stubEstablishmentRollCount: ({ agencyId, assignedMovements, unassignedMovements, movements, enroute }) =>
+      Promise.all([
+        elite2api.stubAssignedMovements(agencyId, assignedMovements),
+        elite2api.stubUnassignedMovements(agencyId, unassignedMovements),
+        elite2api.stubRollcountByType(agencyId, 'movements', movements),
+        elite2api.stubRollcountByType(agencyId, 'enroute', enroute),
+      ]),
   })
 }

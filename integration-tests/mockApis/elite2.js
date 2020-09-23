@@ -1453,6 +1453,48 @@ module.exports = {
         jsonBody: locationAttributes || {},
       },
     }),
+  stubAssignedMovements: (agencyId, movements) =>
+    stubFor({
+      request: {
+        method: 'GET',
+        url: `/api/movements/rollcount/${agencyId}?unassigned=false`,
+      },
+      response: {
+        status: 200,
+        headers: {
+          'Content-Type': 'application/json;charset=UTF-8',
+        },
+        jsonBody: movements || {},
+      },
+    }),
+  stubUnassignedMovements: (agencyId, movements) =>
+    stubFor({
+      request: {
+        method: 'GET',
+        url: `/api/movements/rollcount/${agencyId}?unassigned=true`,
+      },
+      response: {
+        status: 200,
+        headers: {
+          'Content-Type': 'application/json;charset=UTF-8',
+        },
+        jsonBody: movements || {},
+      },
+    }),
+  stubRollcountByType: (agencyId, type, movements) =>
+    stubFor({
+      request: {
+        method: 'GET',
+        url: `/api/movements/rollcount/${agencyId}/${type}`,
+      },
+      response: {
+        status: 200,
+        headers: {
+          'Content-Type': 'application/json;charset=UTF-8',
+        },
+        jsonBody: movements || {},
+      },
+    }),
   stubMoveToCell: () =>
     stubFor({
       request: {
