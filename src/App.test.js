@@ -45,7 +45,7 @@ const fn = jest.fn()
 const props = {
   activity: '',
   caseChangeRedirect: true,
-  config: { notmEndpointUrl: '', mailTo: 'feedback@test.com' },
+  config: { notmEndpointUrl: '', mailTo: 'feedback@test.com', supportUrl: '//supportUrl/' },
   currentLocation: 'cell',
   date: 'today',
   menuOpen: false,
@@ -133,7 +133,7 @@ describe('App component', () => {
     const component = mount(<App {...props} store={store} />)
 
     expect(component.find(FooterContainer).props()).toEqual({
-      feedbackEmail: props.config.mailTo,
+      supportUrl: `${props.config.supportUrl}feedback-and-support`,
       prisonStaffHubUrl: '/',
     })
   })

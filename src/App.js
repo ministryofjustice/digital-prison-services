@@ -541,7 +541,7 @@ class App extends React.Component {
                   />
                   {shouldShowTerms && <Terms close={() => this.hideTermsAndConditions()} />}
                   {innerContent}
-                  <FooterContainer feedbackEmail={config.mailTo} prisonStaffHubUrl="/" />
+                  <FooterContainer supportUrl={`${config.supportUrl}feedback-and-support`} prisonStaffHubUrl="/" />
                 </ScrollToTop>
               </div>
             )}
@@ -564,6 +564,7 @@ App.propTypes = {
     googleAnalyticsId: PropTypes.string,
     licencesUrl: PropTypes.string,
     flags: PropTypes.objectOf(PropTypes.string),
+    supportUrl: PropTypes.string,
   }).isRequired,
   date: PropTypes.string.isRequired,
   error: PropTypes.oneOfType([PropTypes.string, PropTypes.shape({ message: PropTypes.string })]),
