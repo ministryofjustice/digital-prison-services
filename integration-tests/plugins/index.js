@@ -352,5 +352,7 @@ module.exports = on => {
     stubGetLocationPrefix: ({ agencyId, groupName, response }) =>
       whereabouts.stubGetLocationPrefix({ agencyId, groupName, response }),
     verifyMoveToCellSwap: ({ bookingId }) => elite2api.verifyMoveToCellSwap({ bookingId }),
+    stubAttendanceStats: ({ agencyId, fromDate, period, stats }) =>
+      whereabouts.stubAttendanceStats(agencyId, fromDate, period, stats),
   })
 }
