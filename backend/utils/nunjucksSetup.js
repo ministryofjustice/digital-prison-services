@@ -140,8 +140,8 @@ module.exports = (app, path) => {
   njkEnv.addFilter('getTime', getTime)
   njkEnv.addFilter('truthy', data => Boolean(data))
   njkEnv.addGlobal('notmUrl', config.app.notmEndpointUrl)
-  njkEnv.addGlobal('oauthUrl', config.apis.oauth2.url)
   njkEnv.addGlobal('googleAnalyticsId', config.analytics.googleAnalyticsId)
+  njkEnv.addGlobal('supportUrl', config.app.supportUrl)
 
   return njkEnv
 }

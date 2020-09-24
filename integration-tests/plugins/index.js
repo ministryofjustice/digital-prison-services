@@ -352,6 +352,15 @@ module.exports = on => {
     stubGetLocationPrefix: ({ agencyId, groupName, response }) =>
       whereabouts.stubGetLocationPrefix({ agencyId, groupName, response }),
     verifyMoveToCellSwap: ({ bookingId }) => elite2api.verifyMoveToCellSwap({ bookingId }),
+    stubAttendanceStats: ({ agencyId, fromDate, period, stats }) =>
+      whereabouts.stubAttendanceStats(agencyId, fromDate, period, stats),
+    stubEstablishmentRollCount: ({ agencyId, assignedMovements, unassignedMovements, movements, enroute }) =>
+      Promise.all([
+        elite2api.stubAssignedMovements(agencyId, assignedMovements),
+        elite2api.stubUnassignedMovements(agencyId, unassignedMovements),
+        elite2api.stubRollcountByType(agencyId, 'movements', movements),
+        elite2api.stubRollcountByType(agencyId, 'enroute', enroute),
+      ]),
     stubLocationGroups: locationGroups => whereabouts.stubLocationGroups(locationGroups),
     stubActivityLocationsByDateAndPeriod: ({ locations, date, period }) =>
       elite2api.stubActivityLocationsByDateAndPeriod(locations, date, period),

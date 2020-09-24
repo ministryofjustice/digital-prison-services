@@ -34,6 +34,21 @@ module.exports = {
       },
     })
   },
+  stubAttendanceStats: (agencyId, fromDate, period, stats, status = 200) => {
+    return stubFor({
+      request: {
+        method: 'GET',
+        url: `/whereabouts/attendance-statistics/${agencyId}/over-date-range?fromDate=${fromDate}&toDate=${fromDate}&period=${period}`,
+      },
+      response: {
+        status,
+        headers: {
+          'Content-Type': 'application/json;charset=UTF-8',
+        },
+        jsonBody: stats,
+      },
+    })
+  },
   stubGetAbsenceReasons: () => {
     return stubFor({
       request: {
