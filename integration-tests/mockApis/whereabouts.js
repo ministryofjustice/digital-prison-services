@@ -279,4 +279,24 @@ module.exports = {
         jsonBody: response,
       },
     }),
+  stubLocationGroups: locationGroups =>
+    stubFor({
+      request: {
+        method: 'GET',
+        urlPathPattern: '/whereabouts/agencies/.+?/locations/groups',
+      },
+      response: {
+        status: 200,
+        headers: {
+          'Content-Type': 'application/json;charset=UTF-8',
+        },
+        jsonBody: locationGroups || [
+          {
+            name: '1',
+            key: '1',
+            children: [{ name: 'A', key: 'A' }, { name: 'B', key: 'B' }, { name: 'C', key: 'C' }],
+          },
+        ],
+      },
+    }),
 }

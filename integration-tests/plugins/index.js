@@ -75,7 +75,7 @@ module.exports = on => {
 
     stubAttendanceChanges: response => Promise.all([whereabouts.stubAttendanceChanges(response)]),
     stubCourts: courts => Promise.all([whereabouts.stubCourtLocations(courts)]),
-    stubGroups: caseload => Promise.all([whereabouts.stubGroups(caseload)]),
+    stubGroups: caseload => whereabouts.stubGroups(caseload),
     stubAddVideoLinkAppointment: appointment => Promise.all([whereabouts.stubAddVideoLinkAppointment(appointment)]),
     stubCaseNotes: response => caseNotes.stubCaseNotes(response),
     stubCaseNoteTypes: () => caseNotes.stubCaseNoteTypes(),
@@ -352,5 +352,8 @@ module.exports = on => {
     stubGetLocationPrefix: ({ agencyId, groupName, response }) =>
       whereabouts.stubGetLocationPrefix({ agencyId, groupName, response }),
     verifyMoveToCellSwap: ({ bookingId }) => elite2api.verifyMoveToCellSwap({ bookingId }),
+    stubLocationGroups: locationGroups => whereabouts.stubLocationGroups(locationGroups),
+    stubActivityLocationsByDateAndPeriod: ({ locations, date, period }) =>
+      elite2api.stubActivityLocationsByDateAndPeriod(locations, date, period),
   })
 }

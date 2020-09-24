@@ -1205,6 +1205,21 @@ module.exports = {
       },
     })
   },
+  stubActivityLocationsByDateAndPeriod: (locations, date, period) => {
+    return stubFor({
+      request: {
+        method: 'GET',
+        url: `/api/agencies/MDI/eventLocationsBooked?bookedOnDay=${date}&timeSlot=${period}`,
+      },
+      response: {
+        status: 200,
+        headers: {
+          'Content-Type': 'application/json;charset=UTF-8',
+        },
+        jsonBody: locations,
+      },
+    })
+  },
   stubInmates: ({ locationId, params, count, data = [] }) =>
     stubFor({
       request: {
