@@ -138,11 +138,11 @@ context('Whereabouts search page fault handling', () => {
   it('should show error on activity locations api error', () => {
     cy.task('stubActivityLocationsConnectionResetFault')
 
-    const page = searchPage.goTo()
+    cy.visit('/')
     // eslint-disable-next-line cypress/no-unnecessary-waiting
     cy.wait(3000)
-    page
-      .errorMessage()
-      .contains('Something went wrong: Error: this page cannot be loaded. You can try to refresh your browser.')
+    cy.get('.error-message').contains(
+      'Something went wrong: Error: this page cannot be loaded. You can try to refresh your browser.'
+    )
   })
 })
