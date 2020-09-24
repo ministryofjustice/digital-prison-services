@@ -137,20 +137,11 @@ context('Whereabouts search page fault handling', () => {
 
   it('should show error on activity locations api error', () => {
     cy.task('stubActivityLocationsConnectionResetFault')
-    cy.server()
-    cy.route({
-      method: 'GET',
-      url: `/api/activityLocations?agencyId=MDI&bookedOnDay=${moment().format(
-        'DD/MM/YYYY'
-      )}&timeSlot=${getCurrentPeriod(moment())}`,
-    }).as('stubActivityLocationsByDateAndPeriod')
 
     const page = searchPage.goTo()
 
-    cy.wait('@stubActivityLocationsByDateAndPeriod', { timeout: 50000 }).then(() => {
-      page
-        .errorMessage()
-        .contains('Something went wrong: Error: The page is having trouble loading. Try refreshing the browser.')
-    })
+    page
+      .errorMessage()
+      .contains('Something went wrong: Error: this page cannot be loaded. You can try to refresh your browser.')
   })
 })

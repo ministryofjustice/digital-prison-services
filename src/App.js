@@ -125,7 +125,7 @@ class App extends React.Component {
         },
       })
       if (response.data.error)
-        return this.handleError(new Error('The page is having trouble loading. Try refreshing the browser.'))
+        return this.handleError(new Error('this page cannot be loaded. You can try to refresh your browser.'))
 
       activitiesDispatch(response.data)
       // set to unselected
