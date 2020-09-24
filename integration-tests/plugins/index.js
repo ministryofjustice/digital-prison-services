@@ -150,7 +150,7 @@ module.exports = on => {
 
     stubAlertTypes: () => Promise.all([elite2api.stubAlertTypes()]),
     stubAlertsForBooking: alerts => Promise.all([elite2api.stubAlertsForBooking(alerts)]),
-    stubAlerts: alerts => elite2api.stubAlerts({ alerts }),
+    stubAlerts: elite2api.stubAlerts,
 
     stubInmates: elite2api.stubInmates,
     stubUserLocations: elite2api.stubUserLocations,

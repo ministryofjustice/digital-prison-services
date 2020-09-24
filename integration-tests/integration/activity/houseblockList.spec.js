@@ -5,12 +5,12 @@ const HouseblockPage = require('../../pages/whereabouts/houseblockPage')
 const caseload = 'MDI'
 const date = new Date().toISOString().split('T')[0]
 
-context('Activity list page', () => {
+context('Houseblock list page list page', () => {
   beforeEach(() => {
     cy.task('reset')
-    cy.task('stubGroups', { id: caseload })
     cy.task('stubLogin', { username: 'ITAG_USER', caseload })
     cy.login()
+    cy.task('stubGroups', { id: caseload })
     cy.task('stubActivityLocations')
     cy.task('stubGetAgencyGroupLocations', { agencyId: caseload, groupName: 1, response: [1] })
     cy.task('stubGetAttendancesForBookings', {
@@ -150,7 +150,7 @@ context('Activity list page', () => {
     cy.task('stubSentenceData')
     cy.task('stubCourtEvents')
     cy.task('stubExternalTransfers')
-    cy.task('stubAlerts')
+    cy.task('stubAlerts', { locationId: 'MDI', alerts: [] })
     cy.task('stubAssessments', ['A1234AA', 'A1234AB', 'A1234AC'])
 
     cy.task('stubGetAbsenceReasons')
