@@ -150,7 +150,7 @@ module.exports = on => {
 
     stubAlertTypes: () => Promise.all([elite2api.stubAlertTypes()]),
     stubAlertsForBooking: alerts => Promise.all([elite2api.stubAlertsForBooking(alerts)]),
-    stubAlerts: elite2api.stubAlerts,
+    stubAlerts: alerts => elite2api.stubAlerts({ alerts }),
 
     stubInmates: elite2api.stubInmates,
     stubUserLocations: elite2api.stubUserLocations,
@@ -361,5 +361,12 @@ module.exports = on => {
         elite2api.stubRollcountByType(agencyId, 'movements', movements),
         elite2api.stubRollcountByType(agencyId, 'enroute', enroute),
       ]),
+    stubCourtEvents: courtEvents => elite2api.stubCourtEvents(courtEvents),
+    stubGetEventsByLocationIds: ({ agencyId, date, timeSlot, response }) =>
+      elite2api.stubGetEventsByLocationIds(agencyId, date, timeSlot, response),
+    stubExternalTransfers: response => elite2api.stubExternalTransfers(response),
+    stubAssessments: assessments => elite2api.stubAssessments(assessments),
+    stubGetAgencyGroupLocations: ({ agencyId, groupName, response }) =>
+      whereabouts.stubGetAgencyGroupLocations({ agencyId, groupName, response }),
   })
 }

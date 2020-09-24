@@ -1,6 +1,5 @@
 const searchPage = require('../../pages/whereabouts/searchPage')
 const activityPage = require('../../pages/whereabouts/activityPage')
-const { verifyPosts } = require('../../mockApis/wiremock')
 
 const caseload = 'MDI'
 const date = new Date().toISOString().split('T')[0]
