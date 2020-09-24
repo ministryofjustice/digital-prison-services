@@ -955,7 +955,6 @@ module.exports = {
     })
   },
   stubSentenceData: (offenderSentenceDetail, status = 200) => {
-    console.log(offenderSentenceDetail)
     return stubFor({
       request: {
         method: 'POST',
