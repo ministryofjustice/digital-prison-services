@@ -1030,7 +1030,6 @@ module.exports = {
     })
   },
   stubAppointmentsGet: (appointments, status = 200) => {
-    console.log(appointments)
     return stubFor({
       request: {
         method: 'GET',
@@ -1206,6 +1205,16 @@ module.exports = {
       },
     })
   },
+  stubActivityLocationsConnectionResetFault: () =>
+    stubFor({
+      request: {
+        method: 'GET',
+        urlPattern: '/api/agencies/.+?/eventLocationsBooked.+?',
+      },
+      response: {
+        fault: 'CONNECTION_RESET_BY_PEER',
+      },
+    }),
   stubActivityLocationsByDateAndPeriod: (locations, date, period) => {
     return stubFor({
       request: {

@@ -121,3 +121,36 @@ context('Whereabouts search page', () => {
     })
   })
 })
+
+context('Whereabouts search page fault handling', () => {
+  before(() => {
+    cy.clearCookies()
+    cy.task('reset')
+    cy.task('stubLogin', { username: 'ITAG_USER', caseload: 'MDI' })
+    cy.login()
+  })
+  beforeEach(() => {
+    Cypress.Cookies.preserveOnce('hmpps-session-dev')
+    cy.task('stubLocationGroups')
+    cy.task('stubGroups', caseload)
+  })
+
+  it('should show error on activity locations api error', () => {
+    cy.task('stubActivityLocationsConnectionResetFault')
+    cy.server()
+    cy.route({
+      method: 'GET',
+      url: `/api/activityLocations?agencyId=MDI&bookedOnDay=${moment().format(
+        'DD/MM/YYYY'
+      )}&timeSlot=${getCurrentPeriod(moment())}`,
+    }).as('stubActivityLocationsByDateAndPeriod')
+
+    const page = searchPage.goTo()
+
+    cy.wait('@stubActivityLocationsByDateAndPeriod').then(() => {
+      page
+        .errorMessage()
+        .contains('Something went wrong: Error: The page is having trouble loading. Try refreshing the browser.')
+    })
+  })
+})

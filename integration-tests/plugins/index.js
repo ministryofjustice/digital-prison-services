@@ -249,7 +249,7 @@ module.exports = on => {
     stubAppointmentsAtAgency: (agency, locations) =>
       Promise.all([elite2api.stubUsageAtAgency(agency, 'APP', locations)]),
     stubVisitsAtAgency: (agency, locations) => Promise.all([elite2api.stubUsageAtAgency(agency, 'VISIT', locations)]),
-    stubActivityLocations: () => Promise.all([elite2api.stubActivityLocations()]),
+    stubActivityLocations: status => elite2api.stubActivityLocations(status),
     stubPostAppointments: () => Promise.all([elite2api.stubPostAppointments()]),
     stubSchedules: ({ agency, location, date, appointments, visits, activities }) =>
       Promise.all([
@@ -364,5 +364,6 @@ module.exports = on => {
     stubLocationGroups: locationGroups => whereabouts.stubLocationGroups(locationGroups),
     stubActivityLocationsByDateAndPeriod: ({ locations, date, period }) =>
       elite2api.stubActivityLocationsByDateAndPeriod(locations, date, period),
+    stubActivityLocationsConnectionResetFault: () => elite2api.stubActivityLocationsConnectionResetFault(),
   })
 }
