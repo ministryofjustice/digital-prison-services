@@ -75,7 +75,7 @@ module.exports = on => {
 
     stubAttendanceChanges: response => Promise.all([whereabouts.stubAttendanceChanges(response)]),
     stubCourts: courts => Promise.all([whereabouts.stubCourtLocations(courts)]),
-    stubGroups: caseload => Promise.all([whereabouts.stubGroups(caseload)]),
+    stubGroups: caseload => whereabouts.stubGroups(caseload),
     stubAddVideoLinkAppointment: appointment => Promise.all([whereabouts.stubAddVideoLinkAppointment(appointment)]),
     stubCaseNotes: response => caseNotes.stubCaseNotes(response),
     stubCaseNoteTypes: () => caseNotes.stubCaseNoteTypes(),
@@ -361,5 +361,8 @@ module.exports = on => {
         elite2api.stubRollcountByType(agencyId, 'movements', movements),
         elite2api.stubRollcountByType(agencyId, 'enroute', enroute),
       ]),
+    stubLocationGroups: locationGroups => whereabouts.stubLocationGroups(locationGroups),
+    stubActivityLocationsByDateAndPeriod: ({ locations, date, period }) =>
+      elite2api.stubActivityLocationsByDateAndPeriod(locations, date, period),
   })
 }
