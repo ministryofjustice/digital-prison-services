@@ -1,6 +1,5 @@
 const searchPage = require('../../pages/whereabouts/searchPage')
 const activityPage = require('../../pages/whereabouts/activityPage')
-const { verifyPosts } = require('../../mockApis/wiremock')
 
 const caseload = 'MDI'
 const date = new Date().toISOString().split('T')[0]
@@ -445,7 +444,7 @@ context('Activity list page', () => {
 
     // then: "An attendance record should have been created and updated"
     cy.task('verifyPostAttendance').then(val => {
-      expect(JSON.parse(val.text).count).to.equal(2)
+      expect(JSON.parse(val.text).count).to.equal(1)
     })
   })
 })

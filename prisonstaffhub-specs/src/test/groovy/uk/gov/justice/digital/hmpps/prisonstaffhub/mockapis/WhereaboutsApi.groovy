@@ -105,44 +105,6 @@ public class WhereaboutsApi extends WireMockRule {
             triggersIEPWarning: [ 'Refused', 'UnacceptableAbsence' ]
     ]
 
-    void stubGetAttendance(Caseload caseload, int locationId, String timeSlot, String date, data = attendance) {
-        this.stubFor(
-                get("/attendances/${caseload.id}/${locationId}?date=${date}&period=${timeSlot}")
-                        .willReturn(aResponse()
-                        .withStatus(200)
-                        .withHeader('Content-Type', 'application/json')
-                        .withBody(JsonOutput.toJson(data))))
-    }
-
-
-    void stubGetAttendanceForBookings(Caseload caseload, String timeSlot, String date, data = attendanceForBookingsResponse) {
-    this.stubFor(
-            post("/attendances/${caseload.id}?date=${date}&period=${timeSlot}")
-                    .willReturn(aResponse()
-                    .withStatus(200)
-                    .withHeader('Content-Type', 'application/json')
-                    .withBody(JsonOutput.toJson(data))))
-    }
-
-    void stubGetAbsenceReasons() {
-        this.stubFor(
-                get('/absence-reasons')
-                        .willReturn(aResponse()
-                        .withStatus(200)
-                        .withHeader('Content-Type', 'application/json')
-                        .withBody(JsonOutput.toJson(absenceReasons))))
-    }
-
-    void stubPostAttendance(attendanceToReturn = []) {
-        this.stubFor(
-                post('/attendance')
-                        .willReturn(aResponse()
-                                .withStatus(200)
-                                .withHeader('Content-Type', 'application/json')
-                                .withBody(JsonOutput.toJson(attendanceToReturn)))
-        )
-    }
-
     void stubGroups(Caseload caseload) {
 
         def json = JsonOutput.toJson([
@@ -171,21 +133,5 @@ public class WhereaboutsApi extends WireMockRule {
                                         .withHeader('Content-Type', 'application/json')
                                         .withStatus(200))
         )
-    }
-
-    void stubGetAgencyGroupLocations(agencyId, groupName) {
-        this.stubFor(
-                get("/locations/groups/${agencyId}/${groupName}")
-                        .willReturn(aResponse()
-                                .withStatus(200)
-                                .withHeader('Content-Type', 'application/json')
-                                .withBody("[1]")
-                        )
-        )
-
-    }
-
-    void verifyPostAttendance() {
-        this.verify(postRequestedFor(urlEqualTo('/attendance')))
     }
 }

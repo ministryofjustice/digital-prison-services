@@ -264,7 +264,7 @@ module.exports = on => {
         elite2api.stubAppointments(appointments),
         elite2api.stubActivities(activities),
       ]),
-    stubSentenceData: details => Promise.all([elite2api.stubSentenceData(details)]),
+    stubSentenceData: details => elite2api.stubSentenceData(details),
     stubLocation: ({ locationId, locationData }) => Promise.all([elite2api.stubLocation(locationId, locationData)]),
     stubAgencyDetails: ({ agencyId, details }) => Promise.all([elite2api.stubAgencyDetails(agencyId, details)]),
     stubAppointmentLocations: ({ agency, locations }) =>
@@ -361,8 +361,17 @@ module.exports = on => {
         elite2api.stubRollcountByType(agencyId, 'movements', movements),
         elite2api.stubRollcountByType(agencyId, 'enroute', enroute),
       ]),
+    stubCourtEvents: courtEvents => elite2api.stubCourtEvents(courtEvents),
+    stubGetEventsByLocationIds: ({ agencyId, date, timeSlot, response }) =>
+      elite2api.stubGetEventsByLocationIds(agencyId, date, timeSlot, response),
+    stubExternalTransfers: response => elite2api.stubExternalTransfers(response),
+    stubAssessments: offenderNumbers => elite2api.stubAssessments(offenderNumbers),
+    stubGetAgencyGroupLocations: ({ agencyId, groupName, response }) =>
+      whereabouts.stubGetAgencyGroupLocations({ agencyId, groupName, response }),
     stubLocationGroups: locationGroups => whereabouts.stubLocationGroups(locationGroups),
     stubActivityLocationsByDateAndPeriod: ({ locations, date, period }) =>
       elite2api.stubActivityLocationsByDateAndPeriod(locations, date, period),
+    stubGetAttendancesForBookings: ({ agencyId, timeSlot, date, data }) =>
+      whereabouts.stubGetAttendancesForBookings(agencyId, timeSlot, date, data),
   })
 }
