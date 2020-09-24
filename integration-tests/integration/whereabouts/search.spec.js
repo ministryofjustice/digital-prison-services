@@ -147,7 +147,7 @@ context('Whereabouts search page fault handling', () => {
 
     const page = searchPage.goTo()
 
-    cy.wait('@stubActivityLocationsByDateAndPeriod').then(() => {
+    cy.wait('@stubActivityLocationsByDateAndPeriod', { timeout: 50000 }).then(() => {
       page
         .errorMessage()
         .contains('Something went wrong: Error: The page is having trouble loading. Try refreshing the browser.')
