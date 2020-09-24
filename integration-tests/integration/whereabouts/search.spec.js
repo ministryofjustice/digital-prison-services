@@ -139,7 +139,8 @@ context('Whereabouts search page fault handling', () => {
     cy.task('stubActivityLocationsConnectionResetFault')
 
     const page = searchPage.goTo()
-
+    // eslint-disable-next-line cypress/no-unnecessary-waiting
+    cy.wait(3000)
     page
       .errorMessage()
       .contains('Something went wrong: Error: this page cannot be loaded. You can try to refresh your browser.')
