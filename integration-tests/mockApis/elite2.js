@@ -955,6 +955,7 @@ module.exports = {
     })
   },
   stubSentenceData: (offenderSentenceDetail, status = 200) => {
+    console.log(offenderSentenceDetail)
     return stubFor({
       request: {
         method: 'POST',
@@ -1203,6 +1204,21 @@ module.exports = {
             userDescription: 'loc3',
           },
         ],
+      },
+    })
+  },
+  stubActivityLocationsByDateAndPeriod: (locations, date, period) => {
+    return stubFor({
+      request: {
+        method: 'GET',
+        url: `/api/agencies/MDI/eventLocationsBooked?bookedOnDay=${date}&timeSlot=${period}`,
+      },
+      response: {
+        status: 200,
+        headers: {
+          'Content-Type': 'application/json;charset=UTF-8',
+        },
+        jsonBody: locations,
       },
     })
   },

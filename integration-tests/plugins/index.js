@@ -75,7 +75,7 @@ module.exports = on => {
 
     stubAttendanceChanges: response => Promise.all([whereabouts.stubAttendanceChanges(response)]),
     stubCourts: courts => Promise.all([whereabouts.stubCourtLocations(courts)]),
-    stubGroups: caseload => Promise.all([whereabouts.stubGroups(caseload)]),
+    stubGroups: caseload => whereabouts.stubGroups(caseload),
     stubAddVideoLinkAppointment: appointment => Promise.all([whereabouts.stubAddVideoLinkAppointment(appointment)]),
     stubCaseNotes: response => caseNotes.stubCaseNotes(response),
     stubCaseNoteTypes: () => caseNotes.stubCaseNoteTypes(),
@@ -264,7 +264,7 @@ module.exports = on => {
         elite2api.stubAppointments(appointments),
         elite2api.stubActivities(activities),
       ]),
-    stubSentenceData: details => Promise.all([elite2api.stubSentenceData(details)]),
+    stubSentenceData: details => elite2api.stubSentenceData(details),
     stubLocation: ({ locationId, locationData }) => Promise.all([elite2api.stubLocation(locationId, locationData)]),
     stubAgencyDetails: ({ agencyId, details }) => Promise.all([elite2api.stubAgencyDetails(agencyId, details)]),
     stubAppointmentLocations: ({ agency, locations }) =>
@@ -365,8 +365,13 @@ module.exports = on => {
     stubGetEventsByLocationIds: ({ agencyId, date, timeSlot, response }) =>
       elite2api.stubGetEventsByLocationIds(agencyId, date, timeSlot, response),
     stubExternalTransfers: response => elite2api.stubExternalTransfers(response),
-    stubAssessments: assessments => elite2api.stubAssessments(assessments),
+    stubAssessments: offenderNumbers => elite2api.stubAssessments(offenderNumbers),
     stubGetAgencyGroupLocations: ({ agencyId, groupName, response }) =>
       whereabouts.stubGetAgencyGroupLocations({ agencyId, groupName, response }),
+    stubLocationGroups: locationGroups => whereabouts.stubLocationGroups(locationGroups),
+    stubActivityLocationsByDateAndPeriod: ({ locations, date, period }) =>
+      elite2api.stubActivityLocationsByDateAndPeriod(locations, date, period),
+    stubGetAttendancesForBookings: ({ agencyId, timeSlot, date, data }) =>
+      whereabouts.stubGetAttendancesForBookings(agencyId, timeSlot, date, data),
   })
 }

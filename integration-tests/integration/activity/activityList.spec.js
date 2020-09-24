@@ -444,7 +444,7 @@ context('Activity list page', () => {
 
     // then: "An attendance record should have been created and updated"
     cy.task('verifyPostAttendance').then(val => {
-      expect(JSON.parse(val.text).count).to.equal(2)
+      expect(JSON.parse(val.text).count).to.equal(1)
     })
   })
 })
