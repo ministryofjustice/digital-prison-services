@@ -14,7 +14,6 @@ context('Whereabouts search page', () => {
   beforeEach(() => {
     Cypress.Cookies.preserveOnce('hmpps-session-dev')
     cy.task('stubLocationGroups')
-    cy.task('stubGroups', caseload)
     cy.task('stubActivityLocationsByDateAndPeriod', {
       locations: [
         {
@@ -132,15 +131,13 @@ context('Whereabouts search page fault handling', () => {
   beforeEach(() => {
     Cypress.Cookies.preserveOnce('hmpps-session-dev')
     cy.task('stubLocationGroups')
-    cy.task('stubGroups', caseload)
+    cy.task('stubActivityLocationsConnectionResetFault')
   })
 
   it('should show error on activity locations api error', () => {
-    cy.task('stubActivityLocationsConnectionResetFault')
-
     cy.visit('/')
     // eslint-disable-next-line cypress/no-unnecessary-waiting
-    cy.wait(3000)
+    cy.wait(8000)
     cy.get('.error-message').contains(
       'Something went wrong: Error: this page cannot be loaded. You can try to refresh your browser.'
     )
