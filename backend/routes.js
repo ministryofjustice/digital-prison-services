@@ -218,6 +218,8 @@ const setup = ({
     amendCaseNNoteRouter({ elite2Api, caseNotesApi, logError })
   )
 
+  router.get('/content/support', (req, res) => res.redirect(config.app.supportUrl))
+
   return router
 }
 
