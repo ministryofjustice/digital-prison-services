@@ -131,17 +131,34 @@ context('Whereabouts search page fault handling', () => {
   beforeEach(() => {
     Cypress.Cookies.preserveOnce('hmpps-session-dev')
     cy.task('stubLocationGroups')
-    cy.task('stubActivityLocationsConnectionResetFault')
   })
 
   it('should show error on activity locations api error', () => {
-    cy.visit('/')
-    // eslint-disable-next-line cypress/no-unnecessary-waiting
+    cy.task('stubActivityLocationsByDateAndPeriod', {
+      locations: [
+        {
+          locationId: 6,
+          userDescription: 'loc6',
+        },
+      ],
+      date: moment().format('YYYY-MM-DD'),
+      period: getCurrentPeriod(moment()),
+    })
 
-    // TODO: Will remove, just testing something
-    cy.wait(20000)
-    cy.get('.error-message').contains(
-      'Something went wrong: Error: this page cannot be loaded. You can try to refresh your browser.'
-    )
+    const page = searchPage.goTo()
+
+    page.period().then(() => {
+      cy.task('stubActivityLocationsByDateAndPeriod', {
+        date: moment().format('YYYY-MM-DD'),
+        period: 'ED',
+        withFault: true,
+      })
+
+      page.period().select('ED')
+
+      cy.get('.error-message').contains(
+        'Something went wrong: Error: this page cannot be loaded. You can try to refresh your browser.'
+      )
+    })
   })
 })
