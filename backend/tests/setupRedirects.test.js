@@ -2,6 +2,9 @@ const express = require('express')
 const request = require('supertest')
 
 const setupRedirects = require('../setupRedirects')
+const config = require('../config')
+
+config.app.supportUrl = '//supportUrl'
 
 describe('setup redirects', () => {
   let agent
@@ -16,6 +19,13 @@ describe('setup redirects', () => {
     agent
       .get('/add-bulk-appointments')
       .expect('location', '/bulk-appointments/need-to-upload-file')
+      .expect(301, done)
+  })
+
+  it('should redirect to the new support service when the old support url is used', done => {
+    agent
+      .get('/content/support')
+      .expect('location', '//supportUrl')
       .expect(301, done)
   })
 })
