@@ -173,7 +173,7 @@ module.exports = {
     return stubFor({
       request: {
         method: 'POST',
-        urlPattern: `/api/offender-assessments/CATEGORY`,
+        url: '/api/offender-assessments/CATEGORY',
         bodyPatterns: [{ equalToJson: offenderNumbers, ignoreArrayOrder: true, ignoreExtraElements: false }],
       },
       response: {
@@ -219,7 +219,7 @@ module.exports = {
     return stubFor({
       request: {
         method: 'POST',
-        urlPattern: `/api/offender-sentences`,
+        url: '/api/offender-sentences',
         bodyPatterns: [{ equalToJson: offenderNumbers }],
       },
       response: {
@@ -1517,6 +1517,20 @@ module.exports = {
           'Content-Type': 'application/json;charset=UTF-8',
         },
         jsonBody: movements || {},
+      },
+    }),
+  stubGetEventsByLocationIds: (agencyId, date, timeSlot, response) =>
+    stubFor({
+      request: {
+        method: 'POST',
+        url: `/api/schedules/${agencyId}/events-by-location-ids?date=${date}&timeSlot=${timeSlot}`,
+      },
+      response: {
+        status: 200,
+        headers: {
+          'Content-Type': 'application/json;charset=UTF-8',
+        },
+        jsonBody: response || {},
       },
     }),
   stubMoveToCell: () =>

@@ -96,11 +96,26 @@ module.exports = {
       },
     })
   },
+  stubGetAttendancesForBookings: (caseload, timeSlot, date, data = []) => {
+    return stubFor({
+      request: {
+        method: 'POST',
+        url: `/whereabouts/attendances/${caseload}?date=${date}&period=${timeSlot}`,
+      },
+      response: {
+        status: 200,
+        headers: {
+          'Content-Type': 'application/json;charset=UTF-8',
+        },
+        jsonBody: data,
+      },
+    })
+  },
   stubPostAttendance: attendanceToReturn => {
     return stubFor({
       request: {
         method: 'POST',
-        urlPattern: `/whereabouts/attendances`,
+        urlPattern: `/whereabouts/attendance`,
       },
       response: {
         status: 200,
@@ -271,6 +286,21 @@ module.exports = {
       request: {
         method: 'GET',
         url: `/whereabouts/locations/${agencyId}/${groupName}/location-prefix`,
+      },
+      response: {
+        status: 200,
+        headers: {
+          'Content-Type': 'application/json;charset=UTF-8',
+        },
+        jsonBody: response,
+      },
+    }),
+
+  stubGetAgencyGroupLocations: ({ agencyId, groupName, response }) =>
+    stubFor({
+      request: {
+        method: 'GET',
+        url: `/whereabouts/locations/groups/${agencyId}/${groupName}`,
       },
       response: {
         status: 200,
