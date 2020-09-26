@@ -117,17 +117,26 @@ context('Whereabouts search page', () => {
   })
 
   it('should show error on activity locations api error', () => {
-    cy.clearCookies()
-    cy.task('reset')
-    cy.task('stubLogin', { username: 'ITAG_USER', caseload: 'MDI' })
+    const page = searchPage.goTo()
 
-    cy.task('stubLocationGroups')
-    cy.task('stubActivityLocationsConnectionResetFault')
+    page.period().then(() => {
+      cy.task('stubActivityLocationsByDateAndPeriod', {
+        locations: [
+          {
+            locationId: 6,
+            userDescription: 'loc6',
+          },
+        ],
+        date: moment().format('YYYY-MM-DD'),
+        period: 'ED',
+        withFault: true,
+      })
 
-    cy.login()
+      page.period().select('ED')
 
-    cy.get('.error-message').contains(
-      'Something went wrong: Error: this page cannot be loaded. You can try to refresh your browser.'
-    )
+      cy.get('.error-message').contains(
+        'Something went wrong: Error: this page cannot be loaded. You can try to refresh your browser.'
+      )
+    })
   })
 })
