@@ -2,17 +2,11 @@ const moment = require('moment')
 const { getCurrentPeriod } = require('../../../backend/utils')
 const searchPage = require('../../pages/whereabouts/searchPage')
 
-const caseload = 'MDI'
-
 context('Whereabouts search page', () => {
-  before(() => {
+  beforeEach(() => {
     cy.clearCookies()
     cy.task('reset')
     cy.task('stubLogin', { username: 'ITAG_USER', caseload: 'MDI' })
-    cy.login()
-  })
-  beforeEach(() => {
-    Cypress.Cookies.preserveOnce('hmpps-session-dev')
     cy.task('stubLocationGroups')
     cy.task('stubActivityLocationsByDateAndPeriod', {
       locations: [
@@ -32,6 +26,8 @@ context('Whereabouts search page', () => {
       date: moment().format('YYYY-MM-DD'),
       period: getCurrentPeriod(moment()),
     })
+
+    cy.login()
   })
 
   it('should load the page without error', () => {
@@ -119,20 +115,17 @@ context('Whereabouts search page', () => {
       })
     })
   })
-})
 
-context('Whereabouts search page fault handling', () => {
-  before(() => {
+  it('should show error on activity locations api error', () => {
     cy.clearCookies()
     cy.task('reset')
+    cy.task('stubLogin', { username: 'ITAG_USER', caseload: 'MDI' })
 
     cy.task('stubLocationGroups')
     cy.task('stubActivityLocationsConnectionResetFault')
-    cy.task('stubLogin', { username: 'ITAG_USER', caseload: 'MDI' })
-    cy.login()
-  })
 
-  it('should show error on activity locations api error', () => {
+    cy.login()
+
     cy.get('.error-message').contains(
       'Something went wrong: Error: this page cannot be loaded. You can try to refresh your browser.'
     )
