@@ -125,40 +125,16 @@ context('Whereabouts search page fault handling', () => {
   before(() => {
     cy.clearCookies()
     cy.task('reset')
+
+    cy.task('stubLocationGroups')
+    cy.task('stubActivityLocationsConnectionResetFault')
     cy.task('stubLogin', { username: 'ITAG_USER', caseload: 'MDI' })
     cy.login()
   })
-  beforeEach(() => {
-    Cypress.Cookies.preserveOnce('hmpps-session-dev')
-    cy.task('stubLocationGroups')
-  })
 
   it('should show error on activity locations api error', () => {
-    cy.task('stubActivityLocationsByDateAndPeriod', {
-      locations: [
-        {
-          locationId: 6,
-          userDescription: 'loc6',
-        },
-      ],
-      date: moment().format('YYYY-MM-DD'),
-      period: getCurrentPeriod(moment()),
-    })
-
-    const page = searchPage.goTo()
-
-    page.period().then(() => {
-      cy.task('stubActivityLocationsByDateAndPeriod', {
-        date: moment().format('YYYY-MM-DD'),
-        period: 'ED',
-        withFault: true,
-      })
-
-      page.period().select('ED')
-
-      cy.get('.error-message').contains(
-        'Something went wrong: Error: this page cannot be loaded. You can try to refresh your browser.'
-      )
-    })
+    cy.get('.error-message').contains(
+      'Something went wrong: Error: this page cannot be loaded. You can try to refresh your browser.'
+    )
   })
 })
