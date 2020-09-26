@@ -132,11 +132,19 @@ context('Whereabouts search page', () => {
         withFault: true,
       })
 
+      cy.server()
+      cy.route({
+        method: 'GET',
+        url: `/api/activityLocations?agencyId=MDI&bookedOnDay=${moment().format('DD/MM/YYYY')}&timeSlot=ED`,
+      }).as('stubActivityLocationsByDateAndPeriod')
+
       page.period().select('ED')
 
-      cy.get('.error-message').contains(
-        'Something went wrong: Error: this page cannot be loaded. You can try to refresh your browser.'
-      )
+      cy.wait('@stubActivityLocationsByDateAndPeriod').then(() => {
+        cy.get('.error-message').contains(
+          'Something went wrong: Error: this page cannot be loaded. You can try to refresh your browser.'
+        )
+      })
     })
   })
 })
