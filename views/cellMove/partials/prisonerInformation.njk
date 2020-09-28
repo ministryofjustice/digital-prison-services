@@ -26,11 +26,11 @@
   <div class="horizontal-information__item horizontal-information__item--tenth">
     <h3 class="govuk-heading-s govuk-!-margin-bottom-1">Relevant alerts</h3>
     {% if alerts.length %}
-      <div class="govuk-!-margin-bottom-3">
+      <div class="govuk-!-margin-bottom-3" data-test="alerts">
         {{ alertFlags(alerts) }}
       </div>
     {% else %}
-      <p class="govuk-body">None</p>
+      <p class="govuk-body" data-test="alerts">None</p>
     {% endif %}
   </div>
   <div class="horizontal-information__item">
