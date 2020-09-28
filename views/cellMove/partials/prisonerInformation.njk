@@ -1,67 +1,46 @@
-<div class="cell-move-header govuk-!-margin-bottom-6">
-    <div class="govuk-grid-row govuk-!-margin-top-2">
-        <div class="govuk-grid-column-one-half">
-        <div class="govuk-grid-row">
-            <div class="govuk-grid-column-one-third">
-            <h2 class="govuk-heading-m govuk-!-margin-bottom-1">Name</h2>
-            </div>
-            <div class="govuk-grid-column-one-third">
-            <h2 class="govuk-heading-m govuk-!-margin-bottom-1">Current location</h2>
-            </div>
-            <div class="govuk-grid-column-one-third">
-            <h2 class="govuk-heading-m govuk-!-margin-bottom-1">CSRA rating</h2>
-            </div>
-        </div>
-        </div>
-        <div class="govuk-grid-column-one-half">
-        <div class="govuk-grid-row">
-            <div class="govuk-grid-column-one-half">
-            <h2 class="govuk-heading-m govuk-!-margin-bottom-1">Relevant alerts</h2>
-            </div>
-            <div class="govuk-grid-column-one-half">
-            <h2 class="govuk-heading-m govuk-!-margin-bottom-1">Non-associations</h2>
-            </div>
-        </div>
-        </div>
-    </div>
-    <div class="govuk-grid-row govuk-!-margin-bottom-2">
-        <div class="govuk-grid-column-one-half">
-        <div class="govuk-grid-row">
-            <div class="govuk-grid-column-one-third">
-            <p class="govuk-body govuk-!-margin-bottom-1" data-test="name"> {{ breadcrumbPrisonerName }} </p>
-            <a href="{{ offenderDetailsUrl }}" class="govuk-link" data-test="name-link">View details <span class="govuk-visually-hidden">for {{ breadcrumbPrisonerName }}</span> </a>
-            </div>
-            <div class="govuk-grid-column-one-third">
-            <p class="govuk-body govuk-!-margin-bottom-1" data-test="living-unit"> {{ prisonerDetails.assignedLivingUnit.description }} </p>
-            </div>
-            <div class="govuk-grid-column-one-third">
-            <p class="govuk-body govuk-!-margin-bottom-1" data-test="csra"> {{ prisonerDetails.csra }} </p>
-            {% if showCsraLink %}
-            <a href="{{ csraDetailsUrl }}" class="govuk-link" data-test="csra-link">View details <span class="govuk-visually-hidden">for {{ breadcrumbPrisonerName }}</span></a>
-            {% endif %}
-            </div>
-        </div>
-        </div>
-        
-        <div class="govuk-grid-column-one-half">
-        <div class="govuk-grid-row">
-            <div class="govuk-grid-column-one-half" data-test="alerts">
-            {% if alerts.length %}
-                {{ alertFlags(alerts) }}
-            {% else %}
-                <p class="govuk-body govuk-!-margin-bottom-1">None</p>
-            {% endif %}
-            </div>
-            {% if showNonAssociationsLink %}
-            <div class="govuk-grid-column-one-half">
-            <a href="{{ nonAssociationLink }}" class="govuk-link" data-test="non-associations-link">View non-associations <span class="govuk-visually-hidden">for {{ breadcrumbPrisonerName }}</span></a>
-            </div>
-            {% else %}
-            <div class="govuk-grid-column-one-half">
-                <p class="govuk-body govuk-!-margin-bottom-1" data-test="non-associations-message">You must also check any local processes</p>
-            </div>
-            {% endif %}
-        </div>
-        </div>
-    </div>
+<div class="horizontal-information" data-test="cell-move-header-information">
+  <div class="horizontal-information__item">
+    <h3 class="govuk-heading-s govuk-!-margin-bottom-1">Name</h3>
+    <p class="govuk-body govuk-!-margin-bottom-1" data-test="name">{{ breadcrumbPrisonerName }}</p>
+    <p class="govuk-body">
+      <a href="{{ offenderDetailsUrl }}" class="govuk-link" data-test="name-link">View details
+        <span class="govuk-visually-hidden">for {{ breadcrumbPrisonerName }}</span>
+      </a>
+    </p>
+  </div>
+  <div class="horizontal-information__item">
+    <h3 class="govuk-heading-s govuk-!-margin-bottom-1">Current location</h3>
+    <p class="govuk-body" data-test="living-unit">{{ prisonerDetails.assignedLivingUnit.description }}</p>
+  </div>
+  <div class="horizontal-information__item">
+    <h3 class="govuk-heading-s govuk-!-margin-bottom-1">CSRA rating</h3>
+    <p class="govuk-body govuk-!-margin-bottom-1" data-test="csra">{{ prisonerDetails.csra }}</p>
+    {% if showCsraLink %}
+      <p class="govuk-body">
+        <a href="{{ csraDetailsUrl }}" class="govuk-link" data-test="csra-link">View details
+          <span class="govuk-visually-hidden">for{{ breadcrumbPrisonerName }}</span>
+        </a>
+      </p>
+    {% endif %}
+  </div>
+  <div class="horizontal-information__item horizontal-information__item--tenth">
+    <h3 class="govuk-heading-s govuk-!-margin-bottom-1">Relevant alerts</h3>
+    {% if alerts.length %}
+      <div class="govuk-!-margin-bottom-3" data-test="alerts">
+        {{ alertFlags(alerts) }}
+      </div>
+    {% else %}
+      <p class="govuk-body" data-test="alerts">None</p>
+    {% endif %}
+  </div>
+  <div class="horizontal-information__item">
+    <h3 class="govuk-heading-s govuk-!-margin-bottom-1">Non-associations</h3>
+    {% if showNonAssociationsLink %}
+      <a href="{{ nonAssociationLink }}" class="govuk-link govuk-body" data-test="non-associations-link">View non-associations
+        <span class="govuk-visually-hidden">for {{ breadcrumbPrisonerName }}</span>  
+      </a>
+    {% else %}
+      <p class="govuk-body" data-test="non-associations-message">You must also check any local processes</p>
+    {% endif %}
+  </div>
 </div>

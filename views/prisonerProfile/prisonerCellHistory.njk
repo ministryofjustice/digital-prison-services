@@ -65,69 +65,36 @@
     {% endif %}
   </div>
   <h2 class="govuk-heading-m">Current location</h2>
-    <div class="cell-history-header govuk-!-margin-bottom-7">
-      <div class="govuk-grid-row govuk-!-margin-top-2">
-        <div class="govuk-grid-column-one-half">
-        <div class="govuk-grid-row">
-            <div class="govuk-grid-column-one-third">
-            <h3 class="govuk-heading-s govuk-!-margin-bottom-1">Establishment</h3>
-            </div>
-            <div class="govuk-grid-column-one-third">
-            <h3 class="govuk-heading-s govuk-!-margin-bottom-1">Location</h3>
-            </div>
-            <div class="govuk-grid-column-one-third">
-            <h3 class="govuk-heading-s govuk-!-margin-bottom-1">Moved in</h3>
-            </div>
-        </div>
-        </div>
-        <div class="govuk-grid-column-one-half">
-        <div class="govuk-grid-row">
-          {% if occupants.length %}
-            <div class="govuk-grid-column-one-half">
-              <h3 class="govuk-heading-s govuk-!-margin-bottom-1">Currently sharing with</h3>
-            </div>
-          {% endif %}
-            <div class="govuk-grid-column-one-half">
-            <h3 class="govuk-heading-s govuk-!-margin-bottom-1"></h3>
-            </div>
-        </div>
-        </div>
-      </div>
-      <div class="govuk-grid-row govuk-!-margin-bottom-2">
-        <div class="govuk-grid-column-one-half">
-        <div class="govuk-grid-row">
-            <div class="govuk-grid-column-one-third">
-            <p class="govuk-body govuk-!-margin-bottom-1" data-test="establishment"> {{ currentLocation.establishment }} </p>
-            </div>
-            <div class="govuk-grid-column-one-third">
-            <p class="govuk-body govuk-!-margin-bottom-1" data-test="location"> {{ currentLocation.location }} </p>
-            </div>
-            <div class="govuk-grid-column-one-third">
-            <p class="govuk-body govuk-!-margin-bottom-1" data-test="moved-in"> {{ currentLocation.movedIn }} </p>
-            </div>
-        </div>
-        </div>
-        
-        <div class="govuk-grid-column-one-half">
-        <div class="govuk-grid-row">
-        {% if occupants.length %}
-          <div class="govuk-grid-column-one-half" data-test="occupants">
-            {% for occupant in occupants %}
-              <p class="govuk-body"><a class="govuk-link" href={{occupant.profileUrl}}>{{ occupant.name }}</a></p>
-            {% endfor %}
-            </div>
-        {% endif %}
-          <div class="govuk-grid-column-one-half">
-          <p class="govuk-body">
-            <a href="{{ './location-history?fromDate=' + currentLocation.assignmentDateTime + '&toDate=' + currentLocation.assignmentEndDateTime + '&locationId=' + currentLocation.livingUnitId + '&agencyId=' + currentLocation.agencyId }}" class="govuk-link" data-test="cell-details-link">
-              View details
-            </a>
-          </p>
-          </div>
-        </div>
-        </div>
-      </div>
+  <div class="horizontal-information">
+    <div class="horizontal-information__item">
+      <h3 class="govuk-heading-s govuk-!-margin-bottom-1">Establishment</h3>
+      <p class="govuk-body" data-test="establishment"> {{ currentLocation.establishment }} </p>
     </div>
+    <div class="horizontal-information__item">
+      <h3 class="govuk-heading-s govuk-!-margin-bottom-1">Location</h3>
+      <p class="govuk-body" data-test="location"> {{ currentLocation.location }} </p>
+    </div>
+    <div class="horizontal-information__item">
+      <h3 class="govuk-heading-s govuk-!-margin-bottom-1">Moved in</h3>
+      <p class="govuk-body" data-test="moved-in"> {{ currentLocation.movedIn }} </p>
+    </div>
+    {% if occupants.length %}
+      <div class="horizontal-information__item">
+        <h3 class="govuk-heading-s govuk-!-margin-bottom-1">Currently sharing with</h3>
+        {% for occupant in occupants %}
+          <p class="govuk-body" data-test="occupants">
+            <a class="govuk-link" href={{occupant.profileUrl}}>{{ occupant.name }}</a>
+          </p>
+        {% endfor %}
+      </div>
+    {% endif %}
+    <div class="horizontal-information__item">
+      <a href="{{ './location-history?fromDate=' + currentLocation.assignmentDateTime + '&toDate=' + currentLocation.assignmentEndDateTime + '&locationId=' + currentLocation.livingUnitId + '&agencyId=' + currentLocation.agencyId }}" class="govuk-link govuk-body" data-test="cell-details-link">
+      View details
+      </a>
+    </div>
+  </div>
+
   <h2 class="govuk-heading-m">Previous locations</h2>
   {% if rows.length %}
       {{ govukTable({
