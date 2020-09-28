@@ -31,36 +31,32 @@
 
   <h2 class="govuk-heading-m">Location details</h2>
 
-  <hr class="govuk-section-break govuk-section-break--m govuk-section-break--visible">
-
-  <div class="govuk-grid-row">
-    <div class="govuk-grid-column-one-quarter">
+  <div class="horizontal-information">
+    <div class="horizontal-information__item">
       <h3 class="govuk-heading-s govuk-!-margin-bottom-1">Location</h3>
-      <p class="govuk-body govuk-!-margin-bottom-0" data-test="establishment">
+      <p class="govuk-body" data-test="establishment">
         {{ locationDetails.description }}
       </p>
     </div>
-    <div class="govuk-grid-column-one-quarter">
+    <div class="horizontal-information__item">
       <h3 class="govuk-heading-s govuk-!-margin-bottom-1">Moved in</h3>
-      <p class="govuk-body govuk-!-margin-bottom-0" data-test="moved-in">
+      <p class="govuk-body" data-test="moved-in">
         {{ locationDetails.movedIn }}
       </p>
     </div>
-    <div class="govuk-grid-column-one-quarter">
+    <div class="horizontal-information__item">
       <h3 class="govuk-heading-s govuk-!-margin-bottom-1">Moved out</h3>
-      <p class="govuk-body govuk-!-margin-bottom-0" data-test="moved-out">
+      <p class="govuk-body" data-test="moved-out">
         {{ locationDetails.movedOut }}
       </p>
     </div>
-    <div class="govuk-grid-column-one-quarter">
+    <div class="horizontal-information__item">
       <h3 class="govuk-heading-s govuk-!-margin-bottom-1">Cell type</h3>
-      <p class="govuk-body govuk-!-margin-bottom-0" data-test="cell-type">
+      <p class="govuk-body" data-test="cell-type">
         {{ locationDetails.attributes | join(', ', 'description') | safe }}
       </p>
     </div>
   </div>
-
-  <hr class="govuk-section-break govuk-section-break--m govuk-section-break--visible">
 
   {% set rows = [] %}
   {% for prisoner in locationSharingHistory %}

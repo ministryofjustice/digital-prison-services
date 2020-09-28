@@ -19,7 +19,6 @@ $govuk-page-width: 1170px;
 @import 'components/covid/dashboard';
 @import 'components/prisonerSearch/prisoner-search';
 @import 'components/prisonerSearch/prisoner-panel';
-@import 'components/cell-move';
 
 @import 'views/components/datePicker/datePicker.scss';
 @import 'views/components/timePicker/timePicker.scss';
@@ -28,6 +27,7 @@ $govuk-page-width: 1170px;
 @import 'govuk-overrides';
 @import 'moj-overrides';
 @import 'typography';
+@import 'horizontal-content';
 
 * {
   box-sizing: border-box;
@@ -44,67 +44,6 @@ $govuk-page-width: 1170px;
 
 .clickable {
   cursor: pointer;
-}
-
-.horizontal-form {
-  * {
-    width: 100%;
-  }
-
-  @include govuk-media-query($from: desktop) {
-    display: flex;
-    flex-flow: row wrap;
-
-    * {
-      width: auto;
-      margin-bottom: 0;
-    }
-
-    > div {
-      margin-right: govuk-spacing(3);
-    }
-
-    .date-picker-container input {
-      width: 130px !important;
-    }
-
-    label {
-      margin-bottom: govuk-spacing(1);
-    }
-
-    button {
-      margin-right: govuk-spacing(3);
-    }
-
-    a {
-      margin-top: govuk-spacing(3);
-    }
-
-    button,
-    a {
-      align-self: flex-end;
-      margin-bottom: $govuk-border-width-form-element;
-    }
-  }
-}
-
-.horizontal-links {
-  > a {
-    margin-right: govuk-spacing(2);
-  }
-
-  @include govuk-media-query($from: desktop) {
-    display: flex;
-
-    * {
-      width: auto;
-      margin-bottom: 0;
-    }
-
-    > a {
-      margin-right: govuk-spacing(3);
-    }
-  }
 }
 
 .word-break {
@@ -217,7 +156,7 @@ $govuk-page-width: 1170px;
 }
 
 pre {
-  white-space: pre-wrap;       /* css-3 */
-  white-space: -moz-pre-wrap;  /* Mozilla, since 1999 */
-  word-wrap: break-word;       /* Internet Explorer 5.5+ */
- }
+  white-space: pre-wrap; /* css-3 */
+  white-space: -moz-pre-wrap; /* Mozilla, since 1999 */
+  word-wrap: break-word; /* Internet Explorer 5.5+ */
+}
