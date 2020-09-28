@@ -45,7 +45,7 @@ describe('Activity locations', () => {
 
     expect(logError.mock.calls.length).toBe(0)
     expect(res.status.mock.calls.length).toBe(0)
-    expect(res.end).toHaveBeenCalled()
+    expect(res.json).toHaveBeenCalledWith({ error: true })
   })
 
   it('should not log connection reset API errors with Timout in stack', async () => {
@@ -54,7 +54,7 @@ describe('Activity locations', () => {
 
     expect(logError.mock.calls.length).toBe(0)
     expect(res.status.mock.calls.length).toBe(0)
-    expect(res.end).toHaveBeenCalled()
+    expect(res.json).toHaveBeenCalledWith({ error: true })
   })
 
   it('should respond with the correct status codes', async () => {

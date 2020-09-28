@@ -1030,7 +1030,6 @@ module.exports = {
     })
   },
   stubAppointmentsGet: (appointments, status = 200) => {
-    console.log(appointments)
     return stubFor({
       request: {
         method: 'GET',
@@ -1206,19 +1205,33 @@ module.exports = {
       },
     })
   },
-  stubActivityLocationsByDateAndPeriod: (locations, date, period) => {
+  stubActivityLocationsConnectionResetFault: () =>
+    stubFor({
+      request: {
+        method: 'GET',
+        urlPattern: '/api/agencies/.+?/eventLocationsBooked.+?',
+      },
+      response: {
+        fault: 'CONNECTION_RESET_BY_PEER',
+      },
+    }),
+  stubActivityLocationsByDateAndPeriod: (locations, date, period, withFault) => {
     return stubFor({
       request: {
         method: 'GET',
         url: `/api/agencies/MDI/eventLocationsBooked?bookedOnDay=${date}&timeSlot=${period}`,
       },
-      response: {
-        status: 200,
-        headers: {
-          'Content-Type': 'application/json;charset=UTF-8',
-        },
-        jsonBody: locations,
-      },
+      response: withFault
+        ? {
+            fault: 'CONNECTION_RESET_BY_PEER',
+          }
+        : {
+            status: 200,
+            headers: {
+              'Content-Type': 'application/json;charset=UTF-8',
+            },
+            jsonBody: locations,
+          },
     })
   },
   stubInmates: ({ locationId, params, count, data = [] }) =>

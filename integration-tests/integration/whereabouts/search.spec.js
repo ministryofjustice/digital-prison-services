@@ -2,19 +2,12 @@ const moment = require('moment')
 const { getCurrentPeriod } = require('../../../backend/utils')
 const searchPage = require('../../pages/whereabouts/searchPage')
 
-const caseload = 'MDI'
-
 context('Whereabouts search page', () => {
-  before(() => {
+  beforeEach(() => {
     cy.clearCookies()
     cy.task('reset')
     cy.task('stubLogin', { username: 'ITAG_USER', caseload: 'MDI' })
-    cy.login()
-  })
-  beforeEach(() => {
-    Cypress.Cookies.preserveOnce('hmpps-session-dev')
     cy.task('stubLocationGroups')
-    cy.task('stubGroups', caseload)
     cy.task('stubActivityLocationsByDateAndPeriod', {
       locations: [
         {
@@ -33,6 +26,8 @@ context('Whereabouts search page', () => {
       date: moment().format('YYYY-MM-DD'),
       period: getCurrentPeriod(moment()),
     })
+
+    cy.login()
   })
 
   it('should load the page without error', () => {
@@ -117,6 +112,38 @@ context('Whereabouts search page', () => {
 
       cy.wait('@stubActivityLocationsByDateAndPeriod').then(() => {
         page.activity().contains('loc6')
+      })
+    })
+  })
+
+  it('should show error on activity locations api error', () => {
+    const page = searchPage.goTo()
+
+    page.period().then(() => {
+      cy.task('stubActivityLocationsByDateAndPeriod', {
+        locations: [
+          {
+            locationId: 6,
+            userDescription: 'loc6',
+          },
+        ],
+        date: moment().format('YYYY-MM-DD'),
+        period: 'ED',
+        withFault: true,
+      })
+
+      cy.server()
+      cy.route({
+        method: 'GET',
+        url: `/api/activityLocations?agencyId=MDI&bookedOnDay=${moment().format('DD/MM/YYYY')}&timeSlot=ED`,
+      }).as('stubActivityLocationsByDateAndPeriod')
+
+      page.period().select('ED')
+
+      cy.wait('@stubActivityLocationsByDateAndPeriod').then(() => {
+        cy.get('.error-message').contains(
+          'Something went wrong: Error: this page cannot be loaded. You can try to refresh your browser.'
+        )
       })
     })
   })

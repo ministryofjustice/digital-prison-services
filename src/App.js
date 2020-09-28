@@ -124,13 +124,16 @@ class App extends React.Component {
           timeSlot,
         },
       })
+      if (response.data.error)
+        return this.handleError(new Error('this page cannot be loaded. You can try to refresh your browser.'))
+
       activitiesDispatch(response.data)
       // set to unselected
       activityDispatch('--')
     } catch (error) {
       this.handleError(error)
     }
-    setLoadedDispatch(true)
+    return setLoadedDispatch(true)
   }
 
   handlePeriodChange = event => {

@@ -249,7 +249,7 @@ module.exports = on => {
     stubAppointmentsAtAgency: (agency, locations) =>
       Promise.all([elite2api.stubUsageAtAgency(agency, 'APP', locations)]),
     stubVisitsAtAgency: (agency, locations) => Promise.all([elite2api.stubUsageAtAgency(agency, 'VISIT', locations)]),
-    stubActivityLocations: () => Promise.all([elite2api.stubActivityLocations()]),
+    stubActivityLocations: status => elite2api.stubActivityLocations(status),
     stubPostAppointments: () => Promise.all([elite2api.stubPostAppointments()]),
     stubSchedules: ({ agency, location, date, appointments, visits, activities }) =>
       Promise.all([
@@ -369,8 +369,9 @@ module.exports = on => {
     stubGetAgencyGroupLocations: ({ agencyId, groupName, response }) =>
       whereabouts.stubGetAgencyGroupLocations({ agencyId, groupName, response }),
     stubLocationGroups: locationGroups => whereabouts.stubLocationGroups(locationGroups),
-    stubActivityLocationsByDateAndPeriod: ({ locations, date, period }) =>
-      elite2api.stubActivityLocationsByDateAndPeriod(locations, date, period),
+    stubActivityLocationsByDateAndPeriod: ({ locations, date, period, withFault }) =>
+      elite2api.stubActivityLocationsByDateAndPeriod(locations, date, period, withFault),
+    stubActivityLocationsConnectionResetFault: () => elite2api.stubActivityLocationsConnectionResetFault(),
     stubGetAttendancesForBookings: ({ agencyId, timeSlot, date, data }) =>
       whereabouts.stubGetAttendancesForBookings(agencyId, timeSlot, date, data),
   })

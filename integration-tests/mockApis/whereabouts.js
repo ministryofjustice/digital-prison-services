@@ -335,13 +335,7 @@ module.exports = {
         headers: {
           'Content-Type': 'application/json;charset=UTF-8',
         },
-        jsonBody: locationGroups || [
-          {
-            name: '1',
-            key: '1',
-            children: [{ name: 'A', key: 'A' }, { name: 'B', key: 'B' }, { name: 'C', key: 'C' }],
-          },
-        ],
+        jsonBody: locationGroups || [],
       },
     }),
 }

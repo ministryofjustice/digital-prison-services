@@ -17,6 +17,7 @@ const searchPage = () =>
         .not('.rdtNew')
         .not('.rdtOld'),
     validationMessage: () => cy.get('#validation-message'),
+    errorMessage: () => cy.get('.error-message'),
   })
 
 export default {
