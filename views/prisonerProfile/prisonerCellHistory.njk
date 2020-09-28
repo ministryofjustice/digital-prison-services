@@ -82,7 +82,9 @@
       <div class="horizontal-information__item">
         <h3 class="govuk-heading-s govuk-!-margin-bottom-1">Currently sharing with</h3>
         {% for occupant in occupants %}
-          <p class="govuk-body"><a class="govuk-link" href={{occupant.profileUrl}}>{{ occupant.name }}</a></p>
+          <p class="govuk-body" data-test="occupants">
+            <a class="govuk-link" href={{occupant.profileUrl}}>{{ occupant.name }}</a>
+          </p>
         {% endfor %}
       </div>
     {% endif %}
