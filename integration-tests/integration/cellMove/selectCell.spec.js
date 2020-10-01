@@ -95,7 +95,7 @@ context('A user can select a cell', () => {
         userDescription: 'LEI-1-1',
       },
       {
-        attributes: [{ code: 'LC', description: 'Listener Cell' }],
+        attributes: [{ code: 'LC', description: 'Listener Cell' }, { description: 'Gated Cell', code: 'GC' }],
         capacity: 3,
         description: 'LEI-1-1',
         id: 1,
@@ -130,7 +130,7 @@ context('A user can select a cell', () => {
 
             assertRow(0, columns, {
               location: 'LEI-1-1',
-              cellType: 'Listener Cell',
+              cellType: 'Gated Cell,\nListener Cell',
               capacity: 3,
               spaces: 1,
               occupier: 'Doe, Bob\nView details\nfor Doe, Bob\nNON-ASSOCIATION',
