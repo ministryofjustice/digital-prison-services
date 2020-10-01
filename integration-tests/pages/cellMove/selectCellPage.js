@@ -8,6 +8,7 @@ const selectCellPage = () =>
     locationTableHeader: () => cy.get('[data-test="location-table-header"]').find('button'),
     nonAssociationWarning: () => cy.get('#non-association-warning'),
     selectCswapLink: () => cy.get('[data-test="select-cswap-link"]'),
+    noResultsMessage: () => cy.get('[data-test="no-results-message"]'),
   })
 
 export default {
