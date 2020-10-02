@@ -80,7 +80,7 @@
       <h3 class="govuk-heading-s govuk-!-margin-bottom-1">Comments</h3>
       <p class="govuk-body govuk-!-margin-bottom-6" data-test="hearing-comments">{{ hearing.comment | showDefault('Not entered') }}</p>
 
-      {% if hearing.results.length > 0 %}
+      {% if hearing.results.length %}
         {% for result in hearing.results %}
           {% set resultsRows = (resultsRows.push([
             { text: result.oicOffenceCode },
@@ -123,7 +123,7 @@
           rows: resultsRows
         }) }}
 
-        {% if awardsRows %}
+        {% if awardsRows.length %}
           {{ govukTable({
             caption: "Awards",
             head: [
@@ -145,13 +145,7 @@
             ],
             rows: awardsRows
           }) }}
-        {% else %}
-          <h3 class="govuk-heading-s govuk-!-margin-bottom-1">Awards</h3>
-          <p class="govuk-body">No awards available.</p>
         {% endif %}
-      {% else %}
-        <h3 class="govuk-heading-s govuk-!-margin-bottom-1">Results</h3>
-        <p class="govuk-body">No results available.</p>
       {% endif %}
 
       {% if hearing.comments.length %}
@@ -163,8 +157,5 @@
 
       <hr class="govuk-section-break govuk-section-break--l govuk-section-break--visible">
     {% endfor %}
-  {% else %}
-    <h2 class="govuk-heading-m">Hearings</h2>
-    <p class="govuk-body">No hearing details available.</p>
   {% endif %}
 {% endblock %}
