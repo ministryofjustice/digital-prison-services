@@ -374,5 +374,6 @@ module.exports = on => {
     stubActivityLocationsConnectionResetFault: () => elite2api.stubActivityLocationsConnectionResetFault(),
     stubGetAttendancesForBookings: ({ agencyId, timeSlot, date, data }) =>
       whereabouts.stubGetAttendancesForBookings(agencyId, timeSlot, date, data),
+    stubGetAdjudicationDetails: adjudicationDetails => elite2api.stubGetAdjudicationDetails(adjudicationDetails),
   })
 }

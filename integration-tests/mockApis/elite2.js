@@ -1509,6 +1509,20 @@ module.exports = {
         jsonBody: movements || {},
       },
     }),
+  stubGetAdjudicationDetails: adjudicationDetails =>
+    stubFor({
+      request: {
+        method: 'GET',
+        urlPathPattern: `/api/offenders/.+?/adjudications/[0-9]+?`,
+      },
+      response: {
+        status: 200,
+        headers: {
+          'Content-Type': 'application/json;charset=UTF-8',
+        },
+        jsonBody: adjudicationDetails || {},
+      },
+    }),
   stubRollcountByType: (agencyId, type, movements) =>
     stubFor({
       request: {

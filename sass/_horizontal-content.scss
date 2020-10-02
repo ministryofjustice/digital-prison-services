@@ -1,12 +1,15 @@
 .horizontal-information {
   margin-bottom: govuk-spacing(6);
-  padding: govuk-spacing(3) 0;
-  border-top: 1px solid $govuk-border-colour;
-  border-bottom: 1px solid $govuk-border-colour;
 
   @include govuk-media-query($from: tablet) {
     padding-bottom: 0;
     display: flex;
+  }
+
+  &--with-border {
+    padding: govuk-spacing(3) 0;
+    border-top: 1px solid $govuk-border-colour;
+    border-bottom: 1px solid $govuk-border-colour;
   }
 
   &__item {

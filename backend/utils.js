@@ -18,7 +18,8 @@ const readableDateFormat = (displayDate, fromFormat = 'DD/MM/YYYY') => {
 
 const formatTimestampToDate = timestamp => timestamp && moment(timestamp).format('DD/MM/YYYY')
 
-const formatTimestampToDateTime = timestamp => timestamp && moment(timestamp).format('DD/MM/YYYY - HH:mm')
+const formatTimestampToDateTime = (timestamp, format = 'DD/MM/YYYY - HH:mm') =>
+  timestamp && moment(timestamp).format(format)
 
 const distinct = data =>
   data.reduce((accumulator, current) => (accumulator.includes(current) ? accumulator : [...accumulator, current]), [])
