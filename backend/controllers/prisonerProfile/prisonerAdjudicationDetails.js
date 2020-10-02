@@ -52,6 +52,7 @@ module.exports = ({ elite2Api, logError }) => async (req, res) => {
       profileUrl: `/prisoner/${offenderNo}`,
     })
   } catch (error) {
+    console.log('===ERROR', error)
     logError(req.originalUrl, error, serviceUnavailableMessage)
     return res.render('error.njk', { url: `/prisoner/${offenderNo}` })
   }
