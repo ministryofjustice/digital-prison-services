@@ -1,0 +1,170 @@
+{% extends "../partials/layout.njk" %}
+{% from "govuk/components/table/macro.njk" import govukTable %}
+
+{% set title =  "Adjudication " + adjudicationDetails.adjudicationNumber + " details"  %}
+
+{% block beforeContent %}
+  {{ govukBreadcrumbs({
+    items: [
+      {
+        text: "Home",
+        href: dpsUrl
+      },
+      {
+        text: breadcrumbPrisonerName,
+        href: profileUrl
+      },
+      {
+        text: 'Adjudication history',
+        href: profileUrl + '/adjudications'
+      },
+      {
+        text: 'Adjudication details'
+      }
+    ],
+    classes: 'govuk-!-display-none-print'
+  }) }}
+{% endblock %}
+
+{% block content %}
+  <h1 class="govuk-heading-l">{{ title }}</h1>
+  
+  <h2 class="govuk-heading-m">Governor`s report number {{ adjudicationDetails.reportNumber }}</h2>
+
+  <div class="horizontal-information govuk-!-margin-bottom-0">
+    <div class="horizontal-information__item">
+      <h3 class="govuk-heading-s govuk-!-margin-bottom-1">Incident date and time</h3>
+      <p class="govuk-body" data-test="establishment">{{ adjudicationDetails.incidentTime }}</p>
+    </div>
+    <div class="horizontal-information__item">
+      <h3 class="govuk-heading-s govuk-!-margin-bottom-1">Location</h3>
+      <p class="govuk-body" data-test="establishment">{{ adjudicationDetails.interiorLocation }}, {{ adjudicationDetails.establishment }}</p>
+    </div>
+    <div class="horizontal-information__item">
+      <h3 class="govuk-heading-s govuk-!-margin-bottom-1">Reported by</h3>
+      <p class="govuk-body" data-test="establishment">{{ adjudicationDetails.reportedBy }}</p>
+    </div>
+    <div class="horizontal-information__item">
+      <h3 class="govuk-heading-s govuk-!-margin-bottom-1">Report date and time</h3>
+      <p class="govuk-body" data-test="establishment">{{ adjudicationDetails.reportTime }}</p>
+    </div>
+  </div>
+
+  <h3 class="govuk-heading-s govuk-!-margin-bottom-1">What happened</h3>
+  <p class="govuk-body word-break" data-test="establishment">{{ adjudicationDetails.incidentDetails | showDefault('Not entered') }}</p>
+
+  <hr class="govuk-section-break govuk-section-break--l govuk-section-break--visible">
+
+  {% if adjudicationDetails.hearings.length %}
+    {% for hearing in adjudicationDetails.hearings %}
+      {% set resultsRows = [] %}
+      {% set awardsRows = [] %}
+
+      <h2 class="govuk-heading-m">Hearing held on {{ hearing.hearingTime }}</h2>
+
+      <div class="horizontal-information govuk-!-margin-bottom-0">
+        <div class="horizontal-information__item">
+          <h3 class="govuk-heading-s govuk-!-margin-bottom-1">Type</h3>
+          <p class="govuk-body" data-test="establishment">{{ hearing.hearingType }}</p>
+        </div>
+        <div class="horizontal-information__item">
+          <h3 class="govuk-heading-s govuk-!-margin-bottom-1">Location</h3>
+          <p class="govuk-body" data-test="establishment">{{ hearing.location }}</p>
+        </div>
+        <div class="horizontal-information__item">
+          <h3 class="govuk-heading-s govuk-!-margin-bottom-1">Heard by</h3>
+          <p class="govuk-body" data-test="establishment">{{ hearing.heardBy | showDefault('Not entered') }}</p>
+        </div> 
+      </div>
+
+      <h3 class="govuk-heading-s govuk-!-margin-bottom-1">Comments</h3>
+      <p class="govuk-body govuk-!-margin-bottom-6" data-test="hearing-comments">{{ hearing.comment | showDefault('Not entered') }}</p>
+
+      {% if hearing.results.length > 0 %}
+        {% for result in hearing.results %}
+          {% set resultsRows = (resultsRows.push([
+            { text: result.oicOffenceCode },
+            { text: result.offenceType },
+            { text: result.offenceDescription },
+            { text: result.plea },
+            { text: result.finding }
+          ]), resultsRows) %}
+
+          {% for sanction in result.sanctions %}
+            {% set awardsRows = (awardsRows.push([
+              { text: sanction.sanctionType },
+              { text: sanction.sanctionDays  + ' days'},
+              { text: sanction.effectiveDate },
+              { text: sanction.status },
+              { text: sanction.statusDate }
+            ]), awardsRows) %}
+          {% endfor %}
+        {% endfor %}
+          
+        {{ govukTable({
+          caption: "Results",
+          head: [
+            {
+              text: "Offence paragraph"
+            },
+            {
+              text: "Offence type"
+            },
+            {
+              text: "Offence description"
+            },
+            {
+              text: "Plea"
+            },
+            {
+              text: "Finding"
+            }
+          ],
+          rows: resultsRows
+        }) }}
+
+        {% if awardsRows %}
+          {{ govukTable({
+            caption: "Awards",
+            head: [
+              {
+                text: "Type"
+              },
+              {
+                text: "Length of time"
+              },
+              {
+                text: "Effective date"
+              },
+              {
+                text: "Status"
+              },
+              {
+                text: "Status date"
+              }
+            ],
+            rows: awardsRows
+          }) }}
+        {% else %}
+          <h3 class="govuk-heading-s govuk-!-margin-bottom-1">Awards</h3>
+          <p class="govuk-body">No awards available.</p>
+        {% endif %}
+      {% else %}
+        <h3 class="govuk-heading-s govuk-!-margin-bottom-1">Results</h3>
+        <p class="govuk-body">No results available.</p>
+      {% endif %}
+
+      {% if hearing.comments.length %}
+        <h3 class="govuk-heading-s govuk-!-margin-bottom-1">Comments</h3>
+        {% for comment in hearing.comments %}
+          <p class="govuk-body">{{ comment }}</p>
+        {% endfor %}
+      {% endif %}
+
+      <hr class="govuk-section-break govuk-section-break--l govuk-section-break--visible">
+    {% endfor %}
+  {% else %}
+    <h2 class="govuk-heading-m">Hearings</h2>
+    <p class="govuk-body">No hearing details available.</p>
+  {% endif %}
+{% endblock %}
