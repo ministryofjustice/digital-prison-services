@@ -25,8 +25,7 @@ import CurrentlyOutContainer, { fetchAgencyData, fetchLivingUnitData } from './C
 import IncentiveLevelDetailsContainer from './IncentiveLevelDetails/IncentiveLevelDetailsContainer'
 import IncentiveLevelChangeContainer from './IncentiveLevelDetails/IncentiveLevelChangeContainer'
 import EnRouteContainer from './EnRoute/EnRouteContainer'
-import AdjudicationHistoryContainer from './Adjudications/AdjudicationHistory/AdjudicationHistoryContainer'
-import AdjudicationDetailContainer from './Adjudications/AdjudicationDetail/AdjudicationDetailContainer'
+
 import routePaths from './routePaths'
 import Content from './Components/Content'
 import { setFlagsAction } from './flags'
@@ -428,35 +427,6 @@ class App extends React.Component {
                 setLoadedDispatch={setLoadedDispatch}
                 resetErrorDispatch={resetErrorDispatch}
                 raiseAnalyticsEvent={this.raiseAnalyticsEvent}
-                history={history}
-              />
-            )}
-          />
-
-          <Route
-            exact
-            path={routePaths.adjudications}
-            render={({ history, match: { params } }) => (
-              <AdjudicationHistoryContainer
-                handleError={this.handleError}
-                setLoadedDispatch={setLoadedDispatch}
-                resetErrorDispatch={resetErrorDispatch}
-                offenderNumber={params.offenderNo}
-                history={history}
-              />
-            )}
-          />
-
-          <Route
-            exact
-            path={routePaths.adjudication}
-            render={({ history, match: { params } }) => (
-              <AdjudicationDetailContainer
-                handleError={this.handleError}
-                setLoadedDispatch={setLoadedDispatch}
-                resetErrorDispatch={resetErrorDispatch}
-                offenderNumber={params.offenderNo}
-                adjudicationNumber={params.adjudicationNo}
                 history={history}
               />
             )}

@@ -375,5 +375,10 @@ module.exports = on => {
     stubGetAttendancesForBookings: ({ agencyId, timeSlot, date, data }) =>
       whereabouts.stubGetAttendancesForBookings(agencyId, timeSlot, date, data),
     stubGetAdjudicationDetails: adjudicationDetails => elite2api.stubGetAdjudicationDetails(adjudicationDetails),
+    stubAdjudicationFindingTypes: types => elite2api.stubAdjudicationFindingTypes(types),
+    stubAdjudications: ({ response, headers }) => elite2api.stubAdjudications(response, headers),
+    verifyAdjudicationsHistory: ({ offenderNo, agencyId, finding, fromDate, toDate }) =>
+      elite2api.verifyAdjudicationsHistory({ offenderNo, agencyId, finding, fromDate, toDate }),
+    resetAdjudicationsStub: () => elite2api.resetAdjudicationsStub(),
   })
 }
