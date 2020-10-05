@@ -374,5 +374,10 @@ module.exports = on => {
     stubActivityLocationsConnectionResetFault: () => elite2api.stubActivityLocationsConnectionResetFault(),
     stubGetAttendancesForBookings: ({ agencyId, timeSlot, date, data }) =>
       whereabouts.stubGetAttendancesForBookings(agencyId, timeSlot, date, data),
+    stubAdjudicationFindingTypes: types => elite2api.stubAdjudicationFindingTypes(types),
+    stubAdjudications: ({ response, headers }) => elite2api.stubAdjudications(response, headers),
+    verifyAdjudicationsHistory: ({ offenderNo, agencyId, finding, fromDate, toDate }) =>
+      elite2api.verifyAdjudicationsHistory({ offenderNo, agencyId, finding, fromDate, toDate }),
+    resetAdjudicationsStub: () => elite2api.resetAdjudicationsStub(),
   })
 }

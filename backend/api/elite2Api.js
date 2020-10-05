@@ -191,8 +191,26 @@ const elite2ApiFactory = client => {
 
   const getAdjudicationFindingTypes = context => get(context, '/api/reference-domains/domains/OIC_FINDING', 1000)
 
-  const getAdjudications = (context, offenderNumber, params) =>
-    get(context, `/api/offenders/${offenderNumber}/adjudications${params && `?${mapToQueryString(params)}`}`)
+  const getAdjudications = async (context, offenderNumber, params, pageOffset, pageLimit) => {
+    contextProperties.setCustomRequestHeaders(context, {
+      'page-offset': pageOffset || 0,
+      'page-limit': pageLimit || 10,
+    })
+
+    const response = await get(
+      context,
+      `/api/offenders/${offenderNumber}/adjudications${params && `?${mapToQueryString(params)}`}`
+    )
+
+    return {
+      ...response,
+      pagination: {
+        pageOffset: context.responseHeaders['page-offset'],
+        pageLimit: context.responseHeaders['page-limit'],
+        totalRecords: context.responseHeaders['total-records'],
+      },
+    }
+  }
 
   const getAdjudicationDetails = (context, offenderNumber, adjudicationNumber) =>
     get(context, `/api/offenders/${offenderNumber}/adjudications/${adjudicationNumber}`)

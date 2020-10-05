@@ -1,10 +1,17 @@
-const { stubFor, postFor, verifyPut } = require('./wiremock')
+const { stubFor, postFor, verifyPut, verifyGet, resetStub } = require('./wiremock')
 const alertTypes = require('./responses/alertTypes')
 const cellAttributes = require('./responses/cellAttributes')
 const assessmentsResponse = require('./responses/assessmentsResponse')
 const activity3 = require('./responses/activity3')
 
 module.exports = {
+  verifyMoveToCell: ({ bookingId, locationPrefix }) =>
+    verifyPut(`/api/bookings/${bookingId}/living-unit/${locationPrefix}?reasonCode=ADM`),
+  verifyMoveToCellSwap: ({ bookingId }) => verifyPut(`/api/bookings/${bookingId}/move-to-cell-swap`),
+  verifyAdjudicationsHistory: ({ offenderNo, agencyId, finding, fromDate, toDate }) =>
+    verifyGet(
+      `/api/offenders/${offenderNo}/adjudications?agencyId=${agencyId}&finding=${finding}&fromDate=${fromDate}&toDate=${toDate}`
+    ),
   stubHealth: (status = 200) => {
     return stubFor({
       request: {
@@ -1565,7 +1572,34 @@ module.exports = {
         jsonBody: {},
       },
     }),
-  verifyMoveToCell: ({ bookingId, locationPrefix }) =>
-    verifyPut(`/api/bookings/${bookingId}/living-unit/${locationPrefix}?reasonCode=ADM`),
-  verifyMoveToCellSwap: ({ bookingId }) => verifyPut(`/api/bookings/${bookingId}/move-to-cell-swap`),
+  stubAdjudicationFindingTypes: types =>
+    stubFor({
+      request: {
+        method: 'GET',
+        urlPattern: '/api/reference-domains/domains/OIC_FINDING',
+      },
+      response: {
+        status: 200,
+        headers: {
+          'Content-Type': 'application/json;charset=UTF-8',
+        },
+        jsonBody: types,
+      },
+    }),
+  stubAdjudications: (response, headers = {}) =>
+    stubFor({
+      request: {
+        method: 'GET',
+        urlPathPattern: '/api/offenders/A12345/adjudications',
+      },
+      response: {
+        status: 200,
+        headers: {
+          ...headers,
+          'Content-Type': 'application/json;charset=UTF-8',
+        },
+        jsonBody: response,
+      },
+    }),
+  resetAdjudicationsStub: () => resetStub({ requestUrl: '/api/offenders/A12345/adjudications', method: 'GET' }),
 }

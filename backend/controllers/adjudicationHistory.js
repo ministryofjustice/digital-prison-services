@@ -1,99 +1,113 @@
 const moment = require('moment')
-const shortid = require('shortid')
-const {
-  formatName,
-  formatMonthsAndDays,
-  formatTimestampToDateTime,
-  formatTimestampToDate,
-  sortByDateTime,
-} = require('../utils')
 
-const AdjudciationHistoryServiceFactory = elite2Api => {
-  const getAdjudications = async (context, offenderNumber, params) => {
-    const { requestHeaders, ...withoutPagination } = context
+const { DATE_TIME_FORMAT_SPEC } = require('../../src/dateHelpers')
+const { formatName, putLastNameFirst } = require('../utils')
 
-    const [adjudications, findingTypes] = await Promise.all([
-      elite2Api.getAdjudications(context, offenderNumber, params),
-      elite2Api.getAdjudicationFindingTypes(withoutPagination),
-    ])
+const perPage = 10
 
-    const establishments = adjudications.agencies.reduce(
-      (accumulator, target) => ({ ...accumulator, [target.agencyId]: target.description }),
-      {}
-    )
+const sortByDateTimeDesc = (left, right) => {
+  const leftDateTime = moment(`${left.reportDate}T${left.reportTime}`, DATE_TIME_FORMAT_SPEC)
+  const rightDateTime = moment(`${right.reportDate}T${right.reportTime}`, DATE_TIME_FORMAT_SPEC)
 
-    const ordercharges = adjudications.results.map(result => {
-      const { adjudicationCharges, ...fields } = result
-      const charge = adjudicationCharges.reduce((charge1, charge2) => (charge1.findingCode ? charge1 : charge2))
-      const finding = findingTypes.find(type => type.code === charge.findingCode)
+  if (leftDateTime.isBefore(rightDateTime, 'day')) return 1
+  if (leftDateTime.isAfter(rightDateTime, 'day')) return -1
+  return 0
+}
 
-      return {
-        ...fields,
-        establishment: establishments[result.agencyId],
-        reportDate: moment(result.reportTime).format('DD/MM/YYYY'),
-        reportTime: moment(result.reportTime).format('HH:mm'),
-        ...charge,
-        findingDescription: (finding && finding.description) || '--',
+module.exports = ({ adjudicationHistoryService, elite2Api, logError, paginationService }) => {
+  const index = async (req, res) => {
+    const { offenderNo } = req.params
+    const fullUrl = new URL(`${req.protocol}://${req.get('host')}${req.originalUrl}`)
+
+    try {
+      const errors = []
+      const { fromDate, toDate, agencyId, finding, pageOffsetOption = 0 } = req.query || {}
+
+      const fromDateMoment = moment(fromDate, 'DD/MM/YYYY')
+      const toDateMoment = moment(toDate, 'DD/MM/YYYY')
+
+      if (fromDate && toDate && fromDateMoment.isAfter(toDateMoment, 'day')) {
+        errors.push({ href: '#fromDate', text: 'Enter a from date which is not after the to date' })
+        errors.push({ href: '#toDate', text: 'Enter a to date which is not before the from date' })
       }
-    })
-    return {
-      ...adjudications,
-      results: ordercharges,
-    }
-  }
 
-  const extractHearingAndResults = hearings => {
-    if (hearings.length === 0) {
-      return [undefined, []]
-    }
-    const firstHearing = hearings[0]
-    const { heardByFirstName, heardByLastName, results = [], ...hearing } = firstHearing
+      const filterParameters =
+        errors.length || (!toDate && !fromDate)
+          ? { agencyId, finding }
+          : {
+              agencyId,
+              finding,
+              fromDate: fromDateMoment.format('YYYY-MM-DD'),
+              toDate: toDateMoment.format('YYYY-MM-DD'),
+            }
 
-    return [
-      {
-        ...hearing,
-        hearingTime: formatTimestampToDateTime(hearing.hearingTime),
-        heardByName: formatName(heardByFirstName, heardByLastName),
-      },
-      results,
-    ]
-  }
+      const adjudicationsData = await adjudicationHistoryService.getAdjudications(
+        res.locals,
+        offenderNo,
+        filterParameters,
+        pageOffsetOption,
+        perPage
+      )
 
-  const extractSanctions = results => {
-    const [{ sanctions = [] } = {}] = results
+      const { firstName, lastName } = await elite2Api.getDetails(res.locals, offenderNo)
 
-    return sanctions.sort((left, right) => sortByDateTime(right.effectiveDate, left.effectiveDate)).map(sanction => ({
-      ...sanction,
-      duration: formatMonthsAndDays(sanction.sanctionMonths, sanction.sanctionDays),
-      effectiveDate: formatTimestampToDate(sanction.effectiveDate),
-      statusDate: formatTimestampToDate(sanction.statusDate),
-    }))
-  }
+      const formattedName = formatName(firstName, lastName)
 
-  const getAdjudicationDetails = async (context, offenderNumber, adjudicationNumber) => {
-    const details = await elite2Api.getAdjudicationDetails(context, offenderNumber, adjudicationNumber)
-    const { hearings = [], ...otherDetails } = details
+      const prisonerName =
+        formattedName && formattedName[formattedName.length - 1] !== 's' ? [formattedName, 's'] : [formattedName]
 
-    const [hearing, results] = extractHearingAndResults(hearings)
-    const sanctions = extractSanctions(results)
+      const noAdjudications = Boolean(!adjudicationsData.results.length)
+      const noAdjudicationsForDatesSelected = Boolean(noAdjudications && fromDate && toDate)
 
-    return {
-      ...otherDetails,
-      incidentTime: formatTimestampToDateTime(otherDetails.incidentTime),
-      reportTime: formatTimestampToDateTime(otherDetails.reportTime),
-      reporterName: formatName(details.reporterFirstName, details.reporterLastName),
-      hearing,
-      results: results
-        .map(({ sanctions: ignored, ...rest }) => rest)
-        .map(result => ({ id: shortid.generate(), ...result })),
-      sanctions: sanctions.map(sanction => ({ id: shortid.generate(), ...sanction })),
+      return res.render('adjudicationHistory.njk', {
+        errors,
+        breadcrumbPrisonerName: putLastNameFirst(firstName, lastName),
+        prisonerName,
+        prisonerProfileLink: `/offenders/${offenderNo}/`,
+        clearLink: `/offenders/${offenderNo}/adjudications`,
+        noAdjudicationsForDatesSelected,
+        noRecordsFoundMessage:
+          (noAdjudications &&
+            (noAdjudicationsForDatesSelected
+              ? 'There are no adjudications for the dates selected'
+              : `${formattedName} has had no adjudications`)) ||
+          null,
+        rows: adjudicationsData.results
+          .sort(sortByDateTimeDesc)
+          .map(result => [
+            { text: result.adjudicationNumber },
+            { text: `${result.reportDate} ${result.reportTime}` },
+            { text: result.establishment },
+            { text: result.offenceDescription },
+            { text: result.findingDescription },
+          ]),
+        agencies: adjudicationsData.agencies.map(agency => ({
+          text: agency.description,
+          value: agency.agencyId,
+        })),
+        findingTypes: adjudicationsData.findingTypes.map(fd => ({
+          text: fd.description,
+          value: fd.code,
+        })),
+        formValues: req.query,
+        pagination: paginationService.getPagination(
+          Number(adjudicationsData.pagination.totalRecords),
+          Number(adjudicationsData.pagination.pageOffset),
+          perPage,
+          fullUrl
+        ),
+      })
+    } catch (error) {
+      if (error) logError(req.originalUrl, error, `Failed to load adjudication history page`)
+
+      return res.render('error.njk', {
+        url: `/offenders/${offenderNo}/adjudications`,
+        homeUrl: `/prisoner/${offenderNo}`,
+      })
     }
   }
 
   return {
-    getAdjudications,
-    getAdjudicationDetails,
+    index,
   }
 }
-
-module.exports = AdjudciationHistoryServiceFactory
