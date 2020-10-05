@@ -61,7 +61,7 @@ module.exports = ({ adjudicationHistoryService, elite2Api, logError, paginationS
 
       return res.render('adjudicationHistory.njk', {
         errors,
-        breadcrumbPrisonerName: putLastNameFirst(firstName, lastName),
+        prisonerNameForBreadcrumb: putLastNameFirst(firstName, lastName),
         prisonerName,
         prisonerProfileLink: `/offenders/${offenderNo}/`,
         clearLink: `/offenders/${offenderNo}/adjudications`,
