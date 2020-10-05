@@ -26,9 +26,9 @@ context('A user can select a cell', () => {
   it('Shows the correct data for no non-associations and no csra comment', () => {
     cy.visit(`/prisoner/${offenderNo}/cell-move/select-location`)
     const selectLocationPage = SelectLocationPage.verifyOnPage()
-    cy.get('.cell-move-header').then($header => {
+    cy.get('[data-test="cell-move-header-information"]').then($header => {
       cy.get($header)
-        .find('h2')
+        .find('h3')
         .then($headings => {
           cy.get($headings)
             .its('length')
@@ -93,9 +93,9 @@ context('A user can select a cell', () => {
     })
     const selectLocationPage = SelectLocationPage.verifyOnPage()
     cy.visit(`/prisoner/${offenderNo}/cell-move/select-location`)
-    cy.get('.cell-move-header').then($header => {
+    cy.get('[data-test="cell-move-header-information"]').then($header => {
       cy.get($header)
-        .find('h2')
+        .find('h3')
         .then($headings => {
           cy.get($headings)
             .its('length')

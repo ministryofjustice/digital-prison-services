@@ -95,7 +95,7 @@ context('A user can select a cell', () => {
         userDescription: 'LEI-1-1',
       },
       {
-        attributes: [{ code: 'LC', description: 'Listener Cell' }],
+        attributes: [{ code: 'LC', description: 'Listener Cell' }, { description: 'Gated Cell', code: 'GC' }],
         capacity: 3,
         description: 'LEI-1-1',
         id: 1,
@@ -124,13 +124,13 @@ context('A user can select a cell', () => {
           .then($tableRows => {
             cy.get($tableRows)
               .its('length')
-              .should('eq', 10)
+              .should('eq', 9)
 
             const columns = $tableRows.find('td')
 
             assertRow(0, columns, {
               location: 'LEI-1-1',
-              cellType: 'Listener Cell',
+              cellType: 'Gated Cell,\nListener Cell',
               capacity: 3,
               spaces: 1,
               occupier: 'Doe, Bob\nView details\nfor Doe, Bob\nNON-ASSOCIATION',
@@ -215,8 +215,6 @@ context('A user can select a cell', () => {
               relevantAlerts: 'PEEP',
               selectCell: '',
             })
-
-            expect($tableRows.last().get(0).innerText).to.contain('Cell swap\tSelect')
           })
       })
     })
@@ -232,7 +230,7 @@ context('A user can select a cell', () => {
       page.nonAssociationWarning().should('not.be.visible')
     })
 
-    it('should navigate to the confirm cell move page on select c-swap', () => {
+    it('should navigate to the confirm cell move page on Move to cell swap', () => {
       const page = SelectCellPage.goTo(offenderNo, '1')
 
       page
@@ -241,6 +239,22 @@ context('A user can select a cell', () => {
         .then(href => {
           expect(href).to.equal('/prisoner/A12345/cell-move/confirm-cell-move?cellId=C-SWAP')
         })
+    })
+  })
+
+  context('without cell data', () => {
+    const response = []
+
+    beforeEach(() => {
+      cy.task('stubCellsWithCapacity', { cells: response })
+      cy.task('stubCellsWithCapacityByGroupName', { agencyId: 'MDI', groupName: 1, response })
+    })
+
+    it('should load without error and display no results message', () => {
+      const page = SelectCellPage.goTo(offenderNo)
+
+      page.checkStillOnPage()
+      page.noResultsMessage().contains('There are no results for what you have chosen.')
     })
   })
 })

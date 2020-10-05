@@ -1,0 +1,86 @@
+.horizontal-information {
+  margin-bottom: govuk-spacing(6);
+
+  @include govuk-media-query($from: tablet) {
+    padding-bottom: 0;
+    display: flex;
+  }
+
+  &--with-border {
+    padding: govuk-spacing(3) 0;
+    border-top: 1px solid $govuk-border-colour;
+    border-bottom: 1px solid $govuk-border-colour;
+  }
+
+  &__item {
+    @include govuk-media-query($from: tablet) {
+      flex: 1 1 0;
+      padding-right: govuk-spacing(3);
+
+      &--tenth {
+        flex-basis: 10%;
+      }
+    }
+  }
+}
+
+.horizontal-form {
+  * {
+    width: 100%;
+  }
+
+  @include govuk-media-query($from: desktop) {
+    display: flex;
+    flex-flow: row wrap;
+
+    * {
+      width: auto;
+      margin-bottom: 0;
+    }
+
+    > div {
+      margin-right: govuk-spacing(3);
+    }
+
+    .date-picker-container input {
+      width: 130px !important;
+    }
+
+    label {
+      margin-bottom: govuk-spacing(1);
+    }
+
+    button {
+      margin-right: govuk-spacing(3);
+    }
+
+    a {
+      margin-top: govuk-spacing(3);
+    }
+
+    button,
+    a {
+      align-self: flex-end;
+      margin-bottom: $govuk-border-width-form-element;
+    }
+  }
+}
+
+.horizontal-links {
+  > a {
+    margin-right: govuk-spacing(2);
+  }
+
+  @include govuk-media-query($from: desktop) {
+    display: flex;
+
+    * {
+      width: auto;
+      margin-bottom: 0;
+    }
+
+    > a {
+      margin-right: govuk-spacing(3);
+    }
+  }
+}

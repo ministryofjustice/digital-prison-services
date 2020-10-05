@@ -14,7 +14,7 @@
 
   {% if index === 1 %}
     <td class="{{ cellClass }}">{{ cell.description }}</th>
-    <td class="{{ cellClass }}">{{ cell.type | join('<br>', 'description') | safe if cell.type.length else '--' }}</td>
+    <td class="{{ cellClass }}">{{ cell.type | join(',<br>', 'description') | safe if cell.type.length else 'Nothing entered' }}</td>
     <td class="{{ cellClass }}">{{ cell.capacity }}</td>
     <td class="{{ cellClass }}">{{ cell.spaces }}</td>
   {% else %}
@@ -104,7 +104,7 @@
   <div class="govuk-grid-row govuk-!-margin-bottom-6">
     <div class="govuk-grid-column-full">
       <form class="horizontal-form" method="GET">
-        <h2 class="govuk-heading-m govuk-!-margin-right-2 govuk-!-margin-top-1">View by:</h2>
+        <h2 class="govuk-heading-s govuk-!-margin-right-2 govuk-!-margin-top-1">View by:</h2>
 
         {{ govukSelect({
           name: 'location',
@@ -147,52 +147,60 @@
     </div>
   </div>
 
-  {% if showNonAssociationWarning %}
-    {{ govukWarningText({
-      attributes: {
-        id: 'non-association-warning'
-      },
-      text: breadcrumbPrisonerName + " has a non-association with a prisoner in this location.",
-      iconFallbackText: "Warning"
-    }) }}
-  {% endif %}
+  <div class="govuk-grid-row">
+    <div class="govuk-grid-column-two-thirds">
+      {% if showNonAssociationWarning %}
+        {{ govukWarningText({
+          attributes: {
+            id: 'non-association-warning'
+          },
+          text: breadcrumbPrisonerName + " has a non-association with a prisoner in this location.",
+          iconFallbackText: "Warning"
+        }) }}
+      {% endif %}
+    </div>
 
-  <table class="govuk-table govuk-table--with-child-rows" data-test="cell-results-table">
-    <thead class="govuk-table__head">
-      <tr class="govuk-table__row">
-        <th scope="col" class="govuk-table__header" data-test="location-table-header">Location</th>
-        <th scope="col" class="govuk-table__header">Cell type</th>
-        <th scope="col" class="govuk-table__header">Capacity</th>
-        <th scope="col" class="govuk-table__header">Spaces</th>
-        <th scope="col" class="govuk-table__header">Occupier</th>
+    <div class="{{ 'govuk-grid-column-one-third' if showNonAssociationWarning else 'govuk-grid-column-full' }}">
+      <p class="govuk-body pull-right govuk-!-margin-top-2">
+        <a data-test="select-cswap-link" href="{{ '/prisoner/' + offenderNo + '/cell-move/confirm-cell-move?cellId=C-SWAP' }}" class="govuk-link">Move to cell swap</a>
+      </p>
+    </div>
+  </div>
 
-        <th scope="col" class="govuk-table__header">CSRA</th>
-        <th scope="col" class="govuk-table__header">Relevant alerts</th>
-        <th scope="col" class="govuk-table__header"><span class="govuk-visually-hidden">Select cell</span></th>
-      </tr>
-    </thead>
-    <tbody class="govuk-table__body">
-      {% for cell in cells %}
-        {% if cell.occupants.length > 0 %}
-             {% for occupier in cell.occupants %}
-               <tr class="govuk-table__row">
-                 {{ makeRow(cell, loop.index, cell.occupants.length === loop.index, occupier) }}
-               </tr>
-              {% endfor %}
-        {% else %}
+  {% if cells %}
+    <table class="govuk-table govuk-table--with-child-rows" data-test="cell-results-table">
+      <thead class="govuk-table__head">
         <tr class="govuk-table__row">
-          {{ makeRow(cell, 1, true, null) }}
+          <th scope="col" class="govuk-table__header" data-test="location-table-header">Location</th>
+          <th scope="col" class="govuk-table__header">Cell type</th>
+          <th scope="col" class="govuk-table__header">Capacity</th>
+          <th scope="col" class="govuk-table__header">Spaces</th>
+          <th scope="col" class="govuk-table__header">Occupier</th>
+
+          <th scope="col" class="govuk-table__header">CSRA</th>
+          <th scope="col" class="govuk-table__header">Relevant alerts</th>
+          <th scope="col" class="govuk-table__header"><span class="govuk-visually-hidden">Select cell</span></th>
         </tr>
-        {% endif%}
-      {% endfor %}
-    </tbody>
-    <tfoot>
-      <tr class="govuk-table__row">
-        <td class="govuk-table__cell" colspan="7">Cell swap</td>
-        <td class="govuk-table__cell"><a data-test="select-cswap-link" href="{{ '/prisoner/' + offenderNo + '/cell-move/confirm-cell-move?cellId=C-SWAP' }}" class="govuk-link">Select</a></td>
-      </tr>
-    </tfoot>
-  </table>
+      </thead>
+      <tbody class="govuk-table__body">
+        {% for cell in cells %}
+          {% if cell.occupants.length > 0 %}
+              {% for occupier in cell.occupants %}
+                <tr class="govuk-table__row">
+                  {{ makeRow(cell, loop.index, cell.occupants.length === loop.index, occupier) }}
+                </tr>
+                {% endfor %}
+          {% else %}
+          <tr class="govuk-table__row">
+            {{ makeRow(cell, 1, true, null) }}
+          </tr>
+          {% endif%}
+        {% endfor %}
+      </tbody>
+    </table>
+  {% else %}
+    <p class="govuk-body" data-test="no-results-message">There are no results for what you have chosen.</p>
+  {% endif %}
 
 {% endblock %}
 
