@@ -93,7 +93,7 @@ describe('Adjudications history controller', () => {
             value: 'MDI',
           },
         ],
-        breadcrumbPrisonerName: 'Doe, Bob',
+        prisonerNameForBreadcrumb: 'Doe, Bob',
         errors: [],
         findingTypes: [
           {
