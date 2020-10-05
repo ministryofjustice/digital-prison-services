@@ -106,6 +106,16 @@ describe('Prisoner adjudication details', () => {
         establishment: 'Moorland (HMP & YOI)',
         hearings: [
           expect.objectContaining({
+            comments: [],
+            establishment: 'Moorland (HMP & YOI)',
+            heardBy: 'Jones, Steve',
+            hearingTime: '25 October 2018 - 10:00',
+            hearingType: "Governor's Hearing Adult",
+            location: 'Adj',
+            oicHearingId: 2,
+            results: [],
+          }),
+          expect.objectContaining({
             comments: ['No privileges comment', 'Confinement comment'],
             establishment: 'Moorland (HMP & YOI)',
             heardBy: 'Smith, John',
@@ -143,16 +153,6 @@ describe('Prisoner adjudication details', () => {
                 ],
               },
             ],
-          }),
-          expect.objectContaining({
-            comments: [],
-            establishment: 'Moorland (HMP & YOI)',
-            heardBy: 'Jones, Steve',
-            hearingTime: '25 October 2018 - 10:00',
-            hearingType: "Governor's Hearing Adult",
-            location: 'Adj',
-            oicHearingId: 2,
-            results: [],
           }),
         ],
         incidentDetails: 'Something happened',
