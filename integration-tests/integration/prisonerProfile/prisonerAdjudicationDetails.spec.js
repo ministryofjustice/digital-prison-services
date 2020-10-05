@@ -96,6 +96,34 @@ context('Prisoner adjudication details', () => {
         .then($hearing => {
           cy.get($hearing)
             .find('[data-test="hearing-title"]')
+            .should('contain', 'Hearing held on 25 October 2018 - 10:00')
+
+          cy.get($hearing)
+            .find('[data-test="hearing-type"]')
+            .should('contain', "Governor's Hearing Adult")
+
+          cy.get($hearing)
+            .find('[data-test="hearing-location"]')
+            .should('contain', 'Adj')
+
+          cy.get($hearing)
+            .find('[data-test="hearing-heard-by"]')
+            .should('contain', 'Jones, Steve')
+
+          cy.get($hearing)
+            .find('[data-test="hearing-comments"]')
+            .should('contain', 'A hearing comment')
+
+          cy.get($hearing)
+            .find('[data-test="hearing-results"]')
+            .should('not.exist')
+        })
+
+      cy.get('[data-test="hearing"]')
+        .eq(1)
+        .then($hearing => {
+          cy.get($hearing)
+            .find('[data-test="hearing-title"]')
             .should('contain', 'Hearing held on 21 October 2016 - 10:00')
 
           cy.get($hearing)
@@ -165,34 +193,6 @@ context('Prisoner adjudication details', () => {
             .find('[data-test="award-comment"]')
             .eq(1)
             .should('contain', 'Confinement comment')
-        })
-
-      cy.get('[data-test="hearing"]')
-        .eq(1)
-        .then($hearing => {
-          cy.get($hearing)
-            .find('[data-test="hearing-title"]')
-            .should('contain', 'Hearing held on 25 October 2018 - 10:00')
-
-          cy.get($hearing)
-            .find('[data-test="hearing-type"]')
-            .should('contain', "Governor's Hearing Adult")
-
-          cy.get($hearing)
-            .find('[data-test="hearing-location"]')
-            .should('contain', 'Adj')
-
-          cy.get($hearing)
-            .find('[data-test="hearing-heard-by"]')
-            .should('contain', 'Jones, Steve')
-
-          cy.get($hearing)
-            .find('[data-test="hearing-comments"]')
-            .should('contain', 'A hearing comment')
-
-          cy.get($hearing)
-            .find('[data-test="hearing-results"]')
-            .should('not.exist')
         })
     })
   })

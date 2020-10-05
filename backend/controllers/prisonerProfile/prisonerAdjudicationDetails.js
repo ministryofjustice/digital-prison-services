@@ -1,5 +1,5 @@
 const { serviceUnavailableMessage } = require('../../common-messages')
-const { formatTimestampToDate, formatTimestampToDateTime, putLastNameFirst } = require('../../utils')
+const { formatTimestampToDate, formatTimestampToDateTime, putLastNameFirst, sortByDateTime } = require('../../utils')
 const {
   app: { notmEndpointUrl: dpsUrl },
 } = require('../../config')
@@ -19,7 +19,7 @@ module.exports = ({ elite2Api, logError }) => async (req, res) => {
     return res.render('prisonerProfile/prisonerAdjudicationDetails.njk', {
       adjudicationDetails: {
         ...adjudicationDetails,
-        hearings: hearings.map(hearing => {
+        hearings: hearings.sort((left, right) => sortByDateTime(right.hearingTime, left.hearingTime)).map(hearing => {
           const { hearingTime, heardByFirstName, heardByLastName, results } = hearing
           const comments = []
 
