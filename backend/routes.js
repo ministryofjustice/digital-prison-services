@@ -37,6 +37,8 @@ const cellMoveRouter = require('./routes/cellMoveRouter')
 
 const videolinkPrisonerSearchController = require('./controllers/videolink/search/videolinkPrisonerSearch')
 const amendCaseNNoteRouter = require('./routes/caseNoteAmendmentRouter')
+const adjudicationsHistoryRouter = require('./routes/adjudicationHistoryRouter')
+
 const currentUser = require('./middleware/currentUser')
 const systemOauthClient = require('./api/systemOauthClient')
 const handleErrors = require('./middleware/asyncHandler')
@@ -217,6 +219,8 @@ const setup = ({
     '/prisoner/:offenderNo/case-notes/amend-case-note/:caseNoteId',
     amendCaseNNoteRouter({ elite2Api, caseNotesApi, logError })
   )
+
+  router.use('/offenders/:offenderNo/adjudications', adjudicationsHistoryRouter(elite2Api, logError))
 
   return router
 }

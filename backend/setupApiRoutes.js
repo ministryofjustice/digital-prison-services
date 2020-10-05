@@ -6,7 +6,7 @@ const { logError } = require('./logError')
 const config = require('./config')
 
 const userCaseLoadsFactory = require('./controllers/usercaseloads').userCaseloadsFactory
-const adjudicationHistoryFactory = require('./controllers/adjudicationHistory')
+const adjudicationHistoryFactory = require('./services/adjudicationHistory')
 const offenderServiceFactory = require('./services/offenderService')
 const { offenderActivitesFactory } = require('./controllers/attendance/offenderActivities')
 const { userLocationsFactory } = require('./controllers/userLocations')

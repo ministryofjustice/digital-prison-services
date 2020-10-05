@@ -10,6 +10,13 @@ const getMatchingRequests = body => superagent.post(`${url}/requests/find`).send
 
 const resetStubs = () => Promise.all([superagent.delete(`${url}/mappings`), superagent.delete(`${url}/requests`)])
 
+const resetStub = ({ requestUrl, method }) => {
+  return superagent.post(`${url}/requests/remove`).send({
+    method,
+    url: requestUrl,
+  })
+}
+
 const verifyPosts = requestUrl =>
   superagent.post(`${url}/requests/count`).send({
     method: 'POST',
@@ -19,6 +26,12 @@ const verifyPosts = requestUrl =>
 const verifyPut = requestUrl =>
   superagent.post(`${url}/requests/count`).send({
     method: 'PUT',
+    url: requestUrl,
+  })
+
+const verifyGet = requestUrl =>
+  superagent.post(`${url}/requests/count`).send({
+    method: 'GET',
     url: requestUrl,
   })
 
@@ -63,4 +76,6 @@ module.exports = {
   postFor,
   verifyPosts,
   verifyPut,
+  verifyGet,
+  resetStub,
 }

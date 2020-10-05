@@ -5,7 +5,7 @@ jest.mock('shortid', () => ({
   generate: () => '123',
 }))
 
-const adjudicationHistory = require('../controllers/adjudicationHistory')(elite2Api)
+const adjudicationHistory = require('../services/adjudicationHistory')(elite2Api)
 
 beforeEach(() => {
   elite2Api.getAdjudicationDetails = jest.fn()
@@ -119,8 +119,49 @@ const findings = [
 ]
 
 const expectedResult = {
-  agencies: adjudications.agencies,
-  offences: adjudications.offences,
+  agencies: [
+    {
+      agencyId: 'MDI',
+      agencyType: 'INST',
+      description: 'Moorland (HMP & YOI)',
+    },
+    {
+      agencyId: 'ONI',
+      agencyType: 'INST',
+      description: 'Onley (HMP)',
+    },
+  ],
+  findingTypes: [
+    {
+      code: 'GUILTY',
+      description: 'Guilty',
+      domain: 'OIC_FINDING',
+    },
+    {
+      code: 'NOT_GUILTY',
+      description: 'Not Guilty',
+      domain: 'OIC_FINDING',
+    },
+  ],
+  offences: [
+    {
+      code: '51:23AS',
+      description:
+        'Disobeys or fails to comply with any rule or regulation applying to him - offence against good order and discipline',
+      id: '142',
+    },
+    {
+      code: '51:18A',
+      description:
+        'Absents himself from any place he is required to be or is present at any place where he is not authorised to be - absence without permission',
+      id: '92',
+    },
+    {
+      code: '51:1J',
+      description: 'Commits any assault - assault on prison officer',
+      id: '80',
+    },
+  ],
   results: [
     {
       adjudicationNumber: 1492249,
@@ -171,12 +212,28 @@ describe('Adjudication History Service', () => {
     elite2Api.getAdjudicationFindingTypes.mockReturnValue(findings)
 
     const response = await adjudicationHistory.getAdjudications({}, 'OFF-1', {})
-    expect(response).toEqual({ agencies: [], offences: [], results: [] })
+    expect(response).toEqual({
+      agencies: [],
+      findingTypes: [
+        {
+          code: 'GUILTY',
+          description: 'Guilty',
+          domain: 'OIC_FINDING',
+        },
+        {
+          code: 'NOT_GUILTY',
+          description: 'Not Guilty',
+          domain: 'OIC_FINDING',
+        },
+      ],
+      offences: [],
+      results: [],
+    })
 
     expect(elite2Api.getAdjudications).toHaveBeenCalled()
     expect(elite2Api.getAdjudicationFindingTypes).toHaveBeenCalled()
 
-    expect(elite2Api.getAdjudications.mock.calls[0]).toEqual([{}, 'OFF-1', {}])
+    expect(elite2Api.getAdjudications.mock.calls[0]).toEqual([{}, 'OFF-1', {}, undefined, undefined])
     expect(elite2Api.getAdjudicationFindingTypes.mock.calls[0]).toEqual([{}])
   })
 
@@ -276,6 +333,8 @@ describe('Adjudication History Service', () => {
       },
       'OFF-1',
       {},
+      undefined,
+      undefined,
     ])
 
     // Pagination Headers from request are not passed through to the get findings call
