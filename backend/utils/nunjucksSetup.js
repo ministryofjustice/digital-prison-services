@@ -136,6 +136,7 @@ module.exports = (app, path) => {
 
     return value || specifiedText || '--'
   })
+
   njkEnv.addFilter('getDate', getDate)
   njkEnv.addFilter('getTime', getTime)
   njkEnv.addFilter('truthy', data => Boolean(data))

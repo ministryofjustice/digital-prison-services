@@ -1,5 +1,4 @@
 const moment = require('moment')
-const sanitizer = require('sanitizer')
 
 const { DATE_TIME_FORMAT_SPEC } = require('../../../src/dateHelpers')
 const {
@@ -178,7 +177,7 @@ const confirmAppointmentFactory = ({ elite2Api, appointmentsService, logError })
 
         res.render('confirmAppointments.njk', {
           addAppointmentsLink: `/offenders/${offenderNo}/add-appointment`,
-          prisonerName: sanitizer.sanitize(formatName(firstName, lastName)),
+          prisonerName: formatName(firstName, lastName),
           prisonerProfileLink: `${dpsUrl}offenders/${offenderNo}`,
           details: {
             type: details.appointmentType,

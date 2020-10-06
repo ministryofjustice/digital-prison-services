@@ -76,25 +76,6 @@ describe('Confirm appointments', () => {
     )
   })
 
-  it('should strip out unsafe tags when creating prisonerName', async () => {
-    const { index } = confirmAppointments.confirmAppointmentFactory({
-      elite2Api,
-      appointmentsService,
-      logError: () => {},
-    })
-
-    elite2Api.getDetails.mockResolvedValue({ firstName: 'John', lastName: `<script> alert('hello') </script> Doe` })
-
-    await index(req, res)
-
-    expect(res.render).toHaveBeenCalledWith(
-      'confirmAppointments.njk',
-      expect.objectContaining({
-        prisonerName: 'John  doe',
-      })
-    )
-  })
-
   it('should only extract pre and post appointments when appointmentType is VLB', async () => {
     const { index } = confirmAppointments.confirmAppointmentFactory({
       elite2Api,

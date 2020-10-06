@@ -27,7 +27,7 @@
 {% endblock %}
 
 {% block content %}
-  <h1 class="govuk-heading-l" data-test="title">{{ prisonerName | possessive }} history in location {{ locationName }}</h1>
+  <h1 class="govuk-heading-l" data-test="title">{{ prisonerName | possessive | safe }} history in location {{ locationName }}</h1>
 
   <h2 class="govuk-heading-m">Location details</h2>
 

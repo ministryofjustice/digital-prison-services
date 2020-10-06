@@ -9,7 +9,7 @@
     <div class="govuk-grid-row">
         <div class="govuk-grid-column-two-thirds">
             {{ govukPanel({
-                titleHtml: prisonerName | possessive + ' appointment has been added' ,
+                titleHtml: prisonerName | possessive | safe + ' appointment has been added' ,
                 classes: "govuk-!-margin-bottom-9"
             }) }}
 
