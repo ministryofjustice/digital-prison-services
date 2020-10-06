@@ -1,6 +1,6 @@
 const express = require('express')
 
-const adjudicationsController = require('../controllers/adjudicationHistory')
+const adjudicationsController = require('../controllers/prisonerProfile/adjudicationHistory')
 const adjudicationsHistoryService = require('../services/adjudicationHistory')
 const paginationService = require('../services/paginationService')
 

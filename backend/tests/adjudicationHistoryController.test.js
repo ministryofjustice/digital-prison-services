@@ -1,6 +1,41 @@
-const adjudicationsHistoryController = require('../controllers/adjudicationHistory')
+const adjudicationsHistoryController = require('../controllers/prisonerProfile/adjudicationHistory')
 
 const offenderNo = 'A12345'
+
+const adjudicationHistoryResponse = {
+  results: [
+    {
+      adjudicationNumber: 1,
+      reportDate: '10/10/2020',
+      reportTime: '15:00',
+      establishment: 'MDI',
+      offenceDescription: 'offence 1',
+      findingDescription: 'finding 1',
+    },
+    {
+      adjudicationNumber: 2,
+      reportDate: '10/10/2020',
+      reportTime: '13:00',
+      establishment: 'MDI',
+      offenceDescription: 'offence 2',
+      findingDescription: 'finding 2',
+    },
+    {
+      adjudicationNumber: 3,
+      reportDate: '11/10/2020',
+      reportTime: '16:00',
+      establishment: 'MDI',
+      offenceDescription: 'offence 3',
+      findingDescription: 'finding 3',
+    },
+  ],
+  agencies: [{ agencyId: 'MDI', description: 'Moorland' }],
+  findingTypes: [{ code: 'F1', description: 'finding description' }],
+  pagination: {
+    totalRecords: 3,
+    pageOffset: 0,
+  },
+}
 
 describe('Adjudications history controller', () => {
   const elite2Api = {}
@@ -14,40 +49,7 @@ describe('Adjudications history controller', () => {
   beforeEach(() => {
     paginationService.getPagination = jest.fn()
     elite2Api.getDetails = jest.fn().mockResolvedValue({ firstName: 'bob', lastName: 'doe' })
-    adjudicationHistoryService.getAdjudications = jest.fn().mockResolvedValue({
-      results: [
-        {
-          adjudicationNumber: 1,
-          reportDate: '10/10/2020',
-          reportTime: '15:00',
-          establishment: 'MDI',
-          offenceDescription: 'offence 1',
-          findingDescription: 'finding 1',
-        },
-        {
-          adjudicationNumber: 2,
-          reportDate: '10/10/2020',
-          reportTime: '13:00',
-          establishment: 'MDI',
-          offenceDescription: 'offence 2',
-          findingDescription: 'finding 2',
-        },
-        {
-          adjudicationNumber: 3,
-          reportDate: '11/10/2020',
-          reportTime: '16:00',
-          establishment: 'MDI',
-          offenceDescription: 'offence 3',
-          findingDescription: 'finding 3',
-        },
-      ],
-      agencies: [{ agencyId: 'MDI', description: 'Moorland' }],
-      findingTypes: [{ code: 'F1', description: 'finding description' }],
-      pagination: {
-        totalRecords: 3,
-        pageOffset: 0,
-      },
-    })
+    adjudicationHistoryService.getAdjudications = jest.fn().mockResolvedValue(adjudicationHistoryResponse)
 
     logError = jest.fn()
     res.render = jest.fn()
@@ -65,7 +67,7 @@ describe('Adjudications history controller', () => {
       finding: 12,
     }
 
-    await controller.index(req, res)
+    await controller(req, res)
 
     expect(adjudicationHistoryService.getAdjudications).toHaveBeenCalledWith(
       {},
@@ -82,10 +84,10 @@ describe('Adjudications history controller', () => {
   })
 
   it('should render view with the correct data in date time desc', async () => {
-    await controller.index(req, res)
+    await controller(req, res)
 
     expect(res.render).toHaveBeenCalledWith(
-      'adjudicationHistory.njk',
+      'prisonerProfile/adjudicationHistory.njk',
       expect.objectContaining({
         agencies: [
           {
@@ -104,10 +106,11 @@ describe('Adjudications history controller', () => {
         prisonerName: 'Bob Doe',
         formValues: undefined,
         noRecordsFoundMessage: null,
+        prisonerProfileLink: `/prisoner/${offenderNo}/`,
         rows: [
           [
             {
-              text: 3,
+              html: '<a href="/prisoner/A12345/adjudications/3" class="govuk-link"> 3 </a>',
             },
             {
               text: '11/10/2020 16:00',
@@ -124,7 +127,7 @@ describe('Adjudications history controller', () => {
           ],
           [
             {
-              text: 1,
+              html: '<a href="/prisoner/A12345/adjudications/1" class="govuk-link"> 1 </a>',
             },
             {
               text: '10/10/2020 15:00',
@@ -141,7 +144,7 @@ describe('Adjudications history controller', () => {
           ],
           [
             {
-              text: 2,
+              html: '<a href="/prisoner/A12345/adjudications/2" class="govuk-link"> 2 </a>',
             },
             {
               text: '10/10/2020 13:00',
@@ -166,7 +169,7 @@ describe('Adjudications history controller', () => {
 
     adjudicationHistoryService.getAdjudications.mockRejectedValue(error)
 
-    await controller.index(req, res)
+    await controller(req, res)
 
     expect(logError).toHaveBeenCalledWith('http://localhost', error, 'Failed to load adjudication history page')
     expect(res.render).toHaveBeenCalledWith('error.njk', {
@@ -181,7 +184,7 @@ describe('Adjudications history controller', () => {
       toDate: '11/12/2020',
     }
 
-    await controller.index(req, res)
+    await controller(req, res)
 
     expect(adjudicationHistoryService.getAdjudications).toHaveBeenCalledWith(
       {},
@@ -202,7 +205,7 @@ describe('Adjudications history controller', () => {
       agencyId: 'MDI',
     }
 
-    await controller.index(req, res)
+    await controller(req, res)
 
     expect(adjudicationHistoryService.getAdjudications).toHaveBeenCalledWith(
       {},
@@ -215,7 +218,7 @@ describe('Adjudications history controller', () => {
     )
 
     expect(res.render).toHaveBeenCalledWith(
-      'adjudicationHistory.njk',
+      'prisonerProfile/adjudicationHistory.njk',
       expect.objectContaining({
         errors: [
           { href: '#fromDate', text: 'Enter a from date which is not after the to date' },
@@ -236,10 +239,10 @@ describe('Adjudications history controller', () => {
       },
     })
 
-    await controller.index(req, res)
+    await controller(req, res)
 
     expect(res.render).toHaveBeenCalledWith(
-      'adjudicationHistory.njk',
+      'prisonerProfile/adjudicationHistory.njk',
       expect.objectContaining({
         noRecordsFoundMessage: 'Bob Doe has had no adjudications',
       })
@@ -262,12 +265,40 @@ describe('Adjudications history controller', () => {
       },
     })
 
-    await controller.index(req, res)
+    await controller(req, res)
 
     expect(res.render).toHaveBeenCalledWith(
-      'adjudicationHistory.njk',
+      'prisonerProfile/adjudicationHistory.njk',
       expect.objectContaining({
         noRecordsFoundMessage: 'There are no adjudications for the dates selected',
+      })
+    )
+  })
+
+  it('should list the finding types alphabetically', async () => {
+    adjudicationHistoryService.getAdjudications = jest.fn().mockResolvedValue({
+      ...adjudicationHistoryResponse,
+      findingTypes: [
+        { code: 'F1', description: 'finding description' },
+        { code: 'A1', description: 'a finding description' },
+      ],
+    })
+
+    await controller(req, res)
+
+    expect(res.render).toHaveBeenCalledWith(
+      'prisonerProfile/adjudicationHistory.njk',
+      expect.objectContaining({
+        findingTypes: [
+          {
+            text: 'a finding description',
+            value: 'A1',
+          },
+          {
+            text: 'finding description',
+            value: 'F1',
+          },
+        ],
       })
     )
   })
