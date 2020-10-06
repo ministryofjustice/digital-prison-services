@@ -18,7 +18,12 @@ const imageFactory = elite2Api => {
           data.pipe(res)
         })
         .catch(error => {
-          log.error(error)
+          // Not Found 404 is an acceptable response.
+          // It has been logged as part of the client call,
+          // no need to repeat here.
+          if (error.status !== 404) {
+            log.error(error)
+          }
           res.sendFile(placeHolder)
         })
     }
@@ -38,7 +43,12 @@ const imageFactory = elite2Api => {
           data.pipe(res)
         })
         .catch(error => {
-          log.error(error)
+          // Not Found 404 is an acceptable response.
+          // It has been logged as part of the client call,
+          // no need to repeat here.
+          if (error.status !== 404) {
+            log.error(error)
+          }
           res.sendFile(placeHolder)
         })
     }
