@@ -5,7 +5,8 @@
     "lastName": "COMMON",
     "prisonId": "OUT",
     "prisonName": "Outside",
-    "dateOfBirth": "1977-10-15"
+    "dateOfBirth": "1977-10-15",
+    "locationDescription": "Outside - released from Low Newton (HMP)"
   },
   {
     "prisonerNumber": "T1002AA",
@@ -13,7 +14,8 @@
     "lastName": "COMMON",
     "prisonId": "LEI",
     "prisonName": "Leeds HMP",
-    "dateOfBirth": "1977-10-15"
+    "dateOfBirth": "1977-10-15",
+    "locationDescription": "Leeds HMP"
   },
   {
     "prisonerNumber": "T1003AA",
@@ -21,7 +23,8 @@
     "lastName": "COMMON",
     "prisonId": "LEI",
     "prisonName": "Leeds HMP",
-    "dateOfBirth": "1977-10-15"
+    "dateOfBirth": "1977-10-15",
+    "locationDescription": "Leeds HMP"
   },
   {
     "prisonerNumber": "T1004AA",
@@ -29,7 +32,8 @@
     "lastName": "COMMON",
     "prisonId": "LEI",
     "prisonName": "Leeds HMP",
-    "dateOfBirth": "1977-10-15"
+    "dateOfBirth": "1977-10-15",
+    "locationDescription": "Leeds HMP"
   },
   {
     "prisonerNumber": "T1005AA",
@@ -37,7 +41,8 @@
     "lastName": "COMMON",
     "prisonId": "LEI",
     "prisonName": "Leeds HMP",
-    "dateOfBirth": "1977-10-15"
+    "dateOfBirth": "1977-10-15",
+    "locationDescription": "Leeds HMP"
   },
   {
     "prisonerNumber": "T1006AA",
@@ -53,7 +58,8 @@
     "lastName": "COMMON",
     "prisonId": "LEI",
     "prisonName": "Leeds HMP",
-    "dateOfBirth": "1977-10-15"
+    "dateOfBirth": "1977-10-15",
+    "locationDescription": "Leeds HMP"
   },
   {
     "prisonerNumber": "T1008AA",
@@ -61,7 +67,8 @@
     "lastName": "COMMON",
     "prisonId": "LEI",
     "prisonName": "Leeds HMP",
-    "dateOfBirth": "1977-10-15"
+    "dateOfBirth": "1977-10-15",
+    "locationDescription": "Leeds HMP"
   },
   {
     "prisonerNumber": "T1009AA",
@@ -69,7 +76,8 @@
     "lastName": "COMMON",
     "prisonId": "LEI",
     "prisonName": "Leeds HMP",
-    "dateOfBirth": "1977-10-15"
+    "dateOfBirth": "1977-10-15",
+    "locationDescription": "Leeds HMP"
   },
   {
     "prisonerNumber": "T1010AA",
@@ -77,7 +85,8 @@
     "lastName": "COMMON",
     "prisonId": "LEI",
     "prisonName": "Leeds HMP",
-    "dateOfBirth": "1977-10-15"
+    "dateOfBirth": "1977-10-15",
+    "locationDescription": "Leeds HMP"
   },
   {
     "prisonerNumber": "T1011AA",
@@ -85,7 +94,8 @@
     "lastName": "COMMON",
     "prisonId": "LEI",
     "prisonName": "Leeds HMP",
-    "dateOfBirth": "1977-10-15"
+    "dateOfBirth": "1977-10-15",
+    "locationDescription": "Leeds HMP"
   },
   {
     "prisonerNumber": "T1012AA",
@@ -93,7 +103,8 @@
     "lastName": "COMMON",
     "prisonId": "LEI",
     "prisonName": "Leeds HMP",
-    "dateOfBirth": "1977-10-15"
+    "dateOfBirth": "1977-10-15",
+    "locationDescription": "Leeds HMP"
   },
   {
     "prisonerNumber": "T1013AA",
@@ -101,7 +112,8 @@
     "lastName": "COMMON",
     "prisonId": "LEI",
     "prisonName": "Leeds HMP",
-    "dateOfBirth": "1977-10-15"
+    "dateOfBirth": "1977-10-15",
+    "locationDescription": "Leeds HMP"
   },
   {
     "prisonerNumber": "T1014AA",
@@ -109,7 +121,8 @@
     "lastName": "COMMON",
     "prisonId": "LEI",
     "prisonName": "Leeds HMP",
-    "dateOfBirth": "1977-10-15"
+    "dateOfBirth": "1977-10-15",
+    "locationDescription": "Leeds HMP"
   },
   {
     "prisonerNumber": "T1015AA",
@@ -117,7 +130,8 @@
     "lastName": "COMMON",
     "prisonId": "LEI",
     "prisonName": "Leeds HMP",
-    "dateOfBirth": "1977-10-15"
+    "dateOfBirth": "1977-10-15",
+    "locationDescription": "Leeds HMP"
   },
   {
     "prisonerNumber": "T1016AA",
@@ -125,7 +139,8 @@
     "lastName": "COMMON",
     "prisonId": "LEI",
     "prisonName": "Leeds HMP",
-    "dateOfBirth": "1977-10-15"
+    "dateOfBirth": "1977-10-15",
+    "locationDescription": "Leeds HMP"
   },
   {
     "prisonerNumber": "T1017AA",
@@ -133,7 +148,8 @@
     "lastName": "COMMON",
     "prisonId": "LEI",
     "prisonName": "Leeds HMP",
-    "dateOfBirth": "1977-10-15"
+    "dateOfBirth": "1977-10-15",
+    "locationDescription": "Leeds HMP"
   },
   {
     "prisonerNumber": "T1018AA",
@@ -141,7 +157,8 @@
     "lastName": "COMMON",
     "prisonId": "LEI",
     "prisonName": "Leeds HMP",
-    "dateOfBirth": "1977-10-15"
+    "dateOfBirth": "1977-10-15",
+    "locationDescription": "Leeds HMP"
   },
   {
     "prisonerNumber": "T1019AA",
@@ -149,7 +166,8 @@
     "lastName": "COMMON",
     "prisonId": "LEI",
     "prisonName": "Leeds HMP",
-    "dateOfBirth": "1977-10-15"
+    "dateOfBirth": "1977-10-15",
+    "locationDescription": "Leeds HMP"
   },
   {
     "prisonerNumber": "T1020AA",
@@ -157,7 +175,8 @@
     "lastName": "COMMON",
     "prisonId": "LEI",
     "prisonName": "Leeds HMP",
-    "dateOfBirth": "1977-10-15"
+    "dateOfBirth": "1977-10-15",
+    "locationDescription": "Leeds HMP"
   },
   {
     "prisonerNumber": "T1021AA",
@@ -165,6 +184,7 @@
     "lastName": "COMMON",
     "prisonId": "LEI",
     "prisonName": "Leeds HMP",
-    "dateOfBirth": "1977-10-15"
+    "dateOfBirth": "1977-10-15",
+    "locationDescription": "Leeds HMP"
   }
 ]

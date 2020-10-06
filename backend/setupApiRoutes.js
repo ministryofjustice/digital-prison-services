@@ -42,8 +42,6 @@ const handleErrors = require('./middleware/asyncHandler')
 const router = express.Router()
 
 const setup = ({ elite2Api, whereaboutsApi, oauthApi, caseNotesApi, offenderSearchApi }) => {
-  const globalSearchApi = config.apis.offenderSearch.enabled ? offenderSearchApi : elite2Api
-
   const controller = controllerFactory({
     activityListService: activityListFactory(elite2Api, whereaboutsApi, config),
     adjudicationHistoryService: adjudicationHistoryFactory(elite2Api),
@@ -51,7 +49,7 @@ const setup = ({ elite2Api, whereaboutsApi, oauthApi, caseNotesApi, offenderSear
     houseblockListService: houseblockListFactory(elite2Api, whereaboutsApi, config),
     attendanceService: attendanceFactory(whereaboutsApi),
     establishmentRollService: establishmentRollFactory(elite2Api),
-    globalSearchService: globalSearchFactory(elite2Api, globalSearchApi),
+    globalSearchService: globalSearchFactory(offenderSearchApi),
     movementsService: movementsServiceFactory(elite2Api, systemOauthClient),
     offenderLoader: offenderLoaderFactory(elite2Api),
     appointmentsService: appointmentsServiceFactory(elite2Api),
