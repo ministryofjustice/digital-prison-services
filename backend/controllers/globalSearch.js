@@ -5,10 +5,7 @@ const { isPrisonerIdentifier } = require('../utils')
 
 const globalSearchFactory = globalSearchApi => {
   const searchByOffender = (context, offenderNo, gender, location, dateOfBirth) =>
-    // offenderNo can be removed once we have fully switched to prisoner offender search instead, i.e. the env variable
-    // OFFENDER_SEARCH_API_ENABLED has been removed
     globalSearchApi.globalSearch(context, {
-      offenderNo,
       prisonerIdentifier: offenderNo,
       gender,
       location,
