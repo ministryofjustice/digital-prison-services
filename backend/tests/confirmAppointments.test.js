@@ -63,7 +63,7 @@ describe('Confirm appointments', () => {
       expect.objectContaining({
         addAppointmentsLink: '/offenders/A12345/add-appointment',
         prisonerProfileLink: `http://localhost:3000/offenders/A12345`,
-        titleHtml: 'John Doe&rsquo;s appointment has been added',
+        prisonerName: 'John Doe',
         details: {
           date: '10 October 2017',
           endTime: '14:00',
@@ -76,7 +76,7 @@ describe('Confirm appointments', () => {
     )
   })
 
-  it('should strip out unsafe tags when creating titleHtml', async () => {
+  it('should strip out unsafe tags when creating prisonerName', async () => {
     const { index } = confirmAppointments.confirmAppointmentFactory({
       elite2Api,
       appointmentsService,
@@ -90,7 +90,7 @@ describe('Confirm appointments', () => {
     expect(res.render).toHaveBeenCalledWith(
       'confirmAppointments.njk',
       expect.objectContaining({
-        titleHtml: 'John  doe&rsquo;s appointment has been added',
+        prisonerName: 'John  doe',
       })
     )
   })

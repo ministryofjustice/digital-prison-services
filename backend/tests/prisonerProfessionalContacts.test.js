@@ -24,7 +24,7 @@ describe('Prisoner professional contacts', () => {
 
     personService.getPersonContactDetails = jest.fn().mockResolvedValue({})
 
-    elite2Api.getDetails = jest.fn().mockResolvedValue({ bookingId, firstName: 'John', lastName: 'Smith ' })
+    elite2Api.getDetails = jest.fn().mockResolvedValue({ bookingId, firstName: 'John', lastName: 'Smith' })
     elite2Api.getPrisonerContacts = jest.fn().mockResolvedValue([])
 
     allocationManagerApi.getPomByOffenderNo = jest.fn().mockResolvedValue({})
@@ -52,11 +52,11 @@ describe('Prisoner professional contacts', () => {
       expect(res.render).toHaveBeenCalledWith(
         'prisonerProfile/prisonerProfessionalContacts/prisonerProfessionalContacts.njk',
         {
-          breadcrumbPrisonerName: 'Smith , John',
+          breadcrumbPrisonerName: 'Smith, John',
           dpsUrl: 'http://localhost:3000/',
           contactsGroupedByRelationship: [],
           offenderNo: 'ABC123',
-          prisonerName: ['John Smith ', 's'],
+          prisonerName: 'John Smith',
         }
       )
     })
@@ -213,7 +213,7 @@ describe('Prisoner professional contacts', () => {
         expect(res.render).toHaveBeenCalledWith(
           'prisonerProfile/prisonerProfessionalContacts/prisonerProfessionalContacts.njk',
           {
-            breadcrumbPrisonerName: 'Smith , John',
+            breadcrumbPrisonerName: 'Smith, John',
             dpsUrl: 'http://localhost:3000/',
             contactsGroupedByRelationship: [
               {
@@ -447,7 +447,7 @@ describe('Prisoner professional contacts', () => {
               },
             ],
             offenderNo: 'ABC123',
-            prisonerName: ['John Smith ', 's'],
+            prisonerName: 'John Smith',
           }
         )
       })

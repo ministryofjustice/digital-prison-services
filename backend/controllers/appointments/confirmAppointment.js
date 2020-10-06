@@ -175,14 +175,10 @@ const confirmAppointmentFactory = ({ elite2Api, appointmentsService, logError })
           numberAdded: details.numberOfAppointments,
           lastAppointment: details.endDateShortFormat,
         }
-        const formattedName = sanitizer.sanitize(formatName(firstName, lastName))
-
-        const prisonerName =
-          formattedName && formattedName[formattedName.length - 1] !== 's' ? [formattedName, 's'] : [formattedName]
 
         res.render('confirmAppointments.njk', {
-          titleHtml: `${prisonerName[0]}&rsquo;${prisonerName[1] || ''} appointment has been added`,
           addAppointmentsLink: `/offenders/${offenderNo}/add-appointment`,
+          prisonerName: sanitizer.sanitize(formatName(firstName, lastName)),
           prisonerProfileLink: `${dpsUrl}offenders/${offenderNo}`,
           details: {
             type: details.appointmentType,

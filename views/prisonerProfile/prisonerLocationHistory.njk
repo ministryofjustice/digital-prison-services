@@ -27,7 +27,7 @@
 {% endblock %}
 
 {% block content %}
-  <h1 class="govuk-heading-l" data-test="title">{{titleWithName | safe}}</h1>
+  <h1 class="govuk-heading-l" data-test="title">{{ prisonerName | possessive }} history in location {{ locationName }}</h1>
 
   <h2 class="govuk-heading-m">Location details</h2>
 
@@ -91,7 +91,7 @@
       attributes: { "data-test": "prisoner-location-history" }
     }) }}
   {% else %}
-    <p class="govuk-body" data-test="no-history-message">{{ formattedName }} has not shared this cell with anyone else.</p>
+    <p class="govuk-body" data-test="no-history-message">{{ prisonerName }} has not shared this cell with anyone else.</p>
   {% endif %}
 
   <a href="{{ profileUrl + '/cell-history' }}" class="govuk-link govuk-body">

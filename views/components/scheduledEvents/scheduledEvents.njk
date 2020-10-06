@@ -3,7 +3,7 @@
 {% macro scheduledEvents(events, type, header, prisonerName, date) %}
     {% set eventsHtml %}
         {% if prisonerName != null %}
-            <h2 class="govuk-heading-m">{{ prisonerName[0] }}&rsquo;{{ prisonerName[1] }} schedule</h2>
+            <h2 class="govuk-heading-m">{{ prisonerName | possessive }} schedule</h2>
         {% else %}
             <h2 class="govuk-heading-m">{{ header }}</h2>
         {% endif %}

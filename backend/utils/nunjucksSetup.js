@@ -1,7 +1,7 @@
 const moment = require('moment')
 const nunjucks = require('nunjucks')
 const config = require('../config')
-const { getDate, getTime, pascalToString, capitalize, hyphenatedStringToCamel } = require('../utils')
+const { getDate, getTime, pascalToString, capitalize, hyphenatedStringToCamel, possessive } = require('../utils')
 
 module.exports = (app, path) => {
   const njkEnv = nunjucks.configure(
@@ -139,6 +139,7 @@ module.exports = (app, path) => {
   njkEnv.addFilter('getDate', getDate)
   njkEnv.addFilter('getTime', getTime)
   njkEnv.addFilter('truthy', data => Boolean(data))
+  njkEnv.addFilter('possessive', possessive)
   njkEnv.addGlobal('notmUrl', config.app.notmEndpointUrl)
   njkEnv.addGlobal('googleAnalyticsId', config.analytics.googleAnalyticsId)
   njkEnv.addGlobal('supportUrl', config.app.supportUrl)

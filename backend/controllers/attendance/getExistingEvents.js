@@ -11,15 +11,10 @@ module.exports = ({ elite2Api, logError, existingEventsService }) => async (req,
       existingEventsService.getExistingEventsForOffender(res.locals, agencyId, date, offenderNo),
     ])
 
-    const formattedName = formatName(offenderDetails.firstName, offenderDetails.lastName)
-
-    const prisonerName =
-      formattedName && formattedName[formattedName.length - 1] !== 's' ? [formattedName, 's'] : [formattedName]
-
     return res.render('components/scheduledEvents/scheduledEvents.njk', {
       events,
       date: moment(date, 'DD/MM/YYYY').format('D MMMM YYYY'),
-      prisonerName,
+      prisonerName: formatName(offenderDetails.firstName, offenderDetails.lastName),
       type: 'offender',
     })
   } catch (error) {

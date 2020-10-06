@@ -101,7 +101,7 @@ describe('Adjudications history controller', () => {
             value: 'F1',
           },
         ],
-        prisonerName: ['Bob Doe', 's'],
+        prisonerName: 'Bob Doe',
         formValues: undefined,
         noRecordsFoundMessage: null,
         rows: [
