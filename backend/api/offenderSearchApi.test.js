@@ -96,6 +96,7 @@ describe('offender search api tests', () => {
             releaseDate: '2023-03-03',
             confirmedReleaseDate: '2023-03-03',
             uiId: 'Tw4PcPHG6',
+            locationDescription: 'Leeds',
           },
         ]
         mock.post('/global-search?size=20').reply(200, { content: results, pageable: {} })

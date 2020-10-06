@@ -8,19 +8,31 @@ const offenderSearchApiFactory = client => {
   }
 
   const changeFieldNames = () => data =>
-    data.map(({ uiId, prisonerNumber, bookingId, firstName, lastName, dateOfBirth, prisonId, prisonName, status }) => ({
-      uiId,
-      offenderNo: prisonerNumber,
-      firstName,
-      lastName,
-      dateOfBirth,
-      latestBookingId: Number(bookingId),
-      latestLocationId: prisonId,
-      latestLocation: prisonName,
-      currentlyInPrison: status && status.startsWith('ACTIVE') ? 'Y' : 'N',
-      currentWorkingFirstName: firstName,
-      currentWorkingLastName: lastName,
-    }))
+    data.map(
+      ({
+        uiId,
+        prisonerNumber,
+        bookingId,
+        firstName,
+        lastName,
+        dateOfBirth,
+        prisonId,
+        locationDescription,
+        status,
+      }) => ({
+        uiId,
+        offenderNo: prisonerNumber,
+        firstName,
+        lastName,
+        dateOfBirth,
+        latestBookingId: Number(bookingId),
+        latestLocationId: prisonId,
+        latestLocation: locationDescription,
+        currentlyInPrison: status && status.startsWith('ACTIVE') ? 'Y' : 'N',
+        currentWorkingFirstName: firstName,
+        currentWorkingLastName: lastName,
+      })
+    )
 
   const post = (context, url, data) => client.post(context, url, data).then(processResponse(context))
 

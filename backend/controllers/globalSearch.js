@@ -3,7 +3,7 @@ const shortid = require('shortid')
 const log = require('../log')
 const { isPrisonerIdentifier } = require('../utils')
 
-const globalSearchFactory = (elite2Api, globalSearchApi) => {
+const globalSearchFactory = globalSearchApi => {
   const searchByOffender = (context, offenderNo, gender, location, dateOfBirth) =>
     // offenderNo can be removed once we have fully switched to prisoner offender search instead, i.e. the env variable
     // OFFENDER_SEARCH_API_ENABLED has been removed
@@ -42,29 +42,13 @@ const globalSearchFactory = (elite2Api, globalSearchApi) => {
       : searchByName(context, text, gender, location, dateOfBirth))
     log.info(data.length, 'globalSearch data received')
 
-    const offenderOutIds = data
-      .filter(offender => offender.latestLocationId === 'OUT')
-      .map(offender => offender.offenderNo)
-
-    const offenderMovements =
-      (offenderOutIds.length > 0 && (await elite2Api.getLastPrison({ ...context }, offenderOutIds))) || []
-
     return data.map(offender => {
-      const movement = offenderMovements.filter(mv => mv.offenderNo === offender.offenderNo)[0]
-      const latestLocation =
-        (movement &&
-          (movement.movementType === 'REL'
-            ? `Outside - released from ${movement.fromAgencyDescription}`
-            : `Outside - ${movement.movementTypeDescription}`)) ||
-        offender.latestLocation
-
       const formattedDateOfBirth =
         offender.dateOfBirth && moment(offender.dateOfBirth, 'YYYY-MM-DD').format('DD/MM/YYYY')
       const uiId = shortid.generate()
 
       return {
         ...offender,
-        latestLocation,
         dateOfBirth: formattedDateOfBirth,
         uiId,
       }

@@ -29,6 +29,7 @@ module.exports = {
             prisonName: 'Leeds HMP',
             dateOfBirth: '1977-10-15',
             prisonId: 'LEI',
+            locationDescription: 'Leeds HMP',
           },
           {
             prisonerNumber: 'A1234AA',
@@ -37,6 +38,7 @@ module.exports = {
             prisonName: 'Moorland HMP',
             dateOfBirth: '1976-09-15',
             prisonId: 'MDI',
+            locationDescription: 'Moorland HMP',
           },
         ],
       },
