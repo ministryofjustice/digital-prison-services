@@ -380,5 +380,9 @@ module.exports = on => {
     verifyAdjudicationsHistory: ({ offenderNo, agencyId, finding, fromDate, toDate }) =>
       elite2api.verifyAdjudicationsHistory({ offenderNo, agencyId, finding, fromDate, toDate }),
     resetAdjudicationsStub: () => elite2api.resetAdjudicationsStub(),
+    stubConvictions: ({ offenderNo, convictions }) => community.stubConvictions(offenderNo, convictions),
+    stubOffenderDetails: ({ offenderNo, details }) => community.stubOffenderDetails(offenderNo, details),
+    stubDocuments: ({ offenderNo, documents }) => community.stubDocuments(offenderNo, documents),
+    stubDocument: ({ offenderNo, documentId, content }) => community.stubDocument(offenderNo, documentId, content),
   })
 }
