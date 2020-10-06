@@ -42,7 +42,6 @@ env:
   SOC_URL: https://manage-soc-cases.hmpps.service.justice.gov.uk
   SOC_API_ENABLED: true
   OFFENDER_SEARCH_API_URL: https://prisoner-offender-search.prison.service.justice.gov.uk
-  OFFENDER_SEARCH_API_ENABLED: true
   SUPPORT_URL: https://support.hmpps.service.justice.gov.uk/
 
 whitelist:
