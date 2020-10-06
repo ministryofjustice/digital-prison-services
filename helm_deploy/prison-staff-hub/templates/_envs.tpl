@@ -152,9 +152,6 @@ env:
   - name: OFFENDER_SEARCH_API_URL
     value: {{ .Values.env.OFFENDER_SEARCH_API_URL | quote }}
 
-  - name: OFFENDER_SEARCH_API_ENABLED
-    value: {{ .Values.env.OFFENDER_SEARCH_API_ENABLED | quote }}
-
   - name: ALLOCATION_MANAGER_ENDPOINT_URL
     value: {{ .Values.env.ALLOCATION_MANAGER_ENDPOINT_URL | quote }}
 
