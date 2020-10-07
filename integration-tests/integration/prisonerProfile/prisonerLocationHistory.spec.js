@@ -182,5 +182,25 @@ context('Prisoner location history', () => {
       const prisonerLocationHistoryPage = PrisonerLocationHistoryPage.verifyOnPage()
       prisonerLocationHistoryPage.noHistoryMessage().contains('John Smith has not shared this cell with anyone else.')
     })
+
+    it('should should show the alternative possessive page title', () => {
+      cy.task('stubOffenderBasicDetails', { bookingId: 1, firstName: 'John', lastName: 'Jones', agencyId: 'MDI' })
+      cy.task('stubHistoryForLocation', [
+        {
+          bookingId: 1,
+          livingUnitId: 1,
+          assignmentDate: '2020-08-28',
+          assignmentDateTime: '2020-08-28T11:20:39',
+          agencyId: 'MDI',
+          description: 'MDI-1-1-015',
+        },
+      ])
+
+      cy.visit(`/prisoner/${offenderNo}/location-history?fromDate=2020-08-28&locationId=1&agencyId=MDI`)
+
+      const prisonerLocationHistoryPage = PrisonerLocationHistoryPage.verifyOnPage()
+      prisonerLocationHistoryPage.title().contains('John Jones’')
+      prisonerLocationHistoryPage.noHistoryMessage().contains('John Jones has not shared this cell with anyone else.')
+    })
   })
 })

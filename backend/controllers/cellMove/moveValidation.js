@@ -50,7 +50,7 @@ const moveValidationFactory = ({ elite2Api, logError }) => {
 
   const getOffenderAlertBody = (alert, title, firstName, lastName) => {
     return {
-      subTitle: alert.comment && `The details of ${formatName(firstName, lastName)}${possessive(lastName)} alert are`,
+      subTitle: alert.comment && `The details of ${possessive(formatName(firstName, lastName))} alert are`,
       title,
       comment: alert.comment,
       date: `Date added: ${moment(alert.dateCreated, 'YYYY-MM-DD').format('D MMMM YYYY')}`,

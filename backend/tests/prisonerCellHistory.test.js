@@ -25,7 +25,7 @@ describe('Prisoner cell history', () => {
     logError = jest.fn()
 
     oauthApi.userRoles = jest.fn().mockResolvedValue([])
-    elite2Api.getDetails = jest.fn().mockResolvedValue({ bookingId, firstName: 'John', lastName: 'Smith ' })
+    elite2Api.getDetails = jest.fn().mockResolvedValue({ bookingId, firstName: 'John', lastName: 'Smith' })
     elite2Api.getOffenderCellHistory = jest.fn().mockResolvedValue({
       content: [
         {
@@ -110,6 +110,7 @@ describe('Prisoner cell history', () => {
             movedIn: '01/09/2020 - 12:48',
           },
           canViewCellMoveButton: false,
+          prisonerName: 'John Smith',
         })
       )
     })

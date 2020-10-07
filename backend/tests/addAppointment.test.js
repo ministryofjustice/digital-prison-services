@@ -387,20 +387,7 @@ describe('Add appointment', () => {
         expect(res.render).toHaveBeenCalledWith(
           'addAppointment/addAppointment.njk',
           expect.objectContaining({
-            prisonerName: ['John Smith', 's'],
-          })
-        )
-      })
-
-      it('should return prisoner name for John Jones', async () => {
-        elite2Api.getDetails = jest.fn().mockResolvedValue({ firstName: 'John', lastName: 'Jones' })
-
-        await controller.post(req, res)
-
-        expect(res.render).toHaveBeenCalledWith(
-          'addAppointment/addAppointment.njk',
-          expect.objectContaining({
-            prisonerName: ['John Jones'],
+            prisonerName: 'John Smith',
           })
         )
       })

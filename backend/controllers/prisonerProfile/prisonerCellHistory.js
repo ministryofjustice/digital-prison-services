@@ -3,7 +3,6 @@ const { serviceUnavailableMessage } = require('../../common-messages')
 const {
   formatName,
   formatTimestampToDateTime,
-  possessive,
   sortByDateTime,
   putLastNameFirst,
   extractLocation,
@@ -62,8 +61,6 @@ module.exports = ({ oauthApi, elite2Api, logError, page = 0 }) => async (req, re
         }
       })
 
-    const titleWithName = `${formatName(firstName, lastName)}${possessive(lastName)} location details`
-
     return res.render('prisonerProfile/prisonerCellHistory.njk', {
       cellData,
       currentLocation: {
@@ -84,7 +81,7 @@ module.exports = ({ oauthApi, elite2Api, logError, page = 0 }) => async (req, re
           profileUrl: `/prisoner/${occupant.offenderNo}`,
         }
       }),
-      titleWithName,
+      prisonerName: formatName(firstName, lastName),
       profileUrl: `/prisoner/${offenderNo}`,
       breadcrumbPrisonerName: putLastNameFirst(firstName, lastName),
       changeCellLink: `/prisoner/${offenderNo}/cell-move/select-location`,

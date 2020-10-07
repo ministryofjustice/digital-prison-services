@@ -53,7 +53,7 @@ describe('Existing events for offenders', () => {
     expect(res.render).toHaveBeenCalledWith('components/scheduledEvents/scheduledEvents.njk', {
       date: '10 October 2020',
       events: [{ eventId: 1 }, { eventId: 2 }],
-      prisonerName: ['John Smith', 's'],
+      prisonerName: 'John Smith',
       type: 'offender',
     })
   })
@@ -67,7 +67,7 @@ describe('Existing events for offenders', () => {
     expect(res.render).toHaveBeenCalledWith('components/scheduledEvents/scheduledEvents.njk', {
       date: '10 October 2020',
       events: [{ eventId: 1 }, { eventId: 2 }],
-      prisonerName: ['John Jones'],
+      prisonerName: 'John Jones',
       type: 'offender',
     })
   })
