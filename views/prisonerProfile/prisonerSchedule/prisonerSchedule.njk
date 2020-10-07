@@ -2,7 +2,7 @@
 {% from "../../macros/printLink.njk" import printLink %}
 {% from "../macros/prisonerScheduledActivities.njk" import scheduledActivities %}
 
-{% set title = prisonerName + '`s schedule' %}
+{% set title = 'Schedule' %}
 {% set htmlClasses = "printed-page" %}
 
 {% block beforeContent %}
@@ -17,7 +17,7 @@
         href: '/prisoner/' + offenderNo
       },
       {
-        text: 'Schedule'
+        text: title
       }
     ],
     classes: 'govuk-!-display-none-print'
@@ -28,7 +28,7 @@
   {% set firstDay = days | first %}
   {% set lastDay = days | last %}
   <div class="prisoner-schedule">
-    <h1 class="govuk-heading-l govuk-!-margin-bottom-1">{{ title }}</h1>
+    <h1 class="govuk-heading-l govuk-!-margin-bottom-1">{{ prisonerName | possessive | safe }} schedule</h1>
     <p class="govuk-body govuk-!-font-size-24" data-test="schedule-dates">{{ firstDay.date }} to {{ lastDay.date }}</p>
 
     <div>
