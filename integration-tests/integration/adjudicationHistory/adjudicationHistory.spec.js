@@ -73,6 +73,9 @@ context('A user can confirm the cell move', () => {
       .find('td')
       .then($columns => {
         expect($columns[0].innerText).to.equal('1234567')
+        expect($columns[0].innerHTML).to.equal(
+          '<a href="/prisoner/A12345/adjudications/1234567" class="govuk-link"> 1234567 </a>'
+        )
         expect($columns[1].innerText).to.equal('17/03/2017 08:02')
         expect($columns[2].innerText).to.equal('Moorland (HMP & YOI)')
         expect($columns[3].innerText).to.equal('Disobeys any lawful order')
