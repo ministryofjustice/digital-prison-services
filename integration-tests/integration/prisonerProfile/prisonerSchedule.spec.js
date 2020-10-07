@@ -105,7 +105,7 @@ context('Prisoner schedule', () => {
       it('should show the correct dates in the title and link', () => {
         cy.visit(`/prisoner/${offenderNo}/schedule`)
 
-        cy.get('h1').should('have.text', 'John Smith`s schedule')
+        cy.get('h1').should('have.text', 'John Smith’s schedule')
         cy.get('[data-test="schedule-dates"]').should(
           'contain.text',
           `${moment().format(longDateFormat)} to ${moment()
@@ -171,7 +171,7 @@ context('Prisoner schedule', () => {
         cy.visit(`/prisoner/${offenderNo}/schedule`)
         cy.get('[data-test="schedule-select-week"]').click()
 
-        cy.get('h1').should('have.text', 'John Smith`s schedule')
+        cy.get('h1').should('have.text', 'John Smith’s schedule')
         cy.get('[data-test="schedule-dates"]').should(
           'contain.text',
           `${moment()
