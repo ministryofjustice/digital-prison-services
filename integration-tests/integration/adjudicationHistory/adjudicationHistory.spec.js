@@ -167,6 +167,6 @@ context('A user can confirm the cell move', () => {
 
     page.checkStillOnPage()
 
-    page.noRecordsFoundMessage().contains('There are no adjudications for the dates selected')
+    page.noRecordsFoundMessage().contains('There are no adjudications for the selections you have made')
   })
 })
