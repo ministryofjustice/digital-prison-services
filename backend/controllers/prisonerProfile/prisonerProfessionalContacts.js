@@ -95,11 +95,6 @@ module.exports = ({ elite2Api, personService, allocationManagerApi, logError }) 
       })
     }
 
-    const formattedName = formatName(firstName, lastName)
-
-    const prisonerName =
-      formattedName && formattedName[formattedName.length - 1] !== 's' ? [formattedName, 's'] : [formattedName]
-
     return res.render('prisonerProfile/prisonerProfessionalContacts/prisonerProfessionalContacts.njk', {
       breadcrumbPrisonerName: putLastNameFirst(firstName, lastName),
       dpsUrl,
@@ -107,7 +102,7 @@ module.exports = ({ elite2Api, personService, allocationManagerApi, logError }) 
         left.relationship.localeCompare(right.relationship)
       ),
       offenderNo,
-      prisonerName,
+      prisonerName: formatName(firstName, lastName),
     })
   } catch (error) {
     logError(req.originalUrl, error, serviceUnavailableMessage)

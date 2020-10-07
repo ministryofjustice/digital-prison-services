@@ -3,7 +3,6 @@ const { serviceUnavailableMessage } = require('../../common-messages')
 const {
   formatName,
   formatTimestampToDateTime,
-  possessive,
   sortByDateTime,
   putLastNameFirst,
   hasLength,
@@ -32,8 +31,6 @@ module.exports = ({ elite2Api, logError }) => async (req, res) => {
 
     const currentPrisonerDetails = locationHistory.find(record => record.bookingId === bookingId) || {}
 
-    const formattedName = formatName(firstName, lastName)
-
     const locationHistoryWithPrisoner =
       hasLength(locationHistory) &&
       (await Promise.all(
@@ -43,9 +40,11 @@ module.exports = ({ elite2Api, logError }) => async (req, res) => {
         }))
       ))
 
+    const prisonerName = formatName(firstName, lastName)
+
     const getMovedOutText = sharingOffenderEndTime => {
       if (!currentPrisonerDetails.assignmentEndDateTime && !sharingOffenderEndTime) return 'Currently sharing'
-      if (currentPrisonerDetails.assignmentEndDateTime && !sharingOffenderEndTime) return `${formattedName} moved out`
+      if (currentPrisonerDetails.assignmentEndDateTime && !sharingOffenderEndTime) return `${prisonerName} moved out`
       if (sharingOffenderEndTime) return formatTimestampToDateTime(sharingOffenderEndTime)
       return null
     }
@@ -53,7 +52,6 @@ module.exports = ({ elite2Api, logError }) => async (req, res) => {
     return res.render('prisonerProfile/prisonerLocationHistory.njk', {
       breadcrumbPrisonerName: putLastNameFirst(firstName, lastName),
       dpsUrl,
-      formattedName,
       locationDetails: {
         description: agencyDetails.description,
         movedIn:
@@ -77,10 +75,8 @@ module.exports = ({ elite2Api, logError }) => async (req, res) => {
             movedOut: getMovedOutText(prisoner.assignmentEndDateTime),
           })),
       profileUrl: `/prisoner/${offenderNo}`,
-      titleWithName: `${formattedName}${possessive(lastName)} history in location ${extractLocation(
-        locationAttributes.description,
-        agencyId
-      )}`,
+      prisonerName,
+      locationName: extractLocation(locationAttributes.description, agencyId),
     })
   } catch (error) {
     logError(req.originalUrl, error, serviceUnavailableMessage)
