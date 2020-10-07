@@ -14,7 +14,7 @@ module.exports = () => {
     res.redirect(301, `/prisoner/${req.params.offenderNo}/adjudications`)
   )
 
-  router.get(`/api/offenders/:offenderNo/adjudications/:adjudicationNumber`, (req, res) =>
+  router.get('/api/offenders/:offenderNo/adjudications/:adjudicationNumber', (req, res) =>
     res.redirect(301, `/prisoner/${req.params.offenderNo}/adjudications/${req.params.adjudicationNumber}`)
   )
 
