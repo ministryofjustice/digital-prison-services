@@ -3,10 +3,7 @@ kind: Service
 metadata:
   name: {{ template "app.fullname" . }}
   labels:
-    app: {{ template "app.name" . }}
-    chart: {{ template "app.chart" . }}
-    release: {{ .Release.Name }}
-    heritage: {{ .Release.Service }}
+    {{- include "app.labels" . | nindent 4 }}
 spec:
   type: ClusterIP
   ports:
@@ -14,5 +11,4 @@ spec:
       targetPort: {{ .Values.image.port }} 
       name: http
   selector:
-    app: {{ template "app.name" . }}
-    release: {{ .Release.Name }}
+    {{- include "app.selectorLabels" . | nindent 4 }}
