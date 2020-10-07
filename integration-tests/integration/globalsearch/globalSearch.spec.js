@@ -54,7 +54,6 @@ context('Global search', () => {
       expect(requests).to.have.lengthOf(1)
       expect(JSON.parse(requests[0].body)).to.deep.equal({
         prisonerIdentifier: 'A1234BC',
-        offenderNo: 'A1234BC',
         gender: 'ALL',
         location: 'ALL',
         includeAliases: true,
