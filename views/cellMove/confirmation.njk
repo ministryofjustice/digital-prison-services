@@ -23,11 +23,17 @@
 {% block content %}
     {{ govukPanel({
         titleText: title,
-        classes: "govuk-!-margin-bottom-9"
+        classes: "govuk-!-margin-bottom-6"
     }) }}
 
+    <p class="govuk-body govuk-!-margin-bottom-6">
+        <a class="govuk-link" href="https://www.surveymonkey.co.uk/r/5QLYDWY" target="_blank" rel="noopener noreferrer" data-test="exit-survey-link">
+            What did you think of this service? (Takes 60 seconds - opens in a new tab)
+        </a>
+    </p>
+
     {{ govukButton({
-        text: "Return to prisoner's profile",
+        text: "Return to prisoner’s profile",
         element: 'a',
         href: prisonerProfileLink,
         attributes: {
@@ -35,9 +41,7 @@
         }
     }) }}
 
-  <div>
-    <p class="govuk-body govuk-!-margin-top-4">
-      <a class="govuk-link" href="{{ prisonerSearchLink }}" data-test="back-to-search">Select another prisoner</a>
+    <p class="govuk-body">
+        <a class="govuk-link" href="{{ prisonerSearchLink }}" data-test="back-to-search">Select another prisoner</a>
     </p>
-  </div>
 {% endblock %}
