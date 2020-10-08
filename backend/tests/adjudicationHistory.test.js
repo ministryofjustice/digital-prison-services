@@ -69,6 +69,13 @@ const adjudications = {
             'Disobeys or fails to comply with any rule or regulation applying to him - offence against good order and discipline',
           findingCode: 'GUILTY',
         },
+        {
+          oicChargeId: '529404/1',
+          offenceCode: '51:23AS',
+          offenceDescription:
+            'Disobeys or fails to comply with any rule or regulation applying to him - offence against good order and discipline',
+          findingCode: 'NOT_GUILTY',
+        },
       ],
     },
   ],
@@ -195,8 +202,8 @@ const expectedResult = {
       agencyId: 'ONI',
       agencyIncidentId: 524130,
       establishment: 'Onley (HMP)',
-      findingCode: 'GUILTY',
-      findingDescription: 'Guilty',
+      findingCode: 'NOT_GUILTY',
+      findingDescription: 'Not Guilty',
       offenceCode: '51:23AS',
       offenceDescription:
         'Disobeys or fails to comply with any rule or regulation applying to him - offence against good order and discipline',
