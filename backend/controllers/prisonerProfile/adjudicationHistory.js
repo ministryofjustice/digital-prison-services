@@ -52,13 +52,10 @@ module.exports = ({ adjudicationHistoryService, elite2Api, logError, paginationS
 
     const { firstName, lastName } = await elite2Api.getDetails(res.locals, offenderNo)
 
-    const formattedName = formatName(firstName, lastName)
-
-    const prisonerName =
-      formattedName && formattedName[formattedName.length - 1] !== 's' ? [formattedName, 's'] : [formattedName]
+    const prisonerName = formatName(firstName, lastName)
 
     const noAdjudications = Boolean(!adjudicationsData.results.length)
-    const noAdjudicationsForDatesSelected = Boolean(noAdjudications && fromDate && toDate)
+    const noAdjudicationsSelection = Boolean(noAdjudications && (fromDate || toDate || agencyId || finding))
 
     return res.render('prisonerProfile/adjudicationHistory.njk', {
       errors,
@@ -66,12 +63,12 @@ module.exports = ({ adjudicationHistoryService, elite2Api, logError, paginationS
       prisonerName,
       prisonerProfileLink: `/prisoner/${offenderNo}/`,
       clearLink: `/offenders/${offenderNo}/adjudications`,
-      noAdjudicationsForDatesSelected,
+      noAdjudicationsSelection,
       noRecordsFoundMessage:
         (noAdjudications &&
-          (noAdjudicationsForDatesSelected
-            ? 'There are no adjudications for the dates selected'
-            : `${formattedName} has had no adjudications`)) ||
+          (noAdjudicationsSelection
+            ? 'There are no adjudications for the selections you have made'
+            : `${prisonerName} has had no adjudications`)) ||
         null,
       rows: adjudicationsData.results.sort(sortByDateTimeDesc).map(result => [
         {

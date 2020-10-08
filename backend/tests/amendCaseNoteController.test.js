@@ -114,48 +114,16 @@ describe('Amendment case note', () => {
       expect(res.render).toHaveBeenCalledWith('amendCaseNote.njk', {
         errors: undefined,
         formValues: undefined,
-        prisonerNameForBreadcrumb: 'Bob Smith',
+        prisonerNameForBreadcrumb: 'Smith, Bob',
         backToCaseNotes: '/prisoner/A12345/case-notes',
         caseNoteId: 1,
         prisonNumber: 'A12345',
         typeSubType: 'Key worker: Key worker session',
         caseNoteText: 'This is some text',
         postAmendmentUrl: 'http://localhost:3002/prisoner/case-notes/amend-case-note/1',
-        prisonerName: ['Bob Smith', 's'],
+        prisonerName: 'Bob Smith',
         amendments: [{ text: 'This is an amendment' }, { text: 'This is an amendment' }],
       })
-    })
-
-    it('should split the name across two parts to cater for the apostrophe when a name ends in an s', async () => {
-      elite2Api.getDetails = jest.fn().mockResolvedValue({
-        firstName: 'Bob',
-        lastName: 'Jones',
-      })
-
-      await controller.index(req, res)
-
-      expect(res.render).toHaveBeenCalledWith(
-        'amendCaseNote.njk',
-        expect.objectContaining({
-          prisonerName: ['Bob Jones'],
-        })
-      )
-    })
-
-    it('should split the name across two parts to cater for the apostrophe when a name does not in an s', async () => {
-      elite2Api.getDetails = jest.fn().mockResolvedValue({
-        firstName: 'Bob',
-        lastName: 'Smith',
-      })
-
-      await controller.index(req, res)
-
-      expect(res.render).toHaveBeenCalledWith(
-        'amendCaseNote.njk',
-        expect.objectContaining({
-          prisonerName: ['Bob Smith', 's'],
-        })
-      )
     })
   })
 

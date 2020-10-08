@@ -8,12 +8,12 @@ const changeCaseloadFactory = (elite2Api, logError) => {
       // In case someone goes directly to the URL
       // and they don't have more than 1 caseload
       if (caseloads.length <= 1) {
-        res.redirect(config.app.notmEndpointUrl)
+        return res.redirect(config.app.notmEndpointUrl)
       }
 
       const activeCaseLoad = caseloads.find(cl => cl.currentlyActive)
       const options = caseloads.map(caseload => ({ value: caseload.caseLoadId, text: caseload.description }))
-      res.render('changeCaseload.njk', {
+      return res.render('changeCaseload.njk', {
         title: 'Change caseload',
         options,
         allCaseloads: caseloads,
@@ -29,7 +29,7 @@ const changeCaseloadFactory = (elite2Api, logError) => {
       })
     } catch (error) {
       logError(req.originalUrl, error, 'Sorry, the service is unavailable')
-      res.render('error.njk', {
+      return res.render('error.njk', {
         url: '/change-caseload',
       })
     }

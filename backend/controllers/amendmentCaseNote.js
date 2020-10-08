@@ -1,4 +1,4 @@
-const { capitalize, formatName } = require('../utils')
+const { capitalize, formatName, putLastNameFirst } = require('../utils')
 const { serviceUnavailableMessage } = require('../common-messages')
 
 module.exports = ({ elite2Api, caseNotesApi, logError }) => {
@@ -17,11 +17,6 @@ module.exports = ({ elite2Api, caseNotesApi, logError }) => {
         return res.render('notFound.njk', { url: req.headers.referer || `/prisoner/${offenderNo}/case-notes` })
       }
 
-      const formattedName = formatName(prisonerDetails.firstName, prisonerDetails.lastName)
-
-      const prisonerName =
-        formattedName && formattedName[formattedName.length - 1] !== 's' ? [formattedName, 's'] : [formattedName]
-
       const formValues = req.flash('formValues')
 
       return res.render('amendCaseNote.njk', {
@@ -29,8 +24,8 @@ module.exports = ({ elite2Api, caseNotesApi, logError }) => {
         formValues: formValues && formValues.pop(),
         caseNoteId: caseNote.caseNoteId,
         prisonNumber: offenderNo,
-        prisonerNameForBreadcrumb: formattedName,
-        prisonerName,
+        prisonerNameForBreadcrumb: putLastNameFirst(prisonerDetails.firstName, prisonerDetails.lastName),
+        prisonerName: formatName(prisonerDetails.firstName, prisonerDetails.lastName),
         typeSubType: `${capitalize(caseNote.typeDescription)}: ${capitalize(caseNote.subTypeDescription)}`,
         caseNoteText: caseNote.text,
         backToCaseNotes: `/prisoner/${offenderNo}/case-notes`,

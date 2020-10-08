@@ -214,10 +214,6 @@ const addAppointmentFactory = (appointmentsService, existingEventsService, elite
       const { endOfPeriod } = endRecurringEndingDate({ date, startTime, repeats, times })
 
       const offenderDetails = await elite2Api.getDetails(res.locals, offenderNo)
-      const formattedName = formatName(offenderDetails.firstName, offenderDetails.lastName)
-
-      const prisonerName =
-        formattedName && formattedName[formattedName.length - 1] !== 's' ? [formattedName, 's'] : [formattedName]
 
       const [locationDetails, locationEvents] = (location &&
         (await Promise.all([
@@ -227,7 +223,7 @@ const addAppointmentFactory = (appointmentsService, existingEventsService, elite
 
       return renderTemplate(req, res, {
         errors,
-        prisonerName,
+        prisonerName: formatName(offenderDetails.firstName, offenderDetails.lastName),
         date: moment(date, 'DD/MM/YYYY').format('D MMMM YYYY'),
         locationName: locationDetails.userDescription,
         locationEvents,

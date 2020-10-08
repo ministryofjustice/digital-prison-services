@@ -39,7 +39,7 @@
     {% endif %}
 
 
-    <h1 class="govuk-heading-l">{{ prisonerName[0] }}&rsquo;{{ prisonerName[1] }} adjudication history </h1>
+    <h1 class="govuk-heading-l">{{ prisonerName | possessive | safe }} adjudication history </h1>
 
     <div class="govuk-!-padding-3 govuk-!-margin-bottom-5 form-background">
         <h2 class="govuk-heading-m">View by</h2>
@@ -89,12 +89,12 @@
         </form>
     </div>
 
-    {% if noRecordsFoundMessage != null and noAdjudicationsForDatesSelected == false %}
+    {% if noRecordsFoundMessage != null and noAdjudicationsSelection == false %}
         <p class="govuk-body" data-qa="no-records-found-message"> {{ noRecordsFoundMessage }} </p>
     {% else %}
         {{ mojPagination(pagination) }}
 
-        {% if noAdjudicationsForDatesSelected == true %}
+        {% if noAdjudicationsSelection == true %}
             <p class="govuk-body" data-qa="no-records-found-message"> {{ noRecordsFoundMessage }} </p>
         {% endif %}
 

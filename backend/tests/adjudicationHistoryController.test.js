@@ -103,7 +103,7 @@ describe('Adjudications history controller', () => {
             value: 'F1',
           },
         ],
-        prisonerName: ['Bob Doe', 's'],
+        prisonerName: 'Bob Doe',
         formValues: undefined,
         noRecordsFoundMessage: null,
         prisonerProfileLink: `/prisoner/${offenderNo}/`,
@@ -270,7 +270,55 @@ describe('Adjudications history controller', () => {
     expect(res.render).toHaveBeenCalledWith(
       'prisonerProfile/adjudicationHistory.njk',
       expect.objectContaining({
-        noRecordsFoundMessage: 'There are no adjudications for the dates selected',
+        noRecordsFoundMessage: 'There are no adjudications for the selections you have made',
+      })
+    )
+  })
+
+  it('should return a no records found message for selected finding', async () => {
+    req.query = {
+      finding: 'PROVED',
+    }
+    adjudicationHistoryService.getAdjudications = jest.fn().mockResolvedValue({
+      results: [],
+      agencies: [{ agencyId: 'MDI', description: 'Moorland' }],
+      findingTypes: [{ code: 'F1', description: 'finding description' }],
+      pagination: {
+        totalRecords: 0,
+        pageOffset: 0,
+      },
+    })
+
+    await controller(req, res)
+
+    expect(res.render).toHaveBeenCalledWith(
+      'prisonerProfile/adjudicationHistory.njk',
+      expect.objectContaining({
+        noRecordsFoundMessage: 'There are no adjudications for the selections you have made',
+      })
+    )
+  })
+
+  it('should return a no records found message for selected agencyId', async () => {
+    req.query = {
+      agencyId: 'MDI',
+    }
+    adjudicationHistoryService.getAdjudications = jest.fn().mockResolvedValue({
+      results: [],
+      agencies: [{ agencyId: 'MDI', description: 'Moorland' }],
+      findingTypes: [{ code: 'F1', description: 'finding description' }],
+      pagination: {
+        totalRecords: 0,
+        pageOffset: 0,
+      },
+    })
+
+    await controller(req, res)
+
+    expect(res.render).toHaveBeenCalledWith(
+      'prisonerProfile/adjudicationHistory.njk',
+      expect.objectContaining({
+        noRecordsFoundMessage: 'There are no adjudications for the selections you have made',
       })
     )
   })

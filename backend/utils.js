@@ -252,7 +252,11 @@ const times = number => func => {
   return iter(0)
 }
 
-const possessive = string => (string.toLowerCase().endsWith('s') ? '&rsquo;' : '&rsquo;s')
+const possessive = string => {
+  if (!string) return ''
+
+  return `${string}${string.toLowerCase().endsWith('s') ? '’' : '’s'}`
+}
 
 const indefiniteArticle = string =>
   ['a', 'e', 'i', 'o', 'u'].some(vowel => string.toLowerCase().startsWith(vowel)) ? 'an' : 'a'
