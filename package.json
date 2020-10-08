@@ -183,6 +183,7 @@
     "verify": "npm run lint && npm test",
     "security_audit": "npx audit-ci --config audit-ci.json",
     "int-test": "cypress run",
+    "int-test-no-artefacts": "cypress run --config video=false,screenshotOnRunFailure=false",
     "int-test-ui": "cypress open",
     "compile-sass": "sass --load-path=. ./sass:./build/static/stylesheets --style compressed",
     "compile-sass-watch": "npm run compile-sass && sass --load-path=. ./sass:./build/static/stylesheets --watch --style compressed"

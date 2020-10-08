@@ -105,7 +105,7 @@ jobs:
           background: true
       - run:
           name: Run Cypress Integration tests
-          command: npm run int-test
+          command: npm run int-test-no-artefacts
       - store_test_results:
           path: test-results
       - store_artifacts:
