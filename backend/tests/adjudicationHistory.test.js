@@ -37,6 +37,20 @@ const adjudications = {
       ],
     },
     {
+      adjudicationNumber: 1492250,
+      reportTime: '2017-02-23T10:49:00',
+      agencyIncidentId: 1470044,
+      agencyId: 'MDI',
+      adjudicationCharges: [
+        {
+          oicChargeId: '1492249/1',
+          offenceCode: '51:18A',
+          offenceDescription:
+            'Absents himself from any place he is required to be or is present at any place where he is not authorised to be - absence without permission',
+        },
+      ],
+    },
+    {
       adjudicationNumber: 554213,
       reportTime: '2012-01-05T15:42:00',
       agencyIncidentId: 548434,
@@ -183,6 +197,15 @@ const expectedResult = {
       oicChargeId: '1492249/1',
       reportDate: '23/02/2017',
       reportTime: '10:29',
+    },
+    {
+      adjudicationNumber: 1492250,
+      agencyId: 'MDI',
+      agencyIncidentId: 1470044,
+      establishment: 'Moorland (HMP & YOI)',
+      findingDescription: 'Not entered',
+      reportDate: '23/02/2017',
+      reportTime: '10:49',
     },
     {
       adjudicationNumber: 554213,
