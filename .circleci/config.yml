@@ -42,6 +42,7 @@ jobs:
     working_directory: ~/app
     docker:
       - image: circleci/node:12-buster-browsers
+    resource_class: large
     steps:
       - checkout
       - attach_workspace:
