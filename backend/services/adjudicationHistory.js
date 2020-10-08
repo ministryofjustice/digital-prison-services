@@ -24,7 +24,7 @@ const AdjudciationHistoryServiceFactory = elite2Api => {
 
     const ordercharges = adjudications.results.map(result => {
       const { adjudicationCharges, ...fields } = result
-      const charge = adjudicationCharges.filter(item => item.findingCode).pop()
+      const charge = adjudicationCharges.reduce((charge1, charge2) => (charge1.findingCode ? charge1 : charge2))
       const finding = findingTypes.find(type => type.code === charge.findingCode)
 
       return {
