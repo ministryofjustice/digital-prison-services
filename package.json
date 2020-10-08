@@ -172,7 +172,7 @@
   "scripts": {
     "start": "node backend/index.js",
     "start:dev": "nodemon --watch backend --watch views backend/index.js",
-    "start-feature": "export $(cat $npm_config_env) && node backend/index.js",
+    "start-feature": "npm run compile-sass && export $(cat $npm_config_env) && node backend/index.js",
     "start-feature-no-webpack": "export $(cat $npm_config_env) && DISABLE_WEBPACK=true node backend/index.js",
     "build": "webpack --mode=production && npm run compile-sass",
     "build:analyse": "BUNDLE_ANALYSE=true npm run build",
