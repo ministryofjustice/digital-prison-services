@@ -11,9 +11,7 @@ const getTotals = (array, figure) =>
 
 module.exports = ({ elite2Api, logError }) => async (req, res) => {
   try {
-    const caseloads = await elite2Api.userCaseLoads(res.locals)
-    const activeCaseLoad = caseloads.find(cl => cl.currentlyActive)
-    const agencyId = activeCaseLoad.caseLoadId
+    const agencyId = res.locals.user.activeCaseLoad.caseLoadId
     const [assignedResponse, unassignedResponse, movementsResponse, enroute] = await Promise.all([
       elite2Api.getEstablishmentRollBlocksCount(res.locals, agencyId, false),
       elite2Api.getEstablishmentRollBlocksCount(res.locals, agencyId, true),

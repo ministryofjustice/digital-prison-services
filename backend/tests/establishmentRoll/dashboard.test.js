@@ -7,7 +7,7 @@ describe('Establishment Roll', () => {
   let controller
   const agencyId = 'LEI'
   const req = { originalUrl: 'http://localhost' }
-  const res = { locals: {} }
+  const res = { locals: { user: { activeCaseLoad: { caseLoadId: 'LEI' } } } }
   const unassignedBlockData = [
     {
       livingUnitId: 0,
@@ -70,7 +70,6 @@ describe('Establishment Roll', () => {
     elite2Api.getEstablishmentRollBlocksCount = jest.fn()
     elite2Api.getEstablishmentRollMovementsCount = jest.fn()
     elite2Api.getEstablishmentRollEnrouteCount = jest.fn()
-    elite2Api.userCaseLoads = jest.fn().mockResolvedValue([{ currentlyActive: true, caseLoadId: 'LEI' }])
     elite2Api.getEstablishmentRollBlocksCount.mockImplementation(
       (_context, _agencyId, _unassigned) => (_unassigned ? unassignedBlockData : assignedBlockData)
     )
