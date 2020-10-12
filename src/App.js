@@ -9,7 +9,6 @@ import { Header, FooterContainer } from 'new-nomis-shared-components'
 import Dashboard from './Dashboard/index'
 import ErrorComponent from './Error/index'
 import SearchContainer from './Search/SearchContainer'
-import EstablishmentRollContainer from './EstablishmentRoll/EstablishmentRollContainer'
 import Terms from './Footer/terms-and-conditions'
 import './App.scss'
 import ScrollToTop from './Components/ScrollToTop'
@@ -325,17 +324,6 @@ class App extends React.Component {
             )}
           />
           <Route exact path="/dashboard" render={() => <Dashboard />} />
-          <Route
-            exact
-            path={routePaths.establishmentRoll}
-            render={() => (
-              <EstablishmentRollContainer
-                handleError={this.handleError}
-                setLoadedDispatch={setLoadedDispatch}
-                resetErrorDispatch={resetErrorDispatch}
-              />
-            )}
-          />
 
           <Route
             exact

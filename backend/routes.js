@@ -34,6 +34,7 @@ const attendanceChangeRouter = require('./routes/attendanceChangesRouter')
 const covidRouter = require('./routes/covidRouter')
 const prisonerSearchRouter = require('./routes/prisonerSearchRouter')
 const cellMoveRouter = require('./routes/cellMoveRouter')
+const establishmentRollRouter = require('./routes/establishmentRollRouter')
 
 const videolinkPrisonerSearchController = require('./controllers/videolink/search/videolinkPrisonerSearch')
 const amendCaseNNoteRouter = require('./routes/caseNoteAmendmentRouter')
@@ -191,6 +192,8 @@ const setup = ({
   )
 
   router.use('/prisoner/:offenderNo/cell-move', cellMoveRouter({ oauthApi, elite2Api, whereaboutsApi, logError }))
+
+  router.use('/establishment-roll', establishmentRollRouter({ elite2Api, logError }))
 
   router.use(
     '/prisoner/:offenderNo',
