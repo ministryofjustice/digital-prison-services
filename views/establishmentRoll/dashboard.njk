@@ -28,22 +28,22 @@
           <div class="govuk-grid-row">
             <div class="govuk-grid-column-one-third">
                 <p class="govuk-body">Unlock roll</p>
-                <span class="govuk-body govuk-!-font-size-36 govuk-!-font-weight-bold" data-test="unlock-roll">{{todayStats.unlockRoll}}</span>
+                <span class="govuk-body govuk-!-font-size-36 govuk-!-font-weight-bold block-figure__value" data-test="unlock-roll">{{todayStats.unlockRoll}}</span>
             </div>
             <div class="govuk-grid-column-one-third with-separator">
                 <p class="govuk-body">In today</p>
                 {% if todayStats.inToday > 0 %}
-                  <a class="govuk-link govuk-!-font-size-36 govuk-!-font-weight-bold" data-test="in-today" href="/establishment-roll/in-today">{{todayStats.inToday}}</a>
+                  <a class="govuk-link govuk-!-font-size-36 govuk-!-font-weight-bold block-figure__value" data-test="in-today" href="/establishment-roll/in-today">{{todayStats.inToday}}</a>
                 {% else %}
-                  <span class="govuk-body govuk-!-font-size-36 govuk-!-font-weight-bold" data-test="in-today">{{todayStats.inToday}}</span>
+                  <span class="govuk-body govuk-!-font-size-36 govuk-!-font-weight-bold block-figure__value" data-test="in-today">{{todayStats.inToday}}</span>
                 {% endif %}
             </div>
             <div class="govuk-grid-column-one-third with-separator">
                 <p class="govuk-body">Out today</p>
                 {% if todayStats.outToday > 0 %}
-                  <a class="govuk-link govuk-!-font-size-36 govuk-!-font-weight-bold" data-test="out-today" href="/establishment-roll/out-today">{{todayStats.outToday}}</a>
+                  <a class="govuk-link govuk-!-font-size-36 govuk-!-font-weight-bold block-figure__value" data-test="out-today" href="/establishment-roll/out-today">{{todayStats.outToday}}</a>
                 {% else %}
-                  <span class="govuk-body govuk-!-font-size-36 govuk-!-font-weight-bold" data-test="out-today">{{todayStats.outToday}}</span>
+                  <span class="govuk-body govuk-!-font-size-36 govuk-!-font-weight-bold block-figure__value" data-test="out-today">{{todayStats.outToday}}</span>
                 {% endif %}
             </div>
           </div>
@@ -52,22 +52,22 @@
           <div class="govuk-grid-row">
             <div class="govuk-grid-column-one-third with-separator">
                 <p class="govuk-body">Current roll</p>
-                <span class="govuk-body govuk-!-font-size-36 govuk-!-font-weight-bold" data-test="current-roll">{{todayStats.currentRoll}}</span>
+                <span class="govuk-body govuk-!-font-size-36 govuk-!-font-weight-bold block-figure__value" data-test="current-roll">{{todayStats.currentRoll}}</span>
             </div>
             <div class="govuk-grid-column-one-third with-separator">
                 <p class="govuk-body">In reception</p>
                 {% if todayStats.unassignedIn > 0 %}
-                  <a class="govuk-link govuk-!-font-size-36 govuk-!-font-weight-bold" data-test="unassigned-in" href="/establishment-roll/in-reception">{{todayStats.unassignedIn}}</a>
+                  <a class="govuk-link govuk-!-font-size-36 govuk-!-font-weight-bold block-figure__value" data-test="unassigned-in" href="/establishment-roll/in-reception">{{todayStats.unassignedIn}}</a>
                 {% else %}
-                  <span class="govuk-body govuk-!-font-size-36 govuk-!-font-weight-bold" data-test="unassigned-in">{{todayStats.unassignedIn}}</span>
+                  <span class="govuk-body govuk-!-font-size-36 govuk-!-font-weight-bold block-figure__value" data-test="unassigned-in">{{todayStats.unassignedIn}}</span>
                 {% endif %}
             </div>
             <div class="govuk-grid-column-one-third with-separator">
                 <p class="govuk-body">En-route</p>
                 {% if todayStats.enRoute > 0 %}
-                  <a class="govuk-link govuk-!-font-size-36 govuk-!-font-weight-bold" data-test="enroute" href="/establishment-roll/en-route">{{todayStats.enroute}}</a>
+                  <a class="govuk-link govuk-!-font-size-36 govuk-!-font-weight-bold block-figure__value" data-test="enroute" href="/establishment-roll/en-route">{{todayStats.enroute}}</a>
                 {% else %}
-                  <span class="govuk-body govuk-!-font-size-36 govuk-!-font-weight-bold" data-test="enroute">{{todayStats.enroute}}</span>
+                  <span class="govuk-body govuk-!-font-size-36 govuk-!-font-weight-bold block-figure__value" data-test="enroute">{{todayStats.enroute}}</span>
                 {% endif %}
             </div>
           </div>
@@ -83,18 +83,18 @@
             <div class="govuk-grid-row">
               <div class="govuk-grid-column-one-third">
                   <p class="govuk-body">Beds in use</p>
-                  <span class="govuk-body govuk-!-font-size-36 govuk-!-font-weight-bold" data-test="block-beds-in-use">{{ block.stats.bedsInUse }}</span>
+                  <span class="govuk-body govuk-!-font-size-36 govuk-!-font-weight-bold block-figure__value" data-test="block-beds-in-use">{{ block.stats.bedsInUse }}</span>
               </div>
               <div class="govuk-grid-column-one-third with-separator">
                   <p class="govuk-body">Currently in cell</p>
-                  <span class="govuk-body govuk-!-font-size-36 govuk-!-font-weight-bold" data-test="block-in-cell">{{ block.stats.inCell }}</span>
+                  <span class="govuk-body govuk-!-font-size-36 govuk-!-font-weight-bold block-figure__value" data-test="block-in-cell">{{ block.stats.inCell }}</span>
               </div>
               <div class="govuk-grid-column-one-third with-separator">
                   <p class="govuk-body">Currently out</p>
                   {% if block.stats.out > 0 %}
-                    <a class="govuk-link govuk-!-font-size-36 govuk-!-font-weight-bold" data-test="block-out" href={{ "/establishment-roll/" + block.livingUnitId + "/currently-out" }}>{{ block.stats.out }}</a>
+                    <a class="govuk-link govuk-!-font-size-36 govuk-!-font-weight-bold block-figure__value" data-test="block-out" href={{ "/establishment-roll/" + block.livingUnitId + "/currently-out" }}>{{ block.stats.out }}</a>
                   {% else %}
-                    <span class="govuk-body govuk-!-font-size-36 govuk-!-font-weight-bold" data-test="block-out">{{ block.stats.out }}</span>
+                    <span class="govuk-body govuk-!-font-size-36 govuk-!-font-weight-bold block-figure__value" data-test="block-out">{{ block.stats.out }}</span>
                   {% endif %}
               </div>
             </div>
@@ -103,15 +103,15 @@
             <div class="govuk-grid-row">
               <div class="govuk-grid-column-one-third with-separator">
                   <p class="govuk-body">Operational cap.</p>
-                  <span class="govuk-body govuk-!-font-size-36 govuk-!-font-weight-bold" data-test="block-op-cap">{{ block.stats.operationalCapacity }}</span>
+                  <span class="govuk-body govuk-!-font-size-36 govuk-!-font-weight-bold block-figure__value" data-test="block-op-cap">{{ block.stats.operationalCapacity }}</span>
               </div>
               <div class="govuk-grid-column-one-third with-separator">
                   <p class="govuk-body">Net vacancies</p>
-                  <span class="govuk-body govuk-!-font-size-36 govuk-!-font-weight-bold" data-test="block-vacancies">{{ block.stats.netVacancies }}</span>
+                  <span class="govuk-body govuk-!-font-size-36 govuk-!-font-weight-bold block-figure__value" data-test="block-vacancies">{{ block.stats.netVacancies }}</span>
               </div>
               <div class="govuk-grid-column-one-third with-separator">
                   <p class="govuk-body">Out of order</p>
-                  <span class="govuk-body govuk-!-font-size-36 govuk-!-font-weight-bold" data-test="block-out-of-order">{{ block.stats.outOfOrder }}</span>
+                  <span class="govuk-body govuk-!-font-size-36 govuk-!-font-weight-bold block-figure__value" data-test="block-out-of-order">{{ block.stats.outOfOrder }}</span>
               </div>
             </div>
           </div>
@@ -130,18 +130,18 @@
           <div class="govuk-grid-row">
             <div class="govuk-grid-column-one-third">
                 <p class="govuk-body">Total roll</p>
-                <span class="govuk-body govuk-!-font-size-36 govuk-!-font-weight-bold" data-test="total-roll">{{totalsStats.roll}}</span>
+                <span class="govuk-body govuk-!-font-size-36 govuk-!-font-weight-bold block-figure__value" data-test="total-roll">{{totalsStats.roll}}</span>
             </div>
             <div class="govuk-grid-column-one-third with-separator">
                 <p class="govuk-body">Total in cell</p>
-                <span class="govuk-body govuk-!-font-size-36 govuk-!-font-weight-bold" data-test="total-in-cell">{{totalsStats.inCell}}</span>
+                <span class="govuk-body govuk-!-font-size-36 govuk-!-font-weight-bold block-figure__value" data-test="total-in-cell">{{totalsStats.inCell}}</span>
             </div>
             <div class="govuk-grid-column-one-third with-separator">
                 <p class="govuk-body">Total out</p>
                 {% if totalsStats.out > 0 %}
-                  <a class="govuk-link govuk-!-font-size-36 govuk-!-font-weight-bold" data-test="total-out" href="/establishment-roll/total-currently-out">{{totalsStats.out}}</a>
+                  <a class="govuk-link govuk-!-font-size-36 govuk-!-font-weight-bold block-figure__value" data-test="total-out" href="/establishment-roll/total-currently-out">{{totalsStats.out}}</a>
                 {% else %}
-                <span class="govuk-body govuk-!-font-size-36 govuk-!-font-weight-bold" data-test="total-out">{{totalsStats.out}}</span>
+                <span class="govuk-body govuk-!-font-size-36 govuk-!-font-weight-bold block-figure__value" data-test="total-out">{{totalsStats.out}}</span>
                 {% endif %}
             </div>
           </div>
@@ -150,15 +150,15 @@
           <div class="govuk-grid-row">
             <div class="govuk-grid-column-one-third with-separator">
                 <p class="govuk-body">Total op. cap.</p>
-                <span class="govuk-body govuk-!-font-size-36 govuk-!-font-weight-bold" data-test="total-op-cap">{{totalsStats.operationalCapacity}}</span>
+                <span class="govuk-body govuk-!-font-size-36 govuk-!-font-weight-bold block-figure__value" data-test="total-op-cap">{{totalsStats.operationalCapacity}}</span>
             </div>
             <div class="govuk-grid-column-one-third with-separator">
                 <p class="govuk-body">Total vacancies</p>
-                <span class="govuk-body govuk-!-font-size-36 govuk-!-font-weight-bold" data-test="total-vacancies">{{totalsStats.vacancies}}</span>
+                <span class="govuk-body govuk-!-font-size-36 govuk-!-font-weight-bold block-figure__value" data-test="total-vacancies">{{totalsStats.vacancies}}</span>
             </div>
             <div class="govuk-grid-column-one-third with-separator">
                 <p class="govuk-body">Total out of order</p>
-                <span class="govuk-body govuk-!-font-size-36 govuk-!-font-weight-bold" data-test="total-out-of-order">{{totalsStats.outOfOrder}}</span>
+                <span class="govuk-body govuk-!-font-size-36 govuk-!-font-weight-bold block-figure__value" data-test="total-out-of-order">{{totalsStats.outOfOrder}}</span>
             </div>
           </div>
         </div>
