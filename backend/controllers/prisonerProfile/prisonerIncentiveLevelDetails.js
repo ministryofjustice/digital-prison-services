@@ -102,7 +102,6 @@ module.exports = ({ elite2Api, logError }) => async (req, res) => {
         value: level,
       })),
       nextReviewDate,
-      // offenderAgencyId: prisonerDetails.agencyId,
       prisonerName: formatName(firstName, lastName),
       profileUrl: `/prisoner/${offenderNo}`,
       results: filteredResults,
