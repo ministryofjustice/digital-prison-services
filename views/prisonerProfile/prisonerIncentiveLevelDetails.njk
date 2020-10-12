@@ -52,14 +52,16 @@
       <h3 class="govuk-heading-s govuk-!-margin-bottom-1">Date of next review</h3>
       <p class="govuk-body" data-test="incident-reported-by">{{ nextReviewDate }}</p>
     </div>
-    <div class="horizontal-information__item">
-      {{ govukButton({
-        text: "Change incentive level",
-        element: "a",
-        classes: "govuk-button--link",
-        href: "/offenders/" + prisonerProfileData.offenderNo + "/incentive-level-details/change-incentive-level"
-      }) }}
-    </div>
+    {% if userCanUpdateIEP %}
+      <div class="horizontal-information__item">
+        {{ govukButton({
+          text: "Change incentive level",
+          element: "a",
+          classes: "govuk-button--link",
+          href: "/offenders/" + prisonerProfileData.offenderNo + "/incentive-level-details/change-incentive-level"
+        }) }}
+      </div>
+    {% endif %}
   </div>
 
   <div class="govuk-!-padding-3 govuk-!-margin-bottom-5 form-background">

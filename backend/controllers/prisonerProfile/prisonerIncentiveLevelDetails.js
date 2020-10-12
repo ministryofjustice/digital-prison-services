@@ -28,7 +28,7 @@ const filterData = (data, fields) => {
   return filteredResults
 }
 
-module.exports = ({ elite2Api, logError }) => async (req, res) => {
+module.exports = ({ elite2Api, oauthApi, logError }) => async (req, res) => {
   const { offenderNo } = req.params
   const { agencyId, incentiveLevel, fromDate, toDate } = req.query
 
@@ -37,7 +37,10 @@ module.exports = ({ elite2Api, logError }) => async (req, res) => {
 
   try {
     const errors = []
-    const prisonerDetails = await elite2Api.getDetails(res.locals, offenderNo)
+    const [prisonerDetails, userRoles] = await Promise.all([
+      elite2Api.getDetails(res.locals, offenderNo),
+      oauthApi.userRoles(res.locals),
+    ])
     const { bookingId, firstName, lastName } = prisonerDetails
 
     const iepSummary = await elite2Api.getIepSummaryForBooking(res.locals, bookingId, true)
@@ -85,6 +88,10 @@ module.exports = ({ elite2Api, logError }) => async (req, res) => {
       toDate: toDate && toDateFormatted.format('YYYY-MM-DD'),
     })
 
+    const prisonerWithinCaseloads = res.locals.user.allCaseloads.find(cl => cl.caseLoadId === prisonerDetails.agencyId)
+
+    const userCanMaintainIEP = userRoles.find(role => role.roleCode === 'MAINTAIN_IEP')
+
     return res.render('prisonerProfile/prisonerIncentiveLevelDetails.njk', {
       breadcrumbPrisonerName: putLastNameFirst(firstName, lastName),
       currentIepDateTime: iepSummary.iepTime,
@@ -105,6 +112,7 @@ module.exports = ({ elite2Api, logError }) => async (req, res) => {
       prisonerName: formatName(firstName, lastName),
       profileUrl: `/prisoner/${offenderNo}`,
       results: filteredResults,
+      userCanUpdateIEP: Boolean(prisonerWithinCaseloads && userCanMaintainIEP),
     })
   } catch (error) {
     logError(req.originalUrl, error, serviceUnavailableMessage)

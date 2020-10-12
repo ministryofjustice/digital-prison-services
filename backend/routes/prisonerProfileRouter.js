@@ -91,7 +91,7 @@ const controller = ({
     })
   )
 
-  router.get('/incentive-level-details', prisonerIncentiveLevelDetails({ elite2Api, logError }))
+  router.get('/incentive-level-details', prisonerIncentiveLevelDetails({ elite2Api, oauthApi, logError }))
 
   return router
 }

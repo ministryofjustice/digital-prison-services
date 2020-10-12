@@ -4,6 +4,7 @@ describe('Prisoner incentive level details', () => {
   const offenderNo = 'ABC123'
   const bookingId = '123'
   const elite2Api = {}
+  const oauthApi = {}
 
   let req
   let res
@@ -16,11 +17,13 @@ describe('Prisoner incentive level details', () => {
       params: { offenderNo },
       query: {},
     }
-    res = { locals: {}, render: jest.fn() }
+    res = { locals: { user: { allCaseloads: [] } }, render: jest.fn() }
 
     logError = jest.fn()
 
-    elite2Api.getDetails = jest.fn().mockResolvedValue({ bookingId, firstName: 'John', lastName: 'Smith' })
+    elite2Api.getDetails = jest
+      .fn()
+      .mockResolvedValue({ agencyId: 'MDI', bookingId, firstName: 'John', lastName: 'Smith' })
     elite2Api.getIepSummaryForBooking = jest.fn().mockReturnValue({
       bookingId: -1,
       iepDate: '2017-08-15',
@@ -70,7 +73,9 @@ describe('Prisoner incentive level details', () => {
       lastName: 'Member',
     })
 
-    controller = prisonerIncentiveLevelDetails({ elite2Api, logError })
+    oauthApi.userRoles = jest.fn().mockReturnValue([])
+
+    controller = prisonerIncentiveLevelDetails({ elite2Api, oauthApi, logError })
   })
 
   it('should make the expected API calls', async () => {
@@ -78,6 +83,7 @@ describe('Prisoner incentive level details', () => {
 
     expect(elite2Api.getDetails).toHaveBeenCalledWith(res.locals, offenderNo)
     expect(elite2Api.getIepSummaryForBooking).toHaveBeenCalledWith(res.locals, bookingId, true)
+    expect(oauthApi.userRoles).toHaveBeenCalledWith(res.locals)
   })
 
   it('Should render the correct template with the correct data', async () => {
@@ -144,7 +150,47 @@ describe('Prisoner incentive level details', () => {
           userId: 'ITAG_USER',
         },
       ],
+      userCanUpdateIEP: false,
     })
+  })
+
+  it('should allow user to update iep if user is in case load and has correct role', async () => {
+    oauthApi.userRoles.mockReturnValue([{ roleCode: 'GLOBAL_SEARCH' }, { roleCode: 'MAINTAIN_IEP' }])
+    res.locals.user.allCaseloads = [{ caseLoadId: 'MDI', description: 'Moorland' }]
+    await controller(req, res)
+
+    expect(res.render).toHaveBeenCalledWith(
+      'prisonerProfile/prisonerIncentiveLevelDetails.njk',
+      expect.objectContaining({
+        userCanUpdateIEP: true,
+      })
+    )
+  })
+
+  it('should NOT allow user to update iep if user is NOT in case load but has correct role', async () => {
+    oauthApi.userRoles.mockReturnValue([{ roleCode: 'GLOBAL_SEARCH' }, { roleCode: 'MAINTAIN_IEP' }])
+    res.locals.user.allCaseloads = [{ caseLoadId: 'LEI', description: 'Leeds' }]
+    await controller(req, res)
+
+    expect(res.render).toHaveBeenCalledWith(
+      'prisonerProfile/prisonerIncentiveLevelDetails.njk',
+      expect.objectContaining({
+        userCanUpdateIEP: false,
+      })
+    )
+  })
+
+  it('should NOT allow user to update iep if user is in case load but does NOT have correct role', async () => {
+    oauthApi.userRoles.mockReturnValue([{ roleCode: 'GLOBAL_SEARCH' }])
+    res.locals.user.allCaseloads = [{ caseLoadId: 'MDI', description: 'Moorland' }]
+    await controller(req, res)
+
+    expect(res.render).toHaveBeenCalledWith(
+      'prisonerProfile/prisonerIncentiveLevelDetails.njk',
+      expect.objectContaining({
+        userCanUpdateIEP: false,
+      })
+    )
   })
 
   it('Should filter by level', async () => {
