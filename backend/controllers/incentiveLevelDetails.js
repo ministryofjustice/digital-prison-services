@@ -25,6 +25,7 @@ const getIepDetailsFactory = elite2Api => {
     return filteredResults
   }
 
+  // delete
   const getIepDetails = async (context, offenderNo, params) => {
     const bookingDetails = await elite2Api.getDetails(context, offenderNo)
     const iepSummary = await elite2Api.getIepSummaryForBooking(context, bookingDetails.bookingId, true)
@@ -75,6 +76,7 @@ const getIepDetailsFactory = elite2Api => {
     }
   }
 
+  // For change form
   const sortPossibleIepLevelsAlphabetically = levels => levels.sort((a, b) => (a.title > b.title ? 1 : -1))
 
   const getPossibleLevels = async (context, currentIepLevel, agencyId) => {

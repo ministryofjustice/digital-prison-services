@@ -1,0 +1,150 @@
+{% extends "../partials/layout.njk" %}
+
+{% from "govuk/components/error-summary/macro.njk" import govukErrorSummary %}
+{% from "govuk/components/button/macro.njk" import govukButton %}
+{% from "govuk/components/table/macro.njk" import govukTable %}
+{% from "govuk/components/select/macro.njk" import govukSelect %}
+{% from "govuk/components/input/macro.njk" import govukInput %}
+{% from "components/datePicker/datePicker.njk" import datePicker %}
+
+{% set title =  "Incentive details"  %}
+
+{% block beforeContent %}
+  {{ govukBreadcrumbs({
+    items: [
+      {
+        text: "Home",
+        href: dpsUrl
+      },
+      {
+        text: breadcrumbPrisonerName,
+        href: profileUrl
+      },
+      {
+        text: 'Incentive details'
+      }
+    ],
+    classes: 'govuk-!-display-none-print'
+  }) }}
+{% endblock %}
+
+{% block content %}
+  {% if errors.length > 0 %}
+    {{ govukErrorSummary({
+        titleText: "There is a problem",
+        errorList: errors,
+        attributes: { 'data-qa-errors': true }
+    }) }}
+  {% endif %}
+
+  <h1 class="govuk-heading-l">Incentive details for {{ prisonerName }}</h1>
+
+  <div class="horizontal-information govuk-!-margin-bottom-0">
+    <div class="horizontal-information__item">
+      <h3 class="govuk-heading-s govuk-!-margin-bottom-1">Current incentive level</h3>
+      <p class="govuk-body" data-test="incident-time">{{ currentIepLevel }}</p>
+    </div>
+    <div class="horizontal-information__item">
+      <h3 class="govuk-heading-s govuk-!-margin-bottom-1">Time since review</h3>
+      <p class="govuk-body" data-test="incident-location">{{ daysOnIepLevel }}</p>
+    </div>
+    <div class="horizontal-information__item">
+      <h3 class="govuk-heading-s govuk-!-margin-bottom-1">Date of next review</h3>
+      <p class="govuk-body" data-test="incident-reported-by">{{ nextReviewDate }}</p>
+    </div>
+    <div class="horizontal-information__item">
+      {{ govukButton({
+        text: "Change incentive level",
+        element: "a",
+        classes: "govuk-button--link",
+        href: "/offenders/" + prisonerProfileData.offenderNo + "/incentive-level-details/change-incentive-level"
+      }) }}
+    </div>
+  </div>
+
+  <div class="govuk-!-padding-3 govuk-!-margin-bottom-5 form-background">
+    <h2 class="govuk-heading-m">View by</h2>
+    <form class="horizontal-form govuk-body govuk-!-margin-bottom-3" method="GET">
+      {{ govukSelect({
+        name: 'agencyId',
+        id: 'agencyId',
+        label: {
+            text: 'Establisment'
+        },
+        items: establishments | addDefaultSelectedVale('All', true) | setSelected(formValues.agencyId)
+      }) }}
+
+      {{ govukSelect({
+        name: 'incentiveLevel',
+        id: 'incentiveLevel',
+        label: {
+            text: 'Incentive level'
+        },
+        items: levels  | addDefaultSelectedVale('All', true) | setSelected(formValues.incentiveLevel)
+      }) }}
+
+
+      {{ datePicker({
+        id: 'fromDate',
+        label: 'Date from',
+        name: 'fromDate',
+        date: formValues.fromDate,
+        errorMessage: errors | findError('fromDate')
+      }) }}
+
+      {{ datePicker({
+        id: 'toDate',
+        label: 'Date to',
+        name: 'toDate',
+        date: formValues.toDate,
+        errorMessage: errors | findError('toDate')
+      }) }}
+
+      {{ govukButton({
+        text: "Apply",
+        preventDoubleClick: true,
+        type: "submit"
+      }) }}
+
+      <a href="./incentive-level-details" class="govuk-link govuk-link--no-visited-state">Clear</a>
+    </form>
+    </div>
+
+  {% set resultsRows = [] %}
+
+  {% for result in results %}
+    {% set resultsRows = (resultsRows.push([
+      { text: result.formattedTime },
+      { text: result.iepLevel },
+      { text: result.comments | showDefault('Not entered') },
+      { text: result.iepEstablishment },
+      { text: result.iepStaffMember | showDefault('Not entered') }
+    ]), resultsRows) %}
+  {% endfor %}
+
+  {{ govukTable({
+      caption: "Incentive level history",
+      head: [
+        {
+          text: "Date and time"
+        },
+        {
+          text: "Incentive level"
+        },
+        {
+          text: "Reason"
+        },
+        {
+          text: "Establishment"
+        },
+        {
+          text: "Staff member"
+        }
+      ],
+      rows: resultsRows,
+      attributes: {
+        "data-test": 'hearing-results'
+      }
+    }) }}
+
+{% endblock %}
