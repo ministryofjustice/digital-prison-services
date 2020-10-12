@@ -98,8 +98,8 @@ context('A user can view list of appointments', () => {
 
     cy.task('stubUser', 'username1', 'MDI')
     cy.task('stubUser', 'COURT_USER')
-    cy.task('stubStaff', 'STAFF_1', { fistName: 'Staff', lastName: 'One' })
-    cy.task('stubStaff', 'STAFF_2', { fistName: 'Staff', lastName: 'Two' })
+    cy.task('stubStaff', { staffId: 'STAFF_1', details: { firstName: 'Staff', lastName: 'One' } })
+    cy.task('stubStaff', { staffId: 'STAFF_2', details: { firstName: 'Staff', lastName: 'Two' } })
   })
 
   it('A user can see appointments for the date and period', () => {

@@ -58,7 +58,8 @@
           text: "Change incentive level",
           element: "a",
           classes: "govuk-button--link",
-          href: "/offenders/" + prisonerProfileData.offenderNo + "/incentive-level-details/change-incentive-level"
+          href: "/offenders/" + prisonerProfileData.offenderNo + "/incentive-level-details/change-incentive-level",
+          attributes: { "data-test": "change-incentive-level-link" }
         }) }}
       </div>
     {% endif %}
@@ -73,7 +74,10 @@
         label: {
             text: 'Establisment'
         },
-        items: establishments | addDefaultSelectedVale('All', true) | setSelected(formValues.agencyId)
+        items: establishments | addDefaultSelectedVale('All', true) | setSelected(formValues.agencyId),
+        attributes: {
+          "data-test": 'establishment-select'
+        }
       }) }}
 
       {{ govukSelect({
@@ -82,7 +86,10 @@
         label: {
             text: 'Incentive level'
         },
-        items: levels  | addDefaultSelectedVale('All', true) | setSelected(formValues.incentiveLevel)
+        items: levels  | addDefaultSelectedVale('All', true) | setSelected(formValues.incentiveLevel),
+        attributes: {
+          "data-test": 'incentive-level-select'
+        }
       }) }}
 
 
@@ -105,7 +112,10 @@
       {{ govukButton({
         text: "Apply",
         preventDoubleClick: true,
-        type: "submit"
+        type: "submit",
+        attributes: {
+        "data-test": 'filter-submit'
+      }
       }) }}
 
       <a href="./incentive-level-details" class="govuk-link govuk-link--no-visited-state">Clear</a>
@@ -145,7 +155,7 @@
       ],
       rows: resultsRows,
       attributes: {
-        "data-test": 'hearing-results'
+        "data-test": 'incentive-level-history'
       }
     }) }}
 
