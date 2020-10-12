@@ -56,7 +56,7 @@ const logout = () =>
   stubFor({
     request: {
       method: 'GET',
-      url: '/auth/logout',
+      urlPath: '/auth/logout',
     },
     response: {
       status: 200,
