@@ -61,7 +61,7 @@ context('A user can see the data in the dashbaord', () => {
     })
   })
 
-  it('should page with the correct offender name and cell description', () => {
+  it('should load the page with the correct data', () => {
     cy.visit('/establishment-roll')
     cy.get('.block-figure__value').then($values => {
       cy.get($values)

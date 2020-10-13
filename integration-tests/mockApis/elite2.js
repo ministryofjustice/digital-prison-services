@@ -434,6 +434,66 @@ module.exports = {
       },
     })
   },
+  stubMovementsIn: ({ agencyId, fromDate, movements }) => {
+    return stubFor({
+      request: {
+        method: 'GET',
+        url: `/api/movements/${agencyId}/in/${fromDate}`,
+      },
+      response: {
+        status: 200,
+        headers: {
+          'Content-Type': 'application/json;charset=UTF-8',
+        },
+        jsonBody: movements || [],
+      },
+    })
+  },
+  stubMovementsOut: ({ agencyId, fromDate, movements }) => {
+    return stubFor({
+      request: {
+        method: 'GET',
+        url: `/api/movements/${agencyId}/out/${encodeURIComponent(fromDate)}`,
+      },
+      response: {
+        status: 200,
+        headers: {
+          'Content-Type': 'application/json;charset=UTF-8',
+        },
+        jsonBody: movements || [],
+      },
+    })
+  },
+  stubCurrentlyOut: (livingUnitId, movements) => {
+    return stubFor({
+      request: {
+        method: 'GET',
+        url: `/api/movements/livingUnit/${livingUnitId}/currently-out`,
+      },
+      response: {
+        status: 200,
+        headers: {
+          'Content-Type': 'application/json;charset=UTF-8',
+        },
+        jsonBody: movements || [],
+      },
+    })
+  },
+  stubTotalCurrentlyOut: (agencyId, movements) => {
+    return stubFor({
+      request: {
+        method: 'GET',
+        url: `/api/movements/agency/${agencyId}/currently-out`,
+      },
+      response: {
+        status: 200,
+        headers: {
+          'Content-Type': 'application/json;charset=UTF-8',
+        },
+        jsonBody: movements || [],
+      },
+    })
+  },
   stubOffenderImage: () => {
     return stubFor({
       request: {
@@ -1557,6 +1617,20 @@ module.exports = {
         jsonBody: movements || {},
       },
     }),
+  stubEnRoute: (agencyId, movements) =>
+    stubFor({
+      request: {
+        method: 'GET',
+        url: `/api/movements/${agencyId}/enroute`,
+      },
+      response: {
+        status: 200,
+        headers: {
+          'Content-Type': 'application/json;charset=UTF-8',
+        },
+        jsonBody: movements || {},
+      },
+    }),
   stubGetEventsByLocationIds: (agencyId, date, timeSlot, response) =>
     stubFor({
       request: {
@@ -1629,4 +1703,18 @@ module.exports = {
       },
     }),
   resetAdjudicationsStub: () => resetStub({ requestUrl: '/api/offenders/A12345/adjudications', method: 'GET' }),
+  stubSystemAlerts: alerts =>
+    stubFor({
+      request: {
+        method: 'POST',
+        url: '/api/bookings/offenderNo/alerts',
+      },
+      response: {
+        status: 200,
+        headers: {
+          'Content-Type': 'application/json;charset=UTF-8',
+        },
+        jsonBody: alerts || [],
+      },
+    }),
 }

@@ -386,5 +386,15 @@ module.exports = on => {
     stubDocuments: ({ offenderNo, documents }) => community.stubDocuments(offenderNo, documents),
     stubDocument: ({ offenderNo, documentId, content }) => community.stubDocument(offenderNo, documentId, content),
     stubIepSummaryForBooking: iepSummary => elite2api.stubIepSummaryForBooking(iepSummary),
+    stubMovementsIn: ({ agencyId, fromDate, movements }) =>
+      elite2api.stubMovementsIn({ agencyId, fromDate, movements }),
+    stubMovementsOut: ({ agencyId, fromDate, movements }) =>
+      elite2api.stubMovementsOut({ agencyId, fromDate, movements }),
+    stubIepSummaryForBookingIds: elite2api.stubIepSummaryForBookingIds,
+    stubSystemAlerts: elite2api.stubSystemAlerts,
+    stubInReception: ({ agencyId, results }) => elite2api.stubRollcountByType(agencyId, 'in-reception', results),
+    stubEnRoute: ({ agencyId, results }) => elite2api.stubEnRoute(agencyId, results),
+    stubCurrentlyOut: ({ livingUnitId, movements }) => elite2api.stubCurrentlyOut(livingUnitId, movements),
+    stubTotalCurrentlyOut: ({ agencyId, movements }) => elite2api.stubTotalCurrentlyOut(agencyId, movements),
   })
 }
