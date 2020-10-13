@@ -109,6 +109,7 @@ module.exports = ({ elite2Api, oauthApi, logError }) => async (req, res) => {
         value: level,
       })),
       nextReviewDate,
+      offenderNo,
       prisonerName: formatName(firstName, lastName),
       profileUrl: `/prisoner/${offenderNo}`,
       results: filteredResults,
