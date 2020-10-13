@@ -14,6 +14,7 @@ const prisonerCellHistory = require('../controllers/prisonerProfile/prisonerCell
 const prisonerLocationHistory = require('../controllers/prisonerProfile/prisonerLocationHistory')
 const prisonerAdjudicationDetails = require('../controllers/prisonerProfile/prisonerAdjudicationDetails')
 const adjudicationsController = require('../controllers/prisonerProfile/adjudicationHistory')
+const prisonerIncentiveLevelDetails = require('../controllers/prisonerProfile/prisonerIncentiveLevelDetails')
 
 const prisonerProfileServiceFactory = require('../services/prisonerProfileService')
 const personServiceFactory = require('../services/personService')
@@ -89,6 +90,8 @@ const controller = ({
       logError,
     })
   )
+
+  router.get('/incentive-level-details', prisonerIncentiveLevelDetails({ elite2Api, oauthApi, logError }))
 
   return router
 }

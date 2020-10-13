@@ -68,7 +68,7 @@ module.exports = on => {
 
     stubUserEmail: username => Promise.all([auth.stubEmail(username)]),
     stubUser: (username, caseload) => Promise.all([auth.stubUser(username, caseload)]),
-    stubStaff: (staffId, details) => Promise.all([elite2api.stubStaff(staffId, details)]),
+    stubStaff: ({ staffId, details }) => Promise.all([elite2api.stubStaff(staffId, details)]),
     stubScheduledActivities: response => Promise.all([elite2api.stubUserScheduledActivities(response)]),
     stubProgEventsAtLocation: ({ caseload, locationId, timeSlot, date, activities }) =>
       Promise.all([elite2api.stubProgEventsAtLocation(caseload, locationId, timeSlot, date, activities)]),
@@ -385,5 +385,6 @@ module.exports = on => {
     stubOffenderDetails: ({ offenderNo, details }) => community.stubOffenderDetails(offenderNo, details),
     stubDocuments: ({ offenderNo, documents }) => community.stubDocuments(offenderNo, documents),
     stubDocument: ({ offenderNo, documentId, content }) => community.stubDocument(offenderNo, documentId, content),
+    stubIepSummaryForBooking: iepSummary => elite2api.stubIepSummaryForBooking(iepSummary),
   })
 }
