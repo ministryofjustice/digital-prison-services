@@ -1,8 +1,6 @@
 export default {
   establishmentRoll: '/establishment-roll',
   inToday: '/establishment-roll/in-today',
-  iepHistory: '/offenders/:offenderNo/iep-details',
-  incentiveLevelDetails: '/offenders/:offenderNo/incentive-level-details',
   incentiveLevelChange: '/offenders/:offenderNo/incentive-level-details/change-incentive-level',
   outToday: '/establishment-roll/out-today',
   inReception: '/establishment-roll/in-reception',
