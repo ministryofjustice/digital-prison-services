@@ -84,7 +84,11 @@ context('Prisoner adjudication details', () => {
       cy.visit(`/prisoner/${offenderNo}/incentive-level-details`)
 
       cy.get('h1').should('contain', 'Incentive details for John Smith')
-      cy.get('[data-test="change-incentive-level-link"]').should('be.visible')
+      cy.get('[data-test="change-incentive-level-link"]')
+        .invoke('attr', 'href')
+        .then(href => {
+          expect(href).to.equal('/offenders/A1234A/incentive-level-details/change-incentive-level')
+        })
     })
 
     it('should not show change incentive level link if user does not have correct role', () => {
