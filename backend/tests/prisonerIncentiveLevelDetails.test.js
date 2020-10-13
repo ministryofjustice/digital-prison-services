@@ -113,6 +113,7 @@ describe('Prisoner incentive level details', () => {
           value: 'Standard',
         },
       ],
+      offenderNo,
       prisonerName: 'John Smith',
       profileUrl: '/prisoner/ABC123',
       results: [
