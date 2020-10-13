@@ -73,41 +73,6 @@ Just on the command line (any console log outputs will not be visible, they appe
 npm run int-test
 ```
 
-## Groovy integration tests
-
-The `prisonstaffhub-specs` directory contains a set of Groovy integration tests for the `prisonstaffhub` application.
-These tests are written in the Groovy programming language using a test framework called Spock. The tests drive
-the UI using 'Geb', a Groovy wrapper for Selenium Webdriver, and use WireMock to stub the application's dependencies
-on the elite2 and keyworker-service RESTful APIs.
-
-### Running the Groovy tests
-
-The tests may be run from an IDE such as IntelliJ IDEA or from the Gradle build.
-The tests may be configured to drive a range of web-browsers including Chrome headless and PhantomJS.
-Currently the tests use Chrome and / or Chrome headless.
-To drive the tests through Chrome you must install Chrome (obviously) and a Selenium Webdriver adapter called ChromeDriver.
-ChromeDriver is a standalone server which implements WebDriver's wire protocol for
-Chromium. Download the latest version of ChromeDriver from here:
-https://sites.google.com/a/chromium.org/chromedriver/downloads and follow the installation instructions here:
-https://sites.google.com/a/chromium.org/chromedriver/getting-started
-
-### Starting feature tests node instance
-
-A separate node instance needs to be started for the feature tests. This will run on port 3006 and won't conflict
-with any of the api services, e.g. elite2-api or oauth.
-
-```npm run start-feature --env=feature.env```
-
-**To run the tests using Gradle:**
-Ensure that chromedriver is on your path. Run `./gradlew build` from the root of this project.
-The Gradle build will produce report(s) at `prisonstaffhub-specs/reports/tests`
-
-**To run the tests from IntelliJ IDEA:**
-Ensure that `build.gradle` is linked to the IDE project (See here: https://www.jetbrains.com/help/idea/gradle.html)
-and that `chromedriver` is on the PATH. Open a Spock Specification
-(`uk.gov.justice.digital.hmpps.prisonstaffhub.specs.LoginSpecification` for example). The gutter should
-now display 'run' icons for the class and each of its tests methods.
-
 ### Useful links
 
 - Spock: http://spockframework.org/
