@@ -21,7 +21,6 @@ import MovementsInContainer from './MovementsIn/MovementsInContainer'
 import MovementsOutContainer from './MovementsOut/MovementsOutContainer'
 import InReceptionContainer from './InReception/InReceptionContainer'
 import CurrentlyOutContainer, { fetchAgencyData, fetchLivingUnitData } from './CurrentlyOut/CurrentlyOutContainer'
-import IncentiveLevelDetailsContainer from './IncentiveLevelDetails/IncentiveLevelDetailsContainer'
 import IncentiveLevelChangeContainer from './IncentiveLevelDetails/IncentiveLevelChangeContainer'
 import EnRouteContainer from './EnRoute/EnRouteContainer'
 
@@ -386,20 +385,6 @@ class App extends React.Component {
               <EnRouteContainer
                 handleError={this.handleError}
                 raiseAnalyticsEvent={this.raiseAnalyticsEvent}
-                history={history}
-              />
-            )}
-          />
-
-          <Route
-            exact
-            path={[routePaths.iepHistory, routePaths.incentiveLevelDetails]}
-            render={({ history, match: { params } }) => (
-              <IncentiveLevelDetailsContainer
-                offenderNo={params.offenderNo}
-                handleError={this.handleError}
-                setLoadedDispatch={setLoadedDispatch}
-                resetErrorDispatch={resetErrorDispatch}
                 history={history}
               />
             )}
