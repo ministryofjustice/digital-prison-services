@@ -89,14 +89,10 @@
         </form>
     </div>
 
-    {% if noRecordsFoundMessage != null and noAdjudicationsSelection == false %}
+    {% if noRecordsFoundMessage != null %}
         <p class="govuk-body" data-qa="no-records-found-message"> {{ noRecordsFoundMessage }} </p>
     {% else %}
         {{ mojPagination(pagination) }}
-
-        {% if noAdjudicationsSelection == true %}
-            <p class="govuk-body" data-qa="no-records-found-message"> {{ noRecordsFoundMessage }} </p>
-        {% endif %}
 
         {{ govukTable({
             head: [
