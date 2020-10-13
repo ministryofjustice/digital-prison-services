@@ -299,6 +299,7 @@ module.exports = on => {
     stubCreateCaseNote: caseNotes.stubCreateCaseNote,
     stubCaseNoteTypesForUser: caseNotes.stubCaseNoteTypesForUser,
     stubGlobalSearch: offenderSearch.stubGlobalSearch,
+    stubPrisonApiGlobalSearch: elite2api.stubPrisonApiGlobalSearch,
     stubGlobalSearchMultiplePages: offenderSearch.stubGlobalSearchMultiplePages,
     stubOffenderImage: elite2api.stubOffenderImage,
     verifyGlobalSearch: offenderSearch.verifyGlobalSearch,

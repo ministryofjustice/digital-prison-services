@@ -1702,6 +1702,20 @@ module.exports = {
         jsonBody: response,
       },
     }),
+  stubPrisonApiGlobalSearch: response =>
+    stubFor({
+      request: {
+        method: 'GET',
+        urlPath: '/api/prisoners',
+      },
+      response: {
+        status: 200,
+        headers: {
+          'Content-Type': 'application/json;charset=UTF-8',
+        },
+        jsonBody: response,
+      },
+    }),
   resetAdjudicationsStub: () => resetStub({ requestUrl: '/api/offenders/A12345/adjudications', method: 'GET' }),
   stubSystemAlerts: alerts =>
     stubFor({
