@@ -1,8 +1,0 @@
-branch-defaults:
-  main:
-    environment: prisonstaffhub-dev
-deploy:
-  artifact: Dockerrun.aws.json
-global:
-  application_name: prisonstaffhub
-  default_region: eu-west-2
