@@ -79,7 +79,7 @@ jobs:
     docker:
       - image: circleci/node:12-buster-browsers
       - image: circleci/redis:buster
-    resource_class: large
+    resource_class: xlarge
     steps:
       - checkout
       - attach_workspace:
