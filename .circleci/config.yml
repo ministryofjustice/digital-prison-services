@@ -38,48 +38,12 @@ jobs:
             - node_modules
             - build
 
-  integration_tests:
-    working_directory: ~/app
-    docker:
-      - image: circleci/node:12-buster-browsers
-    steps:
-      - checkout
-      - attach_workspace:
-          at: ~/app
-      - run:
-          name: Run the node app.
-          command: npm run start-feature --env=feature.env
-          background: true
-      - restore_cache:
-          key: gradle-wrapper-{{ checksum "gradle/wrapper/gradle-wrapper.properties" }}
-      - restore_cache:
-          key: gradle-cache-{{ checksum "prisonstaffhub-specs/build.gradle" }}
-      - run:
-          name: Run Integration Tests
-          command: ./gradlew build
-      - save_cache:
-          key: gradle-wrapper-{{ checksum "gradle/wrapper/gradle-wrapper.properties" }}
-          paths:
-              - /home/circleci/.gradle/wrapper
-      - save_cache:
-          key: gradle-cache-{{ checksum "prisonstaffhub-specs/build.gradle" }}
-          paths:
-              - /home/circleci/.gradle/caches
-      - store_artifacts:
-          path: prisonstaffhub-specs/build/reports
-          destination: integration/spock
-      - store_artifacts:
-          path: prisonstaffhub-specs/build/geb-reports
-          destination: integration/geb
-      - store_test_results:
-          path: prisonstaffhub-specs/build/test-results
-
   cypress_integration_tests:
     working_directory: ~/app
     docker:
       - image: circleci/node:12-buster-browsers
       - image: circleci/redis:buster
-    resource_class: large
+    resource_class: xlarge
     steps:
       - checkout
       - attach_workspace:
@@ -121,9 +85,6 @@ workflows:
           filters:
             tags:
               ignore: /.*/
-      - integration_tests:
-          requires:
-            - build
       - cypress_integration_tests:
           requires:
             - build
@@ -141,7 +102,6 @@ workflows:
           env: "dev"
           requires:
             - build_docker
-            - integration_tests
             - cypress_integration_tests
           filters:
             branches:

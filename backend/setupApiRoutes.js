@@ -18,7 +18,6 @@ const activityListFactory = require('./controllers/attendance/activityList').get
 const iepDetailsFactory = require('./controllers/incentiveLevelDetails').getIepDetailsFactory
 const houseblockListFactory = require('./controllers/attendance/houseblockList').getHouseblockListFactory
 const { attendanceFactory } = require('./controllers/attendance/attendance')
-const establishmentRollFactory = require('./controllers/establishmentRollCount').getEstablishmentRollCountFactory
 const { movementsServiceFactory } = require('./services/movementsService')
 const { globalSearchFactory } = require('./controllers/globalSearch')
 const { imageFactory } = require('./controllers/images')
@@ -48,7 +47,6 @@ const setup = ({ elite2Api, whereaboutsApi, oauthApi, caseNotesApi, offenderSear
     iepDetailsService: iepDetailsFactory(elite2Api),
     houseblockListService: houseblockListFactory(elite2Api, whereaboutsApi, config),
     attendanceService: attendanceFactory(whereaboutsApi),
-    establishmentRollService: establishmentRollFactory(elite2Api),
     globalSearchService: globalSearchFactory(offenderSearchApi),
     movementsService: movementsServiceFactory(elite2Api, systemOauthClient),
     offenderLoader: offenderLoaderFactory(elite2Api),

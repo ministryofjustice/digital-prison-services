@@ -29,7 +29,7 @@ const favicon = () =>
   stubFor({
     request: {
       method: 'GET',
-      urlPattern: '/favicon.ico',
+      url: '/favicon.ico',
     },
     response: {
       status: 200,
@@ -71,7 +71,7 @@ const token = () =>
   stubFor({
     request: {
       method: 'POST',
-      urlPattern: '/auth/oauth/token',
+      url: '/auth/oauth/token',
     },
     response: {
       status: 200,
@@ -97,7 +97,7 @@ const stubUser = (username, caseload) => {
   return stubFor({
     request: {
       method: 'GET',
-      urlPattern: `/auth/api/user/${encodeURI(user)}`,
+      url: `/auth/api/user/${encodeURI(user)}`,
     },
     response: {
       status: 200,
@@ -121,7 +121,7 @@ const stubUserMe = (username = 'ITAG_USER', staffId = 12345) => {
   return stubFor({
     request: {
       method: 'GET',
-      urlPattern: '/auth/api/user/me',
+      url: '/auth/api/user/me',
     },
     response: {
       status: 200,
@@ -176,7 +176,7 @@ const stubUnverifiedEmail = username =>
   stubFor({
     request: {
       method: 'GET',
-      urlPattern: `/auth/api/user/${encodeURI(username)}/email`,
+      url: `/auth/api/user/${encodeURI(username)}/email`,
     },
     response: {
       status: 204,

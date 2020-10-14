@@ -1,5 +1,3 @@
-const EstablishmentRollCountPage = require('../../pages/establishmentRollCount/establishmentRollCountPage')
-
 context('A user can see the data in the dashbaord', () => {
   before(() => {
     cy.clearCookies()
@@ -63,10 +61,9 @@ context('A user can see the data in the dashbaord', () => {
     })
   })
 
-  it('should page with the correct offender name and cell description', () => {
+  it('should load the page with the correct data', () => {
     cy.visit('/establishment-roll')
-    const establishmentRollCountPage = EstablishmentRollCountPage.verifyOnPage()
-    establishmentRollCountPage.values().then($values => {
+    cy.get('.block-figure__value').then($values => {
       cy.get($values)
         .its('length')
         .should('eq', 24)

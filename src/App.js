@@ -9,7 +9,6 @@ import { Header, FooterContainer } from 'new-nomis-shared-components'
 import Dashboard from './Dashboard/index'
 import ErrorComponent from './Error/index'
 import SearchContainer from './Search/SearchContainer'
-import EstablishmentRollContainer from './EstablishmentRoll/EstablishmentRollContainer'
 import Terms from './Footer/terms-and-conditions'
 import './App.scss'
 import ScrollToTop from './Components/ScrollToTop'
@@ -22,7 +21,6 @@ import MovementsInContainer from './MovementsIn/MovementsInContainer'
 import MovementsOutContainer from './MovementsOut/MovementsOutContainer'
 import InReceptionContainer from './InReception/InReceptionContainer'
 import CurrentlyOutContainer, { fetchAgencyData, fetchLivingUnitData } from './CurrentlyOut/CurrentlyOutContainer'
-import IncentiveLevelDetailsContainer from './IncentiveLevelDetails/IncentiveLevelDetailsContainer'
 import IncentiveLevelChangeContainer from './IncentiveLevelDetails/IncentiveLevelChangeContainer'
 import EnRouteContainer from './EnRoute/EnRouteContainer'
 
@@ -325,17 +323,6 @@ class App extends React.Component {
             )}
           />
           <Route exact path="/dashboard" render={() => <Dashboard />} />
-          <Route
-            exact
-            path={routePaths.establishmentRoll}
-            render={() => (
-              <EstablishmentRollContainer
-                handleError={this.handleError}
-                setLoadedDispatch={setLoadedDispatch}
-                resetErrorDispatch={resetErrorDispatch}
-              />
-            )}
-          />
 
           <Route
             exact
@@ -398,20 +385,6 @@ class App extends React.Component {
               <EnRouteContainer
                 handleError={this.handleError}
                 raiseAnalyticsEvent={this.raiseAnalyticsEvent}
-                history={history}
-              />
-            )}
-          />
-
-          <Route
-            exact
-            path={[routePaths.iepHistory, routePaths.incentiveLevelDetails]}
-            render={({ history, match: { params } }) => (
-              <IncentiveLevelDetailsContainer
-                offenderNo={params.offenderNo}
-                handleError={this.handleError}
-                setLoadedDispatch={setLoadedDispatch}
-                resetErrorDispatch={resetErrorDispatch}
                 history={history}
               />
             )}
