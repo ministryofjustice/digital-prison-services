@@ -3,7 +3,6 @@ const moment = require('moment')
 const offenderBasicDetails = require('../../mockApis/responses/offenderBasicDetails.json')
 const AddAppointmentPage = require('../../pages/appointments/addAppointmentPage')
 const ConfirmSingleAppointmentPage = require('../../pages/appointments/confirmSingleAppointmentPage')
-const ConfirmRecurringAppointmentPage = require('../../pages/appointments/confirmRecurringAppointmentPage')
 const PrePostAppointmentsPage = require('../../pages/appointments/prePostAppointmentsPage')
 const OtherCourtPage = require('../../pages/appointments/otherCourtPage')
 const ConfirmVideoLinkPrisonPage = require('../../pages/appointments/confirmVideoLinkPrisonPage')
@@ -11,13 +10,12 @@ const ConfirmVideoLinkPrisonPage = require('../../pages/appointments/confirmVide
 context('A user can add an appointment', () => {
   before(() => {
     cy.clearCookies()
-    cy.task('reset')
+    cy.task('resetAndStubTokenVerification')
     cy.task('stubLogin', { username: 'ITAG_USER', caseload: 'WWI' })
     cy.login()
   })
   beforeEach(() => {
     Cypress.Cookies.preserveOnce('hmpps-session-dev')
-    cy.task('resetAndStubTokenVerification')
     const offenderNo = 'A12345'
     cy.task('stubOffenderBasicDetails', offenderBasicDetails)
     cy.task('stubAppointmentTypes', [

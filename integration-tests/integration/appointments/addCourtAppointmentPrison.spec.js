@@ -10,13 +10,12 @@ const SelectCourtAppointmentRoomsPage = require('../../pages/appointments/select
 context('A user can add a video link', () => {
   before(() => {
     cy.clearCookies()
-    cy.task('reset')
+    cy.task('resetAndStubTokenVerification')
     cy.task('stubLogin', { username: 'ITAG_USER', caseload: 'MDI' })
     cy.login()
   })
   beforeEach(() => {
     Cypress.Cookies.preserveOnce('hmpps-session-dev')
-    cy.task('resetAndStubTokenVerification')
     const offenderNo = 'A12345'
     cy.task('stubOffenderBasicDetails', offenderBasicDetails)
     cy.task('stubAppointmentTypes', [

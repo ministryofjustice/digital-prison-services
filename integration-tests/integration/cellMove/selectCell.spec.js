@@ -22,13 +22,12 @@ context('A user can select a cell', () => {
   }
   before(() => {
     cy.clearCookies()
-    cy.task('reset')
+    cy.task('resetAndStubTokenVerification')
     cy.task('stubLogin', { username: 'ITAG_USER', caseload: 'MDI' })
     cy.login()
   })
   beforeEach(() => {
     Cypress.Cookies.preserveOnce('hmpps-session-dev')
-    cy.task('resetAndStubTokenVerification')
     cy.task('stubOffenderFullDetails', offenderFullDetails)
     cy.task('stubGroups', { id: 'MDI' })
     cy.task('stubCellAttributes')

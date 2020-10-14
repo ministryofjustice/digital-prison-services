@@ -3,13 +3,12 @@ const ViewAppointmentsPage = require('../../pages/appointments/viewAppointmentsP
 context('A user can view list of appointments', () => {
   before(() => {
     cy.clearCookies()
-    cy.task('reset')
+    cy.task('resetAndStubTokenVerification')
     cy.task('stubLogin', { username: 'ITAG_USER', caseload: 'MDI' })
     cy.login()
   })
   beforeEach(() => {
     Cypress.Cookies.preserveOnce('hmpps-session-dev')
-    cy.task('resetAndStubTokenVerification')
     cy.task('stubAppointmentTypes', [
       { code: 'ACTI', description: 'Activities' },
       { code: 'VLB', description: 'Video Link Booking' },
