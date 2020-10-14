@@ -10,13 +10,12 @@ const BulkAppointmentUploadCSVPage = require('../../pages/appointments/bulkAppoi
 context('A user can add a bulk appointment', () => {
   before(() => {
     cy.clearCookies()
-    cy.task('reset')
+    cy.task('resetAndStubTokenVerification')
     cy.task('stubLogin', { username: 'ITAG_USER', caseload: 'MDI' })
     cy.login()
   })
   beforeEach(() => {
     Cypress.Cookies.preserveOnce('hmpps-session-dev')
-    cy.task('resetAndStubTokenVerification')
     const offenderNo = 'A12345'
     cy.task('stubAppointmentTypes', [
       { code: 'ACTI', description: 'Activities' },

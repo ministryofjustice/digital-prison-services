@@ -11,13 +11,12 @@ const tomorrow = moment()
 context('A user can view non associations', () => {
   before(() => {
     cy.clearCookies()
-    cy.task('reset')
+    cy.task('resetAndStubTokenVerification')
     cy.task('stubLogin', { username: 'ITAG_USER', caseload: 'MDI' })
     cy.login()
   })
   beforeEach(() => {
     Cypress.Cookies.preserveOnce('hmpps-session-dev')
-    cy.task('resetAndStubTokenVerification')
     cy.task('stubOffenderBasicDetails', offenderBasicDetails)
     cy.task('stubBookingNonAssociations', {
       offenderNo: 'A12345',

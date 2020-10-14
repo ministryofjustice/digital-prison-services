@@ -1,14 +1,13 @@
 context('A user can search for an offender', () => {
   before(() => {
     cy.clearCookies()
-    cy.task('reset')
+    cy.task('resetAndStubTokenVerification')
     cy.task('stubLoginCourt')
     cy.login()
   })
 
   beforeEach(() => {
     Cypress.Cookies.preserveOnce('hmpps-session-dev')
-    cy.task('resetAndStubTokenVerification')
     cy.task('stubUserMeRoles', [{ roleCode: 'VIDEO_LINK_COURT_USER' }])
     cy.task('stubUserMe')
     cy.task('stubUserCaseLoads')

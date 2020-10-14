@@ -5,13 +5,12 @@ const offenderNo = 'A12345'
 context('A user is presented with a cell no longer available error page', () => {
   before(() => {
     cy.clearCookies()
-    cy.task('reset')
+    cy.task('resetAndStubTokenVerification')
     cy.task('stubLogin', { username: 'ITAG_USER', caseload: 'MDI' })
     cy.login()
   })
   beforeEach(() => {
     Cypress.Cookies.preserveOnce('hmpps-session-dev')
-    cy.task('resetAndStubTokenVerification')
     cy.task('stubBookingDetails', {
       firstName: 'Bob',
       lastName: 'Doe',
