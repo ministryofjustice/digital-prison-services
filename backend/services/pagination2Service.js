@@ -8,7 +8,7 @@ The pagination service only shows ten page links regardless of where the current
 Rules:
   1) Show ten page links
   2) Show pages 5 before and after the current page
-  3) Where there less than 5 pages before the current page show the remaining
+  3) Where there are less than 5 pages before the current page show the remaining
   4) Where there are more than 5 pages after the current page show the remaining
 
 1 2 3 4 5 6 7 8 9 10
