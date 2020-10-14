@@ -65,7 +65,14 @@ const controller = ({
   )
   router.get(
     '/case-notes',
-    prisonerCaseNotes({ caseNotesApi, prisonerProfileService, elite2Api, paginationServiceV2, nunjucks, logError })
+    prisonerCaseNotes({
+      caseNotesApi,
+      prisonerProfileService,
+      elite2Api,
+      paginationService: paginationServiceV2,
+      nunjucks,
+      logError,
+    })
   )
   router.get(
     '/sentence-and-release',
