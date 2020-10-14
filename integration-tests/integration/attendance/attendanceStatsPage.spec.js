@@ -7,14 +7,13 @@ const agencyId = 'WWI'
 context('A user can view attendance changes', () => {
   before(() => {
     cy.clearCookies()
-    cy.task('reset')
+    cy.task('resetAndStubTokenVerification')
     cy.task('stubLogin', { username: 'ITAG_USER', caseload: 'WWI' })
     cy.login()
   })
 
   beforeEach(() => {
     Cypress.Cookies.preserveOnce('hmpps-session-dev')
-    cy.task('resetAndStubTokenVerification')
     cy.task('stubUserMeRoles')
     cy.task('stubUserMe')
     cy.task('stubUserCaseLoads')

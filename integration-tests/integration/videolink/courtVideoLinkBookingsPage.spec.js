@@ -3,14 +3,13 @@ const CourtVideoLinkBookingsPage = require('../../pages/videolink/courtVideoBook
 context('A user can view the video link home page', () => {
   before(() => {
     cy.clearCookies()
-    cy.task('reset')
+    cy.task('resetAndStubTokenVerification')
     cy.task('stubLoginCourt')
     cy.login()
   })
 
   beforeEach(() => {
     Cypress.Cookies.preserveOnce('hmpps-session-dev')
-    cy.task('resetAndStubTokenVerification')
     cy.task('stubCourts')
     cy.task('stubAppointmentsGet', [
       {

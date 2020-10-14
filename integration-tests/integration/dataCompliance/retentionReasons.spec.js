@@ -1,21 +1,19 @@
 const offenderBasicDetails = require('../../mockApis/responses/offenderBasicDetails.json')
 const offenderFullDetails = require('../../mockApis/responses/offenderFullDetails.json')
 const RetentionReasonsPage = require('../../pages/dataCompliance/retentionReasonsPage')
-const PrisonerQuickLookPage = require('../../pages/prisonerProfile/prisonerQuickLookPage')
 
 const offenderNo = 'A12345'
 
 context('Retention reasons', () => {
   before(() => {
     cy.clearCookies()
-    cy.task('reset')
+    cy.task('resetAndStubTokenVerification')
     cy.task('stubLogin', { username: 'ITAG_USER', caseload: 'MDI' })
     cy.login()
   })
 
   beforeEach(() => {
     Cypress.Cookies.preserveOnce('hmpps-session-dev')
-    cy.task('resetAndStubTokenVerification')
     cy.task('stubGetOffenderRetentionReasons')
     cy.task('stubNoExistingOffenderRecord', { offenderNo })
     cy.task('stubAgencyDetails', { agencyId: 'MDI', details: { description: 'Moorland' } })
