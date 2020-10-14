@@ -113,7 +113,7 @@ describe('Adjudications history controller', () => {
               html: '<a href="/prisoner/A12345/adjudications/3" class="govuk-link"> 3 </a>',
             },
             {
-              text: '11/10/2020 16:00',
+              text: '11/10/2020 - 16:00',
             },
             {
               text: 'MDI',
@@ -130,7 +130,7 @@ describe('Adjudications history controller', () => {
               html: '<a href="/prisoner/A12345/adjudications/1" class="govuk-link"> 1 </a>',
             },
             {
-              text: '10/10/2020 15:00',
+              text: '10/10/2020 - 15:00',
             },
             {
               text: 'MDI',
@@ -147,7 +147,7 @@ describe('Adjudications history controller', () => {
               html: '<a href="/prisoner/A12345/adjudications/2" class="govuk-link"> 2 </a>',
             },
             {
-              text: '10/10/2020 13:00',
+              text: '10/10/2020 - 13:00',
             },
             {
               text: 'MDI',

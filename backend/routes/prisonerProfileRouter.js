@@ -17,7 +17,8 @@ const adjudicationsController = require('../controllers/prisonerProfile/adjudica
 
 const prisonerProfileServiceFactory = require('../services/prisonerProfileService')
 const personServiceFactory = require('../services/personService')
-const paginationService = require('../services/paginationService')
+const paginationService = require('../services/pagination2Service')
+
 const referenceCodesServiceFactory = require('../controllers/reference-codes-service')
 
 const adjudicationsHistoryService = require('../services/adjudicationHistory')
