@@ -64,6 +64,8 @@ const getPagination = (totalResults, offset, limit, url) => {
   const useLowestNumber = (left, right) => (left >= right ? right : left)
 
   const calculateFrom = ({ currentPage, numberOfPages }) => {
+    if (numberOfPages <= maxNumberOfPageLinks) return 0
+
     const towardsTheEnd = numberOfPages - currentPage <= pageBreakPoint
 
     if (towardsTheEnd) return numberOfPages - maxNumberOfPageLinks
@@ -76,9 +78,12 @@ const getPagination = (totalResults, offset, limit, url) => {
 
   const allPages = [...Array(numberOfPages).keys()]
   const from = calculateFrom({ currentPage, numberOfPages })
-  const to = useLowestNumber(from + maxNumberOfPageLinks, allPages.length)
+  const to =
+    numberOfPages <= maxNumberOfPageLinks
+      ? numberOfPages
+      : useLowestNumber(from + maxNumberOfPageLinks, allPages.length)
 
-  const pageList = allPages.slice(from, to)
+  const pageList = (numberOfPages > 1 && allPages.slice(from, to)) || []
 
   const previousPage =
     numberOfPages > 1
