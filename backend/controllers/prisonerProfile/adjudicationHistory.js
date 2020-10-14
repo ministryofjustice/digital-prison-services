@@ -1,17 +1,13 @@
 const moment = require('moment')
-
-const { DATE_TIME_FORMAT_SPEC } = require('../../../src/dateHelpers')
 const { formatName, putLastNameFirst } = require('../../utils')
 
 const perPage = 10
 
 const sortByDateTimeDesc = (left, right) => {
-  const leftDateTime = moment(`${left.reportDate}T${left.reportTime}`, DATE_TIME_FORMAT_SPEC)
-  const rightDateTime = moment(`${right.reportDate}T${right.reportTime}`, DATE_TIME_FORMAT_SPEC)
+  const leftDateTime = moment(`${left.reportDate}T${left.reportTime}`, 'DD/MM/YYYYTHH:mm')
+  const rightDateTime = moment(`${right.reportDate}T${right.reportTime}`, 'DD/MM/YYYYTHH:mm')
 
-  if (leftDateTime.isBefore(rightDateTime, 'day')) return 1
-  if (leftDateTime.isAfter(rightDateTime, 'day')) return -1
-  return 0
+  return rightDateTime.valueOf() - leftDateTime.valueOf()
 }
 
 const sortByTextAlphabetically = (left, right) => left.text.localeCompare(right.text)
@@ -24,8 +20,8 @@ module.exports = ({ adjudicationHistoryService, elite2Api, logError, paginationS
     const errors = []
     const { fromDate, toDate, agencyId, finding, pageOffsetOption = 0 } = req.query || {}
 
-    const fromDateMoment = moment(fromDate, 'DD/MM/YYYY')
-    const toDateMoment = moment(toDate, 'DD/MM/YYYY')
+    const fromDateMoment = fromDate && moment(fromDate, 'DD/MM/YYYY')
+    const toDateMoment = toDate && moment(toDate, 'DD/MM/YYYY')
 
     if (fromDate && toDate && fromDateMoment.isAfter(toDateMoment, 'day')) {
       errors.push({ href: '#fromDate', text: 'Enter a from date which is not after the to date' })
@@ -38,8 +34,8 @@ module.exports = ({ adjudicationHistoryService, elite2Api, logError, paginationS
         : {
             agencyId,
             finding,
-            fromDate: fromDateMoment.format('YYYY-MM-DD'),
-            toDate: toDateMoment.format('YYYY-MM-DD'),
+            ...{ fromDate: fromDateMoment && fromDateMoment.format('YYYY-MM-DD') },
+            ...{ toDate: toDateMoment && toDateMoment.format('YYYY-MM-DD') },
           }
 
     const adjudicationsData = await adjudicationHistoryService.getAdjudications(

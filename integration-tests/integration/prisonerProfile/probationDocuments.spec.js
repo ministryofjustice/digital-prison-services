@@ -16,10 +16,13 @@ context('Prisoner probation documents', () => {
       cy.task('stubUserMeRoles', [{ roleCode: 'VIEW_PROBATION_DOCUMENTS' }])
       cy.task('stubClientCredentialsRequest')
       cy.task('stubOffenderBasicDetails', offenderBasicDetails)
-      cy.task('stubStaff', 'ITAG_USER', {
-        username: 'ITAG_USER',
-        firstName: 'Staff',
-        lastName: 'Member',
+      cy.task('stubStaff', {
+        staffId: 'ITAG_USER',
+        details: {
+          username: 'ITAG_USER',
+          firstName: 'Staff',
+          lastName: 'Member',
+        },
       })
       cy.task('stubConvictions', {
         offenderNo,

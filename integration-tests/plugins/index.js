@@ -68,7 +68,7 @@ module.exports = on => {
 
     stubUserEmail: username => Promise.all([auth.stubEmail(username)]),
     stubUser: (username, caseload) => Promise.all([auth.stubUser(username, caseload)]),
-    stubStaff: (staffId, details) => Promise.all([elite2api.stubStaff(staffId, details)]),
+    stubStaff: ({ staffId, details }) => Promise.all([elite2api.stubStaff(staffId, details)]),
     stubScheduledActivities: response => Promise.all([elite2api.stubUserScheduledActivities(response)]),
     stubProgEventsAtLocation: ({ caseload, locationId, timeSlot, date, activities }) =>
       Promise.all([elite2api.stubProgEventsAtLocation(caseload, locationId, timeSlot, date, activities)]),
@@ -299,6 +299,7 @@ module.exports = on => {
     stubCreateCaseNote: caseNotes.stubCreateCaseNote,
     stubCaseNoteTypesForUser: caseNotes.stubCaseNoteTypesForUser,
     stubGlobalSearch: offenderSearch.stubGlobalSearch,
+    stubPrisonApiGlobalSearch: elite2api.stubPrisonApiGlobalSearch,
     stubGlobalSearchMultiplePages: offenderSearch.stubGlobalSearchMultiplePages,
     stubOffenderImage: elite2api.stubOffenderImage,
     verifyGlobalSearch: offenderSearch.verifyGlobalSearch,
@@ -385,5 +386,16 @@ module.exports = on => {
     stubOffenderDetails: ({ offenderNo, details }) => community.stubOffenderDetails(offenderNo, details),
     stubDocuments: ({ offenderNo, documents }) => community.stubDocuments(offenderNo, documents),
     stubDocument: ({ offenderNo, documentId, content }) => community.stubDocument(offenderNo, documentId, content),
+    stubIepSummaryForBooking: iepSummary => elite2api.stubIepSummaryForBooking(iepSummary),
+    stubMovementsIn: ({ agencyId, fromDate, movements }) =>
+      elite2api.stubMovementsIn({ agencyId, fromDate, movements }),
+    stubMovementsOut: ({ agencyId, fromDate, movements }) =>
+      elite2api.stubMovementsOut({ agencyId, fromDate, movements }),
+    stubIepSummaryForBookingIds: elite2api.stubIepSummaryForBookingIds,
+    stubSystemAlerts: elite2api.stubSystemAlerts,
+    stubInReception: ({ agencyId, results }) => elite2api.stubRollcountByType(agencyId, 'in-reception', results),
+    stubEnRoute: ({ agencyId, results }) => elite2api.stubEnRoute(agencyId, results),
+    stubCurrentlyOut: ({ livingUnitId, movements }) => elite2api.stubCurrentlyOut(livingUnitId, movements),
+    stubTotalCurrentlyOut: ({ agencyId, movements }) => elite2api.stubTotalCurrentlyOut(agencyId, movements),
   })
 }

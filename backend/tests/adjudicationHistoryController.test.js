@@ -21,6 +21,14 @@ const adjudicationHistoryResponse = {
       findingDescription: 'finding 2',
     },
     {
+      adjudicationNumber: 4,
+      reportDate: '11/10/2019',
+      reportTime: '16:00',
+      establishment: 'MDI',
+      offenceDescription: 'offence 4',
+      findingDescription: 'finding 4',
+    },
+    {
       adjudicationNumber: 3,
       reportDate: '11/10/2020',
       reportTime: '16:00',
@@ -157,6 +165,23 @@ describe('Adjudications history controller', () => {
             },
             {
               text: 'finding 2',
+            },
+          ],
+          [
+            {
+              html: '<a href="/prisoner/A12345/adjudications/4" class="govuk-link"> 4 </a>',
+            },
+            {
+              text: '11/10/2019 16:00',
+            },
+            {
+              text: 'MDI',
+            },
+            {
+              text: 'offence 4',
+            },
+            {
+              text: 'finding 4',
             },
           ],
         ],
@@ -348,6 +373,45 @@ describe('Adjudications history controller', () => {
           },
         ],
       })
+    )
+  })
+
+  it('should handle from date being null', async () => {
+    req.query = {
+      agencyId: 'MDI',
+      toDate: '15/10/2020',
+    }
+
+    await controller(req, res)
+
+    expect(adjudicationHistoryService.getAdjudications).toHaveBeenCalledWith(
+      {},
+      offenderNo,
+      {
+        agencyId: 'MDI',
+        toDate: '2020-10-15',
+      },
+      0,
+      10
+    )
+  })
+  it('should handle to date being null', async () => {
+    req.query = {
+      agencyId: 'MDI',
+      fromDate: '15/10/2020',
+    }
+
+    await controller(req, res)
+
+    expect(adjudicationHistoryService.getAdjudications).toHaveBeenCalledWith(
+      {},
+      offenderNo,
+      {
+        agencyId: 'MDI',
+        fromDate: '2020-10-15',
+      },
+      0,
+      10
     )
   })
 })
