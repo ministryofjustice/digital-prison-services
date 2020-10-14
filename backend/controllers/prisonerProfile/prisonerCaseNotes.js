@@ -142,7 +142,6 @@ module.exports = ({ caseNotesApi, prisonerProfileService, paginationService, nun
           : paginationService.getPagination(caseNotes.totalElements, Number(pageOffsetOption || 0), perPage, fullUrl),
       })
     } catch (error) {
-      console.error(error)
       logError(req.originalUrl, error, serviceUnavailableMessage)
       return res.render('error.njk', { url: `/prisoner/${offenderNo}/case-notes` })
     }
