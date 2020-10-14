@@ -7,13 +7,12 @@ const RequestCourtBookingConfirmationPage = require('../../pages/appointments/re
 context('A user can request a booking', () => {
   before(() => {
     cy.clearCookies()
-    cy.task('reset')
+    cy.task('resetAndStubTokenVerification')
     cy.task('stubLogin', { username: 'ITAG_USER', caseload: 'WWI' })
     cy.login()
   })
   beforeEach(() => {
     Cypress.Cookies.preserveOnce('hmpps-session-dev')
-    cy.task('resetAndStubTokenVerification')
     cy.task('stubCourts')
     cy.task('stubAgencies', [{ agencyId: 'WWI', description: 'HMP Wandsworth' }])
     cy.task('stubUserEmail', 'ITAG_USER')

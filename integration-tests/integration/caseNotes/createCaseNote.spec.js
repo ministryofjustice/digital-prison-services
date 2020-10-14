@@ -8,13 +8,12 @@ const PrisonerCaseNotePage = require('../../pages/prisonerProfile/caseNotePage')
 context('A user can add a case note', () => {
   before(() => {
     cy.clearCookies()
-    cy.task('reset')
+    cy.task('resetAndStubTokenVerification')
     cy.task('stubLogin', { username: 'ITAG_USER', caseload: 'MDI' })
     cy.login()
   })
   beforeEach(() => {
     Cypress.Cookies.preserveOnce('hmpps-session-dev')
-    cy.task('resetAndStubTokenVerification')
     cy.task('stubOffenderBasicDetails', offenderBasicDetails)
     const offenderNo = 'A12345'
     cy.task('stubCaseNoteTypesForUser')

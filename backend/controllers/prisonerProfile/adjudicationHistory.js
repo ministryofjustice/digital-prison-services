@@ -72,7 +72,7 @@ module.exports = ({ adjudicationHistoryService, elite2Api, logError, paginationS
             result.adjudicationNumber
           } </a>`,
         },
-        { text: `${result.reportDate} ${result.reportTime}` },
+        { text: `${result.reportDate} - ${result.reportTime}` },
         { text: result.establishment },
         { text: result.offenceDescription },
         { text: result.findingDescription },

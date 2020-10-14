@@ -97,14 +97,13 @@ const otherContacts = [
 context('Prisoner professional contacts', () => {
   before(() => {
     cy.clearCookies()
-    cy.task('reset')
+    cy.task('resetAndStubTokenVerification')
     cy.task('stubLogin', { username: 'ITAG_USER', caseload: 'MDI' })
     cy.login()
   })
 
   beforeEach(() => {
     Cypress.Cookies.preserveOnce('hmpps-session-dev')
-    cy.task('resetAndStubTokenVerification')
     cy.task('stubPathFinderOffenderDetails', null)
     cy.task('stubClientCredentialsRequest')
   })

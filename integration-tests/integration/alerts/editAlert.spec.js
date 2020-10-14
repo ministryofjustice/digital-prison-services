@@ -10,13 +10,12 @@ const alertId = 1
 context('A user can add an appointment', () => {
   before(() => {
     cy.clearCookies()
-    cy.task('reset')
+    cy.task('resetAndStubTokenVerification')
     cy.task('stubLogin', { username: 'ITAG_USER', caseload: 'MDI' })
     cy.login()
   })
   beforeEach(() => {
     Cypress.Cookies.preserveOnce('hmpps-session-dev')
-    cy.task('resetAndStubTokenVerification')
     cy.task('stubOffenderBasicDetails', offenderBasicDetails)
     cy.task('stubOffenderFullDetails', offenderFullDetails)
     cy.task('stubAlertTypes')

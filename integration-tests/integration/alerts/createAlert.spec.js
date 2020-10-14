@@ -7,13 +7,12 @@ const NotFoundPage = require('../../pages/notFound')
 context('A user can add an appointment', () => {
   before(() => {
     cy.clearCookies()
-    cy.task('reset')
+    cy.task('resetAndStubTokenVerification')
     cy.task('stubLogin', { username: 'ITAG_USER', caseload: 'MDI' })
     cy.login()
   })
   beforeEach(() => {
     Cypress.Cookies.preserveOnce('hmpps-session-dev')
-    cy.task('resetAndStubTokenVerification')
     const offenderNo = 'A12345'
     cy.task('stubOffenderFullDetails', offenderFullDetails)
     cy.task('stubAlertTypes')

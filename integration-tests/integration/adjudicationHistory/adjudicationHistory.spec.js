@@ -48,13 +48,12 @@ const adjudicationResponse = {
 context('A user can confirm the cell move', () => {
   before(() => {
     cy.clearCookies()
-    cy.task('reset')
+    cy.task('resetAndStubTokenVerification')
     cy.task('stubLogin', { username: 'ITAG_USER', caseload: 'MDI' })
     cy.login()
   })
   beforeEach(() => {
     Cypress.Cookies.preserveOnce('hmpps-session-dev')
-    cy.task('resetAndStubTokenVerification')
     cy.task('stubBookingDetails', {
       firstName: 'Bob',
       lastName: 'Doe',
@@ -76,7 +75,7 @@ context('A user can confirm the cell move', () => {
         expect($columns[0].innerHTML).to.equal(
           '<a href="/prisoner/A12345/adjudications/1234567" class="govuk-link"> 1234567 </a>'
         )
-        expect($columns[1].innerText).to.equal('17/03/2017 08:02')
+        expect($columns[1].innerText).to.equal('17/03/2017 - 08:02')
         expect($columns[2].innerText).to.equal('Moorland (HMP & YOI)')
         expect($columns[3].innerText).to.equal('Disobeys any lawful order')
         expect($columns[4].innerText).to.equal('Not entered')
