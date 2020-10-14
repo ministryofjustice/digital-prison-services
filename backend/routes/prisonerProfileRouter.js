@@ -18,7 +18,9 @@ const prisonerIncentiveLevelDetails = require('../controllers/prisonerProfile/pr
 
 const prisonerProfileServiceFactory = require('../services/prisonerProfileService')
 const personServiceFactory = require('../services/personService')
+const paginationServiceV2 = require('../services/pagination2Service')
 const paginationService = require('../services/paginationService')
+
 const referenceCodesServiceFactory = require('../controllers/reference-codes-service')
 
 const adjudicationsHistoryService = require('../services/adjudicationHistory')
@@ -63,7 +65,14 @@ const controller = ({
   )
   router.get(
     '/case-notes',
-    prisonerCaseNotes({ caseNotesApi, prisonerProfileService, elite2Api, paginationService, nunjucks, logError })
+    prisonerCaseNotes({
+      caseNotesApi,
+      prisonerProfileService,
+      elite2Api,
+      paginationService: paginationServiceV2,
+      nunjucks,
+      logError,
+    })
   )
   router.get(
     '/sentence-and-release',
