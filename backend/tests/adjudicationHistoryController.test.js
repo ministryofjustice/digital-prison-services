@@ -172,7 +172,7 @@ describe('Adjudications history controller', () => {
               html: '<a href="/prisoner/A12345/adjudications/4" class="govuk-link"> 4 </a>',
             },
             {
-              text: '11/10/2019 16:00',
+              text: '11/10/2019 - 16:00',
             },
             {
               text: 'MDI',
