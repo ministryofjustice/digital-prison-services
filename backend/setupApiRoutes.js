@@ -83,7 +83,6 @@ const setup = ({ elite2Api, whereaboutsApi, oauthApi, caseNotesApi, offenderSear
     houseblockLocationsFactory({ whereaboutsApi, logError }).getHouseblockLocations
   )
   router.use('/api/activityLocations', activityLocationsFactory({ elite2Api, logError }).getActivityLocations)
-  router.use('/api/bookings/:offenderNo/iepSummary', controller.getIepDetails)
   router.use('/api/houseblocklist', controller.getHouseblockList)
   router.use('/api/activityList', controller.getActivityList)
   router.use('/api/offenders/:offenderNumber/adjudications/:adjudicationNumber', controller.getAdjudicationDetails)
