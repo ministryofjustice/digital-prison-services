@@ -9,7 +9,7 @@ module.exports = ({ movementsService, logError }) => async (req, res) => {
     const offendersInReception = await movementsService.getOffendersInReception(res.locals, activeCaseLoadId)
 
     const offenders = offendersInReception
-      .sort((left, right) => left.lastName.localeCompare(right.lastName))
+      .sort((left, right) => left.lastName.localeCompare(right.lastName, 'en', { ignorePunctuation: true }))
       .map(offender => ({
         offenderNo: offender.offenderNo,
         dateOfBirth: moment(offender.dateOfBirth, 'YYYY-MM-DD').format('DD/MM/YYYY'),
