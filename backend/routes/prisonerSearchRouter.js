@@ -4,8 +4,8 @@ const paginationService = require('../services/paginationService')
 
 const router = express.Router()
 
-const controller = ({ elite2Api, logError }) => {
-  const { index, post } = prisonerSearchController({ paginationService, elite2Api, logError })
+const controller = ({ prisonApi, logError }) => {
+  const { index, post } = prisonerSearchController({ paginationService, prisonApi, logError })
   router.get('/', index)
   router.post('/', post)
 

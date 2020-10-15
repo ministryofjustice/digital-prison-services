@@ -1,8 +1,8 @@
 import factory from '../controllers/reference-codes-service'
 
 const context = {}
-const elite2Api = {}
-const service = factory(elite2Api)
+const prisonApi = {}
+const service = factory(prisonApi)
 
 const getAlertAPIData = [
   {
@@ -52,8 +52,8 @@ const getAlertAPIData = [
 
 describe('Reference codes service', () => {
   beforeEach(() => {
-    elite2Api.getAlertTypes = jest.fn()
-    elite2Api.getAlertTypes.mockReturnValue(getAlertAPIData)
+    prisonApi.getAlertTypes = jest.fn()
+    prisonApi.getAlertTypes.mockReturnValue(getAlertAPIData)
   })
   it('should map to alert type sub type model', async () => {
     const model = await service.getAlertTypes(context)

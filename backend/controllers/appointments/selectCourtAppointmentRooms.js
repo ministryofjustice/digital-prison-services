@@ -84,7 +84,7 @@ const validate = ({
 }
 
 const selectCourtAppointmentRoomsFactory = ({
-  elite2Api,
+  prisonApi,
   whereaboutsApi,
   appointmentsService,
   existingEventsService,
@@ -110,8 +110,8 @@ const selectCourtAppointmentRoomsFactory = ({
       const { text: appointmentTypeDescription } = appointmentTypes.find(app => app.value === appointmentType)
 
       const [offenderDetails, agencyDetails] = await Promise.all([
-        elite2Api.getDetails(res.locals, offenderNo),
-        elite2Api.getAgencyDetails(res.locals, agencyId),
+        prisonApi.getDetails(res.locals, offenderNo),
+        prisonApi.getAgencyDetails(res.locals, agencyId),
       ])
       const { firstName, lastName, bookingId } = offenderDetails
 

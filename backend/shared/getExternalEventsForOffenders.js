@@ -1,12 +1,12 @@
 const { sortByDateTime, isViewableFlag, isAfterToday } = require('../utils')
 
-const getExternalEvents = (elite2Api, context, { offenderNumbers, agencyId, formattedDate }) =>
+const getExternalEvents = (prisonApi, context, { offenderNumbers, agencyId, formattedDate }) =>
   Promise.all([
-    elite2Api.getSentenceData(context, offenderNumbers),
-    elite2Api.getCourtEvents(context, { agencyId, date: formattedDate, offenderNumbers }),
-    elite2Api.getExternalTransfers(context, { agencyId, date: formattedDate, offenderNumbers }),
-    elite2Api.getAlerts(context, { agencyId, offenderNumbers }),
-    elite2Api.getAssessments(context, { code: 'CATEGORY', offenderNumbers }),
+    prisonApi.getSentenceData(context, offenderNumbers),
+    prisonApi.getCourtEvents(context, { agencyId, date: formattedDate, offenderNumbers }),
+    prisonApi.getExternalTransfers(context, { agencyId, date: formattedDate, offenderNumbers }),
+    prisonApi.getAlerts(context, { agencyId, offenderNumbers }),
+    prisonApi.getAssessments(context, { code: 'CATEGORY', offenderNumbers }),
   ])
 
 const releaseScheduled = (releaseScheduledData, offenderNo, formattedDate) =>
@@ -132,11 +132,11 @@ const reduceToMap = (
     return map.set(offenderNumber, offenderData)
   }, new Map())
 
-module.exports = async (elite2Api, context, { offenderNumbers, formattedDate, agencyId }) => {
+module.exports = async (prisonApi, context, { offenderNumbers, formattedDate, agencyId }) => {
   if (!offenderNumbers || offenderNumbers.length === 0) return []
 
   const [releaseScheduleData, courtEventData, transferData, alertData, assessmentData] = await getExternalEvents(
-    elite2Api,
+    prisonApi,
     context,
     {
       offenderNumbers,

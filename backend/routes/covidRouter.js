@@ -9,8 +9,8 @@ const notInUnitController = require('../controllers/covid/notInUnitController')
 
 const router = express.Router({ mergeParams: true })
 
-module.exports = (elite2Api, logError) => {
-  const covidService = covidServiceFactory(elite2Api)
+module.exports = (prisonApi, logError) => {
+  const covidService = covidServiceFactory(prisonApi)
 
   router.get('/', covidDashboardController({ covidService, logError }))
   router.get('/reverse-cohorting-unit', reverseCohortingUnitController({ covidService, logError }))

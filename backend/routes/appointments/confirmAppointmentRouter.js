@@ -4,9 +4,9 @@ const { appointmentsServiceFactory } = require('../../services/appointmentsServi
 
 const router = express.Router({ mergeParams: true })
 
-const controller = ({ elite2Api, logError }) => {
-  const appointmentsService = appointmentsServiceFactory(elite2Api)
-  const { index } = confirmAppointment.confirmAppointmentFactory({ elite2Api, appointmentsService, logError })
+const controller = ({ prisonApi, logError }) => {
+  const appointmentsService = appointmentsServiceFactory(prisonApi)
+  const { index } = confirmAppointment.confirmAppointmentFactory({ prisonApi, appointmentsService, logError })
 
   router.get('/', index)
 

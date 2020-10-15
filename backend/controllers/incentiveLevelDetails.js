@@ -1,7 +1,7 @@
 const moment = require('moment')
 const { properCaseName, formatDaysInYears } = require('../utils')
 
-const getIepDetailsFactory = elite2Api => {
+const getIepDetailsFactory = prisonApi => {
   const filterData = (data, fields) => {
     let filteredResults = data
     if (fields.establishment) {
@@ -26,8 +26,8 @@ const getIepDetailsFactory = elite2Api => {
   }
 
   const getIepDetails = async (context, offenderNo, params) => {
-    const bookingDetails = await elite2Api.getDetails(context, offenderNo)
-    const iepSummary = await elite2Api.getIepSummaryForBooking(context, bookingDetails.bookingId, true)
+    const bookingDetails = await prisonApi.getDetails(context, offenderNo)
+    const iepSummary = await prisonApi.getIepSummaryForBooking(context, bookingDetails.bookingId, true)
 
     // Offenders are likely to have multiple IEPs at the same agency.
     // By getting a unique list of users and agencies, we reduce the duplicate
@@ -37,13 +37,13 @@ const getIepDetailsFactory = elite2Api => {
     const levels = [...new Set(iepSummary.iepDetails.map(details => details.iepLevel))].sort()
 
     const users = await Promise.all(
-      uniqueUserIds.filter(userId => Boolean(userId)).map(userId => elite2Api.getStaffDetails(context, userId))
+      uniqueUserIds.filter(userId => Boolean(userId)).map(userId => prisonApi.getStaffDetails(context, userId))
     )
 
     const establishments = await Promise.all(
       uniqueAgencyIds
         .filter(agencyId => Boolean(agencyId))
-        .map(agencyId => elite2Api.getAgencyDetails(context, agencyId))
+        .map(agencyId => prisonApi.getAgencyDetails(context, agencyId))
     )
 
     const iepHistoryDetails = iepSummary.iepDetails.map(details => {
@@ -78,7 +78,7 @@ const getIepDetailsFactory = elite2Api => {
   const sortPossibleIepLevelsAlphabetically = levels => levels.sort((a, b) => (a.title > b.title ? 1 : -1))
 
   const getPossibleLevels = async (context, currentIepLevel, agencyId) => {
-    const levels = await elite2Api.getAgencyIepLevels(context, agencyId)
+    const levels = await prisonApi.getAgencyIepLevels(context, agencyId)
 
     return sortPossibleIepLevelsAlphabetically(
       levels.filter(level => level.iepDescription !== currentIepLevel).map(level => ({
@@ -89,8 +89,8 @@ const getIepDetailsFactory = elite2Api => {
   }
 
   const changeIepLevel = async (context, offenderNo, params) => {
-    const bookingDetails = await elite2Api.getDetails(context, offenderNo)
-    await elite2Api.changeIepLevel(context, bookingDetails.bookingId, params)
+    const bookingDetails = await prisonApi.getDetails(context, offenderNo)
+    await prisonApi.changeIepLevel(context, bookingDetails.bookingId, params)
   }
 
   return {

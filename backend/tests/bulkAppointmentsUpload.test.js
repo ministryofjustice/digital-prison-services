@@ -5,8 +5,8 @@ Reflect.deleteProperty(process.env, 'APPINSIGHTS_INSTRUMENTATIONKEY')
 const logError = jest.fn()
 const csvParser = {}
 const offenderLoader = {}
-const elite2api = {}
-const controller = bulkAppointmentsUploadFactory(csvParser, offenderLoader, elite2api, logError)
+const prisonapi = {}
+const controller = bulkAppointmentsUploadFactory(csvParser, offenderLoader, prisonapi, logError)
 
 describe('bulk appointments upload', () => {
   const appointmentDetails = {
@@ -68,8 +68,8 @@ describe('bulk appointments upload', () => {
     beforeEach(() => {
       csvParser.loadAndParseCsvFile = jest.fn()
       offenderLoader.loadFromCsvContent = jest.fn()
-      elite2api.getLocation = jest.fn()
-      elite2api.getLocation.mockImplementation((context, livingUnitId) => {
+      prisonapi.getLocation = jest.fn()
+      prisonapi.getLocation.mockImplementation((context, livingUnitId) => {
         return { description: `${livingUnitId}_cell_no` }
       })
     })

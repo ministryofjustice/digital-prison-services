@@ -4,7 +4,7 @@ const { alertFlagLabels, profileAlertCodes } = require('../../shared/alertFlagVa
 const { putLastNameFirst, hasLength } = require('../../utils')
 const config = require('../../config')
 
-module.exports = ({ paginationService, elite2Api, logError }) => {
+module.exports = ({ paginationService, prisonApi, logError }) => {
   const index = async (req, res) => {
     const {
       user: { activeCaseLoad },
@@ -44,8 +44,8 @@ module.exports = ({ paginationService, elite2Api, logError }) => {
       }
 
       const [locations, prisoners] = await Promise.all([
-        elite2Api.userLocations(res.locals),
-        elite2Api.getInmates(context, location || currentUserCaseLoad, {
+        prisonApi.userLocations(res.locals),
+        prisonApi.getInmates(context, location || currentUserCaseLoad, {
           keywords,
           alerts: selectedAlerts,
           returnIep: 'true',

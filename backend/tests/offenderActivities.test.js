@@ -1,10 +1,10 @@
 Reflect.deleteProperty(process.env, 'APPINSIGHTS_INSTRUMENTATIONKEY')
 
 const context = {}
-const elite2api = {}
+const prisonapi = {}
 const whereaboutsApi = {}
 const { getPrisonersUnaccountedFor } = require('../controllers/attendance/offenderActivities').offenderActivitesFactory(
-  elite2api,
+  prisonapi,
   whereaboutsApi
 )
 
@@ -74,9 +74,9 @@ const scheduledActivitiesResponse = [
 describe('offender activities', () => {
   describe('getPrisonersUnaccountedFor()', () => {
     beforeEach(() => {
-      elite2api.getOffenderActivities = jest.fn().mockReturnValue(scheduledActivitiesResponse)
-      elite2api.getVisits = jest.fn().mockReturnValue([])
-      elite2api.getAppointments = jest.fn().mockReturnValue([])
+      prisonapi.getOffenderActivities = jest.fn().mockReturnValue(scheduledActivitiesResponse)
+      prisonapi.getVisits = jest.fn().mockReturnValue([])
+      prisonapi.getAppointments = jest.fn().mockReturnValue([])
       whereaboutsApi.getPrisonAttendance = jest.fn().mockReturnValue({ attendances: [] })
     })
 
@@ -184,7 +184,7 @@ describe('offender activities', () => {
           },
         ],
       })
-      elite2api.getVisits = jest.fn().mockReturnValueOnce([
+      prisonapi.getVisits = jest.fn().mockReturnValueOnce([
         {
           offenderNo: 'G7179GP',
           locationId: 26996,
@@ -199,7 +199,7 @@ describe('offender activities', () => {
           endTime: '2019-08-07T16:00:00',
         },
       ])
-      elite2api.getAppointments = jest.fn().mockReturnValueOnce([
+      prisonapi.getAppointments = jest.fn().mockReturnValueOnce([
         {
           offenderNo: 'G7179GP',
           locationId: 27218,

@@ -119,7 +119,7 @@ function error(message, status) {
 
 describe('Probation documents', () => {
   const oauthApi = {}
-  const elite2Api = {}
+  const prisonApi = {}
   const communityApi = {}
   const systemOauthClient = {}
   const getDetailsResponse = { bookingId: 1234, firstName: 'Test', lastName: 'User' }
@@ -127,8 +127,8 @@ describe('Probation documents', () => {
   describe('Controller', () => {
     const mockReq = { flash: jest.fn().mockReturnValue([]), originalUrl: '/offenders/G9542VP/probation-documents' }
     beforeEach(() => {
-      elite2Api.getDetails = jest.fn().mockReturnValue(getDetailsResponse)
-      elite2Api.userCaseLoads = jest.fn()
+      prisonApi.getDetails = jest.fn().mockReturnValue(getDetailsResponse)
+      prisonApi.userCaseLoads = jest.fn()
       oauthApi.currentUser = jest.fn()
       oauthApi.userRoles = jest.fn()
       communityApi.getOffenderConvictions = jest.fn()
@@ -144,7 +144,7 @@ describe('Probation documents', () => {
         activeCaseLoadId: 'LEI',
       })
       oauthApi.userRoles.mockReturnValue([{ roleCode: 'VIEW_PROBATION_DOCUMENTS' }])
-      elite2Api.userCaseLoads.mockReturnValue([
+      prisonApi.userCaseLoads.mockReturnValue([
         {
           currentlyActive: true,
           caseLoadId: 'LEI',
@@ -171,7 +171,7 @@ describe('Probation documents', () => {
           documents: [],
           convictions: [],
         })
-        page = probationDocumentsFactory(oauthApi, elite2Api, communityApi, systemOauthClient)
+        page = probationDocumentsFactory(oauthApi, prisonApi, communityApi, systemOauthClient)
           .displayProbationDocumentsPage
         res.render = jest.fn()
 
@@ -664,7 +664,7 @@ describe('Probation documents', () => {
         oauthApi.userRoles.mockReturnValue([{ roleCode: 'VIEW_PROBATION_DOCUMENTS' }])
         communityApi.getOffenderConvictions.mockReturnValue([])
         communityApi.getOffenderDetails.mockReturnValue({})
-        page = probationDocumentsFactory(oauthApi, elite2Api, communityApi, systemOauthClient)
+        page = probationDocumentsFactory(oauthApi, prisonApi, communityApi, systemOauthClient)
           .displayProbationDocumentsPage
         res.render = jest.fn()
 

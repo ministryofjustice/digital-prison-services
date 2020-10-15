@@ -33,21 +33,21 @@ const sortByLatestAssessmentDateDesc = (left, right) => {
   return 0
 }
 
-const getCellOccupants = async (res, { elite2Api, activeCaseLoadId, cells, nonAssociations }) => {
+const getCellOccupants = async (res, { prisonApi, activeCaseLoadId, cells, nonAssociations }) => {
   const currentCellOccupants = (await Promise.all(
-    cells.map(cell => cell.id).map(cellId => elite2Api.getInmatesAtLocation(res.locals, cellId, {}))
+    cells.map(cell => cell.id).map(cellId => prisonApi.getInmatesAtLocation(res.locals, cellId, {}))
   )).flatMap(occupant => occupant)
 
   if (!hasLength(currentCellOccupants)) return []
 
   const occupantOffenderNos = Array.from(new Set(currentCellOccupants.map(occupant => occupant.offenderNo)))
 
-  const occupantAlerts = await elite2Api.getAlerts(res.locals, {
+  const occupantAlerts = await prisonApi.getAlerts(res.locals, {
     agencyId: activeCaseLoadId,
     offenderNumbers: occupantOffenderNos,
   })
 
-  const occupantAssessments = await elite2Api.getCsraAssessments(res.locals, occupantOffenderNos)
+  const occupantAssessments = await prisonApi.getCsraAssessments(res.locals, occupantOffenderNos)
   const assessmentsGroupedByOffenderNo = occupantAssessments ? groupBy(occupantAssessments, 'offenderNo') : []
 
   const cellSharingAssessments = Object.keys(assessmentsGroupedByOffenderNo)
@@ -94,7 +94,7 @@ const getCellOccupants = async (res, { elite2Api, activeCaseLoadId, cells, nonAs
   })
 }
 
-const getResidentialLevelNonAssociations = async (res, { elite2Api, nonAssociations, cellId, agencyId, location }) => {
+const getResidentialLevelNonAssociations = async (res, { prisonApi, nonAssociations, cellId, agencyId, location }) => {
   if (!nonAssociations || !cellId) return []
 
   if (!location || location === 'ALL') {
@@ -106,9 +106,9 @@ const getResidentialLevelNonAssociations = async (res, { elite2Api, nonAssociati
   }
   // Get the residential unit level prefix for the selected cell by traversing up the
   // parent location tree
-  const locationDetail = await elite2Api.getLocation(res.locals, cellId)
-  const parentLocationDetail = await elite2Api.getLocation(res.locals, locationDetail.parentLocationId)
-  const { locationPrefix } = await elite2Api.getLocation(res.locals, parentLocationDetail.parentLocationId)
+  const locationDetail = await prisonApi.getLocation(res.locals, cellId)
+  const parentLocationDetail = await prisonApi.getLocation(res.locals, locationDetail.parentLocationId)
+  const { locationPrefix } = await prisonApi.getLocation(res.locals, parentLocationDetail.parentLocationId)
 
   return nonAssociations.nonAssociations.filter(
     nonAssociation =>
@@ -117,24 +117,24 @@ const getResidentialLevelNonAssociations = async (res, { elite2Api, nonAssociati
   )
 }
 
-module.exports = ({ oauthApi, elite2Api, whereaboutsApi, logError }) => async (req, res) => {
+module.exports = ({ oauthApi, prisonApi, whereaboutsApi, logError }) => async (req, res) => {
   const { offenderNo } = req.params
   const { location, subLocation, attribute, locationId } = extractQueryParameters(req.query)
   const { activeCaseLoadId } = req.session.userDetails
 
   try {
     const [userCaseLoads, userRoles] = await Promise.all([
-      elite2Api.userCaseLoads(res.locals),
+      prisonApi.userCaseLoads(res.locals),
       oauthApi.userRoles(res.locals),
     ])
-    const prisonerDetails = await elite2Api.getDetails(res.locals, offenderNo, true)
+    const prisonerDetails = await prisonApi.getDetails(res.locals, offenderNo, true)
 
     if (!userHasAccess({ userRoles, userCaseLoads, offenderCaseload: prisonerDetails.agencyId })) {
       return res.render('notFound.njk', { url: '/prisoner-search' })
     }
 
-    const nonAssociations = await elite2Api.getNonAssociations(res.locals, prisonerDetails.bookingId)
-    const cellAttributesData = await elite2Api.getCellAttributes(res.locals)
+    const nonAssociations = await prisonApi.getNonAssociations(res.locals, prisonerDetails.bookingId)
+    const cellAttributesData = await prisonApi.getCellAttributes(res.locals)
     const locationsData = await whereaboutsApi.searchGroups(res.locals, prisonerDetails.agencyId)
 
     if (req.xhr) {
@@ -184,7 +184,7 @@ module.exports = ({ oauthApi, elite2Api, whereaboutsApi, logError }) => async (r
     // we can directly call prisonApi.
     const cells =
       location === 'ALL'
-        ? await elite2Api.getCellsWithCapacity(res.locals, prisonerDetails.agencyId, attribute)
+        ? await prisonApi.getCellsWithCapacity(res.locals, prisonerDetails.agencyId, attribute)
         : await whereaboutsApi.getCellsWithCapacity(res.locals, {
             agencyId: prisonerDetails.agencyId,
             groupName: subLocation ? `${location}_${subLocation}` : location,
@@ -192,14 +192,14 @@ module.exports = ({ oauthApi, elite2Api, whereaboutsApi, logError }) => async (r
           })
 
     const residentialLevelNonAssociations = await getResidentialLevelNonAssociations(res, {
-      elite2Api,
+      prisonApi,
       nonAssociations,
       cellId: hasLength(cells) && cells[0].id,
       agencyId: prisonerDetails.agencyId,
       location,
     })
 
-    const cellOccupants = await getCellOccupants(res, { activeCaseLoadId, elite2Api, cells, nonAssociations })
+    const cellOccupants = await getCellOccupants(res, { activeCaseLoadId, prisonApi, cells, nonAssociations })
 
     return res.render('cellMove/selectCell.njk', {
       formValues: {

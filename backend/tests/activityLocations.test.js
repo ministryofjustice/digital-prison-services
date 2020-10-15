@@ -4,15 +4,15 @@ const { makeError, makeResetError, makeResetErrorWithStack } = require('./helper
 describe('Activity locations', () => {
   let getActivityLocations
   let logError
-  const elite2Api = {}
+  const prisonApi = {}
   const req = { originalUrl: 'http://localhost' }
   const res = { locals: {} }
 
   beforeEach(() => {
     logError = jest.fn()
-    elite2Api.searchActivityLocations = jest.fn().mockResolvedValue({ location: 'test' })
+    prisonApi.searchActivityLocations = jest.fn().mockResolvedValue({ location: 'test' })
 
-    getActivityLocations = getActivityLocationsFactory({ elite2Api, logError }).getActivityLocations
+    getActivityLocations = getActivityLocationsFactory({ prisonApi, logError }).getActivityLocations
 
     res.json = jest.fn()
     res.end = jest.fn()
@@ -28,19 +28,19 @@ describe('Activity locations', () => {
   it('should make a call to get locations for activity using the correct parameters', async () => {
     await getActivityLocations(req, res)
 
-    expect(elite2Api.searchActivityLocations).toHaveBeenCalledWith({}, 'LEI', '2020-12-10', 'AM')
+    expect(prisonApi.searchActivityLocations).toHaveBeenCalledWith({}, 'LEI', '2020-12-10', 'AM')
     expect(res.json).toHaveBeenCalledWith({ location: 'test' })
   })
 
   it('should log API errors', async () => {
-    elite2Api.searchActivityLocations.mockRejectedValue(new Error('test'))
+    prisonApi.searchActivityLocations.mockRejectedValue(new Error('test'))
     await getActivityLocations(req, res)
 
     expect(logError).toHaveBeenCalledWith('http://localhost', new Error('test'), 'getActivityLocations()')
   })
 
   it('should not log connection reset API errors', async () => {
-    elite2Api.searchActivityLocations.mockRejectedValue(makeResetError())
+    prisonApi.searchActivityLocations.mockRejectedValue(makeResetError())
     await getActivityLocations(req, res)
 
     expect(logError.mock.calls.length).toBe(0)
@@ -49,7 +49,7 @@ describe('Activity locations', () => {
   })
 
   it('should not log connection reset API errors with Timout in stack', async () => {
-    elite2Api.searchActivityLocations.mockRejectedValue(makeResetErrorWithStack())
+    prisonApi.searchActivityLocations.mockRejectedValue(makeResetErrorWithStack())
     await getActivityLocations(req, res)
 
     expect(logError.mock.calls.length).toBe(0)
@@ -58,19 +58,19 @@ describe('Activity locations', () => {
   })
 
   it('should respond with the correct status codes', async () => {
-    elite2Api.searchActivityLocations.mockRejectedValue(makeError('status', 403))
+    prisonApi.searchActivityLocations.mockRejectedValue(makeError('status', 403))
     await getActivityLocations(req, res)
 
     expect(res.status).toHaveBeenCalledWith(403)
     expect(res.end).toHaveBeenCalled()
 
-    elite2Api.searchActivityLocations.mockRejectedValue(makeError('response', { status: 404 }))
+    prisonApi.searchActivityLocations.mockRejectedValue(makeError('response', { status: 404 }))
     await getActivityLocations(req, res)
 
     expect(res.status).toHaveBeenCalledWith(404)
     expect(res.end).toHaveBeenCalled()
 
-    elite2Api.searchActivityLocations.mockRejectedValue(new Error())
+    prisonApi.searchActivityLocations.mockRejectedValue(new Error())
     await getActivityLocations(req, res)
 
     expect(res.status).toHaveBeenCalledWith(500)

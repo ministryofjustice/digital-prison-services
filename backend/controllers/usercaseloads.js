@@ -1,8 +1,8 @@
 const asyncMiddleware = require('../middleware/asyncHandler')
 
-const userCaseloadsFactory = elite2Api => {
+const userCaseloadsFactory = prisonApi => {
   const userCaseloads = asyncMiddleware(async (req, res) => {
-    const data = await elite2Api.userCaseLoads(res.locals)
+    const data = await prisonApi.userCaseLoads(res.locals)
     res.json(data)
   })
 

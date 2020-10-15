@@ -62,18 +62,18 @@ const mapAppointmentType = appointment => ({
   text: appointment.description,
 })
 
-const appointmentsServiceFactory = elite2Api => {
+const appointmentsServiceFactory = prisonApi => {
   const getLocations = async (context, agency, filterByLocationType) =>
     filterByLocationType
-      ? (await elite2Api.getLocationsForAppointments(context, agency))
+      ? (await prisonApi.getLocationsForAppointments(context, agency))
           .filter(loc => loc.locationType === filterByLocationType)
           .map(mapLocationType)
-      : (await elite2Api.getLocationsForAppointments(context, agency)).map(mapLocationType)
+      : (await prisonApi.getLocationsForAppointments(context, agency)).map(mapLocationType)
 
   const getAppointmentOptions = async (context, agency) => {
     const [locationTypes, appointmentTypes] = await Promise.all([
-      elite2Api.getLocationsForAppointments(context, agency),
-      elite2Api.getAppointmentTypes(context),
+      prisonApi.getLocationsForAppointments(context, agency),
+      prisonApi.getAppointmentTypes(context),
     ])
 
     return {
@@ -82,7 +82,7 @@ const appointmentsServiceFactory = elite2Api => {
     }
   }
   const addAppointments = async (context, appointments) => {
-    await elite2Api.addAppointments(context, appointments)
+    await prisonApi.addAppointments(context, appointments)
   }
 
   const getLocationAndAppointmentDescription = async (context, { activeCaseLoadId, locationId, appointmentType }) => {

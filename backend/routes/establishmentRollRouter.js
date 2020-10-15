@@ -4,8 +4,8 @@ const establishmentRollDashboardController = require('../controllers/establishme
 
 const router = express.Router({ mergeParams: true })
 
-const controller = ({ elite2Api, logError }) => {
-  router.get('/', establishmentRollDashboardController({ elite2Api, logError }))
+const controller = ({ prisonApi, logError }) => {
+  router.get('/', establishmentRollDashboardController({ prisonApi, logError }))
   return router
 }
 

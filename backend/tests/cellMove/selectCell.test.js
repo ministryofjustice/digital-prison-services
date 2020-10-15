@@ -5,7 +5,7 @@ const someBookingId = -10
 const someAgency = 'LEI'
 
 describe('Select a cell', () => {
-  const elite2Api = {}
+  const prisonApi = {}
   const whereaboutsApi = {}
   const oauthApi = {}
 
@@ -28,8 +28,8 @@ describe('Select a cell', () => {
 
   beforeEach(() => {
     oauthApi.userRoles = jest.fn().mockResolvedValue([{ roleCode: 'CELL_MOVE' }])
-    elite2Api.userCaseLoads = jest.fn().mockResolvedValue([{ caseLoadId: 'LEI' }])
-    elite2Api.getDetails = jest.fn().mockResolvedValue({
+    prisonApi.userCaseLoads = jest.fn().mockResolvedValue([{ caseLoadId: 'LEI' }])
+    prisonApi.getDetails = jest.fn().mockResolvedValue({
       firstName: 'John',
       lastName: 'Doe',
       offenderNo: someOffenderNumber,
@@ -38,13 +38,13 @@ describe('Select a cell', () => {
       alerts: [{ expired: false, alertCode: 'PEEP' }, { expired: true, alertCode: 'DCC' }],
     })
 
-    elite2Api.getCsraAssessments = jest.fn()
-    elite2Api.getAlerts = jest.fn()
-    elite2Api.getNonAssociations = jest.fn()
-    elite2Api.getLocation = jest.fn().mockResolvedValue({})
-    elite2Api.getCellsWithCapacity = jest.fn().mockResolvedValue([])
-    elite2Api.getInmatesAtLocation = jest.fn().mockResolvedValue([])
-    elite2Api.getCellAttributes = jest.fn().mockResolvedValue([
+    prisonApi.getCsraAssessments = jest.fn()
+    prisonApi.getAlerts = jest.fn()
+    prisonApi.getNonAssociations = jest.fn()
+    prisonApi.getLocation = jest.fn().mockResolvedValue({})
+    prisonApi.getCellsWithCapacity = jest.fn().mockResolvedValue([])
+    prisonApi.getInmatesAtLocation = jest.fn().mockResolvedValue([])
+    prisonApi.getCellAttributes = jest.fn().mockResolvedValue([
       {
         description: 'Attribute 1',
         code: 'A1',
@@ -62,7 +62,7 @@ describe('Select a cell', () => {
 
     res.render = jest.fn()
     logError = jest.fn()
-    controller = selectCellFactory({ oauthApi, elite2Api, whereaboutsApi, logError })
+    controller = selectCellFactory({ oauthApi, prisonApi, whereaboutsApi, logError })
 
     req = {
       params: {
@@ -84,14 +84,14 @@ describe('Select a cell', () => {
     it('should make the correct api calls to display default data', async () => {
       await controller(req, res)
 
-      expect(elite2Api.getDetails).toHaveBeenCalledWith({}, someOffenderNumber, true)
-      expect(elite2Api.getNonAssociations).toHaveBeenCalledWith({}, someBookingId)
-      expect(elite2Api.getCellAttributes).toHaveBeenCalledWith({})
+      expect(prisonApi.getDetails).toHaveBeenCalledWith({}, someOffenderNumber, true)
+      expect(prisonApi.getNonAssociations).toHaveBeenCalledWith({}, someBookingId)
+      expect(prisonApi.getCellAttributes).toHaveBeenCalledWith({})
       expect(whereaboutsApi.searchGroups).toHaveBeenCalledWith({}, someAgency)
     })
 
     it('Redirects when offender not in user caseloads', async () => {
-      elite2Api.userCaseLoads = jest.fn().mockResolvedValue([{ caseLoadId: 'BWY' }])
+      prisonApi.userCaseLoads = jest.fn().mockResolvedValue([{ caseLoadId: 'BWY' }])
       await controller(req, res)
 
       expect(res.render).toHaveBeenCalledWith('notFound.njk', { url: '/prisoner-search' })
@@ -104,7 +104,7 @@ describe('Select a cell', () => {
       }
       await controller(req, res)
 
-      expect(elite2Api.getCellsWithCapacity).toHaveBeenCalledWith({}, someAgency, 'A')
+      expect(prisonApi.getCellsWithCapacity).toHaveBeenCalledWith({}, someAgency, 'A')
     })
 
     it('should call get cells with capacity for leeds and house block 1', async () => {
@@ -275,7 +275,7 @@ describe('Select a cell', () => {
 
   describe('Cell view model data', () => {
     beforeEach(() => {
-      elite2Api.getCellsWithCapacity.mockResolvedValue([
+      prisonApi.getCellsWithCapacity.mockResolvedValue([
         {
           id: 1,
           description: 'MDI-1-3',
@@ -284,18 +284,18 @@ describe('Select a cell', () => {
           attributes: [{ description: 'Single occupancy', code: 'SO' }, { description: 'Listener Cell', code: 'LC' }],
         },
       ])
-      elite2Api.getLocation
+      prisonApi.getLocation
         .mockResolvedValueOnce(cellLocationData)
         .mockResolvedValueOnce(parentLocationData)
         .mockResolvedValueOnce(superParentLocationData)
-      elite2Api.getInmatesAtLocation = jest
+      prisonApi.getInmatesAtLocation = jest
         .fn()
         .mockResolvedValue([
           { firstName: 'bob', lastName: 'doe', offenderNo: 'A11111' },
           { firstName: 'dave', lastName: 'doe1', offenderNo: 'A22222' },
         ])
 
-      elite2Api.getCellsWithCapacity.mockResolvedValue([
+      prisonApi.getCellsWithCapacity.mockResolvedValue([
         {
           id: 1,
           description: 'MDI-1-3',
@@ -322,10 +322,10 @@ describe('Select a cell', () => {
     it('should make the relevant calls to gather cell occupant data', async () => {
       await controller(req, res)
 
-      expect(elite2Api.getInmatesAtLocation).toHaveBeenCalledWith({}, 1, {})
-      expect(elite2Api.getInmatesAtLocation).toHaveBeenCalledWith({}, 2, {})
-      expect(elite2Api.getInmatesAtLocation).toHaveBeenCalledWith({}, 3, {})
-      expect(elite2Api.getAlerts).toHaveBeenCalledWith(
+      expect(prisonApi.getInmatesAtLocation).toHaveBeenCalledWith({}, 1, {})
+      expect(prisonApi.getInmatesAtLocation).toHaveBeenCalledWith({}, 2, {})
+      expect(prisonApi.getInmatesAtLocation).toHaveBeenCalledWith({}, 3, {})
+      expect(prisonApi.getAlerts).toHaveBeenCalledWith(
         {},
         {
           agencyId: 'LEI',
@@ -335,7 +335,7 @@ describe('Select a cell', () => {
     })
 
     it('should return the correctly formatted cell details', async () => {
-      elite2Api.getInmatesAtLocation.mockImplementation((context, cellId) => {
+      prisonApi.getInmatesAtLocation.mockImplementation((context, cellId) => {
         if (cellId === 1)
           return Promise.resolve([
             {
@@ -365,13 +365,13 @@ describe('Select a cell', () => {
         ])
       })
 
-      elite2Api.getAlerts.mockResolvedValue([
+      prisonApi.getAlerts.mockResolvedValue([
         { offenderNo: 'A111111', alertCode: 'PEEP' },
         { offenderNo: 'A222222', alertCode: 'XEL' },
         { offenderNo: 'A333333', alertCode: 'URS' },
       ])
 
-      elite2Api.getCsraAssessments.mockResolvedValue([
+      prisonApi.getCsraAssessments.mockResolvedValue([
         { offenderNo: 'A111111', assessmentDescription: 'TEST', assessmentCode: 'TEST', assessmentComment: 'test' },
         {
           offenderNo: 'A222222',
@@ -501,7 +501,7 @@ describe('Select a cell', () => {
     })
 
     it('should select the latest csra rating for each occupant', async () => {
-      elite2Api.getCellsWithCapacity.mockResolvedValue([
+      prisonApi.getCellsWithCapacity.mockResolvedValue([
         {
           id: 1,
           description: 'MDI-1-3',
@@ -510,7 +510,7 @@ describe('Select a cell', () => {
           attributes: [],
         },
       ])
-      elite2Api.getInmatesAtLocation.mockResolvedValue([
+      prisonApi.getInmatesAtLocation.mockResolvedValue([
         {
           firstName: 'bob1',
           lastName: 'doe1',
@@ -519,9 +519,9 @@ describe('Select a cell', () => {
         },
       ])
 
-      elite2Api.getAlerts.mockResolvedValue([])
+      prisonApi.getAlerts.mockResolvedValue([])
 
-      elite2Api.getCsraAssessments.mockResolvedValue([
+      prisonApi.getCsraAssessments.mockResolvedValue([
         {
           offenderNo: 'A111111',
           assessmentCode: 'CSR',
@@ -573,7 +573,7 @@ describe('Select a cell', () => {
     })
 
     it('should not make a call for assessments or alerts when there are no cell occupants', async () => {
-      elite2Api.getCellsWithCapacity.mockResolvedValue([
+      prisonApi.getCellsWithCapacity.mockResolvedValue([
         {
           id: 1,
           description: 'MDI-1-3',
@@ -582,18 +582,18 @@ describe('Select a cell', () => {
           attributes: [],
         },
       ])
-      elite2Api.getInmatesAtLocation.mockResolvedValue([])
+      prisonApi.getInmatesAtLocation.mockResolvedValue([])
 
       await controller(req, res)
 
-      expect(elite2Api.getCsraAssessments.mock.calls.length).toBe(0)
-      expect(elite2Api.getAlerts.mock.calls.length).toBe(0)
+      expect(prisonApi.getCsraAssessments.mock.calls.length).toBe(0)
+      expect(prisonApi.getAlerts.mock.calls.length).toBe(0)
     })
   })
 
   describe('Non associations', () => {
     beforeEach(() => {
-      elite2Api.getNonAssociations = jest.fn().mockResolvedValue({
+      prisonApi.getNonAssociations = jest.fn().mockResolvedValue({
         offenderNo: 'G6123VU',
         firstName: 'JOHN',
         lastName: 'SAUNDERS',
@@ -621,7 +621,7 @@ describe('Select a cell', () => {
         ],
       })
 
-      elite2Api.getCellsWithCapacity.mockResolvedValue([
+      prisonApi.getCellsWithCapacity.mockResolvedValue([
         {
           id: 1,
           description: 'MDI-1-3',
@@ -630,7 +630,7 @@ describe('Select a cell', () => {
           attributes: [],
         },
       ])
-      elite2Api.getInmatesAtLocation.mockResolvedValue([
+      prisonApi.getInmatesAtLocation.mockResolvedValue([
         {
           firstName: 'bob1',
           lastName: 'doe1',
@@ -638,8 +638,8 @@ describe('Select a cell', () => {
           assignedLivingUnitId: 1,
         },
       ])
-      elite2Api.getAlerts.mockResolvedValue([])
-      elite2Api.getCsraAssessments.mockResolvedValue([])
+      prisonApi.getAlerts.mockResolvedValue([])
+      prisonApi.getCsraAssessments.mockResolvedValue([])
 
       req.query = {
         location: 'Houseblock 1',
@@ -682,14 +682,14 @@ describe('Select a cell', () => {
     })
 
     it('should not request the location prefix when there are no non-associations', async () => {
-      elite2Api.getNonAssociations = jest.fn().mockResolvedValue(null)
+      prisonApi.getNonAssociations = jest.fn().mockResolvedValue(null)
       await controller(req, res)
 
-      expect(elite2Api.getLocation.mock.calls.length).toBe(0)
+      expect(prisonApi.getLocation.mock.calls.length).toBe(0)
     })
 
     it('should set show non association value to true when there are res unit level non-associations', async () => {
-      elite2Api.getDetails = jest.fn().mockResolvedValue({
+      prisonApi.getDetails = jest.fn().mockResolvedValue({
         firstName: 'John',
         lastName: 'Doe',
         offenderNo: someOffenderNumber,
@@ -697,7 +697,7 @@ describe('Select a cell', () => {
         agencyId: someAgency,
         alerts: [],
       })
-      elite2Api.getLocation
+      prisonApi.getLocation
         .mockResolvedValueOnce(cellLocationData)
         .mockResolvedValueOnce(parentLocationData)
         .mockResolvedValueOnce(superParentLocationData)
@@ -723,8 +723,8 @@ describe('Select a cell', () => {
     })
 
     it('should set show non association value to true when there are non-associations within the establishment', async () => {
-      elite2Api.userCaseLoads = jest.fn().mockResolvedValue([{ caseLoadId: 'MDI' }])
-      elite2Api.getDetails = jest.fn().mockResolvedValue({
+      prisonApi.userCaseLoads = jest.fn().mockResolvedValue([{ caseLoadId: 'MDI' }])
+      prisonApi.getDetails = jest.fn().mockResolvedValue({
         firstName: 'John',
         lastName: 'Doe',
         offenderNo: someOffenderNumber,
@@ -746,7 +746,7 @@ describe('Select a cell', () => {
     })
 
     it('should set show non association value to false', async () => {
-      elite2Api.nonAssociations = jest.fn().mockResolvedValue({})
+      prisonApi.nonAssociations = jest.fn().mockResolvedValue({})
       await controller(req, res)
 
       expect(res.render).toHaveBeenCalledWith(
@@ -758,7 +758,7 @@ describe('Select a cell', () => {
     })
 
     it('should set show non association value to false when non association offender does not have assigned living unit', async () => {
-      elite2Api.getNonAssociations = jest.fn().mockResolvedValue({
+      prisonApi.getNonAssociations = jest.fn().mockResolvedValue({
         offenderNo: 'G6123VU',
         firstName: 'JOHN',
         lastName: 'SAUNDERS',

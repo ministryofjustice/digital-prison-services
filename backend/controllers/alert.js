@@ -47,7 +47,7 @@ const getValidationErrors = ({ alertStatus, comment }) => {
   return errors
 }
 
-const alertFactory = (oauthApi, elite2Api, referenceCodesService) => {
+const alertFactory = (oauthApi, prisonApi, referenceCodesService) => {
   const renderTemplate = (req, res, pageData) => {
     const { alert, pageErrors, offenderDetails, ...rest } = pageData
     const formAction = offenderDetails && alert && `/edit-alert/${offenderDetails.bookingId}/${alert.alertId}`
@@ -91,12 +91,12 @@ const alertFactory = (oauthApi, elite2Api, referenceCodesService) => {
 
     try {
       const { offenderNo, alertId } = req.query
-      const { bookingId, firstName, lastName, agencyId } = await elite2Api.getDetails(res.locals, offenderNo)
+      const { bookingId, firstName, lastName, agencyId } = await prisonApi.getDetails(res.locals, offenderNo)
 
       const [alert, user, caseLoads, userRoles] = await Promise.all([
-        elite2Api.getAlert(res.locals, bookingId, alertId),
+        prisonApi.getAlert(res.locals, bookingId, alertId),
         oauthApi.currentUser(res.locals),
-        elite2Api.userCaseLoads(res.locals),
+        prisonApi.userCaseLoads(res.locals),
         oauthApi.userRoles(res.locals),
       ])
 
@@ -149,8 +149,8 @@ const alertFactory = (oauthApi, elite2Api, referenceCodesService) => {
     const editAlert = closeAlert || Boolean(comment)
 
     const [alert, caseLoads] = await Promise.all([
-      elite2Api.getAlert(res.locals, bookingId, alertId),
-      elite2Api.userCaseLoads(res.locals),
+      prisonApi.getAlert(res.locals, bookingId, alertId),
+      prisonApi.userCaseLoads(res.locals),
     ])
 
     const activeCaseLoad = caseLoads.find(cl => cl.currentlyActive)
@@ -164,7 +164,7 @@ const alertFactory = (oauthApi, elite2Api, referenceCodesService) => {
 
     if (editAlert) {
       try {
-        await elite2Api.updateAlert(res.locals, bookingId, alertId, {
+        await prisonApi.updateAlert(res.locals, bookingId, alertId, {
           ...getUpdateParameters({ comment, expiryDate: closeAlert && moment().format('YYYY-MM-DD') }),
         })
 
@@ -182,14 +182,14 @@ const alertFactory = (oauthApi, elite2Api, referenceCodesService) => {
   const displayCreateAlertPage = async (req, res) => {
     const { offenderNo } = req.params
     try {
-      const { bookingId, firstName, lastName, alerts, agencyId } = await elite2Api.getDetails(
+      const { bookingId, firstName, lastName, alerts, agencyId } = await prisonApi.getDetails(
         res.locals,
         offenderNo,
         true
       )
       const [userRoles, caseLoads] = await Promise.all([
         oauthApi.userRoles(res.locals),
-        elite2Api.userCaseLoads(res.locals),
+        prisonApi.userCaseLoads(res.locals),
       ])
 
       const canViewInactivePrisoner = userRoles && userRoles.some(role => role.roleCode === 'INACTIVE_BOOKINGS')
@@ -318,7 +318,7 @@ const alertFactory = (oauthApi, elite2Api, referenceCodesService) => {
     }
 
     if (errors.length > 0) {
-      const { firstName, lastName, alerts } = await elite2Api.getDetails(res.locals, offenderNo, true)
+      const { firstName, lastName, alerts } = await prisonApi.getDetails(res.locals, offenderNo, true)
 
       const prisonersActiveAlertCodes = alerts
         .filter(alert => !alert.expired)
@@ -362,7 +362,7 @@ const alertFactory = (oauthApi, elite2Api, referenceCodesService) => {
     }
 
     try {
-      await elite2Api.createAlert(res.locals, bookingId, {
+      await prisonApi.createAlert(res.locals, bookingId, {
         alertType,
         alertCode,
         comment: comments,

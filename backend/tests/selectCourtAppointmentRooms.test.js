@@ -3,7 +3,7 @@ const { notifyClient } = require('../shared/notifyClient')
 const config = require('../config')
 
 describe('Select court appointment rooms', () => {
-  const elite2Api = {}
+  const prisonApi = {}
   const whereaboutsApi = {}
   const oauthApi = {}
   const appointmentsService = {}
@@ -48,10 +48,10 @@ describe('Select court appointment rooms', () => {
   }
 
   beforeEach(() => {
-    elite2Api.getDetails = jest.fn()
-    elite2Api.getAgencyDetails = jest.fn()
-    elite2Api.addSingleAppointment = jest.fn()
-    elite2Api.getLocation = jest.fn()
+    prisonApi.getDetails = jest.fn()
+    prisonApi.getAgencyDetails = jest.fn()
+    prisonApi.addSingleAppointment = jest.fn()
+    prisonApi.getLocation = jest.fn()
 
     oauthApi.userEmail = jest.fn()
 
@@ -73,7 +73,7 @@ describe('Select court appointment rooms', () => {
 
     existingEventsService.getAvailableLocationsForVLB.mockReturnValue(availableLocations)
 
-    elite2Api.getDetails.mockReturnValue({
+    prisonApi.getDetails.mockReturnValue({
       bookingId,
       offenderNo: 'A12345',
       firstName: 'john',
@@ -81,7 +81,7 @@ describe('Select court appointment rooms', () => {
       assignedLivingUnitDesc: 'Cell 1',
     })
 
-    elite2Api.getAgencyDetails.mockReturnValue({ description: 'Moorland' })
+    prisonApi.getAgencyDetails.mockReturnValue({ description: 'Moorland' })
 
     req.flash.mockImplementation(() => [appointmentDetails])
 
@@ -91,7 +91,7 @@ describe('Select court appointment rooms', () => {
   describe('index', () => {
     it('should return locations', async () => {
       const { index } = selectCourtAppointmentRoomsFactory({
-        elite2Api,
+        prisonApi,
         appointmentsService,
         logError,
         existingEventsService,
@@ -107,7 +107,7 @@ describe('Select court appointment rooms', () => {
 
     it('should extract appointment details', async () => {
       const { index } = selectCourtAppointmentRoomsFactory({
-        elite2Api,
+        prisonApi,
         appointmentsService,
         logError,
         existingEventsService,
@@ -131,7 +131,7 @@ describe('Select court appointment rooms', () => {
 
     it('should throw and log an error when appointment details are missing from flash', async () => {
       const { index } = selectCourtAppointmentRoomsFactory({
-        elite2Api,
+        prisonApi,
         appointmentsService,
         logError,
       })
@@ -153,7 +153,7 @@ describe('Select court appointment rooms', () => {
 
     it('should call getAvailableLocationsForVLB with the correct parameters', async () => {
       const { index } = selectCourtAppointmentRoomsFactory({
-        elite2Api,
+        prisonApi,
         appointmentsService,
         existingEventsService,
         logError,
@@ -187,7 +187,7 @@ describe('Select court appointment rooms', () => {
       }
 
       const { validateInput } = selectCourtAppointmentRoomsFactory({
-        elite2Api,
+        prisonApi,
         appointmentsService,
         logError,
         existingEventsService,
@@ -214,7 +214,7 @@ describe('Select court appointment rooms', () => {
 
     it('should validate presence of room locations', async () => {
       const { validateInput } = selectCourtAppointmentRoomsFactory({
-        elite2Api,
+        prisonApi,
         appointmentsService,
         logError,
         existingEventsService,
@@ -249,7 +249,7 @@ describe('Select court appointment rooms', () => {
 
     it('should return selected form values on validation errors', async () => {
       const { validateInput } = selectCourtAppointmentRoomsFactory({
-        elite2Api,
+        prisonApi,
         appointmentsService,
         logError,
         existingEventsService,
@@ -270,7 +270,7 @@ describe('Select court appointment rooms', () => {
 
     it('should return locations, links and summary details on validation errors', async () => {
       const { validateInput } = selectCourtAppointmentRoomsFactory({
-        elite2Api,
+        prisonApi,
         appointmentsService,
         logError,
         existingEventsService,
@@ -304,7 +304,7 @@ describe('Select court appointment rooms', () => {
     })
 
     it('should throw and log an error when appointment details are missing from flash', async () => {
-      const { validateInput } = selectCourtAppointmentRoomsFactory({ elite2Api, appointmentsService, logError })
+      const { validateInput } = selectCourtAppointmentRoomsFactory({ prisonApi, appointmentsService, logError })
 
       req.flash.mockImplementation(() => [])
 
@@ -319,7 +319,7 @@ describe('Select court appointment rooms', () => {
     })
 
     it('should pack appointment details back into flash before rendering', async () => {
-      const { validateInput } = selectCourtAppointmentRoomsFactory({ elite2Api, appointmentsService, logError })
+      const { validateInput } = selectCourtAppointmentRoomsFactory({ prisonApi, appointmentsService, logError })
 
       await validateInput(req, res)
 
@@ -348,7 +348,7 @@ describe('Select court appointment rooms', () => {
     })
     it('should create main appointment', async () => {
       const { createAppointments } = selectCourtAppointmentRoomsFactory({
-        elite2Api,
+        prisonApi,
         whereaboutsApi,
         appointmentsService,
         existingEventsService,
@@ -374,7 +374,7 @@ describe('Select court appointment rooms', () => {
 
     it('should create main pre appointment 20 minutes before main with 20 minute duration', async () => {
       const { createAppointments } = selectCourtAppointmentRoomsFactory({
-        elite2Api,
+        prisonApi,
         whereaboutsApi,
         appointmentsService,
         existingEventsService,
@@ -400,7 +400,7 @@ describe('Select court appointment rooms', () => {
 
     it('should create main post appointment 20 minutes after main with 20 minute duration', async () => {
       const { createAppointments } = selectCourtAppointmentRoomsFactory({
-        elite2Api,
+        prisonApi,
         whereaboutsApi,
         appointmentsService,
         logError,
@@ -426,7 +426,7 @@ describe('Select court appointment rooms', () => {
 
     it('should not request pre or post appointments when "no" has been selected', async () => {
       const { createAppointments } = selectCourtAppointmentRoomsFactory({
-        elite2Api,
+        prisonApi,
         whereaboutsApi,
         appointmentsService,
         logError,
@@ -453,7 +453,7 @@ describe('Select court appointment rooms', () => {
 
     it('should place pre and post appointment details into flash', async () => {
       const { createAppointments } = selectCourtAppointmentRoomsFactory({
-        elite2Api,
+        prisonApi,
         whereaboutsApi,
         appointmentsService,
         logError,
@@ -483,7 +483,7 @@ describe('Select court appointment rooms', () => {
 
     it('should redirect to confirmation page', async () => {
       const { createAppointments } = selectCourtAppointmentRoomsFactory({
-        elite2Api,
+        prisonApi,
         whereaboutsApi,
         oauthApi,
         logError,
@@ -513,7 +513,7 @@ describe('Select court appointment rooms', () => {
         },
       ])
       const { createAppointments } = selectCourtAppointmentRoomsFactory({
-        elite2Api,
+        prisonApi,
         whereaboutsApi,
         oauthApi,
         logError,
@@ -547,7 +547,7 @@ describe('Select court appointment rooms', () => {
       })
 
       const { createAppointments } = selectCourtAppointmentRoomsFactory({
-        elite2Api,
+        prisonApi,
         whereaboutsApi,
         oauthApi,
         notifyClient,

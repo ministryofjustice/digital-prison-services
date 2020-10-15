@@ -1,16 +1,16 @@
 Reflect.deleteProperty(process.env, 'APPINSIGHTS_INSTRUMENTATIONKEY')
-const elite2Api = {}
+const prisonApi = {}
 
 jest.mock('shortid', () => ({
   generate: () => '123',
 }))
 
-const adjudicationHistory = require('../services/adjudicationHistory')(elite2Api)
+const adjudicationHistory = require('../services/adjudicationHistory')(prisonApi)
 
 beforeEach(() => {
-  elite2Api.getAdjudicationDetails = jest.fn()
-  elite2Api.getAdjudications = jest.fn()
-  elite2Api.getAdjudicationFindingTypes = jest.fn()
+  prisonApi.getAdjudicationDetails = jest.fn()
+  prisonApi.getAdjudications = jest.fn()
+  prisonApi.getAdjudicationFindingTypes = jest.fn()
 })
 
 const noAdjudications = {
@@ -238,8 +238,8 @@ const expectedResult = {
 }
 describe('Adjudication History Service', () => {
   it('handles no results', async () => {
-    elite2Api.getAdjudications.mockReturnValue(noAdjudications)
-    elite2Api.getAdjudicationFindingTypes.mockReturnValue(findings)
+    prisonApi.getAdjudications.mockReturnValue(noAdjudications)
+    prisonApi.getAdjudicationFindingTypes.mockReturnValue(findings)
 
     const response = await adjudicationHistory.getAdjudications({}, 'OFF-1', {})
     expect(response).toEqual({
@@ -260,23 +260,23 @@ describe('Adjudication History Service', () => {
       results: [],
     })
 
-    expect(elite2Api.getAdjudications).toHaveBeenCalled()
-    expect(elite2Api.getAdjudicationFindingTypes).toHaveBeenCalled()
+    expect(prisonApi.getAdjudications).toHaveBeenCalled()
+    expect(prisonApi.getAdjudicationFindingTypes).toHaveBeenCalled()
 
-    expect(elite2Api.getAdjudications.mock.calls[0]).toEqual([{}, 'OFF-1', {}, undefined, undefined])
-    expect(elite2Api.getAdjudicationFindingTypes.mock.calls[0]).toEqual([{}])
+    expect(prisonApi.getAdjudications.mock.calls[0]).toEqual([{}, 'OFF-1', {}, undefined, undefined])
+    expect(prisonApi.getAdjudicationFindingTypes.mock.calls[0]).toEqual([{}])
   })
 
   it('return adjudication history', async () => {
-    elite2Api.getAdjudications.mockReturnValue(adjudications)
-    elite2Api.getAdjudicationFindingTypes.mockReturnValue(findings)
+    prisonApi.getAdjudications.mockReturnValue(adjudications)
+    prisonApi.getAdjudicationFindingTypes.mockReturnValue(findings)
 
     const response = await adjudicationHistory.getAdjudications({}, 'OFF-1', {})
     expect(response).toEqual(expectedResult)
   })
 
   it('return adjudication detail with hearings and sanctions', async () => {
-    elite2Api.getAdjudicationDetails.mockReturnValue({
+    prisonApi.getAdjudicationDetails.mockReturnValue({
       reporterFirstName: 'Laurie',
       reporterLastName: 'Jones',
       incidentTime: '2012-11-29T14:45',
@@ -320,11 +320,11 @@ describe('Adjudication History Service', () => {
       ],
     })
 
-    expect(elite2Api.getAdjudicationDetails.mock.calls[0]).toEqual([{}, 'OFF-1', 'ADJ-1'])
+    expect(prisonApi.getAdjudicationDetails.mock.calls[0]).toEqual([{}, 'OFF-1', 'ADJ-1'])
   })
 
   it('return adjudication detail when no hearings', async () => {
-    elite2Api.getAdjudicationDetails.mockReturnValue({})
+    prisonApi.getAdjudicationDetails.mockReturnValue({})
 
     const response = await adjudicationHistory.getAdjudicationDetails({}, 'OFF-1', 'ADJ-1')
 
@@ -334,16 +334,16 @@ describe('Adjudication History Service', () => {
       sanctions: [],
     })
 
-    expect(elite2Api.getAdjudicationDetails.mock.calls[0]).toEqual([{}, 'OFF-1', 'ADJ-1'])
+    expect(prisonApi.getAdjudicationDetails.mock.calls[0]).toEqual([{}, 'OFF-1', 'ADJ-1'])
   })
 
   it('pagination is only applied to adjudication retrieval requests', async () => {
-    elite2Api.getAdjudications.mockImplementation(ctx => {
+    prisonApi.getAdjudications.mockImplementation(ctx => {
       ctx.adjudicationResponseHeaders = true
       return adjudications
     })
 
-    elite2Api.getAdjudicationFindingTypes.mockImplementation(ctx => {
+    prisonApi.getAdjudicationFindingTypes.mockImplementation(ctx => {
       ctx.findingResponseHeaders = true
       return findings
     })
@@ -355,7 +355,7 @@ describe('Adjudication History Service', () => {
     expect(response).toEqual(expectedResult)
 
     // Pagination Headers from request are passed through to the get adjudication call
-    expect(elite2Api.getAdjudications.mock.calls[0]).toEqual([
+    expect(prisonApi.getAdjudications.mock.calls[0]).toEqual([
       {
         anotherAttribute: 1,
         requestHeaders: { pageOffset: 1, pageLimit: 20 },
@@ -368,7 +368,7 @@ describe('Adjudication History Service', () => {
     ])
 
     // Pagination Headers from request are not passed through to the get findings call
-    expect(elite2Api.getAdjudicationFindingTypes.mock.calls[0]).toEqual([
+    expect(prisonApi.getAdjudicationFindingTypes.mock.calls[0]).toEqual([
       {
         anotherAttribute: 1,
         findingResponseHeaders: true,

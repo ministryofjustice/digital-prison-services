@@ -4,15 +4,15 @@ const config = require('../config')
 config.app.notmEndpointUrl = '//newNomisEndPointUrl/'
 
 describe('index', () => {
-  const elite2Api = {}
+  const prisonApi = {}
   const mockRes = { render: jest.fn(), redirect: jest.fn(), locals: {} }
   const logError = jest.fn()
 
   let service
 
   beforeEach(() => {
-    elite2Api.userCaseLoads = jest.fn()
-    service = changeCaseloadFactory(elite2Api, logError)
+    prisonApi.userCaseLoads = jest.fn()
+    service = changeCaseloadFactory(prisonApi, logError)
   })
 
   it('should make a request for caseloads', async () => {
@@ -23,7 +23,7 @@ describe('index', () => {
     const res = { ...mockRes }
     await service.index(req, res)
 
-    expect(elite2Api.userCaseLoads).toHaveBeenCalledWith({})
+    expect(prisonApi.userCaseLoads).toHaveBeenCalledWith({})
   })
 
   it('should render the change caseload page with correct data', async () => {
@@ -33,7 +33,7 @@ describe('index', () => {
     }
     const res = { ...mockRes }
 
-    elite2Api.userCaseLoads.mockReturnValue([
+    prisonApi.userCaseLoads.mockReturnValue([
       {
         caseLoadId: 'LEI',
         description: 'Leeds (HMP)',
@@ -86,7 +86,7 @@ describe('index', () => {
     }
     const res = { ...mockRes }
 
-    elite2Api.userCaseLoads.mockReturnValue([
+    prisonApi.userCaseLoads.mockReturnValue([
       {
         caseLoadId: 'LEI',
         description: 'Leeds (HMP)',
@@ -112,7 +112,7 @@ describe('index', () => {
 })
 
 describe('post', () => {
-  const elite2Api = {}
+  const prisonApi = {}
   const req = {
     session: {
       userDetails: {},
@@ -131,21 +131,21 @@ describe('post', () => {
   let service
 
   beforeEach(() => {
-    elite2Api.setActiveCaseload = jest.fn()
+    prisonApi.setActiveCaseload = jest.fn()
   })
 
   it('should call the API with the correct body', async () => {
-    service = changeCaseloadFactory(elite2Api, logError)
+    service = changeCaseloadFactory(prisonApi, logError)
 
     req.body = { caseLoadId: 'MDI' }
 
     await service.post(req, res)
 
-    expect(elite2Api.setActiveCaseload).toHaveBeenCalledWith(res.locals, { caseLoadId: 'MDI' })
+    expect(prisonApi.setActiveCaseload).toHaveBeenCalledWith(res.locals, { caseLoadId: 'MDI' })
   })
 
   it('should redirect on success', async () => {
-    service = changeCaseloadFactory(elite2Api, logError)
+    service = changeCaseloadFactory(prisonApi, logError)
 
     req.body = { caseLoadId: 'MDI' }
 
@@ -155,7 +155,7 @@ describe('post', () => {
   })
 
   it('should update session with new caseload id and clear app session data', async () => {
-    service = changeCaseloadFactory(elite2Api, logError)
+    service = changeCaseloadFactory(prisonApi, logError)
 
     req.body = { caseLoadId: 'MDI' }
 
@@ -166,7 +166,7 @@ describe('post', () => {
   })
 
   it('should error when caseload id is missing', async () => {
-    service = changeCaseloadFactory(elite2Api, logError)
+    service = changeCaseloadFactory(prisonApi, logError)
 
     req.body = {}
 

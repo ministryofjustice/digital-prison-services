@@ -2,7 +2,7 @@ const moment = require('moment')
 const { serviceUnavailableMessage } = require('../../common-messages')
 const { getTime, properCaseName } = require('../../utils')
 
-module.exports = ({ elite2Api, whereaboutsApi, logError }) => async (req, res) => {
+module.exports = ({ prisonApi, whereaboutsApi, logError }) => async (req, res) => {
   const { date, courtOption } = req.query
   const searchDate = date ? moment(date, 'DD/MM/YYYY').format('YYYY-MM-DD') : moment().format('YYYY-MM-DD')
   // FIXME: Temporary fix while waiting for new API
@@ -25,7 +25,7 @@ module.exports = ({ elite2Api, whereaboutsApi, logError }) => async (req, res) =
     // FIXME: Replace with API with returns appointments for whole estate
     const [courts, appointments] = await Promise.all([
       getCourts(res.locals),
-      elite2Api.getAppointmentsForAgency(res.locals, {
+      prisonApi.getAppointmentsForAgency(res.locals, {
         agencyId,
         date: searchDate,
       }),

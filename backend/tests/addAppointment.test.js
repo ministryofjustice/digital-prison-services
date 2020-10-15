@@ -8,7 +8,7 @@ const { repeatTypes } = require('../shared/appointmentConstants')
 config.app.notmEndpointUrl = '//dpsUrl/'
 
 describe('Add appointment', () => {
-  const elite2Api = {}
+  const prisonApi = {}
   const appointmentsService = {}
   const existingEventsService = {}
   const offenderNo = 'ABC123'
@@ -45,18 +45,18 @@ describe('Add appointment', () => {
     existingEventsService.getExistingEventsForOffender = jest.fn()
     existingEventsService.getExistingEventsForLocation = jest.fn()
 
-    elite2Api.getDetails = jest.fn()
-    elite2Api.addAppointments = jest.fn()
-    elite2Api.getLocation = jest.fn()
+    prisonApi.getDetails = jest.fn()
+    prisonApi.addAppointments = jest.fn()
+    prisonApi.getLocation = jest.fn()
 
-    controller = addAppointmentFactory(appointmentsService, existingEventsService, elite2Api, logError)
+    controller = addAppointmentFactory(appointmentsService, existingEventsService, prisonApi, logError)
   })
 
   describe('index', () => {
     describe('when there are no errors', () => {
       beforeEach(() => {
         req.params.offenderNo = offenderNo
-        elite2Api.getDetails.mockReturnValue({
+        prisonApi.getDetails.mockReturnValue({
           bookingId,
           firstName: 'BARRY',
           lastName: 'SMITH',
@@ -66,7 +66,7 @@ describe('Add appointment', () => {
       it('should make the correct calls for information and render the correct template', async () => {
         await controller.index(req, res)
 
-        expect(elite2Api.getDetails).toHaveBeenCalledWith(res.locals, offenderNo)
+        expect(prisonApi.getDetails).toHaveBeenCalledWith(res.locals, offenderNo)
         expect(appointmentsService.getAppointmentOptions).toHaveBeenCalledWith(res.locals, 'LEI')
         expect(res.render).toHaveBeenCalledWith('addAppointment/addAppointment.njk', {
           bookingId,
@@ -86,7 +86,7 @@ describe('Add appointment', () => {
     describe('when there are API errors', () => {
       beforeEach(() => {
         req.params.offenderNo = offenderNo
-        elite2Api.getDetails.mockImplementation(() => Promise.reject(new Error('Network error')))
+        prisonApi.getDetails.mockImplementation(() => Promise.reject(new Error('Network error')))
       })
 
       it('should render the error template', async () => {
@@ -116,13 +116,13 @@ describe('Add appointment', () => {
 
     beforeEach(() => {
       req.params.offenderNo = offenderNo
-      elite2Api.getDetails.mockReturnValue({
+      prisonApi.getDetails.mockReturnValue({
         bookingId,
         firstName: 'BARRY',
         lastName: 'SMITH',
       })
 
-      elite2Api.getLocation = jest.fn().mockResolvedValue({ userDescription: 'Gym' })
+      prisonApi.getLocation = jest.fn().mockResolvedValue({ userDescription: 'Gym' })
       existingEventsService.getExistingEventsForLocation = jest.fn().mockResolvedValue([{ eventId: 1 }, { eventId: 2 }])
     })
 
@@ -135,7 +135,7 @@ describe('Add appointment', () => {
         comment: 'Test comment',
       }
       beforeEach(() => {
-        elite2Api.addAppointments = jest.fn().mockReturnValue('All good')
+        prisonApi.addAppointments = jest.fn().mockReturnValue('All good')
         req.flash = jest.fn()
       })
       it('should submit the appointment with the correct details and redirect', async () => {
@@ -144,7 +144,7 @@ describe('Add appointment', () => {
 
         await controller.post(req, res)
 
-        expect(elite2Api.addAppointments).toHaveBeenCalledWith(res.locals, {
+        expect(prisonApi.addAppointments).toHaveBeenCalledWith(res.locals, {
           appointmentDefaults,
           appointments: [
             {
@@ -188,7 +188,7 @@ describe('Add appointment', () => {
       it('should render the error template', async () => {
         jest.spyOn(Date, 'now').mockImplementation(() => 33103209600000) // Friday 3019-01-01T00:00:00.000Z
         req.body = { ...validBody, date: moment().format(DAY_MONTH_YEAR) }
-        elite2Api.addAppointments.mockImplementation(() => Promise.reject(new Error('Network error')))
+        prisonApi.addAppointments.mockImplementation(() => Promise.reject(new Error('Network error')))
 
         await controller.post(req, res)
 
@@ -202,7 +202,7 @@ describe('Add appointment', () => {
     describe('when there are form errors', () => {
       beforeEach(() => {
         req.params.offenderNo = offenderNo
-        elite2Api.getDetails.mockReturnValue({
+        prisonApi.getDetails.mockReturnValue({
           bookingId,
           firstName: 'BARRY',
           lastName: 'SMITH',
@@ -375,12 +375,12 @@ describe('Add appointment', () => {
           })
         )
 
-        expect(elite2Api.getLocation.mock.calls.length).toBe(0)
+        expect(prisonApi.getLocation.mock.calls.length).toBe(0)
         expect(existingEventsService.getExistingEventsForOffender.mock.calls.length).toBe(0)
       })
 
       it('should return prisoner name for John Smith', async () => {
-        elite2Api.getDetails = jest.fn().mockResolvedValue({ firstName: 'John', lastName: 'Smith' })
+        prisonApi.getDetails = jest.fn().mockResolvedValue({ firstName: 'John', lastName: 'Smith' })
 
         await controller.post(req, res)
 
@@ -427,7 +427,7 @@ describe('Add appointment', () => {
 
           existingEventsService.getExistingEventsForOffender.mockReturnValue(offenderEvents)
           existingEventsService.getExistingEventsForLocation.mockReturnValue(locationEvents)
-          elite2Api.getLocation.mockReturnValue({ userDescription: 'Test location' })
+          prisonApi.getLocation.mockReturnValue({ userDescription: 'Test location' })
 
           await controller.post(req, res)
 

@@ -13,23 +13,23 @@ const cellNotAvailable = require('../controllers/cellMove/cellNotAvailable')
 
 const router = express.Router({ mergeParams: true })
 
-const controller = ({ oauthApi, elite2Api, whereaboutsApi, logError }) => {
-  const { index: moveValidationIndex, post: moveValidationPost } = moveValidationFactory({ elite2Api, logError })
+const controller = ({ oauthApi, prisonApi, whereaboutsApi, logError }) => {
+  const { index: moveValidationIndex, post: moveValidationPost } = moveValidationFactory({ prisonApi, logError })
 
-  const { index: confirmCellMoveIndex, post: confirmCellMovePost } = confirmCellMoveController({ elite2Api, logError })
+  const { index: confirmCellMoveIndex, post: confirmCellMovePost } = confirmCellMoveController({ prisonApi, logError })
 
-  router.get('/select-location', selectLocationController({ oauthApi, elite2Api, whereaboutsApi, logError }))
-  router.get('/non-associations', nonAssociationsController({ elite2Api, logError }))
-  router.get('/offender-details', offenderDetailsController({ elite2Api, logError }))
-  router.get('/cell-sharing-risk-assessment-details', cellSharingRiskAssessmentController({ elite2Api, logError }))
-  router.get('/select-cell', selectCellController({ oauthApi, elite2Api, whereaboutsApi, logError }))
+  router.get('/select-location', selectLocationController({ oauthApi, prisonApi, whereaboutsApi, logError }))
+  router.get('/non-associations', nonAssociationsController({ prisonApi, logError }))
+  router.get('/offender-details', offenderDetailsController({ prisonApi, logError }))
+  router.get('/cell-sharing-risk-assessment-details', cellSharingRiskAssessmentController({ prisonApi, logError }))
+  router.get('/select-cell', selectCellController({ oauthApi, prisonApi, whereaboutsApi, logError }))
   router.get('/confirm-cell-move', confirmCellMoveIndex)
   router.post('/confirm-cell-move', confirmCellMovePost)
   router.get('/move-validation', moveValidationIndex)
   router.post('/move-validation', moveValidationPost)
-  router.get('/confirmation', cellMoveConfirmationController({ elite2Api, logError }))
-  router.get('/cswap-confirmation', cswapConfirmationController({ elite2Api, logError }))
-  router.get('/cell-not-available', cellNotAvailable({ elite2Api, logError }))
+  router.get('/confirmation', cellMoveConfirmationController({ prisonApi, logError }))
+  router.get('/cswap-confirmation', cswapConfirmationController({ prisonApi, logError }))
+  router.get('/cell-not-available', cellNotAvailable({ prisonApi, logError }))
   return router
 }
 

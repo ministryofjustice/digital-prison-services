@@ -1,7 +1,7 @@
 const { selectCourtAppointmentCourtFactory } = require('../controllers/appointments/selectCourtAppointmentCourt')
 
 describe('Select court appoinment court', () => {
-  const elite2Api = {}
+  const prisonApi = {}
   const whereaboutsApi = {}
   const req = {
     originalUrl: 'http://localhost',
@@ -32,8 +32,8 @@ describe('Select court appoinment court', () => {
   }
 
   beforeEach(() => {
-    elite2Api.getDetails = jest.fn()
-    elite2Api.getAgencyDetails = jest.fn()
+    prisonApi.getDetails = jest.fn()
+    prisonApi.getAgencyDetails = jest.fn()
 
     whereaboutsApi.getCourtLocations = jest.fn()
 
@@ -41,14 +41,14 @@ describe('Select court appoinment court', () => {
     res.render = jest.fn()
     res.redirect = jest.fn()
 
-    elite2Api.getDetails.mockReturnValue({
+    prisonApi.getDetails.mockReturnValue({
       bookingId,
       offenderNo: 'A12345',
       firstName: 'John',
       lastName: 'Doe',
       assignedLivingUnitDesc: 'Cell 1',
     })
-    elite2Api.getAgencyDetails.mockReturnValue({ description: 'Moorland' })
+    prisonApi.getAgencyDetails.mockReturnValue({ description: 'Moorland' })
 
     whereaboutsApi.getCourtLocations.mockReturnValue({
       courtLocations: ['Kingston-upon-Thames', 'Westminster', 'Wimbledon', 'City of London', 'Southwark'],
@@ -59,7 +59,7 @@ describe('Select court appoinment court', () => {
 
   describe('index', () => {
     it('should render the template correctly with the court values sorted alphabetically', async () => {
-      const { index } = selectCourtAppointmentCourtFactory(elite2Api, whereaboutsApi, logError)
+      const { index } = selectCourtAppointmentCourtFactory(prisonApi, whereaboutsApi, logError)
 
       await index(req, res)
 
@@ -82,7 +82,7 @@ describe('Select court appoinment court', () => {
     })
 
     it('should not include pre post data if not required', async () => {
-      const { index } = selectCourtAppointmentCourtFactory(elite2Api, whereaboutsApi, logError)
+      const { index } = selectCourtAppointmentCourtFactory(prisonApi, whereaboutsApi, logError)
 
       req.flash.mockImplementation(() => [
         {
@@ -105,7 +105,7 @@ describe('Select court appoinment court', () => {
   describe('post', () => {
     describe('when no court has been selected', () => {
       it('should return an error', async () => {
-        const { post } = selectCourtAppointmentCourtFactory(elite2Api, whereaboutsApi, logError)
+        const { post } = selectCourtAppointmentCourtFactory(prisonApi, whereaboutsApi, logError)
 
         await post(req, res)
 
@@ -120,7 +120,7 @@ describe('Select court appoinment court', () => {
 
     describe('when a court has been selected', () => {
       it('should populate the details with the selected court and redirect to room selection page ', async () => {
-        const { post } = selectCourtAppointmentCourtFactory(elite2Api, whereaboutsApi, logError)
+        const { post } = selectCourtAppointmentCourtFactory(prisonApi, whereaboutsApi, logError)
 
         req.body = { court: 'city-of-london' }
         await post(req, res)

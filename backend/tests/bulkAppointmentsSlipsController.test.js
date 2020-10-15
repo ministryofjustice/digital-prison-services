@@ -1,5 +1,5 @@
 Reflect.deleteProperty(process.env, 'APPINSIGHTS_INSTRUMENTATIONKEY')
-const elite2Api = {}
+const prisonApi = {}
 const { largePrisonersListed, largePrisonersListedWithCell } = require('./bulkAppointmentsTestData')
 const bulkAppointmentsSlipsRouter = require('../routes/appointments/bulkAppointmentsSlipsRouter')
 const { serviceUnavailableMessage } = require('../common-messages')
@@ -10,7 +10,7 @@ let logError
 let controller
 
 beforeEach(() => {
-  elite2Api.getOffenderSummaries = jest.fn()
+  prisonApi.getOffenderSummaries = jest.fn()
   req = {
     originalUrl: '/bulk-appointments/confirm-appointment/',
     session: {
@@ -24,7 +24,7 @@ beforeEach(() => {
   }
   res = { locals: {}, render: jest.fn(), redirect: jest.fn() }
   logError = jest.fn()
-  controller = bulkAppointmentsSlipsRouter({ elite2Api, logError })
+  controller = bulkAppointmentsSlipsRouter({ prisonApi, logError })
 })
 
 const appointmentDetails = {
@@ -80,7 +80,7 @@ describe('appointment movement slips', () => {
       it('should call the correct endpoint for the extra required offender information', async () => {
         await controller(req, res)
 
-        expect(elite2Api.getOffenderSummaries).toHaveBeenCalledWith(res.locals, [
+        expect(prisonApi.getOffenderSummaries).toHaveBeenCalledWith(res.locals, [
           'G1683VN',
           'G4803UT',
           'G4346UT',
@@ -89,7 +89,7 @@ describe('appointment movement slips', () => {
       })
 
       it('should render the movement slips page with the correct details', async () => {
-        elite2Api.getOffenderSummaries = jest
+        prisonApi.getOffenderSummaries = jest
           .fn()
           .mockReturnValue([
             { offenderNo: 'G1683VN', assignedLivingUnitDesc: 'CELL 1' },
@@ -141,7 +141,7 @@ describe('appointment movement slips', () => {
       describe('but there is an issue getting additional offender details', () => {
         const genericErrorMessage = 'There has been an error'
         beforeEach(() => {
-          elite2Api.getOffenderSummaries = jest.fn().mockRejectedValue(new Error(genericErrorMessage))
+          prisonApi.getOffenderSummaries = jest.fn().mockRejectedValue(new Error(genericErrorMessage))
           req.session.appointmentSlipsData = { appointmentDetails, prisonersListed: largePrisonersListed }
         })
 
@@ -166,22 +166,22 @@ describe('appointment movement slips', () => {
       it('should call the correct endpoint the correct amount of times for the extra required offender information', async () => {
         await controller(req, res)
 
-        expect(elite2Api.getOffenderSummaries).toHaveBeenCalledWith(
+        expect(prisonApi.getOffenderSummaries).toHaveBeenCalledWith(
           res.locals,
           largePrisonersListed.slice(0, 100).map(prisoner => prisoner.offenderNo)
         )
-        expect(elite2Api.getOffenderSummaries).toHaveBeenCalledWith(
+        expect(prisonApi.getOffenderSummaries).toHaveBeenCalledWith(
           res.locals,
           largePrisonersListed.slice(100, 200).map(prisoner => prisoner.offenderNo)
         )
-        expect(elite2Api.getOffenderSummaries).toHaveBeenCalledWith(
+        expect(prisonApi.getOffenderSummaries).toHaveBeenCalledWith(
           res.locals,
           largePrisonersListed.slice(200, 201).map(prisoner => prisoner.offenderNo)
         )
       })
 
       it('should render the movement slips page with the correct details', async () => {
-        elite2Api.getOffenderSummaries = jest
+        prisonApi.getOffenderSummaries = jest
           .fn()
           .mockReturnValueOnce(largePrisonersListedWithCell.slice(0, 100))
           .mockReturnValueOnce(largePrisonersListedWithCell.slice(100, 200))

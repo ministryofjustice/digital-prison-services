@@ -6,19 +6,19 @@ const {
   app: { notmEndpointUrl: dpsUrl },
 } = require('../../config')
 
-module.exports = ({ elite2Api, logError }) => async (req, res) => {
+module.exports = ({ prisonApi, logError }) => async (req, res) => {
   let schedule
   const { when } = req.query
   const { offenderNo } = req.params
 
   try {
-    const details = await elite2Api.getDetails(res.locals, offenderNo)
+    const details = await prisonApi.getDetails(res.locals, offenderNo)
     const { bookingId, firstName, lastName } = details || {}
 
     if (when === 'nextWeek') {
-      schedule = await elite2Api.getScheduledEventsForNextWeek(res.locals, bookingId)
+      schedule = await prisonApi.getScheduledEventsForNextWeek(res.locals, bookingId)
     } else {
-      schedule = await elite2Api.getScheduledEventsForThisWeek(res.locals, bookingId)
+      schedule = await prisonApi.getScheduledEventsForThisWeek(res.locals, bookingId)
     }
 
     const groupedByDate = groupBy(schedule, 'eventDate')

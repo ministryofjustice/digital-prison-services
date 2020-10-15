@@ -4,7 +4,7 @@ const amendCaseNoteController = require('../controllers/amendmentCaseNote')
 
 describe('Amendment case note', () => {
   const caseNotesApi = {}
-  const elite2Api = {}
+  const prisonApi = {}
 
   let controller
   const req = {
@@ -27,12 +27,12 @@ describe('Amendment case note', () => {
       text: 'This is some text',
     })
     caseNotesApi.amendCaseNote = jest.fn()
-    elite2Api.getDetails = jest.fn().mockResolvedValue({
+    prisonApi.getDetails = jest.fn().mockResolvedValue({
       firstName: 'BOB',
       lastName: 'SMITH',
     })
 
-    controller = amendCaseNoteController({ caseNotesApi, elite2Api, logError: jest.fn() })
+    controller = amendCaseNoteController({ caseNotesApi, prisonApi, logError: jest.fn() })
 
     res.render = jest.fn()
     res.redirect = jest.fn()
@@ -70,7 +70,7 @@ describe('Amendment case note', () => {
       expect(res.render).toHaveBeenCalledWith('notFound.njk', { url: '/prisoner/A12345/case-notes' })
     })
     it('should render error page on exception', async () => {
-      elite2Api.getDetails.mockRejectedValue(new Error('error'))
+      prisonApi.getDetails.mockRejectedValue(new Error('error'))
       await controller.index(req, res)
 
       expect(res.render).toHaveBeenCalledWith('error.njk', { url: '/prisoner/A12345/case-notes' })
@@ -85,7 +85,7 @@ describe('Amendment case note', () => {
     it('should make a call to retrieve an prisoners name', async () => {
       await controller.index(req, res)
 
-      expect(elite2Api.getDetails).toHaveBeenCalledWith({}, 'A12345')
+      expect(prisonApi.getDetails).toHaveBeenCalledWith({}, 'A12345')
     })
 
     it('should return case note details', async () => {

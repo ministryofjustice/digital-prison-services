@@ -12,7 +12,7 @@ const { serviceUnavailableMessage } = require('../../common-messages')
 const { prepostDurations } = require('../../shared/appointmentConstants')
 const { toAppointmentDetailsSummary, isVideoLinkBooking } = require('../../services/appointmentsService')
 
-const confirmAppointmentFactory = ({ elite2Api, appointmentsService, logError }) => {
+const confirmAppointmentFactory = ({ prisonApi, appointmentsService, logError }) => {
   const index = async (req, res) => {
     const { offenderNo } = req.params
     const { activeCaseLoadId, authSource } = req.session.userDetails
@@ -53,7 +53,7 @@ const confirmAppointmentFactory = ({ elite2Api, appointmentsService, logError })
       const { text: locationDescriptionForMovementSlip } = (preAppointment &&
         locationTypes.find(loc => loc.value === Number(preAppointment.locationId))) || { text: locationDescription }
 
-      const { firstName, lastName, assignedLivingUnitDesc } = await elite2Api.getDetails(res.locals, offenderNo)
+      const { firstName, lastName, assignedLivingUnitDesc } = await prisonApi.getDetails(res.locals, offenderNo)
 
       req.session.appointmentSlipsData = {
         appointmentDetails: {

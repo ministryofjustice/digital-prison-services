@@ -24,12 +24,12 @@ const extractResponse = (complexData, key) => {
   return key ? complexData.response[key] : complexData.response
 }
 
-module.exports = ({ prisonerProfileService, elite2Api, logError }) => async (req, res) => {
+module.exports = ({ prisonerProfileService, prisonApi, logError }) => async (req, res) => {
   const { offenderNo } = req.params
   const { username } = req.session.userDetails
 
   try {
-    const details = await elite2Api.getDetails(res.locals, offenderNo)
+    const details = await prisonApi.getDetails(res.locals, offenderNo)
 
     try {
       const { bookingId } = details || {}
@@ -55,17 +55,17 @@ module.exports = ({ prisonerProfileService, elite2Api, logError }) => async (req
       ] = await Promise.all(
         [
           prisonerProfileService.getPrisonerProfileData(res.locals, offenderNo, username),
-          elite2Api.getMainOffence(res.locals, bookingId),
-          elite2Api.getPrisonerBalances(res.locals, bookingId),
-          elite2Api.getPrisonerDetails(res.locals, offenderNo),
-          elite2Api.getPrisonerSentenceDetails(res.locals, offenderNo),
-          elite2Api.getIepSummaryForBooking(res.locals, bookingId, false),
-          elite2Api.getPositiveCaseNotes(res.locals, bookingId, dateThreeMonthsAgo, today),
-          elite2Api.getNegativeCaseNotes(res.locals, bookingId, dateThreeMonthsAgo, today),
-          elite2Api.getAdjudicationsForBooking(res.locals, bookingId),
-          elite2Api.getNextVisit(res.locals, bookingId),
-          elite2Api.getPrisonerVisitBalances(res.locals, offenderNo),
-          elite2Api.getEventsForToday(res.locals, bookingId),
+          prisonApi.getMainOffence(res.locals, bookingId),
+          prisonApi.getPrisonerBalances(res.locals, bookingId),
+          prisonApi.getPrisonerDetails(res.locals, offenderNo),
+          prisonApi.getPrisonerSentenceDetails(res.locals, offenderNo),
+          prisonApi.getIepSummaryForBooking(res.locals, bookingId, false),
+          prisonApi.getPositiveCaseNotes(res.locals, bookingId, dateThreeMonthsAgo, today),
+          prisonApi.getNegativeCaseNotes(res.locals, bookingId, dateThreeMonthsAgo, today),
+          prisonApi.getAdjudicationsForBooking(res.locals, bookingId),
+          prisonApi.getNextVisit(res.locals, bookingId),
+          prisonApi.getPrisonerVisitBalances(res.locals, offenderNo),
+          prisonApi.getEventsForToday(res.locals, bookingId),
         ].map(apiCall => captureErrorAndContinue(apiCall))
       )
 

@@ -1,13 +1,13 @@
 const { putLastNameFirst } = require('../../utils')
 
-module.exports = ({ elite2Api, logError }) => async (req, res) => {
+module.exports = ({ prisonApi, logError }) => async (req, res) => {
   const { offenderNo } = req.params
   const { cellDescription } = req.query
 
   try {
     if (!cellDescription) return res.redirect(`/prisoner/${offenderNo}/cell-move/select-cell`)
 
-    const { firstName, lastName } = await elite2Api.getDetails(res.locals, offenderNo)
+    const { firstName, lastName } = await prisonApi.getDetails(res.locals, offenderNo)
 
     return res.render('cellMove/cellNotAvailable.njk', {
       header: `Cell ${cellDescription} is no longer available`,

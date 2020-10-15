@@ -13,7 +13,7 @@ const {
 const logErrorAndContinue = require('../shared/logErrorAndContinue')
 
 module.exports = ({
-  elite2Api,
+  prisonApi,
   keyworkerApi,
   oauthApi,
   dataComplianceApi,
@@ -25,7 +25,7 @@ module.exports = ({
   const getPrisonerProfileData = async (context, offenderNo, username) => {
     const [currentUser, prisonerDetails] = await Promise.all([
       oauthApi.currentUser(context),
-      elite2Api.getDetails(context, offenderNo, true),
+      prisonApi.getDetails(context, offenderNo, true),
     ])
 
     const allocationManager = await allocationManagerApi.getPomByOffenderNo(context, offenderNo)
@@ -74,10 +74,10 @@ module.exports = ({
       socDetails,
     ] = await Promise.all(
       [
-        elite2Api.getIepSummary(context, [bookingId]),
-        elite2Api.getCaseNoteSummaryByTypes(context, { type: 'KA', subType: 'KS', numMonths: 1, bookingId }),
-        elite2Api.userCaseLoads(context),
-        elite2Api.getStaffRoles(context, currentUser.staffId, currentUser.activeCaseLoadId),
+        prisonApi.getIepSummary(context, [bookingId]),
+        prisonApi.getCaseNoteSummaryByTypes(context, { type: 'KA', subType: 'KS', numMonths: 1, bookingId }),
+        prisonApi.userCaseLoads(context),
+        prisonApi.getStaffRoles(context, currentUser.staffId, currentUser.activeCaseLoadId),
         keyworkerApi.getKeyworkerByCaseloadAndOffenderNo(context, agencyId, offenderNo),
         oauthApi.userRoles(context),
         pathfinderApi.getPathfinderDetails(systemContext, offenderNo),

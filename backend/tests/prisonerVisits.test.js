@@ -6,7 +6,7 @@ describe('Prisoner visits', () => {
   const pageSize = 2
   const offenderNo = 'ABC123'
   const bookingId = '123'
-  const elite2Api = {}
+  const prisonApi = {}
 
   let req
   let res
@@ -25,24 +25,24 @@ describe('Prisoner visits', () => {
 
     logError = jest.fn()
 
-    elite2Api.getDetails = jest.fn().mockResolvedValue({})
-    elite2Api.getVisitTypes = jest.fn().mockResolvedValue([])
-    elite2Api.getVisitsForBookingWithVisitors = jest.fn().mockResolvedValue({})
+    prisonApi.getDetails = jest.fn().mockResolvedValue({})
+    prisonApi.getVisitTypes = jest.fn().mockResolvedValue([])
+    prisonApi.getVisitsForBookingWithVisitors = jest.fn().mockResolvedValue({})
 
-    controller = prisonerVisits({ elite2Api, logError, pageSize })
+    controller = prisonerVisits({ prisonApi, logError, pageSize })
   })
 
   it('should get the prisoner details and visit types', async () => {
     await controller(req, res)
 
-    expect(elite2Api.getDetails).toHaveBeenCalledWith(res.locals, offenderNo)
-    expect(elite2Api.getVisitTypes).toHaveBeenCalledWith(res.locals)
+    expect(prisonApi.getDetails).toHaveBeenCalledWith(res.locals, offenderNo)
+    expect(prisonApi.getVisitTypes).toHaveBeenCalledWith(res.locals)
   })
 
   describe('Visits results', () => {
     beforeEach(() => {
-      elite2Api.getDetails.mockResolvedValue({ bookingId, firstName: 'Prisoner', lastName: 'Name' })
-      elite2Api.getVisitsForBookingWithVisitors.mockResolvedValue({
+      prisonApi.getDetails.mockResolvedValue({ bookingId, firstName: 'Prisoner', lastName: 'Name' })
+      prisonApi.getVisitsForBookingWithVisitors.mockResolvedValue({
         content: [
           {
             visitors: [
@@ -145,7 +145,7 @@ describe('Prisoner visits', () => {
       }
       await controller(req, res)
 
-      expect(elite2Api.getVisitsForBookingWithVisitors).toHaveBeenCalledWith(res.locals, bookingId, {
+      expect(prisonApi.getVisitsForBookingWithVisitors).toHaveBeenCalledWith(res.locals, bookingId, {
         fromDate: '2020-01-13',
         page: 0,
         paged: true,
@@ -258,7 +258,7 @@ describe('Prisoner visits', () => {
 
   describe('Errors', () => {
     it('should render the error template with a link to the homepage if there is a problem retrieving prisoner details', async () => {
-      elite2Api.getDetails.mockImplementation(() => Promise.reject(new Error('Network error')))
+      prisonApi.getDetails.mockImplementation(() => Promise.reject(new Error('Network error')))
 
       await controller(req, res)
 
@@ -267,7 +267,7 @@ describe('Prisoner visits', () => {
     })
 
     it('should render the error template with a link to the prisoner profile if there is a problem retrieving visits', async () => {
-      elite2Api.getVisitsForBookingWithVisitors.mockImplementation(() => Promise.reject(new Error('Network error')))
+      prisonApi.getVisitsForBookingWithVisitors.mockImplementation(() => Promise.reject(new Error('Network error')))
 
       await controller(req, res)
 

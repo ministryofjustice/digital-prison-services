@@ -208,7 +208,7 @@ const getSubheading = ({ fromDate, toDate, displayPeriod }) => {
   )}  - ${displayPeriod}`
 }
 
-const attendanceStatisticsFactory = (oauthApi, elite2Api, whereaboutsApi, logError) => {
+const attendanceStatisticsFactory = (oauthApi, prisonApi, whereaboutsApi, logError) => {
   const attendanceStatistics = async (req, res) => {
     const currentPeriod = getCurrentPeriod(moment().format())
 
@@ -218,7 +218,7 @@ const attendanceStatisticsFactory = (oauthApi, elite2Api, whereaboutsApi, logErr
     try {
       const [user, caseloads, roles] = await Promise.all([
         oauthApi.currentUser(res.locals),
-        elite2Api.userCaseLoads(res.locals),
+        prisonApi.userCaseLoads(res.locals),
         oauthApi.userRoles(res.locals),
       ])
 
@@ -310,7 +310,7 @@ const attendanceStatisticsFactory = (oauthApi, elite2Api, whereaboutsApi, logErr
     try {
       const [user, caseloads, roles] = await Promise.all([
         oauthApi.currentUser(res.locals),
-        elite2Api.userCaseLoads(res.locals),
+        prisonApi.userCaseLoads(res.locals),
         oauthApi.userRoles(res.locals),
       ])
 
@@ -382,7 +382,7 @@ const attendanceStatisticsFactory = (oauthApi, elite2Api, whereaboutsApi, logErr
     try {
       const [user, caseloads, roles] = await Promise.all([
         oauthApi.currentUser(res.locals),
-        elite2Api.userCaseLoads(res.locals),
+        prisonApi.userCaseLoads(res.locals),
         oauthApi.userRoles(res.locals),
       ])
 
@@ -394,7 +394,7 @@ const attendanceStatisticsFactory = (oauthApi, elite2Api, whereaboutsApi, logErr
         )
       }
 
-      const scheduledActivities = await elite2Api.getOffenderActivitiesOverDateRange(res.locals, {
+      const scheduledActivities = await prisonApi.getOffenderActivitiesOverDateRange(res.locals, {
         agencyId,
         fromDate: formattedFromDate,
         toDate: formattedToDate,

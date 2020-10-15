@@ -7,12 +7,12 @@ const {
   app: { notmEndpointUrl: dpsUrl },
 } = require('../../config')
 
-module.exports = ({ elite2Api, logError }) => async (req, res) => {
+module.exports = ({ prisonApi, logError }) => async (req, res) => {
   const { offenderNo } = req.params
 
   try {
-    const { bookingId, firstName, lastName } = await elite2Api.getDetails(res.locals, offenderNo)
-    const nonAssociations = await elite2Api.getNonAssociations(res.locals, bookingId)
+    const { bookingId, firstName, lastName } = await prisonApi.getDetails(res.locals, offenderNo)
+    const nonAssociations = await prisonApi.getNonAssociations(res.locals, bookingId)
 
     // Only show active non-associations in the same establishment
     // Active means the effective date is not in the future and the expiry date is not in the past

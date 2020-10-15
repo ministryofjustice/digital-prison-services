@@ -1,9 +1,9 @@
-const elite2Api = {}
+const prisonApi = {}
 const {
   getIepDetails,
   changeIepLevel,
   getPossibleLevels,
-} = require('../controllers/incentiveLevelDetails').getIepDetailsFactory(elite2Api)
+} = require('../controllers/incentiveLevelDetails').getIepDetailsFactory(prisonApi)
 
 function createIepDetailsReponse() {
   return {
@@ -53,30 +53,30 @@ function createIepDetailsReponse() {
 }
 
 beforeEach(() => {
-  elite2Api.getDetails = jest.fn()
-  elite2Api.getIepSummaryForBooking = jest.fn()
-  elite2Api.getAgencyDetails = jest.fn()
-  elite2Api.getStaffDetails = jest.fn()
-  elite2Api.changeIepLevel = jest.fn()
-  elite2Api.getAgencyIepLevels = jest.fn()
+  prisonApi.getDetails = jest.fn()
+  prisonApi.getIepSummaryForBooking = jest.fn()
+  prisonApi.getAgencyDetails = jest.fn()
+  prisonApi.getStaffDetails = jest.fn()
+  prisonApi.changeIepLevel = jest.fn()
+  prisonApi.getAgencyIepLevels = jest.fn()
 })
 
 describe('Incentive details controller', () => {
   beforeEach(() => {
-    elite2Api.getDetails.mockReturnValue({
+    prisonApi.getDetails.mockReturnValue({
       firstName: 'ARTHUR',
       lastName: 'ANDERSON',
       agencyId: 'HEI',
       bookingId: -1,
     })
 
-    elite2Api.getStaffDetails.mockReturnValue({
+    prisonApi.getStaffDetails.mockReturnValue({
       username: 'ITAG_USER',
       firstName: 'Staff',
       lastName: 'Member',
     })
 
-    elite2Api.getAgencyDetails
+    prisonApi.getAgencyDetails
       .mockReturnValueOnce({
         agencyId: 'HEI',
         description: 'Hewell',
@@ -85,7 +85,7 @@ describe('Incentive details controller', () => {
         agencyId: 'LEI',
         description: 'Leeds',
       })
-    elite2Api.getIepSummaryForBooking.mockReturnValue({
+    prisonApi.getIepSummaryForBooking.mockReturnValue({
       bookingId: -1,
       iepDate: '2017-08-15',
       iepTime: '2017-08-15T16:04:35',
@@ -118,7 +118,7 @@ describe('Incentive details controller', () => {
         },
       ],
     })
-    elite2Api.getAgencyIepLevels.mockReturnValue([
+    prisonApi.getAgencyIepLevels.mockReturnValue([
       { iepLevel: 'ENT', iepDescription: 'Entry' },
       { iepLevel: 'BAS', iepDescription: 'Basic' },
       { iepLevel: 'STD', iepDescription: 'Standard' },
@@ -131,9 +131,9 @@ describe('Incentive details controller', () => {
     const expected = createIepDetailsReponse()
     expect(response).toEqual(expected)
 
-    expect(elite2Api.getDetails.mock.calls.length).toBe(1)
-    expect(elite2Api.getIepSummaryForBooking.mock.calls.length).toBe(1)
-    expect(elite2Api.getIepSummaryForBooking).toHaveBeenCalledWith({}, -1, true)
+    expect(prisonApi.getDetails.mock.calls.length).toBe(1)
+    expect(prisonApi.getIepSummaryForBooking.mock.calls.length).toBe(1)
+    expect(prisonApi.getIepSummaryForBooking).toHaveBeenCalledWith({}, -1, true)
   })
 
   it('Should filter by level', async () => {
@@ -161,8 +161,8 @@ describe('Incentive details controller', () => {
       ],
     })
 
-    expect(elite2Api.getDetails.mock.calls.length).toBe(1)
-    expect(elite2Api.getIepSummaryForBooking.mock.calls.length).toBe(1)
+    expect(prisonApi.getDetails.mock.calls.length).toBe(1)
+    expect(prisonApi.getIepSummaryForBooking.mock.calls.length).toBe(1)
   })
 
   it('Should filter by date', async () => {
@@ -190,8 +190,8 @@ describe('Incentive details controller', () => {
       ],
     })
 
-    expect(elite2Api.getDetails.mock.calls.length).toBe(1)
-    expect(elite2Api.getIepSummaryForBooking.mock.calls.length).toBe(1)
+    expect(prisonApi.getDetails.mock.calls.length).toBe(1)
+    expect(prisonApi.getIepSummaryForBooking.mock.calls.length).toBe(1)
   })
 
   it('Should return records if same From and To dates', async () => {
@@ -219,8 +219,8 @@ describe('Incentive details controller', () => {
       ],
     })
 
-    expect(elite2Api.getDetails.mock.calls.length).toBe(1)
-    expect(elite2Api.getIepSummaryForBooking.mock.calls.length).toBe(1)
+    expect(prisonApi.getDetails.mock.calls.length).toBe(1)
+    expect(prisonApi.getIepSummaryForBooking.mock.calls.length).toBe(1)
   })
 
   it('Should filter by establishment', async () => {
@@ -259,8 +259,8 @@ describe('Incentive details controller', () => {
       ],
     })
 
-    expect(elite2Api.getDetails.mock.calls.length).toBe(1)
-    expect(elite2Api.getIepSummaryForBooking.mock.calls.length).toBe(1)
+    expect(prisonApi.getDetails.mock.calls.length).toBe(1)
+    expect(prisonApi.getIepSummaryForBooking.mock.calls.length).toBe(1)
   })
 
   it('Should filter by all filters', async () => {
@@ -293,12 +293,12 @@ describe('Incentive details controller', () => {
       ],
     })
 
-    expect(elite2Api.getDetails.mock.calls.length).toBe(1)
-    expect(elite2Api.getIepSummaryForBooking.mock.calls.length).toBe(1)
+    expect(prisonApi.getDetails.mock.calls.length).toBe(1)
+    expect(prisonApi.getIepSummaryForBooking.mock.calls.length).toBe(1)
   })
 
   it('Should return "Changed today" when 0 days since review', async () => {
-    elite2Api.getIepSummaryForBooking.mockReturnValue({
+    prisonApi.getIepSummaryForBooking.mockReturnValue({
       bookingId: -1,
       iepDate: '2017-08-15',
       iepTime: '2017-08-15T16:04:35',
@@ -360,12 +360,12 @@ describe('Incentive details controller', () => {
       ],
     })
 
-    expect(elite2Api.getDetails.mock.calls.length).toBe(1)
-    expect(elite2Api.getIepSummaryForBooking.mock.calls.length).toBe(1)
+    expect(prisonApi.getDetails.mock.calls.length).toBe(1)
+    expect(prisonApi.getIepSummaryForBooking.mock.calls.length).toBe(1)
   })
 
-  it('Should call the right elite2 end point for update level', async () => {
-    elite2Api.getDetails.mockReturnValue({
+  it('Should call the right prisonapi end point for update level', async () => {
+    prisonApi.getDetails.mockReturnValue({
       bookingId: -1,
     })
 
@@ -375,8 +375,8 @@ describe('Incentive details controller', () => {
     }
     await changeIepLevel({}, '1', params)
 
-    expect(elite2Api.getDetails.mock.calls.length).toBe(1)
-    expect(elite2Api.changeIepLevel).toHaveBeenCalledWith({}, -1, params)
+    expect(prisonApi.getDetails.mock.calls.length).toBe(1)
+    expect(prisonApi.changeIepLevel).toHaveBeenCalledWith({}, -1, params)
   })
 
   it('Should return the right Incentive levels when current is Basic', async () => {

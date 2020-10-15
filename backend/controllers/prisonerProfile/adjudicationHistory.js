@@ -12,7 +12,7 @@ const sortByDateTimeDesc = (left, right) => {
 
 const sortByTextAlphabetically = (left, right) => left.text.localeCompare(right.text)
 
-module.exports = ({ adjudicationHistoryService, elite2Api, logError, paginationService }) => async (req, res) => {
+module.exports = ({ adjudicationHistoryService, prisonApi, logError, paginationService }) => async (req, res) => {
   const { offenderNo } = req.params
   const fullUrl = new URL(`${req.protocol}://${req.get('host')}${req.originalUrl}`)
 
@@ -46,7 +46,7 @@ module.exports = ({ adjudicationHistoryService, elite2Api, logError, paginationS
       perPage
     )
 
-    const { firstName, lastName } = await elite2Api.getDetails(res.locals, offenderNo)
+    const { firstName, lastName } = await prisonApi.getDetails(res.locals, offenderNo)
 
     const prisonerName = formatName(firstName, lastName)
 

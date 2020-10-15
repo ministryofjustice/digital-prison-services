@@ -9,7 +9,7 @@ describe('view offender details', () => {
   let logError
   let controller
 
-  const elite2Api = {}
+  const prisonApi = {}
 
   const offenderNo = 'ABC123'
 
@@ -42,25 +42,25 @@ describe('view offender details', () => {
     }
     res = { locals: {}, render: jest.fn() }
 
-    elite2Api.getDetails = jest.fn().mockResolvedValue(getDetailsResponse)
-    elite2Api.getMainOffence = jest.fn().mockResolvedValue([
+    prisonApi.getDetails = jest.fn().mockResolvedValue(getDetailsResponse)
+    prisonApi.getMainOffence = jest.fn().mockResolvedValue([
       {
         offenceDescription: '13 hours over work',
       },
     ])
 
-    controller = viewOffenderDetails({ elite2Api, logError })
+    controller = viewOffenderDetails({ prisonApi, logError })
   })
 
   it('Makes the expected API calls', async () => {
     await controller(req, res)
 
-    expect(elite2Api.getDetails).toHaveBeenCalledWith(res.locals, offenderNo, true)
-    expect(elite2Api.getMainOffence).toHaveBeenCalledWith(res.locals, 1234)
+    expect(prisonApi.getDetails).toHaveBeenCalledWith(res.locals, offenderNo, true)
+    expect(prisonApi.getMainOffence).toHaveBeenCalledWith(res.locals, 1234)
   })
 
   it('Should render error template when there is an API error', async () => {
-    elite2Api.getDetails.mockImplementation(() => Promise.reject(new Error('Network error')))
+    prisonApi.getDetails.mockImplementation(() => Promise.reject(new Error('Network error')))
 
     await controller(req, res)
 
@@ -94,14 +94,14 @@ describe('view offender details', () => {
   })
 
   it('populates the data correctly when optional missing', async () => {
-    elite2Api.getDetails = jest.fn().mockResolvedValue({
+    prisonApi.getDetails = jest.fn().mockResolvedValue({
       ...getDetailsResponse,
       profileInformation: [],
       age: undefined,
       physicalAttributes: {},
       religion: undefined,
     })
-    elite2Api.getMainOffence = jest.fn().mockResolvedValue([])
+    prisonApi.getMainOffence = jest.fn().mockResolvedValue([])
     await controller(req, res)
 
     expect(res.render).toHaveBeenCalledWith(

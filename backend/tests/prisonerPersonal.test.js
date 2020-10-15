@@ -20,7 +20,7 @@ describe('prisoner personal', () => {
     writtenLanguage: 'Russian',
   }
   const bookingId = '123'
-  const elite2Api = {}
+  const prisonApi = {}
   const allocationManagerApi = {}
   const prisonerProfileService = {}
   const personService = {}
@@ -40,27 +40,27 @@ describe('prisoner personal', () => {
 
     personService.getPersonContactDetails = jest.fn().mockResolvedValue({})
 
-    elite2Api.getDetails = jest.fn().mockResolvedValue({})
-    elite2Api.getIdentifiers = jest.fn().mockResolvedValue([])
-    elite2Api.getOffenderAliases = jest.fn().mockResolvedValue([])
-    elite2Api.getPrisonerProperty = jest.fn().mockResolvedValue([])
-    elite2Api.getPrisonerContacts = jest.fn().mockResolvedValue([])
-    elite2Api.getPrisonerAddresses = jest.fn().mockResolvedValue([])
-    elite2Api.getSecondaryLanguages = jest.fn().mockResolvedValue([])
-    elite2Api.getPersonalCareNeeds = jest.fn().mockResolvedValue([])
-    elite2Api.getReasonableAdjustments = jest.fn().mockResolvedValue([])
-    elite2Api.getTreatmentTypes = jest.fn().mockResolvedValue([])
-    elite2Api.getHealthTypes = jest.fn().mockResolvedValue([])
-    elite2Api.getAgencies = jest.fn().mockResolvedValue([])
+    prisonApi.getDetails = jest.fn().mockResolvedValue({})
+    prisonApi.getIdentifiers = jest.fn().mockResolvedValue([])
+    prisonApi.getOffenderAliases = jest.fn().mockResolvedValue([])
+    prisonApi.getPrisonerProperty = jest.fn().mockResolvedValue([])
+    prisonApi.getPrisonerContacts = jest.fn().mockResolvedValue([])
+    prisonApi.getPrisonerAddresses = jest.fn().mockResolvedValue([])
+    prisonApi.getSecondaryLanguages = jest.fn().mockResolvedValue([])
+    prisonApi.getPersonalCareNeeds = jest.fn().mockResolvedValue([])
+    prisonApi.getReasonableAdjustments = jest.fn().mockResolvedValue([])
+    prisonApi.getTreatmentTypes = jest.fn().mockResolvedValue([])
+    prisonApi.getHealthTypes = jest.fn().mockResolvedValue([])
+    prisonApi.getAgencies = jest.fn().mockResolvedValue([])
     allocationManagerApi.getPomByOffenderNo = jest.fn().mockResolvedValue({})
 
-    controller = prisonerPersonal({ prisonerProfileService, personService, elite2Api, allocationManagerApi, logError })
+    controller = prisonerPersonal({ prisonerProfileService, personService, prisonApi, allocationManagerApi, logError })
   })
 
   it('should make a call for the basic details of a prisoner and the prisoner header details and render them', async () => {
     await controller(req, res)
 
-    expect(elite2Api.getDetails).toHaveBeenCalledWith(res.locals, offenderNo)
+    expect(prisonApi.getDetails).toHaveBeenCalledWith(res.locals, offenderNo)
     expect(prisonerProfileService.getPrisonerProfileData).toHaveBeenCalledWith(res.locals, offenderNo)
     expect(res.render).toHaveBeenCalledWith(
       'prisonerProfile/prisonerPersonal/prisonerPersonal.njk',
@@ -71,8 +71,8 @@ describe('prisoner personal', () => {
   })
 
   it('should make a call to request the prisoners secondary languages', async () => {
-    elite2Api.getDetails.mockResolvedValue({ bookingId: 123 })
-    elite2Api.getSecondaryLanguages.mockResolvedValue([
+    prisonApi.getDetails.mockResolvedValue({ bookingId: 123 })
+    prisonApi.getSecondaryLanguages.mockResolvedValue([
       {
         bookingId: 10000,
         canRead: true,
@@ -84,7 +84,7 @@ describe('prisoner personal', () => {
     ])
     await controller(req, res)
 
-    expect(elite2Api.getSecondaryLanguages).toHaveBeenCalledWith({}, 123)
+    expect(prisonApi.getSecondaryLanguages).toHaveBeenCalledWith({}, 123)
     expect(res.render).toHaveBeenCalledWith(
       'prisonerProfile/prisonerPersonal/prisonerPersonal.njk',
       expect.objectContaining({
@@ -107,13 +107,13 @@ describe('prisoner personal', () => {
 
   describe('identifiers', () => {
     beforeEach(() => {
-      elite2Api.getDetails.mockResolvedValue({ bookingId })
+      prisonApi.getDetails.mockResolvedValue({ bookingId })
     })
 
     it('should make a call for identifiers data', async () => {
       await controller(req, res)
 
-      expect(elite2Api.getIdentifiers).toHaveBeenCalledWith(res.locals, bookingId)
+      expect(prisonApi.getIdentifiers).toHaveBeenCalledWith(res.locals, bookingId)
     })
 
     describe('when there is missing identifier data', () => {
@@ -131,7 +131,7 @@ describe('prisoner personal', () => {
 
     describe('when there is identifier data', () => {
       beforeEach(() => {
-        elite2Api.getIdentifiers = jest
+        prisonApi.getIdentifiers = jest
           .fn()
           .mockResolvedValue([
             { type: 'PNC', value: '1234' },
@@ -163,13 +163,13 @@ describe('prisoner personal', () => {
 
   describe('aliases', () => {
     beforeEach(() => {
-      elite2Api.getDetails.mockResolvedValue({ bookingId })
+      prisonApi.getDetails.mockResolvedValue({ bookingId })
     })
 
     it('should make a call for aliases data', async () => {
       await controller(req, res)
 
-      expect(elite2Api.getOffenderAliases).toHaveBeenCalledWith(res.locals, bookingId)
+      expect(prisonApi.getOffenderAliases).toHaveBeenCalledWith(res.locals, bookingId)
     })
 
     describe('when there is missing aliases data', () => {
@@ -187,7 +187,7 @@ describe('prisoner personal', () => {
 
     describe('when there is aliases data', () => {
       beforeEach(() => {
-        elite2Api.getOffenderAliases = jest
+        prisonApi.getOffenderAliases = jest
           .fn()
           .mockResolvedValue([
             { firstName: 'First', lastName: 'Alias', dob: '1985-08-31' },
@@ -210,7 +210,7 @@ describe('prisoner personal', () => {
 
   describe('physical characteristics', () => {
     beforeEach(() => {
-      elite2Api.getDetails.mockResolvedValue({ bookingId })
+      prisonApi.getDetails.mockResolvedValue({ bookingId })
     })
 
     describe('when there is missing physical characteristic data', () => {
@@ -281,7 +281,7 @@ describe('prisoner personal', () => {
 
   describe('distinguishing physical marks', () => {
     beforeEach(() => {
-      elite2Api.getDetails.mockResolvedValue({ bookingId })
+      prisonApi.getDetails.mockResolvedValue({ bookingId })
     })
 
     describe('when there is missing distinguishing physical marks data', () => {
@@ -350,7 +350,7 @@ describe('prisoner personal', () => {
 
   describe('personal details section', () => {
     beforeEach(() => {
-      elite2Api.getDetails.mockResolvedValue({ bookingId })
+      prisonApi.getDetails.mockResolvedValue({ bookingId })
     })
 
     describe('primary', () => {
@@ -862,7 +862,7 @@ describe('prisoner personal', () => {
 
       describe('when there is property data', () => {
         beforeEach(() => {
-          elite2Api.getPrisonerProperty.mockResolvedValue([
+          prisonApi.getPrisonerProperty.mockResolvedValue([
             {
               containerType: 'Valuables',
               location: { userDescription: 'Property Box 123' },
@@ -991,13 +991,13 @@ describe('prisoner personal', () => {
     }
 
     beforeEach(() => {
-      elite2Api.getDetails.mockResolvedValue({ bookingId })
+      prisonApi.getDetails.mockResolvedValue({ bookingId })
     })
 
     it('should make a call for prisoners contacts data', async () => {
       await controller(req, res)
 
-      expect(elite2Api.getPrisonerContacts).toHaveBeenCalledWith(res.locals, bookingId)
+      expect(prisonApi.getPrisonerContacts).toHaveBeenCalledWith(res.locals, bookingId)
     })
 
     it('should make a call for prison offender managers', async () => {
@@ -1019,7 +1019,7 @@ describe('prisoner personal', () => {
 
     describe('when there is prisoner contacts data', () => {
       beforeEach(() => {
-        elite2Api.getPrisonerContacts.mockResolvedValue({
+        prisonApi.getPrisonerContacts.mockResolvedValue({
           nextOfKin: [
             {
               lastName: 'SMITH',
@@ -1492,13 +1492,13 @@ describe('prisoner personal', () => {
     }
 
     beforeEach(() => {
-      elite2Api.getDetails.mockResolvedValue({ bookingId })
+      prisonApi.getDetails.mockResolvedValue({ bookingId })
     })
 
     it('should make a call for prisoners addresses', async () => {
       await controller(req, res)
 
-      expect(elite2Api.getPrisonerAddresses).toHaveBeenCalledWith(res.locals, offenderNo)
+      expect(prisonApi.getPrisonerAddresses).toHaveBeenCalledWith(res.locals, offenderNo)
     })
 
     describe('when there is missing prisoner address data', () => {
@@ -1524,7 +1524,7 @@ describe('prisoner personal', () => {
 
     describe('when there is prisoner address data', () => {
       beforeEach(() => {
-        elite2Api.getPrisonerAddresses.mockResolvedValue([primaryAddress, nonPrimaryAddress])
+        prisonApi.getPrisonerAddresses.mockResolvedValue([primaryAddress, nonPrimaryAddress])
         jest.spyOn(Date, 'now').mockImplementation(() => 1578787200000) // Sun Jan 12 2020 00:00:00
       })
 
@@ -1562,7 +1562,7 @@ describe('prisoner personal', () => {
 
       describe('when the address is missing county and/or country', () => {
         beforeEach(() => {
-          elite2Api.getPrisonerAddresses.mockResolvedValue([
+          prisonApi.getPrisonerAddresses.mockResolvedValue([
             { ...primaryAddress, county: undefined, country: undefined },
             nonPrimaryAddress,
           ])
@@ -1597,7 +1597,7 @@ describe('prisoner personal', () => {
 
       describe('when the prisoners address does not have a flat number', () => {
         beforeEach(() => {
-          elite2Api.getPrisonerAddresses.mockResolvedValue([{ ...primaryAddress, flat: undefined }, nonPrimaryAddress])
+          prisonApi.getPrisonerAddresses.mockResolvedValue([{ ...primaryAddress, flat: undefined }, nonPrimaryAddress])
         })
 
         it('should not return it as part of the address field', async () => {
@@ -1631,7 +1631,7 @@ describe('prisoner personal', () => {
 
       describe('when the primary address has an end date in the past', () => {
         beforeEach(() => {
-          elite2Api.getPrisonerAddresses.mockResolvedValue([
+          prisonApi.getPrisonerAddresses.mockResolvedValue([
             { ...primaryAddress, endDate: '2020-1-11' },
             nonPrimaryAddress,
           ])
@@ -1663,20 +1663,20 @@ describe('prisoner personal', () => {
     it('should make a call for treatment and health types', async () => {
       await controller(req, res)
 
-      expect(elite2Api.getTreatmentTypes).toHaveBeenCalledWith(res.locals)
-      expect(elite2Api.getHealthTypes).toHaveBeenCalledWith(res.locals)
+      expect(prisonApi.getTreatmentTypes).toHaveBeenCalledWith(res.locals)
+      expect(prisonApi.getHealthTypes).toHaveBeenCalledWith(res.locals)
     })
 
     beforeEach(() => {
-      elite2Api.getDetails.mockResolvedValue({ bookingId })
+      prisonApi.getDetails.mockResolvedValue({ bookingId })
     })
 
     it('should make a call for care needs, adjustments and agencies data', async () => {
       await controller(req, res)
 
-      expect(elite2Api.getPersonalCareNeeds).toHaveBeenCalledWith(res.locals, bookingId, '')
-      expect(elite2Api.getReasonableAdjustments).toHaveBeenCalledWith(res.locals, bookingId, '')
-      expect(elite2Api.getAgencies).toHaveBeenCalledWith(res.locals)
+      expect(prisonApi.getPersonalCareNeeds).toHaveBeenCalledWith(res.locals, bookingId, '')
+      expect(prisonApi.getReasonableAdjustments).toHaveBeenCalledWith(res.locals, bookingId, '')
+      expect(prisonApi.getAgencies).toHaveBeenCalledWith(res.locals)
     })
 
     describe('when there is no care needs and adjustments data', () => {
@@ -1697,7 +1697,7 @@ describe('prisoner personal', () => {
 
     describe('when there is care needs and adjustments data', () => {
       beforeEach(() => {
-        elite2Api.getPersonalCareNeeds = jest.fn().mockResolvedValue({
+        prisonApi.getPersonalCareNeeds = jest.fn().mockResolvedValue({
           personalCareNeeds: [
             {
               problemType: 'DISAB',
@@ -1728,7 +1728,7 @@ describe('prisoner personal', () => {
             },
           ],
         })
-        elite2Api.getHealthTypes = jest.fn().mockResolvedValue([
+        prisonApi.getHealthTypes = jest.fn().mockResolvedValue([
           {
             domain: 'HEALTH',
             code: 'DISAB',
@@ -1740,7 +1740,7 @@ describe('prisoner personal', () => {
             description: 'Psychological',
           },
         ])
-        elite2Api.getReasonableAdjustments = jest.fn().mockResolvedValue({
+        prisonApi.getReasonableAdjustments = jest.fn().mockResolvedValue({
           reasonableAdjustments: [
             {
               treatmentCode: 'AMP TEL',
@@ -1758,7 +1758,7 @@ describe('prisoner personal', () => {
             },
           ],
         })
-        elite2Api.getTreatmentTypes = jest.fn().mockResolvedValue([
+        prisonApi.getTreatmentTypes = jest.fn().mockResolvedValue([
           {
             domain: 'HEALTH_TREAT',
             code: 'AMP TEL',
@@ -1771,7 +1771,7 @@ describe('prisoner personal', () => {
           },
         ])
 
-        elite2Api.getAgencies = jest.fn().mockResolvedValue([
+        prisonApi.getAgencies = jest.fn().mockResolvedValue([
           {
             agencyId: 'MDI',
             description: 'MOORLAND (HMP & YOI)',
@@ -1783,8 +1783,8 @@ describe('prisoner personal', () => {
       it('should make a call for care needs and adjustments with the available treatment and health types', async () => {
         await controller(req, res)
 
-        expect(elite2Api.getReasonableAdjustments).toHaveBeenCalledWith(res.locals, bookingId, 'AMP TEL,FLEX_REFRESH')
-        expect(elite2Api.getPersonalCareNeeds).toHaveBeenCalledWith(res.locals, bookingId, 'DISAB,PSYCH')
+        expect(prisonApi.getReasonableAdjustments).toHaveBeenCalledWith(res.locals, bookingId, 'AMP TEL,FLEX_REFRESH')
+        expect(prisonApi.getPersonalCareNeeds).toHaveBeenCalledWith(res.locals, bookingId, 'DISAB,PSYCH')
       })
 
       it('should render the personal template with the correct personal care need and reasonable adjustment data', async () => {
@@ -1829,7 +1829,7 @@ describe('prisoner personal', () => {
       })
 
       it('should not return NR records', async () => {
-        elite2Api.getPersonalCareNeeds = jest.fn().mockResolvedValue({
+        prisonApi.getPersonalCareNeeds = jest.fn().mockResolvedValue({
           personalCareNeeds: [
             {
               problemType: 'DISAB',
@@ -1860,14 +1860,14 @@ describe('prisoner personal', () => {
   describe('when there are errors with retrieving information', () => {
     beforeEach(() => {
       req.params.offenderNo = offenderNo
-      elite2Api.getIdentifiers.mockRejectedValue(new Error('Network error'))
-      elite2Api.getOffenderAliases.mockRejectedValue(new Error('Network error'))
-      elite2Api.getPrisonerProperty.mockRejectedValue(new Error('Network error'))
-      elite2Api.getPrisonerContacts.mockRejectedValue(new Error('Network error'))
-      elite2Api.getPrisonerAddresses.mockRejectedValue(new Error('Network error'))
-      elite2Api.getSecondaryLanguages.mockRejectedValue(new Error('Network error'))
-      elite2Api.getPersonalCareNeeds.mockRejectedValue(new Error('Network error'))
-      elite2Api.getReasonableAdjustments.mockRejectedValue(new Error('Network error'))
+      prisonApi.getIdentifiers.mockRejectedValue(new Error('Network error'))
+      prisonApi.getOffenderAliases.mockRejectedValue(new Error('Network error'))
+      prisonApi.getPrisonerProperty.mockRejectedValue(new Error('Network error'))
+      prisonApi.getPrisonerContacts.mockRejectedValue(new Error('Network error'))
+      prisonApi.getPrisonerAddresses.mockRejectedValue(new Error('Network error'))
+      prisonApi.getSecondaryLanguages.mockRejectedValue(new Error('Network error'))
+      prisonApi.getPersonalCareNeeds.mockRejectedValue(new Error('Network error'))
+      prisonApi.getReasonableAdjustments.mockRejectedValue(new Error('Network error'))
     })
 
     it('should still render the personal template with missing data', async () => {

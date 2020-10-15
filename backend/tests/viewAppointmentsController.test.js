@@ -2,7 +2,7 @@ const viewAppointmentsRouter = require('../routes/appointments/viewAppointmentsR
 const { serviceUnavailableMessage } = require('../common-messages')
 
 describe('View appointments', () => {
-  const elite2Api = {}
+  const prisonApi = {}
   const whereaboutsApi = {}
   const oauthApi = {}
 
@@ -28,15 +28,15 @@ describe('View appointments', () => {
     logError = jest.fn()
 
     oauthApi.userDetails = jest.fn()
-    elite2Api.getAppointmentTypes = jest.fn()
-    elite2Api.getLocationsForAppointments = jest.fn()
-    elite2Api.getAppointmentsForAgency = jest.fn()
-    elite2Api.getStaffDetails = jest.fn()
+    prisonApi.getAppointmentTypes = jest.fn()
+    prisonApi.getLocationsForAppointments = jest.fn()
+    prisonApi.getAppointmentsForAgency = jest.fn()
+    prisonApi.getStaffDetails = jest.fn()
 
-    elite2Api.getAppointmentTypes.mockReturnValue([{ description: 'Video link booking', code: 'VLB' }])
-    elite2Api.getLocationsForAppointments.mockReturnValue([{ userDescription: 'VCC Room 1', locationId: '1' }])
-    elite2Api.getAppointmentsForAgency.mockReturnValue([])
-    elite2Api.getStaffDetails.mockResolvedValue([])
+    prisonApi.getAppointmentTypes.mockReturnValue([{ description: 'Video link booking', code: 'VLB' }])
+    prisonApi.getLocationsForAppointments.mockReturnValue([{ userDescription: 'VCC Room 1', locationId: '1' }])
+    prisonApi.getAppointmentsForAgency.mockReturnValue([])
+    prisonApi.getStaffDetails.mockResolvedValue([])
 
     whereaboutsApi.getVideoLinkAppointments = jest.fn()
     whereaboutsApi.getVideoLinkAppointments.mockReturnValue({ appointments: [] })
@@ -45,7 +45,7 @@ describe('View appointments', () => {
       name: 'Bob Doe',
     })
 
-    controller = viewAppointmentsRouter({ elite2Api, whereaboutsApi, logError, oauthApi })
+    controller = viewAppointmentsRouter({ prisonApi, whereaboutsApi, logError, oauthApi })
   })
 
   beforeAll(() => {
@@ -60,15 +60,15 @@ describe('View appointments', () => {
     it('should make the correct API calls', async () => {
       await controller(req, res)
 
-      expect(elite2Api.getAppointmentTypes).toHaveBeenCalledWith(res.locals)
-      expect(elite2Api.getLocationsForAppointments).toHaveBeenCalledWith(res.locals, activeCaseLoadId)
-      expect(elite2Api.getAppointmentsForAgency).toHaveBeenCalledWith(res.locals, {
+      expect(prisonApi.getAppointmentTypes).toHaveBeenCalledWith(res.locals)
+      expect(prisonApi.getLocationsForAppointments).toHaveBeenCalledWith(res.locals, activeCaseLoadId)
+      expect(prisonApi.getAppointmentsForAgency).toHaveBeenCalledWith(res.locals, {
         agencyId: activeCaseLoadId,
         date: '2020-01-01',
         timeSlot: 'AM',
       })
       expect(whereaboutsApi.getVideoLinkAppointments).toHaveBeenCalledWith(res.locals, [])
-      expect(elite2Api.getStaffDetails).not.toHaveBeenCalled()
+      expect(prisonApi.getStaffDetails).not.toHaveBeenCalled()
     })
 
     it('should render the correct template information', async () => {
@@ -89,7 +89,7 @@ describe('View appointments', () => {
 
       await controller(req, res)
 
-      expect(elite2Api.getAppointmentsForAgency).toHaveBeenCalledWith(
+      expect(prisonApi.getAppointmentsForAgency).toHaveBeenCalledWith(
         res.locals,
         expect.objectContaining({
           timeSlot: 'PM',
@@ -108,7 +108,7 @@ describe('View appointments', () => {
 
       await controller(req, res)
 
-      expect(elite2Api.getAppointmentsForAgency).toHaveBeenCalledWith(
+      expect(prisonApi.getAppointmentsForAgency).toHaveBeenCalledWith(
         res.locals,
         expect.objectContaining({
           timeSlot: 'ED',
@@ -125,7 +125,7 @@ describe('View appointments', () => {
 
   describe('when there are selected search parameters with results', () => {
     beforeEach(() => {
-      elite2Api.getAppointmentsForAgency.mockReturnValue([
+      prisonApi.getAppointmentsForAgency.mockReturnValue([
         {
           id: 1,
           offenderNo: 'ABC123',
@@ -187,7 +187,7 @@ describe('View appointments', () => {
         },
       ])
 
-      elite2Api.getStaffDetails
+      prisonApi.getStaffDetails
         .mockResolvedValueOnce({
           staffId: 1,
           username: 'STAFF_1',
@@ -224,13 +224,13 @@ describe('View appointments', () => {
     it('should make the correct API calls', async () => {
       await controller(req, res)
 
-      expect(elite2Api.getAppointmentsForAgency).toHaveBeenCalledWith(res.locals, {
+      expect(prisonApi.getAppointmentsForAgency).toHaveBeenCalledWith(res.locals, {
         agencyId: activeCaseLoadId,
         date: '2020-01-02',
         timeSlot: 'PM',
       })
       expect(whereaboutsApi.getVideoLinkAppointments).toHaveBeenCalledWith(res.locals, [3, 4])
-      expect(elite2Api.getStaffDetails).toHaveBeenCalledTimes(3)
+      expect(prisonApi.getStaffDetails).toHaveBeenCalledTimes(3)
       expect(oauthApi.userDetails).toHaveBeenCalledTimes(1)
     })
 
@@ -341,7 +341,7 @@ describe('View appointments', () => {
 
       await controller(req, res)
 
-      expect(elite2Api.getAppointmentsForAgency).toHaveBeenCalledWith(res.locals, {
+      expect(prisonApi.getAppointmentsForAgency).toHaveBeenCalledWith(res.locals, {
         agencyId: activeCaseLoadId,
         date: '2020-01-02',
       })
@@ -350,7 +350,7 @@ describe('View appointments', () => {
 
   describe('when there is an error retrieving information', () => {
     it('should render the error template', async () => {
-      elite2Api.getAppointmentTypes.mockRejectedValue(new Error('Problem retrieving appointment types'))
+      prisonApi.getAppointmentTypes.mockRejectedValue(new Error('Problem retrieving appointment types'))
 
       await controller(req, res)
 

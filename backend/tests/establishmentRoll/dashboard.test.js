@@ -1,6 +1,6 @@
 const dashboard = require('../../controllers/establishmentRoll/dashboard')
 
-const elite2Api = {}
+const prisonApi = {}
 
 describe('Establishment Roll', () => {
   const logError = jest.fn()
@@ -67,25 +67,25 @@ describe('Establishment Roll', () => {
   }
 
   beforeEach(() => {
-    elite2Api.getEstablishmentRollBlocksCount = jest.fn()
-    elite2Api.getEstablishmentRollMovementsCount = jest.fn()
-    elite2Api.getEstablishmentRollEnrouteCount = jest.fn()
-    elite2Api.getEstablishmentRollBlocksCount.mockImplementation(
+    prisonApi.getEstablishmentRollBlocksCount = jest.fn()
+    prisonApi.getEstablishmentRollMovementsCount = jest.fn()
+    prisonApi.getEstablishmentRollEnrouteCount = jest.fn()
+    prisonApi.getEstablishmentRollBlocksCount.mockImplementation(
       (_context, _agencyId, _unassigned) => (_unassigned ? unassignedBlockData : assignedBlockData)
     )
-    elite2Api.getEstablishmentRollMovementsCount.mockImplementation(() => movements)
-    elite2Api.getEstablishmentRollEnrouteCount.mockImplementation(() => 8)
-    controller = dashboard({ elite2Api, logError })
+    prisonApi.getEstablishmentRollMovementsCount.mockImplementation(() => movements)
+    prisonApi.getEstablishmentRollEnrouteCount.mockImplementation(() => 8)
+    controller = dashboard({ prisonApi, logError })
     res.render = jest.fn()
   })
 
   it('should call the rollcount endpoint', async () => {
     await controller(req, res)
 
-    expect(elite2Api.getEstablishmentRollBlocksCount).toHaveBeenCalledWith(res.locals, agencyId, false)
-    expect(elite2Api.getEstablishmentRollBlocksCount).toHaveBeenCalledWith(res.locals, agencyId, true)
-    expect(elite2Api.getEstablishmentRollMovementsCount).toHaveBeenCalledWith(res.locals, agencyId)
-    expect(elite2Api.getEstablishmentRollEnrouteCount).toHaveBeenCalledWith(res.locals, agencyId)
+    expect(prisonApi.getEstablishmentRollBlocksCount).toHaveBeenCalledWith(res.locals, agencyId, false)
+    expect(prisonApi.getEstablishmentRollBlocksCount).toHaveBeenCalledWith(res.locals, agencyId, true)
+    expect(prisonApi.getEstablishmentRollMovementsCount).toHaveBeenCalledWith(res.locals, agencyId)
+    expect(prisonApi.getEstablishmentRollEnrouteCount).toHaveBeenCalledWith(res.locals, agencyId)
   })
 
   it('should return response with block counts', async () => {
@@ -114,7 +114,7 @@ describe('Establishment Roll', () => {
   })
 
   it('should default to zero when data is undefined for blocks and totals', async () => {
-    elite2Api.getEstablishmentRollBlocksCount.mockReturnValue([{ livingUnitDesc: 'livingUnitDesc1', bedsInUse: 100 }])
+    prisonApi.getEstablishmentRollBlocksCount.mockReturnValue([{ livingUnitDesc: 'livingUnitDesc1', bedsInUse: 100 }])
 
     await controller(req, res)
 

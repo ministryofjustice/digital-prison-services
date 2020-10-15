@@ -18,7 +18,7 @@ const trackEvent = (offenderNo, suffix, { username }) => {
   }
 }
 
-const probationDocumentsFactory = (oauthApi, elite2Api, communityApi, systemOauthClient) => {
+const probationDocumentsFactory = (oauthApi, prisonApi, communityApi, systemOauthClient) => {
   const renderTemplate = (req, res, pageData) => {
     const { pageErrors, offenderDetails, ...rest } = pageData
 
@@ -131,10 +131,10 @@ const probationDocumentsFactory = (oauthApi, elite2Api, communityApi, systemOaut
     const { offenderNo } = req.params
 
     try {
-      const { bookingId, firstName, lastName } = await elite2Api.getDetails(res.locals, offenderNo)
+      const { bookingId, firstName, lastName } = await prisonApi.getDetails(res.locals, offenderNo)
 
       const [caseloads, user, userRoles, communityDocuments] = await Promise.all([
-        elite2Api.userCaseLoads(res.locals),
+        prisonApi.userCaseLoads(res.locals),
         oauthApi.currentUser(res.locals),
         oauthApi.userRoles(res.locals),
         getCommunityDocuments(offenderNo),

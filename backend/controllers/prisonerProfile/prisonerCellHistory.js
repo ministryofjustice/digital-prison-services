@@ -11,7 +11,7 @@ const {
   app: { notmEndpointUrl: dpsUrl },
 } = require('../../config')
 
-module.exports = ({ oauthApi, elite2Api, logError, page = 0 }) => async (req, res) => {
+module.exports = ({ oauthApi, prisonApi, logError, page = 0 }) => async (req, res) => {
   const { offenderNo } = req.params
 
   const getAgencyDetails = async cells => {
@@ -19,13 +19,13 @@ module.exports = ({ oauthApi, elite2Api, logError, page = 0 }) => async (req, re
       cells
         .map(cell => cell.agencyId)
         .filter((v, i, a) => a.indexOf(v) === i)
-        .map(agencyId => elite2Api.getAgencyDetails(res.locals, agencyId))
+        .map(agencyId => prisonApi.getAgencyDetails(res.locals, agencyId))
     )
   }
 
   try {
-    const { bookingId, firstName, lastName } = await elite2Api.getDetails(res.locals, offenderNo)
-    const { content: cells } = await elite2Api.getOffenderCellHistory(res.locals, bookingId, {
+    const { bookingId, firstName, lastName } = await prisonApi.getDetails(res.locals, offenderNo)
+    const { content: cells } = await prisonApi.getOffenderCellHistory(res.locals, bookingId, {
       page,
       size: 10000,
     })
@@ -38,7 +38,7 @@ module.exports = ({ oauthApi, elite2Api, logError, page = 0 }) => async (req, re
 
     const currentLocation = cells.find(cell => cell.assignmentEndDateTime === undefined)
     const occupants =
-      (currentLocation && (await elite2Api.getInmatesAtLocation(res.locals, currentLocation.livingUnitId, {}))) || []
+      (currentLocation && (await prisonApi.getInmatesAtLocation(res.locals, currentLocation.livingUnitId, {}))) || []
 
     const today = moment().format('YYYY-MM-DDTHH:mm:ss')
 

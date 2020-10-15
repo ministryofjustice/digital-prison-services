@@ -6,22 +6,22 @@ const {
   app: { notmEndpointUrl: dpsUrl },
 } = require('../../config')
 
-module.exports = ({ oauthApi, elite2Api, whereaboutsApi, logError }) => async (req, res) => {
+module.exports = ({ oauthApi, prisonApi, whereaboutsApi, logError }) => async (req, res) => {
   const { offenderNo } = req.params
 
   try {
     const [userCaseLoads, userRoles] = await Promise.all([
-      elite2Api.userCaseLoads(res.locals),
+      prisonApi.userCaseLoads(res.locals),
       oauthApi.userRoles(res.locals),
     ])
-    const prisonerDetails = await elite2Api.getDetails(res.locals, offenderNo, true)
+    const prisonerDetails = await prisonApi.getDetails(res.locals, offenderNo, true)
 
     if (!userHasAccess({ userRoles, userCaseLoads, offenderCaseload: prisonerDetails.agencyId })) {
       return res.render('notFound.njk', { url: '/prisoner-search' })
     }
 
-    const nonAssociations = await elite2Api.getNonAssociations(res.locals, prisonerDetails.bookingId)
-    const cellAttributesData = await elite2Api.getCellAttributes(res.locals)
+    const nonAssociations = await prisonApi.getNonAssociations(res.locals, prisonerDetails.bookingId)
+    const cellAttributesData = await prisonApi.getCellAttributes(res.locals)
     const locationsData = await whereaboutsApi.searchGroups(res.locals, prisonerDetails.agencyId)
 
     const locations = locationsData.map(location => ({ text: location.name, value: location.key }))

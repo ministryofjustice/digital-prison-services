@@ -4,14 +4,14 @@ const log = require('../log')
 
 const placeHolder = path.join(__dirname, '../assets/images/image-missing.jpg')
 
-const imageFactory = elite2Api => {
+const imageFactory = prisonApi => {
   const image = asyncMiddleware(async (req, res) => {
     const { imageId } = req.params
 
     if (!imageId) {
       res.sendFile(placeHolder)
     } else {
-      elite2Api
+      prisonApi
         .getImage(res.locals, imageId)
         .then(data => {
           res.type('image/jpeg')
@@ -36,7 +36,7 @@ const imageFactory = elite2Api => {
     if (!offenderNo || offenderNo === 'placeholder') {
       res.sendFile(placeHolder)
     } else {
-      elite2Api
+      prisonApi
         .getPrisonerImage(res.locals, offenderNo, fullSizeImage)
         .then(data => {
           res.type('image/jpeg')

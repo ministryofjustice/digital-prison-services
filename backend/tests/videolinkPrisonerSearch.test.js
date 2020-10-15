@@ -5,7 +5,7 @@ const config = require('../config')
 config.app.videoLinkEnabledFor = ['MDI']
 
 describe('Video link prisoner search', () => {
-  const elite2Api = {}
+  const prisonApi = {}
   const oauthApi = {}
 
   let req
@@ -23,7 +23,7 @@ describe('Video link prisoner search', () => {
     logError = jest.fn()
 
     oauthApi.userRoles = jest.fn()
-    elite2Api.getAgencies = jest.fn().mockReturnValue([
+    prisonApi.getAgencies = jest.fn().mockReturnValue([
       {
         agencyId: 'PRISON2',
         description: 'PRISON 2',
@@ -35,9 +35,9 @@ describe('Video link prisoner search', () => {
         formattedDescription: 'Prison 1',
       },
     ])
-    elite2Api.globalSearch = jest.fn()
+    prisonApi.globalSearch = jest.fn()
 
-    controller = videolinkPrisonerSearchController({ oauthApi, elite2Api, logError })
+    controller = videolinkPrisonerSearchController({ oauthApi, prisonApi, logError })
   })
 
   const agencyOptions = [
@@ -58,8 +58,8 @@ describe('Video link prisoner search', () => {
 
         await controller(req, res)
 
-        expect(elite2Api.getAgencies).not.toHaveBeenCalled()
-        expect(elite2Api.globalSearch).not.toHaveBeenCalled()
+        expect(prisonApi.getAgencies).not.toHaveBeenCalled()
+        expect(prisonApi.globalSearch).not.toHaveBeenCalled()
         expect(res.redirect).toHaveBeenCalledWith('back')
       })
     })
@@ -72,7 +72,7 @@ describe('Video link prisoner search', () => {
       it('should render the prisoner search template', async () => {
         await controller(req, res)
 
-        expect(elite2Api.getAgencies).toHaveBeenCalled()
+        expect(prisonApi.getAgencies).toHaveBeenCalled()
         expect(res.render).toHaveBeenCalledWith('videolinkPrisonerSearch.njk', {
           agencyOptions,
           errors: [],
@@ -85,7 +85,7 @@ describe('Video link prisoner search', () => {
 
       describe('when a search has been made', () => {
         beforeEach(() => {
-          elite2Api.globalSearch.mockReturnValue([
+          prisonApi.globalSearch.mockReturnValue([
             {
               offenderNo: 'G0011GX',
               firstName: 'TEST',
@@ -116,7 +116,7 @@ describe('Video link prisoner search', () => {
 
             await controller(req, res)
 
-            expect(elite2Api.globalSearch).toHaveBeenCalledWith(
+            expect(prisonApi.globalSearch).toHaveBeenCalledWith(
               res.locals,
               {
                 offenderNo: prisonNumber,
@@ -144,7 +144,7 @@ describe('Video link prisoner search', () => {
           it('should make the correct search', async () => {
             await controller(req, res)
 
-            expect(elite2Api.globalSearch).toHaveBeenCalledWith(
+            expect(prisonApi.globalSearch).toHaveBeenCalledWith(
               res.locals,
               {
                 lastName,
@@ -236,7 +236,7 @@ describe('Video link prisoner search', () => {
 
       it('should render the error template if there is an error retrieving agencies', async () => {
         oauthApi.userRoles.mockReturnValue([{ roleCode: 'VIDEO_LINK_COURT_USER' }])
-        elite2Api.getAgencies.mockImplementation(() => Promise.reject(new Error('Network error')))
+        prisonApi.getAgencies.mockImplementation(() => Promise.reject(new Error('Network error')))
         await controller(req, res)
 
         expect(logError).toHaveBeenCalledWith('http://localhost', new Error('Network error'), serviceUnavailableMessage)
@@ -245,7 +245,7 @@ describe('Video link prisoner search', () => {
 
       it('should render the error template if there is an error with global search', async () => {
         oauthApi.userRoles.mockReturnValue([{ roleCode: 'VIDEO_LINK_COURT_USER' }])
-        elite2Api.globalSearch.mockImplementation(() => Promise.reject(new Error('Network error')))
+        prisonApi.globalSearch.mockImplementation(() => Promise.reject(new Error('Network error')))
         req.query = { lastName: 'Offender' }
         await controller(req, res)
 

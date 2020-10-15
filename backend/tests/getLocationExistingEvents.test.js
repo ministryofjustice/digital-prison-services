@@ -1,7 +1,7 @@
 const getLocationExistingEventsFactory = require('../controllers/attendance/getLocationExistingEvents')
 
 describe('Get location existing events', () => {
-  const elite2Api = {}
+  const prisonApi = {}
   const existingEventsService = {}
   let controller
   let logError
@@ -19,10 +19,10 @@ describe('Get location existing events', () => {
 
   beforeEach(() => {
     logError = jest.fn()
-    elite2Api.getLocation = jest.fn()
+    prisonApi.getLocation = jest.fn()
     existingEventsService.getExistingEventsForLocation = jest.fn()
 
-    controller = getLocationExistingEventsFactory({ elite2Api, existingEventsService, logError })
+    controller = getLocationExistingEventsFactory({ prisonApi, existingEventsService, logError })
 
     res.render = jest.fn()
     res.status = jest.fn()
@@ -36,7 +36,7 @@ describe('Get location existing events', () => {
     }
     await controller(req, res)
 
-    expect(elite2Api.getLocation).toHaveBeenCalledWith({}, 1)
+    expect(prisonApi.getLocation).toHaveBeenCalledWith({}, 1)
   })
 
   it('should make a call to retrieve events at a location', async () => {
@@ -46,7 +46,7 @@ describe('Get location existing events', () => {
   })
 
   it('should render template with correct view model', async () => {
-    elite2Api.getLocation = jest.fn().mockReturnValue({
+    prisonApi.getLocation = jest.fn().mockReturnValue({
       userDescription: 'Gym',
     })
 

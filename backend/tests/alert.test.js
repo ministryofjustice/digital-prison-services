@@ -1,7 +1,7 @@
 Reflect.deleteProperty(process.env, 'APPINSIGHTS_INSTRUMENTATIONKEY')
 const moment = require('moment')
 
-const elite2api = {}
+const prisonapi = {}
 const oauthApi = {}
 const referenceCodesService = {}
 const config = require('../config')
@@ -12,7 +12,7 @@ const {
   displayCreateAlertPage,
   displayEditAlertPage,
   handleEditAlertForm,
-} = require('../controllers/alert').alertFactory(oauthApi, elite2api, referenceCodesService)
+} = require('../controllers/alert').alertFactory(oauthApi, prisonapi, referenceCodesService)
 
 jest.mock('../raiseAnalyticsEvent', () => ({
   raiseAnalyticsEvent: jest.fn(),
@@ -82,9 +82,9 @@ describe('alert management', () => {
       body: {},
       headers: {},
     }
-    elite2api.getDetails = jest.fn().mockReturnValue(getDetailsResponse)
+    prisonapi.getDetails = jest.fn().mockReturnValue(getDetailsResponse)
     oauthApi.currentUser = jest.fn().mockReturnValue({ name: 'Test User' })
-    elite2api.userCaseLoads = jest.fn().mockReturnValue([
+    prisonapi.userCaseLoads = jest.fn().mockReturnValue([
       {
         caseLoadId: 'AKI',
         description: 'Acklington (HMP)',
@@ -104,15 +104,15 @@ describe('alert management', () => {
   })
 
   afterEach(() => {
-    elite2api.getDetails.mockRestore()
-    elite2api.userCaseLoads.mockRestore()
+    prisonapi.getDetails.mockRestore()
+    prisonapi.userCaseLoads.mockRestore()
     mockReq.flash.mockRestore()
   })
 
   describe('displayCloseAlertPage()', () => {
     describe('when there are errors', () => {
       it('should return an error when there is a problem retrieving the alert', async () => {
-        elite2api.getAlert = jest.fn().mockImplementationOnce(() => {
+        prisonapi.getAlert = jest.fn().mockImplementationOnce(() => {
           throw new Error('There has been an error')
         })
 
@@ -131,7 +131,7 @@ describe('alert management', () => {
       })
 
       it.skip('should return an error when the alert has already expired', async () => {
-        elite2api.getAlert = jest.fn().mockReturnValueOnce({ ...alert, expired: true })
+        prisonapi.getAlert = jest.fn().mockReturnValueOnce({ ...alert, expired: true })
 
         const req = { ...mockReq, query: { offenderNo, alertId: 1 } }
 
@@ -147,7 +147,7 @@ describe('alert management', () => {
     })
 
     it.skip('should render the closeAlertForm with the correctly formatted information', async () => {
-      elite2api.getAlert = jest.fn().mockReturnValueOnce({ ...alert, expired: false })
+      prisonapi.getAlert = jest.fn().mockReturnValueOnce({ ...alert, expired: false })
 
       const req = { ...mockReq, query: { offenderNo, alertId: 1 } }
 
@@ -184,8 +184,8 @@ describe('alert management', () => {
 
   describe('handleCloseAlertForm()', () => {
     beforeEach(() => {
-      elite2api.updateAlert = jest.fn()
-      elite2api.getAlert = jest.fn()
+      prisonapi.updateAlert = jest.fn()
+      prisonapi.getAlert = jest.fn()
     })
 
     describe('when there are errors', () => {
@@ -196,7 +196,7 @@ describe('alert management', () => {
           body: { alertStatus: 'yes', offenderNo, comment: 'test' },
         }
 
-        elite2api.updateAlert = jest.fn().mockImplementationOnce(() => {
+        prisonapi.updateAlert = jest.fn().mockImplementationOnce(() => {
           throw new Error('There has been an error')
         })
 
@@ -273,8 +273,8 @@ describe('alert management', () => {
       }
 
       it('should update the alert to INACTIVE and set the expiry date to the current date, then redirect back to the offender alerts page', async () => {
-        elite2api.getAlert = jest.fn().mockReturnValue({ ...alert, expired: false })
-        elite2api.userCaseLoads = jest.fn().mockReturnValue([
+        prisonapi.getAlert = jest.fn().mockReturnValue({ ...alert, expired: false })
+        prisonapi.userCaseLoads = jest.fn().mockReturnValue([
           {
             caseLoadId: 'LEI',
             currentlyActive: true,
@@ -283,7 +283,7 @@ describe('alert management', () => {
         jest.spyOn(Date, 'now').mockImplementation(() => 1553860800000) // Friday 2019-03-29T12:00:00.000Z
         await handleEditAlertForm(req, res)
 
-        expect(elite2api.updateAlert).toBeCalledWith(res.locals, getDetailsResponse.bookingId, req.params.alertId, {
+        expect(prisonapi.updateAlert).toBeCalledWith(res.locals, getDetailsResponse.bookingId, req.params.alertId, {
           expiryDate: '2019-03-29',
           comment: 'test',
         })
@@ -304,12 +304,12 @@ describe('alert management', () => {
       }
 
       it('should update the alert comment and expiry date', async () => {
-        elite2api.getAlert = jest.fn().mockReturnValueOnce({ ...alert, expired: false })
+        prisonapi.getAlert = jest.fn().mockReturnValueOnce({ ...alert, expired: false })
         jest.spyOn(Date, 'now').mockImplementation(() => 1553860800000) // Friday 2019-03-29T12:00:00.000Z
 
         await handleEditAlertForm(req, res)
 
-        expect(elite2api.updateAlert).toBeCalledWith({}, '1234', 1, { comment: 'test', expiryDate: '2019-03-29' })
+        expect(prisonapi.updateAlert).toBeCalledWith({}, '1234', 1, { comment: 'test', expiryDate: '2019-03-29' })
 
         expect(res.redirect).toBeCalledWith(`/prisoner/${req.body.offenderNo}/alerts?alertStatus=closed`)
 
@@ -325,14 +325,14 @@ describe('alert management', () => {
       }
 
       beforeEach(() => {
-        elite2api.getAlert = jest.fn().mockReturnValueOnce({ ...alert, expired: false })
+        prisonapi.getAlert = jest.fn().mockReturnValueOnce({ ...alert, expired: false })
         raiseAnalyticsEvent.mockRestore()
       })
 
       it('should update the alert comment only', async () => {
         await handleEditAlertForm(req, res)
 
-        expect(elite2api.updateAlert).toBeCalledWith({}, '1234', 1, { comment: 'test' })
+        expect(prisonapi.updateAlert).toBeCalledWith({}, '1234', 1, { comment: 'test' })
         expect(res.redirect).toBeCalledWith(`/prisoner/${req.body.offenderNo}/alerts?alertStatus=open`)
       })
 
@@ -415,7 +415,7 @@ describe('alert management', () => {
   describe('handleCreateAlertForm()', () => {
     beforeEach(() => {
       raiseAnalyticsEvent.mockRestore()
-      elite2api.createAlert = jest.fn()
+      prisonapi.createAlert = jest.fn()
       referenceCodesService.getAlertTypes = jest.fn().mockImplementationOnce(() => {
         return {
           alertTypes: [
@@ -452,7 +452,7 @@ describe('alert management', () => {
           },
         }
 
-        elite2api.createAlert = jest.fn().mockImplementationOnce(() => {
+        prisonapi.createAlert = jest.fn().mockImplementationOnce(() => {
           throw new Error('There has been an error')
         })
 
@@ -558,7 +558,7 @@ describe('alert management', () => {
           },
         }
 
-        elite2api.createAlert = jest.fn()
+        prisonapi.createAlert = jest.fn()
 
         await handleCreateAlertForm(req, res)
 

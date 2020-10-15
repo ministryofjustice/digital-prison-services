@@ -5,7 +5,7 @@ const config = require('../config')
 config.app.notmEndpointUrl = '//dpsUrl/'
 
 describe('retention reasons', () => {
-  const elite2Api = {}
+  const prisonApi = {}
   const dataComplianceApi = {}
   const offenderNo = 'ABC123'
 
@@ -31,24 +31,24 @@ describe('retention reasons', () => {
 
     logError = jest.fn()
 
-    elite2Api.getDetails = jest.fn()
-    elite2Api.getAgencyDetails = jest.fn()
+    prisonApi.getDetails = jest.fn()
+    prisonApi.getAgencyDetails = jest.fn()
     dataComplianceApi.getOffenderRetentionReasons = jest.fn()
     dataComplianceApi.getOffenderRetentionRecord = jest.fn()
     dataComplianceApi.putOffenderRetentionRecord = jest.fn()
 
-    controller = retentionReasonsFactory(elite2Api, dataComplianceApi, logError)
+    controller = retentionReasonsFactory(prisonApi, dataComplianceApi, logError)
   })
 
   const mockApis = () => {
-    elite2Api.getDetails.mockReturnValue({
+    prisonApi.getDetails.mockReturnValue({
       offenderNo,
       firstName: 'BARRY',
       lastName: 'SMITH',
       dateOfBirth: '1990-02-01',
       agencyId: 'LEI',
     })
-    elite2Api.getAgencyDetails.mockReturnValue({ description: 'Leeds' })
+    prisonApi.getAgencyDetails.mockReturnValue({ description: 'Leeds' })
     dataComplianceApi.getOffenderRetentionReasons.mockResolvedValue([
       {
         reasonCode: 'OTHER',
@@ -100,8 +100,8 @@ describe('retention reasons', () => {
       it('should make the correct calls for information and render the correct template', async () => {
         await controller.index(req, res)
 
-        expect(elite2Api.getDetails).toHaveBeenCalledWith(res.locals, offenderNo)
-        expect(elite2Api.getAgencyDetails).toHaveBeenCalledWith(res.locals, 'LEI')
+        expect(prisonApi.getDetails).toHaveBeenCalledWith(res.locals, offenderNo)
+        expect(prisonApi.getAgencyDetails).toHaveBeenCalledWith(res.locals, 'LEI')
         expect(res.render).toHaveBeenCalledWith('retentionReasons.njk', {
           retentionReasons: [
             {
@@ -126,7 +126,7 @@ describe('retention reasons', () => {
 
     describe('when there are API errors', () => {
       beforeEach(() => {
-        elite2Api.getDetails.mockRejectedValue(new Error('Network error'))
+        prisonApi.getDetails.mockRejectedValue(new Error('Network error'))
         dataComplianceApi.getOffenderRetentionReasons.mockResolvedValue([])
       })
 
