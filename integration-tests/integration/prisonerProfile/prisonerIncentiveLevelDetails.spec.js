@@ -1,6 +1,6 @@
 const offenderBasicDetails = require('../../mockApis/responses/offenderBasicDetails.json')
 
-context('Prisoner adjudication details', () => {
+context('Prisoner incentive level details', () => {
   const offenderNo = 'A1234A'
 
   before(() => {
@@ -87,7 +87,7 @@ context('Prisoner adjudication details', () => {
       cy.get('[data-test="change-incentive-level-link"]')
         .invoke('attr', 'href')
         .then(href => {
-          expect(href).to.equal('/offenders/A1234A/incentive-level-details/change-incentive-level')
+          expect(href).to.equal('/prisoner/A1234A/incentive-level-details/change-incentive-level')
         })
     })
 
