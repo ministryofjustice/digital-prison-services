@@ -1,7 +1,6 @@
 export default {
   establishmentRoll: '/establishment-roll',
   inToday: '/establishment-roll/in-today',
-  incentiveLevelChange: '/offenders/:offenderNo/incentive-level-details/change-incentive-level',
   outToday: '/establishment-roll/out-today',
   inReception: '/establishment-roll/in-reception',
   currentlyOut: '/establishment-roll/:livingUnitId/currently-out',
