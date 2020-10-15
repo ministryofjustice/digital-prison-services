@@ -8,19 +8,12 @@ export default [
   { path: '/content/whats-new', breadcrumb: "What's new" },
   { path: '/establishment-roll/in-today', breadcrumb: 'In today' },
   { path: '/establishment-roll/out-today', breadcrumb: 'Out today' },
-  { path: '/establishment-roll/in-reception', breadcrumb: 'In reception' },
   { path: '/establishment-roll/en-route', breadcrumb: 'En route' },
   { path: '/establishment-roll/total-currently-out', breadcrumb: 'Total currently out' },
   { path: '/establishment-roll/:livingUnitId', breadcrumb: null },
 
   { path: '/offenders', breadcrumb: null },
   { path: '/offenders/:offenderNo', breadcrumb: OffenderBreadcrumb, renderDirectly: true },
-  { path: '/offenders/:offenderNo/iep-details', breadcrumb: 'Incentive details' },
-  { path: '/offenders/:offenderNo/incentive-level-details', breadcrumb: 'Incentive details' },
-  {
-    path: '/offenders/:offenderNo/incentive-level-details/change-incentive-level',
-    breadcrumb: 'Change incentive level',
-  },
   { path: '/offenders/:offenderNo/adjudications/:adjudicationNo', breadcrumb: 'Details' },
   // Below are temporary as latest version of react-router-breadcrumbs-hoc leaves hyphens in the breadcrumb text
   { path: '/establishment-roll', breadcrumb: 'Establishment roll' },

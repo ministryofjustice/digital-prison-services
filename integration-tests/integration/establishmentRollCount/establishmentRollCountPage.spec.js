@@ -1,13 +1,12 @@
 context('A user can see the data in the dashbaord', () => {
   before(() => {
     cy.clearCookies()
-    cy.task('reset')
+    cy.task('resetAndStubTokenVerification')
     cy.task('stubLogin', { username: 'ITAG_USER', caseload: 'MDI' })
     cy.login()
   })
   beforeEach(() => {
     Cypress.Cookies.preserveOnce('hmpps-session-dev')
-    cy.task('resetAndStubTokenVerification')
     cy.task('stubUserMeRoles', [])
     cy.task('stubUserMe')
     cy.task('stubUserCaseLoads')

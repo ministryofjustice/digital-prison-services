@@ -3,7 +3,6 @@ const asyncMiddleware = require('../middleware/asyncHandler')
 const factory = ({
   activityListService,
   adjudicationHistoryService,
-  iepDetailsService,
   houseblockListService,
   attendanceService,
   establishmentRollService,
@@ -71,18 +70,6 @@ const factory = ({
     }
   }
 
-  const getIepDetails = asyncMiddleware(async (req, res) => {
-    const { offenderNo } = req.params
-    const viewModel = await iepDetailsService.getIepDetails(res.locals, offenderNo, req.query)
-    res.json(viewModel)
-  })
-
-  const getPossibleLevels = asyncMiddleware(async (req, res) => {
-    const { currentIepLevel, agencyId } = req.query
-    const viewModel = await iepDetailsService.getPossibleLevels(res.locals, currentIepLevel, agencyId)
-    res.json(viewModel)
-  })
-
   const updateAttendance = asyncMiddleware(async (req, res) => {
     const attendanceRecord = await attendanceService.updateAttendance(res.locals, req.body)
     res.json(attendanceRecord)
@@ -131,12 +118,6 @@ const factory = ({
   const getMovementsOut = asyncMiddleware(async (req, res) => {
     const { agencyId } = req.params
     const viewModel = await movementsService.getMovementsOut(res.locals, agencyId)
-    res.json(viewModel)
-  })
-
-  const getOffendersInReception = asyncMiddleware(async (req, res) => {
-    const { agencyId } = req.params
-    const viewModel = await movementsService.getOffendersInReception(res.locals, agencyId)
     res.json(viewModel)
   })
 
@@ -194,12 +175,6 @@ const factory = ({
     res.json(viewModel)
   })
 
-  const changeIepLevel = asyncMiddleware(async (req, res) => {
-    const { offenderNumber } = req.params
-    await iepDetailsService.changeIepLevel(res.locals, offenderNumber, req.body)
-    res.end()
-  })
-
   const getPrisonersUnaccountedFor = asyncMiddleware(async (req, res) => {
     const { agencyId, date, timeSlot } = req.query
     const viewModel = await offenderActivitesService.getPrisonersUnaccountedFor(res.locals, agencyId, date, timeSlot)
@@ -224,17 +199,13 @@ const factory = ({
     globalSearch,
     getMovementsIn,
     getMovementsOut,
-    getIepDetails,
     getOffender,
-    getOffendersInReception,
     getOffendersCurrentlyOutOfLivingUnit,
     getOffendersCurrentlyOutOfAgency,
     getOffendersEnRoute,
     uploadOffenders,
     getAppointmentOptions,
     bulkAppointmentsCsvTemplate,
-    changeIepLevel,
-    getPossibleLevels,
     getPrisonersUnaccountedFor,
     getCaseNote,
   }

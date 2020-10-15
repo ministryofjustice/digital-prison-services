@@ -19,10 +19,7 @@ import GlobalSearchContainer from './GlobalSearch/GlobalSearchContainer'
 import links from './links'
 import MovementsInContainer from './MovementsIn/MovementsInContainer'
 import MovementsOutContainer from './MovementsOut/MovementsOutContainer'
-import InReceptionContainer from './InReception/InReceptionContainer'
 import CurrentlyOutContainer, { fetchAgencyData, fetchLivingUnitData } from './CurrentlyOut/CurrentlyOutContainer'
-import IncentiveLevelChangeContainer from './IncentiveLevelDetails/IncentiveLevelChangeContainer'
-import EnRouteContainer from './EnRoute/EnRouteContainer'
 
 import routePaths from './routePaths'
 import Content from './Components/Content'
@@ -344,18 +341,6 @@ class App extends React.Component {
 
           <Route
             exact
-            path={routePaths.inReception}
-            render={({ history }) => (
-              <InReceptionContainer
-                handleError={this.handleError}
-                raiseAnalyticsEvent={this.raiseAnalyticsEvent}
-                history={history}
-              />
-            )}
-          />
-
-          <Route
-            exact
             path={routePaths.currentlyOut}
             render={({ history, match: { params } }) => (
               <CurrentlyOutContainer
@@ -374,33 +359,6 @@ class App extends React.Component {
                 handleError={this.handleError}
                 history={history}
                 dataFetcher={fetchAgencyData(agencyId)}
-              />
-            )}
-          />
-
-          <Route
-            exact
-            path={routePaths.enRoute}
-            render={({ history }) => (
-              <EnRouteContainer
-                handleError={this.handleError}
-                raiseAnalyticsEvent={this.raiseAnalyticsEvent}
-                history={history}
-              />
-            )}
-          />
-
-          <Route
-            exact
-            path={routePaths.incentiveLevelChange}
-            render={({ history, match: { params } }) => (
-              <IncentiveLevelChangeContainer
-                offenderNo={params.offenderNo}
-                handleError={this.handleError}
-                setLoadedDispatch={setLoadedDispatch}
-                resetErrorDispatch={resetErrorDispatch}
-                raiseAnalyticsEvent={this.raiseAnalyticsEvent}
-                history={history}
               />
             )}
           />

@@ -193,7 +193,14 @@ const setup = ({
 
   router.use('/prisoner/:offenderNo/cell-move', cellMoveRouter({ oauthApi, prisonApi, whereaboutsApi, logError }))
 
-  router.use('/establishment-roll', establishmentRollRouter({ prisonApi, logError }))
+  router.use(
+    '/establishment-roll',
+    establishmentRollRouter({
+      prisonApi,
+      systemOauthClient,
+      logError,
+    })
+  )
 
   router.use(
     '/prisoner/:offenderNo',

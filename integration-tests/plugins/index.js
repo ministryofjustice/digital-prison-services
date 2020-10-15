@@ -34,7 +34,7 @@ module.exports = on => {
       return tokenverification.stubVerifyToken(true)
     },
     stubAuthHealth: status => Promise.all([auth.stubHealth(status)]),
-    stubPrisonApiHealth: status => Promise.all([prisonapi.stubHealth(status)]),
+    stubElite2Health: status => Promise.all([prisonapi.stubHealth(status)]),
     stubWhereaboutsHealth: status => Promise.all([whereabouts.stubHealth(status)]),
     stubAllocationManagerHealth: status => Promise.all([allocationManager.stubHealth(status)]),
     stubKeyworkerHealth: status => Promise.all([keyworker.stubHealth(status)]),
@@ -397,5 +397,7 @@ module.exports = on => {
     stubEnRoute: ({ agencyId, results }) => prisonapi.stubEnRoute(agencyId, results),
     stubCurrentlyOut: ({ livingUnitId, movements }) => prisonapi.stubCurrentlyOut(livingUnitId, movements),
     stubTotalCurrentlyOut: ({ agencyId, movements }) => prisonapi.stubTotalCurrentlyOut(agencyId, movements),
+    stubGetAgencyIepLevels: response => prisonapi.stubGetAgencyIepLevels(response),
+    stubChangeIepLevel: body => prisonapi.stubChangeIepLevel(body),
   })
 }

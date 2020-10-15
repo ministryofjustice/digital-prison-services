@@ -15,7 +15,6 @@ const { getConfiguration } = require('./controllers/getConfig')
 const houseblockLocationsFactory = require('./controllers/attendance/houseblockLocations').getHouseblockLocationsFactory
 const activityLocationsFactory = require('./controllers/attendance/activityLocations').getActivityLocationsFactory
 const activityListFactory = require('./controllers/attendance/activityList').getActivityListFactory
-const iepDetailsFactory = require('./controllers/incentiveLevelDetails').getIepDetailsFactory
 const houseblockListFactory = require('./controllers/attendance/houseblockList').getHouseblockListFactory
 const { attendanceFactory } = require('./controllers/attendance/attendance')
 const { movementsServiceFactory } = require('./services/movementsService')
@@ -44,7 +43,6 @@ const setup = ({ prisonApi, whereaboutsApi, oauthApi, caseNotesApi, offenderSear
   const controller = controllerFactory({
     activityListService: activityListFactory(prisonApi, whereaboutsApi, config),
     adjudicationHistoryService: adjudicationHistoryFactory(prisonApi),
-    iepDetailsService: iepDetailsFactory(prisonApi),
     houseblockListService: houseblockListFactory(prisonApi, whereaboutsApi, config),
     attendanceService: attendanceFactory(whereaboutsApi),
     globalSearchService: globalSearchFactory(offenderSearchApi),
@@ -85,14 +83,10 @@ const setup = ({ prisonApi, whereaboutsApi, oauthApi, caseNotesApi, offenderSear
     houseblockLocationsFactory({ whereaboutsApi, logError }).getHouseblockLocations
   )
   router.use('/api/activityLocations', activityLocationsFactory({ prisonApi, logError }).getActivityLocations)
-  router.use('/api/bookings/:offenderNo/iepSummary', controller.getIepDetails)
   router.use('/api/houseblocklist', controller.getHouseblockList)
   router.use('/api/activityList', controller.getActivityList)
   router.use('/api/offenders/:offenderNumber/adjudications/:adjudicationNumber', controller.getAdjudicationDetails)
   router.use('/api/offenders/:offenderNumber/adjudications', controller.getAdjudications)
-  router.use('/api/offenders/:offenderNumber/iep-details', controller.getIepDetails)
-  router.use('/api/iep-levels', controller.getPossibleLevels)
-  router.post('/api/offenders/:offenderNumber/change-incentive-level', controller.changeIepLevel)
   router.use('/api/attendance/absence-reasons', controller.getAbsenceReasons)
   router.use('/api/attendance/batch', controller.batchUpdateAttendance)
   router.use('/api/attendance', controller.updateAttendance)
@@ -100,10 +94,8 @@ const setup = ({ prisonApi, whereaboutsApi, oauthApi, caseNotesApi, offenderSear
   router.use('/api/establishmentRollCount', controller.getEstablishmentRollCount)
   router.use('/api/movements/:agencyId/in', controller.getMovementsIn)
   router.use('/api/movements/:agencyId/out', controller.getMovementsOut)
-  router.use('/api/movements/:agencyId/in-reception', controller.getOffendersInReception)
   router.use('/api/movements/livingUnit/:livingUnitId/currently-out', controller.getOffendersCurrentlyOutOfLivingUnit)
   router.use('/api/movements/agency/:agencyId/currently-out', controller.getOffendersCurrentlyOutOfAgency)
-  router.use('/api/movements/:agencyId/en-route', controller.getOffendersEnRoute)
   router.use('/api/globalSearch', controller.globalSearch)
   router.use('/api/appointments/upload-offenders/:agencyId', controller.uploadOffenders)
   router.get('/app/images/:offenderNo/data', imageFactory(prisonApi).prisonerImage)
