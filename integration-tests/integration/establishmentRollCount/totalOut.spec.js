@@ -22,7 +22,7 @@ context('A user can see the list of total out today', () => {
           offenderNo: 'A1234AA',
           dateOfBirth: '1980-01-01',
           firstName: 'AAAAB',
-          lastName: 'AAAAA',
+          lastName: 'AAAAB',
           reasonDescription: 'Normal transfer',
           timeOut: '01:01:45',
         },
@@ -49,12 +49,10 @@ context('A user can see the list of total out today', () => {
         expect($cells.get(1)).to.contain('Aaaaa, Aaaaa')
         expect($cells.get(2)).to.contain('G0000AA')
         expect($cells.get(3)).to.contain('31/12/1980')
-        expect($cells.get(4)).to.contain('--')
 
-        expect($cells.get(10)).to.contain('Aaaaa, Aaaab')
+        expect($cells.get(10)).to.contain('Aaaab, Aaaab')
         expect($cells.get(11)).to.contain('A1234AA')
         expect($cells.get(12)).to.contain('01/01/1980')
-        expect($cells.get(13)).to.contain('--')
       })
   })
 })

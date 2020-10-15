@@ -19,7 +19,6 @@ import GlobalSearchContainer from './GlobalSearch/GlobalSearchContainer'
 import links from './links'
 import MovementsInContainer from './MovementsIn/MovementsInContainer'
 import MovementsOutContainer from './MovementsOut/MovementsOutContainer'
-import CurrentlyOutContainer, { fetchAgencyData, fetchLivingUnitData } from './CurrentlyOut/CurrentlyOutContainer'
 
 import routePaths from './routePaths'
 import Content from './Components/Content'
@@ -335,30 +334,6 @@ class App extends React.Component {
                 handleError={this.handleError}
                 raiseAnalyticsEvent={this.raiseAnalyticsEvent}
                 history={history}
-              />
-            )}
-          />
-
-          <Route
-            exact
-            path={routePaths.currentlyOut}
-            render={({ history, match: { params } }) => (
-              <CurrentlyOutContainer
-                handleError={this.handleError}
-                history={history}
-                dataFetcher={fetchLivingUnitData(params)}
-              />
-            )}
-          />
-
-          <Route
-            exact
-            path={routePaths.totalOut}
-            render={({ history }) => (
-              <CurrentlyOutContainer
-                handleError={this.handleError}
-                history={history}
-                dataFetcher={fetchAgencyData(agencyId)}
               />
             )}
           />
