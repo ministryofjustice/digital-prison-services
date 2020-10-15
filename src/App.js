@@ -19,7 +19,6 @@ import GlobalSearchContainer from './GlobalSearch/GlobalSearchContainer'
 import links from './links'
 import MovementsInContainer from './MovementsIn/MovementsInContainer'
 import MovementsOutContainer from './MovementsOut/MovementsOutContainer'
-import InReceptionContainer from './InReception/InReceptionContainer'
 import CurrentlyOutContainer, { fetchAgencyData, fetchLivingUnitData } from './CurrentlyOut/CurrentlyOutContainer'
 import IncentiveLevelChangeContainer from './IncentiveLevelDetails/IncentiveLevelChangeContainer'
 import EnRouteContainer from './EnRoute/EnRouteContainer'
@@ -335,18 +334,6 @@ class App extends React.Component {
             path={routePaths.outToday}
             render={({ history }) => (
               <MovementsOutContainer
-                handleError={this.handleError}
-                raiseAnalyticsEvent={this.raiseAnalyticsEvent}
-                history={history}
-              />
-            )}
-          />
-
-          <Route
-            exact
-            path={routePaths.inReception}
-            render={({ history }) => (
-              <InReceptionContainer
                 handleError={this.handleError}
                 raiseAnalyticsEvent={this.raiseAnalyticsEvent}
                 history={history}
