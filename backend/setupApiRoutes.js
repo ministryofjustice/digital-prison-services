@@ -15,7 +15,6 @@ const { getConfiguration } = require('./controllers/getConfig')
 const houseblockLocationsFactory = require('./controllers/attendance/houseblockLocations').getHouseblockLocationsFactory
 const activityLocationsFactory = require('./controllers/attendance/activityLocations').getActivityLocationsFactory
 const activityListFactory = require('./controllers/attendance/activityList').getActivityListFactory
-const iepDetailsFactory = require('./controllers/incentiveLevelDetails').getIepDetailsFactory
 const houseblockListFactory = require('./controllers/attendance/houseblockList').getHouseblockListFactory
 const { attendanceFactory } = require('./controllers/attendance/attendance')
 const { movementsServiceFactory } = require('./services/movementsService')
@@ -44,7 +43,6 @@ const setup = ({ elite2Api, whereaboutsApi, oauthApi, caseNotesApi, offenderSear
   const controller = controllerFactory({
     activityListService: activityListFactory(elite2Api, whereaboutsApi, config),
     adjudicationHistoryService: adjudicationHistoryFactory(elite2Api),
-    iepDetailsService: iepDetailsFactory(elite2Api),
     houseblockListService: houseblockListFactory(elite2Api, whereaboutsApi, config),
     attendanceService: attendanceFactory(whereaboutsApi),
     globalSearchService: globalSearchFactory(offenderSearchApi),
@@ -90,9 +88,6 @@ const setup = ({ elite2Api, whereaboutsApi, oauthApi, caseNotesApi, offenderSear
   router.use('/api/activityList', controller.getActivityList)
   router.use('/api/offenders/:offenderNumber/adjudications/:adjudicationNumber', controller.getAdjudicationDetails)
   router.use('/api/offenders/:offenderNumber/adjudications', controller.getAdjudications)
-  router.use('/api/offenders/:offenderNumber/iep-details', controller.getIepDetails)
-  router.use('/api/iep-levels', controller.getPossibleLevels)
-  router.post('/api/offenders/:offenderNumber/change-incentive-level', controller.changeIepLevel)
   router.use('/api/attendance/absence-reasons', controller.getAbsenceReasons)
   router.use('/api/attendance/batch', controller.batchUpdateAttendance)
   router.use('/api/attendance', controller.updateAttendance)
