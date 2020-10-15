@@ -89,7 +89,7 @@ module.exports = ({ elite2Api, logError }) => {
         `Incentive level change`
       )
 
-      return res.redirect(`/prisoner/${offenderNo}/incentive-level-details/`)
+      return res.redirect(`/prisoner/${offenderNo}/incentive-level-details`)
     } catch (error) {
       return renderError(req, res, error)
     }

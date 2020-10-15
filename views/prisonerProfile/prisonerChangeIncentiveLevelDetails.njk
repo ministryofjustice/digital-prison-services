@@ -35,26 +35,22 @@
     {{ govukErrorSummary({
         titleText: "There is a problem",
         errorList: errors,
-        attributes: { 'data-qa-errors': true }
+        attributes: { "data-test": "form-errors" }
     }) }}
   {% endif %}
 
-  <h1 class="govuk-heading-l">{{ title }}
-    for
-    {{ prisonerName }}</h1>
+  <h1 class="govuk-heading-l">{{ title }} for {{ prisonerName }}</h1>
 
   <p class="govuk-body">
-    <span class="govuk-!-font-weight-bold">Prison number:
-    </span>
+    <span class="govuk-!-font-weight-bold">Prison number:</span>
     <br>
-    <span>{{ offenderNo }}</span>
+    <span data-test="prisoner-number">{{ offenderNo }}</span>
   </p>
 
   <p class="govuk-body">
-    <span class="govuk-!-font-weight-bold">Current level:
-    </span>
+    <span class="govuk-!-font-weight-bold">Current level:</span>
     <br>
-    <span>{{ iepLevel }}</span>
+    <span data-test="current-incentive-level">{{ iepLevel }}</span>
   </p>
 
   <form method="POST" novalidate="novalidate">
@@ -74,7 +70,8 @@
           classes: "govuk-fieldset__legend--s"
         }
       },
-      items: selectableLevels
+      items: selectableLevels,
+      attributes: { "data-test": "new-level" }
     }) }}
 
     {{ govukCharacterCount({
@@ -84,22 +81,23 @@
       errorMessage: errors | findError('reason'),
       classes: 'govuk-!-width-one-half',
       maxlength: 240,
-      label: {
-        text: "Reason for change"
-      }
+      label: { text: "Reason for change" },
+      attributes: { "data-test": "change-reason" }
     }) }}
 
     {{ govukButton({
       text: "Confirm change",
       type: "submit",
-      classes: "govuk-!-margin-right-2"
+      classes: "govuk-!-margin-right-2",
+      attributes: { "data-test": "submit-change" }
     }) }}
 
     {{ govukButton({
         text: "Cancel",
         element: 'a',
         href: profileUrl + '/incentive-level-details',
-        classes: "govuk-button--secondary"
+        classes: "govuk-button--secondary",
+        attributes: { "data-test": "cancel-change" }
     }) }}
   </form>
 {% endblock %}

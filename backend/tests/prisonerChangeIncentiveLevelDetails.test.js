@@ -154,7 +154,7 @@ describe('Prisoner change incentive level details', () => {
           'Level changed from Standard to Enhanced at MDI',
           'Incentive level change'
         )
-        expect(res.redirect).toHaveBeenCalledWith(`/prisoner/${offenderNo}/incentive-level-details/`)
+        expect(res.redirect).toHaveBeenCalledWith(`/prisoner/${offenderNo}/incentive-level-details`)
       })
     })
 

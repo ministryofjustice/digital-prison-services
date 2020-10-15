@@ -1,6 +1,6 @@
 const offenderBasicDetails = require('../../mockApis/responses/offenderBasicDetails.json')
 
-context('Prisoner adjudication details', () => {
+context('Prisoner incentive level details', () => {
   const offenderNo = 'A1234A'
 
   before(() => {
