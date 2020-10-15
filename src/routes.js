@@ -8,7 +8,6 @@ export default [
   { path: '/content/whats-new', breadcrumb: "What's new" },
   { path: '/establishment-roll/in-today', breadcrumb: 'In today' },
   { path: '/establishment-roll/out-today', breadcrumb: 'Out today' },
-  { path: '/establishment-roll/in-reception', breadcrumb: 'In reception' },
   { path: '/establishment-roll/en-route', breadcrumb: 'En route' },
   { path: '/establishment-roll/total-currently-out', breadcrumb: 'Total currently out' },
   { path: '/establishment-roll/:livingUnitId', breadcrumb: null },
