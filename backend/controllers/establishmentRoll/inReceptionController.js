@@ -3,10 +3,10 @@ const moment = require('moment')
 const { putLastNameFirst } = require('../../utils')
 const { alertFlagLabels } = require('../../shared/alertFlagValues')
 
-module.exports = ({ movementService, logError }) => async (req, res) => {
+module.exports = ({ movementsService, logError }) => async (req, res) => {
   const { activeCaseLoadId } = req.session.userDetails
   try {
-    const offendersInReception = await movementService.getOffendersInReception(res.locals, activeCaseLoadId)
+    const offendersInReception = await movementsService.getOffendersInReception(res.locals, activeCaseLoadId)
 
     const offenders = offendersInReception
       .sort((left, right) => left.lastName.localeCompare(right.lastName))

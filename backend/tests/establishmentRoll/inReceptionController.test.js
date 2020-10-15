@@ -20,16 +20,16 @@ const inReceptionResponse = [
 ]
 
 describe('In reception controller', () => {
-  const movementService = {}
+  const movementsService = {}
   const res = { locals: {} }
   let req
   let logError
   let controller
 
   beforeEach(() => {
-    movementService.getOffendersInReception = jest.fn().mockResolvedValue([])
+    movementsService.getOffendersInReception = jest.fn().mockResolvedValue([])
     logError = jest.fn()
-    controller = inReceptionController({ movementService, logError })
+    controller = inReceptionController({ movementsService, logError })
 
     res.render = jest.fn()
     req = {
@@ -43,13 +43,13 @@ describe('In reception controller', () => {
   it('should make a call to retrieve offenders in reception', async () => {
     await controller(req, res)
 
-    expect(movementService.getOffendersInReception).toHaveBeenCalledWith({}, 'MDI')
+    expect(movementsService.getOffendersInReception).toHaveBeenCalledWith({}, 'MDI')
   })
 
   it('should handle api error', async () => {
     const error = new Error('network error')
 
-    movementService.getOffendersInReception.mockRejectedValue(error)
+    movementsService.getOffendersInReception.mockRejectedValue(error)
 
     await controller(req, res)
 
@@ -60,7 +60,7 @@ describe('In reception controller', () => {
   })
 
   it('should render view with the correctly formatted data', async () => {
-    movementService.getOffendersInReception = jest.fn().mockResolvedValue(inReceptionResponse)
+    movementsService.getOffendersInReception = jest.fn().mockResolvedValue(inReceptionResponse)
 
     await controller(req, res)
 
@@ -92,7 +92,7 @@ describe('In reception controller', () => {
   })
 
   it('should return offenders sorted alphabetically by last name', async () => {
-    movementService.getOffendersInReception = jest
+    movementsService.getOffendersInReception = jest
       .fn()
       .mockResolvedValue([
         { firstName: 'BB', lastName: 'BB', alerts: [] },

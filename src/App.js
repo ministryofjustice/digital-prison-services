@@ -21,7 +21,6 @@ import MovementsInContainer from './MovementsIn/MovementsInContainer'
 import MovementsOutContainer from './MovementsOut/MovementsOutContainer'
 import CurrentlyOutContainer, { fetchAgencyData, fetchLivingUnitData } from './CurrentlyOut/CurrentlyOutContainer'
 import IncentiveLevelChangeContainer from './IncentiveLevelDetails/IncentiveLevelChangeContainer'
-import EnRouteContainer from './EnRoute/EnRouteContainer'
 
 import routePaths from './routePaths'
 import Content from './Components/Content'
@@ -361,18 +360,6 @@ class App extends React.Component {
                 handleError={this.handleError}
                 history={history}
                 dataFetcher={fetchAgencyData(agencyId)}
-              />
-            )}
-          />
-
-          <Route
-            exact
-            path={routePaths.enRoute}
-            render={({ history }) => (
-              <EnRouteContainer
-                handleError={this.handleError}
-                raiseAnalyticsEvent={this.raiseAnalyticsEvent}
-                history={history}
               />
             )}
           />
