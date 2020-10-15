@@ -100,7 +100,6 @@ const setup = ({ elite2Api, whereaboutsApi, oauthApi, caseNotesApi, offenderSear
   router.use('/api/establishmentRollCount', controller.getEstablishmentRollCount)
   router.use('/api/movements/:agencyId/in', controller.getMovementsIn)
   router.use('/api/movements/:agencyId/out', controller.getMovementsOut)
-  router.use('/api/movements/:agencyId/in-reception', controller.getOffendersInReception)
   router.use('/api/movements/livingUnit/:livingUnitId/currently-out', controller.getOffendersCurrentlyOutOfLivingUnit)
   router.use('/api/movements/agency/:agencyId/currently-out', controller.getOffendersCurrentlyOutOfAgency)
   router.use('/api/movements/:agencyId/en-route', controller.getOffendersEnRoute)

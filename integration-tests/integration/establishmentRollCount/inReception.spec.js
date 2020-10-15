@@ -22,8 +22,8 @@ context('A user can see the list of offenders in reception', () => {
           offenderNo: 'A1234AA',
           bookingId: -1,
           dateOfBirth: '1980-01-01',
-          firstName: 'AAAAB',
-          lastName: 'AAAAA',
+          firstName: 'AAAAA',
+          lastName: 'AAAAB',
           fromAgencyDescription: 'Hull (HMP)',
           movementTime: '01:01:45',
           location: 'LEI-A-01-011',
@@ -46,19 +46,19 @@ context('A user can see the list of offenders in reception', () => {
     cy.visit('/establishment-roll/in-reception')
     cy.get('h1').contains('In reception')
     cy.get('table tr')
-      .find('td')
+      .find('td.govuk-table__cell')
       .then($cells => {
         expect($cells.length).to.eq(14)
 
-        expect($cells.get(1)).to.contain('Aaaaa, Aaaaa')
-        expect($cells.get(2)).to.contain('G0000AA')
-        expect($cells.get(3)).to.contain('31/12/1980')
-        expect($cells.get(4)).to.contain('Outside')
+        expect($cells.get(1).innerText).to.contain('Aaaaa, Aaaaa')
+        expect($cells.get(2).innerText).to.contain('G0000AA')
+        expect($cells.get(3).innerText).to.contain('31/12/1980')
+        expect($cells.get(4).innerText).to.contain('Outside')
 
-        expect($cells.get(8)).to.contain('Aaaaa, Aaaab')
-        expect($cells.get(9)).to.contain('A1234AA')
-        expect($cells.get(10)).to.contain('01/01/1980')
-        expect($cells.get(11)).to.contain('Hull (HMP)')
+        expect($cells.get(8).innerText).to.contain('Aaaab, Aaaaa')
+        expect($cells.get(9).innerText).to.contain('A1234AA')
+        expect($cells.get(10).innerText).to.contain('01/01/1980')
+        expect($cells.get(11).innerText).to.contain('Hull (HMP)')
       })
   })
 })
