@@ -103,7 +103,6 @@ const setup = ({ elite2Api, whereaboutsApi, oauthApi, caseNotesApi, offenderSear
   router.use('/api/movements/:agencyId/in-reception', controller.getOffendersInReception)
   router.use('/api/movements/livingUnit/:livingUnitId/currently-out', controller.getOffendersCurrentlyOutOfLivingUnit)
   router.use('/api/movements/agency/:agencyId/currently-out', controller.getOffendersCurrentlyOutOfAgency)
-  router.use('/api/movements/:agencyId/en-route', controller.getOffendersEnRoute)
   router.use('/api/globalSearch', controller.globalSearch)
   router.use('/api/appointments/upload-offenders/:agencyId', controller.uploadOffenders)
   router.get('/app/images/:offenderNo/data', imageFactory(elite2Api).prisonerImage)
