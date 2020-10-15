@@ -397,5 +397,7 @@ module.exports = on => {
     stubEnRoute: ({ agencyId, results }) => elite2api.stubEnRoute(agencyId, results),
     stubCurrentlyOut: ({ livingUnitId, movements }) => elite2api.stubCurrentlyOut(livingUnitId, movements),
     stubTotalCurrentlyOut: ({ agencyId, movements }) => elite2api.stubTotalCurrentlyOut(agencyId, movements),
+    stubGetAgencyIepLevels: response => elite2api.stubGetAgencyIepLevels(response),
+    stubChangeIepLevel: body => elite2api.stubChangeIepLevel(body),
   })
 }
