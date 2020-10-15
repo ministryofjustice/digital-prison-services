@@ -88,7 +88,6 @@ const setup = ({ elite2Api, whereaboutsApi, oauthApi, caseNotesApi, offenderSear
   router.use('/api/attendance/absence-reasons', controller.getAbsenceReasons)
   router.use('/api/attendance/batch', controller.batchUpdateAttendance)
   router.use('/api/attendance', controller.updateAttendance)
-  router.use('/api/offenders/:offenderNo', controller.getOffender)
   router.use('/api/movements/:agencyId/in', controller.getMovementsIn)
   router.use('/api/movements/:agencyId/out', controller.getMovementsOut)
   router.use('/api/globalSearch', controller.globalSearch)
