@@ -5,7 +5,6 @@ export default {
   outToday: '/establishment-roll/out-today',
   inReception: '/establishment-roll/in-reception',
   currentlyOut: '/establishment-roll/:livingUnitId/currently-out',
-  enRoute: '/establishment-roll/en-route',
   totalOut: '/establishment-roll/total-currently-out',
   uploadOffenders: '/bulk-appointments/upload-offenders',
   bulkAppointments: '/add-bulk-appointments',
