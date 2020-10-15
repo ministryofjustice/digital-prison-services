@@ -1,6 +1,3 @@
-/* eslint-disable no-unused-expressions */
-const moment = require('moment')
-
 context('A user can see the list of total out today', () => {
   before(() => {
     cy.clearCookies()

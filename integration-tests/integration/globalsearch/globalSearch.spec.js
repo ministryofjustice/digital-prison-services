@@ -3,14 +3,13 @@ const GlobalSearchPage = require('./globalSearchPage')
 context('Global search', () => {
   before(() => {
     cy.clearCookies()
-    cy.task('reset')
+    cy.task('resetAndStubTokenVerification')
     cy.task('stubLogin', { username: 'ITAG_USER', caseload: 'MDI' })
     cy.login('/global-search')
   })
 
   beforeEach(() => {
     Cypress.Cookies.preserveOnce('hmpps-session-dev')
-    cy.task('resetAndStubTokenVerification')
     cy.task('stubLogin', {})
     cy.task('stubOffenderImage')
   })
