@@ -5,3 +5,9 @@
 .with-separator {
   border-left: 3px solid govuk-colour("dark-grey")
 }
+
+.establishment-roll-list {
+  .govuk-table__cell {
+    vertical-align: middle;
+  }
+}
