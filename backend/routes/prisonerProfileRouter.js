@@ -104,11 +104,11 @@ const controller = ({
   router.get('/incentive-level-details', prisonerIncentiveLevelDetails({ elite2Api, oauthApi, logError }))
   router.get(
     '/incentive-level-details/change-incentive-level',
-    prisonerChangeIncentiveLevelDetails({ elite2Api, oauthApi, logError }).index
+    prisonerChangeIncentiveLevelDetails({ elite2Api, logError }).index
   )
   router.post(
     '/incentive-level-details/change-incentive-level',
-    prisonerChangeIncentiveLevelDetails({ elite2Api, oauthApi, logError }).post
+    prisonerChangeIncentiveLevelDetails({ elite2Api, logError }).post
   )
 
   return router
