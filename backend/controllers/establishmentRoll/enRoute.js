@@ -30,6 +30,7 @@ module.exports = ({ movementsService, logError }) => async (req, res) => {
           from: offender.fromAgencyDescription,
           reason: offender.movementReasonDescription,
           alerts,
+          category: offender.category,
         }
       })
 

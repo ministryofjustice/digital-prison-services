@@ -1,4 +1,4 @@
-{% macro categoryFlag(categoryText, categoryCode) %}
+{% macro categoryFlag(categoryText, categoryCode, default = true) %}
   {% set classes = 'cat-a-status cat-a-status--' + categoryCode if categoryCode in ['A', 'E', 'H', 'P'] %}
   {% set text %}
     {% if categoryCode in ['A', 'E'] %}
@@ -8,7 +8,7 @@
     {% elif categoryCode === 'P' %}
       CAT A Prov
     {% else %}
-      {{ categoryText | showDefault('Not entered') }}
+      {{ categoryText | default and showDefault('Not entered') }}
     {% endif %}
   {% endset %}
 
