@@ -5,7 +5,6 @@ const factory = ({
   houseblockListService,
   attendanceService,
   globalSearchService,
-  movementsService,
   offenderLoader,
   csvParserService,
   offenderActivitesService,
@@ -82,18 +81,6 @@ const factory = ({
     res.json(viewModel)
   })
 
-  const getMovementsIn = asyncMiddleware(async (req, res) => {
-    const { agencyId } = req.params
-    const viewModel = await movementsService.getMovementsIn(res.locals, agencyId)
-    res.json(viewModel)
-  })
-
-  const getMovementsOut = asyncMiddleware(async (req, res) => {
-    const { agencyId } = req.params
-    const viewModel = await movementsService.getMovementsOut(res.locals, agencyId)
-    res.json(viewModel)
-  })
-
   const uploadOffenders = asyncMiddleware(async (req, res) => {
     const { file } = req.files
     const { agencyId } = req.params
@@ -137,8 +124,6 @@ const factory = ({
     batchUpdateAttendance,
     getAbsenceReasons,
     globalSearch,
-    getMovementsIn,
-    getMovementsOut,
     uploadOffenders,
     bulkAppointmentsCsvTemplate,
     getPrisonersUnaccountedFor,
