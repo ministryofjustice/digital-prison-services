@@ -15,8 +15,8 @@ const { offenderSearchApiFactory } = require('./api/offenderSearchApi')
 
 const prisonApi = prisonApiFactory(
   clientFactory({
-    baseUrl: config.apis.prisonapi.url,
-    timeout: config.apis.prisonapi.timeoutSeconds * 1000,
+    baseUrl: config.apis.prisonApi.url,
+    timeout: config.apis.prisonApi.timeoutSeconds * 1000,
   })
 )
 

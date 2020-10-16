@@ -1,6 +1,6 @@
 const { switchDateFormat } = require('../../utils')
 
-const offenderActivitesFactory = (prisonapi, whereaboutsApi) => {
+const offenderActivitesFactory = (prisonApi, whereaboutsApi) => {
   const getPrisonersUnaccountedFor = async (context, agencyId, dateString, timeSlot) => {
     const date = switchDateFormat(dateString)
     const params = {
@@ -10,7 +10,7 @@ const offenderActivitesFactory = (prisonapi, whereaboutsApi) => {
     }
 
     const [offenderActivities, prisonAttendance] = await Promise.all([
-      prisonapi.getOffenderActivities(context, params),
+      prisonApi.getOffenderActivities(context, params),
       whereaboutsApi.getPrisonAttendance(context, params),
     ])
 
@@ -28,8 +28,8 @@ const offenderActivitesFactory = (prisonapi, whereaboutsApi) => {
     const searchCriteria = { agencyId, date, timeSlot, offenderNumbers }
 
     const [visits, appointments] = await Promise.all([
-      prisonapi.getVisits(context, searchCriteria),
-      prisonapi.getAppointments(context, searchCriteria),
+      prisonApi.getVisits(context, searchCriteria),
+      prisonApi.getAppointments(context, searchCriteria),
     ])
 
     const prisonersWithOtherEvents = prisonersUnaccountedFor.map(prisoner => ({

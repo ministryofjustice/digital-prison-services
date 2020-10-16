@@ -1,11 +1,11 @@
 Reflect.deleteProperty(process.env, 'APPINSIGHTS_INSTRUMENTATIONKEY')
 const moment = require('moment')
 
-const prisonapi = {}
+const prisonApi = {}
 const caseNotesApi = {}
 const { logError } = require('../logError')
 const { displayCreateCaseNotePage, handleCreateCaseNoteForm } = require('../controllers/caseNote').caseNoteFactory(
-  prisonapi,
+  prisonApi,
   caseNotesApi
 )
 
@@ -63,13 +63,13 @@ describe('case note management', () => {
   beforeEach(() => {
     res = { render: jest.fn(), redirect: jest.fn(), locals: {} }
     mockReq = { flash: jest.fn().mockReturnValue([]), originalUrl: '/add-case-note/', get: jest.fn(), body: {} }
-    prisonapi.getDetails = jest.fn().mockReturnValue(getDetailsResponse)
+    prisonApi.getDetails = jest.fn().mockReturnValue(getDetailsResponse)
     caseNotesApi.myCaseNoteTypes = jest.fn().mockReturnValue(caseNoteTypes)
     caseNotesApi.addCaseNote = jest.fn()
   })
 
   afterEach(() => {
-    prisonapi.getDetails.mockRestore()
+    prisonApi.getDetails.mockRestore()
     caseNotesApi.myCaseNoteTypes.mockRestore()
     caseNotesApi.addCaseNote.mockRestore()
     mockReq.flash.mockRestore()

@@ -34,7 +34,7 @@ const addAppInfo = result => {
 
 module.exports = function healthcheckFactory(
   authUrl,
-  prisonapiUrl,
+  prisonApiUrl,
   whereaboutsUrl,
   communityUrl,
   keyworkerUrl,
@@ -45,7 +45,7 @@ module.exports = function healthcheckFactory(
 ) {
   const checks = [
     service('auth', authUrl),
-    service('prisonapi', prisonapiUrl),
+    service('prisonApi', prisonApiUrl),
     service('whereabouts', whereaboutsUrl),
     service('community', communityUrl),
     service('keyworker', keyworkerUrl),

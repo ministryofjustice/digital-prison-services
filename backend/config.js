@@ -39,7 +39,7 @@ module.exports = {
       systemClientId: process.env.API_SYSTEM_CLIENT_ID || 'prisonstaffhubclient',
       systemClientSecret: process.env.API_SYSTEM_CLIENT_SECRET || 'clientsecret',
     },
-    prisonapi: {
+    prisonApi: {
       url: process.env.API_ENDPOINT_URL || 'http://localhost:8080/',
       timeoutSeconds: process.env.API_ENDPOINT_TIMEOUT_SECONDS || 30,
     },
