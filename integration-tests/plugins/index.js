@@ -34,7 +34,7 @@ module.exports = on => {
       return tokenverification.stubVerifyToken(true)
     },
     stubAuthHealth: status => Promise.all([auth.stubHealth(status)]),
-    stubElite2Health: status => Promise.all([prisonApi.stubHealth(status)]),
+    stubPrisonApiHealth: status => Promise.all([prisonApi.stubHealth(status)]),
     stubWhereaboutsHealth: status => Promise.all([whereabouts.stubHealth(status)]),
     stubAllocationManagerHealth: status => Promise.all([allocationManager.stubHealth(status)]),
     stubKeyworkerHealth: status => Promise.all([keyworker.stubHealth(status)]),
