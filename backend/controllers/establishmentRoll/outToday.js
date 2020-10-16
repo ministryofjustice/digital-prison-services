@@ -5,14 +5,14 @@ const {
 } = require('../../config')
 
 const { alertFlagLabels } = require('../../shared/alertFlagValues')
-const { putLastNameFirst, stripAgencyPrefix } = require('../../utils')
+const { putLastNameFirst } = require('../../utils')
 
 module.exports = ({ movementsService, logError }) => async (req, res) => {
   try {
-    const { livingUnitId } = req.params
-    const response = await movementsService.getOffendersCurrentlyOutOfLivingUnit(res.locals, livingUnitId)
+    const agencyId = res.locals.user.activeCaseLoad.caseLoadId
+    const response = await movementsService.getMovementsOut(res.locals, agencyId)
 
-    const results = response.currentlyOut
+    const results = response
       .sort((a, b) => a.lastName.localeCompare(b.lastName, 'en', { ignorePunctuation: true }))
       .map(offender => {
         const alerts = alertFlagLabels.filter(alertFlag =>
@@ -22,25 +22,22 @@ module.exports = ({ movementsService, logError }) => async (req, res) => {
           name: putLastNameFirst(offender.firstName, offender.lastName),
           offenderNo: offender.offenderNo,
           dob: moment(offender.dateOfBirth, 'YYYY-MM-DD').format('DD/MM/YYYY'),
-          location: stripAgencyPrefix(offender.location, offender.fromAgency),
-          incentiveLevel: offender.iepLevel,
-          currentLocation: offender.toCity,
-          comment: offender.commentText,
+          reason: offender.reasonDescription,
+          timeOut: moment(offender.timeOut, 'HH:mm:ss').format('HH:mm'),
           alerts,
           category: offender.category,
         }
       })
 
-    return res.render('establishmentRoll/currentlyOut.njk', {
+    return res.render('establishmentRoll/outToday.njk', {
       results,
-      livingUnitName: response.location,
       notmUrl: dpsUrl,
     })
   } catch (error) {
-    if (error) logError(req.originalUrl, error, 'Failed to load currently out page')
+    if (error) logError(req.originalUrl, error, 'Failed to load out today page')
 
     return res.render('error.njk', {
-      url: '/establishment-roll/currently-out',
+      url: '/establishment-roll/out-today',
       homeUrl: dpsUrl,
     })
   }

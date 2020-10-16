@@ -6,7 +6,6 @@ import { connect } from 'react-redux'
 import Notifications from 'react-notify-toast'
 import ReactGA from 'react-ga'
 import { Header, FooterContainer } from 'new-nomis-shared-components'
-import Dashboard from './Dashboard/index'
 import ErrorComponent from './Error/index'
 import SearchContainer from './Search/SearchContainer'
 import Terms from './Footer/terms-and-conditions'
@@ -17,9 +16,6 @@ import ResultsActivityContainer from './ResultsActivity/ResultsActivityContainer
 import GlobalSearchContainer from './GlobalSearch/GlobalSearchContainer'
 
 import links from './links'
-import MovementsInContainer from './MovementsIn/MovementsInContainer'
-import MovementsOutContainer from './MovementsOut/MovementsOutContainer'
-import CurrentlyOutContainer, { fetchAgencyData, fetchLivingUnitData } from './CurrentlyOut/CurrentlyOutContainer'
 
 import routePaths from './routePaths'
 import Content from './Components/Content'
@@ -234,7 +230,6 @@ class App extends React.Component {
       error,
       user,
       title,
-      agencyId,
       modalActive,
       modalContent,
       setShowModalDispatch,
@@ -316,49 +311,6 @@ class App extends React.Component {
                 handlePeriodChange={event => this.handlePeriodChange(event)}
                 raiseAnalyticsEvent={this.raiseAnalyticsEvent}
                 showModal={setShowModalDispatch}
-              />
-            )}
-          />
-          <Route exact path="/dashboard" render={() => <Dashboard />} />
-
-          <Route
-            exact
-            path={routePaths.inToday}
-            render={({ history }) => <MovementsInContainer handleError={this.handleError} history={history} />}
-          />
-
-          <Route
-            exact
-            path={routePaths.outToday}
-            render={({ history }) => (
-              <MovementsOutContainer
-                handleError={this.handleError}
-                raiseAnalyticsEvent={this.raiseAnalyticsEvent}
-                history={history}
-              />
-            )}
-          />
-
-          <Route
-            exact
-            path={routePaths.currentlyOut}
-            render={({ history, match: { params } }) => (
-              <CurrentlyOutContainer
-                handleError={this.handleError}
-                history={history}
-                dataFetcher={fetchLivingUnitData(params)}
-              />
-            )}
-          />
-
-          <Route
-            exact
-            path={routePaths.totalOut}
-            render={({ history }) => (
-              <CurrentlyOutContainer
-                handleError={this.handleError}
-                history={history}
-                dataFetcher={fetchAgencyData(agencyId)}
               />
             )}
           />

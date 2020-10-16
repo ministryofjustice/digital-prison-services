@@ -9,10 +9,10 @@ const { putLastNameFirst, stripAgencyPrefix } = require('../../utils')
 
 module.exports = ({ movementsService, logError }) => async (req, res) => {
   try {
-    const { livingUnitId } = req.params
-    const response = await movementsService.getOffendersCurrentlyOutOfLivingUnit(res.locals, livingUnitId)
+    const agencyId = res.locals.user.activeCaseLoad.caseLoadId
+    const response = await movementsService.getOffendersCurrentlyOutOfAgency(res.locals, agencyId)
 
-    const results = response.currentlyOut
+    const results = response
       .sort((a, b) => a.lastName.localeCompare(b.lastName, 'en', { ignorePunctuation: true }))
       .map(offender => {
         const alerts = alertFlagLabels.filter(alertFlag =>
@@ -31,16 +31,16 @@ module.exports = ({ movementsService, logError }) => async (req, res) => {
         }
       })
 
-    return res.render('establishmentRoll/currentlyOut.njk', {
+    return res.render('establishmentRoll/totalCurrentlyOut.njk', {
       results,
       livingUnitName: response.location,
       notmUrl: dpsUrl,
     })
   } catch (error) {
-    if (error) logError(req.originalUrl, error, 'Failed to load currently out page')
+    if (error) logError(req.originalUrl, error, 'Failed to load total currently out page')
 
     return res.render('error.njk', {
-      url: '/establishment-roll/currently-out',
+      url: '/establishment-roll/total-currently-out',
       homeUrl: dpsUrl,
     })
   }

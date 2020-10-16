@@ -1,13 +1,13 @@
-const currentlyOut = require('../../controllers/establishmentRoll/currentlyOut')
+const totalCurrentlyOut = require('../../controllers/establishmentRoll/totalCurrentlyOut')
 
 const movementsService = {}
 
 describe('Currently out', () => {
   let logError
   let controller
-  const livingUnitId = 1234
-  const req = { originalUrl: 'http://localhost', params: { livingUnitId } }
-  const res = { locals: {} }
+  const agencyId = 'LEI'
+  const req = { originalUrl: 'http://localhost' }
+  const res = { locals: { user: { activeCaseLoad: { caseLoadId: 'LEI', description: 'Leeds' } } } }
   const offenders = [
     {
       offenderNo: 'A1234AA',
@@ -20,7 +20,6 @@ describe('Currently out', () => {
       toCity: 'Somewhere',
       alerts: [],
       commentText: 'Comments',
-      category: 'C',
     },
     {
       offenderNo: 'G0000AA',
@@ -33,41 +32,43 @@ describe('Currently out', () => {
       toCity: 'Somewhere Else',
       alerts: ['XR'],
       commentText: 'Comments',
-      category: 'A',
     },
   ]
   beforeEach(() => {
-    movementsService.getOffendersCurrentlyOutOfLivingUnit = jest.fn()
+    movementsService.getOffendersCurrentlyOutOfAgency = jest.fn()
     logError = jest.fn()
-    controller = currentlyOut({ movementsService, logError })
+    controller = totalCurrentlyOut({ movementsService, logError })
     res.render = jest.fn()
   })
 
-  it('should call the currently out endpoint', async () => {
+  it('should call the currently out for agency endpoint', async () => {
     await controller(req, res)
 
-    expect(movementsService.getOffendersCurrentlyOutOfLivingUnit).toHaveBeenCalledWith(res.locals, livingUnitId)
+    expect(movementsService.getOffendersCurrentlyOutOfAgency).toHaveBeenCalledWith(res.locals, agencyId)
   })
 
   it('should return right error message', async () => {
-    movementsService.getOffendersCurrentlyOutOfLivingUnit.mockRejectedValue(new Error('error'))
+    movementsService.getOffendersCurrentlyOutOfAgency.mockRejectedValue(new Error('error'))
     await controller(req, res)
 
-    expect(logError).toHaveBeenCalledWith(req.originalUrl, new Error('error'), 'Failed to load currently out page')
+    expect(logError).toHaveBeenCalledWith(
+      req.originalUrl,
+      new Error('error'),
+      'Failed to load total currently out page'
+    )
     expect(res.render).toHaveBeenCalledWith('error.njk', {
-      url: '/establishment-roll/currently-out',
+      url: '/establishment-roll/total-currently-out',
       homeUrl: 'http://localhost:3000/',
     })
   })
 
   it('should return response with data', async () => {
-    movementsService.getOffendersCurrentlyOutOfLivingUnit.mockReturnValue({ location: 'A', currentlyOut: offenders })
+    movementsService.getOffendersCurrentlyOutOfAgency.mockReturnValue(offenders)
     await controller(req, res)
 
     expect(res.render).toHaveBeenCalledWith(
-      'establishmentRoll/currentlyOut.njk',
+      'establishmentRoll/totalCurrentlyOut.njk',
       expect.objectContaining({
-        livingUnitName: 'A',
         results: [
           {
             alerts: [],
@@ -78,7 +79,6 @@ describe('Currently out', () => {
             location: '1-1',
             name: 'Aaaaa, Aaaab',
             offenderNo: 'A1234AA',
-            category: 'C',
           },
           {
             alerts: [{ alertCodes: ['XR'], classes: 'alert-status alert-status--racist', label: 'Racist' }],
@@ -89,7 +89,6 @@ describe('Currently out', () => {
             location: '1-2',
             name: 'Aaaaa, Aaaaa',
             offenderNo: 'G0000AA',
-            category: 'A',
           },
         ],
       })
