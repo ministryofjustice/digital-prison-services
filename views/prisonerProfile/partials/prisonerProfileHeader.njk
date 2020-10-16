@@ -29,7 +29,7 @@
 {% endset %}
 
 {% set categoryHtml %}
-  {{ categoryFlag(prisonerProfileData.category, prisonerProfileData.categoryCode, true) }}
+  {{ categoryFlag(prisonerProfileData.category, prisonerProfileData.categoryCode) }}
 
   {% if prisonerProfileData.categorisationLinkText %}
     <br>
