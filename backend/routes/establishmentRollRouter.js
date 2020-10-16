@@ -6,6 +6,7 @@ const enRouteController = require('../controllers/establishmentRoll/enRoute')
 const currentlyOutController = require('../controllers/establishmentRoll/currentlyOut')
 const totalCurrentlyOutController = require('../controllers/establishmentRoll/totalCurrentlyOut')
 const inTodayController = require('../controllers/establishmentRoll/inToday')
+const outTodayController = require('../controllers/establishmentRoll/outToday')
 
 const { movementsServiceFactory } = require('../services/movementsService')
 
@@ -20,6 +21,7 @@ const controller = ({ elite2Api, systemOauthClient, logError }) => {
   router.get('/:livingUnitId/currently-out', currentlyOutController({ movementsService, logError }))
   router.get('/total-currently-out', totalCurrentlyOutController({ movementsService, logError }))
   router.get('/in-today', inTodayController({ movementsService, logError }))
+  router.get('/out-today', outTodayController({ movementsService, logError }))
   return router
 }
 
