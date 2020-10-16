@@ -41,7 +41,7 @@ docker run -p 3000:3000 -d \
 ## Cypress integration tests
 
 The `integration-tests` directory contains a set of Cypress integration tests for the `prisonstaffhub` application.
-These tests use WireMock to stub the application's dependencies on the prisonapi, oauth and whereabouts RESTful APIs.
+These tests use WireMock to stub the application's dependencies on the prisonApi, oauth and whereabouts RESTful APIs.
 
 ### Running the Cypress tests
 
@@ -54,7 +54,7 @@ the request log at `localhost:9191/__admin/requests/` and a JSON representation 
 ### Starting feature tests node instance
 
 A separate node instance needs to be started for the feature tests. This will run on port 3008 and won't conflict
-with any of the api services, e.g. prisonapi-api or oauth. It will also not conflict with the Groovy integration tests.
+with any of the api services, e.g. prisonApi or oauth. It will also not conflict with the Groovy integration tests.
 
 ```npm run start-feature --env=cypress.env```
 
