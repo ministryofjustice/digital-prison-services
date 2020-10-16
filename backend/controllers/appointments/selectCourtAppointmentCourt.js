@@ -16,7 +16,7 @@ const unpackAppointmentDetails = req => {
   )
 }
 
-const selectCourtAppointmentCourtFactory = (elite2Api, whereaboutsApi, logError) => {
+const selectCourtAppointmentCourtFactory = (prisonApi, whereaboutsApi, logError) => {
   const getCourts = async context => {
     const { courtLocations } = await whereaboutsApi.getCourtLocations(context)
 
@@ -44,8 +44,8 @@ const selectCourtAppointmentCourtFactory = (elite2Api, whereaboutsApi, logError)
 
     try {
       const [offenderDetails, agencyDetails] = await Promise.all([
-        elite2Api.getDetails(res.locals, offenderNo),
-        elite2Api.getAgencyDetails(res.locals, agencyId),
+        prisonApi.getDetails(res.locals, offenderNo),
+        prisonApi.getAgencyDetails(res.locals, agencyId),
       ])
       const courts = await getCourts(res.locals)
       const { firstName, lastName } = offenderDetails

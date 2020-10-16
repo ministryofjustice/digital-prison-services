@@ -17,15 +17,15 @@ const {
   careNeedsViewModel,
 } = require('./personalViewModels')
 
-module.exports = ({ prisonerProfileService, personService, elite2Api, allocationManagerApi, logError }) => async (
+module.exports = ({ prisonerProfileService, personService, prisonApi, allocationManagerApi, logError }) => async (
   req,
   res
 ) => {
   const { offenderNo } = req.params
   const [basicPrisonerDetails, treatmentTypes, healthTypes] = await Promise.all([
-    elite2Api.getDetails(res.locals, offenderNo),
-    elite2Api.getTreatmentTypes(res.locals),
-    elite2Api.getHealthTypes(res.locals),
+    prisonApi.getDetails(res.locals, offenderNo),
+    prisonApi.getTreatmentTypes(res.locals),
+    prisonApi.getHealthTypes(res.locals),
   ])
     .then(data => data)
     .catch(error => {
@@ -51,15 +51,15 @@ module.exports = ({ prisonerProfileService, personService, elite2Api, allocation
   ] = await Promise.all(
     [
       prisonerProfileService.getPrisonerProfileData(res.locals, offenderNo),
-      elite2Api.getIdentifiers(res.locals, bookingId),
-      elite2Api.getOffenderAliases(res.locals, bookingId),
-      elite2Api.getPrisonerProperty(res.locals, bookingId),
-      elite2Api.getPrisonerContacts(res.locals, bookingId),
-      elite2Api.getPrisonerAddresses(res.locals, offenderNo),
-      elite2Api.getSecondaryLanguages(res.locals, bookingId),
-      elite2Api.getPersonalCareNeeds(res.locals, bookingId, healthCodes),
-      elite2Api.getReasonableAdjustments(res.locals, bookingId, treatmentCodes),
-      elite2Api.getAgencies(res.locals),
+      prisonApi.getIdentifiers(res.locals, bookingId),
+      prisonApi.getOffenderAliases(res.locals, bookingId),
+      prisonApi.getPrisonerProperty(res.locals, bookingId),
+      prisonApi.getPrisonerContacts(res.locals, bookingId),
+      prisonApi.getPrisonerAddresses(res.locals, offenderNo),
+      prisonApi.getSecondaryLanguages(res.locals, bookingId),
+      prisonApi.getPersonalCareNeeds(res.locals, bookingId, healthCodes),
+      prisonApi.getReasonableAdjustments(res.locals, bookingId, treatmentCodes),
+      prisonApi.getAgencies(res.locals),
       allocationManagerApi.getPomByOffenderNo(res.locals, offenderNo),
     ].map(apiCall => logErrorAndContinue(apiCall))
   )

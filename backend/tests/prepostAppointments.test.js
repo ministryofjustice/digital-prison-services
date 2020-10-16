@@ -5,7 +5,7 @@ const config = require('../config')
 
 describe('Pre post appointments', () => {
   let body
-  const elite2Api = {}
+  const prisonApi = {}
   const oauthApi = {}
   const whereaboutsApi = {}
   const appointmentsService = {}
@@ -42,10 +42,10 @@ describe('Pre post appointments', () => {
   ]
 
   beforeEach(() => {
-    elite2Api.getDetails = jest.fn()
-    elite2Api.addSingleAppointment = jest.fn()
-    elite2Api.getLocation = jest.fn()
-    elite2Api.getAgencyDetails = jest.fn()
+    prisonApi.getDetails = jest.fn()
+    prisonApi.addSingleAppointment = jest.fn()
+    prisonApi.getLocation = jest.fn()
+    prisonApi.getAgencyDetails = jest.fn()
     oauthApi.userEmail = jest.fn()
     appointmentsService.getAppointmentOptions = jest.fn()
     existingEventsService.getExistingEventsForLocation = jest.fn()
@@ -60,7 +60,7 @@ describe('Pre post appointments', () => {
       locationTypes: [{ value: 1, text: 'Room 3' }],
     })
 
-    elite2Api.getDetails.mockReturnValue({
+    prisonApi.getDetails.mockReturnValue({
       bookingId,
       offenderNo: 'A12345',
       firstName: 'john',
@@ -68,11 +68,11 @@ describe('Pre post appointments', () => {
       assignedLivingUnitDesc: 'Cell 1',
     })
 
-    elite2Api.getAgencyDetails.mockReturnValue({
+    prisonApi.getAgencyDetails.mockReturnValue({
       description: 'Moorland',
     })
 
-    elite2Api.getLocation.mockReturnValue({ userDescription: 'Test location' })
+    prisonApi.getLocation.mockReturnValue({ userDescription: 'Test location' })
     whereaboutsApi.getCourtLocations.mockReturnValue({ courtLocations: ['Leeds', 'London'] })
     existingEventsService.getExistingEventsForLocation.mockReturnValue(locationEvents)
 
@@ -89,7 +89,7 @@ describe('Pre post appointments', () => {
   describe('index', () => {
     it('should return correct links', async () => {
       const { index } = prepostAppointmentsFactory({
-        elite2Api,
+        prisonApi,
         appointmentsService,
         whereaboutsApi,
         logError: () => {},
@@ -110,7 +110,7 @@ describe('Pre post appointments', () => {
 
     it('should return locations', async () => {
       const { index } = prepostAppointmentsFactory({
-        elite2Api,
+        prisonApi,
         appointmentsService,
         whereaboutsApi,
         logError: () => {},
@@ -128,7 +128,7 @@ describe('Pre post appointments', () => {
 
     it('should return court locations', async () => {
       const { index } = prepostAppointmentsFactory({
-        elite2Api,
+        prisonApi,
         appointmentsService,
         whereaboutsApi,
         logError: () => {},
@@ -150,7 +150,7 @@ describe('Pre post appointments', () => {
 
     it('should return default form values', async () => {
       const { index } = prepostAppointmentsFactory({
-        elite2Api,
+        prisonApi,
         appointmentsService,
         whereaboutsApi,
         logError: () => {},
@@ -173,7 +173,7 @@ describe('Pre post appointments', () => {
 
     it('should extract appointment details', async () => {
       const { index } = prepostAppointmentsFactory({
-        elite2Api,
+        prisonApi,
         appointmentsService,
         whereaboutsApi,
         logError: () => {},
@@ -198,7 +198,7 @@ describe('Pre post appointments', () => {
 
     it('should throw and log an error when appointment details are missing from flash', async () => {
       const logError = jest.fn()
-      const { index } = prepostAppointmentsFactory({ elite2Api, appointmentsService, logError })
+      const { index } = prepostAppointmentsFactory({ prisonApi, appointmentsService, logError })
 
       req.flash.mockImplementation(() => [])
       req.body = body
@@ -227,7 +227,7 @@ describe('Pre post appointments', () => {
       ])
 
       const { index } = prepostAppointmentsFactory({
-        elite2Api,
+        prisonApi,
         appointmentsService,
         existingEventsService,
         whereaboutsApi,
@@ -261,7 +261,7 @@ describe('Pre post appointments', () => {
   describe('post', () => {
     it('should redirect to the court location page when other has been selected', async () => {
       const { post } = prepostAppointmentsFactory({
-        elite2Api,
+        prisonApi,
         appointmentsService,
         whereaboutsApi,
         logError: () => {},
@@ -312,7 +312,7 @@ describe('Pre post appointments', () => {
 
     it('should validate the presence of other court', async () => {
       const { post } = prepostAppointmentsFactory({
-        elite2Api,
+        prisonApi,
         appointmentsService,
         whereaboutsApi,
         logError: () => {},
@@ -336,7 +336,7 @@ describe('Pre post appointments', () => {
 
     it('should validate presence of room locations', async () => {
       const { post } = prepostAppointmentsFactory({
-        elite2Api,
+        prisonApi,
         appointmentsService,
         whereaboutsApi,
         logError: () => {},
@@ -365,7 +365,7 @@ describe('Pre post appointments', () => {
 
     it('should validate presence of court', async () => {
       const { post } = prepostAppointmentsFactory({
-        elite2Api,
+        prisonApi,
         appointmentsService,
         existingEventsService,
         whereaboutsApi,
@@ -391,7 +391,7 @@ describe('Pre post appointments', () => {
 
     it('should validate presence of room locations when "no" have been selected', async () => {
       const { post } = prepostAppointmentsFactory({
-        elite2Api,
+        prisonApi,
         appointmentsService,
         whereaboutsApi,
         logError: () => {},
@@ -416,7 +416,7 @@ describe('Pre post appointments', () => {
 
     it('should return selected form values on validation errors', async () => {
       const { post } = prepostAppointmentsFactory({
-        elite2Api,
+        prisonApi,
         appointmentsService,
         existingEventsService,
         whereaboutsApi,
@@ -449,7 +449,7 @@ describe('Pre post appointments', () => {
 
     it('should return locations, links and summary details on validation errors', async () => {
       const { post } = prepostAppointmentsFactory({
-        elite2Api,
+        prisonApi,
         appointmentsService,
         existingEventsService,
         whereaboutsApi,
@@ -481,7 +481,7 @@ describe('Pre post appointments', () => {
 
     it('should throw and log an error when appointment details are missing from flash', async () => {
       const logError = jest.fn()
-      const { post } = prepostAppointmentsFactory({ elite2Api, appointmentsService, logError })
+      const { post } = prepostAppointmentsFactory({ prisonApi, appointmentsService, logError })
 
       req.flash.mockImplementation(() => [])
       req.body = body
@@ -498,7 +498,7 @@ describe('Pre post appointments', () => {
 
     it('should pack appointment details back into flash before rendering', async () => {
       const { post } = prepostAppointmentsFactory({
-        elite2Api,
+        prisonApi,
         appointmentsService,
         whereaboutsApi,
         existingEventsService,
@@ -512,14 +512,14 @@ describe('Pre post appointments', () => {
     })
 
     it('should raise a telemetry event on appointment creation', async () => {
-      elite2Api.getAgencyDetails.mockReturnValue({
+      prisonApi.getAgencyDetails.mockReturnValue({
         description: 'Leeds',
       })
 
       const raiseAnalyticsEvent = jest.fn()
 
       const { post } = prepostAppointmentsFactory({
-        elite2Api,
+        prisonApi,
         oauthApi,
         appointmentsService,
         whereaboutsApi,
@@ -537,14 +537,14 @@ describe('Pre post appointments', () => {
 
       await post(req, res)
 
-      expect(elite2Api.getAgencyDetails).toHaveBeenCalledWith({}, 'LEI')
+      expect(prisonApi.getAgencyDetails).toHaveBeenCalledWith({}, 'LEI')
       expect(raiseAnalyticsEvent).toHaveBeenCalledWith('VLB Appointments', 'Video link booked', 'Leeds -  London')
     })
 
     describe('Events at location', () => {
       it('should return events at the pre appointment location on validation errors', async () => {
         const { post } = prepostAppointmentsFactory({
-          elite2Api,
+          prisonApi,
           appointmentsService,
           existingEventsService,
           whereaboutsApi,
@@ -575,7 +575,7 @@ describe('Pre post appointments', () => {
 
       it('should return events at the post appointment location on validation errors', async () => {
         const { post } = prepostAppointmentsFactory({
-          elite2Api,
+          prisonApi,
           appointmentsService,
           existingEventsService,
           whereaboutsApi,
@@ -633,7 +633,7 @@ describe('Pre post appointments', () => {
 
       it('should create main appointment', async () => {
         const { post } = prepostAppointmentsFactory({
-          elite2Api,
+          prisonApi,
           oauthApi,
           notifyClient,
           appointmentsService,
@@ -660,7 +660,7 @@ describe('Pre post appointments', () => {
 
       it('should create main pre appointment', async () => {
         const { post } = prepostAppointmentsFactory({
-          elite2Api,
+          prisonApi,
           oauthApi,
           notifyClient,
           appointmentsService,
@@ -687,7 +687,7 @@ describe('Pre post appointments', () => {
 
       it('should create main post appointment', async () => {
         const { post } = prepostAppointmentsFactory({
-          elite2Api,
+          prisonApi,
           oauthApi,
           notifyClient,
           appointmentsService,
@@ -714,7 +714,7 @@ describe('Pre post appointments', () => {
 
       it('should not request pre or post appointments when "no" has been selected', async () => {
         const { post } = prepostAppointmentsFactory({
-          elite2Api,
+          prisonApi,
           oauthApi,
           notifyClient,
           appointmentsService,
@@ -735,7 +735,7 @@ describe('Pre post appointments', () => {
 
       it('should place pre and post appointment details into flash', async () => {
         const { post } = prepostAppointmentsFactory({
-          elite2Api,
+          prisonApi,
           oauthApi,
           notifyClient,
           appointmentsService,
@@ -779,7 +779,7 @@ describe('Pre post appointments', () => {
         notifyClient.sendEmail = jest.fn()
 
         const { post } = prepostAppointmentsFactory({
-          elite2Api,
+          prisonApi,
           oauthApi,
           appointmentsService,
           whereaboutsApi,
@@ -808,7 +808,7 @@ describe('Pre post appointments', () => {
         notifyClient.sendEmail = jest.fn()
 
         const { post } = prepostAppointmentsFactory({
-          elite2Api,
+          prisonApi,
           oauthApi,
           notifyClient,
           appointmentsService,

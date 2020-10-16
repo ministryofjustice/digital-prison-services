@@ -3,7 +3,7 @@ const prisonerIncentiveLevelDetails = require('../controllers/prisonerProfile/pr
 describe('Prisoner incentive level details', () => {
   const offenderNo = 'ABC123'
   const bookingId = '123'
-  const elite2Api = {}
+  const prisonApi = {}
   const oauthApi = {}
 
   let req
@@ -21,10 +21,10 @@ describe('Prisoner incentive level details', () => {
 
     logError = jest.fn()
 
-    elite2Api.getDetails = jest
+    prisonApi.getDetails = jest
       .fn()
       .mockResolvedValue({ agencyId: 'MDI', bookingId, firstName: 'John', lastName: 'Smith' })
-    elite2Api.getIepSummaryForBooking = jest.fn().mockReturnValue({
+    prisonApi.getIepSummaryForBooking = jest.fn().mockReturnValue({
       bookingId: -1,
       iepDate: '2017-08-15',
       iepTime: '2017-08-15T16:04:35',
@@ -57,7 +57,7 @@ describe('Prisoner incentive level details', () => {
         },
       ],
     })
-    elite2Api.getAgencyDetails = jest
+    prisonApi.getAgencyDetails = jest
       .fn()
       .mockReturnValueOnce({
         agencyId: 'HEI',
@@ -67,7 +67,7 @@ describe('Prisoner incentive level details', () => {
         agencyId: 'LEI',
         description: 'Leeds',
       })
-    elite2Api.getStaffDetails = jest.fn().mockReturnValue({
+    prisonApi.getStaffDetails = jest.fn().mockReturnValue({
       username: 'ITAG_USER',
       firstName: 'Staff',
       lastName: 'Member',
@@ -75,14 +75,14 @@ describe('Prisoner incentive level details', () => {
 
     oauthApi.userRoles = jest.fn().mockReturnValue([])
 
-    controller = prisonerIncentiveLevelDetails({ elite2Api, oauthApi, logError })
+    controller = prisonerIncentiveLevelDetails({ prisonApi, oauthApi, logError })
   })
 
   it('should make the expected API calls', async () => {
     await controller(req, res)
 
-    expect(elite2Api.getDetails).toHaveBeenCalledWith(res.locals, offenderNo)
-    expect(elite2Api.getIepSummaryForBooking).toHaveBeenCalledWith(res.locals, bookingId, true)
+    expect(prisonApi.getDetails).toHaveBeenCalledWith(res.locals, offenderNo)
+    expect(prisonApi.getIepSummaryForBooking).toHaveBeenCalledWith(res.locals, bookingId, true)
     expect(oauthApi.userRoles).toHaveBeenCalledWith(res.locals)
   })
 

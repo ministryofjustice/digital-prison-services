@@ -42,7 +42,7 @@ app.use(setupAuth({ oauthApi: apis.oauthApi, tokenVerificationApi: apis.tokenVer
 app.use(setupWebpackForDev())
 app.use(
   setupApiRoutes({
-    elite2Api: apis.elite2Api,
+    prisonApi: apis.prisonApi,
     whereaboutsApi: apis.whereaboutsApi,
     oauthApi: apis.oauthApi,
     caseNotesApi: apis.caseNotesApi,
@@ -52,7 +52,7 @@ app.use(
 app.use(csrf())
 app.use(
   routes({
-    elite2Api: apis.elite2Api,
+    prisonApi: apis.prisonApi,
     whereaboutsApi: apis.whereaboutsApi,
     oauthApi: apis.oauthApi,
     communityApi: apis.communityApi,

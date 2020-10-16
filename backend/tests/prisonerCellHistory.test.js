@@ -4,7 +4,7 @@ const prisonerCellHistory = require('../controllers/prisonerProfile/prisonerCell
 describe('Prisoner cell history', () => {
   const offenderNo = 'ABC123'
   const bookingId = '123'
-  const elite2Api = {}
+  const prisonApi = {}
   const oauthApi = {}
 
   let req
@@ -25,8 +25,8 @@ describe('Prisoner cell history', () => {
     logError = jest.fn()
 
     oauthApi.userRoles = jest.fn().mockResolvedValue([])
-    elite2Api.getDetails = jest.fn().mockResolvedValue({ bookingId, firstName: 'John', lastName: 'Smith' })
-    elite2Api.getOffenderCellHistory = jest.fn().mockResolvedValue({
+    prisonApi.getDetails = jest.fn().mockResolvedValue({ bookingId, firstName: 'John', lastName: 'Smith' })
+    prisonApi.getOffenderCellHistory = jest.fn().mockResolvedValue({
       content: [
         {
           agencyId: 'MDI',
@@ -50,28 +50,28 @@ describe('Prisoner cell history', () => {
         },
       ],
     })
-    elite2Api.getAgencyDetails = jest.fn().mockResolvedValue([])
-    elite2Api.getInmatesAtLocation = jest.fn().mockResolvedValue([])
+    prisonApi.getAgencyDetails = jest.fn().mockResolvedValue([])
+    prisonApi.getInmatesAtLocation = jest.fn().mockResolvedValue([])
 
-    controller = prisonerCellHistory({ oauthApi, elite2Api, logError })
+    controller = prisonerCellHistory({ oauthApi, prisonApi, logError })
   })
 
   it('should make the expected API calls', async () => {
     await controller(req, res)
 
-    expect(elite2Api.getDetails).toHaveBeenCalledWith(res.locals, offenderNo)
-    expect(elite2Api.getOffenderCellHistory).toHaveBeenCalledWith(res.locals, bookingId, { page: 0, size: 10000 })
-    expect(elite2Api.getAgencyDetails.mock.calls.length).toBe(2)
-    expect(elite2Api.getInmatesAtLocation).toHaveBeenCalledWith(res.locals, 1, {})
+    expect(prisonApi.getDetails).toHaveBeenCalledWith(res.locals, offenderNo)
+    expect(prisonApi.getOffenderCellHistory).toHaveBeenCalledWith(res.locals, bookingId, { page: 0, size: 10000 })
+    expect(prisonApi.getAgencyDetails.mock.calls.length).toBe(2)
+    expect(prisonApi.getInmatesAtLocation).toHaveBeenCalledWith(res.locals, 1, {})
   })
 
   describe('cell history for offender', () => {
     beforeEach(() => {
-      elite2Api.getAgencyDetails = jest
+      prisonApi.getAgencyDetails = jest
         .fn()
         .mockResolvedValueOnce({ agencyId: 'MDI', description: 'Moorland' })
         .mockResolvedValueOnce({ agencyId: 'RNI', description: 'Ranby' })
-      elite2Api.getInmatesAtLocation.mockResolvedValue([
+      prisonApi.getInmatesAtLocation.mockResolvedValue([
         { bookingId: '144', firstName: 'Another', lastName: 'Offender', offenderNo: 'B12345' },
       ])
     })

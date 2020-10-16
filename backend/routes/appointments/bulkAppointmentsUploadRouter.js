@@ -7,11 +7,11 @@ const { csvParserService } = require('../../csv-parser')
 
 const router = express.Router()
 
-const controller = ({ elite2Api, logError }) => {
+const controller = ({ prisonApi, logError }) => {
   const { index, post } = bulkAppointmentsUploadFactory(
     csvParserService({ fs, isBinaryFileSync }),
-    offenderLoaderFactory(elite2Api),
-    elite2Api,
+    offenderLoaderFactory(prisonApi),
+    prisonApi,
     logError
   )
 

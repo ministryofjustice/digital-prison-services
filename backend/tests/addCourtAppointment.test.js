@@ -1,6 +1,6 @@
 const { addCourtAppointmentsFactory } = require('../controllers/appointments/addCourtAppointment')
 
-const elite2Api = {}
+const prisonApi = {}
 
 const req = {
   session: {
@@ -18,11 +18,11 @@ describe('Add court appointment', () => {
   let logError
 
   beforeEach(() => {
-    elite2Api.getDetails = jest.fn()
-    elite2Api.getAgencyDetails = jest.fn()
+    prisonApi.getDetails = jest.fn()
+    prisonApi.getAgencyDetails = jest.fn()
 
-    elite2Api.getDetails.mockReturnValue({ firstName: 'firstName', lastName: 'lastName', bookingId: 1 })
-    elite2Api.getAgencyDetails.mockReturnValue({ description: 'Moorland' })
+    prisonApi.getDetails.mockReturnValue({ firstName: 'firstName', lastName: 'lastName', bookingId: 1 })
+    prisonApi.getAgencyDetails.mockReturnValue({ description: 'Moorland' })
 
     res.render = jest.fn()
     res.send = jest.fn()
@@ -30,7 +30,7 @@ describe('Add court appointment', () => {
 
     req.flash = jest.fn()
     logError = jest.fn()
-    controller = addCourtAppointmentsFactory(elite2Api, logError)
+    controller = addCourtAppointmentsFactory(prisonApi, logError)
   })
 
   afterEach(() => {
@@ -40,8 +40,8 @@ describe('Add court appointment', () => {
   it('should request user and agency details', async () => {
     await controller.index(req, res)
 
-    expect(elite2Api.getDetails).toHaveBeenCalledWith({}, 'A12345')
-    expect(elite2Api.getAgencyDetails).toHaveBeenCalledWith({}, 'MDI')
+    expect(prisonApi.getDetails).toHaveBeenCalledWith({}, 'A12345')
+    expect(prisonApi.getAgencyDetails).toHaveBeenCalledWith({}, 'MDI')
   })
 
   it('should pack agencyId into user details', async () => {
@@ -69,7 +69,7 @@ describe('Add court appointment', () => {
   })
 
   it('should render index error template', async () => {
-    elite2Api.getDetails.mockImplementation(() => Promise.reject(new Error('Network error')))
+    prisonApi.getDetails.mockImplementation(() => Promise.reject(new Error('Network error')))
 
     await controller.index(req, res)
 

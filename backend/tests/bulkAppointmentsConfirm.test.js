@@ -1,5 +1,5 @@
 Reflect.deleteProperty(process.env, 'APPINSIGHTS_INSTRUMENTATIONKEY')
-const elite2Api = {}
+const prisonApi = {}
 const { raiseAnalyticsEvent } = require('../raiseAnalyticsEvent')
 const { bulkAppointmentsConfirmFactory } = require('../controllers/appointments/bulkAppointmentsConfirm')
 
@@ -13,11 +13,11 @@ let logError
 let controller
 
 beforeEach(() => {
-  elite2Api.addAppointments = jest.fn()
-  elite2Api.getVisits = jest.fn().mockResolvedValue([])
-  elite2Api.getAppointments = jest.fn().mockResolvedValue([])
-  elite2Api.getExternalTransfers = jest.fn().mockResolvedValue([])
-  elite2Api.getCourtEvents = jest.fn().mockResolvedValue([])
+  prisonApi.addAppointments = jest.fn()
+  prisonApi.getVisits = jest.fn().mockResolvedValue([])
+  prisonApi.getAppointments = jest.fn().mockResolvedValue([])
+  prisonApi.getExternalTransfers = jest.fn().mockResolvedValue([])
+  prisonApi.getCourtEvents = jest.fn().mockResolvedValue([])
 
   req = {
     originalUrl: '/bulk-appointments/confirm-appointment/',
@@ -30,7 +30,7 @@ beforeEach(() => {
   }
   res = { locals: {}, render: jest.fn(), redirect: jest.fn() }
   logError = jest.fn()
-  controller = bulkAppointmentsConfirmFactory(elite2Api, logError)
+  controller = bulkAppointmentsConfirmFactory(prisonApi, logError)
 })
 
 const appointmentDetails = {
@@ -92,7 +92,7 @@ describe('when confirming bulk appointment details', () => {
           prisonersListed: appointmentDetails.prisonersListed,
         })
 
-        expect(elite2Api.addAppointments).toBeCalledWith(res.locals, {
+        expect(prisonApi.addAppointments).toBeCalledWith(res.locals, {
           appointmentDefaults: {
             appointmentType: 'TEST',
             comment: 'Activity comment',
@@ -156,13 +156,13 @@ describe('when confirming bulk appointment details', () => {
       describe('and there are no errors', () => {
         beforeEach(() => {
           req.session.data = { ...appointmentDetails }
-          elite2Api.addAppointments = jest.fn().mockReturnValue('All good')
+          prisonApi.addAppointments = jest.fn().mockReturnValue('All good')
         })
 
         it('should submit the data and redirect to the appointments added page', async () => {
           await controller.post(req, res)
 
-          expect(elite2Api.addAppointments).toBeCalledWith(res.locals, {
+          expect(prisonApi.addAppointments).toBeCalledWith(res.locals, {
             appointmentDefaults: {
               appointmentType: 'TEST',
               locationId: 1,
@@ -186,7 +186,7 @@ describe('when confirming bulk appointment details', () => {
 
     describe('and there are individual start and end times', () => {
       beforeEach(() => {
-        elite2Api.addAppointments = jest.fn().mockReturnValue('All good')
+        prisonApi.addAppointments = jest.fn().mockReturnValue('All good')
         req.session.data = {
           appointmentType: 'TEST',
           location: 1,
@@ -228,7 +228,7 @@ describe('when confirming bulk appointment details', () => {
 
           await controller.post(req, res)
 
-          expect(elite2Api.addAppointments).toBeCalledWith(res.locals, {
+          expect(prisonApi.addAppointments).toBeCalledWith(res.locals, {
             appointmentDefaults: {
               appointmentType: 'TEST',
               comment: 'Activity comment',
@@ -265,7 +265,7 @@ describe('when confirming bulk appointment details', () => {
 
           await controller.post(req, res)
 
-          expect(elite2Api.addAppointments).not.toBeCalled()
+          expect(prisonApi.addAppointments).not.toBeCalled()
           expect(res.render).toBeCalledWith('bulkAppointmentsConfirm.njk', {
             appointmentDetails: {
               appointmentType: 'TEST',
@@ -323,7 +323,7 @@ describe('when confirming bulk appointment details', () => {
 
     describe('and there are recurring appointments', () => {
       beforeEach(() => {
-        elite2Api.addAppointments = jest.fn().mockReturnValue('All good')
+        prisonApi.addAppointments = jest.fn().mockReturnValue('All good')
         req.session.data = {
           ...appointmentDetails,
           recurring: 'yes',
@@ -346,7 +346,7 @@ describe('when confirming bulk appointment details', () => {
           prisonersListed: appointmentDetails.prisonersListed,
         })
 
-        expect(elite2Api.addAppointments).toBeCalledWith(res.locals, {
+        expect(prisonApi.addAppointments).toBeCalledWith(res.locals, {
           appointmentDefaults: {
             appointmentType: 'TEST',
             comment: 'Activity comment',
@@ -374,8 +374,8 @@ describe('when confirming bulk appointment details', () => {
 
     describe('and there are appointment clashes', () => {
       beforeEach(() => {
-        elite2Api.addAppointments = jest.fn().mockReturnValue('All good')
-        elite2Api.getAppointments = jest.fn().mockResolvedValue([
+        prisonApi.addAppointments = jest.fn().mockReturnValue('All good')
+        prisonApi.getAppointments = jest.fn().mockResolvedValue([
           {
             offenderNo: 'G1683VN',
             locationId: 123,
@@ -402,7 +402,7 @@ describe('when confirming bulk appointment details', () => {
 
     describe('and there is an issue with the api', () => {
       beforeEach(() => {
-        elite2Api.addAppointments = jest.fn().mockImplementation(() => {
+        prisonApi.addAppointments = jest.fn().mockImplementation(() => {
           throw new Error('There has been an error')
         })
         req.session.data = { ...appointmentDetails }
@@ -430,10 +430,10 @@ describe('when confirming bulk appointment details', () => {
         offenderNumbers: ['G1683VN', 'G4803UT', 'G4346UT', 'G5402VR'],
       }
 
-      expect(elite2Api.getVisits).toHaveBeenCalledWith({}, searchCriteria)
-      expect(elite2Api.getAppointments).toHaveBeenCalledWith({}, searchCriteria)
-      expect(elite2Api.getExternalTransfers).toHaveBeenCalledWith({}, searchCriteria)
-      expect(elite2Api.getCourtEvents).toHaveBeenCalledWith({}, searchCriteria)
+      expect(prisonApi.getVisits).toHaveBeenCalledWith({}, searchCriteria)
+      expect(prisonApi.getAppointments).toHaveBeenCalledWith({}, searchCriteria)
+      expect(prisonApi.getExternalTransfers).toHaveBeenCalledWith({}, searchCriteria)
+      expect(prisonApi.getCourtEvents).toHaveBeenCalledWith({}, searchCriteria)
     })
   })
 })

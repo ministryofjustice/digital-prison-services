@@ -2,7 +2,7 @@ const { raiseAnalyticsEvent } = require('../../raiseAnalyticsEvent')
 
 const { properCaseName, putLastNameFirst } = require('../../utils')
 
-module.exports = ({ elite2Api, logError }) => {
+module.exports = ({ prisonApi, logError }) => {
   const index = async (req, res) => {
     const { offenderNo } = req.params
     const { cellId } = req.query
@@ -14,9 +14,9 @@ module.exports = ({ elite2Api, logError }) => {
         ? {
             description: 'swap',
           }
-        : await elite2Api.getLocation(res.locals, cellId)
+        : await prisonApi.getLocation(res.locals, cellId)
 
-    const { firstName, lastName } = await elite2Api.getDetails(res.locals, offenderNo)
+    const { firstName, lastName } = await prisonApi.getDetails(res.locals, offenderNo)
 
     return res.render('cellMove/confirmCellMove.njk', {
       showWarning: cellId !== 'C-SWAP',
@@ -31,11 +31,11 @@ module.exports = ({ elite2Api, logError }) => {
   }
 
   const makeCellMove = async (res, { cellId, bookingId, agencyId, offenderNo }) => {
-    const { capacity } = await elite2Api.getAttributesForLocation(res.locals, cellId)
-    const { locationPrefix, description } = await elite2Api.getLocation(res.locals, cellId)
+    const { capacity } = await prisonApi.getAttributesForLocation(res.locals, cellId)
+    const { locationPrefix, description } = await prisonApi.getLocation(res.locals, cellId)
 
     try {
-      await elite2Api.moveToCell(res.locals, { bookingId, internalLocationDescription: locationPrefix })
+      await prisonApi.moveToCell(res.locals, { bookingId, internalLocationDescription: locationPrefix })
     } catch (error) {
       if (error.status === 400)
         return res.redirect(`/prisoner/${offenderNo}/cell-move/cell-not-available?cellDescription=${description}`)
@@ -52,7 +52,7 @@ module.exports = ({ elite2Api, logError }) => {
   }
 
   const makeCSwap = async (res, { bookingId, agencyId, offenderNo }) => {
-    await elite2Api.moveToCellSwap(res.locals, { bookingId })
+    await prisonApi.moveToCellSwap(res.locals, { bookingId })
 
     raiseAnalyticsEvent('Cell move', `Cell move for ${agencyId}`, `Cell type - C-SWAP`)
 
@@ -66,7 +66,7 @@ module.exports = ({ elite2Api, logError }) => {
     try {
       if (!cellId) return res.redirect(`/prisoner/${offenderNo}/cell-move/select-cell`)
 
-      const { bookingId, agencyId } = await elite2Api.getDetails(res.locals, offenderNo)
+      const { bookingId, agencyId } = await prisonApi.getDetails(res.locals, offenderNo)
 
       if (cellId === 'C-SWAP') return await makeCSwap(res, { agencyId, bookingId, offenderNo })
 

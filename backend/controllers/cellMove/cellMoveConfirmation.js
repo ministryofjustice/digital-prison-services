@@ -1,12 +1,12 @@
 const { properCaseName, putLastNameFirst } = require('../../utils')
 
-module.exports = ({ elite2Api, logError }) => async (req, res) => {
+module.exports = ({ prisonApi, logError }) => async (req, res) => {
   const { offenderNo } = req.params
 
   try {
     const { cellId } = req.query
-    const { firstName, lastName } = await elite2Api.getDetails(res.locals, offenderNo)
-    const { description } = await elite2Api.getLocation(res.locals, cellId)
+    const { firstName, lastName } = await prisonApi.getDetails(res.locals, offenderNo)
+    const { description } = await prisonApi.getLocation(res.locals, cellId)
 
     return res.render('cellMove/confirmation.njk', {
       title: `${properCaseName(firstName)} ${properCaseName(lastName)} has been moved to cell ${description}`,

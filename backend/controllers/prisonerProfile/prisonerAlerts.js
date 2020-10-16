@@ -6,7 +6,7 @@ module.exports = ({
   prisonerProfileService,
   referenceCodesService,
   paginationService,
-  elite2Api,
+  prisonApi,
   oauthApi,
   logError,
 }) => async (req, res) => {
@@ -19,7 +19,7 @@ module.exports = ({
   const fullUrl = new URL(`${req.protocol}://${req.get('host')}${req.originalUrl}`)
 
   try {
-    const { bookingId } = await elite2Api.getDetails(res.locals, offenderNo)
+    const { bookingId } = await prisonApi.getDetails(res.locals, offenderNo)
 
     const alertTypeQuery = type => (type ? `alertType:in:'${type}'` : '')
     const fromQuery = date => (date ? `dateCreated:gteq:DATE'${date}'` : '')
@@ -51,7 +51,7 @@ module.exports = ({
     ])
     const { userCanEdit } = prisonerProfileData
     const canUpdateAlerts = roles && roles.some(role => role.roleCode === 'UPDATE_ALERT') && userCanEdit
-    const alerts = await elite2Api.getAlertsForBooking(res.locals, { bookingId, query }, headers)
+    const alerts = await prisonApi.getAlertsForBooking(res.locals, { bookingId, query }, headers)
     const totalAlerts = res.locals.responseHeaders['total-records']
 
     const activeAlerts = alerts.filter(alert => alert.active && !alert.expired).map(alert => {

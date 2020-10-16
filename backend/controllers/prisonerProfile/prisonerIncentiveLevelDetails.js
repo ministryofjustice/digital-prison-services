@@ -28,7 +28,7 @@ const filterData = (data, fields) => {
   return filteredResults
 }
 
-module.exports = ({ elite2Api, oauthApi, logError }) => async (req, res) => {
+module.exports = ({ prisonApi, oauthApi, logError }) => async (req, res) => {
   const { offenderNo } = req.params
   const { agencyId, incentiveLevel, fromDate, toDate } = req.query
 
@@ -38,12 +38,12 @@ module.exports = ({ elite2Api, oauthApi, logError }) => async (req, res) => {
   try {
     const errors = []
     const [prisonerDetails, userRoles] = await Promise.all([
-      elite2Api.getDetails(res.locals, offenderNo),
+      prisonApi.getDetails(res.locals, offenderNo),
       oauthApi.userRoles(res.locals),
     ])
     const { bookingId, firstName, lastName } = prisonerDetails
 
-    const iepSummary = await elite2Api.getIepSummaryForBooking(res.locals, bookingId, true)
+    const iepSummary = await prisonApi.getIepSummaryForBooking(res.locals, bookingId, true)
 
     if (fromDate && toDate && fromDateFormatted.isAfter(toDateFormatted, 'day')) {
       errors.push({ href: '#fromDate', text: 'Enter a from date which is not after the to date' })
@@ -58,11 +58,11 @@ module.exports = ({ elite2Api, oauthApi, logError }) => async (req, res) => {
     const levels = [...new Set(iepSummary.iepDetails.map(details => details.iepLevel))].sort()
 
     const users = await Promise.all(
-      uniqueUserIds.filter(userId => Boolean(userId)).map(userId => elite2Api.getStaffDetails(res.locals, userId))
+      uniqueUserIds.filter(userId => Boolean(userId)).map(userId => prisonApi.getStaffDetails(res.locals, userId))
     )
 
     const establishments = await Promise.all(
-      uniqueAgencyIds.filter(id => Boolean(id)).map(id => elite2Api.getAgencyDetails(res.locals, id))
+      uniqueAgencyIds.filter(id => Boolean(id)).map(id => prisonApi.getAgencyDetails(res.locals, id))
     )
 
     const iepHistoryDetails = iepSummary.iepDetails.map(details => {

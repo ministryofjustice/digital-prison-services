@@ -1,7 +1,7 @@
 const attendanceChangeRouter = require('../routes/attendanceChangesRouter')
 
 describe('Attendance change router', () => {
-  const elite2Api = {}
+  const prisonApi = {}
   const whereaboutsApi = {}
   const oauthApi = {}
   const res = {
@@ -14,16 +14,16 @@ describe('Attendance change router', () => {
 
   beforeEach(() => {
     whereaboutsApi.getAttendanceChanges = jest.fn()
-    elite2Api.getScheduledActivities = jest.fn()
+    prisonApi.getScheduledActivities = jest.fn()
     oauthApi.userDetails = jest.fn()
 
     whereaboutsApi.getAttendanceChanges.mockReturnValue({ changes: [] })
-    elite2Api.getScheduledActivities.mockReturnValue([])
+    prisonApi.getScheduledActivities.mockReturnValue([])
     oauthApi.userDetails.mockReturnValue({ username: 'username1', name: 'First name last name' })
 
     logError = jest.fn()
 
-    router = attendanceChangeRouter({ elite2Api, whereaboutsApi, oauthApi, logError })
+    router = attendanceChangeRouter({ prisonApi, whereaboutsApi, oauthApi, logError })
     res.render = jest.fn()
     res.redirect = jest.fn()
 
@@ -57,7 +57,7 @@ describe('Attendance change router', () => {
 
     await router(req, res)
 
-    expect(elite2Api.getScheduledActivities).toHaveBeenCalledWith({}, { agencyId: 'MDI', eventIds: [1, 2] })
+    expect(prisonApi.getScheduledActivities).toHaveBeenCalledWith({}, { agencyId: 'MDI', eventIds: [1, 2] })
   })
 
   it('should make a request to get user details', async () => {
@@ -97,7 +97,7 @@ describe('Attendance change router', () => {
       ],
     })
 
-    elite2Api.getScheduledActivities.mockReturnValue([
+    prisonApi.getScheduledActivities.mockReturnValue([
       { eventId: 1, firstName: 'first name 1', lastName: 'last name', comment: 'Wood work', offenderNo: 'A123456' },
       { eventId: 2, firstName: 'first name 2', lastName: 'last name', comment: 'Kitchen', offenderNo: 'A23457' },
     ])
@@ -197,7 +197,7 @@ describe('Attendance change router', () => {
       ],
     })
 
-    elite2Api.getScheduledActivities.mockReturnValue([
+    prisonApi.getScheduledActivities.mockReturnValue([
       { eventId: 1, firstName: 'first name 1', lastName: 'last name', comment: 'Wood work', offenderNo: 'A123456' },
       { eventId: 2, firstName: 'first name 2', lastName: 'last name', comment: 'Kitchen', offenderNo: 'A23457' },
     ])

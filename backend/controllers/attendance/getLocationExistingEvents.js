@@ -1,12 +1,12 @@
 const moment = require('moment')
 
-module.exports = ({ elite2Api, logError, existingEventsService }) => async (req, res) => {
+module.exports = ({ prisonApi, logError, existingEventsService }) => async (req, res) => {
   const { activeCaseLoadId: agencyId } = req.session.userDetails
   const { date, locationId } = req.query
 
   try {
     const [locationDetails, events] = await Promise.all([
-      elite2Api.getLocation(res.locals, locationId),
+      prisonApi.getLocation(res.locals, locationId),
       existingEventsService.getExistingEventsForLocation(res.locals, agencyId, locationId, date),
     ])
 

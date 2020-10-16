@@ -6,7 +6,7 @@ jest.mock('../raiseAnalyticsEvent', () => ({
 }))
 
 describe('Confirm appointments', () => {
-  const elite2Api = {}
+  const prisonApi = {}
   const appointmentsService = {}
   const req = {}
   const res = {}
@@ -24,7 +24,7 @@ describe('Confirm appointments', () => {
   }
 
   beforeEach(() => {
-    elite2Api.getDetails = jest.fn()
+    prisonApi.getDetails = jest.fn()
     appointmentsService.getAppointmentOptions = jest.fn()
 
     appointmentsService.getAppointmentOptions.mockReturnValue({
@@ -32,7 +32,7 @@ describe('Confirm appointments', () => {
       locationTypes: [{ value: 1, text: 'Room 3' }, { value: 2, text: 'Room 1' }, { value: 3, text: 'Room 2' }],
     })
 
-    elite2Api.getDetails.mockReturnValue({
+    prisonApi.getDetails.mockReturnValue({
       offenderNo: 'A12345',
       firstName: 'john',
       lastName: 'doe',
@@ -51,7 +51,7 @@ describe('Confirm appointments', () => {
 
   it('should extract appointment details from flash and return a populated view model', async () => {
     const { index } = confirmAppointments.confirmAppointmentFactory({
-      elite2Api,
+      prisonApi,
       appointmentsService,
       logError: () => {},
     })
@@ -78,7 +78,7 @@ describe('Confirm appointments', () => {
 
   it('should only extract pre and post appointments when appointmentType is VLB', async () => {
     const { index } = confirmAppointments.confirmAppointmentFactory({
-      elite2Api,
+      prisonApi,
       appointmentsService,
       logError: () => {},
     })
@@ -130,7 +130,7 @@ describe('Confirm appointments', () => {
 
   it('should load court confirmation page when user is not prison staff', async () => {
     const { index } = confirmAppointments.confirmAppointmentFactory({
-      elite2Api,
+      prisonApi,
       appointmentsService,
       logError: () => {},
     })
@@ -185,7 +185,7 @@ describe('Confirm appointments', () => {
 
   it('should display recurring information', async () => {
     const { index } = confirmAppointments.confirmAppointmentFactory({
-      elite2Api,
+      prisonApi,
       appointmentsService,
       logError: () => {},
     })
@@ -223,7 +223,7 @@ describe('Confirm appointments', () => {
 
   it('should place data needed for movement slips into flash including pre and post appointments', async () => {
     const { index } = confirmAppointments.confirmAppointmentFactory({
-      elite2Api,
+      prisonApi,
       appointmentsService,
       logError: () => {},
     })
@@ -269,7 +269,7 @@ describe('Confirm appointments', () => {
 
   it('should place data needed for movement slips into session', async () => {
     const { index } = confirmAppointments.confirmAppointmentFactory({
-      elite2Api,
+      prisonApi,
       appointmentsService,
       logError: () => {},
     })
@@ -304,7 +304,7 @@ describe('Confirm appointments', () => {
   it('should throw and log an error when appointment details are missing from flash', async () => {
     const logError = jest.fn()
     const { index } = confirmAppointments.confirmAppointmentFactory({
-      elite2Api,
+      prisonApi,
       appointmentsService,
       logError,
     })
@@ -326,7 +326,7 @@ describe('Confirm appointments', () => {
   it('should throw and log a court service error for a court user when appointment details are missing from flash', async () => {
     const logError = jest.fn()
     const { index } = confirmAppointments.confirmAppointmentFactory({
-      elite2Api,
+      prisonApi,
       appointmentsService,
       logError,
     })

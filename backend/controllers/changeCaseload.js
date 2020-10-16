@@ -1,9 +1,9 @@
 const config = require('../config')
 
-const changeCaseloadFactory = (elite2Api, logError) => {
+const changeCaseloadFactory = (prisonApi, logError) => {
   const index = async (req, res) => {
     try {
-      const caseloads = await elite2Api.userCaseLoads(res.locals)
+      const caseloads = await prisonApi.userCaseLoads(res.locals)
 
       // In case someone goes directly to the URL
       // and they don't have more than 1 caseload
@@ -40,7 +40,7 @@ const changeCaseloadFactory = (elite2Api, logError) => {
 
     // Don't call API if data is missing
     if (caseLoadId) {
-      await elite2Api.setActiveCaseload(res.locals, { caseLoadId })
+      await prisonApi.setActiveCaseload(res.locals, { caseLoadId })
 
       if (req.session && req.session.userDetails) req.session.userDetails.activeCaseLoadId = caseLoadId
       if (req.session && req.session.data) req.session.data = null

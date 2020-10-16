@@ -4,13 +4,13 @@ const {
   app: { notmEndpointUrl: dpsUrl },
 } = require('../../config')
 
-module.exports = ({ elite2Api, logError }) => async (req, res) => {
+module.exports = ({ prisonApi, logError }) => async (req, res) => {
   const { offenderNo, adjudicationNumber } = req.params
 
   try {
     const [prisonerDetails, adjudicationDetails] = await Promise.all([
-      elite2Api.getDetails(res.locals, offenderNo),
-      elite2Api.getAdjudicationDetails(res.locals, offenderNo, adjudicationNumber),
+      prisonApi.getDetails(res.locals, offenderNo),
+      prisonApi.getAdjudicationDetails(res.locals, offenderNo, adjudicationNumber),
     ])
 
     const { firstName, lastName } = prisonerDetails

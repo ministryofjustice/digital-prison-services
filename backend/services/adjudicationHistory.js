@@ -8,13 +8,13 @@ const {
   sortByDateTime,
 } = require('../utils')
 
-const AdjudciationHistoryServiceFactory = elite2Api => {
+const AdjudciationHistoryServiceFactory = prisonApi => {
   const getAdjudications = async (context, offenderNumber, params, pageOffsetOption, perPage) => {
     const { requestHeaders, ...withoutPagination } = context
 
     const [adjudications, findingTypes] = await Promise.all([
-      elite2Api.getAdjudications(context, offenderNumber, params, pageOffsetOption, perPage),
-      elite2Api.getAdjudicationFindingTypes(withoutPagination),
+      prisonApi.getAdjudications(context, offenderNumber, params, pageOffsetOption, perPage),
+      prisonApi.getAdjudicationFindingTypes(withoutPagination),
     ])
 
     const establishments = adjudications.agencies.reduce(
@@ -72,7 +72,7 @@ const AdjudciationHistoryServiceFactory = elite2Api => {
   }
 
   const getAdjudicationDetails = async (context, offenderNumber, adjudicationNumber) => {
-    const details = await elite2Api.getAdjudicationDetails(context, offenderNumber, adjudicationNumber)
+    const details = await prisonApi.getAdjudicationDetails(context, offenderNumber, adjudicationNumber)
     const { hearings = [], ...otherDetails } = details
 
     const [hearing, results] = extractHearingAndResults(hearings)

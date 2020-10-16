@@ -31,16 +31,16 @@ const sortByPrimaryAndStartDate = (left, right) => {
   return sortByDateTime(right.startDate, left.startDate) // Most recently added first
 }
 
-module.exports = ({ elite2Api, personService, allocationManagerApi, logError }) => async (req, res) => {
+module.exports = ({ prisonApi, personService, allocationManagerApi, logError }) => async (req, res) => {
   const { offenderNo } = req.params
 
   try {
-    const details = await elite2Api.getDetails(res.locals, offenderNo)
+    const details = await prisonApi.getDetails(res.locals, offenderNo)
     const { bookingId, firstName, lastName } = details || {}
 
     const [contacts, allocationManager] = await Promise.all(
       [
-        elite2Api.getPrisonerContacts(res.locals, bookingId),
+        prisonApi.getPrisonerContacts(res.locals, bookingId),
         allocationManagerApi.getPomByOffenderNo(res.locals, offenderNo),
       ].map(apiCall => logErrorAndContinue(apiCall))
     )

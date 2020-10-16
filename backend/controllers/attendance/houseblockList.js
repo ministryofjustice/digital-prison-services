@@ -57,7 +57,7 @@ const addToActivities = (offender, activity) => ({
   stayingOnWing: isStayingOnWing([...offender.activities, activity]),
 })
 
-const getHouseblockListFactory = (elite2Api, whereaboutsApi) => {
+const getHouseblockListFactory = (prisonApi, whereaboutsApi) => {
   const getHouseblockList = async (context, agencyId, groupName, date, timeSlot, wingStatus) => {
     const locations = await whereaboutsApi.getAgencyGroupLocations(context, agencyId, groupName)
     if (locations.length === 0) {
@@ -67,11 +67,11 @@ const getHouseblockListFactory = (elite2Api, whereaboutsApi) => {
     const locationIds = locations.map(location => location.locationId)
     const formattedDate = switchDateFormat(date)
     // Returns array ordered by inmate/cell or name, then start time
-    const data = await elite2Api.getHouseblockList(context, agencyId, locationIds, formattedDate, timeSlot)
+    const data = await prisonApi.getHouseblockList(context, agencyId, locationIds, formattedDate, timeSlot)
 
     const offenderNumbers = distinct(data.map(offender => offender.offenderNo))
 
-    const externalEventsForOffenders = await getExternalEventsForOffenders(elite2Api, context, {
+    const externalEventsForOffenders = await getExternalEventsForOffenders(prisonApi, context, {
       offenderNumbers,
       formattedDate,
       agencyId,

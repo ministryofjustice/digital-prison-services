@@ -20,19 +20,19 @@ const toEvent = event => ({
   eventDescription: getEventDescription(event),
 })
 
-module.exports = elite2Api => {
+module.exports = prisonApi => {
   const getExistingEventsForOffender = async (context, agencyId, date, offenderNo) => {
     const formattedDate = switchDateFormat(date)
     const searchCriteria = { agencyId, date: formattedDate, offenderNumbers: [offenderNo] }
 
     try {
       const [sentenceData, courtEvents, ...rest] = await Promise.all([
-        elite2Api.getSentenceData(context, searchCriteria.offenderNumbers),
-        elite2Api.getCourtEvents(context, searchCriteria),
-        elite2Api.getVisits(context, searchCriteria),
-        elite2Api.getAppointments(context, searchCriteria),
-        elite2Api.getExternalTransfers(context, searchCriteria),
-        elite2Api.getActivities(context, searchCriteria),
+        prisonApi.getSentenceData(context, searchCriteria.offenderNumbers),
+        prisonApi.getCourtEvents(context, searchCriteria),
+        prisonApi.getVisits(context, searchCriteria),
+        prisonApi.getAppointments(context, searchCriteria),
+        prisonApi.getExternalTransfers(context, searchCriteria),
+        prisonApi.getActivities(context, searchCriteria),
       ])
 
       const hasCourtVisit = courtEvents.length && courtEvents.filter(event => event.eventStatus === 'SCH')
@@ -61,9 +61,9 @@ module.exports = elite2Api => {
 
     try {
       const eventsAtLocationByUsage = await Promise.all([
-        elite2Api.getActivitiesAtLocation(context, searchCriteria),
-        elite2Api.getActivityList(context, { ...searchCriteria, usage: 'VISIT' }),
-        elite2Api.getActivityList(context, { ...searchCriteria, usage: 'APP' }),
+        prisonApi.getActivitiesAtLocation(context, searchCriteria),
+        prisonApi.getActivityList(context, { ...searchCriteria, usage: 'VISIT' }),
+        prisonApi.getActivityList(context, { ...searchCriteria, usage: 'APP' }),
       ]).then(events => events.reduce((flattenedEvents, event) => flattenedEvents.concat(event), []))
 
       return eventsAtLocationByUsage.sort((left, right) => sortByDateTime(left.startTime, right.startTime)).map(toEvent)
@@ -74,7 +74,7 @@ module.exports = elite2Api => {
 
   const getAppointmentsAtLocationEnhanceWithLocationId = (context, agency, locationId, date) =>
     new Promise((resolve, reject) => {
-      elite2Api
+      prisonApi
         .getActivityList(context, { agencyId: agency, date: switchDateFormat(date), locationId, usage: 'APP' })
         .then(response => {
           resolve(response.map(event => toEvent({ ...event, locationId })))
@@ -115,7 +115,7 @@ module.exports = elite2Api => {
     context,
     { agencyId, startTime, endTime, date, preAppointmentRequired, postAppointmentRequired }
   ) => {
-    const appointmentsService = appointmentsServiceFactory(elite2Api)
+    const appointmentsService = appointmentsServiceFactory(prisonApi)
     const locations = await appointmentsService.getLocations(context, agencyId, 'VIDE')
 
     const eventsAtLocations = await getAppointmentsAtLocations(context, {

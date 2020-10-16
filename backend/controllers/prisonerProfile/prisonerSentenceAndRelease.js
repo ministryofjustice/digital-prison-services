@@ -4,7 +4,7 @@ const courtCasesViewModel = require('./sentenceAndReleaseViewModels/courtCasesVi
 const { serviceUnavailableMessage } = require('../../common-messages')
 const { readableDateFormat } = require('../../utils')
 
-module.exports = ({ prisonerProfileService, elite2Api, systemOauthClient, logError }) => async (req, res) => {
+module.exports = ({ prisonerProfileService, prisonApi, systemOauthClient, logError }) => async (req, res) => {
   const { offenderNo } = req.params
 
   try {
@@ -13,18 +13,18 @@ module.exports = ({ prisonerProfileService, elite2Api, systemOauthClient, logErr
 
     const [prisonerProfileData, sentenceData, bookingDetails, offenceHistory] = await Promise.all([
       prisonerProfileService.getPrisonerProfileData(res.locals, offenderNo),
-      elite2Api.getPrisonerSentenceDetails(res.locals, offenderNo),
-      elite2Api.getDetails(res.locals, offenderNo),
-      elite2Api.getOffenceHistory(systemContext, offenderNo),
+      prisonApi.getPrisonerSentenceDetails(res.locals, offenderNo),
+      prisonApi.getDetails(res.locals, offenderNo),
+      prisonApi.getOffenceHistory(systemContext, offenderNo),
     ])
     const releaseDates = releaseDatesViewModel(sentenceData.sentenceDetail)
 
     const { bookingId } = bookingDetails
 
     const [sentenceAdjustmentsData, courtCaseData, sentenceTermsData] = await Promise.all([
-      elite2Api.getSentenceAdjustments(res.locals, bookingId),
-      elite2Api.getCourtCases(res.locals, bookingId),
-      elite2Api.getSentenceTerms(res.locals, bookingId),
+      prisonApi.getSentenceAdjustments(res.locals, bookingId),
+      prisonApi.getCourtCases(res.locals, bookingId),
+      prisonApi.getSentenceTerms(res.locals, bookingId),
     ])
 
     const sentenceAdjustments = sentenceAdjustmentsViewModel(sentenceAdjustmentsData)

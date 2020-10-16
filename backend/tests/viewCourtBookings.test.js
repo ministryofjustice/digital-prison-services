@@ -2,7 +2,7 @@ const viewCourtBookingsRouter = require('../routes/appointments/viewCourtBooking
 const { serviceUnavailableMessage } = require('../common-messages')
 
 describe('View court bookings', () => {
-  const elite2Api = {}
+  const prisonApi = {}
   const whereaboutsApi = {}
 
   let req
@@ -24,9 +24,9 @@ describe('View court bookings', () => {
 
     logError = jest.fn()
 
-    elite2Api.getAppointmentsForAgency = jest.fn()
+    prisonApi.getAppointmentsForAgency = jest.fn()
 
-    elite2Api.getAppointmentsForAgency.mockReturnValue([])
+    prisonApi.getAppointmentsForAgency.mockReturnValue([])
 
     whereaboutsApi.getVideoLinkAppointments = jest.fn()
     whereaboutsApi.getVideoLinkAppointments.mockReturnValue({ appointments: [] })
@@ -34,7 +34,7 @@ describe('View court bookings', () => {
     whereaboutsApi.getCourtLocations = jest.fn()
     whereaboutsApi.getCourtLocations.mockReturnValue({ courtLocations: [] })
 
-    controller = viewCourtBookingsRouter({ elite2Api, whereaboutsApi, logError })
+    controller = viewCourtBookingsRouter({ prisonApi, whereaboutsApi, logError })
   })
 
   beforeAll(() => {
@@ -49,7 +49,7 @@ describe('View court bookings', () => {
     it('should make the correct API calls', async () => {
       await controller(req, res)
 
-      expect(elite2Api.getAppointmentsForAgency).toHaveBeenCalledWith(res.locals, {
+      expect(prisonApi.getAppointmentsForAgency).toHaveBeenCalledWith(res.locals, {
         agencyId: 'WWI',
         date: '2020-01-01',
       })
@@ -73,7 +73,7 @@ describe('View court bookings', () => {
 
     describe('when there are selected search parameters with results', () => {
       beforeEach(() => {
-        elite2Api.getAppointmentsForAgency.mockReturnValue([
+        prisonApi.getAppointmentsForAgency.mockReturnValue([
           {
             id: 1,
             offenderNo: 'ABC123',
@@ -192,7 +192,7 @@ describe('View court bookings', () => {
       it('should make the correct API calls', async () => {
         await controller(req, res)
 
-        expect(elite2Api.getAppointmentsForAgency).toHaveBeenCalledWith(res.locals, {
+        expect(prisonApi.getAppointmentsForAgency).toHaveBeenCalledWith(res.locals, {
           agencyId: 'WWI',
           date: '2020-01-02',
         })

@@ -4,7 +4,7 @@ const { serviceUnavailableMessage } = require('../common-messages')
 describe('Prisoner location sharing history', () => {
   const offenderNo = 'ABC123'
   const bookingId = 1
-  const elite2Api = {}
+  const prisonApi = {}
 
   let req
   let res
@@ -21,14 +21,14 @@ describe('Prisoner location sharing history', () => {
 
     logError = jest.fn()
 
-    elite2Api.getDetails = jest.fn().mockResolvedValue({ bookingId, firstName: 'John', lastName: 'Smith' })
-    elite2Api.getAttributesForLocation = jest.fn().mockResolvedValue({})
-    elite2Api.getHistoryForLocation = jest.fn().mockResolvedValue([])
-    elite2Api.getAgencyDetails = jest.fn().mockResolvedValue({})
-    elite2Api.userCaseLoads = jest.fn().mockResolvedValue([])
-    elite2Api.getPrisonerDetail = jest.fn()
+    prisonApi.getDetails = jest.fn().mockResolvedValue({ bookingId, firstName: 'John', lastName: 'Smith' })
+    prisonApi.getAttributesForLocation = jest.fn().mockResolvedValue({})
+    prisonApi.getHistoryForLocation = jest.fn().mockResolvedValue([])
+    prisonApi.getAgencyDetails = jest.fn().mockResolvedValue({})
+    prisonApi.userCaseLoads = jest.fn().mockResolvedValue([])
+    prisonApi.getPrisonerDetail = jest.fn()
 
-    controller = prisonerLocationHistory({ elite2Api, logError })
+    controller = prisonerLocationHistory({ prisonApi, logError })
 
     jest.spyOn(Date, 'now').mockImplementation(() => 1578787200000) // Sun Jan 12 2020 00:00:00
   })
@@ -40,16 +40,16 @@ describe('Prisoner location sharing history', () => {
   it('should make the expected API calls', async () => {
     await controller(req, res)
 
-    expect(elite2Api.getDetails).toHaveBeenCalledWith(res.locals, offenderNo)
-    expect(elite2Api.getAttributesForLocation).toHaveBeenCalledWith(res.locals, 1)
-    expect(elite2Api.getHistoryForLocation).toHaveBeenCalledWith(res.locals, {
+    expect(prisonApi.getDetails).toHaveBeenCalledWith(res.locals, offenderNo)
+    expect(prisonApi.getAttributesForLocation).toHaveBeenCalledWith(res.locals, 1)
+    expect(prisonApi.getHistoryForLocation).toHaveBeenCalledWith(res.locals, {
       locationId: 1,
       fromDate: '2019-12-31',
       toDate: '2020-01-12',
     })
-    expect(elite2Api.getAgencyDetails).toHaveBeenCalledWith(res.locals, 'MDI')
-    expect(elite2Api.userCaseLoads).toHaveBeenCalledWith(res.locals)
-    expect(elite2Api.getPrisonerDetail.mock.calls.length).toBe(0)
+    expect(prisonApi.getAgencyDetails).toHaveBeenCalledWith(res.locals, 'MDI')
+    expect(prisonApi.userCaseLoads).toHaveBeenCalledWith(res.locals)
+    expect(prisonApi.getPrisonerDetail.mock.calls.length).toBe(0)
   })
 
   describe('without data', () => {
@@ -71,14 +71,14 @@ describe('Prisoner location sharing history', () => {
 
   describe('with data', () => {
     beforeEach(() => {
-      elite2Api.getAttributesForLocation.mockResolvedValue({
+      prisonApi.getAttributesForLocation.mockResolvedValue({
         id: 1,
         description: 'MDI-1-1-015',
         capacity: 2,
         noOfOccupants: 2,
         attributes: [{ description: 'Double occupancy' }],
       })
-      elite2Api.getHistoryForLocation.mockResolvedValue([
+      prisonApi.getHistoryForLocation.mockResolvedValue([
         {
           bookingId: 1,
           livingUnitId: 1,
@@ -107,13 +107,13 @@ describe('Prisoner location sharing history', () => {
           description: 'MDI-1-1-015',
         },
       ])
-      elite2Api.getAgencyDetails.mockResolvedValue({
+      prisonApi.getAgencyDetails.mockResolvedValue({
         agencyId: 'MDI',
         description: 'Moorland (HMP & YOI)',
         agencyType: 'INST',
         active: true,
       })
-      elite2Api.userCaseLoads.mockResolvedValue([
+      prisonApi.userCaseLoads.mockResolvedValue([
         {
           caseLoadId: 'MDI',
           description: 'Moorland Closed (HMP & YOI)',
@@ -122,7 +122,7 @@ describe('Prisoner location sharing history', () => {
           currentlyActive: true,
         },
       ])
-      elite2Api.getPrisonerDetail
+      prisonApi.getPrisonerDetail
         .mockResolvedValueOnce({ offenderNo, bookingId, firstName: 'John', lastName: 'Smith' })
         .mockResolvedValueOnce({ offenderNo: 'ABC456', bookingId: 2, firstName: 'Steve', lastName: 'Jones' })
         .mockResolvedValueOnce({ offenderNo: 'ABC789', bookingId: 3, firstName: 'Barry', lastName: 'Stevenson' })
@@ -165,7 +165,7 @@ describe('Prisoner location sharing history', () => {
 
   describe('Errors', () => {
     it('should render the error template with a link to the homepage if there is a problem retrieving prisoner details', async () => {
-      elite2Api.getDetails.mockImplementation(() => Promise.reject(new Error('Network error')))
+      prisonApi.getDetails.mockImplementation(() => Promise.reject(new Error('Network error')))
 
       await controller(req, res)
 

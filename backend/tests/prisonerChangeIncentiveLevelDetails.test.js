@@ -9,7 +9,7 @@ jest.mock('../raiseAnalyticsEvent', () => ({
 describe('Prisoner change incentive level details', () => {
   const offenderNo = 'ABC123'
   const bookingId = '123'
-  const elite2Api = {}
+  const prisonApi = {}
 
   let req
   let res
@@ -26,10 +26,10 @@ describe('Prisoner change incentive level details', () => {
 
     logError = jest.fn()
 
-    elite2Api.getDetails = jest
+    prisonApi.getDetails = jest
       .fn()
       .mockResolvedValue({ agencyId: 'MDI', bookingId, firstName: 'John', lastName: 'Smith' })
-    elite2Api.getIepSummaryForBooking = jest.fn().mockReturnValue({
+    prisonApi.getIepSummaryForBooking = jest.fn().mockReturnValue({
       bookingId: -1,
       iepDate: '2017-08-15',
       iepTime: '2017-08-15T16:04:35',
@@ -62,7 +62,7 @@ describe('Prisoner change incentive level details', () => {
         },
       ],
     })
-    elite2Api.getAgencyIepLevels = jest
+    prisonApi.getAgencyIepLevels = jest
       .fn()
       .mockReturnValue([
         { iepLevel: 'ENT', iepDescription: 'Entry' },
@@ -70,9 +70,9 @@ describe('Prisoner change incentive level details', () => {
         { iepLevel: 'STD', iepDescription: 'Standard' },
         { iepLevel: 'ENH', iepDescription: 'Enhanced' },
       ])
-    elite2Api.changeIepLevel = jest.fn()
+    prisonApi.changeIepLevel = jest.fn()
 
-    controller = prisonerChangeIncentiveLevelDetails({ elite2Api, logError })
+    controller = prisonerChangeIncentiveLevelDetails({ prisonApi, logError })
   })
 
   describe('index', () => {
@@ -80,9 +80,9 @@ describe('Prisoner change incentive level details', () => {
       it('should make the correct calls for information and render the correct template', async () => {
         await controller.index(req, res)
 
-        expect(elite2Api.getDetails).toHaveBeenCalledWith(res.locals, offenderNo)
-        expect(elite2Api.getIepSummaryForBooking).toHaveBeenCalledWith(res.locals, bookingId, true)
-        expect(elite2Api.getAgencyIepLevels).toHaveBeenCalledWith(res.locals, 'MDI')
+        expect(prisonApi.getDetails).toHaveBeenCalledWith(res.locals, offenderNo)
+        expect(prisonApi.getIepSummaryForBooking).toHaveBeenCalledWith(res.locals, bookingId, true)
+        expect(prisonApi.getAgencyIepLevels).toHaveBeenCalledWith(res.locals, 'MDI')
         expect(res.render).toHaveBeenCalledWith('prisonerProfile/prisonerChangeIncentiveLevelDetails.njk', {
           agencyId: 'MDI',
           bookingId: '123',
@@ -116,7 +116,7 @@ describe('Prisoner change incentive level details', () => {
 
     describe('when there are API errors', () => {
       beforeEach(() => {
-        elite2Api.getDetails.mockImplementation(() => Promise.reject(new Error('Network error')))
+        prisonApi.getDetails.mockImplementation(() => Promise.reject(new Error('Network error')))
       })
 
       it('should render the error template', async () => {
@@ -131,7 +131,7 @@ describe('Prisoner change incentive level details', () => {
   describe('post', () => {
     describe('when there are no errors', () => {
       beforeEach(() => {
-        elite2Api.changeIepLevel = jest.fn().mockReturnValue('All good')
+        prisonApi.changeIepLevel = jest.fn().mockReturnValue('All good')
       })
 
       it('should submit the appointment with the correct details and redirect', async () => {
@@ -145,7 +145,7 @@ describe('Prisoner change incentive level details', () => {
 
         await controller.post(req, res)
 
-        expect(elite2Api.changeIepLevel).toHaveBeenCalledWith(res.locals, bookingId, {
+        expect(prisonApi.changeIepLevel).toHaveBeenCalledWith(res.locals, bookingId, {
           iepLevel: 'Enhanced',
           comment: 'A reason why it has changed',
         })
@@ -164,7 +164,7 @@ describe('Prisoner change incentive level details', () => {
 
         await controller.post(req, res)
 
-        expect(elite2Api.changeIepLevel).not.toHaveBeenCalled()
+        expect(prisonApi.changeIepLevel).not.toHaveBeenCalled()
         expect(res.render).toHaveBeenCalledWith('prisonerProfile/prisonerChangeIncentiveLevelDetails.njk', {
           agencyId: 'MDI',
           bookingId: '123',
@@ -228,7 +228,7 @@ describe('Prisoner change incentive level details', () => {
     describe('when there are API errors', () => {
       it('should render the error template', async () => {
         req.body = { newIepLevel: 'Enhanced', reason: 'A reason why it has changed', bookingId }
-        elite2Api.changeIepLevel.mockImplementation(() => Promise.reject(new Error('Network error')))
+        prisonApi.changeIepLevel.mockImplementation(() => Promise.reject(new Error('Network error')))
 
         await controller.post(req, res)
 

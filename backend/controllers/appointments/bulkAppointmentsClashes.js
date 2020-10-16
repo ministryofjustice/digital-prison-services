@@ -3,7 +3,7 @@ const { DATE_TIME_FORMAT_SPEC, buildDateTime } = require('../../../src/dateHelpe
 const { serviceUnavailableMessage } = require('../../common-messages')
 const { raiseAnalyticsEvent } = require('../../raiseAnalyticsEvent')
 
-const bulkAppointmentsClashesFactory = (elite2Api, logError) => {
+const bulkAppointmentsClashesFactory = (prisonApi, logError) => {
   const renderTemplate = (req, res, pageData) => {
     const { appointmentDetails, prisonersWithClashes } = pageData
 
@@ -20,10 +20,10 @@ const bulkAppointmentsClashesFactory = (elite2Api, logError) => {
     const searchCriteria = { agencyId, date, offenderNumbers }
 
     return Promise.all([
-      elite2Api.getVisits(res.locals, searchCriteria),
-      elite2Api.getAppointments(res.locals, searchCriteria),
-      elite2Api.getExternalTransfers(res.locals, searchCriteria),
-      elite2Api.getCourtEvents(res.locals, searchCriteria),
+      prisonApi.getVisits(res.locals, searchCriteria),
+      prisonApi.getAppointments(res.locals, searchCriteria),
+      prisonApi.getExternalTransfers(res.locals, searchCriteria),
+      prisonApi.getCourtEvents(res.locals, searchCriteria),
     ]).then(events => events.reduce((flattenedEvents, event) => flattenedEvents.concat(event), []))
   }
 
@@ -137,7 +137,7 @@ const bulkAppointmentsClashesFactory = (elite2Api, logError) => {
           : undefined,
     }
 
-    await elite2Api.addAppointments(res.locals, request)
+    await prisonApi.addAppointments(res.locals, request)
 
     req.session.data = null
 

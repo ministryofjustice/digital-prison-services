@@ -18,7 +18,7 @@ describe('prisoner sentence and release', () => {
     offenderNo,
   }
   const prisonerProfileService = {}
-  const elite2Api = {}
+  const prisonApi = {}
   const systemOauthClient = {}
 
   let req
@@ -37,7 +37,7 @@ describe('prisoner sentence and release', () => {
     req.get.mockReturnValue('localhost')
 
     prisonerProfileService.getPrisonerProfileData = jest.fn().mockResolvedValue(prisonerProfileData)
-    elite2Api.getPrisonerSentenceDetails = jest.fn().mockResolvedValue({
+    prisonApi.getPrisonerSentenceDetails = jest.fn().mockResolvedValue({
       sentenceDetail: {
         sentenceStartDate: '2010-02-03',
         confirmedReleaseDate: '2020-04-20',
@@ -72,16 +72,16 @@ describe('prisoner sentence and release', () => {
       },
     })
 
-    elite2Api.getDetails = jest.fn().mockResolvedValue({ bookingId: 1 })
-    elite2Api.getSentenceAdjustments = jest.fn()
-    elite2Api.getOffenceHistory = jest.fn().mockResolvedValue([])
-    elite2Api.getCourtCases = jest.fn().mockResolvedValue([])
-    elite2Api.getSentenceTerms = jest.fn().mockResolvedValue([])
+    prisonApi.getDetails = jest.fn().mockResolvedValue({ bookingId: 1 })
+    prisonApi.getSentenceAdjustments = jest.fn()
+    prisonApi.getOffenceHistory = jest.fn().mockResolvedValue([])
+    prisonApi.getCourtCases = jest.fn().mockResolvedValue([])
+    prisonApi.getSentenceTerms = jest.fn().mockResolvedValue([])
     systemOauthClient.getClientCredentialsTokens = jest.fn().mockResolvedValue({})
 
     controller = prisonerSentenceAndRelease({
       prisonerProfileService,
-      elite2Api,
+      prisonApi,
       systemOauthClient,
       logError,
     })
@@ -91,7 +91,7 @@ describe('prisoner sentence and release', () => {
     await controller(req, res)
 
     expect(prisonerProfileService.getPrisonerProfileData).toHaveBeenCalledWith(res.locals, offenderNo)
-    expect(elite2Api.getPrisonerSentenceDetails).toHaveBeenCalledWith(res.locals, offenderNo)
+    expect(prisonApi.getPrisonerSentenceDetails).toHaveBeenCalledWith(res.locals, offenderNo)
     expect(res.render).toHaveBeenCalledWith(
       'prisonerProfile/prisonerSentenceAndRelease/prisonerSentenceAndRelease.njk',
       expect.objectContaining({
@@ -130,12 +130,12 @@ describe('prisoner sentence and release', () => {
   })
 
   it('should only return sentence, offences and court cases where they result in imprisonment', async () => {
-    elite2Api.getCourtCases.mockResolvedValue([
+    prisonApi.getCourtCases.mockResolvedValue([
       { id: 1, caseInfoNumber: 'T12345', agency: { description: 'Leeds' } },
       { id: 2, caseInfoNumber: 'T56789' },
     ])
 
-    elite2Api.getOffenceHistory.mockResolvedValue([
+    prisonApi.getOffenceHistory.mockResolvedValue([
       {
         offenceDescription: 'Offence 1',
         primaryResultCode: '1002',
@@ -147,7 +147,7 @@ describe('prisoner sentence and release', () => {
       },
     ])
 
-    elite2Api.getSentenceTerms.mockResolvedValue([
+    prisonApi.getSentenceTerms.mockResolvedValue([
       {
         lineSeq: 1,
         sentenceSequence: 1,
@@ -206,13 +206,13 @@ describe('prisoner sentence and release', () => {
     )
   })
   it('should set showSentence to false', async () => {
-    elite2Api.getCourtCases.mockResolvedValue([
+    prisonApi.getCourtCases.mockResolvedValue([
       { id: 1, caseInfoNumber: 'T12345', agency: { description: 'Leeds' } },
       { id: 2, caseInfoNumber: 'T56789' },
     ])
 
-    elite2Api.getOffenceHistory.mockResolvedValue([])
-    elite2Api.getSentenceTerms.mockResolvedValue([])
+    prisonApi.getOffenceHistory.mockResolvedValue([])
+    prisonApi.getSentenceTerms.mockResolvedValue([])
 
     await controller(req, res)
 
@@ -225,13 +225,13 @@ describe('prisoner sentence and release', () => {
   })
 
   it('should show fine amount with sentence terms', async () => {
-    elite2Api.getCourtCases.mockResolvedValue([{ id: 1, caseInfoNumber: 'T12345' }])
+    prisonApi.getCourtCases.mockResolvedValue([{ id: 1, caseInfoNumber: 'T12345' }])
 
-    elite2Api.getOffenceHistory.mockResolvedValue([
+    prisonApi.getOffenceHistory.mockResolvedValue([
       { offenceDescription: 'Offence 1', primaryResultCode: '1002', caseId: 1 },
     ])
 
-    elite2Api.getSentenceTerms.mockResolvedValue([
+    prisonApi.getSentenceTerms.mockResolvedValue([
       {
         lineSeq: 1,
         termSequence: 1,
@@ -275,14 +275,14 @@ describe('prisoner sentence and release', () => {
   })
 
   it('should show licence length with sentence terms', async () => {
-    elite2Api.getCourtCases.mockResolvedValue([{ id: 1, caseInfoNumber: 'T12345' }])
+    prisonApi.getCourtCases.mockResolvedValue([{ id: 1, caseInfoNumber: 'T12345' }])
 
-    elite2Api.getOffenceHistory.mockResolvedValue([
+    prisonApi.getOffenceHistory.mockResolvedValue([
       { offenceDescription: 'Offence 1', primaryResultCode: '1002', caseId: 1 },
       { offenceDescription: 'Offence 1', primaryResultCode: '1002', caseId: 1 },
     ])
 
-    elite2Api.getSentenceTerms.mockResolvedValue([
+    prisonApi.getSentenceTerms.mockResolvedValue([
       {
         lineSeq: 1,
         sentenceSequence: 1,
@@ -362,13 +362,13 @@ describe('prisoner sentence and release', () => {
   })
 
   it('should order sentences by sentence date, then by sentence length', async () => {
-    elite2Api.getCourtCases.mockResolvedValue([{ id: 1, caseInfoNumber: 'T12345' }])
+    prisonApi.getCourtCases.mockResolvedValue([{ id: 1, caseInfoNumber: 'T12345' }])
 
-    elite2Api.getOffenceHistory.mockResolvedValue([
+    prisonApi.getOffenceHistory.mockResolvedValue([
       { offenceDescription: 'Offence 1', primaryResultCode: '1002', caseId: 1 },
     ])
 
-    elite2Api.getSentenceTerms.mockResolvedValue([
+    prisonApi.getSentenceTerms.mockResolvedValue([
       {
         lineSeq: 2,
         termSequence: 1,
@@ -524,15 +524,15 @@ describe('prisoner sentence and release', () => {
   })
 
   it('should order offences alphabetically', async () => {
-    elite2Api.getCourtCases.mockResolvedValue([{ id: 1, caseInfoNumber: 'T12345' }])
+    prisonApi.getCourtCases.mockResolvedValue([{ id: 1, caseInfoNumber: 'T12345' }])
 
-    elite2Api.getOffenceHistory.mockResolvedValue([
+    prisonApi.getOffenceHistory.mockResolvedValue([
       { offenceDescription: 'C', primaryResultCode: '1002', caseId: 1 },
       { offenceDescription: 'b', primaryResultCode: '1002', caseId: 1 },
       { offenceDescription: 'a', primaryResultCode: '1002', caseId: 1 },
     ])
 
-    elite2Api.getSentenceTerms.mockResolvedValue([
+    prisonApi.getSentenceTerms.mockResolvedValue([
       {
         lineSeq: 6,
         termSequence: 1,
@@ -573,15 +573,15 @@ describe('prisoner sentence and release', () => {
   })
 
   it('should not show court cases and offences when there are no active sentences', async () => {
-    elite2Api.getCourtCases.mockResolvedValue([{ id: 1, caseInfoNumber: 'T12345' }])
+    prisonApi.getCourtCases.mockResolvedValue([{ id: 1, caseInfoNumber: 'T12345' }])
 
-    elite2Api.getOffenceHistory.mockResolvedValue([
+    prisonApi.getOffenceHistory.mockResolvedValue([
       { offenceDescription: 'C', primaryResultCode: '1002', caseId: 1 },
       { offenceDescription: 'b', primaryResultCode: '1002', caseId: 1 },
       { offenceDescription: 'a', primaryResultCode: '1002', caseId: 1 },
     ])
 
-    elite2Api.getSentenceTerms.mockResolvedValue([])
+    prisonApi.getSentenceTerms.mockResolvedValue([])
 
     await controller(req, res)
 
@@ -594,15 +594,15 @@ describe('prisoner sentence and release', () => {
   })
 
   it('should return the sentence date using the oldest sentence start date', async () => {
-    elite2Api.getCourtCases.mockResolvedValue([{ id: 1, caseInfoNumber: 'T12345' }])
+    prisonApi.getCourtCases.mockResolvedValue([{ id: 1, caseInfoNumber: 'T12345' }])
 
-    elite2Api.getOffenceHistory.mockResolvedValue([
+    prisonApi.getOffenceHistory.mockResolvedValue([
       { offenceDescription: 'C', primaryResultCode: '1002', caseId: 1 },
       { offenceDescription: 'b', primaryResultCode: '1002', caseId: 1 },
       { offenceDescription: 'a', primaryResultCode: '1002', caseId: 1 },
     ])
 
-    elite2Api.getSentenceTerms.mockResolvedValue([
+    prisonApi.getSentenceTerms.mockResolvedValue([
       {
         lineSeq: 6,
         termSequence: 1,
@@ -667,11 +667,11 @@ describe('prisoner sentence and release', () => {
     await controller(req, res)
 
     expect(systemOauthClient.getClientCredentialsTokens).toHaveBeenCalledWith('ITAG_USER')
-    expect(elite2Api.getOffenceHistory).toHaveBeenCalledWith({ system: true }, 'G3878UK')
+    expect(prisonApi.getOffenceHistory).toHaveBeenCalledWith({ system: true }, 'G3878UK')
   })
 
   it('should return the right data when no overrides', async () => {
-    elite2Api.getPrisonerSentenceDetails = jest.fn().mockResolvedValue({
+    prisonApi.getPrisonerSentenceDetails = jest.fn().mockResolvedValue({
       sentenceDetail: {
         sentenceStartDate: '2010-02-03',
         confirmedReleaseDate: '2020-04-20',
@@ -702,7 +702,7 @@ describe('prisoner sentence and release', () => {
     await controller(req, res)
 
     expect(prisonerProfileService.getPrisonerProfileData).toHaveBeenCalledWith(res.locals, offenderNo)
-    expect(elite2Api.getPrisonerSentenceDetails).toHaveBeenCalledWith(res.locals, offenderNo)
+    expect(prisonApi.getPrisonerSentenceDetails).toHaveBeenCalledWith(res.locals, offenderNo)
     expect(res.render).toHaveBeenCalledWith(
       'prisonerProfile/prisonerSentenceAndRelease/prisonerSentenceAndRelease.njk',
       expect.objectContaining({
@@ -740,7 +740,7 @@ describe('prisoner sentence and release', () => {
   })
 
   it('should return the right data when sections are empty', async () => {
-    elite2Api.getPrisonerSentenceDetails = jest.fn().mockResolvedValue({
+    prisonApi.getPrisonerSentenceDetails = jest.fn().mockResolvedValue({
       sentenceDetail: {
         sentenceStartDate: '2010-02-03',
         confirmedReleaseDate: '2020-04-20',
@@ -752,7 +752,7 @@ describe('prisoner sentence and release', () => {
     await controller(req, res)
 
     expect(prisonerProfileService.getPrisonerProfileData).toHaveBeenCalledWith(res.locals, offenderNo)
-    expect(elite2Api.getPrisonerSentenceDetails).toHaveBeenCalledWith(res.locals, offenderNo)
+    expect(prisonApi.getPrisonerSentenceDetails).toHaveBeenCalledWith(res.locals, offenderNo)
     expect(res.render).toHaveBeenCalledWith(
       'prisonerProfile/prisonerSentenceAndRelease/prisonerSentenceAndRelease.njk',
       expect.objectContaining({
@@ -768,32 +768,32 @@ describe('prisoner sentence and release', () => {
   })
 
   it('should make a call to retrieve an offenders booking id', async () => {
-    elite2Api.getPrisonerSentenceDetails = jest.fn().mockResolvedValue({
+    prisonApi.getPrisonerSentenceDetails = jest.fn().mockResolvedValue({
       sentenceDetail: {},
     })
-    elite2Api.getSentenceAdjustments = jest.fn().mockResolvedValue({})
+    prisonApi.getSentenceAdjustments = jest.fn().mockResolvedValue({})
 
     await controller(req, res)
 
-    expect(elite2Api.getDetails).toHaveBeenCalledWith({}, offenderNo)
+    expect(prisonApi.getDetails).toHaveBeenCalledWith({}, offenderNo)
   })
 
   it('should make a call for sentence adjustments', async () => {
-    elite2Api.getPrisonerSentenceDetails = jest.fn().mockResolvedValue({
+    prisonApi.getPrisonerSentenceDetails = jest.fn().mockResolvedValue({
       sentenceDetail: {},
     })
-    elite2Api.getSentenceAdjustments = jest.fn().mockResolvedValue({})
+    prisonApi.getSentenceAdjustments = jest.fn().mockResolvedValue({})
 
     await controller(req, res)
 
-    expect(elite2Api.getSentenceAdjustments).toHaveBeenCalledWith({}, 1)
+    expect(prisonApi.getSentenceAdjustments).toHaveBeenCalledWith({}, 1)
   })
 
   it('should return the right data when values are available', async () => {
-    elite2Api.getPrisonerSentenceDetails = jest.fn().mockResolvedValue({
+    prisonApi.getPrisonerSentenceDetails = jest.fn().mockResolvedValue({
       sentenceDetail: {},
     })
-    elite2Api.getSentenceAdjustments = jest.fn().mockResolvedValue({
+    prisonApi.getSentenceAdjustments = jest.fn().mockResolvedValue({
       additionalDaysAwarded: 1,
       lawfullyAtLarge: 2,
       recallSentenceRemand: 3,
@@ -832,10 +832,10 @@ describe('prisoner sentence and release', () => {
   })
 
   it('should return the right data when no values are available', async () => {
-    elite2Api.getPrisonerSentenceDetails = jest.fn().mockResolvedValue({
+    prisonApi.getPrisonerSentenceDetails = jest.fn().mockResolvedValue({
       sentenceDetail: {},
     })
-    elite2Api.getSentenceAdjustments = jest.fn().mockResolvedValue({
+    prisonApi.getSentenceAdjustments = jest.fn().mockResolvedValue({
       additionalDaysAwarded: 0,
       lawfullyAtLarge: 0,
       recallSentenceRemand: 0,

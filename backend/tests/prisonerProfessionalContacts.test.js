@@ -4,7 +4,7 @@ const { serviceUnavailableMessage } = require('../common-messages')
 describe('Prisoner professional contacts', () => {
   const offenderNo = 'ABC123'
   const bookingId = '123'
-  const elite2Api = {}
+  const prisonApi = {}
   const allocationManagerApi = {}
   const personService = {}
 
@@ -24,24 +24,24 @@ describe('Prisoner professional contacts', () => {
 
     personService.getPersonContactDetails = jest.fn().mockResolvedValue({})
 
-    elite2Api.getDetails = jest.fn().mockResolvedValue({ bookingId, firstName: 'John', lastName: 'Smith' })
-    elite2Api.getPrisonerContacts = jest.fn().mockResolvedValue([])
+    prisonApi.getDetails = jest.fn().mockResolvedValue({ bookingId, firstName: 'John', lastName: 'Smith' })
+    prisonApi.getPrisonerContacts = jest.fn().mockResolvedValue([])
 
     allocationManagerApi.getPomByOffenderNo = jest.fn().mockResolvedValue({})
 
-    controller = prisonerProfessionalContacts({ elite2Api, personService, allocationManagerApi, logError })
+    controller = prisonerProfessionalContacts({ prisonApi, personService, allocationManagerApi, logError })
   })
 
   it('should get the prisoner details', async () => {
     await controller(req, res)
 
-    expect(elite2Api.getDetails).toHaveBeenCalledWith(res.locals, offenderNo)
+    expect(prisonApi.getDetails).toHaveBeenCalledWith(res.locals, offenderNo)
   })
 
   it('should get the contacts by bookingId and Poms by offenderNo', async () => {
     await controller(req, res)
 
-    expect(elite2Api.getPrisonerContacts).toHaveBeenCalledWith(res.locals, bookingId)
+    expect(prisonApi.getPrisonerContacts).toHaveBeenCalledWith(res.locals, bookingId)
     expect(allocationManagerApi.getPomByOffenderNo).toHaveBeenCalledWith(res.locals, offenderNo)
   })
 
@@ -102,7 +102,7 @@ describe('Prisoner professional contacts', () => {
     }
 
     beforeEach(() => {
-      elite2Api.getPrisonerContacts.mockResolvedValue({
+      prisonApi.getPrisonerContacts.mockResolvedValue({
         nextOfKin: [],
         otherContacts: [
           {
@@ -456,7 +456,7 @@ describe('Prisoner professional contacts', () => {
 
   describe('errors', () => {
     it('should render the error template with a link to the homepage if there is a problem retrieving prisoner details', async () => {
-      elite2Api.getDetails.mockImplementation(() => Promise.reject(new Error('Network error')))
+      prisonApi.getDetails.mockImplementation(() => Promise.reject(new Error('Network error')))
 
       await controller(req, res)
 

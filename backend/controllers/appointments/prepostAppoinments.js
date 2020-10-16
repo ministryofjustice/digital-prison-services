@@ -56,7 +56,7 @@ const getLinks = offenderNo => ({
 })
 
 const prepostAppointmentsFactory = ({
-  elite2Api,
+  prisonApi,
   oauthApi,
   whereaboutsApi,
   notifyClient,
@@ -72,7 +72,7 @@ const prepostAppointmentsFactory = ({
 
   const getLocationEvents = async (context, { activeCaseLoadId, locationId, date }) => {
     const [locationDetails, locationEvents] = await Promise.all([
-      elite2Api.getLocation(context, Number(locationId)),
+      prisonApi.getLocation(context, Number(locationId)),
       existingEventsService.getExistingEventsForLocation(context, activeCaseLoadId, Number(locationId), date),
     ])
 
@@ -140,7 +140,7 @@ const prepostAppointmentsFactory = ({
       const { text: locationDescription } = locationTypes.find(loc => loc.value === Number(locationId))
       const { text: appointmentTypeDescription } = appointmentTypes.find(app => app.value === appointmentType)
 
-      const { firstName, lastName, bookingId } = await elite2Api.getDetails(res.locals, offenderNo)
+      const { firstName, lastName, bookingId } = await prisonApi.getDetails(res.locals, offenderNo)
 
       const date = moment(startTime, DATE_TIME_FORMAT_SPEC).format(DAY_MONTH_YEAR)
 
@@ -384,7 +384,7 @@ const prepostAppointmentsFactory = ({
         })
       }
 
-      const agencyDetails = await elite2Api.getAgencyDetails(res.locals, activeCaseLoadId)
+      const agencyDetails = await prisonApi.getAgencyDetails(res.locals, activeCaseLoadId)
       const userEmailData = await oauthApi.userEmail(res.locals, username)
 
       raiseAnalyticsEvent('VLB Appointments', 'Video link booked', `${agencyDetails.description} -  ${courtValue}`)

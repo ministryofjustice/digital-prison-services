@@ -1,14 +1,14 @@
 const { capitalize, formatName, putLastNameFirst } = require('../utils')
 const { serviceUnavailableMessage } = require('../common-messages')
 
-module.exports = ({ elite2Api, caseNotesApi, logError }) => {
+module.exports = ({ prisonApi, caseNotesApi, logError }) => {
   const index = async (req, res) => {
     const { offenderNo, caseNoteId } = req.params
 
     try {
       const [caseNote, prisonerDetails] = await Promise.all([
         caseNotesApi.getCaseNote(res.locals, offenderNo, caseNoteId),
-        elite2Api.getDetails(res.locals, offenderNo),
+        prisonApi.getDetails(res.locals, offenderNo),
       ])
 
       const { staffId } = req.session.userDetails

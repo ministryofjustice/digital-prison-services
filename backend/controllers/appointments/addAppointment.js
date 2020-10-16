@@ -87,7 +87,7 @@ const getValidationMessages = fields => {
   return errors
 }
 
-const addAppointmentFactory = (appointmentsService, existingEventsService, elite2Api, logError) => {
+const addAppointmentFactory = (appointmentsService, existingEventsService, prisonApi, logError) => {
   const getAppointmentTypesAndLocations = async (locals, activeCaseLoadId) => {
     const { appointmentTypes, locationTypes } = await appointmentsService.getAppointmentOptions(
       locals,
@@ -116,7 +116,7 @@ const addAppointmentFactory = (appointmentsService, existingEventsService, elite
 
     try {
       const prePopulatedData = {}
-      const { firstName, lastName, bookingId } = await elite2Api.getDetails(res.locals, offenderNo)
+      const { firstName, lastName, bookingId } = await prisonApi.getDetails(res.locals, offenderNo)
       const offenderName = `${properCaseName(lastName)}, ${properCaseName(firstName)}`
       const { appointmentTypes, appointmentLocations } = await getAppointmentTypesAndLocations(
         res.locals,
@@ -134,7 +134,7 @@ const addAppointmentFactory = (appointmentsService, existingEventsService, elite
 
       if (formValues && formValues.appointmentType === 'VLB' && formValues.location && formValues.date) {
         const [locationDetails, locationEvents] = await Promise.all([
-          elite2Api.getLocation(res.locals, formValues.location),
+          prisonApi.getLocation(res.locals, formValues.location),
           existingEventsService.getExistingEventsForLocation(
             res.locals,
             activeCaseLoadId,
@@ -213,11 +213,11 @@ const addAppointmentFactory = (appointmentsService, existingEventsService, elite
     if (errors.length > 0) {
       const { endOfPeriod } = endRecurringEndingDate({ date, startTime, repeats, times })
 
-      const offenderDetails = await elite2Api.getDetails(res.locals, offenderNo)
+      const offenderDetails = await prisonApi.getDetails(res.locals, offenderNo)
 
       const [locationDetails, locationEvents] = (location &&
         (await Promise.all([
-          elite2Api.getLocation(res.locals, Number(location)),
+          prisonApi.getLocation(res.locals, Number(location)),
           existingEventsService.getExistingEventsForLocation(res.locals, activeCaseLoadId, Number(location), date),
         ]))) || [{}, []]
 
@@ -265,7 +265,7 @@ const addAppointmentFactory = (appointmentsService, existingEventsService, elite
 
       if (appointmentType === 'VLB') return res.redirect(`/offenders/${offenderNo}/prepost-appointments`)
 
-      await elite2Api.addAppointments(res.locals, request)
+      await prisonApi.addAppointments(res.locals, request)
 
       return res.redirect(`/offenders/${offenderNo}/confirm-appointment`)
     } catch (error) {

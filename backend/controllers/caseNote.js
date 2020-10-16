@@ -6,12 +6,12 @@ const { serviceUnavailableMessage } = require('../common-messages')
 
 const getOffenderUrl = offenderNo => `/prisoner/${offenderNo}`
 
-const caseNoteFactory = (elite2Api, caseNotesApi) => {
+const caseNoteFactory = (prisonApi, caseNotesApi) => {
   const displayCreateCaseNotePage = async (req, res) => {
     const { offenderNo } = req.params
     const { type, subType } = req.query || {}
     try {
-      const { firstName, lastName } = await elite2Api.getDetails(res.locals, offenderNo)
+      const { firstName, lastName } = await prisonApi.getDetails(res.locals, offenderNo)
 
       const caseNoteTypes = await caseNotesApi.myCaseNoteTypes(res.locals)
 
@@ -181,7 +181,7 @@ const caseNoteFactory = (elite2Api, caseNotesApi) => {
     }
 
     if (errors.length > 0) {
-      const { firstName, lastName } = await elite2Api.getDetails(res.locals, offenderNo)
+      const { firstName, lastName } = await prisonApi.getDetails(res.locals, offenderNo)
 
       const caseNoteTypes = await caseNotesApi.myCaseNoteTypes(res.locals)
 

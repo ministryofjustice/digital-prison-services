@@ -1,6 +1,6 @@
 const config = require('./config')
 const clientFactory = require('./api/oauthEnabledClient')
-const { elite2ApiFactory } = require('./api/elite2Api')
+const { prisonApiFactory } = require('./api/prisonApi')
 const { oauthApiFactory } = require('./api/oauthApi')
 const { whereaboutsApiFactory } = require('./api/whereaboutsApi')
 const { communityApiFactory } = require('./api/communityApi')
@@ -13,10 +13,10 @@ const { pathfinderApiFactory } = require('./api/pathfinderApi')
 const { socApiFactory } = require('./api/socApi')
 const { offenderSearchApiFactory } = require('./api/offenderSearchApi')
 
-const elite2Api = elite2ApiFactory(
+const prisonApi = prisonApiFactory(
   clientFactory({
-    baseUrl: config.apis.elite2.url,
-    timeout: config.apis.elite2.timeoutSeconds * 1000,
+    baseUrl: config.apis.prisonApi.url,
+    timeout: config.apis.prisonApi.timeoutSeconds * 1000,
   })
 )
 
@@ -100,7 +100,7 @@ const offenderSearchApi = offenderSearchApiFactory(
 )
 
 module.exports = {
-  elite2Api,
+  prisonApi,
   whereaboutsApi,
   oauthApi,
   communityApi,

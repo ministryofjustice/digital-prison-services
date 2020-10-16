@@ -6,7 +6,7 @@ const { DAY_MONTH_YEAR, DATE_TIME_FORMAT_SPEC, buildDateTime } = require('../../
 const { formatName } = require('../../utils')
 const { serviceUnavailableMessage } = require('../../common-messages')
 
-const addCourtAppointmentsFactory = (elite2Api, logError) => {
+const addCourtAppointmentsFactory = (prisonApi, logError) => {
   const getValidationMessages = fields => {
     const {
       date,
@@ -70,8 +70,8 @@ const addCourtAppointmentsFactory = (elite2Api, logError) => {
     try {
       const { offenderNo, agencyId } = req.params
       const [offenderDetails, agencyDetails] = await Promise.all([
-        elite2Api.getDetails(res.locals, offenderNo),
-        elite2Api.getAgencyDetails(res.locals, agencyId),
+        prisonApi.getDetails(res.locals, offenderNo),
+        prisonApi.getAgencyDetails(res.locals, agencyId),
       ])
       const { firstName, lastName, bookingId } = offenderDetails
       const offenderNameWithNumber = `${formatName(firstName, lastName)} (${offenderNo})`

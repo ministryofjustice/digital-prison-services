@@ -1,7 +1,7 @@
 const moment = require('moment')
-const { elite2ApiFactory } = require('../api/elite2Api')
+const { prisonApiFactory } = require('../api/prisonApi')
 
-const elite2Api = elite2ApiFactory(null)
+const prisonApi = prisonApiFactory(null)
 const externalEvents = require('../shared/getExternalEventsForOffenders')
 const { switchDateFormat } = require('../utils')
 
@@ -149,28 +149,28 @@ describe('External events', () => {
   const offenderWithNoData = 'ABCDEEE'
 
   beforeEach(() => {
-    elite2Api.getSentenceData = jest.fn()
-    elite2Api.getCourtEvents = jest.fn()
-    elite2Api.getExternalTransfers = jest.fn()
-    elite2Api.getAlerts = jest.fn()
-    elite2Api.getAssessments = jest.fn()
+    prisonApi.getSentenceData = jest.fn()
+    prisonApi.getCourtEvents = jest.fn()
+    prisonApi.getExternalTransfers = jest.fn()
+    prisonApi.getAlerts = jest.fn()
+    prisonApi.getAssessments = jest.fn()
   })
 
   it('should handle empty offender numbers', async () => {
     const context = {}
-    const response = await externalEvents(elite2Api, context, {})
+    const response = await externalEvents(prisonApi, context, {})
     expect(response).toEqual([])
   })
 
   it('should deal with empty responses', async () => {
     const today = moment()
 
-    elite2Api.getSentenceData.mockImplementationOnce(() => null)
-    elite2Api.getCourtEvents.mockImplementationOnce(() => [])
-    elite2Api.getExternalTransfers.mockImplementationOnce(() => undefined)
+    prisonApi.getSentenceData.mockImplementationOnce(() => null)
+    prisonApi.getCourtEvents.mockImplementationOnce(() => [])
+    prisonApi.getExternalTransfers.mockImplementationOnce(() => undefined)
 
     const response = await externalEvents(
-      elite2Api,
+      prisonApi,
       {},
       {
         agencyId: 'LEI',
@@ -185,17 +185,17 @@ describe('External events', () => {
     expect(response.get(offenderWithData).alertFlags.length).toBe(0)
     expect(response.get(offenderWithData).category).toEqual('')
 
-    expect(elite2Api.getCourtEvents.mock.calls.length).toBe(1)
-    expect(elite2Api.getExternalTransfers.mock.calls.length).toBe(1)
-    expect(elite2Api.getSentenceData.mock.calls.length).toBe(1)
-    expect(elite2Api.getAlerts.mock.calls.length).toBe(1)
-    expect(elite2Api.getAssessments.mock.calls.length).toBe(1)
+    expect(prisonApi.getCourtEvents.mock.calls.length).toBe(1)
+    expect(prisonApi.getExternalTransfers.mock.calls.length).toBe(1)
+    expect(prisonApi.getSentenceData.mock.calls.length).toBe(1)
+    expect(prisonApi.getAlerts.mock.calls.length).toBe(1)
+    expect(prisonApi.getAssessments.mock.calls.length).toBe(1)
   })
 
   it('should call getSentenceData with the correct parameters', async () => {
     const today = moment()
     await externalEvents(
-      elite2Api,
+      prisonApi,
       {},
       {
         agencyId: 'LEI',
@@ -203,13 +203,13 @@ describe('External events', () => {
         formattedDate: switchDateFormat(today),
       }
     )
-    expect(elite2Api.getSentenceData).toHaveBeenCalledWith({}, [offenderWithData, offenderWithNoData])
+    expect(prisonApi.getSentenceData).toHaveBeenCalledWith({}, [offenderWithData, offenderWithNoData])
   })
 
   it('should call getCourtEvents with the correct parameters', async () => {
     const today = moment()
     await externalEvents(
-      elite2Api,
+      prisonApi,
       {},
       {
         agencyId: 'LEI',
@@ -217,7 +217,7 @@ describe('External events', () => {
         formattedDate: switchDateFormat(today),
       }
     )
-    expect(elite2Api.getCourtEvents).toHaveBeenCalledWith(
+    expect(prisonApi.getCourtEvents).toHaveBeenCalledWith(
       {},
       {
         agencyId: 'LEI',
@@ -230,7 +230,7 @@ describe('External events', () => {
   it('should call getExternalTransfers with the correct parameters', async () => {
     const today = moment()
     await externalEvents(
-      elite2Api,
+      prisonApi,
       {},
       {
         agencyId: 'LEI',
@@ -238,7 +238,7 @@ describe('External events', () => {
         formattedDate: switchDateFormat(today),
       }
     )
-    expect(elite2Api.getExternalTransfers).toHaveBeenCalledWith(
+    expect(prisonApi.getExternalTransfers).toHaveBeenCalledWith(
       {},
       {
         agencyId: 'LEI',
@@ -250,14 +250,14 @@ describe('External events', () => {
 
   it('should call getAlerts with the correct parameters', async () => {
     await externalEvents(
-      elite2Api,
+      prisonApi,
       {},
       {
         agencyId: 'LEI',
         offenderNumbers: [offenderWithData, offenderWithNoData],
       }
     )
-    expect(elite2Api.getAlerts).toHaveBeenCalledWith(
+    expect(prisonApi.getAlerts).toHaveBeenCalledWith(
       {},
       {
         agencyId: 'LEI',
@@ -268,13 +268,13 @@ describe('External events', () => {
 
   it('should call getAssessments with the correct parameters', async () => {
     await externalEvents(
-      elite2Api,
+      prisonApi,
       {},
       {
         offenderNumbers: [offenderWithData, offenderWithNoData],
       }
     )
-    expect(elite2Api.getAssessments).toHaveBeenCalledWith(
+    expect(prisonApi.getAssessments).toHaveBeenCalledWith(
       {},
       {
         code: 'CATEGORY',
@@ -286,14 +286,14 @@ describe('External events', () => {
   it('should extend the offender data with additional call data', async () => {
     const today = moment()
 
-    elite2Api.getSentenceData.mockImplementationOnce(createSentenceDataResponse)
-    elite2Api.getCourtEvents.mockImplementationOnce(createCourtEventResponse)
-    elite2Api.getExternalTransfers.mockImplementationOnce(createTransfersResponse)
-    elite2Api.getAlerts.mockImplementationOnce(createAlertsResponse)
-    elite2Api.getAssessments.mockImplementationOnce(createAssessmentsResponse)
+    prisonApi.getSentenceData.mockImplementationOnce(createSentenceDataResponse)
+    prisonApi.getCourtEvents.mockImplementationOnce(createCourtEventResponse)
+    prisonApi.getExternalTransfers.mockImplementationOnce(createTransfersResponse)
+    prisonApi.getAlerts.mockImplementationOnce(createAlertsResponse)
+    prisonApi.getAssessments.mockImplementationOnce(createAssessmentsResponse)
 
     const response = await externalEvents(
-      elite2Api,
+      prisonApi,
       {},
       {
         agencyId: 'LEI',
@@ -314,20 +314,20 @@ describe('External events', () => {
     expect(response.get(offenderWithNoData).alertFlags.length).toBe(0)
     expect(response.get(offenderWithNoData).category).not.toBeDefined()
 
-    expect(elite2Api.getCourtEvents.mock.calls.length).toBe(1)
-    expect(elite2Api.getExternalTransfers.mock.calls.length).toBe(1)
-    expect(elite2Api.getSentenceData.mock.calls.length).toBe(1)
-    expect(elite2Api.getAlerts.mock.calls.length).toBe(1)
-    expect(elite2Api.getAssessments.mock.calls.length).toBe(1)
+    expect(prisonApi.getCourtEvents.mock.calls.length).toBe(1)
+    expect(prisonApi.getExternalTransfers.mock.calls.length).toBe(1)
+    expect(prisonApi.getSentenceData.mock.calls.length).toBe(1)
+    expect(prisonApi.getAlerts.mock.calls.length).toBe(1)
+    expect(prisonApi.getAssessments.mock.calls.length).toBe(1)
   })
 
   it('should return multiple scheduled transfers along with status descriptions', async () => {
     const today = moment()
 
-    elite2Api.getExternalTransfers.mockImplementationOnce(() => createAllTransferTypes())
+    prisonApi.getExternalTransfers.mockImplementationOnce(() => createAllTransferTypes())
 
     const response = await externalEvents(
-      elite2Api,
+      prisonApi,
       {},
       {
         agencyId: 'LEI',
@@ -359,7 +359,7 @@ describe('External events', () => {
   it('should show the latest completed court event when there are more than one', async () => {
     const today = moment()
 
-    elite2Api.getCourtEvents.mockImplementationOnce(() => [
+    prisonApi.getCourtEvents.mockImplementationOnce(() => [
       {
         eventId: 1,
         eventStatus: 'COMP',
@@ -391,7 +391,7 @@ describe('External events', () => {
     ])
 
     const response = await externalEvents(
-      elite2Api,
+      prisonApi,
       {},
       { agencyId: 'LEI', offenderNumbers: [offenderWithData], formattedDate: switchDateFormat(today) }
     )
@@ -407,7 +407,7 @@ describe('External events', () => {
     const thisTimeTomorrow = switchDateFormat(moment().add(1, 'day'))
 
     it('should not return scheduled transfers', async () => {
-      elite2Api.getExternalTransfers.mockReturnValueOnce([
+      prisonApi.getExternalTransfers.mockReturnValueOnce([
         {
           eventId: 1,
           firstName: 'OFFENDER',
@@ -418,7 +418,7 @@ describe('External events', () => {
       ])
 
       const response = await externalEvents(
-        elite2Api,
+        prisonApi,
         {},
         {
           agencyId: 'LEI',
@@ -431,7 +431,7 @@ describe('External events', () => {
     })
 
     it('should not return scheduled court visits', async () => {
-      elite2Api.getCourtEvents.mockReturnValueOnce([
+      prisonApi.getCourtEvents.mockReturnValueOnce([
         {
           eventId: 1,
           eventDescription: 'Court Appearance - Police Product Order',
@@ -445,7 +445,7 @@ describe('External events', () => {
       ])
 
       const response = await externalEvents(
-        elite2Api,
+        prisonApi,
         {},
         {
           agencyId: 'LEI',
@@ -458,7 +458,7 @@ describe('External events', () => {
     })
 
     it('should not return release dates', async () => {
-      elite2Api.getSentenceData.mockReturnValueOnce([
+      prisonApi.getSentenceData.mockReturnValueOnce([
         {
           offenderNo: 'A1234AA',
           sentenceDetail: {
@@ -468,7 +468,7 @@ describe('External events', () => {
       ])
 
       const response = await externalEvents(
-        elite2Api,
+        prisonApi,
         {},
         {
           agencyId: 'LEI',

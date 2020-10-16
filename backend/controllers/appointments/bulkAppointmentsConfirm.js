@@ -4,7 +4,7 @@ const { DAY_MONTH_YEAR, DATE_TIME_FORMAT_SPEC, buildDateTime } = require('../../
 const { raiseAnalyticsEvent } = require('../../raiseAnalyticsEvent')
 const { bulkAppointmentsClashesFactory } = require('./bulkAppointmentsClashes')
 
-const bulkAppointmentsConfirmFactory = (elite2Api, logError) => {
+const bulkAppointmentsConfirmFactory = (prisonApi, logError) => {
   const renderTemplate = (req, res, pageData) => {
     const {
       appointmentDetails,
@@ -155,7 +155,7 @@ const bulkAppointmentsConfirmFactory = (elite2Api, logError) => {
     }
 
     try {
-      const { getOtherEvents } = bulkAppointmentsClashesFactory(elite2Api, logError)
+      const { getOtherEvents } = bulkAppointmentsClashesFactory(prisonApi, logError)
       const eventsForAllOffenders = await getOtherEvents(req, res, {
         offenderNumbers: prisonersListed.map(prisoner => prisoner.offenderNo),
         date: switchDateFormat(date),
@@ -177,7 +177,7 @@ const bulkAppointmentsConfirmFactory = (elite2Api, logError) => {
         prisonersListed: req.session.data.prisonersListed,
       }
 
-      await elite2Api.addAppointments(res.locals, request)
+      await prisonApi.addAppointments(res.locals, request)
 
       raiseAnalyticsEvent(
         'Bulk Appointments',

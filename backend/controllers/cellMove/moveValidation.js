@@ -7,9 +7,9 @@ const {
 } = require('../../config')
 const getValueByType = require('../../shared/getValueByType')
 
-const moveValidationFactory = ({ elite2Api, logError }) => {
+const moveValidationFactory = ({ prisonApi, logError }) => {
   const getOccupantsDetails = async (context, offenders) => {
-    return Promise.all(offenders.map(offender => elite2Api.getDetails(context, offender, true)))
+    return Promise.all(offenders.map(offender => prisonApi.getDetails(context, offender, true)))
   }
 
   const getCellSharingRiskAssessmentMessage = (offender, currentOccupants) => {
@@ -63,21 +63,21 @@ const moveValidationFactory = ({ elite2Api, logError }) => {
     const { errors } = pageData || {}
 
     try {
-      const currentOffenderDetails = await elite2Api.getDetails(res.locals, offenderNo, true)
+      const currentOffenderDetails = await prisonApi.getDetails(res.locals, offenderNo, true)
 
-      const occupants = await elite2Api.getInmatesAtLocation(res.locals, cellId, {})
+      const occupants = await prisonApi.getInmatesAtLocation(res.locals, cellId, {})
       const currentOccupantsOffenderNos = occupants.map(occupant => occupant.offenderNo)
       const currentOccupantsDetails = occupants && (await getOccupantsDetails(res.locals, currentOccupantsOffenderNos))
 
       // Get the residential unit level prefix for the selected cell by traversing up the
       // parent location tree
-      const locationDetail = await elite2Api.getLocation(res.locals, cellId)
-      const parentLocationDetail = await elite2Api.getLocation(res.locals, locationDetail.parentLocationId)
-      const { locationPrefix } = await elite2Api.getLocation(res.locals, parentLocationDetail.parentLocationId)
+      const locationDetail = await prisonApi.getLocation(res.locals, cellId)
+      const parentLocationDetail = await prisonApi.getLocation(res.locals, locationDetail.parentLocationId)
+      const { locationPrefix } = await prisonApi.getLocation(res.locals, parentLocationDetail.parentLocationId)
 
       // Get non-associations for the offener and filter them down to ones
       // that are currently in the same residential unit as the selected cell
-      const currentOffenderNonAssociations = await elite2Api.getNonAssociations(
+      const currentOffenderNonAssociations = await prisonApi.getNonAssociations(
         res.locals,
         currentOffenderDetails.bookingId
       )

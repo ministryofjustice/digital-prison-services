@@ -49,7 +49,7 @@ const { raiseAnalyticsEvent } = require('./raiseAnalyticsEvent')
 const router = express.Router()
 
 const setup = ({
-  elite2Api,
+  prisonApi,
   whereaboutsApi,
   oauthApi,
   communityApi,
@@ -60,7 +60,7 @@ const setup = ({
   pathfinderApi,
   socApi,
 }) => {
-  router.use(currentUser({ elite2Api, oauthApi }))
+  router.use(currentUser({ prisonApi, oauthApi }))
 
   router.use(async (req, res, next) => {
     res.locals = {
@@ -72,50 +72,50 @@ const setup = ({
   })
   router.get(
     '/edit-alert',
-    handleErrors(alertFactory(oauthApi, elite2Api, referenceCodesService(elite2Api)).displayEditAlertPage)
+    handleErrors(alertFactory(oauthApi, prisonApi, referenceCodesService(prisonApi)).displayEditAlertPage)
   )
   router.post(
     '/edit-alert/:bookingId/:alertId',
-    handleErrors(alertFactory(oauthApi, elite2Api, referenceCodesService(elite2Api)).handleEditAlertForm)
+    handleErrors(alertFactory(oauthApi, prisonApi, referenceCodesService(prisonApi)).handleEditAlertForm)
   )
   router.get(
     '/offenders/:offenderNo/create-alert',
-    handleErrors(alertFactory(oauthApi, elite2Api, referenceCodesService(elite2Api)).displayCreateAlertPage)
+    handleErrors(alertFactory(oauthApi, prisonApi, referenceCodesService(prisonApi)).displayCreateAlertPage)
   )
   router.post(
     '/offenders/:offenderNo/create-alert',
-    handleErrors(alertFactory(oauthApi, elite2Api, referenceCodesService(elite2Api)).handleCreateAlertForm)
+    handleErrors(alertFactory(oauthApi, prisonApi, referenceCodesService(prisonApi)).handleCreateAlertForm)
   )
   router.get(
     '/prisoner/:offenderNo/add-case-note',
-    handleErrors(caseNoteFactory(elite2Api, caseNotesApi).displayCreateCaseNotePage)
+    handleErrors(caseNoteFactory(prisonApi, caseNotesApi).displayCreateCaseNotePage)
   )
   router.post(
     '/prisoner/:offenderNo/add-case-note',
-    handleErrors(caseNoteFactory(elite2Api, caseNotesApi).handleCreateCaseNoteForm)
+    handleErrors(caseNoteFactory(prisonApi, caseNotesApi).handleCreateCaseNoteForm)
   )
   router.get(
     '/manage-prisoner-whereabouts/attendance-reason-statistics',
-    handleErrors(attendanceStatisticsFactory(oauthApi, elite2Api, whereaboutsApi, logError).attendanceStatistics)
+    handleErrors(attendanceStatisticsFactory(oauthApi, prisonApi, whereaboutsApi, logError).attendanceStatistics)
   )
   router.get(
     '/manage-prisoner-whereabouts/attendance-reason-statistics/reason/:reason',
     handleErrors(
-      attendanceStatisticsFactory(oauthApi, elite2Api, whereaboutsApi, logError).attendanceStatisticsOffendersList
+      attendanceStatisticsFactory(oauthApi, prisonApi, whereaboutsApi, logError).attendanceStatisticsOffendersList
     )
   )
 
   router.get(
     '/manage-prisoner-whereabouts/attendance-reason-statistics/suspended',
     handleErrors(
-      attendanceStatisticsFactory(oauthApi, elite2Api, whereaboutsApi, logError).attendanceStatisticsSuspendedList
+      attendanceStatisticsFactory(oauthApi, prisonApi, whereaboutsApi, logError).attendanceStatisticsSuspendedList
     )
   )
 
   router.get(
     '/offenders/:offenderNo/probation-documents',
     handleErrors(
-      probationDocumentsFactory(oauthApi, elite2Api, communityApi, systemOauthClient).displayProbationDocumentsPage
+      probationDocumentsFactory(oauthApi, prisonApi, communityApi, systemOauthClient).displayProbationDocumentsPage
     )
   )
   router.get(
@@ -133,45 +133,45 @@ const setup = ({
     res.render('bulkAppointmentsNotAdded.njk', { reason })
   })
 
-  router.use('/bulk-appointments/upload-file', bulkAppointmentsUploadRouter({ elite2Api, logError }))
+  router.use('/bulk-appointments/upload-file', bulkAppointmentsUploadRouter({ prisonApi, logError }))
   router.use(
     '/bulk-appointments/add-appointment-details',
-    bulkAppointmentsAddDetailsRouter({ elite2Api, oauthApi, logError })
+    bulkAppointmentsAddDetailsRouter({ prisonApi, oauthApi, logError })
   )
   router.use('/bulk-appointments/appointments-added', bulkAppointmentsAddedRouter({ logError }))
-  router.get('/bulk-appointments/appointments-movement-slips', bulkAppointmentsSlipsRouter({ elite2Api, logError }))
-  router.use('/bulk-appointments/confirm-appointments', bulkAppointmentsConfirmRouter({ elite2Api, logError }))
-  router.use('/bulk-appointments/appointment-clashes', bulkAppointmentsClashesRouter({ elite2Api, logError }))
-  router.use('/bulk-appointments/invalid-numbers', bulkAppointmentsInvalidNumbersRouter({ elite2Api, logError }))
+  router.get('/bulk-appointments/appointments-movement-slips', bulkAppointmentsSlipsRouter({ prisonApi, logError }))
+  router.use('/bulk-appointments/confirm-appointments', bulkAppointmentsConfirmRouter({ prisonApi, logError }))
+  router.use('/bulk-appointments/appointment-clashes', bulkAppointmentsClashesRouter({ prisonApi, logError }))
+  router.use('/bulk-appointments/invalid-numbers', bulkAppointmentsInvalidNumbersRouter({ prisonApi, logError }))
 
-  router.use('/change-caseload', changeCaseloadRouter({ elite2Api, logError }))
+  router.use('/change-caseload', changeCaseloadRouter({ prisonApi, logError }))
 
   router.get('/terms', async (req, res) => {
     res.render('terms', { mailTo: config.app.mailTo, homeLink: config.app.notmEndpointUrl })
   })
 
-  router.use('/offenders/:offenderNo/add-appointment', addAppointmentRouter({ elite2Api, logError }))
-  router.use('/offenders/:offenderNo/confirm-appointment', confirmAppointmentRouter({ elite2Api, logError }))
+  router.use('/offenders/:offenderNo/add-appointment', addAppointmentRouter({ prisonApi, logError }))
+  router.use('/offenders/:offenderNo/confirm-appointment', confirmAppointmentRouter({ prisonApi, logError }))
   router.use(
     '/offenders/:offenderNo/prepost-appointments',
-    prepostAppointmentRouter({ elite2Api, logError, oauthApi, whereaboutsApi, notifyClient, raiseAnalyticsEvent })
+    prepostAppointmentRouter({ prisonApi, logError, oauthApi, whereaboutsApi, notifyClient, raiseAnalyticsEvent })
   )
   router.use(
     '/:agencyId/offenders/:offenderNo/add-court-appointment',
-    addCourtAppointmentRouter({ elite2Api, logError })
+    addCourtAppointmentRouter({ prisonApi, logError })
   )
 
   router.use(
     '/:agencyId/offenders/:offenderNo/add-court-appointment/select-court',
-    selectCourtAppointmentCourt({ elite2Api, whereaboutsApi, logError })
+    selectCourtAppointmentCourt({ prisonApi, whereaboutsApi, logError })
   )
 
   router.use(
     '/:agencyId/offenders/:offenderNo/add-court-appointment/select-rooms',
-    selectCourtAppointmentRooms({ elite2Api, whereaboutsApi, logError, oauthApi, notifyClient })
+    selectCourtAppointmentRooms({ prisonApi, whereaboutsApi, logError, oauthApi, notifyClient })
   )
 
-  router.get('/videolink/prisoner-search', videolinkPrisonerSearchController({ oauthApi, elite2Api, logError }))
+  router.get('/videolink/prisoner-search', videolinkPrisonerSearchController({ oauthApi, prisonApi, logError }))
 
   router.get('/videolink', async (req, res) => {
     res.render('courtsVideolink.njk', {
@@ -180,23 +180,23 @@ const setup = ({
     })
   })
 
-  router.use('/videolink/bookings', viewCourtBookingsRouter({ elite2Api, whereaboutsApi, logError }))
+  router.use('/videolink/bookings', viewCourtBookingsRouter({ prisonApi, whereaboutsApi, logError }))
 
-  router.use('/request-booking', requestBookingRouter({ logError, notifyClient, whereaboutsApi, oauthApi, elite2Api }))
+  router.use('/request-booking', requestBookingRouter({ logError, notifyClient, whereaboutsApi, oauthApi, prisonApi }))
 
-  router.use('/appointments', viewAppointmentsRouter({ elite2Api, whereaboutsApi, oauthApi, logError }))
+  router.use('/appointments', viewAppointmentsRouter({ prisonApi, whereaboutsApi, oauthApi, logError }))
 
   router.use(
     '/offenders/:offenderNo/retention-reasons',
-    retentionReasonsRouter({ elite2Api, dataComplianceApi, logError })
+    retentionReasonsRouter({ prisonApi, dataComplianceApi, logError })
   )
 
-  router.use('/prisoner/:offenderNo/cell-move', cellMoveRouter({ oauthApi, elite2Api, whereaboutsApi, logError }))
+  router.use('/prisoner/:offenderNo/cell-move', cellMoveRouter({ oauthApi, prisonApi, whereaboutsApi, logError }))
 
   router.use(
     '/establishment-roll',
     establishmentRollRouter({
-      elite2Api,
+      prisonApi,
       systemOauthClient,
       logError,
     })
@@ -205,7 +205,7 @@ const setup = ({
   router.use(
     '/prisoner/:offenderNo',
     prisonerProfileRouter({
-      elite2Api,
+      prisonApi,
       keyworkerApi,
       oauthApi,
       caseNotesApi,
@@ -218,15 +218,15 @@ const setup = ({
     })
   )
 
-  router.use('/current-covid-units', covidRouter(elite2Api, logError))
+  router.use('/current-covid-units', covidRouter(prisonApi, logError))
 
-  router.use('/attendance-changes', attendanceChangeRouter({ elite2Api, whereaboutsApi, oauthApi, logError }))
+  router.use('/attendance-changes', attendanceChangeRouter({ prisonApi, whereaboutsApi, oauthApi, logError }))
 
-  router.use('/prisoner-search', prisonerSearchRouter({ elite2Api, logError }))
+  router.use('/prisoner-search', prisonerSearchRouter({ prisonApi, logError }))
 
   router.use(
     '/prisoner/:offenderNo/case-notes/amend-case-note/:caseNoteId',
-    amendCaseNNoteRouter({ elite2Api, caseNotesApi, logError })
+    amendCaseNNoteRouter({ prisonApi, caseNotesApi, logError })
   )
 
   return router

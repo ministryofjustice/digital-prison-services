@@ -12,17 +12,17 @@ const {
   app: { notmEndpointUrl: dpsUrl },
 } = require('../../config')
 
-module.exports = ({ elite2Api, logError }) => async (req, res) => {
+module.exports = ({ prisonApi, logError }) => async (req, res) => {
   const { offenderNo } = req.params
   const { agencyId, locationId, fromDate, toDate = moment().format('YYYY-MM-DD') } = req.query
 
   try {
     const [prisonerDetails, locationAttributes, locationHistory, agencyDetails, userCaseLoads] = await Promise.all([
-      elite2Api.getDetails(res.locals, offenderNo),
-      elite2Api.getAttributesForLocation(res.locals, locationId),
-      elite2Api.getHistoryForLocation(res.locals, { locationId, fromDate, toDate }),
-      elite2Api.getAgencyDetails(res.locals, agencyId),
-      elite2Api.userCaseLoads(res.locals),
+      prisonApi.getDetails(res.locals, offenderNo),
+      prisonApi.getAttributesForLocation(res.locals, locationId),
+      prisonApi.getHistoryForLocation(res.locals, { locationId, fromDate, toDate }),
+      prisonApi.getAgencyDetails(res.locals, agencyId),
+      prisonApi.userCaseLoads(res.locals),
     ])
 
     const userCaseLoadIds = userCaseLoads.map(caseLoad => caseLoad.caseLoadId)
@@ -36,7 +36,7 @@ module.exports = ({ elite2Api, logError }) => async (req, res) => {
       (await Promise.all(
         locationHistory.map(async record => ({
           ...record,
-          ...(await elite2Api.getPrisonerDetail(res.locals, record.bookingId)),
+          ...(await prisonApi.getPrisonerDetail(res.locals, record.bookingId)),
         }))
       ))
 

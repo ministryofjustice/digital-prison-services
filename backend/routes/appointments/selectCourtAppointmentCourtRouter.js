@@ -3,8 +3,8 @@ const { selectCourtAppointmentCourtFactory } = require('../../controllers/appoin
 
 const router = express.Router({ mergeParams: true })
 
-const controller = ({ elite2Api, whereaboutsApi, logError }) => {
-  const { index, post } = selectCourtAppointmentCourtFactory(elite2Api, whereaboutsApi, logError)
+const controller = ({ prisonApi, whereaboutsApi, logError }) => {
+  const { index, post } = selectCourtAppointmentCourtFactory(prisonApi, whereaboutsApi, logError)
 
   router.get('/', index)
   router.post('/', post)

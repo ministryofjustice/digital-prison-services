@@ -1,6 +1,6 @@
-const referenceCodesServiceFactory = elite2Api => {
+const referenceCodesServiceFactory = prisonApi => {
   const getAlertTypes = async context => {
-    const types = await elite2Api.getAlertTypes(context)
+    const types = await prisonApi.getAlertTypes(context)
     const alertTypes = types.map(type => ({
       value: type.code,
       description: type.description,

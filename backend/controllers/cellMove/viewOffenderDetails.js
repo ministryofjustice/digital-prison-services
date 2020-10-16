@@ -3,7 +3,7 @@ const { putLastNameFirst } = require('../../utils')
 const { getBackLinkData } = require('./cellMoveUtils')
 const getValueByType = require('../../shared/getValueByType')
 
-module.exports = ({ elite2Api, logError }) => async (req, res) => {
+module.exports = ({ prisonApi, logError }) => async (req, res) => {
   const { offenderNo } = req.params
 
   try {
@@ -16,8 +16,8 @@ module.exports = ({ elite2Api, logError }) => async (req, res) => {
       profileInformation,
       physicalAttributes,
       assignedLivingUnit,
-    } = await elite2Api.getDetails(res.locals, offenderNo, true)
-    const mainOffence = await elite2Api.getMainOffence(res.locals, bookingId)
+    } = await prisonApi.getDetails(res.locals, offenderNo, true)
+    const mainOffence = await prisonApi.getMainOffence(res.locals, bookingId)
     const { ethnicity, raceCode } = physicalAttributes || {}
 
     return res.render('cellMove/offenderDetails.njk', {

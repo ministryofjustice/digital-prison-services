@@ -1,9 +1,9 @@
 Reflect.deleteProperty(process.env, 'APPINSIGHTS_INSTRUMENTATIONKEY')
 const moment = require('moment')
-const { elite2ApiFactory } = require('../api/elite2Api')
+const { prisonApiFactory } = require('../api/prisonApi')
 const factory = require('../controllers/attendance/houseblockList').getHouseblockListFactory
 
-const elite2Api = elite2ApiFactory(null)
+const prisonApi = prisonApiFactory(null)
 const whereaboutsApi = {}
 const config = {
   app: {
@@ -11,7 +11,7 @@ const config = {
   },
 }
 const houseblockList = require('../controllers/attendance/houseblockList').getHouseblockListFactory(
-  elite2Api,
+  prisonApi,
   whereaboutsApi,
   config
 ).getHouseblockList
@@ -183,12 +183,12 @@ function createMultipleUnpaid() {
 
 describe('Houseblock list controller', () => {
   beforeEach(() => {
-    elite2Api.getHouseblockList = jest.fn()
-    elite2Api.getSentenceData = jest.fn()
-    elite2Api.getExternalTransfers = jest.fn()
-    elite2Api.getCourtEvents = jest.fn()
-    elite2Api.getAlerts = jest.fn()
-    elite2Api.getAssessments = jest.fn()
+    prisonApi.getHouseblockList = jest.fn()
+    prisonApi.getSentenceData = jest.fn()
+    prisonApi.getExternalTransfers = jest.fn()
+    prisonApi.getCourtEvents = jest.fn()
+    prisonApi.getAlerts = jest.fn()
+    prisonApi.getAssessments = jest.fn()
     whereaboutsApi.getAbsenceReasons = jest.fn()
     whereaboutsApi.getAttendanceForBookings = jest.fn()
     whereaboutsApi.getAttendanceForBookings.mockReturnValue([])
@@ -200,12 +200,12 @@ describe('Houseblock list controller', () => {
   })
 
   it('Should add visit and appointment details to array', async () => {
-    elite2Api.getHouseblockList.mockImplementationOnce(() => createResponse())
+    prisonApi.getHouseblockList.mockImplementationOnce(() => createResponse())
 
     const response = await houseblockList({})
 
     expect(whereaboutsApi.getAgencyGroupLocations.mock.calls.length).toBe(1)
-    expect(elite2Api.getHouseblockList.mock.calls.length).toBe(1)
+    expect(prisonApi.getHouseblockList.mock.calls.length).toBe(1)
 
     expect(response.length).toBe(4)
 
@@ -255,29 +255,29 @@ describe('Houseblock list controller', () => {
 
   it('Should pass location Ids to getHouseblockList', async () => {
     whereaboutsApi.getAgencyGroupLocations.mockReturnValue([{ locationId: 1 }, { locationId: 2 }])
-    elite2Api.getHouseblockList.mockImplementationOnce(() => createResponse())
+    prisonApi.getHouseblockList.mockImplementationOnce(() => createResponse())
 
     await houseblockList({})
 
     expect(whereaboutsApi.getAgencyGroupLocations.mock.calls.length).toBe(1)
-    expect(elite2Api.getHouseblockList.mock.calls.length).toBe(1)
-    expect(elite2Api.getHouseblockList.mock.calls[0][2]).toStrictEqual([1, 2])
+    expect(prisonApi.getHouseblockList.mock.calls.length).toBe(1)
+    expect(prisonApi.getHouseblockList.mock.calls[0][2]).toStrictEqual([1, 2])
   })
 
   it('Should not retrieve houseblock list if no cell locations in wing', async () => {
     whereaboutsApi.getAgencyGroupLocations = jest.fn()
     whereaboutsApi.getAgencyGroupLocations.mockReturnValue([])
-    elite2Api.getHouseblockList.mockImplementationOnce(() => createResponse())
+    prisonApi.getHouseblockList.mockImplementationOnce(() => createResponse())
 
     const response = await houseblockList({})
 
     expect(whereaboutsApi.getAgencyGroupLocations.mock.calls.length).toBe(1)
-    expect(elite2Api.getHouseblockList.mock.calls.length).toBe(0)
+    expect(prisonApi.getHouseblockList.mock.calls.length).toBe(0)
     expect(response).toStrictEqual([])
   })
 
   it('Should correctly choose main activity', async () => {
-    elite2Api.getHouseblockList.mockImplementationOnce(() => createMultipleActivities())
+    prisonApi.getHouseblockList.mockImplementationOnce(() => createMultipleActivities())
 
     const response = await houseblockList({})
 
@@ -295,7 +295,7 @@ describe('Houseblock list controller', () => {
   })
 
   it('Should correctly choose between multiple unpaid', async () => {
-    elite2Api.getHouseblockList.mockImplementationOnce(() => createMultipleUnpaid())
+    prisonApi.getHouseblockList.mockImplementationOnce(() => createMultipleUnpaid())
 
     const response = await houseblockList({})
 
@@ -312,34 +312,34 @@ describe('Houseblock list controller', () => {
   })
 
   it('Should handle no response data', async () => {
-    elite2Api.getHouseblockList.mockImplementationOnce(() => [])
+    prisonApi.getHouseblockList.mockImplementationOnce(() => [])
 
     const response = await houseblockList({})
 
-    expect(elite2Api.getHouseblockList.mock.calls.length).toBe(1)
+    expect(prisonApi.getHouseblockList.mock.calls.length).toBe(1)
     expect(response.length).toBe(0)
 
-    expect(elite2Api.getSentenceData.mock.calls.length).toBe(0)
-    expect(elite2Api.getCourtEvents.mock.calls.length).toBe(0)
-    expect(elite2Api.getExternalTransfers.mock.calls.length).toBe(0)
+    expect(prisonApi.getSentenceData.mock.calls.length).toBe(0)
+    expect(prisonApi.getCourtEvents.mock.calls.length).toBe(0)
+    expect(prisonApi.getExternalTransfers.mock.calls.length).toBe(0)
   })
 
   it('should fetch sentence data for all offenders in a house block', async () => {
-    elite2Api.getHouseblockList.mockImplementationOnce(() => createMultipleUnpaid())
+    prisonApi.getHouseblockList.mockImplementationOnce(() => createMultipleUnpaid())
 
     await houseblockList({})
 
     const offenderNumbers = createMultipleUnpaid().map(e => e.offenderNo)
 
-    expect(elite2Api.getSentenceData).toHaveBeenCalledWith({}, distinct(offenderNumbers))
+    expect(prisonApi.getSentenceData).toHaveBeenCalledWith({}, distinct(offenderNumbers))
   })
 
   it('should return multiple scheduled transfers along with status descriptions', async () => {
     const today = moment()
 
-    elite2Api.getHouseblockList.mockImplementationOnce(() => createMultipleUnpaid())
+    prisonApi.getHouseblockList.mockImplementationOnce(() => createMultipleUnpaid())
 
-    elite2Api.getExternalTransfers.mockImplementationOnce(() => [
+    prisonApi.getExternalTransfers.mockImplementationOnce(() => [
       {
         firstName: 'BYSJANHKUMAR',
         lastName: 'HENRINEE',
@@ -394,7 +394,7 @@ describe('Houseblock list controller', () => {
 
   describe('Attendance information', () => {
     it('should call getAttendance with correct parameters', async () => {
-      elite2Api.getHouseblockList.mockImplementationOnce(() => createResponse())
+      prisonApi.getHouseblockList.mockImplementationOnce(() => createResponse())
 
       await houseblockList({}, 'LEI', 'Houseblock 1', '15/10/2017', 'PM')
 
@@ -405,7 +405,7 @@ describe('Houseblock list controller', () => {
     })
 
     it('should load attendance details for a list of booking ids', async () => {
-      elite2Api.getHouseblockList.mockImplementationOnce(() => [
+      prisonApi.getHouseblockList.mockImplementationOnce(() => [
         {
           bookingId: 1,
           eventId: 10,
@@ -628,14 +628,14 @@ describe('Houseblock list controller', () => {
     })
 
     it('should not call getAttendanceForBookings if there are no offenders', async () => {
-      elite2Api.getHouseblockList.mockImplementationOnce(() => [])
+      prisonApi.getHouseblockList.mockImplementationOnce(() => [])
       await houseblockList({}, 'LEI', 'Houseblock 1', '15/10/2017', 'PM')
 
       expect(whereaboutsApi.getAttendanceForBookings).not.toHaveBeenCalled()
     })
 
     it('should only request attendance for prison that have been enabled', async () => {
-      elite2Api.getHouseblockList.mockReturnValue([
+      prisonApi.getHouseblockList.mockReturnValue([
         {
           bookingId: 1,
           eventId: 10,
@@ -652,7 +652,7 @@ describe('Houseblock list controller', () => {
         },
       ])
       whereaboutsApi.getAttendanceForBookings.mockReturnValue([])
-      const { getHouseblockList: service } = factory(elite2Api, whereaboutsApi, {
+      const { getHouseblockList: service } = factory(prisonApi, whereaboutsApi, {
         app: {
           production: true,
         },
@@ -666,7 +666,7 @@ describe('Houseblock list controller', () => {
     })
 
     it('should enable attendance for everyone in dev', async () => {
-      elite2Api.getHouseblockList.mockReturnValue([
+      prisonApi.getHouseblockList.mockReturnValue([
         {
           bookingId: 1,
           eventId: 10,
@@ -683,7 +683,7 @@ describe('Houseblock list controller', () => {
         },
       ])
       whereaboutsApi.getAttendanceForBookings.mockReturnValue([])
-      const { getHouseblockList: service } = factory(elite2Api, whereaboutsApi, {
+      const { getHouseblockList: service } = factory(prisonApi, whereaboutsApi, {
         app: {
           production: false,
         },
@@ -791,7 +791,7 @@ describe('Houseblock list controller', () => {
     ]
 
     it('should return only offenders leaving the wing', async () => {
-      elite2Api.getHouseblockList.mockImplementationOnce(() => responseWithOneLeavingWing)
+      prisonApi.getHouseblockList.mockImplementationOnce(() => responseWithOneLeavingWing)
 
       const response = await houseblockList({}, 'LEI', 'Houseblock 1', '15/10/2017', 'ED', 'leaving')
 
@@ -854,7 +854,7 @@ describe('Houseblock list controller', () => {
     })
 
     it('should return only offenders staying on the wing', async () => {
-      elite2Api.getHouseblockList.mockImplementationOnce(() => responseWithOneLeavingWing)
+      prisonApi.getHouseblockList.mockImplementationOnce(() => responseWithOneLeavingWing)
 
       const response = await houseblockList({}, 'LEI', 'Houseblock 1', '15/10/2017', 'ED', 'staying')
 

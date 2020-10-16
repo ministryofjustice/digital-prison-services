@@ -1,13 +1,13 @@
 const currentUser = require('./currentUser')
 
 describe('Current user', () => {
-  const elite2Api = {}
+  const prisonApi = {}
   const oauthApi = {}
   let req
   let res
 
   beforeEach(() => {
-    elite2Api.userCaseLoads = jest.fn()
+    prisonApi.userCaseLoads = jest.fn()
     oauthApi.currentUser = jest.fn()
 
     oauthApi.currentUser.mockReturnValue({
@@ -18,11 +18,11 @@ describe('Current user', () => {
     req = { session: {} }
     res = { locals: {} }
 
-    elite2Api.userCaseLoads.mockReturnValue([{ caseLoadId: 'MDI', description: 'Moorland' }])
+    prisonApi.userCaseLoads.mockReturnValue([{ caseLoadId: 'MDI', description: 'Moorland' }])
   })
 
   it('should request and store user details', async () => {
-    const controller = currentUser({ elite2Api, oauthApi })
+    const controller = currentUser({ prisonApi, oauthApi })
 
     await controller(req, res, () => {})
 
@@ -34,16 +34,16 @@ describe('Current user', () => {
   })
 
   it('should request and store user case loads', async () => {
-    const controller = currentUser({ elite2Api, oauthApi })
+    const controller = currentUser({ prisonApi, oauthApi })
 
     await controller(req, res, () => {})
 
-    expect(elite2Api.userCaseLoads).toHaveBeenCalled()
+    expect(prisonApi.userCaseLoads).toHaveBeenCalled()
     expect(req.session.allCaseloads).toEqual([{ caseLoadId: 'MDI', description: 'Moorland' }])
   })
 
   it('should stash data into res.locals', async () => {
-    const controller = currentUser({ elite2Api, oauthApi })
+    const controller = currentUser({ prisonApi, oauthApi })
 
     await controller(req, res, () => {})
 
@@ -63,7 +63,7 @@ describe('Current user', () => {
   })
 
   it('ignore xhr requests', async () => {
-    const controller = currentUser({ elite2Api, oauthApi })
+    const controller = currentUser({ prisonApi, oauthApi })
     req.xhr = true
 
     const next = jest.fn()
@@ -71,7 +71,7 @@ describe('Current user', () => {
     await controller(req, res, next)
 
     expect(oauthApi.currentUser.mock.calls.length).toEqual(0)
-    expect(elite2Api.userCaseLoads.mock.calls.length).toEqual(0)
+    expect(prisonApi.userCaseLoads.mock.calls.length).toEqual(0)
     expect(next).toHaveBeenCalled()
   })
 })

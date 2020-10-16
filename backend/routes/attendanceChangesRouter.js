@@ -44,7 +44,7 @@ const sortByLastNameThenByDate = activitiesMap => (left, right) => {
 
   return 0
 }
-module.exports = ({ elite2Api, whereaboutsApi, oauthApi, logError }) => async (req, res) => {
+module.exports = ({ prisonApi, whereaboutsApi, oauthApi, logError }) => async (req, res) => {
   try {
     const { agencyId, fromDateTime, toDateTime, subHeading } = req.query
 
@@ -62,7 +62,7 @@ module.exports = ({ elite2Api, whereaboutsApi, oauthApi, logError }) => async (r
     }
 
     const eventIds = [...new Set(changes.map(change => change.eventId))]
-    const activities = await elite2Api.getScheduledActivities(res.locals, { agencyId, eventIds })
+    const activities = await prisonApi.getScheduledActivities(res.locals, { agencyId, eventIds })
 
     const userNames = [...new Set(changes.map(change => change.changedBy))]
     const userDetails = await Promise.all(userNames.map(username => oauthApi.userDetails(res.locals, username)))
