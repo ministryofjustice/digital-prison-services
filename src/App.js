@@ -17,7 +17,6 @@ import ResultsActivityContainer from './ResultsActivity/ResultsActivityContainer
 import GlobalSearchContainer from './GlobalSearch/GlobalSearchContainer'
 
 import links from './links'
-import MovementsInContainer from './MovementsIn/MovementsInContainer'
 import MovementsOutContainer from './MovementsOut/MovementsOutContainer'
 
 import routePaths from './routePaths'
@@ -319,12 +318,6 @@ class App extends React.Component {
             )}
           />
           <Route exact path="/dashboard" render={() => <Dashboard />} />
-
-          <Route
-            exact
-            path={routePaths.inToday}
-            render={({ history }) => <MovementsInContainer handleError={this.handleError} history={history} />}
-          />
 
           <Route
             exact

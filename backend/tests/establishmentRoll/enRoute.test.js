@@ -21,6 +21,7 @@ describe('En route test', () => {
       movementReasonDescription: 'Normal transfer',
       location: 'LEI-A-01-011',
       alerts: ['XR'],
+      category: 'A',
     },
     {
       offenderNo: 'G0000AA',
@@ -33,6 +34,7 @@ describe('En route test', () => {
       movementReasonDescription: 'Normal transfer',
       location: 'LEI-A-02-011',
       alerts: [],
+      category: 'C',
     },
   ]
   beforeEach(() => {
@@ -76,6 +78,7 @@ describe('En route test', () => {
             from: 'Hull (HMP)',
             reason: 'Normal transfer',
             alerts: [{ alertCodes: ['XR'], classes: 'alert-status alert-status--racist', label: 'Racist' }],
+            category: 'A',
           },
           {
             alerts: [],
@@ -85,6 +88,7 @@ describe('En route test', () => {
             name: 'Aaaaa, Aaaaa',
             offenderNo: 'G0000AA',
             reason: 'Normal transfer',
+            category: 'C',
           },
         ],
       })

@@ -16,6 +16,7 @@ const inReceptionResponse = [
     toCity: '',
     alerts: ['XVL', 'HS', 'RKS', 'RKC', 'ROH', 'P2', 'RSS', 'XER', 'C1', 'OHCO', 'LCE', 'PVN', 'HA', 'HA2'],
     iepLevel: 'Dom Test',
+    category: 'C',
   },
 ]
 
@@ -86,6 +87,7 @@ describe('In reception controller', () => {
           iepLevel: 'Dom Test',
           name: 'Abdentine, Ozrashigh',
           offenderNo: 'G7138GQ',
+          category: 'C',
         },
       ],
     })

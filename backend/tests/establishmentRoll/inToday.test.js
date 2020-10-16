@@ -1,13 +1,13 @@
-const currentlyOut = require('../../controllers/establishmentRoll/currentlyOut')
+const inToday = require('../../controllers/establishmentRoll/inToday')
 
 const movementsService = {}
 
-describe('Currently out', () => {
+describe('In today', () => {
   let logError
   let controller
-  const livingUnitId = 1234
-  const req = { originalUrl: 'http://localhost', params: { livingUnitId } }
-  const res = { locals: {} }
+  const agencyId = 'LEI'
+  const req = { originalUrl: 'http://localhost' }
+  const res = { locals: { user: { activeCaseLoad: { caseLoadId: 'LEI', description: 'Leeds' } } } }
   const offenders = [
     {
       offenderNo: 'A1234AA',
@@ -15,11 +15,11 @@ describe('Currently out', () => {
       firstName: 'AAAAB',
       lastName: 'AAAAA',
       iepLevel: 'Basic',
-      fromAgency: 'LEI',
-      location: 'LEI-1-1',
-      toCity: 'Somewhere',
+      fromAgency: 'MDI',
+      fromAgencyDescription: 'Moorland (HMP)',
+      location: 'MDI-1-1',
       alerts: [],
-      commentText: 'Comments',
+      movementTime: '11:11:11',
       category: 'C',
     },
     {
@@ -28,67 +28,64 @@ describe('Currently out', () => {
       firstName: 'AAAAA',
       lastName: 'AAAAA',
       iepLevel: 'Enhanced',
-      fromAgency: 'LEI',
-      location: 'LEI-1-2',
-      toCity: 'Somewhere Else',
+      fromCity: 'Leeds',
       alerts: ['XR'],
-      commentText: 'Comments',
+      movementTime: '12:12:12',
       category: 'A',
     },
   ]
   beforeEach(() => {
-    movementsService.getOffendersCurrentlyOutOfLivingUnit = jest.fn()
+    movementsService.getMovementsIn = jest.fn()
     logError = jest.fn()
-    controller = currentlyOut({ movementsService, logError })
+    controller = inToday({ movementsService, logError })
     res.render = jest.fn()
   })
 
   it('should call the currently out endpoint', async () => {
     await controller(req, res)
 
-    expect(movementsService.getOffendersCurrentlyOutOfLivingUnit).toHaveBeenCalledWith(res.locals, livingUnitId)
+    expect(movementsService.getMovementsIn).toHaveBeenCalledWith(res.locals, agencyId)
   })
 
   it('should return right error message', async () => {
-    movementsService.getOffendersCurrentlyOutOfLivingUnit.mockRejectedValue(new Error('error'))
+    movementsService.getMovementsIn.mockRejectedValue(new Error('error'))
     await controller(req, res)
 
-    expect(logError).toHaveBeenCalledWith(req.originalUrl, new Error('error'), 'Failed to load currently out page')
+    expect(logError).toHaveBeenCalledWith(req.originalUrl, new Error('error'), 'Failed to load in today page')
     expect(res.render).toHaveBeenCalledWith('error.njk', {
-      url: '/establishment-roll/currently-out',
+      url: '/establishment-roll/in-today',
       homeUrl: 'http://localhost:3000/',
     })
   })
 
   it('should return response with data', async () => {
-    movementsService.getOffendersCurrentlyOutOfLivingUnit.mockReturnValue({ location: 'A', currentlyOut: offenders })
+    movementsService.getMovementsIn.mockReturnValue(offenders)
     await controller(req, res)
 
     expect(res.render).toHaveBeenCalledWith(
-      'establishmentRoll/currentlyOut.njk',
+      'establishmentRoll/inToday.njk',
       expect.objectContaining({
-        livingUnitName: 'A',
         results: [
           {
             alerts: [],
-            comment: 'Comments',
-            currentLocation: 'Somewhere',
             dob: '01/01/1980',
             incentiveLevel: 'Basic',
             location: '1-1',
             name: 'Aaaaa, Aaaab',
             offenderNo: 'A1234AA',
+            arrivedFrom: 'Moorland (HMP)',
+            timeIn: '11:11',
             category: 'C',
           },
           {
             alerts: [{ alertCodes: ['XR'], classes: 'alert-status alert-status--racist', label: 'Racist' }],
-            comment: 'Comments',
-            currentLocation: 'Somewhere Else',
             dob: '31/12/1980',
             incentiveLevel: 'Enhanced',
-            location: '1-2',
             name: 'Aaaaa, Aaaaa',
             offenderNo: 'G0000AA',
+            location: undefined,
+            arrivedFrom: 'Leeds',
+            timeIn: '12:12',
             category: 'A',
           },
         ],

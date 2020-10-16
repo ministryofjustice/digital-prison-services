@@ -27,6 +27,7 @@ module.exports = ({ movementsService, logError }) => async (req, res) => {
           currentLocation: offender.toCity,
           comment: offender.commentText,
           alerts,
+          category: offender.category,
         }
       })
 

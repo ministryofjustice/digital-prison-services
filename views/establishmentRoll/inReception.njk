@@ -1,5 +1,6 @@
 {% extends "../partials/layout.njk" %}
 {% from "../macros/alertFlags.njk" import alertFlags %}
+{% from "../macros/categoryFlag.njk" import categoryFlag %}
 
 {% block beforeContent %}
     {{ govukBreadcrumbs({
@@ -58,6 +59,7 @@
                              {% if offender.alerts.length > 0 %}
                                 {{ alertFlags(offender.alerts) }}
                              {% endif %}
+                             {{ categoryFlag('', offender.category, false) }}
                          </td>
                      </tr>
                 {% endfor %}

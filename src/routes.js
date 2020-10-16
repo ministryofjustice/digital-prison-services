@@ -6,11 +6,7 @@ export default [
   { path: '/', breadcrumb: null },
   { path: '/content', breadcrumb: null },
   { path: '/content/whats-new', breadcrumb: "What's new" },
-  { path: '/establishment-roll/in-today', breadcrumb: 'In today' },
   { path: '/establishment-roll/out-today', breadcrumb: 'Out today' },
-  { path: '/establishment-roll/en-route', breadcrumb: 'En route' },
-  { path: '/establishment-roll/total-currently-out', breadcrumb: 'Total currently out' },
-  { path: '/establishment-roll/:livingUnitId', breadcrumb: null },
 
   { path: '/offenders', breadcrumb: null },
   { path: '/offenders/:offenderNo', breadcrumb: OffenderBreadcrumb, renderDirectly: true },
