@@ -69,6 +69,13 @@
 {% endblock %}
 
 {% block content %}
+    {% if errors.length > 0 %}
+        {{ govukErrorSummary({
+            titleText: "There is a problem",
+            errorList: errors,
+            attributes: { 'data-qa-errors': true }
+        }) }}
+      {% endif %}
   <div class="govuk-grid-row">
     <div class="govuk-grid-column-full">
       <h1 class="govuk-heading-l">
@@ -78,14 +85,6 @@
             <span class="govuk-!-font-weight-bold">Prison number:</span> <span
                     id="offenderNo">{{ offenderNo }}</span>
         </div>
-
-      {% if errors.length > 0 %}
-        {{ govukErrorSummary({
-            titleText: "There is a problem",
-            errorList: errors,
-            attributes: { 'data-qa-errors': true }
-        }) }}
-      {% endif %}
 
       <form method="POST" novalidate="novalidate">
         <input type="hidden" name="_csrf" value="{{ csrfToken }}" />

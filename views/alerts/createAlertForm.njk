@@ -27,18 +27,17 @@
 {% endblock %}
 
 {% block content %}
+    {% if errors.length > 0 %}
+      {{ govukErrorSummary({
+          titleText: "There is a problem",
+          errorList: errors,
+          attributes: { 'data-qa-errors': true }
+      }) }}
+    {% endif %}
       <h1 class="govuk-heading-l">
         {{title}}
         <span class="govuk-caption-l">Prison number: {{offenderNo}}</span>
       </h1>
-
-      {% if errors.length > 0 %}
-        {{ govukErrorSummary({
-            titleText: "There is a problem",
-            errorList: errors,
-            attributes: { 'data-qa-errors': true }
-        }) }}
-      {% endif %}
 
   <input type="hidden" name="subTypeUrl" value="{{ alertsRootUrl }}"/>
 
