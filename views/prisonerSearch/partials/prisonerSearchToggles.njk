@@ -1,6 +1,6 @@
 <div class="prisoner-search__toggles">
   {% set listActiveClass = "prisoner-search__toggles__toggle--active" if view !== 'grid'  %}
-  <a href="{{ searchUrl }}" class="{{ 'govuk-body prisoner-search__toggles__toggle prisoner-search__toggles__toggle--list ' + listActiveClass }}">
+  <a href="{{ links.listView }}" class="{{ 'govuk-body prisoner-search__toggles__toggle prisoner-search__toggles__toggle--list ' + listActiveClass }}">
     <span>List</span>
     <svg width="19.7px" height="15.6px" style="margin-left: 10px;">
       <g>
@@ -14,7 +14,7 @@
   </a>
   
   {% set gridActiveClass = "prisoner-search__toggles__toggle--active" if view === 'grid'  %}
-  <a href="{{ searchUrl + '&view=grid' }}" class="{{ 'govuk-body prisoner-search__toggles__toggle prisoner-search__toggles__toggle--grid ' + gridActiveClass }}">
+  <a href="{{ links.gridView }}" class="{{ 'govuk-body prisoner-search__toggles__toggle prisoner-search__toggles__toggle--grid ' + gridActiveClass }}">
     <span>Grid</span>
     <svg width="17.9px" height="15.6px" style="margin-left: 10px;">
       <g>
