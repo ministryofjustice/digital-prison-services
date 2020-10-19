@@ -1,8 +1,8 @@
-.results-table {
+.f {
   &__results {
       overflow: auto;
 
-      img {
+      &__image {
         width: 90px;
 
         @media print {
