@@ -287,7 +287,7 @@ describe('Prisoner search', () => {
       )
     })
 
-    it('should render template with search url containing view type and printed values', async () => {
+    it('should render template with correct urls containing view type and printed values', async () => {
       req.baseUrl = '/prisoner-search'
       req.query = {
         alerts: ['HA', 'HA1'],
@@ -301,7 +301,14 @@ describe('Prisoner search', () => {
       expect(res.render).toHaveBeenCalledWith(
         'prisonerSearch/prisonerSearch.njk',
         expect.objectContaining({
-          searchUrl: '/prisoner-search?location=MDI&keywords=Smith&alerts%5B%5D=HA&alerts%5B%5D=HA1&pageOffsetOption=',
+          links: {
+            allResults:
+              '/prisoner-search?alerts=HA&alerts=HA1&keywords=Smith&location=MDI&view=grid&alerts%5B%5D=HA&alerts%5B%5D=HA1&viewAll=true&pageLimitOption=0',
+            gridView:
+              '/prisoner-search?alerts=HA&alerts=HA1&keywords=Smith&location=MDI&view=grid&alerts%5B%5D=HA&alerts%5B%5D=HA1',
+            listView:
+              '/prisoner-search?alerts=HA&alerts=HA1&keywords=Smith&location=MDI&view=list&alerts%5B%5D=HA&alerts%5B%5D=HA1',
+          },
           view: 'grid',
           printedValues: {
             alerts: ['ACCT open', 'ACCT post closure'],
