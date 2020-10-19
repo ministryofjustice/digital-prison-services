@@ -29,7 +29,7 @@ const adjudicationsHistoryService = require('../services/adjudicationHistory')
 const router = express.Router({ mergeParams: true })
 
 const controller = ({
-  elite2Api,
+  prisonApi,
   keyworkerApi,
   oauthApi,
   caseNotesApi,
@@ -41,7 +41,7 @@ const controller = ({
   socApi,
 }) => {
   const prisonerProfileService = prisonerProfileServiceFactory({
-    elite2Api,
+    prisonApi,
     keyworkerApi,
     oauthApi,
     dataComplianceApi,
@@ -50,26 +50,26 @@ const controller = ({
     socApi,
     allocationManagerApi,
   })
-  const personService = personServiceFactory(elite2Api)
-  const referenceCodesService = referenceCodesServiceFactory(elite2Api)
-  const adjudicationHistoryService = adjudicationsHistoryService(elite2Api)
+  const personService = personServiceFactory(prisonApi)
+  const referenceCodesService = referenceCodesServiceFactory(prisonApi)
+  const adjudicationHistoryService = adjudicationsHistoryService(prisonApi)
 
-  router.get('/', prisonerQuickLook({ prisonerProfileService, elite2Api, logError }))
-  router.get('/image', prisonerFullImage({ elite2Api, logError }))
+  router.get('/', prisonerQuickLook({ prisonerProfileService, prisonApi, logError }))
+  router.get('/image', prisonerFullImage({ prisonApi, logError }))
   router.get(
     '/personal',
-    prisonerPersonal({ prisonerProfileService, personService, elite2Api, allocationManagerApi, logError })
+    prisonerPersonal({ prisonerProfileService, personService, prisonApi, allocationManagerApi, logError })
   )
   router.get(
     '/alerts',
-    prisonerAlerts({ prisonerProfileService, referenceCodesService, paginationService, elite2Api, oauthApi, logError })
+    prisonerAlerts({ prisonerProfileService, referenceCodesService, paginationService, prisonApi, oauthApi, logError })
   )
   router.get(
     '/case-notes',
     prisonerCaseNotes({
       caseNotesApi,
       prisonerProfileService,
-      elite2Api,
+      prisonApi,
       paginationService: paginationServiceV2,
       nunjucks,
       logError,
@@ -77,38 +77,38 @@ const controller = ({
   )
   router.get(
     '/sentence-and-release',
-    prisonerSentenceAndRelease({ prisonerProfileService, elite2Api, systemOauthClient, logError })
+    prisonerSentenceAndRelease({ prisonerProfileService, prisonApi, systemOauthClient, logError })
   )
-  router.get('/visits', prisonerVisits({ elite2Api, logError }))
-  router.get('/schedule', prisonerSchedule({ elite2Api, logError }))
+  router.get('/visits', prisonerVisits({ prisonApi, logError }))
+  router.get('/schedule', prisonerSchedule({ prisonApi, logError }))
   router.get(
     '/professional-contacts',
-    prisonerProfessionalContacts({ elite2Api, personService, allocationManagerApi, logError })
+    prisonerProfessionalContacts({ prisonApi, personService, allocationManagerApi, logError })
   )
 
-  router.get('/cell-history', prisonerCellHistory({ oauthApi, elite2Api, logError }))
-  router.get('/location-history', prisonerLocationHistory({ elite2Api, logError }))
+  router.get('/cell-history', prisonerCellHistory({ oauthApi, prisonApi, logError }))
+  router.get('/location-history', prisonerLocationHistory({ prisonApi, logError }))
 
-  router.get('/adjudications/:adjudicationNumber', prisonerAdjudicationDetails({ elite2Api, logError }))
+  router.get('/adjudications/:adjudicationNumber', prisonerAdjudicationDetails({ prisonApi, logError }))
 
   router.use(
     '/adjudications',
     adjudicationsController({
       adjudicationHistoryService,
       paginationService,
-      elite2Api,
+      prisonApi,
       logError,
     })
   )
 
-  router.get('/incentive-level-details', prisonerIncentiveLevelDetails({ elite2Api, oauthApi, logError }))
+  router.get('/incentive-level-details', prisonerIncentiveLevelDetails({ prisonApi, oauthApi, logError }))
   router.get(
     '/incentive-level-details/change-incentive-level',
-    prisonerChangeIncentiveLevelDetails({ elite2Api, logError }).index
+    prisonerChangeIncentiveLevelDetails({ prisonApi, logError }).index
   )
   router.post(
     '/incentive-level-details/change-incentive-level',
-    prisonerChangeIncentiveLevelDetails({ elite2Api, logError }).post
+    prisonerChangeIncentiveLevelDetails({ prisonApi, logError }).post
   )
 
   return router

@@ -10,7 +10,7 @@ services:
       - '3002:3002'
     depends_on:
       - oauth
-      - elite2
+      - prisonApi
       - whereaboutsapi
       - redis
     environment:
@@ -29,9 +29,9 @@ services:
       - SERVER_PORT=8080
       - SPRING_PROFILES_ACTIVE=dev
 
-  elite2:
+  prisonApi:
     image: quay.io/hmpps/prison-api:latest
-    container_name: elite2_psf
+    container_name: prisonApi_psf
     depends_on:
       - oauth
     ports:

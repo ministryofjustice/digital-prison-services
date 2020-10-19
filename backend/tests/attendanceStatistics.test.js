@@ -6,7 +6,7 @@ const mockDateToSunday012017 = () => jest.spyOn(Date, 'now').mockImplementation(
 describe('Attendance reason statistics', () => {
   const context = {}
   const oauthApi = {}
-  const elite2Api = {}
+  const prisonApi = {}
   const whereaboutsApi = {}
   const agencyId = 'LEI'
   const date = '10/10/2019'
@@ -36,8 +36,8 @@ describe('Attendance reason statistics', () => {
 
   beforeEach(() => {
     oauthApi.currentUser = jest.fn()
-    elite2Api.userCaseLoads = jest.fn()
-    elite2Api.getOffenderActivitiesOverDateRange = jest.fn()
+    prisonApi.userCaseLoads = jest.fn()
+    prisonApi.getOffenderActivitiesOverDateRange = jest.fn()
     oauthApi.userRoles = jest.fn()
     whereaboutsApi.getAttendanceStats = jest.fn()
     whereaboutsApi.getAbsences = jest.fn()
@@ -47,8 +47,8 @@ describe('Attendance reason statistics', () => {
 
     whereaboutsApi.getAttendanceChanges.mockReturnValue({ changes: [] })
 
-    elite2Api.userCaseLoads.mockReturnValue([{ caseLoadId: 'LEI', description: 'Leeds (HMP)', currentlyActive: true }])
-    elite2Api.getOffenderActivitiesOverDateRange.mockReturnValue([])
+    prisonApi.userCaseLoads.mockReturnValue([{ caseLoadId: 'LEI', description: 'Leeds (HMP)', currentlyActive: true }])
+    prisonApi.getOffenderActivitiesOverDateRange.mockReturnValue([])
     oauthApi.currentUser.mockReturnValue({
       username: 'USER_ADM',
       active: true,
@@ -71,11 +71,11 @@ describe('Attendance reason statistics', () => {
     const mockReq = { originalUrl: '/manage-prisoner-whereabouts/attendance-reason-statistics' }
 
     it('should redirect to /manage-prisoner-whereabouts/attendance-reason-statistics with default parameters when none was present', async () => {
-      const { attendanceStatistics } = attendanceStatisticsFactory(oauthApi, elite2Api, whereaboutsApi)
+      const { attendanceStatistics } = attendanceStatisticsFactory(oauthApi, prisonApi, whereaboutsApi)
 
       mockDateToSunday012017()
 
-      elite2Api.userCaseLoads.mockReturnValue([
+      prisonApi.userCaseLoads.mockReturnValue([
         {
           currentlyActive: true,
           caseLoadId: 'LEI',
@@ -99,7 +99,7 @@ describe('Attendance reason statistics', () => {
 
       whereaboutsApi.getAttendanceStats.mockReturnValue(stats)
 
-      const { attendanceStatistics } = attendanceStatisticsFactory(oauthApi, elite2Api, whereaboutsApi, jest.fn())
+      const { attendanceStatistics } = attendanceStatisticsFactory(oauthApi, prisonApi, whereaboutsApi, jest.fn())
 
       const req = { query: { agencyId, toDate, fromDate, period: null } }
       const res = { render: jest.fn(), locals: context }
@@ -116,7 +116,7 @@ describe('Attendance reason statistics', () => {
     })
 
     it('should validate against future fromDate', async () => {
-      const { attendanceStatistics } = attendanceStatisticsFactory(oauthApi, elite2Api, whereaboutsApi, jest.fn())
+      const { attendanceStatistics } = attendanceStatisticsFactory(oauthApi, prisonApi, whereaboutsApi, jest.fn())
 
       const tomorrow = moment()
         .add(1, 'days')
@@ -142,7 +142,7 @@ describe('Attendance reason statistics', () => {
       mockDateToSunday012017()
       whereaboutsApi.getAttendanceStats.mockReturnValue(stats)
 
-      const { attendanceStatistics } = attendanceStatisticsFactory(oauthApi, elite2Api, whereaboutsApi, jest.fn())
+      const { attendanceStatistics } = attendanceStatisticsFactory(oauthApi, prisonApi, whereaboutsApi, jest.fn())
 
       const req = { query: { agencyId, toDate, fromDate, period } }
       const res = { render: jest.fn(), locals: context }
@@ -164,7 +164,7 @@ describe('Attendance reason statistics', () => {
       mockDateToSunday012017()
       whereaboutsApi.getAttendanceStats.mockReturnValue(stats)
 
-      const { attendanceStatistics } = attendanceStatisticsFactory(oauthApi, elite2Api, whereaboutsApi, jest.fn())
+      const { attendanceStatistics } = attendanceStatisticsFactory(oauthApi, prisonApi, whereaboutsApi, jest.fn())
 
       const req = { query: { agencyId, toDate, fromDate, period } }
       const res = { render: jest.fn(), locals: context }
@@ -187,7 +187,7 @@ describe('Attendance reason statistics', () => {
 
       whereaboutsApi.getAttendanceStats.mockReturnValue(stats)
 
-      const { attendanceStatistics } = attendanceStatisticsFactory(oauthApi, elite2Api, whereaboutsApi, jest.fn())
+      const { attendanceStatistics } = attendanceStatisticsFactory(oauthApi, prisonApi, whereaboutsApi, jest.fn())
 
       const req = { query: { agencyId, toDate, fromDate, period } }
       const res = { render: jest.fn(), locals: context }
@@ -206,7 +206,7 @@ describe('Attendance reason statistics', () => {
     })
 
     it('should validate that the date range does not exceed two weeks', async () => {
-      const { attendanceStatistics } = attendanceStatisticsFactory(oauthApi, elite2Api, whereaboutsApi, jest.fn())
+      const { attendanceStatistics } = attendanceStatisticsFactory(oauthApi, prisonApi, whereaboutsApi, jest.fn())
 
       const today = moment().format('DD/MM/YYYY')
       const threeWeeksAgo = moment()
@@ -230,7 +230,7 @@ describe('Attendance reason statistics', () => {
       whereaboutsApi.getAttendanceStats.mockReturnValue({})
       oauthApi.userRoles.mockReturnValue({})
 
-      const { attendanceStatistics } = attendanceStatisticsFactory(oauthApi, elite2Api, whereaboutsApi, jest.fn())
+      const { attendanceStatistics } = attendanceStatisticsFactory(oauthApi, prisonApi, whereaboutsApi, jest.fn())
       const res = { render: jest.fn(), locals: context }
       const req = { query: { agencyId, fromDate, toDate, period } }
 
@@ -248,7 +248,7 @@ describe('Attendance reason statistics', () => {
       whereaboutsApi.getAttendanceStats.mockReturnValue({})
       oauthApi.userRoles.mockReturnValue({})
 
-      const { attendanceStatistics } = attendanceStatisticsFactory(oauthApi, elite2Api, whereaboutsApi, jest.fn())
+      const { attendanceStatistics } = attendanceStatisticsFactory(oauthApi, prisonApi, whereaboutsApi, jest.fn())
       const req = { query: { agencyId, fromDate, toDate, period: 'AM_PM' } }
       const res = { render: jest.fn(), locals: context }
 
@@ -263,7 +263,7 @@ describe('Attendance reason statistics', () => {
     })
 
     it('should call whereabouts attendance changes api with the correct parameters for AM+PM', async () => {
-      const { attendanceStatistics } = attendanceStatisticsFactory(oauthApi, elite2Api, whereaboutsApi, jest.fn())
+      const { attendanceStatistics } = attendanceStatisticsFactory(oauthApi, prisonApi, whereaboutsApi, jest.fn())
       const req = { query: { agencyId, fromDate, toDate, period: 'AM_PM' } }
       const res = { render: jest.fn(), locals: context }
 
@@ -276,7 +276,7 @@ describe('Attendance reason statistics', () => {
     })
 
     it('should call whereabouts attendance changes api with the correct parameters for AM', async () => {
-      const { attendanceStatistics } = attendanceStatisticsFactory(oauthApi, elite2Api, whereaboutsApi, jest.fn())
+      const { attendanceStatistics } = attendanceStatisticsFactory(oauthApi, prisonApi, whereaboutsApi, jest.fn())
       const req = { query: { agencyId, fromDate, toDate, period: 'AM' } }
       const res = { render: jest.fn(), locals: context }
 
@@ -289,7 +289,7 @@ describe('Attendance reason statistics', () => {
     })
 
     it('should call whereabouts attendance changes api with the correct parameters for PM', async () => {
-      const { attendanceStatistics } = attendanceStatisticsFactory(oauthApi, elite2Api, whereaboutsApi, jest.fn())
+      const { attendanceStatistics } = attendanceStatisticsFactory(oauthApi, prisonApi, whereaboutsApi, jest.fn())
       const req = { query: { agencyId, fromDate, toDate, period: 'PM' } }
       const res = { render: jest.fn(), locals: context }
 
@@ -311,7 +311,7 @@ describe('Attendance reason statistics', () => {
         .add(1, 'day')
         .format('DD/MM/YYYY')
 
-      const { attendanceStatistics } = attendanceStatisticsFactory(oauthApi, elite2Api, whereaboutsApi, jest.fn())
+      const { attendanceStatistics } = attendanceStatisticsFactory(oauthApi, prisonApi, whereaboutsApi, jest.fn())
       const req = { query: { agencyId, fromDate: now, toDate: nowPlus1, period: 'AM_PM' } }
       const res = { render: jest.fn() }
 
@@ -329,7 +329,7 @@ describe('Attendance reason statistics', () => {
       whereaboutsApi.getAttendanceStats.mockReturnValue(stats)
       whereaboutsApi.getAttendanceChanges.mockReturnValue({ changes: [{ prisonId: 'MDI' }, { prisonId: 'LEI' }] })
 
-      const { attendanceStatistics } = attendanceStatisticsFactory(oauthApi, elite2Api, whereaboutsApi, jest.fn())
+      const { attendanceStatistics } = attendanceStatisticsFactory(oauthApi, prisonApi, whereaboutsApi, jest.fn())
       const req = { query: { agencyId, fromDate, toDate, period: 'AM_PM' } }
       const res = { render: jest.fn() }
 
@@ -397,7 +397,7 @@ describe('Attendance reason statistics', () => {
 
     it('should try render the error template on error', async () => {
       const logError = jest.fn()
-      const { attendanceStatistics } = attendanceStatisticsFactory(oauthApi, elite2Api, whereaboutsApi, logError)
+      const { attendanceStatistics } = attendanceStatisticsFactory(oauthApi, prisonApi, whereaboutsApi, logError)
 
       const req = { query: { agencyId, date, period } }
       const res = { render: jest.fn() }
@@ -416,7 +416,7 @@ describe('Attendance reason statistics', () => {
         throw new Error('something is wrong')
       })
 
-      const { attendanceStatistics } = attendanceStatisticsFactory(oauthApi, elite2Api, whereaboutsApi, logError)
+      const { attendanceStatistics } = attendanceStatisticsFactory(oauthApi, prisonApi, whereaboutsApi, logError)
 
       const req = { ...mockReq, query: { agencyId, fromDate, period } }
       const res = { render: jest.fn() }
@@ -433,7 +433,7 @@ describe('Attendance reason statistics', () => {
     it('should clear the date and period from a from and to date have been passed', async () => {
       whereaboutsApi.getAttendanceStats.mockReturnValue(stats)
 
-      const { attendanceStatistics } = attendanceStatisticsFactory(oauthApi, elite2Api, whereaboutsApi, jest.fn())
+      const { attendanceStatistics } = attendanceStatisticsFactory(oauthApi, prisonApi, whereaboutsApi, jest.fn())
       const req = { query: { agencyId, fromDate, toDate, period: 'AM_PM' } }
       const res = { render: jest.fn() }
 
@@ -478,7 +478,7 @@ describe('Attendance reason statistics', () => {
 
       const { attendanceStatisticsOffendersList } = attendanceStatisticsFactory(
         oauthApi,
-        elite2Api,
+        prisonApi,
         whereaboutsApi,
         jest.fn()
       )
@@ -562,7 +562,7 @@ describe('Attendance reason statistics', () => {
 
       const { attendanceStatisticsOffendersList } = attendanceStatisticsFactory(
         oauthApi,
-        elite2Api,
+        prisonApi,
         whereaboutsApi,
         jest.fn()
       )
@@ -621,7 +621,7 @@ describe('Attendance reason statistics', () => {
       const logError = jest.fn()
       const { attendanceStatisticsOffendersList } = attendanceStatisticsFactory(
         oauthApi,
-        elite2Api,
+        prisonApi,
         whereaboutsApi,
         logError
       )
@@ -645,7 +645,7 @@ describe('Attendance reason statistics', () => {
 
       const { attendanceStatisticsOffendersList } = attendanceStatisticsFactory(
         oauthApi,
-        elite2Api,
+        prisonApi,
         whereaboutsApi,
         logError
       )
@@ -664,7 +664,7 @@ describe('Attendance reason statistics', () => {
 
   describe('Suspended Controller', () => {
     beforeEach(() => {
-      elite2Api.getOffenderActivitiesOverDateRange.mockReturnValue([
+      prisonApi.getOffenderActivitiesOverDateRange.mockReturnValue([
         {
           bookingId: 1133341,
           offenderNo: 'G8974UK',
@@ -753,14 +753,14 @@ describe('Attendance reason statistics', () => {
 
       const { attendanceStatisticsSuspendedList } = attendanceStatisticsFactory(
         oauthApi,
-        elite2Api,
+        prisonApi,
         whereaboutsApi,
         jest.fn()
       )
 
       await attendanceStatisticsSuspendedList(req, res)
 
-      expect(elite2Api.getOffenderActivitiesOverDateRange).toHaveBeenCalledWith(res.locals, {
+      expect(prisonApi.getOffenderActivitiesOverDateRange).toHaveBeenCalledWith(res.locals, {
         agencyId,
         fromDate: '2019-10-10',
         toDate: '2019-10-11',
@@ -778,7 +778,7 @@ describe('Attendance reason statistics', () => {
     it('should render the list of offenders who are suspended on the given date and period', async () => {
       const { attendanceStatisticsSuspendedList } = attendanceStatisticsFactory(
         oauthApi,
-        elite2Api,
+        prisonApi,
         whereaboutsApi,
         jest.fn()
       )

@@ -8,7 +8,7 @@ jest.mock('../../raiseAnalyticsEvent', () => ({
 }))
 
 describe('Change cell play back details', () => {
-  const elite2Api = {}
+  const prisonApi = {}
 
   let logError
   let controller
@@ -19,22 +19,22 @@ describe('Change cell play back details', () => {
     jest.clearAllMocks()
     logError = jest.fn()
 
-    elite2Api.getDetails = jest.fn().mockResolvedValue({
+    prisonApi.getDetails = jest.fn().mockResolvedValue({
       bookingId: 1,
       firstName: 'Bob',
       lastName: 'Doe',
       agencyId: 'MDI',
     })
-    elite2Api.moveToCell = jest.fn()
-    elite2Api.moveToCellSwap = jest.fn()
-    elite2Api.getLocation = jest.fn().mockResolvedValue({
+    prisonApi.moveToCell = jest.fn()
+    prisonApi.moveToCellSwap = jest.fn()
+    prisonApi.getLocation = jest.fn().mockResolvedValue({
       locationPrefix: 'MDI-10-19',
       description: 'MDI-10',
     })
 
-    elite2Api.getAttributesForLocation = jest.fn().mockResolvedValue({ capacity: 1 })
+    prisonApi.getAttributesForLocation = jest.fn().mockResolvedValue({ capacity: 1 })
 
-    controller = confirmCellMove({ elite2Api, logError })
+    controller = confirmCellMove({ prisonApi, logError })
 
     req.params = {
       offenderNo: 'A12345',
@@ -59,8 +59,8 @@ describe('Change cell play back details', () => {
 
       await controller.index(req, res)
 
-      expect(elite2Api.getLocation).toHaveBeenCalledWith({}, 233)
-      expect(elite2Api.getDetails).toHaveBeenCalledWith({}, 'A12345')
+      expect(prisonApi.getLocation).toHaveBeenCalledWith({}, 233)
+      expect(prisonApi.getDetails).toHaveBeenCalledWith({}, 'A12345')
     })
 
     it('should render play back details page', async () => {
@@ -85,7 +85,7 @@ describe('Change cell play back details', () => {
 
       await controller.index(req, res)
 
-      expect(elite2Api.getLocation.mock.calls.length).toBe(0)
+      expect(prisonApi.getLocation.mock.calls.length).toBe(0)
     })
 
     it('should render view model with C-SWAP title and warnings disabled', async () => {
@@ -116,13 +116,13 @@ describe('Change cell play back details', () => {
     })
 
     it('should call elite api to make the cell move', async () => {
-      elite2Api.getDetails = jest.fn().mockResolvedValue({ bookingId: 1 })
+      prisonApi.getDetails = jest.fn().mockResolvedValue({ bookingId: 1 })
       req.body = { cellId: 223 }
 
       await controller.post(req, res)
 
-      expect(elite2Api.getDetails).toHaveBeenCalledWith({}, 'A12345')
-      expect(elite2Api.moveToCell).toHaveBeenCalledWith({}, { bookingId: 1, internalLocationDescription: 'MDI-10-19' })
+      expect(prisonApi.getDetails).toHaveBeenCalledWith({}, 'A12345')
+      expect(prisonApi.moveToCell).toHaveBeenCalledWith({}, { bookingId: 1, internalLocationDescription: 'MDI-10-19' })
       expect(res.redirect).toHaveBeenCalledWith('/prisoner/A12345/cell-move/confirmation?cellId=223')
     })
 
@@ -131,7 +131,7 @@ describe('Change cell play back details', () => {
 
       const error = new Error('network error')
 
-      elite2Api.getDetails.mockRejectedValue(new Error('network error'))
+      prisonApi.getDetails.mockRejectedValue(new Error('network error'))
       await controller.post(req, res)
 
       expect(logError).toHaveBeenCalledWith('http://localhost', error, 'Failed to make cell move to 223')
@@ -153,7 +153,7 @@ describe('Change cell play back details', () => {
     })
 
     it('should not raise an analytics event on api failures', async () => {
-      elite2Api.moveToCell.mockRejectedValue(new Error('Internal server error'))
+      prisonApi.moveToCell.mockRejectedValue(new Error('Internal server error'))
       req.body = { cellId: 123 }
 
       await controller.post(req, res)
@@ -164,7 +164,7 @@ describe('Change cell play back details', () => {
     it('should redirect to cell not available on a http 400 bad request when attempting a cell move', async () => {
       req.body = { cellId: 223 }
 
-      elite2Api.moveToCell.mockRejectedValue(makeError('status', 400))
+      prisonApi.moveToCell.mockRejectedValue(makeError('status', 400))
 
       await controller.post(req, res)
 
@@ -182,8 +182,8 @@ describe('Change cell play back details', () => {
 
       await controller.post(req, res)
 
-      expect(elite2Api.getDetails).toHaveBeenCalledWith({}, 'A12345')
-      expect(elite2Api.moveToCellSwap).toHaveBeenCalledWith({}, { bookingId: 1 })
+      expect(prisonApi.getDetails).toHaveBeenCalledWith({}, 'A12345')
+      expect(prisonApi.moveToCellSwap).toHaveBeenCalledWith({}, { bookingId: 1 })
       expect(res.redirect).toHaveBeenCalledWith('/prisoner/A12345/cell-move/cswap-confirmation')
     })
 
@@ -196,7 +196,7 @@ describe('Change cell play back details', () => {
     })
 
     it('should not raise an analytics event on api failures', async () => {
-      elite2Api.moveToCellSwap.mockRejectedValue(new Error('Internal server error'))
+      prisonApi.moveToCellSwap.mockRejectedValue(new Error('Internal server error'))
       req.body = { cellId: 'C-SWAP' }
 
       await controller.post(req, res)

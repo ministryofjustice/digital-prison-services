@@ -3,8 +3,8 @@ const { changeCaseloadFactory } = require('../controllers/changeCaseload')
 
 const router = express.Router()
 
-const controller = ({ elite2Api, logError }) => {
-  const { index, post } = changeCaseloadFactory(elite2Api, logError)
+const controller = ({ prisonApi, logError }) => {
+  const { index, post } = changeCaseloadFactory(prisonApi, logError)
 
   router.get('/', index)
   router.post('/', post)

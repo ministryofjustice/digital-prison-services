@@ -12,7 +12,13 @@ context('A user can see the list of offenders in today', () => {
     Cypress.Cookies.preserveOnce('hmpps-session-dev')
     cy.task('stubClientCredentialsRequest')
     cy.task('stubIepSummaryForBookingIds')
-    cy.task('stubSystemAlerts')
+    cy.task('stubSystemAlerts', [
+      {
+        offenderNo: 'G0000AA',
+        expired: false,
+        alertCode: 'XR',
+      },
+    ])
     cy.task('stubAssessments', ['A1234AA', 'G0000AA'])
     cy.task('stubUserMeRoles', [])
     cy.task('stubUserMe')
@@ -23,23 +29,25 @@ context('A user can see the list of offenders in today', () => {
       movements: [
         {
           offenderNo: 'A1234AA',
-          bookingId: -1,
           dateOfBirth: '1980-01-01',
+          bookingId: -1,
           firstName: 'AAAAB',
-          lastName: 'AAAAA',
-          fromAgencyDescription: 'Hull (HMP)',
-          movementTime: '01:01:45',
-          location: 'LEI-A-01-011',
+          lastName: 'AAAAB',
+          iepLevel: 'Basic',
+          fromAgency: 'MDI',
+          fromAgencyDescription: 'Moorland (HMP)',
+          location: 'MDI-1-1',
+          movementTime: '11:11:11',
         },
         {
           offenderNo: 'G0000AA',
-          bookingId: -2,
           dateOfBirth: '1980-12-31',
+          bookingId: -2,
           firstName: 'AAAAA',
           lastName: 'AAAAA',
-          fromAgencyDescription: 'Outside',
-          movementTime: '23:59:59',
-          location: 'LEI-A-02-011',
+          iepLevel: 'Enhanced',
+          fromCity: 'Leeds',
+          movementTime: '12:12:12',
         },
       ],
     })
@@ -56,19 +64,20 @@ context('A user can see the list of offenders in today', () => {
         expect($cells.get(1)).to.contain('Aaaaa, Aaaaa')
         expect($cells.get(2)).to.contain('G0000AA')
         expect($cells.get(3)).to.contain('31/12/1980')
-        expect($cells.get(4)).to.be.empty
-        expect($cells.get(5)).to.contain('--')
-        expect($cells.get(6)).to.contain('23:59')
-        expect($cells.get(7)).to.contain('Outside')
+        expect($cells.get(4)).to.contain('Enhanced')
+        expect($cells.get(5)).to.be.empty
+        expect($cells.get(6)).to.contain('12:12')
+        expect($cells.get(7)).to.contain('Leeds')
+        expect($cells.get(8)).to.contain('Racist')
 
-        expect($cells.get(10)).to.contain('Aaaaa, Aaaab')
+        expect($cells.get(10)).to.contain('Aaaab, Aaaab')
         expect($cells.get(11)).to.contain('A1234AA')
         expect($cells.get(12)).to.contain('01/01/1980')
-        expect($cells.get(13)).to.be.empty
-        expect($cells.get(14)).to.contain('--')
-        expect($cells.get(15)).to.contain('01:01')
-        expect($cells.get(16)).to.contain('Hull (HMP)')
-        expect($cells.get(17)).to.contain('CAT')
+        expect($cells.get(13)).to.contain('Basic')
+        expect($cells.get(14)).to.contain('1-1')
+        expect($cells.get(15)).to.contain('11:11')
+        expect($cells.get(16)).to.contain('Moorland (HMP)')
+        expect($cells.get(17)).to.contain('CAT A')
       })
   })
 })

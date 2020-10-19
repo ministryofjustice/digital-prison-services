@@ -2,8 +2,8 @@ const enRoute = require('../../controllers/establishmentRoll/enRoute')
 
 const movementsService = {}
 
-describe('Establishment Roll', () => {
-  const logError = jest.fn()
+describe('En route test', () => {
+  let logError
   let controller
   const agencyId = 'LEI'
   const req = { originalUrl: 'http://localhost' }
@@ -21,6 +21,7 @@ describe('Establishment Roll', () => {
       movementReasonDescription: 'Normal transfer',
       location: 'LEI-A-01-011',
       alerts: ['XR'],
+      category: 'A',
     },
     {
       offenderNo: 'G0000AA',
@@ -33,10 +34,12 @@ describe('Establishment Roll', () => {
       movementReasonDescription: 'Normal transfer',
       location: 'LEI-A-02-011',
       alerts: [],
+      category: 'C',
     },
   ]
   beforeEach(() => {
     movementsService.getOffendersEnRoute = jest.fn()
+    logError = jest.fn()
     controller = enRoute({ movementsService, logError })
     res.render = jest.fn()
   })
@@ -45,6 +48,17 @@ describe('Establishment Roll', () => {
     await controller(req, res)
 
     expect(movementsService.getOffendersEnRoute).toHaveBeenCalledWith(res.locals, agencyId)
+  })
+
+  it('should return right error message', async () => {
+    movementsService.getOffendersEnRoute.mockRejectedValue(new Error('error'))
+    await controller(req, res)
+
+    expect(logError).toHaveBeenCalledWith(req.originalUrl, new Error('error'), 'Failed to load en route page')
+    expect(res.render).toHaveBeenCalledWith('error.njk', {
+      url: '/establishment-roll/en-route',
+      homeUrl: 'http://localhost:3000/',
+    })
   })
 
   it('should return response with data', async () => {
@@ -64,6 +78,7 @@ describe('Establishment Roll', () => {
             from: 'Hull (HMP)',
             reason: 'Normal transfer',
             alerts: [{ alertCodes: ['XR'], classes: 'alert-status alert-status--racist', label: 'Racist' }],
+            category: 'A',
           },
           {
             alerts: [],
@@ -73,6 +88,7 @@ describe('Establishment Roll', () => {
             name: 'Aaaaa, Aaaaa',
             offenderNo: 'G0000AA',
             reason: 'Normal transfer',
+            category: 'C',
           },
         ],
       })

@@ -5,13 +5,13 @@ const config = require('../../../config')
 const videolinkPrisonerSearchValidation = require('./videolinkPrisonerSearchValidation')
 const dobValidation = require('../../../shared/dobValidation')
 
-module.exports = ({ oauthApi, elite2Api, logError }) => async (req, res) => {
+module.exports = ({ oauthApi, prisonApi, logError }) => async (req, res) => {
   try {
     const userRoles = await oauthApi.userRoles(res.locals)
     const hasSearchAccess = userRoles.find(role => role.roleCode === 'VIDEO_LINK_COURT_USER')
 
     if (hasSearchAccess) {
-      const agencies = await elite2Api.getAgencies(res.locals)
+      const agencies = await prisonApi.getAgencies(res.locals)
       let searchResults = []
       const hasSearched = Boolean(Object.keys(req.query).length)
       const errors = hasSearched ? videolinkPrisonerSearchValidation(req.query) : []
@@ -20,7 +20,7 @@ module.exports = ({ oauthApi, elite2Api, logError }) => async (req, res) => {
       if (hasSearched && !errors.length) {
         const { dobIsValid, dateOfBirth } = dobValidation(dobDay, dobMonth, dobYear)
 
-        searchResults = await elite2Api.globalSearch(
+        searchResults = await prisonApi.globalSearch(
           res.locals,
           {
             offenderNo: prisonNumber,

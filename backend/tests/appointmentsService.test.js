@@ -1,7 +1,7 @@
 const { appointmentsServiceFactory } = require('../services/appointmentsService')
 
 describe('Appointments service', () => {
-  const elite2Api = {}
+  const prisonApi = {}
   const context = {}
   const agency = 'LEI'
   const appointmentTypes = [{ code: 'ACTI', description: 'Activities' }]
@@ -30,18 +30,18 @@ describe('Appointments service', () => {
   let service
 
   beforeEach(() => {
-    elite2Api.getLocationsForAppointments = jest.fn()
-    elite2Api.getAppointmentTypes = jest.fn()
-    elite2Api.addAppointments = jest.fn()
+    prisonApi.getLocationsForAppointments = jest.fn()
+    prisonApi.getAppointmentTypes = jest.fn()
+    prisonApi.addAppointments = jest.fn()
 
-    service = appointmentsServiceFactory(elite2Api)
+    service = appointmentsServiceFactory(prisonApi)
   })
 
   it('should make a request for appointment locations and types', async () => {
     await service.getAppointmentOptions(context, agency)
 
-    expect(elite2Api.getLocationsForAppointments).toHaveBeenCalledWith(context, agency)
-    expect(elite2Api.getAppointmentTypes).toHaveBeenCalledWith(context)
+    expect(prisonApi.getLocationsForAppointments).toHaveBeenCalledWith(context, agency)
+    expect(prisonApi.getAppointmentTypes).toHaveBeenCalledWith(context)
   })
 
   it('should handle empty responses from appointment types and locations', async () => {
@@ -51,8 +51,8 @@ describe('Appointments service', () => {
   })
 
   it('should map appointment types and locations correctly', async () => {
-    elite2Api.getLocationsForAppointments.mockReturnValue(locationTypes)
-    elite2Api.getAppointmentTypes.mockReturnValue(appointmentTypes)
+    prisonApi.getLocationsForAppointments.mockReturnValue(locationTypes)
+    prisonApi.getAppointmentTypes.mockReturnValue(appointmentTypes)
 
     const response = await service.getAppointmentOptions(context, agency)
 
@@ -85,6 +85,6 @@ describe('Appointments service', () => {
 
     await service.addAppointments(context, parameters)
 
-    expect(elite2Api.addAppointments).toHaveBeenCalledWith(context, parameters)
+    expect(prisonApi.addAppointments).toHaveBeenCalledWith(context, parameters)
   })
 })

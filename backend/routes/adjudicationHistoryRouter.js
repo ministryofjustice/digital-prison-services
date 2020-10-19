@@ -6,12 +6,12 @@ const paginationService = require('../services/paginationService')
 
 const router = express.Router({ mergeParams: true })
 
-module.exports = (elite2Api, logError) => {
-  const adjudicationHistoryService = adjudicationsHistoryService(elite2Api)
+module.exports = (prisonApi, logError) => {
+  const adjudicationHistoryService = adjudicationsHistoryService(prisonApi)
   const controller = adjudicationsController({
     adjudicationHistoryService,
     paginationService,
-    elite2Api,
+    prisonApi,
     logError,
   })
 

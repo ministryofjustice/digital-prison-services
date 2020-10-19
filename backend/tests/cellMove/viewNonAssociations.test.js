@@ -10,7 +10,7 @@ describe('view non associations', () => {
   let logError
   let controller
 
-  const elite2Api = {}
+  const prisonApi = {}
 
   const tomorrow = moment().add(1, 'days')
 
@@ -35,8 +35,8 @@ describe('view non associations', () => {
     }
     res = { locals: {}, render: jest.fn() }
 
-    elite2Api.getDetails = jest.fn().mockResolvedValue(getDetailsResponse)
-    elite2Api.getNonAssociations = jest.fn().mockResolvedValue({
+    prisonApi.getDetails = jest.fn().mockResolvedValue(getDetailsResponse)
+    prisonApi.getNonAssociations = jest.fn().mockResolvedValue({
       offenderNo: 'ABC123',
       firstName: 'Fred',
       lastName: 'Bloggs',
@@ -124,18 +124,18 @@ describe('view non associations', () => {
       ],
     })
 
-    controller = viewNonAssociations({ elite2Api, logError })
+    controller = viewNonAssociations({ prisonApi, logError })
   })
 
   it('Makes the expected API calls', async () => {
     await controller(req, res)
 
-    expect(elite2Api.getDetails).toHaveBeenCalledWith(res.locals, offenderNo)
-    expect(elite2Api.getNonAssociations).toHaveBeenCalledWith(res.locals, 1234)
+    expect(prisonApi.getDetails).toHaveBeenCalledWith(res.locals, offenderNo)
+    expect(prisonApi.getNonAssociations).toHaveBeenCalledWith(res.locals, 1234)
   })
 
   it('Should render error template when there is an API error', async () => {
-    elite2Api.getDetails.mockImplementation(() => Promise.reject(new Error('Network error')))
+    prisonApi.getDetails.mockImplementation(() => Promise.reject(new Error('Network error')))
 
     await controller(req, res)
 

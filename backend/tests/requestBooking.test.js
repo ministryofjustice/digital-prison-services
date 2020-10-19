@@ -22,7 +22,7 @@ describe('Request a booking', () => {
   let controller
   const whereaboutsApi = {}
   const oauthApi = {}
-  const elite2Api = {}
+  const prisonApi = {}
 
   beforeEach(() => {
     req = {
@@ -48,14 +48,14 @@ describe('Request a booking', () => {
     whereaboutsApi.getCourtLocations = jest.fn()
     oauthApi.userEmail = jest.fn()
     oauthApi.userDetails = jest.fn()
-    elite2Api.getAgencies = jest.fn()
+    prisonApi.getAgencies = jest.fn()
 
-    elite2Api.getAgencies.mockReturnValue([{ agencyId: 'WWI', description: 'HMP Wandsworth' }])
+    prisonApi.getAgencies.mockReturnValue([{ agencyId: 'WWI', description: 'HMP Wandsworth' }])
 
     oauthApi.userEmail.mockReturnValue({ email: 'test@test' })
     oauthApi.userDetails.mockReturnValue({ name: 'Staff member' })
 
-    controller = requestBookingFactory({ logError, notifyClient, whereaboutsApi, oauthApi, elite2Api })
+    controller = requestBookingFactory({ logError, notifyClient, whereaboutsApi, oauthApi, prisonApi })
 
     raiseAnalyticsEvent.mockRestore()
   })

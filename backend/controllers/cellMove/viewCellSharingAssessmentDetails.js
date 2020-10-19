@@ -3,13 +3,13 @@ const { serviceUnavailableMessage } = require('../../common-messages')
 const { putLastNameFirst, hasLength } = require('../../utils')
 const { getBackLinkData } = require('./cellMoveUtils')
 
-module.exports = ({ elite2Api, logError }) => async (req, res) => {
+module.exports = ({ prisonApi, logError }) => async (req, res) => {
   const { offenderNo } = req.params
 
   try {
     const [offenderDetails, assessments] = await Promise.all([
-      elite2Api.getDetails(res.locals, offenderNo, true),
-      elite2Api.getCsraAssessments(res.locals, [offenderNo]),
+      prisonApi.getDetails(res.locals, offenderNo, true),
+      prisonApi.getCsraAssessments(res.locals, [offenderNo]),
     ])
 
     const { firstName, lastName, assignedLivingUnit } = offenderDetails || {}
@@ -20,7 +20,7 @@ module.exports = ({ elite2Api, logError }) => async (req, res) => {
     const location =
       mostRecentAssessment &&
       mostRecentAssessment.assessmentAgencyId &&
-      (await elite2Api.getAgencyDetails(res.locals, mostRecentAssessment.assessmentAgencyId))
+      (await prisonApi.getAgencyDetails(res.locals, mostRecentAssessment.assessmentAgencyId))
 
     return res.render('cellMove/cellSharingRiskAssessmentDetails.njk', {
       prisonerName: putLastNameFirst(firstName, lastName),

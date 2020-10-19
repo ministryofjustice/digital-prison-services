@@ -19,7 +19,7 @@ describe('prisoner profile quick look', () => {
     profileInformation: [{ type: 'NAT', resultValue: 'British' }],
   }
   const bookingId = '123'
-  const elite2Api = {}
+  const prisonApi = {}
   const prisonerProfileService = {}
 
   let req
@@ -43,26 +43,26 @@ describe('prisoner profile quick look', () => {
 
     prisonerProfileService.getPrisonerProfileData = jest.fn().mockResolvedValue(prisonerProfileData)
 
-    elite2Api.getDetails = jest.fn().mockResolvedValue({})
-    elite2Api.getMainOffence = jest.fn().mockResolvedValue([])
-    elite2Api.getPrisonerBalances = jest.fn().mockResolvedValue({})
-    elite2Api.getPrisonerDetails = jest.fn().mockResolvedValue([])
-    elite2Api.getPrisonerSentenceDetails = jest.fn().mockResolvedValue({})
-    elite2Api.getIepSummaryForBooking = jest.fn().mockResolvedValue({})
-    elite2Api.getPositiveCaseNotes = jest.fn().mockResolvedValue({})
-    elite2Api.getNegativeCaseNotes = jest.fn().mockResolvedValue({})
-    elite2Api.getAdjudicationsForBooking = jest.fn().mockResolvedValue({})
-    elite2Api.getNextVisit = jest.fn().mockResolvedValue({})
-    elite2Api.getPrisonerVisitBalances = jest.fn().mockResolvedValue({})
-    elite2Api.getEventsForToday = jest.fn().mockResolvedValue([])
+    prisonApi.getDetails = jest.fn().mockResolvedValue({})
+    prisonApi.getMainOffence = jest.fn().mockResolvedValue([])
+    prisonApi.getPrisonerBalances = jest.fn().mockResolvedValue({})
+    prisonApi.getPrisonerDetails = jest.fn().mockResolvedValue([])
+    prisonApi.getPrisonerSentenceDetails = jest.fn().mockResolvedValue({})
+    prisonApi.getIepSummaryForBooking = jest.fn().mockResolvedValue({})
+    prisonApi.getPositiveCaseNotes = jest.fn().mockResolvedValue({})
+    prisonApi.getNegativeCaseNotes = jest.fn().mockResolvedValue({})
+    prisonApi.getAdjudicationsForBooking = jest.fn().mockResolvedValue({})
+    prisonApi.getNextVisit = jest.fn().mockResolvedValue({})
+    prisonApi.getPrisonerVisitBalances = jest.fn().mockResolvedValue({})
+    prisonApi.getEventsForToday = jest.fn().mockResolvedValue([])
 
-    controller = prisonerQuickLook({ prisonerProfileService, elite2Api, logError })
+    controller = prisonerQuickLook({ prisonerProfileService, prisonApi, logError })
   })
 
   it('should make a call for the basic details of a prisoner and the prisoner header details and render them', async () => {
     await controller(req, res)
 
-    expect(elite2Api.getDetails).toHaveBeenCalledWith(res.locals, offenderNo)
+    expect(prisonApi.getDetails).toHaveBeenCalledWith(res.locals, offenderNo)
     expect(prisonerProfileService.getPrisonerProfileData).toHaveBeenCalledWith(res.locals, offenderNo, 'user1')
     expect(res.render).toHaveBeenCalledWith(
       'prisonerProfile/prisonerQuickLook/prisonerQuickLook.njk',
@@ -75,13 +75,13 @@ describe('prisoner profile quick look', () => {
 
   describe('offence data', () => {
     beforeEach(() => {
-      elite2Api.getDetails.mockResolvedValue({ bookingId })
+      prisonApi.getDetails.mockResolvedValue({ bookingId })
     })
 
     it('should make a call for offence data', async () => {
       await controller(req, res)
 
-      expect(elite2Api.getMainOffence).toHaveBeenCalledWith(res.locals, bookingId)
+      expect(prisonApi.getMainOffence).toHaveBeenCalledWith(res.locals, bookingId)
     })
 
     describe('when there is missing offence data', () => {
@@ -112,13 +112,13 @@ describe('prisoner profile quick look', () => {
 
     describe('when there is offence data', () => {
       beforeEach(() => {
-        elite2Api.getMainOffence.mockResolvedValue([
+        prisonApi.getMainOffence.mockResolvedValue([
           { offenceDescription: 'Have blade/article which was sharply pointed in public place' },
         ])
-        elite2Api.getPrisonerDetails.mockResolvedValue([
+        prisonApi.getPrisonerDetails.mockResolvedValue([
           { imprisonmentStatusDesc: 'Adult Imprisonment Without Option CJA03' },
         ])
-        elite2Api.getPrisonerSentenceDetails.mockResolvedValue({ sentenceDetail: { releaseDate: '2020-12-13' } })
+        prisonApi.getPrisonerSentenceDetails.mockResolvedValue({ sentenceDetail: { releaseDate: '2020-12-13' } })
       })
 
       it('should render the quick look template with the correctly formatted data', async () => {
@@ -167,7 +167,7 @@ describe('prisoner profile quick look', () => {
 
     describe('when there is balance data', () => {
       beforeEach(() => {
-        elite2Api.getPrisonerBalances.mockResolvedValue({ spends: 100, cash: 75.5, savings: 50, currency: 'GBP' })
+        prisonApi.getPrisonerBalances.mockResolvedValue({ spends: 100, cash: 75.5, savings: 50, currency: 'GBP' })
       })
 
       it('should render the quick look template with the correctly formatted balance/money data', async () => {
@@ -209,7 +209,7 @@ describe('prisoner profile quick look', () => {
     describe('when there is personal data', () => {
       beforeEach(() => {
         jest.spyOn(Date, 'now').mockImplementation(() => 1578873601000) // 2020-01-13T00:00:01.000Z
-        elite2Api.getPrisonerDetails.mockResolvedValue([
+        prisonApi.getPrisonerDetails.mockResolvedValue([
           { dateOfBirth: '1998-12-01', pncNumber: '12/3456A', croNumber: '12345/57B' },
         ])
       })
@@ -238,12 +238,12 @@ describe('prisoner profile quick look', () => {
     })
 
     it('should make a request for the correct data', async () => {
-      elite2Api.getDetails.mockResolvedValue({ bookingId })
+      prisonApi.getDetails.mockResolvedValue({ bookingId })
 
       await controller(req, res)
 
-      expect(elite2Api.getIepSummaryForBooking).toHaveBeenCalledWith({}, bookingId, false)
-      expect(elite2Api.getPositiveCaseNotes).toHaveBeenCalledWith({}, bookingId, '2019-10-13', '2020-01-13')
+      expect(prisonApi.getIepSummaryForBooking).toHaveBeenCalledWith({}, bookingId, false)
+      expect(prisonApi.getPositiveCaseNotes).toHaveBeenCalledWith({}, bookingId, '2019-10-13', '2020-01-13')
     })
 
     describe('when there is missing case note and adjudications data', () => {
@@ -273,10 +273,10 @@ describe('prisoner profile quick look', () => {
 
     describe('when there is case note and adjudications data', () => {
       beforeEach(() => {
-        elite2Api.getIepSummaryForBooking.mockResolvedValue({ daysSinceReview: 40 })
-        elite2Api.getPositiveCaseNotes.mockResolvedValue({ count: 2 })
-        elite2Api.getNegativeCaseNotes.mockResolvedValue({ count: 1 })
-        elite2Api.getAdjudicationsForBooking.mockResolvedValue({
+        prisonApi.getIepSummaryForBooking.mockResolvedValue({ daysSinceReview: 40 })
+        prisonApi.getPositiveCaseNotes.mockResolvedValue({ count: 2 })
+        prisonApi.getNegativeCaseNotes.mockResolvedValue({ count: 1 })
+        prisonApi.getAdjudicationsForBooking.mockResolvedValue({
           adjudicationCount: 3,
           awards: [
             {
@@ -391,13 +391,13 @@ describe('prisoner profile quick look', () => {
 
       describe('when there is visit data', () => {
         beforeEach(() => {
-          elite2Api.getNextVisit.mockResolvedValue({
+          prisonApi.getNextVisit.mockResolvedValue({
             visitTypeDescription: 'Social Contact',
             leadVisitor: 'YRUDYPETER CASSORIA',
             relationshipDescription: 'Probation Officer',
             startTime: '2020-04-17T13:30:00',
           })
-          elite2Api.getPrisonerVisitBalances.mockResolvedValue({ remainingVo: 0, remainingPvo: 0 })
+          prisonApi.getPrisonerVisitBalances.mockResolvedValue({ remainingVo: 0, remainingPvo: 0 })
         })
 
         it('should render the quick look template with the correctly formatted visit details', async () => {
@@ -445,7 +445,7 @@ describe('prisoner profile quick look', () => {
 
     describe('when there is visit data', () => {
       beforeEach(() => {
-        elite2Api.getEventsForToday.mockResolvedValue([
+        prisonApi.getEventsForToday.mockResolvedValue([
           {
             bookingId,
             eventClass: 'INT_MOV',
@@ -580,7 +580,7 @@ describe('prisoner profile quick look', () => {
   describe('when there are errors with getDetails', () => {
     beforeEach(() => {
       req.params.offenderNo = offenderNo
-      elite2Api.getDetails.mockRejectedValue(new Error('Network error'))
+      prisonApi.getDetails.mockRejectedValue(new Error('Network error'))
     })
 
     it('should render the error template', async () => {
@@ -595,22 +595,22 @@ describe('prisoner profile quick look', () => {
     beforeEach(() => {
       req.params.offenderNo = offenderNo
       prisonerProfileService.getPrisonerProfileData = jest.fn().mockRejectedValue(new Error('Network error'))
-      elite2Api.getMainOffence.mockRejectedValue(new Error('Network error'))
-      elite2Api.getPrisonerBalances.mockRejectedValue(new Error('Network error'))
-      elite2Api.getPrisonerDetails.mockRejectedValue(new Error('Network error'))
-      elite2Api.getPrisonerSentenceDetails.mockRejectedValue(new Error('Network error'))
-      elite2Api.getIepSummaryForBooking.mockRejectedValue(new Error('Network error'))
-      elite2Api.getPositiveCaseNotes.mockRejectedValue(new Error('Network error'))
-      elite2Api.getNegativeCaseNotes.mockRejectedValue(new Error('Network error'))
-      elite2Api.getAdjudicationsForBooking.mockRejectedValue(new Error('Network error'))
-      elite2Api.getNextVisit.mockRejectedValue(new Error('Network error'))
-      elite2Api.getPrisonerVisitBalances.mockRejectedValue(new Error('Network error'))
-      elite2Api.getEventsForToday.mockRejectedValue(new Error('Network error'))
+      prisonApi.getMainOffence.mockRejectedValue(new Error('Network error'))
+      prisonApi.getPrisonerBalances.mockRejectedValue(new Error('Network error'))
+      prisonApi.getPrisonerDetails.mockRejectedValue(new Error('Network error'))
+      prisonApi.getPrisonerSentenceDetails.mockRejectedValue(new Error('Network error'))
+      prisonApi.getIepSummaryForBooking.mockRejectedValue(new Error('Network error'))
+      prisonApi.getPositiveCaseNotes.mockRejectedValue(new Error('Network error'))
+      prisonApi.getNegativeCaseNotes.mockRejectedValue(new Error('Network error'))
+      prisonApi.getAdjudicationsForBooking.mockRejectedValue(new Error('Network error'))
+      prisonApi.getNextVisit.mockRejectedValue(new Error('Network error'))
+      prisonApi.getPrisonerVisitBalances.mockRejectedValue(new Error('Network error'))
+      prisonApi.getEventsForToday.mockRejectedValue(new Error('Network error'))
     })
 
     it('should handle api errors when requesting main offence', async () => {
-      elite2Api.getPrisonerSentenceDetails.mockResolvedValue({ sentenceDetail: { releaseDate: '2020-12-13' } })
-      elite2Api.getPrisonerDetails.mockResolvedValue([
+      prisonApi.getPrisonerSentenceDetails.mockResolvedValue({ sentenceDetail: { releaseDate: '2020-12-13' } })
+      prisonApi.getPrisonerDetails.mockResolvedValue([
         { imprisonmentStatusDesc: 'Adult Imprisonment Without Option CJA03' },
       ])
       await controller(req, res)
@@ -629,8 +629,8 @@ describe('prisoner profile quick look', () => {
     })
 
     it('should handle api errors when requesting imprisonment status', async () => {
-      elite2Api.getPrisonerSentenceDetails.mockResolvedValue({ sentenceDetail: { releaseDate: '2020-12-13' } })
-      elite2Api.getMainOffence.mockResolvedValue([
+      prisonApi.getPrisonerSentenceDetails.mockResolvedValue({ sentenceDetail: { releaseDate: '2020-12-13' } })
+      prisonApi.getMainOffence.mockResolvedValue([
         { offenceDescription: 'Have blade/article which was sharply pointed in public place' },
       ])
 
@@ -650,10 +650,10 @@ describe('prisoner profile quick look', () => {
     })
 
     it('should handle api error when requesting the release date', async () => {
-      elite2Api.getMainOffence.mockResolvedValue([
+      prisonApi.getMainOffence.mockResolvedValue([
         { offenceDescription: 'Have blade/article which was sharply pointed in public place' },
       ])
-      elite2Api.getPrisonerDetails.mockResolvedValue([
+      prisonApi.getPrisonerDetails.mockResolvedValue([
         {
           imprisonmentStatusDesc: 'Adult Imprisonment Without Option CJA03',
         },
@@ -697,9 +697,9 @@ describe('prisoner profile quick look', () => {
     })
 
     it('should handle api errors when requesting incentive level warnings', async () => {
-      elite2Api.getPositiveCaseNotes.mockResolvedValue({ count: 10 })
-      elite2Api.getIepSummaryForBooking.mockResolvedValue({ daysSinceReview: 10 })
-      elite2Api.getAdjudicationsForBooking.mockResolvedValue({
+      prisonApi.getPositiveCaseNotes.mockResolvedValue({ count: 10 })
+      prisonApi.getIepSummaryForBooking.mockResolvedValue({ daysSinceReview: 10 })
+      prisonApi.getAdjudicationsForBooking.mockResolvedValue({
         adjudicationCount: 2,
         awards: [
           {
@@ -751,9 +751,9 @@ describe('prisoner profile quick look', () => {
     })
 
     it('should handle api errors when requesting incentive encouragements', async () => {
-      elite2Api.getNegativeCaseNotes.mockResolvedValue({ count: 10 })
-      elite2Api.getIepSummaryForBooking.mockResolvedValue({ daysSinceReview: 10 })
-      elite2Api.getAdjudicationsForBooking.mockResolvedValue({
+      prisonApi.getNegativeCaseNotes.mockResolvedValue({ count: 10 })
+      prisonApi.getIepSummaryForBooking.mockResolvedValue({ daysSinceReview: 10 })
+      prisonApi.getAdjudicationsForBooking.mockResolvedValue({
         adjudicationCount: 2,
         awards: [
           {
@@ -805,9 +805,9 @@ describe('prisoner profile quick look', () => {
     })
 
     it('should handle api errors when requesting last incentive level review', async () => {
-      elite2Api.getPositiveCaseNotes.mockResolvedValue({ count: 10 })
-      elite2Api.getNegativeCaseNotes.mockResolvedValue({ count: 10 })
-      elite2Api.getAdjudicationsForBooking.mockResolvedValue({
+      prisonApi.getPositiveCaseNotes.mockResolvedValue({ count: 10 })
+      prisonApi.getNegativeCaseNotes.mockResolvedValue({ count: 10 })
+      prisonApi.getAdjudicationsForBooking.mockResolvedValue({
         adjudicationCount: 2,
         awards: [
           {
@@ -859,9 +859,9 @@ describe('prisoner profile quick look', () => {
     })
 
     it('should handle api errors when requesting adjudications', async () => {
-      elite2Api.getPositiveCaseNotes.mockResolvedValue({ count: 10 })
-      elite2Api.getNegativeCaseNotes.mockResolvedValue({ count: 10 })
-      elite2Api.getIepSummaryForBooking.mockResolvedValue({ daysSinceReview: 10 })
+      prisonApi.getPositiveCaseNotes.mockResolvedValue({ count: 10 })
+      prisonApi.getNegativeCaseNotes.mockResolvedValue({ count: 10 })
+      prisonApi.getIepSummaryForBooking.mockResolvedValue({ daysSinceReview: 10 })
 
       await controller(req, res)
 
@@ -952,7 +952,7 @@ describe('prisoner profile quick look', () => {
 
     it('should handle errors when requesting profile data', async () => {
       jest.spyOn(Date, 'now').mockImplementation(() => 1578873601000) // 2020-01-13T00:00:01.000Z
-      elite2Api.getPrisonerDetails.mockResolvedValue([
+      prisonApi.getPrisonerDetails.mockResolvedValue([
         { dateOfBirth: '1998-12-01', pncNumber: '12/3456A', croNumber: '12345/57B' },
       ])
 
@@ -986,7 +986,7 @@ describe('prisoner profile quick look', () => {
     })
 
     it('should handle api errors when requesting visit balances', async () => {
-      elite2Api.getNextVisit.mockResolvedValue({
+      prisonApi.getNextVisit.mockResolvedValue({
         startTime: '2020-04-17T13:30:00',
         visitTypeDescription: 'room 1',
         leadVisitor: 'mum',
@@ -1014,7 +1014,7 @@ describe('prisoner profile quick look', () => {
     })
 
     it('should handle api errors when requesting next visit', async () => {
-      elite2Api.getPrisonerVisitBalances.mockResolvedValue({
+      prisonApi.getPrisonerVisitBalances.mockResolvedValue({
         remainingVo: 20,
         remainingPvo: 10,
       })
@@ -1066,7 +1066,7 @@ describe('prisoner profile quick look', () => {
     })
 
     it('should load schedules without section error', async () => {
-      elite2Api.getEventsForToday.mockResolvedValue([
+      prisonApi.getEventsForToday.mockResolvedValue([
         {
           bookingId,
           eventClass: 'INT_MOV',
@@ -1129,19 +1129,19 @@ describe('prisoner profile quick look', () => {
 
   describe('When data is missing', () => {
     beforeEach(() => {
-      elite2Api.getDetails = jest.fn().mockResolvedValue({})
-      elite2Api.getMainOffence = jest.fn().mockResolvedValue([])
-      elite2Api.getPrisonerBalances = jest.fn().mockResolvedValue({})
-      elite2Api.getPrisonerDetails = jest.fn().mockResolvedValue([])
-      elite2Api.getPrisonerSentenceDetails = jest.fn().mockResolvedValue({})
-      elite2Api.getIepSummaryForBooking = jest.fn().mockResolvedValue({})
-      elite2Api.getPositiveCaseNotes = jest.fn().mockResolvedValue({})
-      elite2Api.getNegativeCaseNotes = jest.fn().mockResolvedValue({})
-      elite2Api.getAdjudicationsForBooking = jest.fn().mockResolvedValue({})
-      elite2Api.getNextVisit = jest.fn().mockResolvedValue({})
-      elite2Api.getPrisonerVisitBalances = jest.fn().mockResolvedValue({})
-      elite2Api.getEventsForToday = jest.fn().mockResolvedValue([])
-      elite2Api.getProfileInformation = jest.fn().mockResolvedValue([])
+      prisonApi.getDetails = jest.fn().mockResolvedValue({})
+      prisonApi.getMainOffence = jest.fn().mockResolvedValue([])
+      prisonApi.getPrisonerBalances = jest.fn().mockResolvedValue({})
+      prisonApi.getPrisonerDetails = jest.fn().mockResolvedValue([])
+      prisonApi.getPrisonerSentenceDetails = jest.fn().mockResolvedValue({})
+      prisonApi.getIepSummaryForBooking = jest.fn().mockResolvedValue({})
+      prisonApi.getPositiveCaseNotes = jest.fn().mockResolvedValue({})
+      prisonApi.getNegativeCaseNotes = jest.fn().mockResolvedValue({})
+      prisonApi.getAdjudicationsForBooking = jest.fn().mockResolvedValue({})
+      prisonApi.getNextVisit = jest.fn().mockResolvedValue({})
+      prisonApi.getPrisonerVisitBalances = jest.fn().mockResolvedValue({})
+      prisonApi.getEventsForToday = jest.fn().mockResolvedValue([])
+      prisonApi.getProfileInformation = jest.fn().mockResolvedValue([])
     })
 
     it('should display correct defaults for offences', async () => {
@@ -1160,7 +1160,7 @@ describe('prisoner profile quick look', () => {
     })
 
     it('should display correct defaults for case note adjudications for 1 warning', async () => {
-      elite2Api.getNegativeCaseNotes.mockResolvedValue({ count: 1 })
+      prisonApi.getNegativeCaseNotes.mockResolvedValue({ count: 1 })
 
       await controller(req, res)
 

@@ -20,6 +20,7 @@ module.exports = ({ movementsService, logError }) => async (req, res) => {
           .filter(Boolean)
           .map(alertLabel => ({ classes: alertLabel.classes, label: alertLabel.label })),
         iepLevel: offender.iepLevel,
+        category: offender.category,
       }))
 
     return res.render('establishmentRoll/inReception.njk', {

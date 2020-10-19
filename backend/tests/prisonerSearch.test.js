@@ -4,7 +4,7 @@ const { serviceUnavailableMessage } = require('../common-messages')
 const { makeResetError, makeResetErrorWithStack } = require('./helpers')
 
 describe('Prisoner search', () => {
-  const elite2Api = {}
+  const prisonApi = {}
   const paginationService = {}
 
   let req
@@ -35,7 +35,7 @@ describe('Prisoner search', () => {
 
     logError = jest.fn()
 
-    elite2Api.userLocations = jest.fn().mockReturnValue([
+    prisonApi.userLocations = jest.fn().mockReturnValue([
       {
         locationId: 1,
         locationType: 'INST',
@@ -60,24 +60,24 @@ describe('Prisoner search', () => {
         userDescription: 'Houseblock 2',
       },
     ])
-    elite2Api.getInmates = jest.fn().mockReturnValue([])
+    prisonApi.getInmates = jest.fn().mockReturnValue([])
 
     paginationService.getPagination = jest.fn()
 
-    controller = prisonerSearchController({ paginationService, elite2Api, logError })
+    controller = prisonerSearchController({ paginationService, prisonApi, logError })
   })
 
   describe('index', () => {
     it('should make a call for the users current caseload locations', async () => {
       await controller.index(req, res)
 
-      expect(elite2Api.userLocations).toHaveBeenCalledWith(res.locals)
+      expect(prisonApi.userLocations).toHaveBeenCalledWith(res.locals)
     })
 
     it('should request the current users active case load prisoners if no location specified in the query', async () => {
       await controller.index(req, res)
 
-      expect(elite2Api.getInmates).toHaveBeenCalledWith(
+      expect(prisonApi.getInmates).toHaveBeenCalledWith(
         {
           ...res.locals,
           requestHeaders: {
@@ -229,7 +229,7 @@ describe('Prisoner search', () => {
         },
       ]
       res.locals.responseHeaders['total-records'] = inmates.length
-      elite2Api.getInmates = jest.fn().mockReturnValue(inmates)
+      prisonApi.getInmates = jest.fn().mockReturnValue(inmates)
 
       await controller.index(req, res)
       expect(paginationService.getPagination).toHaveBeenCalledWith(
@@ -287,7 +287,7 @@ describe('Prisoner search', () => {
       )
     })
 
-    it('should render template with search url containing view type and printed values', async () => {
+    it('should render template with correct urls containing view type and printed values', async () => {
       req.baseUrl = '/prisoner-search'
       req.query = {
         alerts: ['HA', 'HA1'],
@@ -301,7 +301,14 @@ describe('Prisoner search', () => {
       expect(res.render).toHaveBeenCalledWith(
         'prisonerSearch/prisonerSearch.njk',
         expect.objectContaining({
-          searchUrl: '/prisoner-search?location=MDI&keywords=Smith&alerts%5B%5D=HA&alerts%5B%5D=HA1&pageOffsetOption=',
+          links: {
+            allResults:
+              '/prisoner-search?alerts=HA&alerts=HA1&keywords=Smith&location=MDI&view=grid&alerts%5B%5D=HA&alerts%5B%5D=HA1&viewAll=true&pageLimitOption=0',
+            gridView:
+              '/prisoner-search?alerts=HA&alerts=HA1&keywords=Smith&location=MDI&view=grid&alerts%5B%5D=HA&alerts%5B%5D=HA1',
+            listView:
+              '/prisoner-search?alerts=HA&alerts=HA1&keywords=Smith&location=MDI&view=list&alerts%5B%5D=HA&alerts%5B%5D=HA1',
+          },
           view: 'grid',
           printedValues: {
             alerts: ['ACCT open', 'ACCT post closure'],
@@ -320,7 +327,7 @@ describe('Prisoner search', () => {
 
       await controller.index(req, res)
 
-      expect(elite2Api.getInmates).toHaveBeenCalledWith(
+      expect(prisonApi.getInmates).toHaveBeenCalledWith(
         {
           ...res.locals,
           requestHeaders: expect.objectContaining({
@@ -340,7 +347,7 @@ describe('Prisoner search', () => {
     })
 
     it('should render the error template if there is a problem', async () => {
-      elite2Api.getInmates.mockImplementation(() => Promise.reject(new Error('Network error')))
+      prisonApi.getInmates.mockImplementation(() => Promise.reject(new Error('Network error')))
 
       await controller.index(req, res)
 
@@ -349,7 +356,7 @@ describe('Prisoner search', () => {
     })
 
     it('should not log connection reset API errors', async () => {
-      elite2Api.getInmates.mockImplementation(() => Promise.reject(makeResetError()))
+      prisonApi.getInmates.mockImplementation(() => Promise.reject(makeResetError()))
 
       await controller.index(req, res)
 
@@ -357,7 +364,7 @@ describe('Prisoner search', () => {
     })
 
     it('should not log connection reset API errors with timeout in stack', async () => {
-      elite2Api.getInmates.mockImplementation(() => Promise.reject(makeResetErrorWithStack()))
+      prisonApi.getInmates.mockImplementation(() => Promise.reject(makeResetErrorWithStack()))
 
       await controller.index(req, res)
 
@@ -383,7 +390,7 @@ describe('Prisoner search', () => {
 
       await controller.index(req, res)
 
-      expect(elite2Api.getInmates).toHaveBeenCalledWith(
+      expect(prisonApi.getInmates).toHaveBeenCalledWith(
         expect.objectContaining({
           requestHeaders: expect.objectContaining({
             'Page-Limit': 500,

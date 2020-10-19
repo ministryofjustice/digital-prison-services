@@ -4,7 +4,7 @@ const { serviceUnavailableMessage } = require('../common-messages')
 describe('Prisoner adjudication details', () => {
   const offenderNo = 'ABC123'
   const adjudicationNumber = '123'
-  const elite2Api = {}
+  const prisonApi = {}
 
   let req
   let res
@@ -20,21 +20,21 @@ describe('Prisoner adjudication details', () => {
 
     logError = jest.fn()
 
-    elite2Api.getDetails = jest.fn().mockResolvedValue({ firstName: 'John', lastName: 'Smith ' })
-    elite2Api.getAdjudicationDetails = jest.fn().mockResolvedValue({})
+    prisonApi.getDetails = jest.fn().mockResolvedValue({ firstName: 'John', lastName: 'Smith ' })
+    prisonApi.getAdjudicationDetails = jest.fn().mockResolvedValue({})
 
-    controller = prisonerAdjudicationDetails({ elite2Api, logError })
+    controller = prisonerAdjudicationDetails({ prisonApi, logError })
   })
 
   it('should make the expected API calls', async () => {
     await controller(req, res)
 
-    expect(elite2Api.getDetails).toHaveBeenCalledWith(res.locals, offenderNo)
-    expect(elite2Api.getAdjudicationDetails).toHaveBeenCalledWith(res.locals, offenderNo, adjudicationNumber)
+    expect(prisonApi.getDetails).toHaveBeenCalledWith(res.locals, offenderNo)
+    expect(prisonApi.getAdjudicationDetails).toHaveBeenCalledWith(res.locals, offenderNo, adjudicationNumber)
   })
 
   it('should render the template with the correctly formatted data', async () => {
-    elite2Api.getAdjudicationDetails.mockResolvedValue({
+    prisonApi.getAdjudicationDetails.mockResolvedValue({
       adjudicationNumber: 123,
       incidentTime: '2016-10-19T10:00:00',
       establishment: 'Moorland (HMP & YOI)',
@@ -171,7 +171,7 @@ describe('Prisoner adjudication details', () => {
 
   describe('Errors', () => {
     it('should render the error template with a link to the prisoner profile page if there is a problem retrieving prisoner details', async () => {
-      elite2Api.getDetails.mockImplementation(() => Promise.reject(new Error('Network error')))
+      prisonApi.getDetails.mockImplementation(() => Promise.reject(new Error('Network error')))
 
       await controller(req, res)
 

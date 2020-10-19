@@ -4,10 +4,10 @@ const {
 } = require('../../config')
 const { properCaseName } = require('../../utils')
 
-module.exports = ({ elite2Api, logError }) => async (req, res) => {
+module.exports = ({ prisonApi, logError }) => async (req, res) => {
   try {
     const { offenderNo } = req.params
-    const prisonerDetails = await elite2Api.getDetails(res.locals, offenderNo)
+    const prisonerDetails = await prisonApi.getDetails(res.locals, offenderNo)
 
     return res.render('prisonerProfile/prisonerFullImage.njk', {
       backUrl: req.headers.referer || `/prisoner/${offenderNo}`,

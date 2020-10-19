@@ -18,7 +18,7 @@ describe('prisoner alerts', () => {
     offenderNo,
   }
   const bookingId = '14'
-  const elite2Api = {}
+  const prisonApi = {}
   const oauthApi = {}
   const prisonerProfileService = {}
   const referenceCodesService = {}
@@ -41,7 +41,7 @@ describe('prisoner alerts', () => {
 
     prisonerProfileService.getPrisonerProfileData = jest.fn().mockResolvedValue(prisonerProfileData)
 
-    elite2Api.getDetails = jest.fn().mockResolvedValue({})
+    prisonApi.getDetails = jest.fn().mockResolvedValue({})
     referenceCodesService.getAlertTypes = jest.fn().mockResolvedValue({
       alertTypes: [
         { activeFlag: 'Y', description: 'Child Communication Measures', value: 'C' },
@@ -49,24 +49,24 @@ describe('prisoner alerts', () => {
       ],
     })
     paginationService.getPagination = jest.fn().mockReturnValue([])
-    elite2Api.getAlertsForBooking = jest.fn().mockResolvedValue([])
+    prisonApi.getAlertsForBooking = jest.fn().mockResolvedValue([])
     oauthApi.userRoles = jest.fn().mockResolvedValue([{ roleCode: 'UPDATE_ALERT' }])
     controller = prisonerAlerts({
       prisonerProfileService,
       referenceCodesService,
       paginationService,
-      elite2Api,
+      prisonApi,
       oauthApi,
       logError,
     })
   })
 
   it('should make a call for the prisoner alerts and the prisoner header details and render them', async () => {
-    elite2Api.getDetails.mockResolvedValue({ bookingId })
+    prisonApi.getDetails.mockResolvedValue({ bookingId })
     await controller(req, res)
 
-    expect(elite2Api.getDetails).toHaveBeenCalledWith(res.locals, offenderNo)
-    expect(elite2Api.getAlertsForBooking).toHaveBeenCalledWith(
+    expect(prisonApi.getDetails).toHaveBeenCalledWith(res.locals, offenderNo)
+    expect(prisonApi.getAlertsForBooking).toHaveBeenCalledWith(
       res.locals,
       {
         bookingId: '14',
@@ -88,7 +88,7 @@ describe('prisoner alerts', () => {
   })
 
   it('should correctly combine filters and pass on to API call', async () => {
-    elite2Api.getDetails.mockResolvedValue({ bookingId })
+    prisonApi.getDetails.mockResolvedValue({ bookingId })
     req.query = {
       fromDate: '10/10/2019',
       toDate: '11/10/2019',
@@ -107,7 +107,7 @@ describe('prisoner alerts', () => {
     })
     await controller(req, res)
 
-    expect(elite2Api.getAlertsForBooking).toHaveBeenCalledWith(
+    expect(prisonApi.getAlertsForBooking).toHaveBeenCalledWith(
       res.locals,
       {
         bookingId: '14',
@@ -142,8 +142,8 @@ describe('prisoner alerts', () => {
 
   describe('alerts', () => {
     beforeEach(() => {
-      elite2Api.getDetails.mockResolvedValue({ bookingId })
-      elite2Api.getAlertsForBooking.mockResolvedValue([
+      prisonApi.getDetails.mockResolvedValue({ bookingId })
+      prisonApi.getAlertsForBooking.mockResolvedValue([
         {
           active: true,
           addedByFirstName: 'John',
@@ -224,7 +224,7 @@ describe('prisoner alerts', () => {
 
   describe('when there are errors with retrieving information', () => {
     it('should redirect to error page', async () => {
-      elite2Api.getAlertsForBooking.mockRejectedValue(new Error('Problem retrieving alerts'))
+      prisonApi.getAlertsForBooking.mockRejectedValue(new Error('Problem retrieving alerts'))
       await controller(req, res)
 
       expect(logError).toHaveBeenCalledWith(

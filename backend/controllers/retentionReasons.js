@@ -2,7 +2,7 @@ const qs = require('qs')
 const { serviceUnavailableMessage } = require('../common-messages')
 const { formatTimestampToDate, formatTimestampToDateTime } = require('../utils')
 
-const retentionReasonsFactory = (elite2Api, dataComplianceApi, logError) => {
+const retentionReasonsFactory = (prisonApi, dataComplianceApi, logError) => {
   const sortReasonsByDisplayOrder = reasons => reasons.sort((r1, r2) => (r1.displayOrder > r2.displayOrder ? 1 : -1))
 
   const getOffenderUrl = offenderNo => `/prisoner/${offenderNo}`
@@ -51,11 +51,11 @@ const retentionReasonsFactory = (elite2Api, dataComplianceApi, logError) => {
     try {
       const { offenderNo } = req.params
       const [offenderDetails, allRetentionReasons, existingRecord] = await Promise.all([
-        elite2Api.getDetails(res.locals, offenderNo),
+        prisonApi.getDetails(res.locals, offenderNo),
         dataComplianceApi.getOffenderRetentionReasons(res.locals).then(sortReasonsByDisplayOrder),
         dataComplianceApi.getOffenderRetentionRecord(res.locals, offenderNo),
       ])
-      const agencyDetails = await elite2Api.getAgencyDetails(res.locals, offenderDetails.agencyId)
+      const agencyDetails = await prisonApi.getAgencyDetails(res.locals, offenderDetails.agencyId)
       const reasonsToFlag = selectedReasons || (existingRecord && existingRecord.retentionReasons) || []
 
       return res.render('retentionReasons.njk', {

@@ -123,6 +123,28 @@
         }
 
         padding: $govuk-gutter-half;
+
+        @media print {
+          width: 25%;
+          display: inline-block;
+          page-break-inside: avoid;
+
+          .govuk-link {
+            color: inherit;
+            text-decoration: none;
+
+            // Remove url from links in printed view
+            &[href^="/"], &[href^="http://"], &[href^="https://"] {
+              &::after {
+                content: '';
+              }
+            }
+          }
+        }
+      }
+
+      @media print {
+        display: block;
       }
     }
   }

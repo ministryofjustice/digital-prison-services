@@ -5,7 +5,7 @@ const {
   app: { notmEndpointUrl: dpsUrl },
 } = require('../../config')
 
-module.exports = ({ elite2Api, logError }) => {
+module.exports = ({ prisonApi, logError }) => {
   const renderError = (req, res, error) => {
     const { offenderNo } = req.params
     logError(req.originalUrl, error, serviceUnavailableMessage)
@@ -17,12 +17,12 @@ module.exports = ({ elite2Api, logError }) => {
     const { errors, formValues = {} } = pageData || {}
 
     try {
-      const prisonerDetails = await elite2Api.getDetails(res.locals, offenderNo)
+      const prisonerDetails = await prisonApi.getDetails(res.locals, offenderNo)
       const { agencyId, bookingId, firstName, lastName } = prisonerDetails
 
       const [iepSummary, iepLevels] = await Promise.all([
-        elite2Api.getIepSummaryForBooking(res.locals, bookingId, true),
-        elite2Api.getAgencyIepLevels(res.locals, agencyId),
+        prisonApi.getIepSummaryForBooking(res.locals, bookingId, true),
+        prisonApi.getAgencyIepLevels(res.locals, agencyId),
       ])
 
       const { iepLevel } = iepSummary
@@ -78,7 +78,7 @@ module.exports = ({ elite2Api, logError }) => {
     }
 
     try {
-      await elite2Api.changeIepLevel(res.locals, bookingId, {
+      await prisonApi.changeIepLevel(res.locals, bookingId, {
         iepLevel: newIepLevel,
         comment: reason,
       })

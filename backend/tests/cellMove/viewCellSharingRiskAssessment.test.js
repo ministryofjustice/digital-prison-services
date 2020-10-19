@@ -9,7 +9,7 @@ describe('view CSRA details', () => {
   let logError
   let controller
 
-  const elite2Api = {}
+  const prisonApi = {}
 
   const offenderNo = 'ABC123'
 
@@ -35,8 +35,8 @@ describe('view CSRA details', () => {
     }
     res = { locals: {}, render: jest.fn() }
 
-    elite2Api.getDetails = jest.fn().mockResolvedValue(getDetailsResponse)
-    elite2Api.getCsraAssessments = jest.fn().mockResolvedValue([
+    prisonApi.getDetails = jest.fn().mockResolvedValue(getDetailsResponse)
+    prisonApi.getCsraAssessments = jest.fn().mockResolvedValue([
       {
         bookingId: 1234,
         offenderNo,
@@ -74,23 +74,23 @@ describe('view CSRA details', () => {
         assessorUser: 'TEST_USER',
       },
     ])
-    elite2Api.getAgencyDetails = jest.fn().mockResolvedValue({
+    prisonApi.getAgencyDetails = jest.fn().mockResolvedValue({
       description: 'HMP Moorland',
     })
 
-    controller = viewCellSharingRiskAssessmentDetails({ elite2Api, logError })
+    controller = viewCellSharingRiskAssessmentDetails({ prisonApi, logError })
   })
 
   it('Makes the expected API calls', async () => {
     await controller(req, res)
 
-    expect(elite2Api.getDetails).toHaveBeenCalledWith(res.locals, offenderNo, true)
-    expect(elite2Api.getCsraAssessments).toHaveBeenCalledWith(res.locals, [offenderNo])
-    expect(elite2Api.getAgencyDetails).toHaveBeenCalledWith(res.locals, 'MDI')
+    expect(prisonApi.getDetails).toHaveBeenCalledWith(res.locals, offenderNo, true)
+    expect(prisonApi.getCsraAssessments).toHaveBeenCalledWith(res.locals, [offenderNo])
+    expect(prisonApi.getAgencyDetails).toHaveBeenCalledWith(res.locals, 'MDI')
   })
 
   it('Should render error template when there is an API error', async () => {
-    elite2Api.getDetails.mockImplementation(() => Promise.reject(new Error('Network error')))
+    prisonApi.getDetails.mockImplementation(() => Promise.reject(new Error('Network error')))
 
     await controller(req, res)
 

@@ -3,7 +3,7 @@ const { serviceUnavailableMessage } = require('../common-messages')
 
 describe('prisoner profile full image', () => {
   const offenderNo = 'ABC123'
-  const elite2Api = {}
+  const prisonApi = {}
 
   let req
   let res
@@ -20,16 +20,16 @@ describe('prisoner profile full image', () => {
 
     logError = jest.fn()
 
-    elite2Api.getDetails = jest.fn()
-    elite2Api.getDetails.mockReturnValue({ firstName: 'Test', lastName: 'Prisoner' })
+    prisonApi.getDetails = jest.fn()
+    prisonApi.getDetails.mockReturnValue({ firstName: 'Test', lastName: 'Prisoner' })
 
-    controller = prisonerFullImage({ elite2Api, logError })
+    controller = prisonerFullImage({ prisonApi, logError })
   })
 
   it('should make a call for the basic details of a prisoner', async () => {
     await controller(req, res)
 
-    expect(elite2Api.getDetails).toHaveBeenCalledWith(res.locals, offenderNo)
+    expect(prisonApi.getDetails).toHaveBeenCalledWith(res.locals, offenderNo)
   })
 
   it('should render with the correct back url if no referer', async () => {
@@ -56,10 +56,10 @@ describe('prisoner profile full image', () => {
     })
   })
 
-  describe('when there are errors with elite2Api', () => {
+  describe('when there are errors with prisonApi', () => {
     beforeEach(() => {
       req.params.offenderNo = offenderNo
-      elite2Api.getDetails.mockImplementation(() => Promise.reject(new Error('Network error')))
+      prisonApi.getDetails.mockImplementation(() => Promise.reject(new Error('Network error')))
     })
 
     it('should render the error template', async () => {

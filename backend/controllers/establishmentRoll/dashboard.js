@@ -9,14 +9,14 @@ const zeroIfNotDefined = number => number || 0
 const getTotals = (array, figure) =>
   array.reduce((accumulator, block) => accumulator + zeroIfNotDefined(block[figure]), 0)
 
-module.exports = ({ elite2Api, logError }) => async (req, res) => {
+module.exports = ({ prisonApi, logError }) => async (req, res) => {
   try {
     const agencyId = res.locals.user.activeCaseLoad.caseLoadId
     const [assignedResponse, unassignedResponse, movementsResponse, enroute] = await Promise.all([
-      elite2Api.getEstablishmentRollBlocksCount(res.locals, agencyId, false),
-      elite2Api.getEstablishmentRollBlocksCount(res.locals, agencyId, true),
-      elite2Api.getEstablishmentRollMovementsCount(res.locals, agencyId),
-      elite2Api.getEstablishmentRollEnrouteCount(res.locals, agencyId),
+      prisonApi.getEstablishmentRollBlocksCount(res.locals, agencyId, false),
+      prisonApi.getEstablishmentRollBlocksCount(res.locals, agencyId, true),
+      prisonApi.getEstablishmentRollMovementsCount(res.locals, agencyId),
+      prisonApi.getEstablishmentRollEnrouteCount(res.locals, agencyId),
     ])
 
     const unassignedIn = getTotals(unassignedResponse, 'currentlyInCell')

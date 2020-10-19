@@ -4,12 +4,12 @@ describe('Cell not available', () => {
   const res = { locals: {} }
   let req
 
-  const elite2Api = {}
+  const prisonApi = {}
   let logError
   let controller
 
   beforeEach(() => {
-    elite2Api.getDetails = jest.fn().mockResolvedValue({
+    prisonApi.getDetails = jest.fn().mockResolvedValue({
       firstName: 'John',
       lastName: 'Doe',
     })
@@ -17,7 +17,7 @@ describe('Cell not available', () => {
     res.redirect = jest.fn()
     res.render = jest.fn()
 
-    controller = cellNotAvailable({ elite2Api, logError })
+    controller = cellNotAvailable({ prisonApi, logError })
 
     req = {
       originalUrl: 'http://localhost',
@@ -40,7 +40,7 @@ describe('Cell not available', () => {
   it('should make a request for offender details', async () => {
     await controller(req, res)
 
-    expect(elite2Api.getDetails).toHaveBeenCalledWith({}, 'A12345')
+    expect(prisonApi.getDetails).toHaveBeenCalledWith({}, 'A12345')
   })
 
   it('should render page with the correct view model', async () => {
@@ -57,7 +57,7 @@ describe('Cell not available', () => {
   it('should log and render the error page', async () => {
     const error = new Error('network error')
 
-    elite2Api.getDetails.mockRejectedValue(error)
+    prisonApi.getDetails.mockRejectedValue(error)
 
     await controller(req, res)
 

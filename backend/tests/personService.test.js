@@ -2,14 +2,14 @@ const personService = require('../services/personService')
 
 describe('person service', () => {
   const context = {}
-  const elite2Api = {}
+  const prisonApi = {}
   let service
 
   beforeEach(() => {
-    elite2Api.getPersonAddresses = jest.fn()
-    elite2Api.getPersonEmails = jest.fn()
-    elite2Api.getPersonPhones = jest.fn()
-    service = personService(elite2Api)
+    prisonApi.getPersonAddresses = jest.fn()
+    prisonApi.getPersonEmails = jest.fn()
+    prisonApi.getPersonPhones = jest.fn()
+    service = personService(prisonApi)
   })
 
   describe('person contact details', () => {
@@ -35,17 +35,17 @@ describe('person service', () => {
     const phones = [{ number: '07711333444', type: 'MOB' }, { number: '011333444', type: 'BUS', ext: '777' }]
 
     beforeEach(() => {
-      elite2Api.getPersonAddresses.mockResolvedValue(addresses)
-      elite2Api.getPersonEmails.mockResolvedValue(emails)
-      elite2Api.getPersonPhones.mockResolvedValue(phones)
+      prisonApi.getPersonAddresses.mockResolvedValue(addresses)
+      prisonApi.getPersonEmails.mockResolvedValue(emails)
+      prisonApi.getPersonPhones.mockResolvedValue(phones)
     })
 
     it('should make a call for the contact details of the specified person', async () => {
       await service.getPersonContactDetails(context, personId)
 
-      expect(elite2Api.getPersonAddresses).toHaveBeenCalledWith(context, personId)
-      expect(elite2Api.getPersonEmails).toHaveBeenCalledWith(context, personId)
-      expect(elite2Api.getPersonPhones).toHaveBeenCalledWith(context, personId)
+      expect(prisonApi.getPersonAddresses).toHaveBeenCalledWith(context, personId)
+      expect(prisonApi.getPersonEmails).toHaveBeenCalledWith(context, personId)
+      expect(prisonApi.getPersonPhones).toHaveBeenCalledWith(context, personId)
     })
 
     it('should return the correct contact details', async () => {
@@ -56,9 +56,9 @@ describe('person service', () => {
 
     describe('when there are errors with retrieving information', () => {
       beforeEach(() => {
-        elite2Api.getPersonAddresses.mockRejectedValue(new Error('Network error'))
-        elite2Api.getPersonEmails.mockRejectedValue(new Error('Network error'))
-        elite2Api.getPersonPhones.mockRejectedValue(new Error('Network error'))
+        prisonApi.getPersonAddresses.mockRejectedValue(new Error('Network error'))
+        prisonApi.getPersonEmails.mockRejectedValue(new Error('Network error'))
+        prisonApi.getPersonPhones.mockRejectedValue(new Error('Network error'))
       })
 
       it('should still pass those values as null', async () => {

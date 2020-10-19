@@ -34,12 +34,12 @@ module.exports = {
       url: process.env.OAUTH_ENDPOINT_URL || 'http://localhost:9090/auth/',
       ui_url: process.env.OAUTH_ENDPOINT_UI_URL || process.env.OAUTH_ENDPOINT_URL || 'http://localhost:9090/auth/',
       timeoutSeconds: process.env.API_ENDPOINT_TIMEOUT_SECONDS || 10,
-      clientId: process.env.API_CLIENT_ID || 'elite2apiclient',
+      clientId: process.env.API_CLIENT_ID || 'prisonapiclient',
       clientSecret: process.env.API_CLIENT_SECRET || 'clientsecret',
       systemClientId: process.env.API_SYSTEM_CLIENT_ID || 'prisonstaffhubclient',
       systemClientSecret: process.env.API_SYSTEM_CLIENT_SECRET || 'clientsecret',
     },
-    elite2: {
+    prisonApi: {
       url: process.env.API_ENDPOINT_URL || 'http://localhost:8080/',
       timeoutSeconds: process.env.API_ENDPOINT_TIMEOUT_SECONDS || 30,
     },

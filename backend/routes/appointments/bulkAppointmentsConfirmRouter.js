@@ -3,8 +3,8 @@ const { bulkAppointmentsConfirmFactory } = require('../../controllers/appointmen
 
 const router = express.Router()
 
-const controller = ({ elite2Api, logError }) => {
-  const { index, post } = bulkAppointmentsConfirmFactory(elite2Api, logError)
+const controller = ({ prisonApi, logError }) => {
+  const { index, post } = bulkAppointmentsConfirmFactory(prisonApi, logError)
 
   router.get('/', index)
   router.post('/', post)

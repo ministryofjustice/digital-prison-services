@@ -20,18 +20,18 @@ function hasCovidAlertByOffenderNo(alertsByOffenderNumber) {
 module.exports = {
   alerts,
 
-  covidServiceFactory: (elite2Api, now = () => moment()) => {
+  covidServiceFactory: (prisonApi, now = () => moment()) => {
     async function getRecentMovements(context, caseLoadId) {
       const fourteenDaysAgo = now()
         .startOf('day')
         .subtract(14, 'days')
         .format('YYYY-MM-DDTHH:mm:ss')
 
-      return elite2Api.getMovementsInBetween(context, caseLoadId, { fromDateTime: fourteenDaysAgo })
+      return prisonApi.getMovementsInBetween(context, caseLoadId, { fromDateTime: fourteenDaysAgo })
     }
 
     async function getAlertsByOffenderNumber(context, caseLoadId, offenderNumbers) {
-      const offenderAlerts = await elite2Api.getAlerts(context, {
+      const offenderAlerts = await prisonApi.getAlerts(context, {
         agencyId: caseLoadId,
         offenderNumbers,
       })
@@ -49,7 +49,7 @@ module.exports = {
 
         const context = { ...res.locals, requestHeaders: { 'page-offset': 0, 'page-limit': 1 } }
 
-        await elite2Api.getInmates(context, caseLoadId, alert ? { alerts: alert } : {})
+        await prisonApi.getInmates(context, caseLoadId, alert ? { alerts: alert } : {})
 
         return context.responseHeaders['total-records']
       },
@@ -59,9 +59,9 @@ module.exports = {
 
         const context = { ...res.locals, requestHeaders: { 'page-offset': 0, 'page-limit': 3000 } }
 
-        const inmates = await elite2Api.getInmates(context, caseLoadId, code ? { alerts: code } : {})
+        const inmates = await prisonApi.getInmates(context, caseLoadId, code ? { alerts: code } : {})
 
-        const offenderAlerts = await elite2Api.getAlerts(context, {
+        const offenderAlerts = await prisonApi.getAlerts(context, {
           agencyId: caseLoadId,
           offenderNumbers: inmates.map(inmate => inmate.offenderNo),
         })

@@ -63,7 +63,7 @@ const extractObjectFromFlash = ({ req, key }) =>
 const getBookingDetails = req => extractObjectFromFlash({ req, key: 'requestBooking' })
 const packBookingDetails = (req, data) => req.flash('requestBooking', data)
 
-const requestBookingFactory = ({ logError, notifyClient, whereaboutsApi, oauthApi, elite2Api }) => {
+const requestBookingFactory = ({ logError, notifyClient, whereaboutsApi, oauthApi, prisonApi }) => {
   const sendEmail = ({ templateId, email, personalisation }) =>
     new Promise((resolve, reject) => {
       try {
@@ -78,7 +78,7 @@ const requestBookingFactory = ({ logError, notifyClient, whereaboutsApi, oauthAp
     })
 
   const getVideoLinkEnabledPrisons = async locals => {
-    const prisons = await elite2Api.getAgencies(locals)
+    const prisons = await prisonApi.getAgencies(locals)
 
     return prisons.filter(prison => videoLinkEnabledFor.includes(prison.agencyId)).map(vlp => ({
       agencyId: vlp.agencyId,
@@ -206,7 +206,7 @@ const requestBookingFactory = ({ logError, notifyClient, whereaboutsApi, oauthAp
       postHearingStartAndEndTime,
     })
 
-    const prisons = await elite2Api.getAgencies(res.locals)
+    const prisons = await prisonApi.getAgencies(res.locals)
     const matchingPrison = prisons.find(p => p.agencyId === prison)
 
     return res.render('requestBooking/selectCourt.njk', {
@@ -305,7 +305,7 @@ const requestBookingFactory = ({ logError, notifyClient, whereaboutsApi, oauthAp
         hearingLocation,
       } = bookingDetails
 
-      const prisons = await elite2Api.getAgencies(res.locals)
+      const prisons = await prisonApi.getAgencies(res.locals)
       const matchingPrison = prisons.find(p => p.agencyId === prison)
 
       const personalisation = {

@@ -4,7 +4,7 @@ const { serviceUnavailableMessage } = require('../common-messages')
 describe('Prisoner schedule', () => {
   const offenderNo = 'ABC123'
   const bookingId = '123'
-  const elite2Api = {}
+  const prisonApi = {}
 
   let req
   let res
@@ -23,11 +23,11 @@ describe('Prisoner schedule', () => {
 
     logError = jest.fn()
 
-    elite2Api.getDetails = jest.fn().mockResolvedValue({ bookingId, firstName: 'John', lastName: 'Smith ' })
-    elite2Api.getScheduledEventsForThisWeek = jest.fn().mockResolvedValue([])
-    elite2Api.getScheduledEventsForNextWeek = jest.fn().mockResolvedValue([])
+    prisonApi.getDetails = jest.fn().mockResolvedValue({ bookingId, firstName: 'John', lastName: 'Smith ' })
+    prisonApi.getScheduledEventsForThisWeek = jest.fn().mockResolvedValue([])
+    prisonApi.getScheduledEventsForNextWeek = jest.fn().mockResolvedValue([])
 
-    controller = prisonerSchedule({ elite2Api, logError })
+    controller = prisonerSchedule({ prisonApi, logError })
 
     jest.spyOn(Date, 'now').mockImplementation(() => 1595548800000) // Friday, 24 July 2020 00:00:00
   })
@@ -35,14 +35,14 @@ describe('Prisoner schedule', () => {
   it('should get the prisoner details', async () => {
     await controller(req, res)
 
-    expect(elite2Api.getDetails).toHaveBeenCalledWith(res.locals, offenderNo)
+    expect(prisonApi.getDetails).toHaveBeenCalledWith(res.locals, offenderNo)
   })
 
   describe('when visiting the page with no query', () => {
     it('should get the schedule for this week', async () => {
       await controller(req, res)
 
-      expect(elite2Api.getScheduledEventsForThisWeek).toHaveBeenCalledWith(res.locals, bookingId)
+      expect(prisonApi.getScheduledEventsForThisWeek).toHaveBeenCalledWith(res.locals, bookingId)
     })
 
     describe('without data', () => {
@@ -92,7 +92,7 @@ describe('Prisoner schedule', () => {
 
     describe('with data', () => {
       beforeEach(() => {
-        elite2Api.getScheduledEventsForThisWeek.mockResolvedValue([
+        prisonApi.getScheduledEventsForThisWeek.mockResolvedValue([
           {
             bookingId: 1200961,
             eventClass: 'INT_MOV',
@@ -258,7 +258,7 @@ describe('Prisoner schedule', () => {
     it('should get the schedule for next week', async () => {
       await controller(req, res)
 
-      expect(elite2Api.getScheduledEventsForNextWeek).toHaveBeenCalledWith(res.locals, bookingId)
+      expect(prisonApi.getScheduledEventsForNextWeek).toHaveBeenCalledWith(res.locals, bookingId)
     })
 
     describe('without data', () => {
@@ -309,7 +309,7 @@ describe('Prisoner schedule', () => {
 
   describe('errors', () => {
     it('should render the error template with a link to the homepage if there is a problem retrieving prisoner details', async () => {
-      elite2Api.getDetails.mockImplementation(() => Promise.reject(new Error('Network error')))
+      prisonApi.getDetails.mockImplementation(() => Promise.reject(new Error('Network error')))
 
       await controller(req, res)
 
@@ -318,7 +318,7 @@ describe('Prisoner schedule', () => {
     })
 
     it('should render the error template with a link to the homepage if there is a problem retrieving schedules', async () => {
-      elite2Api.getScheduledEventsForThisWeek.mockImplementation(() => Promise.reject(new Error('Network error')))
+      prisonApi.getScheduledEventsForThisWeek.mockImplementation(() => Promise.reject(new Error('Network error')))
 
       await controller(req, res)
 

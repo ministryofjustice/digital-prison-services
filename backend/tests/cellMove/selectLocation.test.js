@@ -10,7 +10,7 @@ describe('select location', () => {
   let logError
   let controller
 
-  const elite2Api = {}
+  const prisonApi = {}
 
   const whereaboutsApi = {}
   const oauthApi = {}
@@ -90,9 +90,9 @@ describe('select location', () => {
     }
     res = { locals: {}, render: jest.fn() }
 
-    elite2Api.getDetails = jest.fn().mockResolvedValue(getDetailsResponse)
-    elite2Api.getNonAssociations = jest.fn().mockResolvedValue({ nonAssociations: [] })
-    elite2Api.getCellAttributes = jest.fn().mockResolvedValue([
+    prisonApi.getDetails = jest.fn().mockResolvedValue(getDetailsResponse)
+    prisonApi.getNonAssociations = jest.fn().mockResolvedValue({ nonAssociations: [] })
+    prisonApi.getCellAttributes = jest.fn().mockResolvedValue([
       {
         domain: 'HOU_UNIT_ATT',
         code: 'A',
@@ -231,29 +231,29 @@ describe('select location', () => {
     ])
 
     oauthApi.userRoles = jest.fn().mockResolvedValue([{ roleCode: 'CELL_MOVE' }])
-    elite2Api.userCaseLoads = jest.fn().mockResolvedValue([{ caseLoadId: 'MDI' }])
+    prisonApi.userCaseLoads = jest.fn().mockResolvedValue([{ caseLoadId: 'MDI' }])
 
-    controller = selectLocation({ oauthApi, elite2Api, whereaboutsApi, logError })
+    controller = selectLocation({ oauthApi, prisonApi, whereaboutsApi, logError })
   })
 
   it('Makes the expected API calls', async () => {
     await controller(req, res)
 
-    expect(elite2Api.getDetails).toHaveBeenCalledWith(res.locals, offenderNo, true)
-    expect(elite2Api.getNonAssociations).toHaveBeenCalledWith(res.locals, 1234)
-    expect(elite2Api.getCellAttributes).toHaveBeenCalledWith(res.locals)
+    expect(prisonApi.getDetails).toHaveBeenCalledWith(res.locals, offenderNo, true)
+    expect(prisonApi.getNonAssociations).toHaveBeenCalledWith(res.locals, 1234)
+    expect(prisonApi.getCellAttributes).toHaveBeenCalledWith(res.locals)
     expect(whereaboutsApi.searchGroups).toHaveBeenCalledWith(res.locals, 'MDI')
   })
 
   it('Redirects when offender not in user caseloads', async () => {
-    elite2Api.userCaseLoads = jest.fn().mockResolvedValue([{ caseLoadId: 'BWY' }])
+    prisonApi.userCaseLoads = jest.fn().mockResolvedValue([{ caseLoadId: 'BWY' }])
     await controller(req, res)
 
     expect(res.render).toHaveBeenCalledWith('notFound.njk', { url: '/prisoner-search' })
   })
 
   it('Should render error template when there is an API error', async () => {
-    elite2Api.getDetails.mockImplementation(() => Promise.reject(new Error('Network error')))
+    prisonApi.getDetails.mockImplementation(() => Promise.reject(new Error('Network error')))
 
     await controller(req, res)
 
@@ -285,13 +285,13 @@ describe('select location', () => {
     })
 
     it('populates the data correctly when some non-associations, but not in the same establishment', async () => {
-      elite2Api.getDetails = jest.fn().mockResolvedValue({
+      prisonApi.getDetails = jest.fn().mockResolvedValue({
         ...getDetailsResponse,
         assignedLivingUnit: {
           agencyName: 'Moorland',
         },
       })
-      elite2Api.getNonAssociations = jest.fn().mockResolvedValue({
+      prisonApi.getNonAssociations = jest.fn().mockResolvedValue({
         nonAssociations: [
           {
             offenderNonAssociation: {
@@ -311,13 +311,13 @@ describe('select location', () => {
     })
 
     it('populates the data correctly when some non-associations, but not effective yet', async () => {
-      elite2Api.getDetails = jest.fn().mockResolvedValue({
+      prisonApi.getDetails = jest.fn().mockResolvedValue({
         ...getDetailsResponse,
         assignedLivingUnit: {
           agencyName: 'Moorland',
         },
       })
-      elite2Api.getNonAssociations = jest.fn().mockResolvedValue({
+      prisonApi.getNonAssociations = jest.fn().mockResolvedValue({
         nonAssociations: [
           {
             effectiveDate: moment().add(1, 'days'),
@@ -338,13 +338,13 @@ describe('select location', () => {
     })
 
     it('populates the data correctly when some non-associations, but expired', async () => {
-      elite2Api.getDetails = jest.fn().mockResolvedValue({
+      prisonApi.getDetails = jest.fn().mockResolvedValue({
         ...getDetailsResponse,
         assignedLivingUnit: {
           agencyName: 'Moorland',
         },
       })
-      elite2Api.getNonAssociations = jest.fn().mockResolvedValue({
+      prisonApi.getNonAssociations = jest.fn().mockResolvedValue({
         nonAssociations: [
           {
             effectiveDate: moment().subtract(10, 'days'),
@@ -366,13 +366,13 @@ describe('select location', () => {
     })
 
     it('populates the data correctly when some non-associations in the same establishment', async () => {
-      elite2Api.getDetails = jest.fn().mockResolvedValue({
+      prisonApi.getDetails = jest.fn().mockResolvedValue({
         ...getDetailsResponse,
         assignedLivingUnit: {
           agencyName: 'Moorland',
         },
       })
-      elite2Api.getNonAssociations = jest.fn().mockResolvedValue({
+      prisonApi.getNonAssociations = jest.fn().mockResolvedValue({
         nonAssociations: [
           {
             effectiveDate: moment(),
@@ -393,7 +393,7 @@ describe('select location', () => {
     })
 
     it('populates the data correctly when CSR Rating assessment does not have a comment', async () => {
-      elite2Api.getDetails = jest.fn().mockResolvedValue({
+      prisonApi.getDetails = jest.fn().mockResolvedValue({
         ...getDetailsResponse,
         assessments: [
           {
@@ -412,7 +412,7 @@ describe('select location', () => {
     })
 
     it('populates the data correctly when CSR Rating assessment has a comment', async () => {
-      elite2Api.getDetails = jest.fn().mockResolvedValue({
+      prisonApi.getDetails = jest.fn().mockResolvedValue({
         ...getDetailsResponse,
         assessments: [
           {

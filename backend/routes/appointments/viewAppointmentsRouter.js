@@ -2,16 +2,16 @@ const moment = require('moment')
 const { serviceUnavailableMessage } = require('../../common-messages')
 const { getTime, properCaseName, formatName, getCurrentPeriod } = require('../../utils')
 
-module.exports = ({ elite2Api, whereaboutsApi, oauthApi, logError }) => async (req, res) => {
+module.exports = ({ prisonApi, whereaboutsApi, oauthApi, logError }) => async (req, res) => {
   const { date, timeSlot = getCurrentPeriod(), type, locationId } = req.query
   const searchDate = date ? moment(date, 'DD/MM/YYYY').format('YYYY-MM-DD') : moment().format('YYYY-MM-DD')
   const agencyId = req.session.userDetails.activeCaseLoadId
 
   try {
     const [appointmentTypes, appointmentLocations, appointments] = await Promise.all([
-      elite2Api.getAppointmentTypes(res.locals),
-      elite2Api.getLocationsForAppointments(res.locals, agencyId),
-      elite2Api.getAppointmentsForAgency(res.locals, {
+      prisonApi.getAppointmentTypes(res.locals),
+      prisonApi.getLocationsForAppointments(res.locals, agencyId),
+      prisonApi.getAppointmentsForAgency(res.locals, {
         agencyId,
         date: searchDate,
         timeSlot: timeSlot !== 'All' ? timeSlot : undefined,
@@ -52,7 +52,7 @@ module.exports = ({ elite2Api, whereaboutsApi, oauthApi, logError }) => async (r
 
         const staffDetails =
           !videoLinkLocation &&
-          (await elite2Api.getStaffDetails(res.locals, appointment.createUserId).catch(error => {
+          (await prisonApi.getStaffDetails(res.locals, appointment.createUserId).catch(error => {
             logError(req.originalUrl, error, serviceUnavailableMessage)
             return null
           }))

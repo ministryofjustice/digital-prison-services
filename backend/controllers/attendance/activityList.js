@@ -40,13 +40,13 @@ const extractAttendanceInfo = (attendanceInformation, event, absentReasons = [])
   return null
 }
 
-const getActivityListFactory = (elite2Api, whereaboutsApi) => {
+const getActivityListFactory = (prisonApi, whereaboutsApi) => {
   const getEventsForOffenderNumbers = async (context, { agencyId, date, timeSlot, offenderNumbers }) => {
     const searchCriteria = { agencyId, date, timeSlot, offenderNumbers }
     const eventsByKind = await Promise.all([
-      elite2Api.getVisits(context, searchCriteria),
-      elite2Api.getAppointments(context, searchCriteria),
-      elite2Api.getActivities(context, searchCriteria),
+      prisonApi.getVisits(context, searchCriteria),
+      prisonApi.getAppointments(context, searchCriteria),
+      prisonApi.getActivities(context, searchCriteria),
     ])
     return [...eventsByKind[0], ...eventsByKind[1], ...eventsByKind[2]] // Meh. No flatMap or flat.
   }
@@ -64,9 +64,9 @@ const getActivityListFactory = (elite2Api, whereaboutsApi) => {
 
     const apiParams = { agencyId, locationId, date, timeSlot }
     const eventsAtLocationByUsage = await Promise.all([
-      elite2Api.getActivitiesAtLocation(context, { ...apiParams, includeSuspended: true }),
-      elite2Api.getActivityList(context, { ...apiParams, usage: 'VISIT' }),
-      elite2Api.getActivityList(context, { ...apiParams, usage: 'APP' }),
+      prisonApi.getActivitiesAtLocation(context, { ...apiParams, includeSuspended: true }),
+      prisonApi.getActivityList(context, { ...apiParams, usage: 'VISIT' }),
+      prisonApi.getActivityList(context, { ...apiParams, usage: 'APP' }),
     ])
 
     const eventsAtLocation = [
@@ -85,7 +85,7 @@ const getActivityListFactory = (elite2Api, whereaboutsApi) => {
       period: timeSlot,
     })
 
-    const externalEventsForOffenders = await getExternalEventsForOffenders(elite2Api, context, {
+    const externalEventsForOffenders = await getExternalEventsForOffenders(prisonApi, context, {
       offenderNumbers,
       formattedDate: date,
       agencyId,

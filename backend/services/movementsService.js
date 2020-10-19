@@ -1,24 +1,24 @@
 const moment = require('moment')
 const { toMap } = require('../utils')
 
-const movementsServiceFactory = (elite2Api, systemOauthClient) => {
+const movementsServiceFactory = (prisonApi, systemOauthClient) => {
   const getAssessmentMap = async (context, offenderNumbers) => {
-    const assessments = (await elite2Api.getAssessments(context, { code: 'CATEGORY', offenderNumbers })) || []
+    const assessments = (await prisonApi.getAssessments(context, { code: 'CATEGORY', offenderNumbers })) || []
     return toMap('offenderNo', assessments)
   }
 
   const getIepMap = async (context, bookingIds) => {
-    const iepData = (await elite2Api.getIepSummary(context, bookingIds)) || []
+    const iepData = (await prisonApi.getIepSummary(context, bookingIds)) || []
     return toMap('bookingId', iepData)
   }
 
   const getRecentMovementsMap = async (systemContext, offenderNumbers) => {
-    const recentMovements = (await elite2Api.getRecentMovements(systemContext, offenderNumbers, [])) || []
+    const recentMovements = (await prisonApi.getRecentMovements(systemContext, offenderNumbers, [])) || []
     return toMap('offenderNo', recentMovements)
   }
 
   const getActiveAlerts = async (systemContext, offenderNumbers) => {
-    const alerts = await elite2Api.getAlertsSystem(systemContext, offenderNumbers)
+    const alerts = await prisonApi.getAlertsSystem(systemContext, offenderNumbers)
     return alerts && alerts.filter(alert => !alert.expired)
   }
 
@@ -90,7 +90,7 @@ const movementsServiceFactory = (elite2Api, systemOauthClient) => {
   const isoDateToday = () => moment().format('YYYY-MM-DD')
 
   const getMovementsIn = async (context, agencyId) => {
-    const movements = await elite2Api.getMovementsIn(context, agencyId, isoDateToday())
+    const movements = await prisonApi.getMovementsIn(context, agencyId, isoDateToday())
 
     if (!movements || movements.length === 0) return []
     const offenderNumbers = extractOffenderNumbers(movements)
@@ -108,12 +108,12 @@ const movementsServiceFactory = (elite2Api, systemOauthClient) => {
   }
 
   const getMovementsOut = async (context, agencyId) => {
-    const movements = await elite2Api.getMovementsOut(context, agencyId, isoDateToday())
+    const movements = await prisonApi.getMovementsOut(context, agencyId, isoDateToday())
     return addAlertsAndCategory(context, movements)
   }
 
   const getOffendersInReception = async (context, agencyId) => {
-    const offenders = await elite2Api.getOffendersInReception(context, agencyId)
+    const offenders = await prisonApi.getOffendersInReception(context, agencyId)
 
     if (!offenders) return []
 
@@ -154,10 +154,10 @@ const movementsServiceFactory = (elite2Api, systemOauthClient) => {
   }
 
   const getOffendersCurrentlyOutOfLivingUnit = async (context, livingUnitId) => {
-    const offenders = await elite2Api.getOffendersCurrentlyOutOfLivingUnit(context, livingUnitId)
+    const offenders = await prisonApi.getOffendersCurrentlyOutOfLivingUnit(context, livingUnitId)
     const [currentlyOut, location] = await Promise.all([
       addAlertsCategoryIepMovements(context, offenders),
-      elite2Api.getLocation(context, livingUnitId),
+      prisonApi.getLocation(context, livingUnitId),
     ])
 
     return {
@@ -167,12 +167,12 @@ const movementsServiceFactory = (elite2Api, systemOauthClient) => {
   }
 
   const getOffendersCurrentlyOutOfAgency = async (context, agencyId) => {
-    const offenders = await elite2Api.getOffendersCurrentlyOutOfAgency(context, agencyId)
+    const offenders = await prisonApi.getOffendersCurrentlyOutOfAgency(context, agencyId)
     return addAlertsCategoryIepMovements(context, offenders)
   }
 
   const getOffendersEnRoute = async (context, agency) => {
-    const offenders = await elite2Api.getOffendersEnRoute(context, agency)
+    const offenders = await prisonApi.getOffendersEnRoute(context, agency)
     return addAlertsAndCategory(context, offenders)
   }
 

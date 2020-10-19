@@ -7,12 +7,12 @@ const checkAppointmentRooms = require('../../middleware/checkAppointmentRooms')
 
 const router = express.Router({ mergeParams: true })
 
-const controller = ({ elite2Api, whereaboutsApi, logError, oauthApi, notifyClient }) => {
-  const appointmentsService = appointmentsServiceFactory(elite2Api)
-  const existingEventsService = existingEventsServiceFactory(elite2Api)
+const controller = ({ prisonApi, whereaboutsApi, logError, oauthApi, notifyClient }) => {
+  const appointmentsService = appointmentsServiceFactory(prisonApi)
+  const existingEventsService = existingEventsServiceFactory(prisonApi)
   const availableSlots = availableSlotsService({ existingEventsService, appointmentsService })
   const { index, validateInput, createAppointments } = selectCourtAppointmentRoomsFactory({
-    elite2Api,
+    prisonApi,
     whereaboutsApi,
     oauthApi,
     notifyClient,

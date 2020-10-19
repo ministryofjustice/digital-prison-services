@@ -46,7 +46,7 @@ const adjudicationHistoryResponse = {
 }
 
 describe('Adjudications history controller', () => {
-  const elite2Api = {}
+  const prisonApi = {}
   const adjudicationHistoryService = {}
   const paginationService = {}
   let req
@@ -56,13 +56,13 @@ describe('Adjudications history controller', () => {
 
   beforeEach(() => {
     paginationService.getPagination = jest.fn()
-    elite2Api.getDetails = jest.fn().mockResolvedValue({ firstName: 'bob', lastName: 'doe' })
+    prisonApi.getDetails = jest.fn().mockResolvedValue({ firstName: 'bob', lastName: 'doe' })
     adjudicationHistoryService.getAdjudications = jest.fn().mockResolvedValue(adjudicationHistoryResponse)
 
     logError = jest.fn()
     res.render = jest.fn()
 
-    controller = adjudicationsHistoryController({ adjudicationHistoryService, paginationService, elite2Api, logError })
+    controller = adjudicationsHistoryController({ adjudicationHistoryService, paginationService, prisonApi, logError })
 
     req = { originalUrl: 'http://localhost', params: { offenderNo }, get: () => {} }
   })

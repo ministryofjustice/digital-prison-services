@@ -4,8 +4,8 @@ const { appointmentsServiceFactory } = require('../../services/appointmentsServi
 
 const router = express.Router()
 
-const controller = ({ elite2Api, oauthApi, logError }) => {
-  const { index, post } = bulkAppointmentsAddDetailsFactory(appointmentsServiceFactory(elite2Api), oauthApi, logError)
+const controller = ({ prisonApi, oauthApi, logError }) => {
+  const { index, post } = bulkAppointmentsAddDetailsFactory(appointmentsServiceFactory(prisonApi), oauthApi, logError)
 
   router.get('/', index)
   router.post('/', post)

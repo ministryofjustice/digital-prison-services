@@ -9,7 +9,7 @@ describe('move validation', () => {
   let logError
   let controller
 
-  const elite2Api = {}
+  const prisonApi = {}
 
   const offenderNo = 'ABC123'
   const cellId = 1
@@ -254,10 +254,10 @@ describe('move validation', () => {
     }
     res = { locals: {}, render: jest.fn(), redirect: jest.fn() }
 
-    elite2Api.getDetails = jest.fn()
-    elite2Api.getInmatesAtLocation = jest.fn()
-    elite2Api.getLocation = jest.fn()
-    elite2Api.getNonAssociations = jest.fn().mockResolvedValue({
+    prisonApi.getDetails = jest.fn()
+    prisonApi.getInmatesAtLocation = jest.fn()
+    prisonApi.getLocation = jest.fn()
+    prisonApi.getNonAssociations = jest.fn().mockResolvedValue({
       offenderNo: 'ABC123',
       firstName: 'Fred',
       lastName: 'Bloggs',
@@ -344,38 +344,38 @@ describe('move validation', () => {
       ],
     })
 
-    controller = moveValidationFactory({ elite2Api, logError })
+    controller = moveValidationFactory({ prisonApi, logError })
   })
 
   it('Makes the expected API calls on get', async () => {
-    elite2Api.getDetails
+    prisonApi.getDetails
       .mockResolvedValueOnce(getCurrentOffenderDetailsResponse)
       .mockResolvedValueOnce(getCurrentOccupierDetailsResponse)
-    elite2Api.getLocation
+    prisonApi.getLocation
       .mockResolvedValueOnce(cellLocationData)
       .mockResolvedValueOnce(parentLocationData)
       .mockResolvedValueOnce(superParentLocationData)
-    elite2Api.getInmatesAtLocation.mockResolvedValue([{ offenderNo: 'A12346' }])
+    prisonApi.getInmatesAtLocation.mockResolvedValue([{ offenderNo: 'A12346' }])
     await controller.index(req, res)
 
-    expect(elite2Api.getDetails).toHaveBeenCalledWith(res.locals, offenderNo, true)
-    expect(elite2Api.getDetails).toHaveBeenCalledWith(res.locals, 'A12346', true)
-    expect(elite2Api.getNonAssociations).toHaveBeenCalledWith(res.locals, 1234)
-    expect(elite2Api.getLocation).toHaveBeenCalledWith(res.locals, 1)
-    expect(elite2Api.getLocation).toHaveBeenCalledWith(res.locals, 2)
-    expect(elite2Api.getLocation).toHaveBeenCalledWith(res.locals, 3)
-    expect(elite2Api.getInmatesAtLocation).toHaveBeenCalledWith(res.locals, 1, {})
+    expect(prisonApi.getDetails).toHaveBeenCalledWith(res.locals, offenderNo, true)
+    expect(prisonApi.getDetails).toHaveBeenCalledWith(res.locals, 'A12346', true)
+    expect(prisonApi.getNonAssociations).toHaveBeenCalledWith(res.locals, 1234)
+    expect(prisonApi.getLocation).toHaveBeenCalledWith(res.locals, 1)
+    expect(prisonApi.getLocation).toHaveBeenCalledWith(res.locals, 2)
+    expect(prisonApi.getLocation).toHaveBeenCalledWith(res.locals, 3)
+    expect(prisonApi.getInmatesAtLocation).toHaveBeenCalledWith(res.locals, 1, {})
   })
 
   it('Passes the expected data to the template on get', async () => {
-    elite2Api.getDetails
+    prisonApi.getDetails
       .mockResolvedValueOnce(getCurrentOffenderDetailsResponse)
       .mockResolvedValueOnce(getCurrentOccupierDetailsResponse)
-    elite2Api.getLocation
+    prisonApi.getLocation
       .mockResolvedValueOnce(cellLocationData)
       .mockResolvedValueOnce(parentLocationData)
       .mockResolvedValueOnce(superParentLocationData)
-    elite2Api.getInmatesAtLocation.mockResolvedValue([{ offenderNo: 'A12346' }])
+    prisonApi.getInmatesAtLocation.mockResolvedValue([{ offenderNo: 'A12346' }])
     await controller.index(req, res)
 
     expect(res.render).toHaveBeenCalledWith(
@@ -441,14 +441,14 @@ describe('move validation', () => {
   })
 
   it('Passes the expected CSRA message and sexuality warning when LGB alert but no sexuality', async () => {
-    elite2Api.getDetails
+    prisonApi.getDetails
       .mockResolvedValueOnce({ ...getCurrentOffenderDetailsResponse, csra: 'Standard' })
       .mockResolvedValueOnce({ ...getCurrentOccupierDetailsResponse, profileInformation: [] })
-    elite2Api.getLocation
+    prisonApi.getLocation
       .mockResolvedValueOnce(cellLocationData)
       .mockResolvedValueOnce(parentLocationData)
       .mockResolvedValueOnce(superParentLocationData)
-    elite2Api.getInmatesAtLocation.mockResolvedValue([{ offenderNo: 'A12346' }])
+    prisonApi.getInmatesAtLocation.mockResolvedValue([{ offenderNo: 'A12346' }])
     await controller.index(req, res)
 
     expect(res.render).toHaveBeenCalledWith(
@@ -481,14 +481,14 @@ describe('move validation', () => {
   })
 
   it('Passes no CSRA message when both standard', async () => {
-    elite2Api.getDetails
+    prisonApi.getDetails
       .mockResolvedValueOnce({ ...getCurrentOffenderDetailsResponse, csra: 'Standard' })
       .mockResolvedValueOnce({ ...getCurrentOccupierDetailsResponse, csra: 'Standard' })
-    elite2Api.getLocation
+    prisonApi.getLocation
       .mockResolvedValueOnce(cellLocationData)
       .mockResolvedValueOnce(parentLocationData)
       .mockResolvedValueOnce(superParentLocationData)
-    elite2Api.getInmatesAtLocation.mockResolvedValue([{ offenderNo: 'A12346' }])
+    prisonApi.getInmatesAtLocation.mockResolvedValue([{ offenderNo: 'A12346' }])
     await controller.index(req, res)
 
     expect(res.render).toHaveBeenCalledWith(
@@ -501,16 +501,16 @@ describe('move validation', () => {
   })
 
   it('Does not pass alerts and CSRA when there are no occupants', async () => {
-    elite2Api.getDetails.mockResolvedValueOnce({
+    prisonApi.getDetails.mockResolvedValueOnce({
       ...getCurrentOffenderDetailsResponse,
       csra: 'Standard',
       categoryCode: 'C',
     })
-    elite2Api.getLocation
+    prisonApi.getLocation
       .mockResolvedValueOnce(cellLocationData)
       .mockResolvedValueOnce(parentLocationData)
       .mockResolvedValueOnce(superParentLocationData)
-    elite2Api.getInmatesAtLocation.mockResolvedValue([])
+    prisonApi.getInmatesAtLocation.mockResolvedValue([])
     await controller.index(req, res)
 
     expect(res.render).toHaveBeenCalledWith(
@@ -526,12 +526,12 @@ describe('move validation', () => {
   })
 
   it('Does not pass category warning if no inmates', async () => {
-    elite2Api.getDetails.mockResolvedValueOnce({ ...getCurrentOffenderDetailsResponse, csra: 'Standard' })
-    elite2Api.getLocation
+    prisonApi.getDetails.mockResolvedValueOnce({ ...getCurrentOffenderDetailsResponse, csra: 'Standard' })
+    prisonApi.getLocation
       .mockResolvedValueOnce(cellLocationData)
       .mockResolvedValueOnce(parentLocationData)
       .mockResolvedValueOnce(superParentLocationData)
-    elite2Api.getInmatesAtLocation.mockResolvedValue([])
+    prisonApi.getInmatesAtLocation.mockResolvedValue([])
     await controller.index(req, res)
 
     expect(res.render).toHaveBeenCalledWith(
@@ -544,14 +544,14 @@ describe('move validation', () => {
   })
 
   it('Redirects when form has been triggered with no data', async () => {
-    elite2Api.getDetails
+    prisonApi.getDetails
       .mockResolvedValueOnce(getCurrentOffenderDetailsResponse)
       .mockResolvedValueOnce(getCurrentOccupierDetailsResponse)
-    elite2Api.getLocation
+    prisonApi.getLocation
       .mockResolvedValueOnce(cellLocationData)
       .mockResolvedValueOnce(parentLocationData)
       .mockResolvedValueOnce(superParentLocationData)
-    elite2Api.getInmatesAtLocation.mockResolvedValue([{ offenderNo: 'A12346' }])
+    prisonApi.getInmatesAtLocation.mockResolvedValue([{ offenderNo: 'A12346' }])
     req.body = {}
     await controller.post(req, res)
 
@@ -564,14 +564,14 @@ describe('move validation', () => {
   })
 
   it('Redirects when the user has confirmed they are happy', async () => {
-    elite2Api.getDetails
+    prisonApi.getDetails
       .mockResolvedValueOnce(getCurrentOffenderDetailsResponse)
       .mockResolvedValueOnce(getCurrentOccupierDetailsResponse)
-    elite2Api.getLocation
+    prisonApi.getLocation
       .mockResolvedValueOnce(cellLocationData)
       .mockResolvedValueOnce(parentLocationData)
       .mockResolvedValueOnce(superParentLocationData)
-    elite2Api.getInmatesAtLocation.mockResolvedValue([{ offenderNo: 'A12346' }])
+    prisonApi.getInmatesAtLocation.mockResolvedValue([{ offenderNo: 'A12346' }])
     req.body = { confirmation: 'yes' }
     await controller.post(req, res)
 
@@ -579,14 +579,14 @@ describe('move validation', () => {
   })
 
   it('Redirects when the user has changed their mind', async () => {
-    elite2Api.getDetails
+    prisonApi.getDetails
       .mockResolvedValueOnce(getCurrentOffenderDetailsResponse)
       .mockResolvedValueOnce(getCurrentOccupierDetailsResponse)
-    elite2Api.getLocation
+    prisonApi.getLocation
       .mockResolvedValueOnce(cellLocationData)
       .mockResolvedValueOnce(parentLocationData)
       .mockResolvedValueOnce(superParentLocationData)
-    elite2Api.getInmatesAtLocation.mockResolvedValue([{ offenderNo: 'A12346' }])
+    prisonApi.getInmatesAtLocation.mockResolvedValue([{ offenderNo: 'A12346' }])
     req.body = { confirmation: 'no' }
     await controller.post(req, res)
 
@@ -594,13 +594,13 @@ describe('move validation', () => {
   })
 
   it('Redirects to confirm cell move when there are no warnings', async () => {
-    elite2Api.getNonAssociations = jest.fn().mockResolvedValue({})
-    elite2Api.getDetails = jest.fn().mockResolvedValue({ firstName: 'Bob', lastName: 'Doe', alerts: [] })
-    elite2Api.getLocation
+    prisonApi.getNonAssociations = jest.fn().mockResolvedValue({})
+    prisonApi.getDetails = jest.fn().mockResolvedValue({ firstName: 'Bob', lastName: 'Doe', alerts: [] })
+    prisonApi.getLocation
       .mockResolvedValueOnce(cellLocationData)
       .mockResolvedValueOnce(parentLocationData)
       .mockResolvedValueOnce(superParentLocationData)
-    elite2Api.getInmatesAtLocation.mockResolvedValue([])
+    prisonApi.getInmatesAtLocation.mockResolvedValue([])
 
     await controller.index(req, res)
 

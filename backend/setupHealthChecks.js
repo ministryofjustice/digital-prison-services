@@ -6,7 +6,7 @@ const router = express.Router()
 
 const health = healthFactory(
   config.apis.oauth2.url,
-  config.apis.elite2.url,
+  config.apis.prisonApi.url,
   config.apis.whereabouts.url,
   config.apis.community.url,
   config.apis.keyworker.url,

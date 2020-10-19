@@ -6,15 +6,15 @@ const {
   app: { notmEndpointUrl: dpsUrl },
 } = require('../../config')
 
-module.exports = ({ elite2Api, logError, pageSize = 20 }) => async (req, res) => {
+module.exports = ({ prisonApi, logError, pageSize = 20 }) => async (req, res) => {
   const { offenderNo } = req.params
   const { visitType, fromDate, toDate, page = 0 } = req.query
   const url = new URL(`${req.protocol}://${req.get('host')}${req.originalUrl}`)
 
   try {
     const [details, visitTypes] = await Promise.all([
-      elite2Api.getDetails(res.locals, offenderNo),
-      elite2Api.getVisitTypes(res.locals),
+      prisonApi.getDetails(res.locals, offenderNo),
+      prisonApi.getVisitTypes(res.locals),
     ])
       .then(data => data)
       .catch(error => {
@@ -24,7 +24,7 @@ module.exports = ({ elite2Api, logError, pageSize = 20 }) => async (req, res) =>
 
     const { bookingId } = details || {}
 
-    const visitsWithVisitors = await elite2Api.getVisitsForBookingWithVisitors(res.locals, bookingId, {
+    const visitsWithVisitors = await prisonApi.getVisitsForBookingWithVisitors(res.locals, bookingId, {
       fromDate: fromDate && moment(fromDate, 'DD/MM/YYYY').format('YYYY-MM-DD'),
       page,
       paged: true,

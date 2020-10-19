@@ -4,7 +4,7 @@ const { alertFlagLabels, profileAlertCodes } = require('../../shared/alertFlagVa
 const { putLastNameFirst, hasLength } = require('../../utils')
 const config = require('../../config')
 
-module.exports = ({ paginationService, elite2Api, logError }) => {
+module.exports = ({ paginationService, prisonApi, logError }) => {
   const index = async (req, res) => {
     const {
       user: { activeCaseLoad },
@@ -44,8 +44,8 @@ module.exports = ({ paginationService, elite2Api, logError }) => {
       }
 
       const [locations, prisoners] = await Promise.all([
-        elite2Api.userLocations(res.locals),
-        elite2Api.getInmates(context, location || currentUserCaseLoad, {
+        prisonApi.userLocations(res.locals),
+        prisonApi.getInmates(context, location || currentUserCaseLoad, {
           keywords,
           alerts: selectedAlerts,
           returnIep: 'true',
@@ -72,6 +72,8 @@ module.exports = ({ paginationService, elite2Api, logError }) => {
           ),
         }))
 
+      const searchQueries = { ...req.query, ...(alerts ? { 'alerts[]': alerts } : {}) }
+
       return res.render('prisonerSearch/prisonerSearch.njk', {
         alertOptions: alertFlagLabels
           .filter(({ alertCodes }) => profileAlertCodes.includes(...alertCodes))
@@ -81,6 +83,15 @@ module.exports = ({ paginationService, elite2Api, logError }) => {
             checked: Boolean(selectedAlerts) && selectedAlerts.some(alert => alertCodes.includes(alert)),
           })),
         formValues: { ...req.query, alerts: hasLength(alerts) && alerts.filter(alert => alert.length) },
+        links: {
+          allResults: `${req.baseUrl}?${qs.stringify({
+            ...searchQueries,
+            viewAll: true,
+            pageLimitOption: totalRecords,
+          })}`,
+          gridView: `${req.baseUrl}?${qs.stringify({ ...searchQueries, view: 'grid' })}`,
+          listView: `${req.baseUrl}?${qs.stringify({ ...searchQueries, view: 'list' })}`,
+        },
         locationOptions,
         notmUrl: config.app.notmEndpointUrl,
         pageLimit,
@@ -96,7 +107,6 @@ module.exports = ({ paginationService, elite2Api, logError }) => {
             .map(({ label }) => label),
         },
         results,
-        searchUrl: `${req.baseUrl}?${qs.stringify({ location, keywords, 'alerts[]': alerts, pageOffsetOption })}`,
         totalRecords,
         view,
       })

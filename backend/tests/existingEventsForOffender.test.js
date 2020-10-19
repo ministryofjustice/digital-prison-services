@@ -1,7 +1,7 @@
 const existingEventsForOffenderFactory = require('../controllers/attendance/getExistingEvents')
 
 describe('Existing events for offenders', () => {
-  const elite2Api = {}
+  const prisonApi = {}
   const existingEventsService = {}
   const req = {
     originalUrl: 'http://localhost',
@@ -21,7 +21,7 @@ describe('Existing events for offenders', () => {
   let controller
 
   beforeEach(() => {
-    elite2Api.getDetails = jest.fn()
+    prisonApi.getDetails = jest.fn()
     existingEventsService.getExistingEventsForOffender = jest.fn()
     logError = jest.fn()
 
@@ -29,13 +29,13 @@ describe('Existing events for offenders', () => {
     res.json = jest.fn()
     res.render = jest.fn()
 
-    controller = existingEventsForOffenderFactory({ elite2Api, existingEventsService, logError })
+    controller = existingEventsForOffenderFactory({ prisonApi, existingEventsService, logError })
   })
 
   it('should make a call to retrieve offender details', async () => {
     await controller(req, res)
 
-    expect(elite2Api.getDetails).toHaveBeenCalledWith({}, 'A12345')
+    expect(prisonApi.getDetails).toHaveBeenCalledWith({}, 'A12345')
   })
 
   it('should make call to retrieve events for an offender', async () => {
@@ -45,7 +45,7 @@ describe('Existing events for offenders', () => {
   })
 
   it('should render scheduled events template for John smith', async () => {
-    elite2Api.getDetails = jest.fn().mockResolvedValue({ firstName: 'John', lastName: 'Smith' })
+    prisonApi.getDetails = jest.fn().mockResolvedValue({ firstName: 'John', lastName: 'Smith' })
     existingEventsService.getExistingEventsForOffender = jest.fn().mockResolvedValue([{ eventId: 1 }, { eventId: 2 }])
 
     await controller(req, res)
@@ -59,7 +59,7 @@ describe('Existing events for offenders', () => {
   })
 
   it('should render scheduled events template for John jones', async () => {
-    elite2Api.getDetails = jest.fn().mockResolvedValue({ firstName: 'John', lastName: 'Jones' })
+    prisonApi.getDetails = jest.fn().mockResolvedValue({ firstName: 'John', lastName: 'Jones' })
     existingEventsService.getExistingEventsForOffender = jest.fn().mockResolvedValue([{ eventId: 1 }, { eventId: 2 }])
 
     await controller(req, res)
@@ -73,7 +73,7 @@ describe('Existing events for offenders', () => {
   })
 
   it('should log any errors and respond with an http 500 error', async () => {
-    elite2Api.getDetails.mockRejectedValue(new Error('Error'))
+    prisonApi.getDetails.mockRejectedValue(new Error('Error'))
 
     await controller(req, res)
 
