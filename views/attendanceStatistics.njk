@@ -33,9 +33,6 @@
 
 {% block content %}
 
-  <h1 class="govuk-heading-l govuk-!-margin-bottom-1">Attendance reason statistics</h1>
-  <p class="govuk-body-l govuk-!-font-size-24">{{displayDate}} - {{displayPeriod}} </p>
-
   {% if errors.length > 0 %}
     {{ govukErrorSummary({
       titleText: "There is a problem",
@@ -43,6 +40,9 @@
       attributes: { 'data-qa-errors': true }
     }) }}
   {% endif %}
+
+  <h1 class="govuk-heading-l govuk-!-margin-bottom-1">Attendance reason statistics</h1>
+  <p class="govuk-body-l govuk-!-font-size-24">{{displayDate}} - {{displayPeriod}} </p>
 
   <form action="/manage-prisoner-whereabouts/attendance-reason-statistics" class="horizontal-form govuk-!-display-none-print govuk-!-margin-bottom-6">
       <input type="hidden" name="_csrf" value="{{ csrfToken }}" />

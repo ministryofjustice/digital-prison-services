@@ -78,19 +78,19 @@
 {% endset -%}
 
 {% block content %}
+
+    {% if errors.length > 0 %}
+        {{ govukErrorSummary({
+                titleText: "There is a problem",
+                errorList: errors,
+                attributes: { 'data-qa-errors': true }
+            }) }}
+    {% endif %}
     <h1 class="govuk-heading-l">
         Add appointment details
     </h1>
     <div class="govuk-grid-row">
         <div class="govuk-grid-column-full">
-
-            {% if errors.length > 0 %}
-                {{ govukErrorSummary({
-                        titleText: "There is a problem",
-                        errorList: errors,
-                        attributes: { 'data-qa-errors': true }
-                    }) }}
-            {% endif %}
 
             <form action="/bulk-appointments/add-appointment-details" method="POST" novalidate="novalidate">
                 <input type="hidden" name="_csrf" value="{{ csrfToken }}" />
