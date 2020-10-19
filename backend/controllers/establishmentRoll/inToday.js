@@ -22,7 +22,7 @@ module.exports = ({ movementsService, logError }) => async (req, res) => {
           name: putLastNameFirst(offender.firstName, offender.lastName),
           offenderNo: offender.offenderNo,
           dob: moment(offender.dateOfBirth, 'YYYY-MM-DD').format('DD/MM/YYYY'),
-          location: offender.location && stripAgencyPrefix(offender.location, offender.fromAgency),
+          location: offender.location && stripAgencyPrefix(offender.location, agencyId),
           incentiveLevel: offender.iepLevel,
           arrivedFrom: offender.fromAgencyDescription || offender.fromCity,
           timeIn: moment(offender.movementTime, 'HH:mm:ss').format('HH:mm'),
