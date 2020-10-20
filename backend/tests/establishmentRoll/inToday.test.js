@@ -5,9 +5,9 @@ const movementsService = {}
 describe('In today', () => {
   let logError
   let controller
-  const agencyId = 'LEI'
+  const agencyId = 'MDI'
   const req = { originalUrl: 'http://localhost' }
-  const res = { locals: { user: { activeCaseLoad: { caseLoadId: 'LEI', description: 'Leeds' } } } }
+  const res = { locals: { user: { activeCaseLoad: { caseLoadId: 'MDI', description: 'Leeds' } } } }
   const offenders = [
     {
       offenderNo: 'A1234AA',
@@ -28,7 +28,10 @@ describe('In today', () => {
       firstName: 'AAAAA',
       lastName: 'AAAAA',
       iepLevel: 'Enhanced',
+      fromAgency: 'LEI',
+      fromAgencyDescription: 'Leeds (HMP)',
       fromCity: 'Leeds',
+      location: 'MDI-1-2',
       alerts: ['XR'],
       movementTime: '12:12:12',
       category: 'A',
@@ -83,8 +86,8 @@ describe('In today', () => {
             incentiveLevel: 'Enhanced',
             name: 'Aaaaa, Aaaaa',
             offenderNo: 'G0000AA',
-            location: undefined,
-            arrivedFrom: 'Leeds',
+            location: '1-2',
+            arrivedFrom: 'Leeds (HMP)',
             timeIn: '12:12',
             category: 'A',
           },
