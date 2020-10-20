@@ -42,55 +42,57 @@
   </p>
   <form method="POST" id="confirmBulkAppointments">
     <input type="hidden" name="_csrf" value="{{ csrfToken }}" />
-    <table class="govuk-table table-compact" data-qa="prisoners-found">
-      <thead class="govuk-table__head">
-        <tr class="govuk-table__row">
-          <th scope="col" class="govuk-table__header">Last name</th>
-          <th scope="col" class="govuk-table__header">First name</th>
-          <th scope="col" class="govuk-table__header">Prison number</th> 
-          <th scope="col" class="govuk-table__header">Cell</th> 
-
-          {% if appointmentDetails.sameTimeAppointments === 'no' %}
-            <th scope="col" class="govuk-table__header">Start time</th>
-            <th scope="col" class="govuk-table__header">End time (optional)</th>
-          {% endif %}
-        </tr>
-      </thead>
-      <tbody class="govuk-table__body">
-        {% for prisoner in appointmentDetails.prisonersListed %}
+    <div class="allow-overflow">
+      <table class="govuk-table table-compact" data-qa="prisoners-found">
+        <thead class="govuk-table__head">
           <tr class="govuk-table__row">
-            <td class="govuk-table__cell">{{prisoner.lastName}}</td>
-            <td class="govuk-table__cell">{{prisoner.firstName}}</td>
-            <td class="govuk-table__cell">{{prisoner.offenderNo}}</td>
-            <td class="govuk-table__cell">{{prisoner.cellNo}}</td>
+            <th scope="col" class="govuk-table__header">Last name</th>
+            <th scope="col" class="govuk-table__header">First name</th>
+            <th scope="col" class="govuk-table__header">Prison number</th> 
+            <th scope="col" class="govuk-table__header">Cell</th> 
+
             {% if appointmentDetails.sameTimeAppointments === 'no' %}
-              <td class="govuk-table__cell">
-                {{ timePicker({
-                  id: prisoner.offenderNo + '-start-time',
-                  name: prisoner.offenderNo + 'startTime',
-                  hour: prisoner.startTimeHours,
-                  minute: prisoner.startTimeMinutes,
-                  errorMessage: errors | findError(prisoner.offenderNo + '-start-time-hours'),
-                  classes: ['govuk-!-margin-bottom-0']
-              })
-            }}
-              </td>
-              <td class="govuk-table__cell">
-                {{ timePicker({
-                  id: prisoner.offenderNo + '-end-time',
-                  name: prisoner.offenderNo + 'endTime',
-                  hour: prisoner.endTimeHours,
-                  minute: prisoner.endTimeMinutes,
-                  errorMessage: errors | findError(prisoner.offenderNo + '-end-time-hours'),
-                  classes: ['govuk-!-margin-bottom-0']
-              })
-            }}
-              </td>
+              <th scope="col" class="govuk-table__header">Start time</th>
+              <th scope="col" class="govuk-table__header">End time (optional)</th>
             {% endif %}
           </tr>
-        {% endfor %}
-      </tbody>
-    </table>
+        </thead>
+        <tbody class="govuk-table__body">
+          {% for prisoner in appointmentDetails.prisonersListed %}
+            <tr class="govuk-table__row">
+              <td class="govuk-table__cell">{{prisoner.lastName}}</td>
+              <td class="govuk-table__cell">{{prisoner.firstName}}</td>
+              <td class="govuk-table__cell">{{prisoner.offenderNo}}</td>
+              <td class="govuk-table__cell">{{prisoner.cellNo}}</td>
+              {% if appointmentDetails.sameTimeAppointments === 'no' %}
+                <td class="govuk-table__cell">
+                  {{ timePicker({
+                    id: prisoner.offenderNo + '-start-time',
+                    name: prisoner.offenderNo + 'startTime',
+                    hour: prisoner.startTimeHours,
+                    minute: prisoner.startTimeMinutes,
+                    errorMessage: errors | findError(prisoner.offenderNo + '-start-time-hours'),
+                    classes: ['govuk-!-margin-bottom-0']
+                })
+              }}
+                </td>
+                <td class="govuk-table__cell">
+                  {{ timePicker({
+                    id: prisoner.offenderNo + '-end-time',
+                    name: prisoner.offenderNo + 'endTime',
+                    hour: prisoner.endTimeHours,
+                    minute: prisoner.endTimeMinutes,
+                    errorMessage: errors | findError(prisoner.offenderNo + '-end-time-hours'),
+                    classes: ['govuk-!-margin-bottom-0']
+                })
+              }}
+                </td>
+              {% endif %}
+            </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
 
     {{ govukInsetText({
       text: "You cannot delete the CSV file once you have confirmed these details. If you want to delete any appointments, you will need to delete it through the individual prisoner’s activity page."
