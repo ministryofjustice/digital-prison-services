@@ -28,7 +28,7 @@ describe('In today', () => {
       firstName: 'AAAAA',
       lastName: 'AAAAA',
       iepLevel: 'Enhanced',
-      fromAgency: 'MDI',
+      fromAgency: 'LEI',
       fromAgencyDescription: 'Leeds (HMP)',
       fromCity: 'Leeds',
       location: 'MDI-1-2',
