@@ -51,6 +51,10 @@ $govuk-page-width: 1170px;
   word-break: break-word;
 }
 
+.allow-overflow {
+  overflow: auto;
+}
+
 // Print
 @page {
   margin: 1cm 0;
