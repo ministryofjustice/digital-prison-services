@@ -129,6 +129,11 @@ context('A user can confirm the cell move', () => {
         ...adjudicationResponse,
         results: [],
       },
+      headers: {
+        'page-offset': '0',
+        'page-limit': '10',
+        'total-records': '0',
+      },
     })
 
     const page = adjudicationsPage.goTo(offenderNo, offenderName)
@@ -142,6 +147,11 @@ context('A user can confirm the cell move', () => {
       response: {
         ...adjudicationResponse,
         results: [],
+      },
+      headers: {
+        'page-offset': '0',
+        'page-limit': '10',
+        'total-records': '0',
       },
     })
 
