@@ -1,3 +1,41 @@
+const maxNumberOfPageLinks = 10
+const pageBreakPoint = maxNumberOfPageLinks / 2
+
+/*
+
+The pagination service only shows ten page links regardless of where the current page is pointed.
+
+Rules:
+  1) Show ten page links
+  2) Show pages 5 before and after the current page
+  3) Where there are less than 5 pages before the current page show the remaining
+  4) Where there are more than 5 pages after the current page show the remaining
+
+1 2 3 4 5 6 7 8 9 10
+^
+
+1 2 3 4 5 6 7 8 9 10
+          ^
+
+2 3 4 5 6 7 8 9 10 11
+          ^
+
+4 5 6 7 8 9 10 11 12 13
+          ^
+
+2 3 4 5 6 7 8 9 10 11
+          ^
+
+4 5 6 7 8 9 10 11 13 14
+          ^
+
+4 5 6 7 8 9 10 11 13 14
+            ^
+
+4 5 6 7 8 9 10 11 13 14
+                ^
+ */
+
 const calculateNextUrl = (offset, limit, totalResults, url) => {
   const newOffset = offset + limit >= totalResults ? offset : offset + limit
   url.searchParams.set('pageOffsetOption', newOffset)
@@ -11,19 +49,41 @@ const calculatePreviousUrl = (offset, limit, url) => {
 }
 
 const getPagination = (totalResults, offset, limit, url) => {
+  const toPageNumberNode = page => {
+    const pageOffset = limit * page
+
+    url.searchParams.set('pageOffsetOption', pageOffset)
+
+    return {
+      text: page + 1,
+      href: url.href,
+      selected: offset === pageOffset,
+    }
+  }
+
+  const useLowestNumber = (left, right) => (left >= right ? right : left)
+
+  const calculateFrom = ({ currentPage, numberOfPages }) => {
+    if (numberOfPages <= maxNumberOfPageLinks) return 0
+
+    const towardsTheEnd = numberOfPages - currentPage <= pageBreakPoint
+
+    if (towardsTheEnd) return numberOfPages - maxNumberOfPageLinks
+
+    return currentPage <= pageBreakPoint ? 0 : currentPage - pageBreakPoint
+  }
+
+  const currentPage = offset === 0 ? 0 : Math.ceil(offset / limit)
   const numberOfPages = Math.ceil(totalResults / limit)
 
-  const pageList =
-    numberOfPages > 1
-      ? [...Array(numberOfPages).keys()].map(page => {
-          url.searchParams.set('pageOffsetOption', limit * page)
-          return {
-            text: page + 1,
-            href: url.href,
-            selected: offset === limit * page,
-          }
-        })
-      : []
+  const allPages = [...Array(numberOfPages).keys()]
+  const from = calculateFrom({ currentPage, numberOfPages })
+  const to =
+    numberOfPages <= maxNumberOfPageLinks
+      ? numberOfPages
+      : useLowestNumber(from + maxNumberOfPageLinks, allPages.length)
+
+  const pageList = (numberOfPages > 1 && allPages.slice(from, to)) || []
 
   const previousPage =
     numberOfPages > 1
@@ -41,7 +101,7 @@ const getPagination = (totalResults, offset, limit, url) => {
       : undefined
 
   return {
-    items: pageList,
+    items: pageList.map(toPageNumberNode),
     previous: previousPage,
     next: nextPage,
     results: {
