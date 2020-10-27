@@ -8,7 +8,7 @@
   },
   "dependencies": {
     "@babel/polyfill": "^7.0.0",
-    "@contentful/rich-text-react-renderer": "^13.0.1",
+    "@contentful/rich-text-html-renderer": "^14.1.1",
     "@contentful/rich-text-types": "^13.0.0",
     "@govuk-react/back-link": "^0.7.0",
     "@govuk-react/button": "^0.7.0",
@@ -47,7 +47,7 @@
     "classnames": "^2.2.6",
     "connect-flash": "^0.1.1",
     "connect-redis": "^4.0.3",
-    "contentful": "^7.3.0",
+    "contentful": "^7.14.8",
     "cookie-session": "^2.0.0-beta.3",
     "csurf": "^1.11.0",
     "csv-parse": "^4.4.6",

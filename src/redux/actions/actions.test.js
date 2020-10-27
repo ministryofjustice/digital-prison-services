@@ -4,7 +4,6 @@ import MockAdapter from 'axios-mock-adapter'
 import thunk from 'redux-thunk'
 import * as actions from './index'
 import * as types from './actionTypes'
-import contentfulClient from '../../contentfulClient'
 
 const middlewares = [thunk]
 const mockStore = configureMockStore(middlewares)
@@ -323,60 +322,6 @@ describe('actions', () => {
       levels: ['level-1'],
     }
     expect(actions.setPossibleIepLevels(['level-1'])).toEqual(expectedAction)
-  })
-
-  describe('content actions', () => {
-    let store
-    const getEntriesSpy = jest.spyOn(contentfulClient, 'getEntries')
-
-    beforeEach(() => {
-      store = mockStore({})
-    })
-
-    it('creates SET_ERROR when there is no content for specified path', async () => {
-      const response = {
-        items: [],
-      }
-      const expectedActions = [
-        { type: types.SET_LOADED, loaded: false },
-        { type: types.RESET_ERROR },
-        { type: types.SET_ERROR, error: 'There is no content for this path.' },
-        { type: types.SET_LOADED, loaded: true },
-      ]
-
-      getEntriesSpy.mockResolvedValue(response)
-
-      return store.dispatch(actions.fetchContent()).then(() => {
-        expect(store.getActions()).toEqual(expectedActions)
-      })
-    })
-
-    it('creates SET_CONTENT_SUCCESS when there is content for specified path', async () => {
-      const response = {
-        items: [
-          {
-            fields: {
-              title: 'Content',
-              path: 'content',
-              category: 'footer',
-              body: 'Content body',
-            },
-          },
-        ],
-      }
-      const expectedActions = [
-        { type: types.SET_LOADED, loaded: false },
-        { type: types.RESET_ERROR },
-        { type: types.SET_CONTENT_SUCCESS, payload: response.items[0].fields },
-        { type: types.SET_LOADED, loaded: true },
-      ]
-
-      getEntriesSpy.mockResolvedValue(response)
-
-      return store.dispatch(actions.fetchContent()).then(() => {
-        expect(store.getActions()).toEqual(expectedActions)
-      })
-    })
   })
 
   it('should create an action to set an offenders activity attendance information', () => {

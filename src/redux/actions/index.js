@@ -1,6 +1,5 @@
 import axios from 'axios'
 import * as ActionTypes from './actionTypes'
-import contentfulClient from '../../contentfulClient'
 
 export const setConfig = config => ({
   type: ActionTypes.SET_CONFIG,
@@ -212,29 +211,6 @@ export const setApplicationTitle = title => ({
   type: ActionTypes.SET_APPLICATION_TITLE,
   title,
 })
-
-export function fetchContentSuccess(content) {
-  return { type: ActionTypes.SET_CONTENT_SUCCESS, payload: content }
-}
-
-export const fetchContent = path => dispatch => {
-  dispatch(setLoaded(false))
-  dispatch(resetError())
-  return contentfulClient
-    .getEntries({
-      content_type: 'pages',
-      'fields.path': path,
-    })
-    .then(response => {
-      if (response.items.length === 0) dispatch(setError('There is no content for this path.'))
-      else dispatch(fetchContentSuccess(response.items[0].fields))
-      dispatch(setLoaded(true))
-    })
-    .catch(error => {
-      dispatch(setError(error))
-      dispatch(setLoaded(true))
-    })
-}
 
 export function setAbsentReasons(reasons) {
   return { type: ActionTypes.SET_ABSENT_REASONS, payload: reasons }
