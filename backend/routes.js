@@ -9,7 +9,7 @@ const { probationDocumentsFactory } = require('./controllers/probationDocuments'
 const { downloadProbationDocumentFactory } = require('./controllers/downloadProbationDocument')
 const { attendanceStatisticsFactory } = require('./controllers/attendance/attendanceStatistics')
 const referenceCodesService = require('./controllers/reference-codes-service')
-const contentController = require('./controllers/contentController')
+const contentController = require('./controllers/content')
 
 const bulkAppointmentsAddDetailsRouter = require('./routes/appointments/bulkAppointmentsAddDetailsRouter')
 const bulkAppointmentsConfirmRouter = require('./routes/appointments/bulkAppointmentsConfirmRouter')
@@ -230,7 +230,7 @@ const setup = ({
     amendCaseNNoteRouter({ prisonApi, caseNotesApi, logError })
   )
 
-  router.get('/content/:path', contentController({ logError }))
+  router.get(['/content', '/content/:path'], contentController({ logError }))
 
   return router
 }
