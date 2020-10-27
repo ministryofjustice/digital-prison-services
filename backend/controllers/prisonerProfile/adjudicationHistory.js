@@ -96,7 +96,7 @@ module.exports = ({ adjudicationHistoryService, prisonApi, logError, paginationS
       ),
     })
   } catch (error) {
-    if (error) logError(req.originalUrl, error, `Failed to load adjudication history page`)
+    if (error) logError(req.originalUrl, error, 'Failed to load adjudication history page')
 
     return res.render('error.njk', {
       url: `/offenders/${offenderNo}/adjudications`,
