@@ -13,8 +13,8 @@ module.exports = {
     videoLinkEnabledFor: (process.env.VIDEO_LINK_ENABLED_FOR || '').split(','),
     displayRetentionLink: process.env.DISPLAY_RETENTION_LINK === 'true' || false,
     supportUrl: process.env.SUPPORT_URL || 'http://localhost:3000/',
-    contentfulSpaceId: process.env.CONTENTFUL_SPACE_ID,
-    contentfulAccessToken: process.env.CONTENTFUL_ACCESS_TOKEN,
+    contentfulSpaceId: process.env.CONTENTFUL_SPACE_ID || 1,
+    contentfulAccessToken: process.env.CONTENTFUL_ACCESS_TOKEN || 1,
   },
   analytics: {
     googleAnalyticsId: process.env.GOOGLE_ANALYTICS_ID,
