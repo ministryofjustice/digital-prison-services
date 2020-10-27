@@ -76,7 +76,7 @@ const getPagination = (totalResults, offset, limit, url) => {
   const currentPage = offset === 0 ? 0 : Math.ceil(offset / limit)
   const numberOfPages = Math.ceil(totalResults / limit)
 
-  const allPages = [...Array(numberOfPages).keys()]
+  const allPages = numberOfPages > 0 && [...Array(numberOfPages).keys()]
   const from = calculateFrom({ currentPage, numberOfPages })
   const to =
     numberOfPages <= maxNumberOfPageLinks

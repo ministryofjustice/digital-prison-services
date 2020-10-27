@@ -175,4 +175,8 @@ describe('Pagination service 2', () => {
       },
     })
   })
+
+  it('should not throw error when totalResults is undefined', () => {
+    service.getPagination(undefined, 10, 0, new URL('http://localhost/'))
+  })
 })
