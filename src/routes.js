@@ -2,8 +2,6 @@
 // See: https://reacttraining.com/react-router/web/example/route-config
 export default [
   { path: '/', breadcrumb: null },
-  { path: '/content', breadcrumb: null },
-  { path: '/content/whats-new', breadcrumb: "What's new" },
   // Below are temporary as latest version of react-router-breadcrumbs-hoc leaves hyphens in the breadcrumb text
   { path: '/manage-prisoner-whereabouts', breadcrumb: 'Manage prisoner whereabouts' },
   { path: '/manage-prisoner-whereabouts/housing-block-results', breadcrumb: 'Housing block results' },
