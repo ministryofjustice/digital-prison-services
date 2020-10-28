@@ -21,7 +21,7 @@ context('Prisoner visits', () => {
       cy.visit(`/prisoner/${offenderNo}/visits`)
 
       cy.get('[data-test="no-visit-results"]').should('contain.text', 'There are no visits for this prisoner')
-      cy.get('h1').should('have.text', 'John Smith`s visits')
+      cy.get('h1').should('have.text', 'John Smith’s visits')
     })
 
     it('should maintain form selections from search query', () => {

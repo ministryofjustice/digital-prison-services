@@ -2,7 +2,7 @@
 {% from "govuk/components/table/macro.njk" import govukTable %}
 {% from "moj/components/pagination/macro.njk" import mojPagination %}
 
-{% set title = prisonerName + '`s visits' %}
+{% set title = 'Visits' %}
 
 {% block beforeContent %}
   {{ govukBreadcrumbs({
@@ -53,7 +53,7 @@
 {% endfor %}
 
 {% block content %}
-  <h1 class="govuk-heading-l">{{ title }}</h1>
+  <h1 class="govuk-heading-l">{{ prisonerName | possessive | safe }} visits</h1>
 
   <div class="prisoner-visits">
     {% include './partials/prisonerVisitsSearchForm.njk' %}
@@ -65,8 +65,8 @@
         {{ govukTable({
           head: [
             { text: "Date" },
-            { text: "Visitor`s name" },
-            { text: "Visitor`s age" },
+            { text: "Visitor’s name" },
+            { text: "Visitor’s age" },
             { text: "Relationship to prisoner" },
             { text: "Visit status" }
           ],
