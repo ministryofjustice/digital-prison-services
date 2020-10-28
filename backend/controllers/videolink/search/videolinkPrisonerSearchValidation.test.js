@@ -3,7 +3,7 @@ const videolinkPrisonerSearchValidation = require('./videolinkPrisonerSearchVali
 describe('prisoner search validation', () => {
   it('should error with no last name or prison number', async () => {
     expect(videolinkPrisonerSearchValidation({})).toEqual([
-      { href: '#lastName', text: 'You must search using either the prisoner`s last name or prison number' },
+      { href: '#lastName', text: 'You must search using either the prisoner’s last name or prison number' },
     ])
   })
 

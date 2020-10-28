@@ -12,7 +12,7 @@ module.exports = formValues => {
 
     if (!firstName) {
       videolinkPrisonerSearchErrors.push({
-        text: 'You must search using either the prisoner`s last name or prison number',
+        text: 'You must search using either the prisoner’s last name or prison number',
         href: '#lastName',
       })
     }
