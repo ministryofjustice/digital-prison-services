@@ -29,7 +29,7 @@
         name: 'fromDate',
         date: formValues.fromDate,
         errorMessage: errors | findError('fromDate'),
-        attributes: { "data-test": "from-filter" }
+        attributes: { 'data-test': 'from-filter', 'readonly': 'readonly' }
       }) }}
 
       {{ datePicker({
@@ -38,7 +38,7 @@
         name: 'toDate',
         date: formValues.toDate,
         errorMessage: errors | findError('toDate'),
-        attributes: { "data-test": "to-filter" }
+        attributes: { 'data-test': 'to-filter', 'readonly': 'readonly' }
       }) }}
 
       {{ govukButton({

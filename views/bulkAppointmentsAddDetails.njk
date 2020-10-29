@@ -122,7 +122,7 @@
                         date: date,
                         errorMessage: errors | findError('date'),
                         classes: 'js-appointment-date',
-                        attributes: {'data-disable-past-date':'true'}
+                        attributes: { 'data-disable-past-date':'true', 'readonly':'readonly' }
                     }) }}
 
                 {{ govukRadios({
