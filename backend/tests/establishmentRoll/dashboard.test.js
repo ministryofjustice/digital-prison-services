@@ -7,7 +7,7 @@ describe('Establishment Roll', () => {
   let controller
   const agencyId = 'LEI'
   const req = { originalUrl: 'http://localhost' }
-  const res = { locals: { user: { activeCaseLoad: { caseLoadId: 'LEI' } } } }
+  const res = { locals: { user: { activeCaseLoad: { caseLoadId: 'LEI', description: 'Leeds' } } } }
   const unassignedBlockData = [
     {
       livingUnitId: 0,
@@ -94,21 +94,40 @@ describe('Establishment Roll', () => {
     expect(res.render).toHaveBeenCalledWith(
       'establishmentRoll/dashboard.njk',
       expect.objectContaining({
-        blocks: [
-          {
-            livingUnitId: 0,
-            name: 'Houseblock 1',
-            stats: { bedsInUse: 10, inCell: 20, netVacancies: 3, operationalCapacity: 2, out: 30, outOfOrder: 0 },
-          },
-          {
-            livingUnitId: 1,
-            name: 'Houseblock 2',
-            stats: { bedsInUse: 0, inCell: 0, netVacancies: 0, operationalCapacity: 0, out: 0, outOfOrder: 0 },
-          },
+        dpsUrl: 'http://localhost:3000/',
+        rows: [
+          [
+            { text: 'Houseblock 1' },
+            { text: 10 },
+            { text: 20 },
+            {
+              html: '<a class="govuk-link" href="/establishment-roll/0/currently-out">30</a>',
+              text: 30,
+            },
+            { text: 2 },
+            { text: 3 },
+            { text: 0 },
+          ],
+          [
+            { text: 'Houseblock 2' },
+            { text: 0 },
+            { text: 0 },
+            { html: false, text: 0 },
+            { text: 0 },
+            { text: 0 },
+            { text: 0 },
+          ],
+          [
+            { text: 'Leeds' },
+            { text: 10 },
+            { text: 20 },
+            { html: '<a class="govuk-link" href="/establishment-roll/total-currently-out">30</a>', text: 30 },
+            { text: 2 },
+            { text: 3 },
+            { text: 0 },
+          ],
         ],
-        notmUrl: 'http://localhost:3000/',
         todayStats: { currentRoll: 28, enroute: 8, inToday: 1, outToday: 3, unassignedIn: 8, unlockRoll: 30 },
-        totalsStats: { inCell: 20, operationalCapacity: 2, out: 30, outOfOrder: 0, roll: 10, vacancies: 3 },
       })
     )
   })
@@ -121,16 +140,28 @@ describe('Establishment Roll', () => {
     expect(res.render).toHaveBeenCalledWith(
       'establishmentRoll/dashboard.njk',
       expect.objectContaining({
-        blocks: [
-          {
-            livingUnitId: undefined,
-            name: 'Livingunitdesc1',
-            stats: { bedsInUse: 100, inCell: 0, netVacancies: 0, operationalCapacity: 0, out: 0, outOfOrder: 0 },
-          },
+        dpsUrl: 'http://localhost:3000/',
+        rows: [
+          [
+            { text: 'Livingunitdesc1' },
+            { text: 100 },
+            { text: 0 },
+            { html: false, text: 0 },
+            { text: 0 },
+            { text: 0 },
+            { text: 0 },
+          ],
+          [
+            { text: 'Leeds' },
+            { text: 100 },
+            { text: 0 },
+            { html: false, text: 0 },
+            { text: 0 },
+            { text: 0 },
+            { text: 0 },
+          ],
         ],
-        notmUrl: 'http://localhost:3000/',
         todayStats: { currentRoll: 0, enroute: 8, inToday: 1, outToday: 3, unassignedIn: 0, unlockRoll: 2 },
-        totalsStats: { inCell: 0, operationalCapacity: 0, out: 0, outOfOrder: 0, roll: 100, vacancies: 0 },
       })
     )
   })
