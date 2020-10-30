@@ -17,16 +17,19 @@ const resetStub = ({ requestUrl, method }) => {
   })
 }
 
-const verifyPosts = (requestUrl, body) =>
-  superagent.post(`${url}/requests/count`).send({
+const verifyPosts = (requestUrl, body) => {
+  const bodyPatterns =
+    (body && {
+      bodyPatterns: [{ equalToJson: JSON.stringify(body) }],
+    }) ||
+    {}
+
+  return superagent.post(`${url}/requests/count`).send({
     method: 'POST',
     url: requestUrl,
-    bodyPatterns: [
-      {
-        equalToJson: JSON.stringify(body),
-      },
-    ],
+    ...bodyPatterns,
   })
+}
 
 const verifyPut = requestUrl =>
   superagent.post(`${url}/requests/count`).send({
