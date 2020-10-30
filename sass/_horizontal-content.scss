@@ -1,6 +1,4 @@
 .horizontal-information {
-  margin-bottom: govuk-spacing(6);
-
   @include govuk-media-query($from: tablet) {
     padding-bottom: 0;
     display: flex;
@@ -19,6 +17,10 @@
 
       &--tenth {
         flex-basis: 10%;
+      }
+
+      :last-child {
+        margin-bottom: 0;
       }
     }
   }
