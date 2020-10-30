@@ -16,7 +16,11 @@ const router = express.Router({ mergeParams: true })
 const controller = ({ oauthApi, prisonApi, whereaboutsApi, logError }) => {
   const { index: moveValidationIndex, post: moveValidationPost } = moveValidationFactory({ prisonApi, logError })
 
-  const { index: confirmCellMoveIndex, post: confirmCellMovePost } = confirmCellMoveController({ prisonApi, logError })
+  const { index: confirmCellMoveIndex, post: confirmCellMovePost } = confirmCellMoveController({
+    prisonApi,
+    whereaboutsApi,
+    logError,
+  })
 
   router.get('/select-location', selectLocationController({ oauthApi, prisonApi, whereaboutsApi, logError }))
   router.get('/non-associations', nonAssociationsController({ prisonApi, logError }))

@@ -348,7 +348,7 @@ module.exports = on => {
     stubPrisonerDetail: ({ prisonerDetail, bookingId }) => prisonApi.stubPrisonerDetail(prisonerDetail, bookingId),
     stubPrisonerFullDetail: ({ prisonerDetail, offenderNo, fullInfo }) =>
       prisonApi.stubPrisonerFullDetail(prisonerDetail, offenderNo, fullInfo),
-    stubMoveToCell: () => prisonApi.stubMoveToCell(),
+    stubMoveToCell: () => whereabouts.stubMoveToCell(),
     stubMoveToCellSwap: () => prisonApi.stubMoveToCellSwap(),
     verifyMoveToCell: ({ bookingId, locationPrefix }) => prisonApi.verifyMoveToCell({ bookingId, locationPrefix }),
     stubGetLocationPrefix: ({ agencyId, groupName, response }) =>
