@@ -76,8 +76,11 @@ describe('case note management', () => {
   })
 
   describe('displayCreateCaseNotePage()', () => {
+    const DATE_2020_10_29_16_15 = 1603988100000 // Friday, 29 Oct 2020 16:15 UTC (avoid BST)
+    const DATE_2020_10_29_16_06 = 1603987560000 // Friday, 29 Oct 2020 16:06 UTC
+
     it('should remove the leading zeros from the prepopulated minutes', async () => {
-      jest.spyOn(Date, 'now').mockImplementation(() => 1595606800000) // Friday, 24 July 2020 16:06:00
+      jest.spyOn(Date, 'now').mockImplementation(() => DATE_2020_10_29_16_06)
 
       const req = { ...mockCreateReq, params: { offenderNo } }
 
@@ -87,7 +90,7 @@ describe('case note management', () => {
         'caseNotes/addCaseNoteForm.njk',
         expect.objectContaining({
           formValues: {
-            date: '24/07/2020',
+            date: '29/10/2020',
             hours: '16',
             minutes: '06',
           },
@@ -114,7 +117,7 @@ describe('case note management', () => {
     })
 
     it('should render the add case note with the correctly formatted information', async () => {
-      jest.spyOn(Date, 'now').mockImplementation(() => 1595607300000) // Friday, 24 July 2020 17:15:00
+      jest.spyOn(Date, 'now').mockImplementation(() => DATE_2020_10_29_16_15)
 
       const req = { ...mockCreateReq, params: { offenderNo } }
 
@@ -130,7 +133,7 @@ describe('case note management', () => {
         homeUrl: '/prisoner/ABC123/case-notes',
         caseNotesRootUrl: '/prisoner/ABC123/add-case-note',
         formValues: {
-          date: '24/07/2020',
+          date: '29/10/2020',
           hours: '16',
           minutes: '15',
         },
@@ -145,7 +148,7 @@ describe('case note management', () => {
     })
 
     it('should default type and subType to the values supplied via query parameters', async () => {
-      jest.spyOn(Date, 'now').mockImplementation(() => 1595607300000) // Friday, 24 July 2020 17:15:00
+      jest.spyOn(Date, 'now').mockImplementation(() => DATE_2020_10_29_16_15)
 
       const req = { ...mockCreateReq, params: { offenderNo }, query: { type: 'KS', subType: 'KS' } }
       await displayCreateCaseNotePage(req, res)
@@ -154,7 +157,7 @@ describe('case note management', () => {
         'caseNotes/addCaseNoteForm.njk',
         expect.objectContaining({
           formValues: {
-            date: '24/07/2020',
+            date: '29/10/2020',
             hours: '16',
             minutes: '15',
             subType: 'KS',
