@@ -9,6 +9,7 @@ jest.mock('../../raiseAnalyticsEvent', () => ({
 
 describe('Change cell play back details', () => {
   const prisonApi = {}
+  const whereaboutsApi = {}
 
   let logError
   let controller
@@ -25,7 +26,7 @@ describe('Change cell play back details', () => {
       lastName: 'Doe',
       agencyId: 'MDI',
     })
-    prisonApi.moveToCell = jest.fn()
+    whereaboutsApi.moveToCell = jest.fn()
     prisonApi.moveToCellSwap = jest.fn()
     prisonApi.getLocation = jest.fn().mockResolvedValue({
       locationPrefix: 'MDI-10-19',
@@ -34,7 +35,7 @@ describe('Change cell play back details', () => {
 
     prisonApi.getAttributesForLocation = jest.fn().mockResolvedValue({ capacity: 1 })
 
-    controller = confirmCellMove({ prisonApi, logError })
+    controller = confirmCellMove({ prisonApi, whereaboutsApi, logError })
 
     req.params = {
       offenderNo: 'A12345',
@@ -115,14 +116,20 @@ describe('Change cell play back details', () => {
       expect(res.redirect).toHaveBeenCalledWith('/prisoner/A12345/cell-move/select-cell')
     })
 
-    it('should call elite api to make the cell move', async () => {
+    it('should call whereabouts api to make the cell move', async () => {
       prisonApi.getDetails = jest.fn().mockResolvedValue({ bookingId: 1 })
       req.body = { cellId: 223 }
 
       await controller.post(req, res)
 
       expect(prisonApi.getDetails).toHaveBeenCalledWith({}, 'A12345')
-      expect(prisonApi.moveToCell).toHaveBeenCalledWith({}, { bookingId: 1, internalLocationDescription: 'MDI-10-19' })
+      expect(whereaboutsApi.moveToCell).toHaveBeenCalledWith(
+        {},
+        {
+          bookingId: 1,
+          internalLocationDescription: 'MDI-10-19',
+        }
+      )
       expect(res.redirect).toHaveBeenCalledWith('/prisoner/A12345/cell-move/confirmation?cellId=223')
     })
 
@@ -153,7 +160,7 @@ describe('Change cell play back details', () => {
     })
 
     it('should not raise an analytics event on api failures', async () => {
-      prisonApi.moveToCell.mockRejectedValue(new Error('Internal server error'))
+      whereaboutsApi.moveToCell.mockRejectedValue(new Error('Internal server error'))
       req.body = { cellId: 123 }
 
       await controller.post(req, res)
@@ -164,7 +171,7 @@ describe('Change cell play back details', () => {
     it('should redirect to cell not available on a http 400 bad request when attempting a cell move', async () => {
       req.body = { cellId: 223 }
 
-      prisonApi.moveToCell.mockRejectedValue(makeError('status', 400))
+      whereaboutsApi.moveToCell.mockRejectedValue(makeError('status', 400))
 
       await controller.post(req, res)
 
