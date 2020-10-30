@@ -1,4 +1,4 @@
-const { stubFor, postFor, verifyPut, verifyGet, resetStub } = require('./wiremock')
+const { stubFor, postFor, verifyPut, verifyGet, verifyPosts, resetStub } = require('./wiremock')
 const alertTypes = require('./responses/alertTypes')
 const cellAttributes = require('./responses/cellAttributes')
 const assessmentsResponse = require('./responses/assessmentsResponse')
@@ -6,7 +6,11 @@ const activity3 = require('./responses/activity3')
 
 module.exports = {
   verifyMoveToCell: ({ bookingId, locationPrefix }) =>
-    verifyPut(`/api/bookings/${bookingId}/living-unit/${locationPrefix}?reasonCode=ADM`),
+    verifyPosts('/whereabouts/cell/make-cell-move', {
+      bookingId,
+      cellMoveReasonCode: 'ADM',
+      internalLocationDescriptionDestination: locationPrefix,
+    }),
   verifyMoveToCellSwap: ({ bookingId }) => verifyPut(`/api/bookings/${bookingId}/move-to-cell-swap`),
   verifyAdjudicationsHistory: ({ offenderNo, agencyId, finding, fromDate, toDate }) =>
     verifyGet(
@@ -1643,20 +1647,6 @@ module.exports = {
           'Content-Type': 'application/json;charset=UTF-8',
         },
         jsonBody: response || {},
-      },
-    }),
-  stubMoveToCell: () =>
-    stubFor({
-      request: {
-        method: 'PUT',
-        urlPathPattern: '/api/bookings/[0-9]+?/living-unit/.+?',
-      },
-      response: {
-        status: 200,
-        headers: {
-          'Content-Type': 'application/json;charset=UTF-8',
-        },
-        jsonBody: {},
       },
     }),
   stubMoveToCellSwap: () =>
