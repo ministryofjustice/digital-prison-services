@@ -76,8 +76,7 @@
                 label: 'From',
                 name: 'fromDate',
                 date: formValues.fromDate,
-                errorMessage: errors | findError('fromDate'),
-                attributes: { 'readonly':'readonly' }
+                errorMessage: errors | findError('fromDate')
             }) }}
 
             {{ datePicker({
@@ -85,8 +84,7 @@
                 label: 'To',
                 name: 'toDate',
                 date: formValues.toDate,
-                errorMessage: errors | findError('toDate'),
-                attributes: { 'readonly':'readonly' }
+                errorMessage: errors | findError('toDate')
             }) }}
 
             {{ govukButton({

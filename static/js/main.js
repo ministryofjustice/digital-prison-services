@@ -13,6 +13,8 @@ $(document).ready(function() {
       maxDate: maxDate,
       minDate: minDate,
     })
+
+    $(element).attr('readonly', 'true')
   })
 
   $('.js-prisoner-search-clear-alerts').click(function(e) {

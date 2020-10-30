@@ -60,7 +60,7 @@
         name: 'fromDate',
         date: fromDate,
         errorMessage: errors | findError('fromDate'),
-        attributes: { 'data-qa': 'from-filter', 'readonly':'readonly' }
+        attributes: { "data-qa": "from-filter" }
       }) }}
 
       {{ datePicker({
@@ -69,7 +69,7 @@
         name: 'toDate',
         date: toDate,
         errorMessage: errors | findError('toDate'),
-        attributes: { 'data-qa": "to-filter', 'readonly':'readonly' }
+        attributes: { "data-qa": "to-filter" }
       }) }}
 
       {{ govukButton({
