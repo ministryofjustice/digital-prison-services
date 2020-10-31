@@ -18,7 +18,7 @@ const addAppointmentPage = name =>
       submitButton: () => cy.get('button[type="submit"]'),
     }),
     datePicker: () => cy.get('#ui-datepicker-div'),
-    highlightDate: () => cy.get('.ui-state-highlight'),
+    todaysDate: () => cy.get('.ui-state-highlight'),
     recurringInputs: () => cy.get('[data-qa="recurring-inputs"]'),
     offenderEvents: () => cy.get('[data-qa="offender-events"]'),
     locationEvents: () => cy.get('[data-qa="location-events"]'),

@@ -91,7 +91,7 @@ context('A user can add an appointment', () => {
     const form = addAppointmentPage.form()
 
     form.date().click()
-    addAppointmentPage.highlightDate().click()
+    addAppointmentPage.todaysDate().click()
     form.appointmentType().select('ACTI')
     form.location().select('1')
     form.startTimeHours().select('23')
@@ -110,7 +110,7 @@ context('A user can add an appointment', () => {
     const form = addAppointmentPage.form()
 
     form.date().click()
-    addAppointmentPage.highlightDate().click()
+    addAppointmentPage.todaysDate().click()
 
     form.appointmentType().select('ACTI')
     form.location().select('1')
@@ -136,7 +136,7 @@ context('A user can add an appointment', () => {
     form.startTimeMinutes().select('55')
 
     form.date().click()
-    addAppointmentPage.highlightDate().click()
+    addAppointmentPage.todaysDate().click()
 
     form.recurringYes().click()
     form.repeats().select('DAILY')
@@ -174,7 +174,7 @@ context('A user can add an appointment', () => {
     form.comments().type('Test comment')
 
     form.date().click()
-    addAppointmentPage.highlightDate().click()
+    addAppointmentPage.todaysDate().click()
 
     form.submitButton().click()
 
@@ -205,7 +205,7 @@ context('A user can add an appointment', () => {
     form.comments().type('Test comment')
 
     form.date().click()
-    addAppointmentPage.highlightDate().click()
+    addAppointmentPage.todaysDate().click()
 
     form.submitButton().click()
 
@@ -237,7 +237,7 @@ context('A user can add an appointment', () => {
     form.comments().type('Test comment')
 
     form.date().click()
-    addAppointmentPage.highlightDate().click()
+    addAppointmentPage.todaysDate().click()
 
     form.submitButton().click()
 
@@ -274,7 +274,7 @@ context('A user can add an appointment', () => {
     form.comments().type('Test comment')
 
     form.date().click()
-    addAppointmentPage.highlightDate().click()
+    addAppointmentPage.todaysDate().click()
 
     form.submitButton().click()
 
@@ -314,7 +314,7 @@ context('A user can add an appointment', () => {
     form.comments().type('Test comment')
 
     form.date().click()
-    addAppointmentPage.highlightDate().click()
+    addAppointmentPage.todaysDate().click()
 
     form.submitButton().click()
 
