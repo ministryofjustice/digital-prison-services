@@ -192,11 +192,11 @@ context('A user can view prisoner case notes', () => {
       page
         .filterForm()
         .fromDate()
-        .type('02/02/2020')
+        .type('02/02/2020', { force: true })
       page
         .filterForm()
         .toDate()
-        .type('02/01/2020')
+        .type('02/01/2020', { force: true })
       page
         .filterForm()
         .applyButton()
@@ -251,11 +251,11 @@ context('A user can view prisoner case notes', () => {
       page
         .filterForm()
         .fromDate()
-        .type('02/02/2020')
+        .type('02/02/2020', { force: true })
       page
         .filterForm()
         .toDate()
-        .type('02/01/2020')
+        .type('02/01/2020', { force: true })
       page
         .filterForm()
         .applyButton()

@@ -92,6 +92,15 @@ module.exports = ({ prisonApi, oauthApi, logError }) => async (req, res) => {
 
     const userCanMaintainIEP = userRoles.find(role => role.roleCode === 'MAINTAIN_IEP')
 
+    const noFiltersSupplied = Boolean(!agencyId && !incentiveLevel && !fromDate && !toDate)
+
+    const noResultsFoundMessage =
+      (!filteredResults.length &&
+        (noFiltersSupplied
+          ? `${formatName(firstName, lastName)} has no incentive level history`
+          : 'There is no incentive level history for the selections you have made')) ||
+      ''
+
     return res.render('prisonerProfile/prisonerIncentiveLevelDetails.njk', {
       breadcrumbPrisonerName: putLastNameFirst(firstName, lastName),
       currentIepDateTime: iepSummary.iepTime,
@@ -100,6 +109,7 @@ module.exports = ({ prisonApi, oauthApi, logError }) => async (req, res) => {
       dpsUrl,
       errors,
       formValues: req.query,
+      noResultsFoundMessage,
       establishments: establishments.sort((a, b) => a.description.localeCompare(b.description)).map(establishment => ({
         text: establishment.description,
         value: establishment.agencyId,

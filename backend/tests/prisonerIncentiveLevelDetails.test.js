@@ -24,6 +24,7 @@ describe('Prisoner incentive level details', () => {
     prisonApi.getDetails = jest
       .fn()
       .mockResolvedValue({ agencyId: 'MDI', bookingId, firstName: 'John', lastName: 'Smith' })
+
     prisonApi.getIepSummaryForBooking = jest.fn().mockReturnValue({
       bookingId: -1,
       iepDate: '2017-08-15',
@@ -99,6 +100,7 @@ describe('Prisoner incentive level details', () => {
       nextReviewDate: '15 August 2018',
       establishments: [{ value: 'HEI', text: 'Hewell' }, { value: 'LEI', text: 'Leeds' }],
       formValues: {},
+      noResultsFoundMessage: '',
       levels: [
         {
           text: 'Basic',
@@ -351,6 +353,50 @@ describe('Prisoner incentive level details', () => {
             userId: 'ITAG_USER',
           },
         ],
+      })
+    )
+  })
+  it('should return default message for no incentive level history', async () => {
+    req.query = {}
+    prisonApi.getIepSummaryForBooking = jest.fn().mockReturnValue({
+      bookingId: -1,
+      iepDate: '2017-08-15',
+      iepTime: '2017-08-15T16:04:35',
+      iepLevel: 'Standard',
+      daysSinceReview: 625,
+      iepDetails: [],
+    })
+
+    await controller(req, res)
+
+    expect(res.render).toHaveBeenCalledWith(
+      'prisonerProfile/prisonerIncentiveLevelDetails.njk',
+      expect.objectContaining({
+        noResultsFoundMessage: 'John Smith has no incentive level history',
+        results: [],
+      })
+    )
+  })
+
+  it('should return default message when no incentive level history is returned for the supplied filters', async () => {
+    req.query = { fromDate: '10/08/2017', toDate: '10/08/2017' }
+
+    prisonApi.getIepSummaryForBooking = jest.fn().mockReturnValue({
+      bookingId: -1,
+      iepDate: '2017-08-15',
+      iepTime: '2017-08-15T16:04:35',
+      iepLevel: 'Standard',
+      daysSinceReview: 625,
+      iepDetails: [],
+    })
+
+    await controller(req, res)
+
+    expect(res.render).toHaveBeenCalledWith(
+      'prisonerProfile/prisonerIncentiveLevelDetails.njk',
+      expect.objectContaining({
+        noResultsFoundMessage: 'There is no incentive level history for the selections you have made',
+        results: [],
       })
     )
   })

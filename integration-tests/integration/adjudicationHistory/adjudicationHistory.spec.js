@@ -97,14 +97,14 @@ context('A user can confirm the cell move', () => {
     page
       .form()
       .fromDate()
-      .type('01/08/2020')
-      .type('{esc}')
+      .type('01/08/2020', { force: true })
+      .type('{esc}', { force: true })
 
     page
       .form()
       .toDate()
-      .type('05/08/2020')
-      .type('{esc}')
+      .type('05/08/2020', { force: true })
+      .type('{esc}', { force: true })
 
     page
       .form()
@@ -160,14 +160,14 @@ context('A user can confirm the cell move', () => {
     page
       .form()
       .fromDate()
-      .type('01/08/2020')
-      .type('{esc}')
+      .type('01/08/2020', { force: true })
+      .type('{esc}', { force: true })
 
     page
       .form()
       .toDate()
-      .type('05/08/2020')
-      .type('{esc}')
+      .type('05/08/2020', { force: true })
+      .type('{esc}', { force: true })
 
     page
       .form()
