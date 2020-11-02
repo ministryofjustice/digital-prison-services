@@ -338,4 +338,18 @@ module.exports = {
         jsonBody: locationGroups || [],
       },
     }),
+  stubMoveToCell: () =>
+    stubFor({
+      request: {
+        method: 'POST',
+        urlPath: '/whereabouts/cell/make-cell-move',
+      },
+      response: {
+        status: 201,
+        headers: {
+          'Content-Type': 'application/json;charset=UTF-8',
+        },
+        jsonBody: {},
+      },
+    }),
 }

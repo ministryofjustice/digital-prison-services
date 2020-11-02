@@ -1,7 +1,5 @@
 .horizontal-information {
-  margin-bottom: govuk-spacing(6);
-
-  @include govuk-media-query($from: tablet) {
+  @media print, (min-width: #{map-get($govuk-breakpoints, 'tablet')}) {
     padding-bottom: 0;
     display: flex;
   }
@@ -13,12 +11,16 @@
   }
 
   &__item {
-    @include govuk-media-query($from: tablet) {
+    @media print, (min-width: #{map-get($govuk-breakpoints, 'tablet')}) {
       flex: 1 1 0;
       padding-right: govuk-spacing(3);
 
       &--tenth {
         flex-basis: 10%;
+      }
+
+      :last-child {
+        margin-bottom: 0;
       }
     }
   }

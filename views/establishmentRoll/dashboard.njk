@@ -1,168 +1,102 @@
 {% extends "../partials/layout.njk" %}
+{% from "govuk/components/table/macro.njk" import govukTable %}
+{% from "../macros/printLink.njk" import printLink %}
 
 {% set title = 'Establishment roll' %}
 
 {% block beforeContent %}
   {{ govukBreadcrumbs({
-  items: [
-    {
-      text: "Home",
-      href: notmUrl
-    },
-    {
-      text: title
-    }
-  ]
-})
-}}
+    items: [
+      {
+        text: "Home",
+        href: dpsUrl
+      },
+      {
+        text: title
+      }
+    ],
+    classes: 'govuk-!-display-none-print'
+  })
+  }}
 {% endblock %}
 
 {% block content %}
-    <h1 class="govuk-heading-l">{{title}}</h1>
+  <div class="govuk-!-margin-bottom-6">
+    <h1 class="govuk-heading-l govuk-!-margin-bottom-3">{{title}}</h1>
+    {{ printLink() }}
+  </div>
 
-    <div class="today">
-    <h2 class="govuk-heading-m govuk-!-padding-top-2 govuk-!-padding-left-2"> {{ "Today" | possessive | safe }} movements</h2>
+  <div class="establishment-roll-today">
+    <h2 class="govuk-heading-m"> {{ "Today" | possessive | safe }} movements</h2>
 
-    <div class="govuk-grid-row govuk-!-padding-bottom-3 govuk-!-padding-left-2">
-        <div class="govuk-grid-column-one-half">
-          <div class="govuk-grid-row">
-            <div class="govuk-grid-column-one-third">
-                <p class="govuk-body">Unlock roll</p>
-                <span class="govuk-body govuk-!-font-size-36 govuk-!-font-weight-bold block-figure__value" data-test="unlock-roll">{{todayStats.unlockRoll}}</span>
-            </div>
-            <div class="govuk-grid-column-one-third with-separator">
-                <p class="govuk-body">In today</p>
-                {% if todayStats.inToday > 0 %}
-                  <a class="govuk-link govuk-!-font-size-36 govuk-!-font-weight-bold block-figure__value" data-test="in-today" href="/establishment-roll/in-today">{{todayStats.inToday}}</a>
-                {% else %}
-                  <span class="govuk-body govuk-!-font-size-36 govuk-!-font-weight-bold block-figure__value" data-test="in-today">{{todayStats.inToday}}</span>
-                {% endif %}
-            </div>
-            <div class="govuk-grid-column-one-third with-separator">
-                <p class="govuk-body">Out today</p>
-                {% if todayStats.outToday > 0 %}
-                  <a class="govuk-link govuk-!-font-size-36 govuk-!-font-weight-bold block-figure__value" data-test="out-today" href="/establishment-roll/out-today">{{todayStats.outToday}}</a>
-                {% else %}
-                  <span class="govuk-body govuk-!-font-size-36 govuk-!-font-weight-bold block-figure__value" data-test="out-today">{{todayStats.outToday}}</span>
-                {% endif %}
-            </div>
-          </div>
-        </div>
-        <div class="govuk-grid-column-one-half">
-          <div class="govuk-grid-row">
-            <div class="govuk-grid-column-one-third with-separator">
-                <p class="govuk-body">Current roll</p>
-                <span class="govuk-body govuk-!-font-size-36 govuk-!-font-weight-bold block-figure__value" data-test="current-roll">{{todayStats.currentRoll}}</span>
-            </div>
-            <div class="govuk-grid-column-one-third with-separator">
-                <p class="govuk-body">In reception</p>
-                {% if todayStats.unassignedIn > 0 %}
-                  <a class="govuk-link govuk-!-font-size-36 govuk-!-font-weight-bold block-figure__value" data-test="unassigned-in" href="/establishment-roll/in-reception">{{todayStats.unassignedIn}}</a>
-                {% else %}
-                  <span class="govuk-body govuk-!-font-size-36 govuk-!-font-weight-bold block-figure__value" data-test="unassigned-in">{{todayStats.unassignedIn}}</span>
-                {% endif %}
-            </div>
-            <div class="govuk-grid-column-one-third with-separator">
-                <p class="govuk-body">En-route</p>
-                {% if todayStats.enroute > 0 %}
-                  <a class="govuk-link govuk-!-font-size-36 govuk-!-font-weight-bold block-figure__value" data-test="enroute" href="/establishment-roll/en-route">{{todayStats.enroute}}</a>
-                {% else %}
-                  <span class="govuk-body govuk-!-font-size-36 govuk-!-font-weight-bold block-figure__value" data-test="enroute">{{todayStats.enroute}}</span>
-                {% endif %}
-            </div>
-          </div>
-        </div>
-    </div>
-    </div>
-
-    {% for block in blocks %}
-      <h2 class="govuk-heading-m govuk-!-margin-top-2 govuk-!-padding-left-2"> {{ block.name }} </h2>
-
-      <div class="govuk-grid-row govuk-!-padding-left-3">
-          <div class="govuk-grid-column-one-half">
-            <div class="govuk-grid-row">
-              <div class="govuk-grid-column-one-third">
-                  <p class="govuk-body">Beds in use</p>
-                  <span class="govuk-body govuk-!-font-size-36 govuk-!-font-weight-bold block-figure__value" data-test="block-beds-in-use">{{ block.stats.bedsInUse }}</span>
-              </div>
-              <div class="govuk-grid-column-one-third with-separator">
-                  <p class="govuk-body">Currently in cell</p>
-                  <span class="govuk-body govuk-!-font-size-36 govuk-!-font-weight-bold block-figure__value" data-test="block-in-cell">{{ block.stats.inCell }}</span>
-              </div>
-              <div class="govuk-grid-column-one-third with-separator">
-                  <p class="govuk-body">Currently out</p>
-                  {% if block.stats.out > 0 %}
-                    <a class="govuk-link govuk-!-font-size-36 govuk-!-font-weight-bold block-figure__value" data-test="block-out" href={{ "/establishment-roll/" + block.livingUnitId + "/currently-out" }}>{{ block.stats.out }}</a>
-                  {% else %}
-                    <span class="govuk-body govuk-!-font-size-36 govuk-!-font-weight-bold block-figure__value" data-test="block-out">{{ block.stats.out }}</span>
-                  {% endif %}
-              </div>
-            </div>
-          </div>
-          <div class="govuk-grid-column-one-half">
-            <div class="govuk-grid-row">
-              <div class="govuk-grid-column-one-third with-separator">
-                  <p class="govuk-body">Operational cap.</p>
-                  <span class="govuk-body govuk-!-font-size-36 govuk-!-font-weight-bold block-figure__value" data-test="block-op-cap">{{ block.stats.operationalCapacity }}</span>
-              </div>
-              <div class="govuk-grid-column-one-third with-separator">
-                  <p class="govuk-body">Net vacancies</p>
-                  <span class="govuk-body govuk-!-font-size-36 govuk-!-font-weight-bold block-figure__value" data-test="block-vacancies">{{ block.stats.netVacancies }}</span>
-              </div>
-              <div class="govuk-grid-column-one-third with-separator">
-                  <p class="govuk-body">Out of order</p>
-                  <span class="govuk-body govuk-!-font-size-36 govuk-!-font-weight-bold block-figure__value" data-test="block-out-of-order">{{ block.stats.outOfOrder }}</span>
-              </div>
-            </div>
-          </div>
+    <div class="horizontal-information">
+      <div class="horizontal-information__item">
+        <h3 class="govuk-heading-s govuk-!-margin-bottom-1">Unlock roll</h3>
+        <p class="govuk-body" data-test="unlock-roll">{{todayStats.unlockRoll}}</p>
       </div>
-      {% if not loop.last %}
-        <hr class="govuk-section-break govuk-section-break--m govuk-section-break--visible">
-      {% endif %}
 
-    {% endfor %}
+      <div class="horizontal-information__item">
+        <h3 class="govuk-heading-s govuk-!-margin-bottom-1">In today</h3>
+        <p class="govuk-body" data-test="in-today">
+          {% if todayStats.inToday > 0 %}
+            <a class="govuk-link" href="/establishment-roll/in-today">{{todayStats.inToday}}</a>
+          {% else %}
+            {{todayStats.inToday}}
+          {% endif %}
+        </p>
+      </div>
 
-    <div class="total govuk-!-margin-top-2">
-    <h2 class="govuk-heading-m govuk-!-padding-top-2 govuk-!-padding-left-2"> Totals </h2>
+      <div class="horizontal-information__item">
+        <h3 class="govuk-heading-s govuk-!-margin-bottom-1">Out today</h3>
+        <p class="govuk-body" data-test="out-today">
+          {% if todayStats.outToday > 0 %}
+            <a class="govuk-link" href="/establishment-roll/out-today">{{todayStats.outToday}}</a>
+          {% else %}
+            {{todayStats.outToday}}
+          {% endif %}
+        </p>
+      </div>
 
-    <div class="govuk-grid-row govuk-!-padding-bottom-3 govuk-!-padding-left-3">
-        <div class="govuk-grid-column-one-half">
-          <div class="govuk-grid-row">
-            <div class="govuk-grid-column-one-third">
-                <p class="govuk-body">Total roll</p>
-                <span class="govuk-body govuk-!-font-size-36 govuk-!-font-weight-bold block-figure__value" data-test="total-roll">{{totalsStats.roll}}</span>
-            </div>
-            <div class="govuk-grid-column-one-third with-separator">
-                <p class="govuk-body">Total in cell</p>
-                <span class="govuk-body govuk-!-font-size-36 govuk-!-font-weight-bold block-figure__value" data-test="total-in-cell">{{totalsStats.inCell}}</span>
-            </div>
-            <div class="govuk-grid-column-one-third with-separator">
-                <p class="govuk-body">Total out</p>
-                {% if totalsStats.out > 0 %}
-                  <a class="govuk-link govuk-!-font-size-36 govuk-!-font-weight-bold block-figure__value" data-test="total-out" href="/establishment-roll/total-currently-out">{{totalsStats.out}}</a>
-                {% else %}
-                <span class="govuk-body govuk-!-font-size-36 govuk-!-font-weight-bold block-figure__value" data-test="total-out">{{totalsStats.out}}</span>
-                {% endif %}
-            </div>
-          </div>
-        </div>
-        <div class="govuk-grid-column-one-half">
-          <div class="govuk-grid-row">
-            <div class="govuk-grid-column-one-third with-separator">
-                <p class="govuk-body">Total op. cap.</p>
-                <span class="govuk-body govuk-!-font-size-36 govuk-!-font-weight-bold block-figure__value" data-test="total-op-cap">{{totalsStats.operationalCapacity}}</span>
-            </div>
-            <div class="govuk-grid-column-one-third with-separator">
-                <p class="govuk-body">Total vacancies</p>
-                <span class="govuk-body govuk-!-font-size-36 govuk-!-font-weight-bold block-figure__value" data-test="total-vacancies">{{totalsStats.vacancies}}</span>
-            </div>
-            <div class="govuk-grid-column-one-third with-separator">
-                <p class="govuk-body">Total out of order</p>
-                <span class="govuk-body govuk-!-font-size-36 govuk-!-font-weight-bold block-figure__value" data-test="total-out-of-order">{{totalsStats.outOfOrder}}</span>
-            </div>
-          </div>
-        </div>
+      <div class="horizontal-information__item">
+        <h3 class="govuk-heading-s govuk-!-margin-bottom-1">Current roll</h3>
+        <p class="govuk-body" data-test="current-roll">{{todayStats.currentRoll}}</p>
+      </div>
+
+      <div class="horizontal-information__item">
+        <h3 class="govuk-heading-s govuk-!-margin-bottom-1">In reception</h3>
+        <p class="govuk-body" data-test="unassigned-in">
+          {% if todayStats.unassignedIn > 0 %}
+            <a class="govuk-link" href="/establishment-roll/in-reception">{{todayStats.unassignedIn}}</a>
+          {% else %}
+            {{todayStats.unassignedIn}}
+          {% endif %}
+        </p>
+      </div>
+
+      <div class="horizontal-information__item">
+        <h3 class="govuk-heading-s govuk-!-margin-bottom-1">Arriving today</h3>
+        <p class="govuk-body" data-test="enroute">
+          {% if todayStats.enroute > 0 %}
+            <a class="govuk-link" data-test="enroute" href="/establishment-roll/en-route">{{todayStats.enroute}}</a>
+          {% else %}
+            {{todayStats.enroute}}
+          {% endif %}
+        </p>
+      </div>
     </div>
-    </div>
-      
+  </div>
+
+    {{ govukTable({
+    head: [
+      { text: "Location" },
+      { text: "Beds in use" },
+      { text: "Currently in cell" },
+      { text: "Currently out" },
+      { text: "Operational capacity" },
+      { text: "Net vacancies" },
+      { text: "Out of order" }
+    ],
+    rows: rows,
+    attributes: { "data-test": "establishment-roll-table" }
+  }) }}      
 {% endblock %}

@@ -328,19 +328,23 @@ describe('Test clients built by oauthEnabledClient', () => {
         .get('/api/users/me')
         .reply(404)
 
-      client.get({}, '/api/users/me').catch(e => {
-        expect(logger.warn).toHaveBeenCalledWith('GET /api/users/me No record found')
-      })
+      await expect(client.get({}, '/api/users/me')).rejects.toThrow('Not Found')
+
+      expect(logger.warn).toHaveBeenCalledWith('GET /api/users/me No record found')
     })
 
     it('Should log 500 correctly', async () => {
       nock(hostname)
         .get('/api/users/me')
         .reply(500)
+        .get('/api/users/me')
+        .reply(500)
+        .get('/api/users/me')
+        .reply(500)
 
-      client.get({}, '/api/users/me').catch(e => {
-        expect(logger.warn).toHaveBeenCalledWith('API error in GET /api/users/me 500 Something went very wrong -')
-      })
+      await expect(client.get({}, '/api/users/me')).rejects.toThrow('Internal Server Error')
+
+      expect(logger.warn).toHaveBeenCalledWith('API error in GET /api/users/me 500 Internal Server Error {}')
     })
   })
 })

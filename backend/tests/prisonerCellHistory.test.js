@@ -30,8 +30,8 @@ describe('Prisoner cell history', () => {
       content: [
         {
           agencyId: 'MDI',
-          assignmentDate: '2020-09-01',
-          assignmentDateTime: '2020-09-01T12:48:33.375Z',
+          assignmentDate: '2020-03-01',
+          assignmentDateTime: '2020-03-01T12:48:33.375Z', // Avoid BST
           assignmentReason: 'ADM',
           bookingId,
           description: 'MDI-1-02',
@@ -39,10 +39,10 @@ describe('Prisoner cell history', () => {
         },
         {
           agencyId: 'RNI',
-          assignmentDate: '2020-08-01',
-          assignmentDateTime: '2020-08-01T12:48:33.375Z',
-          assignmentEndDate: '2020-09-01',
-          assignmentEndDateTime: '2020-09-01T12:48:33.375Z',
+          assignmentDate: '2020-02-01',
+          assignmentDateTime: '2020-02-01T12:48:33.375Z',
+          assignmentEndDate: '2020-03-01',
+          assignmentEndDateTime: '2020-03-01T12:48:33.375Z',
           assignmentReason: 'ADM',
           bookingId,
           description: 'RNI-1-03',
@@ -76,7 +76,7 @@ describe('Prisoner cell history', () => {
       ])
     })
 
-    it('sends the right data to the tempalte', async () => {
+    it('sends the right data to the template', async () => {
       await controller(req, res)
 
       expect(res.render).toHaveBeenCalledWith(
@@ -85,13 +85,13 @@ describe('Prisoner cell history', () => {
           cellData: [
             {
               agencyId: 'RNI',
-              assignmentDateTime: '2020-08-01T12:48:33',
-              assignmentEndDateTime: '2020-09-01T12:48:33',
+              assignmentDateTime: '2020-02-01T12:48:33',
+              assignmentEndDateTime: '2020-03-01T12:48:33',
               establishment: 'Ranby',
               livingUnitId: 3,
               location: '1-03',
-              movedIn: '01/08/2020 - 12:48',
-              movedOut: '01/09/2020 - 12:48',
+              movedIn: '01/02/2020 - 12:48',
+              movedOut: '01/03/2020 - 12:48',
             },
           ],
           occupants: [
@@ -102,12 +102,12 @@ describe('Prisoner cell history', () => {
           ],
           currentLocation: {
             agencyId: 'MDI',
-            assignmentDateTime: '2020-09-01T12:48:33',
+            assignmentDateTime: '2020-03-01T12:48:33',
             assignmentEndDateTime: moment().format('YYYY-MM-DDTHH:mm:ss'),
             establishment: 'Moorland',
             livingUnitId: 1,
             location: '1-02',
-            movedIn: '01/09/2020 - 12:48',
+            movedIn: '01/03/2020 - 12:48',
           },
           canViewCellMoveButton: false,
           prisonerName: 'John Smith',

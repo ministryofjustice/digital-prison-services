@@ -428,41 +428,24 @@ describe('prisoner profile service', () => {
         expect(profileData.canViewPathfinderLink).toBe(false)
       })
 
-      it('should enable pathfinder when the user has the PF_STD_PRISON role', async () => {
-        oauthApi.userRoles.mockResolvedValue([{ roleCode: 'PF_STD_PRISON' }])
+      it.each`
+        role                     | flag                       | hasAccess
+        ${'PF_STD_PRISON'}       | ${'canViewPathfinderLink'} | ${true}
+        ${'PF_STD_PROBATION'}    | ${'canViewPathfinderLink'} | ${true}
+        ${'PF_APPROVAL'}         | ${'canViewPathfinderLink'} | ${true}
+        ${'PF_STD_PRISON_RO'}    | ${'canViewPathfinderLink'} | ${true}
+        ${'PF_STD_PROBATION_RO'} | ${'canViewPathfinderLink'} | ${true}
+        ${'PF_HQ'}               | ${'canViewPathfinderLink'} | ${true}
+        ${'PF_PSYCHOLOGIST'}     | ${'canViewPathfinderLink'} | ${true}
+        ${'PF_POLICE'}           | ${'canViewPathfinderLink'} | ${true}
+        ${'OTHER'}               | ${'canViewPathfinderLink'} | ${false}
+      `('$flag should be $hasAccess when the user has the $role role', async ({ role, flag, hasAccess }) => {
+        oauthApi.userRoles.mockResolvedValue([{ roleCode: role }])
 
         const profileData = await service.getPrisonerProfileData(context, offenderNo)
 
-        expect(profileData.canViewPathfinderLink).toBe(true)
+        expect(profileData[flag]).toBe(hasAccess)
         expect(profileData.pathfinderProfileUrl).toBe('http://pathfinder-ui/nominal/1')
-      })
-      it('should enable pathfinder when the user has the PF_STD_PROBATION role', async () => {
-        oauthApi.userRoles.mockResolvedValue([{ roleCode: 'PF_STD_PROBATION' }])
-
-        const profileData = await service.getPrisonerProfileData(context, offenderNo)
-
-        expect(profileData.canViewPathfinderLink).toBe(true)
-      })
-      it('should enable pathfinder when the user has the PF_APPROVAL role', async () => {
-        oauthApi.userRoles.mockResolvedValue([{ roleCode: 'PF_APPROVAL' }])
-
-        const profileData = await service.getPrisonerProfileData(context, offenderNo)
-
-        expect(profileData.canViewPathfinderLink).toBe(true)
-      })
-      it('should enable pathfinder when the user has the PF_STD_PRISON_RO role', async () => {
-        oauthApi.userRoles.mockResolvedValue([{ roleCode: 'PF_STD_PRISON_RO' }])
-
-        const profileData = await service.getPrisonerProfileData(context, offenderNo)
-
-        expect(profileData.canViewPathfinderLink).toBe(true)
-      })
-      it('should enable pathfinder when the user has the PF_STD_PROBATION_RO role', async () => {
-        oauthApi.userRoles.mockResolvedValue([{ roleCode: 'PF_STD_PROBATION_RO' }])
-
-        const profileData = await service.getPrisonerProfileData(context, offenderNo)
-
-        expect(profileData.canViewPathfinderLink).toBe(true)
       })
 
       it('should not enable pathfinder link when the offender does not exists on pathfinder', async () => {
