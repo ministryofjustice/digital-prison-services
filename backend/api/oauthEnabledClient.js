@@ -14,6 +14,8 @@ const resultLogger = result => {
 const errorLogger = error => {
   const status = error.response ? error.response.status : '-'
   const responseData = error.response ? error.response.body : '-'
+  const payload =
+    typeof responseData === 'object' && responseData !== null ? JSON.stringify(responseData) : responseData
 
   // Not Found 404 is a valid response when querying for data.
   // Log it for information and pass it down the line
@@ -25,7 +27,7 @@ const errorLogger = error => {
 
   if (error.response && error.response.req) {
     logger.warn(
-      `API error in ${error.response.req.method} ${error.response.req.path} ${status} ${error.message} ${responseData}`
+      `API error in ${error.response.req.method} ${error.response.req.path} ${status} ${error.message} ${payload}`
     )
   } else logger.warn(`API error with message ${error.message}`)
   return error
