@@ -3,4 +3,9 @@
   margin-bottom: govuk-spacing(6);
   padding: govuk-spacing(3);
   background-color: #e9f3f9;
+
+  @media print {
+    padding: 0;
+    background: none;
+  }
 }
