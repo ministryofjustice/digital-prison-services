@@ -1,5 +1,6 @@
 {% extends "../partials/layout.njk" %}
 {% from "govuk/components/table/macro.njk" import govukTable %}
+{% from "../macros/printLink.njk" import printLink %}
 
 {% set title = 'Establishment roll' %}
 
@@ -20,7 +21,10 @@
 {% endblock %}
 
 {% block content %}
-  <h1 class="govuk-heading-l">{{title}}</h1>
+  <div class="govuk-!-margin-bottom-6">
+    <h1 class="govuk-heading-l govuk-!-margin-bottom-3">{{title}}</h1>
+    {{ printLink() }}
+  </div>
 
   <div class="establishment-roll-today">
     <h2 class="govuk-heading-m"> {{ "Today" | possessive | safe }} movements</h2>
