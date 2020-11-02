@@ -31,9 +31,9 @@ const addBulkAppointmentsAppointmentPage = () =>
       form.location().select('1')
       form.date().click()
       form.date().type(
-        `${moment()
+        moment()
           .add(10, 'days')
-          .format('DD/MM/YYYY')}{esc}`,
+          .format('DD/MM/YYYY'),
         { force: true }
       )
       cy.get('.ui-state-active').click()
