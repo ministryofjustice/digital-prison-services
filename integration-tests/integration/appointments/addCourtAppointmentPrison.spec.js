@@ -132,9 +132,9 @@ context('A user can add a video link', () => {
     const addCourtAppointmentPage = AddCourtAppointmentPage.verifyOnPage()
     const addAppointmentForm = addCourtAppointmentPage.form()
     addAppointmentForm.date().type(
-      `${moment()
+      moment()
         .add(1, 'days')
-        .format('DD/MM/YYYY')}`,
+        .format('DD/MM/YYYY'),
       { force: true }
     )
 
@@ -194,9 +194,9 @@ context('A user can add a video link', () => {
     const addCourtAppointmentPage = AddCourtAppointmentPage.verifyOnPage()
     const addAppointmentForm = addCourtAppointmentPage.form()
     addAppointmentForm.date().type(
-      `${moment()
+      moment()
         .add(1, 'days')
-        .format('DD/MM/YYYY')}`,
+        .format('DD/MM/YYYY'),
       { force: true }
     )
 
