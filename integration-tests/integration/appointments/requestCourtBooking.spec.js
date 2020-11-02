@@ -27,7 +27,8 @@ context('A user can request a booking', () => {
     startForm.date().type(
       moment()
         .add(1, 'days')
-        .format('DD/MM/YYYY')
+        .format('DD/MM/YYYY'),
+      { force: true }
     )
     startForm.prison().select('WWI')
     startForm.startTimeHours().select('10')
