@@ -41,6 +41,8 @@ module.exports = ({ prisonApi, whereaboutsApi, oauthApi, logError }) => async (r
       .filter(appointment => (type ? appointment.appointmentTypeCode === type : true))
       .map(async appointment => {
         const { startTime, endTime, offenderNo } = appointment
+
+        console.log({ appointment })
         const offenderName = `${properCaseName(appointment.lastName)}, ${properCaseName(appointment.firstName)}`
         const offenderUrl = `/prisoner/${offenderNo}`
 
@@ -53,6 +55,13 @@ module.exports = ({ prisonApi, whereaboutsApi, oauthApi, logError }) => async (r
         const staffDetails =
           !videoLinkLocation &&
           (await prisonApi.getStaffDetails(res.locals, appointment.createUserId).catch(error => {
+            logError(req.originalUrl, error, serviceUnavailableMessage)
+            return null
+          }))
+
+        const prisonerDetails =
+          !videoLinkLocation &&
+          (await prisonApi.getDetails(res.locals, offenderNo, true).catch(error => {
             logError(req.originalUrl, error, serviceUnavailableMessage)
             return null
           }))
@@ -88,13 +97,13 @@ module.exports = ({ prisonApi, whereaboutsApi, oauthApi, logError }) => async (r
             text: endTime ? `${getTime(startTime)} to ${getTime(endTime)}` : getTime(startTime),
           },
           {
-            html: `<a href="${offenderUrl}" class="govuk-link">${offenderName}</a>`,
+            html: `<a href="${offenderUrl}" class="govuk-link">${offenderName} - ${offenderNo}</a>`,
             attributes: {
               'data-sort-value': appointment.lastName,
             },
           },
           {
-            text: offenderNo,
+            text: prisonerDetails.assignedLivingUnit.description,
           },
           {
             text: appointment.appointmentTypeDescription,
