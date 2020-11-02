@@ -10,13 +10,6 @@ npm run start:dev
 The application will automatically pick up front end changes and it will restart if there are any changes in /backend or /views.
 Other changes will require a manual restart.
 
-For production
-
-```bash
-npm build
-node-env mode=PRODUCTION npm start
-```
-
 Run locally as docker
 
 ```bash
