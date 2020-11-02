@@ -1,3 +1,5 @@
+const moment = require('moment')
+
 context('A user can see the data in the dashbaord', () => {
   before(() => {
     cy.clearCookies()
@@ -63,6 +65,7 @@ context('A user can see the data in the dashbaord', () => {
   it('should load the page with the correct data', () => {
     cy.visit('/establishment-roll')
 
+    cy.get('h1').should('contain', `Establishment roll for ${moment().format('dddd D MMMM YYYY')}`)
     cy.get('[data-test="unlock-roll"]').should('contain', '329')
     cy.get('[data-test="in-today"]').should('contain', '1')
     cy.get('[data-test="out-today"]').should('contain', '2')
