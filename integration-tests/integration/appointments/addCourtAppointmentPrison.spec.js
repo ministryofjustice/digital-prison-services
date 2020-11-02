@@ -134,7 +134,8 @@ context('A user can add a video link', () => {
     addAppointmentForm.date().type(
       moment()
         .add(1, 'days')
-        .format('DD/MM/YYYY')
+        .format('DD/MM/YYYY'),
+      { force: true }
     )
 
     addCourtAppointmentPage.activeDate().click()
@@ -195,7 +196,8 @@ context('A user can add a video link', () => {
     addAppointmentForm.date().type(
       moment()
         .add(1, 'days')
-        .format('DD/MM/YYYY')
+        .format('DD/MM/YYYY'),
+      { force: true }
     )
 
     addCourtAppointmentPage.activeDate().click()
@@ -326,7 +328,7 @@ context('A user can add a video link', () => {
 
     const addCourtAppointmentPage = AddCourtAppointmentPage.verifyOnPage()
     const addAppointmentForm = addCourtAppointmentPage.form()
-    addAppointmentForm.date().type(tomorrow.format('DD/MM/YYYY'))
+    addAppointmentForm.date().type(tomorrow.format('DD/MM/YYYY'), { force: true })
 
     addCourtAppointmentPage.activeDate().click()
     addAppointmentForm.startTimeHours().select('10')
@@ -420,7 +422,7 @@ context('A user can add a video link', () => {
 
     const addCourtAppointmentPage = AddCourtAppointmentPage.verifyOnPage()
     const addAppointmentForm = addCourtAppointmentPage.form()
-    addAppointmentForm.date().type(tomorrow.format('DD/MM/YYYY'))
+    addAppointmentForm.date().type(tomorrow.format('DD/MM/YYYY'), { force: true })
 
     addCourtAppointmentPage.activeDate().click()
     addAppointmentForm.startTimeHours().select('10')

@@ -14,7 +14,7 @@ $(document).ready(function() {
       minDate: minDate,
     })
 
-    $(element).attr('read-only', 'true')
+    $(element).attr('readonly', 'true')
   })
 
   $('.js-prisoner-search-clear-alerts').click(function(e) {
