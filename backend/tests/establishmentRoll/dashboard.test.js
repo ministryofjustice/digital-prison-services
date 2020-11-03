@@ -165,4 +165,17 @@ describe('Establishment Roll', () => {
       })
     )
   })
+
+  it('should render the template with the correctly formatted date', async () => {
+    jest.spyOn(Date, 'now').mockImplementation(() => 1553860800000) // Friday 2019-03-29T12:00:00.000Z
+
+    await controller(req, res)
+
+    expect(res.render).toHaveBeenCalledWith(
+      'establishmentRoll/dashboard.njk',
+      expect.objectContaining({ date: 'Friday 29 March 2019' })
+    )
+
+    Date.now.mockRestore()
+  })
 })
