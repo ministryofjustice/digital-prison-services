@@ -1,16 +1,33 @@
- <header class="page-header govuk-!-display-none-print">
+{% from "govuk/components/phase-banner/macro.njk" import govukPhaseBanner %}
+
+<header class="page-header govuk-!-display-none-print">
+
+    {% if phaseName %}
+        <div class="outer-phase-banner">  
+            {{ govukPhaseBanner({
+                tag: {
+                    text:  phaseName 
+                },
+                html: 'Some text here'
+            }) }}
+        </div>
+    {% endif %}
+    
     <div class="header-content clickable">
+
         <div class="left-content">
+
             <a title="Home link" class="link" href="/">
                 <div class="logo"><img src="/images/Crest@2x.png" alt="" width="42" height="35"></div>
             </a>
+
             <a title="Home link" class="unstyled-link" href={{homeUrl or notmUrl}}>
                 <span class="logo-text">HMPPS</span>
                 <span class="title">Digital Prison Services</span>
             </a>
         </div>
 
-       {% if user %}
+    {% if user %}
             <div class="right-content">
                 <div class="right-menu no-select">
                     <label class="right-menu-content clickable" for="menuToggle">
