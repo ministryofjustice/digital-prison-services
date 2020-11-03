@@ -1,5 +1,7 @@
 const offenderBasicDetails = require('../../mockApis/responses/offenderBasicDetails.json')
 
+const title = 'Incentive level details for John Smith'
+
 const iepSummaryResponse = {
   bookingId: -1,
   iepDate: '2017-08-15',
@@ -86,7 +88,7 @@ context('Prisoner incentive level details', () => {
 
       cy.visit(`/prisoner/${offenderNo}/incentive-level-details`)
 
-      cy.get('h1').should('contain', 'Incentive details for John Smith')
+      cy.get('h1').should('contain', title)
       cy.get('[data-test="change-incentive-level-link"]')
         .invoke('attr', 'href')
         .then(href => {
@@ -176,7 +178,7 @@ context('Prisoner incentive level details', () => {
 
       cy.get('[data-test="filter-submit"]').click()
 
-      cy.get('h1').should('contain', 'Incentive details for John Smith')
+      cy.get('h1').should('contain', title)
       cy.get('[data-test="incentive-level-history"]').should('not.exist')
       cy.get('[data-test="no-incentive-level-history-message"]').should(
         'contain',
@@ -199,7 +201,7 @@ context('Prisoner incentive level details', () => {
       cy.get('#fromDate').type('01/01/2020', { force: true })
       cy.get('[data-test="filter-submit"]').click()
 
-      cy.get('h1').should('contain', 'Incentive details for John Smith')
+      cy.get('h1').should('contain', title)
       cy.get('[data-test="incentive-level-history"]').should('not.exist')
       cy.get('[data-test="no-incentive-level-history-message"]').should(
         'contain',
