@@ -9,6 +9,7 @@ const { probationDocumentsFactory } = require('./controllers/probationDocuments'
 const { downloadProbationDocumentFactory } = require('./controllers/downloadProbationDocument')
 const { attendanceStatisticsFactory } = require('./controllers/attendance/attendanceStatistics')
 const referenceCodesService = require('./controllers/reference-codes-service')
+const contentController = require('./controllers/content')
 
 const bulkAppointmentsAddDetailsRouter = require('./routes/appointments/bulkAppointmentsAddDetailsRouter')
 const bulkAppointmentsConfirmRouter = require('./routes/appointments/bulkAppointmentsConfirmRouter')
@@ -146,10 +147,6 @@ const setup = ({
 
   router.use('/change-caseload', changeCaseloadRouter({ prisonApi, logError }))
 
-  router.get('/terms', async (req, res) => {
-    res.render('terms', { mailTo: config.app.mailTo, homeLink: config.app.notmEndpointUrl })
-  })
-
   router.use('/offenders/:offenderNo/add-appointment', addAppointmentRouter({ prisonApi, logError }))
   router.use('/offenders/:offenderNo/confirm-appointment', confirmAppointmentRouter({ prisonApi, logError }))
   router.use(
@@ -228,6 +225,8 @@ const setup = ({
     '/prisoner/:offenderNo/case-notes/amend-case-note/:caseNoteId',
     amendCaseNNoteRouter({ prisonApi, caseNotesApi, logError })
   )
+
+  router.get(['/content', '/content/:path'], contentController({ logError }))
 
   return router
 }

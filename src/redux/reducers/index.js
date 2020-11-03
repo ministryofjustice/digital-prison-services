@@ -1,7 +1,6 @@
 import { combineReducers } from 'redux'
 import moment from 'moment'
 import * as ActionTypes from '../actions/actionTypes'
-import content from './content'
 import bulkAppointments from './bulk-appointments'
 import adjudicationHistory from './adjudications'
 
@@ -362,7 +361,6 @@ const prisonStaffHubApp = combineReducers({
   search,
   establishmentRoll,
   globalSearch,
-  content,
   bulkAppointments,
   adjudicationHistory,
   offenderDetails,

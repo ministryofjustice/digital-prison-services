@@ -84,7 +84,7 @@ context('Prisoner adjudication details', () => {
       cy.visit(`/prisoner/${offenderNo}/adjudications/123456`)
 
       cy.get('h1').should('contain', 'Adjudication 123 details')
-      cy.get('[data-test="governors-report-title"]').should('contain', 'Governor`s report number 1392002')
+      cy.get('[data-test="governors-report-title"]').should('contain', 'Governor’s report number 1392002')
       cy.get('[data-test="incident-time"]').should('contain', '19/10/2016 - 10:00')
       cy.get('[data-test="incident-location"]').should('contain', 'Health Care, Moorland (HMP & YOI)')
       cy.get('[data-test="incident-reported-by"]').should('contain', 'Florenzo, Dudfsanaye')

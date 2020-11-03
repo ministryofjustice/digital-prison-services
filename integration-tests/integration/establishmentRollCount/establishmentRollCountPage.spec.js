@@ -1,3 +1,5 @@
+const moment = require('moment')
+
 context('A user can see the data in the dashbaord', () => {
   before(() => {
     cy.clearCookies()
@@ -62,34 +64,27 @@ context('A user can see the data in the dashbaord', () => {
 
   it('should load the page with the correct data', () => {
     cy.visit('/establishment-roll')
-    cy.get('.block-figure__value').then($values => {
-      cy.get($values)
-        .its('length')
-        .should('eq', 24)
-      expect($values.get(0)).to.contain('329')
-      expect($values.get(1)).to.contain('1')
-      expect($values.get(2)).to.contain('2')
-      expect($values.get(3)).to.contain('328')
-      expect($values.get(4)).to.contain('2')
-      expect($values.get(5)).to.contain('6')
-      expect($values.get(6)).to.contain('156')
-      expect($values.get(7)).to.contain('154')
-      expect($values.get(8)).to.contain('2')
-      expect($values.get(9)).to.contain('170')
-      expect($values.get(10)).to.contain('14')
-      expect($values.get(11)).to.contain('0')
-      expect($values.get(12)).to.contain('172')
-      expect($values.get(13)).to.contain('172')
-      expect($values.get(14)).to.contain('0')
-      expect($values.get(15)).to.contain('180')
-      expect($values.get(16)).to.contain('8')
-      expect($values.get(17)).to.contain('1')
-      expect($values.get(18)).to.contain('328')
-      expect($values.get(19)).to.contain('326')
-      expect($values.get(20)).to.contain('2')
-      expect($values.get(21)).to.contain('350')
-      expect($values.get(22)).to.contain('22')
-      expect($values.get(23)).to.contain('1')
+
+    cy.get('h1').should('contain', `Establishment roll for ${moment().format('dddd D MMMM YYYY')}`)
+    cy.get('[data-test="unlock-roll"]').should('contain', '329')
+    cy.get('[data-test="in-today"]').should('contain', '1')
+    cy.get('[data-test="out-today"]').should('contain', '2')
+    cy.get('[data-test="current-roll"]').should('contain', '3')
+    cy.get('[data-test="unassigned-in"]').should('contain', '2')
+    cy.get('[data-test="enroute"]').should('contain', '6')
+
+    cy.get('[data-test="establishment-roll-table"]').then($table => {
+      cy.get($table)
+        .find('tbody')
+        .find('tr')
+        .then($tableRows => {
+          cy.get($tableRows)
+            .its('length')
+            .should('eq', 3)
+          expect($tableRows.get(0).innerText).to.contain('Houseblock 1\t156\t154\t2\t170\t14\t0')
+          expect($tableRows.get(1).innerText).to.contain('Houseblock 2\t172\t172\t0\t180\t8\t1')
+          expect($tableRows.get(2).innerText).to.contain('Moorland\t328\t326\t2\t350\t22\t1')
+        })
     })
   })
 })

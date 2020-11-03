@@ -2,7 +2,7 @@
   &__results {
       overflow: auto;
 
-      img {
+      &__image {
         width: 90px;
 
         @media print {

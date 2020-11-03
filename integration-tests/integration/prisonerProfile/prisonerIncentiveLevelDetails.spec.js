@@ -1,5 +1,41 @@
 const offenderBasicDetails = require('../../mockApis/responses/offenderBasicDetails.json')
 
+const title = 'Incentive level details for John Smith'
+
+const iepSummaryResponse = {
+  bookingId: -1,
+  iepDate: '2017-08-15',
+  iepTime: '2017-08-15T16:04:35',
+  iepLevel: 'Standard',
+  daysSinceReview: 625,
+  iepDetails: [
+    {
+      bookingId: -1,
+      iepDate: '2017-08-15',
+      iepTime: '2017-08-15T16:04:35',
+      agencyId: 'LEI',
+      iepLevel: 'Standard',
+      userId: 'ITAG_USER',
+    },
+    {
+      bookingId: -1,
+      iepDate: '2017-08-10',
+      iepTime: '2017-08-10T16:04:35',
+      agencyId: 'MDI',
+      iepLevel: 'Basic',
+      userId: 'ITAG_USER',
+    },
+    {
+      bookingId: -1,
+      iepDate: '2017-08-07',
+      iepTime: '2017-08-07T16:04:35',
+      agencyId: 'MDI',
+      iepLevel: 'Enhanced',
+      userId: 'ITAG_USER_2',
+    },
+  ],
+}
+
 context('Prisoner incentive level details', () => {
   const offenderNo = 'A1234A'
 
@@ -45,45 +81,14 @@ context('Prisoner incentive level details', () => {
           description: 'Moorland',
         },
       })
-      cy.task('stubIepSummaryForBooking', {
-        bookingId: -1,
-        iepDate: '2017-08-15',
-        iepTime: '2017-08-15T16:04:35',
-        iepLevel: 'Standard',
-        daysSinceReview: 625,
-        iepDetails: [
-          {
-            bookingId: -1,
-            iepDate: '2017-08-15',
-            iepTime: '2017-08-15T16:04:35',
-            agencyId: 'LEI',
-            iepLevel: 'Standard',
-            userId: 'ITAG_USER',
-          },
-          {
-            bookingId: -1,
-            iepDate: '2017-08-10',
-            iepTime: '2017-08-10T16:04:35',
-            agencyId: 'MDI',
-            iepLevel: 'Basic',
-            userId: 'ITAG_USER',
-          },
-          {
-            bookingId: -1,
-            iepDate: '2017-08-07',
-            iepTime: '2017-08-07T16:04:35',
-            agencyId: 'MDI',
-            iepLevel: 'Enhanced',
-            userId: 'ITAG_USER_2',
-          },
-        ],
-      })
     })
 
     it('should display the change incentive level link', () => {
+      cy.task('stubIepSummaryForBooking', iepSummaryResponse)
+
       cy.visit(`/prisoner/${offenderNo}/incentive-level-details`)
 
-      cy.get('h1').should('contain', 'Incentive details for John Smith')
+      cy.get('h1').should('contain', title)
       cy.get('[data-test="change-incentive-level-link"]')
         .invoke('attr', 'href')
         .then(href => {
@@ -92,6 +97,8 @@ context('Prisoner incentive level details', () => {
     })
 
     it('should not show change incentive level link if user does not have correct role', () => {
+      cy.task('stubIepSummaryForBooking', iepSummaryResponse)
+
       cy.task('stubUserMeRoles', [{ roleCode: 'GLOBAL_SEARCH' }])
 
       cy.visit(`/prisoner/${offenderNo}/incentive-level-details`)
@@ -100,6 +107,8 @@ context('Prisoner incentive level details', () => {
     })
 
     it('should show correct history', () => {
+      cy.task('stubIepSummaryForBooking', iepSummaryResponse)
+
       cy.get('[data-test="incentive-level-history"]').then($table => {
         cy.get($table)
           .find('td')
@@ -130,6 +139,8 @@ context('Prisoner incentive level details', () => {
     })
 
     it('should filter correctly', () => {
+      cy.task('stubIepSummaryForBooking', iepSummaryResponse)
+
       cy.visit(`/prisoner/${offenderNo}/incentive-level-details`)
 
       cy.get('[data-test="establishment-select"]').select('MDI')
@@ -151,6 +162,51 @@ context('Prisoner incentive level details', () => {
             expect($tableCells.get(4)).to.contain('Staff Member')
           })
       })
+    })
+
+    it('should show the default no incentive level history when there are no applied filters and no results', () => {
+      cy.task('stubIepSummaryForBooking', {
+        bookingId: -1,
+        iepDate: '2017-08-15',
+        iepTime: '2017-08-15T16:04:35',
+        iepLevel: 'Standard',
+        daysSinceReview: 625,
+        iepDetails: [],
+      })
+
+      cy.visit(`/prisoner/${offenderNo}/incentive-level-details`)
+
+      cy.get('[data-test="filter-submit"]').click()
+
+      cy.get('h1').should('contain', title)
+      cy.get('[data-test="incentive-level-history"]').should('not.exist')
+      cy.get('[data-test="no-incentive-level-history-message"]').should(
+        'contain',
+        'John Smith has no incentive level history'
+      )
+    })
+
+    it('should return default message when no incentive level history is returned for the supplied filters', () => {
+      cy.task('stubIepSummaryForBooking', {
+        bookingId: -1,
+        iepDate: '2017-08-15',
+        iepTime: '2017-08-15T16:04:35',
+        iepLevel: 'Standard',
+        daysSinceReview: 625,
+        iepDetails: [],
+      })
+
+      cy.visit(`/prisoner/${offenderNo}/incentive-level-details`)
+
+      cy.get('#fromDate').type('01/01/2020', { force: true })
+      cy.get('[data-test="filter-submit"]').click()
+
+      cy.get('h1').should('contain', title)
+      cy.get('[data-test="incentive-level-history"]').should('not.exist')
+      cy.get('[data-test="no-incentive-level-history-message"]').should(
+        'contain',
+        'There is no incentive level history for the selections you have made'
+      )
     })
   })
 })

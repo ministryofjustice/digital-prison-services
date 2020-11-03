@@ -19,7 +19,6 @@ const prisonerChangeIncentiveLevelDetails = require('../controllers/prisonerProf
 
 const prisonerProfileServiceFactory = require('../services/prisonerProfileService')
 const personServiceFactory = require('../services/personService')
-const paginationServiceV2 = require('../services/pagination2Service')
 const paginationService = require('../services/paginationService')
 
 const referenceCodesServiceFactory = require('../controllers/reference-codes-service')
@@ -70,7 +69,7 @@ const controller = ({
       caseNotesApi,
       prisonerProfileService,
       prisonApi,
-      paginationService: paginationServiceV2,
+      paginationService,
       nunjucks,
       logError,
     })

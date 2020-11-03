@@ -112,9 +112,16 @@ module.exports = ({
     const isPathfinderUser = Boolean(
       userRoles &&
         userRoles.some(role =>
-          ['PF_STD_PRISON', 'PF_STD_PROBATION', 'PF_APPROVAL', 'PF_STD_PRISON_RO', 'PF_STD_PROBATION_RO'].includes(
-            role.roleCode
-          )
+          [
+            'PF_STD_PRISON',
+            'PF_STD_PROBATION',
+            'PF_APPROVAL',
+            'PF_STD_PRISON_RO',
+            'PF_STD_PROBATION_RO',
+            'PF_POLICE',
+            'PF_HQ',
+            'PF_PSYCHOLOGIST',
+          ].includes(role.roleCode)
         )
     )
 

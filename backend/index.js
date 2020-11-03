@@ -27,7 +27,6 @@ const setupApiRoutes = require('./setupApiRoutes')
 const setupReactRoutes = require('./setupReactRoutes')
 
 app.set('trust proxy', 1) // trust first proxy
-app.set('view engine', 'ejs')
 app.set('view engine', 'njk')
 
 nunjucksSetup(app, path)

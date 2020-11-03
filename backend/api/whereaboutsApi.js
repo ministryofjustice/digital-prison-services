@@ -64,6 +64,13 @@ const whereaboutsApiFactory = client => {
     return get(context, `/locations/cellsWithCapacity/${agencyId}/${groupName}${attributeQuery}`)
   }
 
+  const moveToCell = (context, { bookingId, internalLocationDescription, reasonCode }) =>
+    post(context, `/cell/make-cell-move`, {
+      bookingId,
+      cellMoveReasonCode: reasonCode || 'ADM',
+      internalLocationDescriptionDestination: internalLocationDescription,
+    })
+
   return {
     getAttendance,
     getAttendanceForBookings,
@@ -82,6 +89,7 @@ const whereaboutsApiFactory = client => {
     getVideoLinkAppointments,
     getAttendanceChanges,
     getCellsWithCapacity,
+    moveToCell,
   }
 }
 

@@ -29,6 +29,7 @@ $govuk-page-width: 1170px;
 @import 'moj-overrides';
 @import 'typography';
 @import 'horizontal-content';
+@import 'print';
 
 * {
   box-sizing: border-box;
@@ -51,59 +52,10 @@ $govuk-page-width: 1170px;
   word-break: break-word;
 }
 
-// Print
-@page {
-  margin: 1cm 0;
+.allow-overflow {
+  overflow: auto;
 }
 
-@include govuk-media-query($media-type: print) {
-  // govuk-frontend overrides
-  .govuk-heading-l {
-    font-size: 19pt;
-  }
-
-  .govuk-heading-m {
-    font-size: 16pt;
-  }
-
-  .govuk-heading-s {
-    font-size: 14pt;
-  }
-
-  .govuk-body-l {
-    font-size: 12pt;
-  }
-
-  .printed-page {
-    background: none;
-  }
-
-  .govuk-table {
-    font-size: 10pt;
-
-    .govuk-link {
-      color: inherit;
-      text-decoration: none;
-
-      // Remove url from links in printed view within a table
-      &[href^="/"], &[href^="http://"], &[href^="https://"] {
-        &::after {
-          content: '';
-        }
-      }
-    }
-
-    // Remove styling from MOJ sortable table colum headers
-    [aria-sort] button {
-      color: inherit;
-
-      &:before,
-      &:after {
-        content: '';
-      }
-    }
-  }
-}
 .govuk-blue-background-confirm-override {
   .govuk-panel--confirmation {
     background-color: govuk-colour('blue') !important;

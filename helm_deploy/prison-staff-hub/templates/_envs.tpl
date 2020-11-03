@@ -34,6 +34,18 @@ env:
         name: {{ template "app.name" . }}
         key: APPINSIGHTS_INSTRUMENTATIONKEY
 
+  - name: CONTENTFUL_SPACE_ID
+    valueFrom:
+      secretKeyRef:
+        name: {{ template "app.name" . }}
+        key: CONTENTFUL_SPACE_ID
+
+  - name: CONTENTFUL_ACCESS_TOKEN
+    valueFrom:
+      secretKeyRef:
+        name: {{ template "app.name" . }}
+        key: CONTENTFUL_ACCESS_TOKEN
+
   - name: GOOGLE_ANALYTICS_ID
     valueFrom:
       secretKeyRef:

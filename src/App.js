@@ -18,7 +18,6 @@ import GlobalSearchContainer from './GlobalSearch/GlobalSearchContainer'
 import links from './links'
 
 import routePaths from './routePaths'
-import Content from './Components/Content'
 import { setFlagsAction } from './flags'
 import ModalContainer from './Components/ModalContainer'
 import { userType } from './types'
@@ -335,8 +334,6 @@ class App extends React.Component {
             )}
           />
         </div>
-
-        <Route exact path="/content/:post" component={Content} />
       </div>
     )
 
