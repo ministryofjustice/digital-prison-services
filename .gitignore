@@ -80,3 +80,5 @@ prisonstaffhub-specs/out
 # Cypress
 integration-tests/videos
 integration-tests/screenshots
+
+test-results/
