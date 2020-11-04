@@ -208,7 +208,6 @@ describe('View appointments', () => {
         .mockResolvedValueOnce({ assignedLivingUnit: { description: '1-1-1' } })
         .mockResolvedValueOnce({ assignedLivingUnit: { description: '2-1-1' } })
         .mockResolvedValueOnce({ assignedLivingUnit: { description: '3-1-1' } })
-        .mockResolvedValueOnce({})
 
       whereaboutsApi.getVideoLinkAppointments.mockReturnValue({
         appointments: [

@@ -63,8 +63,7 @@ module.exports = ({ prisonApi, whereaboutsApi, oauthApi, logError }) => async (r
         })
 
         const createdBy =
-          videoLinkLocation &&
-          videoLinkLocation.createdByUsername &&
+          videoLinkLocation?.createdByUsername &&
           (await oauthApi.userDetails(res.locals, videoLinkLocation.createdByUsername).catch(error => {
             logError(req.originalUrl, error, serviceUnavailableMessage)
             return null
@@ -99,7 +98,7 @@ module.exports = ({ prisonApi, whereaboutsApi, oauthApi, logError }) => async (r
             },
           },
           {
-            text: prisonerDetails.assignedLivingUnit?.description,
+            text: prisonerDetails?.assignedLivingUnit?.description,
           },
           {
             text: appointment.appointmentTypeDescription,
