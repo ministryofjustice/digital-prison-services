@@ -25,14 +25,14 @@ const setupWebpackForDev = require('./setupWebpackForDev')
 const setupRedirects = require('./setupRedirects')
 const setupApiRoutes = require('./setupApiRoutes')
 const setupReactRoutes = require('./setupReactRoutes')
-const setupPhaseNameForBanner = require('./setupPhaseNameForBanner')
+const phaseNameSetup = require('./phaseNameSetup')
 
 app.set('trust proxy', 1) // trust first proxy
 app.set('view engine', 'ejs')
 app.set('view engine', 'njk')
 
 nunjucksSetup(app, path)
-setupPhaseNameForBanner(app, config)
+phaseNameSetup(app, config)
 
 app.use(setupBodyParsers())
 app.use(setupHealthChecks())
