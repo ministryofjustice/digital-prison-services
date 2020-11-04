@@ -113,4 +113,6 @@ module.exports = {
       },
     },
   },
+
+  phaseName: process.env.SYSTEM_PHASE,
 }
