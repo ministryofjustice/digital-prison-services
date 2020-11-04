@@ -1,11 +1,3 @@
-const phaseName = () => {
-  const nameFromEnv = process.env.SYSTEM_PHASE
-  if (nameFromEnv === 'DEV' || nameFromEnv === 'PRE-PRODUCTION') {
-    return nameFromEnv
-  }
-  return null
-}
-
 module.exports = {
   app: {
     port: process.env.PORT || 3002,
@@ -122,5 +114,5 @@ module.exports = {
     },
   },
 
-  phaseName: phaseName(),
+  phaseName: process.env.SYSTEM_PHASE,
 }

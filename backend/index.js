@@ -32,15 +32,7 @@ app.set('view engine', 'njk')
 
 nunjucksSetup(app, path)
 
-app.use((req, res, next) => {
-  const originalRender = res.render
-  res.render = function(view, options, fn) {
-    const optionsWithPhaseName = Object.assign(options, { phaseName: config.phaseName })
-    // _.extend( options, config.phaseName ); //todo: _.extend is undefined
-    originalRender.call(this, view, options, fn)
-  }
-  next()
-})
+app.locals.phaseName = config.phaseName
 
 app.use(setupBodyParsers())
 app.use(setupHealthChecks())
