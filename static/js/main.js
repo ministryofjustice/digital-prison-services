@@ -13,11 +13,8 @@ $(document).ready(function() {
       maxDate: maxDate,
       minDate: minDate,
     })
-    $(element).prop('placeholder', 'dd/mm/yyyy')
 
-    $(element).focusout(() => moment(newDate, 'DD/MM/YYYY', true).isValid())
-
-    //$(element).attr('readonly', 'true')
+    $(element).attr('readonly', 'true')
   })
 
   $('.js-prisoner-search-clear-alerts').click(function(e) {
