@@ -1,3 +1,4 @@
+const moment = require('moment')
 const {
   app: { notmEndpointUrl: dpsUrl },
 } = require('../../config')
@@ -11,12 +12,12 @@ const getTotals = (array, figure) =>
 
 module.exports = ({ prisonApi, logError }) => async (req, res) => {
   try {
-    const agencyId = res.locals.user.activeCaseLoad.caseLoadId
+    const { caseLoadId, description: caseLoadDescription } = res.locals.user.activeCaseLoad
     const [assignedResponse, unassignedResponse, movementsResponse, enroute] = await Promise.all([
-      prisonApi.getEstablishmentRollBlocksCount(res.locals, agencyId, false),
-      prisonApi.getEstablishmentRollBlocksCount(res.locals, agencyId, true),
-      prisonApi.getEstablishmentRollMovementsCount(res.locals, agencyId),
-      prisonApi.getEstablishmentRollEnrouteCount(res.locals, agencyId),
+      prisonApi.getEstablishmentRollBlocksCount(res.locals, caseLoadId, false),
+      prisonApi.getEstablishmentRollBlocksCount(res.locals, caseLoadId, true),
+      prisonApi.getEstablishmentRollMovementsCount(res.locals, caseLoadId),
+      prisonApi.getEstablishmentRollEnrouteCount(res.locals, caseLoadId),
     ])
 
     const unassignedIn = getTotals(unassignedResponse, 'currentlyInCell')
@@ -30,33 +31,50 @@ module.exports = ({ prisonApi, logError }) => async (req, res) => {
       unassignedIn,
       enroute,
     }
-    const blocks = assignedResponse.map(block => ({
-      name: capitalize(block.livingUnitDesc),
-      livingUnitId: block.livingUnitId,
-      stats: {
-        bedsInUse: zeroIfNotDefined(block.bedsInUse),
-        inCell: zeroIfNotDefined(block.currentlyInCell),
-        out: zeroIfNotDefined(block.currentlyOut),
-        operationalCapacity: zeroIfNotDefined(block.operationalCapacity),
-        netVacancies: zeroIfNotDefined(block.netVacancies),
-        outOfOrder: zeroIfNotDefined(block.outOfOrder),
-      },
-    }))
 
-    const totalsStats = {
-      roll: getTotals(assignedResponse, 'bedsInUse'),
-      inCell: getTotals(assignedResponse, 'currentlyInCell'),
-      out: getTotals(assignedResponse, 'currentlyOut'),
-      operationalCapacity: getTotals(assignedResponse, 'operationalCapacity'),
-      vacancies: getTotals(assignedResponse, 'netVacancies'),
-      outOfOrder: getTotals(assignedResponse, 'outOfOrder'),
-    }
+    const blocks = assignedResponse.map(row => {
+      const { livingUnitId, currentlyOut } = row
+
+      const currentlyOutHTML = `<a class="govuk-link" href="/establishment-roll/${livingUnitId}/currently-out">${currentlyOut}</a>`
+
+      return [
+        { text: capitalize(row.livingUnitDesc) },
+        { text: zeroIfNotDefined(row.bedsInUse) },
+        { text: zeroIfNotDefined(row.currentlyInCell) },
+        {
+          text: zeroIfNotDefined(row.currentlyOut),
+          html: currentlyOut > 0 && currentlyOutHTML,
+        },
+        { text: zeroIfNotDefined(row.operationalCapacity) },
+        { text: zeroIfNotDefined(row.netVacancies) },
+        { text: zeroIfNotDefined(row.outOfOrder) },
+      ]
+    })
+
+    const totalCurrentlyOut = getTotals(assignedResponse, 'currentlyOut')
+    const totalCurrentlyOutHTML = `<a class="govuk-link" href="/establishment-roll/total-currently-out">${totalCurrentlyOut}</a>`
+
+    const rows = [
+      ...blocks,
+      [
+        { text: caseLoadDescription },
+        { text: getTotals(assignedResponse, 'bedsInUse') },
+        { text: getTotals(assignedResponse, 'currentlyInCell') },
+        {
+          text: totalCurrentlyOut,
+          html: totalCurrentlyOut > 0 && totalCurrentlyOutHTML,
+        },
+        { text: getTotals(assignedResponse, 'operationalCapacity') },
+        { text: getTotals(assignedResponse, 'netVacancies') },
+        { text: getTotals(assignedResponse, 'outOfOrder') },
+      ],
+    ]
 
     return res.render('establishmentRoll/dashboard.njk', {
+      date: moment().format('dddd D MMMM YYYY'),
+      dpsUrl,
       todayStats,
-      blocks,
-      totalsStats,
-      notmUrl: dpsUrl,
+      rows,
     })
   } catch (error) {
     if (error) logError(req.originalUrl, error, 'Failed to load estalishment roll count page')

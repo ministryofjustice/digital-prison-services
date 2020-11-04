@@ -1,0 +1,56 @@
+@page {
+  margin: 1cm 0;
+}
+
+@include govuk-media-query($media-type: print) {
+  // govuk-frontend overrides
+  .govuk-heading-l {
+    font-size: 19pt;
+  }
+
+  .govuk-heading-m {
+    font-size: 16pt;
+  }
+
+  .govuk-heading-s {
+    font-size: 14pt;
+  }
+
+  .govuk-body-l {
+    font-size: 12pt;
+  }
+
+  .printed-page {
+    background: none;
+  }
+
+  .govuk-table {
+    font-size: 10pt;
+
+    // Remove styling from MOJ sortable table colum headers
+    [aria-sort] button {
+      color: inherit;
+
+      &:before,
+      &:after {
+        content: '';
+      }
+    }
+  }
+
+  .govuk-link {
+    text-decoration: none;
+
+    &:link,
+    &:visited {
+      color: $govuk-text-colour;
+    }
+
+    // Remove url from links in printed view within a table
+    &[href^="/"], &[href^="http://"], &[href^="https://"] {
+      &::after {
+        content: '';
+      }
+    }
+  }
+}

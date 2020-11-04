@@ -1,13 +1,11 @@
-.today, .total {
-  background: #e9f3f9
-}
 
-.with-separator {
-  border-left: 3px solid govuk-colour("dark-grey")
-}
+.establishment-roll-today {
+  margin-bottom: govuk-spacing(6);
+  padding: govuk-spacing(3);
+  background-color: #e9f3f9;
 
-.establishment-roll-list {
-  .govuk-table__cell {
-    vertical-align: middle;
+  @media print {
+    padding: 0;
+    background: none;
   }
 }

@@ -363,12 +363,6 @@ const prisonApiFactory = client => {
   const getHistoryForLocation = (context, { locationId, fromDate, toDate }) =>
     get(context, `/api/cell/${locationId}/history?fromDate=${fromDate}&toDate=${toDate}`)
 
-  const moveToCell = (context, { bookingId, internalLocationDescription, reasonCode }) =>
-    put(
-      context,
-      `/api/bookings/${bookingId}/living-unit/${internalLocationDescription}?reasonCode=${reasonCode || 'ADM'}`
-    )
-
   const moveToCellSwap = (context, { bookingId }) => put(context, `/api/bookings/${bookingId}/move-to-cell-swap`, {})
 
   return {
@@ -478,7 +472,6 @@ const prisonApiFactory = client => {
     getHistoryForLocation,
     getInmatesAtLocation,
     getInmatesAtLocationPrefix,
-    moveToCell,
     moveToCellSwap,
   }
 }

@@ -2,7 +2,7 @@ const { raiseAnalyticsEvent } = require('../../raiseAnalyticsEvent')
 
 const { properCaseName, putLastNameFirst } = require('../../utils')
 
-module.exports = ({ prisonApi, logError }) => {
+module.exports = ({ prisonApi, whereaboutsApi, logError }) => {
   const index = async (req, res) => {
     const { offenderNo } = req.params
     const { cellId } = req.query
@@ -35,7 +35,7 @@ module.exports = ({ prisonApi, logError }) => {
     const { locationPrefix, description } = await prisonApi.getLocation(res.locals, cellId)
 
     try {
-      await prisonApi.moveToCell(res.locals, { bookingId, internalLocationDescription: locationPrefix })
+      await whereaboutsApi.moveToCell(res.locals, { bookingId, internalLocationDescription: locationPrefix })
     } catch (error) {
       if (error.status === 400)
         return res.redirect(`/prisoner/${offenderNo}/cell-move/cell-not-available?cellDescription=${description}`)

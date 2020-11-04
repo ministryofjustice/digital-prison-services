@@ -41,11 +41,8 @@
 
   <h1 class="govuk-heading-l">{{ title }} for {{ prisonerName }}</h1>
 
-  <p class="govuk-body">
-    <span class="govuk-!-font-weight-bold">Prison number:</span>
-    <br>
-    <span data-test="prisoner-number">{{ offenderNo }}</span>
-  </p>
+  <p class="govuk-body" data-test="prisoner-number"><span class="govuk-!-font-weight-bold">Prison number:</span> {{offenderNo}}</p>
+
 
   <p class="govuk-body">
     <span class="govuk-!-font-weight-bold">Current level:</span>
@@ -66,7 +63,7 @@
       errorMessage: errors | findError('newIepLevel'),
       fieldset: {
         legend: {
-          text: "Select new level",
+          text: "What is the new incentive level?",
           classes: "govuk-fieldset__legend--s"
         }
       },
