@@ -106,6 +106,11 @@ env:
   - name: API_WHEREABOUTS_ENDPOINT_URL
     value: {{ .Values.env.API_WHEREABOUTS_ENDPOINT_URL | quote }}
 
+  {{- if .Values.env.SYSTEM_PHASE }}
+  - name: SYSTEM_PHASE
+    value: {{ .Values.env.SYSTEM_PHASE | quote }}
+  {{- end }}
+
   {{- if .Values.env.API_DATA_COMPLIANCE_ENDPOINT_URL }}
   - name: API_DATA_COMPLIANCE_ENDPOINT_URL
     value: {{ .Values.env.API_DATA_COMPLIANCE_ENDPOINT_URL | quote }}
