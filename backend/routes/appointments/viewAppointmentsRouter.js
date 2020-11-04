@@ -41,8 +41,6 @@ module.exports = ({ prisonApi, whereaboutsApi, oauthApi, logError }) => async (r
       .filter(appointment => (type ? appointment.appointmentTypeCode === type : true))
       .map(async appointment => {
         const { startTime, endTime, offenderNo } = appointment
-
-        console.log({ appointment })
         const offenderName = `${properCaseName(appointment.lastName)}, ${properCaseName(appointment.firstName)}`
         const offenderUrl = `/prisoner/${offenderNo}`
 
@@ -59,12 +57,10 @@ module.exports = ({ prisonApi, whereaboutsApi, oauthApi, logError }) => async (r
             return null
           }))
 
-        const prisonerDetails =
-          !videoLinkLocation &&
-          (await prisonApi.getDetails(res.locals, offenderNo, true).catch(error => {
-            logError(req.originalUrl, error, serviceUnavailableMessage)
-            return null
-          }))
+        const prisonerDetails = await prisonApi.getDetails(res.locals, offenderNo, true).catch(error => {
+          logError(req.originalUrl, error, serviceUnavailableMessage)
+          return null
+        })
 
         const createdBy =
           videoLinkLocation &&
@@ -103,7 +99,7 @@ module.exports = ({ prisonApi, whereaboutsApi, oauthApi, logError }) => async (r
             },
           },
           {
-            text: prisonerDetails.assignedLivingUnit.description,
+            text: prisonerDetails.assignedLivingUnit?.description,
           },
           {
             text: appointment.appointmentTypeDescription,

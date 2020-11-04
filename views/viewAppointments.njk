@@ -69,7 +69,7 @@
       name: 'locationId',
       id: 'locationId',
       label: {
-          text: "Location"
+          text: "Appointment location"
       },
       items: locations | addDefaultSelectedVale('All', true) | setSelected(locationId),
       errorMessage: errors | findError(locationId)

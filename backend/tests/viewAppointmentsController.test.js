@@ -32,11 +32,13 @@ describe('View appointments', () => {
     prisonApi.getLocationsForAppointments = jest.fn()
     prisonApi.getAppointmentsForAgency = jest.fn()
     prisonApi.getStaffDetails = jest.fn()
+    prisonApi.getDetails = jest.fn()
 
     prisonApi.getAppointmentTypes.mockReturnValue([{ description: 'Video link booking', code: 'VLB' }])
     prisonApi.getLocationsForAppointments.mockReturnValue([{ userDescription: 'VCC Room 1', locationId: '1' }])
     prisonApi.getAppointmentsForAgency.mockReturnValue([])
     prisonApi.getStaffDetails.mockResolvedValue([])
+    prisonApi.getDetails.mockResolvedValue({})
 
     whereaboutsApi.getVideoLinkAppointments = jest.fn()
     whereaboutsApi.getVideoLinkAppointments.mockReturnValue({ appointments: [] })
@@ -202,6 +204,12 @@ describe('View appointments', () => {
           lastName: 'THREE',
         })
 
+      prisonApi.getDetails
+        .mockResolvedValueOnce({ assignedLivingUnit: { description: '1-1-1' } })
+        .mockResolvedValueOnce({ assignedLivingUnit: { description: '2-1-1' } })
+        .mockResolvedValueOnce({ assignedLivingUnit: { description: '3-1-1' } })
+        .mockResolvedValueOnce({})
+
       whereaboutsApi.getVideoLinkAppointments.mockReturnValue({
         appointments: [
           {
@@ -231,6 +239,7 @@ describe('View appointments', () => {
       })
       expect(whereaboutsApi.getVideoLinkAppointments).toHaveBeenCalledWith(res.locals, [3, 4])
       expect(prisonApi.getStaffDetails).toHaveBeenCalledTimes(3)
+      expect(prisonApi.getDetails).toHaveBeenCalledTimes(4)
       expect(oauthApi.userDetails).toHaveBeenCalledTimes(1)
     })
 
@@ -250,9 +259,9 @@ describe('View appointments', () => {
               { text: '12:30' },
               {
                 attributes: { 'data-sort-value': 'ONE' },
-                html: '<a href="/prisoner/ABC123" class="govuk-link">One, Offender</a>',
+                html: '<a href="/prisoner/ABC123" class="govuk-link">One, Offender - ABC123</a>',
               },
-              { text: 'ABC123' },
+              { text: '2-1-1' },
               { text: 'Medical - Other' },
               { html: 'HEALTH CARE' },
               { text: 'Staff One' },
@@ -261,9 +270,9 @@ describe('View appointments', () => {
               { text: '13:30 to 14:30' },
               {
                 attributes: { 'data-sort-value': 'TWO' },
-                html: '<a href="/prisoner/ABC456" class="govuk-link">Two, Offender</a>',
+                html: '<a href="/prisoner/ABC456" class="govuk-link">Two, Offender - ABC456</a>',
               },
-              { text: 'ABC456' },
+              { text: '3-1-1' },
               { text: 'Gym - Exercise' },
               { html: 'GYM' },
               { text: '--' },
@@ -272,9 +281,9 @@ describe('View appointments', () => {
               { text: '14:30 to 15:30' },
               {
                 attributes: { 'data-sort-value': 'THREE' },
-                html: '<a href="/prisoner/ABC789" class="govuk-link">Three, Offender</a>',
+                html: '<a href="/prisoner/ABC789" class="govuk-link">Three, Offender - ABC789</a>',
               },
-              { text: 'ABC789' },
+              { text: '1-1-1' },
               { text: 'Video Link booking' },
               { html: 'VCC ROOM</br>with: Wimbledon' },
               { text: 'Bob Doe (court)' },
@@ -283,9 +292,9 @@ describe('View appointments', () => {
               { text: '13:30 to 14:30' },
               {
                 attributes: { 'data-sort-value': 'FOUR' },
-                html: '<a href="/prisoner/ABC456" class="govuk-link">Four, Offender</a>',
+                html: '<a href="/prisoner/ABC456" class="govuk-link">Four, Offender - ABC456</a>',
               },
-              { text: 'ABC456' },
+              { text: undefined },
               { text: 'Video Link booking' },
               { html: 'VCC ROOM' },
               { text: 'Staff Three' },
@@ -317,12 +326,12 @@ describe('View appointments', () => {
             [
               { text: '13:30 to 14:30' },
               {
-                html: '<a href="/prisoner/ABC456" class="govuk-link">Two, Offender</a>',
+                html: '<a href="/prisoner/ABC456" class="govuk-link">Two, Offender - ABC456</a>',
                 attributes: {
                   'data-sort-value': 'TWO',
                 },
               },
-              { text: 'ABC456' },
+              { text: '1-1-1' },
               { text: 'Gym - Exercise' },
               { html: 'GYM' },
               { text: 'Staff One' },
