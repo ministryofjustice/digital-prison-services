@@ -22,12 +22,12 @@
 
 {% block content %}
   <div class="govuk-!-margin-bottom-6">
-    <h1 class="govuk-heading-l govuk-!-margin-bottom-3">{{title}}</h1>
+    <h1 class="govuk-heading-l govuk-!-margin-bottom-3">{{ title }} for {{ date }}</h1>
     {{ printLink() }}
   </div>
 
   <div class="establishment-roll-today">
-    <h2 class="govuk-heading-m"> {{ "Today" | possessive | safe }} movements</h2>
+    <h2 class="govuk-heading-m">Movements</h2>
 
     <div class="horizontal-information">
       <div class="horizontal-information__item">

@@ -37,7 +37,7 @@
         }) }}
     {% endif %}
 
-    <h1 class="govuk-heading-l">Incentive details for {{ prisonerName }}</h1>
+    <h1 class="govuk-heading-l">Incentive level details for {{ prisonerName }}</h1>
 
     <div class="horizontal-information govuk-!-margin-bottom-3">
         <div class="horizontal-information__item">
@@ -132,14 +132,15 @@
             {% set resultsRows = (resultsRows.push([
                 { text: result.formattedTime },
                 { text: result.iepLevel },
-                { text: result.comments | showDefault('Not entered') },
+                { html: result.comments | showDefault('Not entered'), classes: 'govuk-input--width-4' },
                 { text: result.iepEstablishment },
                 { text: result.iepStaffMember | showDefault('Not entered') }
             ]), resultsRows) %}
         {% endfor %}
 
+        <h3 class="govuk-heading-l">Incentive level history</h3>
+
         {{ govukTable({
-            caption: "Incentive level history",
             head: [
                 {
                     text: "Date and time"
@@ -148,7 +149,7 @@
                     text: "Incentive level"
                 },
                 {
-                    text: "Reason"
+                    text: "Reason for change"
                 },
                 {
                     text: "Establishment"

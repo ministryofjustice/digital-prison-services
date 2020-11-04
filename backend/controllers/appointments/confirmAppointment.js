@@ -25,7 +25,7 @@ const confirmAppointmentFactory = ({ prisonApi, appointmentsService, logError })
       )
 
       const appointmentDetails = req.flash('appointmentDetails')
-      if (!appointmentDetails || !appointmentDetails.length) throw new Error('Appointment details are missing')
+      if (!appointmentDetails?.length) throw new Error('Appointment details are missing')
 
       const {
         locationId,
@@ -66,8 +66,8 @@ const confirmAppointmentFactory = ({ prisonApi, appointmentsService, logError })
             firstName: properCaseName(firstName),
             lastName: properCaseName(lastName),
             offenderNo,
-            startTime: (preAppointment && preAppointment.startTime) || startTime,
-            endTime: (postAppointment && postAppointment.endTime) || endTime,
+            startTime: preAppointment?.startTime ?? startTime,
+            endTime: postAppointment?.endTime ?? endTime,
             assignedLivingUnitDesc,
           },
         ],
