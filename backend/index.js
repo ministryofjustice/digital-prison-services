@@ -33,6 +33,7 @@ app.set('view engine', 'njk')
 nunjucksSetup(app, path)
 
 app.locals.phaseName = config.phaseName
+app.locals.phaseNameColour = config.phaseName === 'DEV' ? 'govuk-tag--blue' : 'govuk-tag--green'
 
 app.use(setupBodyParsers())
 app.use(setupHealthChecks())
