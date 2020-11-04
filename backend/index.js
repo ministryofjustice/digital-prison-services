@@ -25,15 +25,14 @@ const setupWebpackForDev = require('./setupWebpackForDev')
 const setupRedirects = require('./setupRedirects')
 const setupApiRoutes = require('./setupApiRoutes')
 const setupReactRoutes = require('./setupReactRoutes')
+const setupPhaseNameForBanner = require('./setupPhaseNameForBanner')
 
 app.set('trust proxy', 1) // trust first proxy
 app.set('view engine', 'ejs')
 app.set('view engine', 'njk')
 
 nunjucksSetup(app, path)
-
-app.locals.phaseName = config.phaseName
-app.locals.phaseNameColour = config.phaseName === 'PRE_PRODUCTION' ? 'phase-banner-green' : 'phase-banner-blue'
+setupPhaseNameForBanner(app, config)
 
 app.use(setupBodyParsers())
 app.use(setupHealthChecks())
