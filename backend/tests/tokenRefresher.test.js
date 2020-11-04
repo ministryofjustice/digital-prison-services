@@ -1,5 +1,3 @@
-/* eslint-disable no-unused-expressions */
-const { expect } = require('chai')
 const contextProperties = require('../contextProperties')
 const tokenRefresher = require('../tokenRefresher')
 
@@ -9,11 +7,11 @@ const EXPIRY_TIME = 1530031633
 
 describe('JWT access token refresh', () => {
   it('Token has not expired before EXPIRY_TIME', () => {
-    expect(tokenRefresher.tokenExpiresBefore(ACCESS_TOKEN, EXPIRY_TIME)).to.be.false
+    expect(tokenRefresher.tokenExpiresBefore(ACCESS_TOKEN, EXPIRY_TIME)).toBe(false)
   })
 
   it('Token has expired before EXPIRY_TIME + 1', () => {
-    expect(tokenRefresher.tokenExpiresBefore(ACCESS_TOKEN, EXPIRY_TIME + 1)).to.be.true
+    expect(tokenRefresher.tokenExpiresBefore(ACCESS_TOKEN, EXPIRY_TIME + 1)).toBe(true)
   })
 
   const stubOauthRefresh = () => Promise.resolve({ access_token: 'accessRefreshed', refresh_token: 'refreshRefreshed' })
@@ -28,8 +26,8 @@ describe('JWT access token refresh', () => {
     const nowInSeconds = EXPIRY_TIME - 59
 
     return refreshTokens(context, nowInSeconds).then(() => {
-      expect(contextProperties.getAccessToken(context)).to.be.equal('accessRefreshed')
-      expect(contextProperties.getRefreshToken(context)).to.be.equal('refreshRefreshed')
+      expect(contextProperties.getAccessToken(context)).toBe('accessRefreshed')
+      expect(contextProperties.getRefreshToken(context)).toBe('refreshRefreshed')
     })
   })
 
@@ -43,8 +41,8 @@ describe('JWT access token refresh', () => {
 
     return refreshTokens(context, nowInSeconds).then(() => {
       // Original tokens because they have not been refreshed.
-      expect(contextProperties.getAccessToken(context)).to.be.equal(ACCESS_TOKEN)
-      expect(contextProperties.getRefreshToken(context)).to.be.equal('XXX')
+      expect(contextProperties.getAccessToken(context)).toBe(ACCESS_TOKEN)
+      expect(contextProperties.getRefreshToken(context)).toBe('XXX')
     })
   })
 })

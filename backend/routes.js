@@ -147,10 +147,6 @@ const setup = ({
 
   router.use('/change-caseload', changeCaseloadRouter({ prisonApi, logError }))
 
-  router.get('/terms', async (req, res) => {
-    res.render('terms', { mailTo: config.app.mailTo, homeLink: config.app.notmEndpointUrl })
-  })
-
   router.use('/offenders/:offenderNo/add-appointment', addAppointmentRouter({ prisonApi, logError }))
   router.use('/offenders/:offenderNo/confirm-appointment', confirmAppointmentRouter({ prisonApi, logError }))
   router.use(

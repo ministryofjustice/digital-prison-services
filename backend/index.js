@@ -28,7 +28,6 @@ const setupReactRoutes = require('./setupReactRoutes')
 const phaseNameSetup = require('./phaseNameSetup')
 
 app.set('trust proxy', 1) // trust first proxy
-app.set('view engine', 'ejs')
 app.set('view engine', 'njk')
 
 nunjucksSetup(app, path)

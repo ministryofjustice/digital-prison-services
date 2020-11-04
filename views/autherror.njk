@@ -1,0 +1,14 @@
+{% extends "./partials/courtServiceLayout.njk" %}
+
+{% set title = "Authorisation Error" %}
+{% set mainClasses = "govuk-main-wrapper--l" %}
+
+{% block content %}
+<div class="govuk-grid-row govuk-body">
+    <div class="govuk-grid-column-two-thirds">
+        <h1 class="govuk-heading-l">Authorisation Error</h1>
+        <p>There was a problem authorising you to use this application.</p>
+        <p>Please go to <a class="govuk-link govuk-link--no-visited-state" href="{{ authURL }}">here</a> to try again.</p>
+    </div>
+</div>
+{% endblock %}

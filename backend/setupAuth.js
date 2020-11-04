@@ -21,7 +21,6 @@ module.exports = ({ oauthApi, tokenVerificationApi }) => {
     app: router,
     tokenRefresher,
     tokenVerifier: tokenVerificationApi.verifyToken,
-    mailTo: config.app.mailTo,
     homeLink: config.app.notmEndpointUrl,
   })
 
