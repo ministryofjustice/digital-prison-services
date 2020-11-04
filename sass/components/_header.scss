@@ -173,6 +173,19 @@
   color: white;
 }
 
+.phase-name-banner {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.phase-name-banner-content {
+  width: 100%;
+  max-width: 1170px;
+  padding-left: 15px;
+  padding-right: 15px;
+}
+
 .govuk-phase-banner__text {
   color: black;
 }
