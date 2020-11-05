@@ -18,17 +18,10 @@ const bulkAppointmentsAddedRouter = require('./routes/appointments/bulkAppointme
 const bulkAppointmentsSlipsRouter = require('./routes/appointments/bulkAppointmentsSlipsRouter')
 const bulkAppointmentsUploadRouter = require('./routes/appointments/bulkAppointmentsUploadRouter')
 const bulkAppointmentsClashesRouter = require('./routes/appointments/bulkAppointmentsClashesRouter')
-
 const changeCaseloadRouter = require('./routes/changeCaseloadRouter')
 const addAppointmentRouter = require('./routes/appointments/addAppointmentRouter')
-const addCourtAppointmentRouter = require('./routes/appointments/courtRouter')
-const confirmAppointmentRouter = require('./routes/appointments/confirmAppointmentRouter')
 const prepostAppointmentRouter = require('./routes/appointments/prepostAppointmentsRouter')
-const selectCourtAppointmentRooms = require('./routes/appointments/selectCourtAppointmentRoomsRouter')
-const selectCourtAppointmentCourt = require('./routes/appointments/selectCourtAppointmentCourtRouter')
 const viewAppointmentsRouter = require('./routes/appointments/viewAppointmentsRouter')
-const viewCourtBookingsRouter = require('./routes/appointments/viewCourtBookingsRouter')
-const requestBookingRouter = require('./routes/appointments/requestBookingRouter')
 const prisonerProfileRouter = require('./routes/prisonerProfileRouter')
 const retentionReasonsRouter = require('./routes/retentionReasonsRouter')
 const attendanceChangeRouter = require('./routes/attendanceChangesRouter')
@@ -37,7 +30,6 @@ const prisonerSearchRouter = require('./routes/prisonerSearchRouter')
 const cellMoveRouter = require('./routes/cellMoveRouter')
 const establishmentRollRouter = require('./routes/establishmentRollRouter')
 
-const videolinkPrisonerSearchController = require('./controllers/videolink/search/videolinkPrisonerSearch')
 const amendCaseNNoteRouter = require('./routes/caseNoteAmendmentRouter')
 
 const currentUser = require('./middleware/currentUser')
@@ -148,38 +140,11 @@ const setup = ({
   router.use('/change-caseload', changeCaseloadRouter({ prisonApi, logError }))
 
   router.use('/offenders/:offenderNo/add-appointment', addAppointmentRouter({ prisonApi, logError }))
-  router.use('/offenders/:offenderNo/confirm-appointment', confirmAppointmentRouter({ prisonApi, logError }))
+
   router.use(
     '/offenders/:offenderNo/prepost-appointments',
     prepostAppointmentRouter({ prisonApi, logError, oauthApi, whereaboutsApi, notifyClient, raiseAnalyticsEvent })
   )
-  router.use(
-    '/:agencyId/offenders/:offenderNo/add-court-appointment',
-    addCourtAppointmentRouter({ prisonApi, logError })
-  )
-
-  router.use(
-    '/:agencyId/offenders/:offenderNo/add-court-appointment/select-court',
-    selectCourtAppointmentCourt({ prisonApi, whereaboutsApi, logError })
-  )
-
-  router.use(
-    '/:agencyId/offenders/:offenderNo/add-court-appointment/select-rooms',
-    selectCourtAppointmentRooms({ prisonApi, whereaboutsApi, logError, oauthApi, notifyClient })
-  )
-
-  router.get('/videolink/prisoner-search', videolinkPrisonerSearchController({ oauthApi, prisonApi, logError }))
-
-  router.get('/videolink', async (req, res) => {
-    res.render('courtsVideolink.njk', {
-      user: { displayName: req.session.userDetails.name },
-      homeUrl: '/videolink',
-    })
-  })
-
-  router.use('/videolink/bookings', viewCourtBookingsRouter({ prisonApi, whereaboutsApi, logError }))
-
-  router.use('/request-booking', requestBookingRouter({ logError, notifyClient, whereaboutsApi, oauthApi, prisonApi }))
 
   router.use('/appointments', viewAppointmentsRouter({ prisonApi, whereaboutsApi, oauthApi, logError }))
 
