@@ -13,6 +13,7 @@ const router = express.Router()
 module.exports = () => {
   router.use(
     helmet({
+      contentSecurityPolicy: false,
       hsts: {
         maxAge: sixtyDaysInSeconds,
         includeSubDomains: true,
