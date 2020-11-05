@@ -1,4 +1,6 @@
- <header class="page-header govuk-!-display-none-print">
+{% from "govuk/components/phase-banner/macro.njk" import govukPhaseBanner %}
+
+<header class="page-header govuk-!-display-none-print">    
     <div class="header-content clickable">
         <div class="left-content">
             <a title="Home link" class="link" href="/">
@@ -10,7 +12,7 @@
             </a>
         </div>
 
-       {% if user %}
+        {% if user %}
             <div class="right-content">
                 <div class="right-menu no-select">
                     <label class="right-menu-content clickable" for="menuToggle">
@@ -33,3 +35,19 @@
         {% endif %}
     </div>
 </header>
+
+{% if phaseName %}
+<div class="phase-name-banner">
+    <div class="phase-name-banner-content">
+        {{ govukPhaseBanner({
+            tag: {
+                text:  phaseName,
+                classes: phaseNameColour
+            },
+            html: 'This test version of DPS contains real data which may be up to two weeks old.'
+        }) }}
+    </div>
+</div>
+{% endif %}
+
+ 
