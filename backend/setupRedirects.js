@@ -22,25 +22,5 @@ module.exports = () => {
     res.redirect(301, `/prisoner/${req.params.offenderNo}/incentive-level-details`)
   )
 
-  if (config.app.featureFlags.redirectToBookingVideoLinkEnabled) {
-    const bvlRoutes = [
-      '/offenders/:offenderNo/confirm-appointment',
-      '/:agencyId/offenders/:offenderNo/add-court-appointment',
-      '/:agencyId/offenders/:offenderNo/add-court-appointment/select-court',
-      '/:agencyId/offenders/:offenderNo/add-court-appointment/select-rooms',
-      '/videolink/prisoner-search',
-      '/videolink',
-      '/videolink/bookings',
-      '/request-booking',
-    ]
-
-    bvlRoutes.forEach(route => {
-      router.use(route, (req, res) => {
-        res.redirect(`${config.apis.bookVideoLink.url}${req.originalUrl}`)
-        res.end()
-      })
-    })
-  }
-
   return router
 }
