@@ -57,9 +57,13 @@ module.exports = ({ prisonApi, whereaboutsApi, oauthApi, logError }) => async (r
             return null
           }))
 
+        const prisonerDetails = await prisonApi.getDetails(res.locals, offenderNo, true).catch(error => {
+          logError(req.originalUrl, error, serviceUnavailableMessage)
+          return null
+        })
+
         const createdBy =
-          videoLinkLocation &&
-          videoLinkLocation.createdByUsername &&
+          videoLinkLocation?.createdByUsername &&
           (await oauthApi.userDetails(res.locals, videoLinkLocation.createdByUsername).catch(error => {
             logError(req.originalUrl, error, serviceUnavailableMessage)
             return null
@@ -88,13 +92,13 @@ module.exports = ({ prisonApi, whereaboutsApi, oauthApi, logError }) => async (r
             text: endTime ? `${getTime(startTime)} to ${getTime(endTime)}` : getTime(startTime),
           },
           {
-            html: `<a href="${offenderUrl}" class="govuk-link">${offenderName}</a>`,
+            html: `<a href="${offenderUrl}" class="govuk-link">${offenderName} - ${offenderNo}</a>`,
             attributes: {
               'data-sort-value': appointment.lastName,
             },
           },
           {
-            text: offenderNo,
+            text: prisonerDetails?.assignedLivingUnit?.description,
           },
           {
             text: appointment.appointmentTypeDescription,

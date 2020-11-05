@@ -1,6 +1,5 @@
 const express = require('express')
 const bunyanMiddleware = require('bunyan-middleware')
-const hsts = require('hsts')
 const helmet = require('helmet')
 const noCache = require('nocache')
 const config = require('./config')
@@ -12,15 +11,16 @@ const sixtyDaysInSeconds = 5184000
 const router = express.Router()
 
 module.exports = () => {
-  router.use(helmet())
-
   router.use(
-    hsts({
-      maxAge: sixtyDaysInSeconds,
-      includeSubDomains: true,
-      preload: true,
+    helmet({
+      hsts: {
+        maxAge: sixtyDaysInSeconds,
+        includeSubDomains: true,
+        preload: true,
+      },
     })
   )
+
   router.use(
     bunyanMiddleware({
       logger: log,
