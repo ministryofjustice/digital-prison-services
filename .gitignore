@@ -82,3 +82,4 @@ integration-tests/videos
 integration-tests/screenshots
 
 test-results/
+build-info.json
