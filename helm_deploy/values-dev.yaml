@@ -47,5 +47,5 @@ env:
   SUPPORT_URL: https://support-dev.hmpps.service.justice.gov.uk/
 
   SYSTEM_PHASE: DEV
-  REDIRECT_TO_BOOKING_VIDEO_LINK_ENABLED: true
+  REDIRECT_TO_BOOKING_VIDEO_LINK_ENABLED: false
   BVL_URL: https://book-video-link-dev.prison.service.justice.gov.uk
