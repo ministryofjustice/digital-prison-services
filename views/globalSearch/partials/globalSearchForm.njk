@@ -1,0 +1,114 @@
+{% from "govuk/components/input/macro.njk" import govukInput %}
+{% from "govuk/components/select/macro.njk" import govukSelect %}
+{% from "govuk/components/button/macro.njk" import govukButton %}
+{% from "govuk/components/details/macro.njk" import govukDetails %}
+{% from "govuk/components/date-input/macro.njk" import govukDateInput %}
+
+{% macro errorClass(field) -%}
+  {{ ' govuk-input--error' if errors | hasErrorWithPrefix([field, 'dobError']) else '' }}
+{%- endmacro %}
+
+{% set searchFilters %}
+  {{ govukSelect({
+    name: 'locationFilter',
+    id: 'locationFilter',
+    label: {
+        text: "Location status of prisoner"
+    },
+    items: [
+        { text: 'All', value: 'ALL' },
+        { text: 'Inside', value: 'IN' },
+        { text: 'Outside', value: 'OUT' }
+    ] | setSelected(formValues.filters.locationFilter)
+  }) }}
+
+  {{ govukSelect({
+    name: 'genderFilter',
+    id: 'genderFilter',
+    label: {
+        text: "Prisoner gender"
+    },
+    items: [
+        { text: 'All', value: 'ALL' },
+        { text: 'Male', value: 'M' },
+        { text: 'Female', value: 'F' },
+        { text: 'Not known', value: 'NK' },
+        { text: 'Not specified', value: 'NS' }
+    ] | setSelected(formValues.filters.genderFilter)
+  }) }}
+
+  {{ govukDateInput({
+    id: "dob",
+    fieldset: {
+      legend: {
+        text: "Date of birth (optional)",
+        classes: "govuk-fieldset__legend--s"
+      }
+    },
+    errorMessage: errors | findErrors(['dobDay', 'dobMonth', 'dobYear']),
+    hint: {
+      text: "For example, 31 3 1980"
+    },
+    items: [
+      {
+        id: "dobDay",
+        name: "dobDay",
+        label: "Day",
+        classes: "govuk-input--width-2" + errorClass('dobDay'),
+        value: formValues.filters.dobDay
+      },
+      {
+        id: "dobMonth",
+        name: "dobMonth",
+        label: "Month",
+        classes: "govuk-input--width-2" + errorClass('dobMonth'),
+        value: formValues.filters.dobMonth
+      },
+      {
+        id: "dobYear",
+        name: "dobYear",
+        label: "Year",
+        classes: "govuk-input--width-4" + errorClass('dobYear'),
+        value: formValues.filters.dobYear
+      }
+    ]
+  }) }}
+
+  {% set clearUrl = './results?searchText=' + formValues.searchText if formValues.searchText else './global-search' %}
+
+  <a href="{{ clearUrl }}" data-qa="clear-link" class="govuk-body govuk-link govuk-link--no-visited-state">Clear</a>
+{% endset %}
+
+<form novalidate="novalidate" class="prisoner-search__form" data-test="global-search-form" action="/global-search/results">
+  <div class="horizontal-form govuk-!-margin-bottom-3">
+    {{ govukInput({
+      id: "searchText",
+      name: "searchText",
+      value: formValues.searchText,
+      errorMessage: errors | findError('searchText'),
+      label: {
+          text: "Enter prisoner name or ID"
+      },
+      classes: 'govuk-!-width-full',
+      attributes: {
+        'data-test': 'global-search-text'
+      }
+    }) }}
+
+    {{ govukButton({
+      text: "Search",
+      type: "submit"
+    }) }}
+  </div>
+
+  {{ govukDetails({
+    summaryText: "Filters",
+    classes: 'govuk-!-margin-bottom-0',
+    open: openFilters,
+    html: searchFilters,
+    attributes: {
+      'data-test': 'global-search-filters-container'
+    }
+  }) }}
+</form>
+

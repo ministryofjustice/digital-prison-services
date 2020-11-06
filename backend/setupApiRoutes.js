@@ -15,7 +15,6 @@ const activityLocationsFactory = require('./controllers/attendance/activityLocat
 const activityListFactory = require('./controllers/attendance/activityList').getActivityListFactory
 const houseblockListFactory = require('./controllers/attendance/houseblockList').getHouseblockListFactory
 const { attendanceFactory } = require('./controllers/attendance/attendance')
-const { globalSearchFactory } = require('./controllers/globalSearch')
 const { imageFactory } = require('./controllers/images')
 const { offenderLoaderFactory } = require('./controllers/offender-loader')
 const getExistingEventsController = require('./controllers/attendance/getExistingEvents')
@@ -34,12 +33,11 @@ const handleErrors = require('./middleware/asyncHandler')
 
 const router = express.Router()
 
-const setup = ({ prisonApi, whereaboutsApi, oauthApi, caseNotesApi, offenderSearchApi }) => {
+const setup = ({ prisonApi, whereaboutsApi, oauthApi, caseNotesApi }) => {
   const controller = controllerFactory({
     activityListService: activityListFactory(prisonApi, whereaboutsApi, config),
     houseblockListService: houseblockListFactory(prisonApi, whereaboutsApi, config),
     attendanceService: attendanceFactory(whereaboutsApi),
-    globalSearchService: globalSearchFactory(offenderSearchApi),
     offenderLoader: offenderLoaderFactory(prisonApi),
     csvParserService: csvParserService({ fs, isBinaryFileSync }),
     offenderActivitesService: offenderActivitesFactory(prisonApi, whereaboutsApi),
@@ -79,7 +77,6 @@ const setup = ({ prisonApi, whereaboutsApi, oauthApi, caseNotesApi, offenderSear
   router.use('/api/attendance/absence-reasons', controller.getAbsenceReasons)
   router.use('/api/attendance/batch', controller.batchUpdateAttendance)
   router.use('/api/attendance', controller.updateAttendance)
-  router.use('/api/globalSearch', controller.globalSearch)
   router.use('/api/appointments/upload-offenders/:agencyId', controller.uploadOffenders)
   router.get('/app/images/:offenderNo/data', imageFactory(prisonApi).prisonerImage)
   router.get('/app/image/:imageId/data', imageFactory(prisonApi).image)

@@ -1,7 +1,6 @@
 const express = require('express')
 
 const { logError } = require('./logError')
-const config = require('./config')
 
 const { alertFactory } = require('./controllers/alert')
 const { caseNoteFactory } = require('./controllers/caseNote')
@@ -36,6 +35,7 @@ const covidRouter = require('./routes/covidRouter')
 const prisonerSearchRouter = require('./routes/prisonerSearchRouter')
 const cellMoveRouter = require('./routes/cellMoveRouter')
 const establishmentRollRouter = require('./routes/establishmentRollRouter')
+const globalSearchRouter = require('./routes/globalSearchRouter')
 
 const videolinkPrisonerSearchController = require('./controllers/videolink/search/videolinkPrisonerSearch')
 const amendCaseNNoteRouter = require('./routes/caseNoteAmendmentRouter')
@@ -60,6 +60,7 @@ const setup = ({
   allocationManagerApi,
   pathfinderApi,
   socApi,
+  offenderSearchApi,
 }) => {
   router.use(currentUser({ prisonApi, oauthApi }))
 
@@ -227,6 +228,8 @@ const setup = ({
   )
 
   router.get(['/content', '/content/:path'], contentController({ logError }))
+
+  router.use('/global-search', globalSearchRouter({ offenderSearchApi, logError }))
 
   return router
 }

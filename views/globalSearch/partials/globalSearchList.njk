@@ -1,0 +1,28 @@
+{% set rows = [] %}
+{% for prisoner in results %}
+  {% set prisonerImage = '<img src="/app/images/' + prisoner.offenderNo + '/data" alt="Image of ' + prisoner.name + '" class="prisoner-search__results-list__image" />' %}
+  {% set prisonerLink = '<a href="/prisoner/' + prisoner.offenderNo + '" class="govuk-link">' + prisoner.name + '</a>'%}
+  {% set rows = (rows.push([
+    { html: prisonerImage },
+    { html: prisonerLink },
+    { text: prisoner.offenderNo },
+    { text: prisoner.dateOfBirth },
+    { text: prisoner.latestLocation },
+    { text: prisoner.workingName }
+  ]), rows) %}
+{% endfor %}
+
+<div class="prisoner-search__results-list">
+  {{ govukTable({
+    head: [
+      { html: '<span class="govuk-visually-hidden">Picture</span>' },
+      { text: "Name" },
+      { text: "Prison number" },
+      { text: "Date of birth" },
+      { text: "Location" },
+      { text: "Actual working name" }
+    ],
+    rows: rows,
+    attributes: { "data-test": "global-search-results-table" }
+  }) }}
+</div>

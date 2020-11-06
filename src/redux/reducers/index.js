@@ -74,12 +74,6 @@ const eventsInitialState = {
   absentReasons: [],
 }
 
-const establishmentRollInitialState = {
-  movements: null,
-  blocks: [],
-  totals: null,
-}
-
 const globalSearchInitialState = {
   data: [],
   pageNumber: 0,
@@ -291,22 +285,6 @@ export function events(state = eventsInitialState, action) {
   }
 }
 
-export function establishmentRoll(state = establishmentRollInitialState, action) {
-  switch (action.type) {
-    case ActionTypes.SET_ESTABLISHMENT_ROLL_DATA: {
-      const { movements, blocks, totals } = action.data
-      return {
-        ...state,
-        movements,
-        blocks,
-        totals,
-      }
-    }
-    default:
-      return state
-  }
-}
-
 export function globalSearch(state = globalSearchInitialState, action) {
   switch (action.type) {
     case ActionTypes.SET_GLOBAL_SEARCH_RESULTS_DATA:
@@ -359,7 +337,6 @@ const prisonStaffHubApp = combineReducers({
   events,
   app,
   search,
-  establishmentRoll,
   globalSearch,
   bulkAppointments,
   adjudicationHistory,

@@ -9,18 +9,7 @@ const offenderSearchApiFactory = client => {
 
   const changeFieldNames = () => data =>
     data.map(
-      ({
-        uiId,
-        prisonerNumber,
-        bookingId,
-        firstName,
-        lastName,
-        dateOfBirth,
-        prisonId,
-        locationDescription,
-        status,
-      }) => ({
-        uiId,
+      ({ prisonerNumber, bookingId, firstName, lastName, dateOfBirth, prisonId, locationDescription, status }) => ({
         offenderNo: prisonerNumber,
         firstName,
         lastName,

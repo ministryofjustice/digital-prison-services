@@ -1,13 +1,13 @@
 Reflect.deleteProperty(process.env, 'APPINSIGHTS_INSTRUMENTATIONKEY')
-const globalSearchApi = {}
-const { globalSearch } = require('./globalSearch').globalSearchFactory(globalSearchApi)
+const offenderSearchApi = {}
+const { globalSearch } = require('./globalSearch').globalSearchFactory(offenderSearchApi)
 
 jest.mock('shortid', () => ({
   generate: () => '123',
 }))
 
 beforeEach(() => {
-  globalSearchApi.globalSearch = jest.fn()
+  offenderSearchApi.globalSearch = jest.fn()
 })
 
 function createResponse() {
@@ -42,7 +42,6 @@ function createResponseWithFormattedDate() {
       latestLocation: 'Leeds HMP',
       latestLocationId: 'LEI',
       dateOfBirth: '15/10/1977',
-      uiId: '123',
       locationDescription: 'Leeds HMP',
     },
     {
@@ -52,7 +51,6 @@ function createResponseWithFormattedDate() {
       latestLocationId: 'MDI',
       latestLocation: 'Moorland HMP',
       dateOfBirth: '15/09/1976',
-      uiId: '123',
       locationDescription: 'Moorland HMP',
     },
   ]
@@ -60,14 +58,14 @@ function createResponseWithFormattedDate() {
 
 describe('Global Search controller', () => {
   it('Should return no results as an empty array', async () => {
-    globalSearchApi.globalSearch.mockReturnValue([])
+    offenderSearchApi.globalSearch.mockReturnValue([])
 
     const response = await globalSearch({}, 'text', '', '', '')
     expect(response).toEqual([])
 
-    expect(globalSearchApi.globalSearch).toHaveBeenCalled()
+    expect(offenderSearchApi.globalSearch).toHaveBeenCalled()
 
-    expect(globalSearchApi.globalSearch.mock.calls[0]).toEqual([
+    expect(offenderSearchApi.globalSearch.mock.calls[0]).toEqual([
       {},
       {
         dateOfBirth: '',
@@ -82,7 +80,7 @@ describe('Global Search controller', () => {
 
   it('Should return results', async () => {
     const apiResponse = createResponse()
-    globalSearchApi.globalSearch.mockReturnValue(apiResponse)
+    offenderSearchApi.globalSearch.mockReturnValue(apiResponse)
 
     const response = await globalSearch({}, 'text')
     expect(response).toEqual(createResponseWithFormattedDate())
@@ -90,11 +88,11 @@ describe('Global Search controller', () => {
 
   it('Should detect an offenderId', async () => {
     const apiResponse = createResponse()
-    globalSearchApi.globalSearch.mockReturnValue(apiResponse)
+    offenderSearchApi.globalSearch.mockReturnValue(apiResponse)
 
     const offenderNo = 'Z4444YY'
     await globalSearch({}, offenderNo, '', '', '', '')
-    expect(globalSearchApi.globalSearch.mock.calls[0]).toEqual([
+    expect(offenderSearchApi.globalSearch.mock.calls[0]).toEqual([
       {},
       {
         dateOfBirth: '',
@@ -108,11 +106,11 @@ describe('Global Search controller', () => {
 
   it('Should detect an offenderId with lowercase letters', async () => {
     const apiResponse = createResponse()
-    globalSearchApi.globalSearch.mockReturnValue(apiResponse)
+    offenderSearchApi.globalSearch.mockReturnValue(apiResponse)
 
     const offenderNo = 'z4444yy'
     await globalSearch({}, offenderNo, '', '', '')
-    expect(globalSearchApi.globalSearch.mock.calls[0]).toEqual([
+    expect(offenderSearchApi.globalSearch.mock.calls[0]).toEqual([
       {},
       {
         dateOfBirth: '',
@@ -126,10 +124,10 @@ describe('Global Search controller', () => {
 
   it('Should detect 2 words', async () => {
     const apiResponse = createResponse()
-    globalSearchApi.globalSearch.mockReturnValue(apiResponse)
+    offenderSearchApi.globalSearch.mockReturnValue(apiResponse)
 
     await globalSearch({}, 'last first', '', '', '')
-    expect(globalSearchApi.globalSearch.mock.calls[0]).toEqual([
+    expect(offenderSearchApi.globalSearch.mock.calls[0]).toEqual([
       {},
       {
         dateOfBirth: '',
@@ -144,10 +142,10 @@ describe('Global Search controller', () => {
 
   it('Should detect 2 words and remove commas', async () => {
     const apiResponse = createResponse()
-    globalSearchApi.globalSearch.mockReturnValue(apiResponse)
+    offenderSearchApi.globalSearch.mockReturnValue(apiResponse)
 
     await globalSearch({}, ',last, first,', '', '', '')
-    expect(globalSearchApi.globalSearch.mock.calls[0]).toEqual([
+    expect(offenderSearchApi.globalSearch.mock.calls[0]).toEqual([
       {},
       {
         dateOfBirth: '',
@@ -162,10 +160,10 @@ describe('Global Search controller', () => {
 
   it('Should detect 2 words with no space between comma', async () => {
     const apiResponse = createResponse()
-    globalSearchApi.globalSearch.mockReturnValue(apiResponse)
+    offenderSearchApi.globalSearch.mockReturnValue(apiResponse)
 
     await globalSearch({}, ',last, first,', '', '', '')
-    expect(globalSearchApi.globalSearch.mock.calls[0]).toEqual([
+    expect(offenderSearchApi.globalSearch.mock.calls[0]).toEqual([
       {},
       {
         dateOfBirth: '',
@@ -180,10 +178,10 @@ describe('Global Search controller', () => {
 
   it('Should detect 2 words with various spaces and commas', async () => {
     const apiResponse = createResponse()
-    globalSearchApi.globalSearch.mockReturnValue(apiResponse)
+    offenderSearchApi.globalSearch.mockReturnValue(apiResponse)
 
     await globalSearch({}, ', last , first other, ', '', '', '')
-    expect(globalSearchApi.globalSearch.mock.calls[0]).toEqual([
+    expect(offenderSearchApi.globalSearch.mock.calls[0]).toEqual([
       {},
       {
         dateOfBirth: '',
@@ -198,10 +196,10 @@ describe('Global Search controller', () => {
 
   it('Should propagate filter values to global search call', async () => {
     const apiResponse = createResponse()
-    globalSearchApi.globalSearch.mockReturnValue(apiResponse)
+    offenderSearchApi.globalSearch.mockReturnValue(apiResponse)
 
     await globalSearch({}, ', last , first other, ', 'F', 'OUT', '2000-01-02')
-    expect(globalSearchApi.globalSearch.mock.calls[0]).toEqual([
+    expect(offenderSearchApi.globalSearch.mock.calls[0]).toEqual([
       {},
       {
         dateOfBirth: '2000-01-02',
@@ -216,11 +214,11 @@ describe('Global Search controller', () => {
 
   it('Should propagate filter values to global search by offender call', async () => {
     const apiResponse = createResponse()
-    globalSearchApi.globalSearch.mockReturnValue(apiResponse)
+    offenderSearchApi.globalSearch.mockReturnValue(apiResponse)
 
     const offenderNo = 'z4444yy'
     await globalSearch({}, offenderNo, 'F', 'OUT', '')
-    expect(globalSearchApi.globalSearch.mock.calls[0]).toEqual([
+    expect(offenderSearchApi.globalSearch.mock.calls[0]).toEqual([
       {},
       {
         dateOfBirth: '',
@@ -234,10 +232,10 @@ describe('Global Search controller', () => {
 
   it('Should ignore leading and trailing whitespace', async () => {
     const apiResponse = createResponse()
-    globalSearchApi.globalSearch.mockReturnValue(apiResponse)
+    offenderSearchApi.globalSearch.mockReturnValue(apiResponse)
 
     await globalSearch({}, '  word  ', '', '', '')
-    expect(globalSearchApi.globalSearch.mock.calls[0]).toEqual([
+    expect(offenderSearchApi.globalSearch.mock.calls[0]).toEqual([
       {},
       {
         dateOfBirth: '',

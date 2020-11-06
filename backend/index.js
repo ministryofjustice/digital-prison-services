@@ -47,7 +47,6 @@ app.use(
     whereaboutsApi: apis.whereaboutsApi,
     oauthApi: apis.oauthApi,
     caseNotesApi: apis.caseNotesApi,
-    offenderSearchApi: apis.offenderSearchApi,
   })
 )
 app.use(csrf())
@@ -63,6 +62,7 @@ app.use(
     allocationManagerApi: apis.allocationManagerApi,
     pathfinderApi: apis.pathfinderApi,
     socApi: apis.socApi,
+    offenderSearchApi: apis.offenderSearchApi,
   })
 )
 

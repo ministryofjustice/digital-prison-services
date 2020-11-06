@@ -181,19 +181,6 @@ describe('actions', () => {
     expect(actions.setActivityData([{ stuff: 'stuff' }])).toEqual(expectedAction)
   })
 
-  it('should create an action to set establishment roll block data', () => {
-    const data = {
-      movements: null,
-      blocks: [],
-      totals: null,
-    }
-    const expectedAction = {
-      type: types.SET_ESTABLISHMENT_ROLL_DATA,
-      data,
-    }
-    expect(actions.setEstablishmentRollData(data)).toEqual(expectedAction)
-  })
-
   it('should create an action to save the global search data', () => {
     const expectedAction = {
       type: types.SET_GLOBAL_SEARCH_RESULTS_DATA,

@@ -122,11 +122,6 @@ export const setMenuOpen = payload => ({
   payload,
 })
 
-export const setEstablishmentRollData = data => ({
-  type: ActionTypes.SET_ESTABLISHMENT_ROLL_DATA,
-  data,
-})
-
 export const setAdjudicationDetail = detail => ({
   type: ActionTypes.SET_ADJUDICATION_DETAIL,
   detail,
