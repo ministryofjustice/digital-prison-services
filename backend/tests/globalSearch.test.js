@@ -345,6 +345,44 @@ describe('Global search', () => {
         })
       })
 
+      describe('should run dob validation', () => {
+        it('should trigger date of birth in the past validation message', async () => {
+          req.query = {
+            searchText: 'ABC123',
+            dobDay: 1,
+            dobMonth: 1,
+            dobYear: 8000,
+          }
+
+          await controller.resultsPage(req, res)
+
+          expect(res.render).toHaveBeenCalledWith(
+            'globalSearch/globalSearchResults.njk',
+            expect.objectContaining({
+              errors: [{ href: '#dobDay', text: 'Enter a date of birth which is in the past' }, { href: '#dobError' }],
+            })
+          )
+        })
+
+        it('should trigger date of birth not real validation message', async () => {
+          req.query = {
+            searchText: 'ABC123',
+            dobDay: 200,
+            dobMonth: 200,
+            dobYear: 8000,
+          }
+
+          await controller.resultsPage(req, res)
+
+          expect(res.render).toHaveBeenCalledWith(
+            'globalSearch/globalSearchResults.njk',
+            expect.objectContaining({
+              errors: [{ href: '#dobDay', text: 'Enter a date of birth which is a real date' }, { href: '#dobError' }],
+            })
+          )
+        })
+      })
+
       describe('when viewed by a licenses user', () => {
         beforeEach(() => {
           req.query = {
