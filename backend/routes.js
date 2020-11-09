@@ -229,7 +229,7 @@ const setup = ({
 
   router.get(['/content', '/content/:path'], contentController({ logError }))
 
-  router.use('/global-search', globalSearchRouter({ offenderSearchApi, logError }))
+  router.use('/global-search', globalSearchRouter({ offenderSearchApi, oauthApi, logError }))
 
   return router
 }

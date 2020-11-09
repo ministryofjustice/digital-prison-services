@@ -4,11 +4,10 @@ const paginationService = require('../services/paginationService')
 
 const router = express.Router()
 
-const controller = ({ offenderSearchApi, logError }) => {
-  const { indexPage, resultsPage } = globalSearchFactory({ paginationService, offenderSearchApi, logError })
+const controller = ({ offenderSearchApi, oauthApi, logError }) => {
+  const { indexPage, resultsPage } = globalSearchFactory({ paginationService, offenderSearchApi, oauthApi, logError })
 
   router.get('/', indexPage)
-  // router.post('/', post)
   router.get('/results', resultsPage)
 
   return router

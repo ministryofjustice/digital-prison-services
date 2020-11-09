@@ -3,10 +3,10 @@ const log = require('../log')
 const { isPrisonerIdentifier, putLastNameFirst } = require('../utils')
 const dobValidation = require('../shared/dobValidation')
 const {
-  app: { notmEndpointUrl: dpsUrl },
+  app: { notmEndpointUrl: dpsUrl, licencesUrl },
 } = require('../config')
 
-const globalSearchFactory = ({ paginationService, offenderSearchApi, logError }) => {
+const globalSearchFactory = ({ paginationService, offenderSearchApi, oauthApi, logError }) => {
   const searchByOffender = (context, offenderNo, gender, location, dateOfBirth, pageLimit) =>
     offenderSearchApi.globalSearch(
       context,
@@ -39,7 +39,7 @@ const globalSearchFactory = ({ paginationService, offenderSearchApi, logError })
   const indexPage = (req, res) => res.render('globalSearch/globalSearch.njk', { dpsUrl })
 
   const resultsPage = async (req, res) => {
-    let results = []
+    let prisonerResults = []
     const { searchText, pageLimitOption, pageOffsetOption, ...filters } = req.query
     const { genderFilter, locationFilter, dobDay, dobMonth, dobYear } = filters
     const pageLimit = (pageLimitOption && parseInt(pageLimitOption, 10)) || 20
@@ -72,7 +72,7 @@ const globalSearchFactory = ({ paginationService, offenderSearchApi, logError })
 
         log.info(searchData.length, 'globalSearch data received')
 
-        results = searchData.map(offender => {
+        prisonerResults = searchData.map(offender => {
           const formattedDateOfBirth =
             offender.dateOfBirth && moment(offender.dateOfBirth, 'YYYY-MM-DD').format('DD/MM/YYYY')
 
@@ -85,7 +85,10 @@ const globalSearchFactory = ({ paginationService, offenderSearchApi, logError })
         })
       }
 
-      const totalRecords = context.responseHeaders?.['total-records'] || 0
+      const userRoles = await oauthApi.userRoles(res.locals)
+      const isLicencesUser = userRoles.includes('LICENCE_RO')
+      const isLicencesVaryUser = userRoles.includes('LICENCE_VARY')
+      const userCanViewInactive = userRoles.includes('INACTIVE_BOOKINGS')
 
       return res.render('globalSearch/globalSearchResults.njk', {
         dpsUrl,
@@ -94,14 +97,21 @@ const globalSearchFactory = ({ paginationService, offenderSearchApi, logError })
           searchText,
           filters,
         },
+        isLicencesUser,
         openFilters: Boolean(Object.values(filters).filter(value => value && value !== 'ALL').length),
         pagination: paginationService.getPagination(
-          totalRecords,
+          context.responseHeaders?.['total-records'] || 0,
           pageOffset,
           pageLimit,
           new URL(`${req.protocol}://${req.get('host')}${req.originalUrl}`)
         ),
-        results,
+        results: prisonerResults.map(prisoner => ({
+          ...prisoner,
+          showUpdateLicenceLink: isLicencesUser && (prisoner.currentlyInPrison === 'Y' || isLicencesVaryUser),
+          showProfileLink:
+            (userCanViewInactive && prisoner.currentlyInPrison === 'N') || prisoner.currentlyInPrison === 'Y',
+          updateLicenceLink: `${licencesUrl}hdc/taskList/${prisoner.latestBookingId}`,
+        })),
       })
     } catch (error) {
       if (error) logError(req.originalUrl, error, 'Sorry, the service is unavailable')
