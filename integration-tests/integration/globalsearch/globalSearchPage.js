@@ -1,24 +1,21 @@
 const page = require('../../pages/page')
 
-const globalSearchPage = (results = false) => {
-  const globalSearch = page(`Global search${results ? ' results' : ''}`, {
+const globalSearchPage = () => {
+  const globalSearch = page('Global search', {
     form: () => ({
-      search: () => cy.get('#search-text'),
-      submitButton: () => cy.get('button[type="submit"]'),
+      search: () => cy.get('[data-test="global-search-text"]'),
+      submitButton: () => cy.get('[data-test="global-search-submit"]'),
     }),
-    rows: () => cy.get('tr'),
-    nextPage: () => cy.get('#next-page'),
-    previousPage: () => cy.get('#previous-page'),
-    showFilters: () => cy.get('#showFiltersLink'),
-    clearFilters: () => cy.get('#clearFilters'),
-    locationSelect: () => cy.get('#location-select'),
-    genderSelect: () => cy.get('#gender-select'),
-    dobDay: () => cy.get('input[type="number"]:eq(0)'),
-    dobMonth: () => cy.get('input[type="number"]:eq(1)'),
-    dobYear: () => cy.get('input[type="number"]:eq(2)'),
-    spinner: () => cy.get('.spinner-component'),
+    nextPage: () => cy.get('.moj-pagination__item--next').first(),
+    previousPage: () => cy.get('.moj-pagination__item--prev').first(),
+    showFilters: () => cy.get('[data-test="global-search-filters-container"] .govuk-details__summary-text'),
+    clearFilters: () => cy.get('[data-test="clear-link"]'),
+    locationSelect: () => cy.get('[data-test="location-filter"]'),
+    genderSelect: () => cy.get('[data-test="gender-filter"]'),
+    dobDay: () => cy.get('[data-test="dob-day"]'),
+    dobMonth: () => cy.get('[data-test="dob-month"]'),
+    dobYear: () => cy.get('[data-test="dob-year"]'),
   })
-  globalSearch.spinner().should('not.exist')
   return globalSearch
 }
 

@@ -19,7 +19,10 @@
         { text: 'All', value: 'ALL' },
         { text: 'Inside', value: 'IN' },
         { text: 'Outside', value: 'OUT' }
-    ] | setSelected(formValues.filters.locationFilter)
+    ] | setSelected(formValues.filters.locationFilter),
+    attributes: {
+      'data-test': 'location-filter'
+    }
   }) }}
 
   {{ govukSelect({
@@ -34,7 +37,10 @@
         { text: 'Female', value: 'F' },
         { text: 'Not known', value: 'NK' },
         { text: 'Not specified', value: 'NS' }
-    ] | setSelected(formValues.filters.genderFilter)
+    ] | setSelected(formValues.filters.genderFilter),
+    attributes: {
+      'data-test': 'gender-filter'
+    }
   }) }}
 
   {{ govukDateInput({
@@ -55,28 +61,37 @@
         name: "dobDay",
         label: "Day",
         classes: "govuk-input--width-2" + errorClass('dobDay'),
-        value: formValues.filters.dobDay
+        value: formValues.filters.dobDay,
+        attributes: {
+          'data-test': 'dob-day'
+        }
       },
       {
         id: "dobMonth",
         name: "dobMonth",
         label: "Month",
         classes: "govuk-input--width-2" + errorClass('dobMonth'),
-        value: formValues.filters.dobMonth
+        value: formValues.filters.dobMonth,
+        attributes: {
+          'data-test': 'dob-month'
+        }
       },
       {
         id: "dobYear",
         name: "dobYear",
         label: "Year",
         classes: "govuk-input--width-4" + errorClass('dobYear'),
-        value: formValues.filters.dobYear
+        value: formValues.filters.dobYear,
+        attributes: {
+          'data-test': 'dob-year'
+        }
       }
     ]
   }) }}
 
   {% set clearUrl = './results?searchText=' + formValues.searchText if formValues.searchText else './global-search' %}
 
-  <a href="{{ clearUrl }}" data-qa="clear-link" class="govuk-body govuk-link govuk-link--no-visited-state">Clear</a>
+  <a href="{{ clearUrl }}" data-test="clear-link" class="govuk-body govuk-link govuk-link--no-visited-state">Clear</a>
 {% endset %}
 
 <form novalidate="novalidate" class="prisoner-search__form" data-test="global-search-form" action="/global-search/results">
@@ -98,7 +113,10 @@
 
     {{ govukButton({
       text: "Search",
-      type: "submit"
+      type: "submit",
+      attributes: {
+        'data-test': 'global-search-submit'
+      }
     }) }}
   </div>
 
