@@ -36,11 +36,16 @@ const globalSearchFactory = ({ paginationService, offenderSearchApi, oauthApi, l
     )
   }
 
-  const indexPage = (req, res) => res.render('globalSearch/globalSearch.njk', { dpsUrl })
+  const backWhiteList = { licences: licencesUrl }
+
+  const indexPage = (req, res) => {
+    const { referrer } = req.query
+    return res.render('globalSearch/globalSearch.njk', { backLink: backWhiteList[referrer], dpsUrl, referrer })
+  }
 
   const resultsPage = async (req, res) => {
     let prisonerResults = []
-    const { searchText, pageLimitOption, pageOffsetOption, ...filters } = req.query
+    const { searchText, pageLimitOption, pageOffsetOption, referrer, ...filters } = req.query
     const { genderFilter, locationFilter, dobDay, dobMonth, dobYear } = filters
     const pageLimit = (pageLimitOption && parseInt(pageLimitOption, 10)) || 20
     const pageOffset = (pageOffsetOption && parseInt(pageOffsetOption, 10)) || 0
@@ -85,12 +90,13 @@ const globalSearchFactory = ({ paginationService, offenderSearchApi, oauthApi, l
         })
       }
 
-      const userRoles = await oauthApi.userRoles(res.locals)
+      const userRoles = await oauthApi.userRoles(res.locals).then(roles => roles.map(role => role.roleCode))
       const isLicencesUser = userRoles.includes('LICENCE_RO')
       const isLicencesVaryUser = userRoles.includes('LICENCE_VARY')
       const userCanViewInactive = userRoles.includes('INACTIVE_BOOKINGS')
 
       return res.render('globalSearch/globalSearchResults.njk', {
+        backLink: backWhiteList[referrer],
         dpsUrl,
         errors,
         formValues: {

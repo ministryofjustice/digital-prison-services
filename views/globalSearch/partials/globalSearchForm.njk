@@ -80,6 +80,7 @@
 {% endset %}
 
 <form novalidate="novalidate" class="prisoner-search__form" data-test="global-search-form" action="/global-search/results">
+  <input type="hidden" name="referrer" value="{{ referrer }}" />
   <div class="horizontal-form govuk-!-margin-bottom-3">
     {{ govukInput({
       id: "searchText",
