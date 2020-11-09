@@ -80,3 +80,6 @@ npm run int-test
 This will enable/disable to ability to refer a prisoner to the SOC service and view their SOC profile if already referred.
 To enable the feature, change the environment variable of **SOC_API_ENABLED** to **true**. Any other value will disable the feature. 
 
+#### Phase Name Banner
+To show the phase name banner add the environment variable ``` SYSTEM_PHASE=ENV_NAME ```. 
+This will trigger the banner to become visible showing the given name.

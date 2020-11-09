@@ -13,6 +13,7 @@ $(document).ready(function() {
       maxDate: maxDate,
       minDate: minDate,
     })
+    $(element).prop('placeholder', 'DD/MM/YYYY')
 
     $(element).attr('readonly', 'true')
   })

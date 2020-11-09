@@ -28,7 +28,7 @@ const addCourtAppointmentsFactory = (prisonApi, logError) => {
 
     if (!date) errors.push({ text: 'Select the date of the video link', href: '#date' })
 
-    if (date && !moment(date, DAY_MONTH_YEAR).isValid())
+    if (date && !moment(date, DAY_MONTH_YEAR, true).isValid())
       errors.push({ text: 'Enter a date in DD/MM/YYYY format', href: '#date' })
 
     if (date && moment(date, DAY_MONTH_YEAR).isBefore(now, 'day'))
