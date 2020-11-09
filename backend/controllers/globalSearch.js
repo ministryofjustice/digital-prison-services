@@ -6,7 +6,7 @@ const {
   app: { notmEndpointUrl: dpsUrl, licencesUrl },
 } = require('../config')
 
-const globalSearchFactory = ({ paginationService, offenderSearchApi, oauthApi, logError }) => {
+module.exports = ({ paginationService, offenderSearchApi, oauthApi, logError }) => {
   const searchByOffender = (context, offenderNo, gender, location, dateOfBirth, pageLimit) =>
     offenderSearchApi.globalSearch(
       context,
@@ -111,6 +111,7 @@ const globalSearchFactory = ({ paginationService, offenderSearchApi, oauthApi, l
           pageLimit,
           new URL(`${req.protocol}://${req.get('host')}${req.originalUrl}`)
         ),
+        referrer,
         results: prisonerResults.map(prisoner => ({
           ...prisoner,
           showUpdateLicenceLink: isLicencesUser && (prisoner.currentlyInPrison === 'Y' || isLicencesVaryUser),
@@ -127,8 +128,4 @@ const globalSearchFactory = ({ paginationService, offenderSearchApi, oauthApi, l
   }
 
   return { indexPage, resultsPage }
-}
-
-module.exports = {
-  globalSearchFactory,
 }
