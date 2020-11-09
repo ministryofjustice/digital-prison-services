@@ -8,12 +8,10 @@ const requestBookingRouter = require('./routes/appointments/requestBookingRouter
 const confirmAppointmentRouter = require('./routes/appointments/confirmAppointmentRouter')
 const videolinkPrisonerSearchController = require('./controllers/videolink/search/videolinkPrisonerSearch')
 
-const router = express.Router()
-
-module.exports = ({ prisonApi, whereaboutsApi, oauthApi, notifyClient, logError }) => {
+module.exports = ({ prisonApi, whereaboutsApi, oauthApi, notifyClient, logError }, router = express.Router()) => {
   if (config.app.featureFlags.redirectToBookingVideoLinkEnabled) {
-    router.use('/videolink', (req, res) => {
-      res.redirect(`${config.apis.bookVideoLink.url}`)
+    router.get('/videolink', (req, res) => {
+      res.redirect(config.apis.bookVideoLink.url)
     })
   } else {
     router.use('/offenders/:offenderNo/confirm-appointment', confirmAppointmentRouter({ prisonApi, logError }))

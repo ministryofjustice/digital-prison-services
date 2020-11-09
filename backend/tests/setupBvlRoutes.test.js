@@ -1,36 +1,41 @@
 /* eslint-disable no-unused-expressions, prefer-promise-reject-errors */
-const express = require('express')
-const request = require('supertest')
 const config = require('../config')
 const bvlRoutes = require('../setupBvlRoutes')
-const nunjucksSetup = require('../utils/nunjucksSetup')
 
 const prisonApi = jest.fn()
 const whereaboutsApi = jest.fn()
 const oauthApi = jest.fn()
 const notifyClient = jest.fn()
 const logError = jest.fn()
-
-const createApp = redirect => {
-  config.app.featureFlags.redirectToBookingVideoLinkEnabled = redirect
-  const app = express()
-  nunjucksSetup(app)
-  app.use((req, res, next) => {
-    // @ts-ignore
-    req.session = { userDetails: { name: 'someName' } }
-    next()
-  })
-
-  app.use(bvlRoutes({ prisonApi, whereaboutsApi, oauthApi, notifyClient, logError }))
-  return app
-}
+const router = { use: jest.fn(), get: jest.fn() }
 
 describe('Test setupBvlRoutes for redirects', () => {
+  beforeEach(() => {
+    jest.resetAllMocks()
+  })
   it('GET "/videolink" redirect = true, app redirects to http://localhost:3000', async () => {
-    const app = createApp(true)
-    await request(app)
-      .get('/videolink')
-      .expect('location', 'http://localhost:3000')
-      .expect(302)
+    config.app.featureFlags.redirectToBookingVideoLinkEnabled = true
+    bvlRoutes({ prisonApi, whereaboutsApi, oauthApi, notifyClient, logError }, router)
+
+    expect(router.get).toHaveBeenCalledTimes(1)
+    expect(router.use).not.toHaveBeenCalled()
+
+    const [path, handler] = router.get.mock.calls[0]
+    expect(path).toBe('/videolink')
+
+    const res = {
+      redirect: jest.fn(),
+    }
+
+    handler(null, res)
+
+    expect(res.redirect).toHaveBeenCalledWith(config.apis.bookVideoLink.url)
+  })
+
+  it('GET "/videolink" redirect = false, route registration happens as normal', async () => {
+    config.app.featureFlags.redirectToBookingVideoLinkEnabled = false
+    bvlRoutes({ prisonApi, whereaboutsApi, oauthApi, notifyClient, logError }, router)
+    expect(router.get).toHaveBeenCalled()
+    expect(router.use).toHaveBeenCalled()
   })
 })
