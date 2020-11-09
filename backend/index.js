@@ -9,7 +9,6 @@ const csrf = require('csurf')
 
 const app = express()
 
-const path = require('path')
 const apis = require('./apis')
 const config = require('./config')
 const routes = require('./routes')
@@ -33,7 +32,7 @@ const setupBvlRoutes = require('./setupBvlRoutes')
 app.set('trust proxy', 1) // trust first proxy
 app.set('view engine', 'njk')
 
-nunjucksSetup(app, path)
+nunjucksSetup(app)
 phaseNameSetup(app, config)
 
 app.use(setupBodyParsers())

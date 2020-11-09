@@ -24,7 +24,7 @@ config.app.notmEndpointUrl = newNomisEndpointUrl
 describe('Test the routes and middleware installed by sessionManagementRoutes', () => {
   const app = express()
 
-  app.set('view engine', 'ejs')
+  app.set('view engine', 'njk')
   app.use(bodyParser.urlencoded({ extended: false }))
 
   app.use(

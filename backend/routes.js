@@ -1,8 +1,5 @@
 const express = require('express')
-
 const { logError } = require('./logError')
-const config = require('./config')
-
 const { alertFactory } = require('./controllers/alert')
 const { caseNoteFactory } = require('./controllers/caseNote')
 const { probationDocumentsFactory } = require('./controllers/probationDocuments')

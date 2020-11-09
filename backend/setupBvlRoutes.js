@@ -1,6 +1,5 @@
 const express = require('express')
 const config = require('./config')
-
 const addCourtAppointmentRouter = require('./routes/appointments/courtRouter')
 const selectCourtAppointmentRooms = require('./routes/appointments/selectCourtAppointmentRoomsRouter')
 const selectCourtAppointmentCourt = require('./routes/appointments/selectCourtAppointmentCourtRouter')
@@ -13,8 +12,8 @@ const router = express.Router()
 
 module.exports = ({ prisonApi, whereaboutsApi, oauthApi, notifyClient, logError }) => {
   if (config.app.featureFlags.redirectToBookingVideoLinkEnabled) {
-    router.get('/videolink', async (req, res) => {
-      res.redirect(`${config.apis.bookVideoLink.url}/videolink}`)
+    router.use('/videolink', (req, res) => {
+      res.redirect(`${config.apis.bookVideoLink.url}`)
     })
   } else {
     router.use('/offenders/:offenderNo/confirm-appointment', confirmAppointmentRouter({ prisonApi, logError }))
@@ -49,6 +48,5 @@ module.exports = ({ prisonApi, whereaboutsApi, oauthApi, notifyClient, logError 
       requestBookingRouter({ logError, notifyClient, whereaboutsApi, oauthApi, prisonApi })
     )
   }
-
   return router
 }
