@@ -44,7 +44,7 @@ env:
   SOC_API_ENABLED: true
   OFFENDER_SEARCH_API_URL: https://prisoner-offender-search-preprod.prison.service.justice.gov.uk
   SUPPORT_URL: https://support-preprod.hmpps.service.justice.gov.uk/
-  SYSTEM_PHASE: PRE_PRODUCTION
+  SYSTEM_PHASE: PRE-PRODUCTION
 
 whitelist:
   office: "217.33.148.210/32"
