@@ -4,7 +4,6 @@ const factory = ({
   activityListService,
   houseblockListService,
   attendanceService,
-  globalSearchService,
   offenderLoader,
   csvParserService,
   offenderActivitesService,
@@ -63,24 +62,6 @@ const factory = ({
     res.json(absenceReasons)
   })
 
-  const globalSearch = asyncMiddleware(async (req, res) => {
-    const { searchText, genderFilter, locationFilter, dateOfBirthFilter } = req.query
-
-    const hasSearched = Boolean(Object.keys(req.query).length)
-    // The original url here is the /api one which is not what we want
-    // the user to get back to. The frontend url is held in the referer
-    if (hasSearched) req.session.prisonerSearchUrl = req.headers.referer
-    const viewModel = await globalSearchService.globalSearch(
-      res.locals,
-      searchText,
-      genderFilter,
-      locationFilter,
-      dateOfBirthFilter
-    )
-    res.set(res.locals.responseHeaders)
-    res.json(viewModel)
-  })
-
   const uploadOffenders = asyncMiddleware(async (req, res) => {
     const { file } = req.files
     const { agencyId } = req.params
@@ -123,7 +104,6 @@ const factory = ({
     updateAttendance,
     batchUpdateAttendance,
     getAbsenceReasons,
-    globalSearch,
     uploadOffenders,
     bulkAppointmentsCsvTemplate,
     getPrisonersUnaccountedFor,

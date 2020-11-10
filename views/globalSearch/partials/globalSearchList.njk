@@ -1,0 +1,37 @@
+{% set rows = [] %}
+{% for prisoner in results %}
+  {% set prisonerImage = '<img src="/app/images/' + prisoner.offenderNo + '/data" alt="Image of ' + prisoner.name + '" class="prisoner-search__results-list__image" />' %}
+  {% set prisonerLink = '<a href="/prisoner/' + prisoner.offenderNo + '" class="govuk-link" target="_blank" rel="noopener noreferrer" data-test="prisoner-profile-link">' + prisoner.name + '</a>' %}
+  {% set updateLicenceLink = '<a href="' + prisoner.updateLicenceLink + '" class="govuk-link" target="_blank" rel="noopener noreferrer" data-test="update-licence-link">Update licence</a>' %}
+  {% set rows = (rows.push([
+    { html: prisonerImage },
+    { 
+      text: prisoner.name,
+      html: prisonerLink if prisoner.showProfileLink
+    },
+    { text: prisoner.offenderNo },
+    { text: prisoner.dateOfBirth },
+    { text: prisoner.latestLocation },
+    { text: prisoner.workingName },
+    { html: updateLicenceLink if prisoner.showUpdateLicenceLink }
+  ]), rows) %}
+{% endfor %}
+
+<div class="prisoner-search__results-list">
+  {{ govukTable({
+    head: [
+      { html: '<span class="govuk-visually-hidden">Picture</span>' },
+      { text: "Name" },
+      { text: "Prison number" },
+      { text: "Date of birth" },
+      { text: "Location" },
+      { text: "Actual working name" },
+      {
+        html: '<span class="govuk-visually-hidden">Licences</span>',
+        classes: "govuk-visually-hidden" if not isLicencesUser
+      }
+    ],
+    rows: rows,
+    attributes: { "data-test": "global-search-results-table" }
+  }) }}
+</div>

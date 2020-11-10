@@ -12,10 +12,6 @@ const setup = () => {
     res.sendFile(path.join(__dirname, '../build/index.html'))
   })
 
-  router.get('/global-search*', (req, res) => {
-    res.sendFile(path.join(__dirname, '../build/index.html'))
-  })
-
   router.get('/iep-slip', (req, res) => {
     res.sendFile(path.join(__dirname, '../build/index.html'))
   })

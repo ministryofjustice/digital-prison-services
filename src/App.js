@@ -13,7 +13,6 @@ import './App.scss'
 import ScrollToTop from './Components/ScrollToTop'
 import ResultsHouseblockContainer from './ResultsHouseblock/ResultsHouseblockContainer'
 import ResultsActivityContainer from './ResultsActivity/ResultsActivityContainer'
-import GlobalSearchContainer from './GlobalSearch/GlobalSearchContainer'
 
 import links from './links'
 
@@ -274,16 +273,6 @@ class App extends React.Component {
                 handlePeriodChange={event => this.handlePeriodChangeWithLocationsUpdate(event)}
                 dateDispatch={dateDispatch}
                 periodDispatch={periodDispatch}
-              />
-            )}
-          />
-          <Route
-            path="/(global-search-results|global-search)"
-            render={() => (
-              <GlobalSearchContainer
-                handleError={this.handleError}
-                raiseAnalyticsEvent={this.raiseAnalyticsEvent}
-                setLoadedDispatch={setLoadedDispatch}
               />
             )}
           />

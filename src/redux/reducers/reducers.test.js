@@ -1,5 +1,5 @@
 import moment from 'moment'
-import { app, search, defaultPeriod, events, establishmentRoll, globalSearch } from './index'
+import { app, search, defaultPeriod, events, globalSearch } from './index'
 import * as types from '../actions/actionTypes'
 import { setMenuOpen } from '../actions'
 
@@ -32,12 +32,6 @@ const eventsInitialState = {
   orderField: 'cellLocation',
   sortOrder: 'ASC',
   absentReasons: [],
-}
-
-const establishmentRollInitialState = {
-  movements: [],
-  blocks: [],
-  totals: null,
 }
 
 const appWithValidationErrorState = {
@@ -519,23 +513,6 @@ describe('app (global) reducer', () => {
     state = app(appInitialState, setMenuOpen(false))
 
     expect(state.menuOpen).toBe(false)
-  })
-
-  it('should handle SET_ESTABLISHMENT_ROLL_DATA', () => {
-    expect(
-      establishmentRoll(establishmentRollInitialState, {
-        type: types.SET_ESTABLISHMENT_ROLL_DATA,
-        data: {
-          movements: null,
-          blocks: [],
-          totals: null,
-        },
-      })
-    ).toEqual({
-      movements: null,
-      blocks: [],
-      totals: null,
-    })
   })
 
   it('should handle SET_GLOBAL_SEARCH_RESULTS_DATA', () => {

@@ -58,7 +58,6 @@ describe('offender search api tests', () => {
         const data = await offenderSearchApi.globalSearch({}, { search: 'params' })
         expect(data).toEqual([
           {
-            uiId: undefined,
             offenderNo: 'A1234BC',
             firstName: undefined,
             lastName: undefined,
@@ -95,7 +94,6 @@ describe('offender search api tests', () => {
             sentenceStartDate: '2009-09-09',
             releaseDate: '2023-03-03',
             confirmedReleaseDate: '2023-03-03',
-            uiId: 'Tw4PcPHG6',
             locationDescription: 'Leeds',
           },
         ]
@@ -103,7 +101,6 @@ describe('offender search api tests', () => {
         const data = await offenderSearchApi.globalSearch({}, { search: 'params' })
         expect(data).toEqual([
           {
-            uiId: 'Tw4PcPHG6',
             offenderNo: 'Z0025ZZ',
             firstName: 'MATTHEW',
             lastName: 'SMITH',
