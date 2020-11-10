@@ -37,7 +37,7 @@ context('A user can add an appointment', () => {
     cy.url().should('include', `prisoner/${offenderNo}/alerts`)
   })
 
-  it('Should show correct error messages', () => {
+  it.only('Should show correct error messages', () => {
     cy.visit(`/edit-alert?offenderNo=${offenderNo}&alertId=${alertId}`)
     const editAlertPage = EditAlertPage.verifyOnPage()
     const form = editAlertPage.form()

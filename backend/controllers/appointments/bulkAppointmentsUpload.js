@@ -97,7 +97,7 @@ const bulkAppointmentsUploadFactory = (csvParserService, offenderLoader, prisonA
         })
         .catch(error => {
           req.flash('errors', { text: error.message, href: '#file' })
-          return res.redirect('back')
+          return res.redirect('/bulk-appointments/add-appointment-details')
         })
     } catch (error) {
       return renderError(req, res, error)
