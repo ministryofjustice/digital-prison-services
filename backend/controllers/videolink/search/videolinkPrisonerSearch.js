@@ -61,7 +61,7 @@ module.exports = ({ oauthApi, prisonApi, logError }) => async (req, res) => {
       })
     }
 
-    return res.redirect('back')
+    return res.redirect('/videolink')
   } catch (error) {
     if (error) logError(req.originalUrl, error, serviceUnavailableMessage)
 

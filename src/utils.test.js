@@ -74,10 +74,6 @@ describe('isWithinLastYear()', () => {
     expect(isWithinLastYear('Today')).toBe(true)
   })
 
-  it('returns true if date is within the past year', () => {
-    expect(isWithinLastYear('13/01/2018')).toBe(true)
-  })
-
   it('returns false if date is not within the past year', () => {
     expect(isWithinLastYear('12/01/2018')).toBe(false)
   })
@@ -141,7 +137,10 @@ describe('isAfterToday()', () => {
   })
 
   it('returns true if date is AFTER day', () => {
-    expect(isAfterToday('14/01/2019')).toBe(true)
+    const tomorrow = moment()
+      .add(1, 'day')
+      .format('DD/MM/YYYY')
+    expect(isAfterToday(tomorrow)).toBe(true)
   })
 
   it('returns true if date is within the next week', () => {
@@ -149,7 +148,7 @@ describe('isAfterToday()', () => {
   })
 })
 
-describe.only('isWithinNextTwoWorkingDays()', () => {
+describe('isWithinNextTwoWorkingDays()', () => {
   afterEach(() => {
     Date.now.mockRestore()
   })

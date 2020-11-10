@@ -203,7 +203,7 @@ describe('alert management', () => {
         await handleEditAlertForm(req, res)
 
         expect(req.flash).toBeCalledWith('errors', [{ text: 'Sorry, the service is unavailable' }])
-        expect(res.redirect).toBeCalledWith('back')
+        expect(res.redirect).toBeCalledWith('/edit-alert?offenderNo=ABC123&alertId=1')
       })
 
       it('should return an error if no option is selected', async () => {
@@ -218,7 +218,7 @@ describe('alert management', () => {
         expect(req.flash).toBeCalledWith('errors', [
           { href: '#alertStatus', text: 'Select yes if you want to close this alert' },
         ])
-        expect(res.redirect).toBeCalledWith('back')
+        expect(res.redirect).toBeCalledWith('/edit-alert?offenderNo=ABC123&alertId=1')
       })
     })
 
@@ -250,7 +250,7 @@ describe('alert management', () => {
         await handleEditAlertForm(req, res)
 
         expect(req.flash).toBeCalledWith('comment', 'test')
-        expect(res.redirect).toBeCalledWith('back')
+        expect(res.redirect).toBeCalledWith('/edit-alert?offenderNo=ABC123&alertId=1')
       })
 
       it('should validate missing comment', async () => {
