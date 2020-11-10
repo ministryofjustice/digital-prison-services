@@ -9,10 +9,11 @@ const csrf = require('csurf')
 
 const app = express()
 
-const path = require('path')
 const apis = require('./apis')
 const config = require('./config')
 const routes = require('./routes')
+const { notifyClient } = require('./shared/notifyClient')
+const { logError } = require('./logError')
 
 const setupWebSession = require('./setupWebSession')
 const setupHealthChecks = require('./setupHealthChecks')
@@ -26,11 +27,12 @@ const setupRedirects = require('./setupRedirects')
 const setupApiRoutes = require('./setupApiRoutes')
 const setupReactRoutes = require('./setupReactRoutes')
 const phaseNameSetup = require('./phaseNameSetup')
+const setupBvlRoutes = require('./setupBvlRoutes')
 
 app.set('trust proxy', 1) // trust first proxy
 app.set('view engine', 'njk')
 
-nunjucksSetup(app, path)
+nunjucksSetup(app)
 phaseNameSetup(app, config)
 
 app.use(setupBodyParsers())
@@ -63,6 +65,16 @@ app.use(
     pathfinderApi: apis.pathfinderApi,
     socApi: apis.socApi,
     offenderSearchApi: apis.offenderSearchApi,
+  })
+)
+
+app.use(
+  setupBvlRoutes({
+    prisonApi: apis.prisonApi,
+    whereaboutsApi: apis.whereaboutsApi,
+    oauthApi: apis.oauthApi,
+    notifyClient,
+    logError,
   })
 )
 

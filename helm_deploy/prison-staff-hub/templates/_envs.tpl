@@ -192,5 +192,12 @@ env:
 
   - name: SOC_API_ENABLED
     value: {{ .Values.env.SOC_API_ENABLED | quote }}
+
+  - name: BVL_URL
+    value: {{ .Values.env.BVL_URL | quote }}
+
+  - name: REDIRECT_TO_BOOKING_VIDEO_LINK_ENABLED
+    value: {{ .Values.env.REDIRECT_TO_BVL_SERVICE | quote }}
+    
       
 {{- end -}}
