@@ -273,8 +273,9 @@ context('Global search', () => {
     it('should link to both active and inactive prisoner profiles', () => {
       cy.task('stubGlobalSearch')
       cy.visit('/global-search/results?searchText=quimby')
+      const globalSearchPage = GlobalSearchPage.verifyOnResultsPage()
 
-      cy.get('[data-test="prisoner-profile-link"]').then($profileLinks => {
+      globalSearchPage.profileLinks().then($profileLinks => {
         cy.get($profileLinks)
           .its('length')
           .should('eq', 2)
@@ -308,8 +309,9 @@ context('Global search', () => {
     it('should have an update licence link for the active prisoner', () => {
       cy.task('stubGlobalSearch')
       cy.visit('/global-search/results?searchText=quimby')
+      const globalSearchPage = GlobalSearchPage.verifyOnResultsPage()
 
-      cy.get('[data-test="update-licence-link"]').then($licenceLinks => {
+      globalSearchPage.updateLicenceLinks().then($licenceLinks => {
         cy.get($licenceLinks)
           .its('length')
           .should('eq', 1)
@@ -318,7 +320,7 @@ context('Global search', () => {
           .first()
           .invoke('attr', 'href')
           .then(href => {
-            expect(href).to.equal('http://localhost:3000/hdc/taskList/1')
+            expect(href).to.equal('http://localhost:3003/hdc/taskList/1')
           })
       })
     })
@@ -336,8 +338,9 @@ context('Global search', () => {
     it('should have an update licence link for both active and inactive prisoners', () => {
       cy.task('stubGlobalSearch')
       cy.visit('/global-search/results?searchText=quimby')
+      const globalSearchPage = GlobalSearchPage.verifyOnResultsPage()
 
-      cy.get('[data-test="update-licence-link"]').then($licenceLinks => {
+      globalSearchPage.updateLicenceLinks().then($licenceLinks => {
         cy.get($licenceLinks)
           .its('length')
           .should('eq', 2)
@@ -346,14 +349,14 @@ context('Global search', () => {
           .first()
           .invoke('attr', 'href')
           .then(href => {
-            expect(href).to.equal('http://localhost:3000/hdc/taskList/1')
+            expect(href).to.equal('http://localhost:3003/hdc/taskList/1')
           })
 
         cy.get($licenceLinks)
           .last()
           .invoke('attr', 'href')
           .then(href => {
-            expect(href).to.equal('http://localhost:3000/hdc/taskList/2')
+            expect(href).to.equal('http://localhost:3003/hdc/taskList/2')
           })
       })
     })
