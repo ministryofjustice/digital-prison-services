@@ -101,8 +101,9 @@ context('Global search', () => {
   it('should present global search results', () => {
     cy.task('stubGlobalSearch')
     cy.visit('/global-search/results?searchText=quimby')
+    const globalSearchPage = GlobalSearchPage.verifyOnResultsPage()
 
-    cy.get('[data-test="global-search-results-table"]').then($table => {
+    globalSearchPage.resultsTable().then($table => {
       cy.get($table)
         .find('tbody')
         .find('tr')
@@ -123,8 +124,9 @@ context('Global search', () => {
   it('should only link to active prisoners', () => {
     cy.task('stubGlobalSearch')
     cy.visit('/global-search/results?searchText=quimby')
+    const globalSearchPage = GlobalSearchPage.verifyOnResultsPage()
 
-    cy.get('[data-test="prisoner-profile-link"]').then($profileLinks => {
+    globalSearchPage.profileLinks().then($profileLinks => {
       cy.get($profileLinks)
         .its('length')
         .should('eq', 1)
@@ -142,7 +144,9 @@ context('Global search', () => {
     cy.task('stubGlobalSearchMultiplePages')
     cy.task('stubOffenderMovements')
     cy.visit('/global-search/results?searchText=common')
-    cy.get('[data-test="global-search-results-table"]').then($table => {
+    const globalSearchPage = GlobalSearchPage.verifyOnResultsPage()
+
+    globalSearchPage.resultsTable().then($table => {
       cy.get($table)
         .find('tbody')
         .find('tr')
@@ -162,7 +166,7 @@ context('Global search', () => {
     cy.task('stubOffenderMovements')
     cy.visit('/global-search/results?searchText=common')
     const globalSearchPage = GlobalSearchPage.verifyOnResultsPage()
-    cy.get('[data-test="global-search-results-table"]').then($table => {
+    globalSearchPage.resultsTable().then($table => {
       cy.get($table)
         .find('tbody')
         .find('tr')
@@ -176,7 +180,7 @@ context('Global search', () => {
         })
     })
     globalSearchPage.nextPage().click()
-    cy.get('[data-test="global-search-results-table"]').then($table => {
+    globalSearchPage.resultsTable().then($table => {
       cy.get($table)
         .find('tbody')
         .find('tr')
@@ -190,7 +194,7 @@ context('Global search', () => {
         })
     })
     globalSearchPage.previousPage().click()
-    cy.get('[data-test="global-search-results-table"]').then($table => {
+    globalSearchPage.resultsTable().then($table => {
       cy.get($table)
         .find('tbody')
         .find('tr')
