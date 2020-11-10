@@ -120,6 +120,24 @@ context('Global search', () => {
     })
   })
 
+  it('should only link to active prisoners', () => {
+    cy.task('stubGlobalSearch')
+    cy.visit('/global-search/results?searchText=quimby')
+
+    cy.get('[data-test="prisoner-profile-link"]').then($profileLinks => {
+      cy.get($profileLinks)
+        .its('length')
+        .should('eq', 1)
+
+      cy.get($profileLinks)
+        .first()
+        .invoke('attr', 'href')
+        .then(href => {
+          expect(href).to.equal('/prisoner/A1234AC')
+        })
+    })
+  })
+
   it('should present global search results with outside descriptions', () => {
     cy.task('stubGlobalSearchMultiplePages')
     cy.task('stubOffenderMovements')
@@ -239,6 +257,104 @@ context('Global search', () => {
         gender: 'F',
         location: 'OUT',
         includeAliases: true,
+      })
+    })
+  })
+
+  describe('when user can has INACTIVE_BOOKINGS role', () => {
+    beforeEach(() => {
+      cy.task('stubLogin', {
+        username: 'ITAG_USER',
+        caseload: 'MDI',
+        roles: [{ roleCode: 'INACTIVE_BOOKINGS' }],
+      })
+    })
+
+    it('should link to both active and inactive prisoner profiles', () => {
+      cy.task('stubGlobalSearch')
+      cy.visit('/global-search/results?searchText=quimby')
+
+      cy.get('[data-test="prisoner-profile-link"]').then($profileLinks => {
+        cy.get($profileLinks)
+          .its('length')
+          .should('eq', 2)
+
+        cy.get($profileLinks)
+          .first()
+          .invoke('attr', 'href')
+          .then(href => {
+            expect(href).to.equal('/prisoner/A1234AC')
+          })
+
+        cy.get($profileLinks)
+          .last()
+          .invoke('attr', 'href')
+          .then(href => {
+            expect(href).to.equal('/prisoner/A1234AA')
+          })
+      })
+    })
+  })
+
+  describe('when user has LICENCE_RO role', () => {
+    beforeEach(() => {
+      cy.task('stubLogin', {
+        username: 'ITAG_USER',
+        caseload: 'MDI',
+        roles: [{ roleCode: 'LICENCE_RO' }],
+      })
+    })
+
+    it('should have an update licence link for the active prisoner', () => {
+      cy.task('stubGlobalSearch')
+      cy.visit('/global-search/results?searchText=quimby')
+
+      cy.get('[data-test="update-licence-link"]').then($licenceLinks => {
+        cy.get($licenceLinks)
+          .its('length')
+          .should('eq', 1)
+
+        cy.get($licenceLinks)
+          .first()
+          .invoke('attr', 'href')
+          .then(href => {
+            expect(href).to.equal('http://localhost:3000/hdc/taskList/1')
+          })
+      })
+    })
+  })
+
+  describe('when user has LICENCE_RO and LICENCE_VARY roles', () => {
+    beforeEach(() => {
+      cy.task('stubLogin', {
+        username: 'ITAG_USER',
+        caseload: 'MDI',
+        roles: [{ roleCode: 'LICENCE_RO' }, { roleCode: 'LICENCE_VARY' }],
+      })
+    })
+
+    it('should have an update licence link for both active and inactive prisoners', () => {
+      cy.task('stubGlobalSearch')
+      cy.visit('/global-search/results?searchText=quimby')
+
+      cy.get('[data-test="update-licence-link"]').then($licenceLinks => {
+        cy.get($licenceLinks)
+          .its('length')
+          .should('eq', 2)
+
+        cy.get($licenceLinks)
+          .first()
+          .invoke('attr', 'href')
+          .then(href => {
+            expect(href).to.equal('http://localhost:3000/hdc/taskList/1')
+          })
+
+        cy.get($licenceLinks)
+          .last()
+          .invoke('attr', 'href')
+          .then(href => {
+            expect(href).to.equal('http://localhost:3000/hdc/taskList/2')
+          })
       })
     })
   })
