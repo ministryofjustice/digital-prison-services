@@ -53,7 +53,7 @@
   {% endif %}
 
   {% if alert and not alert.expired %}
-    <form action={{formAction}} method="POST">
+    <form action="{{formAction}}" method="POST">
       <input type="hidden" name="_csrf" value="{{ csrfToken }}" />
       {% call govukFieldset({
                 legend: {

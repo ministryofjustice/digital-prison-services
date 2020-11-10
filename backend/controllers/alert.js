@@ -159,7 +159,7 @@ const alertFactory = (oauthApi, prisonApi, referenceCodesService) => {
     if (errors.length > 0) {
       if (comment) req.flash('comment', comment)
       req.flash('errors', errors)
-      return res.redirect('back')
+      return res.redirect(`/edit-alert?offenderNo=${offenderNo}&alertId=${alertId}`)
     }
 
     if (editAlert) {
@@ -172,7 +172,7 @@ const alertFactory = (oauthApi, prisonApi, referenceCodesService) => {
       } catch (error) {
         logError(req.originalUrl, error, serviceUnavailableMessage)
         req.flash('errors', [{ text: serviceUnavailableMessage }])
-        return res.redirect('back')
+        return res.redirect(`/edit-alert?offenderNo=${offenderNo}&alertId=${alertId}`)
       }
     }
 

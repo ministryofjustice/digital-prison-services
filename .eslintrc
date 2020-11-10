@@ -29,7 +29,8 @@
     "import/no-named-as-default": 0, // disable as we use connected components
     "jsx-a11y/label-has-associated-control": [2, { "assert": "either" }],
     "jsx-a11y/label-has-for": 0, // disable as has been deprecated and replaced by label-has-associated-control
-    "react/forbid-prop-types": 0
+    "react/forbid-prop-types": 0,
+    "no-only-tests/no-only-tests": "error"
   },
-  "plugins": ["prettier"]
+  "plugins": ["prettier", "no-only-tests"]
 }
