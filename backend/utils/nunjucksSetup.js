@@ -1,9 +1,10 @@
 const moment = require('moment')
+const path = require('path')
 const nunjucks = require('nunjucks')
 const config = require('../config')
 const { getDate, getTime, pascalToString, capitalize, hyphenatedStringToCamel, possessive } = require('../utils')
 
-module.exports = (app, path) => {
+module.exports = app => {
   const njkEnv = nunjucks.configure(
     [path.join(__dirname, '../../views'), 'node_modules/govuk-frontend/', 'node_modules/@ministryofjustice/frontend/'],
     {

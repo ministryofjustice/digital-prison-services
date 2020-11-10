@@ -9,7 +9,9 @@ module.exports = {
     tokenRefreshThresholdSeconds: process.env.TOKEN_REFRESH_THRESHOLD_SECONDS || 60,
     url: process.env.PRISON_STAFF_HUB_UI_URL || `http://localhost:${process.env.PORT || 3002}/`,
     maximumFileUploadSizeInMb: process.env.MAXIMUM_FILE_UPLOAD_SIZE_IN_MB || 200,
-    featureFlags: {},
+    featureFlags: {
+      redirectToBookingVideoLinkEnabled: process.env.REDIRECT_TO_BOOKING_VIDEO_LINK_ENABLED === 'true' || false,
+    },
     videoLinkEnabledFor: (process.env.VIDEO_LINK_ENABLED_FOR || '').split(','),
     displayRetentionLink: process.env.DISPLAY_RETENTION_LINK === 'true' || false,
     supportUrl: process.env.SUPPORT_URL || 'http://localhost:3000/',
@@ -95,6 +97,10 @@ module.exports = {
     offenderSearch: {
       url: process.env.OFFENDER_SEARCH_API_URL || 'http://localhost:8085',
       timeoutSeconds: process.env.OFFENDER_SEARCH_API_TIMEOUT_SECONDS || 10,
+    },
+
+    bookVideoLink: {
+      url: process.env.BVL_URL || 'http://localhost:3000',
     },
   },
 
