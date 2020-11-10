@@ -1,29 +1,21 @@
 #!/usr/bin/env node
 
-const path = require('path');
+const fs = require('fs')
+const path = require('path')
 
-const { recordBuildInfoTo } = require('./build-info');
+const target = path.resolve(__dirname, '../build-info.json')
 
-const target = path.resolve(__dirname, '../build-info.json');
-
-const getEnvironmentVariable = (name) => {
+function getEnvironmentVariable(name) {
   if (process.env[name]) {
-    return process.env[name];
+    return process.env[name]
   }
-  throw new Error(`Missing env var ${name}`);
-};
+  throw new Error(`Missing env var ${name}`)
+}
 
-const buildInfo = {
-  buildNumber: getEnvironmentVariable('BUILD_NUMBER'),
-  gitRef: getEnvironmentVariable('GIT_REF')
-};
-
-recordBuildInfoTo(target, buildInfo, (error) => {
-  if (error) {
-    console.log('💔 Failed to record build info');
-    return process.exit(1);
-  }
-
-  console.log('✨ Successfully recorded build info');
-  return process.exit(0);
-});
+fs.writeFileSync(
+  target,
+  JSON.stringify({
+    buildNumber: getEnvironmentVariable('BUILD_NUMBER'),
+    gitRef: getEnvironmentVariable('GIT_REF'),
+  })
+)

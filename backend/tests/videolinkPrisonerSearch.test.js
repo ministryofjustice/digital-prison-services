@@ -60,7 +60,7 @@ describe('Video link prisoner search', () => {
 
         expect(prisonApi.getAgencies).not.toHaveBeenCalled()
         expect(prisonApi.globalSearch).not.toHaveBeenCalled()
-        expect(res.redirect).toHaveBeenCalledWith('back')
+        expect(res.redirect).toHaveBeenCalledWith('/videolink')
       })
     })
 
