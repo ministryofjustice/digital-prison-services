@@ -40,7 +40,7 @@ const validateDate = (date, errors) => {
   const now = moment()
   if (!date) errors.push({ text: 'Select a date', href: '#date' })
 
-  if (date && !moment(date, DAY_MONTH_YEAR).isValid())
+  if (date && !moment(date, DAY_MONTH_YEAR, true).isValid())
     errors.push({ text: 'Enter a date in DD/MM/YYYY format', href: '#date' })
 
   if (date && moment(date, DAY_MONTH_YEAR).isBefore(now, 'day'))

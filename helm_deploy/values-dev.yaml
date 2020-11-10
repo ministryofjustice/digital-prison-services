@@ -45,4 +45,4 @@ env:
   SOC_API_ENABLED: true
   OFFENDER_SEARCH_API_URL: https://prisoner-offender-search-dev.prison.service.justice.gov.uk
   SUPPORT_URL: https://support-dev.hmpps.service.justice.gov.uk/
-  SYSTEM_PHASE: DEV
+
