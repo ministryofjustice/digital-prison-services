@@ -197,7 +197,7 @@ env:
     value: {{ .Values.env.BVL_URL | quote }}
 
   - name: REDIRECT_TO_BOOKING_VIDEO_LINK_ENABLED
-    value: {{ .Values.env.REDIRECT_TO_BVL_SERVICE | quote }}
+    value: {{ .Values.env.REDIRECT_TO_BOOKING_VIDEO_LINK_ENABLED | quote }}
     
       
 {{- end -}}
