@@ -20,6 +20,7 @@ const changeCaseloadRouter = require('./routes/changeCaseloadRouter')
 const addAppointmentRouter = require('./routes/appointments/addAppointmentRouter')
 const prepostAppointmentRouter = require('./routes/appointments/prepostAppointmentsRouter')
 const viewAppointmentsRouter = require('./routes/appointments/viewAppointmentsRouter')
+const confirmAppointmentRouter = require('./routes/appointments/confirmAppointmentRouter')
 const prisonerProfileRouter = require('./routes/prisonerProfileRouter')
 const retentionReasonsRouter = require('./routes/retentionReasonsRouter')
 const attendanceChangeRouter = require('./routes/attendanceChangesRouter')
@@ -147,6 +148,8 @@ const setup = ({
   )
 
   router.use('/appointments', viewAppointmentsRouter({ prisonApi, whereaboutsApi, oauthApi, logError }))
+
+  router.use('/offenders/:offenderNo/confirm-appointment', confirmAppointmentRouter({ prisonApi, logError }))
 
   router.use(
     '/offenders/:offenderNo/retention-reasons',

@@ -5,7 +5,6 @@ const selectCourtAppointmentRooms = require('./routes/appointments/selectCourtAp
 const selectCourtAppointmentCourt = require('./routes/appointments/selectCourtAppointmentCourtRouter')
 const viewCourtBookingsRouter = require('./routes/appointments/viewCourtBookingsRouter')
 const requestBookingRouter = require('./routes/appointments/requestBookingRouter')
-const confirmAppointmentRouter = require('./routes/appointments/confirmAppointmentRouter')
 const videolinkPrisonerSearchController = require('./controllers/videolink/search/videolinkPrisonerSearch')
 
 module.exports = ({ prisonApi, whereaboutsApi, oauthApi, notifyClient, logError }, router = express.Router()) => {
@@ -14,8 +13,6 @@ module.exports = ({ prisonApi, whereaboutsApi, oauthApi, notifyClient, logError 
       res.redirect(config.apis.bookVideoLink.url)
     })
   } else {
-    router.use('/offenders/:offenderNo/confirm-appointment', confirmAppointmentRouter({ prisonApi, logError }))
-
     router.use(
       '/:agencyId/offenders/:offenderNo/add-court-appointment',
       addCourtAppointmentRouter({ prisonApi, logError })
