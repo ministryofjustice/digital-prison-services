@@ -46,7 +46,6 @@
     "body-parser": "^1.19.0",
     "bunyan": "^1.8.14",
     "bunyan-middleware": "^1.0.0",
-
     "classnames": "^2.2.6",
     "connect-flash": "^0.1.1",
     "connect-redis": "^5.0.0",

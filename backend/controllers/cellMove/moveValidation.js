@@ -168,9 +168,14 @@ const moveValidationFactory = ({ prisonApi, logError }) => {
         return res.redirect(`/prisoner/${offenderNo}/cell-move/confirm-cell-move?cellId=${cellId}`)
       }
 
+      const profileUrl = `/prisoner/${offenderNo}`
+
       return res.render('cellMove/moveValidation.njk', {
         offenderNo,
         offenderName: `${formatName(currentOffenderDetails.firstName, currentOffenderDetails.lastName)}`,
+        prisonerNameForBreadcrumb: putLastNameFirst(currentOffenderDetails.firstName, currentOffenderDetails.lastName),
+        profileUrl,
+        selectCellUrl: `${profileUrl}/cell-move/select-cell`,
         csraWarningMessage,
         nonAssociations,
         currentOffenderActiveAlerts,
