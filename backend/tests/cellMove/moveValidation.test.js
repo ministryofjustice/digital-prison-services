@@ -436,6 +436,9 @@ describe('move validation', () => {
             title: 'into a cell with a prisoner who has an Isolated Prisoner alert',
           },
         ],
+        prisonerNameForBreadcrumb: 'User, Test',
+        profileUrl: `/prisoner/${offenderNo}`,
+        selectCellUrl: `/prisoner/${offenderNo}/cell-move/select-cell`,
       })
     )
   })

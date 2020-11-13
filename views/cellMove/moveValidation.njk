@@ -8,63 +8,63 @@
 {% from "govuk/components/button/macro.njk" import govukButton %}
 {%- from "moj/components/banner/macro.njk" import mojBanner -%}
 
-
 {% set title = "Are you sure you want to select this cell?" %}
+
 {% macro nonAssociationHtml(nonAssociation) %}
   {{ govukSummaryList({
-        classes: "govuk-summary-list--no-border govuk-body",
-        attributes: {'data-test': 'non-association-summary-' + nonAssociation.prisonNumber},
-        rows: [
-          {
-            key: {
-              text: "Name"
-            },
-            value: {
-              text: nonAssociation.name
-            }
+      classes: "govuk-summary-list--no-border govuk-body",
+      attributes: {'data-test': 'non-association-summary-' + nonAssociation.prisonNumber},
+      rows: [
+        {
+          key: {
+            text: "Name"
           },
-          {
-            key: {
-              text: "Prison number"
-            },
-            value: {
-              text: nonAssociation.prisonNumber
-            }
-          },
-          {
-            key: {
-              text: "Location"
-            },
-            value: {
-              text: nonAssociation.location
-            }
-          },
-          {
-            key: {
-              text: "Type"
-            },
-            value: {
-              text: nonAssociation.type
-            }
-          },
-          {
-            key: {
-              text: "Reason"
-            },
-            value: {
-              text: nonAssociation.reason
-            }
-          },
-          {
-            key: {
-              text: "Comment"
-            },
-            value: {
-              text: nonAssociation.comment
-            }
+          value: {
+            text: nonAssociation.name
           }
-        ] | removePaddingBottom
-    }) }}
+        },
+        {
+          key: {
+            text: "Prison number"
+          },
+          value: {
+            text: nonAssociation.prisonNumber
+          }
+        },
+        {
+          key: {
+            text: "Location"
+          },
+          value: {
+            text: nonAssociation.location
+          }
+        },
+        {
+          key: {
+            text: "Type"
+          },
+          value: {
+            text: nonAssociation.type
+          }
+        },
+        {
+          key: {
+            text: "Reason"
+          },
+          value: {
+            text: nonAssociation.reason
+          }
+        },
+        {
+          key: {
+            text: "Comment"
+          },
+          value: {
+            text: nonAssociation.comment
+          }
+        }
+      ] | removePaddingBottom
+  }) }}
 {% endmacro %}
 
 {% macro alertDetails(alert) %}
@@ -75,8 +75,29 @@
   <p class="govuk-body" data-test="alert-date">{{ alert.date}}</p>
 {% endmacro %}
 
-{% block content %}
+{% block beforeContent %}
+  {{ govukBreadcrumbs({
+      items: [
+          {
+              text: "Home",
+              href: dpsUrl
+          },
+          {
+              text: prisonerNameForBreadcrumb,
+              href: profileUrl
+          },
+          {
+              text: 'Select cell',
+              href: selectCellUrl
+          },
+          {
+              text: "Review risks"
+          }
+      ]
+  }) }}
+{% endblock %}
 
+{% block content %}
   {% if errors.length > 0 %}
     {{ govukErrorSummary({
         titleText: "There is a problem",
