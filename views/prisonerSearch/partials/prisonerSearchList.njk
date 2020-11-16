@@ -14,7 +14,7 @@
     { text: prisoner.assignedLivingUnitDesc },
     { text: prisoner.iepLevel },
     { text: prisoner.age },
-    { html: alertFlags(prisoner.alerts, newLine=true) }
+    { html: alertFlags(prisoner.alerts, newLine=true) + categoryFlag('', prisoner.categoryCode, false) }
   ]), rows) %}
 {% endfor %}
 

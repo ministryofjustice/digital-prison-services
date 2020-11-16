@@ -14,7 +14,7 @@ context('Prisoner search', () => {
     assignedLivingUnitId: 1,
     assignedLivingUnitDesc: 'UNIT-1',
     iepLevel: 'Standard',
-    categoryCode: 'C',
+    categoryCode: 'A',
     alertsDetails: ['XA', 'XVL'],
   }
   const inmate2 = {
@@ -64,7 +64,7 @@ context('Prisoner search', () => {
               .its('length')
               .should('eq', 3) // 2 results plus table header
             expect($tableRows.get(1).innerText).to.contain(
-              '\tSaunders, John\tA1234BC\tUNIT-1\tStandard\t29\t\nARSONIST'
+              '\tSaunders, John\tA1234BC\tUNIT-1\tStandard\t29\t\nARSONIST\n\nCAT A'
             )
             expect($tableRows.get(2).innerText).to.contain('\tSmith, Steve\tB4567CD\tUNIT-2\tStandard\t30\t')
           })
