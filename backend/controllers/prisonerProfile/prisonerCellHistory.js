@@ -6,6 +6,8 @@ const {
   sortByDateTime,
   putLastNameFirst,
   extractLocation,
+  groupBy,
+  hasLength,
 } = require('../../utils')
 const {
   app: { notmEndpointUrl: dpsUrl },
@@ -61,7 +63,21 @@ module.exports = ({ oauthApi, prisonApi, logError, page = 0 }) => async (req, re
         }
       })
 
+    const cellHistoryGroupedByAgency = hasLength(cellData)
+      ? Object.entries(groupBy(cellData, 'establishment')).map(([key, value]) => {
+          const fromDateString = value[0].movedIn.split(' -')[0]
+          const toDateString = value.slice(-1)[0].movedOut.split(' -')[0]
+
+          return {
+            name: key,
+            datePeriod: `from ${fromDateString} to ${toDateString}`,
+            cellHistory: value,
+          }
+        })
+      : []
+
     return res.render('prisonerProfile/prisonerCellHistory.njk', {
+      cellHistoryGroupedByAgency,
       cellData,
       currentLocation: {
         establishment: agencyData.find(agencyDetails => currentLocation.agencyId === agencyDetails.agencyId)
