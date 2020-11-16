@@ -429,16 +429,16 @@ describe('prisoner profile service', () => {
       })
 
       it.each`
-        role                     | flag                       | hasAccess
-        ${'PF_STD_PRISON'}       | ${'canViewPathfinderLink'} | ${true}
-        ${'PF_STD_PROBATION'}    | ${'canViewPathfinderLink'} | ${true}
-        ${'PF_APPROVAL'}         | ${'canViewPathfinderLink'} | ${true}
-        ${'PF_STD_PRISON_RO'}    | ${'canViewPathfinderLink'} | ${true}
-        ${'PF_STD_PROBATION_RO'} | ${'canViewPathfinderLink'} | ${true}
-        ${'PF_HQ'}               | ${'canViewPathfinderLink'} | ${true}
-        ${'PF_PSYCHOLOGIST'}     | ${'canViewPathfinderLink'} | ${true}
-        ${'PF_POLICE'}           | ${'canViewPathfinderLink'} | ${true}
-        ${'OTHER'}               | ${'canViewPathfinderLink'} | ${false}
+        role                    | flag                       | hasAccess
+        ${'PF_STD_PRISON'}      | ${'canViewPathfinderLink'} | ${true}
+        ${'PF_STD_PROBATION'}   | ${'canViewPathfinderLink'} | ${true}
+        ${'PF_APPROVAL'}        | ${'canViewPathfinderLink'} | ${true}
+        ${'PF_NATIONAL_READER'} | ${'canViewPathfinderLink'} | ${true}
+        ${'PF_LOCAL_READER'}    | ${'canViewPathfinderLink'} | ${true}
+        ${'PF_HQ'}              | ${'canViewPathfinderLink'} | ${true}
+        ${'PF_PSYCHOLOGIST'}    | ${'canViewPathfinderLink'} | ${true}
+        ${'PF_POLICE'}          | ${'canViewPathfinderLink'} | ${true}
+        ${'OTHER'}              | ${'canViewPathfinderLink'} | ${false}
       `('$flag should be $hasAccess when the user has the $role role', async ({ role, flag, hasAccess }) => {
         oauthApi.userRoles.mockResolvedValue([{ roleCode: role }])
 
