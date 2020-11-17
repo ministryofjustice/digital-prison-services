@@ -49,10 +49,7 @@ module.exports = ({ oauthApi, prisonApi, logError, page = 0 }) => async (req, re
         .sort((left, right) => sortByDateTime(right.assignmentDateTime, left.assignmentDateTime))
         .filter(cell => cell.assignmentEndDateTime)
         .map(async cell => {
-          const staffDetails = await prisonApi.getStaffDetails(res.locals, cell.movementMadeBy).catch(error => {
-            logError(req.originalUrl, error, serviceUnavailableMessage)
-            return null
-          })
+          const staffDetails = await prisonApi.getStaffDetails(res.locals, cell.movementMadeBy)
           const agency = agencyData.find(agencyDetails => cell.agencyId === agencyDetails.agencyId)
 
           return {
