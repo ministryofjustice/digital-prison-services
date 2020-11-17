@@ -71,7 +71,12 @@ const findConsecutiveSentence = ({ sentences, consecutiveTo }) => {
 
 module.exports = ({ courtCaseData, sentenceTermsData, offenceHistory }) => {
   const caseIds = [
-    ...new Set(offenceHistory.filter(offence => offence.primaryResultCode === '1002').map(offence => offence.caseId)),
+    // Only show charge codes of Imprisonment (1002 & 1510), Recall (1501) and YOI (1024)
+    ...new Set(
+      offenceHistory
+        .filter(offence => ['1002', '1501', '1510', '1024'].includes(offence.primaryResultCode))
+        .map(offence => offence.caseId)
+    ),
   ]
 
   return courtCaseData
