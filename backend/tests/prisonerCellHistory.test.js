@@ -36,6 +36,7 @@ describe('Prisoner cell history', () => {
           bookingId,
           description: 'MDI-1-02',
           livingUnitId: 1,
+          movementMadeBy: 'STAFFID1',
         },
         {
           agencyId: 'RNI',
@@ -47,11 +48,13 @@ describe('Prisoner cell history', () => {
           bookingId,
           description: 'RNI-1-03',
           livingUnitId: 3,
+          movementMadeBy: 'STAFFID2',
         },
       ],
     })
     prisonApi.getAgencyDetails = jest.fn().mockResolvedValue([])
     prisonApi.getInmatesAtLocation = jest.fn().mockResolvedValue([])
+    prisonApi.getStaffDetails = jest.fn().mockResolvedValue({ bookingId, firstName: 'John', lastName: 'Smith' })
 
     controller = prisonerCellHistory({ oauthApi, prisonApi, logError })
   })
@@ -63,6 +66,8 @@ describe('Prisoner cell history', () => {
     expect(prisonApi.getOffenderCellHistory).toHaveBeenCalledWith(res.locals, bookingId, { page: 0, size: 10000 })
     expect(prisonApi.getAgencyDetails.mock.calls.length).toBe(2)
     expect(prisonApi.getInmatesAtLocation).toHaveBeenCalledWith(res.locals, 1, {})
+    expect(prisonApi.getStaffDetails.mock.calls.length).toBe(1)
+    expect(prisonApi.getStaffDetails).toHaveBeenCalledWith(res.locals, 'STAFFID2')
   })
 
   describe('cell history for offender', () => {
@@ -82,16 +87,23 @@ describe('Prisoner cell history', () => {
       expect(res.render).toHaveBeenCalledWith(
         'prisonerProfile/prisonerCellHistory.njk',
         expect.objectContaining({
-          cellData: [
+          cellHistoryGroupedByAgency: [
             {
-              agencyId: 'RNI',
-              assignmentDateTime: '2020-02-01T12:48:33',
-              assignmentEndDateTime: '2020-03-01T12:48:33',
-              establishment: 'Ranby',
-              livingUnitId: 3,
-              location: '1-03',
-              movedIn: '01/02/2020 - 12:48',
-              movedOut: '01/03/2020 - 12:48',
+              name: 'Ranby',
+              datePeriod: 'from 01/02/2020 to 01/03/2020',
+              cellHistory: [
+                {
+                  agencyId: 'RNI',
+                  assignmentDateTime: '2020-02-01T12:48:33',
+                  assignmentEndDateTime: '2020-03-01T12:48:33',
+                  establishment: 'Ranby',
+                  livingUnitId: 3,
+                  location: '1-03',
+                  movedBy: 'John Smith',
+                  movedIn: '01/02/2020 - 12:48',
+                  movedOut: '01/03/2020 - 12:48',
+                },
+              ],
             },
           ],
           occupants: [

@@ -83,22 +83,22 @@
 
     {% for cell in agency.cellHistory %}
       {% set rows = (rows.push([  
-        { text: cell.establishment },
         { text: cell.location },
         { text: cell.movedIn },
         { text: cell.movedOut },
-        { html: '<a href="' + './location-history?fromDate=' + cell.assignmentDateTime + '&toDate=' + cell.assignmentEndDateTime + '&locationId=' + cell.livingUnitId + '&agencyId=' + cell.agencyId + '" class="govuk-link">View details</a>' }
+        { text: cell.movedBy },
+        { html: '<a href="' + './location-history?fromDate=' + cell.assignmentDateTime + '&toDate=' + cell.assignmentEndDateTime + '&locationId=' + cell.livingUnitId + '&agencyId=' + cell.agencyId + '" class="govuk-link">View details</a>' if cell.location !== 'Reception' }
       ]), rows) %}
     {% endfor %}
 
-    <h3 class="govuk-heading-m">{{ agency.name }} <span class="govuk-!-font-weight-regular">{{ agency.datePeriod }}</span></h2>
+    <h3 class="govuk-heading-m" data-test="agency-heading">{{ agency.name }} <span class="govuk-!-font-weight-regular">{{ agency.datePeriod }}</span></h2>
 
     {{ govukTable({
       head: [
-        { text: "Establishment" },
         { text: "Location" },
         { text: "Moved in" },
         { text: "Moved out" },
+        { text: "Moved by" },
         { html: '<span class="govuk-visually-hidden">Details link</span>' }
       ],
       rows: rows,
