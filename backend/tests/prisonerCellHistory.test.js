@@ -36,7 +36,7 @@ describe('Prisoner cell history', () => {
           bookingId,
           description: 'MDI-1-02',
           livingUnitId: 1,
-          movementMadeBy: 'STAFFID1',
+          movementMadeBy: 'STAFF_1',
         },
         {
           agencyId: 'RNI',
@@ -48,7 +48,7 @@ describe('Prisoner cell history', () => {
           bookingId,
           description: 'RNI-1-03',
           livingUnitId: 3,
-          movementMadeBy: 'STAFFID2',
+          movementMadeBy: 'STAFF_2',
         },
       ],
     })
@@ -67,7 +67,7 @@ describe('Prisoner cell history', () => {
     expect(prisonApi.getAgencyDetails.mock.calls.length).toBe(2)
     expect(prisonApi.getInmatesAtLocation).toHaveBeenCalledWith(res.locals, 1, {})
     expect(prisonApi.getStaffDetails.mock.calls.length).toBe(1)
-    expect(prisonApi.getStaffDetails).toHaveBeenCalledWith(res.locals, 'STAFFID2')
+    expect(prisonApi.getStaffDetails).toHaveBeenCalledWith(res.locals, 'STAFF_2')
   })
 
   describe('cell history for offender', () => {
