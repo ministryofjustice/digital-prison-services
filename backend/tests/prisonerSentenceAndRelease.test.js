@@ -133,6 +133,9 @@ describe('prisoner sentence and release', () => {
     prisonApi.getCourtCases.mockResolvedValue([
       { id: 1, caseInfoNumber: 'T12345', agency: { description: 'Leeds' } },
       { id: 2, caseInfoNumber: 'T56789' },
+      { id: 3, caseInfoNumber: 'T56799', agency: { description: 'Leeds' } },
+      { id: 4, caseInfoNumber: 'T56800', agency: { description: 'Leeds' } },
+      { id: 5, caseInfoNumber: 'T56801', agency: { description: 'Leeds' } },
     ])
 
     prisonApi.getOffenceHistory.mockResolvedValue([
@@ -143,7 +146,23 @@ describe('prisoner sentence and release', () => {
       },
       {
         offenceDescription: 'Offence 2',
+        primaryResultCode: '4560',
         caseId: 2,
+      },
+      {
+        offenceDescription: 'Offence 3',
+        primaryResultCode: '1501',
+        caseId: 3,
+      },
+      {
+        offenceDescription: 'Offence 4',
+        primaryResultCode: '1510',
+        caseId: 4,
+      },
+      {
+        offenceDescription: 'Offence 5',
+        primaryResultCode: '1024',
+        caseId: 5,
       },
     ])
 
@@ -175,6 +194,45 @@ describe('prisoner sentence and release', () => {
         sentenceTermCode: 'IMP',
         sentenceTypeDescription: 'Some sentence info 2',
       },
+      {
+        lineSeq: 3,
+        sentenceSequence: 4,
+        termSequence: 1,
+        sentenceStartDate: '2018-12-31',
+        years: 0,
+        months: 12,
+        weeks: 0,
+        days: 0,
+        caseId: 3,
+        sentenceTermCode: 'IMP',
+        sentenceTypeDescription: 'Some sentence info 3',
+      },
+      {
+        lineSeq: 4,
+        sentenceSequence: 5,
+        termSequence: 1,
+        sentenceStartDate: '2018-12-31',
+        years: 0,
+        months: 0,
+        weeks: 50,
+        days: 0,
+        caseId: 4,
+        sentenceTermCode: 'IMP',
+        sentenceTypeDescription: 'Some sentence info 4',
+      },
+      {
+        lineSeq: 5,
+        sentenceSequence: 6,
+        termSequence: 1,
+        sentenceStartDate: '2018-12-31',
+        years: 2,
+        months: 0,
+        weeks: 0,
+        days: 0,
+        caseId: 5,
+        sentenceTermCode: 'IMP',
+        sentenceTypeDescription: 'Some sentence info 5',
+      },
     ])
 
     await controller(req, res)
@@ -197,6 +255,54 @@ describe('prisoner sentence and release', () => {
                   { label: 'Start date', value: '31 December 2018' },
                   { label: 'Imprisonment', value: '11 years' },
                   { label: 'Consecutive to', value: 2 },
+                ],
+              },
+            ],
+          },
+          {
+            caseInfoNumber: 'T56799',
+            offences: ['Offence 3'],
+            sentenceDate: '31 December 2018',
+            courtName: 'Leeds',
+            sentenceTerms: [
+              {
+                sentenceHeader: 'Sentence 3',
+                sentenceTypeDescription: 'Some sentence info 3',
+                summaryDetailRows: [
+                  { label: 'Start date', value: '31 December 2018' },
+                  { label: 'Imprisonment', value: '12 months' },
+                ],
+              },
+            ],
+          },
+          {
+            caseInfoNumber: 'T56800',
+            offences: ['Offence 4'],
+            sentenceDate: '31 December 2018',
+            courtName: 'Leeds',
+            sentenceTerms: [
+              {
+                sentenceHeader: 'Sentence 4',
+                sentenceTypeDescription: 'Some sentence info 4',
+                summaryDetailRows: [
+                  { label: 'Start date', value: '31 December 2018' },
+                  { label: 'Imprisonment', value: '50 weeks' },
+                ],
+              },
+            ],
+          },
+          {
+            caseInfoNumber: 'T56801',
+            offences: ['Offence 5'],
+            sentenceDate: '31 December 2018',
+            courtName: 'Leeds',
+            sentenceTerms: [
+              {
+                sentenceHeader: 'Sentence 5',
+                sentenceTypeDescription: 'Some sentence info 5',
+                summaryDetailRows: [
+                  { label: 'Start date', value: '31 December 2018' },
+                  { label: 'Imprisonment', value: '2 years' },
                 ],
               },
             ],
