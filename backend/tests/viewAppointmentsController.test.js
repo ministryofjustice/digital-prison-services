@@ -77,6 +77,7 @@ describe('View appointments', () => {
       await controller(req, res)
 
       expect(res.render).toHaveBeenCalledWith('viewAppointments.njk', {
+        dpsUrl: 'http://localhost:3000/',
         appointmentRows: [],
         date: '01/01/2020',
         formattedDate: '1 January 2020',
