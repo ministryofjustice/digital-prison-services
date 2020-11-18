@@ -2,6 +2,7 @@ const moment = require('moment')
 const { serviceUnavailableMessage } = require('../../common-messages')
 const {
   formatName,
+  formatTimestampToDate,
   formatTimestampToDateTime,
   sortByDateTime,
   putLastNameFirst,
@@ -46,8 +47,8 @@ module.exports = ({ oauthApi, prisonApi, logError, page = 0 }) => async (req, re
 
     const cellData = await Promise.all(
       cells
-        .sort((left, right) => sortByDateTime(right.assignmentDateTime, left.assignmentDateTime))
         .filter(cell => cell.assignmentEndDateTime)
+        .sort((left, right) => sortByDateTime(right.assignmentDateTime, left.assignmentDateTime))
         .map(async cell => {
           const staffDetails = await prisonApi.getStaffDetails(res.locals, cell.movementMadeBy)
           const agency = agencyData.find(agencyDetails => cell.agencyId === agencyDetails.agencyId)
@@ -71,8 +72,8 @@ module.exports = ({ oauthApi, prisonApi, logError, page = 0 }) => async (req, re
     return res.render('prisonerProfile/prisonerCellHistory.njk', {
       cellHistoryGroupedByAgency: hasLength(cellData)
         ? Object.entries(groupBy(cellData, 'establishment')).map(([key, value]) => {
-            const fromDateString = value[0].movedIn.split(' -')[0]
-            const toDateString = value.slice(-1)[0].movedOut.split(' -')[0]
+            const fromDateString = formatTimestampToDate(value[0].assignmentDateTime)
+            const toDateString = formatTimestampToDate(value.slice(-1)[0].assignmentEndDateTime)
 
             return {
               name: key,

@@ -39,6 +39,18 @@ describe('Prisoner cell history', () => {
           movementMadeBy: 'STAFF_1',
         },
         {
+          agencyId: 'MDI',
+          assignmentDate: '2020-01-01',
+          assignmentDateTime: '2020-01-01T12:48:33.375Z',
+          assignmentEndDate: '2020-02-01',
+          assignmentEndDateTime: '2020-02-01T12:48:33.375Z',
+          assignmentReason: 'ADM',
+          bookingId,
+          description: 'MDI-1-02',
+          livingUnitId: 2,
+          movementMadeBy: 'STAFF_3',
+        },
+        {
           agencyId: 'RNI',
           assignmentDate: '2020-02-01',
           assignmentDateTime: '2020-02-01T12:48:33.375Z',
@@ -66,7 +78,7 @@ describe('Prisoner cell history', () => {
     expect(prisonApi.getOffenderCellHistory).toHaveBeenCalledWith(res.locals, bookingId, { page: 0, size: 10000 })
     expect(prisonApi.getAgencyDetails.mock.calls.length).toBe(2)
     expect(prisonApi.getInmatesAtLocation).toHaveBeenCalledWith(res.locals, 1, {})
-    expect(prisonApi.getStaffDetails.mock.calls.length).toBe(1)
+    expect(prisonApi.getStaffDetails.mock.calls.length).toBe(2)
     expect(prisonApi.getStaffDetails).toHaveBeenCalledWith(res.locals, 'STAFF_2')
   })
 
@@ -102,6 +114,23 @@ describe('Prisoner cell history', () => {
                   movedBy: 'John Smith',
                   movedIn: '01/02/2020 - 12:48',
                   movedOut: '01/03/2020 - 12:48',
+                },
+              ],
+            },
+            {
+              name: 'Moorland',
+              datePeriod: 'from 01/01/2020 to 01/02/2020',
+              cellHistory: [
+                {
+                  agencyId: 'MDI',
+                  assignmentDateTime: '2020-01-01T12:48:33',
+                  assignmentEndDateTime: '2020-02-01T12:48:33',
+                  establishment: 'Moorland',
+                  livingUnitId: 2,
+                  location: '1-02',
+                  movedBy: 'John Smith',
+                  movedIn: '01/01/2020 - 12:48',
+                  movedOut: '01/02/2020 - 12:48',
                 },
               ],
             },
