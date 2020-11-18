@@ -1,3 +1,6 @@
+const {
+  app: { notmEndpointUrl: dpsUrl },
+} = require('../../config')
 const { raiseAnalyticsEvent } = require('../../raiseAnalyticsEvent')
 
 const { properCaseName, putLastNameFirst } = require('../../utils')
@@ -19,6 +22,7 @@ module.exports = ({ prisonApi, whereaboutsApi, logError }) => {
     const { firstName, lastName } = await prisonApi.getDetails(res.locals, offenderNo)
 
     return res.render('cellMove/confirmCellMove.njk', {
+      dpsUrl,
       showWarning: cellId !== 'C-SWAP',
       offenderNo,
       description,

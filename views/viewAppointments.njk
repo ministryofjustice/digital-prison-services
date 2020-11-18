@@ -11,10 +11,21 @@
 {% set htmlClasses = "printed-page" %}
 
 {% block beforeContent %}
-  {{ govukBackLink({
-      text: "Back",
-      href: "/",
-      classes: "govuk-!-display-none-print"
+  {{ govukBreadcrumbs({
+    items: [
+      {
+        text: "Home",
+        href: dpsUrl
+      },
+      {
+        text: "Manage prisoner whereabouts",
+        href: "/manage-prisoner-whereabouts"
+      },
+      {
+        text: 'Appointments'
+      }
+    ],
+    classes: "govuk-!-display-none-print"
   }) }}
 {% endblock %}
 

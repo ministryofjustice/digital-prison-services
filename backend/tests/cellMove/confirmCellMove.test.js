@@ -70,6 +70,7 @@ describe('Change cell play back details', () => {
       await controller.index(req, res)
 
       expect(res.render).toHaveBeenCalledWith('cellMove/confirmCellMove.njk', {
+        dpsUrl: 'http://localhost:3000/',
         breadcrumbPrisonerName: 'Doe, Bob',
         cellId: 223,
         description: 'MDI-10',
@@ -95,6 +96,7 @@ describe('Change cell play back details', () => {
       await controller.index(req, res)
 
       expect(res.render).toHaveBeenCalledWith('cellMove/confirmCellMove.njk', {
+        dpsUrl: 'http://localhost:3000/',
         breadcrumbPrisonerName: 'Doe, Bob',
         cellId: 'C-SWAP',
         description: 'swap',
