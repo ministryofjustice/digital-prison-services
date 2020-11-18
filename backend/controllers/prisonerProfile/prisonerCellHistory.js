@@ -2,10 +2,13 @@ const moment = require('moment')
 const { serviceUnavailableMessage } = require('../../common-messages')
 const {
   formatName,
+  formatTimestampToDate,
   formatTimestampToDateTime,
   sortByDateTime,
   putLastNameFirst,
   extractLocation,
+  groupBy,
+  hasLength,
 } = require('../../utils')
 const {
   app: { notmEndpointUrl: dpsUrl },
@@ -42,27 +45,43 @@ module.exports = ({ oauthApi, prisonApi, logError, page = 0 }) => async (req, re
 
     const today = moment().format('YYYY-MM-DDTHH:mm:ss')
 
-    const cellData = cells
-      .sort((left, right) => sortByDateTime(right.assignmentDateTime, left.assignmentDateTime))
-      .filter(cell => cell.assignmentEndDateTime)
-      .map(cell => {
-        const agency = agencyData.find(agencyDetails => cell.agencyId === agencyDetails.agencyId)
-        return {
-          establishment: agency.description,
-          location: extractLocation(cell.description, cell.agencyId),
-          movedIn: cell.assignmentDateTime && formatTimestampToDateTime(cell.assignmentDateTime),
-          movedOut: cell.assignmentEndDateTime && formatTimestampToDateTime(cell.assignmentEndDateTime),
-          assignmentDateTime: moment(cell.assignmentDateTime).format('YYYY-MM-DDTHH:mm:ss'),
-          assignmentEndDateTime: cell.assignmentEndDateTime
-            ? moment(cell.assignmentEndDateTime).format('YYYY-MM-DDTHH:mm:ss')
-            : today,
-          livingUnitId: cell.livingUnitId,
-          agencyId: cell.agencyId,
-        }
-      })
+    const cellData = await Promise.all(
+      cells
+        .filter(cell => cell.assignmentEndDateTime)
+        .sort((left, right) => sortByDateTime(right.assignmentDateTime, left.assignmentDateTime))
+        .map(async cell => {
+          const staffDetails = await prisonApi.getStaffDetails(res.locals, cell.movementMadeBy)
+          const agency = agencyData.find(agencyDetails => cell.agencyId === agencyDetails.agencyId)
+
+          return {
+            establishment: agency.description,
+            location: extractLocation(cell.description, cell.agencyId),
+            movedIn: cell.assignmentDateTime && formatTimestampToDateTime(cell.assignmentDateTime),
+            movedOut: cell.assignmentEndDateTime && formatTimestampToDateTime(cell.assignmentEndDateTime),
+            assignmentDateTime: moment(cell.assignmentDateTime).format('YYYY-MM-DDTHH:mm:ss'),
+            assignmentEndDateTime: cell.assignmentEndDateTime
+              ? moment(cell.assignmentEndDateTime).format('YYYY-MM-DDTHH:mm:ss')
+              : today,
+            livingUnitId: cell.livingUnitId,
+            agencyId: cell.agencyId,
+            movedBy: formatName(staffDetails.firstName, staffDetails.lastName),
+          }
+        })
+    )
 
     return res.render('prisonerProfile/prisonerCellHistory.njk', {
-      cellData,
+      cellHistoryGroupedByAgency: hasLength(cellData)
+        ? Object.entries(groupBy(cellData, 'establishment')).map(([key, value]) => {
+            const fromDateString = formatTimestampToDate(value[0].assignmentDateTime)
+            const toDateString = formatTimestampToDate(value.slice(-1)[0].assignmentEndDateTime)
+
+            return {
+              name: key,
+              datePeriod: `from ${fromDateString} to ${toDateString}`,
+              cellHistory: value,
+            }
+          })
+        : [],
       currentLocation: {
         establishment: agencyData.find(agencyDetails => currentLocation.agencyId === agencyDetails.agencyId)
           .description,
