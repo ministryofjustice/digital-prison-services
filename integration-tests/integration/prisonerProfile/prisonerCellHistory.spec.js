@@ -75,6 +75,7 @@ context('Prisoner cell history', () => {
       prisonerCellHistoryPage.cellMoveButton().should('not.be.visible')
       prisonerCellHistoryPage
         .cellDetailsLink()
+        .should('contain.text', 'View details for location 1-02')
         .should('have.attr', 'href')
         .and(
           'include',
@@ -98,6 +99,7 @@ context('Prisoner cell history', () => {
             expect($tableCells.get(3)).to.contain('Staff Two')
             cy.get($tableCells.get(4))
               .find('a')
+              .should('contain.text', 'View details for location 1-03')
               .should('have.attr', 'href')
               .and(
                 'include',
