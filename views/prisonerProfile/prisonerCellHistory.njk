@@ -71,7 +71,7 @@
     {% endif %}
     <div class="horizontal-information__item">
       <a href="{{ './location-history?fromDate=' + currentLocation.assignmentDateTime + '&toDate=' + currentLocation.assignmentEndDateTime + '&locationId=' + currentLocation.livingUnitId + '&agencyId=' + currentLocation.agencyId }}" class="govuk-link govuk-body" data-test="cell-details-link">
-      View details
+      View details<span class="govuk-visually-hidden"> for location {{ currentLocation.location }}</span>
       </a>
     </div>
   </div>
@@ -87,7 +87,7 @@
         { text: cell.movedIn },
         { text: cell.movedOut },
         { text: cell.movedBy },
-        { html: '<a href="' + './location-history?fromDate=' + cell.assignmentDateTime + '&toDate=' + cell.assignmentEndDateTime + '&locationId=' + cell.livingUnitId + '&agencyId=' + cell.agencyId + '" class="govuk-link">View details</a>' if cell.location !== 'Reception' }
+        { html: '<a href="' + './location-history?fromDate=' + cell.assignmentDateTime + '&toDate=' + cell.assignmentEndDateTime + '&locationId=' + cell.livingUnitId + '&agencyId=' + cell.agencyId + '" class="govuk-link">View details<span class="govuk-visually-hidden"> for location ' + cell.location + '</span></a>' if cell.location !== 'Reception' }
       ]), rows) %}
     {% endfor %}
 
