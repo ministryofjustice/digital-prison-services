@@ -72,8 +72,8 @@ module.exports = ({ oauthApi, prisonApi, logError, page = 0 }) => async (req, re
     return res.render('prisonerProfile/prisonerCellHistory.njk', {
       cellHistoryGroupedByAgency: hasLength(cellData)
         ? Object.entries(groupBy(cellData, 'establishment')).map(([key, value]) => {
-            const fromDateString = formatTimestampToDate(value[0].assignmentDateTime)
-            const toDateString = formatTimestampToDate(value.slice(-1)[0].assignmentEndDateTime)
+            const fromDateString = formatTimestampToDate(value.slice(-1)[0].assignmentDateTime)
+            const toDateString = formatTimestampToDate(value[0].assignmentEndDateTime)
 
             return {
               name: key,
