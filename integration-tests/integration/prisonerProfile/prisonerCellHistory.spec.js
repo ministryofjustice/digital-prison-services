@@ -63,8 +63,6 @@ context('Prisoner cell history', () => {
       })
       cy.task('stubStaff', { staffId: 'STAFF_1', details: { firstName: 'Staff', lastName: 'One' } })
       cy.task('stubStaff', { staffId: 'STAFF_2', details: { firstName: 'Staff', lastName: 'Two' } })
-      cy.task('stubStaff', { staffId: 'STAFF_3', details: { firstName: 'Staff', lastName: 'Two' } })
-      cy.task('stubStaff', { staffId: 'STAFF_3', details: { firstName: 'Staff', lastName: 'Two' } })
     })
 
     it('should load the data correcly when one other occupant', () => {

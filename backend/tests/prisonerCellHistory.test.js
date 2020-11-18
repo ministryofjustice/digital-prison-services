@@ -81,7 +81,7 @@ describe('Prisoner cell history', () => {
 
     controller = prisonerCellHistory({ oauthApi, prisonApi, logError })
 
-    jest.spyOn(Date, 'now').mockImplementation(() => 1603988100000) // Friday, 29 Oct 2020 16:15 UTC (avoid BST)20_10_29_16_06
+    jest.spyOn(Date, 'now').mockImplementation(() => 1603988100000) // Friday, 29 Oct 2020 16:15 UTC (avoid BST)
   })
 
   afterEach(() => {
@@ -97,6 +97,7 @@ describe('Prisoner cell history', () => {
     expect(prisonApi.getInmatesAtLocation).toHaveBeenCalledWith(res.locals, 1, {})
     expect(prisonApi.getStaffDetails.mock.calls.length).toBe(3)
     expect(prisonApi.getStaffDetails).toHaveBeenCalledWith(res.locals, 'STAFF_2')
+    expect(prisonApi.getStaffDetails).toHaveBeenCalledWith(res.locals, 'STAFF_3')
   })
 
   describe('cell history for offender', () => {
