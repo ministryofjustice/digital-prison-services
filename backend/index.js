@@ -5,7 +5,6 @@ require('dotenv').config()
 require('./azure-appinsights')
 
 const express = require('express')
-const helmet = require('helmet')
 const csrf = require('csurf')
 
 const app = express()
@@ -35,12 +34,6 @@ app.set('view engine', 'njk')
 
 nunjucksSetup(app)
 phaseNameSetup(app, config)
-
-app.use(
-  helmet({
-    referrerPolicy: { policy: 'no-referrer-when-downgrade' },
-  })
-)
 
 app.use(setupBodyParsers())
 app.use(setupHealthChecks())
