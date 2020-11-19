@@ -26,8 +26,8 @@ context('Prisoner cell history', () => {
           content: [
             {
               agencyId: 'MDI',
-              assignmentDate: '2020-09-01',
-              assignmentDateTime: '2020-09-01T12:48:33.375Z',
+              assignmentDate: '2020-05-01',
+              assignmentDateTime: '2020-05-01T12:48:33.375Z',
               assignmentReason: 'ADM',
               bookingId: 123,
               description: 'MDI-1-02',
@@ -36,33 +36,32 @@ context('Prisoner cell history', () => {
             },
             {
               agencyId: 'MDI',
-              assignmentDate: '2020-08-01',
-              assignmentDateTime: '2020-08-01T12:48:33.375Z',
-              assignmentEndDate: '2020-09-01',
-              assignmentEndDateTime: '2020-09-01T12:48:33.375Z',
+              assignmentDate: '2020-03-01',
+              assignmentDateTime: '2020-03-01T12:48:33.375Z',
+              assignmentEndDate: '2020-04-01',
+              assignmentEndDateTime: '2020-04-01T12:48:33.375Z',
               assignmentReason: 'ADM',
               bookingId: 123,
-              description: 'MDI-1-03',
-              livingUnitId: 3,
+              description: 'MDI-RECP',
+              livingUnitId: 2,
               movementMadeBy: 'STAFF_2',
             },
             {
               agencyId: 'MDI',
-              assignmentDate: '2020-08-01',
-              assignmentDateTime: '2020-08-01T10:48:33.375Z',
-              assignmentEndDate: '2020-09-01',
-              assignmentEndDateTime: '2020-09-01T11:48:33.375Z',
+              assignmentDate: '2020-04-01',
+              assignmentDateTime: '2020-04-01T12:48:33.375Z',
+              assignmentEndDate: '2020-05-01',
+              assignmentEndDateTime: '2020-05-01T12:48:33.375Z',
               assignmentReason: 'ADM',
               bookingId: 123,
-              description: 'MDI-RECP',
-              livingUnitId: 4,
+              description: 'MDI-1-03',
+              livingUnitId: 3,
               movementMadeBy: 'STAFF_1',
             },
           ],
         },
       })
       cy.task('stubStaff', { staffId: 'STAFF_1', details: { firstName: 'Staff', lastName: 'One' } })
-      cy.task('stubStaff', { staffId: 'STAFF_2', details: { firstName: 'Staff', lastName: 'Two' } })
       cy.task('stubStaff', { staffId: 'STAFF_2', details: { firstName: 'Staff', lastName: 'Two' } })
     })
 
@@ -79,11 +78,11 @@ context('Prisoner cell history', () => {
         .should('have.attr', 'href')
         .and(
           'include',
-          `/location-history?fromDate=2020-09-01T12:48:33&toDate=${moment().format(
+          `/location-history?fromDate=2020-05-01T12:48:33&toDate=${moment().format(
             'YYYY-MM-DDTHH:mm:ss'
           )}&locationId=1&agencyId=MDI`
         )
-      prisonerCellHistoryPage.agencyHeading().contains('Moorland from 01/08/2020 to 01/09/2020')
+      prisonerCellHistoryPage.agencyHeading().contains('Moorland from 01/03/2020 to 01/05/2020')
 
       prisonerCellHistoryPage.results().then($table => {
         cy.get($table)
@@ -94,21 +93,21 @@ context('Prisoner cell history', () => {
               .should('eq', 10) // 2 rows with 5 cells
 
             expect($tableCells.get(0)).to.contain('1-03')
-            expect($tableCells.get(1)).to.contain(moment('2020-08-01T12:48:33.375Z').format('DD/MM/YYYY - HH:mm'))
-            expect($tableCells.get(2)).to.contain(moment('2020-09-01T12:48:33.375Z').format('DD/MM/YYYY - HH:mm'))
-            expect($tableCells.get(3)).to.contain('Staff Two')
+            expect($tableCells.get(1)).to.contain(moment('2020-04-01T12:48:33.375Z').format('DD/MM/YYYY - HH:mm'))
+            expect($tableCells.get(2)).to.contain(moment('2020-05-01T12:48:33.375Z').format('DD/MM/YYYY - HH:mm'))
+            expect($tableCells.get(3)).to.contain('Staff One')
             cy.get($tableCells.get(4))
               .find('a')
               .should('contain.text', 'View details for location 1-03')
               .should('have.attr', 'href')
               .and(
                 'include',
-                '/location-history?fromDate=2020-08-01T12:48:33&toDate=2020-09-01T12:48:33&locationId=3&agencyId=MDI'
+                '/location-history?fromDate=2020-04-01T12:48:33&toDate=2020-05-01T12:48:33&locationId=3&agencyId=MDI'
               )
             expect($tableCells.get(5)).to.contain('Reception')
-            expect($tableCells.get(6)).to.contain(moment('2020-08-01T10:48:33.375Z').format('DD/MM/YYYY - HH:mm'))
-            expect($tableCells.get(7)).to.contain(moment('2020-09-01T11:48:33.375Z').format('DD/MM/YYYY - HH:mm'))
-            expect($tableCells.get(8)).to.contain('Staff One')
+            expect($tableCells.get(6)).to.contain(moment('2020-03-01T12:48:33.375Z').format('DD/MM/YYYY - HH:mm'))
+            expect($tableCells.get(7)).to.contain(moment('2020-04-01T12:48:33.375Z').format('DD/MM/YYYY - HH:mm'))
+            expect($tableCells.get(8)).to.contain('Staff Two')
             expect($tableCells.get(9)).to.contain('')
           })
       })

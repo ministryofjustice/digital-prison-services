@@ -1,4 +1,3 @@
-const moment = require('moment')
 const prisonerCellHistory = require('../controllers/prisonerProfile/prisonerCellHistory')
 
 describe('Prisoner cell history', () => {
@@ -29,28 +28,6 @@ describe('Prisoner cell history', () => {
     prisonApi.getOffenderCellHistory = jest.fn().mockResolvedValue({
       content: [
         {
-          agencyId: 'MDI',
-          assignmentDate: '2020-03-01',
-          assignmentDateTime: '2020-03-01T12:48:33.375Z', // Avoid BST
-          assignmentReason: 'ADM',
-          bookingId,
-          description: 'MDI-1-02',
-          livingUnitId: 1,
-          movementMadeBy: 'STAFF_1',
-        },
-        {
-          agencyId: 'MDI',
-          assignmentDate: '2020-01-01',
-          assignmentDateTime: '2020-01-01T12:48:33.375Z',
-          assignmentEndDate: '2020-02-01',
-          assignmentEndDateTime: '2020-02-01T12:48:33.375Z',
-          assignmentReason: 'ADM',
-          bookingId,
-          description: 'MDI-1-02',
-          livingUnitId: 2,
-          movementMadeBy: 'STAFF_3',
-        },
-        {
           agencyId: 'RNI',
           assignmentDate: '2020-02-01',
           assignmentDateTime: '2020-02-01T12:48:33.375Z',
@@ -62,6 +39,40 @@ describe('Prisoner cell history', () => {
           livingUnitId: 3,
           movementMadeBy: 'STAFF_2',
         },
+        {
+          agencyId: 'MDI',
+          assignmentDate: '2020-05-01',
+          assignmentDateTime: '2020-05-01T12:48:33.375Z', // Avoid BST
+          assignmentReason: 'ADM',
+          bookingId,
+          description: 'MDI-1-02',
+          livingUnitId: 1,
+          movementMadeBy: 'STAFF_1',
+        },
+        {
+          agencyId: 'MDI',
+          assignmentDate: '2020-03-01',
+          assignmentDateTime: '2020-03-01T12:48:33.375Z',
+          assignmentEndDate: '2020-04-01',
+          assignmentEndDateTime: '2020-04-01T12:48:33.375Z',
+          assignmentReason: 'ADM',
+          bookingId,
+          description: 'MDI-1-02',
+          livingUnitId: 2,
+          movementMadeBy: 'STAFF_3',
+        },
+        {
+          agencyId: 'MDI',
+          assignmentDate: '2020-04-01',
+          assignmentDateTime: '2020-04-01T12:48:33.375Z',
+          assignmentEndDate: '2020-05-01',
+          assignmentEndDateTime: '2020-05-01T12:48:33.375Z',
+          assignmentReason: 'ADM',
+          bookingId,
+          description: 'MDI-1-03',
+          livingUnitId: 2,
+          movementMadeBy: 'STAFF_3',
+        },
       ],
     })
     prisonApi.getAgencyDetails = jest.fn().mockResolvedValue([])
@@ -69,6 +80,12 @@ describe('Prisoner cell history', () => {
     prisonApi.getStaffDetails = jest.fn().mockResolvedValue({ bookingId, firstName: 'John', lastName: 'Smith' })
 
     controller = prisonerCellHistory({ oauthApi, prisonApi, logError })
+
+    jest.spyOn(Date, 'now').mockImplementation(() => 1603988100000) // Friday, 29 Oct 2020 16:15 UTC (avoid BST)
+  })
+
+  afterEach(() => {
+    Date.now.mockRestore()
   })
 
   it('should make the expected API calls', async () => {
@@ -78,8 +95,9 @@ describe('Prisoner cell history', () => {
     expect(prisonApi.getOffenderCellHistory).toHaveBeenCalledWith(res.locals, bookingId, { page: 0, size: 10000 })
     expect(prisonApi.getAgencyDetails.mock.calls.length).toBe(2)
     expect(prisonApi.getInmatesAtLocation).toHaveBeenCalledWith(res.locals, 1, {})
-    expect(prisonApi.getStaffDetails.mock.calls.length).toBe(2)
+    expect(prisonApi.getStaffDetails.mock.calls.length).toBe(3)
     expect(prisonApi.getStaffDetails).toHaveBeenCalledWith(res.locals, 'STAFF_2')
+    expect(prisonApi.getStaffDetails).toHaveBeenCalledWith(res.locals, 'STAFF_3')
   })
 
   describe('cell history for offender', () => {
@@ -96,64 +114,71 @@ describe('Prisoner cell history', () => {
     it('sends the right data to the template', async () => {
       await controller(req, res)
 
-      expect(res.render).toHaveBeenCalledWith(
-        'prisonerProfile/prisonerCellHistory.njk',
-        expect.objectContaining({
-          cellHistoryGroupedByAgency: [
-            {
-              name: 'Ranby',
-              datePeriod: 'from 01/02/2020 to 01/03/2020',
-              cellHistory: [
-                {
-                  agencyId: 'RNI',
-                  assignmentDateTime: '2020-02-01T12:48:33',
-                  assignmentEndDateTime: '2020-03-01T12:48:33',
-                  establishment: 'Ranby',
-                  livingUnitId: 3,
-                  location: '1-03',
-                  movedBy: 'John Smith',
-                  movedIn: '01/02/2020 - 12:48',
-                  movedOut: '01/03/2020 - 12:48',
-                },
-              ],
-            },
-            {
-              name: 'Moorland',
-              datePeriod: 'from 01/01/2020 to 01/02/2020',
-              cellHistory: [
-                {
-                  agencyId: 'MDI',
-                  assignmentDateTime: '2020-01-01T12:48:33',
-                  assignmentEndDateTime: '2020-02-01T12:48:33',
-                  establishment: 'Moorland',
-                  livingUnitId: 2,
-                  location: '1-02',
-                  movedBy: 'John Smith',
-                  movedIn: '01/01/2020 - 12:48',
-                  movedOut: '01/02/2020 - 12:48',
-                },
-              ],
-            },
-          ],
-          occupants: [
-            {
-              name: 'Offender, Another',
-              profileUrl: '/prisoner/B12345',
-            },
-          ],
-          currentLocation: {
-            agencyId: 'MDI',
-            assignmentDateTime: '2020-03-01T12:48:33',
-            assignmentEndDateTime: moment().format('YYYY-MM-DDTHH:mm:ss'),
-            establishment: 'Moorland',
-            livingUnitId: 1,
-            location: '1-02',
-            movedIn: '01/03/2020 - 12:48',
+      expect(res.render).toHaveBeenCalledWith('prisonerProfile/prisonerCellHistory.njk', {
+        breadcrumbPrisonerName: 'Smith, John',
+        canViewCellMoveButton: false,
+        cellHistoryGroupedByAgency: [
+          {
+            name: 'Moorland',
+            datePeriod: 'from 01/03/2020 to 01/05/2020',
+            cellHistory: [
+              {
+                agencyId: 'MDI',
+                assignmentDateTime: '2020-04-01T12:48:33',
+                assignmentEndDateTime: '2020-05-01T12:48:33',
+                establishment: 'Moorland',
+                livingUnitId: 2,
+                location: '1-03',
+                movedBy: 'John Smith',
+                movedIn: '01/04/2020 - 12:48',
+                movedOut: '01/05/2020 - 12:48',
+              },
+              {
+                agencyId: 'MDI',
+                assignmentDateTime: '2020-03-01T12:48:33',
+                assignmentEndDateTime: '2020-04-01T12:48:33',
+                establishment: 'Moorland',
+                livingUnitId: 2,
+                location: '1-02',
+                movedBy: 'John Smith',
+                movedIn: '01/03/2020 - 12:48',
+                movedOut: '01/04/2020 - 12:48',
+              },
+            ],
           },
-          canViewCellMoveButton: false,
-          prisonerName: 'John Smith',
-        })
-      )
+          {
+            name: 'Ranby',
+            datePeriod: 'from 01/02/2020 to 01/03/2020',
+            cellHistory: [
+              {
+                agencyId: 'RNI',
+                assignmentDateTime: '2020-02-01T12:48:33',
+                assignmentEndDateTime: '2020-03-01T12:48:33',
+                establishment: 'Ranby',
+                livingUnitId: 3,
+                location: '1-03',
+                movedBy: 'John Smith',
+                movedIn: '01/02/2020 - 12:48',
+                movedOut: '01/03/2020 - 12:48',
+              },
+            ],
+          },
+        ],
+        changeCellLink: '/prisoner/ABC123/cell-move/select-location',
+        currentLocation: {
+          agencyId: 'MDI',
+          assignmentDateTime: '2020-05-01T12:48:33',
+          assignmentEndDateTime: '2020-10-29T16:15:00',
+          establishment: 'Moorland',
+          livingUnitId: 1,
+          location: '1-02',
+          movedIn: '01/05/2020 - 12:48',
+        },
+        dpsUrl: 'http://localhost:3000/',
+        occupants: [{ name: 'Offender, Another', profileUrl: '/prisoner/B12345' }],
+        prisonerName: 'John Smith',
+        profileUrl: '/prisoner/ABC123',
+      })
     })
 
     it('sets the cell move correctly if role exists', async () => {
