@@ -19,6 +19,7 @@ module.exports = () => {
         includeSubDomains: true,
         preload: true,
       },
+      referrerPolicy: { policy: 'no-referrer-when-downgrade' },
     })
   )
 
