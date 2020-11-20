@@ -365,6 +365,9 @@ const prisonApiFactory = client => {
 
   const moveToCellSwap = (context, { bookingId }) => put(context, `/api/bookings/${bookingId}/move-to-cell-swap`, {})
 
+  const getOffenderDamageObligations = (context, offenderNo) =>
+    get(context, `/api/offenders/${offenderNo}/damage-obligations`)
+
   return {
     userLocations,
     userCaseLoads,
@@ -473,6 +476,7 @@ const prisonApiFactory = client => {
     getInmatesAtLocation,
     getInmatesAtLocationPrefix,
     moveToCellSwap,
+    getOffenderDamageObligations,
   }
 }
 
