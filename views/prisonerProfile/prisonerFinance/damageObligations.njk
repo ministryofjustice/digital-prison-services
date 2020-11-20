@@ -7,17 +7,19 @@
   <h2 class="govuk-heading-m govuk-!-margin-bottom-1">Currently owes</h2>
   <p class="govuk-body-l">{{ totalOwed }}</p>
 
-  {{ govukTable({
-    head: [
-      { text: "Obligation number" },
-      { text: "Adjudication" },
-      { text: "Date" },
-      { text: "Amount" },
-      { text: "Paid" },
-      { text: "Owes" },
-      { text: "Location" }
-    ],
-    rows: rows,
-    attributes: { "data-qa": "damage-obligations-table" }
-  }) }}
+  {% if rows.length %}
+    {{ govukTable({
+      head: [
+        { text: "Obligation number" },
+        { text: "Adjudication" },
+        { text: "Date" },
+        { text: "Amount" },
+        { text: "Paid" },
+        { text: "Owes" },
+        { text: "Location" }
+      ],
+      rows: rows,
+      attributes: { "data-qa": "damage-obligations-table" }
+    }) }}
+  {% endif %}
 {% endblock %}

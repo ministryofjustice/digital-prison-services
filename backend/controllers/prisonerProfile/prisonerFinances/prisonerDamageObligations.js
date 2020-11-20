@@ -23,11 +23,12 @@ module.exports = ({ prisonApi, logError }) => async (req, res) => {
 
     const rows = await Promise.all(
       obligations
+        .filter(obligation => obligation.status === 'ACTIVE')
         .sort((left, right) => sortByDateTime(right.startDateTime, left.startDateTime))
         .map(async obligation => {
-          const prisonDetails = await prisonApi.getAgencyDetails(res.locals, obligation.prisonId)
+          const { description: prisonName } = await prisonApi.getAgencyDetails(res.locals, obligation.prisonId)
 
-          const { amountToPay, amountPaid } = obligation
+          const { amountToPay, amountPaid, comment } = obligation
 
           const balanceRemaining = amountToPay - amountPaid
 
@@ -44,10 +45,11 @@ module.exports = ({ prisonApi, logError }) => async (req, res) => {
             { text: formatCurrency(amountToPay) },
             { text: formatCurrency(amountPaid) },
             { text: formatCurrency(balanceRemaining) },
-            { text: `${prisonDetails.description} - ${obligation.comment || 'Nothing entered'}` },
+            { text: comment ? `${prisonName} - ${comment}` : prisonName },
           ]
         })
     )
+
     return res.render('prisonerProfile/prisonerFinance/damageObligations.njk', {
       dpsUrl,
       prisoner: {
