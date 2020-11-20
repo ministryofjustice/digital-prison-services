@@ -1,0 +1,28 @@
+{% extends "../../../partials/layout.njk" %}
+
+{% set title = "Prisoner’s finance details" %}
+
+{% block beforeContent %}
+  {{ govukBreadcrumbs({
+    items: [
+      {
+          text: "Home",
+          href: dpsUrl
+      },
+      {
+          text: prisoner.nameForBreadcrumb,
+          href: '/prisoner/' + prisoner.offenderNo
+      },
+      {
+          text: 'Finances'
+      }
+    ]
+  }) }}
+{% endblock %}
+
+{% block content %}
+  {% include "../partials/prisonerFinanceTabs.njk" %}
+
+  {% block prisonerFinanceSection %}{% endblock %}
+{% endblock %}
+
