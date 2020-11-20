@@ -399,5 +399,6 @@ module.exports = on => {
     stubTotalCurrentlyOut: ({ agencyId, movements }) => prisonApi.stubTotalCurrentlyOut(agencyId, movements),
     stubGetAgencyIepLevels: response => prisonApi.stubGetAgencyIepLevels(response),
     stubChangeIepLevel: body => prisonApi.stubChangeIepLevel(body),
+    stubGetPrisonerDamageObligations: response => prisonApi.stubGetPrisonerDamageObligations(response),
   })
 }

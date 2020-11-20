@@ -5,7 +5,7 @@
   <h1 class="govuk-heading-l">Damage obligations for {{ prisoner.name }}</h1>
 
   <h2 class="govuk-heading-m govuk-!-margin-bottom-1">Currently owes</h2>
-  <p class="govuk-body-l">{{ totalOwed }}</p>
+  <p class="govuk-body-l" data-test="total-owed">{{ totalOwed }}</p>
 
   {% if rows.length %}
     {{ govukTable({
@@ -19,7 +19,7 @@
         { text: "Location" }
       ],
       rows: rows,
-      attributes: { "data-qa": "damage-obligations-table" }
+      attributes: { "data-test": "damage-obligations-table" }
     }) }}
   {% endif %}
 {% endblock %}

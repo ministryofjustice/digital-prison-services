@@ -1750,4 +1750,18 @@ module.exports = {
       },
     })
   },
+  stubGetPrisonerDamageObligations: response =>
+    stubFor({
+      request: {
+        method: 'GET',
+        urlPattern: '/api/offenders/.+?/damage-obligations',
+      },
+      response: {
+        status: 200,
+        headers: {
+          'Content-Type': 'application/json;charset=UTF-8',
+        },
+        jsonBody: response || { damageObligations: [] },
+      },
+    }),
 }
