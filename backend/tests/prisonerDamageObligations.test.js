@@ -96,8 +96,8 @@ describe('Prisoner damage obligations', () => {
     beforeEach(() => {
       prisonApi.getOffenderDamageObligations.mockResolvedValue(damageObligationsResponse)
       prisonApi.getAgencyDetails
-        .mockResolvedValueOnce({ description: 'Leeds' })
-        .mockResolvedValueOnce({ description: 'Moorland' })
+        .mockResolvedValueOnce({ description: 'Leeds', agencyId: 'LEI' })
+        .mockResolvedValueOnce({ description: 'Moorland', agencyId: 'MDI' })
     })
 
     it('should render the correct template with the correct data', async () => {

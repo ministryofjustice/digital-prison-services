@@ -19,36 +19,36 @@ module.exports = ({ prisonApi, logError }) => async (req, res) => {
     ])
 
     const { damageObligations: obligations } = damageObligations
-    let totalOwed = 0
 
-    const rows = await Promise.all(
-      obligations
-        .filter(obligation => obligation.status === 'ACTIVE')
-        .sort((left, right) => sortByDateTime(right.startDateTime, left.startDateTime))
-        .map(async obligation => {
-          const { description: prisonName } = await prisonApi.getAgencyDetails(res.locals, obligation.prisonId)
-
-          const { amountToPay, amountPaid, comment } = obligation
-
-          const balanceRemaining = amountToPay - amountPaid
-
-          totalOwed += balanceRemaining
-
-          return [
-            { text: obligation.id },
-            { text: obligation.referenceNumber },
-            {
-              text: `${formatTimestampToDate(obligation.startDateTime)} to ${formatTimestampToDate(
-                obligation.endDateTime
-              )}`,
-            },
-            { text: formatCurrency(amountToPay) },
-            { text: formatCurrency(amountPaid) },
-            { text: formatCurrency(balanceRemaining) },
-            { text: comment ? `${prisonName} - ${comment}` : prisonName },
-          ]
-        })
+    const activeObligations = obligations.filter(obligation => obligation.status === 'ACTIVE')
+    const totalOwed = activeObligations.reduce(
+      (total, current) => total + (current.amountToPay - current.amountPaid),
+      0
     )
+    const prisons = await Promise.all(
+      activeObligations.map(obligation => prisonApi.getAgencyDetails(res.locals, obligation.prisonId))
+    )
+
+    const rows = activeObligations
+      .sort((left, right) => sortByDateTime(right.startDateTime, left.startDateTime))
+      .map(obligation => {
+        const { description: prisonName } = prisons.find(prison => prison.agencyId === obligation.prisonId)
+        const { amountToPay, amountPaid, comment } = obligation
+
+        return [
+          { text: obligation.id },
+          { text: obligation.referenceNumber },
+          {
+            text: `${formatTimestampToDate(obligation.startDateTime)} to ${formatTimestampToDate(
+              obligation.endDateTime
+            )}`,
+          },
+          { text: formatCurrency(amountToPay) },
+          { text: formatCurrency(amountPaid) },
+          { text: formatCurrency(amountToPay - amountPaid) },
+          { text: comment ? `${prisonName} - ${comment}` : prisonName },
+        ]
+      })
 
     return res.render('prisonerProfile/prisonerFinance/damageObligations.njk', {
       dpsUrl,
