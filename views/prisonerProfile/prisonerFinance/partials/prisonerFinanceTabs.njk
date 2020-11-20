@@ -1,0 +1,23 @@
+{% set tabs = [
+    { text: 'Damage obligations', path: '/damage-obligations', visible: true, testId: 'damage-obligations' }
+  ]
+%}
+
+<div class="govuk-tabs">
+  <h2 class="govuk-tabs__title">
+    Prisoner finance sections
+  </h2>
+  <ul class="govuk-tabs__list">
+    {% for tab in tabs %}
+      {% if tab.visible %}
+        {% set fullTabPath = '/prisoner/' + prisoner.offenderNo + '/prisoner-finance-details' + tab.path %}
+        {% set isSelected = ' govuk-tabs__list-item--selected' if currentUrlPath.split('?')[0].replace(r/\/$/, '') === fullTabPath %}
+        <li class="{{'govuk-tabs__list-item' + isSelected }}">
+          <a class="govuk-tabs__tab" href="{{ fullTabPath }}" data-test="{{'tabs-' + tab.testId }}">
+          {{ tab.text }}
+          </a>
+        </li>
+      {% endif %}
+    {% endfor %}
+  </ul>
+</div>
