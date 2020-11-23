@@ -75,6 +75,11 @@ context('Prisoner damage obligations', () => {
 
       cy.get('h1').contains('Damage obligations for John Smith')
       cy.get('[data-test="total-owed"]').contains('£274.59')
+      cy.get('[data-test="tabs-damage-obligations"]')
+        .contains('Damage obligations')
+        .should('have.attr', 'aria-label', 'View damage obligations account')
+        .parent()
+        .should('have.class', 'govuk-tabs__list-item--selected')
 
       cy.get('[data-test="damage-obligations-table"]').then($table => {
         cy.get($table)
