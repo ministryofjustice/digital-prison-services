@@ -50,7 +50,7 @@ module.exports = ({ prisonApi, whereaboutsApi, caseNotesApi, logError }) => {
     })
   }
 
-  const makeCellMove = async (res, { cellId, bookingId, agencyId, offenderNo, reasonCode, comment }) => {
+  const makeCellMove = async (res, { cellId, bookingId, agencyId, offenderNo, reasonCode, commentText }) => {
     const { capacity } = await prisonApi.getAttributesForLocation(res.locals, cellId)
     const { locationPrefix, description } = await prisonApi.getLocation(res.locals, cellId)
 
@@ -60,7 +60,7 @@ module.exports = ({ prisonApi, whereaboutsApi, caseNotesApi, logError }) => {
         offenderNo,
         internalLocationDescriptionDestination: locationPrefix,
         cellMoveReasonCode: reasonCode,
-        comment,
+        commentText,
       })
     } catch (error) {
       if (error.status === 400)
@@ -127,7 +127,14 @@ module.exports = ({ prisonApi, whereaboutsApi, caseNotesApi, logError }) => {
 
       if (cellId === 'C-SWAP') return await makeCSwap(res, { agencyId, bookingId, offenderNo })
 
-      return await makeCellMove(res, { cellId, bookingId, agencyId, offenderNo, reasonCode: reason, comment })
+      return await makeCellMove(res, {
+        cellId,
+        bookingId,
+        agencyId,
+        offenderNo,
+        reasonCode: reason,
+        commentText: comment,
+      })
     } catch (error) {
       if (error) logError(req.originalUrl, error, `Failed to make cell move to ${cellId}`)
 

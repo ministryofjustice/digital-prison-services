@@ -66,14 +66,14 @@ const whereaboutsApiFactory = client => {
 
   const moveToCell = (
     context,
-    { bookingId, internalLocationDescriptionDestination, cellMoveReasonCode, comment, offenderNo }
+    { bookingId, internalLocationDescriptionDestination, cellMoveReasonCode, commentText, offenderNo }
   ) =>
     post(context, `/cell/make-cell-move`, {
       bookingId,
       offenderNo,
       cellMoveReasonCode,
       internalLocationDescriptionDestination,
-      comment,
+      commentText,
     })
 
   return {
