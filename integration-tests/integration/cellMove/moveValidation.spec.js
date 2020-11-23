@@ -4,6 +4,14 @@ const ConfirmCellMovePage = require('../../pages/cellMove/confirmCellMovePage')
 const offenderNo = 'A1234A'
 
 context('A user can see conflicts in cell', () => {
+  beforeEach(() => {
+    cy.task('stubCaseNoteTypes', [
+      {
+        code: 'MOVED_CELL',
+        subCodes: [{ code: 'ADM', description: 'Administrative' }, { code: 'BEH', description: 'Behaviour' }],
+      },
+    ])
+  })
   const stubPrisonDetails = () => {
     cy.task('stubPrisonerFullDetail', {
       prisonerDetail: {
