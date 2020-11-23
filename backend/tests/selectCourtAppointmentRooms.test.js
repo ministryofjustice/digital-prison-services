@@ -26,8 +26,8 @@ describe('Select court appointment rooms', () => {
     lastName: 'doe',
     appointmentType: 'VLB',
     locationId: 1,
-    startTime: '2017-10-10T11:00',
-    endTime: '2017-10-10T14:00',
+    startTime: '2017-10-10T11:00:00',
+    endTime: '2017-10-10T14:00:00',
     recurring: 'No',
     comment: 'Test',
     locationDescription: 'Room 3',
@@ -55,7 +55,7 @@ describe('Select court appointment rooms', () => {
 
     oauthApi.userEmail = jest.fn()
 
-    whereaboutsApi.addVideoLinkAppointment = jest.fn()
+    whereaboutsApi.addVideoLinkBooking = jest.fn()
 
     appointmentsService.getAppointmentOptions = jest.fn()
     appointmentsService.getLocations = jest.fn()
@@ -166,10 +166,10 @@ describe('Select court appointment rooms', () => {
         {
           agencyId: 'MDI',
           date: '10/10/2017',
-          endTime: '2017-10-10T14:00',
+          endTime: '2017-10-10T14:00:00',
           postAppointmentRequired: 'yes',
           preAppointmentRequired: 'yes',
-          startTime: '2017-10-10T11:00',
+          startTime: '2017-10-10T11:00:00',
         }
       )
     })
@@ -327,13 +327,13 @@ describe('Select court appointment rooms', () => {
     })
   })
 
-  describe('createAppointments', () => {
+  describe('createBooking', () => {
     beforeEach(() => {
       req.flash.mockImplementation(() => [
         {
           ...appointmentDetails,
-          startTime: '2017-10-10T11:00',
-          endTime: '2017-10-10T14:00',
+          startTime: '2017-10-10T11:00:00',
+          endTime: '2017-10-10T14:00:00',
         },
       ])
 
@@ -346,60 +346,9 @@ describe('Select court appointment rooms', () => {
 
       res.redirect = jest.fn()
     })
-    it('should create main appointment', async () => {
-      const { createAppointments } = selectCourtAppointmentRoomsFactory({
-        prisonApi,
-        whereaboutsApi,
-        appointmentsService,
-        existingEventsService,
-        logError,
-        oauthApi,
-      })
-
-      await createAppointments(req, res)
-
-      expect(whereaboutsApi.addVideoLinkAppointment).toHaveBeenCalledWith(
-        {},
-        {
-          bookingId: 1,
-          court: 'Leeds',
-          hearingType: 'MAIN',
-          comment: 'Test',
-          locationId: 2,
-          startTime: '2017-10-10T11:00',
-          endTime: '2017-10-10T14:00',
-        }
-      )
-    })
-
-    it('should create main pre appointment 20 minutes before main with 20 minute duration', async () => {
-      const { createAppointments } = selectCourtAppointmentRoomsFactory({
-        prisonApi,
-        whereaboutsApi,
-        appointmentsService,
-        existingEventsService,
-        logError,
-        oauthApi,
-      })
-
-      await createAppointments(req, res)
-
-      expect(whereaboutsApi.addVideoLinkAppointment).toHaveBeenCalledWith(
-        {},
-        {
-          bookingId: 1,
-          court: 'Leeds',
-          hearingType: 'PRE',
-          comment: 'Test',
-          locationId: 1,
-          startTime: '2017-10-10T10:40:00',
-          endTime: '2017-10-10T11:00',
-        }
-      )
-    })
 
     it('should create main post appointment 20 minutes after main with 20 minute duration', async () => {
-      const { createAppointments } = selectCourtAppointmentRoomsFactory({
+      const { createBooking } = selectCourtAppointmentRoomsFactory({
         prisonApi,
         whereaboutsApi,
         appointmentsService,
@@ -408,24 +357,36 @@ describe('Select court appointment rooms', () => {
         oauthApi,
       })
 
-      await createAppointments(req, res)
+      await createBooking(req, res)
 
-      expect(whereaboutsApi.addVideoLinkAppointment).toHaveBeenCalledWith(
+      expect(whereaboutsApi.addVideoLinkBooking).toHaveBeenCalledWith(
         {},
         {
           bookingId: 1,
-          court: 'Leeds',
-          hearingType: 'POST',
           comment: 'Test',
-          locationId: 3,
-          startTime: '2017-10-10T14:00',
-          endTime: '2017-10-10T14:20:00',
+          court: 'Leeds',
+          madeByTheCourt: true,
+          main: {
+            endTime: '2017-10-10T14:00:00',
+            locationId: 2,
+            startTime: '2017-10-10T11:00:00',
+          },
+          post: {
+            locationId: 3,
+            startTime: '2017-10-10T14:00:00',
+            endTime: '2017-10-10T14:20:00',
+          },
+          pre: {
+            locationId: 1,
+            startTime: '2017-10-10T10:40:00',
+            endTime: '2017-10-10T11:00:00',
+          },
         }
       )
     })
 
-    it('should not request pre or post appointments when "no" has been selected', async () => {
-      const { createAppointments } = selectCourtAppointmentRoomsFactory({
+    it('should not request pre or post appointments when no has been selected', async () => {
+      const { createBooking } = selectCourtAppointmentRoomsFactory({
         prisonApi,
         whereaboutsApi,
         appointmentsService,
@@ -446,13 +407,22 @@ describe('Select court appointment rooms', () => {
       req.body = {
         selectMainAppointmentLocation: '2',
       }
-      await createAppointments(req, res)
+      await createBooking(req, res)
 
-      expect(whereaboutsApi.addVideoLinkAppointment.mock.calls.length).toBe(1)
+      expect(whereaboutsApi.addVideoLinkBooking.mock.calls.length).toBe(1)
+      expect(whereaboutsApi.addVideoLinkBooking).toHaveBeenCalledWith(
+        {},
+        {
+          bookingId: 1,
+          court: 'Leeds',
+          madeByTheCourt: true,
+          main: { endTime: '2017-10-10T14:00:00', locationId: 2, startTime: '2017-10-10T11:00:00' },
+        }
+      )
     })
 
     it('should place pre and post appointment details into flash', async () => {
-      const { createAppointments } = selectCourtAppointmentRoomsFactory({
+      const { createBooking } = selectCourtAppointmentRoomsFactory({
         prisonApi,
         whereaboutsApi,
         appointmentsService,
@@ -468,21 +438,21 @@ describe('Select court appointment rooms', () => {
         comment: 'Test',
       }
 
-      await createAppointments(req, res)
+      await createBooking(req, res)
 
       expect(req.flash).toHaveBeenCalledWith(
         'appointmentDetails',
         expect.objectContaining({
           locationId: '2',
           comment: 'Test',
-          postAppointment: { endTime: '2017-10-10T14:20:00', locationId: 3, startTime: '2017-10-10T14:00' },
-          preAppointment: { endTime: '2017-10-10T11:00', locationId: 1, startTime: '2017-10-10T10:40:00' },
+          postAppointment: { endTime: '2017-10-10T14:20:00', locationId: 3, startTime: '2017-10-10T14:00:00' },
+          preAppointment: { endTime: '2017-10-10T11:00:00', locationId: 1, startTime: '2017-10-10T10:40:00' },
         })
       )
     })
 
     it('should redirect to confirmation page', async () => {
-      const { createAppointments } = selectCourtAppointmentRoomsFactory({
+      const { createBooking } = selectCourtAppointmentRoomsFactory({
         prisonApi,
         whereaboutsApi,
         oauthApi,
@@ -498,7 +468,7 @@ describe('Select court appointment rooms', () => {
         comment: 'Test',
       }
 
-      await createAppointments(req, res)
+      await createBooking(req, res)
 
       expect(res.redirect).toHaveBeenCalledWith('/offenders/A12345/confirm-appointment')
       expect(notifyClient.sendEmail).not.toHaveBeenCalled()
@@ -512,7 +482,7 @@ describe('Select court appointment rooms', () => {
           postAppointmentRequired: 'no',
         },
       ])
-      const { createAppointments } = selectCourtAppointmentRoomsFactory({
+      const { createBooking } = selectCourtAppointmentRoomsFactory({
         prisonApi,
         whereaboutsApi,
         oauthApi,
@@ -526,7 +496,7 @@ describe('Select court appointment rooms', () => {
         comment: 'Test',
       }
 
-      await createAppointments(req, res)
+      await createBooking(req, res)
 
       expect(res.redirect).toHaveBeenCalledWith('/offenders/A12345/confirm-appointment')
       expect(notifyClient.sendEmail).not.toHaveBeenCalled()
@@ -546,7 +516,7 @@ describe('Select court appointment rooms', () => {
         email: 'test@example.com',
       })
 
-      const { createAppointments } = selectCourtAppointmentRoomsFactory({
+      const { createBooking } = selectCourtAppointmentRoomsFactory({
         prisonApi,
         whereaboutsApi,
         oauthApi,
@@ -563,7 +533,7 @@ describe('Select court appointment rooms', () => {
         comment: 'Test',
       }
 
-      await createAppointments(req, res)
+      await createBooking(req, res)
 
       const personalisation = {
         startTime: '11:00',

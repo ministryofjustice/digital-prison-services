@@ -11,7 +11,7 @@ const controller = ({ prisonApi, whereaboutsApi, logError, oauthApi, notifyClien
   const appointmentsService = appointmentsServiceFactory(prisonApi)
   const existingEventsService = existingEventsServiceFactory(prisonApi)
   const availableSlots = availableSlotsService({ existingEventsService, appointmentsService })
-  const { index, validateInput, createAppointments } = selectCourtAppointmentRoomsFactory({
+  const { index, validateInput, createBooking } = selectCourtAppointmentRoomsFactory({
     prisonApi,
     whereaboutsApi,
     oauthApi,
@@ -22,12 +22,7 @@ const controller = ({ prisonApi, whereaboutsApi, logError, oauthApi, notifyClien
   })
 
   router.get('/', index)
-  router.post(
-    '/',
-    validateInput,
-    checkAppointmentRooms(existingEventsService, availableSlots, logError),
-    createAppointments
-  )
+  router.post('/', validateInput, checkAppointmentRooms(existingEventsService, availableSlots, logError), createBooking)
 
   return router
 }

@@ -172,53 +172,52 @@ const selectCourtAppointmentRoomsFactory = ({
     }
   }
 
-  const createAppointment = async (context, appointmentDetails) => {
-    const { startTime, endTime, bookingId, locationId, comment, court, hearingType } = appointmentDetails
+  const makeVideoLinkBooking = async (context, main, pre, post) => {
+    const { bookingId, comment, court } = main
 
-    await whereaboutsApi.addVideoLinkAppointment(context, {
+    await whereaboutsApi.addVideoLinkBooking(context, {
       bookingId,
-      locationId: Number(locationId),
-      startTime,
-      endTime,
-      comment,
       court,
-      hearingType,
+      comment,
+      madeByTheCourt: true,
+      ...(pre && {
+        pre: {
+          locationId: Number(pre.locationId),
+          startTime: pre.startTime,
+          endTime: pre.endTime,
+        },
+      }),
+      main: {
+        locationId: Number(main.locationId),
+        startTime: main.startTime,
+        endTime: main.endTime,
+      },
+      ...(post && {
+        post: {
+          locationId: Number(post.locationId),
+          startTime: post.startTime,
+          endTime: post.endTime,
+        },
+      }),
     })
   }
 
-  const createPreAppointment = async (context, { appointmentDetails, startTime, preAppointmentLocation }) => {
+  const createPreAppointment = ({ startTime, preAppointmentLocation }) => {
     const preStartTime = moment(startTime, DATE_TIME_FORMAT_SPEC).subtract(20, 'minutes')
-    const preDetails = {
+    return {
       startTime: preStartTime.format(DATE_TIME_FORMAT_SPEC),
       endTime: startTime,
       locationId: Number(preAppointmentLocation),
     }
-
-    await createAppointment(context, {
-      ...appointmentDetails,
-      ...preDetails,
-      hearingType: 'PRE',
-    })
-
-    return preDetails
   }
 
-  const createPostAppointment = async (context, { appointmentDetails, endTime, postAppointmentLocation }) => {
+  const createPostAppointment = ({ endTime, postAppointmentLocation }) => {
     const postEndTime = moment(endTime, DATE_TIME_FORMAT_SPEC).add(20, 'minutes')
-
-    const postDetails = {
+    return {
       startTime: endTime,
       endTime: postEndTime.format(DATE_TIME_FORMAT_SPEC),
       locationId: Number(postAppointmentLocation),
     }
-
-    await createAppointment(context, {
-      ...appointmentDetails,
-      ...postDetails,
-      hearingType: 'POST',
-    })
-
-    return postDetails
   }
 
   const validateInput = async (req, res, next) => {
@@ -294,7 +293,7 @@ const selectCourtAppointmentRoomsFactory = ({
     }
   }
 
-  const createAppointments = async (req, res) => {
+  const createBooking = async (req, res) => {
     const { offenderNo, agencyId } = req.params
     const appointmentDetails = unpackAppointmentDetails(req)
     const {
@@ -319,30 +318,32 @@ const selectCourtAppointmentRoomsFactory = ({
       comment,
     } = req.body
 
-    await createAppointment(res.locals, {
-      ...appointmentDetails,
-      comment,
-      locationId: selectMainAppointmentLocation,
-      hearingType: 'MAIN',
-    })
-
     const prepostAppointments = {}
 
     if (preAppointmentRequired === 'yes') {
-      prepostAppointments.preAppointment = await createPreAppointment(res.locals, {
-        appointmentDetails,
+      prepostAppointments.preAppointment = createPreAppointment({
         startTime,
         preAppointmentLocation: selectPreAppointmentLocation,
       })
     }
 
     if (postAppointmentRequired === 'yes') {
-      prepostAppointments.postAppointment = await createPostAppointment(res.locals, {
-        appointmentDetails,
+      prepostAppointments.postAppointment = createPostAppointment({
         endTime,
         postAppointmentLocation: selectPostAppointmentLocation,
       })
     }
+
+    await makeVideoLinkBooking(
+      res.locals,
+      {
+        ...appointmentDetails,
+        comment,
+        locationId: selectMainAppointmentLocation,
+      },
+      prepostAppointments.preAppointment,
+      prepostAppointments.postAppointment
+    )
 
     packAppointmentDetails(req, {
       ...appointmentDetails,
@@ -403,7 +404,7 @@ const selectCourtAppointmentRoomsFactory = ({
   return {
     index,
     validateInput,
-    createAppointments,
+    createBooking,
   }
 }
 
