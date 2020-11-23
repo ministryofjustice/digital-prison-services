@@ -138,15 +138,35 @@ module.exports = ({ prisonerProfileService, prisonApi, logError }) => async (req
         balanceDetails: [
           {
             label: 'Spends',
-            value: formatCurrency((balanceData && balanceData.spends) || 0, balanceData && balanceData.currency),
+            visible: true,
+            html: `<a href='#'>${formatCurrency(
+              (balanceData && balanceData.spends) || 0,
+              balanceData && balanceData.currency
+            )}</a>`,
           },
           {
             label: 'Private',
-            value: formatCurrency((balanceData && balanceData.cash) || 0, balanceData && balanceData.currency),
+            visible: true,
+            html: `<a href='#'>${formatCurrency(
+              (balanceData && balanceData.cash) || 0,
+              balanceData && balanceData.currency
+            )}</a>`,
           },
           {
             label: 'Savings',
-            value: formatCurrency((balanceData && balanceData.savings) || 0, balanceData && balanceData.currency),
+            visible: true,
+            html: `<a href='#'>${formatCurrency(
+              (balanceData && balanceData.savings) || 0,
+              balanceData && balanceData.currency
+            )}</a>`,
+          },
+          {
+            label: 'Damage obligations',
+            visible: balanceData && balanceData?.damageObligations > 0,
+            html: `<a href='#'>${formatCurrency(
+              (balanceData && balanceData.damageObligations) || 0,
+              balanceData && balanceData.currency
+            )}</a>`,
           },
         ],
         incentives: {
