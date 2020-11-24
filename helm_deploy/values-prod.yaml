@@ -43,7 +43,7 @@ env:
   SOC_API_ENABLED: true
   OFFENDER_SEARCH_API_URL: https://prisoner-offender-search.prison.service.justice.gov.uk
   SUPPORT_URL: https://support.hmpps.service.justice.gov.uk/
-  REDIRECT_TO_BOOKING_VIDEO_LINK_ENABLED: false
+  REDIRECT_TO_BOOKING_VIDEO_LINK_ENABLED: true
   BVL_URL: https://book-video-link.prison.service.justice.gov.uk
 
 allowlist:

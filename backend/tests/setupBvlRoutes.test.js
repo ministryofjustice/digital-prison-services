@@ -14,7 +14,7 @@ describe('Test setupBvlRoutes for redirects', () => {
     jest.resetAllMocks()
   })
   it('GET "/videolink" redirect = true, app redirects to http://localhost:3000', async () => {
-    config.app.featureFlags.redirectToBookingVideoLinkEnabled = true
+    config.app.redirectToBookingVideoLinkEnabled = true
     bvlRoutes({ prisonApi, whereaboutsApi, oauthApi, notifyClient, logError }, router)
 
     expect(router.get).toHaveBeenCalledTimes(1)
@@ -33,7 +33,7 @@ describe('Test setupBvlRoutes for redirects', () => {
   })
 
   it('GET "/videolink" redirect = false, route registration happens as normal', async () => {
-    config.app.featureFlags.redirectToBookingVideoLinkEnabled = false
+    config.app.redirectToBookingVideoLinkEnabled = false
     bvlRoutes({ prisonApi, whereaboutsApi, oauthApi, notifyClient, logError }, router)
     expect(router.get).toHaveBeenCalled()
     expect(router.use).toHaveBeenCalled()
