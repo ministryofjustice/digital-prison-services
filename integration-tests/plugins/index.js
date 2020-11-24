@@ -78,7 +78,7 @@ module.exports = on => {
     stubGroups: caseload => whereabouts.stubGroups(caseload),
     stubAddVideoLinkAppointment: appointment => Promise.all([whereabouts.stubAddVideoLinkAppointment(appointment)]),
     stubCaseNotes: response => caseNotes.stubCaseNotes(response),
-    stubCaseNoteTypes: () => caseNotes.stubCaseNoteTypes(),
+    stubCaseNoteTypes: types => caseNotes.stubCaseNoteTypes(types),
 
     stubForAttendance: ({ caseload, locationId, timeSlot, date, activities }) => {
       const offenderNumbers = extractOffenderNumbers(activities)
@@ -350,7 +350,7 @@ module.exports = on => {
       prisonApi.stubPrisonerFullDetail(prisonerDetail, offenderNo, fullInfo),
     stubMoveToCell: () => whereabouts.stubMoveToCell(),
     stubMoveToCellSwap: () => prisonApi.stubMoveToCellSwap(),
-    verifyMoveToCell: ({ bookingId, locationPrefix }) => prisonApi.verifyMoveToCell({ bookingId, locationPrefix }),
+    verifyMoveToCell: body => prisonApi.verifyMoveToCell(body),
     stubGetLocationPrefix: ({ agencyId, groupName, response }) =>
       whereabouts.stubGetLocationPrefix({ agencyId, groupName, response }),
     verifyMoveToCellSwap: ({ bookingId }) => prisonApi.verifyMoveToCellSwap({ bookingId }),
@@ -399,5 +399,6 @@ module.exports = on => {
     stubTotalCurrentlyOut: ({ agencyId, movements }) => prisonApi.stubTotalCurrentlyOut(agencyId, movements),
     stubGetAgencyIepLevels: response => prisonApi.stubGetAgencyIepLevels(response),
     stubChangeIepLevel: body => prisonApi.stubChangeIepLevel(body),
+    stubGetPrisonerDamageObligations: response => prisonApi.stubGetPrisonerDamageObligations(response),
   })
 }

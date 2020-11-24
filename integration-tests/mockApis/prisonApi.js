@@ -5,12 +5,7 @@ const assessmentsResponse = require('./responses/assessmentsResponse')
 const activity3 = require('./responses/activity3')
 
 module.exports = {
-  verifyMoveToCell: ({ bookingId, locationPrefix }) =>
-    verifyPosts('/whereabouts/cell/make-cell-move', {
-      bookingId,
-      cellMoveReasonCode: 'ADM',
-      internalLocationDescriptionDestination: locationPrefix,
-    }),
+  verifyMoveToCell: body => verifyPosts('/whereabouts/cell/make-cell-move', body),
   verifyMoveToCellSwap: ({ bookingId }) => verifyPut(`/api/bookings/${bookingId}/move-to-cell-swap`),
   verifyAdjudicationsHistory: ({ offenderNo, agencyId, finding, fromDate, toDate }) =>
     verifyGet(
@@ -1750,4 +1745,18 @@ module.exports = {
       },
     })
   },
+  stubGetPrisonerDamageObligations: response =>
+    stubFor({
+      request: {
+        method: 'GET',
+        urlPattern: '/api/offenders/.+?/damage-obligations',
+      },
+      response: {
+        status: 200,
+        headers: {
+          'Content-Type': 'application/json;charset=UTF-8',
+        },
+        jsonBody: response || { damageObligations: [] },
+      },
+    }),
 }

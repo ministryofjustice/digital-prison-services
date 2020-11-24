@@ -13,12 +13,13 @@ const cellNotAvailable = require('../controllers/cellMove/cellNotAvailable')
 
 const router = express.Router({ mergeParams: true })
 
-const controller = ({ oauthApi, prisonApi, whereaboutsApi, logError }) => {
+const controller = ({ oauthApi, prisonApi, whereaboutsApi, caseNotesApi, logError }) => {
   const { index: moveValidationIndex, post: moveValidationPost } = moveValidationFactory({ prisonApi, logError })
 
   const { index: confirmCellMoveIndex, post: confirmCellMovePost } = confirmCellMoveController({
     prisonApi,
     whereaboutsApi,
+    caseNotesApi,
     logError,
   })
 
