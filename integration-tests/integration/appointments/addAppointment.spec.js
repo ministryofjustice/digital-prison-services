@@ -79,7 +79,7 @@ context('A user can add an appointment', () => {
     cy.task('stubSentenceData')
     cy.task('stubLocation', { locationId: 1 })
     cy.task('stubCourts')
-    cy.task('stubAddVideoLinkAppointment')
+    cy.task('stubAddVideoLinkBooking')
     cy.task('stubAgencyDetails', { agencyId: 'MDI', details: {} })
     cy.task('stubUserEmail', 'ITAG_USER')
 
@@ -184,6 +184,25 @@ context('A user can add an appointment', () => {
 
     const confirmVideoLinkPrisonPage = ConfirmVideoLinkPrisonPage.verifyOnPage()
     confirmVideoLinkPrisonPage.courtLocation().contains('Leeds')
+
+    cy.task('getBookingRequest').then(request => {
+      expect(request).to.deep.equal({
+        bookingId: 14,
+        court: 'Leeds',
+        comment: 'Test comment',
+        madeByTheCourt: false,
+        pre: {
+          locationId: 1,
+          startTime: moment().format(`YYYY-MM-DD[T22:35:00]`),
+          endTime: moment().format(`YYYY-MM-DD[T22:55:00]`),
+        },
+        main: {
+          locationId: 1,
+          startTime: moment().format(`YYYY-MM-DD[T22:55:00]`),
+          endTime: moment().format(`YYYY-MM-DD[T23:55:00]`),
+        },
+      })
+    })
   })
 
   it('Correct validation errors for video link bookings', () => {
@@ -249,6 +268,25 @@ context('A user can add an appointment', () => {
 
     const confirmVideoLinkPrisonPage = ConfirmVideoLinkPrisonPage.verifyOnPage()
     confirmVideoLinkPrisonPage.courtLocation().contains('test')
+
+    cy.task('getBookingRequest').then(request => {
+      expect(request).to.deep.equal({
+        bookingId: 14,
+        court: 'test',
+        comment: 'Test comment',
+        madeByTheCourt: false,
+        pre: {
+          locationId: 1,
+          startTime: moment().format(`YYYY-MM-DD[T22:35:00]`),
+          endTime: moment().format(`YYYY-MM-DD[T22:55:00]`),
+        },
+        main: {
+          locationId: 1,
+          startTime: moment().format(`YYYY-MM-DD[T22:55:00]`),
+          endTime: moment().format(`YYYY-MM-DD[T23:55:00]`),
+        },
+      })
+    })
   })
 
   it('Should display correct error messages on other court form page', () => {
