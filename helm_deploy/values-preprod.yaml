@@ -45,7 +45,7 @@ env:
   OFFENDER_SEARCH_API_URL: https://prisoner-offender-search-preprod.prison.service.justice.gov.uk
   SUPPORT_URL: https://support-preprod.hmpps.service.justice.gov.uk/
   SYSTEM_PHASE: PRE-PRODUCTION
-  REDIRECT_TO_BOOKING_VIDEO_LINK_ENABLED: false
+  REDIRECT_TO_BOOKING_VIDEO_LINK_ENABLED: true
   BVL_URL: https://book-video-link-preprod.prison.service.justice.gov.uk
 
 whitelist:
