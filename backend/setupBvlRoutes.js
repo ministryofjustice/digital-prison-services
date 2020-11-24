@@ -8,7 +8,7 @@ const requestBookingRouter = require('./routes/appointments/requestBookingRouter
 const videolinkPrisonerSearchController = require('./controllers/videolink/search/videolinkPrisonerSearch')
 
 module.exports = ({ prisonApi, whereaboutsApi, oauthApi, notifyClient, logError }, router = express.Router()) => {
-  if (config.app.featureFlags.redirectToBookingVideoLinkEnabled) {
+  if (config.app.redirectToBookingVideoLinkEnabled) {
     router.get('/videolink', (req, res) => {
       res.redirect(config.apis.bookVideoLink.url)
     })
