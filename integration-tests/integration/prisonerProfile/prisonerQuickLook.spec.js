@@ -184,7 +184,8 @@ context('Prisoner quick look data retrieval errors', () => {
       })
   })
 
-  it('Should display the appropriate message when there was an error requesting personal details', () => {
+  // TODO Details on NN-3056
+  it.skip('Should display the appropriate message when there was an error requesting personal details', () => {
     cy.get('[data-test="personal-details"]')
       .find('p')
       .then($element => {
