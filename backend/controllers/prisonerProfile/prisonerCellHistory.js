@@ -75,7 +75,10 @@ module.exports = ({ oauthApi, prisonApi, logError, page = 0 }) => async (req, re
             }
           })
         : [],
-      currentLocation,
+      currentLocation: {
+        ...currentLocation,
+        assignmentEndDateTime: moment().format('YYYY-MM-DDTHH:mm:ss'),
+      },
       occupants: occupants.filter(occupant => occupant.offenderNo !== offenderNo).map(occupant => {
         return {
           name: putLastNameFirst(occupant.firstName, occupant.lastName),

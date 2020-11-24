@@ -174,6 +174,7 @@ describe('Prisoner cell history', () => {
         currentLocation: {
           agencyId: 'MDI',
           assignmentDateTime: '2020-05-01T12:48:33',
+          assignmentEndDateTime: '2020-10-29T16:15:00',
           establishment: 'Moorland',
           livingUnitId: 1,
           location: '1-02',
