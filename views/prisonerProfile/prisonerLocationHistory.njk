@@ -77,6 +77,27 @@
     ]), rows) %}
   {% endfor %}
 
+  <div>
+    <h3 class="govuk-heading-s govuk-!-margin-bottom-1">Moved by</h3>
+    <p class="govuk-body" data-test="moved-by">
+          {{ locationDetails.movedBy }}
+    </p>
+  </div>
+  
+  <div>
+    <h3 class="govuk-heading-s govuk-!-margin-bottom-1">Reason for move</h3>
+    <p class="govuk-body" data-test="reason-for-move">
+         {{ locationDetails.reasonForMove }}
+    </p>
+  </div>
+
+  <div>
+    <h3 class="govuk-heading-s govuk-!-margin-bottom-1">What happened</h3>
+    <p class="govuk-body" data-test="what-happened">
+         {{ locationDetails.whatHappened }}
+    </p>
+  </div>
+
   {% if rows.length %}
     <h2 class="govuk-heading-m">Shared with</h2>
     

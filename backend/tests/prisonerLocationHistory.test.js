@@ -61,6 +61,9 @@ describe('Prisoner location sharing history', () => {
         dpsUrl: 'http://localhost:3000/',
         locationDetails: {
           movedOut: 'Current cell',
+          movedBy: 'John Brown',
+          reasonForMove: 'Behaviour',
+          whatHappened: 'A long comment about what happened on the day to cause the move.',
         },
         locationSharingHistory: false,
         profileUrl: '/prisoner/ABC123',
@@ -139,6 +142,9 @@ describe('Prisoner location sharing history', () => {
           description: 'Moorland (HMP & YOI)',
           movedIn: '28/08/2020 - 11:20',
           movedOut: 'Current cell',
+          movedBy: 'John Brown',
+          reasonForMove: 'Behaviour',
+          whatHappened: 'A long comment about what happened on the day to cause the move.',
         },
         locationSharingHistory: [
           {

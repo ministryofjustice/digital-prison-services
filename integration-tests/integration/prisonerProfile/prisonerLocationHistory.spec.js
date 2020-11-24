@@ -202,5 +202,16 @@ context('Prisoner location history', () => {
       prisonerLocationHistoryPage.title().contains('John Jones’')
       prisonerLocationHistoryPage.noHistoryMessage().contains('John Jones has not shared this cell with anyone else.')
     })
+
+    it('should show moved by, reason for move and what happened', () => {
+      cy.visit(`/prisoner/${offenderNo}/location-history?fromDate=2020-08-28&locationId=1&agencyId=MDI`)
+
+      const prisonerLocationHistoryPage = PrisonerLocationHistoryPage.verifyOnPage()
+      prisonerLocationHistoryPage.movedBy().contains('John Brown')
+      prisonerLocationHistoryPage.reasonForMove().contains('Behaviour')
+      prisonerLocationHistoryPage
+        .whatHappened()
+        .contains('A long comment about what happened on the day to cause the move.')
+    })
   })
 })

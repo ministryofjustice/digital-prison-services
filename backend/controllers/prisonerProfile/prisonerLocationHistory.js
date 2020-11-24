@@ -60,6 +60,9 @@ module.exports = ({ prisonApi, logError }) => async (req, res) => {
         movedOut: currentPrisonerDetails.assignmentEndDateTime
           ? formatTimestampToDateTime(currentPrisonerDetails.assignmentEndDateTime)
           : 'Current cell',
+        movedBy: 'John Brown',
+        reasonForMove: 'Behaviour',
+        whatHappened: 'A long comment about what happened on the day to cause the move.',
         attributes: locationAttributes.attributes,
       },
       locationSharingHistory:
