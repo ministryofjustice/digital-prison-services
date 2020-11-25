@@ -15,7 +15,7 @@ const quickLookFullDetails = {
     },
   ],
   sentenceDetails: { sentenceDetail: { releaseDate: '2020-12-13' } },
-  balances: { spends: 100, cash: 75.5, savings: 50, currency: 'GBP' },
+  balances: { spends: 100, cash: 75.5, savings: 50, damageObligations: 65, currency: 'GBP' },
   iepSummary: { daysSinceReview: 40 },
   positiveCaseNotes: { count: 2 },
   negativeCaseNotes: { count: 1 },
@@ -566,6 +566,97 @@ context('Prisoner quick look', () => {
           .should('contain.text', 'View SOC profile')
           .and('have.attr', 'href')
           .and('match', RegExp('.*?/nominal/1$'))
+      })
+    })
+  })
+})
+
+context('Finances section', () => {
+  context('where damage obligations is zero', () => {
+    before(() => {
+      cy.task('reset')
+      cy.clearCookies()
+      cy.task('reset')
+      cy.task('stubLogin', { username: 'ITAG_USER', caseload: 'MDI' })
+      cy.login()
+
+      quickLookFullDetails.balances.damageObligations = 0
+      cy.task('stubQuickLook', quickLookFullDetails)
+    })
+
+    context('When a prisoner is in users caseload', () => {
+      beforeEach(() => {
+        Cypress.Cookies.preserveOnce('hmpps-session-dev')
+        cy.task('stubPrisonerProfileHeaderData', {
+          offenderBasicDetails,
+          offenderFullDetails: {
+            ...offenderFullDetails,
+            profileInformation: [{ type: 'NAT', resultValue: 'British' }],
+          },
+          iepSummary: {},
+          caseNoteSummary: {},
+          offenderNo,
+        })
+      })
+
+      it('Should not show damage obligations balance when it is of zero value', () => {
+        cy.visit(`/prisoner/${offenderNo}`)
+
+        prisonerQuickLookPage.verifyOnPage('Smith, John')
+
+        cy.get('[data-test="money-summary"]')
+          .find('dd')
+          .then($summaryValues => {
+            expect($summaryValues.length).to.eq(3)
+            expect($summaryValues.get(0).innerText).to.eq('£100.00')
+            expect($summaryValues.get(1).innerText).to.eq('£75.50')
+            expect($summaryValues.get(2).innerText).to.eq('£50.00')
+          })
+      })
+    })
+  })
+
+  context('where damage obligations is non-zero', () => {
+    before(() => {
+      cy.task('reset')
+      cy.clearCookies()
+      cy.task('reset')
+      cy.task('stubLogin', { username: 'ITAG_USER', caseload: 'MDI' })
+      cy.login()
+
+      quickLookFullDetails.balances.damageObligations = 65
+      cy.task('stubQuickLook', quickLookFullDetails)
+    })
+
+    context('When a prisoner is in users caseload', () => {
+      beforeEach(() => {
+        Cypress.Cookies.preserveOnce('hmpps-session-dev')
+        cy.task('stubPrisonerProfileHeaderData', {
+          offenderBasicDetails,
+          offenderFullDetails: {
+            ...offenderFullDetails,
+            profileInformation: [{ type: 'NAT', resultValue: 'British' }],
+          },
+          iepSummary: {},
+          caseNoteSummary: {},
+          offenderNo,
+        })
+      })
+
+      it('Should show damage obligations balance when it is of non-zero value', () => {
+        cy.visit(`/prisoner/${offenderNo}`)
+
+        prisonerQuickLookPage.verifyOnPage('Smith, John')
+
+        cy.get('[data-test="money-summary"]')
+          .find('dd')
+          .then($summaryValues => {
+            expect($summaryValues.length).to.eq(4)
+            expect($summaryValues.get(0).innerText).to.eq('£100.00')
+            expect($summaryValues.get(1).innerText).to.eq('£75.50')
+            expect($summaryValues.get(2).innerText).to.eq('£50.00')
+            expect($summaryValues.get(3).innerText).to.eq('£65.00')
+          })
       })
     })
   })
