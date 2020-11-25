@@ -159,7 +159,11 @@ describe('prisoner profile quick look', () => {
               { label: 'Spends', html: "<a href='#'>£0.00</a>", visible: true },
               { label: 'Private', html: "<a href='#'>£0.00</a>", visible: true },
               { label: 'Savings', html: "<a href='#'>£0.00</a>", visible: true },
-              { label: 'Damage obligations', html: "<a href='#'>£0.00</a>", visible: false },
+              {
+                label: 'Damage obligations',
+                html: "<a href='/prisoner/ABC123/prisoner-finance-details/damage-obligations'>£0.00</a>",
+                visible: false,
+              },
             ],
           })
         )
@@ -187,7 +191,11 @@ describe('prisoner profile quick look', () => {
               { label: 'Spends', html: "<a href='#'>£100.00</a>", visible: true },
               { label: 'Private', html: "<a href='#'>£75.50</a>", visible: true },
               { label: 'Savings', html: "<a href='#'>£50.00</a>", visible: true },
-              { label: 'Damage obligations', html: "<a href='#'>£65.00</a>", visible: true },
+              {
+                label: 'Damage obligations',
+                html: "<a href='/prisoner/ABC123/prisoner-finance-details/damage-obligations'>£65.00</a>",
+                visible: true,
+              },
             ],
           })
         )

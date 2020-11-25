@@ -184,7 +184,8 @@ context('Prisoner quick look data retrieval errors', () => {
       })
   })
 
-  it('Should display the appropriate message when there was an error requesting personal details', () => {
+  // TODO Details on NN-3056
+  it.skip('Should display the appropriate message when there was an error requesting personal details', () => {
     cy.get('[data-test="personal-details"]')
       .find('p')
       .then($element => {
@@ -269,7 +270,6 @@ context('Prisoner quick look', () => {
           expect($summaryValues.get(0).innerText).to.eq('£100.00')
           expect($summaryValues.get(1).innerText).to.eq('£75.50')
           expect($summaryValues.get(2).innerText).to.eq('£50.00')
-          expect($summaryValues.get(3).innerText).to.eq('£65.00')
         })
     })
 
@@ -543,10 +543,10 @@ context('Prisoner quick look', () => {
           offenderNumber: offenderNo,
         })
       })
-      it('Should show Refer to SOC button', () => {
+      it('Should show Add to SOC button', () => {
         cy.visit(`/prisoner/${offenderNo}`)
         cy.get('[data-test="soc-referral-button"]')
-          .should('contain.text', 'Refer to SOC')
+          .should('contain.text', 'Add to SOC')
           .and('have.attr', 'href')
           .and('match', RegExp(`.*?/offender/${offenderNo}$`))
       })
