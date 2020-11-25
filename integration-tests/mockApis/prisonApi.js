@@ -5,7 +5,12 @@ const assessmentsResponse = require('./responses/assessmentsResponse')
 const activity3 = require('./responses/activity3')
 
 module.exports = {
-  verifyMoveToCell: body => verifyPosts('/whereabouts/cell/make-cell-move', body),
+  verifyMoveToCell: ({ bookingId, locationPrefix }) =>
+    verifyPosts('/whereabouts/cell/make-cell-move', {
+      bookingId,
+      cellMoveReasonCode: 'ADM',
+      internalLocationDescriptionDestination: locationPrefix,
+    }),
   verifyMoveToCellSwap: ({ bookingId }) => verifyPut(`/api/bookings/${bookingId}/move-to-cell-swap`),
   verifyAdjudicationsHistory: ({ offenderNo, agencyId, finding, fromDate, toDate }) =>
     verifyGet(

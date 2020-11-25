@@ -52,10 +52,10 @@ module.exports = {
       },
     })
   },
-  stubCaseNoteTypes: types => {
+  stubCaseNoteTypes: () => {
     return getFor({
       urlPattern: '/casenotes/case-notes/types',
-      body: types || caseNoteTypes,
+      body: caseNoteTypes,
     })
   },
   stubCaseNoteTypesForUser: () => {
