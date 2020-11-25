@@ -64,7 +64,7 @@ context('A user can confirm the cell move', () => {
       offenderNo,
       cellMoveReasonCode: 'ADM',
       internalLocationDescriptionDestination: 'MDI-1',
-      commentText: comment,
+      comment,
     }).then(assertHasRequestCount(1))
 
     cy.location('pathname').should('eq', `/prisoner/${offenderNo}/cell-move/confirmation`)
