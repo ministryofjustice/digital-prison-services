@@ -296,7 +296,7 @@ describe('Change cell play back details', () => {
           bookingId: 1,
           offenderNo: 'A12345',
           cellMoveReasonCode: 'BEH',
-          comment: 'Hello world',
+          commentText: 'Hello world',
           internalLocationDescriptionDestination: 'MDI-10-19',
         }
       )
