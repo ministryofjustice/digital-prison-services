@@ -6,8 +6,6 @@ const confirmCellMovePage = (name, cell) =>
     warning: () => cy.get('.govuk-inset-text'),
     form: () => ({
       submitButton: () => cy.get('button[type="submit"]'),
-      reason: () => cy.get('#reason'),
-      comment: () => cy.get('#comment'),
     }),
   })
 
