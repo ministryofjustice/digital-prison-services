@@ -156,9 +156,14 @@ describe('prisoner profile quick look', () => {
           'prisonerProfile/prisonerQuickLook/prisonerQuickLook.njk',
           expect.objectContaining({
             balanceDetails: [
-              { label: 'Spends', value: '£0.00' },
-              { label: 'Private', value: '£0.00' },
-              { label: 'Savings', value: '£0.00' },
+              { label: 'Spends', html: "<a href='#'>£0.00</a>", visible: true },
+              { label: 'Private', html: "<a href='#'>£0.00</a>", visible: true },
+              { label: 'Savings', html: "<a href='#'>£0.00</a>", visible: true },
+              {
+                label: 'Damage obligations',
+                html: "<a href='/prisoner/ABC123/prisoner-finance-details/damage-obligations'>£0.00</a>",
+                visible: false,
+              },
             ],
           })
         )
@@ -167,7 +172,13 @@ describe('prisoner profile quick look', () => {
 
     describe('when there is balance data', () => {
       beforeEach(() => {
-        prisonApi.getPrisonerBalances.mockResolvedValue({ spends: 100, cash: 75.5, savings: 50, currency: 'GBP' })
+        prisonApi.getPrisonerBalances.mockResolvedValue({
+          spends: 100,
+          cash: 75.5,
+          savings: 50,
+          damageObligations: 65,
+          currency: 'GBP',
+        })
       })
 
       it('should render the quick look template with the correctly formatted balance/money data', async () => {
@@ -177,9 +188,14 @@ describe('prisoner profile quick look', () => {
           'prisonerProfile/prisonerQuickLook/prisonerQuickLook.njk',
           expect.objectContaining({
             balanceDetails: [
-              { label: 'Spends', value: '£100.00' },
-              { label: 'Private', value: '£75.50' },
-              { label: 'Savings', value: '£50.00' },
+              { label: 'Spends', html: "<a href='#'>£100.00</a>", visible: true },
+              { label: 'Private', html: "<a href='#'>£75.50</a>", visible: true },
+              { label: 'Savings', html: "<a href='#'>£50.00</a>", visible: true },
+              {
+                label: 'Damage obligations',
+                html: "<a href='/prisoner/ABC123/prisoner-finance-details/damage-obligations'>£65.00</a>",
+                visible: true,
+              },
             ],
           })
         )
