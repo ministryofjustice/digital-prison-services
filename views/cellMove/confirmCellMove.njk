@@ -1,9 +1,7 @@
 {% extends "../partials/layout.njk" %}
 {% from "govuk/components/button/macro.njk" import govukButton %}
 {% from "govuk/components/inset-text/macro.njk" import govukInsetText %}
-{% from "govuk/components/radios/macro.njk" import govukRadios %}
-{% from "govuk/components/error-summary/macro.njk" import govukErrorSummary %}
-{% from "govuk/components/textarea/macro.njk" import govukTextarea %}
+
 
 {% set title = "Change cell" %}
 
@@ -19,28 +17,16 @@
                 href: '/prisoner/' + offenderNo
             },
             {
-                text: 'Select cell',
-                href:  '/prisoner/' + offenderNo + '/cell-move/select-cell'
-            },
-            {
-                text: 'Confirm cell move'
+                text: 'Change cell'
             }
         ]
     }) }}
 {% endblock %}
 
 {% block content %}
-    {% if errors.length > 0 %}
-        {{ govukErrorSummary({
-            titleText: "There is a problem",
-            errorList: errors,
-            attributes: { 'data-qa-errors': true }
-        }) }}
-    {% endif %}
-
     <div class="govuk-grid-row govuk-!-margin-bottom-6">
         <div class="govuk-grid-column-full">
-            <h1 class="govuk-heading-l">
+            <h1  class="govuk-heading-l">
                 You are moving {{ name }} to cell {{ description }}
             </h1>
             {% if showWarning %}
@@ -51,40 +37,7 @@
 
             <form method="POST">
                 <input type="hidden" name="_csrf" value="{{ csrfToken }}" />
-                <input type="hidden" name="cellId" value="{{ cellId }}" />
-
-                {% if cellMoveReasonRadioValues != null %}
-                    {{ govukRadios({
-                        idPrefix: "reason",
-                        name: "reason",
-                        fieldset: {
-                            legend: {
-                                text: "What is the reason for the move?",
-                                isPageHeading: true,
-                                classes: "govuk-fieldset__legend--s"
-                            }
-                        },
-                        items: cellMoveReasonRadioValues,
-                        errorMessage: errors | findError('reason')
-                    }) }}
-                {% endif %}
-
-                {{ govukTextarea({
-                    name: "comment",
-                    id: "comment",
-                    maxlength: 4000,
-                    value: formValues.comment,
-                    errorMessage: errors | findError('comment'),
-                    classes: 'govuk-!-width-one-half',
-                    hint: {
-                        text: 'This will be used to add a case note.'
-                    },
-                    label: {
-                        text: "What happened?",
-                        classes: "govuk-!-font-weight-bold"
-                    }
-                }) }}
-
+                <input type="hidden" name="cellId" value="{{ cellId }}"/>
                 {{ govukButton({ text: "Confirm move", type: "submit" }) }}
             </form>
 

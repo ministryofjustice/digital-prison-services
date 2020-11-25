@@ -78,7 +78,7 @@ module.exports = on => {
     stubGroups: caseload => whereabouts.stubGroups(caseload),
     stubAddVideoLinkAppointment: appointment => Promise.all([whereabouts.stubAddVideoLinkAppointment(appointment)]),
     stubCaseNotes: response => caseNotes.stubCaseNotes(response),
-    stubCaseNoteTypes: types => caseNotes.stubCaseNoteTypes(types),
+    stubCaseNoteTypes: () => caseNotes.stubCaseNoteTypes(),
 
     stubForAttendance: ({ caseload, locationId, timeSlot, date, activities }) => {
       const offenderNumbers = extractOffenderNumbers(activities)
@@ -350,7 +350,7 @@ module.exports = on => {
       prisonApi.stubPrisonerFullDetail(prisonerDetail, offenderNo, fullInfo),
     stubMoveToCell: () => whereabouts.stubMoveToCell(),
     stubMoveToCellSwap: () => prisonApi.stubMoveToCellSwap(),
-    verifyMoveToCell: body => prisonApi.verifyMoveToCell(body),
+    verifyMoveToCell: ({ bookingId, locationPrefix }) => prisonApi.verifyMoveToCell({ bookingId, locationPrefix }),
     stubGetLocationPrefix: ({ agencyId, groupName, response }) =>
       whereabouts.stubGetLocationPrefix({ agencyId, groupName, response }),
     verifyMoveToCellSwap: ({ bookingId }) => prisonApi.verifyMoveToCellSwap({ bookingId }),

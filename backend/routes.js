@@ -156,16 +156,7 @@ const setup = ({
     retentionReasonsRouter({ prisonApi, dataComplianceApi, logError })
   )
 
-  router.use(
-    '/prisoner/:offenderNo/cell-move',
-    cellMoveRouter({
-      oauthApi,
-      prisonApi,
-      whereaboutsApi,
-      caseNotesApi,
-      logError,
-    })
-  )
+  router.use('/prisoner/:offenderNo/cell-move', cellMoveRouter({ oauthApi, prisonApi, whereaboutsApi, logError }))
 
   router.use(
     '/establishment-roll',

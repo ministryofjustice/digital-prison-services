@@ -64,16 +64,11 @@ const whereaboutsApiFactory = client => {
     return get(context, `/locations/cellsWithCapacity/${agencyId}/${groupName}${attributeQuery}`)
   }
 
-  const moveToCell = (
-    context,
-    { bookingId, internalLocationDescriptionDestination, cellMoveReasonCode, commentText, offenderNo }
-  ) =>
+  const moveToCell = (context, { bookingId, internalLocationDescription, reasonCode }) =>
     post(context, `/cell/make-cell-move`, {
       bookingId,
-      offenderNo,
-      cellMoveReasonCode,
-      internalLocationDescriptionDestination,
-      commentText,
+      cellMoveReasonCode: reasonCode || 'ADM',
+      internalLocationDescriptionDestination: internalLocationDescription,
     })
 
   return {
