@@ -150,7 +150,7 @@ module.exports = ({ prisonerProfileService, prisonApi, logError }) => async (req
             )}</a>`,
           },
           {
-            label: 'Private',
+            label: 'Private cash',
             visible: true,
             html: `<a href='${privateBreakdownUrl}'>${formatCurrency(
               (balanceData && balanceData.cash) || 0,
