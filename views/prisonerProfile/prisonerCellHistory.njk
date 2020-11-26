@@ -57,7 +57,11 @@
     </div>
     <div class="horizontal-information__item">
       <h3 class="govuk-heading-s govuk-!-margin-bottom-1">Moved in</h3>
-      <p class="govuk-body" data-test="moved-in"> {{ currentLocation.movedIn }} </p>
+      <p class="govuk-body" data-test="current-location-moved-in-date"> {{ currentLocation.movedIn }} </p>
+    </div>
+    <div class="horizontal-information__item">
+      <h3 class="govuk-heading-s govuk-!-margin-bottom-1">Moved in by</h3>
+      <p class="govuk-body" data-test="current-location-moved-in-by"> {{ currentLocation.movedInBy }} </p>
     </div>
     {% if occupants.length %}
       <div class="horizontal-information__item">
@@ -85,8 +89,8 @@
       {% set rows = (rows.push([  
         { text: cell.location },
         { text: cell.movedIn },
+        { text: cell.movedInBy },
         { text: cell.movedOut },
-        { text: cell.movedBy },
         { html: '<a href="' + './location-history?fromDate=' + cell.assignmentDateTime + '&toDate=' + cell.assignmentEndDateTime + '&locationId=' + cell.livingUnitId + '&agencyId=' + cell.agencyId + '" class="govuk-link">View details<span class="govuk-visually-hidden"> for location ' + cell.location + '</span></a>' if cell.location !== 'Reception' }
       ]), rows) %}
     {% endfor %}
@@ -97,8 +101,8 @@
       head: [
         { text: "Location" },
         { text: "Moved in" },
+        { text: "Moved in by" },
         { text: "Moved out" },
-        { text: "Moved by" },
         { html: '<span class="govuk-visually-hidden">Details link</span>' }
       ],
       rows: rows,
