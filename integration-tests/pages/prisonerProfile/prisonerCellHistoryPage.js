@@ -9,6 +9,8 @@ const prisonerCellHistoryPage = () =>
     cellMoveButton: () => cy.get("[data-test='cell-move-button']"),
     results: () => cy.get('[data-test="prisoner-cell-history"]'),
     agencyHeading: () => cy.get('[data-test="agency-heading"]'),
+    currentLocationMovedInDate: () => cy.get("[data-test='current-location-moved-in-date']"),
+    currentLocationMovedInBy: () => cy.get("[data-test='current-location-moved-in-by']"),
   })
 
 export default {
