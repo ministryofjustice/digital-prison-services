@@ -157,7 +157,7 @@ describe('prisoner profile quick look', () => {
           expect.objectContaining({
             balanceDetails: [
               { label: 'Spends', html: "<a href='#'>£0.00</a>", visible: true },
-              { label: 'Private', html: "<a href='#'>£0.00</a>", visible: true },
+              { label: 'Private cash', html: "<a href='#'>£0.00</a>", visible: true },
               { label: 'Savings', html: "<a href='#'>£0.00</a>", visible: true },
               {
                 label: 'Damage obligations',
@@ -189,7 +189,7 @@ describe('prisoner profile quick look', () => {
           expect.objectContaining({
             balanceDetails: [
               { label: 'Spends', html: "<a href='#'>£100.00</a>", visible: true },
-              { label: 'Private', html: "<a href='#'>£75.50</a>", visible: true },
+              { label: 'Private cash', html: "<a href='#'>£75.50</a>", visible: true },
               { label: 'Savings', html: "<a href='#'>£50.00</a>", visible: true },
               {
                 label: 'Damage obligations',
