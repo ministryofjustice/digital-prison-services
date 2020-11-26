@@ -52,7 +52,7 @@ const whereaboutsApiFactory = client => {
 
   const getCourtLocations = context => get(context, '/court/all-courts')
 
-  const addVideoLinkAppointment = (context, body) => post(context, '/court/add-video-link-appointment', body)
+  const addVideoLinkBooking = (context, body) => post(context, '/court/video-link-bookings', body)
 
   const getVideoLinkAppointments = (context, body) => post(context, '/court/video-link-appointments', body)
 
@@ -90,7 +90,7 @@ const whereaboutsApiFactory = client => {
     searchGroups,
     getAgencyGroupLocations,
     getCourtLocations,
-    addVideoLinkAppointment,
+    addVideoLinkBooking,
     getVideoLinkAppointments,
     getAttendanceChanges,
     getCellsWithCapacity,

@@ -193,17 +193,33 @@ const prepostAppointmentsFactory = ({
       })
     }
   }
-  const createAppointment = async (context, appointmentDetails) => {
-    const { startTime, endTime, comment, bookingId, locationId, court } = appointmentDetails
+  const makeVideoLinkBooking = async (context, main, pre, post) => {
+    const { comment, bookingId, court } = main
 
-    await whereaboutsApi.addVideoLinkAppointment(context, {
+    await whereaboutsApi.addVideoLinkBooking(context, {
       bookingId,
-      locationId: Number(locationId),
-      startTime,
-      endTime,
-      comment,
       court,
+      comment,
       madeByTheCourt: false,
+      ...(pre && {
+        pre: {
+          locationId: Number(pre.locationId),
+          startTime: pre.startTime,
+          endTime: pre.endTime,
+        },
+      }),
+      main: {
+        locationId: Number(main.locationId),
+        startTime: main.startTime,
+        endTime: main.endTime,
+      },
+      ...(post && {
+        post: {
+          locationId: Number(post.locationId),
+          startTime: post.startTime,
+          endTime: post.endTime,
+        },
+      }),
     })
   }
 
@@ -363,26 +379,15 @@ const prepostAppointmentsFactory = ({
         })
       }
 
-      await createAppointment(res.locals, {
-        ...appointmentDetails,
-        court: courtValue,
-      })
-
-      if (preAppointment === 'yes') {
-        await createAppointment(res.locals, {
+      await makeVideoLinkBooking(
+        res.locals,
+        {
           ...appointmentDetails,
-          ...preDetails,
           court: courtValue,
-        })
-      }
-
-      if (postAppointment === 'yes') {
-        await createAppointment(res.locals, {
-          ...appointmentDetails,
-          ...postDetails,
-          court: courtValue,
-        })
-      }
+        },
+        preAppointment === 'yes' && preDetails,
+        postAppointment === 'yes' && postDetails
+      )
 
       const agencyDetails = await prisonApi.getAgencyDetails(res.locals, activeCaseLoadId)
       const userEmailData = await oauthApi.userEmail(res.locals, username)
