@@ -12,7 +12,7 @@ const {
   app: { notmEndpointUrl: dpsUrl },
 } = require('../../config')
 
-module.exports = ({ prisonApi, logError }) => async (req, res) => {
+module.exports = ({ prisonApi, whereaboutsApi, logError }) => async (req, res) => {
   const { offenderNo } = req.params
   const { agencyId, locationId, fromDate, toDate = moment().format('YYYY-MM-DD') } = req.query
 
@@ -30,6 +30,16 @@ module.exports = ({ prisonApi, logError }) => async (req, res) => {
     const { bookingId, firstName, lastName } = prisonerDetails
 
     const currentPrisonerDetails = locationHistory.find(record => record.bookingId === bookingId) || {}
+
+    const whatHappenedCaseNote = await whereaboutsApi
+      .getCellMoveReason(
+        res.locals,
+        currentPrisonerDetails.bookingId,
+        currentPrisonerDetails.bedAssignmentHistorySequence
+      )
+      .then(cellMoveReason => prisonApi.getCaseNote(res.locals, offenderNo, cellMoveReason.caseNoteId))
+      .then(caseNote => caseNote.text)
+      .catch(err => 'No details found')
 
     const locationHistoryWithPrisoner =
       hasLength(locationHistory) &&
@@ -60,9 +70,9 @@ module.exports = ({ prisonApi, logError }) => async (req, res) => {
         movedOut: currentPrisonerDetails.assignmentEndDateTime
           ? formatTimestampToDateTime(currentPrisonerDetails.assignmentEndDateTime)
           : 'Current cell',
-        movedBy: 'John Brown',
-        reasonForMove: 'Behaviour',
-        whatHappened: 'A long comment about what happened on the day to cause the move.',
+        movedBy: currentPrisonerDetails.movementMadeBy,
+        reasonForMove: currentPrisonerDetails.assignmentReason,
+        whatHappened: whatHappenedCaseNote,
         attributes: locationAttributes.attributes,
       },
       locationSharingHistory:

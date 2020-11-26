@@ -5,6 +5,7 @@ describe('Prisoner location sharing history', () => {
   const offenderNo = 'ABC123'
   const bookingId = 1
   const prisonApi = {}
+  const whereaboutsApi = {}
 
   let req
   let res
@@ -28,7 +29,9 @@ describe('Prisoner location sharing history', () => {
     prisonApi.userCaseLoads = jest.fn().mockResolvedValue([])
     prisonApi.getPrisonerDetail = jest.fn()
 
-    controller = prisonerLocationHistory({ prisonApi, logError })
+    whereaboutsApi.getCellMoveReason = jest.fn().mockResolvedValue({})
+
+    controller = prisonerLocationHistory({ prisonApi, whereaboutsApi, logError })
 
     jest.spyOn(Date, 'now').mockImplementation(() => 1578787200000) // Sun Jan 12 2020 00:00:00
   })
@@ -61,9 +64,7 @@ describe('Prisoner location sharing history', () => {
         dpsUrl: 'http://localhost:3000/',
         locationDetails: {
           movedOut: 'Current cell',
-          movedBy: 'John Brown',
-          reasonForMove: 'Behaviour',
-          whatHappened: 'A long comment about what happened on the day to cause the move.',
+          whatHappened: 'No details found',
         },
         locationSharingHistory: false,
         profileUrl: '/prisoner/ABC123',
@@ -89,6 +90,8 @@ describe('Prisoner location sharing history', () => {
           assignmentDateTime: '2020-08-28T11:20:39',
           agencyId: 'MDI',
           description: 'MDI-1-1-015',
+          movementMadeBy: 'JDRAPER_GEN',
+          assignmentReason: 'CLA',
         },
         {
           bookingId: 2,
@@ -100,6 +103,7 @@ describe('Prisoner location sharing history', () => {
           assignmentEndDateTime: '2020-08-28T11:00:00',
           agencyId: 'LEI',
           description: 'MDI-1-1-015',
+          movementMadeBy: 'JDRAPER_GEN',
         },
         {
           bookingId: 3,
@@ -108,6 +112,8 @@ describe('Prisoner location sharing history', () => {
           assignmentDateTime: '2020-08-25T11:20:39',
           agencyId: 'MDI',
           description: 'MDI-1-1-015',
+          movementMadeBy: 'JDRAPER_GEN',
+          assignmentReason: 'ADM',
         },
       ])
       prisonApi.getAgencyDetails.mockResolvedValue({
@@ -129,6 +135,10 @@ describe('Prisoner location sharing history', () => {
         .mockResolvedValueOnce({ offenderNo, bookingId, firstName: 'John', lastName: 'Smith' })
         .mockResolvedValueOnce({ offenderNo: 'ABC456', bookingId: 2, firstName: 'Steve', lastName: 'Jones' })
         .mockResolvedValueOnce({ offenderNo: 'ABC789', bookingId: 3, firstName: 'Barry', lastName: 'Stevenson' })
+
+      prisonApi.getCaseNote = jest
+        .fn()
+        .mockResolvedValue({ text: 'A long comment about what happened on the day to cause the move.' })
     })
 
     it('render the template with the correct data', async () => {
@@ -142,8 +152,8 @@ describe('Prisoner location sharing history', () => {
           description: 'Moorland (HMP & YOI)',
           movedIn: '28/08/2020 - 11:20',
           movedOut: 'Current cell',
-          movedBy: 'John Brown',
-          reasonForMove: 'Behaviour',
+          movedBy: 'JDRAPER_GEN',
+          reasonForMove: 'CLA',
           whatHappened: 'A long comment about what happened on the day to cause the move.',
         },
         locationSharingHistory: [

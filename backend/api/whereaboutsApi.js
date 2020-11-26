@@ -64,6 +64,9 @@ const whereaboutsApiFactory = client => {
     return get(context, `/locations/cellsWithCapacity/${agencyId}/${groupName}${attributeQuery}`)
   }
 
+  const getCellMoveReason = (context, bookingId, bedAssignmentId) =>
+    get(context, `/cell/cell-move-reason/booking/${bookingId}/bed-assignment-sequence/${bedAssignmentId}`)
+
   const moveToCell = (
     context,
     { bookingId, internalLocationDescriptionDestination, cellMoveReasonCode, commentText, offenderNo }
@@ -95,6 +98,7 @@ const whereaboutsApiFactory = client => {
     getAttendanceChanges,
     getCellsWithCapacity,
     moveToCell,
+    getCellMoveReason,
   }
 }
 
