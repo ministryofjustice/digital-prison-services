@@ -61,8 +61,14 @@ context('Prisoner cell history', () => {
           ],
         },
       })
-      cy.task('stubStaff', { staffId: 'STAFF_1', details: { firstName: 'Staff', lastName: 'One' } })
-      cy.task('stubStaff', { staffId: 'STAFF_2', details: { firstName: 'Staff', lastName: 'Two' } })
+      cy.task('stubStaff', {
+        staffId: 'STAFF_1',
+        details: { firstName: 'Staff', lastName: 'One', username: 'STAFF_1' },
+      })
+      cy.task('stubStaff', {
+        staffId: 'STAFF_2',
+        details: { firstName: 'Staff', lastName: 'Two', username: 'STAFF_2' },
+      })
     })
 
     it('should load the data correcly when one other occupant', () => {
@@ -70,6 +76,10 @@ context('Prisoner cell history', () => {
       const prisonerCellHistoryPage = PrisonerCellHistoryPage.verifyOnPage()
       prisonerCellHistoryPage.establishment().contains('Moorland')
       prisonerCellHistoryPage.location().contains('1-02')
+      prisonerCellHistoryPage
+        .currentLocationMovedInDate()
+        .contains(moment('2020-05-01T12:48:33.375Z').format('DD/MM/YYYY - HH:mm'))
+      prisonerCellHistoryPage.currentLocationMovedInBy().contains('Staff One')
       prisonerCellHistoryPage.occupants().contains('Offender, Test')
       prisonerCellHistoryPage.cellMoveButton().should('not.be.visible')
       prisonerCellHistoryPage
@@ -94,8 +104,8 @@ context('Prisoner cell history', () => {
 
             expect($tableCells.get(0)).to.contain('1-03')
             expect($tableCells.get(1)).to.contain(moment('2020-04-01T12:48:33.375Z').format('DD/MM/YYYY - HH:mm'))
-            expect($tableCells.get(2)).to.contain(moment('2020-05-01T12:48:33.375Z').format('DD/MM/YYYY - HH:mm'))
-            expect($tableCells.get(3)).to.contain('Staff One')
+            expect($tableCells.get(2)).to.contain('Staff One')
+            expect($tableCells.get(3)).to.contain(moment('2020-05-01T12:48:33.375Z').format('DD/MM/YYYY - HH:mm'))
             cy.get($tableCells.get(4))
               .find('a')
               .should('contain.text', 'View details for location 1-03')
@@ -106,8 +116,8 @@ context('Prisoner cell history', () => {
               )
             expect($tableCells.get(5)).to.contain('Reception')
             expect($tableCells.get(6)).to.contain(moment('2020-03-01T12:48:33.375Z').format('DD/MM/YYYY - HH:mm'))
-            expect($tableCells.get(7)).to.contain(moment('2020-04-01T12:48:33.375Z').format('DD/MM/YYYY - HH:mm'))
-            expect($tableCells.get(8)).to.contain('Staff Two')
+            expect($tableCells.get(7)).to.contain('Staff Two')
+            expect($tableCells.get(8)).to.contain(moment('2020-04-01T12:48:33.375Z').format('DD/MM/YYYY - HH:mm'))
             expect($tableCells.get(9)).to.contain('')
           })
       })

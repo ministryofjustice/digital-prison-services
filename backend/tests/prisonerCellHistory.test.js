@@ -39,6 +39,7 @@ describe('Prisoner cell history', () => {
           livingUnitId: 3,
           movementMadeBy: 'STAFF_2',
         },
+        // Current location
         {
           agencyId: 'MDI',
           assignmentDate: '2020-05-01',
@@ -75,9 +76,9 @@ describe('Prisoner cell history', () => {
         },
       ],
     })
-    prisonApi.getAgencyDetails = jest.fn().mockResolvedValue([])
-    prisonApi.getInmatesAtLocation = jest.fn().mockResolvedValue([])
-    prisonApi.getStaffDetails = jest.fn().mockResolvedValue({ bookingId, firstName: 'John', lastName: 'Smith' })
+    prisonApi.getAgencyDetails = jest.fn()
+    prisonApi.getInmatesAtLocation = jest.fn()
+    prisonApi.getStaffDetails = jest.fn()
 
     controller = prisonerCellHistory({ oauthApi, prisonApi, logError })
 
@@ -86,18 +87,6 @@ describe('Prisoner cell history', () => {
 
   afterEach(() => {
     Date.now.mockRestore()
-  })
-
-  it('should make the expected API calls', async () => {
-    await controller(req, res)
-
-    expect(prisonApi.getDetails).toHaveBeenCalledWith(res.locals, offenderNo)
-    expect(prisonApi.getOffenderCellHistory).toHaveBeenCalledWith(res.locals, bookingId, { page: 0, size: 10000 })
-    expect(prisonApi.getAgencyDetails.mock.calls.length).toBe(2)
-    expect(prisonApi.getInmatesAtLocation).toHaveBeenCalledWith(res.locals, 1, {})
-    expect(prisonApi.getStaffDetails.mock.calls.length).toBe(3)
-    expect(prisonApi.getStaffDetails).toHaveBeenCalledWith(res.locals, 'STAFF_2')
-    expect(prisonApi.getStaffDetails).toHaveBeenCalledWith(res.locals, 'STAFF_3')
   })
 
   describe('cell history for offender', () => {
@@ -109,6 +98,23 @@ describe('Prisoner cell history', () => {
       prisonApi.getInmatesAtLocation.mockResolvedValue([
         { bookingId: '144', firstName: 'Another', lastName: 'Offender', offenderNo: 'B12345' },
       ])
+      prisonApi.getStaffDetails
+        .mockResolvedValueOnce({ firstName: 'Staff', lastName: 'Two', username: 'STAFF_2' })
+        .mockResolvedValueOnce({ firstName: 'Staff', lastName: 'Three', username: 'STAFF_3' })
+        .mockResolvedValue({ firstName: 'Staff', lastName: 'One', username: 'STAFF_1' })
+    })
+
+    it('should make the expected API calls', async () => {
+      await controller(req, res)
+
+      expect(prisonApi.getDetails).toHaveBeenCalledWith(res.locals, offenderNo)
+      expect(prisonApi.getOffenderCellHistory).toHaveBeenCalledWith(res.locals, bookingId, { page: 0, size: 10000 })
+      expect(prisonApi.getAgencyDetails.mock.calls.length).toBe(2)
+      expect(prisonApi.getStaffDetails.mock.calls.length).toBe(4)
+      expect(prisonApi.getStaffDetails).toHaveBeenCalledWith(res.locals, 'STAFF_1')
+      expect(prisonApi.getStaffDetails).toHaveBeenCalledWith(res.locals, 'STAFF_2')
+      expect(prisonApi.getStaffDetails).toHaveBeenCalledWith(res.locals, 'STAFF_3')
+      expect(prisonApi.getInmatesAtLocation).toHaveBeenCalledWith(res.locals, 1, {})
     })
 
     it('sends the right data to the template', async () => {
@@ -129,7 +135,7 @@ describe('Prisoner cell history', () => {
                 establishment: 'Moorland',
                 livingUnitId: 2,
                 location: '1-03',
-                movedBy: 'John Smith',
+                movedInBy: 'Staff Three',
                 movedIn: '01/04/2020 - 12:48',
                 movedOut: '01/05/2020 - 12:48',
               },
@@ -140,7 +146,7 @@ describe('Prisoner cell history', () => {
                 establishment: 'Moorland',
                 livingUnitId: 2,
                 location: '1-02',
-                movedBy: 'John Smith',
+                movedInBy: 'Staff Three',
                 movedIn: '01/03/2020 - 12:48',
                 movedOut: '01/04/2020 - 12:48',
               },
@@ -157,7 +163,7 @@ describe('Prisoner cell history', () => {
                 establishment: 'Ranby',
                 livingUnitId: 3,
                 location: '1-03',
-                movedBy: 'John Smith',
+                movedInBy: 'Staff Two',
                 movedIn: '01/02/2020 - 12:48',
                 movedOut: '01/03/2020 - 12:48',
               },
@@ -173,6 +179,7 @@ describe('Prisoner cell history', () => {
           livingUnitId: 1,
           location: '1-02',
           movedIn: '01/05/2020 - 12:48',
+          movedInBy: 'Staff One',
         },
         dpsUrl: 'http://localhost:3000/',
         occupants: [{ name: 'Offender, Another', profileUrl: '/prisoner/B12345' }],
