@@ -139,9 +139,6 @@ env:
   - name: API_COMMUNITY_API_PREFIX
     value: {{ .Values.env.API_COMMUNITY_API_PREFIX | quote }}
 
-  - name: VIDEO_LINK_ENABLED_FOR
-    value: {{ .Values.env.VIDEO_LINK_ENABLED_FOR | quote }}
-
   - name: HMPPS_COOKIE_NAME
     value: {{ .Values.env.HMPPS_COOKIE_NAME | quote }}
 
@@ -194,10 +191,6 @@ env:
     value: {{ .Values.env.SOC_API_ENABLED | quote }}
 
   - name: BVL_URL
-    value: {{ .Values.env.BVL_URL | quote }}
-
-  - name: REDIRECT_TO_BOOKING_VIDEO_LINK_ENABLED
-    value: {{ .Values.env.REDIRECT_TO_BOOKING_VIDEO_LINK_ENABLED | quote }}
-    
+    value: {{ .Values.env.BVL_URL | quote }}    
       
 {{- end -}}

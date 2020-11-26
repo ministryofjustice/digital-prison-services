@@ -5,6 +5,7 @@ const setupRedirects = require('../setupRedirects')
 const config = require('../config')
 
 config.app.supportUrl = '//supportUrl'
+config.apis.bookVideoLink.url = '//bvl'
 
 describe('setup redirects', () => {
   let agent
@@ -19,6 +20,13 @@ describe('setup redirects', () => {
     agent
       .get('/add-bulk-appointments')
       .expect('location', '/bulk-appointments/need-to-upload-file')
+      .expect(301, done)
+  })
+
+  it('should redirect to the new book video link service when the old url is used', done => {
+    agent
+      .get('/videolink')
+      .expect('location', '//bvl')
       .expect(301, done)
   })
 
