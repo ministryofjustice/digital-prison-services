@@ -1,4 +1,4 @@
-<h3 class="govuk-heading-m">Money</h3>
+<h3 class="govuk-heading-m">Finances</h3>
 <div data-test="offender-balances">
 
     {% if balanceDetailsSectionError %}
@@ -12,16 +12,19 @@
         {% set balanceRows = [] %}
 
         {% for balance in balanceDetails %}
-            {% set balanceRows = (balanceRows.push(
-                {
-                    key: {
-                    text: balance.label
-                },
-                    value: {
-                    text: balance.value | showDefault
-                }
-                }
-                ), balanceRows) %}
+            {% if (balance.visible === true) %}
+                {% set balanceRows = (balanceRows.push(
+                    {
+                        key: {
+                        text: balance.label
+                    },
+                        value: {
+                        html: balance.html | showDefault
+                    }
+                    }
+                    ), balanceRows) 
+                %}
+            {% endif %}
         {% endfor %}
 
         {{ govukSummaryList({
