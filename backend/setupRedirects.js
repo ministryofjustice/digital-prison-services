@@ -22,5 +22,9 @@ module.exports = () => {
     res.redirect(301, `/prisoner/${req.params.offenderNo}/incentive-level-details`)
   )
 
+  router.get('/videolink', (req, res) => {
+    res.redirect(301, config.apis.bookVideoLink.url)
+  })
+
   return router
 }

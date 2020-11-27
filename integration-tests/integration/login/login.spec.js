@@ -1,4 +1,3 @@
-const CourtVideoLinkHomePage = require('../../pages/videolink/courtVideoLinkHomePage')
 const SearchPage = require('../../pages/whereabouts/searchPage')
 
 context('Login functionality', () => {
@@ -58,11 +57,5 @@ context('Login functionality', () => {
     cy.task('stubLogin', {})
     cy.login()
     SearchPage.verifyOnPage()
-  })
-
-  it('Log in as video link court user', () => {
-    cy.task('stubLoginCourt')
-    cy.login()
-    CourtVideoLinkHomePage.verifyOnPage()
   })
 })
