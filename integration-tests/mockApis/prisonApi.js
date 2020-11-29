@@ -1759,4 +1759,34 @@ module.exports = {
         jsonBody: response || { damageObligations: [] },
       },
     }),
+  stubGetCaseNote: (offenderId, caseNoteId, caseNoteResponse) => {
+    return stubFor({
+      request: {
+        method: 'GET',
+        urlPattern: `/api/offenders/${offenderId}/case-notes/${caseNoteId}`,
+      },
+      response: {
+        status: 200,
+        headers: {
+          'Content-Type': 'application/json;charset=UTF-8',
+        },
+        jsonBody: caseNoteResponse || {},
+      },
+    })
+  },
+  stubGetStaffDetails: (staffId, response) => {
+    return stubFor({
+      request: {
+        method: 'GET',
+        urlPattern: `/api/users/${staffId}`,
+      },
+      response: {
+        status: 200,
+        headers: {
+          'Content-Type': 'application/json;charset=UTF-8',
+        },
+        jsonBody: response || {},
+      },
+    })
+  },
 }

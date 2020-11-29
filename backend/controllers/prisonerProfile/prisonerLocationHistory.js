@@ -12,7 +12,37 @@ const {
   app: { notmEndpointUrl: dpsUrl },
 } = require('../../config')
 
-module.exports = ({ prisonApi, whereaboutsApi, logError }) => async (req, res) => {
+const fetchStaffName = (context, staffId, prisonApi) => {
+  return prisonApi
+    .getStaffDetails(context, staffId)
+    .then(staff => formatName(staff.firstName, staff.lastName))
+    .catch('No staff name found')
+}
+
+const fetchReasonDescription = (context, assignmentReasonCode, caseNotesApi) => {
+  return caseNotesApi
+    .getCaseNoteTypes(context)
+    .then(caseNoteTypes => caseNoteTypes.find(type => type.code === 'MOVED_CELL'))
+    .then(cellMoveTypes => {
+      return cellMoveTypes?.subCodes.map(subType => ({
+        value: subType.code,
+        text: subType.description,
+      }))
+    })
+    .then(cellMoveReasonRadioValues => cellMoveReasonRadioValues.find(record => record.value === assignmentReasonCode))
+    .then(assignmentReason => assignmentReason.text)
+    .catch('No reason description found')
+}
+
+const fetchWhatHappened = (context, offenderNo, bookingId, bedAssignmentHistorySequence, prisonApi, whereaboutsApi) => {
+  return whereaboutsApi
+    .getCellMoveReason(context, bookingId, bedAssignmentHistorySequence)
+    .then(cellMoveReason => prisonApi.getCaseNote(context, offenderNo, cellMoveReason.caseNoteId))
+    .then(caseNote => caseNote.text)
+    .catch(err => 'No details found')
+}
+
+module.exports = ({ prisonApi, whereaboutsApi, caseNotesApi, logError }) => async (req, res) => {
   const { offenderNo } = req.params
   const { agencyId, locationId, fromDate, toDate = moment().format('YYYY-MM-DD') } = req.query
 
@@ -26,20 +56,25 @@ module.exports = ({ prisonApi, whereaboutsApi, logError }) => async (req, res) =
     ])
 
     const userCaseLoadIds = userCaseLoads.map(caseLoad => caseLoad.caseLoadId)
-
     const { bookingId, firstName, lastName } = prisonerDetails
-
     const currentPrisonerDetails = locationHistory.find(record => record.bookingId === bookingId) || {}
 
-    const whatHappenedCaseNote = await whereaboutsApi
-      .getCellMoveReason(
-        res.locals,
-        currentPrisonerDetails.bookingId,
-        currentPrisonerDetails.bedAssignmentHistorySequence
-      )
-      .then(cellMoveReason => prisonApi.getCaseNote(res.locals, offenderNo, cellMoveReason.caseNoteId))
-      .then(caseNote => caseNote.text)
-      .catch(err => 'No details found')
+    const movementMadeByName = currentPrisonerDetails.movementMadeBy
+      ? await fetchStaffName(res.locals, currentPrisonerDetails.movementMadeBy, prisonApi)
+      : ''
+    const assignmentReasonName = currentPrisonerDetails.assignmentReason
+      ? await fetchReasonDescription(res.locals, currentPrisonerDetails.assignmentReason, caseNotesApi)
+      : ''
+    const whatHappenedDetails = currentPrisonerDetails.bedAssignmentHistorySequence
+      ? await fetchWhatHappened(
+          res.locals,
+          offenderNo,
+          bookingId,
+          currentPrisonerDetails.bedAssignmentHistorySequence,
+          prisonApi,
+          whereaboutsApi
+        )
+      : ''
 
     const locationHistoryWithPrisoner =
       hasLength(locationHistory) &&
@@ -51,7 +86,6 @@ module.exports = ({ prisonApi, whereaboutsApi, logError }) => async (req, res) =
       ))
 
     const prisonerName = formatName(firstName, lastName)
-
     const getMovedOutText = sharingOffenderEndTime => {
       if (!currentPrisonerDetails.assignmentEndDateTime && !sharingOffenderEndTime) return 'Currently sharing'
       if (currentPrisonerDetails.assignmentEndDateTime && !sharingOffenderEndTime) return `${prisonerName} moved out`
@@ -70,9 +104,9 @@ module.exports = ({ prisonApi, whereaboutsApi, logError }) => async (req, res) =
         movedOut: currentPrisonerDetails.assignmentEndDateTime
           ? formatTimestampToDateTime(currentPrisonerDetails.assignmentEndDateTime)
           : 'Current cell',
-        movedBy: currentPrisonerDetails.movementMadeBy,
-        reasonForMove: currentPrisonerDetails.assignmentReason,
-        whatHappened: whatHappenedCaseNote,
+        movedBy: movementMadeByName,
+        reasonForMove: assignmentReasonName,
+        whatHappened: whatHappenedDetails,
         attributes: locationAttributes.attributes,
       },
       locationSharingHistory:

@@ -29,6 +29,9 @@ context('Prisoner location history', () => {
           assignmentDateTime: '2020-08-28T11:20:39',
           agencyId: 'MDI',
           description: 'MDI-1-1-015',
+          movementMadeBy: 'USERID_GEN',
+          assignmentReason: 'CLA',
+          bedAssignmentHistorySequence: 1,
         },
         {
           bookingId: 2,
@@ -40,6 +43,8 @@ context('Prisoner location history', () => {
           assignmentEndDateTime: '2020-08-28T11:00:00',
           agencyId: 'LEI',
           description: 'MDI-1-1-015',
+          movementMadeBy: 'USERID_GEN',
+          bedAssignmentHistorySequence: 1,
         },
         {
           bookingId: 3,
@@ -48,6 +53,9 @@ context('Prisoner location history', () => {
           assignmentDateTime: '2020-08-25T11:20:39',
           agencyId: 'MDI',
           description: 'MDI-1-1-015',
+          movementMadeBy: 'USERID_GEN',
+          assignmentReason: 'CLA',
+          bedAssignmentHistorySequence: 1,
         },
       ])
       cy.task('stubAgencyDetails', { agencyId: 'MDI', details: { agencyId: 'MDI', description: 'Moorland' } })
@@ -72,6 +80,38 @@ context('Prisoner location history', () => {
         prisonerDetail: { offenderNo: 'ABC789', bookingId: 3, firstName: 'Barry', lastName: 'Stevenson' },
         bookingId: 3,
       })
+
+      cy.task('stubGetCellMoveReason', {
+        bookingId: 1,
+        bedAssignmentHistorySequence: 1,
+        cellMoveReason: { caseNoteId: 123 },
+      })
+
+      cy.task('stubGetOffenderCaseNote', {
+        offenderId: 'A1234A',
+        caseNoteId: 123,
+        caseNote: { text: 'A long comment about what happened on the day to cause the move.' },
+      })
+
+      cy.task('stubGetStaffDetails', {
+        staffId: 'USERID_GEN',
+        response: { firstName: 'Joe', lastName: 'Bloggss' },
+      })
+
+      const caseNotesTypes = [
+        {
+          code: 'MOVED_CELL',
+          subCodes: [
+            { code: 'ADM', description: 'Administrative' },
+            { code: 'BEH', description: 'Behaviour' },
+            { code: 'CLA', description: 'Classification or re-classification' },
+            { code: 'CON', description: 'Conflict with other prisoners' },
+            { code: 'LN', description: 'Local needs' },
+            { code: 'VP', description: 'Vulnerable prisoner' },
+          ],
+        },
+      ]
+      cy.task('stubCaseNoteTypes', caseNotesTypes)
     })
 
     it('should load and display the correct data', () => {
@@ -115,6 +155,9 @@ context('Prisoner location history', () => {
           assignmentEndDateTime: '2020-08-28T12:00:00',
           agencyId: 'MDI',
           description: 'MDI-1-1-015',
+          movementMadeBy: 'USERID_GEN',
+          assignmentReason: 'CLA',
+          bedAssignmentHistorySequence: 1,
         },
         {
           bookingId: 2,
@@ -126,6 +169,8 @@ context('Prisoner location history', () => {
           assignmentEndDateTime: '2020-08-28T11:00:00',
           agencyId: 'LEI',
           description: 'MDI-1-1-015',
+          movementMadeBy: 'USERID_GEN',
+          bedAssignmentHistorySequence: 1,
         },
         {
           bookingId: 3,
@@ -134,6 +179,9 @@ context('Prisoner location history', () => {
           assignmentDateTime: '2020-08-25T11:20:39',
           agencyId: 'MDI',
           description: 'MDI-1-1-015',
+          movementMadeBy: 'USERID_GEN',
+          assignmentReason: 'CLA',
+          bedAssignmentHistorySequence: 1,
         },
       ])
       cy.visit(`/prisoner/${offenderNo}/location-history?fromDate=2020-08-28&locationId=1&agencyId=MDI`)
@@ -174,6 +222,9 @@ context('Prisoner location history', () => {
           assignmentDateTime: '2020-08-28T11:20:39',
           agencyId: 'MDI',
           description: 'MDI-1-1-015',
+          movementMadeBy: 'USERID_GEN',
+          assignmentReason: 'CLA',
+          bedAssignmentHistorySequence: 1,
         },
       ])
 
@@ -193,6 +244,9 @@ context('Prisoner location history', () => {
           assignmentDateTime: '2020-08-28T11:20:39',
           agencyId: 'MDI',
           description: 'MDI-1-1-015',
+          movementMadeBy: 'USERID_GEN',
+          assignmentReason: 'CLA',
+          bedAssignmentHistorySequence: 1,
         },
       ])
 
@@ -207,8 +261,8 @@ context('Prisoner location history', () => {
       cy.visit(`/prisoner/${offenderNo}/location-history?fromDate=2020-08-28&locationId=1&agencyId=MDI`)
 
       const prisonerLocationHistoryPage = PrisonerLocationHistoryPage.verifyOnPage()
-      prisonerLocationHistoryPage.movedBy().contains('John Brown')
-      prisonerLocationHistoryPage.reasonForMove().contains('Behaviour')
+      prisonerLocationHistoryPage.movedBy().contains('Joe Bloggs')
+      prisonerLocationHistoryPage.reasonForMove().contains('Classification or re-classification')
       prisonerLocationHistoryPage
         .whatHappened()
         .contains('A long comment about what happened on the day to cause the move.')

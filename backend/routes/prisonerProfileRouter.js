@@ -89,7 +89,7 @@ const controller = ({
   )
 
   router.get('/cell-history', prisonerCellHistory({ oauthApi, prisonApi, logError }))
-  router.get('/location-history', prisonerLocationHistory({ prisonApi, whereaboutsApi, logError }))
+  router.get('/location-history', prisonerLocationHistory({ prisonApi, whereaboutsApi, caseNotesApi, logError }))
 
   router.get('/adjudications/:adjudicationNumber', prisonerAdjudicationDetails({ prisonApi, logError }))
 
