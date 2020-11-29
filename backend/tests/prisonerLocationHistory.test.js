@@ -59,23 +59,25 @@ describe('Prisoner location sharing history', () => {
     expect(prisonApi.getPrisonerDetail.mock.calls.length).toBe(0)
   })
 
-  // describe('without data', () => {
-  //   it('should still be able to render the template and not error', async () => {
-  //     await controller(req, res)
+  describe('without data', () => {
+    it('should still be able to render the template and not error', async () => {
+      await controller(req, res)
 
-  //     expect(res.render).toHaveBeenCalledWith('prisonerProfile/prisonerLocationHistory.njk', {
-  //       breadcrumbPrisonerName: 'Smith, John',
-  //       dpsUrl: 'http://localhost:3000/',
-  //       locationDetails: {
-  //         movedOut: 'Current cell',
-  //         // whatHappened: 'No details found',
-  //       },
-  //       locationSharingHistory: false,
-  //       profileUrl: '/prisoner/ABC123',
-  //       prisonerName: 'John Smith',
-  //     })
-  //   })
-  // })
+      expect(res.render).toHaveBeenCalledWith('prisonerProfile/prisonerLocationHistory.njk', {
+        breadcrumbPrisonerName: 'Smith, John',
+        dpsUrl: 'http://localhost:3000/',
+        locationDetails: {
+          movedOut: 'Current cell',
+          movedBy: '',
+          reasonForMove: '',
+          whatHappened: '',
+        },
+        locationSharingHistory: false,
+        profileUrl: '/prisoner/ABC123',
+        prisonerName: 'John Smith',
+      })
+    })
+  })
 
   describe('with data', () => {
     beforeEach(() => {
