@@ -39,7 +39,7 @@ const fetchWhatHappened = (context, offenderNo, bookingId, bedAssignmentHistoryS
     .getCellMoveReason(context, bookingId, bedAssignmentHistorySequence)
     .then(cellMoveReason => prisonApi.getCaseNote(context, offenderNo, cellMoveReason.cellMoveReason.caseNoteId))
     .then(caseNote => caseNote.text)
-    .catch(err => 'No details found')
+    .catch(err => 'Not entered')
 }
 
 module.exports = ({ prisonApi, whereaboutsApi, caseNotesApi, logError }) => async (req, res) => {
@@ -74,7 +74,7 @@ module.exports = ({ prisonApi, whereaboutsApi, caseNotesApi, logError }) => asyn
           prisonApi,
           whereaboutsApi
         )
-      : ''
+      : 'Not entered'
 
     const locationHistoryWithPrisoner =
       hasLength(locationHistory) &&

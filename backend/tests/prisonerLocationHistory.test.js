@@ -70,7 +70,7 @@ describe('Prisoner location sharing history', () => {
           movedOut: 'Current cell',
           movedBy: '',
           reasonForMove: '',
-          whatHappened: '',
+          whatHappened: 'Not entered',
         },
         locationSharingHistory: false,
         profileUrl: '/prisoner/ABC123',
@@ -144,10 +144,6 @@ describe('Prisoner location sharing history', () => {
         .mockResolvedValueOnce({ offenderNo, bookingId, firstName: 'John', lastName: 'Smith' })
         .mockResolvedValueOnce({ offenderNo: 'ABC456', bookingId: 2, firstName: 'Steve', lastName: 'Jones' })
         .mockResolvedValueOnce({ offenderNo: 'ABC789', bookingId: 3, firstName: 'Barry', lastName: 'Stevenson' })
-
-      prisonApi.getCaseNote = jest
-        .fn()
-        .mockResolvedValue({ text: 'A long comment about what happened on the day to cause the move.' })
 
       prisonApi.getStaffDetails = jest.fn().mockResolvedValue({ firstName: 'Joe', lastName: 'Bloggs' })
       const caseNotesTypes = [
