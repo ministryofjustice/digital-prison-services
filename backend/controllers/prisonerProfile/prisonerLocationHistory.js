@@ -28,10 +28,17 @@ const fetchReasonDescription = (context, assignmentReasonCode, caseNotesApi) =>
     .then(cellMoveReasonRadioValues => cellMoveReasonRadioValues.find(record => record.value === assignmentReasonCode))
     .then(assignmentReason => assignmentReason.text)
 
-const fetchWhatHappened = (context, offenderNo, bookingId, bedAssignmentHistorySequence, prisonApi, whereaboutsApi) =>
+const fetchWhatHappened = (
+  context,
+  offenderNo,
+  bookingId,
+  bedAssignmentHistorySequence,
+  caseNotesApi,
+  whereaboutsApi
+) =>
   whereaboutsApi
     .getCellMoveReason(context, bookingId, bedAssignmentHistorySequence)
-    .then(cellMoveReason => prisonApi.getCaseNote(context, offenderNo, cellMoveReason.cellMoveReason.caseNoteId))
+    .then(cellMoveReason => caseNotesApi.getCaseNote(context, offenderNo, cellMoveReason.cellMoveReason.caseNoteId))
     .then(caseNote => caseNote.text)
     .catch(err => 'Not entered')
 
@@ -61,7 +68,7 @@ module.exports = ({ prisonApi, whereaboutsApi, caseNotesApi, logError }) => asyn
       offenderNo,
       bookingId,
       currentPrisonerDetails.bedAssignmentHistorySequence,
-      prisonApi,
+      caseNotesApi,
       whereaboutsApi
     )
 

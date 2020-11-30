@@ -305,6 +305,8 @@ module.exports = on => {
     verifyGlobalSearch: offenderSearch.verifyGlobalSearch,
     stubOffenderMovements: prisonApi.stubOffenderMovements,
     stubGetCaseNote: caseNote => caseNotes.stubGetCaseNote(caseNote),
+    stubGetOffenderCaseNote: ({ offenderId, caseNoteId, caseNote }) =>
+      caseNotes.stubGetOffenderCaseNote(offenderId, caseNoteId, caseNote),
     stubBookingDetails: details => prisonApi.stubBookingDetails(details),
     verifySaveAmendment: caseNotes.verifySaveAmendment,
     stubGetCaseNoteTypes: caseNotes.stubGetCaseNoteTypes,
@@ -403,8 +405,6 @@ module.exports = on => {
     stubGetPrisonerDamageObligations: response => prisonApi.stubGetPrisonerDamageObligations(response),
     stubGetCellMoveReason: ({ bookingId, bedAssignmentHistorySequence, cellMoveReason }) =>
       whereabouts.stubGetCellMoveReason(bookingId, bedAssignmentHistorySequence, cellMoveReason),
-    stubGetOffenderCaseNote: ({ offenderId, caseNoteId, caseNote }) =>
-      prisonApi.stubGetCaseNote(offenderId, caseNoteId, caseNote),
     stubGetStaffDetails: ({ staffId, response }) => prisonApi.stubGetStaffDetails(staffId, response),
   })
 }

@@ -31,7 +31,7 @@ describe('Prisoner location sharing history', () => {
     prisonApi.getPrisonerDetail = jest.fn()
 
     prisonApi.getStaffDetails = jest.fn().mockResolvedValue({ firstName: 'Joe', lastName: 'Bloggs' })
-    prisonApi.getCaseNote = jest.fn().mockResolvedValue({ text: 'Some details regarding what happened' })
+    caseNotesApi.getCaseNote = jest.fn().mockResolvedValue({ text: 'Some details regarding what happened' })
 
     const caseNotesTypes = [
       {
@@ -175,7 +175,7 @@ describe('Prisoner location sharing history', () => {
       ]
       caseNotesApi.getCaseNoteTypes = jest.fn().mockResolvedValue(caseNotesTypes)
       whereaboutsApi.getCellMoveReason = jest.fn().mockResolvedValue({ cellMoveReason: { caseNoteId: 123 } })
-      prisonApi.getCaseNote = jest
+      caseNotesApi.getCaseNote = jest
         .fn()
         .mockResolvedValue({ text: 'A long comment about what happened on the day to cause the move.' })
     })
