@@ -12,15 +12,11 @@ const {
   app: { notmEndpointUrl: dpsUrl },
 } = require('../../config')
 
-const fetchStaffName = (context, staffId, prisonApi) => {
-  return prisonApi
-    .getStaffDetails(context, staffId)
-    .then(staff => formatName(staff.firstName, staff.lastName))
-    .catch('No staff name found')
-}
+const fetchStaffName = (context, staffId, prisonApi) =>
+  prisonApi.getStaffDetails(context, staffId).then(staff => formatName(staff.firstName, staff.lastName))
 
-const fetchReasonDescription = (context, assignmentReasonCode, caseNotesApi) => {
-  return caseNotesApi
+const fetchReasonDescription = (context, assignmentReasonCode, caseNotesApi) =>
+  caseNotesApi
     .getCaseNoteTypes(context)
     .then(caseNoteTypes => caseNoteTypes.find(type => type.code === 'MOVED_CELL'))
     .then(cellMoveTypes => {
@@ -31,16 +27,13 @@ const fetchReasonDescription = (context, assignmentReasonCode, caseNotesApi) => 
     })
     .then(cellMoveReasonRadioValues => cellMoveReasonRadioValues.find(record => record.value === assignmentReasonCode))
     .then(assignmentReason => assignmentReason.text)
-    .catch('No reason description found')
-}
 
-const fetchWhatHappened = (context, offenderNo, bookingId, bedAssignmentHistorySequence, prisonApi, whereaboutsApi) => {
-  return whereaboutsApi
+const fetchWhatHappened = (context, offenderNo, bookingId, bedAssignmentHistorySequence, prisonApi, whereaboutsApi) =>
+  whereaboutsApi
     .getCellMoveReason(context, bookingId, bedAssignmentHistorySequence)
     .then(cellMoveReason => prisonApi.getCaseNote(context, offenderNo, cellMoveReason.cellMoveReason.caseNoteId))
     .then(caseNote => caseNote.text)
     .catch(err => 'Not entered')
-}
 
 module.exports = ({ prisonApi, whereaboutsApi, caseNotesApi, logError }) => async (req, res) => {
   const { offenderNo } = req.params
@@ -59,22 +52,18 @@ module.exports = ({ prisonApi, whereaboutsApi, caseNotesApi, logError }) => asyn
     const { bookingId, firstName, lastName } = prisonerDetails
     const currentPrisonerDetails = locationHistory.find(record => record.bookingId === bookingId) || {}
 
-    const movementMadeByName = currentPrisonerDetails.movementMadeBy
-      ? await fetchStaffName(res.locals, currentPrisonerDetails.movementMadeBy, prisonApi)
-      : ''
+    const movementMadeByName = await fetchStaffName(res.locals, currentPrisonerDetails.movementMadeBy, prisonApi)
     const assignmentReasonName = currentPrisonerDetails.assignmentReason
       ? await fetchReasonDescription(res.locals, currentPrisonerDetails.assignmentReason, caseNotesApi)
       : ''
-    const whatHappenedDetails = currentPrisonerDetails.bedAssignmentHistorySequence
-      ? await fetchWhatHappened(
-          res.locals,
-          offenderNo,
-          bookingId,
-          currentPrisonerDetails.bedAssignmentHistorySequence,
-          prisonApi,
-          whereaboutsApi
-        )
-      : 'Not entered'
+    const whatHappenedDetails = await fetchWhatHappened(
+      res.locals,
+      offenderNo,
+      bookingId,
+      currentPrisonerDetails.bedAssignmentHistorySequence,
+      prisonApi,
+      whereaboutsApi
+    )
 
     const locationHistoryWithPrisoner =
       hasLength(locationHistory) &&

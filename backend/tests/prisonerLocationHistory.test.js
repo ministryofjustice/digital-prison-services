@@ -29,11 +29,25 @@ describe('Prisoner location sharing history', () => {
     prisonApi.getAgencyDetails = jest.fn().mockResolvedValue({})
     prisonApi.userCaseLoads = jest.fn().mockResolvedValue([])
     prisonApi.getPrisonerDetail = jest.fn()
-    prisonApi.getStaffDetails = jest.fn().mockResolvedValue({})
-    prisonApi.getCaseNote = jest.fn().mockResolvedValue({})
 
-    caseNotesApi.getCaseNoteTypes = jest.fn().mockResolvedValue([])
-    whereaboutsApi.getCellMoveReason = jest.fn().mockResolvedValue({})
+    prisonApi.getStaffDetails = jest.fn().mockResolvedValue({ firstName: 'Joe', lastName: 'Bloggs' })
+    prisonApi.getCaseNote = jest.fn().mockResolvedValue({ text: 'Some details regarding what happened' })
+
+    const caseNotesTypes = [
+      {
+        code: 'MOVED_CELL',
+        subCodes: [
+          { code: 'ADM', description: 'Administrative' },
+          { code: 'BEH', description: 'Behaviour' },
+          { code: 'CLA', description: 'Classification or re-classification' },
+          { code: 'CON', description: 'Conflict with other prisoners' },
+          { code: 'LN', description: 'Local needs' },
+          { code: 'VP', description: 'Vulnerable prisoner' },
+        ],
+      },
+    ]
+    caseNotesApi.getCaseNoteTypes = jest.fn().mockResolvedValue(caseNotesTypes)
+    whereaboutsApi.getCellMoveReason = jest.fn().mockResolvedValue({ cellMoveReason: { caseNoteId: 123 } })
 
     controller = prisonerLocationHistory({ prisonApi, whereaboutsApi, caseNotesApi, logError })
 
@@ -68,9 +82,9 @@ describe('Prisoner location sharing history', () => {
         dpsUrl: 'http://localhost:3000/',
         locationDetails: {
           movedOut: 'Current cell',
-          movedBy: '',
+          movedBy: 'Joe Bloggs',
           reasonForMove: '',
-          whatHappened: 'Not entered',
+          whatHappened: 'Some details regarding what happened',
         },
         locationSharingHistory: false,
         profileUrl: '/prisoner/ABC123',
