@@ -37,7 +37,7 @@ const fetchReasonDescription = (context, assignmentReasonCode, caseNotesApi) => 
 const fetchWhatHappened = (context, offenderNo, bookingId, bedAssignmentHistorySequence, prisonApi, whereaboutsApi) => {
   return whereaboutsApi
     .getCellMoveReason(context, bookingId, bedAssignmentHistorySequence)
-    .then(cellMoveReason => prisonApi.getCaseNote(context, offenderNo, cellMoveReason.caseNoteId))
+    .then(cellMoveReason => prisonApi.getCaseNote(context, offenderNo, cellMoveReason.cellMoveReason.caseNoteId))
     .then(caseNote => caseNote.text)
     .catch(err => 'No details found')
 }

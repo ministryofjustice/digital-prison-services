@@ -84,7 +84,7 @@ context('Prisoner location history', () => {
       cy.task('stubGetCellMoveReason', {
         bookingId: 1,
         bedAssignmentHistorySequence: 1,
-        cellMoveReason: { caseNoteId: 123 },
+        cellMoveReason: { cellMoveReason: { caseNoteId: 123 } },
       })
 
       cy.task('stubGetOffenderCaseNote', {
