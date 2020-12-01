@@ -1,3 +1,4 @@
+const moment = require('moment')
 const prisonerQuickLookPage = require('../../pages/prisonerProfile/prisonerQuickLookPage')
 const offenderBasicDetails = require('../../mockApis/responses/offenderBasicDetails.json')
 const offenderFullDetails = require('../../mockApis/responses/offenderFullDetails.json')
@@ -9,7 +10,9 @@ const quickLookFullDetails = {
   prisonerDetails: [
     {
       imprisonmentStatusDesc: 'Adult Imprisonment Without Option CJA03',
-      dateOfBirth: '1998-12-01',
+      dateOfBirth: moment()
+        .subtract(21, 'years')
+        .format('YYYY-MM-DD'),
       pncNumber: '12/3456A',
       croNumber: '12345/57B',
     },
