@@ -17,6 +17,7 @@ import {
   putLastNameFirst,
   getNamesFromString,
   isPrisonerIdentifier,
+  trimString,
 } from './utils'
 
 describe('capitalize()', () => {
@@ -372,5 +373,39 @@ describe('isPrisonerIdentifier()', () => {
   })
   it('should return false for name', () => {
     expect(isPrisonerIdentifier('John Smith')).toEqual(false)
+  })
+})
+
+describe('trimString()', () => {
+  it('trim string of length 20 to 10', () => {
+    expect(trimString('some string value at', 10)).toEqual('some strin')
+  })
+
+  it('trim string of length 9 to 10', () => {
+    expect(trimString('some stri', 10)).toEqual('some stri')
+  })
+
+  it('trim string to length of 0', () => {
+    expect(trimString('some stri', 0)).toEqual('some stri')
+  })
+
+  it('trim undefined string', () => {
+    expect(trimString(undefined, 5)).toEqual(undefined)
+  })
+
+  it('trim string to undefined length', () => {
+    expect(trimString('some string', undefined)).toEqual('some string')
+  })
+
+  it('trim undefined to undefined length', () => {
+    expect(trimString(undefined, undefined)).toEqual(undefined)
+  })
+
+  it('trim without params', () => {
+    expect(trimString()).toEqual(undefined)
+  })
+
+  it('trim empty string params', () => {
+    expect(trimString('', 10)).toEqual('')
   })
 })
