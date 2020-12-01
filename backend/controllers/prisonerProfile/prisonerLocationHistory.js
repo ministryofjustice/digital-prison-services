@@ -15,24 +15,18 @@ const {
 const fetchStaffName = (context, staffId, prisonApi) =>
   prisonApi.getStaffDetails(context, staffId).then(staff => formatName(staff.firstName, staff.lastName))
 
-const fetchReasonDescription = (context, assignmentReasonCode, caseNotesApi) => {
-  if (assignmentReasonCode) {
-    return caseNotesApi
-      .getCaseNoteTypes(context)
-      .then(caseNoteTypes => caseNoteTypes.find(type => type.code === 'MOVED_CELL'))
-      .then(cellMoveTypes => {
-        return cellMoveTypes?.subCodes.map(subType => ({
-          value: subType.code,
-          text: subType.description,
-        }))
-      })
-      .then(cellMoveReasonRadioValues =>
-        cellMoveReasonRadioValues.find(record => record.value === assignmentReasonCode)
-      )
-      .then(assignmentReason => assignmentReason.text)
-  }
-  return ''
-}
+const fetchReasonDescription = (context, assignmentReasonCode, caseNotesApi) =>
+  caseNotesApi
+    .getCaseNoteTypes(context)
+    .then(caseNoteTypes => caseNoteTypes.find(type => type.code === 'MOVED_CELL'))
+    .then(cellMoveTypes => {
+      return cellMoveTypes?.subCodes.map(subType => ({
+        value: subType.code,
+        text: subType.description,
+      }))
+    })
+    .then(cellMoveReasonRadioValues => cellMoveReasonRadioValues.find(record => record.value === assignmentReasonCode))
+    .then(assignmentReason => assignmentReason.text)
 
 const fetchWhatHappened = (
   context,
@@ -67,7 +61,9 @@ module.exports = ({ prisonApi, whereaboutsApi, caseNotesApi, logError }) => asyn
 
     const { movementMadeBy, assignmentReason, bedAssignmentHistorySequence } = currentPrisonerDetails
     const movementMadeByName = await fetchStaffName(res.locals, movementMadeBy, prisonApi)
-    const assignmentReasonName = await fetchReasonDescription(res.locals, assignmentReason, caseNotesApi)
+    const assignmentReasonName = assignmentReason
+      ? await fetchReasonDescription(res.locals, assignmentReason, caseNotesApi)
+      : ''
     const whatHappenedDetails = await fetchWhatHappened(
       res.locals,
       offenderNo,
