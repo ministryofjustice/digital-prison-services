@@ -189,6 +189,7 @@ const setup = ({
       dataComplianceApi,
       logError,
       socApi,
+      whereaboutsApi,
     })
   )
 

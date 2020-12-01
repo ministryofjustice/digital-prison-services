@@ -1759,4 +1759,19 @@ module.exports = {
         jsonBody: response || { damageObligations: [] },
       },
     }),
+  stubGetStaffDetails: (staffId, response) => {
+    return stubFor({
+      request: {
+        method: 'GET',
+        urlPattern: `/api/users/${staffId}`,
+      },
+      response: {
+        status: 200,
+        headers: {
+          'Content-Type': 'application/json;charset=UTF-8',
+        },
+        jsonBody: response || {},
+      },
+    })
+  },
 }

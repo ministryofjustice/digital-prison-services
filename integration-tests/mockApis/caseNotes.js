@@ -70,6 +70,12 @@ module.exports = {
       body: response,
     })
   },
+  stubGetOffenderCaseNote: (offenderId, caseNoteId, caseNoteResponse) => {
+    return getFor({
+      urlPattern: `/casenotes/case-notes/${offenderId}/${caseNoteId}`,
+      body: caseNoteResponse,
+    })
+  },
   stubSaveAmendment: () => {
     return stubFor({
       request: {
