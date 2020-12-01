@@ -248,9 +248,6 @@ const prisonApiFactory = client => {
   const getCaseNoteSummaryByTypes = (context, params) =>
     get(context, `/api/case-notes/summary?${mapToQueryString(params)}`)
 
-  const getCaseNote = (context, offenderId, caseNoteId) =>
-    get(context, `/api/offenders/${offenderId}/case-notes/${caseNoteId}`)
-
   const getMainOffence = (context, bookingId) => get(context, `/api/bookings/${bookingId}/mainOffence`)
 
   const getStaffRoles = (context, staffId, agencyId) => get(context, `/api/staff/${staffId}/${agencyId}/roles`)
@@ -480,7 +477,6 @@ const prisonApiFactory = client => {
     getInmatesAtLocationPrefix,
     moveToCellSwap,
     getOffenderDamageObligations,
-    getCaseNote,
   }
 }
 
