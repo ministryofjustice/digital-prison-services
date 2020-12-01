@@ -9,6 +9,9 @@ const prisonerLocationHistory = () =>
     type: () => cy.get("[data-test='cell-type']"),
     results: () => cy.get('[data-test="prisoner-location-history"]'),
     noHistoryMessage: () => cy.get('[data-test="no-history-message"]'),
+    movedBy: () => cy.get('[data-test="moved-by"]'),
+    reasonForMove: () => cy.get('[data-test="reason-for-move"]'),
+    whatHappened: () => cy.get('[data-test="what-happened"]'),
   })
 
 export default {

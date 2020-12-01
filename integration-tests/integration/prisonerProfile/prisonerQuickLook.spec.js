@@ -9,7 +9,7 @@ const quickLookFullDetails = {
   prisonerDetails: [
     {
       imprisonmentStatusDesc: 'Adult Imprisonment Without Option CJA03',
-      dateOfBirth: '1998-12-01',
+      dateOfBirth: '1999-12-01',
       pncNumber: '12/3456A',
       croNumber: '12345/57B',
     },
