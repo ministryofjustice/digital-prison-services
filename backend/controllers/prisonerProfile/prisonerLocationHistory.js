@@ -11,6 +11,7 @@ const {
 const {
   app: { notmEndpointUrl: dpsUrl },
 } = require('../../config')
+const { isBlank } = require('../../utils')
 
 const fetchStaffName = (context, staffId, prisonApi) =>
   prisonApi.getStaffDetails(context, staffId).then(staff => formatName(staff.firstName, staff.lastName))
@@ -40,7 +41,6 @@ const fetchWhatHappened = (
     .getCellMoveReason(context, bookingId, bedAssignmentHistorySequence)
     .then(cellMoveReason => caseNotesApi.getCaseNote(context, offenderNo, cellMoveReason.cellMoveReason.caseNoteId))
     .then(caseNote => caseNote.text)
-    .catch(err => 'Not entered')
 
 module.exports = ({ prisonApi, whereaboutsApi, caseNotesApi, logError }) => async (req, res) => {
   const { offenderNo } = req.params
@@ -72,6 +72,7 @@ module.exports = ({ prisonApi, whereaboutsApi, caseNotesApi, logError }) => asyn
       caseNotesApi,
       whereaboutsApi
     )
+    const whatHappenedDetailsToShow = isBlank(whatHappenedDetails) ? 'Not entered' : whatHappenedDetails
 
     const locationHistoryWithPrisoner =
       hasLength(locationHistory) &&
@@ -103,7 +104,7 @@ module.exports = ({ prisonApi, whereaboutsApi, caseNotesApi, logError }) => asyn
           : 'Current cell',
         movedBy: movementMadeByName,
         reasonForMove: assignmentReasonName,
-        whatHappened: whatHappenedDetails,
+        whatHappened: whatHappenedDetailsToShow,
         attributes: locationAttributes.attributes,
       },
       locationSharingHistory:

@@ -310,4 +310,5 @@ module.exports = {
   possessive,
   extractLocation,
   indefiniteArticle,
+  isBlank,
 }
