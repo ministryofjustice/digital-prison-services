@@ -50,7 +50,7 @@ describe('Pre post appointments', () => {
     appointmentsService.getAppointmentOptions = jest.fn()
     existingEventsService.getExistingEventsForLocation = jest.fn()
     whereaboutsApi.getCourtLocations = jest.fn()
-    whereaboutsApi.addVideoLinkAppointment = jest.fn()
+    whereaboutsApi.addVideoLinkBooking = jest.fn()
 
     req.flash = jest.fn()
     res.render = jest.fn()
@@ -631,7 +631,7 @@ describe('Pre post appointments', () => {
         res.redirect = jest.fn()
       })
 
-      it('should create main appointment', async () => {
+      it('should create booking', async () => {
         const { post } = prepostAppointmentsFactory({
           prisonApi,
           oauthApi,
@@ -644,75 +644,33 @@ describe('Pre post appointments', () => {
 
         await post(req, res)
 
-        expect(whereaboutsApi.addVideoLinkAppointment).toHaveBeenCalledWith(
+        expect(whereaboutsApi.addVideoLinkBooking).toHaveBeenCalledWith(
           {},
           {
             bookingId: 1,
             comment: 'Test',
-            locationId: 1,
-            startTime: '2017-10-10T11:00',
-            endTime: '2017-10-10T14:00',
             court: 'London',
             madeByTheCourt: false,
+            pre: {
+              startTime: '2017-10-10T10:45:00',
+              endTime: '2017-10-10T11:00:00',
+              locationId: 2,
+            },
+            main: {
+              startTime: '2017-10-10T11:00',
+              endTime: '2017-10-10T14:00',
+              locationId: 1,
+            },
+            post: {
+              startTime: '2017-10-10T14:00',
+              endTime: '2017-10-10T15:00:00',
+              locationId: 3,
+            },
           }
         )
       })
 
-      it('should create main pre appointment', async () => {
-        const { post } = prepostAppointmentsFactory({
-          prisonApi,
-          oauthApi,
-          notifyClient,
-          appointmentsService,
-          existingEventsService,
-          whereaboutsApi,
-          logError: () => {},
-        })
-
-        await post(req, res)
-
-        expect(whereaboutsApi.addVideoLinkAppointment).toHaveBeenCalledWith(
-          {},
-          {
-            bookingId: 1,
-            comment: 'Test',
-            locationId: 2,
-            startTime: '2017-10-10T10:45:00',
-            endTime: '2017-10-10T11:00:00',
-            court: 'London',
-            madeByTheCourt: false,
-          }
-        )
-      })
-
-      it('should create main post appointment', async () => {
-        const { post } = prepostAppointmentsFactory({
-          prisonApi,
-          oauthApi,
-          notifyClient,
-          appointmentsService,
-          existingEventsService,
-          whereaboutsApi,
-          logError: () => {},
-        })
-
-        await post(req, res)
-
-        expect(whereaboutsApi.addVideoLinkAppointment).toHaveBeenCalledWith(
-          {},
-          {
-            bookingId: 1,
-            comment: 'Test',
-            locationId: 3,
-            startTime: '2017-10-10T14:00',
-            endTime: '2017-10-10T15:00:00',
-            court: 'London',
-            madeByTheCourt: false,
-          }
-        )
-      })
-
-      it('should not request pre or post appointments when "no" has been selected', async () => {
+      it('should not request pre or post appointments when no has been selected', async () => {
         const { post } = prepostAppointmentsFactory({
           prisonApi,
           oauthApi,
@@ -726,11 +684,26 @@ describe('Pre post appointments', () => {
         req.body = {
           postAppointment: 'no',
           preAppointment: 'no',
-          court: 'London',
+          court: 'london',
         }
         await post(req, res)
 
-        expect(whereaboutsApi.addVideoLinkAppointment.mock.calls.length).toBe(1)
+        expect(whereaboutsApi.addVideoLinkBooking.mock.calls.length).toBe(1)
+
+        expect(whereaboutsApi.addVideoLinkBooking).toHaveBeenCalledWith(
+          {},
+          {
+            bookingId: 1,
+            comment: 'Test',
+            court: 'London',
+            madeByTheCourt: false,
+            main: {
+              startTime: '2017-10-10T11:00',
+              endTime: '2017-10-10T14:00',
+              locationId: 1,
+            },
+          }
+        )
       })
 
       it('should place pre and post appointment details into flash', async () => {
