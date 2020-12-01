@@ -20,12 +20,12 @@ const fetchReasonDescription = (context, assignmentReasonCode, caseNotesApi) =>
   caseNotesApi
     .getCaseNoteTypes(context)
     .then(caseNoteTypes => caseNoteTypes.find(type => type.code === 'MOVED_CELL'))
-    .then(cellMoveTypes => {
-      return cellMoveTypes?.subCodes.map(subType => ({
+    .then(cellMoveTypes =>
+      cellMoveTypes?.subCodes.map(subType => ({
         value: subType.code,
         text: subType.description,
       }))
-    })
+    )
     .then(cellMoveReasonValues => cellMoveReasonValues.find(record => record.value === assignmentReasonCode))
     .then(cellMoveReasonValue => cellMoveReasonValue.text)
 
