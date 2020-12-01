@@ -61,9 +61,9 @@ module.exports = ({ prisonApi, whereaboutsApi, caseNotesApi, logError }) => asyn
 
     const { movementMadeBy, assignmentReason, bedAssignmentHistorySequence } = currentPrisonerDetails
     const movementMadeByName = await fetchStaffName(res.locals, movementMadeBy, prisonApi)
-    const assignmentReasonName = assignmentReason
-      ? await fetchReasonDescription(res.locals, assignmentReason, caseNotesApi)
-      : ''
+    const assignmentReasonName =
+      assignmentReason && (await fetchReasonDescription(res.locals, assignmentReason, caseNotesApi))
+
     const whatHappenedDetails = await fetchWhatHappened(
       res.locals,
       offenderNo,

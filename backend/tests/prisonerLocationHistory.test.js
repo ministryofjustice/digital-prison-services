@@ -84,7 +84,6 @@ describe('Prisoner location sharing history', () => {
         locationDetails: {
           movedOut: 'Current cell',
           movedBy: 'Joe Bloggs',
-          reasonForMove: '',
           whatHappened: 'Some details regarding what happened',
         },
         locationSharingHistory: false,
