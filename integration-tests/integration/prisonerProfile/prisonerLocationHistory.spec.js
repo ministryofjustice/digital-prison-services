@@ -339,10 +339,10 @@ context('Prisoner location history', () => {
 
     context('No cell move reason found', () => {
       beforeEach(() => {
-        cy.task('stubGetCellMoveReason', {
-          bookingId: 1,
-          bedAssignmentHistorySequence: 1,
-          cellMoveReason: {},
+        cy.task('stubGetOffenderCaseNote', {
+          offenderId: 'A1234A',
+          caseNoteId: 123,
+          caseNote: { text: '' },
         })
       })
 
