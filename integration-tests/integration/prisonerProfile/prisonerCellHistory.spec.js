@@ -27,7 +27,7 @@ context('Prisoner cell history', () => {
             {
               agencyId: 'MDI',
               assignmentDate: '2020-05-01',
-              assignmentDateTime: '2020-05-01T12:48:33.375Z',
+              assignmentDateTime: '2020-05-01T12:48:33.375',
               assignmentReason: 'ADM',
               bookingId: 123,
               description: 'MDI-1-02',
@@ -37,9 +37,9 @@ context('Prisoner cell history', () => {
             {
               agencyId: 'MDI',
               assignmentDate: '2020-03-01',
-              assignmentDateTime: '2020-03-01T12:48:33.375Z',
+              assignmentDateTime: '2020-03-01T12:48:33.375',
               assignmentEndDate: '2020-04-01',
-              assignmentEndDateTime: '2020-04-01T12:48:33.375Z',
+              assignmentEndDateTime: '2020-04-01T12:48:33.375',
               assignmentReason: 'ADM',
               bookingId: 123,
               description: 'MDI-RECP',
@@ -49,9 +49,9 @@ context('Prisoner cell history', () => {
             {
               agencyId: 'MDI',
               assignmentDate: '2020-04-01',
-              assignmentDateTime: '2020-04-01T12:48:33.375Z',
+              assignmentDateTime: '2020-04-01T12:48:33.375',
               assignmentEndDate: '2020-05-01',
-              assignmentEndDateTime: '2020-05-01T12:48:33.375Z',
+              assignmentEndDateTime: '2020-05-01T12:48:33.375',
               assignmentReason: 'ADM',
               bookingId: 123,
               description: 'MDI-1-03',
@@ -78,7 +78,7 @@ context('Prisoner cell history', () => {
       prisonerCellHistoryPage.location().contains('1-02')
       prisonerCellHistoryPage
         .currentLocationMovedInDate()
-        .contains(moment('2020-05-01T12:48:33.375Z').format('DD/MM/YYYY - HH:mm'))
+        .contains(moment('2020-05-01T12:48:33.375').format('DD/MM/YYYY - HH:mm'))
       prisonerCellHistoryPage.currentLocationMovedInBy().contains('Staff One')
       prisonerCellHistoryPage.occupants().contains('Offender, Test')
       prisonerCellHistoryPage.cellMoveButton().should('not.be.visible')
@@ -103,9 +103,9 @@ context('Prisoner cell history', () => {
               .should('eq', 10) // 2 rows with 5 cells
 
             expect($tableCells.get(0)).to.contain('1-03')
-            expect($tableCells.get(1)).to.contain(moment('2020-04-01T12:48:33.375Z').format('DD/MM/YYYY - HH:mm'))
+            expect($tableCells.get(1)).to.contain(moment('2020-04-01T12:48:33.375').format('DD/MM/YYYY - HH:mm'))
             expect($tableCells.get(2)).to.contain('Staff One')
-            expect($tableCells.get(3)).to.contain(moment('2020-05-01T12:48:33.375Z').format('DD/MM/YYYY - HH:mm'))
+            expect($tableCells.get(3)).to.contain(moment('2020-05-01T12:48:33.375').format('DD/MM/YYYY - HH:mm'))
             cy.get($tableCells.get(4))
               .find('a')
               .should('contain.text', 'View details for location 1-03')
@@ -115,9 +115,9 @@ context('Prisoner cell history', () => {
                 '/location-history?fromDate=2020-04-01T12:48:33&toDate=2020-05-01T12:48:33&locationId=3&agencyId=MDI'
               )
             expect($tableCells.get(5)).to.contain('Reception')
-            expect($tableCells.get(6)).to.contain(moment('2020-03-01T12:48:33.375Z').format('DD/MM/YYYY - HH:mm'))
+            expect($tableCells.get(6)).to.contain(moment('2020-03-01T12:48:33.375').format('DD/MM/YYYY - HH:mm'))
             expect($tableCells.get(7)).to.contain('Staff Two')
-            expect($tableCells.get(8)).to.contain(moment('2020-04-01T12:48:33.375Z').format('DD/MM/YYYY - HH:mm'))
+            expect($tableCells.get(8)).to.contain(moment('2020-04-01T12:48:33.375').format('DD/MM/YYYY - HH:mm'))
             expect($tableCells.get(9)).to.contain('')
           })
       })

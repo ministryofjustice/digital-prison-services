@@ -76,7 +76,8 @@ module.exports = on => {
     stubAttendanceChanges: response => Promise.all([whereabouts.stubAttendanceChanges(response)]),
     stubCourts: courts => Promise.all([whereabouts.stubCourtLocations(courts)]),
     stubGroups: caseload => whereabouts.stubGroups(caseload),
-    stubAddVideoLinkAppointment: appointment => Promise.all([whereabouts.stubAddVideoLinkAppointment(appointment)]),
+    stubAddVideoLinkBooking: () => whereabouts.stubAddVideoLinkBooking(),
+    getBookingRequest: () => whereabouts.getBookingRequest(),
     stubCaseNotes: response => caseNotes.stubCaseNotes(response),
     stubCaseNoteTypes: types => caseNotes.stubCaseNoteTypes(types),
 

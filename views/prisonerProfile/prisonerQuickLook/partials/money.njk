@@ -19,11 +19,11 @@
                         text: balance.label
                     },
                         value: {
-                        html: balance.html | showDefault
+                            html: balance.html,
+                            text: balance.text | showDefault
+                        }
                     }
-                    }
-                    ), balanceRows) 
-                %}
+                ), balanceRows) %}
             {% endif %}
         {% endfor %}
 
