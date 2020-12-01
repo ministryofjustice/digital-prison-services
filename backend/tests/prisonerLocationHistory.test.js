@@ -1,6 +1,7 @@
 const prisonerLocationHistory = require('../controllers/prisonerProfile/prisonerLocationHistory')
 const { serviceUnavailableMessage } = require('../common-messages')
 const { makeNotFoundError } = require('./helpers')
+const { trimString } = require('../utils')
 
 describe('Prisoner location sharing history', () => {
   const offenderNo = 'ABC123'
@@ -241,6 +242,24 @@ describe('Prisoner location sharing history', () => {
           locationDetails: expect.objectContaining({
             reasonForMove: 'Classification or re-classification',
             whatHappened: 'Not entered',
+          }),
+        })
+      )
+    })
+
+    it('when the "what happened" is over 4000 chars then we should trim', async () => {
+      const aLongComment = 'some comment'.repeat(10000)
+      const trimmedComment = trimString(aLongComment, 4000)
+      caseNotesApi.getCaseNote = jest.fn().mockResolvedValue({ text: aLongComment })
+
+      await controller(req, res)
+
+      expect(res.render).toHaveBeenCalledWith(
+        'prisonerProfile/prisonerLocationHistory.njk',
+        expect.objectContaining({
+          locationDetails: expect.objectContaining({
+            reasonForMove: 'Classification or re-classification',
+            whatHappened: trimmedComment,
           }),
         })
       )
