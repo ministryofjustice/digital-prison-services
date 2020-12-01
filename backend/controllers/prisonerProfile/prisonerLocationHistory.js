@@ -26,8 +26,8 @@ const fetchReasonDescription = (context, assignmentReasonCode, caseNotesApi) =>
         text: subType.description,
       }))
     })
-    .then(cellMoveReasonRadioValues => cellMoveReasonRadioValues.find(record => record.value === assignmentReasonCode))
-    .then(assignmentReason => assignmentReason.text)
+    .then(cellMoveReasonValues => cellMoveReasonValues.find(record => record.value === assignmentReasonCode))
+    .then(cellMoveReasonValue => cellMoveReasonValue.text)
 
 const fetchWhatHappened = (
   context,
