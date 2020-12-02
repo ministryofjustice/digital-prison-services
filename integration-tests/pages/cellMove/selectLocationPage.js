@@ -13,6 +13,7 @@ const selectLocationPage = () =>
     csra: () => cy.get("[data-test='csra']"),
     csraLink: () => cy.get("[data-test='csra-link']"),
     alerts: () => cy.get("[data-test='alerts']"),
+    numberOfNonAssociations: () => cy.get("[data-test='number-of-non-associations']"),
     nonAssociationsLink: () => cy.get("[data-test='non-associations-link']"),
     nonAssociationsMessage: () => cy.get("[data-test='non-associations-message']"),
   })
