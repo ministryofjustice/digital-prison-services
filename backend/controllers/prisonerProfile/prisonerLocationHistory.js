@@ -42,9 +42,7 @@ const fetchWhatHappened = async (
       .then(cellMoveReason => caseNotesApi.getCaseNote(context, offenderNo, cellMoveReason.cellMoveReason.caseNoteId))
       .then(caseNote => caseNote.text)
   } catch (err) {
-    if (err?.response?.status === 404) {
-      return 'Not entered'
-    }
+    if (err?.response?.status === 404) return 'Not entered'
     throw err
   }
 }
