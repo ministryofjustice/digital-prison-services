@@ -1,5 +1,5 @@
 const moment = require('moment')
-const { serviceUnavailableMessage } = require('../../common-messages')
+const { serviceUnavailableMessage, notEnteredMessage } = require('../../common-messages')
 const {
   formatName,
   formatTimestampToDateTime,
@@ -42,7 +42,7 @@ const fetchWhatHappened = async (
       .then(cellMoveReason => caseNotesApi.getCaseNote(context, offenderNo, cellMoveReason.cellMoveReason.caseNoteId))
       .then(caseNote => caseNote.text)
   } catch (err) {
-    if (err?.response?.status === 404) return 'Not entered'
+    if (err?.response?.status === 404) return notEnteredMessage
     throw err
   }
 }
@@ -65,7 +65,9 @@ module.exports = ({ prisonApi, whereaboutsApi, caseNotesApi, logError }) => asyn
 
     const { movementMadeBy, assignmentReason, bedAssignmentHistorySequence } = currentPrisonerDetails
     const movementMadeByName = await fetchStaffName(res.locals, movementMadeBy, prisonApi)
-    const assignmentReasonName = await fetchReasonDescription(res.locals, assignmentReason || 'ADM', caseNotesApi)
+    const assignmentReasonName = assignmentReason
+      ? await fetchReasonDescription(res.locals, assignmentReason, caseNotesApi)
+      : notEnteredMessage
     const whatHappenedDetails = await fetchWhatHappened(
       res.locals,
       offenderNo,
