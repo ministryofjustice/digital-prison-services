@@ -267,5 +267,21 @@ context('Prisoner location history', () => {
         .whatHappened()
         .contains('A long comment about what happened on the day to cause the move.')
     })
+
+    it('when cell move reason throws a 404 then we default comment', () => {
+      cy.task('stubGetCellMoveReason', {
+        bookingId: 1,
+        bedAssignmentHistorySequence: 1,
+        cellMoveReason: null,
+        status: 404,
+      })
+
+      cy.visit(`/prisoner/${offenderNo}/location-history?fromDate=2020-08-28&locationId=1&agencyId=MDI`)
+
+      const prisonerLocationHistoryPage = PrisonerLocationHistoryPage.verifyOnPage()
+      prisonerLocationHistoryPage.movedBy().contains('Joe Bloggs')
+      prisonerLocationHistoryPage.reasonForMove().contains('Classification or re-classification')
+      prisonerLocationHistoryPage.whatHappened().contains('Not entered')
+    })
   })
 })
