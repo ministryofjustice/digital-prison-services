@@ -17,7 +17,6 @@ import {
   putLastNameFirst,
   getNamesFromString,
   isPrisonerIdentifier,
-  trimString,
 } from './utils'
 
 describe('capitalize()', () => {
