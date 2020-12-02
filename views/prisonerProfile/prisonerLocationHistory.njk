@@ -115,7 +115,8 @@
   {% else %}
 
     {{ govukInsetText({
-      text: prisonerName + " has not shared this cell with anyone else."
+      text: prisonerName + " has not shared this cell with anyone else.",
+      attributes: { "data-test": "no-history-message" }
     }) }}
 
   {% endif %}
