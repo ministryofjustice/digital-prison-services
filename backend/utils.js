@@ -269,13 +269,6 @@ const extractLocation = (location, agencyId) => {
   return withoutAgency
 }
 
-const trimString = (stringValue, maxLength) => {
-  if (maxLength && maxLength > 1 && stringValue && stringValue?.length > maxLength) {
-    return stringValue.substring(0, maxLength)
-  }
-  return stringValue
-}
-
 module.exports = {
   isBeforeToday,
   isToday,
@@ -318,5 +311,4 @@ module.exports = {
   extractLocation,
   indefiniteArticle,
   isBlank,
-  trimString,
 }

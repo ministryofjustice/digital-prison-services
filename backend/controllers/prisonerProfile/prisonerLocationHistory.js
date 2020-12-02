@@ -11,9 +11,6 @@ const {
 const {
   app: { notmEndpointUrl: dpsUrl },
 } = require('../../config')
-const { trimString } = require('../../utils')
-
-const whatHappenedMaxLength = 4000
 
 const fetchStaffName = (context, staffId, prisonApi) =>
   prisonApi.getStaffDetails(context, staffId).then(staff => formatName(staff.firstName, staff.lastName))
@@ -79,7 +76,6 @@ module.exports = ({ prisonApi, whereaboutsApi, caseNotesApi, logError }) => asyn
       caseNotesApi,
       whereaboutsApi
     )
-    const whatHappenedTrimmedToSize = trimString(whatHappenedDetails, whatHappenedMaxLength)
 
     const locationHistoryWithPrisoner =
       hasLength(locationHistory) &&
@@ -111,7 +107,7 @@ module.exports = ({ prisonApi, whereaboutsApi, caseNotesApi, logError }) => asyn
           : 'Current cell',
         movedBy: movementMadeByName,
         reasonForMove: assignmentReasonName,
-        whatHappened: whatHappenedTrimmedToSize,
+        whatHappened: whatHappenedDetails,
         attributes: locationAttributes.attributes,
       },
       locationSharingHistory:
