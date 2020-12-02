@@ -347,13 +347,7 @@ const prisonApiFactory = client => {
 
   const getNonAssociations = (context, bookingId) => get(context, `/api/bookings/${bookingId}/non-association-details`)
 
-  const getCellsWithCapacity = (context, agencyId, attribute) =>
-    get(
-      context,
-      attribute
-        ? `/api/agencies/${agencyId}/cellsWithCapacity?attribute=${attribute}`
-        : `/api/agencies/${agencyId}/cellsWithCapacity`
-    )
+  const getCellsWithCapacity = (context, agencyId) => get(context, `/api/agencies/${agencyId}/cellsWithCapacity`)
 
   const getOffenderCellHistory = (context, bookingId, params) =>
     get(context, `/api/bookings/${bookingId}/cell-history?${mapToQueryString(params)}`)

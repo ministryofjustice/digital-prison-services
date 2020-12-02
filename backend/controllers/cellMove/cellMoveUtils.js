@@ -30,9 +30,12 @@ const userHasAccess = ({ userRoles, userCaseLoads, offenderCaseload }) => {
   return hasCellMoveRole && offenderInCaseload
 }
 
+const cellAttributes = [{ text: 'Single occupancy', value: 'SO' }, { text: 'Multiple occupancy', value: 'MO' }]
+
 module.exports = {
   getNonAssocationsInEstablishment,
   showCsraLink,
   getBackLinkData,
   userHasAccess,
+  cellAttributes,
 }
