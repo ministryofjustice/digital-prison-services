@@ -1,7 +1,8 @@
 {% extends "../partials/layout.njk" %}
 {% from "govuk/components/table/macro.njk" import govukTable %}
+{% from "govuk/components/inset-text/macro.njk" import govukInsetText %}
 
-{% set title =  "Location history" %}
+{% set title = "Location history" %}
 
 {% block beforeContent %}
   {{ govukBreadcrumbs({
@@ -80,27 +81,27 @@
   <div>
     <h3 class="govuk-heading-s govuk-!-margin-bottom-1">Moved by</h3>
     <p class="govuk-body" data-test="moved-by">
-          {{ locationDetails.movedBy }}
+      {{ locationDetails.movedBy }}
     </p>
   </div>
-  
+
   <div>
     <h3 class="govuk-heading-s govuk-!-margin-bottom-1">Reason for move</h3>
     <p class="govuk-body" data-test="reason-for-move">
-         {{ locationDetails.reasonForMove }}
+      {{ locationDetails.reasonForMove }}
     </p>
   </div>
 
   <div>
     <h3 class="govuk-heading-s govuk-!-margin-bottom-1">What happened</h3>
     <p class="govuk-body" data-test="what-happened">
-         {{ locationDetails.whatHappened }}
+      {{ locationDetails.whatHappened }}
     </p>
   </div>
 
   {% if rows.length %}
     <h2 class="govuk-heading-m">Shared with</h2>
-    
+
     {{ govukTable({
       head: [
         { text: "Name" },
@@ -112,7 +113,11 @@
       attributes: { "data-test": "prisoner-location-history" }
     }) }}
   {% else %}
-    <p class="govuk-body" data-test="no-history-message">{{ prisonerName }} has not shared this cell with anyone else.</p>
+
+    {{ govukInsetText({
+      text: prisonerName + " has not shared this cell with anyone else."
+    }) }}
+
   {% endif %}
 
   <a href="{{ profileUrl + '/cell-history' }}" class="govuk-link govuk-body">
