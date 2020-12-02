@@ -273,6 +273,7 @@ describe('select location', () => {
         expect.objectContaining({
           prisonerDetails: getDetailsResponse,
           breadcrumbPrisonerName: 'User, Test',
+          numberOfNonAssociations: 0,
           showNonAssociationsLink: false,
           showCsraLink: false,
           alerts: [
@@ -285,13 +286,8 @@ describe('select location', () => {
     })
 
     it('populates the data correctly when some non-associations, but not in the same establishment', async () => {
-      prisonApi.getDetails = jest.fn().mockResolvedValue({
-        ...getDetailsResponse,
-        assignedLivingUnit: {
-          agencyName: 'Moorland',
-        },
-      })
       prisonApi.getNonAssociations = jest.fn().mockResolvedValue({
+        agencyDescription: 'MOORLAND',
         nonAssociations: [
           {
             offenderNonAssociation: {
@@ -305,19 +301,15 @@ describe('select location', () => {
       expect(res.render).toHaveBeenCalledWith(
         'cellMove/selectLocation.njk',
         expect.objectContaining({
+          numberOfNonAssociations: 0,
           showNonAssociationsLink: false,
         })
       )
     })
 
     it('populates the data correctly when some non-associations, but not effective yet', async () => {
-      prisonApi.getDetails = jest.fn().mockResolvedValue({
-        ...getDetailsResponse,
-        assignedLivingUnit: {
-          agencyName: 'Moorland',
-        },
-      })
       prisonApi.getNonAssociations = jest.fn().mockResolvedValue({
+        agencyDescription: 'MOORLAND',
         nonAssociations: [
           {
             effectiveDate: moment().add(1, 'days'),
@@ -332,19 +324,15 @@ describe('select location', () => {
       expect(res.render).toHaveBeenCalledWith(
         'cellMove/selectLocation.njk',
         expect.objectContaining({
+          numberOfNonAssociations: 0,
           showNonAssociationsLink: false,
         })
       )
     })
 
     it('populates the data correctly when some non-associations, but expired', async () => {
-      prisonApi.getDetails = jest.fn().mockResolvedValue({
-        ...getDetailsResponse,
-        assignedLivingUnit: {
-          agencyName: 'Moorland',
-        },
-      })
       prisonApi.getNonAssociations = jest.fn().mockResolvedValue({
+        agencyDescription: 'MOORLAND',
         nonAssociations: [
           {
             effectiveDate: moment().subtract(10, 'days'),
@@ -360,19 +348,15 @@ describe('select location', () => {
       expect(res.render).toHaveBeenCalledWith(
         'cellMove/selectLocation.njk',
         expect.objectContaining({
+          numberOfNonAssociations: 0,
           showNonAssociationsLink: false,
         })
       )
     })
 
     it('populates the data correctly when some non-associations in the same establishment', async () => {
-      prisonApi.getDetails = jest.fn().mockResolvedValue({
-        ...getDetailsResponse,
-        assignedLivingUnit: {
-          agencyName: 'Moorland',
-        },
-      })
       prisonApi.getNonAssociations = jest.fn().mockResolvedValue({
+        agencyDescription: 'MOORLAND',
         nonAssociations: [
           {
             effectiveDate: moment(),
@@ -387,6 +371,7 @@ describe('select location', () => {
       expect(res.render).toHaveBeenCalledWith(
         'cellMove/selectLocation.njk',
         expect.objectContaining({
+          numberOfNonAssociations: 1,
           showNonAssociationsLink: true,
         })
       )

@@ -36,11 +36,12 @@
   <div class="horizontal-information__item">
     <h3 class="govuk-heading-s govuk-!-margin-bottom-1">Non-associations</h3>
     {% if showNonAssociationsLink %}
+      <p class="govuk-body govuk-!-margin-bottom-1" data-test="number-of-non-associations">{{ numberOfNonAssociations }}</p>
       <a href="{{ nonAssociationLink }}" class="govuk-link govuk-body" data-test="non-associations-link">View non-associations
         <span class="govuk-visually-hidden">for {{ breadcrumbPrisonerName }}</span>  
       </a>
     {% else %}
-      <p class="govuk-body" data-test="non-associations-message">You must also check any local processes</p>
+      <p class="govuk-body" data-test="non-associations-message">0 in NOMIS. Check local processes.</p>
     {% endif %}
   </div>
 </div>
