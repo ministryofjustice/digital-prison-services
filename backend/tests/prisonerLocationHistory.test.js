@@ -246,7 +246,7 @@ describe('Prisoner location sharing history', () => {
       )
     })
 
-    it('when assignmentReason in missing then default cell move reason', async () => {
+    it('when assignmentReason is missing then default cell move reason', async () => {
       prisonApi.getHistoryForLocation = jest.fn().mockResolvedValue([
         {
           bookingId: 1,
