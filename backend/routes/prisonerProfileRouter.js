@@ -75,6 +75,7 @@ const controller = ({
       paginationService,
       nunjucks,
       logError,
+      oauthApi,
     })
   )
   router.get(

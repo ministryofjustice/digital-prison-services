@@ -136,6 +136,17 @@ const factory = ({ baseUrl, timeout }) => {
         })
     })
 
+  const sendDelete = (context, path) =>
+    new Promise((resolve, reject) => {
+      superagent
+        .delete(remoteUrl + path)
+        .set(getHeaders(context))
+        .end((error, response) => {
+          if (error) reject(errorLogger(error))
+          else if (response) resolve(resultLogger(response))
+        })
+    })
+
   const getStream = (context, path) =>
     new Promise((resolve, reject) => {
       superagent
@@ -187,6 +198,7 @@ const factory = ({ baseUrl, timeout }) => {
     pipe,
     post,
     put,
+    sendDelete,
   }
 }
 

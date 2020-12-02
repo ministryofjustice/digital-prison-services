@@ -66,7 +66,24 @@ const caseNotesApiFactory = client => {
 
   const getCaseNote = (context, offenderNo, caseNoteId) => get(context, `/case-notes/${offenderNo}/${caseNoteId}`)
 
-  return { getCaseNotes, getCaseNoteTypes, myCaseNoteTypes, addCaseNote, amendCaseNote, getCaseNote }
+  const deleteCaseNote = (context, offenderNo, caseNoteId) =>
+    client.sendDelete(context, `/case-notes/${offenderNo}/${caseNoteId}`).then(processResponse(context))
+
+  const deleteCaseNoteAmendment = (context, offenderNo, caseNoteAmendmentId) =>
+    client
+      .sendDelete(context, `/case-notes/amendment/${offenderNo}/${caseNoteAmendmentId}`)
+      .then(processResponse(context))
+
+  return {
+    getCaseNotes,
+    getCaseNoteTypes,
+    myCaseNoteTypes,
+    addCaseNote,
+    amendCaseNote,
+    getCaseNote,
+    deleteCaseNote,
+    deleteCaseNoteAmendment,
+  }
 }
 
 module.exports = { caseNotesApiFactory }
