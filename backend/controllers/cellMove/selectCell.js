@@ -2,7 +2,7 @@ const moment = require('moment')
 const { serviceUnavailableMessage } = require('../../common-messages')
 const { alertFlagLabels, cellMoveAlertCodes } = require('../../shared/alertFlagValues')
 const { putLastNameFirst, hasLength, groupBy, properCaseName } = require('../../utils')
-const { showNonAssociationsLink, showCsraLink, userHasAccess } = require('./cellMoveUtils')
+const { showNonAssociationsLink, showCsraLink, userHasAccess, cellAttributes } = require('./cellMoveUtils')
 const {
   app: { notmEndpointUrl: dpsUrl },
 } = require('../../config')
@@ -11,16 +11,6 @@ const defaultSubLocationsValue = { text: 'Select area in residential unit', valu
 const noAreasSelectedDropDownValue = { text: 'No areas to select', value: '' }
 const toDropDownValue = entry => ({ text: entry.name, value: entry.key })
 
-const extractQueryParameters = query => {
-  const { location, subLocation, attribute, locationId } = query
-
-  return {
-    location: location || 'ALL',
-    attribute,
-    subLocation,
-    locationId,
-  }
-}
 const sortByDescription = (a, b) => a.description.localeCompare(b.description)
 
 const sortByLatestAssessmentDateDesc = (left, right) => {
@@ -119,7 +109,7 @@ const getResidentialLevelNonAssociations = async (res, { prisonApi, nonAssociati
 
 module.exports = ({ oauthApi, prisonApi, whereaboutsApi, logError }) => async (req, res) => {
   const { offenderNo } = req.params
-  const { location, subLocation, attribute, locationId } = extractQueryParameters(req.query)
+  const { location = 'ALL', subLocation, cellType, locationId } = req.query
   const { activeCaseLoadId } = req.session.userDetails
 
   try {
@@ -134,7 +124,6 @@ module.exports = ({ oauthApi, prisonApi, whereaboutsApi, logError }) => async (r
     }
 
     const nonAssociations = await prisonApi.getNonAssociations(res.locals, prisonerDetails.bookingId)
-    const cellAttributesData = await prisonApi.getCellAttributes(res.locals)
     const locationsData = await whereaboutsApi.searchGroups(res.locals, prisonerDetails.agencyId)
 
     if (req.xhr) {
@@ -155,10 +144,6 @@ module.exports = ({ oauthApi, prisonApi, whereaboutsApi, logError }) => async (r
       { text: 'All locations', value: 'ALL' },
       ...locationsData.map(loc => ({ text: loc.name, value: loc.key })),
     ]
-
-    const cellAttributes = cellAttributesData
-      .filter(cellAttribute => 'Y'.includes(cellAttribute.activeFlag))
-      .map(cellAttribute => ({ text: cellAttribute.description, value: cellAttribute.code }))
 
     const subLocations =
       location === 'ALL'
@@ -184,11 +169,10 @@ module.exports = ({ oauthApi, prisonApi, whereaboutsApi, logError }) => async (r
     // we can directly call prisonApi.
     const cells =
       location === 'ALL'
-        ? await prisonApi.getCellsWithCapacity(res.locals, prisonerDetails.agencyId, attribute)
+        ? await prisonApi.getCellsWithCapacity(res.locals, prisonerDetails.agencyId)
         : await whereaboutsApi.getCellsWithCapacity(res.locals, {
             agencyId: prisonerDetails.agencyId,
             groupName: subLocation ? `${location}_${subLocation}` : location,
-            attribute,
           })
 
     const residentialLevelNonAssociations = await getResidentialLevelNonAssociations(res, {
@@ -201,11 +185,17 @@ module.exports = ({ oauthApi, prisonApi, whereaboutsApi, logError }) => async (r
 
     const cellOccupants = await getCellOccupants(res, { activeCaseLoadId, prisonApi, cells, nonAssociations })
 
+    const selectedCells = cells.filter(cell => {
+      if (cellType === 'SO') return cell.capacity === 1
+      if (cellType === 'MO') return cell.capacity > 1
+      return cell
+    })
+
     return res.render('cellMove/selectCell.njk', {
       formValues: {
         location,
         subLocation,
-        attribute,
+        cellType,
       },
       breadcrumbPrisonerName: putLastNameFirst(prisonerDetails.firstName, prisonerDetails.lastName),
       showNonAssociationsLink:
@@ -213,16 +203,14 @@ module.exports = ({ oauthApi, prisonApi, whereaboutsApi, logError }) => async (r
       showCsraLink: prisonerDetails.assessments && showCsraLink(prisonerDetails.assessments),
       alerts: alertsToShow,
       showNonAssociationWarning: Boolean(residentialLevelNonAssociations.length),
-      cells:
-        hasLength(cells) &&
-        cells
-          .map(cell => ({
-            ...cell,
-            occupants: cellOccupants.filter(occupant => occupant.cellId === cell.id).filter(Boolean),
-            spaces: cell.capacity - cell.noOfOccupants,
-            type: hasLength(cell.attributes) && cell.attributes.sort(sortByDescription),
-          }))
-          .sort(sortByDescription),
+      cells: selectedCells
+        ?.map(cell => ({
+          ...cell,
+          occupants: cellOccupants.filter(occupant => occupant.cellId === cell.id).filter(Boolean),
+          spaces: cell.capacity - cell.noOfOccupants,
+          type: hasLength(cell.attributes) && cell.attributes.sort(sortByDescription),
+        }))
+        .sort(sortByDescription),
       locations,
       subLocations,
       cellAttributes,
