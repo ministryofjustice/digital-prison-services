@@ -360,14 +360,14 @@ module.exports = {
         jsonBody: {},
       },
     }),
-  stubGetCellMoveReason: (bookingId, bedAssignmentHistorySequence, cellMoveReasonResponse) =>
+  stubGetCellMoveReason: (bookingId, bedAssignmentHistorySequence, cellMoveReasonResponse, status = 200) =>
     stubFor({
       request: {
         method: 'GET',
         urlPath: `/whereabouts/cell/cell-move-reason/booking/${bookingId}/bed-assignment-sequence/${bedAssignmentHistorySequence}`,
       },
       response: {
-        status: 200,
+        status,
         headers: {
           'Content-Type': 'application/json;charset=UTF-8',
         },

@@ -267,92 +267,21 @@ context('Prisoner location history', () => {
         .whatHappened()
         .contains('A long comment about what happened on the day to cause the move.')
     })
-  })
 
-  context('Cell move comment functionality', () => {
-    beforeEach(() => {
-      Cypress.Cookies.preserveOnce('hmpps-session-dev')
-      cy.task('stubOffenderBasicDetails', { bookingId: 1, firstName: 'John', lastName: 'Smith', agencyId: 'MDI' })
-      cy.task('stubAttributesForLocation', {
-        id: 1,
-        description: 'MDI-1-1-015',
-        capacity: 2,
-        noOfOccupants: 2,
-        attributes: [{ description: 'Double occupancy' }],
-      })
-      cy.task('stubHistoryForLocation', [
-        {
-          bookingId: 1,
-          livingUnitId: 1,
-          assignmentDate: '2020-08-28',
-          assignmentDateTime: '2020-08-28T11:20:39',
-          agencyId: 'MDI',
-          description: 'MDI-1-1-015',
-          movementMadeBy: 'USERID_GEN',
-          assignmentReason: 'CLA',
-          bedAssignmentHistorySequence: 1,
-        },
-      ])
-      cy.task('stubAgencyDetails', { agencyId: 'MDI', details: { agencyId: 'MDI', description: 'Moorland' } })
-      cy.task('stubUserCaseLoads', [
-        {
-          caseLoadId: 'MDI',
-          description: 'Moorland Closed (HMP & YOI)',
-          type: 'INST',
-          caseloadFunction: 'GENERAL',
-          currentlyActive: true,
-        },
-      ])
-      cy.task('stubPrisonerDetail', {
-        prisonerDetail: { offenderNo: 'ABC123', bookingId: 1, firstName: 'John', lastName: 'Smith' },
+    it('when cell move reason throws a 404 then we default comment', () => {
+      cy.task('stubGetCellMoveReason', {
         bookingId: 1,
-      })
-      cy.task('stubPrisonerDetail', {
-        prisonerDetail: { offenderNo: 'ABC456', bookingId: 2, firstName: 'Steve', lastName: 'Jones' },
-        bookingId: 2,
-      })
-      cy.task('stubPrisonerDetail', {
-        prisonerDetail: { offenderNo: 'ABC789', bookingId: 3, firstName: 'Barry', lastName: 'Stevenson' },
-        bookingId: 3,
+        bedAssignmentHistorySequence: 1,
+        cellMoveReason: null,
+        status: 404,
       })
 
-      cy.task('stubGetStaffDetails', {
-        staffId: 'USERID_GEN',
-        response: { firstName: 'Joe', lastName: 'Bloggss' },
-      })
+      cy.visit(`/prisoner/${offenderNo}/location-history?fromDate=2020-08-28&locationId=1&agencyId=MDI`)
 
-      const caseNotesTypes = [
-        {
-          code: 'MOVED_CELL',
-          subCodes: [
-            { code: 'ADM', description: 'Administrative' },
-            { code: 'BEH', description: 'Behaviour' },
-            { code: 'CLA', description: 'Classification or re-classification' },
-            { code: 'CON', description: 'Conflict with other prisoners' },
-            { code: 'LN', description: 'Local needs' },
-            { code: 'VP', description: 'Vulnerable prisoner' },
-          ],
-        },
-      ]
-      cy.task('stubCaseNoteTypes', caseNotesTypes)
-    })
-
-    context('No cell move reason found', () => {
-      beforeEach(() => {
-        cy.task('stubGetOffenderCaseNote', {
-          offenderId: 'A1234A',
-          caseNoteId: 123,
-          caseNote: { text: '' },
-        })
-      })
-
-      it('what happened is Not entered', () => {
-        cy.visit(`/prisoner/${offenderNo}/location-history?fromDate=2020-08-28&locationId=1&agencyId=MDI`)
-        const prisonerLocationHistoryPage = PrisonerLocationHistoryPage.verifyOnPage()
-        prisonerLocationHistoryPage.movedBy().contains('Joe Bloggs')
-        prisonerLocationHistoryPage.reasonForMove().contains('Classification or re-classification')
-        prisonerLocationHistoryPage.whatHappened().contains('Not entered')
-      })
+      const prisonerLocationHistoryPage = PrisonerLocationHistoryPage.verifyOnPage()
+      prisonerLocationHistoryPage.movedBy().contains('Joe Bloggs')
+      prisonerLocationHistoryPage.reasonForMove().contains('Classification or re-classification')
+      prisonerLocationHistoryPage.whatHappened().contains('Not entered')
     })
   })
 })
