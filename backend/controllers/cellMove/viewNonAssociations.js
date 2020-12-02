@@ -2,7 +2,7 @@ const moment = require('moment')
 
 const { serviceUnavailableMessage } = require('../../common-messages')
 const { putLastNameFirst, formatName } = require('../../utils')
-const { getBackLinkData } = require('./cellMoveUtils')
+const { getBackLinkData, getNonAssocationsInEstablishment } = require('./cellMoveUtils')
 const {
   app: { notmEndpointUrl: dpsUrl },
 } = require('../../config')
@@ -16,48 +16,36 @@ module.exports = ({ prisonApi, logError }) => async (req, res) => {
 
     // Only show active non-associations in the same establishment
     // Active means the effective date is not in the future and the expiry date is not in the past
-    const nonAssocationsInEstablishment =
-      nonAssociations &&
-      nonAssociations.nonAssociations &&
-      nonAssociations.nonAssociations
-        .filter(
-          nonAssociation =>
-            nonAssociation.offenderNonAssociation &&
-            nonAssociation.offenderNonAssociation.agencyDescription.toLowerCase() ===
-              nonAssociations.agencyDescription.toLowerCase() &&
-            (!nonAssociation.expiryDate || moment(nonAssociation.expiryDate, 'YYYY-MM-DDTHH:mm:ss') > moment()) &&
-            (nonAssociation.effectiveDate && moment(nonAssociation.effectiveDate, 'YYYY-MM-DDTHH:mm:ss') <= moment())
-        )
-        .sort((left, right) => {
-          if (left.effectiveDate < right.effectiveDate) return 1
-          if (right.effectiveDate < left.effectiveDate) return -1
-          if (left.offenderNonAssociation.lastName > right.offenderNonAssociation.lastName) return 1
-          if (right.offenderNonAssociation.lastName > left.offenderNonAssociation.lastName) return -1
-          return 0
-        })
+    const sortedNonAssocationsInEstablishment = getNonAssocationsInEstablishment(nonAssociations).sort(
+      (left, right) => {
+        if (left.effectiveDate < right.effectiveDate) return 1
+        if (right.effectiveDate < left.effectiveDate) return -1
+        if (left.offenderNonAssociation.lastName > right.offenderNonAssociation.lastName) return 1
+        if (right.offenderNonAssociation.lastName > left.offenderNonAssociation.lastName) return -1
+        return 0
+      }
+    )
 
-    const nonAssociationsRows =
-      nonAssocationsInEstablishment &&
-      nonAssocationsInEstablishment.map(nonAssociation => {
-        return {
-          name: putLastNameFirst(
-            nonAssociation.offenderNonAssociation.firstName,
-            nonAssociation.offenderNonAssociation.lastName
-          ),
-          prisonNumber: nonAssociation.offenderNonAssociation.offenderNo,
-          location: nonAssociation.offenderNonAssociation.assignedLivingUnitDescription,
-          type: nonAssociation.typeDescription,
-          selectedOffenderKey: `${formatName(firstName, lastName)} is`,
-          selectedOffenderRole: nonAssociation.reasonDescription,
-          otherOffenderKey: `${formatName(
-            nonAssociation.offenderNonAssociation.firstName,
-            nonAssociation.offenderNonAssociation.lastName
-          )} is`,
-          otherOffenderRole: nonAssociation.offenderNonAssociation.reasonDescription,
-          comment: nonAssociation.comments || 'None entered',
-          effectiveDate: moment(nonAssociation.effectiveDate).format('D MMMM YYYY'),
-        }
-      })
+    const nonAssociationsRows = sortedNonAssocationsInEstablishment?.map(nonAssociation => {
+      return {
+        name: putLastNameFirst(
+          nonAssociation.offenderNonAssociation.firstName,
+          nonAssociation.offenderNonAssociation.lastName
+        ),
+        prisonNumber: nonAssociation.offenderNonAssociation.offenderNo,
+        location: nonAssociation.offenderNonAssociation.assignedLivingUnitDescription,
+        type: nonAssociation.typeDescription,
+        selectedOffenderKey: `${formatName(firstName, lastName)} is`,
+        selectedOffenderRole: nonAssociation.reasonDescription,
+        otherOffenderKey: `${formatName(
+          nonAssociation.offenderNonAssociation.firstName,
+          nonAssociation.offenderNonAssociation.lastName
+        )} is`,
+        otherOffenderRole: nonAssociation.offenderNonAssociation.reasonDescription,
+        comment: nonAssociation.comments || 'None entered',
+        effectiveDate: moment(nonAssociation.effectiveDate).format('D MMMM YYYY'),
+      }
+    })
 
     return res.render('cellMove/nonAssociations.njk', {
       nonAssociationsRows,

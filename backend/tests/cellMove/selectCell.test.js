@@ -26,6 +26,14 @@ describe('Select a cell', () => {
     locationPrefix: 'MDI-1',
   }
 
+  beforeAll(() => {
+    jest.spyOn(Date, 'now').mockImplementation(() => 1594900800000) // Thursday, 16 July 2020 12:00:00
+  })
+
+  afterAll(() => {
+    Date.now.mockRestore()
+  })
+
   beforeEach(() => {
     oauthApi.userRoles = jest.fn().mockResolvedValue([{ roleCode: 'CELL_MOVE' }])
     prisonApi.userCaseLoads = jest.fn().mockResolvedValue([{ caseLoadId: 'LEI' }])
@@ -152,7 +160,7 @@ describe('Select a cell', () => {
           selectCellRootUrl: '/prisoner/A12345/cell-move/select-cell',
           selectLocationRootUrl: '/prisoner/A12345/cell-move/select-location',
           showCsraLink: undefined,
-          showNonAssociationsLink: undefined,
+          showNonAssociationsLink: false,
         })
       )
     })
@@ -695,6 +703,20 @@ describe('Select a cell', () => {
       }
     })
 
+    it('should render the template with the correct number of non associations', async () => {
+      req.query = { location: 'ALL' }
+
+      await controller(req, res)
+
+      expect(res.render).toHaveBeenCalledWith(
+        'cellMove/selectCell.njk',
+        expect.objectContaining({
+          numberOfNonAssociations: 1,
+          showNonAssociationsLink: true,
+        })
+      )
+    })
+
     it('should mark an occupant with the no association badge', async () => {
       req.query = { location: 'ALL' }
 
@@ -795,7 +817,6 @@ describe('Select a cell', () => {
     })
 
     it('should set show non association value to false', async () => {
-      prisonApi.nonAssociations = jest.fn().mockResolvedValue({})
       await controller(req, res)
 
       expect(res.render).toHaveBeenCalledWith(

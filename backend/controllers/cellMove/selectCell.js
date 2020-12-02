@@ -2,7 +2,7 @@ const moment = require('moment')
 const { serviceUnavailableMessage } = require('../../common-messages')
 const { alertFlagLabels, cellMoveAlertCodes } = require('../../shared/alertFlagValues')
 const { putLastNameFirst, hasLength, groupBy, properCaseName } = require('../../utils')
-const { showNonAssociationsLink, showCsraLink, userHasAccess, cellAttributes } = require('./cellMoveUtils')
+const { showCsraLink, userHasAccess, getNonAssocationsInEstablishment, cellAttributes } = require('./cellMoveUtils')
 const {
   app: { notmEndpointUrl: dpsUrl },
 } = require('../../config')
@@ -191,6 +191,8 @@ module.exports = ({ oauthApi, prisonApi, whereaboutsApi, logError }) => async (r
       return cell
     })
 
+    const numberOfNonAssociations = getNonAssocationsInEstablishment(nonAssociations).length
+
     return res.render('cellMove/selectCell.njk', {
       formValues: {
         location,
@@ -198,8 +200,8 @@ module.exports = ({ oauthApi, prisonApi, whereaboutsApi, logError }) => async (r
         cellType,
       },
       breadcrumbPrisonerName: putLastNameFirst(prisonerDetails.firstName, prisonerDetails.lastName),
-      showNonAssociationsLink:
-        nonAssociations && showNonAssociationsLink(nonAssociations, prisonerDetails.assignedLivingUnit),
+      numberOfNonAssociations,
+      showNonAssociationsLink: numberOfNonAssociations > 0,
       showCsraLink: prisonerDetails.assessments && showCsraLink(prisonerDetails.assessments),
       alerts: alertsToShow,
       showNonAssociationWarning: Boolean(residentialLevelNonAssociations.length),

@@ -45,7 +45,7 @@ context('A user can select a cell', () => {
     selectLocationPage.csraLink().should('not.be.visible')
     selectLocationPage.alerts().contains('None')
     selectLocationPage.nonAssociationsLink().should('not.be.visible')
-    selectLocationPage.nonAssociationsMessage().contains('You must also check any local processes')
+    selectLocationPage.nonAssociationsMessage().contains('0 in NOMIS. Check local processes.')
   })
 
   it('Shows the correct data when there is a relevant non-association and a CSR rating comment', () => {
@@ -80,6 +80,7 @@ context('A user can select a cell', () => {
       ],
     })
     cy.task('stubBookingNonAssociations', {
+      agencyDescription: 'HMP Moorland',
       nonAssociations: [
         {
           effectiveDate: moment(),
@@ -112,6 +113,7 @@ context('A user can select a cell', () => {
     selectLocationPage.csra().contains('High')
     selectLocationPage.csraLink().contains('View details')
     selectLocationPage.alerts().contains('Gang member')
+    selectLocationPage.numberOfNonAssociations().contains('1')
     selectLocationPage.nonAssociationsLink().contains('View non-associations')
     selectLocationPage.nonAssociationsMessage().should('not.be.visible')
   })

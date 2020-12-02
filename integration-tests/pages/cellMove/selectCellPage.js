@@ -9,6 +9,7 @@ const selectCellPage = () =>
     nonAssociationWarning: () => cy.get('#non-association-warning'),
     selectCswapLink: () => cy.get('[data-test="select-cswap-link"]'),
     noResultsMessage: () => cy.get('[data-test="no-results-message"]'),
+    numberOfNonAssociations: () => cy.get("[data-test='number-of-non-associations']"),
   })
 
 export default {
