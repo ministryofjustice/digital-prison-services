@@ -1,7 +1,6 @@
 const prisonerLocationHistory = require('../controllers/prisonerProfile/prisonerLocationHistory')
 const { serviceUnavailableMessage } = require('../common-messages')
 const { makeNotFoundError } = require('./helpers')
-const { trimString } = require('../utils')
 
 describe('Prisoner location sharing history', () => {
   const offenderNo = 'ABC123'
