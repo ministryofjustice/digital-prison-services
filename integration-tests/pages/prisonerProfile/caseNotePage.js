@@ -14,6 +14,8 @@ const caseNotePage = offenderName =>
       caseNoteDetails: () => cy.get('.case-notes-details'),
       caseNoteAddMoreDetailsLink: () => cy.get('[data-test="add-more-details"]'),
       caseNotePrintIncentiveLevelSlipLink: () => cy.get('[data-test="print-slip"]'),
+      caseNoteDeleteLink: () => cy.get('[data-test="delete"]'),
+      caseNoteDeleteAmendmentLink: () => cy.get('[data-test="delete-amendment"]'),
     }),
     noDataMessage: () => cy.get('[data-test="no-case-notes"]'),
     viewAllCaseNotesTopLink: () => cy.get('[data-test="view-all-case-notes-top-link"]'),

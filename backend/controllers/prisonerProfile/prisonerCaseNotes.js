@@ -7,8 +7,9 @@ const { getNamesFromString } = require('../../utils')
 
 const templatePath = 'prisonerProfile/prisonerCaseNotes'
 const perPage = 20
+const SECURE_CASE_NOTE_SOURCE = 'OCNS'
 
-module.exports = ({ caseNotesApi, prisonerProfileService, paginationService, nunjucks, logError }) => {
+module.exports = ({ caseNotesApi, prisonerProfileService, paginationService, nunjucks, logError, oauthApi }) => {
   const getTotalResults = async (locals, offenderNo, { type, subType, fromDate, toDate }) => {
     const { totalElements } = await caseNotesApi.getCaseNotes(locals, offenderNo, {
       pageNumber: 0,
@@ -66,6 +67,9 @@ module.exports = ({ caseNotesApi, prisonerProfileService, paginationService, nun
 
       const prisonerProfileData = await prisonerProfileService.getPrisonerProfileData(res.locals, offenderNo)
 
+      const userRoles = await oauthApi.userRoles(res.locals).then(roles => roles.map(role => role.roleCode))
+      const hasDeleteRole = userRoles.includes('DELETE_SENSITIVE_CASE_NOTES')
+
       const caseNoteViewData = caseNotes.content.map(caseNote => {
         const creationDateTime = moment(caseNote.creationDateTime, DATE_TIME_FORMAT_SPEC)
 
@@ -73,6 +77,7 @@ module.exports = ({ caseNotesApi, prisonerProfileService, paginationService, nun
         const date = creationDateTime.format('D MMMM YYYY')
         const time = creationDateTime.format(MOMENT_TIME)
         const authorNames = getNamesFromString(caseNote.authorName)
+        const canDelete = hasDeleteRole && caseNote.source === SECURE_CASE_NOTE_SOURCE
 
         const amendments = caseNote.amendments.map(amendment => {
           const amendmentCreatedDateTime = moment(amendment.creationDateTime, DATE_TIME_FORMAT_SPEC)
@@ -82,6 +87,11 @@ module.exports = ({ caseNotesApi, prisonerProfileService, paginationService, nun
             time: amendmentCreatedDateTime.format(MOMENT_TIME),
             authorName: `${authorNames.join(' ')}`,
             text: amendment.additionalNoteText,
+            deleteLink:
+              canDelete &&
+              `/prisoner/${offenderNo}/case-notes/delete-case-note/${caseNote.caseNoteId}/${
+                amendment.caseNoteAmendmentId
+              }`,
           }
         })
 
@@ -106,6 +116,7 @@ module.exports = ({ caseNotesApi, prisonerProfileService, paginationService, nun
           subTypeDescription: caseNote.subTypeDescription,
           text: caseNote.text,
           amendLink: canAmend && `/prisoner/${offenderNo}/case-notes/amend-case-note/${caseNote.caseNoteId}`,
+          deleteLink: canDelete && `/prisoner/${offenderNo}/case-notes/delete-case-note/${caseNote.caseNoteId}`,
           printIncentiveLink:
             showPrintIncentiveLink &&
             `/iep-slip?offenderNo=${offenderNo}&offenderName=${encodeURIComponent(
