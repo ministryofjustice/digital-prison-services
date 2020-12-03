@@ -4,7 +4,7 @@
 {% from "govuk/components/error-summary/macro.njk" import govukErrorSummary %}
 {% from "../macros/alertFlags.njk" import alertFlags %}
 
-{% set title = "Select a location" %}
+{% set title = "Search for a cell" %}
 
 {% block beforeContent %}
   {{ govukBreadcrumbs({
@@ -18,58 +18,47 @@
         href: profileUrl
       },
       {
-        text: 'Select a location'
+        text: title
       }
     ]
 }) }}
 {% endblock %}
 
 {% block content %}
-  <h1 class="govuk-heading-l">{{title}}</h1>
+  <h1 class="govuk-heading-l">{{ title }}</h1>
 
   {% include "./partials/prisonerInformation.njk" %}
 
-  <div class="govuk-grid-row govuk-!-margin-bottom-6">
-    <div class="govuk-grid-column-full">
-      <form class="horizontal-form" method="GET" action="{{ formAction }}">
-        <h2 class="govuk-heading-s govuk-!-margin-right-2 govuk-!-margin-top-1">View by:</h2>
+  <form method="GET" action="{{ formAction }}">
+    {{ govukSelect({
+      name: 'location',
+      id: 'location',
+      label: {
+        text: 'Which residential unit do you want to search?',
+        classes: 'govuk-!-font-weight-bold'
+      },
+      items: locations | addDefaultSelectedVale('All residential units', true)
+    }) }}
 
-          {{ govukSelect({
-              name: 'location',
-              id: 'location',
-              label: {
-                text: 'Select residential unit',
-                classes: 'govuk-visually-hidden'
-              },
-              items: locations
-          }) }}
+    {{ govukSelect({
+      name: 'attribute',
+      id: 'attribute',
+      label: {
+        text: 'What type of cell do you want to search for?',
+        classes: 'govuk-!-font-weight-bold'
+      },
+      hint: {
+        text: "These cell details are taken from NOMIS"
+      },
+      items: cellAttributes | addDefaultSelectedVale('All cell types', true)
+    }) }}
 
-          {{ govukSelect({
-              name: 'attribute',
-              id: 'attribute',
-              label: {
-                text: 'Select cell type',
-                classes: 'govuk-visually-hidden'
-              },
-              items: cellAttributes | addDefaultSelectedVale('Select cell type', true)
-          }) }}
+    {{ govukButton({
+        text: "Search for a cell",
+        preventDoubleClick: true,
+        type: "submit"
+    }) }}
+  </form>
 
-          {{ govukButton({
-              text: "Search",
-              preventDoubleClick: true,
-              type: "submit"
-          }) }}
-
-          <a href="{{ selectLocationRootUrl }}" class="govuk-link">Clear</a>
-      </form>
-    </div>
-  </div>
-
-  <div class="govuk-grid-row govuk-!-margin-top-8">
-    <div class="govuk-grid-column-full">
-      <a class="govuk-link" href="{{ profileUrl }}">Return to prisoner’s profile</a>
-    </div>
-  </div>
-      
-  
+  <a class="govuk-body govuk-link" href="{{ profileUrl }}">Return to prisoner’s profile</a> 
 {% endblock %}

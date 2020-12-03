@@ -423,8 +423,6 @@ describe('select location', () => {
         'cellMove/selectLocation.njk',
         expect.objectContaining({
           locations: [
-            { text: 'Select residential unit', value: 'ALL' },
-            { text: 'All locations', value: 'ALL' },
             { text: 'Casu', value: 'Casu' },
             { text: 'Houseblock 1', value: 'Houseblock 1' },
             { text: 'Houseblock 2', value: 'Houseblock 2' },

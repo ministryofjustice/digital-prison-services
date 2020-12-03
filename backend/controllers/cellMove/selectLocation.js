@@ -25,8 +25,6 @@ module.exports = ({ oauthApi, prisonApi, whereaboutsApi, logError }) => async (r
     const locationsData = await whereaboutsApi.searchGroups(res.locals, prisonerDetails.agencyId)
 
     const locations = locationsData.map(location => ({ text: location.name, value: location.key }))
-    locations.unshift({ text: 'All locations', value: 'ALL' })
-    locations.unshift({ text: 'Select residential unit', value: 'ALL' })
     const cellAttributes = cellAttributesData
       .filter(cellAttribute => cellAttribute.activeFlag === 'Y')
       .map(cellAttribute => ({ text: cellAttribute.description, value: cellAttribute.code }))
