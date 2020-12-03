@@ -45,13 +45,13 @@
           }) }}
 
           {{ govukSelect({
-              name: 'cellType',
-              id: 'cellType',
+              name: 'attribute',
+              id: 'attribute',
               label: {
                 text: 'Select cell type',
                 classes: 'govuk-visually-hidden'
               },
-              items: cellAttributes | addDefaultSelectedVale('All cell types', true)
+              items: cellAttributes | addDefaultSelectedVale('Select cell type', true)
           }) }}
 
           {{ govukButton({

@@ -59,8 +59,10 @@ const whereaboutsApiFactory = client => {
   const getAttendanceChanges = (context, { fromDateTime, toDateTime }) =>
     get(context, `/attendances/changes?fromDateTime=${fromDateTime}&toDateTime=${toDateTime}`)
 
-  const getCellsWithCapacity = (context, { agencyId, groupName }) =>
-    get(context, `/locations/cellsWithCapacity/${agencyId}/${groupName}`)
+  const getCellsWithCapacity = (context, { agencyId, groupName, attribute }) => {
+    const attributeQuery = attribute ? `?attribute=${attribute}` : ''
+    return get(context, `/locations/cellsWithCapacity/${agencyId}/${groupName}${attributeQuery}`)
+  }
 
   const getCellMoveReason = (context, bookingId, bedAssignmentHistorySequence) =>
     get(context, `/cell/cell-move-reason/booking/${bookingId}/bed-assignment-sequence/${bedAssignmentHistorySequence}`)

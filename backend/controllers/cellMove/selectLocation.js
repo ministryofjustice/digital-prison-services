@@ -1,7 +1,7 @@
 const { serviceUnavailableMessage } = require('../../common-messages')
 const { alertFlagLabels, cellMoveAlertCodes } = require('../../shared/alertFlagValues')
 const { putLastNameFirst } = require('../../utils')
-const { showCsraLink, userHasAccess, getNonAssocationsInEstablishment, cellAttributes } = require('./cellMoveUtils')
+const { showCsraLink, userHasAccess, getNonAssocationsInEstablishment } = require('./cellMoveUtils')
 const {
   app: { notmEndpointUrl: dpsUrl },
 } = require('../../config')
@@ -21,11 +21,15 @@ module.exports = ({ oauthApi, prisonApi, whereaboutsApi, logError }) => async (r
     }
 
     const nonAssociations = await prisonApi.getNonAssociations(res.locals, prisonerDetails.bookingId)
+    const cellAttributesData = await prisonApi.getCellAttributes(res.locals)
     const locationsData = await whereaboutsApi.searchGroups(res.locals, prisonerDetails.agencyId)
 
     const locations = locationsData.map(location => ({ text: location.name, value: location.key }))
     locations.unshift({ text: 'All locations', value: 'ALL' })
     locations.unshift({ text: 'Select residential unit', value: 'ALL' })
+    const cellAttributes = cellAttributesData
+      .filter(cellAttribute => cellAttribute.activeFlag === 'Y')
+      .map(cellAttribute => ({ text: cellAttribute.description, value: cellAttribute.code }))
 
     const prisonersActiveAlertCodes = prisonerDetails.alerts
       .filter(alert => !alert.expired)
