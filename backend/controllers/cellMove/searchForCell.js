@@ -1,6 +1,6 @@
 const { serviceUnavailableMessage } = require('../../common-messages')
 const { alertFlagLabels, cellMoveAlertCodes } = require('../../shared/alertFlagValues')
-const { putLastNameFirst } = require('../../utils')
+const { putLastNameFirst, formatName } = require('../../utils')
 const { showCsraLink, userHasAccess, getNonAssocationsInEstablishment } = require('./cellMoveUtils')
 const {
   app: { notmEndpointUrl: dpsUrl },
@@ -25,8 +25,6 @@ module.exports = ({ oauthApi, prisonApi, whereaboutsApi, logError }) => async (r
     const locationsData = await whereaboutsApi.searchGroups(res.locals, prisonerDetails.agencyId)
 
     const locations = locationsData.map(location => ({ text: location.name, value: location.key }))
-    locations.unshift({ text: 'All locations', value: 'ALL' })
-    locations.unshift({ text: 'Select residential unit', value: 'ALL' })
     const cellAttributes = cellAttributesData
       .filter(cellAttribute => cellAttribute.activeFlag === 'Y')
       .map(cellAttribute => ({ text: cellAttribute.description, value: cellAttribute.code }))
@@ -41,8 +39,9 @@ module.exports = ({ oauthApi, prisonApi, whereaboutsApi, logError }) => async (r
     )
     const numberOfNonAssociations = getNonAssocationsInEstablishment(nonAssociations).length
 
-    return res.render('cellMove/selectLocation.njk', {
+    return res.render('cellMove/searchForCell.njk', {
       breadcrumbPrisonerName: putLastNameFirst(prisonerDetails.firstName, prisonerDetails.lastName),
+      prisonerName: formatName(prisonerDetails.firstName, prisonerDetails.lastName),
       numberOfNonAssociations,
       showNonAssociationsLink: numberOfNonAssociations > 0,
       showCsraLink: prisonerDetails.assessments && showCsraLink(prisonerDetails.assessments),
@@ -53,7 +52,7 @@ module.exports = ({ oauthApi, prisonApi, whereaboutsApi, logError }) => async (r
       offenderNo,
       dpsUrl,
       nonAssociationLink: `/prisoner/${offenderNo}/cell-move/non-associations`,
-      selectLocationRootUrl: `/prisoner/${offenderNo}/cell-move/select-location`,
+      searchForCellRootUrl: `/prisoner/${offenderNo}/cell-move/search-for-cell`,
       offenderDetailsUrl: `/prisoner/${offenderNo}/cell-move/offender-details`,
       csraDetailsUrl: `/prisoner/${offenderNo}/cell-move/cell-sharing-risk-assessment-details`,
       formAction: `/prisoner/${offenderNo}/cell-move/select-cell`,
@@ -63,7 +62,7 @@ module.exports = ({ oauthApi, prisonApi, whereaboutsApi, logError }) => async (r
     if (error) logError(req.originalUrl, error, serviceUnavailableMessage)
 
     return res.render('error.njk', {
-      url: `/prisoner/${offenderNo}/cell-move/select-location`,
+      url: `/prisoner/${offenderNo}/cell-move/search-for-cell`,
       homeUrl: `/prisoner/${offenderNo}`,
     })
   }

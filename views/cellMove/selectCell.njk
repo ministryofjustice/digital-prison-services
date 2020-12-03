@@ -147,25 +147,15 @@
     </div>
   </div>
 
-  <div class="govuk-grid-row">
-    <div class="govuk-grid-column-two-thirds">
-      {% if showNonAssociationWarning %}
-        {{ govukWarningText({
-          attributes: {
-            id: 'non-association-warning'
-          },
-          text: breadcrumbPrisonerName + " has a non-association with a prisoner in this location.",
-          iconFallbackText: "Warning"
-        }) }}
-      {% endif %}
-    </div>
-
-    <div class="{{ 'govuk-grid-column-one-third' if showNonAssociationWarning else 'govuk-grid-column-full' }}">
-      <p class="govuk-body pull-right govuk-!-margin-top-2">
-        <a data-test="select-cswap-link" href="{{ '/prisoner/' + offenderNo + '/cell-move/confirm-cell-move?cellId=C-SWAP' }}" class="govuk-link">Move to cell swap</a>
-      </p>
-    </div>
-  </div>
+  {% if showNonAssociationWarning %}
+    {{ govukWarningText({
+      attributes: {
+        id: 'non-association-warning'
+      },
+      text: breadcrumbPrisonerName + " has a non-association with a prisoner in this location.",
+      iconFallbackText: "Warning"
+    }) }}
+  {% endif %}
 
   {% if cells %}
     <table class="govuk-table govuk-table--with-child-rows" data-test="cell-results-table">

@@ -89,7 +89,7 @@ context('A user can view non associations', () => {
     cy.visit(`/prisoner/${offenderNo}/cell-move/non-associations`)
     const nonAssociationsPage = NonAssociationsPage.verifyOnPage()
     nonAssociationsPage.message().contains('You must check any local processes for non-association details.')
-    nonAssociationsPage.backLink().contains('Return to select a location')
+    nonAssociationsPage.backLink().contains('Return to search for a cell')
     cy.get(`[data-test="non-association-summary-ABC125"]`).then($section => {
       cy.get($section)
         .find('dt')

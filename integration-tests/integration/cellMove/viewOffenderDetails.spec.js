@@ -63,6 +63,6 @@ context('A user can view non associations', () => {
           expect($summaryValues.get(8).innerText).to.contain('13 hours overwork')
         })
     })
-    offenderDetailsPage.backLink().contains('Return to select a location')
+    offenderDetailsPage.backLink().contains('Return to search for a cell')
   })
 })

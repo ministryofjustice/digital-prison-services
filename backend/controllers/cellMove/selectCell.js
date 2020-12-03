@@ -1,7 +1,7 @@
 const moment = require('moment')
 const { serviceUnavailableMessage } = require('../../common-messages')
 const { alertFlagLabels, cellMoveAlertCodes } = require('../../shared/alertFlagValues')
-const { putLastNameFirst, hasLength, groupBy, properCaseName } = require('../../utils')
+const { putLastNameFirst, hasLength, groupBy, properCaseName, formatName } = require('../../utils')
 const { showCsraLink, userHasAccess, getNonAssocationsInEstablishment } = require('./cellMoveUtils')
 const {
   app: { notmEndpointUrl: dpsUrl },
@@ -210,6 +210,7 @@ module.exports = ({ oauthApi, prisonApi, whereaboutsApi, logError }) => async (r
         attribute,
       },
       breadcrumbPrisonerName: putLastNameFirst(prisonerDetails.firstName, prisonerDetails.lastName),
+      prisonerName: formatName(prisonerDetails.firstName, prisonerDetails.lastName),
       numberOfNonAssociations,
       showNonAssociationsLink: numberOfNonAssociations > 0,
       showCsraLink: prisonerDetails.assessments && showCsraLink(prisonerDetails.assessments),
@@ -234,7 +235,7 @@ module.exports = ({ oauthApi, prisonApi, whereaboutsApi, logError }) => async (r
       nonAssociationLink: `/prisoner/${offenderNo}/cell-move/non-associations`,
       offenderDetailsUrl: `/prisoner/${offenderNo}/cell-move/offender-details`,
       csraDetailsUrl: `/prisoner/${offenderNo}/cell-move/cell-sharing-risk-assessment-details`,
-      selectLocationRootUrl: `/prisoner/${offenderNo}/cell-move/select-location`,
+      searchForCellRootUrl: `/prisoner/${offenderNo}/cell-move/search-for-cell`,
       selectCellRootUrl: `/prisoner/${offenderNo}/cell-move/select-cell`,
       formAction: `/prisoner/${offenderNo}/cell-move/select-cell`,
     })
@@ -242,7 +243,7 @@ module.exports = ({ oauthApi, prisonApi, whereaboutsApi, logError }) => async (r
     if (error) logError(req.originalUrl, error, serviceUnavailableMessage)
 
     return res.render('error.njk', {
-      url: `/prisoner/${offenderNo}/cell-move/select-location`,
+      url: `/prisoner/${offenderNo}/cell-move/search-for-cell`,
       homeUrl: `/prisoner/${offenderNo}`,
     })
   }

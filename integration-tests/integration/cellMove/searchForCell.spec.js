@@ -1,11 +1,11 @@
 const moment = require('moment')
 const offenderFullDetails = require('../../mockApis/responses/offenderFullDetails.json')
-const SelectLocationPage = require('../../pages/cellMove/selectLocationPage')
+const SearchForCellPage = require('../../pages/cellMove/searchForCellPage')
 const OffenderDetailsPage = require('../../pages/cellMove/offenderDetailsPage')
 
 const offenderNo = 'A12345'
 
-context('A user can select a cell', () => {
+context('A user can search for a cell', () => {
   before(() => {
     cy.clearCookies()
     cy.task('resetAndStubTokenVerification')
@@ -23,8 +23,8 @@ context('A user can select a cell', () => {
   })
 
   it('Shows the correct data for no non-associations and no csra comment', () => {
-    cy.visit(`/prisoner/${offenderNo}/cell-move/select-location`)
-    const selectLocationPage = SelectLocationPage.verifyOnPage()
+    cy.visit(`/prisoner/${offenderNo}/cell-move/search-for-cell`)
+    const page = SearchForCellPage.verifyOnPage()
     cy.get('[data-test="cell-move-header-information"]').then($header => {
       cy.get($header)
         .find('h3')
@@ -39,13 +39,13 @@ context('A user can select a cell', () => {
           expect($headings.get(4).innerText).to.contain('Non-associations')
         })
     })
-    selectLocationPage.name().contains('Smith, John')
-    selectLocationPage.livingUnit().contains('HMP Moorland')
-    selectLocationPage.csra().contains('High')
-    selectLocationPage.csraLink().should('not.be.visible')
-    selectLocationPage.alerts().contains('None')
-    selectLocationPage.nonAssociationsLink().should('not.be.visible')
-    selectLocationPage.nonAssociationsMessage().contains('0 in NOMIS. Check local processes.')
+    page.name().contains('Smith, John')
+    page.livingUnit().contains('HMP Moorland')
+    page.csra().contains('High')
+    page.csraLink().should('not.be.visible')
+    page.alerts().contains('None')
+    page.nonAssociationsLink().should('not.be.visible')
+    page.nonAssociationsMessage().contains('0 in NOMIS. Check local processes.')
   })
 
   it('Shows the correct data when there is a relevant non-association and a CSR rating comment', () => {
@@ -91,8 +91,8 @@ context('A user can select a cell', () => {
         },
       ],
     })
-    const selectLocationPage = SelectLocationPage.verifyOnPage()
-    cy.visit(`/prisoner/${offenderNo}/cell-move/select-location`)
+    const page = SearchForCellPage.verifyOnPage()
+    cy.visit(`/prisoner/${offenderNo}/cell-move/search-for-cell`)
     cy.get('[data-test="cell-move-header-information"]').then($header => {
       cy.get($header)
         .find('h3')
@@ -107,21 +107,21 @@ context('A user can select a cell', () => {
           expect($headings.get(4).innerText).to.contain('Non-associations')
         })
     })
-    selectLocationPage.name().contains('Smith, John')
-    selectLocationPage.detailsLink().contains('View details')
-    selectLocationPage.livingUnit().contains('HMP Moorland')
-    selectLocationPage.csra().contains('High')
-    selectLocationPage.csraLink().contains('View details')
-    selectLocationPage.alerts().contains('Gang member')
-    selectLocationPage.numberOfNonAssociations().contains('1')
-    selectLocationPage.nonAssociationsLink().contains('View non-associations')
-    selectLocationPage.nonAssociationsMessage().should('not.be.visible')
+    page.name().contains('Smith, John')
+    page.detailsLink().contains('View details')
+    page.livingUnit().contains('HMP Moorland')
+    page.csra().contains('High')
+    page.csraLink().contains('View details')
+    page.alerts().contains('Gang member')
+    page.numberOfNonAssociations().contains('1')
+    page.nonAssociationsLink().contains('View non-associations')
+    page.nonAssociationsMessage().should('not.be.visible')
   })
 
   it('Passes the correct data to the select a cell page', () => {
-    cy.visit(`/prisoner/${offenderNo}/cell-move/select-location`)
-    const selectLocationPage = SelectLocationPage.verifyOnPage()
-    const form = selectLocationPage.form()
+    cy.visit(`/prisoner/${offenderNo}/cell-move/search-for-cell`)
+    const page = SearchForCellPage.verifyOnPage()
+    const form = page.form()
     form.location().select('1')
     form.attribute().select('Listener Cell')
     form.submitButton().click()
@@ -129,7 +129,7 @@ context('A user can select a cell', () => {
   })
 
   it('Correctly navigates between this page and offender details', () => {
-    cy.visit(`/prisoner/${offenderNo}/cell-move/select-location`)
+    cy.visit(`/prisoner/${offenderNo}/cell-move/search-for-cell`)
     cy.task('stubOffenderFullDetails', {
       ...offenderFullDetails,
       age: 29,
@@ -141,10 +141,29 @@ context('A user can select a cell', () => {
       profileInformation: [{ type: 'SEXO', resultValue: 'Heterosexual' }, { type: 'SMOKE', resultValue: 'No' }],
     })
     cy.task('stubMainOffence', [{ offenceDescription: '13 hours overwork' }])
-    const selectLocationPage = SelectLocationPage.verifyOnPage()
-    selectLocationPage.detailsLink().click()
+    const page = SearchForCellPage.verifyOnPage()
+    page.detailsLink().click()
     const offenderDetailsPage = OffenderDetailsPage.verifyOnPage()
     offenderDetailsPage.backLink().click()
-    SelectLocationPage.verifyOnPage()
+    SearchForCellPage.verifyOnPage()
+  })
+
+  it('should display the correct cell swap messaging and link', () => {
+    cy.visit(`/prisoner/${offenderNo}/cell-move/search-for-cell`)
+
+    const page = SearchForCellPage.verifyOnPage()
+
+    page
+      .selectCswapText()
+      .contains(
+        'Create a space for another prisoner - this will leave John Smith without a cell. You must move him into a cell as soon as possible today.'
+      )
+
+    page
+      .selectCswapLink()
+      .invoke('attr', 'href')
+      .then(href => {
+        expect(href).to.equal('/prisoner/A12345/cell-move/confirm-cell-move?cellId=C-SWAP')
+      })
   })
 })
