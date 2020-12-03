@@ -1,6 +1,5 @@
 const prisonerLocationHistory = require('../controllers/prisonerProfile/prisonerLocationHistory')
 const { serviceUnavailableMessage } = require('../common-messages')
-const { makeNotFoundError } = require('./helpers')
 
 describe('Prisoner location sharing history', () => {
   const offenderNo = 'ABC123'
@@ -84,7 +83,6 @@ describe('Prisoner location sharing history', () => {
         dpsUrl: 'http://localhost:3000/',
         locationDetails: {
           movedOut: 'Current cell',
-          reasonForMove: 'Administrative',
           movedBy: 'Joe Bloggs',
           whatHappened: 'Some details regarding what happened',
         },
@@ -206,44 +204,43 @@ describe('Prisoner location sharing history', () => {
       })
     })
 
-    it('when we get cell move reason throws 404 then no trigger outer try', async () => {
-      whereaboutsApi.getCellMoveReason = jest.fn().mockRejectedValue(makeNotFoundError())
+    it('what happened should default to "Not entered" when empty', async () => {
+      caseNotesApi.getCaseNote.mockImplementation(() => Promise.resolve({ text: '' }))
+
       await controller(req, res)
 
-      expect(res.render).toHaveBeenCalledWith(
-        'prisonerProfile/prisonerLocationHistory.njk',
-        expect.objectContaining({})
-      )
-    })
-
-    it('when we get cell move reason throws 404 then default what happened', async () => {
-      whereaboutsApi.getCellMoveReason = jest.fn().mockRejectedValue(makeNotFoundError())
-      prisonApi.getHistoryForLocation = jest.fn().mockResolvedValue([
-        {
-          bookingId: 1,
-          livingUnitId: 1,
-          assignmentDate: '2020-08-28',
-          assignmentDateTime: '2020-08-28T11:20:39',
-          agencyId: 'MDI',
-          description: 'MDI-1-1-015',
-          movementMadeBy: 'USERID_GEN',
-          assignmentReason: 'CLA',
-          bedAssignmentHistorySequence: 1,
+      expect(res.render).toHaveBeenCalledWith('prisonerProfile/prisonerLocationHistory.njk', {
+        breadcrumbPrisonerName: 'Smith, John',
+        dpsUrl: 'http://localhost:3000/',
+        locationDetails: {
+          attributes: [{ description: 'Double occupancy' }],
+          description: 'Moorland (HMP & YOI)',
+          movedIn: '28/08/2020 - 11:20',
+          movedOut: 'Current cell',
+          movedBy: 'Joe Bloggs',
+          reasonForMove: 'Classification or re-classification',
+          whatHappened: 'Not entered',
         },
-      ])
-      caseNotesApi.getCaseNoteTypes = jest.fn().mockResolvedValue(caseNotesTypes)
-
-      await controller(req, res)
-
-      expect(res.render).toHaveBeenCalledWith(
-        'prisonerProfile/prisonerLocationHistory.njk',
-        expect.objectContaining({
-          locationDetails: expect.objectContaining({
-            reasonForMove: 'Classification or re-classification',
-            whatHappened: 'Not entered',
-          }),
-        })
-      )
+        locationSharingHistory: [
+          {
+            movedIn: '27/08/2020 - 11:10',
+            movedOut: '28/08/2020 - 11:00',
+            name: 'Jones, Steve',
+            number: 'ABC456',
+            shouldLink: false,
+          },
+          {
+            movedIn: '25/08/2020 - 11:20',
+            movedOut: 'Currently sharing',
+            name: 'Stevenson, Barry',
+            number: 'ABC789',
+            shouldLink: true,
+          },
+        ],
+        profileUrl: '/prisoner/ABC123',
+        locationName: '1-1-015',
+        prisonerName: 'John Smith',
+      })
     })
   })
 
