@@ -1,4 +1,5 @@
 const PrisonerLocationHistoryPage = require('../../pages/prisonerProfile/prisonerLocationHistoryPage')
+const { notEnteredMessage } = require('../../../backend/common-messages')
 
 context('Prisoner location history', () => {
   const offenderNo = 'A1234A'
@@ -281,7 +282,31 @@ context('Prisoner location history', () => {
       const prisonerLocationHistoryPage = PrisonerLocationHistoryPage.verifyOnPage()
       prisonerLocationHistoryPage.movedBy().contains('Joe Bloggs')
       prisonerLocationHistoryPage.reasonForMove().contains('Classification or re-classification')
-      prisonerLocationHistoryPage.whatHappened().contains('Not entered')
+      prisonerLocationHistoryPage.whatHappened().contains(notEnteredMessage)
+    })
+
+    it('when assignmentReason is missing then default reason', () => {
+      cy.task('stubHistoryForLocation', [
+        {
+          bookingId: 1,
+          livingUnitId: 1,
+          assignmentDate: '2020-08-28',
+          assignmentDateTime: '2020-08-28T11:20:39',
+          agencyId: 'MDI',
+          description: 'MDI-1-1-015',
+          movementMadeBy: 'USERID_GEN',
+          bedAssignmentHistorySequence: 1,
+        },
+      ])
+
+      cy.visit(`/prisoner/${offenderNo}/location-history?fromDate=2020-08-28&locationId=1&agencyId=MDI`)
+
+      const prisonerLocationHistoryPage = PrisonerLocationHistoryPage.verifyOnPage()
+      prisonerLocationHistoryPage.movedBy().contains('Joe Bloggs')
+      prisonerLocationHistoryPage.reasonForMove().contains(notEnteredMessage)
+      prisonerLocationHistoryPage
+        .whatHappened()
+        .contains('A long comment about what happened on the day to cause the move.')
     })
   })
 })

@@ -1,5 +1,5 @@
 const prisonerLocationHistory = require('../controllers/prisonerProfile/prisonerLocationHistory')
-const { serviceUnavailableMessage } = require('../common-messages')
+const { serviceUnavailableMessage, notEnteredMessage } = require('../common-messages')
 const { makeNotFoundError } = require('./helpers')
 
 describe('Prisoner location sharing history', () => {
@@ -84,7 +84,7 @@ describe('Prisoner location sharing history', () => {
         dpsUrl: 'http://localhost:3000/',
         locationDetails: {
           movedOut: 'Current cell',
-          reasonForMove: 'Administrative',
+          reasonForMove: notEnteredMessage,
           movedBy: 'Joe Bloggs',
           whatHappened: 'Some details regarding what happened',
         },
@@ -240,7 +240,34 @@ describe('Prisoner location sharing history', () => {
         expect.objectContaining({
           locationDetails: expect.objectContaining({
             reasonForMove: 'Classification or re-classification',
-            whatHappened: 'Not entered',
+            whatHappened: notEnteredMessage,
+          }),
+        })
+      )
+    })
+
+    it('when assignmentReason is missing then default cell move reason', async () => {
+      prisonApi.getHistoryForLocation = jest.fn().mockResolvedValue([
+        {
+          bookingId: 1,
+          livingUnitId: 1,
+          assignmentDate: '2020-08-28',
+          assignmentDateTime: '2020-08-28T11:20:39',
+          agencyId: 'MDI',
+          description: 'MDI-1-1-015',
+          movementMadeBy: 'USERID_GEN',
+          bedAssignmentHistorySequence: 1,
+        },
+      ])
+
+      await controller(req, res)
+
+      expect(res.render).toHaveBeenCalledWith(
+        'prisonerProfile/prisonerLocationHistory.njk',
+        expect.objectContaining({
+          locationDetails: expect.objectContaining({
+            reasonForMove: notEnteredMessage,
+            whatHappened: 'A long comment about what happened on the day to cause the move.',
           }),
         })
       )
