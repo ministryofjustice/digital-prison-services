@@ -4,7 +4,7 @@ const selectLocationPage = () =>
   page('Select a location', {
     form: () => ({
       location: () => cy.get('#location'),
-      cellType: () => cy.get('#cellType'),
+      attribute: () => cy.get('#attribute'),
       submitButton: () => cy.get('button[type="submit"]'),
     }),
     name: () => cy.get("[data-test='name']"),
