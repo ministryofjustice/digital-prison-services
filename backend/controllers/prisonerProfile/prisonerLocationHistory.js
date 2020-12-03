@@ -11,6 +11,7 @@ const {
 const {
   app: { notmEndpointUrl: dpsUrl },
 } = require('../../config')
+const { isBlank } = require('../../utils')
 
 const fetchStaffName = (context, staffId, prisonApi) =>
   prisonApi.getStaffDetails(context, staffId).then(staff => formatName(staff.firstName, staff.lastName))
@@ -28,24 +29,19 @@ const fetchReasonDescription = (context, assignmentReasonCode, caseNotesApi) =>
     .then(cellMoveReasonValues => cellMoveReasonValues.find(record => record.value === assignmentReasonCode))
     .then(cellMoveReasonValue => cellMoveReasonValue.text)
 
-const fetchWhatHappened = async (
+const fetchWhatHappened = (
   context,
   offenderNo,
   bookingId,
   bedAssignmentHistorySequence,
   caseNotesApi,
   whereaboutsApi
-) => {
-  try {
-    return await whereaboutsApi
-      .getCellMoveReason(context, bookingId, bedAssignmentHistorySequence)
-      .then(cellMoveReason => caseNotesApi.getCaseNote(context, offenderNo, cellMoveReason.cellMoveReason.caseNoteId))
-      .then(caseNote => caseNote.text)
-  } catch (err) {
-    if (err?.response?.status === 404) return 'Not entered'
-    throw err
-  }
-}
+) =>
+  whereaboutsApi
+    .getCellMoveReason(context, bookingId, bedAssignmentHistorySequence)
+    .then(cellMoveReason => caseNotesApi.getCaseNote(context, offenderNo, cellMoveReason.cellMoveReason.caseNoteId))
+    .then(caseNote => caseNote.text)
+
 module.exports = ({ prisonApi, whereaboutsApi, caseNotesApi, logError }) => async (req, res) => {
   const { offenderNo } = req.params
   const { agencyId, locationId, fromDate, toDate = moment().format('YYYY-MM-DD') } = req.query
@@ -65,7 +61,9 @@ module.exports = ({ prisonApi, whereaboutsApi, caseNotesApi, logError }) => asyn
 
     const { movementMadeBy, assignmentReason, bedAssignmentHistorySequence } = currentPrisonerDetails
     const movementMadeByName = await fetchStaffName(res.locals, movementMadeBy, prisonApi)
-    const assignmentReasonName = await fetchReasonDescription(res.locals, assignmentReason || 'ADM', caseNotesApi)
+    const assignmentReasonName =
+      assignmentReason && (await fetchReasonDescription(res.locals, assignmentReason, caseNotesApi))
+
     const whatHappenedDetails = await fetchWhatHappened(
       res.locals,
       offenderNo,
@@ -74,6 +72,7 @@ module.exports = ({ prisonApi, whereaboutsApi, caseNotesApi, logError }) => asyn
       caseNotesApi,
       whereaboutsApi
     )
+    const whatHappenedDetailsToShow = isBlank(whatHappenedDetails) ? 'Not entered' : whatHappenedDetails
 
     const locationHistoryWithPrisoner =
       hasLength(locationHistory) &&
@@ -105,7 +104,7 @@ module.exports = ({ prisonApi, whereaboutsApi, caseNotesApi, logError }) => asyn
           : 'Current cell',
         movedBy: movementMadeByName,
         reasonForMove: assignmentReasonName,
-        whatHappened: whatHappenedDetails,
+        whatHappened: whatHappenedDetailsToShow,
         attributes: locationAttributes.attributes,
       },
       locationSharingHistory:

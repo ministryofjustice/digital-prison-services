@@ -404,8 +404,8 @@ module.exports = on => {
     stubGetAgencyIepLevels: response => prisonApi.stubGetAgencyIepLevels(response),
     stubChangeIepLevel: body => prisonApi.stubChangeIepLevel(body),
     stubGetPrisonerDamageObligations: response => prisonApi.stubGetPrisonerDamageObligations(response),
-    stubGetCellMoveReason: ({ bookingId, bedAssignmentHistorySequence, cellMoveReason, status }) =>
-      whereabouts.stubGetCellMoveReason(bookingId, bedAssignmentHistorySequence, cellMoveReason, status),
+    stubGetCellMoveReason: ({ bookingId, bedAssignmentHistorySequence, cellMoveReason }) =>
+      whereabouts.stubGetCellMoveReason(bookingId, bedAssignmentHistorySequence, cellMoveReason),
     stubGetStaffDetails: ({ staffId, response }) => prisonApi.stubGetStaffDetails(staffId, response),
   })
 }
