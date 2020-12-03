@@ -188,6 +188,7 @@ describe('Select a cell', () => {
         'cellMove/selectCell.njk',
         expect.objectContaining({
           breadcrumbPrisonerName: 'Doe, John',
+          prisonerName: 'John Doe',
           offenderNo: 'A12345',
           prisonerDetails: {
             agencyId: 'LEI',

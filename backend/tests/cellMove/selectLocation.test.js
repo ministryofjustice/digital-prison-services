@@ -273,6 +273,7 @@ describe('select location', () => {
         expect.objectContaining({
           prisonerDetails: getDetailsResponse,
           breadcrumbPrisonerName: 'User, Test',
+          prisonerName: 'Test User',
           numberOfNonAssociations: 0,
           showNonAssociationsLink: false,
           showCsraLink: false,

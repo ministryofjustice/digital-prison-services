@@ -147,4 +147,21 @@ context('A user can select a cell', () => {
     offenderDetailsPage.backLink().click()
     SelectLocationPage.verifyOnPage()
   })
+
+  it('should display the correct cell swap messaging and link', () => {
+    const selectLocationPage = SelectLocationPage.verifyOnPage()
+
+    selectLocationPage
+      .selectCswapText()
+      .contains(
+        'Create a space for another prisoner - this will leave John Smith without a cell. You must move him into a cell as soon as possible today.'
+      )
+
+    selectLocationPage
+      .selectCswapLink()
+      .invoke('attr', 'href')
+      .then(href => {
+        expect(href).to.equal('/prisoner/A12345/cell-move/confirm-cell-move?cellId=C-SWAP')
+      })
+  })
 })

@@ -1,7 +1,7 @@
 const page = require('../page')
 
 const selectLocationPage = () =>
-  page('Select a location', {
+  page('Search for a cell', {
     form: () => ({
       location: () => cy.get('#location'),
       attribute: () => cy.get('#attribute'),
@@ -16,6 +16,8 @@ const selectLocationPage = () =>
     numberOfNonAssociations: () => cy.get("[data-test='number-of-non-associations']"),
     nonAssociationsLink: () => cy.get("[data-test='non-associations-link']"),
     nonAssociationsMessage: () => cy.get("[data-test='non-associations-message']"),
+    selectCswapText: () => cy.get('[data-test="select-cswap-text"]'),
+    selectCswapLink: () => cy.get('[data-test="select-cswap-link"]'),
   })
 
 export default {
