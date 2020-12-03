@@ -1,6 +1,6 @@
 const page = require('../page')
 
-const selectLocationPage = () =>
+const searchForCellPage = () =>
   page('Search for a cell', {
     form: () => ({
       location: () => cy.get('#location'),
@@ -21,9 +21,9 @@ const selectLocationPage = () =>
   })
 
 export default {
-  verifyOnPage: selectLocationPage,
+  verifyOnPage: searchForCellPage,
   goTo: offenderNo => {
-    cy.visit(`/prisoner/${offenderNo}/cell-move/select-location`)
-    return selectLocationPage()
+    cy.visit(`/prisoner/${offenderNo}/cell-move/search-for-cell`)
+    return searchForCellPage()
   },
 }

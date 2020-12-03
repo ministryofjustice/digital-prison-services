@@ -38,7 +38,7 @@ describe('Cell move confirmation', () => {
 
     expect(res.render).toHaveBeenCalledWith('error.njk', {
       homeUrl: '/prisoner/A12345',
-      url: '/prisoner/A12345/cell-move/select-location',
+      url: '/prisoner/A12345/cell-move/search-for-cell',
     })
   })
 })

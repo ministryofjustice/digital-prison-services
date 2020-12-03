@@ -183,8 +183,8 @@ describe('view non associations', () => {
         prisonerName: 'Test User',
         breadcrumbPrisonerName: 'User, Test',
         dpsUrl: 'http://localhost:3000/',
-        backLink: `/prisoner/${offenderNo}/cell-move/select-location`,
-        backLinkText: 'Return to select a location',
+        backLink: `/prisoner/${offenderNo}/cell-move/search-for-cell`,
+        backLinkText: 'Return to search for a cell',
       })
     )
   })

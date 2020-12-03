@@ -52,7 +52,7 @@ module.exports = ({ prisonApi, logError }) => async (req, res) => {
       breadcrumbPrisonerName: putLastNameFirst(firstName, lastName),
       prisonerName: formatName(firstName, lastName),
       dpsUrl,
-      selectLocationLink: `/prisoner/${offenderNo}/cell-move/select-location`,
+      searchForCellLink: `/prisoner/${offenderNo}/cell-move/search-for-cell`,
       offenderNo,
       ...getBackLinkData(req.headers.referer, offenderNo),
     })

@@ -174,7 +174,7 @@ describe('Select a cell', () => {
           nonAssociationLink: '/prisoner/A12345/cell-move/non-associations',
           offenderDetailsUrl: '/prisoner/A12345/cell-move/offender-details',
           selectCellRootUrl: '/prisoner/A12345/cell-move/select-cell',
-          selectLocationRootUrl: '/prisoner/A12345/cell-move/select-location',
+          searchForCellRootUrl: '/prisoner/A12345/cell-move/search-for-cell',
           showCsraLink: undefined,
           showNonAssociationsLink: false,
         })
