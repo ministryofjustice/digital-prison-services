@@ -1,7 +1,6 @@
 {% extends "../partials/layout.njk" %}
 {% from "govuk/components/select/macro.njk" import govukSelect %}
 {% from "govuk/components/button/macro.njk" import govukButton %}
-{% from "govuk/components/error-summary/macro.njk" import govukErrorSummary %}
 {% from "../macros/alertFlags.njk" import alertFlags %}
 
 {% set title = "Search for a cell" %}
@@ -58,9 +57,9 @@
     }) }}
 
     {{ govukButton({
-        text: "Search for a cell",
-        preventDoubleClick: true,
-        type: "submit"
+      text: "Search for a cell",
+      preventDoubleClick: true,
+      type: "submit"
     }) }}
   </form>
 
