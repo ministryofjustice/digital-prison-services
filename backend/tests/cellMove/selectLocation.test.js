@@ -92,6 +92,125 @@ describe('select location', () => {
 
     prisonApi.getDetails = jest.fn().mockResolvedValue(getDetailsResponse)
     prisonApi.getNonAssociations = jest.fn().mockResolvedValue({ nonAssociations: [] })
+    prisonApi.getCellAttributes = jest.fn().mockResolvedValue([
+      {
+        domain: 'HOU_UNIT_ATT',
+        code: 'A',
+        description: 'Cat A Cell',
+        activeFlag: 'Y',
+        listSeq: 99,
+        systemDataFlag: 'N',
+        subCodes: [],
+      },
+      {
+        domain: 'HOU_UNIT_ATT',
+        code: 'DO',
+        description: 'Double Occupancy',
+        activeFlag: 'Y',
+        listSeq: 99,
+        systemDataFlag: 'N',
+        subCodes: [],
+      },
+      {
+        domain: 'HOU_UNIT_ATT',
+        code: 'ELC',
+        description: 'E List Cell',
+        activeFlag: 'Y',
+        listSeq: 99,
+        systemDataFlag: 'N',
+        subCodes: [],
+      },
+      {
+        domain: 'HOU_UNIT_ATT',
+        code: 'GC',
+        description: 'Gated Cell',
+        activeFlag: 'Y',
+        listSeq: 99,
+        systemDataFlag: 'N',
+        subCodes: [],
+      },
+      {
+        domain: 'HOU_UNIT_ATT',
+        code: 'LC',
+        description: 'Listener Cell',
+        activeFlag: 'Y',
+        listSeq: 99,
+        systemDataFlag: 'N',
+        subCodes: [],
+      },
+      {
+        domain: 'HOU_UNIT_ATT',
+        code: 'LF',
+        description: 'Locate Flat',
+        activeFlag: 'Y',
+        listSeq: 99,
+        systemDataFlag: 'N',
+        subCodes: [],
+      },
+      {
+        domain: 'HOU_UNIT_ATT',
+        code: 'MO',
+        description: 'Multiple Occupancy',
+        activeFlag: 'Y',
+        listSeq: 99,
+        systemDataFlag: 'N',
+        subCodes: [],
+      },
+      {
+        domain: 'HOU_UNIT_ATT',
+        code: 'NSMC',
+        description: 'Non Smoker Cell',
+        activeFlag: 'Y',
+        listSeq: 99,
+        systemDataFlag: 'N',
+        subCodes: [],
+      },
+      {
+        domain: 'HOU_UNIT_ATT',
+        code: 'OC',
+        description: 'Observation Cell',
+        activeFlag: 'Y',
+        listSeq: 99,
+        systemDataFlag: 'N',
+        subCodes: [],
+      },
+      {
+        domain: 'HOU_UNIT_ATT',
+        code: 'SC',
+        description: 'Safe Cell',
+        activeFlag: 'Y',
+        listSeq: 99,
+        systemDataFlag: 'N',
+        subCodes: [],
+      },
+      {
+        domain: 'HOU_UNIT_ATT',
+        code: 'SO',
+        description: 'Single Occupancy',
+        activeFlag: 'Y',
+        listSeq: 99,
+        systemDataFlag: 'N',
+        subCodes: [],
+      },
+      {
+        domain: 'HOU_UNIT_ATT',
+        code: 'SPC',
+        description: 'Special Cell',
+        activeFlag: 'Y',
+        listSeq: 99,
+        systemDataFlag: 'N',
+        subCodes: [],
+      },
+      {
+        domain: 'HOU_UNIT_ATT',
+        code: 'WA',
+        description: 'Wheelchair Access',
+        activeFlag: 'Y',
+        listSeq: 99,
+        systemDataFlag: 'N',
+        subCodes: [],
+      },
+    ])
 
     whereaboutsApi.searchGroups = jest.fn().mockResolvedValue([
       { name: 'Casu', key: 'Casu', children: [] },
@@ -122,6 +241,7 @@ describe('select location', () => {
 
     expect(prisonApi.getDetails).toHaveBeenCalledWith(res.locals, offenderNo, true)
     expect(prisonApi.getNonAssociations).toHaveBeenCalledWith(res.locals, 1234)
+    expect(prisonApi.getCellAttributes).toHaveBeenCalledWith(res.locals)
     expect(whereaboutsApi.searchGroups).toHaveBeenCalledWith(res.locals, 'MDI')
   })
 
@@ -310,7 +430,21 @@ describe('select location', () => {
             { text: 'Houseblock 2', value: 'Houseblock 2' },
             { text: 'Houseblock 3', value: 'Houseblock 3' },
           ],
-          cellAttributes: [{ text: 'Single occupancy', value: 'SO' }, { text: 'Multiple occupancy', value: 'MO' }],
+          cellAttributes: [
+            { text: 'Cat A Cell', value: 'A' },
+            { text: 'Double Occupancy', value: 'DO' },
+            { text: 'E List Cell', value: 'ELC' },
+            { text: 'Gated Cell', value: 'GC' },
+            { text: 'Listener Cell', value: 'LC' },
+            { text: 'Locate Flat', value: 'LF' },
+            { text: 'Multiple Occupancy', value: 'MO' },
+            { text: 'Non Smoker Cell', value: 'NSMC' },
+            { text: 'Observation Cell', value: 'OC' },
+            { text: 'Safe Cell', value: 'SC' },
+            { text: 'Single Occupancy', value: 'SO' },
+            { text: 'Special Cell', value: 'SPC' },
+            { text: 'Wheelchair Access', value: 'WA' },
+          ],
         })
       )
     })

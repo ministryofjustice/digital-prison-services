@@ -123,9 +123,9 @@ context('A user can select a cell', () => {
     const selectLocationPage = SelectLocationPage.verifyOnPage()
     const form = selectLocationPage.form()
     form.location().select('1')
-    form.cellType().select('Single occupancy')
+    form.attribute().select('Listener Cell')
     form.submitButton().click()
-    cy.url().should('include', 'select-cell?location=1&cellType=SO')
+    cy.url().should('include', 'select-cell?location=1&attribute=LC')
   })
 
   it('Correctly navigates between this page and offender details', () => {
