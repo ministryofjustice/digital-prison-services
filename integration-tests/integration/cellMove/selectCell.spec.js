@@ -1,3 +1,4 @@
+const moment = require('moment')
 const offenderFullDetails = require('../../mockApis/responses/offenderFullDetails.json')
 const SelectCellPage = require('../../pages/cellMove/selectCellPage')
 
@@ -61,7 +62,7 @@ context('A user can select a cell', () => {
           typeCode: 'LAND',
           typeDescription: 'Do Not Locate on Same Landing',
           effectiveDate: '2020-06-17T00:00:00',
-          expiryDate: '2020-07-17T00:00:00',
+          expiryDate: moment().add(1, 'day'),
           comments: 'Gang violence',
           offenderNonAssociation: {
             offenderNo: 'A12345',
@@ -220,6 +221,7 @@ context('A user can select a cell', () => {
 
     it('should show non association warning', () => {
       const page = SelectCellPage.goTo(offenderNo, '1')
+      page.numberOfNonAssociations().contains('1')
       page.nonAssociationWarning().contains('Smith, John has a non-association with a prisoner in this location.')
     })
 
