@@ -1,5 +1,5 @@
 const {
-  apis: { moic },
+  apis: { omic },
 } = require('../../config')
 
 const tasks = () => [
@@ -13,7 +13,7 @@ const tasks = () => [
   {
     id: 'manage-key-workers',
     text: 'Manage key workers',
-    linkUrl: moic.url,
+    linkUrl: omic.url,
     roles: ['OMIC_ADMIN', 'KEYWORKER_MONITOR'],
   },
 ]

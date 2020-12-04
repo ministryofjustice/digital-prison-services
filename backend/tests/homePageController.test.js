@@ -2,7 +2,7 @@ const config = require('../config')
 
 const controllerFactory = require('../controllers/homePage/homePage')
 
-config.apis.moic.url = 'http://omic-ui'
+config.apis.omic.url = 'http://omic-ui'
 
 describe('Home page controller', () => {
   const oauthApi = {}

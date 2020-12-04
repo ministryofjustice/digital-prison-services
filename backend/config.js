@@ -97,8 +97,8 @@ module.exports = {
     bookVideoLink: {
       url: process.env.BVL_URL || 'http://localhost:3000',
     },
-    moic: {
-      url: process.env.MOIC_URL,
+    omic: {
+      url: process.env.OMIC_URL,
     },
   },
 
