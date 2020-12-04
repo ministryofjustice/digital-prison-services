@@ -191,6 +191,8 @@ env:
     value: {{ .Values.env.SOC_API_ENABLED | quote }}
 
   - name: BVL_URL
-    value: {{ .Values.env.BVL_URL | quote }}    
-      
+    value: {{ .Values.env.BVL_URL | quote }}
+
+  - name: MOIC_URL
+    value: {{ .Values.env.MOIC_URL | quote }}
 {{- end -}}

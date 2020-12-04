@@ -94,9 +94,11 @@ module.exports = {
       url: process.env.OFFENDER_SEARCH_API_URL || 'http://localhost:8085',
       timeoutSeconds: process.env.OFFENDER_SEARCH_API_TIMEOUT_SECONDS || 10,
     },
-
     bookVideoLink: {
       url: process.env.BVL_URL || 'http://localhost:3000',
+    },
+    moic: {
+      url: process.env.MOIC_URL,
     },
   },
 

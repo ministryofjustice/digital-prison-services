@@ -47,3 +47,4 @@ env:
 
   SYSTEM_PHASE: DEV
   BVL_URL: https://book-video-link-dev.prison.service.justice.gov.uk
+  MOIC_URL: https://allocation-manager-staging.apps.live-1.cloud-platform.service.justice.gov.uk

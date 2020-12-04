@@ -45,6 +45,7 @@ env:
   SUPPORT_URL: https://support-preprod.hmpps.service.justice.gov.uk/
   SYSTEM_PHASE: PRE-PRODUCTION
   BVL_URL: https://book-video-link-preprod.prison.service.justice.gov.uk
+  MOIC_URL: https://allocation-manager-preprod.apps.live-1.cloud-platform.service.justice.gov.uk
 
 allowlist:
   office: "217.33.148.210/32"
