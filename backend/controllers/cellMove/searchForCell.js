@@ -1,7 +1,7 @@
 const { serviceUnavailableMessage } = require('../../common-messages')
 const { alertFlagLabels, cellMoveAlertCodes } = require('../../shared/alertFlagValues')
 const { putLastNameFirst, formatName } = require('../../utils')
-const { showCsraLink, userHasAccess, getNonAssocationsInEstablishment } = require('./cellMoveUtils')
+const { userHasAccess, getNonAssocationsInEstablishment } = require('./cellMoveUtils')
 const {
   app: { notmEndpointUrl: dpsUrl },
 } = require('../../config')
@@ -44,7 +44,6 @@ module.exports = ({ oauthApi, prisonApi, whereaboutsApi, logError }) => async (r
       prisonerName: formatName(prisonerDetails.firstName, prisonerDetails.lastName),
       numberOfNonAssociations,
       showNonAssociationsLink: numberOfNonAssociations > 0,
-      showCsraLink: prisonerDetails.assessments && showCsraLink(prisonerDetails.assessments),
       alerts: alertsToShow,
       locations,
       cellAttributes,

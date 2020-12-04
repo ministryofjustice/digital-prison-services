@@ -42,7 +42,7 @@ context('A user can search for a cell', () => {
     page.name().contains('Smith, John')
     page.livingUnit().contains('HMP Moorland')
     page.csra().contains('High')
-    page.csraLink().should('not.be.visible')
+    page.csraLink().should('be.visible')
     page.alerts().contains('None')
     page.nonAssociationsLink().should('not.be.visible')
     page.nonAssociationsMessage().contains('0 in NOMIS. Check local processes.')
