@@ -52,6 +52,28 @@ module.exports = {
       },
     })
   },
+  stubDeleteCaseNote: () => {
+    return stubFor({
+      request: {
+        method: 'DELETE',
+        urlPattern: '/casenotes/case-notes/A12345/.+?',
+      },
+      response: {
+        status: 200,
+      },
+    })
+  },
+  stubDeleteCaseNoteAmendment: () => {
+    return stubFor({
+      request: {
+        method: 'DELETE',
+        urlPattern: '/casenotes/case-notes/amendment/A12345/.+?',
+      },
+      response: {
+        status: 200,
+      },
+    })
+  },
   stubCaseNoteTypes: types => {
     return getFor({
       urlPattern: '/casenotes/case-notes/types',

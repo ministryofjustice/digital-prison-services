@@ -71,6 +71,6 @@ context('A user can view non associations', () => {
           expect($summaryValues.get(5).innerText).to.contain('HMP Moorland')
         })
     })
-    cellSharingRiskAssessmentDetailsPage.backLink().contains('Return to select a location')
+    cellSharingRiskAssessmentDetailsPage.backLink().contains('Return to search for a cell')
   })
 })

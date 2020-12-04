@@ -170,7 +170,7 @@ describe('Prisoner cell history', () => {
             ],
           },
         ],
-        changeCellLink: '/prisoner/ABC123/cell-move/select-location',
+        changeCellLink: '/prisoner/ABC123/cell-move/search-for-cell',
         currentLocation: {
           agencyId: 'MDI',
           assignmentDateTime: '2020-05-01T12:48:33',

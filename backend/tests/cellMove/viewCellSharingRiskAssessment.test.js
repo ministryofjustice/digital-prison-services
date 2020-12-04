@@ -96,7 +96,7 @@ describe('view CSRA details', () => {
 
     expect(logError).toHaveBeenCalledWith(req.originalUrl, new Error('Network error'), serviceUnavailableMessage)
     expect(res.render).toHaveBeenCalledWith('error.njk', {
-      url: '/prisoner/ABC123/cell-move/select-location',
+      url: '/prisoner/ABC123/cell-move/search-for-cell',
       homeUrl: '/prisoner/ABC123',
     })
   })
@@ -113,8 +113,8 @@ describe('view CSRA details', () => {
         comment: 'Some comment for full assessment',
         date: '27 August 2020',
         level: 'High',
-        backLink: `/prisoner/${offenderNo}/cell-move/select-location`,
-        backLinkText: 'Return to select a location',
+        backLink: `/prisoner/${offenderNo}/cell-move/search-for-cell`,
+        backLinkText: 'Return to search for a cell',
       })
     )
   })

@@ -30,7 +30,8 @@ const cellMoveRouter = require('./routes/cellMoveRouter')
 const establishmentRollRouter = require('./routes/establishmentRollRouter')
 const globalSearchRouter = require('./routes/globalSearchRouter')
 
-const amendCaseNNoteRouter = require('./routes/caseNoteAmendmentRouter')
+const amendCaseNoteRouter = require('./routes/caseNoteAmendmentRouter')
+const deleteCaseNoteRouter = require('./routes/caseNoteDeletionRouter')
 
 const currentUser = require('./middleware/currentUser')
 const systemOauthClient = require('./api/systemOauthClient')
@@ -201,7 +202,12 @@ const setup = ({
 
   router.use(
     '/prisoner/:offenderNo/case-notes/amend-case-note/:caseNoteId',
-    amendCaseNNoteRouter({ prisonApi, caseNotesApi, logError })
+    amendCaseNoteRouter({ prisonApi, caseNotesApi, logError })
+  )
+
+  router.use(
+    '/prisoner/:offenderNo/case-notes/delete-case-note/:caseNoteId/:caseNoteAmendmentId?',
+    deleteCaseNoteRouter({ prisonApi, caseNotesApi, oauthApi, logError })
   )
 
   router.get(['/content', '/content/:path'], contentController({ logError }))

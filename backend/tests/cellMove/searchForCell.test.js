@@ -1,7 +1,7 @@
 Reflect.deleteProperty(process.env, 'APPINSIGHTS_INSTRUMENTATIONKEY')
 const moment = require('moment')
 
-const selectLocation = require('../../controllers/cellMove/selectLocation')
+const searchForCell = require('../../controllers/cellMove/searchForCell')
 const { serviceUnavailableMessage } = require('../../common-messages')
 
 describe('select location', () => {
@@ -233,7 +233,7 @@ describe('select location', () => {
     oauthApi.userRoles = jest.fn().mockResolvedValue([{ roleCode: 'CELL_MOVE' }])
     prisonApi.userCaseLoads = jest.fn().mockResolvedValue([{ caseLoadId: 'MDI' }])
 
-    controller = selectLocation({ oauthApi, prisonApi, whereaboutsApi, logError })
+    controller = searchForCell({ oauthApi, prisonApi, whereaboutsApi, logError })
   })
 
   it('Makes the expected API calls', async () => {
@@ -259,7 +259,7 @@ describe('select location', () => {
 
     expect(logError).toHaveBeenCalledWith(req.originalUrl, new Error('Network error'), serviceUnavailableMessage)
     expect(res.render).toHaveBeenCalledWith('error.njk', {
-      url: '/prisoner/ABC123/cell-move/select-location',
+      url: '/prisoner/ABC123/cell-move/search-for-cell',
       homeUrl: '/prisoner/ABC123',
     })
   })
@@ -269,10 +269,11 @@ describe('select location', () => {
       await controller(req, res)
 
       expect(res.render).toHaveBeenCalledWith(
-        'cellMove/selectLocation.njk',
+        'cellMove/searchForCell.njk',
         expect.objectContaining({
           prisonerDetails: getDetailsResponse,
           breadcrumbPrisonerName: 'User, Test',
+          prisonerName: 'Test User',
           numberOfNonAssociations: 0,
           showNonAssociationsLink: false,
           showCsraLink: false,
@@ -299,7 +300,7 @@ describe('select location', () => {
       await controller(req, res)
 
       expect(res.render).toHaveBeenCalledWith(
-        'cellMove/selectLocation.njk',
+        'cellMove/searchForCell.njk',
         expect.objectContaining({
           numberOfNonAssociations: 0,
           showNonAssociationsLink: false,
@@ -322,7 +323,7 @@ describe('select location', () => {
       await controller(req, res)
 
       expect(res.render).toHaveBeenCalledWith(
-        'cellMove/selectLocation.njk',
+        'cellMove/searchForCell.njk',
         expect.objectContaining({
           numberOfNonAssociations: 0,
           showNonAssociationsLink: false,
@@ -346,7 +347,7 @@ describe('select location', () => {
       await controller(req, res)
 
       expect(res.render).toHaveBeenCalledWith(
-        'cellMove/selectLocation.njk',
+        'cellMove/searchForCell.njk',
         expect.objectContaining({
           numberOfNonAssociations: 0,
           showNonAssociationsLink: false,
@@ -369,7 +370,7 @@ describe('select location', () => {
       await controller(req, res)
 
       expect(res.render).toHaveBeenCalledWith(
-        'cellMove/selectLocation.njk',
+        'cellMove/searchForCell.njk',
         expect.objectContaining({
           numberOfNonAssociations: 1,
           showNonAssociationsLink: true,
@@ -389,7 +390,7 @@ describe('select location', () => {
       await controller(req, res)
 
       expect(res.render).toHaveBeenCalledWith(
-        'cellMove/selectLocation.njk',
+        'cellMove/searchForCell.njk',
         expect.objectContaining({
           showCsraLink: false,
         })
@@ -409,7 +410,7 @@ describe('select location', () => {
       await controller(req, res)
 
       expect(res.render).toHaveBeenCalledWith(
-        'cellMove/selectLocation.njk',
+        'cellMove/searchForCell.njk',
         expect.objectContaining({
           showCsraLink: true,
         })
@@ -420,11 +421,9 @@ describe('select location', () => {
       await controller(req, res)
 
       expect(res.render).toHaveBeenCalledWith(
-        'cellMove/selectLocation.njk',
+        'cellMove/searchForCell.njk',
         expect.objectContaining({
           locations: [
-            { text: 'Select residential unit', value: 'ALL' },
-            { text: 'All locations', value: 'ALL' },
             { text: 'Casu', value: 'Casu' },
             { text: 'Houseblock 1', value: 'Houseblock 1' },
             { text: 'Houseblock 2', value: 'Houseblock 2' },

@@ -1,7 +1,7 @@
 const page = require('../page')
 
-const selectLocationPage = () =>
-  page('Select a location', {
+const searchForCellPage = () =>
+  page('Search for a cell', {
     form: () => ({
       location: () => cy.get('#location'),
       attribute: () => cy.get('#attribute'),
@@ -16,12 +16,14 @@ const selectLocationPage = () =>
     numberOfNonAssociations: () => cy.get("[data-test='number-of-non-associations']"),
     nonAssociationsLink: () => cy.get("[data-test='non-associations-link']"),
     nonAssociationsMessage: () => cy.get("[data-test='non-associations-message']"),
+    selectCswapText: () => cy.get('[data-test="select-cswap-text"]'),
+    selectCswapLink: () => cy.get('[data-test="select-cswap-link"]'),
   })
 
 export default {
-  verifyOnPage: selectLocationPage,
+  verifyOnPage: searchForCellPage,
   goTo: offenderNo => {
-    cy.visit(`/prisoner/${offenderNo}/cell-move/select-location`)
-    return selectLocationPage()
+    cy.visit(`/prisoner/${offenderNo}/cell-move/search-for-cell`)
+    return searchForCellPage()
   },
 }

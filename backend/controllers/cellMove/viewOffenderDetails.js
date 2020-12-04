@@ -37,7 +37,7 @@ module.exports = ({ prisonApi, logError }) => async (req, res) => {
     if (error) logError(req.originalUrl, error, serviceUnavailableMessage)
 
     return res.render('error.njk', {
-      url: `/prisoner/${offenderNo}/cell-move/select-location`,
+      url: `/prisoner/${offenderNo}/cell-move/search-for-cell`,
       homeUrl: `/prisoner/${offenderNo}`,
     })
   }

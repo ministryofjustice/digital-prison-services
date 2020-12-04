@@ -1,6 +1,6 @@
 const express = require('express')
 
-const selectLocationController = require('../controllers/cellMove/selectLocation')
+const searchForCellController = require('../controllers/cellMove/searchForCell')
 const selectCellController = require('../controllers/cellMove/selectCell')
 const nonAssociationsController = require('../controllers/cellMove/viewNonAssociations')
 const offenderDetailsController = require('../controllers/cellMove/viewOffenderDetails')
@@ -23,7 +23,7 @@ const controller = ({ oauthApi, prisonApi, whereaboutsApi, caseNotesApi, logErro
     logError,
   })
 
-  router.get('/select-location', selectLocationController({ oauthApi, prisonApi, whereaboutsApi, logError }))
+  router.get('/search-for-cell', searchForCellController({ oauthApi, prisonApi, whereaboutsApi, logError }))
   router.get('/non-associations', nonAssociationsController({ prisonApi, logError }))
   router.get('/offender-details', offenderDetailsController({ prisonApi, logError }))
   router.get('/cell-sharing-risk-assessment-details', cellSharingRiskAssessmentController({ prisonApi, logError }))

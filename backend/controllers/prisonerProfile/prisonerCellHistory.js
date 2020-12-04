@@ -88,7 +88,7 @@ module.exports = ({ oauthApi, prisonApi, logError, page = 0 }) => async (req, re
       prisonerName: formatName(firstName, lastName),
       profileUrl: `/prisoner/${offenderNo}`,
       breadcrumbPrisonerName: putLastNameFirst(firstName, lastName),
-      changeCellLink: `/prisoner/${offenderNo}/cell-move/select-location`,
+      changeCellLink: `/prisoner/${offenderNo}/cell-move/search-for-cell`,
       canViewCellMoveButton: userRoles && userRoles.some(role => role.roleCode === 'CELL_MOVE'),
       dpsUrl,
     })

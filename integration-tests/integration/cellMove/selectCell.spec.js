@@ -231,8 +231,14 @@ context('A user can select a cell', () => {
       page.nonAssociationWarning().should('not.be.visible')
     })
 
-    it('should navigate to the confirm cell move page on Move to cell swap', () => {
+    it('should display the correct cell swap messaging and link', () => {
       const page = SelectCellPage.goTo(offenderNo, '1')
+
+      page
+        .selectCswapText()
+        .contains(
+          'Create a space for another prisoner - this will leave John Smith without a cell. You must move him into a cell as soon as possible today.'
+        )
 
       page
         .selectCswapLink()

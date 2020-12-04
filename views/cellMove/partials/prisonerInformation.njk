@@ -1,4 +1,8 @@
-<div class="horizontal-information horizontal-information--with-border govuk-!-margin-bottom-6" data-test="cell-move-header-information">
+{% from "govuk/components/inset-text/macro.njk" import govukInsetText %}
+
+<hr class="govuk-section-break govuk-section-break--m govuk-section-break--visible">
+
+<div class="horizontal-information govuk-!-margin-bottom-6" data-test="cell-move-header-information">
   <div class="horizontal-information__item">
     <h3 class="govuk-heading-s govuk-!-margin-bottom-1">Name</h3>
     <p class="govuk-body govuk-!-margin-bottom-1" data-test="name">{{ breadcrumbPrisonerName }}</p>
@@ -45,3 +49,13 @@
     {% endif %}
   </div>
 </div>
+
+{{ govukInsetText({
+  html: '<p class="govuk-body"><a data-test="select-cswap-link" href="' + '/prisoner/' + offenderNo + '/cell-move/confirm-cell-move?cellId=C-SWAP"' + '  class="govuk-link">Create a space for another prisoner</a> -  this will leave ' + prisonerName + ' without a cell. You must move him into a cell as soon as possible today.',
+  classes: 'govuk-!-width-two-thirds',
+  attributes: {
+    'data-test': 'select-cswap-text'
+  }
+}) }}
+
+<hr class="govuk-section-break govuk-section-break--l govuk-section-break--visible">

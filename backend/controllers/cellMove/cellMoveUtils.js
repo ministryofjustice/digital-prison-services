@@ -15,11 +15,11 @@ const showCsraLink = assessments => {
 }
 
 const getBackLinkData = (referer, offenderNo) => {
-  const backLink = referer || `/prisoner/${offenderNo}/cell-move/select-location`
+  const backLink = referer || `/prisoner/${offenderNo}/cell-move/search-for-cell`
   return {
     backLink,
-    backLinkText: backLink.includes('select-location')
-      ? 'Return to select a location'
+    backLinkText: backLink.includes('search-for-cell')
+      ? 'Return to search for a cell'
       : 'Return to select an available cell',
   }
 }

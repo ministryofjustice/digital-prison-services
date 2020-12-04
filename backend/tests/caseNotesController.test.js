@@ -35,6 +35,7 @@ describe('Case notes controller', () => {
   const prisonerProfileService = {}
   const paginationService = {}
   const nunjucks = {}
+  const oauthApi = {}
 
   let controller
   let logError
@@ -73,7 +74,16 @@ describe('Case notes controller', () => {
     nunjucks.render = jest.fn()
     logError = jest.fn()
 
-    controller = controllerFactory({ caseNotesApi, prisonerProfileService, nunjucks, paginationService, logError })
+    oauthApi.userRoles = jest.fn().mockResolvedValue([{ roleCode: 'INACTIVE_BOOKINGS' }])
+
+    controller = controllerFactory({
+      caseNotesApi,
+      prisonerProfileService,
+      nunjucks,
+      paginationService,
+      logError,
+      oauthApi,
+    })
   })
 
   it('should render error template', async () => {
@@ -211,10 +221,12 @@ describe('Case notes controller', () => {
                 authorName: 'John Smith',
                 date: '1 December 2018',
                 day: 'Saturday',
+                deleteLink: false,
                 text: 'Some Additional Text',
                 time: '13:45',
               },
             ],
+            deleteLink: false,
             occurrenceDateTime: 'Tuesday 31 October 2017 - 01:30',
             printIncentiveLink: false,
             subTypeDescription: 'Key Worker Session',
