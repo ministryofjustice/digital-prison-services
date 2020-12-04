@@ -281,7 +281,7 @@ context('Prisoner location history', () => {
 
       const prisonerLocationHistoryPage = PrisonerLocationHistoryPage.verifyOnPage()
       prisonerLocationHistoryPage.movedBy().contains('Joe Bloggs')
-      prisonerLocationHistoryPage.reasonForMove().contains('Classification or re-classification')
+      prisonerLocationHistoryPage.reasonForMove().contains(notEnteredMessage)
       prisonerLocationHistoryPage.whatHappened().contains(notEnteredMessage)
     })
 
