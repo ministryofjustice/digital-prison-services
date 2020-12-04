@@ -33,6 +33,8 @@ const globalSearchRouter = require('./routes/globalSearchRouter')
 const amendCaseNoteRouter = require('./routes/caseNoteAmendmentRouter')
 const deleteCaseNoteRouter = require('./routes/caseNoteDeletionRouter')
 
+const homePageController = require('./controllers/homePage/homePage')
+
 const currentUser = require('./middleware/currentUser')
 const systemOauthClient = require('./api/systemOauthClient')
 const handleErrors = require('./middleware/asyncHandler')
@@ -213,6 +215,8 @@ const setup = ({
   router.get(['/content', '/content/:path'], contentController({ logError }))
 
   router.use('/global-search', globalSearchRouter({ offenderSearchApi, oauthApi, logError }))
+
+  router.get('/home-page', homePageController({ oauthApi, logError }))
 
   return router
 }

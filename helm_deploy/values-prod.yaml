@@ -43,6 +43,9 @@ env:
   OFFENDER_SEARCH_API_URL: https://prisoner-offender-search.prison.service.justice.gov.uk
   SUPPORT_URL: https://support.hmpps.service.justice.gov.uk/
   BVL_URL: https://book-video-link.prison.service.justice.gov.uk
+  MOIC_URL: https://moic.service.justice.gov.uk
+  OMIC_URL: https://manage-key-workers.service.justice.gov.uk
+
 
 allowlist:
   office: "217.33.148.210/32"
