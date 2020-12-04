@@ -231,15 +231,13 @@ describe('Prisoner location sharing history', () => {
           bedAssignmentHistorySequence: 1,
         },
       ])
-      caseNotesApi.getCaseNoteTypes = jest.fn().mockResolvedValue(caseNotesTypes)
-
       await controller(req, res)
 
       expect(res.render).toHaveBeenCalledWith(
         'prisonerProfile/prisonerLocationHistory.njk',
         expect.objectContaining({
           locationDetails: expect.objectContaining({
-            reasonForMove: 'Classification or re-classification',
+            reasonForMove: notEnteredMessage,
             whatHappened: notEnteredMessage,
           }),
         })
