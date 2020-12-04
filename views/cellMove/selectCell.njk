@@ -47,11 +47,9 @@
       {{ occupier.csra }}
     </p>
 
-    {% if occupier.showCsraLink %}
-      <div>
-        <a href="{{ occupier.csraDetailsUrl }}" class="govuk-link" data-test="csra-link">View details <span class="govuk-visually-hidden">for {{ occupier.name }} CSRA</span></a>
-      </div>
-    {% endif %}
+    <div>
+      <a href="{{ occupier.csraDetailsUrl }}" class="govuk-link" data-test="csra-link">View details <span class="govuk-visually-hidden">for {{ occupier.name }} CSRA</span></a>
+    </div>
   </td>
   <td class="{{ cellClass }}">
     {% if occupier.alerts.length %}

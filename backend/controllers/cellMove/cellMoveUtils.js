@@ -10,10 +10,6 @@ const getNonAssocationsInEstablishment = nonAssociations =>
       (nonAssociation.effectiveDate && moment(nonAssociation.effectiveDate, 'YYYY-MM-DDTHH:mm:ss') <= moment())
   ) || []
 
-const showCsraLink = assessments => {
-  return assessments.some(assessment => assessment.assessmentCode.includes('CSR') && assessment.assessmentComment)
-}
-
 const getBackLinkData = (referer, offenderNo) => {
   const backLink = referer || `/prisoner/${offenderNo}/cell-move/search-for-cell`
   return {
@@ -32,7 +28,6 @@ const userHasAccess = ({ userRoles, userCaseLoads, offenderCaseload }) => {
 
 module.exports = {
   getNonAssocationsInEstablishment,
-  showCsraLink,
   getBackLinkData,
   userHasAccess,
 }

@@ -19,13 +19,11 @@
   <div class="horizontal-information__item">
     <h3 class="govuk-heading-s govuk-!-margin-bottom-1">CSRA rating</h3>
     <p class="govuk-body govuk-!-margin-bottom-1" data-test="csra">{{ prisonerDetails.csra }}</p>
-    {% if showCsraLink %}
-      <p class="govuk-body">
-        <a href="{{ csraDetailsUrl }}" class="govuk-link" data-test="csra-link">View details
-          <span class="govuk-visually-hidden">for{{ breadcrumbPrisonerName }}</span>
-        </a>
-      </p>
-    {% endif %}
+    <p class="govuk-body">
+      <a href="{{ csraDetailsUrl }}" class="govuk-link" data-test="csra-link">View details
+        <span class="govuk-visually-hidden">for{{ breadcrumbPrisonerName }}</span>
+      </a>
+    </p>
   </div>
   <div class="horizontal-information__item horizontal-information__item--tenth">
     <h3 class="govuk-heading-s govuk-!-margin-bottom-1">Relevant alerts</h3>

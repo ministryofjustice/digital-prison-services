@@ -276,7 +276,6 @@ describe('select location', () => {
           prisonerName: 'Test User',
           numberOfNonAssociations: 0,
           showNonAssociationsLink: false,
-          showCsraLink: false,
           alerts: [
             { alertCodes: ['XGANG'], classes: 'alert-status alert-status--gang-member', label: 'Gang member' },
             { alertCodes: ['VIP'], classes: 'alert-status alert-status--isolated-prisoner', label: 'Isolated' },
@@ -374,45 +373,6 @@ describe('select location', () => {
         expect.objectContaining({
           numberOfNonAssociations: 1,
           showNonAssociationsLink: true,
-        })
-      )
-    })
-
-    it('populates the data correctly when CSR Rating assessment does not have a comment', async () => {
-      prisonApi.getDetails = jest.fn().mockResolvedValue({
-        ...getDetailsResponse,
-        assessments: [
-          {
-            assessmentCode: 'CSR',
-          },
-        ],
-      })
-      await controller(req, res)
-
-      expect(res.render).toHaveBeenCalledWith(
-        'cellMove/searchForCell.njk',
-        expect.objectContaining({
-          showCsraLink: false,
-        })
-      )
-    })
-
-    it('populates the data correctly when CSR Rating assessment has a comment', async () => {
-      prisonApi.getDetails = jest.fn().mockResolvedValue({
-        ...getDetailsResponse,
-        assessments: [
-          {
-            assessmentCode: 'CSR',
-            assessmentComment: 'Test comment',
-          },
-        ],
-      })
-      await controller(req, res)
-
-      expect(res.render).toHaveBeenCalledWith(
-        'cellMove/searchForCell.njk',
-        expect.objectContaining({
-          showCsraLink: true,
         })
       )
     })
