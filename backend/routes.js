@@ -216,7 +216,7 @@ const setup = ({
 
   router.use('/global-search', globalSearchRouter({ offenderSearchApi, oauthApi, logError }))
 
-  router.get('/home-page', homePageController({ oauthApi, logError }))
+  router.get('/home-page', homePageController({ oauthApi, prisonApi, whereaboutsApi, logError }))
 
   return router
 }

@@ -21,10 +21,15 @@ $govuk-page-width: 1170px;
 @import 'components/prisonerSearch/prisoner-search';
 @import 'components/prisonerSearch/prisoner-panel';
 @import 'components/results-table';
-@import 'views/components/datePicker/datePicker.scss';
-@import 'views/components/timePicker/timePicker.scss';
-@import 'views/components/movementSlip/movementSlip.scss';
-@import 'views/components/scheduledEvents/scheduledEvents.scss';
+@import 'components/card';
+
+@import 'views/components/datePicker/datePicker';
+@import 'views/components/timePicker/timePicker';
+@import 'views/components/movementSlip/movementSlip';
+@import 'views/components/scheduledEvents/scheduledEvents';
+
+@import 'views/homePage/homePage';
+
 @import 'govuk-overrides';
 @import 'moj-overrides';
 @import 'typography';

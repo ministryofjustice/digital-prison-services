@@ -346,6 +346,20 @@ module.exports = {
         jsonBody: locationGroups || [],
       },
     }),
+  stubLocationConfig: ({ agencyId, response }) =>
+    stubFor({
+      request: {
+        method: 'GET',
+        url: `/whereabouts/agencies/${agencyId}/locations/whereabouts`,
+      },
+      response: {
+        status: 200,
+        headers: {
+          'Content-Type': 'application/json;charset=UTF-8',
+        },
+        jsonBody: response,
+      },
+    }),
   stubMoveToCell: () =>
     stubFor({
       request: {

@@ -1,21 +1,69 @@
 {% extends "../partials/layout.njk" %}
-{% from "govuk/components/error-summary/macro.njk" import govukErrorSummary %}
-{% from "govuk/components/textarea/macro.njk" import govukTextarea %}
+{% from "../components/card/card.njk" import card %}
+{% from "govuk/components/input/macro.njk" import govukInput %}
+{% from "govuk/components/select/macro.njk" import govukSelect %}
 {% from "govuk/components/button/macro.njk" import govukButton %}
 
-{% set title = 'Digital prison services' %}
+{% set title = 'Home' %}
 
-{% block content %}
+{% block main %}
+  <div class="govuk-width-container">
+    <h1 class="govuk-heading-l govuk-!-margin-top-7">Digital Prison Services</h1>
+  </div>
 
-    <h1 class="govuk-heading-xl">{{ title }}</h1>
+  <div class="homepage-search">
+    <div class="govuk-width-container">     
+      <h2 class="govuk-heading-m govuk-!-margin-bottom-1">Search for a prisoner</h1>
+      <p class="govuk-body govuk-hint">Leave blank to view all results for selected residential location</p>
 
-    {% for task in tasks %}
-        <div class="govuk-body" id="{{ task.id }}">
-            <a data-qa="task-link" href="{{ task.linkUrl }}"> {{ task.text }} </a>
-            <p data-qa="task-sub-text">
-                {{ task.subText }}
-            </p>
-        </div>
-    {% endfor %}
+      <form action="/prisoner-search" class="horizontal-form" data-test="homepage-search-form">
+        {{ govukInput({
+          id: "keywords",
+          name: "keywords",
+          label: {
+              text: "Name or prison number"
+          },
+          attributes: {
+            'data-test': 'homepage-search-keywords'
+          }
+        }) }}
 
+        {{ govukSelect({
+          id: "location",
+          name: "location",
+          label: {
+            text: "Residential location"
+          },
+          items: locationOptions,
+          attributes: {
+            'data-test': 'homepage-search-location'
+          }
+        }) }}
+
+        {{ govukButton({
+          text: "Search",
+          type: "submit"
+        }) }}
+      </form>
+    </div>
+  </div>
+
+  <div class="homepage-content">
+    <div class="govuk-width-container">
+      <ul class="govuk-grid-row card-group">
+        {% for task in tasks %}
+          <li class="govuk-grid-column-one-third card-group__item">
+            {{ card({
+              "href": task.linkUrl,
+              "clickable": "true",
+              "heading": task.text,
+              "headingClasses": "govuk-heading-m",
+              "description": task.subText,
+              "id": task.id
+            }) }}
+          </li>
+        {% endfor %}
+      </ul>
+    </div>
+  </div>
 {% endblock %}

@@ -49,3 +49,5 @@ env:
   BVL_URL: https://book-video-link-dev.prison.service.justice.gov.uk
   MOIC_URL: https://allocation-manager-staging.apps.live-1.cloud-platform.service.justice.gov.uk
   OMIC_URL: https://dev.manage-key-workers.service.justice.gov.uk
+  MANAGE_AUTH_ACCOUNTS_URL: "https://manage-hmpps-auth-accounts-dev.prison.service.justice.gov.uk"
+  PECS_URL: "https://hmpps-book-secure-move-frontend-staging.apps.live-1.cloud-platform.service.justice.gov.uk"
