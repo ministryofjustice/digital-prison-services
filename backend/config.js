@@ -29,7 +29,10 @@ module.exports = {
     port: process.env.REDIS_PORT || 6379,
     password: process.env.REDIS_PASSWORD,
   },
-  apps: {
+  applications: {
+    licences: {
+      url: process.env.LICENCES_URL || 'http://localhost:3003/',
+    },
     manageaccounts: {
       url: process.env.MANAGE_AUTH_ACCOUNTS_URL || 'http://localhost:3004/',
     },

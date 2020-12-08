@@ -1,6 +1,5 @@
 const {
-  app: { licencesUrl },
-  apps: { manageaccounts, moic, pecs },
+  applications: { licences, manageaccounts, moic, pecs },
   apis: { omic, useOfForce, pathfinder, categorisation, soc },
 } = require('../../config')
 
@@ -66,9 +65,9 @@ const getTasks = ({ activeCaseLoadId, locations, staffId, whereaboutsConfig }) =
     id: 'hdc-licences',
     text: 'HDC and licences',
     subText: 'Create and manage Home Detention Curfew and licences.',
-    linkUrl: licencesUrl,
+    linkUrl: licences.url,
     roles: ['NOMIS_BATCHLOAD', 'LICENCE_CA', 'LICENCE_DM', 'LICENCE_RO', 'LICENCE_VARY', 'LICENCE_READONLY'],
-    enabled: licencesUrl,
+    enabled: licences.url,
   },
   {
     id: 'establishment-roll',
