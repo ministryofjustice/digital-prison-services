@@ -13,6 +13,18 @@ context('Homepage', () => {
     cy.task('stubLocationConfig', { agencyId: 'MDI', response: { enabled: false } })
   })
 
+  describe('Search', () => {
+    it('should should submit to the correct location with the correct search terms', () => {
+      const page = homepagePage.goTo()
+
+      page.searchKeywords().type('Smith')
+      page.searchLocation().select('MDI-1')
+      page.searchForm().submit()
+
+      cy.url().should('include', `/prisoner-search?keywords=Smith&location=MDI-1`)
+    })
+  })
+
   describe('Tasks', () => {
     it('should show use of force', () => {
       const page = homepagePage.goTo()

@@ -94,6 +94,14 @@ const getTasks = ({ activeCaseLoadId, locations, staffId, whereaboutsConfig }) =
     enabled: omic.url,
   },
   {
+    id: 'pom',
+    heading: 'Manage Prison Offender Managers’ cases',
+    description: 'Allocate a Prison Offender Manager (POM) to a prisoner and manage their cases.',
+    href: moic.url,
+    roles: ['ALLOC_MGR', 'ALLOC_CASE_MGR'],
+    enabled: moic.url,
+  },
+  {
     id: 'manage-users',
     heading: 'Manage user accounts',
     description:
@@ -118,14 +126,6 @@ const getTasks = ({ activeCaseLoadId, locations, staffId, whereaboutsConfig }) =
     href: pecs.url,
     roles: ['PECS_OCA', 'PECS_PRISON'],
     enabled: pecs.url,
-  },
-  {
-    id: 'pom',
-    heading: 'Manage Prison Offender Managers’ cases',
-    description: 'Allocate a Prison Offender Manager (POM) to a prisoner and manage their cases.',
-    href: moic.url,
-    roles: ['ALLOC_MGR', 'ALLOC_CASE_MGR'],
-    enabled: moic.url,
   },
   {
     id: 'soc',
@@ -155,8 +155,7 @@ module.exports = ({ oauthApi, prisonApi, whereaboutsApi, logError }) => async (r
         .filter(
           task => Boolean(task.roles === null || task.roles.find(role => roleCodes.includes(role))) && task.enabled
         )
-        .map(({ roles, enabled, ...task }) => task)
-        .sort((left, right) => left.heading.localeCompare(right.heading)),
+        .map(({ roles, enabled, ...task }) => task),
     })
   } catch (error) {
     if (error) logError(req.originalUrl, error, 'Home page not loading')

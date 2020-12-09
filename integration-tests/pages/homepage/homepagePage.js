@@ -2,6 +2,9 @@ const page = require('../page')
 
 const homepagePage = () =>
   page('Digital Prison Services', {
+    searchForm: () => cy.get('[data-test="homepage-search-form"]'),
+    searchKeywords: () => cy.get('[data-test="homepage-search-keywords"]'),
+    searchLocation: () => cy.get('[data-test="homepage-search-location"]'),
     globalSearch: () => cy.get('[data-test="global-search"]'),
     managePrisonerWhereabouts: () => cy.get('[data-test="manage-prisoner-whereabouts"]'),
     covidUnits: () => cy.get('[data-test="covid-units"]'),
