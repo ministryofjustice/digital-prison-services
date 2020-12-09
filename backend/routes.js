@@ -33,7 +33,7 @@ const globalSearchRouter = require('./routes/globalSearchRouter')
 const amendCaseNoteRouter = require('./routes/caseNoteAmendmentRouter')
 const deleteCaseNoteRouter = require('./routes/caseNoteDeletionRouter')
 
-const homePageController = require('./controllers/homePage/homePage')
+const homepageController = require('./controllers/homepage/homepage')
 
 const currentUser = require('./middleware/currentUser')
 const systemOauthClient = require('./api/systemOauthClient')
@@ -216,7 +216,7 @@ const setup = ({
 
   router.use('/global-search', globalSearchRouter({ offenderSearchApi, oauthApi, logError }))
 
-  router.get('/home-page', homePageController({ oauthApi, prisonApi, whereaboutsApi, logError }))
+  router.get('/homepage', homepageController({ oauthApi, prisonApi, whereaboutsApi, logError }))
 
   return router
 }

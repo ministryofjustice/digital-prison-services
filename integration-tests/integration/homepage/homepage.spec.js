@@ -1,6 +1,6 @@
-const homePage = require('../../pages/homepage/homePage')
+const homepagePage = require('../../pages/homepage/homepagePage')
 
-context('Home page', () => {
+context('Homepage', () => {
   beforeEach(() => {
     cy.clearCookies()
     cy.task('reset')
@@ -15,13 +15,13 @@ context('Home page', () => {
 
   describe('Tasks', () => {
     it('should show use of force', () => {
-      const page = homePage.goTo()
+      const page = homepagePage.goTo()
 
       page.useOfForce().should('exist')
     })
 
     it('should show establishment roll', () => {
-      const page = homePage.goTo()
+      const page = homepagePage.goTo()
 
       page.establishmentRoll().should('exist')
     })
@@ -29,7 +29,7 @@ context('Home page', () => {
     it('should show global search task', () => {
       cy.task('stubUserMeRoles', [{ roleCode: 'GLOBAL_SEARCH' }])
 
-      const page = homePage.goTo()
+      const page = homepagePage.goTo()
 
       page.globalSearch().should('exist')
     })
@@ -37,7 +37,7 @@ context('Home page', () => {
     it('should show manage prisoner whereabouts', () => {
       cy.task('stubLocationConfig', { agencyId: 'MDI', response: { enabled: true } })
 
-      const page = homePage.goTo()
+      const page = homepagePage.goTo()
 
       page.managePrisonerWhereabouts().should('exist')
     })
@@ -45,7 +45,7 @@ context('Home page', () => {
     it('should show covid units', () => {
       cy.task('stubUserMeRoles', [{ roleCode: 'PRISON' }])
 
-      const page = homePage.goTo()
+      const page = homepagePage.goTo()
 
       page.covidUnits().should('exist')
     })
@@ -53,7 +53,7 @@ context('Home page', () => {
     it('should show pathfinder', () => {
       cy.task('stubUserMeRoles', [{ roleCode: 'PF_STD_PRISON' }])
 
-      const page = homePage.goTo()
+      const page = homepagePage.goTo()
 
       page.pathfinder().should('exist')
     })
@@ -61,7 +61,7 @@ context('Home page', () => {
     it('should show hdc licences', () => {
       cy.task('stubUserMeRoles', [{ roleCode: 'LICENCE_RO' }])
 
-      const page = homePage.goTo()
+      const page = homepagePage.goTo()
 
       page.hdcLicences().should('exist')
     })
@@ -69,7 +69,7 @@ context('Home page', () => {
     it('should show bulk appointments', () => {
       cy.task('stubUserMeRoles', [{ roleCode: 'BULK_APPOINTMENTS' }])
 
-      const page = homePage.goTo()
+      const page = homepagePage.goTo()
 
       page.bulkAppointments().should('exist')
     })
@@ -77,7 +77,7 @@ context('Home page', () => {
     it('should show manage key workers', () => {
       cy.task('stubUserMeRoles', [{ roleCode: 'OMIC_ADMIN' }])
 
-      const page = homePage.goTo()
+      const page = homepagePage.goTo()
 
       page.manageKeyWorkers().should('exist')
     })
@@ -85,7 +85,7 @@ context('Home page', () => {
     it('should show manage users', () => {
       cy.task('stubUserMeRoles', [{ roleCode: 'MAINTAIN_ACCESS_ROLES' }])
 
-      const page = homePage.goTo()
+      const page = homepagePage.goTo()
 
       page.manageUsers().should('exist')
     })
@@ -93,7 +93,7 @@ context('Home page', () => {
     it('should show categorisation', () => {
       cy.task('stubUserMeRoles', [{ roleCode: 'CREATE_CATEGORISATION' }])
 
-      const page = homePage.goTo()
+      const page = homepagePage.goTo()
 
       page.categorisation().should('exist')
     })
@@ -101,7 +101,7 @@ context('Home page', () => {
     it('should show book a secure move', () => {
       cy.task('stubUserMeRoles', [{ roleCode: 'PECS_OCA' }])
 
-      const page = homePage.goTo()
+      const page = homepagePage.goTo()
 
       page.secureMove().should('exist')
     })
@@ -109,7 +109,7 @@ context('Home page', () => {
     it('should show prison offender managers', () => {
       cy.task('stubUserMeRoles', [{ roleCode: 'ALLOC_MGR' }])
 
-      const page = homePage.goTo()
+      const page = homepagePage.goTo()
 
       page.pom().should('exist')
     })
@@ -117,7 +117,7 @@ context('Home page', () => {
     it('should show serious organised crime', () => {
       cy.task('stubUserMeRoles', [{ roleCode: 'SOC_CUSTODY' }])
 
-      const page = homePage.goTo()
+      const page = homepagePage.goTo()
 
       page.soc().should('exist')
     })

@@ -23,12 +23,12 @@ $govuk-page-width: 1170px;
 @import 'components/results-table';
 @import 'components/card';
 
+@import 'pages/homepage';
+
 @import 'views/components/datePicker/datePicker';
 @import 'views/components/timePicker/timePicker';
 @import 'views/components/movementSlip/movementSlip';
 @import 'views/components/scheduledEvents/scheduledEvents';
-
-@import 'views/homePage/homePage';
 
 @import 'govuk-overrides';
 @import 'moj-overrides';

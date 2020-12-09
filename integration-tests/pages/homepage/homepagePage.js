@@ -1,6 +1,6 @@
 const page = require('../page')
 
-const homePage = () =>
+const homepagePage = () =>
   page('Digital Prison Services', {
     globalSearch: () => cy.get('[data-test="global-search"]'),
     managePrisonerWhereabouts: () => cy.get('[data-test="manage-prisoner-whereabouts"]'),
@@ -19,9 +19,9 @@ const homePage = () =>
   })
 
 export default {
-  verifyOnPage: homePage,
+  verifyOnPage: homepagePage,
   goTo: () => {
-    cy.visit(`/home-page`)
-    return homePage()
+    cy.visit(`/homepage`)
+    return homepagePage()
   },
 }
