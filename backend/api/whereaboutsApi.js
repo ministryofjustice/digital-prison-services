@@ -79,6 +79,8 @@ const whereaboutsApiFactory = client => {
       commentText,
     })
 
+  const getWhereaboutsConfig = (context, agencyId) => get(context, `/agencies/${agencyId}/locations/whereabouts`)
+
   return {
     getAttendance,
     getAttendanceForBookings,
@@ -99,6 +101,7 @@ const whereaboutsApiFactory = client => {
     getCellsWithCapacity,
     moveToCell,
     getCellMoveReason,
+    getWhereaboutsConfig,
   }
 }
 

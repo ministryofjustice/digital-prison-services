@@ -409,5 +409,7 @@ module.exports = on => {
     stubGetCellMoveReason: ({ bookingId, bedAssignmentHistorySequence, cellMoveReason, status }) =>
       whereabouts.stubGetCellMoveReason(bookingId, bedAssignmentHistorySequence, cellMoveReason, status),
     stubGetStaffDetails: ({ staffId, response }) => prisonApi.stubGetStaffDetails(staffId, response),
+    stubStaffRoles: response => prisonApi.stubStaffRoles(response),
+    stubLocationConfig: ({ agencyId, response }) => whereabouts.stubLocationConfig({ agencyId, response }),
   })
 }

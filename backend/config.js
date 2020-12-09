@@ -29,6 +29,22 @@ module.exports = {
     port: process.env.REDIS_PORT || 6379,
     password: process.env.REDIS_PASSWORD,
   },
+  applications: {
+    licences: {
+      url: process.env.LICENCES_URL || 'http://localhost:3003/',
+    },
+    manageaccounts: {
+      url: process.env.MANAGE_AUTH_ACCOUNTS_URL || 'http://localhost:3004/',
+    },
+    moic: {
+      url: process.env.MOIC_URL,
+    },
+    pecs: {
+      url:
+        process.env.PECS_URL ||
+        'https://hmpps-book-secure-move-frontend-staging.apps.live-1.cloud-platform.service.justice.gov.uk',
+    },
+  },
   apis: {
     oauth2: {
       url: process.env.OAUTH_ENDPOINT_URL || 'http://localhost:9090/auth/',
@@ -98,7 +114,7 @@ module.exports = {
       url: process.env.BVL_URL || 'http://localhost:3000',
     },
     omic: {
-      url: process.env.OMIC_URL,
+      url: process.env.OMIC_URL || 'http://localhost:3001',
     },
   },
 
