@@ -201,4 +201,7 @@ env:
     
   - name: PECS_URL
     value: {{ .Values.env.PECS_URL | quote }}
+
+  - name: OMIC_URL
+    value: {{ .Values.env.OMIC_URL | quote }}
 {{- end -}}

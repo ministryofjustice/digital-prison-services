@@ -113,7 +113,7 @@ const getTasks = ({ activeCaseLoadId, locations, staffId, whereaboutsConfig }) =
   {
     id: 'categorisation',
     heading: 'Categorisation',
-    description: 'View a prisoner’s category and complete either an first time categorisation or a recategorisation.',
+    description: 'View a prisoner’s category and complete either a first time categorisation or a recategorisation.',
     href: categorisation.ui_url,
     roles: ['CREATE_CATEGORISATION', 'CREATE_RECATEGORISATION', 'APPROVE_CATEGORISATION', 'CATEGORISATION_SECURITY'],
     enabled: categorisation.ui_url,
