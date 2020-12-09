@@ -156,7 +156,7 @@ context('A user can search for a cell', () => {
     page
       .selectCswapText()
       .contains(
-        'Create a space for another prisoner - this will leave John Smith without a cell. You must move him into a cell as soon as possible today.'
+        'Create a space for another prisoner - this will leave John Smith without a cell. You must move them into a cell as soon as possible today.'
       )
 
     page
