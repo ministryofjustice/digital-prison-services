@@ -47,8 +47,8 @@ env:
   BVL_URL: https://book-video-link-preprod.prison.service.justice.gov.uk
   MOIC_URL: https://allocation-manager-preprod.apps.live-1.cloud-platform.service.justice.gov.uk
   OMIC_URL: https://preprod.manage-key-workers.service.justice.gov.uk
-  MANAGE_AUTH_ACCOUNTS_URL: "https://manage-hmpps-auth-accounts-preprod.prison.service.justice.gov.uk"
-  PECS_URL: " http://hmpps-book-secure-move-frontend-preprod.apps.live-1.cloud-platform.service.justice.gov.uk"
+  MANAGE_AUTH_ACCOUNTS_URL: https://manage-hmpps-auth-accounts-preprod.prison.service.justice.gov.uk
+  PECS_URL: http://hmpps-book-secure-move-frontend-preprod.apps.live-1.cloud-platform.service.justice.gov.uk
 
 allowlist:
   office: "217.33.148.210/32"
