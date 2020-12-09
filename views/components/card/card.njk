@@ -1,24 +1,15 @@
 {% macro card(params) %}
-  {% set headingLevel = params.headingLevel if params.headingLevel else 2 %}
-  <div class="card{% if params.clickable %} card--clickable{% endif %}{% if params.feature %} card--feature{% endif %}{%- if params.classes %} {{ params.classes }}{% endif %}" {%- for attribute, value in params.attributes %} {{attribute}}="{{value}}"{% endfor %} data-test="{{ params.id }}">
-    <div class="card__content{% if params.feature %} card__content--feature{% endif %}">
-      {%- if params.headingHtml %}
-      {{ params.headingHtml | safe }}
-      {%- else %}
-      <h{{ headingLevel }} class="card__heading{% if params.feature %} card__heading--feature{% endif %} {%- if params.headingClasses %} {{ params.headingClasses }}{% endif %}">
-        {%- if params.href and params.feature != "true" %}
+  <div class="card{% if params.clickable %} card--clickable{% endif %}" data-test="{{ params.id }}">
+    <h2 class="govuk-heading-m card__heading">
+      {%- if params.href %}
         <a class="govuk-link card__link" href="{{ params.href }}">{{ params.heading | safe }}</a>
-        {%- else %}
-        {{ params.heading }}
-        {%- endif %}
-      </h{{ headingLevel }}>
-      {%- endif %}
-      {%- if params.descriptionHtml %}
-      {{ params.descriptionHtml | safe }}
-      {%- elif params.description %}
-      <p class="govuk-body card__description">{{ params.description | safe }}</p>
       {%- else %}
+        {{ params.heading }}
       {%- endif %}
-    </div>
+    </h2>
+
+    {%- if params.description %}
+      <p class="govuk-body card__description">{{ params.description | safe }}</p>
+    {%- endif %}
   </div>
 {% endmacro %}
