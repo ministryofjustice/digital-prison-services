@@ -64,9 +64,9 @@ describe('Home page controller', () => {
         tasks: [
           {
             id: 'global-search',
-            text: 'Global search',
-            subText: 'Search for someone in any establishment, or who has been released.',
-            linkUrl: '/global-search',
+            heading: 'Global search',
+            description: 'Search for someone in any establishment, or who has been released.',
+            href: '/global-search',
           },
         ],
       })
@@ -86,9 +86,9 @@ describe('Home page controller', () => {
         tasks: [
           {
             id: 'key-worker-allocations',
-            text: 'My key worker allocation',
-            linkUrl: 'http://omic-url/key-worker/1',
-            subText: 'View your key worker cases.',
+            heading: 'My key worker allocation',
+            href: 'http://omic-url/key-worker/1',
+            description: 'View your key worker cases.',
           },
         ],
       })
@@ -106,9 +106,9 @@ describe('Home page controller', () => {
         tasks: [
           {
             id: 'manage-prisoner-whereabouts',
-            text: 'Manage prisoner whereabouts',
-            subText: 'View unlock lists and manage attendance.',
-            linkUrl: '/manage-prisoner-whereabouts',
+            heading: 'Manage prisoner whereabouts',
+            description: 'View unlock lists and manage attendance.',
+            href: '/manage-prisoner-whereabouts',
           },
         ],
       })
@@ -126,9 +126,9 @@ describe('Home page controller', () => {
         tasks: [
           {
             id: 'covid-units',
-            text: 'View COVID units',
-            subText: 'View who in your establishment is in each COVID unit.',
-            linkUrl: '/current-covid-units',
+            heading: 'View COVID units',
+            description: 'View who in your establishment is in each COVID unit.',
+            href: '/current-covid-units',
           },
         ],
       })
@@ -147,9 +147,9 @@ describe('Home page controller', () => {
         tasks: [
           {
             id: 'use-of-force',
-            text: 'Use of force incidents',
-            subText: 'Manage and view incident reports and statements.',
-            linkUrl: 'http://use-of-force-url',
+            heading: 'Use of force incidents',
+            description: 'Manage and view incident reports and statements.',
+            href: 'http://use-of-force-url',
           },
         ],
       })
@@ -169,9 +169,9 @@ describe('Home page controller', () => {
         tasks: [
           {
             id: 'pathfinder',
-            text: 'Pathfinder',
-            subText: 'Manage your Pathfinder caseloads.',
-            linkUrl: 'http://pathfinder-url',
+            heading: 'Pathfinder',
+            description: 'Manage your Pathfinder caseloads.',
+            href: 'http://pathfinder-url',
           },
         ],
       })
@@ -191,9 +191,9 @@ describe('Home page controller', () => {
         tasks: [
           {
             id: 'hdc-licences',
-            text: 'HDC and licences',
-            subText: 'Create and manage Home Detention Curfew and licences.',
-            linkUrl: 'http://licences-url',
+            heading: 'HDC and licences',
+            description: 'Create and manage Home Detention Curfew and licences.',
+            href: 'http://licences-url',
           },
         ],
       })
@@ -214,9 +214,9 @@ describe('Home page controller', () => {
         tasks: [
           {
             id: 'establishment-roll',
-            text: 'Establishment roll check',
-            subText: 'View the roll broken down by residential unit and see who is arriving and leaving.',
-            linkUrl: '/establishment-roll',
+            heading: 'Establishment roll check',
+            description: 'View the roll broken down by residential unit and see who is arriving and leaving.',
+            href: '/establishment-roll',
           },
         ],
       })
@@ -234,9 +234,9 @@ describe('Home page controller', () => {
         tasks: [
           {
             id: 'bulk-appointments',
-            text: 'Add bulk appointments',
-            subText: 'Upload a file to add appointments for multiple prisoners.',
-            linkUrl: '/bulk-appointments/need-to-upload-file',
+            heading: 'Add bulk appointments',
+            description: 'Upload a file to add appointments for multiple prisoners.',
+            href: '/bulk-appointments/need-to-upload-file',
           },
         ],
       })
@@ -256,9 +256,9 @@ describe('Home page controller', () => {
         tasks: [
           {
             id: 'manage-key-workers',
-            text: 'Key worker management service',
-            subText: 'Add and remove key workers from prisoners and manage individuals.',
-            linkUrl: 'http://omic-url',
+            heading: 'Key worker management service',
+            description: 'Add and remove key workers from prisoners and manage individuals.',
+            href: 'http://omic-url',
           },
         ],
       })
@@ -281,10 +281,10 @@ describe('Home page controller', () => {
         tasks: [
           {
             id: 'manage-users',
-            text: 'Manage user accounts',
-            subText:
+            heading: 'Manage user accounts',
+            description:
               'As a Local System Administrator (LSA) or administrator, manage accounts and groups for service users.',
-            linkUrl: 'http://manage-auth-accounts-url',
+            href: 'http://manage-auth-accounts-url',
           },
         ],
       })
@@ -304,10 +304,10 @@ describe('Home page controller', () => {
         tasks: [
           {
             id: 'categorisation',
-            text: 'Categorisation',
-            subText:
+            heading: 'Categorisation',
+            description:
               'View a prisoner’s category and complete either an first time categorisation or a recategorisation.',
-            linkUrl: 'http://categorisation-url',
+            href: 'http://categorisation-url',
           },
         ],
       })
@@ -327,10 +327,10 @@ describe('Home page controller', () => {
         tasks: [
           {
             id: 'secure-move',
-            text: 'Book a secure move',
-            subText:
+            heading: 'Book a secure move',
+            description:
               'Schedule secure movement for prisoners in custody, via approved transport suppliers, between locations across England and Wales.',
-            linkUrl: 'http://pecs-url',
+            href: 'http://pecs-url',
           },
         ],
       })
@@ -350,9 +350,9 @@ describe('Home page controller', () => {
         tasks: [
           {
             id: 'pom',
-            text: 'Manage Prison Offender Managers’ cases',
-            subText: 'Allocate a Prison Offender Manager (POM) to a prisoner and manage their cases.',
-            linkUrl: 'http://moic-url',
+            heading: 'Manage Prison Offender Managers’ cases',
+            description: 'Allocate a Prison Offender Manager (POM) to a prisoner and manage their cases.',
+            href: 'http://moic-url',
           },
         ],
       })
@@ -372,9 +372,9 @@ describe('Home page controller', () => {
         tasks: [
           {
             id: 'soc',
-            text: 'Manage SOC cases',
-            subText: 'Manage your Serious and Organised Crime (SOC) caseload.',
-            linkUrl: 'http://soc-url',
+            heading: 'Manage SOC cases',
+            description: 'Manage your Serious and Organised Crime (SOC) caseload.',
+            href: 'http://soc-url',
           },
         ],
       })

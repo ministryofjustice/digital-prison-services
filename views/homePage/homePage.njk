@@ -54,10 +54,10 @@
         {% for task in tasks %}
           <li class="govuk-grid-column-one-third card-group__item">
             {{ card({
-              "href": task.linkUrl,
+              "href": task.href,
               "clickable": "true",
-              "heading": task.text,
-              "description": task.subText,
+              "heading": task.heading,
+              "description": task.description,
               "id": task.id
             }) }}
           </li>
