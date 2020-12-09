@@ -181,7 +181,16 @@ describe('Homepage', () => {
     it('should render home page with the pathfinder task', async () => {
       config.apis.pathfinder.ui_url = 'http://pathfinder-url'
 
-      oauthApi.userRoles.mockResolvedValue([{ roleCode: 'PF_STD_PRISON' }])
+      oauthApi.userRoles.mockResolvedValue([
+        { roleCode: 'PF_STD_PRISON' },
+        { roleCode: 'PF_STD_PROBATION' },
+        { roleCode: 'PF_APPROVAL' },
+        { roleCode: 'PF_STD_PRISON_RO' },
+        { roleCode: 'PF_STD_PROBATION_RO' },
+        { roleCode: 'PF_POLICE' },
+        { roleCode: 'PF_HQ' },
+        { roleCode: 'PF_PSYCHOLOGIST' },
+      ])
 
       await controller(req, res)
 
@@ -203,7 +212,14 @@ describe('Homepage', () => {
     it('should render home page with the hdc licences task', async () => {
       config.applications.licences.url = 'http://licences-url'
 
-      oauthApi.userRoles.mockResolvedValue([{ roleCode: 'LICENCE_RO' }])
+      oauthApi.userRoles.mockResolvedValue([
+        { roleCode: 'NOMIS_BATCHLOAD' },
+        { roleCode: 'LICENCE_CA' },
+        { roleCode: 'LICENCE_DM' },
+        { roleCode: 'LICENCE_RO' },
+        { roleCode: 'LICENCE_VARY' },
+        { roleCode: 'LICENCE_READONLY' },
+      ])
 
       await controller(req, res)
 
@@ -293,6 +309,8 @@ describe('Homepage', () => {
       oauthApi.userRoles.mockResolvedValue([
         { roleCode: 'MAINTAIN_ACCESS_ROLES' },
         { roleCode: 'MAINTAIN_ACCESS_ROLES_ADMIN' },
+        { roleCode: 'MAINTAIN_OAUTH_USERS' },
+        { roleCode: 'AUTH_GROUP_MANAGER' },
       ])
 
       await controller(req, res)
@@ -316,7 +334,12 @@ describe('Homepage', () => {
     it('should render home page with the categorisation task', async () => {
       config.apis.categorisation.ui_url = 'http://categorisation-url'
 
-      oauthApi.userRoles.mockResolvedValue([{ roleCode: 'CREATE_CATEGORISATION' }])
+      oauthApi.userRoles.mockResolvedValue([
+        { roleCode: 'CREATE_CATEGORISATION' },
+        { roleCode: 'CREATE_RECATEGORISATION' },
+        { roleCode: 'APPROVE_CATEGORISATION' },
+        { roleCode: 'CATEGORISATION_SECURITY' },
+      ])
 
       await controller(req, res)
 
@@ -339,7 +362,7 @@ describe('Homepage', () => {
     it('should render home page with the book a secure move task', async () => {
       config.applications.pecs.url = 'http://pecs-url'
 
-      oauthApi.userRoles.mockResolvedValue([{ roleCode: 'PECS_OCA' }])
+      oauthApi.userRoles.mockResolvedValue([{ roleCode: 'PECS_OCA' }, { roleCode: 'PECS_PRISON' }])
 
       await controller(req, res)
 
@@ -362,7 +385,7 @@ describe('Homepage', () => {
     it('should render home page with the prison offender managers task', async () => {
       config.applications.moic.url = 'http://moic-url'
 
-      oauthApi.userRoles.mockResolvedValue([{ roleCode: 'ALLOC_MGR' }])
+      oauthApi.userRoles.mockResolvedValue([{ roleCode: 'ALLOC_MGR' }, { roleCode: 'ALLOC_CASE_MGR' }])
 
       await controller(req, res)
 
@@ -384,7 +407,7 @@ describe('Homepage', () => {
     it('should render home page with the serious organised crime task', async () => {
       config.apis.soc.url = 'http://soc-url'
 
-      oauthApi.userRoles.mockResolvedValue([{ roleCode: 'SOC_CUSTODY' }])
+      oauthApi.userRoles.mockResolvedValue([{ roleCode: 'SOC_CUSTODY' }, { roleCode: 'SOC_COMMUNITY' }])
 
       await controller(req, res)
 
