@@ -351,7 +351,7 @@ describe('Homepage', () => {
               id: 'categorisation',
               heading: 'Categorisation',
               description:
-                'View a prisoner’s category and complete either an first time categorisation or a recategorisation.',
+                'View a prisoner’s category and complete either a first time categorisation or a recategorisation.',
               href: 'http://categorisation-url',
             },
           ],
