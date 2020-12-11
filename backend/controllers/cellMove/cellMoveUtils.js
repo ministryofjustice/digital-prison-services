@@ -20,14 +20,23 @@ const getBackLinkData = (referer, offenderNo) => {
   }
 }
 
+const renderLocationOptions = locations => [
+  { text: 'All residential units', value: 'ALL' },
+  ...locations.map(location => ({ text: location.name, value: location.key })),
+]
+
 const userHasAccess = ({ userRoles, userCaseLoads, offenderCaseload }) => {
   const hasCellMoveRole = userRoles && userRoles.some(role => role.roleCode === 'CELL_MOVE')
   const offenderInCaseload = userCaseLoads && userCaseLoads.some(caseload => caseload.caseLoadId === offenderCaseload)
   return hasCellMoveRole && offenderInCaseload
 }
 
+const cellAttributes = [{ text: 'Single occupancy', value: 'SO' }, { text: 'Multiple occupancy', value: 'MO' }]
+
 module.exports = {
   getNonAssocationsInEstablishment,
   getBackLinkData,
   userHasAccess,
+  renderLocationOptions,
+  cellAttributes,
 }

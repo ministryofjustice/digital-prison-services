@@ -1,7 +1,12 @@
 const { serviceUnavailableMessage } = require('../../common-messages')
 const { alertFlagLabels, cellMoveAlertCodes } = require('../../shared/alertFlagValues')
 const { putLastNameFirst, formatName } = require('../../utils')
-const { userHasAccess, getNonAssocationsInEstablishment } = require('./cellMoveUtils')
+const {
+  userHasAccess,
+  getNonAssocationsInEstablishment,
+  renderLocationOptions,
+  cellAttributes,
+} = require('./cellMoveUtils')
 const {
   app: { notmEndpointUrl: dpsUrl },
 } = require('../../config')
@@ -21,13 +26,7 @@ module.exports = ({ oauthApi, prisonApi, whereaboutsApi, logError }) => async (r
     }
 
     const nonAssociations = await prisonApi.getNonAssociations(res.locals, prisonerDetails.bookingId)
-    const cellAttributesData = await prisonApi.getCellAttributes(res.locals)
     const locationsData = await whereaboutsApi.searchGroups(res.locals, prisonerDetails.agencyId)
-
-    const locations = locationsData.map(location => ({ text: location.name, value: location.key }))
-    const cellAttributes = cellAttributesData
-      .filter(cellAttribute => cellAttribute.activeFlag === 'Y')
-      .map(cellAttribute => ({ text: cellAttribute.description, value: cellAttribute.code }))
 
     const prisonersActiveAlertCodes = prisonerDetails.alerts
       .filter(alert => !alert.expired)
@@ -45,7 +44,7 @@ module.exports = ({ oauthApi, prisonApi, whereaboutsApi, logError }) => async (r
       numberOfNonAssociations,
       showNonAssociationsLink: numberOfNonAssociations > 0,
       alerts: alertsToShow,
-      locations,
+      locations: renderLocationOptions(locationsData),
       cellAttributes,
       prisonerDetails,
       offenderNo,
