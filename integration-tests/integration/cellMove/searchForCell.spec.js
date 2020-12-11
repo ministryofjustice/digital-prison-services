@@ -17,7 +17,6 @@ context('A user can search for a cell', () => {
     cy.task('stubOffenderFullDetails', offenderFullDetails)
     cy.task('stubBookingNonAssociations', {})
     cy.task('stubGroups', { id: 'MDI' })
-    cy.task('stubCellAttributes')
     cy.task('stubUserMeRoles', [{ roleCode: 'CELL_MOVE' }])
     cy.task('stubUserCaseLoads')
   })
@@ -123,9 +122,12 @@ context('A user can search for a cell', () => {
     const page = SearchForCellPage.verifyOnPage()
     const form = page.form()
     form.location().select('1')
-    form.attribute().select('Listener Cell')
+    form
+      .cellType()
+      .find('input[value="SO"]')
+      .check()
     form.submitButton().click()
-    cy.url().should('include', 'select-cell?location=1&attribute=LC')
+    cy.url().should('include', 'select-cell?location=1&cellType=SO')
   })
 
   it('Correctly navigates between this page and offender details', () => {
