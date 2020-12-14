@@ -1,0 +1,28 @@
+{{- if .Values.ingress.enabled -}}
+{{- $fullName := include "app.fullname" . -}}
+{{- $ingressPath := .Values.ingress.path -}}
+apiVersion: networking.k8s.io/v1beta1
+kind: Ingress
+metadata:
+  name: whereabouts-redirect
+  labels:
+    {{- include "app.labels" . | nindent 4 }}
+  annotations:
+    kubernetes.io/ingress.class: "nginx"
+    nginx.ingress.kubernetes.io/custom-http-errors: "418"
+    {{ if .Values.ingress.enable_allowlist }}nginx.ingress.kubernetes.io/whitelist-source-range: {{ include "app.joinListWithComma" .Values.allowlist | quote }}{{ end }}
+    nginx.ingress.kubernetes.io/permanent-redirect: {{ .Values.ingress.redirect_host2 }}
+spec:
+  tls:
+  - hosts:
+    - {{ .Values.ingress.host2 }}
+    {{ if .Values.ingress.cert_secret2 }}secretName: {{ .Values.ingress.cert_secret2 }}{{ end }}
+  rules:
+    - host: {{ .Values.ingress.host2 }}
+      http:
+        paths:
+          - path: /
+            backend:
+              serviceName: {{ $fullName }}
+              servicePort: http
+{{- end }}
