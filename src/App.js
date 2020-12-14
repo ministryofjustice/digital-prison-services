@@ -257,8 +257,7 @@ class App extends React.Component {
                     window.location.href = '/videolink'
                     return null
                   }
-                  window.location = '/homepage'
-                  return <div />
+                  return <Redirect to="/manage-prisoner-whereabouts" />
                 }}
               />
             )}
