@@ -132,7 +132,7 @@ const getTasks = ({ activeCaseLoadId, locations, staffId, whereaboutsConfig }) =
     heading: 'Manage SOC cases',
     description: 'Manage your Serious and Organised Crime (SOC) caseload.',
     href: soc.url,
-    roles: ['SOC_CUSTODY', 'SOC_COMMUNITY'],
+    roles: ['SOC_CUSTODY', 'SOC_COMMUNITY', 'SOC_HQ'],
     enabled: soc.url,
   },
 ]
