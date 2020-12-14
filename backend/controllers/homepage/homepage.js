@@ -158,7 +158,6 @@ module.exports = ({ oauthApi, prisonApi, whereaboutsApi, logError }) => async (r
         .map(({ roles, enabled, ...task }) => task),
     })
   } catch (error) {
-    console.error(error)
     if (error) logError(req.originalUrl, error, 'Home page not loading')
 
     return res.render('error.njk', { url: '/' })
