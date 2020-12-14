@@ -125,13 +125,13 @@
         }) }}
 
         {{ govukSelect({
-          name: 'attribute',
-          id: 'attribute',
+          name: 'cellType',
+          id: 'cellType',
           label: {
-            text: 'Select cell type',
+            text: 'Select cell occupancy',
             classes: 'govuk-visually-hidden'
           },
-          items: cellAttributes | addDefaultSelectedVale('Select cell type', true)  | setSelected(formValues.attribute)
+          items: cellAttributes | addDefaultSelectedVale('Select cell occupancy', true)  | setSelected(formValues.cellType)
         }) }}
 
         {{ govukButton({
@@ -155,7 +155,7 @@
     }) }}
   {% endif %}
 
-  {% if cells %}
+  {% if cells.length %}
     <table class="govuk-table govuk-table--with-child-rows" data-test="cell-results-table">
       <thead class="govuk-table__head">
         <tr class="govuk-table__row">

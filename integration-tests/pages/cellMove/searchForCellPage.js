@@ -4,7 +4,7 @@ const searchForCellPage = () =>
   page('Search for a cell', {
     form: () => ({
       location: () => cy.get('#location'),
-      attribute: () => cy.get('#attribute'),
+      cellType: () => cy.get("[data-test='cell-type']"),
       submitButton: () => cy.get('button[type="submit"]'),
     }),
     name: () => cy.get("[data-test='name']"),
