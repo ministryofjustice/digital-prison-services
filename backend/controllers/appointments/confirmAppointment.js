@@ -178,7 +178,7 @@ const confirmAppointmentFactory = ({ prisonApi, appointmentsService, logError })
         res.render('confirmAppointments.njk', {
           addAppointmentsLink: `/offenders/${offenderNo}/add-appointment`,
           prisonerName: formatName(firstName, lastName),
-          prisonerProfileLink: `${dpsUrl}offenders/${offenderNo}`,
+          prisonerProfileLink: `/prisoner/${offenderNo}`,
           details: {
             type: details.appointmentType,
             location: details.location,
@@ -193,7 +193,7 @@ const confirmAppointmentFactory = ({ prisonApi, appointmentsService, logError })
     } catch (error) {
       logError(req.originalUrl, error, serviceUnavailableMessage)
       const pageData = {
-        url: prisonUser ? `${dpsUrl}offenders/${offenderNo}` : '/videolink/prisoner-search',
+        url: prisonUser ? `/prisoner/${offenderNo}` : '/videolink/prisoner-search',
         homeUrl: prisonUser ? dpsUrl : '/videolink',
       }
       if (prisonUser) {
