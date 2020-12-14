@@ -29,6 +29,14 @@ const plugins = [
       },
     ],
   }),
+  new CopyWebpackPlugin({
+    patterns: [
+      {
+        from: 'static/images',
+        to: 'images',
+      },
+    ],
+  }),
   new HtmlWebpackPlugin({
     template: 'html-template/index.html',
     filename: 'index.html',
@@ -43,7 +51,7 @@ module.exports = {
   context: __dirname,
   entry: [...developmentEntries, './src/index.js'],
   output: {
-    filename: 'bundle.js',
+    filename: './app/bundle.js',
     path: path.join(__dirname, 'build'),
     publicPath: process.env.PUBLIC_URL || '/',
     ecmaVersion: 5,
