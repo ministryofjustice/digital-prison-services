@@ -88,6 +88,9 @@ workflows:
       - cypress_integration_tests:
           requires:
             - build
+      - hmpps/helm_lint:
+          name: helm_lint
+          chart_name: "prison-staff-hub"
       - hmpps/build_docker:
           name: build_docker
           image_name: "quay.io/hmpps/prisonstaffhub"
