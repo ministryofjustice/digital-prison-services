@@ -11,8 +11,8 @@ const router = express.Router()
 module.exports = () => {
   if (config.app.production === false && config.app.disableWebpack === false) {
     const compiler = webpack(webpackConfig)
-    router.use(middleware(compiler, { writeToDisk: true }))
-    router.use(hrm(compiler, {}))
+    router.use('/app', middleware(compiler, { writeToDisk: true }))
+    router.use('/app', hrm(compiler, {}))
   }
 
   return router
