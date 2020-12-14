@@ -49,8 +49,7 @@
 </div>
 
 {{ govukInsetText({
-  html: '<p class="govuk-body"><a data-test="select-cswap-link" href="' + '/prisoner/' + offenderNo + '/cell-move/confirm-cell-move?cellId=C-SWAP"' + '  class="govuk-link">Create a space for another prisoner</a> -  this will leave ' + prisonerName + ' without a cell. You must move him into a cell as soon as possible today.',
-  classes: 'govuk-!-width-two-thirds',
+  html: '<p class="govuk-body"><a data-test="select-cswap-link" href="' + '/prisoner/' + offenderNo + '/cell-move/confirm-cell-move?cellId=C-SWAP"' + '  class="govuk-link">Create a space for another prisoner</a> -  this will leave ' + prisonerName + ' without a cell. <br>You must move them into a cell as soon as possible today.',
   attributes: {
     'data-test': 'select-cswap-text'
   }

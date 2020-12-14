@@ -1,5 +1,6 @@
 {% extends "../partials/layout.njk" %}
 {% from "govuk/components/select/macro.njk" import govukSelect %}
+{% from "govuk/components/radios/macro.njk" import govukRadios %}
 {% from "govuk/components/button/macro.njk" import govukButton %}
 {% from "../macros/alertFlags.njk" import alertFlags %}
 
@@ -40,20 +41,20 @@
         text: 'Which residential unit do you want to search?',
         classes: 'govuk-!-font-weight-bold'
       },
-      items: locations | addDefaultSelectedVale('All residential units', true)
+      items: locations
     }) }}
 
-    {{ govukSelect({
-      name: 'attribute',
-      id: 'attribute',
-      label: {
-        text: 'What type of cell do you want to search for?',
-        classes: 'govuk-!-font-weight-bold'
+    {{ govukRadios({
+      idPrefix: "cellType",
+      name: "cellType",
+      fieldset: {
+        legend: {
+          text: "What type of cell do you want to search for? (Optional)",
+          classes: "govuk-fieldset__legend--s"
+        }
       },
-      hint: {
-        text: "These cell details are taken from NOMIS"
-      },
-      items: cellAttributes | addDefaultSelectedVale('All cell types', true)
+      items: cellAttributes,
+      attributes: { "data-test": "cell-type" }
     }) }}
 
     {{ govukButton({
