@@ -1,4 +1,4 @@
-const SearchPage = require('../../pages/whereabouts/searchPage')
+const HomePage = require('../../pages/homepage/homepagePage')
 
 context('Login functionality', () => {
   before(() => {
@@ -7,6 +7,10 @@ context('Login functionality', () => {
 
   beforeEach(() => {
     cy.task('reset')
+    cy.task('stubUserMeRoles')
+    cy.task('stubUserLocations')
+    cy.task('stubStaffRoles', [])
+    cy.task('stubLocationConfig', { agencyId: 'MDI', response: { enabled: false } })
   })
 
   it('Root (/) redirects to the auth login page if not logged in', () => {
@@ -33,7 +37,7 @@ context('Login functionality', () => {
   it('Logout takes user to login page', () => {
     cy.task('stubLogin', {})
     cy.login()
-    SearchPage.verifyOnPage()
+    HomePage.verifyOnPage()
 
     // can't do a visit here as cypress requires only one domain
     cy.request('/auth/logout')
@@ -44,7 +48,7 @@ context('Login functionality', () => {
   it('Token verification failure clears user session', () => {
     cy.task('stubLogin', {})
     cy.login()
-    SearchPage.verifyOnPage()
+    HomePage.verifyOnPage()
     cy.task('stubVerifyToken', false)
 
     // can't do a visit here as cypress requires only one domain
@@ -56,6 +60,6 @@ context('Login functionality', () => {
   it('Log in as ordinary user', () => {
     cy.task('stubLogin', {})
     cy.login()
-    SearchPage.verifyOnPage()
+    HomePage.verifyOnPage()
   })
 })

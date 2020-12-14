@@ -246,7 +246,7 @@ class App extends React.Component {
         }}
       >
         <div className="pure-g">
-          <Route
+          {/*          <Route
             path="(/)"
             render={() => (
               <Route
@@ -261,7 +261,7 @@ class App extends React.Component {
                 }}
               />
             )}
-          />
+          /> */}
           <Route
             exact
             path="(/manage-prisoner-whereabouts)"
