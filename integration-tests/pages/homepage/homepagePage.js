@@ -24,7 +24,7 @@ const homepagePage = () =>
 export default {
   verifyOnPage: homepagePage,
   goTo: () => {
-    cy.visit(`/homepage`)
+    cy.visit(`/`)
     return homepagePage()
   },
 }

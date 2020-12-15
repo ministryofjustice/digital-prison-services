@@ -26,6 +26,8 @@ const setupApiRoutes = require('./setupApiRoutes')
 const setupReactRoutes = require('./setupReactRoutes')
 const phaseNameSetup = require('./phaseNameSetup')
 
+const pageNotFound = require('./setUpPageNotFound')
+
 const { logError } = require('./logError')
 const homepageController = require('./controllers/homepage/homepage')
 
@@ -70,7 +72,8 @@ app.use(
 
 app.use(setupReactRoutes())
 
-app.use(homepageController({ ...apis, logError }))
+app.use('/$', homepageController({ ...apis, logError }))
+app.use(pageNotFound)
 
 app.listen(config.app.port, () => {
   // eslint-disable-next-line no-console
