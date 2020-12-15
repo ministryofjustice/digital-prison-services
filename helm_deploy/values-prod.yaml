@@ -12,9 +12,12 @@ image:
 ingress:
   enabled: true
   enable_allowlist: true
-  host: whereabouts.prison.service.justice.gov.uk
-  cert_secret: prison-staff-hub-cert
+  host: digital.prison.service.justice.gov.uk
+  cert_secret: notm-cert
   path: /
+  host2: whereabouts.prison.service.justice.gov.uk
+  cert_secret2: prison-staff-hub-cert
+  redirect_host2: digital.prison.service.justice.gov.uk
 
 env:
   API_ENDPOINT_URL: https://api.prison.service.justice.gov.uk/
