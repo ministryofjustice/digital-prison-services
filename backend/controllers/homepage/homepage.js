@@ -147,6 +147,8 @@ module.exports = ({ oauthApi, prisonApi, whereaboutsApi, logError }) => async (r
       whereaboutsApi.getWhereaboutsConfig(res.locals, activeCaseLoadId),
     ])
 
+    if (userRoles.map(ur => ur.roleCode).includes('VIDEO_LINK_COURT_USER')) return res.redirect('/videolink')
+
     const roleCodes = [...userRoles.map(userRole => userRole.roleCode), ...staffRoles.map(staffRole => staffRole.role)]
 
     return res.render('homepage/homepage.njk', {
