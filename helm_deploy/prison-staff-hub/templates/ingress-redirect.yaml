@@ -12,7 +12,7 @@ metadata:
     nginx.ingress.kubernetes.io/custom-http-errors: "418"
     {{ if .Values.ingress.enable_allowlist }}nginx.ingress.kubernetes.io/whitelist-source-range: {{ include "app.joinListWithComma" .Values.allowlist | quote }}{{ end }}
     nginx.ingress.kubernetes.io/permanent-redirect: {{ .Values.ingress.redirect_host2 }}
-    nginx.ingress.kubernetes.io/rewrite-target: {{ .Values.ingress.host }}/$1
+    nginx.ingress.kubernetes.io/rewrite-target: {{ .Values.ingress.redirect_host2 }}/$1
 spec:
   tls:
   - hosts:
@@ -22,7 +22,7 @@ spec:
     - host: {{ .Values.ingress.host2 }}
       http:
         paths:
-          - path: /(/|$)
+          - path: /(.*)
             backend:
               serviceName: {{ $fullName }}
               servicePort: http
