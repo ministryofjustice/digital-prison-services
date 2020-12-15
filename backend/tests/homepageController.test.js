@@ -24,7 +24,7 @@ describe('Homepage', () => {
         },
       },
     }
-    res = { locals: {}, render: jest.fn() }
+    res = { locals: {}, render: jest.fn(), redirect: jest.fn() }
 
     logError = jest.fn()
 
@@ -446,6 +446,14 @@ describe('Homepage', () => {
           ],
         })
       )
+    })
+
+    it('should redirect to video link booking for court users', async () => {
+      oauthApi.userRoles.mockResolvedValue([{ roleCode: 'VIDEO_LINK_COURT_USER' }])
+
+      await controller(req, res)
+
+      expect(res.redirect).toHaveBeenCalledWith('/videolink')
     })
   })
 })
