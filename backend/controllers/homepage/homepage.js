@@ -149,6 +149,8 @@ module.exports = ({ oauthApi, prisonApi, whereaboutsApi, logError }) => async (r
 
     const roleCodes = [...userRoles.map(userRole => userRole.roleCode), ...staffRoles.map(staffRole => staffRole.role)]
 
+    if (roleCodes.includes('VIDEO_LINK_COURT_USER')) return res.redirect('/videolink')
+
     return res.render('homepage/homepage.njk', {
       locationOptions: locations?.map(option => ({ value: option.locationPrefix, text: option.description })),
       tasks: getTasks({ activeCaseLoadId, locations, staffId, whereaboutsConfig })
