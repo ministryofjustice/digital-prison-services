@@ -62,62 +62,62 @@
     
     {% for nonAssociation in nonAssociations %}
       {{ govukInsetText({
-      html: govukSummaryList({
-        classes: "govuk-summary-list--no-border govuk-body",
-        attributes: {'data-test': 'non-association-summary-' + nonAssociation.prisonNumber},
-        rows: [
-          {
-            key: {
-              text: "Name"
+        html: govukSummaryList({
+          classes: "govuk-summary-list--no-border govuk-body",
+          attributes: {'data-test': 'non-association-summary-' + nonAssociation.prisonNumber},
+          rows: [
+            {
+              key: {
+                text: "Name"
+              },
+              value: {
+                text: nonAssociation.name
+              }
             },
-            value: {
-              text: nonAssociation.name
-            }
-          },
-          {
-            key: {
-              text: "Prison number"
+            {
+              key: {
+                text: "Prison number"
+              },
+              value: {
+                text: nonAssociation.prisonNumber
+              }
             },
-            value: {
-              text: nonAssociation.prisonNumber
-            }
-          },
-          {
-            key: {
-              text: "Location"
+            {
+              key: {
+                text: "Location"
+              },
+              value: {
+                text: nonAssociation.location
+              }
             },
-            value: {
-              text: nonAssociation.location
-            }
-          },
-          {
-            key: {
-              text: "Type"
+            {
+              key: {
+                text: "Type"
+              },
+              value: {
+                text: nonAssociation.type
+              }
             },
-            value: {
-              text: nonAssociation.type
-            }
-          },
-          {
-            key: {
-              text: "Reason"
+            {
+              key: {
+                text: "Reason"
+              },
+              value: {
+                text: nonAssociation.reason
+              }
             },
-            value: {
-              text: nonAssociation.reason
+            {
+              key: {
+                text: "Comment"
+              },
+              value: {
+                text: nonAssociation.comment
+              }
             }
-          },
-          {
-            key: {
-              text: "Comment"
-            },
-            value: {
-              text: nonAssociation.comment
-            }
-          }
-        ] | removePaddingBottom
-      }),
-      classes: 'govuk-!-padding-top-0 govuk-!-padding-bottom-0'
-    }) }}
+          ] | removePaddingBottom
+        }),
+        classes: 'govuk-!-padding-top-0 govuk-!-padding-bottom-0'
+      }) }}
     {% endfor %}
   {% endif %}
 
@@ -127,7 +127,7 @@
 
   {% if showOffendersNamesWithCsra %}
     <ul class="govuk-list">
-      {% for offender in offendersNamesWithCsra %}
+      {% for offender in offendersFormattedNamesWithCsra %}
         <li>{{ offender }}</li>
       {% endfor %}
     </ul>
@@ -184,7 +184,7 @@
       errorMessage: errors | findError('confirmation'),
       fieldset: {
           legend: {
-              text: "Are you sure you want to move " + offenderName + " into this cell?",
+              text: "Are you sure you want to move " + offenderName + " into a cell with " + stringListOfCurrentOccupantsNames +"?",
               classes: "govuk-fieldset__legend--s"
           }
       },

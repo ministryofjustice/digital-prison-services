@@ -5,7 +5,7 @@ const selectCellController = require('../controllers/cellMove/selectCell')
 const nonAssociationsController = require('../controllers/cellMove/viewNonAssociations')
 const offenderDetailsController = require('../controllers/cellMove/viewOffenderDetails')
 const cellSharingRiskAssessmentController = require('../controllers/cellMove/viewCellSharingAssessmentDetails')
-const { moveValidationFactory } = require('../controllers/cellMove/moveValidation')
+const moveValidationController = require('../controllers/cellMove/moveValidation')
 const confirmCellMoveController = require('../controllers/cellMove/confirmCellMove')
 const cellMoveConfirmationController = require('../controllers/cellMove/cellMoveConfirmation')
 const cswapConfirmationController = require('../controllers/cellMove/cswapConfirmation')
@@ -14,7 +14,7 @@ const cellNotAvailable = require('../controllers/cellMove/cellNotAvailable')
 const router = express.Router({ mergeParams: true })
 
 const controller = ({ oauthApi, prisonApi, whereaboutsApi, caseNotesApi, logError }) => {
-  const { index: moveValidationIndex, post: moveValidationPost } = moveValidationFactory({ prisonApi, logError })
+  const { index: moveValidationIndex, post: moveValidationPost } = moveValidationController({ prisonApi, logError })
 
   const { index: confirmCellMoveIndex, post: confirmCellMovePost } = confirmCellMoveController({
     prisonApi,

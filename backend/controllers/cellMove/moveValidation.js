@@ -1,39 +1,24 @@
 const moment = require('moment')
 const { serviceUnavailableMessage } = require('../../common-messages')
 const { cellMoveAlertCodes } = require('../../shared/alertFlagValues')
-const { putLastNameFirst, formatName, indefiniteArticle, hasLength } = require('../../utils')
+const { putLastNameFirst, formatName, indefiniteArticle, hasLength, createStringFromList } = require('../../utils')
 const {
   app: { notmEndpointUrl: dpsUrl },
 } = require('../../config')
 const getValueByType = require('../../shared/getValueByType')
 
-const moveValidationFactory = ({ prisonApi, logError }) => {
+module.exports = ({ prisonApi, logError }) => {
   const getOccupantsDetails = async (context, offenders) => {
     return Promise.all(offenders.map(offender => prisonApi.getDetails(context, offender, true)))
   }
 
-  const alertString = alertDescription => `${indefiniteArticle(alertDescription)} ${alertDescription} alert`
+  const alertString = alertDescription => `${indefiniteArticle(alertDescription)} ${alertDescription} alert.`
 
-  const getCurrentOffenderAlertTitle = (alert, sexualities, anyNonHetero) => {
-    if (alert.alertCode === 'RLG' && anyNonHetero) {
-      const sexualitiesString = sexualities
-        .filter(sexuality => sexuality && !sexuality.toLowerCase().includes('hetero'))
-        .join(', ')
-      return `${alertString(
-        alert.alertCodeDescription
-      )} into a cell with a prisoner who has a sexual orientation of ${sexualitiesString}`
-    }
-
-    return alertString(alert.alertCodeDescription)
-  }
-
-  const getOffenderAlertBody = (alert, title) => {
-    return {
-      title,
-      comment: alert.comment,
-      date: `Date added: ${moment(alert.dateCreated, 'YYYY-MM-DD').format('D MMMM YYYY')}`,
-    }
-  }
+  const getOffenderAlertBody = (alert, title) => ({
+    title,
+    comment: alert.comment,
+    date: `Date added: ${moment(alert.dateCreated, 'YYYY-MM-DD').format('D MMMM YYYY')}`,
+  })
 
   const renderTemplate = async (req, res, pageData) => {
     const { offenderNo } = req.params
@@ -61,23 +46,9 @@ const moveValidationFactory = ({ prisonApi, logError }) => {
         res.locals,
         currentOffenderDetails.bookingId
       )
-      const nonAssociations = currentOffenderNonAssociations?.nonAssociations
-        ?.filter(nonAssociation =>
-          nonAssociation.offenderNonAssociation.assignedLivingUnitDescription?.includes(locationPrefix)
-        )
-        .map(nonAssociation => ({
-          name: `${putLastNameFirst(
-            nonAssociation.offenderNonAssociation.firstName,
-            nonAssociation.offenderNonAssociation.lastName
-          )}`,
-          prisonNumber: nonAssociation.offenderNonAssociation.offenderNo,
-          location:
-            nonAssociation.offenderNonAssociation.assignedLivingUnitDescription ||
-            nonAssociation.offenderNonAssociation.agencyDescription,
-          type: nonAssociation.typeDescription,
-          reason: nonAssociation.offenderNonAssociation.reasonDescription,
-          comment: nonAssociation.comments || 'None entered',
-        }))
+      const nonAssociationsWithinLocation = currentOffenderNonAssociations?.nonAssociations?.filter(nonAssociation =>
+        nonAssociation.offenderNonAssociation.assignedLivingUnitDescription?.includes(locationPrefix)
+      )
 
       const currentOffenderWithOccupants = [currentOffenderDetails, ...currentOccupantsDetails]
 
@@ -85,13 +56,20 @@ const moveValidationFactory = ({ prisonApi, logError }) => {
         .filter(currentOccupant => currentOccupant.csra)
         .map(currentOccupant => currentOccupant.csra)
 
-      const offendersNamesWithCsra = currentOffenderWithOccupants
-        .filter(offender => offender.csra)
-        .map(offender => `${formatName(offender.firstName, offender.lastName)} is CSRA ${offender.csra.toLowerCase()}`)
+      const showOffendersNamesWithCsra = offendersCsraValues.includes('High')
+
+      const currentOccupantsFormattedNames = currentOccupantsDetails.map(({ firstName, lastName }) =>
+        formatName(firstName, lastName)
+      )
+
+      const offendersFormattedNamesWithCsra = currentOffenderWithOccupants.map(
+        ({ firstName, lastName, csra = 'Not entered' }) => `${formatName(firstName, lastName)} is CSRA ${csra}`
+      )
 
       // Get a list of sexualities involved
       const currentOffenderSexuality = getValueByType('SEXO', currentOffenderDetails.profileInformation, 'resultValue')
-      const currentOffenderNonHetero = currentOffenderSexuality?.includes('hetero')
+      const currentOffenderIsNonHetero = !currentOffenderSexuality?.toLowerCase().includes('hetero')
+
       const currentOccupantsSexualities = [
         ...new Set(
           currentOccupantsDetails.map(currentOccupant =>
@@ -99,23 +77,32 @@ const moveValidationFactory = ({ prisonApi, logError }) => {
           )
         ),
       ]
-      const anyNonHetero = currentOccupantsSexualities.some(
+      const cellHasNonHeteroOccupants = currentOccupantsSexualities.some(
         sexuality => sexuality && !sexuality.toLowerCase().includes('hetero')
       )
 
-      const activeCellMoveNonDisabledAlert = alert =>
+      const activeCellMoveAlertsExcludingDisabled = alert =>
         !alert.expired && cellMoveAlertCodes.includes(alert.alertCode) && alert.alertCode !== 'PEEP'
+
+      const sexualitiesString = currentOccupantsSexualities
+        .filter(sexuality => sexuality && !sexuality.toLowerCase().includes('hetero'))
+        .join(', ')
 
       // Get the list of relevant offender alerts
       const currentOffenderActiveAlerts =
         currentOccupantsDetails.length > 0 &&
         currentOffenderDetails.alerts
-          .filter(activeCellMoveNonDisabledAlert)
-          .filter(alert => alert.alertCode !== 'RLG' || (alert.alertCode === 'RLG' && anyNonHetero))
+          .filter(activeCellMoveAlertsExcludingDisabled)
+          .filter(alert => alert.alertCode !== 'RLG' || (alert.alertCode === 'RLG' && cellHasNonHeteroOccupants))
           .map(alert => {
-            const title = getCurrentOffenderAlertTitle(alert, currentOccupantsSexualities, anyNonHetero)
+            const title =
+              alert.alertCode === 'RLG' && cellHasNonHeteroOccupants
+                ? `${alertString(
+                    alert.alertCodeDescription
+                  )} You have selected a cell with a prisoner who has a sexual orientation of ${sexualitiesString}.`
+                : `${alertString(alert.alertCodeDescription)}`
 
-            return getOffenderAlertBody(alert, title, currentOffenderDetails.firstName, currentOffenderDetails.lastName)
+            return getOffenderAlertBody(alert, title)
           })
 
       const currentOccupantsWithFormattedActiveAlerts = currentOccupantsDetails
@@ -123,17 +110,17 @@ const moveValidationFactory = ({ prisonApi, logError }) => {
           return {
             name: formatName(currentOccupant.firstName, currentOccupant.lastName),
             alerts: currentOccupant.alerts
-              .filter(activeCellMoveNonDisabledAlert)
-              .filter(alert => alert.alertCode !== 'RLG' || (alert.alertCode === 'RLG' && currentOffenderNonHetero))
+              .filter(activeCellMoveAlertsExcludingDisabled)
+              .filter(alert => alert.alertCode !== 'RLG' || (alert.alertCode === 'RLG' && currentOffenderIsNonHetero))
               .map(alert => {
                 const title =
-                  alert.alertCode === 'RLG' && currentOffenderNonHetero
-                    ? `a sexual orientation of ${currentOffenderSexuality} into a cell with a prisoner who has ${alertString(
+                  alert.alertCode === 'RLG' && currentOffenderIsNonHetero
+                    ? `${alertString(
                         alert.alertCodeDescription
-                      )}`
+                      )} You have selected a prisoner who has a sexual orientation of ${currentOffenderSexuality}.`
                     : `${alertString(alert.alertCodeDescription)}`
 
-                return getOffenderAlertBody(alert, title, currentOccupant.firstName, currentOccupant.lastName)
+                return getOffenderAlertBody(alert, title)
               }),
           }
         })
@@ -143,10 +130,10 @@ const moveValidationFactory = ({ prisonApi, logError }) => {
 
       if (
         !categoryWarning &&
-        !hasLength(nonAssociations) &&
+        !showOffendersNamesWithCsra &&
+        !hasLength(nonAssociationsWithinLocation) &&
         !hasLength(currentOffenderActiveAlerts) &&
-        !hasLength(currentOccupantsWithFormattedActiveAlerts) &&
-        !hasLength(cellSharingRiskAssessments)
+        !hasLength(currentOccupantsWithFormattedActiveAlerts)
       ) {
         return res.redirect(`/prisoner/${offenderNo}/cell-move/confirm-cell-move?cellId=${cellId}`)
       }
@@ -159,9 +146,22 @@ const moveValidationFactory = ({ prisonApi, logError }) => {
         prisonerNameForBreadcrumb: putLastNameFirst(currentOffenderDetails.firstName, currentOffenderDetails.lastName),
         profileUrl,
         selectCellUrl: `${profileUrl}/cell-move/select-cell`,
-        showOffendersNamesWithCsra: offendersCsraValues.includes('High'),
-        offendersNamesWithCsra,
-        nonAssociations,
+        showOffendersNamesWithCsra,
+        stringListOfCurrentOccupantsNames: createStringFromList(currentOccupantsFormattedNames),
+        offendersFormattedNamesWithCsra,
+        nonAssociations: nonAssociationsWithinLocation.map(nonAssociation => ({
+          name: `${putLastNameFirst(
+            nonAssociation.offenderNonAssociation.firstName,
+            nonAssociation.offenderNonAssociation.lastName
+          )}`,
+          prisonNumber: nonAssociation.offenderNonAssociation.offenderNo,
+          location:
+            nonAssociation.offenderNonAssociation.assignedLivingUnitDescription ||
+            nonAssociation.offenderNonAssociation.agencyDescription,
+          type: nonAssociation.typeDescription,
+          reason: nonAssociation.offenderNonAssociation.reasonDescription,
+          comment: nonAssociation.comments || 'None entered',
+        })),
         currentOffenderActiveAlerts,
         currentOccupantsWithFormattedActiveAlerts,
         categoryWarning,
@@ -174,7 +174,7 @@ const moveValidationFactory = ({ prisonApi, logError }) => {
       })
     } catch (error) {
       if (error) logError(req.originalUrl, error, serviceUnavailableMessage)
-      console.log({ error })
+
       return res.render('error.njk', {
         url: `/prisoner/${offenderNo}/cell-history`,
         homeUrl: `/prisoner/${offenderNo}`,
@@ -208,8 +208,4 @@ const moveValidationFactory = ({ prisonApi, logError }) => {
   }
 
   return { index, post }
-}
-
-module.exports = {
-  moveValidationFactory,
 }
