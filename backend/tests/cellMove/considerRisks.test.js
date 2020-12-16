@@ -1,7 +1,7 @@
 Reflect.deleteProperty(process.env, 'APPINSIGHTS_INSTRUMENTATIONKEY')
 const moment = require('moment')
 
-const { moveValidationFactory } = require('../../controllers/cellMove/moveValidation')
+const considerRisksController = require('../../controllers/cellMove/considerRisks')
 
 describe('move validation', () => {
   let req
@@ -256,7 +256,11 @@ describe('move validation', () => {
 
     prisonApi.getDetails = jest.fn()
     prisonApi.getInmatesAtLocation = jest.fn()
-    prisonApi.getLocation = jest.fn()
+    prisonApi.getLocation = jest
+      .fn()
+      .mockResolvedValueOnce(cellLocationData)
+      .mockResolvedValueOnce(parentLocationData)
+      .mockResolvedValueOnce(superParentLocationData)
     prisonApi.getNonAssociations = jest.fn().mockResolvedValue({
       offenderNo: 'ABC123',
       firstName: 'Fred',
@@ -344,17 +348,14 @@ describe('move validation', () => {
       ],
     })
 
-    controller = moveValidationFactory({ prisonApi, logError })
+    controller = considerRisksController({ prisonApi, logError })
   })
 
   it('Makes the expected API calls on get', async () => {
     prisonApi.getDetails
       .mockResolvedValueOnce(getCurrentOffenderDetailsResponse)
       .mockResolvedValueOnce(getCurrentOccupierDetailsResponse)
-    prisonApi.getLocation
-      .mockResolvedValueOnce(cellLocationData)
-      .mockResolvedValueOnce(parentLocationData)
-      .mockResolvedValueOnce(superParentLocationData)
+
     prisonApi.getInmatesAtLocation.mockResolvedValue([{ offenderNo: 'A12346' }])
     await controller.index(req, res)
 
@@ -371,133 +372,141 @@ describe('move validation', () => {
     prisonApi.getDetails
       .mockResolvedValueOnce(getCurrentOffenderDetailsResponse)
       .mockResolvedValueOnce(getCurrentOccupierDetailsResponse)
-    prisonApi.getLocation
-      .mockResolvedValueOnce(cellLocationData)
-      .mockResolvedValueOnce(parentLocationData)
-      .mockResolvedValueOnce(superParentLocationData)
+
     prisonApi.getInmatesAtLocation.mockResolvedValue([{ offenderNo: 'A12346' }])
     await controller.index(req, res)
 
-    expect(res.render).toHaveBeenCalledWith(
-      'cellMove/moveValidation.njk',
-      expect.objectContaining({
-        offenderName: 'Test User',
-        offenderNo,
-        csraWarningMessage: 'who is CSRA high into a cell with a prisoner who is CSRA high',
-        categoryWarning: true,
-        showRisks: true,
-        nonAssociations: [
-          {
-            name: 'Bloggs, Jim',
-            location: 'MDI-1-1-3',
-            type: 'Do Not Locate on Same Wing',
-            reason: 'Rival gang',
-            comment: 'Test comment 2',
-            prisonNumber: 'ABC125',
-          },
-        ],
-        currentOffenderActiveAlerts: [
-          {
-            comment: 'has a large poster on cell wall',
-            date: 'Date added: 20 August 2019',
-            subTitle: 'The details of Test User’s alert are',
-            title: 'who has a Risk to LGB alert into a cell with a prisoner who has a sexual orientation of Homosexual',
-          },
-          {
-            comment: 'has a large poster on cell wall',
-            date: 'Date added: 20 August 2019',
-            subTitle: 'The details of Test User’s alert are',
-            title: 'who is an E-List prisoner into a cell with another prisoner',
-          },
-          {
-            comment: 'has a large poster on cell wall',
-            date: 'Date added: 20 August 2019',
-            subTitle: 'The details of Test User’s alert are',
-            title: 'who has a Gang member alert into a cell with another prisoner',
-          },
-          {
-            comment: 'test',
-            date: 'Date added: 20 August 2020',
-            subTitle: 'The details of Test User’s alert are',
-            title: 'who has an Isolated Prisoner alert into a cell with another prisoner',
-          },
-        ],
-        currentOccupantsActiveAlerts: [
-          {
-            comment: 'has a large poster on cell wall',
-            date: 'Date added: 20 August 2019',
-            subTitle: 'The details of Occupant User’s alert are',
-            title: 'into a cell with a prisoner who has a Gang member alert',
-          },
-          {
-            comment: 'test',
-            date: 'Date added: 20 August 2020',
-            subTitle: 'The details of Occupant User’s alert are',
-            title: 'into a cell with a prisoner who has an Isolated Prisoner alert',
-          },
-        ],
-        prisonerNameForBreadcrumb: 'User, Test',
-        profileUrl: `/prisoner/${offenderNo}`,
-        selectCellUrl: `/prisoner/${offenderNo}/cell-move/select-cell`,
-      })
-    )
+    expect(res.render).toHaveBeenCalledWith('cellMove/considerRisks.njk', {
+      categoryWarning: true,
+      currentOccupantsWithFormattedActiveAlerts: [
+        {
+          alerts: [
+            {
+              comment: 'has a large poster on cell wall',
+              date: 'Date added: 20 August 2019',
+              title: 'a Gang member alert.',
+            },
+            {
+              comment: 'test',
+              date: 'Date added: 20 August 2020',
+              title: 'an Isolated Prisoner alert.',
+            },
+          ],
+          name: 'Occupant User',
+        },
+      ],
+      currentOffenderActiveAlerts: [
+        {
+          comment: 'has a large poster on cell wall',
+          date: 'Date added: 20 August 2019',
+          title:
+            'a Risk to LGB alert. You have selected a cell with a prisoner who has a sexual orientation of Homosexual.',
+        },
+        {
+          comment: 'has a large poster on cell wall',
+          date: 'Date added: 20 August 2019',
+          title: 'an E-List alert.',
+        },
+        {
+          comment: 'has a large poster on cell wall',
+          date: 'Date added: 20 August 2019',
+          title: 'a Gang member alert.',
+        },
+        {
+          comment: 'test',
+          date: 'Date added: 20 August 2020',
+          title: 'an Isolated Prisoner alert.',
+        },
+      ],
+      dpsUrl: 'http://localhost:3000/',
+      errors: undefined,
+      nonAssociations: [
+        {
+          comment: 'Test comment 2',
+          location: 'MDI-1-1-3',
+          name: 'Bloggs, Jim',
+          prisonNumber: 'ABC125',
+          reason: 'Rival gang',
+          type: 'Do Not Locate on Same Wing',
+        },
+      ],
+      offenderNo: 'ABC123',
+      offenderName: 'Test User',
+      offendersFormattedNamesWithCsra: ['Test User is CSRA High', 'Occupant User is CSRA High'],
+      prisonerNameForBreadcrumb: 'User, Test',
+      profileUrl: '/prisoner/ABC123',
+      selectCellUrl: '/prisoner/ABC123/cell-move/select-cell',
+      showOffendersNamesWithCsra: true,
+      showRisks: true,
+      stringListOfCurrentOccupantsNames: 'Occupant User',
+    })
   })
 
-  it('Passes the expected CSRA message and sexuality warning when LGB alert but no sexuality', async () => {
+  it('Should warn that the prisoner is non hetro when occupants have risk to LGBT alert', async () => {
     prisonApi.getDetails
-      .mockResolvedValueOnce({ ...getCurrentOffenderDetailsResponse, csra: 'Standard' })
-      .mockResolvedValueOnce({ ...getCurrentOccupierDetailsResponse, profileInformation: [] })
-    prisonApi.getLocation
-      .mockResolvedValueOnce(cellLocationData)
-      .mockResolvedValueOnce(parentLocationData)
-      .mockResolvedValueOnce(superParentLocationData)
+      .mockResolvedValueOnce({
+        ...getCurrentOffenderDetailsResponse,
+        profileInformation: [{ type: 'SEXO', resultValue: 'Homosexual' }],
+        alerts: [],
+      })
+      .mockResolvedValueOnce({
+        ...getCurrentOccupierDetailsResponse,
+        alerts: [
+          {
+            active: true,
+            addedByFirstName: 'John',
+            addedByLastName: 'Smith',
+            alertCode: 'RLG',
+            alertCodeDescription: 'Risk to LGB',
+            alertId: 1,
+            alertType: 'X',
+            alertTypeDescription: 'Risk to LGB',
+            bookingId: 14,
+            comment: 'alert comment',
+            dateCreated: '2019-08-20',
+            dateExpires: null,
+            expired: false,
+            expiredByFirstName: 'John',
+            expiredByLastName: 'Smith',
+            offenderNo,
+          },
+        ],
+      })
+
     prisonApi.getInmatesAtLocation.mockResolvedValue([{ offenderNo: 'A12346' }])
     await controller.index(req, res)
 
     expect(res.render).toHaveBeenCalledWith(
-      'cellMove/moveValidation.njk',
+      'cellMove/considerRisks.njk',
       expect.objectContaining({
-        csraWarningMessage: 'who is CSRA standard into a cell with a prisoner who is CSRA high',
-        showRisks: true,
-        currentOffenderActiveAlerts: [
+        currentOffenderActiveAlerts: [],
+        currentOccupantsWithFormattedActiveAlerts: [
           {
-            comment: 'has a large poster on cell wall',
-            date: 'Date added: 20 August 2019',
-            subTitle: 'The details of Test User’s alert are',
-            title: 'who is an E-List prisoner into a cell with another prisoner',
-          },
-          {
-            comment: 'has a large poster on cell wall',
-            date: 'Date added: 20 August 2019',
-            subTitle: 'The details of Test User’s alert are',
-            title: 'who has a Gang member alert into a cell with another prisoner',
-          },
-          {
-            comment: 'test',
-            date: 'Date added: 20 August 2020',
-            subTitle: 'The details of Test User’s alert are',
-            title: 'who has an Isolated Prisoner alert into a cell with another prisoner',
+            alerts: [
+              {
+                comment: 'alert comment',
+                date: 'Date added: 20 August 2019',
+                title: 'a Risk to LGB alert. You have selected a prisoner who has a sexual orientation of Homosexual.',
+              },
+            ],
+            name: 'Occupant User',
           },
         ],
       })
     )
   })
 
-  it('Passes no CSRA message when both standard', async () => {
+  it('Should not show CSRA messages when both prisoner and occupants are standard', async () => {
     prisonApi.getDetails
       .mockResolvedValueOnce({ ...getCurrentOffenderDetailsResponse, csra: 'Standard' })
       .mockResolvedValueOnce({ ...getCurrentOccupierDetailsResponse, csra: 'Standard' })
-    prisonApi.getLocation
-      .mockResolvedValueOnce(cellLocationData)
-      .mockResolvedValueOnce(parentLocationData)
-      .mockResolvedValueOnce(superParentLocationData)
     prisonApi.getInmatesAtLocation.mockResolvedValue([{ offenderNo: 'A12346' }])
     await controller.index(req, res)
 
     expect(res.render).toHaveBeenCalledWith(
-      'cellMove/moveValidation.njk',
+      'cellMove/considerRisks.njk',
       expect.objectContaining({
-        csraWarningMessage: null,
+        showOffendersNamesWithCsra: false,
         showRisks: true,
       })
     )
@@ -509,20 +518,16 @@ describe('move validation', () => {
       csra: 'Standard',
       categoryCode: 'C',
     })
-    prisonApi.getLocation
-      .mockResolvedValueOnce(cellLocationData)
-      .mockResolvedValueOnce(parentLocationData)
-      .mockResolvedValueOnce(superParentLocationData)
     prisonApi.getInmatesAtLocation.mockResolvedValue([])
     await controller.index(req, res)
 
     expect(res.render).toHaveBeenCalledWith(
-      'cellMove/moveValidation.njk',
+      'cellMove/considerRisks.njk',
       expect.objectContaining({
-        csraWarningMessage: false,
-        currentOffenderActiveAlerts: false,
-        currentOccupantsActiveAlerts: [],
         categoryWarning: false,
+        currentOffenderActiveAlerts: false,
+        currentOccupantsWithFormattedActiveAlerts: [],
+        showOffendersNamesWithCsra: false,
         showRisks: false,
       })
     )
@@ -530,15 +535,11 @@ describe('move validation', () => {
 
   it('Does not pass category warning if no inmates', async () => {
     prisonApi.getDetails.mockResolvedValueOnce({ ...getCurrentOffenderDetailsResponse, csra: 'Standard' })
-    prisonApi.getLocation
-      .mockResolvedValueOnce(cellLocationData)
-      .mockResolvedValueOnce(parentLocationData)
-      .mockResolvedValueOnce(superParentLocationData)
     prisonApi.getInmatesAtLocation.mockResolvedValue([])
     await controller.index(req, res)
 
     expect(res.render).toHaveBeenCalledWith(
-      'cellMove/moveValidation.njk',
+      'cellMove/considerRisks.njk',
       expect.objectContaining({
         categoryWarning: false,
         showRisks: false,
@@ -550,16 +551,12 @@ describe('move validation', () => {
     prisonApi.getDetails
       .mockResolvedValueOnce(getCurrentOffenderDetailsResponse)
       .mockResolvedValueOnce(getCurrentOccupierDetailsResponse)
-    prisonApi.getLocation
-      .mockResolvedValueOnce(cellLocationData)
-      .mockResolvedValueOnce(parentLocationData)
-      .mockResolvedValueOnce(superParentLocationData)
     prisonApi.getInmatesAtLocation.mockResolvedValue([{ offenderNo: 'A12346' }])
     req.body = {}
     await controller.post(req, res)
 
     expect(res.render).toHaveBeenCalledWith(
-      'cellMove/moveValidation.njk',
+      'cellMove/considerRisks.njk',
       expect.objectContaining({
         errors: [{ href: '#confirmation', text: 'Select yes if you are sure you want to select the cell' }],
       })
@@ -570,10 +567,6 @@ describe('move validation', () => {
     prisonApi.getDetails
       .mockResolvedValueOnce(getCurrentOffenderDetailsResponse)
       .mockResolvedValueOnce(getCurrentOccupierDetailsResponse)
-    prisonApi.getLocation
-      .mockResolvedValueOnce(cellLocationData)
-      .mockResolvedValueOnce(parentLocationData)
-      .mockResolvedValueOnce(superParentLocationData)
     prisonApi.getInmatesAtLocation.mockResolvedValue([{ offenderNo: 'A12346' }])
     req.body = { confirmation: 'yes' }
     await controller.post(req, res)
@@ -585,10 +578,6 @@ describe('move validation', () => {
     prisonApi.getDetails
       .mockResolvedValueOnce(getCurrentOffenderDetailsResponse)
       .mockResolvedValueOnce(getCurrentOccupierDetailsResponse)
-    prisonApi.getLocation
-      .mockResolvedValueOnce(cellLocationData)
-      .mockResolvedValueOnce(parentLocationData)
-      .mockResolvedValueOnce(superParentLocationData)
     prisonApi.getInmatesAtLocation.mockResolvedValue([{ offenderNo: 'A12346' }])
     req.body = { confirmation: 'no' }
     await controller.post(req, res)
@@ -599,10 +588,6 @@ describe('move validation', () => {
   it('Redirects to confirm cell move when there are no warnings', async () => {
     prisonApi.getNonAssociations = jest.fn().mockResolvedValue({})
     prisonApi.getDetails = jest.fn().mockResolvedValue({ firstName: 'Bob', lastName: 'Doe', alerts: [] })
-    prisonApi.getLocation
-      .mockResolvedValueOnce(cellLocationData)
-      .mockResolvedValueOnce(parentLocationData)
-      .mockResolvedValueOnce(superParentLocationData)
     prisonApi.getInmatesAtLocation.mockResolvedValue([])
 
     await controller.index(req, res)
