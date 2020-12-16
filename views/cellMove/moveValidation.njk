@@ -126,7 +126,7 @@
   <hr class="govuk-section-break govuk-section-break--m govuk-section-break--visible">
 
   {% if showOffendersNamesWithCsra %}
-    <ul class="govuk-list">
+    <ul class="govuk-list" data-test="csra-messages">
       {% for offender in offendersFormattedNamesWithCsra %}
         <li>{{ offender }}</li>
       {% endfor %}
@@ -137,7 +137,7 @@
 
   {% if showRisks %}
     {% if currentOffenderActiveAlerts.length %}
-      <h2 class="govuk-heading-m govuk-!-font-weight-regular">{{ offenderName }} has:</h2>
+      <h2 class="govuk-heading-m govuk-!-font-weight-regular" data-test="offender-alerts-heading">{{ offenderName }} has:</h2>
 
       <ul class="govuk-list govuk-list--bullet">
         {% for alert in currentOffenderActiveAlerts %}
@@ -157,7 +157,7 @@
     {% endif %}
 
     {% for occupant in currentOccupantsWithFormattedActiveAlerts %}
-      <h2 class="govuk-heading-m govuk-!-font-weight-regular">{{ occupant.name }} has:</h2>
+      <h2 class="govuk-heading-m govuk-!-font-weight-regular" data-test="occupant-alerts-heading">{{ occupant.name }} has:</h2>
 
       <ul class="govuk-list govuk-list--bullet">
         {% for alert in occupant.alerts %}
