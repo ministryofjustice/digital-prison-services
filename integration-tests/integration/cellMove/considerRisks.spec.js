@@ -1,4 +1,4 @@
-const MoveValidationPage = require('../../pages/cellMove/moveValidationPage')
+const ConsiderRisksPage = require('../../pages/cellMove/considerRisksPage')
 const ConfirmCellMovePage = require('../../pages/cellMove/confirmCellMovePage')
 
 const offenderNo = 'A1234A'
@@ -206,7 +206,7 @@ context('A user can see conflicts in cell', () => {
 
   it('should load with correct data', () => {
     stubPrisonDetails()
-    const page = MoveValidationPage.goTo(offenderNo, 1)
+    const page = ConsiderRisksPage.goTo(offenderNo, 1)
     page.nonAssociationsSubTitle().contains('Test User has a non-association with a prisoner on this wing:')
     page.nonAssociationsSummary().then($summary => {
       cy.get($summary)
@@ -293,7 +293,7 @@ context('A user can see conflicts in cell', () => {
 
   it('should show error when nothing is selected', () => {
     stubPrisonDetails()
-    const page = MoveValidationPage.goTo(offenderNo, 1)
+    const page = ConsiderRisksPage.goTo(offenderNo, 1)
     page
       .form()
       .submitButton()
@@ -303,7 +303,7 @@ context('A user can see conflicts in cell', () => {
 
   it('should redirect to select cell if no is selected', () => {
     stubPrisonDetails()
-    const page = MoveValidationPage.goTo(offenderNo, 1)
+    const page = ConsiderRisksPage.goTo(offenderNo, 1)
     page
       .form()
       .confirmationNo()
@@ -317,7 +317,7 @@ context('A user can see conflicts in cell', () => {
 
   it('should redirect to confirm cell move on continue', () => {
     stubPrisonDetails()
-    const page = MoveValidationPage.goTo(offenderNo, 1)
+    const page = ConsiderRisksPage.goTo(offenderNo, 1)
 
     cy.task('stubBookingDetails', { firstName: 'Bob', lastName: 'Doe' })
     cy.task('stubLocation', { locationId: 1, locationDetails: { description: 'MDI-1-1' } })
@@ -347,7 +347,7 @@ context('A user can see conflicts in cell', () => {
       bookingId: 1234,
     })
 
-    cy.visit(`/prisoner/${offenderNo}/cell-move/move-validation?cellId=1`)
+    cy.visit(`/prisoner/${offenderNo}/cell-move/consider-risks?cellId=1`)
 
     ConfirmCellMovePage.verifyOnPage('Bob Doe', 'MDI-1-1')
   })

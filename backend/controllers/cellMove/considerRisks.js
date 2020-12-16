@@ -140,7 +140,7 @@ module.exports = ({ prisonApi, logError }) => {
 
       const profileUrl = `/prisoner/${offenderNo}`
 
-      return res.render('cellMove/moveValidation.njk', {
+      return res.render('cellMove/considerRisks.njk', {
         offenderNo,
         offenderName: `${formatName(currentOffenderDetails.firstName, currentOffenderDetails.lastName)}`,
         prisonerNameForBreadcrumb: putLastNameFirst(currentOffenderDetails.firstName, currentOffenderDetails.lastName),

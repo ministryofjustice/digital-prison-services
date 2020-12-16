@@ -1,7 +1,7 @@
 Reflect.deleteProperty(process.env, 'APPINSIGHTS_INSTRUMENTATIONKEY')
 const moment = require('moment')
 
-const moveValidationController = require('../../controllers/cellMove/moveValidation')
+const considerRisksController = require('../../controllers/cellMove/considerRisks')
 
 describe('move validation', () => {
   let req
@@ -348,7 +348,7 @@ describe('move validation', () => {
       ],
     })
 
-    controller = moveValidationController({ prisonApi, logError })
+    controller = considerRisksController({ prisonApi, logError })
   })
 
   it('Makes the expected API calls on get', async () => {
@@ -376,7 +376,7 @@ describe('move validation', () => {
     prisonApi.getInmatesAtLocation.mockResolvedValue([{ offenderNo: 'A12346' }])
     await controller.index(req, res)
 
-    expect(res.render).toHaveBeenCalledWith('cellMove/moveValidation.njk', {
+    expect(res.render).toHaveBeenCalledWith('cellMove/considerRisks.njk', {
       categoryWarning: true,
       currentOccupantsWithFormattedActiveAlerts: [
         {
@@ -477,7 +477,7 @@ describe('move validation', () => {
     await controller.index(req, res)
 
     expect(res.render).toHaveBeenCalledWith(
-      'cellMove/moveValidation.njk',
+      'cellMove/considerRisks.njk',
       expect.objectContaining({
         currentOffenderActiveAlerts: [],
         currentOccupantsWithFormattedActiveAlerts: [
@@ -504,7 +504,7 @@ describe('move validation', () => {
     await controller.index(req, res)
 
     expect(res.render).toHaveBeenCalledWith(
-      'cellMove/moveValidation.njk',
+      'cellMove/considerRisks.njk',
       expect.objectContaining({
         showOffendersNamesWithCsra: false,
         showRisks: true,
@@ -522,7 +522,7 @@ describe('move validation', () => {
     await controller.index(req, res)
 
     expect(res.render).toHaveBeenCalledWith(
-      'cellMove/moveValidation.njk',
+      'cellMove/considerRisks.njk',
       expect.objectContaining({
         categoryWarning: false,
         currentOffenderActiveAlerts: false,
@@ -539,7 +539,7 @@ describe('move validation', () => {
     await controller.index(req, res)
 
     expect(res.render).toHaveBeenCalledWith(
-      'cellMove/moveValidation.njk',
+      'cellMove/considerRisks.njk',
       expect.objectContaining({
         categoryWarning: false,
         showRisks: false,
@@ -556,7 +556,7 @@ describe('move validation', () => {
     await controller.post(req, res)
 
     expect(res.render).toHaveBeenCalledWith(
-      'cellMove/moveValidation.njk',
+      'cellMove/considerRisks.njk',
       expect.objectContaining({
         errors: [{ href: '#confirmation', text: 'Select yes if you are sure you want to select the cell' }],
       })

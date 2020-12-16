@@ -1,6 +1,6 @@
 const page = require('../page')
 
-const moveValidationPage = () =>
+const considerRisksPage = () =>
   page('You must consider the risks of the prisoners involved', {
     nonAssociationsSubTitle: () => cy.get("[data-test='non-associations-sub-heading']"),
     nonAssociationsSummary: () => cy.get("[data-test*='non-association-summary']"),
@@ -21,9 +21,9 @@ const moveValidationPage = () =>
   })
 
 export default {
-  verifyOnPage: moveValidationPage,
+  verifyOnPage: considerRisksPage,
   goTo: (offenderNo, cellId) => {
-    cy.visit(`/prisoner/${offenderNo}/cell-move/move-validation?cellId=${cellId}`)
-    return moveValidationPage()
+    cy.visit(`/prisoner/${offenderNo}/cell-move/consider-risks?cellId=${cellId}`)
+    return considerRisksPage()
   },
 }
