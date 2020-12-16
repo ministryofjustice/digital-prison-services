@@ -12,9 +12,12 @@ image:
 ingress:
   enabled: true
   enable_whitelist: false
-  host: whereabouts-dev.prison.service.justice.gov.uk
-  cert_secret: prison-staff-hub-cert
+  host: digital-dev.prison.service.justice.gov.uk
+  cert_secret: notm-cert
   path: /
+  host2: whereabouts-dev.prison.service.justice.gov.uk
+  cert_secret2: prison-staff-hub-cert
+  redirect_host2: https://digital-dev.prison.service.justice.gov.uk
 
 env:
   API_ENDPOINT_URL: https://api-dev.prison.service.justice.gov.uk/
@@ -49,3 +52,5 @@ env:
   BVL_URL: https://book-video-link-dev.prison.service.justice.gov.uk
   MOIC_URL: https://allocation-manager-staging.apps.live-1.cloud-platform.service.justice.gov.uk
   OMIC_URL: https://dev.manage-key-workers.service.justice.gov.uk
+  MANAGE_AUTH_ACCOUNTS_URL: https://manage-hmpps-auth-accounts-dev.prison.service.justice.gov.uk
+  PECS_URL: https://hmpps-book-secure-move-frontend-staging.apps.live-1.cloud-platform.service.justice.gov.uk

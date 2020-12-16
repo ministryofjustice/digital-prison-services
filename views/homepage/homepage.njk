@@ -1,0 +1,72 @@
+{% extends "../partials/layout.njk" %}
+{% from "../components/card/card.njk" import card %}
+{% from "govuk/components/input/macro.njk" import govukInput %}
+{% from "govuk/components/select/macro.njk" import govukSelect %}
+{% from "govuk/components/button/macro.njk" import govukButton %}
+
+{% set title = 'Home' %}
+
+{% block main %}
+  <div class="govuk-width-container">
+    <h1 class="govuk-heading-l govuk-!-margin-top-7">Digital Prison Services</h1>
+  </div>
+
+  <div class="homepage-search">
+    <div class="govuk-width-container">     
+      <h2 class="govuk-heading-m govuk-!-margin-bottom-1">Search for a prisoner</h1>
+      <p class="govuk-body govuk-hint">Leave blank to view all results for selected residential location</p>
+
+      <form action="/prisoner-search" class="horizontal-form" data-test="homepage-search-form">
+        {{ govukInput({
+          id: "keywords",
+          name: "keywords",
+          label: {
+              text: "Name or prison number"
+          },
+          attributes: {
+            'data-test': 'homepage-search-keywords'
+          }
+        }) }}
+
+        {{ govukSelect({
+          id: "location",
+          name: "location",
+          label: {
+            text: "Residential location"
+          },
+          items: locationOptions,
+          attributes: {
+            'data-test': 'homepage-search-location'
+          }
+        }) }}
+
+        {{ govukButton({
+          text: "Search",
+          type: "submit"
+        }) }}
+      </form>
+    </div>
+  </div>
+
+  <div class="homepage-content">
+    <div class="govuk-width-container">
+      <ul class="govuk-grid-row card-group">
+        {% for task in tasks %}
+          <li class="govuk-grid-column-one-third card-group__item">
+            {{ card({
+              "href": task.href,
+              "clickable": "true",
+              "heading": task.heading,
+              "description": task.description,
+              "id": task.id
+            }) }}
+          </li>
+        {% endfor %}
+      </ul>
+    </div>
+  </div>
+{% endblock %}
+
+{% block pageScripts %}
+  <script src="/static/js/card.js"></script>
+{% endblock %}

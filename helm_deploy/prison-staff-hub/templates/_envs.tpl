@@ -195,4 +195,13 @@ env:
 
   - name: MOIC_URL
     value: {{ .Values.env.MOIC_URL | quote }}
+
+  - name: MANAGE_AUTH_ACCOUNTS_URL
+    value: {{ .Values.env.MANAGE_AUTH_ACCOUNTS_URL | quote }}
+    
+  - name: PECS_URL
+    value: {{ .Values.env.PECS_URL | quote }}
+
+  - name: OMIC_URL
+    value: {{ .Values.env.OMIC_URL | quote }}
 {{- end -}}

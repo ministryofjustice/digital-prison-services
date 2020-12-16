@@ -52,12 +52,6 @@ describe('Select a cell', () => {
     prisonApi.getLocation = jest.fn().mockResolvedValue({})
     prisonApi.getCellsWithCapacity = jest.fn().mockResolvedValue([])
     prisonApi.getInmatesAtLocation = jest.fn().mockResolvedValue([])
-    prisonApi.getCellAttributes = jest.fn().mockResolvedValue([
-      {
-        description: 'Attribute 1',
-        code: 'A1',
-      },
-    ])
 
     whereaboutsApi.getCellsWithCapacity = jest.fn().mockResolvedValue([])
     whereaboutsApi.searchGroups = jest.fn().mockResolvedValue([
@@ -76,10 +70,7 @@ describe('Select a cell', () => {
       params: {
         offenderNo: someOffenderNumber,
       },
-      query: {
-        location: 'ALL',
-        attribute: 'A',
-      },
+      query: {},
       session: {
         userDetails: {
           activeCaseLoadId: 'LEI',
@@ -94,7 +85,6 @@ describe('Select a cell', () => {
 
       expect(prisonApi.getDetails).toHaveBeenCalledWith({}, someOffenderNumber, true)
       expect(prisonApi.getNonAssociations).toHaveBeenCalledWith({}, someBookingId)
-      expect(prisonApi.getCellAttributes).toHaveBeenCalledWith({})
       expect(whereaboutsApi.searchGroups).toHaveBeenCalledWith({}, someAgency)
     })
 
@@ -106,21 +96,14 @@ describe('Select a cell', () => {
     })
 
     it('should call get cells with capacity for leeds', async () => {
-      req.query = {
-        ...req.query,
-        location: 'ALL',
-      }
       await controller(req, res)
 
-      expect(prisonApi.getCellsWithCapacity).toHaveBeenCalledWith({}, someAgency, 'A')
+      expect(prisonApi.getCellsWithCapacity).toHaveBeenCalledWith({}, someAgency)
     })
 
     it('should call get cells with capacity for leeds and house block 1', async () => {
-      req.query = {
-        ...req.query,
-        location: 'hb1',
-        attribute: 'A',
-      }
+      req.query = { location: 'hb1' }
+
       await controller(req, res)
 
       expect(whereaboutsApi.getCellsWithCapacity).toHaveBeenCalledWith(
@@ -128,7 +111,6 @@ describe('Select a cell', () => {
         {
           agencyId: someAgency,
           groupName: 'hb1',
-          attribute: 'A',
         }
       )
     })
@@ -152,12 +134,13 @@ describe('Select a cell', () => {
     })
 
     it('should populate view model with form values', async () => {
+      req.query = { cellType: 'SO' }
       await controller(req, res)
 
       expect(res.render).toHaveBeenCalledWith(
         'cellMove/selectCell.njk',
         expect.objectContaining({
-          formValues: { attribute: 'A', location: 'ALL', subLocation: undefined },
+          formValues: { cellType: 'SO', location: 'ALL', subLocation: undefined },
         })
       )
     })
@@ -207,16 +190,13 @@ describe('Select a cell', () => {
       expect(res.render).toHaveBeenCalledWith(
         'cellMove/selectCell.njk',
         expect.objectContaining({
-          locations: [{ text: 'All locations', value: 'ALL' }, { text: 'Houseblock 1', value: 'hb1' }],
+          locations: [{ text: 'All residential units', value: 'ALL' }, { text: 'Houseblock 1', value: 'hb1' }],
         })
       )
     })
 
     it('should populate view model with sub locations', async () => {
-      req.query = {
-        ...req.query,
-        location: 'hb1',
-      }
+      req.query = { location: 'hb1' }
       await controller(req, res)
 
       expect(res.render).toHaveBeenCalledWith(
@@ -229,10 +209,7 @@ describe('Select a cell', () => {
 
     it('should render subLocations template on ajax request', async () => {
       req.xhr = true
-      req.query = {
-        ...req.query,
-        locationId: 'hb1',
-      }
+      req.query = { locationId: 'hb1' }
 
       await controller(req, res)
 
@@ -246,10 +223,7 @@ describe('Select a cell', () => {
 
     it('should render subLocations template on ajax request when the subLocationId is ALL', async () => {
       req.xhr = true
-      req.query = {
-        ...req.query,
-        locationId: 'ALL',
-      }
+      req.query = { locationId: 'ALL' }
 
       await controller(req, res)
 
@@ -263,10 +237,9 @@ describe('Select a cell', () => {
 
     it('should make a call to retrieve sub locations', async () => {
       req.query = {
-        ...req.query,
         location: 'hb1',
         subLocation: 'sub1',
-        attribute: 'A',
+        cellType: 'SO',
       }
       await controller(req, res)
 
@@ -275,23 +248,89 @@ describe('Select a cell', () => {
         {
           agencyId: someAgency,
           groupName: 'hb1_sub1',
-          attribute: 'A',
         }
       )
     })
   })
 
-  describe('Cell view model data', () => {
+  describe('Cell types', () => {
     beforeEach(() => {
       prisonApi.getCellsWithCapacity.mockResolvedValue([
         {
           id: 1,
-          description: 'MDI-1-3',
-          capacity: 4,
-          noOfOccupants: 1,
+          description: 'MDI-1-1',
+          capacity: 1,
+          noOfOccupants: 0,
           attributes: [{ description: 'Single occupancy', code: 'SO' }, { description: 'Listener Cell', code: 'LC' }],
         },
+        {
+          id: 2,
+          description: 'MDI-1-2',
+          capacity: 2,
+          noOfOccupants: 0,
+          attributes: [{ description: 'Special Cell', code: 'SPC' }, { description: 'Gated Cell', code: 'GC' }],
+        },
       ])
+    })
+
+    describe('when Single occupancy cell type is selected', () => {
+      it('should only show cells with a capacity of 1', async () => {
+        req.query = { cellType: 'SO' }
+
+        await controller(req, res)
+
+        expect(res.render).toHaveBeenCalledWith(
+          'cellMove/selectCell.njk',
+          expect.objectContaining({
+            cells: [
+              {
+                attributes: [
+                  { code: 'LC', description: 'Listener Cell' },
+                  { code: 'SO', description: 'Single occupancy' },
+                ],
+                capacity: 1,
+                description: 'MDI-1-1',
+                id: 1,
+                noOfOccupants: 0,
+                occupants: [],
+                spaces: 1,
+                type: [{ code: 'LC', description: 'Listener Cell' }, { code: 'SO', description: 'Single occupancy' }],
+              },
+            ],
+          })
+        )
+      })
+    })
+
+    describe('when Multiple occupancy cell type is selected', () => {
+      it('should only show cells with a capacity of 2 or more', async () => {
+        req.query = { cellType: 'MO' }
+
+        await controller(req, res)
+
+        expect(res.render).toHaveBeenCalledWith(
+          'cellMove/selectCell.njk',
+          expect.objectContaining({
+            cells: [
+              {
+                attributes: [{ code: 'GC', description: 'Gated Cell' }, { code: 'SPC', description: 'Special Cell' }],
+                capacity: 2,
+                description: 'MDI-1-2',
+                id: 2,
+                noOfOccupants: 0,
+                occupants: [],
+                spaces: 2,
+                type: [{ code: 'GC', description: 'Gated Cell' }, { code: 'SPC', description: 'Special Cell' }],
+              },
+            ],
+          })
+        )
+      })
+    })
+  })
+
+  describe('Cell view model data', () => {
+    beforeEach(() => {
       prisonApi.getLocation
         .mockResolvedValueOnce(cellLocationData)
         .mockResolvedValueOnce(parentLocationData)
@@ -750,7 +789,7 @@ describe('Select a cell', () => {
         alerts: [],
       })
 
-      req.query = { location: null }
+      req.query = {}
 
       await controller(req, res)
 

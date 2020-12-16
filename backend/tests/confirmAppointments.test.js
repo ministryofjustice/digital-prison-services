@@ -62,7 +62,7 @@ describe('Confirm appointments', () => {
       'confirmAppointments.njk',
       expect.objectContaining({
         addAppointmentsLink: '/offenders/A12345/add-appointment',
-        prisonerProfileLink: `http://localhost:3000/offenders/A12345`,
+        prisonerProfileLink: `/prisoner/A12345`,
         prisonerName: 'John Doe',
         details: {
           date: '10 October 2017',
@@ -318,7 +318,7 @@ describe('Confirm appointments', () => {
       'Sorry, the service is unavailable'
     )
     expect(res.render).toHaveBeenCalledWith('error.njk', {
-      url: 'http://localhost:3000/offenders/A12345',
+      url: '/prisoner/A12345',
       homeUrl: 'http://localhost:3000/',
     })
   })
