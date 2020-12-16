@@ -24,7 +24,7 @@ describe('Homepage', () => {
         },
       },
     }
-    res = { locals: {}, render: jest.fn() }
+    res = { locals: {}, render: jest.fn(), redirect: jest.fn() }
 
     logError = jest.fn()
 
@@ -424,6 +424,36 @@ describe('Homepage', () => {
           ],
         })
       )
+    })
+
+    it('should render home page with the serious organised crime task when the user has the SOC_HQ role', async () => {
+      config.apis.soc.url = 'http://soc-url'
+
+      oauthApi.userRoles.mockResolvedValue([{ roleCode: 'SOC_HQ' }])
+
+      await controller(req, res)
+
+      expect(res.render).toHaveBeenCalledWith(
+        'homepage/homepage.njk',
+        expect.objectContaining({
+          tasks: [
+            {
+              id: 'soc',
+              heading: 'Manage SOC cases',
+              description: 'Manage your Serious and Organised Crime (SOC) caseload.',
+              href: 'http://soc-url',
+            },
+          ],
+        })
+      )
+    })
+
+    it('should redirect to video link booking for court users', async () => {
+      oauthApi.userRoles.mockResolvedValue([{ roleCode: 'VIDEO_LINK_COURT_USER' }])
+
+      await controller(req, res)
+
+      expect(res.redirect).toHaveBeenCalledWith('/videolink')
     })
   })
 })

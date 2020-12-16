@@ -33,8 +33,6 @@ const globalSearchRouter = require('./routes/globalSearchRouter')
 const amendCaseNoteRouter = require('./routes/caseNoteAmendmentRouter')
 const deleteCaseNoteRouter = require('./routes/caseNoteDeletionRouter')
 
-const homepageController = require('./controllers/homepage/homepage')
-
 const currentUser = require('./middleware/currentUser')
 const systemOauthClient = require('./api/systemOauthClient')
 const handleErrors = require('./middleware/asyncHandler')
@@ -67,6 +65,7 @@ const setup = ({
     }
     next()
   })
+
   router.get(
     '/edit-alert',
     handleErrors(alertFactory(oauthApi, prisonApi, referenceCodesService(prisonApi)).displayEditAlertPage)
@@ -215,8 +214,6 @@ const setup = ({
   router.get(['/content', '/content/:path'], contentController({ logError }))
 
   router.use('/global-search', globalSearchRouter({ offenderSearchApi, oauthApi, logError }))
-
-  router.get('/homepage', homepageController({ oauthApi, prisonApi, whereaboutsApi, logError }))
 
   return router
 }

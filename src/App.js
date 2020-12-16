@@ -1,11 +1,11 @@
 import React from 'react'
 import moment from 'moment'
-import { BrowserRouter as Router, Redirect, Route, Switch } from 'react-router-dom'
+import { BrowserRouter as Router, Route, Switch } from 'react-router-dom'
 import PropTypes from 'prop-types'
 import { connect } from 'react-redux'
 import Notifications from 'react-notify-toast'
 import ReactGA from 'react-ga'
-import { Header, FooterContainer } from 'new-nomis-shared-components'
+import { FooterContainer, Header } from 'new-nomis-shared-components'
 import ErrorComponent from './Error/index'
 import SearchContainer from './Search/SearchContainer'
 import Terms from './Footer/terms-and-conditions'
@@ -24,7 +24,9 @@ import IncentiveLevelSlipContainer from './IncentiveLevelSlipContainer'
 import PrisonersUnaccountedForContainer from './PrisonersUnaccountedFor/PrisonersUnaccountedForContainer'
 
 import {
+  getAbsentReasons,
   resetError,
+  setActivityOffenderAttendance,
   setConfig,
   setError,
   setLoaded,
@@ -33,11 +35,9 @@ import {
   setSearchActivity,
   setSearchDate,
   setSearchPeriod,
+  setShowModal,
   setTermsVisibility,
   setUserDetails,
-  setShowModal,
-  setActivityOffenderAttendance,
-  getAbsentReasons,
 } from './redux/actions/index'
 
 const axios = require('axios')
@@ -246,22 +246,6 @@ class App extends React.Component {
         }}
       >
         <div className="pure-g">
-          <Route
-            path="(/)"
-            render={() => (
-              <Route
-                exact
-                path="/"
-                render={() => {
-                  if (user.roles.includes('VIDEO_LINK_COURT_USER')) {
-                    window.location.href = '/videolink'
-                    return null
-                  }
-                  return <Redirect to="/manage-prisoner-whereabouts" />
-                }}
-              />
-            )}
-          />
           <Route
             exact
             path="(/manage-prisoner-whereabouts)"
