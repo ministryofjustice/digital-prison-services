@@ -1,5 +1,7 @@
 const jwt = require('jsonwebtoken')
 const { stubFor, getMatchingRequests } = require('./wiremock')
+const { stubStaffRoles, stubUserLocations } = require('./prisonApi')
+const { stubLocationConfig } = require('./whereabouts')
 
 const createToken = () => {
   const payload = {
@@ -225,6 +227,9 @@ module.exports = {
       stubUserMe(),
       stubUserMeRoles([{ roleCode: 'UPDATE_ALERT' }, ...roles]),
       stubUser(username, caseloadId),
+      stubUserLocations(),
+      stubStaffRoles(),
+      stubLocationConfig({ agencyId: 'MDI', response: { enabled: false } }),
     ]),
   stubLoginCourt: () =>
     Promise.all([

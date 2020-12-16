@@ -14,7 +14,10 @@ ingress:
   enable_whitelist: false
   host: digital-dev.prison.service.justice.gov.uk
   cert_secret: notm-cert
-  path: /homepage
+  path: /
+  host2: whereabouts-dev.prison.service.justice.gov.uk
+  cert_secret2: prison-staff-hub-cert
+  redirect_host2: https://digital-dev.prison.service.justice.gov.uk
 
 env:
   API_ENDPOINT_URL: https://api-dev.prison.service.justice.gov.uk/

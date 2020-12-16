@@ -132,7 +132,7 @@ const getTasks = ({ activeCaseLoadId, locations, staffId, whereaboutsConfig }) =
     heading: 'Manage SOC cases',
     description: 'Manage your Serious and Organised Crime (SOC) caseload.',
     href: soc.url,
-    roles: ['SOC_CUSTODY', 'SOC_COMMUNITY'],
+    roles: ['SOC_CUSTODY', 'SOC_COMMUNITY', 'SOC_HQ'],
     enabled: soc.url,
   },
 ]
@@ -148,6 +148,8 @@ module.exports = ({ oauthApi, prisonApi, whereaboutsApi, logError }) => async (r
     ])
 
     const roleCodes = [...userRoles.map(userRole => userRole.roleCode), ...staffRoles.map(staffRole => staffRole.role)]
+
+    if (roleCodes.includes('VIDEO_LINK_COURT_USER')) return res.redirect('/videolink')
 
     return res.render('homepage/homepage.njk', {
       locationOptions: locations?.map(option => ({ value: option.locationPrefix, text: option.description })),
