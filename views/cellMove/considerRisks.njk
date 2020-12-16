@@ -51,155 +51,159 @@
 
   <h1 class="govuk-heading-l">{{title}}</h1>
 
-  {% if nonAssociations.length %}
-    {{ govukWarningText({
-      text: offenderName + " has a non-association with a prisoner on this wing:",
-      iconFallbackText: "Warning",
-      attributes: {
-        "data-test":"non-associations-sub-heading"
-      }
-    }) }}
-    
-    {% for nonAssociation in nonAssociations %}
-      {{ govukInsetText({
-        html: govukSummaryList({
-          classes: "govuk-summary-list--no-border govuk-body",
-          attributes: {'data-test': 'non-association-summary-' + nonAssociation.prisonNumber},
-          rows: [
-            {
-              key: {
-                text: "Name"
-              },
-              value: {
-                text: nonAssociation.name
-              }
-            },
-            {
-              key: {
-                text: "Prison number"
-              },
-              value: {
-                text: nonAssociation.prisonNumber
-              }
-            },
-            {
-              key: {
-                text: "Location"
-              },
-              value: {
-                text: nonAssociation.location
-              }
-            },
-            {
-              key: {
-                text: "Type"
-              },
-              value: {
-                text: nonAssociation.type
-              }
-            },
-            {
-              key: {
-                text: "Reason"
-              },
-              value: {
-                text: nonAssociation.reason
-              }
-            },
-            {
-              key: {
-                text: "Comment"
-              },
-              value: {
-                text: nonAssociation.comment
-              }
-            }
-          ] | removePaddingBottom
-        }),
-        classes: 'govuk-!-padding-top-0 govuk-!-padding-bottom-0'
-      }) }}
-    {% endfor %}
-  {% endif %}
-
-  <p class="govuk-body">You must have checked any local processes for non-associations.</p>
-
-  <hr class="govuk-section-break govuk-section-break--m govuk-section-break--visible">
-
-  {% if showOffendersNamesWithCsra %}
-    <ul class="govuk-list" data-test="csra-messages">
-      {% for offender in offendersFormattedNamesWithCsra %}
-        <li>{{ offender }}</li>
-      {% endfor %}
-    </ul>
-
-    <hr class="govuk-section-break govuk-section-break--m govuk-section-break--visible">
-  {% endif %}
-
-  {% if showRisks %}
-    {% if currentOffenderActiveAlerts.length %}
-      <h2 class="govuk-heading-m govuk-!-font-weight-regular" data-test="offender-alerts-heading">{{ offenderName }} has:</h2>
-
-      <ul class="govuk-list govuk-list--bullet">
-        {% for alert in currentOffenderActiveAlerts %}
-          <li data-test="offender-alert-message">
-          {{ alert.title }}
-          {{ govukInsetText({
-            html: alertDetails(alert),
-            classes: 'govuk-!-margin-top-2'
-          }) }}
-          </li>
-        {% endfor %}
-
-        {% if categoryWarning %}
-          <li data-test="category-warning">who is a Cat A prisoner into a cell with another prisoner</li>
-        {% endif %}
-      </ul>
-    {% endif %}
-
-    {% for occupant in currentOccupantsWithFormattedActiveAlerts %}
-      <h2 class="govuk-heading-m govuk-!-font-weight-regular" data-test="occupant-alerts-heading">{{ occupant.name }} has:</h2>
-
-      <ul class="govuk-list govuk-list--bullet">
-        {% for alert in occupant.alerts %}
-          <li class="govuk-body" data-test="occupant-alert-message">
-          {{ alert.title }}
-          {{ govukInsetText({
-            html: alertDetails(alert),
-            classes: 'govuk-!-margin-top-2'
-          }) }}
-          </li>
-        {% endfor %}
-      </ul>
-    {% endfor %}
-
-    <hr class="govuk-section-break govuk-section-break--m govuk-section-break--visible">
-  {% endif %}
-
-  <form method="POST" novalidate="novalidate">
-    <input type="hidden" name="_csrf" value="{{ csrfToken }}" />
-    {{ govukRadios({
-      classes: "govuk-radios--inline",
-      idPrefix: "confirmation",
-      name: "confirmation",
-      errorMessage: errors | findError('confirmation'),
-      fieldset: {
-          legend: {
-              text: "Are you sure you want to move " + offenderName + " into a cell with " + stringListOfCurrentOccupantsNames +"?",
-              classes: "govuk-fieldset__legend--s"
+  <div class="govuk-grid-row">
+    <div class="govuk-grid-column-two-thirds">
+      {% if nonAssociations.length %}
+        {{ govukWarningText({
+          text: offenderName + " has a non-association with a prisoner on this wing:",
+          iconFallbackText: "Warning",
+          attributes: {
+            "data-test":"non-associations-sub-heading"
           }
-      },
-      items: [
-        {
-          value: "yes",
-          text: "Yes"
-        },
-        {
-          value: "no",
-          text: "No"
-        }
-        ]
-    }) }}
+        }) }}
+        
+        {% for nonAssociation in nonAssociations %}
+          {{ govukInsetText({
+            html: govukSummaryList({
+              classes: "govuk-summary-list--no-border govuk-body",
+              attributes: {'data-test': 'non-association-summary-' + nonAssociation.prisonNumber},
+              rows: [
+                {
+                  key: {
+                    text: "Name"
+                  },
+                  value: {
+                    text: nonAssociation.name
+                  }
+                },
+                {
+                  key: {
+                    text: "Prison number"
+                  },
+                  value: {
+                    text: nonAssociation.prisonNumber
+                  }
+                },
+                {
+                  key: {
+                    text: "Location"
+                  },
+                  value: {
+                    text: nonAssociation.location
+                  }
+                },
+                {
+                  key: {
+                    text: "Type"
+                  },
+                  value: {
+                    text: nonAssociation.type
+                  }
+                },
+                {
+                  key: {
+                    text: "Reason"
+                  },
+                  value: {
+                    text: nonAssociation.reason
+                  }
+                },
+                {
+                  key: {
+                    text: "Comment"
+                  },
+                  value: {
+                    text: nonAssociation.comment
+                  }
+                }
+              ] | removePaddingBottom
+            }),
+            classes: 'govuk-!-padding-top-0 govuk-!-padding-bottom-0'
+          }) }}
+        {% endfor %}
+      {% endif %}
 
-    {{ govukButton({ text: "Continue", type: "submit" }) }}
-  </form>
+      <p class="govuk-body">You must have checked any local processes for non-associations.</p>
+
+      <hr class="govuk-section-break govuk-section-break--m govuk-section-break--visible">
+
+      {% if showOffendersNamesWithCsra %}
+        <ul class="govuk-list" data-test="csra-messages">
+          {% for offender in offendersFormattedNamesWithCsra %}
+            <li>{{ offender }}</li>
+          {% endfor %}
+        </ul>
+
+        <hr class="govuk-section-break govuk-section-break--m govuk-section-break--visible">
+      {% endif %}
+
+      {% if showRisks %}
+        {% if currentOffenderActiveAlerts.length %}
+          <h2 class="govuk-heading-m govuk-!-font-weight-regular" data-test="offender-alerts-heading">{{ offenderName }} has:</h2>
+
+          <ul class="govuk-list govuk-list--bullet">
+            {% for alert in currentOffenderActiveAlerts %}
+              <li data-test="offender-alert-message">
+              {{ alert.title }}
+              {{ govukInsetText({
+                html: alertDetails(alert),
+                classes: 'govuk-!-margin-top-2'
+              }) }}
+              </li>
+            {% endfor %}
+
+            {% if categoryWarning %}
+              <li data-test="category-warning">who is a Cat A prisoner into a cell with another prisoner</li>
+            {% endif %}
+          </ul>
+        {% endif %}
+
+        {% for occupant in currentOccupantsWithFormattedActiveAlerts %}
+          <h2 class="govuk-heading-m govuk-!-font-weight-regular" data-test="occupant-alerts-heading">{{ occupant.name }} has:</h2>
+
+          <ul class="govuk-list govuk-list--bullet">
+            {% for alert in occupant.alerts %}
+              <li class="govuk-body" data-test="occupant-alert-message">
+              {{ alert.title }}
+              {{ govukInsetText({
+                html: alertDetails(alert),
+                classes: 'govuk-!-margin-top-2'
+              }) }}
+              </li>
+            {% endfor %}
+          </ul>
+        {% endfor %}
+
+        <hr class="govuk-section-break govuk-section-break--m govuk-section-break--visible">
+      {% endif %}
+
+      <form method="POST" novalidate="novalidate">
+        <input type="hidden" name="_csrf" value="{{ csrfToken }}" />
+        {{ govukRadios({
+          classes: "govuk-radios--inline",
+          idPrefix: "confirmation",
+          name: "confirmation",
+          errorMessage: errors | findError('confirmation'),
+          fieldset: {
+              legend: {
+                  text: "Are you sure you want to move " + offenderName + " into a cell with " + stringListOfCurrentOccupantsNames +"?",
+                  classes: "govuk-fieldset__legend--s"
+              }
+          },
+          items: [
+            {
+              value: "yes",
+              text: "Yes"
+            },
+            {
+              value: "no",
+              text: "No"
+            }
+            ]
+        }) }}
+
+        {{ govukButton({ text: "Continue", type: "submit" }) }}
+      </form>
+    </div>
+  </div>
 {% endblock %}
