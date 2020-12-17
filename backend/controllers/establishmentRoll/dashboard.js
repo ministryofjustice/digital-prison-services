@@ -13,12 +13,19 @@ const getTotals = (array, figure) =>
 module.exports = ({ prisonApi, logError }) => async (req, res) => {
   try {
     const { caseLoadId, description: caseLoadDescription } = res.locals.user.activeCaseLoad
-    const [assignedResponse, unassignedResponse, movementsResponse, enroute] = await Promise.all([
+    const [assignedResponse, unassignedResponse, movementsResponse, enroute, caseLoadLocations] = await Promise.all([
       prisonApi.getEstablishmentRollBlocksCount(res.locals, caseLoadId, false),
       prisonApi.getEstablishmentRollBlocksCount(res.locals, caseLoadId, true),
       prisonApi.getEstablishmentRollMovementsCount(res.locals, caseLoadId),
       prisonApi.getEstablishmentRollEnrouteCount(res.locals, caseLoadId),
+      prisonApi.getLocationsForAgency(res.locals, caseLoadId),
     ])
+
+    const cellSwapLocation = caseLoadLocations.find(location => location.description === 'CSWAP')
+
+    const cellSwapDetails = cellSwapLocation
+      ? await prisonApi.getAttributesForLocation(res.locals, cellSwapLocation.locationId)
+      : {}
 
     const unassignedIn = getTotals(unassignedResponse, 'currentlyInCell')
     const currentRoll = getTotals(assignedResponse, 'currentlyInCell') + unassignedIn
@@ -30,6 +37,7 @@ module.exports = ({ prisonApi, logError }) => async (req, res) => {
       currentRoll,
       unassignedIn,
       enroute,
+      noCellAllocated: zeroIfNotDefined(cellSwapDetails?.noOfOccupants),
     }
 
     const blocks = assignedResponse.map(row => {
