@@ -95,6 +95,7 @@ describe('Establishment Roll', () => {
     expect(prisonApi.getEstablishmentRollMovementsCount).toHaveBeenCalledWith(res.locals, agencyId)
     expect(prisonApi.getEstablishmentRollEnrouteCount).toHaveBeenCalledWith(res.locals, agencyId)
     expect(prisonApi.getLocationsForAgency).toHaveBeenCalledWith(res.locals, agencyId)
+    expect(prisonApi.getAttributesForLocation).toHaveBeenCalledWith(res.locals, 2)
   })
 
   it('should render the template with the correct data', async () => {
