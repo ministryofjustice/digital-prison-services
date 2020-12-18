@@ -184,6 +184,8 @@ const prisonApiFactory = client => {
 
   const getBasicInmateDetailsForOffenders = (context, offenders) => post(context, `/api/bookings/offenders`, offenders)
 
+  const getLocationsForAgency = (context, agencyId) => get(context, `/api/agencies/${agencyId}/locations`)
+
   const getLocationsForAppointments = (context, agencyId) =>
     get(context, `/api/agencies/${agencyId}/locations?eventType=APP`)
 
@@ -412,6 +414,7 @@ const prisonApiFactory = client => {
     getLocation,
     getOffendersEnRoute,
     getBasicInmateDetailsForOffenders,
+    getLocationsForAgency,
     getLocationsForAppointments,
     getAppointmentTypes,
     getAdjudicationFindingTypes,
