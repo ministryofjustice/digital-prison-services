@@ -20,16 +20,17 @@ const setupWebSecurity = require('./setupWebSecurity')
 const setupAuth = require('./setupAuth')
 const setupStaticContent = require('./setupStaticContent')
 const nunjucksSetup = require('./utils/nunjucksSetup')
-const setupWebpackForDev = require('./setupWebpackForDev')
 const setupRedirects = require('./setupRedirects')
 const setupApiRoutes = require('./setupApiRoutes')
 const setupReactRoutes = require('./setupReactRoutes')
 const phaseNameSetup = require('./phaseNameSetup')
-
 const pageNotFound = require('./setUpPageNotFound')
 
 const { logError } = require('./logError')
 const homepageController = require('./controllers/homepage/homepage')
+
+// eslint-disable-next-line  global-require
+const setupWebpackForDev = !config.app.disableWebpack && require('./setupWebpackForDev')
 
 app.set('trust proxy', 1) // trust first proxy
 app.set('view engine', 'njk')
@@ -44,7 +45,9 @@ app.use(setupRedirects())
 app.use(setupStaticContent())
 app.use(setupWebSession())
 app.use(setupAuth({ oauthApi: apis.oauthApi, tokenVerificationApi: apis.tokenVerificationApi }))
-app.use(setupWebpackForDev())
+
+if (!config.app.disableWebpack) app.use(setupWebpackForDev())
+
 app.use(
   setupApiRoutes({
     prisonApi: apis.prisonApi,
