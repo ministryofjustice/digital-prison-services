@@ -60,11 +60,6 @@ context('A user can see the data in the dashbaord', () => {
       },
       enroute: 6,
     })
-    cy.task('stubLocationsForAgency', {
-      agency: 'MDI',
-      locations: [{ description: '1-1', locationId: 1 }, { description: 'CSWAP', locationId: 2 }],
-    })
-    cy.task('stubAttributesForLocation', { noOfOccupants: 3 })
   })
 
   it('should load the page with the correct data', () => {
@@ -77,7 +72,6 @@ context('A user can see the data in the dashbaord', () => {
     cy.get('[data-test="current-roll"]').should('contain', '3')
     cy.get('[data-test="unassigned-in"]').should('contain', '2')
     cy.get('[data-test="enroute"]').should('contain', '6')
-    cy.get('[data-test="no-cell-allocated"]').should('contain', '3')
 
     cy.get('[data-test="establishment-roll-table"]').then($table => {
       cy.get($table)
