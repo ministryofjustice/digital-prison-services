@@ -269,15 +269,6 @@ const extractLocation = (location, agencyId) => {
   return withoutAgency
 }
 
-const createStringFromList = array => {
-  if (array.length > 1) {
-    const lastItem = array.pop()
-    return `${array.join(', ')} and ${lastItem}`
-  }
-
-  return array[0]
-}
-
 module.exports = {
   isBeforeToday,
   isToday,
@@ -320,5 +311,4 @@ module.exports = {
   extractLocation,
   indefiniteArticle,
   isBlank,
-  createStringFromList,
 }

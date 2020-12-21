@@ -7,6 +7,7 @@
 
 {% set title = "Select an available cell" %}
 
+
 {% macro makeRow(cell, index, last, occupier) %}
 
   {% set cellClass = 'govuk-table__cell govuk-table__cell--last' if last else 'govuk-table__cell' %}
@@ -67,7 +68,7 @@
   {% endif %}
 
   {% if index === 1 %}
-     <td class="{{ cellClass }}"><a href="{{ '/prisoner/' + offenderNo + '/cell-move/consider-risks?cellId=' + cell.id }}" class="govuk-link">Select cell</a></td>
+     <td class="{{ cellClass }}"><a href="{{ '/prisoner/' + offenderNo + '/cell-move/move-validation?cellId=' + cell.id }}" class="govuk-link">Select cell</a></td>
   {% else %}
       <td class="{{ cellClass }}">
       </td>
