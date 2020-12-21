@@ -35,10 +35,6 @@ module.exports = ({ prisonApi, oauthApi }) => {
         req.session.allCaseloads = allCaseloads
       }
 
-      if (typeof req.csrfToken === 'function') {
-        res.locals.csrfToken = req.csrfToken()
-      }
-
       const activeCaseLoad = await getActiveCaseload(req, res)
 
       res.locals.user = {

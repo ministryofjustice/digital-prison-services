@@ -57,6 +57,13 @@ app.use(
   })
 )
 app.use(csrf())
+app.use((req, res, next) => {
+  if (typeof req.csrfToken === 'function') {
+    res.locals.csrfToken = req.csrfToken()
+  }
+  next()
+})
+
 app.use(
   routes({
     prisonApi: apis.prisonApi,
