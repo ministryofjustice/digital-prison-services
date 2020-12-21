@@ -1,4 +1,4 @@
-const ConsiderRisksPage = require('../../pages/cellMove/considerRisksPage')
+const MoveValidationPage = require('../../pages/cellMove/moveValidationPage')
 const ConfirmCellMovePage = require('../../pages/cellMove/confirmCellMovePage')
 
 const offenderNo = 'A1234A'
@@ -206,8 +206,9 @@ context('A user can see conflicts in cell', () => {
 
   it('should load with correct data', () => {
     stubPrisonDetails()
-    const page = ConsiderRisksPage.goTo(offenderNo, 1)
-    page.nonAssociationsSubTitle().contains('Test User has a non-association with a prisoner on this wing:')
+    const page = MoveValidationPage.goTo(offenderNo, 1)
+    page.nonAssociationsTitle().contains('Test User has non-associations')
+    page.nonAssociationsSubTitle().contains('There is a non-association with a prisoner in this location')
     page.nonAssociationsSummary().then($summary => {
       cy.get($summary)
         .find('dt')
@@ -237,36 +238,39 @@ context('A user can see conflicts in cell', () => {
           expect($summaryContent.get(5).innerText).to.contain('Gang violence')
         })
     })
-    page
-      .csraMessages()
-      .find('li')
-      .then($messages => {
-        cy.get($messages)
-          .its('length')
-          .should('eq', 2)
-        expect($messages.get(0).innerText).to.contain('Test User is CSRA High')
-        expect($messages.get(1).innerText).to.contain('Occupant User is CSRA High')
-      })
-    page.offenderAlertsHeading().contains('Test User has:')
+    page.csraTitle().contains('You must consider the CSRA of the prisoners involved')
+    page.csraSubTitle().contains('You are moving a prisoner:')
+    page.csraMessage().contains('who is CSRA high into a cell with a prisoner who is CSRA high')
+    page.alertsTitle().contains('You must consider the risks of the prisoners involved')
+    page.alertsSubTitle().contains('You are moving a prisoner:')
     page.offenderAlertMessages().then($messages => {
       cy.get($messages)
         .its('length')
         .should('eq', 4)
       expect($messages.get(0)).to.contain(
-        'a Risk to LGB alert. You have selected a cell with a prisoner who has a sexual orientation of Homosexual.'
+        'who has a Risk to LGB alert into a cell with a prisoner who has a sexual orientation of Homosexual'
       )
-      expect($messages.get(1)).to.contain('an E-List alert.')
-      expect($messages.get(2)).to.contain('a Gang member alert.')
-      expect($messages.get(3)).to.contain('an Isolated Prisoner alert.')
+      expect($messages.get(1)).to.contain('who is an E-List prisoner into a cell with another prisoner')
+      expect($messages.get(2)).to.contain('who has a Gang member alert into a cell with another prisoner')
+      expect($messages.get(3)).to.contain('who has an Isolated Prisoner alert into a cell with another prisoner')
     })
     page.categoryWarning().contains('who is a Cat A prisoner into a cell with another prisoner')
-    page.occupantAlertsHeading().contains('Occupant User has:')
     page.occupantAlertMessages().then($messages => {
       cy.get($messages)
         .its('length')
         .should('eq', 2)
-      expect($messages.get(0)).to.contain('a Gang member alert.')
-      expect($messages.get(1)).to.contain('an Isolated Prisoner alert.')
+      expect($messages.get(0)).to.contain('into a cell with a prisoner who has a Gang member alert')
+      expect($messages.get(1)).to.contain('into a cell with a prisoner who has an Isolated Prisoner alert')
+    })
+    page.alertsDetails().then($messages => {
+      cy.get($messages)
+        .its('length')
+        .should('eq', 5)
+      expect($messages.get(0)).to.contain('The details of Test User’s alert are')
+      expect($messages.get(1)).to.contain('The details of Test User’s alert are')
+      expect($messages.get(2)).to.contain('The details of Test User’s alert are')
+      expect($messages.get(3)).to.contain('The details of Occupant User’s alert are')
+      expect($messages.get(4)).to.contain('The details of Occupant User’s alert are')
     })
     page.alertsComments().then($messages => {
       cy.get($messages)
@@ -293,7 +297,7 @@ context('A user can see conflicts in cell', () => {
 
   it('should show error when nothing is selected', () => {
     stubPrisonDetails()
-    const page = ConsiderRisksPage.goTo(offenderNo, 1)
+    const page = MoveValidationPage.goTo(offenderNo, 1)
     page
       .form()
       .submitButton()
@@ -303,7 +307,7 @@ context('A user can see conflicts in cell', () => {
 
   it('should redirect to select cell if no is selected', () => {
     stubPrisonDetails()
-    const page = ConsiderRisksPage.goTo(offenderNo, 1)
+    const page = MoveValidationPage.goTo(offenderNo, 1)
     page
       .form()
       .confirmationNo()
@@ -317,7 +321,7 @@ context('A user can see conflicts in cell', () => {
 
   it('should redirect to confirm cell move on continue', () => {
     stubPrisonDetails()
-    const page = ConsiderRisksPage.goTo(offenderNo, 1)
+    const page = MoveValidationPage.goTo(offenderNo, 1)
 
     cy.task('stubBookingDetails', { firstName: 'Bob', lastName: 'Doe' })
     cy.task('stubLocation', { locationId: 1, locationDetails: { description: 'MDI-1-1' } })
@@ -347,7 +351,7 @@ context('A user can see conflicts in cell', () => {
       bookingId: 1234,
     })
 
-    cy.visit(`/prisoner/${offenderNo}/cell-move/consider-risks?cellId=1`)
+    cy.visit(`/prisoner/${offenderNo}/cell-move/move-validation?cellId=1`)
 
     ConfirmCellMovePage.verifyOnPage('Bob Doe', 'MDI-1-1')
   })
