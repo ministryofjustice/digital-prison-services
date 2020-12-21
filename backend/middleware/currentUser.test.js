@@ -8,6 +8,7 @@ describe('Current user', () => {
 
   beforeEach(() => {
     prisonApi.userCaseLoads = jest.fn()
+    prisonApi.setActiveCaseload = jest.fn()
     oauthApi.currentUser = jest.fn()
 
     oauthApi.currentUser.mockReturnValue({
@@ -73,5 +74,48 @@ describe('Current user', () => {
     expect(oauthApi.currentUser.mock.calls.length).toEqual(0)
     expect(prisonApi.userCaseLoads.mock.calls.length).toEqual(0)
     expect(next).toHaveBeenCalled()
+  })
+
+  it('should default active caseload when not set', async () => {
+    oauthApi.currentUser.mockReturnValue({
+      name: 'Bob Smith',
+      activeCaseLoadId: null,
+    })
+
+    const controller = currentUser({ prisonApi, oauthApi })
+
+    await controller(req, res, () => {})
+
+    expect(oauthApi.currentUser).toHaveBeenCalled()
+    expect(prisonApi.setActiveCaseload).toHaveBeenCalledWith(res.locals, { caseLoadId: 'MDI', description: 'Moorland' })
+    expect(req.session.userDetails).toEqual({
+      name: 'Bob Smith',
+      activeCaseLoadId: 'MDI',
+    })
+  })
+
+  it('should not set caseload when already set', async () => {
+    oauthApi.currentUser.mockReturnValue({
+      name: 'Bob Smith',
+      activeCaseLoadId: 'MDI',
+    })
+
+    const controller = currentUser({ prisonApi, oauthApi })
+
+    req = {
+      session: {
+        userDetails: { activeCaseLoadId: 'MDI', name: 'Bob Smith' },
+        allCaseloads: [{ caseLoadId: 'MDI', description: 'Moorland' }],
+      },
+    }
+
+    await controller(req, res, () => {})
+
+    expect(oauthApi.currentUser).not.toHaveBeenCalled()
+    expect(prisonApi.setActiveCaseload).not.toHaveBeenCalled()
+    expect(req.session.userDetails).toEqual({
+      name: 'Bob Smith',
+      activeCaseLoadId: 'MDI',
+    })
   })
 })
