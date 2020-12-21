@@ -17,7 +17,6 @@ module.exports = ({ prisonApi, oauthApi }) => {
       await prisonApi.setActiveCaseload(res.locals, potentialCaseLoad)
 
       req.session.userDetails.activeCaseLoadId = firstCaseLoadId
-      req.session.data = null
 
       return potentialCaseLoad
     }

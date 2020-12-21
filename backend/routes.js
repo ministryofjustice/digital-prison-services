@@ -33,7 +33,6 @@ const globalSearchRouter = require('./routes/globalSearchRouter')
 const amendCaseNoteRouter = require('./routes/caseNoteAmendmentRouter')
 const deleteCaseNoteRouter = require('./routes/caseNoteDeletionRouter')
 
-const currentUser = require('./middleware/currentUser')
 const systemOauthClient = require('./api/systemOauthClient')
 const handleErrors = require('./middleware/asyncHandler')
 const { notifyClient } = require('./shared/notifyClient')
@@ -55,8 +54,6 @@ const setup = ({
   socApi,
   offenderSearchApi,
 }) => {
-  router.use(currentUser({ prisonApi, oauthApi }))
-
   router.use(async (req, res, next) => {
     res.locals = {
       ...res.locals,

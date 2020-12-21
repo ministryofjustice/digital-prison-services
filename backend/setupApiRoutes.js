@@ -23,8 +23,6 @@ const endDateController = require('./controllers/appointments/endDate')
 
 const existingEventsService = require('./services/existingEventsService')
 
-const currentUser = require('./middleware/currentUser')
-
 const controllerFactory = require('./controllers/controller').factory
 
 const contextProperties = require('./contextProperties')
@@ -44,8 +42,6 @@ const setup = ({ prisonApi, whereaboutsApi, oauthApi, caseNotesApi }) => {
     caseNotesApi,
     logError,
   })
-
-  router.use(currentUser({ prisonApi, oauthApi }))
 
   router.use(async (req, res, next) => {
     res.locals = {
