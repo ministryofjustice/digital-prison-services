@@ -17,7 +17,6 @@ module.exports = ({ prisonApi, oauthApi }) => {
       await prisonApi.setActiveCaseload(res.locals, potentialCaseLoad)
 
       req.session.userDetails.activeCaseLoadId = firstCaseLoadId
-      req.session.data = null
 
       return potentialCaseLoad
     }
@@ -34,10 +33,6 @@ module.exports = ({ prisonApi, oauthApi }) => {
 
         req.session.userDetails = userDetails
         req.session.allCaseloads = allCaseloads
-      }
-
-      if (typeof req.csrfToken === 'function') {
-        res.locals.csrfToken = req.csrfToken()
       }
 
       const activeCaseLoad = await getActiveCaseload(req, res)
