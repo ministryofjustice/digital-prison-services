@@ -1,7 +1,7 @@
 version: 2.1
 
 orbs:
-  hmpps: ministryofjustice/hmpps@1.1.1
+  hmpps: ministryofjustice/hmpps@2.1.0
 
 executors:
   builder:
@@ -103,6 +103,8 @@ workflows:
           release_name: prison-staff-hub
           name: deploy_dev
           env: "dev"
+          context:
+            - hmpps-common-vars
           requires:
             - build_docker
             - cypress_integration_tests
@@ -118,7 +120,9 @@ workflows:
           release_name: prison-staff-hub
           name: deploy_preprod
           env: "preprod"
-          context: prison-staff-hub-preprod
+          context:
+            - prison-staff-hub-preprod
+            - hmpps-common-vars
           requires:
             - request-preprod-approval
       - request-prod-approval:
@@ -131,7 +135,9 @@ workflows:
           name: deploy_prod
           env: "prod"
           slack_notification: true
-          context: prison-staff-hub-prod
+          context:
+            - prison-staff-hub-prod
+            - hmpps-common-vars 
           requires:
             - request-prod-approval
   scheduled:
