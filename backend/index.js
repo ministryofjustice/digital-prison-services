@@ -47,7 +47,6 @@ app.use(setupRedirects())
 app.use(setupStaticContent())
 app.use(setupWebSession())
 app.use(setupAuth({ oauthApi: apis.oauthApi, tokenVerificationApi: apis.tokenVerificationApi }))
-app.use(setupWebpackForDev())
 
 app.use(currentUser({ prisonApi: apis.prisonApi, oauthApi: apis.oauthApi }))
 
