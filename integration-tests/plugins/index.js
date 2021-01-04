@@ -268,6 +268,8 @@ module.exports = on => {
     stubSentenceData: details => prisonApi.stubSentenceData(details),
     stubLocation: ({ locationId, locationData }) => Promise.all([prisonApi.stubLocation(locationId, locationData)]),
     stubAgencyDetails: ({ agencyId, details }) => Promise.all([prisonApi.stubAgencyDetails(agencyId, details)]),
+    stubLocationsForAgency: ({ agency, locations }) =>
+      Promise.all([prisonApi.stubLocationsForAgency(agency, locations)]),
     stubAppointmentLocations: ({ agency, locations }) =>
       Promise.all([prisonApi.stubAppointmentLocations(agency, locations)]),
     stubBookingOffenders: offenders => Promise.all([prisonApi.stubBookingOffenders(offenders)]),
