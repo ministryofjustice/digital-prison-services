@@ -7,7 +7,8 @@ README.md
 .gitignore
 .git
 .circleci
-tests
+integration-tests
+backend/tests
 scss-report.txt
 eslint-report.html
 test-report.html
