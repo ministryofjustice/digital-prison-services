@@ -23,70 +23,71 @@
 {% block content %}
   <div class="govuk-!-margin-bottom-6">
     <h1 class="govuk-heading-l govuk-!-margin-bottom-3">{{ title }} for {{ date }}</h1>
-    {{ printLink() }}
+    {{ printLink(align = "right") }}
   </div>
 
-  <div class="establishment-roll-today">
-    <h2 class="govuk-heading-m">Movements</h2>
+  <div class="establishment-roll">
+    <div class="establishment-roll__label-and-value">
+      <h2 class="govuk-heading-m govuk-!-margin-right-1">Today’s unlock roll:</h3>
+      <p class="govuk-body govuk-!-font-size-24" data-test="unlock-roll">{{todayStats.unlockRoll}}</p>
+    </div>
 
-    <div class="horizontal-information">
-      <div class="horizontal-information__item">
-        <h3 class="govuk-heading-s govuk-!-margin-bottom-1">Unlock roll</h3>
-        <p class="govuk-body" data-test="unlock-roll">{{todayStats.unlockRoll}}</p>
-      </div>
+    <div class="establishment-roll__label-and-value">
+      <h2 class="govuk-heading-m govuk-!-margin-right-1">Current prison population:</h3>
+      <p class="govuk-body govuk-!-font-size-24" data-test="current-roll">{{todayStats.currentRoll}}</p>
+    </div>
 
-      <div class="horizontal-information__item">
-        <h3 class="govuk-heading-s govuk-!-margin-bottom-1">In today</h3>
-        <p class="govuk-body" data-test="in-today">
-          {% if todayStats.inToday > 0 %}
-            <a class="govuk-link" href="/establishment-roll/in-today">{{todayStats.inToday}}</a>
-          {% else %}
-            {{todayStats.inToday}}
-          {% endif %}
-        </p>
-      </div>
+    <div class="establishment-roll__label-and-value establishment-roll__label-and-value--with-space">
+      <h3 class="govuk-heading-s">Arrived today:</h3>
+      <p class="govuk-body" data-test="in-today">
+        {% if todayStats.inToday > 0 %}
+          <a class="govuk-link" href="/establishment-roll/in-today">{{todayStats.inToday}}</a>
+        {% else %}
+          {{todayStats.inToday}}
+        {% endif %}
+      </p>
+    </div>
 
-      <div class="horizontal-information__item">
-        <h3 class="govuk-heading-s govuk-!-margin-bottom-1">Out today</h3>
-        <p class="govuk-body" data-test="out-today">
-          {% if todayStats.outToday > 0 %}
-            <a class="govuk-link" href="/establishment-roll/out-today">{{todayStats.outToday}}</a>
-          {% else %}
-            {{todayStats.outToday}}
-          {% endif %}
-        </p>
-      </div>
+    <div class="establishment-roll__label-and-value establishment-roll__label-and-value--with-space">
+      <h3 class="govuk-heading-s">In reception:</h3>
+      <p class="govuk-body" data-test="unassigned-in">
+        {% if todayStats.unassignedIn > 0 %}
+          <a class="govuk-link" href="/establishment-roll/in-reception">{{todayStats.unassignedIn}}</a>
+        {% else %}
+          {{todayStats.unassignedIn}}
+        {% endif %}
+      </p>
+    </div>
 
-      <div class="horizontal-information__item">
-        <h3 class="govuk-heading-s govuk-!-margin-bottom-1">Current roll</h3>
-        <p class="govuk-body" data-test="current-roll">{{todayStats.currentRoll}}</p>
-      </div>
+    <div class="establishment-roll__label-and-value establishment-roll__label-and-value--with-space">
+      <h3 class="govuk-heading-s">Still to arrive:</h3>
+      <p class="govuk-body" data-test="enroute">
+        {% if todayStats.enroute > 0 %}
+          <a class="govuk-link" data-test="enroute" href="/establishment-roll/en-route">{{todayStats.enroute}}</a>
+        {% else %}
+          {{todayStats.enroute}}
+        {% endif %}
+      </p>
+    </div>
 
-      <div class="horizontal-information__item">
-        <h3 class="govuk-heading-s govuk-!-margin-bottom-1">In reception</h3>
-        <p class="govuk-body" data-test="unassigned-in">
-          {% if todayStats.unassignedIn > 0 %}
-            <a class="govuk-link" href="/establishment-roll/in-reception">{{todayStats.unassignedIn}}</a>
-          {% else %}
-            {{todayStats.unassignedIn}}
-          {% endif %}
-        </p>
-      </div>
+    <div class="establishment-roll__label-and-value establishment-roll__label-and-value--with-space">
+      <h3 class="govuk-heading-s">Out today:</h3>
+      <p class="govuk-body" data-test="out-today">
+        {% if todayStats.outToday > 0 %}
+          <a class="govuk-link" href="/establishment-roll/out-today">{{todayStats.outToday}}</a>
+        {% else %}
+          {{todayStats.outToday}}
+        {% endif %}
+      </p>
+    </div>
 
-      <div class="horizontal-information__item">
-        <h3 class="govuk-heading-s govuk-!-margin-bottom-1">Arriving today</h3>
-        <p class="govuk-body" data-test="enroute">
-          {% if todayStats.enroute > 0 %}
-            <a class="govuk-link" data-test="enroute" href="/establishment-roll/en-route">{{todayStats.enroute}}</a>
-          {% else %}
-            {{todayStats.enroute}}
-          {% endif %}
-        </p>
-      </div>
+    <div class="establishment-roll__label-and-value establishment-roll__label-and-value--with-space">
+      <h3 class="govuk-heading-s">No cell allocated:</h3>
+      <p class="govuk-body" data-test="no-cell-allocated">{{todayStats.noCellAllocated}}</p>
     </div>
   </div>
 
-    {{ govukTable({
+  {{ govukTable({
     head: [
       { text: "Location" },
       { text: "Beds in use" },

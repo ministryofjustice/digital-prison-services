@@ -70,25 +70,37 @@ describe('Establishment Roll', () => {
     prisonApi.getEstablishmentRollBlocksCount = jest.fn()
     prisonApi.getEstablishmentRollMovementsCount = jest.fn()
     prisonApi.getEstablishmentRollEnrouteCount = jest.fn()
+    prisonApi.getLocationsForAgency = jest.fn()
+    prisonApi.getAttributesForLocation = jest.fn()
+
     prisonApi.getEstablishmentRollBlocksCount.mockImplementation(
       (_context, _agencyId, _unassigned) => (_unassigned ? unassignedBlockData : assignedBlockData)
     )
     prisonApi.getEstablishmentRollMovementsCount.mockImplementation(() => movements)
     prisonApi.getEstablishmentRollEnrouteCount.mockImplementation(() => 8)
+    prisonApi.getLocationsForAgency.mockImplementation(() => [
+      { description: '1-1', locationId: 1 },
+      { description: 'CSWAP', locationId: 2 },
+    ])
+
     controller = dashboard({ prisonApi, logError })
     res.render = jest.fn()
   })
 
-  it('should call the rollcount endpoint', async () => {
+  it('should call the correct endpoints', async () => {
     await controller(req, res)
 
     expect(prisonApi.getEstablishmentRollBlocksCount).toHaveBeenCalledWith(res.locals, agencyId, false)
     expect(prisonApi.getEstablishmentRollBlocksCount).toHaveBeenCalledWith(res.locals, agencyId, true)
     expect(prisonApi.getEstablishmentRollMovementsCount).toHaveBeenCalledWith(res.locals, agencyId)
     expect(prisonApi.getEstablishmentRollEnrouteCount).toHaveBeenCalledWith(res.locals, agencyId)
+    expect(prisonApi.getLocationsForAgency).toHaveBeenCalledWith(res.locals, agencyId)
+    expect(prisonApi.getAttributesForLocation).toHaveBeenCalledWith(res.locals, 2)
   })
 
-  it('should return response with block counts', async () => {
+  it('should render the template with the correct data', async () => {
+    prisonApi.getAttributesForLocation.mockImplementation(() => ({ noOfOccupants: 3 }))
+
     await controller(req, res)
 
     expect(res.render).toHaveBeenCalledWith(
@@ -127,7 +139,15 @@ describe('Establishment Roll', () => {
             { text: 0 },
           ],
         ],
-        todayStats: { currentRoll: 28, enroute: 8, inToday: 1, outToday: 3, unassignedIn: 8, unlockRoll: 30 },
+        todayStats: {
+          currentRoll: 28,
+          enroute: 8,
+          inToday: 1,
+          outToday: 3,
+          unassignedIn: 8,
+          unlockRoll: 30,
+          noCellAllocated: 3,
+        },
       })
     )
   })
@@ -161,7 +181,15 @@ describe('Establishment Roll', () => {
             { text: 0 },
           ],
         ],
-        todayStats: { currentRoll: 0, enroute: 8, inToday: 1, outToday: 3, unassignedIn: 0, unlockRoll: 2 },
+        todayStats: {
+          currentRoll: 0,
+          enroute: 8,
+          inToday: 1,
+          outToday: 3,
+          unassignedIn: 0,
+          unlockRoll: 2,
+          noCellAllocated: 0,
+        },
       })
     )
   })
