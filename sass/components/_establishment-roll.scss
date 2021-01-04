@@ -1,11 +1,30 @@
+.establishment-roll {
+  margin-bottom: govuk-spacing(3);
 
-.establishment-roll-today {
-  margin-bottom: govuk-spacing(6);
-  padding: govuk-spacing(3);
-  background-color: #e9f3f9;
+  @media print, (min-width: #{map-get($govuk-breakpoints, 'desktop')}) {
+    display: flex;
+    flex-wrap: wrap;
+    width: 100%;
+  }
 
-  @media print {
-    padding: 0;
-    background: none;
+  @include govuk-media-query($from: desktop) {
+    width: 75%;
+  }
+}
+
+.establishment-roll__label-and-value {
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+
+  @media print, (min-width: #{map-get($govuk-breakpoints, 'desktop')}) {
+    flex-basis: 50%;
+    padding-right: govuk-spacing(6);
+  }
+
+  &--with-space {
+    @media print, (min-width: #{map-get($govuk-breakpoints, 'desktop')}) {
+      flex-basis: 33%;
+    }
   }
 }
