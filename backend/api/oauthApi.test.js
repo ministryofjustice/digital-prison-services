@@ -1,4 +1,3 @@
-/** @type {any} */
 const nock = require('nock')
 const { oauthApiFactory } = require('./oauthApi')
 
