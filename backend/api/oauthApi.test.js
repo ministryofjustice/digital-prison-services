@@ -2,7 +2,7 @@ const nock = require('nock')
 const { oauthApiFactory } = require('./oauthApi')
 
 const clientId = 'clientId'
-const url = 'http://localhost'
+const url = 'http://localhost/'
 const clientSecret = 'clientSecret'
 
 const client = {}
