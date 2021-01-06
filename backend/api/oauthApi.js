@@ -24,8 +24,7 @@ const oauthApiFactory = (client, { clientId, clientSecret, url }) => {
   const userDetails = (context, username) => get(context, `/api/user/${username}`)
 
   const oauthAxios = axios.create({
-    baseURL: url,
-    url: 'oauth/token',
+    baseURL: `${url}/oauth/token`,
     method: 'post',
     timeout: 30000,
     headers: {
