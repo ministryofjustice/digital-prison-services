@@ -33,7 +33,7 @@ describe('view non associations', () => {
       protocol: 'http',
       get: jest.fn().mockReturnValue('localhost'),
     }
-    res = { locals: {}, render: jest.fn() }
+    res = { locals: {}, render: jest.fn(), status: jest.fn() }
 
     prisonApi.getDetails = jest.fn().mockResolvedValue(getDetailsResponse)
     prisonApi.getNonAssociations = jest.fn().mockResolvedValue({
@@ -139,6 +139,7 @@ describe('view non associations', () => {
 
     await controller(req, res)
 
+    expect(res.status).toHaveBeenCalledWith(500)
     expect(logError).toHaveBeenCalledWith(req.originalUrl, new Error('Network error'), serviceUnavailableMessage)
     expect(res.render).toHaveBeenCalledWith('error.njk', {
       url: '/prisoner/ABC123/cell-move/non-associations',

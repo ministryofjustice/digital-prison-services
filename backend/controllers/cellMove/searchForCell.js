@@ -59,6 +59,8 @@ module.exports = ({ oauthApi, prisonApi, whereaboutsApi, logError }) => async (r
   } catch (error) {
     if (error) logError(req.originalUrl, error, serviceUnavailableMessage)
 
+    res.status(500)
+
     return res.render('error.njk', {
       url: `/prisoner/${offenderNo}/cell-move/search-for-cell`,
       homeUrl: `/prisoner/${offenderNo}`,

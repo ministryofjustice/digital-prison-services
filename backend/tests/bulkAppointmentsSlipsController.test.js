@@ -75,6 +75,7 @@ describe('appointment movement slips', () => {
     describe('and there is a small amount of data', () => {
       beforeEach(() => {
         req.session.appointmentSlipsData = { appointmentDetails, prisonersListed }
+        res.status = jest.fn()
       })
 
       it('should call the correct endpoint for the extra required offender information', async () => {
@@ -161,6 +162,7 @@ describe('appointment movement slips', () => {
     describe('and there is a large amount of data', () => {
       beforeEach(() => {
         req.session.appointmentSlipsData = { appointmentDetails, prisonersListed: largePrisonersListed }
+        res.status = jest.fn()
       })
 
       it('should call the correct endpoint the correct amount of times for the extra required offender information', async () => {

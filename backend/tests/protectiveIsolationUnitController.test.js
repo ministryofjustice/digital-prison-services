@@ -14,7 +14,7 @@ describe('protective isolation unit', () => {
     req = {
       originalUrl: 'http://localhost',
     }
-    res = { locals: { user: { activeCaseLoad: { caseLoadId: 'MDI' } } }, render: jest.fn() }
+    res = { locals: { user: { activeCaseLoad: { caseLoadId: 'MDI' } } }, render: jest.fn(), status: jest.fn() }
 
     logError = jest.fn()
 
@@ -67,7 +67,7 @@ describe('protective isolation unit', () => {
     await controller(req, res)
 
     expect(logError).toHaveBeenCalledWith('http://localhost', error, 'Failed to load protective isolation list')
-
+    expect(res.status).toHaveBeenCalledWith(500)
     expect(res.render).toHaveBeenCalledWith(
       'error.njk',
       expect.objectContaining({

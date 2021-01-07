@@ -138,6 +138,8 @@ module.exports = ({ prisonApi, whereaboutsApi, caseNotesApi, logError }) => {
     } catch (error) {
       if (error) logError(req.originalUrl, error, `Failed to make cell move to ${cellId}`)
 
+      res.status(500)
+
       return res.render('error.njk', {
         url: `/prisoner/${offenderNo}/cell-move/select-cell`,
         homeUrl: `/prisoner/${offenderNo}`,

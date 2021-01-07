@@ -175,6 +175,8 @@ module.exports = ({ prisonApi, logError }) => {
     } catch (error) {
       if (error) logError(req.originalUrl, error, serviceUnavailableMessage)
 
+      res.status(500)
+
       return res.render('error.njk', {
         url: `/prisoner/${offenderNo}/cell-history`,
         homeUrl: `/prisoner/${offenderNo}`,

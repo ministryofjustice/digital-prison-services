@@ -7,7 +7,7 @@ describe('Currently out', () => {
   let controller
   const livingUnitId = 1234
   const req = { originalUrl: 'http://localhost', params: { livingUnitId } }
-  const res = { locals: {} }
+  const res = { locals: {}, status: jest.fn() }
   const offenders = [
     {
       offenderNo: 'A1234AA',
@@ -54,6 +54,7 @@ describe('Currently out', () => {
     await controller(req, res)
 
     expect(logError).toHaveBeenCalledWith(req.originalUrl, new Error('error'), 'Failed to load currently out page')
+    expect(res.status).toHaveBeenCalledWith(500)
     expect(res.render).toHaveBeenCalledWith('error.njk', {
       url: '/establishment-roll/currently-out',
       homeUrl: 'http://localhost:3000/',

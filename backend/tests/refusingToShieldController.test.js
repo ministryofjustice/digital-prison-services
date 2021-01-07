@@ -11,7 +11,7 @@ describe('refusing to shield', () => {
     req = {
       originalUrl: 'http://localhost',
     }
-    res = { locals: { user: { activeCaseLoad: { caseLoadId: 'MDI' } } }, render: jest.fn() }
+    res = { locals: { user: { activeCaseLoad: { caseLoadId: 'MDI' } } }, render: jest.fn(), status: jest.fn() }
 
     logError = jest.fn()
 
@@ -65,6 +65,7 @@ describe('refusing to shield', () => {
       'Failed to load list of prisoners refusing to shield'
     )
 
+    expect(res.status).toHaveBeenCalledWith(500)
     expect(res.render).toHaveBeenCalledWith(
       'error.njk',
       expect.objectContaining({

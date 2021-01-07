@@ -39,6 +39,7 @@ describe('Delete case note', () => {
     res.redirect = jest.fn()
     req.flash = jest.fn()
     req.headers = {}
+    res.status = jest.fn()
 
     req.params = {
       offenderNo: 'A12345',
@@ -70,6 +71,7 @@ describe('Delete case note', () => {
       prisonApi.getDetails.mockRejectedValue(new Error('error'))
       await controller.index(req, res)
 
+      expect(res.status).toHaveBeenCalledWith(500)
       expect(res.render).toHaveBeenCalledWith('error.njk', { url: '/prisoner/A12345/case-notes' })
     })
 

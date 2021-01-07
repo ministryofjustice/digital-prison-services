@@ -40,6 +40,7 @@ module.exports = ({ logError }) => async (req, res) => {
     return res.render('content.njk', { content, dpsUrl, title })
   } catch (error) {
     logError(req.originalUrl, error, serviceUnavailableMessage)
+    res.status(500)
     return res.render('error.njk', { url: dpsUrl })
   }
 }

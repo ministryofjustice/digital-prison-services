@@ -63,6 +63,7 @@ const caseNoteFactory = (prisonApi, caseNotesApi) => {
       })
     } catch (error) {
       logError(req.originalUrl, error, serviceUnavailableMessage)
+      res.status(500)
       return res.render('error.njk', { url: `${getOffenderUrl(offenderNo)}/case-notes` })
     }
   }
@@ -237,6 +238,7 @@ const caseNoteFactory = (prisonApi, caseNotesApi) => {
       })
     } catch (error) {
       logError(req.originalUrl, error, serviceUnavailableMessage)
+      res.status(500)
       return res.render('error.njk', { url: `${getOffenderUrl(offenderNo)}/add-case-note` })
     }
 

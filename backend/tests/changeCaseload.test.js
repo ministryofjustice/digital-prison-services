@@ -5,7 +5,7 @@ config.app.notmEndpointUrl = '//newNomisEndPointUrl/'
 
 describe('index', () => {
   const prisonApi = {}
-  const mockRes = { render: jest.fn(), redirect: jest.fn(), locals: {} }
+  const mockRes = { render: jest.fn(), redirect: jest.fn(), locals: {}, status: jest.fn() }
   const logError = jest.fn()
 
   let service
@@ -105,6 +105,7 @@ describe('index', () => {
     const res = { ...mockRes }
     await service.index(req, res)
 
+    expect(res.status).toHaveBeenCalledWith(500)
     expect(res.render).toBeCalledWith('error.njk', {
       url: '/change-caseload',
     })
@@ -169,9 +170,11 @@ describe('post', () => {
     service = changeCaseloadFactory(prisonApi, logError)
 
     req.body = {}
+    res.status = jest.fn()
 
     await service.post(req, res)
 
+    expect(res.status).toHaveBeenCalledWith(500)
     expect(res.render).toBeCalledWith('error.njk', {
       url: '/change-caseload',
     })

@@ -33,6 +33,7 @@ describe('In reception controller', () => {
     controller = inReceptionController({ movementsService, logError })
 
     res.render = jest.fn()
+    res.status = jest.fn()
     req = {
       originalUrl: 'http://localhost',
       session: {
@@ -55,6 +56,7 @@ describe('In reception controller', () => {
     await controller(req, res)
 
     expect(logError).toHaveBeenCalledWith('http://localhost', error, 'Error trying to load in-reception page')
+    expect(res.status).toHaveBeenCalledWith(500)
     expect(res.render).toHaveBeenCalledWith('error.njk', {
       url: '/establishment-roll/in-reception',
     })

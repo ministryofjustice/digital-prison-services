@@ -33,7 +33,7 @@ describe('view CSRA details', () => {
       headers: {},
       get: jest.fn().mockReturnValue('localhost'),
     }
-    res = { locals: {}, render: jest.fn() }
+    res = { locals: {}, render: jest.fn(), status: jest.fn() }
 
     prisonApi.getDetails = jest.fn().mockResolvedValue(getDetailsResponse)
     prisonApi.getCsraAssessments = jest.fn().mockResolvedValue([
@@ -94,6 +94,7 @@ describe('view CSRA details', () => {
 
     await controller(req, res)
 
+    expect(res.status).toHaveBeenCalledWith(500)
     expect(logError).toHaveBeenCalledWith(req.originalUrl, new Error('Network error'), serviceUnavailableMessage)
     expect(res.render).toHaveBeenCalledWith('error.njk', {
       url: '/prisoner/ABC123/cell-move/search-for-cell',

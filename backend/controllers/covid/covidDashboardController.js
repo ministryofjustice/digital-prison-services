@@ -34,6 +34,7 @@ module.exports = ({ covidService, logError }) => {
       return res.render('covid/dashboard.njk', { title: 'Current breakdown of COVID units', dashboardStats })
     } catch (e) {
       logError(req.originalUrl, e, 'Failed to load dashboard stats')
+      res.status(500)
       return res.render('error.njk', { url: '/current-covid-units' })
     }
   }

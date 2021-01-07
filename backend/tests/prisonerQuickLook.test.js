@@ -37,7 +37,7 @@ describe('prisoner profile quick look', () => {
         },
       },
     }
-    res = { locals: {}, render: jest.fn() }
+    res = { locals: {}, render: jest.fn(), status: jest.fn() }
 
     logError = jest.fn()
 
@@ -606,6 +606,7 @@ describe('prisoner profile quick look', () => {
 
       expect(logError).toHaveBeenCalledWith('http://localhost', new Error('Network error'), serviceUnavailableMessage)
       expect(res.render).toHaveBeenCalledWith('error.njk', { url: 'http://localhost:3000/' })
+      expect(res.status).toHaveBeenCalledWith(500)
     })
   })
 

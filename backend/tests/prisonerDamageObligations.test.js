@@ -58,7 +58,7 @@ describe('Prisoner damage obligations', () => {
       originalUrl: 'http://localhost',
       params: { offenderNo },
     }
-    res = { locals: {}, render: jest.fn() }
+    res = { locals: {}, render: jest.fn(), status: jest.fn() }
 
     logError = jest.fn()
 
@@ -146,6 +146,7 @@ describe('Prisoner damage obligations', () => {
         new Error('Network error'),
         'Damage obligations page - Prisoner finances'
       )
+      expect(res.status).toHaveBeenCalledWith(500)
       expect(res.render).toHaveBeenCalledWith('error.njk', { url: `/prisoner/${offenderNo}` })
     })
 
@@ -160,6 +161,7 @@ describe('Prisoner damage obligations', () => {
         new Error('Network error'),
         'Damage obligations page - Prisoner finances'
       )
+      expect(res.status).toHaveBeenCalledWith(500)
       expect(res.render).toHaveBeenCalledWith('error.njk', { url: `/prisoner/${offenderNo}` })
     })
   })

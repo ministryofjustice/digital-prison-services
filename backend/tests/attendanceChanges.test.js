@@ -36,6 +36,8 @@ describe('Attendance change router', () => {
         subHeading: '3 November 2020 - AM + PM',
       },
     }
+
+    res.status = jest.fn()
   })
 
   it('should request changes for a given date time range', async () => {
@@ -146,6 +148,7 @@ describe('Attendance change router', () => {
 
     await router(req, res)
 
+    expect(res.status).toHaveBeenCalledWith(500)
     expect(logError).toHaveBeenCalledWith(
       'http://localhost',
       new Error('Network error'),

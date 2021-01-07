@@ -194,9 +194,12 @@ describe('Adjudications history controller', () => {
 
     adjudicationHistoryService.getAdjudications.mockRejectedValue(error)
 
+    res.status = jest.fn()
+
     await controller(req, res)
 
     expect(logError).toHaveBeenCalledWith('http://localhost', error, 'Failed to load adjudication history page')
+    expect(res.status).toHaveBeenCalledWith(500)
     expect(res.render).toHaveBeenCalledWith('error.njk', {
       homeUrl: '/prisoner/A12345',
       url: '/offenders/A12345/adjudications',

@@ -201,10 +201,12 @@ describe('Pre post appointments', () => {
       const { index } = prepostAppointmentsFactory({ prisonApi, appointmentsService, logError })
 
       req.flash.mockImplementation(() => [])
+      res.status = jest.fn()
       req.body = body
 
       await index(req, res)
 
+      expect(res.status).toHaveBeenCalledWith(500)
       expect(logError).toHaveBeenCalledWith(
         'http://localhost',
         new Error('Appointment details are missing'),

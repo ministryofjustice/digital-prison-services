@@ -7,7 +7,7 @@ describe('In today', () => {
   let controller
   const agencyId = 'MDI'
   const req = { originalUrl: 'http://localhost' }
-  const res = { locals: { user: { activeCaseLoad: { caseLoadId: 'MDI', description: 'Leeds' } } } }
+  const res = { locals: { user: { activeCaseLoad: { caseLoadId: 'MDI', description: 'Leeds' } } }, status: jest.fn() }
   const offenders = [
     {
       offenderNo: 'A1234AA',
@@ -55,6 +55,7 @@ describe('In today', () => {
     await controller(req, res)
 
     expect(logError).toHaveBeenCalledWith(req.originalUrl, new Error('error'), 'Failed to load in today page')
+    expect(res.status).toHaveBeenCalledWith(500)
     expect(res.render).toHaveBeenCalledWith('error.njk', {
       url: '/establishment-roll/in-today',
       homeUrl: 'http://localhost:3000/',
