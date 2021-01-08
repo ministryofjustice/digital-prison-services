@@ -133,6 +133,7 @@ const stubUserMe = (username = 'ITAG_USER', staffId = 12345) => {
       jsonBody: {
         firstName: 'JAMES',
         lastName: 'STUART',
+        name: 'James Stuart',
         username,
         activeCaseLoadId: 'MDI',
         staffId,

@@ -11,15 +11,15 @@
 
       <a class="dps-header__link dps-header__title__organisation-name" href="/">HMPPS</a>
 
-      <a class="dps-header__link dps-header__title__service-name" href="/">Digital prison services</a>
+      <a class="dps-header__link dps-header__title__service-name" href="/">Digital Prison Services</a>
     </div>
 
     <nav aria-label="Account navigation">
       <ul class="dps-header__navigation">
         <li class="dps-header__navigation__item">
-          <a class="dps-header__link" href="{{ authUrl + 'account-details' }}">
-            {{ user.displayName }}
-            <span class="dps-header__link__sub-text">Manage your details</span>
+          <a class="dps-header__link" href="{{ authUrl + 'account-details' }}" data-test="manage-account-link">
+            <span data-test="logged-in-name">{{ user.displayName }}</span>
+            <span class="dps-header__link__sub-text">Manage account details</span>
           </a>
         </li>
 
@@ -32,7 +32,7 @@
 </header>
 
 <div class="location-bar">
-  <span class="location-bar__location">
+  <span class="location-bar__location" data-test="active-location">
     {% if phaseName %}
       {{ govukTag({
         text: phaseName,
@@ -41,5 +41,7 @@
     {% endif %}
     {{ user.activeCaseLoad.description }}
   </span>
-  <a class="location-bar__link" href="/change-caseload">Change location</a>
+  {% if user.allCaseloads.length > 1 %}
+    <a class="location-bar__link" href="/change-caseload" data-test="change-location-link">Change location</a>
+  {% endif %}
 </div>
