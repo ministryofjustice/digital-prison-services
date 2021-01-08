@@ -7,7 +7,6 @@
     @include govuk-width-container;
     display: flex;
     justify-content: space-between;
-    flex-wrap: wrap;
   }
 
   &__title {
@@ -57,22 +56,37 @@
 
     &__sub-text {
       @include govuk-font(16);
-      display: block;
+      display: none;
+
+      @include govuk-media-query($from: tablet) {
+        display: block;
+      }
     }
   }
 
   &__navigation {
     display: flex;
-    align-items: center;
+    flex-direction: column-reverse;
+    align-items: flex-end;
     list-style: none;
     margin: 0;
     padding: 0;
 
+    @include govuk-media-query($from: tablet) {
+      flex-direction: row;
+      align-items: center;
+    }
+
     &__item {
       @include govuk-font(19);
-      @include govuk-responsive-margin(4, 'right');
-      @include govuk-responsive-padding(4, 'right');
-      border-right: 1px solid govuk-colour('white');
+      margin-bottom: govuk-spacing(1);
+      text-align: right;
+      
+      @include govuk-media-query($from: tablet) {
+        @include govuk-responsive-margin(4, 'right');
+        @include govuk-responsive-padding(4, 'right');
+        border-right: 1px solid govuk-colour('white');
+      }
 
       a {
         display: inline-block;
