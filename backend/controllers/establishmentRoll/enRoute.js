@@ -42,6 +42,8 @@ module.exports = ({ movementsService, logError }) => async (req, res) => {
   } catch (error) {
     if (error) logError(req.originalUrl, error, 'Failed to load en route page')
 
+    res.status(500)
+
     return res.render('error.njk', {
       url: '/establishment-roll/en-route',
       homeUrl: dpsUrl,

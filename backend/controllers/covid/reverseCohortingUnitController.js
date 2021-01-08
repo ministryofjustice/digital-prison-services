@@ -34,6 +34,7 @@ module.exports = ({ covidService, logError }) => {
       })
     } catch (e) {
       logError(req.originalUrl, e, 'Failed to load reverse cohorting list')
+      res.status(500)
       return res.render('error.njk', { url: '/current-covid-units/reverse-cohorting-unit' })
     }
   }

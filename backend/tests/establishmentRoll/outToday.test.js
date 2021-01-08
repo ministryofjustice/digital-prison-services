@@ -7,7 +7,7 @@ describe('In today', () => {
   let controller
   const agencyId = 'LEI'
   const req = { originalUrl: 'http://localhost' }
-  const res = { locals: { user: { activeCaseLoad: { caseLoadId: 'LEI', description: 'Leeds' } } } }
+  const res = { locals: { user: { activeCaseLoad: { caseLoadId: 'LEI', description: 'Leeds' } } }, status: jest.fn() }
   const offenders = [
     {
       offenderNo: 'A1234AA',
@@ -48,6 +48,7 @@ describe('In today', () => {
     await controller(req, res)
 
     expect(logError).toHaveBeenCalledWith(req.originalUrl, new Error('error'), 'Failed to load out today page')
+    expect(res.status).toHaveBeenCalledWith(500)
     expect(res.render).toHaveBeenCalledWith('error.njk', {
       url: '/establishment-roll/out-today',
       homeUrl: 'http://localhost:3000/',

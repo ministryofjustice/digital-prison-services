@@ -27,7 +27,7 @@ describe('retention reasons', () => {
       params: { offenderNo },
       flash: jest.fn(),
     }
-    res = { locals: {}, render: jest.fn(), redirect: jest.fn() }
+    res = { locals: {}, render: jest.fn(), redirect: jest.fn(), status: jest.fn() }
 
     logError = jest.fn()
 
@@ -133,6 +133,7 @@ describe('retention reasons', () => {
       it('should render the error template', async () => {
         await controller.index(req, res)
 
+        expect(res.status).toHaveBeenCalledWith(500)
         expect(logError).toHaveBeenCalledWith('http://localhost', new Error('Network error'), serviceUnavailableMessage)
         expect(res.render).toHaveBeenCalledWith('error.njk', { url: `/offenders/${offenderNo}/retention-reasons` })
       })
@@ -251,6 +252,7 @@ describe('retention reasons', () => {
       it('should render the error template', async () => {
         await controller.post(req, res)
 
+        expect(res.status).toHaveBeenCalledWith(500)
         expect(logError).toHaveBeenCalledWith('http://localhost', new Error('Network error'), serviceUnavailableMessage)
         expect(res.render).toHaveBeenCalledWith('error.njk', { url: `/offenders/${offenderNo}/retention-reasons` })
       })

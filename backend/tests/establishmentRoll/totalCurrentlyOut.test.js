@@ -7,7 +7,7 @@ describe('Currently out', () => {
   let controller
   const agencyId = 'LEI'
   const req = { originalUrl: 'http://localhost' }
-  const res = { locals: { user: { activeCaseLoad: { caseLoadId: 'LEI', description: 'Leeds' } } } }
+  const res = { locals: { user: { activeCaseLoad: { caseLoadId: 'LEI', description: 'Leeds' } } }, status: jest.fn() }
   const offenders = [
     {
       offenderNo: 'A1234AA',
@@ -56,6 +56,7 @@ describe('Currently out', () => {
       new Error('error'),
       'Failed to load total currently out page'
     )
+    expect(res.status).toHaveBeenCalledWith(500)
     expect(res.render).toHaveBeenCalledWith('error.njk', {
       url: '/establishment-roll/total-currently-out',
       homeUrl: 'http://localhost:3000/',

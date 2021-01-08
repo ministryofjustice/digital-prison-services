@@ -3,7 +3,7 @@ const cellMoveConfirmation = require('../../controllers/cellMove/cellMoveConfirm
 describe('Cell move confirmation', () => {
   let controller
   const req = { params: { offenderNo: 'A12345' }, query: { cellId: 1 }, originalUrl: 'http://localhost' }
-  const res = { locals: {} }
+  const res = { locals: {}, status: jest.fn() }
   const prisonApi = {}
   let logError
 
@@ -36,6 +36,7 @@ describe('Cell move confirmation', () => {
 
     expect(logError).toHaveBeenCalledWith('http://localhost', error, 'Failed to load cell move confirmation page')
 
+    expect(res.status).toHaveBeenCalledWith(400)
     expect(res.render).toHaveBeenCalledWith('error.njk', {
       homeUrl: '/prisoner/A12345',
       url: '/prisoner/A12345/cell-move/search-for-cell',

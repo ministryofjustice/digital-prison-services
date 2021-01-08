@@ -245,9 +245,11 @@ describe('appointment clashes', () => {
 
       it('should log an error and render the error page', async () => {
         req.session.data = { ...appointmentDetails }
+        res.status = jest.fn()
 
         await controller.index(req, res)
 
+        expect(res.status).toHaveBeenCalledWith(500)
         expect(res.render).toBeCalledWith('error.njk', { url: '/bulk-appointments/need-to-upload-file' })
       })
     })

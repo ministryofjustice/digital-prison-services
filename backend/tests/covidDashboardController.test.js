@@ -11,7 +11,7 @@ describe('covid dashboard', () => {
     req = {
       originalUrl: 'http://localhost',
     }
-    res = { locals: { user: { activeCaseLoad: { caseLoadId: 'MDI' } } }, render: jest.fn() }
+    res = { locals: { user: { activeCaseLoad: { caseLoadId: 'MDI' } } }, render: jest.fn(), status: jest.fn() }
 
     logError = jest.fn()
 
@@ -66,6 +66,7 @@ describe('covid dashboard', () => {
 
     expect(logError).toHaveBeenCalledWith('http://localhost', error, 'Failed to load dashboard stats')
 
+    expect(res.status).toHaveBeenCalledWith(500)
     expect(res.render).toHaveBeenCalledWith(
       'error.njk',
       expect.objectContaining({

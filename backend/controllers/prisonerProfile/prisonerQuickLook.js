@@ -275,10 +275,12 @@ module.exports = ({ prisonerProfileService, prisonApi, logError }) => async (req
       })
     } catch (error) {
       logError(req.originalUrl, error, serviceUnavailableMessage)
+      res.status(500)
       return res.render('error.njk', { url: `/prisoner/${offenderNo}` })
     }
   } catch (error) {
     logError(req.originalUrl, error, serviceUnavailableMessage)
+    res.status(500)
     return res.render('error.njk', { url: dpsUrl })
   }
 }

@@ -123,6 +123,8 @@ module.exports = ({ paginationService, offenderSearchApi, oauthApi, logError }) 
     } catch (error) {
       if (error) logError(req.originalUrl, error, 'Failed to load global search page')
 
+      res.status(500)
+
       return res.render('error.njk', { url: '/global-search' })
     }
   }

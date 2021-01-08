@@ -27,6 +27,7 @@ describe('Global search', () => {
       },
       render: jest.fn(),
       redirect: jest.fn(),
+      status: jest.fn(),
     }
 
     logError = jest.fn()

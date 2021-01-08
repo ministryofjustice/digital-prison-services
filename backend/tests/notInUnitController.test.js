@@ -12,7 +12,7 @@ describe('not in unit', () => {
     req = {
       originalUrl: 'http://localhost',
     }
-    res = { locals: { user: { activeCaseLoad: { caseLoadId: 'MDI' } } }, render: jest.fn() }
+    res = { locals: { user: { activeCaseLoad: { caseLoadId: 'MDI' } } }, render: jest.fn(), status: jest.fn() }
 
     logError = jest.fn()
 
@@ -63,6 +63,7 @@ describe('not in unit', () => {
 
     expect(logError).toHaveBeenCalledWith('http://localhost', error, 'Failed to load not in unit list')
 
+    expect(res.status).toHaveBeenCalledWith(500)
     expect(res.render).toHaveBeenCalledWith(
       'error.njk',
       expect.objectContaining({

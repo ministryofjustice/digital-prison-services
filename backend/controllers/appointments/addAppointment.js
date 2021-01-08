@@ -106,6 +106,8 @@ const addAppointmentFactory = (appointmentsService, existingEventsService, priso
     const { offenderNo } = req.params
     if (error) logError(req.originalUrl, error, serviceUnavailableMessage)
 
+    res.status(500)
+
     return res.render('error.njk', { url: getOffenderUrl(offenderNo) })
   }
 

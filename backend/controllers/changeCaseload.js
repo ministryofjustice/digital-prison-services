@@ -29,6 +29,7 @@ const changeCaseloadFactory = (prisonApi, logError) => {
       })
     } catch (error) {
       logError(req.originalUrl, error, 'Sorry, the service is unavailable')
+      res.status(500)
       return res.render('error.njk', {
         url: '/change-caseload',
       })
@@ -48,6 +49,7 @@ const changeCaseloadFactory = (prisonApi, logError) => {
       res.redirect(config.app.notmEndpointUrl)
     } else {
       logError(req.originalUrl, 'Caseload ID is missing')
+      res.status(500)
       res.render('error.njk', {
         url: '/change-caseload',
       })

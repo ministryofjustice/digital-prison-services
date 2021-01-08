@@ -116,6 +116,7 @@ module.exports = ({
     })
   } catch (error) {
     logError(req.originalUrl, error, serviceUnavailableMessage)
+    res.status(500)
     return res.render('error.njk', { url: `/prisoner/${offenderNo}/alerts` })
   }
 }

@@ -292,6 +292,7 @@ const attendanceStatisticsFactory = (oauthApi, prisonApi, whereaboutsApi, logErr
       })
     } catch (error) {
       logError(req.originalUrl, error, 'Sorry, the service is unavailable')
+      res.status(500)
       return res.render('error.njk', {
         url: attendanceReasonStatsUrl,
       })
@@ -365,6 +366,7 @@ const attendanceStatisticsFactory = (oauthApi, prisonApi, whereaboutsApi, logErr
       })
     } catch (error) {
       logError(req.originalUrl, error, 'Sorry, the service is unavailable')
+      res.status(500)
       return res.render('error.njk', {
         url: `${attendanceReasonStatsUrl}/reason/${reason}`,
       })
@@ -469,6 +471,7 @@ const attendanceStatisticsFactory = (oauthApi, prisonApi, whereaboutsApi, logErr
       })
     } catch (error) {
       logError(req.originalUrl, error, 'Sorry, the service is unavailable')
+      res.status(500)
       return res.render('error.njk', {
         url: `${attendanceReasonStatsUrl}/suspended`,
       })

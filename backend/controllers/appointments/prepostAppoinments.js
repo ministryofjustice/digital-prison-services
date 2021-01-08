@@ -188,6 +188,7 @@ const prepostAppointmentsFactory = ({
       })
     } catch (error) {
       logError(req.originalUrl, error, serviceUnavailableMessage)
+      res.status(500)
       res.render('error.njk', {
         url: authSource === 'nomis' ? `/offenders/${offenderNo}/add-appointment` : '/videolink/prisoner-search',
       })
@@ -438,6 +439,7 @@ const prepostAppointmentsFactory = ({
       return res.redirect(`/offenders/${offenderNo}/confirm-appointment`)
     } catch (error) {
       logError(req.originalUrl, error, serviceUnavailableMessage)
+      res.status(500)
       return res.render('error.njk', {
         url: authSource === 'nomis' ? `/offenders/${offenderNo}/add-appointment` : '/videolink/prisoner-search',
       })

@@ -356,8 +356,11 @@ describe('alert management', () => {
 
       const req = { ...mockCreateReq, params: { offenderNo }, headers: {} }
 
+      res.status = jest.fn()
+
       await displayCreateAlertPage(req, res)
 
+      expect(res.status).toHaveBeenCalledWith(500)
       expect(res.render).toBeCalledWith('error.njk', {
         url: '/prisoner/ABC123/alerts',
       })
@@ -456,8 +459,11 @@ describe('alert management', () => {
           throw new Error('There has been an error')
         })
 
+        res.status = jest.fn()
+
         await handleCreateAlertForm(req, res)
 
+        expect(res.status).toHaveBeenCalledWith(500)
         expect(res.render).toBeCalledWith('error.njk', {
           url: '/prisoner/ABC123/create-alert',
         })

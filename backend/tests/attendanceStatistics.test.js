@@ -231,7 +231,7 @@ describe('Attendance reason statistics', () => {
       oauthApi.userRoles.mockReturnValue({})
 
       const { attendanceStatistics } = attendanceStatisticsFactory(oauthApi, prisonApi, whereaboutsApi, jest.fn())
-      const res = { render: jest.fn(), locals: context }
+      const res = { render: jest.fn(), locals: context, status: jest.fn() }
       const req = { query: { agencyId, fromDate, toDate, period } }
 
       await attendanceStatistics(req, res)
@@ -250,7 +250,7 @@ describe('Attendance reason statistics', () => {
 
       const { attendanceStatistics } = attendanceStatisticsFactory(oauthApi, prisonApi, whereaboutsApi, jest.fn())
       const req = { query: { agencyId, fromDate, toDate, period: 'AM_PM' } }
-      const res = { render: jest.fn(), locals: context }
+      const res = { render: jest.fn(), locals: context, status: jest.fn() }
 
       await attendanceStatistics(req, res)
 
@@ -265,7 +265,7 @@ describe('Attendance reason statistics', () => {
     it('should call whereabouts attendance changes api with the correct parameters for AM+PM', async () => {
       const { attendanceStatistics } = attendanceStatisticsFactory(oauthApi, prisonApi, whereaboutsApi, jest.fn())
       const req = { query: { agencyId, fromDate, toDate, period: 'AM_PM' } }
-      const res = { render: jest.fn(), locals: context }
+      const res = { render: jest.fn(), locals: context, status: jest.fn() }
 
       await attendanceStatistics(req, res)
 
@@ -278,7 +278,7 @@ describe('Attendance reason statistics', () => {
     it('should call whereabouts attendance changes api with the correct parameters for AM', async () => {
       const { attendanceStatistics } = attendanceStatisticsFactory(oauthApi, prisonApi, whereaboutsApi, jest.fn())
       const req = { query: { agencyId, fromDate, toDate, period: 'AM' } }
-      const res = { render: jest.fn(), locals: context }
+      const res = { render: jest.fn(), locals: context, status: jest.fn() }
 
       await attendanceStatistics(req, res)
 
@@ -291,7 +291,7 @@ describe('Attendance reason statistics', () => {
     it('should call whereabouts attendance changes api with the correct parameters for PM', async () => {
       const { attendanceStatistics } = attendanceStatisticsFactory(oauthApi, prisonApi, whereaboutsApi, jest.fn())
       const req = { query: { agencyId, fromDate, toDate, period: 'PM' } }
-      const res = { render: jest.fn(), locals: context }
+      const res = { render: jest.fn(), locals: context, status: jest.fn() }
 
       await attendanceStatistics(req, res)
 
@@ -400,10 +400,11 @@ describe('Attendance reason statistics', () => {
       const { attendanceStatistics } = attendanceStatisticsFactory(oauthApi, prisonApi, whereaboutsApi, logError)
 
       const req = { query: { agencyId, date, period } }
-      const res = { render: jest.fn() }
+      const res = { render: jest.fn(), status: jest.fn() }
 
       await attendanceStatistics(req, res)
 
+      expect(res.status).toHaveBeenCalledWith(500)
       expect(res.render).toHaveBeenCalledWith('error.njk', {
         url: '/manage-prisoner-whereabouts/attendance-reason-statistics',
       })
@@ -419,10 +420,11 @@ describe('Attendance reason statistics', () => {
       const { attendanceStatistics } = attendanceStatisticsFactory(oauthApi, prisonApi, whereaboutsApi, logError)
 
       const req = { ...mockReq, query: { agencyId, fromDate, period } }
-      const res = { render: jest.fn() }
+      const res = { render: jest.fn(), status: jest.fn() }
 
       await attendanceStatistics(req, res)
 
+      expect(res.status).toHaveBeenCalledWith(500)
       expect(logError).toHaveBeenCalledWith(
         '/manage-prisoner-whereabouts/attendance-reason-statistics',
         new Error('something is wrong'),
@@ -627,10 +629,11 @@ describe('Attendance reason statistics', () => {
       )
 
       const req = { query: { agencyId, date, period }, params: { reason: 'AcceptableAbsence' } }
-      const res = { render: jest.fn() }
+      const res = { render: jest.fn(), status: jest.fn() }
 
       await attendanceStatisticsOffendersList(req, res)
 
+      expect(res.status).toHaveBeenCalledWith(500)
       expect(res.render).toHaveBeenCalledWith('error.njk', {
         url: '/manage-prisoner-whereabouts/attendance-reason-statistics/reason/AcceptableAbsence',
       })
@@ -650,10 +653,11 @@ describe('Attendance reason statistics', () => {
         logError
       )
       const req = { ...mockReq, query: { agencyId, date, period }, params: { reason: 'AcceptableAbsence' } }
-      const res = { render: jest.fn() }
+      const res = { render: jest.fn(), status: jest.fn() }
 
       await attendanceStatisticsOffendersList(req, res)
 
+      expect(res.status).toHaveBeenCalledWith(500)
       expect(logError).toHaveBeenCalledWith(
         '/manage-prisoner-whereabouts/attendance-reason-statistics/reason/',
         new Error('something is wrong'),
