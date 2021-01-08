@@ -16,7 +16,7 @@ describe('Prisoner adjudication details', () => {
       originalUrl: 'http://localhost',
       params: { offenderNo, adjudicationNumber },
     }
-    res = { locals: {}, render: jest.fn() }
+    res = { locals: {}, render: jest.fn(), status: jest.fn() }
 
     logError = jest.fn()
 
@@ -175,6 +175,7 @@ describe('Prisoner adjudication details', () => {
 
       await controller(req, res)
 
+      expect(res.status).toHaveBeenCalledWith(500)
       expect(logError).toHaveBeenCalledWith(req.originalUrl, new Error('Network error'), serviceUnavailableMessage)
       expect(res.render).toHaveBeenCalledWith('error.njk', { url: '/prisoner/ABC123' })
     })

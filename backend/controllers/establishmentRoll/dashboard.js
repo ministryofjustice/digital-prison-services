@@ -85,7 +85,9 @@ module.exports = ({ prisonApi, logError }) => async (req, res) => {
       rows,
     })
   } catch (error) {
-    if (error) logError(req.originalUrl, error, 'Failed to load estalishment roll count page')
+    if (error) logError(req.originalUrl, error, 'Failed to load establishment roll count page')
+
+    res.status(500)
 
     return res.render('error.njk', {
       url: '/establishment-roll',

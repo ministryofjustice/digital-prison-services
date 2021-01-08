@@ -15,7 +15,7 @@ describe('Change cell play back details', () => {
   let logError
   let controller
   const req = { originalUrl: 'http://localhost', params: { offenderNo: 'A12345' }, query: {} }
-  const res = { locals: {} }
+  const res = { locals: {}, status: jest.fn() }
 
   beforeEach(() => {
     jest.clearAllMocks()
@@ -312,7 +312,7 @@ describe('Change cell play back details', () => {
       await controller.post(req, res)
 
       expect(logError).toHaveBeenCalledWith('http://localhost', error, 'Failed to make cell move to 223')
-
+      expect(res.status).toHaveBeenCalledWith(500)
       expect(res.render).toHaveBeenCalledWith(
         'error.njk',
         expect.objectContaining({

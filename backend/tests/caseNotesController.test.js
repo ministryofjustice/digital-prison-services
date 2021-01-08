@@ -71,6 +71,7 @@ describe('Case notes controller', () => {
     res.render = jest.fn()
     res.redirect = jest.fn()
     res.send = jest.fn()
+    res.status = jest.fn()
     nunjucks.render = jest.fn()
     logError = jest.fn()
 
@@ -91,6 +92,7 @@ describe('Case notes controller', () => {
     await controller(reqDefault, res)
 
     expect(logError).toHaveBeenCalledWith('http://localhost', new Error('test'), 'Sorry, the service is unavailable')
+    expect(res.status).toHaveBeenCalledWith(500)
     expect(res.render).toHaveBeenCalledWith('error.njk', { url: '/prisoner/A12345/case-notes' })
   })
 

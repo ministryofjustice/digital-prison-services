@@ -28,6 +28,7 @@ module.exports = ({ movementsService, logError }) => async (req, res) => {
     })
   } catch (error) {
     logError(req.originalUrl, error, 'Error trying to load in-reception page')
+    res.status(500)
     return res.render('error.njk', { url: '/establishment-roll/in-reception' })
   }
 }

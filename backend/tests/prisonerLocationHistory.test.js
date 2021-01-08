@@ -34,7 +34,7 @@ describe('Prisoner location sharing history', () => {
       params: { offenderNo },
       query: { agencyId: 'MDI', locationId: 1, fromDate: '2019-12-31' },
     }
-    res = { locals: {}, render: jest.fn() }
+    res = { locals: {}, render: jest.fn(), status: jest.fn() }
 
     logError = jest.fn()
 
@@ -278,6 +278,7 @@ describe('Prisoner location sharing history', () => {
 
       await controller(req, res)
 
+      expect(res.status).toHaveBeenCalledWith(500)
       expect(logError).toHaveBeenCalledWith(req.originalUrl, new Error('Network error'), serviceUnavailableMessage)
       expect(res.render).toHaveBeenCalledWith('error.njk', { url: '/prisoner/ABC123' })
     })
@@ -361,6 +362,7 @@ describe('Prisoner location sharing history', () => {
 
       await controller(req, res)
 
+      expect(res.status).toHaveBeenCalledWith(500)
       expect(logError).toHaveBeenCalledWith(req.originalUrl, new Error('Not found'), serviceUnavailableMessage)
       expect(res.render).toHaveBeenCalledWith('error.njk', { url: '/prisoner/ABC123' })
     })

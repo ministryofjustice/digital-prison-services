@@ -22,7 +22,7 @@ describe('Prisoner change incentive level details', () => {
       params: { offenderNo },
       query: {},
     }
-    res = { locals: { user: { allCaseloads: [] } }, render: jest.fn(), redirect: jest.fn() }
+    res = { locals: { user: { allCaseloads: [] } }, render: jest.fn(), redirect: jest.fn(), status: jest.fn() }
 
     logError = jest.fn()
 
@@ -122,6 +122,7 @@ describe('Prisoner change incentive level details', () => {
       it('should render the error template', async () => {
         await controller.index(req, res)
 
+        expect(res.status).toHaveBeenCalledWith(500)
         expect(logError).toHaveBeenCalledWith('http://localhost', new Error('Network error'), serviceUnavailableMessage)
         expect(res.render).toHaveBeenCalledWith('error.njk', { url: `/prisoner/${offenderNo}` })
       })
@@ -232,6 +233,7 @@ describe('Prisoner change incentive level details', () => {
 
         await controller.post(req, res)
 
+        expect(res.status).toHaveBeenCalledWith(500)
         expect(logError).toHaveBeenCalledWith('http://localhost', new Error('Network error'), serviceUnavailableMessage)
         expect(res.render).toHaveBeenCalledWith('error.njk', { url: `/prisoner/${offenderNo}` })
       })

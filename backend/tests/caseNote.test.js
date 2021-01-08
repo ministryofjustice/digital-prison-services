@@ -105,9 +105,11 @@ describe('case note management', () => {
       })
 
       const req = { ...mockCreateReq, params: { offenderNo } }
+      res.status = jest.fn()
 
       await displayCreateCaseNotePage(req, res)
 
+      expect(res.status).toHaveBeenCalledWith(500)
       expect(res.render).toBeCalledWith('error.njk', { url: '/prisoner/ABC123/case-notes' })
       expect(logError).toBeCalledWith(
         '/add-case-note/',
@@ -189,8 +191,11 @@ describe('case note management', () => {
           throw new Error('There has been an error')
         })
 
+        res.status = jest.fn()
+
         await handleCreateCaseNoteForm(req, res)
 
+        expect(res.status).toHaveBeenCalledWith(500)
         expect(res.render).toBeCalledWith('error.njk', {
           url: '/prisoner/ABC123/add-case-note',
         })

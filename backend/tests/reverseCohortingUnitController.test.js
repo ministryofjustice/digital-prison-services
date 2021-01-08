@@ -12,7 +12,7 @@ describe('reverse cohorting unit', () => {
     req = {
       originalUrl: 'http://localhost',
     }
-    res = { locals: { user: { activeCaseLoad: { caseLoadId: 'MDI' } } }, render: jest.fn() }
+    res = { locals: { user: { activeCaseLoad: { caseLoadId: 'MDI' } } }, render: jest.fn(), status: jest.fn() }
 
     logError = jest.fn()
 
@@ -67,7 +67,7 @@ describe('reverse cohorting unit', () => {
     await controller(req, res)
 
     expect(logError).toHaveBeenCalledWith('http://localhost', error, 'Failed to load reverse cohorting list')
-
+    expect(res.status).toHaveBeenCalledWith(500)
     expect(res.render).toHaveBeenCalledWith(
       'error.njk',
       expect.objectContaining({

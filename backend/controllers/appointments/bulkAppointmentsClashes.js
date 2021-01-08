@@ -13,6 +13,8 @@ const bulkAppointmentsClashesFactory = (prisonApi, logError) => {
   const renderError = (req, res, error) => {
     if (error) logError(req.originalUrl, error, serviceUnavailableMessage)
 
+    res.status(500)
+
     return res.render('error.njk', { url: '/bulk-appointments/need-to-upload-file' })
   }
 

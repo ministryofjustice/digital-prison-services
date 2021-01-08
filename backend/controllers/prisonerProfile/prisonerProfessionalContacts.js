@@ -106,6 +106,7 @@ module.exports = ({ prisonApi, personService, allocationManagerApi, logError }) 
     })
   } catch (error) {
     logError(req.originalUrl, error, serviceUnavailableMessage)
+    res.status(500)
     return res.render('error.njk', { url: '/' })
   }
 }

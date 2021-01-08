@@ -20,6 +20,7 @@ module.exports = ({ covidService, logError }) => {
       })
     } catch (e) {
       logError(req.originalUrl, e, 'Failed to load list of prisoners refusing to shield')
+      res.status(500)
       return res.render('error.njk', { url: '/current-covid-units/refusing-to-shield' })
     }
   }

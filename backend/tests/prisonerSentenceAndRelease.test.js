@@ -35,6 +35,7 @@ describe('prisoner sentence and release', () => {
     req.originalUrl = '/sentence-and-release'
     req.get = jest.fn()
     req.get.mockReturnValue('localhost')
+    res.status = jest.fn()
 
     prisonerProfileService.getPrisonerProfileData = jest.fn().mockResolvedValue(prisonerProfileData)
     prisonApi.getPrisonerSentenceDetails = jest.fn().mockResolvedValue({
@@ -972,6 +973,7 @@ describe('prisoner sentence and release', () => {
         new Error('Problem retrieving prisoner data'),
         serviceUnavailableMessage
       )
+      expect(res.status).toHaveBeenCalledWith(500)
       expect(res.render).toHaveBeenCalledWith('error.njk', { url: '/prisoner/G3878UK/sentence-and-release' })
     })
   })

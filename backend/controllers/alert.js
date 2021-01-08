@@ -244,6 +244,7 @@ const alertFactory = (oauthApi, prisonApi, referenceCodesService) => {
       })
     } catch (error) {
       logError(req.originalUrl, error, serviceUnavailableMessage)
+      res.status(500)
       return res.render('error.njk', { url: `${getOffenderUrl(offenderNo)}/alerts` })
     }
   }
@@ -376,6 +377,7 @@ const alertFactory = (oauthApi, prisonApi, referenceCodesService) => {
       )
     } catch (error) {
       logError(req.originalUrl, error, serviceUnavailableMessage)
+      res.status(500)
       return res.render('error.njk', { url: `${getOffenderUrl(offenderNo)}/create-alert` })
     }
 

@@ -43,6 +43,7 @@ module.exports = ({ prisonApi, logError }) => async (req, res) => {
       appointmentDetails: { ...appointmentDetails, createdBy, prisonersListed: prisonersListedWithCellInfo },
     })
   } catch (error) {
+    res.status(500)
     return renderError(error)
   }
 }

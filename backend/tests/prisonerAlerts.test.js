@@ -31,7 +31,7 @@ describe('prisoner alerts', () => {
 
   beforeEach(() => {
     req = { params: { offenderNo }, query: {}, protocol: 'http' }
-    res = { locals: { responseHeaders: { 'total-records': 0 } }, render: jest.fn() }
+    res = { locals: { responseHeaders: { 'total-records': 0 } }, render: jest.fn(), status: jest.fn() }
 
     logError = jest.fn()
 
@@ -232,6 +232,7 @@ describe('prisoner alerts', () => {
         new Error('Problem retrieving alerts'),
         serviceUnavailableMessage
       )
+      expect(res.status).toHaveBeenCalledWith(500)
       expect(res.render).toHaveBeenCalledWith('error.njk', { url: '/prisoner/G3878UK/alerts' })
     })
   })

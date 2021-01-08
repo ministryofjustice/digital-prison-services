@@ -21,6 +21,7 @@ module.exports = ({ covidService, logError }) => {
       })
     } catch (e) {
       logError(req.originalUrl, e, 'Failed to load not in unit list')
+      res.status(500)
       return res.render('error.njk', { url: '/current-covid-units/not-in-unit' })
     }
   }

@@ -16,7 +16,7 @@ describe('prisoner profile full image', () => {
       originalUrl: 'http://localhost',
       params: { offenderNo },
     }
-    res = { locals: {}, render: jest.fn() }
+    res = { locals: {}, render: jest.fn(), status: jest.fn() }
 
     logError = jest.fn()
 
@@ -65,6 +65,7 @@ describe('prisoner profile full image', () => {
     it('should render the error template', async () => {
       await controller(req, res)
 
+      expect(res.status).toHaveBeenCalledWith(500)
       expect(logError).toHaveBeenCalledWith('http://localhost', new Error('Network error'), serviceUnavailableMessage)
       expect(res.render).toHaveBeenCalledWith('error.njk', { url: 'http://localhost:3000/' })
     })

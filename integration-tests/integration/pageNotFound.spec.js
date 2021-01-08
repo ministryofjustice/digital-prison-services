@@ -8,7 +8,7 @@ context('Page not found', () => {
     cy.login()
   })
   it('should render 404 page', () => {
-    cy.visit('/hello')
+    cy.visit('/hello', { failOnStatusCode: false })
     cy.get('h1').should('have.text', 'Page not found')
     cy.get('[role="button"]').click()
 

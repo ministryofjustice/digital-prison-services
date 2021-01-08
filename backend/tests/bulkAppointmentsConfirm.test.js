@@ -409,8 +409,11 @@ describe('when confirming bulk appointment details', () => {
       })
 
       it('should log an error and render the error page', async () => {
+        res.status = jest.fn()
+
         await controller.post(req, res)
 
+        expect(res.status).toHaveBeenCalledWith(500)
         expect(logError).toBeCalledWith(
           '/bulk-appointments/confirm-appointment/',
           new Error('There has been an error'),

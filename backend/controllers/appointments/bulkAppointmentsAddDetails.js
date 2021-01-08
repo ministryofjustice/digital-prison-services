@@ -84,6 +84,7 @@ const bulkAppointmentsAddDetailsFactory = (appointmentsService, oauthApi, logErr
       })
     } catch (error) {
       logError(req.originalUrl, error, serviceUnavailableMessage)
+      res.status(500)
       res.render('error.njk', {
         url: req.originalUrl,
       })
@@ -188,6 +189,7 @@ const bulkAppointmentsAddDetailsFactory = (appointmentsService, oauthApi, logErr
       })
     } catch (error) {
       logError(req.originalUrl, error, serviceUnavailableMessage)
+      res.status(500)
       res.render('error.njk', {
         url: req.originalUrl,
       })

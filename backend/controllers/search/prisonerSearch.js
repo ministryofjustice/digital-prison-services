@@ -114,6 +114,8 @@ module.exports = ({ paginationService, prisonApi, logError }) => {
       if (error && (error.code !== 'ECONNRESET' && !(error.stack && error.stack.toLowerCase().includes('timeout'))))
         logError(req.originalUrl, error, serviceUnavailableMessage)
 
+      res.status(500)
+
       return res.render('error.njk', { url: '/', homeUrl: '/' })
     }
   }
