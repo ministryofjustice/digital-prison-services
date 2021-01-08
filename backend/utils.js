@@ -167,7 +167,7 @@ const getTime = dateTimeString => {
 
 const forenameToInitial = name => {
   if (!name) return null
-  return `${name.charAt()} ${name.split(' ').pop()}`
+  return `${name.charAt()}. ${name.split(' ').pop()}`
 }
 
 const stripAgencyPrefix = (location, agency) => {

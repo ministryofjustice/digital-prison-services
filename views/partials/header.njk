@@ -1,4 +1,4 @@
-{% from "govuk/components/phase-banner/macro.njk" import govukPhaseBanner %}
+{%- from "govuk/components/tag/macro.njk" import govukTag -%}
 
 <header class="dps-header" role="banner">
   <div class="dps-header__container">
@@ -17,7 +17,7 @@
     <nav aria-label="Account navigation">
       <ul class="dps-header__navigation">
         <li class="dps-header__navigation__item">
-          <a class="dps-header__link" href="/auth/account-details">
+          <a class="dps-header__link" href="{{ authUrl + 'account-details' }}">
             {{ user.displayName }}
             <span class="dps-header__link__sub-text">Manage your details</span>
           </a>
@@ -32,20 +32,14 @@
 </header>
 
 <div class="location-bar">
-  <span class="location-bar__location">{{ user.activeCaseLoad.description }}</span>
-  <a class="location-bar__link" href="/change-caseload">Change caseload</a>
-</div>
-
-{% if phaseName %}
-  <div class="phase-name-banner">
-    <div class="phase-name-banner-content">
-      {{ govukPhaseBanner({
-        tag: {
-          text:  phaseName,
-          classes: phaseNameColour
-        },
-        html: phaseNameText
+  <span class="location-bar__location">
+    {% if phaseName %}
+      {{ govukTag({
+        text: phaseName,
+        classes: 'govuk-!-margin-right-1 ' + phaseNameColour
       }) }}
-    </div>
-  </div>
-{% endif %}
+    {% endif %}
+    {{ user.activeCaseLoad.description }}
+  </span>
+  <a class="location-bar__link" href="/change-caseload">Change location</a>
+</div>
