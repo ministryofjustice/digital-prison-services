@@ -48,6 +48,7 @@ const setup = ({ prisonApi, whereaboutsApi, oauthApi, caseNotesApi }) => {
       ...res.locals,
       currentUrlPath: req.originalUrl,
       prisonerSearchUrl: req.session.prisonerSearchUrl,
+      authUrl: config.apis.oauth2.url,
     }
     next()
   })

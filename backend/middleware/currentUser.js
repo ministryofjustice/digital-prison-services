@@ -1,4 +1,5 @@
 const logger = require('../log')
+const { forenameToInitial } = require('../utils')
 
 module.exports = ({ prisonApi, oauthApi }) => {
   const getActiveCaseload = async (req, res) => {
@@ -40,10 +41,11 @@ module.exports = ({ prisonApi, oauthApi }) => {
       res.locals.user = {
         ...res.locals.user,
         allCaseloads: req.session.allCaseloads,
-        displayName: req.session.userDetails.name,
+        displayName: forenameToInitial(req.session.userDetails.name),
         activeCaseLoad,
       }
     }
+
     next()
   }
 }

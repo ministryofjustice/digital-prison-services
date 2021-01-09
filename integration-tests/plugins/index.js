@@ -56,11 +56,11 @@ module.exports = on => {
         offenderSearch.stubHealth(),
       ]),
     getLoginUrl: auth.getLoginUrl,
-    stubLogin: ({ username = 'ITAG_USER', caseload = 'MDI', roles = [] }) =>
+    stubLogin: ({ username = 'ITAG_USER', caseload = 'MDI', roles = [], caseloads }) =>
       Promise.all([
         auth.stubLogin(username, caseload, roles),
         prisonApi.stubUserMe(),
-        prisonApi.stubUserCaseloads(),
+        prisonApi.stubUserCaseloads(caseloads),
         tokenverification.stubVerifyToken(true),
       ]),
     stubLoginCourt: () =>

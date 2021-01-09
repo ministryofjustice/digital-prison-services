@@ -104,7 +104,7 @@ describe('appointment movement slips', () => {
         expect(res.render).toHaveBeenCalledWith('movementSlipsPage.njk', {
           appointmentDetails: {
             ...appointmentDetails,
-            createdBy: 'T User',
+            createdBy: 'T. User',
             prisonersListed: [
               {
                 assignedLivingUnitDesc: 'CELL 1',
@@ -193,7 +193,7 @@ describe('appointment movement slips', () => {
         expect(res.render).toHaveBeenCalledWith('movementSlipsPage.njk', {
           appointmentDetails: {
             ...appointmentDetails,
-            createdBy: 'T User',
+            createdBy: 'T. User',
             prisonersListed: largePrisonersListedWithCell,
           },
         })
