@@ -5,12 +5,13 @@ import PropTypes from 'prop-types'
 import { connect } from 'react-redux'
 import Notifications from 'react-notify-toast'
 import ReactGA from 'react-ga'
-import { FooterContainer, Header } from 'new-nomis-shared-components'
+import { FooterContainer } from 'new-nomis-shared-components'
 import ErrorComponent from './Error/index'
 import SearchContainer from './Search/SearchContainer'
 import Terms from './Footer/terms-and-conditions'
 import './App.scss'
 import ScrollToTop from './Components/ScrollToTop'
+import Header from './Header/Header'
 import ResultsHouseblockContainer from './ResultsHouseblock/ResultsHouseblockContainer'
 import ResultsActivityContainer from './ResultsActivity/ResultsActivityContainer'
 
@@ -227,7 +228,6 @@ class App extends React.Component {
       periodDispatch,
       error,
       user,
-      title,
       modalActive,
       modalContent,
       setShowModalDispatch,
@@ -347,22 +347,7 @@ class App extends React.Component {
                       if (config && config.googleAnalyticsId) {
                         ReactGA.pageview(location.pathname)
                       }
-
-                      return (
-                        <Header
-                          homeLink={config.notmEndpointUrl}
-                          title={title}
-                          logoText="HMPPS"
-                          user={user}
-                          menuOpen={menuOpen}
-                          setMenuOpen={boundSetMenuOpen}
-                          extraLinks={
-                            user.caseLoadOptions && user.caseLoadOptions.length > 1
-                              ? [{ text: 'Change caseload', url: '/change-caseload' }]
-                              : []
-                          }
-                        />
-                      )
+                      return <Header authUrl={config.authUrl} user={user} />
                     }}
                   />
                   {shouldShowTerms && <Terms close={() => this.hideTermsAndConditions()} />}
@@ -391,6 +376,7 @@ App.propTypes = {
     licencesUrl: PropTypes.string,
     flags: PropTypes.objectOf(PropTypes.string),
     supportUrl: PropTypes.string,
+    authUrl: PropTypes.string,
   }).isRequired,
   date: PropTypes.string.isRequired,
   error: PropTypes.oneOfType([PropTypes.string, PropTypes.shape({ message: PropTypes.string })]),
@@ -398,7 +384,6 @@ App.propTypes = {
   period: PropTypes.string.isRequired,
   shouldShowTerms: PropTypes.bool.isRequired,
   user: userType,
-  title: PropTypes.string.isRequired,
   modalActive: PropTypes.bool,
   modalContent: PropTypes.node,
 
@@ -430,7 +415,6 @@ const mapStateToProps = state => ({
   period: state.search.period,
   shouldShowTerms: state.app.shouldShowTerms,
   user: state.app.user,
-  title: state.app.title,
   modalActive: state.app.modalActive,
   modalContent: state.app.modalContent,
 })
