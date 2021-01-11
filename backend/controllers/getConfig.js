@@ -9,6 +9,7 @@ const getConfiguration = asyncMiddleware(async (req, res) =>
     licencesUrl: config.app.licencesUrl,
     flags: config.app.featureFlags,
     supportUrl: config.app.supportUrl,
+    authUrl: config.apis.oauth2.url,
   })
 )
 
