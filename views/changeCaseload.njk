@@ -19,7 +19,7 @@
           label: {
               text: "Select active case load"
           },
-          items: options | setSelected(caseLoadId)
+          items: options | setSelected(user.activeCaseLoad.caseLoadId)
       }) }}
   {{ govukButton({ 
       text: "Submit",

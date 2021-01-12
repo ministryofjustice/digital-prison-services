@@ -5,7 +5,29 @@ config.app.notmEndpointUrl = '//newNomisEndPointUrl/'
 
 describe('index', () => {
   const prisonApi = {}
-  const mockRes = { render: jest.fn(), redirect: jest.fn(), locals: {}, status: jest.fn() }
+  const mockRes = {
+    render: jest.fn(),
+    redirect: jest.fn(),
+    locals: {
+      user: {
+        allCaseloads: [
+          {
+            caseLoadId: 'LEI',
+            description: 'Leeds (HMP)',
+            type: 'INST',
+            currentlyActive: true,
+          },
+          {
+            caseLoadId: 'HEI',
+            description: 'Hewell (HMP)',
+            type: 'INST',
+            currentlyActive: false,
+          },
+        ],
+      },
+    },
+    status: jest.fn(),
+  }
   const logError = jest.fn()
 
   let service
@@ -15,17 +37,6 @@ describe('index', () => {
     service = changeCaseloadFactory(prisonApi, logError)
   })
 
-  it('should make a request for caseloads', async () => {
-    const req = {
-      headers: { referer: '//newNomisEndPointUrl/' },
-      session: { userDetails: { name: 'Test User', activeCaseLoadId: 'LEI' } },
-    }
-    const res = { ...mockRes }
-    await service.index(req, res)
-
-    expect(prisonApi.userCaseLoads).toHaveBeenCalledWith({})
-  })
-
   it('should render the change caseload page with correct data', async () => {
     const req = {
       headers: { referer: '//newNomisEndPointUrl/' },
@@ -33,48 +44,11 @@ describe('index', () => {
     }
     const res = { ...mockRes }
 
-    prisonApi.userCaseLoads.mockReturnValue([
-      {
-        caseLoadId: 'LEI',
-        description: 'Leeds (HMP)',
-        type: 'INST',
-        currentlyActive: true,
-      },
-      {
-        caseLoadId: 'HEI',
-        description: 'Hewell (HMP)',
-        type: 'INST',
-        currentlyActive: false,
-      },
-    ])
-
     await service.index(req, res)
 
     expect(res.render).toBeCalledWith('changeCaseload.njk', {
       title: 'Change caseload',
       options: [{ value: 'LEI', text: 'Leeds (HMP)' }, { value: 'HEI', text: 'Hewell (HMP)' }],
-      allCaseloads: [
-        {
-          caseLoadId: 'LEI',
-          description: 'Leeds (HMP)',
-          type: 'INST',
-          currentlyActive: true,
-        },
-        {
-          caseLoadId: 'HEI',
-          description: 'Hewell (HMP)',
-          type: 'INST',
-          currentlyActive: false,
-        },
-      ],
-      user: {
-        displayName: 'Test User',
-        activeCaseLoad: {
-          description: 'Leeds (HMP)',
-          id: 'LEI',
-        },
-      },
-      caseLoadId: 'LEI',
       backUrl: '//newNomisEndPointUrl/',
     })
   })
@@ -84,31 +58,25 @@ describe('index', () => {
       headers: { referer: '//newNomisEndPointUrl/' },
       session: { userDetails: { name: 'Test User', activeCaseLoadId: 'LEI' } },
     }
-    const res = { ...mockRes }
-
-    prisonApi.userCaseLoads.mockReturnValue([
-      {
-        caseLoadId: 'LEI',
-        description: 'Leeds (HMP)',
-        type: 'INST',
-        currentlyActive: true,
+    const res = {
+      ...mockRes,
+      locals: {
+        user: {
+          allCaseloads: [
+            {
+              caseLoadId: 'LEI',
+              description: 'Leeds (HMP)',
+              type: 'INST',
+              currentlyActive: true,
+            },
+          ],
+        },
       },
-    ])
+    }
 
     await service.index(req, res)
 
     expect(res.redirect).toHaveBeenCalledWith('//newNomisEndPointUrl/')
-  })
-
-  it('should show error page when there is an error', async () => {
-    const req = {}
-    const res = { ...mockRes }
-    await service.index(req, res)
-
-    expect(res.status).toHaveBeenCalledWith(500)
-    expect(res.render).toBeCalledWith('error.njk', {
-      url: '/change-caseload',
-    })
   })
 })
 
