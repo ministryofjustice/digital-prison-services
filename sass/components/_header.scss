@@ -10,20 +10,23 @@
     align-items: center;
   }
 
+  &__logo {
+    @include govuk-responsive-margin(2, 'right');
+    position: relative;
+    top: -2px;
+    fill: govuk-colour('white');
+  }
+
   &__title {
     @include govuk-responsive-padding(3, 'right');
     display: flex;
     align-items: center;
 
-    &__logo {
-      @include govuk-responsive-margin(2, 'right');
-      position: relative;
-      top: -2px;
-    }
-
     &__organisation-name {
       @include govuk-responsive-margin(2, 'right');
       @include govuk-font($size: 24, $weight: 'bold');
+      display: flex;
+      align-items: center;
     }
 
     &__service-name {
@@ -53,6 +56,10 @@
 
     &:focus {
       color: govuk-colour('black');
+
+      svg {
+        fill: govuk-colour('black');
+      }
     }
 
     &__sub-text {
