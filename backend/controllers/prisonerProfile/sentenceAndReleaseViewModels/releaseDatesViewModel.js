@@ -21,7 +21,7 @@ module.exports = sentenceDetails => {
       ...(sentenceDetails.paroleEligibilityDate
         ? [
             {
-              label: 'Approved for parole',
+              label: 'Parole eligibility',
               value: readableDateFormat(sentenceDetails.paroleEligibilityDate, 'YYYY-MM-DD'),
             },
           ]
@@ -69,7 +69,7 @@ module.exports = sentenceDetails => {
       ...(detentionTrainingOrderPostRecallDate
         ? [
             {
-              label: 'Detention training post recall date',
+              label: 'Detention training post recall',
               value: readableDateFormat(detentionTrainingOrderPostRecallDate, 'YYYY-MM-DD'),
             },
           ]
@@ -111,7 +111,7 @@ module.exports = sentenceDetails => {
       ...(sentenceDetails.actualParoleDate
         ? [
             {
-              label: 'Parole',
+              label: 'Approved for parole',
               value: readableDateFormat(sentenceDetails.actualParoleDate, 'YYYY-MM-DD'),
             },
           ]
@@ -129,7 +129,7 @@ module.exports = sentenceDetails => {
       ...(sentenceDetails.licenceExpiryDate
         ? [
             {
-              label: 'Licence expiry date',
+              label: 'Licence expiry',
               value: readableDateFormat(sentenceDetails.licenceExpiryDate, 'YYYY-MM-DD'),
             },
           ]
