@@ -76,6 +76,11 @@ $govuk-page-width: 1170px;
   text-align: right;
 }
 
+.right-content {
+  float: right;
+  height: 100%;
+}
+
 @include govuk-media-query($from: desktop) {
   .table-compact {
     th {

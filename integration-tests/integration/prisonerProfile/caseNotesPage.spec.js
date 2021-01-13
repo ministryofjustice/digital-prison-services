@@ -106,7 +106,7 @@ context('A user can view prisoner case notes', () => {
       .should(
         'have.attr',
         'href',
-        '/iep-slip?offenderNo=A12345&offenderName=Smith%2C%20John&location=HMP%20Moorland&casenoteId=12311312&issuedBy=undefined'
+        '/iep-slip?offenderNo=A12345&offenderName=Smith%2C%20John&location=HMP%20Moorland&casenoteId=12311312&issuedBy=James%20Stuart'
       )
 
     rows.caseNoteDeleteLink().should('not.exist')

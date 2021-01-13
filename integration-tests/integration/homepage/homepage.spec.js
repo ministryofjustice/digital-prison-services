@@ -4,8 +4,6 @@ context('Homepage', () => {
   beforeEach(() => {
     cy.clearCookies()
     cy.task('reset')
-    cy.task('stubLogin', { username: 'ITAG_USER', caseload: 'MDI' })
-    cy.login()
 
     cy.task('stubUserMeRoles')
     cy.task('stubUserLocations')
@@ -13,8 +11,62 @@ context('Homepage', () => {
     cy.task('stubLocationConfig', { agencyId: 'MDI', response: { enabled: false } })
   })
 
+  describe('Header', () => {
+    it('should display the correct details for the logged in user', () => {
+      cy.task('stubLogin', { username: 'ITAG_USER', caseload: 'MDI' })
+      cy.login()
+
+      const page = homepagePage.goTo()
+
+      page.loggedInName().contains('J. Stuart')
+      page.activeLocation().contains('Moorland')
+
+      page
+        .manageAccountLink()
+        .should('have.attr', 'href')
+        .then(href => {
+          expect(href).to.equal('http://localhost:9191/auth/account-details')
+        })
+
+      page.changeLocationLink().should('not.be.visible')
+    })
+
+    it('should show change location link when user has more than 1 caseload', () => {
+      cy.task('stubLogin', {
+        username: 'ITAG_USER',
+        caseload: 'MDI',
+        caseloads: [
+          {
+            caseLoadId: 'MDI',
+            description: 'Moorland',
+            currentlyActive: true,
+          },
+          {
+            caseLoadId: 'LEI',
+            description: 'Leeds',
+            currentlyActive: false,
+          },
+        ],
+      })
+      cy.login()
+
+      const page = homepagePage.goTo()
+
+      page
+        .changeLocationLink()
+        .should('be.visible')
+        .should('have.attr', 'href')
+        .then(href => {
+          expect(href).to.equal('/change-caseload')
+        })
+    })
+  })
+
   describe('Search', () => {
     it('should should submit to the correct location with the correct search terms', () => {
+      cy.task('stubLogin', { username: 'ITAG_USER', caseload: 'MDI' })
+      cy.login()
+
       const page = homepagePage.goTo()
 
       page.searchKeywords().type('Smith')
@@ -26,6 +78,11 @@ context('Homepage', () => {
   })
 
   describe('Tasks', () => {
+    beforeEach(() => {
+      cy.task('stubLogin', { username: 'ITAG_USER', caseload: 'MDI' })
+      cy.login()
+    })
+
     it('should show use of force', () => {
       const page = homepagePage.goTo()
 
