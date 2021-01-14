@@ -59,7 +59,7 @@ module.exports = on => {
     stubLogin: ({ username = 'ITAG_USER', caseload = 'MDI', roles = [], caseloads }) =>
       Promise.all([
         auth.stubLogin(username, caseload, roles),
-        prisonApi.stubUserMe(),
+        auth.stubUserMe(),
         prisonApi.stubUserCaseloads(caseloads),
         tokenverification.stubVerifyToken(true),
       ]),
@@ -281,7 +281,7 @@ module.exports = on => {
     stubSentenceTerms: sentenceTerms => prisonApi.stubSentenceTerms(sentenceTerms),
     stubClientCredentialsRequest: () => auth.stubClientCredentialsRequest(),
     stubUserMeRoles: roles => auth.stubUserMeRoles(roles),
-    stubUserMe: () => auth.stubUserMe(),
+    stubUserMe: ({ username, staffId, name }) => auth.stubUserMe(username, staffId, name),
     stubPathFinderOffenderDetails: details => pathfinder.getOffenderDetails(details),
     stubSocOffenderDetails: details => socApi.stubGetOffenderDetails(details),
     stubVisitsWithVisitors: ({ visitsWithVisitors, offenderBasicDetails, visitTypes }) =>
