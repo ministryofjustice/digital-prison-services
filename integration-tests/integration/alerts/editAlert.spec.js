@@ -21,7 +21,7 @@ context('A user can add an appointment', () => {
     cy.task('stubAlertTypes')
     cy.task('stubCreateAlert')
     cy.task('stubUserMeRoles', [{ roleCode: 'UPDATE_ALERT' }])
-    cy.task('stubUserMe')
+    cy.task('stubUserMe', {})
     cy.task('stubUserCaseLoads')
     cy.task('stubGetAlert', { bookingId: 14, alertId, alert: { alertId: 1, comment: 'Test comment' } })
     cy.task('stubPutAlert', { bookingId: 14, alertId, alert: { alertId: 1, comment: 'Test comment' } })
