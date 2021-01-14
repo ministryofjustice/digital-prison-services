@@ -11,7 +11,7 @@ module.exports = ({ paginationService, offenderSearchApi, oauthApi, logError }) 
     offenderSearchApi.globalSearch(
       context,
       {
-        prisonerIdentifier: offenderNo,
+        prisonerIdentifier: offenderNo.toUpperCase(),
         gender,
         location,
         dateOfBirth,

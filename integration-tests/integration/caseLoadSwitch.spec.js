@@ -21,7 +21,7 @@ context('Caseloads witched page behaves correctly', () => {
     cy.login()
   })
   it('should successfully change caseload', () => {
-    cy.task('stubUserMe')
+    cy.task('stubUserMe', {})
     cy.visit('/change-caseload')
     cy.get('#changeCaseloadSelect').select('Leeds (HMP)')
     // Currently we can't test the redirect to NOTM without

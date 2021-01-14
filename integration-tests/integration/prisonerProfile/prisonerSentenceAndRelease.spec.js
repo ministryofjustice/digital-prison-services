@@ -73,13 +73,13 @@ context('Prisoner sentence and release', () => {
       .find('dt')
       .then($summaryKeys => {
         expect($summaryKeys.get(0).innerText).to.eq('\n          Approved for home detention curfew\n        ')
-        expect($summaryKeys.get(1).innerText).to.eq('\n          Approved for parole\n        ')
+        expect($summaryKeys.get(1).innerText).to.eq('\n          Parole eligibility\n        ')
         expect($summaryKeys.get(2).innerText).to.eq('\n          Conditional release\n        ')
         expect($summaryKeys.get(3).innerText).to.eq('\n          Post recall release\n        ')
         expect($summaryKeys.get(4).innerText).to.eq('\n          Mid transfer\n        ')
         expect($summaryKeys.get(5).innerText).to.eq('\n          Automatic release\n        ')
         expect($summaryKeys.get(6).innerText).to.eq('\n          Non parole\n        ')
-        expect($summaryKeys.get(7).innerText).to.eq('\n          Detention training post recall date\n        ')
+        expect($summaryKeys.get(7).innerText).to.eq('\n          Detention training post recall\n        ')
       })
 
     prisonerSentenceAndReleasePage
@@ -104,7 +104,7 @@ context('Prisoner sentence and release', () => {
         expect($summaryKeys.get(1).innerText).to.eq('\n          Release on temporary licence\n        ')
         expect($summaryKeys.get(2).innerText).to.eq('\n          Early removal scheme\n        ')
         expect($summaryKeys.get(3).innerText).to.eq('\n          Tariff early removal scheme\n        ')
-        expect($summaryKeys.get(4).innerText).to.eq('\n          Parole\n        ')
+        expect($summaryKeys.get(4).innerText).to.eq('\n          Approved for parole\n        ')
         expect($summaryKeys.get(5).innerText).to.eq('\n          Early transfer\n        ')
       })
 
@@ -124,7 +124,7 @@ context('Prisoner sentence and release', () => {
       .licenceDates()
       .find('dt')
       .then($summaryKeys => {
-        expect($summaryKeys.get(0).innerText).to.eq('\n          Licence expiry date\n        ')
+        expect($summaryKeys.get(0).innerText).to.eq('\n          Licence expiry\n        ')
         expect($summaryKeys.get(1).innerText).to.eq('\n          Sentence expiry\n        ')
         expect($summaryKeys.get(2).innerText).to.eq('\n          Top up supervision expiry\n        ')
       })

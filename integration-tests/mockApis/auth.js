@@ -1,5 +1,5 @@
 const jwt = require('jsonwebtoken')
-const { stubFor, getMatchingRequests } = require('./wiremock')
+const { stubFor, getMatchingRequests, getFor } = require('./wiremock')
 const { stubStaffRoles, stubUserLocations } = require('./prisonApi')
 const { stubLocationConfig } = require('./whereabouts')
 
@@ -23,7 +23,7 @@ const getLoginUrl = () =>
     urlPath: '/auth/oauth/authorize',
   }).then(data => {
     const { requests } = data.body
-    const stateValue = requests[0].queryParams.state.values[0]
+    const stateValue = requests[requests.length - 1].queryParams.state.values[0]
     return `/login/callback?code=codexxxx&state=${stateValue}`
   })
 
@@ -119,28 +119,18 @@ const stubUser = (username, caseload) => {
   })
 }
 
-const stubUserMe = (username = 'ITAG_USER', staffId = 12345) => {
-  return stubFor({
-    request: {
-      method: 'GET',
-      url: '/auth/api/user/me',
-    },
-    response: {
-      status: 200,
-      headers: {
-        'Content-Type': 'application/json;charset=UTF-8',
-      },
-      jsonBody: {
-        firstName: 'JAMES',
-        lastName: 'STUART',
-        name: 'James Stuart',
-        username,
-        activeCaseLoadId: 'MDI',
-        staffId,
-      },
+const stubUserMe = (username = 'ITAG_USER', staffId = 12345, name = 'James Stuart') =>
+  getFor({
+    urlPath: '/auth/api/user/me',
+    body: {
+      firstName: 'JAMES',
+      lastName: 'STUART',
+      name,
+      username,
+      activeCaseLoadId: 'MDI',
+      staffId,
     },
   })
-}
 
 const stubUserMeRoles = (roles = ['ROLE']) =>
   stubFor({

@@ -45,7 +45,7 @@ context('Login functionality', () => {
       .should('contain', 'Sign in')
   })
 
-  it('Token verification failure clears user session', () => {
+  it('Token verification failure takes user to sign in page', () => {
     cy.task('stubLogin', {})
     cy.login()
     HomePage.verifyOnPage()
@@ -55,6 +55,25 @@ context('Login functionality', () => {
     cy.request('/')
       .its('body')
       .should('contain', 'Sign in')
+  })
+
+  it('Token verification failure clears user session', () => {
+    cy.task('stubLogin', {})
+    cy.login()
+    const homePage = HomePage.verifyOnPage()
+    homePage.loggedInName().contains('J. Stuart')
+    cy.task('stubVerifyToken', false)
+
+    // can't do a visit here as cypress requires only one domain
+    cy.request('/')
+      .its('body')
+      .should('contain', 'Sign in')
+
+    cy.task('stubVerifyToken', true)
+    cy.task('stubUserMe', { name: 'Bobby Brown' })
+    cy.login()
+
+    homePage.loggedInName().contains('B. Brown')
   })
 
   it('Log in as ordinary user', () => {
