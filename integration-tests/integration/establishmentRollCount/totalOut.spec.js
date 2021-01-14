@@ -12,7 +12,7 @@ context('A user can see the list of total out today', () => {
     cy.task('stubSystemAlerts')
     cy.task('stubAssessments', ['A1234AA', 'G0000AA'])
     cy.task('stubUserMeRoles', [])
-    cy.task('stubUserMe')
+    cy.task('stubUserMe', {})
     cy.task('stubUserCaseLoads')
     cy.task('stubOffenderMovements')
     cy.task('stubTotalCurrentlyOut', {

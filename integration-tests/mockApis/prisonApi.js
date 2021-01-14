@@ -26,25 +26,6 @@ module.exports = {
       },
     })
   },
-  stubUserMe: () => {
-    return stubFor({
-      request: {
-        method: 'GET',
-        urlPattern: '/api/users/me',
-      },
-      response: {
-        status: 200,
-        headers: {
-          'Content-Type': 'application/json;charset=UTF-8',
-        },
-        jsonBody: {
-          firstName: 'JAMES',
-          lastName: 'STUART',
-          activeCaseLoadId: 'MDI',
-        },
-      },
-    })
-  },
   stubStaff: (staffId, details) => {
     return stubFor({
       request: {
