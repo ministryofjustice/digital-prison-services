@@ -228,7 +228,7 @@ context('A user can select a cell', () => {
     it('should NOT show the non association warning', () => {
       cy.task('stubBookingNonAssociations', null)
       const page = SelectCellPage.goTo(offenderNo)
-      page.nonAssociationWarning().should('not.be.visible')
+      page.nonAssociationWarning().should('not.exist')
     })
 
     it('should display the correct cell swap messaging and link', () => {

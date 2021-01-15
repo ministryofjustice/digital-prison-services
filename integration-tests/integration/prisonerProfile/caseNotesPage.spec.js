@@ -60,7 +60,7 @@ context('A user can view prisoner case notes', () => {
     })
     cy.visit(`/prisoner/${offenderNo}/case-notes?pageOffsetOption=0`)
     const page = CaseNotesPage.verifyOnPage('Smith, John')
-    page.noDataMessage().should('not.be.visible')
+    page.noDataMessage().should('not.exist')
     const rows = page.getRows(0)
 
     rows
