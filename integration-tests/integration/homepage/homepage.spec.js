@@ -28,7 +28,7 @@ context('Homepage', () => {
           expect(href).to.equal('http://localhost:9191/auth/account-details')
         })
 
-      page.changeLocationLink().should('not.be.visible')
+      page.changeLocationLink().should('not.exist')
     })
 
     it('should show change location link when user has more than 1 caseload', () => {

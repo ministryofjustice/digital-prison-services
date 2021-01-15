@@ -110,7 +110,7 @@ context('A user can view the reverse cohorting list', () => {
       location().contains('1-2-018')
       dateAdded().contains(dayBeforeYesterday.format('D MMMM YYYY'))
       dateOverdue().contains(dayBeforeYesterdayOverDue.format('D MMMM YYYY'))
-      overdue().should('not.be.visible')
+      overdue().should('not.exist')
     }
   })
 

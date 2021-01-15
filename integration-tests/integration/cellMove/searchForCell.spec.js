@@ -43,7 +43,7 @@ context('A user can search for a cell', () => {
     page.csra().contains('High')
     page.csraLink().should('be.visible')
     page.alerts().contains('None')
-    page.nonAssociationsLink().should('not.be.visible')
+    page.nonAssociationsLink().should('not.exist')
     page.nonAssociationsMessage().contains('0 in NOMIS. Check local processes.')
   })
 
@@ -114,7 +114,7 @@ context('A user can search for a cell', () => {
     page.alerts().contains('Gang member')
     page.numberOfNonAssociations().contains('1')
     page.nonAssociationsLink().contains('View non-associations')
-    page.nonAssociationsMessage().should('not.be.visible')
+    page.nonAssociationsMessage().should('not.exist')
   })
 
   it('Passes the correct data to the select a cell page', () => {

@@ -138,7 +138,7 @@ context('A user can view alerts for a prisoner', () => {
       cy.task('stubAlertsForBooking', inactiveAlerts)
       cy.visit('/prisoner/G3878UK/alerts')
 
-      cy.get('[data-test="inactive-create-alerts-link"]').should('not.be.visible')
+      cy.get('[data-test="inactive-create-alerts-link"]').should('not.exist')
     })
 
     it('Users should not be able to see Create or Edit / close buttons for active alerts display', () => {
@@ -151,8 +151,8 @@ context('A user can view alerts for a prisoner', () => {
       activeTable
         .editCreateButton()
         .find('a')
-        .should('not.be.visible')
-      cy.get('[data-test="active-create-alerts-link"]').should('not.be.visible')
+        .should('not.exist')
+      cy.get('[data-test="active-create-alerts-link"]').should('not.exist')
     })
 
     it('Should show a message if there are no alerts to display', () => {
@@ -160,7 +160,7 @@ context('A user can view alerts for a prisoner', () => {
       cy.visit('/prisoner/G3878UK/alerts')
 
       cy.get('[data-test="no-alerts"]').should('contain.text', 'There are no alerts of this type')
-      cy.get('[data-test="no-alerts-link"]').should('not.be.visible')
+      cy.get('[data-test="no-alerts-link"]').should('not.exist')
     })
   })
 })

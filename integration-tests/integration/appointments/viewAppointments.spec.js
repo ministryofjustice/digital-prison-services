@@ -117,7 +117,7 @@ context('A user can view list of appointments', () => {
   it('A user can see appointments for the date and period', () => {
     cy.visit('/appointments')
     const viewAppointmentsPage = ViewAppointmentsPage.verifyOnPage()
-    viewAppointmentsPage.noResultsMessage().should('not.be.visible')
+    viewAppointmentsPage.noResultsMessage().should('not.exist')
 
     viewAppointmentsPage
       .results()
@@ -153,7 +153,7 @@ context('A user can view list of appointments', () => {
     filterForm.submitButton().click()
 
     const filteredAppointmentsPage = ViewAppointmentsPage.verifyOnPage()
-    filteredAppointmentsPage.noResultsMessage().should('not.be.visible')
+    filteredAppointmentsPage.noResultsMessage().should('not.exist')
 
     filteredAppointmentsPage
       .results()

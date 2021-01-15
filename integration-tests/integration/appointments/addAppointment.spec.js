@@ -105,7 +105,6 @@ context('A user can add an appointment', () => {
   })
 
   it('Schedules remain after validation error', () => {
-    const today = moment().format('DD/MM/yyyy')
     const addAppointmentPage = AddAppointmentPage.verifyOnPage('John Smith')
     const form = addAppointmentPage.form()
 

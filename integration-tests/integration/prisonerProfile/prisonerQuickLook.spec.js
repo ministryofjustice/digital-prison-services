@@ -360,9 +360,9 @@ context('Prisoner quick look', () => {
     it('Should not display conditionally displayed links to other pages', () => {
       cy.visit(`/prisoner/${offenderNo}`)
 
-      cy.get('[data-test="tabs-case-notes"]').should('not.be.visible')
-      cy.get('[data-test="adjudication-history-link"]').should('not.be.visible')
-      cy.get('[data-test="incentive-details-link"]').should('not.be.visible')
+      cy.get('[data-test="tabs-case-notes"]').should('not.exist')
+      cy.get('[data-test="adjudication-history-link"]').should('not.exist')
+      cy.get('[data-test="incentive-details-link"]').should('not.exist')
     })
   })
 
@@ -403,8 +403,8 @@ context('Prisoner quick look', () => {
     it('Should not display conditionally displayed links to other pages', () => {
       cy.visit(`/prisoner/${offenderNo}`)
 
-      cy.get('[data-test="tabs-case-notes"]').should('not.be.visible')
-      cy.get('[data-test="adjudication-history-link"]').should('not.be.visible')
+      cy.get('[data-test="tabs-case-notes"]').should('not.exist')
+      cy.get('[data-test="adjudication-history-link"]').should('not.exist')
     })
   })
 
@@ -423,7 +423,7 @@ context('Prisoner quick look', () => {
     it('Should not show the View documents held by probation link', () => {
       cy.visit(`/prisoner/${offenderNo}`)
 
-      cy.get('[data-test="probation-documents-link"]').should('not.be.visible')
+      cy.get('[data-test="probation-documents-link"]').should('not.exist')
     })
   })
 
