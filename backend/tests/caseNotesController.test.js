@@ -35,6 +35,7 @@ describe('Case notes controller', () => {
   const prisonerProfileService = {}
   const paginationService = {}
   const nunjucks = {}
+  const oauthApi = {}
 
   let controller
   let logError
@@ -70,10 +71,20 @@ describe('Case notes controller', () => {
     res.render = jest.fn()
     res.redirect = jest.fn()
     res.send = jest.fn()
+    res.status = jest.fn()
     nunjucks.render = jest.fn()
     logError = jest.fn()
 
-    controller = controllerFactory({ caseNotesApi, prisonerProfileService, nunjucks, paginationService, logError })
+    oauthApi.userRoles = jest.fn().mockResolvedValue([{ roleCode: 'INACTIVE_BOOKINGS' }])
+
+    controller = controllerFactory({
+      caseNotesApi,
+      prisonerProfileService,
+      nunjucks,
+      paginationService,
+      logError,
+      oauthApi,
+    })
   })
 
   it('should render error template', async () => {
@@ -81,6 +92,7 @@ describe('Case notes controller', () => {
     await controller(reqDefault, res)
 
     expect(logError).toHaveBeenCalledWith('http://localhost', new Error('test'), 'Sorry, the service is unavailable')
+    expect(res.status).toHaveBeenCalledWith(500)
     expect(res.render).toHaveBeenCalledWith('error.njk', { url: '/prisoner/A12345/case-notes' })
   })
 
@@ -211,10 +223,12 @@ describe('Case notes controller', () => {
                 authorName: 'John Smith',
                 date: '1 December 2018',
                 day: 'Saturday',
+                deleteLink: false,
                 text: 'Some Additional Text',
                 time: '13:45',
               },
             ],
+            deleteLink: false,
             occurrenceDateTime: 'Tuesday 31 October 2017 - 01:30',
             printIncentiveLink: false,
             subTypeDescription: 'Key Worker Session',

@@ -1,5 +1,4 @@
-const CourtVideoLinkHomePage = require('../../pages/videolink/courtVideoLinkHomePage')
-const SearchPage = require('../../pages/whereabouts/searchPage')
+const HomePage = require('../../pages/homepage/homepagePage')
 
 context('Login functionality', () => {
   before(() => {
@@ -8,6 +7,10 @@ context('Login functionality', () => {
 
   beforeEach(() => {
     cy.task('reset')
+    cy.task('stubUserMeRoles')
+    cy.task('stubUserLocations')
+    cy.task('stubStaffRoles', [])
+    cy.task('stubLocationConfig', { agencyId: 'MDI', response: { enabled: false } })
   })
 
   it('Root (/) redirects to the auth login page if not logged in', () => {
@@ -34,7 +37,7 @@ context('Login functionality', () => {
   it('Logout takes user to login page', () => {
     cy.task('stubLogin', {})
     cy.login()
-    SearchPage.verifyOnPage()
+    HomePage.verifyOnPage()
 
     // can't do a visit here as cypress requires only one domain
     cy.request('/auth/logout')
@@ -42,10 +45,10 @@ context('Login functionality', () => {
       .should('contain', 'Sign in')
   })
 
-  it('Token verification failure clears user session', () => {
+  it('Token verification failure takes user to sign in page', () => {
     cy.task('stubLogin', {})
     cy.login()
-    SearchPage.verifyOnPage()
+    HomePage.verifyOnPage()
     cy.task('stubVerifyToken', false)
 
     // can't do a visit here as cypress requires only one domain
@@ -54,15 +57,28 @@ context('Login functionality', () => {
       .should('contain', 'Sign in')
   })
 
+  it('Token verification failure clears user session', () => {
+    cy.task('stubLogin', {})
+    cy.login()
+    const homePage = HomePage.verifyOnPage()
+    homePage.loggedInName().contains('J. Stuart')
+    cy.task('stubVerifyToken', false)
+
+    // can't do a visit here as cypress requires only one domain
+    cy.request('/')
+      .its('body')
+      .should('contain', 'Sign in')
+
+    cy.task('stubVerifyToken', true)
+    cy.task('stubUserMe', { name: 'Bobby Brown' })
+    cy.login()
+
+    homePage.loggedInName().contains('B. Brown')
+  })
+
   it('Log in as ordinary user', () => {
     cy.task('stubLogin', {})
     cy.login()
-    SearchPage.verifyOnPage()
-  })
-
-  it('Log in as video link court user', () => {
-    cy.task('stubLoginCourt')
-    cy.login()
-    CourtVideoLinkHomePage.verifyOnPage()
+    HomePage.verifyOnPage()
   })
 })

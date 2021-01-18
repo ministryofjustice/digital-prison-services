@@ -23,7 +23,7 @@ describe('View appointments', () => {
         },
       },
     }
-    res = { locals: {}, render: jest.fn() }
+    res = { locals: {}, render: jest.fn(), status: jest.fn() }
 
     logError = jest.fn()
 
@@ -369,6 +369,7 @@ describe('View appointments', () => {
         serviceUnavailableMessage
       )
       expect(res.render).toHaveBeenCalledWith('error.njk', { url: '/appointments' })
+      expect(res.status).toHaveBeenCalledWith(500)
     })
   })
 })

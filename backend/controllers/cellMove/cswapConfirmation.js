@@ -17,8 +17,10 @@ module.exports = ({ prisonApi, logError }) => async (req, res) => {
   } catch (error) {
     if (error) logError(req.originalUrl, error, 'Failed to load cswap confirmation page')
 
+    res.status(500)
+
     return res.render('error.njk', {
-      url: `/prisoner/${offenderNo}/cell-move/select-location`,
+      url: `/prisoner/${offenderNo}/cell-move/search-for-cell`,
       homeUrl: `/prisoner/${offenderNo}`,
     })
   }

@@ -27,6 +27,7 @@ describe('Global search', () => {
       },
       render: jest.fn(),
       redirect: jest.fn(),
+      status: jest.fn(),
     }
 
     logError = jest.fn()
@@ -150,7 +151,7 @@ describe('Global search', () => {
     describe('when there is search text with a prisoner number', () => {
       it('should make the correct call with prisonerIdentifier', async () => {
         req.query = {
-          searchText: 'ABC123',
+          searchText: 'abc123',
           locationFilter: 'ALL',
           genderFilter: 'ALL',
         }

@@ -90,8 +90,11 @@ describe('Add appointment', () => {
       })
 
       it('should render the error template', async () => {
+        res.status = jest.fn()
+
         await controller.index(req, res)
 
+        expect(res.status).toHaveBeenCalledWith(500)
         expect(logError).toHaveBeenCalledWith('http://localhost', new Error('Network error'), serviceUnavailableMessage)
         expect(res.render).toHaveBeenCalledWith('error.njk', { url: `/prisoner/${offenderNo}` })
       })
@@ -189,9 +192,11 @@ describe('Add appointment', () => {
         jest.spyOn(Date, 'now').mockImplementation(() => 33103209600000) // Friday 3019-01-01T00:00:00.000Z
         req.body = { ...validBody, date: moment().format(DAY_MONTH_YEAR) }
         prisonApi.addAppointments.mockImplementation(() => Promise.reject(new Error('Network error')))
+        res.status = jest.fn()
 
         await controller.post(req, res)
 
+        expect(res.status).toHaveBeenCalledWith(500)
         expect(logError).toHaveBeenCalledWith('http://localhost', new Error('Network error'), serviceUnavailableMessage)
         expect(res.render).toHaveBeenCalledWith('error.njk', { url: `/prisoner/${offenderNo}` })
 

@@ -1,35 +1,29 @@
 const moment = require('moment')
 
-// The link should only appear if there are active non-associations in the same establishment
-// Active means the effective date is not in the future and the expiry date is not in the past
-const showNonAssociationsLink = (nonAssociations, assignedLivingUnit) => {
-  return (
-    nonAssociations.nonAssociations &&
-    nonAssociations.nonAssociations.some(
-      nonAssociation =>
-        nonAssociation.offenderNonAssociation &&
-        assignedLivingUnit &&
-        nonAssociation.offenderNonAssociation.agencyDescription.toLowerCase() ===
-          assignedLivingUnit.agencyName.toLowerCase() &&
-        (!nonAssociation.expiryDate || moment(nonAssociation.expiryDate, 'YYYY-MM-DDTHH:mm:ss') > moment()) &&
-        (nonAssociation.effectiveDate && moment(nonAssociation.effectiveDate, 'YYYY-MM-DDTHH:mm:ss') <= moment())
-    )
-  )
-}
-
-const showCsraLink = assessments => {
-  return assessments.some(assessment => assessment.assessmentCode.includes('CSR') && assessment.assessmentComment)
-}
+const getNonAssocationsInEstablishment = nonAssociations =>
+  nonAssociations?.nonAssociations?.filter(
+    nonAssociation =>
+      nonAssociation.offenderNonAssociation &&
+      nonAssociation.offenderNonAssociation.agencyDescription.toLowerCase() ===
+        nonAssociations.agencyDescription.toLowerCase() &&
+      (!nonAssociation.expiryDate || moment(nonAssociation.expiryDate, 'YYYY-MM-DDTHH:mm:ss') > moment()) &&
+      (nonAssociation.effectiveDate && moment(nonAssociation.effectiveDate, 'YYYY-MM-DDTHH:mm:ss') <= moment())
+  ) || []
 
 const getBackLinkData = (referer, offenderNo) => {
-  const backLink = referer || `/prisoner/${offenderNo}/cell-move/select-location`
+  const backLink = referer || `/prisoner/${offenderNo}/cell-move/search-for-cell`
   return {
     backLink,
-    backLinkText: backLink.includes('select-location')
-      ? 'Return to select a location'
+    backLinkText: backLink.includes('search-for-cell')
+      ? 'Return to search for a cell'
       : 'Return to select an available cell',
   }
 }
+
+const renderLocationOptions = locations => [
+  { text: 'All residential units', value: 'ALL' },
+  ...locations.map(location => ({ text: location.name, value: location.key })),
+]
 
 const userHasAccess = ({ userRoles, userCaseLoads, offenderCaseload }) => {
   const hasCellMoveRole = userRoles && userRoles.some(role => role.roleCode === 'CELL_MOVE')
@@ -37,9 +31,12 @@ const userHasAccess = ({ userRoles, userCaseLoads, offenderCaseload }) => {
   return hasCellMoveRole && offenderInCaseload
 }
 
+const cellAttributes = [{ text: 'Single occupancy', value: 'SO' }, { text: 'Multiple occupancy', value: 'MO' }]
+
 module.exports = {
-  showNonAssociationsLink,
-  showCsraLink,
+  getNonAssocationsInEstablishment,
   getBackLinkData,
   userHasAccess,
+  renderLocationOptions,
+  cellAttributes,
 }

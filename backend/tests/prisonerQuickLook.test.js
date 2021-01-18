@@ -37,7 +37,7 @@ describe('prisoner profile quick look', () => {
         },
       },
     }
-    res = { locals: {}, render: jest.fn() }
+    res = { locals: {}, render: jest.fn(), status: jest.fn() }
 
     logError = jest.fn()
 
@@ -156,12 +156,13 @@ describe('prisoner profile quick look', () => {
           'prisonerProfile/prisonerQuickLook/prisonerQuickLook.njk',
           expect.objectContaining({
             balanceDetails: [
-              { label: 'Spends', html: "<a href='#'>£0.00</a>", visible: true },
-              { label: 'Private cash', html: "<a href='#'>£0.00</a>", visible: true },
-              { label: 'Savings', html: "<a href='#'>£0.00</a>", visible: true },
+              { label: 'Spends', text: '£0.00', visible: true },
+              { label: 'Private cash', text: '£0.00', visible: true },
+              { label: 'Savings', text: '£0.00', visible: true },
               {
                 label: 'Damage obligations',
-                html: "<a href='/prisoner/ABC123/prisoner-finance-details/damage-obligations'>£0.00</a>",
+                html:
+                  '<a href="/prisoner/ABC123/prisoner-finance-details/damage-obligations" class="govuk-link">£0.00</a>',
                 visible: false,
               },
             ],
@@ -188,12 +189,13 @@ describe('prisoner profile quick look', () => {
           'prisonerProfile/prisonerQuickLook/prisonerQuickLook.njk',
           expect.objectContaining({
             balanceDetails: [
-              { label: 'Spends', html: "<a href='#'>£100.00</a>", visible: true },
-              { label: 'Private cash', html: "<a href='#'>£75.50</a>", visible: true },
-              { label: 'Savings', html: "<a href='#'>£50.00</a>", visible: true },
+              { label: 'Spends', text: '£100.00', visible: true },
+              { label: 'Private cash', text: '£75.50', visible: true },
+              { label: 'Savings', text: '£50.00', visible: true },
               {
                 label: 'Damage obligations',
-                html: "<a href='/prisoner/ABC123/prisoner-finance-details/damage-obligations'>£65.00</a>",
+                html:
+                  '<a href="/prisoner/ABC123/prisoner-finance-details/damage-obligations" class="govuk-link">£65.00</a>',
                 visible: true,
               },
             ],
@@ -604,6 +606,7 @@ describe('prisoner profile quick look', () => {
 
       expect(logError).toHaveBeenCalledWith('http://localhost', new Error('Network error'), serviceUnavailableMessage)
       expect(res.render).toHaveBeenCalledWith('error.njk', { url: 'http://localhost:3000/' })
+      expect(res.status).toHaveBeenCalledWith(500)
     })
   })
 

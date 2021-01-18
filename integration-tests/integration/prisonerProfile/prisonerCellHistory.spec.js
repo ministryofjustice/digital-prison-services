@@ -81,7 +81,7 @@ context('Prisoner cell history', () => {
         .contains(moment('2020-05-01T12:48:33.375').format('DD/MM/YYYY - HH:mm'))
       prisonerCellHistoryPage.currentLocationMovedInBy().contains('Staff One')
       prisonerCellHistoryPage.occupants().contains('Offender, Test')
-      prisonerCellHistoryPage.cellMoveButton().should('not.be.visible')
+      prisonerCellHistoryPage.cellMoveButton().should('not.exist')
       prisonerCellHistoryPage
         .cellDetailsLink()
         .should('contain.text', 'View details for location 1-02')
@@ -131,7 +131,7 @@ context('Prisoner cell history', () => {
       const prisonerCellHistoryPage = PrisonerCellHistoryPage.verifyOnPage()
       prisonerCellHistoryPage.establishment().contains('Moorland')
       prisonerCellHistoryPage.location().contains('1-02')
-      prisonerCellHistoryPage.occupants().should('not.be.visible')
+      prisonerCellHistoryPage.occupants().should('not.exist')
     })
 
     it('should load the data correcly when multiple other occupants', () => {

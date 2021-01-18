@@ -41,6 +41,7 @@ const controller = ({
   pathfinderApi,
   logError,
   socApi,
+  whereaboutsApi,
 }) => {
   const prisonerProfileService = prisonerProfileServiceFactory({
     prisonApi,
@@ -75,6 +76,7 @@ const controller = ({
       paginationService,
       nunjucks,
       logError,
+      oauthApi,
     })
   )
   router.get(
@@ -89,7 +91,7 @@ const controller = ({
   )
 
   router.get('/cell-history', prisonerCellHistory({ oauthApi, prisonApi, logError }))
-  router.get('/location-history', prisonerLocationHistory({ prisonApi, logError }))
+  router.get('/location-history', prisonerLocationHistory({ prisonApi, whereaboutsApi, caseNotesApi, logError }))
 
   router.get('/adjudications/:adjudicationNumber', prisonerAdjudicationDetails({ prisonApi, logError }))
 

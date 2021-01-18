@@ -16,6 +16,7 @@ describe('Cell not available', () => {
     logError = jest.fn()
     res.redirect = jest.fn()
     res.render = jest.fn()
+    res.status = jest.fn()
 
     controller = cellNotAvailable({ prisonApi, logError })
 
@@ -66,9 +67,10 @@ describe('Cell not available', () => {
       error,
       'Failed to load offender details on cell not available page'
     )
+    expect(res.status).toHaveBeenCalledWith(500)
     expect(res.render).toHaveBeenCalledWith('error.njk', {
       homeUrl: '/prisoner/A12345',
-      url: '/prisoner/A12345/cell-move/select-location',
+      url: '/prisoner/A12345/cell-move/search-for-cell',
     })
   })
 })

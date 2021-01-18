@@ -40,7 +40,7 @@ describe('view offender details', () => {
       headers: {},
       get: jest.fn().mockReturnValue('localhost'),
     }
-    res = { locals: {}, render: jest.fn() }
+    res = { locals: {}, render: jest.fn(), status: jest.fn() }
 
     prisonApi.getDetails = jest.fn().mockResolvedValue(getDetailsResponse)
     prisonApi.getMainOffence = jest.fn().mockResolvedValue([
@@ -64,9 +64,10 @@ describe('view offender details', () => {
 
     await controller(req, res)
 
+    expect(res.status).toHaveBeenCalledWith(500)
     expect(logError).toHaveBeenCalledWith(req.originalUrl, new Error('Network error'), serviceUnavailableMessage)
     expect(res.render).toHaveBeenCalledWith('error.njk', {
-      url: '/prisoner/ABC123/cell-move/select-location',
+      url: '/prisoner/ABC123/cell-move/search-for-cell',
       homeUrl: '/prisoner/ABC123',
     })
   })
@@ -86,8 +87,8 @@ describe('view offender details', () => {
         sexualOrientation: 'Heterosexual',
         smokerOrVaper: 'No',
         mainOffence: '13 hours over work',
-        backLink: `/prisoner/${offenderNo}/cell-move/select-location`,
-        backLinkText: 'Return to select a location',
+        backLink: `/prisoner/${offenderNo}/cell-move/search-for-cell`,
+        backLinkText: 'Return to search for a cell',
         profileUrl: `/prisoner/${offenderNo}`,
       })
     )
@@ -116,8 +117,8 @@ describe('view offender details', () => {
         sexualOrientation: 'Not entered',
         smokerOrVaper: 'Not entered',
         mainOffence: 'Not entered',
-        backLink: `/prisoner/${offenderNo}/cell-move/select-location`,
-        backLinkText: 'Return to select a location',
+        backLink: `/prisoner/${offenderNo}/cell-move/search-for-cell`,
+        backLinkText: 'Return to search for a cell',
         profileUrl: `/prisoner/${offenderNo}`,
       })
     )

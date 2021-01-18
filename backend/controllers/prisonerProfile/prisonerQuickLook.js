@@ -104,11 +104,6 @@ module.exports = ({ prisonerProfileService, prisonApi, logError }) => async (req
 
       const daysSinceReview = (iepSummary && iepSummary.daysSinceReview) || 0
 
-      const spendsBreakdownUrl = `#`
-      const privateBreakdownUrl = `#`
-      const savingsBreakdownUrl = `#`
-      const damageObligationsBreakdownUrl = `/prisoner/${offenderNo}/prisoner-finance-details/damage-obligations`
-
       return res.render('prisonerProfile/prisonerQuickLook/prisonerQuickLook.njk', {
         dpsUrl,
         prisonerProfileData,
@@ -144,33 +139,24 @@ module.exports = ({ prisonerProfileService, prisonApi, logError }) => async (req
           {
             label: 'Spends',
             visible: true,
-            html: `<a href='${spendsBreakdownUrl}'>${formatCurrency(
-              (balanceData && balanceData.spends) || 0,
-              balanceData && balanceData.currency
-            )}</a>`,
+            text: formatCurrency(balanceData?.spends || 0, balanceData?.currency),
           },
           {
             label: 'Private cash',
             visible: true,
-            html: `<a href='${privateBreakdownUrl}'>${formatCurrency(
-              (balanceData && balanceData.cash) || 0,
-              balanceData && balanceData.currency
-            )}</a>`,
+            text: formatCurrency(balanceData?.cash || 0, balanceData?.currency),
           },
           {
             label: 'Savings',
             visible: true,
-            html: `<a href='${savingsBreakdownUrl}'>${formatCurrency(
-              (balanceData && balanceData.savings) || 0,
-              balanceData && balanceData.currency
-            )}</a>`,
+            text: formatCurrency(balanceData?.savings || 0, balanceData?.currency),
           },
           {
             label: 'Damage obligations',
             visible: balanceData?.damageObligations > 0,
-            html: `<a href='${damageObligationsBreakdownUrl}'>${formatCurrency(
-              (balanceData && balanceData.damageObligations) || 0,
-              balanceData && balanceData.currency
+            html: `<a href="/prisoner/${offenderNo}/prisoner-finance-details/damage-obligations" class="govuk-link">${formatCurrency(
+              balanceData?.damageObligations || 0,
+              balanceData?.currency
             )}</a>`,
           },
         ],
@@ -289,10 +275,12 @@ module.exports = ({ prisonerProfileService, prisonApi, logError }) => async (req
       })
     } catch (error) {
       logError(req.originalUrl, error, serviceUnavailableMessage)
+      res.status(500)
       return res.render('error.njk', { url: `/prisoner/${offenderNo}` })
     }
   } catch (error) {
     logError(req.originalUrl, error, serviceUnavailableMessage)
+    res.status(500)
     return res.render('error.njk', { url: dpsUrl })
   }
 }

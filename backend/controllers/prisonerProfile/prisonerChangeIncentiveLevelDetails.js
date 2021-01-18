@@ -9,6 +9,7 @@ module.exports = ({ prisonApi, logError }) => {
   const renderError = (req, res, error) => {
     const { offenderNo } = req.params
     logError(req.originalUrl, error, serviceUnavailableMessage)
+    res.status(500)
     return res.render('error.njk', { url: `/prisoner/${offenderNo}` })
   }
 

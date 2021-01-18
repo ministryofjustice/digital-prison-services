@@ -71,8 +71,11 @@ describe('Amendment case note', () => {
     })
     it('should render error page on exception', async () => {
       prisonApi.getDetails.mockRejectedValue(new Error('error'))
+      res.status = jest.fn()
+
       await controller.index(req, res)
 
+      expect(res.status).toHaveBeenCalledWith(500)
       expect(res.render).toHaveBeenCalledWith('error.njk', { url: '/prisoner/A12345/case-notes' })
     })
 

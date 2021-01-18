@@ -1,3 +1,4 @@
+const moment = require('moment')
 const prisonerQuickLookPage = require('../../pages/prisonerProfile/prisonerQuickLookPage')
 const offenderBasicDetails = require('../../mockApis/responses/offenderBasicDetails.json')
 const offenderFullDetails = require('../../mockApis/responses/offenderFullDetails.json')
@@ -9,7 +10,9 @@ const quickLookFullDetails = {
   prisonerDetails: [
     {
       imprisonmentStatusDesc: 'Adult Imprisonment Without Option CJA03',
-      dateOfBirth: '1998-12-01',
+      dateOfBirth: moment()
+        .subtract(21, 'years')
+        .format('YYYY-MM-DD'),
       pncNumber: '12/3456A',
       croNumber: '12345/57B',
     },
@@ -357,9 +360,9 @@ context('Prisoner quick look', () => {
     it('Should not display conditionally displayed links to other pages', () => {
       cy.visit(`/prisoner/${offenderNo}`)
 
-      cy.get('[data-test="tabs-case-notes"]').should('not.be.visible')
-      cy.get('[data-test="adjudication-history-link"]').should('not.be.visible')
-      cy.get('[data-test="incentive-details-link"]').should('not.be.visible')
+      cy.get('[data-test="tabs-case-notes"]').should('not.exist')
+      cy.get('[data-test="adjudication-history-link"]').should('not.exist')
+      cy.get('[data-test="incentive-details-link"]').should('not.exist')
     })
   })
 
@@ -400,8 +403,8 @@ context('Prisoner quick look', () => {
     it('Should not display conditionally displayed links to other pages', () => {
       cy.visit(`/prisoner/${offenderNo}`)
 
-      cy.get('[data-test="tabs-case-notes"]').should('not.be.visible')
-      cy.get('[data-test="adjudication-history-link"]').should('not.be.visible')
+      cy.get('[data-test="tabs-case-notes"]').should('not.exist')
+      cy.get('[data-test="adjudication-history-link"]').should('not.exist')
     })
   })
 
@@ -420,7 +423,7 @@ context('Prisoner quick look', () => {
     it('Should not show the View documents held by probation link', () => {
       cy.visit(`/prisoner/${offenderNo}`)
 
-      cy.get('[data-test="probation-documents-link"]').should('not.be.visible')
+      cy.get('[data-test="probation-documents-link"]').should('not.exist')
     })
   })
 

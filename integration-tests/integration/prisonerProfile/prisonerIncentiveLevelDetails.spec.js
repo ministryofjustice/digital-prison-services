@@ -103,7 +103,7 @@ context('Prisoner incentive level details', () => {
 
       cy.visit(`/prisoner/${offenderNo}/incentive-level-details`)
 
-      cy.get('[data-test="change-incentive-level-link"]').should('not.be.visible')
+      cy.get('[data-test="change-incentive-level-link"]').should('not.exist')
     })
 
     it('should show correct history', () => {

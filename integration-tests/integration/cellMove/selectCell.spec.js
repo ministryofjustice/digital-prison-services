@@ -1,3 +1,4 @@
+const moment = require('moment')
 const offenderFullDetails = require('../../mockApis/responses/offenderFullDetails.json')
 const SelectCellPage = require('../../pages/cellMove/selectCellPage')
 
@@ -61,7 +62,7 @@ context('A user can select a cell', () => {
           typeCode: 'LAND',
           typeDescription: 'Do Not Locate on Same Landing',
           effectiveDate: '2020-06-17T00:00:00',
-          expiryDate: '2020-07-17T00:00:00',
+          expiryDate: moment().add(1, 'day'),
           comments: 'Gang violence',
           offenderNonAssociation: {
             offenderNo: 'A12345',
@@ -220,17 +221,24 @@ context('A user can select a cell', () => {
 
     it('should show non association warning', () => {
       const page = SelectCellPage.goTo(offenderNo, '1')
+      page.numberOfNonAssociations().contains('1')
       page.nonAssociationWarning().contains('Smith, John has a non-association with a prisoner in this location.')
     })
 
     it('should NOT show the non association warning', () => {
       cy.task('stubBookingNonAssociations', null)
       const page = SelectCellPage.goTo(offenderNo)
-      page.nonAssociationWarning().should('not.be.visible')
+      page.nonAssociationWarning().should('not.exist')
     })
 
-    it('should navigate to the confirm cell move page on Move to cell swap', () => {
+    it('should display the correct cell swap messaging and link', () => {
       const page = SelectCellPage.goTo(offenderNo, '1')
+
+      page
+        .selectCswapText()
+        .contains(
+          'Create a space for another prisoner - this will leave John Smith without a cell. You must move them into a cell as soon as possible today.'
+        )
 
       page
         .selectCswapLink()

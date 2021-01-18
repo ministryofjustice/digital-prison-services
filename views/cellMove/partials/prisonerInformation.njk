@@ -1,4 +1,8 @@
-<div class="horizontal-information horizontal-information--with-border govuk-!-margin-bottom-6" data-test="cell-move-header-information">
+{% from "govuk/components/inset-text/macro.njk" import govukInsetText %}
+
+<hr class="govuk-section-break govuk-section-break--m govuk-section-break--visible">
+
+<div class="horizontal-information govuk-!-margin-bottom-6" data-test="cell-move-header-information">
   <div class="horizontal-information__item">
     <h3 class="govuk-heading-s govuk-!-margin-bottom-1">Name</h3>
     <p class="govuk-body govuk-!-margin-bottom-1" data-test="name">{{ breadcrumbPrisonerName }}</p>
@@ -15,13 +19,11 @@
   <div class="horizontal-information__item">
     <h3 class="govuk-heading-s govuk-!-margin-bottom-1">CSRA rating</h3>
     <p class="govuk-body govuk-!-margin-bottom-1" data-test="csra">{{ prisonerDetails.csra }}</p>
-    {% if showCsraLink %}
-      <p class="govuk-body">
-        <a href="{{ csraDetailsUrl }}" class="govuk-link" data-test="csra-link">View details
-          <span class="govuk-visually-hidden">for{{ breadcrumbPrisonerName }}</span>
-        </a>
-      </p>
-    {% endif %}
+    <p class="govuk-body">
+      <a href="{{ csraDetailsUrl }}" class="govuk-link" data-test="csra-link">View details
+        <span class="govuk-visually-hidden">for{{ breadcrumbPrisonerName }}</span>
+      </a>
+    </p>
   </div>
   <div class="horizontal-information__item horizontal-information__item--tenth">
     <h3 class="govuk-heading-s govuk-!-margin-bottom-1">Relevant alerts</h3>
@@ -36,11 +38,21 @@
   <div class="horizontal-information__item">
     <h3 class="govuk-heading-s govuk-!-margin-bottom-1">Non-associations</h3>
     {% if showNonAssociationsLink %}
+      <p class="govuk-body govuk-!-margin-bottom-1" data-test="number-of-non-associations">{{ numberOfNonAssociations }}</p>
       <a href="{{ nonAssociationLink }}" class="govuk-link govuk-body" data-test="non-associations-link">View non-associations
         <span class="govuk-visually-hidden">for {{ breadcrumbPrisonerName }}</span>  
       </a>
     {% else %}
-      <p class="govuk-body" data-test="non-associations-message">You must also check any local processes</p>
+      <p class="govuk-body" data-test="non-associations-message">0 in NOMIS. Check local processes.</p>
     {% endif %}
   </div>
 </div>
+
+{{ govukInsetText({
+  html: '<p class="govuk-body"><a data-test="select-cswap-link" href="' + '/prisoner/' + offenderNo + '/cell-move/confirm-cell-move?cellId=C-SWAP"' + '  class="govuk-link">Create a space for another prisoner</a> -  this will leave ' + prisonerName + ' without a cell. <br>You must move them into a cell as soon as possible today.',
+  attributes: {
+    'data-test': 'select-cswap-text'
+  }
+}) }}
+
+<hr class="govuk-section-break govuk-section-break--l govuk-section-break--visible">

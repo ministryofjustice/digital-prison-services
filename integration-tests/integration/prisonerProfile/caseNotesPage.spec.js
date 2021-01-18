@@ -60,7 +60,7 @@ context('A user can view prisoner case notes', () => {
     })
     cy.visit(`/prisoner/${offenderNo}/case-notes?pageOffsetOption=0`)
     const page = CaseNotesPage.verifyOnPage('Smith, John')
-    page.noDataMessage().should('not.be.visible')
+    page.noDataMessage().should('not.exist')
     const rows = page.getRows(0)
 
     rows
@@ -106,8 +106,11 @@ context('A user can view prisoner case notes', () => {
       .should(
         'have.attr',
         'href',
-        '/iep-slip?offenderNo=A12345&offenderName=Smith%2C%20John&location=HMP%20Moorland&casenoteId=12311312&issuedBy=undefined'
+        '/iep-slip?offenderNo=A12345&offenderName=Smith%2C%20John&location=HMP%20Moorland&casenoteId=12311312&issuedBy=James%20Stuart'
       )
+
+    rows.caseNoteDeleteLink().should('not.exist')
+    rows.caseNoteDeleteAmendmentLink().should('not.exist')
 
     const form = page.filterForm()
 
@@ -162,6 +165,29 @@ context('A user can view prisoner case notes', () => {
 
     page.viewAllCaseNotesTopLink().should('not.exist')
     page.viewAllCaseNotesBottomLink().should('not.exist')
+  })
+
+  it('should show a delete case note link if the case note is sensitive and the user has the correct role', () => {
+    cy.task('stubUserMeRoles', [{ roleCode: 'DELETE_SENSITIVE_CASE_NOTES' }])
+
+    cy.task('stubCaseNotes', {
+      totalElements: 1,
+      content: [{ ...caseNote, source: 'OCNS' }],
+    })
+    cy.visit(`/prisoner/${offenderNo}/case-notes`)
+    const page = CaseNotesPage.verifyOnPage('Smith, John')
+
+    const rows = page.getRows(0)
+
+    rows
+      .caseNoteDeleteLink()
+      .contains('Delete case note')
+      .should('have.attr', 'href', '/prisoner/A12345/case-notes/delete-case-note/12311312')
+
+    rows
+      .caseNoteDeleteAmendmentLink()
+      .contains('Delete amendment')
+      .should('have.attr', 'href', '/prisoner/A12345/case-notes/delete-case-note/12311312/123232')
   })
 
   it('should repopulate input fields with selected filters once applied has been clicked', () => {

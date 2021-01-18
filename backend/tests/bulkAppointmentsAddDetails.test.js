@@ -46,6 +46,7 @@ describe('Add appointment details controller', () => {
     }
     res = { locals: {} }
     res.render = jest.fn()
+    res.status = jest.fn()
 
     appointmentsService.getAppointmentOptions = jest.fn()
     oauthApi.currentUser = jest.fn()
@@ -86,6 +87,7 @@ describe('Add appointment details controller', () => {
         url: 'http://localhost',
       })
 
+      expect(res.status).toHaveBeenCalledWith(500)
       expect(logError).toHaveBeenCalledWith('http://localhost', new Error('Network error'), serviceUnavailableMessage)
     })
 

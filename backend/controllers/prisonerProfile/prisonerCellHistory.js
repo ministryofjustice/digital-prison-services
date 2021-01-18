@@ -88,12 +88,13 @@ module.exports = ({ oauthApi, prisonApi, logError, page = 0 }) => async (req, re
       prisonerName: formatName(firstName, lastName),
       profileUrl: `/prisoner/${offenderNo}`,
       breadcrumbPrisonerName: putLastNameFirst(firstName, lastName),
-      changeCellLink: `/prisoner/${offenderNo}/cell-move/select-location`,
+      changeCellLink: `/prisoner/${offenderNo}/cell-move/search-for-cell`,
       canViewCellMoveButton: userRoles && userRoles.some(role => role.roleCode === 'CELL_MOVE'),
       dpsUrl,
     })
   } catch (error) {
     logError(req.originalUrl, error, serviceUnavailableMessage)
+    res.status(500)
     return res.render('error.njk', { url: `/prisoner/${offenderNo}` })
   }
 }

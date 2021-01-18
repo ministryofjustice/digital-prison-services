@@ -140,6 +140,7 @@ module.exports = ({ prisonApi, whereaboutsApi, oauthApi, logError }) => async (r
     })
   } catch (error) {
     logError(req.originalUrl, error, serviceUnavailableMessage)
+    res.status(500)
     return res.render('error.njk', { url: '/appointments' })
   }
 }

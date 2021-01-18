@@ -56,11 +56,11 @@ module.exports = on => {
         offenderSearch.stubHealth(),
       ]),
     getLoginUrl: auth.getLoginUrl,
-    stubLogin: ({ username = 'ITAG_USER', caseload = 'MDI', roles = [] }) =>
+    stubLogin: ({ username = 'ITAG_USER', caseload = 'MDI', roles = [], caseloads }) =>
       Promise.all([
         auth.stubLogin(username, caseload, roles),
-        prisonApi.stubUserMe(),
-        prisonApi.stubUserCaseloads(),
+        auth.stubUserMe(),
+        prisonApi.stubUserCaseloads(caseloads),
         tokenverification.stubVerifyToken(true),
       ]),
     stubLoginCourt: () =>
@@ -268,6 +268,8 @@ module.exports = on => {
     stubSentenceData: details => prisonApi.stubSentenceData(details),
     stubLocation: ({ locationId, locationData }) => Promise.all([prisonApi.stubLocation(locationId, locationData)]),
     stubAgencyDetails: ({ agencyId, details }) => Promise.all([prisonApi.stubAgencyDetails(agencyId, details)]),
+    stubLocationsForAgency: ({ agency, locations }) =>
+      Promise.all([prisonApi.stubLocationsForAgency(agency, locations)]),
     stubAppointmentLocations: ({ agency, locations }) =>
       Promise.all([prisonApi.stubAppointmentLocations(agency, locations)]),
     stubBookingOffenders: offenders => Promise.all([prisonApi.stubBookingOffenders(offenders)]),
@@ -279,7 +281,7 @@ module.exports = on => {
     stubSentenceTerms: sentenceTerms => prisonApi.stubSentenceTerms(sentenceTerms),
     stubClientCredentialsRequest: () => auth.stubClientCredentialsRequest(),
     stubUserMeRoles: roles => auth.stubUserMeRoles(roles),
-    stubUserMe: () => auth.stubUserMe(),
+    stubUserMe: ({ username, staffId, name }) => auth.stubUserMe(username, staffId, name),
     stubPathFinderOffenderDetails: details => pathfinder.getOffenderDetails(details),
     stubSocOffenderDetails: details => socApi.stubGetOffenderDetails(details),
     stubVisitsWithVisitors: ({ visitsWithVisitors, offenderBasicDetails, visitTypes }) =>
@@ -298,6 +300,8 @@ module.exports = on => {
     stubVideoLinkAppointments: whereabouts.stubVideoLinkAppointments,
     stubCreateAlert: prisonApi.stubCreateAlert,
     stubCreateCaseNote: caseNotes.stubCreateCaseNote,
+    stubDeleteCaseNote: caseNotes.stubDeleteCaseNote,
+    stubDeleteCaseNoteAmendment: caseNotes.stubDeleteCaseNoteAmendment,
     stubCaseNoteTypesForUser: caseNotes.stubCaseNoteTypesForUser,
     stubGlobalSearch: offenderSearch.stubGlobalSearch,
     stubPrisonApiGlobalSearch: prisonApi.stubPrisonApiGlobalSearch,
@@ -306,8 +310,11 @@ module.exports = on => {
     verifyGlobalSearch: offenderSearch.verifyGlobalSearch,
     stubOffenderMovements: prisonApi.stubOffenderMovements,
     stubGetCaseNote: caseNote => caseNotes.stubGetCaseNote(caseNote),
+    stubGetOffenderCaseNote: ({ offenderId, caseNoteId, caseNote }) =>
+      caseNotes.stubGetOffenderCaseNote(offenderId, caseNoteId, caseNote),
     stubBookingDetails: details => prisonApi.stubBookingDetails(details),
     verifySaveAmendment: caseNotes.verifySaveAmendment,
+    stubGetCaseNoteTypes: caseNotes.stubGetCaseNoteTypes,
     stubSaveAmendment: caseNotes.stubSaveAmendment,
     stubBookingNonAssociations: response => prisonApi.stubBookingNonAssociations(response),
     stubProfessionalContacts: ({
@@ -401,5 +408,10 @@ module.exports = on => {
     stubGetAgencyIepLevels: response => prisonApi.stubGetAgencyIepLevels(response),
     stubChangeIepLevel: body => prisonApi.stubChangeIepLevel(body),
     stubGetPrisonerDamageObligations: response => prisonApi.stubGetPrisonerDamageObligations(response),
+    stubGetCellMoveReason: ({ bookingId, bedAssignmentHistorySequence, cellMoveReason, status }) =>
+      whereabouts.stubGetCellMoveReason(bookingId, bedAssignmentHistorySequence, cellMoveReason, status),
+    stubGetStaffDetails: ({ staffId, response }) => prisonApi.stubGetStaffDetails(staffId, response),
+    stubStaffRoles: response => prisonApi.stubStaffRoles(response),
+    stubLocationConfig: ({ agencyId, response }) => whereabouts.stubLocationConfig({ agencyId, response }),
   })
 }

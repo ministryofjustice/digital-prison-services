@@ -26,6 +26,15 @@
             <p>
         {% endif %}
 
+        {% if caseNote.caseNoteDetailColumn.deleteLink %}
+            <p class="govuk-body">
+                <a class="govuk-link" data-test="delete"
+                href={{ caseNote.caseNoteDetailColumn.deleteLink }}>
+                    Delete case note
+                </a>
+            <p>
+        {% endif %}
+
         <p class="govuk-body">
             Happened: {{ caseNote.caseNoteDetailColumn.occurrenceDateTime }}
         </p>
@@ -182,7 +191,14 @@
                                 <pre class="govuk-body">{{ amendment.text }} </pre>
                             </div>
                         </div>
-
+                        {% if amendment.deleteLink %}
+                            <p class="govuk-body">
+                                <a class="govuk-link" data-test="delete-amendment"
+                                href={{ amendment.deleteLink }}>
+                                    Delete amendment
+                                </a>
+                            <p>
+                        {% endif %}
                         {% if loop.index === caseNote.caseNoteDetailColumn.amendments.length %}
                             {{ links(caseNote) }}
                         {% endif %}
@@ -206,5 +222,5 @@
 {% endblock %}
 
 {% block pageScripts %}
-    <script src="/js/caseNotes.js"></script>
+    <script src="/static/js/caseNotes.js"></script>
 {% endblock %}

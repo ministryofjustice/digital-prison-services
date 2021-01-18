@@ -25,6 +25,7 @@ const bulkAppointmentsConfirmFactory = (prisonApi, logError) => {
 
   const renderError = (req, res, error) => {
     if (error) logError(req.originalUrl, error, 'Sorry, the service is unavailable')
+    res.status(500)
 
     return res.render('error.njk', { url: '/bulk-appointments/need-to-upload-file' })
   }

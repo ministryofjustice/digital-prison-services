@@ -76,6 +76,30 @@ env:
         name: {{ template "app.name" . }}
         key: WANDSWORTH_VLB_EMAIL
 
+  - name: THAMESIDE_OMU_EMAIL
+    valueFrom:
+      secretKeyRef:
+        name: {{ template "app.name" . }}
+        key: THAMESIDE_OMU_EMAIL
+    
+  - name: THAMESIDE_VLB_EMAIL
+    valueFrom:
+      secretKeyRef:
+        name: {{ template "app.name" . }}
+        key: THAMESIDE_VLB_EMAIL
+
+  - name: HEWELL_OMU_EMAIL
+    valueFrom:
+      secretKeyRef:
+        name: {{ template "app.name" . }}
+        key: HEWELL_OMU_EMAIL
+    
+  - name: HEWELL_VLB_EMAIL
+    valueFrom:
+      secretKeyRef:
+        name: {{ template "app.name" . }}
+        key: HEWELL_VLB_EMAIL
+
   - name: REDIS_HOST
     valueFrom:
       secretKeyRef:
@@ -139,9 +163,6 @@ env:
   - name: API_COMMUNITY_API_PREFIX
     value: {{ .Values.env.API_COMMUNITY_API_PREFIX | quote }}
 
-  - name: VIDEO_LINK_ENABLED_FOR
-    value: {{ .Values.env.VIDEO_LINK_ENABLED_FOR | quote }}
-
   - name: HMPPS_COOKIE_NAME
     value: {{ .Values.env.HMPPS_COOKIE_NAME | quote }}
 
@@ -196,8 +217,15 @@ env:
   - name: BVL_URL
     value: {{ .Values.env.BVL_URL | quote }}
 
-  - name: REDIRECT_TO_BOOKING_VIDEO_LINK_ENABLED
-    value: {{ .Values.env.REDIRECT_TO_BOOKING_VIDEO_LINK_ENABLED | quote }}
+  - name: MOIC_URL
+    value: {{ .Values.env.MOIC_URL | quote }}
+
+  - name: MANAGE_AUTH_ACCOUNTS_URL
+    value: {{ .Values.env.MANAGE_AUTH_ACCOUNTS_URL | quote }}
     
-      
+  - name: PECS_URL
+    value: {{ .Values.env.PECS_URL | quote }}
+
+  - name: OMIC_URL
+    value: {{ .Values.env.OMIC_URL | quote }}
 {{- end -}}

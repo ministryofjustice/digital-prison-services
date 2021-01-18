@@ -4,6 +4,6 @@ const preprodText = 'This test version of DPS contains real data which may be up
 
 module.exports = (app, config) => {
   app.locals.phaseName = config.phaseName
-  app.locals.phaseNameColour = config.phaseName === 'PRE-PRODUCTION' ? 'phase-banner-green' : 'phase-banner-blue'
+  app.locals.phaseNameColour = config.phaseName === 'PRE-PRODUCTION' ? 'govuk-tag--green' : ''
   app.locals.phaseNameText = config.phaseName === 'PRE-PRODUCTION' ? preprodText : ''
 }

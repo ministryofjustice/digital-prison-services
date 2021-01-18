@@ -12,9 +12,12 @@ image:
 ingress:
   enabled: true
   enable_allowlist: true
-  host: whereabouts.prison.service.justice.gov.uk
-  cert_secret: prison-staff-hub-cert
+  host: digital.prison.service.justice.gov.uk
+  cert_secret: notm-cert
   path: /
+  host2: whereabouts.prison.service.justice.gov.uk
+  cert_secret2: prison-staff-hub-cert
+  redirect_host2: https://digital.prison.service.justice.gov.uk
 
 env:
   API_ENDPOINT_URL: https://api.prison.service.justice.gov.uk/
@@ -27,11 +30,10 @@ env:
   WEB_SESSION_TIMEOUT_IN_MINUTES: "60"
   API_COMMUNITY_ENDPOINT_URL: https://community-api-secure.probation.service.justice.gov.uk
   API_COMMUNITY_API_PREFIX: "/secure"
-  VIDEO_LINK_ENABLED_FOR: "WWI"
   KEYWORKER_API_URL: https://keyworker-api.prison.service.justice.gov.uk/
   CATEGORISATION_UI_URL: https://offender-categorisation.service.justice.gov.uk/
   USE_OF_FORCE_URL: https://use-of-force.service.justice.gov.uk
-  USE_OF_FORCE_PRISONS: "WRI,BLI,RSI"
+  USE_OF_FORCE_PRISONS: "BCI,BLI,DMI,DTI,HDI,HHI,HII,HLI,HMI,HVI,KMI,KVI,LEI,LFI,LHI,LPI,MDI,PNI,RSI,TCI,WEI,WMI,WRI"
   TOKENVERIFICATION_API_URL: https://token-verification-api.prison.service.justice.gov.uk
   TOKENVERIFICATION_API_ENABLED: true
   CASENOTES_API_URL: https://offender-case-notes.service.justice.gov.uk/
@@ -43,8 +45,12 @@ env:
   SOC_API_ENABLED: true
   OFFENDER_SEARCH_API_URL: https://prisoner-offender-search.prison.service.justice.gov.uk
   SUPPORT_URL: https://support.hmpps.service.justice.gov.uk/
-  REDIRECT_TO_BOOKING_VIDEO_LINK_ENABLED: true
   BVL_URL: https://book-video-link.prison.service.justice.gov.uk
+  MOIC_URL: https://moic.service.justice.gov.uk
+  OMIC_URL: https://manage-key-workers.service.justice.gov.uk
+  MANAGE_AUTH_ACCOUNTS_URL: https://manage-hmpps-auth-accounts.prison.service.justice.gov.uk
+  PECS_URL: https://bookasecuremove.service.justice.gov.uk
+
 
 allowlist:
   office: "217.33.148.210/32"
@@ -83,3 +89,4 @@ allowlist:
   moj-official-tgw-prod: "51.149.250.0/24"
   moj-official-tgw-preprod: "51.149.251.0/24"
   crc-rrp: "62.253.83.37/32"
+  crc-pp-wwm: "5.153.255.210/32"

@@ -7,7 +7,6 @@
 
 {% set title = "Select an available cell" %}
 
-
 {% macro makeRow(cell, index, last, occupier) %}
 
   {% set cellClass = 'govuk-table__cell govuk-table__cell--last' if last else 'govuk-table__cell' %}
@@ -47,11 +46,9 @@
       {{ occupier.csra }}
     </p>
 
-    {% if occupier.showCsraLink %}
-      <div>
-        <a href="{{ occupier.csraDetailsUrl }}" class="govuk-link" data-test="csra-link">View details <span class="govuk-visually-hidden">for {{ occupier.name }} CSRA</span></a>
-      </div>
-    {% endif %}
+    <div>
+      <a href="{{ occupier.csraDetailsUrl }}" class="govuk-link" data-test="csra-link">View details <span class="govuk-visually-hidden">for {{ occupier.name }} CSRA</span></a>
+    </div>
   </td>
   <td class="{{ cellClass }}">
     {% if occupier.alerts.length %}
@@ -70,7 +67,7 @@
   {% endif %}
 
   {% if index === 1 %}
-     <td class="{{ cellClass }}"><a href="{{ '/prisoner/' + offenderNo + '/cell-move/move-validation?cellId=' + cell.id }}" class="govuk-link">Select cell</a></td>
+     <td class="{{ cellClass }}"><a href="{{ '/prisoner/' + offenderNo + '/cell-move/consider-risks?cellId=' + cell.id }}" class="govuk-link">Select cell</a></td>
   {% else %}
       <td class="{{ cellClass }}">
       </td>
@@ -127,13 +124,13 @@
         }) }}
 
         {{ govukSelect({
-          name: 'attribute',
-          id: 'attribute',
+          name: 'cellType',
+          id: 'cellType',
           label: {
-            text: 'Select cell type',
+            text: 'Select cell occupancy',
             classes: 'govuk-visually-hidden'
           },
-          items: cellAttributes | addDefaultSelectedVale('Select cell type', true)  | setSelected(formValues.attribute)
+          items: cellAttributes | addDefaultSelectedVale('Select cell occupancy', true)  | setSelected(formValues.cellType)
         }) }}
 
         {{ govukButton({
@@ -147,27 +144,17 @@
     </div>
   </div>
 
-  <div class="govuk-grid-row">
-    <div class="govuk-grid-column-two-thirds">
-      {% if showNonAssociationWarning %}
-        {{ govukWarningText({
-          attributes: {
-            id: 'non-association-warning'
-          },
-          text: breadcrumbPrisonerName + " has a non-association with a prisoner in this location.",
-          iconFallbackText: "Warning"
-        }) }}
-      {% endif %}
-    </div>
+  {% if showNonAssociationWarning %}
+    {{ govukWarningText({
+      attributes: {
+        id: 'non-association-warning'
+      },
+      text: breadcrumbPrisonerName + " has a non-association with a prisoner in this location.",
+      iconFallbackText: "Warning"
+    }) }}
+  {% endif %}
 
-    <div class="{{ 'govuk-grid-column-one-third' if showNonAssociationWarning else 'govuk-grid-column-full' }}">
-      <p class="govuk-body pull-right govuk-!-margin-top-2">
-        <a data-test="select-cswap-link" href="{{ '/prisoner/' + offenderNo + '/cell-move/confirm-cell-move?cellId=C-SWAP' }}" class="govuk-link">Move to cell swap</a>
-      </p>
-    </div>
-  </div>
-
-  {% if cells %}
+  {% if cells.length %}
     <table class="govuk-table govuk-table--with-child-rows" data-test="cell-results-table">
       <thead class="govuk-table__head">
         <tr class="govuk-table__row">
@@ -205,7 +192,7 @@
 {% endblock %}
 
 {% block pageScripts %}
-  <script src="/js/selectCell.js"></script>
+  <script src="/static/js/selectCell.js"></script>
 {% endblock %}
 
 {% block bodyEnd %}

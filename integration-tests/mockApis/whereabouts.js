@@ -346,6 +346,20 @@ module.exports = {
         jsonBody: locationGroups || [],
       },
     }),
+  stubLocationConfig: ({ agencyId, response }) =>
+    stubFor({
+      request: {
+        method: 'GET',
+        url: `/whereabouts/agencies/${agencyId}/locations/whereabouts`,
+      },
+      response: {
+        status: 200,
+        headers: {
+          'Content-Type': 'application/json;charset=UTF-8',
+        },
+        jsonBody: response,
+      },
+    }),
   stubMoveToCell: () =>
     stubFor({
       request: {
@@ -358,6 +372,20 @@ module.exports = {
           'Content-Type': 'application/json;charset=UTF-8',
         },
         jsonBody: {},
+      },
+    }),
+  stubGetCellMoveReason: (bookingId, bedAssignmentHistorySequence, cellMoveReasonResponse, status = 200) =>
+    stubFor({
+      request: {
+        method: 'GET',
+        urlPath: `/whereabouts/cell/cell-move-reason/booking/${bookingId}/bed-assignment-sequence/${bedAssignmentHistorySequence}`,
+      },
+      response: {
+        status,
+        headers: {
+          'Content-Type': 'application/json;charset=UTF-8',
+        },
+        jsonBody: cellMoveReasonResponse,
       },
     }),
 }

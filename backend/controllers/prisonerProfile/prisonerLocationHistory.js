@@ -1,5 +1,5 @@
 const moment = require('moment')
-const { serviceUnavailableMessage } = require('../../common-messages')
+const { serviceUnavailableMessage, notEnteredMessage } = require('../../common-messages')
 const {
   formatName,
   formatTimestampToDateTime,
@@ -12,7 +12,35 @@ const {
   app: { notmEndpointUrl: dpsUrl },
 } = require('../../config')
 
-module.exports = ({ prisonApi, logError }) => async (req, res) => {
+const fetchStaffName = (context, staffId, prisonApi) =>
+  prisonApi.getStaffDetails(context, staffId).then(staff => formatName(staff.firstName, staff.lastName))
+
+const fetchWhatHappened = async (
+  context,
+  offenderNo,
+  bookingId,
+  bedAssignmentHistorySequence,
+  caseNotesApi,
+  whereaboutsApi
+) => {
+  try {
+    return await whereaboutsApi
+      .getCellMoveReason(context, bookingId, bedAssignmentHistorySequence)
+      .then(cellMoveReason => caseNotesApi.getCaseNote(context, offenderNo, cellMoveReason.cellMoveReason.caseNoteId))
+      .then(caseNote => caseNote.text)
+  } catch (err) {
+    if (err?.response?.status === 404) return null
+    throw err
+  }
+}
+
+const mapReasonToCaseNoteSubTypeDescription = ({ caseNoteTypes, assignmentReason }) =>
+  caseNoteTypes
+    .filter(type => type.code === 'MOVED_CELL')
+    .flatMap(cellMoveTypes => cellMoveTypes.subCodes)
+    .find(subType => subType.code === assignmentReason)?.description
+
+module.exports = ({ prisonApi, whereaboutsApi, caseNotesApi, logError }) => async (req, res) => {
   const { offenderNo } = req.params
   const { agencyId, locationId, fromDate, toDate = moment().format('YYYY-MM-DD') } = req.query
 
@@ -26,10 +54,28 @@ module.exports = ({ prisonApi, logError }) => async (req, res) => {
     ])
 
     const userCaseLoadIds = userCaseLoads.map(caseLoad => caseLoad.caseLoadId)
-
     const { bookingId, firstName, lastName } = prisonerDetails
-
     const currentPrisonerDetails = locationHistory.find(record => record.bookingId === bookingId) || {}
+    const { movementMadeBy, assignmentReason, bedAssignmentHistorySequence } = currentPrisonerDetails
+
+    const movementMadeByName = await fetchStaffName(res.locals, movementMadeBy, prisonApi)
+    const whatHappenedDetails = await fetchWhatHappened(
+      res.locals,
+      offenderNo,
+      bookingId,
+      bedAssignmentHistorySequence,
+      caseNotesApi,
+      whereaboutsApi
+    )
+
+    const isDpsCellMove = Boolean(whatHappenedDetails)
+
+    const assignmentReasonName =
+      isDpsCellMove &&
+      mapReasonToCaseNoteSubTypeDescription({
+        caseNoteTypes: await caseNotesApi.getCaseNoteTypes(res.locals),
+        assignmentReason,
+      })
 
     const locationHistoryWithPrisoner =
       hasLength(locationHistory) &&
@@ -41,7 +87,6 @@ module.exports = ({ prisonApi, logError }) => async (req, res) => {
       ))
 
     const prisonerName = formatName(firstName, lastName)
-
     const getMovedOutText = sharingOffenderEndTime => {
       if (!currentPrisonerDetails.assignmentEndDateTime && !sharingOffenderEndTime) return 'Currently sharing'
       if (currentPrisonerDetails.assignmentEndDateTime && !sharingOffenderEndTime) return `${prisonerName} moved out`
@@ -60,6 +105,9 @@ module.exports = ({ prisonApi, logError }) => async (req, res) => {
         movedOut: currentPrisonerDetails.assignmentEndDateTime
           ? formatTimestampToDateTime(currentPrisonerDetails.assignmentEndDateTime)
           : 'Current cell',
+        movedBy: movementMadeByName,
+        reasonForMove: assignmentReasonName || notEnteredMessage,
+        whatHappened: whatHappenedDetails || notEnteredMessage,
         attributes: locationAttributes.attributes,
       },
       locationSharingHistory:
@@ -80,6 +128,7 @@ module.exports = ({ prisonApi, logError }) => async (req, res) => {
     })
   } catch (error) {
     logError(req.originalUrl, error, serviceUnavailableMessage)
+    res.status(500)
     return res.render('error.njk', { url: `/prisoner/${offenderNo}` })
   }
 }

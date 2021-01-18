@@ -1,26 +1,51 @@
-module.exports = ({ prisonApi, oauthApi }) => async (req, res, next) => {
-  if (!req.xhr) {
-    if (!req.session.userDetails) {
-      const userDetails = await oauthApi.currentUser(res.locals)
-      const allCaseloads = await prisonApi.userCaseLoads(res.locals)
+const logger = require('../log')
+const { forenameToInitial } = require('../utils')
 
-      req.session.userDetails = userDetails
-      req.session.allCaseloads = allCaseloads
+module.exports = ({ prisonApi, oauthApi }) => {
+  const getActiveCaseload = async (req, res) => {
+    const { activeCaseLoadId, username } = req.session.userDetails
+    const { allCaseloads: caseloads } = req.session
+
+    const activeCaseLoad = caseloads.find(cl => cl.caseLoadId === activeCaseLoadId)
+    if (activeCaseLoad) {
+      return activeCaseLoad
     }
 
-    if (typeof req.csrfToken === 'function') {
-      res.locals.csrfToken = req.csrfToken()
+    const potentialCaseLoad = caseloads.find(cl => cl.caseLoadId !== '___')
+    if (potentialCaseLoad) {
+      const firstCaseLoadId = potentialCaseLoad.caseLoadId
+      logger.warn(`No active caseload set for user: ${username}: setting to ${firstCaseLoadId}`)
+      await prisonApi.setActiveCaseload(res.locals, potentialCaseLoad)
+
+      req.session.userDetails.activeCaseLoadId = firstCaseLoadId
+
+      return potentialCaseLoad
     }
 
-    const caseloads = req.session.allCaseloads
-    const { name, activeCaseLoadId } = req.session.userDetails
-
-    res.locals.user = {
-      ...res.locals.user,
-      allCaseloads: caseloads,
-      displayName: name,
-      activeCaseLoad: caseloads.find(cl => cl.caseLoadId === activeCaseLoadId),
-    }
+    logger.warn(`No available caseload to set for user: ${username}`)
+    return null
   }
-  next()
+
+  return async (req, res, next) => {
+    if (!req.xhr) {
+      if (!req.session.userDetails) {
+        const userDetails = await oauthApi.currentUser(res.locals)
+        const allCaseloads = await prisonApi.userCaseLoads(res.locals)
+
+        req.session.userDetails = userDetails
+        req.session.allCaseloads = allCaseloads
+      }
+
+      const activeCaseLoad = await getActiveCaseload(req, res)
+
+      res.locals.user = {
+        ...res.locals.user,
+        allCaseloads: req.session.allCaseloads,
+        displayName: forenameToInitial(req.session.userDetails.name),
+        activeCaseLoad,
+      }
+    }
+
+    next()
+  }
 }

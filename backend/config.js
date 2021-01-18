@@ -9,8 +9,6 @@ module.exports = {
     tokenRefreshThresholdSeconds: process.env.TOKEN_REFRESH_THRESHOLD_SECONDS || 60,
     url: process.env.PRISON_STAFF_HUB_UI_URL || `http://localhost:${process.env.PORT || 3002}/`,
     maximumFileUploadSizeInMb: process.env.MAXIMUM_FILE_UPLOAD_SIZE_IN_MB || 200,
-    redirectToBookingVideoLinkEnabled: process.env.REDIRECT_TO_BOOKING_VIDEO_LINK_ENABLED === 'true' || false,
-    videoLinkEnabledFor: (process.env.VIDEO_LINK_ENABLED_FOR || '').split(','),
     displayRetentionLink: process.env.DISPLAY_RETENTION_LINK === 'true' || false,
     supportUrl: process.env.SUPPORT_URL || 'http://localhost:3000/',
     contentfulSpaceId: process.env.CONTENTFUL_SPACE_ID || 1,
@@ -30,6 +28,22 @@ module.exports = {
     host: process.env.REDIS_HOST,
     port: process.env.REDIS_PORT || 6379,
     password: process.env.REDIS_PASSWORD,
+  },
+  applications: {
+    licences: {
+      url: process.env.LICENCES_URL || 'http://localhost:3003/',
+    },
+    manageaccounts: {
+      url: process.env.MANAGE_AUTH_ACCOUNTS_URL || 'http://localhost:3004/',
+    },
+    moic: {
+      url: process.env.MOIC_URL,
+    },
+    pecs: {
+      url:
+        process.env.PECS_URL ||
+        'https://hmpps-book-secure-move-frontend-staging.apps.live-1.cloud-platform.service.justice.gov.uk',
+    },
   },
   apis: {
     oauth2: {
@@ -96,9 +110,11 @@ module.exports = {
       url: process.env.OFFENDER_SEARCH_API_URL || 'http://localhost:8085',
       timeoutSeconds: process.env.OFFENDER_SEARCH_API_TIMEOUT_SECONDS || 10,
     },
-
     bookVideoLink: {
       url: process.env.BVL_URL || 'http://localhost:3000',
+    },
+    omic: {
+      url: process.env.OMIC_URL || 'http://localhost:3001',
     },
   },
 
@@ -106,14 +122,18 @@ module.exports = {
     enabled: process.env.NOTIFY_ENABLED ? process.env.NOTIFY_ENABLED === 'true' : true,
     notifyKey: process.env.NOTIFY_API_KEY || '',
     confirmBookingPrisonTemplateId: '391bb0e0-89b3-4aef-b11e-c6550b71fee8',
-    confirmBookingCourtTemplateId: '7f44cd94-4a74-4b9d-aff8-386fec34bd2e',
-    prisonCourtBookingTemplateId: '2b156491-3a7b-4bb4-ad1c-9ccfb4949fd9',
-    requestBookingCourtTemplateVLBAdminId: 'c1008f55-c228-4cad-b6fd-fe931c993855',
-    requestBookingCourtTemplateRequesterId: '02da54de-a564-4af8-8e6b-b141a85acf87',
     emails: {
       WWI: {
         omu: process.env.WANDSWORTH_OMU_EMAIL,
         vlb: process.env.WANDSWORTH_VLB_EMAIL,
+      },
+      TSI: {
+        omu: process.env.THAMESIDE_OMU_EMAIL,
+        vlb: process.env.THAMESIDE_VLB_EMAIL,
+      },
+      HEI: {
+        omu: process.env.HEWELL_OMU_EMAIL,
+        vlb: process.env.HEWELL_VLB_EMAIL,
       },
     },
   },

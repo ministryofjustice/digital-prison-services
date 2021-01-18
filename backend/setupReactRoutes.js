@@ -16,10 +16,6 @@ const setup = () => {
     res.sendFile(path.join(__dirname, '../build/index.html'))
   })
 
-  router.get('/$', (req, res) => {
-    res.sendFile(path.join(__dirname, '../build/index.html'))
-  })
-
   return router
 }
 

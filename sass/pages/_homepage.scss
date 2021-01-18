@@ -1,0 +1,11 @@
+.homepage {
+  &-search {
+    padding: govuk-spacing(6) 0;
+    background-color: #e0eef8;
+  }
+
+  &-content {
+    padding: govuk-spacing(6) 0;
+    background: #f0f4f5;
+  }
+}

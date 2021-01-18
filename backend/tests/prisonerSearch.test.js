@@ -31,6 +31,7 @@ describe('Prisoner search', () => {
       },
       render: jest.fn(),
       redirect: jest.fn(),
+      status: jest.fn(),
     }
 
     logError = jest.fn()
@@ -351,6 +352,7 @@ describe('Prisoner search', () => {
 
       await controller.index(req, res)
 
+      expect(res.status).toHaveBeenCalledWith(500)
       expect(logError).toHaveBeenCalledWith(req.originalUrl, new Error('Network error'), serviceUnavailableMessage)
       expect(res.render).toHaveBeenCalledWith('error.njk', { url: '/', homeUrl: '/' })
     })

@@ -26,25 +26,6 @@ module.exports = {
       },
     })
   },
-  stubUserMe: () => {
-    return stubFor({
-      request: {
-        method: 'GET',
-        urlPattern: '/api/users/me',
-      },
-      response: {
-        status: 200,
-        headers: {
-          'Content-Type': 'application/json;charset=UTF-8',
-        },
-        jsonBody: {
-          firstName: 'JAMES',
-          lastName: 'STUART',
-          activeCaseLoadId: 'MDI',
-        },
-      },
-    })
-  },
   stubStaff: (staffId, details) => {
     return stubFor({
       request: {
@@ -1138,6 +1119,21 @@ module.exports = {
       },
     })
   },
+  stubLocationsForAgency: (agency, locations, status = 200) => {
+    return stubFor({
+      request: {
+        method: 'GET',
+        url: `/api/agencies/${agency}/locations`,
+      },
+      response: {
+        status,
+        headers: {
+          'Content-Type': 'application/json;charset=UTF-8',
+        },
+        jsonBody: locations || [],
+      },
+    })
+  },
   stubAppointmentLocations: (agency, locations, status = 200) => {
     return stubFor({
       request: {
@@ -1759,4 +1755,19 @@ module.exports = {
         jsonBody: response || { damageObligations: [] },
       },
     }),
+  stubGetStaffDetails: (staffId, response) => {
+    return stubFor({
+      request: {
+        method: 'GET',
+        urlPattern: `/api/users/${staffId}`,
+      },
+      response: {
+        status: 200,
+        headers: {
+          'Content-Type': 'application/json;charset=UTF-8',
+        },
+        jsonBody: response || {},
+      },
+    })
+  },
 }

@@ -1,11 +1,11 @@
 const express = require('express')
 
-const selectLocationController = require('../controllers/cellMove/selectLocation')
+const searchForCellController = require('../controllers/cellMove/searchForCell')
 const selectCellController = require('../controllers/cellMove/selectCell')
 const nonAssociationsController = require('../controllers/cellMove/viewNonAssociations')
 const offenderDetailsController = require('../controllers/cellMove/viewOffenderDetails')
 const cellSharingRiskAssessmentController = require('../controllers/cellMove/viewCellSharingAssessmentDetails')
-const { moveValidationFactory } = require('../controllers/cellMove/moveValidation')
+const considerRisksController = require('../controllers/cellMove/considerRisks')
 const confirmCellMoveController = require('../controllers/cellMove/confirmCellMove')
 const cellMoveConfirmationController = require('../controllers/cellMove/cellMoveConfirmation')
 const cswapConfirmationController = require('../controllers/cellMove/cswapConfirmation')
@@ -14,7 +14,7 @@ const cellNotAvailable = require('../controllers/cellMove/cellNotAvailable')
 const router = express.Router({ mergeParams: true })
 
 const controller = ({ oauthApi, prisonApi, whereaboutsApi, caseNotesApi, logError }) => {
-  const { index: moveValidationIndex, post: moveValidationPost } = moveValidationFactory({ prisonApi, logError })
+  const { index: considerRisksIndex, post: considerRisksPost } = considerRisksController({ prisonApi, logError })
 
   const { index: confirmCellMoveIndex, post: confirmCellMovePost } = confirmCellMoveController({
     prisonApi,
@@ -23,15 +23,15 @@ const controller = ({ oauthApi, prisonApi, whereaboutsApi, caseNotesApi, logErro
     logError,
   })
 
-  router.get('/select-location', selectLocationController({ oauthApi, prisonApi, whereaboutsApi, logError }))
+  router.get('/search-for-cell', searchForCellController({ oauthApi, prisonApi, whereaboutsApi, logError }))
   router.get('/non-associations', nonAssociationsController({ prisonApi, logError }))
   router.get('/offender-details', offenderDetailsController({ prisonApi, logError }))
   router.get('/cell-sharing-risk-assessment-details', cellSharingRiskAssessmentController({ prisonApi, logError }))
   router.get('/select-cell', selectCellController({ oauthApi, prisonApi, whereaboutsApi, logError }))
   router.get('/confirm-cell-move', confirmCellMoveIndex)
   router.post('/confirm-cell-move', confirmCellMovePost)
-  router.get('/move-validation', moveValidationIndex)
-  router.post('/move-validation', moveValidationPost)
+  router.get('/consider-risks', considerRisksIndex)
+  router.post('/consider-risks', considerRisksPost)
   router.get('/confirmation', cellMoveConfirmationController({ prisonApi, logError }))
   router.get('/cswap-confirmation', cswapConfirmationController({ prisonApi, logError }))
   router.get('/cell-not-available', cellNotAvailable({ prisonApi, logError }))

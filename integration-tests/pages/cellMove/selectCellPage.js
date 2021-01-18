@@ -7,8 +7,10 @@ const selectCellPage = () =>
     cellResults: () => cy.get('[data-test="cell-results-table"]'),
     locationTableHeader: () => cy.get('[data-test="location-table-header"]').find('button'),
     nonAssociationWarning: () => cy.get('#non-association-warning'),
+    selectCswapText: () => cy.get('[data-test="select-cswap-text"]'),
     selectCswapLink: () => cy.get('[data-test="select-cswap-link"]'),
     noResultsMessage: () => cy.get('[data-test="no-results-message"]'),
+    numberOfNonAssociations: () => cy.get("[data-test='number-of-non-associations']"),
   })
 
 export default {

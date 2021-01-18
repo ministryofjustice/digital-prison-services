@@ -1,0 +1,68 @@
+{% extends "../partials/layout.njk" %}
+{% from "govuk/components/select/macro.njk" import govukSelect %}
+{% from "govuk/components/radios/macro.njk" import govukRadios %}
+{% from "govuk/components/button/macro.njk" import govukButton %}
+{% from "../macros/alertFlags.njk" import alertFlags %}
+
+{% set title = "Search for a cell" %}
+
+{% block beforeContent %}
+  {{ govukBreadcrumbs({
+    items: [
+      {
+        text: "Home",
+        href: dpsUrl
+      },
+      {
+        text: breadcrumbPrisonerName,
+        href: profileUrl
+      },
+      {
+        text: 'Location details',
+        href: profileUrl + '/cell-history'
+      },
+      {
+        text: title
+      }
+    ]
+}) }}
+{% endblock %}
+
+{% block content %}
+  <h1 class="govuk-heading-l">{{ title }}</h1>
+
+  {% include "./partials/prisonerInformation.njk" %}
+
+  <form method="GET" action="{{ formAction }}">
+    {{ govukSelect({
+      name: 'location',
+      id: 'location',
+      label: {
+        text: 'Which residential unit do you want to search?',
+        classes: 'govuk-!-font-weight-bold'
+      },
+      items: locations
+    }) }}
+
+    {{ govukRadios({
+      idPrefix: "cellType",
+      name: "cellType",
+      fieldset: {
+        legend: {
+          text: "What type of cell do you want to search for? (Optional)",
+          classes: "govuk-fieldset__legend--s"
+        }
+      },
+      items: cellAttributes,
+      attributes: { "data-test": "cell-type" }
+    }) }}
+
+    {{ govukButton({
+      text: "Search for a cell",
+      preventDoubleClick: true,
+      type: "submit"
+    }) }}
+  </form>
+
+  <a class="govuk-body govuk-link" href="{{ profileUrl }}">Return to prisoner’s profile</a> 
+{% endblock %}
