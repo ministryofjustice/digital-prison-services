@@ -115,7 +115,7 @@ describe('Prisoner private cash', () => {
 
   describe('with data', () => {
     beforeEach(() => {
-      prisonApi.getPrisonerBalances = jest.fn().mockResolvedValue({ cash: 305 })
+      prisonApi.getPrisonerBalances = jest.fn().mockResolvedValue({ cash: 95 })
       prisonApi.getTransactionHistory = jest
         .fn()
         .mockResolvedValue(privateCashResponse)
@@ -137,7 +137,7 @@ describe('Prisoner private cash', () => {
       await controller(req, res)
 
       expect(res.render).toHaveBeenCalledWith('prisonerProfile/prisonerFinance/privateCash.njk', {
-        currentBalance: '£305.00',
+        currentBalance: '£95.00',
         dpsUrl: 'http://localhost:3000/',
         formValues: {
           selectedMonth: 10,

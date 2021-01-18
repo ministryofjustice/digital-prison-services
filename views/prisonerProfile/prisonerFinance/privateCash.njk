@@ -15,7 +15,7 @@
     {% if pendingRows.length %}
       <div class="govuk-grid-column-one-quarter">
         <h2 class="govuk-heading-m govuk-!-margin-bottom-1">Pending balance</h2>
-        <p class="govuk-body-l" data-test="current-balance">{{ pendingBalance }}</p>
+        <p class="govuk-body-l" data-test="pending-balance">{{ pendingBalance }}</p>
       </div>
     {% endif %}
   </div>
@@ -89,6 +89,6 @@
       attributes: { "data-test": "private-cash-non-pending-table" }
     }) }}
   {% else %}
-    <p class="govuk-body">There are no payments in or out of this account for the selected month.</p>
+    <p class="govuk-body" data-test="no-transactions-message">There are no payments in or out of this account for the selected month.</p>
   {% endif %}
 {% endblock %}
