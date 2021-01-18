@@ -1770,4 +1770,17 @@ module.exports = {
       },
     })
   },
+  stubGetDetailsFailure: status =>
+    stubFor({
+      request: {
+        method: 'GET',
+        urlPattern: '/api/bookings/offenderNo/.+?',
+      },
+      response: {
+        status,
+        headers: {
+          'Content-Type': 'application/json;charset=UTF-8',
+        },
+      },
+    }),
 }
