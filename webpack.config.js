@@ -54,10 +54,31 @@ module.exports = {
     filename: './app/bundle.js',
     path: path.join(__dirname, 'build'),
     publicPath: process.env.PUBLIC_URL || '/',
-    ecmaVersion: 5,
+    environment: {
+      // The environment supports arrow functions ('() => { ... }').
+      arrowFunction: true,
+      // The environment supports BigInt as literal (123n).
+      bigIntLiteral: false,
+      // The environment supports const and let for variable declarations.
+      const: true,
+      // The environment supports destructuring ('{ a, b } = obj').
+      destructuring: true,
+      // The environment supports an async import() function to import EcmaScript modules.
+      dynamicImport: false,
+      // The environment supports 'for of' iteration ('for (const x of array) { ... }').
+      forOf: false,
+      // The environment supports ECMAScript Module syntax to import ECMAScript modules (import ... from '...').
+      module: true,
+    },
   },
   module: {
     rules: [
+      {
+        test: /\.m?js/,
+        resolve: {
+          fullySpecified: false, // See https://github.com/webpack/webpack/issues/11467#issuecomment-691873586
+        },
+      },
       {
         // "oneOf" will traverse all following loaders until one will
         // match the requirements. When no loader matches it will fall
@@ -111,12 +132,14 @@ module.exports = {
               {
                 loader: 'sass-loader',
                 options: {
-                  includePaths: [
-                    'node_modules/govuk_frontend_toolkit/stylesheets',
-                    'node_modules/govuk-elements-sass/public/sass',
-                    'node_modules/govuk-frontend',
-                    'node_modules/govuk-frontend/govuk/assets',
-                  ],
+                  sassOptions: {
+                    includePaths: [
+                      'node_modules/govuk_frontend_toolkit/stylesheets',
+                      'node_modules/govuk-elements-sass/public/sass',
+                      'node_modules/govuk-frontend',
+                      'node_modules/govuk-frontend/govuk/assets',
+                    ],
+                  },
                 },
               },
             ],
