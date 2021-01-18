@@ -13,7 +13,7 @@ module.exports = ({ movementsService }) => async (req, res) => {
 
   const results = enRouteResponse
     ?.sort((a, b) => a.lastName.localeCompare(b.lastName, 'en', { ignorePunctuation: true }))
-    .map(offender => {
+    ?.map(offender => {
       const departed = `<div>${moment(offender.movementTime, 'HH:mm:ss').format('HH:mm')}</div>${moment(
         offender.movementDate,
         'YYYY-MM-DD'

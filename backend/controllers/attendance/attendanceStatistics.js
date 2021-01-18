@@ -22,13 +22,11 @@ const formatReason = ({ name, triggersIEPWarning }) =>
 
 const buildStatsViewModel = (dashboardStats, triggersIEPWarning, changes) => {
   const mapReasons = reasons =>
-    !reasons
-      ? []
-      : Object.keys(reasons).map(name => ({
-          id: capitalizeStart(name),
-          name: formatReason({ name, triggersIEPWarning }),
-          value: Number(reasons[name]),
-        }))
+    Object.keys(reasons || []).map(name => ({
+      id: capitalizeStart(name),
+      name: formatReason({ name, triggersIEPWarning }),
+      value: Number(reasons[name]),
+    }))
 
   return {
     ...dashboardStats,

@@ -13,7 +13,7 @@ module.exports = ({ movementsService }) => async (req, res) => {
 
   const results = response
     ?.sort((a, b) => a.lastName.localeCompare(b.lastName, 'en', { ignorePunctuation: true }))
-    .map(offender => {
+    ?.map(offender => {
       const alerts = alertFlagLabels.filter(alertFlag =>
         alertFlag.alertCodes.some(alert => offender.alerts && offender.alerts.includes(alert))
       )

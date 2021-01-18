@@ -1,6 +1,6 @@
 const homePage = require('../pages/homepage/homepagePage')
 
-context('Page not found', () => {
+context('Global errors', () => {
   before(() => {
     cy.clearCookies()
     cy.task('reset')
