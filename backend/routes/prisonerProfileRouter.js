@@ -18,6 +18,7 @@ const prisonerIncentiveLevelDetails = require('../controllers/prisonerProfile/pr
 const prisonerChangeIncentiveLevelDetails = require('../controllers/prisonerProfile/prisonerChangeIncentiveLevelDetails')
 
 const prisonerDamageObligations = require('../controllers/prisonerProfile/prisonerFinances/prisonerDamageObligations')
+const prisonerPrivateCash = require('../controllers/prisonerProfile/prisonerFinances/prisonerPrivateCash')
 
 const prisonerProfileServiceFactory = require('../services/prisonerProfileService')
 const personServiceFactory = require('../services/personService')
@@ -115,6 +116,7 @@ const controller = ({
   )
 
   router.get('/prisoner-finance-details/damage-obligations', prisonerDamageObligations({ prisonApi, logError }))
+  router.get('/prisoner-finance-details/private-cash', prisonerPrivateCash({ prisonApi, logError }))
 
   return router
 }

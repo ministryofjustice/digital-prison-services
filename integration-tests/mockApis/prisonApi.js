@@ -1755,6 +1755,22 @@ module.exports = {
         jsonBody: response || { damageObligations: [] },
       },
     }),
+  stubGetTransactionHistory: ({ response, transactionType, fromDate, toDate, accountCode }) =>
+    stubFor({
+      request: {
+        method: 'GET',
+        urlPattern: `/api/offenders/.+?/transaction-history\\?${fromDate ? `from_date=${fromDate}&` : ''}${
+          toDate ? `to_date=${toDate}&` : ''
+        }account_code=${accountCode}${transactionType ? `&transaction_type=${transactionType}` : ''}`,
+      },
+      response: {
+        status: 200,
+        headers: {
+          'Content-Type': 'application/json;charset=UTF-8',
+        },
+        jsonBody: response || [],
+      },
+    }),
   stubGetStaffDetails: (staffId, response) => {
     return stubFor({
       request: {
