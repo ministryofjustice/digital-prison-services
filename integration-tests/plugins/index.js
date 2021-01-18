@@ -408,6 +408,9 @@ module.exports = on => {
     stubGetAgencyIepLevels: response => prisonApi.stubGetAgencyIepLevels(response),
     stubChangeIepLevel: body => prisonApi.stubChangeIepLevel(body),
     stubGetPrisonerDamageObligations: response => prisonApi.stubGetPrisonerDamageObligations(response),
+    stubGetTransactionHistory: ({ response, accountCode, transactionType, fromDate, toDate }) =>
+      prisonApi.stubGetTransactionHistory({ response, accountCode, transactionType, fromDate, toDate }),
+    stubPrisonerBalances: response => prisonApi.stubPrisonerBalances(response),
     stubGetCellMoveReason: ({ bookingId, bedAssignmentHistorySequence, cellMoveReason, status }) =>
       whereabouts.stubGetCellMoveReason(bookingId, bedAssignmentHistorySequence, cellMoveReason, status),
     stubGetStaffDetails: ({ staffId, response }) => prisonApi.stubGetStaffDetails(staffId, response),
