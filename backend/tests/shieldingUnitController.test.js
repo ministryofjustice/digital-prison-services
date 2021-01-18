@@ -58,18 +58,9 @@ describe('shielding unit', () => {
   })
 
   it('should handle errors', async () => {
-    const error = Error('unexpected err')
+    const error = new Error('unexpected err')
     covidService.getAlertList.mockRejectedValue(error)
 
-    await controller(req, res)
-
-    expect(logError).toHaveBeenCalledWith('http://localhost', error, 'Failed to load shielding list')
-    expect(res.status).toHaveBeenCalledWith(500)
-    expect(res.render).toHaveBeenCalledWith(
-      'error.njk',
-      expect.objectContaining({
-        url: '/current-covid-units/shielding-unit',
-      })
-    )
+    await expect(controller(req, res)).rejects.toThrowError(error)
   })
 })

@@ -1,5 +1,4 @@
 const prisonerFullImage = require('../controllers/prisonerProfile/prisonerFullImage.js')
-const { serviceUnavailableMessage } = require('../common-messages')
 
 describe('prisoner profile full image', () => {
   const offenderNo = 'ABC123'
@@ -53,21 +52,6 @@ describe('prisoner profile full image', () => {
       backUrl: refererUrl,
       offenderNo,
       offenderName: 'Prisoner, Test',
-    })
-  })
-
-  describe('when there are errors with prisonApi', () => {
-    beforeEach(() => {
-      req.params.offenderNo = offenderNo
-      prisonApi.getDetails.mockImplementation(() => Promise.reject(new Error('Network error')))
-    })
-
-    it('should render the error template', async () => {
-      await controller(req, res)
-
-      expect(res.status).toHaveBeenCalledWith(500)
-      expect(logError).toHaveBeenCalledWith('http://localhost', new Error('Network error'), serviceUnavailableMessage)
-      expect(res.render).toHaveBeenCalledWith('error.njk', { url: 'http://localhost:3000/' })
     })
   })
 })

@@ -23,13 +23,6 @@ const bulkAppointmentsConfirmFactory = (prisonApi, logError) => {
     })
   }
 
-  const renderError = (req, res, error) => {
-    if (error) logError(req.originalUrl, error, 'Sorry, the service is unavailable')
-    res.status(500)
-
-    return res.render('error.njk', { url: '/bulk-appointments/need-to-upload-file' })
-  }
-
   const validate = (prisonersWithAppointmentTimes, date) => {
     const errors = []
     const now = moment()
@@ -189,7 +182,8 @@ const bulkAppointmentsConfirmFactory = (prisonApi, logError) => {
 
       return res.redirect('/bulk-appointments/appointments-added')
     } catch (error) {
-      return renderError(req, res, error)
+      res.locals.redirectUrl = '/bulk-appointments/need-to-upload-file'
+      throw error
     }
   }
 

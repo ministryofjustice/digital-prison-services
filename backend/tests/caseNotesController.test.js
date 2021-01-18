@@ -87,15 +87,6 @@ describe('Case notes controller', () => {
     })
   })
 
-  it('should render error template', async () => {
-    caseNotesApi.getCaseNotes.mockRejectedValue(new Error('test'))
-    await controller(reqDefault, res)
-
-    expect(logError).toHaveBeenCalledWith('http://localhost', new Error('test'), 'Sorry, the service is unavailable')
-    expect(res.status).toHaveBeenCalledWith(500)
-    expect(res.render).toHaveBeenCalledWith('error.njk', { url: '/prisoner/A12345/case-notes' })
-  })
-
   it('should request case notes without filters', async () => {
     await controller(reqDefault, res)
 
@@ -134,41 +125,6 @@ describe('Case notes controller', () => {
         type: 'type1',
       })
     )
-  })
-
-  it('should make an initial request to pull the total results size, the another request to bring back all the case notes', async () => {
-    caseNotesApi.getCaseNotes.mockResolvedValue({
-      totalElements: 1000,
-    })
-
-    const req = {
-      ...reqDefault,
-      query: {
-        showAll: true,
-        type: 'type1',
-        subType: 'subType2',
-        fromDate: '10/10/2010',
-        toDate: '11/10/2020',
-      },
-    }
-    await controller(req, res)
-
-    expect(caseNotesApi.getCaseNotes).toHaveBeenCalledWith({}, 'A12345', {
-      endDate: '11/10/2020',
-      pageNumber: 0,
-      perPage: 1,
-      startDate: '10/10/2010',
-      subType: 'subType2',
-      type: 'type1',
-    })
-    expect(caseNotesApi.getCaseNotes).toHaveBeenCalledWith({}, 'A12345', {
-      endDate: '11/10/2020',
-      pageNumber: 0,
-      perPage: 1000,
-      startDate: '10/10/2010',
-      subType: 'subType2',
-      type: 'type1',
-    })
   })
 
   it('should handle ajax request', async () => {

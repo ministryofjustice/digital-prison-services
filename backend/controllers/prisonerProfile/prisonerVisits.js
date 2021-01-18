@@ -1,12 +1,11 @@
 const moment = require('moment')
-const { serviceUnavailableMessage } = require('../../common-messages')
 const { hasLength, formatName, putLastNameFirst, sortByDateTime } = require('../../utils')
 const generatePagination = require('../../shared/generatePagination')
 const {
   app: { notmEndpointUrl: dpsUrl },
 } = require('../../config')
 
-module.exports = ({ prisonApi, logError, pageSize = 20 }) => async (req, res) => {
+module.exports = ({ prisonApi, pageSize = 20 }) => async (req, res, next) => {
   const { offenderNo } = req.params
   const { visitType, fromDate, toDate, page = 0 } = req.query
   const url = new URL(`${req.protocol}://${req.get('host')}${req.originalUrl}`)
@@ -17,10 +16,7 @@ module.exports = ({ prisonApi, logError, pageSize = 20 }) => async (req, res) =>
       prisonApi.getVisitTypes(res.locals),
     ])
       .then(data => data)
-      .catch(error => {
-        logError(req.originalUrl, error, serviceUnavailableMessage)
-        return res.render('error.njk', { url: '/' })
-      })
+      .catch(next)
 
     const { bookingId } = details || {}
 
@@ -97,8 +93,7 @@ module.exports = ({ prisonApi, logError, pageSize = 20 }) => async (req, res) =>
       visitTypes: hasLength(visitTypes) && visitTypes.map(type => ({ value: type.code, text: type.description })),
     })
   } catch (error) {
-    logError(req.originalUrl, error, serviceUnavailableMessage)
-    res.status(500)
-    return res.render('error.njk', { url: `/prisoner/${offenderNo}` })
+    res.locals.redirectUrl = `/prisoner/${offenderNo}`
+    throw error
   }
 }

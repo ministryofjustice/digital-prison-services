@@ -1,18 +1,10 @@
-const { serviceUnavailableMessage } = require('../../common-messages')
 const { putLastNameFirst, formatName } = require('../../utils')
 const { raiseAnalyticsEvent } = require('../../raiseAnalyticsEvent')
 const {
   app: { notmEndpointUrl: dpsUrl },
 } = require('../../config')
 
-module.exports = ({ prisonApi, logError }) => {
-  const renderError = (req, res, error) => {
-    const { offenderNo } = req.params
-    logError(req.originalUrl, error, serviceUnavailableMessage)
-    res.status(500)
-    return res.render('error.njk', { url: `/prisoner/${offenderNo}` })
-  }
-
+module.exports = ({ prisonApi }) => {
   const renderTemplate = async (req, res, pageData) => {
     const { offenderNo } = req.params
     const { errors, formValues = {} } = pageData || {}
@@ -50,7 +42,8 @@ module.exports = ({ prisonApi, logError }) => {
         selectableLevels,
       })
     } catch (error) {
-      return renderError(req, res, error)
+      res.locals.redirectUrl = `/prisoner/${offenderNo}`
+      throw error
     }
   }
 
@@ -92,7 +85,8 @@ module.exports = ({ prisonApi, logError }) => {
 
       return res.redirect(`/prisoner/${offenderNo}/incentive-level-details`)
     } catch (error) {
-      return renderError(req, res, error)
+      res.locals.redirectUrl = `/prisoner/${offenderNo}`
+      throw error
     }
   }
 

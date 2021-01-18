@@ -7,7 +7,7 @@ const { properCaseName, putLastNameFirst } = require('../../utils')
 
 const CSWAP = 'C-SWAP'
 
-module.exports = ({ prisonApi, whereaboutsApi, caseNotesApi, logError }) => {
+module.exports = ({ prisonApi, whereaboutsApi, caseNotesApi }) => {
   const index = async (req, res) => {
     const { offenderNo } = req.params
     const { cellId } = req.query
@@ -136,14 +136,10 @@ module.exports = ({ prisonApi, whereaboutsApi, caseNotesApi, logError }) => {
         commentText: comment,
       })
     } catch (error) {
-      if (error) logError(req.originalUrl, error, `Failed to make cell move to ${cellId}`)
-
-      res.status(500)
-
-      return res.render('error.njk', {
-        url: `/prisoner/${offenderNo}/cell-move/select-cell`,
-        homeUrl: `/prisoner/${offenderNo}`,
-      })
+      res.locals.logMessagev = `Failed to make cell move to ${cellId}`
+      res.locals.redirectUrl = `/prisoner/${offenderNo}/cell-move/select-cell`
+      res.locals.homeUrl = `/prisoner/${offenderNo}`
+      throw error
     }
   }
 

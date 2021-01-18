@@ -1,5 +1,4 @@
 const moment = require('moment')
-const { serviceUnavailableMessage } = require('../../common-messages')
 const { alertFlagLabels, cellMoveAlertCodes } = require('../../shared/alertFlagValues')
 const { putLastNameFirst, hasLength, groupBy, properCaseName, formatName } = require('../../utils')
 const {
@@ -109,7 +108,7 @@ const getResidentialLevelNonAssociations = async (res, { prisonApi, nonAssociati
   )
 }
 
-module.exports = ({ oauthApi, prisonApi, whereaboutsApi, logError }) => async (req, res) => {
+module.exports = ({ oauthApi, prisonApi, whereaboutsApi }) => async (req, res) => {
   const { offenderNo } = req.params
   const { location = 'ALL', subLocation, cellType, locationId } = req.query
   const { activeCaseLoadId } = req.session.userDetails
@@ -224,13 +223,8 @@ module.exports = ({ oauthApi, prisonApi, whereaboutsApi, logError }) => async (r
       formAction: `/prisoner/${offenderNo}/cell-move/select-cell`,
     })
   } catch (error) {
-    if (error) logError(req.originalUrl, error, serviceUnavailableMessage)
-
-    res.status(500)
-
-    return res.render('error.njk', {
-      url: `/prisoner/${offenderNo}/cell-move/search-for-cell`,
-      homeUrl: `/prisoner/${offenderNo}`,
-    })
+    res.locals.redirectUrl = `/prisoner/${offenderNo}/cell-move/search-for-cell`
+    res.locals.homeUrl = `/prisoner/${offenderNo}`
+    throw error
   }
 }

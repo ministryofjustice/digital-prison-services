@@ -1,5 +1,5 @@
 const moment = require('moment')
-const { serviceUnavailableMessage, notEnteredMessage } = require('../../common-messages')
+const { notEnteredMessage } = require('../../common-messages')
 const {
   formatName,
   formatTimestampToDateTime,
@@ -40,7 +40,7 @@ const mapReasonToCaseNoteSubTypeDescription = ({ caseNoteTypes, assignmentReason
     .flatMap(cellMoveTypes => cellMoveTypes.subCodes)
     .find(subType => subType.code === assignmentReason)?.description
 
-module.exports = ({ prisonApi, whereaboutsApi, caseNotesApi, logError }) => async (req, res) => {
+module.exports = ({ prisonApi, whereaboutsApi, caseNotesApi }) => async (req, res) => {
   const { offenderNo } = req.params
   const { agencyId, locationId, fromDate, toDate = moment().format('YYYY-MM-DD') } = req.query
 
@@ -127,8 +127,7 @@ module.exports = ({ prisonApi, whereaboutsApi, caseNotesApi, logError }) => asyn
       locationName: extractLocation(locationAttributes.description, agencyId),
     })
   } catch (error) {
-    logError(req.originalUrl, error, serviceUnavailableMessage)
-    res.status(500)
-    return res.render('error.njk', { url: `/prisoner/${offenderNo}` })
+    res.locals.redirectUrl = `/prisoner/${offenderNo}`
+    throw error
   }
 }

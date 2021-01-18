@@ -227,7 +227,7 @@ describe('Attendance reason statistics', () => {
     })
 
     it('should call whereabouts stats api with the correct parameters', async () => {
-      whereaboutsApi.getAttendanceStats.mockReturnValue({})
+      whereaboutsApi.getAttendanceStats.mockReturnValue({ paidReasons: {} })
       oauthApi.userRoles.mockReturnValue({})
 
       const { attendanceStatistics } = attendanceStatisticsFactory(oauthApi, prisonApi, whereaboutsApi, jest.fn())
@@ -395,41 +395,16 @@ describe('Attendance reason statistics', () => {
       )
     })
 
-    it('should try render the error template on error', async () => {
-      const logError = jest.fn()
-      const { attendanceStatistics } = attendanceStatisticsFactory(oauthApi, prisonApi, whereaboutsApi, logError)
-
-      const req = { query: { agencyId, date, period } }
-      const res = { render: jest.fn(), status: jest.fn() }
-
-      await attendanceStatistics(req, res)
-
-      expect(res.status).toHaveBeenCalledWith(500)
-      expect(res.render).toHaveBeenCalledWith('error.njk', {
-        url: '/manage-prisoner-whereabouts/attendance-reason-statistics',
-      })
-    })
-
     it('should log the correct error', async () => {
-      const logError = jest.fn()
+      const error = new Error('something is wrong')
+      whereaboutsApi.getAttendanceStats.mockRejectedValue(error)
 
-      whereaboutsApi.getAttendanceStats.mockImplementation(() => {
-        throw new Error('something is wrong')
-      })
-
-      const { attendanceStatistics } = attendanceStatisticsFactory(oauthApi, prisonApi, whereaboutsApi, logError)
+      const { attendanceStatistics } = attendanceStatisticsFactory(oauthApi, prisonApi, whereaboutsApi)
 
       const req = { ...mockReq, query: { agencyId, fromDate, period } }
       const res = { render: jest.fn(), status: jest.fn() }
 
-      await attendanceStatistics(req, res)
-
-      expect(res.status).toHaveBeenCalledWith(500)
-      expect(logError).toHaveBeenCalledWith(
-        '/manage-prisoner-whereabouts/attendance-reason-statistics',
-        new Error('something is wrong'),
-        'Sorry, the service is unavailable'
-      )
+      await expect(attendanceStatistics(req, res)).rejects.toThrowError(error)
     })
 
     it('should clear the date and period from a from and to date have been passed', async () => {
@@ -619,49 +594,18 @@ describe('Attendance reason statistics', () => {
       })
     })
 
-    it('should try render the error template on error', async () => {
-      const logError = jest.fn()
-      const { attendanceStatisticsOffendersList } = attendanceStatisticsFactory(
-        oauthApi,
-        prisonApi,
-        whereaboutsApi,
-        logError
-      )
-
-      const req = { query: { agencyId, date, period }, params: { reason: 'AcceptableAbsence' } }
-      const res = { render: jest.fn(), status: jest.fn() }
-
-      await attendanceStatisticsOffendersList(req, res)
-
-      expect(res.status).toHaveBeenCalledWith(500)
-      expect(res.render).toHaveBeenCalledWith('error.njk', {
-        url: '/manage-prisoner-whereabouts/attendance-reason-statistics/reason/AcceptableAbsence',
-      })
-    })
-
     it('should log the correct error', async () => {
-      const logError = jest.fn()
+      const error = new Error('something is wrong')
 
-      oauthApi.currentUser.mockImplementation(() => {
-        throw new Error('something is wrong')
-      })
+      oauthApi.currentUser.mockRejectedValueOnce(error)
 
-      const { attendanceStatisticsOffendersList } = attendanceStatisticsFactory(
-        oauthApi,
-        prisonApi,
-        whereaboutsApi,
-        logError
-      )
+      const { attendanceStatisticsOffendersList } = attendanceStatisticsFactory(oauthApi, prisonApi, whereaboutsApi)
       const req = { ...mockReq, query: { agencyId, date, period }, params: { reason: 'AcceptableAbsence' } }
-      const res = { render: jest.fn(), status: jest.fn() }
+      const res = { render: jest.fn(), status: jest.fn(), locals: {} }
 
-      await attendanceStatisticsOffendersList(req, res)
-
-      expect(res.status).toHaveBeenCalledWith(500)
-      expect(logError).toHaveBeenCalledWith(
-        '/manage-prisoner-whereabouts/attendance-reason-statistics/reason/',
-        new Error('something is wrong'),
-        'Sorry, the service is unavailable'
+      await expect(attendanceStatisticsOffendersList(req, res)).rejects.toThrowError(error)
+      expect(res.locals.redirectUrl).toBe(
+        '/manage-prisoner-whereabouts/attendance-reason-statistics/reason/AcceptableAbsence'
       )
     })
   })

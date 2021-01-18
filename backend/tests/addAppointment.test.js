@@ -2,7 +2,6 @@ const moment = require('moment')
 const { addAppointmentFactory } = require('../controllers/appointments/addAppointment')
 const config = require('../config')
 const { DAY_MONTH_YEAR } = require('../../src/dateHelpers')
-const { serviceUnavailableMessage } = require('../common-messages')
 const { repeatTypes } = require('../shared/appointmentConstants')
 
 config.app.notmEndpointUrl = '//dpsUrl/'
@@ -84,19 +83,17 @@ describe('Add appointment', () => {
     })
 
     describe('when there are API errors', () => {
+      const error = new Error('Network error')
       beforeEach(() => {
         req.params.offenderNo = offenderNo
-        prisonApi.getDetails.mockImplementation(() => Promise.reject(new Error('Network error')))
+        prisonApi.getDetails.mockRejectedValue(error)
       })
 
       it('should render the error template', async () => {
         res.status = jest.fn()
 
-        await controller.index(req, res)
-
-        expect(res.status).toHaveBeenCalledWith(500)
-        expect(logError).toHaveBeenCalledWith('http://localhost', new Error('Network error'), serviceUnavailableMessage)
-        expect(res.render).toHaveBeenCalledWith('error.njk', { url: `/prisoner/${offenderNo}` })
+        await expect(controller.index(req, res)).rejects.toThrowError(error)
+        expect(res.locals.redirectUrl).toBe(`/prisoner/${offenderNo}`)
       })
     })
   })
@@ -191,14 +188,14 @@ describe('Add appointment', () => {
       it('should render the error template', async () => {
         jest.spyOn(Date, 'now').mockImplementation(() => 33103209600000) // Friday 3019-01-01T00:00:00.000Z
         req.body = { ...validBody, date: moment().format(DAY_MONTH_YEAR) }
-        prisonApi.addAppointments.mockImplementation(() => Promise.reject(new Error('Network error')))
         res.status = jest.fn()
 
-        await controller.post(req, res)
+        const error = new Error('Network error')
 
-        expect(res.status).toHaveBeenCalledWith(500)
-        expect(logError).toHaveBeenCalledWith('http://localhost', new Error('Network error'), serviceUnavailableMessage)
-        expect(res.render).toHaveBeenCalledWith('error.njk', { url: `/prisoner/${offenderNo}` })
+        prisonApi.addAppointments.mockRejectedValue(error)
+
+        await expect(controller.post(req, res)).rejects.toThrowError(error)
+        expect(res.locals.redirectUrl).toBe(`/prisoner/${offenderNo}`)
 
         Date.now.mockRestore()
       })

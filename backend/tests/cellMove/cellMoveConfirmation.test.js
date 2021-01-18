@@ -3,7 +3,7 @@ const cellMoveConfirmation = require('../../controllers/cellMove/cellMoveConfirm
 describe('Cell move confirmation', () => {
   let controller
   const req = { params: { offenderNo: 'A12345' }, query: { cellId: 1 }, originalUrl: 'http://localhost' }
-  const res = { locals: {}, status: jest.fn() }
+  let res
   const prisonApi = {}
   let logError
 
@@ -13,7 +13,7 @@ describe('Cell move confirmation', () => {
     prisonApi.getLocation = jest.fn().mockResolvedValue({ description: 'A-1-012' })
     controller = cellMoveConfirmation({ prisonApi, logError })
 
-    res.render = jest.fn()
+    res = { locals: {}, status: jest.fn(), render: jest.fn() }
   })
 
   it('should make a call to retrieve an offenders details', async () => {
@@ -28,18 +28,15 @@ describe('Cell move confirmation', () => {
     expect(prisonApi.getLocation).toHaveBeenCalledWith({}, 1)
   })
 
-  it('should handle api errors', async () => {
+  it('should store correct redirect and home url then re-throw the error', async () => {
+    const offenderNo = 'A12345'
     const error = new Error('network error')
+
     prisonApi.getDetails = jest.fn().mockRejectedValue(error)
 
-    await controller(req, res)
+    await expect(controller(req, res)).rejects.toThrowError(error)
 
-    expect(logError).toHaveBeenCalledWith('http://localhost', error, 'Failed to load cell move confirmation page')
-
-    expect(res.status).toHaveBeenCalledWith(400)
-    expect(res.render).toHaveBeenCalledWith('error.njk', {
-      homeUrl: '/prisoner/A12345',
-      url: '/prisoner/A12345/cell-move/search-for-cell',
-    })
+    expect(res.locals.redirectUrl).toBe(`/prisoner/${offenderNo}/cell-move/search-for-cell`)
+    expect(res.locals.homeUrl).toBe(`/prisoner/${offenderNo}`)
   })
 })

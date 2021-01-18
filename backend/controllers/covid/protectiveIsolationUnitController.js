@@ -2,7 +2,7 @@ const moment = require('moment')
 const { sortByDateTime } = require('../../utils')
 const { alerts } = require('../../services/covidService')
 
-module.exports = ({ covidService, logError, nowGetter = moment }) => {
+module.exports = ({ covidService, nowGetter = moment }) => {
   const formatResult = result => {
     const alertCreated = moment(result.alertCreated)
     const now = nowGetter()
@@ -18,21 +18,15 @@ module.exports = ({ covidService, logError, nowGetter = moment }) => {
   }
 
   return async (req, res) => {
-    try {
-      const results = await covidService.getAlertList(res, alerts.protectiveIsolationUnit)
+    const results = await covidService.getAlertList(res, alerts.protectiveIsolationUnit)
 
-      const formattedResults = results
-        .map(formatResult)
-        .sort((left, right) => sortByDateTime(left.alertCreated, right.alertCreated))
+    const formattedResults = results
+      .map(formatResult)
+      .sort((left, right) => sortByDateTime(left.alertCreated, right.alertCreated))
 
-      return res.render('covid/protectiveIsolationUnit.njk', {
-        title: 'Prisoners in the Protective Isolation Unit',
-        results: formattedResults,
-      })
-    } catch (e) {
-      logError(req.originalUrl, e, 'Failed to load protective isolation list')
-      res.status(500)
-      return res.render('error.njk', { url: '/current-covid-units/protective-isolation-unit' })
-    }
+    return res.render('covid/protectiveIsolationUnit.njk', {
+      title: 'Prisoners in the Protective Isolation Unit',
+      results: formattedResults,
+    })
   }
 }

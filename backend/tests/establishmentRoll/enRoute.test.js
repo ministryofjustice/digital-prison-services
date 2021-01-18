@@ -51,15 +51,10 @@ describe('En route test', () => {
   })
 
   it('should return right error message', async () => {
-    movementsService.getOffendersEnRoute.mockRejectedValue(new Error('error'))
-    await controller(req, res)
+    const error = new Error('error')
+    movementsService.getOffendersEnRoute.mockRejectedValue(error)
 
-    expect(logError).toHaveBeenCalledWith(req.originalUrl, new Error('error'), 'Failed to load en route page')
-    expect(res.status).toHaveBeenCalledWith(500)
-    expect(res.render).toHaveBeenCalledWith('error.njk', {
-      url: '/establishment-roll/en-route',
-      homeUrl: 'http://localhost:3000/',
-    })
+    await expect(controller(req, res)).rejects.toThrowError(error)
   })
 
   it('should return response with data', async () => {

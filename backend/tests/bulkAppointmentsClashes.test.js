@@ -239,18 +239,18 @@ describe('appointment clashes', () => {
     })
 
     describe('and there is an issue with getting other events', () => {
+      const error = new Error('There has been an error')
+
       beforeEach(() => {
-        prisonApi.getVisits = jest.fn().mockRejectedValue(new Error('There has been an error'))
+        prisonApi.getVisits = jest.fn().mockRejectedValue(error)
       })
 
       it('should log an error and render the error page', async () => {
         req.session.data = { ...appointmentDetails }
         res.status = jest.fn()
 
-        await controller.index(req, res)
-
-        expect(res.status).toHaveBeenCalledWith(500)
-        expect(res.render).toBeCalledWith('error.njk', { url: '/bulk-appointments/need-to-upload-file' })
+        await expect(controller.index(req, res)).rejects.toThrowError(error)
+        expect(res.locals.redirectUrl).toBe('/bulk-appointments/need-to-upload-file')
       })
     })
   })

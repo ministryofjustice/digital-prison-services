@@ -1,6 +1,6 @@
 const { properCaseName, putLastNameFirst } = require('../../utils')
 
-module.exports = ({ prisonApi, logError }) => async (req, res) => {
+module.exports = ({ prisonApi }) => async (req, res) => {
   const { offenderNo } = req.params
 
   try {
@@ -16,13 +16,8 @@ module.exports = ({ prisonApi, logError }) => async (req, res) => {
       prisonerSearchLink: '/prisoner-search',
     })
   } catch (error) {
-    if (error) logError(req.originalUrl, error, 'Failed to load cell move confirmation page')
-
-    res.status(400)
-
-    return res.render('error.njk', {
-      url: `/prisoner/${offenderNo}/cell-move/search-for-cell`,
-      homeUrl: `/prisoner/${offenderNo}`,
-    })
+    res.locals.redirectUrl = `/prisoner/${offenderNo}/cell-move/search-for-cell`
+    res.locals.homeUrl = `/prisoner/${offenderNo}`
+    throw error
   }
 }

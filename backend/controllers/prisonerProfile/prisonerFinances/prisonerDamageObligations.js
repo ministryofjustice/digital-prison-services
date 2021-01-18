@@ -9,7 +9,7 @@ const {
   sortByDateTime,
 } = require('../../../utils')
 
-module.exports = ({ prisonApi, logError }) => async (req, res) => {
+module.exports = ({ prisonApi }) => async (req, res) => {
   const { offenderNo } = req.params
 
   try {
@@ -61,8 +61,7 @@ module.exports = ({ prisonApi, logError }) => async (req, res) => {
       totalOwed: formatCurrency(totalOwed),
     })
   } catch (error) {
-    logError(req.originalUrl, error, 'Damage obligations page - Prisoner finances')
-    res.status(500)
-    return res.render('error.njk', { url: `/prisoner/${offenderNo}` })
+    res.locals.redirectUrl = `/prisoner/${offenderNo}`
+    throw error
   }
 }

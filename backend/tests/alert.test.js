@@ -190,20 +190,18 @@ describe('alert management', () => {
 
     describe('when there are errors', () => {
       it('should return an error when there is a problem updating the alert', async () => {
+        const error = new Error('There has been an error')
+
         const req = {
           ...mockReq,
           params: { offenderNo, alertId: 1 },
           body: { alertStatus: 'yes', offenderNo, comment: 'test' },
         }
 
-        prisonApi.updateAlert = jest.fn().mockImplementationOnce(() => {
-          throw new Error('There has been an error')
-        })
+        prisonApi.updateAlert = jest.fn().mockRejectedValue(error)
 
-        await handleEditAlertForm(req, res)
-
-        expect(req.flash).toBeCalledWith('errors', [{ text: 'Sorry, the service is unavailable' }])
-        expect(res.redirect).toBeCalledWith('/edit-alert?offenderNo=ABC123&alertId=1')
+        await expect(handleEditAlertForm(req, res)).rejects.toThrowError(error)
+        expect(res.locals.redirectUrl).toBe('/edit-alert?offenderNo=ABC123&alertId=1')
       })
 
       it('should return an error if no option is selected', async () => {
@@ -350,25 +348,14 @@ describe('alert management', () => {
 
   describe('displayCreateAlertPage()', () => {
     it('should return an error when there is a problem loading the form', async () => {
-      oauthApi.userRoles = jest.fn().mockImplementationOnce(() => {
-        throw new Error('There has been an error')
-      })
+      const error = new Error('There has been an error')
+      oauthApi.userRoles = jest.fn().mockRejectedValueOnce(error)
 
       const req = { ...mockCreateReq, params: { offenderNo }, headers: {} }
-
       res.status = jest.fn()
 
-      await displayCreateAlertPage(req, res)
-
-      expect(res.status).toHaveBeenCalledWith(500)
-      expect(res.render).toBeCalledWith('error.njk', {
-        url: '/prisoner/ABC123/alerts',
-      })
-      expect(logError).toBeCalledWith(
-        '/create-alert/',
-        new Error('There has been an error'),
-        'Sorry, the service is unavailable'
-      )
+      await expect(displayCreateAlertPage(req, res)).rejects.toThrowError(error)
+      expect(res.locals.redirectUrl).toBe('/prisoner/ABC123/alerts')
     })
 
     it('should render the createAlertForm with the correctly formatted information', async () => {
@@ -442,6 +429,8 @@ describe('alert management', () => {
 
     describe('when there are errors', () => {
       it('should return an error when there is a problem creating the alert', async () => {
+        const error = new Error('There has been an error')
+
         const req = {
           ...mockCreateReq,
           params: { offenderNo },
@@ -455,18 +444,11 @@ describe('alert management', () => {
           },
         }
 
-        prisonApi.createAlert = jest.fn().mockImplementationOnce(() => {
-          throw new Error('There has been an error')
-        })
+        prisonApi.createAlert = jest.fn().mockRejectedValue(error)
 
         res.status = jest.fn()
 
-        await handleCreateAlertForm(req, res)
-
-        expect(res.status).toHaveBeenCalledWith(500)
-        expect(res.render).toBeCalledWith('error.njk', {
-          url: '/prisoner/ABC123/create-alert',
-        })
+        await expect(handleCreateAlertForm(req, res)).rejects.toThrowError(error)
       })
 
       it('should return an error if missing data', async () => {

@@ -2,7 +2,7 @@ const moment = require('moment')
 const { isBeforeToday, sortByDateTime } = require('../../utils')
 const { alerts } = require('../../services/covidService')
 
-module.exports = ({ covidService, logError }) => {
+module.exports = ({ covidService }) => {
   const formatResult = result => {
     const alertCreated = moment(result.alertCreated)
     const expectedMoveDate = moment(result.alertCreated).add(14, 'days')
@@ -19,23 +19,17 @@ module.exports = ({ covidService, logError }) => {
   }
 
   return async (req, res) => {
-    try {
-      const results = await covidService.getAlertList(res, alerts.reverseCohortingUnit)
-      const notInUnit = await covidService.getUnassignedNewEntrants(res)
+    const results = await covidService.getAlertList(res, alerts.reverseCohortingUnit)
+    const notInUnit = await covidService.getUnassignedNewEntrants(res)
 
-      const formattedResults = results
-        .map(formatResult)
-        .sort((left, right) => sortByDateTime(left.alertCreated, right.alertCreated))
+    const formattedResults = results
+      .map(formatResult)
+      .sort((left, right) => sortByDateTime(left.alertCreated, right.alertCreated))
 
-      return res.render('covid/reverseCohortingUnit.njk', {
-        title: 'Prisoners in the Reverse Cohorting Unit',
-        results: formattedResults,
-        notInUnitCount: notInUnit.length,
-      })
-    } catch (e) {
-      logError(req.originalUrl, e, 'Failed to load reverse cohorting list')
-      res.status(500)
-      return res.render('error.njk', { url: '/current-covid-units/reverse-cohorting-unit' })
-    }
+    return res.render('covid/reverseCohortingUnit.njk', {
+      title: 'Prisoners in the Reverse Cohorting Unit',
+      results: formattedResults,
+      notInUnitCount: notInUnit.length,
+    })
   }
 }

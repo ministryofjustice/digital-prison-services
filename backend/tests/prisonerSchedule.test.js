@@ -1,5 +1,4 @@
 const prisonerSchedule = require('../controllers/prisonerProfile/prisonerSchedule')
-const { serviceUnavailableMessage } = require('../common-messages')
 
 describe('Prisoner schedule', () => {
   const offenderNo = 'ABC123'
@@ -304,27 +303,6 @@ describe('Prisoner schedule', () => {
           when: 'nextWeek',
         })
       })
-    })
-  })
-
-  describe('errors', () => {
-    it('should render the error template with a link to the homepage if there is a problem retrieving prisoner details', async () => {
-      prisonApi.getDetails.mockImplementation(() => Promise.reject(new Error('Network error')))
-
-      await controller(req, res)
-
-      expect(res.status).toHaveBeenCalledWith(500)
-      expect(logError).toHaveBeenCalledWith(req.originalUrl, new Error('Network error'), serviceUnavailableMessage)
-      expect(res.render).toHaveBeenCalledWith('error.njk', { url: '/' })
-    })
-
-    it('should render the error template with a link to the homepage if there is a problem retrieving schedules', async () => {
-      prisonApi.getScheduledEventsForThisWeek.mockImplementation(() => Promise.reject(new Error('Network error')))
-
-      await controller(req, res)
-
-      expect(logError).toHaveBeenCalledWith(req.originalUrl, new Error('Network error'), serviceUnavailableMessage)
-      expect(res.render).toHaveBeenCalledWith('error.njk', { url: '/' })
     })
   })
 })

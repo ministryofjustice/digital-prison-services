@@ -1,5 +1,4 @@
 const prisonerSentenceAndRelease = require('../controllers/prisonerProfile/prisonerSentenceAndRelease')
-const { serviceUnavailableMessage } = require('../common-messages')
 
 describe('prisoner sentence and release', () => {
   const offenderNo = 'G3878UK'
@@ -961,20 +960,5 @@ describe('prisoner sentence and release', () => {
         },
       })
     )
-  })
-
-  describe('when there are errors with retrieving information', () => {
-    it('should redirect to error page', async () => {
-      prisonerProfileService.getPrisonerProfileData.mockRejectedValue(new Error('Problem retrieving prisoner data'))
-      await controller(req, res)
-
-      expect(logError).toHaveBeenCalledWith(
-        '/sentence-and-release',
-        new Error('Problem retrieving prisoner data'),
-        serviceUnavailableMessage
-      )
-      expect(res.status).toHaveBeenCalledWith(500)
-      expect(res.render).toHaveBeenCalledWith('error.njk', { url: '/prisoner/G3878UK/sentence-and-release' })
-    })
   })
 })

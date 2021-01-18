@@ -1,4 +1,3 @@
-const { serviceUnavailableMessage } = require('../../common-messages')
 const { alertFlagLabels, cellMoveAlertCodes } = require('../../shared/alertFlagValues')
 const { putLastNameFirst, formatName } = require('../../utils')
 const {
@@ -11,7 +10,7 @@ const {
   app: { notmEndpointUrl: dpsUrl },
 } = require('../../config')
 
-module.exports = ({ oauthApi, prisonApi, whereaboutsApi, logError }) => async (req, res) => {
+module.exports = ({ oauthApi, prisonApi, whereaboutsApi }) => async (req, res) => {
   const { offenderNo } = req.params
 
   try {
@@ -57,13 +56,7 @@ module.exports = ({ oauthApi, prisonApi, whereaboutsApi, logError }) => async (r
       profileUrl: `/prisoner/${offenderNo}`,
     })
   } catch (error) {
-    if (error) logError(req.originalUrl, error, serviceUnavailableMessage)
-
-    res.status(500)
-
-    return res.render('error.njk', {
-      url: `/prisoner/${offenderNo}/cell-move/search-for-cell`,
-      homeUrl: `/prisoner/${offenderNo}`,
-    })
+    res.locals.homeUrl = `/prisoner/${offenderNo}`
+    throw error
   }
 }

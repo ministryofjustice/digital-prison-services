@@ -1,6 +1,5 @@
 const moment = require('moment')
 const prisonerVisits = require('../controllers/prisonerProfile/prisonerVisits')
-const { serviceUnavailableMessage } = require('../common-messages')
 
 describe('Prisoner visits', () => {
   const pageSize = 2
@@ -27,7 +26,12 @@ describe('Prisoner visits', () => {
 
     prisonApi.getDetails = jest.fn().mockResolvedValue({})
     prisonApi.getVisitTypes = jest.fn().mockResolvedValue([])
-    prisonApi.getVisitsForBookingWithVisitors = jest.fn().mockResolvedValue({})
+    prisonApi.getVisitsForBookingWithVisitors = jest.fn().mockResolvedValue({
+      pageable: {
+        offset: {},
+        pageNumber: {},
+      },
+    })
 
     controller = prisonerVisits({ prisonApi, logError, pageSize })
   })
@@ -258,22 +262,19 @@ describe('Prisoner visits', () => {
 
   describe('Errors', () => {
     it('should render the error template with a link to the homepage if there is a problem retrieving prisoner details', async () => {
-      prisonApi.getDetails.mockImplementation(() => Promise.reject(new Error('Network error')))
+      const error = new Error('Network error')
+      prisonApi.getDetails.mockImplementation(() => Promise.reject(error))
 
-      await controller(req, res)
-
-      expect(res.status).toHaveBeenCalledWith(500)
-      expect(logError).toHaveBeenCalledWith(req.originalUrl, new Error('Network error'), serviceUnavailableMessage)
-      expect(res.render).toHaveBeenCalledWith('error.njk', { url: '/' })
+      await expect(controller(req, res)).rejects.toThrowError(error)
+      expect(res.locals.redirectUrl).toBe('/prisoner/ABC123')
     })
 
     it('should render the error template with a link to the prisoner profile if there is a problem retrieving visits', async () => {
-      prisonApi.getVisitsForBookingWithVisitors.mockImplementation(() => Promise.reject(new Error('Network error')))
+      const error = new Error('Network error')
+      prisonApi.getVisitsForBookingWithVisitors.mockImplementation(() => Promise.reject(error))
 
-      await controller(req, res)
-
-      expect(logError).toHaveBeenCalledWith(req.originalUrl, new Error('Network error'), serviceUnavailableMessage)
-      expect(res.render).toHaveBeenCalledWith('error.njk', { url: '/prisoner/ABC123' })
+      await expect(controller(req, res)).rejects.toThrowError(error)
+      expect(res.locals.redirectUrl).toBe('/prisoner/ABC123')
     })
   })
 })

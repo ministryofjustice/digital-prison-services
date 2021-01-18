@@ -44,6 +44,7 @@ describe('Confirm appointments', () => {
     req.session = { userDetails: { authSource: 'nomis' } }
     req.originalUrl = 'http://localhost'
 
+    res.status = jest.fn()
     res.render = jest.fn()
 
     req.flash.mockImplementation(() => [appointmentDetails])

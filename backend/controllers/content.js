@@ -4,7 +4,6 @@ const {
   app: { notmEndpointUrl: dpsUrl },
 } = require('../config')
 const contentfulClient = require('../contentfulClient')
-const { serviceUnavailableMessage } = require('../common-messages')
 
 const options = {
   renderMark: {
@@ -19,28 +18,22 @@ const options = {
   },
 }
 
-module.exports = ({ logError }) => async (req, res) => {
+module.exports = () => async (req, res) => {
   const { path } = req.params
 
   const notFound = () => res.render('notFound.njk', { url: dpsUrl })
 
   if (!path) return notFound()
 
-  try {
-    const response = await contentfulClient.getEntries({
-      content_type: 'pages',
-      'fields.path': path,
-    })
+  const response = await contentfulClient.getEntries({
+    content_type: 'pages',
+    'fields.path': path,
+  })
 
-    if (response.items.length === 0) return notFound()
+  if (response.items.length === 0) return notFound()
 
-    const { body, title } = response.items[0].fields
-    const content = documentToHtmlString(body, options)
+  const { body, title } = response.items[0].fields
+  const content = documentToHtmlString(body, options)
 
-    return res.render('content.njk', { content, dpsUrl, title })
-  } catch (error) {
-    logError(req.originalUrl, error, serviceUnavailableMessage)
-    res.status(500)
-    return res.render('error.njk', { url: dpsUrl })
-  }
+  return res.render('content.njk', { content, dpsUrl, title })
 }

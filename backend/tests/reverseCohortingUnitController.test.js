@@ -59,20 +59,4 @@ describe('reverse cohorting unit', () => {
       notInUnitCount: 3,
     })
   })
-
-  it('should handle errors', async () => {
-    const error = Error('unexpected err')
-    covidService.getAlertList.mockRejectedValue(error)
-
-    await controller(req, res)
-
-    expect(logError).toHaveBeenCalledWith('http://localhost', error, 'Failed to load reverse cohorting list')
-    expect(res.status).toHaveBeenCalledWith(500)
-    expect(res.render).toHaveBeenCalledWith(
-      'error.njk',
-      expect.objectContaining({
-        url: '/current-covid-units/reverse-cohorting-unit',
-      })
-    )
-  })
 })

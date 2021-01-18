@@ -192,10 +192,14 @@ const confirmAppointmentFactory = ({ prisonApi, appointmentsService, logError })
       }
     } catch (error) {
       logError(req.originalUrl, error, serviceUnavailableMessage)
+
       const pageData = {
         url: prisonUser ? `/prisoner/${offenderNo}` : '/videolink/prisoner-search',
         homeUrl: prisonUser ? dpsUrl : '/videolink',
       }
+
+      res.status(500)
+
       if (prisonUser) {
         res.render('error.njk', pageData)
       } else {

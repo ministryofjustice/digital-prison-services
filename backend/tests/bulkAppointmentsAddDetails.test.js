@@ -1,6 +1,5 @@
 const moment = require('moment')
 const { bulkAppointmentsAddDetailsFactory } = require('../controllers/appointments/bulkAppointmentsAddDetails')
-const { serviceUnavailableMessage } = require('../common-messages')
 const { repeatTypes } = require('../shared/appointmentConstants')
 
 const { DATE_TIME_FORMAT_SPEC, DAY_MONTH_YEAR } = require('../../src/dateHelpers')
@@ -47,6 +46,7 @@ describe('Add appointment details controller', () => {
     res = { locals: {} }
     res.render = jest.fn()
     res.status = jest.fn()
+    res.redirect = jest.fn()
 
     appointmentsService.getAppointmentOptions = jest.fn()
     oauthApi.currentUser = jest.fn()
@@ -79,16 +79,10 @@ describe('Add appointment details controller', () => {
     })
 
     it('should return handle api errors', async () => {
-      appointmentsService.getAppointmentOptions.mockImplementation(() => Promise.reject(new Error('Network error')))
+      const error = new Error('Network error')
+      appointmentsService.getAppointmentOptions.mockRejectedValue(error)
 
-      await controller.index(req, res)
-
-      expect(res.render).toHaveBeenCalledWith('error.njk', {
-        url: 'http://localhost',
-      })
-
-      expect(res.status).toHaveBeenCalledWith(500)
-      expect(logError).toHaveBeenCalledWith('http://localhost', new Error('Network error'), serviceUnavailableMessage)
+      await expect(controller.index(req, res)).rejects.toThrowError(error)
     })
 
     it('should render template with view model', async () => {
@@ -642,15 +636,10 @@ describe('Add appointment details controller', () => {
       })
 
       it('should return handle api errors', async () => {
-        appointmentsService.getAppointmentOptions.mockImplementation(() => Promise.reject(new Error('Network error')))
+        const error = new Error('Network error')
+        appointmentsService.getAppointmentOptions.mockImplementation(() => Promise.reject(error))
 
-        await controller.post(req, res)
-
-        expect(res.render).toHaveBeenCalledWith('error.njk', {
-          url: 'http://localhost',
-        })
-
-        expect(logError).toHaveBeenCalledWith('http://localhost', new Error('Network error'), serviceUnavailableMessage)
+        await expect(controller.post(req, res)).rejects.toThrowError(error)
       })
 
       it('should return selected location and appointment type', async () => {

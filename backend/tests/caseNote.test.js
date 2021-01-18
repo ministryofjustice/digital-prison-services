@@ -3,7 +3,6 @@ const moment = require('moment')
 
 const prisonApi = {}
 const caseNotesApi = {}
-const { logError } = require('../logError')
 const { displayCreateCaseNotePage, handleCreateCaseNoteForm } = require('../controllers/caseNote').caseNoteFactory(
   prisonApi,
   caseNotesApi
@@ -100,22 +99,15 @@ describe('case note management', () => {
       Date.now.mockRestore()
     })
     it('should return an error when there is a problem loading the form', async () => {
-      caseNotesApi.myCaseNoteTypes = jest.fn().mockImplementationOnce(() => {
-        throw new Error('There has been an error')
-      })
+      const error = new Error('There has been an error')
+      caseNotesApi.myCaseNoteTypes.mockRejectedValue(error)
 
       const req = { ...mockCreateReq, params: { offenderNo } }
       res.status = jest.fn()
 
-      await displayCreateCaseNotePage(req, res)
+      await expect(displayCreateCaseNotePage(req, res)).rejects.toThrowError(error)
 
-      expect(res.status).toHaveBeenCalledWith(500)
-      expect(res.render).toBeCalledWith('error.njk', { url: '/prisoner/ABC123/case-notes' })
-      expect(logError).toBeCalledWith(
-        '/add-case-note/',
-        new Error('There has been an error'),
-        'Sorry, the service is unavailable'
-      )
+      expect(res.locals.redirectUrl).toBe('/prisoner/ABC123/case-notes')
     })
 
     it('should render the add case note with the correctly formatted information', async () => {
@@ -173,6 +165,8 @@ describe('case note management', () => {
 
   describe('handleCreateCaseNoteForm()', () => {
     describe('when there are errors', () => {
+      const error = new Error('There has been an error')
+
       it('should return an error when there is a problem creating the alert', async () => {
         const req = {
           ...mockCreateReq,
@@ -187,18 +181,10 @@ describe('case note management', () => {
           },
         }
 
-        caseNotesApi.addCaseNote = jest.fn().mockImplementationOnce(() => {
-          throw new Error('There has been an error')
-        })
-
+        caseNotesApi.addCaseNote = jest.fn().mockRejectedValue(error)
         res.status = jest.fn()
 
-        await handleCreateCaseNoteForm(req, res)
-
-        expect(res.status).toHaveBeenCalledWith(500)
-        expect(res.render).toBeCalledWith('error.njk', {
-          url: '/prisoner/ABC123/add-case-note',
-        })
+        await expect(handleCreateCaseNoteForm(req, res)).rejects.toThrowError(error)
       })
 
       it('should return an error if missing data', async () => {

@@ -2,7 +2,6 @@ Reflect.deleteProperty(process.env, 'APPINSIGHTS_INSTRUMENTATIONKEY')
 const prisonApi = {}
 const { largePrisonersListed, largePrisonersListedWithCell } = require('./bulkAppointmentsTestData')
 const bulkAppointmentsSlipsRouter = require('../routes/appointments/bulkAppointmentsSlipsRouter')
-const { serviceUnavailableMessage } = require('../common-messages')
 
 let req
 let res
@@ -139,63 +138,44 @@ describe('appointment movement slips', () => {
         })
       })
 
-      describe('but there is an issue getting additional offender details', () => {
-        const genericErrorMessage = 'There has been an error'
+      describe('and there is a large amount of data', () => {
         beforeEach(() => {
-          prisonApi.getOffenderSummaries = jest.fn().mockRejectedValue(new Error(genericErrorMessage))
           req.session.appointmentSlipsData = { appointmentDetails, prisonersListed: largePrisonersListed }
+          res.status = jest.fn()
         })
 
-        it('should log an error and render the error page', async () => {
+        it('should call the correct endpoint the correct amount of times for the extra required offender information', async () => {
           await controller(req, res)
 
-          expect(logError).toBeCalledWith(
-            '/bulk-appointments/confirm-appointment/',
-            new Error(genericErrorMessage),
-            serviceUnavailableMessage
+          expect(prisonApi.getOffenderSummaries).toHaveBeenCalledWith(
+            res.locals,
+            largePrisonersListed.slice(0, 100).map(prisoner => prisoner.offenderNo)
           )
-          expect(res.render).toBeCalledWith('error.njk', { url: '/bulk-appointments/need-to-upload-file' })
+          expect(prisonApi.getOffenderSummaries).toHaveBeenCalledWith(
+            res.locals,
+            largePrisonersListed.slice(100, 200).map(prisoner => prisoner.offenderNo)
+          )
+          expect(prisonApi.getOffenderSummaries).toHaveBeenCalledWith(
+            res.locals,
+            largePrisonersListed.slice(200, 201).map(prisoner => prisoner.offenderNo)
+          )
         })
-      })
-    })
 
-    describe('and there is a large amount of data', () => {
-      beforeEach(() => {
-        req.session.appointmentSlipsData = { appointmentDetails, prisonersListed: largePrisonersListed }
-        res.status = jest.fn()
-      })
+        it('should render the movement slips page with the correct details', async () => {
+          prisonApi.getOffenderSummaries = jest
+            .fn()
+            .mockReturnValueOnce(largePrisonersListedWithCell.slice(0, 100))
+            .mockReturnValueOnce(largePrisonersListedWithCell.slice(100, 200))
+            .mockReturnValueOnce(largePrisonersListedWithCell.slice(200, 201))
+          await controller(req, res)
 
-      it('should call the correct endpoint the correct amount of times for the extra required offender information', async () => {
-        await controller(req, res)
-
-        expect(prisonApi.getOffenderSummaries).toHaveBeenCalledWith(
-          res.locals,
-          largePrisonersListed.slice(0, 100).map(prisoner => prisoner.offenderNo)
-        )
-        expect(prisonApi.getOffenderSummaries).toHaveBeenCalledWith(
-          res.locals,
-          largePrisonersListed.slice(100, 200).map(prisoner => prisoner.offenderNo)
-        )
-        expect(prisonApi.getOffenderSummaries).toHaveBeenCalledWith(
-          res.locals,
-          largePrisonersListed.slice(200, 201).map(prisoner => prisoner.offenderNo)
-        )
-      })
-
-      it('should render the movement slips page with the correct details', async () => {
-        prisonApi.getOffenderSummaries = jest
-          .fn()
-          .mockReturnValueOnce(largePrisonersListedWithCell.slice(0, 100))
-          .mockReturnValueOnce(largePrisonersListedWithCell.slice(100, 200))
-          .mockReturnValueOnce(largePrisonersListedWithCell.slice(200, 201))
-        await controller(req, res)
-
-        expect(res.render).toHaveBeenCalledWith('movementSlipsPage.njk', {
-          appointmentDetails: {
-            ...appointmentDetails,
-            createdBy: 'T. User',
-            prisonersListed: largePrisonersListedWithCell,
-          },
+          expect(res.render).toHaveBeenCalledWith('movementSlipsPage.njk', {
+            appointmentDetails: {
+              ...appointmentDetails,
+              createdBy: 'T. User',
+              prisonersListed: largePrisonersListedWithCell,
+            },
+          })
         })
       })
     })

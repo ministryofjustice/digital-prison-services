@@ -55,22 +55,15 @@ describe('Cell not available', () => {
     })
   })
 
-  it('should log and render the error page', async () => {
+  it('should store correct redirect and home url then re-throw the error', async () => {
+    const offenderNo = 'A12345'
     const error = new Error('network error')
 
-    prisonApi.getDetails.mockRejectedValue(error)
+    prisonApi.getDetails = jest.fn().mockRejectedValue(error)
 
-    await controller(req, res)
+    await expect(controller(req, res)).rejects.toThrowError(error)
 
-    expect(logError).toHaveBeenCalledWith(
-      'http://localhost',
-      error,
-      'Failed to load offender details on cell not available page'
-    )
-    expect(res.status).toHaveBeenCalledWith(500)
-    expect(res.render).toHaveBeenCalledWith('error.njk', {
-      homeUrl: '/prisoner/A12345',
-      url: '/prisoner/A12345/cell-move/search-for-cell',
-    })
+    expect(res.locals.redirectUrl).toBe(`/prisoner/${offenderNo}/cell-move/search-for-cell`)
+    expect(res.locals.homeUrl).toBe(`/prisoner/${offenderNo}`)
   })
 })

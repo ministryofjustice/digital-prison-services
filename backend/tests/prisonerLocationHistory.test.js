@@ -1,5 +1,5 @@
 const prisonerLocationHistory = require('../controllers/prisonerProfile/prisonerLocationHistory')
-const { serviceUnavailableMessage, notEnteredMessage } = require('../common-messages')
+const { notEnteredMessage } = require('../common-messages')
 const { makeNotFoundError } = require('./helpers')
 
 describe('Prisoner location sharing history', () => {
@@ -274,13 +274,12 @@ describe('Prisoner location sharing history', () => {
 
   describe('Errors', () => {
     it('should render the error template with a link to the homepage if there is a problem retrieving prisoner details', async () => {
-      prisonApi.getDetails.mockImplementation(() => Promise.reject(new Error('Network error')))
+      const error = new Error('Network error')
+      prisonApi.getDetails.mockImplementation(() => Promise.reject(error))
 
-      await controller(req, res)
+      await expect(controller(req, res)).rejects.toThrowError(error)
 
-      expect(res.status).toHaveBeenCalledWith(500)
-      expect(logError).toHaveBeenCalledWith(req.originalUrl, new Error('Network error'), serviceUnavailableMessage)
-      expect(res.render).toHaveBeenCalledWith('error.njk', { url: '/prisoner/ABC123' })
+      expect(res.locals.redirectUrl).toBe('/prisoner/ABC123')
     })
   })
 
@@ -358,40 +357,32 @@ describe('Prisoner location sharing history', () => {
     })
 
     it('should render the error when fetch staff details fails', async () => {
-      prisonApi.getStaffDetails.mockImplementation(() => Promise.reject(new Error('Not found')))
+      const error = new Error('Not found')
 
-      await controller(req, res)
+      prisonApi.getStaffDetails.mockImplementation(() => Promise.reject(error))
 
-      expect(res.status).toHaveBeenCalledWith(500)
-      expect(logError).toHaveBeenCalledWith(req.originalUrl, new Error('Not found'), serviceUnavailableMessage)
-      expect(res.render).toHaveBeenCalledWith('error.njk', { url: '/prisoner/ABC123' })
+      await expect(controller(req, res)).rejects.toThrowError(error)
     })
 
     it('should render the error when fetch reason description', async () => {
-      caseNotesApi.getCaseNoteTypes.mockImplementation(() => Promise.reject(new Error('Not found')))
+      const error = new Error('Not found')
+      caseNotesApi.getCaseNoteTypes.mockImplementation(() => Promise.reject(error))
 
-      await controller(req, res)
-
-      expect(logError).toHaveBeenCalledWith(req.originalUrl, new Error('Not found'), serviceUnavailableMessage)
-      expect(res.render).toHaveBeenCalledWith('error.njk', { url: '/prisoner/ABC123' })
+      await expect(controller(req, res)).rejects.toThrowError(error)
     })
 
     it('should render the error for fetch what happened and get cell move reason fails', async () => {
-      whereaboutsApi.getCellMoveReason.mockImplementation(() => Promise.reject(new Error('Not found')))
+      const error = new Error('Not found')
+      whereaboutsApi.getCellMoveReason.mockImplementation(() => Promise.reject(error))
 
-      await controller(req, res)
-
-      expect(logError).toHaveBeenCalledWith(req.originalUrl, new Error('Not found'), serviceUnavailableMessage)
-      expect(res.render).toHaveBeenCalledWith('error.njk', { url: '/prisoner/ABC123' })
+      await expect(controller(req, res)).rejects.toThrowError(error)
     })
 
     it('should render the error for fetch what happened and get case note fails', async () => {
-      caseNotesApi.getCaseNote.mockImplementation(() => Promise.reject(new Error('Not found')))
+      const error = new Error('Not found')
+      caseNotesApi.getCaseNote.mockImplementation(() => Promise.reject(error))
 
-      await controller(req, res)
-
-      expect(logError).toHaveBeenCalledWith(req.originalUrl, new Error('Not found'), serviceUnavailableMessage)
-      expect(res.render).toHaveBeenCalledWith('error.njk', { url: '/prisoner/ABC123' })
+      await expect(controller(req, res)).rejects.toThrowError(error)
     })
   })
 })

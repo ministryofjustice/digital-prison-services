@@ -37,9 +37,8 @@ module.exports = ({ prisonApi, caseNotesApi, logError }) => {
           })),
       })
     } catch (error) {
-      logError(req.originalUrl, error, serviceUnavailableMessage)
-      res.status(500)
-      return res.render('error.njk', { url: `/prisoner/${offenderNo}/case-notes` })
+      res.locals.redirectUrl = `/prisoner/${offenderNo}/case-notes`
+      throw error
     }
   }
 
@@ -87,9 +86,8 @@ module.exports = ({ prisonApi, caseNotesApi, logError }) => {
 
       return makeAmendment(req, res, { offenderNo, caseNoteId, moreDetail, maximumLengthValidation })
     } catch (error) {
-      logError(req.originalUrl, error, serviceUnavailableMessage)
-      res.status(500)
-      return res.render('error.njk', { url: `/prisoner/${offenderNo}/case-notes` })
+      res.locals.redirectUrl = `/prisoner/${offenderNo}/case-notes`
+      throw error
     }
   }
 

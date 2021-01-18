@@ -1,5 +1,4 @@
 const { retentionReasonsFactory } = require('../controllers/retentionReasons')
-const { serviceUnavailableMessage } = require('../common-messages')
 const config = require('../config')
 
 config.app.notmEndpointUrl = '//dpsUrl/'
@@ -123,21 +122,6 @@ describe('retention reasons', () => {
         })
       })
     })
-
-    describe('when there are API errors', () => {
-      beforeEach(() => {
-        prisonApi.getDetails.mockRejectedValue(new Error('Network error'))
-        dataComplianceApi.getOffenderRetentionReasons.mockResolvedValue([])
-      })
-
-      it('should render the error template', async () => {
-        await controller.index(req, res)
-
-        expect(res.status).toHaveBeenCalledWith(500)
-        expect(logError).toHaveBeenCalledWith('http://localhost', new Error('Network error'), serviceUnavailableMessage)
-        expect(res.render).toHaveBeenCalledWith('error.njk', { url: `/offenders/${offenderNo}/retention-reasons` })
-      })
-    })
   })
 
   describe('post', () => {
@@ -237,24 +221,6 @@ describe('retention reasons', () => {
           ],
           ...expectedPageDetails(),
         })
-      })
-    })
-
-    describe('when there are API errors', () => {
-      beforeEach(() => {
-        req.body = {
-          version: '"0"',
-          'reasons[0][reasonCode]': 'HIGH_PROFILE',
-        }
-        dataComplianceApi.putOffenderRetentionRecord.mockRejectedValue(new Error('Network error'))
-      })
-
-      it('should render the error template', async () => {
-        await controller.post(req, res)
-
-        expect(res.status).toHaveBeenCalledWith(500)
-        expect(logError).toHaveBeenCalledWith('http://localhost', new Error('Network error'), serviceUnavailableMessage)
-        expect(res.render).toHaveBeenCalledWith('error.njk', { url: `/offenders/${offenderNo}/retention-reasons` })
       })
     })
   })

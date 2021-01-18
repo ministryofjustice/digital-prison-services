@@ -14,36 +14,31 @@ module.exports = ({ prisonApi, logError }) => async (req, res) => {
     return renderError()
   }
 
-  try {
-    const { userDetails } = req.session
+  const { userDetails } = req.session
 
-    const createdBy = forenameToInitial(userDetails.name)
-    const offenderNumbers = prisonersListed.map(prisoner => prisoner.offenderNo)
-    const chunkedOffenderNumbers = chunkArray(offenderNumbers, 100)
+  const createdBy = forenameToInitial(userDetails.name)
+  const offenderNumbers = prisonersListed.map(prisoner => prisoner.offenderNo)
+  const chunkedOffenderNumbers = chunkArray(offenderNumbers, 100)
 
-    const offenderSummaryApiCalls = chunkedOffenderNumbers.map(offendersChunk => ({
-      getOffenderSummaries: prisonApi.getOffenderSummaries,
-      offenders: offendersChunk,
-    }))
+  const offenderSummaryApiCalls = chunkedOffenderNumbers.map(offendersChunk => ({
+    getOffenderSummaries: prisonApi.getOffenderSummaries,
+    offenders: offendersChunk,
+  }))
 
-    const offenderSummaries = (await Promise.all(
-      offenderSummaryApiCalls.map(apiCall => apiCall.getOffenderSummaries(res.locals, apiCall.offenders))
-    )).reduce((flattenedOffenders, offender) => flattenedOffenders.concat(offender), [])
+  const offenderSummaries = (await Promise.all(
+    offenderSummaryApiCalls.map(apiCall => apiCall.getOffenderSummaries(res.locals, apiCall.offenders))
+  )).reduce((flattenedOffenders, offender) => flattenedOffenders.concat(offender), [])
 
-    const prisonersListedWithCellInfo = prisonersListed.map(prisoner => {
-      const prisonerDetails = offenderSummaries.find(offender => prisoner.offenderNo === offender.offenderNo)
+  const prisonersListedWithCellInfo = prisonersListed.map(prisoner => {
+    const prisonerDetails = offenderSummaries.find(offender => prisoner?.offenderNo === offender?.offenderNo)
 
-      return {
-        ...prisoner,
-        assignedLivingUnitDesc: prisonerDetails && prisonerDetails.assignedLivingUnitDesc,
-      }
-    })
+    return {
+      ...prisoner,
+      assignedLivingUnitDesc: prisonerDetails && prisonerDetails.assignedLivingUnitDesc,
+    }
+  })
 
-    return res.render('movementSlipsPage.njk', {
-      appointmentDetails: { ...appointmentDetails, createdBy, prisonersListed: prisonersListedWithCellInfo },
-    })
-  } catch (error) {
-    res.status(500)
-    return renderError(error)
-  }
+  return res.render('movementSlipsPage.njk', {
+    appointmentDetails: { ...appointmentDetails, createdBy, prisonersListed: prisonersListedWithCellInfo },
+  })
 }

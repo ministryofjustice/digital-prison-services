@@ -1,7 +1,6 @@
 const { capitalize, formatName, putLastNameFirst } = require('../utils')
-const { serviceUnavailableMessage } = require('../common-messages')
 
-module.exports = ({ prisonApi, caseNotesApi, oauthApi, logError }) => {
+module.exports = ({ prisonApi, caseNotesApi, oauthApi }) => {
   const index = async (req, res) => {
     const { offenderNo, caseNoteId, caseNoteAmendmentId } = req.params
 
@@ -60,9 +59,8 @@ module.exports = ({ prisonApi, caseNotesApi, oauthApi, logError }) => {
 
       return res.render('caseNoteDeleteConfirm.njk', caseNoteData)
     } catch (error) {
-      logError(req.originalUrl, error, serviceUnavailableMessage)
-      res.status(500)
-      return res.render('error.njk', { url: `/prisoner/${offenderNo}/case-notes` })
+      res.locals.redirectUrl = `/prisoner/${offenderNo}/case-notes`
+      throw error
     }
   }
 
@@ -76,9 +74,8 @@ module.exports = ({ prisonApi, caseNotesApi, oauthApi, logError }) => {
       }
       return res.redirect(`/prisoner/${offenderNo}/case-notes`)
     } catch (error) {
-      logError(req.originalUrl, error, serviceUnavailableMessage)
-      res.status(500)
-      return res.render('error.njk', { url: `/prisoner/${offenderNo}/case-notes` })
+      res.locals.redirectUrl = `/prisoner/${offenderNo}/case-notes`
+      throw error
     }
   }
 

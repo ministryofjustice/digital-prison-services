@@ -54,21 +54,4 @@ describe('not in unit', () => {
       ],
     })
   })
-
-  it('should handle errors', async () => {
-    const error = Error('unexpected err')
-    covidService.getUnassignedNewEntrants.mockRejectedValue(error)
-
-    await controller(req, res)
-
-    expect(logError).toHaveBeenCalledWith('http://localhost', error, 'Failed to load not in unit list')
-
-    expect(res.status).toHaveBeenCalledWith(500)
-    expect(res.render).toHaveBeenCalledWith(
-      'error.njk',
-      expect.objectContaining({
-        url: '/current-covid-units/not-in-unit',
-      })
-    )
-  })
 })

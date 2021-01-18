@@ -1,5 +1,4 @@
 const prisonerQuickLook = require('../controllers/prisonerProfile/prisonerQuickLook')
-const { serviceUnavailableMessage } = require('../common-messages')
 
 describe('prisoner profile quick look', () => {
   const offenderNo = 'ABC123'
@@ -596,17 +595,16 @@ describe('prisoner profile quick look', () => {
   })
 
   describe('when there are errors with getDetails', () => {
+    const error = new Error('Network error')
+
     beforeEach(() => {
       req.params.offenderNo = offenderNo
-      prisonApi.getDetails.mockRejectedValue(new Error('Network error'))
+      prisonApi.getDetails.mockRejectedValue(error)
     })
 
     it('should render the error template', async () => {
-      await controller(req, res)
-
-      expect(logError).toHaveBeenCalledWith('http://localhost', new Error('Network error'), serviceUnavailableMessage)
-      expect(res.render).toHaveBeenCalledWith('error.njk', { url: 'http://localhost:3000/' })
-      expect(res.status).toHaveBeenCalledWith(500)
+      await expect(controller(req, res)).rejects.toThrowError(error)
+      expect(res.locals.redirectUrl).toBe(`/prisoner/${offenderNo}`)
     })
   })
 

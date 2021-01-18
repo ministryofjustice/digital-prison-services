@@ -1,5 +1,4 @@
 const moment = require('moment')
-const { serviceUnavailableMessage } = require('../../common-messages')
 const { cellMoveAlertCodes } = require('../../shared/alertFlagValues')
 const { putLastNameFirst, formatName, indefiniteArticle, hasLength, createStringFromList } = require('../../utils')
 const {
@@ -7,7 +6,7 @@ const {
 } = require('../../config')
 const getValueByType = require('../../shared/getValueByType')
 
-module.exports = ({ prisonApi, logError }) => {
+module.exports = ({ prisonApi }) => {
   const getOccupantsDetails = async (context, offenders) => {
     return Promise.all(offenders.map(offender => prisonApi.getDetails(context, offender, true)))
   }
@@ -173,14 +172,9 @@ module.exports = ({ prisonApi, logError }) => {
         dpsUrl,
       })
     } catch (error) {
-      if (error) logError(req.originalUrl, error, serviceUnavailableMessage)
-
-      res.status(500)
-
-      return res.render('error.njk', {
-        url: `/prisoner/${offenderNo}/cell-history`,
-        homeUrl: `/prisoner/${offenderNo}`,
-      })
+      res.locals.redirectUrl = `/prisoner/${offenderNo}/cell-history`
+      res.locals.homeUrl = `/prisoner/${offenderNo}`
+      throw error
     }
   }
 

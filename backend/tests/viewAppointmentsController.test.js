@@ -1,5 +1,4 @@
 const viewAppointmentsRouter = require('../routes/appointments/viewAppointmentsRouter.js')
-const { serviceUnavailableMessage } = require('../common-messages')
 
 describe('View appointments', () => {
   const prisonApi = {}
@@ -359,17 +358,10 @@ describe('View appointments', () => {
 
   describe('when there is an error retrieving information', () => {
     it('should render the error template', async () => {
-      prisonApi.getAppointmentTypes.mockRejectedValue(new Error('Problem retrieving appointment types'))
+      const error = new Error('Problem retrieving appointment types')
+      prisonApi.getAppointmentTypes.mockRejectedValue(error)
 
-      await controller(req, res)
-
-      expect(logError).toHaveBeenCalledWith(
-        'http://localhost',
-        new Error('Problem retrieving appointment types'),
-        serviceUnavailableMessage
-      )
-      expect(res.render).toHaveBeenCalledWith('error.njk', { url: '/appointments' })
-      expect(res.status).toHaveBeenCalledWith(500)
+      await expect(controller(req, res)).rejects.toThrowError(error)
     })
   })
 })

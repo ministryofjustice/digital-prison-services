@@ -10,9 +10,7 @@ describe('Amendment case note', () => {
   const req = {
     originalUrl: 'http://localhost:3002/prisoner/case-notes/amend-case-note/1',
   }
-  const res = {
-    locals: {},
-  }
+  const res = {}
 
   beforeEach(() => {
     caseNotesApi.getCaseNote = jest.fn().mockResolvedValue({
@@ -36,6 +34,7 @@ describe('Amendment case note', () => {
 
     res.render = jest.fn()
     res.redirect = jest.fn()
+    res.locals = {}
     req.flash = jest.fn()
     req.session = { userDetails: { staffId: 1 } }
     req.headers = {}
@@ -70,13 +69,12 @@ describe('Amendment case note', () => {
       expect(res.render).toHaveBeenCalledWith('notFound.njk', { url: '/prisoner/A12345/case-notes' })
     })
     it('should render error page on exception', async () => {
-      prisonApi.getDetails.mockRejectedValue(new Error('error'))
+      const error = new Error('error')
+      prisonApi.getDetails.mockRejectedValue(error)
       res.status = jest.fn()
 
-      await controller.index(req, res)
-
-      expect(res.status).toHaveBeenCalledWith(500)
-      expect(res.render).toHaveBeenCalledWith('error.njk', { url: '/prisoner/A12345/case-notes' })
+      await expect(controller.index(req, res)).rejects.toThrowError(error)
+      expect(res.locals.redirectUrl).toBe('/prisoner/A12345/case-notes')
     })
 
     it('should make a request for an offenders case note', async () => {

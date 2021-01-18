@@ -1,6 +1,6 @@
 const { alerts } = require('../../services/covidService')
 
-module.exports = ({ covidService, logError }) => {
+module.exports = ({ covidService }) => {
   const formatResult = result => ({
     bookingId: result.bookingId,
     offenderNo: result.offenderNo,
@@ -9,19 +9,12 @@ module.exports = ({ covidService, logError }) => {
   })
 
   return async (req, res) => {
-    try {
-      const results = await covidService.getAlertList(res, alerts.refusingToShield)
+    const results = await covidService.getAlertList(res, alerts.refusingToShield)
+    const formattedResults = results.map(formatResult).sort((left, right) => left.name.localeCompare(right.name))
 
-      const formattedResults = results.map(formatResult).sort((left, right) => left.name.localeCompare(right.name))
-
-      return res.render('covid/refusingToShield.njk', {
-        title: 'Prisoners refusing to shield',
-        results: formattedResults,
-      })
-    } catch (e) {
-      logError(req.originalUrl, e, 'Failed to load list of prisoners refusing to shield')
-      res.status(500)
-      return res.render('error.njk', { url: '/current-covid-units/refusing-to-shield' })
-    }
+    return res.render('covid/refusingToShield.njk', {
+      title: 'Prisoners refusing to shield',
+      results: formattedResults,
+    })
   }
 }

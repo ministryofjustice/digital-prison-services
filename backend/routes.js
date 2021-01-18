@@ -34,7 +34,6 @@ const amendCaseNoteRouter = require('./routes/caseNoteAmendmentRouter')
 const deleteCaseNoteRouter = require('./routes/caseNoteDeletionRouter')
 
 const systemOauthClient = require('./api/systemOauthClient')
-const handleErrors = require('./middleware/asyncHandler')
 const { notifyClient } = require('./shared/notifyClient')
 
 const { raiseAnalyticsEvent } = require('./raiseAnalyticsEvent')
@@ -63,57 +62,42 @@ const setup = ({
     next()
   })
 
-  router.get(
-    '/edit-alert',
-    handleErrors(alertFactory(oauthApi, prisonApi, referenceCodesService(prisonApi)).displayEditAlertPage)
-  )
+  router.get('/edit-alert', alertFactory(oauthApi, prisonApi, referenceCodesService(prisonApi)).displayEditAlertPage)
   router.post(
     '/edit-alert/:bookingId/:alertId',
-    handleErrors(alertFactory(oauthApi, prisonApi, referenceCodesService(prisonApi)).handleEditAlertForm)
+    alertFactory(oauthApi, prisonApi, referenceCodesService(prisonApi)).handleEditAlertForm
   )
   router.get(
     '/offenders/:offenderNo/create-alert',
-    handleErrors(alertFactory(oauthApi, prisonApi, referenceCodesService(prisonApi)).displayCreateAlertPage)
+    alertFactory(oauthApi, prisonApi, referenceCodesService(prisonApi)).displayCreateAlertPage
   )
   router.post(
     '/offenders/:offenderNo/create-alert',
-    handleErrors(alertFactory(oauthApi, prisonApi, referenceCodesService(prisonApi)).handleCreateAlertForm)
+    alertFactory(oauthApi, prisonApi, referenceCodesService(prisonApi)).handleCreateAlertForm
   )
-  router.get(
-    '/prisoner/:offenderNo/add-case-note',
-    handleErrors(caseNoteFactory(prisonApi, caseNotesApi).displayCreateCaseNotePage)
-  )
-  router.post(
-    '/prisoner/:offenderNo/add-case-note',
-    handleErrors(caseNoteFactory(prisonApi, caseNotesApi).handleCreateCaseNoteForm)
-  )
+  router.get('/prisoner/:offenderNo/add-case-note', caseNoteFactory(prisonApi, caseNotesApi).displayCreateCaseNotePage)
+  router.post('/prisoner/:offenderNo/add-case-note', caseNoteFactory(prisonApi, caseNotesApi).handleCreateCaseNoteForm)
   router.get(
     '/manage-prisoner-whereabouts/attendance-reason-statistics',
-    handleErrors(attendanceStatisticsFactory(oauthApi, prisonApi, whereaboutsApi, logError).attendanceStatistics)
+    attendanceStatisticsFactory(oauthApi, prisonApi, whereaboutsApi, logError).attendanceStatistics
   )
   router.get(
     '/manage-prisoner-whereabouts/attendance-reason-statistics/reason/:reason',
-    handleErrors(
-      attendanceStatisticsFactory(oauthApi, prisonApi, whereaboutsApi, logError).attendanceStatisticsOffendersList
-    )
+    attendanceStatisticsFactory(oauthApi, prisonApi, whereaboutsApi, logError).attendanceStatisticsOffendersList
   )
 
   router.get(
     '/manage-prisoner-whereabouts/attendance-reason-statistics/suspended',
-    handleErrors(
-      attendanceStatisticsFactory(oauthApi, prisonApi, whereaboutsApi, logError).attendanceStatisticsSuspendedList
-    )
+    attendanceStatisticsFactory(oauthApi, prisonApi, whereaboutsApi, logError).attendanceStatisticsSuspendedList
   )
 
   router.get(
     '/offenders/:offenderNo/probation-documents',
-    handleErrors(
-      probationDocumentsFactory(oauthApi, prisonApi, communityApi, systemOauthClient).displayProbationDocumentsPage
-    )
+    probationDocumentsFactory(oauthApi, prisonApi, communityApi, systemOauthClient).displayProbationDocumentsPage
   )
   router.get(
     '/offenders/:offenderNo/probation-documents/:documentId/download',
-    handleErrors(downloadProbationDocumentFactory(oauthApi, communityApi, systemOauthClient).downloadDocument)
+    downloadProbationDocumentFactory(oauthApi, communityApi, systemOauthClient).downloadDocument
   )
 
   router.get('/bulk-appointments/need-to-upload-file', async (req, res) => {

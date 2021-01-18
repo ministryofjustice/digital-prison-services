@@ -54,6 +54,7 @@ describe('Pre post appointments', () => {
 
     req.flash = jest.fn()
     res.render = jest.fn()
+    res.locals = {}
 
     appointmentsService.getAppointmentOptions.mockReturnValue({
       appointmentTypes: [{ value: 'VLB', text: 'Videolink' }],
@@ -204,15 +205,8 @@ describe('Pre post appointments', () => {
       res.status = jest.fn()
       req.body = body
 
-      await index(req, res)
-
-      expect(res.status).toHaveBeenCalledWith(500)
-      expect(logError).toHaveBeenCalledWith(
-        'http://localhost',
-        new Error('Appointment details are missing'),
-        'Sorry, the service is unavailable'
-      )
-      expect(res.render).toHaveBeenCalledWith('error.njk', { url: '/offenders/A12345/add-appointment' })
+      await expect(index(req, res)).rejects.toThrowError(new Error('Appointment details are missing'))
+      expect(res.locals.redirectUrl).toBe('/offenders/A12345/add-appointment')
     })
 
     it('should display locationEvents is present in flash', async () => {
@@ -488,14 +482,9 @@ describe('Pre post appointments', () => {
       req.flash.mockImplementation(() => [])
       req.body = body
 
-      await post(req, res)
+      await expect(post(req, res)).rejects.toThrowError(new Error('Appointment details are missing'))
 
-      expect(logError).toHaveBeenCalledWith(
-        'http://localhost',
-        new Error('Appointment details are missing'),
-        'Sorry, the service is unavailable'
-      )
-      expect(res.render).toHaveBeenCalledWith('error.njk', { url: '/offenders/A12345/add-appointment' })
+      expect(res.locals.redirectUrl).toBe('/offenders/A12345/add-appointment')
     })
 
     it('should pack appointment details back into flash before rendering', async () => {
@@ -641,7 +630,7 @@ describe('Pre post appointments', () => {
           appointmentsService,
           existingEventsService,
           whereaboutsApi,
-          logError: () => {},
+          raiseAnalyticsEvent: () => {},
         })
 
         await post(req, res)
@@ -680,7 +669,7 @@ describe('Pre post appointments', () => {
           appointmentsService,
           existingEventsService,
           whereaboutsApi,
-          logError: () => {},
+          raiseAnalyticsEvent: () => {},
         })
 
         req.body = {
@@ -716,7 +705,7 @@ describe('Pre post appointments', () => {
           appointmentsService,
           existingEventsService,
           whereaboutsApi,
-          logError: () => {},
+          raiseAnalyticsEvent: () => {},
         })
 
         req.body = {

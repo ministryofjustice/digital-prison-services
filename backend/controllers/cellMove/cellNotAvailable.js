@@ -1,6 +1,6 @@
 const { putLastNameFirst } = require('../../utils')
 
-module.exports = ({ prisonApi, logError }) => async (req, res) => {
+module.exports = ({ prisonApi }) => async (req, res) => {
   const { offenderNo } = req.params
   const { cellDescription } = req.query
 
@@ -16,13 +16,8 @@ module.exports = ({ prisonApi, logError }) => async (req, res) => {
       selectCellUrl: `/prisoner/${offenderNo}/cell-move/select-cell`,
     })
   } catch (error) {
-    if (error) logError(req.originalUrl, error, 'Failed to load offender details on cell not available page')
-
-    res.status(500)
-
-    return res.render('error.njk', {
-      url: `/prisoner/${offenderNo}/cell-move/search-for-cell`,
-      homeUrl: `/prisoner/${offenderNo}`,
-    })
+    res.locals.redirectUrl = `/prisoner/${offenderNo}/cell-move/search-for-cell`
+    res.locals.homeUrl = `/prisoner/${offenderNo}`
+    throw error
   }
 }

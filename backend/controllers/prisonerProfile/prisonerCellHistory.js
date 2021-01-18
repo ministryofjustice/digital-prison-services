@@ -1,5 +1,4 @@
 const moment = require('moment')
-const { serviceUnavailableMessage } = require('../../common-messages')
 const {
   formatName,
   formatTimestampToDate,
@@ -14,7 +13,7 @@ const {
   app: { notmEndpointUrl: dpsUrl },
 } = require('../../config')
 
-module.exports = ({ oauthApi, prisonApi, logError, page = 0 }) => async (req, res) => {
+module.exports = ({ oauthApi, prisonApi, page = 0 }) => async (req, res) => {
   const { offenderNo } = req.params
 
   const getAgencyDetails = async cells => {
@@ -93,8 +92,7 @@ module.exports = ({ oauthApi, prisonApi, logError, page = 0 }) => async (req, re
       dpsUrl,
     })
   } catch (error) {
-    logError(req.originalUrl, error, serviceUnavailableMessage)
-    res.status(500)
-    return res.render('error.njk', { url: `/prisoner/${offenderNo}` })
+    res.locals.redirectUrl = `/prisoner/${offenderNo}`
+    throw error
   }
 }
