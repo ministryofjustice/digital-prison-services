@@ -7,7 +7,6 @@ describe('Prisoner private cash', () => {
 
   let req
   let res
-  let logError
   let controller
 
   const pendingTransactions = [
@@ -81,14 +80,12 @@ describe('Prisoner private cash', () => {
     }
     res = { locals: {}, render: jest.fn() }
 
-    logError = jest.fn()
-
     prisonApi.getTransactionHistory = jest.fn().mockResolvedValue([])
     prisonApi.getDetails = jest.fn().mockResolvedValue({ bookingId, firstName: 'John', lastName: 'Smith' })
     prisonApi.getAgencyDetails = jest.fn().mockResolvedValue({})
     prisonApi.getPrisonerBalances = jest.fn().mockResolvedValue({})
 
-    controller = prisonerPrivateCash({ prisonApi, logError })
+    controller = prisonerPrivateCash({ prisonApi })
 
     jest.spyOn(Date, 'now').mockImplementation(() => 1606471200000) // Friday, 27 November 2020 10:00:00
   })
@@ -245,6 +242,16 @@ describe('Prisoner private cash', () => {
         account_code: 'cash',
         transaction_type: 'HOA',
       })
+    })
+  })
+
+  describe('when there are errors', () => {
+    it('set the redirect url and throw the error', async () => {
+      const error = new Error('Network error')
+      prisonApi.getDetails.mockRejectedValue(error)
+
+      await expect(controller(req, res)).rejects.toThrowError(error)
+      expect(res.locals.redirectUrl).toBe(`/prisoner/${offenderNo}`)
     })
   })
 })

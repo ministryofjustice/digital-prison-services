@@ -7,7 +7,6 @@ describe('Prisoner damage obligations', () => {
 
   let req
   let res
-  let logError
   let controller
 
   const damageObligationsResponse = {
@@ -60,13 +59,11 @@ describe('Prisoner damage obligations', () => {
     }
     res = { locals: {}, render: jest.fn(), status: jest.fn() }
 
-    logError = jest.fn()
-
     prisonApi.getOffenderDamageObligations = jest.fn().mockResolvedValue({ damageObligations: [] })
     prisonApi.getDetails = jest.fn().mockResolvedValue({ bookingId, firstName: 'John', lastName: 'Smith' })
     prisonApi.getAgencyDetails = jest.fn()
 
-    controller = prisonerDamageObligations({ prisonApi, logError })
+    controller = prisonerDamageObligations({ prisonApi })
   })
 
   it('should make the expected API calls', async () => {
@@ -138,7 +135,7 @@ describe('Prisoner damage obligations', () => {
   })
 
   describe('when there are errors', () => {
-    it('should render the error template with a link to the prisoner profile if there is a problem retrieving prisoner details', async () => {
+    it('set the redirect url and throw the error', async () => {
       const error = new Error('Network error')
       prisonApi.getDetails.mockRejectedValue(error)
 

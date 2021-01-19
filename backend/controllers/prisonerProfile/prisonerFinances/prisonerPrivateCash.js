@@ -18,7 +18,7 @@ const createTransactionViewModel = (transactions, prisons) =>
     ]
   })
 
-module.exports = ({ prisonApi, logError }) => async (req, res) => {
+module.exports = ({ prisonApi }) => async (req, res) => {
   const today = moment()
   const currentYear = today.year()
 
@@ -82,7 +82,7 @@ module.exports = ({ prisonApi, logError }) => async (req, res) => {
       yearOptions: yearOptions.map(yyyy => ({ value: yyyy, text: yyyy })),
     })
   } catch (error) {
-    logError(req.originalUrl, error, 'Private cash page - Prisoner finances')
-    return res.render('error.njk', { url: `/prisoner/${offenderNo}` })
+    res.locals.redirectUrl = `/prisoner/${offenderNo}`
+    throw error
   }
 }

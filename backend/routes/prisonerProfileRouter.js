@@ -115,8 +115,8 @@ const controller = ({
     prisonerChangeIncentiveLevelDetails({ prisonApi, logError }).post
   )
 
-  router.get('/prisoner-finance-details/damage-obligations', prisonerDamageObligations({ prisonApi, logError }))
-  router.get('/prisoner-finance-details/private-cash', prisonerPrivateCash({ prisonApi, logError }))
+  router.get('/prisoner-finance-details/damage-obligations', prisonerDamageObligations({ prisonApi }))
+  router.get('/prisoner-finance-details/private-cash', prisonerPrivateCash({ prisonApi }))
 
   return router
 }
