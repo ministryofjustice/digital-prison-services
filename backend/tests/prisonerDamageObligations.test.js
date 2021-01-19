@@ -88,6 +88,7 @@ describe('Prisoner damage obligations', () => {
         offenderNo,
       },
       rows: [],
+      showDamageObligationsLink: true,
       totalOwed: '£0.00',
     })
   })
@@ -130,6 +131,7 @@ describe('Prisoner damage obligations', () => {
             { text: 'Moorland - Damage of Pool table' },
           ],
         ],
+        showDamageObligationsLink: true,
         totalOwed: '£274.59',
       })
     })

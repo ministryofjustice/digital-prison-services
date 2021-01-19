@@ -115,7 +115,7 @@ describe('Prisoner private cash', () => {
 
   describe('with data', () => {
     beforeEach(() => {
-      prisonApi.getPrisonerBalances = jest.fn().mockResolvedValue({ cash: 95 })
+      prisonApi.getPrisonerBalances = jest.fn().mockResolvedValue({ cash: 95, damageObligations: 0 })
       prisonApi.getTransactionHistory = jest
         .fn()
         .mockResolvedValue(privateCashResponse)
@@ -183,6 +183,7 @@ describe('Prisoner private cash', () => {
           nameForBreadcrumb: 'Smith, John',
           offenderNo: 'ABC123',
         },
+        showDamageObligationsLink: false,
         yearOptions: [
           { text: 2017, value: 2017 },
           { text: 2018, value: 2018 },
@@ -190,6 +191,21 @@ describe('Prisoner private cash', () => {
           { text: 2020, value: 2020 },
         ],
       })
+    })
+  })
+
+  describe('when there is a damage obligations balance', () => {
+    beforeEach(() => {
+      prisonApi.getPrisonerBalances = jest.fn().mockResolvedValue({ cash: 95, damageObligations: 101 })
+    })
+
+    it('should let the template know to display a link to the damage obligations page', async () => {
+      await controller(req, res)
+
+      expect(res.render).toHaveBeenCalledWith(
+        'prisonerProfile/prisonerFinance/privateCash.njk',
+        expect.objectContaining({ showDamageObligationsLink: true })
+      )
     })
   })
 

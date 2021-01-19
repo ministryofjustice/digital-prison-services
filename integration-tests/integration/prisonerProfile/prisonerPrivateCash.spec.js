@@ -103,22 +103,24 @@ context('Prisoner damage obligations', () => {
       })
       cy.task('stubPrisonerBalances', {
         cash: 95,
+        damageObligations: 101,
       })
     })
 
     it('should load and display the correct content', () => {
       cy.visit(`/prisoner/${offenderNo}/prisoner-finance-details/private-cash?month=10&year=2020`)
 
-      cy.get('h1').contains('Private cash account for John Smith')
-      cy.get('[data-test="current-balance"]').contains('£95.00')
-      cy.get('[data-test="pending-balance"]').contains('-£10.00')
-      cy.get('[data-test="private-cash-month"]').should('have.value', '10')
-      cy.get('[data-test="private-cash-year"]').should('have.value', '2020')
       cy.get('[data-test="tabs-private-cash"]')
         .contains('Private cash')
         .should('have.attr', 'aria-label', 'View private cash account')
         .parent()
         .should('have.class', 'govuk-tabs__list-item--selected')
+      cy.get('[data-test="tabs-damage-obligations"]').should('be.visible')
+      cy.get('h1').contains('Private cash account for John Smith')
+      cy.get('[data-test="current-balance"]').contains('£95.00')
+      cy.get('[data-test="pending-balance"]').contains('-£10.00')
+      cy.get('[data-test="private-cash-month"]').should('have.value', '10')
+      cy.get('[data-test="private-cash-year"]').should('have.value', '2020')
       cy.get('[data-test="private-cash-pending-table"]').then($table => {
         cy.get($table)
           .find('tbody')
@@ -165,12 +167,14 @@ context('Prisoner damage obligations', () => {
       })
       cy.task('stubPrisonerBalances', {
         cash: 0,
+        damageObligations: 0,
       })
     })
 
     it('should load and display the correct content', () => {
       cy.visit(`/prisoner/${offenderNo}/prisoner-finance-details/private-cash`)
 
+      cy.get('[data-test="tabs-damage-obligations"]').should('not.exist')
       cy.get('h1').contains('Private cash account for John Smith')
       cy.get('[data-test="current-balance"]').contains('£0.00')
       cy.get('[data-test="pending-balance"]').should('not.exist')

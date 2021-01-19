@@ -78,6 +78,7 @@ module.exports = ({ prisonApi, logError }) => async (req, res) => {
       nonPendingRows: createTransactionViewModel(nonPendingTransactions, prisons),
       pendingBalance: formatCurrency(pendingBalanceInPence / 100),
       pendingRows: createTransactionViewModel(pendingTransactions, prisons),
+      showDamageObligationsLink: balanceData?.damageObligations > 0,
       yearOptions: yearOptions.map(yyyy => ({ value: yyyy, text: yyyy })),
     })
   } catch (error) {
