@@ -58,6 +58,7 @@ module.exports = ({ prisonApi }) => async (req, res) => {
         offenderNo,
       },
       rows,
+      showDamageObligationsLink: true,
       totalOwed: formatCurrency(totalOwed),
     })
   } catch (error) {
