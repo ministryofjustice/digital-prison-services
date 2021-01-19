@@ -189,23 +189,6 @@ describe('Adjudications history controller', () => {
     )
   })
 
-  it('should log the error and render the error page', async () => {
-    const error = new Error('network error')
-
-    adjudicationHistoryService.getAdjudications.mockRejectedValue(error)
-
-    res.status = jest.fn()
-
-    await controller(req, res)
-
-    expect(logError).toHaveBeenCalledWith('http://localhost', error, 'Failed to load adjudication history page')
-    expect(res.status).toHaveBeenCalledWith(500)
-    expect(res.render).toHaveBeenCalledWith('error.njk', {
-      homeUrl: '/prisoner/A12345',
-      url: '/offenders/A12345/adjudications',
-    })
-  })
-
   it('should convert the date format into iso format before requesting adjudications', async () => {
     req.query = {
       fromDate: '10/12/2020',

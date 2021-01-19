@@ -1,5 +1,4 @@
 const moment = require('moment')
-const { serviceUnavailableMessage } = require('../../common-messages')
 const { putLastNameFirst, properCaseName, formatDaysInYears, formatName } = require('../../utils')
 const {
   app: { notmEndpointUrl: dpsUrl },
@@ -28,7 +27,7 @@ const filterData = (data, fields) => {
   return filteredResults
 }
 
-module.exports = ({ prisonApi, oauthApi, logError }) => async (req, res) => {
+module.exports = ({ prisonApi, oauthApi }) => async (req, res) => {
   const { offenderNo } = req.params
   const { agencyId, incentiveLevel, fromDate, toDate } = req.query
 
@@ -126,8 +125,7 @@ module.exports = ({ prisonApi, oauthApi, logError }) => async (req, res) => {
       userCanUpdateIEP: Boolean(prisonerWithinCaseloads && userCanMaintainIEP),
     })
   } catch (error) {
-    logError(req.originalUrl, error, serviceUnavailableMessage)
-    res.status(500)
-    return res.render('error.njk', { url: `/prisoner/${offenderNo}` })
+    res.locals.redirectUrl = `/prisoner/${offenderNo}`
+    throw error
   }
 }

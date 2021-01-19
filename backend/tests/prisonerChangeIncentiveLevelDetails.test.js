@@ -1,5 +1,4 @@
 const prisonerChangeIncentiveLevelDetails = require('../controllers/prisonerProfile/prisonerChangeIncentiveLevelDetails')
-const { serviceUnavailableMessage } = require('../common-messages')
 const { raiseAnalyticsEvent } = require('../raiseAnalyticsEvent')
 
 jest.mock('../raiseAnalyticsEvent', () => ({
@@ -115,16 +114,14 @@ describe('Prisoner change incentive level details', () => {
     })
 
     describe('when there are API errors', () => {
+      const error = new Error('Network error')
       beforeEach(() => {
-        prisonApi.getDetails.mockImplementation(() => Promise.reject(new Error('Network error')))
+        prisonApi.getDetails.mockImplementation(() => Promise.reject(error))
       })
 
       it('should render the error template', async () => {
-        await controller.index(req, res)
-
-        expect(res.status).toHaveBeenCalledWith(500)
-        expect(logError).toHaveBeenCalledWith('http://localhost', new Error('Network error'), serviceUnavailableMessage)
-        expect(res.render).toHaveBeenCalledWith('error.njk', { url: `/prisoner/${offenderNo}` })
+        await expect(controller.index(req, res)).rejects.toThrowError(error)
+        expect(res.locals.redirectUrl).toBe(`/prisoner/${offenderNo}`)
       })
     })
   })
@@ -229,13 +226,11 @@ describe('Prisoner change incentive level details', () => {
     describe('when there are API errors', () => {
       it('should render the error template', async () => {
         req.body = { newIepLevel: 'Enhanced', reason: 'A reason why it has changed', bookingId }
-        prisonApi.changeIepLevel.mockImplementation(() => Promise.reject(new Error('Network error')))
+        const error = new Error('Network error')
 
-        await controller.post(req, res)
+        prisonApi.changeIepLevel.mockRejectedValue(error)
 
-        expect(res.status).toHaveBeenCalledWith(500)
-        expect(logError).toHaveBeenCalledWith('http://localhost', new Error('Network error'), serviceUnavailableMessage)
-        expect(res.render).toHaveBeenCalledWith('error.njk', { url: `/prisoner/${offenderNo}` })
+        await expect(controller.post(req, res)).rejects.toThrowError(error)
       })
     })
   })

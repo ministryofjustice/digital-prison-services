@@ -143,20 +143,6 @@ describe('Attendance change router', () => {
     )
   })
 
-  it('should log error and render error template', async () => {
-    whereaboutsApi.getAttendanceChanges.mockRejectedValue(new Error('Network error'))
-
-    await router(req, res)
-
-    expect(res.status).toHaveBeenCalledWith(500)
-    expect(logError).toHaveBeenCalledWith(
-      'http://localhost',
-      new Error('Network error'),
-      'Sorry, the service is unavailable'
-    )
-    expect(res.render).toHaveBeenCalledWith('error.njk')
-  })
-
   it('should redirect back to the attendance dashboard when any query parameters are missing', async () => {
     req.query = {}
     await router(req, res)

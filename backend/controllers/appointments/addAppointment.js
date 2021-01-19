@@ -5,7 +5,6 @@ const {
 } = require('../../config')
 const { properCaseName, formatName } = require('../../utils')
 const { buildDateTime, DATE_TIME_FORMAT_SPEC, DAY_MONTH_YEAR } = require('../../../src/dateHelpers')
-const { serviceUnavailableMessage } = require('../../common-messages')
 const { repeatTypes, endRecurringEndingDate, validateComments } = require('../../shared/appointmentConstants')
 
 const validateDate = (date, errors) => {
@@ -87,7 +86,7 @@ const getValidationMessages = fields => {
   return errors
 }
 
-const addAppointmentFactory = (appointmentsService, existingEventsService, prisonApi, logError) => {
+const addAppointmentFactory = (appointmentsService, existingEventsService, prisonApi) => {
   const getAppointmentTypesAndLocations = async (locals, activeCaseLoadId) => {
     const { appointmentTypes, locationTypes } = await appointmentsService.getAppointmentOptions(
       locals,
@@ -99,18 +98,6 @@ const addAppointmentFactory = (appointmentsService, existingEventsService, priso
       appointmentLocations: locationTypes,
     }
   }
-
-  const getOffenderUrl = offenderNo => `/prisoner/${offenderNo}`
-
-  const renderError = (req, res, error) => {
-    const { offenderNo } = req.params
-    if (error) logError(req.originalUrl, error, serviceUnavailableMessage)
-
-    res.status(500)
-
-    return res.render('error.njk', { url: getOffenderUrl(offenderNo) })
-  }
-
   const renderTemplate = async (req, res, pageData) => {
     const { formValues } = pageData || {}
     const { offenderNo } = req.params
@@ -163,7 +150,8 @@ const addAppointmentFactory = (appointmentsService, existingEventsService, priso
         bookingId,
       })
     } catch (error) {
-      return renderError(req, res, error)
+      res.locals.redirectUrl = `/prisoner/${offenderNo}`
+      throw error
     }
   }
 
@@ -271,7 +259,8 @@ const addAppointmentFactory = (appointmentsService, existingEventsService, priso
 
       return res.redirect(`/offenders/${offenderNo}/confirm-appointment`)
     } catch (error) {
-      return renderError(req, res, error)
+      res.locals.redirectUrl = `/prisoner/${offenderNo}`
+      throw error
     }
   }
 

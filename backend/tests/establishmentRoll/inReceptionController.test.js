@@ -53,13 +53,7 @@ describe('In reception controller', () => {
 
     movementsService.getOffendersInReception.mockRejectedValue(error)
 
-    await controller(req, res)
-
-    expect(logError).toHaveBeenCalledWith('http://localhost', error, 'Error trying to load in-reception page')
-    expect(res.status).toHaveBeenCalledWith(500)
-    expect(res.render).toHaveBeenCalledWith('error.njk', {
-      url: '/establishment-roll/in-reception',
-    })
+    await expect(controller(req, res)).rejects.toThrowError(error)
   })
 
   it('should render view with the correctly formatted data', async () => {

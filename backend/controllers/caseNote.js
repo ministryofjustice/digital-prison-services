@@ -1,8 +1,6 @@
 const moment = require('moment')
 const nunjucks = require('nunjucks')
 const { properCaseName } = require('../utils')
-const { logError } = require('../logError')
-const { serviceUnavailableMessage } = require('../common-messages')
 
 const getOffenderUrl = offenderNo => `/prisoner/${offenderNo}`
 
@@ -62,9 +60,8 @@ const caseNoteFactory = (prisonApi, caseNotesApi) => {
         caseNotesRootUrl: `/prisoner/${offenderNo}/add-case-note`,
       })
     } catch (error) {
-      logError(req.originalUrl, error, serviceUnavailableMessage)
-      res.status(500)
-      return res.render('error.njk', { url: `${getOffenderUrl(offenderNo)}/case-notes` })
+      res.locals.redirectUrl = `${getOffenderUrl(offenderNo)}/case-notes`
+      throw error
     }
   }
 
@@ -225,22 +222,16 @@ const caseNoteFactory = (prisonApi, caseNotesApi) => {
       })
     }
 
-    try {
-      await caseNotesApi.addCaseNote(res.locals, offenderNo, {
-        type,
-        subType,
-        text,
-        occurrenceDateTime: moment(date, 'DD/MM/YYYY')
-          .hours(hours)
-          .minutes(minutes)
-          .seconds(0)
-          .format('YYYY-MM-DDTHH:mm:ss'),
-      })
-    } catch (error) {
-      logError(req.originalUrl, error, serviceUnavailableMessage)
-      res.status(500)
-      return res.render('error.njk', { url: `${getOffenderUrl(offenderNo)}/add-case-note` })
-    }
+    await caseNotesApi.addCaseNote(res.locals, offenderNo, {
+      type,
+      subType,
+      text,
+      occurrenceDateTime: moment(date, 'DD/MM/YYYY')
+        .hours(hours)
+        .minutes(minutes)
+        .seconds(0)
+        .format('YYYY-MM-DDTHH:mm:ss'),
+    })
 
     return res.redirect(`${getOffenderUrl(offenderNo)}/case-notes`)
   }

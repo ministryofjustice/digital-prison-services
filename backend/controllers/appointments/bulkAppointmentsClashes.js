@@ -1,23 +1,13 @@
 const { switchDateFormat } = require('../../utils')
 const { DATE_TIME_FORMAT_SPEC, buildDateTime } = require('../../../src/dateHelpers')
-const { serviceUnavailableMessage } = require('../../common-messages')
 const { raiseAnalyticsEvent } = require('../../raiseAnalyticsEvent')
 
-const bulkAppointmentsClashesFactory = (prisonApi, logError) => {
+const bulkAppointmentsClashesFactory = prisonApi => {
   const renderTemplate = (req, res, pageData) => {
     const { appointmentDetails, prisonersWithClashes } = pageData
 
     res.render('bulkAppointmentsClashes.njk', { appointmentDetails, prisonersWithClashes })
   }
-
-  const renderError = (req, res, error) => {
-    if (error) logError(req.originalUrl, error, serviceUnavailableMessage)
-
-    res.status(500)
-
-    return res.render('error.njk', { url: '/bulk-appointments/need-to-upload-file' })
-  }
-
   const getOtherEvents = (req, res, { offenderNumbers, agencyId, date }) => {
     const searchCriteria = { agencyId, date, offenderNumbers }
 
@@ -66,7 +56,8 @@ const bulkAppointmentsClashesFactory = (prisonApi, logError) => {
           .filter(prisoner => prisoner),
       })
     } catch (error) {
-      return renderError(req, res, error)
+      res.locals.redirectUrl = '/bulk-appointments/need-to-upload-file'
+      throw error
     }
   }
 

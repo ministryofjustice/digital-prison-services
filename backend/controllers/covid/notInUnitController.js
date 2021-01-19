@@ -1,6 +1,6 @@
 const moment = require('moment')
 
-module.exports = ({ covidService, logError }) => {
+module.exports = ({ covidService }) => {
   const formatResult = result => ({
     bookingId: result.bookingId,
     offenderNo: result.offenderNo,
@@ -10,19 +10,12 @@ module.exports = ({ covidService, logError }) => {
   })
 
   return async (req, res) => {
-    try {
-      const results = await covidService.getUnassignedNewEntrants(res)
+    const results = await covidService.getUnassignedNewEntrants(res)
+    const formattedResults = results.map(formatResult).sort((left, right) => left.name.localeCompare(right.name))
 
-      const formattedResults = results.map(formatResult).sort((left, right) => left.name.localeCompare(right.name))
-
-      return res.render('covid/notInUnit.njk', {
-        title: 'Newly arrived prisoners not in Reverse Cohorting Unit',
-        results: formattedResults,
-      })
-    } catch (e) {
-      logError(req.originalUrl, e, 'Failed to load not in unit list')
-      res.status(500)
-      return res.render('error.njk', { url: '/current-covid-units/not-in-unit' })
-    }
+    return res.render('covid/notInUnit.njk', {
+      title: 'Newly arrived prisoners not in Reverse Cohorting Unit',
+      results: formattedResults,
+    })
   }
 }

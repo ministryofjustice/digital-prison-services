@@ -1,5 +1,4 @@
 const prisonerProfessionalContacts = require('../controllers/prisonerProfile/prisonerProfessionalContacts')
-const { serviceUnavailableMessage } = require('../common-messages')
 
 describe('Prisoner professional contacts', () => {
   const offenderNo = 'ABC123'
@@ -456,13 +455,10 @@ describe('Prisoner professional contacts', () => {
 
   describe('errors', () => {
     it('should render the error template with a link to the homepage if there is a problem retrieving prisoner details', async () => {
-      prisonApi.getDetails.mockImplementation(() => Promise.reject(new Error('Network error')))
+      const error = new Error('Network error')
+      prisonApi.getDetails.mockRejectedValue(error)
 
-      await controller(req, res)
-
-      expect(res.status).toHaveBeenCalledWith(500)
-      expect(logError).toHaveBeenCalledWith(req.originalUrl, new Error('Network error'), serviceUnavailableMessage)
-      expect(res.render).toHaveBeenCalledWith('error.njk', { url: '/' })
+      await expect(controller(req, res)).rejects.toThrowError(error)
     })
   })
 })

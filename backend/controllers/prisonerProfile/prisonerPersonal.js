@@ -1,10 +1,5 @@
-const { serviceUnavailableMessage } = require('../../common-messages')
 const logErrorAndContinue = require('../../shared/logErrorAndContinue')
 const { getNamesFromString } = require('../../utils')
-const {
-  app: { notmEndpointUrl: dpsUrl },
-} = require('../../config')
-
 const {
   aliasesViewModel,
   distinguishingMarksViewModel,
@@ -17,21 +12,14 @@ const {
   careNeedsViewModel,
 } = require('./personalViewModels')
 
-module.exports = ({ prisonerProfileService, personService, prisonApi, allocationManagerApi, logError }) => async (
-  req,
-  res
-) => {
+module.exports = ({ prisonerProfileService, personService, prisonApi, allocationManagerApi }) => async (req, res) => {
   const { offenderNo } = req.params
   const [basicPrisonerDetails, treatmentTypes, healthTypes] = await Promise.all([
     prisonApi.getDetails(res.locals, offenderNo),
     prisonApi.getTreatmentTypes(res.locals),
     prisonApi.getHealthTypes(res.locals),
-  ])
-    .then(data => data)
-    .catch(error => {
-      logError(req.originalUrl, error, serviceUnavailableMessage)
-      return res.render('error.njk', { url: dpsUrl })
-    })
+  ]).then(data => data)
+
   const { bookingId } = basicPrisonerDetails || {}
   const treatmentCodes = treatmentTypes && treatmentTypes.map(type => type.code).join()
   const healthCodes = healthTypes && healthTypes.map(type => type.code).join()

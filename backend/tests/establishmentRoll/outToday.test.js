@@ -44,15 +44,10 @@ describe('In today', () => {
   })
 
   it('should return right error message', async () => {
-    movementsService.getMovementsOut.mockRejectedValue(new Error('error'))
-    await controller(req, res)
+    const error = new Error('error')
+    movementsService.getMovementsOut.mockRejectedValue(error)
 
-    expect(logError).toHaveBeenCalledWith(req.originalUrl, new Error('error'), 'Failed to load out today page')
-    expect(res.status).toHaveBeenCalledWith(500)
-    expect(res.render).toHaveBeenCalledWith('error.njk', {
-      url: '/establishment-roll/out-today',
-      homeUrl: 'http://localhost:3000/',
-    })
+    await expect(controller(req, res)).rejects.toThrowError(error)
   })
 
   it('should return response with data', async () => {

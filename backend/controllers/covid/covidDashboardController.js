@@ -1,6 +1,6 @@
 const { alerts } = require('../../services/covidService')
 
-module.exports = ({ covidService, logError }) => {
+module.exports = ({ covidService }) => {
   const loadStats = async res => {
     const [
       prisonPopulation,
@@ -29,13 +29,7 @@ module.exports = ({ covidService, logError }) => {
   }
 
   return async (req, res) => {
-    try {
-      const dashboardStats = await loadStats(res)
-      return res.render('covid/dashboard.njk', { title: 'Current breakdown of COVID units', dashboardStats })
-    } catch (e) {
-      logError(req.originalUrl, e, 'Failed to load dashboard stats')
-      res.status(500)
-      return res.render('error.njk', { url: '/current-covid-units' })
-    }
+    const dashboardStats = await loadStats(res)
+    return res.render('covid/dashboard.njk', { title: 'Current breakdown of COVID units', dashboardStats })
   }
 }

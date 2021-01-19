@@ -1,10 +1,9 @@
-const { serviceUnavailableMessage } = require('../../common-messages')
 const { formatTimestampToDate, formatTimestampToDateTime, putLastNameFirst, sortByDateTime } = require('../../utils')
 const {
   app: { notmEndpointUrl: dpsUrl },
 } = require('../../config')
 
-module.exports = ({ prisonApi, logError }) => async (req, res) => {
+module.exports = ({ prisonApi }) => async (req, res) => {
   const { offenderNo, adjudicationNumber } = req.params
 
   try {
@@ -19,7 +18,7 @@ module.exports = ({ prisonApi, logError }) => async (req, res) => {
     return res.render('prisonerProfile/prisonerAdjudicationDetails.njk', {
       adjudicationDetails: {
         ...adjudicationDetails,
-        hearings: hearings.sort((left, right) => sortByDateTime(right.hearingTime, left.hearingTime)).map(hearing => {
+        hearings: hearings?.sort((left, right) => sortByDateTime(right.hearingTime, left.hearingTime)).map(hearing => {
           const { hearingTime, heardByFirstName, heardByLastName, results } = hearing
           const comments = []
 
@@ -52,8 +51,7 @@ module.exports = ({ prisonApi, logError }) => async (req, res) => {
       profileUrl: `/prisoner/${offenderNo}`,
     })
   } catch (error) {
-    logError(req.originalUrl, error, serviceUnavailableMessage)
-    res.status(500)
-    return res.render('error.njk', { url: `/prisoner/${offenderNo}` })
+    res.locals.redirectUrl = `/prisoner/${offenderNo}`
+    throw error
   }
 }

@@ -416,5 +416,6 @@ module.exports = on => {
     stubGetStaffDetails: ({ staffId, response }) => prisonApi.stubGetStaffDetails(staffId, response),
     stubStaffRoles: response => prisonApi.stubStaffRoles(response),
     stubLocationConfig: ({ agencyId, response }) => whereabouts.stubLocationConfig({ agencyId, response }),
+    stubGetDetailsFailure: ({ status }) => prisonApi.stubGetDetailsFailure(status),
   })
 }

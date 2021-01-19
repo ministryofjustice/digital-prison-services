@@ -303,22 +303,17 @@ describe('Change cell play back details', () => {
       expect(res.redirect).toHaveBeenCalledWith('/prisoner/A12345/cell-move/confirmation?cellId=223')
     })
 
-    it('should handle api errors', async () => {
+    it('should store correct redirect and home url then re-throw the error', async () => {
       req.body = { ...req.body, cellId: 223 }
-
+      const offenderNo = 'A12345'
       const error = new Error('network error')
 
-      prisonApi.getDetails.mockRejectedValue(new Error('network error'))
-      await controller.post(req, res)
+      prisonApi.getDetails = jest.fn().mockRejectedValue(error)
 
-      expect(logError).toHaveBeenCalledWith('http://localhost', error, 'Failed to make cell move to 223')
-      expect(res.status).toHaveBeenCalledWith(500)
-      expect(res.render).toHaveBeenCalledWith(
-        'error.njk',
-        expect.objectContaining({
-          url: '/prisoner/A12345/cell-move/select-cell',
-        })
-      )
+      await expect(controller.post(req, res)).rejects.toThrowError(error)
+
+      expect(res.locals.redirectUrl).toBe(`/prisoner/${offenderNo}/cell-move/select-cell`)
+      expect(res.locals.homeUrl).toBe(`/prisoner/${offenderNo}`)
     })
 
     it('should raise an analytics event', async () => {
@@ -330,10 +325,12 @@ describe('Change cell play back details', () => {
     })
 
     it('should not raise an analytics event on api failures', async () => {
-      whereaboutsApi.moveToCell.mockRejectedValue(new Error('Internal server error'))
+      const error = new Error('Internal server error')
+      whereaboutsApi.moveToCell.mockRejectedValue(error)
+
       req.body = { ...req.body, cellId: 123 }
 
-      await controller.post(req, res)
+      await expect(controller.post(req, res)).rejects.toThrowError(error)
 
       expect(raiseAnalyticsEvent.mock.calls.length).toBe(0)
     })
@@ -354,6 +351,7 @@ describe('Change cell play back details', () => {
   describe('Post handle C-SWAP cell move', () => {
     it('should call elite api to make the C-SWAP cell move', async () => {
       req.body = { cellId: 'C-SWAP' }
+      res.locals = {}
 
       await controller.post(req, res)
 
@@ -371,10 +369,12 @@ describe('Change cell play back details', () => {
     })
 
     it('should not raise an analytics event on api failures', async () => {
-      prisonApi.moveToCellSwap.mockRejectedValue(new Error('Internal server error'))
+      const error = new Error('Internal server error')
+
+      prisonApi.moveToCellSwap.mockRejectedValue(error)
       req.body = { cellId: 'C-SWAP' }
 
-      await controller.post(req, res)
+      await expect(controller.post(req, res)).rejects.toThrowError(error)
 
       expect(raiseAnalyticsEvent.mock.calls.length).toBe(0)
     })

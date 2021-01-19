@@ -40,6 +40,7 @@ describe('Delete case note', () => {
     req.flash = jest.fn()
     req.headers = {}
     res.status = jest.fn()
+    res.locals = {}
 
     req.params = {
       offenderNo: 'A12345',
@@ -68,11 +69,11 @@ describe('Delete case note', () => {
       expect(res.render).toHaveBeenCalledWith('notFound.njk', { url: '/prisoner/A12345/case-notes' })
     })
     it('should render error page on exception', async () => {
-      prisonApi.getDetails.mockRejectedValue(new Error('error'))
-      await controller.index(req, res)
+      const error = new Error('error')
+      prisonApi.getDetails.mockRejectedValue(error)
 
-      expect(res.status).toHaveBeenCalledWith(500)
-      expect(res.render).toHaveBeenCalledWith('error.njk', { url: '/prisoner/A12345/case-notes' })
+      await expect(controller.index(req, res)).rejects.toThrowError(error)
+      expect(res.locals.redirectUrl).toBe('/prisoner/A12345/case-notes')
     })
 
     it('should make a request for an offenders case note', async () => {
@@ -205,10 +206,11 @@ describe('Delete case note', () => {
       })
 
       it('should render error page on exception', async () => {
-        caseNotesApi.deleteCaseNote.mockRejectedValue(new Error('error'))
-        await controller.post(req, res)
+        const error = new Error('error')
+        caseNotesApi.deleteCaseNote.mockRejectedValue(error)
 
-        expect(res.render).toHaveBeenCalledWith('error.njk', { url: '/prisoner/A12345/case-notes' })
+        await expect(controller.post(req, res)).rejects.toThrowError(error)
+        expect(res.locals.redirectUrl).toBe('/prisoner/A12345/case-notes')
       })
 
       it('should delete the case note', async () => {

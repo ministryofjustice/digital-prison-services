@@ -137,32 +137,11 @@ describe('Prisoner damage obligations', () => {
 
   describe('when there are errors', () => {
     it('should render the error template with a link to the prisoner profile if there is a problem retrieving prisoner details', async () => {
-      prisonApi.getDetails.mockImplementation(() => Promise.reject(new Error('Network error')))
+      const error = new Error('Network error')
+      prisonApi.getDetails.mockRejectedValue(error)
 
-      await controller(req, res)
-
-      expect(logError).toHaveBeenCalledWith(
-        req.originalUrl,
-        new Error('Network error'),
-        'Damage obligations page - Prisoner finances'
-      )
-      expect(res.status).toHaveBeenCalledWith(500)
-      expect(res.render).toHaveBeenCalledWith('error.njk', { url: `/prisoner/${offenderNo}` })
-    })
-
-    it('should render the error template with a link to the prisoner profile if there is a problem retrieving agency details', async () => {
-      prisonApi.getOffenderDamageObligations.mockResolvedValue(damageObligationsResponse)
-      prisonApi.getAgencyDetails.mockImplementation(() => Promise.reject(new Error('Network error')))
-
-      await controller(req, res)
-
-      expect(logError).toHaveBeenCalledWith(
-        req.originalUrl,
-        new Error('Network error'),
-        'Damage obligations page - Prisoner finances'
-      )
-      expect(res.status).toHaveBeenCalledWith(500)
-      expect(res.render).toHaveBeenCalledWith('error.njk', { url: `/prisoner/${offenderNo}` })
+      await expect(controller(req, res)).rejects.toThrowError(error)
+      expect(res.locals.redirectUrl).toBe(`/prisoner/${offenderNo}`)
     })
   })
 })

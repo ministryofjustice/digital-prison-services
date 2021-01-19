@@ -5,6 +5,8 @@ require('dotenv').config()
 require('./azure-appinsights')
 
 const express = require('express')
+require('express-async-errors')
+
 const csrf = require('csurf')
 
 const app = express()
@@ -27,6 +29,7 @@ const phaseNameSetup = require('./phaseNameSetup')
 const currentUser = require('./middleware/currentUser')
 
 const pageNotFound = require('./setUpPageNotFound')
+const errorHandler = require('./middleware/errorHandler')
 
 const { logError } = require('./logError')
 const homepageController = require('./controllers/homepage/homepage')
@@ -85,9 +88,9 @@ app.use(
 )
 
 app.use(setupReactRoutes())
-
 app.use('/$', homepageController({ ...apis, logError }))
 app.use(pageNotFound)
+app.use(errorHandler)
 
 app.listen(config.app.port, () => {
   // eslint-disable-next-line no-console

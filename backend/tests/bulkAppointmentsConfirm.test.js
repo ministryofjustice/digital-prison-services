@@ -401,25 +401,17 @@ describe('when confirming bulk appointment details', () => {
     })
 
     describe('and there is an issue with the api', () => {
+      const error = new Error('There has been an error')
       beforeEach(() => {
-        prisonApi.addAppointments = jest.fn().mockImplementation(() => {
-          throw new Error('There has been an error')
-        })
+        prisonApi.addAppointments.mockRejectedValue(error)
         req.session.data = { ...appointmentDetails }
       })
 
       it('should log an error and render the error page', async () => {
         res.status = jest.fn()
 
-        await controller.post(req, res)
-
-        expect(res.status).toHaveBeenCalledWith(500)
-        expect(logError).toBeCalledWith(
-          '/bulk-appointments/confirm-appointment/',
-          new Error('There has been an error'),
-          'Sorry, the service is unavailable'
-        )
-        expect(res.render).toBeCalledWith('error.njk', { url: '/bulk-appointments/need-to-upload-file' })
+        await expect(controller.post(req, res)).rejects.toThrowError(error)
+        expect(res.locals.redirectUrl).toBe('/bulk-appointments/need-to-upload-file')
       })
     })
 

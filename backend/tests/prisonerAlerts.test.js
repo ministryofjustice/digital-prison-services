@@ -1,5 +1,4 @@
 const prisonerAlerts = require('../controllers/prisonerProfile/prisonerAlerts')
-const { serviceUnavailableMessage } = require('../common-messages')
 
 describe('prisoner alerts', () => {
   const offenderNo = 'G3878UK'
@@ -224,16 +223,10 @@ describe('prisoner alerts', () => {
 
   describe('when there are errors with retrieving information', () => {
     it('should redirect to error page', async () => {
-      prisonApi.getAlertsForBooking.mockRejectedValue(new Error('Problem retrieving alerts'))
-      await controller(req, res)
+      const error = new Error('Problem retrieving alerts')
+      prisonApi.getAlertsForBooking.mockRejectedValue(error)
 
-      expect(logError).toHaveBeenCalledWith(
-        '/alerts',
-        new Error('Problem retrieving alerts'),
-        serviceUnavailableMessage
-      )
-      expect(res.status).toHaveBeenCalledWith(500)
-      expect(res.render).toHaveBeenCalledWith('error.njk', { url: '/prisoner/G3878UK/alerts' })
+      await expect(controller(req, res)).rejects.toThrowError(error)
     })
   })
 })

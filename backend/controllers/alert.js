@@ -170,9 +170,8 @@ const alertFactory = (oauthApi, prisonApi, referenceCodesService) => {
 
         fireAnalyticsEvent({ closeAlert, alertCode: alert.alertCode, caseLoadId: activeCaseLoad.caseLoadId })
       } catch (error) {
-        logError(req.originalUrl, error, serviceUnavailableMessage)
-        req.flash('errors', [{ text: serviceUnavailableMessage }])
-        return res.redirect(`/edit-alert?offenderNo=${offenderNo}&alertId=${alertId}`)
+        res.locals.redirectUrl = `/edit-alert?offenderNo=${offenderNo}&alertId=${alertId}`
+        throw error
       }
     }
 
@@ -243,9 +242,8 @@ const alertFactory = (oauthApi, prisonApi, referenceCodesService) => {
         alertsRootUrl: `/prisoner/${offenderNo}/create-alert`,
       })
     } catch (error) {
-      logError(req.originalUrl, error, serviceUnavailableMessage)
-      res.status(500)
-      return res.render('error.njk', { url: `${getOffenderUrl(offenderNo)}/alerts` })
+      res.locals.redirectUrl = `${getOffenderUrl(offenderNo)}/alerts`
+      throw error
     }
   }
 
@@ -362,24 +360,18 @@ const alertFactory = (oauthApi, prisonApi, referenceCodesService) => {
       })
     }
 
-    try {
-      await prisonApi.createAlert(res.locals, bookingId, {
-        alertType,
-        alertCode,
-        comment: comments,
-        alertDate: moment(alertDate, 'DD/MM/YYYY').format('YYYY-MM-DD'),
-      })
+    await prisonApi.createAlert(res.locals, bookingId, {
+      alertType,
+      alertCode,
+      comment: comments,
+      alertDate: moment(alertDate, 'DD/MM/YYYY').format('YYYY-MM-DD'),
+    })
 
-      raiseAnalyticsEvent(
-        'Alert Created',
-        `Alert type - ${alertCode}`,
-        `Alert created for ${req.session.userDetails.activeCaseLoadId}`
-      )
-    } catch (error) {
-      logError(req.originalUrl, error, serviceUnavailableMessage)
-      res.status(500)
-      return res.render('error.njk', { url: `${getOffenderUrl(offenderNo)}/create-alert` })
-    }
+    raiseAnalyticsEvent(
+      'Alert Created',
+      `Alert type - ${alertCode}`,
+      `Alert created for ${req.session.userDetails.activeCaseLoadId}`
+    )
 
     return res.redirect(`${getOffenderUrl(offenderNo)}/alerts`)
   }

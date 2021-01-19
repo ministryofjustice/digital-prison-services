@@ -1,4 +1,3 @@
-const { logError } = require('../logError')
 const telemetry = require('../azure-appinsights')
 
 const ensureAllowedPageAccess = userRoles => {
@@ -32,11 +31,8 @@ const downloadProbationDocumentFactory = (oauthApi, communityApi, systemOauthCli
         throw error
       }
     } catch (error) {
-      logError(req.originalUrl, error, 'Sorry, the service is unavailable')
-
-      res.render('error.njk', {
-        url: `/offenders/${offenderNo}/probation-documents`,
-      })
+      res.locals.redirectUrl = `/offenders/${offenderNo}/probation-documents`
+      throw error
     }
   }
   return { downloadDocument }

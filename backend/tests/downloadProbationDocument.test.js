@@ -29,6 +29,7 @@ describe('Download probation documents', () => {
       beforeEach(() => {
         page = downloadProbationDocumentFactory(oauthApi, communityApi, systemOauthClient).downloadDocument
         res.render = jest.fn()
+        res.locals = {}
 
         req = { ...mockReq, params: { offenderNo: 'G9542VP', documentId: '123' } }
       })
@@ -51,11 +52,10 @@ describe('Download probation documents', () => {
       it('should render page with unavailable message with missing role', async () => {
         oauthApi.userRoles.mockReturnValue([{ roleCode: 'SOME_OTHER_ROLE' }])
 
-        await page(req, res)
+        const error = new Error('You do not have the correct role to access this page')
 
-        expect(res.render).toHaveBeenCalledWith('error.njk', {
-          url: '/offenders/G9542VP/probation-documents',
-        })
+        await expect(page(req, res)).rejects.toThrowError(error)
+        expect(res.locals.redirectUrl).toBe('/offenders/G9542VP/probation-documents')
       })
     })
   })

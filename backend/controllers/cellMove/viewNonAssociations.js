@@ -1,13 +1,12 @@
 const moment = require('moment')
 
-const { serviceUnavailableMessage } = require('../../common-messages')
 const { putLastNameFirst, formatName } = require('../../utils')
 const { getBackLinkData, getNonAssocationsInEstablishment } = require('./cellMoveUtils')
 const {
   app: { notmEndpointUrl: dpsUrl },
 } = require('../../config')
 
-module.exports = ({ prisonApi, logError }) => async (req, res) => {
+module.exports = ({ prisonApi }) => async (req, res) => {
   const { offenderNo } = req.params
 
   try {
@@ -57,13 +56,7 @@ module.exports = ({ prisonApi, logError }) => async (req, res) => {
       ...getBackLinkData(req.headers.referer, offenderNo),
     })
   } catch (error) {
-    if (error) logError(req.originalUrl, error, serviceUnavailableMessage)
-
-    res.status(500)
-
-    return res.render('error.njk', {
-      url: `/prisoner/${offenderNo}/cell-move/non-associations`,
-      homeUrl: `/prisoner/${offenderNo}`,
-    })
+    res.locals.homeUrl = `/prisoner/${offenderNo}`
+    throw error
   }
 }

@@ -32,7 +32,7 @@ describe('Global search', () => {
 
     logError = jest.fn()
 
-    offenderSearchApi.globalSearch = jest.fn()
+    offenderSearchApi.globalSearch = jest.fn().mockResolvedValue([])
 
     oauthApi.userRoles = jest.fn().mockResolvedValue([])
 

@@ -6,7 +6,6 @@ const {
   notifications: { confirmBookingPrisonTemplateId, emails },
 } = require('../../config')
 
-const { serviceUnavailableMessage } = require('../../common-messages')
 const { properCaseName } = require('../../utils')
 
 const unpackAppointmentDetails = req => {
@@ -63,7 +62,6 @@ const prepostAppointmentsFactory = ({
   appointmentsService,
   existingEventsService,
   raiseAnalyticsEvent,
-  logError,
 }) => {
   const cancel = async (req, res) => {
     unpackAppointmentDetails(req)
@@ -187,11 +185,9 @@ const prepostAppointmentsFactory = ({
         },
       })
     } catch (error) {
-      logError(req.originalUrl, error, serviceUnavailableMessage)
-      res.status(500)
-      res.render('error.njk', {
-        url: authSource === 'nomis' ? `/offenders/${offenderNo}/add-appointment` : '/videolink/prisoner-search',
-      })
+      res.locals.redirectUrl =
+        authSource === 'nomis' ? `/offenders/${offenderNo}/add-appointment` : '/videolink/prisoner-search'
+      throw error
     }
   }
   const makeVideoLinkBooking = async (context, main, pre, post) => {
@@ -438,11 +434,9 @@ const prepostAppointmentsFactory = ({
       }
       return res.redirect(`/offenders/${offenderNo}/confirm-appointment`)
     } catch (error) {
-      logError(req.originalUrl, error, serviceUnavailableMessage)
-      res.status(500)
-      return res.render('error.njk', {
-        url: authSource === 'nomis' ? `/offenders/${offenderNo}/add-appointment` : '/videolink/prisoner-search',
-      })
+      res.locals.redirectUrl =
+        authSource === 'nomis' ? `/offenders/${offenderNo}/add-appointment` : '/videolink/prisoner-search'
+      throw error
     }
   }
 

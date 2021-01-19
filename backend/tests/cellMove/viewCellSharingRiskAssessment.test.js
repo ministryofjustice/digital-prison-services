@@ -1,7 +1,6 @@
 Reflect.deleteProperty(process.env, 'APPINSIGHTS_INSTRUMENTATIONKEY')
 
 const viewCellSharingRiskAssessmentDetails = require('../../controllers/cellMove/viewCellSharingAssessmentDetails')
-const { serviceUnavailableMessage } = require('../../common-messages')
 
 describe('view CSRA details', () => {
   let req
@@ -90,16 +89,13 @@ describe('view CSRA details', () => {
   })
 
   it('Should render error template when there is an API error', async () => {
-    prisonApi.getDetails.mockImplementation(() => Promise.reject(new Error('Network error')))
+    const error = new Error('Network error')
+    prisonApi.getDetails.mockImplementation(() => Promise.reject(error))
 
-    await controller(req, res)
+    await expect(controller(req, res)).rejects.toThrowError(error)
 
-    expect(res.status).toHaveBeenCalledWith(500)
-    expect(logError).toHaveBeenCalledWith(req.originalUrl, new Error('Network error'), serviceUnavailableMessage)
-    expect(res.render).toHaveBeenCalledWith('error.njk', {
-      url: '/prisoner/ABC123/cell-move/search-for-cell',
-      homeUrl: '/prisoner/ABC123',
-    })
+    expect(res.locals.redirectUrl).toBe('/prisoner/ABC123/cell-move/search-for-cell')
+    expect(res.locals.homeUrl).toBe('/prisoner/ABC123')
   })
 
   it('populates the data correctly', async () => {
