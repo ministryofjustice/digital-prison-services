@@ -1,4 +1,4 @@
-const prisonerPrivateCash = require('../controllers/prisonerProfile/prisonerFinances/prisonerPrivateCash')
+const prisonerSpends = require('../controllers/prisonerProfile/prisonerFinances/prisonerSpends')
 
 describe('Prisoner private cash', () => {
   const offenderNo = 'ABC123'
@@ -56,23 +56,18 @@ describe('Prisoner private cash', () => {
 
     prisonerFinanceService.getPrisonerFinanceData = jest.fn().mockResolvedValue(prisonerFinanceData)
 
-    prisonApi.getTransactionHistory = jest.fn().mockResolvedValue([])
     prisonApi.getAgencyDetails = jest.fn().mockResolvedValue({})
 
-    controller = prisonerPrivateCash({ prisonApi, prisonerFinanceService })
+    controller = prisonerSpends({ prisonApi, prisonerFinanceService })
   })
 
   it('should make the expected calls', async () => {
     await controller(req, res)
 
-    expect(prisonApi.getTransactionHistory).toHaveBeenCalledWith(res.locals, offenderNo, {
-      account_code: 'cash',
-      transaction_type: 'HOA',
-    })
     expect(prisonerFinanceService.getPrisonerFinanceData).toHaveBeenCalledWith(
       res.locals,
       offenderNo,
-      'cash',
+      'spends',
       undefined,
       undefined
     )
@@ -86,36 +81,38 @@ describe('Prisoner private cash', () => {
         allTransactionsForDateRange: [
           {
             offenderId: 1,
-            transactionId: 789,
+            transactionId: 456,
             transactionEntrySequence: 1,
-            entryDate: '2020-11-16',
-            transactionType: 'POST',
-            entryDescription: 'Bought some food',
+            entryDate: '2020-12-02',
+            transactionType: 'OT',
+            entryDescription: 'Sub-Account Transfer',
             referenceNumber: null,
             currency: 'GBP',
-            penceAmount: 10000,
-            accountType: 'REG',
+            penceAmount: 1000,
+            accountType: 'SPND',
             postingType: 'DR',
+            offenderNo,
+            agencyId: 'MDI',
+            relatedOffenderTransactions: [],
+          },
+          {
+            offenderId: 1,
+            transactionId: 123,
+            transactionEntrySequence: 1,
+            entryDate: '2020-12-01',
+            transactionType: 'A_EARN',
+            entryDescription: 'Offender Payroll From:01/12/2020 To:01/12/2020',
+            referenceNumber: null,
+            currency: 'GBP',
+            penceAmount: 50,
+            accountType: 'SPND',
+            postingType: 'CR',
+            offenderNo,
             agencyId: 'LEI',
+            relatedOffenderTransactions: [],
           },
         ],
       })
-      prisonApi.getTransactionHistory = jest.fn().mockResolvedValue([
-        {
-          offenderId: 1,
-          transactionId: 234,
-          transactionEntrySequence: 1,
-          entryDate: '2020-11-27',
-          transactionType: 'HOA',
-          entryDescription: 'HOLD',
-          referenceNumber: null,
-          currency: 'GBP',
-          penceAmount: 1000,
-          accountType: 'REG',
-          postingType: 'DR',
-          agencyId: 'MDI',
-        },
-      ])
 
       prisonApi.getAgencyDetails = jest
         .fn()
@@ -133,14 +130,23 @@ describe('Prisoner private cash', () => {
     it('should render the correct template with the correct information', async () => {
       await controller(req, res)
 
-      expect(res.render).toHaveBeenCalledWith('prisonerProfile/prisonerFinance/privateCash.njk', {
+      expect(res.render).toHaveBeenCalledWith('prisonerProfile/prisonerFinance/spends.njk', {
         ...prisonerFinanceData.templateData,
-        nonPendingRows: [
-          [{ text: '16/11/2020' }, { text: '' }, { text: '£100.00' }, { text: 'Bought some food' }, { text: 'Leeds' }],
-        ],
-        pendingBalance: '-£10.00',
-        pendingRows: [
-          [{ text: '27/11/2020' }, { text: '' }, { text: '£10.00' }, { text: 'HOLD' }, { text: 'Moorland' }],
+        spendsRows: [
+          [
+            { text: '02/12/2020' },
+            { text: '' },
+            { text: '£10.00' },
+            { text: 'Sub-Account Transfer' },
+            { text: 'Moorland' },
+          ],
+          [
+            { text: '01/12/2020' },
+            { text: '£0.50' },
+            { text: '' },
+            { text: 'Offender Payroll From:01/12/2020 To:01/12/2020' },
+            { text: 'Leeds' },
+          ],
         ],
       })
     })
@@ -160,7 +166,7 @@ describe('Prisoner private cash', () => {
       expect(prisonerFinanceService.getPrisonerFinanceData).toHaveBeenCalledWith(
         res.locals,
         offenderNo,
-        'cash',
+        'spends',
         '6',
         '2020'
       )

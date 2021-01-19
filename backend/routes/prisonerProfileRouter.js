@@ -22,6 +22,7 @@ const prisonerPrivateCash = require('../controllers/prisonerProfile/prisonerFina
 const prisonerSpends = require('../controllers/prisonerProfile/prisonerFinances/prisonerSpends')
 
 const prisonerProfileServiceFactory = require('../services/prisonerProfileService')
+const prisonerFinanceServiceFactory = require('../services/prisonerFinanceService')
 const personServiceFactory = require('../services/personService')
 const paginationService = require('../services/paginationService')
 
@@ -55,6 +56,7 @@ const controller = ({
     allocationManagerApi,
   })
   const personService = personServiceFactory(prisonApi)
+  const prisonerFinanceService = prisonerFinanceServiceFactory(prisonApi)
   const referenceCodesService = referenceCodesServiceFactory(prisonApi)
   const adjudicationHistoryService = adjudicationsHistoryService(prisonApi)
 
@@ -117,8 +119,8 @@ const controller = ({
   )
 
   router.get('/prisoner-finance-details/damage-obligations', prisonerDamageObligations({ prisonApi }))
-  router.get('/prisoner-finance-details/private-cash', prisonerPrivateCash({ prisonApi }))
-  router.get('/prisoner-finance-details/spends', prisonerSpends({ prisonApi }))
+  router.get('/prisoner-finance-details/private-cash', prisonerPrivateCash({ prisonApi, prisonerFinanceService }))
+  router.get('/prisoner-finance-details/spends', prisonerSpends({ prisonApi, prisonerFinanceService }))
 
   return router
 }
