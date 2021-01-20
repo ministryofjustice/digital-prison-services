@@ -62,68 +62,30 @@ describe('Prisoner finance service', () => {
     service = prisonerFinanceService(prisonApi)
   })
 
-  describe('Prisoner finance data', () => {
+  describe('getTransactionsForDateRange', () => {
     it('should make the expected API calls', async () => {
-      await service.getPrisonerFinanceData(context, offenderNo, 'cash')
+      await service.getTransactionsForDateRange(context, offenderNo, 'cash')
 
-      expect(prisonApi.getDetails).toHaveBeenCalledWith(context, offenderNo)
       expect(prisonApi.getTransactionHistory).toHaveBeenCalledWith(context, offenderNo, {
         account_code: 'cash',
         from_date: '2020-11-01',
         to_date: '2020-11-27',
       })
-      expect(prisonApi.getPrisonerBalances).toHaveBeenCalledWith(context, bookingId)
     })
 
     describe('with data', () => {
       beforeEach(() => {
         prisonApi.getTransactionHistory.mockResolvedValue(allTransactionsResponse)
-        prisonApi.getPrisonerBalances.mockResolvedValue({ cash: 95, damageObligations: 0 })
       })
 
       it('should return the correct data', async () => {
-        const prisonerFinanceData = await service.getPrisonerFinanceData(context, offenderNo, 'cash')
+        const transactionsForDateRange = await service.getTransactionsForDateRange(context, offenderNo, 'cash')
 
-        expect(prisonerFinanceData).toEqual({
-          allTransactionsForDateRange: allTransactionsResponse,
-          templateData: {
-            currentBalance: '£95.00',
-            formValues: {
-              selectedMonth: 10,
-              selectedYear: 2020,
-            },
-            monthOptions: [
-              { text: 'January', value: 0 },
-              { text: 'February', value: 1 },
-              { text: 'March', value: 2 },
-              { text: 'April', value: 3 },
-              { text: 'May', value: 4 },
-              { text: 'June', value: 5 },
-              { text: 'July', value: 6 },
-              { text: 'August', value: 7 },
-              { text: 'September', value: 8 },
-              { text: 'October', value: 9 },
-              { text: 'November', value: 10 },
-              { text: 'December', value: 11 },
-            ],
-            prisoner: {
-              name: 'John Smith',
-              nameForBreadcrumb: 'Smith, John',
-              offenderNo: 'ABC123',
-            },
-            showDamageObligationsLink: false,
-            yearOptions: [
-              { text: 2017, value: 2017 },
-              { text: 2018, value: 2018 },
-              { text: 2019, value: 2019 },
-              { text: 2020, value: 2020 },
-            ],
-          },
-        })
+        expect(transactionsForDateRange).toEqual(allTransactionsResponse)
       })
 
       it('should make a call for the full months worth of transaction history when selecting a previous date', async () => {
-        await service.getPrisonerFinanceData(context, offenderNo, 'cash', '6', '2020')
+        await service.getTransactionsForDateRange(context, offenderNo, 'cash', '6', '2020')
 
         expect(prisonApi.getTransactionHistory).toHaveBeenCalledWith(context, offenderNo, {
           account_code: 'cash',
@@ -133,22 +95,69 @@ describe('Prisoner finance service', () => {
       })
 
       it('should not make a call for transaction history when selecting a future date', async () => {
-        await service.getPrisonerFinanceData(context, offenderNo, 'cash', '6', '2021')
+        await service.getTransactionsForDateRange(context, offenderNo, 'cash', '6', '2021')
 
         expect(prisonApi.getTransactionHistory).not.toHaveBeenCalled()
       })
     })
+  })
 
-    describe('when there is a damage obligations balance', () => {
+  describe('getTemplateData', () => {
+    it('should make the expected API calls', async () => {
+      await service.getTemplateData(context, offenderNo, 'cash')
+
+      expect(prisonApi.getDetails).toHaveBeenCalledWith(context, offenderNo)
+      expect(prisonApi.getPrisonerBalances).toHaveBeenCalledWith(context, bookingId)
+    })
+
+    it('should return the correct data', async () => {
+      const templateData = await service.getTemplateData(context, offenderNo, 'cash')
+
+      expect(templateData).toEqual({
+        currentBalance: '£0.00',
+        formValues: {
+          selectedMonth: 10,
+          selectedYear: 2020,
+        },
+        monthOptions: [
+          { text: 'January', value: 0 },
+          { text: 'February', value: 1 },
+          { text: 'March', value: 2 },
+          { text: 'April', value: 3 },
+          { text: 'May', value: 4 },
+          { text: 'June', value: 5 },
+          { text: 'July', value: 6 },
+          { text: 'August', value: 7 },
+          { text: 'September', value: 8 },
+          { text: 'October', value: 9 },
+          { text: 'November', value: 10 },
+          { text: 'December', value: 11 },
+        ],
+        prisoner: {
+          name: 'John Smith',
+          nameForBreadcrumb: 'Smith, John',
+          offenderNo: 'ABC123',
+        },
+        showDamageObligationsLink: false,
+        yearOptions: [
+          { text: 2017, value: 2017 },
+          { text: 2018, value: 2018 },
+          { text: 2019, value: 2019 },
+          { text: 2020, value: 2020 },
+        ],
+      })
+    })
+
+    describe('when there are balances', () => {
       beforeEach(() => {
         prisonApi.getPrisonerBalances = jest.fn().mockResolvedValue({ cash: 95, damageObligations: 101 })
       })
 
       it('should let the template know to display a link to the damage obligations page', async () => {
-        const prisonerFinanceData = await service.getPrisonerFinanceData(context, offenderNo, 'cash')
+        const templateData = await service.getTemplateData(context, offenderNo, 'cash')
 
-        expect(prisonerFinanceData).toEqual(
-          expect.objectContaining({ templateData: expect.objectContaining({ showDamageObligationsLink: true }) })
+        expect(templateData).toEqual(
+          expect.objectContaining({ currentBalance: '£95.00', showDamageObligationsLink: true })
         )
       })
     })

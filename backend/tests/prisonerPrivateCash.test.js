@@ -9,41 +9,38 @@ describe('Prisoner private cash', () => {
   let res
   let controller
 
-  const prisonerFinanceData = {
-    allTransactionsForDateRange: [],
-    templateData: {
-      currentBalance: '£95.00',
-      formValues: {
-        selectedMonth: 10,
-        selectedYear: 2020,
-      },
-      monthOptions: [
-        { text: 'January', value: 0 },
-        { text: 'February', value: 1 },
-        { text: 'March', value: 2 },
-        { text: 'April', value: 3 },
-        { text: 'May', value: 4 },
-        { text: 'June', value: 5 },
-        { text: 'July', value: 6 },
-        { text: 'August', value: 7 },
-        { text: 'September', value: 8 },
-        { text: 'October', value: 9 },
-        { text: 'November', value: 10 },
-        { text: 'December', value: 11 },
-      ],
-      prisoner: {
-        name: 'John Smith',
-        nameForBreadcrumb: 'Smith, John',
-        offenderNo: 'ABC123',
-      },
-      showDamageObligationsLink: false,
-      yearOptions: [
-        { text: 2017, value: 2017 },
-        { text: 2018, value: 2018 },
-        { text: 2019, value: 2019 },
-        { text: 2020, value: 2020 },
-      ],
+  const templateDataResponse = {
+    currentBalance: '£95.00',
+    formValues: {
+      selectedMonth: 10,
+      selectedYear: 2020,
     },
+    monthOptions: [
+      { text: 'January', value: 0 },
+      { text: 'February', value: 1 },
+      { text: 'March', value: 2 },
+      { text: 'April', value: 3 },
+      { text: 'May', value: 4 },
+      { text: 'June', value: 5 },
+      { text: 'July', value: 6 },
+      { text: 'August', value: 7 },
+      { text: 'September', value: 8 },
+      { text: 'October', value: 9 },
+      { text: 'November', value: 10 },
+      { text: 'December', value: 11 },
+    ],
+    prisoner: {
+      name: 'John Smith',
+      nameForBreadcrumb: 'Smith, John',
+      offenderNo: 'ABC123',
+    },
+    showDamageObligationsLink: false,
+    yearOptions: [
+      { text: 2017, value: 2017 },
+      { text: 2018, value: 2018 },
+      { text: 2019, value: 2019 },
+      { text: 2020, value: 2020 },
+    ],
   }
 
   beforeEach(() => {
@@ -54,7 +51,8 @@ describe('Prisoner private cash', () => {
     }
     res = { locals: {}, render: jest.fn() }
 
-    prisonerFinanceService.getPrisonerFinanceData = jest.fn().mockResolvedValue(prisonerFinanceData)
+    prisonerFinanceService.getTransactionsForDateRange = jest.fn().mockResolvedValue([])
+    prisonerFinanceService.getTemplateData = jest.fn().mockResolvedValue(templateDataResponse)
 
     prisonApi.getTransactionHistory = jest.fn().mockResolvedValue([])
     prisonApi.getAgencyDetails = jest.fn().mockResolvedValue({})
@@ -63,43 +61,37 @@ describe('Prisoner private cash', () => {
   })
 
   it('should make the expected calls', async () => {
+    const params = [res.locals, offenderNo, 'cash', undefined, undefined]
+
     await controller(req, res)
 
     expect(prisonApi.getTransactionHistory).toHaveBeenCalledWith(res.locals, offenderNo, {
       account_code: 'cash',
       transaction_type: 'HOA',
     })
-    expect(prisonerFinanceService.getPrisonerFinanceData).toHaveBeenCalledWith(
-      res.locals,
-      offenderNo,
-      'cash',
-      undefined,
-      undefined
-    )
+    expect(prisonerFinanceService.getTransactionsForDateRange).toHaveBeenCalledWith(...params)
+    expect(prisonerFinanceService.getTemplateData).toHaveBeenCalledWith(...params)
     expect(prisonApi.getAgencyDetails).not.toHaveBeenCalled()
   })
 
-  describe('with data', () => {
+  describe('with transaction data', () => {
     beforeEach(() => {
-      prisonerFinanceService.getPrisonerFinanceData = jest.fn().mockResolvedValue({
-        ...prisonerFinanceData,
-        allTransactionsForDateRange: [
-          {
-            offenderId: 1,
-            transactionId: 789,
-            transactionEntrySequence: 1,
-            entryDate: '2020-11-16',
-            transactionType: 'POST',
-            entryDescription: 'Bought some food',
-            referenceNumber: null,
-            currency: 'GBP',
-            penceAmount: 10000,
-            accountType: 'REG',
-            postingType: 'DR',
-            agencyId: 'LEI',
-          },
-        ],
-      })
+      prisonerFinanceService.getTransactionsForDateRange = jest.fn().mockResolvedValue([
+        {
+          offenderId: 1,
+          transactionId: 789,
+          transactionEntrySequence: 1,
+          entryDate: '2020-11-16',
+          transactionType: 'POST',
+          entryDescription: 'Bought some food',
+          referenceNumber: null,
+          currency: 'GBP',
+          penceAmount: 10000,
+          accountType: 'REG',
+          postingType: 'DR',
+          agencyId: 'LEI',
+        },
+      ])
       prisonApi.getTransactionHistory = jest.fn().mockResolvedValue([
         {
           offenderId: 1,
@@ -134,7 +126,7 @@ describe('Prisoner private cash', () => {
       await controller(req, res)
 
       expect(res.render).toHaveBeenCalledWith('prisonerProfile/prisonerFinance/privateCash.njk', {
-        ...prisonerFinanceData.templateData,
+        ...templateDataResponse,
         nonPendingRows: [
           [{ text: '16/11/2020' }, { text: '' }, { text: '£100.00' }, { text: 'Bought some food' }, { text: 'Leeds' }],
         ],
@@ -154,23 +146,19 @@ describe('Prisoner private cash', () => {
       }
     })
 
-    it('should pass them to getPrisonerFinanceData', async () => {
+    it('should pass make the correct calls to prisonerFinanceService', async () => {
+      const params = [res.locals, offenderNo, 'cash', '6', '2020']
       await controller(req, res)
 
-      expect(prisonerFinanceService.getPrisonerFinanceData).toHaveBeenCalledWith(
-        res.locals,
-        offenderNo,
-        'cash',
-        '6',
-        '2020'
-      )
+      expect(prisonerFinanceService.getTransactionsForDateRange).toHaveBeenCalledWith(...params)
+      expect(prisonerFinanceService.getTemplateData).toHaveBeenCalledWith(...params)
     })
   })
 
   describe('when there are errors', () => {
     it('set the redirect url and throw the error', async () => {
       const error = new Error('Network error')
-      prisonerFinanceService.getPrisonerFinanceData.mockRejectedValue(error)
+      prisonerFinanceService.getTransactionsForDateRange.mockRejectedValue(error)
 
       await expect(controller(req, res)).rejects.toThrowError(error)
       expect(res.locals.redirectUrl).toBe(`/prisoner/${offenderNo}`)

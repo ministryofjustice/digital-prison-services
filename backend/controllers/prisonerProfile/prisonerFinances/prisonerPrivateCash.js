@@ -4,19 +4,19 @@ const createTransactionViewModel = require('../../../shared/createTransactionVie
 module.exports = ({ prisonApi, prisonerFinanceService }) => async (req, res) => {
   const { month, year } = req.query
   const { offenderNo } = req.params
+  const accountCode = 'cash'
 
   try {
-    const [pendingTransactions, prisonerFinanceData] = await Promise.all([
-      prisonApi.getTransactionHistory(res.locals, offenderNo, { account_code: 'cash', transaction_type: 'HOA' }),
-      prisonerFinanceService.getPrisonerFinanceData(res.locals, offenderNo, 'cash', month, year),
+    const [pendingTransactions, allTransactionsForDateRange, templateData] = await Promise.all([
+      prisonApi.getTransactionHistory(res.locals, offenderNo, { account_code: accountCode, transaction_type: 'HOA' }),
+      prisonerFinanceService.getTransactionsForDateRange(res.locals, offenderNo, accountCode, month, year),
+      prisonerFinanceService.getTemplateData(res.locals, offenderNo, accountCode, month, year),
     ])
 
     const pendingBalanceInPence = pendingTransactions.reduce(
       (acc, current) => (current.postingType === 'DR' ? acc - current.penceAmount : acc + current.penceAmount),
       0
     )
-
-    const { allTransactionsForDateRange, templateData } = prisonerFinanceData
 
     const nonPendingTransactions = allTransactionsForDateRange.filter(
       transaction => transaction.transactionType !== 'HOA'
