@@ -228,6 +228,18 @@ describe('Global search', () => {
             currentWorkingFirstName: 'ARTHURS',
             currentWorkingLastName: 'ANDERSONS',
           },
+          {
+            offenderNo: 'A1234AD',
+            firstName: 'TIM',
+            lastName: 'HUMPHRY',
+            latestLocation: 'Leeds HMP',
+            latestLocationId: 'LEI',
+            dateOfBirth: '1977-10-15',
+            locationDescription: 'Leeds HMP',
+            currentlyInPrison: 'Y',
+            currentWorkingFirstName: 'FREDERICK',
+            currentWorkingLastName: 'QUIMBYS',
+          },
         ])
       })
 
@@ -291,6 +303,23 @@ describe('Global search', () => {
               updateLicenceLink: 'http://localhost:3003/hdc/taskList/2',
               workingName: 'Andersons, Arthurs',
               currentlyInPrison: 'N',
+            },
+            {
+              currentWorkingFirstName: 'FREDERICK',
+              currentWorkingLastName: 'QUIMBYS',
+              currentlyInPrison: 'Y',
+              dateOfBirth: '15/10/1977',
+              firstName: 'TIM',
+              lastName: 'HUMPHRY',
+              latestLocation: 'Leeds HMP',
+              latestLocationId: 'LEI',
+              locationDescription: 'Leeds HMP',
+              name: 'Humphry, Tim',
+              offenderNo: 'A1234AD',
+              showProfileLink: false,
+              showUpdateLicenceLink: false,
+              updateLicenceLink: undefined,
+              workingName: 'Quimbys, Frederick',
             },
           ],
         })
@@ -422,6 +451,14 @@ describe('Global search', () => {
                   showUpdateLicenceLink: false,
                   updateLicenceLink: 'http://localhost:3003/hdc/taskList/2',
                 }),
+                expect.objectContaining({
+                  currentlyInPrison: 'Y',
+                  name: 'Humphry, Tim',
+                  offenderNo: 'A1234AD',
+                  showProfileLink: false,
+                  showUpdateLicenceLink: false,
+                  updateLicenceLink: undefined,
+                }),
               ],
             })
           )
@@ -457,6 +494,14 @@ describe('Global search', () => {
                     showProfileLink: false,
                     showUpdateLicenceLink: true,
                     updateLicenceLink: 'http://localhost:3003/hdc/taskList/2',
+                  }),
+                  expect.objectContaining({
+                    currentlyInPrison: 'Y',
+                    name: 'Humphry, Tim',
+                    offenderNo: 'A1234AD',
+                    showProfileLink: false,
+                    showUpdateLicenceLink: false,
+                    updateLicenceLink: undefined,
                   }),
                 ],
               })
@@ -494,6 +539,12 @@ describe('Global search', () => {
                   name: 'Anderson, Arthur',
                   offenderNo: 'A1234AA',
                   showProfileLink: true,
+                }),
+                expect.objectContaining({
+                  currentlyInPrison: 'Y',
+                  name: 'Humphry, Tim',
+                  offenderNo: 'A1234AD',
+                  showProfileLink: false,
                 }),
               ],
             })
