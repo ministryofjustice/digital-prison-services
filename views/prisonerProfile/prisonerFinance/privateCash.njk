@@ -31,15 +31,15 @@
         { text: "Money in" },
         { text: "Money out" },
         { text: "Payment description" },
-        { text: "Paid in location" }
+        { text: "Location" }
       ],
       rows: pendingRows,
       classes: "govuk-!-margin-bottom-6",
       attributes: { "data-test": "private-cash-pending-table" }
     }) }}
-  {% endif %}
 
-  <h2 class="govuk-heading-m">Completed</h2>
+    <h2 class="govuk-heading-m">Completed</h2>
+  {% endif %}
 
   <form novalidate="novalidate" class="form-background govuk-!-padding-3 govuk-!-margin-bottom-5" data-test="private-cash-date-form">
     <h2 class="govuk-heading-m">View by</h2>
@@ -83,7 +83,7 @@
         { text: "Money in" },
         { text: "Money out" },
         { text: "Payment description" },
-        { text: "Paid in location" }
+        { text: "Location" }
       ],
       rows: nonPendingRows,
       attributes: { "data-test": "private-cash-non-pending-table" }
