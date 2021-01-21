@@ -42,7 +42,7 @@ module.exports = ({ paginationService, offenderSearchApi, oauthApi }) => {
     const { referrer } = req.query
     return res.render('globalSearch/globalSearch.njk', { backLink: backWhiteList[referrer], dpsUrl, referrer })
   }
-  const prisonerBooked = prisoner => prisoner.latestBookingId !== null && prisoner.latestBookingId !== undefined
+  const prisonerBooked = prisoner => prisoner.latestBookingId > 0
   const resultsPage = async (req, res) => {
     let prisonerResults = []
     const { searchText, pageLimitOption, pageOffsetOption, referrer, ...filters } = req.query
@@ -116,8 +116,8 @@ module.exports = ({ paginationService, offenderSearchApi, oauthApi }) => {
         showUpdateLicenceLink:
           isLicencesUser && (prisoner.currentlyInPrison === 'Y' || isLicencesVaryUser) && prisonerBooked(prisoner),
         showProfileLink:
-          (userCanViewInactive && prisoner.currentlyInPrison === 'N' && prisonerBooked(prisoner)) ||
-          (prisoner.currentlyInPrison === 'Y' && prisonerBooked(prisoner)),
+          ((userCanViewInactive && prisoner.currentlyInPrison === 'N') || prisoner.currentlyInPrison === 'Y') &&
+          prisonerBooked(prisoner),
         updateLicenceLink: prisonerBooked(prisoner)
           ? `${licencesUrl}hdc/taskList/${prisoner.latestBookingId}`
           : undefined,
