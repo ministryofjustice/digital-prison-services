@@ -1,6 +1,6 @@
 const moment = require('moment')
 
-context('Prisoner damage obligations', () => {
+context('Prisoner private cash', () => {
   const offenderNo = 'A1234A'
   const pendingTransactions = [
     {

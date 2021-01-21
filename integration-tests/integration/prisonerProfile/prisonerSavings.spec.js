@@ -1,8 +1,8 @@
 const moment = require('moment')
 
-context('Prisoner spends', () => {
+context('Prisoner savings', () => {
   const offenderNo = 'A1234A'
-  const spendsResponse = [
+  const savingsResponse = [
     {
       offenderId: 1,
       transactionId: 456,
@@ -13,8 +13,8 @@ context('Prisoner spends', () => {
       referenceNumber: null,
       currency: 'GBP',
       penceAmount: 1000,
-      accountType: 'SPND',
-      postingType: 'DR',
+      accountType: 'SAV',
+      postingType: 'CR',
       offenderNo,
       agencyId: 'MDI',
       relatedOffenderTransactions: [],
@@ -24,13 +24,13 @@ context('Prisoner spends', () => {
       transactionId: 123,
       transactionEntrySequence: 1,
       entryDate: '2020-12-01',
-      transactionType: 'A_EARN',
-      entryDescription: 'Offender Payroll From:01/12/2020 To:01/12/2020',
+      transactionType: 'OT',
+      entryDescription: 'Sub-Account Transfer',
       referenceNumber: null,
       currency: 'GBP',
       penceAmount: 50,
-      accountType: 'SPND',
-      postingType: 'CR',
+      accountType: 'SAV',
+      postingType: 'DR',
       offenderNo,
       agencyId: 'LEI',
       relatedOffenderTransactions: [],
@@ -49,8 +49,8 @@ context('Prisoner spends', () => {
       Cypress.Cookies.preserveOnce('hmpps-session-dev')
       cy.task('stubOffenderBasicDetails', { bookingId: 1, firstName: 'John', lastName: 'Smith', agencyId: 'MDI' })
       cy.task('stubGetTransactionHistory', {
-        accountCode: 'spends',
-        response: spendsResponse,
+        accountCode: 'savings',
+        response: savingsResponse,
         fromDate: '2020-11-01',
         toDate: '2020-11-30',
       })
@@ -71,24 +71,25 @@ context('Prisoner spends', () => {
       cy.task('stubPrisonerBalances', {
         cash: 95,
         spends: 50,
+        savings: 10,
         damageObligations: 101,
       })
     })
 
     it('should load and display the correct content', () => {
-      cy.visit(`/prisoner/${offenderNo}/prisoner-finance-details/spends?month=10&year=2020`)
+      cy.visit(`/prisoner/${offenderNo}/prisoner-finance-details/savings?month=10&year=2020`)
 
-      cy.get('[data-test="tabs-spends"]')
-        .contains('Spends')
-        .should('have.attr', 'aria-label', 'View spends account')
+      cy.get('[data-test="tabs-savings"]')
+        .contains('Savings')
+        .should('have.attr', 'aria-label', 'View savings account')
         .parent()
         .should('have.class', 'govuk-tabs__list-item--selected')
       cy.get('[data-test="tabs-damage-obligations"]').should('be.visible')
-      cy.get('h1').contains('Spends account for John Smith')
-      cy.get('[data-test="current-balance"]').contains('£50.00')
-      cy.get('[data-test="spends-month"]').should('have.value', '10')
-      cy.get('[data-test="spends-year"]').should('have.value', '2020')
-      cy.get('[data-test="spends-table"]').then($table => {
+      cy.get('h1').contains('Savings account for John Smith')
+      cy.get('[data-test="current-balance"]').contains('£10.00')
+      cy.get('[data-test="savings-month"]').should('have.value', '10')
+      cy.get('[data-test="savings-year"]').should('have.value', '2020')
+      cy.get('[data-test="savings-table"]').then($table => {
         cy.get($table)
           .find('tbody')
           .find('tr')
@@ -96,10 +97,8 @@ context('Prisoner spends', () => {
             cy.get($tableRows)
               .its('length')
               .should('eq', 2)
-            expect($tableRows.get(0).innerText).to.contain('02/12/2020\t\t£10.00\tSub-Account Transfer\tMoorland')
-            expect($tableRows.get(1).innerText).to.contain(
-              '01/12/2020\t£0.50\t\tOffender Payroll From:01/12/2020 To:01/12/2020\tLeeds'
-            )
+            expect($tableRows.get(0).innerText).to.contain('02/12/2020\t£10.00\t\tSub-Account Transfer\tMoorland')
+            expect($tableRows.get(1).innerText).to.contain('01/12/2020\t\t£0.50\tSub-Account Transfer\tLeeds')
           })
       })
     })
@@ -110,7 +109,7 @@ context('Prisoner spends', () => {
       Cypress.Cookies.preserveOnce('hmpps-session-dev')
       cy.task('stubOffenderBasicDetails', { bookingId: 1, firstName: 'John', lastName: 'Smith', agencyId: 'MDI' })
       cy.task('stubGetTransactionHistory', {
-        accountCode: 'spends',
+        accountCode: 'savings',
         response: [],
         fromDate: moment()
           .startOf('month')
@@ -124,15 +123,15 @@ context('Prisoner spends', () => {
     })
 
     it('should load and display the correct content', () => {
-      cy.visit(`/prisoner/${offenderNo}/prisoner-finance-details/spends`)
+      cy.visit(`/prisoner/${offenderNo}/prisoner-finance-details/savings`)
 
       cy.get('[data-test="tabs-damage-obligations"]').should('not.exist')
-      cy.get('h1').contains('Spends account for John Smith')
+      cy.get('h1').contains('Savings account for John Smith')
       cy.get('[data-test="current-balance"]').contains('£0.00')
       cy.get('[data-test="pending-balance"]').should('not.exist')
-      cy.get('[data-test="spends-month"]').should('have.value', moment().month())
-      cy.get('[data-test="spends-year"]').should('have.value', moment().year())
-      cy.get('[data-test="spends-table"]').should('not.exist')
+      cy.get('[data-test="savings-month"]').should('have.value', moment().month())
+      cy.get('[data-test="savings-year"]').should('have.value', moment().year())
+      cy.get('[data-test="savings-table"]').should('not.exist')
       cy.get('[data-test="no-transactions-message"]').contains(
         'There are no payments in or out of this account for the selected month.'
       )
