@@ -58,6 +58,8 @@ const getTasks = ({ activeCaseLoadId, locations, staffId, whereaboutsConfig }) =
       'PF_POLICE',
       'PF_HQ',
       'PF_PSYCHOLOGIST',
+      'PF_NATIONAL_READER',
+      'PF_LOCAL_READER',
     ],
     enabled: pathfinder.ui_url,
   },
