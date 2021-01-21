@@ -14,8 +14,8 @@ module.exports = prisonApi => {
     year = currentYear
   ) => {
     const selectedMonthAndYear = moment().set({ month, year })
-    const isCurrentMonthAndYear = selectedMonthAndYear.isSame(today, 'month', 'year')
-    const isFutureMonthAndYear = selectedMonthAndYear.isAfter(today)
+    const isCurrentMonthAndYear = selectedMonthAndYear.isSame(today, 'month')
+    const isFutureMonthAndYear = selectedMonthAndYear.isAfter(today, 'month')
 
     if (isFutureMonthAndYear) return []
 
