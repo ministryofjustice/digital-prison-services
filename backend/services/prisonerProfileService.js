@@ -121,6 +121,8 @@ module.exports = ({
             'PF_POLICE',
             'PF_HQ',
             'PF_PSYCHOLOGIST',
+            'PF_NATIONAL_READER',
+            'PF_LOCAL_READER',
           ].includes(role.roleCode)
         )
     )
@@ -129,10 +131,7 @@ module.exports = ({
     const useOfForceEnabledPrisons = useOfForcePrisons.split(',').map(prison => prison.trim().toUpperCase())
 
     const isSocUser = Boolean(
-      userRoles &&
-        userRoles.some(role =>
-          ['SOC_CUSTODY', 'SOC_COMMUNITY', 'SOC_EXTERNAL_RO', 'SOC_EXTERNAL'].includes(role.roleCode)
-        )
+      userRoles && userRoles.some(role => ['SOC_CUSTODY', 'SOC_COMMUNITY'].includes(role.roleCode))
     )
 
     const canViewSocLink = Boolean(isSocUser && socDetails)

@@ -438,6 +438,8 @@ describe('prisoner profile service', () => {
         ${'PF_HQ'}              | ${'canViewPathfinderLink'} | ${true}
         ${'PF_PSYCHOLOGIST'}    | ${'canViewPathfinderLink'} | ${true}
         ${'PF_POLICE'}          | ${'canViewPathfinderLink'} | ${true}
+        ${'PF_NATIONAL_READER'} | ${'canViewPathfinderLink'} | ${true}
+        ${'PF_LOCAL_READER'}    | ${'canViewPathfinderLink'} | ${true}
         ${'OTHER'}              | ${'canViewPathfinderLink'} | ${false}
       `('$flag should be $hasAccess when the user has the $role role', async ({ role, flag, hasAccess }) => {
         oauthApi.userRoles.mockResolvedValue([{ roleCode: role }])
@@ -488,22 +490,6 @@ describe('prisoner profile service', () => {
 
       it('should enable SOC when the user has the SOC_COMMUNITY role', async () => {
         oauthApi.userRoles.mockResolvedValue([{ roleCode: 'SOC_COMMUNITY' }])
-
-        const profileData = await service.getPrisonerProfileData(context, offenderNo)
-
-        expect(profileData.canViewSocLink).toBe(true)
-      })
-
-      it('should enable SOC when the user has the SOC_EXTERNAL_RO role', async () => {
-        oauthApi.userRoles.mockResolvedValue([{ roleCode: 'SOC_EXTERNAL_RO' }])
-
-        const profileData = await service.getPrisonerProfileData(context, offenderNo)
-
-        expect(profileData.canViewSocLink).toBe(true)
-      })
-
-      it('should enable SOC when the user has the SOC_EXTERNAL role', async () => {
-        oauthApi.userRoles.mockResolvedValue([{ roleCode: 'SOC_EXTERNAL' }])
 
         const profileData = await service.getPrisonerProfileData(context, offenderNo)
 

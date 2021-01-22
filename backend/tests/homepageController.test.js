@@ -190,6 +190,8 @@ describe('Homepage', () => {
         { roleCode: 'PF_POLICE' },
         { roleCode: 'PF_HQ' },
         { roleCode: 'PF_PSYCHOLOGIST' },
+        { roleCode: 'PF_NATIONAL_READER' },
+        { roleCode: 'PF_LOCAL_READER' },
       ])
 
       await controller(req, res)
