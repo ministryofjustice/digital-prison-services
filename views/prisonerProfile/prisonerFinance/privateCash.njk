@@ -3,19 +3,21 @@
 {% from "govuk/components/button/macro.njk" import govukButton %}
 {% from "govuk/components/table/macro.njk" import govukTable %}
 
+{% set testIdPrefix = "private-cash-" %}
+
 {% block prisonerFinanceSection %}
   <h1 class="govuk-heading-l">Private cash account for {{ prisoner.name }}</h1>
 
   <div class="govuk-grid-row">
     <div class="govuk-grid-column-one-quarter">
       <h2 class="govuk-heading-m govuk-!-margin-bottom-1">Current balance</h2>
-      <p class="govuk-body-l" data-test="current-balance">{{ currentBalance }}</p>
+      <p class="govuk-body-l" data-test="{{ testIdPrefix + 'current-balance' }}">{{ currentBalance }}</p>
     </div>
 
     {% if pendingRows.length %}
       <div class="govuk-grid-column-one-quarter">
         <h2 class="govuk-heading-m govuk-!-margin-bottom-1">Pending balance</h2>
-        <p class="govuk-body-l" data-test="pending-balance">{{ pendingBalance }}</p>
+        <p class="govuk-body-l" data-test="{{ testIdPrefix + 'pending-balance' }}">{{ pendingBalance }}</p>
       </div>
     {% endif %}
   </div>
@@ -35,46 +37,13 @@
       ],
       rows: pendingRows,
       classes: "govuk-!-margin-bottom-6",
-      attributes: { "data-test": "private-cash-pending-table" }
+      attributes: { "data-test": testIdPrefix + "pending-table" }
     }) }}
 
     <h2 class="govuk-heading-m">Completed</h2>
   {% endif %}
 
-  <form novalidate="novalidate" class="form-background govuk-!-padding-3 govuk-!-margin-bottom-5" data-test="private-cash-date-form">
-    <h2 class="govuk-heading-m">View by</h2>
-
-    <div class="horizontal-form govuk-!-margin-bottom-3">
-      {{ govukSelect({
-        id: "month",
-        name: "month",
-        label: {
-          text: "Month"
-        },
-        items: monthOptions | setSelected(formValues.selectedMonth),
-        attributes: {
-          "data-test": "private-cash-month"
-        }
-      }) }}
-
-      {{ govukSelect({
-        id: "year",
-        name: "year",
-        label: {
-          text: "Year"
-        },
-        items: yearOptions | setSelected(formValues.selectedYear),
-        attributes: {
-          "data-test": "private-cash-year"
-        }
-      }) }}
-
-      {{ govukButton({
-        text: "Select",
-        type: "submit"
-      }) }}
-    </div>
-  </form>
+  {% include "./partials/prisonerFinanceFilter.njk" %}
 
   {% if nonPendingRows.length %}
     {{ govukTable({
@@ -86,9 +55,9 @@
         { text: "Location" }
       ],
       rows: nonPendingRows,
-      attributes: { "data-test": "private-cash-non-pending-table" }
+      attributes: { "data-test": testIdPrefix + "non-pending-table" }
     }) }}
   {% else %}
-    <p class="govuk-body" data-test="no-transactions-message">There are no payments in or out of this account for the selected month.</p>
+    <p class="govuk-body" data-test="{{ testIdPrefix + 'no-transactions-message' }}">There are no payments in or out of this account for the selected month.</p>
   {% endif %}
 {% endblock %}

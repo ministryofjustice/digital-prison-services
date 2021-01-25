@@ -85,7 +85,7 @@ context('Prisoner spends', () => {
         .should('have.class', 'govuk-tabs__list-item--selected')
       cy.get('[data-test="tabs-damage-obligations"]').should('be.visible')
       cy.get('h1').contains('Spends account for John Smith')
-      cy.get('[data-test="current-balance"]').contains('£50.00')
+      cy.get('[data-test="spends-current-balance"]').contains('£50.00')
       cy.get('[data-test="spends-month"]').should('have.value', '10')
       cy.get('[data-test="spends-year"]').should('have.value', '2020')
       cy.get('[data-test="spends-table"]').then($table => {
@@ -128,12 +128,11 @@ context('Prisoner spends', () => {
 
       cy.get('[data-test="tabs-damage-obligations"]').should('not.exist')
       cy.get('h1').contains('Spends account for John Smith')
-      cy.get('[data-test="current-balance"]').contains('£0.00')
-      cy.get('[data-test="pending-balance"]').should('not.exist')
+      cy.get('[data-test="spends-current-balance"]').contains('£0.00')
       cy.get('[data-test="spends-month"]').should('have.value', moment().month())
       cy.get('[data-test="spends-year"]').should('have.value', moment().year())
       cy.get('[data-test="spends-table"]').should('not.exist')
-      cy.get('[data-test="no-transactions-message"]').contains(
+      cy.get('[data-test="spends-no-transactions-message"]').contains(
         'There are no payments in or out of this account for the selected month.'
       )
     })
