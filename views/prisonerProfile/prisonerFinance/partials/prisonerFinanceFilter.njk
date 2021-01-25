@@ -1,0 +1,34 @@
+<form novalidate="novalidate" class="form-background govuk-!-padding-3 govuk-!-margin-bottom-5 govuk-!-display-none-print" data-test="{{ testIdPrefix + 'date-form' }}">
+  <h2 class="govuk-heading-m">View by</h2>
+
+  <div class="horizontal-form govuk-!-margin-bottom-3">
+    {{ govukSelect({
+      id: "month",
+      name: "month",
+      label: {
+        text: "Month"
+      },
+      items: monthOptions | setSelected(formValues.selectedMonth),
+      attributes: {
+        "data-test": testIdPrefix + "month"
+      }
+    }) }}
+
+    {{ govukSelect({
+      id: "year",
+      name: "year",
+      label: {
+        text: "Year"
+      },
+      items: yearOptions | setSelected(formValues.selectedYear),
+      attributes: {
+        "data-test": testIdPrefix + "year"
+      }
+    }) }}
+
+    {{ govukButton({
+      text: "Select",
+      type: "submit"
+    }) }}
+  </div>
+</form>

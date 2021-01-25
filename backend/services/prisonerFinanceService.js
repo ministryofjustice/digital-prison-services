@@ -39,6 +39,9 @@ module.exports = prisonApi => {
       currentBalance: formatCurrency(balanceData?.[accountCode] || 0, balanceData?.currency),
       formValues: { selectedMonth: parseInt(month, 10), selectedYear: parseInt(year, 10) },
       monthOptions: moment.months().map((m, i) => ({ value: i, text: m })),
+      period: moment()
+        .set({ month, year })
+        .format('MMMM YYYY'),
       prisoner: {
         nameForBreadcrumb: putLastNameFirst(prisonerDetails.firstName, prisonerDetails.lastName),
         name: formatName(prisonerDetails.firstName, prisonerDetails.lastName),

@@ -117,8 +117,8 @@ context('Prisoner private cash', () => {
         .should('have.class', 'govuk-tabs__list-item--selected')
       cy.get('[data-test="tabs-damage-obligations"]').should('be.visible')
       cy.get('h1').contains('Private cash account for John Smith')
-      cy.get('[data-test="current-balance"]').contains('£95.00')
-      cy.get('[data-test="pending-balance"]').contains('-£10.00')
+      cy.get('[data-test="private-cash-current-balance"]').contains('£95.00')
+      cy.get('[data-test="private-cash-pending-balance"]').contains('-£10.00')
       cy.get('[data-test="private-cash-month"]').should('have.value', '10')
       cy.get('[data-test="private-cash-year"]').should('have.value', '2020')
       cy.get('[data-test="private-cash-pending-table"]').then($table => {
@@ -176,13 +176,13 @@ context('Prisoner private cash', () => {
 
       cy.get('[data-test="tabs-damage-obligations"]').should('not.exist')
       cy.get('h1').contains('Private cash account for John Smith')
-      cy.get('[data-test="current-balance"]').contains('£0.00')
-      cy.get('[data-test="pending-balance"]').should('not.exist')
+      cy.get('[data-test="private-cash-current-balance"]').contains('£0.00')
+      cy.get('[data-test="private-cash-pending-balance"]').should('not.exist')
       cy.get('[data-test="private-cash-month"]').should('have.value', moment().month())
       cy.get('[data-test="private-cash-year"]').should('have.value', moment().year())
       cy.get('[data-test="private-cash-pending-table"]').should('not.exist')
       cy.get('[data-test="private-cash-non-pending-table"]').should('not.exist')
-      cy.get('[data-test="no-transactions-message"]').contains(
+      cy.get('[data-test="private-cash-no-transactions-message"]').contains(
         'There are no payments in or out of this account for the selected month.'
       )
     })

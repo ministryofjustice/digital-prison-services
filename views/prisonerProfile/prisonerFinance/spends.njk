@@ -1,48 +1,22 @@
 {% extends "./layouts/prisonerFinanceLayout.njk" %}
+{% from "../../macros/printLink.njk" import printLink %}
 {% from "govuk/components/select/macro.njk" import govukSelect %}
 {% from "govuk/components/button/macro.njk" import govukButton %}
 {% from "govuk/components/table/macro.njk" import govukTable %}
+
+{% set testIdPrefix = "spends-" %}
 
 {% block prisonerFinanceSection %}
   <h1 class="govuk-heading-l">Spends account for {{ prisoner.name }}</h1>
 
   <h2 class="govuk-heading-m govuk-!-margin-bottom-1">Current balance</h2>
-  <p class="govuk-body-l" data-test="current-balance">{{ currentBalance }}</p>
+  <p class="govuk-body-l" data-test="{{ testIdPrefix + 'current-balance' }}">{{ currentBalance }}</p>
 
-  <form novalidate="novalidate" class="form-background govuk-!-padding-3 govuk-!-margin-bottom-5" data-test="spends-date-form">
-    <h2 class="govuk-heading-m">View by</h2>
+  {{ printLink(align="right") }}
 
-    <div class="horizontal-form govuk-!-margin-bottom-3">
-      {{ govukSelect({
-        id: "month",
-        name: "month",
-        label: {
-          text: "Month"
-        },
-        items: monthOptions | setSelected(formValues.selectedMonth),
-        attributes: {
-          "data-test": "spends-month"
-        }
-      }) }}
+  {% include "./partials/prisonerFinanceFilter.njk" %}
 
-      {{ govukSelect({
-        id: "year",
-        name: "year",
-        label: {
-          text: "Year"
-        },
-        items: yearOptions | setSelected(formValues.selectedYear),
-        attributes: {
-          "data-test": "spends-year"
-        }
-      }) }}
-
-      {{ govukButton({
-        text: "Select",
-        type: "submit"
-      }) }}
-    </div>
-  </form>
+  <h2 class="govuk-heading-m print-only">Payments for {{ period }}</h2>
 
   {% if spendsRows.length %}
     {{ govukTable({
@@ -54,10 +28,10 @@
         { text: "Location" }
       ],
       rows: spendsRows,
-      attributes: { "data-test": "spends-table" }
+      attributes: { "data-test": testIdPrefix + "table" }
     }) }}
   {% else %}
-    <p class="govuk-body" data-test="no-transactions-message">There are no payments in or out of this account for the selected month.</p>
+    <p class="govuk-body" data-test="{{ testIdPrefix + 'no-transactions-message' }}">There are no payments in or out of this account for the selected month.</p>
   {% endif %}
 
 {% endblock %}

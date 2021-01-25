@@ -2,6 +2,12 @@
   margin: 1cm 0;
 }
 
+@media screen {
+  .print-only {
+    display: none;
+  }
+}
+
 @include govuk-media-query($media-type: print) {
   // govuk-frontend overrides
   .govuk-heading-l {

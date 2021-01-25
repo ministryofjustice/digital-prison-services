@@ -86,7 +86,7 @@ context('Prisoner savings', () => {
         .should('have.class', 'govuk-tabs__list-item--selected')
       cy.get('[data-test="tabs-damage-obligations"]').should('be.visible')
       cy.get('h1').contains('Savings account for John Smith')
-      cy.get('[data-test="current-balance"]').contains('£10.00')
+      cy.get('[data-test="savings-current-balance"]').contains('£10.00')
       cy.get('[data-test="savings-month"]').should('have.value', '10')
       cy.get('[data-test="savings-year"]').should('have.value', '2020')
       cy.get('[data-test="savings-table"]').then($table => {
@@ -127,12 +127,11 @@ context('Prisoner savings', () => {
 
       cy.get('[data-test="tabs-damage-obligations"]').should('not.exist')
       cy.get('h1').contains('Savings account for John Smith')
-      cy.get('[data-test="current-balance"]').contains('£0.00')
-      cy.get('[data-test="pending-balance"]').should('not.exist')
+      cy.get('[data-test="savings-current-balance"]').contains('£0.00')
       cy.get('[data-test="savings-month"]').should('have.value', moment().month())
       cy.get('[data-test="savings-year"]').should('have.value', moment().year())
       cy.get('[data-test="savings-table"]').should('not.exist')
-      cy.get('[data-test="no-transactions-message"]').contains(
+      cy.get('[data-test="savings-no-transactions-message"]').contains(
         'There are no payments in or out of this account for the selected month.'
       )
     })

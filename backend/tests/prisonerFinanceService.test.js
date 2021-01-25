@@ -133,6 +133,7 @@ describe('Prisoner finance service', () => {
           { text: 'November', value: 10 },
           { text: 'December', value: 11 },
         ],
+        period: 'November 2020',
         prisoner: {
           name: 'John Smith',
           nameForBreadcrumb: 'Smith, John',
