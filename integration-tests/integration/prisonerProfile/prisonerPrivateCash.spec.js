@@ -2,7 +2,7 @@ const moment = require('moment')
 
 context('Prisoner private cash', () => {
   const offenderNo = 'A1234A'
-  const pendingTransactions = [
+  const addHoldFunds = [
     {
       offenderId: 1,
       transactionId: 234,
@@ -18,9 +18,26 @@ context('Prisoner private cash', () => {
       agencyId: 'MDI',
     },
   ]
+  const withheldFunds = [
+    {
+      offenderId: 1,
+      transactionId: 345,
+      transactionEntrySequence: 1,
+      entryDate: '2020-11-26',
+      transactionType: 'WHF',
+      entryDescription: 'WITHHELD',
+      referenceNumber: null,
+      currency: 'GBP',
+      penceAmount: 2000,
+      accountType: 'REG',
+      postingType: 'DR',
+      agencyId: 'MDI',
+    },
+  ]
 
   const privateCashResponse = [
-    ...pendingTransactions,
+    ...addHoldFunds,
+    ...withheldFunds,
     {
       offenderId: 1,
       transactionId: 123,
@@ -78,8 +95,13 @@ context('Prisoner private cash', () => {
       cy.task('stubOffenderBasicDetails', { bookingId: 1, firstName: 'John', lastName: 'Smith', agencyId: 'MDI' })
       cy.task('stubGetTransactionHistory', {
         accountCode: 'cash',
-        response: pendingTransactions,
+        response: addHoldFunds,
         transactionType: 'HOA',
+      })
+      cy.task('stubGetTransactionHistory', {
+        accountCode: 'cash',
+        response: withheldFunds,
+        transactionType: 'WHF',
       })
       cy.task('stubGetTransactionHistory', {
         accountCode: 'cash',
@@ -118,7 +140,7 @@ context('Prisoner private cash', () => {
       cy.get('[data-test="tabs-damage-obligations"]').should('be.visible')
       cy.get('h1').contains('Private cash account for John Smith')
       cy.get('[data-test="private-cash-current-balance"]').contains('£95.00')
-      cy.get('[data-test="private-cash-pending-balance"]').contains('-£10.00')
+      cy.get('[data-test="private-cash-pending-balance"]').contains('-£30.00')
       cy.get('[data-test="private-cash-month"]').should('have.value', '10')
       cy.get('[data-test="private-cash-year"]').should('have.value', '2020')
       cy.get('[data-test="private-cash-pending-table"]').then($table => {
@@ -128,8 +150,9 @@ context('Prisoner private cash', () => {
           .then($tableRows => {
             cy.get($tableRows)
               .its('length')
-              .should('eq', 1)
+              .should('eq', 2)
             expect($tableRows.get(0).innerText).to.contain('27/11/2020\t\t£10.00\tHOLD\tMoorland')
+            expect($tableRows.get(1).innerText).to.contain('26/11/2020\t\t£20.00\tWITHHELD\tMoorland')
           })
       })
       cy.get('[data-test="private-cash-non-pending-table"]').then($table => {
@@ -156,6 +179,11 @@ context('Prisoner private cash', () => {
         accountCode: 'cash',
         response: [],
         transactionType: 'HOA',
+      })
+      cy.task('stubGetTransactionHistory', {
+        accountCode: 'cash',
+        response: [],
+        transactionType: 'WHF',
       })
       cy.task('stubGetTransactionHistory', {
         accountCode: 'cash',

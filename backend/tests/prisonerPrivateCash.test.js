@@ -69,6 +69,10 @@ describe('Prisoner private cash', () => {
       account_code: 'cash',
       transaction_type: 'HOA',
     })
+    expect(prisonApi.getTransactionHistory).toHaveBeenCalledWith(res.locals, offenderNo, {
+      account_code: 'cash',
+      transaction_type: 'WHF',
+    })
     expect(prisonerFinanceService.getTransactionsForDateRange).toHaveBeenCalledWith(...params)
     expect(prisonerFinanceService.getTemplateData).toHaveBeenCalledWith(...params)
     expect(prisonApi.getAgencyDetails).not.toHaveBeenCalled()
@@ -92,22 +96,40 @@ describe('Prisoner private cash', () => {
           agencyId: 'LEI',
         },
       ])
-      prisonApi.getTransactionHistory = jest.fn().mockResolvedValue([
-        {
-          offenderId: 1,
-          transactionId: 234,
-          transactionEntrySequence: 1,
-          entryDate: '2020-11-27',
-          transactionType: 'HOA',
-          entryDescription: 'HOLD',
-          referenceNumber: null,
-          currency: 'GBP',
-          penceAmount: 1000,
-          accountType: 'REG',
-          postingType: 'DR',
-          agencyId: 'MDI',
-        },
-      ])
+      prisonApi.getTransactionHistory = jest
+        .fn()
+        .mockResolvedValue([
+          {
+            offenderId: 1,
+            transactionId: 234,
+            transactionEntrySequence: 1,
+            entryDate: '2020-11-27',
+            transactionType: 'HOA',
+            entryDescription: 'HOLD',
+            referenceNumber: null,
+            currency: 'GBP',
+            penceAmount: 1000,
+            accountType: 'REG',
+            postingType: 'DR',
+            agencyId: 'MDI',
+          },
+        ])
+        .mockResolvedValueOnce([
+          {
+            offenderId: 1,
+            transactionId: 234,
+            transactionEntrySequence: 1,
+            entryDate: '2020-11-26',
+            transactionType: 'WHF',
+            entryDescription: 'WITHHELD',
+            referenceNumber: null,
+            currency: 'GBP',
+            penceAmount: 2000,
+            accountType: 'REG',
+            postingType: 'DR',
+            agencyId: 'MDI',
+          },
+        ])
 
       prisonApi.getAgencyDetails = jest
         .fn()
@@ -130,9 +152,10 @@ describe('Prisoner private cash', () => {
         nonPendingRows: [
           [{ text: '16/11/2020' }, { text: '' }, { text: '£100.00' }, { text: 'Bought some food' }, { text: 'Leeds' }],
         ],
-        pendingBalance: '-£10.00',
+        pendingBalance: '-£30.00',
         pendingRows: [
           [{ text: '27/11/2020' }, { text: '' }, { text: '£10.00' }, { text: 'HOLD' }, { text: 'Moorland' }],
+          [{ text: '26/11/2020' }, { text: '' }, { text: '£20.00' }, { text: 'WITHHELD' }, { text: 'Moorland' }],
         ],
       })
     })
