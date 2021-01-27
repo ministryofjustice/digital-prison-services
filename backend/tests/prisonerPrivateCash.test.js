@@ -161,10 +161,11 @@ describe('Prisoner private cash', () => {
           ],
         ],
         pendingBalance: '-£30.00',
-        pendingRows: [
-          [{ text: '27/11/2020' }, { text: '' }, { text: '£10.00' }, { text: 'HOLD' }, { text: 'Moorland' }],
-          [{ text: '26/11/2020' }, { text: '' }, { text: '£20.00' }, { text: 'WITHHELD' }, { text: 'Moorland' }],
-        ],
+        pendingRows: [],
+        // pendingRows: [
+        //   [{ text: '27/11/2020' }, { text: '' }, { text: '£10.00' }, { text: 'HOLD' }, { text: 'Moorland' }],
+        //   [{ text: '26/11/2020' }, { text: '' }, { text: '£20.00' }, { text: 'WITHHELD' }, { text: 'Moorland' }],
+        // ],
       })
     })
   })

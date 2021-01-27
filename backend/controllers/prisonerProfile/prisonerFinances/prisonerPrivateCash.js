@@ -38,7 +38,7 @@ module.exports = ({ prisonApi, prisonerFinanceService }) => async (req, res) => 
       ...templateData,
       nonPendingRows: createTransactionViewModel(nonPendingTransactions, prisons),
       pendingBalance: formatCurrency(pendingBalanceInPence / 100),
-      pendingRows: createTransactionViewModel(sortedPendingTransactions, prisons, false),
+      pendingRows: [], // createTransactionViewModel(sortedPendingTransactions, prisons, false),
     })
   } catch (error) {
     res.locals.redirectUrl = `/prisoner/${offenderNo}`
