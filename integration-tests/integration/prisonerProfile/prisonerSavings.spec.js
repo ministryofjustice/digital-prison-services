@@ -18,6 +18,7 @@ context('Prisoner savings', () => {
       offenderNo,
       agencyId: 'MDI',
       relatedOffenderTransactions: [],
+      currentBalance: 21500,
     },
     {
       offenderId: 1,
@@ -34,6 +35,7 @@ context('Prisoner savings', () => {
       offenderNo,
       agencyId: 'LEI',
       relatedOffenderTransactions: [],
+      currentBalance: 20500,
     },
   ]
 
@@ -97,8 +99,10 @@ context('Prisoner savings', () => {
             cy.get($tableRows)
               .its('length')
               .should('eq', 2)
-            expect($tableRows.get(0).innerText).to.contain('02/12/2020\t£10.00\t\tSub-Account Transfer\tMoorland')
-            expect($tableRows.get(1).innerText).to.contain('01/12/2020\t\t£0.50\tSub-Account Transfer\tLeeds')
+            expect($tableRows.get(0).innerText).to.contain(
+              '02/12/2020\t£10.00\t\t£215.00\tSub-Account Transfer\tMoorland'
+            )
+            expect($tableRows.get(1).innerText).to.contain('01/12/2020\t\t£0.50\t£205.00\tSub-Account Transfer\tLeeds')
           })
       })
     })
