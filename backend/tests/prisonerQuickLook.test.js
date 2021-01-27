@@ -155,9 +155,21 @@ describe('prisoner profile quick look', () => {
           'prisonerProfile/prisonerQuickLook/prisonerQuickLook.njk',
           expect.objectContaining({
             balanceDetails: [
-              { label: 'Spends', text: '£0.00', visible: true },
-              { label: 'Private cash', text: '£0.00', visible: true },
-              { label: 'Savings', text: '£0.00', visible: true },
+              {
+                label: 'Spends',
+                html: '<a href="/prisoner/ABC123/prisoner-finance-details/spends" class="govuk-link">£0.00</a>',
+                visible: true,
+              },
+              {
+                label: 'Private cash',
+                html: '<a href="/prisoner/ABC123/prisoner-finance-details/private-cash" class="govuk-link">£0.00</a>',
+                visible: true,
+              },
+              {
+                label: 'Savings',
+                html: '<a href="/prisoner/ABC123/prisoner-finance-details/savings" class="govuk-link">£0.00</a>',
+                visible: true,
+              },
               {
                 label: 'Damage obligations',
                 html:
@@ -188,9 +200,21 @@ describe('prisoner profile quick look', () => {
           'prisonerProfile/prisonerQuickLook/prisonerQuickLook.njk',
           expect.objectContaining({
             balanceDetails: [
-              { label: 'Spends', text: '£100.00', visible: true },
-              { label: 'Private cash', text: '£75.50', visible: true },
-              { label: 'Savings', text: '£50.00', visible: true },
+              {
+                label: 'Spends',
+                html: '<a href="/prisoner/ABC123/prisoner-finance-details/spends" class="govuk-link">£100.00</a>',
+                visible: true,
+              },
+              {
+                label: 'Private cash',
+                html: '<a href="/prisoner/ABC123/prisoner-finance-details/private-cash" class="govuk-link">£75.50</a>',
+                visible: true,
+              },
+              {
+                label: 'Savings',
+                html: '<a href="/prisoner/ABC123/prisoner-finance-details/savings" class="govuk-link">£50.00</a>',
+                visible: true,
+              },
               {
                 label: 'Damage obligations',
                 html:

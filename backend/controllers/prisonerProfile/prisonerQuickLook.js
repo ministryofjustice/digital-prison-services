@@ -32,6 +32,11 @@ const getDetails = async ({ res, offenderNo, prisonApi }) => {
   }
 }
 
+const createFinanceLink = (offenderNo, path, value) =>
+  `<a href="/prisoner/${offenderNo}/prisoner-finance-details/${path}" class="govuk-link">${formatCurrency(
+    value || 0
+  )}</a>`
+
 module.exports = ({ prisonerProfileService, prisonApi }) => async (req, res) => {
   const { offenderNo } = req.params
   const { username } = req.session.userDetails
@@ -144,25 +149,22 @@ module.exports = ({ prisonerProfileService, prisonApi }) => async (req, res) => 
       {
         label: 'Spends',
         visible: true,
-        text: formatCurrency(balanceData?.spends || 0, balanceData?.currency),
+        html: createFinanceLink(offenderNo, 'spends', balanceData?.spends),
       },
       {
         label: 'Private cash',
         visible: true,
-        text: formatCurrency(balanceData?.cash || 0, balanceData?.currency),
+        html: createFinanceLink(offenderNo, 'private-cash', balanceData?.cash),
       },
       {
         label: 'Savings',
         visible: true,
-        text: formatCurrency(balanceData?.savings || 0, balanceData?.currency),
+        html: createFinanceLink(offenderNo, 'savings', balanceData?.savings),
       },
       {
         label: 'Damage obligations',
         visible: balanceData?.damageObligations > 0,
-        html: `<a href="/prisoner/${offenderNo}/prisoner-finance-details/damage-obligations" class="govuk-link">${formatCurrency(
-          balanceData?.damageObligations || 0,
-          balanceData?.currency
-        )}</a>`,
+        html: createFinanceLink(offenderNo, 'damage-obligations', balanceData?.damageObligations),
       },
     ],
     incentives: {
