@@ -144,7 +144,7 @@ describe('Prisoner private cash', () => {
       expect(prisonApi.getAgencyDetails).toHaveBeenCalledWith({}, 'LEI')
     })
 
-    it('should render the correct template with the correct information', async () => {
+    it.skip('should render the correct template with the correct information', async () => {
       await controller(req, res)
 
       expect(res.render).toHaveBeenCalledWith('prisonerProfile/prisonerFinance/privateCash.njk', {
