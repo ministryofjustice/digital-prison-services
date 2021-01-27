@@ -51,6 +51,7 @@ context('Prisoner private cash', () => {
       accountType: 'REG',
       postingType: 'DR',
       agencyId: 'MDI',
+      currentBalance: 20000,
     },
     {
       offenderId: 1,
@@ -65,6 +66,7 @@ context('Prisoner private cash', () => {
       accountType: 'REG',
       postingType: 'CR',
       agencyId: 'MDI',
+      currentBalance: 20500,
     },
     {
       offenderId: 1,
@@ -79,6 +81,7 @@ context('Prisoner private cash', () => {
       accountType: 'REG',
       postingType: 'DR',
       agencyId: 'LEI',
+      currentBalance: 500,
     },
   ]
 
@@ -163,9 +166,13 @@ context('Prisoner private cash', () => {
             cy.get($tableRows)
               .its('length')
               .should('eq', 3)
-            expect($tableRows.get(0).innerText).to.contain('22/11/2020\t\t£5.00\tCash To Spends Transfer\tMoorland')
-            expect($tableRows.get(1).innerText).to.contain('16/11/2020\t£200.00\t\tMoney Through Post\tMoorland')
-            expect($tableRows.get(2).innerText).to.contain('16/11/2020\t\t£100.00\tBought some food\tLeeds')
+            expect($tableRows.get(0).innerText).to.contain(
+              '22/11/2020\t\t£5.00\t£200.00\tCash To Spends Transfer\tMoorland'
+            )
+            expect($tableRows.get(1).innerText).to.contain(
+              '16/11/2020\t£200.00\t\t£205.00\tMoney Through Post\tMoorland'
+            )
+            expect($tableRows.get(2).innerText).to.contain('16/11/2020\t\t£100.00\t£5.00\tBought some food\tLeeds')
           })
       })
     })

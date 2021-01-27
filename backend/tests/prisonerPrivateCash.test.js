@@ -94,6 +94,7 @@ describe('Prisoner private cash', () => {
           accountType: 'REG',
           postingType: 'DR',
           agencyId: 'LEI',
+          currentBalance: 500,
         },
       ])
       prisonApi.getTransactionHistory = jest
@@ -150,7 +151,14 @@ describe('Prisoner private cash', () => {
       expect(res.render).toHaveBeenCalledWith('prisonerProfile/prisonerFinance/privateCash.njk', {
         ...templateDataResponse,
         nonPendingRows: [
-          [{ text: '16/11/2020' }, { text: '' }, { text: '£100.00' }, { text: 'Bought some food' }, { text: 'Leeds' }],
+          [
+            { text: '16/11/2020' },
+            { text: '' },
+            { text: '£100.00' },
+            { text: '£5.00' },
+            { text: 'Bought some food' },
+            { text: 'Leeds' },
+          ],
         ],
         pendingBalance: '-£30.00',
         pendingRows: [],

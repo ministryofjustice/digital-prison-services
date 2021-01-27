@@ -86,6 +86,7 @@ describe('Prisoner spends', () => {
           offenderNo,
           agencyId: 'MDI',
           relatedOffenderTransactions: [],
+          currentBalance: 450,
         },
         {
           offenderId: 1,
@@ -102,6 +103,7 @@ describe('Prisoner spends', () => {
           offenderNo,
           agencyId: 'LEI',
           relatedOffenderTransactions: [],
+          currentBalance: 500,
         },
       ])
 
@@ -128,6 +130,7 @@ describe('Prisoner spends', () => {
             { text: '02/12/2020' },
             { text: '' },
             { text: '£10.00' },
+            { text: '£4.50' },
             { text: 'Sub-Account Transfer' },
             { text: 'Moorland' },
           ],
@@ -135,6 +138,7 @@ describe('Prisoner spends', () => {
             { text: '01/12/2020' },
             { text: '£0.50' },
             { text: '' },
+            { text: '£5.00' },
             { text: 'Offender Payroll From:01/12/2020 To:01/12/2020' },
             { text: 'Leeds' },
           ],
