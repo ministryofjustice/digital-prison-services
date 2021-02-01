@@ -1,5 +1,3 @@
-const offenderFullDetails = require('../../mockApis/responses/offenderFullDetails.json')
-
 context('No cell allocated page', () => {
   before(() => {
     cy.clearCookies()
