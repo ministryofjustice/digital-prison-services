@@ -27,7 +27,7 @@
   {% set rows = (rows.push([
     { html: '<img src="/app/images/' + prisoner.offenderNo + '/data" alt="Image of ' + prisoner.prisonerName + '" class="results-table__results__image" />' },
     {
-      html: '<a href="/prisoner/' + prisoner.offenderNo + '" class="govuk-link">' + prisoner.name + '</a>',
+      html: '<a href="/prisoner/' + prisoner.offenderNo + '" class="govuk-link" data-test="prisoner-profile-link">' + prisoner.name + '</a>',
       attributes: {
         "data-sort-value": prisoner.name
       }
@@ -36,7 +36,7 @@
     { text: prisoner.previousCell },
     { text: prisoner.timeOut },
     { text: prisoner.movedBy },
-    { html: '<a href="/prisoner/' + prisoner.offenderNo + '/cell-move/search-for-cell" class="govuk-link">Allocate cell</a>' }
+    { html: '<a href="/prisoner/' + prisoner.offenderNo + '/cell-move/search-for-cell" class="govuk-link" data-test="allocate-cell-link">Allocate cell</a>' }
   ]), rows) %}
 {% endfor %}
 
