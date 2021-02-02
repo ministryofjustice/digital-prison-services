@@ -15,8 +15,8 @@ describe('No cell allocated', () => {
 
     prisonApi.getInmatesAtLocationPrefix = jest.fn()
     prisonApi.getOffenderCellHistory = jest.fn()
-    prisonApi.getDetails = jest.fn()
-    prisonApi.getStaffDetails = jest.fn()
+    prisonApi.getPrisoners = jest.fn()
+    prisonApi.getUserDetailsList = jest.fn()
 
     controller = noCellAllocated({ prisonApi })
   })
@@ -30,9 +30,9 @@ describe('No cell allocated', () => {
       await controller(req, res)
 
       expect(prisonApi.getInmatesAtLocationPrefix).toHaveBeenCalled()
+      expect(prisonApi.getPrisoners).not.toHaveBeenCalled()
       expect(prisonApi.getOffenderCellHistory).not.toHaveBeenCalled()
-      expect(prisonApi.getDetails).not.toHaveBeenCalled()
-      expect(prisonApi.getStaffDetails).not.toHaveBeenCalled()
+      expect(prisonApi.getUserDetailsList).not.toHaveBeenCalled()
     })
 
     it('should render the template with the correct data', async () => {
@@ -84,6 +84,14 @@ describe('No cell allocated', () => {
           legalStatus: 'SENTENCED',
         },
       ])
+      prisonApi.getPrisoners.mockResolvedValue([
+        {
+          offenderNo: 'A7777DY',
+          latestBookingId: 1201093,
+          firstName: 'TOMMY',
+          lastName: 'BIGGLES',
+        },
+      ])
       prisonApi.getOffenderCellHistory.mockResolvedValue({
         content: [
           {
@@ -113,12 +121,7 @@ describe('No cell allocated', () => {
           },
         ],
       })
-      prisonApi.getDetails.mockResolvedValue({
-        bookingId: 1201093,
-        firstName: 'TOMMY',
-        lastName: 'BIGGLES',
-      })
-      prisonApi.getStaffDetails.mockResolvedValue({ firstName: 'Barry', lastName: 'Smith' })
+      prisonApi.getUserDetailsList.mockResolvedValue([{ username: 'ZQH07Y', firstName: 'Barry', lastName: 'Smith' }])
     })
 
     it('should make the expected calls', async () => {
@@ -130,10 +133,13 @@ describe('No cell allocated', () => {
         page: 0,
         size: 10000,
       })
-      expect(prisonApi.getDetails).toHaveBeenCalledTimes(1)
-      expect(prisonApi.getDetails).toHaveBeenCalledWith(res.locals, 'A7777DY')
-      expect(prisonApi.getStaffDetails).toHaveBeenCalledTimes(1)
-      expect(prisonApi.getStaffDetails).toHaveBeenCalledWith(res.locals, 'ZQH07Y')
+      expect(prisonApi.getPrisoners).toHaveBeenCalledTimes(1)
+      expect(prisonApi.getPrisoners).toHaveBeenCalledWith(
+        { ...res.locals, requestHeaders: { 'page-offset': 0, 'page-limit': 2000 } },
+        { offenderNos: ['A7777DY'] }
+      )
+      expect(prisonApi.getUserDetailsList).toHaveBeenCalledTimes(1)
+      expect(prisonApi.getUserDetailsList).toHaveBeenCalledWith(res.locals, ['ZQH07Y'])
     })
 
     it('should render the template with the correct data', async () => {

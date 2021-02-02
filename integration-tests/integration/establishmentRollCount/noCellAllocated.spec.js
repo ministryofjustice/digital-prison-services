@@ -53,11 +53,14 @@ context('No cell allocated page', () => {
         },
       ],
     })
-    cy.task('stubOffenderBasicDetails', {
-      bookingId: 1201093,
-      firstName: 'TOMMY',
-      lastName: 'BIGGLES',
-    })
+    cy.task('stubGetPrisoners', [
+      {
+        offenderNo: 'A7777DY',
+        latestBookingId: 1201093,
+        firstName: 'TOMMY',
+        lastName: 'BIGGLES',
+      },
+    ])
     cy.task('stubOffenderCellHistory', {
       history: {
         content: [
@@ -89,10 +92,13 @@ context('No cell allocated page', () => {
         ],
       },
     })
-    cy.task('stubStaff', {
-      staffId: 'ZQH07Y',
-      details: { firstName: 'Staff', lastName: 'One', username: 'STAFF_1' },
-    })
+    cy.task('stubGetUserDetailsList', [
+      {
+        firstName: 'Barry',
+        lastName: 'Smith',
+        username: 'ZQH07Y',
+      },
+    ])
   })
 
   it('should load the page with the correct data', () => {
@@ -109,7 +115,7 @@ context('No cell allocated page', () => {
             .its('length')
             .should('eq', 1)
           expect($tableRows.get(0).innerText).to.contain(
-            '\tBiggles, Tommy\tA7777DY\tRECP\t16:56\tStaff One\tAllocate cell'
+            '\tBiggles, Tommy\tA7777DY\tRECP\t16:56\tBarry Smith\tAllocate cell'
           )
         })
     })
