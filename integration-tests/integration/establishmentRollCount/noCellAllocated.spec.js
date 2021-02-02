@@ -114,9 +114,7 @@ context('No cell allocated page', () => {
           cy.get($tableRows)
             .its('length')
             .should('eq', 1)
-          expect($tableRows.get(0).innerText).to.contain(
-            '\tBiggles, Tommy\tA7777DY\tRECP\t16:56\tBarry Smith\tAllocate cell'
-          )
+          expect($tableRows.get(0).innerText).to.contain('\tBiggles, Tommy\tA7777DY\tRECP\t16:56\tBarry Smith\t')
         })
     })
     cy.get('[data-test="prisoner-profile-link"]').then($prisonerProfileLinks => {
@@ -127,6 +125,13 @@ context('No cell allocated page', () => {
         .should('have.attr', 'href')
         .should('include', '/prisoner/A7777DY')
     })
+    cy.get('[data-test="allocate-cell-link"]').should('not.exist')
+  })
+
+  it('should show the allocate cell links if user has correct roles', () => {
+    cy.task('stubUserMeRoles', [{ roleCode: 'CELL_MOVE' }])
+    cy.visit('/establishment-roll/no-cell-allocated')
+
     cy.get('[data-test="allocate-cell-link"]').then($allocateCellLink => {
       cy.get($allocateCellLink)
         .its('length')

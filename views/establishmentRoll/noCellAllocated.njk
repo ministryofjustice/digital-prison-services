@@ -36,7 +36,7 @@
     { text: prisoner.previousCell },
     { text: prisoner.timeOut },
     { text: prisoner.movedBy },
-    { html: '<a href="/prisoner/' + prisoner.offenderNo + '/cell-move/search-for-cell" class="govuk-link" data-test="allocate-cell-link">Allocate cell</a>' }
+    { html: '<a href="/prisoner/' + prisoner.offenderNo + '/cell-move/search-for-cell" class="govuk-link" data-test="allocate-cell-link">Allocate cell</a>' } if userCanAllocateCell
   ]), rows) %}
 {% endfor %}
 
@@ -62,7 +62,7 @@
         { text: "Previous cell" },
         { text: "Time moved out" },
         { text: "Moved out by" },
-        { html: '<span class="govuk-visually-hidden">Allocate</span>' }
+        { html: '<span class="govuk-visually-hidden">Allocate</span>' } if userCanAllocateCell
       ],
       rows: rows,
       attributes: { "data-test": "no-cell-allocated-table" }

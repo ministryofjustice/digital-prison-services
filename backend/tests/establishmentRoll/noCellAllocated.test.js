@@ -2,6 +2,7 @@ const noCellAllocated = require('../../controllers/establishmentRoll/noCellAlloc
 
 describe('No cell allocated', () => {
   const prisonApi = {}
+  const oauthApi = {}
 
   let req
   let res
@@ -18,17 +19,21 @@ describe('No cell allocated', () => {
     prisonApi.getPrisoners = jest.fn()
     prisonApi.getUserDetailsList = jest.fn()
 
-    controller = noCellAllocated({ prisonApi })
+    oauthApi.userRoles = jest.fn()
+
+    controller = noCellAllocated({ oauthApi, prisonApi })
   })
 
   describe('with no data', () => {
     beforeEach(() => {
+      oauthApi.userRoles.mockResolvedValue([])
       prisonApi.getInmatesAtLocationPrefix.mockResolvedValue([])
     })
 
     it('should make the expected calls', async () => {
       await controller(req, res)
 
+      expect(oauthApi.userRoles).toHaveBeenCalled()
       expect(prisonApi.getInmatesAtLocationPrefix).toHaveBeenCalled()
       expect(prisonApi.getPrisoners).not.toHaveBeenCalled()
       expect(prisonApi.getOffenderCellHistory).not.toHaveBeenCalled()
@@ -40,12 +45,14 @@ describe('No cell allocated', () => {
 
       expect(res.render).toHaveBeenCalledWith('establishmentRoll/noCellAllocated.njk', {
         results: [],
+        userCanAllocateCell: false,
       })
     })
   })
 
   describe('with data', () => {
     beforeEach(() => {
+      oauthApi.userRoles.mockResolvedValue([{ roleCode: 'CELL_MOVE' }])
       prisonApi.getInmatesAtLocationPrefix.mockResolvedValue([
         {
           bookingId: 1201093,
@@ -155,6 +162,7 @@ describe('No cell allocated', () => {
             timeOut: '16:56',
           },
         ],
+        userCanAllocateCell: true,
       })
     })
   })

@@ -1,12 +1,16 @@
 const { formatName, putLastNameFirst, getTime, stripAgencyPrefix } = require('../../utils')
 
-module.exports = ({ prisonApi }) => async (req, res) => {
+module.exports = ({ oauthApi, prisonApi }) => async (req, res) => {
   const {
     user: { activeCaseLoad },
   } = res.locals
 
   try {
-    const offenders = await prisonApi.getInmatesAtLocationPrefix(res.locals, activeCaseLoad.caseLoadId)
+    const [userRoles, offenders] = await Promise.all([
+      oauthApi.userRoles(res.locals),
+      prisonApi.getInmatesAtLocationPrefix(res.locals, activeCaseLoad.caseLoadId),
+    ])
+
     const offendersInCellSwap = offenders.filter(offender => offender.assignedLivingUnitDesc === 'CSWAP')
 
     const offenderNumbers = offendersInCellSwap.map(offender => offender.offenderNo)
@@ -65,6 +69,7 @@ module.exports = ({ prisonApi }) => async (req, res) => {
           timeOut: getTime(previousLocation.assignmentEndDateTime),
         }
       }),
+      userCanAllocateCell: userRoles && userRoles.some(role => role.roleCode === 'CELL_MOVE'),
     })
   } catch (error) {
     res.locals.redirectUrl = `/establishment-roll`
