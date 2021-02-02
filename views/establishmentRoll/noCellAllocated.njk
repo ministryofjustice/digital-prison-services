@@ -1,0 +1,81 @@
+{% extends "../partials/layout.njk" %}
+{% from "govuk/components/table/macro.njk" import govukTable %}
+
+{% set title = "No cell allocated" %}
+
+{% block beforeContent %}
+  {{ govukBreadcrumbs({
+    items: [
+      {
+          text: "Home",
+          href: '/'
+      },
+      {
+          text: 'Establishment roll',
+          href: '/establishment-roll'
+      },
+      {
+          text: title
+      }
+    ],
+    classes: "govuk-!-display-none-print"
+  }) }}
+{% endblock %}
+
+{% set rows = [] %}
+{% for prisoner in results %}
+  {% set rows = (rows.push([
+    { html: '<img src="/app/images/' + prisoner.offenderNo + '/data" alt="Image of ' + prisoner.prisonerName + '" class="results-table__results__image" />' },
+    {
+      html: '<a href="/prisoner/' + prisoner.offenderNo + '" class="govuk-link" data-test="prisoner-profile-link">' + prisoner.name + '</a>',
+      attributes: {
+        "data-sort-value": prisoner.name
+      }
+    },
+    { text: prisoner.offenderNo },
+    { text: prisoner.previousCell },
+    { text: prisoner.timeOut },
+    { text: prisoner.movedBy },
+    { html: '<a href="/prisoner/' + prisoner.offenderNo + '/cell-move/search-for-cell" class="govuk-link" data-test="allocate-cell-link">Allocate cell</a>' }
+  ]), rows) %}
+{% endfor %}
+
+{% block content %}
+  <div class="govuk-grid-row">
+    <div class="govuk-grid-column-two-thirds">
+      <h1 class="govuk-heading-l">{{ title }}</h1>
+      <p class="govuk-body">These people have been moved out of their cell to create a space for someone else and do not currently have a cell allocated.</p>
+    </div>
+  </div>
+
+  <div class="results-table results-table__results">
+    {{ govukTable({
+      head: [
+        { html: '<span class="govuk-visually-hidden">Picture</span>' },
+        {
+          text: "Name",
+          attributes: {
+            "aria-sort": "ascending"
+          }
+        },
+        { text: "Prison number" },
+        { text: "Previous cell" },
+        { text: "Time moved out" },
+        { text: "Moved out by" },
+        { html: '<span class="govuk-visually-hidden">Allocate</span>' }
+      ],
+      rows: rows,
+      attributes: { "data-test": "no-cell-allocated-table" }
+    }) }}
+  </div>
+{% endblock %}
+
+{% block bodyEnd %}
+  {{ super() }}
+  <script src="/assets/moj/components/sortable-table/sortable-table.js"></script>
+  <script>
+    new MOJFrontend.SortableTable({
+      table: $('table')[0],
+    })
+  </script>
+{% endblock %}

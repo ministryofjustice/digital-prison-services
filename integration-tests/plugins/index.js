@@ -417,5 +417,7 @@ module.exports = on => {
     stubStaffRoles: response => prisonApi.stubStaffRoles(response),
     stubLocationConfig: ({ agencyId, response }) => whereabouts.stubLocationConfig({ agencyId, response }),
     stubGetDetailsFailure: ({ status }) => prisonApi.stubGetDetailsFailure(status),
+    stubGetPrisoners: response => Promise.all([prisonApi.stubGetPrisoners(response)]),
+    stubGetUserDetailsList: response => Promise.all([prisonApi.stubGetUserDetailsList(response)]),
   })
 }

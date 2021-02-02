@@ -373,6 +373,10 @@ const prisonApiFactory = client => {
   const getTransactionHistory = (context, offenderNo, params) =>
     get(context, `/api/offenders/${offenderNo}/transaction-history?${mapToQueryString(params)}`)
 
+  const getPrisoners = (context, searchCriteria) => post(context, `/api/prisoners`, searchCriteria)
+
+  const getUserDetailsList = (context, users) => post(context, `/api/users/list`, users)
+
   return {
     userLocations,
     userCaseLoads,
@@ -484,6 +488,8 @@ const prisonApiFactory = client => {
     moveToCellSwap,
     getOffenderDamageObligations,
     getTransactionHistory,
+    getPrisoners,
+    getUserDetailsList,
   }
 }
 
