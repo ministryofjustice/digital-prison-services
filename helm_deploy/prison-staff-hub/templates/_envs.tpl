@@ -70,36 +70,18 @@ env:
         name: {{ template "app.name" . }}
         key: WANDSWORTH_OMU_EMAIL
 
-  - name: WANDSWORTH_VLB_EMAIL
-    valueFrom:
-      secretKeyRef:
-        name: {{ template "app.name" . }}
-        key: WANDSWORTH_VLB_EMAIL
-
   - name: THAMESIDE_OMU_EMAIL
     valueFrom:
       secretKeyRef:
         name: {{ template "app.name" . }}
         key: THAMESIDE_OMU_EMAIL
     
-  - name: THAMESIDE_VLB_EMAIL
-    valueFrom:
-      secretKeyRef:
-        name: {{ template "app.name" . }}
-        key: THAMESIDE_VLB_EMAIL
-
   - name: HEWELL_OMU_EMAIL
     valueFrom:
       secretKeyRef:
         name: {{ template "app.name" . }}
         key: HEWELL_OMU_EMAIL
     
-  - name: HEWELL_VLB_EMAIL
-    valueFrom:
-      secretKeyRef:
-        name: {{ template "app.name" . }}
-        key: HEWELL_VLB_EMAIL
-
   - name: REDIS_HOST
     valueFrom:
       secretKeyRef:
