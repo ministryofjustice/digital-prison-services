@@ -2,24 +2,28 @@
 
 exports[`<TotalResults /> should match the default snapshot 1`] = `
 <styled.div>
-  Prisoners listed:
+  <styled.span>
+    Prisoners listed:
+  </styled.span>
    
-  <styled.span
+  <span
     name="total-number"
   >
     0
-  </styled.span>
+  </span>
 </styled.div>
 `;
 
 exports[`<TotalResults /> should match with value snapshot 1`] = `
 <styled.div>
-  Prisoners listed:
+  <styled.span>
+    Prisoners listed:
+  </styled.span>
    
-  <styled.span
+  <span
     name="total-number"
   >
     10
-  </styled.span>
+  </span>
 </styled.div>
 `;

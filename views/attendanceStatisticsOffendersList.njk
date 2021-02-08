@@ -39,6 +39,8 @@
         errorMessage: errors | findError('sortingOptions')
     }) }}
 
+<p class="govuk-body pull-right"><strong>Prisoners listed:</strong> {{totalOffenders}}</p>
+
 {{ govukTable({
   firstCellIsHeader: false,
   attributes: { id: "offenderListTable" },
