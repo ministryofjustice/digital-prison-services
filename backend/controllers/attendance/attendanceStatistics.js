@@ -355,6 +355,7 @@ const attendanceStatisticsFactory = (oauthApi, prisonApi, whereaboutsApi) => {
         caseLoadId: activeCaseLoad.caseLoadId,
         allCaseloads: caseloads,
         userRoles: roles,
+        totalOffenders: offenders.length,
       })
     } catch (error) {
       res.locals.redirectUrl = `${attendanceReasonStatsUrl}/reason/${reason}`

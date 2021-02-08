@@ -45,6 +45,7 @@ const ManageResults = styled.div`
 const StackedTotals = styled.div`
   display: flex;
   flex-direction: column;
+  text-align: right;
 `
 
 const HideForPrint = styled.span`
