@@ -7,7 +7,7 @@ const cswapMoveConfirmationPage = (name, cellDescription) =>
 
 export default {
   goTo: ({ offenderNo, name, cellDescription }) => {
-    cy.visit(`/prisoner/${offenderNo}/cell-move/cswap-confirmation`)
+    cy.visit(`/prisoner/${offenderNo}/cell-move/space-created`)
     return cswapMoveConfirmationPage(name, cellDescription)
   },
 }

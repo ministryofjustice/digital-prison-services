@@ -33,7 +33,7 @@ const controller = ({ oauthApi, prisonApi, whereaboutsApi, caseNotesApi, logErro
   router.get('/consider-risks', considerRisksIndex)
   router.post('/consider-risks', considerRisksPost)
   router.get('/confirmation', cellMoveConfirmationController({ prisonApi, logError }))
-  router.get('/cswap-confirmation', cswapConfirmationController({ prisonApi, logError }))
+  router.get('/space-created', cswapConfirmationController({ prisonApi, logError }))
   router.get('/cell-not-available', cellNotAvailable({ prisonApi, logError }))
   return router
 }

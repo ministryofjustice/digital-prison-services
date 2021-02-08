@@ -94,6 +94,6 @@ context('A user can confirm the cell move', () => {
 
     cy.task('verifyMoveToCellSwap', { bookingId: 1234 }).then(assertHasRequestCount(1))
 
-    cy.location('pathname').should('eq', '/prisoner/A12345/cell-move/cswap-confirmation')
+    cy.location('pathname').should('eq', '/prisoner/A12345/cell-move/space-created')
   })
 })
