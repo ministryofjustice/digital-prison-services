@@ -114,6 +114,21 @@ describe('Prisoner private cash', () => {
             postingType: 'DR',
             agencyId: 'MDI',
           },
+          {
+            offenderId: 1,
+            transactionId: 2345,
+            transactionEntrySequence: 2,
+            entryDate: '2020-11-27',
+            transactionType: 'HOA',
+            entryDescription: 'HOLD',
+            referenceNumber: null,
+            currency: 'GBP',
+            penceAmount: 2000,
+            accountType: 'REG',
+            postingType: 'DR',
+            agencyId: 'MDI',
+            holdClearFlag: 'Y',
+          },
         ])
         .mockResolvedValueOnce([
           {
@@ -161,11 +176,10 @@ describe('Prisoner private cash', () => {
           ],
         ],
         pendingBalance: '-£30.00',
-        pendingRows: [],
-        // pendingRows: [
-        //   [{ text: '27/11/2020' }, { text: '' }, { text: '£10.00' }, { text: 'HOLD' }, { text: 'Moorland' }],
-        //   [{ text: '26/11/2020' }, { text: '' }, { text: '£20.00' }, { text: 'WITHHELD' }, { text: 'Moorland' }],
-        // ],
+        pendingRows: [
+          [{ text: '27/11/2020' }, { text: '£10.00' }, { text: 'HOLD' }, { text: 'Moorland' }],
+          [{ text: '26/11/2020' }, { text: '£20.00' }, { text: 'WITHHELD' }, { text: 'Moorland' }],
+        ],
       })
     })
   })
