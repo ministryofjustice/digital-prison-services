@@ -14,9 +14,9 @@ module.exports = ({ prisonApi, prisonerFinanceService }) => async (req, res) => 
       prisonerFinanceService.getTemplateData(res.locals, offenderNo, accountCode, month, year),
     ])
 
-    const sortedPendingTransactions = [...addHoldFunds, ...withheldFunds].sort((left, right) =>
-      sortByDateTime(right.entryDate, left.entryDate)
-    )
+    const sortedPendingTransactions = [...addHoldFunds, ...withheldFunds]
+      .sort((left, right) => sortByDateTime(right.entryDate, left.entryDate))
+      .filter(transaction => !transaction.holdClearFlag)
 
     const pendingBalanceInPence = sortedPendingTransactions.reduce(
       (acc, current) => (current.postingType === 'DR' ? acc - current.penceAmount : acc + current.penceAmount),
@@ -32,13 +32,14 @@ module.exports = ({ prisonApi, prisonerFinanceService }) => async (req, res) => 
         [...sortedPendingTransactions, ...allTransactionsForDateRange].map(transaction => transaction.agencyId)
       ),
     ]
+
     const prisons = await Promise.all(uniqueAgencyIds.map(agencyId => prisonApi.getAgencyDetails(res.locals, agencyId)))
 
     return res.render('prisonerProfile/prisonerFinance/privateCash.njk', {
       ...templateData,
       nonPendingRows: createTransactionViewModel(nonPendingTransactions, prisons),
       pendingBalance: formatCurrency(pendingBalanceInPence / 100),
-      pendingRows: [], // createTransactionViewModel(sortedPendingTransactions, prisons, false),
+      pendingRows: createTransactionViewModel(sortedPendingTransactions, prisons, false, true),
     })
   } catch (error) {
     res.locals.redirectUrl = `/prisoner/${offenderNo}`
