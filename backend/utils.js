@@ -202,7 +202,7 @@ const hyphenatedStringToCamel = string =>
   })
 
 const formatCurrency = (number, currency) =>
-  number === 0 || number ? number.toLocaleString('en-GB', { style: 'currency', currency: currency || 'GBP' }) : ''
+  typeof number === 'number' ? number.toLocaleString('en-GB', { style: 'currency', currency: currency || 'GBP' }) : ''
 
 const capitalizeUppercaseString = string =>
   string

@@ -140,7 +140,7 @@ describe('Prisoner private cash', () => {
             entryDescription: 'WITHHELD',
             referenceNumber: null,
             currency: 'GBP',
-            penceAmount: 2000,
+            penceAmount: null,
             accountType: 'REG',
             postingType: 'DR',
             agencyId: 'MDI',
@@ -175,10 +175,10 @@ describe('Prisoner private cash', () => {
             { text: 'Leeds' },
           ],
         ],
-        pendingBalance: '-£30.00',
+        pendingBalance: '-£10.00',
         pendingRows: [
           [{ text: '27/11/2020' }, { text: '£10.00' }, { text: 'HOLD' }, { text: 'Moorland' }],
-          [{ text: '26/11/2020' }, { text: '£20.00' }, { text: 'WITHHELD' }, { text: 'Moorland' }],
+          [{ text: '26/11/2020' }, { text: '' }, { text: 'WITHHELD' }, { text: 'Moorland' }],
         ],
       })
     })
