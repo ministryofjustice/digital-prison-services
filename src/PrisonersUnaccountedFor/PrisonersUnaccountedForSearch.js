@@ -13,6 +13,7 @@ import WhereaboutsDatePicker from '../DatePickers/WhereaboutsDatePicker'
 import { LAST_NAME, ACTIVITY, CELL_LOCATION } from '../tablesorting/sortColumns'
 import SortLov from '../tablesorting/SortLov'
 import { linkOnClick, getCurrentPeriod, isTodayOrAfter, getLongDateFormat } from '../utils'
+import TotalResults from '../Components/ResultsTable/elements/TotalResults'
 
 import {
   Container,
@@ -104,9 +105,7 @@ const PrisonersUnaccountedForSearch = ({
       </GridCol>
       <GridCol>
         <RightAlignContainer>
-          <LeadParagraph>
-            Prisoners listed: <strong>{numberOfPrisoners}</strong>
-          </LeadParagraph>
+          <TotalResults label="Prisoners listed:" totalResults={numberOfPrisoners} />
         </RightAlignContainer>
       </GridCol>
     </GridRow>
