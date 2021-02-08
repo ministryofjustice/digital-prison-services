@@ -47,13 +47,13 @@ module.exports = ({ prisonApi, prisonerFinanceService }) => async (req, res) => 
       })
       .reverse()
 
-    const transactionsExcludingBatch = allTransactionsForDateRange.filter(
+    const transactionsExcludingRelated = allTransactionsForDateRange.filter(
       transaction => !batchTransactionsOnly(transaction)
     )
 
     return res.render('prisonerProfile/prisonerFinance/spends.njk', {
       ...templateData,
-      spendsRows: createTransactionViewModel([...transactionsExcludingBatch, ...relatedTransactions], prisons),
+      spendsRows: createTransactionViewModel([...transactionsExcludingRelated, ...relatedTransactions], prisons),
     })
   } catch (error) {
     res.locals.redirectUrl = `/prisoner/${offenderNo}`
