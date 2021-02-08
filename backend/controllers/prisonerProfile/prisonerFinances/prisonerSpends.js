@@ -19,7 +19,7 @@ module.exports = ({ prisonApi, prisonerFinanceService }) => async (req, res) => 
     const relatedTransactions = allTransactionsForDateRange
       .filter(batchTransactionsOnly)
       .flatMap(batchTransaction => {
-        const related = batchTransaction.relatedOffenderTransactions?.map(relatedTransaction => ({
+        const related = batchTransaction.relatedOffenderTransactions.map(relatedTransaction => ({
           id: batchTransaction.id,
           entryDate: batchTransaction.entryDate,
           agencyId: batchTransaction.agencyId,
