@@ -1,4 +1,4 @@
-const cswapConfirmationPage = require('../../pages/cellMove/cswapConfirmationPage')
+const spaceCreatedPage = require('../../pages/cellMove/spaceCreatedPage')
 
 const offenderNo = 'A1234A'
 
@@ -27,8 +27,8 @@ context('A user get confirmation of a cell move', () => {
     cy.task('stubMoveToCell')
   })
 
-  it('should page with the correct offender name and cell description', () => {
-    const page = cswapConfirmationPage.goTo({ offenderNo, cellDescription: 'cell swap', name: 'Bob Doe' })
+  it('should page with the correct offender name', () => {
+    const page = spaceCreatedPage.goTo({ offenderNo, name: 'Bob Doe' })
 
     page
       .backToSearchLink()
