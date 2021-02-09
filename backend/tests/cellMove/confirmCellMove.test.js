@@ -80,7 +80,7 @@ describe('Change cell play back details', () => {
         },
         breadcrumbPrisonerName: 'Doe, Bob',
         cellId: 223,
-        description: 'MDI-10',
+        movingToHeading: 'to cell MDI-10',
         locationPrefix: 'MDI-10-19',
         name: 'Bob Doe',
         offenderNo: 'A12345',
@@ -106,7 +106,7 @@ describe('Change cell play back details', () => {
         breadcrumbPrisonerName: 'Doe, Bob',
         cellId: 'C-SWAP',
         cellMoveReasonRadioValues: undefined,
-        description: 'swap',
+        movingToHeading: 'out of their current location',
         dpsUrl: 'http://localhost:3000/',
         errors: undefined,
         formValues: {
@@ -357,7 +357,7 @@ describe('Change cell play back details', () => {
 
       expect(prisonApi.getDetails).toHaveBeenCalledWith({}, 'A12345')
       expect(prisonApi.moveToCellSwap).toHaveBeenCalledWith({}, { bookingId: 1 })
-      expect(res.redirect).toHaveBeenCalledWith('/prisoner/A12345/cell-move/cswap-confirmation')
+      expect(res.redirect).toHaveBeenCalledWith('/prisoner/A12345/cell-move/space-created')
     })
 
     it('should raise an analytics event', async () => {
