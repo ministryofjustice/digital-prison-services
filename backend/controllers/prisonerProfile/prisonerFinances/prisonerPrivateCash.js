@@ -16,12 +16,9 @@ module.exports = ({ prisonApi, prisonerFinanceService }) => async (req, res) => 
 
     const sortedPendingTransactions = [...addHoldFunds, ...withheldFunds]
       .sort((left, right) => sortByDateTime(right.entryDate, left.entryDate))
-      .filter(transaction => !transaction.holdClearFlag)
+      .filter(transaction => !transaction.holdingCleared)
 
-    const pendingBalanceInPence = sortedPendingTransactions.reduce(
-      (acc, current) => (current.postingType === 'DR' ? acc - current.penceAmount : acc + current.penceAmount),
-      0
-    )
+    const pendingBalanceInPence = sortedPendingTransactions.reduce((result, current) => current.penceAmount + result, 0)
 
     const nonPendingTransactions = allTransactionsForDateRange.filter(
       transaction => !['HOA', 'WHF'].includes(transaction.transactionType)

@@ -127,7 +127,7 @@ describe('Prisoner private cash', () => {
             accountType: 'REG',
             postingType: 'DR',
             agencyId: 'MDI',
-            holdClearFlag: 'Y',
+            holdingCleared: 'Y',
           },
         ])
         .mockResolvedValueOnce([
@@ -175,7 +175,7 @@ describe('Prisoner private cash', () => {
             { text: 'Leeds' },
           ],
         ],
-        pendingBalance: '-£10.00',
+        pendingBalance: '£10.00',
         pendingRows: [
           [{ text: '27/11/2020' }, { text: '£10.00' }, { text: 'HOLD' }, { text: 'Moorland' }],
           [{ text: '26/11/2020' }, { text: '' }, { text: 'WITHHELD' }, { text: 'Moorland' }],
