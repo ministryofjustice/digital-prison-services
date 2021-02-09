@@ -6,8 +6,8 @@ module.exports = ({ prisonApi }) => async (req, res) => {
   try {
     const { firstName, lastName } = await prisonApi.getDetails(res.locals, offenderNo)
 
-    return res.render('cellMove/cswapConfirmation.njk', {
-      title: `${properCaseName(firstName)} ${properCaseName(lastName)} has been moved to cell swap`,
+    return res.render('cellMove/spaceCreated.njk', {
+      title: `${properCaseName(firstName)} ${properCaseName(lastName)} has been moved`,
       name: `${properCaseName(firstName)} ${properCaseName(lastName)}`,
       breadcrumbPrisonerName: putLastNameFirst(firstName, lastName),
       offenderNo,

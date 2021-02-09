@@ -36,10 +36,10 @@ module.exports = ({ prisonApi, whereaboutsApi, caseNotesApi }) => {
       dpsUrl,
       showWarning: !isCellSwap,
       offenderNo,
-      description,
       breadcrumbPrisonerName: putLastNameFirst(firstName, lastName),
       name: `${properCaseName(firstName)} ${properCaseName(lastName)}`,
       cellId,
+      movingToHeading: isCellSwap ? 'out of their current location' : `to cell ${description}`,
       locationPrefix,
       selectCellUrl: `/prisoner/${offenderNo}/cell-move/select-cell`,
       cellMoveReasonRadioValues,
@@ -82,7 +82,7 @@ module.exports = ({ prisonApi, whereaboutsApi, caseNotesApi }) => {
 
     raiseAnalyticsEvent('Cell move', `Cell move for ${agencyId}`, `Cell type - C-SWAP`)
 
-    return res.redirect(`/prisoner/${offenderNo}/cell-move/cswap-confirmation`)
+    return res.redirect(`/prisoner/${offenderNo}/cell-move/space-created`)
   }
 
   const validate = ({ reason, comment }) => {
