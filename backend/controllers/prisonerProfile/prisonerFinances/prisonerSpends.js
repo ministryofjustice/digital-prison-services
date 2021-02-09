@@ -4,7 +4,7 @@ const createTransactionViewModel = require('../../../shared/createTransactionVie
 const { formatTimestampToDate, sortByDateTime } = require('../../../utils')
 
 const batchTransactionsOnly = transaction => transaction?.relatedOffenderTransactions?.length
-const sortByEntryRecentDateThenByRecentCalendarDate = (left, right) => {
+const sortByRecentEntryDateThenByRecentCalendarDate = (left, right) => {
   if (left.entryDate && right.entryDate) return moment(right.entryDate).valueOf() - moment(left.entryDate).valueOf()
   if (left.entryDate) return -1
   if (right.entryDate) return 1
@@ -64,7 +64,7 @@ module.exports = ({ prisonApi, prisonerFinanceService }) => async (req, res) => 
     )
 
     const allTransactions = [...transactionsExcludingRelated, ...relatedTransactions].sort(
-      sortByEntryRecentDateThenByRecentCalendarDate
+      sortByRecentEntryDateThenByRecentCalendarDate
     )
 
     return res.render('prisonerProfile/prisonerFinance/spends.njk', {
