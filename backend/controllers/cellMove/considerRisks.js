@@ -212,7 +212,7 @@ module.exports = ({ prisonApi, raiseAnalyticsEvent }) => {
         .map(alert => alert.alertCode)
         .join(',')
 
-      const occupantAlertCodes = Array.from(
+      const alertCodesAssociatedWithOccupants = Array.from(
         new Set(
           currentOccupantsDetails
             .flatMap(occupant => occupant)
@@ -224,7 +224,7 @@ module.exports = ({ prisonApi, raiseAnalyticsEvent }) => {
 
       raiseAnalyticsEvent(
         'Cancelled out of cell move',
-        `Alerts for ${offenderNo}: [${offenderAlertCodes}], Alerts for associated occupants: [${occupantAlertCodes}]`,
+        `Alerts for ${offenderNo}: [${offenderAlertCodes}], Alerts for associated occupants: [${alertCodesAssociatedWithOccupants}]`,
         'Cell move'
       )
 
