@@ -6,7 +6,10 @@ const {
 } = require('../../config')
 const getValueByType = require('../../shared/getValueByType')
 
-module.exports = ({ prisonApi }) => {
+const activeCellMoveAlertsExcludingDisabled = alert =>
+  !alert.expired && cellMoveAlertCodes.includes(alert.alertCode) && alert.alertCode !== 'PEEP'
+
+module.exports = ({ prisonApi, raiseAnalyticsEvent }) => {
   const getOccupantsDetails = async (context, offenders) => {
     return Promise.all(offenders.map(offender => prisonApi.getDetails(context, offender, true)))
   }
@@ -79,9 +82,6 @@ module.exports = ({ prisonApi }) => {
       const cellHasNonHeteroOccupants = currentOccupantsSexualities.some(
         sexuality => sexuality && !sexuality.toLowerCase().includes('hetero')
       )
-
-      const activeCellMoveAlertsExcludingDisabled = alert =>
-        !alert.expired && cellMoveAlertCodes.includes(alert.alertCode) && alert.alertCode !== 'PEEP'
 
       const sexualitiesString = currentOccupantsSexualities
         .filter(sexuality => sexuality && !sexuality.toLowerCase().includes('hetero'))
@@ -183,24 +183,61 @@ module.exports = ({ prisonApi }) => {
   const post = async (req, res) => {
     const { offenderNo } = req.params
     const { cellId } = req.query
+    const redirectUrl = `/prisoner/${offenderNo}/cell-move/select-cell`
 
-    const errors = []
+    try {
+      const errors = []
 
-    const { confirmation } = req.body
+      const { confirmation } = req.body
 
-    if (!confirmation) {
-      errors.push({ text: 'Select yes if you are sure you want to select the cell', href: '#confirmation' })
+      if (!confirmation) {
+        errors.push({ text: 'Select yes if you are sure you want to select the cell', href: '#confirmation' })
+      }
+
+      if (errors.length > 0) {
+        return renderTemplate(req, res, { errors })
+      }
+
+      if (confirmation === 'yes') {
+        return res.redirect(`/prisoner/${offenderNo}/cell-move/confirm-cell-move?cellId=${cellId}`)
+      }
+
+      const [currentOffenderDetails, occupants] = await Promise.all([
+        prisonApi.getDetails(res.locals, offenderNo, true),
+        prisonApi.getInmatesAtLocation(res.locals, cellId, {}),
+      ])
+
+      const currentOccupantsOffenderNos = occupants.map(occupant => occupant.offenderNo)
+      const currentOccupantsDetails = occupants && (await getOccupantsDetails(res.locals, currentOccupantsOffenderNos))
+
+      const offenderAlertCodes = currentOffenderDetails.alerts
+        .map(alert => alert)
+        .filter(activeCellMoveAlertsExcludingDisabled)
+        .map(alert => alert.alertCode)
+        .join(',')
+
+      const occupantAlertCodes = Array.from(
+        new Set(
+          currentOccupantsDetails
+            .flatMap(occupant => occupant)
+            .flatMap(occupant => occupant.alerts)
+            .filter(activeCellMoveAlertsExcludingDisabled)
+            .map(alert => alert.alertCode)
+        )
+      ).join(',')
+
+      raiseAnalyticsEvent(
+        'Cancelled out of cell move',
+        `Alerts for ${offenderNo}: [${offenderAlertCodes}], Alerts for associated occupants: [${occupantAlertCodes}]`,
+        'Cell move'
+      )
+
+      return res.redirect(redirectUrl)
+    } catch (error) {
+      res.locals.redirectUrl = redirectUrl
+      res.locals.homeUrl = `/prisoner/${offenderNo}`
+      throw error
     }
-
-    if (errors.length > 0) {
-      return renderTemplate(req, res, { errors })
-    }
-
-    if (confirmation === 'yes') {
-      return res.redirect(`/prisoner/${offenderNo}/cell-move/confirm-cell-move?cellId=${cellId}`)
-    }
-
-    return res.redirect(`/prisoner/${offenderNo}/cell-move/select-cell`)
   }
 
   return { index, post }
