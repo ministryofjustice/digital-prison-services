@@ -10,11 +10,15 @@ const confirmCellMoveController = require('../controllers/cellMove/confirmCellMo
 const cellMoveConfirmationController = require('../controllers/cellMove/cellMoveConfirmation')
 const spaceCreatedController = require('../controllers/cellMove/spaceCreated')
 const cellNotAvailable = require('../controllers/cellMove/cellNotAvailable')
+const { raiseAnalyticsEvent } = require('../raiseAnalyticsEvent')
 
 const router = express.Router({ mergeParams: true })
 
 const controller = ({ oauthApi, prisonApi, whereaboutsApi, caseNotesApi, logError }) => {
-  const { index: considerRisksIndex, post: considerRisksPost } = considerRisksController({ prisonApi, logError })
+  const { index: considerRisksIndex, post: considerRisksPost } = considerRisksController({
+    prisonApi,
+    raiseAnalyticsEvent,
+  })
 
   const { index: confirmCellMoveIndex, post: confirmCellMovePost } = confirmCellMoveController({
     prisonApi,
