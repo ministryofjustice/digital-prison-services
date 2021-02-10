@@ -190,17 +190,13 @@ module.exports = ({ prisonApi, raiseAnalyticsEvent }) => {
 
       const { confirmation } = req.body
 
-      if (!confirmation) {
+      if (!confirmation)
         errors.push({ text: 'Select yes if you are sure you want to select the cell', href: '#confirmation' })
-      }
 
-      if (errors.length > 0) {
-        return renderTemplate(req, res, { errors })
-      }
+      if (errors.length > 0) return renderTemplate(req, res, { errors })
 
-      if (confirmation === 'yes') {
+      if (confirmation === 'yes')
         return res.redirect(`/prisoner/${offenderNo}/cell-move/confirm-cell-move?cellId=${cellId}`)
-      }
 
       const [currentOffenderDetails, occupants] = await Promise.all([
         prisonApi.getDetails(res.locals, offenderNo, true),
