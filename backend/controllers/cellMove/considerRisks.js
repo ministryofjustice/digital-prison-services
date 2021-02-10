@@ -233,6 +233,5 @@ module.exports = ({ prisonApi, raiseAnalyticsEvent }) => {
       throw error
     }
   }
-
   return { index, post }
 }
