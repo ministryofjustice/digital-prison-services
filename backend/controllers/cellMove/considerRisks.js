@@ -186,14 +186,12 @@ module.exports = ({ prisonApi, raiseAnalyticsEvent }) => {
     const redirectUrl = `/prisoner/${offenderNo}/cell-move/select-cell`
 
     try {
-      const errors = []
-
       const { confirmation } = req.body
 
       if (!confirmation)
-        errors.push({ text: 'Select yes if you are sure you want to select the cell', href: '#confirmation' })
-
-      if (errors.length > 0) return renderTemplate(req, res, { errors })
+        return renderTemplate(req, res, {
+          errors: [{ text: 'Select yes if you are sure you want to select the cell', href: '#confirmation' }],
+        })
 
       if (confirmation === 'yes')
         return res.redirect(`/prisoner/${offenderNo}/cell-move/confirm-cell-move?cellId=${cellId}`)
