@@ -613,7 +613,7 @@ describe('move validation', () => {
 
     expect(raiseAnalyticsEvent).toHaveBeenCalledWith(
       'Cancelled out of cell move',
-      `Alerts for ABC123: [RLG,XEL,XGANG,VIP], Alerts for associated occupants: [XGANG,VIP]`,
+      `Alerts codes for the offender moving in [RLG,XEL,XGANG,VIP], Alerts for associated occupants: [XGANG,VIP]`,
       'Cell move'
     )
 

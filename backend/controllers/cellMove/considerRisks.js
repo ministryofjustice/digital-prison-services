@@ -224,7 +224,7 @@ module.exports = ({ prisonApi, raiseAnalyticsEvent }) => {
 
       raiseAnalyticsEvent(
         'Cancelled out of cell move',
-        `Alerts for ${offenderNo}: [${offenderAlertCodes}], Alerts for associated occupants: [${alertCodesAssociatedWithOccupants}]`,
+        `Alerts codes for the offender moving in [${offenderAlertCodes}], Alerts for associated occupants: [${alertCodesAssociatedWithOccupants}]`,
         'Cell move'
       )
 
