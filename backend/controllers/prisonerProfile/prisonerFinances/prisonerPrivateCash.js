@@ -20,10 +20,6 @@ module.exports = ({ prisonApi, prisonerFinanceService }) => async (req, res) => 
 
     const pendingBalanceInPence = sortedPendingTransactions.reduce((result, current) => current.penceAmount + result, 0)
 
-    const nonPendingTransactions = allTransactionsForDateRange.filter(
-      transaction => !['HOA', 'WHF'].includes(transaction.transactionType)
-    )
-
     const uniqueAgencyIds = [
       ...new Set(
         [...sortedPendingTransactions, ...allTransactionsForDateRange].map(transaction => transaction.agencyId)
@@ -32,9 +28,13 @@ module.exports = ({ prisonApi, prisonerFinanceService }) => async (req, res) => 
 
     const prisons = await Promise.all(uniqueAgencyIds.map(agencyId => prisonApi.getAgencyDetails(res.locals, agencyId)))
 
+    const sortedTransactions = allTransactionsForDateRange.sort((left, right) =>
+      sortByDateTime(right.createDateTime, left.createDateTime)
+    )
+
     return res.render('prisonerProfile/prisonerFinance/privateCash.njk', {
       ...templateData,
-      nonPendingRows: createTransactionViewModel(nonPendingTransactions, prisons),
+      privateTransactionsRows: createTransactionViewModel(sortedTransactions, prisons),
       pendingBalance: formatCurrency(pendingBalanceInPence / 100),
       pendingRows: createTransactionViewModel(sortedPendingTransactions, prisons, false, true),
     })

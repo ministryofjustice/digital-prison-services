@@ -47,7 +47,7 @@
 
   {% include "./partials/prisonerFinanceFilter.njk" %}
 
-  {% if nonPendingRows.length %}
+  {% if privateTransactionsRows.length %}
     {{ govukTable({
       head: [
         { text: "Date" },
@@ -57,7 +57,7 @@
         { text: "Payment description" },
         { text: "Location" }
       ],
-      rows: nonPendingRows,
+      rows: privateTransactionsRows,
       attributes: { "data-test": testIdPrefix + "non-pending-table" }
     }) }}
   {% else %}

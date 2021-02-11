@@ -6,6 +6,7 @@ module.exports = (transactions, prisons, showBalance = true, mergeAmounts = fals
     const { penceAmount, currentBalance } = transaction
 
     const formattedAmount = formatCurrency(typeof penceAmount === 'number' ? penceAmount / 100 : '')
+    const formattedCurrentBalance = formatCurrency(typeof currentBalance === 'number' ? currentBalance / 100 : '')
 
     return [
       { text: transaction.entryDate && formatTimestampToDate(transaction.entryDate) },
@@ -15,7 +16,7 @@ module.exports = (transactions, prisons, showBalance = true, mergeAmounts = fals
             { text: transaction.postingType === 'CR' ? formattedAmount : '' },
             { text: transaction.postingType === 'DR' ? formattedAmount : '' },
           ]),
-      ...(showBalance ? [{ text: formatCurrency(currentBalance / 100) }] : []),
+      ...(showBalance ? [{ text: formattedCurrentBalance }] : []),
       { text: transaction.entryDescription },
       { text: prisonName },
     ]
