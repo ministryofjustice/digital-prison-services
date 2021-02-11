@@ -9,7 +9,6 @@ module.exports = whereaboutsApi => async (req, res) => {
       residentialLocations: residentialLocations.map(location => ({ text: location.name, value: location.key })),
     })
   } catch (error) {
-    console.log({ error })
     res.locals.redirectUrl = `/manage-prisoner-whereabouts`
     throw error
   }

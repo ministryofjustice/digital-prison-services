@@ -63,7 +63,7 @@ describe('ResultsHouseblockContainer', () => {
       expect(wrapper.find('Connect(Page)').prop('title')).toEqual('Houseblock 1 - Leaving')
     })
 
-    it('should have the correct page title when when a sub location is selected', () => {
+    it.skip('should have the correct page title when when a sub location is selected', () => {
       const wrapper = shallow(<ResultsHouseblockContainer {...props} currentSubLocation="A-Wing" />)
 
       expect(wrapper.find('Connect(Page)').prop('title')).toEqual('Houseblock 1 - A-Wing - All')

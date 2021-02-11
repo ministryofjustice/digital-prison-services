@@ -21,9 +21,7 @@ import {
   getAbsentReasons,
   setHouseblockOffenderAttendance,
   setSearchLocations,
-  setSearchLocation,
-  setSearchPeriod,
-  setSearchDate,
+  setSearchParameters,
 } from '../redux/actions'
 import Page from '../Components/Page'
 
@@ -47,37 +45,21 @@ class ResultsHouseblockContainer extends Component {
   }
 
   async componentDidMount() {
-    const {
-      currentLocation,
-      history,
-      resetErrorDispatch,
-      locationDispatch,
-      location,
-      periodDispatch,
-      dateDispatch,
-    } = this.props
+    const { resetErrorDispatch, location, setSearchParametersDispatch } = this.props
     const query = queryString.parse(location.search)
     resetErrorDispatch()
 
     try {
       this.getLocations()
 
-      locationDispatch(query.currentLocation)
-
-      if (query.period) {
-        periodDispatch(query.period)
-      }
-
-      if (query.date) {
-        dateDispatch(query.date)
-      }
-
-      // if (!query.period) {
-      //   this.getHouseblockList('lastName', 'ASC')
-      // }
+      setSearchParametersDispatch({
+        date: query.date,
+        location: query.currentLocation,
+        period: query.period,
+      })
 
       if (!location.search) {
-        history.push('/manage-prisoner-whereabouts')
+        window.location = '/manage-prisoner-whereabouts/select-residential-location'
       }
     } catch (error) {
       this.handleError(error)
@@ -143,10 +125,7 @@ class ResultsHouseblockContainer extends Component {
       houseblockDataDispatch,
       handleError,
       getAbsentReasonsDispatch,
-      location,
     } = this.props
-
-    const query = queryString.parse(location.search)
 
     try {
       this.setState(state => ({
@@ -170,9 +149,9 @@ class ResultsHouseblockContainer extends Component {
       const config = {
         params: {
           agencyId,
-          groupName: compoundGroupName(query.currentLocation || currentLocation, currentSubLocation),
-          date: query.date || date,
-          timeSlot: query.period || period,
+          groupName: compoundGroupName(currentLocation, currentSubLocation),
+          date,
+          timeSlot: period,
           wingStatus,
         },
         headers: {
@@ -192,11 +171,9 @@ class ResultsHouseblockContainer extends Component {
     setLoadedDispatch(true)
   }
 
-  async update() {
+  update() {
     const { currentSubLocation, orderField, sortOrder, history, location } = this.props
     const { activeSubLocation } = this.state
-
-    console.log({ location })
 
     if (currentSubLocation === '--') {
       if (activeSubLocation !== '--') {
@@ -210,7 +187,7 @@ class ResultsHouseblockContainer extends Component {
       this.getHouseblockList(orderField, sortOrder)
     }
 
-    history.push(location.pathname)
+    history.replace(location.pathname)
   }
 
   handlePrint(version) {
@@ -324,13 +301,16 @@ ResultsHouseblockContainer.propTypes = {
   wingStatusDispatch: PropTypes.func.isRequired,
   setOffenderPaymentDataDispatch: PropTypes.func.isRequired,
   getAbsentReasonsDispatch: PropTypes.func.isRequired,
-  locationDispatch: PropTypes.func.isRequired,
   locationsDispatch: PropTypes.func.isRequired,
-  dateDispatch: PropTypes.func.isRequired,
-  periodDispatch: PropTypes.func.isRequired,
+  setSearchParametersDispatch: PropTypes.func.isRequired,
 
   // special
-  history: ReactRouterPropTypes.history.isRequired,
+  history: PropTypes.shape({ push: ReactRouterPropTypes.history.push, replace: ReactRouterPropTypes.history.replace })
+    .isRequired,
+  location: PropTypes.shape({
+    pathname: ReactRouterPropTypes.location.pathname,
+    search: ReactRouterPropTypes.location.search,
+  }).isRequired,
 }
 
 ResultsHouseblockContainer.defaultProps = {
@@ -374,10 +354,8 @@ const mapDispatchToProps = dispatch => ({
   setOffenderPaymentDataDispatch: (offenderIndex, data) =>
     dispatch(setHouseblockOffenderAttendance(offenderIndex, data)),
   getAbsentReasonsDispatch: () => dispatch(getAbsentReasons()),
-  locationDispatch: text => dispatch(setSearchLocation(text)),
   locationsDispatch: locations => dispatch(setSearchLocations(locations)),
-  periodDispatch: text => dispatch(setSearchPeriod(text)),
-  dateDispatch: text => dispatch(setSearchDate(text)),
+  setSearchParametersDispatch: params => dispatch(setSearchParameters(params)),
 })
 
 export { ResultsHouseblockContainer, extractSubLocations }

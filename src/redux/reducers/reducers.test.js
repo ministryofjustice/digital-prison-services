@@ -231,7 +231,6 @@ describe('app (global) reducer', () => {
     ).toEqual({
       ...searchInitialState,
       locations: ['a', 'b'],
-      location: '--',
       subLocation: '--',
     })
   })
