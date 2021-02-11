@@ -1799,4 +1799,34 @@ module.exports = {
         },
       },
     }),
+  stubGetPrisoners: body => {
+    return stubFor({
+      request: {
+        method: 'POST',
+        urlPattern: '/api/prisoners',
+      },
+      response: {
+        status: 200,
+        headers: {
+          'Content-Type': 'application/json;charset=UTF-8',
+        },
+        jsonBody: body,
+      },
+    })
+  },
+  stubGetUserDetailsList: body => {
+    return stubFor({
+      request: {
+        method: 'POST',
+        urlPattern: '/api/users/list',
+      },
+      response: {
+        status: 200,
+        headers: {
+          'Content-Type': 'application/json;charset=UTF-8',
+        },
+        jsonBody: body,
+      },
+    })
+  },
 }

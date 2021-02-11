@@ -14,31 +14,29 @@ module.exports = ({ prisonApi, prisonerFinanceService }) => async (req, res) => 
       prisonerFinanceService.getTemplateData(res.locals, offenderNo, accountCode, month, year),
     ])
 
-    const sortedPendingTransactions = [...addHoldFunds, ...withheldFunds].sort((left, right) =>
-      sortByDateTime(right.entryDate, left.entryDate)
-    )
+    const sortedPendingTransactions = [...addHoldFunds, ...withheldFunds]
+      .sort((left, right) => sortByDateTime(right.createDateTime, left.createDateTime))
+      .filter(transaction => !transaction.holdingCleared)
 
-    const pendingBalanceInPence = sortedPendingTransactions.reduce(
-      (acc, current) => (current.postingType === 'DR' ? acc - current.penceAmount : acc + current.penceAmount),
-      0
-    )
-
-    const nonPendingTransactions = allTransactionsForDateRange.filter(
-      transaction => !['HOA', 'WHF'].includes(transaction.transactionType)
-    )
+    const pendingBalanceInPence = sortedPendingTransactions.reduce((result, current) => current.penceAmount + result, 0)
 
     const uniqueAgencyIds = [
       ...new Set(
         [...sortedPendingTransactions, ...allTransactionsForDateRange].map(transaction => transaction.agencyId)
       ),
     ]
+
     const prisons = await Promise.all(uniqueAgencyIds.map(agencyId => prisonApi.getAgencyDetails(res.locals, agencyId)))
+
+    const sortedTransactions = allTransactionsForDateRange.sort((left, right) =>
+      sortByDateTime(right.createDateTime, left.createDateTime)
+    )
 
     return res.render('prisonerProfile/prisonerFinance/privateCash.njk', {
       ...templateData,
-      nonPendingRows: createTransactionViewModel(nonPendingTransactions, prisons),
+      privateTransactionsRows: createTransactionViewModel(sortedTransactions, prisons),
       pendingBalance: formatCurrency(pendingBalanceInPence / 100),
-      pendingRows: createTransactionViewModel(sortedPendingTransactions, prisons),
+      pendingRows: createTransactionViewModel(sortedPendingTransactions, prisons, false, true),
     })
   } catch (error) {
     res.locals.redirectUrl = `/prisoner/${offenderNo}`

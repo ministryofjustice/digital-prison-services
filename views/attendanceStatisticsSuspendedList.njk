@@ -15,8 +15,8 @@
   <h1 class="govuk-heading-xl govuk-!-margin-bottom-1">Suspended</h1>
   <p class="govuk-body-l govuk-!-font-size-24">{{displayDate}} - {{displayPeriod}}</p>
 
-    <p class="govuk-body-l govuk-!-font-size-27 govuk-!-font-weight-bold govuk-!-margin-bottom-1 pull-right">Number of suspensions: <span class="govuk-!-font-weight-regular">{{totalRecords}}</span></p>
-    <p class="govuk-body-l govuk-!-font-size-27 govuk-!-font-weight-bold pull-right">Prisoners listed: <span class="govuk-!-font-weight-regular">{{totalOffenders}}</span></p>
+  <p class="govuk-body pull-right govuk-!-margin-bottom-1"><strong>Number of suspensions:</strong> {{totalRecords}}</p>
+  <p class="govuk-body pull-right"><strong>Prisoners listed:</strong> {{totalOffenders}}</p>
 
   {{ govukTable({
       head: [

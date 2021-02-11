@@ -153,6 +153,7 @@ const setup = ({
   router.use(
     '/establishment-roll',
     establishmentRollRouter({
+      oauthApi,
       prisonApi,
       systemOauthClient,
       logError,
