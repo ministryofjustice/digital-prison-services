@@ -154,7 +154,7 @@ describe('Prisoner spends', () => {
           [
             { text: '02/12/2020' },
             { text: '' },
-            { text: '£10.00' },
+            { text: '-£10.00' },
             { text: '£4.50' },
             { text: 'Sub-Account Transfer' },
             { text: 'Moorland' },

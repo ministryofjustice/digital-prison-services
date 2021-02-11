@@ -208,7 +208,7 @@ context('Prisoner private cash', () => {
               {
                 date: '27/11/2020',
                 moneyIn: '',
-                moneyOut: '£10.00',
+                moneyOut: '-£10.00',
                 balance: '£10.00',
                 paymentDescription: 'HOLD',
                 location: 'Moorland',
@@ -216,7 +216,7 @@ context('Prisoner private cash', () => {
               {
                 date: '26/11/2020',
                 moneyIn: '',
-                moneyOut: '£20.00',
+                moneyOut: '-£20.00',
                 balance: '£10.00',
                 paymentDescription: 'WITHHELD',
                 location: 'Moorland',
@@ -224,7 +224,7 @@ context('Prisoner private cash', () => {
               {
                 date: '22/11/2020',
                 moneyIn: '',
-                moneyOut: '£5.00',
+                moneyOut: '-£5.00',
                 balance: '£200.00',
                 paymentDescription: 'Cash To Spends Transfer',
                 location: 'Moorland',
@@ -240,7 +240,7 @@ context('Prisoner private cash', () => {
               {
                 date: '16/11/2020',
                 moneyIn: '',
-                moneyOut: '£100.00',
+                moneyOut: '-£100.00',
                 balance: '£5.00',
                 paymentDescription: 'Bought some food',
                 location: 'Leeds',
