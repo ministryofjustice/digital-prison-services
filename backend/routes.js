@@ -8,6 +8,7 @@ const { downloadProbationDocumentFactory } = require('./controllers/downloadProb
 const { attendanceStatisticsFactory } = require('./controllers/attendance/attendanceStatistics')
 const referenceCodesService = require('./controllers/reference-codes-service')
 const contentController = require('./controllers/content')
+const selectResidentialLocationController = require('./controllers/selectResidentialLocation')
 
 const bulkAppointmentsAddDetailsRouter = require('./routes/appointments/bulkAppointmentsAddDetailsRouter')
 const bulkAppointmentsConfirmRouter = require('./routes/appointments/bulkAppointmentsConfirmRouter')
@@ -89,6 +90,11 @@ const setup = ({
   router.get(
     '/manage-prisoner-whereabouts/attendance-reason-statistics/suspended',
     attendanceStatisticsFactory(oauthApi, prisonApi, whereaboutsApi, logError).attendanceStatisticsSuspendedList
+  )
+
+  router.get(
+    '/manage-prisoner-whereabouts/select-residential-location',
+    selectResidentialLocationController(whereaboutsApi)
   )
 
   router.get(

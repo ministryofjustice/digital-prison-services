@@ -1,0 +1,64 @@
+{% extends "./partials/layout.njk" %}
+{% from "govuk/components/back-link/macro.njk" import govukBackLink %}
+{% from "govuk/components/select/macro.njk" import govukSelect %}
+{% from "govuk/components/button/macro.njk" import govukButton %}
+{% from "components/datePicker/datePicker.njk" import datePicker %}
+
+{% set title = "View by residential location "%}
+
+{% block beforeContent %}
+    {{ govukBackLink({
+        text: "Back",
+        href: "/manage-prisoner-whereabouts"
+    }) }}
+{% endblock %}
+
+{% block content %}
+  <h1 class="govuk-heading-l">{{ title }}</h1>
+
+  <form action="/manage-prisoner-whereabouts/housing-block-results">
+    {{ datePicker({
+      id: 'date',
+      label: 'Date',
+      name: 'date',
+      date: date,
+      classes: 'js-appointment-date'
+    }) }}
+    
+    {{ govukSelect({
+      name: 'period',
+      id: 'period',
+      label: {
+          text: "Period"
+      },
+      items: [
+        {
+          text: 'Morning (AM)',
+          value: 'AM'
+        },
+        {
+          text: 'Afternoon (PM)',
+          value: 'PM'
+        },
+        {
+          text: 'Evening (ED)',
+          value: 'ED'
+        }
+      ] | addDefaultSelectedVale('Select', true) | setSelected(period)
+    }) }}
+
+    {{ govukSelect({
+      name: 'currentLocation',
+      id: 'currentLocation',
+      label: {
+          text: "Select a location"
+      },
+      items: residentialLocations | addDefaultSelectedVale('Select', true)
+    }) }}
+
+    {{ govukButton({
+      text: "Continue",
+      type: "submit"
+    }) }}
+  </form>
+{% endblock %}

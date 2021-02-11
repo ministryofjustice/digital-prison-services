@@ -169,7 +169,6 @@ export function search(state = searchInitialState, action) {
       return {
         ...state,
         locations: action.locations,
-        location: '--',
         subLocation: '--',
       }
     case ActionTypes.SET_SEARCH_LOCATION:

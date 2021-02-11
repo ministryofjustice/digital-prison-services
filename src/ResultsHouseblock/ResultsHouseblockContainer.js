@@ -1,5 +1,6 @@
 import React, { Component } from 'react'
 import PropTypes from 'prop-types'
+import queryString from 'query-string'
 import ReactRouterPropTypes from 'react-router-prop-types'
 import { connect } from 'react-redux'
 import { withRouter } from 'react-router'
@@ -19,6 +20,10 @@ import {
   setSortOrder,
   getAbsentReasons,
   setHouseblockOffenderAttendance,
+  setSearchLocations,
+  setSearchLocation,
+  setSearchPeriod,
+  setSearchDate,
 } from '../redux/actions'
 import Page from '../Components/Page'
 
@@ -34,6 +39,7 @@ class ResultsHouseblockContainer extends Component {
     this.setColumnSort = this.setColumnSort.bind(this)
     this.handlePrint = this.handlePrint.bind(this)
     this.update = this.update.bind(this)
+    this.getLocations = this.getLocations.bind(this)
     this.state = {
       activeSubLocation: null,
       redactedPrint: false,
@@ -41,13 +47,36 @@ class ResultsHouseblockContainer extends Component {
   }
 
   async componentDidMount() {
-    const { currentLocation, history, resetErrorDispatch } = this.props
+    const {
+      currentLocation,
+      history,
+      resetErrorDispatch,
+      locationDispatch,
+      location,
+      periodDispatch,
+      dateDispatch,
+    } = this.props
+    const query = queryString.parse(location.search)
     resetErrorDispatch()
 
     try {
-      if (currentLocation) {
-        this.getHouseblockList('lastName', 'ASC')
-      } else {
+      this.getLocations()
+
+      locationDispatch(query.currentLocation)
+
+      if (query.period) {
+        periodDispatch(query.period)
+      }
+
+      if (query.date) {
+        dateDispatch(query.date)
+      }
+
+      // if (!query.period) {
+      //   this.getHouseblockList('lastName', 'ASC')
+      // }
+
+      if (!location.search) {
         history.push('/manage-prisoner-whereabouts')
       }
     } catch (error) {
@@ -84,6 +113,21 @@ class ResultsHouseblockContainer extends Component {
     houseblockDataDispatch(copy)
   }
 
+  async getLocations() {
+    const { agencyId, locationsDispatch, handleError } = this.props
+
+    try {
+      const response = await axios.get('/api/houseblockLocations', {
+        params: {
+          agencyId,
+        },
+      })
+      locationsDispatch(response.data)
+    } catch (error) {
+      handleError(error)
+    }
+  }
+
   async getHouseblockList(orderField, sortOrder) {
     let { date } = this.props
     const {
@@ -99,7 +143,10 @@ class ResultsHouseblockContainer extends Component {
       houseblockDataDispatch,
       handleError,
       getAbsentReasonsDispatch,
+      location,
     } = this.props
+
+    const query = queryString.parse(location.search)
 
     try {
       this.setState(state => ({
@@ -117,15 +164,15 @@ class ResultsHouseblockContainer extends Component {
         date = moment().format('DD/MM/YYYY')
       }
 
-      const compoundGroupName = (location, subLocation) =>
-        subLocation && subLocation !== '--' ? `${location}_${subLocation}` : location
+      const compoundGroupName = (selectedLocation, subLocation) =>
+        subLocation && subLocation !== '--' ? `${selectedLocation}_${subLocation}` : selectedLocation
 
       const config = {
         params: {
           agencyId,
-          groupName: compoundGroupName(currentLocation, currentSubLocation),
-          date,
-          timeSlot: period,
+          groupName: compoundGroupName(query.currentLocation || currentLocation, currentSubLocation),
+          date: query.date || date,
+          timeSlot: query.period || period,
           wingStatus,
         },
         headers: {
@@ -145,9 +192,11 @@ class ResultsHouseblockContainer extends Component {
     setLoadedDispatch(true)
   }
 
-  update() {
-    const { currentSubLocation, orderField, sortOrder } = this.props
+  async update() {
+    const { currentSubLocation, orderField, sortOrder, history, location } = this.props
     const { activeSubLocation } = this.state
+
+    console.log({ location })
 
     if (currentSubLocation === '--') {
       if (activeSubLocation !== '--') {
@@ -160,6 +209,8 @@ class ResultsHouseblockContainer extends Component {
     } else {
       this.getHouseblockList(orderField, sortOrder)
     }
+
+    history.push(location.pathname)
   }
 
   handlePrint(version) {
@@ -273,6 +324,10 @@ ResultsHouseblockContainer.propTypes = {
   wingStatusDispatch: PropTypes.func.isRequired,
   setOffenderPaymentDataDispatch: PropTypes.func.isRequired,
   getAbsentReasonsDispatch: PropTypes.func.isRequired,
+  locationDispatch: PropTypes.func.isRequired,
+  locationsDispatch: PropTypes.func.isRequired,
+  dateDispatch: PropTypes.func.isRequired,
+  periodDispatch: PropTypes.func.isRequired,
 
   // special
   history: ReactRouterPropTypes.history.isRequired,
@@ -319,6 +374,10 @@ const mapDispatchToProps = dispatch => ({
   setOffenderPaymentDataDispatch: (offenderIndex, data) =>
     dispatch(setHouseblockOffenderAttendance(offenderIndex, data)),
   getAbsentReasonsDispatch: () => dispatch(getAbsentReasons()),
+  locationDispatch: text => dispatch(setSearchLocation(text)),
+  locationsDispatch: locations => dispatch(setSearchLocations(locations)),
+  periodDispatch: text => dispatch(setSearchPeriod(text)),
+  dateDispatch: text => dispatch(setSearchDate(text)),
 })
 
 export { ResultsHouseblockContainer, extractSubLocations }
