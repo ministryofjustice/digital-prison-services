@@ -178,7 +178,7 @@ describe('Prisoner private cash', () => {
           [
             { text: '27/11/2020' },
             { text: '' },
-            { text: '£10.00' },
+            { text: '-£10.00' },
             { text: '' },
             { text: 'HOLD' },
             { text: 'Moorland' },
@@ -186,7 +186,7 @@ describe('Prisoner private cash', () => {
           [
             { text: '27/11/2020' },
             { text: '' },
-            { text: '£20.00' },
+            { text: '-£20.00' },
             { text: '' },
             { text: 'HOLD' },
             { text: 'Moorland' },
@@ -202,7 +202,7 @@ describe('Prisoner private cash', () => {
           [
             { text: '16/11/2020' },
             { text: '' },
-            { text: '£100.00' },
+            { text: '-£100.00' },
             { text: '£5.00' },
             { text: 'Bought some food' },
             { text: 'Leeds' },
