@@ -80,12 +80,64 @@ describe('Prisoner private cash', () => {
 
   describe('with transaction data', () => {
     beforeEach(() => {
+      const holds = [
+        {
+          offenderId: 1,
+          transactionId: 234,
+          transactionEntrySequence: 1,
+          entryDate: '2020-11-27',
+          createDateTime: '2020-11-27T10:00',
+          transactionType: 'HOA',
+          entryDescription: 'HOLD',
+          referenceNumber: null,
+          currency: 'GBP',
+          penceAmount: 1000,
+          accountType: 'REG',
+          postingType: 'DR',
+          agencyId: 'MDI',
+        },
+        {
+          offenderId: 1,
+          transactionId: 235,
+          transactionEntrySequence: 2,
+          entryDate: '2020-11-27',
+          createDateTime: '2020-11-27T09:00',
+          transactionType: 'HOA',
+          entryDescription: 'HOLD',
+          referenceNumber: null,
+          currency: 'GBP',
+          penceAmount: 2000,
+          accountType: 'REG',
+          postingType: 'DR',
+          agencyId: 'MDI',
+          holdingCleared: 'Y',
+        },
+      ]
+      const withHolds = [
+        {
+          offenderId: 1,
+          transactionId: 236,
+          transactionEntrySequence: 1,
+          entryDate: '2020-11-26',
+          createDateTime: '2020-11-26T10:00',
+          transactionType: 'WHF',
+          entryDescription: 'WITHHELD',
+          referenceNumber: null,
+          currency: 'GBP',
+          penceAmount: null,
+          accountType: 'REG',
+          postingType: 'DR',
+          agencyId: 'MDI',
+        },
+      ]
+
       prisonerFinanceService.getTransactionsForDateRange = jest.fn().mockResolvedValue([
         {
           offenderId: 1,
           transactionId: 789,
           transactionEntrySequence: 1,
           entryDate: '2020-11-16',
+          createDateTime: '2020-11-16T10:00',
           transactionType: 'POST',
           entryDescription: 'Bought some food',
           referenceNumber: null,
@@ -96,58 +148,13 @@ describe('Prisoner private cash', () => {
           agencyId: 'LEI',
           currentBalance: 500,
         },
+        ...withHolds,
+        ...holds,
       ])
       prisonApi.getTransactionHistory = jest
         .fn()
-        .mockResolvedValue([
-          {
-            offenderId: 1,
-            transactionId: 234,
-            transactionEntrySequence: 1,
-            entryDate: '2020-11-27',
-            transactionType: 'HOA',
-            entryDescription: 'HOLD',
-            referenceNumber: null,
-            currency: 'GBP',
-            penceAmount: 1000,
-            accountType: 'REG',
-            postingType: 'DR',
-            agencyId: 'MDI',
-          },
-          {
-            offenderId: 1,
-            transactionId: 2345,
-            transactionEntrySequence: 2,
-            entryDate: '2020-11-27',
-            createDateTime: '2020-11-27T10:00',
-            transactionType: 'HOA',
-            entryDescription: 'HOLD',
-            referenceNumber: null,
-            currency: 'GBP',
-            penceAmount: 2000,
-            accountType: 'REG',
-            postingType: 'DR',
-            agencyId: 'MDI',
-            holdingCleared: 'Y',
-          },
-        ])
-        .mockResolvedValueOnce([
-          {
-            offenderId: 1,
-            transactionId: 234,
-            transactionEntrySequence: 1,
-            entryDate: '2020-11-26',
-            createDateTime: '2020-11-26T10:00',
-            transactionType: 'WHF',
-            entryDescription: 'WITHHELD',
-            referenceNumber: null,
-            currency: 'GBP',
-            penceAmount: null,
-            accountType: 'REG',
-            postingType: 'DR',
-            agencyId: 'MDI',
-          },
-        ])
+        .mockResolvedValue(holds)
+        .mockResolvedValueOnce(withHolds)
 
       prisonApi.getAgencyDetails = jest
         .fn()
@@ -167,7 +174,31 @@ describe('Prisoner private cash', () => {
 
       expect(res.render).toHaveBeenCalledWith('prisonerProfile/prisonerFinance/privateCash.njk', {
         ...templateDataResponse,
-        nonPendingRows: [
+        privateTransactionsRows: [
+          [
+            { text: '27/11/2020' },
+            { text: '' },
+            { text: '£10.00' },
+            { text: '' },
+            { text: 'HOLD' },
+            { text: 'Moorland' },
+          ],
+          [
+            { text: '27/11/2020' },
+            { text: '' },
+            { text: '£20.00' },
+            { text: '' },
+            { text: 'HOLD' },
+            { text: 'Moorland' },
+          ],
+          [
+            { text: '26/11/2020' },
+            { text: '' },
+            { text: '' },
+            { text: '' },
+            { text: 'WITHHELD' },
+            { text: 'Moorland' },
+          ],
           [
             { text: '16/11/2020' },
             { text: '' },
