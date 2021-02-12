@@ -17,7 +17,7 @@ module.exports = whereaboutsApi => {
         residentialLocations: residentialLocations.map(location => ({ text: location.name, value: location.key })),
       })
     } catch (error) {
-      res.locals.redirectUrl = `/manage-prisoner-whereabouts`
+      res.locals.redirectUrl = '/manage-prisoner-whereabouts'
       throw error
     }
   }

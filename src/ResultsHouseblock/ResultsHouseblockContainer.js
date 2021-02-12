@@ -51,7 +51,7 @@ class ResultsHouseblockContainer extends Component {
 
     try {
       if (currentLocation && !location.search) {
-        // only needed until while existing /manage-prisoner-whereabouts search form exists
+        // only needed while existing /manage-prisoner-whereabouts search form exists
         this.getHouseblockList('lastName', 'ASC')
       } else if (location.search) {
         this.getLocations()
