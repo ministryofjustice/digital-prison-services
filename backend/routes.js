@@ -94,7 +94,11 @@ const setup = ({
 
   router.get(
     '/manage-prisoner-whereabouts/select-residential-location',
-    selectResidentialLocationController(whereaboutsApi)
+    selectResidentialLocationController(whereaboutsApi).index
+  )
+  router.post(
+    '/manage-prisoner-whereabouts/select-residential-location',
+    selectResidentialLocationController(whereaboutsApi).post
   )
 
   router.get(

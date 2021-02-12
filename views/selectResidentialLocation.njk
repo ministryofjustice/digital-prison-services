@@ -2,6 +2,7 @@
 {% from "govuk/components/back-link/macro.njk" import govukBackLink %}
 {% from "govuk/components/select/macro.njk" import govukSelect %}
 {% from "govuk/components/button/macro.njk" import govukButton %}
+{% from "govuk/components/error-summary/macro.njk" import govukErrorSummary %}
 {% from "components/datePicker/datePicker.njk" import datePicker %}
 
 {% set title = "View by residential location "%}
@@ -14,9 +15,19 @@
 {% endblock %}
 
 {% block content %}
+  {% if errors.length > 0 %}
+    {{ govukErrorSummary({
+        titleText: "There is a problem",
+        errorList: errors,
+        attributes: { 'data-test-errors': true }
+    }) }}
+  {% endif %}
+
   <h1 class="govuk-heading-l">{{ title }}</h1>
 
-  <form action="/manage-prisoner-whereabouts/housing-block-results">
+  <form method="POST">
+    <input type="hidden" name="_csrf" value="{{ csrfToken }}" />
+
     {{ datePicker({
       id: 'date',
       label: 'Date',
@@ -24,7 +35,7 @@
       date: date,
       classes: 'js-appointment-date'
     }) }}
-    
+
     {{ govukSelect({
       name: 'period',
       id: 'period',
@@ -53,6 +64,7 @@
       label: {
           text: "Select a location"
       },
+      errorMessage: errors | findError('currentLocation'),
       items: residentialLocations | addDefaultSelectedVale('Select', true)
     }) }}
 
