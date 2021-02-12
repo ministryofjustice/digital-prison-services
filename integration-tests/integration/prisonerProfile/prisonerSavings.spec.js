@@ -102,7 +102,7 @@ context('Prisoner savings', () => {
             expect($tableRows.get(0).innerText).to.contain(
               '02/12/2020\t£10.00\t\t£215.00\tSub-Account Transfer\tMoorland'
             )
-            expect($tableRows.get(1).innerText).to.contain('01/12/2020\t\t£0.50\t£205.00\tSub-Account Transfer\tLeeds')
+            expect($tableRows.get(1).innerText).to.contain('01/12/2020\t\t-£0.50\t£205.00\tSub-Account Transfer\tLeeds')
           })
       })
     })

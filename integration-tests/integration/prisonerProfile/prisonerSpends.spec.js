@@ -99,7 +99,7 @@ context('Prisoner spends', () => {
               .its('length')
               .should('eq', 2)
             expect($tableRows.get(0).innerText).to.contain(
-              '02/12/2020\t\t£10.00\t£195.00\tSub-Account Transfer\tMoorland'
+              '02/12/2020\t\t-£10.00\t£195.00\tSub-Account Transfer\tMoorland'
             )
             expect($tableRows.get(1).innerText).to.contain(
               '01/12/2020\t£0.50\t\t£205.00\tOffender Payroll From:01/12/2020 To:01/12/2020\tLeeds'

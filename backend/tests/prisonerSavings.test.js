@@ -137,7 +137,7 @@ describe('Prisoner savings', () => {
           [
             { text: '01/12/2020' },
             { text: '' },
-            { text: '£0.50' },
+            { text: '-£0.50' },
             { text: '£5.00' },
             { text: 'Sub-Account Transfer' },
             { text: 'Leeds' },
