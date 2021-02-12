@@ -25,6 +25,32 @@ module.exports = ({ oauthApi, prisonApi, page = 0 }) => async (req, res) => {
     )
   }
 
+  const getCellHistoryGroupedByPeriodAtAgency = locations => {
+    let currentEstablishment = locations[0].establishment
+    let currentEstablishmentWithEndDate = currentEstablishment + locations[0].assignmentEndDateTime
+    const updatedLocations = []
+    locations.forEach(location => {
+      if (currentEstablishment !== location.establishment) {
+        currentEstablishmentWithEndDate = location.establishment + location.assignmentEndDateTime
+      }
+      currentEstablishment = location.establishment
+      updatedLocations.push({
+        ...location,
+        establishmentWithEndDate: currentEstablishmentWithEndDate,
+      })
+    })
+    return Object.entries(groupBy(updatedLocations, 'establishmentWithEndDate')).map(([key, value]) => {
+      const fromDateString = formatTimestampToDate(value.slice(-1)[0].assignmentDateTime)
+      const toDateString = formatTimestampToDate(value[0].assignmentEndDateTime)
+
+      return {
+        name: value[0].establishment,
+        datePeriod: `from ${fromDateString} to ${toDateString}`,
+        cellHistory: value,
+      }
+    })
+  }
+
   try {
     const { bookingId, firstName, lastName } = await prisonApi.getDetails(res.locals, offenderNo)
     const { content: cells } = await prisonApi.getOffenderCellHistory(res.locals, bookingId, {
@@ -63,16 +89,7 @@ module.exports = ({ oauthApi, prisonApi, page = 0 }) => async (req, res) => {
 
     return res.render('prisonerProfile/prisonerCellHistory.njk', {
       cellHistoryGroupedByAgency: hasLength(previousLocations)
-        ? Object.entries(groupBy(previousLocations, 'establishment')).map(([key, value]) => {
-            const fromDateString = formatTimestampToDate(value.slice(-1)[0].assignmentDateTime)
-            const toDateString = formatTimestampToDate(value[0].assignmentEndDateTime)
-
-            return {
-              name: key,
-              datePeriod: `from ${fromDateString} to ${toDateString}`,
-              cellHistory: value,
-            }
-          })
+        ? getCellHistoryGroupedByPeriodAtAgency(previousLocations)
         : [],
       currentLocation: {
         ...currentLocation,
