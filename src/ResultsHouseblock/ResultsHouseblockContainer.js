@@ -45,21 +45,23 @@ class ResultsHouseblockContainer extends Component {
   }
 
   async componentDidMount() {
-    const { resetErrorDispatch, location, setSearchParametersDispatch } = this.props
+    const { currentLocation, history, resetErrorDispatch, location, setSearchParametersDispatch } = this.props
     const query = queryString.parse(location.search)
     resetErrorDispatch()
 
     try {
-      this.getLocations()
-
-      setSearchParametersDispatch({
-        date: query.date,
-        location: query.currentLocation,
-        period: query.period,
-      })
-
-      if (!location.search) {
-        window.location = '/manage-prisoner-whereabouts/select-residential-location'
+      if (currentLocation && !location.search) {
+        // only needed until while existing /manage-prisoner-whereabouts search form exists
+        this.getHouseblockList('lastName', 'ASC')
+      } else if (location.search) {
+        this.getLocations()
+        setSearchParametersDispatch({
+          date: query.date,
+          location: query.currentLocation,
+          period: query.period,
+        })
+      } else {
+        history.push('/manage-prisoner-whereabouts')
       }
     } catch (error) {
       this.handleError(error)
