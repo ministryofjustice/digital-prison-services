@@ -19,7 +19,7 @@
     {{ govukErrorSummary({
         titleText: "There is a problem",
         errorList: errors,
-        attributes: { 'data-test-errors': true }
+        attributes: { 'data-test': 'form-errors' }
     }) }}
   {% endif %}
 
@@ -33,7 +33,8 @@
       label: 'Date',
       name: 'date',
       date: date,
-      classes: 'js-appointment-date'
+      classes: 'js-appointment-date',
+      attributes: { 'data-test': 'date-select' }
     }) }}
 
     {{ govukSelect({
@@ -55,7 +56,8 @@
           text: 'Evening (ED)',
           value: 'ED'
         }
-      ] | addDefaultSelectedVale('Select', true) | setSelected(period)
+      ] | setSelected(period),
+      attributes: { 'data-test': 'period-select' }
     }) }}
 
     {{ govukSelect({
@@ -65,7 +67,8 @@
           text: "Select a location"
       },
       errorMessage: errors | findError('currentLocation'),
-      items: residentialLocations | addDefaultSelectedVale('Select', true)
+      items: residentialLocations | addDefaultSelectedVale('--Select--', true),
+      attributes: { 'data-test': 'location-select' }
     }) }}
 
     {{ govukButton({
