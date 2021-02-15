@@ -39,7 +39,7 @@ class ResultsHouseblockContainer extends Component {
     this.update = this.update.bind(this)
     this.getLocations = this.getLocations.bind(this)
     this.state = {
-      activeSubLocation: null,
+      activeSubLocation: props.currentSubLocation,
       redactedPrint: false,
     }
   }
