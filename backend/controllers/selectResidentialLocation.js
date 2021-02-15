@@ -1,8 +1,10 @@
 const moment = require('moment')
-const getCurrentTimePeriod = require('../shared/getCurrentTimePeriod')
+
+const { getCurrentPeriod } = require('../utils')
 
 module.exports = whereaboutsApi => {
   const renderTemplate = async (req, res, pageData) => {
+    const today = moment()
     const { errors, formValues } = pageData || {}
     try {
       const {
@@ -11,9 +13,9 @@ module.exports = whereaboutsApi => {
       const residentialLocations = await whereaboutsApi.searchGroups(res.locals, activeCaseLoad.caseLoadId)
 
       return res.render('selectResidentialLocation.njk', {
-        date: formValues?.date || moment().format('DD/MM/YYYY'),
+        date: formValues?.date || today.format('DD/MM/YYYY'),
         errors,
-        period: formValues?.period || getCurrentTimePeriod(),
+        period: formValues?.period || getCurrentPeriod(today),
         residentialLocations: residentialLocations.map(location => ({ text: location.name, value: location.key })),
       })
     } catch (error) {

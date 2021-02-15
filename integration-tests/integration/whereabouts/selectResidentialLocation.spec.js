@@ -1,16 +1,13 @@
 const moment = require('moment')
 
-// copy of shared/getCurrentTimePeriod.js
-const getCurrentTimePeriod = (time = moment()) => {
-  const midnight = moment('12:00a', 'HH:mm a')
-  const midday = moment('12:00p', 'HH:mm a')
-  const evening = moment('17:00p', 'HH:mm a')
+// copy of { getCurrentPeriod } from backend/utils/.js
+const getCurrentPeriod = date => {
+  const afternoonSplit = 12
+  const eveningSplit = 17
+  const currentHour = moment(date).format('H')
 
-  const isMorning = time.isBetween(midnight, midday, null, '[)')
-  const isAfternoon = time.isBetween(midday, evening, null, '[)')
-
-  if (isMorning) return 'AM'
-  if (isAfternoon) return 'PM'
+  if (currentHour < afternoonSplit) return 'AM'
+  if (currentHour < eveningSplit) return 'PM'
   return 'ED'
 }
 
@@ -31,7 +28,7 @@ context('Select residential location', () => {
 
     cy.get('h1').should('contain', 'View by residential location')
     cy.get('[data-test="date-select"]').should('have.value', today.format('DD/MM/YYYY'))
-    cy.get('[data-test="period-select"]').should('have.value', getCurrentTimePeriod(today))
+    cy.get('[data-test="period-select"]').should('have.value', getCurrentPeriod(today))
     cy.get('[data-test="location-select"]').should('have.value', '')
   })
 
@@ -50,6 +47,6 @@ context('Select residential location', () => {
 
     cy.get('h1').should('contain', '1 - All')
     cy.get('[name="search-date"]').should('have.value', today.format('DD/MM/YYYY'))
-    cy.get('#period-select').should('have.value', getCurrentTimePeriod(today))
+    cy.get('#period-select').should('have.value', getCurrentPeriod(today))
   })
 })
