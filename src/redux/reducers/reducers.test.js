@@ -260,6 +260,24 @@ describe('app (global) reducer', () => {
     })
   })
 
+  it('should handle SET_SEARCH_PARAMETER', () => {
+    expect(
+      search(searchInitialState, {
+        type: types.SET_SEARCH_PARAMETERS,
+        params: {
+          date: '15/02/2021',
+          location: 'Houseblock 1',
+          period: 'PM',
+        },
+      })
+    ).toEqual({
+      ...searchInitialState,
+      date: '15/02/2021',
+      location: 'Houseblock 1',
+      period: 'PM',
+    })
+  })
+
   it('should handle SET_SEARCH_ACTIVITIES', () => {
     expect(
       search(searchInitialState, {
