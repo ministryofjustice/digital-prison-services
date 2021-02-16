@@ -8,7 +8,7 @@
 {% set title = "View by residential location "%}
 
 {% block beforeContent %}
-    {{ govukBackLink({
+  {{ govukBackLink({
         text: "Back",
         href: "/manage-prisoner-whereabouts"
     }) }}
@@ -26,13 +26,13 @@
   <h1 class="govuk-heading-l">{{ title }}</h1>
 
   <form method="POST">
-    <input type="hidden" name="_csrf" value="{{ csrfToken }}" />
+    <input type="hidden" name="_csrf" value="{{ csrfToken }}"/>
 
-  <div class="govuk-grid-row">
-    <div class="govuk-grid-column-one-third">
-      <div class="govuk-grid-row">
-        <div class="govuk-grid-column-one-half">
-          {{ datePicker({
+    <div class="govuk-grid-row">
+      <div class="govuk-grid-column-one-third">
+        <div class="govuk-grid-row">
+          <div class="govuk-grid-column-one-half">
+            {{ datePicker({
             id: 'date',
             label: 'Date',
             name: 'date',
@@ -41,10 +41,10 @@
             containerClasses: 'govuk-!-width-full govuk-!-margin-bottom-4',
             attributes: { 'data-test': 'date-select' }
           }) }}
-        </div>
+          </div>
 
-        <div class="govuk-grid-column-one-half">
-          {{ govukSelect({
+          <div class="govuk-grid-column-one-half">
+            {{ govukSelect({
           name: 'period',
           id: 'period',
           label: {
@@ -67,10 +67,10 @@
           classes: "govuk-!-width-full",
           attributes: { 'data-test': 'period-select' }
         }) }}
+          </div>
         </div>
-      </div>
 
-      {{ govukSelect({
+        {{ govukSelect({
         name: 'currentLocation',
         id: 'currentLocation',
         label: {
@@ -82,11 +82,12 @@
         attributes: { 'data-test': 'location-select' }
       }) }}
 
-      {{ govukButton({
+        {{ govukButton({
         text: "Continue",
         type: "submit"
       }) }}
       </div>
     </div>
-  </form>
+  </div>
+</form>
 {% endblock %}
