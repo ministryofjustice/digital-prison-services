@@ -261,17 +261,6 @@ describe('alert management', () => {
         await handleEditAlertForm(req, res)
         expect(req.flash).toBeCalledWith('errors', [{ href: '#comment', text: 'Comment required' }])
       })
-
-      it('should validate comment is not blank', async () => {
-        const req = {
-          ...mockReq,
-          params: { offenderNo, alertId: 1 },
-          body: { offenderNo, alertStatus: 'yes', comment: ' ' },
-        }
-
-        await handleEditAlertForm(req, res)
-        expect(req.flash).toBeCalledWith('errors', [{ href: '#comment', text: 'Comment required' }])
-      })
     })
 
     describe('when yes is selected', () => {
@@ -510,7 +499,7 @@ describe('alert management', () => {
     })
 
     describe('when comment triggers validation errors', () => {
-      const commentsOverMaximumLength = Array.from(Array(1001).keys())
+      const comments = Array.from(Array(1001).keys())
         .map(_ => 'A')
         .join('')
 
@@ -518,7 +507,7 @@ describe('alert management', () => {
         const req = {
           ...mockCreateReq,
           params: { offenderNo },
-          body: { offenderNo, comments: commentsOverMaximumLength },
+          body: { offenderNo, comments },
         }
 
         await handleCreateAlertForm(req, res)
@@ -529,28 +518,6 @@ describe('alert management', () => {
               { href: '#alert-type', text: 'Select the type of alert' },
               { href: '#alert-code', text: 'Select the alert' },
               { href: '#comments', text: 'Enter why you are creating this alert using 1,000 characters or less' },
-              { href: '#effective-date', text: 'Select when you want this alert to start' },
-            ],
-            alertCodes: [{ text: 'MAPP 1', value: 'PI' }],
-          })
-        )
-      })
-
-      it('should validate comment is not blank', async () => {
-        const req = {
-          ...mockCreateReq,
-          params: { offenderNo },
-          body: { offenderNo, comments: ' ' },
-        }
-
-        await handleCreateAlertForm(req, res)
-        expect(res.render).toHaveBeenCalledWith(
-          'alerts/createAlertForm.njk',
-          expect.objectContaining({
-            errors: [
-              { href: '#alert-type', text: 'Select the type of alert' },
-              { href: '#alert-code', text: 'Select the alert' },
-              { href: '#comments', text: 'Enter why you are creating this alert' },
               { href: '#effective-date', text: 'Select when you want this alert to start' },
             ],
             alertCodes: [{ text: 'MAPP 1', value: 'PI' }],

@@ -50,11 +50,6 @@ export const setSearchLocations = locations => ({
   locations,
 })
 
-export const setSearchParameters = params => ({
-  type: ActionTypes.SET_SEARCH_PARAMETERS,
-  params,
-})
-
 export const setSearchActivities = activities => ({
   type: ActionTypes.SET_SEARCH_ACTIVITIES,
   activities,

@@ -25,42 +25,6 @@ module.exports = ({ oauthApi, prisonApi, page = 0 }) => async (req, res) => {
     )
   }
 
-  const enrichLocationsWithAgencyLeaveDate = locations => {
-    const locationsWithAgencyLeaveDate = []
-    let previousLocationEstablishmentName = locations[0].establishment
-    let previousLocationEstablishmentNameAndLeaveDate =
-      previousLocationEstablishmentName + locations[0].assignmentEndDateTime
-    locations.forEach(location => {
-      const locationEstablishmentNameAndLeaveDate =
-        previousLocationEstablishmentName !== location.establishment
-          ? (previousLocationEstablishmentNameAndLeaveDate = location.establishment + location.assignmentEndDateTime)
-          : previousLocationEstablishmentNameAndLeaveDate
-      locationsWithAgencyLeaveDate.push({
-        ...location,
-        establishmentWithAgencyLeaveDate: locationEstablishmentNameAndLeaveDate,
-      })
-      previousLocationEstablishmentName = location.establishment
-      previousLocationEstablishmentNameAndLeaveDate = locationEstablishmentNameAndLeaveDate
-    })
-    return locationsWithAgencyLeaveDate
-  }
-
-  const getCellHistoryGroupedByPeriodAtAgency = locations => {
-    const locationsWithAgencyLeaveDate = enrichLocationsWithAgencyLeaveDate(locations)
-    return Object.entries(groupBy(locationsWithAgencyLeaveDate, 'establishmentWithAgencyLeaveDate')).map(
-      ([key, value]) => {
-        const fromDateString = formatTimestampToDate(value.slice(-1)[0].assignmentDateTime)
-        const toDateString = formatTimestampToDate(value[0].assignmentEndDateTime)
-
-        return {
-          name: value[0].establishment,
-          datePeriod: `from ${fromDateString} to ${toDateString}`,
-          cellHistory: value,
-        }
-      }
-    )
-  }
-
   try {
     const { bookingId, firstName, lastName } = await prisonApi.getDetails(res.locals, offenderNo)
     const { content: cells } = await prisonApi.getOffenderCellHistory(res.locals, bookingId, {
@@ -99,7 +63,16 @@ module.exports = ({ oauthApi, prisonApi, page = 0 }) => async (req, res) => {
 
     return res.render('prisonerProfile/prisonerCellHistory.njk', {
       cellHistoryGroupedByAgency: hasLength(previousLocations)
-        ? getCellHistoryGroupedByPeriodAtAgency(previousLocations)
+        ? Object.entries(groupBy(previousLocations, 'establishment')).map(([key, value]) => {
+            const fromDateString = formatTimestampToDate(value.slice(-1)[0].assignmentDateTime)
+            const toDateString = formatTimestampToDate(value[0].assignmentEndDateTime)
+
+            return {
+              name: key,
+              datePeriod: `from ${fromDateString} to ${toDateString}`,
+              cellHistory: value,
+            }
+          })
         : [],
       currentLocation: {
         ...currentLocation,
