@@ -25,14 +25,13 @@ class SearchContainer extends Component {
   }
 
   componentWillMount() {
-    const { dateDispatch, periodDispatch, locationDispatch, getActivityLocations } = this.props
+    const { dateDispatch, periodDispatch, getActivityLocations } = this.props
     this.getLocations()
     const today = 'Today'
     dateDispatch(today)
     const currentPeriod = defaultPeriod(moment())
     periodDispatch(currentPeriod)
     getActivityLocations(today, currentPeriod)
-    locationDispatch('--')
   }
 
   onActivityChange(event) {

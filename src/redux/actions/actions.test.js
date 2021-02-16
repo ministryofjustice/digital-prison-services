@@ -141,24 +141,6 @@ describe('actions', () => {
     expect(actions.setSearchPeriod('brunch')).toEqual(expectedAction)
   })
 
-  it('should create an action to save a search activity with multiple parameters', () => {
-    const expectedAction = {
-      type: types.SET_SEARCH_PARAMETERS,
-      params: {
-        date: '15/02/2021',
-        location: 'Houseblock 1',
-        period: 'PM',
-      },
-    }
-    expect(
-      actions.setSearchParameters({
-        date: '15/02/2021',
-        location: 'Houseblock 1',
-        period: 'PM',
-      })
-    ).toEqual(expectedAction)
-  })
-
   it('should create an action to save prisoners wing residence state', () => {
     const expectedAction = {
       type: types.SET_SEARCH_WING_STATUS,

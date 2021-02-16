@@ -165,17 +165,11 @@ export function search(state = searchInitialState, action) {
         ...state,
         allocationStatus: action.allocationStatus,
       }
-    case ActionTypes.SET_SEARCH_PARAMETERS:
-      return {
-        ...state,
-        date: action.params.date,
-        location: action.params.location,
-        period: action.params.period,
-      }
     case ActionTypes.SET_SEARCH_LOCATIONS:
       return {
         ...state,
         locations: action.locations,
+        location: '--',
         subLocation: '--',
       }
     case ActionTypes.SET_SEARCH_LOCATION:
