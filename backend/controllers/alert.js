@@ -38,7 +38,7 @@ const getValidationErrors = ({ alertStatus, comment }) => {
     })
   }
 
-  if (!comment) {
+  if (!comment || !comment.trim()) {
     errors.push({
       text: 'Comment required',
       href: '#comment',
@@ -280,7 +280,7 @@ const alertFactory = (oauthApi, prisonApi, referenceCodesService) => {
       })
     }
 
-    if (!comments) {
+    if (!comments || !comments.trim()) {
       errors.push({
         text: 'Enter why you are creating this alert',
         href: '#comments',
