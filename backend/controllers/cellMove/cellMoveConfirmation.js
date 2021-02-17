@@ -1,4 +1,7 @@
 const { properCaseName, putLastNameFirst } = require('../../utils')
+const {
+  app: { notmEndpointUrl: dpsUrl },
+} = require('../../config')
 
 module.exports = ({ prisonApi }) => async (req, res) => {
   const { offenderNo } = req.params
@@ -14,6 +17,7 @@ module.exports = ({ prisonApi }) => async (req, res) => {
       offenderNo,
       prisonerProfileLink: `/prisoner/${offenderNo}`,
       prisonerSearchLink: '/prisoner-search',
+      dpsUrl,
     })
   } catch (error) {
     res.locals.redirectUrl = `/prisoner/${offenderNo}/cell-move/search-for-cell`

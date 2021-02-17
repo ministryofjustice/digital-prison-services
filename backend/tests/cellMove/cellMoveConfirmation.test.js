@@ -28,6 +28,22 @@ describe('Cell move confirmation', () => {
     expect(prisonApi.getLocation).toHaveBeenCalledWith({}, 1)
   })
 
+  it('should render the template with the correct data', async () => {
+    await controller(req, res)
+
+    expect(res.render).toHaveBeenCalledWith(
+      'cellMove/confirmation.njk',
+      {
+        breadcrumbPrisonerName: "Doe, Bob",
+        dpsUrl: 'http://localhost:3000/',
+        offenderNo: "A12345",
+        prisonerProfileLink: "/prisoner/A12345",
+        prisonerSearchLink: "/prisoner-search",
+        title: "Bob Doe has been moved to cell A-1-012",
+      }
+    )
+  })
+
   it('should store correct redirect and home url then re-throw the error', async () => {
     const offenderNo = 'A12345'
     const error = new Error('network error')
