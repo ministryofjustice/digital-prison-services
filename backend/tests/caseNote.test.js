@@ -293,6 +293,29 @@ describe('case note management', () => {
           })
         )
       })
+
+      it('should validate the case note is not blank', async () => {
+        const req = {
+          ...mockCreateReq,
+          params: { offenderNo },
+          body: {
+            type: 'OBSERVE',
+            subType: 'OBS1',
+            date: moment().format('DD/MM/YYYY'),
+            hours: moment().format('H'),
+            minutes: moment().format('mm'),
+            text: '   ',
+          },
+        }
+
+        await handleCreateCaseNoteForm(req, res)
+        expect(res.render).toHaveBeenCalledWith(
+          'caseNotes/addCaseNoteForm.njk',
+          expect.objectContaining({
+            errors: [{ href: '#text', text: 'Enter what happened' }],
+          })
+        )
+      })
     })
 
     describe('when the form is filled correctly', () => {
