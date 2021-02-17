@@ -151,13 +151,13 @@ context('Activity list page', () => {
     })
   })
 
-  it('Displays the updated activity list', () => {
+  it('Displays the updated activity list', async () => {
     cy.task('stubGetActivityList', { caseload, locationId: 1, timeSlot: 'PM', date })
     cy.task('stubGetAttendance', { caseload, locationId: 1, timeSlot: 'PM', date })
     cy.visit(`/manage-prisoner-whereabouts`)
 
     const sPage = searchPage.verifyOnPage()
-    const initialPeriod = new Cypress.Promise(resolve => {
+    const initialPeriod = await new Cypress.Promise(resolve => {
       cy.get('#period-select')
         .invoke('val')
         .then(txt => resolve(txt.toString()))
