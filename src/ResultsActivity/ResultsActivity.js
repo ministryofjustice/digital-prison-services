@@ -112,7 +112,7 @@ class ResultsActivity extends Component {
     })
 
   notRequireAll = async values => {
-    const { showModal, getActivityList, handleError, raiseAnalyticsEvent, agencyId } = this.props
+    const { showModal, reloadPage, handleError, raiseAnalyticsEvent, agencyId } = this.props
     const { comments } = values
 
     try {
@@ -125,7 +125,7 @@ class ResultsActivity extends Component {
         comments,
       })
       raiseAnalyticsEvent(allNotRequired(this.unattendedOffenders.size, agencyId))
-      getActivityList()
+      reloadPage()
       this.setState({ notRequiringAll: false })
     } catch (error) {
       handleError(error)
@@ -136,13 +136,11 @@ class ResultsActivity extends Component {
 
   render() {
     const {
-      handleDateChange,
       date,
       period,
-      handlePeriodChange,
+      onListCriteriaChange,
       handlePrint,
       redactedPrintState,
-      getActivityList,
       activityData,
       sortOrder,
       orderField,
@@ -174,7 +172,7 @@ class ResultsActivity extends Component {
           name="period-select"
           className="form-control"
           value={period}
-          onChange={handlePeriodChange}
+          onChange={e => onListCriteriaChange({ periodValue: e })}
         >
           <option key="MORNING" value="AM">
             Morning (AM)
@@ -219,7 +217,7 @@ class ResultsActivity extends Component {
         this.setState({ attendingAll: true })
         await this.updateMultipleAttendances({ paid: true, attended: true, offenders: [...this.unattendedOffenders] })
         raiseAnalyticsEvent(attendAll(this.unattendedOffenders.size, agencyId))
-        getActivityList()
+        reloadPage()
         this.setState({ attendingAll: false })
       } catch (error) {
         handleError(error)
@@ -480,7 +478,7 @@ class ResultsActivity extends Component {
         <form className="no-print">
           <div>
             <div className="pure-u-md-1-6 padding-right">
-              <WhereaboutsDatePicker handleDateChange={handleDateChange} date={date} />
+              <WhereaboutsDatePicker handleDateChange={e => onListCriteriaChange({ dateValue: e })} date={date} />
             </div>
             {periodSelect}
           </div>
@@ -530,8 +528,6 @@ ResultsActivity.propTypes = {
   agencyId: PropTypes.string.isRequired,
   handlePrint: PropTypes.func.isRequired,
   redactedPrintState: PropTypes.bool.isRequired,
-  handlePeriodChange: PropTypes.func.isRequired,
-  handleDateChange: PropTypes.func.isRequired,
   getActivityList: PropTypes.func.isRequired,
   date: PropTypes.string.isRequired,
   period: PropTypes.string.isRequired,
@@ -565,6 +561,7 @@ ResultsActivity.propTypes = {
   showModal: PropTypes.func.isRequired,
   activityName: PropTypes.string.isRequired,
   userRoles: PropTypes.arrayOf(PropTypes.string.isRequired).isRequired,
+  onListCriteriaChange: PropTypes.func.isRequired,
 }
 
 const ResultsActivityWithRouter = withRouter(ResultsActivity)

@@ -151,13 +151,13 @@ context('Activity list page', () => {
     })
   })
 
-  it('Displays the updated activity list', async () => {
+  it('Displays the updated activity list', () => {
     cy.task('stubGetActivityList', { caseload, locationId: 1, timeSlot: 'PM', date })
     cy.task('stubGetAttendance', { caseload, locationId: 1, timeSlot: 'PM', date })
     cy.visit(`/manage-prisoner-whereabouts`)
 
     const sPage = searchPage.verifyOnPage()
-    const initialPeriod = await new Cypress.Promise(resolve => {
+    const initialPeriod = new Cypress.Promise(resolve => {
       cy.get('#period-select')
         .invoke('val')
         .then(txt => resolve(txt.toString()))
@@ -193,7 +193,6 @@ context('Activity list page', () => {
     // when: I change selections and update
     const d = new Date()
     const lastYear = d.getFullYear() - 1
-    const firstOfMonthDisplayFormat = `01/08/${lastYear}`
     const firstOfMonthApiFormat = `${lastYear}-08-01`
     cy.task('stubGetActivityList', {
       caseload,
@@ -231,24 +230,12 @@ context('Activity list page', () => {
     newSearchPage.period().should('have.value', initialPeriod)
   })
 
-  it('navigates to the whereabouts search on a page refresh', () => {
+  it('Navigates back to the whereabouts page when the activity results page is loaded without the required query string parameters  ', () => {
     // given: I am on the activity list page
     cy.task('stubGetActivityList', { caseload, locationId: 1, timeSlot: 'PM', date })
     cy.task('stubGetAttendance', { caseload, locationId: 1, timeSlot: 'PM', date })
-    cy.visit(`/manage-prisoner-whereabouts`)
+    cy.visit(`/manage-prisoner-whereabouts/activity-results`)
 
-    const sPage = searchPage.verifyOnPage()
-
-    sPage.period().select('PM')
-    sPage.activity().select('loc1')
-    sPage.continueActivityButton().click()
-
-    const aPage = activityPage.verifyOnPage('loc1')
-
-    // when: "I refresh the page"
-    cy.reload()
-
-    // then: "I should be redirected to the search page"
     searchPage.verifyOnPage()
   })
 
