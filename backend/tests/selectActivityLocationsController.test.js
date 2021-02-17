@@ -97,7 +97,7 @@ describe('Select activity locations controller', () => {
       await controller.post(req, res)
 
       expect(res.redirect).toHaveBeenCalledWith(
-        '/manage-prisoner-whereabouts/select-activity-location?date=10/10/2020&period=PM'
+        '/manage-prisoner-whereabouts/select-location?date=10/10/2020&period=PM'
       )
     })
 

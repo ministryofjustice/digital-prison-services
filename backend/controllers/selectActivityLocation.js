@@ -43,7 +43,7 @@ module.exports = ({ prisonApi }) => {
 
     if (!currentLocation) {
       req.flash('errors', { text: 'Select the location', href: '#current-location' })
-      return res.redirect(`/manage-prisoner-whereabouts/select-activity-location?date=${date}&period=${period}`)
+      return res.redirect(`/manage-prisoner-whereabouts/select-location?date=${date}&period=${period}`)
     }
 
     const bookedOnDay = date || moment().format('DD/MM/YYYY')
