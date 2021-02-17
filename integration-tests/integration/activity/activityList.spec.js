@@ -39,18 +39,13 @@ context('Activity list page', () => {
     cy.task('stubGetAbsenceReasons')
   })
 
-  it.only('Displays the activity list', () => {
+  it('Displays the activity list', () => {
     cy.visit('/manage-prisoner-whereabouts/select-location')
     cy.task('stubGetActivityList', { caseload, locationId: 2, timeSlot: 'AM', date })
     cy.task('stubGetAttendance', { caseload, locationId: 2, timeSlot: 'AM', date })
 
-    // const sPage = searchPage.verifyOnPage()
-
-    // sPage.period().select('AM')
-    // sPage.activity().select('loc2')
-    // sPage.continueActivityButton().click()
-
-    cy.get('#current-location').select('2')
+    cy.get('#period').select('AM')
+    cy.get('#current-location').select('loc2')
     cy.get('[type="submit"]').click()
 
     const aPage = activityPage.verifyOnPage('loc2')
@@ -109,331 +104,301 @@ context('Activity list page', () => {
     })
   })
 
-  // it('The activity list handles sorting correctly', () => {
-  //   cy.task('stubGetActivityList', { caseload, locationId: 2, timeSlot: 'AM', date })
-  //   cy.task('stubGetAttendance', { caseload, locationId: 2, timeSlot: 'AM', date })
-  //   cy.visit(`/manage-prisoner-whereabouts`)
+  it('The activity list handles sorting correctly', () => {
+    cy.task('stubGetActivityList', { caseload, locationId: 2, timeSlot: 'AM', date })
+    cy.task('stubGetAttendance', { caseload, locationId: 2, timeSlot: 'AM', date })
+    cy.visit('/manage-prisoner-whereabouts/select-location')
 
-  //   const sPage = searchPage.verifyOnPage()
+    cy.get('#period').select('AM')
+    cy.get('#current-location').select('loc2')
+    cy.get('[type="submit"]').click()
 
-  //   sPage.period().select('AM')
-  //   sPage.activity().select('loc2')
-  //   sPage.continueActivityButton().click()
+    const aPage = activityPage.verifyOnPage('loc2')
+    aPage
+      .getAllResultRows()
+      .find('tr')
+      .should('have.length', 6)
 
-  //   const aPage = activityPage.verifyOnPage('loc2')
-  //   aPage
-  //     .getAllResultRows()
-  //     .find('tr')
-  //     .should('have.length', 6)
+    const nomsIds = ['A1234AA', 'A1234AC', 'A1234AB', 'A1234AA', 'A1234AA']
 
-  //   const nomsIds = ['A1234AA', 'A1234AC', 'A1234AB', 'A1234AA', 'A1234AA']
+    aPage.getResultNomsIds().each(($el, index) => {
+      expect($el.text()).to.equal(nomsIds[index])
+    })
 
-  //   aPage.getResultNomsIds().each(($el, index) => {
-  //     expect($el.text()).to.equal(nomsIds[index])
-  //   })
+    aPage.sortSelect().select('lastName_ASC')
+    aPage
+      .getAllResultRows()
+      .find('tr')
+      .should('have.length', 6)
+    const nomsIdsLastNameASC = ['A1234AA', 'A1234AA', 'A1234AA', 'A1234AC', 'A1234AB']
+    aPage.getResultNomsIds().each(($el, index) => {
+      expect($el.text()).to.equal(nomsIdsLastNameASC[index])
+    })
 
-  //   aPage.sortSelect().select('lastName_ASC')
-  //   aPage
-  //     .getAllResultRows()
-  //     .find('tr')
-  //     .should('have.length', 6)
-  //   const nomsIdsLastNameASC = ['A1234AA', 'A1234AA', 'A1234AA', 'A1234AC', 'A1234AB']
-  //   aPage.getResultNomsIds().each(($el, index) => {
-  //     expect($el.text()).to.equal(nomsIdsLastNameASC[index])
-  //   })
+    aPage.sortSelect().select('lastName_DESC')
+    aPage
+      .getAllResultRows()
+      .find('tr')
+      .should('have.length', 6)
+    const nomsIdsLastNameDESC = ['A1234AB', 'A1234AC', 'A1234AA', 'A1234AA', 'A1234AA']
+    aPage.getResultNomsIds().each(($el, index) => {
+      expect($el.text()).to.equal(nomsIdsLastNameDESC[index])
+    })
+  })
 
-  //   aPage.sortSelect().select('lastName_DESC')
-  //   aPage
-  //     .getAllResultRows()
-  //     .find('tr')
-  //     .should('have.length', 6)
-  //   const nomsIdsLastNameDESC = ['A1234AB', 'A1234AC', 'A1234AA', 'A1234AA', 'A1234AA']
-  //   aPage.getResultNomsIds().each(($el, index) => {
-  //     expect($el.text()).to.equal(nomsIdsLastNameDESC[index])
-  //   })
-  // })
+  it.skip('Displays the updated activity list', () => {
+    cy.task('stubGetActivityList', { caseload, locationId: 1, timeSlot: 'PM', date })
+    cy.task('stubGetAttendance', { caseload, locationId: 1, timeSlot: 'PM', date })
+    cy.visit('/manage-prisoner-whereabouts/select-location')
 
-  // it('Displays the updated activity list', async () => {
-  //   cy.task('stubGetActivityList', { caseload, locationId: 1, timeSlot: 'PM', date })
-  //   cy.task('stubGetAttendance', { caseload, locationId: 1, timeSlot: 'PM', date })
-  //   cy.visit(`/manage-prisoner-whereabouts`)
+    cy.get('#period').select('PM')
+    cy.get('#current-location').select('loc1')
+    cy.get('[type="submit"]').click()
 
-  //   const sPage = searchPage.verifyOnPage()
-  //   const initialPeriod = await new Cypress.Promise(resolve => {
-  //     cy.get('#period-select')
-  //       .invoke('val')
-  //       .then(txt => resolve(txt.toString()))
-  //   })
+    const aPage = activityPage.verifyOnPage('loc1')
+    aPage
+      .getAllResultRows()
+      .find('tr')
+      .should('have.length', 6)
 
-  //   sPage.period().select('PM')
-  //   sPage.activity().select('loc1')
-  //   sPage.continueActivityButton().click()
+    const activities = [
+      '11:45 - Activity 1',
+      '17:45 - Activity 1',
+      '17:00 - Activity 2',
+      '17:00 - Activity 3',
+      '15:30 - Medical - Dentist - Appt details',
+    ]
+    aPage.getResultActivity().each(($el, index) => {
+      expect($el.text()).to.equal(activities[index])
+    })
 
-  //   const aPage = activityPage.verifyOnPage('loc1')
-  //   aPage
-  //     .getAllResultRows()
-  //     .find('tr')
-  //     .should('have.length', 6)
+    aPage.getActivityTotals().should($activityTotals => {
+      expect($activityTotals).to.have.length(2)
+      expect($activityTotals.first()).to.contain('3')
+      expect($activityTotals[1]).to.contain('0')
+    })
 
-  //   const activities = [
-  //     '11:45 - Activity 1',
-  //     '17:45 - Activity 1',
-  //     '17:00 - Activity 2',
-  //     '17:00 - Activity 3',
-  //     '15:30 - Medical - Dentist - Appt details',
-  //   ]
-  //   aPage.getResultActivity().each(($el, index) => {
-  //     expect($el.text()).to.equal(activities[index])
-  //   })
+    // when: I change selections and update
+    const d = new Date()
+    const lastYear = d.getFullYear() - 1
+    const firstOfMonthApiFormat = `${lastYear}-08-01`
+    cy.task('stubGetActivityList', {
+      caseload,
+      locationId: 1,
+      timeSlot: 'PM',
+      date: firstOfMonthApiFormat,
+      inThePast: true,
+    })
+    cy.task('stubGetAttendance', { caseload, locationId: 1, timeSlot: 'PM', date: firstOfMonthApiFormat })
 
-  //   aPage.getActivityTotals().should($activityTotals => {
-  //     expect($activityTotals).to.have.length(2)
-  //     expect($activityTotals.first()).to.contain('3')
-  //     expect($activityTotals[1]).to.contain('0')
-  //   })
+    aPage.datePicker().click()
+    aPage.datePickerTopBar().click()
+    aPage.datePickerTopBar().click()
+    aPage.getPickerYearSelector(lastYear).click()
+    aPage.getPickerMonthSelector('Aug').click()
+    aPage.getPickerDaySelector('1').click()
 
-  //   // when: I change selections and update
-  //   const d = new Date()
-  //   const lastYear = d.getFullYear() - 1
-  //   const firstOfMonthApiFormat = `${lastYear}-08-01`
-  //   cy.task('stubGetActivityList', {
-  //     caseload,
-  //     locationId: 1,
-  //     timeSlot: 'PM',
-  //     date: firstOfMonthApiFormat,
-  //     inThePast: true,
-  //   })
-  //   cy.task('stubGetAttendance', { caseload, locationId: 1, timeSlot: 'PM', date: firstOfMonthApiFormat })
+    aPage.getActivityTotals().should($activityTotals => {
+      expect($activityTotals).to.have.length(2)
+      expect($activityTotals.first()).to.contain('2')
+      expect($activityTotals[1]).to.contain('0')
+    })
 
-  //   aPage.datePicker().click()
-  //   aPage.datePickerTopBar().click()
-  //   aPage.datePickerTopBar().click()
-  //   aPage.getPickerYearSelector(lastYear).click()
-  //   aPage.getPickerMonthSelector('Aug').click()
-  //   aPage.getPickerDaySelector('1').click()
+    const newActivities = ['17:45 - Activity 1', '17:00 - Activity 2', '15:30 - Medical - Dentist - Appt details']
+    aPage.getResultActivity().each(($el, index) => {
+      expect($el.text()).to.equal(newActivities[index])
+    })
+  })
 
-  //   aPage.getActivityTotals().should($activityTotals => {
-  //     expect($activityTotals).to.have.length(2)
-  //     expect($activityTotals.first()).to.contain('2')
-  //     expect($activityTotals[1]).to.contain('0')
-  //   })
+  it('displays absent reason link and shows attended as checked', () => {
+    const timeSlot = 'AM'
+    const locationId = 1
 
-  //   const newActivities = ['17:45 - Activity 1', '17:00 - Activity 2', '15:30 - Medical - Dentist - Appt details']
-  //   aPage.getResultActivity().each(($el, index) => {
-  //     expect($el.text()).to.equal(newActivities[index])
-  //   })
+    const offenders = [
+      {
+        offenderNo: 'A1234AA',
+        bookingId: 101,
+      },
+      {
+        offenderNo: 'A1234AC',
+        bookingId: 201,
+      },
+    ]
 
-  //   // when: I go to the search page
-  //   cy.visit(`/manage-prisoner-whereabouts`)
-  //   const newSearchPage = searchPage.verifyOnPage()
+    const activities = [
+      {
+        offenderNo: 'A1234AA',
+        bookingId: 101,
+        event: 'PA',
+        eventId: 100,
+        eventDescription: 'Prison Activities',
+        locationId: 1,
+        eventLocationId: 1,
+        firstName: 'ARTHUR',
+        lastName: 'ANDERSON',
+        cellLocation: 'LEI-A-1-1',
+        comment: 'Activity 3',
+        startTime: '2017-10-15T17:00:00',
+        endTime: '2017-10-15T18:30:00',
+      },
+      {
+        offenderNo: 'A1234AC',
+        bookingId: 201,
+        event: 'PA',
+        eventId: 101,
+        eventDescription: 'Prison Activities',
+        locationId: 1,
+        eventLocationId: 1,
+        firstName: 'JOHN',
+        lastName: 'DOE',
+        cellLocation: 'LEI-A-1-1',
+        comment: 'Activity 3',
+        startTime: '2017-10-15T17:00:00',
+        endTime: '2017-10-15T18:30:00',
+      },
+    ]
 
-  //   // then: the selections are reinitialised
-  //   newSearchPage.datePicker().should('have.value', 'Today')
-  //   newSearchPage.period().should('have.value', initialPeriod)
-  // })
+    const attendance = {
+      attendances: [
+        {
+          id: 1,
+          bookingId: 201,
+          eventId: 101,
+          eventLocationId: 1,
+          period: 'AM',
+          prisonId: 'LEI',
+          attended: false,
+          paid: false,
+          absentReason: 'UnacceptableAbsence',
+          eventDate: '2019-05-15',
+        },
+        {
+          id: 2,
+          bookingId: 101,
+          eventId: 100,
+          eventLocationId: 1,
+          period: 'AM',
+          prisonId: 'LEI',
+          attended: true,
+          paid: true,
+          eventDate: '2019-05-15',
+        },
+      ],
+    }
 
-  // it('Navigates back to the whereabouts page when the activity results page is loaded without the required query string parameters  ', () => {
-  //   // given: I am on the activity list page
-  //   cy.task('stubGetActivityList', { caseload, locationId: 1, timeSlot: 'PM', date })
-  //   cy.task('stubGetAttendance', { caseload, locationId: 1, timeSlot: 'PM', date })
-  //   cy.visit(`/manage-prisoner-whereabouts/activity-results`)
+    offenders.forEach(offender => {
+      cy.task('stubOffenderBasicDetails', offender)
+    })
 
-  //   searchPage.verifyOnPage()
-  // })
+    // given: I am on the activity list page
+    cy.task('stubForAttendance', { caseload, locationId, timeSlot, date, activities })
+    cy.task('stubGetAttendance', { caseload, locationId, timeSlot, date, data: attendance })
+    cy.visit('/manage-prisoner-whereabouts/select-location')
 
-  // it('displays absent reason link and shows attended as checked', () => {
-  //   const timeSlot = 'AM'
-  //   const locationId = 1
+    // when: "I select a period and activity location"
+    cy.get('#period').select('AM')
+    cy.get('#current-location').select('loc1')
+    cy.get('[type="submit"]').click()
 
-  //   const offenders = [
-  //     {
-  //       offenderNo: 'A1234AA',
-  //       bookingId: 101,
-  //     },
-  //     {
-  //       offenderNo: 'A1234AC',
-  //       bookingId: 201,
-  //     },
-  //   ]
+    const aPage = activityPage.verifyOnPage('loc1')
 
-  //   const activities = [
-  //     {
-  //       offenderNo: 'A1234AA',
-  //       bookingId: 101,
-  //       event: 'PA',
-  //       eventId: 100,
-  //       eventDescription: 'Prison Activities',
-  //       locationId: 1,
-  //       eventLocationId: 1,
-  //       firstName: 'ARTHUR',
-  //       lastName: 'ANDERSON',
-  //       cellLocation: 'LEI-A-1-1',
-  //       comment: 'Activity 3',
-  //       startTime: '2017-10-15T17:00:00',
-  //       endTime: '2017-10-15T18:30:00',
-  //     },
-  //     {
-  //       offenderNo: 'A1234AC',
-  //       bookingId: 201,
-  //       event: 'PA',
-  //       eventId: 101,
-  //       eventDescription: 'Prison Activities',
-  //       locationId: 1,
-  //       eventLocationId: 1,
-  //       firstName: 'JOHN',
-  //       lastName: 'DOE',
-  //       cellLocation: 'LEI-A-1-1',
-  //       comment: 'Activity 3',
-  //       startTime: '2017-10-15T17:00:00',
-  //       endTime: '2017-10-15T18:30:00',
-  //     },
-  //   ]
+    // then: "The the absent reason should be visible"
+    aPage.getAttendedValues().then($inputs => {
+      cy.get($inputs.get(0)).should('be.checked')
+      cy.get($inputs.get(0)).should('have.value', 'pay')
+      cy.get($inputs.get(1)).should('not.be.checked')
+      cy.get($inputs.get(1)).should('have.value', 'pay')
+    })
 
-  //   const attendance = {
-  //     attendances: [
-  //       {
-  //         id: 1,
-  //         bookingId: 201,
-  //         eventId: 101,
-  //         eventLocationId: 1,
-  //         period: 'AM',
-  //         prisonId: 'LEI',
-  //         attended: false,
-  //         paid: false,
-  //         absentReason: 'UnacceptableAbsence',
-  //         eventDate: '2019-05-15',
-  //       },
-  //       {
-  //         id: 2,
-  //         bookingId: 101,
-  //         eventId: 100,
-  //         eventLocationId: 1,
-  //         period: 'AM',
-  //         prisonId: 'LEI',
-  //         attended: true,
-  //         paid: true,
-  //         eventDate: '2019-05-15',
-  //       },
-  //     ],
-  //   }
+    aPage.getAbsenceReasons().then($inputs => {
+      expect($inputs.get(0).innerText).to.eq('Other')
+      expect($inputs.get(1).innerText).to.eq('Unacceptable - Incentive Level warning')
+    })
+  })
 
-  //   offenders.forEach(offender => {
-  //     cy.task('stubOffenderBasicDetails', offender)
-  //   })
+  it('creates new non attendance with absent reason then updates to attended', () => {
+    const timeSlot = 'AM'
+    const locationId = 1
 
-  //   // given: I am on the activity list page
-  //   cy.task('stubForAttendance', { caseload, locationId, timeSlot, date, activities })
-  //   cy.task('stubGetAttendance', { caseload, locationId, timeSlot, date, data: attendance })
-  //   cy.visit(`/manage-prisoner-whereabouts`)
+    const offenders = [
+      {
+        offenderNo: 'A1234AA',
+        bookingId: 101,
+      },
+    ]
 
-  //   const sPage = searchPage.verifyOnPage()
+    const activities = [
+      {
+        offenderNo: 'A1234AA',
+        bookingId: 101,
+        event: 'PA',
+        eventId: 100,
+        eventDescription: 'Prison Activities',
+        locationId: 1,
+        eventLocationId: 1,
+        firstName: 'ARTHUR',
+        lastName: 'ANDERSON',
+        cellLocation: 'MDI-A-1-1',
+        comment: 'Activity 3',
+        startTime: '2017-10-15T17:00:00',
+        endTime: '2017-10-15T18:30:00',
+      },
+    ]
 
-  //   // when: "I select a period and activity location"
-  //   sPage.period().select('AM')
-  //   sPage.activity().select('loc1')
-  //   sPage.continueActivityButton().click()
+    const attendanceToReturn = {
+      id: 1,
+      bookingId: 101,
+      eventId: 100,
+      eventLocationId: 1,
+    }
 
-  //   const aPage = activityPage.verifyOnPage('loc1')
+    offenders.forEach(offender => {
+      cy.task('stubOffenderBasicDetails', offender)
+    })
 
-  //   // then: "The the absent reason should be visible"
-  //   aPage.getAttendedValues().then($inputs => {
-  //     cy.get($inputs.get(0)).should('be.checked')
-  //     cy.get($inputs.get(0)).should('have.value', 'pay')
-  //     cy.get($inputs.get(1)).should('not.be.checked')
-  //     cy.get($inputs.get(1)).should('have.value', 'pay')
-  //   })
+    // given: I am on the activity list page
+    cy.task('stubForAttendance', { caseload, locationId, timeSlot, date, activities })
+    cy.task('stubGetAttendance', { caseload, locationId, timeSlot, date, data: [] })
+    cy.task('stubPostAttendance', attendanceToReturn)
+    cy.task('stubPutAttendance', attendanceToReturn)
 
-  //   aPage.getAbsenceReasons().then($inputs => {
-  //     expect($inputs.get(0).innerText).to.eq('Other')
-  //     expect($inputs.get(1).innerText).to.eq('Unacceptable - Incentive Level warning')
-  //   })
-  // })
+    cy.visit('/manage-prisoner-whereabouts/select-location')
 
-  // it('creates new non attendance with absent reason then updates to attended', () => {
-  //   const timeSlot = 'AM'
-  //   const locationId = 1
+    // when: "I select a period and activity location"
+    cy.get('#period').select('AM')
+    cy.get('#current-location').select('loc1')
+    cy.get('[type="submit"]').click()
 
-  //   const offenders = [
-  //     {
-  //       offenderNo: 'A1234AA',
-  //       bookingId: 101,
-  //     },
-  //   ]
+    const aPage = activityPage.verifyOnPage('loc1')
 
-  //   const activities = [
-  //     {
-  //       offenderNo: 'A1234AA',
-  //       bookingId: 101,
-  //       event: 'PA',
-  //       eventId: 100,
-  //       eventDescription: 'Prison Activities',
-  //       locationId: 1,
-  //       eventLocationId: 1,
-  //       firstName: 'ARTHUR',
-  //       lastName: 'ANDERSON',
-  //       cellLocation: 'MDI-A-1-1',
-  //       comment: 'Activity 3',
-  //       startTime: '2017-10-15T17:00:00',
-  //       endTime: '2017-10-15T18:30:00',
-  //     },
-  //   ]
+    // then: "The the absent reason should be visible"
+    aPage.getAttendedValues().then($inputs => {
+      cy.get($inputs.get(0)).should('not.be.checked')
+      cy.get($inputs.get(0)).should('have.value', 'pay')
+    })
 
-  //   const attendanceToReturn = {
-  //     id: 1,
-  //     bookingId: 101,
-  //     eventId: 100,
-  //     eventLocationId: 1,
-  //   }
+    aPage.getAbsenceReasons().then($inputs => {
+      cy.get($inputs.get(0)).should('not.be.checked')
+      expect($inputs.get(0).innerText).to.eq('Other')
+    })
 
-  //   offenders.forEach(offender => {
-  //     cy.task('stubOffenderBasicDetails', offender)
-  //   })
+    // then: "Clicking the not attended radio button should open the absent reason modal"
+    aPage
+      .getAbsenceReasonsInput()
+      .first()
+      .check()
 
-  //   // given: I am on the activity list page
-  //   cy.task('stubForAttendance', { caseload, locationId, timeSlot, date, activities })
-  //   cy.task('stubGetAttendance', { caseload, locationId, timeSlot, date, data: [] })
-  //   cy.task('stubPostAttendance', attendanceToReturn)
-  //   cy.task('stubPutAttendance', attendanceToReturn)
+    // then: "Fill out the absent reason form as an acceptable absence"
+    aPage.fillOutAbsentReason()
 
-  //   cy.visit(`/manage-prisoner-whereabouts`)
+    // then: "Mark as attended"
+    aPage.getAttendedValues().then($inputs => {
+      cy.get($inputs.get(0)).click()
+    })
 
-  //   const sPage = searchPage.verifyOnPage()
-
-  //   // when: "I select a period and activity location"
-  //   sPage.period().select('AM')
-  //   sPage.activity().select('loc1')
-  //   sPage.continueActivityButton().click()
-
-  //   const aPage = activityPage.verifyOnPage('loc1')
-
-  //   // then: "The the absent reason should be visible"
-  //   aPage.getAttendedValues().then($inputs => {
-  //     cy.get($inputs.get(0)).should('not.be.checked')
-  //     cy.get($inputs.get(0)).should('have.value', 'pay')
-  //   })
-
-  //   aPage.getAbsenceReasons().then($inputs => {
-  //     cy.get($inputs.get(0)).should('not.be.checked')
-  //     expect($inputs.get(0).innerText).to.eq('Other')
-  //   })
-
-  //   // then: "Clicking the not attended radio button should open the absent reason modal"
-  //   aPage
-  //     .getAbsenceReasonsInput()
-  //     .first()
-  //     .check()
-
-  //   // then: "Fill out the absent reason form as an acceptable absence"
-  //   aPage.fillOutAbsentReason()
-
-  //   // then: "Mark as attended"
-  //   aPage.getAttendedValues().then($inputs => {
-  //     cy.get($inputs.get(0)).click()
-  //   })
-
-  //   // then: "An attendance record should have been created and updated"
-  //   cy.task('verifyPostAttendance').then(val => {
-  //     expect(JSON.parse(val.text).count).to.equal(1)
-  //   })
-  // })
+    // then: "An attendance record should have been created and updated"
+    cy.task('verifyPostAttendance').then(val => {
+      expect(JSON.parse(val.text).count).to.equal(1)
+    })
+  })
 })
