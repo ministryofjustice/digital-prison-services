@@ -89,6 +89,8 @@ class ResultsActivityContainer extends Component {
       searchActivity,
       handleDateChange,
       handlePeriodChange,
+      activities,
+      activitiesDispatch,
     } = this.props
 
     try {
@@ -117,6 +119,17 @@ class ResultsActivityContainer extends Component {
       })
       searchActivity(location)
 
+      if (!activities?.length) {
+        const locationsResponse = await axios.get('/api/activityLocations', {
+          params: {
+            agencyId,
+            bookedOnDay: date,
+            timeSlot: period,
+          },
+        })
+        activitiesDispatch(locationsResponse.data)
+      }
+
       orderDispatch(orderField)
       sortOrderDispatch(sortOrder)
       sortActivityData(activityData, orderField, sortOrder)
@@ -130,6 +143,7 @@ class ResultsActivityContainer extends Component {
   getActivityName() {
     const { activities, activity } = this.props
     if (!activities || !activity) return ''
+
     return (
       activities
         .filter(a => a.locationId === Number(activity))
