@@ -106,7 +106,7 @@ module.exports = ({ courtCaseData, sentenceTermsData, offenceHistory }) => {
             },
             sentence.fineAmount && { label: 'Fine', value: formatCurrency(sentence.fineAmount) },
             sentence.licence && {
-              label: 'License',
+              label: 'Licence',
               value: getLengthTextLabels(sentence.licence),
             },
           ].filter(onlyValidValues),

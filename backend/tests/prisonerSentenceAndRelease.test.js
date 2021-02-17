@@ -457,7 +457,7 @@ describe('prisoner sentence and release', () => {
                   { label: 'Start date', value: '31 December 2018' },
                   { label: 'Imprisonment', value: '11 years' },
                   { label: 'Consecutive to', value: 2 },
-                  { label: 'License', value: '5 years' },
+                  { label: 'Licence', value: '5 years' },
                 ],
               },
             ],
