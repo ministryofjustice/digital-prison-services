@@ -12,7 +12,7 @@ module.exports = ({ prisonApi }) => {
       const bookedOnDay = req.query?.date || moment().format('DD/MM/YYYY')
 
       const date = switchDateFormat(bookedOnDay)
-      const period = req.query?.period || getCurrentPeriod(date)
+      const period = req.query?.period || getCurrentPeriod(moment())
 
       const activityLocations = await prisonApi.searchActivityLocations(
         res.locals,
