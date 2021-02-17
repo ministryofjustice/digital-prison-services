@@ -31,6 +31,10 @@ describe('Prisoner schedule', () => {
     jest.spyOn(Date, 'now').mockImplementation(() => 1595548800000) // Friday, 24 July 2020 00:00:00
   })
 
+  afterEach(() => {
+    Date.now.mockRestore()
+  })
+
   it('should get the prisoner details', async () => {
     await controller(req, res)
 

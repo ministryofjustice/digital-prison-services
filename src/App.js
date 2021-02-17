@@ -160,9 +160,7 @@ class App extends React.Component {
   handleDateChange = date => {
     const { dateDispatch } = this.props
 
-    if (date) {
-      dateDispatch(moment(date).format('DD/MM/YYYY'))
-    }
+    if (date) dateDispatch(date)
   }
 
   handleDateChangeWithLocationsUpdate = date => {

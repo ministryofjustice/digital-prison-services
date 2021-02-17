@@ -34,6 +34,8 @@ const globalSearchRouter = require('./routes/globalSearchRouter')
 const amendCaseNoteRouter = require('./routes/caseNoteAmendmentRouter')
 const deleteCaseNoteRouter = require('./routes/caseNoteDeletionRouter')
 
+const selectActivityLocation = require('./controllers/selectActivityLocation')
+
 const systemOauthClient = require('./api/systemOauthClient')
 const { notifyClient } = require('./shared/notifyClient')
 
@@ -206,6 +208,9 @@ const setup = ({
   router.get(['/content', '/content/:path'], contentController({ logError }))
 
   router.use('/global-search', globalSearchRouter({ offenderSearchApi, oauthApi, logError }))
+
+  router.get('/manage-prisoner-whereabouts/select-location', selectActivityLocation({ prisonApi }).index)
+  router.post('/manage-prisoner-whereabouts/select-location', selectActivityLocation({ prisonApi }).post)
 
   return router
 }

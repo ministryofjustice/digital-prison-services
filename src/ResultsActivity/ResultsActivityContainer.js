@@ -3,18 +3,21 @@ import PropTypes from 'prop-types'
 import ReactRouterPropTypes from 'react-router-prop-types'
 import { connect } from 'react-redux'
 import { withRouter } from 'react-router'
+import queryString from 'query-string'
 import moment from 'moment'
+
 import ResultsActivity from './ResultsActivity'
 import {
+  getAbsentReasons,
   resetError,
-  setError,
   setActivityData,
+  setActivityOffenderAttendance,
+  setError,
   setLoaded,
   setOrderField,
   setSearchActivities,
+  setSearchActivity,
   setSortOrder,
-  setActivityOffenderAttendance,
-  getAbsentReasons,
 } from '../redux/actions'
 import sortActivityData from './activityResultsSorter'
 import Page from '../Components/Page'
@@ -27,37 +30,42 @@ class ResultsActivityContainer extends Component {
     this.handlePrint = this.handlePrint.bind(this)
     this.setColumnSort = this.setColumnSort.bind(this)
     this.getActivityList = this.getActivityList.bind(this)
-    this.update = this.update.bind(this)
+    this.onListCriteriaChange = this.onListCriteriaChange.bind(this)
+    this.reload = this.reload.bind(this)
     this.state = {
       redactedPrint: false,
     }
   }
 
   async componentDidMount() {
-    const { activity, history } = this.props
+    const { location: routerLocation, getAbsentReasonsDispatch } = this.props
+    const { search } = routerLocation
 
-    try {
-      if (activity) {
-        this.getActivityList()
-      } else {
-        history.push('/manage-prisoner-whereabouts')
-      }
-    } catch (error) {
-      this.handleError(error)
-    }
-  }
+    const { date, period, location } = queryString.parse(search)
 
-  async componentDidUpdate(prevProps) {
-    const { date, period } = this.props
-
-    if ((prevProps.date && prevProps.date !== date) || (prevProps.period && prevProps.period !== period)) {
-      await this.update()
+    if (!date && !period && !location) {
+      window.location = '/manage-prisoner-whereabouts'
+    } else {
+      getAbsentReasonsDispatch()
+      await this.getActivityList({ date, period, location })
     }
   }
 
   componentWillUnmount() {
     const { activityDataDispatch } = this.props
     activityDataDispatch([])
+  }
+
+  onListCriteriaChange({ dateValue, periodValue }) {
+    const { date, period, activity, handleDateChange, handlePeriodChange } = this.props
+
+    if (dateValue) {
+      handleDateChange(date)
+      return this.getActivityList({ date: dateValue.format('DD/MM/YYYY'), period, location: activity })
+    }
+
+    handlePeriodChange(periodValue)
+    return this.getActivityList({ period: periodValue.target.value, date, location: activity })
   }
 
   setColumnSort(sortColumn, sortOrder) {
@@ -69,44 +77,50 @@ class ResultsActivityContainer extends Component {
     activityDataDispatch(copy)
   }
 
-  async getActivityList() {
+  async getActivityList({ date, period, location }) {
     const {
       agencyId,
-      activity,
-      period,
       resetErrorDispatch,
       setLoadedDispatch,
       activityDataDispatch,
       orderDispatch,
       sortOrderDispatch,
-      date,
       handleError,
-      getAbsentReasonsDispatch,
+      searchActivity,
+      handleDateChange,
+      handlePeriodChange,
     } = this.props
 
     try {
       resetErrorDispatch()
       setLoadedDispatch(false)
-      const config = {
+
+      handleDateChange(date)
+
+      const response = await axios.get('/api/activitylist', {
         params: {
           agencyId,
-          locationId: activity,
+          locationId: location,
           date: date === 'Today' ? moment().format('DD/MM/YYYY') : date,
           timeSlot: period,
         },
-      }
-      const response = await axios.get('/api/activitylist', config)
+      })
       const activityData = response.data
 
       const orderField = 'activity'
       const sortOrder = 'ASC'
 
+      handlePeriodChange({
+        target: {
+          value: period,
+        },
+      })
+      searchActivity(location)
+
       orderDispatch(orderField)
       sortOrderDispatch(sortOrder)
-
       sortActivityData(activityData, orderField, sortOrder)
       activityDataDispatch(activityData)
-      getAbsentReasonsDispatch()
     } catch (error) {
       handleError(error)
     }
@@ -124,8 +138,10 @@ class ResultsActivityContainer extends Component {
     )
   }
 
-  update() {
-    this.getActivityList()
+  reload() {
+    const { date, period, activity } = this.props
+
+    return this.getActivityList({ period, date, location: activity })
   }
 
   handlePrint(version) {
@@ -175,7 +191,7 @@ class ResultsActivityContainer extends Component {
           getActivityList={this.getActivityList}
           setColumnSort={this.setColumnSort}
           handleError={this.handleError}
-          reloadPage={this.update}
+          reloadPage={this.reload}
           setActivityOffenderAttendance={setOffenderPaymentDataDispatch}
           activityName={activityName}
           resetErrorDispatch={resetErrorDispatch}
@@ -185,6 +201,7 @@ class ResultsActivityContainer extends Component {
           redactedPrintState={redactedPrint}
           totalAttended={totalAttended}
           totalAbsent={totalAbsent}
+          onListCriteriaChange={this.onListCriteriaChange}
           {...this.props}
         />
       </Page>
@@ -239,9 +256,12 @@ ResultsActivityContainer.propTypes = {
   resetErrorDispatch: PropTypes.func.isRequired,
   setErrorDispatch: PropTypes.func.isRequired,
   activityDataDispatch: PropTypes.func.isRequired,
+  locationDispatch: PropTypes.func.isRequired,
+  searchActivity: PropTypes.func.isRequired,
 
   // special
   history: ReactRouterPropTypes.history.isRequired,
+  location: ReactRouterPropTypes.location.isRequired,
 }
 
 ResultsActivityContainer.defaultProps = {
@@ -276,6 +296,7 @@ const mapDispatchToProps = dispatch => ({
   activityDataDispatch: data => dispatch(setActivityData(data)),
   setOffenderPaymentDataDispatch: (offenderIndex, data) => dispatch(setActivityOffenderAttendance(offenderIndex, data)),
   getAbsentReasonsDispatch: () => dispatch(getAbsentReasons()),
+  searchActivity: locationId => dispatch(setSearchActivity(locationId)),
 })
 
 export default withRouter(

@@ -80,12 +80,12 @@ class SearchContainer extends Component {
   }
 
   handleSearch = history => {
-    const { activity, location } = this.props
+    const { activity, location, date, period } = this.props
 
     if (location && location !== '--') {
       history.push('/manage-prisoner-whereabouts/housing-block-results')
     } else if (activity) {
-      history.push('/manage-prisoner-whereabouts/activity-results')
+      history.push(`/manage-prisoner-whereabouts/activity-results?date=${date}&period=${period}&location=${activity}`)
     }
   }
 

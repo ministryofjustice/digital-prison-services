@@ -175,6 +175,7 @@ const props = {
   totalAttended: 0,
   totalAbsent: 0,
   redactedPrintState: false,
+  reloadPage: jest.fn(),
 }
 
 describe('Offender activity list results component', () => {
