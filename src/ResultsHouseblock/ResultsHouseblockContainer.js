@@ -45,13 +45,7 @@ class ResultsHouseblockContainer extends Component {
   }
 
   async componentDidMount() {
-    const {
-      resetErrorDispatch,
-      location,
-      orderDispatch,
-      sortOrderDispatch,
-      setSearchParametersDispatch,
-    } = this.props
+    const { resetErrorDispatch, location, orderDispatch, sortOrderDispatch, setSearchParametersDispatch } = this.props
     const query = queryString.parse(location.search)
     resetErrorDispatch()
 
