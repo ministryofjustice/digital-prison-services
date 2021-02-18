@@ -22,19 +22,11 @@ const getTasks = ({ activeCaseLoadId, locations, staffId, whereaboutsConfig }) =
   },
   {
     id: 'manage-prisoner-whereabouts',
-    heading: 'Manage prisoner whereabouts',
-    description: 'View unlock lists and manage attendance.',
+    heading: 'Prisoner whereabouts',
+    description: 'View unlock lists and COVID units, manage attendance and add bulk appointments.',
     href: '/manage-prisoner-whereabouts',
     roles: null,
     enabled: whereaboutsConfig?.enabled,
-  },
-  {
-    id: 'covid-units',
-    heading: 'View COVID units',
-    description: 'View who in your establishment is in each COVID unit.',
-    href: '/current-covid-units',
-    roles: ['PRISON'],
-    enabled: true,
   },
   {
     id: 'use-of-force',
@@ -78,14 +70,6 @@ const getTasks = ({ activeCaseLoadId, locations, staffId, whereaboutsConfig }) =
     href: '/establishment-roll',
     roles: null,
     enabled: Boolean(locations?.length > 0),
-  },
-  {
-    id: 'bulk-appointments',
-    heading: 'Add bulk appointments',
-    description: 'Upload a file to add appointments for multiple prisoners.',
-    href: '/bulk-appointments/need-to-upload-file',
-    roles: ['BULK_APPOINTMENTS'],
-    enabled: true,
   },
   {
     id: 'manage-key-workers',
