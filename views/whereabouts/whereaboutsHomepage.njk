@@ -1,0 +1,34 @@
+{% extends "../partials/layout.njk" %}
+{% from "../components/card/card.njk" import card %}
+{% from "govuk/components/back-link/macro.njk" import govukBackLink %}
+
+{% set title = 'Manage prisoner whereabouts' %}
+
+{% block main %}
+  <div class="govuk-width-container">
+    {{ govukBackLink({
+      text: "Back",
+      href: "/"
+    }) }}
+
+    <h1 class="govuk-heading-l govuk-!-margin-top-7">{{ title }}</h1>
+  </div>
+
+  <div class="homepage-content">
+    <div class="govuk-width-container">
+      <ul class="govuk-grid-row card-group">
+        {% for task in tasks %}
+          <li class="govuk-grid-column-one-third card-group__item">
+            {{ card({
+              "href": task.href,
+              "clickable": "true",
+              "heading": task.heading,
+              "description": task.description,
+              "id": task.id
+            }) }}
+          </li>
+        {% endfor %}
+      </ul>
+    </div>
+  </div>
+{% endblock %}

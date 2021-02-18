@@ -40,6 +40,7 @@ const systemOauthClient = require('./api/systemOauthClient')
 const { notifyClient } = require('./shared/notifyClient')
 
 const { raiseAnalyticsEvent } = require('./raiseAnalyticsEvent')
+const whereaboutsHomepageController = require('./controllers/whereabouts/whereaboutsHomepage')
 
 const router = express.Router()
 
@@ -64,6 +65,8 @@ const setup = ({
     }
     next()
   })
+
+  router.get('/manage-prisoner-whereabouts', whereaboutsHomepageController(oauthApi))
 
   router.get('/edit-alert', alertFactory(oauthApi, prisonApi, referenceCodesService(prisonApi)).displayEditAlertPage)
   router.post(
