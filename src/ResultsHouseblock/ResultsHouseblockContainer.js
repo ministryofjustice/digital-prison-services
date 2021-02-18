@@ -46,7 +46,6 @@ class ResultsHouseblockContainer extends Component {
 
   async componentDidMount() {
     const {
-      history,
       resetErrorDispatch,
       location,
       orderDispatch,
@@ -67,7 +66,7 @@ class ResultsHouseblockContainer extends Component {
         orderDispatch('lastName')
         sortOrderDispatch('ASC')
       } else {
-        history.push('/manage-prisoner-whereabouts/select-residential-location')
+        window.location = '/manage-prisoner-whereabouts/select-residential-location'
       }
     } catch (error) {
       this.handleError(error)
