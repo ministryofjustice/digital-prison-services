@@ -90,6 +90,32 @@ context('A user can see conflicts in cell', () => {
             addedByFirstName: 'John',
             addedByLastName: 'Smith',
           },
+          {
+            alertId: 4,
+            alertType: 'H',
+            alertTypeDescription: 'Self Harm',
+            alertCode: 'HA',
+            alertCodeDescription: 'ACCT open',
+            comment: 'Test comment',
+            dateCreated: '2021-02-18',
+            expired: false,
+            active: true,
+            addedByFirstName: 'John',
+            addedByLastName: 'Smith',
+          },
+          {
+            alertId: 5,
+            alertType: 'H',
+            alertTypeDescription: 'Self Harm',
+            alertCode: 'HA1',
+            alertCodeDescription: 'ACCT post closure',
+            comment: '',
+            dateCreated: '2021-02-19',
+            expired: false,
+            active: true,
+            addedByFirstName: 'John',
+            addedByLastName: 'Smith',
+          },
         ],
         profileInformation: [],
       },
@@ -251,13 +277,15 @@ context('A user can see conflicts in cell', () => {
     page.offenderAlertMessages().then($messages => {
       cy.get($messages)
         .its('length')
-        .should('eq', 4)
+        .should('eq', 6)
       expect($messages.get(0)).to.contain(
         'a Risk to LGB alert. You have selected a cell with a prisoner who has a sexual orientation of Homosexual.'
       )
       expect($messages.get(1)).to.contain('an E-List alert.')
       expect($messages.get(2)).to.contain('a Gang member alert.')
       expect($messages.get(3)).to.contain('an Isolated Prisoner alert.')
+      expect($messages.get(4)).to.contain('an ACCT open alert')
+      expect($messages.get(5)).to.contain('an ACCT post closure alert.')
     })
     page.categoryWarning().contains('who is a Cat A prisoner into a cell with another prisoner')
     page.occupantAlertsHeading().contains('Occupant User has:')
@@ -271,23 +299,26 @@ context('A user can see conflicts in cell', () => {
     page.alertsComments().then($messages => {
       cy.get($messages)
         .its('length')
-        .should('eq', 5)
+        .should('eq', 8)
       expect($messages.get(0)).to.contain('has a large poster on cell wall')
       expect($messages.get(1)).to.contain('has a large poster on cell wall')
-      expect($messages.get(2)).to.contain('test')
-      expect($messages.get(3)).to.contain('has a large poster on cell wall')
-      expect($messages.get(4)).to.contain('test')
+      expect($messages.get(2)).to.contain('No details entered')
+      expect($messages.get(3)).to.contain('test')
+      expect($messages.get(4)).to.contain('Test comment')
+      expect($messages.get(5)).to.contain('No details entered')
     })
     page.alertsDates().then($dates => {
       cy.get($dates)
         .its('length')
-        .should('eq', 6)
+        .should('eq', 8)
       expect($dates.get(0)).to.contain('Date added: 20 August 2019')
       expect($dates.get(1)).to.contain('Date added: 20 August 2019')
       expect($dates.get(2)).to.contain('Date added: 20 August 2019')
       expect($dates.get(3)).to.contain('Date added: 20 August 2020')
-      expect($dates.get(4)).to.contain('Date added: 20 August 2019')
-      expect($dates.get(5)).to.contain('Date added: 20 August 2020')
+      expect($dates.get(4)).to.contain('Date added: 18 February 2021')
+      expect($dates.get(5)).to.contain('Date added: 19 February 2021')
+      expect($dates.get(6)).to.contain('Date added: 20 August 2019')
+      expect($dates.get(7)).to.contain('Date added: 20 August 2020')
     })
   })
 

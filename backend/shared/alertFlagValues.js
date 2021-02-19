@@ -117,6 +117,8 @@ const cellMoveAlertCodes = [
   'URS',
   'RKS',
   'VIP',
+  'HA',
+  'HA1',
 ]
 
 const profileAlertCodes = [

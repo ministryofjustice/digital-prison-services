@@ -43,7 +43,12 @@ describe('Select a cell', () => {
       offenderNo: someOffenderNumber,
       bookingId: someBookingId,
       agencyId: someAgency,
-      alerts: [{ expired: false, alertCode: 'PEEP' }, { expired: true, alertCode: 'DCC' }],
+      alerts: [
+        { expired: false, alertCode: 'PEEP' },
+        { expired: true, alertCode: 'DCC' },
+        { expired: false, alertCode: 'HA' },
+        { expired: false, alertCode: 'HA1' },
+      ],
     })
 
     prisonApi.getCsraAssessments = jest.fn()
@@ -122,6 +127,12 @@ describe('Select a cell', () => {
         'cellMove/selectCell.njk',
         expect.objectContaining({
           alerts: [
+            { alertCodes: ['HA'], classes: 'alert-status alert-status--acct', label: 'ACCT open' },
+            {
+              alertCodes: ['HA1'],
+              classes: 'alert-status alert-status--acct-post-closure',
+              label: 'ACCT post closure',
+            },
             {
               alertCodes: ['PEEP'],
               classes: 'alert-status alert-status--disability',
@@ -174,7 +185,12 @@ describe('Select a cell', () => {
           offenderNo: 'A12345',
           prisonerDetails: {
             agencyId: 'LEI',
-            alerts: [{ alertCode: 'PEEP', expired: false }, { alertCode: 'DCC', expired: true }],
+            alerts: [
+              { alertCode: 'PEEP', expired: false },
+              { alertCode: 'DCC', expired: true },
+              { alertCode: 'HA', expired: false },
+              { alertCode: 'HA1', expired: false },
+            ],
             bookingId: -10,
             firstName: 'John',
             lastName: 'Doe',

@@ -128,29 +128,9 @@ describe('Homepage', () => {
           tasks: [
             {
               id: 'manage-prisoner-whereabouts',
-              heading: 'Manage prisoner whereabouts',
-              description: 'View unlock lists and manage attendance.',
+              heading: 'Prisoner whereabouts',
+              description: 'View unlock lists and COVID units, manage attendance and add bulk appointments.',
               href: '/manage-prisoner-whereabouts',
-            },
-          ],
-        })
-      )
-    })
-
-    it('should render home page with the view covid units task', async () => {
-      oauthApi.userRoles.mockResolvedValue([{ roleCode: 'PRISON' }])
-
-      await controller(req, res)
-
-      expect(res.render).toHaveBeenCalledWith(
-        'homepage/homepage.njk',
-        expect.objectContaining({
-          tasks: [
-            {
-              id: 'covid-units',
-              heading: 'View COVID units',
-              description: 'View who in your establishment is in each COVID unit.',
-              href: '/current-covid-units',
             },
           ],
         })
@@ -257,26 +237,6 @@ describe('Homepage', () => {
               heading: 'Establishment roll check',
               description: 'View the roll broken down by residential unit and see who is arriving and leaving.',
               href: '/establishment-roll',
-            },
-          ],
-        })
-      )
-    })
-
-    it('should render home page with the bulk appointments task', async () => {
-      oauthApi.userRoles.mockResolvedValue([{ roleCode: 'BULK_APPOINTMENTS' }])
-
-      await controller(req, res)
-
-      expect(res.render).toHaveBeenCalledWith(
-        'homepage/homepage.njk',
-        expect.objectContaining({
-          tasks: [
-            {
-              id: 'bulk-appointments',
-              heading: 'Add bulk appointments',
-              description: 'Upload a file to add appointments for multiple prisoners.',
-              href: '/bulk-appointments/need-to-upload-file',
             },
           ],
         })

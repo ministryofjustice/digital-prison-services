@@ -12,9 +12,7 @@
 {% set title = "You must consider the risks of the prisoners involved" %}
 
 {% macro alertDetails(alert) %}
-  {% if alert.comment %}
-    <p class="govuk-body" data-test="alert-comment">{{ alert.comment | safe }}</p>
-  {% endif %}
+  <p class="govuk-body" data-test="alert-comment">{{ alert.comment or "No details entered" | safe }}</p>
   <p class="govuk-body" data-test="alert-date">{{ alert.date}}</p>
 {% endmacro %}
 
