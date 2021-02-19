@@ -21,9 +21,11 @@
     position: relative;
     margin: 0;
     flex: 0 0 26px;
+    left: -11px;
+    top: -23px;
 
     &__slash {
-      top: 10px;
+      top: 0;
       display: block;
       position: absolute;
       height: 3px;
