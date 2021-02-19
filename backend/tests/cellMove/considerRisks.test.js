@@ -139,6 +139,32 @@ describe('move validation', () => {
         addedByFirstName: 'John',
         addedByLastName: 'Smith',
       },
+      {
+        alertId: 4,
+        alertType: 'H',
+        alertTypeDescription: 'Self Harm',
+        alertCode: 'HA',
+        alertCodeDescription: 'ACCT open',
+        comment: 'Test comment',
+        dateCreated: '2021-02-18',
+        expired: false,
+        active: true,
+        addedByFirstName: 'John',
+        addedByLastName: 'Smith',
+      },
+      {
+        alertId: 5,
+        alertType: 'H',
+        alertTypeDescription: 'Self Harm',
+        alertCode: 'HA1',
+        alertCodeDescription: 'ACCT post closure',
+        comment: '',
+        dateCreated: '2021-02-19',
+        expired: false,
+        active: true,
+        addedByFirstName: 'John',
+        addedByLastName: 'Smith',
+      },
     ],
     profileInformation: [],
   }
@@ -417,6 +443,16 @@ describe('move validation', () => {
           date: 'Date added: 20 August 2020',
           title: 'an Isolated Prisoner alert.',
         },
+        {
+          comment: 'Test comment',
+          date: 'Date added: 18 February 2021',
+          title: 'an ACCT open alert.',
+        },
+        {
+          comment: '',
+          date: 'Date added: 19 February 2021',
+          title: 'an ACCT post closure alert.',
+        },
       ],
       dpsUrl: 'http://localhost:3000/',
       errors: undefined,
@@ -613,7 +649,7 @@ describe('move validation', () => {
 
     expect(raiseAnalyticsEvent).toHaveBeenCalledWith(
       'Cancelled out of cell move',
-      `Alerts codes for the offender moving in [RLG,XEL,XGANG,VIP], Alerts for associated occupants: [XGANG,VIP]`,
+      `Alerts codes for the offender moving in [RLG,XEL,XGANG,VIP,HA,HA1], Alerts for associated occupants: [XGANG,VIP]`,
       'Cell move'
     )
 
