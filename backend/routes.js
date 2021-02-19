@@ -36,6 +36,11 @@ const deleteCaseNoteRouter = require('./routes/caseNoteDeletionRouter')
 
 const selectActivityLocation = require('./controllers/selectActivityLocation')
 
+const notificationCookie = require('./services/notificationCookie')
+const notificationDsmiss = require('./controllers/notificationDismiss')
+const contentfulClient = require('./contentfulClient')
+const notificationBar = require('./middleware/notificationHandler')
+
 const systemOauthClient = require('./api/systemOauthClient')
 const { notifyClient } = require('./shared/notifyClient')
 
@@ -64,6 +69,9 @@ const setup = ({
     }
     next()
   })
+
+  router.post('/notification/dismiss', notificationDsmiss({ notificationCookie }))
+  router.use(notificationBar({ contentfulClient, logError, notificationCookie }))
 
   router.get('/edit-alert', alertFactory(oauthApi, prisonApi, referenceCodesService(prisonApi)).displayEditAlertPage)
   router.post(

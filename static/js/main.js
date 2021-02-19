@@ -22,4 +22,29 @@ $(document).ready(function() {
     e.preventDefault()
     $('.js-prisoner-search-alerts input[type=checkbox]').prop('checked', false)
   })
+
+  $('#notification_dismiss_box').click(function() {
+    let $notification = $('#notification-bar')
+    let id = $('#notification_id').val()
+    let revision = $('#notification_revision').val()
+    let csrf = $('#_csrf').val()
+
+    $.ajax({
+      url: '/notification/dismiss',
+      type: 'POST',
+      headers: {
+        'X-CSRF-Token': csrf,
+      },
+      data: {
+        id,
+        revision,
+      },
+    })
+      .done(function() {
+        $notification.hide()
+      })
+      .fail(function() {
+        window.location = '/'
+      })
+  })
 })
