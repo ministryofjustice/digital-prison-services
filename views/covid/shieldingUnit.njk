@@ -3,18 +3,22 @@
 {% from "govuk/components/table/macro.njk" import govukTable %}
 
 {% block beforeContent %}
-    {{ govukBreadcrumbs({
-        items: [
-            {
-                text: "Digital Prison Services",
-                href: "/"
-            },
-            {
-                text: "Manage prisoner whereabouts",
-                href: "/manage-prisoner-whereabouts"
-            }
-        ]
-    }) }}
+  {{ govukBreadcrumbs({
+    items: [
+      {
+        text: "Digital Prison Services",
+        href: "/"
+      },
+      {
+        text: "Manage prisoner whereabouts",
+        href: "/manage-prisoner-whereabouts"
+      },
+      {
+        text: "Current breakdown of COVID units",
+        href: "/current-covid-units"
+      }
+    ]
+  }) }}
 {% endblock %}
 
   {% set rows = [] %}

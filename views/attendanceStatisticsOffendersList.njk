@@ -13,11 +13,15 @@
       {
         text: "Manage prisoner whereabouts",
         href: "/manage-prisoner-whereabouts"
+      },
+      {
+        text: "Attendance reason statistics",
+        href: "/manage-prisoner-whereabouts/attendance-reason-statistic"
       }
-    ]
+    ],
+    classes: "govuk-!-display-none-print"
   }) }}
 {% endblock %}
-{% block content %}
 
 <h1 class="govuk-heading-xl govuk-!-margin-bottom-1">{{title}}</h1>
 <p class="govuk-body-l govuk-!-font-size-24">{{displayDate}} - {{displayPeriod}}</p>
