@@ -2,19 +2,19 @@
 {% from "govuk/components/button/macro.njk" import govukButton %}
 {% from "govuk/components/inset-text/macro.njk" import govukInsetText %}
 
- {% block beforeContent %}
+{% block beforeContent %}
   {{ govukBreadcrumbs({
-  items: [
-    {
-      text: "Home",
-      href: notmUrl
-    },
-    {
-      text: "Add Bulk Appointments"
-    }
-  ]
-})
-}}
+    items: [
+      {
+        text: "Digital Prison Services",
+        href: "/"
+      },
+      {
+        text: "Manage prisoner whereabouts",
+        href: "/manage-prisoner-whereabouts"
+      }
+    ]
+  }) }}
 {% endblock %}
 
 {% block content %}

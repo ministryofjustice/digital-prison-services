@@ -4,12 +4,21 @@
 {% extends "./partials/layout.njk" %}
 
 {% block beforeContent %}
-  {{ govukBackLink({
-      text: "Back",
-      href: dashboardUrl,
-      classes: "govuk-!-display-none-print"
+  {{ govukBreadcrumbs({
+    items: [
+      {
+        text: "Digital Prison Services",
+        href: "/"
+      },
+      {
+        text: "Manage prisoner whereabouts",
+        href: "/manage-prisoner-whereabouts"
+      }
+    ],
+    classes: "govuk-!-display-none-print"
   }) }}
 {% endblock %}
+
 {% block content %}
 
   <h1 class="govuk-heading-xl govuk-!-margin-bottom-1">Suspended</h1>
