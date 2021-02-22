@@ -8,6 +8,7 @@ const express = require('express')
 require('express-async-errors')
 
 const csrf = require('csurf')
+const cookieParser = require('cookie-parser')
 
 const app = express()
 
@@ -43,6 +44,7 @@ app.set('view engine', 'njk')
 nunjucksSetup(app)
 phaseNameSetup(app, config)
 
+app.use(cookieParser())
 app.use(setupBodyParsers())
 app.use(setupHealthChecks())
 app.use(setupWebSecurity())

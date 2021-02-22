@@ -1,0 +1,17 @@
+{% if notification != null %}
+    <div class="notification-bar" id="notification-bar">
+        <div class="notification-bar__content">
+            {{ notification.content | safe }}
+        </div>
+
+        <input type="hidden" id="notification_id" name="notification_id" value="{{ notification.id }}">
+        <input type="hidden" id="notification_revision" name="notification_revision"
+               value="{{ notification.revision }}">
+        <input type="hidden" id="_csrf" name="_csrf" value="{{ csrfToken }}" />
+
+        <div class="notification-bar__dismiss-box" id="notification_dismiss_box">
+            <span class="notification-bar__dismiss-box__slash notification-bar__dismiss-box__slash__left"></span>
+            <span class="notification-bar__dismiss-box__slash notification-bar__dismiss-box__slash__right"></span>
+        </div>
+    </div>
+{% endif %}

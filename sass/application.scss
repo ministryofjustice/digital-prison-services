@@ -29,6 +29,7 @@ $govuk-page-width: 1170px;
 @import 'views/components/timePicker/timePicker';
 @import 'views/components/movementSlip/movementSlip';
 @import 'views/components/scheduledEvents/scheduledEvents';
+@import 'views/components/notificationBar/notificationBar.scss';
 
 @import 'govuk-overrides';
 @import 'moj-overrides';

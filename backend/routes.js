@@ -36,6 +36,12 @@ const deleteCaseNoteRouter = require('./routes/caseNoteDeletionRouter')
 
 const selectActivityLocation = require('./controllers/selectActivityLocation')
 
+const contentfulServiceFactory = require('./services/contentfulService')
+const notificationCookie = require('./services/notificationCookie')
+const notificationDismiss = require('./controllers/notificationDismiss')
+const contentfulClient = require('./contentfulClient')
+const notificationBar = require('./middleware/notificationHandler')
+
 const systemOauthClient = require('./api/systemOauthClient')
 const { notifyClient } = require('./shared/notifyClient')
 
@@ -67,6 +73,15 @@ const setup = ({
   })
 
   router.get('/manage-prisoner-whereabouts', whereaboutsHomepageController(oauthApi))
+
+  router.post('/notification/dismiss', notificationDismiss({ notificationCookie }))
+  router.use(
+    notificationBar({
+      contentfulService: contentfulServiceFactory({ notificationCookie, contentfulClient }),
+      logError,
+      notificationCookie,
+    })
+  )
 
   router.get('/edit-alert', alertFactory(oauthApi, prisonApi, referenceCodesService(prisonApi)).displayEditAlertPage)
   router.post(
@@ -208,7 +223,10 @@ const setup = ({
     deleteCaseNoteRouter({ prisonApi, caseNotesApi, oauthApi, logError })
   )
 
-  router.get(['/content', '/content/:path'], contentController({ logError }))
+  router.get(
+    ['/content', '/content/:path'],
+    contentController({ contentfulService: contentfulServiceFactory({ contentfulClient }) })
+  )
 
   router.use('/global-search', globalSearchRouter({ offenderSearchApi, oauthApi, logError }))
 
