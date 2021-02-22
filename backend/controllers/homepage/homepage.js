@@ -22,7 +22,7 @@ const getTasks = ({ activeCaseLoadId, locations, staffId, whereaboutsConfig }) =
   },
   {
     id: 'manage-prisoner-whereabouts',
-    heading: 'Prisoner whereabouts',
+    heading: 'Manage prisoner whereabouts',
     description: 'View unlock lists and COVID units, manage attendance and add bulk appointments.',
     href: '/manage-prisoner-whereabouts',
     roles: null,

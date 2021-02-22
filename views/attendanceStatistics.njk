@@ -12,23 +12,20 @@
    {%  set toDate = null %}
 {%  endif %}
 
+
 {% block beforeContent %}
-  {{ govukBreadcrumbs({
-  items: [
-    {
-      text: "Home",
-      href: notmUrl
-    },
-    {
-      text: "Manage prisoner whereabouts",
-      href: "/manage-prisoner-whereabouts"
-    },
-    {
-      text: "Attendance reason statistics"
-    }
-  ]
-})
-}}
+    {{ govukBreadcrumbs({
+        items: [
+            {
+                text: "Digital Prison Services",
+                href: "/"
+            },
+            {
+                text: "Manage prisoner whereabouts",
+                href: "/manage-prisoner-whereabouts"
+            }
+        ]
+    }) }}
 {% endblock %}
 
 {% block content %}

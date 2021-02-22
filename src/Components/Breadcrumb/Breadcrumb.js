@@ -14,7 +14,7 @@ export const Breadcrumb = ({ breadcrumbs, homeLink }) => {
       <BreadcrumbList>
         <BreadcrumbListItem>
           <a data-qa="breadcrumb-home-page-link" href={homeLink}>
-            Home
+            Digital Prison Services
           </a>
         </BreadcrumbListItem>
         {breadcrumbs.map(({ match, breadcrumb }, i, arr) => {

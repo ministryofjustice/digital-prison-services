@@ -4,26 +4,24 @@
 
 {% block beforeContent %}
   {{ govukBreadcrumbs({
-  items: [
-    {
-      text: "Home",
-      href: notmUrl
-    },
-    {
-      text: "Manage prisoner whereabouts",
-      href: "/manage-prisoner-whereabouts"
-    },
-    {
-      text: "Attendance reason statistics",
-      href: dashboardUrl
-    },
-    {
-      text: title
-    }
-  ]
-})
-}}
+    items: [
+      {
+        text: "Digital Prison Services",
+        href: "/"
+      },
+      {
+        text: "Manage prisoner whereabouts",
+        href: "/manage-prisoner-whereabouts"
+      },
+      {
+        text: "Attendance reason statistics",
+        href: "/manage-prisoner-whereabouts/attendance-reason-statistics"
+      }
+    ],
+    classes: "govuk-!-display-none-print"
+  }) }}
 {% endblock %}
+
 {% block content %}
 
 <h1 class="govuk-heading-xl govuk-!-margin-bottom-1">{{title}}</h1>
