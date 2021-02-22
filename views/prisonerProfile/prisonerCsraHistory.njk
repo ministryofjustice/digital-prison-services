@@ -6,22 +6,22 @@
 {% set title = 'CSRA History' %}
 
 {% block beforeContent %}
-    {{ govukBreadcrumbs({
-        items: [
-            {
-                text: 'Home',
-                href: '/'
-            },
-            {
-                text: breadcrumbPrisonerName,
-                href: profileUrl
-            },
-            {
-                text: title
-            }
-        ],
-        classes: 'govuk-!-display-none-print'
-    }) }}
+  {{ govukBreadcrumbs({
+    items: [
+      {
+        text: 'Home',
+        href: '/'
+      },
+      {
+        text: breadcrumbPrisonerName,
+        href: profileUrl
+      },
+      {
+        text: title
+      }
+    ],
+    classes: 'govuk-!-display-none-print'
+  }) }}
 {% endblock %}
 
 {% block content %}
@@ -76,7 +76,7 @@
       attributes: { "data-test": "csra-table" }
     }) }}
   {% else %}
-    <p class="govuk-body" data-qa="no-results-message">There are no CSRAs to display.</p>
+    <p class="govuk-body" data-test="no-results-message">There are no CSRAs to display.</p>
   {% endif %}
 
 {% endblock %}
