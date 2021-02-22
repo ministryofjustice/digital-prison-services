@@ -2,7 +2,6 @@
 {% from "govuk/components/select/macro.njk" import govukSelect %}
 {% extends "./partials/layout.njk" %}
 
-
 {% block beforeContent %}
   {{ govukBreadcrumbs({
     items: [
@@ -16,12 +15,14 @@
       },
       {
         text: "Attendance reason statistics",
-        href: "/manage-prisoner-whereabouts/attendance-reason-statistic"
+        href: "/manage-prisoner-whereabouts/attendance-reason-statistics"
       }
     ],
     classes: "govuk-!-display-none-print"
   }) }}
 {% endblock %}
+
+{% block content %}
 
 <h1 class="govuk-heading-xl govuk-!-margin-bottom-1">{{title}}</h1>
 <p class="govuk-body-l govuk-!-font-size-24">{{displayDate}} - {{displayPeriod}}</p>
