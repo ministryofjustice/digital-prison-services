@@ -1,6 +1,5 @@
 {% extends "./partials/layout.njk" %}
 {% from "govuk/components/error-summary/macro.njk" import govukErrorSummary %}
-{% from "govuk/components/back-link/macro.njk" import govukBackLink %}
 {% from "govuk/components/select/macro.njk" import govukSelect %}
 {% from "govuk/components/button/macro.njk" import govukButton %}
 {% from "components/datePicker/datePicker.njk" import datePicker %}
@@ -8,9 +7,17 @@
 {% set title = "View by activity or appointment location" %}
 
 {% block beforeContent %}
-    {{ govukBackLink({
-        text: "Back",
-        href: "/manage-prisoner-whereabouts"
+    {{ govukBreadcrumbs({
+        items: [
+            {
+                text: "Digital Prison Services",
+                href: "/"
+            },
+            {
+                text: "Manage prisoner whereabouts",
+                href: "/manage-prisoner-whereabouts"
+            }
+        ]
     }) }}
 {% endblock %}
 

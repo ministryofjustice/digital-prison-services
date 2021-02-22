@@ -92,7 +92,7 @@ describe('<Breadcrumb />', () => {
         .first()
         .find('a')
         .text()
-    ).toEqual('Home')
+    ).toEqual('Digital Prison Services')
   })
 
   it('should link to the homeLink prop', () => {

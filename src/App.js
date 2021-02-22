@@ -325,6 +325,9 @@ class App extends React.Component {
                   <Notifications />
                   <Route
                     render={({ location }) => {
+                      if (location.pathname === '/manage-prisoner-whereabouts') {
+                        window.location = '/manage-prisoner-whereabouts'
+                      }
                       if (config && config.googleAnalyticsId) {
                         ReactGA.pageview(location.pathname)
                       }
