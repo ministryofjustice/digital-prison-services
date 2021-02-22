@@ -1,4 +1,4 @@
-const { putLastNameFirst, formatName, formatTimestampToDate } = require('../../utils')
+const { putLastNameFirst, formatName, formatTimestampToDate, sortByDateTime } = require('../../utils')
 
 const csraOptions = [
   { value: 'STANDARD', text: 'Standard' },
@@ -24,14 +24,16 @@ module.exports = ({ prisonApi }) => async (req, res) => {
       agencyIds.filter(agencyId => agencyId).map(agencyId => prisonApi.getAgencyDetails(res.locals, agencyId))
     )
 
-    const relavantResults = csraAssessments.filter(assessment => {
-      const { assessmentAgencyId, classificationCode } = assessment
-      if (csra && location) return classificationCode === csra && assessmentAgencyId === location
-      if (csra) return classificationCode === csra
-      if (location) return assessmentAgencyId === location
+    const sortedRelavantResults = csraAssessments
+      .filter(assessment => {
+        const { assessmentAgencyId, classificationCode } = assessment
+        if (csra && location) return classificationCode === csra && assessmentAgencyId === location
+        if (csra) return classificationCode === csra
+        if (location) return assessmentAgencyId === location
 
-      return true
-    })
+        return true
+      })
+      .sort((left, right) => sortByDateTime(right.assessmentDate, left.assessmentDate))
 
     return res.render('prisonerProfile/prisonerCsraHistory.njk', {
       breadcrumbPrisonerName: putLastNameFirst(firstName, lastName),
@@ -39,7 +41,8 @@ module.exports = ({ prisonApi }) => async (req, res) => {
       formValues: req.query,
       locationOptions: agenciesWithDescriptions.map(agency => ({ text: agency.description, value: agency.agencyId })),
       prisonerName: formatName(firstName, lastName),
-      rows: relavantResults.map(assessment => [
+      profileUrl: `/prisoner/${offenderNo}`,
+      rows: sortedRelavantResults.map(assessment => [
         { text: assessment.assessmentDate && formatTimestampToDate(assessment.assessmentDate) },
         { text: csraOptions.find(csraCode => csraCode.value === assessment.classificationCode)?.text },
         {

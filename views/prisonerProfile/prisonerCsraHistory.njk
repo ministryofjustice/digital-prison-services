@@ -59,10 +59,13 @@
         text: "Apply",
         type: "submit"
       }) }}
+
+      <a href="./csra-history" class="govuk-body govuk-link govuk-link--no-visited-state govuk-!-padding-bottom-1">Clear</a>
     </div>
   </form>
 
-  {{ govukTable({
+  {% if rows.length %}
+    {{ govukTable({
       head: [
         { text: "Date" },
         { text: "CSRA" },
@@ -72,5 +75,8 @@
       rows: rows,
       attributes: { "data-test": "csra-table" }
     }) }}
+  {% else %}
+    <p class="govuk-body" data-qa="no-results-message">There are no CSRAs to display.</p>
+  {% endif %}
 
 {% endblock %}
