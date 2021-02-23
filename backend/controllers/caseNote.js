@@ -178,7 +178,7 @@ const caseNoteFactory = (prisonApi, caseNotesApi) => {
       // has been handled by the above validations
     }
 
-    if (errors.length == 0) {
+    if (errors.length === 0) {
       try {
         await caseNotesApi.addCaseNote(res.locals, offenderNo, {
           type,

@@ -203,10 +203,10 @@ describe('case note management', () => {
         }
         const error400 = {
           status: 400,
-          body : {
+          body: {
             userMessage: 'createCaseNote.caseNote.text: Value is too long: max length is 4000',
             developerMessage: 'createCaseNote.caseNote.text: Value too long: max length is 4000',
-          }
+          },
         }
         caseNotesApi.addCaseNote = jest.fn().mockRejectedValue(makeError('response', error400))
 
@@ -216,7 +216,7 @@ describe('case note management', () => {
           'caseNotes/addCaseNoteForm.njk',
           expect.objectContaining({
             errors: [
-              { href: '#text', text: error400.body.userMessage },
+              { href: '#text', text: error400.body.userMessage }
             ],
           })
         )
