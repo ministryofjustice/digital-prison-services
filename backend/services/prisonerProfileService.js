@@ -171,9 +171,7 @@ module.exports = ({
       keyWorkerName: keyworkerDetails && formatName(keyworkerDetails.firstName, keyworkerDetails.lastName),
       inactiveAlertCount,
       lastReviewDate:
-        mostRecentAssessment &&
-        mostRecentAssessment.assessmentDate &&
-        moment(mostRecentAssessment.assessmentDate).format('D MMMM YYYY'),
+        mostRecentAssessment?.assessmentDate && moment(mostRecentAssessment.assessmentDate).format('DD/MM/YYYY'),
       location: assignedLivingUnit.description,
       notmEndpointUrl,
       offenderName: putLastNameFirst(prisonerDetails.firstName, prisonerDetails.lastName),
