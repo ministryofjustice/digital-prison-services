@@ -509,6 +509,7 @@ describe('Attendance reason statistics', () => {
           { text: 'Activity (Z-A)', value: '3_descending' },
         ],
         userRoles: undefined,
+        totalOffenders: 1,
       })
     })
 
@@ -591,6 +592,7 @@ describe('Attendance reason statistics', () => {
           displayName: 'User Name',
         },
         userRoles: undefined,
+        totalOffenders: 1,
       })
     })
 

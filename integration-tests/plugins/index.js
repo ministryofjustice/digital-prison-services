@@ -339,6 +339,7 @@ module.exports = on => {
     stubMainOffence: offence => prisonApi.stubMainOffence(offence),
     stubCsraAssessments: ({ offenderNumbers, assessments }) =>
       prisonApi.stubCsraAssessments(offenderNumbers, assessments),
+    stubCsraAssessmentsForPrisoner: assessments => prisonApi.stubCsraAssessmentsForPrisoner(assessments),
     stubNoExistingOffenderRecord: ({ offenderNo }) => dataComplianceApi.stubNoExistingOffenderRecord(offenderNo),
     stubRetentionRecord: ({ offenderNo, record }) => dataComplianceApi.stubRetentionRecord(offenderNo, record),
     stubGetOffenderRetentionReasons: dataComplianceApi.stubGetOffenderRetentionReasons,
@@ -417,5 +418,7 @@ module.exports = on => {
     stubStaffRoles: response => prisonApi.stubStaffRoles(response),
     stubLocationConfig: ({ agencyId, response }) => whereabouts.stubLocationConfig({ agencyId, response }),
     stubGetDetailsFailure: ({ status }) => prisonApi.stubGetDetailsFailure(status),
+    stubGetPrisoners: response => Promise.all([prisonApi.stubGetPrisoners(response)]),
+    stubGetUserDetailsList: response => Promise.all([prisonApi.stubGetUserDetailsList(response)]),
   })
 }

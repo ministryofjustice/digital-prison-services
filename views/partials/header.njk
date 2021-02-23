@@ -1,5 +1,6 @@
 {%- from "govuk/components/tag/macro.njk" import govukTag -%}
 
+
 <header class="dps-header" role="banner">
   <div class="dps-header__container">
     <div class="dps-header__title">
@@ -31,6 +32,8 @@
     </nav>
   </div>
 </header>
+
+{% include "../components/notificationBar/notificationBar.njk" %}
 
 <div class="location-bar">
   <span class="location-bar__location" data-test="active-location">

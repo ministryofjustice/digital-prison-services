@@ -1,0 +1,98 @@
+{% extends "./partials/layout.njk" %}
+{% from "govuk/components/error-summary/macro.njk" import govukErrorSummary %}
+{% from "govuk/components/select/macro.njk" import govukSelect %}
+{% from "govuk/components/button/macro.njk" import govukButton %}
+{% from "components/datePicker/datePicker.njk" import datePicker %}
+
+{% set title = "View by activity or appointment location" %}
+
+{% block beforeContent %}
+    {{ govukBreadcrumbs({
+        items: [
+            {
+                text: "Digital Prison Services",
+                href: "/"
+            },
+            {
+                text: "Manage prisoner whereabouts",
+                href: "/manage-prisoner-whereabouts"
+            }
+        ]
+    }) }}
+{% endblock %}
+
+{% block content %}
+    <h1 class="govuk-heading-l">{{ title }}</h1>
+
+    {% if errors.length > 0 %}
+        {{ govukErrorSummary({
+            titleText: "There is a problem",
+            errorList: errors,
+            attributes: { 'data-qa-errors': true }
+        }) }}
+    {% endif %}
+
+    <form action="/manage-prisoner-whereabouts/select-location" method="POST">
+        <input type="hidden" name="_csrf" value="{{ csrfToken }}" />
+
+        <div class="govuk-grid-row">
+            <div class="govuk-grid-column-one-third">
+                <div class="govuk-grid-row">
+                    <div class="govuk-grid-column-one-half">
+
+                        {{ datePicker({
+                            id: 'date',
+                            label: 'Date',
+                            name: 'date',
+                            date: date
+                        }) }}
+                    </div>
+
+                    <div class="govuk-grid-column-one-half">
+
+                        {{ govukSelect({
+                            name: 'period',
+                            id: 'period',
+                            label: {
+                                text: "Period"
+                            },
+                            items: [
+                                {
+                                    text: 'Morning (AM)',
+                                    value: 'AM'
+                                },
+                                {
+                                    text: 'Afternoon (PM)',
+                                    value: 'PM'
+                                },
+                                {
+                                    text: 'Evening (ED)',
+                                    value: 'ED'
+                                }
+                            ] | addDefaultSelectedVale('Select', true) | setSelected(period)
+                        }) }}
+                    </div>
+                </div>
+
+                {{ govukSelect({
+                    name: 'currentLocation',
+                    id: 'current-location',
+                    label: {
+                        text: "Select a location"
+                    },
+                    items: locationDropdownValues | addDefaultSelectedVale('--Select--', true),
+                    errorMessage: errors | findError('current-location')
+                }) }}
+
+                {{ govukButton({
+                    text: "Continue",
+                    type: "submit"
+                }) }}
+            </div>
+        </div>
+    </form>
+{% endblock %}
+
+{% block pageScripts %}
+    <script src="/static/js/select-activity-location.js"></script>
+{% endblock %}

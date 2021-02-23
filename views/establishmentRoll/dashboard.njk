@@ -83,7 +83,13 @@
 
     <div class="establishment-roll__label-and-value establishment-roll__label-and-value--with-space">
       <h3 class="govuk-heading-s">No cell allocated:</h3>
-      <p class="govuk-body" data-test="no-cell-allocated">{{todayStats.noCellAllocated}}</p>
+      <p class="govuk-body" data-test="no-cell-allocated">
+        {% if todayStats.noCellAllocated > 0 %}
+          <a class="govuk-link" href="/establishment-roll/no-cell-allocated">{{ todayStats.noCellAllocated }}</a>
+        {% else %}
+          {{ todayStats.noCellAllocated }}
+        {% endif %}
+      </p>
     </div>
   </div>
 

@@ -17,7 +17,7 @@
 
     {% if pendingRows.length %}
       <div class="govuk-grid-column-one-quarter">
-        <h2 class="govuk-heading-m govuk-!-margin-bottom-1">Pending balance</h2>
+        <h2 class="govuk-heading-m govuk-!-margin-bottom-1">Pending</h2>
         <p class="govuk-body-l" data-test="{{ testIdPrefix + 'pending-balance' }}">{{ pendingBalance }}</p>
       </div>
     {% endif %}
@@ -27,14 +27,13 @@
 
   {% if pendingRows.length %}
     <h2 class="govuk-heading-m">Pending</h2>
-    <p class="govuk-body govuk-!-margin-bottom-1">This is all received money which has not yet been cleared into the account.</p>
+    <p class="govuk-body govuk-!-margin-bottom-1">This is all received money which has not yet been cleared from the account.</p>
     <p class="govuk-body">This is not part of the current balance.</p>
 
     {{ govukTable({
       head: [
         { text: "Date" },
-        { text: "Money in" },
-        { text: "Money out" },
+        { text: "Amount" },
         { text: "Payment description" },
         { text: "Location" }
       ],
@@ -48,16 +47,17 @@
 
   {% include "./partials/prisonerFinanceFilter.njk" %}
 
-  {% if nonPendingRows.length %}
+  {% if privateTransactionsRows.length %}
     {{ govukTable({
       head: [
         { text: "Date" },
         { text: "Money in" },
         { text: "Money out" },
+        { text: "Balance" },
         { text: "Payment description" },
         { text: "Location" }
       ],
-      rows: nonPendingRows,
+      rows: privateTransactionsRows,
       attributes: { "data-test": testIdPrefix + "non-pending-table" }
     }) }}
   {% else %}

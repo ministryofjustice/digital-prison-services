@@ -28,6 +28,18 @@ describe('Prisoner cell history', () => {
     prisonApi.getOffenderCellHistory = jest.fn().mockResolvedValue({
       content: [
         {
+          agencyId: 'MDI',
+          assignmentDate: '2020-01-01',
+          assignmentDateTime: '2020-01-01T11:48:33',
+          assignmentEndDate: '2020-02-01',
+          assignmentEndDateTime: '2020-02-01T11:48:33',
+          assignmentReason: 'ADM',
+          bookingId,
+          description: 'MDI-1-01',
+          livingUnitId: 1,
+          movementMadeBy: 'STAFF_1',
+        },
+        {
           agencyId: 'RNI',
           assignmentDate: '2020-02-01',
           assignmentDateTime: '2020-02-01T12:48:33.375Z',
@@ -110,7 +122,7 @@ describe('Prisoner cell history', () => {
       expect(prisonApi.getDetails).toHaveBeenCalledWith(res.locals, offenderNo)
       expect(prisonApi.getOffenderCellHistory).toHaveBeenCalledWith(res.locals, bookingId, { page: 0, size: 10000 })
       expect(prisonApi.getAgencyDetails.mock.calls.length).toBe(2)
-      expect(prisonApi.getStaffDetails.mock.calls.length).toBe(4)
+      expect(prisonApi.getStaffDetails.mock.calls.length).toBe(5)
       expect(prisonApi.getStaffDetails).toHaveBeenCalledWith(res.locals, 'STAFF_1')
       expect(prisonApi.getStaffDetails).toHaveBeenCalledWith(res.locals, 'STAFF_2')
       expect(prisonApi.getStaffDetails).toHaveBeenCalledWith(res.locals, 'STAFF_3')
@@ -133,6 +145,7 @@ describe('Prisoner cell history', () => {
                 assignmentDateTime: '2020-04-01T12:48:33',
                 assignmentEndDateTime: '2020-05-01T12:48:33',
                 establishment: 'Moorland',
+                establishmentWithAgencyLeaveDate: 'Moorland2020-05-01T12:48:33',
                 livingUnitId: 2,
                 location: '1-03',
                 movedInBy: 'Staff Three',
@@ -144,6 +157,7 @@ describe('Prisoner cell history', () => {
                 assignmentDateTime: '2020-03-01T12:48:33',
                 assignmentEndDateTime: '2020-04-01T12:48:33',
                 establishment: 'Moorland',
+                establishmentWithAgencyLeaveDate: 'Moorland2020-05-01T12:48:33',
                 livingUnitId: 2,
                 location: '1-02',
                 movedInBy: 'Staff Three',
@@ -161,11 +175,30 @@ describe('Prisoner cell history', () => {
                 assignmentDateTime: '2020-02-01T12:48:33',
                 assignmentEndDateTime: '2020-03-01T12:48:33',
                 establishment: 'Ranby',
+                establishmentWithAgencyLeaveDate: 'Ranby2020-03-01T12:48:33',
                 livingUnitId: 3,
                 location: '1-03',
                 movedInBy: 'Staff Two',
                 movedIn: '01/02/2020 - 12:48',
                 movedOut: '01/03/2020 - 12:48',
+              },
+            ],
+          },
+          {
+            name: 'Moorland',
+            datePeriod: 'from 01/01/2020 to 01/02/2020',
+            cellHistory: [
+              {
+                agencyId: 'MDI',
+                assignmentDateTime: '2020-01-01T11:48:33',
+                assignmentEndDateTime: '2020-02-01T11:48:33',
+                establishment: 'Moorland',
+                establishmentWithAgencyLeaveDate: 'Moorland2020-02-01T11:48:33',
+                livingUnitId: 1,
+                location: '1-01',
+                movedInBy: 'Staff One',
+                movedIn: '01/01/2020 - 11:48',
+                movedOut: '01/02/2020 - 11:48',
               },
             ],
           },

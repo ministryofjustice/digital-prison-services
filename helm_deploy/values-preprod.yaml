@@ -34,7 +34,7 @@ env:
   KEYWORKER_API_URL: https://keyworker-api-preprod.prison.service.justice.gov.uk/
   CATEGORISATION_UI_URL: https://preprod.offender-categorisation.service.justice.gov.uk/
   USE_OF_FORCE_URL: https://preprod.use-of-force.service.justice.gov.uk
-  USE_OF_FORCE_PRISONS: "BCI,BLI,DMI,DTI,HDI,HHI,HII,HLI,HMI,HVI,KMI,KVI,LEI,LFI,LHI,LPI,MDI,PNI,RSI,TCI,WEI,WMI,WRI"
+  USE_OF_FORCE_PRISONS: "AGI,AYI,BAI,BCI,BFI,BLI,BNI,BRI,CDI,CWI,DAI,DGI,DHI,DMI,DTI,DWI,EEI,ESI,EWI,EXI,FHI,FKI,FNI,GHI,GMI,GNI,GTI,HBI,HCI,HDI,HHI,HII,HLI,HMI,HPI,HVI,IWI,KMI,KVI,LEI,LFI,LHI,LLI,LNI,LPI,LTI,LYI,MDI,MRI,MTI,NHI,NWI,PDI,PNI,RSI,SDI,SLI,SPI,STI,TCI,VEI,WCI,WDI,WEI,WHI,WII,WLI,WMI,WRI"
   TOKENVERIFICATION_API_URL: https://token-verification-api-preprod.prison.service.justice.gov.uk
   TOKENVERIFICATION_API_ENABLED: true
   CASENOTES_API_URL: https://preprod.offender-case-notes.service.justice.gov.uk/

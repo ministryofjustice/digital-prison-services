@@ -111,14 +111,6 @@ context('Homepage', () => {
       page.managePrisonerWhereabouts().should('exist')
     })
 
-    it('should show covid units', () => {
-      cy.task('stubUserMeRoles', [{ roleCode: 'PRISON' }])
-
-      const page = homepagePage.goTo()
-
-      page.covidUnits().should('exist')
-    })
-
     it('should show pathfinder', () => {
       cy.task('stubUserMeRoles', [{ roleCode: 'PF_STD_PRISON' }])
 
@@ -133,14 +125,6 @@ context('Homepage', () => {
       const page = homepagePage.goTo()
 
       page.hdcLicences().should('exist')
-    })
-
-    it('should show bulk appointments', () => {
-      cy.task('stubUserMeRoles', [{ roleCode: 'BULK_APPOINTMENTS' }])
-
-      const page = homepagePage.goTo()
-
-      page.bulkAppointments().should('exist')
     })
 
     it('should show manage key workers', () => {

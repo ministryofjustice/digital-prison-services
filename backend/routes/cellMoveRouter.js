@@ -8,13 +8,17 @@ const cellSharingRiskAssessmentController = require('../controllers/cellMove/vie
 const considerRisksController = require('../controllers/cellMove/considerRisks')
 const confirmCellMoveController = require('../controllers/cellMove/confirmCellMove')
 const cellMoveConfirmationController = require('../controllers/cellMove/cellMoveConfirmation')
-const cswapConfirmationController = require('../controllers/cellMove/cswapConfirmation')
+const spaceCreatedController = require('../controllers/cellMove/spaceCreated')
 const cellNotAvailable = require('../controllers/cellMove/cellNotAvailable')
+const { raiseAnalyticsEvent } = require('../raiseAnalyticsEvent')
 
 const router = express.Router({ mergeParams: true })
 
 const controller = ({ oauthApi, prisonApi, whereaboutsApi, caseNotesApi, logError }) => {
-  const { index: considerRisksIndex, post: considerRisksPost } = considerRisksController({ prisonApi, logError })
+  const { index: considerRisksIndex, post: considerRisksPost } = considerRisksController({
+    prisonApi,
+    raiseAnalyticsEvent,
+  })
 
   const { index: confirmCellMoveIndex, post: confirmCellMovePost } = confirmCellMoveController({
     prisonApi,
@@ -33,7 +37,7 @@ const controller = ({ oauthApi, prisonApi, whereaboutsApi, caseNotesApi, logErro
   router.get('/consider-risks', considerRisksIndex)
   router.post('/consider-risks', considerRisksPost)
   router.get('/confirmation', cellMoveConfirmationController({ prisonApi, logError }))
-  router.get('/cswap-confirmation', cswapConfirmationController({ prisonApi, logError }))
+  router.get('/space-created', spaceCreatedController({ prisonApi, logError }))
   router.get('/cell-not-available', cellNotAvailable({ prisonApi, logError }))
   return router
 }

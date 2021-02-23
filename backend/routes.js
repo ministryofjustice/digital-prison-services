@@ -8,6 +8,7 @@ const { downloadProbationDocumentFactory } = require('./controllers/downloadProb
 const { attendanceStatisticsFactory } = require('./controllers/attendance/attendanceStatistics')
 const referenceCodesService = require('./controllers/reference-codes-service')
 const contentController = require('./controllers/content')
+const selectResidentialLocationController = require('./controllers/selectResidentialLocation')
 
 const bulkAppointmentsAddDetailsRouter = require('./routes/appointments/bulkAppointmentsAddDetailsRouter')
 const bulkAppointmentsConfirmRouter = require('./routes/appointments/bulkAppointmentsConfirmRouter')
@@ -33,10 +34,19 @@ const globalSearchRouter = require('./routes/globalSearchRouter')
 const amendCaseNoteRouter = require('./routes/caseNoteAmendmentRouter')
 const deleteCaseNoteRouter = require('./routes/caseNoteDeletionRouter')
 
+const selectActivityLocation = require('./controllers/selectActivityLocation')
+
+const contentfulServiceFactory = require('./services/contentfulService')
+const notificationCookie = require('./services/notificationCookie')
+const notificationDismiss = require('./controllers/notificationDismiss')
+const contentfulClient = require('./contentfulClient')
+const notificationBar = require('./middleware/notificationHandler')
+
 const systemOauthClient = require('./api/systemOauthClient')
 const { notifyClient } = require('./shared/notifyClient')
 
 const { raiseAnalyticsEvent } = require('./raiseAnalyticsEvent')
+const whereaboutsHomepageController = require('./controllers/whereabouts/whereaboutsHomepage')
 
 const router = express.Router()
 
@@ -61,6 +71,17 @@ const setup = ({
     }
     next()
   })
+
+  router.get('/manage-prisoner-whereabouts', whereaboutsHomepageController(oauthApi))
+
+  router.post('/notification/dismiss', notificationDismiss({ notificationCookie }))
+  router.use(
+    notificationBar({
+      contentfulService: contentfulServiceFactory({ notificationCookie, contentfulClient }),
+      logError,
+      notificationCookie,
+    })
+  )
 
   router.get('/edit-alert', alertFactory(oauthApi, prisonApi, referenceCodesService(prisonApi)).displayEditAlertPage)
   router.post(
@@ -89,6 +110,15 @@ const setup = ({
   router.get(
     '/manage-prisoner-whereabouts/attendance-reason-statistics/suspended',
     attendanceStatisticsFactory(oauthApi, prisonApi, whereaboutsApi, logError).attendanceStatisticsSuspendedList
+  )
+
+  router.get(
+    '/manage-prisoner-whereabouts/select-residential-location',
+    selectResidentialLocationController(whereaboutsApi).index
+  )
+  router.post(
+    '/manage-prisoner-whereabouts/select-residential-location',
+    selectResidentialLocationController(whereaboutsApi).post
   )
 
   router.get(
@@ -153,6 +183,7 @@ const setup = ({
   router.use(
     '/establishment-roll',
     establishmentRollRouter({
+      oauthApi,
       prisonApi,
       systemOauthClient,
       logError,
@@ -192,9 +223,15 @@ const setup = ({
     deleteCaseNoteRouter({ prisonApi, caseNotesApi, oauthApi, logError })
   )
 
-  router.get(['/content', '/content/:path'], contentController({ logError }))
+  router.get(
+    ['/content', '/content/:path'],
+    contentController({ contentfulService: contentfulServiceFactory({ contentfulClient }) })
+  )
 
   router.use('/global-search', globalSearchRouter({ offenderSearchApi, oauthApi, logError }))
+
+  router.get('/manage-prisoner-whereabouts/select-location', selectActivityLocation({ prisonApi }).index)
+  router.post('/manage-prisoner-whereabouts/select-location', selectActivityLocation({ prisonApi }).post)
 
   return router
 }

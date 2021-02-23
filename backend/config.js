@@ -125,15 +125,12 @@ module.exports = {
     emails: {
       WWI: {
         omu: process.env.WANDSWORTH_OMU_EMAIL,
-        vlb: process.env.WANDSWORTH_VLB_EMAIL,
       },
       TSI: {
         omu: process.env.THAMESIDE_OMU_EMAIL,
-        vlb: process.env.THAMESIDE_VLB_EMAIL,
       },
       HEI: {
         omu: process.env.HEWELL_OMU_EMAIL,
-        vlb: process.env.HEWELL_VLB_EMAIL,
       },
     },
   },

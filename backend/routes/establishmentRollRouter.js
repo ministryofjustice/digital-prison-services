@@ -7,12 +7,13 @@ const currentlyOutController = require('../controllers/establishmentRoll/current
 const totalCurrentlyOutController = require('../controllers/establishmentRoll/totalCurrentlyOut')
 const inTodayController = require('../controllers/establishmentRoll/inToday')
 const outTodayController = require('../controllers/establishmentRoll/outToday')
+const noCellAllocatedController = require('../controllers/establishmentRoll/noCellAllocated')
 
 const { movementsServiceFactory } = require('../services/movementsService')
 
 const router = express.Router({ mergeParams: true })
 
-const controller = ({ prisonApi, systemOauthClient, logError }) => {
+const controller = ({ oauthApi, prisonApi, systemOauthClient, logError }) => {
   const movementsService = movementsServiceFactory(prisonApi, systemOauthClient)
 
   router.get('/', establishmentRollDashboardController({ prisonApi, logError }))
@@ -22,6 +23,7 @@ const controller = ({ prisonApi, systemOauthClient, logError }) => {
   router.get('/total-currently-out', totalCurrentlyOutController({ movementsService, logError }))
   router.get('/in-today', inTodayController({ movementsService, logError }))
   router.get('/out-today', outTodayController({ movementsService, logError }))
+  router.get('/no-cell-allocated', noCellAllocatedController({ oauthApi, prisonApi, logError }))
   return router
 }
 

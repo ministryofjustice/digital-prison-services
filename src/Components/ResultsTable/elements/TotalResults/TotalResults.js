@@ -5,19 +5,19 @@ import { spacing, typography } from '@govuk-react/lib'
 
 const StyledTotalResults = styled.div`
   ${spacing.withWhiteSpace({ margin: { size: 3, direction: 'bottom' } })};
-  ${typography.font({ size: 24 })};
+  ${typography.font({ size: 19 })};
 
   @media print {
     ${spacing.withWhiteSpace({ margin: { size: 3, direction: 'top' } })};
   }
 `
-const TotalNumber = styled.span`
+const TotalLabel = styled.span`
   font-weight: bold;
 `
 
 const TotalResults = ({ label, totalResults }) => (
   <StyledTotalResults>
-    {label} <TotalNumber name="total-number">{totalResults}</TotalNumber>
+    <TotalLabel>{label}</TotalLabel> <span name="total-number">{totalResults}</span>
   </StyledTotalResults>
 )
 

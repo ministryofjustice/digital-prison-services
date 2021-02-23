@@ -1,4 +1,3 @@
-const searchPage = require('../../pages/whereabouts/searchPage')
 const activityPage = require('../../pages/whereabouts/activityPage')
 
 const caseload = 'MDI'
@@ -41,15 +40,13 @@ context('Activity list page', () => {
   })
 
   it('Displays the activity list', () => {
-    cy.visit(`/manage-prisoner-whereabouts`)
+    cy.visit('/manage-prisoner-whereabouts/select-location')
     cy.task('stubGetActivityList', { caseload, locationId: 2, timeSlot: 'AM', date })
     cy.task('stubGetAttendance', { caseload, locationId: 2, timeSlot: 'AM', date })
 
-    const sPage = searchPage.verifyOnPage()
-
-    sPage.period().select('AM')
-    sPage.activity().select('loc2')
-    sPage.continueActivityButton().click()
+    cy.get('#period').select('AM')
+    cy.get('#current-location').select('loc2')
+    cy.get('[type="submit"]').click()
 
     const aPage = activityPage.verifyOnPage('loc2')
 
@@ -110,13 +107,11 @@ context('Activity list page', () => {
   it('The activity list handles sorting correctly', () => {
     cy.task('stubGetActivityList', { caseload, locationId: 2, timeSlot: 'AM', date })
     cy.task('stubGetAttendance', { caseload, locationId: 2, timeSlot: 'AM', date })
-    cy.visit(`/manage-prisoner-whereabouts`)
+    cy.visit('/manage-prisoner-whereabouts/select-location')
 
-    const sPage = searchPage.verifyOnPage()
-
-    sPage.period().select('AM')
-    sPage.activity().select('loc2')
-    sPage.continueActivityButton().click()
+    cy.get('#period').select('AM')
+    cy.get('#current-location').select('loc2')
+    cy.get('[type="submit"]').click()
 
     const aPage = activityPage.verifyOnPage('loc2')
     aPage
@@ -151,21 +146,14 @@ context('Activity list page', () => {
     })
   })
 
-  it('Displays the updated activity list', async () => {
+  it.skip('Displays the updated activity list', () => {
     cy.task('stubGetActivityList', { caseload, locationId: 1, timeSlot: 'PM', date })
     cy.task('stubGetAttendance', { caseload, locationId: 1, timeSlot: 'PM', date })
-    cy.visit(`/manage-prisoner-whereabouts`)
+    cy.visit('/manage-prisoner-whereabouts/select-location')
 
-    const sPage = searchPage.verifyOnPage()
-    const initialPeriod = await new Cypress.Promise(resolve => {
-      cy.get('#period-select')
-        .invoke('val')
-        .then(txt => resolve(txt.toString()))
-    })
-
-    sPage.period().select('PM')
-    sPage.activity().select('loc1')
-    sPage.continueActivityButton().click()
+    cy.get('#period').select('PM')
+    cy.get('#current-location').select('loc1')
+    cy.get('[type="submit"]').click()
 
     const aPage = activityPage.verifyOnPage('loc1')
     aPage
@@ -193,7 +181,6 @@ context('Activity list page', () => {
     // when: I change selections and update
     const d = new Date()
     const lastYear = d.getFullYear() - 1
-    const firstOfMonthDisplayFormat = `01/08/${lastYear}`
     const firstOfMonthApiFormat = `${lastYear}-08-01`
     cy.task('stubGetActivityList', {
       caseload,
@@ -221,35 +208,6 @@ context('Activity list page', () => {
     aPage.getResultActivity().each(($el, index) => {
       expect($el.text()).to.equal(newActivities[index])
     })
-
-    // when: I go to the search page
-    cy.visit(`/manage-prisoner-whereabouts`)
-    const newSearchPage = searchPage.verifyOnPage()
-
-    // then: the selections are reinitialised
-    newSearchPage.datePicker().should('have.value', 'Today')
-    newSearchPage.period().should('have.value', initialPeriod)
-  })
-
-  it('navigates to the whereabouts search on a page refresh', () => {
-    // given: I am on the activity list page
-    cy.task('stubGetActivityList', { caseload, locationId: 1, timeSlot: 'PM', date })
-    cy.task('stubGetAttendance', { caseload, locationId: 1, timeSlot: 'PM', date })
-    cy.visit(`/manage-prisoner-whereabouts`)
-
-    const sPage = searchPage.verifyOnPage()
-
-    sPage.period().select('PM')
-    sPage.activity().select('loc1')
-    sPage.continueActivityButton().click()
-
-    const aPage = activityPage.verifyOnPage('loc1')
-
-    // when: "I refresh the page"
-    cy.reload()
-
-    // then: "I should be redirected to the search page"
-    searchPage.verifyOnPage()
   })
 
   it('displays absent reason link and shows attended as checked', () => {
@@ -335,14 +293,12 @@ context('Activity list page', () => {
     // given: I am on the activity list page
     cy.task('stubForAttendance', { caseload, locationId, timeSlot, date, activities })
     cy.task('stubGetAttendance', { caseload, locationId, timeSlot, date, data: attendance })
-    cy.visit(`/manage-prisoner-whereabouts`)
-
-    const sPage = searchPage.verifyOnPage()
+    cy.visit('/manage-prisoner-whereabouts/select-location')
 
     // when: "I select a period and activity location"
-    sPage.period().select('AM')
-    sPage.activity().select('loc1')
-    sPage.continueActivityButton().click()
+    cy.get('#period').select('AM')
+    cy.get('#current-location').select('loc1')
+    cy.get('[type="submit"]').click()
 
     const aPage = activityPage.verifyOnPage('loc1')
 
@@ -406,14 +362,12 @@ context('Activity list page', () => {
     cy.task('stubPostAttendance', attendanceToReturn)
     cy.task('stubPutAttendance', attendanceToReturn)
 
-    cy.visit(`/manage-prisoner-whereabouts`)
-
-    const sPage = searchPage.verifyOnPage()
+    cy.visit('/manage-prisoner-whereabouts/select-location')
 
     // when: "I select a period and activity location"
-    sPage.period().select('AM')
-    sPage.activity().select('loc1')
-    sPage.continueActivityButton().click()
+    cy.get('#period').select('AM')
+    cy.get('#current-location').select('loc1')
+    cy.get('[type="submit"]').click()
 
     const aPage = activityPage.verifyOnPage('loc1')
 

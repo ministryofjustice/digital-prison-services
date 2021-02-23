@@ -1,9 +1,10 @@
 /* eslint-disable no-unused-expressions */
-const searchPage = require('../../pages/whereabouts/searchPage')
+const moment = require('moment')
 const HouseblockPage = require('../../pages/whereabouts/houseblockPage')
 
 const caseload = 'MDI'
 const date = new Date().toISOString().split('T')[0]
+const today = moment()
 
 context('Houseblock list page list page', () => {
   beforeEach(() => {
@@ -157,17 +158,16 @@ context('Houseblock list page list page', () => {
   })
 
   it('Displays the houseblock list', () => {
-    cy.visit(`/manage-prisoner-whereabouts`)
-    const sPage = searchPage.verifyOnPage()
+    cy.visit('/manage-prisoner-whereabouts/select-residential-location')
 
-    sPage.period().select('AM')
-    sPage.location().select('1')
-    sPage.continueActivityButton().click()
+    cy.get('[data-test="period-select"]').select('AM')
+    cy.get('[data-test="location-select"]').select('1')
+    cy.get('button[type="submit"]').click()
 
     const houseblockPage = HouseblockPage.verifyOnPage('1')
     houseblockPage.tableRows().should('have.length', 4)
     houseblockPage.printButton().should('have.length', 2)
-    houseblockPage.searchDate().should('have.value', 'Today')
+    houseblockPage.searchDate().should('have.value', today.format('DD/MM/YYYY'))
     houseblockPage.location().contains('All')
     houseblockPage.locationOrderLink().contains('Location')
 
@@ -214,7 +214,7 @@ context('Houseblock list page list page', () => {
   })
 
   it('Displays multiple activities correctly', () => {
-    cy.visit(`/manage-prisoner-whereabouts`)
+    cy.visit('/manage-prisoner-whereabouts/select-residential-location')
     cy.task('stubAssessments', ['A1234AA'])
     cy.task('stubGetEventsByLocationIds', {
       agencyId: caseload,
@@ -252,16 +252,15 @@ context('Houseblock list page list page', () => {
         },
       ],
     })
-    const sPage = searchPage.verifyOnPage()
 
-    sPage.period().select('AM')
-    sPage.location().select('1')
-    sPage.continueActivityButton().click()
+    cy.get('[data-test="period-select"]').select('AM')
+    cy.get('[data-test="location-select"]').select('1')
+    cy.get('button[type="submit"]').click()
 
     const houseblockPage = HouseblockPage.verifyOnPage('1')
     houseblockPage.tableRows().should('have.length', 2)
     houseblockPage.printButton().should('have.length', 2)
-    houseblockPage.searchDate().should('have.value', 'Today')
+    houseblockPage.searchDate().should('have.value', today.format('DD/MM/YYYY'))
     houseblockPage.location().contains('All')
     houseblockPage.locationOrderLink().contains('Location')
 
@@ -279,7 +278,7 @@ context('Houseblock list page list page', () => {
   })
 
   it('Displays 0 activities, transfers and releases', () => {
-    cy.visit(`/manage-prisoner-whereabouts`)
+    cy.visit('/manage-prisoner-whereabouts/select-residential-location')
     cy.task('stubAssessments', ['A1234AH', 'A1234AA', 'A1234AB', 'A1234AC'])
     cy.task('stubSentenceData', [
       {
@@ -468,16 +467,15 @@ context('Houseblock list page list page', () => {
         },
       ],
     })
-    const sPage = searchPage.verifyOnPage()
 
-    sPage.period().select('AM')
-    sPage.location().select('1')
-    sPage.continueActivityButton().click()
+    cy.get('[data-test="period-select"]').select('AM')
+    cy.get('[data-test="location-select"]').select('1')
+    cy.get('button[type="submit"]').click()
 
     const houseblockPage = HouseblockPage.verifyOnPage('1')
     houseblockPage.tableRows().should('have.length', 5)
     houseblockPage.printButton().should('have.length', 2)
-    houseblockPage.searchDate().should('have.value', 'Today')
+    houseblockPage.searchDate().should('have.value', today.format('DD/MM/YYYY'))
     houseblockPage.location().contains('All')
     houseblockPage.locationOrderLink().contains('Location')
 
@@ -502,19 +500,6 @@ context('Houseblock list page list page', () => {
       })
   })
 
-  it('Should navigate to whereabouts home page on react', () => {
-    cy.visit(`/manage-prisoner-whereabouts`)
-    const sPage = searchPage.verifyOnPage()
-
-    sPage.period().select('AM')
-    sPage.location().select('1')
-    sPage.continueActivityButton().click()
-
-    HouseblockPage.verifyOnPage('1')
-    cy.reload()
-    searchPage.verifyOnPage()
-  })
-
   it('Marks attendance', () => {
     cy.task('stubPostAttendance', {
       id: 1,
@@ -522,17 +507,16 @@ context('Houseblock list page list page', () => {
       eventId: 100,
       eventLocationId: 1,
     })
-    cy.visit(`/manage-prisoner-whereabouts`)
-    const sPage = searchPage.verifyOnPage()
+    cy.visit('/manage-prisoner-whereabouts/select-residential-location')
 
-    sPage.period().select('AM')
-    sPage.location().select('1')
-    sPage.continueActivityButton().click()
+    cy.get('[data-test="period-select"]').select('AM')
+    cy.get('[data-test="location-select"]').select('1')
+    cy.get('button[type="submit"]').click()
 
     const houseblockPage = HouseblockPage.verifyOnPage('1')
     houseblockPage.tableRows().should('have.length', 4)
     houseblockPage.printButton().should('have.length', 2)
-    houseblockPage.searchDate().should('have.value', 'Today')
+    houseblockPage.searchDate().should('have.value', today.format('DD/MM/YYYY'))
     houseblockPage.location().contains('All')
     houseblockPage.locationOrderLink().contains('Location')
 

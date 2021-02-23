@@ -1,22 +1,24 @@
 {% extends "../partials/layout.njk" %}
 {% from "govuk/components/table/macro.njk" import govukTable %}
 {% from "./macros.njk" import notInUnitWarning %}
+
 {% block beforeContent %}
-    {{ govukBreadcrumbs({
-        items: [
-            {
-                text: "Home",
-                href: notmUrl
-            },
-            {
-                text: "COVID units",
-                href: '/current-covid-units'
-            },
-            {
-                text: "Prisoners in the Reverse Cohorting Unit"
-            }
-        ]
-    }) }}
+  {{ govukBreadcrumbs({
+    items: [
+      {
+        text: "Digital Prison Services",
+        href: "/"
+      },
+      {
+        text: "Manage prisoner whereabouts",
+        href: "/manage-prisoner-whereabouts"
+      },
+      {
+        text: "Current breakdown of COVID units",
+        href: "/current-covid-units"
+      }
+    ]
+  }) }}
 {% endblock %}
 
   {% set rows = [] %}
@@ -64,7 +66,7 @@
   {{ notInUnitWarning(notInUnitCount) }}
 
   {% if rows.length %}
-    <p class="govuk-body right-content">Prisoners listed: <strong><span data-qa="prisonerCount">{{ rows.length }}</span></strong></p>
+    <p class="govuk-body right-content"><strong>Prisoners listed:</strong> <span data-qa="prisonerCount">{{ rows.length }}</span></p>
 
     {{ govukTable({
       head: [

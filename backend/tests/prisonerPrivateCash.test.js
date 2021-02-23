@@ -69,6 +69,10 @@ describe('Prisoner private cash', () => {
       account_code: 'cash',
       transaction_type: 'HOA',
     })
+    expect(prisonApi.getTransactionHistory).toHaveBeenCalledWith(res.locals, offenderNo, {
+      account_code: 'cash',
+      transaction_type: 'WHF',
+    })
     expect(prisonerFinanceService.getTransactionsForDateRange).toHaveBeenCalledWith(...params)
     expect(prisonerFinanceService.getTemplateData).toHaveBeenCalledWith(...params)
     expect(prisonApi.getAgencyDetails).not.toHaveBeenCalled()
@@ -76,28 +80,13 @@ describe('Prisoner private cash', () => {
 
   describe('with transaction data', () => {
     beforeEach(() => {
-      prisonerFinanceService.getTransactionsForDateRange = jest.fn().mockResolvedValue([
-        {
-          offenderId: 1,
-          transactionId: 789,
-          transactionEntrySequence: 1,
-          entryDate: '2020-11-16',
-          transactionType: 'POST',
-          entryDescription: 'Bought some food',
-          referenceNumber: null,
-          currency: 'GBP',
-          penceAmount: 10000,
-          accountType: 'REG',
-          postingType: 'DR',
-          agencyId: 'LEI',
-        },
-      ])
-      prisonApi.getTransactionHistory = jest.fn().mockResolvedValue([
+      const holds = [
         {
           offenderId: 1,
           transactionId: 234,
           transactionEntrySequence: 1,
           entryDate: '2020-11-27',
+          createDateTime: '2020-11-27T10:00',
           transactionType: 'HOA',
           entryDescription: 'HOLD',
           referenceNumber: null,
@@ -107,7 +96,65 @@ describe('Prisoner private cash', () => {
           postingType: 'DR',
           agencyId: 'MDI',
         },
+        {
+          offenderId: 1,
+          transactionId: 235,
+          transactionEntrySequence: 2,
+          entryDate: '2020-11-27',
+          createDateTime: '2020-11-27T09:00',
+          transactionType: 'HOA',
+          entryDescription: 'HOLD',
+          referenceNumber: null,
+          currency: 'GBP',
+          penceAmount: 2000,
+          accountType: 'REG',
+          postingType: 'DR',
+          agencyId: 'MDI',
+          holdingCleared: 'Y',
+        },
+      ]
+      const withHolds = [
+        {
+          offenderId: 1,
+          transactionId: 236,
+          transactionEntrySequence: 1,
+          entryDate: '2020-11-26',
+          createDateTime: '2020-11-26T10:00',
+          transactionType: 'WHF',
+          entryDescription: 'WITHHELD',
+          referenceNumber: null,
+          currency: 'GBP',
+          penceAmount: null,
+          accountType: 'REG',
+          postingType: 'DR',
+          agencyId: 'MDI',
+        },
+      ]
+
+      prisonerFinanceService.getTransactionsForDateRange = jest.fn().mockResolvedValue([
+        {
+          offenderId: 1,
+          transactionId: 789,
+          transactionEntrySequence: 1,
+          entryDate: '2020-11-16',
+          createDateTime: '2020-11-16T10:00',
+          transactionType: 'POST',
+          entryDescription: 'Bought some food',
+          referenceNumber: null,
+          currency: 'GBP',
+          penceAmount: 10000,
+          accountType: 'REG',
+          postingType: 'DR',
+          agencyId: 'LEI',
+          currentBalance: 500,
+        },
+        ...withHolds,
+        ...holds,
       ])
+      prisonApi.getTransactionHistory = jest
+        .fn()
+        .mockResolvedValue(holds)
+        .mockResolvedValueOnce(withHolds)
 
       prisonApi.getAgencyDetails = jest
         .fn()
@@ -127,12 +174,44 @@ describe('Prisoner private cash', () => {
 
       expect(res.render).toHaveBeenCalledWith('prisonerProfile/prisonerFinance/privateCash.njk', {
         ...templateDataResponse,
-        nonPendingRows: [
-          [{ text: '16/11/2020' }, { text: '' }, { text: '£100.00' }, { text: 'Bought some food' }, { text: 'Leeds' }],
+        privateTransactionsRows: [
+          [
+            { text: '27/11/2020' },
+            { text: '' },
+            { text: '-£10.00' },
+            { text: '' },
+            { text: 'HOLD' },
+            { text: 'Moorland' },
+          ],
+          [
+            { text: '27/11/2020' },
+            { text: '' },
+            { text: '-£20.00' },
+            { text: '' },
+            { text: 'HOLD' },
+            { text: 'Moorland' },
+          ],
+          [
+            { text: '26/11/2020' },
+            { text: '' },
+            { text: '' },
+            { text: '' },
+            { text: 'WITHHELD' },
+            { text: 'Moorland' },
+          ],
+          [
+            { text: '16/11/2020' },
+            { text: '' },
+            { text: '-£100.00' },
+            { text: '£5.00' },
+            { text: 'Bought some food' },
+            { text: 'Leeds' },
+          ],
         ],
-        pendingBalance: '-£10.00',
+        pendingBalance: '£10.00',
         pendingRows: [
-          [{ text: '27/11/2020' }, { text: '' }, { text: '£10.00' }, { text: 'HOLD' }, { text: 'Moorland' }],
+          [{ text: '27/11/2020' }, { text: '£10.00' }, { text: 'HOLD' }, { text: 'Moorland' }],
+          [{ text: '26/11/2020' }, { text: '' }, { text: 'WITHHELD' }, { text: 'Moorland' }],
         ],
       })
     })

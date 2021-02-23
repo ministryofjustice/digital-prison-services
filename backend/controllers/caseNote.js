@@ -91,7 +91,7 @@ const caseNoteFactory = (prisonApi, caseNotesApi) => {
       })
     }
 
-    if (!text) {
+    if (!text || !text.trim()) {
       errors.push({
         text: 'Enter what happened',
         href: '#text',

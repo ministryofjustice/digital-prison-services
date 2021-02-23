@@ -86,6 +86,7 @@ describe('Prisoner savings', () => {
           offenderNo,
           agencyId: 'MDI',
           relatedOffenderTransactions: [],
+          currentBalance: 450,
         },
         {
           offenderId: 1,
@@ -102,6 +103,7 @@ describe('Prisoner savings', () => {
           offenderNo,
           agencyId: 'LEI',
           relatedOffenderTransactions: [],
+          currentBalance: 500,
         },
       ])
 
@@ -128,13 +130,15 @@ describe('Prisoner savings', () => {
             { text: '02/12/2020' },
             { text: '£10.00' },
             { text: '' },
+            { text: '£4.50' },
             { text: 'Sub-Account Transfer' },
             { text: 'Moorland' },
           ],
           [
             { text: '01/12/2020' },
             { text: '' },
-            { text: '£0.50' },
+            { text: '-£0.50' },
+            { text: '£5.00' },
             { text: 'Sub-Account Transfer' },
             { text: 'Leeds' },
           ],

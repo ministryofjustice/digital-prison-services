@@ -7,7 +7,6 @@ import Notifications from 'react-notify-toast'
 import ReactGA from 'react-ga'
 import { FooterContainer } from 'new-nomis-shared-components'
 import ErrorComponent from './Error/index'
-import SearchContainer from './Search/SearchContainer'
 import Terms from './Footer/terms-and-conditions'
 import './App.scss'
 import ScrollToTop from './Components/ScrollToTop'
@@ -160,9 +159,7 @@ class App extends React.Component {
   handleDateChange = date => {
     const { dateDispatch } = this.props
 
-    if (date) {
-      dateDispatch(moment(date).format('DD/MM/YYYY'))
-    }
+    if (date) dateDispatch(date)
   }
 
   handleDateChangeWithLocationsUpdate = date => {
@@ -224,8 +221,6 @@ class App extends React.Component {
       setLoadedDispatch,
       resetErrorDispatch,
       setErrorDispatch,
-      dateDispatch,
-      periodDispatch,
       error,
       user,
       modalActive,
@@ -246,20 +241,6 @@ class App extends React.Component {
         }}
       >
         <div className="pure-g">
-          <Route
-            exact
-            path="(/manage-prisoner-whereabouts)"
-            render={() => (
-              <SearchContainer
-                handleError={this.handleError}
-                getActivityLocations={this.getActivityLocations}
-                handleDateChange={event => this.handleDateChangeWithLocationsUpdate(event)}
-                handlePeriodChange={event => this.handlePeriodChangeWithLocationsUpdate(event)}
-                dateDispatch={dateDispatch}
-                periodDispatch={periodDispatch}
-              />
-            )}
-          />
           <Route
             exact
             path="/manage-prisoner-whereabouts/housing-block-results"
@@ -344,6 +325,9 @@ class App extends React.Component {
                   <Notifications />
                   <Route
                     render={({ location }) => {
+                      if (location.pathname === '/manage-prisoner-whereabouts') {
+                        window.location = '/manage-prisoner-whereabouts'
+                      }
                       if (config && config.googleAnalyticsId) {
                         ReactGA.pageview(location.pathname)
                       }

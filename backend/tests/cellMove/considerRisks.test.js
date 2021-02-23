@@ -6,10 +6,10 @@ const considerRisksController = require('../../controllers/cellMove/considerRisk
 describe('move validation', () => {
   let req
   let res
-  let logError
   let controller
 
   const prisonApi = {}
+  let raiseAnalyticsEvent
 
   const offenderNo = 'ABC123'
   const cellId = 1
@@ -139,6 +139,32 @@ describe('move validation', () => {
         addedByFirstName: 'John',
         addedByLastName: 'Smith',
       },
+      {
+        alertId: 4,
+        alertType: 'H',
+        alertTypeDescription: 'Self Harm',
+        alertCode: 'HA',
+        alertCodeDescription: 'ACCT open',
+        comment: 'Test comment',
+        dateCreated: '2021-02-18',
+        expired: false,
+        active: true,
+        addedByFirstName: 'John',
+        addedByLastName: 'Smith',
+      },
+      {
+        alertId: 5,
+        alertType: 'H',
+        alertTypeDescription: 'Self Harm',
+        alertCode: 'HA1',
+        alertCodeDescription: 'ACCT post closure',
+        comment: '',
+        dateCreated: '2021-02-19',
+        expired: false,
+        active: true,
+        addedByFirstName: 'John',
+        addedByLastName: 'Smith',
+      },
     ],
     profileInformation: [],
   }
@@ -243,8 +269,6 @@ describe('move validation', () => {
   }
 
   beforeEach(() => {
-    logError = jest.fn()
-
     req = {
       originalUrl: 'http://localhost',
       params: { offenderNo },
@@ -348,7 +372,9 @@ describe('move validation', () => {
       ],
     })
 
-    controller = considerRisksController({ prisonApi, logError })
+    raiseAnalyticsEvent = jest.fn()
+
+    controller = considerRisksController({ prisonApi, raiseAnalyticsEvent })
   })
 
   it('Makes the expected API calls on get', async () => {
@@ -417,6 +443,16 @@ describe('move validation', () => {
           date: 'Date added: 20 August 2020',
           title: 'an Isolated Prisoner alert.',
         },
+        {
+          comment: 'Test comment',
+          date: 'Date added: 18 February 2021',
+          title: 'an ACCT open alert.',
+        },
+        {
+          comment: '',
+          date: 'Date added: 19 February 2021',
+          title: 'an ACCT post closure alert.',
+        },
       ],
       dpsUrl: 'http://localhost:3000/',
       errors: undefined,
@@ -442,111 +478,125 @@ describe('move validation', () => {
     })
   })
 
-  it('Should warn that the prisoner is non hetro when occupants have risk to LGBT alert', async () => {
-    prisonApi.getDetails
-      .mockResolvedValueOnce({
-        ...getCurrentOffenderDetailsResponse,
-        profileInformation: [{ type: 'SEXO', resultValue: 'Homosexual' }],
-        alerts: [],
-      })
-      .mockResolvedValueOnce({
-        ...getCurrentOccupierDetailsResponse,
-        alerts: [
-          {
-            active: true,
-            addedByFirstName: 'John',
-            addedByLastName: 'Smith',
-            alertCode: 'RLG',
-            alertCodeDescription: 'Risk to LGB',
-            alertId: 1,
-            alertType: 'X',
-            alertTypeDescription: 'Risk to LGB',
-            bookingId: 14,
-            comment: 'alert comment',
-            dateCreated: '2019-08-20',
-            dateExpires: null,
-            expired: false,
-            expiredByFirstName: 'John',
-            expiredByLastName: 'Smith',
-            offenderNo,
-          },
-        ],
-      })
+  describe('Index', () => {
+    it('Should warn that the prisoner is non hetro when occupants have risk to LGBT alert', async () => {
+      prisonApi.getDetails
+        .mockResolvedValueOnce({
+          ...getCurrentOffenderDetailsResponse,
+          profileInformation: [{ type: 'SEXO', resultValue: 'Homosexual' }],
+          alerts: [],
+        })
+        .mockResolvedValueOnce({
+          ...getCurrentOccupierDetailsResponse,
+          alerts: [
+            {
+              active: true,
+              addedByFirstName: 'John',
+              addedByLastName: 'Smith',
+              alertCode: 'RLG',
+              alertCodeDescription: 'Risk to LGB',
+              alertId: 1,
+              alertType: 'X',
+              alertTypeDescription: 'Risk to LGB',
+              bookingId: 14,
+              comment: 'alert comment',
+              dateCreated: '2019-08-20',
+              dateExpires: null,
+              expired: false,
+              expiredByFirstName: 'John',
+              expiredByLastName: 'Smith',
+              offenderNo,
+            },
+          ],
+        })
 
-    prisonApi.getInmatesAtLocation.mockResolvedValue([{ offenderNo: 'A12346' }])
-    await controller.index(req, res)
+      prisonApi.getInmatesAtLocation.mockResolvedValue([{ offenderNo: 'A12346' }])
+      await controller.index(req, res)
 
-    expect(res.render).toHaveBeenCalledWith(
-      'cellMove/considerRisks.njk',
-      expect.objectContaining({
-        currentOffenderActiveAlerts: [],
-        currentOccupantsWithFormattedActiveAlerts: [
-          {
-            alerts: [
-              {
-                comment: 'alert comment',
-                date: 'Date added: 20 August 2019',
-                title: 'a Risk to LGB alert. You have selected a prisoner who has a sexual orientation of Homosexual.',
-              },
-            ],
-            name: 'Occupant User',
-          },
-        ],
-      })
-    )
-  })
-
-  it('Should not show CSRA messages when both prisoner and occupants are standard', async () => {
-    prisonApi.getDetails
-      .mockResolvedValueOnce({ ...getCurrentOffenderDetailsResponse, csra: 'Standard' })
-      .mockResolvedValueOnce({ ...getCurrentOccupierDetailsResponse, csra: 'Standard' })
-    prisonApi.getInmatesAtLocation.mockResolvedValue([{ offenderNo: 'A12346' }])
-    await controller.index(req, res)
-
-    expect(res.render).toHaveBeenCalledWith(
-      'cellMove/considerRisks.njk',
-      expect.objectContaining({
-        showOffendersNamesWithCsra: false,
-        showRisks: true,
-      })
-    )
-  })
-
-  it('Does not pass alerts and CSRA when there are no occupants', async () => {
-    prisonApi.getDetails.mockResolvedValueOnce({
-      ...getCurrentOffenderDetailsResponse,
-      csra: 'Standard',
-      categoryCode: 'C',
+      expect(res.render).toHaveBeenCalledWith(
+        'cellMove/considerRisks.njk',
+        expect.objectContaining({
+          currentOffenderActiveAlerts: [],
+          currentOccupantsWithFormattedActiveAlerts: [
+            {
+              alerts: [
+                {
+                  comment: 'alert comment',
+                  date: 'Date added: 20 August 2019',
+                  title:
+                    'a Risk to LGB alert. You have selected a prisoner who has a sexual orientation of Homosexual.',
+                },
+              ],
+              name: 'Occupant User',
+            },
+          ],
+        })
+      )
     })
-    prisonApi.getInmatesAtLocation.mockResolvedValue([])
-    await controller.index(req, res)
 
-    expect(res.render).toHaveBeenCalledWith(
-      'cellMove/considerRisks.njk',
-      expect.objectContaining({
-        categoryWarning: false,
-        currentOffenderActiveAlerts: false,
-        currentOccupantsWithFormattedActiveAlerts: [],
-        showOffendersNamesWithCsra: false,
-        showRisks: false,
+    it('Should not show CSRA messages when both prisoner and occupants are standard', async () => {
+      prisonApi.getDetails
+        .mockResolvedValueOnce({ ...getCurrentOffenderDetailsResponse, csra: 'Standard' })
+        .mockResolvedValueOnce({ ...getCurrentOccupierDetailsResponse, csra: 'Standard' })
+      prisonApi.getInmatesAtLocation.mockResolvedValue([{ offenderNo: 'A12346' }])
+      await controller.index(req, res)
+
+      expect(res.render).toHaveBeenCalledWith(
+        'cellMove/considerRisks.njk',
+        expect.objectContaining({
+          showOffendersNamesWithCsra: false,
+          showRisks: true,
+        })
+      )
+    })
+
+    it('Does not pass alerts and CSRA when there are no occupants', async () => {
+      prisonApi.getDetails.mockResolvedValueOnce({
+        ...getCurrentOffenderDetailsResponse,
+        csra: 'Standard',
+        categoryCode: 'C',
       })
-    )
+      prisonApi.getInmatesAtLocation.mockResolvedValue([])
+      await controller.index(req, res)
+
+      expect(res.render).toHaveBeenCalledWith(
+        'cellMove/considerRisks.njk',
+        expect.objectContaining({
+          categoryWarning: false,
+          currentOffenderActiveAlerts: false,
+          currentOccupantsWithFormattedActiveAlerts: [],
+          showOffendersNamesWithCsra: false,
+          showRisks: false,
+        })
+      )
+    })
+
+    it('Does not pass category warning if no inmates', async () => {
+      prisonApi.getDetails.mockResolvedValueOnce({ ...getCurrentOffenderDetailsResponse, csra: 'Standard' })
+      prisonApi.getInmatesAtLocation.mockResolvedValue([])
+      await controller.index(req, res)
+
+      expect(res.render).toHaveBeenCalledWith(
+        'cellMove/considerRisks.njk',
+        expect.objectContaining({
+          categoryWarning: false,
+          showRisks: false,
+        })
+      )
+    })
+
+    it('Redirects to confirm cell move when there are no warnings', async () => {
+      prisonApi.getNonAssociations = jest.fn().mockResolvedValue({})
+      prisonApi.getDetails = jest.fn().mockResolvedValue({ firstName: 'Bob', lastName: 'Doe', alerts: [] })
+      prisonApi.getInmatesAtLocation.mockResolvedValue([])
+
+      await controller.index(req, res)
+
+      expect(res.redirect).toHaveBeenCalledWith('/prisoner/ABC123/cell-move/confirm-cell-move?cellId=1')
+    })
   })
 
-  it('Does not pass category warning if no inmates', async () => {
-    prisonApi.getDetails.mockResolvedValueOnce({ ...getCurrentOffenderDetailsResponse, csra: 'Standard' })
-    prisonApi.getInmatesAtLocation.mockResolvedValue([])
-    await controller.index(req, res)
-
-    expect(res.render).toHaveBeenCalledWith(
-      'cellMove/considerRisks.njk',
-      expect.objectContaining({
-        categoryWarning: false,
-        showRisks: false,
-      })
-    )
-  })
-
+  describe('Post', () => {})
   it('Redirects when form has been triggered with no data', async () => {
     prisonApi.getDetails
       .mockResolvedValueOnce(getCurrentOffenderDetailsResponse)
@@ -585,13 +635,35 @@ describe('move validation', () => {
     expect(res.redirect).toHaveBeenCalledWith(`/prisoner/${offenderNo}/cell-move/select-cell`)
   })
 
-  it('Redirects to confirm cell move when there are no warnings', async () => {
-    prisonApi.getNonAssociations = jest.fn().mockResolvedValue({})
-    prisonApi.getDetails = jest.fn().mockResolvedValue({ firstName: 'Bob', lastName: 'Doe', alerts: [] })
-    prisonApi.getInmatesAtLocation.mockResolvedValue([])
+  it('Raise ga event on cancel, containing the alert codes for all involed offenders', async () => {
+    prisonApi.getInmatesAtLocation.mockResolvedValue([{ offenderNo: 'A12346' }, { offenderNo: 'A12421' }])
+    prisonApi.getDetails
+      .mockResolvedValueOnce(getCurrentOffenderDetailsResponse)
+      .mockResolvedValueOnce(getCurrentOccupierDetailsResponse)
+      .mockResolvedValueOnce(getCurrentOccupierDetailsResponse)
 
-    await controller.index(req, res)
+    req.query = { offenderNo }
+    req.body = { confirmation: 'no' }
 
-    expect(res.redirect).toHaveBeenCalledWith('/prisoner/ABC123/cell-move/confirm-cell-move?cellId=1')
+    await controller.post(req, res)
+
+    expect(raiseAnalyticsEvent).toHaveBeenCalledWith(
+      'Cancelled out of cell move',
+      `Alerts codes for the offender moving in [RLG,XEL,XGANG,VIP,HA,HA1], Alerts for associated occupants: [XGANG,VIP]`,
+      'Cell move'
+    )
+
+    expect(res.redirect).toHaveBeenCalledWith(`/prisoner/${offenderNo}/cell-move/select-cell`)
+  })
+
+  it('should set correct redirect links and rethrow error', async () => {
+    const error = new Error('Network error')
+    prisonApi.getDetails = jest.fn().mockRejectedValue(error)
+
+    req.body = { confirmation: 'no' }
+
+    await expect(controller.post(req, res)).rejects.toThrowError(error)
+    expect(res.locals.redirectUrl).toBe(`/prisoner/${offenderNo}/cell-move/select-cell`)
+    expect(res.locals.homeUrl).toBe(`/prisoner/${offenderNo}`)
   })
 })
