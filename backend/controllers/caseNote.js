@@ -178,6 +178,30 @@ const caseNoteFactory = (prisonApi, caseNotesApi) => {
       // has been handled by the above validations
     }
 
+    if (errors.length == 0) {
+      try {
+        await caseNotesApi.addCaseNote(res.locals, offenderNo, {
+          type,
+          subType,
+          text,
+          occurrenceDateTime: moment(date, 'DD/MM/YYYY')
+            .hours(hours)
+            .minutes(minutes)
+            .seconds(0)
+            .format('YYYY-MM-DDTHH:mm:ss'),
+          })
+      } catch (err) {
+        if (err?.response?.status === 400) {
+          errors.push({
+            text: err.response.body.userMessage,
+            href: '#text',
+          })
+        } else {
+          throw err
+        }
+      }
+    }
+
     if (errors.length > 0) {
       const { firstName, lastName } = await prisonApi.getDetails(res.locals, offenderNo)
 
@@ -221,17 +245,6 @@ const caseNoteFactory = (prisonApi, caseNotesApi) => {
         alertsRootUrl: `/prisoner/${offenderNo}/add-case-note`,
       })
     }
-
-    await caseNotesApi.addCaseNote(res.locals, offenderNo, {
-      type,
-      subType,
-      text,
-      occurrenceDateTime: moment(date, 'DD/MM/YYYY')
-        .hours(hours)
-        .minutes(minutes)
-        .seconds(0)
-        .format('YYYY-MM-DDTHH:mm:ss'),
-    })
 
     return res.redirect(`${getOffenderUrl(offenderNo)}/case-notes`)
   }

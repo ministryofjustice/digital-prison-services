@@ -1,5 +1,6 @@
 Reflect.deleteProperty(process.env, 'APPINSIGHTS_INSTRUMENTATIONKEY')
 const moment = require('moment')
+const { makeError } = require('./helpers')
 
 const prisonApi = {}
 const caseNotesApi = {}
@@ -185,6 +186,40 @@ describe('case note management', () => {
         res.status = jest.fn()
 
         await expect(handleCreateCaseNoteForm(req, res)).rejects.toThrowError(error)
+      })
+
+      it('should return the specific error in case of a 400 response', async () => {
+        const req = {
+          ...mockCreateReq,
+          params: { offenderNo },
+          body: {
+            type: 'P',
+            subType: 'PI',
+            date: '20/07/2020',
+            hours: '10',
+            minutes: '10',
+            text: 'test',
+          },
+        }
+        const error400 = {
+          status: 400,
+          body : {
+            userMessage: 'createCaseNote.caseNote.text: Value is too long: max length is 4000',
+            developerMessage: 'createCaseNote.caseNote.text: Value too long: max length is 4000',
+          }
+        }
+        caseNotesApi.addCaseNote = jest.fn().mockRejectedValue(makeError('response', error400))
+
+        await handleCreateCaseNoteForm(req, res)
+
+        expect(res.render).toHaveBeenCalledWith(
+          'caseNotes/addCaseNoteForm.njk',
+          expect.objectContaining({
+            errors: [
+              { href: '#text', text: error400.body.userMessage },
+            ],
+          })
+        )
       })
 
       it('should return an error if missing data', async () => {
