@@ -186,12 +186,18 @@ describe('Amendment case note', () => {
     })
 
     it('should show validation message when the api returns a 400', async () => {
-      caseNotesApi.amendCaseNote.mockRejectedValue(makeError('response', { status: 400 }))
+      caseNotesApi.amendCaseNote.mockRejectedValue(makeError('response', { 
+        status: 400,
+        body : {
+          userMessage: 'Amendments can no longer be made due to the maximum character limit being reached',
+          developerMessage: 'createCaseNote.caseNote.text: Value too long: max length is 4000',
+        } 
+      }))
 
       await controller.post(req, res)
 
       expect(req.flash).toHaveBeenCalledWith('amendmentErrors', [
-        { href: '#moreDetail', text: 'Enter more details using 4,000 characters or less' },
+        { href: '#moreDetail', text: 'Amendments can no longer be made due to the maximum character limit being reached' },
       ])
 
       expect(res.redirect).toHaveBeenCalledWith('http://localhost:3002/prisoner/case-notes/amend-case-note/1')
