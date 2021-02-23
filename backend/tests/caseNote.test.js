@@ -215,9 +215,7 @@ describe('case note management', () => {
         expect(res.render).toHaveBeenCalledWith(
           'caseNotes/addCaseNoteForm.njk',
           expect.objectContaining({
-            errors: [
-              { href: '#text', text: error400.body.userMessage }
-            ],
+            errors: [{ href: '#text', text: error400.body.userMessage }],
           })
         )
       })

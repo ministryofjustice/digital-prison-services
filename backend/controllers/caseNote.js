@@ -189,7 +189,7 @@ const caseNoteFactory = (prisonApi, caseNotesApi) => {
             .minutes(minutes)
             .seconds(0)
             .format('YYYY-MM-DDTHH:mm:ss'),
-          })
+        })
       } catch (err) {
         if (err?.response?.status === 400) {
           errors.push({
