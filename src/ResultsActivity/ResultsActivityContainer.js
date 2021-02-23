@@ -4,7 +4,6 @@ import ReactRouterPropTypes from 'react-router-prop-types'
 import { connect } from 'react-redux'
 import { withRouter } from 'react-router'
 import queryString from 'query-string'
-import moment from 'moment'
 
 import ResultsActivity from './ResultsActivity'
 import {
@@ -98,12 +97,11 @@ class ResultsActivityContainer extends Component {
       setLoadedDispatch(false)
 
       handleDateChange(date)
-
       const response = await axios.get('/api/activitylist', {
         params: {
           agencyId,
           locationId: location,
-          date: date === 'Today' ? moment().format('DD/MM/YYYY') : date,
+          date,
           timeSlot: period,
         },
       })

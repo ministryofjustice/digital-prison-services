@@ -151,7 +151,7 @@ class ResultsHouseblockContainer extends Component {
         params: {
           agencyId,
           groupName: compoundGroupName(currentLocation, currentSubLocation),
-          date,
+          date: date?.format ? date.format('DD/MM/YYYY') : date,
           timeSlot: period,
           wingStatus,
         },
