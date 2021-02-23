@@ -55,7 +55,7 @@ function PrisonersUnaccountedForContainer({
             params: {
               agencyId,
               timeSlot: period,
-              date: date === 'Today' ? moment().format('DD/MM/YYYY') : date,
+              date: date === 'Today' ? moment().format('DD/MM/YYYY') : date.format('DD/MM/YYYY'),
             },
           })
 
