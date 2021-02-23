@@ -33,6 +33,13 @@ module.exports = ({ prisonApi }) => {
         errors: req.flash('errors'),
       })
     } catch (error) {
+      if (error.code === 'ECONNRESET' || (error.stack && error.stack.toLowerCase().includes('timeout'))) {
+        return res.render('error.njk', {
+          url: res.locals.redirectUrl || req.originalUrl,
+          homeUrl: res.locals.homeUrl,
+        })
+      }
+
       res.locals.redirectUrl = `/manage-prisoner-whereabouts`
       throw error
     }

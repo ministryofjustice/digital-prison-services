@@ -1,4 +1,5 @@
 const selectActivityLocationController = require('../controllers/selectActivityLocation')
+const { makeResetError } = require('./helpers')
 
 describe('Select activity locations controller', () => {
   const agencyId = 'MDI'
@@ -13,12 +14,14 @@ describe('Select activity locations controller', () => {
     res = {
       locals: {
         user: { activeCaseLoad: { caseLoadId: agencyId } },
+        homeUrl: '/',
       },
       render: jest.fn(),
       redirect: jest.fn(),
     }
     req = {
       flash: jest.fn(),
+      originalUrl: 'http://localhost:8080',
     }
 
     controller = selectActivityLocationController({ prisonApi })
@@ -88,6 +91,26 @@ describe('Select activity locations controller', () => {
       await expect(controller.index(req, res)).rejects.toThrowError
 
       expect(res.locals.redirectUrl).toBe(`/manage-prisoner-whereabouts`)
+    })
+
+    describe('When there is a timeout error', () => {
+      beforeEach(() => {
+        const connectionResetError = makeResetError()
+        prisonApi.searchActivityLocations.mockRejectedValue(connectionResetError)
+      })
+      it('should render error template using the req.originalUrl as the redirect url', async () => {
+        await controller.index(req, res)
+
+        expect(res.render).toHaveBeenCalledWith('error.njk', { homeUrl: '/', url: 'http://localhost:8080' })
+      })
+
+      it('should render error template using the res.redirectUrl as the redirect url', async () => {
+        req.originalUrl = null
+        res.locals.redirectUrl = 'http://localhost:9090'
+        await controller.index(req, res)
+
+        expect(res.render).toHaveBeenCalledWith('error.njk', { homeUrl: '/', url: 'http://localhost:9090' })
+      })
     })
   })
 
