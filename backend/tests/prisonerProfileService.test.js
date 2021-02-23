@@ -203,7 +203,7 @@ describe('prisoner profile service', () => {
         incentiveLevel: 'Standard',
         keyWorkerLastSession: '7 April 2020',
         keyWorkerName: 'Staff Member',
-        lastReviewDate: '18/08/2020',
+        lastReviewDate: '18 August 2020',
         location: 'CELL-123',
         notmEndpointUrl: 'http://localhost:3000/',
         offenderName: 'Prisoner, Test',
@@ -248,7 +248,7 @@ describe('prisoner profile service', () => {
           incentiveLevel: undefined,
           keyWorkerLastSession: undefined,
           keyWorkerName: null,
-          lastReviewDate: undefined,
+          lastReviewDate: false,
         })
       )
     })
