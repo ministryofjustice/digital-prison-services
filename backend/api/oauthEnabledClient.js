@@ -120,11 +120,9 @@ const factory = ({ baseUrl, timeout }) => {
         .type('json')
         .set(getHeaders(context))
         .set('Accept', 'application/json')
-        .then((response) => {
-          resolve(resultLogger(response))
-        })
-        .catch((error) => {
-          reject(errorLogger(error));
+        .end((error, response) => {
+          if (error) reject(errorLogger(error))
+          else if (response) resolve(resultLogger(response))
         })
     })
 
@@ -133,7 +131,9 @@ const factory = ({ baseUrl, timeout }) => {
       superagent
         .put(remoteUrl + path)
         .send(body)
+        .type('json')
         .set(getHeaders(context))
+        .set('Accept', 'application/json')
         .end((error, response) => {
           if (error) reject(errorLogger(error))
           else if (response) resolve(resultLogger(response))
