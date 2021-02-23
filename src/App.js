@@ -159,7 +159,7 @@ class App extends React.Component {
   handleDateChange = date => {
     const { dateDispatch } = this.props
 
-    if (date) dateDispatch(date)
+    if (date) dateDispatch(date === 'Today' ? moment().format('DD/MM/YYYY') : moment(date).format('DD/MM/YYYY'))
   }
 
   handleDateChangeWithLocationsUpdate = date => {
