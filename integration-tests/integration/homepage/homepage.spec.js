@@ -174,5 +174,21 @@ context('Homepage', () => {
 
       page.soc().should('exist')
     })
+
+    it('should show covid unit task', () => {
+      cy.task('stubUserMeRoles', [{ roleCode: 'PRISON' }])
+
+      const page = homepagePage.goTo()
+
+      page.covidUnits().should('exist')
+    })
+
+    it('should show bulk appointments task', () => {
+      cy.task('stubUserMeRoles', [{ roleCode: 'BULK_APPOINTMENTS' }])
+
+      const page = homepagePage.goTo()
+
+      page.bulkAppointments().should('exist')
+    })
   })
 })

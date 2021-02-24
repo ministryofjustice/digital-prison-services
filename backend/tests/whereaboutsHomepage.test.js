@@ -61,39 +61,5 @@ describe('Homepage', () => {
         ],
       })
     })
-
-    it('should render page with the view covid units task', async () => {
-      oauthApi.userRoles.mockResolvedValue([{ roleCode: 'PRISON' }])
-
-      await controller(req, res)
-
-      expect(res.render).toHaveBeenCalledWith('whereabouts/whereaboutsHomepage.njk', {
-        tasks: expect.arrayContaining([
-          {
-            id: 'covid-units',
-            heading: 'View COVID units',
-            description: 'View who is in each COVID unit in your establishment.',
-            href: '/current-covid-units',
-          },
-        ]),
-      })
-    })
-
-    it('should render page with the bulk appointments task', async () => {
-      oauthApi.userRoles.mockResolvedValue([{ roleCode: 'BULK_APPOINTMENTS' }])
-
-      await controller(req, res)
-
-      expect(res.render).toHaveBeenCalledWith('whereabouts/whereaboutsHomepage.njk', {
-        tasks: expect.arrayContaining([
-          {
-            id: 'bulk-appointments',
-            heading: 'Add bulk appointments',
-            description: 'Upload a spreadsheet to add appointments for multiple people.',
-            href: '/bulk-appointments/need-to-upload-file',
-          },
-        ]),
-      })
-    })
   })
 })
