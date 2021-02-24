@@ -200,6 +200,21 @@ module.exports = {
       },
     })
   },
+  stubCsraAssessmentsForPrisoner: (assessments = []) => {
+    return stubFor({
+      request: {
+        method: 'GET',
+        urlPattern: '/api/offender-assessments/CSR\\?.+?',
+      },
+      response: {
+        status: 200,
+        headers: {
+          'Content-Type': 'application/json;charset=UTF-8',
+        },
+        jsonBody: assessments,
+      },
+    })
+  },
   stubIepSummaryForBookingIds: results => {
     return stubFor({
       request: {
