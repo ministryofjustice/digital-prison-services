@@ -66,13 +66,5 @@
     "agencyName": "HMP Moorland",
     "description": "HMP Moorland",
     "locationId": 12
-  },
-  "assessments": [
-    {
-      "classification": "High",
-      "assessmentCode": "CSRREV",
-      "assessmentDescription": "CSR Review",
-      "assessmentDate": "2016-11-23"
-    }
-  ]
+  }
 }
