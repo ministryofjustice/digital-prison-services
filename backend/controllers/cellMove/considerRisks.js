@@ -81,14 +81,13 @@ module.exports = ({ prisonApi, raiseAnalyticsEvent }) => {
             .includes('hetero')
       )
 
-      const currentNonHeteroOccupantsWithName = currentNonHeteroOccupants.map(currentOccupant => {
-        const sexuality = getValueByType('SEXO', currentOccupant.profileInformation, 'resultValue')
-
-        return `${formatName(
-          currentOccupant.firstName,
-          currentOccupant.lastName
-        )} has a sexual orientation of ${sexuality}`
-      })
+      const currentNonHeteroOccupantsWithName = currentNonHeteroOccupants.map(
+        currentOccupant =>
+          `${formatName(
+            currentOccupant.firstName,
+            currentOccupant.lastName
+          )} has a sexual orientation of ${getValueByType('SEXO', currentOccupant.profileInformation, 'resultValue')}`
+      )
 
       // Get the list of relevant offender alerts
       const currentOffenderActiveAlerts =
