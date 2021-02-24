@@ -16,14 +16,6 @@ const whereaboutsTasks = [
     enabled: true,
   },
   {
-    id: 'covid-units',
-    heading: 'View COVID units',
-    description: 'View who is in each COVID unit in your establishment.',
-    href: '/current-covid-units',
-    roles: ['PRISON'],
-    enabled: true,
-  },
-  {
     id: 'view-all-appointments',
     heading: 'View all appointments',
     description: 'View all appointments in your establishment.',
@@ -45,14 +37,6 @@ const whereaboutsTasks = [
     description: 'View a breakdown of attendance statistics.',
     href: '/manage-prisoner-whereabouts/attendance-reason-statistics',
     roles: null,
-    enabled: true,
-  },
-  {
-    id: 'bulk-appointments',
-    heading: 'Add bulk appointments',
-    description: 'Upload a spreadsheet to add appointments for multiple people.',
-    href: '/bulk-appointments/need-to-upload-file',
-    roles: ['BULK_APPOINTMENTS'],
     enabled: true,
   },
 ]

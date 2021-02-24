@@ -24,21 +24,5 @@ context('Whereabouts homepage', () => {
       cy.get('[data-test="covid-units"]').should('not.exist')
       cy.get('[data-test="bulk-appointments"]').should('not.exist')
     })
-
-    it('should show covid unit task', () => {
-      cy.task('stubUserMeRoles', [{ roleCode: 'PRISON' }])
-
-      cy.visit('/manage-prisoner-whereabouts')
-
-      cy.get('[data-test="covid-units"]').should('exist')
-    })
-
-    it('should show bulk appointments task', () => {
-      cy.task('stubUserMeRoles', [{ roleCode: 'BULK_APPOINTMENTS' }])
-
-      cy.visit('/manage-prisoner-whereabouts')
-
-      cy.get('[data-test="bulk-appointments"]').should('exist')
-    })
   })
 })

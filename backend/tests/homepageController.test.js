@@ -129,7 +129,7 @@ describe('Homepage', () => {
             {
               id: 'manage-prisoner-whereabouts',
               heading: 'Manage prisoner whereabouts',
-              description: 'View unlock lists and COVID units, manage attendance and add bulk appointments.',
+              description: 'View unlock lists and manage attendance.',
               href: '/manage-prisoner-whereabouts',
             },
           ],
@@ -152,6 +152,46 @@ describe('Homepage', () => {
               heading: 'Use of force incidents',
               description: 'Manage and view incident reports and statements.',
               href: 'http://use-of-force-url',
+            },
+          ],
+        })
+      )
+    })
+
+    it('should render page with the view covid units task', async () => {
+      oauthApi.userRoles.mockResolvedValue([{ roleCode: 'PRISON' }])
+
+      await controller(req, res)
+
+      expect(res.render).toHaveBeenCalledWith(
+        'homepage/homepage.njk',
+        expect.objectContaining({
+          tasks: [
+            {
+              id: 'covid-units',
+              heading: 'View COVID units',
+              description: 'View who is in each COVID unit in your establishment.',
+              href: '/current-covid-units',
+            },
+          ],
+        })
+      )
+    })
+
+    it('should render page with the bulk appointments task', async () => {
+      oauthApi.userRoles.mockResolvedValue([{ roleCode: 'BULK_APPOINTMENTS' }])
+
+      await controller(req, res)
+
+      expect(res.render).toHaveBeenCalledWith(
+        'homepage/homepage.njk',
+        expect.objectContaining({
+          tasks: [
+            {
+              id: 'bulk-appointments',
+              heading: 'Add bulk appointments',
+              description: 'Upload a spreadsheet to add appointments for multiple people.',
+              href: '/bulk-appointments/need-to-upload-file',
             },
           ],
         })
