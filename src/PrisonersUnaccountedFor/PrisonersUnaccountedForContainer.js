@@ -55,7 +55,7 @@ function PrisonersUnaccountedForContainer({
             params: {
               agencyId,
               timeSlot: period,
-              date: date === 'Today' ? moment().format('DD/MM/YYYY') : date,
+              date: date === 'Today' ? moment().format('DD/MM/YYYY') : date.format('DD/MM/YYYY'),
             },
           })
 
@@ -100,7 +100,7 @@ function PrisonersUnaccountedForContainer({
         prisonersUnaccountedFor={prisonersUnaccountedFor}
         sortOrder={sortOrder}
         setColumnSort={setColumnSort}
-        date={date}
+        date={date === 'Today' ? moment().format('DD/MM/YYYY') : date.format('DD/MM/YYYY')}
         period={period}
         agencyId={agencyId}
         resetErrorDispatch={resetErrorDispatch}

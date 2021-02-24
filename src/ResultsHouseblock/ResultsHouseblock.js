@@ -362,7 +362,7 @@ class ResultsHouseblock extends Component {
                     showModal={showModal}
                     activityName={activityName}
                     setOffenderAttendance={setHouseblockOffenderAttendance}
-                    date={date}
+                    date={moment(date).isValid() ? moment(date).format('DD/MM/YYYY') : date}
                     noPay
                   />
                 )}
