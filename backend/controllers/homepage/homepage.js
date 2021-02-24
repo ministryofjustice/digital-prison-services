@@ -23,10 +23,26 @@ const getTasks = ({ activeCaseLoadId, locations, staffId, whereaboutsConfig }) =
   {
     id: 'manage-prisoner-whereabouts',
     heading: 'Manage prisoner whereabouts',
-    description: 'View unlock lists and COVID units, manage attendance and add bulk appointments.',
+    description: 'View unlock lists and manage attendance.',
     href: '/manage-prisoner-whereabouts',
     roles: null,
     enabled: whereaboutsConfig?.enabled,
+  },
+  {
+    id: 'bulk-appointments',
+    heading: 'Add bulk appointments',
+    description: 'Upload a spreadsheet to add appointments for multiple people.',
+    href: '/bulk-appointments/need-to-upload-file',
+    roles: ['BULK_APPOINTMENTS'],
+    enabled: true,
+  },
+  {
+    id: 'covid-units',
+    heading: 'View COVID units',
+    description: 'View who is in each COVID unit in your establishment.',
+    href: '/current-covid-units',
+    roles: ['PRISON'],
+    enabled: true,
   },
   {
     id: 'use-of-force',
