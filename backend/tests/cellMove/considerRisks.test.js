@@ -165,6 +165,19 @@ describe('move validation', () => {
         addedByFirstName: 'John',
         addedByLastName: 'Smith',
       },
+      {
+        alertId: 6,
+        alertType: 'R',
+        alertTypeDescription: 'Risk',
+        alertCode: 'RTP',
+        alertCodeDescription: 'Risk to transgender people',
+        comment: 'test',
+        dateCreated: '2020-09-21',
+        expired: false,
+        active: true,
+        addedByFirstName: 'John',
+        addedByLastName: 'Smith',
+      },
     ],
     profileInformation: [],
   }
@@ -172,7 +185,7 @@ describe('move validation', () => {
   const getCurrentOccupierDetailsResponse = {
     bookingId: 1235,
     firstName: 'Occupant',
-    lastName: 'User',
+    lastName: 'One',
     csra: 'High',
     agencyId: 'MDI',
     offenderNo: 'A12346',
@@ -265,6 +278,20 @@ describe('move validation', () => {
         addedByLastName: 'Smith',
       },
     ],
+    profileInformation: [{ type: 'SEXO', resultValue: 'Homosexual' }],
+  }
+
+  const getAnotherCurrentOccupierDetailsResponse = {
+    bookingId: 1235,
+    firstName: 'Occupant',
+    categoryCode: 'B',
+    lastName: 'Two',
+    csra: 'Standard',
+    agencyId: 'MDI',
+    offenderNo: 'A12347',
+    assessments: [],
+    assignedLivingUnit: {},
+    alerts: [],
     profileInformation: [{ type: 'SEXO', resultValue: 'Homosexual' }],
   }
 
@@ -398,27 +425,28 @@ describe('move validation', () => {
     prisonApi.getDetails
       .mockResolvedValueOnce(getCurrentOffenderDetailsResponse)
       .mockResolvedValueOnce(getCurrentOccupierDetailsResponse)
+      .mockResolvedValueOnce(getAnotherCurrentOccupierDetailsResponse)
 
-    prisonApi.getInmatesAtLocation.mockResolvedValue([{ offenderNo: 'A12346' }])
+    prisonApi.getInmatesAtLocation.mockResolvedValue([{ offenderNo: 'A12346' }, { offenderNo: 'A12347' }])
     await controller.index(req, res)
 
     expect(res.render).toHaveBeenCalledWith('cellMove/considerRisks.njk', {
-      categoryWarning: true,
+      categoryWarning: 'a Cat A rating and Occupant One is a Cat Not entered and Occupant Two is a Cat B',
       currentOccupantsWithFormattedActiveAlerts: [
         {
           alerts: [
             {
               comment: 'has a large poster on cell wall',
               date: 'Date added: 20 August 2019',
-              title: 'a Gang member alert.',
+              title: 'a Gang member alert',
             },
             {
               comment: 'test',
               date: 'Date added: 20 August 2020',
-              title: 'an Isolated Prisoner alert.',
+              title: 'an Isolated Prisoner alert',
             },
           ],
-          name: 'Occupant User',
+          name: 'Occupant One',
         },
       ],
       currentOffenderActiveAlerts: [
@@ -426,32 +454,37 @@ describe('move validation', () => {
           comment: 'has a large poster on cell wall',
           date: 'Date added: 20 August 2019',
           title:
-            'a Risk to LGB alert. You have selected a cell with a prisoner who has a sexual orientation of Homosexual.',
+            'a Risk to LGB alert and Occupant One has a sexual orientation of Homosexual and Occupant Two has a sexual orientation of Homosexual',
         },
         {
           comment: 'has a large poster on cell wall',
           date: 'Date added: 20 August 2019',
-          title: 'an E-List alert.',
+          title: 'an E-List alert',
         },
         {
           comment: 'has a large poster on cell wall',
           date: 'Date added: 20 August 2019',
-          title: 'a Gang member alert.',
+          title: 'a Gang member alert',
         },
         {
           comment: 'test',
           date: 'Date added: 20 August 2020',
-          title: 'an Isolated Prisoner alert.',
+          title: 'an Isolated Prisoner alert',
         },
         {
           comment: 'Test comment',
           date: 'Date added: 18 February 2021',
-          title: 'an ACCT open alert.',
+          title: 'an ACCT open alert',
         },
         {
           comment: '',
           date: 'Date added: 19 February 2021',
-          title: 'an ACCT post closure alert.',
+          title: 'an ACCT post closure alert',
+        },
+        {
+          comment: 'test',
+          date: 'Date added: 21 September 2020',
+          title: 'a Risk to transgender people alert',
         },
       ],
       dpsUrl: 'http://localhost:3000/',
@@ -467,14 +500,18 @@ describe('move validation', () => {
         },
       ],
       offenderNo: 'ABC123',
-      offenderName: 'Test User',
-      offendersFormattedNamesWithCsra: ['Test User is CSRA High', 'Occupant User is CSRA High'],
+      currentOffenderName: 'Test User',
+      offendersFormattedNamesWithCsra: [
+        'Test User is CSRA High.',
+        'Occupant One is CSRA High.',
+        'Occupant Two is CSRA Standard.',
+      ],
       prisonerNameForBreadcrumb: 'User, Test',
       profileUrl: '/prisoner/ABC123',
       selectCellUrl: '/prisoner/ABC123/cell-move/select-cell',
       showOffendersNamesWithCsra: true,
       showRisks: true,
-      stringListOfCurrentOccupantsNames: 'Occupant User',
+      stringListOfCurrentOccupantsNames: 'Occupant One and Occupant Two',
     })
   })
 
@@ -523,11 +560,10 @@ describe('move validation', () => {
                 {
                   comment: 'alert comment',
                   date: 'Date added: 20 August 2019',
-                  title:
-                    'a Risk to LGB alert. You have selected a prisoner who has a sexual orientation of Homosexual.',
+                  title: 'a Risk to LGB alert and Test User has a sexual orientation of Homosexual',
                 },
               ],
-              name: 'Occupant User',
+              name: 'Occupant One',
             },
           ],
         })
@@ -649,7 +685,7 @@ describe('move validation', () => {
 
     expect(raiseAnalyticsEvent).toHaveBeenCalledWith(
       'Cancelled out of cell move',
-      `Alerts codes for the offender moving in [RLG,XEL,XGANG,VIP,HA,HA1], Alerts for associated occupants: [XGANG,VIP]`,
+      `Alerts codes for the offender moving in [RLG,XEL,XGANG,VIP,HA,HA1,RTP], Alerts for associated occupants: [XGANG,VIP]`,
       'Cell move'
     )
 

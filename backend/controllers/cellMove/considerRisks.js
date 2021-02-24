@@ -14,7 +14,7 @@ module.exports = ({ prisonApi, raiseAnalyticsEvent }) => {
     return Promise.all(offenders.map(offender => prisonApi.getDetails(context, offender, true)))
   }
 
-  const alertString = alertDescription => `${indefiniteArticle(alertDescription)} ${alertDescription} alert.`
+  const alertString = alertDescription => `${indefiniteArticle(alertDescription)} ${alertDescription} alert`
 
   const getOffenderAlertBody = (alert, title) => ({
     title,
@@ -32,6 +32,8 @@ module.exports = ({ prisonApi, raiseAnalyticsEvent }) => {
         prisonApi.getDetails(res.locals, offenderNo, true),
         prisonApi.getInmatesAtLocation(res.locals, cellId, {}),
       ])
+
+      const currentOffenderName = formatName(currentOffenderDetails.firstName, currentOffenderDetails.lastName)
 
       const currentOccupantsOffenderNos = occupants.map(occupant => occupant.offenderNo)
       const currentOccupantsDetails = occupants && (await getOccupantsDetails(res.locals, currentOccupantsOffenderNos))
@@ -65,40 +67,41 @@ module.exports = ({ prisonApi, raiseAnalyticsEvent }) => {
       )
 
       const offendersFormattedNamesWithCsra = currentOffenderWithOccupants.map(
-        ({ firstName, lastName, csra = 'Not entered' }) => `${formatName(firstName, lastName)} is CSRA ${csra}`
+        ({ firstName, lastName, csra = 'Not entered' }) => `${formatName(firstName, lastName)} is CSRA ${csra}.`
       )
 
       // Get a list of sexualities involved
       const currentOffenderSexuality = getValueByType('SEXO', currentOffenderDetails.profileInformation, 'resultValue')
       const currentOffenderIsNonHetero = !currentOffenderSexuality?.toLowerCase().includes('hetero')
 
-      const currentOccupantsSexualities = [
-        ...new Set(
-          currentOccupantsDetails.map(currentOccupant =>
-            getValueByType('SEXO', currentOccupant.profileInformation, 'resultValue')
-          )
-        ),
-      ]
-      const cellHasNonHeteroOccupants = currentOccupantsSexualities.some(
-        sexuality => sexuality && !sexuality.toLowerCase().includes('hetero')
+      const currentNonHeteroOccupants = currentOccupantsDetails.filter(
+        currentOccupant =>
+          !getValueByType('SEXO', currentOccupant.profileInformation, 'resultValue')
+            ?.toLowerCase()
+            .includes('hetero')
       )
 
-      const sexualitiesString = currentOccupantsSexualities
-        .filter(sexuality => sexuality && !sexuality.toLowerCase().includes('hetero'))
-        .join(', ')
+      const currentNonHeteroOccupantsWithName = currentNonHeteroOccupants.map(currentOccupant => {
+        const sexuality = getValueByType('SEXO', currentOccupant.profileInformation, 'resultValue')
+
+        return `${formatName(
+          currentOccupant.firstName,
+          currentOccupant.lastName
+        )} has a sexual orientation of ${sexuality}`
+      })
 
       // Get the list of relevant offender alerts
       const currentOffenderActiveAlerts =
         currentOccupantsDetails.length > 0 &&
         currentOffenderDetails.alerts
           .filter(activeCellMoveAlertsExcludingDisabled)
-          .filter(alert => alert.alertCode !== 'RLG' || (alert.alertCode === 'RLG' && cellHasNonHeteroOccupants))
+          .filter(alert => alert.alertCode !== 'RLG' || (alert.alertCode === 'RLG' && currentNonHeteroOccupants.length))
           .map(alert => {
             const title =
-              alert.alertCode === 'RLG' && cellHasNonHeteroOccupants
-                ? `${alertString(
-                    alert.alertCodeDescription
-                  )} You have selected a cell with a prisoner who has a sexual orientation of ${sexualitiesString}.`
+              alert.alertCode === 'RLG' && currentNonHeteroOccupants.length
+                ? `${alertString(alert.alertCodeDescription)} and ${createStringFromList(
+                    currentNonHeteroOccupantsWithName
+                  )}`
                 : `${alertString(alert.alertCodeDescription)}`
 
             return getOffenderAlertBody(alert, title)
@@ -116,7 +119,7 @@ module.exports = ({ prisonApi, raiseAnalyticsEvent }) => {
                   alert.alertCode === 'RLG' && currentOffenderIsNonHetero
                     ? `${alertString(
                         alert.alertCodeDescription
-                      )} You have selected a prisoner who has a sexual orientation of ${currentOffenderSexuality}.`
+                      )} and ${currentOffenderName} has a sexual orientation of ${currentOffenderSexuality}`
                     : `${alertString(alert.alertCodeDescription)}`
 
                 return getOffenderAlertBody(alert, title)
@@ -125,7 +128,18 @@ module.exports = ({ prisonApi, raiseAnalyticsEvent }) => {
         })
         .filter(occupant => occupant.alerts.length)
 
-      const categoryWarning = currentOccupantsDetails.length > 0 && currentOffenderDetails.categoryCode === 'A'
+      const categoryWarning =
+        currentOccupantsDetails.length > 0 &&
+        currentOffenderDetails.categoryCode === 'A' &&
+        `a Cat A rating and ${createStringFromList(
+          currentOccupantsDetails.map(
+            currentOccupant =>
+              `${formatName(
+                currentOccupant.firstName,
+                currentOccupant.lastName
+              )} is a Cat ${currentOccupant.categoryCode || 'Not entered'}`
+          )
+        )}`
 
       if (
         !categoryWarning &&
@@ -141,7 +155,7 @@ module.exports = ({ prisonApi, raiseAnalyticsEvent }) => {
 
       return res.render('cellMove/considerRisks.njk', {
         offenderNo,
-        offenderName: `${formatName(currentOffenderDetails.firstName, currentOffenderDetails.lastName)}`,
+        currentOffenderName,
         prisonerNameForBreadcrumb: putLastNameFirst(currentOffenderDetails.firstName, currentOffenderDetails.lastName),
         profileUrl,
         selectCellUrl: `${profileUrl}/cell-move/select-cell`,
