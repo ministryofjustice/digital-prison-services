@@ -339,6 +339,7 @@ module.exports = on => {
     stubMainOffence: offence => prisonApi.stubMainOffence(offence),
     stubCsraAssessments: ({ offenderNumbers, assessments }) =>
       prisonApi.stubCsraAssessments(offenderNumbers, assessments),
+    stubCsraAssessmentsForPrisoner: assessments => prisonApi.stubCsraAssessmentsForPrisoner(assessments),
     stubNoExistingOffenderRecord: ({ offenderNo }) => dataComplianceApi.stubNoExistingOffenderRecord(offenderNo),
     stubRetentionRecord: ({ offenderNo, record }) => dataComplianceApi.stubRetentionRecord(offenderNo, record),
     stubGetOffenderRetentionReasons: dataComplianceApi.stubGetOffenderRetentionReasons,

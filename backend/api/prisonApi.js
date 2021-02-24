@@ -110,6 +110,9 @@ const prisonApiFactory = client => {
   const getCsraAssessments = (context, offenderNumbers) =>
     post(context, `/api/offender-assessments/csra/list`, offenderNumbers)
 
+  const getCsraAssessmentsForPrisoner = (context, params) =>
+    get(context, `/api/offender-assessments/CSR?${mapToQueryString(params)}`)
+
   const getEstablishmentRollBlocksCount = (context, agencyId, unassigned) =>
     get(context, `/api/movements/rollcount/${agencyId}?unassigned=${unassigned}`)
 
@@ -480,6 +483,7 @@ const prisonApiFactory = client => {
     getCellAttributes,
     getCellsWithCapacity,
     getCsraAssessments,
+    getCsraAssessmentsForPrisoner,
     getOffenderCellHistory,
     getAttributesForLocation,
     getHistoryForLocation,
