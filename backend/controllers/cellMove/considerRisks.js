@@ -33,8 +33,6 @@ module.exports = ({ prisonApi, raiseAnalyticsEvent }) => {
         prisonApi.getInmatesAtLocation(res.locals, cellId, {}),
       ])
 
-      const currentOffenderName = formatName(currentOffenderDetails.firstName, currentOffenderDetails.lastName)
-
       const currentOccupantsOffenderNos = occupants.map(occupant => occupant.offenderNo)
       const currentOccupantsDetails = occupants && (await getOccupantsDetails(res.locals, currentOccupantsOffenderNos))
 
@@ -69,6 +67,8 @@ module.exports = ({ prisonApi, raiseAnalyticsEvent }) => {
       const offendersFormattedNamesWithCsra = currentOffenderWithOccupants.map(
         ({ firstName, lastName, csra = 'Not entered' }) => `${formatName(firstName, lastName)} is CSRA ${csra}.`
       )
+
+      const currentOffenderName = formatName(currentOffenderDetails.firstName, currentOffenderDetails.lastName)
 
       // Get a list of sexualities involved
       const currentOffenderSexuality = getValueByType('SEXO', currentOffenderDetails.profileInformation, 'resultValue')
@@ -128,18 +128,16 @@ module.exports = ({ prisonApi, raiseAnalyticsEvent }) => {
         })
         .filter(occupant => occupant.alerts.length)
 
+      const currentOccupantsWithCatRating = currentOccupantsDetails.map(
+        currentOccupant =>
+          `${formatName(currentOccupant.firstName, currentOccupant.lastName)} is a Cat ${currentOccupant.categoryCode ||
+            'not entered'}`
+      )
+
       const categoryWarning =
         currentOccupantsDetails.length > 0 &&
         currentOffenderDetails.categoryCode === 'A' &&
-        `a Cat A rating and ${createStringFromList(
-          currentOccupantsDetails.map(
-            currentOccupant =>
-              `${formatName(
-                currentOccupant.firstName,
-                currentOccupant.lastName
-              )} is a Cat ${currentOccupant.categoryCode || 'Not entered'}`
-          )
-        )}`
+        `a Cat A rating and ${createStringFromList(currentOccupantsWithCatRating)}`
 
       if (
         !categoryWarning &&

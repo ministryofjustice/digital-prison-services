@@ -431,7 +431,7 @@ describe('move validation', () => {
     await controller.index(req, res)
 
     expect(res.render).toHaveBeenCalledWith('cellMove/considerRisks.njk', {
-      categoryWarning: 'a Cat A rating and Occupant One is a Cat Not entered and Occupant Two is a Cat B',
+      categoryWarning: 'a Cat A rating and Occupant One is a Cat not entered and Occupant Two is a Cat B',
       currentOccupantsWithFormattedActiveAlerts: [
         {
           alerts: [
