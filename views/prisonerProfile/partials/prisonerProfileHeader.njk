@@ -49,14 +49,6 @@
     </a>
 {% endset %}
 
-{% set csraHtml %}
-  <span data-test="csra-details">{{ prisonerProfileData.csra }} - {{ prisonerProfileData.lastReviewDate or 'No previous review' }}</span>
-  <br>
-  <a data-test="csra-link" class="govuk-link" href="{{ '/prisoner/' + prisonerProfileData.offenderNo + '/csra-history' }}">
-    View details <span class="govuk-visually-hidden">of CSRA</span>
-  </a>
-{% endset %}
-
 <div class="header-with-link">
     <h1 class="govuk-heading-l">{{ prisonerProfileData.offenderName }}</h1>
     {%  if prisonerProfileData.canViewPathfinderLink %}
@@ -88,7 +80,8 @@
       {{ headerItem('Category', categoryHtml) }}
       {{ headerItem('Incentive level', incentiveLevelHtml) }}
       {{ headerItem('Location', locationHtml) }}
-      {{ headerItem('CSRA', csraHtml, classes="govuk-!-margin-bottom-4") }}
+      {{ headerItem('CSRA', prisonerProfileData.csra, classes='govuk-!-margin-bottom-0') }}
+      {{ headerItem('Last review', prisonerProfileData.lastReviewDate, 'No previous review', 'govuk-!-margin-bottom-4') }}
       {{ headerItem('Alerts', alertNumbersHtml) }}
       {{ headerItem('Key worker', prisonerProfileData.keyWorkerName, 'None assigned', 'govuk-!-margin-bottom-0') }}
       {{ headerItem('Last session', prisonerProfileData.keyWorkerLastSession, 'No previous session') }}
