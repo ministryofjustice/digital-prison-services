@@ -167,6 +167,13 @@ describe('case note management', () => {
   describe('handleCreateCaseNoteForm()', () => {
     describe('when there are errors', () => {
       const error = new Error('There has been an error')
+      const error400 = makeError('response', {
+        status: 400,
+        body: {
+          userMessage: 'createCaseNote.caseNote.text: Value is too long: max length is 4000',
+          developerMessage: 'createCaseNote.caseNote.text: Value too long: max length is 4000',
+        },
+      })
 
       it('should return an error when there is a problem creating the alert', async () => {
         const req = {
@@ -201,21 +208,14 @@ describe('case note management', () => {
             text: 'test',
           },
         }
-        const error400 = {
-          status: 400,
-          body: {
-            userMessage: 'createCaseNote.caseNote.text: Value is too long: max length is 4000',
-            developerMessage: 'createCaseNote.caseNote.text: Value too long: max length is 4000',
-          },
-        }
-        caseNotesApi.addCaseNote = jest.fn().mockRejectedValue(makeError('response', error400))
+        caseNotesApi.addCaseNote = jest.fn().mockRejectedValue(error400)
 
         await handleCreateCaseNoteForm(req, res)
 
         expect(res.render).toHaveBeenCalledWith(
           'caseNotes/addCaseNoteForm.njk',
           expect.objectContaining({
-            errors: [{ href: '#text', text: error400.body.userMessage }],
+            errors: [{ href: '#text', text: error400.response.body.userMessage }],
           })
         )
       })
