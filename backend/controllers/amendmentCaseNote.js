@@ -50,7 +50,7 @@ module.exports = ({ prisonApi, caseNotesApi, logError }) => {
     return res.redirect(req.originalUrl)
   }
 
-  const makeAmendment = async (req, res, { offenderNo, caseNoteId, moreDetail, maximumLengthValidation }) => {
+  const makeAmendment = async (req, res, { offenderNo, caseNoteId, moreDetail }) => {
     try {
       await caseNotesApi.amendCaseNote(res.locals, offenderNo, caseNoteId, {
         text: moreDetail,
@@ -59,7 +59,11 @@ module.exports = ({ prisonApi, caseNotesApi, logError }) => {
       return res.redirect(`/prisoner/${offenderNo}/case-notes`)
     } catch (apiError) {
       if (apiError.response && apiError.response.status === 400) {
-        return stashSateAndRedirectToIndex(req, res, moreDetail, [maximumLengthValidation])
+        const errorData = {
+          href: '#moreDetail',
+          text: apiError.response.body?.userMessage,
+        }
+        return stashSateAndRedirectToIndex(req, res, moreDetail, [errorData])
       }
       logError(req.originalUrl, apiError, serviceUnavailableMessage)
       return res.render('error.njk', { url: `/prisoner/${offenderNo}/case-notes` })
@@ -84,7 +88,7 @@ module.exports = ({ prisonApi, caseNotesApi, logError }) => {
 
       if (errors.length > 0) return stashSateAndRedirectToIndex(req, res, moreDetail, errors)
 
-      return makeAmendment(req, res, { offenderNo, caseNoteId, moreDetail, maximumLengthValidation })
+      return makeAmendment(req, res, { offenderNo, caseNoteId, moreDetail })
     } catch (error) {
       res.locals.redirectUrl = `/prisoner/${offenderNo}/case-notes`
       throw error
