@@ -6,8 +6,7 @@ import { BreadcrumbContainer, BreadcrumbList, BreadcrumbListItem } from './Bread
 import routes from '../../routes'
 
 export const Breadcrumb = ({ breadcrumbs, homeLink }) => {
-  // Pick (pop) the last breadcrumb from the array (also removes it from the array)
-  const { breadcrumb: poppedBreadcrumb } = breadcrumbs.length > 0 ? breadcrumbs.pop() : breadcrumbs
+  const breadcrumbTrail = breadcrumbs.splice(0, breadcrumbs.length - 1)
 
   return (
     <BreadcrumbContainer data-qa="breadcrumb">
@@ -17,11 +16,9 @@ export const Breadcrumb = ({ breadcrumbs, homeLink }) => {
             Digital Prison Services
           </a>
         </BreadcrumbListItem>
-        {breadcrumbs.map(({ match, breadcrumb }, i, arr) => {
+        {breadcrumbTrail.map(({ match, breadcrumb }, i, arr) => {
           const parentPageLink = arr.length - 1 === i ? 'breadcrumb-parent-page-link' : null
-          if (breadcrumb.props.renderDirectly) {
-            return <BreadcrumbListItem key={match.url}>{breadcrumb}</BreadcrumbListItem>
-          }
+
           return (
             <BreadcrumbListItem key={match.url}>
               <Link to={match.url} data-qa={parentPageLink}>
@@ -30,7 +27,6 @@ export const Breadcrumb = ({ breadcrumbs, homeLink }) => {
             </BreadcrumbListItem>
           )
         })}
-        <BreadcrumbListItem>{poppedBreadcrumb}</BreadcrumbListItem>
       </BreadcrumbList>
     </BreadcrumbContainer>
   )
