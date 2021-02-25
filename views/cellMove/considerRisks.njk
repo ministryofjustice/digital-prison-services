@@ -53,7 +53,7 @@
     <div class="govuk-grid-column-two-thirds">
       {% if nonAssociations.length %}
         {{ govukWarningText({
-          text: offenderName + " has a non-association with a prisoner on this wing:",
+          text: currentOffenderName + " has a non-association with a prisoner on this wing:",
           iconFallbackText: "Warning",
           attributes: {
             "data-test":"non-associations-sub-heading"
@@ -137,7 +137,7 @@
 
       {% if showRisks %}
         {% if currentOffenderActiveAlerts.length %}
-          <h2 class="govuk-heading-m govuk-!-font-weight-regular" data-test="offender-alerts-heading">{{ offenderName }} has:</h2>
+          <h2 class="govuk-heading-m govuk-!-font-weight-regular" data-test="offender-alerts-heading">{{ currentOffenderName }} has:</h2>
 
           <ul class="govuk-list govuk-list--bullet">
             {% for alert in currentOffenderActiveAlerts %}
@@ -151,7 +151,7 @@
             {% endfor %}
 
             {% if categoryWarning %}
-              <li data-test="category-warning">who is a Cat A prisoner into a cell with another prisoner</li>
+              <li data-test="category-warning">{{ categoryWarning }}</li>
             {% endif %}
           </ul>
         {% endif %}
@@ -184,7 +184,7 @@
           errorMessage: errors | findError('confirmation'),
           fieldset: {
               legend: {
-                  text: "Are you sure you want to move " + offenderName + " into a cell with " + stringListOfCurrentOccupantsNames +"?",
+                  text: "Are you sure you want to move " + currentOffenderName + " into a cell with " + stringListOfCurrentOccupantsNames +"?",
                   classes: "govuk-fieldset__legend--s"
               }
           },

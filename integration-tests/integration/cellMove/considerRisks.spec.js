@@ -131,6 +131,7 @@ context('A user can see conflicts in cell', () => {
         offenderNo: 'A12346',
         assessments: [],
         assignedLivingUnit: {},
+        categoryCode: 'B',
         alerts: [
           {
             active: true,
@@ -279,22 +280,22 @@ context('A user can see conflicts in cell', () => {
         .its('length')
         .should('eq', 6)
       expect($messages.get(0)).to.contain(
-        'a Risk to LGB alert. You have selected a cell with a prisoner who has a sexual orientation of Homosexual.'
+        'a Risk to LGB alert and Occupant User has a sexual orientation of Homosexual'
       )
-      expect($messages.get(1)).to.contain('an E-List alert.')
-      expect($messages.get(2)).to.contain('a Gang member alert.')
-      expect($messages.get(3)).to.contain('an Isolated Prisoner alert.')
+      expect($messages.get(1)).to.contain('an E-List alert')
+      expect($messages.get(2)).to.contain('a Gang member alert')
+      expect($messages.get(3)).to.contain('an Isolated Prisoner alert')
       expect($messages.get(4)).to.contain('an ACCT open alert')
-      expect($messages.get(5)).to.contain('an ACCT post closure alert.')
+      expect($messages.get(5)).to.contain('an ACCT post closure alert')
     })
-    page.categoryWarning().contains('who is a Cat A prisoner into a cell with another prisoner')
+    page.categoryWarning().contains('a Cat A rating and Occupant User is a Cat B')
     page.occupantAlertsHeading().contains('Occupant User has:')
     page.occupantAlertMessages().then($messages => {
       cy.get($messages)
         .its('length')
         .should('eq', 2)
-      expect($messages.get(0)).to.contain('a Gang member alert.')
-      expect($messages.get(1)).to.contain('an Isolated Prisoner alert.')
+      expect($messages.get(0)).to.contain('a Gang member alert')
+      expect($messages.get(1)).to.contain('an Isolated Prisoner alert')
     })
     page.alertsComments().then($messages => {
       cy.get($messages)
