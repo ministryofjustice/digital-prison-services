@@ -119,6 +119,7 @@ const cellMoveAlertCodes = [
   'VIP',
   'HA',
   'HA1',
+  'RTP',
 ]
 
 const profileAlertCodes = [
