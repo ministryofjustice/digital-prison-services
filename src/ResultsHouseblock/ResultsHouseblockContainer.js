@@ -245,7 +245,6 @@ class ResultsHouseblockContainer extends Component {
     const title = this.titleString()
     const { resetErrorDispatch, setErrorDispatch, setOffenderPaymentDataDispatch, showModal } = this.props
     const { redactedPrint } = this.state
-
     return (
       <Page title={title} alwaysRender>
         <ResultsHouseblock

@@ -40,6 +40,7 @@ const PrisonersUnaccountedFor = ({
 }) => (
   <TableContainer>
     <Table
+      data-qa="results-table"
       head={
         <Table.Row>
           <Table.CellHeader setWidth="20%">
@@ -90,7 +91,7 @@ const PrisonersUnaccountedFor = ({
         </Table.Row>
       )}
       {prisonersUnaccountedFor.map(prisonerActivity => (
-        <Table.Row key={prisonerActivity.eventId}>
+        <Table.Row data-qa="result-row" key={prisonerActivity.eventId}>
           <Table.Cell>
             {prisonerActivity.inCaseLoad && (
               <OffenderLink offenderNo={prisonerActivity.offenderNo}>

@@ -388,4 +388,15 @@ module.exports = {
         jsonBody: cellMoveReasonResponse,
       },
     }),
+  stubAttendanceForScheduledActivities: attendances =>
+    stubFor({
+      request: {
+        method: 'GET',
+        urlPattern: '/whereabouts/attendances/[A-Z].+?/attendance-for-scheduled-activities.+?',
+      },
+      response: {
+        status: 200,
+        jsonBody: attendances || {},
+      },
+    }),
 }
