@@ -192,7 +192,7 @@ context('Prisoners unaccounted for', () => {
     attendanceDialogDriver(cy).markAsPaidAbsence()
 
     cy.wait('@request').then(xhr => {
-      const requestBody = xhr.request.bod
+      const requestBody = xhr.request.body
 
       expect(requestBody.absentReason).to.eq('AcceptableAbsence')
       expect(requestBody.attended).to.eq(false)
