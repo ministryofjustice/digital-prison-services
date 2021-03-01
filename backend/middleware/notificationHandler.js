@@ -1,5 +1,8 @@
+const { app } = require('../config')
+
 module.exports = ({ contentfulService, logError }) => async (req, res, next) => {
   try {
+    if (!app.contentfulSpaceId) return next()
     const notificationContent = await contentfulService.getMostRecentNotificationAsHtml(req)
 
     if (!notificationContent) return next()
