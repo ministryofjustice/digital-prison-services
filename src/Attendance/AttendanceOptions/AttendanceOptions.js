@@ -144,7 +144,7 @@ function AttendanceOptions({
         activityName={activityName}
         setOffenderAttendance={setOffenderAttendance}
         setSelectedOption={setSelectedOption}
-        date={date}
+        date={date?.format ? date.format('DD/MM/YYYY') : date}
       />
     )
 

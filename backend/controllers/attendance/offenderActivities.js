@@ -16,7 +16,7 @@ const offenderActivitesFactory = (prisonApi, whereaboutsApi) => {
 
     const prisonersUnaccountedFor = offenderActivities.filter(
       offenderActivity =>
-        prisonAttendance.attendances &&
+        !prisonAttendance.attendances ||
         !prisonAttendance.attendances.find(
           attendance =>
             offenderActivity.bookingId === attendance.bookingId && offenderActivity.eventId === attendance.eventId
