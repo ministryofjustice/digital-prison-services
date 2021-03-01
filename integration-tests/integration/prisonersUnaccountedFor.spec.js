@@ -192,39 +192,17 @@ context('Prisoners unaccounted for', () => {
     attendanceDialogDriver(cy).markAsPaidAbsence()
 
     cy.wait('@request').then(xhr => {
-      const {
-        absentReason,
-        attended,
-        bookingId,
-        comments,
-        eventDate,
-        eventId,
-        offenderNo,
-        paid,
-        prisonId,
-      } = xhr.request.body
+      const requestBody = xhr.request.bod
 
-      expect({
-        absentReason,
-        attended,
-        bookingId,
-        comments,
-        eventDate,
-        eventId,
-        offenderNo,
-        paid,
-        prisonId,
-      }).to.deep.eq({
-        absentReason: 'AcceptableAbsence',
-        attended: false,
-        bookingId: -1,
-        comments: 'test',
-        eventDate: today.format('DD/MM/YYYY'),
-        eventId: 1,
-        offenderNo: 'A12345',
-        paid: true,
-        prisonId: 'MDI',
-      })
+      expect(requestBody.absentReason).to.eq('AcceptableAbsence')
+      expect(requestBody.attended).to.eq(false)
+      expect(requestBody.bookingId).to.eq(-1)
+      expect(requestBody.comments).to.eq('test')
+      expect(requestBody.eventDate).to.eq(today.format('DD/MM/YYYY'))
+      expect(requestBody.eventId).to.eq(1)
+      expect(requestBody.offenderNo).to.eq(offenderNo1)
+      expect(requestBody.paid).to.eq(true)
+      expect(requestBody.prisonId).to.eq('MDI')
     })
   })
 })
