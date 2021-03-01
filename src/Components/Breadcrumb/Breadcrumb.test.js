@@ -82,7 +82,7 @@ describe('<Breadcrumb />', () => {
   const wrapper = shallow(<Breadcrumb {...props} />)
 
   it('should display the correct amount of breadcrumbs', () => {
-    expect(wrapper.find('BreadcrumbItem').length).toBe(4)
+    expect(wrapper.find('BreadcrumbItem').length).toBe(3)
   })
 
   it('should have the Home link as the first Breadcrumb ', () => {
@@ -112,17 +112,10 @@ describe('<Breadcrumb />', () => {
     expect(breadcrumbItem.find('span').text()).toEqual('Application homepage')
   })
 
-  it('should not link breadcrumb that should be rendered directly', () => {
-    const breadcrumbItem = wrapper.find('BreadcrumbItem').at(2)
-
-    expect(breadcrumbItem.find('Link').exists()).toBe(false)
-    expect(breadcrumbItem.find('span').text()).toEqual('Offender')
-  })
-
-  it('should not apply a link to the current page breadcrumb', () => {
+  it('should always link on the final breadcrumb', () => {
     const breadcrumbItem = wrapper.find('BreadcrumbItem').last()
 
-    expect(breadcrumbItem.find('Link').exists()).toBe(false)
-    expect(breadcrumbItem.find('span').text()).toEqual('Test page')
+    expect(breadcrumbItem.find('Link').exists()).toBe(true)
+    expect(breadcrumbItem.find('span').text()).toEqual('Offender')
   })
 })
