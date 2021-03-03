@@ -102,7 +102,7 @@
     "redux": "^4.0.5",
     "redux-logger": "^3.0.6",
     "redux-thunk": "^2.3.0",
-    "sass": "^1.32.0",
+    "sass": "^1.32.7",
     "shortid": "2.2.14",
     "spin.js": "^3.1.0",
     "styled-components": "^4.1.3",
