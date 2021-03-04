@@ -1,9 +1,6 @@
 const moment = require('moment')
 const logErrorAndContinue = require('../../shared/logErrorAndContinue')
 const { formatName, putLastNameFirst, hasLength, groupBy, sortByDateTime, getNamesFromString } = require('../../utils')
-const {
-  app: { notmEndpointUrl: dpsUrl },
-} = require('../../config')
 const { getPhone, getFormattedAddress } = require('../../shared/addressHelpers')
 
 const getContactView = contact => {
@@ -93,7 +90,6 @@ module.exports = ({ prisonApi, personService, allocationManagerApi }) => async (
 
   return res.render('prisonerProfile/prisonerProfessionalContacts/prisonerProfessionalContacts.njk', {
     breadcrumbPrisonerName: putLastNameFirst(firstName, lastName),
-    dpsUrl,
     contactsGroupedByRelationship: contactsGroupedByRelationship.sort((left, right) =>
       left.relationship.localeCompare(right.relationship)
     ),

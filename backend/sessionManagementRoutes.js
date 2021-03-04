@@ -19,7 +19,7 @@ const isXHRRequest = req =>
  */
 const configureRoutes = ({ app, tokenRefresher, tokenVerifier, homeLink }) => {
   const authLogoutUrl = `${config.apis.oauth2.ui_url}logout?client_id=${config.apis.oauth2.clientId}&redirect_uri=${
-    config.app.notmEndpointUrl
+    config.app.url
   }`
 
   const remoteLoginIndex = (req, res, next) => {

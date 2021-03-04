@@ -75,7 +75,6 @@ const props = {
     isExact: true,
     params: {},
   },
-  homeLink: 'http://HOME/',
 }
 
 describe('<Breadcrumb />', () => {
@@ -95,14 +94,14 @@ describe('<Breadcrumb />', () => {
     ).toEqual('Digital Prison Services')
   })
 
-  it('should link to the homeLink prop', () => {
+  it('should link to the home', () => {
     expect(
       wrapper
         .find('BreadcrumbItem')
         .first()
         .find('a')
         .prop('href')
-    ).toEqual('http://HOME/')
+    ).toEqual('/')
   })
 
   it('should link back to the Application homepage', () => {

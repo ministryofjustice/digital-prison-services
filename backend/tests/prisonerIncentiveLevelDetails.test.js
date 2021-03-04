@@ -94,7 +94,6 @@ describe('Prisoner incentive level details', () => {
       breadcrumbPrisonerName: 'Smith, John',
       currentIepLevel: 'Standard',
       daysOnIepLevel: '1 year, 260 days',
-      dpsUrl: 'http://localhost:3000/',
       errors: [],
       currentIepDateTime: '2017-08-15T16:04:35',
       nextReviewDate: '15 August 2018',

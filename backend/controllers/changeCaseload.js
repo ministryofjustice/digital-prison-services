@@ -1,5 +1,3 @@
-const config = require('../config')
-
 const changeCaseloadFactory = (prisonApi, logError) => {
   const index = (req, res) => {
     const {
@@ -7,7 +5,7 @@ const changeCaseloadFactory = (prisonApi, logError) => {
     } = res.locals
 
     if (allCaseloads.length <= 1) {
-      return res.redirect(config.app.notmEndpointUrl)
+      return res.redirect('/')
     }
 
     const options = allCaseloads.map(caseload => ({ value: caseload.caseLoadId, text: caseload.description }))
@@ -29,7 +27,7 @@ const changeCaseloadFactory = (prisonApi, logError) => {
       if (req.session && req.session.userDetails) req.session.userDetails.activeCaseLoadId = caseLoadId
       if (req.session && req.session.data) req.session.data = null
 
-      res.redirect(config.app.notmEndpointUrl)
+      res.redirect('/')
     } else {
       logError(req.originalUrl, 'Caseload ID is missing')
       res.status(500)

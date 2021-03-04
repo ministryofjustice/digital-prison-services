@@ -108,7 +108,7 @@ describe('Confirm appointments', () => {
     expect(res.render).toHaveBeenCalledWith(
       'videolinkBookingConfirmHearingPrison.njk',
       expect.objectContaining({
-        prisonerProfileLink: `http://localhost:3000/offenders/A12345`,
+        prisonerProfileLink: '/prisoner/A12345',
         title: 'The video link has been booked',
         offender: {
           name: 'Doe, John',
@@ -320,7 +320,7 @@ describe('Confirm appointments', () => {
     )
     expect(res.render).toHaveBeenCalledWith('error.njk', {
       url: '/prisoner/A12345',
-      homeUrl: 'http://localhost:3000/',
+      homeUrl: '/',
     })
   })
 

@@ -9,8 +9,6 @@ describe('<Page />', () => {
     error: '',
     loaded: false,
     children: 'Page content',
-    homeLink: 'http://home/',
-    defaultHome: 'http://notmhome/',
     backLink: 'http://this/',
   }
 
@@ -43,15 +41,6 @@ describe('<Page />', () => {
 
     it('should display the Breadcrumb component by default', () => {
       expect(wrapper.find('Breadcrumb').exists()).toEqual(true)
-    })
-
-    it('should pass the homelink to Breadcrumb component', () => {
-      expect(
-        wrapper
-          .find('Breadcrumb')
-          .find({ homeLink: 'http://home/' })
-          .exists()
-      ).toEqual(true)
     })
 
     it('should render a back link if prop passed in', () => {

@@ -62,7 +62,6 @@ describe('Add court appointment', () => {
         offenderNo: 'A12345',
         offenderNameWithNumber: 'Firstname Lastname (A12345)',
         agencyDescription: 'Moorland',
-        dpsUrl: 'http://localhost:3000/',
         bookingId: 1,
       })
     )
@@ -86,7 +85,6 @@ describe('Add court appointment', () => {
         'addAppointment/addCourtAppointment.njk',
         expect.objectContaining({
           bookingId: 1,
-          dpsUrl: 'http://localhost:3000/',
           errors: [
             { href: '#date', text: 'Select the date of the video link' },
             { href: '#start-time-hours', text: 'Select the start time of the court hearing video link' },

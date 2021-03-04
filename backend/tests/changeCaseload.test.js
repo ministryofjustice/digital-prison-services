@@ -1,7 +1,4 @@
 const { changeCaseloadFactory } = require('../controllers/changeCaseload')
-const config = require('../config')
-
-config.app.notmEndpointUrl = '//newNomisEndPointUrl/'
 
 describe('index', () => {
   const prisonApi = {}
@@ -39,7 +36,7 @@ describe('index', () => {
 
   it('should render the change caseload page with correct data', async () => {
     const req = {
-      headers: { referer: '//newNomisEndPointUrl/' },
+      headers: { referer: '//pshUrl/' },
       session: { userDetails: { name: 'Test User', activeCaseLoadId: 'LEI' } },
     }
     const res = { ...mockRes }
@@ -49,7 +46,7 @@ describe('index', () => {
     expect(res.render).toBeCalledWith('changeCaseload.njk', {
       title: 'Change caseload',
       options: [{ value: 'LEI', text: 'Leeds (HMP)' }, { value: 'HEI', text: 'Hewell (HMP)' }],
-      backUrl: '//newNomisEndPointUrl/',
+      backUrl: '//pshUrl/',
     })
   })
 
@@ -76,7 +73,7 @@ describe('index', () => {
 
     await service.index(req, res)
 
-    expect(res.redirect).toHaveBeenCalledWith('//newNomisEndPointUrl/')
+    expect(res.redirect).toHaveBeenCalledWith('/')
   })
 })
 
@@ -120,7 +117,7 @@ describe('post', () => {
 
     await service.post(req, res)
 
-    expect(res.redirect).toHaveBeenCalledWith('//newNomisEndPointUrl/')
+    expect(res.redirect).toHaveBeenCalledWith('/')
   })
 
   it('should update session with new caseload id and clear app session data', async () => {

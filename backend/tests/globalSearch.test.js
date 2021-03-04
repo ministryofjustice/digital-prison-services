@@ -47,7 +47,6 @@ describe('Global search', () => {
 
       expect(res.render).toHaveBeenCalledWith('globalSearch/globalSearch.njk', {
         backLink: undefined,
-        dpsUrl: 'http://localhost:3000/',
         referrer: undefined,
       })
     })
@@ -59,7 +58,6 @@ describe('Global search', () => {
 
         expect(res.render).toHaveBeenCalledWith('globalSearch/globalSearch.njk', {
           backLink: 'http://localhost:3003/',
-          dpsUrl: 'http://localhost:3000/',
           referrer: 'licences',
         })
       })
@@ -85,7 +83,6 @@ describe('Global search', () => {
 
         expect(res.render).toHaveBeenCalledWith('globalSearch/globalSearchResults.njk', {
           backLink: undefined,
-          dpsUrl: 'http://localhost:3000/',
           errors: [],
           formValues: {
             filters: {},
@@ -254,7 +251,6 @@ describe('Global search', () => {
 
         expect(res.render).toHaveBeenCalledWith('globalSearch/globalSearchResults.njk', {
           backLink: undefined,
-          dpsUrl: 'http://localhost:3000/',
           errors: [],
           formValues: {
             filters: {

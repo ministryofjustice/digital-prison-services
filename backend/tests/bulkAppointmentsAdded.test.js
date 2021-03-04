@@ -1,8 +1,6 @@
 Reflect.deleteProperty(process.env, 'APPINSIGHTS_INSTRUMENTATIONKEY')
 const { bulkAppointmentsAddedFactory } = require('../controllers/appointments/bulkAppointmentsAdded')
-const config = require('../config')
 
-config.app.notmEndpointUrl = '//newNomisEndPointUrl/'
 let controller
 
 beforeEach(() => {
@@ -58,7 +56,6 @@ describe('bulk appointments confirm', () => {
 
         expect(res.render).toBeCalledWith('bulkAppointmentsAdded.njk', {
           prisonersRemoved: appointmentDetails.prisonersRemoved,
-          dpsUrl: '//newNomisEndPointUrl/',
         })
       })
     })

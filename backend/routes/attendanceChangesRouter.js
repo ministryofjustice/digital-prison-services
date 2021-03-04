@@ -1,10 +1,6 @@
 const moment = require('moment')
 const { properCaseName, capitalize, pascalToString } = require('../utils')
 
-const {
-  app: { notmEndpointUrl: dpsUrl },
-} = require('../config')
-
 const toActivitiesMap = activities =>
   activities.reduce(
     (acc, current) => ({
@@ -53,7 +49,6 @@ module.exports = ({ prisonApi, whereaboutsApi, oauthApi }) => async (req, res) =
 
   if (!changes.length) {
     return res.render('attendanceChanges.njk', {
-      dpsUrl,
       subHeading,
       attendanceChanges: [],
     })
@@ -97,7 +92,6 @@ module.exports = ({ prisonApi, whereaboutsApi, oauthApi }) => async (req, res) =
   })
 
   return res.render('attendanceChanges.njk', {
-    dpsUrl,
     subHeading,
     attendanceChanges,
   })

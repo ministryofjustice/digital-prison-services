@@ -45,7 +45,7 @@ const fn = jest.fn()
 const props = {
   activity: '',
   caseChangeRedirect: true,
-  config: { notmEndpointUrl: '', mailTo: 'feedback@test.com', supportUrl: '//supportUrl/' },
+  config: { mailTo: 'feedback@test.com', supportUrl: '//supportUrl/' },
   currentLocation: 'cell',
   date: 'today',
   menuOpen: false,

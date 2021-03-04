@@ -2,7 +2,6 @@ const moment = require('moment')
 const { DATE_TIME_FORMAT_SPEC, DAY_MONTH_YEAR, Time } = require('../../../src/dateHelpers')
 
 const {
-  app: { notmEndpointUrl: dpsUrl },
   notifications: { confirmBookingPrisonTemplateId, emails },
 } = require('../../config')
 
@@ -65,7 +64,7 @@ const prepostAppointmentsFactory = ({
 }) => {
   const cancel = async (req, res) => {
     unpackAppointmentDetails(req)
-    res.redirect(`${dpsUrl}offenders/${req.params.offenderNo}`)
+    res.redirect(`/prisoner/${req.params.offenderNo}`)
   }
 
   const getLocationEvents = async (context, { activeCaseLoadId, locationId, date }) => {

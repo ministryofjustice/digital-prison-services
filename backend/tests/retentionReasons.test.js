@@ -1,7 +1,4 @@
 const { retentionReasonsFactory } = require('../controllers/retentionReasons')
-const config = require('../config')
-
-config.app.notmEndpointUrl = '//dpsUrl/'
 
 describe('retention reasons', () => {
   const prisonApi = {}

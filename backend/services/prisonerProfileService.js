@@ -8,7 +8,7 @@ const {
     soc: { url: socUrl, enabled: socEnabled },
     useOfForce: { prisons: useOfForcePrisons, ui_url: useOfForceUrl },
   },
-  app: { notmEndpointUrl, displayRetentionLink },
+  app: { displayRetentionLink },
 } = require('../config')
 const logErrorAndContinue = require('../shared/logErrorAndContinue')
 
@@ -173,7 +173,6 @@ module.exports = ({
       lastReviewDate:
         mostRecentAssessment?.assessmentDate && moment(mostRecentAssessment.assessmentDate).format('DD/MM/YYYY'),
       location: assignedLivingUnit.description,
-      notmEndpointUrl,
       offenderName: putLastNameFirst(prisonerDetails.firstName, prisonerDetails.lastName),
       offenderNo,
       offenderRecordRetained: offenderRetentionRecord && hasLength(offenderRetentionRecord.retentionReasons),
