@@ -1,13 +1,12 @@
 const moment = require('moment')
 const { cellMoveAlertCodes } = require('../../shared/alertFlagValues')
 const { putLastNameFirst, formatName, indefiniteArticle, hasLength, createStringFromList } = require('../../utils')
-const {
-  app: { notmEndpointUrl: dpsUrl },
-} = require('../../config')
 const getValueByType = require('../../shared/getValueByType')
 
 const activeCellMoveAlertsExcludingDisabled = alert =>
   !alert.expired && cellMoveAlertCodes.includes(alert.alertCode) && alert.alertCode !== 'PEEP'
+
+const missingDataString = 'not entered'
 
 module.exports = ({ prisonApi, raiseAnalyticsEvent }) => {
   const getOccupantsDetails = async (context, offenders) => {
@@ -65,13 +64,14 @@ module.exports = ({ prisonApi, raiseAnalyticsEvent }) => {
       )
 
       const offendersFormattedNamesWithCsra = currentOffenderWithOccupants.map(
-        ({ firstName, lastName, csra = 'Not entered' }) => `${formatName(firstName, lastName)} is CSRA ${csra}.`
+        ({ firstName, lastName, csra = missingDataString }) => `${formatName(firstName, lastName)} is CSRA ${csra}.`
       )
 
       const currentOffenderName = formatName(currentOffenderDetails.firstName, currentOffenderDetails.lastName)
 
       // Get a list of sexualities involved
-      const currentOffenderSexuality = getValueByType('SEXO', currentOffenderDetails.profileInformation, 'resultValue')
+      const currentOffenderSexuality =
+        getValueByType('SEXO', currentOffenderDetails.profileInformation, 'resultValue') || missingDataString
       const currentOffenderIsNonHetero = !currentOffenderSexuality?.toLowerCase().includes('hetero')
 
       const currentNonHeteroOccupants = currentOccupantsDetails.filter(
@@ -86,7 +86,8 @@ module.exports = ({ prisonApi, raiseAnalyticsEvent }) => {
           `${formatName(
             currentOccupant.firstName,
             currentOccupant.lastName
-          )} has a sexual orientation of ${getValueByType('SEXO', currentOccupant.profileInformation, 'resultValue')}`
+          )} has a sexual orientation of ${getValueByType('SEXO', currentOccupant.profileInformation, 'resultValue') ||
+            missingDataString}`
       )
 
       // Get the list of relevant offender alerts
@@ -128,9 +129,8 @@ module.exports = ({ prisonApi, raiseAnalyticsEvent }) => {
         .filter(occupant => occupant.alerts.length)
 
       const currentOccupantsWithCatRating = currentOccupantsDetails.map(
-        currentOccupant =>
-          `${formatName(currentOccupant.firstName, currentOccupant.lastName)} is a Cat ${currentOccupant.categoryCode ||
-            'not entered'}`
+        ({ firstName, lastName, categoryCode = missingDataString }) =>
+          `${formatName(firstName, lastName)} is a Cat ${categoryCode}`
       )
 
       const categoryWarning =
@@ -180,7 +180,6 @@ module.exports = ({ prisonApi, raiseAnalyticsEvent }) => {
           currentOccupantsWithFormattedActiveAlerts.length > 0 ||
           categoryWarning,
         errors,
-        dpsUrl,
       })
     } catch (error) {
       res.locals.redirectUrl = `/prisoner/${offenderNo}/cell-history`

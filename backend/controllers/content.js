@@ -1,11 +1,7 @@
-const {
-  app: { notmEndpointUrl: dpsUrl },
-} = require('../config')
-
 module.exports = ({ contentfulService }) => async (req, res) => {
   const { path } = req.params
 
-  const notFound = () => res.render('notFound.njk', { url: dpsUrl })
+  const notFound = () => res.render('notFound.njk', { url: '/' })
 
   if (!path) return notFound()
 
@@ -15,5 +11,5 @@ module.exports = ({ contentfulService }) => async (req, res) => {
 
   const { title, content } = pageContent
 
-  return res.render('content.njk', { content, dpsUrl, title })
+  return res.render('content.njk', { content, title })
 }

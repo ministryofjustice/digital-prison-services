@@ -100,9 +100,6 @@ env:
   - name: OAUTH_ENDPOINT_URL
     value: {{ .Values.env.OAUTH_ENDPOINT_URL | quote }}
 
-  - name: NN_ENDPOINT_URL
-    value: {{ .Values.env.NN_ENDPOINT_URL | quote }}
-
   - name: CASENOTES_API_URL
     value: {{ .Values.env.CASENOTES_API_URL | quote }}
 

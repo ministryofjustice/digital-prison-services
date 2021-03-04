@@ -164,7 +164,6 @@ describe('Prisoner visits', () => {
 
       expect(res.render).toHaveBeenCalledWith('prisonerProfile/prisonerVisits/prisonerVisits.njk', {
         breadcrumbPrisonerName: 'Name, Prisoner',
-        dpsUrl: 'http://localhost:3000/',
         formValues: {},
         offenderNo: 'ABC123',
         pagination: {

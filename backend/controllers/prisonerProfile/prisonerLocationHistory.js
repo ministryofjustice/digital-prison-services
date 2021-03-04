@@ -8,9 +8,6 @@ const {
   hasLength,
   extractLocation,
 } = require('../../utils')
-const {
-  app: { notmEndpointUrl: dpsUrl },
-} = require('../../config')
 
 const fetchStaffName = (context, staffId, prisonApi) =>
   prisonApi.getStaffDetails(context, staffId).then(staff => formatName(staff.firstName, staff.lastName))
@@ -96,7 +93,6 @@ module.exports = ({ prisonApi, whereaboutsApi, caseNotesApi }) => async (req, re
 
     return res.render('prisonerProfile/prisonerLocationHistory.njk', {
       breadcrumbPrisonerName: putLastNameFirst(firstName, lastName),
-      dpsUrl,
       locationDetails: {
         description: agencyDetails.description,
         movedIn:

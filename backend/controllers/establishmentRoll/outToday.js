@@ -1,9 +1,5 @@
 const moment = require('moment')
 
-const {
-  app: { notmEndpointUrl: dpsUrl },
-} = require('../../config')
-
 const { alertFlagLabels } = require('../../shared/alertFlagValues')
 const { putLastNameFirst } = require('../../utils')
 
@@ -30,6 +26,5 @@ module.exports = ({ movementsService }) => async (req, res) => {
 
   return res.render('establishmentRoll/outToday.njk', {
     results,
-    notmUrl: dpsUrl,
   })
 }

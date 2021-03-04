@@ -1,10 +1,7 @@
 const moment = require('moment')
 const { addAppointmentFactory } = require('../controllers/appointments/addAppointment')
-const config = require('../config')
 const { DAY_MONTH_YEAR } = require('../../src/dateHelpers')
 const { repeatTypes } = require('../shared/appointmentConstants')
-
-config.app.notmEndpointUrl = '//dpsUrl/'
 
 describe('Add appointment', () => {
   const prisonApi = {}
@@ -73,7 +70,6 @@ describe('Add appointment', () => {
           appointmentLocations: [],
           appointmentTypes: [],
           errors: undefined,
-          dpsUrl: 'http://localhost:3000/',
           offenderName: 'Smith, Barry',
           firstName: 'Barry',
           lastName: 'Smith',

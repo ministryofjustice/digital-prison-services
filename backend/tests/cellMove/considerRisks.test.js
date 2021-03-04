@@ -292,7 +292,7 @@ describe('move validation', () => {
     assessments: [],
     assignedLivingUnit: {},
     alerts: [],
-    profileInformation: [{ type: 'SEXO', resultValue: 'Homosexual' }],
+    profileInformation: [{ type: 'SEXO' }],
   }
 
   beforeEach(() => {
@@ -454,7 +454,7 @@ describe('move validation', () => {
           comment: 'has a large poster on cell wall',
           date: 'Date added: 20 August 2019',
           title:
-            'a Risk to LGB alert and Occupant One has a sexual orientation of Homosexual and Occupant Two has a sexual orientation of Homosexual',
+            'a Risk to LGB alert and Occupant One has a sexual orientation of Homosexual and Occupant Two has a sexual orientation of not entered',
         },
         {
           comment: 'has a large poster on cell wall',
@@ -487,7 +487,6 @@ describe('move validation', () => {
           title: 'a Risk to transgender people alert',
         },
       ],
-      dpsUrl: 'http://localhost:3000/',
       errors: undefined,
       nonAssociations: [
         {

@@ -22,7 +22,6 @@ ingress:
 env:
   API_ENDPOINT_URL: https://api-preprod.prison.service.justice.gov.uk/
   OAUTH_ENDPOINT_URL: https://sign-in-preprod.hmpps.service.justice.gov.uk/auth/
-  NN_ENDPOINT_URL: https://digital-preprod.prison.service.justice.gov.uk/
   API_WHEREABOUTS_ENDPOINT_URL: https://whereabouts-api-preprod.service.justice.gov.uk/
   LICENCES_URL: https://licences-preprod.prison.service.justice.gov.uk/
   HMPPS_COOKIE_NAME: hmpps-session-preprod
@@ -34,7 +33,7 @@ env:
   KEYWORKER_API_URL: https://keyworker-api-preprod.prison.service.justice.gov.uk/
   CATEGORISATION_UI_URL: https://preprod.offender-categorisation.service.justice.gov.uk/
   USE_OF_FORCE_URL: https://preprod.use-of-force.service.justice.gov.uk
-  USE_OF_FORCE_PRISONS: "AGI,AYI,BAI,BCI,BFI,BLI,BNI,BRI,CDI,CWI,DAI,DGI,DHI,DMI,DTI,DWI,EEI,ESI,EWI,EXI,FHI,FKI,FNI,GHI,GMI,GNI,GTI,HBI,HCI,HDI,HHI,HII,HLI,HMI,HPI,HVI,IWI,KMI,KVI,LEI,LFI,LHI,LLI,LNI,LPI,LTI,LYI,MDI,MRI,MTI,NHI,NWI,PDI,PNI,RSI,SDI,SLI,SPI,STI,TCI,VEI,WCI,WDI,WEI,WHI,WII,WLI,WMI,WRI"
+  USE_OF_FORCE_PRISONS: "AGI,AYI,BAI,BCI,BFI,BHI,BLI,BNI,BRI,BXI,CDI,CLI,CWI,DAI,DGI,DHI,DMI,DTI,DWI,EEI,EHI,ESI,EWI,EXI,EYI,FDI,FHI,FKI,FMI,FNI,GHI,GMI,GNI,GTI,HBI,HCI,HDI,HHI,HII,HLI,HMI,HOI,HPI,HVI,ISI,IWI,KMI,KVI,LEI,LFI,LHI,LLI,LNI,LPI,LTI,LWI,LYI,MDI,MRI,MSI,MTI,NHI,NWI,PDI,PNI,PVI,RCI,RSI,SDI,SLI,SPI,STI,TCI,VEI,WCI,WDI,WEI,WHI,WII,WLI,WMI,WRI,WSI,WWI"
   TOKENVERIFICATION_API_URL: https://token-verification-api-preprod.prison.service.justice.gov.uk
   TOKENVERIFICATION_API_ENABLED: true
   CASENOTES_API_URL: https://preprod.offender-case-notes.service.justice.gov.uk/

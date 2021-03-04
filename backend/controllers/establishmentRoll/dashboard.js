@@ -1,7 +1,4 @@
 const moment = require('moment')
-const {
-  app: { notmEndpointUrl: dpsUrl },
-} = require('../../config')
 
 const { capitalize } = require('../../utils')
 
@@ -79,7 +76,6 @@ module.exports = ({ prisonApi }) => async (req, res) => {
 
   return res.render('establishmentRoll/dashboard.njk', {
     date: moment().format('dddd D MMMM YYYY'),
-    dpsUrl,
     todayStats,
     rows,
   })

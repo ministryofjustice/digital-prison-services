@@ -214,7 +214,6 @@ describe('Prisoner cell history', () => {
           movedIn: '01/05/2020 - 12:48',
           movedInBy: 'Staff One',
         },
-        dpsUrl: 'http://localhost:3000/',
         occupants: [{ name: 'Offender, Another', profileUrl: '/prisoner/B12345' }],
         prisonerName: 'John Smith',
         profileUrl: '/prisoner/ABC123',

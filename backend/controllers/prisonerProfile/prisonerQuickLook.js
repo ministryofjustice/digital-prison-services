@@ -1,7 +1,4 @@
 const moment = require('moment')
-const {
-  app: { notmEndpointUrl: dpsUrl },
-} = require('../../config')
 const { formatCurrency, capitalizeUppercaseString } = require('../../utils')
 const formatAward = require('../../shared/formatAward')
 const filterActivitiesByPeriod = require('../../shared/filterActivitiesByPeriod')
@@ -115,7 +112,6 @@ module.exports = ({ prisonerProfileService, prisonApi }) => async (req, res) => 
   const daysSinceReview = (iepSummary && iepSummary.daysSinceReview) || 0
 
   return res.render('prisonerProfile/prisonerQuickLook/prisonerQuickLook.njk', {
-    dpsUrl,
     prisonerProfileData,
     offenceDetailsSectionError: Boolean(
       offenceDataResponse.error && prisonerDataResponse.error && sentenceDataResponse.error

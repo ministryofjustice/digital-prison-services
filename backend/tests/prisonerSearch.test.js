@@ -93,7 +93,7 @@ describe('Prisoner search', () => {
       )
     })
 
-    it('should render the prisoner search template with the correct alert, location options and notm url', async () => {
+    it('should render the prisoner search template with the correct alert and location options', async () => {
       await controller.index(req, res)
 
       expect(res.render).toHaveBeenCalledWith(
@@ -132,7 +132,6 @@ describe('Prisoner search', () => {
             { text: 'Houseblock 1', value: 'MDI-1' },
             { text: 'Houseblock 2', value: 'MDI-2' },
           ],
-          notmUrl: 'http://localhost:3000/',
         })
       )
 
@@ -354,7 +353,7 @@ describe('Prisoner search', () => {
 
       expect(res.status).toHaveBeenCalledWith(500)
       expect(logError).toHaveBeenCalledWith(req.originalUrl, new Error('Network error'), serviceUnavailableMessage)
-      expect(res.render).toHaveBeenCalledWith('error.njk', { url: '/', homeUrl: '/' })
+      expect(res.render).toHaveBeenCalledWith('error.njk', { url: '/' })
     })
 
     it('should not log connection reset API errors', async () => {

@@ -1,9 +1,6 @@
 const moment = require('moment')
 const { hasLength, formatName, putLastNameFirst, sortByDateTime } = require('../../utils')
 const generatePagination = require('../../shared/generatePagination')
-const {
-  app: { notmEndpointUrl: dpsUrl },
-} = require('../../config')
 
 module.exports = ({ prisonApi, pageSize = 20 }) => async (req, res, next) => {
   const { offenderNo } = req.params
@@ -77,7 +74,6 @@ module.exports = ({ prisonApi, pageSize = 20 }) => async (req, res, next) => {
 
     return res.render('prisonerProfile/prisonerVisits/prisonerVisits.njk', {
       breadcrumbPrisonerName: putLastNameFirst(details.firstName, details.lastName),
-      dpsUrl,
       formValues: req.query,
       offenderNo,
       pagination: generatePagination({

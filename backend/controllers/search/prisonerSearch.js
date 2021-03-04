@@ -2,7 +2,6 @@ const qs = require('querystring')
 const { serviceUnavailableMessage } = require('../../common-messages')
 const { alertFlagLabels, profileAlertCodes } = require('../../shared/alertFlagValues')
 const { putLastNameFirst, hasLength } = require('../../utils')
-const config = require('../../config')
 
 module.exports = ({ paginationService, prisonApi, logError }) => {
   const index = async (req, res) => {
@@ -93,7 +92,6 @@ module.exports = ({ paginationService, prisonApi, logError }) => {
           listView: `${req.baseUrl}?${qs.stringify({ ...searchQueries, view: 'list' })}`,
         },
         locationOptions,
-        notmUrl: config.app.notmEndpointUrl,
         pageLimit,
         pagination: paginationService.getPagination(totalRecords, pageOffset, pageLimit, fullUrl),
         printedValues: {
@@ -116,7 +114,7 @@ module.exports = ({ paginationService, prisonApi, logError }) => {
 
       res.status(500)
 
-      return res.render('error.njk', { url: '/', homeUrl: '/' })
+      return res.render('error.njk', { url: '/' })
     }
   }
 

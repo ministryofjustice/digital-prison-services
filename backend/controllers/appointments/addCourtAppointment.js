@@ -1,7 +1,4 @@
 const moment = require('moment')
-const {
-  app: { notmEndpointUrl: dpsUrl },
-} = require('../../config')
 const { DAY_MONTH_YEAR, DATE_TIME_FORMAT_SPEC, buildDateTime } = require('../../../src/dateHelpers')
 const { formatName } = require('../../utils')
 const { serviceUnavailableMessage } = require('../../common-messages')
@@ -90,7 +87,6 @@ const addCourtAppointmentsFactory = (prisonApi, logError) => {
         offenderNo,
         offenderNameWithNumber,
         agencyDescription,
-        dpsUrl,
         homeUrl: '/videolink',
         bookingId,
       })

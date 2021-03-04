@@ -1,8 +1,5 @@
 const moment = require('moment')
 const { putLastNameFirst, properCaseName, formatDaysInYears, formatName } = require('../../utils')
-const {
-  app: { notmEndpointUrl: dpsUrl },
-} = require('../../config')
 
 const filterData = (data, fields) => {
   let filteredResults = data
@@ -105,7 +102,6 @@ module.exports = ({ prisonApi, oauthApi }) => async (req, res) => {
       currentIepDateTime: iepSummary.iepTime,
       currentIepLevel: iepSummary.iepLevel,
       daysOnIepLevel: `${formatDaysInYears(iepSummary.daysSinceReview) || 'Changed today'}`,
-      dpsUrl,
       errors,
       formValues: req.query,
       noResultsFoundMessage,

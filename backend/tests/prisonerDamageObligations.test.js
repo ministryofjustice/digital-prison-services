@@ -78,7 +78,6 @@ describe('Prisoner damage obligations', () => {
     await controller(req, res)
 
     expect(res.render).toHaveBeenCalledWith('prisonerProfile/prisonerFinance/damageObligations.njk', {
-      dpsUrl: 'http://localhost:3000/',
       prisoner: {
         nameForBreadcrumb: 'Smith, John',
         name: 'John Smith',
@@ -102,7 +101,6 @@ describe('Prisoner damage obligations', () => {
       await controller(req, res)
 
       expect(res.render).toHaveBeenCalledWith('prisonerProfile/prisonerFinance/damageObligations.njk', {
-        dpsUrl: 'http://localhost:3000/',
         prisoner: {
           nameForBreadcrumb: 'Smith, John',
           name: 'John Smith',

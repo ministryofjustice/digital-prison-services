@@ -1,12 +1,7 @@
 const moment = require('moment')
-const config = require('../../config')
 const { DATE_TIME_FORMAT_SPEC, buildDateTime } = require('../../../src/dateHelpers')
 const { capitalize } = require('../../utils')
 const { repeatTypes, getValidationMessages, endRecurringEndingDate } = require('../../shared/appointmentConstants')
-
-const {
-  app: { notmEndpointUrl },
-} = config
 
 const setSelected = (value, items) =>
   items.map(
@@ -65,7 +60,6 @@ const bulkAppointmentsAddDetailsFactory = appointmentsService => {
       title: 'Add appointment details',
       appointmentTypes,
       locations,
-      homeUrl: notmEndpointUrl,
       appointmentType,
       location,
       comments,
@@ -169,7 +163,6 @@ const bulkAppointmentsAddDetailsFactory = appointmentsService => {
       locations: setSelected(Number(location), locations),
       appointmentType,
       location: Number(location),
-      homeUrl: notmEndpointUrl,
       repeatTypes,
       repeats,
       times: Number(times),

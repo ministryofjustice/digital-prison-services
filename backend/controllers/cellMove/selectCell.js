@@ -7,9 +7,6 @@ const {
   renderLocationOptions,
   cellAttributes,
 } = require('./cellMoveUtils')
-const {
-  app: { notmEndpointUrl: dpsUrl },
-} = require('../../config')
 
 const defaultSubLocationsValue = { text: 'Select area in residential unit', value: '' }
 const noAreasSelectedDropDownValue = { text: 'No areas to select', value: '' }
@@ -214,7 +211,6 @@ module.exports = ({ oauthApi, prisonApi, whereaboutsApi }) => async (req, res) =
       cellAttributes,
       prisonerDetails,
       offenderNo,
-      dpsUrl,
       nonAssociationLink: `/prisoner/${offenderNo}/cell-move/non-associations`,
       offenderDetailsUrl: `/prisoner/${offenderNo}/cell-move/offender-details`,
       csraDetailsUrl: `/prisoner/${offenderNo}/cell-move/cell-sharing-risk-assessment-details`,

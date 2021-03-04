@@ -25,7 +25,7 @@ describe('content', () => {
     it('should render not found template', async () => {
       await controller(req, res)
 
-      expect(res.render).toHaveBeenCalledWith('notFound.njk', { url: 'http://localhost:3000/' })
+      expect(res.render).toHaveBeenCalledWith('notFound.njk', { url: '/' })
     })
   })
 
@@ -44,21 +44,19 @@ describe('content', () => {
       it('should render not found template', async () => {
         await controller(req, res)
 
-        expect(res.render).toHaveBeenCalledWith('notFound.njk', { url: 'http://localhost:3000/' })
+        expect(res.render).toHaveBeenCalledWith('notFound.njk', { url: '/' })
       })
     })
 
     it('should render the content page with the correctly formatted markup', async () => {
       contentfulService.getPagesAsHtml = jest.fn().mockResolvedValue({
         content: '<h1>hello,world</h1>',
-        dpsUrl: 'http://localhost:3000/',
         title: 'Features',
       })
       await controller(req, res)
 
       expect(res.render).toHaveBeenCalledWith('content.njk', {
         content: '<h1>hello,world</h1>',
-        dpsUrl: 'http://localhost:3000/',
         title: 'Features',
       })
     })

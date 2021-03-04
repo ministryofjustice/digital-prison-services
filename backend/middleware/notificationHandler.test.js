@@ -1,3 +1,4 @@
+const config = require('../config')
 const notificationHandlerFactory = require('./notificationHandler')
 
 describe('Notification handler', () => {
@@ -19,6 +20,7 @@ describe('Notification handler', () => {
     logError = jest.fn()
     contentfulService.getMostRecentNotificationAsHtml = jest.fn()
     notificationHandler = notificationHandlerFactory({ contentfulService, logError })
+    config.app.contentfulSpaceId = '123'
   })
 
   it('should make a call to the contentful service', async () => {
@@ -41,6 +43,14 @@ describe('Notification handler', () => {
       id: 1,
       revision: 2,
     })
+  })
+
+  it('should not make a call to the contentful service when not enabled', async () => {
+    config.app.contentfulSpaceId = null
+    await notificationHandler(req, res, next)
+
+    expect(contentfulService.getMostRecentNotificationAsHtml.mock.calls.length).toBe(0)
+    expect(next).toHaveBeenCalled()
   })
 
   it('should log error and continue', async () => {

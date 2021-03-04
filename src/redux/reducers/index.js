@@ -42,7 +42,7 @@ const getHouseBlockMainActivities = houseBlockData =>
     .filter(activity => activity && activity.mainActivity)
 
 const appInitialState = {
-  config: { mailTo: '', notmEndpointUrl: '', licencesUrl: '' },
+  config: { mailTo: '', licencesUrl: '' },
   user: { activeCaseLoadId: null, roles: [] },
   shouldShowTerms: false,
   error: '',

@@ -163,7 +163,6 @@ describe('Select a cell', () => {
         'cellMove/selectCell.njk',
         expect.objectContaining({
           csraDetailsUrl: '/prisoner/A12345/cell-move/cell-sharing-risk-assessment-details',
-          dpsUrl: 'http://localhost:3000/',
           formAction: '/prisoner/A12345/cell-move/select-cell',
           nonAssociationLink: '/prisoner/A12345/cell-move/non-associations',
           offenderDetailsUrl: '/prisoner/A12345/cell-move/offender-details',

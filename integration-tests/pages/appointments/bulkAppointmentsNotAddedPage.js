@@ -5,8 +5,7 @@ const bulkAppointmentsNotAddedPage = () =>
     notAddedMessage: () => cy.get("[data-qa='appointments-not-added-message']"),
     uploadAnotherFileCTA: () =>
       cy.get("[data-qa='upload-another-file']").find('[href="/bulk-appointments/upload-file"]'),
-    exitBulkAppointmentsCTA: () =>
-      cy.get("[data-qa='exit-bulk-appointments']").find('[href="http://localhost:20200/"]'),
+    exitBulkAppointmentsCTA: () => cy.get("[data-qa='exit-bulk-appointments']").find('[href="/"]'),
   })
 
 export default {

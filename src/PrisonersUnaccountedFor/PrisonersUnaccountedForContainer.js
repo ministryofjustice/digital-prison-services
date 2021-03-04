@@ -41,7 +41,6 @@ function PrisonersUnaccountedForContainer({
   }
 
   const activityHubUser = userRoles.includes('ACTIVITY_HUB')
-
   const uniqueOffenderNos = new Set(prisonersUnaccountedFor.map(prisoner => prisoner.offenderNo))
 
   useEffect(

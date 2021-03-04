@@ -79,7 +79,7 @@ const PrisonersUnaccountedForSearch = ({
         </GridCol>
         <GridCol>
           <RightAlignContainer>
-            <Button className="no-print" onClick={() => window.print()}>
+            <Button data-qa="print-button" className="no-print" onClick={() => window.print()}>
               Print list
             </Button>
           </RightAlignContainer>

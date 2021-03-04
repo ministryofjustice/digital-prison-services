@@ -133,6 +133,21 @@ module.exports = {
       },
     })
   },
+  stubOffenderActivities: activities => {
+    return stubFor({
+      request: {
+        method: 'GET',
+        urlPattern: '/api/schedules/[A-Z].+?/activities.+?',
+      },
+      response: {
+        status: 200,
+        headers: {
+          'Content-Type': 'application/json;charset=UTF-8',
+        },
+        jsonBody: activities || [],
+      },
+    })
+  },
   stubProgEventsAtLocation: (locationId, timeSlot, date, activities, suspended = true) => {
     return stubFor({
       request: {

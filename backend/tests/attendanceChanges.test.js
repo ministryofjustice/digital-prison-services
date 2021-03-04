@@ -111,7 +111,6 @@ describe('Attendance change router', () => {
     expect(res.render).toHaveBeenCalledWith(
       'attendanceChanges.njk',
       expect.objectContaining({
-        dpsUrl: 'http://localhost:3000/',
         subHeading: '3 November 2020 - AM + PM',
         attendanceChanges: [
           [
@@ -158,7 +157,6 @@ describe('Attendance change router', () => {
       'attendanceChanges.njk',
       expect.objectContaining({
         attendanceChanges: [],
-        dpsUrl: 'http://localhost:3000/',
         subHeading: '3 November 2020 - AM + PM',
       })
     )
@@ -198,7 +196,6 @@ describe('Attendance change router', () => {
     expect(res.render).toHaveBeenCalledWith(
       'attendanceChanges.njk',
       expect.objectContaining({
-        dpsUrl: 'http://localhost:3000/',
         subHeading: '3 November 2020 - AM + PM',
         attendanceChanges: [
           [

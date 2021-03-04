@@ -1,7 +1,4 @@
 const moment = require('moment')
-const {
-  app: { notmEndpointUrl: dpsUrl },
-} = require('../../config')
 const { serviceUnavailableMessage } = require('../../common-messages')
 const { getTime, properCaseName, formatName, getCurrentPeriod } = require('../../utils')
 
@@ -127,7 +124,6 @@ module.exports = ({ prisonApi, whereaboutsApi, oauthApi, logError }) => async (r
   }))
 
   return res.render('viewAppointments.njk', {
-    dpsUrl,
     types,
     locations,
     timeSlot,

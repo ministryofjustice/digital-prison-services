@@ -72,7 +72,6 @@ describe('Change cell play back details', () => {
       await controller.index(req, res)
 
       expect(res.render).toHaveBeenCalledWith('cellMove/confirmCellMove.njk', {
-        dpsUrl: 'http://localhost:3000/',
         errors: undefined,
         formValues: {
           comment: undefined,
@@ -107,7 +106,6 @@ describe('Change cell play back details', () => {
         cellId: 'C-SWAP',
         cellMoveReasonRadioValues: undefined,
         movingToHeading: 'out of their current location',
-        dpsUrl: 'http://localhost:3000/',
         errors: undefined,
         formValues: {
           comment: undefined,

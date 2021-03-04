@@ -4,7 +4,6 @@ const moment = require('moment')
 const prisonApi = {}
 const oauthApi = {}
 const referenceCodesService = {}
-const config = require('../config')
 const { logError } = require('../logError')
 const { raiseAnalyticsEvent } = require('../raiseAnalyticsEvent')
 const {
@@ -21,7 +20,6 @@ jest.mock('../raiseAnalyticsEvent', () => ({
 jest.mock('../logError', () => ({
   logError: jest.fn(),
 }))
-config.app.notmEndpointUrl = '//newNomisEndPointUrl/'
 
 describe('alert management', () => {
   let mockReq
