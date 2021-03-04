@@ -1,9 +1,6 @@
 const moment = require('moment')
 
 const { DATE_TIME_FORMAT_SPEC } = require('../../../src/dateHelpers')
-const {
-  app: { notmEndpointUrl: dpsUrl },
-} = require('../../config')
 const { raiseAnalyticsEvent } = require('../../raiseAnalyticsEvent')
 
 const { properCaseName, formatName } = require('../../utils')
@@ -122,7 +119,7 @@ const confirmAppointmentFactory = ({ prisonApi, appointmentsService, logError })
         if (prisonUser) {
           res.render('videolinkBookingConfirmHearingPrison.njk', {
             title: 'The video link has been booked',
-            prisonerProfileLink: `${dpsUrl}offenders/${offenderNo}`,
+            prisonerProfileLink: `/prisoner/${offenderNo}`,
             offender: {
               name: `${properCaseName(lastName)}, ${properCaseName(firstName)}`,
               prison: agencyDescription,
@@ -195,7 +192,7 @@ const confirmAppointmentFactory = ({ prisonApi, appointmentsService, logError })
 
       const pageData = {
         url: prisonUser ? `/prisoner/${offenderNo}` : '/videolink/prisoner-search',
-        homeUrl: prisonUser ? dpsUrl : '/videolink',
+        homeUrl: prisonUser ? '/' : '/videolink',
       }
 
       res.status(500)

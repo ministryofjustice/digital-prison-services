@@ -52,7 +52,6 @@ describe('Prisoner professional contacts', () => {
         'prisonerProfile/prisonerProfessionalContacts/prisonerProfessionalContacts.njk',
         {
           breadcrumbPrisonerName: 'Smith, John',
-          dpsUrl: 'http://localhost:3000/',
           contactsGroupedByRelationship: [],
           offenderNo: 'ABC123',
           prisonerName: 'John Smith',
@@ -213,7 +212,6 @@ describe('Prisoner professional contacts', () => {
           'prisonerProfile/prisonerProfessionalContacts/prisonerProfessionalContacts.njk',
           {
             breadcrumbPrisonerName: 'Smith, John',
-            dpsUrl: 'http://localhost:3000/',
             contactsGroupedByRelationship: [
               {
                 relationship: 'Case Administrator',

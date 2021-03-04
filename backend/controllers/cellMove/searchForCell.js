@@ -6,9 +6,6 @@ const {
   renderLocationOptions,
   cellAttributes,
 } = require('./cellMoveUtils')
-const {
-  app: { notmEndpointUrl: dpsUrl },
-} = require('../../config')
 
 module.exports = ({ oauthApi, prisonApi, whereaboutsApi }) => async (req, res) => {
   const { offenderNo } = req.params
@@ -47,7 +44,6 @@ module.exports = ({ oauthApi, prisonApi, whereaboutsApi }) => async (req, res) =
       cellAttributes,
       prisonerDetails,
       offenderNo,
-      dpsUrl,
       nonAssociationLink: `/prisoner/${offenderNo}/cell-move/non-associations`,
       searchForCellRootUrl: `/prisoner/${offenderNo}/cell-move/search-for-cell`,
       offenderDetailsUrl: `/prisoner/${offenderNo}/cell-move/offender-details`,

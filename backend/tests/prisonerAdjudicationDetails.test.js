@@ -163,7 +163,6 @@ describe('Prisoner adjudication details', () => {
         reportedBy: 'Florenzo, Dudfsanaye',
       }),
       breadcrumbPrisonerName: 'Smith , John',
-      dpsUrl: 'http://localhost:3000/',
       profileUrl: '/prisoner/ABC123',
     })
   })

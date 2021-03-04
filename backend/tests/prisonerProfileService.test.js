@@ -205,7 +205,6 @@ describe('prisoner profile service', () => {
         keyWorkerName: 'Staff Member',
         lastReviewDate: '18/08/2020',
         location: 'CELL-123',
-        notmEndpointUrl: 'http://localhost:3000/',
         offenderName: 'Prisoner, Test',
         offenderNo: 'ABC123',
         offenderRecordRetained: undefined,

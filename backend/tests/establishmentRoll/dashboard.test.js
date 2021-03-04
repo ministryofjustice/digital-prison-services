@@ -106,7 +106,6 @@ describe('Establishment Roll', () => {
     expect(res.render).toHaveBeenCalledWith(
       'establishmentRoll/dashboard.njk',
       expect.objectContaining({
-        dpsUrl: 'http://localhost:3000/',
         rows: [
           [
             { text: 'Houseblock 1' },
@@ -160,7 +159,6 @@ describe('Establishment Roll', () => {
     expect(res.render).toHaveBeenCalledWith(
       'establishmentRoll/dashboard.njk',
       expect.objectContaining({
-        dpsUrl: 'http://localhost:3000/',
         rows: [
           [
             { text: 'Livingunitdesc1' },

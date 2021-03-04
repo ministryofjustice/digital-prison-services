@@ -14,8 +14,6 @@ import Header from './Header/Header'
 import ResultsHouseblockContainer from './ResultsHouseblock/ResultsHouseblockContainer'
 import ResultsActivityContainer from './ResultsActivity/ResultsActivityContainer'
 
-import links from './links'
-
 import routePaths from './routePaths'
 import { setFlagsAction } from './flags'
 import ModalContainer from './Components/ModalContainer'
@@ -63,7 +61,6 @@ class App extends React.Component {
     try {
       const [config] = await Promise.all([axios.get('/api/config'), this.loadUserAndCaseload()])
 
-      links.notmEndpointUrl = config.data.notmEndpointUrl
       if (config.data.googleAnalyticsId) {
         ReactGA.initialize(config.data.googleAnalyticsId)
       }
@@ -354,7 +351,6 @@ App.propTypes = {
   // mapStateToProps
   agencyId: PropTypes.string,
   config: PropTypes.shape({
-    notmEndpointUrl: PropTypes.string,
     mailTo: PropTypes.string,
     googleAnalyticsId: PropTypes.string,
     licencesUrl: PropTypes.string,

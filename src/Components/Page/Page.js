@@ -31,13 +31,13 @@ export class Page extends Component {
   }
 
   render() {
-    const { error, loaded, title, children, alwaysRender, showBreadcrumb, homeLink, backLink, showPrint } = this.props
+    const { error, loaded, title, children, alwaysRender, showBreadcrumb, backLink, showPrint } = this.props
 
     if (alwaysRender || loaded || error) {
       return (
         <>
           {alwaysRender && !loaded && <Spinner />}
-          {showBreadcrumb && <Breadcrumb homeLink={homeLink} />}
+          {showBreadcrumb && <Breadcrumb />}
           {backLink && <BackLink href={backLink}>Back</BackLink>}
           <Container>
             <PageHeader>
@@ -68,7 +68,6 @@ Page.propTypes = {
   children: childrenType,
   alwaysRender: PropTypes.bool,
   showBreadcrumb: PropTypes.bool,
-  homeLink: PropTypes.string.isRequired,
   backLink: PropTypes.string,
   applicationTitle: PropTypes.string,
   dispatchApplicationTitle: PropTypes.func,
@@ -94,7 +93,6 @@ const mapDispatchToProps = dispatch => ({
 const mapStateToProps = state => ({
   error: state.app.error,
   loaded: state.app.loaded,
-  homeLink: state.app.config.notmEndpointUrl,
 })
 
 export default connect(

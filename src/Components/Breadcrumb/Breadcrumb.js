@@ -5,14 +5,14 @@ import withBreadcrumbs from 'react-router-breadcrumbs-hoc'
 import { BreadcrumbContainer, BreadcrumbList, BreadcrumbListItem } from './Breadcrumb.styles'
 import routes from '../../routes'
 
-export const Breadcrumb = ({ breadcrumbs, homeLink }) => {
+export const Breadcrumb = ({ breadcrumbs }) => {
   const breadcrumbTrail = breadcrumbs.splice(0, breadcrumbs.length - 1)
 
   return (
     <BreadcrumbContainer data-qa="breadcrumb">
       <BreadcrumbList>
         <BreadcrumbListItem>
-          <a data-qa="breadcrumb-home-page-link" href={homeLink}>
+          <a data-qa="breadcrumb-home-page-link" href="/">
             Digital Prison Services
           </a>
         </BreadcrumbListItem>
@@ -34,7 +34,6 @@ export const Breadcrumb = ({ breadcrumbs, homeLink }) => {
 
 Breadcrumb.propTypes = {
   breadcrumbs: PropTypes.arrayOf(PropTypes.object).isRequired,
-  homeLink: PropTypes.string.isRequired,
 }
 
 export default withBreadcrumbs(routes)(Breadcrumb)

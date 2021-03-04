@@ -1,7 +1,4 @@
 const {
-  app: { notmEndpointUrl: dpsUrl },
-} = require('../../../config')
-const {
   formatCurrency,
   formatTimestampToDate,
   putLastNameFirst,
@@ -51,7 +48,6 @@ module.exports = ({ prisonApi }) => async (req, res) => {
       })
 
     return res.render('prisonerProfile/prisonerFinance/damageObligations.njk', {
-      dpsUrl,
       prisoner: {
         nameForBreadcrumb: putLastNameFirst(prisonerDetails.firstName, prisonerDetails.lastName),
         name: formatName(prisonerDetails.firstName, prisonerDetails.lastName),

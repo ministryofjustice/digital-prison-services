@@ -1,7 +1,4 @@
 const { formatTimestampToDate, formatTimestampToDateTime, putLastNameFirst, sortByDateTime } = require('../../utils')
-const {
-  app: { notmEndpointUrl: dpsUrl },
-} = require('../../config')
 
 module.exports = ({ prisonApi }) => async (req, res) => {
   const { offenderNo, adjudicationNumber } = req.params
@@ -47,7 +44,6 @@ module.exports = ({ prisonApi }) => async (req, res) => {
         reportedBy: putLastNameFirst(reporterFirstName, reporterLastName),
       },
       breadcrumbPrisonerName: putLastNameFirst(firstName, lastName),
-      dpsUrl,
       profileUrl: `/prisoner/${offenderNo}`,
     })
   } catch (error) {

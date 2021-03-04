@@ -3,7 +3,7 @@ const log = require('../log')
 const { isPrisonerIdentifier, putLastNameFirst } = require('../utils')
 const dobValidation = require('../shared/dobValidation')
 const {
-  app: { notmEndpointUrl: dpsUrl, licencesUrl },
+  app: { licencesUrl },
 } = require('../config')
 
 module.exports = ({ paginationService, offenderSearchApi, oauthApi }) => {
@@ -40,7 +40,7 @@ module.exports = ({ paginationService, offenderSearchApi, oauthApi }) => {
 
   const indexPage = (req, res) => {
     const { referrer } = req.query
-    return res.render('globalSearch/globalSearch.njk', { backLink: backWhiteList[referrer], dpsUrl, referrer })
+    return res.render('globalSearch/globalSearch.njk', { backLink: backWhiteList[referrer], referrer })
   }
   const prisonerBooked = prisoner => prisoner.latestBookingId > 0
   const resultsPage = async (req, res) => {
@@ -96,7 +96,6 @@ module.exports = ({ paginationService, offenderSearchApi, oauthApi }) => {
 
     return res.render('globalSearch/globalSearchResults.njk', {
       backLink: backWhiteList[referrer],
-      dpsUrl,
       errors,
       formValues: {
         searchText,

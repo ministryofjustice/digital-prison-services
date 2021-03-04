@@ -109,7 +109,6 @@ describe('Add appointment details controller', () => {
         title: 'Add appointment details',
         appointmentTypes: [{ value: 'app1', text: 'app1' }, { value: 2, text: 'app2' }],
         locations: [{ value: 1, text: 'loc1' }, { value: 2, text: 'loc2' }],
-        homeUrl: 'http://localhost:3000/',
       })
     })
 
@@ -151,7 +150,6 @@ describe('Add appointment details controller', () => {
         date: now.format(DAY_MONTH_YEAR),
         endTimeHours: '02',
         endTimeMinutes: '33',
-        homeUrl: 'http://localhost:3000/',
         location: 1,
         locations: [{ text: 'loc1', value: 1 }, { text: 'loc2', value: 2 }],
         sameTimeAppointments: 'yes',
@@ -178,7 +176,6 @@ describe('Add appointment details controller', () => {
         expect(res.render).toHaveBeenCalledWith(
           'bulkAppointmentsAddDetails.njk',
           expect.objectContaining({
-            homeUrl: 'http://localhost:3000/',
             errors: [
               { href: '#appointment-type', text: 'Select an appointment type' },
               { href: '#location', text: 'Select a location' },

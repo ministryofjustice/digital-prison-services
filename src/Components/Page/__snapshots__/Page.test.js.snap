@@ -3,9 +3,7 @@
 exports[`<Page /> when there is an error should display spinner and contents 1`] = `
 <Fragment>
   <Spinner />
-  <Component
-    homeLink="http://home/"
-  />
+  <Component />
   <BackLink
     href="http://this/"
   >

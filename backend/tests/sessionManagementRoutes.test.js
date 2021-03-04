@@ -18,8 +18,7 @@ const hasCookies = expectedNames => res => {
   expect(cookieNames).toEqual(expect.arrayContaining(expectedNames))
 }
 
-const newNomisEndpointUrl = 'https://newnomis.url/'
-config.app.notmEndpointUrl = newNomisEndpointUrl
+config.app.url = 'https://digital.prison.url/'
 
 describe('Test the routes and middleware installed by sessionManagementRoutes', () => {
   const app = express()
@@ -94,7 +93,7 @@ describe('Test the routes and middleware installed by sessionManagementRoutes', 
       .expect(302)
       .expect(
         'location',
-        'http://localhost:9090/auth/logout?client_id=prisonapiclient&redirect_uri=https://newnomis.url/'
+        'http://localhost:9090/auth/logout?client_id=prisonapiclient&redirect_uri=https://digital.prison.url/'
       ))
 
   it('After logout get "/" should redirect to "/login"', () =>

@@ -487,7 +487,6 @@ describe('move validation', () => {
           title: 'a Risk to transgender people alert',
         },
       ],
-      dpsUrl: 'http://localhost:3000/',
       errors: undefined,
       nonAssociations: [
         {

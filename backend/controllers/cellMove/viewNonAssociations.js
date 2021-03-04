@@ -2,9 +2,6 @@ const moment = require('moment')
 
 const { putLastNameFirst, formatName } = require('../../utils')
 const { getBackLinkData, getNonAssocationsInEstablishment } = require('./cellMoveUtils')
-const {
-  app: { notmEndpointUrl: dpsUrl },
-} = require('../../config')
 
 module.exports = ({ prisonApi }) => async (req, res) => {
   const { offenderNo } = req.params
@@ -50,7 +47,6 @@ module.exports = ({ prisonApi }) => async (req, res) => {
       nonAssociationsRows,
       breadcrumbPrisonerName: putLastNameFirst(firstName, lastName),
       prisonerName: formatName(firstName, lastName),
-      dpsUrl,
       searchForCellLink: `/prisoner/${offenderNo}/cell-move/search-for-cell`,
       offenderNo,
       ...getBackLinkData(req.headers.referer, offenderNo),

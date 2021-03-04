@@ -86,7 +86,6 @@ describe('Prisoner change incentive level details', () => {
           agencyId: 'MDI',
           bookingId: '123',
           breadcrumbPrisonerName: 'Smith, John',
-          dpsUrl: 'http://localhost:3000/',
           formValues: {},
           iepLevel: 'Standard',
           offenderNo: 'ABC123',
@@ -167,7 +166,6 @@ describe('Prisoner change incentive level details', () => {
           agencyId: 'MDI',
           bookingId: '123',
           breadcrumbPrisonerName: 'Smith, John',
-          dpsUrl: 'http://localhost:3000/',
           errors: [
             {
               href: '#newIepLevel',

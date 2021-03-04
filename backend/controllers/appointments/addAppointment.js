@@ -1,8 +1,4 @@
 const moment = require('moment')
-
-const {
-  app: { notmEndpointUrl: dpsUrl },
-} = require('../../config')
 const { properCaseName, formatName } = require('../../utils')
 const { buildDateTime, DATE_TIME_FORMAT_SPEC, DAY_MONTH_YEAR } = require('../../../src/dateHelpers')
 const { repeatTypes, endRecurringEndingDate, validateComments } = require('../../shared/appointmentConstants')
@@ -143,7 +139,6 @@ const addAppointmentFactory = (appointmentsService, existingEventsService, priso
         offenderName,
         firstName: properCaseName(firstName),
         lastName: properCaseName(lastName),
-        dpsUrl,
         appointmentTypes,
         appointmentLocations,
         repeatTypes,

@@ -1,8 +1,5 @@
 const { putLastNameFirst, formatName } = require('../../utils')
 const { raiseAnalyticsEvent } = require('../../raiseAnalyticsEvent')
-const {
-  app: { notmEndpointUrl: dpsUrl },
-} = require('../../config')
 
 module.exports = ({ prisonApi }) => {
   const renderTemplate = async (req, res, pageData) => {
@@ -33,7 +30,6 @@ module.exports = ({ prisonApi }) => {
         bookingId,
         breadcrumbPrisonerName: putLastNameFirst(firstName, lastName),
         errors,
-        dpsUrl,
         iepLevel,
         formValues,
         offenderNo,

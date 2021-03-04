@@ -81,7 +81,6 @@ describe('Prisoner location sharing history', () => {
 
       expect(res.render).toHaveBeenCalledWith('prisonerProfile/prisonerLocationHistory.njk', {
         breadcrumbPrisonerName: 'Smith, John',
-        dpsUrl: 'http://localhost:3000/',
         locationDetails: {
           movedOut: 'Current cell',
           reasonForMove: notEnteredMessage,
@@ -174,7 +173,6 @@ describe('Prisoner location sharing history', () => {
 
       expect(res.render).toHaveBeenCalledWith('prisonerProfile/prisonerLocationHistory.njk', {
         breadcrumbPrisonerName: 'Smith, John',
-        dpsUrl: 'http://localhost:3000/',
         locationDetails: {
           attributes: [{ description: 'Double occupancy' }],
           description: 'Moorland (HMP & YOI)',

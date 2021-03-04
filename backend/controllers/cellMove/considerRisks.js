@@ -1,9 +1,6 @@
 const moment = require('moment')
 const { cellMoveAlertCodes } = require('../../shared/alertFlagValues')
 const { putLastNameFirst, formatName, indefiniteArticle, hasLength, createStringFromList } = require('../../utils')
-const {
-  app: { notmEndpointUrl: dpsUrl },
-} = require('../../config')
 const getValueByType = require('../../shared/getValueByType')
 
 const activeCellMoveAlertsExcludingDisabled = alert =>
@@ -183,7 +180,6 @@ module.exports = ({ prisonApi, raiseAnalyticsEvent }) => {
           currentOccupantsWithFormattedActiveAlerts.length > 0 ||
           categoryWarning,
         errors,
-        dpsUrl,
       })
     } catch (error) {
       res.locals.redirectUrl = `/prisoner/${offenderNo}/cell-history`

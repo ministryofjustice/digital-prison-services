@@ -9,9 +9,6 @@ const {
   groupBy,
   hasLength,
 } = require('../../utils')
-const {
-  app: { notmEndpointUrl: dpsUrl },
-} = require('../../config')
 
 module.exports = ({ oauthApi, prisonApi, page = 0 }) => async (req, res) => {
   const { offenderNo } = req.params
@@ -48,6 +45,7 @@ module.exports = ({ oauthApi, prisonApi, page = 0 }) => async (req, res) => {
   const getCellHistoryGroupedByPeriodAtAgency = locations => {
     const locationsWithAgencyLeaveDate = enrichLocationsWithAgencyLeaveDate(locations)
     return Object.entries(groupBy(locationsWithAgencyLeaveDate, 'establishmentWithAgencyLeaveDate')).map(
+      // eslint-disable-next-line no-unused-vars
       ([key, value]) => {
         const fromDateString = formatTimestampToDate(value.slice(-1)[0].assignmentDateTime)
         const toDateString = formatTimestampToDate(value[0].assignmentEndDateTime)
@@ -116,7 +114,6 @@ module.exports = ({ oauthApi, prisonApi, page = 0 }) => async (req, res) => {
       breadcrumbPrisonerName: putLastNameFirst(firstName, lastName),
       changeCellLink: `/prisoner/${offenderNo}/cell-move/search-for-cell`,
       canViewCellMoveButton: userRoles && userRoles.some(role => role.roleCode === 'CELL_MOVE'),
-      dpsUrl,
     })
   } catch (error) {
     res.locals.redirectUrl = `/prisoner/${offenderNo}`
