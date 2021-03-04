@@ -35,7 +35,7 @@ env:
   KEYWORKER_API_URL: https://keyworker-api-dev.prison.service.justice.gov.uk/
   CATEGORISATION_UI_URL: https://dev.offender-categorisation.service.justice.gov.uk/
   USE_OF_FORCE_URL: https://dev.use-of-force.service.justice.gov.uk
-  USE_OF_FORCE_PRISONS: "WRI"
+  USE_OF_FORCE_PRISONS: "WRI,MDI"
   TOKENVERIFICATION_API_URL: https://token-verification-api-dev.prison.service.justice.gov.uk
   TOKENVERIFICATION_API_ENABLED: true
   CASENOTES_API_URL: https://dev.offender-case-notes.service.justice.gov.uk/
