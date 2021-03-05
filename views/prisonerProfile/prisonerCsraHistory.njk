@@ -3,7 +3,7 @@
 {% from "govuk/components/button/macro.njk" import govukButton %}
 {% from "govuk/components/table/macro.njk" import govukTable %}
 
-{% set title = 'CSRA History' %}
+{% set title = 'CSRA history' %}
 
 {% block beforeContent %}
   {{ govukBreadcrumbs({
@@ -15,9 +15,6 @@
       {
         text: breadcrumbPrisonerName,
         href: profileUrl
-      },
-      {
-        text: title
       }
     ],
     classes: 'govuk-!-display-none-print'
@@ -25,7 +22,7 @@
 {% endblock %}
 
 {% block content %}
-  <h1 class="govuk-heading-l">CSRA History for {{ prisonerName }}</h1>
+  <h1 class="govuk-heading-l">{{ title }} for {{ prisonerName }}</h1>
 
   <form novalidate="novalidate" class="form-background govuk-!-padding-3 govuk-!-margin-bottom-5 govuk-!-display-none-print" data-test="csra-form">
     <h2 class="govuk-heading-m">View by</h2>
