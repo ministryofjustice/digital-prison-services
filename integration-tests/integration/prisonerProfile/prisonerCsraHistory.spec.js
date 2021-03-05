@@ -1,4 +1,4 @@
-context('Prisoner CSRA History', () => {
+context('Prisoner CSRA history', () => {
   const offenderNo = 'A1234A'
 
   before(() => {
@@ -84,7 +84,7 @@ context('Prisoner CSRA History', () => {
   it('should load and display the correct content', () => {
     cy.visit(`/prisoner/${offenderNo}/csra-history`)
 
-    cy.get('h1').contains('CSRA History for John Smith')
+    cy.get('h1').contains('CSRA history for John Smith')
     cy.get('[data-test="csra-table"]').then($table => {
       cy.get($table)
         .find('tbody')
