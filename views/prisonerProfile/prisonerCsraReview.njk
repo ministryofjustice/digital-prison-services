@@ -1,0 +1,42 @@
+{% extends '../partials/layout.njk' %}
+{% from "govuk/components/summary-list/macro.njk" import govukSummaryList %}
+
+{% set title = 'CSRA details' %}
+
+{% block beforeContent %}
+  {{ govukBreadcrumbs({
+    items: [
+      {
+        text: 'Home',
+        href: '/'
+      },
+      {
+        text: breadcrumbPrisonerName,
+        href: profileUrl
+      }
+    ],
+    classes: 'govuk-!-display-none-print'
+  }) }}
+{% endblock %}
+
+{% block content %}
+  <h1 class="govuk-heading-l">CSRA review on {{ reviewDate }}</h1>
+
+  {{ govukSummaryList({
+    classes: 'govuk-summary-list--no-border',
+    rows: details | removePaddingBottom
+  }) }}
+
+  <h2 class="govuk-heading-m">Review questions</h1>
+
+  {% for question in reviewQuestions %}
+    <div class="govuk-grid-row">
+      <div class="govuk-grid-column-one-half">
+        <p class="govuk-body">{{question.question}}</p>
+      </div>
+      <div class="govuk-grid-column-one-half">
+        <p class="govuk-body">{{question.answer}}</p>
+      </div>
+    </div>
+  {% endfor %}
+{% endblock %}
