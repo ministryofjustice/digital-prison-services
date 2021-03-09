@@ -48,7 +48,7 @@ module.exports = ({ oauthApi, prisonApi, page = 0 }) => async (req, res) => {
       // eslint-disable-next-line no-unused-vars
       ([key, value]) => {
         const fromDateString = formatTimestampToDate(value.slice(-1)[0].assignmentDateTime)
-        const toDateString = formatTimestampToDate(value[0].assignmentEndDateTime)
+        const toDateString = formatTimestampToDate(value[0].assignmentEndDateTime) || 'Unknown'
 
         return {
           name: value[0].establishment,
@@ -87,13 +87,14 @@ module.exports = ({ oauthApi, prisonApi, page = 0 }) => async (req, res) => {
       }
     })
 
-    const currentLocation = cellData.find(cell => cell.assignmentEndDateTime === undefined)
+    const cellDataLatestFirst = cellData.sort((left, right) =>
+      sortByDateTime(right.assignmentDateTime, left.assignmentDateTime)
+    )
+    const currentLocation = cellDataLatestFirst.slice(0, 1)[0]
     const occupants =
       (currentLocation && (await prisonApi.getInmatesAtLocation(res.locals, currentLocation.livingUnitId, {}))) || []
 
-    const previousLocations = cellData
-      .filter(cell => cell.assignmentEndDateTime)
-      .sort((left, right) => sortByDateTime(right.assignmentDateTime, left.assignmentDateTime))
+    const previousLocations = cellDataLatestFirst.slice(1)
 
     return res.render('prisonerProfile/prisonerCellHistory.njk', {
       cellHistoryGroupedByAgency: hasLength(previousLocations)

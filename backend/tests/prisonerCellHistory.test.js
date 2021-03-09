@@ -39,12 +39,11 @@ describe('Prisoner cell history', () => {
           livingUnitId: 1,
           movementMadeBy: 'STAFF_1',
         },
+        // Previous location without end date/time
         {
           agencyId: 'RNI',
           assignmentDate: '2020-02-01',
           assignmentDateTime: '2020-02-01T12:48:33.375Z',
-          assignmentEndDate: '2020-03-01',
-          assignmentEndDateTime: '2020-03-01T12:48:33.375Z',
           assignmentReason: 'ADM',
           bookingId,
           description: 'RNI-1-03',
@@ -168,19 +167,19 @@ describe('Prisoner cell history', () => {
           },
           {
             name: 'Ranby',
-            datePeriod: 'from 01/02/2020 to 01/03/2020',
+            datePeriod: 'from 01/02/2020 to Unknown',
             cellHistory: [
               {
                 agencyId: 'RNI',
                 assignmentDateTime: '2020-02-01T12:48:33',
-                assignmentEndDateTime: '2020-03-01T12:48:33',
+                assignmentEndDateTime: undefined,
                 establishment: 'Ranby',
-                establishmentWithAgencyLeaveDate: 'Ranby2020-03-01T12:48:33',
+                establishmentWithAgencyLeaveDate: 'Ranbyundefined',
                 livingUnitId: 3,
                 location: '1-03',
                 movedInBy: 'Staff Two',
                 movedIn: '01/02/2020 - 12:48',
-                movedOut: '01/03/2020 - 12:48',
+                movedOut: undefined,
               },
             ],
           },
