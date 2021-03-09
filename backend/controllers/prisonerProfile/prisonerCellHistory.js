@@ -87,8 +87,9 @@ module.exports = ({ oauthApi, prisonApi, page = 0 }) => async (req, res) => {
       }
     })
 
-    const cellDataLatestFirst = cellData
-      .sort((left, right) => sortByDateTime(right.assignmentDateTime, left.assignmentDateTime))
+    const cellDataLatestFirst = cellData.sort((left, right) =>
+      sortByDateTime(right.assignmentDateTime, left.assignmentDateTime)
+    )
     const currentLocation = cellDataLatestFirst.slice(0, 1)[0]
     const occupants =
       (currentLocation && (await prisonApi.getInmatesAtLocation(res.locals, currentLocation.livingUnitId, {}))) || []
