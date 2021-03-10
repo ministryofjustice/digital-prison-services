@@ -49,6 +49,11 @@ module.exports = ({ prisonApi }) => async (req, res) => {
           text: agenciesWithDescriptions.find(agency => agency.agencyId === assessment.assessmentAgencyId)?.description,
         },
         { text: assessment.assessmentComment || 'Not entered' },
+        {
+          html: `<a class="govuk-link" href="/prisoner/${offenderNo}/csra-review?assessmentSeq=${
+            assessment.assessmentSeq
+          }&bookingId=${assessment.bookingId}">View details</a>`,
+        },
       ]),
     })
   } catch (error) {

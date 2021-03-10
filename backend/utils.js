@@ -16,7 +16,8 @@ const readableDateFormat = (displayDate, fromFormat = 'DD/MM/YYYY') => {
   return displayDate
 }
 
-const formatTimestampToDate = timestamp => timestamp && moment(timestamp).format('DD/MM/YYYY')
+const formatTimestampToDate = (timestamp, outputFormat = 'DD/MM/YYYY') =>
+  timestamp && moment(timestamp).format(outputFormat)
 
 const formatTimestampToDateTime = (timestamp, format = 'DD/MM/YYYY - HH:mm') =>
   timestamp && moment(timestamp).format(format)
