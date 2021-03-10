@@ -4,19 +4,17 @@ const createTransactionViewModel = require('../../../shared/createTransactionVie
 const { formatTimestampToDate, sortByDateTime } = require('../../../utils')
 
 const batchTransactionsOnly = transaction => transaction?.relatedOffenderTransactions?.length
+
 const sortByRecentEntryDateThenByRecentCalendarDate = (left, right) => {
-  if (left.entryDate && right.entryDate) return moment(right.entryDate).valueOf() - moment(left.entryDate).valueOf()
-  if (left.entryDate) return -1
-  if (right.entryDate) return 1
+  const entryDateDiff = moment(right.entryDate).valueOf() - moment(left.entryDate).valueOf()
+  if (entryDateDiff !== 0) return entryDateDiff
 
   if (left.calendarDate && right.calendarDate)
     return moment(right.calendarDate).valueOf() - moment(left.calendarDate).valueOf()
-  if (left.calendarDate) return -1
-  if (right.calendarDate) return 1
 
   return 0
 }
-const sortByOldestCalendarDate = (left, right) => sortByDateTime(left.calendarDate, right.calendarDate)
+const sortByOldestCalendarDate = (left, right) => sortByDateTime(right.calendarDate, left.calendarDate)
 
 module.exports = ({ prisonApi, prisonerFinanceService }) => async (req, res) => {
   const { month, year } = req.query
@@ -31,11 +29,10 @@ module.exports = ({ prisonApi, prisonerFinanceService }) => async (req, res) => 
     const uniqueAgencyIds = [...new Set(allTransactionsForDateRange.map(transaction => transaction.agencyId))]
     const prisons = await Promise.all(uniqueAgencyIds.map(agencyId => prisonApi.getAgencyDetails(res.locals, agencyId)))
 
-    const relatedTransactions = allTransactionsForDateRange
-      .filter(batchTransactionsOnly)
-      .sort(sortByOldestCalendarDate)
-      .flatMap(batchTransaction => {
-        const related = batchTransaction.relatedOffenderTransactions.map(relatedTransaction => ({
+    const relatedTransactions = allTransactionsForDateRange.filter(batchTransactionsOnly).flatMap(batchTransaction => {
+      const related = batchTransaction.relatedOffenderTransactions
+        .sort(sortByOldestCalendarDate)
+        .map(relatedTransaction => ({
           id: batchTransaction.id,
           entryDate: batchTransaction.entryDate,
           agencyId: batchTransaction.agencyId,
@@ -47,17 +44,17 @@ module.exports = ({ prisonApi, prisonerFinanceService }) => async (req, res) => 
           calendarDate: relatedTransaction.calendarDate,
         }))
 
-        let startingBalance = batchTransaction.currentBalance
+      let startingBalance = batchTransaction.currentBalance
 
-        return related.map(current => {
-          const withBalance = {
-            ...current,
-            currentBalance: startingBalance,
-          }
-          startingBalance -= current.penceAmount
-          return withBalance
-        })
+      return related.map(current => {
+        const withBalance = {
+          ...current,
+          currentBalance: startingBalance,
+        }
+        startingBalance -= current.penceAmount
+        return withBalance
       })
+    })
 
     const transactionsExcludingRelated = allTransactionsForDateRange.filter(
       transaction => !batchTransactionsOnly(transaction)
