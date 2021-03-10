@@ -64,11 +64,11 @@ module.exports = ({ prisonApi }) => async (req, res, next) => {
         },
         {
           key: { text: 'Next review date' },
-          value: { text: formatTimestampToDate(reviewDetails.nextReviewDate) },
+          value: { text: formatTimestampToDate(reviewDetails.nextReviewDate, 'DD MMMM YYYY') },
         },
       ],
       profileUrl: `/prisoner/${offenderNo}`,
-      reviewDate: formatTimestampToDate(reviewDetails.assessmentDate),
+      reviewDate: formatTimestampToDate(reviewDetails.assessmentDate, 'DD MMMM YYYY'),
       reviewQuestions: reviewDetails.questions,
     })
   } catch (error) {

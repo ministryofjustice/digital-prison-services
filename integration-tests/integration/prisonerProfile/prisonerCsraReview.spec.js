@@ -58,7 +58,7 @@ context('Prisoner CSRA review', () => {
   it('should load and display the correct content', () => {
     cy.visit(`/prisoner/${offenderNo}/csra-review?assessmentSeq=1`)
 
-    cy.get('h1').contains('CSRA review on 15/03/2011')
+    cy.get('h1').contains('CSRA review on 15 March 2011')
 
     cy.get('[data-test="review-summary"]').then($summary => {
       cy.get($summary)
@@ -88,7 +88,7 @@ context('Prisoner CSRA review', () => {
           expect($summaryValues.get(3).innerText).to.contain('Moorland')
           expect($summaryValues.get(4).innerText).to.contain('Comments about the review')
           expect($summaryValues.get(5).innerText).to.contain('Staff One')
-          expect($summaryValues.get(6).innerText).to.contain('13/06/2011')
+          expect($summaryValues.get(6).innerText).to.contain('13 June 2011')
         })
 
       cy.get('[data-test="review-question"]').then($questions => {

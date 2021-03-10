@@ -89,11 +89,11 @@ describe('Prisoner CSRA Review', () => {
             },
             {
               key: { text: 'Next review date' },
-              value: { text: '13/06/2011' },
+              value: { text: '13 June 2011' },
             },
           ],
           profileUrl: `/prisoner/${offenderNo}`,
-          reviewDate: '15/03/2011',
+          reviewDate: '15 March 2011',
           reviewQuestions: [
             {
               question: 'Does the prisoner have a history of self-harm?',
@@ -175,11 +175,11 @@ describe('Prisoner CSRA Review', () => {
             },
             {
               key: { text: 'Next review date' },
-              value: { text: '13/06/2011' },
+              value: { text: '13 June 2011' },
             },
           ],
           profileUrl: `/prisoner/${offenderNo}`,
-          reviewDate: '15/03/2011',
+          reviewDate: '15 March 2011',
           reviewQuestions: [
             {
               question: 'Is there a reason to suspect that the prisoner is abusing drugs / alcohol?',
