@@ -13,11 +13,11 @@ describe('Prisoner CSRA Review', () => {
     req = {
       originalUrl: 'http://localhost',
       params: { offenderNo },
-      query: { assessmentSeq: 1 },
+      query: { assessmentSeq: 1, bookingId },
     }
     res = { locals: {}, render: jest.fn() }
 
-    prisonApi.getDetails = jest.fn().mockResolvedValue({ bookingId, firstName: 'John', lastName: 'Smith' })
+    prisonApi.getDetails = jest.fn().mockResolvedValue({ firstName: 'John', lastName: 'Smith' })
     prisonApi.getCsraReviewForBooking = jest.fn().mockResolvedValue({})
     prisonApi.getAgencyDetails = jest.fn().mockResolvedValue({})
     prisonApi.getStaffDetails = jest.fn().mockResolvedValue({})

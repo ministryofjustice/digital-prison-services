@@ -52,7 +52,7 @@ module.exports = ({ prisonApi }) => async (req, res) => {
         {
           html: `<a class="govuk-link" href="/prisoner/${offenderNo}/csra-review?assessmentSeq=${
             assessment.assessmentSeq
-          }">View details</a>`,
+          }&bookingId=${assessment.bookingId}">View details</a>`,
         },
       ]),
     })

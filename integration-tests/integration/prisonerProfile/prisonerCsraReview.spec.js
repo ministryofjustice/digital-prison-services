@@ -11,7 +11,7 @@ context('Prisoner CSRA review', () => {
 
   beforeEach(() => {
     Cypress.Cookies.preserveOnce('hmpps-session-dev')
-    cy.task('stubOffenderBasicDetails', { bookingId, firstName: 'John', lastName: 'Smith', agencyId: 'MDI' })
+    cy.task('stubOffenderBasicDetails', { firstName: 'John', lastName: 'Smith', agencyId: 'MDI' })
     cy.task('stubCsraReviewForPrisoner', {
       bookingId,
       assessmentSeq: 1,
@@ -56,7 +56,7 @@ context('Prisoner CSRA review', () => {
   })
 
   it('should load and display the correct content', () => {
-    cy.visit(`/prisoner/${offenderNo}/csra-review?assessmentSeq=1`)
+    cy.visit(`/prisoner/${offenderNo}/csra-review?assessmentSeq=1&bookingId=${bookingId}`)
 
     cy.get('h1').contains('CSRA review on 15 March 2011')
 

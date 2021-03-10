@@ -9,13 +9,14 @@ const csraTranslations = {
 
 module.exports = ({ prisonApi }) => async (req, res, next) => {
   const { offenderNo } = req.params
-  const { assessmentSeq } = req.query
+  const { assessmentSeq, bookingId } = req.query
 
   try {
-    const prisonerDetails = await prisonApi.getDetails(res.locals, offenderNo)
-    const { bookingId, firstName, lastName } = prisonerDetails
+    const [prisonerDetails, reviewDetails] = await Promise.all([
+      prisonApi.getDetails(res.locals, offenderNo),
+      prisonApi.getCsraReviewForBooking(res.locals, bookingId, assessmentSeq),
+    ])
 
-    const reviewDetails = await prisonApi.getCsraReviewForBooking(res.locals, bookingId, assessmentSeq)
     const { assessmentAgencyId, assessorUser, classificationCode, originalClassificationCode } = reviewDetails
 
     const agencyDetails = assessmentAgencyId ? await prisonApi.getAgencyDetails(res.locals, assessmentAgencyId) : {}
@@ -28,7 +29,7 @@ module.exports = ({ prisonApi }) => async (req, res, next) => {
       : csraTranslations[classificationCode]
 
     return res.render('prisonerProfile/prisonerCsraReview.njk', {
-      breadcrumbPrisonerName: putLastNameFirst(firstName, lastName),
+      breadcrumbPrisonerName: putLastNameFirst(prisonerDetails.firstName, prisonerDetails.lastName),
       details: [
         {
           key: { text: 'CSRA' },

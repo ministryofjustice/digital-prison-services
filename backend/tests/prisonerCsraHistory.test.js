@@ -145,21 +145,30 @@ describe('Prisoner CSRA History', () => {
             { text: 'High' },
             { text: 'Doncaster' },
             { text: 'comment' },
-            { html: '<a class="govuk-link" href="/prisoner/ABC123/csra-review?assessmentSeq=3">View details</a>' },
+            {
+              html:
+                '<a class="govuk-link" href="/prisoner/ABC123/csra-review?assessmentSeq=3&bookingId=2">View details</a>',
+            },
           ],
           [
             { text: '10/11/2013' },
             { text: 'Pending' },
             { text: 'Doncaster' },
             { text: 'comment' },
-            { html: '<a class="govuk-link" href="/prisoner/ABC123/csra-review?assessmentSeq=2">View details</a>' },
+            {
+              html:
+                '<a class="govuk-link" href="/prisoner/ABC123/csra-review?assessmentSeq=2&bookingId=2">View details</a>',
+            },
           ],
           [
             { text: '02/06/2011' },
             { text: 'Standard' },
             { text: 'Moorland' },
             { text: 'Not entered' },
-            { html: '<a class="govuk-link" href="/prisoner/ABC123/csra-review?assessmentSeq=1">View details</a>' },
+            {
+              html:
+                '<a class="govuk-link" href="/prisoner/ABC123/csra-review?assessmentSeq=1&bookingId=1">View details</a>',
+            },
           ],
         ],
       })
@@ -180,7 +189,10 @@ describe('Prisoner CSRA History', () => {
                 { text: 'High' },
                 { text: 'Doncaster' },
                 { text: 'comment' },
-                { html: '<a class="govuk-link" href="/prisoner/ABC123/csra-review?assessmentSeq=3">View details</a>' },
+                {
+                  html:
+                    '<a class="govuk-link" href="/prisoner/ABC123/csra-review?assessmentSeq=3&bookingId=2">View details</a>',
+                },
               ],
             ],
           })
@@ -201,7 +213,10 @@ describe('Prisoner CSRA History', () => {
                 { text: 'Standard' },
                 { text: 'Moorland' },
                 { text: 'Not entered' },
-                { html: '<a class="govuk-link" href="/prisoner/ABC123/csra-review?assessmentSeq=1">View details</a>' },
+                {
+                  html:
+                    '<a class="govuk-link" href="/prisoner/ABC123/csra-review?assessmentSeq=1&bookingId=1">View details</a>',
+                },
               ],
             ],
           })
@@ -222,7 +237,10 @@ describe('Prisoner CSRA History', () => {
                 { text: 'High' },
                 { text: 'Doncaster' },
                 { text: 'comment' },
-                { html: '<a class="govuk-link" href="/prisoner/ABC123/csra-review?assessmentSeq=3">View details</a>' },
+                {
+                  html:
+                    '<a class="govuk-link" href="/prisoner/ABC123/csra-review?assessmentSeq=3&bookingId=2">View details</a>',
+                },
               ],
             ],
           })
