@@ -44,7 +44,7 @@
     "applicationinsights-native-metrics": "^0.0.5",
     "axios": "0.21.1",
     "body-parser": "^1.19.0",
-    "bunyan": "^1.8.14",
+    "bunyan": "^2.0.5",
     "bunyan-middleware": "^1.0.1",
     "classnames": "^2.2.6",
     "connect-flash": "^0.1.1",
