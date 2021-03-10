@@ -230,6 +230,21 @@ module.exports = {
       },
     })
   },
+  stubCsraReviewForPrisoner: ({ bookingId, assessmentSeq, review = {} }) => {
+    return stubFor({
+      request: {
+        method: 'GET',
+        urlPattern: `/api/offender-assessments/csra/${bookingId}/assessment/${assessmentSeq}`,
+      },
+      response: {
+        status: 200,
+        headers: {
+          'Content-Type': 'application/json;charset=UTF-8',
+        },
+        jsonBody: review,
+      },
+    })
+  },
   stubIepSummaryForBookingIds: results => {
     return stubFor({
       request: {
