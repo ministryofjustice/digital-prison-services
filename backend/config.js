@@ -15,6 +15,7 @@ module.exports = {
   },
   analytics: {
     googleAnalyticsId: process.env.GOOGLE_ANALYTICS_ID,
+    googleTagManagerId: process.env.GOOGLE_TAG_MANAGER_ID,
   },
   hmppsCookie: {
     name: process.env.HMPPS_COOKIE_NAME || 'hmpps-session-dev',
