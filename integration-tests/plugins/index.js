@@ -344,6 +344,8 @@ module.exports = on => {
     stubCsraAssessments: ({ offenderNumbers, assessments }) =>
       prisonApi.stubCsraAssessments(offenderNumbers, assessments),
     stubCsraAssessmentsForPrisoner: assessments => prisonApi.stubCsraAssessmentsForPrisoner(assessments),
+    stubCsraReviewForPrisoner: ({ bookingId, assessmentSeq, review }) =>
+      prisonApi.stubCsraReviewForPrisoner({ bookingId, assessmentSeq, review }),
     stubNoExistingOffenderRecord: ({ offenderNo }) => dataComplianceApi.stubNoExistingOffenderRecord(offenderNo),
     stubRetentionRecord: ({ offenderNo, record }) => dataComplianceApi.stubRetentionRecord(offenderNo, record),
     stubGetOffenderRetentionReasons: dataComplianceApi.stubGetOffenderRetentionReasons,

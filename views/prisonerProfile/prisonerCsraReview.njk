@@ -24,7 +24,8 @@
 
   {{ govukSummaryList({
     classes: 'govuk-summary-list--no-border',
-    rows: details | removePaddingBottom
+    rows: details | removePaddingBottom,
+    attributes: { "data-test": 'review-summary' }
   }) }}
 
   <h2 class="govuk-heading-m">Review questions</h1>
@@ -32,10 +33,10 @@
   {% for question in reviewQuestions %}
     <div class="govuk-grid-row">
       <div class="govuk-grid-column-one-half">
-        <p class="govuk-body">{{question.question}}</p>
+        <p class="govuk-body" data-test="review-question">{{question.question}}</p>
       </div>
       <div class="govuk-grid-column-one-half">
-        <p class="govuk-body">{{question.answer}}</p>
+        <p class="govuk-body" data-test="review-answer">{{question.answer}}</p>
       </div>
     </div>
   {% endfor %}
