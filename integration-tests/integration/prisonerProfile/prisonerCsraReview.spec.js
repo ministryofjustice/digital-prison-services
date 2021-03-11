@@ -87,7 +87,7 @@ context('Prisoner CSRA review', () => {
           expect($summaryValues.get(2).innerText).to.contain('Review Board')
           expect($summaryValues.get(3).innerText).to.contain('Moorland')
           expect($summaryValues.get(4).innerText).to.contain('Comments about the review')
-          expect($summaryValues.get(5).innerText).to.contain('Staff One')
+          expect($summaryValues.get(5).innerText).to.contain('Review Board - Staff One')
           expect($summaryValues.get(6).innerText).to.contain('13 June 2011')
         })
 
