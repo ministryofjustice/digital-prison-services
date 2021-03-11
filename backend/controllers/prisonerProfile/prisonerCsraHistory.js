@@ -1,9 +1,6 @@
 const { putLastNameFirst, formatName, formatTimestampToDate, sortByDateTime } = require('../../utils')
 
-const csraOptions = [
-  { value: 'STANDARD', text: 'Standard' },
-  { value: 'HI', text: 'High' },
-]
+const csraOptions = [{ value: 'STANDARD', text: 'Standard' }, { value: 'HI', text: 'High' }]
 
 module.exports = ({ prisonApi }) => async (req, res) => {
   const { offenderNo } = req.params
@@ -36,7 +33,7 @@ module.exports = ({ prisonApi }) => async (req, res) => {
 
     return res.render('prisonerProfile/prisonerCsraHistory.njk', {
       breadcrumbPrisonerName: putLastNameFirst(firstName, lastName),
-      csraOptions, //: ['STANDARD', 'HIGH'],
+      csraOptions,
       formValues: req.query,
       locationOptions: agenciesWithDescriptions.map(agency => ({ text: agency.description, value: agency.agencyId })),
       prisonerName: formatName(firstName, lastName),
