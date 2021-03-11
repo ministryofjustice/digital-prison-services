@@ -3,7 +3,6 @@ const { putLastNameFirst, formatName, formatTimestampToDate, sortByDateTime } = 
 const csraOptions = [
   { value: 'STANDARD', text: 'Standard' },
   { value: 'HI', text: 'High' },
-  { value: 'PEND', text: 'Pending' },
 ]
 
 module.exports = ({ prisonApi }) => async (req, res) => {
@@ -13,7 +12,7 @@ module.exports = ({ prisonApi }) => async (req, res) => {
   try {
     const [prisonerDetails, csraAssessments] = await Promise.all([
       prisonApi.getDetails(res.locals, offenderNo),
-      prisonApi.getCsraAssessmentsForPrisoner(res.locals, { offenderNo, latestOnly: 'false', activeOnly: 'false' }),
+      prisonApi.getCsraAssessmentsForPrisoner(res.locals, offenderNo),
     ])
 
     const { firstName, lastName } = prisonerDetails
@@ -37,7 +36,7 @@ module.exports = ({ prisonApi }) => async (req, res) => {
 
     return res.render('prisonerProfile/prisonerCsraHistory.njk', {
       breadcrumbPrisonerName: putLastNameFirst(firstName, lastName),
-      csraOptions,
+      csraOptions, //: ['STANDARD', 'HIGH'],
       formValues: req.query,
       locationOptions: agenciesWithDescriptions.map(agency => ({ text: agency.description, value: agency.agencyId })),
       prisonerName: formatName(firstName, lastName),
