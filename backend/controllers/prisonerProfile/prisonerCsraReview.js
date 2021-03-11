@@ -17,23 +17,32 @@ module.exports = ({ prisonApi }) => async (req, res, next) => {
       prisonApi.getCsraReviewForBooking(res.locals, bookingId, assessmentSeq),
     ])
 
-    const { assessmentAgencyId, assessorUser, classificationCode, originalClassificationCode } = reviewDetails
+    const {
+      assessmentAgencyId,
+      assessmentCommitteeName,
+      assessorUser,
+      classificationCode,
+      originalClassificationCode,
+    } = reviewDetails
 
     const agencyDetails = assessmentAgencyId ? await prisonApi.getAgencyDetails(res.locals, assessmentAgencyId) : {}
     const staffDetails = assessorUser ? await prisonApi.getStaffDetails(res.locals, assessorUser) : {}
 
-    const csraLevelString = originalClassificationCode
-      ? `${csraTranslations[classificationCode]} - this is an override from ${
-          csraTranslations[originalClassificationCode]
-        }`
-      : csraTranslations[classificationCode]
+    const assessorAuthority = assessmentCommitteeName || 'Not entered'
+    const assessorName = formatName(staffDetails.firstName, staffDetails.lastName)
 
     return res.render('prisonerProfile/prisonerCsraReview.njk', {
       breadcrumbPrisonerName: putLastNameFirst(prisonerDetails.firstName, prisonerDetails.lastName),
       details: [
         {
           key: { text: 'CSRA' },
-          value: { text: csraLevelString },
+          value: {
+            text: originalClassificationCode
+              ? `${csraTranslations[classificationCode]} - this is an override from ${
+                  csraTranslations[originalClassificationCode]
+                }`
+              : csraTranslations[classificationCode],
+          },
         },
         ...(reviewDetails.classificationReviewReason
           ? [
@@ -61,7 +70,7 @@ module.exports = ({ prisonApi }) => async (req, res, next) => {
         },
         {
           key: { text: 'Reviewed by' },
-          value: { text: formatName(staffDetails.firstName, staffDetails.lastName) },
+          value: { text: originalClassificationCode ? `${assessorAuthority} - ${assessorName}` : assessorName },
         },
         {
           key: { text: 'Next review date' },
