@@ -52,6 +52,12 @@ env:
         name: {{ template "app.name" . }}
         key: GOOGLE_ANALYTICS_ID
 
+  - name: GOOGLE_TAG_MANAGER_ID
+    valueFrom:
+      secretKeyRef:
+        name: {{ template "app.name" . }}
+        key: GOOGLE_TAG_MANAGER_ID
+
   - name: SESSION_COOKIE_SECRET
     valueFrom:
       secretKeyRef:

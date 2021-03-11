@@ -142,7 +142,7 @@ module.exports = app => {
   njkEnv.addFilter('getTime', getTime)
   njkEnv.addFilter('truthy', data => Boolean(data))
   njkEnv.addFilter('possessive', possessive)
-  njkEnv.addGlobal('googleAnalyticsId', config.analytics.googleAnalyticsId)
+  njkEnv.addGlobal('googleTagManagerId', config.analytics.googleTagManagerId)
   njkEnv.addGlobal('supportUrl', config.app.supportUrl)
 
   return njkEnv
