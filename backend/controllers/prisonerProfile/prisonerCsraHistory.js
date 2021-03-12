@@ -42,7 +42,9 @@ module.exports = ({ prisonApi }) => async (req, res) => {
         { text: assessment.assessmentDate && formatTimestampToDate(assessment.assessmentDate) },
         { text: csraOptions.find(csraCode => csraCode.value === assessment.classificationCode)?.text },
         {
-          text: agenciesWithDescriptions.find(agency => agency.agencyId === assessment.assessmentAgencyId)?.description || 'Not entered',
+          text:
+            agenciesWithDescriptions.find(agency => agency.agencyId === assessment.assessmentAgencyId)?.description ||
+            'Not entered',
         },
         { text: assessment.assessmentComment || 'Not entered' },
         {
