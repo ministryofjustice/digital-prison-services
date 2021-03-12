@@ -34,11 +34,6 @@ jobs:
             - node_modules
             - build
 
-  cypress_integration_tests:
-    working_directory: ~/app
-    docker:
-      - image: cimg/node:14.15.3-browsers
-
   veracode_scan:
     docker:
       - image: cimg/node:14.15.3-browsers
