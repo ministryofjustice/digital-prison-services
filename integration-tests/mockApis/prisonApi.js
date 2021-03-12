@@ -215,11 +215,11 @@ module.exports = {
       },
     })
   },
-  stubCsraAssessmentsForPrisoner: (assessments = []) => {
+  stubCsraAssessmentsForPrisoner: ({offenderNo, assessments = [] }) => {
     return stubFor({
       request: {
         method: 'GET',
-        urlPattern: '/api/offender-assessments/CSR\\?.+?',
+        urlPattern: `/api/offender-assessments/csra/${offenderNo}`,
       },
       response: {
         status: 200,
