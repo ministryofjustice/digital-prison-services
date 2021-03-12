@@ -1,6 +1,7 @@
 const moment = require('moment')
 const { putLastNameFirst, hasLength, formatName, getNamesFromString } = require('../utils')
 const { alertFlagLabels, profileAlertCodes } = require('../shared/alertFlagValues')
+const { csraTranslations } = require('../shared/csraHelpers')
 const {
   apis: {
     categorisation: { ui_url: categorisationUrl },
@@ -48,7 +49,7 @@ module.exports = ({
       bookingId,
       category,
       categoryCode,
-      csra,
+      csraClassificationCode,
       inactiveAlertCount,
       interpreterRequired,
       writtenLanguage,
@@ -163,7 +164,7 @@ module.exports = ({
       categorisationLinkText: (isCatToolUser && 'Manage category') || (offenderInCaseload && 'View category') || '',
       category,
       categoryCode,
-      csra,
+      csra: csraTranslations[csraClassificationCode],
       displayRetentionLink,
       incentiveLevel: iepDetails && iepDetails[0] && iepDetails[0].iepLevel,
       keyWorkerLastSession:
