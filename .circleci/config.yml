@@ -34,22 +34,46 @@ jobs:
             - node_modules
             - build
 
+  cypress_integration_tests:
+    working_directory: ~/app
+    docker:
+      - image: cimg/node:14.15.3-browsers
+
   veracode_scan:
     docker:
-      - image: veracode/pipeline-scan:latest
+      - image: cimg/node:14.15.3-browsers
     steps:
       - run:
           name: Copy app files from docker image
           command: docker cp $(docker create --pull --rm quay.io/hmpps/prisonstaffhub:latest):/app ./app
       - run:
           name: Zip files ready for veracode scan
-          command: zip -r upload.zip ./app -x "*node_modules*"
+          command: zip -r source.zip ./app -x "*node_modules*"
       - run:
-          name: Veracode pipeline scan
-          command: java -jar /opt/veracode/pipeline-scan.jar 
-              -vid $VERACODE_API_ID 
-              -vkey $VERACODE_API_KEY 
-              --file upload.zip
+          name: Download/Extract-Veracode-Pipeline-Scanner
+          command: |
+            wget https://downloads.veracode.com/securityscan/pipeline-scan-LATEST.zip -O pipeline-scan.zip
+            unzip pipeline-scan.zip -x README.md
+      - run:
+          name: Download Policy
+          no_output_timeout: 1m
+          command: |
+            java -jar pipeline-scan.jar \
+            --request_policy "Ministry of Justice" \
+            --veracode_api_id "${VERACODE_API_ID}" \
+            --veracode_api_key "${VERACODE_API_KEY}" 
+      - run:
+          name: Scan Project
+          no_output_timeout: 30m
+          command: |
+            java -jar pipeline-scan.jar \
+            --file source.zip \
+            --policy_file Ministry_of_Justice.json \
+            --veracode_api_id "${VERACODE_API_ID}" \
+            --veracode_api_key "${VERACODE_API_KEY}" \
+            --timeout 60 \
+            --issue_details true \
+            --summary_output true 
 
   cypress_integration_tests:
     working_directory: ~/app
