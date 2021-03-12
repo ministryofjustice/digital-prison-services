@@ -65,7 +65,7 @@ module.exports = ({ prisonApi }) => async (req, res, next) => {
         },
         {
           key: { text: 'Reviewed by' },
-          value: { text: originalClassificationCode ? `${assessorAuthority} - ${assessorName}` : assessorName },
+          value: { text: `${assessorAuthority} - ${assessorName}` },
         },
         {
           key: { text: 'Next review date' },
