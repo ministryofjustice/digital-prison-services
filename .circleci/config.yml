@@ -34,6 +34,23 @@ jobs:
             - node_modules
             - build
 
+  veracode_scan:
+    docker:
+      - image: veracode/pipeline-scan:latest
+    steps:
+      - run:
+          name: Copy app files from docker image
+          command: docker cp $(docker create --pull --rm quay.io/hmpps/prisonstaffhub:latest):/app ./app
+      - run:
+          name: Zip files ready for veracode scan
+          command: zip -r upload.zip ./app -x "*node_modules*"
+      - run:
+          name: Veracode pipeline scan
+          command: java -jar /opt/veracode/pipeline-scan.jar 
+              -vid $VERACODE_API_ID 
+              -vkey $VERACODE_API_KEY 
+              --file upload.zip
+
   cypress_integration_tests:
     working_directory: ~/app
     docker:
@@ -79,6 +96,7 @@ workflows:
   version: 2
   build-test-and-deploy:
     jobs:
+      - veracode_scan
       - build:
           filters:
             tags:
