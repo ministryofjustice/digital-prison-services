@@ -4,7 +4,6 @@ const csraTranslations = {
   HI: 'High',
 }
 
-
 module.exports = {
   csraTranslations,
 }
