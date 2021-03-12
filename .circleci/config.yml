@@ -41,7 +41,7 @@ jobs:
       - setup_remote_docker
       - run:
           name: Copy app files from docker image
-          command: docker cp $(docker create --pull --rm quay.io/hmpps/prisonstaffhub:latest):/app ./app
+          command: docker cp $(docker create --rm quay.io/hmpps/prisonstaffhub:latest):/app ./app
       - run:
           name: Zip files ready for veracode scan
           command: zip -r source.zip ./app -x "*node_modules*"
