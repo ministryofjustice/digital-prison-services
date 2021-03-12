@@ -149,7 +149,7 @@ describe('prisoner profile service', () => {
       await service.getPrisonerProfileData(context, offenderNo)
 
       expect(oauthApi.currentUser).toHaveBeenCalledWith(context)
-      expect(prisonApi.getDetails).toHaveBeenCalledWith(context, offenderNo, true, true)
+      expect(prisonApi.getDetails).toHaveBeenCalledWith(context, offenderNo, true)
     })
 
     it('should make calls for the additional details required for the prisoner profile', async () => {

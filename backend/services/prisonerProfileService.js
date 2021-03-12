@@ -26,7 +26,7 @@ module.exports = ({
   const getPrisonerProfileData = async (context, offenderNo, username) => {
     const [currentUser, prisonerDetails] = await Promise.all([
       oauthApi.currentUser(context),
-      prisonApi.getDetails(context, offenderNo, true, true),
+      prisonApi.getDetails(context, offenderNo, true),
     ])
 
     const allocationManager = await allocationManagerApi.getPomByOffenderNo(context, offenderNo)

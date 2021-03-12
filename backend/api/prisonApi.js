@@ -175,8 +175,8 @@ const prisonApiFactory = client => {
   const getIepSummaryForBooking = (context, bookingId, withDetails) =>
     get(context, `/api/bookings/${bookingId}/iepSummary?withDetails=${withDetails}`)
 
-  const getDetails = (context, offenderNo, fullInfo = false, includeCsraSummary = false) =>
-    get(context, `/api/bookings/offenderNo/${offenderNo}?fullInfo=${fullInfo}&csraSummary=${includeCsraSummary}`)
+  const getDetails = (context, offenderNo, fullInfo = false) =>
+    get(context, `/api/bookings/offenderNo/${offenderNo}?fullInfo=${fullInfo}&csraSummary=${fullInfo}`)
 
   const getOffendersCurrentlyOutOfLivingUnit = (context, livingUnitId) =>
     get(context, `/api/movements/livingUnit/${livingUnitId}/currently-out`)
