@@ -38,6 +38,7 @@ jobs:
     docker:
       - image: cimg/node:14.15.3-browsers
     steps:
+      - setup_remote_docker
       - run:
           name: Copy app files from docker image
           command: docker cp $(docker create --pull --rm quay.io/hmpps/prisonstaffhub:latest):/app ./app
