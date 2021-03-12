@@ -27,10 +27,7 @@ describe('Prisoner CSRA History', () => {
     await controller(req, res)
 
     expect(prisonApi.getDetails).toHaveBeenCalledWith({}, offenderNo)
-    expect(prisonApi.getCsraAssessmentsForPrisoner).toHaveBeenCalledWith(
-      {},
-      { offenderNo, latestOnly: 'false', activeOnly: 'false' }
-    )
+    expect(prisonApi.getCsraAssessmentsForPrisoner).toHaveBeenCalledWith({}, offenderNo)
     expect(prisonApi.getAgencyDetails).not.toHaveBeenCalled()
   })
 
@@ -121,10 +118,6 @@ describe('Prisoner CSRA History', () => {
             text: 'High',
             value: 'HI',
           },
-          {
-            text: 'Pending',
-            value: 'PEND',
-          },
         ],
         formValues: {},
         locationOptions: [
@@ -152,7 +145,7 @@ describe('Prisoner CSRA History', () => {
           ],
           [
             { text: '10/11/2013' },
-            { text: 'Pending' },
+            { text: undefined },
             { text: 'Doncaster' },
             { text: 'comment' },
             {

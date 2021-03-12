@@ -110,8 +110,8 @@ const prisonApiFactory = client => {
   const getCsraAssessments = (context, offenderNumbers) =>
     post(context, `/api/offender-assessments/csra/list`, offenderNumbers)
 
-  const getCsraAssessmentsForPrisoner = (context, params) =>
-    get(context, `/api/offender-assessments/CSR?${mapToQueryString(params)}`)
+  const getCsraAssessmentsForPrisoner = (context, offenderNumber) =>
+    get(context, `/api/offender-assessments/csra/${offenderNumber}`)
 
   const getCsraReviewForBooking = (context, bookingId, assessmentSeq) =>
     get(context, `/api/offender-assessments/csra/${bookingId}/assessment/${assessmentSeq}`)

@@ -1,10 +1,6 @@
 const { putLastNameFirst, formatName, formatTimestampToDate, sortByDateTime } = require('../../utils')
 
-const csraOptions = [
-  { value: 'STANDARD', text: 'Standard' },
-  { value: 'HI', text: 'High' },
-  { value: 'PEND', text: 'Pending' },
-]
+const csraOptions = [{ value: 'STANDARD', text: 'Standard' }, { value: 'HI', text: 'High' }]
 
 module.exports = ({ prisonApi }) => async (req, res) => {
   const { offenderNo } = req.params
@@ -13,7 +9,7 @@ module.exports = ({ prisonApi }) => async (req, res) => {
   try {
     const [prisonerDetails, csraAssessments] = await Promise.all([
       prisonApi.getDetails(res.locals, offenderNo),
-      prisonApi.getCsraAssessmentsForPrisoner(res.locals, { offenderNo, latestOnly: 'false', activeOnly: 'false' }),
+      prisonApi.getCsraAssessmentsForPrisoner(res.locals, offenderNo),
     ])
 
     const { firstName, lastName } = prisonerDetails
