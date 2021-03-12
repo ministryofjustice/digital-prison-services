@@ -106,6 +106,7 @@ describe('prisoner profile service', () => {
       bookingId,
       category: 'Cat C',
       csra: 'High',
+      csraClassificationCode: 'HI',
       firstName: 'TEST',
       inactiveAlertCount: 2,
       lastName: 'PRISONER',
@@ -144,11 +145,11 @@ describe('prisoner profile service', () => {
       allocationManagerApi.getPomByOffenderNo.mockReturnValue({ primary_pom: { name: 'SMITH, JANE' } })
     })
 
-    it('should make a call for the full details for a prisoner and the current user', async () => {
+    it('should make a call for the full details including csra class for a prisoner and the current user', async () => {
       await service.getPrisonerProfileData(context, offenderNo)
 
       expect(oauthApi.currentUser).toHaveBeenCalledWith(context)
-      expect(prisonApi.getDetails).toHaveBeenCalledWith(context, offenderNo, true)
+      expect(prisonApi.getDetails).toHaveBeenCalledWith(context, offenderNo, true, true)
     })
 
     it('should make calls for the additional details required for the prisoner profile', async () => {
