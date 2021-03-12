@@ -87,6 +87,22 @@ describe('Prisoner CSRA History', () => {
           assessorId: 397307,
           assessorUser: 'DQL61T',
         },
+        {
+          bookingId: 2,
+          offenderNo,
+          classificationCode: 'LOW',
+          classification: 'Low',
+          assessmentCode: 'CSR',
+          assessmentDescription: 'CSR Rating',
+          cellSharingAlertFlag: true,
+          assessmentDate: '2018-11-10',
+          nextReviewDate: '2019-11-11',
+          approvalDate: '2018-11-18',
+          // No assessmentAgencyId
+          assessmentStatus: 'A',
+          assessmentSeq: 4,
+          assessorUser: 'DQL61T',
+        },
       ])
       prisonApi.getAgencyDetails
         .mockResolvedValueOnce({
@@ -133,6 +149,16 @@ describe('Prisoner CSRA History', () => {
         prisonerName: 'John Smith',
         profileUrl: '/prisoner/ABC123',
         rows: [
+          [
+            { text: '10/11/2018' },
+            { text: undefined },
+            { text: 'Not entered' },
+            { text: 'Not entered' },
+            {
+              html:
+                '<a class="govuk-link" href="/prisoner/ABC123/csra-review?assessmentSeq=4&bookingId=2">View details</a>',
+            },
+          ],
           [
             { text: '10/11/2014' },
             { text: 'High' },
