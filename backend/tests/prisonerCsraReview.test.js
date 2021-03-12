@@ -85,7 +85,7 @@ describe('Prisoner CSRA Review', () => {
             },
             {
               key: { text: 'Reviewed by' },
-              value: { text: 'Staff One' },
+              value: { text: 'Not entered - Staff One' },
             },
             {
               key: { text: 'Next review date' },
@@ -105,34 +105,33 @@ describe('Prisoner CSRA Review', () => {
     })
 
     describe('with an override review and all possible data', () => {
-      const overrideReview = {
-        bookingId,
-        assessmentSeq: 2,
-        offenderNo,
-        classificationCode: 'STANDARD',
-        assessmentCode: 'CSRREV',
-        cellSharingAlertFlag: true,
-        assessmentDate: '2011-03-15',
-        assessmentAgencyId: 'MDI',
-        assessmentComment: 'Comments about the review',
-        assessmentCommitteeCode: 'REVIEW',
-        assessmentCommitteeName: 'Review Board',
-        assessorUser: 'USER2',
-        approvalDate: '2011-11-06',
-        approvalCommitteeCode: 'REVIEW',
-        approvalCommitteeName: 'Review Board',
-        originalClassificationCode: 'LOW',
-        classificationReviewReason: 'Previous History',
-        nextReviewDate: '2011-06-13',
-        questions: [
-          {
-            question: 'Is there a reason to suspect that the prisoner is abusing drugs / alcohol?',
-            answer: 'No',
-          },
-        ],
-      }
       beforeEach(() => {
-        prisonApi.getCsraReviewForBooking.mockResolvedValue(overrideReview)
+        prisonApi.getCsraReviewForBooking.mockResolvedValue({
+          bookingId,
+          assessmentSeq: 2,
+          offenderNo,
+          classificationCode: 'STANDARD',
+          assessmentCode: 'CSRREV',
+          cellSharingAlertFlag: true,
+          assessmentDate: '2011-03-15',
+          assessmentAgencyId: 'MDI',
+          assessmentComment: 'Comments about the review',
+          assessmentCommitteeCode: 'REVIEW',
+          assessmentCommitteeName: 'Review Board',
+          assessorUser: 'USER2',
+          approvalDate: '2011-11-06',
+          approvalCommitteeCode: 'REVIEW',
+          approvalCommitteeName: 'Review Board',
+          originalClassificationCode: 'LOW',
+          classificationReviewReason: 'Previous History',
+          nextReviewDate: '2011-06-13',
+          questions: [
+            {
+              question: 'Is there a reason to suspect that the prisoner is abusing drugs / alcohol?',
+              answer: 'No',
+            },
+          ],
+        })
         prisonApi.getAgencyDetails.mockResolvedValue({ description: 'Moorland' })
         prisonApi.getStaffDetails.mockResolvedValue({ firstName: 'Staff', lastName: 'Two' })
       })
@@ -188,27 +187,6 @@ describe('Prisoner CSRA Review', () => {
             },
           ],
         })
-      })
-
-      it('should render not entered if there is no committee name for override assessments', async () => {
-        prisonApi.getCsraReviewForBooking.mockResolvedValue({
-          ...overrideReview,
-          assessmentCommitteeName: undefined,
-        })
-
-        await controller(req, res)
-
-        expect(res.render).toHaveBeenCalledWith(
-          'prisonerProfile/prisonerCsraReview.njk',
-          expect.objectContaining({
-            details: expect.arrayContaining([
-              {
-                key: { text: 'Reviewed by' },
-                value: { text: 'Not entered - Staff Two' },
-              },
-            ]),
-          })
-        )
       })
     })
 
