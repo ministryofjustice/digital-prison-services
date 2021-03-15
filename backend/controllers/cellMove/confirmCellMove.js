@@ -1,6 +1,7 @@
 const { raiseAnalyticsEvent } = require('../../raiseAnalyticsEvent')
 
 const { properCaseName, putLastNameFirst } = require('../../utils')
+const { getBackLinkData } = require('./cellMoveUtils')
 
 const CSWAP = 'C-SWAP'
 
@@ -37,12 +38,12 @@ module.exports = ({ prisonApi, whereaboutsApi, caseNotesApi }) => {
       cellId,
       movingToHeading: isCellSwap ? 'out of their current location' : `to cell ${description}`,
       locationPrefix,
-      selectCellUrl: `/prisoner/${offenderNo}/cell-move/select-cell`,
       cellMoveReasonRadioValues,
       errors: req.flash('errors'),
       formValues: {
         comment,
       },
+      backLink: getBackLinkData(req.headers.referer, offenderNo).backLink,
     })
   }
 

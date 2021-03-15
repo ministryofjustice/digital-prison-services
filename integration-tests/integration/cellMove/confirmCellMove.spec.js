@@ -70,12 +70,13 @@ context('A user can confirm the cell move', () => {
     cy.location('pathname').should('eq', `/prisoner/${offenderNo}/cell-move/confirmation`)
   })
 
-  it('should navigate back to select cell', () => {
+  it('should navigate back to search for cell', () => {
     const page = ConfirmCellMovePage.goTo('A12345', 1, 'Bob Doe', 'MDI-1-1')
 
-    page.backToSelectCellLink().click()
+    page.backLink().contains('Cancel')
+    page.backLink().click()
 
-    cy.location('pathname').should('eq', '/prisoner/A12345/cell-move/select-cell')
+    cy.location('pathname').should('eq', '/prisoner/A12345/cell-move/search-for-cell')
   })
 
   it('should not mention c-swap', () => {

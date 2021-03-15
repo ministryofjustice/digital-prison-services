@@ -2,7 +2,7 @@ const page = require('../page')
 
 const confirmCellMovePage = (name, cell) =>
   page(`You are moving ${name} ${cell === 'swap' ? 'out of their current location' : `to cell ${cell}`}`, {
-    backToSelectCellLink: () => cy.get('[data-qa="back-to-select-cell"]'),
+    backLink: () => cy.get('[data-test="back-link"]'),
     warning: () => cy.get('.govuk-inset-text'),
     form: () => ({
       submitButton: () => cy.get('button[type="submit"]'),
