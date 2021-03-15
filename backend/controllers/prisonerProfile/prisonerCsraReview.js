@@ -39,11 +39,11 @@ module.exports = ({ prisonApi }) => async (req, res, next) => {
               : csraTranslations[classificationCode],
           },
         },
-        ...(reviewDetails.classificationReviewReason
+        ...(originalClassificationCode
           ? [
               {
                 key: { text: 'Override reason' },
-                value: { text: reviewDetails.classificationReviewReason },
+                value: { text: reviewDetails.classificationReviewReason || notEnteredMessage },
               },
             ]
           : []),
