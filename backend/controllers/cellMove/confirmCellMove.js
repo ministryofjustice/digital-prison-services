@@ -82,13 +82,10 @@ module.exports = ({ prisonApi, whereaboutsApi, caseNotesApi }) => {
     return res.redirect(`/prisoner/${offenderNo}/cell-move/space-created`)
   }
 
-  const validate = ({ cellId, reason, comment }) => {
+  const validate = ({ reason, comment }) => {
     const errors = []
 
-    if (cellId !== CSWAP) {
-      if (!reason) errors.push({ href: '#reason', text: 'Select the reason for the cell move' })
-    }
-
+    if (!reason) errors.push({ href: '#reason', text: 'Select the reason for the cell move' })
     if (!comment) errors.push({ href: '#comment', text: 'Enter what happened for you to change this person’s cell' })
     if (comment && comment.length < 7) {
       errors.push({
@@ -112,12 +109,14 @@ module.exports = ({ prisonApi, whereaboutsApi, caseNotesApi }) => {
 
     if (!cellId) return res.redirect(`/prisoner/${offenderNo}/cell-move/select-cell`)
 
-    const errors = validate({ cellId, reason, comment })
+    if (cellId !== CSWAP) {
+      const errors = validate({ reason, comment })
 
-    if (errors.length) {
-      req.flash('formValues', { comment, reason })
-      req.flash('errors', errors)
-      return res.redirect(`/prisoner/${offenderNo}/cell-move/confirm-cell-move?cellId=${cellId}`)
+      if (errors.length) {
+        req.flash('formValues', { comment, reason })
+        req.flash('errors', errors)
+        return res.redirect(`/prisoner/${offenderNo}/cell-move/confirm-cell-move?cellId=${cellId}`)
+      }
     }
 
     try {

@@ -86,10 +86,6 @@ context('A user can confirm the cell move', () => {
 
     page
       .form()
-      .comment()
-      .type('Test comment')
-    page
-      .form()
       .submitButton()
       .click()
 
