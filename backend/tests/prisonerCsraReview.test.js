@@ -104,88 +104,119 @@ describe('Prisoner CSRA Review', () => {
       })
     })
 
-    describe('with an override review and all possible data', () => {
+    describe('with an override review', () => {
+      const overrideReview = {
+        bookingId,
+        assessmentSeq: 2,
+        offenderNo,
+        classificationCode: 'STANDARD',
+        assessmentCode: 'CSRREV',
+        cellSharingAlertFlag: true,
+        assessmentDate: '2011-03-15',
+        assessmentAgencyId: 'MDI',
+        assessmentComment: 'Comments about the review',
+        assessmentCommitteeCode: 'REVIEW',
+        assessmentCommitteeName: 'Review Board',
+        assessorUser: 'USER2',
+        approvalDate: '2011-11-06',
+        approvalCommitteeCode: 'REVIEW',
+        approvalCommitteeName: 'Review Board',
+        originalClassificationCode: 'LOW',
+        classificationReviewReason: 'Previous History',
+        nextReviewDate: '2011-06-13',
+        questions: [
+          {
+            question: 'Is there a reason to suspect that the prisoner is abusing drugs / alcohol?',
+            answer: 'No',
+          },
+        ],
+      }
+
       beforeEach(() => {
-        prisonApi.getCsraReviewForBooking.mockResolvedValue({
-          bookingId,
-          assessmentSeq: 2,
-          offenderNo,
-          classificationCode: 'STANDARD',
-          assessmentCode: 'CSRREV',
-          cellSharingAlertFlag: true,
-          assessmentDate: '2011-03-15',
-          assessmentAgencyId: 'MDI',
-          assessmentComment: 'Comments about the review',
-          assessmentCommitteeCode: 'REVIEW',
-          assessmentCommitteeName: 'Review Board',
-          assessorUser: 'USER2',
-          approvalDate: '2011-11-06',
-          approvalCommitteeCode: 'REVIEW',
-          approvalCommitteeName: 'Review Board',
-          originalClassificationCode: 'LOW',
-          classificationReviewReason: 'Previous History',
-          nextReviewDate: '2011-06-13',
-          questions: [
-            {
-              question: 'Is there a reason to suspect that the prisoner is abusing drugs / alcohol?',
-              answer: 'No',
-            },
-          ],
-        })
+        prisonApi.getCsraReviewForBooking.mockResolvedValue(overrideReview)
         prisonApi.getAgencyDetails.mockResolvedValue({ description: 'Moorland' })
         prisonApi.getStaffDetails.mockResolvedValue({ firstName: 'Staff', lastName: 'Two' })
       })
 
-      it('should make the additional expected calls', async () => {
-        await controller(req, res)
+      describe('and all possible data', () => {
+        it('should make the additional expected calls', async () => {
+          await controller(req, res)
 
-        expect(prisonApi.getAgencyDetails).toHaveBeenCalledWith(res.locals, 'MDI')
-        expect(prisonApi.getStaffDetails).toHaveBeenCalledWith(res.locals, 'USER2')
+          expect(prisonApi.getAgencyDetails).toHaveBeenCalledWith(res.locals, 'MDI')
+          expect(prisonApi.getStaffDetails).toHaveBeenCalledWith(res.locals, 'USER2')
+        })
+
+        it('should render the correct template with the correct values', async () => {
+          await controller(req, res)
+
+          expect(res.render).toHaveBeenCalledWith('prisonerProfile/prisonerCsraReview.njk', {
+            breadcrumbPrisonerName: 'Smith, John',
+            details: [
+              {
+                key: { text: 'CSRA' },
+                value: { text: 'Standard - this is an override from Low' },
+              },
+              {
+                key: { text: 'Override reason' },
+                value: { text: 'Previous History' },
+              },
+              {
+                key: { text: 'Authorised by' },
+                value: { text: 'Review Board' },
+              },
+              {
+                key: { classes: 'govuk-!-padding-top-6', text: 'Location' },
+                value: { text: 'Moorland' },
+              },
+              {
+                key: { text: 'Comments' },
+                value: { text: 'Comments about the review' },
+              },
+              {
+                key: { text: 'Reviewed by' },
+                value: { text: 'Review Board - Staff Two' },
+              },
+              {
+                key: { text: 'Next review date' },
+                value: { text: '13 June 2011' },
+              },
+            ],
+            profileUrl: `/prisoner/${offenderNo}`,
+            reviewDate: '15 March 2011',
+            reviewQuestions: [
+              {
+                question: 'Is there a reason to suspect that the prisoner is abusing drugs / alcohol?',
+                answer: 'No',
+              },
+            ],
+          })
+        })
       })
 
-      it('should render the correct template with the correct values', async () => {
-        await controller(req, res)
+      describe('and some not entered data', () => {
+        it('should render the correct template with the correct values', async () => {
+          prisonApi.getCsraReviewForBooking.mockResolvedValue({
+            ...overrideReview,
+            classificationReviewReason: undefined,
+          })
 
-        expect(res.render).toHaveBeenCalledWith('prisonerProfile/prisonerCsraReview.njk', {
-          breadcrumbPrisonerName: 'Smith, John',
-          details: [
-            {
-              key: { text: 'CSRA' },
-              value: { text: 'Standard - this is an override from Low' },
-            },
-            {
-              key: { text: 'Override reason' },
-              value: { text: 'Previous History' },
-            },
-            {
-              key: { text: 'Authorised by' },
-              value: { text: 'Review Board' },
-            },
-            {
-              key: { classes: 'govuk-!-padding-top-6', text: 'Location' },
-              value: { text: 'Moorland' },
-            },
-            {
-              key: { text: 'Comments' },
-              value: { text: 'Comments about the review' },
-            },
-            {
-              key: { text: 'Reviewed by' },
-              value: { text: 'Review Board - Staff Two' },
-            },
-            {
-              key: { text: 'Next review date' },
-              value: { text: '13 June 2011' },
-            },
-          ],
-          profileUrl: `/prisoner/${offenderNo}`,
-          reviewDate: '15 March 2011',
-          reviewQuestions: [
-            {
-              question: 'Is there a reason to suspect that the prisoner is abusing drugs / alcohol?',
-              answer: 'No',
-            },
-          ],
+          await controller(req, res)
+
+          expect(res.render).toHaveBeenCalledWith(
+            'prisonerProfile/prisonerCsraReview.njk',
+            expect.objectContaining({
+              details: expect.arrayContaining([
+                {
+                  key: { text: 'CSRA' },
+                  value: { text: 'Standard - this is an override from Low' },
+                },
+                {
+                  key: { text: 'Override reason' },
+                  value: { text: 'Not entered' },
+                },
+              ]),
+            })
+          )
         })
       })
     })
