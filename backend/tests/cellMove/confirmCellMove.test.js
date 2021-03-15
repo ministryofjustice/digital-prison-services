@@ -360,57 +360,8 @@ describe('Change cell play back details', () => {
   })
 
   describe('Post handle C-SWAP cell move', () => {
-    it('should trigger missing comment validation', async () => {
-      req.body = { cellId: 'C-SWAP' }
-
-      await controller.post(req, res)
-
-      expect(req.flash).toHaveBeenCalledWith('errors', [
-        {
-          href: '#comment',
-          text: 'Enter what happened for you to change this person’s cell',
-        },
-      ])
-      expect(res.redirect).toHaveBeenCalledWith('/prisoner/A12345/cell-move/confirm-cell-move?cellId=C-SWAP')
-    })
-
-    it('should trigger minimum comment length validation', async () => {
-      req.body = { cellId: 'C-SWAP', comment: 'hello' }
-
-      await controller.post(req, res)
-
-      expect(req.flash).toHaveBeenCalledWith('errors', [
-        {
-          href: '#comment',
-          text: 'Enter a real explanation of what happened for you to change this person’s cell',
-        },
-      ])
-
-      expect(req.flash).toHaveBeenCalledWith('formValues', {
-        comment: 'hello',
-      })
-      expect(res.redirect).toHaveBeenCalledWith('/prisoner/A12345/cell-move/confirm-cell-move?cellId=C-SWAP')
-    })
-
-    it('should trigger the maximum comment length validation', async () => {
-      const bigComment = [...Array(40001).keys()].map(() => 'A').join('')
-
-      req.body = { cellId: 'C-SWAP', comment: bigComment }
-
-      await controller.post(req, res)
-
-      expect(req.flash).toHaveBeenCalledWith('errors', [
-        {
-          href: '#comment',
-          text: 'Enter what happened for you to change this person’s cell using 4,000 characters or less',
-        },
-      ])
-
-      expect(res.redirect).toHaveBeenCalledWith('/prisoner/A12345/cell-move/confirm-cell-move?cellId=C-SWAP')
-    })
-
     it('should call elite api to make the C-SWAP cell move', async () => {
-      req.body = { cellId: 'C-SWAP', comment: 'Test comment' }
+      req.body = { cellId: 'C-SWAP' }
       res.locals = {}
 
       await controller.post(req, res)
@@ -421,7 +372,7 @@ describe('Change cell play back details', () => {
     })
 
     it('should raise an analytics event', async () => {
-      req.body = { cellId: 'C-SWAP', comment: 'Test comment' }
+      req.body = { cellId: 'C-SWAP' }
 
       await controller.post(req, res)
 
@@ -432,7 +383,7 @@ describe('Change cell play back details', () => {
       const error = new Error('Internal server error')
 
       prisonApi.moveToCellSwap.mockRejectedValue(error)
-      req.body = { cellId: 'C-SWAP', comment: 'Test comment' }
+      req.body = { cellId: 'C-SWAP' }
 
       await expect(controller.post(req, res)).rejects.toThrowError(error)
 
