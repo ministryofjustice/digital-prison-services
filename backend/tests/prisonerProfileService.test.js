@@ -107,6 +107,7 @@ describe('prisoner profile service', () => {
       category: 'Cat C',
       csra: 'High',
       csraClassificationCode: 'HI',
+      csraClassificationDate: '2016-11-23',
       firstName: 'TEST',
       inactiveAlertCount: 2,
       lastName: 'PRISONER',
@@ -199,12 +200,12 @@ describe('prisoner profile service', () => {
         birthPlace: undefined,
         category: 'Cat C',
         csra: 'High',
+        csraReviewDate: '23/11/2016',
         displayRetentionLink: true,
         inactiveAlertCount: 2,
         incentiveLevel: 'Standard',
         keyWorkerLastSession: '7 April 2020',
         keyWorkerName: 'Staff Member',
-        lastReviewDate: '18/08/2020',
         location: 'CELL-123',
         offenderName: 'Prisoner, Test',
         offenderNo: 'ABC123',
@@ -248,7 +249,6 @@ describe('prisoner profile service', () => {
           incentiveLevel: undefined,
           keyWorkerLastSession: undefined,
           keyWorkerName: null,
-          lastReviewDate: undefined,
         })
       )
     })

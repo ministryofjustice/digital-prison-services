@@ -50,6 +50,7 @@ module.exports = ({
       category,
       categoryCode,
       csraClassificationCode,
+      csraClassificationDate,
       inactiveAlertCount,
       interpreterRequired,
       writtenLanguage,
@@ -61,7 +62,6 @@ module.exports = ({
       age,
       birthPlace,
       dateOfBirth,
-      assessments,
     } = prisonerDetails
 
     const [
@@ -137,12 +137,6 @@ module.exports = ({
 
     const canViewSocLink = Boolean(isSocUser && socDetails)
 
-    const mostRecentAssessment =
-      hasLength(assessments) &&
-      assessments
-        .filter(assessment => assessment.assessmentDescription.includes('CSR'))
-        .sort((a, b) => b.assessmentDate.localeCompare(a.assessmentDate))[0]
-
     return {
       activeAlertCount,
       agencyName: assignedLivingUnit.agencyName,
@@ -165,14 +159,13 @@ module.exports = ({
       category,
       categoryCode,
       csra: csraTranslations[csraClassificationCode],
+      csraReviewDate: csraClassificationDate && moment(csraClassificationDate).format('DD/MM/YYYY'),
       displayRetentionLink,
       incentiveLevel: iepDetails && iepDetails[0] && iepDetails[0].iepLevel,
       keyWorkerLastSession:
         keyworkerSessions && keyworkerSessions[0] && moment(keyworkerSessions[0].latestCaseNote).format('D MMMM YYYY'),
       keyWorkerName: keyworkerDetails && formatName(keyworkerDetails.firstName, keyworkerDetails.lastName),
       inactiveAlertCount,
-      lastReviewDate:
-        mostRecentAssessment?.assessmentDate && moment(mostRecentAssessment.assessmentDate).format('DD/MM/YYYY'),
       location: assignedLivingUnit.description,
       offenderName: putLastNameFirst(prisonerDetails.firstName, prisonerDetails.lastName),
       offenderNo,
