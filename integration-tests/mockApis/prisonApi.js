@@ -285,7 +285,7 @@ module.exports = {
     return stubFor({
       request: {
         method: 'GET',
-        urlPattern: `/api/bookings/offenderNo/.+?\\?fullInfo=true&csraSummary=true`,
+        urlPattern: `/api/bookings/offenderNo/.+?\\?fullInfo=true`,
       },
       response: {
         status: 200,
@@ -300,7 +300,7 @@ module.exports = {
     return stubFor({
       request: {
         method: 'GET',
-        urlPattern: `/api/bookings/offenderNo/.+?\\?fullInfo=false&csraSummary=false`,
+        urlPattern: `/api/bookings/offenderNo/.+?\\?fullInfo=false`,
       },
       response: {
         status: 200,
@@ -569,7 +569,7 @@ module.exports = {
     return stubFor({
       request: {
         method: 'GET',
-        url: `/api/bookings/offenderNo/${offenderNo}?fullInfo=${fullInfo}&csraSummary=${fullInfo}`,
+        url: `/api/bookings/offenderNo/${offenderNo}?fullInfo=${fullInfo}`,
       },
       response: {
         status: 200,

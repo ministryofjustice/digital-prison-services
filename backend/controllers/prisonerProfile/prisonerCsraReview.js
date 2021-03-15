@@ -1,6 +1,11 @@
 const { putLastNameFirst, formatName, formatTimestampToDate } = require('../../utils')
 const { notEnteredMessage } = require('../../common-messages')
-const { csraTranslations } = require('../../shared/csraHelpers')
+
+const csraTranslations = {
+  LOW: 'Low',
+  STANDARD: 'Standard',
+  HI: 'High',
+}
 
 module.exports = ({ prisonApi }) => async (req, res, next) => {
   const { offenderNo } = req.params
