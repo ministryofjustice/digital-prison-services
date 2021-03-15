@@ -14,7 +14,7 @@ describe('Change cell play back details', () => {
 
   let logError
   let controller
-  const req = { originalUrl: 'http://localhost', params: { offenderNo: 'A12345' }, query: {} }
+  const req = { originalUrl: 'http://localhost', params: { offenderNo: 'A12345' }, query: {}, headers: {} }
   const res = { locals: {}, status: jest.fn() }
 
   beforeEach(() => {
@@ -72,6 +72,7 @@ describe('Change cell play back details', () => {
       await controller.index(req, res)
 
       expect(res.render).toHaveBeenCalledWith('cellMove/confirmCellMove.njk', {
+        backLink: '/prisoner/A12345/cell-move/search-for-cell',
         errors: undefined,
         formValues: {
           comment: undefined,
@@ -83,7 +84,6 @@ describe('Change cell play back details', () => {
         locationPrefix: 'MDI-10-19',
         name: 'Bob Doe',
         offenderNo: 'A12345',
-        selectCellUrl: '/prisoner/A12345/cell-move/select-cell',
         showWarning: true,
       })
     })
@@ -102,6 +102,7 @@ describe('Change cell play back details', () => {
       await controller.index(req, res)
 
       expect(res.render).toHaveBeenCalledWith('cellMove/confirmCellMove.njk', {
+        backLink: '/prisoner/A12345/cell-move/search-for-cell',
         breadcrumbPrisonerName: 'Doe, Bob',
         cellId: 'C-SWAP',
         cellMoveReasonRadioValues: undefined,
@@ -113,7 +114,6 @@ describe('Change cell play back details', () => {
         locationPrefix: undefined,
         name: 'Bob Doe',
         offenderNo: 'A12345',
-        selectCellUrl: '/prisoner/A12345/cell-move/select-cell',
         showWarning: false,
       })
     })
@@ -195,6 +195,19 @@ describe('Change cell play back details', () => {
           formValues: {
             comment: 'Hello',
           },
+        })
+      )
+    })
+
+    it('sets the back link when referer data is present', async () => {
+      req.headers = { referer: `/prisoner/A12345/cell-move/select-cell` }
+
+      await controller.index(req, res)
+
+      expect(res.render).toHaveBeenCalledWith(
+        'cellMove/confirmCellMove.njk',
+        expect.objectContaining({
+          backLink: `/prisoner/A12345/cell-move/select-cell`,
         })
       )
     })
