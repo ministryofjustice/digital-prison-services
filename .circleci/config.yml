@@ -51,7 +51,8 @@ jobs:
       - run: NODE_ENV=production npm run build
       - run:
           name: Zip files ready for veracode scan
-          command: zip -r source.zip package.json package-lock.json build-info.json views backend build src/dateHelpers.js src/BulkAppointments/RecurringAppointments.js
+          #command: zip -r source.zip package.json package-lock.json build-info.json views backend build src/dateHelpers.js src/BulkAppointments/RecurringAppointments.js
+          command: zip -r source.zip . 
       - run:
           name: Download/Extract-Veracode-Pipeline-Scanner
           command: |
