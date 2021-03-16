@@ -52,9 +52,9 @@
 {% set csraHtml %}
   <span data-test="csra-details">{{ prisonerProfileData.csra }} - {{ prisonerProfileData.csraReviewDate or 'No previous review' }}</span>
   <br>
-  {# <a data-test="csra-link" class="govuk-link" href="{{ '/prisoner/' + prisonerProfileData.offenderNo + '/csra-history' }}">
+  <a data-test="csra-link" class="govuk-link" href="{{ '/prisoner/' + prisonerProfileData.offenderNo + '/csra-history' }}">
     View details <span class="govuk-visually-hidden">of CSRA</span>
-  </a> #}
+  </a>
 {% endset %}
 
 <div class="header-with-link">
