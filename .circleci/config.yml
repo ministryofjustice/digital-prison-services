@@ -39,14 +39,11 @@ jobs:
       - image: cimg/node:14.15.3-browsers
     steps:
       - setup_remote_docker
-      - hmpps/build_docker:
-          name: build_docker
-          publish: false
-      - mem/recall:
-          env_var: APP_VERSION
       - run:
-          name: Copy app files from docker image
-          command: docker cp $(docker create --rm quay.io/hmpps/prisonstaffhub:${APP_VERSION}):/app ./app
+          name: Build docker image and copy app files from docker image
+          command: |
+            IMAGE_ID=$(docker build -q .)
+            docker cp $(docker create --rm ${IMAGE_ID}):/app ./app
       - run:
           name: Zip files ready for veracode scan
           command: zip -r source.zip ./app -x "*node_modules*"
