@@ -35,10 +35,12 @@ jobs:
             - build
 
   veracode_scan:
+    working_directory: ~/app
     docker:
       - image: cimg/node:14.15.3-browsers
     steps:
       - setup_remote_docker
+      - checkout
       - run:
           name: Build docker image and copy app files from docker image
           command: |
