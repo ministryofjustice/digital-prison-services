@@ -39,20 +39,17 @@ jobs:
       - image: cimg/node:14.15.3-browsers
     steps:
       - setup_remote_docker
-      #- run:
-      #    name: Copy app files from docker image
-      #    command: docker cp $(docker create --rm quay.io/hmpps/prisonstaffhub:latest):/app ./app
-      - checkout
-      - restore_cache:
-          key: node_modules-{{ checksum "package-lock.json" }}-{{ checksum "package.json" }}
+      - hmpps/build_docker:
+          name: build_docker
+          publish: false
+      - mem/recall:
+          env_var: APP_VERSION
       - run:
-          name: Install Dependencies
-          command: CYPRESS_INSTALL_BINARY=0 npm ci --no-audit
-      - run: NODE_ENV=production npm run build
+          name: Copy app files from docker image
+          command: docker cp $(docker create --rm quay.io/hmpps/prisonstaffhub:${APP_VERSION}):/app ./app
       - run:
           name: Zip files ready for veracode scan
-          #command: zip -r source.zip package.json package-lock.json build-info.json views backend build src/dateHelpers.js src/BulkAppointments/RecurringAppointments.js
-          command: zip -r source.zip . 
+          command: zip -r source.zip ./app -x "*node_modules*"
       - run:
           name: Download/Extract-Veracode-Pipeline-Scanner
           command: |
