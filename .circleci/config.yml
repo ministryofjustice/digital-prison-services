@@ -42,9 +42,9 @@ jobs:
       - setup_remote_docker
       - checkout
       - run:
-          name: Build docker image and copy app files from docker image
+          name: Build temp docker image and copy app files from docker image
           command: |
-            IMAGE_ID=$(docker build -q .)
+            IMAGE_ID=$(docker build -q . --build-arg BUILD_NUMBER=$CIRCLE_SHA1 --build-arg GIT_REF=$CIRCLE_SHA1)
             docker cp $(docker create --rm ${IMAGE_ID}):/app ./app
       - run:
           name: Zip files ready for veracode scan
