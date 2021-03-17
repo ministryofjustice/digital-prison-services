@@ -193,6 +193,31 @@ describe('select location', () => {
       )
     })
 
+    it('shows the CSWAP description as the location', async () => {
+      prisonApi.getDetails = jest.fn().mockResolvedValue({
+        ...getDetailsResponse,
+        assignedLivingUnit: {
+          ...getDetailsResponse.assignedLivingUnit,
+          description: 'CSWAP',
+        }
+      })
+  
+      await controller(req, res)
+  
+      expect(res.render).toHaveBeenCalledWith(
+        'cellMove/searchForCell.njk',
+        expect.objectContaining({
+          prisonerDetails: {
+            ...getDetailsResponse,
+            assignedLivingUnit: {
+              ...getDetailsResponse.assignedLivingUnit,
+              description: 'No cell allocated',
+            }
+          }
+        })
+      )
+    })
+  
     it('populates the data correctly when some non-associations, but not in the same establishment', async () => {
       prisonApi.getNonAssociations = jest.fn().mockResolvedValue({
         agencyDescription: 'MOORLAND',

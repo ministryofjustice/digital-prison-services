@@ -1,5 +1,5 @@
 const moment = require('moment')
-const { putLastNameFirst, hasLength, formatName, getNamesFromString } = require('../utils')
+const { putLastNameFirst, hasLength, formatName, getNamesFromString, formatLocation } = require('../utils')
 const { alertFlagLabels, profileAlertCodes } = require('../shared/alertFlagValues')
 const { csraTranslations } = require('../shared/csraHelpers')
 const {
@@ -166,7 +166,7 @@ module.exports = ({
         keyworkerSessions && keyworkerSessions[0] && moment(keyworkerSessions[0].latestCaseNote).format('D MMMM YYYY'),
       keyWorkerName: keyworkerDetails && formatName(keyworkerDetails.firstName, keyworkerDetails.lastName),
       inactiveAlertCount,
-      location: assignedLivingUnit.description,
+      location: formatLocation(assignedLivingUnit.description),
       offenderName: putLastNameFirst(prisonerDetails.firstName, prisonerDetails.lastName),
       offenderNo,
       offenderRecordRetained: offenderRetentionRecord && hasLength(offenderRetentionRecord.retentionReasons),

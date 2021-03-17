@@ -122,7 +122,7 @@ module.exports = ({ prisonApi, whereaboutsApi, caseNotesApi }) => {
     try {
       const { bookingId, agencyId } = await prisonApi.getDetails(res.locals, offenderNo)
 
-      if (cellId === 'C-SWAP') return await makeCSwap(res, { agencyId, bookingId, offenderNo })
+      if (cellId === CSWAP) return await makeCSwap(res, { agencyId, bookingId, offenderNo })
 
       return await makeCellMove(res, {
         cellId,

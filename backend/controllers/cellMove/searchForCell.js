@@ -1,5 +1,5 @@
 const { alertFlagLabels, cellMoveAlertCodes } = require('../../shared/alertFlagValues')
-const { putLastNameFirst, formatName } = require('../../utils')
+const { putLastNameFirst, formatName, formatLocation } = require('../../utils')
 const {
   userHasAccess,
   getNonAssocationsInEstablishment,
@@ -34,6 +34,14 @@ module.exports = ({ oauthApi, prisonApi, whereaboutsApi }) => async (req, res) =
     )
     const numberOfNonAssociations = getNonAssocationsInEstablishment(nonAssociations).length
 
+    const prisonerDetailsWithFormattedLocation = {
+        ...prisonerDetails,
+        assignedLivingUnit: {
+          ...prisonerDetails.assignedLivingUnit,
+          description: formatLocation(prisonerDetails.assignedLivingUnit.description),
+        }
+      }
+
     return res.render('cellMove/searchForCell.njk', {
       breadcrumbPrisonerName: putLastNameFirst(prisonerDetails.firstName, prisonerDetails.lastName),
       prisonerName: formatName(prisonerDetails.firstName, prisonerDetails.lastName),
@@ -42,7 +50,7 @@ module.exports = ({ oauthApi, prisonApi, whereaboutsApi }) => async (req, res) =
       alerts: alertsToShow,
       locations: renderLocationOptions(locationsData),
       cellAttributes,
-      prisonerDetails,
+      prisonerDetails: prisonerDetailsWithFormattedLocation,
       offenderNo,
       nonAssociationLink: `/prisoner/${offenderNo}/cell-move/non-associations`,
       searchForCellRootUrl: `/prisoner/${offenderNo}/cell-move/search-for-cell`,

@@ -7,6 +7,7 @@ import {
   formatTimestampToDateTime,
   formatTimestampToDate,
   formatName,
+  formatLocation,
   getCurrentPeriod,
   isToday,
   isTodayOrAfter,
@@ -372,5 +373,22 @@ describe('isPrisonerIdentifier()', () => {
   })
   it('should return false for name', () => {
     expect(isPrisonerIdentifier('John Smith')).toEqual(false)
+  })
+})
+
+describe('formatLocation()', () => {
+  it('should cope with undefined', () => {
+    expect(formatLocation(undefined)).toEqual(undefined)
+  })
+  it('should cope with null', () => {
+    expect(formatLocation(null)).toEqual(undefined)
+  })
+  it('should preserve normal location names', () => {
+    expect(formatLocation('A1234BC')).toEqual('A1234BC')
+  })
+  it('should convert RECP,CSWAP,COURT', () => {
+    expect(formatLocation('RECP')).not.toEqual('RECP')
+    expect(formatLocation('CSWAP')).not.toEqual('CSWAP')
+    expect(formatLocation('COURT')).not.toEqual('COURT')
   })
 })
