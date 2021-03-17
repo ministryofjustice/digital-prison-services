@@ -32,6 +32,7 @@ module.exports = ({ prisonApi, raiseAnalyticsEvent }) => {
         prisonApi.getInmatesAtLocation(res.locals, cellId, {}),
       ])
 
+      const hasOccupants = occupants.length > 0
       const currentOccupantsOffenderNos = occupants.map(occupant => occupant.offenderNo)
       const currentOccupantsDetails = occupants && (await getOccupantsDetails(res.locals, currentOccupantsOffenderNos))
 
@@ -57,7 +58,7 @@ module.exports = ({ prisonApi, raiseAnalyticsEvent }) => {
         .filter(currentOccupant => currentOccupant.csra)
         .map(currentOccupant => currentOccupant.csra)
 
-      const showOffendersNamesWithCsra = offendersCsraValues.includes('High')
+      const showOffendersNamesWithCsra = hasOccupants && offendersCsraValues.includes('High')
 
       const currentOccupantsFormattedNames = currentOccupantsDetails.map(({ firstName, lastName }) =>
         formatName(firstName, lastName)
@@ -157,7 +158,11 @@ module.exports = ({ prisonApi, raiseAnalyticsEvent }) => {
         profileUrl,
         selectCellUrl: `${profileUrl}/cell-move/select-cell`,
         showOffendersNamesWithCsra,
-        stringListOfCurrentOccupantsNames: createStringFromList(currentOccupantsFormattedNames),
+        confirmationQuestionLabel: hasOccupants
+          ? `Are you sure you want to move ${currentOffenderName} into a cell with ${createStringFromList(
+              currentOccupantsFormattedNames
+            )}?`
+          : 'Are you sure you want to select this cell?',
         offendersFormattedNamesWithCsra,
         nonAssociations: nonAssociationsWithinLocation.map(nonAssociation => ({
           name: `${putLastNameFirst(
