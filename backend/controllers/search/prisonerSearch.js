@@ -1,7 +1,7 @@
 const qs = require('querystring')
 const { serviceUnavailableMessage } = require('../../common-messages')
 const { alertFlagLabels, profileAlertCodes } = require('../../shared/alertFlagValues')
-const { putLastNameFirst, hasLength } = require('../../utils')
+const { putLastNameFirst, hasLength, formatLocation } = require('../../utils')
 
 module.exports = ({ paginationService, prisonApi, logError }) => {
   const index = async (req, res) => {
@@ -62,6 +62,7 @@ module.exports = ({ paginationService, prisonApi, logError }) => {
         prisoners &&
         prisoners.map(prisoner => ({
           ...prisoner,
+          assignedLivingUnitDesc: formatLocation(prisoner.assignedLivingUnitDesc),
           name: putLastNameFirst(prisoner.firstName, prisoner.lastName),
           alerts: alertFlagLabels.filter(alertFlag =>
             alertFlag.alertCodes.some(

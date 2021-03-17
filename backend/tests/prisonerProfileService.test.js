@@ -237,7 +237,12 @@ describe('prisoner profile service', () => {
     })
 
     it('should return the correct prisoner information when some data is missing', async () => {
-      prisonApi.getDetails.mockReturnValue({ ...prisonerDetails, assessments: [] })
+      prisonApi.getDetails.mockReturnValue({
+        ...prisonerDetails,
+        csraClassificationCode: undefined,
+        csraClassificationDate: undefined,
+        assessments: [],
+      })
       prisonApi.getIepSummary.mockResolvedValue([])
       prisonApi.getCaseNoteSummaryByTypes.mockResolvedValue([])
       keyworkerApi.getKeyworkerByCaseloadAndOffenderNo.mockResolvedValue(null)
@@ -249,6 +254,8 @@ describe('prisoner profile service', () => {
           incentiveLevel: undefined,
           keyWorkerLastSession: undefined,
           keyWorkerName: null,
+          csra: undefined,
+          csraReviewDate: undefined,
         })
       )
     })
@@ -503,6 +510,22 @@ describe('prisoner profile service', () => {
         const profileData = await service.getPrisonerProfileData(context, offenderNo)
 
         expect(profileData.canViewSocLink).toBe(false)
+      })
+    })
+
+    describe('when a prisoner is in CSWAP', () => {
+      it('should show the CSWAP location description', async () => {
+        prisonApi.getDetails.mockReturnValue({
+          ...prisonerDetails,
+          assignedLivingUnit: {
+            ...prisonerDetails.assignedLivingUnit,
+            description: 'CSWAP',
+          },
+        })
+
+        const profileData = await service.getPrisonerProfileData(context, offenderNo)
+
+        expect(profileData.location).toBe('No cell allocated')
       })
     })
   })

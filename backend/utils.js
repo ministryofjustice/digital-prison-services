@@ -260,12 +260,27 @@ const possessive = string => {
 const indefiniteArticle = string =>
   ['a', 'e', 'i', 'o', 'u'].some(vowel => string.toLowerCase().startsWith(vowel)) ? 'an' : 'a'
 
+const formatLocation = locationName => {
+  if (!locationName) return undefined
+  if (locationName.includes('RECP')) return 'Reception'
+  if (locationName.includes('CSWAP')) return 'No cell allocated'
+  if (locationName.includes('COURT')) return 'Court'
+  return locationName
+}
+
+const isTemporaryLocation = locationName => {
+  if (!locationName) return false
+  if (locationName.endsWith('RECP')) return true
+  if (locationName.endsWith('CSWAP')) return true
+  if (locationName.endsWith('COURT')) return true
+  if (locationName.endsWith('TAP')) return true
+  return false
+}
+
 const extractLocation = (location, agencyId) => {
   if (!location || !agencyId) return undefined
   const withoutAgency = stripAgencyPrefix(location, agencyId)
-  if (withoutAgency.includes('RECP')) return 'Reception'
-  if (withoutAgency.includes('CSWAP')) return 'Cell swap'
-  return withoutAgency
+  return formatLocation(withoutAgency)
 }
 
 const createStringFromList = array => {
@@ -316,6 +331,8 @@ module.exports = {
   groupBy,
   times,
   possessive,
+  formatLocation,
+  isTemporaryLocation,
   extractLocation,
   indefiniteArticle,
   isBlank,

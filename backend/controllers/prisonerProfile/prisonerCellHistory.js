@@ -6,6 +6,7 @@ const {
   sortByDateTime,
   putLastNameFirst,
   extractLocation,
+  isTemporaryLocation,
   groupBy,
   hasLength,
 } = require('../../utils')
@@ -75,6 +76,7 @@ module.exports = ({ oauthApi, prisonApi, page = 0 }) => async (req, res) => {
       return {
         establishment: agency.description,
         location: extractLocation(cell.description, cell.agencyId),
+        isTemporaryLocation: isTemporaryLocation(cell.description),
         movedIn: cell.assignmentDateTime && formatTimestampToDateTime(cell.assignmentDateTime),
         movedOut: cell.assignmentEndDateTime && formatTimestampToDateTime(cell.assignmentEndDateTime),
         assignmentDateTime: moment(cell.assignmentDateTime).format('YYYY-MM-DDTHH:mm:ss'),

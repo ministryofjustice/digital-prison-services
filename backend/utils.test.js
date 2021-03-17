@@ -7,6 +7,8 @@ import {
   formatTimestampToDateTime,
   formatTimestampToDate,
   formatName,
+  formatLocation,
+  isTemporaryLocation,
   getCurrentPeriod,
   isToday,
   isTodayOrAfter,
@@ -372,5 +374,46 @@ describe('isPrisonerIdentifier()', () => {
   })
   it('should return false for name', () => {
     expect(isPrisonerIdentifier('John Smith')).toEqual(false)
+  })
+})
+
+describe('formatLocation()', () => {
+  it('should cope with undefined', () => {
+    expect(formatLocation(undefined)).toEqual(undefined)
+  })
+  it('should cope with null', () => {
+    expect(formatLocation(null)).toEqual(undefined)
+  })
+  it('should preserve normal location names', () => {
+    expect(formatLocation('A1234BC')).toEqual('A1234BC')
+  })
+  it('should convert RECP,CSWAP,COURT', () => {
+    expect(formatLocation('RECP')).not.toEqual('RECP')
+    expect(formatLocation('CSWAP')).not.toEqual('CSWAP')
+    expect(formatLocation('COURT')).not.toEqual('COURT')
+  })
+})
+
+describe('isTemporaryLocation()', () => {
+  it('should cope with undefined', () => {
+    expect(isTemporaryLocation(undefined)).toEqual(false)
+  })
+  it('should cope with null', () => {
+    expect(isTemporaryLocation(null)).toEqual(false)
+  })
+  it('should ignore normal locations', () => {
+    expect(isTemporaryLocation('A1234BC')).toEqual(false)
+  })
+  it('should detect temporary locations', () => {
+    expect(isTemporaryLocation('RECP')).toEqual(true)
+    expect(isTemporaryLocation('CSWAP')).toEqual(true)
+    expect(isTemporaryLocation('COURT')).toEqual(true)
+    expect(isTemporaryLocation('TAP')).toEqual(true)
+  })
+  it('should detect temporary locations even with prefix', () => {
+    expect(isTemporaryLocation('MDI-CSWAP')).toEqual(true)
+  })
+  it('should not detect temporary locations with suffix', () => {
+    expect(isTemporaryLocation('CSWAP-')).toEqual(false)
   })
 })

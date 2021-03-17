@@ -74,9 +74,11 @@
       </div>
     {% endif %}
     <div class="horizontal-information__item">
-      <a href="{{ './location-history?fromDate=' + currentLocation.assignmentDateTime + '&toDate=' + currentLocation.assignmentEndDateTime + '&locationId=' + currentLocation.livingUnitId + '&agencyId=' + currentLocation.agencyId }}" class="govuk-link govuk-body" data-test="cell-details-link">
-      View details<span class="govuk-visually-hidden"> for location {{ currentLocation.location }}</span>
-      </a>
+      {% if not currentLocation.isTemporaryLocation %}
+        <a href="{{ './location-history?fromDate=' + currentLocation.assignmentDateTime + '&toDate=' + currentLocation.assignmentEndDateTime + '&locationId=' + currentLocation.livingUnitId + '&agencyId=' + currentLocation.agencyId }}" class="govuk-link govuk-body" data-test="cell-details-link">
+        View details<span class="govuk-visually-hidden"> for location {{ currentLocation.location }}</span>
+        </a>
+      {% endif %}
     </div>
   </div>
 
@@ -91,7 +93,7 @@
         { text: cell.movedIn },
         { text: cell.movedInBy },
         { text: cell.movedOut },
-        { html: '<a href="' + './location-history?fromDate=' + cell.assignmentDateTime + '&toDate=' + cell.assignmentEndDateTime + '&locationId=' + cell.livingUnitId + '&agencyId=' + cell.agencyId + '" class="govuk-link">View details<span class="govuk-visually-hidden"> for location ' + cell.location + '</span></a>' if cell.location !== 'Reception' }
+        { html: '<a href="' + './location-history?fromDate=' + cell.assignmentDateTime + '&toDate=' + cell.assignmentEndDateTime + '&locationId=' + cell.livingUnitId + '&agencyId=' + cell.agencyId + '" class="govuk-link">View details<span class="govuk-visually-hidden"> for location ' + cell.location + '</span></a>' if not cell.isTemporaryLocation }
       ]), rows) %}
     {% endfor %}
 
