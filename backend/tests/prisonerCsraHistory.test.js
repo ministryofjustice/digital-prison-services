@@ -72,8 +72,8 @@ describe('Prisoner CSRA History', () => {
         {
           bookingId: 2,
           offenderNo,
-          classificationCode: 'PEND',
-          classification: 'Pending',
+          // Empty classification
+          classificationCode: '',
           assessmentCode: 'CSR',
           assessmentDescription: 'CSR Rating',
           cellSharingAlertFlag: true,
@@ -90,8 +90,7 @@ describe('Prisoner CSRA History', () => {
         {
           bookingId: 2,
           offenderNo,
-          classificationCode: 'LOW',
-          classification: 'Low',
+          // No classification
           assessmentCode: 'CSR',
           assessmentDescription: 'CSR Rating',
           cellSharingAlertFlag: true,
@@ -150,16 +149,6 @@ describe('Prisoner CSRA History', () => {
         profileUrl: '/prisoner/ABC123',
         rows: [
           [
-            { text: '10/11/2018' },
-            { text: undefined },
-            { text: 'Not entered' },
-            { text: 'Not entered' },
-            {
-              html:
-                '<a class="govuk-link" href="/prisoner/ABC123/csra-review?assessmentSeq=4&bookingId=2">View details</a>',
-            },
-          ],
-          [
             { text: '10/11/2014' },
             { text: 'High' },
             { text: 'Doncaster' },
@@ -167,16 +156,6 @@ describe('Prisoner CSRA History', () => {
             {
               html:
                 '<a class="govuk-link" href="/prisoner/ABC123/csra-review?assessmentSeq=3&bookingId=2">View details</a>',
-            },
-          ],
-          [
-            { text: '10/11/2013' },
-            { text: undefined },
-            { text: 'Doncaster' },
-            { text: 'comment' },
-            {
-              html:
-                '<a class="govuk-link" href="/prisoner/ABC123/csra-review?assessmentSeq=2&bookingId=2">View details</a>',
             },
           ],
           [
