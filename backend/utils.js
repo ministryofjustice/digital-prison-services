@@ -268,6 +268,15 @@ const formatLocation = locationName => {
   return locationName
 }
 
+const isTemporaryLocation = locationName => {
+  if (!locationName) return false
+  if (locationName.endsWith('RECP')) return true
+  if (locationName.endsWith('CSWAP')) return true
+  if (locationName.endsWith('COURT')) return true
+  if (locationName.endsWith('TAP')) return true
+  return false
+}
+
 const extractLocation = (location, agencyId) => {
   if (!location || !agencyId) return undefined
   const withoutAgency = stripAgencyPrefix(location, agencyId)
@@ -323,6 +332,7 @@ module.exports = {
   times,
   possessive,
   formatLocation,
+  isTemporaryLocation,
   extractLocation,
   indefiniteArticle,
   isBlank,
