@@ -35,12 +35,12 @@ module.exports = ({ oauthApi, prisonApi, whereaboutsApi }) => async (req, res) =
     const numberOfNonAssociations = getNonAssocationsInEstablishment(nonAssociations).length
 
     const prisonerDetailsWithFormattedLocation = {
-        ...prisonerDetails,
-        assignedLivingUnit: {
-          ...prisonerDetails.assignedLivingUnit,
-          description: formatLocation(prisonerDetails.assignedLivingUnit.description),
-        }
-      }
+      ...prisonerDetails,
+      assignedLivingUnit: {
+        ...prisonerDetails.assignedLivingUnit,
+        description: formatLocation(prisonerDetails.assignedLivingUnit.description),
+      },
+    }
 
     return res.render('cellMove/searchForCell.njk', {
       breadcrumbPrisonerName: putLastNameFirst(prisonerDetails.firstName, prisonerDetails.lastName),

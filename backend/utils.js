@@ -260,7 +260,7 @@ const possessive = string => {
 const indefiniteArticle = string =>
   ['a', 'e', 'i', 'o', 'u'].some(vowel => string.toLowerCase().startsWith(vowel)) ? 'an' : 'a'
 
-const formatLocation = (locationName) => {
+const formatLocation = locationName => {
   if (!locationName) return undefined
   if (locationName.includes('RECP')) return 'Reception'
   if (locationName.includes('CSWAP')) return 'No cell allocated'

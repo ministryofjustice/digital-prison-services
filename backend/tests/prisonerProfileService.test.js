@@ -237,7 +237,12 @@ describe('prisoner profile service', () => {
     })
 
     it('should return the correct prisoner information when some data is missing', async () => {
-      prisonApi.getDetails.mockReturnValue({ ...prisonerDetails, csraClassificationCode: undefined, csraClassificationDate: undefined, assessments: [] })
+      prisonApi.getDetails.mockReturnValue({
+        ...prisonerDetails,
+        csraClassificationCode: undefined,
+        csraClassificationDate: undefined,
+        assessments: [],
+      })
       prisonApi.getIepSummary.mockResolvedValue([])
       prisonApi.getCaseNoteSummaryByTypes.mockResolvedValue([])
       keyworkerApi.getKeyworkerByCaseloadAndOffenderNo.mockResolvedValue(null)
@@ -515,7 +520,7 @@ describe('prisoner profile service', () => {
           assignedLivingUnit: {
             ...prisonerDetails.assignedLivingUnit,
             description: 'CSWAP',
-          },          
+          },
         })
 
         const profileData = await service.getPrisonerProfileData(context, offenderNo)
