@@ -84,6 +84,7 @@ describe('Change cell play back details', () => {
         locationPrefix: 'MDI-10-19',
         name: 'Bob Doe',
         offenderNo: 'A12345',
+        showCommentInput: true,
         showWarning: true,
       })
     })
@@ -114,6 +115,7 @@ describe('Change cell play back details', () => {
         locationPrefix: undefined,
         name: 'Bob Doe',
         offenderNo: 'A12345',
+        showCommentInput: false,
         showWarning: false,
       })
     })

@@ -44,6 +44,7 @@ module.exports = ({ prisonApi, whereaboutsApi, caseNotesApi }) => {
         comment,
       },
       backLink: getBackLinkData(req.headers.referer, offenderNo).backLink,
+      showCommentInput: !isCellSwap,
     })
   }
 
