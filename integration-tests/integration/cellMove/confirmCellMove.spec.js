@@ -79,10 +79,20 @@ context('A user can confirm the cell move', () => {
     cy.location('pathname').should('eq', '/prisoner/A12345/cell-move/search-for-cell')
   })
 
-  it('should not mention c-swap', () => {
+  it('should not mention c-swap or show form inputs', () => {
     const page = ConfirmCellMovePage.goTo('A12345', 'C-SWAP', 'Bob Doe', 'swap')
 
     page.warning().should('not.exist')
+
+    page
+      .form()
+      .reason()
+      .should('not.exist')
+
+    page
+      .form()
+      .comment()
+      .should('not.exist')
 
     page
       .form()
