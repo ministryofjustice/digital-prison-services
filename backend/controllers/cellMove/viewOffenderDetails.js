@@ -1,4 +1,4 @@
-const { putLastNameFirst } = require('../../utils')
+const { putLastNameFirst, formatLocation } = require('../../utils')
 const { getBackLinkData } = require('./cellMoveUtils')
 const getValueByType = require('../../shared/getValueByType')
 
@@ -21,7 +21,7 @@ module.exports = ({ prisonApi }) => async (req, res) => {
 
     return res.render('cellMove/offenderDetails.njk', {
       prisonerName: putLastNameFirst(firstName, lastName),
-      cellLocation: assignedLivingUnit.description || 'Not entered',
+      cellLocation: formatLocation(assignedLivingUnit.description) || 'Not entered',
       offenderNo,
       age: age || 'Not entered',
       religion: religion || 'Not entered',
