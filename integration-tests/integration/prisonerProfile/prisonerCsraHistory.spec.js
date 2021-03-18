@@ -82,7 +82,7 @@ context('Prisoner CSRA history', () => {
             .its('length')
             .should('eq', 3)
           expect($tableRows.get(0).innerText).to.contain('10/11/2014\tHigh\tDoncaster\tcomment')
-          expect($tableRows.get(2).innerText).to.contain('02/06/2011\t\tMoorland\tNot entered')
+          expect($tableRows.get(1).innerText).to.contain('02/06/2011\t\tMoorland\tNot entered')
         })
     })
   })
