@@ -23,6 +23,7 @@ module.exports = ({ prisonApi }) => async (req, res) => {
     const sortedRelavantResults = csraAssessments
       .filter(assessment => {
         const { assessmentAgencyId, classificationCode } = assessment
+        if (!classificationCode) return false
         if (csra && location) return classificationCode === csra && assessmentAgencyId === location
         if (csra) return classificationCode === csra
         if (location) return assessmentAgencyId === location
