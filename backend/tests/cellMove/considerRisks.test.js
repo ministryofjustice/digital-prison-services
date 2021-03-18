@@ -432,6 +432,8 @@ describe('move validation', () => {
 
     expect(res.render).toHaveBeenCalledWith('cellMove/considerRisks.njk', {
       categoryWarning: 'a Cat A rating and Occupant One is a Cat not entered and Occupant Two is a Cat B',
+      confirmationQuestionLabel:
+        'Are you sure you want to move Test User into a cell with Occupant One and Occupant Two?',
       currentOccupantsWithFormattedActiveAlerts: [
         {
           alerts: [
@@ -510,7 +512,6 @@ describe('move validation', () => {
       selectCellUrl: '/prisoner/ABC123/cell-move/select-cell',
       showOffendersNamesWithCsra: true,
       showRisks: true,
-      stringListOfCurrentOccupantsNames: 'Occupant One and Occupant Two',
     })
   })
 
@@ -606,15 +607,18 @@ describe('move validation', () => {
       )
     })
 
-    it('Does not pass category warning if no inmates', async () => {
+    it('Passes the correct conditional data to the template when there are no inmates at the location', async () => {
       prisonApi.getDetails.mockResolvedValueOnce({ ...getCurrentOffenderDetailsResponse, csra: 'Standard' })
       prisonApi.getInmatesAtLocation.mockResolvedValue([])
+
       await controller.index(req, res)
 
       expect(res.render).toHaveBeenCalledWith(
         'cellMove/considerRisks.njk',
         expect.objectContaining({
           categoryWarning: false,
+          confirmationQuestionLabel: 'Are you sure you want to select this cell?',
+          showOffendersNamesWithCsra: false,
           showRisks: false,
         })
       )
