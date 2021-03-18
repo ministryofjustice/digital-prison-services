@@ -52,6 +52,9 @@ describe('Prisoner CSRA Review', () => {
               question: 'Does the prisoner have a history of self-harm?',
               answer: 'Yes',
             },
+            {
+              question: 'An unanswered question?',
+            },
           ],
         })
         prisonApi.getAgencyDetails.mockResolvedValue({ description: 'Leeds' })
