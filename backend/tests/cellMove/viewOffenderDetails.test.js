@@ -120,6 +120,24 @@ describe('view offender details', () => {
     )
   })
 
+  it('shows a full descriotion of the location when in a temporary location', async () => {
+    prisonApi.getDetails = jest.fn().mockResolvedValue({
+      ...getDetailsResponse,
+      assignedLivingUnit: {
+        ...getDetailsResponse.assignedLivingUnit,
+        description: 'CSWAP',
+      },
+    })
+    await controller(req, res)
+
+    expect(res.render).toHaveBeenCalledWith(
+      'cellMove/offenderDetails.njk',
+      expect.objectContaining({
+        cellLocation: 'No cell allocated',
+      })
+    )
+  })
+
   it('sets the back link and text correctly when referer data is present', async () => {
     req = { ...req, headers: { referer: `/prisoner/${offenderNo}/cell-move/select-cell` } }
     await controller(req, res)
