@@ -69,21 +69,23 @@
                     }) }}
                 {% endif %}
 
-                {{ govukTextarea({
-                    name: "comment",
-                    id: "comment",
-                    maxlength: 4000,
-                    value: formValues.comment,
-                    errorMessage: errors | findError('comment'),
-                    classes: 'govuk-!-width-one-half',
-                    hint: {
-                        text: 'This will be used to add a case note.'
-                    },
-                    label: {
-                        text: "What happened?",
-                        classes: "govuk-!-font-weight-bold"
-                    }
-                }) }}
+                {% if showCommentInput %}
+                    {{ govukTextarea({
+                        name: "comment",
+                        id: "comment",
+                        maxlength: 4000,
+                        value: formValues.comment,
+                        errorMessage: errors | findError('comment'),
+                        classes: 'govuk-!-width-one-half',
+                        hint: {
+                            text: 'This will be used to add a case note.'
+                        },
+                        label: {
+                            text: "What happened?",
+                            classes: "govuk-!-font-weight-bold"
+                        }
+                    }) }}
+                {% endif %}
 
                 {{ govukButton({ text: "Confirm move", type: "submit" }) }}
             </form>
