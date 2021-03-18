@@ -74,7 +74,7 @@ module.exports = ({ prisonApi }) => async (req, res, next) => {
       ],
       profileUrl: `/prisoner/${offenderNo}`,
       reviewDate: formatTimestampToDate(reviewDetails.assessmentDate, 'DD MMMM YYYY'),
-      reviewQuestions: reviewDetails.questions,
+      reviewQuestions: reviewDetails.questions?.filter(q => !!q.answer),
     })
   } catch (error) {
     res.locals.redirectUrl = `/prisoner/${offenderNo}`
