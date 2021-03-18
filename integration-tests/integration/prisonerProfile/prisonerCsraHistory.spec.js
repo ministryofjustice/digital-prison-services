@@ -80,7 +80,7 @@ context('Prisoner CSRA history', () => {
         .then($tableRows => {
           cy.get($tableRows)
             .its('length')
-            .should('eq', 3)
+            .should('eq', 2)
           expect($tableRows.get(0).innerText).to.contain('10/11/2014\tHigh\tDoncaster\tcomment')
           expect($tableRows.get(1).innerText).to.contain('02/06/2011\t\tMoorland\tNot entered')
         })
