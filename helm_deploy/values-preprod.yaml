@@ -89,3 +89,6 @@ allowlist:
   moj-official-tgw-preprod: "51.149.251.0/24"
   crc-rrp: "62.253.83.37/32"
   crc-pp-wwm: "5.153.255.210/32"
+  forest-bank: "51.155.85.249"
+  northumberland: "51.148.47.137"
+  peterborough: "51.155.55.241"
