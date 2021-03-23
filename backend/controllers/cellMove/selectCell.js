@@ -176,13 +176,13 @@ module.exports = ({ oauthApi, prisonApi, whereaboutsApi }) => async (req, res) =
       location,
     })
 
-    const cellOccupants = await getCellOccupants(res, { activeCaseLoadId, prisonApi, cells, nonAssociations })
-
     const selectedCells = cells.filter(cell => {
       if (cellType === 'SO') return cell.capacity === 1
       if (cellType === 'MO') return cell.capacity > 1
       return cell
     })
+
+    const cellOccupants = await getCellOccupants(res, { activeCaseLoadId, prisonApi, cells: selectedCells, nonAssociations })
 
     const numberOfNonAssociations = getNonAssocationsInEstablishment(nonAssociations).length
 
