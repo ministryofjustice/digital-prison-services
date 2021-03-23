@@ -182,7 +182,12 @@ module.exports = ({ oauthApi, prisonApi, whereaboutsApi }) => async (req, res) =
       return cell
     })
 
-    const cellOccupants = await getCellOccupants(res, { activeCaseLoadId, prisonApi, cells: selectedCells, nonAssociations })
+    const cellOccupants = await getCellOccupants(res, {
+      activeCaseLoadId,
+      prisonApi,
+      cells: selectedCells,
+      nonAssociations,
+    })
 
     const numberOfNonAssociations = getNonAssocationsInEstablishment(nonAssociations).length
 
