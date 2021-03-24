@@ -92,7 +92,7 @@ app.use(
 app.use(setupReactRoutes())
 app.use('/$', homepageController({ ...apis, logError }))
 app.use(pageNotFound)
-app.use(errorHandler)
+app.use(errorHandler({ logError }))
 
 app.listen(config.app.port, () => {
   // eslint-disable-next-line no-console
