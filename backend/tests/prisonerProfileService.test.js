@@ -467,6 +467,42 @@ describe('prisoner profile service', () => {
       })
     })
 
+    describe('allowing pathfinder referrals based on roles and current offender status', () => {
+      beforeEach(() => {
+        pathfinderApi.getPathfinderDetails = jest.fn().mockResolvedValue(undefined)
+      })
+
+      it.each`
+        role                    | flag                           | hasAccess
+        ${'PF_STD_PRISON'}      | ${'showPathfinderReferButton'} | ${true}
+        ${'PF_STD_PROBATION'}   | ${'showPathfinderReferButton'} | ${true}
+        ${'PF_APPROVAL'}        | ${'showPathfinderReferButton'} | ${true}
+        ${'PF_NATIONAL_READER'} | ${'showPathfinderReferButton'} | ${false}
+        ${'PF_LOCAL_READER'}    | ${'showPathfinderReferButton'} | ${false}
+        ${'PF_HQ'}              | ${'showPathfinderReferButton'} | ${true}
+        ${'PF_PSYCHOLOGIST'}    | ${'showPathfinderReferButton'} | ${false}
+        ${'PF_POLICE'}          | ${'showPathfinderReferButton'} | ${false}
+        ${'PF_NATIONAL_READER'} | ${'showPathfinderReferButton'} | ${false}
+        ${'PF_LOCAL_READER'}    | ${'showPathfinderReferButton'} | ${false}
+        ${'OTHER'}              | ${'showPathfinderReferButton'} | ${false}
+      `('$flag should be $hasAccess when the user has the $role role', async ({ role, flag, hasAccess }) => {
+        oauthApi.userRoles.mockResolvedValue([{ roleCode: role }])
+
+        const profileData = await service.getPrisonerProfileData(context, offenderNo)
+
+        expect(profileData[flag]).toBe(hasAccess)
+      })
+
+      it('should not display pathfinder referral when the offender exists on pathfinder', async () => {
+        pathfinderApi.getPathfinderDetails = jest.fn().mockResolvedValue({ id: 1 })
+        oauthApi.userRoles.mockResolvedValue([{ roleCode: 'PF_STD_PROBATION' }])
+
+        const profileData = await service.getPrisonerProfileData(context, offenderNo)
+
+        expect(profileData.showPathfinderReferButton).toBe(false)
+      })
+    })
+
     describe('when a SOC prisoner exists and the current user has the correct role', () => {
       beforeEach(() => {
         socApi.getSocDetails = jest.fn().mockResolvedValue({ id: 1 })
