@@ -292,6 +292,11 @@ const createStringFromList = array => {
   return array[0]
 }
 
+const isXHRRequest = req =>
+  req.xhr ||
+  (req.headers.accept && (req.headers.accept.indexOf('json') > -1 || req.headers.accept.indexOf('image/*') > -1)) ||
+  (req.path && req.path.endsWith('.js'))
+
 module.exports = {
   isBeforeToday,
   isToday,
@@ -337,4 +342,5 @@ module.exports = {
   indefiniteArticle,
   isBlank,
   createStringFromList,
+  isXHRRequest,
 }

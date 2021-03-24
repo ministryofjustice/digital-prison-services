@@ -1,18 +1,21 @@
-const { logError } = require('../logError')
+const { isXHRRequest } = require('../utils')
 
-module.exports = (error, req, res, next) => {
-  if (error?.response?.status === 404) {
-    res.status(404)
-    return res.render('notFound.njk', { url: req.headers.referer || '/' })
+module.exports = ({ logError }) => (error, req, res, next) => {
+  const status = error?.response?.status || 500
+
+  if (status >= 500) logError(req.originalUrl, error, 'There was a problem loading page')
+
+  if (isXHRRequest(req)) {
+    res.status(status)
+    return res.end()
   }
 
-  const pageData = {
-    url: res.locals.redirectUrl || req.originalUrl,
-    homeUrl: res.locals.homeUrl,
-  }
+  res.status(status)
 
-  logError(req.originalUrl, error, `There was a problem loading ${pageData.url}`)
-  res.status(500)
+  if (status === 404) return res.render('notFound.njk', { url: req.headers.referer || '/' })
 
-  return res.render('error.njk', pageData)
+  return res.render('error.njk', {
+    url: res.locals?.redirectUrl || req.originalUrl,
+    homeUrl: res.locals?.homeUrl,
+  })
 }
