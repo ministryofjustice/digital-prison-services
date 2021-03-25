@@ -122,10 +122,13 @@ module.exports = ({
             'PF_POLICE',
             'PF_HQ',
             'PF_PSYCHOLOGIST',
-            'PF_NATIONAL_READER',
-            'PF_LOCAL_READER',
           ].includes(role.roleCode)
         )
+    )
+
+    const isPathfinderReadWriteUser = Boolean(
+      userRoles &&
+        userRoles.some(role => ['PF_STD_PRISON', 'PF_STD_PROBATION', 'PF_APPROVAL', 'PF_HQ'].includes(role.roleCode))
     )
 
     const canViewPathfinderLink = Boolean(isPathfinderUser && pathfinderDetails)
@@ -148,7 +151,7 @@ module.exports = ({
       canViewPathfinderLink,
       pathfinderProfileUrl:
         pathfinderUrl && pathfinderDetails && `${pathfinderUrl}nominal/${String(pathfinderDetails.id)}`,
-      showPathfinderReferButton: Boolean(!pathfinderDetails && isPathfinderUser),
+      showPathfinderReferButton: Boolean(!pathfinderDetails && isPathfinderReadWriteUser),
       pathfinderReferUrl: pathfinderUrl && `${pathfinderUrl}refer/offender/${offenderNo}`,
       canViewSocLink: socEnabled && canViewSocLink,
       socProfileUrl: socEnabled && socUrl && socDetails && `${socUrl}/nominal/${String(socDetails.id)}`,
