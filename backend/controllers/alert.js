@@ -177,7 +177,7 @@ const alertFactory = (oauthApi, prisonApi, referenceCodesService) => {
         fireAnalyticsEvent({ closeAlert, alertCode: alert.alertCode, caseLoadId: activeCaseLoad.caseLoadId })
       } catch (error) {
         if (error?.response?.status === 400) {
-          const { firstName, lastName} = await prisonApi.getDetails(res.locals, offenderNo, true)
+          const { firstName, lastName } = await prisonApi.getDetails(res.locals, offenderNo, true)
           return res.render('alerts/alertAlreadyClosed.njk', {
             url: `${getOffenderUrl(offenderNo)}/alerts`,
             profileUrl: getOffenderUrl(offenderNo),

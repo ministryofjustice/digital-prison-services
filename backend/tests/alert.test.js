@@ -210,7 +210,7 @@ describe('alert management', () => {
             developerMessage: 'Malformed request',
           },
         })
-  
+
         const req = {
           ...mockReq,
           params: { offenderNo, alertId: 1 },
@@ -226,7 +226,7 @@ describe('alert management', () => {
           profileUrl: '/prisoner/ABC123',
           name: 'Test User',
         })
-    })
+      })
 
       it('should return an error if no option is selected', async () => {
         const req = {
