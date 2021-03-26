@@ -1,7 +1,7 @@
 const offenderBasicDetails = require('../../mockApis/responses/offenderBasicDetails.json')
 const offenderFullDetails = require('../../mockApis/responses/offenderFullDetails.json')
 const EditAlertPage = require('../../pages/alerts/editAlertPage')
-const PrisonerAlertsPage = require('../../pages/prisonerProfile/prisonerAlertsPage')
+const AlertAlreadyClosedPage = require('../../pages/alerts/alertAlreadyClosedPage')
 const NotFoundPage = require('../../pages/notFound')
 
 const offenderNo = 'A12345'
@@ -56,5 +56,18 @@ context('A user can add an appointment', () => {
     cy.task('stubUserMeRoles', [])
     cy.visit(`/edit-alert?offenderNo=${offenderNo}&alertId=${alertId}`)
     NotFoundPage.verifyOnPage()
+  })
+
+  it('A user is presented with alert already created when 400 error', () => {
+    cy.task('stubPutAlertErrors', { bookingId: 14, alertId, alert: { alertId: 1, comment: 'Test comment' }, status: 400 })
+    cy.visit(`/edit-alert?offenderNo=${offenderNo}&alertId=${alertId}`)
+
+    const editAlertPage = EditAlertPage.verifyOnPage()
+    const form = editAlertPage.form()
+    form.comments().type('Test')
+    form.alertStatusYes().click()
+    form.submitButton().click()
+
+    AlertAlreadyClosedPage.verifyOnPage()
   })
 })

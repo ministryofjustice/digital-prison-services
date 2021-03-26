@@ -415,14 +415,14 @@ module.exports = {
         jsonBody: alert || {},
       },
     }),
-  stubPutAlert: ({ bookingId, alertId, alert }) =>
+  stubPutAlert: ({ bookingId, alertId, alert, status = 200 }) =>
     stubFor({
       request: {
         method: 'PUT',
         url: `/api/bookings/${bookingId}/alert/${alertId}`,
       },
       response: {
-        status: 200,
+        status: status,
         headers: {
           'Content-Type': 'application/json;charset=UTF-8',
         },
