@@ -358,6 +358,7 @@ module.exports = on => {
     stubGetAlerts: ({ agencyId, alerts }) => prisonApi.stubGetAlerts({ agencyId, alerts }),
     stubGetAlert: ({ bookingId, alertId, alert }) => prisonApi.stubGetAlert({ bookingId, alertId, alert }),
     stubPutAlert: ({ bookingId, alertId, alert }) => prisonApi.stubPutAlert({ bookingId, alertId, alert }),
+    stubPutAlertErrors: ({ bookingId, alertId, alert, status }) => prisonApi.stubPutAlert({ bookingId, alertId, alert, status }),
     stubHistoryForLocation: locationHistory => prisonApi.stubHistoryForLocation(locationHistory),
     stubAttributesForLocation: locationAttributes => prisonApi.stubAttributesForLocation(locationAttributes),
     stubPrisonerDetail: ({ prisonerDetail, bookingId }) => prisonApi.stubPrisonerDetail(prisonerDetail, bookingId),
