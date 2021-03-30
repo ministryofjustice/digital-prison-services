@@ -117,7 +117,7 @@ module.exports = {
       url: process.env.OMIC_URL || 'http://localhost:3001',
     },
     complexity: {
-      url: process.env.COMPLEXITY_ENDPOINT_URL,
+      url: process.env.COMPLEXITY_OF_NEED_URI,
     },
   },
 
