@@ -16,6 +16,7 @@ const community = require('../mockApis/community')
 const pathfinder = require('../mockApis/pathfinder')
 const socApi = require('../mockApis/soc')
 const offenderSearch = require('../mockApis/offenderSearch')
+const complexity = require('../mockApis/complexity')
 
 const { resetStubs } = require('../mockApis/wiremock')
 
@@ -54,6 +55,7 @@ module.exports = on => {
         tokenverification.stubHealth(),
         community.stubHealth(),
         offenderSearch.stubHealth(),
+        complexity.stubHealth(),
       ]),
     getLoginUrl: auth.getLoginUrl,
     stubLogin: ({ username = 'ITAG_USER', caseload = 'MDI', roles = [], caseloads }) =>
@@ -358,7 +360,13 @@ module.exports = on => {
     stubGetAlerts: ({ agencyId, alerts }) => prisonApi.stubGetAlerts({ agencyId, alerts }),
     stubGetAlert: ({ bookingId, alertId, alert }) => prisonApi.stubGetAlert({ bookingId, alertId, alert }),
     stubPutAlert: ({ bookingId, alertId, alert }) => prisonApi.stubPutAlert({ bookingId, alertId, alert }),
-    stubPutAlertErrors: ({ bookingId, alertId, alert, status }) => prisonApi.stubPutAlert({ bookingId, alertId, alert, status }),
+    stubPutAlertErrors: ({ bookingId, alertId, alert, status }) =>
+      prisonApi.stubPutAlert({
+        bookingId,
+        alertId,
+        alert,
+        status,
+      }),
     stubHistoryForLocation: locationHistory => prisonApi.stubHistoryForLocation(locationHistory),
     stubAttributesForLocation: locationAttributes => prisonApi.stubAttributesForLocation(locationAttributes),
     stubPrisonerDetail: ({ prisonerDetail, bookingId }) => prisonApi.stubPrisonerDetail(prisonerDetail, bookingId),

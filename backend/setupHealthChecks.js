@@ -13,7 +13,8 @@ const health = healthFactory(
   config.apis.caseNotes.url,
   config.apis.allocationManager.url,
   config.apis.tokenverification.url,
-  config.apis.offenderSearch.url
+  config.apis.offenderSearch.url,
+  config.apis.complexity.url
 )
 
 module.exports = () => {

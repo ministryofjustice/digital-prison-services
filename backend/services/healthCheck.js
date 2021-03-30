@@ -41,7 +41,8 @@ module.exports = function healthcheckFactory(
   caseNotesUrl,
   allocationManagerUrl,
   tokenverificationUrl,
-  offenderSearchUrl
+  offenderSearchUrl,
+  complexityUrl
 ) {
   const checks = [
     service('auth', authUrl),
@@ -53,6 +54,7 @@ module.exports = function healthcheckFactory(
     service('casenotes', caseNotesUrl),
     service('tokenverification', tokenverificationUrl),
     service('offenderSearch', offenderSearchUrl),
+    service('complexity', complexityUrl),
   ]
 
   return callback =>
