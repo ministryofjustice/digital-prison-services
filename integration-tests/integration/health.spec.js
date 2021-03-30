@@ -18,6 +18,7 @@ context('Health page reports health correctly', () => {
         tokenverification: 'UP',
         whereabouts: 'UP',
         offenderSearch: 'UP',
+        complexity: 'UP',
       })
     })
   })
@@ -40,6 +41,7 @@ context('Health page reports health correctly', () => {
         tokenverification: 'UP',
         whereabouts: 'UP',
         offenderSearch: 'UP',
+        complexity: 'UP',
       })
     })
   })
