@@ -296,7 +296,7 @@ describe('Homepage', () => {
           tasks: [
             {
               id: 'manage-key-workers',
-              heading: 'Key worker management service',
+              heading: 'Manage key workers',
               description: 'Add and remove key workers from prisoners and manage individuals.',
               href: 'http://omic-url',
             },
