@@ -215,6 +215,16 @@ context('Prisoner quick look data retrieval errors', () => {
 })
 
 context('Prisoner profile header', () => {
+  const headerProfileData = {
+    offenderBasicDetails,
+    offenderFullDetails: {
+      ...offenderFullDetails,
+      profileInformation: [{ type: 'NAT', resultValue: 'British' }],
+    },
+    iepSummary: {},
+    caseNoteSummary: {},
+    offenderNo,
+  }
   before(() => {
     cy.task('reset')
     cy.clearCookies()
@@ -230,16 +240,7 @@ context('Prisoner profile header', () => {
   })
 
   it('Should show correct header information', () => {
-    cy.task('stubPrisonerProfileHeaderData', {
-      offenderBasicDetails,
-      offenderFullDetails: {
-        ...offenderFullDetails,
-        profileInformation: [{ type: 'NAT', resultValue: 'British' }],
-      },
-      iepSummary: {},
-      caseNoteSummary: {},
-      offenderNo,
-    })
+    cy.task('stubPrisonerProfileHeaderData', headerProfileData)
     cy.task('stubGetComplexOffenders', [])
     cy.visit(`/prisoner/${offenderNo}`)
 
@@ -250,14 +251,7 @@ context('Prisoner profile header', () => {
 
   it('should show complexity text and hide last key worker session', () => {
     cy.task('stubPrisonerProfileHeaderData', {
-      offenderBasicDetails,
-      offenderFullDetails: {
-        ...offenderFullDetails,
-        profileInformation: [{ type: 'NAT', resultValue: 'British' }],
-      },
-      iepSummary: {},
-      caseNoteSummary: {},
-      offenderNo,
+      ...headerProfileData,
       keyworkerDetails: {},
     })
     cy.task('stubGetComplexOffenders', [
@@ -275,14 +269,7 @@ context('Prisoner profile header', () => {
 
   it('should show not allocated when no key worker is assigned', () => {
     cy.task('stubPrisonerProfileHeaderData', {
-      offenderBasicDetails,
-      offenderFullDetails: {
-        ...offenderFullDetails,
-        profileInformation: [{ type: 'NAT', resultValue: 'British' }],
-      },
-      iepSummary: {},
-      caseNoteSummary: {},
-      offenderNo,
+      ...headerProfileData,
       keyworkerDetails: {},
     })
     cy.task('stubGetComplexOffenders', [])
