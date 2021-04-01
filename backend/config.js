@@ -118,6 +118,7 @@ module.exports = {
     },
     complexity: {
       url: process.env.COMPLEXITY_OF_NEED_URI,
+      timeoutSeconds: 10,
     },
   },
 

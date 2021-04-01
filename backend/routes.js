@@ -62,6 +62,7 @@ const setup = ({
   pathfinderApi,
   socApi,
   offenderSearchApi,
+  complexityApi,
 }) => {
   router.use(async (req, res, next) => {
     res.locals = {
@@ -204,6 +205,7 @@ const setup = ({
       logError,
       socApi,
       whereaboutsApi,
+      complexityApi,
     })
   )
 

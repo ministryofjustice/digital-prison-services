@@ -47,6 +47,7 @@ const controller = ({
   logError,
   socApi,
   whereaboutsApi,
+  complexityApi,
 }) => {
   const prisonerProfileService = prisonerProfileServiceFactory({
     prisonApi,
@@ -57,6 +58,7 @@ const controller = ({
     systemOauthClient,
     socApi,
     allocationManagerApi,
+    complexityApi,
   })
   const personService = personServiceFactory(prisonApi)
   const prisonerFinanceService = prisonerFinanceServiceFactory(prisonApi)

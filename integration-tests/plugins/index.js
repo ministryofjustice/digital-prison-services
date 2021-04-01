@@ -135,6 +135,8 @@ module.exports = on => {
       userRoles = [],
       retentionRecord,
       offenderNo,
+      keyworkerDetails,
+      complexOffenders = [],
     }) =>
       Promise.all([
         auth.stubUserMe(),
@@ -146,9 +148,10 @@ module.exports = on => {
         prisonApi.stubUserCaseloads(),
         prisonApi.stubStaffRoles(),
         prisonApi.stubOffenderImage(),
-        keyworker.stubKeyworkerByCaseloadAndOffenderNo(),
+        keyworker.stubKeyworkerByCaseloadAndOffenderNo(keyworkerDetails),
         dataComplianceApi.stubRetentionRecord(offenderNo, retentionRecord),
         allocationManager.stubGetPomForOffender({ primary_pom: { name: 'SMITH, JANE' } }),
+        complexity.stubGetComplexOffenders(complexOffenders),
       ]),
 
     stubAlertTypes: () => Promise.all([prisonApi.stubAlertTypes()]),
@@ -435,5 +438,6 @@ module.exports = on => {
     stubGetDetailsFailure: ({ status }) => prisonApi.stubGetDetailsFailure(status),
     stubGetPrisoners: response => Promise.all([prisonApi.stubGetPrisoners(response)]),
     stubGetUserDetailsList: response => Promise.all([prisonApi.stubGetUserDetailsList(response)]),
+    stubGetComplexOffenders: offenders => complexity.stubGetComplexOffenders(offenders),
   })
 }

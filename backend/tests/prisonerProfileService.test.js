@@ -9,7 +9,6 @@ config.apis.soc = {
   url: 'http://soc',
   enabled: true,
 }
-
 const prisonerProfileService = require('../services/prisonerProfileService')
 
 describe('prisoner profile service', () => {
@@ -22,8 +21,9 @@ describe('prisoner profile service', () => {
   const systemOauthClient = {}
   const allocationManagerApi = {}
   const socApi = {}
-  let service
+  const complexityApi = {}
 
+  let service
   beforeEach(() => {
     prisonApi.getDetails = jest.fn()
     prisonApi.getIepSummary = jest.fn()
@@ -38,8 +38,9 @@ describe('prisoner profile service', () => {
     pathfinderApi.getPathfinderDetails = jest.fn().mockRejectedValue(new Error('not found'))
     socApi.getSocDetails = jest.fn().mockRejectedValue(new Error('not found'))
 
-    systemOauthClient.getClientCredentialsTokens = jest.fn().mockResolvedValue({})
+    complexityApi.getComplexOffenders = jest.fn().mockResolvedValue([])
 
+    systemOauthClient.getClientCredentialsTokens = jest.fn().mockResolvedValue({})
     service = prisonerProfileService({
       prisonApi,
       keyworkerApi,
@@ -49,12 +50,13 @@ describe('prisoner profile service', () => {
       systemOauthClient,
       socApi,
       allocationManagerApi,
+      complexityApi,
     })
   })
-
   describe('prisoner profile data', () => {
     const offenderNo = 'ABC123'
     const bookingId = '123'
+
     const prisonerDetails = {
       activeAlertCount: 1,
       agencyId: 'MDI',
@@ -132,7 +134,6 @@ describe('prisoner profile service', () => {
         },
       ],
     }
-
     beforeEach(() => {
       prisonApi.getDetails.mockReturnValue(prisonerDetails)
       prisonApi.getIepSummary.mockResolvedValue([{ iepLevel: 'Standard' }])
@@ -217,6 +218,7 @@ describe('prisoner profile service', () => {
         staffId: 111,
         categoryCode: undefined,
         interpreterRequired: undefined,
+        isHighComplexity: false,
         language: undefined,
         staffName: undefined,
         writtenLanguage: undefined,
@@ -259,7 +261,6 @@ describe('prisoner profile service', () => {
         })
       )
     })
-
     describe('prisoner profile links', () => {
       describe('when the the prisoner is out and user can view inactive bookings', () => {
         beforeEach(() => {
@@ -322,6 +323,52 @@ describe('prisoner profile service', () => {
           expect(getPrisonerProfileData).toEqual(
             expect.objectContaining({
               showAddKeyworkerSession: true,
+            })
+          )
+        })
+      })
+      describe('When the offender has a measured complexity of need', () => {
+        it('should return false for offenders with no complexity of need data', async () => {
+          complexityApi.getComplexOffenders = jest.fn().mockResolvedValue([])
+          const getPrisonerProfileData = await service.getPrisonerProfileData(context, offenderNo)
+
+          expect(getPrisonerProfileData).toEqual(
+            expect.objectContaining({
+              isHighComplexity: false,
+            })
+          )
+        })
+        it('should return false when the offender has a low complexity of need', async () => {
+          complexityApi.getComplexOffenders = jest.fn().mockResolvedValue([{ offenderNo, level: 'low' }])
+
+          const getPrisonerProfileData = await service.getPrisonerProfileData(context, offenderNo)
+          expect(getPrisonerProfileData).toEqual(
+            expect.objectContaining({
+              isHighComplexity: false,
+            })
+          )
+        })
+
+        it('should return false when the offender has a medium complexity of need', async () => {
+          complexityApi.getComplexOffenders = jest.fn().mockResolvedValue([{ offenderNo, level: 'medium' }])
+
+          const getPrisonerProfileData = await service.getPrisonerProfileData(context, offenderNo)
+
+          expect(getPrisonerProfileData).toEqual(
+            expect.objectContaining({
+              isHighComplexity: false,
+            })
+          )
+        })
+
+        it('should return true when the offender has a high complexity of need', async () => {
+          complexityApi.getComplexOffenders = jest.fn().mockResolvedValue([{ offenderNo, level: 'high' }])
+
+          const getPrisonerProfileData = await service.getPrisonerProfileData(context, offenderNo)
+
+          expect(getPrisonerProfileData).toEqual(
+            expect.objectContaining({
+              isHighComplexity: true,
             })
           )
         })

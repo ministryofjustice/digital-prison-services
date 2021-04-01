@@ -86,6 +86,7 @@ app.use(
     pathfinderApi: apis.pathfinderApi,
     socApi: apis.socApi,
     offenderSearchApi: apis.offenderSearchApi,
+    complexityApi: apis.complexityApi,
   })
 )
 
