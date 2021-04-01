@@ -22,6 +22,7 @@ module.exports = ({
   socApi,
   systemOauthClient,
   allocationManagerApi,
+  complexityApi,
 }) => {
   const getPrisonerProfileData = async (context, offenderNo, username) => {
     const [currentUser, prisonerDetails] = await Promise.all([
@@ -140,6 +141,9 @@ module.exports = ({
 
     const canViewSocLink = Boolean(isSocUser && socDetails)
 
+    const complexityLevel = await complexityApi.getComplexOffenders(context, [offenderNo])
+    const isHighComplexity = Boolean(complexityLevel?.length > 0 && complexityLevel[0]?.level === 'high')
+
     return {
       activeAlertCount,
       agencyName: assignedLivingUnit.agencyName,
@@ -168,6 +172,7 @@ module.exports = ({
       keyWorkerLastSession:
         keyworkerSessions && keyworkerSessions[0] && moment(keyworkerSessions[0].latestCaseNote).format('D MMMM YYYY'),
       keyWorkerName: keyworkerDetails && formatName(keyworkerDetails.firstName, keyworkerDetails.lastName),
+      isHighComplexity,
       inactiveAlertCount,
       location: formatLocation(assignedLivingUnit.description),
       offenderName: putLastNameFirst(prisonerDetails.firstName, prisonerDetails.lastName),

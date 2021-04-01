@@ -145,6 +145,7 @@ context('Prisoner quick look data retrieval errors', () => {
     cy.task('stubLogin', { username: 'ITAG_USER', caseload: 'MDI' })
     cy.login()
 
+    cy.task('stubGetComplexOffenders', [])
     cy.task('stubPrisonerProfileHeaderData', {
       offenderBasicDetails,
       offenderFullDetails,
@@ -226,6 +227,9 @@ context('Prisoner profile header', () => {
 
   beforeEach(() => {
     Cypress.Cookies.preserveOnce('hmpps-session-dev')
+  })
+
+  it('Should show correct header information', () => {
     cy.task('stubPrisonerProfileHeaderData', {
       offenderBasicDetails,
       offenderFullDetails: {
@@ -236,14 +240,57 @@ context('Prisoner profile header', () => {
       caseNoteSummary: {},
       offenderNo,
     })
-  })
-
-  it('Should show correct header information', () => {
+    cy.task('stubGetComplexOffenders', [])
     cy.visit(`/prisoner/${offenderNo}`)
 
     prisonerQuickLookPage.verifyOnPage('Smith, John')
 
     cy.get('[data-test="csra-details"]').contains('High - 23/11/2016')
+  })
+
+  it('should show complexity text and hide last key worker session', () => {
+    cy.task('stubPrisonerProfileHeaderData', {
+      offenderBasicDetails,
+      offenderFullDetails: {
+        ...offenderFullDetails,
+        profileInformation: [{ type: 'NAT', resultValue: 'British' }],
+      },
+      iepSummary: {},
+      caseNoteSummary: {},
+      offenderNo,
+      keyworkerDetails: {},
+    })
+    cy.task('stubGetComplexOffenders', [
+      {
+        offenderNo,
+        level: 'high',
+      },
+    ])
+    cy.visit(`/prisoner/${offenderNo}`)
+
+    prisonerQuickLookPage.verifyOnPage('Smith, John')
+    cy.get('[data-test="keyworker-name"]').contains('None - high complexity')
+    cy.get('[data-test="last-session"]').should('not.exist')
+  })
+
+  it('should show not allocated when no key worker is assigned', () => {
+    cy.task('stubPrisonerProfileHeaderData', {
+      offenderBasicDetails,
+      offenderFullDetails: {
+        ...offenderFullDetails,
+        profileInformation: [{ type: 'NAT', resultValue: 'British' }],
+      },
+      iepSummary: {},
+      caseNoteSummary: {},
+      offenderNo,
+      keyworkerDetails: {},
+    })
+    cy.task('stubGetComplexOffenders', [])
+    cy.visit(`/prisoner/${offenderNo}`)
+
+    prisonerQuickLookPage.verifyOnPage('Smith, John')
+    cy.get('[data-test="keyworker-name"]').contains('Not allocated')
+    cy.get('[data-test="last-session"]').contains('No previous session')
   })
 })
 
@@ -261,6 +308,7 @@ context('Prisoner quick look', () => {
   context('When a prisoner is in users caseload', () => {
     beforeEach(() => {
       Cypress.Cookies.preserveOnce('hmpps-session-dev')
+      cy.task('stubGetComplexOffenders', [])
       cy.task('stubPrisonerProfileHeaderData', {
         offenderBasicDetails,
         offenderFullDetails: { ...offenderFullDetails, profileInformation: [{ type: 'NAT', resultValue: 'British' }] },
@@ -429,6 +477,7 @@ context('Prisoner quick look', () => {
   context('When a user CANNOT view inactive bookings', () => {
     beforeEach(() => {
       Cypress.Cookies.preserveOnce('hmpps-session-dev')
+      cy.task('stubGetComplexOffenders', [])
       cy.task('stubPrisonerProfileHeaderData', {
         offenderBasicDetails,
         offenderFullDetails: { ...offenderFullDetails, agencyId: 'OUT' },
@@ -449,6 +498,7 @@ context('Prisoner quick look', () => {
   context('When a user has no roles relating to viewing probation documents', () => {
     beforeEach(() => {
       Cypress.Cookies.preserveOnce('hmpps-session-dev')
+      cy.task('stubGetComplexOffenders', [])
       cy.task('stubPrisonerProfileHeaderData', {
         offenderBasicDetails,
         offenderFullDetails,
@@ -468,6 +518,7 @@ context('Prisoner quick look', () => {
   context('When a user has VIEW_PROBATION_DOCUMENTS role', () => {
     beforeEach(() => {
       Cypress.Cookies.preserveOnce('hmpps-session-dev')
+      cy.task('stubGetComplexOffenders', [])
       cy.task('stubPrisonerProfileHeaderData', {
         offenderBasicDetails,
         offenderFullDetails,
@@ -488,6 +539,7 @@ context('Prisoner quick look', () => {
   context('When a user has POM role', () => {
     beforeEach(() => {
       Cypress.Cookies.preserveOnce('hmpps-session-dev')
+      cy.task('stubGetComplexOffenders', [])
       cy.task('stubPrisonerProfileHeaderData', {
         offenderBasicDetails,
         offenderFullDetails,
@@ -508,6 +560,7 @@ context('Prisoner quick look', () => {
   context('When a prisoner does NOT have a record retention record', () => {
     beforeEach(() => {
       Cypress.Cookies.preserveOnce('hmpps-session-dev')
+      cy.task('stubGetComplexOffenders', [])
       cy.task('stubPrisonerProfileHeaderData', {
         offenderBasicDetails,
         offenderFullDetails: { ...offenderFullDetails, agencyId: 'LEI' },
@@ -622,6 +675,7 @@ context('Finances section', () => {
       cy.login()
 
       quickLookFullDetails.balances.damageObligations = 0
+      cy.task('stubGetComplexOffenders', [])
       cy.task('stubQuickLook', quickLookFullDetails)
     })
 
@@ -666,6 +720,7 @@ context('Finances section', () => {
       cy.login()
 
       quickLookFullDetails.balances.damageObligations = 65
+      cy.task('stubGetComplexOffenders', [])
       cy.task('stubQuickLook', quickLookFullDetails)
     })
 
