@@ -136,6 +136,7 @@ module.exports = on => {
       retentionRecord,
       offenderNo,
       keyworkerDetails,
+      complexOffenders = [],
     }) =>
       Promise.all([
         auth.stubUserMe(),
@@ -150,6 +151,7 @@ module.exports = on => {
         keyworker.stubKeyworkerByCaseloadAndOffenderNo(keyworkerDetails),
         dataComplianceApi.stubRetentionRecord(offenderNo, retentionRecord),
         allocationManager.stubGetPomForOffender({ primary_pom: { name: 'SMITH, JANE' } }),
+        complexity.stubGetComplexOffenders(complexOffenders),
       ]),
 
     stubAlertTypes: () => Promise.all([prisonApi.stubAlertTypes()]),
