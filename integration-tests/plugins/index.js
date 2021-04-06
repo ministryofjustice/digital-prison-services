@@ -34,16 +34,15 @@ module.exports = on => {
       await resetStubs()
       return tokenverification.stubVerifyToken(true)
     },
-    stubAuthHealth: status => Promise.all([auth.stubHealth(status)]),
-    stubPrisonApiHealth: status => Promise.all([prisonApi.stubHealth(status)]),
-    stubWhereaboutsHealth: status => Promise.all([whereabouts.stubHealth(status)]),
-    stubAllocationManagerHealth: status => Promise.all([allocationManager.stubHealth(status)]),
-    stubKeyworkerHealth: status => Promise.all([keyworker.stubHealth(status)]),
-    stubCaseNotesHealth: status => Promise.all([caseNotes.stubHealth(status)]),
-    stubCommunityHealth: status => Promise.all([community.stubHealth(status)]),
-    stubTokenverificationHealth: status => Promise.all([tokenverification.stubHealth(status)]),
-    stubOffenderSearchHealth: status => Promise.all([offenderSearch.stubHealth(status)]),
-
+    stubAuthHealth: status => auth.stubHealth(status),
+    stubPrisonApiHealth: status => prisonApi.stubHealth(status),
+    stubWhereaboutsHealth: status => whereabouts.stubHealth(status),
+    stubAllocationManagerHealth: status => allocationManager.stubHealth(status),
+    stubKeyworkerHealth: status => keyworker.stubHealth(status),
+    stubCaseNotesHealth: status => caseNotes.stubHealth(status),
+    stubCommunityHealth: status => community.stubHealth(status),
+    stubTokenverificationHealth: status => tokenverification.stubHealth(status),
+    stubOffenderSearchHealth: status => offenderSearch.stubHealth(status),
     stubHealthAllHealthy: () =>
       Promise.all([
         auth.stubHealth(),
