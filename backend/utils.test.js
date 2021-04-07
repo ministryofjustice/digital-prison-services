@@ -1,24 +1,25 @@
 import {
   capitalize,
-  properCaseName,
-  mapToQueryString,
+  chunkArray,
   formatDaysInYears,
-  formatMonthsAndDays,
-  formatTimestampToDateTime,
-  formatTimestampToDate,
-  formatName,
   formatLocation,
-  isTemporaryLocation,
+  formatMonthsAndDays,
+  formatName,
+  formatTimestampToDate,
+  formatTimestampToDateTime,
   getCurrentPeriod,
+  getDate,
+  getNamesFromString,
+  getTime,
+  isPrisonerIdentifier,
+  isTemporaryLocation,
   isToday,
   isTodayOrAfter,
   isViewableFlag,
-  getDate,
-  getTime,
-  chunkArray,
+  joinUrlPath,
+  mapToQueryString,
+  properCaseName,
   putLastNameFirst,
-  getNamesFromString,
-  isPrisonerIdentifier,
 } from './utils'
 
 describe('capitalize()', () => {
@@ -415,5 +416,20 @@ describe('isTemporaryLocation()', () => {
   })
   it('should not detect temporary locations with suffix', () => {
     expect(isTemporaryLocation('CSWAP-')).toEqual(false)
+  })
+})
+
+describe('Url joining', () => {
+  it('should handle url missing an ending forward slash and path starting a forward slash', () => {
+    expect(joinUrlPath('http://auth', '/health/ping')).toBe('http://auth/health/ping')
+  })
+  it('should handle url ending with a forward slash and path not starting with a forward slash', () => {
+    expect(joinUrlPath('http://auth/', 'health/ping')).toBe('http://auth/health/ping')
+  })
+  it('should handle url ending with a forward slash and path starting with a forward slash', () => {
+    expect(joinUrlPath('http://auth/', '/health/ping')).toBe('http://auth/health/ping')
+  })
+  it('should handle missing forward slashes for both url and path ', () => {
+    expect(joinUrlPath('http://auth', 'health/ping')).toBe('http://auth/health/ping')
   })
 })

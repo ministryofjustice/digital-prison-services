@@ -297,6 +297,18 @@ const isXHRRequest = req =>
   (req.headers.accept && (req.headers.accept.indexOf('json') > -1 || req.headers.accept.indexOf('image/*') > -1)) ||
   (req.path && req.path.endsWith('.js'))
 
+const joinUrlPath = (url, path) => {
+  if (!url && !path) return url
+
+  const endOfUrl = url[url.length - 1]
+  const startOfPath = path[0]
+
+  if (endOfUrl !== '/' && startOfPath !== '/') return `${url}/${path}`
+  if (endOfUrl === '/' && startOfPath === '/') return url.substr(0, url.length - 1) + path
+
+  return url + path
+}
+
 module.exports = {
   isBeforeToday,
   isToday,
@@ -343,4 +355,5 @@ module.exports = {
   isBlank,
   createStringFromList,
   isXHRRequest,
+  joinUrlPath,
 }

@@ -7,7 +7,7 @@ module.exports = {
     return stubFor({
       request: {
         method: 'GET',
-        url: '/whereabouts/health/ping',
+        urlPath: '/whereabouts/health/ping',
       },
       response: {
         status,

@@ -15,7 +15,7 @@ module.exports = {
     return stubFor({
       request: {
         method: 'GET',
-        urlPattern: '/health/ping',
+        urlPath: '/health/ping',
       },
       response: {
         status,
@@ -215,7 +215,7 @@ module.exports = {
       },
     })
   },
-  stubCsraAssessmentsForPrisoner: ({offenderNo, assessments = [] }) => {
+  stubCsraAssessmentsForPrisoner: ({ offenderNo, assessments = [] }) => {
     return stubFor({
       request: {
         method: 'GET',
@@ -422,7 +422,7 @@ module.exports = {
         url: `/api/bookings/${bookingId}/alert/${alertId}`,
       },
       response: {
-        status: status,
+        status,
         headers: {
           'Content-Type': 'application/json;charset=UTF-8',
         },

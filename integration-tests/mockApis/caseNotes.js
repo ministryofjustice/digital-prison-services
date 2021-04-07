@@ -21,7 +21,7 @@ module.exports = {
     return getFor({
       request: {
         method: 'GET',
-        url: '/casenotes/health/ping',
+        urlPath: '/casenotes/health/ping',
       },
       response: {
         status,
