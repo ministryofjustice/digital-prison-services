@@ -222,4 +222,7 @@ env:
 
   - name: OMIC_URL
     value: {{ .Values.env.OMIC_URL | quote }}
+
+  - name: ENABLE_COMPLEXITY_API
+    value: {{ .Values.env.ENABLE_COMPLEXITY_API | quote }}
 {{- end -}}
