@@ -87,7 +87,13 @@ env:
       secretKeyRef:
         name: {{ template "app.name" . }}
         key: HEWELL_OMU_EMAIL
-    
+
+  - name: BERWYN_OMU_EMAIL
+    valueFrom:
+      secretKeyRef:
+        name: {{ template "app.name" . }}
+        key: BERWYN_OMU_EMAIL
+
   - name: REDIS_HOST
     valueFrom:
       secretKeyRef:
