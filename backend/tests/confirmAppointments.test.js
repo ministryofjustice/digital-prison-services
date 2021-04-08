@@ -319,7 +319,7 @@ describe('Confirm appointments', () => {
 
   it('should throw and log an error when an unexpected error occurs', async () => {
     const logError = jest.fn()
-    appointmentsService.getAppointmentOptions.mockRejectedValue(new Error("Unexpected error"))
+    appointmentsService.getAppointmentOptions.mockRejectedValue(new Error('Unexpected error'))
     const { index } = confirmAppointments.confirmAppointmentFactory({
       prisonApi,
       appointmentsService,
@@ -357,7 +357,7 @@ describe('Confirm appointments', () => {
 
   it('should throw and log a court service error for a court user when an unexpected error occurs', async () => {
     const logError = jest.fn()
-    appointmentsService.getAppointmentOptions.mockRejectedValue(new Error("Unexpected error"))
+    appointmentsService.getAppointmentOptions.mockRejectedValue(new Error('Unexpected error'))
     const { index } = confirmAppointments.confirmAppointmentFactory({
       prisonApi,
       appointmentsService,
