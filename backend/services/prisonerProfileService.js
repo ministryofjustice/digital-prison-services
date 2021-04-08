@@ -8,6 +8,7 @@ const {
     pathfinder: { ui_url: pathfinderUrl },
     soc: { url: socUrl, enabled: socEnabled },
     useOfForce: { prisons: useOfForcePrisons, ui_url: useOfForceUrl },
+    complexity,
   },
   app: { displayRetentionLink },
 } = require('../config')
@@ -141,8 +142,9 @@ module.exports = ({
 
     const canViewSocLink = Boolean(isSocUser && socDetails)
 
-    const complexityLevel = await complexityApi.getComplexOffenders(context, [offenderNo])
-    const isHighComplexity = Boolean(complexityLevel?.length > 0 && complexityLevel[0]?.level === 'high')
+    const complexityLevel = complexity.enabled && (await complexityApi.getComplexOffenders(context, [offenderNo]))
+    const isHighComplexity =
+      complexity.enabled && Boolean(complexityLevel?.length > 0 && complexityLevel[0]?.level === 'high')
 
     return {
       activeAlertCount,

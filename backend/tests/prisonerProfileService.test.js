@@ -372,6 +372,20 @@ describe('prisoner profile service', () => {
             })
           )
         })
+
+        it('should only check for complex offenders when the feature is enabled', async () => {
+          config.apis.complexity.enabled = false
+
+          const getPrisonerProfileData = await service.getPrisonerProfileData(context, offenderNo)
+
+          expect(getPrisonerProfileData).toEqual(
+            expect.objectContaining({
+              isHighComplexity: false,
+            })
+          )
+
+          expect(complexityApi.getComplexOffenders).not.toHaveBeenCalled()
+        })
       })
 
       describe('when the user is in a use of force prison', () => {
