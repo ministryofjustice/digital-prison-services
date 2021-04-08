@@ -136,6 +136,9 @@ module.exports = {
       HEI: {
         omu: process.env.HEWELL_OMU_EMAIL,
       },
+      BWI: {
+        omu: process.env.BERWYN_OMU_EMAIL,
+      },
     },
   },
 
