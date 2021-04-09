@@ -328,6 +328,9 @@ describe('prisoner profile service', () => {
         })
       })
       describe('When the offender has a measured complexity of need', () => {
+        beforeEach(() => {
+          config.apis.complexity.enabled = true
+        })
         it('should return false for offenders with no complexity of need data', async () => {
           complexityApi.getComplexOffenders = jest.fn().mockResolvedValue([])
           const getPrisonerProfileData = await service.getPrisonerProfileData(context, offenderNo)
