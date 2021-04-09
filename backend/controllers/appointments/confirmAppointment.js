@@ -22,7 +22,10 @@ const confirmAppointmentFactory = ({ prisonApi, appointmentsService, logError })
       )
 
       const appointmentDetails = req.flash('appointmentDetails')
-      if (!appointmentDetails?.length) throw new Error('Appointment details are missing')
+      if (!appointmentDetails?.length) {
+        res.redirect(prisonUser ? `/prisoner/${offenderNo}` : '/videolink/prisoner-search')
+        return
+      }
 
       const {
         locationId,
