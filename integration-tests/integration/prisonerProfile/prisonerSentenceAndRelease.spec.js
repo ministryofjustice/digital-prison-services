@@ -187,8 +187,8 @@ context('Prisoner sentence and release', () => {
       .otherReleaseDates()
       .find('dd')
       .then($summaryValues => {
-        expect($summaryValues.get(0).innerText).to.eq('7 May 2021')
-        expect($summaryValues.get(1).innerText).to.eq('11 August 2021')
+        expect($summaryValues.get(0).innerText.trim()).to.eq('7 May 2021')
+        expect($summaryValues.get(1).innerText.trim()).to.eq('11 August 2021')
       })
   })
 
