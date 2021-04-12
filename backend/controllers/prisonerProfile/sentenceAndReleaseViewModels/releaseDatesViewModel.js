@@ -1,3 +1,4 @@
+const moment = require('moment')
 const { readableDateFormat } = require('../../../utils')
 
 module.exports = sentenceDetails => {
@@ -8,6 +9,13 @@ module.exports = sentenceDetails => {
   const detentionTrainingOrderPostRecallDate =
     sentenceDetails.dtoPostRecallReleaseDateOverride || sentenceDetails.dtoPostRecallReleaseDate
 
+  const sortByEarliestDate = (left, right) => {
+    const leftDate = moment(left.value, 'D MMMM YYYY')
+    const rightDate = moment(right.value, 'D MMMM YYYY')
+
+    return leftDate.diff(rightDate)
+  }
+
   return {
     currentExpectedReleaseDates: [
       ...(sentenceDetails.homeDetentionCurfewActualDate
@@ -15,14 +23,6 @@ module.exports = sentenceDetails => {
             {
               label: 'Approved for home detention curfew',
               value: readableDateFormat(sentenceDetails.homeDetentionCurfewActualDate, 'YYYY-MM-DD'),
-            },
-          ]
-        : []),
-      ...(sentenceDetails.paroleEligibilityDate
-        ? [
-            {
-              label: 'Parole eligibility',
-              value: readableDateFormat(sentenceDetails.paroleEligibilityDate, 'YYYY-MM-DD'),
             },
           ]
         : []),
@@ -74,8 +74,16 @@ module.exports = sentenceDetails => {
             },
           ]
         : []),
-    ],
+    ].sort(sortByEarliestDate),
     earlyAndTemporaryReleaseEligibilityDates: [
+      ...(sentenceDetails.paroleEligibilityDate
+        ? [
+            {
+              label: 'Parole eligibility',
+              value: readableDateFormat(sentenceDetails.paroleEligibilityDate, 'YYYY-MM-DD'),
+            },
+          ]
+        : []),
       ...(sentenceDetails.homeDetentionCurfewEligibilityDate
         ? [
             {
@@ -124,7 +132,7 @@ module.exports = sentenceDetails => {
             },
           ]
         : []),
-    ],
+    ].sort(sortByEarliestDate),
     licenceDates: [
       ...(sentenceDetails.licenceExpiryDate
         ? [
@@ -150,7 +158,7 @@ module.exports = sentenceDetails => {
             },
           ]
         : []),
-    ],
+    ].sort(sortByEarliestDate),
     otherReleaseDates: [
       ...(sentenceDetails.lateTermDate
         ? [
@@ -168,6 +176,6 @@ module.exports = sentenceDetails => {
             },
           ]
         : []),
-    ],
+    ].sort(sortByEarliestDate),
   }
 }
