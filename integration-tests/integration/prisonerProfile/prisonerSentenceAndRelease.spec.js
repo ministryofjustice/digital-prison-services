@@ -179,16 +179,16 @@ context('Prisoner sentence and release', () => {
       .otherReleaseDates()
       .find('dt')
       .then($summaryKeys => {
-        expect($summaryKeys.get(0).innerText).to.eq('Tariff')
-        expect($summaryKeys.get(1).innerText).to.eq('Late transfer')
+        expect($summaryKeys.get(0).innerText).to.eq('\n          Tariff\n        ')
+        expect($summaryKeys.get(1).innerText).to.eq('\n          Late transfer\n        ')
       })
 
     prisonerSentenceAndReleasePage
       .otherReleaseDates()
       .find('dd')
       .then($summaryValues => {
-        expect($summaryValues.get(0).innerText.trim()).to.eq('7 May 2021')
-        expect($summaryValues.get(1).innerText.trim()).to.eq('11 August 2021')
+        expect($summaryValues.get(0).innerText).to.eq('\n          7 May 2021\n        ')
+        expect($summaryValues.get(1).innerText).to.eq('\n          11 August 2021\n        ')
       })
   })
 
