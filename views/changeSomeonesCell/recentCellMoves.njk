@@ -1,0 +1,42 @@
+{% extends "../partials/layout.njk" %}
+
+{% set title = '7 day cell move history' %}
+
+{% block beforeContent %}
+    {{ govukBreadcrumbs({
+        items: [
+            {
+                text: "Digitial Prison Services",
+                href: '/'
+            },
+            {
+                text: "Change somes's cell",
+                href: '/change-someones-cell'
+            }
+        ]
+    }) }}
+{% endblock %}
+
+{% block content %}
+    <h1 class="govuk-heading-l">
+        {{ title }}
+    </h1>
+
+    <div class="govuk-grid-row ">
+        {% for stat in stats %}
+            <div class="govuk-grid-column-one-quarter govuk-!-padding-bottom-3">
+                <p class="govuk-body">{{stat.dateDisplay}}</p>
+                <span class="govuk-body govuk-!-font-size-48 govuk-!-font-weight-bold" data-qa="{{ 'daily-stats-' + stat.date }}">
+            {% if stat.count > 0 %}
+                <a href="/change-someones-cell/recent-cell-moves/history?date={{ stat.date }}" class="govuk-link--no-visited-state">
+                {{stat.count}}
+              </a>
+            {% else %}
+                {{stat.count}}
+            {% endif %}
+          </span>
+            </div>
+        {% endfor %}
+    </div>
+
+{% endblock %}

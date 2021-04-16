@@ -371,6 +371,8 @@ const prisonApiFactory = client => {
   const getHistoryForLocation = (context, { locationId, fromDate, toDate }) =>
     get(context, `/api/cell/${locationId}/history?fromDate=${fromDate}&toDate=${toDate}`)
 
+  const getHistoryByDate = (context, { assignmentDate }) => get(context, `/api/cell/history/${assignmentDate}`)
+
   const moveToCellSwap = (context, { bookingId }) => put(context, `/api/bookings/${bookingId}/move-to-cell-swap`, {})
 
   const getOffenderDamageObligations = (context, offenderNo) =>
@@ -498,6 +500,7 @@ const prisonApiFactory = client => {
     getTransactionHistory,
     getPrisoners,
     getUserDetailsList,
+    getHistoryByDate,
   }
 }
 
