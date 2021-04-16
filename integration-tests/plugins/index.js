@@ -438,5 +438,7 @@ module.exports = on => {
     stubGetPrisoners: response => Promise.all([prisonApi.stubGetPrisoners(response)]),
     stubGetUserDetailsList: response => Promise.all([prisonApi.stubGetUserDetailsList(response)]),
     stubGetComplexOffenders: offenders => complexity.stubGetComplexOffenders(offenders),
+    stubCellMoveHistory: ({ assignmentDate, cellMoves }) =>
+      prisonApi.stubCellMoveHistory({ assignmentDate, cellMoves }),
   })
 }

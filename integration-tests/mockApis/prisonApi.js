@@ -1874,4 +1874,18 @@ module.exports = {
       },
     })
   },
+  stubCellMoveHistory: ({ assignmentDate, cellMoves }) =>
+    stubFor({
+      request: {
+        method: 'GET',
+        urlPath: `/api/cell/history/${assignmentDate}`,
+      },
+      response: {
+        status: 200,
+        headers: {
+          'Content-Type': 'application/json;charset=UTF-8',
+        },
+        jsonBody: cellMoves,
+      },
+    }),
 }
