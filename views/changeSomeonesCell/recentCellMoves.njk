@@ -26,7 +26,7 @@
         {% for stat in stats %}
             <div class="govuk-grid-column-one-quarter govuk-!-padding-bottom-3">
                 <p class="govuk-body">{{stat.dateDisplay}}</p>
-                <span class="govuk-body govuk-!-font-size-48 govuk-!-font-weight-bold" data-qa="{{ 'daily-stats-' + stat.date }}">
+                <span class="govuk-body govuk-!-font-size-36 govuk-!-font-weight-bold" data-qa="{{ 'daily-stats-' + stat.date }}">
             {% if stat.count > 0 %}
                 <a href="/change-someones-cell/recent-cell-moves/history?date={{ stat.date }}" class="govuk-link--no-visited-state">
                 {{stat.count}}
