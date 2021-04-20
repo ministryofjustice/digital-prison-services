@@ -1,4 +1,4 @@
-const prisonerSearchController = require('../../controllers/cellmove/cellMovePrisonerSearch')
+const prisonerSearchController = require('../../controllers/cellMove/cellMovePrisonerSearch')
 
 describe('Prisoner search', () => {
   const prisonApi = {}
@@ -151,18 +151,16 @@ describe('Prisoner search', () => {
     })
 
     it('should render template without results when not searched', async () => {
-      req.query = {
-      }
+      req.query = {}
 
       await controller(req, res)
 
       expect(res.render).toHaveBeenCalledWith(
         'cellMove/cellMovePrisonerSearch.njk',
         expect.objectContaining({
-          hasSearched: false
+          hasSearched: false,
         })
       )
     })
-
   })
 })

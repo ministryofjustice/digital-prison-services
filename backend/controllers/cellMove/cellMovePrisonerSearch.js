@@ -5,13 +5,11 @@ module.exports = ({ prisonApi }) => async (req, res) => {
   const {
     user: { activeCaseLoad },
   } = res.locals
-  const {
-    keywords,
-  } = req.query
+  const { keywords } = req.query
 
   if (!keywords) {
     return res.render('cellMove/cellMovePrisonerSearch.njk', {
-      hasSearched: false
+      hasSearched: false,
     })
   }
 
@@ -31,7 +29,7 @@ module.exports = ({ prisonApi }) => async (req, res) => {
       returnAlerts: 'true',
     }),
   ])
-  
+
   const results =
     prisoners &&
     prisoners.map(prisoner => ({
