@@ -60,8 +60,8 @@
       {% for prisoner in results %}
         {% set prisonerImage = '<img src="/app/images/' + prisoner.offenderNo + '/data" alt="Image of ' + prisoner.name + '" class="prisoner-search__results-list__image" />' %}
         {% set prisonerLink = '<a href="/prisoner/' + prisoner.offenderNo + '" class="govuk-link">' + prisoner.name + '</a>'%}
-        {% set cellHistoryLink = '<a href="' + prisoner.cellHistoryUrl + '" class="govuk-link">View cell history</a>'%}
-        {% set cellSearchLink = '<a href="' + prisoner.cellSearchUrl + '" class="govuk-link">Change cell</a>'%}
+        {% set cellHistoryLink = '<a href="' + prisoner.cellHistoryUrl + '" class="govuk-link" data-test="prisoner-cell-history-link">View cell history</a>'%}
+        {% set cellSearchLink = '<a href="' + prisoner.cellSearchUrl + '" class="govuk-link" data-test="prisoner-cell-search-link">Change cell</a>'%}
         {% set rows = (rows.push([
           { html: prisonerImage },
           {
