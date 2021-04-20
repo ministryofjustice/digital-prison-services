@@ -41,21 +41,7 @@ const whereaboutsTasks = [
   },
 ]
 
-module.exports = oauthApi => async (req, res) => {
-  try {
-    const userRoles = await oauthApi.userRoles(res.locals)
-
-    const roleCodes = userRoles.map(userRole => userRole.roleCode)
-
-    return res.render('whereabouts/whereaboutsHomepage.njk', {
-      tasks: whereaboutsTasks
-        .filter(
-          task => Boolean(task.roles === null || task.roles.find(role => roleCodes.includes(role))) && task.enabled
-        )
-        .map(({ roles, enabled, ...task }) => task),
-    })
-  } catch (error) {
-    res.locals.redirectUrl = '/'
-    throw error
-  }
-}
+module.exports = () => async (req, res) =>
+  res.render('whereabouts/whereaboutsHomepage.njk', {
+    tasks: whereaboutsTasks.filter(task => task.enabled).map(({ roles, enabled, ...task }) => task),
+  })

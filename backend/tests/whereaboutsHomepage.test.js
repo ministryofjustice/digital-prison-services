@@ -1,8 +1,6 @@
 const whereaboutsHomepageController = require('../controllers/whereabouts/whereaboutsHomepage')
 
 describe('Homepage', () => {
-  const oauthApi = {}
-
   let req
   let res
   let controller
@@ -11,15 +9,7 @@ describe('Homepage', () => {
     req = {}
     res = { locals: {}, render: jest.fn(), redirect: jest.fn() }
 
-    oauthApi.userRoles = jest.fn().mockResolvedValue([])
-
-    controller = whereaboutsHomepageController(oauthApi)
-  })
-
-  it('should make the required calls to endpoints', async () => {
-    await controller(req, res)
-
-    expect(oauthApi.userRoles).toHaveBeenCalledWith({})
+    controller = whereaboutsHomepageController()
   })
 
   describe('Tasks', () => {

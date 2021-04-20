@@ -47,6 +47,7 @@ const { notifyClient } = require('./shared/notifyClient')
 
 const { raiseAnalyticsEvent } = require('./raiseAnalyticsEvent')
 const whereaboutsHomepageController = require('./controllers/whereabouts/whereaboutsHomepage')
+const cellMoveHomepageController = require('./controllers/cellMove/cellMoveHomepage')
 const recentCellMoves = require('./controllers/recentCellMoves')
 
 const router = express.Router()
@@ -74,7 +75,8 @@ const setup = ({
     next()
   })
 
-  router.get('/manage-prisoner-whereabouts', whereaboutsHomepageController(oauthApi))
+  router.get('/manage-prisoner-whereabouts', whereaboutsHomepageController())
+  router.get('/change-someones-cell', cellMoveHomepageController(oauthApi))
 
   router.post('/notification/dismiss', notificationDismiss({ notificationCookie }))
   router.use(

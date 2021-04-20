@@ -20,9 +20,6 @@ context('Whereabouts homepage', () => {
       cy.get('[data-test="view-all-appointments"]').should('exist')
       cy.get('[data-test="view-unaccounted-for"]').should('exist')
       cy.get('[data-test="view-attendance-statistics"]').should('exist')
-
-      cy.get('[data-test="covid-units"]').should('not.exist')
-      cy.get('[data-test="bulk-appointments"]').should('not.exist')
     })
   })
 })
