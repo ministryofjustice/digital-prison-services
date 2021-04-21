@@ -16,7 +16,7 @@ context('Cell move homepage', () => {
       cy.get('[data-test="search-for-prisoner"]').should('exist')
       cy.get('[data-test="view-residential-location"]').should('exist')
       cy.get('[data-test="create-space"]').should('exist')
-      cy.get('[data-test="view-history"]').should('exist')
+      cy.get('[data-test="view-history"]').should('contain', 'Moorland')
       cy.get('[data-test="no-cell-allocated"]').should('exist')
     })
   })
