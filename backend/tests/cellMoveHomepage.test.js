@@ -9,7 +9,11 @@ describe('Homepage', () => {
 
   beforeEach(() => {
     req = {}
-    res = { locals: {}, render: jest.fn(), redirect: jest.fn() }
+    res = {
+      locals: { user: { activeCaseLoad: { description: 'Moorland (HMP)' } } },
+      render: jest.fn(),
+      redirect: jest.fn(),
+    }
 
     oauthApi.userRoles = jest.fn().mockResolvedValue([])
 
@@ -19,7 +23,7 @@ describe('Homepage', () => {
   it('should make the required calls to endpoints', async () => {
     await controller(req, res)
 
-    expect(oauthApi.userRoles).toHaveBeenCalledWith({})
+    expect(oauthApi.userRoles).toHaveBeenCalledWith(res.locals)
   })
 
   it('should render not found template if no appropiate roles', async () => {
@@ -61,8 +65,7 @@ describe('Homepage', () => {
           {
             id: 'view-history',
             heading: 'View 7 day cell move history',
-            description:
-              'View all cell moves completed over the last 7 days in [prison name]. Note that the name will be the caseload that the user has selected.',
+            description: 'View all cell moves completed over the last 7 days in Moorland (HMP).',
             href: '/change-someones-cell/recent-cell-moves',
           },
           {

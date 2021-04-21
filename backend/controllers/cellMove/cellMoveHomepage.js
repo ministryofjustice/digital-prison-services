@@ -1,4 +1,4 @@
-const whereaboutsTasks = [
+const whereaboutsTasks = prisonName => [
   {
     id: 'search-for-prisoner',
     heading: 'Search for a prisoner',
@@ -27,8 +27,7 @@ const whereaboutsTasks = [
   {
     id: 'view-history',
     heading: 'View 7 day cell move history',
-    description:
-      'View all cell moves completed over the last 7 days in [prison name]. Note that the name will be the caseload that the user has selected.',
+    description: `View all cell moves completed over the last 7 days in ${prisonName}.`,
     href: '/change-someones-cell/recent-cell-moves',
     roles: null,
     enabled: true,
@@ -44,13 +43,16 @@ const whereaboutsTasks = [
 ]
 
 module.exports = oauthApi => async (req, res) => {
+  const { activeCaseLoad } = res.locals.user
   const userRoles = await oauthApi.userRoles(res.locals)
 
   const canViewCellMoveButton = userRoles?.some(role => role.roleCode === 'CELL_MOVE')
 
   if (canViewCellMoveButton) {
     return res.render('cellMove/cellMoveHomepage', {
-      tasks: whereaboutsTasks.filter(task => task.enabled).map(({ roles, enabled, ...task }) => task),
+      tasks: whereaboutsTasks(activeCaseLoad.description)
+        .filter(task => task.enabled)
+        .map(({ roles, enabled, ...task }) => task),
     })
   }
 
