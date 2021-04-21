@@ -27,7 +27,7 @@ const whereaboutsTasks = prisonName => [
   {
     id: 'view-history',
     heading: 'View 7 day cell move history',
-    description: `View all cell moves completed over the last 7 days in ${prisonName}. Note that the name will be the caseload that the user has selected.`,
+    description: `View all cell moves completed over the last 7 days in ${prisonName}.`,
     href: '/change-someones-cell/recent-cell-moves',
     roles: null,
     enabled: true,
