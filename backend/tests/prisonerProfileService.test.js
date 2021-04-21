@@ -145,6 +145,8 @@ describe('prisoner profile service', () => {
       oauthApi.currentUser.mockReturnValue({ staffId: 111, activeCaseLoadId: 'MDI' })
       dataComplianceApi.getOffenderRetentionRecord.mockReturnValue({})
       allocationManagerApi.getPomByOffenderNo.mockReturnValue({ primary_pom: { name: 'SMITH, JANE' } })
+
+      config.apis.complexity.enabled_prisons = []
     })
 
     it('should make a call for the full details including csra class for a prisoner and the current user', async () => {
@@ -327,10 +329,12 @@ describe('prisoner profile service', () => {
           )
         })
       })
+
       describe('When the offender has a measured complexity of need', () => {
         beforeEach(() => {
-          config.apis.complexity.enabled = true
+          config.apis.complexity.enabled_prisons = ['MDI']
         })
+
         it('should return false for offenders with no complexity of need data', async () => {
           complexityApi.getComplexOffenders = jest.fn().mockResolvedValue([])
           const getPrisonerProfileData = await service.getPrisonerProfileData(context, offenderNo)
@@ -377,7 +381,7 @@ describe('prisoner profile service', () => {
         })
 
         it('should only check for complex offenders when the feature is enabled', async () => {
-          config.apis.complexity.enabled = false
+          config.apis.complexity.enabled_prisons = ['LEI']
 
           const getPrisonerProfileData = await service.getPrisonerProfileData(context, offenderNo)
 

@@ -52,7 +52,7 @@ env:
   MANAGE_AUTH_ACCOUNTS_URL: https://manage-hmpps-auth-accounts-preprod.prison.service.justice.gov.uk
   PECS_URL: http://hmpps-book-secure-move-frontend-preprod.apps.live-1.cloud-platform.service.justice.gov.uk
   COMPLEXITY_OF_NEED_URI: https://complexity-of-need-preprod.hmpps.service.justice.gov.uk
-  ENABLE_COMPLEXITY_API: true
+  PRISONS_WITH_OFFENDERS_THAT_HAVE_COMPLEX_NEEDS: "AGI,BZI,DHI,DWI,ESI,EWI,FHI,LNI,NHI,PFI,SDI,STI"
 
 allowlist:
   office: "217.33.148.210/32"
