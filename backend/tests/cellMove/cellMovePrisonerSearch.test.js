@@ -159,6 +159,28 @@ describe('Prisoner search', () => {
         'cellMove/cellMovePrisonerSearch.njk',
         expect.objectContaining({
           hasSearched: false,
+          errors: undefined
+        })
+      )
+    })
+
+    it('should render template with error when searched without keywords', async () => {
+      req.query = {
+        keywords: '',
+      }
+
+      await controller(req, res)
+
+      expect(res.render).toHaveBeenCalledWith(
+        'cellMove/cellMovePrisonerSearch.njk',
+        expect.objectContaining({
+          hasSearched: false,
+          errors: [
+            {
+              href: '#keywords',
+              html: 'Enter a prisoner&#8217;s name or number'
+            }
+          ]
         })
       )
     })

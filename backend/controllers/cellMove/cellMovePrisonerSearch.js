@@ -8,8 +8,13 @@ module.exports = ({ prisonApi }) => async (req, res) => {
   const { keywords } = req.query
 
   if (!keywords) {
+    const errors = (keywords === undefined)? undefined : [{
+      href: '#keywords',
+      html: 'Enter a prisoner&#8217;s name or number',
+    }]
     return res.render('cellMove/cellMovePrisonerSearch.njk', {
       hasSearched: false,
+      errors
     })
   }
 
