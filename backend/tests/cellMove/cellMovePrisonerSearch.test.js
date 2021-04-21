@@ -159,7 +159,7 @@ describe('Prisoner search', () => {
         'cellMove/cellMovePrisonerSearch.njk',
         expect.objectContaining({
           hasSearched: false,
-          errors: undefined
+          errors: undefined,
         })
       )
     })
@@ -178,9 +178,9 @@ describe('Prisoner search', () => {
           errors: [
             {
               href: '#keywords',
-              html: 'Enter a prisoner&#8217;s name or number'
-            }
-          ]
+              html: 'Enter a prisoner&#8217;s name or number',
+            },
+          ],
         })
       )
     })
