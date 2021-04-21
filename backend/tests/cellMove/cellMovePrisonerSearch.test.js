@@ -99,7 +99,7 @@ describe('Prisoner search', () => {
       expect(res.render).toHaveBeenCalledWith(
         'cellMove/cellMovePrisonerSearch.njk',
         expect.objectContaining({
-          hasSearched: true,
+          showResults: true,
           results: [
             {
               age: 29,
@@ -158,7 +158,7 @@ describe('Prisoner search', () => {
       expect(res.render).toHaveBeenCalledWith(
         'cellMove/cellMovePrisonerSearch.njk',
         expect.objectContaining({
-          hasSearched: false,
+          showResults: false,
           errors: [],
         })
       )
@@ -174,7 +174,7 @@ describe('Prisoner search', () => {
       expect(res.render).toHaveBeenCalledWith(
         'cellMove/cellMovePrisonerSearch.njk',
         expect.objectContaining({
-          hasSearched: false,
+          showResults: false,
           errors: [
             {
               href: '#keywords',
