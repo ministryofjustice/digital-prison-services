@@ -8,18 +8,14 @@ module.exports = ({ prisonApi }) => async (req, res) => {
   const { keywords } = req.query
 
   if (!keywords) {
-    const errors =
-      keywords === undefined
-        ? undefined
-        : [
-            {
-              href: '#keywords',
-              html: 'Enter a prisoner&#8217;s name or number',
-            },
-          ]
+    const firstCall = keywords === undefined
+    const noKeywordError = {
+      href: '#keywords',
+      html: 'Enter a prisoner&#8217;s name or number',
+    }
     return res.render('cellMove/cellMovePrisonerSearch.njk', {
       hasSearched: false,
-      errors,
+      errors: firstCall ? [] : [noKeywordError],
     })
   }
 
@@ -33,12 +29,10 @@ module.exports = ({ prisonApi }) => async (req, res) => {
     },
   }
 
-  const [prisoners] = await Promise.all([
-    prisonApi.getInmates(context, currentUserCaseLoad, {
-      keywords,
-      returnAlerts: 'true',
-    }),
-  ])
+  const prisoners = await prisonApi.getInmates(context, currentUserCaseLoad, {
+    keywords,
+    returnAlerts: 'true',
+  })
 
   const results =
     prisoners &&
@@ -48,8 +42,7 @@ module.exports = ({ prisonApi }) => async (req, res) => {
       name: putLastNameFirst(prisoner.firstName, prisoner.lastName),
       alerts: alertFlagLabels.filter(alertFlag =>
         alertFlag.alertCodes.some(
-          alert =>
-            prisoner.alertsDetails && prisoner.alertsDetails.includes(alert) && cellMoveAlertCodes.includes(alert)
+          alert => prisoner.alertsDetails?.includes(alert) && cellMoveAlertCodes.includes(alert)
         )
       ),
       cellHistoryUrl: `/prisoner/${prisoner.offenderNo}/cell-history`,

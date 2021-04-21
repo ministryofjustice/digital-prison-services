@@ -159,7 +159,7 @@ describe('Prisoner search', () => {
         'cellMove/cellMovePrisonerSearch.njk',
         expect.objectContaining({
           hasSearched: false,
-          errors: undefined,
+          errors: [],
         })
       )
     })
