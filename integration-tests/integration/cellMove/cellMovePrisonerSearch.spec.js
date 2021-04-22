@@ -1,6 +1,15 @@
 const offenderBasicDetails = require('../../mockApis/responses/offenderBasicDetails.json')
 const offenderFullDetails = require('../../mockApis/responses/offenderFullDetails.json')
 
+const toOffender = $cell => ({
+  name: $cell[1]?.textContent,
+  prisonNo: $cell[2]?.textContent,
+  location: $cell[3]?.textContent,
+  alerts: $cell[4]?.textContent,
+  cellHistoryText: $cell[5]?.textContent,
+  changeCellText: $cell[6]?.textContent,
+})
+
 context('Cell move prisoner search', () => {
   const inmate1 = {
     bookingId: 1,
@@ -70,10 +79,21 @@ context('Cell move prisoner search', () => {
             cy.get($tableRows)
               .its('length')
               .should('eq', 3) // 2 results plus table header
-            expect($tableRows.get(1).innerText).to.contain(
-              '\tSmith, John\tA1234BC\tUNIT-1\t\nARSONIST\n\n\tView cell history\tChange cell'
-            )
-            expect($tableRows.get(2).innerText).to.contain('\tSmith, Steve\tB4567CD\tUNIT-2\t\tView cell history\tChange cell')
+
+            const offenders = Array.from($tableRows).map($row => toOffender($row.cells))
+
+            expect(offenders[1].name).to.contain('Smith, John')
+            expect(offenders[1].prisonNo).to.eq('A1234BC')
+            expect(offenders[1].location).to.eq('UNIT-1')
+            expect(offenders[1].alerts).to.contain('Arsonist')
+            expect(offenders[1].cellHistoryText).to.contain('View cell history')
+            expect(offenders[1].changeCellText).to.contain('Change cell')
+
+            expect(offenders[2].name).to.contain('Smith, Steve')
+            expect(offenders[2].prisonNo).to.eq('B4567CD')
+            expect(offenders[2].location).to.eq('UNIT-2')
+            expect(offenders[2].cellHistoryText).to.contain('View cell history')
+            expect(offenders[2].changeCellText).to.contain('Change cell')
           })
       })
     })

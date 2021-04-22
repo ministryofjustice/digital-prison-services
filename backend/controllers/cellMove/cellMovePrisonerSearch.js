@@ -8,14 +8,14 @@ module.exports = ({ prisonApi }) => async (req, res) => {
   const { keywords } = req.query
 
   if (!keywords) {
-    const firstCall = keywords === undefined
-    const noKeywordError = {
+    const hasSearched = keywords !== undefined
+    const emptySearchError = {
       href: '#keywords',
       html: 'Enter a prisoner&#8217;s name or number',
     }
     return res.render('cellMove/cellMovePrisonerSearch.njk', {
-      hasSearched: false,
-      errors: firstCall ? [] : [noKeywordError],
+      showResults: false,
+      errors: hasSearched ? [emptySearchError] : [],
     })
   }
 
@@ -50,7 +50,7 @@ module.exports = ({ prisonApi }) => async (req, res) => {
     }))
 
   return res.render('cellMove/cellMovePrisonerSearch.njk', {
-    hasSearched: true,
+    showResults: true,
     formValues: { ...req.query },
     results,
     totalOffenders: results.length,
