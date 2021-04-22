@@ -39,7 +39,7 @@ context('Activity list page', () => {
     cy.task('stubGetAbsenceReasons')
   })
 
-  it('Displays the activity list', () => {
+  it.skip('Displays the activity list', () => {
     cy.visit('/manage-prisoner-whereabouts/select-location')
     cy.task('stubGetActivityList', { caseload, locationId: 2, timeSlot: 'AM', date })
     cy.task('stubGetAttendance', { caseload, locationId: 2, timeSlot: 'AM', date })
