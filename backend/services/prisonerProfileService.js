@@ -147,8 +147,7 @@ module.exports = ({
     const complexityLevel =
       isComplexityEnabledFor(agencyId) && (await complexityApi.getComplexOffenders(context, [offenderNo]))
 
-    const isHighComplexity =
-      isComplexityEnabledFor(agencyId) && Boolean(complexityLevel?.length > 0 && complexityLevel[0]?.level === 'high')
+    const isHighComplexity = Boolean(complexityLevel?.length > 0 && complexityLevel[0]?.level === 'high')
 
     return {
       activeAlertCount,
