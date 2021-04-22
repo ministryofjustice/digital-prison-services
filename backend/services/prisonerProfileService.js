@@ -14,6 +14,8 @@ const {
 } = require('../config')
 const logErrorAndContinue = require('../shared/logErrorAndContinue')
 
+const isComplexityEnabledFor = agencyId => complexity.enabled_prisons?.includes(agencyId)
+
 module.exports = ({
   prisonApi,
   keyworkerApi,
@@ -142,9 +144,10 @@ module.exports = ({
 
     const canViewSocLink = Boolean(isSocUser && socDetails)
 
-    const complexityLevel = complexity.enabled && (await complexityApi.getComplexOffenders(context, [offenderNo]))
-    const isHighComplexity =
-      complexity.enabled && Boolean(complexityLevel?.length > 0 && complexityLevel[0]?.level === 'high')
+    const complexityLevel =
+      isComplexityEnabledFor(agencyId) && (await complexityApi.getComplexOffenders(context, [offenderNo]))
+
+    const isHighComplexity = Boolean(complexityLevel?.length > 0 && complexityLevel[0]?.level === 'high')
 
     return {
       activeAlertCount,

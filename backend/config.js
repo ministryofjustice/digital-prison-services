@@ -119,7 +119,7 @@ module.exports = {
     complexity: {
       url: process.env.COMPLEXITY_OF_NEED_URI,
       timeoutSeconds: 10,
-      enabled: process.env.ENABLE_COMPLEXITY_API === 'true',
+      enabled_prisons: process.env.PRISONS_WITH_OFFENDERS_THAT_HAVE_COMPLEX_NEEDS,
     },
   },
 
