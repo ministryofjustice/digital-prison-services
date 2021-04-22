@@ -145,7 +145,7 @@ module.exports = ({
     const canViewSocLink = Boolean(isSocUser && socDetails)
 
     const complexityLevel =
-      isComplexityEnabledFor(agencyId) && (await complexityApi.getComplexOffenders(context, [offenderNo]))
+      isComplexityEnabledFor(agencyId) && (await complexityApi.getComplexOffenders(systemContext, [offenderNo]))
 
     const isHighComplexity = Boolean(complexityLevel?.length > 0 && complexityLevel[0]?.level === 'high')
 
