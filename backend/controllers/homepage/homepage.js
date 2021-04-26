@@ -164,7 +164,7 @@ module.exports = ({ oauthApi, prisonApi, whereaboutsApi, logError, keyworkerApi 
         keyworkerMigrated,
       })
         .filter(
-          task => Boolean(task.roles === null || task.roles.find(role => roleCodes.includes(role))) && task.enabled
+          task => task.enabled && Boolean(task.roles === null || task.roles.find(role => roleCodes.includes(role)))
         )
         .map(({ roles, enabled, ...task }) => task),
     })
