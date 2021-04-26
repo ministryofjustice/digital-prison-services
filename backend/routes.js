@@ -242,7 +242,10 @@ const setup = ({
 
   router.get('/change-someones-cell/recent-cell-moves', recentCellMoves({ prisonApi }))
   router.get('/change-someones-cell/prisoner-search', cellMovePrisonerSearch({ prisonApi }))
-  router.get('/change-someones-cell/view-residential-location', cellMoveViewResidentialLocation({ prisonApi, whereaboutsApi }))
+  router.get(
+    '/change-someones-cell/view-residential-location',
+    cellMoveViewResidentialLocation({ prisonApi, whereaboutsApi })
+  )
 
   return router
 }

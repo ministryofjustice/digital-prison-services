@@ -29,18 +29,21 @@ describe('View Residential Location', () => {
       status: jest.fn(),
     }
 
-    whereaboutsApi.searchGroups = jest.fn().mockReturnValue([{
-      name: 'Houseblock 1',
-      key: 'H 1',
-    },
-    {
-      name: 'Houseblock 2',
-      key: 'H 2',
-    }]),
+    whereaboutsApi.searchGroups = jest.fn().mockReturnValue([
+      {
+        name: 'Houseblock 1',
+        key: 'H 1',
+      },
+      {
+        name: 'Houseblock 2',
+        key: 'H 2',
+      },
+    ])
 
     whereaboutsApi.getAgencyGroupLocationPrefix = jest.fn().mockReturnValue({
       locationPrefix: '1',
-    }),
+    })
+
     prisonApi.getInmates = jest.fn().mockReturnValue([])
 
     controller = viewResidentialLocationController({ prisonApi, whereaboutsApi })
@@ -48,8 +51,7 @@ describe('View Residential Location', () => {
 
   describe('index', () => {
     it('should make a call to whereabouts to get available locations', async () => {
-      req.query = {
-      }
+      req.query = {}
 
       await controller(req, res)
 
@@ -57,7 +59,7 @@ describe('View Residential Location', () => {
         {
           ...res.locals,
         },
-        'MDI',
+        'MDI'
       )
     })
 
@@ -74,14 +76,14 @@ describe('View Residential Location', () => {
           ...res.locals,
         },
         `MDI`,
-        locationValue,
+        locationValue
       )
     })
 
     it('should make a call to get inmates using shortened location prefix from whereabouts if present', async () => {
       whereaboutsApi.getAgencyGroupLocationPrefix = jest.fn().mockReturnValue({
         locationPrefix: 'MDI-1-',
-      }),
+      })
 
       req.query = {
         location: 'A location',
@@ -105,7 +107,7 @@ describe('View Residential Location', () => {
     })
 
     it('should make a call to get inmates using location id built from case load and location key if whereabouts prefix not present', async () => {
-      whereaboutsApi.getAgencyGroupLocationPrefix = jest.fn().mockReturnValue(null),
+      whereaboutsApi.getAgencyGroupLocationPrefix = jest.fn().mockReturnValue(null)
 
       req.query = {
         location: '1',
@@ -171,18 +173,20 @@ describe('View Residential Location', () => {
         'cellMove/cellMoveViewResidentialLocation.njk',
         expect.objectContaining({
           showResults: true,
-          locationOptions: [{
-            text: 'Select',
-            value: 'SELECT',
-          },
-          {
-            text: 'Houseblock 1',
-            value: 'H 1',
-          },
-          {
-            text: 'Houseblock 2',
-            value: 'H 2',
-          }],
+          locationOptions: [
+            {
+              text: 'Select',
+              value: 'SELECT',
+            },
+            {
+              text: 'Houseblock 1',
+              value: 'H 1',
+            },
+            {
+              text: 'Houseblock 2',
+              value: 'H 2',
+            },
+          ],
           results: [
             {
               age: 29,
@@ -242,18 +246,20 @@ describe('View Residential Location', () => {
         'cellMove/cellMoveViewResidentialLocation.njk',
         expect.objectContaining({
           showResults: false,
-          locationOptions: [{
-            text: 'Select',
-            value: 'SELECT',
-          },
-          {
-            text: 'Houseblock 1',
-            value: 'H 1',
-          },
-          {
-            text: 'Houseblock 2',
-            value: 'H 2',
-          }],
+          locationOptions: [
+            {
+              text: 'Select',
+              value: 'SELECT',
+            },
+            {
+              text: 'Houseblock 1',
+              value: 'H 1',
+            },
+            {
+              text: 'Houseblock 2',
+              value: 'H 2',
+            },
+          ],
         })
       )
     })
@@ -269,18 +275,20 @@ describe('View Residential Location', () => {
         'cellMove/cellMoveViewResidentialLocation.njk',
         expect.objectContaining({
           showResults: false,
-          locationOptions: [{
-            text: 'Select',
-            value: 'SELECT',
-          },
-          {
-            text: 'Houseblock 1',
-            value: 'H 1',
-          },
-          {
-            text: 'Houseblock 2',
-            value: 'H 2',
-          }],
+          locationOptions: [
+            {
+              text: 'Select',
+              value: 'SELECT',
+            },
+            {
+              text: 'Houseblock 1',
+              value: 'H 1',
+            },
+            {
+              text: 'Houseblock 2',
+              value: 'H 2',
+            },
+          ],
           errors: [
             {
               href: '#location',

@@ -7,7 +7,7 @@ const prionsApiLocationId = async (res, whereaboutsApi, locationKey, userCaseLoa
     const locationIdWithSuffix = fullLocationPrefix?.locationPrefix
     return locationIdWithSuffix?.length < 1 ? '' : locationIdWithSuffix?.slice(0, -1)
   }
-  return userCaseLoad + '-' + locationKey
+  return `${userCaseLoad}-${locationKey}`
 }
 
 module.exports = ({ prisonApi, whereaboutsApi }) => async (req, res) => {
@@ -21,7 +21,7 @@ module.exports = ({ prisonApi, whereaboutsApi }) => async (req, res) => {
   const locationsData = await whereaboutsApi.searchGroups(res.locals, currentUserCaseLoad)
   const locationOptions = [
     { text: 'Select', value: 'SELECT' },
-    ...locationsData.map(location => ({ text: location.name, value: location.key })),
+    ...locationsData.map(locationData => ({ text: locationData.name, value: locationData.key })),
   ]
 
   const hasSearched = location !== undefined
@@ -34,14 +34,14 @@ module.exports = ({ prisonApi, whereaboutsApi }) => async (req, res) => {
 
   const noLocationSelected = location === 'SELECT'
   if (noLocationSelected) {
-    const noLocationSelected = {
+    const noLocationSelectedError = {
       href: '#location',
       html: 'Select a residential location',
     }
     return res.render('cellMove/cellMoveViewResidentialLocation.njk', {
       showResults: false,
       locationOptions,
-      errors: [noLocationSelected],
+      errors: [noLocationSelectedError],
     })
   }
 

@@ -9,7 +9,11 @@ const whereaboutsApiFactory = client => {
   }
 
   const get = (context, url) => client.get(context, url).then(processResponse())
-  const getWith404AsNull = (context, url) => client.get(context, url).then(processResponse()).catch(map404ToNull)
+  const getWith404AsNull = (context, url) =>
+    client
+      .get(context, url)
+      .then(processResponse())
+      .catch(map404ToNull)
   const getWithCustomTimeout = (context, path, overrides) =>
     client.getWithCustomTimeout(context, path, overrides).then(processResponse())
   const post = (context, url, data) => client.post(context, url, data).then(processResponse())
