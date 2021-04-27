@@ -4,7 +4,7 @@
 {% from "govuk/components/button/macro.njk" import govukButton %}
 {% from "govuk/components/error-summary/macro.njk" import govukErrorSummary %}
 
-{% set title = 'Search for a prisoner' %}
+{% set title = 'Move someone temporarily out of a cell' %}
 
 {% block beforeContent %}
   {{ govukBreadcrumbs({
@@ -34,9 +34,10 @@
     }}
   {% endif %}
 
-  <h1 class="govuk-heading-l">
+  <h1 class="govuk-heading-l govuk-!-margin-bottom-1">
     {{title}}
   </h1>
+  <p class="govuk-body govuk-!-margin-bottom-6">Create a space for another prisoner by moving someone temporarily out of a cell.</p>
 
   <form novalidate="novalidate" data-test="prisoner-search-form">
     <div class="horizontal-form govuk-!-margin-bottom-3">
@@ -123,7 +124,9 @@
               attributes: {
                 "aria-sort": "none"
               }
-            }
+            },
+            { text: "" },
+            { text: "" }
           ],
           rows: rows,
           attributes: { "data-test": "prisoner-search-results-table" }
