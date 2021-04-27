@@ -9,6 +9,7 @@ context('Homepage', () => {
     cy.task('stubUserLocations')
     cy.task('stubStaffRoles', [])
     cy.task('stubLocationConfig', { agencyId: 'MDI', response: { enabled: false } })
+    cy.task('stubKeyworkerMigrated')
   })
 
   describe('Header', () => {
