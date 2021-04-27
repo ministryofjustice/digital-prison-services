@@ -93,9 +93,10 @@ const getTasks = ({ activeCaseLoadId, locations, staffId, whereaboutsConfig, key
       heading: 'Manage key workers',
       description: 'Add and remove key workers from prisoners and manage individuals.',
       href: omic.url,
-      enabled: () =>
-        (keyworkerPrisonStatus?.migrated === false && userHasRoles(['KW_MIGRATION'])) ||
-        userHasRoles(['OMIC_ADMIN', 'KEYWORKER_MONITOR']),
+      enabled: () => {
+        if (!keyworkerPrisonStatus?.migrated) return userHasRoles(['KW_MIGRATION'])
+        return userHasRoles(['OMIC_ADMIN', 'KEYWORKER_MONITOR'])
+      },
     },
     {
       id: 'pom',

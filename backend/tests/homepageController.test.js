@@ -312,6 +312,7 @@ describe('Homepage', () => {
         keyworkerApi.getPrisonMigrationStatus = jest.fn().mockResolvedValue({ migrated: false })
       })
       it('should not show the manage key workers link', async () => {
+        oauthApi.userRoles.mockResolvedValue([{ roleCode: 'OMIC_ADMIN' }])
         await controller(req, res)
 
         expect(res.render).toHaveBeenCalledWith(
