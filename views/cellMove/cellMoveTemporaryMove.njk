@@ -4,7 +4,7 @@
 {% from "govuk/components/button/macro.njk" import govukButton %}
 {% from "govuk/components/error-summary/macro.njk" import govukErrorSummary %}
 
-{% set title = 'Search for a prisoner' %}
+{% set title = 'Move someone temporarily out of a cell' %}
 
 {% block beforeContent %}
   {{ govukBreadcrumbs({
@@ -123,7 +123,9 @@
               attributes: {
                 "aria-sort": "none"
               }
-            }
+            },
+            { text: "" },
+            { text: "" }
           ],
           rows: rows,
           attributes: { "data-test": "prisoner-search-results-table" }
