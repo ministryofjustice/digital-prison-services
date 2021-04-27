@@ -1,11 +1,11 @@
 const { alertFlagLabels, cellMoveAlertCodes } = require('../../shared/alertFlagValues')
 const { putLastNameFirst, formatLocation } = require('../../utils')
 
-const prionsApiLocationId = async (res, whereaboutsApi, locationKey, userCaseLoad) => {
+const prisonApiLocationId = async (res, whereaboutsApi, locationKey, userCaseLoad) => {
   const fullLocationPrefix = await whereaboutsApi.getAgencyGroupLocationPrefix(res.locals, userCaseLoad, locationKey)
   if (fullLocationPrefix) {
-    const locationIdWithSuffix = fullLocationPrefix?.locationPrefix
-    return locationIdWithSuffix?.length < 1 ? '' : locationIdWithSuffix?.slice(0, -1)
+    const locationIdWithSuffix = fullLocationPrefix.locationPrefix
+    return locationIdWithSuffix?.length < 1 ? '' : locationIdWithSuffix.slice(0, -1)
   }
   return `${userCaseLoad}-${locationKey}`
 }
@@ -45,7 +45,7 @@ module.exports = ({ prisonApi, whereaboutsApi }) => async (req, res) => {
     })
   }
 
-  const locationId = await prionsApiLocationId(res, whereaboutsApi, location, currentUserCaseLoad)
+  const locationId = await prisonApiLocationId(res, whereaboutsApi, location, currentUserCaseLoad)
 
   const context = {
     ...res.locals,
