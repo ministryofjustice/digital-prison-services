@@ -51,6 +51,7 @@ const cellMoveHomepageController = require('./controllers/cellMove/cellMoveHomep
 const recentCellMoves = require('./controllers/recentCellMoves')
 const cellMovePrisonerSearch = require('./controllers/cellMove/cellMovePrisonerSearch')
 const cellMoveViewResidentialLocation = require('./controllers/cellMove/cellMoveViewResidentialLocation')
+const cellMoveTemporaryMove = require('./controllers/cellMove/cellMoveTemporaryMove')
 
 const router = express.Router()
 
@@ -246,6 +247,7 @@ const setup = ({
     '/change-someones-cell/view-residential-location',
     cellMoveViewResidentialLocation({ prisonApi, whereaboutsApi })
   )
+  router.get('/change-someones-cell/temporary-move', cellMoveTemporaryMove({ prisonApi }))
 
   return router
 }
