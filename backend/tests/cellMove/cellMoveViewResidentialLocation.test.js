@@ -95,6 +95,7 @@ describe('View Residential Location', () => {
         {
           ...res.locals,
           requestHeaders: expect.objectContaining({
+            'Page-Limit': '5000',
             'Sort-Fields': 'lastName,firstName',
             'Sort-Order': 'ASC',
           }),
@@ -119,6 +120,7 @@ describe('View Residential Location', () => {
         {
           ...res.locals,
           requestHeaders: expect.objectContaining({
+            'Page-Limit': '5000',
             'Sort-Fields': 'lastName,firstName',
             'Sort-Order': 'ASC',
           }),
