@@ -6,11 +6,8 @@ const keyworkerApiFactory = client => {
   const getKeyworkerByCaseloadAndOffenderNo = (context, caseLoadId, offenderNo) =>
     get(context, `/key-worker/${caseLoadId}/offender/${offenderNo}`)
 
-  const getPrisonMigrationStatus = (context, prisonId) => get(context, `/key-worker/prison/${prisonId}`)
-
   return {
     getKeyworkerByCaseloadAndOffenderNo,
-    getPrisonMigrationStatus,
   }
 }
 

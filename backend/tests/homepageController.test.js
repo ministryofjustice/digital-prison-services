@@ -5,7 +5,6 @@ describe('Homepage', () => {
   const oauthApi = {}
   const prisonApi = {}
   const whereaboutsApi = {}
-  const keyworkerApi = {}
 
   let req
   let res
@@ -33,9 +32,8 @@ describe('Homepage', () => {
     prisonApi.getStaffRoles = jest.fn().mockResolvedValue([])
     oauthApi.userRoles = jest.fn().mockResolvedValue([])
     whereaboutsApi.getWhereaboutsConfig = jest.fn().mockResolvedValue({})
-    keyworkerApi.getPrisonMigrationStatus = jest.fn()
 
-    controller = homepageController({ oauthApi, prisonApi, whereaboutsApi, logError, keyworkerApi })
+    controller = homepageController({ oauthApi, prisonApi, whereaboutsApi, logError })
   })
 
   it('should make the required calls to endpoints', async () => {
@@ -288,7 +286,6 @@ describe('Homepage', () => {
     it('should render home page with the manage key workers task', async () => {
       config.apis.omic.url = 'http://omic-url'
 
-      keyworkerApi.getPrisonMigrationStatus.mockResolvedValue({ supported: true })
       oauthApi.userRoles.mockResolvedValue([{ roleCode: 'OMIC_ADMIN' }, { roleCode: 'KEYWORKER_MONITOR' }])
 
       await controller(req, res)

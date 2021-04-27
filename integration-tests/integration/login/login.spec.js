@@ -11,7 +11,6 @@ context('Login functionality', () => {
     cy.task('stubUserLocations')
     cy.task('stubStaffRoles', [])
     cy.task('stubLocationConfig', { agencyId: 'MDI', response: { enabled: false } })
-    cy.task('stubKeyworkerMigrated')
   })
 
   it('Root (/) redirects to the auth login page if not logged in', () => {

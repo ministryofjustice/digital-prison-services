@@ -440,6 +440,5 @@ module.exports = on => {
     stubGetComplexOffenders: offenders => complexity.stubGetComplexOffenders(offenders),
     stubCellMoveHistory: ({ assignmentDate, cellMoves }) =>
       prisonApi.stubCellMoveHistory({ assignmentDate, cellMoves }),
-    stubKeyworkerMigrated: () => keyworker.stubKeyworkerMigrated(),
   })
 }

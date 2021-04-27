@@ -3,7 +3,7 @@ const {
   apis: { omic, useOfForce, pathfinder, categorisation, soc },
 } = require('../../config')
 
-const getTasks = ({ activeCaseLoadId, locations, staffId, whereaboutsConfig, keyworkerMigrated }) => [
+const getTasks = ({ activeCaseLoadId, locations, staffId, whereaboutsConfig }) => [
   {
     id: 'global-search',
     heading: 'Global search',
@@ -93,7 +93,7 @@ const getTasks = ({ activeCaseLoadId, locations, staffId, whereaboutsConfig, key
     description: 'Add and remove key workers from prisoners and manage individuals.',
     href: omic.url,
     roles: ['OMIC_ADMIN', 'KEYWORKER_MONITOR'],
-    enabled: keyworkerMigrated?.supported,
+    enabled: omic.url,
   },
   {
     id: 'pom',
@@ -139,15 +139,14 @@ const getTasks = ({ activeCaseLoadId, locations, staffId, whereaboutsConfig, key
   },
 ]
 
-module.exports = ({ oauthApi, prisonApi, whereaboutsApi, logError, keyworkerApi }) => async (req, res) => {
+module.exports = ({ oauthApi, prisonApi, whereaboutsApi, logError }) => async (req, res) => {
   try {
     const { activeCaseLoadId, staffId } = req.session.userDetails
-    const [locations, staffRoles, userRoles, whereaboutsConfig, keyworkerMigrated] = await Promise.all([
+    const [locations, staffRoles, userRoles, whereaboutsConfig] = await Promise.all([
       prisonApi.userLocations(res.locals),
       prisonApi.getStaffRoles(res.locals, staffId, activeCaseLoadId),
       oauthApi.userRoles(res.locals),
       whereaboutsApi.getWhereaboutsConfig(res.locals, activeCaseLoadId),
-      keyworkerApi.getPrisonMigrationStatus(res.locals, activeCaseLoadId),
     ])
 
     const roleCodes = [...userRoles.map(userRole => userRole.roleCode), ...staffRoles.map(staffRole => staffRole.role)]
@@ -156,15 +155,9 @@ module.exports = ({ oauthApi, prisonApi, whereaboutsApi, logError, keyworkerApi 
 
     return res.render('homepage/homepage.njk', {
       locationOptions: locations?.map(option => ({ value: option.locationPrefix, text: option.description })),
-      tasks: getTasks({
-        activeCaseLoadId,
-        locations,
-        staffId,
-        whereaboutsConfig,
-        keyworkerMigrated,
-      })
+      tasks: getTasks({ activeCaseLoadId, locations, staffId, whereaboutsConfig })
         .filter(
-          task => task.enabled && Boolean(task.roles === null || task.roles.find(role => roleCodes.includes(role)))
+          task => Boolean(task.roles === null || task.roles.find(role => roleCodes.includes(role))) && task.enabled
         )
         .map(({ roles, enabled, ...task }) => task),
     })
