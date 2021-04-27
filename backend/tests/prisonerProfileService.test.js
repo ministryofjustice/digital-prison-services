@@ -393,6 +393,15 @@ describe('prisoner profile service', () => {
 
           expect(complexityApi.getComplexOffenders).not.toHaveBeenCalled()
         })
+
+        it('should use client credentials when making request to the complexity api', async () => {
+          const systemContext = { client_creds: true }
+          complexityApi.getComplexOffenders = jest.fn().mockResolvedValue([{ offenderNo, level: 'high' }])
+          systemOauthClient.getClientCredentialsTokens = jest.fn().mockResolvedValue(systemContext)
+
+          await service.getPrisonerProfileData(context, offenderNo)
+          expect(complexityApi.getComplexOffenders).toHaveBeenCalledWith(systemContext, ['ABC123'])
+        })
       })
 
       describe('when the user is in a use of force prison', () => {
