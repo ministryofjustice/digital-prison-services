@@ -5,6 +5,7 @@ describe('Homepage', () => {
   const oauthApi = {}
   const prisonApi = {}
   const whereaboutsApi = {}
+  const keyworkerApi = {}
 
   let req
   let res
@@ -32,8 +33,9 @@ describe('Homepage', () => {
     prisonApi.getStaffRoles = jest.fn().mockResolvedValue([])
     oauthApi.userRoles = jest.fn().mockResolvedValue([])
     whereaboutsApi.getWhereaboutsConfig = jest.fn().mockResolvedValue({})
+    keyworkerApi.getPrisonMigrationStatus = jest.fn().mockResolvedValue({ migrated: true })
 
-    controller = homepageController({ oauthApi, prisonApi, whereaboutsApi, logError })
+    controller = homepageController({ oauthApi, prisonApi, whereaboutsApi, keyworkerApi, logError })
   })
 
   it('should make the required calls to endpoints', async () => {
@@ -303,6 +305,41 @@ describe('Homepage', () => {
           ],
         })
       )
+    })
+
+    describe('when a prison has not been migrated for manage key workers', () => {
+      beforeEach(() => {
+        keyworkerApi.getPrisonMigrationStatus = jest.fn().mockResolvedValue({ migrated: false })
+      })
+      it('should not show the manage key workers link', async () => {
+        await controller(req, res)
+
+        expect(res.render).toHaveBeenCalledWith(
+          'homepage/homepage.njk',
+          expect.objectContaining({
+            tasks: [],
+          })
+        )
+      })
+
+      it('should show the manage key worker link if the user has the migrate role', async () => {
+        oauthApi.userRoles.mockResolvedValue([{ roleCode: 'KW_MIGRATION' }])
+        await controller(req, res)
+
+        expect(res.render).toHaveBeenCalledWith(
+          'homepage/homepage.njk',
+          expect.objectContaining({
+            tasks: [
+              {
+                description: 'Add and remove key workers from prisoners and manage individuals.',
+                heading: 'Manage key workers',
+                href: undefined,
+                id: 'manage-key-workers',
+              },
+            ],
+          })
+        )
+      })
     })
 
     it('should render home page with the manage users task', async () => {
