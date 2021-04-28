@@ -41,7 +41,7 @@ module.exports = ({ prisonApi }) => async (req, res) => {
       assignedLivingUnitDesc: formatLocation(prisoner.assignedLivingUnitDesc),
       name: putLastNameFirst(prisoner.firstName, prisoner.lastName),
       cellHistoryUrl: `/prisoner/${prisoner.offenderNo}/cell-history`,
-      cellMoveUrl: `/prisoner/${prisoner.offenderNo}/cell-move/confirm-cell-move`,
+      cellMoveUrl: `/prisoner/${prisoner.offenderNo}/cell-move/confirm-cell-move?cellId=C-SWAP`,
     }))
 
   return res.render('cellMove/cellMoveTemporaryMove.njk', {
