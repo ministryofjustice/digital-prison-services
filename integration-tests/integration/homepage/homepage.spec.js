@@ -129,7 +129,7 @@ context('Homepage', () => {
     })
 
     it('should show manage key workers', () => {
-      cy.task('stubUserMeRoles', [{ roleCode: 'OMIC_ADMIN' }])
+      cy.task('stubUserMeRoles', [{ roleCode: 'OMIC_ADMIN' }, { roleCode: 'KW_MIGRATION' }])
 
       const page = homepagePage.goTo()
 
