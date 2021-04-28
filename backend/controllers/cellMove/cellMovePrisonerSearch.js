@@ -24,6 +24,7 @@ module.exports = ({ prisonApi }) => async (req, res) => {
   const context = {
     ...res.locals,
     requestHeaders: {
+      'Page-Limit': '5000',
       'Sort-Fields': 'lastName,firstName',
       'Sort-Order': 'ASC',
     },

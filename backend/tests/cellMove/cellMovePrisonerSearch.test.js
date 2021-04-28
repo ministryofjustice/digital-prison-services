@@ -45,6 +45,7 @@ describe('Prisoner search', () => {
         {
           ...res.locals,
           requestHeaders: expect.objectContaining({
+            'Page-Limit': '5000',
             'Sort-Fields': 'lastName,firstName',
             'Sort-Order': 'ASC',
           }),
