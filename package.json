@@ -98,7 +98,7 @@
     "react-router-breadcrumbs-hoc": "^3.3.1",
     "react-router-dom": "^5.0.0",
     "react-router-prop-types": "^1.0.5",
-    "redis": "^3.0.2",
+    "redis": "^3.1.1",
     "redux": "^4.0.5",
     "redux-logger": "^3.0.6",
     "redux-thunk": "^2.3.0",
