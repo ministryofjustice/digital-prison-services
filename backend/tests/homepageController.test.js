@@ -139,6 +139,27 @@ describe('Homepage', () => {
       )
     })
 
+    it('should render page with the view change someones cell task', async () => {
+      oauthApi.userRoles.mockResolvedValue([{ roleCode: 'CELL_MOVE' }])
+
+      await controller(req, res)
+
+      expect(res.render).toHaveBeenCalledWith(
+        'homepage/homepage.njk',
+        expect.objectContaining({
+          tasks: [
+            {
+              id: 'change-someones-cell',
+              heading: 'Change someone’s cell',
+              description:
+                'Complete a cell move and view the 7 day history of all cell moves completed in your establishment.',
+              href: '/change-someones-cell',
+            },
+          ],
+        })
+      )
+    })
+
     it('should render home page with the use of force task', async () => {
       config.apis.useOfForce.ui_url = 'http://use-of-force-url'
       config.apis.useOfForce.prisons = 'MDI'
