@@ -22,12 +22,11 @@ module.exports = ({ prisonApi, whereaboutsApi, caseNotesApi }) => {
     const formValues = req.flash('formValues')
     const { reason, comment } = (formValues && formValues[0]) || {}
 
-    const caseNoteTypes = (!isCellSwap && (await caseNotesApi.getCaseNoteTypes(res.locals))) || []
-    const cellMoveTypes = caseNoteTypes.find(type => type.code === 'MOVED_CELL')
-    const cellMoveReasonRadioValues = cellMoveTypes?.subCodes.map(subType => ({
-      value: subType.code,
-      text: subType.description,
-      checked: subType.code === reason,
+    const cellMoveReasonTypes = (!isCellSwap && (await prisonApi.getCellMoveReasonTypes(res.locals))) || []
+    const cellMoveReasonRadioValues = cellMoveReasonTypes.filter(type => type.activeFlag === 'Y').map(type => ({
+      value: type.code,
+      text: type.description,
+      checked: type.code === reason,
     }))
 
     return res.render('cellMove/confirmCellMove.njk', {
