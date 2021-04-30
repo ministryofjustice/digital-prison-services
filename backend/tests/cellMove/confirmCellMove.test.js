@@ -219,6 +219,45 @@ describe('Change cell play back details', () => {
       )
     })
 
+    it('should show cell move reasons in Db order', async () => {
+      prisonApi.getCellMoveReasonTypes.mockResolvedValue([
+        {
+          code: 'ADM',
+          description: 'Admin',
+          listSeq: 2,
+          activeFlag: 'Y',
+        },
+        {
+          code: 'SA',
+          description: 'Safety',
+          listSeq: 1,
+          activeFlag: 'Y',
+        },
+      ])
+      req.flash.mockImplementation(() => [
+        {
+          reason: 'ADM',
+          comment: 'Hello',
+        },
+      ])
+      req.query = { cellId: 'A-1-3' }
+
+      await controller.index(req, res)
+
+      expect(res.render).toHaveBeenCalledWith(
+        'cellMove/confirmCellMove.njk',
+        expect.objectContaining({
+          cellMoveReasonRadioValues: [
+            { checked: false, text: 'Safety', value: 'SA' },
+            { checked: true, text: 'Admin', value: 'ADM' },
+          ],
+          formValues: {
+            comment: 'Hello',
+          },
+        })
+      )
+    })
+
     it('sets the back link when referer data is present', async () => {
       req.headers = { referer: `/prisoner/A12345/cell-move/select-cell` }
 
