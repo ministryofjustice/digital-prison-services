@@ -14,18 +14,13 @@ describe('Prisoner location sharing history', () => {
   let logError
   let controller
 
-  const caseNotesTypes = [
-    {
-      code: 'MOVED_CELL',
-      subCodes: [
-        { code: 'ADM', description: 'Administrative' },
-        { code: 'BEH', description: 'Behaviour' },
-        { code: 'CLA', description: 'Classification or re-classification' },
-        { code: 'CON', description: 'Conflict with other prisoners' },
-        { code: 'LN', description: 'Local needs' },
-        { code: 'VP', description: 'Vulnerable prisoner' },
-      ],
-    },
+  const cellMoveReasonTypes = [
+    { code: 'ADM', activeFlag: 'Y', description: 'Administrative' },
+    { code: 'BEH', activeFlag: 'Y', description: 'Behaviour' },
+    { code: 'CLA', activeFlag: 'Y', description: 'Classification or re-classification' },
+    { code: 'CON', activeFlag: 'Y', description: 'Conflict with other prisoners' },
+    { code: 'LN', activeFlag: 'N', description: 'Local needs' },
+    { code: 'VP', activeFlag: 'N', description: 'Vulnerable prisoner' },
   ]
 
   beforeEach(() => {
@@ -46,9 +41,10 @@ describe('Prisoner location sharing history', () => {
     prisonApi.getPrisonerDetail = jest.fn()
 
     prisonApi.getStaffDetails = jest.fn().mockResolvedValue({ firstName: 'Joe', lastName: 'Bloggs' })
+    prisonApi.getCellMoveReasonTypes = jest.fn().mockResolvedValue(cellMoveReasonTypes)
+
     caseNotesApi.getCaseNote = jest.fn().mockResolvedValue({ text: 'Some details regarding what happened' })
 
-    caseNotesApi.getCaseNoteTypes = jest.fn().mockResolvedValue(caseNotesTypes)
     whereaboutsApi.getCellMoveReason = jest.fn().mockResolvedValue({ cellMoveReason: { caseNoteId: 123 } })
 
     controller = prisonerLocationHistory({ prisonApi, whereaboutsApi, caseNotesApi, logError })
@@ -161,7 +157,7 @@ describe('Prisoner location sharing history', () => {
         .mockResolvedValueOnce({ offenderNo: 'ABC789', bookingId: 3, firstName: 'Barry', lastName: 'Stevenson' })
 
       prisonApi.getStaffDetails = jest.fn().mockResolvedValue({ firstName: 'Joe', lastName: 'Bloggs' })
-      caseNotesApi.getCaseNoteTypes = jest.fn().mockResolvedValue(caseNotesTypes)
+      prisonApi.getCellMoveReasonTypes = jest.fn().mockResolvedValue(cellMoveReasonTypes)
       whereaboutsApi.getCellMoveReason = jest.fn().mockResolvedValue({ cellMoveReason: { caseNoteId: 123 } })
       caseNotesApi.getCaseNote = jest
         .fn()
@@ -349,7 +345,7 @@ describe('Prisoner location sharing history', () => {
         .mockResolvedValueOnce({ offenderNo: 'ABC789', bookingId: 3, firstName: 'Barry', lastName: 'Stevenson' })
 
       prisonApi.getStaffDetails = jest.fn().mockResolvedValue({ firstName: 'Joe', lastName: 'Bloggs' })
-      caseNotesApi.getCaseNoteTypes = jest.fn().mockResolvedValue(caseNotesTypes)
+      prisonApi.getCellMoveReasonTypes = jest.fn().mockResolvedValue(cellMoveReasonTypes)
       whereaboutsApi.getCellMoveReason = jest.fn().mockResolvedValue({ cellMoveReason: { caseNoteId: 123 } })
       caseNotesApi.getCaseNote = jest.fn().mockResolvedValue({ text: 'Some comment' })
     })
@@ -364,7 +360,7 @@ describe('Prisoner location sharing history', () => {
 
     it('should render the error when fetch reason description', async () => {
       const error = new Error('Not found')
-      caseNotesApi.getCaseNoteTypes.mockImplementation(() => Promise.reject(error))
+      prisonApi.getCellMoveReasonTypes.mockImplementation(() => Promise.reject(error))
 
       await expect(controller(req, res)).rejects.toThrowError(error)
     })
