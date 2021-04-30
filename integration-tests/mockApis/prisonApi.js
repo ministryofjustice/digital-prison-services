@@ -1888,4 +1888,18 @@ module.exports = {
         jsonBody: cellMoves,
       },
     }),
+  stubCellMoveTypes: types =>
+    stubFor({
+      request: {
+        method: 'GET',
+        urlPattern: '/api/reference-domains/domains/CHG_HOUS_RSN',
+      },
+      response: {
+        status: 200,
+        headers: {
+          'Content-Type': 'application/json;charset=UTF-8',
+        },
+        jsonBody: types,
+      },
+    }),
 }
