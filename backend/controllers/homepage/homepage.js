@@ -30,6 +30,13 @@ const getTasks = ({ activeCaseLoadId, locations, staffId, whereaboutsConfig, key
       enabled: () => whereaboutsConfig?.enabled,
     },
     {
+      id: 'change-someones-cell',
+      heading: 'Change someone’s cell',
+      description: 'Complete a cell move and view the 7 day history of all cell moves completed in your establishment.',
+      href: '/change-someones-cell',
+      enabled: () => userHasRoles(['CELL_MOVE']),
+    },
+    {
       id: 'bulk-appointments',
       heading: 'Add bulk appointments',
       description: 'Upload a spreadsheet to add appointments for multiple people.',
