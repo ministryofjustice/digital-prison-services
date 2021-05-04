@@ -5,10 +5,16 @@ const offenderNo = 'A1234A'
 
 context('A user can see conflicts in cell', () => {
   beforeEach(() => {
-    cy.task('stubCaseNoteTypes', [
+    cy.task('stubCellMoveTypes', [
       {
-        code: 'MOVED_CELL',
-        subCodes: [{ code: 'ADM', description: 'Administrative' }, { code: 'BEH', description: 'Behaviour' }],
+        code: 'ADM', 
+        activeFlag: 'Y',
+        description: 'Administrative',
+      },
+      {
+        code: 'BEH', 
+        activeFlag: 'Y',
+        description: 'Behaviour',
       },
     ])
   })

@@ -31,11 +31,8 @@ const fetchWhatHappened = async (
   }
 }
 
-const mapReasonToCaseNoteSubTypeDescription = ({ caseNoteTypes, assignmentReason }) =>
-  caseNoteTypes
-    .filter(type => type.code === 'MOVED_CELL')
-    .flatMap(cellMoveTypes => cellMoveTypes.subCodes)
-    .find(subType => subType.code === assignmentReason)?.description
+const mapReasonToCellMoveReasonDescription = ({ cellMoveReasonTypes, assignmentReason }) =>
+  cellMoveReasonTypes.find(type => type.code === assignmentReason)?.description
 
 module.exports = ({ prisonApi, whereaboutsApi, caseNotesApi }) => async (req, res) => {
   const { offenderNo } = req.params
@@ -69,8 +66,8 @@ module.exports = ({ prisonApi, whereaboutsApi, caseNotesApi }) => async (req, re
 
     const assignmentReasonName =
       isDpsCellMove &&
-      mapReasonToCaseNoteSubTypeDescription({
-        caseNoteTypes: await caseNotesApi.getCaseNoteTypes(res.locals),
+      mapReasonToCellMoveReasonDescription({
+        cellMoveReasonTypes: await prisonApi.getCellMoveReasonTypes(res.locals),
         assignmentReason,
       })
 
