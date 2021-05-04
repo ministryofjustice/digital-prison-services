@@ -25,11 +25,14 @@ module.exports = ({ prisonApi, whereaboutsApi, caseNotesApi }) => {
     const sortOnListSeq = (a, b) => a.listSeq - b.listSeq
 
     const cellMoveReasonTypes = (!isCellSwap && (await prisonApi.getCellMoveReasonTypes(res.locals))) || []
-    const cellMoveReasonRadioValues = cellMoveReasonTypes.filter(type => type.activeFlag === 'Y').sort(sortOnListSeq).map(type => ({
-      value: type.code,
-      text: type.description,
-      checked: type.code === reason,
-    }))
+    const cellMoveReasonRadioValues = cellMoveReasonTypes
+      .filter(type => type.activeFlag === 'Y')
+      .sort(sortOnListSeq)
+      .map(type => ({
+        value: type.code,
+        text: type.description,
+        checked: type.code === reason,
+      }))
 
     return res.render('cellMove/confirmCellMove.njk', {
       showWarning: !isCellSwap,
