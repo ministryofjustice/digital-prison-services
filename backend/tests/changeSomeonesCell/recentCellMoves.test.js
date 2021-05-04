@@ -1,4 +1,4 @@
-const recentCellMovesFactory = require('../controllers/recentCellMoves')
+const recentCellMovesFactory = require('../../controllers/cellMove/recentCellMoves')
 
 const dataSets = {
   '2020-02-01': [
@@ -56,7 +56,13 @@ describe('Recent cell moves', () => {
     prisonApi.getHistoryByDate = jest.fn().mockResolvedValue([])
 
     res = {
-      locals: {},
+      locals: {
+        user: {
+          activeCaseLoad: {
+            caseLoadId: 'LEI',
+          },
+        },
+      },
       render: jest.fn(),
     }
     req = {}
@@ -73,13 +79,13 @@ describe('Recent cell moves', () => {
 
     await controller(req, res)
 
-    expect(prisonApi.getHistoryByDate).toHaveBeenCalledWith({}, { assignmentDate: '2020-02-07' })
-    expect(prisonApi.getHistoryByDate).toHaveBeenCalledWith({}, { assignmentDate: '2020-02-06' })
-    expect(prisonApi.getHistoryByDate).toHaveBeenCalledWith({}, { assignmentDate: '2020-02-05' })
-    expect(prisonApi.getHistoryByDate).toHaveBeenCalledWith({}, { assignmentDate: '2020-02-04' })
-    expect(prisonApi.getHistoryByDate).toHaveBeenCalledWith({}, { assignmentDate: '2020-02-03' })
-    expect(prisonApi.getHistoryByDate).toHaveBeenCalledWith({}, { assignmentDate: '2020-02-02' })
-    expect(prisonApi.getHistoryByDate).toHaveBeenCalledWith({}, { assignmentDate: '2020-02-01' })
+    expect(prisonApi.getHistoryByDate).toHaveBeenCalledWith(expect.anything(), { assignmentDate: '2020-02-07' })
+    expect(prisonApi.getHistoryByDate).toHaveBeenCalledWith(expect.anything(), { assignmentDate: '2020-02-06' })
+    expect(prisonApi.getHistoryByDate).toHaveBeenCalledWith(expect.anything(), { assignmentDate: '2020-02-05' })
+    expect(prisonApi.getHistoryByDate).toHaveBeenCalledWith(expect.anything(), { assignmentDate: '2020-02-04' })
+    expect(prisonApi.getHistoryByDate).toHaveBeenCalledWith(expect.anything(), { assignmentDate: '2020-02-03' })
+    expect(prisonApi.getHistoryByDate).toHaveBeenCalledWith(expect.anything(), { assignmentDate: '2020-02-02' })
+    expect(prisonApi.getHistoryByDate).toHaveBeenCalledWith(expect.anything(), { assignmentDate: '2020-02-01' })
   })
 
   it('should count all cell moves over the last 7 days, grouping by day', async () => {
@@ -98,6 +104,32 @@ describe('Recent cell moves', () => {
         { date: '2020-02-03', dateDisplay: 'Monday 3 February 2020', count: 2 },
         { date: '2020-02-02', dateDisplay: 'Sunday 2 February 2020', count: 0 },
         { date: '2020-02-01', dateDisplay: 'Saturday 1 February 2020', count: 1 },
+      ],
+    })
+  })
+
+  it('should only count cell moves for the current caseload', async () => {
+    res = {
+      locals: {
+        user: {
+          activeCaseLoad: {
+            caseLoadId: 'MDI',
+          },
+        },
+      },
+      render: jest.fn(),
+    }
+    await controller(req, res)
+
+    expect(res.render).toHaveBeenCalledWith('changeSomeonesCell/recentCellMoves.njk', {
+      stats: [
+        { date: '2020-02-07', dateDisplay: 'Friday 7 February 2020', count: 0 },
+        { date: '2020-02-06', dateDisplay: 'Thursday 6 February 2020', count: 0 },
+        { date: '2020-02-05', dateDisplay: 'Wednesday 5 February 2020', count: 0 },
+        { date: '2020-02-04', dateDisplay: 'Tuesday 4 February 2020', count: 0 },
+        { date: '2020-02-03', dateDisplay: 'Monday 3 February 2020', count: 0 },
+        { date: '2020-02-02', dateDisplay: 'Sunday 2 February 2020', count: 0 },
+        { date: '2020-02-01', dateDisplay: 'Saturday 1 February 2020', count: 0 },
       ],
     })
   })
