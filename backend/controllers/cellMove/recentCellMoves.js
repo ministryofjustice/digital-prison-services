@@ -3,6 +3,10 @@ const moment = require('moment')
 const mergeArrays = (result, current) => [...result, ...current]
 
 module.exports = ({ prisonApi }) => async (req, res) => {
+  const {
+    user: { activeCaseLoad },
+  } = res.locals
+
   const lastSevenDays = [...Array(7).keys()].map(days =>
     moment()
       .subtract(days, 'day')
@@ -20,7 +24,7 @@ module.exports = ({ prisonApi }) => async (req, res) => {
   const stats = lastSevenDays.map(date => ({
     date,
     dateDisplay: moment(date, 'YYYY-MM-DD').format('dddd D MMMM YYYY'),
-    count: cellMoves.filter(move => move.assignmentDate === date).length,
+    count: cellMoves.filter(move => move.assignmentDate === date && move.agencyId === activeCaseLoad.caseLoadId).length,
   }))
 
   return res.render('changeSomeonesCell/recentCellMoves.njk', {

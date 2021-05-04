@@ -1,0 +1,129 @@
+{% extends "../partials/layout.njk" %}
+{% from "govuk/components/table/macro.njk" import govukTable %}
+{% from "govuk/components/select/macro.njk" import govukSelect %}
+{% from "govuk/components/button/macro.njk" import govukButton %}
+
+{% block beforeContent %}
+    {{ govukBreadcrumbs({
+        items: [
+            {
+                text: "Digitial Prison Services",
+                href: '/'
+            },
+            {
+                text: "Change somes's cell",
+                href: '/change-someones-cell'
+            }
+        ]
+    }) }}
+{% endblock %}
+
+{% block content %}
+    <h1 class="govuk-heading-l">
+        {{ title }}
+    </h1>
+
+    <form novalidate="novalidate"
+          class="form-background govuk-!-padding-3 govuk-!-margin-bottom-5 govuk-!-display-none-print" method="get">
+        <h2 class="govuk-heading-m">View by</h2>
+
+        <input type="hidden" name="date" value="{{ formValues.date }}" />
+
+        <div class="horizontal-form govuk-!-margin-bottom-3">
+            {{ govukSelect({
+                id: "locations",
+                name: "locationId",
+                label: {
+                    text: "Residential location"
+                },
+                items: locations | addDefaultSelectedVale('All', true) | setSelected(formValues.locationId),
+                attributes: {
+                    "data-test": "location-id-select"
+                }
+            }) }}
+
+            {{ govukSelect({
+                id: "reason",
+                name: "reason",
+                label: {
+                    text: "Reason"
+                },
+                items: cellMoveReasons | addDefaultSelectedVale('All', true) | setSelected(formValues.reason),
+                attributes: {
+                    "data-test": "reason-select"
+                }
+            }) }}
+
+            {{ govukButton({
+                text: "View",
+                type: "submit"
+            }) }}
+        </div>
+    </form>
+
+    <p class="govuk-body pull-right"><strong>Cell moves completed:</strong> {{ historyByDate.length }}</p>
+
+    {% if  historyByDate.length === 0 %}
+        <p class="govuk-body" data-test="no-cell-moves">There were no cell moves completed for what you have selected.</p>
+    {% else %}
+        {% set rows = [] %}
+        {% for cellHistory in historyByDate %}
+            {% set prisonerLinkHtml %}
+                <a href="{{ '/prisoner/' + cellHistory.offenderNo }}" class="govuk-link"
+                   data-test="prisoner-profile-link">{{ cellHistory.prisonerName }}</a>
+            {% endset -%}
+            {% set rows = (rows.push([
+                {
+                    html: prisonerLinkHtml,
+                    attributes: {
+                    "data-sort-value": cellHistory.prisonerName
+                }
+                },
+                { text: cellHistory.movedFrom },
+                { text: cellHistory.movedTo },
+                { text: cellHistory.movedBy },
+                { text: cellHistory.reason },
+                { text: cellHistory.time }
+            ]), rows) %}
+        {% endfor %}
+
+
+        {{ govukTable({
+            head: [{
+                text: "Name",
+                attributes: { "aria-sort": "ascending" }
+            },
+                {
+                    text: "Moved from"
+                },
+                {
+                    text: "Moved to"
+                },
+                {
+                    text: "Moved by"
+                },
+                {
+                    text: "Reason"
+                },
+                {
+                    text: "Time",
+                    attributes: { "aria-sort": "ascending" }
+                }],
+            rows: rows,
+            attributes: { "data-test": "cell-history-table" }
+        }) }}
+    {% endif %}
+
+
+
+{% endblock %}
+
+{% block bodyEnd %}
+    {{ super() }}
+    <script src="/assets/moj/components/sortable-table/sortable-table.js"></script>
+    <script>
+      new MOJFrontend.SortableTable({
+        table: $('table')[0],
+      })
+    </script>
+{% endblock %}
