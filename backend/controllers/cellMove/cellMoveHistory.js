@@ -95,9 +95,7 @@ module.exports = ({ prisonApi, whereaboutsApi }) => async (req, res) => {
   const historyByDate = cellMoveHistory.sort(sortByMostEarliestFirst).map(history => {
     const offender = offenders.find(o => o.offenderNo === history.offenderNo)
     const staff = staffMembers.find(s => s.username === history.movementMadeBy)
-
     const movementReason = cellMoveTypes.find(type => type.code === history.assignmentReason)
-
     const assignmentTime = moment(history.assignmentDateTime, dateTimeFormat).format('HH:mm')
 
     const movedFrom = (cellHistoryByOffenderNo || [])
