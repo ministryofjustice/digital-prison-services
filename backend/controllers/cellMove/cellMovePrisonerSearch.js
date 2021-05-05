@@ -47,7 +47,7 @@ module.exports = ({ prisonApi }) => async (req, res) => {
         )
       ),
       cellHistoryUrl: `/prisoner/${prisoner.offenderNo}/cell-history`,
-      cellSearchUrl: `/prisoner/${prisoner.offenderNo}/cell-move/search-for-cell`,
+      cellSearchUrl: `/prisoner/${prisoner.offenderNo}/cell-move/search-for-cell?returnUrl=/change-someones-cell`,
     }))
 
   return res.render('cellMove/cellMovePrisonerSearch.njk', {
