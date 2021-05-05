@@ -13,7 +13,7 @@ describe('Return URL', () => {
     controller = returnUrl()
   })
 
-  it('should not set a returnUrl in session', async () => {
+  it('should not set a returnUrl in session by default', async () => {
     await controller(req, res, next)
 
     expect(req.session.returnUrl).toEqual(undefined)
