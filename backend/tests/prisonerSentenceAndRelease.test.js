@@ -991,4 +991,35 @@ describe('prisoner sentence and release', () => {
       })
     )
   })
+
+  it('should handle an scenario where license comes first triggering an undefined exception', async () => {
+    prisonApi.getCourtCases.mockResolvedValue([{ id: 1, caseInfoNumber: 'T12345', agency: { description: 'Leeds' } }])
+
+    prisonApi.getOffenceHistory.mockResolvedValue([
+      {
+        offenceDescription: 'Offence 1',
+        primaryResultCode: '1002',
+        caseId: 1,
+      },
+    ])
+
+    prisonApi.getSentenceTerms.mockResolvedValue([
+      {
+        lineSeq: 1,
+        sentenceSequence: 1,
+        termSequence: 1,
+        consecutiveTo: 3,
+        sentenceStartDate: '2018-12-31',
+        years: 11,
+        months: 0,
+        weeks: 0,
+        days: 0,
+        caseId: 1,
+        sentenceTermCode: 'LIC',
+        sentenceTypeDescription: 'Some sentence info 1',
+      },
+    ])
+
+    await controller(req, res)
+  })
 })

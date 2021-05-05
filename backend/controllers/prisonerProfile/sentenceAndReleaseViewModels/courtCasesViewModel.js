@@ -18,7 +18,7 @@ const getLengthTextLabels = data => {
 const mergeMostRecentLicenceTerm = sentences =>
   sentences.reduce((result, current) => {
     if (current.sentenceTermCode === 'IMP' && !result) return current
-    if (current.sentenceTermCode === 'LIC' && !result.licence) {
+    if (current.sentenceTermCode === 'LIC' && !result?.licence) {
       return {
         licence: {
           years: current.years,
