@@ -28,6 +28,7 @@ const setupApiRoutes = require('./setupApiRoutes')
 const setupReactRoutes = require('./setupReactRoutes')
 const phaseNameSetup = require('./phaseNameSetup')
 const currentUser = require('./middleware/currentUser')
+const returnUrl = require('./middleware/returnUrl')
 
 const pageNotFound = require('./setUpPageNotFound')
 const errorHandler = require('./middleware/errorHandler')
@@ -54,6 +55,7 @@ app.use(setupWebSession())
 app.use(setupAuth({ oauthApi: apis.oauthApi, tokenVerificationApi: apis.tokenVerificationApi }))
 
 app.use(currentUser({ prisonApi: apis.prisonApi, oauthApi: apis.oauthApi }))
+app.use(returnUrl())
 
 if (!config.app.disableWebpack) app.use(setupWebpackForDev())
 
