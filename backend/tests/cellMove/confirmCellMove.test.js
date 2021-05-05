@@ -107,7 +107,7 @@ describe('Change cell play back details', () => {
         backLink: '/prisoner/A12345/cell-move/search-for-cell',
         breadcrumbPrisonerName: 'Doe, Bob',
         cellId: 'C-SWAP',
-        cellMoveReasonRadioValues: [],
+        cellMoveReasonRadioValues: undefined,
         movingToHeading: 'out of their current location',
         errors: undefined,
         formValues: {
