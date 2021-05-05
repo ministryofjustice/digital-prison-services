@@ -992,7 +992,7 @@ describe('prisoner sentence and release', () => {
     )
   })
 
-  it('should handle an scenario where license comes first triggering an undefined exception', async () => {
+  it('should not trigger an undefined exception when a license comes first in the sentence terms data set', async () => {
     prisonApi.getCourtCases.mockResolvedValue([{ id: 1, caseInfoNumber: 'T12345', agency: { description: 'Leeds' } }])
 
     prisonApi.getOffenceHistory.mockResolvedValue([
