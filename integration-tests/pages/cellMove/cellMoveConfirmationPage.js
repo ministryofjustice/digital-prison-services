@@ -2,8 +2,7 @@ const page = require('../page')
 
 const cellMoveConfirmationPage = (name, cellDescription) =>
   page(`${name} has been moved to cell ${cellDescription}`, {
-    backLink: () => cy.get("[data-test='back-to-profile']"),
-    backToSearchLink: () => cy.get("[data-test='back-to-search']"),
+    backToStart: () => cy.get("[data-test='back-to-start']"),
   })
 
 export default {

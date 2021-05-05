@@ -53,6 +53,7 @@ const cellMoveHistory = require('./controllers/cellMove/cellMoveHistory')
 const cellMovePrisonerSearch = require('./controllers/cellMove/cellMovePrisonerSearch')
 const cellMoveViewResidentialLocation = require('./controllers/cellMove/cellMoveViewResidentialLocation')
 const cellMoveTemporaryMove = require('./controllers/cellMove/cellMoveTemporaryMove')
+const backToStart = require('./controllers/backToStart')
 
 const router = express.Router()
 
@@ -253,6 +254,8 @@ const setup = ({
     '/change-someones-cell/recent-cell-moves/history',
     cellMoveHistory({ prisonApi, caseNotesApi, whereaboutsApi })
   )
+
+  router.get('/back-to-start', backToStart())
 
   return router
 }
