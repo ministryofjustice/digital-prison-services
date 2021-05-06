@@ -1,16 +1,20 @@
 const moment = require('moment')
-const { putLastNameFirst, hasLength, formatName, getNamesFromString } = require('../utils')
+const { putLastNameFirst, hasLength, formatName, getNamesFromString, formatLocation } = require('../utils')
 const { alertFlagLabels, profileAlertCodes } = require('../shared/alertFlagValues')
+const { csraTranslations } = require('../shared/csraHelpers')
 const {
   apis: {
     categorisation: { ui_url: categorisationUrl },
     pathfinder: { ui_url: pathfinderUrl },
     soc: { url: socUrl, enabled: socEnabled },
     useOfForce: { prisons: useOfForcePrisons, ui_url: useOfForceUrl },
+    complexity,
   },
   app: { displayRetentionLink },
 } = require('../config')
 const logErrorAndContinue = require('../shared/logErrorAndContinue')
+
+const isComplexityEnabledFor = agencyId => complexity.enabled_prisons?.includes(agencyId)
 
 module.exports = ({
   prisonApi,
@@ -21,6 +25,7 @@ module.exports = ({
   socApi,
   systemOauthClient,
   allocationManagerApi,
+  complexityApi,
 }) => {
   const getPrisonerProfileData = async (context, offenderNo, username) => {
     const [currentUser, prisonerDetails] = await Promise.all([
@@ -48,7 +53,8 @@ module.exports = ({
       bookingId,
       category,
       categoryCode,
-      csra,
+      csraClassificationCode,
+      csraClassificationDate,
       inactiveAlertCount,
       interpreterRequired,
       writtenLanguage,
@@ -60,7 +66,6 @@ module.exports = ({
       age,
       birthPlace,
       dateOfBirth,
-      assessments,
     } = prisonerDetails
 
     const [
@@ -121,10 +126,13 @@ module.exports = ({
             'PF_POLICE',
             'PF_HQ',
             'PF_PSYCHOLOGIST',
-            'PF_NATIONAL_READER',
-            'PF_LOCAL_READER',
           ].includes(role.roleCode)
         )
+    )
+
+    const isPathfinderReadWriteUser = Boolean(
+      userRoles &&
+        userRoles.some(role => ['PF_STD_PRISON', 'PF_STD_PROBATION', 'PF_APPROVAL', 'PF_HQ'].includes(role.roleCode))
     )
 
     const canViewPathfinderLink = Boolean(isPathfinderUser && pathfinderDetails)
@@ -136,11 +144,10 @@ module.exports = ({
 
     const canViewSocLink = Boolean(isSocUser && socDetails)
 
-    const mostRecentAssessment =
-      hasLength(assessments) &&
-      assessments
-        .filter(assessment => assessment.assessmentDescription.includes('CSR'))
-        .sort((a, b) => b.assessmentDate.localeCompare(a.assessmentDate))[0]
+    const complexityLevel =
+      isComplexityEnabledFor(agencyId) && (await complexityApi.getComplexOffenders(systemContext, [offenderNo]))
+
+    const isHighComplexity = Boolean(complexityLevel?.length > 0 && complexityLevel[0]?.level === 'high')
 
     return {
       activeAlertCount,
@@ -153,7 +160,7 @@ module.exports = ({
       canViewPathfinderLink,
       pathfinderProfileUrl:
         pathfinderUrl && pathfinderDetails && `${pathfinderUrl}nominal/${String(pathfinderDetails.id)}`,
-      showPathfinderReferButton: Boolean(!pathfinderDetails && isPathfinderUser),
+      showPathfinderReferButton: Boolean(!pathfinderDetails && isPathfinderReadWriteUser),
       pathfinderReferUrl: pathfinderUrl && `${pathfinderUrl}refer/offender/${offenderNo}`,
       canViewSocLink: socEnabled && canViewSocLink,
       socProfileUrl: socEnabled && socUrl && socDetails && `${socUrl}/nominal/${String(socDetails.id)}`,
@@ -163,16 +170,16 @@ module.exports = ({
       categorisationLinkText: (isCatToolUser && 'Manage category') || (offenderInCaseload && 'View category') || '',
       category,
       categoryCode,
-      csra,
+      csra: csraTranslations[csraClassificationCode],
+      csraReviewDate: csraClassificationDate && moment(csraClassificationDate).format('DD/MM/YYYY'),
       displayRetentionLink,
       incentiveLevel: iepDetails && iepDetails[0] && iepDetails[0].iepLevel,
       keyWorkerLastSession:
         keyworkerSessions && keyworkerSessions[0] && moment(keyworkerSessions[0].latestCaseNote).format('D MMMM YYYY'),
       keyWorkerName: keyworkerDetails && formatName(keyworkerDetails.firstName, keyworkerDetails.lastName),
+      isHighComplexity,
       inactiveAlertCount,
-      lastReviewDate:
-        mostRecentAssessment?.assessmentDate && moment(mostRecentAssessment.assessmentDate).format('DD/MM/YYYY'),
-      location: assignedLivingUnit.description,
+      location: formatLocation(assignedLivingUnit.description),
       offenderName: putLastNameFirst(prisonerDetails.firstName, prisonerDetails.lastName),
       offenderNo,
       offenderRecordRetained: offenderRetentionRecord && hasLength(offenderRetentionRecord.retentionReasons),

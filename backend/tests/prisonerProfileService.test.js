@@ -9,7 +9,6 @@ config.apis.soc = {
   url: 'http://soc',
   enabled: true,
 }
-
 const prisonerProfileService = require('../services/prisonerProfileService')
 
 describe('prisoner profile service', () => {
@@ -22,8 +21,9 @@ describe('prisoner profile service', () => {
   const systemOauthClient = {}
   const allocationManagerApi = {}
   const socApi = {}
-  let service
+  const complexityApi = {}
 
+  let service
   beforeEach(() => {
     prisonApi.getDetails = jest.fn()
     prisonApi.getIepSummary = jest.fn()
@@ -38,8 +38,9 @@ describe('prisoner profile service', () => {
     pathfinderApi.getPathfinderDetails = jest.fn().mockRejectedValue(new Error('not found'))
     socApi.getSocDetails = jest.fn().mockRejectedValue(new Error('not found'))
 
-    systemOauthClient.getClientCredentialsTokens = jest.fn().mockResolvedValue({})
+    complexityApi.getComplexOffenders = jest.fn().mockResolvedValue([])
 
+    systemOauthClient.getClientCredentialsTokens = jest.fn().mockResolvedValue({})
     service = prisonerProfileService({
       prisonApi,
       keyworkerApi,
@@ -49,12 +50,13 @@ describe('prisoner profile service', () => {
       systemOauthClient,
       socApi,
       allocationManagerApi,
+      complexityApi,
     })
   })
-
   describe('prisoner profile data', () => {
     const offenderNo = 'ABC123'
     const bookingId = '123'
+
     const prisonerDetails = {
       activeAlertCount: 1,
       agencyId: 'MDI',
@@ -106,6 +108,8 @@ describe('prisoner profile service', () => {
       bookingId,
       category: 'Cat C',
       csra: 'High',
+      csraClassificationCode: 'HI',
+      csraClassificationDate: '2016-11-23',
       firstName: 'TEST',
       inactiveAlertCount: 2,
       lastName: 'PRISONER',
@@ -130,7 +134,6 @@ describe('prisoner profile service', () => {
         },
       ],
     }
-
     beforeEach(() => {
       prisonApi.getDetails.mockReturnValue(prisonerDetails)
       prisonApi.getIepSummary.mockResolvedValue([{ iepLevel: 'Standard' }])
@@ -142,9 +145,11 @@ describe('prisoner profile service', () => {
       oauthApi.currentUser.mockReturnValue({ staffId: 111, activeCaseLoadId: 'MDI' })
       dataComplianceApi.getOffenderRetentionRecord.mockReturnValue({})
       allocationManagerApi.getPomByOffenderNo.mockReturnValue({ primary_pom: { name: 'SMITH, JANE' } })
+
+      config.apis.complexity.enabled_prisons = []
     })
 
-    it('should make a call for the full details for a prisoner and the current user', async () => {
+    it('should make a call for the full details including csra class for a prisoner and the current user', async () => {
       await service.getPrisonerProfileData(context, offenderNo)
 
       expect(oauthApi.currentUser).toHaveBeenCalledWith(context)
@@ -198,12 +203,12 @@ describe('prisoner profile service', () => {
         birthPlace: undefined,
         category: 'Cat C',
         csra: 'High',
+        csraReviewDate: '23/11/2016',
         displayRetentionLink: true,
         inactiveAlertCount: 2,
         incentiveLevel: 'Standard',
         keyWorkerLastSession: '7 April 2020',
         keyWorkerName: 'Staff Member',
-        lastReviewDate: '18/08/2020',
         location: 'CELL-123',
         offenderName: 'Prisoner, Test',
         offenderNo: 'ABC123',
@@ -215,6 +220,7 @@ describe('prisoner profile service', () => {
         staffId: 111,
         categoryCode: undefined,
         interpreterRequired: undefined,
+        isHighComplexity: false,
         language: undefined,
         staffName: undefined,
         writtenLanguage: undefined,
@@ -235,7 +241,12 @@ describe('prisoner profile service', () => {
     })
 
     it('should return the correct prisoner information when some data is missing', async () => {
-      prisonApi.getDetails.mockReturnValue({ ...prisonerDetails, assessments: [] })
+      prisonApi.getDetails.mockReturnValue({
+        ...prisonerDetails,
+        csraClassificationCode: undefined,
+        csraClassificationDate: undefined,
+        assessments: [],
+      })
       prisonApi.getIepSummary.mockResolvedValue([])
       prisonApi.getCaseNoteSummaryByTypes.mockResolvedValue([])
       keyworkerApi.getKeyworkerByCaseloadAndOffenderNo.mockResolvedValue(null)
@@ -247,11 +258,11 @@ describe('prisoner profile service', () => {
           incentiveLevel: undefined,
           keyWorkerLastSession: undefined,
           keyWorkerName: null,
-          lastReviewDate: undefined,
+          csra: undefined,
+          csraReviewDate: undefined,
         })
       )
     })
-
     describe('prisoner profile links', () => {
       describe('when the the prisoner is out and user can view inactive bookings', () => {
         beforeEach(() => {
@@ -316,6 +327,80 @@ describe('prisoner profile service', () => {
               showAddKeyworkerSession: true,
             })
           )
+        })
+      })
+
+      describe('When the offender has a measured complexity of need', () => {
+        beforeEach(() => {
+          config.apis.complexity.enabled_prisons = ['MDI']
+        })
+
+        it('should return false for offenders with no complexity of need data', async () => {
+          complexityApi.getComplexOffenders = jest.fn().mockResolvedValue([])
+          const getPrisonerProfileData = await service.getPrisonerProfileData(context, offenderNo)
+
+          expect(getPrisonerProfileData).toEqual(
+            expect.objectContaining({
+              isHighComplexity: false,
+            })
+          )
+        })
+        it('should return false when the offender has a low complexity of need', async () => {
+          complexityApi.getComplexOffenders = jest.fn().mockResolvedValue([{ offenderNo, level: 'low' }])
+
+          const getPrisonerProfileData = await service.getPrisonerProfileData(context, offenderNo)
+          expect(getPrisonerProfileData).toEqual(
+            expect.objectContaining({
+              isHighComplexity: false,
+            })
+          )
+        })
+
+        it('should return false when the offender has a medium complexity of need', async () => {
+          complexityApi.getComplexOffenders = jest.fn().mockResolvedValue([{ offenderNo, level: 'medium' }])
+
+          const getPrisonerProfileData = await service.getPrisonerProfileData(context, offenderNo)
+
+          expect(getPrisonerProfileData).toEqual(
+            expect.objectContaining({
+              isHighComplexity: false,
+            })
+          )
+        })
+
+        it('should return true when the offender has a high complexity of need', async () => {
+          complexityApi.getComplexOffenders = jest.fn().mockResolvedValue([{ offenderNo, level: 'high' }])
+
+          const getPrisonerProfileData = await service.getPrisonerProfileData(context, offenderNo)
+
+          expect(getPrisonerProfileData).toEqual(
+            expect.objectContaining({
+              isHighComplexity: true,
+            })
+          )
+        })
+
+        it('should only check for complex offenders when the feature is enabled', async () => {
+          config.apis.complexity.enabled_prisons = ['LEI']
+
+          const getPrisonerProfileData = await service.getPrisonerProfileData(context, offenderNo)
+
+          expect(getPrisonerProfileData).toEqual(
+            expect.objectContaining({
+              isHighComplexity: false,
+            })
+          )
+
+          expect(complexityApi.getComplexOffenders).not.toHaveBeenCalled()
+        })
+
+        it('should use client credentials when making request to the complexity api', async () => {
+          const systemContext = { client_creds: true }
+          complexityApi.getComplexOffenders = jest.fn().mockResolvedValue([{ offenderNo, level: 'high' }])
+          systemOauthClient.getClientCredentialsTokens = jest.fn().mockResolvedValue(systemContext)
+
+          await service.getPrisonerProfileData(context, offenderNo)
+          expect(complexityApi.getComplexOffenders).toHaveBeenCalledWith(systemContext, ['ABC123'])
         })
       })
 
@@ -459,6 +544,42 @@ describe('prisoner profile service', () => {
       })
     })
 
+    describe('allowing pathfinder referrals based on roles and current offender status', () => {
+      beforeEach(() => {
+        pathfinderApi.getPathfinderDetails = jest.fn().mockResolvedValue(undefined)
+      })
+
+      it.each`
+        role                    | flag                           | hasAccess
+        ${'PF_STD_PRISON'}      | ${'showPathfinderReferButton'} | ${true}
+        ${'PF_STD_PROBATION'}   | ${'showPathfinderReferButton'} | ${true}
+        ${'PF_APPROVAL'}        | ${'showPathfinderReferButton'} | ${true}
+        ${'PF_NATIONAL_READER'} | ${'showPathfinderReferButton'} | ${false}
+        ${'PF_LOCAL_READER'}    | ${'showPathfinderReferButton'} | ${false}
+        ${'PF_HQ'}              | ${'showPathfinderReferButton'} | ${true}
+        ${'PF_PSYCHOLOGIST'}    | ${'showPathfinderReferButton'} | ${false}
+        ${'PF_POLICE'}          | ${'showPathfinderReferButton'} | ${false}
+        ${'PF_NATIONAL_READER'} | ${'showPathfinderReferButton'} | ${false}
+        ${'PF_LOCAL_READER'}    | ${'showPathfinderReferButton'} | ${false}
+        ${'OTHER'}              | ${'showPathfinderReferButton'} | ${false}
+      `('$flag should be $hasAccess when the user has the $role role', async ({ role, flag, hasAccess }) => {
+        oauthApi.userRoles.mockResolvedValue([{ roleCode: role }])
+
+        const profileData = await service.getPrisonerProfileData(context, offenderNo)
+
+        expect(profileData[flag]).toBe(hasAccess)
+      })
+
+      it('should not display pathfinder referral when the offender exists on pathfinder', async () => {
+        pathfinderApi.getPathfinderDetails = jest.fn().mockResolvedValue({ id: 1 })
+        oauthApi.userRoles.mockResolvedValue([{ roleCode: 'PF_STD_PROBATION' }])
+
+        const profileData = await service.getPrisonerProfileData(context, offenderNo)
+
+        expect(profileData.showPathfinderReferButton).toBe(false)
+      })
+    })
+
     describe('when a SOC prisoner exists and the current user has the correct role', () => {
       beforeEach(() => {
         socApi.getSocDetails = jest.fn().mockResolvedValue({ id: 1 })
@@ -502,6 +623,22 @@ describe('prisoner profile service', () => {
         const profileData = await service.getPrisonerProfileData(context, offenderNo)
 
         expect(profileData.canViewSocLink).toBe(false)
+      })
+    })
+
+    describe('when a prisoner is in CSWAP', () => {
+      it('should show the CSWAP location description', async () => {
+        prisonApi.getDetails.mockReturnValue({
+          ...prisonerDetails,
+          assignedLivingUnit: {
+            ...prisonerDetails.assignedLivingUnit,
+            description: 'CSWAP',
+          },
+        })
+
+        const profileData = await service.getPrisonerProfileData(context, offenderNo)
+
+        expect(profileData.location).toBe('No cell allocated')
       })
     })
   })

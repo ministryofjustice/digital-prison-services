@@ -47,6 +47,13 @@ const { notifyClient } = require('./shared/notifyClient')
 
 const { raiseAnalyticsEvent } = require('./raiseAnalyticsEvent')
 const whereaboutsHomepageController = require('./controllers/whereabouts/whereaboutsHomepage')
+const cellMoveHomepageController = require('./controllers/cellMove/cellMoveHomepage')
+const recentCellMoves = require('./controllers/cellMove/recentCellMoves')
+const cellMoveHistory = require('./controllers/cellMove/cellMoveHistory')
+const cellMovePrisonerSearch = require('./controllers/cellMove/cellMovePrisonerSearch')
+const cellMoveViewResidentialLocation = require('./controllers/cellMove/cellMoveViewResidentialLocation')
+const cellMoveTemporaryMove = require('./controllers/cellMove/cellMoveTemporaryMove')
+const backToStart = require('./controllers/backToStart')
 
 const router = express.Router()
 
@@ -62,6 +69,7 @@ const setup = ({
   pathfinderApi,
   socApi,
   offenderSearchApi,
+  complexityApi,
 }) => {
   router.use(async (req, res, next) => {
     res.locals = {
@@ -72,7 +80,8 @@ const setup = ({
     next()
   })
 
-  router.get('/manage-prisoner-whereabouts', whereaboutsHomepageController(oauthApi))
+  router.get('/manage-prisoner-whereabouts', whereaboutsHomepageController())
+  router.get('/change-someones-cell', cellMoveHomepageController(oauthApi))
 
   router.post('/notification/dismiss', notificationDismiss({ notificationCookie }))
   router.use(
@@ -204,6 +213,7 @@ const setup = ({
       logError,
       socApi,
       whereaboutsApi,
+      complexityApi,
     })
   )
 
@@ -232,6 +242,20 @@ const setup = ({
 
   router.get('/manage-prisoner-whereabouts/select-location', selectActivityLocation({ prisonApi }).index)
   router.post('/manage-prisoner-whereabouts/select-location', selectActivityLocation({ prisonApi }).post)
+
+  router.get('/change-someones-cell/recent-cell-moves', recentCellMoves({ prisonApi }))
+  router.get('/change-someones-cell/prisoner-search', cellMovePrisonerSearch({ prisonApi }))
+  router.get(
+    '/change-someones-cell/view-residential-location',
+    cellMoveViewResidentialLocation({ prisonApi, whereaboutsApi })
+  )
+  router.get('/change-someones-cell/temporary-move', cellMoveTemporaryMove({ prisonApi }))
+  router.get(
+    '/change-someones-cell/recent-cell-moves/history',
+    cellMoveHistory({ prisonApi, caseNotesApi, whereaboutsApi })
+  )
+
+  router.get('/back-to-start', backToStart())
 
   return router
 }

@@ -1,10 +1,6 @@
 const { putLastNameFirst, formatName, formatTimestampToDate, sortByDateTime } = require('../../utils')
 
-const csraOptions = [
-  { value: 'STANDARD', text: 'Standard' },
-  { value: 'HI', text: 'High' },
-  { value: 'PEND', text: 'Pending' },
-]
+const csraOptions = [{ value: 'STANDARD', text: 'Standard' }, { value: 'HI', text: 'High' }]
 
 module.exports = ({ prisonApi }) => async (req, res) => {
   const { offenderNo } = req.params
@@ -13,7 +9,7 @@ module.exports = ({ prisonApi }) => async (req, res) => {
   try {
     const [prisonerDetails, csraAssessments] = await Promise.all([
       prisonApi.getDetails(res.locals, offenderNo),
-      prisonApi.getCsraAssessmentsForPrisoner(res.locals, { offenderNo, latestOnly: 'false', activeOnly: 'false' }),
+      prisonApi.getCsraAssessmentsForPrisoner(res.locals, offenderNo),
     ])
 
     const { firstName, lastName } = prisonerDetails
@@ -27,6 +23,7 @@ module.exports = ({ prisonApi }) => async (req, res) => {
     const sortedRelavantResults = csraAssessments
       .filter(assessment => {
         const { assessmentAgencyId, classificationCode } = assessment
+        if (!classificationCode) return false
         if (csra && location) return classificationCode === csra && assessmentAgencyId === location
         if (csra) return classificationCode === csra
         if (location) return assessmentAgencyId === location
@@ -46,9 +43,16 @@ module.exports = ({ prisonApi }) => async (req, res) => {
         { text: assessment.assessmentDate && formatTimestampToDate(assessment.assessmentDate) },
         { text: csraOptions.find(csraCode => csraCode.value === assessment.classificationCode)?.text },
         {
-          text: agenciesWithDescriptions.find(agency => agency.agencyId === assessment.assessmentAgencyId)?.description,
+          text:
+            agenciesWithDescriptions.find(agency => agency.agencyId === assessment.assessmentAgencyId)?.description ||
+            'Not entered',
         },
         { text: assessment.assessmentComment || 'Not entered' },
+        {
+          html: `<a class="govuk-link" href="/prisoner/${offenderNo}/csra-review?assessmentSeq=${
+            assessment.assessmentSeq
+          }&bookingId=${assessment.bookingId}">View details</a>`,
+        },
       ]),
     })
   } catch (error) {

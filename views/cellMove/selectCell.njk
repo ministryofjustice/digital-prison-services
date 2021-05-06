@@ -127,10 +127,10 @@
           name: 'cellType',
           id: 'cellType',
           label: {
-            text: 'Select cell occupancy',
+            text: 'All cell occupancies',
             classes: 'govuk-visually-hidden'
           },
-          items: cellAttributes | addDefaultSelectedVale('Select cell occupancy', true)  | setSelected(formValues.cellType)
+          items: cellAttributes | addDefaultSelectedVale('All cell occupancies', true)  | setSelected(formValues.cellType)
         }) }}
 
         {{ govukButton({

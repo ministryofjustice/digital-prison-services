@@ -194,6 +194,7 @@ describe('Select a cell', () => {
             firstName: 'John',
             lastName: 'Doe',
             offenderNo: 'A12345',
+            assignedLivingUnit: {},
           },
         })
       )
@@ -860,6 +861,42 @@ describe('Select a cell', () => {
         'cellMove/selectCell.njk',
         expect.objectContaining({
           showNonAssociationWarning: false,
+        })
+      )
+    })
+  })
+
+  describe('Current location is not a cell', () => {
+    it('shows the CSWAP description as the location', async () => {
+      prisonApi.userCaseLoads = jest.fn().mockResolvedValue([{ caseLoadId: 'MDI' }])
+      prisonApi.getDetails = jest.fn().mockResolvedValue({
+        firstName: 'John',
+        lastName: 'Doe',
+        offenderNo: someOffenderNumber,
+        bookingId: someBookingId,
+        agencyId: 'MDI',
+        alerts: [],
+        assignedLivingUnit: {
+          description: 'CSWAP',
+        },
+      })
+
+      await controller(req, res)
+
+      expect(res.render).toHaveBeenCalledWith(
+        'cellMove/selectCell.njk',
+        expect.objectContaining({
+          prisonerDetails: {
+            agencyId: 'MDI',
+            alerts: [],
+            bookingId: -10,
+            firstName: 'John',
+            lastName: 'Doe',
+            offenderNo: 'A12345',
+            assignedLivingUnit: {
+              description: 'No cell allocated',
+            },
+          },
         })
       )
     })

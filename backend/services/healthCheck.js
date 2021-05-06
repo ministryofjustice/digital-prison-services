@@ -1,9 +1,8 @@
 const { serviceCheckFactory } = require('../controllers/healthCheck')
 
 const service = (name, url) => {
-  const healthUrl =
-    name === 'allocationManager' ? `${url.replace(/\/$/, '')}/health` : `${url.replace(/\/$/, '')}/health/ping`
-  const check = serviceCheckFactory(name, healthUrl)
+  const check = serviceCheckFactory(name, url)
+
   return () =>
     check()
       .then(result => ({ name, status: 'UP', message: result }))
@@ -41,7 +40,8 @@ module.exports = function healthcheckFactory(
   caseNotesUrl,
   allocationManagerUrl,
   tokenverificationUrl,
-  offenderSearchUrl
+  offenderSearchUrl,
+  complexityUrl
 ) {
   const checks = [
     service('auth', authUrl),
@@ -53,6 +53,7 @@ module.exports = function healthcheckFactory(
     service('casenotes', caseNotesUrl),
     service('tokenverification', tokenverificationUrl),
     service('offenderSearch', offenderSearchUrl),
+    service('complexity', complexityUrl),
   ]
 
   return callback =>

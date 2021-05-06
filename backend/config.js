@@ -15,6 +15,7 @@ module.exports = {
   },
   analytics: {
     googleAnalyticsId: process.env.GOOGLE_ANALYTICS_ID,
+    googleTagManagerId: process.env.GOOGLE_TAG_MANAGER_ID,
   },
   hmppsCookie: {
     name: process.env.HMPPS_COOKIE_NAME || 'hmpps-session-dev',
@@ -115,6 +116,11 @@ module.exports = {
     omic: {
       url: process.env.OMIC_URL || 'http://localhost:3001',
     },
+    complexity: {
+      url: process.env.COMPLEXITY_OF_NEED_URI,
+      timeoutSeconds: 10,
+      enabled_prisons: process.env.PRISONS_WITH_OFFENDERS_THAT_HAVE_COMPLEX_NEEDS,
+    },
   },
 
   notifications: {
@@ -130,6 +136,9 @@ module.exports = {
       },
       HEI: {
         omu: process.env.HEWELL_OMU_EMAIL,
+      },
+      BWI: {
+        omu: process.env.BERWYN_OMU_EMAIL,
       },
     },
   },

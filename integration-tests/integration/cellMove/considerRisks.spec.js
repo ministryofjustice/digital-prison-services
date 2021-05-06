@@ -5,10 +5,16 @@ const offenderNo = 'A1234A'
 
 context('A user can see conflicts in cell', () => {
   beforeEach(() => {
-    cy.task('stubCaseNoteTypes', [
+    cy.task('stubCellMoveTypes', [
       {
-        code: 'MOVED_CELL',
-        subCodes: [{ code: 'ADM', description: 'Administrative' }, { code: 'BEH', description: 'Behaviour' }],
+        code: 'ADM', 
+        activeFlag: 'Y',
+        description: 'Administrative',
+      },
+      {
+        code: 'BEH', 
+        activeFlag: 'Y',
+        description: 'Behaviour',
       },
     ])
   })
@@ -321,6 +327,10 @@ context('A user can see conflicts in cell', () => {
       expect($dates.get(6)).to.contain('Date added: 20 August 2019')
       expect($dates.get(7)).to.contain('Date added: 20 August 2020')
     })
+    page
+      .form()
+      .confirmationInput()
+      .contains('Are you sure you want to move Test User into a cell with Occupant User?')
   })
 
   it('should show error when nothing is selected', () => {
@@ -382,5 +392,22 @@ context('A user can see conflicts in cell', () => {
     cy.visit(`/prisoner/${offenderNo}/cell-move/consider-risks?cellId=1`)
 
     ConfirmCellMovePage.verifyOnPage('Bob Doe', 'MDI-1-1')
+  })
+
+  describe('when there are no inmates at the location', () => {
+    beforeEach(() => {
+      cy.task('stubInmatesAtLocation', {
+        inmates: [],
+      })
+    })
+
+    it('should not show CSRA messages and have the correct confirmation label', () => {
+      const page = ConsiderRisksPage.goTo(offenderNo, 1)
+      page.csraMessages().should('not.exist')
+      page
+        .form()
+        .confirmationInput()
+        .contains('Are you sure you want to select this cell?')
+    })
   })
 })

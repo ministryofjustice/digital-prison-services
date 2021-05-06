@@ -1,5 +1,6 @@
 Reflect.deleteProperty(process.env, 'APPINSIGHTS_INSTRUMENTATIONKEY')
 const moment = require('moment')
+const { makeError } = require('./helpers')
 
 const prisonApi = {}
 const oauthApi = {}
@@ -128,19 +129,18 @@ describe('alert management', () => {
         )
       })
 
-      it.skip('should return an error when the alert has already expired', async () => {
+      it('should show the alertAlreadyClosed page if it has already expired', async () => {
         prisonApi.getAlert = jest.fn().mockReturnValueOnce({ ...alert, expired: true })
 
         const req = { ...mockReq, query: { offenderNo, alertId: 1 } }
 
         await displayEditAlertPage(req, res)
 
-        expect(res.render).toBeCalledWith(
-          'alerts/editAlertForm.njk',
-          expect.objectContaining({
-            errors: [{ text: 'This alert has already expired' }],
-          })
-        )
+        expect(res.render).toBeCalledWith('alerts/alertAlreadyClosed.njk', {
+          url: '/prisoner/ABC123/alerts',
+          profileUrl: '/prisoner/ABC123',
+          name: 'Test User',
+        })
       })
     })
 
@@ -187,7 +187,7 @@ describe('alert management', () => {
     })
 
     describe('when there are errors', () => {
-      it('should return an error when there is a problem updating the alert', async () => {
+      it('should return an error when there is a general problem updating the alert', async () => {
         const error = new Error('There has been an error')
 
         const req = {
@@ -200,6 +200,32 @@ describe('alert management', () => {
 
         await expect(handleEditAlertForm(req, res)).rejects.toThrowError(error)
         expect(res.locals.redirectUrl).toBe('/edit-alert?offenderNo=ABC123&alertId=1')
+      })
+
+      it('should show the alertAlreadyExists page when a 400 is returned', async () => {
+        const error400 = makeError('response', {
+          status: 400,
+          body: {
+            userMessage: 'Malformed request',
+            developerMessage: 'Malformed request',
+          },
+        })
+
+        const req = {
+          ...mockReq,
+          params: { offenderNo, alertId: 1 },
+          body: { alertStatus: 'yes', offenderNo, comment: 'test' },
+        }
+
+        prisonApi.updateAlert = jest.fn().mockRejectedValue(error400)
+
+        await handleEditAlertForm(req, res)
+
+        expect(res.render).toBeCalledWith('alerts/alertAlreadyClosed.njk', {
+          url: '/prisoner/ABC123/alerts',
+          profileUrl: '/prisoner/ABC123',
+          name: 'Test User',
+        })
       })
 
       it('should return an error if no option is selected', async () => {

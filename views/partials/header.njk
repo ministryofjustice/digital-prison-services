@@ -43,7 +43,7 @@
         classes: 'govuk-!-margin-right-1 ' + phaseNameColour
       }) }}
     {% endif %}
-    {{ user.activeCaseLoad.description }}
+    <span class="gtm-active-case-load">{{ user.activeCaseLoad.description }}</span>
   </span>
   {% if user.allCaseloads.length > 1 %}
     <a class="location-bar__link" href="/change-caseload" data-test="change-location-link">Change location</a>

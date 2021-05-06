@@ -6,7 +6,7 @@ module.exports = {
     stubFor({
       request: {
         method: 'GET',
-        url: '/offenderSearch/health/ping',
+        urlPath: '/offenderSearch/health/ping',
       },
       response: {
         status,

@@ -46,6 +46,7 @@ describe('Confirm appointments', () => {
 
     res.status = jest.fn()
     res.render = jest.fn()
+    res.redirect = jest.fn()
 
     req.flash.mockImplementation(() => [appointmentDetails])
   })
@@ -302,8 +303,23 @@ describe('Confirm appointments', () => {
     })
   })
 
-  it('should throw and log an error when appointment details are missing from flash', async () => {
+  it('should redirect to prisoner profile page when appointment details are missing from flash', async () => {
     const logError = jest.fn()
+    const { index } = confirmAppointments.confirmAppointmentFactory({
+      prisonApi,
+      appointmentsService,
+      logError,
+    })
+    req.flash.mockImplementation(() => [])
+
+    await index(req, res)
+
+    expect(res.redirect).toHaveBeenCalledWith('/prisoner/A12345')
+  })
+
+  it('should throw and log an error when an unexpected error occurs', async () => {
+    const logError = jest.fn()
+    appointmentsService.getAppointmentOptions.mockRejectedValue(new Error('Unexpected error'))
     const { index } = confirmAppointments.confirmAppointmentFactory({
       prisonApi,
       appointmentsService,
@@ -315,7 +331,7 @@ describe('Confirm appointments', () => {
 
     expect(logError).toHaveBeenCalledWith(
       'http://localhost',
-      new Error('Appointment details are missing'),
+      new Error('Unexpected error'),
       'Sorry, the service is unavailable'
     )
     expect(res.render).toHaveBeenCalledWith('error.njk', {
@@ -324,8 +340,24 @@ describe('Confirm appointments', () => {
     })
   })
 
-  it('should throw and log a court service error for a court user when appointment details are missing from flash', async () => {
+  it('should redirect to video link search page for a court user when appointment details are missing from flash', async () => {
     const logError = jest.fn()
+    const { index } = confirmAppointments.confirmAppointmentFactory({
+      prisonApi,
+      appointmentsService,
+      logError,
+    })
+    req.flash.mockImplementation(() => [])
+    req.session.userDetails.authSource = 'auth'
+
+    await index(req, res)
+
+    expect(res.redirect).toHaveBeenCalledWith('/videolink/prisoner-search')
+  })
+
+  it('should throw and log a court service error for a court user when an unexpected error occurs', async () => {
+    const logError = jest.fn()
+    appointmentsService.getAppointmentOptions.mockRejectedValue(new Error('Unexpected error'))
     const { index } = confirmAppointments.confirmAppointmentFactory({
       prisonApi,
       appointmentsService,
@@ -338,7 +370,7 @@ describe('Confirm appointments', () => {
 
     expect(logError).toHaveBeenCalledWith(
       'http://localhost',
-      new Error('Appointment details are missing'),
+      new Error('Unexpected error'),
       'Sorry, the service is unavailable'
     )
     expect(res.render).toHaveBeenCalledWith('courtServiceError.njk', {

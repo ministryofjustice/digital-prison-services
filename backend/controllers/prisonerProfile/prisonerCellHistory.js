@@ -6,6 +6,7 @@ const {
   sortByDateTime,
   putLastNameFirst,
   extractLocation,
+  isTemporaryLocation,
   groupBy,
   hasLength,
 } = require('../../utils')
@@ -75,6 +76,7 @@ module.exports = ({ oauthApi, prisonApi, page = 0 }) => async (req, res) => {
       return {
         establishment: agency.description,
         location: extractLocation(cell.description, cell.agencyId),
+        isTemporaryLocation: isTemporaryLocation(cell.description),
         movedIn: cell.assignmentDateTime && formatTimestampToDateTime(cell.assignmentDateTime),
         movedOut: cell.assignmentEndDateTime && formatTimestampToDateTime(cell.assignmentEndDateTime),
         assignmentDateTime: moment(cell.assignmentDateTime).format('YYYY-MM-DDTHH:mm:ss'),
@@ -96,6 +98,8 @@ module.exports = ({ oauthApi, prisonApi, page = 0 }) => async (req, res) => {
 
     const previousLocations = cellDataLatestFirst.slice(1)
 
+    const prisonerProfileUrl = `/prisoner/${offenderNo}`
+
     return res.render('prisonerProfile/prisonerCellHistory.njk', {
       cellHistoryGroupedByAgency: hasLength(previousLocations)
         ? getCellHistoryGroupedByPeriodAtAgency(previousLocations)
@@ -113,7 +117,7 @@ module.exports = ({ oauthApi, prisonApi, page = 0 }) => async (req, res) => {
       prisonerName: formatName(firstName, lastName),
       profileUrl: `/prisoner/${offenderNo}`,
       breadcrumbPrisonerName: putLastNameFirst(firstName, lastName),
-      changeCellLink: `/prisoner/${offenderNo}/cell-move/search-for-cell`,
+      changeCellLink: `${prisonerProfileUrl}/cell-move/search-for-cell?returnUrl=${prisonerProfileUrl}`,
       canViewCellMoveButton: userRoles && userRoles.some(role => role.roleCode === 'CELL_MOVE'),
     })
   } catch (error) {

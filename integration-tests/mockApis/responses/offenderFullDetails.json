@@ -5,6 +5,8 @@
   "lastName": "Smith",
   "offenderNo": "G3878UK",
   "csra": "High",
+  "csraClassificationCode": "HI",
+  "csraClassificationDate": "2016-11-23",
   "alerts": [
     {
       "active": true,

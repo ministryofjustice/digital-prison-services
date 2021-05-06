@@ -28,6 +28,7 @@ const setupApiRoutes = require('./setupApiRoutes')
 const setupReactRoutes = require('./setupReactRoutes')
 const phaseNameSetup = require('./phaseNameSetup')
 const currentUser = require('./middleware/currentUser')
+const returnUrl = require('./middleware/returnUrl')
 
 const pageNotFound = require('./setUpPageNotFound')
 const errorHandler = require('./middleware/errorHandler')
@@ -54,6 +55,7 @@ app.use(setupWebSession())
 app.use(setupAuth({ oauthApi: apis.oauthApi, tokenVerificationApi: apis.tokenVerificationApi }))
 
 app.use(currentUser({ prisonApi: apis.prisonApi, oauthApi: apis.oauthApi }))
+app.use(returnUrl())
 
 if (!config.app.disableWebpack) app.use(setupWebpackForDev())
 
@@ -86,13 +88,14 @@ app.use(
     pathfinderApi: apis.pathfinderApi,
     socApi: apis.socApi,
     offenderSearchApi: apis.offenderSearchApi,
+    complexityApi: apis.complexityApi,
   })
 )
 
 app.use(setupReactRoutes())
 app.use('/$', homepageController({ ...apis, logError }))
 app.use(pageNotFound)
-app.use(errorHandler)
+app.use(errorHandler({ logError }))
 
 app.listen(config.app.port, () => {
   // eslint-disable-next-line no-console

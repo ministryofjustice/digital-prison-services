@@ -11,60 +11,48 @@ context('Prisoner CSRA history', () => {
   beforeEach(() => {
     Cypress.Cookies.preserveOnce('hmpps-session-dev')
     cy.task('stubOffenderBasicDetails', { firstName: 'John', lastName: 'Smith', agencyId: 'MDI' })
-    cy.task('stubCsraAssessmentsForPrisoner', [
-      {
-        bookingId: 1,
-        offenderNo,
-        classificationCode: 'STANDARD',
-        classification: 'Standard',
-        assessmentCode: 'CSR',
-        assessmentDescription: 'CSR Rating',
-        cellSharingAlertFlag: true,
-        assessmentDate: '2011-06-02',
-        nextReviewDate: '2011-06-03',
-        assessmentAgencyId: 'MDI',
-        assessmentStatus: 'A',
-        assessmentSeq: 1,
-        assessorId: 17551,
-        assessorUser: 'TQL59P',
-      },
-      {
-        bookingId: 2,
-        offenderNo,
-        classificationCode: 'HI',
-        classification: 'High',
-        assessmentCode: 'CSR',
-        assessmentDescription: 'CSR Rating',
-        cellSharingAlertFlag: true,
-        assessmentDate: '2014-11-10',
-        nextReviewDate: '2015-11-11',
-        approvalDate: '2014-11-18',
-        assessmentAgencyId: 'DNI',
-        assessmentStatus: 'A',
-        assessmentSeq: 3,
-        assessmentComment: 'comment',
-        assessorId: 397307,
-        assessorUser: 'DQL61T',
-      },
-      {
-        bookingId: 2,
-        offenderNo,
-        classificationCode: 'PEND',
-        classification: 'Pending',
-        assessmentCode: 'CSR',
-        assessmentDescription: 'CSR Rating',
-        cellSharingAlertFlag: true,
-        assessmentDate: '2013-11-10',
-        nextReviewDate: '2014-11-11',
-        approvalDate: '2013-11-18',
-        assessmentAgencyId: 'DNI',
-        assessmentStatus: 'A',
-        assessmentSeq: 2,
-        assessmentComment: 'comment',
-        assessorId: 397307,
-        assessorUser: 'DQL61T',
-      },
-    ])
+    cy.task('stubCsraAssessmentsForPrisoner', {
+      offenderNo, 
+      assessments: [
+        {
+          bookingId: 1,
+          offenderNo,
+          classificationCode: 'LOW',
+          assessmentCode: 'CSR',
+          cellSharingAlertFlag: true,
+          assessmentDate: '2011-06-02',
+          nextReviewDate: '2011-06-03',
+          assessmentAgencyId: 'MDI',
+          assessmentSeq: 1,
+          assessorUser: 'TQL59P',
+        },
+        {
+          bookingId: 2,
+          offenderNo,
+          classificationCode: 'HI',
+          assessmentCode: 'CSR',
+          cellSharingAlertFlag: true,
+          assessmentDate: '2014-11-10',
+          nextReviewDate: '2015-11-11',
+          assessmentAgencyId: 'DNI',
+          assessmentSeq: 3,
+          assessmentComment: 'comment',
+          assessorUser: 'DQL61T',
+        },
+        {
+          bookingId: 2,
+          offenderNo,
+          assessmentCode: 'CSR',
+          cellSharingAlertFlag: true,
+          assessmentDate: '2013-11-10',
+          nextReviewDate: '2014-11-11',
+          assessmentAgencyId: 'DNI',
+          assessmentSeq: 2,
+          assessmentComment: 'comment',
+          assessorUser: 'DQL61T',
+        },
+      ]
+    })
     cy.task('stubAgencyDetails', {
       agencyId: 'DNI',
       details: {
@@ -92,10 +80,9 @@ context('Prisoner CSRA history', () => {
         .then($tableRows => {
           cy.get($tableRows)
             .its('length')
-            .should('eq', 3)
+            .should('eq', 2)
           expect($tableRows.get(0).innerText).to.contain('10/11/2014\tHigh\tDoncaster\tcomment')
-          expect($tableRows.get(1).innerText).to.contain('10/11/2013\tPending\tDoncaster\tcomment')
-          expect($tableRows.get(2).innerText).to.contain('02/06/2011\tStandard\tMoorland\tNot entered')
+          expect($tableRows.get(1).innerText).to.contain('02/06/2011\t\tMoorland\tNot entered')
         })
     })
   })

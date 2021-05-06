@@ -1,6 +1,6 @@
 const moment = require('moment')
 const { alertFlagLabels, cellMoveAlertCodes } = require('../../shared/alertFlagValues')
-const { putLastNameFirst, hasLength, groupBy, properCaseName, formatName } = require('../../utils')
+const { putLastNameFirst, hasLength, groupBy, properCaseName, formatName, formatLocation } = require('../../utils')
 const {
   userHasAccess,
   getNonAssocationsInEstablishment,
@@ -176,15 +176,28 @@ module.exports = ({ oauthApi, prisonApi, whereaboutsApi }) => async (req, res) =
       location,
     })
 
-    const cellOccupants = await getCellOccupants(res, { activeCaseLoadId, prisonApi, cells, nonAssociations })
-
     const selectedCells = cells.filter(cell => {
       if (cellType === 'SO') return cell.capacity === 1
       if (cellType === 'MO') return cell.capacity > 1
       return cell
     })
 
+    const cellOccupants = await getCellOccupants(res, {
+      activeCaseLoadId,
+      prisonApi,
+      cells: selectedCells,
+      nonAssociations,
+    })
+
     const numberOfNonAssociations = getNonAssocationsInEstablishment(nonAssociations).length
+
+    const prisonerDetailsWithFormattedLocation = {
+      ...prisonerDetails,
+      assignedLivingUnit: {
+        ...prisonerDetails.assignedLivingUnit,
+        description: formatLocation(prisonerDetails?.assignedLivingUnit?.description),
+      },
+    }
 
     return res.render('cellMove/selectCell.njk', {
       formValues: {
@@ -209,7 +222,7 @@ module.exports = ({ oauthApi, prisonApi, whereaboutsApi }) => async (req, res) =
       locations: renderLocationOptions(locationsData),
       subLocations,
       cellAttributes,
-      prisonerDetails,
+      prisonerDetails: prisonerDetailsWithFormattedLocation,
       offenderNo,
       nonAssociationLink: `/prisoner/${offenderNo}/cell-move/non-associations`,
       offenderDetailsUrl: `/prisoner/${offenderNo}/cell-move/offender-details`,

@@ -16,6 +16,7 @@ const community = require('../mockApis/community')
 const pathfinder = require('../mockApis/pathfinder')
 const socApi = require('../mockApis/soc')
 const offenderSearch = require('../mockApis/offenderSearch')
+const complexity = require('../mockApis/complexity')
 
 const { resetStubs } = require('../mockApis/wiremock')
 
@@ -33,16 +34,15 @@ module.exports = on => {
       await resetStubs()
       return tokenverification.stubVerifyToken(true)
     },
-    stubAuthHealth: status => Promise.all([auth.stubHealth(status)]),
-    stubPrisonApiHealth: status => Promise.all([prisonApi.stubHealth(status)]),
-    stubWhereaboutsHealth: status => Promise.all([whereabouts.stubHealth(status)]),
-    stubAllocationManagerHealth: status => Promise.all([allocationManager.stubHealth(status)]),
-    stubKeyworkerHealth: status => Promise.all([keyworker.stubHealth(status)]),
-    stubCaseNotesHealth: status => Promise.all([caseNotes.stubHealth(status)]),
-    stubCommunityHealth: status => Promise.all([community.stubHealth(status)]),
-    stubTokenverificationHealth: status => Promise.all([tokenverification.stubHealth(status)]),
-    stubOffenderSearchHealth: status => Promise.all([offenderSearch.stubHealth(status)]),
-
+    stubAuthHealth: status => auth.stubHealth(status),
+    stubPrisonApiHealth: status => prisonApi.stubHealth(status),
+    stubWhereaboutsHealth: status => whereabouts.stubHealth(status),
+    stubAllocationManagerHealth: status => allocationManager.stubHealth(status),
+    stubKeyworkerHealth: status => keyworker.stubHealth(status),
+    stubCaseNotesHealth: status => caseNotes.stubHealth(status),
+    stubCommunityHealth: status => community.stubHealth(status),
+    stubTokenverificationHealth: status => tokenverification.stubHealth(status),
+    stubOffenderSearchHealth: status => offenderSearch.stubHealth(status),
     stubHealthAllHealthy: () =>
       Promise.all([
         auth.stubHealth(),
@@ -54,6 +54,7 @@ module.exports = on => {
         tokenverification.stubHealth(),
         community.stubHealth(),
         offenderSearch.stubHealth(),
+        complexity.stubHealth(),
       ]),
     getLoginUrl: auth.getLoginUrl,
     stubLogin: ({ username = 'ITAG_USER', caseload = 'MDI', roles = [], caseloads }) =>
@@ -133,6 +134,8 @@ module.exports = on => {
       userRoles = [],
       retentionRecord,
       offenderNo,
+      keyworkerDetails,
+      complexOffenders = [],
     }) =>
       Promise.all([
         auth.stubUserMe(),
@@ -144,9 +147,10 @@ module.exports = on => {
         prisonApi.stubUserCaseloads(),
         prisonApi.stubStaffRoles(),
         prisonApi.stubOffenderImage(),
-        keyworker.stubKeyworkerByCaseloadAndOffenderNo(),
+        keyworker.stubKeyworkerByCaseloadAndOffenderNo(keyworkerDetails),
         dataComplianceApi.stubRetentionRecord(offenderNo, retentionRecord),
         allocationManager.stubGetPomForOffender({ primary_pom: { name: 'SMITH, JANE' } }),
+        complexity.stubGetComplexOffenders(complexOffenders),
       ]),
 
     stubAlertTypes: () => Promise.all([prisonApi.stubAlertTypes()]),
@@ -344,6 +348,8 @@ module.exports = on => {
     stubCsraAssessments: ({ offenderNumbers, assessments }) =>
       prisonApi.stubCsraAssessments(offenderNumbers, assessments),
     stubCsraAssessmentsForPrisoner: assessments => prisonApi.stubCsraAssessmentsForPrisoner(assessments),
+    stubCsraReviewForPrisoner: ({ bookingId, assessmentSeq, review }) =>
+      prisonApi.stubCsraReviewForPrisoner({ bookingId, assessmentSeq, review }),
     stubNoExistingOffenderRecord: ({ offenderNo }) => dataComplianceApi.stubNoExistingOffenderRecord(offenderNo),
     stubRetentionRecord: ({ offenderNo, record }) => dataComplianceApi.stubRetentionRecord(offenderNo, record),
     stubGetOffenderRetentionReasons: dataComplianceApi.stubGetOffenderRetentionReasons,
@@ -356,6 +362,13 @@ module.exports = on => {
     stubGetAlerts: ({ agencyId, alerts }) => prisonApi.stubGetAlerts({ agencyId, alerts }),
     stubGetAlert: ({ bookingId, alertId, alert }) => prisonApi.stubGetAlert({ bookingId, alertId, alert }),
     stubPutAlert: ({ bookingId, alertId, alert }) => prisonApi.stubPutAlert({ bookingId, alertId, alert }),
+    stubPutAlertErrors: ({ bookingId, alertId, alert, status }) =>
+      prisonApi.stubPutAlert({
+        bookingId,
+        alertId,
+        alert,
+        status,
+      }),
     stubHistoryForLocation: locationHistory => prisonApi.stubHistoryForLocation(locationHistory),
     stubAttributesForLocation: locationAttributes => prisonApi.stubAttributesForLocation(locationAttributes),
     stubPrisonerDetail: ({ prisonerDetail, bookingId }) => prisonApi.stubPrisonerDetail(prisonerDetail, bookingId),
@@ -422,7 +435,12 @@ module.exports = on => {
     stubStaffRoles: response => prisonApi.stubStaffRoles(response),
     stubLocationConfig: ({ agencyId, response }) => whereabouts.stubLocationConfig({ agencyId, response }),
     stubGetDetailsFailure: ({ status }) => prisonApi.stubGetDetailsFailure(status),
-    stubGetPrisoners: response => Promise.all([prisonApi.stubGetPrisoners(response)]),
+    stubGetPrisoners: response => prisonApi.stubGetPrisoners(response),
     stubGetUserDetailsList: response => Promise.all([prisonApi.stubGetUserDetailsList(response)]),
+    stubGetComplexOffenders: offenders => complexity.stubGetComplexOffenders(offenders),
+    stubCellMoveHistory: ({ assignmentDate, cellMoves }) =>
+      prisonApi.stubCellMoveHistory({ assignmentDate, cellMoves }),
+    stubCellMoveTypes: types => prisonApi.stubCellMoveTypes(types),
+    stubKeyworkerMigrated: () => keyworker.stubKeyworkerMigrated(),
   })
 }

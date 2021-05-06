@@ -1,8 +1,23 @@
 const { raiseAnalyticsEvent } = require('../../raiseAnalyticsEvent')
 
 const { properCaseName, putLastNameFirst } = require('../../utils')
+const { getBackLinkData } = require('./cellMoveUtils')
 
 const CSWAP = 'C-SWAP'
+
+const sortOnListSeq = (a, b) => a.listSeq - b.listSeq
+
+const cellMoveReasons = async (res, prisonApi, selectedReason) => {
+  const cellMoveReasonTypes = await prisonApi.getCellMoveReasonTypes(res.locals)
+  return cellMoveReasonTypes
+    .filter(type => type.activeFlag === 'Y')
+    .sort(sortOnListSeq)
+    .map(type => ({
+      value: type.code,
+      text: type.description,
+      checked: type.code === selectedReason,
+    }))
+}
 
 module.exports = ({ prisonApi, whereaboutsApi, caseNotesApi }) => {
   const index = async (req, res) => {
@@ -21,13 +36,7 @@ module.exports = ({ prisonApi, whereaboutsApi, caseNotesApi }) => {
     const formValues = req.flash('formValues')
     const { reason, comment } = (formValues && formValues[0]) || {}
 
-    const caseNoteTypes = (!isCellSwap && (await caseNotesApi.getCaseNoteTypes(res.locals))) || []
-    const cellMoveTypes = caseNoteTypes.find(type => type.code === 'MOVED_CELL')
-    const cellMoveReasonRadioValues = cellMoveTypes?.subCodes.map(subType => ({
-      value: subType.code,
-      text: subType.description,
-      checked: subType.code === reason,
-    }))
+    const cellMoveReasonRadioValues = isCellSwap ? undefined : await cellMoveReasons(res, prisonApi, reason)
 
     return res.render('cellMove/confirmCellMove.njk', {
       showWarning: !isCellSwap,
@@ -37,12 +46,13 @@ module.exports = ({ prisonApi, whereaboutsApi, caseNotesApi }) => {
       cellId,
       movingToHeading: isCellSwap ? 'out of their current location' : `to cell ${description}`,
       locationPrefix,
-      selectCellUrl: `/prisoner/${offenderNo}/cell-move/select-cell`,
       cellMoveReasonRadioValues,
       errors: req.flash('errors'),
       formValues: {
         comment,
       },
+      backLink: getBackLinkData(req.headers.referer, offenderNo).backLink,
+      showCommentInput: !isCellSwap,
     })
   }
 
@@ -121,7 +131,7 @@ module.exports = ({ prisonApi, whereaboutsApi, caseNotesApi }) => {
     try {
       const { bookingId, agencyId } = await prisonApi.getDetails(res.locals, offenderNo)
 
-      if (cellId === 'C-SWAP') return await makeCSwap(res, { agencyId, bookingId, offenderNo })
+      if (cellId === CSWAP) return await makeCSwap(res, { agencyId, bookingId, offenderNo })
 
       return await makeCellMove(res, {
         cellId,

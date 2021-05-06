@@ -12,6 +12,7 @@ const { tokenVerificationApiFactory } = require('./api/tokenVerificationApi')
 const { pathfinderApiFactory } = require('./api/pathfinderApi')
 const { socApiFactory } = require('./api/socApi')
 const { offenderSearchApiFactory } = require('./api/offenderSearchApi')
+const { complexityApiFactory } = require('./api/complexityApi')
 
 const prisonApi = prisonApiFactory(
   clientFactory({
@@ -99,6 +100,13 @@ const offenderSearchApi = offenderSearchApiFactory(
   })
 )
 
+const complexityApi = complexityApiFactory(
+  clientFactory({
+    baseUrl: config.apis.complexity.url,
+    timeout: config.apis.complexity.timeoutSeconds * 1000,
+  })
+)
+
 module.exports = {
   prisonApi,
   whereaboutsApi,
@@ -112,4 +120,5 @@ module.exports = {
   pathfinderApi,
   socApi,
   offenderSearchApi,
+  complexityApi,
 }

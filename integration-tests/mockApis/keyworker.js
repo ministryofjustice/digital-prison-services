@@ -5,7 +5,7 @@ module.exports = {
     return stubFor({
       request: {
         method: 'GET',
-        url: '/keyworker/health/ping',
+        urlPath: '/keyworker/health/ping',
       },
       response: {
         status,
@@ -33,4 +33,20 @@ module.exports = {
       },
     })
   },
+  stubKeyworkerMigrated: () =>
+    stubFor({
+      request: {
+        method: 'GET',
+        urlPattern: `/keyworker/key-worker/prison/.+?`,
+      },
+      response: {
+        status: 200,
+        headers: {
+          'Content-Type': 'application/json;charset=UTF-8',
+        },
+        jsonBody: {
+          migrated: false,
+        },
+      },
+    }),
 }

@@ -27,10 +27,7 @@ describe('Prisoner CSRA History', () => {
     await controller(req, res)
 
     expect(prisonApi.getDetails).toHaveBeenCalledWith({}, offenderNo)
-    expect(prisonApi.getCsraAssessmentsForPrisoner).toHaveBeenCalledWith(
-      {},
-      { offenderNo, latestOnly: 'false', activeOnly: 'false' }
-    )
+    expect(prisonApi.getCsraAssessmentsForPrisoner).toHaveBeenCalledWith({}, offenderNo)
     expect(prisonApi.getAgencyDetails).not.toHaveBeenCalled()
   })
 
@@ -75,8 +72,8 @@ describe('Prisoner CSRA History', () => {
         {
           bookingId: 2,
           offenderNo,
-          classificationCode: 'PEND',
-          classification: 'Pending',
+          // Empty classification
+          classificationCode: '',
           assessmentCode: 'CSR',
           assessmentDescription: 'CSR Rating',
           cellSharingAlertFlag: true,
@@ -88,6 +85,21 @@ describe('Prisoner CSRA History', () => {
           assessmentSeq: 2,
           assessmentComment: 'comment',
           assessorId: 397307,
+          assessorUser: 'DQL61T',
+        },
+        {
+          bookingId: 2,
+          offenderNo,
+          // No classification
+          assessmentCode: 'CSR',
+          assessmentDescription: 'CSR Rating',
+          cellSharingAlertFlag: true,
+          assessmentDate: '2018-11-10',
+          nextReviewDate: '2019-11-11',
+          approvalDate: '2018-11-18',
+          // No assessmentAgencyId
+          assessmentStatus: 'A',
+          assessmentSeq: 4,
           assessorUser: 'DQL61T',
         },
       ])
@@ -121,10 +133,6 @@ describe('Prisoner CSRA History', () => {
             text: 'High',
             value: 'HI',
           },
-          {
-            text: 'Pending',
-            value: 'PEND',
-          },
         ],
         formValues: {},
         locationOptions: [
@@ -140,9 +148,26 @@ describe('Prisoner CSRA History', () => {
         prisonerName: 'John Smith',
         profileUrl: '/prisoner/ABC123',
         rows: [
-          [{ text: '10/11/2014' }, { text: 'High' }, { text: 'Doncaster' }, { text: 'comment' }],
-          [{ text: '10/11/2013' }, { text: 'Pending' }, { text: 'Doncaster' }, { text: 'comment' }],
-          [{ text: '02/06/2011' }, { text: 'Standard' }, { text: 'Moorland' }, { text: 'Not entered' }],
+          [
+            { text: '10/11/2014' },
+            { text: 'High' },
+            { text: 'Doncaster' },
+            { text: 'comment' },
+            {
+              html:
+                '<a class="govuk-link" href="/prisoner/ABC123/csra-review?assessmentSeq=3&bookingId=2">View details</a>',
+            },
+          ],
+          [
+            { text: '02/06/2011' },
+            { text: 'Standard' },
+            { text: 'Moorland' },
+            { text: 'Not entered' },
+            {
+              html:
+                '<a class="govuk-link" href="/prisoner/ABC123/csra-review?assessmentSeq=1&bookingId=1">View details</a>',
+            },
+          ],
         ],
       })
     })
@@ -156,7 +181,18 @@ describe('Prisoner CSRA History', () => {
         expect(res.render).toHaveBeenCalledWith(
           'prisonerProfile/prisonerCsraHistory.njk',
           expect.objectContaining({
-            rows: [[{ text: '10/11/2014' }, { text: 'High' }, { text: 'Doncaster' }, { text: 'comment' }]],
+            rows: [
+              [
+                { text: '10/11/2014' },
+                { text: 'High' },
+                { text: 'Doncaster' },
+                { text: 'comment' },
+                {
+                  html:
+                    '<a class="govuk-link" href="/prisoner/ABC123/csra-review?assessmentSeq=3&bookingId=2">View details</a>',
+                },
+              ],
+            ],
           })
         )
       })
@@ -169,7 +205,18 @@ describe('Prisoner CSRA History', () => {
         expect(res.render).toHaveBeenCalledWith(
           'prisonerProfile/prisonerCsraHistory.njk',
           expect.objectContaining({
-            rows: [[{ text: '02/06/2011' }, { text: 'Standard' }, { text: 'Moorland' }, { text: 'Not entered' }]],
+            rows: [
+              [
+                { text: '02/06/2011' },
+                { text: 'Standard' },
+                { text: 'Moorland' },
+                { text: 'Not entered' },
+                {
+                  html:
+                    '<a class="govuk-link" href="/prisoner/ABC123/csra-review?assessmentSeq=1&bookingId=1">View details</a>',
+                },
+              ],
+            ],
           })
         )
       })
@@ -182,7 +229,18 @@ describe('Prisoner CSRA History', () => {
         expect(res.render).toHaveBeenCalledWith(
           'prisonerProfile/prisonerCsraHistory.njk',
           expect.objectContaining({
-            rows: [[{ text: '10/11/2014' }, { text: 'High' }, { text: 'Doncaster' }, { text: 'comment' }]],
+            rows: [
+              [
+                { text: '10/11/2014' },
+                { text: 'High' },
+                { text: 'Doncaster' },
+                { text: 'comment' },
+                {
+                  html:
+                    '<a class="govuk-link" href="/prisoner/ABC123/csra-review?assessmentSeq=3&bookingId=2">View details</a>',
+                },
+              ],
+            ],
           })
         )
       })

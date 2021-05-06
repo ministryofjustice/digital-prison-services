@@ -214,6 +214,16 @@ context('Prisoner quick look data retrieval errors', () => {
 })
 
 context('Prisoner profile header', () => {
+  const headerProfileData = {
+    offenderBasicDetails,
+    offenderFullDetails: {
+      ...offenderFullDetails,
+      profileInformation: [{ type: 'NAT', resultValue: 'British' }],
+    },
+    iepSummary: {},
+    caseNoteSummary: {},
+    offenderNo,
+  }
   before(() => {
     cy.task('reset')
     cy.clearCookies()
@@ -226,24 +236,40 @@ context('Prisoner profile header', () => {
 
   beforeEach(() => {
     Cypress.Cookies.preserveOnce('hmpps-session-dev')
-    cy.task('stubPrisonerProfileHeaderData', {
-      offenderBasicDetails,
-      offenderFullDetails: {
-        ...offenderFullDetails,
-        profileInformation: [{ type: 'NAT', resultValue: 'British' }],
-      },
-      iepSummary: {},
-      caseNoteSummary: {},
-      offenderNo,
-    })
   })
 
   it('Should show correct header information', () => {
+    cy.task('stubPrisonerProfileHeaderData', headerProfileData)
     cy.visit(`/prisoner/${offenderNo}`)
 
     prisonerQuickLookPage.verifyOnPage('Smith, John')
 
     cy.get('[data-test="csra-details"]').contains('High - 23/11/2016')
+  })
+
+  it('should show complexity text and hide last key worker session', () => {
+    cy.task('stubPrisonerProfileHeaderData', {
+      ...headerProfileData,
+      complexOffenders: [{ offenderNo, level: 'high' }],
+      keyworkerDetails: {},
+    })
+    cy.visit(`/prisoner/${offenderNo}`)
+
+    prisonerQuickLookPage.verifyOnPage('Smith, John')
+    cy.get('[data-test="keyworker-name"]').contains('None - high complexity')
+    cy.get('[data-test="last-session"]').should('not.exist')
+  })
+
+  it('should show not allocated when no key worker is assigned', () => {
+    cy.task('stubPrisonerProfileHeaderData', {
+      ...headerProfileData,
+      keyworkerDetails: {},
+    })
+    cy.visit(`/prisoner/${offenderNo}`)
+
+    prisonerQuickLookPage.verifyOnPage('Smith, John')
+    cy.get('[data-test="keyworker-name"]').contains('Not allocated')
+    cy.get('[data-test="last-session"]').contains('No previous session')
   })
 })
 
@@ -373,10 +399,10 @@ context('Prisoner quick look', () => {
       cy.get('[data-test="tabs-case-notes"]').should('contain.text', 'Case notes')
       cy.get('[data-test="tabs-sentence-release"]').should('contain.text', 'Sentence and release')
       cy.get('[data-test="adjudication-history-link"]').should('contain.text', 'View adjudication history')
-      // cy.get('[data-test="csra-link"]')
-      //   .should('contain.text', 'View details of CSRA')
-      //   .should('have.attr', 'href')
-      //   .should('include', '/prisoner/A1234A/csra-history')
+      cy.get('[data-test="csra-link"]')
+        .should('contain.text', 'View details of CSRA')
+        .should('have.attr', 'href')
+        .should('include', '/prisoner/A1234A/csra-history')
       cy.get('[data-test="view-alerts-link"]').should('contain.text', 'View alerts')
       cy.get('[data-test="iep-details-link"]').should('contain.text', 'View details for Incentive Level')
       cy.get('[data-test="incentive-details-link"]').should('contain.text', 'View incentive level details')

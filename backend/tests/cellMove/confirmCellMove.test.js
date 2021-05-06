@@ -14,7 +14,7 @@ describe('Change cell play back details', () => {
 
   let logError
   let controller
-  const req = { originalUrl: 'http://localhost', params: { offenderNo: 'A12345' }, query: {} }
+  const req = { originalUrl: 'http://localhost', params: { offenderNo: 'A12345' }, query: {}, headers: {} }
   const res = { locals: {}, status: jest.fn() }
 
   beforeEach(() => {
@@ -35,7 +35,7 @@ describe('Change cell play back details', () => {
     })
 
     prisonApi.getAttributesForLocation = jest.fn().mockResolvedValue({ capacity: 1 })
-    caseNotesApi.getCaseNoteTypes = jest.fn().mockResolvedValue([])
+    prisonApi.getCellMoveReasonTypes = jest.fn().mockResolvedValue([])
 
     controller = confirmCellMove({ prisonApi, whereaboutsApi, logError, caseNotesApi })
 
@@ -72,6 +72,7 @@ describe('Change cell play back details', () => {
       await controller.index(req, res)
 
       expect(res.render).toHaveBeenCalledWith('cellMove/confirmCellMove.njk', {
+        backLink: '/prisoner/A12345/cell-move/search-for-cell',
         errors: undefined,
         formValues: {
           comment: undefined,
@@ -79,11 +80,12 @@ describe('Change cell play back details', () => {
         },
         breadcrumbPrisonerName: 'Doe, Bob',
         cellId: 223,
+        cellMoveReasonRadioValues: [],
         movingToHeading: 'to cell MDI-10',
         locationPrefix: 'MDI-10-19',
         name: 'Bob Doe',
         offenderNo: 'A12345',
-        selectCellUrl: '/prisoner/A12345/cell-move/select-cell',
+        showCommentInput: true,
         showWarning: true,
       })
     })
@@ -102,6 +104,7 @@ describe('Change cell play back details', () => {
       await controller.index(req, res)
 
       expect(res.render).toHaveBeenCalledWith('cellMove/confirmCellMove.njk', {
+        backLink: '/prisoner/A12345/cell-move/search-for-cell',
         breadcrumbPrisonerName: 'Doe, Bob',
         cellId: 'C-SWAP',
         cellMoveReasonRadioValues: undefined,
@@ -113,7 +116,7 @@ describe('Change cell play back details', () => {
         locationPrefix: undefined,
         name: 'Bob Doe',
         offenderNo: 'A12345',
-        selectCellUrl: '/prisoner/A12345/cell-move/select-cell',
+        showCommentInput: false,
         showWarning: false,
       })
     })
@@ -123,22 +126,33 @@ describe('Change cell play back details', () => {
 
       await controller.index(req, res)
 
-      expect(caseNotesApi.getCaseNoteTypes.mock.calls.length).toBe(0)
+      expect(prisonApi.getCellMoveReasonTypes.mock.calls.length).toBe(0)
     })
 
     it('should make a request to retrieve all cell move case note types for none c-swap moves', async () => {
       req.query = { cellId: 'A-1-3' }
 
-      caseNotesApi.getCaseNoteTypes.mockResolvedValue([
+      prisonApi.getCellMoveReasonTypes.mockResolvedValue([
         {
-          code: 'MOVED_CELL',
-          subCodes: [{ code: 'ADM', description: 'Admin' }, { code: 'SA', description: 'Safety' }],
+          code: 'ADM',
+          description: 'Admin',
+          activeFlag: 'Y',
+        },
+        {
+          code: 'SA',
+          description: 'Safety',
+          activeFlag: 'Y',
+        },
+        {
+          code: 'UNUSED',
+          description: 'Unused value',
+          activeFlag: 'N',
         },
       ])
 
       await controller.index(req, res)
 
-      expect(caseNotesApi.getCaseNoteTypes).toHaveBeenCalledWith({})
+      expect(prisonApi.getCellMoveReasonTypes).toHaveBeenCalledWith({})
       expect(res.render).toHaveBeenCalledWith(
         'cellMove/confirmCellMove.njk',
         expect.objectContaining({
@@ -169,10 +183,16 @@ describe('Change cell play back details', () => {
     })
 
     it('should unpack form values out of req.flash', async () => {
-      caseNotesApi.getCaseNoteTypes.mockResolvedValue([
+      prisonApi.getCellMoveReasonTypes.mockResolvedValue([
         {
-          code: 'MOVED_CELL',
-          subCodes: [{ code: 'ADM', description: 'Admin' }, { code: 'SA', description: 'Safety' }],
+          code: 'ADM',
+          description: 'Admin',
+          activeFlag: 'Y',
+        },
+        {
+          code: 'SA',
+          description: 'Safety',
+          activeFlag: 'Y',
         },
       ])
       req.flash.mockImplementation(() => [
@@ -195,6 +215,58 @@ describe('Change cell play back details', () => {
           formValues: {
             comment: 'Hello',
           },
+        })
+      )
+    })
+
+    it('should show cell move reasons in Db order', async () => {
+      prisonApi.getCellMoveReasonTypes.mockResolvedValue([
+        {
+          code: 'ADM',
+          description: 'Admin',
+          listSeq: 2,
+          activeFlag: 'Y',
+        },
+        {
+          code: 'SA',
+          description: 'Safety',
+          listSeq: 1,
+          activeFlag: 'Y',
+        },
+      ])
+      req.flash.mockImplementation(() => [
+        {
+          reason: 'ADM',
+          comment: 'Hello',
+        },
+      ])
+      req.query = { cellId: 'A-1-3' }
+
+      await controller.index(req, res)
+
+      expect(res.render).toHaveBeenCalledWith(
+        'cellMove/confirmCellMove.njk',
+        expect.objectContaining({
+          cellMoveReasonRadioValues: [
+            { checked: false, text: 'Safety', value: 'SA' },
+            { checked: true, text: 'Admin', value: 'ADM' },
+          ],
+          formValues: {
+            comment: 'Hello',
+          },
+        })
+      )
+    })
+
+    it('sets the back link when referer data is present', async () => {
+      req.headers = { referer: `/prisoner/A12345/cell-move/select-cell` }
+
+      await controller.index(req, res)
+
+      expect(res.render).toHaveBeenCalledWith(
+        'cellMove/confirmCellMove.njk',
+        expect.objectContaining({
+          backLink: `/prisoner/A12345/cell-move/select-cell`,
         })
       )
     })

@@ -98,31 +98,61 @@ describe('prisoner sentence and release', () => {
         prisonerProfileData,
         releaseDates: {
           currentExpectedReleaseDates: [
-            { label: 'Approved for home detention curfew', value: '2 June 2021' },
-            { label: 'Parole eligibility', value: '3 February 2022' },
+            {
+              label: 'Automatic release',
+              value: '2 February 2020',
+            },
             { label: 'Conditional release', value: '3 February 2020' },
-            { label: 'Post recall release', value: '1 April 2020' },
+            {
+              label: 'Post recall release',
+              value: '1 April 2020',
+            },
             { label: 'Mid transfer', value: '10 August 2020' },
-            { label: 'Automatic release', value: '2 February 2020' },
-            { label: 'Non parole', value: '3 October 2020' },
+            {
+              label: 'Non parole',
+              value: '3 October 2020',
+            },
+            {
+              label: 'Approved for home detention curfew',
+              value: '2 June 2021',
+            },
             { label: 'Detention training post recall', value: '16 October 2021' },
           ],
           earlyAndTemporaryReleaseEligibilityDates: [
-            { label: 'Home detention curfew', value: '3 July 2019' },
-            { label: 'Release on temporary licence', value: '3 February 2025' },
+            {
+              label: 'Tariff early removal scheme',
+              value: '10 October 2017',
+            },
             { label: 'Early removal scheme', value: '12 November 2018' },
-            { label: 'Tariff early removal scheme', value: '10 October 2017' },
-            { label: 'Approved for parole', value: '3 April 2020' },
+            {
+              label: 'Home detention curfew',
+              value: '3 July 2019',
+            },
             { label: 'Early transfer', value: '9 August 2019' },
+            {
+              label: 'Approved for parole',
+              value: '3 April 2020',
+            },
+            {
+              label: 'Parole eligibility',
+              value: '3 February 2022',
+            },
+            { label: 'Release on temporary licence', value: '3 February 2025' },
           ],
           licenceDates: [
             { label: 'Licence expiry', value: '4 February 2020' },
-            { label: 'Sentence expiry', value: '19 February 2020' },
+            {
+              label: 'Sentence expiry',
+              value: '19 February 2020',
+            },
             { label: 'Top up supervision expiry', value: '14 October 2020' },
           ],
           otherReleaseDates: [
-            { label: 'Late transfer', value: '11 August 2021' },
             { label: 'Tariff', value: '7 May 2021' },
+            {
+              label: 'Late transfer',
+              value: '11 August 2021',
+            },
           ],
         },
       })
@@ -815,21 +845,21 @@ describe('prisoner sentence and release', () => {
         prisonerProfileData,
         releaseDates: {
           currentExpectedReleaseDates: [
-            { label: 'Approved for home detention curfew', value: '2 June 2021' },
-            { label: 'Parole eligibility', value: '3 February 2022' },
-            { label: 'Conditional release', value: '1 February 2020' },
-            { label: 'Post recall release', value: '3 February 2021' },
-            { label: 'Mid transfer', value: '10 August 2020' },
-            { label: 'Automatic release', value: '1 January 2020' },
             { label: 'Non parole', value: '3 February 2019' },
+            { label: 'Automatic release', value: '1 January 2020' },
+            { label: 'Conditional release', value: '1 February 2020' },
+            { label: 'Mid transfer', value: '10 August 2020' },
             { label: 'Detention training post recall', value: '16 October 2020' },
+            { label: 'Post recall release', value: '3 February 2021' },
+            { label: 'Approved for home detention curfew', value: '2 June 2021' },
           ],
           earlyAndTemporaryReleaseEligibilityDates: [
-            { label: 'Home detention curfew', value: '3 July 2019' },
-            { label: 'Release on temporary licence', value: '3 February 2025' },
             { label: 'Early removal scheme', value: '12 November 2018' },
-            { label: 'Approved for parole', value: '3 April 2020' },
+            { label: 'Home detention curfew', value: '3 July 2019' },
             { label: 'Early transfer', value: '9 August 2019' },
+            { label: 'Approved for parole', value: '3 April 2020' },
+            { label: 'Parole eligibility', value: '3 February 2022' },
+            { label: 'Release on temporary licence', value: '3 February 2025' },
           ],
           licenceDates: [
             { label: 'Licence expiry', value: '4 February 2020' },
@@ -837,8 +867,8 @@ describe('prisoner sentence and release', () => {
             { label: 'Top up supervision expiry', value: '14 October 2020' },
           ],
           otherReleaseDates: [
-            { label: 'Late transfer', value: '11 August 2021' },
             { label: 'Tariff', value: '7 May 2021' },
+            { label: 'Late transfer', value: '11 August 2021' },
           ],
         },
       })

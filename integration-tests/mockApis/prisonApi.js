@@ -15,7 +15,7 @@ module.exports = {
     return stubFor({
       request: {
         method: 'GET',
-        urlPattern: '/health/ping',
+        urlPath: '/health/ping',
       },
       response: {
         status,
@@ -215,11 +215,11 @@ module.exports = {
       },
     })
   },
-  stubCsraAssessmentsForPrisoner: (assessments = []) => {
+  stubCsraAssessmentsForPrisoner: ({ offenderNo, assessments = [] }) => {
     return stubFor({
       request: {
         method: 'GET',
-        urlPattern: '/api/offender-assessments/CSR\\?.+?',
+        urlPattern: `/api/offender-assessments/csra/${offenderNo}`,
       },
       response: {
         status: 200,
@@ -227,6 +227,21 @@ module.exports = {
           'Content-Type': 'application/json;charset=UTF-8',
         },
         jsonBody: assessments,
+      },
+    })
+  },
+  stubCsraReviewForPrisoner: ({ bookingId, assessmentSeq, review = {} }) => {
+    return stubFor({
+      request: {
+        method: 'GET',
+        urlPattern: `/api/offender-assessments/csra/${bookingId}/assessment/${assessmentSeq}`,
+      },
+      response: {
+        status: 200,
+        headers: {
+          'Content-Type': 'application/json;charset=UTF-8',
+        },
+        jsonBody: review,
       },
     })
   },
@@ -270,7 +285,7 @@ module.exports = {
     return stubFor({
       request: {
         method: 'GET',
-        urlPattern: `/api/bookings/offenderNo/.+?\\?fullInfo=true`,
+        urlPattern: `/api/bookings/offenderNo/.+?\\?fullInfo=true&csraSummary=true`,
       },
       response: {
         status: 200,
@@ -285,7 +300,7 @@ module.exports = {
     return stubFor({
       request: {
         method: 'GET',
-        urlPattern: `/api/bookings/offenderNo/.+?\\?fullInfo=false`,
+        urlPattern: `/api/bookings/offenderNo/.+?\\?fullInfo=false&csraSummary=false`,
       },
       response: {
         status: 200,
@@ -400,14 +415,14 @@ module.exports = {
         jsonBody: alert || {},
       },
     }),
-  stubPutAlert: ({ bookingId, alertId, alert }) =>
+  stubPutAlert: ({ bookingId, alertId, alert, status = 200 }) =>
     stubFor({
       request: {
         method: 'PUT',
         url: `/api/bookings/${bookingId}/alert/${alertId}`,
       },
       response: {
-        status: 200,
+        status,
         headers: {
           'Content-Type': 'application/json;charset=UTF-8',
         },
@@ -554,7 +569,7 @@ module.exports = {
     return stubFor({
       request: {
         method: 'GET',
-        url: `/api/bookings/offenderNo/${offenderNo}?fullInfo=${fullInfo}`,
+        url: `/api/bookings/offenderNo/${offenderNo}?fullInfo=${fullInfo}&csraSummary=${fullInfo}`,
       },
       response: {
         status: 200,
@@ -1859,4 +1874,32 @@ module.exports = {
       },
     })
   },
+  stubCellMoveHistory: ({ assignmentDate, cellMoves }) =>
+    stubFor({
+      request: {
+        method: 'GET',
+        urlPath: `/api/cell/history/${assignmentDate}`,
+      },
+      response: {
+        status: 200,
+        headers: {
+          'Content-Type': 'application/json;charset=UTF-8',
+        },
+        jsonBody: cellMoves,
+      },
+    }),
+  stubCellMoveTypes: types =>
+    stubFor({
+      request: {
+        method: 'GET',
+        urlPattern: '/api/reference-domains/domains/CHG_HOUS_RSN',
+      },
+      response: {
+        status: 200,
+        headers: {
+          'Content-Type': 'application/json;charset=UTF-8',
+        },
+        jsonBody: types,
+      },
+    }),
 }

@@ -100,6 +100,14 @@ const alertFactory = (oauthApi, prisonApi, referenceCodesService) => {
         oauthApi.userRoles(res.locals),
       ])
 
+      if (alert && alert.expired) {
+        return res.render('alerts/alertAlreadyClosed.njk', {
+          url: `${getOffenderUrl(offenderNo)}/alerts`,
+          profileUrl: getOffenderUrl(offenderNo),
+          name: `${properCaseName(firstName)} ${properCaseName(lastName)}`,
+        })
+      }
+
       const canViewInactivePrisoner = userRoles && userRoles.some(role => role.roleCode === 'INACTIVE_BOOKINGS')
       const offenderInCaseload = caseLoads && caseLoads.some(caseload => caseload.caseLoadId === agencyId)
       const userCanEdit = (canViewInactivePrisoner && ['OUT', 'TRN'].includes(agencyId)) || offenderInCaseload
@@ -115,8 +123,6 @@ const alertFactory = (oauthApi, prisonApi, referenceCodesService) => {
         name: `${properCaseName(lastName)}, ${properCaseName(firstName)}`,
       }
       const activeCaseLoad = caseLoads.find(cl => cl.currentlyActive)
-
-      if (alert && alert.expired) pageErrors.push({ text: 'This alert has already expired' })
 
       return renderTemplate(req, res, {
         alert: {
@@ -170,6 +176,14 @@ const alertFactory = (oauthApi, prisonApi, referenceCodesService) => {
 
         fireAnalyticsEvent({ closeAlert, alertCode: alert.alertCode, caseLoadId: activeCaseLoad.caseLoadId })
       } catch (error) {
+        if (error?.response?.status === 400) {
+          const { firstName, lastName } = await prisonApi.getDetails(res.locals, offenderNo, true)
+          return res.render('alerts/alertAlreadyClosed.njk', {
+            url: `${getOffenderUrl(offenderNo)}/alerts`,
+            profileUrl: getOffenderUrl(offenderNo),
+            name: `${properCaseName(firstName)} ${properCaseName(lastName)}`,
+          })
+        }
         res.locals.redirectUrl = `/edit-alert?offenderNo=${offenderNo}&alertId=${alertId}`
         throw error
       }

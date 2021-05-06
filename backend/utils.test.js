@@ -1,22 +1,25 @@
 import {
   capitalize,
-  properCaseName,
-  mapToQueryString,
+  chunkArray,
   formatDaysInYears,
+  formatLocation,
   formatMonthsAndDays,
-  formatTimestampToDateTime,
-  formatTimestampToDate,
   formatName,
+  formatTimestampToDate,
+  formatTimestampToDateTime,
   getCurrentPeriod,
+  getDate,
+  getNamesFromString,
+  getTime,
+  isPrisonerIdentifier,
+  isTemporaryLocation,
   isToday,
   isTodayOrAfter,
   isViewableFlag,
-  getDate,
-  getTime,
-  chunkArray,
+  joinUrlPath,
+  mapToQueryString,
+  properCaseName,
   putLastNameFirst,
-  getNamesFromString,
-  isPrisonerIdentifier,
 } from './utils'
 
 describe('capitalize()', () => {
@@ -372,5 +375,61 @@ describe('isPrisonerIdentifier()', () => {
   })
   it('should return false for name', () => {
     expect(isPrisonerIdentifier('John Smith')).toEqual(false)
+  })
+})
+
+describe('formatLocation()', () => {
+  it('should cope with undefined', () => {
+    expect(formatLocation(undefined)).toEqual(undefined)
+  })
+  it('should cope with null', () => {
+    expect(formatLocation(null)).toEqual(undefined)
+  })
+  it('should preserve normal location names', () => {
+    expect(formatLocation('A1234BC')).toEqual('A1234BC')
+  })
+  it('should convert RECP,CSWAP,COURT', () => {
+    expect(formatLocation('RECP')).not.toEqual('RECP')
+    expect(formatLocation('CSWAP')).not.toEqual('CSWAP')
+    expect(formatLocation('COURT')).not.toEqual('COURT')
+  })
+})
+
+describe('isTemporaryLocation()', () => {
+  it('should cope with undefined', () => {
+    expect(isTemporaryLocation(undefined)).toEqual(false)
+  })
+  it('should cope with null', () => {
+    expect(isTemporaryLocation(null)).toEqual(false)
+  })
+  it('should ignore normal locations', () => {
+    expect(isTemporaryLocation('A1234BC')).toEqual(false)
+  })
+  it('should detect temporary locations', () => {
+    expect(isTemporaryLocation('RECP')).toEqual(true)
+    expect(isTemporaryLocation('CSWAP')).toEqual(true)
+    expect(isTemporaryLocation('COURT')).toEqual(true)
+    expect(isTemporaryLocation('TAP')).toEqual(true)
+  })
+  it('should detect temporary locations even with prefix', () => {
+    expect(isTemporaryLocation('MDI-CSWAP')).toEqual(true)
+  })
+  it('should not detect temporary locations with suffix', () => {
+    expect(isTemporaryLocation('CSWAP-')).toEqual(false)
+  })
+})
+
+describe('Url joining', () => {
+  it('should handle url missing an ending forward slash and path starting a forward slash', () => {
+    expect(joinUrlPath('http://auth', '/health/ping')).toBe('http://auth/health/ping')
+  })
+  it('should handle url ending with a forward slash and path not starting with a forward slash', () => {
+    expect(joinUrlPath('http://auth/', 'health/ping')).toBe('http://auth/health/ping')
+  })
+  it('should handle url ending with a forward slash and path starting with a forward slash', () => {
+    expect(joinUrlPath('http://auth/', '/health/ping')).toBe('http://auth/health/ping')
+  })
+  it('should handle missing forward slashes for both url and path ', () => {
+    expect(joinUrlPath('http://auth', 'health/ping')).toBe('http://auth/health/ping')
   })
 })

@@ -1,19 +1,21 @@
 const express = require('express')
 const config = require('./config')
 const healthFactory = require('./services/healthCheck')
+const { joinUrlPath } = require('./utils')
 
 const router = express.Router()
 
 const health = healthFactory(
-  config.apis.oauth2.url,
-  config.apis.prisonApi.url,
-  config.apis.whereabouts.url,
-  config.apis.community.url,
-  config.apis.keyworker.url,
-  config.apis.caseNotes.url,
-  config.apis.allocationManager.url,
-  config.apis.tokenverification.url,
-  config.apis.offenderSearch.url
+  joinUrlPath(config.apis.oauth2.url, '/health/ping'),
+  joinUrlPath(config.apis.prisonApi.url, '/health/ping'),
+  joinUrlPath(config.apis.whereabouts.url, '/health/ping'),
+  joinUrlPath(config.apis.community.url, '/health/ping'),
+  joinUrlPath(config.apis.keyworker.url, '/health/ping'),
+  joinUrlPath(config.apis.caseNotes.url, '/health/ping'),
+  joinUrlPath(config.apis.allocationManager.url, '/health'),
+  joinUrlPath(config.apis.tokenverification.url, '/health/ping'),
+  joinUrlPath(config.apis.offenderSearch.url, '/health/ping'),
+  joinUrlPath(config.apis.complexity.url, '/ping')
 )
 
 module.exports = () => {

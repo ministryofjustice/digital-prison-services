@@ -110,8 +110,11 @@ const prisonApiFactory = client => {
   const getCsraAssessments = (context, offenderNumbers) =>
     post(context, `/api/offender-assessments/csra/list`, offenderNumbers)
 
-  const getCsraAssessmentsForPrisoner = (context, params) =>
-    get(context, `/api/offender-assessments/CSR?${mapToQueryString(params)}`)
+  const getCsraAssessmentsForPrisoner = (context, offenderNumber) =>
+    get(context, `/api/offender-assessments/csra/${offenderNumber}`)
+
+  const getCsraReviewForBooking = (context, bookingId, assessmentSeq) =>
+    get(context, `/api/offender-assessments/csra/${bookingId}/assessment/${assessmentSeq}`)
 
   const getEstablishmentRollBlocksCount = (context, agencyId, unassigned) =>
     get(context, `/api/movements/rollcount/${agencyId}?unassigned=${unassigned}`)
@@ -173,7 +176,7 @@ const prisonApiFactory = client => {
     get(context, `/api/bookings/${bookingId}/iepSummary?withDetails=${withDetails}`)
 
   const getDetails = (context, offenderNo, fullInfo = false) =>
-    get(context, `/api/bookings/offenderNo/${offenderNo}?fullInfo=${fullInfo}`)
+    get(context, `/api/bookings/offenderNo/${offenderNo}?fullInfo=${fullInfo}&csraSummary=${fullInfo}`)
 
   const getOffendersCurrentlyOutOfLivingUnit = (context, livingUnitId) =>
     get(context, `/api/movements/livingUnit/${livingUnitId}/currently-out`)
@@ -331,6 +334,8 @@ const prisonApiFactory = client => {
 
   const getCellAttributes = context => get(context, '/api/reference-domains/domains/HOU_UNIT_ATT', 1000)
 
+  const getCellMoveReasonTypes = context => get(context, '/api/reference-domains/domains/CHG_HOUS_RSN', 1000)
+
   const getSentenceAdjustments = (context, bookingId) => get(context, `/api/bookings/${bookingId}/sentenceAdjustments`)
 
   const getCourtCases = (context, bookingId) => get(context, `/api/bookings/${bookingId}/court-cases`)
@@ -367,6 +372,8 @@ const prisonApiFactory = client => {
 
   const getHistoryForLocation = (context, { locationId, fromDate, toDate }) =>
     get(context, `/api/cell/${locationId}/history?fromDate=${fromDate}&toDate=${toDate}`)
+
+  const getHistoryByDate = (context, { assignmentDate }) => get(context, `/api/cell/history/${assignmentDate}`)
 
   const moveToCellSwap = (context, { bookingId }) => put(context, `/api/bookings/${bookingId}/move-to-cell-swap`, {})
 
@@ -481,9 +488,11 @@ const prisonApiFactory = client => {
     getScheduledEventsForNextWeek,
     getNonAssociations,
     getCellAttributes,
+    getCellMoveReasonTypes,
     getCellsWithCapacity,
     getCsraAssessments,
     getCsraAssessmentsForPrisoner,
+    getCsraReviewForBooking,
     getOffenderCellHistory,
     getAttributesForLocation,
     getHistoryForLocation,
@@ -494,6 +503,7 @@ const prisonApiFactory = client => {
     getTransactionHistory,
     getPrisoners,
     getUserDetailsList,
+    getHistoryByDate,
   }
 }
 

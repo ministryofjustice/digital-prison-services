@@ -184,7 +184,7 @@ const stubHealth = (status = 200) =>
   stubFor({
     request: {
       method: 'GET',
-      url: '/auth/health/ping',
+      urlPath: '/auth/health/ping',
     },
     response: {
       status,
