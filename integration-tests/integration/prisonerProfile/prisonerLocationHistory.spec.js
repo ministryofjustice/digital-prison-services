@@ -99,20 +99,38 @@ context('Prisoner location history', () => {
         response: { firstName: 'Joe', lastName: 'Bloggss' },
       })
 
-      const caseNotesTypes = [
+      cy.task('stubCellMoveTypes', [
         {
-          code: 'MOVED_CELL',
-          subCodes: [
-            { code: 'ADM', description: 'Administrative' },
-            { code: 'BEH', description: 'Behaviour' },
-            { code: 'CLA', description: 'Classification or re-classification' },
-            { code: 'CON', description: 'Conflict with other prisoners' },
-            { code: 'LN', description: 'Local needs' },
-            { code: 'VP', description: 'Vulnerable prisoner' },
-          ],
+          code: 'ADM', 
+          activeFlag: 'Y',
+          description: 'Administrative',
         },
-      ]
-      cy.task('stubCaseNoteTypes', caseNotesTypes)
+        {
+          code: 'BEH', 
+          activeFlag: 'Y',
+          description: 'Behaviour',
+        },
+        {
+          code: 'CLA', 
+          activeFlag: 'N',
+          description: 'Classification or re-classification',
+        },
+        {
+          code: 'CON', 
+          activeFlag: 'N',
+          description: 'Conflict with other prisoners',
+        },
+        {
+          code: 'LN', 
+          activeFlag: 'N',
+          description: 'Local needs',
+        },
+        {
+          code: 'VP', 
+          activeFlag: 'Y',
+          description: 'Vulnerable prisoner',
+        },
+      ])
     })
 
     it('should load and display the correct data', () => {

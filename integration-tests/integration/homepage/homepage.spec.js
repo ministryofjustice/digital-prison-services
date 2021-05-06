@@ -112,6 +112,14 @@ context('Homepage', () => {
       page.managePrisonerWhereabouts().should('exist')
     })
 
+    it('should show change someones cell task', () => {
+      cy.task('stubUserMeRoles', [{ roleCode: 'CELL_MOVE' }])
+
+      const page = homepagePage.goTo()
+
+      page.changeSomeonesCell().should('exist')
+    })
+
     it('should show pathfinder', () => {
       cy.task('stubUserMeRoles', [{ roleCode: 'PF_STD_PRISON' }])
 
@@ -129,7 +137,7 @@ context('Homepage', () => {
     })
 
     it('should show manage key workers', () => {
-      cy.task('stubUserMeRoles', [{ roleCode: 'OMIC_ADMIN' }])
+      cy.task('stubUserMeRoles', [{ roleCode: 'OMIC_ADMIN' }, { roleCode: 'KW_MIGRATION' }])
 
       const page = homepagePage.goTo()
 

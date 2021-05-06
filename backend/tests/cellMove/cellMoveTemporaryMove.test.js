@@ -117,7 +117,7 @@ describe('Move someone temporarily out of a cell', () => {
               name: 'Smith, John',
               offenderNo: 'A1234BC',
               cellHistoryUrl: `/prisoner/A1234BC/cell-history`,
-              cellMoveUrl: `/prisoner/A1234BC/cell-move/confirm-cell-move`,
+              cellMoveUrl: `/prisoner/A1234BC/cell-move/confirm-cell-move?cellId=C-SWAP`,
             },
             {
               age: 30,
@@ -134,7 +134,7 @@ describe('Move someone temporarily out of a cell', () => {
               name: 'Smith, Steve',
               offenderNo: 'B4567CD',
               cellHistoryUrl: `/prisoner/B4567CD/cell-history`,
-              cellMoveUrl: `/prisoner/B4567CD/cell-move/confirm-cell-move`,
+              cellMoveUrl: `/prisoner/B4567CD/cell-move/confirm-cell-move?cellId=C-SWAP`,
             },
           ],
           totalOffenders: 2,

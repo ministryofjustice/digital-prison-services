@@ -45,6 +45,7 @@ describe('Prisoner search', () => {
         {
           ...res.locals,
           requestHeaders: expect.objectContaining({
+            'Page-Limit': '5000',
             'Sort-Fields': 'lastName,firstName',
             'Sort-Order': 'ASC',
           }),
@@ -123,8 +124,8 @@ describe('Prisoner search', () => {
               lastName: 'SMITH',
               name: 'Smith, John',
               offenderNo: 'A1234BC',
-              cellHistoryUrl: `/prisoner/A1234BC/cell-history`,
-              cellSearchUrl: `/prisoner/A1234BC/cell-move/search-for-cell`,
+              cellHistoryUrl: '/prisoner/A1234BC/cell-history',
+              cellSearchUrl: '/prisoner/A1234BC/cell-move/search-for-cell?returnUrl=/change-someones-cell',
             },
             {
               age: 30,
@@ -141,8 +142,8 @@ describe('Prisoner search', () => {
               lastName: 'SMITH',
               name: 'Smith, Steve',
               offenderNo: 'B4567CD',
-              cellHistoryUrl: `/prisoner/B4567CD/cell-history`,
-              cellSearchUrl: `/prisoner/B4567CD/cell-move/search-for-cell`,
+              cellHistoryUrl: '/prisoner/B4567CD/cell-history',
+              cellSearchUrl: '/prisoner/B4567CD/cell-move/search-for-cell?returnUrl=/change-someones-cell',
             },
           ],
           totalOffenders: 2,

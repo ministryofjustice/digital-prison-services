@@ -435,11 +435,12 @@ module.exports = on => {
     stubStaffRoles: response => prisonApi.stubStaffRoles(response),
     stubLocationConfig: ({ agencyId, response }) => whereabouts.stubLocationConfig({ agencyId, response }),
     stubGetDetailsFailure: ({ status }) => prisonApi.stubGetDetailsFailure(status),
-    stubGetPrisoners: response => Promise.all([prisonApi.stubGetPrisoners(response)]),
+    stubGetPrisoners: response => prisonApi.stubGetPrisoners(response),
     stubGetUserDetailsList: response => Promise.all([prisonApi.stubGetUserDetailsList(response)]),
     stubGetComplexOffenders: offenders => complexity.stubGetComplexOffenders(offenders),
     stubCellMoveHistory: ({ assignmentDate, cellMoves }) =>
       prisonApi.stubCellMoveHistory({ assignmentDate, cellMoves }),
+    stubCellMoveTypes: types => prisonApi.stubCellMoveTypes(types),
     stubKeyworkerMigrated: () => keyworker.stubKeyworkerMigrated(),
   })
 }

@@ -334,6 +334,8 @@ const prisonApiFactory = client => {
 
   const getCellAttributes = context => get(context, '/api/reference-domains/domains/HOU_UNIT_ATT', 1000)
 
+  const getCellMoveReasonTypes = context => get(context, '/api/reference-domains/domains/CHG_HOUS_RSN', 1000)
+
   const getSentenceAdjustments = (context, bookingId) => get(context, `/api/bookings/${bookingId}/sentenceAdjustments`)
 
   const getCourtCases = (context, bookingId) => get(context, `/api/bookings/${bookingId}/court-cases`)
@@ -486,6 +488,7 @@ const prisonApiFactory = client => {
     getScheduledEventsForNextWeek,
     getNonAssociations,
     getCellAttributes,
+    getCellMoveReasonTypes,
     getCellsWithCapacity,
     getCsraAssessments,
     getCsraAssessmentsForPrisoner,

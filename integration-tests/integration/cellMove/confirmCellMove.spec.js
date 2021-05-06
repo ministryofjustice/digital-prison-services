@@ -29,10 +29,16 @@ context('A user can confirm the cell move', () => {
     cy.task('stubAttributesForLocation', {
       capacity: 2,
     })
-    cy.task('stubCaseNoteTypes', [
+    cy.task('stubCellMoveTypes', [
       {
-        code: 'MOVED_CELL',
-        subCodes: [{ code: 'ADM', description: 'Administrative' }, { code: 'BEH', description: 'Behaviour' }],
+        code: 'ADM', 
+        activeFlag: 'Y',
+        description: 'Administrative',
+      },
+      {
+        code: 'BEH', 
+        activeFlag: 'Y',
+        description: 'Behaviour',
       },
     ])
   })

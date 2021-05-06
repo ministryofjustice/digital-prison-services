@@ -24,6 +24,7 @@ module.exports = ({ prisonApi }) => async (req, res) => {
   const context = {
     ...res.locals,
     requestHeaders: {
+      'Page-Limit': '5000',
       'Sort-Fields': 'lastName,firstName',
       'Sort-Order': 'ASC',
     },
@@ -46,7 +47,7 @@ module.exports = ({ prisonApi }) => async (req, res) => {
         )
       ),
       cellHistoryUrl: `/prisoner/${prisoner.offenderNo}/cell-history`,
-      cellSearchUrl: `/prisoner/${prisoner.offenderNo}/cell-move/search-for-cell`,
+      cellSearchUrl: `/prisoner/${prisoner.offenderNo}/cell-move/search-for-cell?returnUrl=/change-someones-cell`,
     }))
 
   return res.render('cellMove/cellMovePrisonerSearch.njk', {

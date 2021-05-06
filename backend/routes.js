@@ -48,10 +48,12 @@ const { notifyClient } = require('./shared/notifyClient')
 const { raiseAnalyticsEvent } = require('./raiseAnalyticsEvent')
 const whereaboutsHomepageController = require('./controllers/whereabouts/whereaboutsHomepage')
 const cellMoveHomepageController = require('./controllers/cellMove/cellMoveHomepage')
-const recentCellMoves = require('./controllers/recentCellMoves')
+const recentCellMoves = require('./controllers/cellMove/recentCellMoves')
+const cellMoveHistory = require('./controllers/cellMove/cellMoveHistory')
 const cellMovePrisonerSearch = require('./controllers/cellMove/cellMovePrisonerSearch')
 const cellMoveViewResidentialLocation = require('./controllers/cellMove/cellMoveViewResidentialLocation')
 const cellMoveTemporaryMove = require('./controllers/cellMove/cellMoveTemporaryMove')
+const backToStart = require('./controllers/backToStart')
 
 const router = express.Router()
 
@@ -248,6 +250,12 @@ const setup = ({
     cellMoveViewResidentialLocation({ prisonApi, whereaboutsApi })
   )
   router.get('/change-someones-cell/temporary-move', cellMoveTemporaryMove({ prisonApi }))
+  router.get(
+    '/change-someones-cell/recent-cell-moves/history',
+    cellMoveHistory({ prisonApi, caseNotesApi, whereaboutsApi })
+  )
+
+  router.get('/back-to-start', backToStart())
 
   return router
 }
