@@ -472,12 +472,12 @@ describe('Cell move history', () => {
           expect.objectContaining({
             historyByDate: [
               expect.objectContaining({
-                movedTo: 'H-1-3',
-                time: '10:10',
-              }),
-              expect.objectContaining({
                 movedTo: 'H-1-2',
                 time: '20:10',
+              }),
+              expect.objectContaining({
+                movedTo: 'H-1-3',
+                time: '10:10',
               }),
             ],
           })

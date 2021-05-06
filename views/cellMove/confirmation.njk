@@ -2,27 +2,11 @@
 {% from "govuk/components/button/macro.njk" import govukButton %}
 {% from "govuk/components/panel/macro.njk" import govukPanel %}
 
-{% block beforeContent %}
-    {{ govukBreadcrumbs({
-        items: [
-            {
-                text: "Home",
-                href: "/"
-            },
-            {
-                text: breadcrumbPrisonerName,
-                href: '/prisoner/' + offenderNo
-            },
-            {
-                text: 'Change Cell'
-            }
-        ]
-    }) }}
-{% endblock %}
+{% set title = 'The prisoner’s cell has been changed' %}
 
 {% block content %}
     {{ govukPanel({
-        titleText: title,
+        titleText: confirmationMessage,
         classes: "govuk-!-margin-bottom-6"
     }) }}
 
@@ -33,15 +17,11 @@
     </p>
 
     {{ govukButton({
-        text: "Return to prisoner’s profile",
+        text: 'Finish',
         element: 'a',
-        href: prisonerProfileLink,
+        href: '/back-to-start',
         attributes: {
-            'data-test': 'back-to-profile'
+            'data-test': 'back-to-start'
         }
     }) }}
-
-    <p class="govuk-body">
-        <a class="govuk-link" href="{{ prisonerSearchLink }}" data-test="back-to-search">Select another prisoner</a>
-    </p>
 {% endblock %}

@@ -18,8 +18,8 @@ const sortByMostEarliestFirst = (left, right) => {
   const leftDate = moment(left.assignmentDateTime, dateTimeFormat)
   const rightDate = moment(right.assignmentDateTime, dateTimeFormat)
 
-  if (leftDate.isAfter(rightDate, 'minute')) return 1
-  if (leftDate.isBefore(rightDate, 'minute')) return -1
+  if (leftDate.isAfter(rightDate, 'minute')) return -1
+  if (leftDate.isBefore(rightDate, 'minute')) return 1
 
   return 0
 }
