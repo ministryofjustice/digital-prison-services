@@ -2,5 +2,5 @@
   "low": true,
   "package-manager": "auto",
   "registry": "https://registry.npmjs.org",
-  "advisories": [961]
+  "allowlist": [1677]
 }
