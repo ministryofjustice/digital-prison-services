@@ -33,7 +33,7 @@ describe('Homepage', () => {
           {
             description: 'View all appointments in your establishment.',
             heading: 'View all appointments',
-            href: '/appointments',
+            href: '/view-all-appointments',
             id: 'view-all-appointments',
           },
           {

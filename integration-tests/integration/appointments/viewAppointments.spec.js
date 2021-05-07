@@ -115,7 +115,7 @@ context('A user can view list of appointments', () => {
   })
 
   it('A user can see appointments for the date and period', () => {
-    cy.visit('/appointments')
+    cy.visit('/view-all-appointments')
     const viewAppointmentsPage = ViewAppointmentsPage.verifyOnPage()
     viewAppointmentsPage.noResultsMessage().should('not.exist')
 
@@ -176,7 +176,7 @@ context('A user can view list of appointments', () => {
     cy.task('stubAppointmentsGet')
     cy.task('stubVideoLinkAppointments')
 
-    cy.visit('/appointments')
+    cy.visit('/view-all-appointments')
     const viewAppointmentsPage = ViewAppointmentsPage.verifyOnPage()
     viewAppointmentsPage.noResultsMessage().should('be.visible')
   })
