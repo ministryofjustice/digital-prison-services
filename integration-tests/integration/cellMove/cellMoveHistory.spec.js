@@ -17,6 +17,7 @@ context('Cell move history', () => {
   beforeEach(() => {
     cy.task('stubCellMoveHistory', {
       assignmentDate: '2021-04-30',
+      agencyId: 'MDI',
       cellMoves: [
         {
           bookingId: -34,

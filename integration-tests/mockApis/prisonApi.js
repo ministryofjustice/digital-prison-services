@@ -1874,11 +1874,11 @@ module.exports = {
       },
     })
   },
-  stubCellMoveHistory: ({ assignmentDate, cellMoves }) =>
+  stubCellMoveHistory: ({ assignmentDate, agencyId, cellMoves }) =>
     stubFor({
       request: {
         method: 'GET',
-        urlPath: `/api/cell/history/${assignmentDate}`,
+        urlPath: `/api/cell/${agencyId}/history/${assignmentDate}`,
       },
       response: {
         status: 200,
