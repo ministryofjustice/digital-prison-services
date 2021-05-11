@@ -81,7 +81,7 @@ module.exports = ({ prisonApi, whereaboutsApi }) => async (req, res) => {
       prisonApi
         .getOffenderCellHistory(res.locals, bookingId, {
           page: 0,
-          size: 10000,
+          size: 20,
         })
         .then(result => result.content.flatMap(history => history))
         .catch(error => {
