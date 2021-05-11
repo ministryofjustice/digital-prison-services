@@ -438,8 +438,8 @@ module.exports = on => {
     stubGetPrisoners: response => prisonApi.stubGetPrisoners(response),
     stubGetUserDetailsList: response => Promise.all([prisonApi.stubGetUserDetailsList(response)]),
     stubGetComplexOffenders: offenders => complexity.stubGetComplexOffenders(offenders),
-    stubCellMoveHistory: ({ assignmentDate, cellMoves }) =>
-      prisonApi.stubCellMoveHistory({ assignmentDate, cellMoves }),
+    stubCellMoveHistory: ({ assignmentDate, agencyId, cellMoves }) =>
+      prisonApi.stubCellMoveHistory({ assignmentDate, agencyId, cellMoves }),
     stubCellMoveTypes: types => prisonApi.stubCellMoveTypes(types),
     stubKeyworkerMigrated: () => keyworker.stubKeyworkerMigrated(),
   })

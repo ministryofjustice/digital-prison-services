@@ -17,6 +17,7 @@ module.exports = ({ prisonApi }) => async (req, res) => {
     lastSevenDays.map(date =>
       prisonApi.getHistoryByDate(res.locals, {
         assignmentDate: date,
+        agencyId: activeCaseLoad.caseLoadId,
       })
     )
   )).reduce(mergeArrays, [])
@@ -24,7 +25,7 @@ module.exports = ({ prisonApi }) => async (req, res) => {
   const stats = lastSevenDays.map(date => ({
     date,
     dateDisplay: moment(date, 'YYYY-MM-DD').format('dddd D MMMM YYYY'),
-    count: cellMoves.filter(move => move.assignmentDate === date && move.agencyId === activeCaseLoad.caseLoadId).length,
+    count: cellMoves.filter(move => move.assignmentDate === date).length,
   }))
 
   return res.render('changeSomeonesCell/recentCellMoves.njk', {

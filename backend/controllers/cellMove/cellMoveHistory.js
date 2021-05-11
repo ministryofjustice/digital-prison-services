@@ -52,9 +52,9 @@ module.exports = ({ prisonApi, whereaboutsApi }) => async (req, res) => {
 
   const cellMoveHistory = (await prisonApi.getHistoryByDate(res.locals, {
     assignmentDate: date,
+    agencyId: activeCaseLoad.caseLoadId,
   })).filter(
     item =>
-      item.agencyId === activeCaseLoad.caseLoadId &&
       (!filterByLocationPrefix || matchesLocationPrefix(item.description, filterByLocationPrefix)) &&
       (!reason || item.assignmentReason === reason)
   )
