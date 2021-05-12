@@ -245,6 +245,22 @@ describe('Cell move history', () => {
       )
     })
 
+    it('should make a call for offender cell history limiting paged results by 20', async () => {
+      await controller(req, res)
+
+      expect(prisonApi.getOffenderCellHistory).toHaveBeenCalledWith(
+        {
+          user: {
+            activeCaseLoad: {
+              caseLoadId: 'MDI',
+            },
+          },
+        },
+        undefined,
+        { page: 0, size: 20 }
+      )
+    })
+
     describe('Filtering', () => {
       beforeEach(() => {
         prisonApi.getHistoryByDate = jest.fn().mockResolvedValue([
