@@ -79,13 +79,34 @@ describe('Recent cell moves', () => {
 
     await controller(req, res)
 
-    expect(prisonApi.getHistoryByDate).toHaveBeenCalledWith(expect.anything(), { assignmentDate: '2020-02-07' })
-    expect(prisonApi.getHistoryByDate).toHaveBeenCalledWith(expect.anything(), { assignmentDate: '2020-02-06' })
-    expect(prisonApi.getHistoryByDate).toHaveBeenCalledWith(expect.anything(), { assignmentDate: '2020-02-05' })
-    expect(prisonApi.getHistoryByDate).toHaveBeenCalledWith(expect.anything(), { assignmentDate: '2020-02-04' })
-    expect(prisonApi.getHistoryByDate).toHaveBeenCalledWith(expect.anything(), { assignmentDate: '2020-02-03' })
-    expect(prisonApi.getHistoryByDate).toHaveBeenCalledWith(expect.anything(), { assignmentDate: '2020-02-02' })
-    expect(prisonApi.getHistoryByDate).toHaveBeenCalledWith(expect.anything(), { assignmentDate: '2020-02-01' })
+    expect(prisonApi.getHistoryByDate).toHaveBeenCalledWith(expect.anything(), {
+      assignmentDate: '2020-02-07',
+      agencyId: 'LEI',
+    })
+    expect(prisonApi.getHistoryByDate).toHaveBeenCalledWith(expect.anything(), {
+      assignmentDate: '2020-02-06',
+      agencyId: 'LEI',
+    })
+    expect(prisonApi.getHistoryByDate).toHaveBeenCalledWith(expect.anything(), {
+      assignmentDate: '2020-02-05',
+      agencyId: 'LEI',
+    })
+    expect(prisonApi.getHistoryByDate).toHaveBeenCalledWith(expect.anything(), {
+      assignmentDate: '2020-02-04',
+      agencyId: 'LEI',
+    })
+    expect(prisonApi.getHistoryByDate).toHaveBeenCalledWith(expect.anything(), {
+      assignmentDate: '2020-02-03',
+      agencyId: 'LEI',
+    })
+    expect(prisonApi.getHistoryByDate).toHaveBeenCalledWith(expect.anything(), {
+      assignmentDate: '2020-02-02',
+      agencyId: 'LEI',
+    })
+    expect(prisonApi.getHistoryByDate).toHaveBeenCalledWith(expect.anything(), {
+      assignmentDate: '2020-02-01',
+      agencyId: 'LEI',
+    })
   })
 
   it('should count all cell moves over the last 7 days, grouping by day', async () => {

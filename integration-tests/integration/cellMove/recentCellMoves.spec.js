@@ -60,6 +60,7 @@ context('7 day cell move history page', () => {
     lastSevenDays.forEach(assignmentDate =>
       cy.task('stubCellMoveHistory', {
         assignmentDate,
+        agencyId: 'MDI',
         cellMoves: dataSets[assignmentDate] || [],
       })
     )

@@ -43,7 +43,10 @@ describe('Cell move history', () => {
   it('should make a request for cell move for the date passed in', async () => {
     await controller(req, res)
 
-    expect(prisonApi.getHistoryByDate).toHaveBeenCalledWith(expect.anything(), { assignmentDate: '2020-10-12' })
+    expect(prisonApi.getHistoryByDate).toHaveBeenCalledWith(expect.anything(), {
+      assignmentDate: '2020-10-12',
+      agencyId: 'MDI',
+    })
   })
 
   it('should return the page header correctly formatted', async () => {
@@ -242,6 +245,22 @@ describe('Cell move history', () => {
       )
     })
 
+    it('should make a call for offender cell history limiting paged results by 20', async () => {
+      await controller(req, res)
+
+      expect(prisonApi.getOffenderCellHistory).toHaveBeenCalledWith(
+        {
+          user: {
+            activeCaseLoad: {
+              caseLoadId: 'MDI',
+            },
+          },
+        },
+        undefined,
+        { page: 0, size: 20 }
+      )
+    })
+
     describe('Filtering', () => {
       beforeEach(() => {
         prisonApi.getHistoryByDate = jest.fn().mockResolvedValue([
@@ -282,23 +301,6 @@ describe('Cell move history', () => {
             assignmentReason: 'BEH',
           },
         ])
-      })
-      it('should only show cell moves for the current case load', async () => {
-        await controller(req, res)
-
-        expect(res.render).toHaveBeenCalledWith(
-          'changeSomeonesCell/cellMoveHistory.njk',
-          expect.objectContaining({
-            historyByDate: [
-              expect.objectContaining({
-                movedTo: '1-2-3',
-              }),
-              expect.objectContaining({
-                movedTo: '2-2-3',
-              }),
-            ],
-          })
-        )
       })
 
       it('should filter by location', async () => {
