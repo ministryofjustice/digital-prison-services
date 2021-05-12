@@ -64,13 +64,16 @@ const BatchLink = styled(Link)`
 `
 
 export const PrintLink = styled(Link)`
-  font-size: ${FONT_SIZE.SIZE_22};
+  font-size: ${FONT_SIZE.SIZE_16};
   color: ${LINK_COLOUR};
   cursor: pointer;
-  display: inline-block;
-  margin-top: 20px;
   text-decoration: underline;
-  text-align: left;
+  display: inline-block;
+  margin: 0 0 15px -10px;
+  position: relative;
+  padding: 0.5em 0 0.5em 38px;
+  background: url('/images/Printer_icon.png') no-repeat 10px 50%;
+  background-size: 16px 18px;
 
   &:hover {
     color: ${LINK_HOVER_COLOUR};
@@ -81,6 +84,10 @@ const HideForPrint = styled.span`
   @media print {
     display: none;
   }
+`
+
+const TitleLinkContainer = styled('div')`
+  margin: -15px 0 15px;
 `
 
 class ResultsActivity extends Component {
@@ -162,7 +169,7 @@ class ResultsActivity extends Component {
     const activityHubUser = userRoles.includes('ACTIVITY_HUB')
 
     const periodSelect = (
-      <div className="pure-u-md-1-6">
+      <div>
         <label className="form-label" htmlFor="period-select">
           Choose period
         </label>
@@ -188,20 +195,11 @@ class ResultsActivity extends Component {
     )
 
     const buttons = (
-      <div id="buttons" className="pure-u-md-12-12 padding-bottom">
+      <div id="buttons" className="pull-right">
         {isWithinNextTwoWorkingDays(date) && (
-          <div className="printButton">
-            <button id="printButton" className="button" type="button" onClick={() => handlePrint()}>
-              <img
-                className="print-icon"
-                src="/images/Printer_icon_white.png"
-                height="23"
-                width="20"
-                alt="Print icon"
-              />{' '}
-              Print list
-            </button>
-          </div>
+          <PrintLink onClick={() => handlePrint()} id="printButton">
+            Print this page
+          </PrintLink>
         )}
         {isWithinNextTwoWorkingDays(date) &&
           isAfterToday(date) && (
@@ -307,8 +305,8 @@ class ResultsActivity extends Component {
             sortColumn={orderField}
           />
         </th>
-        <th className="straight width10">Prison&nbsp;no.</th>
-        <th className={`straight width10 ${redactedHide}`}>Info</th>
+        <th className="straight width10">Prison numbers</th>
+        <th className={`straight width10 ${redactedHide}`}>Relevant alerts</th>
         <th className="straight width20">
           <SortableColumn
             heading="Activity"
@@ -474,22 +472,46 @@ class ResultsActivity extends Component {
         <span className="whereabouts-date print-only">
           {getLongDateFormat(date)} - {period}
         </span>
-        <hr className="print-only" />
-        <form className="no-print">
-          <div>
-            <div className="pure-u-md-1-6 padding-right">
-              <WhereaboutsDatePicker handleDateChange={e => onListCriteriaChange({ dateValue: e })} date={date} />
-            </div>
-            {periodSelect}
+
+        <TitleLinkContainer className="horizontal-information govuk-!-display-none-print">
+          <div className="horizontal-information__item">
+            <a href="/manage-prisoner-whereabouts/select-location" className="govuk-link">
+              Select another activity or appointment location
+            </a>
           </div>
-          <hr />
-          <div className="margin-bottom">
-            <Link as={RouterLink} {...linkOnClick(reloadPage)}>
-              Reload page
+          <div className="horizontal-information__item">{buttons}</div>
+        </TitleLinkContainer>
+
+        <hr className="print-only" />
+
+        <div className="govuk-grid-row">
+          <div className="govuk-grid-column-three-quarters">
+            <form className="form-background govuk-!-padding-3 govuk-!-margin-bottom-5 govuk-!-display-none-print">
+              <h2 className="govuk-heading-m">View by</h2>
+              <div className="horizontal-form">
+                <WhereaboutsDatePicker
+                  handleDateChange={e => onListCriteriaChange({ dateValue: e })}
+                  date={date}
+                  marginBottom={0}
+                />
+
+                {periodSelect}
+              </div>
+            </form>
+          </div>
+          <div className="govuk-grid-column-one-quarter">
+            <StackedTotals>
+              <TotalResults label="Prisoners listed:" totalResults={this.totalOffenders.size} />
+              <HideForPrint>
+                <TotalResults label="Sessions attended:" totalResults={totalAttended} />
+              </HideForPrint>
+            </StackedTotals>
+
+            <Link as={RouterLink} {...linkOnClick(reloadPage)} className="pull-right govuk-!-display-none-print">
+              Check for updates to the list
             </Link>
           </div>
-          {buttons}
-        </form>
+        </div>
 
         <ManageResults>
           <div className="pure-u-md-1-4 margin-top-small">
@@ -500,13 +522,7 @@ class ResultsActivity extends Component {
               setColumnSort={setColumnSort}
             />
           </div>
-          <StackedTotals>
-            <TotalResults label="Prisoners listed:" totalResults={this.totalOffenders.size} />
-            <HideForPrint>
-              <TotalResults label="Sessions attended:" totalResults={totalAttended} />
-            </HideForPrint>
-            {activityHubUser && <BatchControls />}
-          </StackedTotals>
+          <StackedTotals>{activityHubUser && <BatchControls />}</StackedTotals>
         </ManageResults>
         <div className={getListSizeClass(offenders)}>
           <table className="row-gutters">

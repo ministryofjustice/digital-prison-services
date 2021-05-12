@@ -62,20 +62,25 @@ export const PrintButton = styled(Button)`
   }
 `
 
+const TitleLinkContainer = styled('div')`
+  margin: -15px 0 15px;
+`
+
 export const PrintLink = styled(Link)`
-  font-size: ${FONT_SIZE.SIZE_22};
+  font-size: ${FONT_SIZE.SIZE_16};
   color: ${LINK_COLOUR};
   cursor: pointer;
-  display: block;
   text-decoration: underline;
+  display: inline-block;
+  margin: 0 0 15px -10px;
+  position: relative;
+  padding: 0.5em 0 0.5em 38px;
+  background: url('/images/Printer_icon.png') no-repeat 10px 50%;
+  background-size: 16px 18px;
 
   &:hover {
     color: ${LINK_HOVER_COLOUR};
   }
-`
-
-const LargeLink = styled(Link)`
-  font-size: ${FONT_SIZE.SIZE_24};
 `
 
 class ResultsHouseblock extends Component {
@@ -142,7 +147,7 @@ class ResultsHouseblock extends Component {
     }
 
     const locationSelect = (
-      <div className="pure-u-md-1-3">
+      <div>
         <label className="form-label" htmlFor="housing-location-select">
           Select sub-location
         </label>
@@ -160,13 +165,13 @@ class ResultsHouseblock extends Component {
     )
 
     const dateSelect = (
-      <div className="pure-u-md-1-6 padding-left padding-right">
-        <WhereaboutsDatePicker handleDateChange={handleDateChange} date={date} />
+      <div>
+        <WhereaboutsDatePicker handleDateChange={handleDateChange} date={date} marginBottom={0} />
       </div>
     )
 
     const periodSelect = (
-      <div className="pure-u-md-1-6 padding-right">
+      <div>
         <label className="form-label" htmlFor="period-select">
           Choose period
         </label>
@@ -192,7 +197,7 @@ class ResultsHouseblock extends Component {
     )
 
     const stayingLeavingSelect = (
-      <div className="pure-u-md-1-6">
+      <div>
         <label className="form-label" htmlFor="period-select">
           Staying or leaving wing
         </label>
@@ -217,18 +222,20 @@ class ResultsHouseblock extends Component {
     )
 
     const printButton = (
-      <div id="buttons" className="buttons">
+      <div id="buttons" className="buttons pull-right">
         {isWithinNextTwoWorkingDays(date) && (
-          <PrintButton type="button" id="printButton" onClick={() => handlePrint()}>
-            <img className="print-icon" src="/images/Printer_icon_white.png" height="23" width="20" alt="Print icon" />
-            Print list
-          </PrintButton>
+          <PrintLink onClick={() => handlePrint()} id="printButton" data-test="print-button">
+            Print this page
+          </PrintLink>
         )}
         {isWithinNextTwoWorkingDays(date) &&
           isAfterToday(date) && (
-            <PrintLink onClick={() => handlePrint('redacted')} className="redactedPrintButton">
-              Print list for general view
-            </PrintLink>
+            <>
+              <br />
+              <PrintLink onClick={() => handlePrint('redacted')} className="redactedPrintButton">
+                Print list for general view
+              </PrintLink>
+            </>
           )}
       </div>
     )
@@ -255,8 +262,8 @@ class ResultsHouseblock extends Component {
             sortColumn={orderField}
           />
         </th>
-        <th className="straight width10">Prison&nbsp;no.</th>
-        <th className={`straight width10 ${redactedHide}`}>Info</th>
+        <th className="straight width10">Prison number</th>
+        <th className={`straight width10 ${redactedHide}`}>Relevant alerts</th>
         <th className="straight width20">
           <SortableColumn
             heading="Activities"
@@ -376,22 +383,44 @@ class ResultsHouseblock extends Component {
         <span className="whereabouts-date print-only">
           {getLongDateFormat(date)} - {period}
         </span>
+
+        <TitleLinkContainer className="horizontal-information govuk-!-display-none-print">
+          <div className="horizontal-information__item">
+            <a href="/manage-prisoner-whereabouts/select-residential-location" className="govuk-link">
+              Select another residential location
+            </a>
+          </div>
+          <div className="horizontal-information__item">{printButton}</div>
+        </TitleLinkContainer>
+
         <hr className="print-only" />
-        <form className="no-print">
-          <div>
-            {locationSelect}
-            {dateSelect}
-            {periodSelect}
-            {stayingLeavingSelect}
-            {printButton}
+
+        <div className="govuk-grid-row">
+          <div className="govuk-grid-column-three-quarters">
+            <form className="form-background govuk-!-padding-3 govuk-!-margin-bottom-5 govuk-!-display-none-print">
+              <h2 className="govuk-heading-m">View by</h2>
+              <div className="horizontal-form">
+                {locationSelect}
+                {dateSelect}
+                {periodSelect}
+                {stayingLeavingSelect}
+              </div>
+            </form>
           </div>
-          <hr />
-          <div className="margin-bottom">
-            <LargeLink as={RouterLink} {...linkOnClick(update)}>
-              Reload page
-            </LargeLink>
+          <div className="govuk-grid-column-one-quarter">
+            <StackedTotals>
+              <TotalResults label="Prisoners listed:" totalResults={houseblockData.length} />
+              <HideForPrint>
+                <TotalResults label="Sessions attended:" totalResults={totalAttended} />
+              </HideForPrint>
+            </StackedTotals>
+
+            <Link as={RouterLink} {...linkOnClick(update)} className="pull-right govuk-!-display-none-print">
+              Check for updates to the list
+            </Link>
           </div>
-        </form>
+        </div>
+
         <ManageResults>
           <div className="pure-u-md-1-4 margin-top-small">
             <SortLov
@@ -401,12 +430,6 @@ class ResultsHouseblock extends Component {
               setColumnSort={setColumnSort}
             />
           </div>
-          <StackedTotals>
-            <TotalResults label="Prisoners listed:" totalResults={houseblockData.length} />
-            <HideForPrint>
-              <TotalResults label="Sessions attended:" totalResults={totalAttended} />
-            </HideForPrint>
-          </StackedTotals>
         </ManageResults>
         <div className={getListSizeClass(offenders)}>
           <table className="row-gutters">

@@ -376,8 +376,7 @@ describe('Offender activity list results component', () => {
   it('should handle buttons correctly', async () => {
     const component = shallow(<ResultsActivity {...props} activityData={response} date={today} period="AM" />)
 
-    expect(component.find('.printButton > button').some('#printButton')).toEqual(true)
-    expect(component.find(PrintLink).length).toEqual(0)
+    expect(component.find(PrintLink).length).toEqual(2)
 
     component
       .find('#printButton')
@@ -388,19 +387,18 @@ describe('Offender activity list results component', () => {
 
   it('should recognise "Today"', async () => {
     const component = shallow(<ResultsActivity {...props} activityData={response} date="Today" period="AM" />)
-    // If today, print button is present
-    expect(component.find('.printButton > button').some('#printButton')).toEqual(true)
+    // If today, print links are present
+    expect(component.find(PrintLink).length).toEqual(2)
   })
 
-  it('should not display print button when date is in the past', async () => {
+  it('should not display print links when date is in the past', async () => {
     const oldDate = '25/05/2018'
     const component = shallow(<ResultsActivity {...props} activityData={response} date={oldDate} period="ED" />)
 
-    expect(component.find('#buttons > button').some('#printButton')).toEqual(false)
     expect(component.find(PrintLink).length).toEqual(0)
   })
 
-  it('should display print button when date is in the future', async () => {
+  it('should display print links when date is in the future', async () => {
     const futureDate = moment()
       .add(1, 'days')
       .format('DD/MM/YYYY')
@@ -408,8 +406,7 @@ describe('Offender activity list results component', () => {
       <ResultsActivity {...props} activityData={response} handleSearch={jest.fn()} date={futureDate} period="ED" />
     )
 
-    expect(component.find('.printButton > button').some('#printButton')).toEqual(true)
-    expect(component.find(PrintLink).length).toEqual(2)
+    expect(component.find(PrintLink).length).toEqual(4)
   })
 
   it('should not display "Print list for general view" links if date is today', () => {

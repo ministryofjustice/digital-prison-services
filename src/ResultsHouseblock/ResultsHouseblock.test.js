@@ -1,7 +1,7 @@
 import React from 'react'
 import { shallow } from 'enzyme'
 import moment from 'moment'
-import { ResultsHouseblock, PrintButton, PrintLink } from './ResultsHouseblock'
+import { ResultsHouseblock, PrintLink } from './ResultsHouseblock'
 import OtherActivitiesView from '../OtherActivityListView'
 
 const PRISON = 'LEI'
@@ -441,17 +441,16 @@ describe('Offender results component Jira NN-843', () => {
       />
     )
 
-    expect(component.find(PrintButton).length).toEqual(2)
-    expect(component.find(PrintLink).length).toEqual(0)
+    expect(component.find(PrintLink).length).toEqual(2)
 
     component
-      .find(PrintButton)
+      .find(PrintLink)
       .at(0)
       .simulate('click')
     expect(props.handlePrint).toHaveBeenCalled()
   })
 
-  it('should not display print button when date is in the past', async () => {
+  it('should not display print links when date is in the past', async () => {
     const oldDate = '25/05/2018'
     const component = shallow(
       <ResultsHouseblock
@@ -466,10 +465,10 @@ describe('Offender results component Jira NN-843', () => {
         offenderNo="1"
       />
     )
-    expect(component.find('#buttons > button').some('#printButton')).toEqual(false)
+    expect(component.find(PrintLink).length).toEqual(0)
   })
 
-  it('should display print button when date is in the future', async () => {
+  it('should display print links when date is in the future', async () => {
     const futureDate = moment()
       .add(1, 'days')
       .format('DD/MM/YYYY')
@@ -486,8 +485,7 @@ describe('Offender results component Jira NN-843', () => {
         offenderNo="1"
       />
     )
-    expect(component.find(PrintButton).length).toEqual(2)
-    expect(component.find(PrintLink).length).toEqual(2)
+    expect(component.find(PrintLink).length).toEqual(4)
   })
 
   it('should not display "Print list for general view" links if date is today', () => {
