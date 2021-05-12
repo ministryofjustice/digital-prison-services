@@ -17,10 +17,10 @@ class FormDatePicker extends Component {
   }
 
   renderInput(props) {
-    const { label, meta, placeholder, input } = this.props
+    const { label, meta, placeholder, input, marginBottom } = this.props
     return (
       <Label error={meta.error}>
-        <LabelText> {label} </LabelText>
+        <LabelText className="govuk-!-margin-bottom-1"> {label} </LabelText>
         {meta.touched && meta.error && <ErrorText>{meta.error}</ErrorText>}
         <Input
           {...props}
@@ -28,7 +28,8 @@ class FormDatePicker extends Component {
           error={meta.touched && meta.error}
           placeholder={placeholder}
           readOnly
-          mb={6}
+          mb={marginBottom}
+          style={{ height: '38px' }}
         />
       </Label>
     )
@@ -66,12 +67,14 @@ FormDatePicker.propTypes = {
     name: PropTypes.string.isRequired,
     value: PropTypes.oneOfType([PropTypes.string, PropTypes.instanceOf(moment)]),
   }).isRequired,
+  marginBottom: PropTypes.number,
 }
 
 FormDatePicker.defaultProps = {
   placeholder: '',
   label: '',
   meta: {},
+  marginBottom: 6,
 }
 
 export default FormDatePicker

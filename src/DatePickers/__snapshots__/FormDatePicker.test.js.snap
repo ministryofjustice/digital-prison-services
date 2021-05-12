@@ -9,7 +9,7 @@ exports[`Form date picker should render correctly 1`] = `
       className="sc-bwzfXH cukpBy"
     >
       <span
-        className="sc-bdVaJa jmnRGq"
+        className="sc-bdVaJa jmnRGq govuk-!-margin-bottom-1"
       >
          
         
@@ -28,6 +28,11 @@ exports[`Form date picker should render correctly 1`] = `
         onKeyDown={[Function]}
         placeholder="Select"
         readOnly={true}
+        style={
+          Object {
+            "height": "38px",
+          }
+        }
         type="text"
         value="2017-01-01T:21:00:00Z"
       />
