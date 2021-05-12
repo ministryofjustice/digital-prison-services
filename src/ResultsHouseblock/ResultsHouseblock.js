@@ -224,7 +224,7 @@ class ResultsHouseblock extends Component {
     const printButton = (
       <div id="buttons" className="buttons pull-right">
         {isWithinNextTwoWorkingDays(date) && (
-          <PrintLink onClick={() => handlePrint()} id="printButton">
+          <PrintLink onClick={() => handlePrint()} id="printButton" data-test="print-button">
             Print this page
           </PrintLink>
         )}
