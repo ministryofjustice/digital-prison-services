@@ -305,7 +305,7 @@ class ResultsActivity extends Component {
             sortColumn={orderField}
           />
         </th>
-        <th className="straight width10">Prison numbers</th>
+        <th className="straight width10">Prison number</th>
         <th className={`straight width10 ${redactedHide}`}>Relevant alerts</th>
         <th className="straight width20">
           <SortableColumn
