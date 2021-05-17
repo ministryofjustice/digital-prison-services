@@ -13,7 +13,7 @@ const viewAppointmentsPage = () =>
 export default {
   verifyOnPage: viewAppointmentsPage,
   goTo: () => {
-    cy.visit('/appointments')
+    cy.visit('/view-all-appointments')
     return viewAppointmentsPage()
   },
 }

@@ -169,7 +169,7 @@ const setup = ({
     prepostAppointmentRouter({ prisonApi, logError, oauthApi, whereaboutsApi, notifyClient, raiseAnalyticsEvent })
   )
 
-  router.use('/appointments', viewAppointmentsRouter({ prisonApi, whereaboutsApi, oauthApi, logError }))
+  router.use('/view-all-appointments', viewAppointmentsRouter({ prisonApi, whereaboutsApi, oauthApi, logError }))
 
   router.use('/offenders/:offenderNo/confirm-appointment', confirmAppointmentRouter({ prisonApi, logError }))
 

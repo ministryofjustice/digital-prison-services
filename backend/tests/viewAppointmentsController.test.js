@@ -29,18 +29,34 @@ describe('View appointments', () => {
     oauthApi.userDetails = jest.fn()
     prisonApi.getAppointmentTypes = jest.fn()
     prisonApi.getLocationsForAppointments = jest.fn()
-    prisonApi.getAppointmentsForAgency = jest.fn()
     prisonApi.getStaffDetails = jest.fn()
     prisonApi.getDetails = jest.fn()
 
     prisonApi.getAppointmentTypes.mockReturnValue([{ description: 'Video link booking', code: 'VLB' }])
     prisonApi.getLocationsForAppointments.mockReturnValue([{ userDescription: 'VCC Room 1', locationId: '1' }])
-    prisonApi.getAppointmentsForAgency.mockReturnValue([])
     prisonApi.getStaffDetails.mockResolvedValue([])
     prisonApi.getDetails.mockResolvedValue({})
 
+    whereaboutsApi.getAppointments = jest.fn()
     whereaboutsApi.getVideoLinkAppointments = jest.fn()
+    whereaboutsApi.searchGroups = jest.fn()
+    whereaboutsApi.getAgencyGroupLocationPrefix = jest.fn()
+
     whereaboutsApi.getVideoLinkAppointments.mockReturnValue({ appointments: [] })
+    whereaboutsApi.getAppointments.mockReturnValue([])
+    whereaboutsApi.searchGroups.mockReturnValue([
+      {
+        name: 'Houseblock 1',
+        key: 'H 1',
+      },
+      {
+        name: 'Houseblock 2',
+        key: 'H 2',
+      },
+    ])
+    whereaboutsApi.getAgencyGroupLocationPrefix = jest.fn().mockReturnValue({
+      locationPrefix: 'MDI-1-',
+    })
 
     oauthApi.userDetails.mockResolvedValue({
       name: 'Bob Doe',
@@ -63,9 +79,10 @@ describe('View appointments', () => {
 
       expect(prisonApi.getAppointmentTypes).toHaveBeenCalledWith(res.locals)
       expect(prisonApi.getLocationsForAppointments).toHaveBeenCalledWith(res.locals, activeCaseLoadId)
-      expect(prisonApi.getAppointmentsForAgency).toHaveBeenCalledWith(res.locals, {
-        agencyId: activeCaseLoadId,
+      expect(whereaboutsApi.getAppointments).toHaveBeenCalledWith(res.locals, 'MDI', {
         date: '2020-01-01',
+        locationId: undefined,
+        offenderLocationPrefix: 'MDI',
         timeSlot: 'AM',
       })
       expect(whereaboutsApi.getVideoLinkAppointments).toHaveBeenCalledWith(res.locals, [])
@@ -80,6 +97,16 @@ describe('View appointments', () => {
         date: '01/01/2020',
         formattedDate: '1 January 2020',
         locations: [{ text: 'VCC Room 1', value: '1' }],
+        residentialLocationOptions: [
+          {
+            text: 'Houseblock 1',
+            value: 'H 1',
+          },
+          {
+            text: 'Houseblock 2',
+            value: 'H 2',
+          },
+        ],
         timeSlot: 'AM',
         types: [{ text: 'Video link booking', value: 'VLB' }],
       })
@@ -90,8 +117,9 @@ describe('View appointments', () => {
 
       await controller(req, res)
 
-      expect(prisonApi.getAppointmentsForAgency).toHaveBeenCalledWith(
+      expect(whereaboutsApi.getAppointments).toHaveBeenCalledWith(
         res.locals,
+        'MDI',
         expect.objectContaining({
           timeSlot: 'PM',
         })
@@ -109,8 +137,9 @@ describe('View appointments', () => {
 
       await controller(req, res)
 
-      expect(prisonApi.getAppointmentsForAgency).toHaveBeenCalledWith(
+      expect(whereaboutsApi.getAppointments).toHaveBeenCalledWith(
         res.locals,
+        'MDI',
         expect.objectContaining({
           timeSlot: 'ED',
         })
@@ -126,7 +155,7 @@ describe('View appointments', () => {
 
   describe('when there are selected search parameters with results', () => {
     beforeEach(() => {
-      prisonApi.getAppointmentsForAgency.mockReturnValue([
+      whereaboutsApi.getAppointments.mockReturnValue([
         {
           id: 1,
           offenderNo: 'ABC123',
@@ -225,17 +254,20 @@ describe('View appointments', () => {
       req.query = {
         date: '02/01/2020',
         timeSlot: 'PM',
+        residentialLocation: 'H 1',
       }
     })
+
     it('should make the correct API calls', async () => {
       await controller(req, res)
 
-      expect(prisonApi.getAppointmentsForAgency).toHaveBeenCalledWith(res.locals, {
-        agencyId: activeCaseLoadId,
+      expect(whereaboutsApi.getAppointments).toHaveBeenCalledWith(res.locals, 'MDI', {
         date: '2020-01-02',
+        offenderLocationPrefix: 'MDI-1',
         timeSlot: 'PM',
       })
       expect(whereaboutsApi.getVideoLinkAppointments).toHaveBeenCalledWith(res.locals, [3, 4])
+      expect(whereaboutsApi.getAgencyGroupLocationPrefix).toHaveBeenCalledWith(res.locals, 'MDI', 'H 1')
       expect(prisonApi.getStaffDetails).toHaveBeenCalledTimes(3)
       expect(prisonApi.getDetails).toHaveBeenCalledTimes(4)
       expect(oauthApi.userDetails).toHaveBeenCalledTimes(1)
@@ -348,9 +380,9 @@ describe('View appointments', () => {
 
       await controller(req, res)
 
-      expect(prisonApi.getAppointmentsForAgency).toHaveBeenCalledWith(res.locals, {
-        agencyId: activeCaseLoadId,
+      expect(whereaboutsApi.getAppointments).toHaveBeenCalledWith(res.locals, 'MDI', {
         date: '2020-01-02',
+        offenderLocationPrefix: 'MDI-1',
       })
     })
   })

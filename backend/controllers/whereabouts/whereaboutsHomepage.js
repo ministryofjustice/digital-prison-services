@@ -19,7 +19,7 @@ const whereaboutsTasks = [
     id: 'view-all-appointments',
     heading: 'View all appointments',
     description: 'View all appointments in your establishment.',
-    href: '/appointments',
+    href: '/view-all-appointments',
     roles: null,
     enabled: true,
   },
