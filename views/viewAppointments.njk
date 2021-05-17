@@ -42,7 +42,6 @@
     <h2 class="govuk-heading-m">View by</h2>
 
     <form class="horizontal-form govuk-!-display-none-print">
-      <input type="hidden" name="_csrf" value="{{ csrfToken }}" />
       {{ datePicker({
         id: 'date',
         label: 'Date',
@@ -66,11 +65,24 @@
         errorMessage: errors | findError(timeSlot)
       }) }}
 
+       {{ govukSelect({
+        name: 'residentialLocation',
+        id: 'residentialLocation',
+        label: {
+            text: "Residential location"
+        },
+        items: residentialLocationOptions | addDefaultSelectedVale('All', true) | setSelected(residentialLocation),
+        errorMessage: errors | findError(residentialLocation)
+      }) }}
+
       {{ govukSelect({
         name: 'type',
         id: 'type',
         label: {
-            text: "Type"
+            text: "Appointment type"
+        },
+        formGroup: {
+            classes: 'govuk-!-width-one-quarter'
         },
         items: types | addDefaultSelectedVale('All', true) | setSelected(type),
         errorMessage: errors | findError(type)
@@ -82,6 +94,9 @@
         label: {
             text: "Appointment location"
         },
+        formGroup: {
+            classes: 'govuk-!-width-one-quarter'
+        },
         items: locations | addDefaultSelectedVale('All', true) | setSelected(locationId),
         errorMessage: errors | findError(locationId)
       }) }}
@@ -89,6 +104,7 @@
       {{ govukButton({
         text: "View",
         preventDoubleClick: true,
+        classes: 'govuk-!-margin-top-3',
         type: "submit"
       }) }}
     </form>
@@ -128,9 +144,6 @@
           attributes: {
             "aria-sort": "none"
           }
-        },
-        {
-          text: "Added by"
         }
       ],
       rows: appointmentRows,

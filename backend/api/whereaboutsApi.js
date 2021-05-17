@@ -1,3 +1,5 @@
+const { mapToQueryString } = require('../utils')
+
 const whereaboutsApiFactory = client => {
   const processResponse = () => response => response.body
 
@@ -96,6 +98,17 @@ const whereaboutsApiFactory = client => {
 
   const getWhereaboutsConfig = (context, agencyId) => get(context, `/agencies/${agencyId}/locations/whereabouts`)
 
+  const getAppointments = (context, agencyId, { date, locationId, offenderLocationPrefix, timeSlot }) => {
+    const searchParams = mapToQueryString({
+      date,
+      locationId,
+      offenderLocationPrefix,
+      timeSlot,
+    })
+
+    return get(context, `/appointments/${agencyId}?${searchParams}`)
+  }
+
   return {
     getAttendance,
     getAttendanceForBookings,
@@ -118,6 +131,7 @@ const whereaboutsApiFactory = client => {
     moveToCell,
     getCellMoveReason,
     getWhereaboutsConfig,
+    getAppointments,
   }
 }
 

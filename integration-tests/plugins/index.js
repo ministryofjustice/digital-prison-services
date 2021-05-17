@@ -442,5 +442,6 @@ module.exports = on => {
       prisonApi.stubCellMoveHistory({ assignmentDate, agencyId, cellMoves }),
     stubCellMoveTypes: types => prisonApi.stubCellMoveTypes(types),
     stubKeyworkerMigrated: () => keyworker.stubKeyworkerMigrated(),
+    stubGetWhereaboutsAppointments: appointments => whereabouts.stubGetWhereaboutsAppointments(appointments),
   })
 }

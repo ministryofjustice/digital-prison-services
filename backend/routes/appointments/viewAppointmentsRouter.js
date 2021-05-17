@@ -2,20 +2,35 @@ const moment = require('moment')
 const { serviceUnavailableMessage } = require('../../common-messages')
 const { getTime, properCaseName, formatName, getCurrentPeriod } = require('../../utils')
 
+const prisonApiLocationDescription = async (res, whereaboutsApi, locationKey, userCaseLoad) => {
+  const fullLocationPrefix = await whereaboutsApi.getAgencyGroupLocationPrefix(res.locals, userCaseLoad, locationKey)
+
+  if (fullLocationPrefix) {
+    const locationIdWithSuffix = fullLocationPrefix.locationPrefix
+    return locationIdWithSuffix?.length < 1 ? '' : locationIdWithSuffix.slice(0, -1)
+  }
+  return `${userCaseLoad}-${locationKey}`
+}
+
 module.exports = ({ prisonApi, whereaboutsApi, oauthApi, logError }) => async (req, res) => {
-  const { date, timeSlot = getCurrentPeriod(), type, locationId } = req.query
+  const { date, timeSlot = getCurrentPeriod(), type, locationId, residentialLocation } = req.query
   const searchDate = date ? moment(date, 'DD/MM/YYYY').format('YYYY-MM-DD') : moment().format('YYYY-MM-DD')
   const agencyId = req.session.userDetails.activeCaseLoadId
 
-  const [appointmentTypes, appointmentLocations, appointments] = await Promise.all([
+  const locationDesc = residentialLocation
+    ? await prisonApiLocationDescription(res, whereaboutsApi, residentialLocation, agencyId)
+    : agencyId
+
+  const [appointmentTypes, appointmentLocations, appointments, residentialLocations] = await Promise.all([
     prisonApi.getAppointmentTypes(res.locals),
     prisonApi.getLocationsForAppointments(res.locals, agencyId),
-    prisonApi.getAppointmentsForAgency(res.locals, {
-      agencyId,
+    whereaboutsApi.getAppointments(res.locals, agencyId, {
       date: searchDate,
       timeSlot: timeSlot !== 'All' ? timeSlot : undefined,
       locationId,
+      offenderLocationPrefix: locationDesc,
     }),
+    whereaboutsApi.searchGroups(res.locals, agencyId),
   ])
 
   const videoLinkAppointmentIds = appointments
@@ -130,6 +145,8 @@ module.exports = ({ prisonApi, whereaboutsApi, oauthApi, logError }) => async (r
     type,
     appointmentRows,
     locationId: locationId && Number(locationId),
+    residentialLocation,
+    residentialLocationOptions: residentialLocations.map(location => ({ text: location.name, value: location.key })),
     date: moment(searchDate).format('DD/MM/YYYY'),
     formattedDate: moment(searchDate).format('D MMMM YYYY'),
   })

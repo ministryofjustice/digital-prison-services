@@ -15,8 +15,8 @@ context('A user can view list of appointments', () => {
     ])
     cy.task('stubAgencyDetails', { agencyId: 'MDI', details: {} })
     cy.task('stubUserEmail', 'ITAG_USER')
-
-    cy.task('stubAppointmentsGet', [
+    cy.task('stubGroups', { id: 'MDI' })
+    cy.task('stubGetWhereaboutsAppointments', [
       {
         id: 1,
         offenderNo: 'ABC123',
@@ -173,7 +173,7 @@ context('A user can view list of appointments', () => {
 
   it('A user is presented with the no data message when no data', () => {
     cy.task('stubAppointmentsAtAgency', 'MDI', [])
-    cy.task('stubAppointmentsGet')
+    cy.task('stubGetWhereaboutsAppointments')
     cy.task('stubVideoLinkAppointments')
 
     cy.visit('/view-all-appointments')

@@ -399,4 +399,19 @@ module.exports = {
         jsonBody: attendances || {},
       },
     }),
+  stubGetWhereaboutsAppointments: (appointments, status = 200) => {
+    return stubFor({
+      request: {
+        method: 'GET',
+        urlPattern: '/whereabouts/appointments/[A-Z].+?',
+      },
+      response: {
+        status,
+        headers: {
+          'Content-Type': 'application/json;charset=UTF-8',
+        },
+        jsonBody: appointments || [],
+      },
+    })
+  },
 }
