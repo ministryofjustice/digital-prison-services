@@ -54,6 +54,7 @@ const cellMovePrisonerSearch = require('./controllers/cellMove/cellMovePrisonerS
 const cellMoveViewResidentialLocation = require('./controllers/cellMove/cellMoveViewResidentialLocation')
 const cellMoveTemporaryMove = require('./controllers/cellMove/cellMoveTemporaryMove')
 const backToStart = require('./controllers/backToStart')
+const permit = require('./controllers/permit')
 
 const router = express.Router()
 
@@ -243,7 +244,7 @@ const setup = ({
   router.get('/manage-prisoner-whereabouts/select-location', selectActivityLocation({ prisonApi }).index)
   router.post('/manage-prisoner-whereabouts/select-location', selectActivityLocation({ prisonApi }).post)
 
-  router.get('/change-someones-cell/recent-cell-moves', recentCellMoves({ prisonApi }))
+  router.get('/change-someones-cell/recent-cell-moves', permit(oauthApi, ['CELL_MOVE']), recentCellMoves({ prisonApi }))
   router.get('/change-someones-cell/prisoner-search', cellMovePrisonerSearch({ prisonApi }))
   router.get(
     '/change-someones-cell/view-residential-location',
