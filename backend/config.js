@@ -140,6 +140,9 @@ module.exports = {
       BWI: {
         omu: process.env.BERWYN_OMU_EMAIL,
       },
+      NMI: {
+        omu: process.env.NOTTINGHAM_OMU_EMAIL,
+      },
     },
   },
 
