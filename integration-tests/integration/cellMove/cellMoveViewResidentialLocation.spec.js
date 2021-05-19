@@ -36,7 +36,7 @@ context('Cell move view residential location', () => {
   before(() => {
     cy.clearCookies()
     cy.task('resetAndStubTokenVerification')
-    cy.task('stubLogin', { username: 'ITAG_USER', caseload: 'MDI' })
+    cy.task('stubLogin', { username: 'ITAG_USER', caseload: 'MDI', roles: [{ roleCode: 'CELL_MOVE' }] })
     cy.login()
   })
 
@@ -52,12 +52,16 @@ context('Cell move view residential location', () => {
     it('should display the search box with the expected data only', () => {
       cy.visit(`/change-someones-cell/view-residential-location`)
 
-      cy.get('[data-test="prisoner-search-form"]').should('be.visible').within(($form) => {
-        cy.get('[data-test="prisoner-search-location"]').children('option').then(options => {
-          const actual = [...options].map(o => o.value)
-          expect(actual).to.deep.eq(['SELECT', '1', '2', '3'])
+      cy.get('[data-test="prisoner-search-form"]')
+        .should('be.visible')
+        .within(() => {
+          cy.get('[data-test="prisoner-search-location"]')
+            .children('option')
+            .then(options => {
+              const actual = [...options].map(o => o.value)
+              expect(actual).to.deep.eq(['SELECT', '1', '2', '3'])
+            })
         })
-      })
       cy.get('[data-test="prisoner-search-results-table"]').should('not.exist')
     })
   })
@@ -126,6 +130,19 @@ context('Cell move view residential location', () => {
           .should('have.attr', 'href')
           .should('include', '/prisoner/A1234BC/cell-move/search-for-cell')
       })
+    })
+  })
+
+  context('When the user does not have the correct cell move roles', () => {
+    beforeEach(() => {
+      cy.task('stubLogin', { username: 'ITAG_USER', caseload: 'MDI', roles: [] })
+      cy.login()
+    })
+
+    it('should display page not found', () => {
+      cy.visit('/change-someones-cell', { failOnStatusCode: false })
+
+      cy.get('h1').contains('Page not found')
     })
   })
 })

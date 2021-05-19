@@ -1,6 +1,3 @@
-const offenderBasicDetails = require('../../mockApis/responses/offenderBasicDetails.json')
-const offenderFullDetails = require('../../mockApis/responses/offenderFullDetails.json')
-
 const toOffender = $cell => ({
   name: $cell[1]?.textContent,
   prisonNo: $cell[2]?.textContent,
@@ -39,7 +36,7 @@ context('Cell move prisoner search', () => {
   before(() => {
     cy.clearCookies()
     cy.task('resetAndStubTokenVerification')
-    cy.task('stubLogin', { username: 'ITAG_USER', caseload: 'MDI' })
+    cy.task('stubLogin', { username: 'ITAG_USER', caseload: 'MDI', roles: [{ roleCode: 'CELL_MOVE' }] })
     cy.login()
   })
 
@@ -123,6 +120,19 @@ context('Cell move prisoner search', () => {
           .should('have.attr', 'href')
           .should('include', '/prisoner/A1234BC/cell-move/search-for-cell')
       })
+    })
+  })
+
+  context('When the user does not have the correct cell move roles', () => {
+    beforeEach(() => {
+      cy.task('stubLogin', { username: 'ITAG_USER', caseload: 'MDI', roles: [] })
+      cy.login()
+    })
+
+    it('should display page not found', () => {
+      cy.visit('/change-someones-cell', { failOnStatusCode: false })
+
+      cy.get('h1').contains('Page not found')
     })
   })
 })
