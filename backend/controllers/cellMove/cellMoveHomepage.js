@@ -42,19 +42,12 @@ const whereaboutsTasks = prisonName => [
   },
 ]
 
-module.exports = oauthApi => async (req, res) => {
+module.exports = (req, res) => {
   const { activeCaseLoad } = res.locals.user
-  const userRoles = await oauthApi.userRoles(res.locals)
 
-  const canViewCellMoveButton = userRoles?.some(role => role.roleCode === 'CELL_MOVE')
-
-  if (canViewCellMoveButton) {
-    return res.render('cellMove/cellMoveHomepage', {
-      tasks: whereaboutsTasks(activeCaseLoad.description)
-        .filter(task => task.enabled)
-        .map(({ roles, enabled, ...task }) => task),
-    })
-  }
-
-  return res.render('notFound', { url: '/' })
+  return res.render('cellMove/cellMoveHomepage', {
+    tasks: whereaboutsTasks(activeCaseLoad.description)
+      .filter(task => task.enabled)
+      .map(({ roles, enabled, ...task }) => task),
+  })
 }

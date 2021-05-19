@@ -12,7 +12,7 @@ module.exports = ({ logError }) => (error, req, res, next) => {
 
   res.status(status)
 
-  if (status === 404) return res.render('notFound.njk', { url: req.headers.referer || '/' })
+  if (status === 403 || status === 404) return res.render('notFound.njk', { url: req.headers.referer || '/' })
 
   return res.render('error.njk', {
     url: res.locals?.redirectUrl || req.originalUrl,

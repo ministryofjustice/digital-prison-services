@@ -1,44 +1,16 @@
 const cellMoveHomepageController = require('../controllers/cellMove/cellMoveHomepage')
 
 describe('Homepage', () => {
-  const oauthApi = {}
-
-  let req
-  let res
-  let controller
-
-  beforeEach(() => {
-    req = {}
-    res = {
-      locals: { user: { activeCaseLoad: { description: 'Moorland (HMP)' } } },
-      render: jest.fn(),
-      redirect: jest.fn(),
-    }
-
-    oauthApi.userRoles = jest.fn().mockResolvedValue([])
-
-    controller = cellMoveHomepageController(oauthApi)
-  })
-
-  it('should make the required calls to endpoints', async () => {
-    await controller(req, res)
-
-    expect(oauthApi.userRoles).toHaveBeenCalledWith(res.locals)
-  })
-
-  it('should render not found template if no appropiate roles', async () => {
-    await controller(req, res)
-
-    expect(res.render).toHaveBeenCalledWith('notFound', { url: '/' })
-  })
+  const req = {}
+  const res = {
+    locals: { user: { activeCaseLoad: { description: 'Moorland (HMP)' } } },
+    render: jest.fn(),
+    redirect: jest.fn(),
+  }
 
   describe('Tasks', () => {
-    beforeEach(() => {
-      oauthApi.userRoles.mockResolvedValue([{ roleCode: 'CELL_MOVE' }])
-    })
-
     it('should render template with correct non role specfic tasks', async () => {
-      await controller(req, res)
+      await cellMoveHomepageController(req, res)
 
       expect(res.render).toHaveBeenCalledWith('cellMove/cellMoveHomepage', {
         tasks: [

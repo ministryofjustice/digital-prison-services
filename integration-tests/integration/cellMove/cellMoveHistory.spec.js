@@ -11,7 +11,7 @@ context('Cell move history', () => {
   before(() => {
     cy.clearCookies()
     cy.task('resetAndStubTokenVerification')
-    cy.task('stubLogin', { username: 'ITAG_USER', caseload: 'MDI' })
+    cy.task('stubLogin', { username: 'ITAG_USER', caseload: 'MDI', roles: [{ roleCode: 'CELL_MOVE' }] })
     cy.login()
   })
   beforeEach(() => {
@@ -81,6 +81,19 @@ context('Cell move history', () => {
           expect(cellMoves[1].reason).to.contain('Administrative')
           expect(cellMoves[1].time).to.contain('11:00')
         })
+    })
+  })
+
+  context('When the user does not have the correct cell move roles', () => {
+    beforeEach(() => {
+      cy.task('stubLogin', { username: 'ITAG_USER', caseload: 'MDI', roles: [] })
+      cy.login()
+    })
+
+    it('should display page not found', () => {
+      cy.visit('/change-someones-cell', { failOnStatusCode: false })
+
+      cy.get('h1').contains('Page not found')
     })
   })
 })

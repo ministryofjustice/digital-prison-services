@@ -53,7 +53,7 @@ context('7 day cell move history page', () => {
   before(() => {
     cy.clearCookies()
     cy.task('reset')
-    cy.task('stubLogin', { username: 'ITAG_USER', caseload: 'MDI' })
+    cy.task('stubLogin', { username: 'ITAG_USER', caseload: 'MDI', roles: [{ roleCode: 'CELL_MOVE' }] })
     cy.login()
   })
   beforeEach(() => {
@@ -78,6 +78,19 @@ context('7 day cell move history page', () => {
     cy.get(`[data-qa="daily-stats-${yesterday}"]`).then($element => {
       expect($element[0].innerText).to.eq('2')
       expect($element[0].innerHTML).contains(`/change-someones-cell/recent-cell-moves/history?date=${yesterday}`)
+    })
+  })
+
+  context('When the user does not have the correct cell move roles', () => {
+    beforeEach(() => {
+      cy.task('stubLogin', { username: 'ITAG_USER', caseload: 'MDI', roles: [] })
+      cy.login()
+    })
+
+    it('should display page not found', () => {
+      cy.visit('/change-someones-cell', { failOnStatusCode: false })
+
+      cy.get('h1').contains('Page not found')
     })
   })
 })

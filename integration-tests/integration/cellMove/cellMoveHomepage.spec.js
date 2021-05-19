@@ -20,4 +20,17 @@ context('Cell move homepage', () => {
       cy.get('[data-test="no-cell-allocated"]').should('exist')
     })
   })
+
+  context('When the user does not have the correct cell move roles', () => {
+    beforeEach(() => {
+      cy.task('stubLogin', { username: 'ITAG_USER', caseload: 'MDI', roles: [] })
+      cy.login()
+    })
+
+    it('should display page not found', () => {
+      cy.visit('/change-someones-cell', { failOnStatusCode: false })
+
+      cy.get('h1').contains('Page not found')
+    })
+  })
 })
