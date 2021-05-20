@@ -31,12 +31,12 @@ module.exports = ({ prisonApi, prisonerFinanceService }) => async (req, res) => 
 
     const relatedTransactions = allTransactionsForDateRange.filter(batchTransactionsOnly).flatMap(batchTransaction => {
       const related = batchTransaction.relatedOffenderTransactions
-        .sort(sortByOldestCalendarDate)
         .map(relatedTransaction => ({
           id: batchTransaction.id,
           entryDate: batchTransaction.entryDate,
           agencyId: batchTransaction.agencyId,
           penceAmount: relatedTransaction.payAmount,
+          currentBalance: relatedTransaction.currentBalance,
           entryDescription: `${relatedTransaction.paymentDescription} from ${formatTimestampToDate(
             relatedTransaction.calendarDate
           )}`,
@@ -44,16 +44,7 @@ module.exports = ({ prisonApi, prisonerFinanceService }) => async (req, res) => 
           calendarDate: relatedTransaction.calendarDate,
         }))
 
-      let startingBalance = batchTransaction.currentBalance
-
-      return related.map(current => {
-        const withBalance = {
-          ...current,
-          currentBalance: startingBalance,
-        }
-        startingBalance -= current.penceAmount
-        return withBalance
-      })
+      return related
     })
 
     const transactionsExcludingRelated = allTransactionsForDateRange.filter(
