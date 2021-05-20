@@ -14,7 +14,6 @@ const sortByRecentEntryDateThenByRecentCalendarDate = (left, right) => {
 
   return 0
 }
-const sortByOldestCalendarDate = (left, right) => sortByDateTime(right.calendarDate, left.calendarDate)
 
 module.exports = ({ prisonApi, prisonerFinanceService }) => async (req, res) => {
   const { month, year } = req.query
@@ -30,30 +29,20 @@ module.exports = ({ prisonApi, prisonerFinanceService }) => async (req, res) => 
     const prisons = await Promise.all(uniqueAgencyIds.map(agencyId => prisonApi.getAgencyDetails(res.locals, agencyId)))
 
     const relatedTransactions = allTransactionsForDateRange.filter(batchTransactionsOnly).flatMap(batchTransaction => {
-      const related = batchTransaction.relatedOffenderTransactions
-        .sort(sortByOldestCalendarDate)
-        .map(relatedTransaction => ({
-          id: batchTransaction.id,
-          entryDate: batchTransaction.entryDate,
-          agencyId: batchTransaction.agencyId,
-          penceAmount: relatedTransaction.payAmount,
-          entryDescription: `${relatedTransaction.paymentDescription} from ${formatTimestampToDate(
-            relatedTransaction.calendarDate
-          )}`,
-          postingType: 'CR',
-          calendarDate: relatedTransaction.calendarDate,
-        }))
+      const related = batchTransaction.relatedOffenderTransactions.map(relatedTransaction => ({
+        id: batchTransaction.id,
+        entryDate: batchTransaction.entryDate,
+        agencyId: batchTransaction.agencyId,
+        penceAmount: relatedTransaction.payAmount,
+        currentBalance: relatedTransaction.currentBalance,
+        entryDescription: `${relatedTransaction.paymentDescription} from ${formatTimestampToDate(
+          relatedTransaction.calendarDate
+        )}`,
+        postingType: 'CR',
+        calendarDate: relatedTransaction.calendarDate,
+      }))
 
-      let startingBalance = batchTransaction.currentBalance
-
-      return related.map(current => {
-        const withBalance = {
-          ...current,
-          currentBalance: startingBalance,
-        }
-        startingBalance -= current.penceAmount
-        return withBalance
-      })
+      return related
     })
 
     const transactionsExcludingRelated = allTransactionsForDateRange.filter(
