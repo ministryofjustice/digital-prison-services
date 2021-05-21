@@ -32,7 +32,6 @@ const oauthApiFactory = (client, { clientId, clientSecret, url }) => {
       authorization: `Basic ${apiClientCredentials(clientId, clientSecret)}`,
     },
   })
-
   // eslint-disable-next-line camelcase
   const parseOauthTokens = ({ access_token, refresh_token }) => ({
     access_token,

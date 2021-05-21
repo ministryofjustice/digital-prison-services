@@ -173,7 +173,7 @@ const bulkAppointmentsConfirmFactory = (prisonApi, logError) => {
 
       await prisonApi.addAppointments(res.locals, request)
 
-      raiseAnalyticsEvent(
+      await raiseAnalyticsEvent(
         'Bulk Appointments',
         `Appointments created at ${activeCaseLoadId}`,
         `Appointment type - ${appointmentTypeDescription}`,

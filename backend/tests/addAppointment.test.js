@@ -7,6 +7,7 @@ describe('Add appointment', () => {
   const prisonApi = {}
   const appointmentsService = {}
   const existingEventsService = {}
+  const whereaboutsApi = {}
   const offenderNo = 'ABC123'
   const bookingId = 123
 
@@ -42,10 +43,11 @@ describe('Add appointment', () => {
     existingEventsService.getExistingEventsForLocation = jest.fn()
 
     prisonApi.getDetails = jest.fn()
-    prisonApi.addAppointments = jest.fn()
     prisonApi.getLocation = jest.fn()
 
-    controller = addAppointmentFactory(appointmentsService, existingEventsService, prisonApi, logError)
+    whereaboutsApi.createAppointment = jest.fn()
+
+    controller = addAppointmentFactory(appointmentsService, existingEventsService, prisonApi, whereaboutsApi, logError)
   })
 
   describe('index', () => {
@@ -140,13 +142,9 @@ describe('Add appointment', () => {
 
         await controller.post(req, res)
 
-        expect(prisonApi.addAppointments).toHaveBeenCalledWith(res.locals, {
-          appointmentDefaults,
-          appointments: [
-            {
-              bookingId,
-            },
-          ],
+        expect(whereaboutsApi.createAppointment).toHaveBeenCalledWith(res.locals, {
+          ...appointmentDefaults,
+          bookingId,
           repeat: {
             count: '1',
             repeatPeriod: 'DAILY',
@@ -188,7 +186,7 @@ describe('Add appointment', () => {
 
         const error = new Error('Network error')
 
-        prisonApi.addAppointments.mockRejectedValue(error)
+        whereaboutsApi.createAppointment.mockRejectedValue(error)
 
         await expect(controller.post(req, res)).rejects.toThrowError(error)
         expect(res.locals.redirectUrl).toBe(`/prisoner/${offenderNo}`)

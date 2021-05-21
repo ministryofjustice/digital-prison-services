@@ -24,7 +24,7 @@ context('A user can add an appointment', () => {
     ])
     cy.task('stubAppointmentsAtAgency', 'MDI', [])
     cy.task('stubVisitsAtAgency', 'MDI', [])
-    cy.task('stubPostAppointments')
+    cy.task('stubCreateAppointment')
     cy.task('stubSchedules', {
       agency: 'MDI',
       location: 1,
