@@ -1,8 +1,6 @@
 const { isXHRRequest } = require('../utils')
 
 module.exports = ({ logError }) => (error, req, res, next) => {
-  console.error(error)
-
   const status = error?.response?.status || 500
 
   if (status >= 500) logError(req.originalUrl, error, 'There was a problem loading page')
