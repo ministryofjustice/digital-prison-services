@@ -157,7 +157,7 @@ const setup = ({
 
   router.use('/change-caseload', changeCaseloadRouter({ prisonApi, logError }))
 
-  router.use('/offenders/:offenderNo/add-appointment', addAppointmentRouter({ prisonApi, logError }))
+  router.use('/offenders/:offenderNo/add-appointment', addAppointmentRouter({ prisonApi, whereaboutsApi, logError }))
 
   router.use(
     '/offenders/:offenderNo/prepost-appointments',

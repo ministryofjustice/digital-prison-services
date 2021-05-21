@@ -109,6 +109,8 @@ const whereaboutsApiFactory = client => {
     return get(context, `/appointments/${agencyId}?${searchParams}`)
   }
 
+  const createAppointment = (context, appointmentDetails) => post(context, '/appointment', appointmentDetails)
+
   return {
     getAttendance,
     getAttendanceForBookings,
@@ -132,6 +134,7 @@ const whereaboutsApiFactory = client => {
     getCellMoveReason,
     getWhereaboutsConfig,
     getAppointments,
+    createAppointment,
   }
 }
 

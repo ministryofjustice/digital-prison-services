@@ -443,5 +443,6 @@ module.exports = on => {
     stubCellMoveTypes: types => prisonApi.stubCellMoveTypes(types),
     stubKeyworkerMigrated: () => keyworker.stubKeyworkerMigrated(),
     stubGetWhereaboutsAppointments: appointments => whereabouts.stubGetWhereaboutsAppointments(appointments),
+    stubCreateAppointment: () => whereabouts.stubCreateAppointment(),
   })
 }

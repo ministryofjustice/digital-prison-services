@@ -82,7 +82,7 @@ const getValidationMessages = fields => {
   return errors
 }
 
-const addAppointmentFactory = (appointmentsService, existingEventsService, prisonApi) => {
+const addAppointmentFactory = (appointmentsService, existingEventsService, prisonApi, whereaboutsApi) => {
   const getAppointmentTypesAndLocations = async (locals, activeCaseLoadId) => {
     const { appointmentTypes, locationTypes } = await appointmentsService.getAppointmentOptions(
       locals,
@@ -217,19 +217,17 @@ const addAppointmentFactory = (appointmentsService, existingEventsService, priso
       })
     }
 
+    const appointmentDefaults = {
+      comment: comments,
+      locationId: Number(location),
+      appointmentType,
+      startTime: startTime.format(DATE_TIME_FORMAT_SPEC),
+      endTime: endTime && endTime.format(DATE_TIME_FORMAT_SPEC),
+    }
+
     const request = {
-      appointmentDefaults: {
-        comment: comments,
-        locationId: Number(location),
-        appointmentType,
-        startTime: startTime.format(DATE_TIME_FORMAT_SPEC),
-        endTime: endTime && endTime.format(DATE_TIME_FORMAT_SPEC),
-      },
-      appointments: [
-        {
-          bookingId,
-        },
-      ],
+      ...appointmentDefaults,
+      bookingId,
       repeat:
         recurring === 'yes'
           ? {
@@ -244,13 +242,13 @@ const addAppointmentFactory = (appointmentsService, existingEventsService, priso
         recurring,
         times,
         repeats,
-        ...request.appointmentDefaults,
+        ...appointmentDefaults,
         bookingId,
       })
 
       if (appointmentType === 'VLB') return res.redirect(`/offenders/${offenderNo}/prepost-appointments`)
 
-      await prisonApi.addAppointments(res.locals, request)
+      await whereaboutsApi.createAppointment(res.locals, request)
 
       return res.redirect(`/offenders/${offenderNo}/confirm-appointment`)
     } catch (error) {

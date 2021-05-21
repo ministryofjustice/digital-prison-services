@@ -414,4 +414,19 @@ module.exports = {
       },
     })
   },
+  stubCreateAppointment: (appointments, status = 201) => {
+    return stubFor({
+      request: {
+        method: 'POST',
+        urlPattern: '/whereabouts/appointment',
+      },
+      response: {
+        status,
+        headers: {
+          'Content-Type': 'application/json;charset=UTF-8',
+        },
+        jsonBody: appointments || [],
+      },
+    })
+  },
 }
