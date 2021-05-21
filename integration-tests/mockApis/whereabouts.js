@@ -414,11 +414,11 @@ module.exports = {
       },
     })
   },
-  stubCreateAppointment: (appointments, status = 200) => {
+  stubCreateAppointment: (appointments, status = 201) => {
     return stubFor({
       request: {
         method: 'POST',
-        urlPattern: '/appointment',
+        urlPattern: '/whereabouts/appointment',
       },
       response: {
         status,
