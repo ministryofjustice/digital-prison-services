@@ -268,14 +268,7 @@ describe('View appointments', () => {
       })
       expect(whereaboutsApi.getVideoLinkAppointments).toHaveBeenCalledWith(res.locals, [3, 4])
       expect(whereaboutsApi.getAgencyGroupLocationPrefix).toHaveBeenCalledWith(res.locals, 'MDI', 'H 1')
-      expect(prisonApi.getStaffDetails).toHaveBeenCalledTimes(3)
       expect(prisonApi.getDetails).toHaveBeenCalledTimes(4)
-      expect(oauthApi.userDetails).toHaveBeenCalledTimes(1)
-    })
-
-    it('should make a call to get user details', async () => {
-      await controller(req, res)
-      expect(oauthApi.userDetails).toHaveBeenCalledWith(res.locals, 'username1')
     })
 
     it('should render the correct template information', async () => {
@@ -291,10 +284,10 @@ describe('View appointments', () => {
                 attributes: { 'data-sort-value': 'ONE' },
                 html: '<a href="/prisoner/ABC123" class="govuk-link">One, Offender - ABC123</a>',
               },
-              { text: '2-1-1' },
+              { text: '1-1-1' },
               { text: 'Medical - Other' },
               { html: 'HEALTH CARE' },
-              { text: 'Staff One' },
+              { html: '<a href="/appointment-details/1" class="govuk-link">View details</a>' },
             ],
             [
               { text: '13:30 to 14:30' },
@@ -302,10 +295,10 @@ describe('View appointments', () => {
                 attributes: { 'data-sort-value': 'TWO' },
                 html: '<a href="/prisoner/ABC456" class="govuk-link">Two, Offender - ABC456</a>',
               },
-              { text: '3-1-1' },
+              { text: '2-1-1' },
               { text: 'Gym - Exercise' },
               { html: 'GYM' },
-              { text: '--' },
+              { html: '<a href="/appointment-details/2" class="govuk-link">View details</a>' },
             ],
             [
               { text: '14:30 to 15:30' },
@@ -313,10 +306,10 @@ describe('View appointments', () => {
                 attributes: { 'data-sort-value': 'THREE' },
                 html: '<a href="/prisoner/ABC789" class="govuk-link">Three, Offender - ABC789</a>',
               },
-              { text: '1-1-1' },
+              { text: '3-1-1' },
               { text: 'Video Link booking' },
               { html: 'VCC ROOM</br>with: Wimbledon' },
-              { text: 'Bob Doe (court)' },
+              { html: '<a href="/appointment-details/3" class="govuk-link">View details</a>' },
             ],
             [
               { text: '13:30 to 14:30' },
@@ -327,7 +320,7 @@ describe('View appointments', () => {
               { text: undefined },
               { text: 'Video Link booking' },
               { html: 'VCC ROOM' },
-              { text: 'Staff Three' },
+              { html: '<a href="/appointment-details/4" class="govuk-link">View details</a>' },
             ],
           ],
           date: '02/01/2020',
@@ -364,7 +357,7 @@ describe('View appointments', () => {
               { text: '1-1-1' },
               { text: 'Gym - Exercise' },
               { html: 'GYM' },
-              { text: 'Staff One' },
+              { html: '<a href="/appointment-details/2" class="govuk-link">View details</a>' },
             ],
           ],
           type: 'GYM',

@@ -95,11 +95,6 @@ context('A user can view list of appointments', () => {
       ],
     })
 
-    cy.task('stubUser', 'username1', 'MDI')
-    cy.task('stubUser', 'COURT_USER')
-    cy.task('stubStaff', { staffId: 'STAFF_1', details: { firstName: 'Staff', lastName: 'One' } })
-    cy.task('stubStaff', { staffId: 'STAFF_2', details: { firstName: 'Staff', lastName: 'Two' } })
-
     cy.task('stubPrisonerFullDetail', {
       prisonerDetail: { assignedLivingUnit: { description: '1-1-1' } },
       offenderNo: 'ABC123',
@@ -131,21 +126,30 @@ context('A user can view list of appointments', () => {
         expect($tableCells.get(2)).to.contain('1-1-1')
         expect($tableCells.get(3)).to.contain('Medical - Other')
         expect($tableCells.get(4)).to.contain('HEALTH CARE')
-        expect($tableCells.get(5)).to.contain('Staff One')
+        cy.get($tableCells.get(5))
+          .find('a')
+          .should('have.attr', 'href')
+          .should('include', '/appointment-details/1')
 
         expect($tableCells.get(6)).to.contain('13:30 to 14:30')
         expect($tableCells.get(7)).to.contain('Two, Offender - ABC456')
         expect($tableCells.get(8)).to.contain('2-1-1')
         expect($tableCells.get(9)).to.contain('Gym - Exercise')
         expect($tableCells.get(10)).to.contain('GYM')
-        expect($tableCells.get(11)).to.contain('Staff Two')
+        cy.get($tableCells.get(11))
+          .find('a')
+          .should('have.attr', 'href')
+          .should('include', '/appointment-details/2')
 
         expect($tableCells.get(12)).to.contain('14:30 to 15:30')
         expect($tableCells.get(13)).to.contain('Three, Offender - ABC789')
         expect($tableCells.get(14)).to.contain('3-1-1')
         expect($tableCells.get(15)).to.contain('Video Link booking')
         expect($tableCells.get(16)).to.contain('VCC ROOM')
-        expect($tableCells.get(17)).to.contain('--')
+        cy.get($tableCells.get(17))
+          .find('a')
+          .should('have.attr', 'href')
+          .should('include', '/appointment-details/3')
       })
 
     const filterForm = viewAppointmentsPage.form()
@@ -167,7 +171,10 @@ context('A user can view list of appointments', () => {
         expect($tableCells.get(2)).to.contain('3-1-1')
         expect($tableCells.get(3)).to.contain('Video Link booking')
         expect($tableCells.get(4)).to.contain('VCC ROOM')
-        expect($tableCells.get(5)).to.contain('--')
+        cy.get($tableCells.get(5))
+          .find('a')
+          .should('have.attr', 'href')
+          .should('include', '/appointment-details/3')
       })
   })
 

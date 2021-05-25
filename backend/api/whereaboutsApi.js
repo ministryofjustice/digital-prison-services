@@ -110,6 +110,7 @@ const whereaboutsApiFactory = client => {
   }
 
   const createAppointment = (context, appointmentDetails) => post(context, '/appointment', appointmentDetails)
+  const getAppointment = (context, id) => get(context, `/appointment/${id}`)
 
   return {
     getAttendance,
@@ -135,6 +136,7 @@ const whereaboutsApiFactory = client => {
     getWhereaboutsConfig,
     getAppointments,
     createAppointment,
+    getAppointment,
   }
 }
 
