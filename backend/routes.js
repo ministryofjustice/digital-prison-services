@@ -50,6 +50,7 @@ const { raiseAnalyticsEvent } = require('./raiseAnalyticsEvent')
 const whereaboutsHomepageController = require('./controllers/whereabouts/whereaboutsHomepage')
 const backToStart = require('./controllers/backToStart')
 const permit = require('./controllers/permit')
+const appointmentDetails = require('./controllers/appointmentDetails')
 
 const router = express.Router()
 
@@ -249,6 +250,8 @@ const setup = ({
   router.post('/manage-prisoner-whereabouts/select-location', selectActivityLocation({ prisonApi }).post)
 
   router.get('/back-to-start', backToStart())
+
+  router.use('/appointment-details/:id', appointmentDetails({ prisonApi, whereaboutsApi }))
 
   return router
 }

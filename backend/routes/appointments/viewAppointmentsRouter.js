@@ -1,6 +1,6 @@
 const moment = require('moment')
 const { serviceUnavailableMessage } = require('../../common-messages')
-const { getTime, properCaseName, formatName, getCurrentPeriod } = require('../../utils')
+const { getTime, properCaseName, getCurrentPeriod } = require('../../utils')
 
 const prisonApiLocationDescription = async (res, whereaboutsApi, locationKey, userCaseLoad) => {
   const fullLocationPrefix = await whereaboutsApi.getAgencyGroupLocationPrefix(res.locals, userCaseLoad, locationKey)
@@ -12,7 +12,7 @@ const prisonApiLocationDescription = async (res, whereaboutsApi, locationKey, us
   return `${userCaseLoad}-${locationKey}`
 }
 
-module.exports = ({ prisonApi, whereaboutsApi, oauthApi, logError }) => async (req, res) => {
+module.exports = ({ prisonApi, whereaboutsApi, logError }) => async (req, res) => {
   const { date, timeSlot = getCurrentPeriod(), type, locationId, residentialLocation } = req.query
   const searchDate = date ? moment(date, 'DD/MM/YYYY').format('YYYY-MM-DD') : moment().format('YYYY-MM-DD')
   const agencyId = req.session.userDetails.activeCaseLoadId
@@ -64,31 +64,10 @@ module.exports = ({ prisonApi, whereaboutsApi, oauthApi, logError }) => async (r
           videoLinkAppointment => videoLinkAppointment.appointmentId === appointment.id
         )
 
-      const staffDetails =
-        !videoLinkLocation &&
-        (await prisonApi.getStaffDetails(res.locals, appointment.createUserId).catch(error => {
-          logError(req.originalUrl, error, serviceUnavailableMessage)
-          return null
-        }))
-
       const prisonerDetails = await prisonApi.getDetails(res.locals, offenderNo, true).catch(error => {
         logError(req.originalUrl, error, serviceUnavailableMessage)
         return null
       })
-
-      const createdBy =
-        videoLinkLocation?.createdByUsername &&
-        (await oauthApi.userDetails(res.locals, videoLinkLocation.createdByUsername).catch(error => {
-          logError(req.originalUrl, error, serviceUnavailableMessage)
-          return null
-        }))
-
-      const getAddedBy = () => {
-        if (!videoLinkLocation)
-          return (staffDetails && formatName(staffDetails.firstName, staffDetails.lastName)) || '--'
-
-        return createdBy ? `${createdBy.name} (court)` : videoLinkLocation.court
-      }
 
       const getCourtDescription = () => {
         if (videoLinkLocation) return `${appointment.locationDescription}</br>with: ${videoLinkLocation.court}`
@@ -121,7 +100,7 @@ module.exports = ({ prisonApi, whereaboutsApi, oauthApi, logError }) => async (r
           html: getCourtDescription(),
         },
         {
-          text: getAddedBy(),
+          html: `<a href="/appointment-details/${appointment.id}" class="govuk-link">View details</a>`,
         },
       ]
     })

@@ -308,6 +308,8 @@ const prisonApiFactory = client => {
   const getInmates = (context, locationId, params) =>
     get(context, `/api/locations/description/${locationId}/inmates?${mapToQueryString(params)}`)
 
+  const getLocationDetails = (context, locationId) => get(context, `/api/locations/${locationId}`)
+
   const getInmatesAtLocation = (context, locationId, params) =>
     get(context, `/api/locations/${locationId}/inmates?${mapToQueryString(params)}`)
 
@@ -497,6 +499,7 @@ const prisonApiFactory = client => {
     getOffenderCellHistory,
     getAttributesForLocation,
     getHistoryForLocation,
+    getLocationDetails,
     getInmatesAtLocation,
     getInmatesAtLocationPrefix,
     moveToCellSwap,

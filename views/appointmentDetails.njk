@@ -1,0 +1,50 @@
+{% extends "./partials/layout.njk" %}
+{% from "govuk/components/summary-list/macro.njk" import govukSummaryList %}
+{% from "govuk/components/button/macro.njk" import govukButton %}
+
+{% set title = "Appointment details" %}
+
+{% block content %}
+  <h1 class="govuk-heading-l govuk-!-margin-bottom-3">{{ prisoner.name | possessive }} appointment details</h1>
+  <p class="govuk-body govuk-!-margin-bottom-6">
+    <strong class="govuk-!-margin-right-2">Prison number</strong> {{ prisoner.number }}
+  </p>
+
+  {# {{ govukButton({
+    text: "Delete appointment",
+    classes: "govuk-button--warning",
+    href: "/appointment-details/confirm-deletion"
+  }) }} #}
+
+  {{ govukSummaryList({
+    classes: "govuk-summary-list--no-border govuk-!-margin-bottom-2",
+    rows: basicDetails | toSummaryViewModel
+  }) }}
+
+  {{ govukSummaryList({
+    classes: "govuk-summary-list--no-border govuk-!-margin-bottom-4",
+    rows: timeDetails | toSummaryViewModel | removePaddingBottom
+  }) }}
+
+  {% if recurringDetails %}
+    {{ govukSummaryList({
+      classes: "govuk-summary-list--no-border govuk-!-margin-bottom-4",
+      rows: recurringDetails | toSummaryViewModel | removePaddingBottom
+    }) }}
+  {% endif %}
+
+  {% if prepostData | length %}
+    {{ govukSummaryList({
+      classes: "govuk-summary-list--no-border govuk-body govuk-!-margin-bottom-4",
+      rows: prepostData | toSummaryViewModel | removePaddingBottom
+    }) }}
+  {% endif %}
+
+  {{ govukSummaryList({
+    classes: "govuk-summary-list--no-border",
+    rows: additionalDetails | toSummaryViewModel
+  }) }}
+
+  <a href="/view-all-appointments" class="govuk-link govuk-body">Return to all appointments</a>
+{% endblock %}
+
