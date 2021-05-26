@@ -20,7 +20,7 @@ const clearAppointmentDetails = req => {
 }
 
 module.exports = ({ whereaboutsApi }) => {
-  const renderTemplate = async (req, res, errors) => {
+  const renderTemplate = (req, res, errors) => {
     const appointmentDetails = unpackAppointmentDetails(req)
     const {
       id,
@@ -47,7 +47,14 @@ module.exports = ({ whereaboutsApi }) => {
     })
   }
 
-  const index = async (req, res) => renderTemplate(req, res, [])
+  const index = async (req, res) => {
+    try {
+      renderTemplate(req, res, [])
+    } catch (error) {
+      res.locals.redirectUrl = `/view-all-appointments`
+      throw error
+    }
+  }
 
   const post = async (req, res) => {
     const { confirmation, isRecurring, appointmentEventId } = req.body

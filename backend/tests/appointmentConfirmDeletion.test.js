@@ -95,6 +95,15 @@ describe('any appointment deletion', () => {
       },
     })
   })
+
+  it('should throw an error when appointment details are missing from flash', async () => {
+    const req = {
+      flash: jest.fn(),
+    }
+
+    await expect(controller.index(req, res)).rejects.toThrowError(new Error('Appointment details are missing'))
+    expect(res.locals.redirectUrl).toBe('/view-all-appointments')
+  })
 })
 
 describe('confirm single appointment deletion', () => {
@@ -123,6 +132,7 @@ describe('confirm single appointment deletion', () => {
       whereaboutsApi.deleteAppointment = jest.fn().mockRejectedValue(error)
 
       await expect(controller.post(req, res)).rejects.toThrowError(error)
+      expect(res.locals.redirectUrl).toBe('/appointment-details/123')
     })
   })
 
