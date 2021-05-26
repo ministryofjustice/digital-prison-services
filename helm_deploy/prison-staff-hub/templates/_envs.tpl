@@ -208,6 +208,9 @@ env:
   - name: PATHFINDER_ENDPOINT_API_URL
     value: {{ .Values.env.PATHFINDER_ENDPOINT_API_URL | quote }}
 
+  - name: PIN_PHONES_URL
+    value: {{ .Values.env.PIN_PHONES_URL | quote }}
+
   - name: SOC_URL
     value: {{ .Values.env.SOC_URL | quote }}
 
@@ -231,4 +234,8 @@ env:
 
   - name: PRISONS_WITH_OFFENDERS_THAT_HAVE_COMPLEX_NEEDS
     value: {{ .Values.env.PRISONS_WITH_OFFENDERS_THAT_HAVE_COMPLEX_NEEDS | quote }}
+
+  - name: WHEREABOUTS_CREATE_APPOINTMENT_ENABLED
+    value: {{ .Values.env.WHEREABOUTS_CREATE_APPOINTMENT_ENABLED | quote }}
+    
 {{- end -}}

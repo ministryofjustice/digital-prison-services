@@ -1,6 +1,6 @@
 const {
   applications: { licences, manageaccounts, moic, pecs },
-  apis: { omic, useOfForce, pathfinder, categorisation, soc },
+  apis: { omic, useOfForce, pathfinder, categorisation, soc, pinPhones },
 } = require('../../config')
 
 const getTasks = ({ activeCaseLoadId, locations, staffId, whereaboutsConfig, keyworkerPrisonStatus, roleCodes }) => {
@@ -155,6 +155,13 @@ const getTasks = ({ activeCaseLoadId, locations, staffId, whereaboutsConfig, key
       description: 'Manage your Serious and Organised Crime (SOC) caseload.',
       href: soc.url,
       enabled: () => soc.url && userHasRoles(['SOC_CUSTODY', 'SOC_COMMUNITY', 'SOC_HQ']),
+    },
+    {
+      id: 'pin-phones',
+      heading: 'Pin phone service',
+      description: 'Access to the pin phone service.',
+      href: pinPhones.ui_url,
+      enabled: () => pinPhones.ui_url && userHasRoles(['PPM_ANALYST', 'PPM_AUTHORISING_OFFICER', 'PPM_GLOBAL_ADMIN']),
     },
   ]
 }
