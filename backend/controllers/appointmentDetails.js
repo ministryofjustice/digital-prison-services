@@ -43,34 +43,50 @@ module.exports = ({ prisonApi, whereaboutsApi }) => async (req, res) => {
     prepostData['post-court hearing briefing'] = createLocationAndTimeString(videoLinkBooking.post)
   }
 
+  const additionalDetails = {
+    ...(videoLinkBooking && { courtLocation: videoLinkBooking.main.court }),
+    comments: appointment.comment || 'Not entered',
+    // addedBy: formatName(staffDetails.firstName, staffDetails.lastName),
+  }
+
+  const basicDetails = {
+    type: appointmentType?.description,
+    location: locationType?.userDescription,
+    date: getDate(appointment.startTime),
+  }
+
+  const timeDetails = {
+    startTime: getTime(appointment.startTime),
+    endTime: (appointment.endTime && getTime(appointment.endTime)) || 'Not entered',
+  }
+
+  const recurringDetails = !videoLinkBooking && {
+    recurring: recurring ? 'Yes' : 'No',
+    ...(recurring && {
+      repeats: repeatTypes.find(repeat => repeat.value === recurring.repeatPeriod).text,
+      lastAppointment: getDate(lastAppointmentDate.endOfPeriod),
+    }),
+  }
+
+  req.flash('appointmentDetails', {
+    id,
+    isRecurring: !!recurring,
+    additionalDetails,
+    basicDetails,
+    prepostData,
+    recurringDetails,
+    timeDetails,
+  })
+
   return res.render('appointmentDetails', {
-    additionalDetails: {
-      ...(videoLinkBooking && { courtLocation: videoLinkBooking.main.court }),
-      comments: appointment.comment || 'Not entered',
-      // addedBy: formatName(staffDetails.firstName, staffDetails.lastName),
-    },
-    basicDetails: {
-      type: appointmentType?.description,
-      location: locationType?.userDescription,
-      date: getDate(appointment.startTime),
-    },
+    additionalDetails,
+    basicDetails,
     prepostData,
     prisoner: {
       name: prisonerDetails && formatName(prisonerDetails.firstName, prisonerDetails.lastName),
       number: prisonerDetails?.offenderNo,
     },
-    ...(!videoLinkBooking && {
-      recurringDetails: {
-        recurring: recurring ? 'Yes' : 'No',
-        ...(recurring && {
-          repeats: repeatTypes.find(repeat => repeat.value === recurring.repeatPeriod).text,
-          lastAppointment: getDate(lastAppointmentDate.endOfPeriod),
-        }),
-      },
-    }),
-    timeDetails: {
-      startTime: getTime(appointment.startTime),
-      endTime: (appointment.endTime && getTime(appointment.endTime)) || 'Not entered',
-    },
+    recurringDetails,
+    timeDetails,
   })
 }

@@ -20,6 +20,7 @@ const whereaboutsApiFactory = client => {
     client.getWithCustomTimeout(context, path, overrides).then(processResponse())
   const post = (context, url, data) => client.post(context, url, data).then(processResponse())
   const put = (context, url, data) => client.put(context, url, data).then(processResponse())
+  const sendDelete = (context, url) => client.sendDelete(context, url).then(processResponse())
 
   const getAttendance = (context, { agencyId, period, locationId, date }) =>
     get(context, `/attendances/${agencyId}/${locationId}?date=${date}&period=${period}`)
@@ -110,6 +111,7 @@ const whereaboutsApiFactory = client => {
   }
 
   const createAppointment = (context, appointmentDetails) => post(context, '/appointment', appointmentDetails)
+  const deleteAppointment = (context, appointmentEventId) => sendDelete(context, `/appointment/${appointmentEventId}`)
   const getAppointment = (context, id) => get(context, `/appointment/${id}`)
 
   return {
@@ -136,6 +138,7 @@ const whereaboutsApiFactory = client => {
     getWhereaboutsConfig,
     getAppointments,
     createAppointment,
+    deleteAppointment,
     getAppointment,
   }
 }
