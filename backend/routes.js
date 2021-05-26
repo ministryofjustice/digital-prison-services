@@ -52,6 +52,7 @@ const backToStart = require('./controllers/backToStart')
 const permit = require('./controllers/permit')
 const appointmentDetails = require('./controllers/appointmentDetails')
 const appointmentConfirmDeletion = require('./controllers/appointmentConfirmDeletion')
+const appointmentDeleted = require('./controllers/appointmentDeleted')
 
 const router = express.Router()
 
@@ -254,6 +255,7 @@ const setup = ({
 
   router.get('/appointment-details/confirm-deletion', appointmentConfirmDeletion({ prisonApi, whereaboutsApi }).index)
   router.post('/appointment-details/confirm-deletion', appointmentConfirmDeletion({ whereaboutsApi }).post)
+  router.get('/appointment-details/deleted', appointmentDeleted().index)
   router.use('/appointment-details/:id', appointmentDetails({ prisonApi, whereaboutsApi }))
 
   return router
