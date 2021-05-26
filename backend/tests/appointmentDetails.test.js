@@ -97,7 +97,7 @@ describe('appointment details', () => {
           comments: 'Not entered',
         },
         basicDetails: {
-          date: 'Thursday 20 May 2021',
+          date: '20 May 2021',
           location: 'Gymnasium',
           type: 'Gym',
         },
