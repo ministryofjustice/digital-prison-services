@@ -68,7 +68,7 @@ describe('appointment details', () => {
           comments: 'Not entered',
         },
         basicDetails: {
-          date: 'Thursday 20 May 2021',
+          date: '20 May 2021',
           location: 'Gymnasium',
           type: 'Gym',
         },
@@ -130,7 +130,7 @@ describe('appointment details', () => {
           'appointmentDetails',
           expect.objectContaining({
             recurringDetails: {
-              lastAppointment: 'Thursday 22 July 2021',
+              lastAppointment: '22 July 2021',
               recurring: 'Yes',
               repeats: 'Weekly',
             },
@@ -177,7 +177,7 @@ describe('appointment details', () => {
               comments: 'Test appointment comments',
             },
             basicDetails: {
-              date: 'Thursday 20 May 2021',
+              date: '20 May 2021',
               location: 'VCC Room 1',
               type: 'Video link booking',
             },
