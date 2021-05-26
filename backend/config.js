@@ -118,9 +118,12 @@ module.exports = {
       url: process.env.OMIC_URL || 'http://localhost:3001',
     },
     complexity: {
-      url: process.env.COMPLEXITY_OF_NEED_URI,
+      url: process.env.COMPLEXITY_OF_NEED_URI || '',
       timeoutSeconds: 10,
       enabled_prisons: process.env.PRISONS_WITH_OFFENDERS_THAT_HAVE_COMPLEX_NEEDS,
+    },
+    pinPhones: {
+      ui_url: process.env.PIN_PHONES_URL || 'http://localhost:3000/',
     },
   },
 
