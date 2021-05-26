@@ -7,7 +7,7 @@
 {% block content %}
   <h1 class="govuk-heading-l govuk-!-margin-bottom-3">{{ prisoner.name | possessive }} appointment details</h1>
   <p class="govuk-body govuk-!-margin-bottom-6">
-    <strong class="govuk-!-margin-right-2">Prison number</strong> {{ prisoner.number }}
+    <strong class="govuk-!-margin-right-2">Prison number</strong> <span data-test="prisoner-number">{{ prisoner.number }}</span>
   </p>
 
   {# {{ govukButton({
@@ -45,6 +45,6 @@
     rows: additionalDetails | toSummaryViewModel
   }) }}
 
-  <a href="/view-all-appointments" class="govuk-link govuk-body">Return to all appointments</a>
+  <a href="/view-all-appointments" class="govuk-link govuk-body" data-test="return-link">Return to all appointments</a>
 {% endblock %}
 

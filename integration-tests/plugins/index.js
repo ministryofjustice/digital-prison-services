@@ -444,5 +444,6 @@ module.exports = on => {
     stubKeyworkerMigrated: () => keyworker.stubKeyworkerMigrated(),
     stubGetWhereaboutsAppointments: appointments => whereabouts.stubGetWhereaboutsAppointments(appointments),
     stubCreateAppointment: () => whereabouts.stubCreateAppointment(),
+    stubGetAppointment: ({ appointment, id, status }) => whereabouts.stubGetAppointment({ appointment, id, status }),
   })
 }
