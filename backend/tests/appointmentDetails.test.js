@@ -25,6 +25,7 @@ describe('appointment details', () => {
     req = {
       params: { id: 1 },
       session: { userDetails: { activeCaseLoadId: 'MDI' } },
+      flash: jest.fn(),
     }
     res = { render: jest.fn() }
 
@@ -76,6 +77,31 @@ describe('appointment details', () => {
           name: 'Barry Smith',
           number: 'ABC123',
         },
+        recurringDetails: {
+          recurring: 'No',
+        },
+        timeDetails: {
+          startTime: '13:00',
+          endTime: 'Not entered',
+        },
+      })
+    })
+
+    it('should save the main details to flash', async () => {
+      await controller(req, res)
+
+      expect(req.flash).toHaveBeenCalledWith('appointmentDetails', {
+        id: 1,
+        isRecurring: false,
+        additionalDetails: {
+          comments: 'Not entered',
+        },
+        basicDetails: {
+          date: 'Thursday 20 May 2021',
+          location: 'Gymnasium',
+          type: 'Gym',
+        },
+        prepostData: {},
         recurringDetails: {
           recurring: 'No',
         },
