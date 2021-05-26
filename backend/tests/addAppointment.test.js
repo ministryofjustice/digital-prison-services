@@ -3,6 +3,8 @@ const { addAppointmentFactory } = require('../controllers/appointments/addAppoin
 const { DAY_MONTH_YEAR } = require('../../src/dateHelpers')
 const { repeatTypes } = require('../shared/appointmentConstants')
 
+const { app } = require('../config')
+
 describe('Add appointment', () => {
   const prisonApi = {}
   const appointmentsService = {}
@@ -44,6 +46,7 @@ describe('Add appointment', () => {
 
     prisonApi.getDetails = jest.fn()
     prisonApi.getLocation = jest.fn()
+    prisonApi.addAppointments = jest.fn()
 
     whereaboutsApi.createAppointment = jest.fn()
 
@@ -122,6 +125,71 @@ describe('Add appointment', () => {
 
       prisonApi.getLocation = jest.fn().mockResolvedValue({ userDescription: 'Gym' })
       existingEventsService.getExistingEventsForLocation = jest.fn().mockResolvedValue([{ eventId: 1 }, { eventId: 2 }])
+    })
+
+    it('should make a call to prison api to create an appointment when the feature is turned off', async () => {
+      app.whereaboutsCreateAppointmentEnabled = false
+
+      req.body = {
+        ...validBody,
+        date: moment()
+          .add(2, 'day')
+          .format(DAY_MONTH_YEAR),
+      }
+
+      await controller.post(req, res)
+
+      expect(whereaboutsApi.createAppointment.mock.calls.length).toBe(0)
+      expect(prisonApi.addAppointments).toHaveBeenCalledWith(
+        {},
+        {
+          appointmentDefaults: {
+            appointmentType: 'APT1',
+            comment: 'Test comment',
+            endTime: '2021-05-28T02:00:00',
+            locationId: 1,
+            startTime: '2021-05-28T01:00:00',
+          },
+          appointments: [
+            {
+              bookingId: 123,
+            },
+          ],
+          repeat: {
+            count: '1',
+            repeatPeriod: 'DAILY',
+          },
+        }
+      )
+    })
+    it('should make a call to whereabouts api to create an appointment when the feature is turned on', async () => {
+      app.whereaboutsCreateAppointmentEnabled = true
+
+      req.body = {
+        ...validBody,
+        date: moment()
+          .add(2, 'day')
+          .format(DAY_MONTH_YEAR),
+      }
+
+      await controller.post(req, res)
+
+      expect(prisonApi.addAppointments.mock.calls.length).toBe(0)
+      expect(whereaboutsApi.createAppointment).toHaveBeenCalledWith(
+        {},
+        {
+          appointmentType: 'APT1',
+          bookingId: 123,
+          comment: 'Test comment',
+          endTime: '2021-05-28T02:00:00',
+          locationId: 1,
+          repeat: {
+            count: '1',
+            repeatPeriod: 'DAILY',
+          },
+          startTime: '2021-05-28T01:00:00',
+        }
+      )
     })
 
     describe('when there are no errors', () => {

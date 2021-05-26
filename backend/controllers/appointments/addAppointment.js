@@ -2,6 +2,7 @@ const moment = require('moment')
 const { properCaseName, formatName } = require('../../utils')
 const { buildDateTime, DATE_TIME_FORMAT_SPEC, DAY_MONTH_YEAR } = require('../../../src/dateHelpers')
 const { repeatTypes, endRecurringEndingDate, validateComments } = require('../../shared/appointmentConstants')
+const { app } = require('../../config')
 
 const validateDate = (date, errors) => {
   const now = moment()
@@ -83,6 +84,77 @@ const getValidationMessages = fields => {
 }
 
 const addAppointmentFactory = (appointmentsService, existingEventsService, prisonApi, whereaboutsApi) => {
+  const createAppointmentsUsingPrisonApi = ({
+    locals,
+    comments,
+    location,
+    appointmentType,
+    startTime,
+    endTime,
+    bookingId,
+    recurring,
+    repeats,
+    times,
+  }) => {
+    const request = {
+      appointmentDefaults: {
+        comment: comments,
+        locationId: Number(location),
+        appointmentType,
+        startTime: startTime.format(DATE_TIME_FORMAT_SPEC),
+        endTime: endTime && endTime.format(DATE_TIME_FORMAT_SPEC),
+      },
+      appointments: [
+        {
+          bookingId,
+        },
+      ],
+      repeat:
+        recurring === 'yes'
+          ? {
+              repeatPeriod: repeats,
+              count: times,
+            }
+          : undefined,
+    }
+
+    return prisonApi.addAppointments(locals, request)
+  }
+
+  const createAppointmentsUsingWhereaboutsApi = ({
+    locals,
+    comments,
+    location,
+    appointmentType,
+    startTime,
+    endTime,
+    bookingId,
+    recurring,
+    repeats,
+    times,
+  }) => {
+    const appointmentDefaults = {
+      comment: comments,
+      locationId: Number(location),
+      appointmentType,
+      startTime: startTime.format(DATE_TIME_FORMAT_SPEC),
+      endTime: endTime && endTime.format(DATE_TIME_FORMAT_SPEC),
+    }
+
+    const request = {
+      ...appointmentDefaults,
+      bookingId,
+      repeat:
+        recurring === 'yes'
+          ? {
+              repeatPeriod: repeats,
+              count: times,
+            }
+          : undefined,
+    }
+
+    return whereaboutsApi.createAppointment(locals, request)
+  }
   const getAppointmentTypesAndLocations = async (locals, activeCaseLoadId) => {
     const { appointmentTypes, locationTypes } = await appointmentsService.getAppointmentOptions(
       locals,
@@ -225,18 +297,6 @@ const addAppointmentFactory = (appointmentsService, existingEventsService, priso
       endTime: endTime && endTime.format(DATE_TIME_FORMAT_SPEC),
     }
 
-    const request = {
-      ...appointmentDefaults,
-      bookingId,
-      repeat:
-        recurring === 'yes'
-          ? {
-              repeatPeriod: repeats,
-              count: times,
-            }
-          : undefined,
-    }
-
     try {
       req.flash('appointmentDetails', {
         recurring,
@@ -248,7 +308,33 @@ const addAppointmentFactory = (appointmentsService, existingEventsService, priso
 
       if (appointmentType === 'VLB') return res.redirect(`/offenders/${offenderNo}/prepost-appointments`)
 
-      await whereaboutsApi.createAppointment(res.locals, request)
+      if (app.whereaboutsCreateAppointmentEnabled) {
+        await createAppointmentsUsingWhereaboutsApi({
+          locals: res.locals,
+          comments,
+          location,
+          appointmentType,
+          startTime,
+          endTime,
+          bookingId,
+          repeats,
+          recurring,
+          times,
+        })
+      } else {
+        await createAppointmentsUsingPrisonApi({
+          locals: res.locals,
+          comments,
+          location,
+          appointmentType,
+          startTime,
+          endTime,
+          bookingId,
+          repeats,
+          recurring,
+          times,
+        })
+      }
 
       return res.redirect(`/offenders/${offenderNo}/confirm-appointment`)
     } catch (error) {
