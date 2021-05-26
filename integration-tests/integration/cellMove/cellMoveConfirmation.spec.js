@@ -39,7 +39,7 @@ context('A user get confirmation of a cell move', () => {
     cy.get("[data-test='exit-survey-link']")
       .invoke('attr', 'href')
       .then(href => {
-        expect(href).to.equal('https://www.surveymonkey.co.uk/r/5QLYDWY')
+        expect(href).to.equal('https://eu.surveymonkey.com/r/3JHPDDD')
       })
   })
 })
