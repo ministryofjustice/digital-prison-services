@@ -250,7 +250,7 @@ const prepostAppointmentsFactory = ({
       preAppointmentDuration,
       preAppointmentLocation,
       postAppointmentLocation,
-      court,
+      court: courtId,
       otherCourt,
       otherCourtForm,
     } = req.body
@@ -273,7 +273,7 @@ const prepostAppointmentsFactory = ({
         postAppointment,
         preAppointmentLocation,
         postAppointmentLocation,
-        court,
+        court: courtId,
         otherCourt,
         otherCourtForm,
       })
@@ -286,7 +286,7 @@ const prepostAppointmentsFactory = ({
       })
 
       const courts = await getCourts(res.locals)
-      const courtName = otherCourt || courts[court]
+      const courtName = otherCourt || courts[courtId]
 
       const preDetails = (preAppointment === 'yes' &&
         toPreAppointment({
@@ -324,7 +324,7 @@ const prepostAppointmentsFactory = ({
               preAppointmentDuration,
               preAppointmentLocation,
               postAppointmentLocation,
-              court,
+              court: courtId,
             },
             errors,
           })
@@ -342,7 +342,7 @@ const prepostAppointmentsFactory = ({
             preAppointmentDuration,
             preAppointmentLocation: preAppointmentLocation && Number(preAppointmentLocation),
             postAppointmentLocation: postAppointmentLocation && Number(postAppointmentLocation),
-            court,
+            court: courtId,
           },
           errors,
           date,
@@ -356,7 +356,7 @@ const prepostAppointmentsFactory = ({
         })
       }
 
-      if (court === 'other') {
+      if (courtId === 'other') {
         return res.render('enterCustomCourt.njk', {
           cancel: `/offenders/${offenderNo}/prepost-appointments`,
           formValues: {
@@ -366,7 +366,7 @@ const prepostAppointmentsFactory = ({
             preAppointmentDuration,
             preAppointmentLocation: preAppointmentLocation && Number(preAppointmentLocation),
             postAppointmentLocation: postAppointmentLocation && Number(postAppointmentLocation),
-            court,
+            court: courtId,
           },
           errors,
           date,
@@ -379,7 +379,7 @@ const prepostAppointmentsFactory = ({
           ...appointmentDetails,
           // Pass court name if 'other' as it means free text, else send court ID
           courtName: otherCourt ? courtName : undefined,
-          courtId: !otherCourt ? court : undefined,
+          courtId: !otherCourt ? courtId : undefined,
         },
         preAppointment === 'yes' && preDetails,
         postAppointment === 'yes' && postDetails

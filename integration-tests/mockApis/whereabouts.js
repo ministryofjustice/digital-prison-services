@@ -68,16 +68,18 @@ module.exports = {
     return stubFor({
       request: {
         method: 'GET',
-        url: '/whereabouts/court/all-courts',
+        url: '/whereabouts/court/courts',
       },
       response: {
         status,
         headers: {
           'Content-Type': 'application/json;charset=UTF-8',
         },
-        jsonBody: locations || {
-          courtLocations: ['London', 'Sheffield', 'Leeds'],
-        },
+        jsonBody: locations || [
+          { id: 'LDN', name: 'London' },
+          { id: 'SHF', name: 'Sheffield' },
+          { id: 'LDS', name: 'Leeds' },
+        ],
       },
     })
   },
