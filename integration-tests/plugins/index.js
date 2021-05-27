@@ -75,7 +75,7 @@ module.exports = on => {
       Promise.all([prisonApi.stubProgEventsAtLocation(caseload, locationId, timeSlot, date, activities)]),
 
     stubAttendanceChanges: response => Promise.all([whereabouts.stubAttendanceChanges(response)]),
-    stubCourts: courts => Promise.all([whereabouts.stubCourtLocations(courts)]),
+    stubCourts: whereabouts.stubCourtLocations,
     stubGroups: caseload => whereabouts.stubGroups(caseload),
     stubAddVideoLinkBooking: () => whereabouts.stubAddVideoLinkBooking(),
     getBookingRequest: () => whereabouts.getBookingRequest(),
