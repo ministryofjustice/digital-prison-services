@@ -14,5 +14,6 @@ const makeResetErrorWithStack = () =>
   )
 
 const makeNotFoundError = () => makeError('response', { status: 404 })
+const makeServerError = () => makeError('response', { status: 500 })
 
-export { makeError, makeResetError, makeResetErrorWithStack, makeNotFoundError }
+export { makeError, makeResetError, makeResetErrorWithStack, makeNotFoundError, makeServerError }

@@ -1,4 +1,7 @@
+import { makeNotFoundError } from './helpers'
+
 const appointmentDetails = require('../controllers/appointmentDetails.js')
+const { makeError } = require('./helpers')
 
 describe('appointment details', () => {
   const testAppointment = {
@@ -66,7 +69,8 @@ describe('appointment details', () => {
     })
 
     it('should fall back to the user id if there are errors fetching the user details', async () => {
-      prisonApi.getStaffDetails = jest.fn().mockRejectedValue(new Error('error'))
+      prisonApi.getStaffDetails = jest.fn().mockRejectedValue(makeNotFoundError())
+
       await controller(req, res)
 
       expect(res.render).toHaveBeenCalledWith(

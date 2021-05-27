@@ -1,6 +1,6 @@
 const moment = require('moment')
 const { endRecurringEndingDate, repeatTypes } = require('../shared/appointmentConstants')
-const { formatName, getDate, getTime } = require('../utils')
+const { formatName, getDate, getTime, getWith404AsNull } = require('../utils')
 
 module.exports = ({ prisonApi, whereaboutsApi }) => async (req, res) => {
   const { id } = req.params
@@ -16,12 +16,7 @@ module.exports = ({ prisonApi, whereaboutsApi }) => async (req, res) => {
     prisonApi.getAppointmentTypes(res.locals),
   ])
 
-  const staffDetails = await new Promise(resolve =>
-    prisonApi
-      .getStaffDetails(res.locals, appointment.createUserId)
-      .then(details => resolve(details))
-      .catch(_ => resolve(null))
-  )
+  const staffDetails = await getWith404AsNull(prisonApi.getStaffDetails(res.locals, appointment.createUserId))
 
   const appointmentType = appointmentTypes?.find(type => type.code === appointment.appointmentTypeCode)
   const locationType = locationTypes?.find(loc => Number(loc.locationId) === Number(appointment.locationId))

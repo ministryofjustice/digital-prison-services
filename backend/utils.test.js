@@ -11,6 +11,7 @@ import {
   getDate,
   getNamesFromString,
   getTime,
+  getWith404AsNull,
   isPrisonerIdentifier,
   isTemporaryLocation,
   isToday,
@@ -21,6 +22,7 @@ import {
   properCaseName,
   putLastNameFirst,
 } from './utils'
+import { makeNotFoundError, makeServerError } from './tests/helpers'
 
 describe('capitalize()', () => {
   describe('when a string IS NOT provided', () => {
@@ -431,5 +433,25 @@ describe('Url joining', () => {
   })
   it('should handle missing forward slashes for both url and path ', () => {
     expect(joinUrlPath('http://auth', 'health/ping')).toBe('http://auth/health/ping')
+  })
+})
+describe('getWith404AsNull', () => {
+  it('should return resolve the result on success', async () => {
+    const details = { test: true }
+    const result = await getWith404AsNull(Promise.resolve(details))
+
+    expect(result.test).toBeTruthy()
+  })
+  it('should return null when the request returns a 404', async () => {
+    const result = await getWith404AsNull(Promise.reject(makeNotFoundError()))
+    expect(result).toBeNull()
+  })
+
+  it('should throw an error for any none successful response code', async () => {
+    try {
+      await getWith404AsNull(Promise.reject(makeServerError()))
+    } catch (error) {
+      expect(error).toEqual(makeServerError())
+    }
   })
 })
