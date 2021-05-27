@@ -51,6 +51,8 @@ describe('Add appointment', () => {
     whereaboutsApi.createAppointment = jest.fn()
 
     controller = addAppointmentFactory(appointmentsService, existingEventsService, prisonApi, whereaboutsApi, logError)
+
+    jest.spyOn(Date, 'now').mockImplementation(() => 1553860800000) // Friday 2019-03-29T12:00:00.000Z
   })
 
   describe('index', () => {
@@ -146,9 +148,9 @@ describe('Add appointment', () => {
           appointmentDefaults: {
             appointmentType: 'APT1',
             comment: 'Test comment',
-            endTime: '2021-05-28T02:00:00',
+            endTime: '2019-03-31T02:00:00',
             locationId: 1,
-            startTime: '2021-05-28T01:00:00',
+            startTime: '2019-03-31T01:00:00',
           },
           appointments: [
             {
@@ -181,13 +183,13 @@ describe('Add appointment', () => {
           appointmentType: 'APT1',
           bookingId: 123,
           comment: 'Test comment',
-          endTime: '2021-05-28T02:00:00',
+          endTime: '2019-03-31T02:00:00',
           locationId: 1,
           repeat: {
             count: '1',
             repeatPeriod: 'DAILY',
           },
-          startTime: '2021-05-28T01:00:00',
+          startTime: '2019-03-31T01:00:00',
         }
       )
     })
@@ -274,7 +276,7 @@ describe('Add appointment', () => {
       })
 
       it('should validate and check for missing required fields', async () => {
-        jest.spyOn(Date, 'now').mockImplementation(() => 1553860800000) // Friday 2019-03-29T12:00:00.000Z
+        // jest.spyOn(Date, 'now').mockImplementation(() => 1553860800000) // Friday 2019-03-29T12:00:00.000Z
         const date = moment().format(DAY_MONTH_YEAR)
 
         req.body = {
@@ -458,7 +460,7 @@ describe('Add appointment', () => {
 
       describe('and there are existing events for an offender and a location', () => {
         it('should still show the offender and location events along with the validation messages', async () => {
-          jest.spyOn(Date, 'now').mockImplementation(() => 1553860800000) // Friday 2019-03-29T12:00:00.000Z
+          // jest.spyOn(Date, 'now').mockImplementation(() => 1553860800000) // Friday 2019-03-29T12:00:00.000Z
           const offenderEvents = [
             { eventDescription: '**Court visit scheduled**' },
             {
