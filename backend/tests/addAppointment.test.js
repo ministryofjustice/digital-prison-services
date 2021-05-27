@@ -1,6 +1,6 @@
 const moment = require('moment')
 const { addAppointmentFactory } = require('../controllers/appointments/addAppointment')
-const { DAY_MONTH_YEAR } = require('../../src/dateHelpers')
+const { DAY_MONTH_YEAR, DATE_TIME_FORMAT_SPEC } = require('../../src/dateHelpers')
 const { repeatTypes } = require('../shared/appointmentConstants')
 
 const { app } = require('../config')
@@ -12,6 +12,16 @@ describe('Add appointment', () => {
   const whereaboutsApi = {}
   const offenderNo = 'ABC123'
   const bookingId = 123
+
+  const twoDaysHence = moment().add(2, 'day')
+
+  const startTime = moment(twoDaysHence)
+    .set({ hours: 1, minute: 0, second: 0 })
+    .format(DATE_TIME_FORMAT_SPEC)
+
+  const endTime = moment(twoDaysHence)
+    .set({ hours: 2, minute: 0, second: 0 })
+    .format(DATE_TIME_FORMAT_SPEC)
 
   let req
   let res
@@ -132,9 +142,7 @@ describe('Add appointment', () => {
 
       req.body = {
         ...validBody,
-        date: moment()
-          .add(2, 'day')
-          .format(DAY_MONTH_YEAR),
+        date: twoDaysHence.format(DAY_MONTH_YEAR),
       }
 
       await controller.post(req, res)
@@ -146,9 +154,9 @@ describe('Add appointment', () => {
           appointmentDefaults: {
             appointmentType: 'APT1',
             comment: 'Test comment',
-            endTime: '2021-05-28T02:00:00',
+            endTime,
             locationId: 1,
-            startTime: '2021-05-28T01:00:00',
+            startTime,
           },
           appointments: [
             {
@@ -167,9 +175,7 @@ describe('Add appointment', () => {
 
       req.body = {
         ...validBody,
-        date: moment()
-          .add(2, 'day')
-          .format(DAY_MONTH_YEAR),
+        date: twoDaysHence.format(DAY_MONTH_YEAR),
       }
 
       await controller.post(req, res)
@@ -181,13 +187,13 @@ describe('Add appointment', () => {
           appointmentType: 'APT1',
           bookingId: 123,
           comment: 'Test comment',
-          endTime: '2021-05-28T02:00:00',
+          startTime,
+          endTime,
           locationId: 1,
           repeat: {
             count: '1',
             repeatPeriod: 'DAILY',
           },
-          startTime: '2021-05-28T01:00:00',
         }
       )
     })
@@ -316,9 +322,9 @@ describe('Add appointment', () => {
 
       it('should return validation messages for start times being in the past', async () => {
         const date = moment().format(DAY_MONTH_YEAR)
-        const startTime = moment().subtract(5, 'minutes')
-        const startTimeHours = startTime.hour()
-        const startTimeMinutes = startTime.minute()
+        const fiveMinutesPrior = moment().subtract(5, 'minutes')
+        const startTimeHours = fiveMinutesPrior.hour()
+        const startTimeMinutes = fiveMinutesPrior.minute()
 
         req.body = {
           date,
@@ -339,13 +345,13 @@ describe('Add appointment', () => {
       })
 
       it('should validate that the end time comes after the start time', async () => {
-        const endTime = moment().subtract(2, 'hours')
-        const endTimeHours = endTime.hour()
-        const endTimeMinutes = endTime.minute()
+        const twoHoursPrior = moment().subtract(2, 'hours')
+        const endTimeHours = twoHoursPrior.hour()
+        const endTimeMinutes = twoHoursPrior.minute()
 
-        const startTime = moment().add(5, 'minutes')
-        const startTimeHours = startTime.hour()
-        const startTimeMinutes = startTime.minute()
+        const fiverMinutesHence = moment().add(5, 'minutes')
+        const startTimeHours = fiverMinutesHence.hour()
+        const startTimeMinutes = fiverMinutesHence.minute()
 
         req.body = {
           date: moment().format(DAY_MONTH_YEAR),
@@ -477,9 +483,9 @@ describe('Add appointment', () => {
             },
           ]
           const date = moment().format(DAY_MONTH_YEAR)
-          const startTime = moment().subtract(5, 'minutes')
-          const startTimeHours = startTime.hour()
-          const startTimeMinutes = startTime.minute()
+          const fiveMinutesPrior = moment().subtract(5, 'minutes')
+          const startTimeHours = fiveMinutesPrior.hour()
+          const startTimeMinutes = fiveMinutesPrior.minute()
 
           req.body = {
             date,
