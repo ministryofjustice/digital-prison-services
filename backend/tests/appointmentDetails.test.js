@@ -65,6 +65,21 @@ describe('appointment details', () => {
       expect(prisonApi.getStaffDetails).toHaveBeenCalledWith(res.locals, 'TEST_USER')
     })
 
+    it('should fall back to the user id if the user no longer exists', async () => {
+      prisonApi.getStaffDetails = jest.fn().mockRejectedValue(new Error('error'))
+      await controller(req, res)
+
+      expect(res.render).toHaveBeenCalledWith(
+        'appointmentDetails',
+        expect.objectContaining({
+          additionalDetails: {
+            comments: 'Not entered',
+            addedBy: 'TEST_USER',
+          },
+        })
+      )
+    })
+
     it('should render with the correct appointment', async () => {
       await controller(req, res)
 

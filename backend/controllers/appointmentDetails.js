@@ -10,12 +10,18 @@ module.exports = ({ prisonApi, whereaboutsApi }) => async (req, res) => {
 
   const { appointment, recurring, videoLinkBooking } = appointmentDetails
 
-  const [prisonerDetails, locationTypes, appointmentTypes, staffDetails] = await Promise.all([
+  const [prisonerDetails, locationTypes, appointmentTypes] = await Promise.all([
     prisonApi.getDetails(res.locals, appointment.offenderNo),
     prisonApi.getLocationsForAppointments(res.locals, activeCaseLoadId),
     prisonApi.getAppointmentTypes(res.locals),
-    prisonApi.getStaffDetails(res.locals, appointment.createUserId),
   ])
+
+  const staffDetails = await new Promise(resolve =>
+    prisonApi
+      .getStaffDetails(res.locals, appointment.createUserId)
+      .then(details => resolve(details))
+      .catch(_ => resolve(null))
+  )
 
   const appointmentType = appointmentTypes?.find(type => type.code === appointment.appointmentTypeCode)
   const locationType = locationTypes?.find(loc => Number(loc.locationId) === Number(appointment.locationId))
@@ -46,7 +52,7 @@ module.exports = ({ prisonApi, whereaboutsApi }) => async (req, res) => {
   const additionalDetails = {
     ...(videoLinkBooking && { courtLocation: videoLinkBooking.main.court }),
     comments: appointment.comment || 'Not entered',
-    addedBy: formatName(staffDetails.firstName, staffDetails.lastName),
+    addedBy: (staffDetails && formatName(staffDetails.firstName, staffDetails.lastName)) || appointment.createUserId,
   }
 
   const basicDetails = {
