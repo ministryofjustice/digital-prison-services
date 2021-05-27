@@ -80,11 +80,8 @@ const prepostAppointmentsFactory = ({
   }
 
   const getCourts = async locals => {
-    const { courtLocations } = await whereaboutsApi.getCourtLocations(locals)
-    const formattedLocations = courtLocations.sort().reduce((courtList, court) => {
-      const key = court.replace(/\W+/g, '-').toLowerCase()
-      return { ...courtList, [key]: court }
-    }, {})
+    const items = await whereaboutsApi.getCourtLocations(locals)
+    const formattedLocations = Object.fromEntries(items.map(({ id, name }) => [id, name]))
 
     return {
       ...formattedLocations,
@@ -190,11 +187,12 @@ const prepostAppointmentsFactory = ({
     }
   }
   const makeVideoLinkBooking = async (context, main, pre, post) => {
-    const { comment, bookingId, court } = main
+    const { comment, bookingId, courtName, courtId } = main
 
     await whereaboutsApi.addVideoLinkBooking(context, {
       bookingId,
-      court,
+      court: courtName,
+      courtId,
       comment,
       madeByTheCourt: false,
       ...(pre && {
@@ -288,7 +286,7 @@ const prepostAppointmentsFactory = ({
       })
 
       const courts = await getCourts(res.locals)
-      const courtValue = otherCourt || courts[court]
+      const courtName = otherCourt || courts[court]
 
       const preDetails = (preAppointment === 'yes' &&
         toPreAppointment({
@@ -308,7 +306,7 @@ const prepostAppointmentsFactory = ({
         ...appointmentDetails,
         preAppointment: preDetails,
         postAppointment: postDetails,
-        court: courtValue,
+        court: courtName,
       })
 
       if (errors.length) {
@@ -379,7 +377,9 @@ const prepostAppointmentsFactory = ({
         res.locals,
         {
           ...appointmentDetails,
-          court: courtValue,
+          // Pass court name if 'other' as it means free text, else send court ID
+          courtName: otherCourt ? courtName : undefined,
+          courtId: !otherCourt ? court : undefined,
         },
         preAppointment === 'yes' && preDetails,
         postAppointment === 'yes' && postDetails
@@ -388,7 +388,7 @@ const prepostAppointmentsFactory = ({
       const agencyDetails = await prisonApi.getAgencyDetails(res.locals, activeCaseLoadId)
       const userEmailData = await oauthApi.userEmail(res.locals, username)
 
-      raiseAnalyticsEvent('VLB Appointments', 'Video link booked', `${agencyDetails.description} -  ${courtValue}`)
+      raiseAnalyticsEvent('VLB Appointments', 'Video link booked', `${agencyDetails.description} -  ${courtName}`)
 
       const preAppointmentInfo =
         preAppointment === 'yes'
