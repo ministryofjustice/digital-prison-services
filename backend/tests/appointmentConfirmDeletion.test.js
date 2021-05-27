@@ -124,7 +124,7 @@ describe('confirm single appointment deletion', () => {
 
       expect(whereaboutsApi.deleteAppointment).toHaveBeenCalledWith(res.locals, 123)
 
-      expect(res.redirect).toHaveBeenCalledWith('/appointment-details/appointment-deleted?multipleDeleted=false')
+      expect(res.redirect).toHaveBeenCalledWith('/appointment-details/deleted?multipleDeleted=false')
     })
 
     it('should go to the error page if the deletion fails', async () => {

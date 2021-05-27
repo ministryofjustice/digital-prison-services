@@ -75,7 +75,7 @@ module.exports = ({ whereaboutsApi }) => {
 
     try {
       await whereaboutsApi.deleteAppointment(res.locals, appointmentEventId)
-      return res.redirect(`/appointment-details/appointment-deleted?multipleDeleted=false`)
+      return res.redirect(`/appointment-details/deleted?multipleDeleted=false`)
     } catch (error) {
       res.locals.redirectUrl = `/appointment-details/${appointmentEventId}`
       throw error

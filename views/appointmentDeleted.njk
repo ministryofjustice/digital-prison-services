@@ -1,0 +1,21 @@
+{% extends "./partials/layout.njk" %}
+{% from "govuk/components/button/macro.njk" import govukButton %}
+{% from "govuk/components/panel/macro.njk" import govukPanel %}
+
+{% set title = 'Appointments deleted' if multipleDeleted else 'Appointment deleted' %}
+
+{% block content %}
+    {{ govukPanel({
+        titleText: 'The appointments have been deleted' if multipleDeleted else 'The appointment has been deleted',
+        classes: "govuk-!-margin-bottom-6"
+    }) }}
+
+    {{ govukButton({
+        text: 'Finish',
+        element: 'a',
+        href: '/view-all-appointments',
+        attributes: {
+            'data-test': 'appointments-home'
+        }
+    }) }}
+{% endblock %}
