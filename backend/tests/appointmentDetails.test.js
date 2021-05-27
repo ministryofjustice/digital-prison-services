@@ -1,7 +1,7 @@
 import { makeNotFoundError } from './helpers'
 
 const appointmentDetails = require('../controllers/appointmentDetails.js')
-const { makeError } = require('./helpers')
+const appointmentDeletionServiceFactory = require('../services/appointmentDeletionService')
 
 describe('appointment details', () => {
   const testAppointment = {
@@ -24,6 +24,8 @@ describe('appointment details', () => {
   let req
   let res
   let controller
+
+  let appointmentDeletionService
 
   beforeEach(() => {
     req = {
@@ -54,7 +56,9 @@ describe('appointment details', () => {
 
     whereaboutsApi.getAppointment = jest.fn().mockResolvedValue(testAppointment)
 
-    controller = appointmentDetails({ prisonApi, whereaboutsApi })
+    appointmentDeletionService = appointmentDeletionServiceFactory({ prisonApi })
+
+    controller = appointmentDetails({ prisonApi, whereaboutsApi, appointmentDeletionService })
   })
 
   describe('viewAppointment', () => {
@@ -102,32 +106,6 @@ describe('appointment details', () => {
           name: 'Barry Smith',
           number: 'ABC123',
         },
-        recurringDetails: {
-          recurring: 'No',
-        },
-        timeDetails: {
-          startTime: '13:00',
-          endTime: 'Not entered',
-        },
-      })
-    })
-
-    it('should save the main details to flash', async () => {
-      await controller(req, res)
-
-      expect(req.flash).toHaveBeenCalledWith('appointmentDetails', {
-        id: 1,
-        isRecurring: false,
-        additionalDetails: {
-          comments: 'Not entered',
-          addedBy: 'Test User',
-        },
-        basicDetails: {
-          date: '20 May 2021',
-          location: 'Gymnasium',
-          type: 'Gym',
-        },
-        prepostData: {},
         recurringDetails: {
           recurring: 'No',
         },

@@ -1,11 +1,24 @@
 const appointmentConfirmDeletion = require('../controllers/appointmentConfirmDeletion')
 
 const res = { locals: {}, send: jest.fn(), redirect: jest.fn() }
-const prisonApi = {}
 const whereaboutsApi = {}
+const appointmentDeletionService = {}
 
-const appointmentDetails = {
-  id: 1,
+const testAppointment = {
+  appointment: {
+    offenderNo: 'ABC123',
+    id: 1,
+    agencyId: 'MDI',
+    locationId: 2,
+    appointmentTypeCode: 'GYM',
+    startTime: '2021-05-20T13:00:00',
+  },
+  recurring: null,
+  videoLinkBooking: null,
+}
+
+const testAppointmentViewModel = {
+  isRecurring: false,
   additionalDetails: {
     comments: 'Not entered',
   },
@@ -24,28 +37,41 @@ const appointmentDetails = {
   },
 }
 
-const flashImpl = jest.fn()
-
 let controller
 
 beforeEach(() => {
-  controller = appointmentConfirmDeletion({ prisonApi, whereaboutsApi })
+  whereaboutsApi.getAppointment = jest.fn().mockResolvedValue(testAppointment)
+  appointmentDeletionService.getAppointmentViewModel = jest.fn().mockResolvedValue(testAppointmentViewModel)
+
+  controller = appointmentConfirmDeletion({ whereaboutsApi, appointmentDeletionService })
 
   res.render = jest.fn()
-
-  flashImpl.mockImplementation(() => [appointmentDetails])
 })
 
 describe('any appointment deletion', () => {
-  it('should show the correct data from the flash', async () => {
+  it('should call the whereabouts api and the deletion service', async () => {
     const req = {
-      flash: flashImpl,
+      params: { id: 123 },
+      session: { userDetails: { activeCaseLoadId: 'MDI' } },
+    }
+
+    await controller.index(req, res)
+
+    expect(whereaboutsApi.getAppointment).toHaveBeenCalledWith(res.locals, 123)
+    expect(appointmentDeletionService.getAppointmentViewModel).toHaveBeenCalledWith(res, testAppointment, 'MDI')
+  })
+
+  it('should show the correct data', async () => {
+    const req = {
+      params: { id: 1 },
+      session: { userDetails: { activeCaseLoadId: 'MDI' } },
     }
 
     await controller.index(req, res)
 
     expect(res.render).toHaveBeenCalledWith('appointmentConfirmDeletion', {
       errors: [],
+      isRecurring: false,
       appointmentEventId: 1,
       additionalDetails: {
         comments: 'Not entered',
@@ -68,15 +94,17 @@ describe('any appointment deletion', () => {
 
   it('should show the relevant error if no confirmation radio button is selected', async () => {
     const req = {
-      body: { isRecurring: 'false', appointmentEventId: 123 },
-      flash: flashImpl,
+      params: { id: 123 },
+      body: { confirmation: '', isRecurring: 'false' },
+      session: { userDetails: { activeCaseLoadId: 'MDI' } },
     }
 
     await controller.post(req, res)
 
     expect(res.render).toHaveBeenCalledWith('appointmentConfirmDeletion', {
       errors: [{ text: 'Select yes if you want to delete this appointment', href: '#confirmation' }],
-      appointmentEventId: 1,
+      appointmentEventId: 123,
+      isRecurring: false,
       additionalDetails: {
         comments: 'Not entered',
       },
@@ -95,15 +123,6 @@ describe('any appointment deletion', () => {
       },
     })
   })
-
-  it('should throw an error when appointment details are missing from flash', async () => {
-    const req = {
-      flash: jest.fn(),
-    }
-
-    await expect(controller.index(req, res)).rejects.toThrowError(new Error('Appointment details are missing'))
-    expect(res.locals.redirectUrl).toBe('/view-all-appointments')
-  })
 })
 
 describe('confirm single appointment deletion', () => {
@@ -112,8 +131,9 @@ describe('confirm single appointment deletion', () => {
 
     beforeEach(() => {
       req = {
-        body: { confirmation: 'yes', isRecurring: 'false', appointmentEventId: 123 },
-        flash: flashImpl,
+        params: { id: 123 },
+        body: { confirmation: 'yes', isRecurring: 'false' },
+        session: { userDetails: { activeCaseLoadId: 'MDI' } },
       }
     })
 
@@ -141,8 +161,9 @@ describe('confirm single appointment deletion', () => {
 
     beforeEach(() => {
       req = {
-        body: { confirmation: 'no', isRecurring: 'false', appointmentEventId: 123 },
-        flash: flashImpl,
+        params: { id: 123 },
+        body: { confirmation: 'no', isRecurring: 'false' },
+        session: { userDetails: { activeCaseLoadId: 'MDI' } },
       }
     })
 
@@ -160,8 +181,9 @@ describe('confirm recurring appointment deletion', () => {
 
     beforeEach(() => {
       req = {
-        body: { confirmation: 'yes', isRecurring: 'true', appointmentEventId: 123 },
-        flash: flashImpl,
+        params: { id: 123 },
+        body: { confirmation: 'yes', isRecurring: 'true' },
+        session: { userDetails: { activeCaseLoadId: 'MDI' } },
       }
     })
 
@@ -177,8 +199,9 @@ describe('confirm recurring appointment deletion', () => {
 
     beforeEach(() => {
       req = {
-        body: { confirmation: 'no', isRecurring: 'true', appointmentEventId: 123 },
-        flash: flashImpl,
+        params: { id: 123 },
+        body: { confirmation: 'no', isRecurring: 'true' },
+        session: { userDetails: { activeCaseLoadId: 'MDI' } },
       }
     })
 

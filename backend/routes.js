@@ -50,6 +50,7 @@ const { raiseAnalyticsEvent } = require('./raiseAnalyticsEvent')
 const whereaboutsHomepageController = require('./controllers/whereabouts/whereaboutsHomepage')
 const backToStart = require('./controllers/backToStart')
 const permit = require('./controllers/permit')
+const appointmentDeletionServiceFactory = require('./services/appointmentDeletionService')
 const appointmentDetails = require('./controllers/appointmentDetails')
 const appointmentConfirmDeletion = require('./controllers/appointmentConfirmDeletion')
 const appointmentDeleted = require('./controllers/appointmentDeleted')
@@ -253,10 +254,29 @@ const setup = ({
 
   router.get('/back-to-start', backToStart())
 
-  router.get('/appointment-details/confirm-deletion', appointmentConfirmDeletion({ prisonApi, whereaboutsApi }).index)
-  router.post('/appointment-details/confirm-deletion', appointmentConfirmDeletion({ whereaboutsApi }).post)
+  router.get(
+    '/appointment-details/:id/confirm-deletion',
+    appointmentConfirmDeletion({
+      whereaboutsApi,
+      appointmentDeletionService: appointmentDeletionServiceFactory({ prisonApi }),
+    }).index
+  )
+  router.post(
+    '/appointment-details/:id/confirm-deletion',
+    appointmentConfirmDeletion({
+      whereaboutsApi,
+      appointmentDeletionService: appointmentDeletionServiceFactory({ prisonApi }),
+    }).post
+  )
   router.get('/appointment-details/deleted', appointmentDeleted().index)
-  router.use('/appointment-details/:id', appointmentDetails({ prisonApi, whereaboutsApi }))
+  router.use(
+    '/appointment-details/:id',
+    appointmentDetails({
+      prisonApi,
+      whereaboutsApi,
+      appointmentDeletionService: appointmentDeletionServiceFactory({ prisonApi }),
+    })
+  )
 
   return router
 }
