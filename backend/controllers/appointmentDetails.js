@@ -52,7 +52,7 @@ module.exports = ({ prisonApi, whereaboutsApi }) => async (req, res) => {
   const basicDetails = {
     type: appointmentType?.description,
     location: locationType?.userDescription,
-    date: getDate(appointment.startTime),
+    date: getDate(appointment.startTime, 'D MMMM YYYY'),
   }
 
   const timeDetails = {
@@ -64,7 +64,7 @@ module.exports = ({ prisonApi, whereaboutsApi }) => async (req, res) => {
     recurring: recurring ? 'Yes' : 'No',
     ...(recurring && {
       repeats: repeatTypes.find(repeat => repeat.value === recurring.repeatPeriod).text,
-      lastAppointment: getDate(lastAppointmentDate.endOfPeriod),
+      lastAppointment: getDate(lastAppointmentDate.endOfPeriod, 'D MMMM YYYY'),
     }),
   }
 
