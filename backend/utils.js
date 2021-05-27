@@ -309,6 +309,14 @@ const joinUrlPath = (url, path) => {
   return url + path
 }
 
+const getWith404AsNull = async apiCall =>
+  new Promise((resolve, reject) =>
+    apiCall.then(details => resolve(details)).catch(error => {
+      if (error?.response?.status === 404) resolve(null)
+      reject(error)
+    })
+  )
+
 module.exports = {
   isBeforeToday,
   isToday,
@@ -356,4 +364,5 @@ module.exports = {
   createStringFromList,
   isXHRRequest,
   joinUrlPath,
+  getWith404AsNull,
 }
