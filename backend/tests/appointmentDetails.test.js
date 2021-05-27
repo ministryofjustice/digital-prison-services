@@ -65,7 +65,7 @@ describe('appointment details', () => {
       expect(prisonApi.getStaffDetails).toHaveBeenCalledWith(res.locals, 'TEST_USER')
     })
 
-    it('should fall back to the user id if the user no longer exists', async () => {
+    it('should fall back to the user id if there are errors fetching the user details', async () => {
       prisonApi.getStaffDetails = jest.fn().mockRejectedValue(new Error('error'))
       await controller(req, res)
 
