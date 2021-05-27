@@ -10,11 +10,11 @@ module.exports = ({ prisonApi, whereaboutsApi }) => async (req, res) => {
 
   const { appointment, recurring, videoLinkBooking } = appointmentDetails
 
-  const [prisonerDetails, locationTypes, appointmentTypes] = await Promise.all([
+  const [prisonerDetails, locationTypes, appointmentTypes, staffDetails] = await Promise.all([
     prisonApi.getDetails(res.locals, appointment.offenderNo),
     prisonApi.getLocationsForAppointments(res.locals, activeCaseLoadId),
     prisonApi.getAppointmentTypes(res.locals),
-    // prisonApi.getStaffDetails(res.locals, appointment.createUserId)
+    prisonApi.getStaffDetails(res.locals, appointment.createUserId),
   ])
 
   const appointmentType = appointmentTypes?.find(type => type.code === appointment.appointmentTypeCode)
@@ -46,7 +46,7 @@ module.exports = ({ prisonApi, whereaboutsApi }) => async (req, res) => {
   const additionalDetails = {
     ...(videoLinkBooking && { courtLocation: videoLinkBooking.main.court }),
     comments: appointment.comment || 'Not entered',
-    // addedBy: formatName(staffDetails.firstName, staffDetails.lastName),
+    addedBy: formatName(staffDetails.firstName, staffDetails.lastName),
   }
 
   const basicDetails = {

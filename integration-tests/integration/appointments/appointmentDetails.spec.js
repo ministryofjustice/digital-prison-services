@@ -9,6 +9,7 @@ context('Appointment details page', () => {
       locationId: 2,
       appointmentTypeCode: 'GYM',
       startTime: '2021-05-20T13:00:00',
+      createUserId: 'TEST_USER',
     },
     recurring: null,
     videoLinkBooking: null,
@@ -40,6 +41,10 @@ context('Appointment details page', () => {
       id: 1,
       appointment: testAppointment,
     })
+    cy.task('stubGetStaffDetails', {
+      staffId: 'TEST_USER',
+      response: { firstName: 'Test', lastName: 'User' },
+    })
   })
 
   it('Should show the correct information', () => {
@@ -59,6 +64,7 @@ context('Appointment details page', () => {
     cy.get('.qa-repeats-value').should('not.exist')
     cy.get('.qa-lastAppointment-value').should('not.exist')
     cy.get('.qa-comments-value').should('contain', 'Not entered')
+    cy.get('.qa-addedBy-value').should('contain', 'Test User')
     cy.get('[data-test="return-link"]')
       .should('have.attr', 'href')
       .should('include', '/view-all-appointments')
@@ -95,6 +101,7 @@ context('Appointment details page', () => {
       cy.get('.qa-repeats-value').should('contain', 'Weekly')
       cy.get('.qa-lastAppointment-value').should('contain', '22 July 2021')
       cy.get('.qa-comments-value').should('contain', 'Not entered')
+      cy.get('.qa-addedBy-value').should('contain', 'Test User')
       cy.get('[data-test="return-link"]')
         .should('have.attr', 'href')
         .should('include', '/view-all-appointments')
@@ -158,6 +165,7 @@ context('Appointment details page', () => {
       cy.get('.qa-repeats-value').should('not.exist')
       cy.get('.qa-lastAppointment-value').should('not.exist')
       cy.get('.qa-comments-value').should('contain', 'Test appointment comments')
+      cy.get('.qa-addedBy-value').should('contain', 'Test User')
       cy.get('[data-test="return-link"]')
         .should('have.attr', 'href')
         .should('include', '/view-all-appointments')
