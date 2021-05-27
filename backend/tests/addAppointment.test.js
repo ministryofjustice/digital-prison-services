@@ -61,8 +61,6 @@ describe('Add appointment', () => {
     whereaboutsApi.createAppointment = jest.fn()
 
     controller = addAppointmentFactory(appointmentsService, existingEventsService, prisonApi, whereaboutsApi, logError)
-
-    jest.spyOn(Date, 'now').mockImplementation(() => 1553860800000) // Friday 2019-03-29T12:00:00.000Z
   })
 
   describe('index', () => {
@@ -282,7 +280,7 @@ describe('Add appointment', () => {
       })
 
       it('should validate and check for missing required fields', async () => {
-        // jest.spyOn(Date, 'now').mockImplementation(() => 1553860800000) // Friday 2019-03-29T12:00:00.000Z
+        jest.spyOn(Date, 'now').mockImplementation(() => 1553860800000) // Friday 2019-03-29T12:00:00.000Z
         const date = moment().format(DAY_MONTH_YEAR)
 
         req.body = {
@@ -466,7 +464,7 @@ describe('Add appointment', () => {
 
       describe('and there are existing events for an offender and a location', () => {
         it('should still show the offender and location events along with the validation messages', async () => {
-          // jest.spyOn(Date, 'now').mockImplementation(() => 1553860800000) // Friday 2019-03-29T12:00:00.000Z
+          jest.spyOn(Date, 'now').mockImplementation(() => 1553860800000) // Friday 2019-03-29T12:00:00.000Z
           const offenderEvents = [
             { eventDescription: '**Court visit scheduled**' },
             {
