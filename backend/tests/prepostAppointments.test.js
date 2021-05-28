@@ -74,7 +74,10 @@ describe('Pre post appointments', () => {
     })
 
     prisonApi.getLocation.mockReturnValue({ userDescription: 'Test location' })
-    whereaboutsApi.getCourtLocations.mockReturnValue({ courtLocations: ['Leeds', 'London'] })
+    whereaboutsApi.getCourtLocations.mockReturnValue([
+      { id: 'LEICOURT-1', name: 'Leeds' },
+      { id: 'LDNCOURT-1', name: 'London' },
+    ])
     existingEventsService.getExistingEventsForLocation.mockReturnValue(locationEvents)
 
     req.flash.mockImplementation(() => [appointmentDetails])
@@ -83,7 +86,7 @@ describe('Pre post appointments', () => {
       postAppointment: 'yes',
       preAppointment: 'no',
       postAppointmentDuration: '60',
-      court: 'london',
+      court: 'LDNCOURT-1',
     }
   })
 
@@ -141,8 +144,8 @@ describe('Pre post appointments', () => {
         'prepostAppointments.njk',
         expect.objectContaining({
           courts: [
-            { text: 'Leeds', value: 'leeds' },
-            { text: 'London', value: 'london' },
+            { text: 'Leeds', value: 'LEICOURT-1' },
+            { text: 'London', value: 'LDNCOURT-1' },
             { text: 'Other', value: 'other' },
           ],
         })
@@ -616,7 +619,7 @@ describe('Pre post appointments', () => {
           preAppointmentDuration: '15',
           preAppointmentLocation: '2',
           postAppointmentLocation: '3',
-          court: 'london',
+          court: 'LDNCOURT-1',
         }
 
         res.redirect = jest.fn()
@@ -640,7 +643,48 @@ describe('Pre post appointments', () => {
           {
             bookingId: 1,
             comment: 'Test',
-            court: 'London',
+            court: undefined,
+            courtId: 'LDNCOURT-1',
+            madeByTheCourt: false,
+            pre: {
+              startTime: '2017-10-10T10:45:00',
+              endTime: '2017-10-10T11:00:00',
+              locationId: 2,
+            },
+            main: {
+              startTime: '2017-10-10T11:00',
+              endTime: '2017-10-10T14:00',
+              locationId: 1,
+            },
+            post: {
+              startTime: '2017-10-10T14:00',
+              endTime: '2017-10-10T15:00:00',
+              locationId: 3,
+            },
+          }
+        )
+      })
+
+      it('when other court selected it should create booking', async () => {
+        const { post } = prepostAppointmentsFactory({
+          prisonApi,
+          oauthApi,
+          notifyClient,
+          appointmentsService,
+          existingEventsService,
+          whereaboutsApi,
+          raiseAnalyticsEvent: () => {},
+        })
+
+        await post({ ...req, body: { ...req.body, otherCourt: 'Mega Court' } }, res)
+
+        expect(whereaboutsApi.addVideoLinkBooking).toHaveBeenCalledWith(
+          {},
+          {
+            bookingId: 1,
+            comment: 'Test',
+            court: 'Mega Court',
+            courtId: undefined,
             madeByTheCourt: false,
             pre: {
               startTime: '2017-10-10T10:45:00',
@@ -675,7 +719,7 @@ describe('Pre post appointments', () => {
         req.body = {
           postAppointment: 'no',
           preAppointment: 'no',
-          court: 'london',
+          court: 'LDNCOURT-1',
         }
         await post(req, res)
 
@@ -686,7 +730,8 @@ describe('Pre post appointments', () => {
           {
             bookingId: 1,
             comment: 'Test',
-            court: 'London',
+            court: undefined,
+            courtId: 'LDNCOURT-1',
             madeByTheCourt: false,
             main: {
               startTime: '2017-10-10T11:00',

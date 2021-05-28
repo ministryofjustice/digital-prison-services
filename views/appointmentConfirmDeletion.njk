@@ -1,0 +1,81 @@
+{% extends "./partials/layout.njk" %}
+{% from "govuk/components/error-summary/macro.njk" import govukErrorSummary %}
+{% from "govuk/components/summary-list/macro.njk" import govukSummaryList %}
+{% from "govuk/components/radios/macro.njk" import govukRadios %}
+{% from "govuk/components/button/macro.njk" import govukButton %}
+
+{% set title = 'Delete appointment' %}
+
+{% block content %}
+    {% if errors.length > 0 %}
+        {{ govukErrorSummary({
+            titleText: "There is a problem",
+            errorList: errors,
+            attributes: { 'data-qa-errors': true }
+        }) }}
+    {% endif %}
+
+    <h1 class="govuk-heading-l">Are you sure you want to delete this appointment?</h1>
+
+    {{ govukSummaryList({
+      classes: "govuk-summary-list--no-border govuk-!-margin-bottom-2",
+      rows: basicDetails | toSummaryViewModel
+    }) }}
+
+    {{ govukSummaryList({
+      classes: "govuk-summary-list--no-border govuk-!-margin-bottom-4",
+      rows: timeDetails | toSummaryViewModel | removePaddingBottom
+    }) }}
+
+    {% if recurringDetails %}
+      {{ govukSummaryList({
+        classes: "govuk-summary-list--no-border govuk-!-margin-bottom-4",
+        rows: recurringDetails | toSummaryViewModel | removePaddingBottom
+      }) }}
+    {% endif %}
+
+    {% if prepostData | length %}
+      {{ govukSummaryList({
+        classes: "govuk-summary-list--no-border govuk-body govuk-!-margin-bottom-4",
+        rows: prepostData | toSummaryViewModel | removePaddingBottom
+      }) }}
+    {% endif %}
+
+    {{ govukSummaryList({
+      classes: "govuk-summary-list--no-border",
+      rows: additionalDetails | toSummaryViewModel
+    }) }}
+
+    <form action="{{ postAmendment }}" method="post">
+        <input type="hidden" name="_csrf" value="{{ csrfToken }}" />
+        <input type="hidden" name="isRecurring" value="{{ isRecurring }}" />
+        <input type="hidden" name="appointmentEventId" value="{{ appointmentEventId }}" />
+
+        {{ govukRadios({
+          classes: "govuk-radios--inline",
+          idPrefix: "confirmation",
+          name: "confirmation",
+          errorMessage: errors | findError('confirmation'),
+          fieldset: {
+              attributes: { 'data-test': 'confirmation-input' },
+              legend: {
+                  text: confirmationQuestionLabel,
+                  classes: "govuk-fieldset__legend--s"
+              }
+          },
+          items: [
+            {
+              value: "yes",
+              text: "Yes"
+            },
+            {
+              value: "no",
+              text: "No"
+            }
+            ]
+        }) }}
+
+        {{ govukButton({ text: "Confirm", type: "submit" }) }}
+    </form>
+
+{% endblock %}

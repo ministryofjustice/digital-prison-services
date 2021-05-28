@@ -187,7 +187,7 @@ context('A user can add an appointment', () => {
     cy.task('getBookingRequest').then(request => {
       expect(request).to.deep.equal({
         bookingId: 14,
-        court: 'Leeds',
+        courtId: 'LDS',
         comment: 'Test comment',
         madeByTheCourt: false,
         pre: {

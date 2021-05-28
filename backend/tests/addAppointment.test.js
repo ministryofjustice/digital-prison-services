@@ -1,7 +1,9 @@
 const moment = require('moment')
 const { addAppointmentFactory } = require('../controllers/appointments/addAppointment')
-const { DAY_MONTH_YEAR } = require('../../src/dateHelpers')
+const { DAY_MONTH_YEAR, DATE_TIME_FORMAT_SPEC } = require('../../src/dateHelpers')
 const { repeatTypes } = require('../shared/appointmentConstants')
+
+const { app } = require('../config')
 
 describe('Add appointment', () => {
   const prisonApi = {}
@@ -10,6 +12,16 @@ describe('Add appointment', () => {
   const whereaboutsApi = {}
   const offenderNo = 'ABC123'
   const bookingId = 123
+
+  const twoDaysHence = moment().add(2, 'day')
+
+  const startTime = moment(twoDaysHence)
+    .set({ hours: 1, minute: 0, second: 0 })
+    .format(DATE_TIME_FORMAT_SPEC)
+
+  const endTime = moment(twoDaysHence)
+    .set({ hours: 2, minute: 0, second: 0 })
+    .format(DATE_TIME_FORMAT_SPEC)
 
   let req
   let res
@@ -44,6 +56,7 @@ describe('Add appointment', () => {
 
     prisonApi.getDetails = jest.fn()
     prisonApi.getLocation = jest.fn()
+    prisonApi.addAppointments = jest.fn()
 
     whereaboutsApi.createAppointment = jest.fn()
 
@@ -122,6 +135,67 @@ describe('Add appointment', () => {
 
       prisonApi.getLocation = jest.fn().mockResolvedValue({ userDescription: 'Gym' })
       existingEventsService.getExistingEventsForLocation = jest.fn().mockResolvedValue([{ eventId: 1 }, { eventId: 2 }])
+    })
+
+    it('should make a call to prison api to create an appointment when the feature is turned off', async () => {
+      app.whereaboutsCreateAppointmentEnabled = false
+
+      req.body = {
+        ...validBody,
+        date: twoDaysHence.format(DAY_MONTH_YEAR),
+      }
+
+      await controller.post(req, res)
+
+      expect(whereaboutsApi.createAppointment.mock.calls.length).toBe(0)
+      expect(prisonApi.addAppointments).toHaveBeenCalledWith(
+        {},
+        {
+          appointmentDefaults: {
+            appointmentType: 'APT1',
+            comment: 'Test comment',
+            endTime,
+            locationId: 1,
+            startTime,
+          },
+          appointments: [
+            {
+              bookingId: 123,
+            },
+          ],
+          repeat: {
+            count: '1',
+            repeatPeriod: 'DAILY',
+          },
+        }
+      )
+    })
+    it('should make a call to whereabouts api to create an appointment when the feature is turned on', async () => {
+      app.whereaboutsCreateAppointmentEnabled = true
+
+      req.body = {
+        ...validBody,
+        date: twoDaysHence.format(DAY_MONTH_YEAR),
+      }
+
+      await controller.post(req, res)
+
+      expect(prisonApi.addAppointments.mock.calls.length).toBe(0)
+      expect(whereaboutsApi.createAppointment).toHaveBeenCalledWith(
+        {},
+        {
+          appointmentType: 'APT1',
+          bookingId: 123,
+          comment: 'Test comment',
+          startTime,
+          endTime,
+          locationId: 1,
+          repeat: {
+            count: '1',
+            repeatPeriod: 'DAILY',
+          },
+        }
+      )
     })
 
     describe('when there are no errors', () => {
@@ -248,9 +322,9 @@ describe('Add appointment', () => {
 
       it('should return validation messages for start times being in the past', async () => {
         const date = moment().format(DAY_MONTH_YEAR)
-        const startTime = moment().subtract(5, 'minutes')
-        const startTimeHours = startTime.hour()
-        const startTimeMinutes = startTime.minute()
+        const fiveMinutesPrior = moment().subtract(5, 'minutes')
+        const startTimeHours = fiveMinutesPrior.hour()
+        const startTimeMinutes = fiveMinutesPrior.minute()
 
         req.body = {
           date,
@@ -271,13 +345,13 @@ describe('Add appointment', () => {
       })
 
       it('should validate that the end time comes after the start time', async () => {
-        const endTime = moment().subtract(2, 'hours')
-        const endTimeHours = endTime.hour()
-        const endTimeMinutes = endTime.minute()
+        const twoHoursPrior = moment().subtract(2, 'hours')
+        const endTimeHours = twoHoursPrior.hour()
+        const endTimeMinutes = twoHoursPrior.minute()
 
-        const startTime = moment().add(5, 'minutes')
-        const startTimeHours = startTime.hour()
-        const startTimeMinutes = startTime.minute()
+        const fiverMinutesHence = moment().add(5, 'minutes')
+        const startTimeHours = fiverMinutesHence.hour()
+        const startTimeMinutes = fiverMinutesHence.minute()
 
         req.body = {
           date: moment().format(DAY_MONTH_YEAR),
@@ -409,9 +483,9 @@ describe('Add appointment', () => {
             },
           ]
           const date = moment().format(DAY_MONTH_YEAR)
-          const startTime = moment().subtract(5, 'minutes')
-          const startTimeHours = startTime.hour()
-          const startTimeMinutes = startTime.minute()
+          const fiveMinutesPrior = moment().subtract(5, 'minutes')
+          const startTimeHours = fiveMinutesPrior.hour()
+          const startTimeMinutes = fiveMinutesPrior.minute()
 
           req.body = {
             date,

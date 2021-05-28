@@ -1,4 +1,7 @@
+import { makeNotFoundError } from './helpers'
+
 const appointmentDetails = require('../controllers/appointmentDetails.js')
+const { makeError } = require('./helpers')
 
 describe('appointment details', () => {
   const testAppointment = {
@@ -9,6 +12,7 @@ describe('appointment details', () => {
       locationId: 2,
       appointmentTypeCode: 'GYM',
       startTime: '2021-05-20T13:00:00',
+      createUserId: 'TEST_USER',
     },
     recurring: null,
     videoLinkBooking: null,
@@ -25,6 +29,7 @@ describe('appointment details', () => {
     req = {
       params: { id: 1 },
       session: { userDetails: { activeCaseLoadId: 'MDI' } },
+      flash: jest.fn(),
     }
     res = { render: jest.fn() }
 
@@ -43,6 +48,9 @@ describe('appointment details', () => {
     prisonApi.getAppointmentTypes = jest
       .fn()
       .mockResolvedValue([{ code: 'GYM', description: 'Gym' }, { description: 'Video link booking', code: 'VLB' }])
+    prisonApi.getStaffDetails = jest
+      .fn()
+      .mockResolvedValue({ username: 'TEST_USER', firstName: 'TEST', lastName: 'USER' })
 
     whereaboutsApi.getAppointment = jest.fn().mockResolvedValue(testAppointment)
 
@@ -57,6 +65,23 @@ describe('appointment details', () => {
       expect(prisonApi.getDetails).toHaveBeenCalledWith(res.locals, 'ABC123')
       expect(prisonApi.getLocationsForAppointments).toHaveBeenCalledWith(res.locals, 'MDI')
       expect(prisonApi.getAppointmentTypes).toHaveBeenCalledWith(res.locals)
+      expect(prisonApi.getStaffDetails).toHaveBeenCalledWith(res.locals, 'TEST_USER')
+    })
+
+    it('should fall back to the user id if there are errors fetching the user details', async () => {
+      prisonApi.getStaffDetails = jest.fn().mockRejectedValue(makeNotFoundError())
+
+      await controller(req, res)
+
+      expect(res.render).toHaveBeenCalledWith(
+        'appointmentDetails',
+        expect.objectContaining({
+          additionalDetails: {
+            comments: 'Not entered',
+            addedBy: 'TEST_USER',
+          },
+        })
+      )
     })
 
     it('should render with the correct appointment', async () => {
@@ -65,9 +90,10 @@ describe('appointment details', () => {
       expect(res.render).toHaveBeenCalledWith('appointmentDetails', {
         additionalDetails: {
           comments: 'Not entered',
+          addedBy: 'Test User',
         },
         basicDetails: {
-          date: 'Thursday 20 May 2021',
+          date: '20 May 2021',
           location: 'Gymnasium',
           type: 'Gym',
         },
@@ -76,6 +102,32 @@ describe('appointment details', () => {
           name: 'Barry Smith',
           number: 'ABC123',
         },
+        recurringDetails: {
+          recurring: 'No',
+        },
+        timeDetails: {
+          startTime: '13:00',
+          endTime: 'Not entered',
+        },
+      })
+    })
+
+    it('should save the main details to flash', async () => {
+      await controller(req, res)
+
+      expect(req.flash).toHaveBeenCalledWith('appointmentDetails', {
+        id: 1,
+        isRecurring: false,
+        additionalDetails: {
+          comments: 'Not entered',
+          addedBy: 'Test User',
+        },
+        basicDetails: {
+          date: '20 May 2021',
+          location: 'Gymnasium',
+          type: 'Gym',
+        },
+        prepostData: {},
         recurringDetails: {
           recurring: 'No',
         },
@@ -104,7 +156,7 @@ describe('appointment details', () => {
           'appointmentDetails',
           expect.objectContaining({
             recurringDetails: {
-              lastAppointment: 'Thursday 22 July 2021',
+              lastAppointment: '22 July 2021',
               recurring: 'Yes',
               repeats: 'Weekly',
             },
@@ -149,9 +201,10 @@ describe('appointment details', () => {
             additionalDetails: {
               courtLocation: 'Nottingham Justice Centre',
               comments: 'Test appointment comments',
+              addedBy: 'Test User',
             },
             basicDetails: {
-              date: 'Thursday 20 May 2021',
+              date: '20 May 2021',
               location: 'VCC Room 1',
               type: 'Video link booking',
             },

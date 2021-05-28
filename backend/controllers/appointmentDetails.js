@@ -1,6 +1,6 @@
 const moment = require('moment')
 const { endRecurringEndingDate, repeatTypes } = require('../shared/appointmentConstants')
-const { formatName, getDate, getTime } = require('../utils')
+const { formatName, getDate, getTime, getWith404AsNull } = require('../utils')
 
 module.exports = ({ prisonApi, whereaboutsApi }) => async (req, res) => {
   const { id } = req.params
@@ -14,8 +14,9 @@ module.exports = ({ prisonApi, whereaboutsApi }) => async (req, res) => {
     prisonApi.getDetails(res.locals, appointment.offenderNo),
     prisonApi.getLocationsForAppointments(res.locals, activeCaseLoadId),
     prisonApi.getAppointmentTypes(res.locals),
-    // prisonApi.getStaffDetails(res.locals, appointment.createUserId)
   ])
+
+  const staffDetails = await getWith404AsNull(prisonApi.getStaffDetails(res.locals, appointment.createUserId))
 
   const appointmentType = appointmentTypes?.find(type => type.code === appointment.appointmentTypeCode)
   const locationType = locationTypes?.find(loc => Number(loc.locationId) === Number(appointment.locationId))
@@ -43,34 +44,50 @@ module.exports = ({ prisonApi, whereaboutsApi }) => async (req, res) => {
     prepostData['post-court hearing briefing'] = createLocationAndTimeString(videoLinkBooking.post)
   }
 
+  const additionalDetails = {
+    ...(videoLinkBooking && { courtLocation: videoLinkBooking.main.court }),
+    comments: appointment.comment || 'Not entered',
+    addedBy: (staffDetails && formatName(staffDetails.firstName, staffDetails.lastName)) || appointment.createUserId,
+  }
+
+  const basicDetails = {
+    type: appointmentType?.description,
+    location: locationType?.userDescription,
+    date: getDate(appointment.startTime, 'D MMMM YYYY'),
+  }
+
+  const timeDetails = {
+    startTime: getTime(appointment.startTime),
+    endTime: (appointment.endTime && getTime(appointment.endTime)) || 'Not entered',
+  }
+
+  const recurringDetails = !videoLinkBooking && {
+    recurring: recurring ? 'Yes' : 'No',
+    ...(recurring && {
+      repeats: repeatTypes.find(repeat => repeat.value === recurring.repeatPeriod).text,
+      lastAppointment: getDate(lastAppointmentDate.endOfPeriod, 'D MMMM YYYY'),
+    }),
+  }
+
+  req.flash('appointmentDetails', {
+    id,
+    isRecurring: !!recurring,
+    additionalDetails,
+    basicDetails,
+    prepostData,
+    recurringDetails,
+    timeDetails,
+  })
+
   return res.render('appointmentDetails', {
-    additionalDetails: {
-      ...(videoLinkBooking && { courtLocation: videoLinkBooking.main.court }),
-      comments: appointment.comment || 'Not entered',
-      // addedBy: formatName(staffDetails.firstName, staffDetails.lastName),
-    },
-    basicDetails: {
-      type: appointmentType?.description,
-      location: locationType?.userDescription,
-      date: getDate(appointment.startTime),
-    },
+    additionalDetails,
+    basicDetails,
     prepostData,
     prisoner: {
       name: prisonerDetails && formatName(prisonerDetails.firstName, prisonerDetails.lastName),
       number: prisonerDetails?.offenderNo,
     },
-    ...(!videoLinkBooking && {
-      recurringDetails: {
-        recurring: recurring ? 'Yes' : 'No',
-        ...(recurring && {
-          repeats: repeatTypes.find(repeat => repeat.value === recurring.repeatPeriod).text,
-          lastAppointment: getDate(lastAppointmentDate.endOfPeriod),
-        }),
-      },
-    }),
-    timeDetails: {
-      startTime: getTime(appointment.startTime),
-      endTime: (appointment.endTime && getTime(appointment.endTime)) || 'Not entered',
-    },
+    recurringDetails,
+    timeDetails,
   })
 }
