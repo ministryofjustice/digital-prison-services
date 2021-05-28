@@ -445,5 +445,6 @@ module.exports = on => {
     stubGetWhereaboutsAppointments: appointments => whereabouts.stubGetWhereaboutsAppointments(appointments),
     stubCreateAppointment: () => whereabouts.stubCreateAppointment(),
     stubGetAppointment: ({ appointment, id, status }) => whereabouts.stubGetAppointment({ appointment, id, status }),
+    stubDeleteAppointment: ({ id, status }) => whereabouts.stubDeleteAppointment({ id, status }),
   })
 }
