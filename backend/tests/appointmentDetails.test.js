@@ -1,7 +1,7 @@
 import { makeNotFoundError } from './helpers'
 
 const appointmentDetails = require('../controllers/appointmentDetails.js')
-const appointmentDeletionServiceFactory = require('../services/appointmentDeletionService')
+const appointmentDetailsServiceFactory = require('../services/appointmentDetailsService')
 
 describe('appointment details', () => {
   const testAppointment = {
@@ -25,7 +25,7 @@ describe('appointment details', () => {
   let res
   let controller
 
-  let appointmentDeletionService
+  let appointmentDetailsService
 
   beforeEach(() => {
     req = {
@@ -56,9 +56,9 @@ describe('appointment details', () => {
 
     whereaboutsApi.getAppointment = jest.fn().mockResolvedValue(testAppointment)
 
-    appointmentDeletionService = appointmentDeletionServiceFactory({ prisonApi })
+    appointmentDetailsService = appointmentDetailsServiceFactory({ prisonApi })
 
-    controller = appointmentDetails({ prisonApi, whereaboutsApi, appointmentDeletionService })
+    controller = appointmentDetails({ prisonApi, whereaboutsApi, appointmentDetailsService })
   })
 
   describe('viewAppointment', () => {

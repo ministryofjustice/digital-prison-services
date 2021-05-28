@@ -1,6 +1,6 @@
 const { formatName } = require('../utils')
 
-module.exports = ({ prisonApi, whereaboutsApi, appointmentDeletionService }) => async (req, res) => {
+module.exports = ({ prisonApi, whereaboutsApi, appointmentDetailsService }) => async (req, res) => {
   const { id } = req.params
   const { activeCaseLoadId } = req.session.userDetails
 
@@ -8,7 +8,7 @@ module.exports = ({ prisonApi, whereaboutsApi, appointmentDeletionService }) => 
 
   const [prisonerDetails, appointmentViewModel] = await Promise.all([
     prisonApi.getDetails(res.locals, appointmentDetails.appointment.offenderNo),
-    appointmentDeletionService.getAppointmentViewModel(res, appointmentDetails, activeCaseLoadId),
+    appointmentDetailsService.getAppointmentViewModel(res, appointmentDetails, activeCaseLoadId),
   ])
 
   const { additionalDetails, basicDetails, prepostData, recurringDetails, timeDetails } = appointmentViewModel

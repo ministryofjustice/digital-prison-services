@@ -2,7 +2,7 @@ const appointmentConfirmDeletion = require('../controllers/appointmentConfirmDel
 
 const res = { locals: {}, send: jest.fn(), redirect: jest.fn() }
 const whereaboutsApi = {}
-const appointmentDeletionService = {}
+const appointmentDetailsService = {}
 
 const testAppointment = {
   appointment: {
@@ -41,9 +41,9 @@ let controller
 
 beforeEach(() => {
   whereaboutsApi.getAppointment = jest.fn().mockResolvedValue(testAppointment)
-  appointmentDeletionService.getAppointmentViewModel = jest.fn().mockResolvedValue(testAppointmentViewModel)
+  appointmentDetailsService.getAppointmentViewModel = jest.fn().mockResolvedValue(testAppointmentViewModel)
 
-  controller = appointmentConfirmDeletion({ whereaboutsApi, appointmentDeletionService })
+  controller = appointmentConfirmDeletion({ whereaboutsApi, appointmentDetailsService })
 
   res.render = jest.fn()
 })
@@ -58,7 +58,7 @@ describe('any appointment deletion', () => {
     await controller.index(req, res)
 
     expect(whereaboutsApi.getAppointment).toHaveBeenCalledWith(res.locals, 123)
-    expect(appointmentDeletionService.getAppointmentViewModel).toHaveBeenCalledWith(res, testAppointment, 'MDI')
+    expect(appointmentDetailsService.getAppointmentViewModel).toHaveBeenCalledWith(res, testAppointment, 'MDI')
   })
 
   it('should show the correct data', async () => {

@@ -1,4 +1,4 @@
-module.exports = ({ whereaboutsApi, appointmentDeletionService }) => {
+module.exports = ({ whereaboutsApi, appointmentDetailsService }) => {
   const renderTemplate = (res, id, appointmentViewModel, errors) => {
     const {
       isRecurring,
@@ -28,7 +28,7 @@ module.exports = ({ whereaboutsApi, appointmentDeletionService }) => {
 
       const appointmentDetails = await whereaboutsApi.getAppointment(res.locals, id)
 
-      const appointmentViewModel = await appointmentDeletionService.getAppointmentViewModel(
+      const appointmentViewModel = await appointmentDetailsService.getAppointmentViewModel(
         res,
         appointmentDetails,
         activeCaseLoadId
@@ -52,7 +52,7 @@ module.exports = ({ whereaboutsApi, appointmentDeletionService }) => {
 
       const appointmentDetails = await whereaboutsApi.getAppointment(res.locals, id)
 
-      const appointmentViewModel = await appointmentDeletionService.getAppointmentViewModel(
+      const appointmentViewModel = await appointmentDetailsService.getAppointmentViewModel(
         res,
         appointmentDetails,
         activeCaseLoadId

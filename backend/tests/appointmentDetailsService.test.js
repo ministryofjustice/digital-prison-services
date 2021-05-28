@@ -1,6 +1,6 @@
 import { makeNotFoundError } from './helpers'
 
-const appointmentDeletionServiceFactory = require('../services/appointmentDeletionService')
+const appointmentDetailsServiceFactory = require('../services/appointmentDetailsService')
 
 describe('appointment details', () => {
   const testAppointment = {
@@ -44,7 +44,7 @@ describe('appointment details', () => {
       .fn()
       .mockResolvedValue({ username: 'TEST_USER', firstName: 'TEST', lastName: 'USER' })
 
-    service = appointmentDeletionServiceFactory({ prisonApi })
+    service = appointmentDetailsServiceFactory({ prisonApi })
   })
 
   describe('an appointment view model request', () => {

@@ -50,7 +50,7 @@ const { raiseAnalyticsEvent } = require('./raiseAnalyticsEvent')
 const whereaboutsHomepageController = require('./controllers/whereabouts/whereaboutsHomepage')
 const backToStart = require('./controllers/backToStart')
 const permit = require('./controllers/permit')
-const appointmentDeletionServiceFactory = require('./services/appointmentDeletionService')
+const appointmentDetailsServiceFactory = require('./services/appointmentDetailsService')
 const appointmentDetails = require('./controllers/appointmentDetails')
 const appointmentConfirmDeletion = require('./controllers/appointmentConfirmDeletion')
 const appointmentDeleted = require('./controllers/appointmentDeleted')
@@ -258,14 +258,14 @@ const setup = ({
     '/appointment-details/:id/confirm-deletion',
     appointmentConfirmDeletion({
       whereaboutsApi,
-      appointmentDeletionService: appointmentDeletionServiceFactory({ prisonApi }),
+      appointmentDetailsService: appointmentDetailsServiceFactory({ prisonApi }),
     }).index
   )
   router.post(
     '/appointment-details/:id/confirm-deletion',
     appointmentConfirmDeletion({
       whereaboutsApi,
-      appointmentDeletionService: appointmentDeletionServiceFactory({ prisonApi }),
+      appointmentDetailsService: appointmentDetailsServiceFactory({ prisonApi }),
     }).post
   )
   router.get('/appointment-details/deleted', appointmentDeleted().index)
@@ -274,7 +274,7 @@ const setup = ({
     appointmentDetails({
       prisonApi,
       whereaboutsApi,
-      appointmentDeletionService: appointmentDeletionServiceFactory({ prisonApi }),
+      appointmentDetailsService: appointmentDetailsServiceFactory({ prisonApi }),
     })
   )
 
