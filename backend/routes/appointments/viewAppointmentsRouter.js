@@ -100,7 +100,11 @@ module.exports = ({ prisonApi, whereaboutsApi, logError }) => async (req, res) =
           html: getCourtDescription(),
         },
         {
-          html: `<a href="/appointment-details/${appointment.id}" class="govuk-link">View details</a>`,
+          html: `<a href="/appointment-details/${appointment.id}" class="govuk-link" aria-label="View details of ${
+            appointment.firstName[0]
+          }${appointment.firstName.slice(1).toLowerCase()} ${appointment.lastName[0]}${appointment.lastName
+            .slice(1)
+            .toLowerCase()}'s appointment">View details </a>`,
         },
       ]
     })

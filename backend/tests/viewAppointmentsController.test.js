@@ -287,7 +287,9 @@ describe('View appointments', () => {
               { text: '1-1-1' },
               { text: 'Medical - Other' },
               { html: 'HEALTH CARE' },
-              { html: '<a href="/appointment-details/1" class="govuk-link">View details</a>' },
+              {
+                html: `<a href="/appointment-details/1" class="govuk-link" aria-label="View details of Offender One's appointment">View details </a>`,
+              },
             ],
             [
               { text: '13:30 to 14:30' },
@@ -298,7 +300,9 @@ describe('View appointments', () => {
               { text: '2-1-1' },
               { text: 'Gym - Exercise' },
               { html: 'GYM' },
-              { html: '<a href="/appointment-details/2" class="govuk-link">View details</a>' },
+              {
+                html: `<a href="/appointment-details/2" class="govuk-link" aria-label="View details of Offender Two's appointment">View details </a>`,
+              },
             ],
             [
               { text: '14:30 to 15:30' },
@@ -309,7 +313,9 @@ describe('View appointments', () => {
               { text: '3-1-1' },
               { text: 'Video Link booking' },
               { html: 'VCC ROOM</br>with: Wimbledon' },
-              { html: '<a href="/appointment-details/3" class="govuk-link">View details</a>' },
+              {
+                html: `<a href="/appointment-details/3" class="govuk-link" aria-label="View details of Offender Three's appointment">View details </a>`,
+              },
             ],
             [
               { text: '13:30 to 14:30' },
@@ -320,7 +326,9 @@ describe('View appointments', () => {
               { text: undefined },
               { text: 'Video Link booking' },
               { html: 'VCC ROOM' },
-              { html: '<a href="/appointment-details/4" class="govuk-link">View details</a>' },
+              {
+                html: `<a href="/appointment-details/4" class="govuk-link" aria-label="View details of Offender Four's appointment">View details </a>`,
+              },
             ],
           ],
           date: '02/01/2020',
@@ -357,7 +365,9 @@ describe('View appointments', () => {
               { text: '1-1-1' },
               { text: 'Gym - Exercise' },
               { html: 'GYM' },
-              { html: '<a href="/appointment-details/2" class="govuk-link">View details</a>' },
+              {
+                html: `<a href="/appointment-details/2" class="govuk-link" aria-label="View details of Offender Two's appointment">View details </a>`,
+              },
             ],
           ],
           type: 'GYM',
