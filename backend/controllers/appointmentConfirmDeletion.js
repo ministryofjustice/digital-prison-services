@@ -1,47 +1,21 @@
-const packAppointmentDetails = (req, details) => {
-  req.flash('appointmentDetails', details)
-}
-
-const unpackAppointmentDetails = req => {
-  const appointmentDetails = req.flash('appointmentDetails')
-  if (!appointmentDetails || !appointmentDetails.length) throw new Error('Appointment details are missing')
-
-  return appointmentDetails.reduce(
-    (acc, current) => ({
-      ...acc,
-      ...current,
-    }),
-    {}
-  )
-}
-
-const clearAppointmentDetails = req => {
-  req.flash('appointmentDetails')
-}
-
-module.exports = ({ whereaboutsApi }) => {
-  const renderTemplate = (req, res, errors) => {
-    const appointmentDetails = unpackAppointmentDetails(req)
+module.exports = ({ whereaboutsApi, appointmentDetailsService }) => {
+  const renderTemplate = (res, id, appointmentViewModel, errors) => {
     const {
-      id,
       isRecurring,
       additionalDetails,
       basicDetails,
       prepostData,
       recurringDetails,
       timeDetails,
-    } = appointmentDetails
-
-    // Save for possible re-showing on error
-    packAppointmentDetails(req, appointmentDetails)
+    } = appointmentViewModel
 
     return res.render('appointmentConfirmDeletion', {
       errors,
       appointmentEventId: id,
-      isRecurring,
       additionalDetails,
       basicDetails,
       prepostData,
+      isRecurring,
       recurringDetails,
       timeDetails,
     })
@@ -49,7 +23,18 @@ module.exports = ({ whereaboutsApi }) => {
 
   const index = async (req, res) => {
     try {
-      renderTemplate(req, res, [])
+      const { id } = req.params
+      const { activeCaseLoadId } = req.session.userDetails
+
+      const appointmentDetails = await whereaboutsApi.getAppointment(res.locals, id)
+
+      const appointmentViewModel = await appointmentDetailsService.getAppointmentViewModel(
+        res,
+        appointmentDetails,
+        activeCaseLoadId
+      )
+
+      renderTemplate(res, id, appointmentViewModel, [])
     } catch (error) {
       res.locals.redirectUrl = `/view-all-appointments`
       throw error
@@ -57,27 +42,36 @@ module.exports = ({ whereaboutsApi }) => {
   }
 
   const post = async (req, res) => {
-    const { confirmation, isRecurring, appointmentEventId } = req.body
+    const { confirmation, isRecurring } = req.body
+    const { id } = req.params
+    const { activeCaseLoadId } = req.session.userDetails
 
     if (!confirmation) {
       const errors = []
       errors.push({ text: 'Select yes if you want to delete this appointment', href: '#confirmation' })
-      return renderTemplate(req, res, errors)
+
+      const appointmentDetails = await whereaboutsApi.getAppointment(res.locals, id)
+
+      const appointmentViewModel = await appointmentDetailsService.getAppointmentViewModel(
+        res,
+        appointmentDetails,
+        activeCaseLoadId
+      )
+
+      return renderTemplate(res, id, appointmentViewModel, errors)
     }
 
-    clearAppointmentDetails(req)
-
     if (confirmation === 'no') {
-      return res.redirect(`/appointment-details/${appointmentEventId}`)
+      return res.redirect(`/appointment-details/${id}`)
     }
 
     if (isRecurring === 'true') return res.redirect(`/appointment-details/recurring-appointments-booked`)
 
     try {
-      await whereaboutsApi.deleteAppointment(res.locals, appointmentEventId)
+      await whereaboutsApi.deleteAppointment(res.locals, id)
       return res.redirect(`/appointment-details/deleted?multipleDeleted=false`)
     } catch (error) {
-      res.locals.redirectUrl = `/appointment-details/${appointmentEventId}`
+      res.locals.redirectUrl = `/appointment-details/${id}`
       throw error
     }
   }

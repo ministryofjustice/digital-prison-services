@@ -68,7 +68,7 @@ const whereaboutsApiFactory = client => {
   const getAgencyGroupLocations = (context, agencyId, groupName) =>
     get(context, `/locations/groups/${agencyId}/${groupName}`)
 
-  const getCourtLocations = context => get(context, '/court/all-courts')
+  const getCourtLocations = context => get(context, '/court/courts')
 
   const addVideoLinkBooking = (context, body) => post(context, '/court/video-link-bookings', body)
 
