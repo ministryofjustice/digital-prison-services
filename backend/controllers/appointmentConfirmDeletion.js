@@ -1,5 +1,5 @@
 module.exports = ({ whereaboutsApi, appointmentDetailsService }) => {
-  const renderTemplate = (res, id, appointmentViewModel, errors) => {
+  const renderTemplate = (req, res, id, appointmentViewModel, errors) => {
     const {
       isRecurring,
       additionalDetails,
@@ -10,7 +10,7 @@ module.exports = ({ whereaboutsApi, appointmentDetailsService }) => {
     } = appointmentViewModel
 
     return res.render('appointmentConfirmDeletion', {
-      errors,
+      errors: req.flash('deletionErrors'),
       appointmentEventId: id,
       additionalDetails,
       basicDetails,
@@ -34,7 +34,7 @@ module.exports = ({ whereaboutsApi, appointmentDetailsService }) => {
         activeCaseLoadId
       )
 
-      renderTemplate(res, id, appointmentViewModel, [])
+      renderTemplate(req, res, id, appointmentViewModel, [])
     } catch (error) {
       res.locals.redirectUrl = `/view-all-appointments`
       throw error
@@ -44,21 +44,13 @@ module.exports = ({ whereaboutsApi, appointmentDetailsService }) => {
   const post = async (req, res) => {
     const { confirmation, isRecurring } = req.body
     const { id } = req.params
-    const { activeCaseLoadId } = req.session.userDetails
 
     if (!confirmation) {
       const errors = []
       errors.push({ text: 'Select yes if you want to delete this appointment', href: '#confirmation' })
 
-      const appointmentDetails = await whereaboutsApi.getAppointment(res.locals, id)
-
-      const appointmentViewModel = await appointmentDetailsService.getAppointmentViewModel(
-        res,
-        appointmentDetails,
-        activeCaseLoadId
-      )
-
-      return renderTemplate(res, id, appointmentViewModel, errors)
+      req.flash('deletionErrors', errors)
+      return res.redirect(req.originalUrl)
     }
 
     if (confirmation === 'no') {
@@ -71,6 +63,10 @@ module.exports = ({ whereaboutsApi, appointmentDetailsService }) => {
       await whereaboutsApi.deleteAppointment(res.locals, id)
       return res.redirect(`/appointment-details/deleted?multipleDeleted=false`)
     } catch (error) {
+      if (error?.response?.status === 404) {
+        // Already deleted - ignore
+        return res.redirect(`/appointment-details/deleted?multipleDeleted=false`)
+      }
       res.locals.redirectUrl = `/appointment-details/${id}`
       throw error
     }

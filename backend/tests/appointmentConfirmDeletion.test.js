@@ -1,3 +1,5 @@
+import { makeNotFoundError } from './helpers'
+
 const appointmentConfirmDeletion = require('../controllers/appointmentConfirmDeletion')
 
 const res = { locals: {}, send: jest.fn(), redirect: jest.fn() }
@@ -49,10 +51,11 @@ beforeEach(() => {
 })
 
 describe('any appointment deletion', () => {
-  it('should call the whereabouts api and the deletion service', async () => {
+  it('should call the whereabouts api and the appointment details service', async () => {
     const req = {
       params: { id: 123 },
       session: { userDetails: { activeCaseLoadId: 'MDI' } },
+      flash: jest.fn(),
     }
 
     await controller.index(req, res)
@@ -65,12 +68,12 @@ describe('any appointment deletion', () => {
     const req = {
       params: { id: 1 },
       session: { userDetails: { activeCaseLoadId: 'MDI' } },
+      flash: jest.fn(),
     }
 
     await controller.index(req, res)
 
     expect(res.render).toHaveBeenCalledWith('appointmentConfirmDeletion', {
-      errors: [],
       isRecurring: false,
       appointmentEventId: 1,
       additionalDetails: {
@@ -92,17 +95,36 @@ describe('any appointment deletion', () => {
     })
   })
 
-  it('should show the relevant error if no confirmation radio button is selected', async () => {
+  it('should add the relevant error to the flash if no confirmation radio button is selected', async () => {
     const req = {
       params: { id: 123 },
       body: { confirmation: '', isRecurring: 'false' },
       session: { userDetails: { activeCaseLoadId: 'MDI' } },
+      flash: jest.fn(),
+      originalUrl: 'confirm-deletion',
     }
 
     await controller.post(req, res)
 
+    expect(req.flash).toHaveBeenCalledWith('deletionErrors', [
+      { href: '#confirmation', text: 'Select yes if you want to delete this appointment' },
+    ])
+
+    expect(res.redirect).toHaveBeenCalledWith('confirm-deletion')
+  })
+
+  it('should show any errors stored the flash', async () => {
+    const req = {
+      params: { id: 123 },
+      body: { confirmation: '', isRecurring: 'false' },
+      session: { userDetails: { activeCaseLoadId: 'MDI' } },
+      flash: jest.fn().mockReturnValue([{ text: 'Error message', href: '#errorhref' }]),
+    }
+
+    await controller.index(req, res)
+
     expect(res.render).toHaveBeenCalledWith('appointmentConfirmDeletion', {
-      errors: [{ text: 'Select yes if you want to delete this appointment', href: '#confirmation' }],
+      errors: [{ text: 'Error message', href: '#errorhref' }],
       appointmentEventId: 123,
       isRecurring: false,
       additionalDetails: {
@@ -153,6 +175,14 @@ describe('confirm single appointment deletion', () => {
 
       await expect(controller.post(req, res)).rejects.toThrowError(error)
       expect(res.locals.redirectUrl).toBe('/appointment-details/123')
+    })
+
+    it('should go to the report page if the deletion fails due to a 404 error when deleting', async () => {
+      whereaboutsApi.deleteAppointment = jest.fn().mockRejectedValue(makeNotFoundError())
+
+      await controller.post(req, res)
+
+      expect(res.redirect).toHaveBeenCalledWith('/appointment-details/deleted?multipleDeleted=false')
     })
   })
 
