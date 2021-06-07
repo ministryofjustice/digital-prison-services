@@ -67,7 +67,7 @@ const Header = ({ authUrl, user }) => {
         {user.caseLoadOptions &&
           user.caseLoadOptions.length && (
             <a className="location-bar__link" href="/change-caseload" data-test="change-location-link">
-              Change location
+              Change your location
             </a>
           )}
       </div>
