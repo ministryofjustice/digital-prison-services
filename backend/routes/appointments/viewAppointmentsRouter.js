@@ -1,6 +1,6 @@
 const moment = require('moment')
 const { serviceUnavailableMessage } = require('../../common-messages')
-const { getTime, properCaseName, getCurrentPeriod } = require('../../utils')
+const { getTime, properCaseName, getCurrentPeriod, formatName } = require('../../utils')
 
 const prisonApiLocationDescription = async (res, whereaboutsApi, locationKey, userCaseLoad) => {
   const fullLocationPrefix = await whereaboutsApi.getAgencyGroupLocationPrefix(res.locals, userCaseLoad, locationKey)
@@ -100,7 +100,12 @@ module.exports = ({ prisonApi, whereaboutsApi, logError }) => async (req, res) =
           html: getCourtDescription(),
         },
         {
-          html: `<a href="/appointment-details/${appointment.id}" class="govuk-link">View details</a>`,
+          html: `<a href="/appointment-details/${
+            appointment.id
+          }" class="govuk-link" aria-label="View details of ${formatName(
+            appointment.firstName,
+            appointment.lastName
+          )}'s appointment">View details </a>`,
         },
       ]
     })
