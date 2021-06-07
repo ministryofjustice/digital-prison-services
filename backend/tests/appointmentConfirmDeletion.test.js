@@ -1,3 +1,5 @@
+import { makeNotFoundError } from './helpers'
+
 const appointmentConfirmDeletion = require('../controllers/appointmentConfirmDeletion')
 
 const res = { locals: {}, send: jest.fn(), redirect: jest.fn() }
@@ -49,7 +51,7 @@ beforeEach(() => {
 })
 
 describe('any appointment deletion', () => {
-  it('should call the whereabouts api and the deletion service', async () => {
+  it('should call the whereabouts api and the appointment details service', async () => {
     const req = {
       params: { id: 123 },
       session: { userDetails: { activeCaseLoadId: 'MDI' } },
@@ -173,6 +175,14 @@ describe('confirm single appointment deletion', () => {
 
       await expect(controller.post(req, res)).rejects.toThrowError(error)
       expect(res.locals.redirectUrl).toBe('/appointment-details/123')
+    })
+
+    it('should go to the report page if the deletion fails due to a 404 error when deleting', async () => {
+      whereaboutsApi.deleteAppointment = jest.fn().mockRejectedValue(makeNotFoundError())
+
+      await controller.post(req, res)
+
+      expect(res.redirect).toHaveBeenCalledWith('/appointment-details/deleted?multipleDeleted=false')
     })
   })
 
