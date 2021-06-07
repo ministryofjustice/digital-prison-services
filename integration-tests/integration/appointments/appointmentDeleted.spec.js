@@ -17,7 +17,8 @@ context('Deleted appointment page', () => {
     cy.visit(`/appointment-details/deleted`)
     const deletedSingleAppointmentPage = DeletedSingleAppointmentPage.verifyOnPage()
 
-    deletedSingleAppointmentPage.finishLink()
+    deletedSingleAppointmentPage
+      .finishLink()
       .should('have.attr', 'href')
       .then(href => {
         expect(href).to.equal('/view-all-appointments')
@@ -28,7 +29,8 @@ context('Deleted appointment page', () => {
     cy.visit(`/appointment-details/deleted?multipleDeleted=true`)
     const deletedMultipleAppointmentPage = DeletedMultipleAppointmentsPage.verifyOnPage()
 
-    deletedMultipleAppointmentPage.finishLink()
+    deletedMultipleAppointmentPage
+      .finishLink()
       .should('have.attr', 'href')
       .then(href => {
         expect(href).to.equal('/view-all-appointments')

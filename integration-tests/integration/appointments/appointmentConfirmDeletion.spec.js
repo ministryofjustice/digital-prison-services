@@ -181,7 +181,7 @@ context('Confirm appointment deletion page', () => {
 
       cy.get('h1').should('have.text', 'Sorry, there is a problem with the service')
     })
-  
+
     it('Should return to the appointment details page when deletion rejected', () => {
       cy.visit('/appointment-details/1/confirm-deletion')
       const confirmDeleteAppointmentPage = ConfirmDeleteAppointmentPage.verifyOnPage()
@@ -189,9 +189,9 @@ context('Confirm appointment deletion page', () => {
       form.confirmNo().click()
       form.submitButton().click()
 
-      cy.url().should('include', '/appointment-details/1') 
+      cy.url().should('include', '/appointment-details/1')
     })
-  
+
     it('Should show an error if nothing selected', () => {
       cy.visit('/appointment-details/1/confirm-deletion')
       const confirmDeleteAppointmentPage = ConfirmDeleteAppointmentPage.verifyOnPage()
@@ -210,9 +210,9 @@ context('Confirm appointment deletion page', () => {
       form.confirmYes().click()
       form.submitButton().click()
 
-      cy.url().should('include', '/appointment-details/1') 
+      cy.url().should('include', '/appointment-details/1')
     })
-  
+
     it('Should return to the appointment details page when deletion rejected', () => {
       cy.visit('/appointment-details/1/confirm-deletion')
       const confirmDeleteAppointmentPage = ConfirmDeleteAppointmentPage.verifyOnPage()
@@ -220,9 +220,9 @@ context('Confirm appointment deletion page', () => {
       form.confirmNo().click()
       form.submitButton().click()
 
-      cy.url().should('include', '/appointment-details/1') 
+      cy.url().should('include', '/appointment-details/1')
     })
-  
+
     it('Should show an error if nothing selected', () => {
       cy.visit('/appointment-details/1/confirm-deletion')
       const confirmDeleteAppointmentPage = ConfirmDeleteAppointmentPage.verifyOnPage()
