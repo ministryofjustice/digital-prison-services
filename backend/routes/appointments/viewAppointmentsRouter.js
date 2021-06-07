@@ -102,7 +102,8 @@ module.exports = ({ prisonApi, whereaboutsApi, logError }) => async (req, res) =
         {
           html: `<a href="/appointment-details/${
             appointment.id
-          }" class="govuk-link" aria-label="View details of ${formatName(appointment.firstName)} ${formatName(
+          }" class="govuk-link" aria-label="View details of ${formatName(
+            appointment.firstName,
             appointment.lastName
           )}'s appointment">View details </a>`,
         },
