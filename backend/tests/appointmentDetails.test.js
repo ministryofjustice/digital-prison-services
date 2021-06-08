@@ -123,6 +123,7 @@ describe('appointment details', () => {
           recurring: {
             repeatPeriod: 'WEEKLY',
             count: 10,
+            startTime: testAppointment.appointment.startTime,
           },
         })
       })

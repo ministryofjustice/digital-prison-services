@@ -69,6 +69,7 @@ context('Confirm appointment deletion page', () => {
           recurring: {
             repeatPeriod: 'WEEKLY',
             count: 10,
+            startTime: testAppointment.appointment.startTime,
           },
         },
       })
