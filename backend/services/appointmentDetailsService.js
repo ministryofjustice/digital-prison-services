@@ -19,7 +19,7 @@ module.exports = ({ prisonApi }) => {
     const lastAppointmentDate =
       recurring &&
       endRecurringEndingDate({
-        date: moment(appointment.startTime).format('DD/MM/YYYY'),
+        date: moment(recurring.startTime).format('DD/MM/YYYY'),
         repeats: recurring.repeatPeriod,
         times: recurring.count,
       })
