@@ -54,41 +54,51 @@ module.exports = ({ prisonApi, whereaboutsApi, logError }) => async (req, res) =
   })
 
   const videoLinkAppointmentBookingIds = videoLinkAppointments.map(VLAppointment => VLAppointment.bookingId)
-  const videoLinkAppointmentWithPreAndPostCount = videoLinkAppointmentBookingIds.reduce((acc, curr) => {
+  const VLAppointmentsWithPrePostCount = videoLinkAppointmentBookingIds.reduce((acc, curr) => {
     acc[curr] = (acc[curr] || 0) + 1
     return acc
   }, {})
-  const videoLinkAppointmentToMergeBookingIds = [...new Set(videoLinkAppointmentBookingIds)].filter(
-    bookingId => videoLinkAppointmentWithPreAndPostCount[bookingId] > 2
+
+  const VLAppointmentsToMergeBookingIds = [...new Set(videoLinkAppointmentBookingIds)].filter(
+    bookingId => VLAppointmentsWithPrePostCount[bookingId] >= 2
   )
-  const videoLinkAppointmentsToMergeIds = videoLinkAppointments
-    .filter(VLAppointment => videoLinkAppointmentToMergeBookingIds.includes(VLAppointment.bookingId))
+  const VLAppointmentsToMergeAppIds = videoLinkAppointments
+    .filter(VLAppointment => VLAppointmentsToMergeBookingIds.includes(VLAppointment.bookingId))
     .map(VLAppointment => VLAppointment.appointmentId)
 
-  const VideoLinkPreAppointmentIds = videoLinkAppointments
+  const VLPreAppIds = videoLinkAppointments
     .filter(VLAppointment => VLAppointment.hearingType === 'PRE')
     .map(VLAppointment => VLAppointment.appointmentId)
 
-  const VideoLinkMainAppointmentIds = videoLinkAppointments
+  const VLMainAppsIdWithPreOrPost = videoLinkAppointments
     .filter(
       VLAppointment =>
-        VLAppointment.hearingType === 'MAIN' && videoLinkAppointmentsToMergeIds.includes(VLAppointment.appointmentId)
+        VLAppointment.hearingType === 'MAIN' && VLAppointmentsToMergeAppIds.includes(VLAppointment.appointmentId)
     )
     .map(VLAppointment => VLAppointment.appointmentId)
 
-  const VideoLinkPostAppointmentIds = videoLinkAppointments
+  const VLPostAppIds = videoLinkAppointments
     .filter(VLAppointment => VLAppointment.hearingType === 'POST')
     .map(VLAppointment => VLAppointment.appointmentId)
 
-  const appointmentsWithPrePostTimings = videoLinkAppointmentToMergeBookingIds.reduce((acc, curr) => {
+  const VLAppFullTimings = VLAppointmentsToMergeBookingIds.reduce((acc, curr) => {
     const obj = {}
     const matchedAppointments = videoLinkAppointmentsWithTimesAndBookingIds.filter(
       VLAppointment => VLAppointment.bookingId === curr
     )
-    obj.bookingId = curr
-    obj.mainAppointmentId = matchedAppointments[1].id
-    obj.startTime = matchedAppointments[0].startTime
-    obj.endTime = matchedAppointments[2].endTime
+    if (matchedAppointments.length === 2) {
+      obj.bookingId = curr
+      obj.mainAppointmentId = VLMainAppsIdWithPreOrPost.includes(matchedAppointments[0].id)
+        ? matchedAppointments[0].id
+        : matchedAppointments[1].id
+      obj.startTime = matchedAppointments[0].startTime
+      obj.endTime = matchedAppointments[1].endTime
+    } else if (matchedAppointments.length > 2) {
+      obj.bookingId = curr
+      obj.mainAppointmentId = matchedAppointments[1].id
+      obj.startTime = matchedAppointments[0].startTime
+      obj.endTime = matchedAppointments[2].endTime
+    }
     return acc.concat(obj)
   }, [])
 
@@ -101,10 +111,7 @@ module.exports = ({ prisonApi, whereaboutsApi, logError }) => async (req, res) =
 
   const appointmentsEnhanced = appointments
     .filter(appointment => (type ? appointment.appointmentTypeCode === type : true))
-    .filter(
-      appointment =>
-        !VideoLinkPreAppointmentIds.includes(appointment.id) && !VideoLinkPostAppointmentIds.includes(appointment.id)
-    )
+    .filter(appointment => !VLPreAppIds.includes(appointment.id) && !VLPostAppIds.includes(appointment.id))
     .map(async appointment => {
       const { startTime, endTime, offenderNo } = appointment
       const offenderName = `${properCaseName(appointment.lastName)}, ${properCaseName(appointment.firstName)}`
@@ -131,11 +138,10 @@ module.exports = ({ prisonApi, whereaboutsApi, logError }) => async (req, res) =
           appointment.locationDescription
         )
       }
-
       const getAppointmentTimes = () => {
         let timeText
-        if (VideoLinkMainAppointmentIds.includes(appointment.id)) {
-          const appointmentTimes = appointmentsWithPrePostTimings.find(
+        if (VLMainAppsIdWithPreOrPost.includes(appointment.id)) {
+          const appointmentTimes = VLAppFullTimings.find(
             VLAppointment => VLAppointment.mainAppointmentId === appointment.id
           )
           timeText = `${getTime(appointmentTimes.startTime)} to ${getTime(appointmentTimes.endTime)}`

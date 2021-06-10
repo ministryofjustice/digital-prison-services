@@ -390,6 +390,293 @@ describe('View appointments', () => {
     })
   })
 
+  describe('when there are video link appointments with pre and post appointments within the same booking', () => {
+    beforeEach(() => {
+      whereaboutsApi.getAppointments.mockReturnValue([
+        {
+          id: 439524260,
+          offenderNo: 'ABC456',
+          firstName: 'OFFENDER',
+          lastName: 'ONE',
+          date: '2020-01-02',
+          startTime: '2020-01-02T12:10:00',
+          endTime: '2020-01-02T12:30:00',
+          appointmentTypeDescription: 'Video Link booking',
+          appointmentTypeCode: 'VLB',
+          locationDescription: 'VCC ROOM',
+          locationId: 123,
+          agencyId: 'MDI',
+        },
+        {
+          id: 439524259,
+          offenderNo: 'ABC456',
+          firstName: 'OFFENDER',
+          lastName: 'ONE',
+          date: '2020-01-02',
+          startTime: '2020-01-02T12:30:00',
+          endTime: '2020-01-02T13:30:00',
+          appointmentTypeDescription: 'Video Link booking',
+          appointmentTypeCode: 'VLB',
+          locationDescription: 'VCC ROOM',
+          locationId: 456,
+          agencyId: 'MDI',
+        },
+        {
+          id: 439524261,
+          offenderNo: 'ABC456',
+          firstName: 'OFFENDER',
+          lastName: 'ONE',
+          date: '2020-01-02',
+          startTime: '2020-01-02T13:30:00',
+          endTime: '2020-01-02T13:50:00',
+          appointmentTypeDescription: 'Video Link booking',
+          appointmentTypeCode: 'VLB',
+          locationDescription: 'VCC ROOM',
+          locationId: 789,
+          agencyId: 'MDI',
+        },
+        {
+          id: 439524262,
+          offenderNo: 'ABC567',
+          firstName: 'OFFENDER',
+          lastName: 'TWO',
+          date: '2020-01-02',
+          startTime: '2020-01-02T14:30:00',
+          endTime: '2020-01-02T15:30:00',
+          appointmentTypeDescription: 'Video Link booking',
+          appointmentTypeCode: 'VLB',
+          locationDescription: 'VCC ROOM',
+          locationId: 456,
+          agencyId: 'MDI',
+        },
+        {
+          id: 439524263,
+          offenderNo: 'ABC567',
+          firstName: 'OFFENDER',
+          lastName: 'TWO',
+          date: '2020-01-02',
+          startTime: '2020-01-02T15:30:00',
+          endTime: '2020-01-02T15:50:00',
+          appointmentTypeDescription: 'Video Link booking',
+          appointmentTypeCode: 'VLB',
+          locationDescription: 'VCC ROOM',
+          locationId: 456,
+          agencyId: 'MDI',
+        },
+        {
+          id: 439524265,
+          offenderNo: 'ABC678',
+          firstName: 'OFFENDER',
+          lastName: 'THREE',
+          date: '2020-01-02',
+          startTime: '2020-01-02T16:00:00',
+          endTime: '2020-01-02T16:20:00',
+          appointmentTypeDescription: 'Video Link booking',
+          appointmentTypeCode: 'VLB',
+          locationDescription: 'VCC ROOM',
+          locationId: 456,
+          agencyId: 'MDI',
+        },
+        {
+          id: 439524264,
+          offenderNo: 'ABC678',
+          firstName: 'OFFENDER',
+          lastName: 'THREE',
+          date: '2020-01-02',
+          startTime: '2020-01-02T16:20:00',
+          endTime: '2020-01-02T16:40:00',
+          appointmentTypeDescription: 'Video Link booking',
+          appointmentTypeCode: 'VLB',
+          locationDescription: 'VCC ROOM',
+          locationId: 456,
+          agencyId: 'MDI',
+        },
+        {
+          id: 439524279,
+          offenderNo: 'XYZ123',
+          firstName: 'OFFENDER',
+          lastName: 'NINE',
+          date: '2020-01-02',
+          startTime: '2020-01-02T16:50:00',
+          endTime: '2020-01-02T17:00:00',
+          appointmentTypeDescription: 'Video Link booking',
+          appointmentTypeCode: 'VLB',
+          locationDescription: 'VCC ROOM',
+          locationId: 123,
+          agencyId: 'MDI',
+        },
+      ])
+
+      prisonApi.getDetails
+        .mockResolvedValueOnce({ assignedLivingUnit: { description: '1-1-1' } })
+        .mockResolvedValueOnce({ assignedLivingUnit: { description: '2-1-1' } })
+        .mockResolvedValueOnce({ assignedLivingUnit: { description: '3-1-1' } })
+        .mockResolvedValueOnce({ assignedLivingUnit: { description: '4-1-1' } })
+
+      whereaboutsApi.getVideoLinkAppointments.mockReturnValue({
+        appointments: [
+          {
+            id: 1,
+            bookingId: 1084837,
+            appointmentId: 439524260,
+            court: 'Derby Crown',
+            courtId: 'DRBYCC',
+            hearingType: 'PRE',
+            createdByUsername: 'username1',
+            madeByTheCourt: false,
+          },
+          {
+            id: 2,
+            bookingId: 1084837,
+            appointmentId: 439524259,
+            court: 'Derby Crown',
+            courtId: 'DRBYCC',
+            hearingType: 'MAIN',
+            createdByUsername: 'username1',
+            madeByTheCourt: false,
+          },
+          {
+            id: 3,
+            bookingId: 1084837,
+            appointmentId: 439524261,
+            court: 'Derby Crown',
+            courtId: 'DRBYCC',
+            hearingType: 'POST',
+            createdByUsername: 'username1',
+            madeByTheCourt: false,
+          },
+          {
+            id: 4,
+            bookingId: 1084838,
+            appointmentId: 439524262,
+            court: 'Caernarfon Crown',
+            courtId: 'CRNRCC',
+            hearingType: 'MAIN',
+            createdByUsername: 'username1',
+            madeByTheCourt: false,
+          },
+          {
+            id: 5,
+            bookingId: 1084838,
+            appointmentId: 439524263,
+            court: 'Caernarfon Crown',
+            courtId: 'CRNRCC',
+            hearingType: 'POST',
+            createdByUsername: 'username1',
+            madeByTheCourt: false,
+          },
+          {
+            id: 6,
+            bookingId: 1084839,
+            appointmentId: 439524265,
+            court: 'Caernarfon Crown',
+            courtId: 'CRNRCC',
+            hearingType: 'PRE',
+            createdByUsername: 'username1',
+            madeByTheCourt: false,
+          },
+          {
+            id: 7,
+            bookingId: 1084839,
+            appointmentId: 439524264,
+            court: 'Caernarfon Crown',
+            courtId: 'CRNRCC',
+            hearingType: 'MAIN',
+            createdByUsername: 'username1',
+            madeByTheCourt: false,
+          },
+          {
+            id: 10,
+            bookingId: 1084860,
+            appointmentId: 439524279,
+            court: 'Derby Crown',
+            courtId: 'DRBYCC',
+            hearingType: 'MAIN',
+            createdByUsername: 'username1',
+            madeByTheCourt: false,
+          },
+        ],
+      })
+
+      req.query = {
+        date: '02/01/2020',
+        timeSlot: 'PM',
+        residentialLocation: 'H 1',
+        type: 'VLB',
+      }
+    })
+    it('should only return the main appointment for that group, using the pre-appointment start time and the post-appointment end time', async () => {
+      await controller(req, res)
+
+      expect(res.render).toHaveBeenCalledWith(
+        'viewAppointments.njk',
+        expect.objectContaining({
+          appointmentRows: [
+            [
+              { text: '12:10 to 13:50' },
+              {
+                attributes: { 'data-sort-value': 'ONE' },
+                html: '<a href="/prisoner/ABC456" class="govuk-link">One, Offender - ABC456</a>',
+              },
+              { text: '1-1-1' },
+              { text: 'Video Link booking' },
+              { html: 'VCC ROOM</br>with: Derby Crown' },
+              {
+                html: `<a href="/appointment-details/439524259" class="govuk-link" aria-label="View details of Offender One's appointment">View details </a>`,
+              },
+            ],
+            [
+              { text: '14:30 to 15:50' },
+              {
+                attributes: { 'data-sort-value': 'TWO' },
+                html: '<a href="/prisoner/ABC567" class="govuk-link">Two, Offender - ABC567</a>',
+              },
+              { text: '2-1-1' },
+              { text: 'Video Link booking' },
+              { html: 'VCC ROOM</br>with: Caernarfon Crown' },
+              {
+                html: `<a href="/appointment-details/439524262" class="govuk-link" aria-label="View details of Offender Two's appointment">View details </a>`,
+              },
+            ],
+            [
+              { text: '16:00 to 16:40' },
+              {
+                attributes: { 'data-sort-value': 'THREE' },
+                html: '<a href="/prisoner/ABC678" class="govuk-link">Three, Offender - ABC678</a>',
+              },
+              { text: '3-1-1' },
+              { text: 'Video Link booking' },
+              { html: 'VCC ROOM</br>with: Caernarfon Crown' },
+              {
+                html: `<a href="/appointment-details/439524264" class="govuk-link" aria-label="View details of Offender Three's appointment">View details </a>`,
+              },
+            ],
+            [
+              { text: '16:50 to 17:00' },
+              {
+                attributes: { 'data-sort-value': 'NINE' },
+                html: '<a href="/prisoner/XYZ123" class="govuk-link">Nine, Offender - XYZ123</a>',
+              },
+              { text: '4-1-1' },
+              { text: 'Video Link booking' },
+              { html: 'VCC ROOM</br>with: Derby Crown' },
+              {
+                html: `<a href="/appointment-details/439524279" class="govuk-link" aria-label="View details of Offender Nine's appointment">View details </a>`,
+              },
+            ],
+          ],
+          date: '02/01/2020',
+          formattedDate: '2 January 2020',
+          locationId: undefined,
+          locations: [{ text: 'VCC Room 1', value: '1' }],
+          timeSlot: 'PM',
+          type: 'VLB',
+          types: [{ text: 'Video link booking', value: 'VLB' }],
+        })
+      )
+    })
+  })
+
   describe('when there is an error retrieving information', () => {
     it('should render the error template', async () => {
       const error = new Error('Problem retrieving appointment types')
