@@ -105,6 +105,7 @@ describe('appointment details', () => {
         ...testAppointment,
         isRecurring: true,
         recurring: {
+          id: 100,
           repeatPeriod: 'WEEKLY',
           count: 10,
           startTime: testAppointment.appointment.startTime,

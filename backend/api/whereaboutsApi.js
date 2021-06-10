@@ -112,6 +112,8 @@ const whereaboutsApiFactory = client => {
 
   const createAppointment = (context, appointmentDetails) => post(context, '/appointment', appointmentDetails)
   const deleteAppointment = (context, appointmentEventId) => sendDelete(context, `/appointment/${appointmentEventId}`)
+  const deleteRecurringAppointmentSequence = (context, recurringAppointmentSequenceId) =>
+    sendDelete(context, `/appointment/recurring/${recurringAppointmentSequenceId}`)
   const getAppointment = (context, id) => get(context, `/appointment/${id}`)
 
   return {
@@ -139,6 +141,7 @@ const whereaboutsApiFactory = client => {
     getAppointments,
     createAppointment,
     deleteAppointment,
+    deleteRecurringAppointmentSequence,
     getAppointment,
   }
 }

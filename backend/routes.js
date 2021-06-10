@@ -53,6 +53,7 @@ const permit = require('./controllers/permit')
 const appointmentDetailsServiceFactory = require('./services/appointmentDetailsService')
 const appointmentDetails = require('./controllers/appointmentDetails')
 const appointmentConfirmDeletion = require('./controllers/appointmentConfirmDeletion')
+const appointmentDeleteRecurringBookings = require('./controllers/appointmentDeleteRecurringBookings')
 const appointmentDeleted = require('./controllers/appointmentDeleted')
 
 const router = express.Router()
@@ -266,6 +267,18 @@ const setup = ({
     appointmentConfirmDeletion({
       whereaboutsApi,
       appointmentDetailsService: appointmentDetailsServiceFactory({ prisonApi }),
+    }).post
+  )
+  router.get(
+    '/appointment-details/:id/delete-recurring-bookings',
+    appointmentDeleteRecurringBookings({
+      whereaboutsApi,
+    }).index
+  )
+  router.post(
+    '/appointment-details/:id/delete-recurring-bookings',
+    appointmentDeleteRecurringBookings({
+      whereaboutsApi,
     }).post
   )
   router.get('/appointment-details/deleted', appointmentDeleted().index)

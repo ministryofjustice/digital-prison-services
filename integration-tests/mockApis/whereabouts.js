@@ -460,4 +460,18 @@ module.exports = {
       },
     })
   },
+  stubDeleteRecurringAppointmentSequence: ({ id, status = 200 }) => {
+    return stubFor({
+      request: {
+        method: 'DELETE',
+        urlPattern: `/whereabouts/appointment/recurring/${id}`,
+      },
+      response: {
+        status,
+        headers: {
+          'Content-Type': 'application/json;charset=UTF-8',
+        },
+      },
+    })
+  },
 }

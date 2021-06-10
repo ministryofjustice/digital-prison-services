@@ -57,7 +57,7 @@ module.exports = ({ whereaboutsApi, appointmentDetailsService }) => {
       return res.redirect(`/appointment-details/${id}`)
     }
 
-    if (isRecurring === 'true') return res.redirect(`/appointment-details/recurring-appointments-booked`)
+    if (isRecurring === 'true') return res.redirect(`/appointment-details/${id}/delete-recurring-bookings`)
 
     try {
       await whereaboutsApi.deleteAppointment(res.locals, id)

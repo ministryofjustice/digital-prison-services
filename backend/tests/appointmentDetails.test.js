@@ -121,6 +121,7 @@ describe('appointment details', () => {
         whereaboutsApi.getAppointment = jest.fn().mockResolvedValue({
           ...testAppointment,
           recurring: {
+            id: 100,
             repeatPeriod: 'WEEKLY',
             count: 10,
             startTime: testAppointment.appointment.startTime,
