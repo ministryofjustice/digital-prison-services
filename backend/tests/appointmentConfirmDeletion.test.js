@@ -220,7 +220,7 @@ describe('confirm recurring appointment deletion', () => {
     it('should go to the recurring appointment confirmation page', async () => {
       await controller.post(req, res)
 
-      expect(res.redirect).toHaveBeenCalledWith('/appointment-details/recurring-appointments-booked')
+      expect(res.redirect).toHaveBeenCalledWith('/appointment-details/123/delete-recurring-bookings')
     })
   })
 
