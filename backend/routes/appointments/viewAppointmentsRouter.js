@@ -64,35 +64,37 @@ module.exports = ({ prisonApi, whereaboutsApi, logError }) => async (req, res) =
     return appCopy
   }
 
-  const filterOutPrePostVLBAppointments = appointment => {
-    if (appointment.appointmentTypeCode === 'VLB') {
-      if (appointment.hearingType === 'PRE' || appointment.hearingType === 'POST') return false
+  const addDisplayTimesForVLBAppointments = (appointment, index, appointmentsArray) => {
+    const appCopy = { ...appointment }
+    const preAppointment = appointmentsArray.find(
+      otherAppointment => otherAppointment.bookingId === appointment.bookingId && otherAppointment.hearingType === 'PRE'
+    )
+    const postAppointment = appointmentsArray.find(
+      otherAppointment =>
+        otherAppointment.bookingId === appointment.bookingId && otherAppointment.hearingType === 'POST'
+    )
+    if (preAppointment) {
+      appCopy.displayStartTime = preAppointment.startTime
     }
-    return true
+    if (postAppointment) {
+      appCopy.displayEndTime = postAppointment.endTime
+    }
+    return appCopy
   }
 
   const appointmentsEnhanced = appointments
     .filter(appointment => (type ? appointment.appointmentTypeCode === type : true))
     .map(appointment => addBookingIdAndHearingTypesToVLBAppointments(appointment))
-    .map((appointment, index, array) => {
-      const appCopy = { ...appointment }
-      const preAppointment = array.find(
-        otherAppointment =>
-          otherAppointment.bookingId === appointment.bookingId && otherAppointment.hearingType === 'PRE'
-      )
-      const postAppointment = array.find(
-        otherAppointment =>
-          otherAppointment.bookingId === appointment.bookingId && otherAppointment.hearingType === 'POST'
-      )
-      if (preAppointment) {
-        appCopy.displayStartTime = preAppointment.startTime
-      }
-      if (postAppointment) {
-        appCopy.displayEndTime = postAppointment.endTime
-      }
-      return appCopy
-    })
-    .filter(appointment => filterOutPrePostVLBAppointments(appointment))
+    .map((appointment, index, appointmentsArray) =>
+      addDisplayTimesForVLBAppointments(appointment, index, appointmentsArray)
+    )
+    .filter(
+      appointment =>
+        !(
+          (appointment.appointmentTypeCode === 'VLB' && appointment.hearingType === 'PRE') ||
+          (appointment.appointmentTypeCode === 'VLB' && appointment.hearingType === 'POST')
+        )
+    )
     .map(async appointment => {
       const { startTime, endTime, offenderNo, displayStartTime, displayEndTime } = appointment
       const offenderName = `${properCaseName(appointment.lastName)}, ${properCaseName(appointment.firstName)}`
