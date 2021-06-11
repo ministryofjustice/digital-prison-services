@@ -76,11 +76,19 @@ module.exports = ({ prisonApi, whereaboutsApi, logError }) => async (req, res) =
     .map(appointment => addBookingIdAndHearingTypesToVLBAppointments(appointment))
     .map((appointment, index, array) => {
       const appCopy = { ...appointment }
-      if (array[index - 1] && array[index - 1].hearingType === 'PRE') {
-        appCopy.displayStartTime = array[index - 1].startTime
+      const preAppointment = array.find(
+        otherAppointment =>
+          otherAppointment.bookingId === appointment.bookingId && otherAppointment.hearingType === 'PRE'
+      )
+      const postAppointment = array.find(
+        otherAppointment =>
+          otherAppointment.bookingId === appointment.bookingId && otherAppointment.hearingType === 'POST'
+      )
+      if (preAppointment) {
+        appCopy.displayStartTime = preAppointment.startTime
       }
-      if (array[index + 1] && array[index + 1].hearingType === 'POST') {
-        appCopy.displayEndTime = array[index + 1].endTime
+      if (postAppointment) {
+        appCopy.displayEndTime = postAppointment.endTime
       }
       return appCopy
     })
