@@ -12,7 +12,6 @@ module.exports = {
     supportUrl: process.env.SUPPORT_URL || 'http://localhost:3000/',
     contentfulSpaceId: process.env.CONTENTFUL_SPACE_ID || 1,
     contentfulAccessToken: process.env.CONTENTFUL_ACCESS_TOKEN || 1,
-    whereaboutsCreateAppointmentEnabled: process.env.WHEREABOUTS_CREATE_APPOINTMENT_ENABLED === 'true',
   },
   analytics: {
     googleAnalyticsId: process.env.GOOGLE_ANALYTICS_ID,
