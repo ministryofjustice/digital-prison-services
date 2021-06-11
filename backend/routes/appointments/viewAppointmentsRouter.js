@@ -51,10 +51,42 @@ module.exports = ({ prisonApi, whereaboutsApi, logError }) => async (req, res) =
       court: appointment.court,
     }))
 
+  const addBookingIdAndHearingTypesToVLBAppointments = appointment => {
+    const appCopy = { ...appointment }
+    if (appointment.appointmentTypeCode === 'VLB') {
+      videoLinkAppointments.forEach(vlAppointment => {
+        if (vlAppointment.appointmentId === appointment.id) {
+          appCopy.hearingType = vlAppointment.hearingType
+          appCopy.bookingId = vlAppointment.bookingId
+        }
+      })
+    }
+    return appCopy
+  }
+
+  const filterOutPrePostVLBAppointments = appointment => {
+    if (appointment.appointmentTypeCode === 'VLB') {
+      if (appointment.hearingType === 'PRE' || appointment.hearingType === 'POST') return false
+    }
+    return true
+  }
+
   const appointmentsEnhanced = appointments
     .filter(appointment => (type ? appointment.appointmentTypeCode === type : true))
+    .map(appointment => addBookingIdAndHearingTypesToVLBAppointments(appointment))
+    .map((appointment, index, array) => {
+      const appCopy = { ...appointment }
+      if (array[index - 1] && array[index - 1].hearingType === 'PRE') {
+        appCopy.displayStartTime = array[index - 1].startTime
+      }
+      if (array[index + 1] && array[index + 1].hearingType === 'POST') {
+        appCopy.displayEndTime = array[index + 1].endTime
+      }
+      return appCopy
+    })
+    .filter(appointment => filterOutPrePostVLBAppointments(appointment))
     .map(async appointment => {
-      const { startTime, endTime, offenderNo } = appointment
+      const { startTime, endTime, offenderNo, displayStartTime, displayEndTime } = appointment
       const offenderName = `${properCaseName(appointment.lastName)}, ${properCaseName(appointment.firstName)}`
       const offenderUrl = `/prisoner/${offenderNo}`
 
@@ -82,7 +114,9 @@ module.exports = ({ prisonApi, whereaboutsApi, logError }) => async (req, res) =
 
       return [
         {
-          text: endTime ? `${getTime(startTime)} to ${getTime(endTime)}` : getTime(startTime),
+          text: endTime
+            ? `${getTime(displayStartTime || startTime)} to ${getTime(displayEndTime || endTime)}`
+            : getTime(startTime),
         },
         {
           html: `<a href="${offenderUrl}" class="govuk-link">${offenderName} - ${offenderNo}</a>`,
