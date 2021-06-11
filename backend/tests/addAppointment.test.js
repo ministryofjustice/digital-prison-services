@@ -1,6 +1,6 @@
 const moment = require('moment')
 const { addAppointmentFactory } = require('../controllers/appointments/addAppointment')
-const { DAY_MONTH_YEAR, DATE_TIME_FORMAT_SPEC } = require('../../src/dateHelpers')
+const { DAY_MONTH_YEAR } = require('../../src/dateHelpers')
 const { repeatTypes } = require('../shared/appointmentConstants')
 
 describe('Add appointment', () => {
@@ -10,8 +10,6 @@ describe('Add appointment', () => {
   const whereaboutsApi = {}
   const offenderNo = 'ABC123'
   const bookingId = 123
-
-  const twoDaysHence = moment().add(2, 'day')
 
   let req
   let res
