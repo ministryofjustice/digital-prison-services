@@ -56,4 +56,3 @@ env:
   PECS_URL: https://hmpps-book-secure-move-frontend-staging.apps.live-1.cloud-platform.service.justice.gov.uk
   COMPLEXITY_OF_NEED_URI: https://complexity-of-need-staging.hmpps.service.justice.gov.uk
   PRISONS_WITH_OFFENDERS_THAT_HAVE_COMPLEX_NEEDS: "MDI,LEI"
-  WHEREABOUTS_CREATE_APPOINTMENT_ENABLED: true
