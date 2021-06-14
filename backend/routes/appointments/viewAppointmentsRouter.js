@@ -65,7 +65,6 @@ module.exports = ({ prisonApi, whereaboutsApi, logError }) => async (req, res) =
   }
 
   const addDisplayTimesForVLBAppointments = (appointment, index, appointmentsArray) => {
-    const appCopy = { ...appointment }
     const preAppointment = appointmentsArray.find(
       otherAppointment => otherAppointment.bookingId === appointment.bookingId && otherAppointment.hearingType === 'PRE'
     )
@@ -73,13 +72,11 @@ module.exports = ({ prisonApi, whereaboutsApi, logError }) => async (req, res) =
       otherAppointment =>
         otherAppointment.bookingId === appointment.bookingId && otherAppointment.hearingType === 'POST'
     )
-    if (preAppointment) {
-      appCopy.displayStartTime = preAppointment.startTime
+    return {
+      ...appointment,
+      startTime: preAppointment ? preAppointment.startTime : appointment.startTime,
+      endTime: postAppointment ? postAppointment.endTime : appointment.endTime,
     }
-    if (postAppointment) {
-      appCopy.displayEndTime = postAppointment.endTime
-    }
-    return appCopy
   }
 
   const appointmentsEnhanced = appointments
@@ -124,9 +121,7 @@ module.exports = ({ prisonApi, whereaboutsApi, logError }) => async (req, res) =
 
       return [
         {
-          text: endTime
-            ? `${getTime(displayStartTime || startTime)} to ${getTime(displayEndTime || endTime)}`
-            : getTime(startTime),
+          text: endTime ? `${getTime(startTime)} to ${getTime(endTime)}` : getTime(startTime),
         },
         {
           html: `<a href="${offenderUrl}" class="govuk-link">${offenderName} - ${offenderNo}</a>`,
