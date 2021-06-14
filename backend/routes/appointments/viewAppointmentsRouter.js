@@ -93,7 +93,7 @@ module.exports = ({ prisonApi, whereaboutsApi, logError }) => async (req, res) =
         )
     )
     .map(async appointment => {
-      const { startTime, endTime, offenderNo, displayStartTime, displayEndTime } = appointment
+      const { startTime, endTime, offenderNo } = appointment
       const offenderName = `${properCaseName(appointment.lastName)}, ${properCaseName(appointment.firstName)}`
       const offenderUrl = `/prisoner/${offenderNo}`
 
