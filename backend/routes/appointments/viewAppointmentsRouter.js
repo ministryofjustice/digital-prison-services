@@ -52,16 +52,19 @@ module.exports = ({ prisonApi, whereaboutsApi, logError }) => async (req, res) =
     }))
 
   const addBookingIdAndHearingTypesToVLBAppointments = appointment => {
-    const appCopy = { ...appointment }
+    let enhancedAppointment
     if (appointment.appointmentTypeCode === 'VLB') {
       videoLinkAppointments.forEach(vlAppointment => {
         if (vlAppointment.appointmentId === appointment.id) {
-          appCopy.hearingType = vlAppointment.hearingType
-          appCopy.bookingId = vlAppointment.bookingId
+          enhancedAppointment = {
+            ...appointment,
+            hearingType: vlAppointment.hearingType,
+            bookingId: vlAppointment.bookingId,
+          }
         }
       })
     }
-    return appCopy
+    return enhancedAppointment || appointment
   }
 
   const addDisplayTimesForVLBAppointments = (appointment, index, appointmentsArray) => {
