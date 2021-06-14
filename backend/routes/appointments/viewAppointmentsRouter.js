@@ -51,8 +51,50 @@ module.exports = ({ prisonApi, whereaboutsApi, logError }) => async (req, res) =
       court: appointment.court,
     }))
 
+  const addBookingIdAndHearingTypesToVLBAppointments = appointment => {
+    let enhancedAppointment
+    if (appointment.appointmentTypeCode === 'VLB') {
+      videoLinkAppointments.forEach(vlAppointment => {
+        if (vlAppointment.appointmentId === appointment.id) {
+          enhancedAppointment = {
+            ...appointment,
+            hearingType: vlAppointment.hearingType,
+            bookingId: vlAppointment.bookingId,
+          }
+        }
+      })
+    }
+    return enhancedAppointment || appointment
+  }
+
+  const addDisplayTimesForVLBAppointments = (appointment, index, appointmentsArray) => {
+    const preAppointment = appointmentsArray.find(
+      otherAppointment => otherAppointment.bookingId === appointment.bookingId && otherAppointment.hearingType === 'PRE'
+    )
+    const postAppointment = appointmentsArray.find(
+      otherAppointment =>
+        otherAppointment.bookingId === appointment.bookingId && otherAppointment.hearingType === 'POST'
+    )
+    return {
+      ...appointment,
+      startTime: preAppointment ? preAppointment.startTime : appointment.startTime,
+      endTime: postAppointment ? postAppointment.endTime : appointment.endTime,
+    }
+  }
+
   const appointmentsEnhanced = appointments
     .filter(appointment => (type ? appointment.appointmentTypeCode === type : true))
+    .map(appointment => addBookingIdAndHearingTypesToVLBAppointments(appointment))
+    .map((appointment, index, appointmentsArray) =>
+      addDisplayTimesForVLBAppointments(appointment, index, appointmentsArray)
+    )
+    .filter(
+      appointment =>
+        !(
+          (appointment.appointmentTypeCode === 'VLB' && appointment.hearingType === 'PRE') ||
+          (appointment.appointmentTypeCode === 'VLB' && appointment.hearingType === 'POST')
+        )
+    )
     .map(async appointment => {
       const { startTime, endTime, offenderNo } = appointment
       const offenderName = `${properCaseName(appointment.lastName)}, ${properCaseName(appointment.firstName)}`
