@@ -33,11 +33,11 @@
 {% endmacro %}
 
 {% set preAppointmentHtml %}
-    {{ appointment({name:"preAppointment",locations: locations, location: formValues.preAppointmentLocation, duration: formValues.preAppointmentDuration}) }}
+    {{ appointment({name:"preAppointment",locations: locations, location: formValues.preAppointmentLocation }) }}
 {% endset -%}
 
 {% set postAppointmentHtml %}
-    {{ appointment({name:"postAppointment",locations: locations, location: formValues.postAppointmentLocation, duration: formValues.postAppointmentDuration}) }}
+    {{ appointment({name:"postAppointment",locations: locations, location: formValues.postAppointmentLocation }) }}
 {% endset -%}
 
 {% block content %}

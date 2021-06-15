@@ -610,8 +610,6 @@ describe('Pre post appointments', () => {
         req.body = {
           postAppointment: 'yes',
           preAppointment: 'yes',
-          postAppointmentDuration: '60',
-          preAppointmentDuration: '15',
           preAppointmentLocation: '2',
           postAppointmentLocation: '3',
           court: 'LDNCOURT-1',
