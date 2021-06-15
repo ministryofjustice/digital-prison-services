@@ -30,7 +30,7 @@ module.exports = ({ prisonerDetails, property }) => {
       { label: 'Age', value: age },
       { label: 'Date of Birth', value: dateOfBirth && moment(dateOfBirth).format('DD/MM/YYYY') },
       { label: 'Place of Birth', value: birthPlace && capitalize(birthPlace) },
-      { label: 'Gender', value: gender },
+      { label: 'Sex', value: gender },
       { label: 'Ethnicity', value: ethnicity && raceCode && `${ethnicity} (${raceCode})` },
       { label: 'Religion or belief', value: getValueByType('RELF', profileInformation, 'resultValue') },
       { label: 'Nationality', value: getValueByType('NAT', profileInformation, 'resultValue') },
