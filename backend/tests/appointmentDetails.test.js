@@ -18,6 +18,7 @@ describe('appointment details', () => {
     videoLinkBooking: null,
   }
 
+  const oauthApi = {}
   const prisonApi = {}
   const whereaboutsApi = {}
 
@@ -34,6 +35,8 @@ describe('appointment details', () => {
       flash: jest.fn(),
     }
     res = { render: jest.fn() }
+
+    oauthApi.userRoles = jest.fn().mockResolvedValue([{ roleCode: 'INACTIVE_BOOKINGS' }])
 
     prisonApi.getDetails = jest.fn().mockResolvedValue({
       firstName: 'BARRY',
@@ -58,13 +61,14 @@ describe('appointment details', () => {
 
     appointmentDetailsService = appointmentDetailsServiceFactory({ prisonApi })
 
-    controller = appointmentDetails({ prisonApi, whereaboutsApi, appointmentDetailsService })
+    controller = appointmentDetails({ oauthApi, prisonApi, whereaboutsApi, appointmentDetailsService })
   })
 
   describe('viewAppointment', () => {
     it('should make the correct calls', async () => {
       await controller(req, res)
 
+      expect(oauthApi.userRoles).toHaveBeenCalledWith(res.locals)
       expect(whereaboutsApi.getAppointment).toHaveBeenCalledWith(res.locals, 1)
       expect(prisonApi.getDetails).toHaveBeenCalledWith(res.locals, 'ABC123')
       expect(prisonApi.getLocationsForAppointments).toHaveBeenCalledWith(res.locals, 'MDI')
@@ -113,6 +117,40 @@ describe('appointment details', () => {
           startTime: '13:00',
           endTime: 'Not entered',
         },
+      })
+    })
+
+    describe('with activity hub role', () => {
+      beforeEach(() => {
+        oauthApi.userRoles = jest.fn().mockResolvedValue([{ roleCode: 'ACTIVITY_HUB' }])
+      })
+
+      it('should supply delete button link', async () => {
+        await controller(req, res)
+
+        expect(res.render).toHaveBeenCalledWith(
+          'appointmentDetails',
+          expect.objectContaining({
+            appointmentConfirmDeletionLink: '/appointment-details/1/confirm-deletion',
+          })
+        )
+      })
+    })
+
+    describe('with delete-a-prisoners-appointment role', () => {
+      beforeEach(() => {
+        oauthApi.userRoles = jest.fn().mockResolvedValue([{ roleCode: 'DELETE_A_PRISONERS_APPOINTMENT' }])
+      })
+
+      it('should supply delete button link', async () => {
+        await controller(req, res)
+
+        expect(res.render).toHaveBeenCalledWith(
+          'appointmentDetails',
+          expect.objectContaining({
+            appointmentConfirmDeletionLink: '/appointment-details/1/confirm-deletion',
+          })
+        )
       })
     })
 

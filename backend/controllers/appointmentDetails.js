@@ -1,6 +1,6 @@
 const { formatName } = require('../utils')
 
-module.exports = ({ prisonApi, whereaboutsApi, appointmentDetailsService }) => async (req, res) => {
+module.exports = ({ oauthApi, prisonApi, whereaboutsApi, appointmentDetailsService }) => async (req, res) => {
   const { id } = req.params
   const { activeCaseLoadId } = req.session.userDetails
 
@@ -13,7 +13,14 @@ module.exports = ({ prisonApi, whereaboutsApi, appointmentDetailsService }) => a
 
   const { additionalDetails, basicDetails, prepostData, recurringDetails, timeDetails } = appointmentViewModel
 
+  const userRoles = await oauthApi.userRoles(res.locals)
+
+  const canDeleteAppointment =
+    userRoles &&
+    userRoles.some(role => role.roleCode === 'ACTIVITY_HUB' || role.roleCode === 'DELETE_A_PRISONERS_APPOINTMENT')
+
   return res.render('appointmentDetails', {
+    appointmentConfirmDeletionLink: canDeleteAppointment ? `/appointment-details/${id}/confirm-deletion` : undefined,
     additionalDetails,
     basicDetails,
     prepostData,
