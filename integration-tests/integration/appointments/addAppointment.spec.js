@@ -176,7 +176,6 @@ context('A user can add an appointment', () => {
     const prePostForm = prePostAppointmentsPage.form()
 
     prePostForm.preAppointmentLocation().select('1')
-    prePostForm.preAppointmentDuration().select('20')
     prePostForm.postAppointmentNo().click()
     prePostForm.court().select('Leeds')
     prePostForm.submitButton().click()
@@ -192,7 +191,7 @@ context('A user can add an appointment', () => {
         madeByTheCourt: false,
         pre: {
           locationId: 1,
-          startTime: moment().format(`YYYY-MM-DD[T22:35:00]`),
+          startTime: moment().format(`YYYY-MM-DD[T22:40:00]`),
           endTime: moment().format(`YYYY-MM-DD[T22:55:00]`),
         },
         main: {
@@ -254,7 +253,6 @@ context('A user can add an appointment', () => {
     const prePostForm = prePostAppointmentsPage.form()
 
     prePostForm.preAppointmentLocation().select('1')
-    prePostForm.preAppointmentDuration().select('20')
     prePostForm.postAppointmentNo().click()
     prePostForm.court().select('Other')
     prePostForm.submitButton().click()
@@ -276,7 +274,7 @@ context('A user can add an appointment', () => {
         madeByTheCourt: false,
         pre: {
           locationId: 1,
-          startTime: moment().format(`YYYY-MM-DD[T22:35:00]`),
+          startTime: moment().format(`YYYY-MM-DD[T22:40:00]`),
           endTime: moment().format(`YYYY-MM-DD[T22:55:00]`),
         },
         main: {
@@ -308,7 +306,6 @@ context('A user can add an appointment', () => {
     const prePostForm = prePostAppointmentsPage.form()
 
     prePostForm.preAppointmentLocation().select('1')
-    prePostForm.preAppointmentDuration().select('20')
     prePostForm.postAppointmentNo().click()
     prePostForm.court().select('Other')
     prePostForm.submitButton().click()
@@ -346,7 +343,6 @@ context('A user can add an appointment', () => {
     const prePostForm = prePostAppointmentsPage.form()
 
     prePostForm.preAppointmentLocation().select('1')
-    prePostForm.preAppointmentDuration().select('20')
     prePostForm.postAppointmentNo().click()
     prePostForm.court().select('Other')
     prePostForm.submitButton().click()
@@ -365,10 +361,6 @@ context('A user can add an appointment', () => {
       .form()
       .preAppointmentLocation()
       .contains('1')
-    returnPrePostAppointmentsPage
-      .form()
-      .preAppointmentDuration()
-      .contains('20')
     returnPrePostAppointmentsPage
       .form()
       .postAppointmentNo()

@@ -7,6 +7,8 @@ const {
 
 const { properCaseName } = require('../../utils')
 
+const APPOINTMENT_DURATION_MINS = 15
+
 const unpackAppointmentDetails = req => {
   const appointmentDetails = req.flash('appointmentDetails')
   if (!appointmentDetails || !appointmentDetails.length) throw new Error('Appointment details are missing')
@@ -166,8 +168,6 @@ const prepostAppointmentsFactory = ({
         formValues: {
           postAppointment: (postAppointment && postAppointment.required) || 'yes',
           preAppointment: (preAppointment && preAppointment.required) || 'yes',
-          preAppointmentDuration: (preAppointment && preAppointment.duration) || '20',
-          postAppointmentDuration: (postAppointment && postAppointment.duration) || '20',
           preAppointmentLocation: preAppointment && Number(preAppointment.locationId),
           postAppointmentLocation: postAppointment && Number(postAppointment.locationId),
         },
@@ -217,25 +217,23 @@ const prepostAppointmentsFactory = ({
     })
   }
 
-  const toPreAppointment = ({ startTime, preAppointmentDuration, preAppointmentLocation }) => {
-    const preStartTime = moment(startTime, DATE_TIME_FORMAT_SPEC).subtract(Number(preAppointmentDuration), 'minutes')
-    const preEndTime = moment(preStartTime, DATE_TIME_FORMAT_SPEC).add(Number(preAppointmentDuration), 'minutes')
+  const toPreAppointment = ({ startTime, preAppointmentLocation }) => {
+    const preStartTime = moment(startTime, DATE_TIME_FORMAT_SPEC).subtract(APPOINTMENT_DURATION_MINS, 'minutes')
+    const preEndTime = moment(preStartTime, DATE_TIME_FORMAT_SPEC).add(APPOINTMENT_DURATION_MINS, 'minutes')
     return {
       startTime: preStartTime.format(DATE_TIME_FORMAT_SPEC),
       endTime: preEndTime.format(DATE_TIME_FORMAT_SPEC),
       locationId: Number(preAppointmentLocation),
-      duration: preAppointmentDuration,
     }
   }
 
-  const toPostAppointment = ({ endTime, postAppointmentDuration, postAppointmentLocation }) => {
-    const postEndTime = moment(endTime, DATE_TIME_FORMAT_SPEC).add(Number(postAppointmentDuration), 'minutes')
+  const toPostAppointment = ({ endTime, postAppointmentLocation }) => {
+    const postEndTime = moment(endTime, DATE_TIME_FORMAT_SPEC).add(APPOINTMENT_DURATION_MINS, 'minutes')
 
     return {
       startTime: endTime,
       endTime: postEndTime.format(DATE_TIME_FORMAT_SPEC),
       locationId: Number(postAppointmentLocation),
-      duration: postAppointmentDuration,
     }
   }
 
@@ -246,8 +244,6 @@ const prepostAppointmentsFactory = ({
     const {
       postAppointment,
       preAppointment,
-      postAppointmentDuration,
-      preAppointmentDuration,
       preAppointmentLocation,
       postAppointmentLocation,
       court: courtId,
@@ -292,14 +288,12 @@ const prepostAppointmentsFactory = ({
         toPreAppointment({
           startTime,
           preAppointmentLocation,
-          preAppointmentDuration,
         })) || { required: 'no' }
 
       const postDetails = (postAppointment === 'yes' &&
         toPostAppointment({
           endTime,
           postAppointmentLocation,
-          postAppointmentDuration,
         })) || { required: 'no' }
 
       packAppointmentDetails(req, {
@@ -320,8 +314,6 @@ const prepostAppointmentsFactory = ({
             formValues: {
               postAppointment,
               preAppointment,
-              postAppointmentDuration,
-              preAppointmentDuration,
               preAppointmentLocation,
               postAppointmentLocation,
               court: courtId,
@@ -338,8 +330,6 @@ const prepostAppointmentsFactory = ({
           formValues: {
             postAppointment,
             preAppointment,
-            postAppointmentDuration,
-            preAppointmentDuration,
             preAppointmentLocation: preAppointmentLocation && Number(preAppointmentLocation),
             postAppointmentLocation: postAppointmentLocation && Number(postAppointmentLocation),
             court: courtId,
@@ -362,8 +352,6 @@ const prepostAppointmentsFactory = ({
           formValues: {
             postAppointment,
             preAppointment,
-            postAppointmentDuration,
-            preAppointmentDuration,
             preAppointmentLocation: preAppointmentLocation && Number(preAppointmentLocation),
             postAppointmentLocation: postAppointmentLocation && Number(postAppointmentLocation),
             court: courtId,
@@ -393,14 +381,14 @@ const prepostAppointmentsFactory = ({
       const preAppointmentInfo =
         preAppointment === 'yes'
           ? `${locationEvents.preAppointment.locationName}, ${Time(
-              moment(startTime, DATE_TIME_FORMAT_SPEC).subtract(preAppointmentDuration, 'minutes')
+              moment(startTime, DATE_TIME_FORMAT_SPEC).subtract(APPOINTMENT_DURATION_MINS, 'minutes')
             )} to ${Time(startTime)}`
           : 'None requested'
 
       const postAppointmentInfo =
         postAppointment === 'yes'
           ? `${locationEvents.postAppointment.locationName}, ${Time(endTime)} to ${Time(
-              moment(endTime, DATE_TIME_FORMAT_SPEC).add(postAppointmentDuration, 'minutes')
+              moment(endTime, DATE_TIME_FORMAT_SPEC).add(APPOINTMENT_DURATION_MINS, 'minutes')
             )}`
           : 'None requested'
 

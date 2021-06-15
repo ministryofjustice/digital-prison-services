@@ -85,7 +85,6 @@ describe('Pre post appointments', () => {
     body = {
       postAppointment: 'yes',
       preAppointment: 'no',
-      postAppointmentDuration: '60',
       court: 'LDNCOURT-1',
     }
   })
@@ -168,8 +167,6 @@ describe('Pre post appointments', () => {
           formValues: {
             postAppointment: 'yes',
             preAppointment: 'yes',
-            postAppointmentDuration: '20',
-            preAppointmentDuration: '20',
           },
         })
       )
@@ -426,7 +423,6 @@ describe('Pre post appointments', () => {
         preAppointment: 'yes',
         preAppointmentLocation: 2,
         postAppointment: 'yes',
-        postAppointmentDuration: '60',
         court: 'london',
       }
 
@@ -439,7 +435,6 @@ describe('Pre post appointments', () => {
             preAppointment: 'yes',
             preAppointmentLocation: 2,
             postAppointment: 'yes',
-            postAppointmentDuration: '60',
             court: 'london',
           },
         })
@@ -615,8 +610,6 @@ describe('Pre post appointments', () => {
         req.body = {
           postAppointment: 'yes',
           preAppointment: 'yes',
-          postAppointmentDuration: '60',
-          preAppointmentDuration: '15',
           preAppointmentLocation: '2',
           postAppointmentLocation: '3',
           court: 'LDNCOURT-1',
@@ -658,7 +651,7 @@ describe('Pre post appointments', () => {
             },
             post: {
               startTime: '2017-10-10T14:00',
-              endTime: '2017-10-10T15:00:00',
+              endTime: '2017-10-10T14:15:00',
               locationId: 3,
             },
           }
@@ -698,7 +691,7 @@ describe('Pre post appointments', () => {
             },
             post: {
               startTime: '2017-10-10T14:00',
-              endTime: '2017-10-10T15:00:00',
+              endTime: '2017-10-10T14:15:00',
               locationId: 3,
             },
           }
@@ -758,8 +751,6 @@ describe('Pre post appointments', () => {
           preAppointment: 'yes',
           preAppointmentLocation: 1,
           postAppointmentLocation: 2,
-          preAppointmentDuration: 15,
-          postAppointmentDuration: 15,
           court: 'london',
         }
 
@@ -772,13 +763,11 @@ describe('Pre post appointments', () => {
               endTime: '2017-10-10T11:00:00',
               locationId: 1,
               startTime: '2017-10-10T10:45:00',
-              duration: 15,
             },
             postAppointment: {
               endTime: '2017-10-10T14:15:00',
               locationId: 2,
               startTime: '2017-10-10T14:00',
-              duration: 15,
             },
           })
         )
