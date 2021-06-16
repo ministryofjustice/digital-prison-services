@@ -285,6 +285,7 @@ const setup = ({
   router.use(
     '/appointment-details/:id',
     appointmentDetails({
+      oauthApi,
       prisonApi,
       whereaboutsApi,
       appointmentDetailsService: appointmentDetailsServiceFactory({ prisonApi }),

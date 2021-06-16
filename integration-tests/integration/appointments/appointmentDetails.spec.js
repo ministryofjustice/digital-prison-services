@@ -24,6 +24,7 @@ context('Appointment details page', () => {
 
   beforeEach(() => {
     Cypress.Cookies.preserveOnce('hmpps-session-dev')
+    cy.task('stubUserMeRoles', [{ roleCode: 'DELETE_A_PRISONERS_APPOINTMENT' }])
     cy.task('stubOffenderBasicDetails', offenderBasicDetails)
     cy.task('stubAppointmentLocations', {
       agency: 'MDI',
@@ -68,6 +69,27 @@ context('Appointment details page', () => {
     cy.get('[data-test="return-link"]')
       .should('have.attr', 'href')
       .should('include', '/view-all-appointments')
+  })
+
+  it('Should show delete button and go to the confirm deletion page when clicked', () => {
+    cy.visit('/appointment-details/1')
+
+    cy.get('[role="button"]').should('contain', 'Delete appointment')
+    cy.get('[role="button"]').click()
+
+    cy.url().should('include', '/appointment-details/1/confirm-deletion')
+  })
+
+  context('when the user does not have the roles', () => {
+    beforeEach(() => {
+      cy.task('stubUserMeRoles', [])
+    })
+
+    it('Should not show delete button', () => {
+      cy.visit('/appointment-details/1')
+  
+      cy.get('#confirmDeletion').should('not.exist')
+    })
   })
 
   context('when it is a recurring appointment', () => {
