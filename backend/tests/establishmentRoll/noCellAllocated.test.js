@@ -11,6 +11,9 @@ describe('No cell allocated', () => {
   beforeEach(() => {
     req = {
       originalUrl: 'http://localhost',
+      session: {
+        returnUrl: 'establishment-roll',
+      },
     }
     res = { locals: { user: { activeCaseLoad: { caseLoadId: 'MDI' } } }, render: jest.fn() }
 
@@ -46,6 +49,7 @@ describe('No cell allocated', () => {
       expect(res.render).toHaveBeenCalledWith('establishmentRoll/noCellAllocated.njk', {
         results: [],
         userCanAllocateCell: false,
+        returnUrl: 'establishment-roll',
       })
     })
   })
@@ -163,6 +167,7 @@ describe('No cell allocated', () => {
           },
         ],
         userCanAllocateCell: true,
+        returnUrl: 'establishment-roll',
       })
     })
   })

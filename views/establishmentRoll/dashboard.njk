@@ -82,7 +82,7 @@
       <h3 class="govuk-heading-s">No cell allocated:</h3>
       <p class="govuk-body" data-test="no-cell-allocated">
         {% if todayStats.noCellAllocated > 0 %}
-          <a class="govuk-link" href="/establishment-roll/no-cell-allocated">{{ todayStats.noCellAllocated }}</a>
+          <a class="govuk-link" href="/establishment-roll/no-cell-allocated?returnUrl=establishment-roll">{{ todayStats.noCellAllocated }}</a>
         {% else %}
           {{ todayStats.noCellAllocated }}
         {% endif %}

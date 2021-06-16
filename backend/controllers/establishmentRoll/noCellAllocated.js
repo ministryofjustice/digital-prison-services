@@ -5,6 +5,8 @@ module.exports = ({ oauthApi, prisonApi }) => async (req, res) => {
     user: { activeCaseLoad },
   } = res.locals
 
+  const { returnUrl } = req.session
+
   try {
     const [userRoles, offenders] = await Promise.all([
       oauthApi.userRoles(res.locals),
@@ -70,6 +72,7 @@ module.exports = ({ oauthApi, prisonApi }) => async (req, res) => {
         }
       }),
       userCanAllocateCell: userRoles && userRoles.some(role => role.roleCode === 'CELL_MOVE'),
+      returnUrl,
     })
   } catch (error) {
     res.locals.redirectUrl = `/establishment-roll`
