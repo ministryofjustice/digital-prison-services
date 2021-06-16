@@ -20,7 +20,7 @@ module.exports = ({ oauthApi, prisonApi, whereaboutsApi, appointmentDetailsServi
     userRoles.some(role => role.roleCode === 'ACTIVITY_HUB' || role.roleCode === 'DELETE_A_PRISONERS_APPOINTMENT')
 
   return res.render('appointmentDetails', {
-    appointmentConfirmDeletionLink: canDeleteAppointment ? `/appointment-details/${id}/confirm-deletion` : undefined,
+    appointmentConfirmDeletionLink: canDeleteAppointment && `/appointment-details/${id}/confirm-deletion`,
     additionalDetails,
     basicDetails,
     prepostData,

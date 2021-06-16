@@ -96,6 +96,7 @@ describe('appointment details', () => {
       await controller(req, res)
 
       expect(res.render).toHaveBeenCalledWith('appointmentDetails', {
+        appointmentConfirmDeletionLink: false,
         additionalDetails: {
           comments: 'Not entered',
           addedBy: 'Test User',
