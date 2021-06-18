@@ -294,7 +294,7 @@ describe('View Residential Location', () => {
           errors: [
             {
               href: '#location',
-              html: 'Select a residential location',
+              text: 'Select a residential location',
             },
           ],
         })

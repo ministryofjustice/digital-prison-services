@@ -11,7 +11,7 @@ module.exports = ({ prisonApi }) => async (req, res) => {
     const hasSearched = keywords !== undefined
     const emptySearchError = {
       href: '#keywords',
-      html: 'Enter a prisoner&#8217;s name or number',
+      text: 'Enter a prisoner’s name or number',
     }
     return res.render('cellMove/cellMovePrisonerSearch.njk', {
       showResults: false,

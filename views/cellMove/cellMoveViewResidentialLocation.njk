@@ -51,7 +51,9 @@
         items: locationOptions | setSelected(formValues.location),
         attributes: {
           'data-test': 'prisoner-search-location'
-        }
+        },
+        errorMessage: errors | findError('location')
+
       }) }}
 
       {{ govukButton({

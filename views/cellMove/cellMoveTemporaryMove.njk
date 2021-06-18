@@ -51,7 +51,9 @@
         classes: 'govuk-!-width-full',
         attributes: {
           'data-test': 'prisoner-search-keywords'
-        }
+        },
+        errorMessage: errors | findError('keywords')
+
       }) }}
 
       {{ govukButton({
