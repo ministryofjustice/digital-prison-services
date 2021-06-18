@@ -9,7 +9,7 @@ const { window } = jsdom
 global.window = window
 global.document = window.document
 
-describe('DateOfBirthInput', () => {
+describe.skip('DateOfBirthInput', () => {
   it('Should render', () => {
     mount(<DateOfBirthInput />)
   })
