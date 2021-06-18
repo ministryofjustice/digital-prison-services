@@ -6,22 +6,22 @@ exports[`Form date picker should render correctly 1`] = `
 >
   <div>
     <label
-      className="sc-bwzfXH cukpBy"
+      className="src__StyledLabel-sc-14n2scx-0 ItktZ"
     >
       <span
-        className="sc-bdVaJa jmnRGq govuk-!-margin-bottom-1"
+        className="src__StyledLabelText-sc-12l0n4z-0 kRpDqJ govuk-!-margin-bottom-1"
       >
          
         
          
       </span>
       <span
-        className="sc-htpNat gTYgEH"
+        className="src__StyledError-q8g4f0-0 fExyED"
       >
         there was an error
       </span>
       <input
-        className="sc-bxivhb Qpyky form-control"
+        className="src__StyledInput-u8exb4-0 duCyUL form-control"
         name="date"
         onChange={[Function]}
         onFocus={[Function]}
