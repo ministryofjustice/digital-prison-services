@@ -36,7 +36,7 @@ module.exports = ({ prisonApi, whereaboutsApi }) => async (req, res) => {
   if (noLocationSelected) {
     const noLocationSelectedError = {
       href: '#location',
-      html: 'Select a residential location',
+      text: 'Select a residential location',
     }
     return res.render('cellMove/cellMoveViewResidentialLocation.njk', {
       showResults: false,

@@ -49,7 +49,7 @@ module.exports = ({ prisonApi }) => {
     const { currentLocation, date, period } = req.body
 
     if (!currentLocation) {
-      req.flash('errors', { text: 'Select the location', href: '#current-location' })
+      req.flash('errors', { text: 'Select a location', href: '#current-location' })
       return res.redirect(`/manage-prisoner-whereabouts/select-location?date=${date}&period=${period}`)
     }
 

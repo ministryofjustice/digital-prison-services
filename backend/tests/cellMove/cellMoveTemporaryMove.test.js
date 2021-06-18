@@ -172,7 +172,7 @@ describe('Move someone temporarily out of a cell', () => {
           errors: [
             {
               href: '#keywords',
-              html: 'Enter a prisoner&#8217;s name or number',
+              text: 'Enter a prisoner’s name or number',
             },
           ],
         })
