@@ -34,19 +34,19 @@ exports[`<ResultsFilter /> should match the with children snapshot 1`] = `
      results
   </div>
   <div
-    className="sc-gzVnrw gdYXbN"
+    className="sc-htpNat dcvQGX"
   >
     <label
       htmlFor="perPage"
     >
       <span
-        className="sc-htpNat kaNhqV"
+        className="src__StyledLabelText-sc-12l0n4z-0 kRpDqJ"
       >
         Results per page
       </span>
     </label>
     <select
-      className="sc-bZQynM jejjgg"
+      className="src__StyledSelect-vnwid3-0 cbPlJt"
       id="perPage"
       onChange={[Function]}
       value={20}
