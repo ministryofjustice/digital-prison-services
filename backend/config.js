@@ -146,6 +146,9 @@ module.exports = {
       NMI: {
         omu: process.env.NOTTINGHAM_OMU_EMAIL,
       },
+      EYI: {
+        omu: process.env.ELMLEY_OMU_EMAIL,
+      },
     },
   },
 
