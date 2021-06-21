@@ -33,6 +33,17 @@ module.exports = ({
       prisonApi.getDetails(context, offenderNo, true),
     ])
 
+    console.log("***************************")
+    console.log("***************************")
+    console.log("***************************")
+    console.log("***************************")
+    console.log(prisonerDetails)
+    console.log("***************************")
+    console.log("***************************")
+    console.log("***************************")
+    console.log("***************************")
+    console.log(prisonerDetails.imprisonmentStatus)
+
     const allocationManager = await allocationManagerApi.getPomByOffenderNo(context, offenderNo)
 
     const pomStaff =
@@ -148,7 +159,6 @@ module.exports = ({
       isComplexityEnabledFor(agencyId) && (await complexityApi.getComplexOffenders(systemContext, [offenderNo]))
 
     const isHighComplexity = Boolean(complexityLevel?.length > 0 && complexityLevel[0]?.level === 'high')
-
     return {
       activeAlertCount,
       agencyName: assignedLivingUnit.agencyName,

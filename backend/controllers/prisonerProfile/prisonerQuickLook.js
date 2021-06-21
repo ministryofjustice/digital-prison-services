@@ -35,6 +35,7 @@ const createFinanceLink = (offenderNo, path, value) =>
   )}</a>`
 
 const extractLifeImprisonmentStatus = (prisonerProfileDataResponse, prisonerProfileData, unableToShowDetailMessage) => {
+  console.log(prisonerProfileData.imprisonmentStatus)
   if (prisonerProfileDataResponse.error) {
     return unableToShowDetailMessage
   }
