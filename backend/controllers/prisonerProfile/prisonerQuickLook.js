@@ -34,13 +34,13 @@ const createFinanceLink = (offenderNo, path, value) =>
     value || 0
   )}</a>`
 
-const extractLifeImprisonmentStatus = (prisonerProfileDataResponse, prisonerProfileData, unableToShowDetailMessage) => {
-  console.log(prisonerProfileData.imprisonmentStatus)
-  if (prisonerProfileDataResponse.error) {
+const extractLifeImprisonmentStatus = (prisonerDataResponse, prisoner, unableToShowDetailMessage) => {
+  if (prisonerDataResponse.error) {
     return unableToShowDetailMessage
   }
-  return prisonerProfileData.imprisonmentStatus === 'LIFE' ? 'Life imprisonment' : 'Not entered'
+  return prisoner?.imprisonmentStatus === 'LIFE' ? 'Life sentence' : 'Not entered'
 }
+
 module.exports = ({ prisonerProfileService, prisonApi }) => async (req, res) => {
   const { offenderNo } = req.params
   const { username } = req.session.userDetails
@@ -144,7 +144,7 @@ module.exports = ({ prisonerProfileService, prisonApi }) => async (req, res) => 
               sentenceData.sentenceDetail &&
               sentenceData.sentenceDetail.releaseDate &&
               moment(sentenceData.sentenceDetail.releaseDate).format('D MMMM YYYY')) ||
-            extractLifeImprisonmentStatus(prisonerProfileDataResponse, prisonerProfileData, unableToShowDetailMessage),
+            extractLifeImprisonmentStatus(prisonerDataResponse, prisoner, unableToShowDetailMessage),
       },
     ],
     balanceDetailsSectionError: Boolean(balanceDataResponse.error),

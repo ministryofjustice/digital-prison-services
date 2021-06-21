@@ -33,17 +33,6 @@ module.exports = ({
       prisonApi.getDetails(context, offenderNo, true),
     ])
 
-    console.log("***************************")
-    console.log("***************************")
-    console.log("***************************")
-    console.log("***************************")
-    console.log(prisonerDetails)
-    console.log("***************************")
-    console.log("***************************")
-    console.log("***************************")
-    console.log("***************************")
-    console.log(prisonerDetails.imprisonmentStatus)
-
     const allocationManager = await allocationManagerApi.getPomByOffenderNo(context, offenderNo)
 
     const pomStaff =

@@ -72,7 +72,7 @@ describe('prisoner sentence and release', () => {
       },
     })
 
-    prisonApi.getDetails = jest.fn().mockResolvedValue({ bookingId: 1 })
+    prisonApi.getPrisonerDetails = jest.fn().mockResolvedValue([{ latestBookingId: 1 }])
     prisonApi.getSentenceAdjustments = jest.fn()
     prisonApi.getOffenceHistory = jest.fn().mockResolvedValue([])
     prisonApi.getCourtCases = jest.fn().mockResolvedValue([])
@@ -911,7 +911,7 @@ describe('prisoner sentence and release', () => {
 
     await controller(req, res)
 
-    expect(prisonApi.getDetails).toHaveBeenCalledWith({}, offenderNo)
+    expect(prisonApi.getPrisonerDetails).toHaveBeenCalledWith({}, offenderNo)
   })
 
   it('should make a call for sentence adjustments', async () => {
