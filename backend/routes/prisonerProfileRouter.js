@@ -1,5 +1,6 @@
 const express = require('express')
 const nunjucks = require('nunjucks')
+const telemetry = require('../azure-appinsights')
 
 const prisonerQuickLook = require('../controllers/prisonerProfile/prisonerQuickLook')
 const prisonerFullImage = require('../controllers/prisonerProfile/prisonerFullImage')
@@ -65,7 +66,7 @@ const controller = ({
   const referenceCodesService = referenceCodesServiceFactory(prisonApi)
   const adjudicationHistoryService = adjudicationsHistoryService(prisonApi)
 
-  router.get('/', prisonerQuickLook({ prisonerProfileService, prisonApi, logError }))
+  router.get('/', prisonerQuickLook({ prisonerProfileService, prisonApi, telemetry, logError }))
   router.get('/image', prisonerFullImage({ prisonApi, logError }))
   router.get(
     '/personal',
