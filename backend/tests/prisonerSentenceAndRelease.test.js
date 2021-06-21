@@ -1022,4 +1022,44 @@ describe('prisoner sentence and release', () => {
 
     await controller(req, res)
   })
+
+  it('Should show Life Sentence in Effective Sentence End Date if the end date doesnt exist and it is a life sentence', async () => {
+    prisonApi.getPrisonerSentenceDetails = jest.fn().mockResolvedValue({
+      sentenceDetail: {
+        sentenceStartDate: '2010-02-03',
+        confirmedReleaseDate: '2020-04-20',
+        releaseDate: '2020-04-01',
+      },
+    })
+    prisonApi.getPrisonerDetails = jest.fn().mockResolvedValue([{ latestBookingId: 1, imprisonmentStatus: 'LIFE' }])
+
+    await controller(req, res)
+
+    expect(res.render).toHaveBeenCalledWith(
+      'prisonerProfile/prisonerSentenceAndRelease/prisonerSentenceAndRelease.njk',
+      expect.objectContaining({
+        effectiveSentenceEndDate: 'Life sentence',
+      })
+    )
+  })
+
+  it('Should return nothing in Effective Sentence End Date if the end date doesnt exist and it is not a life sentence', async () => {
+    prisonApi.getPrisonerSentenceDetails = jest.fn().mockResolvedValue({
+      sentenceDetail: {
+        sentenceStartDate: '2010-02-03',
+        confirmedReleaseDate: '2020-04-20',
+        releaseDate: '2020-04-01',
+      },
+    })
+    prisonApi.getPrisonerDetails = jest.fn().mockResolvedValue([{ latestBookingId: 1, imprisonmentStatus: 'OTHER' }])
+
+    await controller(req, res)
+
+    expect(res.render).toHaveBeenCalledWith(
+      'prisonerProfile/prisonerSentenceAndRelease/prisonerSentenceAndRelease.njk',
+      expect.objectContaining({
+        effectiveSentenceEndDate: undefined,
+      })
+    )
+  })
 })
