@@ -93,6 +93,12 @@ env:
       secretKeyRef:
         name: {{ template "app.name" . }}
         key: BERWYN_OMU_EMAIL
+    
+  - name: ELMLEY_OMU_EMAIL
+    valueFrom:
+      secretKeyRef:
+        name: {{ template "app.name" . }}
+        key: ELMLEY_OMU_EMAIL
 
   - name: NOTTINGHAM_OMU_EMAIL
     valueFrom:
