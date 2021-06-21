@@ -4,10 +4,10 @@ const courtCasesViewModel = require('./sentenceAndReleaseViewModels/courtCasesVi
 const { readableDateFormat } = require('../../utils')
 
 function getEffectiveSentenceEndDate(sentenceData, prisonerDetails) {
-  return readableDateFormat(sentenceData?.sentenceDetail?.effectiveSentenceEndDate, 'YYYY-MM-DD') ||
-    prisonerDetails?.imprisonmentStatus === 'LIFE'
-    ? 'Life sentence'
-    : undefined
+  return (
+    readableDateFormat(sentenceData?.sentenceDetail?.effectiveSentenceEndDate, 'YYYY-MM-DD') ||
+    (prisonerDetails?.imprisonmentStatus === 'LIFE' ? 'Life sentence' : undefined)
+  )
 }
 
 module.exports = ({ prisonerProfileService, prisonApi, systemOauthClient }) => async (req, res) => {

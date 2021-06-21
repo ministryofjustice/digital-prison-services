@@ -1,6 +1,20 @@
+const moment = require('moment')
 const PrisonerSentenceAndReleasePage = require('../../pages/prisonerProfile/prisonerSentenceAndReleasePage')
 const offenderBasicDetails = require('../../mockApis/responses/offenderBasicDetails.json')
 const offenderFullDetails = require('../../mockApis/responses/offenderFullDetails.json')
+
+const prisonerDetails = [
+  {
+    imprisonmentStatus: 'ADULT',
+    imprisonmentStatusDesc: 'Adult Imprisonment Without Option CJA03',
+    dateOfBirth: moment()
+      .subtract(21, 'years')
+      .format('YYYY-MM-DD'),
+    latestBookingId: 1,
+    pncNumber: '12/3456A',
+    croNumber: '12345/57B',
+  },
+]
 
 context('Prisoner sentence and release', () => {
   before(() => {
@@ -21,6 +35,8 @@ context('Prisoner sentence and release', () => {
       offenderNo: 'A12345',
     })
     cy.task('stubOffenderBasicDetails', { bookingId: 1 })
+    cy.task('stubPrisonerDetails', prisonerDetails)
+    cy.task('stubOffenderFullDetails', offenderFullDetails)
     cy.task('stubClientCredentialsRequest')
   })
 
