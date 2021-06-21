@@ -34,7 +34,7 @@ const createFinanceLink = (offenderNo, path, value) =>
     value || 0
   )}</a>`
 
-module.exports = ({ prisonerProfileService, prisonApi, offenderSearchApi }) => async (req, res) => {
+module.exports = ({ prisonerProfileService, prisonApi }) => async (req, res) => {
   const { offenderNo } = req.params
   const { username } = req.session.userDetails
 
@@ -59,7 +59,6 @@ module.exports = ({ prisonerProfileService, prisonApi, offenderSearchApi }) => a
     nextVisitResponse,
     visitBalancesResponse,
     todaysEventsResponse,
-    prisonerDetailsResponse,
   ] = await Promise.all(
     [
       prisonerProfileService.getPrisonerProfileData(res.locals, offenderNo, username),
@@ -74,7 +73,6 @@ module.exports = ({ prisonerProfileService, prisonApi, offenderSearchApi }) => a
       prisonApi.getNextVisit(res.locals, bookingId),
       prisonApi.getPrisonerVisitBalances(res.locals, offenderNo),
       prisonApi.getEventsForToday(res.locals, bookingId),
-      offenderSearchApi.getPrisonersDetails(res.locals, [offenderNo]),
     ].map(apiCall => captureErrorAndContinue(apiCall))
   )
 
@@ -91,7 +89,6 @@ module.exports = ({ prisonerProfileService, prisonApi, offenderSearchApi }) => a
     nextVisit,
     visitBalances,
     todaysEvents,
-    prisonerDetails,
   ] = [
     prisonerProfileDataResponse,
     offenceDataResponse,
@@ -105,7 +102,6 @@ module.exports = ({ prisonerProfileService, prisonApi, offenderSearchApi }) => a
     nextVisitResponse,
     visitBalancesResponse,
     todaysEventsResponse,
-    prisonerDetailsResponse,
   ].map(response => extractResponse(response))
 
   const prisoner = prisonerData && prisonerData[0]
@@ -115,7 +111,7 @@ module.exports = ({ prisonerProfileService, prisonApi, offenderSearchApi }) => a
 
   const daysSinceReview = (iepSummary && iepSummary.daysSinceReview) || 0
   const imprisonmentStatusOrNotEntered =
-    prisonerDetails[0].imprisonmentStatus === 'LIFE' ? 'Life imprisonment' : 'Not entered'
+    prisonerProfileData.imprisonmentStatus === 'LIFE' ? 'Life imprisonment' : 'Not entered'
 
   return res.render('prisonerProfile/prisonerQuickLook/prisonerQuickLook.njk', {
     prisonerProfileData,

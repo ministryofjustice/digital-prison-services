@@ -19,7 +19,6 @@ describe('prisoner profile quick look', () => {
   }
   const bookingId = '123'
   const prisonApi = {}
-  const offenderSearchApi = {}
   const prisonerProfileService = {}
 
   let req
@@ -55,9 +54,8 @@ describe('prisoner profile quick look', () => {
     prisonApi.getNextVisit = jest.fn().mockResolvedValue({})
     prisonApi.getPrisonerVisitBalances = jest.fn().mockResolvedValue({})
     prisonApi.getEventsForToday = jest.fn().mockResolvedValue([])
-    offenderSearchApi.getPrisonersDetails = jest.fn().mockResolvedValue([{}])
 
-    controller = prisonerQuickLook({ prisonerProfileService, prisonApi, offenderSearchApi, logError })
+    controller = prisonerQuickLook({ prisonerProfileService, prisonApi, logError })
   })
 
   it('should make a call for the basic details of a prisoner and the prisoner header details and render them', async () => {

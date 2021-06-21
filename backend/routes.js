@@ -214,7 +214,6 @@ const setup = ({
       socApi,
       whereaboutsApi,
       complexityApi,
-      offenderSearchApi,
     })
   )
 
