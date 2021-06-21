@@ -6,7 +6,25 @@ const {
   app: { licencesUrl },
 } = require('../config')
 
-module.exports = ({ paginationService, offenderSearchApi, oauthApi }) => {
+const trackEvent = (telemetry, prisonerResults, searchText, filters, username, activeCaseLoad) => {
+  if (telemetry) {
+    const offenderNos = prisonerResults?.map(prisonerResult => prisonerResult.offenderNo)
+    const openFilterValues = Object.fromEntries(Object.entries(filters).filter(entry => entry[1] && entry[1] !== 'ALL'))
+
+    telemetry.trackEvent({
+      name: `GlobalSearch`,
+      properties: {
+        offenderNos,
+        searchText,
+        filters: openFilterValues,
+        username,
+        caseLoadId: activeCaseLoad?.caseLoadId,
+      },
+    })
+  }
+}
+
+module.exports = ({ paginationService, offenderSearchApi, oauthApi, telemetry }) => {
   const searchByOffender = (context, offenderNo, gender, location, dateOfBirth, pageLimit) =>
     offenderSearchApi.globalSearch(
       context,
@@ -45,6 +63,11 @@ module.exports = ({ paginationService, offenderSearchApi, oauthApi }) => {
   const prisonerBooked = prisoner => prisoner.latestBookingId > 0
   const resultsPage = async (req, res) => {
     let prisonerResults = []
+    const {
+      user: { activeCaseLoad },
+    } = res.locals
+    const { username } = req.session.userDetails
+
     const { searchText, pageLimitOption, pageOffsetOption, referrer, ...filters } = req.query
     const { genderFilter, locationFilter, dobDay, dobMonth, dobYear } = filters
     const pageLimit = (pageLimitOption && parseInt(pageLimitOption, 10)) || 20
@@ -93,6 +116,10 @@ module.exports = ({ paginationService, offenderSearchApi, oauthApi }) => {
     const isLicencesUser = userRoles.includes('LICENCE_RO')
     const isLicencesVaryUser = userRoles.includes('LICENCE_VARY')
     const userCanViewInactive = userRoles.includes('INACTIVE_BOOKINGS')
+
+    if (prisonerResults?.length > 0) {
+      trackEvent(telemetry, prisonerResults, searchText, filters, username, activeCaseLoad)
+    }
 
     return res.render('globalSearch/globalSearchResults.njk', {
       backLink: backWhiteList[referrer],

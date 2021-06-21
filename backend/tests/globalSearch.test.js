@@ -4,6 +4,7 @@ describe('Global search', () => {
   const offenderSearchApi = {}
   const oauthApi = {}
   const paginationService = {}
+  const telemetry = {}
 
   let req
   let res
@@ -17,6 +18,11 @@ describe('Global search', () => {
       baseUrl: '/global-search',
       originalUrl: '/global-search',
       query: {},
+      session: {
+        userDetails: {
+          username: 'user1',
+        },
+      },
     }
     res = {
       locals: {
@@ -38,7 +44,9 @@ describe('Global search', () => {
 
     paginationService.getPagination = jest.fn()
 
-    controller = globalSearchController({ paginationService, offenderSearchApi, oauthApi, logError })
+    telemetry.trackEvent = jest.fn().mockResolvedValue([])
+
+    controller = globalSearchController({ paginationService, offenderSearchApi, oauthApi, telemetry, logError })
   })
 
   describe('indexPage', () => {
@@ -94,6 +102,12 @@ describe('Global search', () => {
           referrer: undefined,
           results: [],
         })
+      })
+
+      it('should not send custom event', async () => {
+        await controller.resultsPage(req, res)
+
+        expect(telemetry.trackEvent).not.toHaveBeenCalled()
       })
     })
 
@@ -337,6 +351,35 @@ describe('Global search', () => {
           20,
           new URL('http://localhost/global-search')
         )
+      })
+
+      it('should send custom event with visible offender numbers, search terms, username and active caseload', async () => {
+        req.query = {
+          searchText: 'Smith Ben',
+          locationFilter: 'ALL',
+          genderFilter: 'M',
+          dobDay: 7,
+          dobMonth: 4,
+          dobYear: 1958,
+        }
+
+        await controller.resultsPage(req, res)
+
+        expect(telemetry.trackEvent).toHaveBeenCalledWith({
+          name: 'GlobalSearch',
+          properties: {
+            offenderNos: ['A1234AC', 'A1234AA', 'A1234AD'],
+            filters: {
+              dobDay: 7,
+              dobMonth: 4,
+              dobYear: 1958,
+              genderFilter: 'M',
+            },
+            searchText: 'Smith Ben',
+            username: 'user1',
+            caseLoadId: 'MDI',
+          },
+        })
       })
 
       describe('when there are non default filter values', () => {
