@@ -55,6 +55,32 @@ class ResultsActivityContainer extends Component {
     activityDataDispatch([])
   }
 
+  handlePrint(version) {
+    const { raiseAnalyticsEvent } = this.props
+
+    if (version === 'redacted') {
+      this.setState({ redactedPrint: true }, () => {
+        window.print()
+      })
+
+      raiseAnalyticsEvent({
+        category: 'Redacted Activity list',
+        action: 'Print list',
+      })
+    }
+
+    if (!version) {
+      this.setState({ redactedPrint: false }, () => {
+        window.print()
+      })
+
+      raiseAnalyticsEvent({
+        category: 'Activity list',
+        action: 'Print list',
+      })
+    }
+  }
+
   onListCriteriaChange({ dateValue, periodValue }) {
     const { date, period, activity, handleDateChange, handlePeriodChange } = this.props
 
@@ -154,32 +180,6 @@ class ResultsActivityContainer extends Component {
     const { date, period, activity } = this.props
 
     return this.getActivityList({ period, date, location: activity })
-  }
-
-  handlePrint(version) {
-    const { raiseAnalyticsEvent } = this.props
-
-    if (version === 'redacted') {
-      this.setState({ redactedPrint: true }, () => {
-        window.print()
-      })
-
-      raiseAnalyticsEvent({
-        category: 'Redacted Activity list',
-        action: 'Print list',
-      })
-    }
-
-    if (!version) {
-      this.setState({ redactedPrint: false }, () => {
-        window.print()
-      })
-
-      raiseAnalyticsEvent({
-        category: 'Activity list',
-        action: 'Print list',
-      })
-    }
   }
 
   render() {

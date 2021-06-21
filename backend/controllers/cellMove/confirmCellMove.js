@@ -19,7 +19,7 @@ const cellMoveReasons = async (res, prisonApi, selectedReason) => {
     }))
 }
 
-module.exports = ({ prisonApi, whereaboutsApi, caseNotesApi }) => {
+module.exports = ({ prisonApi, whereaboutsApi }) => {
   const index = async (req, res) => {
     const { offenderNo } = req.params
     const { cellId } = req.query
