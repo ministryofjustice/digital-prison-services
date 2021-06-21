@@ -3,11 +3,32 @@ const { serviceUnavailableMessage } = require('../../common-messages')
 const { alertFlagLabels, profileAlertCodes } = require('../../shared/alertFlagValues')
 const { putLastNameFirst, hasLength, formatLocation } = require('../../utils')
 
-module.exports = ({ paginationService, prisonApi, logError }) => {
+const trackEvent = (telemetry, results, searchQueries, username, activeCaseLoad) => {
+  if (telemetry) {
+    const offenderNos = results?.map(result => result.offenderNo)
+    // Remove empty terms and the alerts[] property (which is a duplicate of the alerts property)
+    const searchTerms = Object.fromEntries(
+      Object.entries(searchQueries).filter(entry => entry[1] && entry[0] !== 'alerts[]')
+    )
+
+    telemetry.trackEvent({
+      name: `PrisonerSearch`,
+      properties: {
+        offenderNos,
+        filters: searchTerms,
+        username,
+        caseLoadId: activeCaseLoad?.caseLoadId,
+      },
+    })
+  }
+}
+
+module.exports = ({ paginationService, prisonApi, telemetry, logError }) => {
   const index = async (req, res) => {
     const {
       user: { activeCaseLoad },
     } = res.locals
+    const { username } = req.session.userDetails
     const fullUrl = new URL(`${req.protocol}://${req.get('host')}${req.originalUrl}`)
     const {
       location,
@@ -73,6 +94,10 @@ module.exports = ({ paginationService, prisonApi, logError }) => {
         }))
 
       const searchQueries = { ...req.query, ...(alerts ? { 'alerts[]': alerts } : {}) }
+
+      if (results?.length > 0) {
+        trackEvent(telemetry, results, searchQueries, username, activeCaseLoad)
+      }
 
       return res.render('prisonerSearch/prisonerSearch.njk', {
         alertOptions: alertFlagLabels
