@@ -35,9 +35,7 @@ module.exports = app => {
     return null
   })
 
-  njkEnv.addFilter('formatDate', (value, format) => {
-    return value ? moment(value).format(format) : null
-  })
+  njkEnv.addFilter('formatDate', (value, format) => (value ? moment(value).format(format) : null))
 
   njkEnv.addFilter('hasErrorWithPrefix', (errorsArray, prefixes) => {
     if (!errorsArray) return null

@@ -69,9 +69,7 @@ describe('bulk appointments upload', () => {
       csvParser.loadAndParseCsvFile = jest.fn()
       offenderLoader.loadFromCsvContent = jest.fn()
       prisonApi.getLocation = jest.fn()
-      prisonApi.getLocation.mockImplementation((context, livingUnitId) => {
-        return { description: `${livingUnitId}_cell_no` }
-      })
+      prisonApi.getLocation.mockImplementation((context, livingUnitId) => ({ description: `${livingUnitId}_cell_no` }))
     })
     let fileContent = [['Prison number'], ['G1683VN'], ['G4803UT'], ['G4346UT']]
 

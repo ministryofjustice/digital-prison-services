@@ -1,4 +1,4 @@
-const prisonerFullImage = require('../controllers/prisonerProfile/prisonerFullImage.js')
+const prisonerFullImage = require('../controllers/prisonerProfile/prisonerFullImage')
 
 describe('prisoner profile full image', () => {
   const offenderNo = 'ABC123'

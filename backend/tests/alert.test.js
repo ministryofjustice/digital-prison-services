@@ -394,25 +394,23 @@ describe('alert management', () => {
     })
 
     it('should render the createAlertForm with the correctly formatted information', async () => {
-      referenceCodesService.getAlertTypes = jest.fn().mockImplementationOnce(() => {
-        return {
-          alertTypes: [
-            {
-              value: 'P',
-              description: 'MAPP',
-              activeFlag: 'Y',
-            },
-          ],
-          alertSubTypes: [
-            {
-              value: 'PI',
-              description: 'MAPP 1',
-              activeFlag: 'Y',
-              parentValue: 'P',
-            },
-          ],
-        }
-      })
+      referenceCodesService.getAlertTypes = jest.fn().mockImplementationOnce(() => ({
+        alertTypes: [
+          {
+            value: 'P',
+            description: 'MAPP',
+            activeFlag: 'Y',
+          },
+        ],
+        alertSubTypes: [
+          {
+            value: 'PI',
+            description: 'MAPP 1',
+            activeFlag: 'Y',
+            parentValue: 'P',
+          },
+        ],
+      }))
       oauthApi.userRoles = jest.fn().mockReturnValue([{ roleCode: 'UPDATE_ALERT' }])
       const req = { ...mockCreateReq, params: { offenderNo }, headers: {} }
 
@@ -441,25 +439,23 @@ describe('alert management', () => {
     beforeEach(() => {
       raiseAnalyticsEvent.mockRestore()
       prisonApi.createAlert = jest.fn()
-      referenceCodesService.getAlertTypes = jest.fn().mockImplementationOnce(() => {
-        return {
-          alertTypes: [
-            {
-              value: 'P',
-              description: 'MAPP',
-              activeFlag: 'Y',
-            },
-          ],
-          alertSubTypes: [
-            {
-              value: 'PI',
-              description: 'MAPP 1',
-              activeFlag: 'Y',
-              parentValue: 'P',
-            },
-          ],
-        }
-      })
+      referenceCodesService.getAlertTypes = jest.fn().mockImplementationOnce(() => ({
+        alertTypes: [
+          {
+            value: 'P',
+            description: 'MAPP',
+            activeFlag: 'Y',
+          },
+        ],
+        alertSubTypes: [
+          {
+            value: 'PI',
+            description: 'MAPP 1',
+            activeFlag: 'Y',
+            parentValue: 'P',
+          },
+        ],
+      }))
     })
 
     describe('when there are errors', () => {

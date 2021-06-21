@@ -1,6 +1,6 @@
 const moment = require('moment')
 
-const { formatName, formatLocation, stripAgencyPrefix, putLastNameFirst } = require('../../utils.js')
+const { formatName, formatLocation, stripAgencyPrefix, putLastNameFirst } = require('../../utils')
 
 const latestBedAssignment = (left, right) => right.bedAssignmentHistorySequence - left.bedAssignmentHistorySequence
 const formatLocationDescription = (description, agencyId) => formatLocation(stripAgencyPrefix(description, agencyId))
