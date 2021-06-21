@@ -80,7 +80,7 @@ describe('prisoner profile quick look', () => {
     )
   })
 
-  it('should submit telemetry custom event containing username and active caseload', async () => {
+  it('should send custom event with username and active caseload', async () => {
     await controller(req, res)
 
     expect(telemetry.trackEvent).toHaveBeenCalledWith({
