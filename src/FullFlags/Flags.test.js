@@ -289,7 +289,7 @@ describe('Flags.', () => {
       expect(
         wrapper.equals(
           <div className="full-flags">
-            <span className="cata-status">CAT A</span>
+            <span className="cata-status">CAT A</span>
           </div>
         )
       )
@@ -300,7 +300,7 @@ describe('Flags.', () => {
       expect(
         wrapper.equals(
           <div className="full-flags">
-            <span className="cata-status">CAT A</span>
+            <span className="cata-status">CAT A</span>
           </div>
         )
       )
@@ -311,7 +311,7 @@ describe('Flags.', () => {
       expect(
         wrapper.equals(
           <div className="full-flags">
-            <span className="cata-high-status">CAT A High</span>
+            <span className="cata-high-status">CAT A High</span>
           </div>
         )
       )
@@ -322,7 +322,7 @@ describe('Flags.', () => {
       expect(
         wrapper.equals(
           <div className="full-flags">
-            <span className="cata-high-status">CAT A Prov</span>
+            <span className="cata-high-status">CAT A Prov</span>
           </div>
         )
       )
