@@ -203,6 +203,7 @@ module.exports = on => {
         prisonApi.stubEventsForToday([], 500),
         prisonApi.stubProfileInformation(null, 500),
       ]),
+    stubPrisonerDetails: prisonerDetails => prisonApi.stubPrisonerDetails(prisonerDetails),
     stubPersonal: ({
       identifiers,
       aliases,
