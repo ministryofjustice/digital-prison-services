@@ -30,14 +30,13 @@ const retentionReasonsFactory = (prisonApi, dataComplianceApi) => {
     })
   }
 
-  const validateOptionsSelected = optionsSelected => {
-    return optionsSelected
+  const validateOptionsSelected = optionsSelected =>
+    optionsSelected
       .filter(option => {
         const details = option.reasonDetails && option.reasonDetails.trim()
         return details === '' || (details && details.length < 2)
       })
       .map(option => ({ text: 'Enter more detail', href: `#more-detail-${option.reasonCode}` }))
-  }
 
   const renderTemplate = async ({ req, res, selectedReasons, pageErrors }) => {
     const { offenderNo } = req.params
