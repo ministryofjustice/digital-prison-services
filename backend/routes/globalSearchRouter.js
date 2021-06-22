@@ -1,6 +1,7 @@
 const express = require('express')
 const globalSearchController = require('../controllers/globalSearch')
 const paginationService = require('../services/paginationService')
+const telemetry = require('../azure-appinsights')
 
 const router = express.Router()
 
@@ -9,6 +10,7 @@ const controller = ({ offenderSearchApi, oauthApi, logError }) => {
     paginationService,
     offenderSearchApi,
     oauthApi,
+    telemetry,
     logError,
   })
 

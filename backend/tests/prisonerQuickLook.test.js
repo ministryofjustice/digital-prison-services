@@ -20,6 +20,7 @@ describe('prisoner profile quick look', () => {
   const bookingId = '123'
   const prisonApi = {}
   const prisonerProfileService = {}
+  const telemetry = {}
 
   let req
   let res
@@ -36,7 +37,13 @@ describe('prisoner profile quick look', () => {
         },
       },
     }
-    res = { locals: {}, render: jest.fn(), status: jest.fn() }
+    res = {
+      locals: {
+        user: { activeCaseLoad: { caseLoadId: 'MDI' } },
+      },
+      render: jest.fn(),
+      status: jest.fn(),
+    }
 
     logError = jest.fn()
 
@@ -55,7 +62,9 @@ describe('prisoner profile quick look', () => {
     prisonApi.getPrisonerVisitBalances = jest.fn().mockResolvedValue({})
     prisonApi.getEventsForToday = jest.fn().mockResolvedValue([])
 
-    controller = prisonerQuickLook({ prisonerProfileService, prisonApi, logError })
+    telemetry.trackEvent = jest.fn().mockResolvedValue([])
+
+    controller = prisonerQuickLook({ prisonerProfileService, prisonApi, telemetry, logError })
   })
 
   it('should make a call for the basic details of a prisoner and the prisoner header details and render them', async () => {
@@ -69,6 +78,15 @@ describe('prisoner profile quick look', () => {
         prisonerProfileData,
       })
     )
+  })
+
+  it('should send custom event with username and active caseload', async () => {
+    await controller(req, res)
+
+    expect(telemetry.trackEvent).toHaveBeenCalledWith({
+      name: 'ViewPrisonerProfile',
+      properties: { username: 'user1', caseLoadId: 'MDI' },
+    })
   })
 
   describe('offence data', () => {
@@ -311,8 +329,21 @@ describe('prisoner profile quick look', () => {
 
       await controller(req, res)
 
-      expect(prisonApi.getIepSummaryForBooking).toHaveBeenCalledWith({}, bookingId, false)
-      expect(prisonApi.getPositiveCaseNotes).toHaveBeenCalledWith({}, bookingId, '2019-10-13', '2020-01-13')
+      expect(prisonApi.getIepSummaryForBooking).toHaveBeenCalledWith(
+        {
+          user: { activeCaseLoad: { caseLoadId: 'MDI' } },
+        },
+        bookingId,
+        false
+      )
+      expect(prisonApi.getPositiveCaseNotes).toHaveBeenCalledWith(
+        {
+          user: { activeCaseLoad: { caseLoadId: 'MDI' } },
+        },
+        bookingId,
+        '2019-10-13',
+        '2020-01-13'
+      )
     })
 
     describe('when there is missing case note and adjudications data', () => {

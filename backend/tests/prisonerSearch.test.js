@@ -6,6 +6,7 @@ const { makeResetError, makeResetErrorWithStack } = require('./helpers')
 describe('Prisoner search', () => {
   const prisonApi = {}
   const paginationService = {}
+  const telemetry = {}
 
   let req
   let res
@@ -20,7 +21,11 @@ describe('Prisoner search', () => {
       originalUrl: '/prisoner-search',
       query: {},
       body: { sortFieldsWithOrder: 'lastName,firstName:ASC ' },
-      session: {},
+      session: {
+        userDetails: {
+          username: 'user1',
+        },
+      },
     }
     res = {
       locals: {
@@ -65,7 +70,9 @@ describe('Prisoner search', () => {
 
     paginationService.getPagination = jest.fn()
 
-    controller = prisonerSearchController({ paginationService, prisonApi, logError })
+    telemetry.trackEvent = jest.fn().mockResolvedValue([])
+
+    controller = prisonerSearchController({ paginationService, prisonApi, telemetry, logError })
   })
 
   describe('index', () => {
@@ -197,94 +204,135 @@ describe('Prisoner search', () => {
       )
     })
 
-    it('should call pagination service and return the correctly formatted results', async () => {
-      const inmates = [
-        {
-          bookingId: 1,
-          offenderNo: 'A1234BC',
-          firstName: 'JOHN',
-          lastName: 'SAUNDERS',
-          dateOfBirth: '1990-10-12',
-          age: 29,
-          agencyId: 'MDI',
-          assignedLivingUnitId: 1,
-          assignedLivingUnitDesc: 'UNIT-1',
-          iepLevel: 'Standard',
-          categoryCode: 'C',
-          alertsDetails: ['XA', 'XVL'],
-        },
-        {
-          bookingId: 2,
-          offenderNo: 'B4567CD',
-          firstName: 'STEVE',
-          lastName: 'SMITH',
-          dateOfBirth: '1989-11-12',
-          age: 30,
-          agencyId: 'MDI',
-          assignedLivingUnitId: 2,
-          assignedLivingUnitDesc: 'CSWAP',
-          iepLevel: 'Standard',
-          categoryCode: 'C',
-          alertsDetails: ['RSS', 'XC'],
-        },
-      ]
-      res.locals.responseHeaders['total-records'] = inmates.length
-      prisonApi.getInmates = jest.fn().mockReturnValue(inmates)
+    it('should not send custom event as there arent any results', async () => {
+      req.query = {
+        alerts: ['HA', 'HA1'],
+        keywords: 'Smith',
+        location: 'MDI',
+      }
 
       await controller.index(req, res)
-      expect(paginationService.getPagination).toHaveBeenCalledWith(
-        2,
-        0,
-        50,
-        new URL('http://localhost/prisoner-search')
-      )
-      expect(res.render).toHaveBeenCalledWith(
-        'prisonerSearch/prisonerSearch.njk',
-        expect.objectContaining({
-          results: [
-            {
-              age: 29,
-              agencyId: 'MDI',
-              alerts: [
-                {
-                  alertCodes: ['XA'],
-                  classes: 'alert-status alert-status--arsonist',
-                  img: '/images/Arsonist_icon.png',
-                  label: 'Arsonist',
-                },
-              ],
-              alertsDetails: ['XA', 'XVL'],
-              assignedLivingUnitDesc: 'UNIT-1',
-              assignedLivingUnitId: 1,
-              bookingId: 1,
-              categoryCode: 'C',
-              dateOfBirth: '1990-10-12',
-              firstName: 'JOHN',
-              iepLevel: 'Standard',
-              lastName: 'SAUNDERS',
-              name: 'Saunders, John',
-              offenderNo: 'A1234BC',
+
+      expect(telemetry.trackEvent).not.toHaveBeenCalled()
+    })
+
+    describe('with inmates returned', () => {
+      beforeEach(() => {
+        const inmates = [
+          {
+            bookingId: 1,
+            offenderNo: 'A1234BC',
+            firstName: 'JOHN',
+            lastName: 'SAUNDERS',
+            dateOfBirth: '1990-10-12',
+            age: 29,
+            agencyId: 'MDI',
+            assignedLivingUnitId: 1,
+            assignedLivingUnitDesc: 'UNIT-1',
+            iepLevel: 'Standard',
+            categoryCode: 'C',
+            alertsDetails: ['XA', 'XVL'],
+          },
+          {
+            bookingId: 2,
+            offenderNo: 'B4567CD',
+            firstName: 'STEVE',
+            lastName: 'SMITH',
+            dateOfBirth: '1989-11-12',
+            age: 30,
+            agencyId: 'MDI',
+            assignedLivingUnitId: 2,
+            assignedLivingUnitDesc: 'CSWAP',
+            iepLevel: 'Standard',
+            categoryCode: 'C',
+            alertsDetails: ['RSS', 'XC'],
+          },
+        ]
+        res.locals.responseHeaders['total-records'] = inmates.length
+        prisonApi.getInmates = jest.fn().mockReturnValue(inmates)
+      })
+
+      it('should call pagination service and return the correctly formatted results', async () => {
+        await controller.index(req, res)
+
+        expect(paginationService.getPagination).toHaveBeenCalledWith(
+          2,
+          0,
+          50,
+          new URL('http://localhost/prisoner-search')
+        )
+        expect(res.render).toHaveBeenCalledWith(
+          'prisonerSearch/prisonerSearch.njk',
+          expect.objectContaining({
+            results: [
+              {
+                age: 29,
+                agencyId: 'MDI',
+                alerts: [
+                  {
+                    alertCodes: ['XA'],
+                    classes: 'alert-status alert-status--arsonist',
+                    img: '/images/Arsonist_icon.png',
+                    label: 'Arsonist',
+                  },
+                ],
+                alertsDetails: ['XA', 'XVL'],
+                assignedLivingUnitDesc: 'UNIT-1',
+                assignedLivingUnitId: 1,
+                bookingId: 1,
+                categoryCode: 'C',
+                dateOfBirth: '1990-10-12',
+                firstName: 'JOHN',
+                iepLevel: 'Standard',
+                lastName: 'SAUNDERS',
+                name: 'Saunders, John',
+                offenderNo: 'A1234BC',
+              },
+              {
+                age: 30,
+                agencyId: 'MDI',
+                alerts: [],
+                alertsDetails: ['RSS', 'XC'],
+                assignedLivingUnitDesc: 'No cell allocated',
+                assignedLivingUnitId: 2,
+                bookingId: 2,
+                categoryCode: 'C',
+                dateOfBirth: '1989-11-12',
+                firstName: 'STEVE',
+                iepLevel: 'Standard',
+                lastName: 'SMITH',
+                name: 'Smith, Steve',
+                offenderNo: 'B4567CD',
+              },
+            ],
+            totalRecords: 2,
+          })
+        )
+      })
+
+      it('should send custom event with visible offender numbers, search terms, username and active caseload', async () => {
+        req.query = {
+          alerts: ['HA', 'HA1'],
+          keywords: 'Smith',
+          location: 'MDI',
+        }
+
+        await controller.index(req, res)
+
+        expect(telemetry.trackEvent).toHaveBeenCalledWith({
+          name: 'PrisonerSearch',
+          properties: {
+            offenderNos: ['A1234BC', 'B4567CD'],
+            filters: {
+              alerts: ['HA', 'HA1'],
+              keywords: 'Smith',
+              location: 'MDI',
             },
-            {
-              age: 30,
-              agencyId: 'MDI',
-              alerts: [],
-              alertsDetails: ['RSS', 'XC'],
-              assignedLivingUnitDesc: 'No cell allocated',
-              assignedLivingUnitId: 2,
-              bookingId: 2,
-              categoryCode: 'C',
-              dateOfBirth: '1989-11-12',
-              firstName: 'STEVE',
-              iepLevel: 'Standard',
-              lastName: 'SMITH',
-              name: 'Smith, Steve',
-              offenderNo: 'B4567CD',
-            },
-          ],
-          totalRecords: 2,
+            username: 'user1',
+            caseLoadId: 'MDI',
+          },
         })
-      )
+      })
     })
 
     it('should render template with correct urls containing view type and printed values', async () => {
@@ -375,7 +423,7 @@ describe('Prisoner search', () => {
     it('should NOT set prisonerSearchUrl to the originalUrl if there has NOT been a search', async () => {
       await controller.index(req, res)
 
-      expect(req.session).toEqual({})
+      expect(req.session).toEqual({ userDetails: { username: 'user1' } })
     })
 
     it('should set prisonerSearchUrl to the originalUrl if there has been a search', async () => {
@@ -383,7 +431,7 @@ describe('Prisoner search', () => {
 
       await controller.index(req, res)
 
-      expect(req.session).toEqual({ prisonerSearchUrl: req.originalUrl })
+      expect(req.session).toEqual({ prisonerSearchUrl: req.originalUrl, userDetails: { username: 'user1' } })
     })
 
     it('should set the Page-Limit in the request header if pageLimitOption is specified in the url', async () => {
