@@ -28,15 +28,20 @@ module.exports = ({ prisonerProfileService, prisonApi, systemOauthClient }) => a
   const sentenceAdjustments = sentenceAdjustmentsViewModel(sentenceAdjustmentsData)
   const courtCases = courtCasesViewModel({ courtCaseData, sentenceTermsData, offenceHistory })
 
+  const determineLifeSentence = async () => {
+    const prisonerDetails = await prisonApi.getPrisonerDetails(res.locals, offenderNo)
+    return prisonerDetails && prisonerDetails[0]?.imprisonmentStatus === 'LIFE' ? 'Life sentence' : undefined
+  }
+
+  const getEffectiveSentenceEndDate = async () =>
+    readableDateFormat(sentenceData?.sentenceDetail?.effectiveSentenceEndDate, 'YYYY-MM-DD') || determineLifeSentence()
+
   return res.render('prisonerProfile/prisonerSentenceAndRelease/prisonerSentenceAndRelease.njk', {
     prisonerProfileData,
     releaseDates,
     sentenceAdjustments,
     courtCases,
     showSentences: Boolean(courtCases.find(courtCase => courtCase.sentenceTerms.length)),
-    effectiveSentenceEndDate:
-      sentenceData &&
-      sentenceData.sentenceDetail &&
-      readableDateFormat(sentenceData.sentenceDetail.effectiveSentenceEndDate, 'YYYY-MM-DD'),
+    effectiveSentenceEndDate: await getEffectiveSentenceEndDate(sentenceData),
   })
 }

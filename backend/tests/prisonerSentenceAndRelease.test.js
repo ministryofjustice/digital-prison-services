@@ -69,6 +69,7 @@ describe('prisoner sentence and release', () => {
         tariffDate: '2021-05-07',
         dtoPostRecallReleaseDate: '2020-10-16',
         dtoPostRecallReleaseDateOverride: '2021-10-16',
+        effectiveSentenceEndDate: '2021-10-16',
       },
     })
 
@@ -833,6 +834,7 @@ describe('prisoner sentence and release', () => {
         topupSupervisionExpiryDate: '2020-10-14',
         tariffDate: '2021-05-07',
         dtoPostRecallReleaseDate: '2020-10-16',
+        effectiveSentenceEndDate: '2021-10-16',
       },
     })
     await controller(req, res)
@@ -883,6 +885,7 @@ describe('prisoner sentence and release', () => {
         releaseDate: '2020-04-01',
         nonDtoReleaseDateType: 'CRD',
         additionalDaysAwarded: 5,
+        effectiveSentenceEndDate: '2021-10-16',
       },
     })
     await controller(req, res)
@@ -905,7 +908,7 @@ describe('prisoner sentence and release', () => {
 
   it('should make a call to retrieve an offenders booking id', async () => {
     prisonApi.getPrisonerSentenceDetails = jest.fn().mockResolvedValue({
-      sentenceDetail: {},
+      sentenceDetail: { effectiveSentenceEndDate: '2021-10-16' },
     })
     prisonApi.getSentenceAdjustments = jest.fn().mockResolvedValue({})
 
@@ -916,7 +919,7 @@ describe('prisoner sentence and release', () => {
 
   it('should make a call for sentence adjustments', async () => {
     prisonApi.getPrisonerSentenceDetails = jest.fn().mockResolvedValue({
-      sentenceDetail: {},
+      sentenceDetail: { effectiveSentenceEndDate: '2021-10-16' },
     })
     prisonApi.getSentenceAdjustments = jest.fn().mockResolvedValue({})
 
@@ -927,7 +930,7 @@ describe('prisoner sentence and release', () => {
 
   it('should return the right data when values are available', async () => {
     prisonApi.getPrisonerSentenceDetails = jest.fn().mockResolvedValue({
-      sentenceDetail: {},
+      sentenceDetail: { effectiveSentenceEndDate: '2021-10-16' },
     })
     prisonApi.getSentenceAdjustments = jest.fn().mockResolvedValue({
       additionalDaysAwarded: 1,
@@ -969,7 +972,7 @@ describe('prisoner sentence and release', () => {
 
   it('should return the right data when no values are available', async () => {
     prisonApi.getPrisonerSentenceDetails = jest.fn().mockResolvedValue({
-      sentenceDetail: {},
+      sentenceDetail: { effectiveSentenceEndDate: '2021-10-16' },
     })
     prisonApi.getSentenceAdjustments = jest.fn().mockResolvedValue({
       additionalDaysAwarded: 0,
@@ -1021,5 +1024,45 @@ describe('prisoner sentence and release', () => {
     ])
 
     await controller(req, res)
+  })
+
+  it('Should show Life Sentence in Effective Sentence End Date if the end date doesnt exist and it is a life sentence', async () => {
+    prisonApi.getPrisonerSentenceDetails = jest.fn().mockResolvedValue({
+      sentenceDetail: {
+        sentenceStartDate: '2010-02-03',
+        confirmedReleaseDate: '2020-04-20',
+        releaseDate: '2020-04-01',
+      },
+    })
+    prisonApi.getPrisonerDetails = jest.fn().mockResolvedValue([{ latestBookingId: 1, imprisonmentStatus: 'LIFE' }])
+
+    await controller(req, res)
+
+    expect(res.render).toHaveBeenCalledWith(
+      'prisonerProfile/prisonerSentenceAndRelease/prisonerSentenceAndRelease.njk',
+      expect.objectContaining({
+        effectiveSentenceEndDate: 'Life sentence',
+      })
+    )
+  })
+
+  it('Should return nothing in Effective Sentence End Date if the end date doesnt exist and it is not a life sentence', async () => {
+    prisonApi.getPrisonerSentenceDetails = jest.fn().mockResolvedValue({
+      sentenceDetail: {
+        sentenceStartDate: '2010-02-03',
+        confirmedReleaseDate: '2020-04-20',
+        releaseDate: '2020-04-01',
+      },
+    })
+    prisonApi.getPrisonerDetails = jest.fn().mockResolvedValue([{ latestBookingId: 1, imprisonmentStatus: 'OTHER' }])
+
+    await controller(req, res)
+
+    expect(res.render).toHaveBeenCalledWith(
+      'prisonerProfile/prisonerSentenceAndRelease/prisonerSentenceAndRelease.njk',
+      expect.objectContaining({
+        effectiveSentenceEndDate: undefined,
+      })
+    )
   })
 })
