@@ -160,6 +160,35 @@ describe('prisoner profile quick look', () => {
           })
         )
       })
+
+      it('should show Life Imprisonment alongside the release date if no release date is set and the offender is serving LIFE', async () => {
+        prisonApi.getPrisonerDetails.mockResolvedValue([
+          { imprisonmentStatus: 'LIFE', imprisonmentStatusDesc: 'Serving Life Imprisonment' },
+        ])
+        prisonApi.getPrisonerSentenceDetails.mockResolvedValue({ sentenceDetail: { releaseDate: '' } })
+
+        await controller(req, res)
+
+        expect(res.render).toHaveBeenCalledWith(
+          'prisonerProfile/prisonerQuickLook/prisonerQuickLook.njk',
+          expect.objectContaining({
+            offenceDetails: [
+              {
+                label: 'Main offence',
+                value: 'Have blade/article which was sharply pointed in public place',
+              },
+              {
+                label: 'Imprisonment status',
+                value: 'Serving Life Imprisonment',
+              },
+              {
+                label: 'Release date',
+                value: 'Life sentence',
+              },
+            ],
+          })
+        )
+      })
     })
   })
 
@@ -714,6 +743,26 @@ describe('prisoner profile quick look', () => {
             { label: 'Main offence', value: 'Have blade/article which was sharply pointed in public place' },
             { label: 'Imprisonment status', value: 'Unable to show this detail' },
             { label: 'Release date', value: '13 December 2020' },
+          ],
+          offenceDetailsSectionError: false,
+        })
+      )
+    })
+    it('should handle api errors when requesting imprisonment status and release date is not set', async () => {
+      prisonApi.getPrisonerSentenceDetails.mockResolvedValue({ sentenceDetail: { releaseDate: '' } })
+      prisonApi.getMainOffence.mockResolvedValue([
+        { offenceDescription: 'Have blade/article which was sharply pointed in public place' },
+      ])
+
+      await controller(req, res)
+
+      expect(res.render).toHaveBeenCalledWith(
+        'prisonerProfile/prisonerQuickLook/prisonerQuickLook.njk',
+        expect.objectContaining({
+          offenceDetails: [
+            { label: 'Main offence', value: 'Have blade/article which was sharply pointed in public place' },
+            { label: 'Imprisonment status', value: 'Unable to show this detail' },
+            { label: 'Release date', value: 'Unable to show this detail' },
           ],
           offenceDetailsSectionError: false,
         })

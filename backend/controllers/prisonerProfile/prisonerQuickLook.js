@@ -43,6 +43,13 @@ const createFinanceLink = (offenderNo, path, value) =>
     value || 0
   )}</a>`
 
+const extractLifeImprisonmentStatus = (prisonerDataResponse, prisoner, unableToShowDetailMessage) => {
+  if (prisonerDataResponse.error) {
+    return unableToShowDetailMessage
+  }
+  return prisoner?.imprisonmentStatus === 'LIFE' ? 'Life sentence' : 'Not entered'
+}
+
 module.exports = ({ prisonerProfileService, prisonApi, telemetry }) => async (req, res) => {
   const {
     user: { activeCaseLoad },
@@ -151,7 +158,7 @@ module.exports = ({ prisonerProfileService, prisonApi, telemetry }) => async (re
               sentenceData.sentenceDetail &&
               sentenceData.sentenceDetail.releaseDate &&
               moment(sentenceData.sentenceDetail.releaseDate).format('D MMMM YYYY')) ||
-            'Not entered',
+            extractLifeImprisonmentStatus(prisonerDataResponse, prisoner, unableToShowDetailMessage),
       },
     ],
     balanceDetailsSectionError: Boolean(balanceDataResponse.error),
