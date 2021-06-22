@@ -22,26 +22,24 @@ module.exports = ({ prisonApi }) => async (req, res) => {
       }
     )
 
-    const nonAssociationsRows = sortedNonAssocationsInEstablishment?.map(nonAssociation => {
-      return {
-        name: putLastNameFirst(
-          nonAssociation.offenderNonAssociation.firstName,
-          nonAssociation.offenderNonAssociation.lastName
-        ),
-        prisonNumber: nonAssociation.offenderNonAssociation.offenderNo,
-        location: nonAssociation.offenderNonAssociation.assignedLivingUnitDescription,
-        type: nonAssociation.typeDescription,
-        selectedOffenderKey: `${formatName(firstName, lastName)} is`,
-        selectedOffenderRole: nonAssociation.reasonDescription,
-        otherOffenderKey: `${formatName(
-          nonAssociation.offenderNonAssociation.firstName,
-          nonAssociation.offenderNonAssociation.lastName
-        )} is`,
-        otherOffenderRole: nonAssociation.offenderNonAssociation.reasonDescription,
-        comment: nonAssociation.comments || 'None entered',
-        effectiveDate: moment(nonAssociation.effectiveDate).format('D MMMM YYYY'),
-      }
-    })
+    const nonAssociationsRows = sortedNonAssocationsInEstablishment?.map(nonAssociation => ({
+      name: putLastNameFirst(
+        nonAssociation.offenderNonAssociation.firstName,
+        nonAssociation.offenderNonAssociation.lastName
+      ),
+      prisonNumber: nonAssociation.offenderNonAssociation.offenderNo,
+      location: nonAssociation.offenderNonAssociation.assignedLivingUnitDescription,
+      type: nonAssociation.typeDescription,
+      selectedOffenderKey: `${formatName(firstName, lastName)} is`,
+      selectedOffenderRole: nonAssociation.reasonDescription,
+      otherOffenderKey: `${formatName(
+        nonAssociation.offenderNonAssociation.firstName,
+        nonAssociation.offenderNonAssociation.lastName
+      )} is`,
+      otherOffenderRole: nonAssociation.offenderNonAssociation.reasonDescription,
+      comment: nonAssociation.comments || 'None entered',
+      effectiveDate: moment(nonAssociation.effectiveDate).format('D MMMM YYYY'),
+    }))
 
     return res.render('cellMove/nonAssociations.njk', {
       nonAssociationsRows,

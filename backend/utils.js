@@ -195,10 +195,7 @@ const isAfterToday = date => {
 
 const isBeforeToday = date => !(isToday(date) || isAfterToday(date))
 
-const hyphenatedStringToCamel = string =>
-  string.replace(/[-\s]([a-z])/g, char => {
-    return char[1].toUpperCase()
-  })
+const hyphenatedStringToCamel = string => string.replace(/[-\s]([a-z])/g, char => char[1].toUpperCase())
 
 const formatCurrency = (number, currency) =>
   typeof number === 'number' ? number.toLocaleString('en-GB', { style: 'currency', currency: currency || 'GBP' }) : ''
@@ -221,26 +218,20 @@ const putLastNameFirst = (firstName, lastName) => {
 
 const hasLength = array => array && array.length > 0
 
-const getNamesFromString = string => {
-  return (
-    string &&
-    string
-      .split(', ')
-      .reverse()
-      .map(name => properCaseName(name))
-  )
-}
+const getNamesFromString = string =>
+  string &&
+  string
+    .split(', ')
+    .reverse()
+    .map(name => properCaseName(name))
 
-const groupBy = (array, key) => {
-  return (
-    array &&
-    array.reduce((acc, current) => {
-      const group = current[key]
+const groupBy = (array, key) =>
+  array &&
+  array.reduce((acc, current) => {
+    const group = current[key]
 
-      return { ...acc, [group]: [...(acc[group] || []), current] }
-    }, {})
-  )
-}
+    return { ...acc, [group]: [...(acc[group] || []), current] }
+  }, {})
 
 const times = number => func => {
   const iter = index => {

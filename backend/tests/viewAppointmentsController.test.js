@@ -1,4 +1,4 @@
-const viewAppointmentsRouter = require('../routes/appointments/viewAppointmentsRouter.js')
+const viewAppointmentsRouter = require('../routes/appointments/viewAppointmentsRouter')
 
 describe('View appointments', () => {
   const prisonApi = {}

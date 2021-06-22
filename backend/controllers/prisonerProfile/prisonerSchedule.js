@@ -29,12 +29,10 @@ module.exports = ({ prisonApi }) => async (req, res) => {
     })
   )
 
-  const days = selectedWeekDates.map(day => {
-    return {
-      date: moment(day.date).format('dddd D MMMM YYYY'),
-      periods: filterActivitiesByPeriod(groupedByDate[day.date]),
-    }
-  })
+  const days = selectedWeekDates.map(day => ({
+    date: moment(day.date).format('dddd D MMMM YYYY'),
+    periods: filterActivitiesByPeriod(groupedByDate[day.date]),
+  }))
 
   return res.render('prisonerProfile/prisonerSchedule/prisonerSchedule.njk', {
     breadcrumbPrisonerName: putLastNameFirst(firstName, lastName),

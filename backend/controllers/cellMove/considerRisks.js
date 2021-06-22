@@ -9,9 +9,8 @@ const activeCellMoveAlertsExcludingDisabled = alert =>
 const missingDataString = 'not entered'
 
 module.exports = ({ prisonApi, raiseAnalyticsEvent }) => {
-  const getOccupantsDetails = async (context, offenders) => {
-    return Promise.all(offenders.map(offender => prisonApi.getDetails(context, offender, true)))
-  }
+  const getOccupantsDetails = async (context, offenders) =>
+    Promise.all(offenders.map(offender => prisonApi.getDetails(context, offender, true)))
 
   const alertString = alertDescription => `${indefiniteArticle(alertDescription)} ${alertDescription} alert`
 
@@ -109,24 +108,22 @@ module.exports = ({ prisonApi, raiseAnalyticsEvent }) => {
           })
 
       const currentOccupantsWithFormattedActiveAlerts = currentOccupantsDetails
-        .map(currentOccupant => {
-          return {
-            name: formatName(currentOccupant.firstName, currentOccupant.lastName),
-            alerts: currentOccupant.alerts
-              .filter(activeCellMoveAlertsExcludingDisabled)
-              .filter(alert => alert.alertCode !== 'RLG' || (alert.alertCode === 'RLG' && currentOffenderIsNonHetero))
-              .map(alert => {
-                const title =
-                  alert.alertCode === 'RLG' && currentOffenderIsNonHetero
-                    ? `${alertString(
-                        alert.alertCodeDescription
-                      )} and ${currentOffenderName} has a sexual orientation of ${currentOffenderSexuality}`
-                    : `${alertString(alert.alertCodeDescription)}`
+        .map(currentOccupant => ({
+          name: formatName(currentOccupant.firstName, currentOccupant.lastName),
+          alerts: currentOccupant.alerts
+            .filter(activeCellMoveAlertsExcludingDisabled)
+            .filter(alert => alert.alertCode !== 'RLG' || (alert.alertCode === 'RLG' && currentOffenderIsNonHetero))
+            .map(alert => {
+              const title =
+                alert.alertCode === 'RLG' && currentOffenderIsNonHetero
+                  ? `${alertString(
+                      alert.alertCodeDescription
+                    )} and ${currentOffenderName} has a sexual orientation of ${currentOffenderSexuality}`
+                  : `${alertString(alert.alertCodeDescription)}`
 
-                return getOffenderAlertBody(alert, title)
-              }),
-          }
-        })
+              return getOffenderAlertBody(alert, title)
+            }),
+        }))
         .filter(occupant => occupant.alerts.length)
 
       const currentOccupantsWithCatRating = currentOccupantsDetails.map(

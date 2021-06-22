@@ -3,7 +3,7 @@ const webpack = require('webpack')
 const middleware = require('webpack-dev-middleware')
 const hrm = require('webpack-hot-middleware')
 
-const webpackConfig = require('../webpack.config.js')
+const webpackConfig = require('../webpack.config')
 const config = require('./config')
 
 const router = express.Router()
