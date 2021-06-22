@@ -6,6 +6,15 @@ const getValueByType = require('../../shared/getValueByType')
 
 const log = require('../../log')
 
+const trackEvent = (telemetry, username, activeCaseLoad) => {
+  if (telemetry) {
+    telemetry.trackEvent({
+      name: `ViewPrisonerProfile`,
+      properties: { username, caseLoadId: activeCaseLoad?.caseLoadId },
+    })
+  }
+}
+
 const captureErrorAndContinue = apiCall =>
   new Promise(resolve => {
     apiCall.then(response => resolve({ response })).catch(error => {
@@ -41,7 +50,10 @@ const extractLifeImprisonmentStatus = (prisonerDataResponse, prisoner, unableToS
   return prisoner?.imprisonmentStatus === 'LIFE' ? 'Life sentence' : 'Not entered'
 }
 
-module.exports = ({ prisonerProfileService, prisonApi }) => async (req, res) => {
+module.exports = ({ prisonerProfileService, prisonApi, telemetry }) => async (req, res) => {
+  const {
+    user: { activeCaseLoad },
+  } = res.locals
   const { offenderNo } = req.params
   const { username } = req.session.userDetails
 
@@ -117,6 +129,8 @@ module.exports = ({ prisonerProfileService, prisonApi }) => async (req, res) => 
   const unableToShowDetailMessage = 'Unable to show this detail'
 
   const daysSinceReview = (iepSummary && iepSummary.daysSinceReview) || 0
+
+  trackEvent(telemetry, username, activeCaseLoad)
 
   return res.render('prisonerProfile/prisonerQuickLook/prisonerQuickLook.njk', {
     prisonerProfileData,
