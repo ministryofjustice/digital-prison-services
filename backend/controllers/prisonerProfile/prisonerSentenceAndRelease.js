@@ -33,12 +33,8 @@ module.exports = ({ prisonerProfileService, prisonApi, systemOauthClient }) => a
     return prisonerDetails && prisonerDetails[0]?.imprisonmentStatus === 'LIFE' ? 'Life sentence' : undefined
   }
 
-  const getEffectiveSentenceEndDate = async () => {
-    return (
-      readableDateFormat(sentenceData?.sentenceDetail?.effectiveSentenceEndDate, 'YYYY-MM-DD') ||
-      determineLifeSentence()
-    )
-  }
+  const getEffectiveSentenceEndDate = async () =>
+    readableDateFormat(sentenceData?.sentenceDetail?.effectiveSentenceEndDate, 'YYYY-MM-DD') || determineLifeSentence()
 
   return res.render('prisonerProfile/prisonerSentenceAndRelease/prisonerSentenceAndRelease.njk', {
     prisonerProfileData,
