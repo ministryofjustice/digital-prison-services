@@ -19,6 +19,7 @@ describe('prisoner profile quick look', () => {
   }
   const bookingId = '123'
   const prisonApi = {}
+  const offenderSearchApi = {}
   const prisonerProfileService = {}
   const telemetry = {}
 
@@ -64,7 +65,7 @@ describe('prisoner profile quick look', () => {
 
     telemetry.trackEvent = jest.fn().mockResolvedValue([])
 
-    controller = prisonerQuickLook({ prisonerProfileService, prisonApi, telemetry, logError })
+    controller = prisonerQuickLook({ prisonerProfileService, prisonApi, telemetry, offenderSearchApi, logError })
   })
 
   it('should make a call for the basic details of a prisoner and the prisoner header details and render them', async () => {

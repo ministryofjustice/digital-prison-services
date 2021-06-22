@@ -16,12 +16,13 @@ const trackEvent = (telemetry, username, activeCaseLoad) => {
 }
 
 const captureErrorAndContinue = apiCall =>
-  new Promise(resolve => {
-    apiCall.then(response => resolve({ response })).catch(error => {
-      log.error(error)
-      resolve({ error: true })
-    })
-  })
+    [{}]
+  // new Promise(resolve => {
+  //   apiCall.then(response => resolve({ response })).catch(error => {
+  //     log.error(error)
+  //     resolve({ error: true })
+  //   })
+  // })
 
 const extractResponse = (complexData, key) => {
   if (!complexData || complexData.error) return null
@@ -43,14 +44,14 @@ const createFinanceLink = (offenderNo, path, value) =>
     value || 0
   )}</a>`
 
-const extractLifeImprisonmentStatus = (prisonerDataResponse, prisoner, unableToShowDetailMessage) => {
-  if (prisonerDataResponse.error) {
+const extractLifeImprisonmentStatus = (prisonerDetailsResponse, prisonerDetail, unableToShowDetailMessage) => {
+  if (prisonerDetailsResponse.error) {
     return unableToShowDetailMessage
   }
-  return prisoner?.imprisonmentStatus === 'LIFE' ? 'Life sentence' : 'Not entered'
+  return prisonerDetail?.indeterminateSentence ? 'Life sentence' : 'Not entered'
 }
 
-module.exports = ({ prisonerProfileService, prisonApi, telemetry }) => async (req, res) => {
+module.exports = ({ prisonerProfileService, prisonApi, telemetry, offenderSearchApi }) => async (req, res) => {
   const {
     user: { activeCaseLoad },
   } = res.locals
@@ -65,6 +66,9 @@ module.exports = ({ prisonerProfileService, prisonApi, telemetry }) => async (re
     .format('YYYY-MM-DD')
   const today = moment().format('YYYY-MM-DD')
 
+  console.log('1')
+  console.log('1')
+  console.log('1')
   const [
     prisonerProfileDataResponse,
     offenceDataResponse,
@@ -78,6 +82,7 @@ module.exports = ({ prisonerProfileService, prisonApi, telemetry }) => async (re
     nextVisitResponse,
     visitBalancesResponse,
     todaysEventsResponse,
+    prisonerDetailsResponse,
   ] = await Promise.all(
     [
       prisonerProfileService.getPrisonerProfileData(res.locals, offenderNo, username),
@@ -92,9 +97,25 @@ module.exports = ({ prisonerProfileService, prisonApi, telemetry }) => async (re
       prisonApi.getNextVisit(res.locals, bookingId),
       prisonApi.getPrisonerVisitBalances(res.locals, offenderNo),
       prisonApi.getEventsForToday(res.locals, bookingId),
+      //
+      // [{}],
+      // [{}],
+      // [{}],
+      // [{}],
+      // [{}],
+      // [{}],
+      // [{}],
+      // [{}],
+      // [{}],
+      // [{}],
+      // [{}],
+      // [{}],
+      [{}],
+      // offenderSearchApi.getPrisonersDetails(res.locals, [offenderNo]),
     ].map(apiCall => captureErrorAndContinue(apiCall))
   )
 
+  console.log('2')
   const [
     prisonerProfileData,
     offenceData,
@@ -108,6 +129,7 @@ module.exports = ({ prisonerProfileService, prisonApi, telemetry }) => async (re
     nextVisit,
     visitBalances,
     todaysEvents,
+    prisonerDetails,
   ] = [
     prisonerProfileDataResponse,
     offenceDataResponse,
@@ -121,9 +143,11 @@ module.exports = ({ prisonerProfileService, prisonApi, telemetry }) => async (re
     nextVisitResponse,
     visitBalancesResponse,
     todaysEventsResponse,
+    prisonerDetailsResponse,
   ].map(response => extractResponse(response))
 
   const prisoner = prisonerData && prisonerData[0]
+  const prisonerDetail = prisonerDetails && prisonerDetails[0]
   const { profileInformation } = prisonerProfileData || {}
   const { morningActivities, afternoonActivities, eveningActivities } = filterActivitiesByPeriod(todaysEvents)
   const unableToShowDetailMessage = 'Unable to show this detail'
@@ -158,7 +182,7 @@ module.exports = ({ prisonerProfileService, prisonApi, telemetry }) => async (re
               sentenceData.sentenceDetail &&
               sentenceData.sentenceDetail.releaseDate &&
               moment(sentenceData.sentenceDetail.releaseDate).format('D MMMM YYYY')) ||
-            extractLifeImprisonmentStatus(prisonerDataResponse, prisoner, unableToShowDetailMessage),
+            extractLifeImprisonmentStatus(prisonerDetailsResponse, prisonerDetail, unableToShowDetailMessage),
       },
     ],
     balanceDetailsSectionError: Boolean(balanceDataResponse.error),

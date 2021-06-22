@@ -49,6 +49,7 @@ const controller = ({
   socApi,
   whereaboutsApi,
   complexityApi,
+  offenderSearchApi,
 }) => {
   const prisonerProfileService = prisonerProfileServiceFactory({
     prisonApi,
@@ -60,13 +61,14 @@ const controller = ({
     socApi,
     allocationManagerApi,
     complexityApi,
+    offenderSearchApi,
   })
   const personService = personServiceFactory(prisonApi)
   const prisonerFinanceService = prisonerFinanceServiceFactory(prisonApi)
   const referenceCodesService = referenceCodesServiceFactory(prisonApi)
   const adjudicationHistoryService = adjudicationsHistoryService(prisonApi)
 
-  router.get('/', prisonerQuickLook({ prisonerProfileService, prisonApi, telemetry, logError }))
+  router.get('/', prisonerQuickLook({ prisonerProfileService, prisonApi, telemetry, offenderSearchApi, logError }))
   router.get('/image', prisonerFullImage({ prisonApi, logError }))
   router.get(
     '/personal',
