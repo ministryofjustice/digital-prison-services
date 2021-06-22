@@ -69,10 +69,11 @@ describe('prisoner sentence and release', () => {
         tariffDate: '2021-05-07',
         dtoPostRecallReleaseDate: '2020-10-16',
         dtoPostRecallReleaseDateOverride: '2021-10-16',
+        effectiveSentenceEndDate: '2021-10-16',
       },
     })
 
-    prisonApi.getPrisonerDetails = jest.fn().mockResolvedValue([{ latestBookingId: 1 }])
+    prisonApi.getDetails = jest.fn().mockResolvedValue({ bookingId: 1 })
     prisonApi.getSentenceAdjustments = jest.fn()
     prisonApi.getOffenceHistory = jest.fn().mockResolvedValue([])
     prisonApi.getCourtCases = jest.fn().mockResolvedValue([])
@@ -833,6 +834,7 @@ describe('prisoner sentence and release', () => {
         topupSupervisionExpiryDate: '2020-10-14',
         tariffDate: '2021-05-07',
         dtoPostRecallReleaseDate: '2020-10-16',
+        effectiveSentenceEndDate: '2021-10-16',
       },
     })
     await controller(req, res)
@@ -883,6 +885,7 @@ describe('prisoner sentence and release', () => {
         releaseDate: '2020-04-01',
         nonDtoReleaseDateType: 'CRD',
         additionalDaysAwarded: 5,
+        effectiveSentenceEndDate: '2021-10-16',
       },
     })
     await controller(req, res)
@@ -905,18 +908,18 @@ describe('prisoner sentence and release', () => {
 
   it('should make a call to retrieve an offenders booking id', async () => {
     prisonApi.getPrisonerSentenceDetails = jest.fn().mockResolvedValue({
-      sentenceDetail: {},
+      sentenceDetail: { effectiveSentenceEndDate: '2021-10-16' },
     })
     prisonApi.getSentenceAdjustments = jest.fn().mockResolvedValue({})
 
     await controller(req, res)
 
-    expect(prisonApi.getPrisonerDetails).toHaveBeenCalledWith({}, offenderNo)
+    expect(prisonApi.getDetails).toHaveBeenCalledWith({}, offenderNo)
   })
 
   it('should make a call for sentence adjustments', async () => {
     prisonApi.getPrisonerSentenceDetails = jest.fn().mockResolvedValue({
-      sentenceDetail: {},
+      sentenceDetail: { effectiveSentenceEndDate: '2021-10-16' },
     })
     prisonApi.getSentenceAdjustments = jest.fn().mockResolvedValue({})
 
@@ -927,7 +930,7 @@ describe('prisoner sentence and release', () => {
 
   it('should return the right data when values are available', async () => {
     prisonApi.getPrisonerSentenceDetails = jest.fn().mockResolvedValue({
-      sentenceDetail: {},
+      sentenceDetail: { effectiveSentenceEndDate: '2021-10-16' },
     })
     prisonApi.getSentenceAdjustments = jest.fn().mockResolvedValue({
       additionalDaysAwarded: 1,
@@ -969,7 +972,7 @@ describe('prisoner sentence and release', () => {
 
   it('should return the right data when no values are available', async () => {
     prisonApi.getPrisonerSentenceDetails = jest.fn().mockResolvedValue({
-      sentenceDetail: {},
+      sentenceDetail: { effectiveSentenceEndDate: '2021-10-16' },
     })
     prisonApi.getSentenceAdjustments = jest.fn().mockResolvedValue({
       additionalDaysAwarded: 0,
