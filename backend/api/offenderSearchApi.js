@@ -34,10 +34,12 @@ const offenderSearchApiFactory = client => {
   }
 
   const getPrisonersDetails = async (context, prisonerNumbers) => {
-    // const res = await client.post(context, '/prisoner-search/prisoner-numbers', { prisonerNumbers })
-    // return res.body
-      console.log('Hello')
-      return [{}]
+      console.log('in ')
+    const res = await client.post(context, '/prisoner-search/prisoner-numbers', { prisonerNumbers })
+      console.log('out ')
+    return res.body
+    //   console.log('Hello')
+    //   return [{}]
   }
 
   return {

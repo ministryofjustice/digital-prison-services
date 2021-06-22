@@ -16,13 +16,12 @@ const trackEvent = (telemetry, username, activeCaseLoad) => {
 }
 
 const captureErrorAndContinue = apiCall =>
-    [{}]
-  // new Promise(resolve => {
-  //   apiCall.then(response => resolve({ response })).catch(error => {
-  //     log.error(error)
-  //     resolve({ error: true })
-  //   })
-  // })
+  new Promise(resolve => {
+    apiCall.then(response => resolve({ response })).catch(error => {
+      log.error(error)
+      resolve({ error: true })
+    })
+  })
 
 const extractResponse = (complexData, key) => {
   if (!complexData || complexData.error) return null
@@ -82,7 +81,6 @@ module.exports = ({ prisonerProfileService, prisonApi, telemetry, offenderSearch
     nextVisitResponse,
     visitBalancesResponse,
     todaysEventsResponse,
-    prisonerDetailsResponse,
   ] = await Promise.all(
     [
       prisonerProfileService.getPrisonerProfileData(res.locals, offenderNo, username),
@@ -96,26 +94,15 @@ module.exports = ({ prisonerProfileService, prisonApi, telemetry, offenderSearch
       prisonApi.getAdjudicationsForBooking(res.locals, bookingId),
       prisonApi.getNextVisit(res.locals, bookingId),
       prisonApi.getPrisonerVisitBalances(res.locals, offenderNo),
-      prisonApi.getEventsForToday(res.locals, bookingId),
-      //
-      // [{}],
-      // [{}],
-      // [{}],
-      // [{}],
-      // [{}],
-      // [{}],
-      // [{}],
-      // [{}],
-      // [{}],
-      // [{}],
-      // [{}],
-      // [{}],
-      [{}],
-      // offenderSearchApi.getPrisonersDetails(res.locals, [offenderNo]),
+      prisonApi.getEventsForToday(res.locals, bookingId)
     ].map(apiCall => captureErrorAndContinue(apiCall))
   )
 
   console.log('2')
+  const prisonerDetailsResponse = await offenderSearchApi.getPrisonersDetails(res.locals, [offenderNo])
+
+  console.log('3')
+
   const [
     prisonerProfileData,
     offenceData,

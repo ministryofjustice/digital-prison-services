@@ -61,7 +61,6 @@ const controller = ({
     socApi,
     allocationManagerApi,
     complexityApi,
-    offenderSearchApi,
   })
   const personService = personServiceFactory(prisonApi)
   const prisonerFinanceService = prisonerFinanceServiceFactory(prisonApi)
