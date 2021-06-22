@@ -34,12 +34,8 @@ const offenderSearchApiFactory = client => {
   }
 
   const getPrisonersDetails = async (context, prisonerNumbers) => {
-      console.log('in ')
     const res = await client.post(context, '/prisoner-search/prisoner-numbers', { prisonerNumbers })
-      console.log('out ')
     return res.body
-    //   console.log('Hello')
-    //   return [{}]
   }
 
   return {

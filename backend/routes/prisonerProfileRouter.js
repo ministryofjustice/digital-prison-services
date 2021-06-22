@@ -91,7 +91,7 @@ const controller = ({
   )
   router.get(
     '/sentence-and-release',
-    prisonerSentenceAndRelease({ prisonerProfileService, prisonApi, systemOauthClient, logError })
+    prisonerSentenceAndRelease({ prisonerProfileService, prisonApi, systemOauthClient, offenderSearchApi, logError })
   )
   router.get('/visits', prisonerVisits({ prisonApi, logError }))
   router.get('/schedule', prisonerSchedule({ prisonApi, logError }))

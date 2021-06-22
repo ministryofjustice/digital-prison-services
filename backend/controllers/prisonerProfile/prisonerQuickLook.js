@@ -43,13 +43,6 @@ const createFinanceLink = (offenderNo, path, value) =>
     value || 0
   )}</a>`
 
-const extractLifeImprisonmentStatus = (prisonerDetailsResponse, prisonerDetail, unableToShowDetailMessage) => {
-  if (prisonerDetailsResponse.error) {
-    return unableToShowDetailMessage
-  }
-  return prisonerDetail?.indeterminateSentence ? 'Life sentence' : 'Not entered'
-}
-
 module.exports = ({ prisonerProfileService, prisonApi, telemetry, offenderSearchApi }) => async (req, res) => {
   const {
     user: { activeCaseLoad },
@@ -65,9 +58,6 @@ module.exports = ({ prisonerProfileService, prisonApi, telemetry, offenderSearch
     .format('YYYY-MM-DD')
   const today = moment().format('YYYY-MM-DD')
 
-  console.log('1')
-  console.log('1')
-  console.log('1')
   const [
     prisonerProfileDataResponse,
     offenceDataResponse,
@@ -94,14 +84,9 @@ module.exports = ({ prisonerProfileService, prisonApi, telemetry, offenderSearch
       prisonApi.getAdjudicationsForBooking(res.locals, bookingId),
       prisonApi.getNextVisit(res.locals, bookingId),
       prisonApi.getPrisonerVisitBalances(res.locals, offenderNo),
-      prisonApi.getEventsForToday(res.locals, bookingId)
+      prisonApi.getEventsForToday(res.locals, bookingId),
     ].map(apiCall => captureErrorAndContinue(apiCall))
   )
-
-  console.log('2')
-  const prisonerDetailsResponse = await offenderSearchApi.getPrisonersDetails(res.locals, [offenderNo])
-
-  console.log('3')
 
   const [
     prisonerProfileData,
@@ -116,7 +101,6 @@ module.exports = ({ prisonerProfileService, prisonApi, telemetry, offenderSearch
     nextVisit,
     visitBalances,
     todaysEvents,
-    prisonerDetails,
   ] = [
     prisonerProfileDataResponse,
     offenceDataResponse,
@@ -130,11 +114,9 @@ module.exports = ({ prisonerProfileService, prisonApi, telemetry, offenderSearch
     nextVisitResponse,
     visitBalancesResponse,
     todaysEventsResponse,
-    prisonerDetailsResponse,
   ].map(response => extractResponse(response))
 
   const prisoner = prisonerData && prisonerData[0]
-  const prisonerDetail = prisonerDetails && prisonerDetails[0]
   const { profileInformation } = prisonerProfileData || {}
   const { morningActivities, afternoonActivities, eveningActivities } = filterActivitiesByPeriod(todaysEvents)
   const unableToShowDetailMessage = 'Unable to show this detail'
@@ -142,6 +124,18 @@ module.exports = ({ prisonerProfileService, prisonApi, telemetry, offenderSearch
   const daysSinceReview = (iepSummary && iepSummary.daysSinceReview) || 0
 
   trackEvent(telemetry, username, activeCaseLoad)
+
+  const extractLifeImprisonmentStatus = async () => {
+    const [prisonerDetailsResponse] = await Promise.all(
+      [offenderSearchApi.getPrisonersDetails(res.locals, [offenderNo])].map(apiCall => captureErrorAndContinue(apiCall))
+    )
+
+    if (prisonerDetailsResponse.error) {
+      return unableToShowDetailMessage
+    }
+    const prisonerDetail = prisonerDetailsResponse.response && prisonerDetailsResponse.response[0]
+    return prisonerDetail?.indeterminateSentence ? 'Life sentence' : 'Not entered'
+  }
 
   return res.render('prisonerProfile/prisonerQuickLook/prisonerQuickLook.njk', {
     prisonerProfileData,
@@ -169,7 +163,7 @@ module.exports = ({ prisonerProfileService, prisonApi, telemetry, offenderSearch
               sentenceData.sentenceDetail &&
               sentenceData.sentenceDetail.releaseDate &&
               moment(sentenceData.sentenceDetail.releaseDate).format('D MMMM YYYY')) ||
-            extractLifeImprisonmentStatus(prisonerDetailsResponse, prisonerDetail, unableToShowDetailMessage),
+            (await extractLifeImprisonmentStatus()),
       },
     ],
     balanceDetailsSectionError: Boolean(balanceDataResponse.error),

@@ -3,7 +3,7 @@ const sentenceAdjustmentsViewModel = require('./sentenceAndReleaseViewModels/sen
 const courtCasesViewModel = require('./sentenceAndReleaseViewModels/courtCasesViewModel')
 const { readableDateFormat } = require('../../utils')
 
-module.exports = ({ prisonerProfileService, prisonApi, systemOauthClient }) => async (req, res) => {
+module.exports = ({ prisonerProfileService, prisonApi, systemOauthClient, offenderSearchApi }) => async (req, res) => {
   const { offenderNo } = req.params
 
   const { username } = req.session.userDetails
@@ -29,8 +29,8 @@ module.exports = ({ prisonerProfileService, prisonApi, systemOauthClient }) => a
   const courtCases = courtCasesViewModel({ courtCaseData, sentenceTermsData, offenceHistory })
 
   const determineLifeSentence = async () => {
-    const prisonerDetails = await prisonApi.getPrisonerDetails(res.locals, offenderNo)
-    return prisonerDetails && prisonerDetails[0]?.imprisonmentStatus === 'LIFE' ? 'Life sentence' : undefined
+    const prisonerDetails = await offenderSearchApi.getPrisonersDetails(res.locals, [offenderNo])
+    return prisonerDetails && prisonerDetails[0]?.indeterminateSentence ? 'Life sentence' : undefined
   }
 
   const getEffectiveSentenceEndDate = async () =>

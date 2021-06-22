@@ -65,6 +65,8 @@ describe('prisoner profile quick look', () => {
 
     telemetry.trackEvent = jest.fn().mockResolvedValue([])
 
+    offenderSearchApi.getPrisonersDetails = jest.fn().mockResolvedValue([])
+
     controller = prisonerQuickLook({ prisonerProfileService, prisonApi, telemetry, offenderSearchApi, logError })
   })
 
@@ -167,6 +169,7 @@ describe('prisoner profile quick look', () => {
           { imprisonmentStatus: 'LIFE', imprisonmentStatusDesc: 'Serving Life Imprisonment' },
         ])
         prisonApi.getPrisonerSentenceDetails.mockResolvedValue({ sentenceDetail: { releaseDate: '' } })
+        offenderSearchApi.getPrisonersDetails.mockResolvedValue([{ indeterminateSentence: true }])
 
         await controller(req, res)
 
@@ -750,10 +753,12 @@ describe('prisoner profile quick look', () => {
       )
     })
     it('should handle api errors when requesting imprisonment status and release date is not set', async () => {
+      const error = new Error('Network error')
       prisonApi.getPrisonerSentenceDetails.mockResolvedValue({ sentenceDetail: { releaseDate: '' } })
       prisonApi.getMainOffence.mockResolvedValue([
         { offenceDescription: 'Have blade/article which was sharply pointed in public place' },
       ])
+      offenderSearchApi.getPrisonersDetails.mockRejectedValue(error)
 
       await controller(req, res)
 
