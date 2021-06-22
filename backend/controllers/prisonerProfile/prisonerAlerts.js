@@ -48,42 +48,38 @@ module.exports = ({ prisonerProfileService, referenceCodesService, paginationSer
   const alerts = await prisonApi.getAlertsForBooking(res.locals, { bookingId, query }, headers)
   const totalAlerts = res.locals.responseHeaders['total-records']
 
-  const activeAlerts = alerts.filter(alert => alert.active && !alert.expired).map(alert => {
-    return [
-      { text: `${alert.alertTypeDescription} (${alert.alertType})` },
-      { text: `${alert.alertCodeDescription} (${alert.alertCode})` },
-      { text: alert.comment || 'None', classes: 'clip-overflow' },
-      { text: moment(alert.dateCreated, 'YYYY-MM-DD').format('D MMMM YYYY') },
-      { text: `${formatName(alert.addedByFirstName, alert.addedByLastName)}` },
-      {
-        html: canUpdateAlerts
-          ? `<a class="govuk-button govuk-button--secondary" href="/edit-alert?offenderNo=${offenderNo}&alertId=${
-              alert.alertId
-            }">Change or close</a>`
-          : '',
-        classes: 'govuk-table__cell--numeric',
-      },
-    ]
-  })
-  const inactiveAlerts = alerts.filter(alert => !alert.active && alert.expired).map(alert => {
-    return [
-      { text: `${alert.alertTypeDescription} (${alert.alertType})` },
-      { text: `${alert.alertCodeDescription} (${alert.alertCode})` },
-      { text: alert.comment || 'None', classes: 'clip-overflow' },
-      {
-        html: `${moment(alert.dateCreated, 'YYYY-MM-DD').format('D MMMM YYYY')}<br>${moment(
-          alert.dateExpires,
-          'YYYY-MM-DD'
-        ).format('D MMMM YYYY')}`,
-      },
-      {
-        html: `${formatName(alert.addedByFirstName, alert.addedByLastName)}<br>${formatName(
-          alert.expiredByFirstName,
-          alert.expiredByLastName
-        )}`,
-      },
-    ]
-  })
+  const activeAlerts = alerts.filter(alert => alert.active && !alert.expired).map(alert => [
+    { text: `${alert.alertTypeDescription} (${alert.alertType})` },
+    { text: `${alert.alertCodeDescription} (${alert.alertCode})` },
+    { text: alert.comment || 'None', classes: 'clip-overflow' },
+    { text: moment(alert.dateCreated, 'YYYY-MM-DD').format('D MMMM YYYY') },
+    { text: `${formatName(alert.addedByFirstName, alert.addedByLastName)}` },
+    {
+      html: canUpdateAlerts
+        ? `<a class="govuk-button govuk-button--secondary" href="/edit-alert?offenderNo=${offenderNo}&alertId=${
+            alert.alertId
+          }">Change or close</a>`
+        : '',
+      classes: 'govuk-table__cell--numeric',
+    },
+  ])
+  const inactiveAlerts = alerts.filter(alert => !alert.active && alert.expired).map(alert => [
+    { text: `${alert.alertTypeDescription} (${alert.alertType})` },
+    { text: `${alert.alertCodeDescription} (${alert.alertCode})` },
+    { text: alert.comment || 'None', classes: 'clip-overflow' },
+    {
+      html: `${moment(alert.dateCreated, 'YYYY-MM-DD').format('D MMMM YYYY')}<br>${moment(
+        alert.dateExpires,
+        'YYYY-MM-DD'
+      ).format('D MMMM YYYY')}`,
+    },
+    {
+      html: `${formatName(alert.addedByFirstName, alert.addedByLastName)}<br>${formatName(
+        alert.expiredByFirstName,
+        alert.expiredByLastName
+      )}`,
+    },
+  ])
 
   const alertTypeValues =
     (alertTypes &&

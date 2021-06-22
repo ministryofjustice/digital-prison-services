@@ -14,14 +14,13 @@ const {
 module.exports = ({ oauthApi, prisonApi, page = 0 }) => async (req, res) => {
   const { offenderNo } = req.params
 
-  const getAgencyDetails = async cells => {
-    return Promise.all(
+  const getAgencyDetails = async cells =>
+    Promise.all(
       cells
         .map(cell => cell.agencyId)
         .filter((v, i, a) => a.indexOf(v) === i)
         .map(agencyId => prisonApi.getAgencyDetails(res.locals, agencyId))
     )
-  }
 
   const enrichLocationsWithAgencyLeaveDate = locations => {
     const locationsWithAgencyLeaveDate = []
@@ -108,12 +107,10 @@ module.exports = ({ oauthApi, prisonApi, page = 0 }) => async (req, res) => {
         ...currentLocation,
         assignmentEndDateTime: moment().format('YYYY-MM-DDTHH:mm:ss'),
       },
-      occupants: occupants.filter(occupant => occupant.offenderNo !== offenderNo).map(occupant => {
-        return {
-          name: putLastNameFirst(occupant.firstName, occupant.lastName),
-          profileUrl: `/prisoner/${occupant.offenderNo}`,
-        }
-      }),
+      occupants: occupants.filter(occupant => occupant.offenderNo !== offenderNo).map(occupant => ({
+        name: putLastNameFirst(occupant.firstName, occupant.lastName),
+        profileUrl: `/prisoner/${occupant.offenderNo}`,
+      })),
       prisonerName: formatName(firstName, lastName),
       profileUrl: `/prisoner/${offenderNo}`,
       breadcrumbPrisonerName: putLastNameFirst(firstName, lastName),

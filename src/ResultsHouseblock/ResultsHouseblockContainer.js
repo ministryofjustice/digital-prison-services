@@ -87,6 +87,44 @@ class ResultsHouseblockContainer extends Component {
     wingStatusDispatch('all')
   }
 
+  handlePrint(version) {
+    const { raiseAnalyticsEvent } = this.props
+
+    if (version === 'redacted') {
+      this.setState({ redactedPrint: true }, () => {
+        window.print()
+      })
+
+      raiseAnalyticsEvent({
+        category: 'Redacted Residential list',
+        action: 'Print list',
+      })
+    }
+
+    if (!version) {
+      this.setState({ redactedPrint: false }, () => {
+        window.print()
+      })
+
+      raiseAnalyticsEvent({
+        category: 'House block list',
+        action: 'Print list',
+      })
+    }
+  }
+
+  handleSubLocationChange(event) {
+    const { subLocationDispatch } = this.props
+
+    subLocationDispatch(event.target.value)
+  }
+
+  handleWingStatusChange(event) {
+    const { wingStatusDispatch } = this.props
+
+    wingStatusDispatch(event.target.value)
+  }
+
   setColumnSort(sortColumn, sortOrder) {
     const { orderDispatch, sortOrderDispatch, houseblockData, houseblockDataDispatch } = this.props
     orderDispatch(sortColumn)
@@ -189,44 +227,6 @@ class ResultsHouseblockContainer extends Component {
     }
 
     history.replace(location.pathname)
-  }
-
-  handlePrint(version) {
-    const { raiseAnalyticsEvent } = this.props
-
-    if (version === 'redacted') {
-      this.setState({ redactedPrint: true }, () => {
-        window.print()
-      })
-
-      raiseAnalyticsEvent({
-        category: 'Redacted Residential list',
-        action: 'Print list',
-      })
-    }
-
-    if (!version) {
-      this.setState({ redactedPrint: false }, () => {
-        window.print()
-      })
-
-      raiseAnalyticsEvent({
-        category: 'House block list',
-        action: 'Print list',
-      })
-    }
-  }
-
-  handleSubLocationChange(event) {
-    const { subLocationDispatch } = this.props
-
-    subLocationDispatch(event.target.value)
-  }
-
-  handleWingStatusChange(event) {
-    const { wingStatusDispatch } = this.props
-
-    wingStatusDispatch(event.target.value)
   }
 
   titleString() {

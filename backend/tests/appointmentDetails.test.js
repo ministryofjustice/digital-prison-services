@@ -1,6 +1,6 @@
 import { makeNotFoundError } from './helpers'
 
-const appointmentDetails = require('../controllers/appointmentDetails.js')
+const appointmentDetails = require('../controllers/appointmentDetails')
 const appointmentDetailsServiceFactory = require('../services/appointmentDetailsService')
 
 describe('appointment details', () => {

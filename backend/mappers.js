@@ -23,14 +23,11 @@ const absentReasonMapper = absenceReasons => absentReason => {
   )
 }
 
-const stripWarning = reason => {
-  return (
-    (reason &&
-      reason.toUpperCase().indexOf(warning.toUpperCase()) > 0 &&
-      ` ${reason.replace(warning.toLowerCase(), '').trim()}`.trimStart()) ||
-    reason
-  )
-}
+const stripWarning = reason =>
+  (reason &&
+    reason.toUpperCase().indexOf(warning.toUpperCase()) > 0 &&
+    ` ${reason.replace(warning.toLowerCase(), '').trim()}`.trimStart()) ||
+  reason
 
 module.exports = {
   absentReasonMapper,

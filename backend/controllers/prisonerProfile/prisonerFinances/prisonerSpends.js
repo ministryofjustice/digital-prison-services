@@ -1,7 +1,7 @@
 const moment = require('moment')
 
 const createTransactionViewModel = require('../../../shared/createTransactionViewModel')
-const { formatTimestampToDate, sortByDateTime } = require('../../../utils')
+const { formatTimestampToDate } = require('../../../utils')
 
 const batchTransactionsOnly = transaction => transaction?.relatedOffenderTransactions?.length
 

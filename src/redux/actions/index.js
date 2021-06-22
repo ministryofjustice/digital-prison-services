@@ -112,13 +112,13 @@ export const setActivityData = data => ({
 
 export const setActivityOffenderAttendance = (offenderIndex, attendanceInfo) => ({
   type: ActionTypes.SET_ACTIVITY_OFFENDER_ATTENDANCE,
-  offenderIndex: parseInt(offenderIndex, 0),
+  offenderIndex: parseInt(offenderIndex, 10),
   attendanceInfo,
 })
 
 export const setHouseblockOffenderAttendance = (offenderIndex, attendanceInfo) => ({
   type: ActionTypes.SET_HOUSEBLOCK_OFFENDER_ATTENDANCE,
-  offenderIndex: parseInt(offenderIndex, 0),
+  offenderIndex: parseInt(offenderIndex, 10),
   attendanceInfo,
 })
 
