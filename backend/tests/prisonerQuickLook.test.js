@@ -164,7 +164,7 @@ describe('prisoner profile quick look', () => {
         )
       })
 
-      it('should show Life Imprisonment alongside the release date if no release date is set and the offender is serving LIFE', async () => {
+      it('should show Life Imprisonment alongside the release date if no release date is set and the offender has a life term', async () => {
         prisonApi.getPrisonerDetails.mockResolvedValue([
           { imprisonmentStatus: 'LIFE', imprisonmentStatusDesc: 'Serving Life Imprisonment' },
         ])
@@ -188,6 +188,36 @@ describe('prisoner profile quick look', () => {
               {
                 label: 'Release date',
                 value: 'Life sentence',
+              },
+            ],
+          })
+        )
+      })
+
+      it('should show Not entered alongside the release date if no release date is set and the offender is not on a life term', async () => {
+        prisonApi.getPrisonerDetails.mockResolvedValue([
+          { imprisonmentStatus: 'LIFE', imprisonmentStatusDesc: 'Serving Life Imprisonment' },
+        ])
+        prisonApi.getPrisonerSentenceDetails.mockResolvedValue({ sentenceDetail: { releaseDate: '' } })
+        offenderSearchApi.getPrisonersDetails.mockResolvedValue([{ indeterminateSentence: false }])
+
+        await controller(req, res)
+
+        expect(res.render).toHaveBeenCalledWith(
+          'prisonerProfile/prisonerQuickLook/prisonerQuickLook.njk',
+          expect.objectContaining({
+            offenceDetails: [
+              {
+                label: 'Main offence',
+                value: 'Have blade/article which was sharply pointed in public place',
+              },
+              {
+                label: 'Imprisonment status',
+                value: 'Serving Life Imprisonment',
+              },
+              {
+                label: 'Release date',
+                value: 'Not entered',
               },
             ],
           })
