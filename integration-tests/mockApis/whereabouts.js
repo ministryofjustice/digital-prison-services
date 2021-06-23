@@ -84,10 +84,12 @@ module.exports = {
     })
   },
   stubGetAttendance: (caseload, locationId, timeSlot, date, data = attendance) => {
+    const dateAndTimeSlotParameters = date ? `date=${date}&period=${timeSlot}` : '.*'
+
     return stubFor({
       request: {
         method: 'GET',
-        urlPattern: `/whereabouts/attendances/.+?/${locationId}\\?date=${date}&period=${timeSlot}`,
+        urlPattern: `/whereabouts/attendances/.+?/${locationId}\\?${dateAndTimeSlotParameters}`,
       },
       response: {
         status: 200,

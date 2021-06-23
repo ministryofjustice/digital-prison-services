@@ -149,12 +149,14 @@ module.exports = {
     })
   },
   stubProgEventsAtLocation: (locationId, timeSlot, date, activities, suspended = true) => {
+    const dateAndTimeSlotParameters = date ? `${
+      timeSlot ? `timeSlot=${timeSlot}&` : ''
+    }date=${date}` : '.+?'
+
     return stubFor({
       request: {
         method: 'GET',
-        urlPattern: `/api/schedules/locations/${locationId}/activities\\?${
-          timeSlot ? `timeSlot=${timeSlot}&` : ''
-        }date=${date}&includeSuspended=${suspended}`,
+        urlPattern: `/api/schedules/locations/${locationId}/activities\\?${dateAndTimeSlotParameters}&includeSuspended=${suspended}`,
       },
       response: {
         status: 200,
@@ -166,12 +168,14 @@ module.exports = {
     })
   },
   stubUsageAtLocation: (caseload, locationId, timeSlot, date, usage, json = []) => {
+    const dateAndTimeSlotParameters = date ? `${
+      timeSlot ? `timeSlot=${timeSlot}&` : ''
+    }date=${date}` : '.*'
+
     return stubFor({
       request: {
         method: 'GET',
-        urlPattern: `/api/schedules/.+?/${locationId}/usage/${usage}\\?${
-          timeSlot ? `timeSlot=${timeSlot}&` : ''
-        }date=${date}`,
+        urlPattern: `/api/schedules/.+?/${locationId}/usage/${usage}\\?${dateAndTimeSlotParameters}`,
       },
       response: {
         status: 200,
