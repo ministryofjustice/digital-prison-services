@@ -33,6 +33,7 @@ const paginationService = require('../services/paginationService')
 const referenceCodesServiceFactory = require('../controllers/reference-codes-service')
 
 const adjudicationsHistoryService = require('../services/adjudicationHistory')
+const EsweService = require('../services/esweService')
 
 const router = express.Router({ mergeParams: true })
 
@@ -50,6 +51,7 @@ const controller = ({
   whereaboutsApi,
   complexityApi,
   offenderSearchApi,
+  curiousApi,
 }) => {
   const prisonerProfileService = prisonerProfileServiceFactory({
     prisonApi,
@@ -66,12 +68,13 @@ const controller = ({
   const prisonerFinanceService = prisonerFinanceServiceFactory(prisonApi)
   const referenceCodesService = referenceCodesServiceFactory(prisonApi)
   const adjudicationHistoryService = adjudicationsHistoryService(prisonApi)
+  const esweService = EsweService.create(curiousApi, prisonApi)
 
   router.get('/', prisonerQuickLook({ prisonerProfileService, prisonApi, telemetry, offenderSearchApi, logError }))
   router.get('/image', prisonerFullImage({ prisonApi, logError }))
   router.get(
     '/personal',
-    prisonerPersonal({ prisonerProfileService, personService, prisonApi, allocationManagerApi, logError })
+    prisonerPersonal({ prisonerProfileService, personService, prisonApi, allocationManagerApi, logError, esweService })
   )
   router.get(
     '/alerts',

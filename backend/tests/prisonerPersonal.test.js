@@ -24,6 +24,7 @@ describe('prisoner personal', () => {
   const allocationManagerApi = {}
   const prisonerProfileService = {}
   const personService = {}
+  const esweService = {}
 
   let req
   let res
@@ -39,6 +40,7 @@ describe('prisoner personal', () => {
     prisonerProfileService.getPrisonerProfileData = jest.fn().mockResolvedValue(prisonerProfileData)
 
     personService.getPersonContactDetails = jest.fn().mockResolvedValue({})
+    esweService.getLearnerProfiles = jest.fn().mockResolvedValue([])
 
     prisonApi.getDetails = jest.fn().mockResolvedValue({})
     prisonApi.getIdentifiers = jest.fn().mockResolvedValue([])
@@ -54,7 +56,14 @@ describe('prisoner personal', () => {
     prisonApi.getAgencies = jest.fn().mockResolvedValue([])
     allocationManagerApi.getPomByOffenderNo = jest.fn().mockResolvedValue({})
 
-    controller = prisonerPersonal({ prisonerProfileService, personService, prisonApi, allocationManagerApi, logError })
+    controller = prisonerPersonal({
+      prisonerProfileService,
+      personService,
+      prisonApi,
+      allocationManagerApi,
+      logError,
+      esweService,
+    })
   })
 
   it('should make a call for the basic details of a prisoner and the prisoner header details and render them', async () => {
@@ -1922,6 +1931,30 @@ describe('prisoner personal', () => {
           languages: expect.objectContaining({ secondaryLanguages: null }),
           careNeedsAndAdjustments: { personalCareNeeds: null, reasonableAdjustments: null },
         })
+      )
+    })
+  })
+
+  describe('learner profile data', () => {
+    beforeEach(() => {
+      esweService.getLearnerProfiles = jest.fn()
+    })
+
+    it('should return null for a failed request', async () => {
+      esweService.getLearnerProfiles.mockRejectedValue(new Error())
+      await controller(req, res)
+      expect(res.render).toHaveBeenCalledWith(
+        'prisonerProfile/prisonerPersonal/prisonerPersonal.njk',
+        expect.objectContaining({ learnerProfiles: null })
+      )
+    })
+
+    it('should return a list of learner profiles for a successful request', async () => {
+      esweService.getLearnerProfiles.mockResolvedValue([])
+      await controller(req, res)
+      expect(res.render).toHaveBeenCalledWith(
+        'prisonerProfile/prisonerPersonal/prisonerPersonal.njk',
+        expect.objectContaining({ learnerProfiles: [] })
       )
     })
   })
