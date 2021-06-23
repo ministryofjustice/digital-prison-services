@@ -3,17 +3,6 @@ const moment = require('moment')
 const caseload = 'MDI'
 const date = new Date().toISOString().split('T')[0]
 
-// copy of { getCurrentPeriod } from backend/utils/.js
-const getCurrentPeriod = now => {
-  const afternoonSplit = 12
-  const eveningSplit = 17
-  const currentHour = moment(now).format('H')
-
-  if (currentHour < afternoonSplit) return 'AM'
-  if (currentHour < eveningSplit) return 'PM'
-  return 'ED'
-}
-
 context('Select activity location', () => {
   const headerText = 'View by activity or appointment location'
 
@@ -55,8 +44,8 @@ context('Select activity location', () => {
   it('should redirect to the activity lists page', () => {
     const now = moment()
 
-    cy.task('stubGetActivityList', { caseload, locationId: 2, timeSlot: getCurrentPeriod(now), date })
-    cy.task('stubGetAttendance', { caseload, locationId: 2, timeSlot: getCurrentPeriod(now), date })
+    cy.task('stubGetActivityList', { caseload, locationId: 2 })
+    cy.task('stubGetAttendance', { caseload, locationId: 2 })
 
     cy.visit('/manage-prisoner-whereabouts/select-location')
 
