@@ -10,7 +10,7 @@ const {
   courtEventsWithDifferentStatusResponse,
   externalTransfersResponse,
 } = require('../mockApis/responses/houseBlockResponse')
-const alertsResponse = require('../mockApis/responses/alertsResponse')
+const alertsResponse = require('../mockApis/responses/alertsResponse.json')
 const allocationManager = require('../mockApis/allocationManager')
 const community = require('../mockApis/community')
 const pathfinder = require('../mockApis/pathfinder')
@@ -21,9 +21,7 @@ const complexity = require('../mockApis/complexity')
 const { resetStubs } = require('../mockApis/wiremock')
 
 const extractOffenderNumbers = activityList => {
-  const result = Object.keys(activityList).reduce((r, k) => {
-    return r.concat(activityList[k])
-  }, [])
+  const result = Object.keys(activityList).reduce((r, k) => r.concat(activityList[k]), [])
   return [...new Set(result.map(item => item.offenderNo))]
 }
 
@@ -241,6 +239,8 @@ module.exports = on => {
     stubReleaseDatesOffenderNo: releaseDates => Promise.all([prisonApi.stubPrisonerSentenceDetails(releaseDates)]),
     stubVerifyToken: (active = true) => tokenverification.stubVerifyToken(active),
     stubLoginPage: auth.redirect,
+    stubGetAbsences: ({ agencyId, reason, absences }) =>
+      Promise.all([whereabouts.stubGetAbsences(agencyId, reason, absences)]),
     stubGetAbsenceReasons: response => Promise.all([whereabouts.stubGetAbsenceReasons()]),
     stubGetAttendance: ({ caseload, locationId, timeSlot, date, data }) =>
       Promise.all([whereabouts.stubGetAttendance(caseload, locationId, timeSlot, date, data)]),
@@ -447,7 +447,8 @@ module.exports = on => {
     stubCreateAppointment: () => whereabouts.stubCreateAppointment(),
     stubGetAppointment: ({ appointment, id, status }) => whereabouts.stubGetAppointment({ appointment, id, status }),
     stubDeleteAppointment: ({ id, status }) => whereabouts.stubDeleteAppointment({ id, status }),
-    stubDeleteRecurringAppointmentSequence: ({ id, status }) => whereabouts.stubDeleteRecurringAppointmentSequence({ id, status }),
+    stubDeleteRecurringAppointmentSequence: ({ id, status }) =>
+      whereabouts.stubDeleteRecurringAppointmentSequence({ id, status }),
     stubPrisonerSearch: () => offenderSearch.stubPrisonerSearch(),
   })
 }
