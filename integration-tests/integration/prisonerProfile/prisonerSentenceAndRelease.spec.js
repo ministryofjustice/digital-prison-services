@@ -35,7 +35,7 @@ context('Prisoner sentence and release', () => {
       offenderNo: 'A12345',
     })
     cy.task('stubOffenderBasicDetails', { bookingId: 1 })
-    cy.task('stubPrisonerDetails', prisonerDetails)
+    cy.task('stubPrisonerSearch')
     cy.task('stubClientCredentialsRequest')
   })
 

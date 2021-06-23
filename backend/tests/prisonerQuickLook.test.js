@@ -19,6 +19,7 @@ describe('prisoner profile quick look', () => {
   }
   const bookingId = '123'
   const prisonApi = {}
+  const offenderSearchApi = {}
   const prisonerProfileService = {}
   const telemetry = {}
 
@@ -64,7 +65,9 @@ describe('prisoner profile quick look', () => {
 
     telemetry.trackEvent = jest.fn().mockResolvedValue([])
 
-    controller = prisonerQuickLook({ prisonerProfileService, prisonApi, telemetry, logError })
+    offenderSearchApi.getPrisonersDetails = jest.fn().mockResolvedValue([])
+
+    controller = prisonerQuickLook({ prisonerProfileService, prisonApi, telemetry, offenderSearchApi, logError })
   })
 
   it('should make a call for the basic details of a prisoner and the prisoner header details and render them', async () => {
@@ -161,11 +164,12 @@ describe('prisoner profile quick look', () => {
         )
       })
 
-      it('should show Life Imprisonment alongside the release date if no release date is set and the offender is serving LIFE', async () => {
+      it('should show Life Imprisonment alongside the release date if no release date is set and the offender has a life term', async () => {
         prisonApi.getPrisonerDetails.mockResolvedValue([
           { imprisonmentStatus: 'LIFE', imprisonmentStatusDesc: 'Serving Life Imprisonment' },
         ])
         prisonApi.getPrisonerSentenceDetails.mockResolvedValue({ sentenceDetail: { releaseDate: '' } })
+        offenderSearchApi.getPrisonersDetails.mockResolvedValue([{ indeterminateSentence: true }])
 
         await controller(req, res)
 
@@ -184,6 +188,36 @@ describe('prisoner profile quick look', () => {
               {
                 label: 'Release date',
                 value: 'Life sentence',
+              },
+            ],
+          })
+        )
+      })
+
+      it('should show Not entered alongside the release date if no release date is set and the offender is not on a life term', async () => {
+        prisonApi.getPrisonerDetails.mockResolvedValue([
+          { imprisonmentStatus: 'LIFE', imprisonmentStatusDesc: 'Serving Life Imprisonment' },
+        ])
+        prisonApi.getPrisonerSentenceDetails.mockResolvedValue({ sentenceDetail: { releaseDate: '' } })
+        offenderSearchApi.getPrisonersDetails.mockResolvedValue([{ indeterminateSentence: false }])
+
+        await controller(req, res)
+
+        expect(res.render).toHaveBeenCalledWith(
+          'prisonerProfile/prisonerQuickLook/prisonerQuickLook.njk',
+          expect.objectContaining({
+            offenceDetails: [
+              {
+                label: 'Main offence',
+                value: 'Have blade/article which was sharply pointed in public place',
+              },
+              {
+                label: 'Imprisonment status',
+                value: 'Serving Life Imprisonment',
+              },
+              {
+                label: 'Release date',
+                value: 'Not entered',
               },
             ],
           })
@@ -749,10 +783,12 @@ describe('prisoner profile quick look', () => {
       )
     })
     it('should handle api errors when requesting imprisonment status and release date is not set', async () => {
+      const error = new Error('Network error')
       prisonApi.getPrisonerSentenceDetails.mockResolvedValue({ sentenceDetail: { releaseDate: '' } })
       prisonApi.getMainOffence.mockResolvedValue([
         { offenceDescription: 'Have blade/article which was sharply pointed in public place' },
       ])
+      offenderSearchApi.getPrisonersDetails.mockRejectedValue(error)
 
       await controller(req, res)
 
