@@ -126,7 +126,9 @@ module.exports = ({ prisonerProfileService, prisonApi, telemetry, offenderSearch
   trackEvent(telemetry, username, activeCaseLoad)
 
   const getLifeImprisonmentLabel = async () => {
-    const prisonerDetailsResponse = await captureErrorAndContinue(offenderSearchApi.getPrisonersDetails(res.locals, [offenderNo]))
+    const prisonerDetailsResponse = await captureErrorAndContinue(
+      offenderSearchApi.getPrisonersDetails(res.locals, [offenderNo])
+    )
 
     if (prisonerDetailsResponse.error) {
       return unableToShowDetailMessage
