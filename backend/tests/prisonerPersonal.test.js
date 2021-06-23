@@ -1236,6 +1236,35 @@ describe('prisoner personal', () => {
               phones: [{ number: '04444444444', type: 'MOB' }, { number: '055555555555', type: 'BUS', ext: '123' }],
             })
         })
+
+        it('should render the template with the most recently added active address data', async () => {
+          await controller(req, res)
+
+          expect(res.render).toHaveBeenCalledWith(
+            'prisonerProfile/prisonerPersonal/prisonerPersonal.njk',
+            expect.objectContaining({
+              personalContacts: [
+                {
+                  name: 'John Smith',
+                  emergencyContact: true,
+                  noFixedAddress: false,
+                  details: [
+                    { label: 'Relationship', value: 'Cousin' },
+                    { html: '02222222222,<br>033333333333 extension number 777', label: 'Phone number' },
+                    { label: 'Email', value: 'test1@email.com, test2@email.com' },
+                    { label: 'Address', value: 'Flat B, Latest active, Another Street' },
+                    { label: 'Town', value: 'Leeds' },
+                    { label: 'County', value: 'West Yorkshire' },
+                    { label: 'Postcode', value: 'LS2 BBB' },
+                    { label: 'Country', value: 'England' },
+                    { html: '011111111111', label: 'Address phone' },
+                    { label: 'Address type', value: 'Home' },
+                  ],
+                },
+              ],
+            })
+          )
+        })
       })
 
       describe('when there are multiple active addresses home active is highest priority', () => {
