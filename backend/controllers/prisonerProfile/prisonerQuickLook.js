@@ -125,10 +125,8 @@ module.exports = ({ prisonerProfileService, prisonApi, telemetry, offenderSearch
 
   trackEvent(telemetry, username, activeCaseLoad)
 
-  const extractLifeImprisonmentStatus = async () => {
-    const [prisonerDetailsResponse] = await Promise.all(
-      [offenderSearchApi.getPrisonersDetails(res.locals, [offenderNo])].map(apiCall => captureErrorAndContinue(apiCall))
-    )
+  const getLifeImprisonmentLabel = async () => {
+    const prisonerDetailsResponse = await captureErrorAndContinue(offenderSearchApi.getPrisonersDetails(res.locals, [offenderNo]))
 
     if (prisonerDetailsResponse.error) {
       return unableToShowDetailMessage
@@ -163,7 +161,7 @@ module.exports = ({ prisonerProfileService, prisonApi, telemetry, offenderSearch
               sentenceData.sentenceDetail &&
               sentenceData.sentenceDetail.releaseDate &&
               moment(sentenceData.sentenceDetail.releaseDate).format('D MMMM YYYY')) ||
-            (await extractLifeImprisonmentStatus()),
+            (await getLifeImprisonmentLabel()),
       },
     ],
     balanceDetailsSectionError: Boolean(balanceDataResponse.error),
