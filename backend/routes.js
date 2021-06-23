@@ -71,6 +71,7 @@ const setup = ({
   socApi,
   offenderSearchApi,
   complexityApi,
+  curiousApi,
 }) => {
   router.use(async (req, res, next) => {
     res.locals = {
@@ -214,6 +215,7 @@ const setup = ({
       socApi,
       whereaboutsApi,
       complexityApi,
+      curiousApi,
     })
   )
 

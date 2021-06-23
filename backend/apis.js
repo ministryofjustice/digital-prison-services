@@ -13,6 +13,7 @@ const { pathfinderApiFactory } = require('./api/pathfinderApi')
 const { socApiFactory } = require('./api/socApi')
 const { offenderSearchApiFactory } = require('./api/offenderSearchApi')
 const { complexityApiFactory } = require('./api/complexityApi')
+const { curiousApiFactory } = require('./api/curiousApi')
 
 const prisonApi = prisonApiFactory(
   clientFactory({
@@ -107,6 +108,8 @@ const complexityApi = complexityApiFactory(
   })
 )
 
+const curiousApi = curiousApiFactory()
+
 module.exports = {
   prisonApi,
   whereaboutsApi,
@@ -121,4 +124,5 @@ module.exports = {
   socApi,
   offenderSearchApi,
   complexityApi,
+  curiousApi,
 }

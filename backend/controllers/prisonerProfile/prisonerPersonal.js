@@ -12,7 +12,10 @@ const {
   careNeedsViewModel,
 } = require('./personalViewModels')
 
-module.exports = ({ prisonerProfileService, personService, prisonApi, allocationManagerApi }) => async (req, res) => {
+module.exports = ({ prisonerProfileService, personService, prisonApi, allocationManagerApi, esweService }) => async (
+  req,
+  res
+) => {
   const { offenderNo } = req.params
   const [basicPrisonerDetails, treatmentTypes, healthTypes] = await Promise.all([
     prisonApi.getDetails(res.locals, offenderNo),
@@ -36,6 +39,7 @@ module.exports = ({ prisonerProfileService, personService, prisonApi, allocation
     adjustments,
     agencies,
     allocationManager,
+    learnerProfiles,
   ] = await Promise.all(
     [
       prisonerProfileService.getPrisonerProfileData(res.locals, offenderNo),
@@ -49,6 +53,7 @@ module.exports = ({ prisonerProfileService, personService, prisonApi, allocation
       prisonApi.getReasonableAdjustments(res.locals, bookingId, treatmentCodes),
       prisonApi.getAgencies(res.locals),
       allocationManagerApi.getPomByOffenderNo(res.locals, offenderNo),
+      esweService.getLearnerProfiles(offenderNo),
     ].map(apiCall => logErrorAndContinue(apiCall))
   )
 
@@ -110,7 +115,6 @@ module.exports = ({ prisonerProfileService, personService, prisonApi, allocation
 
   const { physicalAttributes, physicalCharacteristics, physicalMarks } = prisonerProfileData || {}
   const { language, writtenLanguage, interpreterRequired } = prisonerProfileData
-
   return res.render('prisonerProfile/prisonerPersonal/prisonerPersonal.njk', {
     prisonerProfileData,
     languages: languageViewModel({ language, writtenLanguage, interpreterRequired, secondaryLanguages }),
@@ -123,6 +127,7 @@ module.exports = ({ prisonerProfileService, personService, prisonApi, allocation
       personal: nextOfKinsWithContact,
     }),
     professionalContacts,
+    learnerProfiles,
     addresses: addressesViewModel({ addresses }),
     careNeedsAndAdjustments: careNeedsViewModel({
       personalCareNeeds: careNeeds && careNeeds.personalCareNeeds,
