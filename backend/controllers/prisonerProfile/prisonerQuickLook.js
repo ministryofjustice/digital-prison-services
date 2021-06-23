@@ -43,14 +43,7 @@ const createFinanceLink = (offenderNo, path, value) =>
     value || 0
   )}</a>`
 
-const extractLifeImprisonmentStatus = (prisonerDataResponse, prisoner, unableToShowDetailMessage) => {
-  if (prisonerDataResponse.error) {
-    return unableToShowDetailMessage
-  }
-  return prisoner?.imprisonmentStatus === 'LIFE' ? 'Life sentence' : 'Not entered'
-}
-
-module.exports = ({ prisonerProfileService, prisonApi, telemetry }) => async (req, res) => {
+module.exports = ({ prisonerProfileService, prisonApi, telemetry, offenderSearchApi }) => async (req, res) => {
   const {
     user: { activeCaseLoad },
   } = res.locals
@@ -132,6 +125,18 @@ module.exports = ({ prisonerProfileService, prisonApi, telemetry }) => async (re
 
   trackEvent(telemetry, username, activeCaseLoad)
 
+  const getLifeImprisonmentLabel = async () => {
+    const prisonerDetailsResponse = await captureErrorAndContinue(
+      offenderSearchApi.getPrisonersDetails(res.locals, [offenderNo])
+    )
+
+    if (prisonerDetailsResponse.error) {
+      return unableToShowDetailMessage
+    }
+    const prisonerDetail = prisonerDetailsResponse.response && prisonerDetailsResponse.response[0]
+    return prisonerDetail?.indeterminateSentence ? 'Life sentence' : 'Not entered'
+  }
+
   return res.render('prisonerProfile/prisonerQuickLook/prisonerQuickLook.njk', {
     prisonerProfileData,
     offenceDetailsSectionError: Boolean(
@@ -158,7 +163,7 @@ module.exports = ({ prisonerProfileService, prisonApi, telemetry }) => async (re
               sentenceData.sentenceDetail &&
               sentenceData.sentenceDetail.releaseDate &&
               moment(sentenceData.sentenceDetail.releaseDate).format('D MMMM YYYY')) ||
-            extractLifeImprisonmentStatus(prisonerDataResponse, prisoner, unableToShowDetailMessage),
+            (await getLifeImprisonmentLabel()),
       },
     ],
     balanceDetailsSectionError: Boolean(balanceDataResponse.error),

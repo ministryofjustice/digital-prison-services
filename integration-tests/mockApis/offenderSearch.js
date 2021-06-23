@@ -47,6 +47,24 @@ module.exports = {
         ],
       },
     }),
+  stubPrisonerSearch: () =>
+    postFor({
+      urlPattern: '/offenderSearch/prisoner-search/prisoner-numbers',
+      body: {
+        totalElements: 2,
+        pageable: { pageSize: 20, offset: 0 },
+        content:  [
+          {
+            prisonerNumber: 'A1234AC',
+            indeterminiteSentence: false,
+          },
+          {
+            prisonerNumber: 'A1234AA',
+            indeterminiteSentence: false,
+          },
+        ],
+      },
+    }),
   verifyGlobalSearch: () =>
     getMatchingRequests({
       method: 'POST',
