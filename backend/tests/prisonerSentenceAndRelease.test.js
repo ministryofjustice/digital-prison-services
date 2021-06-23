@@ -19,6 +19,7 @@ describe('prisoner sentence and release', () => {
   const prisonerProfileService = {}
   const prisonApi = {}
   const systemOauthClient = {}
+  const offenderSearchApi = {}
 
   let req
   let res
@@ -84,6 +85,7 @@ describe('prisoner sentence and release', () => {
       prisonerProfileService,
       prisonApi,
       systemOauthClient,
+      offenderSearchApi,
       logError,
     })
   })
@@ -1034,7 +1036,7 @@ describe('prisoner sentence and release', () => {
         releaseDate: '2020-04-01',
       },
     })
-    prisonApi.getPrisonerDetails = jest.fn().mockResolvedValue([{ latestBookingId: 1, imprisonmentStatus: 'LIFE' }])
+    offenderSearchApi.getPrisonersDetails = jest.fn().mockResolvedValue([{ indeterminateSentence: true }])
 
     await controller(req, res)
 
@@ -1054,7 +1056,7 @@ describe('prisoner sentence and release', () => {
         releaseDate: '2020-04-01',
       },
     })
-    prisonApi.getPrisonerDetails = jest.fn().mockResolvedValue([{ latestBookingId: 1, imprisonmentStatus: 'OTHER' }])
+    offenderSearchApi.getPrisonersDetails = jest.fn().mockResolvedValue([{ indeterminateSentence: false }])
 
     await controller(req, res)
 
