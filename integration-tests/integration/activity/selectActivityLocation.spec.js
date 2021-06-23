@@ -3,17 +3,6 @@ const moment = require('moment')
 const caseload = 'MDI'
 const date = new Date().toISOString().split('T')[0]
 
-// copy of { getCurrentPeriod } from backend/utils/.js
-const getCurrentPeriod = now => {
-  const afternoonSplit = 12
-  const eveningSplit = 17
-  const currentHour = moment(now).format('H')
-
-  if (currentHour < afternoonSplit) return 'AM'
-  if (currentHour < eveningSplit) return 'PM'
-  return 'ED'
-}
-
 context('Select activity location', () => {
   const headerText = 'View by activity or appointment location'
 
