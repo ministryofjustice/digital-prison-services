@@ -1,6 +1,6 @@
 const moment = require('moment')
 const { addAppointmentFactory } = require('../controllers/appointments/addAppointment')
-const { DAY_MONTH_YEAR } = require('../../src/dateHelpers')
+const { DAY_MONTH_YEAR } = require('../../common/dateHelpers')
 const { repeatTypes } = require('../shared/appointmentConstants')
 
 describe('Add appointment', () => {

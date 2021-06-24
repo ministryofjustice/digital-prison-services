@@ -121,6 +121,11 @@
     "@babel/plugin-syntax-dynamic-import": "^7.0.0",
     "@babel/preset-env": "^7.14.7",
     "@babel/preset-react": "^7.14.5",
+    "@babel/preset-typescript": "^7.14.5",
+    "@types/jest": "^26.0.23",
+    "@types/node": "^15.12.4",
+    "@typescript-eslint/eslint-plugin": "^4.28.0",
+    "@typescript-eslint/parser": "^4.28.0",
     "audit-ci": "^3.1.1",
     "axios-mock-adapter": "^1.19.0",
     "babel-jest": "^27.0.5",
@@ -136,6 +141,7 @@
     "eslint": "^7.29.0",
     "eslint-config-airbnb": "^18.2.1",
     "eslint-config-prettier": "^8.3.0",
+    "eslint-import-resolver-webpack": "^0.13.1",
     "eslint-plugin-cypress": "^2.11.3",
     "eslint-plugin-import": "^2.23.4",
     "eslint-plugin-jsx-a11y": "^6.4.1",
@@ -161,17 +167,23 @@
     "set-cookie-parser": "^2.4.6",
     "style-loader": "^2.0.0",
     "supertest": "^3.1.0",
+    "ts-jest": "^27.0.3",
+    "ts-node": "^10.0.0",
+    "typescript": "^4.3.4",
     "url-loader": "^1.0.1",
     "webpack-bundle-analyzer": "^4.4.2",
     "webpack-cli": "^4.7.2",
     "whatwg-fetch": "2.0.4"
   },
   "scripts": {
-    "start": "node backend/index.js",
-    "start:dev": "nodemon --watch backend --watch views backend/index.js | bunyan -o simple",
-    "start-feature": "npm run compile-sass && export $(cat $npm_config_env) && node backend/index.js",
-    "start-feature-no-webpack": "export $(cat $npm_config_env) && DISABLE_WEBPACK=true node backend/index.js",
-    "build": "webpack --mode=production && npm run compile-sass",
+    "start": "DISABLE_WEBPACK=true node dist/backend/index.js",
+    "start:dev": "nodemon",
+    "start-feature": "npm run compile-sass && export $(cat $npm_config_env) && npm run start:dev",
+    "start-feature-no-webpack": "export $(cat $npm_config_env) && npm run build && npm run start",
+    "build": "rm -rf dist && npm run build:frontend && npm run build:backend && npm run build:copy",
+    "build:backend": "tsc",
+    "build:frontend": "webpack --mode=production && npm run compile-sass",
+    "build:copy": "cp -R views dist/views && cp -R build dist/build",
     "build:analyse": "BUNDLE_ANALYSE=true npm run build",
     "test": "jest --env=jsdom",
     "test-watch": "jest --env=jsdom --watch",
@@ -189,7 +201,8 @@
   "jest": {
     "collectCoverageFrom": [
       "src/**/*.{js,jsx,mjs}",
-      "backend/**/*.{js,jsx,mjs}"
+      "backend/**/*.{js,jsx,mjs,ts,tsx}",
+      "backend/**/*.{js,jsx,mjs,ts,tsx}"
     ],
     "setupFiles": [
       "<rootDir>/config/polyfills.js"
@@ -207,7 +220,7 @@
     ],
     "testURL": "http://localhost",
     "transform": {
-      "^.+\\.(js|jsx|mjs)$": "babel-jest",
+      "^.+\\.(js|jsx|mjs|ts|tsx)$": "babel-jest",
       "^.+\\.css$": "<rootDir>/config/jest/cssTransform.js",
       "^(?!.*\\.(js|jsx|mjs|css|json)$)": "<rootDir>/config/jest/fileTransform.js"
     },
@@ -224,7 +237,9 @@
       "web.jsx",
       "jsx",
       "node",
-      "mjs"
+      "mjs",
+      "ts",
+      "tsc"
     ],
     "unmockedModulePathPatterns": [
       "node_modules/react/",
@@ -232,21 +247,22 @@
     ]
   },
   "lint-staged": {
-    "*.{js,json,css}": [
-      "prettier --write",
-      "eslint --cache --fix",
-      "git add"
+    "*.{ts,js,json,css}": [
+      "prettier --write"
+    ],
+    "*.{ts,js}": [
+      "eslint --cache --fix"
     ]
   },
   "nodemonConfig": {
-    "ignore": [
-      ".circleci/*",
-      "migrations/*",
-      "seeds/*",
-      "node_modules/*",
-      "integration-tests/*"
+    "watch": [
+      "backend",
+      "common"
     ],
-    "delay": 2500,
-    "ext": "js,njk"
+    "ext": "ts,tsx,json,js,jsx,mjs",
+    "ignore": [
+      "**/*.test.*"
+    ],
+    "exec": "ts-node ./backend/index.js | bunyan -o simple"
   }
 }

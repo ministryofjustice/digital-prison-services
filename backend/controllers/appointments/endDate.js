@@ -1,5 +1,5 @@
 const { endRecurringEndingDate } = require('../../shared/appointmentConstants')
-const { buildDateTime } = require('../../../src/dateHelpers')
+const { buildDateTime } = require('../../../common/dateHelpers')
 
 module.exports = (req, res) => {
   const { date, repeats, times } = req.query

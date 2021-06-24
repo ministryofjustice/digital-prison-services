@@ -1,7 +1,7 @@
 /**
  * TODO: remove this during the curious api integration
  */
-const dummyLearnerProfiles = [
+export const dummyLearnerProfiles: curious.LearnerProfile[] = [
   {
     prn: 'G8346GA',
     establishmentId: 2,
@@ -17,7 +17,7 @@ const dummyLearnerProfiles = [
       },
     ],
     languageStatus: 'string',
-    plannedHours: '8',
+    plannedHours: 8,
   },
   {
     prn: 'G8346GA',
@@ -34,14 +34,17 @@ const dummyLearnerProfiles = [
       },
     ],
     languageStatus: 'string',
-    plannedHours: '8',
+    plannedHours: 8,
   },
 ]
 
-const curiousApiFactory = (_) => ({
-  getLearnerProfiles() {
-    return Promise.resolve(dummyLearnerProfiles)
-  },
-})
+export default class CuriousApi {
+  static create(): CuriousApi {
+    return new CuriousApi()
+  }
 
-module.exports = { curiousApiFactory, dummyLearnerProfiles }
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  getLearnerProfiles(nomisId: string): Promise<curious.LearnerProfile[]> {
+    return Promise.resolve(dummyLearnerProfiles)
+  }
+}

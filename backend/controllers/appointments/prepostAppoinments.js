@@ -1,5 +1,5 @@
 const moment = require('moment')
-const { DATE_TIME_FORMAT_SPEC, DAY_MONTH_YEAR, Time } = require('../../../src/dateHelpers')
+const { DATE_TIME_FORMAT_SPEC, DAY_MONTH_YEAR, Time } = require('../../../common/dateHelpers')
 
 const {
   notifications: { confirmBookingPrisonTemplateId, emails },

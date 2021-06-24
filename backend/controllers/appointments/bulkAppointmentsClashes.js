@@ -1,5 +1,5 @@
 const { switchDateFormat } = require('../../utils')
-const { DATE_TIME_FORMAT_SPEC, buildDateTime } = require('../../../src/dateHelpers')
+const { DATE_TIME_FORMAT_SPEC, buildDateTime } = require('../../../common/dateHelpers')
 const { raiseAnalyticsEvent } = require('../../raiseAnalyticsEvent')
 
 const bulkAppointmentsClashesFactory = (prisonApi) => {

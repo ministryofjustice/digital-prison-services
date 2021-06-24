@@ -1,7 +1,7 @@
 const moment = require('moment')
 const querystring = require('querystring')
 
-const { DATE_TIME_FORMAT_SPEC, MOMENT_DAY_OF_THE_WEEK, MOMENT_TIME } = require('../../../src/dateHelpers')
+const { DATE_TIME_FORMAT_SPEC, MOMENT_DAY_OF_THE_WEEK, MOMENT_TIME } = require('../../../common/dateHelpers')
 const { getNamesFromString } = require('../../utils')
 
 const templatePath = 'prisonerProfile/prisonerCaseNotes'

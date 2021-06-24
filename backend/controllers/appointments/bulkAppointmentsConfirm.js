@@ -1,6 +1,6 @@
 const moment = require('moment')
 const { switchDateFormat } = require('../../utils')
-const { DAY_MONTH_YEAR, DATE_TIME_FORMAT_SPEC, buildDateTime } = require('../../../src/dateHelpers')
+const { DAY_MONTH_YEAR, DATE_TIME_FORMAT_SPEC, buildDateTime } = require('../../../common/dateHelpers')
 const { raiseAnalyticsEvent } = require('../../raiseAnalyticsEvent')
 const { bulkAppointmentsClashesFactory } = require('./bulkAppointmentsClashes')
 

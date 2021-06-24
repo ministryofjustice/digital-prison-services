@@ -1,11 +1,11 @@
-const { curiousApiFactory, dummyLearnerProfiles } = require('./curiousApi')
+import CuriousApi, { dummyLearnerProfiles } from './curiousApi'
 
-const curiousApi = curiousApiFactory()
+const curiousApi = CuriousApi.create()
 
 describe('curiousApi', () => {
   describe('getLearnerProfiles', () => {
     it('should return the expected response data', async () => {
-      const actual = await curiousApi.getLearnerProfiles()
+      const actual = await curiousApi.getLearnerProfiles('abc')
       expect(actual).toEqual(dummyLearnerProfiles)
     })
   })

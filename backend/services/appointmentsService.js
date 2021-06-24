@@ -1,6 +1,6 @@
 const moment = require('moment')
 const { repeatTypes, endRecurringEndingDate } = require('../shared/appointmentConstants')
-const { DATE_TIME_FORMAT_SPEC, Time } = require('../../src/dateHelpers')
+const { DATE_TIME_FORMAT_SPEC, Time } = require('../../common/dateHelpers')
 const { properCaseName } = require('../utils')
 
 const isVideoLinkBooking = (appointmentType) => appointmentType === 'VLB'
