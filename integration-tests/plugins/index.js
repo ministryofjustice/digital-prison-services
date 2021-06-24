@@ -270,8 +270,12 @@ module.exports = on => {
         prisonApi.stubAppointments(appointments),
         prisonApi.stubActivities(activities),
       ]),
+    stubOffenderActivitiesOverDateRange: ({ agencyId, fromDate, toDate, period, suspensions }) =>
+      Promise.all([prisonApi.stubOffenderActivitiesOverDateRange(agencyId, fromDate, toDate, period, suspensions)]),
     stubOffenderActivities: activities => prisonApi.stubOffenderActivities(activities),
     stubAttendanceForScheduledActivities: attendances => whereabouts.stubAttendanceForScheduledActivities(attendances),
+    stubAttendanceForBookings: ({ agencyId, fromDate, toDate, period, attendances }) =>
+      whereabouts.stubAttendanceForBookings(agencyId, fromDate, toDate, period, attendances),
     stubAppointments: appointments => prisonApi.stubAppointments(appointments),
     stubVisits: visits => prisonApi.stubVisits(visits),
     stubSentenceData: details => prisonApi.stubSentenceData(details),

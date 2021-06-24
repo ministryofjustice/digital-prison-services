@@ -407,6 +407,20 @@ module.exports = {
         jsonBody: attendances || {},
       },
     }),
+  stubAttendanceForBookings: (agencyId, fromDate, toDate, period, attendances, status = 200) =>
+    stubFor({
+      request: {
+        method: 'POST',
+        url: `/whereabouts/attendances/${agencyId}/attendance-over-date-range?fromDate=${fromDate}&toDate=${toDate}&period=${period}`,
+      },
+      response: {
+        status,
+        headers: {
+          'Content-Type': 'application/json;charset=UTF-8',
+        },
+        jsonBody: attendances,
+      },
+    }),
   stubGetWhereaboutsAppointments: (appointments, status = 200) =>
     stubFor({
       request: {
