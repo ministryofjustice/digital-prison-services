@@ -302,7 +302,7 @@ describe('Add appointment', () => {
 
       it('should validate maximum length of comments', async () => {
         req.body = {
-          comments: [...Array(3601).keys()].map(_ => 'A').join(''),
+          comments: [...Array(3601).keys()].map((_) => 'A').join(''),
         }
 
         await controller.post(req, res)

@@ -5,7 +5,7 @@ const clientFactory = require('./oauthEnabledClient')
 const config = require('../config')
 const logger = require('../log')
 
-const getClientCredentialsTokens = async username => {
+const getClientCredentialsTokens = async (username) => {
   const oauthRequest = username
     ? querystring.stringify({ grant_type: 'client_credentials', username })
     : querystring.stringify({ grant_type: 'client_credentials' })

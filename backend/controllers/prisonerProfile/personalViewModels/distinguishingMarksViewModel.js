@@ -1,6 +1,6 @@
 module.exports = ({ physicalMarks }) =>
   physicalMarks &&
-  physicalMarks.map(physicalMark => ({
+  physicalMarks.map((physicalMark) => ({
     label: physicalMark.type,
     details: [
       { label: 'Body part', value: physicalMark.bodyPart },

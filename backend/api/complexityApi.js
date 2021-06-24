@@ -1,7 +1,7 @@
 const contextProperties = require('../contextProperties')
 
-const complexityApiFactory = client => {
-  const processResponse = context => response => {
+const complexityApiFactory = (client) => {
+  const processResponse = (context) => (response) => {
     contextProperties.setResponsePagination(context, response.headers)
     return response.body
   }

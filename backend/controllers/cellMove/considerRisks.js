@@ -3,16 +3,16 @@ const { cellMoveAlertCodes } = require('../../shared/alertFlagValues')
 const { putLastNameFirst, formatName, indefiniteArticle, hasLength, createStringFromList } = require('../../utils')
 const getValueByType = require('../../shared/getValueByType')
 
-const activeCellMoveAlertsExcludingDisabled = alert =>
+const activeCellMoveAlertsExcludingDisabled = (alert) =>
   !alert.expired && cellMoveAlertCodes.includes(alert.alertCode) && alert.alertCode !== 'PEEP'
 
 const missingDataString = 'not entered'
 
 module.exports = ({ prisonApi, raiseAnalyticsEvent }) => {
   const getOccupantsDetails = async (context, offenders) =>
-    Promise.all(offenders.map(offender => prisonApi.getDetails(context, offender, true)))
+    Promise.all(offenders.map((offender) => prisonApi.getDetails(context, offender, true)))
 
-  const alertString = alertDescription => `${indefiniteArticle(alertDescription)} ${alertDescription} alert`
+  const alertString = (alertDescription) => `${indefiniteArticle(alertDescription)} ${alertDescription} alert`
 
   const getOffenderAlertBody = (alert, title) => ({
     title,
@@ -32,7 +32,7 @@ module.exports = ({ prisonApi, raiseAnalyticsEvent }) => {
       ])
 
       const hasOccupants = occupants.length > 0
-      const currentOccupantsOffenderNos = occupants.map(occupant => occupant.offenderNo)
+      const currentOccupantsOffenderNos = occupants.map((occupant) => occupant.offenderNo)
       const currentOccupantsDetails = occupants && (await getOccupantsDetails(res.locals, currentOccupantsOffenderNos))
 
       // Get the residential unit level prefix for the selected cell by traversing up the
@@ -47,15 +47,15 @@ module.exports = ({ prisonApi, raiseAnalyticsEvent }) => {
         res.locals,
         currentOffenderDetails.bookingId
       )
-      const nonAssociationsWithinLocation = currentOffenderNonAssociations?.nonAssociations?.filter(nonAssociation =>
+      const nonAssociationsWithinLocation = currentOffenderNonAssociations?.nonAssociations?.filter((nonAssociation) =>
         nonAssociation.offenderNonAssociation.assignedLivingUnitDescription?.includes(locationPrefix)
       )
 
       const currentOffenderWithOccupants = [currentOffenderDetails, ...currentOccupantsDetails]
 
       const offendersCsraValues = currentOffenderWithOccupants
-        .filter(currentOccupant => currentOccupant.csra)
-        .map(currentOccupant => currentOccupant.csra)
+        .filter((currentOccupant) => currentOccupant.csra)
+        .map((currentOccupant) => currentOccupant.csra)
 
       const showOffendersNamesWithCsra = hasOccupants && offendersCsraValues.includes('High')
 
@@ -75,19 +75,15 @@ module.exports = ({ prisonApi, raiseAnalyticsEvent }) => {
       const currentOffenderIsNonHetero = !currentOffenderSexuality?.toLowerCase().includes('hetero')
 
       const currentNonHeteroOccupants = currentOccupantsDetails.filter(
-        currentOccupant =>
-          !getValueByType('SEXO', currentOccupant.profileInformation, 'resultValue')
-            ?.toLowerCase()
-            .includes('hetero')
+        (currentOccupant) =>
+          !getValueByType('SEXO', currentOccupant.profileInformation, 'resultValue')?.toLowerCase().includes('hetero')
       )
 
       const currentNonHeteroOccupantsWithName = currentNonHeteroOccupants.map(
-        currentOccupant =>
-          `${formatName(
-            currentOccupant.firstName,
-            currentOccupant.lastName
-          )} has a sexual orientation of ${getValueByType('SEXO', currentOccupant.profileInformation, 'resultValue') ||
-            missingDataString}`
+        (currentOccupant) =>
+          `${formatName(currentOccupant.firstName, currentOccupant.lastName)} has a sexual orientation of ${
+            getValueByType('SEXO', currentOccupant.profileInformation, 'resultValue') || missingDataString
+          }`
       )
 
       // Get the list of relevant offender alerts
@@ -95,8 +91,10 @@ module.exports = ({ prisonApi, raiseAnalyticsEvent }) => {
         currentOccupantsDetails.length > 0 &&
         currentOffenderDetails.alerts
           .filter(activeCellMoveAlertsExcludingDisabled)
-          .filter(alert => alert.alertCode !== 'RLG' || (alert.alertCode === 'RLG' && currentNonHeteroOccupants.length))
-          .map(alert => {
+          .filter(
+            (alert) => alert.alertCode !== 'RLG' || (alert.alertCode === 'RLG' && currentNonHeteroOccupants.length)
+          )
+          .map((alert) => {
             const title =
               alert.alertCode === 'RLG' && currentNonHeteroOccupants.length
                 ? `${alertString(alert.alertCodeDescription)} and ${createStringFromList(
@@ -108,12 +106,12 @@ module.exports = ({ prisonApi, raiseAnalyticsEvent }) => {
           })
 
       const currentOccupantsWithFormattedActiveAlerts = currentOccupantsDetails
-        .map(currentOccupant => ({
+        .map((currentOccupant) => ({
           name: formatName(currentOccupant.firstName, currentOccupant.lastName),
           alerts: currentOccupant.alerts
             .filter(activeCellMoveAlertsExcludingDisabled)
-            .filter(alert => alert.alertCode !== 'RLG' || (alert.alertCode === 'RLG' && currentOffenderIsNonHetero))
-            .map(alert => {
+            .filter((alert) => alert.alertCode !== 'RLG' || (alert.alertCode === 'RLG' && currentOffenderIsNonHetero))
+            .map((alert) => {
               const title =
                 alert.alertCode === 'RLG' && currentOffenderIsNonHetero
                   ? `${alertString(
@@ -124,7 +122,7 @@ module.exports = ({ prisonApi, raiseAnalyticsEvent }) => {
               return getOffenderAlertBody(alert, title)
             }),
         }))
-        .filter(occupant => occupant.alerts.length)
+        .filter((occupant) => occupant.alerts.length)
 
       const currentOccupantsWithCatRating = currentOccupantsDetails.map(
         ({ firstName, lastName, categoryCode = missingDataString }) =>
@@ -161,7 +159,7 @@ module.exports = ({ prisonApi, raiseAnalyticsEvent }) => {
             )}?`
           : 'Are you sure you want to select this cell?',
         offendersFormattedNamesWithCsra,
-        nonAssociations: nonAssociationsWithinLocation.map(nonAssociation => ({
+        nonAssociations: nonAssociationsWithinLocation.map((nonAssociation) => ({
           name: `${putLastNameFirst(
             nonAssociation.offenderNonAssociation.firstName,
             nonAssociation.offenderNonAssociation.lastName
@@ -213,22 +211,22 @@ module.exports = ({ prisonApi, raiseAnalyticsEvent }) => {
         prisonApi.getInmatesAtLocation(res.locals, cellId, {}),
       ])
 
-      const currentOccupantsOffenderNos = occupants.map(occupant => occupant.offenderNo)
+      const currentOccupantsOffenderNos = occupants.map((occupant) => occupant.offenderNo)
       const currentOccupantsDetails = occupants && (await getOccupantsDetails(res.locals, currentOccupantsOffenderNos))
 
       const offenderAlertCodes = currentOffenderDetails.alerts
-        .map(alert => alert)
+        .map((alert) => alert)
         .filter(activeCellMoveAlertsExcludingDisabled)
-        .map(alert => alert.alertCode)
+        .map((alert) => alert.alertCode)
         .join(',')
 
       const alertCodesAssociatedWithOccupants = Array.from(
         new Set(
           currentOccupantsDetails
-            .flatMap(occupant => occupant)
-            .flatMap(occupant => occupant.alerts)
+            .flatMap((occupant) => occupant)
+            .flatMap((occupant) => occupant.alerts)
             .filter(activeCellMoveAlertsExcludingDisabled)
-            .map(alert => alert.alertCode)
+            .map((alert) => alert.alertCode)
         )
       ).join(',')
 

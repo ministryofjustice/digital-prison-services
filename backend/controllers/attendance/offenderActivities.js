@@ -15,15 +15,15 @@ const offenderActivitesFactory = (prisonApi, whereaboutsApi) => {
     ])
 
     const prisonersUnaccountedFor = offenderActivities.filter(
-      offenderActivity =>
+      (offenderActivity) =>
         !prisonAttendance.attendances ||
         !prisonAttendance.attendances.find(
-          attendance =>
+          (attendance) =>
             offenderActivity.bookingId === attendance.bookingId && offenderActivity.eventId === attendance.eventId
         )
     )
 
-    const offenderNumbers = prisonersUnaccountedFor.map(prisoner => prisoner.offenderNo)
+    const offenderNumbers = prisonersUnaccountedFor.map((prisoner) => prisoner.offenderNo)
 
     const searchCriteria = { agencyId, date, timeSlot, offenderNumbers }
 
@@ -32,9 +32,9 @@ const offenderActivitesFactory = (prisonApi, whereaboutsApi) => {
       prisonApi.getAppointments(context, searchCriteria),
     ])
 
-    const prisonersWithOtherEvents = prisonersUnaccountedFor.map(prisoner => ({
+    const prisonersWithOtherEvents = prisonersUnaccountedFor.map((prisoner) => ({
       ...prisoner,
-      eventsElsewhere: [...visits, ...appointments].filter(event => prisoner.offenderNo === event.offenderNo),
+      eventsElsewhere: [...visits, ...appointments].filter((event) => prisoner.offenderNo === event.offenderNo),
     }))
 
     return prisonersWithOtherEvents

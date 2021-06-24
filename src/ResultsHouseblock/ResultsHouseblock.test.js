@@ -153,7 +153,10 @@ const response = [
   },
 ]
 
-const subLocations = [{ name: '1', key: '1' }, { name: '2', key: '2' }]
+const subLocations = [
+  { name: '1', key: '1' },
+  { name: '2', key: '2' },
+]
 
 const user = {
   activeCaseLoadId: 'SYI',
@@ -223,10 +226,7 @@ describe('Offender results component Jira NN-843', () => {
     const housingLocationSelect = component.find('#housing-location-select')
     expect(housingLocationSelect.some('[value="--"]')).toEqual(true)
     // Dig into the DatePicker component
-    const searchDate = component
-      .find('WhereaboutsDatePicker')
-      .dive()
-      .prop('input').value
+    const searchDate = component.find('WhereaboutsDatePicker').dive().prop('input').value
     expect(searchDate).toEqual(date)
     const periodSelect = component.find('#period-select')
     expect(periodSelect.some('[value="ED"]')).toEqual(true)
@@ -235,175 +235,59 @@ describe('Offender results component Jira NN-843', () => {
     expect(tr.at(0).contains('Prison no.'))
     expect(tr.length).toEqual(5) // 4 plus table header tr
     const row1Tds = tr.at(1).find('td')
-    expect(
-      row1Tds
-        .at(OFFENDER_NAME_COLUMN)
-        .childAt(0)
-        .dive()
-        .childAt(0)
-        .dive()
-        .text()
-    ).toEqual('Anderson, Arthur')
+    expect(row1Tds.at(OFFENDER_NAME_COLUMN).childAt(0).dive().childAt(0).dive().text()).toEqual('Anderson, Arthur')
     expect(row1Tds.at(NOMS_ID_COLUMN).text()).toEqual('A1234AA')
     expect(row1Tds.at(REDACTED_NOMS_ID_COLUMN).text()).toEqual('***34AA')
 
     // TODO: find out how to fix the following line...
     //     expect(row1Tds.at(LOCATION_COLUMN).text()).toEqual('A-1-1')
-    const row1Flags = row1Tds
-      .at(FLAGS_COLUMN)
-      .find('AlertFlags')
-      .dive()
-      .find('AlertFlag')
+    const row1Flags = row1Tds.at(FLAGS_COLUMN).find('AlertFlags').dive().find('AlertFlag')
 
     expect(row1Flags.length).toEqual(2)
-    expect(
-      row1Flags
-        .at(0)
-        .shallow()
-        .text()
-    ).toEqual('ACCT ')
-    expect(
-      row1Flags
-        .at(1)
-        .shallow()
-        .text()
-    ).toEqual('CAT A ')
+    expect(row1Flags.at(0).shallow().text()).toEqual('ACCT ')
+    expect(row1Flags.at(1).shallow().text()).toEqual('CAT A ')
     expect(row1Tds.at(MAIN_COLUMN).text()).toEqual('18:00 - Chapel')
-    expect(
-      row1Tds
-        .at(OTHER_COLUMN)
-        .find(OtherActivitiesView)
-        .at(0)
-        .dive()
-        .find('li')
-        .at(0)
-        .text()
-    ).toEqual('Release scheduled')
-    expect(
-      row1Tds
-        .at(OTHER_COLUMN)
-        .find(OtherActivitiesView)
-        .at(0)
-        .dive()
-        .find('li')
-        .at(1)
-        .text()
-    ).toEqual('11:00 - Visits - Official Visit')
-    expect(
-      row1Tds
-        .at(OTHER_COLUMN)
-        .find(OtherActivitiesView)
-        .at(0)
-        .dive()
-        .find('li')
-        .at(2)
-        .text()
-    ).toEqual('17:00 - 17:30 - The gym, appointment')
-    expect(
-      row1Tds
-        .at(OTHER_COLUMN)
-        .find(OtherActivitiesView)
-        .at(0)
-        .dive()
-        .find('li')
-        .at(3)
-        .text()
-    ).toEqual('11:40 - Medical - Dentist - Appt details')
+    expect(row1Tds.at(OTHER_COLUMN).find(OtherActivitiesView).at(0).dive().find('li').at(0).text()).toEqual(
+      'Release scheduled'
+    )
+    expect(row1Tds.at(OTHER_COLUMN).find(OtherActivitiesView).at(0).dive().find('li').at(1).text()).toEqual(
+      '11:00 - Visits - Official Visit'
+    )
+    expect(row1Tds.at(OTHER_COLUMN).find(OtherActivitiesView).at(0).dive().find('li').at(2).text()).toEqual(
+      '17:00 - 17:30 - The gym, appointment'
+    )
+    expect(row1Tds.at(OTHER_COLUMN).find(OtherActivitiesView).at(0).dive().find('li').at(3).text()).toEqual(
+      '11:40 - Medical - Dentist - Appt details'
+    )
     // Check not disabled. This odd looking attribute value is handled correctly in the real DOM
-    expect(
-      row1Tds
-        .at(ATTEND_COLUMN)
-        .find('input')
-        .some('[type="checkbox"]')
-    ).toEqual(true)
-    expect(
-      row1Tds
-        .at(DONT_ATTEND_COLUMN)
-        .find('input')
-        .some('[type="checkbox"]')
-    ).toEqual(true)
+    expect(row1Tds.at(ATTEND_COLUMN).find('input').some('[type="checkbox"]')).toEqual(true)
+    expect(row1Tds.at(DONT_ATTEND_COLUMN).find('input').some('[type="checkbox"]')).toEqual(true)
 
     const row2Tds = tr.at(2).find('td')
-    expect(
-      row2Tds
-        .at(OFFENDER_NAME_COLUMN)
-        .childAt(0)
-        .dive()
-        .childAt(0)
-        .dive()
-        .text()
-    ).toEqual('Smith, Michael')
+    expect(row2Tds.at(OFFENDER_NAME_COLUMN).childAt(0).dive().childAt(0).dive().text()).toEqual('Smith, Michael')
     // TODO: find out how to fix the following line
     // expect(row2Tds.at(LOCATION_COLUMN).text()).toEqual('A-1-2')
-    expect(
-      row2Tds
-        .at(FLAGS_COLUMN)
-        .find('AlertFlags')
-        .shallow()
-        .text()
-    ).toEqual('')
+    expect(row2Tds.at(FLAGS_COLUMN).find('AlertFlags').shallow().text()).toEqual('')
     expect(row2Tds.at(MAIN_COLUMN).text()).toEqual('18:00 - Chapel Act')
-    expect(
-      row2Tds
-        .at(OTHER_COLUMN)
-        .find(OtherActivitiesView)
-        .at(0)
-        .dive()
-        .find('li').length
-    ).toEqual(0)
+    expect(row2Tds.at(OTHER_COLUMN).find(OtherActivitiesView).at(0).dive().find('li').length).toEqual(0)
 
     const row3Tds = tr.at(3).find('td')
-    expect(
-      row3Tds
-        .at(OFFENDER_NAME_COLUMN)
-        .childAt(0)
-        .dive()
-        .childAt(0)
-        .dive()
-        .text()
-    ).toEqual('Quimby, Fred')
+    expect(row3Tds.at(OFFENDER_NAME_COLUMN).childAt(0).dive().childAt(0).dive().text()).toEqual('Quimby, Fred')
     // TODO: find out how to fix the following line
     // expect(row3Tds.at(LOCATION_COLUMN).text()).toEqual('A-1-3')
-    const row3Flags = row3Tds
-      .at(FLAGS_COLUMN)
-      .find('AlertFlags')
-      .dive()
-      .find('AlertFlag')
+    const row3Flags = row3Tds.at(FLAGS_COLUMN).find('AlertFlags').dive().find('AlertFlag')
 
     expect(row3Flags.length).toEqual(1)
-    expect(
-      row3Flags
-        .at(0)
-        .shallow()
-        .text()
-    ).toEqual('CAT A High ')
+    expect(row3Flags.at(0).shallow().text()).toEqual('CAT A High ')
     expect(row3Tds.at(MAIN_COLUMN).text()).toEqual('18:00 - Chapel Activity')
-    expect(
-      row3Tds
-        .at(OTHER_COLUMN)
-        .find(OtherActivitiesView)
-        .at(0)
-        .dive()
-        .find('li')
-        .at(0)
-        .text()
-    ).toEqual('11:11 - Visits - Family Visit (cancelled)')
+    expect(row3Tds.at(OTHER_COLUMN).find(OtherActivitiesView).at(0).dive().find('li').at(0).text()).toEqual(
+      '11:11 - Visits - Family Visit (cancelled)'
+    )
 
-    const row4Flags = tr
-      .at(4)
-      .find('td')
-      .at(FLAGS_COLUMN)
-      .find('AlertFlags')
-      .dive()
-      .find('AlertFlag')
+    const row4Flags = tr.at(4).find('td').at(FLAGS_COLUMN).find('AlertFlags').dive().find('AlertFlag')
 
     expect(row4Flags.length).toEqual(1)
-    expect(
-      row4Flags
-        .at(0)
-        .shallow()
-        .text()
-    ).toEqual('CAT A Prov ')
+    expect(row4Flags.at(0).shallow().text()).toEqual('CAT A Prov ')
   })
 
   it('should render empty results list correctly', async () => {
@@ -443,10 +327,7 @@ describe('Offender results component Jira NN-843', () => {
 
     expect(component.find(PrintLink).length).toEqual(2)
 
-    component
-      .find(PrintLink)
-      .at(0)
-      .simulate('click')
+    component.find(PrintLink).at(0).simulate('click')
     expect(props.handlePrint).toHaveBeenCalled()
   })
 
@@ -469,9 +350,7 @@ describe('Offender results component Jira NN-843', () => {
   })
 
   it('should display print links when date is in the future', async () => {
-    const futureDate = moment()
-      .add(1, 'days')
-      .format('DD/MM/YYYY')
+    const futureDate = moment().add(1, 'days').format('DD/MM/YYYY')
     const component = shallow(
       <ResultsHouseblock
         {...props}
@@ -544,22 +423,8 @@ describe('Offender results component Jira NN-843', () => {
     )
 
     const tr = component.find('tr')
-    expect(
-      tr
-        .at(1)
-        .find('td')
-        .at(ATTEND_COLUMN)
-        .find('input')
-        .some('[disabled]')
-    ).toEqual(true)
-    expect(
-      tr
-        .at(1)
-        .find('td')
-        .at(DONT_ATTEND_COLUMN)
-        .find('input')
-        .some('[disabled]')
-    ).toEqual(true)
+    expect(tr.at(1).find('td').at(ATTEND_COLUMN).find('input').some('[disabled]')).toEqual(true)
+    expect(tr.at(1).find('td').at(DONT_ATTEND_COLUMN).find('input').some('[disabled]')).toEqual(true)
   })
 
   it('should display the correct sorting headings for Location', async () => {
@@ -578,37 +443,13 @@ describe('Offender results component Jira NN-843', () => {
       />
     )
 
-    expect(
-      component
-        .find('SortableColumn')
-        .at(1)
-        .shallow()
-        .find('#Location-sort-asc').length
-    ).toEqual(1)
+    expect(component.find('SortableColumn').at(1).shallow().find('#Location-sort-asc').length).toEqual(1)
 
-    expect(
-      component
-        .find('SortableColumn')
-        .at(1)
-        .shallow()
-        .find('#Location-sort-desc').length
-    ).toEqual(0)
+    expect(component.find('SortableColumn').at(1).shallow().find('#Location-sort-desc').length).toEqual(0)
 
-    expect(
-      component
-        .find('SortableColumn')
-        .at(0)
-        .shallow()
-        .find('#Name-sort-desc').length
-    ).toEqual(0)
+    expect(component.find('SortableColumn').at(0).shallow().find('#Name-sort-desc').length).toEqual(0)
 
-    expect(
-      component
-        .find('SortableColumn')
-        .at(0)
-        .shallow()
-        .find('#Name-sort-asc').length
-    ).toEqual(0)
+    expect(component.find('SortableColumn').at(0).shallow().find('#Name-sort-asc').length).toEqual(0)
   })
 
   it('should display the correct sorting headings for Name', async () => {
@@ -627,37 +468,13 @@ describe('Offender results component Jira NN-843', () => {
       />
     )
 
-    expect(
-      component
-        .find('SortableColumn')
-        .at(1)
-        .shallow()
-        .find('#Location-sort-asc').length
-    ).toEqual(0)
+    expect(component.find('SortableColumn').at(1).shallow().find('#Location-sort-asc').length).toEqual(0)
 
-    expect(
-      component
-        .find('SortableColumn')
-        .at(1)
-        .shallow()
-        .find('#Location-sort-desc').length
-    ).toEqual(0)
+    expect(component.find('SortableColumn').at(1).shallow().find('#Location-sort-desc').length).toEqual(0)
 
-    expect(
-      component
-        .find('SortableColumn')
-        .at(0)
-        .shallow()
-        .find('#Name-sort-desc').length
-    ).toEqual(1)
+    expect(component.find('SortableColumn').at(0).shallow().find('#Name-sort-desc').length).toEqual(1)
 
-    expect(
-      component
-        .find('SortableColumn')
-        .at(0)
-        .shallow()
-        .find('#Name-sort-asc').length
-    ).toEqual(0)
+    expect(component.find('SortableColumn').at(0).shallow().find('#Name-sort-asc').length).toEqual(0)
   })
 
   it('should handle change of sort order', async () => {
@@ -677,21 +494,11 @@ describe('Offender results component Jira NN-843', () => {
       />
     )
 
-    component
-      .find('SortableColumn')
-      .at(1)
-      .shallow()
-      .find('#Location-sort-asc')
-      .simulate('click')
+    component.find('SortableColumn').at(1).shallow().find('#Location-sort-asc').simulate('click')
 
     expect(props.setColumnSort).toHaveBeenCalledWith('cellLocation', 'DESC')
 
-    component
-      .find('SortableColumn')
-      .at(0)
-      .shallow()
-      .find('#Name-sortable-column')
-      .simulate('click')
+    component.find('SortableColumn').at(0).shallow().find('#Name-sortable-column').simulate('click')
 
     expect(props.setColumnSort).toHaveBeenCalledWith('lastName', 'ASC')
   })
@@ -739,18 +546,9 @@ describe('Offender results component Jira NN-843', () => {
     )
 
     const tr = component.find('tr')
-    expect(
-      tr
-        .at(1)
-        .find('td')
-        .at(OTHER_COLUMN)
-        .find(OtherActivitiesView)
-        .at(0)
-        .dive()
-        .find('li')
-        .at(0)
-        .text()
-    ).toEqual('Release scheduled')
+    expect(tr.at(1).find('td').at(OTHER_COLUMN).find(OtherActivitiesView).at(0).dive().find('li').at(0).text()).toEqual(
+      'Release scheduled'
+    )
   })
 
   it('Should render sub-locations in drop-down', () => {
@@ -820,18 +618,9 @@ describe('Offender results component Jira NN-843', () => {
     )
 
     const tr = component.find('tr')
-    expect(
-      tr
-        .at(1)
-        .find('td')
-        .at(OTHER_COLUMN)
-        .find(OtherActivitiesView)
-        .at(0)
-        .dive()
-        .find('li')
-        .at(0)
-        .text()
-    ).toEqual('Transfer scheduled')
+    expect(tr.at(1).find('td').at(OTHER_COLUMN).find(OtherActivitiesView).at(0).dive().find('li').at(0).text()).toEqual(
+      'Transfer scheduled'
+    )
   })
 
   it('should show multiple scheduled transfers along with status description', () => {
@@ -883,38 +672,17 @@ describe('Offender results component Jira NN-843', () => {
       />
     )
 
-    const transfers = component
-      .find(OtherActivitiesView)
-      .dive()
-      .find('.transfer')
+    const transfers = component.find(OtherActivitiesView).dive().find('.transfer')
 
     expect(transfers.at(0).text()).toBe('Transfer scheduled')
     expect(transfers.at(1).text()).toBe('Transfer scheduled (cancelled)')
-    expect(
-      transfers
-        .at(1)
-        .find('span')
-        .last()
-        .getElement().props.className
-    ).toBe('cancelled')
+    expect(transfers.at(1).find('span').last().getElement().props.className).toBe('cancelled')
 
     expect(transfers.at(2).text()).toBe('Transfer scheduled (complete)')
-    expect(
-      transfers
-        .at(2)
-        .find('span')
-        .last()
-        .getElement().props.className
-    ).toBe('complete')
+    expect(transfers.at(2).find('span').last().getElement().props.className).toBe('complete')
 
     expect(transfers.at(3).text()).toBe('Transfer scheduled (expired)')
-    expect(
-      transfers
-        .at(3)
-        .find('span')
-        .last()
-        .getElement().props.className
-    ).toBe('cancelled')
+    expect(transfers.at(3).find('span').last().getElement().props.className).toBe('cancelled')
   })
 
   it('should display the correct total number of offenders', () => {
@@ -935,12 +703,7 @@ describe('Offender results component Jira NN-843', () => {
       />
     )
 
-    expect(
-      component
-        .find('TotalResults')
-        .first()
-        .props()
-    ).toEqual({ label: 'Prisoners listed:', totalResults: 4 })
+    expect(component.find('TotalResults').first().props()).toEqual({ label: 'Prisoners listed:', totalResults: 4 })
   })
 
   it('should display the correct total number of paid offenders', () => {
@@ -962,11 +725,6 @@ describe('Offender results component Jira NN-843', () => {
       />
     )
 
-    expect(
-      component
-        .find('TotalResults')
-        .at(1)
-        .props()
-    ).toEqual({ label: 'Sessions attended:', totalResults: 1 })
+    expect(component.find('TotalResults').at(1).props()).toEqual({ label: 'Sessions attended:', totalResults: 1 })
   })
 })

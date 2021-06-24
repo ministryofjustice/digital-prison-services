@@ -4,7 +4,7 @@ const logger = require('../log')
 const errorStatusCode = require('../error-status-code')
 
 const AuthClientErrorName = 'AuthClientError'
-const AuthClientError = message => ({ name: AuthClientErrorName, message, stack: new Error().stack })
+const AuthClientError = (message) => ({ name: AuthClientErrorName, message, stack: new Error().stack })
 
 const apiClientCredentials = (clientId, clientSecret) => Buffer.from(`${clientId}:${clientSecret}`).toString('base64')
 
@@ -17,9 +17,9 @@ const apiClientCredentials = (clientId, clientSecret) => Buffer.from(`${clientId
  * @returns a configured oauthApi instance
  */
 const oauthApiFactory = (client, { clientId, clientSecret, url }) => {
-  const get = (context, path) => client.get(context, path).then(response => response.body)
-  const currentUser = context => get(context, '/api/user/me')
-  const userRoles = context => get(context, '/api/user/me/roles')
+  const get = (context, path) => client.get(context, path).then((response) => response.body)
+  const currentUser = (context) => get(context, '/api/user/me')
+  const userRoles = (context) => get(context, '/api/user/me/roles')
   const userEmail = (context, username) => get(context, `/api/user/${username}/email`)
   const userDetails = (context, username) => get(context, `/api/user/${username}`)
 
@@ -39,7 +39,7 @@ const oauthApiFactory = (client, { clientId, clientSecret, url }) => {
     refresh_token,
   })
 
-  const translateAuthClientError = error => {
+  const translateAuthClientError = (error) => {
     logger.info(`login error description = ${error}`)
 
     if (error.includes('has expired')) return 'Your password has expired.'
@@ -53,13 +53,13 @@ const oauthApiFactory = (client, { clientId, clientSecret, url }) => {
 
   const makeTokenRequest = (data, msg) =>
     oauthAxios({ data })
-      .then(response => {
+      .then((response) => {
         logger.debug(
           `${msg} ${response.config.method} ${response.config.url} ${response.status} ${response.statusText}`
         )
         return parseOauthTokens(response.data)
       })
-      .catch(error => {
+      .catch((error) => {
         const status = errorStatusCode(error)
         const errorDesc = (error.response && error.response.data && error.response.data.error_description) || null
 
@@ -77,7 +77,7 @@ const oauthApiFactory = (client, { clientId, clientSecret, url }) => {
    * Perform OAuth token refresh, returning the tokens to the caller. See scopedStore.run.
    * @returns A Promise that resolves when token refresh has succeeded and the OAuth tokens have been returned.
    */
-  const refresh = refreshToken =>
+  const refresh = (refreshToken) =>
     makeTokenRequest(querystring.stringify({ refresh_token: refreshToken, grant_type: 'refresh_token' }), 'refresh:')
 
   return {

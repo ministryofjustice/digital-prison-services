@@ -6,12 +6,12 @@ module.exports = ({ prisonApi, oauthApi }) => {
     const { activeCaseLoadId, username } = req.session.userDetails
     const { allCaseloads: caseloads } = req.session
 
-    const activeCaseLoad = caseloads.find(cl => cl.caseLoadId === activeCaseLoadId)
+    const activeCaseLoad = caseloads.find((cl) => cl.caseLoadId === activeCaseLoadId)
     if (activeCaseLoad) {
       return activeCaseLoad
     }
 
-    const potentialCaseLoad = caseloads.find(cl => cl.caseLoadId !== '___')
+    const potentialCaseLoad = caseloads.find((cl) => cl.caseLoadId !== '___')
     if (potentialCaseLoad) {
       const firstCaseLoadId = potentialCaseLoad.caseLoadId
       logger.warn(`No active caseload set for user: ${username}: setting to ${firstCaseLoadId}`)

@@ -12,7 +12,7 @@ function safeTimeCompare(a, b) {
 
 const shouldPromoteToMainActivity = (offender, newActivity) => {
   if (newActivity.eventType !== 'PRISON_ACT') return false
-  const mainActivity = offender.activities.find(act => act.mainActivity)
+  const mainActivity = offender.activities.find((act) => act.mainActivity)
   if (!mainActivity) return true
 
   if (mainActivity.payRate && !newActivity.payRate) {
@@ -26,17 +26,17 @@ const shouldPromoteToMainActivity = (offender, newActivity) => {
   return Boolean(safeTimeCompare(mainActivity.startTime, newActivity.startTime))
 }
 
-const isStayingOnWing = activities => {
+const isStayingOnWing = (activities) => {
   const stayingOnWingCodes = ['WOW', 'STAYONWING', 'UNEMPLOYED', 'RETIRED']
-  const leavingWingActivities = activities.filter(activity => !stayingOnWingCodes.includes(activity.locationCode))
+  const leavingWingActivities = activities.filter((activity) => !stayingOnWingCodes.includes(activity.locationCode))
 
   return leavingWingActivities.length === 0
 }
 
 const promoteToMainActivity = (offender, activity) => {
   const newMainActivity = { ...activity, mainActivity: true }
-  const oldMainActivity = offender.activities.find(act => act.mainActivity)
-  const otherActivities = offender.activities.filter(act => act && !act.mainActivity)
+  const oldMainActivity = offender.activities.find((act) => act.mainActivity)
+  const otherActivities = offender.activities.filter((act) => act && !act.mainActivity)
 
   if (oldMainActivity) oldMainActivity.mainActivity = false
 
@@ -64,12 +64,12 @@ const getHouseblockListFactory = (prisonApi, whereaboutsApi) => {
       return []
     }
 
-    const locationIds = locations.map(location => location.locationId)
+    const locationIds = locations.map((location) => location.locationId)
     const formattedDate = switchDateFormat(date)
     // Returns array ordered by inmate/cell or name, then start time
     const data = await prisonApi.getHouseblockList(context, agencyId, locationIds, formattedDate, timeSlot)
 
-    const offenderNumbers = distinct(data.map(offender => offender.offenderNo))
+    const offenderNumbers = distinct(data.map((offender) => offender.offenderNo))
 
     const externalEventsForOffenders = await getExternalEventsForOffenders(prisonApi, context, {
       offenderNumbers,
@@ -79,7 +79,7 @@ const getHouseblockListFactory = (prisonApi, whereaboutsApi) => {
 
     log.info(data.size, 'getHouseblockList data received')
 
-    const bookings = Array.from(new Set(data.map(event => event.bookingId)))
+    const bookings = Array.from(new Set(data.map((event) => event.bookingId)))
     const shouldGetAttendanceForBookings = bookings.length > 0
     const absentReasons = await whereaboutsApi.getAbsenceReasons(context)
     const toAbsentReason = absentReasonMapper(absentReasons)
@@ -94,13 +94,8 @@ const getHouseblockListFactory = (prisonApi, whereaboutsApi) => {
       : []
 
     const offendersMap = data.reduce((offenders, event) => {
-      const {
-        releaseScheduled,
-        courtEvents,
-        scheduledTransfers,
-        alertFlags,
-        category,
-      } = externalEventsForOffenders.get(event.offenderNo)
+      const { releaseScheduled, courtEvents, scheduledTransfers, alertFlags, category } =
+        externalEventsForOffenders.get(event.offenderNo)
 
       const offenderData = offenders[event.offenderNo] || {
         offenderNo: event.offenderNo,
@@ -121,7 +116,7 @@ const getHouseblockListFactory = (prisonApi, whereaboutsApi) => {
       const attendanceInfo =
         attendanceInformation.attendances &&
         attendanceInformation.attendances.find(
-          activityWithAttendance =>
+          (activityWithAttendance) =>
             event.bookingId === activityWithAttendance.bookingId &&
             event.eventId === activityWithAttendance.eventId &&
             event.eventLocationId === activityWithAttendance.eventLocationId
@@ -157,14 +152,14 @@ const getHouseblockListFactory = (prisonApi, whereaboutsApi) => {
       }
     }, {})
 
-    const response = Object.keys(offendersMap).map(offenderNo => ({
+    const response = Object.keys(offendersMap).map((offenderNo) => ({
       offenderNo,
       ...offendersMap[offenderNo],
     }))
 
-    if (wingStatus === 'staying') return response.filter(offender => offender.stayingOnWing)
+    if (wingStatus === 'staying') return response.filter((offender) => offender.stayingOnWing)
 
-    if (wingStatus === 'leaving') return response.filter(offender => !offender.stayingOnWing)
+    if (wingStatus === 'leaving') return response.filter((offender) => !offender.stayingOnWing)
 
     return response
   }

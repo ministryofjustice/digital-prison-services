@@ -2,7 +2,7 @@ import React from 'react'
 import PropTypes from 'prop-types'
 import { getHoursMinutes, getEventDescription } from '../utils'
 
-const shouldShowOtherActivities = offenderMainEvent =>
+const shouldShowOtherActivities = (offenderMainEvent) =>
   Boolean(
     offenderMainEvent &&
       ((offenderMainEvent.activities && offenderMainEvent.activities.length > 1) ||
@@ -18,7 +18,7 @@ const renderOtherEvent = (event, index) => {
     event.event !== 'VISIT' && event.endTime && getHoursMinutes(event.endTime),
     getEventDescription(event),
   ]
-  const text = parts.filter(part => !!part).join(' - ')
+  const text = parts.filter((part) => !!part).join(' - ')
   const key = `${event.offenderNo}_others_${index}`
   const cancelled = event.event === 'VISIT' && event.eventStatus === 'CANC'
 
@@ -43,7 +43,7 @@ const renderEvent = (event, type, index) => (
 
 const OtherActivityListView = ({ offenderMainEvent }) => {
   const otherActivities = offenderMainEvent.activities
-    ? offenderMainEvent.activities.filter(activity => !activity.mainActivity)
+    ? offenderMainEvent.activities.filter((activity) => !activity.mainActivity)
     : offenderMainEvent.others
 
   return (

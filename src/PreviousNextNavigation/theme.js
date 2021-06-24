@@ -2,7 +2,7 @@ import styled from 'styled-components'
 import { media } from './style-utils'
 
 export const PrevNextNavContainer = styled('nav')`
-  display: ${props => (props.show ? 'block' : 'none')};
+  display: ${(props) => (props.show ? 'block' : 'none')};
 `
 
 export const PrevNextNavWrapper = styled('ul')`
@@ -33,7 +33,7 @@ export const PrevNavigatorRegion = styled('li')`
   float: left;
 
   div {
-    display: ${props => (props.show ? 'block' : 'none')};
+    display: ${(props) => (props.show ? 'block' : 'none')};
     padding: 15px 0 15px 35px;
   }
 
@@ -57,7 +57,7 @@ export const NextNavigatorRegion = styled('li')`
   text-align: right;
 
   div {
-    display: ${props => (props.show ? 'block' : 'none')};
+    display: ${(props) => (props.show ? 'block' : 'none')};
     padding: 15px 35px 15px 0;
   }
 

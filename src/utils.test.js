@@ -137,9 +137,7 @@ describe('isAfterToday()', () => {
   })
 
   it('returns true if date is AFTER day', () => {
-    const tomorrow = moment()
-      .add(1, 'day')
-      .format('DD/MM/YYYY')
+    const tomorrow = moment().add(1, 'day').format('DD/MM/YYYY')
     expect(isAfterToday(tomorrow)).toBe(true)
   })
 

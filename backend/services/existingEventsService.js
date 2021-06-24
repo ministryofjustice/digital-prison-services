@@ -11,7 +11,7 @@ const getEventDescription = ({ eventDescription, eventLocation, comment }) => {
   return `${locationString} ${descriptionString}`
 }
 
-const toEvent = event => ({
+const toEvent = (event) => ({
   ...event,
   startTime: getTime(event.startTime),
   endTime: event.endTime && getTime(event.endTime),
@@ -20,7 +20,7 @@ const toEvent = event => ({
   eventDescription: getEventDescription(event),
 })
 
-module.exports = prisonApi => {
+module.exports = (prisonApi) => {
   const getExistingEventsForOffender = async (context, agencyId, date, offenderNo) => {
     const formattedDate = switchDateFormat(date)
     const searchCriteria = { agencyId, date: formattedDate, offenderNumbers: [offenderNo] }
@@ -35,7 +35,7 @@ module.exports = prisonApi => {
         prisonApi.getActivities(context, searchCriteria),
       ])
 
-      const hasCourtVisit = courtEvents.length && courtEvents.filter(event => event.eventStatus === 'SCH')
+      const hasCourtVisit = courtEvents.length && courtEvents.filter((event) => event.eventStatus === 'SCH')
 
       const isReleaseDate = sentenceData.length && sentenceData[0].sentenceDetail.releaseDate === formattedDate
 
@@ -64,7 +64,7 @@ module.exports = prisonApi => {
         prisonApi.getActivitiesAtLocation(context, searchCriteria),
         prisonApi.getActivityList(context, { ...searchCriteria, usage: 'VISIT' }),
         prisonApi.getActivityList(context, { ...searchCriteria, usage: 'APP' }),
-      ]).then(events => events.reduce((flattenedEvents, event) => flattenedEvents.concat(event), []))
+      ]).then((events) => events.reduce((flattenedEvents, event) => flattenedEvents.concat(event), []))
 
       return eventsAtLocationByUsage.sort((left, right) => sortByDateTime(left.startTime, right.startTime)).map(toEvent)
     } catch (error) {
@@ -76,23 +76,27 @@ module.exports = prisonApi => {
     new Promise((resolve, reject) => {
       prisonApi
         .getActivityList(context, { agencyId: agency, date: switchDateFormat(date), locationId, usage: 'APP' })
-        .then(response => {
-          resolve(response.map(event => toEvent({ ...event, locationId })))
+        .then((response) => {
+          resolve(response.map((event) => toEvent({ ...event, locationId })))
         })
         .catch(reject)
     })
 
   const getAppointmentsAtLocations = async (context, { agency, date, locations }) =>
-    (await Promise.all(
-      locations.map(location => getAppointmentsAtLocationEnhanceWithLocationId(context, agency, location.value, date))
-    )).reduce((acc, current) => acc.concat(current), [])
+    (
+      await Promise.all(
+        locations.map((location) =>
+          getAppointmentsAtLocationEnhanceWithLocationId(context, agency, location.value, date)
+        )
+      )
+    ).reduce((acc, current) => acc.concat(current), [])
 
   const getAvailableLocations = async (context, { timeSlot, locations, eventsAtLocations }) => {
     const requestedStartTime = moment(timeSlot.startTime, DATE_TIME_FORMAT_SPEC)
     const requestedEndTime = moment(timeSlot.endTime, DATE_TIME_FORMAT_SPEC)
 
-    const findOverlappingSlots = slots =>
-      slots.filter(bookedSlot => {
+    const findOverlappingSlots = (slots) =>
+      slots.filter((bookedSlot) => {
         const bookedStartTime = moment(bookedSlot.start, DATE_TIME_FORMAT_SPEC)
         const bookedEndTime = moment(bookedSlot.end, DATE_TIME_FORMAT_SPEC)
 
@@ -102,12 +106,12 @@ module.exports = prisonApi => {
         )
       })
 
-    const fullyBookedLocations = locations.filter(location => {
-      const slots = eventsAtLocations.filter(locationEvent => locationEvent.locationId === location.value)
+    const fullyBookedLocations = locations.filter((location) => {
+      const slots = eventsAtLocations.filter((locationEvent) => locationEvent.locationId === location.value)
       return findOverlappingSlots(slots).length > 0
     })
 
-    return locations.filter(location => !fullyBookedLocations.includes(location))
+    return locations.filter((location) => !fullyBookedLocations.includes(location))
   }
 
   const getAvailableLocationsForVLB = async (
@@ -123,18 +127,14 @@ module.exports = prisonApi => {
       locations,
     })
 
-    const mainStartTime = moment(startTime, DATE_TIME_FORMAT_SPEC)
-      .add(1, 'minute')
-      .format(DATE_TIME_FORMAT_SPEC)
+    const mainStartTime = moment(startTime, DATE_TIME_FORMAT_SPEC).add(1, 'minute').format(DATE_TIME_FORMAT_SPEC)
     const mainLocations = await getAvailableLocations(context, {
       timeSlot: { startTime: mainStartTime, endTime },
       locations,
       eventsAtLocations,
     })
 
-    const preStartTime = moment(startTime, DATE_TIME_FORMAT_SPEC)
-      .subtract(20, 'minutes')
-      .format(DATE_TIME_FORMAT_SPEC)
+    const preStartTime = moment(startTime, DATE_TIME_FORMAT_SPEC).subtract(20, 'minutes').format(DATE_TIME_FORMAT_SPEC)
 
     const preLocations =
       preAppointmentRequired === 'yes'
@@ -145,9 +145,7 @@ module.exports = prisonApi => {
           })
         : []
 
-    const postEndTime = moment(endTime, DATE_TIME_FORMAT_SPEC)
-      .add(20, 'minutes')
-      .format(DATE_TIME_FORMAT_SPEC)
+    const postEndTime = moment(endTime, DATE_TIME_FORMAT_SPEC).add(20, 'minutes').format(DATE_TIME_FORMAT_SPEC)
 
     const postLocations =
       postAppointmentRequired === 'yes'

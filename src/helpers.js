@@ -1,11 +1,11 @@
-const linkOnClick = handlerFn => {
+const linkOnClick = (handlerFn) => {
   if (!handlerFn) return null
 
   return {
     tabIndex: 0,
     role: 'link',
     onClick: handlerFn,
-    onKeyDown: event => {
+    onKeyDown: (event) => {
       if (event.key === 'Enter') handlerFn(event)
     },
   }
@@ -13,7 +13,7 @@ const linkOnClick = handlerFn => {
 
 const groupBy = (list, keyGetter) => {
   const map = new Map()
-  list.forEach(item => {
+  list.forEach((item) => {
     const key = keyGetter(item)
     const collection = map.get(key)
     if (!collection) {

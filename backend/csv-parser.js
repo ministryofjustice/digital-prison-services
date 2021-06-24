@@ -4,16 +4,14 @@ const logger = require('./log')
 
 const validationMessages = {
   invalidFile: 'Select a CSV file - the file you have chosen is not a CSV file',
-  maxFileSizeReached: `Select a CSV file less than ${
-    config.app.maximumFileUploadSizeInMb
-  }MB - the file you selected is too big`,
+  maxFileSizeReached: `Select a CSV file less than ${config.app.maximumFileUploadSizeInMb}MB - the file you selected is too big`,
   noFileInput: `Select a file`,
   noFileContent: `Select a CSV file with prison numbers entered`,
   parsingError: 'There was a problem importing your file, please use the template provided',
 }
 
 const csvParserService = ({ fs, isBinaryFileSync }) => {
-  const parseCsvData = async data => {
+  const parseCsvData = async (data) => {
     const output = []
     // eslint-disable-next-line prefer-arrow-callback
     const parser = parse(data, { trim: true, skip_empty_lines: true }).on('readable', function onRead() {
@@ -25,13 +23,13 @@ const csvParserService = ({ fs, isBinaryFileSync }) => {
     })
 
     return new Promise((resolve, reject) => {
-      parser.on('error', error => reject(error))
+      parser.on('error', (error) => reject(error))
       parser.on('end', () => resolve(output))
       parser.on('finish', () => resolve(output))
     })
   }
 
-  const readFile = path =>
+  const readFile = (path) =>
     new Promise((resolve, reject) => {
       fs.readFile(path, (error, result) => {
         if (error) {

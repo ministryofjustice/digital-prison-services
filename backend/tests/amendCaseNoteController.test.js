@@ -168,7 +168,7 @@ describe('Amendment case note', () => {
     })
 
     it('should validate the length of the amendment', async () => {
-      req.body.moreDetail = [...Array(4001).keys()].map(_ => 'A').join('')
+      req.body.moreDetail = [...Array(4001).keys()].map((_) => 'A').join('')
 
       await controller.post(req, res)
 

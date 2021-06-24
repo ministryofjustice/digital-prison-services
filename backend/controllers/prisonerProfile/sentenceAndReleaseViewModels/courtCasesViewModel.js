@@ -2,9 +2,9 @@ const moment = require('moment')
 
 const { formatCurrency, readableDateFormat } = require('../../../utils')
 
-const onlyValidValues = value => Boolean(value)
+const onlyValidValues = (value) => Boolean(value)
 
-const getLengthTextLabels = data => {
+const getLengthTextLabels = (data) => {
   const { years, months, weeks, days } = data
 
   const yearsLabel = years > 0 && `${years} ${years === 1 ? 'year' : 'years'}`
@@ -12,10 +12,10 @@ const getLengthTextLabels = data => {
   const weeksLabel = weeks > 0 && `${weeks} ${weeks === 1 ? 'week' : 'weeks'}`
   const daysLabel = days > 0 && `${days} ${days === 1 ? 'day' : 'days'}`
 
-  return [yearsLabel, monthsLabel, weeksLabel, daysLabel].filter(label => label).join(', ')
+  return [yearsLabel, monthsLabel, weeksLabel, daysLabel].filter((label) => label).join(', ')
 }
 
-const mergeMostRecentLicenceTerm = sentences =>
+const mergeMostRecentLicenceTerm = (sentences) =>
   sentences.reduce((result, current) => {
     if (current.sentenceTermCode === 'IMP' && !result) return current
     if (current.sentenceTermCode === 'LIC' && !result?.licence) {
@@ -33,13 +33,13 @@ const mergeMostRecentLicenceTerm = sentences =>
     return result
   }, null)
 
-const groupSentencesBySequence = sentences =>
+const groupSentencesBySequence = (sentences) =>
   sentences.reduce((result, current) => {
     const key = current.lineSeq
-    const existing = result.find(sentence => sentence.key === key)
+    const existing = result.find((sentence) => sentence.key === key)
 
     if (existing) {
-      return [{ ...existing, items: [...existing.items, current] }, ...result.filter(entry => entry.key !== key)]
+      return [{ ...existing, items: [...existing.items, current] }, ...result.filter((entry) => entry.key !== key)]
     }
     return [{ key, caseId: current.caseId, items: [current] }, ...result]
   }, [])
@@ -64,7 +64,7 @@ const sortBySentenceDateThenByImprisonmentLength = (left, right) => {
 }
 
 const findConsecutiveSentence = ({ sentences, consecutiveTo }) => {
-  const sentence = sentences.find(s => s.sentenceSequence === consecutiveTo)
+  const sentence = sentences.find((s) => s.sentenceSequence === consecutiveTo)
 
   return sentence && sentence.lineSeq
 }
@@ -74,21 +74,21 @@ module.exports = ({ courtCaseData, sentenceTermsData, offenceHistory }) => {
     // Only show charge codes of Imprisonment (1002 & 1510), Recall (1501) and YOI (1024)
     ...new Set(
       offenceHistory
-        .filter(offence => ['1002', '1501', '1510', '1024'].includes(offence.primaryResultCode))
-        .map(offence => offence.caseId)
+        .filter((offence) => ['1002', '1501', '1510', '1024'].includes(offence.primaryResultCode))
+        .map((offence) => offence.caseId)
     ),
   ]
 
   return courtCaseData
-    .filter(courtCase => caseIds.includes(courtCase.id))
-    .map(courtCase => ({
+    .filter((courtCase) => caseIds.includes(courtCase.id))
+    .map((courtCase) => ({
       caseInfoNumber: courtCase.caseInfoNumber || 'Not entered',
       courtName: courtCase.agency && courtCase.agency.description,
       sentenceTerms: groupSentencesBySequence(sentenceTermsData)
-        .filter(group => Number(group.caseId) === courtCase.id)
-        .map(groupedSentence => mergeMostRecentLicenceTerm(groupedSentence.items))
+        .filter((group) => Number(group.caseId) === courtCase.id)
+        .map((groupedSentence) => mergeMostRecentLicenceTerm(groupedSentence.items))
         .sort(sortBySentenceDateThenByImprisonmentLength)
-        .map(sentence => ({
+        .map((sentence) => ({
           sentenceHeader: `Sentence ${sentence.lineSeq}`,
           sentenceTypeDescription: sentence.sentenceTypeDescription,
           summaryDetailRows: [
@@ -114,16 +114,16 @@ module.exports = ({ courtCaseData, sentenceTermsData, offenceHistory }) => {
       offences: [
         ...new Set(
           offenceHistory
-            .filter(offence => offence.caseId === courtCase.id)
-            .map(offence => offence.offenceDescription)
+            .filter((offence) => offence.caseId === courtCase.id)
+            .map((offence) => offence.offenceDescription)
             .filter(onlyValidValues)
             .sort((left, right) => left.localeCompare(right))
         ),
       ],
     }))
-    .filter(courtCase => courtCase.sentenceTerms.length)
-    .map(courtCase => {
-      const sentenceDateRow = courtCase.sentenceTerms[0].summaryDetailRows.find(st => st.label === 'Start date')
+    .filter((courtCase) => courtCase.sentenceTerms.length)
+    .map((courtCase) => {
+      const sentenceDateRow = courtCase.sentenceTerms[0].summaryDetailRows.find((st) => st.label === 'Start date')
 
       return {
         ...courtCase,

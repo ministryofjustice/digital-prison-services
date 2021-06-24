@@ -7,12 +7,8 @@ const oauthApi = {}
 const referenceCodesService = {}
 const { logError } = require('../logError')
 const { raiseAnalyticsEvent } = require('../raiseAnalyticsEvent')
-const {
-  handleCreateAlertForm,
-  displayCreateAlertPage,
-  displayEditAlertPage,
-  handleEditAlertForm,
-} = require('../controllers/alert').alertFactory(oauthApi, prisonApi, referenceCodesService)
+const { handleCreateAlertForm, displayCreateAlertPage, displayEditAlertPage, handleEditAlertForm } =
+  require('../controllers/alert').alertFactory(oauthApi, prisonApi, referenceCodesService)
 
 jest.mock('../raiseAnalyticsEvent', () => ({
   raiseAnalyticsEvent: jest.fn(),
@@ -246,7 +242,7 @@ describe('alert management', () => {
 
     describe('when comment triggers validation errors', () => {
       const comment = Array.from(Array(1001).keys())
-        .map(_ => 'A')
+        .map((_) => 'A')
         .join('')
 
       it('should validate maximum length does not exceed 1000', async () => {
@@ -531,7 +527,7 @@ describe('alert management', () => {
 
     describe('when comment triggers validation errors', () => {
       const commentsOverMaximumLength = Array.from(Array(1001).keys())
-        .map(_ => 'A')
+        .map((_) => 'A')
         .join('')
 
       it('should validate maximum length does not exceed 1000', async () => {

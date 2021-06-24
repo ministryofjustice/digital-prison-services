@@ -45,7 +45,10 @@ describe('index', () => {
 
     expect(res.render).toBeCalledWith('changeCaseload.njk', {
       title: 'Change caseload',
-      options: [{ value: 'LEI', text: 'Leeds (HMP)' }, { value: 'HEI', text: 'Hewell (HMP)' }],
+      options: [
+        { value: 'LEI', text: 'Leeds (HMP)' },
+        { value: 'HEI', text: 'Hewell (HMP)' },
+      ],
       backUrl: '//pshUrl/',
     })
   })

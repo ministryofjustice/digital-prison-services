@@ -14,9 +14,10 @@ describe('Cell move history', () => {
     prisonApi.getOffenderCellHistory = jest.fn().mockResolvedValue({ content: [] })
     whereaboutsApi.searchGroups = jest.fn().mockResolvedValue([])
     whereaboutsApi.getAgencyGroupLocationPrefix = jest.fn()
-    prisonApi.getCellMoveReasonTypes = jest
-      .fn()
-      .mockResolvedValue([{ code: 'ADM', description: 'Administrative' }, { code: 'SA', description: 'Safety' }])
+    prisonApi.getCellMoveReasonTypes = jest.fn().mockResolvedValue([
+      { code: 'ADM', description: 'Administrative' },
+      { code: 'SA', description: 'Safety' },
+    ])
 
     req = {
       query: {

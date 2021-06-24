@@ -47,9 +47,7 @@ describe('view non associations', () => {
           reasonDescription: 'Victim',
           typeCode: 'WING',
           typeDescription: 'Do Not Locate on Same Wing',
-          effectiveDate: moment()
-            .add(7, 'days')
-            .format('YYYY-MM-DDTHH:mm:ss'),
+          effectiveDate: moment().add(7, 'days').format('YYYY-MM-DDTHH:mm:ss'),
           authorisedBy: 'string',
           comments: 'Test comment 1',
           offenderNonAssociation: {
@@ -85,9 +83,7 @@ describe('view non associations', () => {
           reasonDescription: 'Rival gang',
           typeCode: 'WING',
           typeDescription: 'Do Not Locate on Same Wing',
-          effectiveDate: moment()
-            .subtract(1, 'years')
-            .format('YYYY-MM-DDTHH:mm:ss'),
+          effectiveDate: moment().subtract(1, 'years').format('YYYY-MM-DDTHH:mm:ss'),
           expiryDate: tomorrow,
           authorisedBy: 'string',
           comments: 'Test comment 2',
@@ -163,9 +159,7 @@ describe('view non associations', () => {
           },
           {
             comment: 'Test comment 2',
-            effectiveDate: moment()
-              .subtract(1, 'years')
-              .format('D MMMM YYYY'),
+            effectiveDate: moment().subtract(1, 'years').format('D MMMM YYYY'),
             location: 'MDI-2-1-3',
             name: 'Bloggs, Jim',
             otherOffenderKey: 'Jim Bloggs is',

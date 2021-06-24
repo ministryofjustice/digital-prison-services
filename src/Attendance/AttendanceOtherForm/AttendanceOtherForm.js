@@ -38,10 +38,10 @@ export function AttendanceOtherForm({
 }) {
   const { offenderNo, bookingId, eventId, eventLocationId, attendanceInfo } = offender
   const { id, absentReason, comments } = attendanceInfo || {}
-  const shouldTriggerIEP = selectedReason => triggersIEPWarning && triggersIEPWarning.includes(selectedReason)
-  const commentOrCaseNote = selectedReason => (shouldTriggerIEP(selectedReason) ? 'case note' : 'comment')
+  const shouldTriggerIEP = (selectedReason) => triggersIEPWarning && triggersIEPWarning.includes(selectedReason)
+  const commentOrCaseNote = (selectedReason) => (shouldTriggerIEP(selectedReason) ? 'case note' : 'comment')
 
-  const validateThenSubmit = submitHandler => async values => {
+  const validateThenSubmit = (submitHandler) => async (values) => {
     const formErrors = []
     const commentText = values.comments && values.comments.trim()
 
@@ -85,7 +85,7 @@ export function AttendanceOtherForm({
     return attendanceUpdated
   }
 
-  const payOffender = values => {
+  const payOffender = (values) => {
     const paid = values.pay === 'yes'
     const reasons = [...absentReasons.paidReasons, ...absentReasons.unpaidReasons]
 
@@ -96,7 +96,7 @@ export function AttendanceOtherForm({
       paid,
       eventId,
       eventLocationId,
-      absentReason: reasons.find(ar => ar.value === values.absentReason),
+      absentReason: reasons.find((ar) => ar.value === values.absentReason),
       comments: values.comments,
       attended: false,
     }
@@ -118,7 +118,7 @@ export function AttendanceOtherForm({
     )
   }
 
-  const getAbsentReasons = pay => {
+  const getAbsentReasons = (pay) => {
     if (!pay) return []
     return pay === 'yes' ? absentReasons.paidReasons : absentReasons.unpaidReasons
   }
@@ -139,7 +139,7 @@ export function AttendanceOtherForm({
   return (
     <Form
       initialValues={initialValues}
-      onSubmit={values => validateThenSubmit(payOffender, showModal)(values)}
+      onSubmit={(values) => validateThenSubmit(payOffender, showModal)(values)}
       render={({ handleSubmit, submitting, pristine, submitError: errors, values }) => (
         <form onSubmit={handleSubmit}>
           {errors && (
@@ -154,14 +154,17 @@ export function AttendanceOtherForm({
               name="pay"
               errors={errors}
               component={RadioGroup}
-              options={[{ title: 'Yes', value: 'yes' }, { title: 'No', value: 'no' }]}
+              options={[
+                { title: 'Yes', value: 'yes' },
+                { title: 'No', value: 'no' },
+              ]}
               inline
             />
             <FieldWithError errors={errors} name="absentReason" component={Select} label="Select a reason">
               <option value="" disabled>
                 Select
               </option>
-              {getAbsentReasons(values.pay).map(reason => (
+              {getAbsentReasons(values.pay).map((reason) => (
                 <option key={reason.value} value={reason.value}>
                   {reason.name}
                 </option>
@@ -225,7 +228,7 @@ AttendanceOtherForm.propTypes = {
   setSelectedOption: PropTypes.func.isRequired,
 }
 
-const mapStateToProps = state => ({
+const mapStateToProps = (state) => ({
   user: state.app.user,
   absentReasons: state.events.absentReasons,
 })

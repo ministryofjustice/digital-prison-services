@@ -3,7 +3,7 @@ const { repeatTypes, endRecurringEndingDate } = require('../shared/appointmentCo
 const { DATE_TIME_FORMAT_SPEC, Time } = require('../../src/dateHelpers')
 const { properCaseName } = require('../utils')
 
-const isVideoLinkBooking = appointmentType => appointmentType === 'VLB'
+const isVideoLinkBooking = (appointmentType) => appointmentType === 'VLB'
 
 const toAppointmentDetailsSummary = ({
   firstName,
@@ -23,7 +23,7 @@ const toAppointmentDetailsSummary = ({
 }) => {
   const recurringInformation = recurring === 'yes' &&
     !isVideoLinkBooking(appointmentType) && {
-      howOften: repeatTypes.find(repeat => repeat.value === repeats).text,
+      howOften: repeatTypes.find((repeat) => repeat.value === repeats).text,
       numberOfAppointments: times,
       endDate: endRecurringEndingDate({ startTime, repeats, times }).endOfPeriod.format('dddd D MMMM YYYY'),
       endDateShortFormat: endRecurringEndingDate({ startTime, repeats, times }).endOfPeriod.format('D MMMM YYYY'),
@@ -46,27 +46,27 @@ const toAppointmentDetailsSummary = ({
   }
 
   if (isVideoLinkBooking(appointmentType)) {
-    ;['appointmentType', 'recurring'].forEach(e => delete appointmentInfo[e])
+    ;['appointmentType', 'recurring'].forEach((e) => delete appointmentInfo[e])
   }
 
   return appointmentInfo
 }
 
-const mapLocationType = location => ({
+const mapLocationType = (location) => ({
   value: location.locationId,
   text: location.userDescription || location.description,
 })
 
-const mapAppointmentType = appointment => ({
+const mapAppointmentType = (appointment) => ({
   value: appointment.code,
   text: appointment.description,
 })
 
-const appointmentsServiceFactory = prisonApi => {
+const appointmentsServiceFactory = (prisonApi) => {
   const getLocations = async (context, agency, filterByLocationType) =>
     filterByLocationType
       ? (await prisonApi.getLocationsForAppointments(context, agency))
-          .filter(loc => loc.locationType === filterByLocationType)
+          .filter((loc) => loc.locationType === filterByLocationType)
           .map(mapLocationType)
       : (await prisonApi.getLocationsForAppointments(context, agency)).map(mapLocationType)
 
@@ -87,8 +87,8 @@ const appointmentsServiceFactory = prisonApi => {
 
   const getLocationAndAppointmentDescription = async (context, { activeCaseLoadId, locationId, appointmentType }) => {
     const { appointmentTypes, locationTypes } = await getAppointmentOptions(context, activeCaseLoadId)
-    const { text: locationDescription } = locationTypes.find(loc => loc.value === Number(locationId))
-    const { text: appointmentTypeDescription } = appointmentTypes.find(app => app.value === appointmentType)
+    const { text: locationDescription } = locationTypes.find((loc) => loc.value === Number(locationId))
+    const { text: appointmentTypeDescription } = appointmentTypes.find((app) => app.value === appointmentType)
 
     return {
       locationDescription,

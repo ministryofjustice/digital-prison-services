@@ -15,7 +15,7 @@ AlertFlag.propTypes = {
 const AlertFlags = ({ alerts, category }) => {
   function isShown(code) {
     if (alerts) {
-      return alerts.some(alert => {
+      return alerts.some((alert) => {
         if (alert.get) {
           if (!alert.get('expired')) {
             if (alert.get('alertCode') === code) return true

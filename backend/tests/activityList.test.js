@@ -186,12 +186,18 @@ describe('Activity list controller', () => {
     prisonApi.getActivityList.mockResolvedValue([])
     prisonApi.getActivitiesAtLocation.mockResolvedValue([{ offenderNo: 'A' }, { offenderNo: 'B' }, { offenderNo: 'C' }])
 
-    prisonApi.getVisits.mockResolvedValue([{ offenderNo: 'A', locationId: 2 }, { offenderNo: 'B', locationId: 3 }])
+    prisonApi.getVisits.mockResolvedValue([
+      { offenderNo: 'A', locationId: 2 },
+      { offenderNo: 'B', locationId: 3 },
+    ])
     prisonApi.getAppointments.mockResolvedValue([
       { offenderNo: 'B', locationId: 4 },
       { offenderNo: 'C', locationId: 5 },
     ])
-    prisonApi.getActivities.mockResolvedValue([{ offenderNo: 'A', locationId: 6 }, { offenderNo: 'C', locationId: 7 }])
+    prisonApi.getActivities.mockResolvedValue([
+      { offenderNo: 'A', locationId: 6 },
+      { offenderNo: 'C', locationId: 7 },
+    ])
     prisonApi.getSentenceData.mockResolvedValue([])
 
     const result = await activityList({}, 'LEI', 1, '23/11/2018', 'PM')
@@ -202,7 +208,10 @@ describe('Activity list controller', () => {
         releaseScheduled: false,
         courtEvents: [],
         scheduledTransfers: [],
-        eventsElsewhere: [{ offenderNo: 'A', locationId: 2 }, { offenderNo: 'A', locationId: 6 }],
+        eventsElsewhere: [
+          { offenderNo: 'A', locationId: 2 },
+          { offenderNo: 'A', locationId: 6 },
+        ],
         alertFlags: [],
         category: '',
         attendanceInfo: null,
@@ -212,7 +221,10 @@ describe('Activity list controller', () => {
         courtEvents: [],
         scheduledTransfers: [],
         offenderNo: 'B',
-        eventsElsewhere: [{ offenderNo: 'B', locationId: 3 }, { offenderNo: 'B', locationId: 4 }],
+        eventsElsewhere: [
+          { offenderNo: 'B', locationId: 3 },
+          { offenderNo: 'B', locationId: 4 },
+        ],
         alertFlags: [],
         category: '',
         attendanceInfo: null,
@@ -222,7 +234,10 @@ describe('Activity list controller', () => {
         courtEvents: [],
         scheduledTransfers: [],
         offenderNo: 'C',
-        eventsElsewhere: [{ offenderNo: 'C', locationId: 5 }, { offenderNo: 'C', locationId: 7 }],
+        eventsElsewhere: [
+          { offenderNo: 'C', locationId: 5 },
+          { offenderNo: 'C', locationId: 7 },
+        ],
         alertFlags: [],
         category: '',
         attendanceInfo: null,
@@ -234,12 +249,18 @@ describe('Activity list controller', () => {
     prisonApi.getActivityList.mockResolvedValue([])
     prisonApi.getActivitiesAtLocation.mockResolvedValue([{ offenderNo: 'A' }, { offenderNo: 'B' }, { offenderNo: 'C' }])
 
-    prisonApi.getVisits.mockResolvedValue([{ offenderNo: 'A', locationId: 1 }, { offenderNo: 'B', locationId: 1 }])
+    prisonApi.getVisits.mockResolvedValue([
+      { offenderNo: 'A', locationId: 1 },
+      { offenderNo: 'B', locationId: 1 },
+    ])
     prisonApi.getAppointments.mockResolvedValue([
       { offenderNo: 'B', locationId: 2 },
       { offenderNo: 'C', locationId: 1 },
     ])
-    prisonApi.getActivities.mockResolvedValue([{ offenderNo: 'A', locationId: 1 }, { offenderNo: 'C', locationId: 3 }])
+    prisonApi.getActivities.mockResolvedValue([
+      { offenderNo: 'A', locationId: 1 },
+      { offenderNo: 'C', locationId: 3 },
+    ])
     prisonApi.getSentenceData.mockResolvedValue([])
 
     const result = await activityList({}, 'LEI', 1, '23/11/2018', 'PM')
@@ -410,7 +431,7 @@ describe('Activity list controller', () => {
 
     const result = await activityList({}, 'LEI', 1, '23/11/2018', 'PM')
 
-    expect(result.map(event => event.offenderNo)).toEqual(['C', 'F', 'B', 'D', 'A', 'E'])
+    expect(result.map((event) => event.offenderNo)).toEqual(['C', 'F', 'B', 'D', 'A', 'E'])
   })
 
   it('should order eventsElsewhere by startTime', async () => {
@@ -433,8 +454,8 @@ describe('Activity list controller', () => {
 
     const result = await activityList({}, 'LEI', 1, '23/11/2018', 'PM')
 
-    expect(result.map(event => event.offenderNo)).toEqual(['A'])
-    expect(result[0].eventsElsewhere.map(event => event.startTime)).toEqual([
+    expect(result.map((event) => event.offenderNo)).toEqual(['A'])
+    expect(result[0].eventsElsewhere.map((event) => event.startTime)).toEqual([
       '2017-10-15T00:00:00',
       '2017-10-15T11:00:00',
       '2017-10-15T13:00:00',

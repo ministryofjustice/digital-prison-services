@@ -10,9 +10,9 @@ const sortOnListSeq = (a, b) => a.listSeq - b.listSeq
 const cellMoveReasons = async (res, prisonApi, selectedReason) => {
   const cellMoveReasonTypes = await prisonApi.getCellMoveReasonTypes(res.locals)
   return cellMoveReasonTypes
-    .filter(type => type.activeFlag === 'Y')
+    .filter((type) => type.activeFlag === 'Y')
     .sort(sortOnListSeq)
-    .map(type => ({
+    .map((type) => ({
       value: type.code,
       text: type.description,
       checked: type.code === selectedReason,

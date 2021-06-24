@@ -17,7 +17,7 @@ export default function iepHistory(state = initialState, action) {
       const { offenderAgencyId } = action.results
       const { caseLoadOptions, roles } = state
 
-      const caseLoad = caseLoadOptions.find(x => x.caseLoadId === offenderAgencyId)
+      const caseLoad = caseLoadOptions.find((x) => x.caseLoadId === offenderAgencyId)
 
       return {
         ...state,

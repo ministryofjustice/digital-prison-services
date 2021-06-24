@@ -43,5 +43,5 @@ const whereaboutsTasks = [
 
 module.exports = () => async (req, res) =>
   res.render('whereabouts/whereaboutsHomepage.njk', {
-    tasks: whereaboutsTasks.filter(task => task.enabled).map(({ roles, enabled, ...task }) => task),
+    tasks: whereaboutsTasks.filter((task) => task.enabled).map(({ roles, enabled, ...task }) => task),
   })

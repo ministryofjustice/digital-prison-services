@@ -2,12 +2,12 @@ const qs = require('qs')
 const { formatTimestampToDate, formatTimestampToDateTime } = require('../utils')
 
 const retentionReasonsFactory = (prisonApi, dataComplianceApi) => {
-  const sortReasonsByDisplayOrder = reasons => reasons.sort((r1, r2) => (r1.displayOrder > r2.displayOrder ? 1 : -1))
+  const sortReasonsByDisplayOrder = (reasons) => reasons.sort((r1, r2) => (r1.displayOrder > r2.displayOrder ? 1 : -1))
 
-  const getOffenderUrl = offenderNo => `/prisoner/${offenderNo}`
-  const getRetentionReasonsUrl = offenderNo => `/offenders/${offenderNo}/retention-reasons`
+  const getOffenderUrl = (offenderNo) => `/prisoner/${offenderNo}`
+  const getRetentionReasonsUrl = (offenderNo) => `/offenders/${offenderNo}/retention-reasons`
 
-  const getLastUpdate = existingRecord =>
+  const getLastUpdate = (existingRecord) =>
     existingRecord
       ? {
           version: existingRecord.etag,
@@ -17,9 +17,9 @@ const retentionReasonsFactory = (prisonApi, dataComplianceApi) => {
       : {}
 
   const flagReasonsAlreadySelected = (retentionReasons, existingReasons) => {
-    const matchingReason = reason1 => reason2 => reason1.reasonCode === reason2.reasonCode
+    const matchingReason = (reason1) => (reason2) => reason1.reasonCode === reason2.reasonCode
 
-    return retentionReasons.map(reasonToDisplay => {
+    return retentionReasons.map((reasonToDisplay) => {
       const matchedReason = existingReasons.find(matchingReason(reasonToDisplay))
 
       return {
@@ -30,13 +30,13 @@ const retentionReasonsFactory = (prisonApi, dataComplianceApi) => {
     })
   }
 
-  const validateOptionsSelected = optionsSelected =>
+  const validateOptionsSelected = (optionsSelected) =>
     optionsSelected
-      .filter(option => {
+      .filter((option) => {
         const details = option.reasonDetails && option.reasonDetails.trim()
         return details === '' || (details && details.length < 2)
       })
-      .map(option => ({ text: 'Enter more detail', href: `#more-detail-${option.reasonCode}` }))
+      .map((option) => ({ text: 'Enter more detail', href: `#more-detail-${option.reasonCode}` }))
 
   const renderTemplate = async ({ req, res, selectedReasons, pageErrors }) => {
     const { offenderNo } = req.params
@@ -69,7 +69,7 @@ const retentionReasonsFactory = (prisonApi, dataComplianceApi) => {
   const post = async (req, res) => {
     const { offenderNo } = req.params
     const { reasons, version } = qs.parse(req.body)
-    const selectedReasons = reasons.filter(reason => reason.reasonCode)
+    const selectedReasons = reasons.filter((reason) => reason.reasonCode)
 
     const pageErrors = validateOptionsSelected(selectedReasons)
     if (pageErrors.length > 0) return renderTemplate({ req, res, selectedReasons, pageErrors })

@@ -5,8 +5,11 @@ describe('Movement service', () => {
   const oauthClient = {}
   const context = {}
   const agency = 'LEI'
-  const offenders = [{ offenderNo: 'offenderNo1', bookingId: 1 }, { offenderNo: 'offenderNo2', bookingId: 2 }]
-  const offenderNumbers = offenders.map(offender => offender.offenderNo)
+  const offenders = [
+    { offenderNo: 'offenderNo1', bookingId: 1 },
+    { offenderNo: 'offenderNo2', bookingId: 2 },
+  ]
+  const offenderNumbers = offenders.map((offender) => offender.offenderNo)
   const alertFlags = [
     {
       offenderNo: offenderNumbers[0],
@@ -121,7 +124,10 @@ describe('Movement service', () => {
       ])
 
       const response = await movementsServiceFactory(prisonApi, oauthClient).getMovementsIn(context, agency)
-      expect(response).toEqual([{ offenderNo: 'G0000GG', alerts: [] }, { offenderNo: 'G0001GG', alerts: ['XEL'] }])
+      expect(response).toEqual([
+        { offenderNo: 'G0000GG', alerts: [] },
+        { offenderNo: 'G0001GG', alerts: ['XEL'] },
+      ])
     })
 
     it('Decorates movements in with categories', async () => {
@@ -260,7 +266,10 @@ describe('Movement service', () => {
 
       const response = await movementsServiceFactory(prisonApi, oauthClient).getOffendersInReception(context, agency)
 
-      expect(response).toEqual([{ ...offenders[0], iepLevel: 'basic' }, { ...offenders[1], iepLevel: 'standard' }])
+      expect(response).toEqual([
+        { ...offenders[0], iepLevel: 'basic' },
+        { ...offenders[1], iepLevel: 'standard' },
+      ])
     })
 
     it('should not request extra information if there are no offenders in reception', async () => {
@@ -361,7 +370,10 @@ describe('Movement service', () => {
         )
         expect(response).toEqual({
           location: 'location',
-          currentlyOut: [{ offenderNo: 'G0000GG', alerts: [] }, { offenderNo: 'G0001GG', alerts: ['XEL'] }],
+          currentlyOut: [
+            { offenderNo: 'G0000GG', alerts: [] },
+            { offenderNo: 'G0001GG', alerts: ['XEL'] },
+          ],
         })
       })
 
@@ -530,7 +542,10 @@ describe('Movement service', () => {
           context,
           key
         )
-        expect(response).toEqual([{ offenderNo: 'G0000GG', alerts: [] }, { offenderNo: 'G0001GG', alerts: ['XEL'] }])
+        expect(response).toEqual([
+          { offenderNo: 'G0000GG', alerts: [] },
+          { offenderNo: 'G0001GG', alerts: ['XEL'] },
+        ])
       })
 
       it('Decorates with categories', async () => {

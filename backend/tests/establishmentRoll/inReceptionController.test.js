@@ -90,12 +90,10 @@ describe('In reception controller', () => {
   })
 
   it('should return offenders sorted alphabetically by last name', async () => {
-    movementsService.getOffendersInReception = jest
-      .fn()
-      .mockResolvedValue([
-        { firstName: 'BB', lastName: 'BB', alerts: [] },
-        { firstName: 'AA', lastName: 'AA', alerts: [] },
-      ])
+    movementsService.getOffendersInReception = jest.fn().mockResolvedValue([
+      { firstName: 'BB', lastName: 'BB', alerts: [] },
+      { firstName: 'AA', lastName: 'AA', alerts: [] },
+    ])
 
     await controller(req, res)
 

@@ -11,7 +11,7 @@ beforeEach(() => {
   prisonApi.getMovementsInBetween = jest.fn()
 })
 
-const returnSize = count => context => {
+const returnSize = (count) => (context) => {
   // eslint-disable-next-line no-param-reassign,
   context.responseHeaders = { 'total-records': count }
 }

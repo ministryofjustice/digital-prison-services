@@ -86,16 +86,13 @@ Page.defaultProps = {
   showPrint: false,
 }
 
-const mapDispatchToProps = dispatch => ({
-  dispatchApplicationTitle: title => dispatch(setApplicationTitle(title)),
+const mapDispatchToProps = (dispatch) => ({
+  dispatchApplicationTitle: (title) => dispatch(setApplicationTitle(title)),
 })
 
-const mapStateToProps = state => ({
+const mapStateToProps = (state) => ({
   error: state.app.error,
   loaded: state.app.loaded,
 })
 
-export default connect(
-  mapStateToProps,
-  mapDispatchToProps
-)(Page)
+export default connect(mapStateToProps, mapDispatchToProps)(Page)

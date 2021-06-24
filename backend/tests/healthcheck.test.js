@@ -24,10 +24,7 @@ describe('service healthcheck', () => {
 
   describe('check unhealthy', () => {
     it('should throw error from api', async () => {
-      fakeServiceApi
-        .get('/ping')
-        .thrice()
-        .reply(500)
+      fakeServiceApi.get('/ping').thrice().reply(500)
 
       await expect(healthcheck()).rejects.toThrow('Internal Server Error')
     })

@@ -4,7 +4,7 @@ const log = require('../log')
 
 const placeHolder = path.join(__dirname, '../assets/images/image-missing.jpg')
 
-const imageFactory = prisonApi => {
+const imageFactory = (prisonApi) => {
   const image = asyncMiddleware(async (req, res) => {
     const { imageId } = req.params
 
@@ -13,11 +13,11 @@ const imageFactory = prisonApi => {
     } else {
       prisonApi
         .getImage(res.locals, imageId)
-        .then(data => {
+        .then((data) => {
           res.type('image/jpeg')
           data.pipe(res)
         })
-        .catch(error => {
+        .catch((error) => {
           // Not Found 404 is an acceptable response.
           // It has been logged as part of the client call,
           // no need to repeat here.
@@ -38,11 +38,11 @@ const imageFactory = prisonApi => {
     } else {
       prisonApi
         .getPrisonerImage(res.locals, offenderNo, fullSizeImage)
-        .then(data => {
+        .then((data) => {
           res.type('image/jpeg')
           data.pipe(res)
         })
-        .catch(error => {
+        .catch((error) => {
           // Not Found 404 is an acceptable response.
           // It has been logged as part of the client call,
           // no need to repeat here.

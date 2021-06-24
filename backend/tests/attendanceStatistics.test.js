@@ -118,9 +118,7 @@ describe('Attendance reason statistics', () => {
     it('should validate against future fromDate', async () => {
       const { attendanceStatistics } = attendanceStatisticsFactory(oauthApi, prisonApi, whereaboutsApi, jest.fn())
 
-      const tomorrow = moment()
-        .add(1, 'days')
-        .format('DD/MM/YYYY')
+      const tomorrow = moment().add(1, 'days').format('DD/MM/YYYY')
 
       const req = { query: { agencyId, toDate: tomorrow, fromDate: tomorrow, period } }
       const res = { render: jest.fn(), locals: context }
@@ -209,9 +207,7 @@ describe('Attendance reason statistics', () => {
       const { attendanceStatistics } = attendanceStatisticsFactory(oauthApi, prisonApi, whereaboutsApi, jest.fn())
 
       const today = moment().format('DD/MM/YYYY')
-      const threeWeeksAgo = moment()
-        .subtract(3, 'weeks')
-        .format('DD/MM/YYYY')
+      const threeWeeksAgo = moment().subtract(3, 'weeks').format('DD/MM/YYYY')
 
       const req = { query: { agencyId, toDate: today, fromDate: threeWeeksAgo, period } }
       const res = { render: jest.fn(), locals: context }
@@ -307,9 +303,7 @@ describe('Attendance reason statistics', () => {
       mockDateToSunday012017()
 
       const now = moment().format('DD/MM/YYYY')
-      const nowPlus1 = moment()
-        .add(1, 'day')
-        .format('DD/MM/YYYY')
+      const nowPlus1 = moment().add(1, 'day').format('DD/MM/YYYY')
 
       const { attendanceStatistics } = attendanceStatisticsFactory(oauthApi, prisonApi, whereaboutsApi, jest.fn())
       const req = { query: { agencyId, fromDate: now, toDate: nowPlus1, period: 'AM_PM' } }
@@ -490,8 +484,7 @@ describe('Attendance reason statistics', () => {
         offenders: [
           [
             {
-              html:
-                '<a href=/prisoner/G8974UK class="govuk-link" target="_blank" rel="noopener noreferrer">Smith, Adam</a>',
+              html: '<a href=/prisoner/G8974UK class="govuk-link" target="_blank" rel="noopener noreferrer">Smith, Adam</a>',
             },
             { text: 'G8974UK' },
             { text: '1' },

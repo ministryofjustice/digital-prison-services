@@ -48,10 +48,10 @@ const confirmAppointmentFactory = ({ prisonApi, appointmentsService, logError })
         {}
       )
 
-      const { text: locationDescription } = locationTypes.find(loc => loc.value === Number(locationId))
-      const { text: appointmentTypeDescription } = appointmentTypes.find(app => app.value === appointmentType)
+      const { text: locationDescription } = locationTypes.find((loc) => loc.value === Number(locationId))
+      const { text: appointmentTypeDescription } = appointmentTypes.find((app) => app.value === appointmentType)
       const { text: locationDescriptionForMovementSlip } = (preAppointment &&
-        locationTypes.find(loc => loc.value === Number(preAppointment.locationId))) || { text: locationDescription }
+        locationTypes.find((loc) => loc.value === Number(preAppointment.locationId))) || { text: locationDescription }
 
       const { firstName, lastName, assignedLivingUnitDesc } = await prisonApi.getDetails(res.locals, offenderNo)
 
@@ -94,12 +94,12 @@ const confirmAppointmentFactory = ({ prisonApi, appointmentsService, logError })
       if (appointmentType === 'VLB') {
         const preAppointmentData = preAppointment &&
           preAppointment.locationId && {
-            locationDescription: locationTypes.find(l => l.value === Number(preAppointment.locationId)).text,
+            locationDescription: locationTypes.find((l) => l.value === Number(preAppointment.locationId)).text,
             duration: prepostDurations[preAppointment.duration],
           }
         const postAppointmentData = postAppointment &&
           postAppointment.locationId && {
-            locationDescription: locationTypes.find(l => l.value === Number(postAppointment.locationId)).text,
+            locationDescription: locationTypes.find((l) => l.value === Number(postAppointment.locationId)).text,
             duration: prepostDurations[postAppointment.duration],
           }
 

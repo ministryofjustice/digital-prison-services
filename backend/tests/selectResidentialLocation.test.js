@@ -11,12 +11,10 @@ describe('Select residential location controller', () => {
     req = {}
     res = { locals: { user: { activeCaseLoad: { caseLoadId: 'MDI' } } }, render: jest.fn(), redirect: jest.fn() }
 
-    whereaboutsApi.searchGroups = jest
-      .fn()
-      .mockResolvedValue([
-        { name: 'Houseblock 1', key: 'HB1', children: [] },
-        { name: 'Houseblock 2', key: 'HB2', children: [] },
-      ])
+    whereaboutsApi.searchGroups = jest.fn().mockResolvedValue([
+      { name: 'Houseblock 1', key: 'HB1', children: [] },
+      { name: 'Houseblock 2', key: 'HB2', children: [] },
+    ])
 
     controller = selectResidentialLocationController(whereaboutsApi)
 
@@ -37,7 +35,10 @@ describe('Select residential location controller', () => {
         date: '27/11/2020',
         errors: undefined,
         period: 'AM',
-        residentialLocations: [{ text: 'Houseblock 1', value: 'HB1' }, { text: 'Houseblock 2', value: 'HB2' }],
+        residentialLocations: [
+          { text: 'Houseblock 1', value: 'HB1' },
+          { text: 'Houseblock 2', value: 'HB2' },
+        ],
       })
     })
 

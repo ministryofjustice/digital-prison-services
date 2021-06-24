@@ -132,7 +132,10 @@ describe('case note management', () => {
           hours: '16',
           minutes: '15',
         },
-        types: [{ value: 'OBSERVE', text: 'Observations' }, { value: 'ACHIEVEMENTS', text: 'Achievements' }],
+        types: [
+          { value: 'OBSERVE', text: 'Observations' },
+          { value: 'ACHIEVEMENTS', text: 'Achievements' },
+        ],
         subTypes: [
           { value: 'OBS1', text: 'Observation 1', type: 'OBSERVE' },
           { value: 'ACH1', text: 'Achievement 1', type: 'ACHIEVEMENTS' },
@@ -246,7 +249,7 @@ describe('case note management', () => {
 
     describe('when comment triggers validation errors', () => {
       const text = Array.from(Array(4001).keys())
-        .map(_ => 'A')
+        .map((_) => 'A')
         .join('')
 
       it('should validate maximum length does not exceed 1000', async () => {
@@ -280,9 +283,7 @@ describe('case note management', () => {
             offenderNo,
             text: 'test',
             date: moment().format('DD/MM/YYYY'),
-            hours: moment()
-              .add(1, 'hours')
-              .format('H'),
+            hours: moment().add(1, 'hours').format('H'),
             minutes: moment().format('mm'),
           },
         }

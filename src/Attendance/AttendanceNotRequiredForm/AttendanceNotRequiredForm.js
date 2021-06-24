@@ -11,7 +11,7 @@ import ErrorSummary from '@govuk-react/error-summary'
 import { ButtonContainer, ButtonCancel } from '../../Components/Buttons'
 import { FieldWithError, onHandleErrorClick } from '../../final-form-govuk-helpers'
 
-const validateThenSubmit = submitHandler => values => {
+const validateThenSubmit = (submitHandler) => (values) => {
   const formErrors = []
   const commentText = values.comments && values.comments.trim()
 
@@ -33,7 +33,7 @@ const AttendanceNotRequiredForm = ({ showModal, submitHandler }) => {
 
   return (
     <Form
-      onSubmit={values => validateThenSubmit(submitHandler)(values)}
+      onSubmit={(values) => validateThenSubmit(submitHandler)(values)}
       render={({ handleSubmit, submitting, pristine, submitError: errors }) => (
         <form onSubmit={handleSubmit}>
           {errors && (

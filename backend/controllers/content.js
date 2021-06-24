@@ -1,15 +1,17 @@
-module.exports = ({ contentfulService }) => async (req, res) => {
-  const { path } = req.params
+module.exports =
+  ({ contentfulService }) =>
+  async (req, res) => {
+    const { path } = req.params
 
-  const notFound = () => res.render('notFound.njk', { url: '/' })
+    const notFound = () => res.render('notFound.njk', { url: '/' })
 
-  if (!path) return notFound()
+    if (!path) return notFound()
 
-  const pageContent = await contentfulService.getPagesAsHtml(path)
+    const pageContent = await contentfulService.getPagesAsHtml(path)
 
-  if (!pageContent) return notFound()
+    if (!pageContent) return notFound()
 
-  const { title, content } = pageContent
+    const { title, content } = pageContent
 
-  return res.render('content.njk', { content, title })
-}
+    return res.render('content.njk', { content, title })
+  }

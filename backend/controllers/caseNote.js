@@ -2,7 +2,7 @@ const moment = require('moment')
 const nunjucks = require('nunjucks')
 const { properCaseName } = require('../utils')
 
-const getOffenderUrl = offenderNo => `/prisoner/${offenderNo}`
+const getOffenderUrl = (offenderNo) => `/prisoner/${offenderNo}`
 
 const caseNoteFactory = (prisonApi, caseNotesApi) => {
   const displayCreateCaseNotePage = async (req, res) => {
@@ -13,25 +13,29 @@ const caseNoteFactory = (prisonApi, caseNotesApi) => {
 
       const caseNoteTypes = await caseNotesApi.myCaseNoteTypes(res.locals)
 
-      const types = caseNoteTypes.filter(caseNoteType => caseNoteType.activeFlag === 'Y').map(caseNoteType => ({
-        value: caseNoteType.code,
-        text: caseNoteType.description,
-      }))
+      const types = caseNoteTypes
+        .filter((caseNoteType) => caseNoteType.activeFlag === 'Y')
+        .map((caseNoteType) => ({
+          value: caseNoteType.code,
+          text: caseNoteType.description,
+        }))
 
       const subTypes = caseNoteTypes
-        .filter(caseNoteType => caseNoteType.activeFlag === 'Y')
-        .map(caseNoteType =>
-          caseNoteType.subCodes.filter(sub => sub.activeFlag === 'Y').map(subCode => ({
-            type: caseNoteType.code,
-            value: subCode.code,
-            text: subCode.description,
-          }))
+        .filter((caseNoteType) => caseNoteType.activeFlag === 'Y')
+        .map((caseNoteType) =>
+          caseNoteType.subCodes
+            .filter((sub) => sub.activeFlag === 'Y')
+            .map((subCode) => ({
+              type: caseNoteType.code,
+              value: subCode.code,
+              text: subCode.description,
+            }))
         )
         .reduce((result, subCodes) => result.concat(subCodes), [])
 
       if (req.xhr) {
         const { typeCode } = req.query
-        const filteredSubTypes = subTypes.filter(st => st.type === typeCode)
+        const filteredSubTypes = subTypes.filter((st) => st.type === typeCode)
         return res.send(nunjucks.render('caseNotes/partials/subTypesSelect.njk', { subTypes: filteredSubTypes }))
       }
 
@@ -161,11 +165,7 @@ const caseNoteFactory = (prisonApi, caseNotesApi) => {
         date &&
         hours &&
         minutes &&
-        moment(date, 'DD/MM/YYYY')
-          .hours(hours)
-          .minutes(minutes)
-          .seconds(0)
-          .format('YYYY-MM-DDTHH:mm:ss')
+        moment(date, 'DD/MM/YYYY').hours(hours).minutes(minutes).seconds(0).format('YYYY-MM-DDTHH:mm:ss')
 
       if (dateTime && dateTime > moment().format('YYYY-MM-DDTHH:mm:ss')) {
         errors.push({
@@ -207,25 +207,25 @@ const caseNoteFactory = (prisonApi, caseNotesApi) => {
 
       const caseNoteTypes = await caseNotesApi.myCaseNoteTypes(res.locals)
 
-      const types = caseNoteTypes.map(caseNoteType => ({
+      const types = caseNoteTypes.map((caseNoteType) => ({
         value: caseNoteType.code,
         text: caseNoteType.description,
       }))
 
       const subTypes = caseNoteTypes
-        .map(caseNoteType =>
-          caseNoteType.subCodes.map(subCode => ({
+        .map((caseNoteType) =>
+          caseNoteType.subCodes.map((subCode) => ({
             type: caseNoteType.code,
             value: subCode.code,
             text: subCode.description,
           }))
         )
         .reduce((result, subCodes) => result.concat(subCodes), [])
-        .filter(sub => (type === undefined ? true : sub.type === type))
+        .filter((sub) => (type === undefined ? true : sub.type === type))
 
       if (req.xhr) {
         const { typeCode } = req.query
-        const filteredSubTypes = subTypes.filter(st => st.type === typeCode)
+        const filteredSubTypes = subTypes.filter((st) => st.type === typeCode)
         return res.send(nunjucks.render('caseNotes/partials/subTypesSelect.njk', { subTypes: filteredSubTypes }))
       }
 

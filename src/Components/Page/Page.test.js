@@ -44,12 +44,7 @@ describe('<Page />', () => {
     })
 
     it('should render a back link if prop passed in', () => {
-      expect(
-        wrapper
-          .find('BackLink')
-          .find({ href: 'http://this/' })
-          .exists()
-      ).toEqual(true)
+      expect(wrapper.find('BackLink').find({ href: 'http://this/' }).exists()).toEqual(true)
     })
 
     it('should NOT display the Breadcrumb component when showBreadcrumb is false', () => {

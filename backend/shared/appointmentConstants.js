@@ -18,11 +18,7 @@ const prepostDurations = {
 }
 
 const endRecurringEndingDate = ({ date, startTime, times, repeats }) => {
-  const recurringStartTime =
-    (startTime && moment(startTime)) ||
-    moment(date, DAY_MONTH_YEAR)
-      .hours(0)
-      .minutes(0)
+  const recurringStartTime = (startTime && moment(startTime)) || moment(date, DAY_MONTH_YEAR).hours(0).minutes(0)
 
   const endOfPeriod = calculateEndDate({
     startTime: recurringStartTime,

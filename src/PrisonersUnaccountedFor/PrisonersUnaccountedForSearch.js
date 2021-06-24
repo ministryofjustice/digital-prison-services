@@ -23,16 +23,11 @@ import {
   DummyLink,
 } from './PrisonersUnaccountedForSearch.style'
 
-const showPMPrisonerOption = (timeOfDay, date) => !isTodayOrAfter(date) || (timeOfDay === 'PM' || timeOfDay === 'ED')
+const showPMPrisonerOption = (timeOfDay, date) => !isTodayOrAfter(date) || timeOfDay === 'PM' || timeOfDay === 'ED'
 
 const showEDPrisonerOption = (timeOfDay, date) => !isTodayOrAfter(date) || timeOfDay === 'ED'
 
-const pastAndPresentDay = date =>
-  date.isBefore(
-    moment()
-      .add(1, 'days')
-      .startOf('day')
-  )
+const pastAndPresentDay = (date) => date.isBefore(moment().add(1, 'days').startOf('day'))
 
 const PrisonersUnaccountedForSearch = ({
   handleDateChange,

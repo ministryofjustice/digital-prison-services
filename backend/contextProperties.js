@@ -15,13 +15,13 @@ const setTokens = ({ access_token, refresh_token, authSource }, context) => {
   context.authSource = authSource
 }
 
-const hasTokens = context => Boolean(context && context.access_token && context.refresh_token)
+const hasTokens = (context) => Boolean(context && context.access_token && context.refresh_token)
 
-const getAccessToken = context => (context && context.access_token ? context.access_token : null)
+const getAccessToken = (context) => (context && context.access_token ? context.access_token : null)
 
-const getRefreshToken = context => (context && context.refresh_token ? context.refresh_token : null)
+const getRefreshToken = (context) => (context && context.refresh_token ? context.refresh_token : null)
 
-const normalizeHeaderNames = srcHeaders =>
+const normalizeHeaderNames = (srcHeaders) =>
   Object.keys(srcHeaders).reduce(
     (previous, headerName) => ({
       ...previous,
@@ -47,7 +47,7 @@ const setRequestPagination = (context, headers) => {
   context.requestHeaders = copyNamedHeaders(headerNames, (headers && normalizeHeaderNames(headers)) || {})
 }
 
-const getRequestPagination = context => context.requestHeaders || {}
+const getRequestPagination = (context) => context.requestHeaders || {}
 
 const setResponsePagination = (context, headers) => {
   const headerNames = ['page-offset', 'page-limit', 'sort-fields', 'sort-order', 'total-records']
@@ -71,14 +71,14 @@ const setPaginationFromPageRequest = (context, { totalElements, pageable: { page
   c.responseHeaders = { 'page-offset': offset, 'page-limit': pageSize, 'total-records': totalElements }
 }
 
-const getResponsePagination = context => context.responseHeaders || {}
+const getResponsePagination = (context) => context.responseHeaders || {}
 
 const setCustomRequestHeaders = (context, headers) => {
   // eslint-disable-next-line no-param-reassign
   context.customRequestHeaders = (headers && normalizeHeaderNames(headers)) || {}
 }
 
-const getCustomRequestHeaders = context => context.customRequestHeaders || {}
+const getCustomRequestHeaders = (context) => context.customRequestHeaders || {}
 
 module.exports = {
   setTokens,

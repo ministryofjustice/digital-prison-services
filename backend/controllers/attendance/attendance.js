@@ -4,7 +4,7 @@ const log = require('../../log')
 
 const { absentReasonMapper } = require('../../mappers')
 
-const attendanceFactory = whereaboutsApi => {
+const attendanceFactory = (whereaboutsApi) => {
   const sortByName = (a, b) => {
     if (a.name < b.name) {
       return -1
@@ -42,7 +42,7 @@ const attendanceFactory = whereaboutsApi => {
     log.info(`Number of offenders to be paid ${offenderCount}`)
 
     const { eventLocationId, period, eventDate, prisonId } = offenders[0]
-    const bookingActivities = offenders.map(offender => ({
+    const bookingActivities = offenders.map((offender) => ({
       bookingId: offender.bookingId,
       activityId: offender.eventId,
     }))
@@ -62,7 +62,7 @@ const attendanceFactory = whereaboutsApi => {
     return whereaboutsApi.postAttendances(context, payload)
   }
 
-  const getAbsenceReasons = async context => {
+  const getAbsenceReasons = async (context) => {
     const absenceReasons = await whereaboutsApi.getAbsenceReasons(context)
     const { paidReasons, unpaidReasons, triggersIEPWarning } = absenceReasons
     const mapToAbsentReason = absentReasonMapper(absenceReasons)
@@ -72,9 +72,9 @@ const attendanceFactory = whereaboutsApi => {
       name: 'Approved course',
     }
 
-    const paidReasonsExcluding = name =>
+    const paidReasonsExcluding = (name) =>
       paidReasons
-        .filter(reason => reason !== name)
+        .filter((reason) => reason !== name)
         .map(mapToAbsentReason)
         .sort(sortByName)
 

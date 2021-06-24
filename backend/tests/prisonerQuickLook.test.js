@@ -252,8 +252,7 @@ describe('prisoner profile quick look', () => {
               },
               {
                 label: 'Damage obligations',
-                html:
-                  '<a href="/prisoner/ABC123/prisoner-finance-details/damage-obligations" class="govuk-link">£0.00</a>',
+                html: '<a href="/prisoner/ABC123/prisoner-finance-details/damage-obligations" class="govuk-link">£0.00</a>',
                 visible: false,
               },
             ],
@@ -297,8 +296,7 @@ describe('prisoner profile quick look', () => {
               },
               {
                 label: 'Damage obligations',
-                html:
-                  '<a href="/prisoner/ABC123/prisoner-finance-details/damage-obligations" class="govuk-link">£65.00</a>',
+                html: '<a href="/prisoner/ABC123/prisoner-finance-details/damage-obligations" class="govuk-link">£65.00</a>',
                 visible: true,
               },
             ],

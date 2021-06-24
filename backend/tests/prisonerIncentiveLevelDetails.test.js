@@ -97,7 +97,10 @@ describe('Prisoner incentive level details', () => {
       errors: [],
       currentIepDateTime: '2017-08-15T16:04:35',
       nextReviewDate: '15 August 2018',
-      establishments: [{ value: 'HEI', text: 'Hewell' }, { value: 'LEI', text: 'Leeds' }],
+      establishments: [
+        { value: 'HEI', text: 'Hewell' },
+        { value: 'LEI', text: 'Leeds' },
+      ],
       formValues: {},
       noResultsFoundMessage: '',
       levels: [

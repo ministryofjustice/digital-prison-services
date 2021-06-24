@@ -3,7 +3,7 @@ import * as PropTypes from 'prop-types'
 import { linkOnClick } from '../helpers'
 import { ASC, DESC } from './sortOrder'
 
-const SortableColumn = props => {
+const SortableColumn = (props) => {
   const { heading, column, sortOrder, setColumnSort, sortColumn } = props
   let triangleImage = ''
 

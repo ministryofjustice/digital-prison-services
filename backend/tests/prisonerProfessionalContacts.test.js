@@ -186,7 +186,10 @@ describe('Prisoner professional contacts', () => {
         personService.getPersonContactDetails.mockResolvedValue({
           addresses: [businessNonPrimary, businessPrimary],
           emails: [{ email: 'test3@email.com' }, { email: 'test4@email.com' }],
-          phones: [{ number: '04444444444', type: 'MOB' }, { number: '055555555555', type: 'BUS', ext: '123' }],
+          phones: [
+            { number: '04444444444', type: 'MOB' },
+            { number: '055555555555', type: 'BUS', ext: '123' },
+          ],
         })
 
         allocationManagerApi.getPomByOffenderNo.mockResolvedValue({
