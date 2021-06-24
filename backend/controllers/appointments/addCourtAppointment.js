@@ -4,7 +4,7 @@ const { formatName } = require('../../utils')
 const { serviceUnavailableMessage } = require('../../common-messages')
 
 const addCourtAppointmentsFactory = (prisonApi, logError) => {
-  const getValidationMessages = fields => {
+  const getValidationMessages = (fields) => {
     const {
       date,
       startTime,

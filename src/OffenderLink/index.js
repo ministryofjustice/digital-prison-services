@@ -2,7 +2,7 @@ import React from 'react'
 import PropTypes from 'prop-types'
 import { getOffenderLink, getAlertsLink } from '../links'
 
-const OffenderLink = props => {
+const OffenderLink = (props) => {
   const { offenderNo, alerts, children } = props
   return (
     <a

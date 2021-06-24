@@ -14,7 +14,7 @@ const {
 } = require('../config')
 const logErrorAndContinue = require('../shared/logErrorAndContinue')
 
-const isComplexityEnabledFor = agencyId => complexity.enabled_prisons?.includes(agencyId)
+const isComplexityEnabledFor = (agencyId) => complexity.enabled_prisons?.includes(agencyId)
 
 module.exports = ({
   prisonApi,
@@ -87,20 +87,22 @@ module.exports = ({
         oauthApi.userRoles(context),
         pathfinderApi.getPathfinderDetails(systemContext, offenderNo),
         socApi.getSocDetails(systemContext, offenderNo, socEnabled),
-      ].map(apiCall => logErrorAndContinue(apiCall))
+      ].map((apiCall) => logErrorAndContinue(apiCall))
     )
 
-    const prisonersActiveAlertCodes = alerts.filter(alert => !alert.expired).map(alert => alert.alertCode)
-    const alertsToShow = alertFlagLabels.filter(alertFlag =>
-      alertFlag.alertCodes.some(alert => prisonersActiveAlertCodes.includes(alert) && profileAlertCodes.includes(alert))
+    const prisonersActiveAlertCodes = alerts.filter((alert) => !alert.expired).map((alert) => alert.alertCode)
+    const alertsToShow = alertFlagLabels.filter((alertFlag) =>
+      alertFlag.alertCodes.some(
+        (alert) => prisonersActiveAlertCodes.includes(alert) && profileAlertCodes.includes(alert)
+      )
     )
 
-    const canViewInactivePrisoner = userRoles && userRoles.some(role => role.roleCode === 'INACTIVE_BOOKINGS')
-    const offenderInCaseload = userCaseloads && userCaseloads.some(caseload => caseload.caseLoadId === agencyId)
+    const canViewInactivePrisoner = userRoles && userRoles.some((role) => role.roleCode === 'INACTIVE_BOOKINGS')
+    const offenderInCaseload = userCaseloads && userCaseloads.some((caseload) => caseload.caseLoadId === agencyId)
 
     const isCatToolUser = Boolean(
       userRoles &&
-        userRoles.some(role =>
+        userRoles.some((role) =>
           [
             'CREATE_CATEGORISATION',
             'CREATE_RECATEGORISATION',
@@ -111,12 +113,12 @@ module.exports = ({
     )
 
     const canViewProbationDocuments = Boolean(
-      userRoles && userRoles.some(role => ['VIEW_PROBATION_DOCUMENTS', 'POM'].includes(role.roleCode))
+      userRoles && userRoles.some((role) => ['VIEW_PROBATION_DOCUMENTS', 'POM'].includes(role.roleCode))
     )
 
     const isPathfinderUser = Boolean(
       userRoles &&
-        userRoles.some(role =>
+        userRoles.some((role) =>
           [
             'PF_STD_PRISON',
             'PF_STD_PROBATION',
@@ -132,14 +134,14 @@ module.exports = ({
 
     const isPathfinderReadWriteUser = Boolean(
       userRoles &&
-        userRoles.some(role => ['PF_STD_PRISON', 'PF_STD_PROBATION', 'PF_APPROVAL', 'PF_HQ'].includes(role.roleCode))
+        userRoles.some((role) => ['PF_STD_PRISON', 'PF_STD_PROBATION', 'PF_APPROVAL', 'PF_HQ'].includes(role.roleCode))
     )
 
     const canViewPathfinderLink = Boolean(isPathfinderUser && pathfinderDetails)
-    const useOfForceEnabledPrisons = useOfForcePrisons.split(',').map(prison => prison.trim().toUpperCase())
+    const useOfForceEnabledPrisons = useOfForcePrisons.split(',').map((prison) => prison.trim().toUpperCase())
 
     const isSocUser = Boolean(
-      userRoles && userRoles.some(role => ['SOC_CUSTODY', 'SOC_COMMUNITY'].includes(role.roleCode))
+      userRoles && userRoles.some((role) => ['SOC_CUSTODY', 'SOC_COMMUNITY'].includes(role.roleCode))
     )
 
     const canViewSocLink = Boolean(isSocUser && socDetails)
@@ -183,7 +185,7 @@ module.exports = ({
       offenderName: putLastNameFirst(prisonerDetails.firstName, prisonerDetails.lastName),
       offenderNo,
       offenderRecordRetained: offenderRetentionRecord && hasLength(offenderRetentionRecord.retentionReasons),
-      showAddKeyworkerSession: staffRoles && staffRoles.some(role => role.role === 'KW'),
+      showAddKeyworkerSession: staffRoles && staffRoles.some((role) => role.role === 'KW'),
       showReportUseOfForce: useOfForceEnabledPrisons.includes(currentUser.activeCaseLoadId),
       useOfForceUrl: `${useOfForceUrl}/report/${bookingId}/report-use-of-force`,
       userCanEdit: (canViewInactivePrisoner && ['OUT', 'TRN'].includes(agencyId)) || offenderInCaseload,

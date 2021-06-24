@@ -8,7 +8,7 @@ const changeCaseloadFactory = (prisonApi, logError) => {
       return res.redirect('/')
     }
 
-    const options = allCaseloads.map(caseload => ({ value: caseload.caseLoadId, text: caseload.description }))
+    const options = allCaseloads.map((caseload) => ({ value: caseload.caseLoadId, text: caseload.description }))
 
     return res.render('changeCaseload.njk', {
       title: 'Change caseload',

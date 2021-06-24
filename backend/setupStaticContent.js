@@ -13,7 +13,7 @@ module.exports = () => {
     '../node_modules/govuk-frontend',
     '../node_modules/@ministryofjustice/frontend',
   ]
-  assetPaths.forEach(dir => {
+  assetPaths.forEach((dir) => {
     router.use('/assets', express.static(path.join(__dirname, dir)))
   })
 

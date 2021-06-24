@@ -1,8 +1,8 @@
 const { formatCurrency, formatTimestampToDate } = require('../utils')
 
 module.exports = (transactions, prisons, showBalance = true, mergeAmounts = false) =>
-  transactions.map(transaction => {
-    const { description: prisonName } = prisons.find(agency => transaction.agencyId === agency.agencyId)
+  transactions.map((transaction) => {
+    const { description: prisonName } = prisons.find((agency) => transaction.agencyId === agency.agencyId)
     const { penceAmount, currentBalance } = transaction
 
     const formattedMoneyIn = formatCurrency(typeof penceAmount === 'number' ? penceAmount / 100 : '')

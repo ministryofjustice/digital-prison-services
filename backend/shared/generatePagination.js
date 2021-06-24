@@ -15,7 +15,7 @@ module.exports = ({ totalPages, totalElements, pageNumber, offset, pageSize, url
   const hasMultiplePages = totalPages > 1
 
   const pageList = hasMultiplePages
-    ? [...Array(totalPages).keys()].map(page => {
+    ? [...Array(totalPages).keys()].map((page) => {
         url.searchParams.set('page', page)
         return {
           text: page + 1,

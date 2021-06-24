@@ -1,13 +1,7 @@
 module.exports = ({ whereaboutsApi, appointmentDetailsService }) => {
   const renderTemplate = (req, res, id, appointmentViewModel, errors) => {
-    const {
-      isRecurring,
-      additionalDetails,
-      basicDetails,
-      prepostData,
-      recurringDetails,
-      timeDetails,
-    } = appointmentViewModel
+    const { isRecurring, additionalDetails, basicDetails, prepostData, recurringDetails, timeDetails } =
+      appointmentViewModel
 
     return res.render('appointmentConfirmDeletion', {
       errors: req.flash('deletionErrors'),

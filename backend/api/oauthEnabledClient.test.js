@@ -201,7 +201,7 @@ describe('Test clients built by oauthEnabledClient', () => {
         }
       })
       it('Should retry twice if request fails', async () => {
-        const pipe = new Promise(resolve => {
+        const pipe = new Promise((resolve) => {
           mock
             .get('/api/users/me')
             .reply(500, { failure: 'one' })
@@ -210,23 +210,19 @@ describe('Test clients built by oauthEnabledClient', () => {
             .get('/api/users/me')
             .reply(200, Buffer.from('some binary data'), ['Content-Type', 'image/png'])
 
-          client.pipe(
-            {},
-            '/api/users/me',
-            {
-              ...res,
-              end: () => {
-                resolve()
-              },
-            }
-          )
+          client.pipe({}, '/api/users/me', {
+            ...res,
+            end: () => {
+              resolve()
+            },
+          })
         })
 
         await pipe
         expect(res.write).toHaveBeenCalled()
       })
       it('Should retry many time if configure with more retires if request fails', async () => {
-        const pipe = new Promise(resolve => {
+        const pipe = new Promise((resolve) => {
           mock
             .get('/api/users/me')
             .reply(500, { failure: 'one' })
@@ -258,22 +254,18 @@ describe('Test clients built by oauthEnabledClient', () => {
         expect(res.write).toHaveBeenCalled()
       })
       it('Should set headers on response to pipe to', async () => {
-        const pipe = new Promise(resolve => {
+        const pipe = new Promise((resolve) => {
           mock.get('/api/users/me').reply(200, Buffer.from('some binary data'), {
             'Content-Type': 'image/png',
             'Content-Length': 123,
           })
 
-          client.pipe(
-            {},
-            '/api/users/me',
-            {
-              ...res,
-              end: () => {
-                resolve()
-              },
-            }
-          )
+          client.pipe({}, '/api/users/me', {
+            ...res,
+            end: () => {
+              resolve()
+            },
+          })
         })
 
         await pipe
@@ -289,9 +281,7 @@ describe('Test clients built by oauthEnabledClient', () => {
 
     it('Should set the url correctly if ends with a /', async () => {
       const client = clientFactory({ baseUrl: `${hostname}/`, timeout: 2000 })
-      nock(hostname)
-        .get('/api/users/me')
-        .reply(200, {})
+      nock(hostname).get('/api/users/me').reply(200, {})
 
       const context = {}
       contextProperties.setTokens({ access_token: 'a', refresh_token: 'b' }, context)
@@ -303,9 +293,7 @@ describe('Test clients built by oauthEnabledClient', () => {
 
     it("Should set the url correctly if doesn't end with a /", async () => {
       const client = clientFactory({ baseUrl: hostname, timeout: 2000 })
-      nock(hostname)
-        .get('/api/users/me')
-        .reply(200, {})
+      nock(hostname).get('/api/users/me').reply(200, {})
 
       const context = {}
       contextProperties.setTokens({ access_token: 'a', refresh_token: 'b' }, context)
@@ -324,9 +312,7 @@ describe('Test clients built by oauthEnabledClient', () => {
     })
 
     it('Should log 404 correctly', async () => {
-      nock(hostname)
-        .get('/api/users/me')
-        .reply(404)
+      nock(hostname).get('/api/users/me').reply(404)
 
       await expect(client.get({}, '/api/users/me')).rejects.toThrow('Not Found')
 
@@ -334,13 +320,7 @@ describe('Test clients built by oauthEnabledClient', () => {
     })
 
     it('Should log 500 correctly', async () => {
-      nock(hostname)
-        .get('/api/users/me')
-        .reply(500)
-        .get('/api/users/me')
-        .reply(500)
-        .get('/api/users/me')
-        .reply(500)
+      nock(hostname).get('/api/users/me').reply(500).get('/api/users/me').reply(500).get('/api/users/me').reply(500)
 
       await expect(client.get({}, '/api/users/me')).rejects.toThrow('Internal Server Error')
 

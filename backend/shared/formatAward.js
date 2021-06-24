@@ -1,9 +1,9 @@
 const { formatTimestampToDate, formatCurrency } = require('../utils')
 
-const pluraliseDay = days => (days > 1 ? 'days' : 'day')
-const pluraliseMonth = months => (months > 1 ? 'months' : 'month')
+const pluraliseDay = (days) => (days > 1 ? 'days' : 'day')
+const pluraliseMonth = (months) => (months > 1 ? 'months' : 'month')
 
-const durationText = award => {
+const durationText = (award) => {
   if (award.months && award.days) {
     return `${award.months} ${pluraliseMonth(award.months)} and ${award.days} ${pluraliseDay(award.days)}`
   }
@@ -14,7 +14,7 @@ const durationText = award => {
   )
 }
 
-const descriptionWithLimit = award => {
+const descriptionWithLimit = (award) => {
   switch (award.sanctionCode) {
     case 'STOP_PCT': {
       return `${award.sanctionCodeDescription.replace('(%)', '').trim()} (${award.limit}%)`
@@ -29,7 +29,7 @@ const descriptionWithLimit = award => {
   }
 }
 
-module.exports = award => ({
+module.exports = (award) => ({
   ...award,
   sanctionCodeDescription: descriptionWithLimit(award),
   effectiveDate: formatTimestampToDate(award.effectiveDate),

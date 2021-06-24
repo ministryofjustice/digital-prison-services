@@ -20,7 +20,7 @@ class DateOfBirthInput extends Component {
     this.onChange({})
   }
 
-  onChange = value => {
+  onChange = (value) => {
     const { handleDateOfBirthChange } = this.props
     // value only holds the current input value, so need to copy all over and then replace
     const {

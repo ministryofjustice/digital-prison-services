@@ -59,7 +59,10 @@ describe('Homepage', () => {
       expect(res.render).toHaveBeenCalledWith(
         'homepage/homepage.njk',
         expect.objectContaining({
-          locationOptions: [{ text: 'Moorland (HMP & YOI)', value: 'MDI' }, { text: 'Houseblock 1', value: 'MDI-1' }],
+          locationOptions: [
+            { text: 'Moorland (HMP & YOI)', value: 'MDI' },
+            { text: 'Houseblock 1', value: 'MDI-1' },
+          ],
         })
       )
     })

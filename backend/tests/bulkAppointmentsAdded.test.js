@@ -41,9 +41,10 @@ describe('bulk appointments confirm', () => {
     describe('when there are no errors', () => {
       const req = {
         session: { data: null },
-        flash: jest
-          .fn()
-          .mockReturnValue([{ lastName: 'Smith', offenderNo: 'ABC123' }, { lastName: 'Jones', offenderNo: 'ABC345' }]),
+        flash: jest.fn().mockReturnValue([
+          { lastName: 'Smith', offenderNo: 'ABC123' },
+          { lastName: 'Jones', offenderNo: 'ABC345' },
+        ]),
       }
       const res = { ...mockRes }
 

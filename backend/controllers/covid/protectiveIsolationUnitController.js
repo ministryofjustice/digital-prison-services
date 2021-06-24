@@ -3,7 +3,7 @@ const { sortByDateTime } = require('../../utils')
 const { alerts } = require('../../services/covidService')
 
 module.exports = ({ covidService, nowGetter = moment }) => {
-  const formatResult = result => {
+  const formatResult = (result) => {
     const alertCreated = moment(result.alertCreated)
     const now = nowGetter()
     const daysInUnit = now.diff(alertCreated, 'days')

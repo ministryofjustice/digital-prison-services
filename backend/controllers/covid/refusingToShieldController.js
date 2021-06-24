@@ -1,7 +1,7 @@
 const { alerts } = require('../../services/covidService')
 
 module.exports = ({ covidService }) => {
-  const formatResult = result => ({
+  const formatResult = (result) => ({
     bookingId: result.bookingId,
     offenderNo: result.offenderNo,
     name: result.name,

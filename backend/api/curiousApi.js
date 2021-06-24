@@ -38,7 +38,7 @@ const dummyLearnerProfiles = [
   },
 ]
 
-const curiousApiFactory = _ => ({
+const curiousApiFactory = (_) => ({
   getLearnerProfiles() {
     return Promise.resolve(dummyLearnerProfiles)
   },

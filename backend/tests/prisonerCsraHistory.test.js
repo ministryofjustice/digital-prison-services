@@ -154,8 +154,7 @@ describe('Prisoner CSRA History', () => {
             { text: 'Doncaster' },
             { text: 'comment' },
             {
-              html:
-                '<a class="govuk-link" href="/prisoner/ABC123/csra-review?assessmentSeq=3&bookingId=2">View details</a>',
+              html: '<a class="govuk-link" href="/prisoner/ABC123/csra-review?assessmentSeq=3&bookingId=2">View details</a>',
             },
           ],
           [
@@ -164,8 +163,7 @@ describe('Prisoner CSRA History', () => {
             { text: 'Moorland' },
             { text: 'Not entered' },
             {
-              html:
-                '<a class="govuk-link" href="/prisoner/ABC123/csra-review?assessmentSeq=1&bookingId=1">View details</a>',
+              html: '<a class="govuk-link" href="/prisoner/ABC123/csra-review?assessmentSeq=1&bookingId=1">View details</a>',
             },
           ],
         ],
@@ -188,8 +186,7 @@ describe('Prisoner CSRA History', () => {
                 { text: 'Doncaster' },
                 { text: 'comment' },
                 {
-                  html:
-                    '<a class="govuk-link" href="/prisoner/ABC123/csra-review?assessmentSeq=3&bookingId=2">View details</a>',
+                  html: '<a class="govuk-link" href="/prisoner/ABC123/csra-review?assessmentSeq=3&bookingId=2">View details</a>',
                 },
               ],
             ],
@@ -212,8 +209,7 @@ describe('Prisoner CSRA History', () => {
                 { text: 'Moorland' },
                 { text: 'Not entered' },
                 {
-                  html:
-                    '<a class="govuk-link" href="/prisoner/ABC123/csra-review?assessmentSeq=1&bookingId=1">View details</a>',
+                  html: '<a class="govuk-link" href="/prisoner/ABC123/csra-review?assessmentSeq=1&bookingId=1">View details</a>',
                 },
               ],
             ],
@@ -236,8 +232,7 @@ describe('Prisoner CSRA History', () => {
                 { text: 'Doncaster' },
                 { text: 'comment' },
                 {
-                  html:
-                    '<a class="govuk-link" href="/prisoner/ABC123/csra-review?assessmentSeq=3&bookingId=2">View details</a>',
+                  html: '<a class="govuk-link" href="/prisoner/ABC123/csra-review?assessmentSeq=3&bookingId=2">View details</a>',
                 },
               ],
             ],

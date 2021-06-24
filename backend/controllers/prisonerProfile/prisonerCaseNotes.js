@@ -42,14 +42,14 @@ module.exports = ({ caseNotesApi, prisonerProfileService, paginationService, nun
 
     const caseNoteTypes = await caseNotesApi.getCaseNoteTypes(res.locals)
 
-    const types = caseNoteTypes.map(caseNoteType => ({
+    const types = caseNoteTypes.map((caseNoteType) => ({
       value: caseNoteType.code,
       text: caseNoteType.description,
     }))
 
     const subTypes = caseNoteTypes
-      .map(caseNoteType =>
-        caseNoteType.subCodes.map(subCode => ({
+      .map((caseNoteType) =>
+        caseNoteType.subCodes.map((subCode) => ({
           type: caseNoteType.code,
           value: subCode.code,
           text: subCode.description,
@@ -59,16 +59,16 @@ module.exports = ({ caseNotesApi, prisonerProfileService, paginationService, nun
 
     if (req.xhr) {
       const { typeCode } = req.query
-      const filteredSubTypes = subTypes.filter(st => st.type === typeCode)
+      const filteredSubTypes = subTypes.filter((st) => st.type === typeCode)
       return res.send(nunjucks.render(`${templatePath}/partials/subTypesSelect.njk`, { subTypes: filteredSubTypes }))
     }
 
     const prisonerProfileData = await prisonerProfileService.getPrisonerProfileData(res.locals, offenderNo)
 
-    const userRoles = await oauthApi.userRoles(res.locals).then(roles => roles.map(role => role.roleCode))
+    const userRoles = await oauthApi.userRoles(res.locals).then((roles) => roles.map((role) => role.roleCode))
     const hasDeleteRole = userRoles.includes('DELETE_SENSITIVE_CASE_NOTES')
 
-    const caseNoteViewData = caseNotes.content.map(caseNote => {
+    const caseNoteViewData = caseNotes.content.map((caseNote) => {
       const creationDateTime = moment(caseNote.creationDateTime, DATE_TIME_FORMAT_SPEC)
 
       const day = creationDateTime.format(MOMENT_DAY_OF_THE_WEEK)
@@ -77,7 +77,7 @@ module.exports = ({ caseNotesApi, prisonerProfileService, paginationService, nun
       const authorNames = getNamesFromString(caseNote.authorName)
       const canDelete = hasDeleteRole && caseNote.source === SECURE_CASE_NOTE_SOURCE
 
-      const amendments = caseNote.amendments.map(amendment => {
+      const amendments = caseNote.amendments.map((amendment) => {
         const amendmentCreatedDateTime = moment(amendment.creationDateTime, DATE_TIME_FORMAT_SPEC)
         return {
           day: amendmentCreatedDateTime.format(MOMENT_DAY_OF_THE_WEEK),
@@ -87,9 +87,7 @@ module.exports = ({ caseNotesApi, prisonerProfileService, paginationService, nun
           text: amendment.additionalNoteText,
           deleteLink:
             canDelete &&
-            `/prisoner/${offenderNo}/case-notes/delete-case-note/${caseNote.caseNoteId}/${
-              amendment.caseNoteAmendmentId
-            }`,
+            `/prisoner/${offenderNo}/case-notes/delete-case-note/${caseNote.caseNoteId}/${amendment.caseNoteAmendmentId}`,
         }
       })
 
@@ -127,7 +125,7 @@ module.exports = ({ caseNotesApi, prisonerProfileService, paginationService, nun
       return { createdByColumn, caseNoteDetailColumn }
     })
 
-    const selectedSubTypes = subTypes.filter(sub => sub.type === type)
+    const selectedSubTypes = subTypes.filter((sub) => sub.type === type)
 
     return res.render(`${templatePath}/caseNotes.njk`, {
       prisonerProfileData,

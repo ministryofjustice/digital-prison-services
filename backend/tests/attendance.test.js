@@ -2,11 +2,8 @@ Reflect.deleteProperty(process.env, 'APPINSIGHTS_INSTRUMENTATIONKEY')
 
 const context = {}
 const whereaboutsApi = {}
-const {
-  updateAttendance,
-  getAbsenceReasons,
-  batchUpdateAttendance,
-} = require('../controllers/attendance/attendance').attendanceFactory(whereaboutsApi)
+const { updateAttendance, getAbsenceReasons, batchUpdateAttendance } =
+  require('../controllers/attendance/attendance').attendanceFactory(whereaboutsApi)
 
 describe('Attendence and Pay controller', () => {
   const attendenceDetails = {

@@ -1,13 +1,13 @@
 const contextProperties = require('../contextProperties')
 const { mapToQueryString } = require('../utils')
 
-const offenderSearchApiFactory = client => {
-  const processResponse = context => response => {
+const offenderSearchApiFactory = (client) => {
+  const processResponse = (context) => (response) => {
     contextProperties.setPaginationFromPageRequest(context, response.body)
     return response.body.content
   }
 
-  const changeFieldNames = () => data =>
+  const changeFieldNames = () => (data) =>
     data.map(
       ({ prisonerNumber, bookingId, firstName, lastName, dateOfBirth, prisonId, locationDescription, status }) => ({
         offenderNo: prisonerNumber,

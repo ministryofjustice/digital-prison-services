@@ -4,7 +4,7 @@ const { repeatTypes } = require('../shared/appointmentConstants')
 
 const { DATE_TIME_FORMAT_SPEC, DAY_MONTH_YEAR } = require('../../src/dateHelpers')
 
-const buildBodyForDate = date => {
+const buildBodyForDate = (date) => {
   const startTime = moment().add(1, 'hours')
   const endTime = moment().add(2, 'hours')
 
@@ -87,8 +87,14 @@ describe('Add appointment details controller', () => {
 
     it('should render template with view model', async () => {
       appointmentsService.getAppointmentOptions.mockReturnValue({
-        appointmentTypes: [{ value: 'app1', text: 'app1' }, { value: 2, text: 'app2' }],
-        locationTypes: [{ value: 1, text: 'loc1' }, { value: 2, text: 'loc2' }],
+        appointmentTypes: [
+          { value: 'app1', text: 'app1' },
+          { value: 2, text: 'app2' },
+        ],
+        locationTypes: [
+          { value: 1, text: 'loc1' },
+          { value: 2, text: 'loc2' },
+        ],
       })
 
       await controller.index(req, res)
@@ -107,8 +113,14 @@ describe('Add appointment details controller', () => {
         startTimeHours: '',
         startTimeMinutes: '',
         title: 'Add appointment details',
-        appointmentTypes: [{ value: 'app1', text: 'app1' }, { value: 2, text: 'app2' }],
-        locations: [{ value: 1, text: 'loc1' }, { value: 2, text: 'loc2' }],
+        appointmentTypes: [
+          { value: 'app1', text: 'app1' },
+          { value: 2, text: 'app2' },
+        ],
+        locations: [
+          { value: 1, text: 'loc1' },
+          { value: 2, text: 'loc2' },
+        ],
       })
     })
 
@@ -120,14 +132,8 @@ describe('Add appointment details controller', () => {
         appointmentType: 'app1',
         location: 1,
         date: now.format(DAY_MONTH_YEAR),
-        startTime: now
-          .hour(1)
-          .minutes(30)
-          .format(DATE_TIME_FORMAT_SPEC),
-        endTime: now
-          .hours(2)
-          .minutes(33)
-          .format(DATE_TIME_FORMAT_SPEC),
+        startTime: now.hour(1).minutes(30).format(DATE_TIME_FORMAT_SPEC),
+        endTime: now.hours(2).minutes(33).format(DATE_TIME_FORMAT_SPEC),
         sameTimeAppointments: 'yes',
         comments: 'test',
         times: 1,
@@ -136,8 +142,14 @@ describe('Add appointment details controller', () => {
       }
 
       appointmentsService.getAppointmentOptions.mockReturnValue({
-        appointmentTypes: [{ value: 'app1', text: 'app1' }, { value: 2, text: 'app2' }],
-        locationTypes: [{ value: 1, text: 'loc1' }, { value: 2, text: 'loc2' }],
+        appointmentTypes: [
+          { value: 'app1', text: 'app1' },
+          { value: 2, text: 'app2' },
+        ],
+        locationTypes: [
+          { value: 1, text: 'loc1' },
+          { value: 2, text: 'loc2' },
+        ],
       })
 
       await controller.index(req, res)
@@ -145,13 +157,19 @@ describe('Add appointment details controller', () => {
       expect(res.render).toHaveBeenCalledWith('bulkAppointmentsAddDetails.njk', {
         ...buildBodyForDate(now),
         appointmentType: 'app1',
-        appointmentTypes: [{ text: 'app1', value: 'app1' }, { text: 'app2', value: 2 }],
+        appointmentTypes: [
+          { text: 'app1', value: 'app1' },
+          { text: 'app2', value: 2 },
+        ],
         comments: 'test',
         date: now.format(DAY_MONTH_YEAR),
         endTimeHours: '02',
         endTimeMinutes: '33',
         location: 1,
-        locations: [{ text: 'loc1', value: 1 }, { text: 'loc2', value: 2 }],
+        locations: [
+          { text: 'loc1', value: 1 },
+          { text: 'loc2', value: 2 },
+        ],
         sameTimeAppointments: 'yes',
         startTimeHours: '01',
         startTimeMinutes: '30',
@@ -218,9 +236,7 @@ describe('Add appointment details controller', () => {
       it('should only care about start times being in the past if the date is today', async () => {
         res.redirect = jest.fn()
 
-        const date = moment()
-          .add(1, 'day')
-          .format(DAY_MONTH_YEAR)
+        const date = moment().add(1, 'day').format(DAY_MONTH_YEAR)
         const startTime = moment().subtract(5, 'minutes')
 
         const startTimeHours = startTime.hour()
@@ -273,13 +289,11 @@ describe('Add appointment details controller', () => {
       })
 
       it('should validate maximum length of comments', async () => {
-        const comments = [...Array(3601).keys()].map(_ => 'A').join('')
+        const comments = [...Array(3601).keys()].map((_) => 'A').join('')
 
         req.body = {
           date: moment().format(DAY_MONTH_YEAR),
-          startTimeHours: moment()
-            .add(1, 'hours')
-            .hours(),
+          startTimeHours: moment().add(1, 'hours').hours(),
           startTimeMinutes: '00',
           appointmentType: 'app1',
           location: 1,
@@ -301,9 +315,7 @@ describe('Add appointment details controller', () => {
       it('should validate that date is in the correct format', async () => {
         req.body = {
           date: moment().format(DATE_TIME_FORMAT_SPEC),
-          startTimeHours: moment()
-            .add(1, 'hours')
-            .hours(),
+          startTimeHours: moment().add(1, 'hours').hours(),
           startTimeMinutes: '00',
           appointmentType: 'app1',
           location: 1,
@@ -328,9 +340,7 @@ describe('Add appointment details controller', () => {
         })
 
         req.body = {
-          date: moment()
-            .subtract(1, 'days')
-            .format(DAY_MONTH_YEAR),
+          date: moment().subtract(1, 'days').format(DAY_MONTH_YEAR),
           startTimeHours: '00',
           startTimeMinutes: '00',
           appointmentType: 'app1',
@@ -387,10 +397,7 @@ describe('Add appointment details controller', () => {
 
       it('should return a error message when daily x times days exceeds 1 year', async () => {
         const date = moment().endOf('day')
-        const yearAndDay = moment()
-          .endOf('day')
-          .add('1', 'year')
-          .add(2, 'days')
+        const yearAndDay = moment().endOf('day').add('1', 'year').add(2, 'days')
 
         const days = Math.abs(date.diff(yearAndDay, 'days', true))
 
@@ -439,9 +446,7 @@ describe('Add appointment details controller', () => {
       })
 
       it('should return an error message when date is on a Sunday', async () => {
-        const date = moment()
-          .day('SUNDAY')
-          .add(1, 'week')
+        const date = moment().day('SUNDAY').add(1, 'week')
 
         req.body = {
           ...buildBodyForDate(date),
@@ -641,8 +646,14 @@ describe('Add appointment details controller', () => {
 
       it('should return selected location and appointment type', async () => {
         appointmentsService.getAppointmentOptions.mockReturnValue({
-          appointmentTypes: [{ value: 'app1', text: 'appointment 1' }, { value: 'app2', text: 'appointment 2' }],
-          locationTypes: [{ value: 1, text: 'location 1' }, { value: 2, text: 'location 2' }],
+          appointmentTypes: [
+            { value: 'app1', text: 'appointment 1' },
+            { value: 'app2', text: 'appointment 2' },
+          ],
+          locationTypes: [
+            { value: 1, text: 'location 1' },
+            { value: 2, text: 'location 2' },
+          ],
         })
 
         req.body = {
@@ -659,7 +670,10 @@ describe('Add appointment details controller', () => {
               { text: 'appointment 1', value: 'app1' },
               { selected: true, text: 'appointment 2', value: 'app2' },
             ],
-            locations: [{ text: 'location 1', value: 1 }, { selected: true, text: 'location 2', value: 2 }],
+            locations: [
+              { text: 'location 1', value: 1 },
+              { selected: true, text: 'location 2', value: 2 },
+            ],
           })
         )
       })

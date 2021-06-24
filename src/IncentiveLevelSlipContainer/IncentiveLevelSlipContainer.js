@@ -25,7 +25,7 @@ function IncentiveLevelSlipContainer() {
         )
         const caseNoteData = await axios
           .get(`/api/get-case-note/${offenderNo}/${casenoteId}`)
-          .then(promise => promise.data)
+          .then((promise) => promise.data)
 
         setIepData({
           type: caseNoteData.subTypeDescription,

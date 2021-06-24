@@ -18,7 +18,7 @@ const ATTEND_COLUMN = 8
 const DONT_ATTEND_COLUMN = 9
 
 const waitForAsync = () =>
-  new Promise(resolve =>
+  new Promise((resolve) =>
     setTimeout(() => {
       resolve()
     }, 0)
@@ -200,10 +200,7 @@ describe('Offender activity list results component', () => {
     expect(component.find('.whereabouts-date').text()).toEqual(`${longDateFormat} - ED`)
 
     // Dig into the DatePicker component
-    const searchDate = component
-      .find('WhereaboutsDatePicker')
-      .dive()
-      .prop('input').value
+    const searchDate = component.find('WhereaboutsDatePicker').dive().prop('input').value
     expect(searchDate).toEqual(date)
     const periodSelect = component.find('#period-select')
     expect(periodSelect.some('[value="ED"]')).toEqual(true)
@@ -212,130 +209,51 @@ describe('Offender activity list results component', () => {
     expect(tr.length).toEqual(5) // 4 plus table header tr
     const row1Tds = tr.at(1).find('td')
 
-    expect(
-      row1Tds
-        .at(OFFENDER_NAME_COLUMN)
-        .childAt(0)
-        .dive()
-        .childAt(0)
-        .dive()
-        .text()
-    ).toEqual('Anderson, Arthur')
+    expect(row1Tds.at(OFFENDER_NAME_COLUMN).childAt(0).dive().childAt(0).dive().text()).toEqual('Anderson, Arthur')
     expect(row1Tds.at(NOMS_ID_COLUMN).text()).toEqual('A1234AA')
     expect(row1Tds.at(REDACTED_NOMS_ID_COLUMN).text()).toEqual('***34AA')
 
-    const row1Flags = row1Tds
-      .at(FLAGS_COLUMN)
-      .find('AlertFlags')
-      .dive()
-      .find('AlertFlag')
+    const row1Flags = row1Tds.at(FLAGS_COLUMN).find('AlertFlags').dive().find('AlertFlag')
 
     expect(row1Flags.length).toEqual(2)
-    expect(
-      row1Flags
-        .at(0)
-        .shallow()
-        .text()
-    ).toEqual('E-LIST ')
-    expect(
-      row1Flags
-        .at(1)
-        .shallow()
-        .text()
-    ).toEqual('CAT A ')
+    expect(row1Flags.at(0).shallow().text()).toEqual('E-LIST ')
+    expect(row1Flags.at(1).shallow().text()).toEqual('CAT A ')
 
     // TODO: find out how to fix the following line
     // expect(row1Tds.at(LOCATION_COLUMN).text()).toEqual('A-1-1')
     expect(row1Tds.at(ACTIVITY_COLUMN).text()).toEqual('18:00 - Chapel')
-    expect(
-      row1Tds
-        .at(OTHER_COLUMN)
-        .find(OtherActivitiesView)
-        .at(0)
-        .dive()
-        .find('li')
-        .at(0)
-        .text()
-    ).toEqual('Release scheduled')
-    expect(
-      row1Tds
-        .at(OTHER_COLUMN)
-        .find(OtherActivitiesView)
-        .at(0)
-        .dive()
-        .find('li')
-        .at(1)
-        .text()
-    ).toEqual('11:00 - Visits - Official Visit')
-    expect(
-      row1Tds
-        .at(OTHER_COLUMN)
-        .find(OtherActivitiesView)
-        .at(0)
-        .dive()
-        .find('li')
-        .at(2)
-        .text()
-    ).toEqual('11:40 - Medical - Dentist - Appt details')
+    expect(row1Tds.at(OTHER_COLUMN).find(OtherActivitiesView).at(0).dive().find('li').at(0).text()).toEqual(
+      'Release scheduled'
+    )
+    expect(row1Tds.at(OTHER_COLUMN).find(OtherActivitiesView).at(0).dive().find('li').at(1).text()).toEqual(
+      '11:00 - Visits - Official Visit'
+    )
+    expect(row1Tds.at(OTHER_COLUMN).find(OtherActivitiesView).at(0).dive().find('li').at(2).text()).toEqual(
+      '11:40 - Medical - Dentist - Appt details'
+    )
 
     const row2Tds = tr.at(2).find('td')
-    expect(
-      row2Tds
-        .at(OFFENDER_NAME_COLUMN)
-        .childAt(0)
-        .dive()
-        .text()
-    ).toEqual('Smith, Michael')
+    expect(row2Tds.at(OFFENDER_NAME_COLUMN).childAt(0).dive().text()).toEqual('Smith, Michael')
     // TODO: find out how to fix the following line
     // expect(row2Tds.at(LOCATION_COLUMN).text()).toEqual('A-1-2')
     expect(row2Tds.at(ACTIVITY_COLUMN).text()).toEqual('18:00 - Visits - Family Visit (cancelled)')
     expect(row2Tds.at(OTHER_COLUMN).find('li').length).toEqual(0)
 
     const row3Tds = tr.at(3).find('td')
-    expect(
-      row3Tds
-        .at(OFFENDER_NAME_COLUMN)
-        .childAt(0)
-        .dive()
-        .childAt(0)
-        .dive()
-        .text()
-    ).toEqual('Quimby, Fred')
+    expect(row3Tds.at(OFFENDER_NAME_COLUMN).childAt(0).dive().childAt(0).dive().text()).toEqual('Quimby, Fred')
     // TODO: find out how to fix the following line
     // expect(row3Tds.at(LOCATION_COLUMN).text()).toEqual('A-1-3')
     expect(row3Tds.at(ACTIVITY_COLUMN).text()).toEqual('18:00 - Chapel')
-    expect(
-      row3Tds
-        .at(OTHER_COLUMN)
-        .find(OtherActivitiesView)
-        .at(0)
-        .dive()
-        .find('li')
-        .at(0)
-        .text()
-    ).toEqual('11:11 - Visits - Family Visit (cancelled)')
+    expect(row3Tds.at(OTHER_COLUMN).find(OtherActivitiesView).at(0).dive().find('li').at(0).text()).toEqual(
+      '11:11 - Visits - Family Visit (cancelled)'
+    )
 
     const row4Tds = tr.at(4).find('td')
-    expect(
-      row4Tds
-        .at(OFFENDER_NAME_COLUMN)
-        .childAt(0)
-        .dive()
-        .childAt(0)
-        .dive()
-        .text()
-    ).toEqual('Bunny, Bugs')
+    expect(row4Tds.at(OFFENDER_NAME_COLUMN).childAt(0).dive().childAt(0).dive().text()).toEqual('Bunny, Bugs')
     expect(row4Tds.at(ACTIVITY_COLUMN).text()).toEqual('14:00 - Carrot Sculpture')
-    expect(
-      row4Tds
-        .at(OTHER_COLUMN)
-        .find(OtherActivitiesView)
-        .at(0)
-        .dive()
-        .find('li')
-        .at(0)
-        .text()
-    ).toEqual('Court visit scheduled')
+    expect(row4Tds.at(OTHER_COLUMN).find(OtherActivitiesView).at(0).dive().find('li').at(0).text()).toEqual(
+      'Court visit scheduled'
+    )
   })
 
   it('should render suspended activity correctly', async () => {
@@ -383,10 +301,7 @@ describe('Offender activity list results component', () => {
 
     expect(component.find(PrintLink).length).toEqual(2)
 
-    component
-      .find('#printButton')
-      .at(0)
-      .simulate('click')
+    component.find('#printButton').at(0).simulate('click')
     expect(props.handlePrint).toHaveBeenCalled()
   })
 
@@ -404,9 +319,7 @@ describe('Offender activity list results component', () => {
   })
 
   it('should display print links when date is in the future', async () => {
-    const futureDate = moment()
-      .add(1, 'days')
-      .format('DD/MM/YYYY')
+    const futureDate = moment().add(1, 'days').format('DD/MM/YYYY')
     const component = shallow(
       <ResultsActivity {...props} activityData={response} handleSearch={jest.fn()} date={futureDate} period="ED" />
     )
@@ -438,22 +351,8 @@ describe('Offender activity list results component', () => {
     const component = shallow(<ResultsActivity {...props} activityData={response} date={oldDate} period="ED" />)
 
     const tr = component.find('tr')
-    expect(
-      tr
-        .at(1)
-        .find('td')
-        .at(ATTEND_COLUMN)
-        .find('input')
-        .some('[disabled]')
-    ).toEqual(true)
-    expect(
-      tr
-        .at(1)
-        .find('td')
-        .at(DONT_ATTEND_COLUMN)
-        .find('input')
-        .some('[disabled]')
-    ).toEqual(true)
+    expect(tr.at(1).find('td').at(ATTEND_COLUMN).find('input').some('[disabled]')).toEqual(true)
+    expect(tr.at(1).find('td').at(DONT_ATTEND_COLUMN).find('input').some('[disabled]')).toEqual(true)
   })
 
   it('should not display the location of the main activity', () => {
@@ -488,15 +387,7 @@ describe('Offender activity list results component', () => {
     expect(tr.at(0).contains('Prison no.'))
     const row1Tds = tr.at(1).find('td')
 
-    expect(
-      row1Tds
-        .at(OFFENDER_NAME_COLUMN)
-        .childAt(0)
-        .dive()
-        .childAt(0)
-        .dive()
-        .text()
-    ).toEqual('Anderson, Arthur')
+    expect(row1Tds.at(OFFENDER_NAME_COLUMN).childAt(0).dive().childAt(0).dive().text()).toEqual('Anderson, Arthur')
     expect(row1Tds.at(NOMS_ID_COLUMN).text()).toEqual('A1234AA')
     // TODO: Find out how to fix the following line
     // expect(row1Tds.at(LOCATION_COLUMN).text()).toEqual('A-1-1')
@@ -506,24 +397,14 @@ describe('Offender activity list results component', () => {
   it('should display the correct total number of offenders', () => {
     const component = shallow(<ResultsActivity {...props} activityData={response} date="07/06/2019" period="AM" />)
 
-    expect(
-      component
-        .find('TotalResults')
-        .first()
-        .props()
-    ).toEqual({ label: 'Prisoners listed:', totalResults: 4 })
+    expect(component.find('TotalResults').first().props()).toEqual({ label: 'Prisoners listed:', totalResults: 4 })
   })
 
   it('should display current total number of paid offenders', () => {
     const component = shallow(
       <ResultsActivity {...props} totalAttended={1} activityData={response} date="07/06/2019" period="AM" />
     )
-    expect(
-      component
-        .find('TotalResults')
-        .at(1)
-        .props()
-    ).toEqual({ label: 'Sessions attended:', totalResults: 1 })
+    expect(component.find('TotalResults').at(1).props()).toEqual({ label: 'Sessions attended:', totalResults: 1 })
   })
 
   it('should not display pay all button if all prisoners are paid', () => {
@@ -531,55 +412,37 @@ describe('Offender activity list results component', () => {
       <ResultsActivity {...props} totalAttended={3} activityData={response} date={today} period="AM" />
     )
 
-    const attendAllLink = component
-      .find('BatchControls')
-      .shallow()
-      .find('#attendAllLink')
+    const attendAllLink = component.find('BatchControls').shallow().find('#attendAllLink')
     expect(attendAllLink.length).toEqual(0)
   })
 
   it('should not display "All prisoners have attended" button if the date is more than a week in the past', () => {
-    const isMoreThanAWeekOld = moment(new Date())
-      .subtract(8, 'days')
-      .format('DD/MM/YYYY')
+    const isMoreThanAWeekOld = moment(new Date()).subtract(8, 'days').format('DD/MM/YYYY')
     const component = shallow(
       <ResultsActivity {...props} totalAttended={0} activityData={response} date={isMoreThanAWeekOld} period="AM" />
     )
 
-    const button = component
-      .find('BatchControls')
-      .shallow()
-      .find('#attendAllLink')
+    const button = component.find('BatchControls').shallow().find('#attendAllLink')
     expect(button.length).toEqual(0)
   })
 
   it('should display "All prisoners have attended" button if the date is less than 8 days old', () => {
-    const isInTheLastWeek = moment(new Date())
-      .subtract(6, 'days')
-      .format('DD/MM/YYYY')
+    const isInTheLastWeek = moment(new Date()).subtract(6, 'days').format('DD/MM/YYYY')
     const component = shallow(
       <ResultsActivity {...props} totalAttended={0} activityData={response} date={isInTheLastWeek} period="AM" />
     )
 
-    const button = component
-      .find('BatchControls')
-      .shallow()
-      .find('#attendAllLink')
+    const button = component.find('BatchControls').shallow().find('#attendAllLink')
     expect(button.length).toEqual(1)
   })
 
   it('should not display "All prisoners have attended" button if the date is in the future', () => {
-    const tomorrow = moment(new Date())
-      .add(1, 'days')
-      .format('DD/MM/YYYY')
+    const tomorrow = moment(new Date()).add(1, 'days').format('DD/MM/YYYY')
     const component = shallow(
       <ResultsActivity {...props} totalAttended={0} activityData={response} date={tomorrow} period="AM" />
     )
 
-    const button = component
-      .find('BatchControls')
-      .shallow()
-      .find('#attendAllLink')
+    const button = component.find('BatchControls').shallow().find('#attendAllLink')
     expect(button.length).toEqual(0)
   })
 
@@ -588,10 +451,7 @@ describe('Offender activity list results component', () => {
       <ResultsActivity {...props} totalAttended={0} totalAbsent={0} activityData={response} date={today} period="AM" />
     )
 
-    const button = component
-      .find('BatchControls')
-      .shallow()
-      .find('#attendAllLink')
+    const button = component.find('BatchControls').shallow().find('#attendAllLink')
     expect(button.length).toEqual(1)
     expect(button.text()).toEqual('All prisoners have attended')
   })
@@ -601,10 +461,7 @@ describe('Offender activity list results component', () => {
       <ResultsActivity {...props} totalAttended={3} totalAbsent={3} activityData={response} date={today} period="AM" />
     )
 
-    const button = component
-      .find('BatchControls')
-      .shallow()
-      .find('#attendAllLink')
+    const button = component.find('BatchControls').shallow().find('#attendAllLink')
     expect(button.length).toEqual(1)
     expect(button.text()).toEqual('All remaining prisoners have attended')
   })
@@ -660,10 +517,7 @@ describe('Offender activity list results component', () => {
       />
     )
 
-    const button = component
-      .find('BatchControls')
-      .shallow()
-      .find('#attendAllLink')
+    const button = component.find('BatchControls').shallow().find('#attendAllLink')
     expect(button.length).toEqual(1)
     expect(button.text()).toEqual('All remaining prisoners have attended')
   })
@@ -705,10 +559,7 @@ describe('Offender activity list results component', () => {
       <ResultsActivity {...props} activityData={otherAttendanceNull} date={today} period="AM" />
     )
 
-    const button = component
-      .find('BatchControls')
-      .shallow()
-      .find('#attendAllLink')
+    const button = component.find('BatchControls').shallow().find('#attendAllLink')
     expect(button.length).toEqual(1)
     expect(button.text()).toEqual('All prisoners have attended')
   })
@@ -718,10 +569,7 @@ describe('Offender activity list results component', () => {
       <ResultsActivity {...props} totalAttended={0} totalAbsent={0} activityData={response} date={today} period="AM" />
     )
 
-    const attendAllLink = component
-      .find('BatchControls')
-      .shallow()
-      .find('#attendAllLink')
+    const attendAllLink = component.find('BatchControls').shallow().find('#attendAllLink')
     attendAllLink.props().onClick()
 
     mockAxios.onPost('/api/attendance/batch').reply(200, [

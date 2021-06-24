@@ -13,4 +13,4 @@ const controller = ({ prisonApi, oauthApi, logError }) => {
   return router
 }
 
-module.exports = dependencies => controller(dependencies)
+module.exports = (dependencies) => controller(dependencies)

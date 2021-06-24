@@ -52,7 +52,7 @@ module.exports = ({ whereaboutsApi }) => {
       })
 
       const recurringFrequencyDescription = repeatTypeDescriptions.find(
-        repeat => repeat.value === appointmentDetails.recurring.repeatPeriod
+        (repeat) => repeat.value === appointmentDetails.recurring.repeatPeriod
       ).text
 
       return res.render('appointmentDeleteRecurringBookings', {

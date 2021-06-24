@@ -338,12 +338,12 @@ describe('Adjudication History Service', () => {
   })
 
   it('pagination is only applied to adjudication retrieval requests', async () => {
-    prisonApi.getAdjudications.mockImplementation(ctx => {
+    prisonApi.getAdjudications.mockImplementation((ctx) => {
       ctx.adjudicationResponseHeaders = true
       return adjudications
     })
 
-    prisonApi.getAdjudicationFindingTypes.mockImplementation(ctx => {
+    prisonApi.getAdjudicationFindingTypes.mockImplementation((ctx) => {
       ctx.findingResponseHeaders = true
       return findings
     })

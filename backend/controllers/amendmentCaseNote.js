@@ -32,7 +32,7 @@ module.exports = ({ prisonApi, caseNotesApi, logError }) => {
         postAmendmentUrl: req.originalUrl,
         amendments:
           caseNote.amendments &&
-          caseNote.amendments.map(amendment => ({
+          caseNote.amendments.map((amendment) => ({
             text: amendment.additionalNoteText,
           })),
       })

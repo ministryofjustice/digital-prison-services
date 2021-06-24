@@ -97,4 +97,4 @@ const setup = ({ prisonApi, whereaboutsApi, oauthApi, caseNotesApi }) => {
   return router
 }
 
-module.exports = dependencies => setup(dependencies)
+module.exports = (dependencies) => setup(dependencies)

@@ -73,8 +73,8 @@ describe('Establishment Roll', () => {
     prisonApi.getLocationsForAgency = jest.fn()
     prisonApi.getAttributesForLocation = jest.fn()
 
-    prisonApi.getEstablishmentRollBlocksCount.mockImplementation(
-      (_context, _agencyId, _unassigned) => (_unassigned ? unassignedBlockData : assignedBlockData)
+    prisonApi.getEstablishmentRollBlocksCount.mockImplementation((_context, _agencyId, _unassigned) =>
+      _unassigned ? unassignedBlockData : assignedBlockData
     )
     prisonApi.getEstablishmentRollMovementsCount.mockImplementation(() => movements)
     prisonApi.getEstablishmentRollEnrouteCount.mockImplementation(() => 8)

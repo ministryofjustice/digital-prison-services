@@ -25,7 +25,10 @@ describe('view offender details', () => {
       ethnicity: 'White',
       raceCode: 'W1',
     },
-    profileInformation: [{ type: 'SEXO', resultValue: 'Heterosexual' }, { type: 'SMOKE', resultValue: 'No' }],
+    profileInformation: [
+      { type: 'SEXO', resultValue: 'Heterosexual' },
+      { type: 'SMOKE', resultValue: 'No' },
+    ],
   }
 
   beforeEach(() => {

@@ -11,7 +11,7 @@ export const StyledImage = styled.img`
   }
 `
 
-const OffenderImage = props => {
+const OffenderImage = (props) => {
   const { offenderNo } = props
   const offenderImageUrl = `/app/images/${offenderNo}/data`
   return <StyledImage id={`image-${offenderNo}`} alt={`prisoner ${offenderNo}`} src={offenderImageUrl} />

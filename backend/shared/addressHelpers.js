@@ -1,9 +1,9 @@
 const { capitalize } = require('../utils')
 
-const getPhone = phones =>
+const getPhone = (phones) =>
   phones &&
   phones
-    .map(phone => {
+    .map((phone) => {
       const { ext, number } = phone
       if (ext) {
         return `${number} extension number ${ext}`
@@ -15,7 +15,7 @@ const getPhone = phones =>
 
 const getAddress = ({ address = {}, showType = true, phoneLabel = 'Address phone' }) => {
   const flat = address.flat && `Flat ${address.flat}`
-  const streetWithNumber = [flat, address.premise, address.street].filter(value => value)
+  const streetWithNumber = [flat, address.premise, address.street].filter((value) => value)
 
   return [
     { label: address.label || 'Address', value: streetWithNumber.join(', ') },
@@ -37,10 +37,10 @@ const getAddress = ({ address = {}, showType = true, phoneLabel = 'Address phone
 
 const getFormattedAddress = ({ address = {} }) => {
   const flat = address.flat && `Flat ${address.flat}`
-  const streetWithNumber = [flat, address.street].filter(value => value).join(', ')
+  const streetWithNumber = [flat, address.street].filter((value) => value).join(', ')
 
   const formattedAddress = [address.premise, streetWithNumber, address.locality, address.town, address.county]
-    .filter(value => value)
+    .filter((value) => value)
     .join('<br>')
 
   return [

@@ -206,7 +206,10 @@ describe('Select a cell', () => {
       expect(res.render).toHaveBeenCalledWith(
         'cellMove/selectCell.njk',
         expect.objectContaining({
-          locations: [{ text: 'All residential units', value: 'ALL' }, { text: 'Houseblock 1', value: 'hb1' }],
+          locations: [
+            { text: 'All residential units', value: 'ALL' },
+            { text: 'Houseblock 1', value: 'hb1' },
+          ],
         })
       )
     })
@@ -218,7 +221,10 @@ describe('Select a cell', () => {
       expect(res.render).toHaveBeenCalledWith(
         'cellMove/selectCell.njk',
         expect.objectContaining({
-          subLocations: [{ text: 'Select area in residential unit', value: '' }, { text: 'Sub value', value: 'sl' }],
+          subLocations: [
+            { text: 'Select area in residential unit', value: '' },
+            { text: 'Sub value', value: 'sl' },
+          ],
         })
       )
     })
@@ -232,7 +238,10 @@ describe('Select a cell', () => {
       expect(res.render).toHaveBeenCalledWith(
         'cellMove/partials/subLocationsSelect.njk',
         expect.objectContaining({
-          subLocations: [{ text: 'Select area in residential unit', value: '' }, { text: 'Sub value', value: 'sl' }],
+          subLocations: [
+            { text: 'Select area in residential unit', value: '' },
+            { text: 'Sub value', value: 'sl' },
+          ],
         })
       )
     })
@@ -277,14 +286,20 @@ describe('Select a cell', () => {
           description: 'MDI-1-1',
           capacity: 1,
           noOfOccupants: 0,
-          attributes: [{ description: 'Single occupancy', code: 'SO' }, { description: 'Listener Cell', code: 'LC' }],
+          attributes: [
+            { description: 'Single occupancy', code: 'SO' },
+            { description: 'Listener Cell', code: 'LC' },
+          ],
         },
         {
           id: 2,
           description: 'MDI-1-2',
           capacity: 2,
           noOfOccupants: 0,
-          attributes: [{ description: 'Special Cell', code: 'SPC' }, { description: 'Gated Cell', code: 'GC' }],
+          attributes: [
+            { description: 'Special Cell', code: 'SPC' },
+            { description: 'Gated Cell', code: 'GC' },
+          ],
         },
       ])
     })
@@ -310,7 +325,10 @@ describe('Select a cell', () => {
                 noOfOccupants: 0,
                 occupants: [],
                 spaces: 1,
-                type: [{ code: 'LC', description: 'Listener Cell' }, { code: 'SO', description: 'Single occupancy' }],
+                type: [
+                  { code: 'LC', description: 'Listener Cell' },
+                  { code: 'SO', description: 'Single occupancy' },
+                ],
               },
             ],
           })
@@ -329,14 +347,20 @@ describe('Select a cell', () => {
           expect.objectContaining({
             cells: [
               {
-                attributes: [{ code: 'GC', description: 'Gated Cell' }, { code: 'SPC', description: 'Special Cell' }],
+                attributes: [
+                  { code: 'GC', description: 'Gated Cell' },
+                  { code: 'SPC', description: 'Special Cell' },
+                ],
                 capacity: 2,
                 description: 'MDI-1-2',
                 id: 2,
                 noOfOccupants: 0,
                 occupants: [],
                 spaces: 2,
-                type: [{ code: 'GC', description: 'Gated Cell' }, { code: 'SPC', description: 'Special Cell' }],
+                type: [
+                  { code: 'GC', description: 'Gated Cell' },
+                  { code: 'SPC', description: 'Special Cell' },
+                ],
               },
             ],
           })
@@ -351,12 +375,10 @@ describe('Select a cell', () => {
         .mockResolvedValueOnce(cellLocationData)
         .mockResolvedValueOnce(parentLocationData)
         .mockResolvedValueOnce(superParentLocationData)
-      prisonApi.getInmatesAtLocation = jest
-        .fn()
-        .mockResolvedValue([
-          { firstName: 'bob', lastName: 'doe', offenderNo: 'A11111' },
-          { firstName: 'dave', lastName: 'doe1', offenderNo: 'A22222' },
-        ])
+      prisonApi.getInmatesAtLocation = jest.fn().mockResolvedValue([
+        { firstName: 'bob', lastName: 'doe', offenderNo: 'A11111' },
+        { firstName: 'dave', lastName: 'doe1', offenderNo: 'A22222' },
+      ])
 
       prisonApi.getCellsWithCapacity.mockResolvedValue([
         {
@@ -364,14 +386,20 @@ describe('Select a cell', () => {
           description: 'MDI-1-3',
           capacity: 4,
           noOfOccupants: 1,
-          attributes: [{ description: 'Single occupancy', code: 'SO' }, { description: 'Listener Cell', code: 'LC' }],
+          attributes: [
+            { description: 'Single occupancy', code: 'SO' },
+            { description: 'Listener Cell', code: 'LC' },
+          ],
         },
         {
           id: 2,
           description: 'MDI-1-2',
           capacity: 5,
           noOfOccupants: 1,
-          attributes: [{ description: 'Special Cell', code: 'SPC' }, { description: 'Gated Cell', code: 'GC' }],
+          attributes: [
+            { description: 'Special Cell', code: 'SPC' },
+            { description: 'Gated Cell', code: 'GC' },
+          ],
         },
         {
           id: 3,
@@ -514,7 +542,10 @@ describe('Select a cell', () => {
                 },
               ],
               spaces: 4,
-              type: [{ code: 'GC', description: 'Gated Cell' }, { code: 'SPC', description: 'Special Cell' }],
+              type: [
+                { code: 'GC', description: 'Gated Cell' },
+                { code: 'SPC', description: 'Special Cell' },
+              ],
             },
             {
               attributes: [
@@ -779,7 +810,10 @@ describe('Select a cell', () => {
           description: 'MDI-1-3',
           capacity: 4,
           noOfOccupants: 1,
-          attributes: [{ description: 'Single occupancy', code: 'SO' }, { description: 'Listener Cell', code: 'LC' }],
+          attributes: [
+            { description: 'Single occupancy', code: 'SO' },
+            { description: 'Listener Cell', code: 'LC' },
+          ],
         },
       ])
 

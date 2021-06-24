@@ -45,7 +45,7 @@ class App extends React.Component {
     const { configDispatch, setErrorDispatch } = this.props
 
     axios.interceptors.response.use(
-      config => {
+      (config) => {
         if (config.status === 205) {
           // eslint-disable-next-line no-alert
           alert(
@@ -55,7 +55,7 @@ class App extends React.Component {
         }
         return config
       },
-      error => Promise.reject(error)
+      (error) => Promise.reject(error)
     )
 
     try {
@@ -76,7 +76,7 @@ class App extends React.Component {
     this.updateFeatureFlags(config.flags)
   }
 
-  updateFeatureFlags = flags => {
+  updateFeatureFlags = (flags) => {
     const { setFlagsDispatch } = this.props
     const featureFlags = {
       ...flags,
@@ -121,27 +121,27 @@ class App extends React.Component {
     return setLoadedDispatch(true)
   }
 
-  handlePeriodChange = event => {
+  handlePeriodChange = (event) => {
     const { periodDispatch } = this.props
 
     periodDispatch(event.target.value)
   }
 
-  handlePeriodChangeWithLocationsUpdate = event => {
+  handlePeriodChangeWithLocationsUpdate = (event) => {
     const { periodDispatch } = this.props
 
     periodDispatch(event.target.value)
     this.getActivityLocations(null, event.target.value)
   }
 
-  raiseAnalyticsEvent = event => {
+  raiseAnalyticsEvent = (event) => {
     const { config } = this.props
     if (event && config.googleAnalyticsId) {
       ReactGA.event(event)
     }
   }
 
-  displayAlertAndLogout = message => {
+  displayAlertAndLogout = (message) => {
     alert(message) // eslint-disable-line no-alert
     window.location = '/auth/logout'
   }
@@ -153,13 +153,13 @@ class App extends React.Component {
     return !shouldShowTerms && user && user.username
   }
 
-  handleDateChange = date => {
+  handleDateChange = (date) => {
     const { dateDispatch } = this.props
 
     if (date) dateDispatch(date)
   }
 
-  handleDateChangeWithLocationsUpdate = date => {
+  handleDateChangeWithLocationsUpdate = (date) => {
     const { dateDispatch } = this.props
 
     if (date) {
@@ -169,12 +169,13 @@ class App extends React.Component {
     }
   }
 
-  handleError = error => {
+  handleError = (error) => {
     const { setErrorDispatch } = this.props
     if (
       error.response &&
       error.response.status === 401 &&
-      (error.response.data && error.response.data.reason === 'session-expired')
+      error.response.data &&
+      error.response.data.reason === 'session-expired'
     ) {
       this.displayAlertAndLogout('Your session has expired, please click OK to be redirected back to the login page')
     } else {
@@ -203,7 +204,7 @@ class App extends React.Component {
       axios.get('/api/userroles'),
     ])
 
-    const activeCaseLoad = caseloads.data.find(cl => cl.currentlyActive)
+    const activeCaseLoad = caseloads.data.find((cl) => cl.currentlyActive)
     const activeCaseLoadId = activeCaseLoad ? activeCaseLoad.caseLoadId : null
 
     userDetailsDispatch({ ...user.data, activeCaseLoadId, caseLoadOptions: caseloads.data, roles: roles.data })
@@ -244,8 +245,8 @@ class App extends React.Component {
             render={() => (
               <ResultsHouseblockContainer
                 handleError={this.handleError}
-                handleDateChange={event => this.handleDateChange(event)}
-                handlePeriodChange={event => this.handlePeriodChange(event)}
+                handleDateChange={(event) => this.handleDateChange(event)}
+                handlePeriodChange={(event) => this.handlePeriodChange(event)}
                 raiseAnalyticsEvent={this.raiseAnalyticsEvent}
                 showModal={setShowModalDispatch}
               />
@@ -257,8 +258,8 @@ class App extends React.Component {
             render={() => (
               <ResultsActivityContainer
                 handleError={this.handleError}
-                handleDateChange={event => this.handleDateChange(event)}
-                handlePeriodChange={event => this.handlePeriodChange(event)}
+                handleDateChange={(event) => this.handleDateChange(event)}
+                handlePeriodChange={(event) => this.handlePeriodChange(event)}
                 raiseAnalyticsEvent={this.raiseAnalyticsEvent}
                 showModal={setShowModalDispatch}
               />
@@ -270,8 +271,8 @@ class App extends React.Component {
             path={routePaths.prisonersUnaccountedFor}
             render={({ history }) => (
               <PrisonersUnaccountedForContainer
-                handleDateChange={event => this.handleDateChange(event)}
-                handlePeriodChange={event => this.handlePeriodChange(event)}
+                handleDateChange={(event) => this.handleDateChange(event)}
+                handlePeriodChange={(event) => this.handlePeriodChange(event)}
                 handleError={this.handleError}
                 setLoadedDispatch={setLoadedDispatch}
                 setErrorDispatch={setErrorDispatch}
@@ -385,7 +386,7 @@ App.propTypes = {
   setOffenderPaymentDataDispatch: PropTypes.func.isRequired,
 }
 
-const mapStateToProps = state => ({
+const mapStateToProps = (state) => ({
   agencyId: state.app.user.activeCaseLoadId,
   caseChangeRedirect: state.app.caseChangeRedirect,
   config: state.app.config,
@@ -407,28 +408,25 @@ App.defaultProps = {
   modalContent: undefined,
 }
 
-const mapDispatchToProps = dispatch => ({
-  activitiesDispatch: text => dispatch(setSearchActivities(text)),
-  activityDispatch: text => dispatch(setSearchActivity(text)),
-  boundSetMenuOpen: flag => dispatch(setMenuOpen(flag)),
-  configDispatch: config => dispatch(setConfig(config)),
-  dateDispatch: text => dispatch(setSearchDate(text)),
-  periodDispatch: text => dispatch(setSearchPeriod(text)),
+const mapDispatchToProps = (dispatch) => ({
+  activitiesDispatch: (text) => dispatch(setSearchActivities(text)),
+  activityDispatch: (text) => dispatch(setSearchActivity(text)),
+  boundSetMenuOpen: (flag) => dispatch(setMenuOpen(flag)),
+  configDispatch: (config) => dispatch(setConfig(config)),
+  dateDispatch: (text) => dispatch(setSearchDate(text)),
+  periodDispatch: (text) => dispatch(setSearchPeriod(text)),
   resetErrorDispatch: () => dispatch(resetError()),
-  setErrorDispatch: error => dispatch(setError(error)),
-  setLoadedDispatch: status => dispatch(setLoaded(status)),
-  setTermsVisibilityDispatch: shouldShowTerms => dispatch(setTermsVisibility(shouldShowTerms)),
-  userDetailsDispatch: user => dispatch(setUserDetails(user)),
-  setFlagsDispatch: flags => dispatch(setFlagsAction(flags)),
+  setErrorDispatch: (error) => dispatch(setError(error)),
+  setLoadedDispatch: (status) => dispatch(setLoaded(status)),
+  setTermsVisibilityDispatch: (shouldShowTerms) => dispatch(setTermsVisibility(shouldShowTerms)),
+  userDetailsDispatch: (user) => dispatch(setUserDetails(user)),
+  setFlagsDispatch: (flags) => dispatch(setFlagsAction(flags)),
   setShowModalDispatch: (modalActive, modalContent) => dispatch(setShowModal(modalActive, modalContent)),
   getAbsentReasonsDispatch: () => dispatch(getAbsentReasons()),
   setOffenderPaymentDataDispatch: (offenderIndex, data) => dispatch(setActivityOffenderAttendance(offenderIndex, data)),
 })
 
-const AppContainer = connect(
-  mapStateToProps,
-  mapDispatchToProps
-)(App)
+const AppContainer = connect(mapStateToProps, mapDispatchToProps)(App)
 
 export { App, AppContainer }
 export default App

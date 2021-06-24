@@ -1,7 +1,7 @@
 const moment = require('moment')
 
 module.exports = ({ covidService }) => {
-  const formatResult = result => ({
+  const formatResult = (result) => ({
     bookingId: result.bookingId,
     offenderNo: result.offenderNo,
     name: result.name,

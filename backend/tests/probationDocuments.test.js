@@ -106,7 +106,7 @@ function documentsWithMultipleConvictionMatching(convictions) {
   return expect.objectContaining({
     documents: {
       offenderDocuments: [],
-      convictions: expect.objectContaining(convictions.map(conviction => expect.objectContaining(conviction))),
+      convictions: expect.objectContaining(convictions.map((conviction) => expect.objectContaining(conviction))),
     },
   })
 }
@@ -171,8 +171,12 @@ describe('Probation documents', () => {
           documents: [],
           convictions: [],
         })
-        page = probationDocumentsFactory(oauthApi, prisonApi, communityApi, systemOauthClient)
-          .displayProbationDocumentsPage
+        page = probationDocumentsFactory(
+          oauthApi,
+          prisonApi,
+          communityApi,
+          systemOauthClient
+        ).displayProbationDocumentsPage
         res.render = jest.fn()
 
         req = { ...mockReq, params: { offenderNo: 'G9542VP' } }
@@ -664,8 +668,12 @@ describe('Probation documents', () => {
         oauthApi.userRoles.mockReturnValue([{ roleCode: 'VIEW_PROBATION_DOCUMENTS' }])
         communityApi.getOffenderConvictions.mockReturnValue([])
         communityApi.getOffenderDetails.mockReturnValue({})
-        page = probationDocumentsFactory(oauthApi, prisonApi, communityApi, systemOauthClient)
-          .displayProbationDocumentsPage
+        page = probationDocumentsFactory(
+          oauthApi,
+          prisonApi,
+          communityApi,
+          systemOauthClient
+        ).displayProbationDocumentsPage
         res.render = jest.fn()
 
         req = { ...mockReq, params: { offenderNo: 'G9542VP' } }
@@ -703,8 +711,7 @@ describe('Probation documents', () => {
             expect.objectContaining({
               errors: [
                 {
-                  text:
-                    'We are unable to display documents for this prisoner because we cannot find the offender record in the probation system',
+                  text: 'We are unable to display documents for this prisoner because we cannot find the offender record in the probation system',
                 },
               ],
             })

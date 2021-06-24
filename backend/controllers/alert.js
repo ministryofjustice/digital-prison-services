@@ -5,7 +5,7 @@ const { logError } = require('../logError')
 const { raiseAnalyticsEvent } = require('../raiseAnalyticsEvent')
 const { serviceUnavailableMessage } = require('../common-messages')
 
-const getOffenderUrl = offenderNo => `/prisoner/${offenderNo}`
+const getOffenderUrl = (offenderNo) => `/prisoner/${offenderNo}`
 
 const getUpdateParameters = ({ comment, expiryDate }) => {
   if (comment && expiryDate) return { comment, expiryDate }
@@ -108,11 +108,11 @@ const alertFactory = (oauthApi, prisonApi, referenceCodesService) => {
         })
       }
 
-      const canViewInactivePrisoner = userRoles && userRoles.some(role => role.roleCode === 'INACTIVE_BOOKINGS')
-      const offenderInCaseload = caseLoads && caseLoads.some(caseload => caseload.caseLoadId === agencyId)
+      const canViewInactivePrisoner = userRoles && userRoles.some((role) => role.roleCode === 'INACTIVE_BOOKINGS')
+      const offenderInCaseload = caseLoads && caseLoads.some((caseload) => caseload.caseLoadId === agencyId)
       const userCanEdit = (canViewInactivePrisoner && ['OUT', 'TRN'].includes(agencyId)) || offenderInCaseload
 
-      if (!userRoles.some(role => role.roleCode === 'UPDATE_ALERT') || !userCanEdit) {
+      if (!userRoles.some((role) => role.roleCode === 'UPDATE_ALERT') || !userCanEdit) {
         return res.render('notFound.njk', { url: req.headers.referer || `/prisoner/${offenderNo}/alerts` })
       }
 
@@ -122,7 +122,7 @@ const alertFactory = (oauthApi, prisonApi, referenceCodesService) => {
         profileUrl: getOffenderUrl(offenderNo),
         name: `${properCaseName(lastName)}, ${properCaseName(firstName)}`,
       }
-      const activeCaseLoad = caseLoads.find(cl => cl.currentlyActive)
+      const activeCaseLoad = caseLoads.find((cl) => cl.currentlyActive)
 
       return renderTemplate(req, res, {
         alert: {
@@ -159,7 +159,7 @@ const alertFactory = (oauthApi, prisonApi, referenceCodesService) => {
       prisonApi.userCaseLoads(res.locals),
     ])
 
-    const activeCaseLoad = caseLoads.find(cl => cl.currentlyActive)
+    const activeCaseLoad = caseLoads.find((cl) => cl.currentlyActive)
     const errors = getValidationErrors({ alertStatus, comment })
 
     if (errors.length > 0) {
@@ -205,19 +205,19 @@ const alertFactory = (oauthApi, prisonApi, referenceCodesService) => {
         prisonApi.userCaseLoads(res.locals),
       ])
 
-      const canViewInactivePrisoner = userRoles && userRoles.some(role => role.roleCode === 'INACTIVE_BOOKINGS')
-      const offenderInCaseload = caseLoads && caseLoads.some(caseload => caseload.caseLoadId === agencyId)
+      const canViewInactivePrisoner = userRoles && userRoles.some((role) => role.roleCode === 'INACTIVE_BOOKINGS')
+      const offenderInCaseload = caseLoads && caseLoads.some((caseload) => caseload.caseLoadId === agencyId)
       const userCanEdit = (canViewInactivePrisoner && ['OUT', 'TRN'].includes(agencyId)) || offenderInCaseload
 
-      if (!userRoles.some(role => role.roleCode === 'UPDATE_ALERT') || !userCanEdit) {
+      if (!userRoles.some((role) => role.roleCode === 'UPDATE_ALERT') || !userCanEdit) {
         return res.render('notFound.njk', { url: req.headers.referer || `/prisoner/${offenderNo}/alerts` })
       }
 
       const alertTypes = await referenceCodesService.getAlertTypes(res.locals)
 
       const prisonersActiveAlertCodes = alerts
-        .filter(alert => !alert.expired)
-        .map(alert => alert.alertCode)
+        .filter((alert) => !alert.expired)
+        .map((alert) => alert.alertCode)
         .join(',')
 
       const offenderDetails = {
@@ -230,9 +230,9 @@ const alertFactory = (oauthApi, prisonApi, referenceCodesService) => {
       if (req.xhr) {
         const { typeCode } = req.query
         const filteredSubTypes = alertTypes.alertSubTypes
-          .filter(st => st.parentValue === typeCode)
-          .filter(st => st.activeFlag === 'Y')
-          .map(st => ({
+          .filter((st) => st.parentValue === typeCode)
+          .filter((st) => st.activeFlag === 'Y')
+          .map((st) => ({
             value: st.value,
             text: st.description,
           }))
@@ -246,12 +246,14 @@ const alertFactory = (oauthApi, prisonApi, referenceCodesService) => {
         bookingId,
         formValues: { effectiveDate: moment().format('DD/MM/YYYY'), ...req.body },
         alertTypes: alertTypes.alertTypes
-          .filter(type => type.activeFlag === 'Y')
-          .map(type => ({ value: type.value, text: type.description })),
-        alertCodes: alertTypes.alertSubTypes.filter(type => type.activeFlag === 'Y').map(type => ({
-          value: type.value,
-          text: type.description,
-        })),
+          .filter((type) => type.activeFlag === 'Y')
+          .map((type) => ({ value: type.value, text: type.description })),
+        alertCodes: alertTypes.alertSubTypes
+          .filter((type) => type.activeFlag === 'Y')
+          .map((type) => ({
+            value: type.value,
+            text: type.description,
+          })),
         homeUrl: `${getOffenderUrl(offenderNo)}/alerts`,
         alertsRootUrl: `/prisoner/${offenderNo}/create-alert`,
       })
@@ -324,8 +326,7 @@ const alertFactory = (oauthApi, prisonApi, referenceCodesService) => {
 
     if (alertDate && moment(alertDate, 'DD/MM/YYYY') < moment().subtract(8, 'days')) {
       errors.push({
-        text:
-          'Enter a date that is not more than 8 days in the past in the format DD/MM/YYYY - for example, 27/03/2020',
+        text: 'Enter a date that is not more than 8 days in the past in the format DD/MM/YYYY - for example, 27/03/2020',
         href: '#effective-date',
       })
     }
@@ -334,23 +335,25 @@ const alertFactory = (oauthApi, prisonApi, referenceCodesService) => {
       const { firstName, lastName, alerts } = await prisonApi.getDetails(res.locals, offenderNo, true)
 
       const prisonersActiveAlertCodes = alerts
-        .filter(alert => !alert.expired)
-        .map(alert => alert.alertCode)
+        .filter((alert) => !alert.expired)
+        .map((alert) => alert.alertCode)
         .join(',')
 
       const alertTypes = await referenceCodesService.getAlertTypes(res.locals)
       const alertCodes = alertType
         ? alertTypes.alertSubTypes
-            .filter(type => type.parentValue === alertType)
-            .filter(type => type.activeFlag === 'Y')
-            .map(type => ({
+            .filter((type) => type.parentValue === alertType)
+            .filter((type) => type.activeFlag === 'Y')
+            .map((type) => ({
               value: type.value,
               text: type.description,
             }))
-        : alertTypes.alertSubTypes.filter(type => type.activeFlag === 'Y').map(type => ({
-            value: type.value,
-            text: type.description,
-          }))
+        : alertTypes.alertSubTypes
+            .filter((type) => type.activeFlag === 'Y')
+            .map((type) => ({
+              value: type.value,
+              text: type.description,
+            }))
 
       const offenderDetails = {
         bookingId,
@@ -366,8 +369,8 @@ const alertFactory = (oauthApi, prisonApi, referenceCodesService) => {
         offenderDetails,
         prisonersActiveAlertCodes,
         alertTypes: alertTypes.alertTypes
-          .filter(type => type.activeFlag === 'Y')
-          .map(type => ({ value: type.value, text: type.description })),
+          .filter((type) => type.activeFlag === 'Y')
+          .map((type) => ({ value: type.value, text: type.description })),
         alertCodes,
         homeUrl: `${getOffenderUrl(offenderNo)}/alerts`,
         alertsRootUrl: `/prisoner/${offenderNo}/create-alert`,

@@ -13,8 +13,8 @@ module.exports = ({ prisonApi }) => {
 
     const staffDetails = await getWith404AsNull(prisonApi.getStaffDetails(res.locals, appointment.createUserId))
 
-    const appointmentType = appointmentTypes?.find(type => type.code === appointment.appointmentTypeCode)
-    const locationType = locationTypes?.find(loc => Number(loc.locationId) === Number(appointment.locationId))
+    const appointmentType = appointmentTypes?.find((type) => type.code === appointment.appointmentTypeCode)
+    const locationType = locationTypes?.find((loc) => Number(loc.locationId) === Number(appointment.locationId))
 
     const lastAppointmentDate =
       recurring &&
@@ -26,8 +26,8 @@ module.exports = ({ prisonApi }) => {
 
     const prepostData = {}
 
-    const createLocationAndTimeString = appt =>
-      `${locationTypes.find(loc => Number(loc.locationId) === Number(appt.locationId)).userDescription} - ${getTime(
+    const createLocationAndTimeString = (appt) =>
+      `${locationTypes.find((loc) => Number(loc.locationId) === Number(appt.locationId)).userDescription} - ${getTime(
         appt.startTime
       )} to ${getTime(appt.endTime)}`
 
@@ -59,7 +59,7 @@ module.exports = ({ prisonApi }) => {
     const recurringDetails = !videoLinkBooking && {
       recurring: recurring ? 'Yes' : 'No',
       ...(recurring && {
-        repeats: repeatTypes.find(repeat => repeat.value === recurring.repeatPeriod).text,
+        repeats: repeatTypes.find((repeat) => repeat.value === recurring.repeatPeriod).text,
         lastAppointment: getDate(lastAppointmentDate.endOfPeriod, 'D MMMM YYYY'),
       }),
     }

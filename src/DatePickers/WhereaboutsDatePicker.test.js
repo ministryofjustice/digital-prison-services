@@ -28,31 +28,20 @@ describe('<WhereaboutsDatePicker />', () => {
 
   describe('daysToShow() future dates', () => {
     it('should only return the following 7 days from today', () => {
-      const seventhDay = moment()
-        .add(7, 'day')
-        .startOf('day')
+      const seventhDay = moment().add(7, 'day').startOf('day')
 
-      const eigthDay = moment(seventhDay)
-        .add(1, 'day')
-        .startOf('day')
+      const eigthDay = moment(seventhDay).add(1, 'day').startOf('day')
 
       expect(wrapper.instance().daysToShow(seventhDay)).toEqual(true)
       expect(wrapper.instance().daysToShow(eigthDay)).toEqual(false)
     })
 
     it('should use the shouldShowDay prop if present', () => {
-      const pastAndPresentDay = date =>
-        date.isBefore(
-          moment()
-            .add(1, 'days')
-            .startOf('day')
-        )
+      const pastAndPresentDay = (date) => date.isBefore(moment().add(1, 'days').startOf('day'))
 
       wrapper = shallow(<WhereaboutsDatePicker {...props} shouldShowDay={pastAndPresentDay} />)
 
-      const tomorrow = moment()
-        .add(1, 'day')
-        .startOf('day')
+      const tomorrow = moment().add(1, 'day').startOf('day')
 
       const daysToShowSpy = jest.spyOn(wrapper.instance(), 'daysToShow')
       expect(daysToShowSpy).not.toBeCalled()

@@ -1,17 +1,17 @@
 const moment = require('moment')
 const formatEvent = require('./formatEvent')
 
-const filterMorning = activities =>
-  activities && activities.filter(activity => moment(activity.startTime).get('hour') < 12)
+const filterMorning = (activities) =>
+  activities && activities.filter((activity) => moment(activity.startTime).get('hour') < 12)
 
-const filterAfternoon = activities =>
+const filterAfternoon = (activities) =>
   activities &&
   activities.filter(
-    activity => moment(activity.startTime).get('hour') > 11 && moment(activity.startTime).get('hour') < 17
+    (activity) => moment(activity.startTime).get('hour') > 11 && moment(activity.startTime).get('hour') < 17
   )
 
-const filterEveningDuties = activities =>
-  activities && activities.filter(activity => moment(activity.startTime).get('hour') >= 17)
+const filterEveningDuties = (activities) =>
+  activities && activities.filter((activity) => moment(activity.startTime).get('hour') >= 17)
 
 const byStartTimeThenByEndTime = (a, b) => {
   if (moment(a.startTime).isBefore(moment(b.startTime))) return -1
@@ -27,17 +27,17 @@ const byStartTimeThenByEndTime = (a, b) => {
   return 0
 }
 
-module.exports = events => {
+module.exports = (events) => {
   const morningActivity = filterMorning(events)
   const afternoonActivity = filterAfternoon(events)
   const eveningDuties = filterEveningDuties(events)
 
   return {
     morningActivities:
-      morningActivity && morningActivity.map(activity => formatEvent(activity)).sort(byStartTimeThenByEndTime),
+      morningActivity && morningActivity.map((activity) => formatEvent(activity)).sort(byStartTimeThenByEndTime),
     afternoonActivities:
-      afternoonActivity && afternoonActivity.map(activity => formatEvent(activity)).sort(byStartTimeThenByEndTime),
+      afternoonActivity && afternoonActivity.map((activity) => formatEvent(activity)).sort(byStartTimeThenByEndTime),
     eveningActivities:
-      eveningDuties && eveningDuties.map(activity => formatEvent(activity)).sort(byStartTimeThenByEndTime),
+      eveningDuties && eveningDuties.map((activity) => formatEvent(activity)).sort(byStartTimeThenByEndTime),
   }
 }

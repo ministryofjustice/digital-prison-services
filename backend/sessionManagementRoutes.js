@@ -4,7 +4,7 @@ const logger = require('./log')
 const contextProperties = require('./contextProperties')
 const config = require('./config')
 
-const isXHRRequest = req =>
+const isXHRRequest = (req) =>
   req.xhr ||
   (req.headers.accept && (req.headers.accept.indexOf('json') > -1 || req.headers.accept.indexOf('image/*') > -1)) ||
   (req.path && req.path.endsWith('.js'))
@@ -18,9 +18,7 @@ const isXHRRequest = req =>
  * @param homeLink The URL for the home page.
  */
 const configureRoutes = ({ app, tokenRefresher, tokenVerifier, homeLink }) => {
-  const authLogoutUrl = `${config.apis.oauth2.ui_url}logout?client_id=${config.apis.oauth2.clientId}&redirect_uri=${
-    config.app.url
-  }`
+  const authLogoutUrl = `${config.apis.oauth2.ui_url}logout?client_id=${config.apis.oauth2.clientId}&redirect_uri=${config.app.url}`
 
   const remoteLoginIndex = (req, res, next) => {
     req.session.returnTo = req.query.returnTo
@@ -116,7 +114,7 @@ const configureRoutes = ({ app, tokenRefresher, tokenVerifier, homeLink }) => {
         logger.info(`Auth failure due to ${JSON.stringify(info)}`)
         return res.redirect('/autherror')
       }
-      req.logIn(user, err2 => {
+      req.logIn(user, (err2) => {
         if (err2) {
           return next(err2)
         }

@@ -125,7 +125,7 @@ class ResultsHouseblock extends Component {
       totalAttended,
     } = this.props
 
-    const renderLocationOptions = locationOptions => {
+    const renderLocationOptions = (locationOptions) => {
       if (!locationOptions) {
         return (
           <option key="housinglocation_option_All" value="--">
@@ -138,7 +138,7 @@ class ResultsHouseblock extends Component {
         <option key="housinglocation_option_All" value="--">
           All
         </option>,
-        ...locationOptions.map(loc => (
+        ...locationOptions.map((loc) => (
           <option key={`housinglocation_option_${loc.key}`} value={loc.key}>
             {loc.name}
           </option>
@@ -228,15 +228,14 @@ class ResultsHouseblock extends Component {
             Print this page
           </PrintLink>
         )}
-        {isWithinNextTwoWorkingDays(date) &&
-          isAfterToday(date) && (
-            <>
-              <br />
-              <PrintLink onClick={() => handlePrint('redacted')} className="redactedPrintButton">
-                Print list for general view
-              </PrintLink>
-            </>
-          )}
+        {isWithinNextTwoWorkingDays(date) && isAfterToday(date) && (
+          <>
+            <br />
+            <PrintLink onClick={() => handlePrint('redacted')} className="redactedPrintButton">
+              Print list for general view
+            </PrintLink>
+          </>
+        )}
       </div>
     )
     const redactedHide = redactedPrintState ? 'no-print' : 'straightPrint'
@@ -294,7 +293,7 @@ class ResultsHouseblock extends Component {
       houseblockData &&
       houseblockData.map((offender, index) => {
         const { offenderNo, bookingId, firstName, lastName, cellLocation } = offender
-        const mainActivity = offender.activities.find(activity => activity.mainActivity)
+        const mainActivity = offender.activities.find((activity) => activity.mainActivity)
         const { eventId, attendanceInfo, eventLocationId } = mainActivity || {}
         const offenderDetails = {
           offenderNo,
@@ -355,24 +354,23 @@ class ResultsHouseblock extends Component {
             <>
               {isReceived && <td className="no-print">Received</td>}
               {isPaid && <td className="no-print">Paid</td>}
-              {!isReceived &&
-                !isPaid && (
-                  <AttendanceOptions
-                    offenderDetails={offenderDetails}
-                    raiseAnalyticsEvent={raiseAnalyticsEvent}
-                    resetErrorDispatch={resetErrorDispatch}
-                    setErrorDispatch={setErrorDispatch}
-                    handleError={handleError}
-                    reloadPage={update}
-                    agencyId={agencyId}
-                    period={period}
-                    showModal={showModal}
-                    activityName={activityName}
-                    setOffenderAttendance={setHouseblockOffenderAttendance}
-                    date={date}
-                    noPay
-                  />
-                )}
+              {!isReceived && !isPaid && (
+                <AttendanceOptions
+                  offenderDetails={offenderDetails}
+                  raiseAnalyticsEvent={raiseAnalyticsEvent}
+                  resetErrorDispatch={resetErrorDispatch}
+                  setErrorDispatch={setErrorDispatch}
+                  handleError={handleError}
+                  reloadPage={update}
+                  agencyId={agencyId}
+                  period={period}
+                  showModal={showModal}
+                  activityName={activityName}
+                  setOffenderAttendance={setHouseblockOffenderAttendance}
+                  date={date}
+                  noPay
+                />
+              )}
             </>
           </tr>
         )

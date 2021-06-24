@@ -3,7 +3,7 @@ const { isBeforeToday, sortByDateTime } = require('../../utils')
 const { alerts } = require('../../services/covidService')
 
 module.exports = ({ covidService }) => {
-  const formatResult = result => {
+  const formatResult = (result) => {
     const alertCreated = moment(result.alertCreated)
     const expectedMoveDate = moment(result.alertCreated).add(14, 'days')
     const isOverdue = isBeforeToday(expectedMoveDate)

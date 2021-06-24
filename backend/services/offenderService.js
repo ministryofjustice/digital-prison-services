@@ -1,6 +1,6 @@
 const { properCaseName } = require('../utils')
 
-const OffenderServiceFactory = prisonApi => {
+const OffenderServiceFactory = (prisonApi) => {
   const getOffender = async (context, offenderNo) => {
     const bookingDetails = await prisonApi.getDetails(context, offenderNo)
 

@@ -12,7 +12,7 @@ const StyledPrintLink = styled.div`
 
   @media screen and (min-width: ${BREAKPOINTS.DESKTOP}) {
     display: inline-block;
-    ${props => (props.bottom ? spacing.responsive({ size: 6, property: 'margin', direction: ['top'] }) : null)};
+    ${(props) => (props.bottom ? spacing.responsive({ size: 6, property: 'margin', direction: ['top'] }) : null)};
     text-decoration: underline;
     cursor: pointer;
     background: url(${PrintIcon}) no-repeat 0 50%;

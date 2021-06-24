@@ -2,7 +2,7 @@ const moment = require('moment')
 
 const { getCurrentPeriod } = require('../utils')
 
-module.exports = whereaboutsApi => {
+module.exports = (whereaboutsApi) => {
   const renderTemplate = async (req, res, pageData) => {
     const today = moment()
     const { errors, formValues } = pageData || {}
@@ -16,7 +16,7 @@ module.exports = whereaboutsApi => {
         date: formValues?.date || today.format('DD/MM/YYYY'),
         errors,
         period: formValues?.period || getCurrentPeriod(today),
-        residentialLocations: residentialLocations.map(location => ({ text: location.name, value: location.key })),
+        residentialLocations: residentialLocations.map((location) => ({ text: location.name, value: location.key })),
       })
     } catch (error) {
       res.locals.redirectUrl = '/manage-prisoner-whereabouts'

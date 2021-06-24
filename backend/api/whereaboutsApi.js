@@ -1,9 +1,9 @@
 const { mapToQueryString } = require('../utils')
 
-const whereaboutsApiFactory = client => {
-  const processResponse = () => response => response.body
+const whereaboutsApiFactory = (client) => {
+  const processResponse = () => (response) => response.body
 
-  const map404ToNull = error => {
+  const map404ToNull = (error) => {
     if (!error.response) throw error
     if (!error.response.status) throw error
     if (error.response.status !== 404) throw error
@@ -11,11 +11,7 @@ const whereaboutsApiFactory = client => {
   }
 
   const get = (context, url) => client.get(context, url).then(processResponse())
-  const getWith404AsNull = (context, url) =>
-    client
-      .get(context, url)
-      .then(processResponse())
-      .catch(map404ToNull)
+  const getWith404AsNull = (context, url) => client.get(context, url).then(processResponse()).catch(map404ToNull)
   const getWithCustomTimeout = (context, path, overrides) =>
     client.getWithCustomTimeout(context, path, overrides).then(processResponse())
   const post = (context, url, data) => client.post(context, url, data).then(processResponse())
@@ -39,7 +35,7 @@ const whereaboutsApiFactory = client => {
 
   const putAttendance = (context, body, id) => put(context, `/attendance/${id}`, body)
 
-  const getAbsenceReasons = context => get(context, '/absence-reasons')
+  const getAbsenceReasons = (context) => get(context, '/absence-reasons')
 
   const getPrisonAttendance = (context, { agencyId, date, period }) =>
     get(context, `/attendances/${agencyId}/attendance-for-scheduled-activities?date=${date}&period=${period}`)
@@ -68,7 +64,7 @@ const whereaboutsApiFactory = client => {
   const getAgencyGroupLocations = (context, agencyId, groupName) =>
     get(context, `/locations/groups/${agencyId}/${groupName}`)
 
-  const getCourtLocations = context => get(context, '/court/courts')
+  const getCourtLocations = (context) => get(context, '/court/courts')
 
   const addVideoLinkBooking = (context, body) => post(context, '/court/video-link-bookings', body)
 

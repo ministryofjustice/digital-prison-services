@@ -1,5 +1,5 @@
-const pathfinderApiFactory = client => {
-  const processResponse = () => response => response.body
+const pathfinderApiFactory = (client) => {
+  const processResponse = () => (response) => response.body
 
   const get = (context, url) => client.get(context, url).then(processResponse())
 

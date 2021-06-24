@@ -27,9 +27,7 @@ describe('protective isolation unit', () => {
   it('should render view with results', async () => {
     const results = [
       {
-        alertCreated: moment(now)
-          .subtract(3, 'days')
-          .format('YYYY-MM-DD'),
+        alertCreated: moment(now).subtract(3, 'days').format('YYYY-MM-DD'),
         assignedLivingUnitDesc: '1-2-017',
         bookingId: 123,
         name: 'Stewart, James',

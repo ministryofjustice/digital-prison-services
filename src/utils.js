@@ -1,12 +1,12 @@
 const moment = require('moment')
 
-const properCase = word =>
+const properCase = (word) =>
   typeof word === 'string' && word.length >= 1 ? word[0].toUpperCase() + word.toLowerCase().slice(1) : word
 
 function isBlank(str) {
   return !str || /^\s*$/.test(str)
 }
-const removeBlanks = array => array.filter(item => !!item)
+const removeBlanks = (array) => array.filter((item) => !!item)
 
 /**
  * Converts a name (first name, last name, middle name, etc.) to proper case equivalent, handling double-barreled names
@@ -14,20 +14,14 @@ const removeBlanks = array => array.filter(item => !!item)
  * @param name name to be converted.
  * @returns name converted to proper case.
  */
-const properCaseName = name =>
-  isBlank(name)
-    ? ''
-    : name
-        .split('-')
-        .map(properCase)
-        .join('-')
+const properCaseName = (name) => (isBlank(name) ? '' : name.split('-').map(properCase).join('-'))
 
-const forenameToInitial = name => {
+const forenameToInitial = (name) => {
   if (!name) return null
   return `${name.charAt()}. ${name.split(' ').pop()}`
 }
 
-const getHoursMinutes = timestamp => {
+const getHoursMinutes = (timestamp) => {
   const indexOfT = timestamp.indexOf('T')
   if (indexOfT < 0) {
     return ''
@@ -35,14 +29,12 @@ const getHoursMinutes = timestamp => {
   return timestamp.substr(indexOfT + 1, 5)
 }
 
-const isToday = date => {
+const isToday = (date) => {
   if (date === 'Today') return true
 
-  return moment(date, 'DD/MM/YYYY')
-    .startOf('day')
-    .isSame(moment().startOf('day'))
+  return moment(date, 'DD/MM/YYYY').startOf('day').isSame(moment().startOf('day'))
 }
-const getCurrentPeriod = date => {
+const getCurrentPeriod = (date) => {
   const afternoonSplit = 12
   const eveningSplit = 17
   const currentHour = moment(date).format('H')
@@ -52,20 +44,20 @@ const getCurrentPeriod = date => {
   return 'ED'
 }
 
-const isTodayOrAfter = date => {
+const isTodayOrAfter = (date) => {
   if (isToday(date)) return true
 
   const searchDate = moment(date, 'DD/MM/YYYY')
   return searchDate.isSameOrAfter(moment(), 'day')
 }
 
-const isAfterToday = date => {
+const isAfterToday = (date) => {
   const dayAfter = moment().add(1, 'day')
   const daysDifference = moment(date, 'DD/MM/YYYY').diff(dayAfter, 'day')
   return daysDifference >= 0
 }
 
-const isWithinNextTwoWorkingDays = date => {
+const isWithinNextTwoWorkingDays = (date) => {
   if (isToday(date)) return true
   if (moment(date, 'DD/MM/YYYY').isBefore(moment().startOf('day'))) return false
 
@@ -78,14 +70,10 @@ const isWithinNextTwoWorkingDays = date => {
   if (isThursday || isFriday) daysInAdvance += 2
   if (isSaturday) daysInAdvance += 1
 
-  return moment(date, 'DD/MM/YYYY').isBefore(
-    moment()
-      .add(daysInAdvance, 'days')
-      .endOf('day')
-  )
+  return moment(date, 'DD/MM/YYYY').isBefore(moment().add(daysInAdvance, 'days').endOf('day'))
 }
 
-const isWithinLastYear = date => {
+const isWithinLastYear = (date) => {
   if (isToday(date)) return true
 
   const oneYearAgo = moment().subtract(1, 'years')
@@ -94,7 +82,7 @@ const isWithinLastYear = date => {
   return daysDifference >= 0
 }
 
-const isWithinLastWeek = date => {
+const isWithinLastWeek = (date) => {
   if (isToday(date)) return true
 
   const oneWeekAgo = moment().subtract(1, 'week')
@@ -102,23 +90,23 @@ const isWithinLastWeek = date => {
   return daysDifference >= 0
 }
 
-const isBeforeToday = date => !(isToday(date) || isAfterToday(date))
+const isBeforeToday = (date) => !(isToday(date) || isAfterToday(date))
 
-const getMainEventDescription = event => {
+const getMainEventDescription = (event) => {
   if (event.eventType === 'PRISON_ACT' || event.event === 'PA') {
     return event.comment
   }
   return removeBlanks([event.eventDescription, event.comment]).join(' - ')
 }
 
-const getEventDescription = event => {
+const getEventDescription = (event) => {
   if (event.eventType === 'PRISON_ACT' || event.event === 'PA') {
     return event.comment
   }
   return removeBlanks([event.eventDescription, event.eventLocation, event.comment]).join(' - ')
 }
 
-const getListSizeClass = list => {
+const getListSizeClass = (list) => {
   if (!list || list.length === 0) return 'empty-list'
   if (list.length < 20) return 'small-list'
   if (list.length < 30) return 'medium-list'
@@ -126,21 +114,21 @@ const getListSizeClass = list => {
   return 'extra-large-list'
 }
 
-const getLongDateFormat = date => {
+const getLongDateFormat = (date) => {
   if (date && date !== 'Today') return moment(date, 'DD/MM/YYYY').format('dddd Do MMMM')
   return moment().format('dddd Do MMMM')
 }
 
-const linkOnClick = handlerFn => ({
+const linkOnClick = (handlerFn) => ({
   tabIndex: 0,
   role: 'link',
   onClick: handlerFn,
-  onKeyDown: event => {
+  onKeyDown: (event) => {
     if (event.key === 'Enter') handlerFn(event)
   },
 })
 
-const pascalToString = value =>
+const pascalToString = (value) =>
   value.substring(0, 1) +
   value
     .substring(1)

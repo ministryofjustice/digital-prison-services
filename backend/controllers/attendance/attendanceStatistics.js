@@ -21,8 +21,8 @@ const formatReason = ({ name, triggersIEPWarning }) =>
     : capitalize(pascalToString(name))
 
 const buildStatsViewModel = (dashboardStats, triggersIEPWarning, changes) => {
-  const mapReasons = reasons =>
-    Object.keys(reasons || []).map(name => ({
+  const mapReasons = (reasons) =>
+    Object.keys(reasons || []).map((name) => ({
       id: capitalizeStart(name),
       name: formatReason({ name, triggersIEPWarning }),
       value: Number(reasons[name]),
@@ -32,7 +32,7 @@ const buildStatsViewModel = (dashboardStats, triggersIEPWarning, changes) => {
     ...dashboardStats,
     attended: dashboardStats?.paidReasons?.attended,
     paidReasons: mapReasons(dashboardStats?.paidReasons).filter(
-      nvp => nvp.name && nvp.name.toLowerCase() !== 'attended'
+      (nvp) => nvp.name && nvp.name.toLowerCase() !== 'attended'
     ),
     unpaidReasons: mapReasons(dashboardStats?.unpaidReasons),
     changes,
@@ -46,9 +46,9 @@ const periodDisplayLookup = {
   AM_PM: 'AM and PM',
 }
 
-const extractCaseLoadInfo = caseloads => {
-  const activeCaseLoad = caseloads.find(cl => cl.currentlyActive)
-  const inactiveCaseLoads = caseloads.filter(cl => cl.currentlyActive === false)
+const extractCaseLoadInfo = (caseloads) => {
+  const activeCaseLoad = caseloads.find((cl) => cl.currentlyActive)
+  const inactiveCaseLoads = caseloads.filter((cl) => cl.currentlyActive === false)
   const activeCaseLoadId = activeCaseLoad ? activeCaseLoad.caseLoadId : null
 
   return {
@@ -58,7 +58,7 @@ const extractCaseLoadInfo = caseloads => {
   }
 }
 
-const absentReasonTableViewModel = offenderData => ({
+const absentReasonTableViewModel = (offenderData) => ({
   sortOptions: [
     { value: '0_ascending', text: 'Name (A-Z)' },
     { value: '0_descending', text: 'Name (Z-A)' },
@@ -69,16 +69,14 @@ const absentReasonTableViewModel = offenderData => ({
   ],
   offenders: offenderData
     .sort((a, b) => a.offenderName.localeCompare(b.offenderName, 'en', { ignorePunctuation: true }))
-    .map(data => {
+    .map((data) => {
       const quickLookUrl = `/prisoner/${data.offenderNo}`
 
       // Return the data in the appropriate format to seed the table macro
       return [
         {
           html: data.location
-            ? `<a href=${quickLookUrl} class="govuk-link" target="_blank" rel="noopener noreferrer">${
-                data.offenderName
-              }</a>`
+            ? `<a href=${quickLookUrl} class="govuk-link" target="_blank" rel="noopener noreferrer">${data.offenderName}</a>`
             : data.offenderName,
         },
         {
@@ -100,7 +98,7 @@ const absentReasonTableViewModel = offenderData => ({
     }),
 })
 
-const validateDates = dates => {
+const validateDates = (dates) => {
   const errors = []
 
   const fromDate = moment(dates.fromDate, 'DD/MM/YYYY')
@@ -123,14 +121,8 @@ const validateDates = dates => {
 }
 
 const dateRangeForStats = (subtractWeeks = 0) => {
-  const sunday = moment()
-    .subtract(subtractWeeks, 'week')
-    .day(0)
-    .format('DD/MM/YYYY')
-  const saturday = moment()
-    .subtract(subtractWeeks, 'week')
-    .day(6)
-    .format('DD/MM/YYYY')
+  const sunday = moment().subtract(subtractWeeks, 'week').day(0).format('DD/MM/YYYY')
+  const saturday = moment().subtract(subtractWeeks, 'week').day(6).format('DD/MM/YYYY')
 
   return {
     fromDate: sunday,
@@ -151,17 +143,11 @@ const getStatPresetsLinks = ({ activeCaseLoadId }) => {
   const currentWeek = dateRangeForStats()
   const previousWeek = dateRangeForStats(1)
 
-  const statsForCurrentWeek = `${attendanceReasonStatsUrl}?agencyId=${activeCaseLoadId}&period=AM_PM&fromDate=${
-    currentWeek.fromDate
-  }&toDate=${currentWeek.toDate}`
+  const statsForCurrentWeek = `${attendanceReasonStatsUrl}?agencyId=${activeCaseLoadId}&period=AM_PM&fromDate=${currentWeek.fromDate}&toDate=${currentWeek.toDate}`
 
-  const statsForPreviousWeek = `${attendanceReasonStatsUrl}?agencyId=${activeCaseLoadId}&period=AM_PM&fromDate=${
-    previousWeek.fromDate
-  }&toDate=${previousWeek.toDate}`
+  const statsForPreviousWeek = `${attendanceReasonStatsUrl}?agencyId=${activeCaseLoadId}&period=AM_PM&fromDate=${previousWeek.fromDate}&toDate=${previousWeek.toDate}`
 
-  const statsFor2Weeks = `${attendanceReasonStatsUrl}?agencyId=${activeCaseLoadId}&period=AM_PM&fromDate=${
-    previousWeek.fromDate
-  }&toDate=${currentWeek.toDate}`
+  const statsFor2Weeks = `${attendanceReasonStatsUrl}?agencyId=${activeCaseLoadId}&period=AM_PM&fromDate=${previousWeek.fromDate}&toDate=${currentWeek.toDate}`
 
   return {
     statsForCurrentWeek,
@@ -274,7 +260,7 @@ const attendanceStatisticsFactory = (oauthApi, prisonApi, whereaboutsApi) => {
     }
 
     const { changes } = await whereaboutsApi.getAttendanceChanges(res.locals, dateRange)
-    const changesForAgency = (changes && changes.filter(change => change.prisonId === agencyId).length) || 0
+    const changesForAgency = (changes && changes.filter((change) => change.prisonId === agencyId).length) || 0
 
     const dashboardStats = await whereaboutsApi.getAttendanceStats(res.locals, {
       agencyId,
@@ -323,7 +309,7 @@ const attendanceStatisticsFactory = (oauthApi, prisonApi, whereaboutsApi) => {
         toDate: formattedToDate || formattedFromDate,
       })
 
-      const offenderData = absences.map(absence => ({
+      const offenderData = absences.map((absence) => ({
         offenderName: `${capitalize(absence.lastName)}, ${capitalize(absence.firstName)}`,
         offenderNo: absence.offenderNo,
         location: stripAgencyPrefix(absence.cellLocation, agencyId),
@@ -392,18 +378,18 @@ const attendanceStatisticsFactory = (oauthApi, prisonApi, whereaboutsApi) => {
       period: period === 'AM_PM' ? '' : period,
     })
 
-    const suspendedActivites = scheduledActivities.filter(activity => activity.suspended)
-    const totalOffenders = new Set(suspendedActivites.map(activity => activity.bookingId)).size
+    const suspendedActivites = scheduledActivities.filter((activity) => activity.suspended)
+    const totalOffenders = new Set(suspendedActivites.map((activity) => activity.bookingId)).size
 
     const suspendedAttendances = await whereaboutsApi.getAttendanceForBookingsOverDateRange(res.locals, {
       agencyId,
       period: period === 'AM_PM' ? '' : period,
-      bookings: suspendedActivites.map(activity => activity.bookingId),
+      bookings: suspendedActivites.map((activity) => activity.bookingId),
       fromDate: formattedFromDate,
       toDate: formattedToDate,
     })
 
-    const formatAttendedData = data => {
+    const formatAttendedData = (data) => {
       if (data.attended) {
         return 'Yes'
       }
@@ -411,9 +397,9 @@ const attendanceStatisticsFactory = (oauthApi, prisonApi, whereaboutsApi) => {
       return `${data.paid ? 'Yes' : 'No'} - ${pascalToString(data.absentReason).toLowerCase()}`
     }
 
-    const offendersData = suspendedActivites.map(activity => {
+    const offendersData = suspendedActivites.map((activity) => {
       const attendanceDetails = suspendedAttendances.attendances.find(
-        attendance =>
+        (attendance) =>
           activity.bookingId === attendance.bookingId &&
           moment(activity.startTime).format('YYYY-MM-DD') === attendance.eventDate &&
           activity.eventId === attendance.eventId
@@ -449,8 +435,9 @@ const attendanceStatisticsFactory = (oauthApi, prisonApi, whereaboutsApi) => {
       },
       displayDate: formatDatesForDisplay({ fromDate, toDate }),
       displayPeriod: periodDisplayLookup[period],
-      dashboardUrl: `${attendanceReasonStatsUrl}?agencyId=${agencyId}&period=${period}&fromDate=${fromDate}&toDate=${toDate ||
-        ''}`,
+      dashboardUrl: `${attendanceReasonStatsUrl}?agencyId=${agencyId}&period=${period}&fromDate=${fromDate}&toDate=${
+        toDate || ''
+      }`,
       offendersData,
       caseLoadId: activeCaseLoad.caseLoadId,
       allCaseloads: caseloads,

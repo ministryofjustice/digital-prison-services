@@ -5,10 +5,10 @@ const { putLastNameFirst, hasLength, formatLocation } = require('../../utils')
 
 const trackEvent = (telemetry, results, searchQueries, username, activeCaseLoad) => {
   if (telemetry) {
-    const offenderNos = results?.map(result => result.offenderNo)
+    const offenderNos = results?.map((result) => result.offenderNo)
     // Remove empty terms and the alerts[] property (which is a duplicate of the alerts property)
     const searchTerms = Object.fromEntries(
-      Object.entries(searchQueries).filter(entry => entry[1] && entry[0] !== 'alerts[]')
+      Object.entries(searchQueries).filter((entry) => entry[1] && entry[0] !== 'alerts[]')
     )
 
     telemetry.trackEvent({
@@ -41,7 +41,7 @@ module.exports = ({ paginationService, prisonApi, telemetry, logError }) => {
       viewAll,
     } = req.query
 
-    const selectedAlerts = alerts && alerts.map(alert => alert.split(',')).flat()
+    const selectedAlerts = alerts && alerts.map((alert) => alert.split(',')).flat()
     const pageLimit = (pageLimitOption && parseInt(pageLimitOption, 10)) || 50
     const pageOffset = (pageOffsetOption && !viewAll && parseInt(pageOffsetOption, 10)) || 0
     const [sortFields, sortOrder] = sortFieldsWithOrder.split(':')
@@ -77,17 +77,17 @@ module.exports = ({ paginationService, prisonApi, telemetry, logError }) => {
       const totalRecords = context.responseHeaders['total-records']
 
       const locationOptions =
-        locations && locations.map(option => ({ value: option.locationPrefix, text: option.description }))
+        locations && locations.map((option) => ({ value: option.locationPrefix, text: option.description }))
 
       const results =
         prisoners &&
-        prisoners.map(prisoner => ({
+        prisoners.map((prisoner) => ({
           ...prisoner,
           assignedLivingUnitDesc: formatLocation(prisoner.assignedLivingUnitDesc),
           name: putLastNameFirst(prisoner.firstName, prisoner.lastName),
-          alerts: alertFlagLabels.filter(alertFlag =>
+          alerts: alertFlagLabels.filter((alertFlag) =>
             alertFlag.alertCodes.some(
-              alert =>
+              (alert) =>
                 prisoner.alertsDetails && prisoner.alertsDetails.includes(alert) && profileAlertCodes.includes(alert)
             )
           ),
@@ -105,9 +105,9 @@ module.exports = ({ paginationService, prisonApi, telemetry, logError }) => {
           .map(({ alertCodes, label }) => ({
             value: alertCodes,
             text: label,
-            checked: Boolean(selectedAlerts) && selectedAlerts.some(alert => alertCodes.includes(alert)),
+            checked: Boolean(selectedAlerts) && selectedAlerts.some((alert) => alertCodes.includes(alert)),
           })),
-        formValues: { ...req.query, alerts: hasLength(alerts) && alerts.filter(alert => alert.length) },
+        formValues: { ...req.query, alerts: hasLength(alerts) && alerts.filter((alert) => alert.length) },
         links: {
           allResults: `${req.baseUrl}?${qs.stringify({
             ...searchQueries,
@@ -121,12 +121,12 @@ module.exports = ({ paginationService, prisonApi, telemetry, logError }) => {
         pageLimit,
         pagination: paginationService.getPagination(totalRecords, pageOffset, pageLimit, fullUrl),
         printedValues: {
-          location: locationOptions.find(loc => loc.value === req.query.location),
+          location: locationOptions.find((loc) => loc.value === req.query.location),
           alerts: alertFlagLabels
             .filter(
               ({ alertCodes }) =>
                 Boolean(selectedAlerts) &&
-                selectedAlerts.find(alert => alertCodes.includes(alert) && profileAlertCodes.includes(alert))
+                selectedAlerts.find((alert) => alertCodes.includes(alert) && profileAlertCodes.includes(alert))
             )
             .map(({ label }) => label),
         },
@@ -135,7 +135,7 @@ module.exports = ({ paginationService, prisonApi, telemetry, logError }) => {
         view,
       })
     } catch (error) {
-      if (error && (error.code !== 'ECONNRESET' && !(error.stack && error.stack.toLowerCase().includes('timeout'))))
+      if (error && error.code !== 'ECONNRESET' && !(error.stack && error.stack.toLowerCase().includes('timeout')))
         logError(req.originalUrl, error, serviceUnavailableMessage)
 
       res.status(500)

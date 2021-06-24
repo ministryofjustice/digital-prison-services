@@ -81,7 +81,10 @@ describe('prisoner alerts', () => {
         prisonerProfileData,
         activeAlerts: [],
         inactiveAlerts: [],
-        alertTypeValues: [{ text: 'Child Communication Measures', value: 'C' }, { text: 'Social Care', value: 'A' }],
+        alertTypeValues: [
+          { text: 'Child Communication Measures', value: 'C' },
+          { text: 'Social Care', value: 'A' },
+        ],
       })
     )
   })
@@ -122,7 +125,10 @@ describe('prisoner alerts', () => {
         prisonerProfileData,
         activeAlerts: [],
         inactiveAlerts: [],
-        alertTypeValues: [{ text: 'Child Communication Measures', value: 'C' }, { text: 'Social Care', value: 'A' }],
+        alertTypeValues: [
+          { text: 'Child Communication Measures', value: 'C' },
+          { text: 'Social Care', value: 'A' },
+        ],
         totalAlerts: 1,
         alertType: 'X',
         active: 'ACTIVE',
@@ -202,8 +208,7 @@ describe('prisoner alerts', () => {
               { text: 'John Smith' },
               {
                 classes: 'govuk-table__cell--numeric',
-                html:
-                  '<a class="govuk-button govuk-button--secondary" href="/edit-alert?offenderNo=G3878UK&alertId=1">Change or close</a>',
+                html: '<a class="govuk-button govuk-button--secondary" href="/edit-alert?offenderNo=G3878UK&alertId=1">Change or close</a>',
               },
             ],
           ],
