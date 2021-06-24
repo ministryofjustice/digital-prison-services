@@ -76,7 +76,7 @@ context('A user can view attendance reasons', () => {
     })
   })
 
-  it('The page shows the reasons correctly', () => {
+  it('Shows the reasons correctly', () => {
     cy.visit(
       `/manage-prisoner-whereabouts/attendance-reason-statistics/reason/${reason}?agencyId=${agencyId}&period=${period}&fromDate=${fromDate}&toDate=${toDate}`
     )
@@ -99,6 +99,10 @@ context('A user can view attendance reasons', () => {
       cy.get($table)
         .find('tr')
         .then($tableRows => {
+          cy.get($tableRows)
+            .its('length')
+            .should('eq', 3) // 2 results plus table header
+
           const reasons = Array.from($tableRows).map($row => toReason($row.cells))
 
           expect(reasons[1].name).to.contain('Bo, Jim')
@@ -137,7 +141,7 @@ context('A user can view attendance reasons', () => {
     })
   })
 
-  it('Shows the correct when when no absence reasons are found', () => {
+  it('Shows the correct data when when no absence reasons are found', () => {
     cy.task('stubGetAbsences', { agencyId, reason, absences: [] })
 
     cy.visit(
