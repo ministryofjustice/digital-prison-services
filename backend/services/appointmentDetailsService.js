@@ -3,6 +3,11 @@ const { endRecurringEndingDate, repeatTypes } = require('../shared/appointmentCo
 const { formatName, getDate, getTime, getWith404AsNull } = require('../utils')
 
 module.exports = ({ prisonApi }) => {
+  const getAddedByUser = async (res, appointment) => {
+    const staffDetails = await getWith404AsNull(prisonApi.getStaffDetails(res.locals, appointment.createUserId))
+    return (staffDetails && formatName(staffDetails.firstName, staffDetails.lastName)) || appointment.createUserId
+  }
+
   const getAppointmentViewModel = async (res, appointmentDetails, activeCaseLoadId) => {
     const { appointment, recurring, videoLinkBooking } = appointmentDetails
 
@@ -10,8 +15,6 @@ module.exports = ({ prisonApi }) => {
       prisonApi.getLocationsForAppointments(res.locals, activeCaseLoadId),
       prisonApi.getAppointmentTypes(res.locals),
     ])
-
-    const staffDetails = await getWith404AsNull(prisonApi.getStaffDetails(res.locals, appointment.createUserId))
 
     const appointmentType = appointmentTypes?.find((type) => type.code === appointment.appointmentTypeCode)
     const locationType = locationTypes?.find((loc) => Number(loc.locationId) === Number(appointment.locationId))
@@ -39,10 +42,12 @@ module.exports = ({ prisonApi }) => {
       prepostData['post-court hearing briefing'] = createLocationAndTimeString(videoLinkBooking.post)
     }
 
+    const addedBy = await (videoLinkBooking?.main?.madeByTheCourt ? 'Court User' : getAddedByUser(res, appointment))
+
     const additionalDetails = {
       ...(videoLinkBooking && { courtLocation: videoLinkBooking.main.court }),
       comments: appointment.comment || 'Not entered',
-      addedBy: (staffDetails && formatName(staffDetails.firstName, staffDetails.lastName)) || appointment.createUserId,
+      addedBy,
     }
 
     const basicDetails = {
