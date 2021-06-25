@@ -1,8 +1,8 @@
 const contextProperties = require('../contextProperties')
 const { arrayToQueryString, mapToQueryString } = require('../utils')
 
-const prisonApiFactory = client => {
-  const processResponse = context => response => {
+const prisonApiFactory = (client) => {
+  const processResponse = (context) => (response) => {
     contextProperties.setResponsePagination(context, response.headers)
     return response.body
   }
@@ -15,8 +15,8 @@ const prisonApiFactory = client => {
 
   const put = (context, url, data) => client.put(context, url, data).then(processResponse(context))
 
-  const userLocations = context => (context.authSource !== 'auth' ? get(context, '/api/users/me/locations') : [])
-  const userCaseLoads = context => (context.authSource !== 'auth' ? get(context, '/api/users/me/caseLoads') : [])
+  const userLocations = (context) => (context.authSource !== 'auth' ? get(context, '/api/users/me/locations') : [])
+  const userCaseLoads = (context) => (context.authSource !== 'auth' ? get(context, '/api/users/me/caseLoads') : [])
 
   // NB. This function expects a caseload object.
   // The object *must* have non-blank caseLoadId,  description and type properties.
@@ -78,7 +78,7 @@ const prisonApiFactory = client => {
       offenderNumbers
     )
 
-  const getAgencies = context => get(context, '/api/agencies/prison')
+  const getAgencies = (context) => get(context, '/api/agencies/prison')
 
   const getAgencyDetails = (context, agencyId) => get(context, `/api/agencies/${agencyId}?activeOnly=false`)
 
@@ -195,9 +195,9 @@ const prisonApiFactory = client => {
   const getLocationsForAppointments = (context, agencyId) =>
     get(context, `/api/agencies/${agencyId}/locations?eventType=APP`)
 
-  const getAppointmentTypes = context => get(context, '/api/reference-domains/scheduleReasons?eventType=APP')
+  const getAppointmentTypes = (context) => get(context, '/api/reference-domains/scheduleReasons?eventType=APP')
 
-  const getAdjudicationFindingTypes = context => get(context, '/api/reference-domains/domains/OIC_FINDING', 1000)
+  const getAdjudicationFindingTypes = (context) => get(context, '/api/reference-domains/domains/OIC_FINDING', 1000)
 
   const getAdjudications = async (context, offenderNumber, params, pageOffset, pageLimit) => {
     contextProperties.setCustomRequestHeaders(context, {
@@ -241,7 +241,7 @@ const prisonApiFactory = client => {
       `/api/schedules/${agencyId}/activities-by-date-range?fromDate=${fromDate}&toDate=${toDate}&timeSlot=${period}&includeSuspended=true`
     )
 
-  const getAlertTypes = context => get(context, '/api/reference-domains/alertTypes', 1000)
+  const getAlertTypes = (context) => get(context, '/api/reference-domains/alertTypes', 1000)
 
   const createAlert = (context, bookingId, body) => post(context, `/api/bookings/${bookingId}/alert`, body)
 
@@ -328,15 +328,15 @@ const prisonApiFactory = client => {
   const getReasonableAdjustments = (context, bookingId, types) =>
     get(context, `/api/bookings/${bookingId}/reasonable-adjustments?type=${types}`)
 
-  const getTreatmentTypes = context => get(context, '/api/reference-domains/domains/HEALTH_TREAT', 1000)
+  const getTreatmentTypes = (context) => get(context, '/api/reference-domains/domains/HEALTH_TREAT', 1000)
 
-  const getHealthTypes = context => get(context, '/api/reference-domains/domains/HEALTH', 1000)
+  const getHealthTypes = (context) => get(context, '/api/reference-domains/domains/HEALTH', 1000)
 
-  const getVisitTypes = context => get(context, '/api/reference-domains/domains/VISIT_TYPE', 1000)
+  const getVisitTypes = (context) => get(context, '/api/reference-domains/domains/VISIT_TYPE', 1000)
 
-  const getCellAttributes = context => get(context, '/api/reference-domains/domains/HOU_UNIT_ATT', 1000)
+  const getCellAttributes = (context) => get(context, '/api/reference-domains/domains/HOU_UNIT_ATT', 1000)
 
-  const getCellMoveReasonTypes = context => get(context, '/api/reference-domains/domains/CHG_HOUS_RSN', 1000)
+  const getCellMoveReasonTypes = (context) => get(context, '/api/reference-domains/domains/CHG_HOUS_RSN', 1000)
 
   const getSentenceAdjustments = (context, bookingId) => get(context, `/api/bookings/${bookingId}/sentenceAdjustments`)
 

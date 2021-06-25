@@ -71,6 +71,7 @@ const setup = ({
   socApi,
   offenderSearchApi,
   complexityApi,
+  curiousApi,
 }) => {
   router.use(async (req, res, next) => {
     res.locals = {
@@ -215,6 +216,7 @@ const setup = ({
       whereaboutsApi,
       complexityApi,
       offenderSearchApi,
+      curiousApi,
     })
   )
 
@@ -296,4 +298,4 @@ const setup = ({
   return router
 }
 
-module.exports = dependencies => setup(dependencies)
+module.exports = (dependencies) => setup(dependencies)

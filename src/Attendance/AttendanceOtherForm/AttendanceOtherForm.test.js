@@ -4,7 +4,7 @@ import { AttendanceOtherForm } from './AttendanceOtherForm'
 import IncentiveLevelCreated from '../../IncentiveLevelCreated'
 
 describe('<AttendanceOtherForm />', () => {
-  const submitForm = async formWrapper => {
+  const submitForm = async (formWrapper) => {
     await formWrapper.find('form').simulate('submit')
     formWrapper.update()
   }
@@ -21,7 +21,10 @@ describe('<AttendanceOtherForm />', () => {
     updateOffenderAttendance: jest.fn(),
     absentReasons: {
       paidReasons: [{ value: 'AcceptableAbsence', name: 'Acceptable' }],
-      unpaidReasons: [{ value: 'UnacceptableAbsence', name: 'Unacceptable' }, { value: 'Refused', name: 'Refused' }],
+      unpaidReasons: [
+        { value: 'UnacceptableAbsence', name: 'Unacceptable' },
+        { value: 'Refused', name: 'Refused' },
+      ],
       triggersIEPWarning: ['UnacceptableAbsence', 'Refused'],
     },
     showModal: jest.fn(),
@@ -47,7 +50,7 @@ describe('<AttendanceOtherForm />', () => {
   let reasonSelector = {}
   let commentInput = {}
 
-  const buildWrapper = wrappedComponent => {
+  const buildWrapper = (wrappedComponent) => {
     wrapper = wrappedComponent
     yesRadio = wrappedComponent.find('input[value="yes"]')
     noRadio = wrappedComponent.find('input[value="no"]')
@@ -82,7 +85,7 @@ describe('<AttendanceOtherForm />', () => {
       const reasons = wrapper
         .find('select[name="absentReason"]')
         .getElement()
-        .props.children[skipDefaultEntry].map(reason => reason.props)
+        .props.children[skipDefaultEntry].map((reason) => reason.props)
 
       expect(reasons).toEqual([
         { value: 'UnacceptableAbsence', children: 'Unacceptable' },
@@ -95,7 +98,7 @@ describe('<AttendanceOtherForm />', () => {
       const reasons = wrapper
         .find('select[name="absentReason"]')
         .getElement()
-        .props.children[skipDefaultEntry].map(reason => reason.props)
+        .props.children[skipDefaultEntry].map((reason) => reason.props)
 
       expect(reasons).toEqual([])
     })
@@ -109,7 +112,7 @@ describe('<AttendanceOtherForm />', () => {
       const reasons = wrapper
         .find('select[name="absentReason"]')
         .getElement()
-        .props.children[skipDefaultEntry].map(reason => reason.props)
+        .props.children[skipDefaultEntry].map((reason) => reason.props)
 
       expect(reasons).toEqual([{ value: 'AcceptableAbsence', children: 'Acceptable' }])
     })

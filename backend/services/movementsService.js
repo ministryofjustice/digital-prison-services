@@ -19,35 +19,35 @@ const movementsServiceFactory = (prisonApi, systemOauthClient) => {
 
   const getActiveAlerts = async (systemContext, offenderNumbers) => {
     const alerts = await prisonApi.getAlertsSystem(systemContext, offenderNumbers)
-    return alerts && alerts.filter(alert => !alert.expired)
+    return alerts && alerts.filter((alert) => !alert.expired)
   }
 
-  const extractOffenderNumbers = obj => obj.map(o => o.offenderNo)
-  const extractBookingIds = obj => obj.map(o => o.bookingId)
+  const extractOffenderNumbers = (obj) => obj.map((o) => o.offenderNo)
+  const extractBookingIds = (obj) => obj.map((o) => o.bookingId)
 
   const alertCodesForOffenderNo = (alerts, offenderNo) =>
-    alerts.filter(alert => alert.offenderNo === offenderNo).map(alert => alert.alertCode)
+    alerts.filter((alert) => alert.offenderNo === offenderNo).map((alert) => alert.alertCode)
 
   const addAlerts = (objects, alerts) =>
     alerts
-      ? objects.map(obj => ({
+      ? objects.map((obj) => ({
           ...obj,
           alerts: alertCodesForOffenderNo(alerts, obj.offenderNo),
         }))
       : objects
 
-  const categoryFromAssessment = assessment => (assessment ? { category: assessment.classificationCode } : {})
+  const categoryFromAssessment = (assessment) => (assessment ? { category: assessment.classificationCode } : {})
 
   const addCategory = (objects, assessmentMap) =>
     assessmentMap
-      ? objects.map(obj => ({
+      ? objects.map((obj) => ({
           ...obj,
           ...categoryFromAssessment(assessmentMap.get(obj.offenderNo)),
         }))
       : objects
 
   const addMovements = (objects, recentMovementsMap) =>
-    objects.map(obj => {
+    objects.map((obj) => {
       const m = recentMovementsMap.get(obj.offenderNo)
       if (!m) {
         return obj
@@ -66,7 +66,7 @@ const movementsServiceFactory = (prisonApi, systemOauthClient) => {
     })
 
   const addIepSummaries = (objects, iepMap) =>
-    objects.map(obj => {
+    objects.map((obj) => {
       const iepSummary = iepMap.get(obj.bookingId)
       if (!iepSummary) return obj
       return {

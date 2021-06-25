@@ -1,7 +1,7 @@
 const { alerts } = require('../../services/covidService')
 
 module.exports = ({ covidService }) => {
-  const loadStats = async res => {
+  const loadStats = async (res) => {
     const [
       prisonPopulation,
       reverseCohortingUnit,

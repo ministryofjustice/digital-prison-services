@@ -5,8 +5,8 @@ const service = (name, url) => {
 
   return () =>
     check()
-      .then(result => ({ name, status: 'UP', message: result }))
-      .catch(err => ({ name, status: 'ERROR', message: err }))
+      .then((result) => ({ name, status: 'UP', message: result }))
+      .catch((err) => ({ name, status: 'ERROR', message: err }))
 }
 
 const gatherCheckInfo = (total, currentValue) => ({ ...total, [currentValue.name]: currentValue.message })
@@ -20,7 +20,7 @@ const getBuild = () => {
   }
 }
 
-const addAppInfo = result => {
+const addAppInfo = (result) => {
   const buildInformation = getBuild()
   const buildInfo = {
     uptime: process.uptime(),
@@ -56,9 +56,9 @@ module.exports = function healthcheckFactory(
     service('complexity', complexityUrl),
   ]
 
-  return callback =>
-    Promise.all(checks.map(fn => fn())).then(checkResults => {
-      const allOk = checkResults.every(item => item.status === 'UP') ? 'UP' : 'DOWN'
+  return (callback) =>
+    Promise.all(checks.map((fn) => fn())).then((checkResults) => {
+      const allOk = checkResults.every((item) => item.status === 'UP') ? 'UP' : 'DOWN'
       const result = {
         name: 'prisonstaffhub',
         status: allOk,

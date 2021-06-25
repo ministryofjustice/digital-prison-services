@@ -58,7 +58,10 @@ describe('Appointments service', () => {
 
     expect(response).toEqual({
       appointmentTypes: [{ value: 'ACTI', text: 'Activities' }],
-      locationTypes: [{ value: 27187, text: 'Adj' }, { value: 27188, text: 'RES-MCASU-MCASU' }],
+      locationTypes: [
+        { value: 27187, text: 'Adj' },
+        { value: 27188, text: 'RES-MCASU-MCASU' },
+      ],
     })
   })
 

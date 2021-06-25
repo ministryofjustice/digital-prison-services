@@ -324,9 +324,7 @@ describe('move validation', () => {
           reasonDescription: 'Victim',
           typeCode: 'WING',
           typeDescription: 'Do Not Locate on Same Wing',
-          effectiveDate: moment()
-            .add(7, 'days')
-            .format('YYYY-MM-DDTHH:mm:ss'),
+          effectiveDate: moment().add(7, 'days').format('YYYY-MM-DDTHH:mm:ss'),
           authorisedBy: 'string',
           comments: 'Test comment 1',
           offenderNonAssociation: {
@@ -362,9 +360,7 @@ describe('move validation', () => {
           reasonDescription: 'Rival gang',
           typeCode: 'WING',
           typeDescription: 'Do Not Locate on Same Wing',
-          effectiveDate: moment()
-            .subtract(1, 'years')
-            .format('YYYY-MM-DDTHH:mm:ss'),
+          effectiveDate: moment().subtract(1, 'years').format('YYYY-MM-DDTHH:mm:ss'),
           authorisedBy: 'string',
           comments: 'Test comment 2',
           offenderNonAssociation: {

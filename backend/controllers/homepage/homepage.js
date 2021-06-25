@@ -4,7 +4,7 @@ const {
 } = require('../../config')
 
 const getTasks = ({ activeCaseLoadId, locations, staffId, whereaboutsConfig, keyworkerPrisonStatus, roleCodes }) => {
-  const userHasRoles = roles => roles.find(role => roleCodes.includes(role))
+  const userHasRoles = (roles) => roles.find((role) => roleCodes.includes(role))
 
   return [
     {
@@ -166,42 +166,49 @@ const getTasks = ({ activeCaseLoadId, locations, staffId, whereaboutsConfig, key
   ]
 }
 
-module.exports = ({ oauthApi, prisonApi, whereaboutsApi, keyworkerApi, logError }) => async (req, res) => {
-  try {
-    const { activeCaseLoadId, staffId } = req.session.userDetails
-    const [locations, staffRoles, userRoles, whereaboutsConfig, keyworkerPrisonStatus] = await Promise.all([
-      prisonApi.userLocations(res.locals),
-      prisonApi.getStaffRoles(res.locals, staffId, activeCaseLoadId),
-      oauthApi.userRoles(res.locals),
-      whereaboutsApi.getWhereaboutsConfig(res.locals, activeCaseLoadId),
-      keyworkerApi.getPrisonMigrationStatus(res.locals, activeCaseLoadId),
-    ])
+module.exports =
+  ({ oauthApi, prisonApi, whereaboutsApi, keyworkerApi, logError }) =>
+  async (req, res) => {
+    try {
+      const { activeCaseLoadId, staffId } = req.session.userDetails
+      const [locations, staffRoles, userRoles, whereaboutsConfig, keyworkerPrisonStatus] = await Promise.all([
+        prisonApi.userLocations(res.locals),
+        prisonApi.getStaffRoles(res.locals, staffId, activeCaseLoadId),
+        oauthApi.userRoles(res.locals),
+        whereaboutsApi.getWhereaboutsConfig(res.locals, activeCaseLoadId),
+        keyworkerApi.getPrisonMigrationStatus(res.locals, activeCaseLoadId),
+      ])
 
-    const roleCodes = [...userRoles.map(userRole => userRole.roleCode), ...staffRoles.map(staffRole => staffRole.role)]
+      const roleCodes = [
+        ...userRoles.map((userRole) => userRole.roleCode),
+        ...staffRoles.map((staffRole) => staffRole.role),
+      ]
 
-    if (roleCodes.includes('VIDEO_LINK_COURT_USER')) return res.redirect('/videolink')
+      if (roleCodes.includes('VIDEO_LINK_COURT_USER')) return res.redirect('/videolink')
 
-    const allTasks = getTasks({
-      activeCaseLoadId,
-      locations,
-      staffId,
-      whereaboutsConfig,
-      keyworkerPrisonStatus,
-      roleCodes,
-    })
+      const allTasks = getTasks({
+        activeCaseLoadId,
+        locations,
+        staffId,
+        whereaboutsConfig,
+        keyworkerPrisonStatus,
+        roleCodes,
+      })
 
-    return res.render('homepage/homepage.njk', {
-      locationOptions: locations?.map(option => ({ value: option.locationPrefix, text: option.description })),
-      tasks: allTasks.filter(task => task.enabled()).map(task => ({
-        id: task.id,
-        href: task.href,
-        heading: task.heading,
-        description: task.description,
-      })),
-    })
-  } catch (error) {
-    if (error) logError(req.originalUrl, error, 'Home page not loading')
+      return res.render('homepage/homepage.njk', {
+        locationOptions: locations?.map((option) => ({ value: option.locationPrefix, text: option.description })),
+        tasks: allTasks
+          .filter((task) => task.enabled())
+          .map((task) => ({
+            id: task.id,
+            href: task.href,
+            heading: task.heading,
+            description: task.description,
+          })),
+      })
+    } catch (error) {
+      if (error) logError(req.originalUrl, error, 'Home page not loading')
 
-    return res.render('error.njk', { url: '/' })
+      return res.render('error.njk', { url: '/' })
+    }
   }
-}

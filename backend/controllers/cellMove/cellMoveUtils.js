@@ -1,13 +1,14 @@
 const moment = require('moment')
 
-const getNonAssocationsInEstablishment = nonAssociations =>
+const getNonAssocationsInEstablishment = (nonAssociations) =>
   nonAssociations?.nonAssociations?.filter(
-    nonAssociation =>
+    (nonAssociation) =>
       nonAssociation.offenderNonAssociation &&
       nonAssociation.offenderNonAssociation.agencyDescription.toLowerCase() ===
         nonAssociations.agencyDescription.toLowerCase() &&
       (!nonAssociation.expiryDate || moment(nonAssociation.expiryDate, 'YYYY-MM-DDTHH:mm:ss') > moment()) &&
-      (nonAssociation.effectiveDate && moment(nonAssociation.effectiveDate, 'YYYY-MM-DDTHH:mm:ss') <= moment())
+      nonAssociation.effectiveDate &&
+      moment(nonAssociation.effectiveDate, 'YYYY-MM-DDTHH:mm:ss') <= moment()
   ) || []
 
 const getBackLinkData = (referer, offenderNo) => {
@@ -20,18 +21,21 @@ const getBackLinkData = (referer, offenderNo) => {
   }
 }
 
-const renderLocationOptions = locations => [
+const renderLocationOptions = (locations) => [
   { text: 'All residential units', value: 'ALL' },
-  ...locations.map(location => ({ text: location.name, value: location.key })),
+  ...locations.map((location) => ({ text: location.name, value: location.key })),
 ]
 
 const userHasAccess = ({ userRoles, userCaseLoads, offenderCaseload }) => {
-  const hasCellMoveRole = userRoles && userRoles.some(role => role.roleCode === 'CELL_MOVE')
-  const offenderInCaseload = userCaseLoads && userCaseLoads.some(caseload => caseload.caseLoadId === offenderCaseload)
+  const hasCellMoveRole = userRoles && userRoles.some((role) => role.roleCode === 'CELL_MOVE')
+  const offenderInCaseload = userCaseLoads && userCaseLoads.some((caseload) => caseload.caseLoadId === offenderCaseload)
   return hasCellMoveRole && offenderInCaseload
 }
 
-const cellAttributes = [{ text: 'Single occupancy', value: 'SO' }, { text: 'Multiple occupancy', value: 'MO' }]
+const cellAttributes = [
+  { text: 'Single occupancy', value: 'SO' },
+  { text: 'Multiple occupancy', value: 'MO' },
+]
 
 module.exports = {
   getNonAssocationsInEstablishment,

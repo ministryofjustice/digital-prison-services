@@ -84,7 +84,7 @@ describe('offender activities', () => {
       const response = await getPrisonersUnaccountedFor(context, 'LEI', '2019-08-07', 'PM')
 
       expect(response.length).toBe(4)
-      expect(response).toEqual(scheduledActivitiesResponse.map(activity => ({ ...activity, eventsElsewhere: [] })))
+      expect(response).toEqual(scheduledActivitiesResponse.map((activity) => ({ ...activity, eventsElsewhere: [] })))
     })
 
     it('should only return unaccounted for offender activities', async () => {

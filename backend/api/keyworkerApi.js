@@ -1,5 +1,5 @@
-const keyworkerApiFactory = client => {
-  const processResponse = () => response => response.body
+const keyworkerApiFactory = (client) => {
+  const processResponse = () => (response) => response.body
 
   const get = (context, url) => client.get(context, url).then(processResponse())
 

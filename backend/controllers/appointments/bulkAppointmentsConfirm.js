@@ -88,7 +88,7 @@ const bulkAppointmentsConfirmFactory = (prisonApi, logError) => {
       userDetails: { activeCaseLoadId },
     } = req.session
 
-    const prisonersWithAppointmentTimes = prisonersListed.map(prisoner => {
+    const prisonersWithAppointmentTimes = prisonersListed.map((prisoner) => {
       if (sameTimeAppointments === 'no') {
         const startTimeHours = req.body[`${prisoner.offenderNo}startTimeHours`]
         const startTimeMinutes = req.body[`${prisoner.offenderNo}startTimeMinutes`]
@@ -134,7 +134,7 @@ const bulkAppointmentsConfirmFactory = (prisonApi, logError) => {
         startTime: startTime || buildDateTime({ date, hours: 23, minutes: 59 }).format(DATE_TIME_FORMAT_SPEC),
         endTime,
       },
-      appointments: prisonersWithAppointmentTimes.map(prisoner => ({
+      appointments: prisonersWithAppointmentTimes.map((prisoner) => ({
         bookingId: prisoner.bookingId,
         startTime: prisoner.startTime,
         endTime: prisoner.endTime,
@@ -151,7 +151,7 @@ const bulkAppointmentsConfirmFactory = (prisonApi, logError) => {
     try {
       const { getOtherEvents } = bulkAppointmentsClashesFactory(prisonApi, logError)
       const eventsForAllOffenders = await getOtherEvents(req, res, {
-        offenderNumbers: prisonersListed.map(prisoner => prisoner.offenderNo),
+        offenderNumbers: prisonersListed.map((prisoner) => prisoner.offenderNo),
         date: switchDateFormat(date),
         agencyId: activeCaseLoadId,
       })

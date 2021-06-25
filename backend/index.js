@@ -89,6 +89,7 @@ app.use(
     socApi: apis.socApi,
     offenderSearchApi: apis.offenderSearchApi,
     complexityApi: apis.complexityApi,
+    curiousApi: apis.curiousApi,
   })
 )
 

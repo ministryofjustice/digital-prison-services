@@ -2,11 +2,8 @@ Reflect.deleteProperty(process.env, 'APPINSIGHTS_INSTRUMENTATIONKEY')
 
 const context = {}
 const whereaboutsApi = {}
-const {
-  updateAttendance,
-  getAbsenceReasons,
-  batchUpdateAttendance,
-} = require('../controllers/attendance/attendance').attendanceFactory(whereaboutsApi)
+const { updateAttendance, getAbsenceReasons, batchUpdateAttendance } =
+  require('../controllers/attendance/attendance').attendanceFactory(whereaboutsApi)
 
 describe('Attendence and Pay controller', () => {
   const attendenceDetails = {
@@ -21,12 +18,11 @@ describe('Attendence and Pay controller', () => {
   }
 
   describe('updateAttendance', () => {
-    it('should throw an error when offenderNo is null', async done => {
+    it('should throw an error when offenderNo is null', () => {
       try {
-        await updateAttendance(context)
+        updateAttendance(context)
       } catch (e) {
         expect(e).toEqual(new Error('Booking ID is missing'))
-        done()
       }
     })
 

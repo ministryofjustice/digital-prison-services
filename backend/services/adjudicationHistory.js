@@ -8,7 +8,7 @@ const {
   sortByDateTime,
 } = require('../utils')
 
-const AdjudciationHistoryServiceFactory = prisonApi => {
+const AdjudciationHistoryServiceFactory = (prisonApi) => {
   const getAdjudications = async (context, offenderNumber, params, pageOffsetOption, perPage) => {
     const { requestHeaders, ...withoutPagination } = context
 
@@ -22,10 +22,10 @@ const AdjudciationHistoryServiceFactory = prisonApi => {
       {}
     )
 
-    const ordercharges = adjudications.results.map(result => {
+    const ordercharges = adjudications.results.map((result) => {
       const { adjudicationCharges, ...fields } = result
-      const charge = adjudicationCharges.filter(item => item.findingCode).pop()
-      const finding = findingTypes.find(type => charge && type.code === charge.findingCode)
+      const charge = adjudicationCharges.filter((item) => item.findingCode).pop()
+      const finding = findingTypes.find((type) => charge && type.code === charge.findingCode)
 
       return {
         ...fields,
@@ -43,7 +43,7 @@ const AdjudciationHistoryServiceFactory = prisonApi => {
     }
   }
 
-  const extractHearingAndResults = hearings => {
+  const extractHearingAndResults = (hearings) => {
     if (hearings.length === 0) {
       return [undefined, []]
     }
@@ -60,15 +60,17 @@ const AdjudciationHistoryServiceFactory = prisonApi => {
     ]
   }
 
-  const extractSanctions = results => {
+  const extractSanctions = (results) => {
     const [{ sanctions = [] } = {}] = results
 
-    return sanctions.sort((left, right) => sortByDateTime(right.effectiveDate, left.effectiveDate)).map(sanction => ({
-      ...sanction,
-      duration: formatMonthsAndDays(sanction.sanctionMonths, sanction.sanctionDays),
-      effectiveDate: formatTimestampToDate(sanction.effectiveDate),
-      statusDate: formatTimestampToDate(sanction.statusDate),
-    }))
+    return sanctions
+      .sort((left, right) => sortByDateTime(right.effectiveDate, left.effectiveDate))
+      .map((sanction) => ({
+        ...sanction,
+        duration: formatMonthsAndDays(sanction.sanctionMonths, sanction.sanctionDays),
+        effectiveDate: formatTimestampToDate(sanction.effectiveDate),
+        statusDate: formatTimestampToDate(sanction.statusDate),
+      }))
   }
 
   const getAdjudicationDetails = async (context, offenderNumber, adjudicationNumber) => {
@@ -86,8 +88,8 @@ const AdjudciationHistoryServiceFactory = prisonApi => {
       hearing,
       results: results
         .map(({ sanctions: ignored, ...rest }) => rest)
-        .map(result => ({ id: shortid.generate(), ...result })),
-      sanctions: sanctions.map(sanction => ({ id: shortid.generate(), ...sanction })),
+        .map((result) => ({ id: shortid.generate(), ...result })),
+      sanctions: sanctions.map((sanction) => ({ id: shortid.generate(), ...sanction })),
     }
   }
 

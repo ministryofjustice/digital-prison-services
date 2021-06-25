@@ -28,7 +28,8 @@ const tokenExpiresBefore = (encodedToken, timeSinceTheEpochInSeconds) => {
  * @returns A Function which takes a 'context' object holding JWT auth and refresh tokens.  Returns a Promise which settles when
  * the check and refresh are complete.
  */
-const factory = (refreshFunction, secondsToExpiry) =>
+const factory =
+  (refreshFunction, secondsToExpiry) =>
   /**
    * Refresh the JWT tokens in context if the access token has less than secondsToExpiry before it expires.
    *

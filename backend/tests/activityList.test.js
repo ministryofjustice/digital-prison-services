@@ -118,18 +118,18 @@ beforeEach(() => {
   whereaboutsApi.getAttendance = jest.fn()
   whereaboutsApi.getAbsenceReasons = jest.fn()
 
-  whereaboutsApi.getAbsenceReasons.mockReturnValue({
+  whereaboutsApi.getAbsenceReasons.mockResolvedValue({
     triggersIEPWarning: ['UnacceptableAbsence', 'RefusedIncentiveLevelWarning'],
   })
-  prisonApi.getVisits.mockReturnValue([])
-  prisonApi.getAppointments.mockReturnValue([])
-  prisonApi.getActivities.mockReturnValue([])
+  prisonApi.getVisits.mockResolvedValue([])
+  prisonApi.getAppointments.mockResolvedValue([])
+  prisonApi.getActivities.mockResolvedValue([])
 })
 
 describe('Activity list controller', () => {
   it('Should return no results as an empty array', async () => {
-    prisonApi.getActivityList.mockReturnValue([])
-    prisonApi.getActivitiesAtLocation.mockReturnValue([])
+    prisonApi.getActivityList.mockResolvedValue([])
+    prisonApi.getActivitiesAtLocation.mockResolvedValue([])
 
     const response = await activityList({}, 'LEI', -1, '23/11/2018', 'PM')
     expect(response).toEqual([])
@@ -166,7 +166,7 @@ describe('Activity list controller', () => {
       }
     })
 
-    prisonApi.getActivitiesAtLocation.mockReturnValue([{ offenderNo: 'B' }])
+    prisonApi.getActivitiesAtLocation.mockResolvedValue([{ offenderNo: 'B' }])
 
     await activityList({}, 'LEI', -1, '23/11/2018', 'PM')
 
@@ -183,13 +183,22 @@ describe('Activity list controller', () => {
   })
 
   it('Should assign visits, appointments and activities by offender number', async () => {
-    prisonApi.getActivityList.mockReturnValue([])
-    prisonApi.getActivitiesAtLocation.mockReturnValue([{ offenderNo: 'A' }, { offenderNo: 'B' }, { offenderNo: 'C' }])
+    prisonApi.getActivityList.mockResolvedValue([])
+    prisonApi.getActivitiesAtLocation.mockResolvedValue([{ offenderNo: 'A' }, { offenderNo: 'B' }, { offenderNo: 'C' }])
 
-    prisonApi.getVisits.mockReturnValue([{ offenderNo: 'A', locationId: 2 }, { offenderNo: 'B', locationId: 3 }])
-    prisonApi.getAppointments.mockReturnValue([{ offenderNo: 'B', locationId: 4 }, { offenderNo: 'C', locationId: 5 }])
-    prisonApi.getActivities.mockReturnValue([{ offenderNo: 'A', locationId: 6 }, { offenderNo: 'C', locationId: 7 }])
-    prisonApi.getSentenceData.mockReturnValue([])
+    prisonApi.getVisits.mockResolvedValue([
+      { offenderNo: 'A', locationId: 2 },
+      { offenderNo: 'B', locationId: 3 },
+    ])
+    prisonApi.getAppointments.mockResolvedValue([
+      { offenderNo: 'B', locationId: 4 },
+      { offenderNo: 'C', locationId: 5 },
+    ])
+    prisonApi.getActivities.mockResolvedValue([
+      { offenderNo: 'A', locationId: 6 },
+      { offenderNo: 'C', locationId: 7 },
+    ])
+    prisonApi.getSentenceData.mockResolvedValue([])
 
     const result = await activityList({}, 'LEI', 1, '23/11/2018', 'PM')
 
@@ -199,7 +208,10 @@ describe('Activity list controller', () => {
         releaseScheduled: false,
         courtEvents: [],
         scheduledTransfers: [],
-        eventsElsewhere: [{ offenderNo: 'A', locationId: 2 }, { offenderNo: 'A', locationId: 6 }],
+        eventsElsewhere: [
+          { offenderNo: 'A', locationId: 2 },
+          { offenderNo: 'A', locationId: 6 },
+        ],
         alertFlags: [],
         category: '',
         attendanceInfo: null,
@@ -209,7 +221,10 @@ describe('Activity list controller', () => {
         courtEvents: [],
         scheduledTransfers: [],
         offenderNo: 'B',
-        eventsElsewhere: [{ offenderNo: 'B', locationId: 3 }, { offenderNo: 'B', locationId: 4 }],
+        eventsElsewhere: [
+          { offenderNo: 'B', locationId: 3 },
+          { offenderNo: 'B', locationId: 4 },
+        ],
         alertFlags: [],
         category: '',
         attendanceInfo: null,
@@ -219,7 +234,10 @@ describe('Activity list controller', () => {
         courtEvents: [],
         scheduledTransfers: [],
         offenderNo: 'C',
-        eventsElsewhere: [{ offenderNo: 'C', locationId: 5 }, { offenderNo: 'C', locationId: 7 }],
+        eventsElsewhere: [
+          { offenderNo: 'C', locationId: 5 },
+          { offenderNo: 'C', locationId: 7 },
+        ],
         alertFlags: [],
         category: '',
         attendanceInfo: null,
@@ -228,13 +246,22 @@ describe('Activity list controller', () => {
   })
 
   it('Should exclude visits, appointments and activities at the location from eventsElsewhere', async () => {
-    prisonApi.getActivityList.mockReturnValue([])
-    prisonApi.getActivitiesAtLocation.mockReturnValue([{ offenderNo: 'A' }, { offenderNo: 'B' }, { offenderNo: 'C' }])
+    prisonApi.getActivityList.mockResolvedValue([])
+    prisonApi.getActivitiesAtLocation.mockResolvedValue([{ offenderNo: 'A' }, { offenderNo: 'B' }, { offenderNo: 'C' }])
 
-    prisonApi.getVisits.mockReturnValue([{ offenderNo: 'A', locationId: 1 }, { offenderNo: 'B', locationId: 1 }])
-    prisonApi.getAppointments.mockReturnValue([{ offenderNo: 'B', locationId: 2 }, { offenderNo: 'C', locationId: 1 }])
-    prisonApi.getActivities.mockReturnValue([{ offenderNo: 'A', locationId: 1 }, { offenderNo: 'C', locationId: 3 }])
-    prisonApi.getSentenceData.mockReturnValue([])
+    prisonApi.getVisits.mockResolvedValue([
+      { offenderNo: 'A', locationId: 1 },
+      { offenderNo: 'B', locationId: 1 },
+    ])
+    prisonApi.getAppointments.mockResolvedValue([
+      { offenderNo: 'B', locationId: 2 },
+      { offenderNo: 'C', locationId: 1 },
+    ])
+    prisonApi.getActivities.mockResolvedValue([
+      { offenderNo: 'A', locationId: 1 },
+      { offenderNo: 'C', locationId: 3 },
+    ])
+    prisonApi.getSentenceData.mockResolvedValue([])
 
     const result = await activityList({}, 'LEI', 1, '23/11/2018', 'PM')
 
@@ -273,13 +300,13 @@ describe('Activity list controller', () => {
   })
 
   it('Should add visit and appointment details to activity array', async () => {
-    prisonApi.getActivityList.mockReturnValue([])
-    prisonApi.getActivitiesAtLocation.mockReturnValue(createActivitiesResponse())
+    prisonApi.getActivityList.mockResolvedValue([])
+    prisonApi.getActivitiesAtLocation.mockResolvedValue(createActivitiesResponse())
 
-    prisonApi.getVisits.mockReturnValue(createVisitsResponse())
-    prisonApi.getAppointments.mockReturnValue(createAppointmentsResponse())
-    prisonApi.getActivities.mockReturnValue([])
-    prisonApi.getSentenceData.mockReturnValue([])
+    prisonApi.getVisits.mockResolvedValue(createVisitsResponse())
+    prisonApi.getAppointments.mockResolvedValue(createAppointmentsResponse())
+    prisonApi.getActivities.mockResolvedValue([])
+    prisonApi.getSentenceData.mockResolvedValue([])
 
     const response = await activityList({}, 'LEI', -1, '23/11/2018', 'PM')
 
@@ -392,7 +419,7 @@ describe('Activity list controller', () => {
   })
 
   it('should order activities by comment then by last name', async () => {
-    prisonApi.getActivitiesAtLocation.mockReturnValue([
+    prisonApi.getActivitiesAtLocation.mockResolvedValue([
       { offenderNo: 'A', comment: 'aa', lastName: 'b' },
       { offenderNo: 'B', comment: 'a', lastName: 'c' },
       { offenderNo: 'C', comment: 'a', lastName: 'a' },
@@ -400,26 +427,26 @@ describe('Activity list controller', () => {
       { offenderNo: 'E', comment: 'aa', lastName: 'c' },
       { offenderNo: 'F', comment: 'a', lastName: 'b' },
     ])
-    prisonApi.getActivityList.mockReturnValue([])
+    prisonApi.getActivityList.mockResolvedValue([])
 
     const result = await activityList({}, 'LEI', 1, '23/11/2018', 'PM')
 
-    expect(result.map(event => event.offenderNo)).toEqual(['C', 'F', 'B', 'D', 'A', 'E'])
+    expect(result.map((event) => event.offenderNo)).toEqual(['C', 'F', 'B', 'D', 'A', 'E'])
   })
 
   it('should order eventsElsewhere by startTime', async () => {
-    prisonApi.getActivitiesAtLocation.mockReturnValue([{ offenderNo: 'A', comment: 'aa', lastName: 'b' }])
-    prisonApi.getActivityList.mockReturnValue([])
+    prisonApi.getActivitiesAtLocation.mockResolvedValue([{ offenderNo: 'A', comment: 'aa', lastName: 'b' }])
+    prisonApi.getActivityList.mockResolvedValue([])
 
-    prisonApi.getVisits.mockReturnValue([
+    prisonApi.getVisits.mockResolvedValue([
       { offenderNo: 'A', locationId: 2, startTime: '2017-10-15T00:00:00' },
       { offenderNo: 'A', locationId: 2, startTime: '2017-10-15T13:00:00' },
     ])
-    prisonApi.getAppointments.mockReturnValue([
+    prisonApi.getAppointments.mockResolvedValue([
       { offenderNo: 'A', locationId: 2, startTime: '2017-10-15T11:00:00' },
       { offenderNo: 'A', locationId: 2 },
     ])
-    prisonApi.getActivities.mockReturnValue([
+    prisonApi.getActivities.mockResolvedValue([
       { offenderNo: 'A', locationId: 2, startTime: '2017-10-15T14:00:01' },
       { offenderNo: 'A', locationId: 2, startTime: '2017-10-15T14:00:00' },
       { offenderNo: 'A', locationId: 2, startTime: '2017-10-15T13:59:59' },
@@ -427,8 +454,8 @@ describe('Activity list controller', () => {
 
     const result = await activityList({}, 'LEI', 1, '23/11/2018', 'PM')
 
-    expect(result.map(event => event.offenderNo)).toEqual(['A'])
-    expect(result[0].eventsElsewhere.map(event => event.startTime)).toEqual([
+    expect(result.map((event) => event.offenderNo)).toEqual(['A'])
+    expect(result[0].eventsElsewhere.map((event) => event.startTime)).toEqual([
       '2017-10-15T00:00:00',
       '2017-10-15T11:00:00',
       '2017-10-15T13:00:00',
@@ -441,8 +468,8 @@ describe('Activity list controller', () => {
 
   describe('Attendance information', () => {
     beforeEach(() => {
-      prisonApi.getActivitiesAtLocation.mockReturnValue([{ offenderNo: 'A', comment: 'aa', lastName: 'b' }])
-      prisonApi.getActivityList.mockReturnValue([])
+      prisonApi.getActivitiesAtLocation.mockResolvedValue([{ offenderNo: 'A', comment: 'aa', lastName: 'b' }])
+      prisonApi.getActivityList.mockResolvedValue([])
     })
 
     it('should call getAttendance with correct parameters', async () => {
@@ -454,20 +481,18 @@ describe('Activity list controller', () => {
       )
     })
 
-    it('should throw error when location is not a number and no call the APIs', async done => {
+    it('should throw error when location is not a number and no call the APIs', async () => {
       try {
         await activityList({}, 'LEI', '--', '23/11/2018', 'PM')
       } catch (e) {
         expect(e).toEqual(new Error('Location ID is missing'))
         expect(whereaboutsApi.getAttendance.mock.calls.length).toBe(0)
         expect(prisonApi.getActivityList.mock.calls.length).toBe(0)
-
-        done()
       }
     })
 
     it('should load attendance details', async () => {
-      whereaboutsApi.getAttendance.mockReturnValue({
+      whereaboutsApi.getAttendance.mockResolvedValue({
         attendances: [
           {
             id: 1,
@@ -511,12 +536,12 @@ describe('Activity list controller', () => {
         ],
       })
 
-      prisonApi.getActivitiesAtLocation.mockReturnValue([
+      prisonApi.getActivitiesAtLocation.mockResolvedValue([
         { offenderNo: 'A1', comment: 'Test comment', lastName: 'A', bookingId: 1, eventId: 1 },
         { offenderNo: 'B2', comment: 'Test comment', lastName: 'B', bookingId: 2, eventId: 2 },
         { offenderNo: 'C3', comment: 'Test comment', lastName: 'C', bookingId: 3, eventId: 3 },
       ])
-      prisonApi.getActivityList.mockReturnValue([])
+      prisonApi.getActivityList.mockResolvedValue([])
 
       const response = await activityList({}, 'LEI', 1, '23/11/2018', 'PM')
 
@@ -593,7 +618,7 @@ describe('Activity list controller', () => {
     })
 
     it('should format absent reasons', async () => {
-      whereaboutsApi.getAttendance.mockReturnValue({
+      whereaboutsApi.getAttendance.mockResolvedValue({
         attendances: [
           {
             id: 1,
@@ -613,16 +638,16 @@ describe('Activity list controller', () => {
         ],
       })
 
-      whereaboutsApi.getAbsenceReasons.mockReturnValue({
+      whereaboutsApi.getAbsenceReasons.mockResolvedValue({
         triggersIEPWarning: ['UnacceptableAbsence', 'RefusedIncentiveLevelWarning'],
       })
 
-      prisonApi.getActivitiesAtLocation.mockReturnValue([
+      prisonApi.getActivitiesAtLocation.mockResolvedValue([
         { offenderNo: 'A1', comment: 'Test comment', lastName: 'A', bookingId: 1 },
         { offenderNo: 'B2', comment: 'Test comment', lastName: 'B', bookingId: 2 },
         { offenderNo: 'C3', comment: 'Test comment', lastName: 'C', bookingId: 3 },
       ])
-      prisonApi.getActivityList.mockReturnValue([])
+      prisonApi.getActivityList.mockResolvedValue([])
 
       const response = await activityList({}, 'LEI', 1, '23/11/2018', 'PM')
 
@@ -638,12 +663,12 @@ describe('Activity list controller', () => {
   })
 
   it('should attach attendance to the correct activity', async () => {
-    prisonApi.getActivityList.mockReturnValue([])
-    prisonApi.getActivitiesAtLocation.mockReturnValue([
+    prisonApi.getActivityList.mockResolvedValue([])
+    prisonApi.getActivitiesAtLocation.mockResolvedValue([
       { offenderNo: 'A1', comment: 'Test comment', lastName: 'A', bookingId: 1, eventLocationId: 2, eventId: 1 },
       { offenderNo: 'B2', comment: 'Test comment', lastName: 'B', bookingId: 1, eventLocationId: 2, eventId: 2 },
     ])
-    whereaboutsApi.getAttendance.mockReturnValue({
+    whereaboutsApi.getAttendance.mockResolvedValue({
       attendances: [
         {
           id: 1,
@@ -655,7 +680,7 @@ describe('Activity list controller', () => {
       ],
     })
 
-    whereaboutsApi.getAbsenceReasons.mockReturnValue({
+    whereaboutsApi.getAbsenceReasons.mockResolvedValue({
       triggersIEPWarning: ['UnacceptableAbsence', 'Refused'],
     })
 
@@ -679,12 +704,12 @@ describe('Activity list controller', () => {
   })
 
   it('should request attendance for all establishments', async () => {
-    prisonApi.getActivityList.mockReturnValue([])
-    prisonApi.getActivitiesAtLocation.mockReturnValue([
+    prisonApi.getActivityList.mockResolvedValue([])
+    prisonApi.getActivitiesAtLocation.mockResolvedValue([
       { offenderNo: 'A1', comment: 'Test comment', lastName: 'A', bookingId: 1, eventLocationId: 2, eventId: 1 },
     ])
-    whereaboutsApi.getAttendance.mockReturnValue({ attendances: [] })
-    whereaboutsApi.getAbsenceReasons.mockReturnValue([])
+    whereaboutsApi.getAttendance.mockResolvedValue({ attendances: [] })
+    whereaboutsApi.getAbsenceReasons.mockResolvedValue([])
 
     const { getActivityList: service } = factory(prisonApi, whereaboutsApi, {
       app: { production: false },

@@ -1,4 +1,4 @@
-const getSecondaryLanguageLabel = lang => {
+const getSecondaryLanguageLabel = (lang) => {
   const { canRead, canWrite, canSpeak } = lang
 
   if (canRead && canWrite && canSpeak) return null
@@ -32,7 +32,7 @@ module.exports = ({ language, writtenLanguage, interpreterRequired, secondaryLan
     speaksAndWritesDifferentPreferredLanguages,
     secondaryLanguages:
       secondaryLanguages &&
-      secondaryLanguages.map(lang => ({
+      secondaryLanguages.map((lang) => ({
         key: { text: lang.description, classes: 'govuk-summary-list__key--indent' },
         value: { text: getSecondaryLanguageLabel(lang) },
       })),

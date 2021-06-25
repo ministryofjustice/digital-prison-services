@@ -4,17 +4,16 @@ const { capitalize } = require('../../utils')
 const { repeatTypes, getValidationMessages, endRecurringEndingDate } = require('../../shared/appointmentConstants')
 
 const setSelected = (value, items) =>
-  items.map(
-    item =>
-      item.value === value
-        ? {
-            ...item,
-            selected: true,
-          }
-        : item
+  items.map((item) =>
+    item.value === value
+      ? {
+          ...item,
+          selected: true,
+        }
+      : item
   )
 
-const extractHoursMinutes = dateTime => {
+const extractHoursMinutes = (dateTime) => {
   if (!dateTime) return { hours: '', minutes: '' }
   const instant = moment(dateTime, DATE_TIME_FORMAT_SPEC)
   return {
@@ -23,7 +22,7 @@ const extractHoursMinutes = dateTime => {
   }
 }
 
-const bulkAppointmentsAddDetailsFactory = appointmentsService => {
+const bulkAppointmentsAddDetailsFactory = (appointmentsService) => {
   const getAppointmentTypesAndLocations = async (locals, activeCaseLoadId) => {
     const { appointmentTypes, locationTypes } = await appointmentsService.getAppointmentOptions(
       locals,
@@ -99,8 +98,8 @@ const bulkAppointmentsAddDetailsFactory = appointmentsService => {
     const startTime = buildDateTime({ date, hours: startTimeHours, minutes: startTimeMinutes })
     const endTime = buildDateTime({ date, hours: endTimeHours, minutes: endTimeMinutes })
 
-    const appointmentTypeDetails = appointmentType && appointmentTypes.find(type => type.value === appointmentType)
-    const locationDetails = location && locations.find(type => type.value === Number(location))
+    const appointmentTypeDetails = appointmentType && appointmentTypes.find((type) => type.value === appointmentType)
+    const locationDetails = location && locations.find((type) => type.value === Number(location))
 
     const errors = [
       ...getValidationMessages({

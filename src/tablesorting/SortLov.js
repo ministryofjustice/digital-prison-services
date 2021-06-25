@@ -32,16 +32,16 @@ const columnSortOption = (sortColumn, sortOrder) => {
   )
 }
 
-const columnSortOptions = sortColumn => (
+const columnSortOptions = (sortColumn) => (
   <React.Fragment key={sortColumn}>
     {columnSortOption(sortColumn, ASC)}
     {columnSortOption(sortColumn, DESC)}
   </React.Fragment>
 )
 
-const sortOptions = sortColumns => sortColumns.map(sc => columnSortOptions(sc))
+const sortOptions = (sortColumns) => sortColumns.map((sc) => columnSortOptions(sc))
 
-const invokeColumnSortWithEventData = setColumnSort => event => {
+const invokeColumnSortWithEventData = (setColumnSort) => (event) => {
   event.preventDefault()
   const [field, order] = event.target.value.split('_')
   setColumnSort(field, order)

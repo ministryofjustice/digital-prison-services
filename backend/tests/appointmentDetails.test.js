@@ -43,16 +43,15 @@ describe('appointment details', () => {
       lastName: 'SMITH',
       offenderNo: 'ABC123',
     })
-    prisonApi.getLocationsForAppointments = jest
-      .fn()
-      .mockResolvedValue([
-        { userDescription: 'VCC Room 1', locationId: '1' },
-        { userDescription: 'Gymnasium', locationId: '2' },
-        { userDescription: 'VCC Room 2', locationId: '3' },
-      ])
-    prisonApi.getAppointmentTypes = jest
-      .fn()
-      .mockResolvedValue([{ code: 'GYM', description: 'Gym' }, { description: 'Video link booking', code: 'VLB' }])
+    prisonApi.getLocationsForAppointments = jest.fn().mockResolvedValue([
+      { userDescription: 'VCC Room 1', locationId: '1' },
+      { userDescription: 'Gymnasium', locationId: '2' },
+      { userDescription: 'VCC Room 2', locationId: '3' },
+    ])
+    prisonApi.getAppointmentTypes = jest.fn().mockResolvedValue([
+      { code: 'GYM', description: 'Gym' },
+      { description: 'Video link booking', code: 'VLB' },
+    ])
     prisonApi.getStaffDetails = jest
       .fn()
       .mockResolvedValue({ username: 'TEST_USER', firstName: 'TEST', lastName: 'USER' })

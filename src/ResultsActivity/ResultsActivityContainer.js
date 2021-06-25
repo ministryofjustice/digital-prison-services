@@ -170,9 +170,9 @@ class ResultsActivityContainer extends Component {
 
     return (
       activities
-        .filter(a => a.locationId === Number(activity))
-        .map(a => a.userDescription)
-        .find(a => !!a) || null
+        .filter((a) => a.locationId === Number(activity))
+        .map((a) => a.userDescription)
+        .find((a) => !!a) || null
     )
   }
 
@@ -282,7 +282,7 @@ ResultsActivityContainer.defaultProps = {
   error: '',
 }
 
-const mapStateToProps = state => ({
+const mapStateToProps = (state) => ({
   activities: state.search.activities,
   activity: state.search.activity,
   date: state.search.date,
@@ -298,22 +298,17 @@ const mapStateToProps = state => ({
   userRoles: state.app.user.roles,
 })
 
-const mapDispatchToProps = dispatch => ({
-  orderDispatch: field => dispatch(setOrderField(field)),
-  sortOrderDispatch: field => dispatch(setSortOrder(field)),
-  activitiesDispatch: text => dispatch(setSearchActivities(text)),
-  setLoadedDispatch: status => dispatch(setLoaded(status)),
+const mapDispatchToProps = (dispatch) => ({
+  orderDispatch: (field) => dispatch(setOrderField(field)),
+  sortOrderDispatch: (field) => dispatch(setSortOrder(field)),
+  activitiesDispatch: (text) => dispatch(setSearchActivities(text)),
+  setLoadedDispatch: (status) => dispatch(setLoaded(status)),
   resetErrorDispatch: () => dispatch(resetError()),
-  setErrorDispatch: error => dispatch(setError(error)),
-  activityDataDispatch: data => dispatch(setActivityData(data)),
+  setErrorDispatch: (error) => dispatch(setError(error)),
+  activityDataDispatch: (data) => dispatch(setActivityData(data)),
   setOffenderPaymentDataDispatch: (offenderIndex, data) => dispatch(setActivityOffenderAttendance(offenderIndex, data)),
   getAbsentReasonsDispatch: () => dispatch(getAbsentReasons()),
-  searchActivity: locationId => dispatch(setSearchActivity(locationId)),
+  searchActivity: (locationId) => dispatch(setSearchActivity(locationId)),
 })
 
-export default withRouter(
-  connect(
-    mapStateToProps,
-    mapDispatchToProps
-  )(ResultsActivityContainer)
-)
+export default withRouter(connect(mapStateToProps, mapDispatchToProps)(ResultsActivityContainer))

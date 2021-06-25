@@ -4,7 +4,7 @@ const { BLOCKS, MARKS, INLINES } = require('@contentful/rich-text-types')
 
 const options = {
   renderMark: {
-    [MARKS.BOLD]: text => `<strong>${text}</strong>`,
+    [MARKS.BOLD]: (text) => `<strong>${text}</strong>`,
   },
   renderNode: {
     [BLOCKS.HEADING_2]: (node, next) => `<h2 class="govuk-heading-m">${next(node.content)}</h2>`,
@@ -16,7 +16,7 @@ const options = {
 }
 
 module.exports = ({ contentfulClient, notificationCookie }) => {
-  const getMostRecentNotificationAsHtml = async req => {
+  const getMostRecentNotificationAsHtml = async (req) => {
     const response = await contentfulClient.getEntries({
       content_type: 'notification',
       order: '-sys.updatedAt',
@@ -41,7 +41,7 @@ module.exports = ({ contentfulClient, notificationCookie }) => {
     }
   }
 
-  const getPagesAsHtml = async path => {
+  const getPagesAsHtml = async (path) => {
     const response = await contentfulClient.getEntries({
       content_type: 'pages',
       'fields.path': path,

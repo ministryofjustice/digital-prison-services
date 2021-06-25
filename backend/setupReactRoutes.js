@@ -19,4 +19,4 @@ const setup = () => {
   return router
 }
 
-module.exports = dependencies => setup(dependencies)
+module.exports = (dependencies) => setup(dependencies)

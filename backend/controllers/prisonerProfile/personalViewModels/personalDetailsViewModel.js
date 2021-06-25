@@ -23,7 +23,7 @@ module.exports = ({ prisonerDetails, property }) => {
   const showListenerRecognised =
     listenerSuitableValue === 'Yes' || (!listenerSuitableValue && listenerRecognisedValue === 'Yes')
 
-  const needsWarning = value => (value === 'Yes' ? value : 'Needs to be warned')
+  const needsWarning = (value) => (value === 'Yes' ? value : 'Needs to be warned')
 
   return {
     primary: [
@@ -74,7 +74,7 @@ module.exports = ({ prisonerDetails, property }) => {
     ],
     property:
       property &&
-      property.map(item => ({
+      property.map((item) => ({
         label: 'Property',
         value: item.containerType,
         details: [

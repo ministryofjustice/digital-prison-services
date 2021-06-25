@@ -24,6 +24,7 @@ describe('prisoner personal', () => {
   const allocationManagerApi = {}
   const prisonerProfileService = {}
   const personService = {}
+  const esweService = {}
 
   let req
   let res
@@ -39,6 +40,7 @@ describe('prisoner personal', () => {
     prisonerProfileService.getPrisonerProfileData = jest.fn().mockResolvedValue(prisonerProfileData)
 
     personService.getPersonContactDetails = jest.fn().mockResolvedValue({})
+    esweService.getLearnerProfiles = jest.fn().mockResolvedValue([])
 
     prisonApi.getDetails = jest.fn().mockResolvedValue({})
     prisonApi.getIdentifiers = jest.fn().mockResolvedValue([])
@@ -54,7 +56,14 @@ describe('prisoner personal', () => {
     prisonApi.getAgencies = jest.fn().mockResolvedValue([])
     allocationManagerApi.getPomByOffenderNo = jest.fn().mockResolvedValue({})
 
-    controller = prisonerPersonal({ prisonerProfileService, personService, prisonApi, allocationManagerApi, logError })
+    controller = prisonerPersonal({
+      prisonerProfileService,
+      personService,
+      prisonApi,
+      allocationManagerApi,
+      logError,
+      esweService,
+    })
   })
 
   it('should make a call for the basic details of a prisoner and the prisoner header details and render them', async () => {
@@ -131,15 +140,13 @@ describe('prisoner personal', () => {
 
     describe('when there is identifier data', () => {
       beforeEach(() => {
-        prisonApi.getIdentifiers = jest
-          .fn()
-          .mockResolvedValue([
-            { type: 'PNC', value: '1234' },
-            { type: 'CRO', value: '2345' },
-            { type: 'NINO', value: '3456' },
-            { type: 'HOREF', value: '4567' },
-            { type: 'DL', value: '5678' },
-          ])
+        prisonApi.getIdentifiers = jest.fn().mockResolvedValue([
+          { type: 'PNC', value: '1234' },
+          { type: 'CRO', value: '2345' },
+          { type: 'NINO', value: '3456' },
+          { type: 'HOREF', value: '4567' },
+          { type: 'DL', value: '5678' },
+        ])
       })
 
       it('should render the personal template with the correctly formatted data', async () => {
@@ -187,12 +194,10 @@ describe('prisoner personal', () => {
 
     describe('when there is aliases data', () => {
       beforeEach(() => {
-        prisonApi.getOffenderAliases = jest
-          .fn()
-          .mockResolvedValue([
-            { firstName: 'First', lastName: 'Alias', dob: '1985-08-31' },
-            { firstName: 'Second', lastName: 'Alias', dob: '1986-05-20' },
-          ])
+        prisonApi.getOffenderAliases = jest.fn().mockResolvedValue([
+          { firstName: 'First', lastName: 'Alias', dob: '1985-08-31' },
+          { firstName: 'Second', lastName: 'Alias', dob: '1986-05-20' },
+        ])
       })
 
       it('should render the personal template with the correctly formatted data', async () => {
@@ -201,7 +206,10 @@ describe('prisoner personal', () => {
         expect(res.render).toHaveBeenCalledWith(
           'prisonerProfile/prisonerPersonal/prisonerPersonal.njk',
           expect.objectContaining({
-            aliases: [{ label: 'Alias, First', value: '31/08/1985' }, { label: 'Alias, Second', value: '20/05/1986' }],
+            aliases: [
+              { label: 'Alias, First', value: '31/08/1985' },
+              { label: 'Alias, Second', value: '20/05/1986' },
+            ],
           })
         )
       })
@@ -389,7 +397,10 @@ describe('prisoner personal', () => {
               ethnicity: 'White: Eng./Welsh/Scot./N.Irish/British',
               raceCode: 'W1',
             },
-            profileInformation: [{ type: 'RELF', resultValue: 'Christian' }, { type: 'NAT', resultValue: 'British' }],
+            profileInformation: [
+              { type: 'RELF', resultValue: 'Christian' },
+              { type: 'NAT', resultValue: 'British' },
+            ],
           })
         })
 
@@ -576,7 +587,10 @@ describe('prisoner personal', () => {
         beforeEach(() => {
           prisonerProfileService.getPrisonerProfileData = jest.fn().mockResolvedValue({
             ...prisonerProfileData,
-            profileInformation: [{ type: 'TAT', resultValue: 'Yes' }, { type: 'APPEAR', resultValue: 'Yes' }],
+            profileInformation: [
+              { type: 'TAT', resultValue: 'Yes' },
+              { type: 'APPEAR', resultValue: 'Yes' },
+            ],
           })
         })
 
@@ -601,7 +615,10 @@ describe('prisoner personal', () => {
         beforeEach(() => {
           prisonerProfileService.getPrisonerProfileData = jest.fn().mockResolvedValue({
             ...prisonerProfileData,
-            profileInformation: [{ type: 'TAT', resultValue: 'No' }, { type: 'APPEAR', resultValue: 'No' }],
+            profileInformation: [
+              { type: 'TAT', resultValue: 'No' },
+              { type: 'APPEAR', resultValue: 'No' },
+            ],
           })
         })
 
@@ -644,7 +661,10 @@ describe('prisoner personal', () => {
           beforeEach(() => {
             prisonerProfileService.getPrisonerProfileData = jest.fn().mockResolvedValue({
               ...prisonerProfileData,
-              profileInformation: [{ type: 'LIST_SUIT', resultValue: 'No' }, { type: 'LIST_REC', resultValue: 'No' }],
+              profileInformation: [
+                { type: 'LIST_SUIT', resultValue: 'No' },
+                { type: 'LIST_REC', resultValue: 'No' },
+              ],
             })
           })
 
@@ -666,7 +686,10 @@ describe('prisoner personal', () => {
           beforeEach(() => {
             prisonerProfileService.getPrisonerProfileData = jest.fn().mockResolvedValue({
               ...prisonerProfileData,
-              profileInformation: [{ type: 'LIST_SUIT', resultValue: 'Yes' }, { type: 'LIST_REC', resultValue: 'No' }],
+              profileInformation: [
+                { type: 'LIST_SUIT', resultValue: 'Yes' },
+                { type: 'LIST_REC', resultValue: 'No' },
+              ],
             })
           })
 
@@ -691,7 +714,10 @@ describe('prisoner personal', () => {
           beforeEach(() => {
             prisonerProfileService.getPrisonerProfileData = jest.fn().mockResolvedValue({
               ...prisonerProfileData,
-              profileInformation: [{ type: 'LIST_SUIT', resultValue: 'Yes' }, { type: 'LIST_REC', resultValue: 'Yes' }],
+              profileInformation: [
+                { type: 'LIST_SUIT', resultValue: 'Yes' },
+                { type: 'LIST_REC', resultValue: 'Yes' },
+              ],
             })
           })
 
@@ -738,7 +764,10 @@ describe('prisoner personal', () => {
           beforeEach(() => {
             prisonerProfileService.getPrisonerProfileData = jest.fn().mockResolvedValue({
               ...prisonerProfileData,
-              profileInformation: [{ type: 'LIST_SUIT', resultValue: 'No' }, { type: 'LIST_REC', resultValue: 'Yes' }],
+              profileInformation: [
+                { type: 'LIST_SUIT', resultValue: 'No' },
+                { type: 'LIST_REC', resultValue: 'Yes' },
+              ],
             })
           })
 
@@ -800,7 +829,10 @@ describe('prisoner personal', () => {
         beforeEach(() => {
           prisonerProfileService.getPrisonerProfileData = jest.fn().mockResolvedValue({
             ...prisonerProfileData,
-            profileInformation: [{ type: 'DOMESTIC', resultValue: 'YES' }, { type: 'DOMVIC', resultValue: 'YES' }],
+            profileInformation: [
+              { type: 'DOMESTIC', resultValue: 'YES' },
+              { type: 'DOMVIC', resultValue: 'YES' },
+            ],
           })
         })
 
@@ -825,7 +857,10 @@ describe('prisoner personal', () => {
         beforeEach(() => {
           prisonerProfileService.getPrisonerProfileData = jest.fn().mockResolvedValue({
             ...prisonerProfileData,
-            profileInformation: [{ type: 'DOMESTIC', resultValue: 'NO' }, { type: 'DOMVIC', resultValue: 'NO' }],
+            profileInformation: [
+              { type: 'DOMESTIC', resultValue: 'NO' },
+              { type: 'DOMVIC', resultValue: 'NO' },
+            ],
           })
         })
 
@@ -885,12 +920,18 @@ describe('prisoner personal', () => {
               personalDetails: expect.objectContaining({
                 property: [
                   {
-                    details: [{ label: 'Seal mark', value: 123 }, { label: 'Location', value: 'Property Box 123' }],
+                    details: [
+                      { label: 'Seal mark', value: 123 },
+                      { label: 'Location', value: 'Property Box 123' },
+                    ],
                     label: 'Property',
                     value: 'Valuables',
                   },
                   {
-                    details: [{ label: 'Seal mark', value: 456 }, { label: 'Location', value: 'Property Box 456' }],
+                    details: [
+                      { label: 'Seal mark', value: 456 },
+                      { label: 'Location', value: 'Property Box 456' },
+                    ],
                     label: 'Property',
                     value: 'Bulk',
                   },
@@ -917,7 +958,10 @@ describe('prisoner personal', () => {
       primary: true,
       noFixedAddress: false,
       startDate: '2020-05-01',
-      phones: [{ number: '011111111111', type: 'MOB' }, { number: '011333444', type: 'HOME', ext: '777' }],
+      phones: [
+        { number: '011111111111', type: 'MOB' },
+        { number: '011333444', type: 'HOME', ext: '777' },
+      ],
     }
 
     const nonPrimaryAddress = {
@@ -1125,12 +1169,18 @@ describe('prisoner personal', () => {
             .mockResolvedValueOnce({
               addresses: [primaryAddress, nonPrimaryAddress],
               emails: [{ email: 'test1@email.com' }, { email: 'test2@email.com' }],
-              phones: [{ number: '02222222222', type: 'MOB' }, { number: '033333333333', type: 'MOB', ext: '777' }],
+              phones: [
+                { number: '02222222222', type: 'MOB' },
+                { number: '033333333333', type: 'MOB', ext: '777' },
+              ],
             })
             .mockResolvedValueOnce({
               addresses: [businessPrimary, businessNonPrimary],
               emails: [{ email: 'test3@email.com' }, { email: 'test4@email.com' }],
-              phones: [{ number: '04444444444', type: 'MOB' }, { number: '055555555555', type: 'BUS', ext: '123' }],
+              phones: [
+                { number: '04444444444', type: 'MOB' },
+                { number: '055555555555', type: 'BUS', ext: '123' },
+              ],
             })
 
           allocationManagerApi.getPomByOffenderNo.mockResolvedValue({
@@ -1216,7 +1266,10 @@ describe('prisoner personal', () => {
                 { ...nonPrimaryAddress, startDate: '2020-01-02', premise: 'Latest active' },
               ],
               emails: [{ email: 'test1@email.com' }, { email: 'test2@email.com' }],
-              phones: [{ number: '02222222222', type: 'MOB' }, { number: '033333333333', type: 'MOB', ext: '777' }],
+              phones: [
+                { number: '02222222222', type: 'MOB' },
+                { number: '033333333333', type: 'MOB', ext: '777' },
+              ],
             })
             .mockResolvedValueOnce({
               addresses: [
@@ -1224,8 +1277,40 @@ describe('prisoner personal', () => {
                 { ...businessNonPrimary, startDate: '2020-01-02', premise: 'Latest active' },
               ],
               emails: [{ email: 'test3@email.com' }, { email: 'test4@email.com' }],
-              phones: [{ number: '04444444444', type: 'MOB' }, { number: '055555555555', type: 'BUS', ext: '123' }],
+              phones: [
+                { number: '04444444444', type: 'MOB' },
+                { number: '055555555555', type: 'BUS', ext: '123' },
+              ],
             })
+        })
+
+        it('should render the template with the most recently added active address data', async () => {
+          await controller(req, res)
+
+          expect(res.render).toHaveBeenCalledWith(
+            'prisonerProfile/prisonerPersonal/prisonerPersonal.njk',
+            expect.objectContaining({
+              personalContacts: [
+                {
+                  name: 'John Smith',
+                  emergencyContact: true,
+                  noFixedAddress: false,
+                  details: [
+                    { label: 'Relationship', value: 'Cousin' },
+                    { html: '02222222222,<br>033333333333 extension number 777', label: 'Phone number' },
+                    { label: 'Email', value: 'test1@email.com, test2@email.com' },
+                    { label: 'Address', value: 'Flat B, Latest active, Another Street' },
+                    { label: 'Town', value: 'Leeds' },
+                    { label: 'County', value: 'West Yorkshire' },
+                    { label: 'Postcode', value: 'LS2 BBB' },
+                    { label: 'Country', value: 'England' },
+                    { html: '011111111111', label: 'Address phone' },
+                    { label: 'Address type', value: 'Home' },
+                  ],
+                },
+              ],
+            })
+          )
         })
       })
 
@@ -1238,7 +1323,10 @@ describe('prisoner personal', () => {
                 { ...nonPrimaryAddress, startDate: '2020-01-02', premise: 'Latest active' },
               ],
               emails: [{ email: 'test1@email.com' }, { email: 'test2@email.com' }],
-              phones: [{ number: '02222222222', type: 'MOB' }, { number: '033333333333', type: 'MOB', ext: '777' }],
+              phones: [
+                { number: '02222222222', type: 'MOB' },
+                { number: '033333333333', type: 'MOB', ext: '777' },
+              ],
             })
             .mockResolvedValueOnce({
               addresses: [
@@ -1246,7 +1334,10 @@ describe('prisoner personal', () => {
                 { ...businessNonPrimary, startDate: '2020-01-02', premise: 'Latest active' },
               ],
               emails: [{ email: 'test3@email.com' }, { email: 'test4@email.com' }],
-              phones: [{ number: '04444444444', type: 'MOB' }, { number: '055555555555', type: 'BUS', ext: '123' }],
+              phones: [
+                { number: '04444444444', type: 'MOB' },
+                { number: '055555555555', type: 'BUS', ext: '123' },
+              ],
             })
         })
 
@@ -1286,12 +1377,18 @@ describe('prisoner personal', () => {
             .mockResolvedValueOnce({
               addresses: [{ ...primaryAddress, county: undefined, country: undefined }, nonPrimaryAddress],
               emails: [{ email: 'test1@email.com' }, { email: 'test2@email.com' }],
-              phones: [{ number: '02222222222', type: 'MOB' }, { number: '033333333333', type: 'MOB' }],
+              phones: [
+                { number: '02222222222', type: 'MOB' },
+                { number: '033333333333', type: 'MOB' },
+              ],
             })
             .mockResolvedValueOnce({
               addresses: [{ ...primaryAddress, county: undefined, country: undefined, addressType: 'Business' }],
               emails: [{ email: 'test3@email.com' }, { email: 'test4@email.com' }],
-              phones: [{ number: '04444444444', type: 'MOB' }, { number: '055555555555', type: 'BUS', ext: '123' }],
+              phones: [
+                { number: '04444444444', type: 'MOB' },
+                { number: '055555555555', type: 'BUS', ext: '123' },
+              ],
             })
           allocationManagerApi.getPomByOffenderNo.mockResolvedValue({
             primary_pom: { staffId: 1, name: 'Jane smith' },
@@ -1893,6 +1990,30 @@ describe('prisoner personal', () => {
           languages: expect.objectContaining({ secondaryLanguages: null }),
           careNeedsAndAdjustments: { personalCareNeeds: null, reasonableAdjustments: null },
         })
+      )
+    })
+  })
+
+  describe('learner profile data', () => {
+    beforeEach(() => {
+      esweService.getLearnerProfiles = jest.fn()
+    })
+
+    it('should return null for a failed request', async () => {
+      esweService.getLearnerProfiles.mockRejectedValue(new Error())
+      await controller(req, res)
+      expect(res.render).toHaveBeenCalledWith(
+        'prisonerProfile/prisonerPersonal/prisonerPersonal.njk',
+        expect.objectContaining({ learnerProfiles: null })
+      )
+    })
+
+    it('should return a list of learner profiles for a successful request', async () => {
+      esweService.getLearnerProfiles.mockResolvedValue([])
+      await controller(req, res)
+      expect(res.render).toHaveBeenCalledWith(
+        'prisonerProfile/prisonerPersonal/prisonerPersonal.njk',
+        expect.objectContaining({ learnerProfiles: [] })
       )
     })
   })

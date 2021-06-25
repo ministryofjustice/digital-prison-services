@@ -7,7 +7,7 @@ import Radio from '@govuk-react/radio'
 
 const RadioGroup = ({ label, hint, options, inline, input, meta }) => (
   <MultiChoice label={label} hint={hint} meta={meta} mb={6}>
-    {options.map(o => (
+    {options.map((o) => (
       <div key={o.value}>
         <Radio {...input} value={o.value} inline={inline} checked={o.value === input.value}>
           {o.title}

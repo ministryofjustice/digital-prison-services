@@ -6,12 +6,12 @@ const logger = require('../log')
 
 const { getHeaders } = require('./axios-config-decorators')
 
-const resultLogger = result => {
+const resultLogger = (result) => {
   logger.debug(`${result.req.method} ${result.req.path} ${result.status}`)
   return result
 }
 
-const errorLogger = error => {
+const errorLogger = (error) => {
   const status = error.response ? error.response.status : '-'
   const responseData = error.response ? error.response.body : '-'
   const payload =
@@ -189,7 +189,7 @@ const factory = ({ baseUrl, timeout }) => {
       .set(getHeaders(context))
       .retry(options.retry, retryHandler)
       .timeout(deadline)
-      .on('response', res => {
+      .on('response', (res) => {
         pipeTo.header(res.header)
       })
       .pipe(pipeTo)

@@ -1,7 +1,7 @@
 const telemetry = require('../azure-appinsights')
 
-const ensureAllowedPageAccess = userRoles => {
-  if (!userRoles.find(role => role.roleCode === 'VIEW_PROBATION_DOCUMENTS' || role.roleCode === 'POM')) {
+const ensureAllowedPageAccess = (userRoles) => {
+  if (!userRoles.find((role) => role.roleCode === 'VIEW_PROBATION_DOCUMENTS' || role.roleCode === 'POM')) {
     throw new Error('You do not have the correct role to access this page')
   }
 }

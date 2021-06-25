@@ -30,7 +30,7 @@ const validateStartEndTime = (date, startTime, endTime, errors) => {
   }
 }
 
-const getValidationMessages = fields => {
+const getValidationMessages = (fields) => {
   const { appointmentType, location, date, startTime, endTime, comments, recurring, repeats, times } = fields
   const errors = []
 

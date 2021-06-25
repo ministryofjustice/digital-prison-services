@@ -118,7 +118,7 @@ class ResultsActivity extends Component {
       offenders,
     })
 
-  notRequireAll = async values => {
+  notRequireAll = async (values) => {
     const { showModal, reloadPage, handleError, raiseAnalyticsEvent, agencyId } = this.props
     const { comments } = values
 
@@ -179,7 +179,7 @@ class ResultsActivity extends Component {
           name="period-select"
           className="form-control"
           value={period}
-          onChange={e => onListCriteriaChange({ periodValue: e })}
+          onChange={(e) => onListCriteriaChange({ periodValue: e })}
         >
           <option key="MORNING" value="AM">
             Morning (AM)
@@ -201,12 +201,11 @@ class ResultsActivity extends Component {
             Print this page
           </PrintLink>
         )}
-        {isWithinNextTwoWorkingDays(date) &&
-          isAfterToday(date) && (
-            <PrintLink onClick={() => handlePrint('redacted')} className="redactedPrintButton">
-              Print list for general view
-            </PrintLink>
-          )}
+        {isWithinNextTwoWorkingDays(date) && isAfterToday(date) && (
+          <PrintLink onClick={() => handlePrint('redacted')} className="redactedPrintButton">
+            Print list for general view
+          </PrintLink>
+        )}
       </div>
     )
 
@@ -226,9 +225,9 @@ class ResultsActivity extends Component {
       // Activities need an eventId in order to be updatable
       // Ignore ones without when deciding whether to show the
       // batch buttons - they can't be actioned.
-      const activitiesWithEventId = activities.filter(activity => activity.eventId)
-      const attendanceInfo = activitiesWithEventId.filter(activity => activity.attendanceInfo)
-      const lockedCases = attendanceInfo.filter(activity => activity.attendanceInfo.locked === true)
+      const activitiesWithEventId = activities.filter((activity) => activity.eventId)
+      const attendanceInfo = activitiesWithEventId.filter((activity) => activity.attendanceInfo)
+      const lockedCases = attendanceInfo.filter((activity) => activity.attendanceInfo.locked === true)
 
       return !(
         !isWithinLastWeek(date) ||
@@ -327,7 +326,7 @@ class ResultsActivity extends Component {
       </tr>
     )
 
-    const renderMainEvent = event => {
+    const renderMainEvent = (event) => {
       const mainEventDescription = `${getHoursMinutes(event.startTime)} - ${getMainEventDescription(event)}`
       if (event.suspended) {
         return (
@@ -490,7 +489,7 @@ class ResultsActivity extends Component {
               <h2 className="govuk-heading-m">View by</h2>
               <div className="horizontal-form">
                 <WhereaboutsDatePicker
-                  handleDateChange={e => onListCriteriaChange({ dateValue: e })}
+                  handleDateChange={(e) => onListCriteriaChange({ dateValue: e })}
                   date={date}
                   marginBottom={0}
                 />

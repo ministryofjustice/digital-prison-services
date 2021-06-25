@@ -2,10 +2,10 @@ const { switchDateFormat, sortByDateTime } = require('../../utils')
 const getExternalEventsForOffenders = require('../../shared/getExternalEventsForOffenders')
 const { absentReasonMapper } = require('../../mappers')
 
-const offenderNumberMultiMap = offenderNumbers =>
+const offenderNumberMultiMap = (offenderNumbers) =>
   offenderNumbers.reduce((map, offenderNumber) => map.set(offenderNumber, []), new Map())
 
-const sortActivitiesByEventThenByLastName = data => {
+const sortActivitiesByEventThenByLastName = (data) => {
   data.sort((a, b) => {
     if (a.comment < b.comment) return -1
     if (a.comment > b.comment) return 1
@@ -20,7 +20,7 @@ const sortActivitiesByEventThenByLastName = data => {
 const extractAttendanceInfo = (attendanceInformation, event, absentReasons = []) => {
   if (attendanceInformation && attendanceInformation.attendances && attendanceInformation.attendances.length > 0) {
     const offenderAttendanceInfo = attendanceInformation.attendances.find(
-      attendance => attendance.bookingId === event.bookingId && attendance.eventId === event.eventId
+      (attendance) => attendance.bookingId === event.bookingId && attendance.eventId === event.eventId
     )
     if (!offenderAttendanceInfo) return null
 
@@ -75,7 +75,7 @@ const getActivityListFactory = (prisonApi, whereaboutsApi) => {
       ...eventsAtLocationByUsage[2],
     ] // Meh. No flatMap or flat.
 
-    const offenderNumbersWithDuplicates = eventsAtLocation.map(event => event.offenderNo)
+    const offenderNumbersWithDuplicates = eventsAtLocation.map((event) => event.offenderNo)
     const offenderNumbers = [...new Set(offenderNumbersWithDuplicates)]
 
     const attendanceInformation = await whereaboutsApi.getAttendance(context, {
@@ -97,22 +97,17 @@ const getActivityListFactory = (prisonApi, whereaboutsApi) => {
       offenderNumbers,
     })
 
-    const eventsElsewhere = eventsForOffenderNumbers.filter(event => event.locationId !== locationId)
+    const eventsElsewhere = eventsForOffenderNumbers.filter((event) => event.locationId !== locationId)
     const eventsElsewhereByOffenderNumber = offenderNumberMultiMap(offenderNumbers)
 
-    eventsElsewhere.forEach(event => {
+    eventsElsewhere.forEach((event) => {
       const events = eventsElsewhereByOffenderNumber.get(event.offenderNo)
       if (events) events.push(event)
     })
 
-    const events = eventsAtLocation.map(event => {
-      const {
-        releaseScheduled,
-        courtEvents,
-        scheduledTransfers,
-        alertFlags,
-        category,
-      } = externalEventsForOffenders.get(event.offenderNo)
+    const events = eventsAtLocation.map((event) => {
+      const { releaseScheduled, courtEvents, scheduledTransfers, alertFlags, category } =
+        externalEventsForOffenders.get(event.offenderNo)
 
       const eventsElsewhereForOffender = eventsElsewhereByOffenderNumber
         .get(event.offenderNo)

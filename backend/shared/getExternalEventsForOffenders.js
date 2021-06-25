@@ -14,14 +14,14 @@ const releaseScheduled = (releaseScheduledData, offenderNo, formattedDate) =>
     releaseScheduledData &&
       releaseScheduledData.length &&
       releaseScheduledData.filter(
-        release =>
+        (release) =>
           release.offenderNo === offenderNo &&
           release.sentenceDetail.releaseDate === formattedDate &&
           !isAfterToday(formattedDate)
       )[0]
   )
 
-const courtEventStatus = eventStatus => {
+const courtEventStatus = (eventStatus) => {
   switch (eventStatus) {
     case 'SCH':
       return { scheduled: true }
@@ -34,15 +34,15 @@ const courtEventStatus = eventStatus => {
   }
 }
 
-const toCourtEvent = event => ({
+const toCourtEvent = (event) => ({
   eventId: event.eventId,
   eventDescription: 'Court visit scheduled',
   ...courtEventStatus(event.eventStatus),
 })
 
-const latestCompletedCourtEvent = events => {
+const latestCompletedCourtEvent = (events) => {
   const courtEvents = events
-    .filter(event => event.eventStatus === 'COMP')
+    .filter((event) => event.eventStatus === 'COMP')
     .sort((left, right) => sortByDateTime(left.startTime, right.startTime))
 
   const event = courtEvents[courtEvents.length - 1]
@@ -54,12 +54,12 @@ const getOffenderCourtEvents = (courtEvents, offenderNo, formattedDate) => {
   const events =
     (courtEvents &&
       courtEvents.length &&
-      courtEvents.filter(courtEvent => courtEvent.offenderNo === offenderNo && !isAfterToday(formattedDate))) ||
+      courtEvents.filter((courtEvent) => courtEvent.offenderNo === offenderNo && !isAfterToday(formattedDate))) ||
     []
 
   const scheduledAndExpiredCourtEvents = events
-    .filter(event => event.eventStatus !== 'COMP')
-    .map(event => toCourtEvent(event))
+    .filter((event) => event.eventStatus !== 'COMP')
+    .map((event) => toCourtEvent(event))
 
   const completedEvent = latestCompletedCourtEvent(events)
 
@@ -69,7 +69,7 @@ const getOffenderCourtEvents = (courtEvents, offenderNo, formattedDate) => {
   return scheduledAndExpiredCourtEvents
 }
 
-const transferStatus = eventStatus => {
+const transferStatus = (eventStatus) => {
   switch (eventStatus) {
     case 'SCH':
       return { scheduled: true }
@@ -87,25 +87,27 @@ const transferStatus = eventStatus => {
 const scheduledTransfers = (transfers, offenderNo, formattedDate) =>
   (transfers &&
     transfers.length &&
-    transfers.filter(transfer => transfer.offenderNo === offenderNo && !isAfterToday(formattedDate)).map(event => ({
-      eventId: event.eventId,
-      eventDescription: 'Transfer scheduled',
-      ...transferStatus(event.eventStatus),
-    }))) ||
+    transfers
+      .filter((transfer) => transfer.offenderNo === offenderNo && !isAfterToday(formattedDate))
+      .map((event) => ({
+        eventId: event.eventId,
+        eventDescription: 'Transfer scheduled',
+        ...transferStatus(event.eventStatus),
+      }))) ||
   []
 
 const selectAlertFlags = (alertData, offenderNumber) =>
   (alertData &&
     alertData
-      .filter(alert => !alert.expired && alert.offenderNo === offenderNumber && isViewableFlag(alert.alertCode))
-      .map(alert => alert.alertCode)) ||
+      .filter((alert) => !alert.expired && alert.offenderNo === offenderNumber && isViewableFlag(alert.alertCode))
+      .map((alert) => alert.alertCode)) ||
   []
 
 const selectCategory = (assessmentData, offenderNumber) => {
   if (!assessmentData) {
     return ''
   }
-  const cat = assessmentData.find(assessment => assessment.offenderNo === offenderNumber)
+  const cat = assessmentData.find((assessment) => assessment.offenderNo === offenderNumber)
   if (!cat) {
     return ''
   }

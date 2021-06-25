@@ -4,12 +4,7 @@ import moment from 'moment'
 import FormDatePicker from './FormDatePicker'
 
 class WhereaboutsDatePicker extends Component {
-  daysToShow = date =>
-    date.isBefore(
-      moment()
-        .add(7, 'days')
-        .endOf('day')
-    )
+  daysToShow = (date) => date.isBefore(moment().add(7, 'days').endOf('day'))
 
   render() {
     const { handleDateChange, date, shouldShowDay, marginBottom } = this.props

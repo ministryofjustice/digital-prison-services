@@ -10,7 +10,7 @@ module.exports = ({ prisonApi, caseNotesApi, oauthApi }) => {
         prisonApi.getDetails(res.locals, offenderNo),
       ])
 
-      const userRoles = await oauthApi.userRoles(res.locals).then(roles => roles.map(role => role.roleCode))
+      const userRoles = await oauthApi.userRoles(res.locals).then((roles) => roles.map((role) => role.roleCode))
 
       if (!userRoles.includes('DELETE_SENSITIVE_CASE_NOTES' || !caseNote.caseNoteId)) {
         return res.render('notFound.njk', { url: req.headers.referer || `/prisoner/${offenderNo}/case-notes` })
@@ -28,7 +28,7 @@ module.exports = ({ prisonApi, caseNotesApi, oauthApi }) => {
       if (caseNoteAmendmentId) {
         const amendmentToDelete =
           caseNote.amendments &&
-          caseNote.amendments.find(amendment => amendment.caseNoteAmendmentId === Number(caseNoteAmendmentId))
+          caseNote.amendments.find((amendment) => amendment.caseNoteAmendmentId === Number(caseNoteAmendmentId))
 
         if (!amendmentToDelete) {
           return res.render('notFound.njk', { url: req.headers.referer || `/prisoner/${offenderNo}/case-notes` })
@@ -49,7 +49,7 @@ module.exports = ({ prisonApi, caseNotesApi, oauthApi }) => {
           authorName: caseNote.authorName,
           amendments:
             caseNote.amendments &&
-            caseNote.amendments.map(amendment => ({
+            caseNote.amendments.map((amendment) => ({
               text: amendment.additionalNoteText,
               date: amendment.creationDateTime,
               authorName: amendment.authorName,

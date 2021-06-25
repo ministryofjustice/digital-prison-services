@@ -96,7 +96,7 @@ const contentfulPages = {
   ],
 }
 
-const contentfulNotification = expiryTime => ({
+const contentfulNotification = (expiryTime) => ({
   total: 1,
   items: [
     {
@@ -235,9 +235,7 @@ describe('Contentful service', () => {
     })
 
     it('should not render expired content', async () => {
-      const expiryDate = moment()
-        .subtract(1, 'day')
-        .toISOString(false)
+      const expiryDate = moment().subtract(1, 'day').toISOString(false)
 
       contentfulClient.getEntries = jest.fn().mockResolvedValue(contentfulNotification(expiryDate))
 

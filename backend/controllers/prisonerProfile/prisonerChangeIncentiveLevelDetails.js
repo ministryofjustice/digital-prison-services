@@ -17,9 +17,9 @@ module.exports = ({ prisonApi }) => {
 
       const { iepLevel } = iepSummary
       const selectableLevels = iepLevels
-        .filter(level => level.iepDescription !== iepLevel)
+        .filter((level) => level.iepDescription !== iepLevel)
         .sort((a, b) => a.iepDescription.localeCompare(b.iepDescription))
-        .map(level => ({
+        .map((level) => ({
           text: level.iepDescription,
           value: level.iepLevel,
           checked: level.iepLevel === formValues.newIepLevel,

@@ -28,11 +28,17 @@ describe('person service', () => {
         primary: true,
         noFixedAddress: false,
         startDate: '2020-05-01',
-        phones: [{ number: '07711333444', type: 'MOB' }, { number: '011333444', type: 'BUS', ext: '777' }],
+        phones: [
+          { number: '07711333444', type: 'MOB' },
+          { number: '011333444', type: 'BUS', ext: '777' },
+        ],
       },
     ]
     const emails = [{ email: 'email@addressgoeshere.com' }]
-    const phones = [{ number: '07711333444', type: 'MOB' }, { number: '011333444', type: 'BUS', ext: '777' }]
+    const phones = [
+      { number: '07711333444', type: 'MOB' },
+      { number: '011333444', type: 'BUS', ext: '777' },
+    ]
 
     beforeEach(() => {
       prisonApi.getPersonAddresses.mockResolvedValue(addresses)

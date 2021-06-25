@@ -2,7 +2,7 @@ const { pascalToString } = require('./utils')
 
 const warning = 'Incentive Level warning'
 
-const absentReasonMapper = absenceReasons => absentReason => {
+const absentReasonMapper = (absenceReasons) => (absentReason) => {
   const { triggersIEPWarning } = absenceReasons
 
   const absentReasonMap = {
@@ -23,7 +23,7 @@ const absentReasonMapper = absenceReasons => absentReason => {
   )
 }
 
-const stripWarning = reason =>
+const stripWarning = (reason) =>
   (reason &&
     reason.toUpperCase().indexOf(warning.toUpperCase()) > 0 &&
     ` ${reason.replace(warning.toLowerCase(), '').trim()}`.trimStart()) ||

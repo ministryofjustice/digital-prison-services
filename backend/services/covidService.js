@@ -9,7 +9,7 @@ const alerts = {
 }
 
 function hasCovidAlertByOffenderNo(alertsByOffenderNumber) {
-  return offenderNo => {
+  return (offenderNo) => {
     const alertsForOffender = alertsByOffenderNumber[offenderNo] || []
     return alertsForOffender
       .filter(({ expired }) => !expired)
@@ -22,10 +22,7 @@ module.exports = {
 
   covidServiceFactory: (prisonApi, now = () => moment()) => {
     async function getRecentMovements(context, caseLoadId) {
-      const fourteenDaysAgo = now()
-        .startOf('day')
-        .subtract(14, 'days')
-        .format('YYYY-MM-DDTHH:mm:ss')
+      const fourteenDaysAgo = now().startOf('day').subtract(14, 'days').format('YYYY-MM-DDTHH:mm:ss')
 
       return prisonApi.getMovementsInBetween(context, caseLoadId, { fromDateTime: fourteenDaysAgo })
     }
@@ -63,15 +60,15 @@ module.exports = {
 
         const offenderAlerts = await prisonApi.getAlerts(context, {
           agencyId: caseLoadId,
-          offenderNumbers: inmates.map(inmate => inmate.offenderNo),
+          offenderNumbers: inmates.map((inmate) => inmate.offenderNo),
         })
 
-        const inmateFor = offenderNo => inmates.find(inmate => inmate.offenderNo === offenderNo)
+        const inmateFor = (offenderNo) => inmates.find((inmate) => inmate.offenderNo === offenderNo)
 
         return offenderAlerts
           .filter(({ alertCode }) => alertCode === code)
           .filter(({ expired }) => !expired)
-          .map(alert => [alert, inmateFor(alert.offenderNo)])
+          .map((alert) => [alert, inmateFor(alert.offenderNo)])
           .map(([alert, inmate]) => ({
             bookingId: inmate.bookingId,
             offenderNo: inmate.offenderNo,
@@ -89,18 +86,20 @@ module.exports = {
         const alertsByOffenderNumber = await getAlertsByOffenderNumber(
           context,
           caseLoadId,
-          recentMovements.map(inmate => inmate.offenderNo)
+          recentMovements.map((inmate) => inmate.offenderNo)
         )
 
         const hasCovidAlert = hasCovidAlertByOffenderNo(alertsByOffenderNumber)
 
-        return recentMovements.filter(({ offenderNo }) => !hasCovidAlert(offenderNo)).map(movement => ({
-          bookingId: movement.bookingId,
-          offenderNo: movement.offenderNo,
-          name: putLastNameFirst(movement.firstName, movement.lastName),
-          assignedLivingUnitDesc: movement.location,
-          arrivalDate: movement.movementDateTime,
-        }))
+        return recentMovements
+          .filter(({ offenderNo }) => !hasCovidAlert(offenderNo))
+          .map((movement) => ({
+            bookingId: movement.bookingId,
+            offenderNo: movement.offenderNo,
+            name: putLastNameFirst(movement.firstName, movement.lastName),
+            assignedLivingUnitDesc: movement.location,
+            arrivalDate: movement.movementDateTime,
+          }))
       },
     }
   },

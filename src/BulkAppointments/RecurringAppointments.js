@@ -23,7 +23,7 @@ const calculateEndDate = ({ startTime, repeats, numberOfTimes }) => {
     : moment(startTime, DATE_TIME_FORMAT_SPEC).add(times, unitOfTime)
 }
 
-const recurringEndDate = values => {
+const recurringEndDate = (values) => {
   const endDate = calculateEndDate({
     startTime: values.startTime,
     repeats: values.repeats,

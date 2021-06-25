@@ -1,4 +1,4 @@
-const whereaboutsTasks = prisonName => [
+const whereaboutsTasks = (prisonName) => [
   {
     id: 'search-for-prisoner',
     heading: 'Search for a prisoner',
@@ -47,7 +47,7 @@ module.exports = (req, res) => {
 
   return res.render('cellMove/cellMoveHomepage', {
     tasks: whereaboutsTasks(activeCaseLoad.description)
-      .filter(task => task.enabled)
+      .filter((task) => task.enabled)
       .map(({ roles, enabled, ...task }) => task),
   })
 }

@@ -329,7 +329,7 @@ describe('Houseblock list controller', () => {
 
     await houseblockList({})
 
-    const offenderNumbers = createMultipleUnpaid().map(e => e.offenderNo)
+    const offenderNumbers = createMultipleUnpaid().map((e) => e.offenderNo)
 
     expect(prisonApi.getSentenceData).toHaveBeenCalledWith({}, distinct(offenderNumbers))
   })

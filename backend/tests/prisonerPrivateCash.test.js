@@ -151,10 +151,7 @@ describe('Prisoner private cash', () => {
         ...withHolds,
         ...holds,
       ])
-      prisonApi.getTransactionHistory = jest
-        .fn()
-        .mockResolvedValue(holds)
-        .mockResolvedValueOnce(withHolds)
+      prisonApi.getTransactionHistory = jest.fn().mockResolvedValue(holds).mockResolvedValueOnce(withHolds)
 
       prisonApi.getAgencyDetails = jest
         .fn()

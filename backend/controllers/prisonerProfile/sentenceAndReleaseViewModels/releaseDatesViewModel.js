@@ -1,7 +1,7 @@
 const moment = require('moment')
 const { readableDateFormat } = require('../../../utils')
 
-module.exports = sentenceDetails => {
+module.exports = (sentenceDetails) => {
   const conditionalRelease = sentenceDetails.conditionalReleaseOverrideDate || sentenceDetails.conditionalReleaseDate
   const postRecallDate = sentenceDetails.postRecallReleaseOverrideDate || sentenceDetails.postRecallReleaseDate
   const automaticReleaseDate = sentenceDetails.automaticReleaseOverrideDate || sentenceDetails.automaticReleaseDate

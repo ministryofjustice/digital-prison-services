@@ -21,7 +21,7 @@ module.exports = ({ prisonApi }) => {
         period
       )
 
-      const locationDropdownValues = activityLocations?.map(location => ({
+      const locationDropdownValues = activityLocations?.map((location) => ({
         text: location.userDescription,
         value: location.locationId,
       }))

@@ -61,14 +61,12 @@ describe('Prisoner change incentive level details', () => {
         },
       ],
     })
-    prisonApi.getAgencyIepLevels = jest
-      .fn()
-      .mockReturnValue([
-        { iepLevel: 'ENT', iepDescription: 'Entry' },
-        { iepLevel: 'BAS', iepDescription: 'Basic' },
-        { iepLevel: 'STD', iepDescription: 'Standard' },
-        { iepLevel: 'ENH', iepDescription: 'Enhanced' },
-      ])
+    prisonApi.getAgencyIepLevels = jest.fn().mockReturnValue([
+      { iepLevel: 'ENT', iepDescription: 'Entry' },
+      { iepLevel: 'BAS', iepDescription: 'Basic' },
+      { iepLevel: 'STD', iepDescription: 'Standard' },
+      { iepLevel: 'ENH', iepDescription: 'Enhanced' },
+    ])
     prisonApi.changeIepLevel = jest.fn()
 
     controller = prisonerChangeIncentiveLevelDetails({ prisonApi, logError })

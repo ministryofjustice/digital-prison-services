@@ -30,7 +30,10 @@ describe('existing events', () => {
         {
           agency: 'MDI',
           timeSlot: { startTime, endTime },
-          locations: [{ value: 1, text: 'Location 1' }, { value: 2, text: 'Location 2' }],
+          locations: [
+            { value: 1, text: 'Location 1' },
+            { value: 2, text: 'Location 2' },
+          ],
           eventsAtLocations: [
             {
               locationId: 1,
@@ -54,7 +57,10 @@ describe('existing events', () => {
         {
           agency: 'MDI',
           timeSlot: { startTime, endTime },
-          locations: [{ value: 1, text: 'Location 1' }, { value: 2, text: 'Location 2' }],
+          locations: [
+            { value: 1, text: 'Location 1' },
+            { value: 2, text: 'Location 2' },
+          ],
           eventsAtLocations: [
             {
               locationId: 1,
@@ -127,7 +133,10 @@ describe('existing events', () => {
         {
           agency: 'MDI',
           timeSlot: { startTime, endTime },
-          locations: [{ value: 1, text: 'Location 1' }, { value: 2, text: 'Location 2' }],
+          locations: [
+            { value: 1, text: 'Location 1' },
+            { value: 2, text: 'Location 2' },
+          ],
           eventsAtLocations: [
             {
               locationId: 1,
@@ -138,7 +147,10 @@ describe('existing events', () => {
           ],
         }
       )
-      expect(availableLocations).toEqual([{ value: 1, text: 'Location 1' }, { value: 2, text: 'Location 2' }])
+      expect(availableLocations).toEqual([
+        { value: 1, text: 'Location 1' },
+        { value: 2, text: 'Location 2' },
+      ])
     })
 
     it('should make multiple calls to retrieve events at each location, also enhancing each event with the locationId', async () => {
@@ -149,7 +161,14 @@ describe('existing events', () => {
       const date = '10/10/2019'
       const events = await service.getAppointmentsAtLocations(
         {},
-        { date, agency: 'MDI', locations: [{ value: 1, text: 'location 1' }, { value: 2, text: 'location 2' }] }
+        {
+          date,
+          agency: 'MDI',
+          locations: [
+            { value: 1, text: 'location 1' },
+            { value: 2, text: 'location 2' },
+          ],
+        }
       )
 
       expect(events).toEqual(

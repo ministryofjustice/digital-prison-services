@@ -169,34 +169,26 @@ function AttendanceOptions({
           )}
           <Option data-qa="pay-option" className="row-gutters">
             {payMessage() && <PayMessage data-qa="pay-message">{payMessage()}</PayMessage>}
-            {!isPaying &&
-              showRadioButton && (
-                <Radio
-                  onChange={payOffender}
-                  name={offenderNo + eventId}
-                  value="pay"
-                  checked={selectedOption === 'pay'}
-                >
-                  <VisuallyHidden>Pay</VisuallyHidden>
-                </Radio>
-              )}
+            {!isPaying && showRadioButton && (
+              <Radio onChange={payOffender} name={offenderNo + eventId} value="pay" checked={selectedOption === 'pay'}>
+                <VisuallyHidden>Pay</VisuallyHidden>
+              </Radio>
+            )}
             {isPaying && <Spinner title="Paying" height={radioSize} width={radioSize} />}
           </Option>
         </>
       )}
       <Option data-qa="other-option" className="row-gutters">
-        {showRadioButton &&
-          !absentReason && (
-            <Radio name={offenderNo + eventId} onChange={renderForm} value="other" checked={selectedOption === 'other'}>
-              <VisuallyHidden>Other</VisuallyHidden>
-            </Radio>
-          )}
-        {absentReason &&
-          !locked && (
-            <UpdateLink role="link" onClick={renderForm}>
-              <OtherMessage data-qa="other-message">{absentReason.name}</OtherMessage>
-            </UpdateLink>
-          )}
+        {showRadioButton && !absentReason && (
+          <Radio name={offenderNo + eventId} onChange={renderForm} value="other" checked={selectedOption === 'other'}>
+            <VisuallyHidden>Other</VisuallyHidden>
+          </Radio>
+        )}
+        {absentReason && !locked && (
+          <UpdateLink role="link" onClick={renderForm}>
+            <OtherMessage data-qa="other-message">{absentReason.name}</OtherMessage>
+          </UpdateLink>
+        )}
         {absentReason && locked && <OtherMessage data-qa="other-message">{absentReason.name}</OtherMessage>}
         {noPay && notRecorded && <OtherMessage data-qa="other-message">Not Recorded</OtherMessage>}
       </Option>

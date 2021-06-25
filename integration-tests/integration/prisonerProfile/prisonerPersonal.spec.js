@@ -276,6 +276,21 @@ context('Prisoner personal', () => {
       })
     })
 
+    context('Neurodiversity summary section', () => {
+      it('Should display a description of the section', () => {
+        cy.get('[data-test="neurodiversity-summary"]').then($section => {
+          expect($section).to.contain.text('This is self-declared by the prisoner')
+          expect($section).to.contain.text('Also known as learning difficulties and disabilities (LDD).')
+        })
+      })
+      it('Should display learning difficulties', () => {
+        cy.get('[data-test="neurodiversity-summary"]').then($section => {
+          expect($section).to.contain.text('Dyslexia')
+          expect($section).to.contain.text('Autistic spectrum disorder')
+        })
+      })
+    })
+
     context('Languages section', () => {
       it('Should show correct missing content text', () => {
         cy.get('[data-test="languages-summary"]').then($section => {

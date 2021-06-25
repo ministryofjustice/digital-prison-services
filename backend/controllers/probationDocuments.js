@@ -7,7 +7,7 @@ const telemetry = require('../azure-appinsights')
 const serviceUnavailableMessage = 'Sorry, the service is unavailable'
 const offenderNotFoundInProbationMessage =
   'We are unable to display documents for this prisoner because we cannot find the offender record in the probation system'
-const getOffenderUrl = offenderNo => `/prisoner/${offenderNo}`
+const getOffenderUrl = (offenderNo) => `/prisoner/${offenderNo}`
 
 const trackEvent = (offenderNo, suffix, { username }) => {
   if (telemetry) {
@@ -33,26 +33,26 @@ const probationDocumentsFactory = (oauthApi, prisonApi, communityApi, systemOaut
   const displayProbationDocumentsPage = async (req, res) => {
     const pageErrors = []
 
-    const ensureAllowedPageAccess = userRoles => {
-      if (!userRoles.find(role => role.roleCode === 'VIEW_PROBATION_DOCUMENTS' || role.roleCode === 'POM')) {
+    const ensureAllowedPageAccess = (userRoles) => {
+      if (!userRoles.find((role) => role.roleCode === 'VIEW_PROBATION_DOCUMENTS' || role.roleCode === 'POM')) {
         throw new Error('You do not have the correct role to access this page')
       }
     }
 
-    const getCommunityDocuments = async offenderNo => {
-      const sentenceLength = sentence => {
+    const getCommunityDocuments = async (offenderNo) => {
+      const sentenceLength = (sentence) => {
         if (!sentence.originalLength || !sentence.originalLengthUnits) {
           return ''
         }
         return ` (${sentence.originalLength} ${sentence.originalLengthUnits})`
       }
 
-      const convictionDescription = conviction =>
+      const convictionDescription = (conviction) =>
         (conviction.sentence && `${conviction.sentence.description}${sentenceLength(conviction.sentence)}`) ||
         conviction.latestCourtAppearanceOutcome.description
 
-      const mainOffenceDescription = conviction =>
-        conviction.offences.find(offence => offence.mainOffence).detail.subCategoryDescription
+      const mainOffenceDescription = (conviction) =>
+        conviction.offences.find((offence) => offence.mainOffence).detail.subCategoryDescription
 
       const convictionSorter = (first, second) =>
         moment(second.referralDate, 'YYYY-MM-DD').diff(moment(first.referralDate, 'YYYY-MM-DD'))
@@ -60,7 +60,7 @@ const probationDocumentsFactory = (oauthApi, prisonApi, communityApi, systemOaut
       const documentSorter = (first, second) =>
         moment(second.createdAt, 'YYYY-MM-DD').diff(moment(first.createdAt, 'YYYY-MM-DD'))
 
-      const documentMapper = document => ({
+      const documentMapper = (document) => ({
         id: document.id,
         documentName: document.documentName,
         author: document.author,
@@ -69,7 +69,7 @@ const probationDocumentsFactory = (oauthApi, prisonApi, communityApi, systemOaut
         date: formatTimestampToDate(document.createdAt),
       })
 
-      const convictionMapper = conviction => {
+      const convictionMapper = (conviction) => {
         const convictionSummary = {
           title: convictionDescription(conviction),
           offence: mainOffenceDescription(conviction),
@@ -93,11 +93,11 @@ const probationDocumentsFactory = (oauthApi, prisonApi, communityApi, systemOaut
           communityApi.getOffenderDocuments(systemContext, { offenderNo }),
         ])
 
-        const convictionsWithDocuments = convictions.map(conviction => {
+        const convictionsWithDocuments = convictions.map((conviction) => {
           const convictionDocuments = allDocuments.convictions || []
           const relatedConviction = convictionDocuments.find(
             // community api mixes types for convictionId so use string
-            documentConviction => documentConviction.convictionId.toString() === conviction.convictionId.toString()
+            (documentConviction) => documentConviction.convictionId.toString() === conviction.convictionId.toString()
           )
           return {
             ...conviction,
@@ -143,7 +143,7 @@ const probationDocumentsFactory = (oauthApi, prisonApi, communityApi, systemOaut
       // maybe move this to middleware? Just not sure about the need for "authApi.userRoles(res.locals)"
       ensureAllowedPageAccess(userRoles)
 
-      const activeCaseLoad = caseloads.find(cl => cl.currentlyActive)
+      const activeCaseLoad = caseloads.find((cl) => cl.currentlyActive)
       const activeCaseLoadId = activeCaseLoad ? activeCaseLoad.caseLoadId : null
 
       const offenderDetails = {

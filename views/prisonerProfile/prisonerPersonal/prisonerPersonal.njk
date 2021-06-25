@@ -74,14 +74,32 @@
   </div>
 {% endset %}
 
+
+{% set neurodiversityContent %}
+  <div data-test="neurodiversity-summary">
+    {% include "./partials/neurodiversity.njk" %}
+  </div>
+{% endset %}
+
 {% set leftSections = [
     { heading: 'Personal details', html: personalContent },
     { heading: 'Physical characteristics', html: physicalCharacteristicsContent },
     { heading: 'Distinguishing marks', html: distinguishingMarksContent },
-    { heading: 'Personal care needs', html: careNeedsContent },
-    { heading: 'Languages', html: languages }
+    { heading: 'Personal care needs', html: careNeedsContent }
   ]
 %}
+
+{% if learnerProfiles.enabled %}
+    {% set leftSections = (
+        leftSections.push({ heading: 'Neurodiversity', html: neurodiversityContent }),
+        leftSections
+    ) %}
+{% endif %}
+
+{% set leftSections = (
+    leftSections.push({ heading: 'Languages', html: languages }),
+    leftSections
+) %}
 
 {% set rightSections = [
     { heading: 'Aliases', html: aliasesContent },

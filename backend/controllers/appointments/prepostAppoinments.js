@@ -9,7 +9,7 @@ const { properCaseName } = require('../../utils')
 
 const APPOINTMENT_DURATION_MINS = 15
 
-const unpackAppointmentDetails = req => {
+const unpackAppointmentDetails = (req) => {
   const appointmentDetails = req.flash('appointmentDetails')
   if (!appointmentDetails || !appointmentDetails.length) throw new Error('Appointment details are missing')
 
@@ -50,7 +50,7 @@ const validate = ({
   return errors
 }
 
-const getLinks = offenderNo => ({
+const getLinks = (offenderNo) => ({
   postAppointments: `/offenders/${offenderNo}/prepost-appointments`,
   cancel: `/offenders/${offenderNo}/prepost-appointments/cancel`,
 })
@@ -81,7 +81,7 @@ const prepostAppointmentsFactory = ({
     }
   }
 
-  const getCourts = async locals => {
+  const getCourts = async (locals) => {
     const items = await whereaboutsApi.getCourtLocations(locals)
     const formattedLocations = Object.fromEntries(items.map(({ id, name }) => [id, name]))
 
@@ -90,9 +90,9 @@ const prepostAppointmentsFactory = ({
       other: 'Other',
     }
   }
-  const getCourtDropdownValues = async locals => {
+  const getCourtDropdownValues = async (locals) => {
     const courts = await getCourts(locals)
-    return Object.keys(courts).map(key => ({ value: key, text: courts[key] }))
+    return Object.keys(courts).map((key) => ({ value: key, text: courts[key] }))
   }
 
   const handleLocationEventsIfRequired = async (
@@ -133,8 +133,8 @@ const prepostAppointmentsFactory = ({
         res.locals,
         activeCaseLoadId
       )
-      const { text: locationDescription } = locationTypes.find(loc => loc.value === Number(locationId))
-      const { text: appointmentTypeDescription } = appointmentTypes.find(app => app.value === appointmentType)
+      const { text: locationDescription } = locationTypes.find((loc) => loc.value === Number(locationId))
+      const { text: appointmentTypeDescription } = appointmentTypes.find((app) => app.value === appointmentType)
 
       const { firstName, lastName, bookingId } = await prisonApi.getDetails(res.locals, offenderNo)
 
@@ -253,16 +253,8 @@ const prepostAppointmentsFactory = ({
 
     try {
       const appointmentDetails = unpackAppointmentDetails(req)
-      const {
-        startTime,
-        endTime,
-        comment,
-        locationDescription,
-        locationTypes,
-        firstName,
-        lastName,
-        date,
-      } = appointmentDetails
+      const { startTime, endTime, comment, locationDescription, locationTypes, firstName, lastName, date } =
+        appointmentDetails
 
       const errors = validate({
         preAppointment,

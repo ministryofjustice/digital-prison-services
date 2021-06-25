@@ -28,15 +28,15 @@ const bulkAppointmentsUploadFactory = (csvParserService, offenderLoader, prisonA
 
   const getNonExistingOffenderNumbers = (uploadedList, prisonersList) => {
     const matchingPrisonerNumbers = []
-    uploadedList.forEach(uploadedOffenderNo =>
-      prisonersList.forEach(prisoner => {
+    uploadedList.forEach((uploadedOffenderNo) =>
+      prisonersList.forEach((prisoner) => {
         if (uploadedOffenderNo === prisoner.offenderNo) {
           matchingPrisonerNumbers.push(uploadedOffenderNo)
         }
       })
     )
 
-    return uploadedList.filter(x => matchingPrisonerNumbers.indexOf(x) < 0)
+    return uploadedList.filter((x) => matchingPrisonerNumbers.indexOf(x) < 0)
   }
 
   const post = async (req, res) => {
@@ -46,7 +46,7 @@ const bulkAppointmentsUploadFactory = (csvParserService, offenderLoader, prisonA
     try {
       return csvParserService
         .loadAndParseCsvFile(file)
-        .then(async fileContent => {
+        .then(async (fileContent) => {
           const fileContentWithNoHeader = fileContent[0][0] === 'Prison number' ? fileContent.slice(1) : fileContent
           const prisonersDetails = await offenderLoader.loadFromCsvContent(
             res.locals,
@@ -64,7 +64,7 @@ const bulkAppointmentsUploadFactory = (csvParserService, offenderLoader, prisonA
           )
 
           const prisonerList = await Promise.all(
-            prisonersDetails.map(async prisoner => {
+            prisonersDetails.map(async (prisoner) => {
               const location = await prisonApi.getLocation(res.locals, prisoner.assignedLivingUnitId)
               return {
                 bookingId: prisoner.bookingId,
@@ -95,7 +95,7 @@ const bulkAppointmentsUploadFactory = (csvParserService, offenderLoader, prisonA
 
           return res.redirect('/bulk-appointments/confirm-appointments')
         })
-        .catch(error => {
+        .catch((error) => {
           req.flash('errors', { text: error.message, href: '#file' })
           return res.redirect('/bulk-appointments/add-appointment-details')
         })

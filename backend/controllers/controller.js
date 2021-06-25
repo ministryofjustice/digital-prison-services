@@ -68,11 +68,11 @@ const factory = ({
 
     csvParserService
       .loadAndParseCsvFile(file)
-      .then(async fileContent => {
+      .then(async (fileContent) => {
         const viewModel = await offenderLoader.loadFromCsvContent(res.locals, fileContent, agencyId)
         res.json(viewModel)
       })
-      .catch(error => {
+      .catch((error) => {
         res.status(400)
         res.send(error.message)
         res.end()

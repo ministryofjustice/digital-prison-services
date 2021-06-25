@@ -49,7 +49,7 @@ const calculatePreviousUrl = (offset, limit, url) => {
 }
 
 const getPagination = (totalResults, offset, limit, url) => {
-  const toPageNumberNode = page => {
+  const toPageNumberNode = (page) => {
     const pageOffset = limit * page
 
     url.searchParams.set('pageOffsetOption', pageOffset)

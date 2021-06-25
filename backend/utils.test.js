@@ -326,7 +326,10 @@ describe('chunkArray()', () => {
   it('should split an array into multiple arrays at the specified number', () => {
     const arrayWithFourThings = ['Item 1', 'Item 2', 'Item 3', 'Item 4']
 
-    expect(chunkArray(arrayWithFourThings, 2)).toEqual([['Item 1', 'Item 2'], ['Item 3', 'Item 4']])
+    expect(chunkArray(arrayWithFourThings, 2)).toEqual([
+      ['Item 1', 'Item 2'],
+      ['Item 3', 'Item 4'],
+    ])
   })
 })
 

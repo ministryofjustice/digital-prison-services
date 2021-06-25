@@ -1,7 +1,7 @@
 const moment = require('moment')
 const { formatCurrency, putLastNameFirst, formatName } = require('../utils')
 
-module.exports = prisonApi => {
+module.exports = (prisonApi) => {
   const today = moment()
   const currentMonth = today.month()
   const currentYear = today.year()
@@ -39,16 +39,14 @@ module.exports = prisonApi => {
       currentBalance: formatCurrency(balanceData?.[accountCode] || 0, balanceData?.currency),
       formValues: { selectedMonth: parseInt(month, 10), selectedYear: parseInt(year, 10) },
       monthOptions: moment.months().map((m, i) => ({ value: i, text: m })),
-      period: moment()
-        .set({ month, year })
-        .format('MMMM YYYY'),
+      period: moment().set({ month, year }).format('MMMM YYYY'),
       prisoner: {
         nameForBreadcrumb: putLastNameFirst(prisonerDetails.firstName, prisonerDetails.lastName),
         name: formatName(prisonerDetails.firstName, prisonerDetails.lastName),
         offenderNo,
       },
       showDamageObligationsLink: balanceData?.damageObligations > 0,
-      yearOptions: yearOptions.map(yyyy => ({ value: yyyy, text: yyyy })),
+      yearOptions: yearOptions.map((yyyy) => ({ value: yyyy, text: yyyy })),
     }
   }
 

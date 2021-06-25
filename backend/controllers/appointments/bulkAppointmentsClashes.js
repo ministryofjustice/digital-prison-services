@@ -2,7 +2,7 @@ const { switchDateFormat } = require('../../utils')
 const { DATE_TIME_FORMAT_SPEC, buildDateTime } = require('../../../src/dateHelpers')
 const { raiseAnalyticsEvent } = require('../../raiseAnalyticsEvent')
 
-const bulkAppointmentsClashesFactory = prisonApi => {
+const bulkAppointmentsClashesFactory = (prisonApi) => {
   const renderTemplate = (req, res, pageData) => {
     const { appointmentDetails, prisonersWithClashes } = pageData
 
@@ -16,7 +16,7 @@ const bulkAppointmentsClashesFactory = prisonApi => {
       prisonApi.getAppointments(res.locals, searchCriteria),
       prisonApi.getExternalTransfers(res.locals, searchCriteria),
       prisonApi.getCourtEvents(res.locals, searchCriteria),
-    ]).then(events => events.reduce((flattenedEvents, event) => flattenedEvents.concat(event), []))
+    ]).then((events) => events.reduce((flattenedEvents, event) => flattenedEvents.concat(event), []))
   }
 
   const index = async (req, res) => {
@@ -30,10 +30,10 @@ const bulkAppointmentsClashesFactory = prisonApi => {
       } = req.session
 
       const eventsByOffenderNo = await getOtherEvents(req, res, {
-        offenderNumbers: prisonersListed.map(prisoner => prisoner.offenderNo),
+        offenderNumbers: prisonersListed.map((prisoner) => prisoner.offenderNo),
         date: switchDateFormat(date),
         agencyId: req.session.userDetails.activeCaseLoadId,
-      }).then(events =>
+      }).then((events) =>
         events.reduce(
           (offenders, event) => ({
             ...offenders,
@@ -47,13 +47,13 @@ const bulkAppointmentsClashesFactory = prisonApi => {
         appointmentDetails: { ...req.session.data },
         prisonersWithClashes: prisonersListed
           .map(
-            prisoner =>
+            (prisoner) =>
               eventsByOffenderNo[prisoner.offenderNo] && {
                 ...prisoner,
                 clashes: eventsByOffenderNo[prisoner.offenderNo],
               }
           )
-          .filter(prisoner => prisoner),
+          .filter((prisoner) => prisoner),
       })
     } catch (error) {
       res.locals.redirectUrl = '/bulk-appointments/need-to-upload-file'
@@ -116,7 +116,7 @@ const bulkAppointmentsClashesFactory = prisonApi => {
         startTime: startTime || buildDateTime({ date, hours: 23, minutes: 59 }).format(DATE_TIME_FORMAT_SPEC),
         endTime,
       },
-      appointments: remainingPrisoners.map(prisoner => ({
+      appointments: remainingPrisoners.map((prisoner) => ({
         bookingId: prisoner.bookingId,
         startTime: prisoner.startTime,
         endTime: prisoner.endTime,

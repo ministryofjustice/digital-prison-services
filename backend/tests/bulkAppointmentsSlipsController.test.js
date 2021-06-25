@@ -89,14 +89,12 @@ describe('appointment movement slips', () => {
       })
 
       it('should render the movement slips page with the correct details', async () => {
-        prisonApi.getOffenderSummaries = jest
-          .fn()
-          .mockReturnValue([
-            { offenderNo: 'G1683VN', assignedLivingUnitDesc: 'CELL 1' },
-            { offenderNo: 'G4803UT', assignedLivingUnitDesc: 'CELL 2' },
-            { offenderNo: 'G4346UT', assignedLivingUnitDesc: 'CELL 3' },
-            { offenderNo: 'G5402VR', assignedLivingUnitDesc: 'CELL 4' },
-          ])
+        prisonApi.getOffenderSummaries = jest.fn().mockReturnValue([
+          { offenderNo: 'G1683VN', assignedLivingUnitDesc: 'CELL 1' },
+          { offenderNo: 'G4803UT', assignedLivingUnitDesc: 'CELL 2' },
+          { offenderNo: 'G4346UT', assignedLivingUnitDesc: 'CELL 3' },
+          { offenderNo: 'G5402VR', assignedLivingUnitDesc: 'CELL 4' },
+        ])
 
         await controller(req, res)
 
@@ -149,15 +147,15 @@ describe('appointment movement slips', () => {
 
           expect(prisonApi.getOffenderSummaries).toHaveBeenCalledWith(
             res.locals,
-            largePrisonersListed.slice(0, 100).map(prisoner => prisoner.offenderNo)
+            largePrisonersListed.slice(0, 100).map((prisoner) => prisoner.offenderNo)
           )
           expect(prisonApi.getOffenderSummaries).toHaveBeenCalledWith(
             res.locals,
-            largePrisonersListed.slice(100, 200).map(prisoner => prisoner.offenderNo)
+            largePrisonersListed.slice(100, 200).map((prisoner) => prisoner.offenderNo)
           )
           expect(prisonApi.getOffenderSummaries).toHaveBeenCalledWith(
             res.locals,
-            largePrisonersListed.slice(200, 201).map(prisoner => prisoner.offenderNo)
+            largePrisonersListed.slice(200, 201).map((prisoner) => prisoner.offenderNo)
           )
         })
 

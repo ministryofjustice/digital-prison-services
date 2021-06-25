@@ -28,8 +28,15 @@ describe('Confirm appointments', () => {
     appointmentsService.getAppointmentOptions = jest.fn()
 
     appointmentsService.getAppointmentOptions.mockReturnValue({
-      appointmentTypes: [{ value: 'VLB', text: 'Videolink' }, { value: 'appointment1', text: 'Appointment 1' }],
-      locationTypes: [{ value: 1, text: 'Room 3' }, { value: 2, text: 'Room 1' }, { value: 3, text: 'Room 2' }],
+      appointmentTypes: [
+        { value: 'VLB', text: 'Videolink' },
+        { value: 'appointment1', text: 'Appointment 1' },
+      ],
+      locationTypes: [
+        { value: 1, text: 'Room 3' },
+        { value: 2, text: 'Room 1' },
+        { value: 3, text: 'Room 2' },
+      ],
     })
 
     prisonApi.getDetails.mockReturnValue({

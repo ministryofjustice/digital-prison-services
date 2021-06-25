@@ -323,7 +323,10 @@ describe('select location', () => {
             { text: 'Houseblock 2', value: 'Houseblock 2' },
             { text: 'Houseblock 3', value: 'Houseblock 3' },
           ],
-          cellAttributes: [{ text: 'Single occupancy', value: 'SO' }, { text: 'Multiple occupancy', value: 'MO' }],
+          cellAttributes: [
+            { text: 'Single occupancy', value: 'SO' },
+            { text: 'Multiple occupancy', value: 'MO' },
+          ],
         })
       )
     })

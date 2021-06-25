@@ -4,7 +4,7 @@ import { FOCUS_COLOUR, LINK_HOVER_COLOUR, LINK_COLOUR } from 'govuk-colours'
 import { typography } from '@govuk-react/lib'
 
 export const Option = styled.td`
-  display: ${props => (props.printOnly ? 'none' : 'table-cell')};
+  display: ${(props) => (props.printOnly ? 'none' : 'table-cell')};
   vertical-align: top;
 
   label {
@@ -12,7 +12,7 @@ export const Option = styled.td`
   }
 
   ${MEDIA_QUERIES.PRINT} {
-    display: ${props => (props.printOnly ? 'table-cell' : 'none')};
+    display: ${(props) => (props.printOnly ? 'table-cell' : 'none')};
   }
 `
 
