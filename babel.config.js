@@ -1,4 +1,4 @@
-const presets = ['@babel/preset-env', '@babel/preset-react']
+const presets = ['@babel/preset-env', '@babel/preset-typescript', '@babel/preset-react']
 
 const plugins = [
   '@babel/plugin-syntax-dynamic-import',
@@ -8,9 +8,9 @@ const plugins = [
   ['@babel/plugin-proposal-private-methods', { loose: true }],
 ]
 
-const ignore = ['.spec.js', '.test.js', '-test.js', '/__tests__/']
+const ignore = ['.spec.js', '.test.js', '.spec.ts', '.test.ts', '-test.js', '/__tests__/']
 
-module.exports = api => {
+module.exports = (api) => {
   api.cache(() => process.env.NODE_ENV)
   return {
     presets,

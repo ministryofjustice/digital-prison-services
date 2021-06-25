@@ -1,5 +1,6 @@
-const { app } = require('../config')
-const EsweService = require('../services/esweService')
+import EsweService from '../services/esweService'
+import { app } from '../config'
+import CuriousApi from '../api/curious/curiousApi'
 
 jest.mock('../config', () => ({
   app: {
@@ -10,13 +11,14 @@ jest.mock('../config', () => ({
 }))
 
 describe('Education skills and work experience', () => {
-  const prisonApi = jest.fn()
-  const curiousApi = {}
+  const curiousApi = {} as CuriousApi
 
   let service
+  let getLearnerProfilesMock
   beforeEach(() => {
-    curiousApi.getLearnerProfiles = jest.fn()
-    service = EsweService.create(curiousApi, prisonApi)
+    getLearnerProfilesMock = jest.fn()
+    curiousApi.getLearnerProfiles = getLearnerProfilesMock
+    service = EsweService.create(curiousApi)
   })
 
   describe('learner profiles', () => {
@@ -41,26 +43,26 @@ describe('Education skills and work experience', () => {
     const nomisId = 'G2823GV'
 
     it('should return expected learner profiles', async () => {
-      curiousApi.getLearnerProfiles.mockResolvedValue([fakeLearnerProfile])
+      getLearnerProfilesMock.mockResolvedValue([fakeLearnerProfile])
 
       const actual = await service.getLearnerProfiles(nomisId)
       expect(actual.enabled).toBeFalsy()
       expect(actual.content).toHaveLength(0)
-      expect(curiousApi.getLearnerProfiles).not.toHaveBeenCalled()
+      expect(getLearnerProfilesMock).not.toHaveBeenCalled()
     })
 
     it('should set enabled to true', async () => {
       jest.spyOn(app, 'esweEnabled', 'get').mockReturnValue(true)
 
-      curiousApi.getLearnerProfiles.mockResolvedValue([fakeLearnerProfile])
+      getLearnerProfilesMock.mockResolvedValue([fakeLearnerProfile])
 
       const actual = await service.getLearnerProfiles(nomisId)
 
       expect(actual.enabled).toBeTruthy()
       expect(actual.content).toHaveLength(1)
       expect(actual.content).toContain(fakeLearnerProfile)
-      expect(curiousApi.getLearnerProfiles).toHaveBeenCalledTimes(1)
-      expect(curiousApi.getLearnerProfiles).toHaveBeenCalledWith(nomisId)
+      expect(getLearnerProfilesMock).toHaveBeenCalledTimes(1)
+      expect(getLearnerProfilesMock).toHaveBeenCalledWith(nomisId)
     })
   })
 })

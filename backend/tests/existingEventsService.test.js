@@ -1,5 +1,5 @@
 const moment = require('moment')
-const { DATE_ONLY_FORMAT_SPEC } = require('../../src/dateHelpers')
+const { DATE_ONLY_FORMAT_SPEC } = require('../../common/dateHelpers')
 const existingEventsService = require('../services/existingEventsService')
 
 describe('existing events', () => {

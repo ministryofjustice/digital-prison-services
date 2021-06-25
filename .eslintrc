@@ -1,5 +1,15 @@
 {
   "extends": ["airbnb", "prettier"],
+  "settings": {
+    "import/parsers": {
+      "@typescript-eslint/parser": [".ts", ".tsx"]
+    },
+    "import/resolver": {
+      "node": {
+        "extensions": [".js", ".jsx", ".ts", ".tsx", ".json"]
+      }
+    }
+  },
   "parser": "@babel/eslint-parser",
   "parserOptions": {
     "ecmaVersion": 6,
@@ -30,7 +40,45 @@
     "jsx-a11y/label-has-associated-control": [2, { "assert": "either" }],
     "jsx-a11y/label-has-for": 0, // disable as has been deprecated and replaced by label-has-associated-control
     "react/forbid-prop-types": 0,
-    "no-only-tests/no-only-tests": "error"
+    "no-only-tests/no-only-tests": "error",
+    "import/extensions": [
+      "error",
+      "ignorePackages",
+      {
+        "js": "never",
+        "jsx": "never",
+        "ts": "never",
+        "tsx": "never"
+      }
+    ]
   },
-  "plugins": ["prettier", "no-only-tests"]
+  "plugins": ["prettier", "no-only-tests", "import"],
+  "overrides": [
+    {
+      "plugins": ["@typescript-eslint"],
+      "parser": "@typescript-eslint/parser",
+      "files": ["**/*.ts"],
+      "excludedFiles": "*.js",
+      "extends": [
+        "plugin:@typescript-eslint/eslint-recommended",
+        "plugin:@typescript-eslint/recommended",
+        "plugin:prettier/recommended"
+      ],
+      "rules": {
+        "import/no-unresolved": "off",
+        "no-use-before-define": 0,
+        "@typescript-eslint/no-use-before-define": 0,
+        "class-methods-use-this": 0,
+        "no-useless-constructor": 0,
+        "no-shadow": "off", // https://github.com/typescript-eslint/typescript-eslint/issues/2484
+        "@typescript-eslint/no-shadow": ["error"]
+      },
+      "globals": { "Atomics": "readonly", "SharedArrayBuffer": "readonly" },
+      "parserOptions": {
+        "ecmaFeatures": { "jsx": true },
+        "ecmaVersion": 2018,
+        "sourceType": "module"
+      }
+    }
+  ]
 }

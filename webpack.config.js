@@ -168,6 +168,9 @@ module.exports = {
   },
   plugins,
   resolve: {
-    alias: { path: false },
+    alias: {
+      path: false,
+      common: path.resolve(__dirname, 'common/'),
+    },
   },
 }

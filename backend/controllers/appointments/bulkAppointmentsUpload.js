@@ -1,5 +1,5 @@
 const moment = require('moment')
-const { DAY_MONTH_YEAR, DATE_TIME_FORMAT_SPEC } = require('../../../src/dateHelpers')
+const { DAY_MONTH_YEAR, DATE_TIME_FORMAT_SPEC } = require('../../../common/dateHelpers')
 
 const bulkAppointmentsUploadFactory = (csvParserService, offenderLoader, prisonApi, logError) => {
   const renderError = (req, res, error) => {

@@ -1,6 +1,6 @@
 const moment = require('moment')
 
-const { DATE_TIME_FORMAT_SPEC } = require('../../../src/dateHelpers')
+const { DATE_TIME_FORMAT_SPEC } = require('../../../common/dateHelpers')
 const { raiseAnalyticsEvent } = require('../../raiseAnalyticsEvent')
 
 const { properCaseName, formatName } = require('../../utils')

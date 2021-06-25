@@ -1,5 +1,5 @@
 const { prepostAppointmentsFactory } = require('../controllers/appointments/prepostAppoinments')
-const { Time } = require('../../src/dateHelpers')
+const { Time } = require('../../common/dateHelpers')
 const { notifyClient } = require('../shared/notifyClient')
 const config = require('../config')
 

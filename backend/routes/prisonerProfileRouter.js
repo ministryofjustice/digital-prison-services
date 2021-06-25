@@ -1,3 +1,5 @@
+import EsweService from '../services/esweService'
+
 const express = require('express')
 const nunjucks = require('nunjucks')
 const telemetry = require('../azure-appinsights')
@@ -33,7 +35,6 @@ const paginationService = require('../services/paginationService')
 const referenceCodesServiceFactory = require('../controllers/reference-codes-service')
 
 const adjudicationsHistoryService = require('../services/adjudicationHistory')
-const EsweService = require('../services/esweService')
 
 const router = express.Router({ mergeParams: true })
 
@@ -68,7 +69,7 @@ const controller = ({
   const prisonerFinanceService = prisonerFinanceServiceFactory(prisonApi)
   const referenceCodesService = referenceCodesServiceFactory(prisonApi)
   const adjudicationHistoryService = adjudicationsHistoryService(prisonApi)
-  const esweService = EsweService.create(curiousApi, prisonApi)
+  const esweService = EsweService.create(curiousApi)
 
   router.get('/', prisonerQuickLook({ prisonerProfileService, prisonApi, telemetry, offenderSearchApi, logError }))
   router.get('/image', prisonerFullImage({ prisonApi, logError }))

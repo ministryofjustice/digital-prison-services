@@ -2,7 +2,7 @@ const moment = require('moment')
 const { bulkAppointmentsAddDetailsFactory } = require('../controllers/appointments/bulkAppointmentsAddDetails')
 const { repeatTypes } = require('../shared/appointmentConstants')
 
-const { DATE_TIME_FORMAT_SPEC, DAY_MONTH_YEAR } = require('../../src/dateHelpers')
+const { DATE_TIME_FORMAT_SPEC, DAY_MONTH_YEAR } = require('../../common/dateHelpers')
 
 const buildBodyForDate = (date) => {
   const startTime = moment().add(1, 'hours')
