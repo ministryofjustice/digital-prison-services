@@ -1,8 +1,8 @@
 const { stubFor, postFor, verifyPut, verifyGet, verifyPosts, resetStub } = require('./wiremock')
-const alertTypes = require('./responses/alertTypes')
-const cellAttributes = require('./responses/cellAttributes')
-const assessmentsResponse = require('./responses/assessmentsResponse')
-const activity3 = require('./responses/activity3')
+const alertTypes = require('./responses/alertTypes.json')
+const cellAttributes = require('./responses/cellAttributes.json')
+const assessmentsResponse = require('./responses/assessmentsResponse.json')
+const activity3 = require('./responses/activity3.json')
 
 module.exports = {
   verifyMoveToCell: body => verifyPosts('/whereabouts/cell/make-cell-move', body),
@@ -11,8 +11,8 @@ module.exports = {
     verifyGet(
       `/api/offenders/${offenderNo}/adjudications?agencyId=${agencyId}&finding=${finding}&fromDate=${fromDate}&toDate=${toDate}`
     ),
-  stubHealth: (status = 200) => {
-    return stubFor({
+  stubHealth: (status = 200) =>
+    stubFor({
       request: {
         method: 'GET',
         urlPath: '/health/ping',
@@ -24,10 +24,9 @@ module.exports = {
         },
         fixedDelayMilliseconds: status === 500 ? 5000 : '',
       },
-    })
-  },
-  stubStaff: (staffId, details) => {
-    return stubFor({
+    }),
+  stubStaff: (staffId, details) =>
+    stubFor({
       request: {
         method: 'GET',
         url: `/api/users/${encodeURIComponent(staffId)}`,
@@ -43,10 +42,9 @@ module.exports = {
           activeCaseLoadId: 'MDI',
         },
       },
-    })
-  },
-  stubUserCaseloads: caseloads => {
-    return stubFor({
+    }),
+  stubUserCaseloads: caseloads =>
+    stubFor({
       request: {
         method: 'GET',
         url: '/api/users/me/caseLoads',
@@ -64,8 +62,7 @@ module.exports = {
           },
         ],
       },
-    })
-  },
+    }),
   stubUpdateCaseload: () =>
     stubFor({
       request: {
@@ -79,8 +76,8 @@ module.exports = {
         },
       },
     }),
-  stubUserLocations: locations => {
-    return stubFor({
+  stubUserLocations: locations =>
+    stubFor({
       request: {
         method: 'GET',
         urlPattern: '/api/users/me/locations',
@@ -116,10 +113,9 @@ module.exports = {
           },
         ],
       },
-    })
-  },
-  stubUserScheduledActivities: activities => {
-    return stubFor({
+    }),
+  stubUserScheduledActivities: activities =>
+    stubFor({
       request: {
         method: 'POST',
         urlPattern: '/api/schedules/.+?/activities-by-event-ids',
@@ -131,10 +127,23 @@ module.exports = {
         },
         jsonBody: activities,
       },
-    })
-  },
-  stubOffenderActivities: activities => {
-    return stubFor({
+    }),
+  stubOffenderActivitiesOverDateRange: (agencyId, fromDate, toDate, period, suspensions) =>
+    stubFor({
+      request: {
+        method: 'GET',
+        url: `/api/schedules/${agencyId}/activities-by-date-range?fromDate=${fromDate}&toDate=${toDate}&timeSlot=${period}&includeSuspended=true`,
+      },
+      response: {
+        status: 200,
+        headers: {
+          'Content-Type': 'application/json;charset=UTF-8',
+        },
+        jsonBody: suspensions,
+      },
+    }),
+  stubOffenderActivities: activities =>
+    stubFor({
       request: {
         method: 'GET',
         urlPattern: '/api/schedules/[A-Z].+?/activities.+?',
@@ -146,12 +155,9 @@ module.exports = {
         },
         jsonBody: activities || [],
       },
-    })
-  },
+    }),
   stubProgEventsAtLocation: (locationId, timeSlot, date, activities, suspended = true) => {
-    const dateAndTimeSlotParameters = date ? `${
-      timeSlot ? `timeSlot=${timeSlot}&` : ''
-    }date=${date}` : '.+?'
+    const dateAndTimeSlotParameters = date ? `${timeSlot ? `timeSlot=${timeSlot}&` : ''}date=${date}` : '.+?'
 
     return stubFor({
       request: {
@@ -168,9 +174,7 @@ module.exports = {
     })
   },
   stubUsageAtLocation: (caseload, locationId, timeSlot, date, usage, json = []) => {
-    const dateAndTimeSlotParameters = date ? `${
-      timeSlot ? `timeSlot=${timeSlot}&` : ''
-    }date=${date}` : '.*'
+    const dateAndTimeSlotParameters = date ? `${timeSlot ? `timeSlot=${timeSlot}&` : ''}date=${date}` : '.*'
 
     return stubFor({
       request: {
@@ -204,8 +208,8 @@ module.exports = {
       },
     })
   },
-  stubCsraAssessments: (offenderNumbers, assessments = []) => {
-    return stubFor({
+  stubCsraAssessments: (offenderNumbers, assessments = []) =>
+    stubFor({
       request: {
         method: 'POST',
         urlPattern: '/api/offender-assessments/csra/list',
@@ -217,10 +221,9 @@ module.exports = {
         },
         jsonBody: assessments,
       },
-    })
-  },
-  stubCsraAssessmentsForPrisoner: ({ offenderNo, assessments = [] }) => {
-    return stubFor({
+    }),
+  stubCsraAssessmentsForPrisoner: ({ offenderNo, assessments = [] }) =>
+    stubFor({
       request: {
         method: 'GET',
         urlPattern: `/api/offender-assessments/csra/${offenderNo}`,
@@ -232,10 +235,9 @@ module.exports = {
         },
         jsonBody: assessments,
       },
-    })
-  },
-  stubCsraReviewForPrisoner: ({ bookingId, assessmentSeq, review = {} }) => {
-    return stubFor({
+    }),
+  stubCsraReviewForPrisoner: ({ bookingId, assessmentSeq, review = {} }) =>
+    stubFor({
       request: {
         method: 'GET',
         urlPattern: `/api/offender-assessments/csra/${bookingId}/assessment/${assessmentSeq}`,
@@ -247,10 +249,9 @@ module.exports = {
         },
         jsonBody: review,
       },
-    })
-  },
-  stubIepSummaryForBookingIds: results => {
-    return stubFor({
+    }),
+  stubIepSummaryForBookingIds: results =>
+    stubFor({
       request: {
         method: 'GET',
         urlPattern: '/api/bookings/offenders/iepSummary\\?.+?',
@@ -262,10 +263,9 @@ module.exports = {
         },
         jsonBody: results,
       },
-    })
-  },
-  stubOffenderSentences: (offenderNumbers, date) => {
-    return stubFor({
+    }),
+  stubOffenderSentences: (offenderNumbers, date) =>
+    stubFor({
       request: {
         method: 'POST',
         url: '/api/offender-sentences',
@@ -283,10 +283,9 @@ module.exports = {
           },
         ],
       },
-    })
-  },
-  stubOffenderFullDetails: details => {
-    return stubFor({
+    }),
+  stubOffenderFullDetails: details =>
+    stubFor({
       request: {
         method: 'GET',
         urlPattern: `/api/bookings/offenderNo/.+?\\?fullInfo=true&csraSummary=true`,
@@ -298,10 +297,9 @@ module.exports = {
         },
         jsonBody: details || {},
       },
-    })
-  },
-  stubOffenderBasicDetails: offender => {
-    return stubFor({
+    }),
+  stubOffenderBasicDetails: offender =>
+    stubFor({
       request: {
         method: 'GET',
         urlPattern: `/api/bookings/offenderNo/.+?\\?fullInfo=false&csraSummary=false`,
@@ -313,10 +311,9 @@ module.exports = {
         },
         jsonBody: offender || {},
       },
-    })
-  },
-  stubOffenderCaseNoteSummary: summary => {
-    return stubFor({
+    }),
+  stubOffenderCaseNoteSummary: summary =>
+    stubFor({
       request: {
         method: 'GET',
         urlPattern: '/api/case-notes/summary\\?.+?',
@@ -328,10 +325,9 @@ module.exports = {
         },
         jsonBody: summary || [],
       },
-    })
-  },
-  stubStaffRoles: roles => {
-    return stubFor({
+    }),
+  stubStaffRoles: roles =>
+    stubFor({
       request: {
         method: 'GET',
         urlPattern: `/api/staff/.+?/.+?/roles`,
@@ -343,10 +339,9 @@ module.exports = {
         },
         jsonBody: roles || [{ role: 'KW' }],
       },
-    })
-  },
-  stubAlertTypes: () => {
-    return stubFor({
+    }),
+  stubAlertTypes: () =>
+    stubFor({
       request: {
         method: 'GET',
         urlPattern: '/api/reference-domains/alertTypes',
@@ -358,10 +353,9 @@ module.exports = {
         },
         jsonBody: alertTypes,
       },
-    })
-  },
-  stubAlertsForBooking: alerts => {
-    return stubFor({
+    }),
+  stubAlertsForBooking: alerts =>
+    stubFor({
       request: {
         method: 'GET',
         urlPattern: '/api/bookings/[0-9]+?/alerts\\?query=.+?',
@@ -373,11 +367,10 @@ module.exports = {
         },
         jsonBody: alerts || [],
       },
-    })
-  },
+    }),
 
-  stubAlerts: ({ alerts }) => {
-    return stubFor({
+  stubAlerts: ({ alerts }) =>
+    stubFor({
       request: {
         method: 'POST',
         urlPattern: `/api/bookings/offenderNo/.+?/alerts`,
@@ -389,8 +382,7 @@ module.exports = {
         },
         jsonBody: alerts || [],
       },
-    })
-  },
+    }),
   stubGetAlerts: ({ agencyId, alerts }) =>
     stubFor({
       request: {
@@ -433,8 +425,8 @@ module.exports = {
         jsonBody: alert || {},
       },
     }),
-  stubCreateAlert: () => {
-    return stubFor({
+  stubCreateAlert: () =>
+    stubFor({
       request: {
         method: 'POST',
         urlPattern: '/api/bookings/[0-9].+?/alert',
@@ -446,10 +438,9 @@ module.exports = {
         },
         jsonBody: {},
       },
-    })
-  },
-  stubMovementsBetween: ({ locationId, fromDate, movements }) => {
-    return stubFor({
+    }),
+  stubMovementsBetween: ({ locationId, fromDate, movements }) =>
+    stubFor({
       request: {
         method: 'GET',
         urlPattern: `/api/movements/${locationId}/in\\?fromDateTime=${encodeURIComponent(fromDate)}`,
@@ -461,10 +452,9 @@ module.exports = {
         },
         jsonBody: movements || [],
       },
-    })
-  },
-  stubMovementsIn: ({ agencyId, fromDate, movements }) => {
-    return stubFor({
+    }),
+  stubMovementsIn: ({ agencyId, fromDate, movements }) =>
+    stubFor({
       request: {
         method: 'GET',
         url: `/api/movements/${agencyId}/in/${fromDate}`,
@@ -476,10 +466,9 @@ module.exports = {
         },
         jsonBody: movements || [],
       },
-    })
-  },
-  stubMovementsOut: ({ agencyId, fromDate, movements }) => {
-    return stubFor({
+    }),
+  stubMovementsOut: ({ agencyId, fromDate, movements }) =>
+    stubFor({
       request: {
         method: 'GET',
         url: `/api/movements/${agencyId}/out/${encodeURIComponent(fromDate)}`,
@@ -491,10 +480,9 @@ module.exports = {
         },
         jsonBody: movements || [],
       },
-    })
-  },
-  stubCurrentlyOut: (livingUnitId, movements) => {
-    return stubFor({
+    }),
+  stubCurrentlyOut: (livingUnitId, movements) =>
+    stubFor({
       request: {
         method: 'GET',
         url: `/api/movements/livingUnit/${livingUnitId}/currently-out`,
@@ -506,10 +494,9 @@ module.exports = {
         },
         jsonBody: movements || [],
       },
-    })
-  },
-  stubTotalCurrentlyOut: (agencyId, movements) => {
-    return stubFor({
+    }),
+  stubTotalCurrentlyOut: (agencyId, movements) =>
+    stubFor({
       request: {
         method: 'GET',
         url: `/api/movements/agency/${agencyId}/currently-out`,
@@ -521,10 +508,9 @@ module.exports = {
         },
         jsonBody: movements || [],
       },
-    })
-  },
-  stubOffenderImage: () => {
-    return stubFor({
+    }),
+  stubOffenderImage: () =>
+    stubFor({
       request: {
         method: 'GET',
         urlPattern: '/api/bookings/offenderNo/.+?/image/data\\?fullSizeImage=false',
@@ -537,10 +523,9 @@ module.exports = {
         base64Body:
           '/9j/4AAQSkZJRgABAQEAYABgAAD/2wBDAAIBAQIBAQICAgICAgICAwUDAwMDAwYEBAMFBwYHBwcGBwcICQsJCAgKCAcHCg0KCgsMDAwMBwkODw0MDgsMDAz/2wBDAQICAgMDAwYDAwYMCAcIDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAz/wAARCAABAAEDASIAAhEBAxEB/8QAHwAAAQUBAQEBAQEAAAAAAAAAAAECAwQFBgcICQoL/8QAtRAAAgEDAwIEAwUFBAQAAAF9AQIDAAQRBRIhMUEGE1FhByJxFDKBkaEII0KxwRVS0fAkM2JyggkKFhcYGRolJicoKSo0NTY3ODk6Q0RFRkdISUpTVFVWV1hZWmNkZWZnaGlqc3R1dnd4eXqDhIWGh4iJipKTlJWWl5iZmqKjpKWmp6ipqrKztLW2t7i5usLDxMXGx8jJytLT1NXW19jZ2uHi4+Tl5ufo6erx8vP09fb3+Pn6/8QAHwEAAwEBAQEBAQEBAQAAAAAAAAECAwQFBgcICQoL/8QAtREAAgECBAQDBAcFBAQAAQJ3AAECAxEEBSExBhJBUQdhcRMiMoEIFEKRobHBCSMzUvAVYnLRChYkNOEl8RcYGRomJygpKjU2Nzg5OkNERUZHSElKU1RVVldYWVpjZGVmZ2hpanN0dXZ3eHl6goOEhYaHiImKkpOUlZaXmJmaoqOkpaanqKmqsrO0tba3uLm6wsPExcbHyMnK0tPU1dbX2Nna4uPk5ebn6Onq8vP09fb3+Pn6/9oADAMBAAIRAxEAPwD9/KKKKAP/2Q==',
       },
-    })
-  },
-  stubMainOffence: (offence, status = 200) => {
-    return stubFor({
+    }),
+  stubMainOffence: (offence, status = 200) =>
+    stubFor({
       request: {
         method: 'GET',
         urlPattern: '/api/bookings/[0-9]+?/mainOffence',
@@ -552,10 +537,9 @@ module.exports = {
         },
         jsonBody: offence || [],
       },
-    })
-  },
-  stubPrisonerDetail: (prisonerDetail, bookingId = '[0-9]+?') => {
-    return stubFor({
+    }),
+  stubPrisonerDetail: (prisonerDetail, bookingId = '[0-9]+?') =>
+    stubFor({
       request: {
         method: 'GET',
         urlPattern: `/api/bookings/${bookingId}`,
@@ -567,10 +551,9 @@ module.exports = {
         },
         jsonBody: prisonerDetail || {},
       },
-    })
-  },
-  stubPrisonerFullDetail: (prisonerDetail, offenderNo, fullInfo = true) => {
-    return stubFor({
+    }),
+  stubPrisonerFullDetail: (prisonerDetail, offenderNo, fullInfo = true) =>
+    stubFor({
       request: {
         method: 'GET',
         url: `/api/bookings/offenderNo/${offenderNo}?fullInfo=${fullInfo}&csraSummary=${fullInfo}`,
@@ -582,10 +565,9 @@ module.exports = {
         },
         jsonBody: prisonerDetail || {},
       },
-    })
-  },
-  stubPrisonerDetails: (prisonerDetails, status = 200) => {
-    return stubFor({
+    }),
+  stubPrisonerDetails: (prisonerDetails, status = 200) =>
+    stubFor({
       request: {
         method: 'GET',
         urlPattern: '/api/prisoners/.+?',
@@ -597,10 +579,9 @@ module.exports = {
         },
         jsonBody: prisonerDetails || [],
       },
-    })
-  },
-  stubPrisonerSentenceDetails: (sentenceDetails, status = 200) => {
-    return stubFor({
+    }),
+  stubPrisonerSentenceDetails: (sentenceDetails, status = 200) =>
+    stubFor({
       request: {
         method: 'GET',
         urlPattern: '/api/offenders/.+?/sentences',
@@ -612,10 +593,9 @@ module.exports = {
         },
         jsonBody: sentenceDetails || {},
       },
-    })
-  },
-  stubPrisonerBalances: (balances, status = 200) => {
-    return stubFor({
+    }),
+  stubPrisonerBalances: (balances, status = 200) =>
+    stubFor({
       request: {
         method: 'GET',
         urlPattern: '/api/bookings/[0-9]+?/balances',
@@ -627,10 +607,9 @@ module.exports = {
         },
         jsonBody: balances || {},
       },
-    })
-  },
-  stubIepSummaryForBooking: (iepSummary, status = 200) => {
-    return stubFor({
+    }),
+  stubIepSummaryForBooking: (iepSummary, status = 200) =>
+    stubFor({
       request: {
         method: 'GET',
         urlPattern: '/api/bookings/[0-9]+?/iepSummary\\?.+?',
@@ -642,10 +621,9 @@ module.exports = {
         },
         jsonBody: iepSummary || {},
       },
-    })
-  },
-  stubPositiveCaseNotes: (positiveCaseNotes, status = 200) => {
-    return stubFor({
+    }),
+  stubPositiveCaseNotes: (positiveCaseNotes, status = 200) =>
+    stubFor({
       request: {
         method: 'GET',
         urlPattern: '/api/bookings/[0-9]+?/caseNotes/POS/IEP_ENC/count\\?.+?',
@@ -657,10 +635,9 @@ module.exports = {
         },
         jsonBody: positiveCaseNotes || {},
       },
-    })
-  },
-  stubNegativeCaseNotes: (negativeCaseNotes, status) => {
-    return stubFor({
+    }),
+  stubNegativeCaseNotes: (negativeCaseNotes, status) =>
+    stubFor({
       request: {
         method: 'GET',
         urlPattern: '/api/bookings/[0-9]+?/caseNotes/NEG/IEP_WARN/count\\?.+?',
@@ -672,10 +649,9 @@ module.exports = {
         },
         jsonBody: negativeCaseNotes || {},
       },
-    })
-  },
-  stubAdjudicationsForBooking: (adjudications, status = 200) => {
-    return stubFor({
+    }),
+  stubAdjudicationsForBooking: (adjudications, status = 200) =>
+    stubFor({
       request: {
         method: 'GET',
         urlPattern: '/api/bookings/[0-9]+?/adjudications',
@@ -687,10 +663,9 @@ module.exports = {
         },
         jsonBody: adjudications || {},
       },
-    })
-  },
-  stubNextVisit: (nextVisit, status) => {
-    return stubFor({
+    }),
+  stubNextVisit: (nextVisit, status) =>
+    stubFor({
       request: {
         method: 'GET',
         urlPattern: '/api/bookings/[0-9]+?/visits/next',
@@ -702,10 +677,9 @@ module.exports = {
         },
         jsonBody: nextVisit || {},
       },
-    })
-  },
-  stubVisitsWithVisitors: (visitsWithVisitors, status) => {
-    return stubFor({
+    }),
+  stubVisitsWithVisitors: (visitsWithVisitors, status) =>
+    stubFor({
       request: {
         method: 'GET',
         urlPattern: '/api/bookings/[0-9]+?/visits-with-visitors\\?.+?',
@@ -735,10 +709,9 @@ module.exports = {
           empty: false,
         },
       },
-    })
-  },
-  stubVisitTypes: (visitTypes, status) => {
-    return stubFor({
+    }),
+  stubVisitTypes: (visitTypes, status) =>
+    stubFor({
       request: {
         method: 'GET',
         urlPattern: '/api/reference-domains/domains/VISIT_TYPE',
@@ -753,10 +726,9 @@ module.exports = {
           { code: 'SCON', description: 'Social contact' },
         ],
       },
-    })
-  },
-  stubPrisonerVisitBalances: (visitBalances, status) => {
-    return stubFor({
+    }),
+  stubPrisonerVisitBalances: (visitBalances, status) =>
+    stubFor({
       request: {
         method: 'GET',
         urlPattern: '/api/bookings/offenderNo/.+?/visit/balances',
@@ -768,10 +740,9 @@ module.exports = {
         },
         jsonBody: visitBalances || {},
       },
-    })
-  },
-  stubEventsForToday: (events, status) => {
-    return stubFor({
+    }),
+  stubEventsForToday: (events, status) =>
+    stubFor({
       request: {
         method: 'GET',
         urlPattern: '/api/bookings/[0-9]+?/events/today',
@@ -783,10 +754,9 @@ module.exports = {
         },
         jsonBody: events || [],
       },
-    })
-  },
-  stubProfileInformation: (profileInfo, status) => {
-    return stubFor({
+    }),
+  stubProfileInformation: (profileInfo, status) =>
+    stubFor({
       request: {
         method: 'GET',
         urlPattern: '/api/bookings/[0-9]+?/profileInformation',
@@ -798,10 +768,9 @@ module.exports = {
         },
         jsonBody: profileInfo || [],
       },
-    })
-  },
-  stubIdentifiers: (identifiers, status) => {
-    return stubFor({
+    }),
+  stubIdentifiers: (identifiers, status) =>
+    stubFor({
       request: {
         method: 'GET',
         urlPattern: '/api/bookings/[0-9]+?/identifiers',
@@ -813,10 +782,9 @@ module.exports = {
         },
         jsonBody: identifiers || [],
       },
-    })
-  },
-  stubOffenderAliases: (aliases, status) => {
-    return stubFor({
+    }),
+  stubOffenderAliases: (aliases, status) =>
+    stubFor({
       request: {
         method: 'GET',
         urlPattern: '/api/bookings/[0-9]+?/aliases',
@@ -828,10 +796,9 @@ module.exports = {
         },
         jsonBody: aliases || [],
       },
-    })
-  },
-  stubPrisonerProperty: property => {
-    return stubFor({
+    }),
+  stubPrisonerProperty: property =>
+    stubFor({
       request: {
         method: 'GET',
         urlPattern: '/api/bookings/[0-9]+?/property',
@@ -843,10 +810,9 @@ module.exports = {
         },
         jsonBody: property || [],
       },
-    })
-  },
-  stubPrisonerContacts: contacts => {
-    return stubFor({
+    }),
+  stubPrisonerContacts: contacts =>
+    stubFor({
       request: {
         method: 'GET',
         urlPattern: '/api/bookings/[0-9]+?/contacts',
@@ -858,10 +824,9 @@ module.exports = {
         },
         jsonBody: contacts || [],
       },
-    })
-  },
-  stubSecondaryLanguages: secondaryLanguages => {
-    return stubFor({
+    }),
+  stubSecondaryLanguages: secondaryLanguages =>
+    stubFor({
       request: {
         method: 'GET',
         urlPattern: '/api/bookings/[0-9]+?/secondary-languages',
@@ -873,10 +838,9 @@ module.exports = {
         },
         jsonBody: secondaryLanguages || [],
       },
-    })
-  },
-  stubPrisonerAddresses: addresses => {
-    return stubFor({
+    }),
+  stubPrisonerAddresses: addresses =>
+    stubFor({
       request: {
         method: 'GET',
         urlPattern: '/api/offenders/.+?/addresses',
@@ -888,10 +852,9 @@ module.exports = {
         },
         jsonBody: addresses || [],
       },
-    })
-  },
-  stubPersonAddresses: addresses => {
-    return stubFor({
+    }),
+  stubPersonAddresses: addresses =>
+    stubFor({
       request: {
         method: 'GET',
         urlPattern: '/api/persons/.+?/addresses',
@@ -903,10 +866,9 @@ module.exports = {
         },
         jsonBody: addresses || [],
       },
-    })
-  },
-  stubPersonEmails: emails => {
-    return stubFor({
+    }),
+  stubPersonEmails: emails =>
+    stubFor({
       request: {
         method: 'GET',
         urlPattern: '/api/persons/.+?/emails',
@@ -918,10 +880,9 @@ module.exports = {
         },
         jsonBody: emails || [],
       },
-    })
-  },
-  stubPersonPhones: phones => {
-    return stubFor({
+    }),
+  stubPersonPhones: phones =>
+    stubFor({
       request: {
         method: 'GET',
         urlPattern: '/api/persons/.+?/phones',
@@ -933,10 +894,9 @@ module.exports = {
         },
         jsonBody: phones || [],
       },
-    })
-  },
-  stubTreatmentTypes: treatmentTypes => {
-    return stubFor({
+    }),
+  stubTreatmentTypes: treatmentTypes =>
+    stubFor({
       request: {
         method: 'GET',
         urlPattern: '/api/reference-domains/domains/HEALTH_TREAT',
@@ -948,10 +908,9 @@ module.exports = {
         },
         jsonBody: treatmentTypes || [],
       },
-    })
-  },
-  stubHealthTypes: healthTypes => {
-    return stubFor({
+    }),
+  stubHealthTypes: healthTypes =>
+    stubFor({
       request: {
         method: 'GET',
         urlPattern: '/api/reference-domains/domains/HEALTH',
@@ -963,10 +922,9 @@ module.exports = {
         },
         jsonBody: healthTypes || [],
       },
-    })
-  },
-  stubPersonalCareNeeds: careNeeds => {
-    return stubFor({
+    }),
+  stubPersonalCareNeeds: careNeeds =>
+    stubFor({
       request: {
         method: 'GET',
         urlPattern: '/api/bookings/[0-9]+?/personal-care-needs\\?.+?',
@@ -978,10 +936,9 @@ module.exports = {
         },
         jsonBody: careNeeds || {},
       },
-    })
-  },
-  stubReasonableAdjustments: reasonableAdjustments => {
-    return stubFor({
+    }),
+  stubReasonableAdjustments: reasonableAdjustments =>
+    stubFor({
       request: {
         method: 'GET',
         urlPattern: '/api/bookings/[0-9]+?/reasonable-adjustments\\?.+?',
@@ -993,10 +950,9 @@ module.exports = {
         },
         jsonBody: reasonableAdjustments || {},
       },
-    })
-  },
-  stubAgencies: agencies => {
-    return stubFor({
+    }),
+  stubAgencies: agencies =>
+    stubFor({
       request: {
         method: 'GET',
         urlPattern: '/api/agencies/prison',
@@ -1008,10 +964,9 @@ module.exports = {
         },
         jsonBody: agencies || [],
       },
-    })
-  },
-  stubGetSentenceAdjustments: response => {
-    return stubFor({
+    }),
+  stubGetSentenceAdjustments: response =>
+    stubFor({
       request: {
         method: 'GET',
         urlPattern: '/api/bookings/[0-9]+?/sentenceAdjustments',
@@ -1023,10 +978,9 @@ module.exports = {
         },
         jsonBody: response,
       },
-    })
-  },
-  stubVisits: (visits, status = 200) => {
-    return stubFor({
+    }),
+  stubVisits: (visits, status = 200) =>
+    stubFor({
       request: {
         method: 'POST',
         urlPattern: '/api/schedules/[A-Z].+?/visits.+?',
@@ -1038,10 +992,9 @@ module.exports = {
         },
         jsonBody: visits || [],
       },
-    })
-  },
-  stubLocation: (locationId, locationData, status = 200) => {
-    return stubFor({
+    }),
+  stubLocation: (locationId, locationData, status = 200) =>
+    stubFor({
       request: {
         method: 'GET',
         url: `/api/locations/${locationId}`,
@@ -1061,10 +1014,9 @@ module.exports = {
           internalLocationCode: 'HB1',
         },
       },
-    })
-  },
-  stubSentenceData: (offenderSentenceDetail, status = 200) => {
-    return stubFor({
+    }),
+  stubSentenceData: (offenderSentenceDetail, status = 200) =>
+    stubFor({
       request: {
         method: 'POST',
         urlPattern: '/api/offender-sentences',
@@ -1076,10 +1028,9 @@ module.exports = {
         },
         jsonBody: offenderSentenceDetail || [],
       },
-    })
-  },
-  stubCourtEvents: (courtEvents, status = 200) => {
-    return stubFor({
+    }),
+  stubCourtEvents: (courtEvents, status = 200) =>
+    stubFor({
       request: {
         method: 'POST',
         urlPattern: '/api/schedules/.+?/courtEvents.+?',
@@ -1091,10 +1042,9 @@ module.exports = {
         },
         jsonBody: courtEvents || [],
       },
-    })
-  },
-  stubActivities: (activities, status = 200) => {
-    return stubFor({
+    }),
+  stubActivities: (activities, status = 200) =>
+    stubFor({
       request: {
         method: 'POST',
         urlPattern: '/api/schedules/[A-Z].+?/activities.+?',
@@ -1106,10 +1056,9 @@ module.exports = {
         },
         jsonBody: activities || [],
       },
-    })
-  },
-  stubPostAppointments: (appointments, status = 200) => {
-    return stubFor({
+    }),
+  stubPostAppointments: (appointments, status = 200) =>
+    stubFor({
       request: {
         method: 'POST',
         urlPattern: '/api/appointments',
@@ -1121,10 +1070,9 @@ module.exports = {
         },
         jsonBody: appointments || [],
       },
-    })
-  },
-  stubAppointments: (appointments, status = 200) => {
-    return stubFor({
+    }),
+  stubAppointments: (appointments, status = 200) =>
+    stubFor({
       request: {
         method: 'POST',
         urlPattern: '/api/schedules/[A-Z].+?/appointments.+?',
@@ -1136,10 +1084,9 @@ module.exports = {
         },
         jsonBody: appointments || [],
       },
-    })
-  },
-  stubAppointmentsGet: (appointments, status = 200) => {
-    return stubFor({
+    }),
+  stubAppointmentsGet: (appointments, status = 200) =>
+    stubFor({
       request: {
         method: 'GET',
         urlPattern: '/api/schedules/[A-Z].+?/appointments.+?',
@@ -1151,10 +1098,9 @@ module.exports = {
         },
         jsonBody: appointments || [],
       },
-    })
-  },
-  stubExternalTransfers: (transfers, status = 200) => {
-    return stubFor({
+    }),
+  stubExternalTransfers: (transfers, status = 200) =>
+    stubFor({
       request: {
         method: 'POST',
         urlPattern: '/api/schedules/[A-Z].+?/externalTransfers.+?',
@@ -1166,10 +1112,9 @@ module.exports = {
         },
         jsonBody: transfers || [],
       },
-    })
-  },
-  stubLocationsForAgency: (agency, locations, status = 200) => {
-    return stubFor({
+    }),
+  stubLocationsForAgency: (agency, locations, status = 200) =>
+    stubFor({
       request: {
         method: 'GET',
         url: `/api/agencies/${agency}/locations`,
@@ -1181,10 +1126,9 @@ module.exports = {
         },
         jsonBody: locations || [],
       },
-    })
-  },
-  stubAppointmentLocations: (agency, locations, status = 200) => {
-    return stubFor({
+    }),
+  stubAppointmentLocations: (agency, locations, status = 200) =>
+    stubFor({
       request: {
         method: 'GET',
         url: `/api/agencies/${agency}/locations?eventType=APP`,
@@ -1196,10 +1140,9 @@ module.exports = {
         },
         jsonBody: locations || [],
       },
-    })
-  },
-  stubAppointmentTypes: (types, status = 200) => {
-    return stubFor({
+    }),
+  stubAppointmentTypes: (types, status = 200) =>
+    stubFor({
       request: {
         method: 'GET',
         url: '/api/reference-domains/scheduleReasons?eventType=APP',
@@ -1211,10 +1154,9 @@ module.exports = {
         },
         jsonBody: types || [],
       },
-    })
-  },
-  stubAgencyDetails: (agencyId, details, status = 200) => {
-    return stubFor({
+    }),
+  stubAgencyDetails: (agencyId, details, status = 200) =>
+    stubFor({
       request: {
         method: 'GET',
         url: `/api/agencies/${agencyId}?activeOnly=false`,
@@ -1226,10 +1168,9 @@ module.exports = {
         },
         jsonBody: details || {},
       },
-    })
-  },
-  stubAppointmentsForBooking: (appointments, status = 200) => {
-    return stubFor({
+    }),
+  stubAppointmentsForBooking: (appointments, status = 200) =>
+    stubFor({
       request: {
         method: 'POST',
         urlPattern: '/api/bookings/[0-9]+?/appointments',
@@ -1241,10 +1182,9 @@ module.exports = {
         },
         jsonBody: appointments || [],
       },
-    })
-  },
-  stubUsageAtAgency: (agency, type, locations, status = 200) => {
-    return stubFor({
+    }),
+  stubUsageAtAgency: (agency, type, locations, status = 200) =>
+    stubFor({
       request: {
         method: 'GET',
         url: `/api/agencies/${agency}/locations?eventType=${type}`,
@@ -1269,10 +1209,9 @@ module.exports = {
           },
         ],
       },
-    })
-  },
-  stubSchedulesAtAgency: (agency, location, type, date, schedules, status = 200) => {
-    return stubFor({
+    }),
+  stubSchedulesAtAgency: (agency, location, type, date, schedules, status = 200) =>
+    stubFor({
       request: {
         method: 'GET',
         url: `/api/schedules/${agency}/locations/${location}/usage/${type}?date=${date}`,
@@ -1284,10 +1223,9 @@ module.exports = {
         },
         jsonBody: schedules || [],
       },
-    })
-  },
-  stubSchedulesAtLocation: (location, type, date, schedules, status = 200) => {
-    return stubFor({
+    }),
+  stubSchedulesAtLocation: (location, type, date, schedules, status = 200) =>
+    stubFor({
       request: {
         method: 'GET',
         url: `/api/schedules/locations/${location}/usage/${type}?date=${date}`,
@@ -1299,10 +1237,9 @@ module.exports = {
         },
         jsonBody: schedules || [],
       },
-    })
-  },
-  stubActivityLocations: (locations, status = 200) => {
-    return stubFor({
+    }),
+  stubActivityLocations: (locations, status = 200) =>
+    stubFor({
       request: {
         method: 'GET',
         urlPattern: '/api/agencies/.+?/eventLocationsBooked.+?',
@@ -1327,8 +1264,7 @@ module.exports = {
           },
         ],
       },
-    })
-  },
+    }),
   stubActivityLocationsConnectionResetFault: () =>
     stubFor({
       request: {
@@ -1339,8 +1275,8 @@ module.exports = {
         fault: 'CONNECTION_RESET_BY_PEER',
       },
     }),
-  stubActivityLocationsByDateAndPeriod: (locations, date, period, withFault) => {
-    return stubFor({
+  stubActivityLocationsByDateAndPeriod: (locations, date, period, withFault) =>
+    stubFor({
       request: {
         method: 'GET',
         url: `/api/agencies/MDI/eventLocationsBooked?bookedOnDay=${date}&timeSlot=${period}`,
@@ -1356,8 +1292,7 @@ module.exports = {
             },
             jsonBody: locations,
           },
-    })
-  },
+    }),
   stubInmates: ({ locationId, params, count, data = [] }) =>
     stubFor({
       request: {
@@ -1775,8 +1710,8 @@ module.exports = {
         jsonBody: response,
       },
     }),
-  stubChangeIepLevel: body => {
-    return stubFor({
+  stubChangeIepLevel: body =>
+    stubFor({
       request: {
         method: 'POST',
         urlPattern: '/api/bookings/[0-9]+?/iepLevels',
@@ -1788,8 +1723,7 @@ module.exports = {
         },
         jsonBody: body,
       },
-    })
-  },
+    }),
   stubGetPrisonerDamageObligations: response =>
     stubFor({
       request: {
@@ -1820,8 +1754,8 @@ module.exports = {
         jsonBody: response || [],
       },
     }),
-  stubGetStaffDetails: (staffId, response) => {
-    return stubFor({
+  stubGetStaffDetails: (staffId, response) =>
+    stubFor({
       request: {
         method: 'GET',
         urlPattern: `/api/users/${staffId}`,
@@ -1833,8 +1767,7 @@ module.exports = {
         },
         jsonBody: response || {},
       },
-    })
-  },
+    }),
   stubGetDetailsFailure: status =>
     stubFor({
       request: {
@@ -1848,8 +1781,8 @@ module.exports = {
         },
       },
     }),
-  stubGetPrisoners: body => {
-    return stubFor({
+  stubGetPrisoners: body =>
+    stubFor({
       request: {
         method: 'POST',
         urlPattern: '/api/prisoners',
@@ -1861,10 +1794,9 @@ module.exports = {
         },
         jsonBody: body,
       },
-    })
-  },
-  stubGetUserDetailsList: body => {
-    return stubFor({
+    }),
+  stubGetUserDetailsList: body =>
+    stubFor({
       request: {
         method: 'POST',
         urlPattern: '/api/users/list',
@@ -1876,8 +1808,7 @@ module.exports = {
         },
         jsonBody: body,
       },
-    })
-  },
+    }),
   stubCellMoveHistory: ({ assignmentDate, agencyId, cellMoves }) =>
     stubFor({
       request: {

@@ -26,10 +26,10 @@
 {% block content %}
 
   <h1 class="govuk-heading-xl govuk-!-margin-bottom-1">Suspended</h1>
-  <p class="govuk-body-l govuk-!-font-size-24">{{displayDate}} - {{displayPeriod}}</p>
+  <p class="govuk-body-l govuk-!-font-size-24" data-qa="timespan">{{displayDate}} - {{displayPeriod}}</p>
 
-  <p class="govuk-body pull-right govuk-!-margin-bottom-1"><strong>Number of suspensions:</strong> {{totalRecords}}</p>
-  <p class="govuk-body pull-right"><strong>Prisoners listed:</strong> {{totalOffenders}}</p>
+  <p class="govuk-body pull-right govuk-!-margin-bottom-1" data-qa="suspension-count"><strong>Number of suspensions:</strong> {{totalRecords}}</p>
+  <p class="govuk-body pull-right" data-qa="offender-count"><strong>Prisoners listed:</strong> {{totalOffenders}}</p>
 
   {{ govukTable({
       head: [
