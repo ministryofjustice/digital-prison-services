@@ -1,6 +1,6 @@
 {% from "govuk/components/summary-list/macro.njk" import govukSummaryList %}
 
-{% macro prisonerSummarySection(array = [], missingValueText = 'Not entered', attributes = {}, indentKey = false) %}
+{% macro prisonerSummarySection(array = [], missingValueText = 'Not entered', attributes = {}, indentKey = false, classes='') %}
   {% set rows = [] %}
   {% set indentClass = "govuk-summary-list__key--indent" if indentKey %}
 
@@ -26,6 +26,7 @@
   {% if rows.length %}
     {{ govukSummaryList({
       rows: rows,
+      classes: classes,
       attributes: attributes
     }) }}
   {% endif %}

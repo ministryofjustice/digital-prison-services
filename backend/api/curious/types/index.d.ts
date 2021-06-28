@@ -418,4 +418,30 @@ declare namespace curious {
      */
     qualifications?: LearnerAssessment[]
   }
+
+  /**
+   *
+   * @export
+   * @interface FunctionalSkillsLevels
+   */
+  export interface FunctionalSkillsLevels {
+    /**
+     *
+     * @type {Array<FunctionalSkillsLevels>}
+     * @memberof FunctionalSkillsLevels
+     */
+    english?: Array
+    /**
+     *
+     * @type {Array<FunctionalSkillsLevels>}
+     * @memberof FunctionalSkillsLevels
+     */
+    maths?: Array
+    /**
+     *
+     * @type {Array<FunctionalSkillsLevels>}
+     * @memberof FunctionalSkillsLevels
+     */
+    digiLit?: Array
+  }
 }

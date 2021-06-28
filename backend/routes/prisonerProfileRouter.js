@@ -21,6 +21,7 @@ const prisonerIncentiveLevelDetails = require('../controllers/prisonerProfile/pr
 const prisonerChangeIncentiveLevelDetails = require('../controllers/prisonerProfile/prisonerChangeIncentiveLevelDetails')
 const prisonerCsraHistory = require('../controllers/prisonerProfile/prisonerCsraHistory')
 const prisonerCsraReview = require('../controllers/prisonerProfile/prisonerCsraReview')
+const prisonerWorkAndSkills = require('../controllers/prisonerProfile/prisonerWorkAndSkills')
 
 const prisonerDamageObligations = require('../controllers/prisonerProfile/prisonerFinances/prisonerDamageObligations')
 const prisonerPrivateCash = require('../controllers/prisonerProfile/prisonerFinances/prisonerPrivateCash')
@@ -97,6 +98,7 @@ const controller = ({
     '/sentence-and-release',
     prisonerSentenceAndRelease({ prisonerProfileService, prisonApi, systemOauthClient, offenderSearchApi, logError })
   )
+  router.get('/work-and-skills', prisonerWorkAndSkills({ prisonerProfileService, esweService }))
   router.get('/visits', prisonerVisits({ prisonApi, logError }))
   router.get('/schedule', prisonerSchedule({ prisonApi, logError }))
   router.get(
