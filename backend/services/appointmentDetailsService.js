@@ -42,7 +42,7 @@ module.exports = ({ prisonApi }) => {
       prepostData['post-court hearing briefing'] = createLocationAndTimeString(videoLinkBooking.post)
     }
 
-    const addedBy = await (videoLinkBooking?.main?.madeByTheCourt ? 'Court User' : getAddedByUser(res, appointment))
+    const addedBy = await (videoLinkBooking?.main?.madeByTheCourt ? 'Court' : getAddedByUser(res, appointment))
 
     const additionalDetails = {
       ...(videoLinkBooking && { courtLocation: videoLinkBooking.main.court }),
