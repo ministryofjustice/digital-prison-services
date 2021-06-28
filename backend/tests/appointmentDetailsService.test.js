@@ -146,6 +146,8 @@ describe('appointment details', () => {
             locationId: 1,
             startTime: '2021-05-20T13:00:00',
             endTime: '2021-05-20T14:00:00',
+            createdByUsername: 'AUSER',
+            madeByTheCourt: false,
           },
         },
       }
@@ -179,6 +181,8 @@ describe('appointment details', () => {
           locationId: 3,
           startTime: '2021-05-20T12:45:00',
           endTime: '2021-05-20T13:00:00',
+          createdByUsername: 'AUSER',
+          madeByTheCourt: false,
         }
       })
 
@@ -201,6 +205,8 @@ describe('appointment details', () => {
           locationId: 3,
           startTime: '2021-05-20T14:00:00',
           endTime: '2021-05-20T14:15:00',
+          createdByUsername: 'AUSER',
+          madeByTheCourt: false,
         }
       })
 
@@ -210,6 +216,31 @@ describe('appointment details', () => {
         expect(appointmentDetails).toMatchObject({
           prepostData: {
             'post-court hearing briefing': 'VCC Room 2 - 14:00 to 14:15',
+          },
+        })
+      })
+    })
+
+    describe('with VLB appointment made by a court user', () => {
+      beforeEach(() => {
+        videoLinkBookingAppointment.videoLinkBooking.main = {
+          court: 'Nottingham Justice Centre',
+          hearingType: 'POST',
+          locationId: 3,
+          startTime: '2021-05-20T14:00:00',
+          endTime: '2021-05-20T14:15:00',
+          createdByUsername: 'VLB_COURT',
+          madeByTheCourt: true,
+        }
+      })
+
+      it('should render with the added by of Court User', async () => {
+        const appointmentDetails = await service.getAppointmentViewModel(res, videoLinkBookingAppointment, 'MDI')
+
+        expect(appointmentDetails).toMatchObject({
+          additionalDetails: {
+            comments: 'Test appointment comments',
+            addedBy: 'Court User',
           },
         })
       })
