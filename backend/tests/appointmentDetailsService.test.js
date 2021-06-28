@@ -234,13 +234,13 @@ describe('appointment details', () => {
         }
       })
 
-      it('should render with the added by of Court User', async () => {
+      it('should render with the added by of Court', async () => {
         const appointmentDetails = await service.getAppointmentViewModel(res, videoLinkBookingAppointment, 'MDI')
 
         expect(appointmentDetails).toMatchObject({
           additionalDetails: {
             comments: 'Test appointment comments',
-            addedBy: 'Court User',
+            addedBy: 'Court',
           },
         })
       })
