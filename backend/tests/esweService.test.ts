@@ -113,18 +113,18 @@ describe('Education skills and work experience', () => {
         const expectedResult = {
           digiLit: [
             { label: 'Digital Literacy', value: 'Entry Level 2' },
-            { label: 'Assessment Date', value: '1 June 2021' },
-            { label: 'Location', value: 'HMP Winchester' },
+            { label: 'Assessment date', value: '1 June 2021' },
+            { label: 'Assessment location', value: 'HMP Winchester' },
           ],
           english: [
             { label: 'English/Welsh', value: 'Entry Level 2' },
-            { label: 'Assessment Date', value: '2 May 2021' },
-            { label: 'Location', value: 'HMP Winchester' },
+            { label: 'Assessment date', value: '2 May 2021' },
+            { label: 'Assessment location', value: 'HMP Winchester' },
           ],
           maths: [
             { label: 'Maths', value: 'Entry Level 1' },
-            { label: 'Assessment Date', value: '27 May 2021' },
-            { label: 'Location', value: 'HMP Winchester' },
+            { label: 'Assessment date', value: '27 May 2021' },
+            { label: 'Assessment location', value: 'HMP Winchester' },
           ],
         }
 
@@ -183,18 +183,18 @@ describe('Education skills and work experience', () => {
         const expectedResult = {
           digiLit: [
             { label: 'Digital Literacy', value: 'Entry Level 2' },
-            { label: 'Assessment Date', value: '1 June 2021' },
-            { label: 'Location', value: 'HMP Winchester' },
+            { label: 'Assessment date', value: '1 June 2021' },
+            { label: 'Assessment location', value: 'HMP Winchester' },
           ],
           english: [
             { label: 'English/Welsh', value: 'Entry Level 3' },
-            { label: 'Assessment Date', value: '30 June 2021' },
-            { label: 'Location', value: 'HMP Winchester' },
+            { label: 'Assessment date', value: '30 June 2021' },
+            { label: 'Assessment location', value: 'HMP Winchester' },
           ],
           maths: [
             { label: 'Maths', value: 'Entry Level 1' },
-            { label: 'Assessment Date', value: '27 May 2021' },
-            { label: 'Location', value: 'HMP Winchester' },
+            { label: 'Assessment date', value: '27 May 2021' },
+            { label: 'Assessment location', value: 'HMP Winchester' },
           ],
         }
 
@@ -234,13 +234,13 @@ describe('Education skills and work experience', () => {
         const expectedResult = {
           digiLit: [
             { label: 'Digital Literacy', value: 'Entry Level 2' },
-            { label: 'Assessment Date', value: '1 June 2021' },
-            { label: 'Location', value: 'HMP Winchester' },
+            { label: 'Assessment date', value: '1 June 2021' },
+            { label: 'Assessment location', value: 'HMP Winchester' },
           ],
           english: [
             { label: 'English/Welsh', value: 'Entry Level 2' },
-            { label: 'Assessment Date', value: '2 May 2021' },
-            { label: 'Location', value: 'HMP Winchester' },
+            { label: 'Assessment date', value: '2 May 2021' },
+            { label: 'Assessment location', value: 'HMP Winchester' },
           ],
           maths: [{ label: 'Maths', value: 'Awaiting assessment' }],
         }

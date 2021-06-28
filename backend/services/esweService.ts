@@ -70,11 +70,11 @@ export default class EsweService {
           value: qualificationGrade,
         },
         {
-          label: 'Assessment Date',
+          label: 'Assessment date',
           value: readableDateFormat(assessmentDate, 'YYYY-MM-DD'),
         },
         {
-          label: 'Location',
+          label: 'Assessment location',
           value: establishmentName,
         },
       ]
