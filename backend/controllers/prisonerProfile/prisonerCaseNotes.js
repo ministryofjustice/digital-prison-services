@@ -74,7 +74,6 @@ module.exports = ({ caseNotesApi, prisonerProfileService, paginationService, nun
       const day = creationDateTime.format(MOMENT_DAY_OF_THE_WEEK)
       const date = creationDateTime.format('D MMMM YYYY')
       const time = creationDateTime.format(MOMENT_TIME)
-      const authorNames = getNamesFromString(caseNote.authorName)
       const canDelete = hasDeleteRole && caseNote.source === SECURE_CASE_NOTE_SOURCE
 
       const amendments = caseNote.amendments.map((amendment) => {
@@ -83,7 +82,7 @@ module.exports = ({ caseNotesApi, prisonerProfileService, paginationService, nun
           day: amendmentCreatedDateTime.format(MOMENT_DAY_OF_THE_WEEK),
           date: amendmentCreatedDateTime.format('D MMMM YYYY'),
           time: amendmentCreatedDateTime.format(MOMENT_TIME),
-          authorName: `${authorNames.join(' ')}`,
+          authorName: getNamesFromString(amendment.authorName).join(' '),
           text: amendment.additionalNoteText,
           deleteLink:
             canDelete &&
@@ -95,7 +94,7 @@ module.exports = ({ caseNotesApi, prisonerProfileService, paginationService, nun
         day,
         date,
         time,
-        authorName: `${authorNames.join(' ')}`,
+        authorName: getNamesFromString(caseNote.authorName).join(' '),
       }
 
       const occurrenceDateTime = moment(caseNote.occurrenceDateTime, DATE_TIME_FORMAT_SPEC)

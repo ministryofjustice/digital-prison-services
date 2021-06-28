@@ -23,7 +23,7 @@ const caseNote = {
       sequence: 1,
       creationDateTime: '2018-12-01T13:45:00',
       authorUserName: 'USER1',
-      authorName: 'Mouse, Mickey',
+      authorName: 'Smith, John',
       additionalNoteText: 'Some Additional Text',
       authorUserId: 12345,
     },
@@ -66,24 +66,29 @@ context('A user can view prisoner case notes', () => {
     rows
       .createdBy()
       .find('span')
-      .then($element => {
+      .then(($element) => {
         expect($element.get(0).innerText.trim()).to.eq('Tuesday')
         expect($element.get(1).innerText.trim()).to.eq('31 October 2017')
         expect($element.get(2).innerText.trim()).to.eq('01:30')
         expect($element.get(3).innerText.trim()).to.eq('Mickey Mouse')
+
+        expect($element.get(4).innerText.trim()).to.eq('Saturday')
+        expect($element.get(5).innerText.trim()).to.eq('1 December 2018')
+        expect($element.get(6).innerText.trim()).to.eq('13:45')
+        expect($element.get(7).innerText.trim()).to.eq('John Smith')
       })
 
     rows
       .caseNoteDetails()
       .find('h3')
-      .then($element => {
+      .then(($element) => {
         expect($element.get(0).innerText.trim()).to.eq('Incentive Level: Incentive Level Warning')
       })
 
     rows
       .caseNoteDetails()
       .find('pre')
-      .then($element => {
+      .then(($element) => {
         expect($element.get(0).innerText.trim()).to.eq('This is some text')
         expect($element.get(1).innerText.trim()).to.eq('Some Additional Text')
       })
@@ -91,7 +96,7 @@ context('A user can view prisoner case notes', () => {
     rows
       .caseNoteDetails()
       .find('p')
-      .then($element => {
+      .then(($element) => {
         expect($element.get(0).innerText.trim()).to.eq('More details added:')
       })
 
@@ -116,10 +121,7 @@ context('A user can view prisoner case notes', () => {
 
     form.typeSelect().select('Observations')
 
-    form
-      .subTypeSelect()
-      .get('option')
-      .should('contain', 'Test')
+    form.subTypeSelect().get('option').should('contain', 'Test')
 
     form.subTypeSelect().select('Test')
     form.applyButton().click()
@@ -205,47 +207,20 @@ context('A user can view prisoner case notes', () => {
 
     const page = CaseNotesPage.verifyOnPage('Smith, John')
 
-    page
-      .filterForm()
-      .typeSelect()
-      .select('Observations')
+    page.filterForm().typeSelect().select('Observations')
 
     cy.wait('@getSubTypes').then(() => {
-      page
-        .filterForm()
-        .subTypeSelect()
-        .select('Test')
-      page
-        .filterForm()
-        .fromDate()
-        .type('02/02/2020', { force: true })
-      page
-        .filterForm()
-        .toDate()
-        .type('02/01/2020', { force: true })
-      page
-        .filterForm()
-        .applyButton()
-        .click()
+      page.filterForm().subTypeSelect().select('Test')
+      page.filterForm().fromDate().type('02/02/2020', { force: true })
+      page.filterForm().toDate().type('02/01/2020', { force: true })
+      page.filterForm().applyButton().click()
 
       CaseNotesPage.verifyOnPage('Smith, John')
 
-      page
-        .filterForm()
-        .typeSelect()
-        .should('have.value', 'OBSERVE')
-      page
-        .filterForm()
-        .subTypeSelect()
-        .should('have.value', 'test')
-      page
-        .filterForm()
-        .fromDate()
-        .should('have.value', '02/02/2020')
-      page
-        .filterForm()
-        .toDate()
-        .should('have.value', '02/01/2020')
+      page.filterForm().typeSelect().should('have.value', 'OBSERVE')
+      page.filterForm().subTypeSelect().should('have.value', 'test')
+      page.filterForm().fromDate().should('have.value', '02/02/2020')
+      page.filterForm().toDate().should('have.value', '02/01/2020')
     })
   })
 
@@ -264,28 +239,13 @@ context('A user can view prisoner case notes', () => {
 
     const page = CaseNotesPage.verifyOnPage('Smith, John')
 
-    page
-      .filterForm()
-      .typeSelect()
-      .select('Observations')
+    page.filterForm().typeSelect().select('Observations')
 
     const fillOutForm = () => {
-      page
-        .filterForm()
-        .subTypeSelect()
-        .select('Test')
-      page
-        .filterForm()
-        .fromDate()
-        .type('02/02/2020', { force: true })
-      page
-        .filterForm()
-        .toDate()
-        .type('02/01/2020', { force: true })
-      page
-        .filterForm()
-        .applyButton()
-        .click()
+      page.filterForm().subTypeSelect().select('Test')
+      page.filterForm().fromDate().type('02/02/2020', { force: true })
+      page.filterForm().toDate().type('02/01/2020', { force: true })
+      page.filterForm().applyButton().click()
     }
 
     cy.wait('@getSubTypes').then(() => {
@@ -306,10 +266,7 @@ context('A user can view prisoner case notes', () => {
 
       CaseNotesPage.verifyOnPage('Smith, John')
 
-      page
-        .filterForm()
-        .typeSelect()
-        .select('Observations')
+      page.filterForm().typeSelect().select('Observations')
 
       cy.wait('@getSubTypes').then(() => {
         fillOutForm()
