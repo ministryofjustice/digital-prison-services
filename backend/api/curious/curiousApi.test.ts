@@ -9,7 +9,7 @@ describe('curiousApi', () => {
       expect(actual).toEqual(dummyLearnerProfiles)
     })
   })
-  describe('getFunctionalSkillsLevels', () => {
+  describe('getLearnerLatestAssessments', () => {
     it('should return the expected response data', async () => {
       const actual = await curiousApi.getLearnerLatestAssessments('abc')
       expect(actual).toEqual(dummyLearnerLatestAssessments)

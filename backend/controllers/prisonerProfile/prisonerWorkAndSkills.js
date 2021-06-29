@@ -8,7 +8,7 @@ module.exports =
     const [prisonerProfileData, functionalSkillLevels] = await Promise.all(
       [
         prisonerProfileService.getPrisonerProfileData(res.locals, offenderNo),
-        esweService.getFunctionalSkillsLevels(offenderNo),
+        esweService.getLearnerLatestAssessments(offenderNo),
       ].map((apiCall) => logErrorAndContinue(apiCall))
     )
 
