@@ -1,4 +1,4 @@
-const viewAppointmentsRouter = require('../routes/appointments/viewAppointmentsRouter')
+const viewAppointments = require('../controllers/appointments/viewAppointments')
 
 describe('View appointments', () => {
   const prisonApi = {}
@@ -62,7 +62,7 @@ describe('View appointments', () => {
       name: 'Bob Doe',
     })
 
-    controller = viewAppointmentsRouter({ prisonApi, whereaboutsApi, logError, oauthApi })
+    controller = viewAppointments({ prisonApi, whereaboutsApi, logError, oauthApi })
   })
 
   beforeAll(() => {
