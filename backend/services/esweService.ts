@@ -1,4 +1,5 @@
 import { app } from '../config'
+import { readableDateFormat } from '../utils'
 import type CuriousApi from '../api/curious/curiousApi'
 
 type FeatureFlagged<T> = {
@@ -7,6 +8,7 @@ type FeatureFlagged<T> = {
 }
 
 type LearnerProfiles = FeatureFlagged<curious.LearnerProfile[]>
+type LearnerLatestAssessments = FeatureFlagged<curious.FunctionalSkillsLevels>
 
 /**
  * Education skills and work experience (ESWE)
@@ -29,6 +31,64 @@ export default class EsweService {
     return {
       enabled: app.esweEnabled,
       content: await this.curiousApi.getLearnerProfiles(nomisId),
+    }
+  }
+
+  async getLearnerLatestAssessments(nomisId: string): Promise<LearnerLatestAssessments> {
+    if (!app.esweEnabled) {
+      return {
+        enabled: app.esweEnabled,
+        content: {},
+      }
+    }
+
+    const content = await this.curiousApi.getLearnerLatestAssessments(nomisId)
+
+    const filterSkillsAndGetLatestGrade = (functionalSkillLevels, skillToFilter) =>
+      functionalSkillLevels[0].qualifications
+        .filter((functionalSkillLevel) => functionalSkillLevel.qualification.qualificationType === skillToFilter)
+        .sort(
+          (a, b) =>
+            new Date(b.qualification.assessmentDate).getTime() - new Date(a.qualification.assessmentDate).getTime()
+        )[0]
+
+    const englishSkillLevels = filterSkillsAndGetLatestGrade(content, 'English') || { skill: 'English/Welsh' }
+    const mathsSkillLevels = filterSkillsAndGetLatestGrade(content, 'Maths') || { skill: 'Maths' }
+    const digiLitSkillLevels = filterSkillsAndGetLatestGrade(content, 'Digital Literacy') || {
+      skill: 'Digital Literacy',
+    }
+
+    const createSkillAssessmentSummary = (skillAssessment) => {
+      if (!skillAssessment.qualification) return [{ label: skillAssessment.skill, value: 'Awaiting assessment' }]
+
+      const { qualificationType, qualificationGrade, assessmentDate } = skillAssessment.qualification
+      const { establishmentName } = skillAssessment
+
+      return [
+        {
+          label: qualificationType === 'English' ? 'English/Welsh' : qualificationType,
+          value: qualificationGrade,
+        },
+        {
+          label: 'Assessment date',
+          value: readableDateFormat(assessmentDate, 'YYYY-MM-DD'),
+        },
+        {
+          label: 'Assessment location',
+          value: establishmentName,
+        },
+      ]
+    }
+
+    const functionalSkillLevels = {
+      english: createSkillAssessmentSummary(englishSkillLevels),
+      maths: createSkillAssessmentSummary(mathsSkillLevels),
+      digiLit: createSkillAssessmentSummary(digiLitSkillLevels),
+    }
+
+    return {
+      enabled: app.esweEnabled,
+      content: functionalSkillLevels,
     }
   }
 }

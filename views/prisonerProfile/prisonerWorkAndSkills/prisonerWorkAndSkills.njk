@@ -1,0 +1,36 @@
+{% extends "../layouts/prisonerLayout.njk" %}
+{% from "../macros/prisonerAccordionSection.njk" import accordionSection %}
+{% from "govuk/components/accordion/macro.njk" import govukAccordion %}
+{% from "../macros/prisonerSummarySection.njk" import prisonerSummarySection %}
+{% from "govuk/components/summary-list/macro.njk" import govukSummaryList %}
+
+{% set title = "Work and Skills" %}
+{% set containerClasses = "prisoner-profile" %}
+{% set missingLevel = "Missing data" %}
+
+{% set functionalSkillLevels = functionalSkillLevels.content %}
+
+{% set functionalSkillsLevel %}
+  <div data-test="functional-skills-level-summary">
+    {% include "./partials/learnerLatestAssessments.njk" %}
+  </div>
+{% endset %}
+
+{% set leftSections = [
+    { heading: 'Functional skills level', html: functionalSkillsLevel }
+  ]
+%}
+
+{% block prisonerProfileSection %}
+  <div class="govuk-accordion govuk-accordion--split" data-module="govuk-accordion" id="prisoner-eswe-accordion">
+    <div class="govuk-grid-row">
+      <div class="govuk-grid-column-two-thirds">
+        {% for section in leftSections %}
+          {{ accordionSection(section.heading, section.html, loop.index) }}
+        {% endfor %}
+      </div>
+
+      <div class="govuk-grid-column-one-third"></div>
+    </div>
+  </div>
+{% endblock %} 
