@@ -47,6 +47,8 @@ env:
   SOC_API_ENABLED: true
   OFFENDER_SEARCH_API_URL: https://prisoner-offender-search-dev.prison.service.justice.gov.uk
   SUPPORT_URL: https://support-dev.hmpps.service.justice.gov.uk/
+  ESWE_ENABLED: true
+  CURIOUS_URL: https://testservices.sequation.net/sequation-virtual-campus2-api/
 
   SYSTEM_PHASE: DEV
   BVL_URL: https://book-video-link-dev.prison.service.justice.gov.uk
