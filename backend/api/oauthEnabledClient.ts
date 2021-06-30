@@ -173,7 +173,7 @@ export class OauthApiClient {
   }
 
   sendDelete = <T>(context, path): Promise<ClientResponse<T>> => {
-    return superagent.get(this.createUrl(path)).set(getHeaders(context)).catch(errorLogger).then(resultLogger)
+    return superagent.delete(this.createUrl(path)).set(getHeaders(context)).catch(errorLogger).then(resultLogger)
   }
 
   private retryHandler = (err) => {

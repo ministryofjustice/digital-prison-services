@@ -10,7 +10,7 @@ const {
     useOfForce: { prisons: useOfForcePrisons, ui_url: useOfForceUrl },
     complexity,
   },
-  app: { displayRetentionLink },
+  app: { displayRetentionLink, esweEnabled },
 } = require('../config')
 const logErrorAndContinue = require('../shared/logErrorAndContinue')
 
@@ -199,6 +199,7 @@ module.exports = ({
       staffId: currentUser.staffId,
       staffName: currentUser.name,
       pomStaff,
+      esweEnabled,
     }
   }
 

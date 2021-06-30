@@ -1,5 +1,5 @@
 import nock from 'nock'
-import CuriousApi from './curiousApi'
+import CuriousApi, { dummyLearnerLatestAssessments } from './curiousApi'
 import clientFactory from '../oauthEnabledClient'
 
 const hostname = 'http://localhost:8080'
@@ -51,6 +51,13 @@ describe('curiousApi', () => {
 
       const actual = await curiousApi.getLearnerEducation({ access_token: accessToken }, nomisId)
       expect(actual).toEqual(dummyEducations)
+    })
+  })
+
+  describe('getLearnerLatestAssessments', () => {
+    it('should return the expected response data', async () => {
+      const actual = await curiousApi.getLearnerLatestAssessments('abc')
+      expect(actual).toEqual(dummyLearnerLatestAssessments)
     })
   })
 })
