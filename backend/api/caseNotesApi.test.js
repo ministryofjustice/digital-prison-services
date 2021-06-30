@@ -1,6 +1,6 @@
-const nock = require('nock')
+import clientFactory from './oauthEnabledClient'
 
-const clientFactory = require('./oauthEnabledClient')
+const nock = require('nock')
 const { caseNotesApiFactory } = require('./caseNotesApi')
 
 const hostname = 'http://localhost:8080'

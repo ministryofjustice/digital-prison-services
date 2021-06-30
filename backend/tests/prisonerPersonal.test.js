@@ -40,7 +40,7 @@ describe('prisoner personal', () => {
     prisonerProfileService.getPrisonerProfileData = jest.fn().mockResolvedValue(prisonerProfileData)
 
     personService.getPersonContactDetails = jest.fn().mockResolvedValue({})
-    esweService.getLearnerProfiles = jest.fn().mockResolvedValue([])
+    esweService.getLatestLearningDifficulty = jest.fn().mockResolvedValue('')
 
     prisonApi.getDetails = jest.fn().mockResolvedValue({})
     prisonApi.getIdentifiers = jest.fn().mockResolvedValue([])
@@ -1996,24 +1996,25 @@ describe('prisoner personal', () => {
 
   describe('learner profile data', () => {
     beforeEach(() => {
-      esweService.getLearnerProfiles = jest.fn()
+      esweService.getLatestLearningDifficulty = jest.fn()
     })
 
     it('should return null for a failed request', async () => {
-      esweService.getLearnerProfiles.mockRejectedValue(new Error())
+      esweService.getLatestLearningDifficulty.mockRejectedValue(new Error())
       await controller(req, res)
       expect(res.render).toHaveBeenCalledWith(
         'prisonerProfile/prisonerPersonal/prisonerPersonal.njk',
-        expect.objectContaining({ learnerProfiles: null })
+        expect.objectContaining({ learningDifficulty: null })
       )
     })
 
     it('should return a list of learner profiles for a successful request', async () => {
-      esweService.getLearnerProfiles.mockResolvedValue([])
+      const learningDifficulty = 'Dyslexia'
+      esweService.getLatestLearningDifficulty.mockResolvedValue(learningDifficulty)
       await controller(req, res)
       expect(res.render).toHaveBeenCalledWith(
         'prisonerProfile/prisonerPersonal/prisonerPersonal.njk',
-        expect.objectContaining({ learnerProfiles: [] })
+        expect.objectContaining({ learningDifficulty })
       )
     })
   })
