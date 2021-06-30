@@ -20,7 +20,7 @@ const bulkAppointmentsClashesRouter = require('./routes/appointments/bulkAppoint
 const changeCaseloadRouter = require('./routes/changeCaseloadRouter')
 const addAppointmentRouter = require('./routes/appointments/addAppointmentRouter')
 const prepostAppointmentRouter = require('./routes/appointments/prepostAppointmentsRouter')
-const viewAppointmentsRouter = require('./routes/appointments/viewAppointmentsRouter')
+const viewAppointments = require('./controllers/appointments/viewAppointments')
 const confirmAppointmentRouter = require('./routes/appointments/confirmAppointmentRouter')
 const prisonerProfileRouter = require('./routes/prisonerProfileRouter')
 const retentionReasonsRouter = require('./routes/retentionReasonsRouter')
@@ -170,7 +170,7 @@ const setup = ({
     prepostAppointmentRouter({ prisonApi, logError, oauthApi, whereaboutsApi, notifyClient, raiseAnalyticsEvent })
   )
 
-  router.use('/view-all-appointments', viewAppointmentsRouter({ prisonApi, whereaboutsApi, oauthApi, logError }))
+  router.use('/view-all-appointments', viewAppointments({ prisonApi, whereaboutsApi, oauthApi, logError }))
 
   router.use('/offenders/:offenderNo/confirm-appointment', confirmAppointmentRouter({ prisonApi, logError }))
 
