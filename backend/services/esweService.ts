@@ -1,9 +1,9 @@
-import moment from 'moment'
+import moment, { Moment } from 'moment'
 import { app } from '../config'
 import { readableDateFormat } from '../utils'
 import type CuriousApi from '../api/curious/curiousApi'
-import { ClientContext } from '../api/oauthEnabledClient'
 import log from '../log'
+import AssessmentQualificationType from '../api/curious/types/AssessmentQualificationType'
 
 type FeatureFlagged<T> = {
   enabled: boolean
@@ -19,6 +19,20 @@ const createFlaggedContent = <T>(content: T) => ({
 })
 
 const CURIOUS_DATE_FORMAT = 'YYYY-MM-DD'
+
+const parseDate = (value: string) => moment(value, CURIOUS_DATE_FORMAT)
+
+const compareByDate = (dateA: Moment, dateB: Moment, descending = true) => {
+  const order = descending ? 1 : -1
+
+  if (dateA.isAfter(dateB)) {
+    return -1 * order
+  }
+  if (dateB.isAfter(dateA)) {
+    return 1 * order
+  }
+  return 0
+}
 
 /**
  * Education skills and work experience (ESWE)
@@ -61,18 +75,8 @@ export default class EsweService {
         this.curiousApi.getLearnerProfiles(context, nomisId),
       ])
 
-      const compareByDateDesc = (a: curious.LearnerEducation, b: curious.LearnerEducation) => {
-        const startDateA = moment(a.learningStartDate, CURIOUS_DATE_FORMAT)
-        const startDateB = moment(b.learningStartDate, CURIOUS_DATE_FORMAT)
-
-        if (startDateA.isAfter(startDateB)) {
-          return -1
-        }
-        if (startDateB.isAfter(startDateA)) {
-          return 1
-        }
-        return 0
-      }
+      const compareByDateDesc = (a: curious.LearnerEducation, b: curious.LearnerEducation) =>
+        compareByDate(parseDate(a.learningStartDate), parseDate(b.learningStartDate))
 
       educations.sort(compareByDateDesc)
 
@@ -98,42 +102,61 @@ export default class EsweService {
 
   async getLearnerLatestAssessments(nomisId: string): Promise<LearnerLatestAssessments> {
     if (!app.esweEnabled) {
-      return {
-        enabled: app.esweEnabled,
-        content: {},
+      return createFlaggedContent({})
+    }
+
+    const context = await this.systemOauthClient.getClientCredentialsTokens()
+    const learnerLatestAssessments = await this.curiousApi.getLearnerLatestAssessments(context, nomisId)
+
+    const compareByDateDesc = (a: curious.LearnerAssessment, b: curious.LearnerAssessment) =>
+      compareByDate(parseDate(a.qualification.assessmentDate), parseDate(b.qualification.assessmentDate))
+
+    const getLatestGrade = (
+      functionalSkillLevels: curious.LearnerLatestAssessment[],
+      qualificationType: AssessmentQualificationType
+    ): curious.LearnerAssessment => {
+      const emptyAssessment: curious.LearnerAssessment = {
+        qualification: {
+          qualificationType,
+        },
       }
+      if (Array.isArray(functionalSkillLevels) && functionalSkillLevels.length > 0) {
+        const { qualifications } = functionalSkillLevels[0]
+        const learnerAssessment = qualifications
+          .filter((functionalSkillLevel) => functionalSkillLevel.qualification.qualificationType === qualificationType)
+          .sort(compareByDateDesc)[0]
+
+        return learnerAssessment || emptyAssessment
+      }
+
+      return emptyAssessment
     }
 
-    const content = await this.curiousApi.getLearnerLatestAssessments(nomisId)
+    const englishGrade = getLatestGrade(learnerLatestAssessments, AssessmentQualificationType.English)
+    const mathsGrade = getLatestGrade(learnerLatestAssessments, AssessmentQualificationType.Maths)
+    const digitalLiteracyGrade = getLatestGrade(learnerLatestAssessments, AssessmentQualificationType.DigitalLiteracy)
 
-    const filterSkillsAndGetLatestGrade = (functionalSkillLevels, skillToFilter) =>
-      functionalSkillLevels[0].qualifications
-        .filter((functionalSkillLevel) => functionalSkillLevel.qualification.qualificationType === skillToFilter)
-        .sort(
-          (a, b) =>
-            new Date(b.qualification.assessmentDate).getTime() - new Date(a.qualification.assessmentDate).getTime()
-        )[0]
+    const createSkillAssessmentSummary = (learnerAssessment: curious.LearnerAssessment) => {
+      const { qualification, establishmentName } = learnerAssessment || {}
+      const { qualificationType, qualificationGrade, assessmentDate } = qualification || {}
 
-    const englishSkillLevels = filterSkillsAndGetLatestGrade(content, 'English') || { skill: 'English/Welsh' }
-    const mathsSkillLevels = filterSkillsAndGetLatestGrade(content, 'Maths') || { skill: 'Maths' }
-    const digiLitSkillLevels = filterSkillsAndGetLatestGrade(content, 'Digital Literacy') || {
-      skill: 'Digital Literacy',
-    }
-
-    const createSkillAssessmentSummary = (skillAssessment) => {
-      if (!skillAssessment.qualification) return [{ label: skillAssessment.skill, value: 'Awaiting assessment' }]
-
-      const { qualificationType, qualificationGrade, assessmentDate } = skillAssessment.qualification
-      const { establishmentName } = skillAssessment
+      if (!assessmentDate) {
+        return [
+          {
+            label: qualificationType,
+            value: 'Awaiting assessment',
+          },
+        ]
+      }
 
       return [
         {
-          label: qualificationType === 'English' ? 'English/Welsh' : qualificationType,
+          label: qualificationType === AssessmentQualificationType.English ? 'English/Welsh' : qualificationType,
           value: qualificationGrade,
         },
         {
           label: 'Assessment date',
-          value: readableDateFormat(assessmentDate, 'YYYY-MM-DD'),
+          value: readableDateFormat(assessmentDate, CURIOUS_DATE_FORMAT),
         },
         {
           label: 'Assessment location',
@@ -143,14 +166,11 @@ export default class EsweService {
     }
 
     const functionalSkillLevels = {
-      english: createSkillAssessmentSummary(englishSkillLevels),
-      maths: createSkillAssessmentSummary(mathsSkillLevels),
-      digiLit: createSkillAssessmentSummary(digiLitSkillLevels),
+      english: createSkillAssessmentSummary(englishGrade),
+      maths: createSkillAssessmentSummary(mathsGrade),
+      digiLit: createSkillAssessmentSummary(digitalLiteracyGrade),
     }
 
-    return {
-      enabled: app.esweEnabled,
-      content: functionalSkillLevels,
-    }
+    return createFlaggedContent(functionalSkillLevels)
   }
 }

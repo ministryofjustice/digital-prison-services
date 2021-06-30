@@ -172,8 +172,9 @@ describe('Education skills and work experience', () => {
         expect(actual.enabled).toBeTruthy()
         expect(actual.content).toStrictEqual(expectedResult)
         expect(getLearnerLatestAssessmentsMock).toHaveBeenCalledTimes(1)
-        expect(getLearnerLatestAssessmentsMock).toHaveBeenCalledWith(nomisId)
+        expect(getLearnerLatestAssessmentsMock).toHaveBeenCalledWith(credentialsRef, nomisId)
       })
+
       it('should return expected assessments when there are multiple assessments for a subject available', async () => {
         const dummyFunctionalSkillsLevels = {
           prn: 'G8346GA',
@@ -242,8 +243,9 @@ describe('Education skills and work experience', () => {
         expect(actual.enabled).toBeTruthy()
         expect(actual.content).toStrictEqual(expectedResult)
         expect(getLearnerLatestAssessmentsMock).toHaveBeenCalledTimes(1)
-        expect(getLearnerLatestAssessmentsMock).toHaveBeenCalledWith(nomisId)
+        expect(getLearnerLatestAssessmentsMock).toHaveBeenCalledWith(credentialsRef, nomisId)
       })
+
       it('should return expected response when there are no assessments available for a subject', async () => {
         const dummyFunctionalSkillsLevels = {
           prn: 'G8346GA',
@@ -289,7 +291,7 @@ describe('Education skills and work experience', () => {
         expect(actual.enabled).toBeTruthy()
         expect(actual.content).toStrictEqual(expectedResult)
         expect(getLearnerLatestAssessmentsMock).toHaveBeenCalledTimes(1)
-        expect(getLearnerLatestAssessmentsMock).toHaveBeenCalledWith(nomisId)
+        expect(getLearnerLatestAssessmentsMock).toHaveBeenCalledWith(credentialsRef, nomisId)
       })
     })
   })
