@@ -133,7 +133,7 @@ describe('App component', () => {
     const component = mount(<App {...props} store={store} />)
 
     expect(component.find(FooterContainer).props()).toEqual({
-      supportUrl: `${props.config.supportUrl}feedback-and-support`,
+      supportUrl: props.config.supportUrl,
       prisonStaffHubUrl: '/',
     })
   })
