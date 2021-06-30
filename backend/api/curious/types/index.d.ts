@@ -1,4 +1,7 @@
 declare namespace curious {
+  type AssessmentQualificationType = import('AssessmentQualificationType')
+  type LearnerEducationDeliveryMethodType = import('LearnerEducationDeliveryMethodType')
+
   /**
    *
    * @export
@@ -23,16 +26,6 @@ declare namespace curious {
      * @memberof Assessment
      */
     qualificationType?: AssessmentQualificationType
-  }
-
-  /**
-   * @export
-   * @enum {string}
-   */
-  export enum AssessmentQualificationType {
-    English = 'English',
-    Maths = 'Maths',
-    DigitalLiteracy = 'Digital Literacy',
   }
 
   /**
@@ -390,16 +383,6 @@ declare namespace curious {
   }
 
   /**
-   * @export
-   * @enum {string}
-   */
-  export enum LearnerEducationDeliveryMethodType {
-    BlendedLearning = 'Blended Learning',
-    ClassroomOnlyLearning = 'Classroom Only Learning',
-    PackOnlyLearning = 'Pack Only Learning',
-  }
-
-  /**
    *
    * @export
    * @interface LearnerLatestAssessment
@@ -417,5 +400,31 @@ declare namespace curious {
      * @memberof LearnerLatestAssessment
      */
     qualifications?: LearnerAssessment[]
+  }
+
+  /**
+   *
+   * @export
+   * @interface FunctionalSkillsLevels
+   */
+  export interface FunctionalSkillsLevels {
+    /**
+     *
+     * @type {Array<FunctionalSkillsLevels>}
+     * @memberof FunctionalSkillsLevels
+     */
+    english?: Array
+    /**
+     *
+     * @type {Array<FunctionalSkillsLevels>}
+     * @memberof FunctionalSkillsLevels
+     */
+    maths?: Array
+    /**
+     *
+     * @type {Array<FunctionalSkillsLevels>}
+     * @memberof FunctionalSkillsLevels
+     */
+    digiLit?: Array
   }
 }
