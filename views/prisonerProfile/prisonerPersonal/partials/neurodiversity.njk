@@ -8,27 +8,14 @@
 
 {% set lddHealthProblems = [] %}
 
-{% set learnerProfiles = learnerProfiles.content %}
-{% if learnerProfiles and learnerProfiles.length > 0 %}
-    {% for learnerProfile in learnerProfiles %}
-        {% if learnerProfile.lddHealthProblem %}
-            {% set lddHealthProblems = (
-                lddHealthProblems.push(learnerProfile.lddHealthProblem),
-                lddHealthProblems
-            ) %}
-        {% endif %}
-    {% endfor %}
-{% else %}
+{% set learningDifficulty = learningDifficulty.content %}
+
+{% if not learningDifficulty and learningDifficulty !== '' %}
     <p class="govuk-body">No data found.</p>
-{% endif %}
-
-
-{% if learnerProfiles.length > 0 %}
-    {% for lddHealthProblem in lddHealthProblems %}
-        <p class="govuk-body">
-            {{ lddHealthProblem }}
-        </p>
-    {% endfor %}
+    {% elif learningDifficulty and learningDifficulty !== '' %}
+    <p class="govuk-body">
+        {{ learningDifficulty }}
+    </p>
 {% else %}
     <p class="govuk-body">None</p>
 {% endif %}

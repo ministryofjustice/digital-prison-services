@@ -1,5 +1,5 @@
 const nock = require('nock')
-const clientFactory = require('./oauthEnabledClient')
+const clientFactory = require('./oauthEnabledClient').default
 const contextProperties = require('../contextProperties')
 const logger = require('../log')
 
@@ -51,7 +51,7 @@ describe('Test clients built by oauthEnabledClient', () => {
       const context = {}
       contextProperties.setRequestPagination(context, { 'page-offset': '0', 'page-limit': '10' })
 
-      const response = await client.get(context, '/api/users/me', 500)
+      const response = await client.get(context, '/api/users/me', { resultsLimit: 500 })
 
       expect(response.request.header).toEqual(expect.objectContaining({ 'page-offset': '0', 'page-limit': '500' }))
     })

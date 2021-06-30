@@ -7,7 +7,7 @@ const prisonApiFactory = (client) => {
     return response.body
   }
 
-  const get = (context, url, resultsLimit) => client.get(context, url, resultsLimit).then(processResponse(context))
+  const get = (context, url, resultsLimit) => client.get(context, url, { resultsLimit }).then(processResponse(context))
 
   const getStream = (context, url) => client.getStream(context, url)
 
