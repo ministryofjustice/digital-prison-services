@@ -2,7 +2,8 @@ const path = require('path')
 const asyncMiddleware = require('../middleware/asyncHandler')
 const log = require('../log')
 
-const placeHolder = path.join(__dirname, '../assets/images/image-missing.jpg')
+const rootDirectory = process.cwd()
+const placeHolder = path.join(rootDirectory, '/static/images/image-missing.jpg')
 
 const imageFactory = (prisonApi) => {
   const image = asyncMiddleware(async (req, res) => {
