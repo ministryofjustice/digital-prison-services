@@ -55,6 +55,17 @@ module.exports =
         court: appointment.court,
       }))
 
+    const videoLinkAppointmentsWithMainId = videoLinkAppointments.map((videoLinkAppt, i, array) => {
+      const mainAppointment = array.find(
+        (appt) => appt.hearingType === 'MAIN' && appt.videoLinkBookingId === videoLinkAppt.videoLinkBookingId
+      )
+
+      return {
+        ...videoLinkAppt,
+        mainAppointmentId: mainAppointment.appointmentId,
+      }
+    })
+
     const appointmentsEnhanced = appointments
       .filter((appointment) => (type ? appointment.appointmentTypeCode === type : true))
       .map(async (appointment) => {
@@ -84,6 +95,10 @@ module.exports =
           )
         }
 
+        const videoLinkAppointment =
+          appointment.appointmentTypeCode === 'VLB' &&
+          videoLinkAppointmentsWithMainId.find((videoLinkAppt) => videoLinkAppt.appointmentId === appointment.id)
+
         return [
           {
             text: endTime ? `${getTime(startTime)} to ${getTime(endTime)}` : getTime(startTime),
@@ -105,7 +120,7 @@ module.exports =
           },
           {
             html: `<a href="/appointment-details/${
-              appointment.id
+              videoLinkAppointment?.mainAppointmentId || appointment.id
             }" class="govuk-link" aria-label="View details of ${formatName(
               appointment.firstName,
               appointment.lastName

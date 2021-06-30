@@ -215,6 +215,21 @@ describe('View appointments', () => {
           auditUserId: 'STAFF_2',
           agencyId: 'MDI',
         },
+        {
+          id: 5,
+          offenderNo: 'ABC789',
+          firstName: 'OFFENDER',
+          lastName: 'THREE',
+          date: '2020-01-02',
+          startTime: '2020-01-02T15:30:00',
+          endTime: '2020-01-02T15:45:00',
+          appointmentTypeDescription: 'Video Link booking',
+          appointmentTypeCode: 'VLB',
+          locationDescription: 'VCC ROOM',
+          locationId: 456,
+          auditUserId: 'STAFF_3',
+          agencyId: 'MDI',
+        },
       ])
 
       prisonApi.getStaffDetails
@@ -247,6 +262,17 @@ describe('View appointments', () => {
             hearingType: 'MAIN',
             createdByUsername: 'username1',
             madeByTheCourt: true,
+            videoLinkBookingId: 1,
+          },
+          {
+            id: 2,
+            bookingId: 1,
+            appointmentId: 5,
+            court: 'Wimbledon',
+            hearingType: 'POST',
+            createdByUsername: 'username1',
+            madeByTheCourt: true,
+            videoLinkBookingId: 1,
           },
         ],
       })
@@ -266,9 +292,9 @@ describe('View appointments', () => {
         offenderLocationPrefix: 'MDI-1',
         timeSlot: 'PM',
       })
-      expect(whereaboutsApi.getVideoLinkAppointments).toHaveBeenCalledWith(res.locals, [3, 4])
+      expect(whereaboutsApi.getVideoLinkAppointments).toHaveBeenCalledWith(res.locals, [3, 4, 5])
       expect(whereaboutsApi.getAgencyGroupLocationPrefix).toHaveBeenCalledWith(res.locals, 'MDI', 'H 1')
-      expect(prisonApi.getDetails).toHaveBeenCalledTimes(4)
+      expect(prisonApi.getDetails).toHaveBeenCalledTimes(5)
     })
 
     it('should render the correct template information', async () => {
@@ -328,6 +354,19 @@ describe('View appointments', () => {
               { html: 'VCC ROOM' },
               {
                 html: `<a href="/appointment-details/4" class="govuk-link" aria-label="View details of Offender Four's appointment">View details </a>`,
+              },
+            ],
+            [
+              { text: '15:30 to 15:45' },
+              {
+                attributes: { 'data-sort-value': 'THREE' },
+                html: '<a href="/prisoner/ABC789" class="govuk-link">Three, Offender - ABC789</a>',
+              },
+              { text: undefined },
+              { text: 'Video Link booking' },
+              { html: 'VCC ROOM</br>with: Wimbledon' },
+              {
+                html: '<a href="/appointment-details/3" class="govuk-link" aria-label="View details of Offender Three\'s appointment">View details </a>',
               },
             ],
           ],
