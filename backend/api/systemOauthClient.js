@@ -1,6 +1,7 @@
+import clientFactory from './oauthEnabledClient'
+
 const querystring = require('querystring')
 const oauthApi = require('./oauthApi')
-const clientFactory = require('./oauthEnabledClient')
 
 const config = require('../config')
 const logger = require('../log')

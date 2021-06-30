@@ -223,6 +223,12 @@ env:
   - name: SOC_API_ENABLED
     value: {{ .Values.env.SOC_API_ENABLED | quote }}
 
+  - name: CURIOUS_URL
+    value: {{ .Values.env.CURIOUS_URL | quote }}
+
+  - name: ESWE_ENABLED
+    value: {{ .Values.env.ESWE_ENABLED | quote }}
+
   - name: BVL_URL
     value: {{ .Values.env.BVL_URL | quote }}
 

@@ -1,7 +1,7 @@
 import CuriousApi from './api/curious/curiousApi'
+import clientFactory from './api/oauthEnabledClient'
 
 const config = require('./config')
-const clientFactory = require('./api/oauthEnabledClient')
 const { prisonApiFactory } = require('./api/prisonApi')
 const { oauthApiFactory } = require('./api/oauthApi')
 const { whereaboutsApiFactory } = require('./api/whereaboutsApi')
@@ -109,7 +109,7 @@ const complexityApi = complexityApiFactory(
   })
 )
 
-const curiousApi = CuriousApi.create()
+const curiousApi = CuriousApi.create(clientFactory({ baseUrl: config.apis.curious.url }))
 
 module.exports = {
   prisonApi,

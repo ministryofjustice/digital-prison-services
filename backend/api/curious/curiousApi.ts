@@ -1,43 +1,9 @@
+import querystring from 'qs'
+import type { ClientContext, OauthApiClient } from '../oauthEnabledClient'
+
 /**
  * TODO: remove this during the curious api integration
  */
-export const dummyLearnerProfiles: curious.LearnerProfile[] = [
-  {
-    prn: 'G8346GA',
-    establishmentId: 2,
-    establishmentName: 'HMP Winchester',
-    uln: '345455',
-    lddHealthProblem: 'Dyslexia',
-    priorAttainment: '',
-    qualifications: [
-      {
-        qualificationType: 'English',
-        qualificationGrade: 'c',
-        assessmentDate: '2021-06-22',
-      },
-    ],
-    languageStatus: 'string',
-    plannedHours: 8,
-  },
-  {
-    prn: 'G8346GA',
-    establishmentId: 2,
-    establishmentName: 'HMP Winchester',
-    uln: '345455',
-    lddHealthProblem: 'Autistic spectrum disorder',
-    priorAttainment: '',
-    qualifications: [
-      {
-        qualificationType: 'Maths',
-        qualificationGrade: 'A',
-        assessmentDate: '2021-06-22',
-      },
-    ],
-    languageStatus: 'string',
-    plannedHours: 8,
-  },
-]
-
 export const dummyLearnerLatestAssessments: curious.LearnerLatestAssessment[] = [
   {
     prn: 'G8346GA',
@@ -92,16 +58,35 @@ export const dummyLearnerLatestAssessments: curious.LearnerLatestAssessment[] = 
 ]
 
 export default class CuriousApi {
-  static create(): CuriousApi {
-    return new CuriousApi()
+  static create(client: OauthApiClient): CuriousApi {
+    return new CuriousApi(client)
   }
 
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  getLearnerProfiles(nomisId: string): Promise<curious.LearnerProfile[]> {
-    return Promise.resolve(dummyLearnerProfiles)
+  constructor(private readonly client: OauthApiClient) {}
+
+  getLearnerProfiles(
+    context: ClientContext,
+    nomisId: string,
+    establishmentId?: number
+  ): Promise<curious.LearnerProfile[]> {
+    return this.client
+      .get<curious.LearnerProfile[]>(context, this.applyQuery(`/learnerProfile/${nomisId}`, { establishmentId }))
+      .then((response) => response.body)
+  }
+
+  getLearnerEducation(context: ClientContext, nomisId: string): Promise<curious.LearnerEducation[]> {
+    return this.client
+      .get<curious.LearnerEducation[]>(context, `/learnerEducation/${nomisId}`)
+      .then((response) => response.body)
   }
 
   getLearnerLatestAssessments(nomisId: string): Promise<curious.LearnerLatestAssessment[]> {
     return Promise.resolve(dummyLearnerLatestAssessments)
   }
+
+  private applyQuery = (path, query?: Record<string, unknown>) =>
+    this.hasNonEmptyValues(query) ? `${path}?${querystring.stringify(query)}` : path
+
+  private hasNonEmptyValues = (object?: Record<string, unknown>) =>
+    object && Object.values(object).filter((value) => !!value).length > 0
 }

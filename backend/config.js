@@ -125,6 +125,9 @@ module.exports = {
     pinPhones: {
       ui_url: process.env.PIN_PHONES_URL || 'http://localhost:3000/',
     },
+    curious: {
+      url: process.env.CURIOUS_URL || '',
+    },
   },
 
   notifications: {
