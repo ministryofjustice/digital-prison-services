@@ -166,8 +166,8 @@ const prepostAppointmentsFactory = ({
         locationEvents,
         courts,
         formValues: {
-          postAppointment: (postAppointment && postAppointment.required) || 'yes',
-          preAppointment: (preAppointment && preAppointment.required) || 'yes',
+          postAppointment: postAppointment?.required,
+          preAppointment: preAppointment?.required,
           preAppointmentLocation: preAppointment && Number(preAppointment.locationId),
           postAppointmentLocation: postAppointment && Number(postAppointment.locationId),
         },
@@ -221,6 +221,7 @@ const prepostAppointmentsFactory = ({
     const preStartTime = moment(startTime, DATE_TIME_FORMAT_SPEC).subtract(APPOINTMENT_DURATION_MINS, 'minutes')
     const preEndTime = moment(preStartTime, DATE_TIME_FORMAT_SPEC).add(APPOINTMENT_DURATION_MINS, 'minutes')
     return {
+      required: 'yes',
       startTime: preStartTime.format(DATE_TIME_FORMAT_SPEC),
       endTime: preEndTime.format(DATE_TIME_FORMAT_SPEC),
       locationId: Number(preAppointmentLocation),
@@ -231,6 +232,7 @@ const prepostAppointmentsFactory = ({
     const postEndTime = moment(endTime, DATE_TIME_FORMAT_SPEC).add(APPOINTMENT_DURATION_MINS, 'minutes')
 
     return {
+      required: 'yes',
       startTime: endTime,
       endTime: postEndTime.format(DATE_TIME_FORMAT_SPEC),
       locationId: Number(postAppointmentLocation),

@@ -62,7 +62,7 @@ module.exports =
 
       return {
         ...videoLinkAppt,
-        mainAppointmentId: mainAppointment.appointmentId,
+        mainAppointmentId: mainAppointment?.appointmentId,
       }
     })
 
@@ -125,6 +125,7 @@ module.exports =
               appointment.firstName,
               appointment.lastName
             )}'s appointment">View details </a>`,
+            classes: 'govuk-!-display-none-print',
           },
         ]
       })
