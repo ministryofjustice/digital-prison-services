@@ -294,7 +294,7 @@ describe('View appointments', () => {
             bookingId: 1,
             appointmentId: 6,
             court: 'Rotherham',
-            hearingType: 'POST',
+            hearingType: 'MAIN',
             createdByUsername: 'username1',
             madeByTheCourt: true,
             videoLinkBookingId: 2,
