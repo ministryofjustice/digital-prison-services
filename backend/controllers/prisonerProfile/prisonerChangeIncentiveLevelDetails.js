@@ -16,14 +16,11 @@ module.exports = ({ prisonApi }) => {
       ])
 
       const { iepLevel } = iepSummary
-      const selectableLevels = iepLevels
-        .filter((level) => level.iepDescription !== iepLevel)
-        .sort((a, b) => a.iepDescription.localeCompare(b.iepDescription))
-        .map((level) => ({
-          text: level.iepDescription,
-          value: level.iepLevel,
-          checked: level.iepLevel === formValues.newIepLevel,
-        }))
+      const selectableLevels = iepLevels.map((level) => ({
+        text: level.iepDescription,
+        value: level.iepLevel,
+        checked: level.iepLevel === formValues.newIepLevel,
+      }))
 
       return res.render('prisonerProfile/prisonerChangeIncentiveLevelDetails.njk', {
         agencyId,
@@ -52,15 +49,15 @@ module.exports = ({ prisonApi }) => {
     const { agencyId, bookingId, iepLevel, newIepLevel, reason } = req.body || {}
 
     if (!newIepLevel) {
-      errors.push({ text: 'Select a level', href: '#newIepLevel' })
+      errors.push({ text: 'Select an incentive level', href: '#newIepLevel' })
     }
 
     if (!reason) {
-      errors.push({ text: 'Enter reason for incentive level change', href: '#reason' })
+      errors.push({ text: 'Enter a reason for your selected incentive label', href: '#reason' })
     }
 
     if (reason && reason.length > 240) {
-      errors.push({ text: 'Reason must be 240 characters or less', href: '#reason' })
+      errors.push({ text: 'The reason must be 240 characters or less', href: '#reason' })
     }
 
     if (errors.length > 0) {
