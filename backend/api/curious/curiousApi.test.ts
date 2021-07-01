@@ -1,5 +1,5 @@
 import nock from 'nock'
-import CuriousApi, { dummyLearnerLatestAssessments } from './curiousApi'
+import CuriousApi from './curiousApi'
 import clientFactory from '../oauthEnabledClient'
 
 const hostname = 'http://localhost:8080'
@@ -55,8 +55,14 @@ describe('curiousApi', () => {
   })
 
   describe('getLearnerLatestAssessments', () => {
+    const dummyLearnerLatestAssessments = getDummyLearnerLatestAssessments()
     it('should return the expected response data', async () => {
-      const actual = await curiousApi.getLearnerLatestAssessments('abc')
+      const nomisId = dummyLearnerLatestAssessments[0].prn
+      mock
+        .get(`/latestLearnerAssessments/${nomisId}`)
+        .matchHeader('authorization', `Bearer ${accessToken}`)
+        .reply(200, dummyLearnerLatestAssessments)
+      const actual = await curiousApi.getLearnerLatestAssessments({ access_token: accessToken }, nomisId)
       expect(actual).toEqual(dummyLearnerLatestAssessments)
     })
   })
@@ -193,6 +199,61 @@ function getDummyEducations(): curious.LearnerEducation[] {
       fundingType: 'DPS',
       deliveryMethodType: null,
       alevelIndicator: false,
+    },
+  ]
+}
+
+function getDummyLearnerLatestAssessments(): curious.LearnerLatestAssessment[] {
+  return [
+    {
+      prn: 'G8346GA',
+      qualifications: [
+        {
+          establishmentId: 2,
+          establishmentName: 'HMP Winchester',
+          qualification: {
+            qualificationType: 'English',
+            qualificationGrade: 'Entry Level 2',
+            assessmentDate: '2021-05-02',
+          },
+        },
+        {
+          establishmentId: 2,
+          establishmentName: 'HMP Winchester',
+          qualification: {
+            qualificationType: 'English',
+            qualificationGrade: 'Entry Level 2',
+            assessmentDate: '2020-12-02',
+          },
+        },
+        {
+          establishmentId: 2,
+          establishmentName: 'HMP Winchester',
+          qualification: {
+            qualificationType: 'Digital Literacy',
+            qualificationGrade: 'Entry Level 1',
+            assessmentDate: '2020-06-01',
+          },
+        },
+        {
+          establishmentId: 2,
+          establishmentName: 'HMP Winchester',
+          qualification: {
+            qualificationType: 'Digital Literacy',
+            qualificationGrade: 'Entry Level 2',
+            assessmentDate: '2021-06-01',
+          },
+        },
+        {
+          establishmentId: 2,
+          establishmentName: 'HMP Winchester',
+          qualification: {
+            qualificationType: 'Maths',
+            qualificationGrade: 'Entry Level 2',
+            assessmentDate: '2021-06-06',
+          },
+        },
+      ],
     },
   ]
 }
