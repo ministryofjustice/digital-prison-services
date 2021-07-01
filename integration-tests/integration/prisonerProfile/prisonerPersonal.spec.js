@@ -271,8 +271,10 @@ context('Prisoner personal', () => {
     context('Neurodiversity summary section', () => {
       it('Should display a description of the section', () => {
         cy.get('[data-test="neurodiversity-summary"]').then(($section) => {
-          expect($section).to.contain.text('This is self-declared by the prisoner')
-          expect($section).to.contain.text('Also known as learning difficulties and disabilities (LDD).')
+          expect($section).to.contain.text('This is self-declared by the prisoner.')
+          expect($section).to.contain.text(
+            'Neurodiversity is also known as learning difficulties and disabilities (LDD).'
+          )
         })
       })
       it('Should display learning difficulties', () => {
