@@ -1,3 +1,5 @@
+import whereaboutsHomepage from './controllers/whereabouts/whereaboutsHomepage'
+
 const express = require('express')
 const { logError } = require('./logError')
 
@@ -47,7 +49,6 @@ const systemOauthClient = require('./api/systemOauthClient')
 const { notifyClient } = require('./shared/notifyClient')
 
 const { raiseAnalyticsEvent } = require('./raiseAnalyticsEvent')
-const whereaboutsHomepageController = require('./controllers/whereabouts/whereaboutsHomepage')
 const backToStart = require('./controllers/backToStart')
 const permit = require('./controllers/permit')
 const appointmentDetailsServiceFactory = require('./services/appointmentDetailsService')
@@ -82,7 +83,7 @@ const setup = ({
     next()
   })
 
-  router.get('/manage-prisoner-whereabouts', whereaboutsHomepageController())
+  router.use('/manage-prisoner-whereabouts', whereaboutsHomepage({ oauthApi, prisonApi }))
 
   router.post('/notification/dismiss', notificationDismiss({ notificationCookie }))
   router.use(

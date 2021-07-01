@@ -25,7 +25,7 @@ context('Homepage', () => {
       page
         .manageAccountLink()
         .should('have.attr', 'href')
-        .then(href => {
+        .then((href) => {
           expect(href).to.equal('http://localhost:9191/auth/account-details')
         })
 
@@ -57,7 +57,7 @@ context('Homepage', () => {
         .changeLocationLink()
         .should('be.visible')
         .should('have.attr', 'href')
-        .then(href => {
+        .then((href) => {
           expect(href).to.equal('/change-caseload')
         })
     })
@@ -182,22 +182,6 @@ context('Homepage', () => {
       const page = homepagePage.goTo()
 
       page.soc().should('exist')
-    })
-
-    it('should show covid unit task', () => {
-      cy.task('stubUserMeRoles', [{ roleCode: 'PRISON' }])
-
-      const page = homepagePage.goTo()
-
-      page.covidUnits().should('exist')
-    })
-
-    it('should show bulk appointments task', () => {
-      cy.task('stubUserMeRoles', [{ roleCode: 'BULK_APPOINTMENTS' }])
-
-      const page = homepagePage.goTo()
-
-      page.bulkAppointments().should('exist')
     })
   })
 })
