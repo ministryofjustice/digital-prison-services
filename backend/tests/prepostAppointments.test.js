@@ -151,7 +151,7 @@ describe('Pre post appointments', () => {
       )
     })
 
-    it('should return default form values', async () => {
+    it('should return no default form values', async () => {
       const { index } = prepostAppointmentsFactory({
         prisonApi,
         appointmentsService,
@@ -164,10 +164,7 @@ describe('Pre post appointments', () => {
       expect(res.render).toHaveBeenCalledWith(
         'prepostAppointments.njk',
         expect.objectContaining({
-          formValues: {
-            postAppointment: 'yes',
-            preAppointment: 'yes',
-          },
+          formValues: {},
         })
       )
     })
