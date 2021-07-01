@@ -757,11 +757,13 @@ describe('Pre post appointments', () => {
           'appointmentDetails',
           expect.objectContaining({
             preAppointment: {
+              required: 'yes',
               endTime: '2017-10-10T11:00:00',
               locationId: 1,
               startTime: '2017-10-10T10:45:00',
             },
             postAppointment: {
+              required: 'yes',
               endTime: '2017-10-10T14:15:00',
               locationId: 2,
               startTime: '2017-10-10T14:00',
