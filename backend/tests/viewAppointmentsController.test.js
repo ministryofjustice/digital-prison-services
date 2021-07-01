@@ -230,6 +230,21 @@ describe('View appointments', () => {
           auditUserId: 'STAFF_3',
           agencyId: 'MDI',
         },
+        {
+          id: 6,
+          offenderNo: 'ABC789',
+          firstName: 'OFFENDER',
+          lastName: 'THREE',
+          date: '2020-01-02',
+          startTime: '2020-01-02T15:45:00',
+          endTime: '2020-01-02T16:45:00',
+          appointmentTypeDescription: 'Video Link booking',
+          appointmentTypeCode: 'VLB',
+          locationDescription: 'VCC ROOM',
+          locationId: 456,
+          auditUserId: 'STAFF_3',
+          agencyId: 'MDI',
+        },
       ])
 
       prisonApi.getStaffDetails
@@ -274,6 +289,16 @@ describe('View appointments', () => {
             madeByTheCourt: true,
             videoLinkBookingId: 1,
           },
+          {
+            id: 3,
+            bookingId: 1,
+            appointmentId: 6,
+            court: 'Rotherham',
+            hearingType: 'POST',
+            createdByUsername: 'username1',
+            madeByTheCourt: true,
+            videoLinkBookingId: 2,
+          },
         ],
       })
 
@@ -292,9 +317,9 @@ describe('View appointments', () => {
         offenderLocationPrefix: 'MDI-1',
         timeSlot: 'PM',
       })
-      expect(whereaboutsApi.getVideoLinkAppointments).toHaveBeenCalledWith(res.locals, [3, 4, 5])
+      expect(whereaboutsApi.getVideoLinkAppointments).toHaveBeenCalledWith(res.locals, [3, 4, 5, 6])
       expect(whereaboutsApi.getAgencyGroupLocationPrefix).toHaveBeenCalledWith(res.locals, 'MDI', 'H 1')
-      expect(prisonApi.getDetails).toHaveBeenCalledTimes(5)
+      expect(prisonApi.getDetails).toHaveBeenCalledTimes(6)
     })
 
     it('should render the correct template information', async () => {
@@ -315,6 +340,7 @@ describe('View appointments', () => {
               { html: 'HEALTH CARE' },
               {
                 html: `<a href="/appointment-details/1" class="govuk-link" aria-label="View details of Offender One's appointment">View details </a>`,
+                classes: 'govuk-!-display-none-print',
               },
             ],
             [
@@ -328,6 +354,7 @@ describe('View appointments', () => {
               { html: 'GYM' },
               {
                 html: `<a href="/appointment-details/2" class="govuk-link" aria-label="View details of Offender Two's appointment">View details </a>`,
+                classes: 'govuk-!-display-none-print',
               },
             ],
             [
@@ -341,6 +368,7 @@ describe('View appointments', () => {
               { html: 'VCC ROOM</br>with: Wimbledon' },
               {
                 html: `<a href="/appointment-details/3" class="govuk-link" aria-label="View details of Offender Three's appointment">View details </a>`,
+                classes: 'govuk-!-display-none-print',
               },
             ],
             [
@@ -354,6 +382,7 @@ describe('View appointments', () => {
               { html: 'VCC ROOM' },
               {
                 html: `<a href="/appointment-details/4" class="govuk-link" aria-label="View details of Offender Four's appointment">View details </a>`,
+                classes: 'govuk-!-display-none-print',
               },
             ],
             [
@@ -367,6 +396,21 @@ describe('View appointments', () => {
               { html: 'VCC ROOM</br>with: Wimbledon' },
               {
                 html: '<a href="/appointment-details/3" class="govuk-link" aria-label="View details of Offender Three\'s appointment">View details </a>',
+                classes: 'govuk-!-display-none-print',
+              },
+            ],
+            [
+              { text: '15:45 to 16:45' },
+              {
+                attributes: { 'data-sort-value': 'THREE' },
+                html: '<a href="/prisoner/ABC789" class="govuk-link">Three, Offender - ABC789</a>',
+              },
+              { text: undefined },
+              { text: 'Video Link booking' },
+              { html: 'VCC ROOM</br>with: Rotherham' },
+              {
+                html: '<a href="/appointment-details/6" class="govuk-link" aria-label="View details of Offender Three\'s appointment">View details </a>',
+                classes: 'govuk-!-display-none-print',
               },
             ],
           ],
@@ -406,6 +450,7 @@ describe('View appointments', () => {
               { html: 'GYM' },
               {
                 html: `<a href="/appointment-details/2" class="govuk-link" aria-label="View details of Offender Two's appointment">View details </a>`,
+                classes: 'govuk-!-display-none-print',
               },
             ],
           ],
