@@ -166,8 +166,8 @@ const prepostAppointmentsFactory = ({
         locationEvents,
         courts,
         formValues: {
-          postAppointment: postAppointment && postAppointment.required,
-          preAppointment: preAppointment && preAppointment.required,
+          postAppointment: postAppointment?.required,
+          preAppointment: preAppointment?.required,
           preAppointmentLocation: preAppointment && Number(preAppointment.locationId),
           postAppointmentLocation: postAppointment && Number(postAppointment.locationId),
         },
