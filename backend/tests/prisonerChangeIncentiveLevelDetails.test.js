@@ -92,18 +92,23 @@ describe('Prisoner change incentive level details', () => {
           selectableLevels: [
             {
               checked: false,
+              text: 'Entry',
+              value: 'ENT',
+            },
+            {
+              checked: false,
               text: 'Basic',
               value: 'BAS',
             },
             {
               checked: false,
-              text: 'Enhanced',
-              value: 'ENH',
+              text: 'Standard',
+              value: 'STD',
             },
             {
               checked: false,
-              text: 'Entry',
-              value: 'ENT',
+              text: 'Enhanced',
+              value: 'ENH',
             },
           ],
         })
@@ -167,11 +172,11 @@ describe('Prisoner change incentive level details', () => {
           errors: [
             {
               href: '#newIepLevel',
-              text: 'Select a level',
+              text: 'Select an incentive level',
             },
             {
               href: '#reason',
-              text: 'Enter reason for incentive level change',
+              text: 'Enter a reason for your selected incentive label',
             },
           ],
           formValues: {},
@@ -182,18 +187,23 @@ describe('Prisoner change incentive level details', () => {
           selectableLevels: [
             {
               checked: false,
+              text: 'Entry',
+              value: 'ENT',
+            },
+            {
+              checked: false,
               text: 'Basic',
               value: 'BAS',
             },
             {
               checked: false,
-              text: 'Enhanced',
-              value: 'ENH',
+              text: 'Standard',
+              value: 'STD',
             },
             {
               checked: false,
-              text: 'Entry',
-              value: 'ENT',
+              text: 'Enhanced',
+              value: 'ENH',
             },
           ],
         })
@@ -210,7 +220,7 @@ describe('Prisoner change incentive level details', () => {
             errors: [
               {
                 href: '#newIepLevel',
-                text: 'Select a level',
+                text: 'Select an incentive level',
               },
             ],
             formValues: { reason: 'A reason why it has changed' },
