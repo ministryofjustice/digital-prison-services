@@ -1,5 +1,5 @@
 const { alertFlagLabels, cellMoveAlertCodes } = require('../../shared/alertFlagValues')
-const { putLastNameFirst, formatLocation } = require('../../utils')
+const { putLastNameFirst, formatLocation, formatName } = require('../../utils')
 
 const prisonApiLocationDescription = async (res, whereaboutsApi, locationKey, userCaseLoad) => {
   const fullLocationPrefix = await whereaboutsApi.getAgencyGroupLocationPrefix(res.locals, userCaseLoad, locationKey)
@@ -67,6 +67,7 @@ module.exports =
         ...prisoner,
         assignedLivingUnitDesc: formatLocation(prisoner.assignedLivingUnitDesc),
         name: putLastNameFirst(prisoner.firstName, prisoner.lastName),
+        formattedName: formatName(prisoner.firstName, prisoner.lastName),
         alerts: alertFlagLabels.filter((alertFlag) =>
           alertFlag.alertCodes.some(
             (alert) => prisoner.alertsDetails?.includes(alert) && cellMoveAlertCodes.includes(alert)
