@@ -48,18 +48,18 @@ export const whereaboutsTasks: TaskType[] = [
     enabled: isEnabled,
   },
   {
-    id: 'view-bulk-appointments',
-    heading: 'Add bulk appointments',
-    description: 'Upload a spreadsheet to add appointments for multiple people.',
-    href: '/bulk-appointments/need-to-upload-file',
-    enabled: ({ roles }) => hasAnyRole(['BULK_APPOINTMENTS'], roles),
-  },
-  {
     id: 'view-covid-units',
     heading: 'View COVID units',
     description: 'View who is in each COVID unit in your establishment.',
     href: '/current-covid-units',
     enabled: ({ roles }) => hasAnyRole(['PRISON'], roles),
+  },
+  {
+    id: 'view-bulk-appointments',
+    heading: 'Add bulk appointments',
+    description: 'Upload a spreadsheet to add appointments for multiple people.',
+    href: '/bulk-appointments/need-to-upload-file',
+    enabled: ({ roles }) => hasAnyRole(['BULK_APPOINTMENTS'], roles),
   },
 ]
 
