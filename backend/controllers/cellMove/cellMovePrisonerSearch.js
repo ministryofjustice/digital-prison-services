@@ -1,5 +1,5 @@
 const { alertFlagLabels, cellMoveAlertCodes } = require('../../shared/alertFlagValues')
-const { putLastNameFirst, formatLocation } = require('../../utils')
+const { putLastNameFirst, formatLocation, formatName } = require('../../utils')
 
 module.exports =
   ({ prisonApi }) =>
@@ -43,6 +43,7 @@ module.exports =
         ...prisoner,
         assignedLivingUnitDesc: formatLocation(prisoner.assignedLivingUnitDesc),
         name: putLastNameFirst(prisoner.firstName, prisoner.lastName),
+        formattedName: formatName(prisoner.firstName, prisoner.lastName),
         alerts: alertFlagLabels.filter((alertFlag) =>
           alertFlag.alertCodes.some(
             (alert) => prisoner.alertsDetails?.includes(alert) && cellMoveAlertCodes.includes(alert)
