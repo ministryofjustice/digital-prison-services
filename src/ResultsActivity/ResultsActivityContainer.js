@@ -131,6 +131,11 @@ class ResultsActivityContainer extends Component {
           timeSlot: period,
         },
       })
+      if (response?.data?.error) {
+        handleError(response.data.error)
+        setLoadedDispatch(true)
+        return
+      }
       const activityData = response.data
 
       const orderField = 'activity'

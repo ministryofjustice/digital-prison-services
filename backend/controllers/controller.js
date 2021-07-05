@@ -1,4 +1,5 @@
 const asyncMiddleware = require('../middleware/asyncHandler')
+const { serviceUnavailableMessage } = require('../common-messages')
 
 const factory = ({
   activityListService,
@@ -16,8 +17,18 @@ const factory = ({
       const viewModel = await activityListService.getActivityList(res.locals, agencyId, locationId, date, timeSlot)
       return res.json(viewModel)
     } catch (error) {
-      if (error.code === 'ECONNRESET' || (error.stack && error.stack.toLowerCase().includes('timeout')))
+      if (error.code === 'ECONNRESET' || (error.stack && error.stack.toLowerCase().includes('timeout'))) {
+        logError(req.originalUrl, error, 'getActivityList() - timeout')
+        res.json({
+          error: {
+            response: {
+              data: `${serviceUnavailableMessage}. You can try again.`,
+            },
+          },
+        })
+        res.status(200)
         return res.end()
+      }
       logError(req.originalUrl, error, 'getActivityList()')
       const errorStatusCode = (error && error.status) || (error.response && error.response.status) || 500
       res.status(errorStatusCode)
