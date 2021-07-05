@@ -33,13 +33,6 @@ module.exports = ({
       prisonApi.getDetails(context, offenderNo, true),
     ])
 
-    const allocationManager = await allocationManagerApi.getPomByOffenderNo(context, offenderNo)
-
-    const pomStaff =
-      allocationManager &&
-      allocationManager.primary_pom &&
-      getNamesFromString(allocationManager.primary_pom.name).join(' ')
-
     const offenderRetentionRecord =
       displayRetentionLink && (await dataComplianceApi.getOffenderRetentionRecord(context, offenderNo))
 
@@ -77,6 +70,7 @@ module.exports = ({
       userRoles,
       pathfinderDetails,
       socDetails,
+      allocationManager,
     ] = await Promise.all(
       [
         prisonApi.getIepSummary(context, [bookingId]),
@@ -87,6 +81,7 @@ module.exports = ({
         oauthApi.userRoles(context),
         pathfinderApi.getPathfinderDetails(systemContext, offenderNo),
         socApi.getSocDetails(systemContext, offenderNo, socEnabled),
+        allocationManagerApi.getPomByOffenderNo(context, offenderNo),
       ].map((apiCall) => logErrorAndContinue(apiCall))
     )
 
@@ -150,6 +145,8 @@ module.exports = ({
       isComplexityEnabledFor(agencyId) && (await complexityApi.getComplexOffenders(systemContext, [offenderNo]))
 
     const isHighComplexity = Boolean(complexityLevel?.length > 0 && complexityLevel[0]?.level === 'high')
+
+    const pomStaff = allocationManager?.primary_pom && getNamesFromString(allocationManager.primary_pom.name).join(' ')
 
     return {
       activeAlertCount,

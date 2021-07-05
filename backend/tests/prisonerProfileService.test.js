@@ -144,7 +144,7 @@ describe('prisoner profile service', () => {
       oauthApi.userRoles.mockResolvedValue([])
       oauthApi.currentUser.mockReturnValue({ staffId: 111, activeCaseLoadId: 'MDI' })
       dataComplianceApi.getOffenderRetentionRecord.mockReturnValue({})
-      allocationManagerApi.getPomByOffenderNo.mockReturnValue({ primary_pom: { name: 'SMITH, JANE' } })
+      allocationManagerApi.getPomByOffenderNo.mockResolvedValue({ primary_pom: { name: 'SMITH, JANE' } })
 
       config.apis.complexity.enabled_prisons = []
     })
@@ -478,6 +478,7 @@ describe('prisoner profile service', () => {
         prisonApi.getStaffRoles.mockRejectedValue(new Error('Network error'))
         keyworkerApi.getKeyworkerByCaseloadAndOffenderNo.mockRejectedValue(new Error('Network error'))
         oauthApi.userRoles.mockRejectedValue(new Error('Network error'))
+        allocationManagerApi.getPomByOffenderNo.mockRejectedValue(new Error('Network error'))
       })
 
       it('should still pass those values as null', async () => {
@@ -489,6 +490,7 @@ describe('prisoner profile service', () => {
             keyWorkerLastSession: null,
             showAddKeyworkerSession: null,
             userCanEdit: null,
+            pomStaff: undefined,
           })
         )
       })
