@@ -20,6 +20,7 @@ import ModalContainer from './Components/ModalContainer'
 import { userType } from './types'
 import IncentiveLevelSlipContainer from './IncentiveLevelSlipContainer'
 import PrisonersUnaccountedForContainer from './PrisonersUnaccountedFor/PrisonersUnaccountedForContainer'
+import FeedbackBanner from './Components/FeedbackBanner/FeedbackBanner'
 
 import {
   getAbsentReasons,
@@ -37,7 +38,6 @@ import {
   setTermsVisibility,
   setUserDetails,
 } from './redux/actions/index'
-import FeedbackBanner from './Components/FeedbackBanner/FeedbackBanner'
 
 const axios = require('axios')
 
