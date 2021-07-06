@@ -30,7 +30,8 @@ $govuk-font-family-print: 'GDS Transport';
 @import 'views/components/timePicker/timePicker';
 @import 'views/components/movementSlip/movementSlip';
 @import 'views/components/scheduledEvents/scheduledEvents';
-@import 'views/components/notificationBar/notificationBar.scss';
+@import 'views/components/notificationBar/notificationBar';
+@import 'views/components/feedbackBanner/feedbackBanner';
 
 @import 'govuk-overrides';
 @import 'moj-overrides';
