@@ -297,7 +297,7 @@ describe('View appointments', () => {
             hearingType: 'MAIN',
             createdByUsername: 'username1',
             madeByTheCourt: true,
-            mainAppointmentId: 3,
+            mainAppointmentId: 6,
           },
         ],
       })
@@ -339,7 +339,7 @@ describe('View appointments', () => {
               { text: 'Medical - Other' },
               { html: 'HEALTH CARE' },
               {
-                html: `<a href="/appointment-details/3" class="govuk-link" aria-label="View details of Offender One's appointment">View details </a>`,
+                html: `<a href="/appointment-details/1" class="govuk-link" aria-label="View details of Offender One's appointment">View details </a>`,
                 classes: 'govuk-!-display-none-print',
               },
             ],
@@ -353,7 +353,7 @@ describe('View appointments', () => {
               { text: 'Gym - Exercise' },
               { html: 'GYM' },
               {
-                html: `<a href="/appointment-details/3" class="govuk-link" aria-label="View details of Offender Two's appointment">View details </a>`,
+                html: `<a href="/appointment-details/2" class="govuk-link" aria-label="View details of Offender Two's appointment">View details </a>`,
                 classes: 'govuk-!-display-none-print',
               },
             ],
@@ -418,6 +418,11 @@ describe('View appointments', () => {
           formattedDate: '2 January 2020',
           locationId: undefined,
           locations: [{ text: 'VCC Room 1', value: '1' }],
+          residentialLocation: 'H 1',
+          residentialLocationOptions: [
+            { text: 'Houseblock 1', value: 'H 1' },
+            { text: 'Houseblock 2', value: 'H 2' },
+          ],
           timeSlot: 'PM',
           type: undefined,
           types: [{ text: 'Video link booking', value: 'VLB' }],
