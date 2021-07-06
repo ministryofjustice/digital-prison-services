@@ -1,16 +1,9 @@
 .feedback-banner {
   background: $govuk-brand-colour;
-  padding: govuk-spacing(4) govuk-spacing(6);
+  padding: govuk-spacing(4);
 
-  &__button {
-    @extend .govuk-button;
-    background: transparent;
-    box-shadow: 0 2px 0 #fff;
-    border: 1px #fff solid;
-    margin: 0;
-
-    &:hover {
-      background: rgba(11,12,12,0.2);
-    }
-  }
+  // Only neccessary because of the React template layout
+  width: 100%;
+  max-width: 1170px;
+  margin: 0 auto;
 }

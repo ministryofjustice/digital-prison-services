@@ -37,6 +37,7 @@ import {
   setTermsVisibility,
   setUserDetails,
 } from './redux/actions/index'
+import FeedbackBanner from './Components/FeedbackBanner/FeedbackBanner'
 
 const axios = require('axios')
 
@@ -334,6 +335,7 @@ class App extends React.Component {
                   />
                   {shouldShowTerms && <Terms close={() => this.hideTermsAndConditions()} />}
                   {innerContent}
+                  <FeedbackBanner />
                   <FooterContainer supportUrl={config.supportUrl} prisonStaffHubUrl="/" />
                 </ScrollToTop>
               </div>
