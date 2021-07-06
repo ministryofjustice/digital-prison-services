@@ -277,7 +277,7 @@ describe('View appointments', () => {
             hearingType: 'MAIN',
             createdByUsername: 'username1',
             madeByTheCourt: true,
-            videoLinkBookingId: 1,
+            mainAppointmentId: 3,
           },
           {
             id: 2,
@@ -287,7 +287,7 @@ describe('View appointments', () => {
             hearingType: 'POST',
             createdByUsername: 'username1',
             madeByTheCourt: true,
-            videoLinkBookingId: 1,
+            mainAppointmentId: 3,
           },
           {
             id: 3,
@@ -297,7 +297,7 @@ describe('View appointments', () => {
             hearingType: 'MAIN',
             createdByUsername: 'username1',
             madeByTheCourt: true,
-            videoLinkBookingId: 2,
+            mainAppointmentId: 6,
           },
         ],
       })
@@ -418,6 +418,11 @@ describe('View appointments', () => {
           formattedDate: '2 January 2020',
           locationId: undefined,
           locations: [{ text: 'VCC Room 1', value: '1' }],
+          residentialLocation: 'H 1',
+          residentialLocationOptions: [
+            { text: 'Houseblock 1', value: 'H 1' },
+            { text: 'Houseblock 2', value: 'H 2' },
+          ],
           timeSlot: 'PM',
           type: undefined,
           types: [{ text: 'Video link booking', value: 'VLB' }],
