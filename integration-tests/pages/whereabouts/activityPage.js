@@ -1,6 +1,6 @@
 const page = require('../page')
 
-const activityPage = title =>
+const activityPage = (title) =>
   page(title, {
     getActivityTotals: () => cy.get('[name=total-number]'),
     getAllResultRows: () => cy.get('table.row-gutters'),
@@ -14,24 +14,21 @@ const activityPage = title =>
     datePicker: () => cy.get('[name=search-date]'),
     datePickerText: () => cy.get('[name=search-date]').text(),
     datePickerTopBar: () => cy.get('.rdtSwitch'),
-    getPickerYearSelector: year => cy.get(`.rdtYear:contains(${year})`),
-    getPickerMonthSelector: month => cy.get(`.rdtMonth:contains(${month})`),
-    getPickerDaySelector: day =>
-      cy
-        .get(`.rdtDay[data-value="1"]`)
-        .not('.rdtNew')
-        .not('.rdtOld'),
+    getPickerYearSelector: (year) => cy.get(`.rdtYear:contains(${year})`),
+    getPickerMonthSelector: (month) => cy.get(`.rdtMonth:contains(${month})`),
+    getPickerDaySelector: () => cy.get(`.rdtDay[data-value="1"]`).not('.rdtNew').not('.rdtOld'),
     getAttendedValues: () => cy.get('td[data-qa="pay-option"] input'),
     getAbsenceReasons: () => cy.get('td[data-qa="other-option"]'),
     getAbsenceReasonsInput: () => cy.get('td[data-qa="other-option"] input'),
     fillOutAbsentReason: () => {
-      cy.get('.ReactModalPortal form').within($form => {
+      cy.get('.ReactModalPortal form').within(() => {
         cy.get('input[name="pay"]').check('yes')
         cy.get('select[name="absentReason"]').select('AcceptableAbsence')
         cy.get('textarea[name="comments"]').type('test')
         cy.get('button[name="confirm"]').click()
       })
     },
+    feedbackBanner: () => cy.get('[data-test="feedback-banner"]'),
   })
 
 export default {

@@ -1,5 +1,11 @@
 {% from "govuk/components/footer/macro.njk" import govukFooter %}
 
+<div style="background: {{ feedbackBannerBackground or '#fff' }}">
+  <div class="govuk-width-container">
+    {% include "../components/feedbackBanner/feedbackBanner.njk" %}
+  </div>
+</div>
+
 {{ 
   govukFooter({
     meta: {
