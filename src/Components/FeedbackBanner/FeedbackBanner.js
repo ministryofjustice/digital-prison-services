@@ -8,7 +8,7 @@ const FeedbackBanner = () => {
     <div className="feedback-banner" data-test="feedback-banner">
       <a
         href={`https://eu.surveymonkey.com/r/GYB8Y9Q?source=${location.pathname}`}
-        className="govuk-link govuk-link--inverse"
+        className="govuk-link govuk-link--inverse govuk-!-font-size-16"
         target="_blank"
         rel="noopener noreferrer"
       >
