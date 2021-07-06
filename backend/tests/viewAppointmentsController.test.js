@@ -277,7 +277,7 @@ describe('View appointments', () => {
             hearingType: 'MAIN',
             createdByUsername: 'username1',
             madeByTheCourt: true,
-            videoLinkBookingId: 1,
+            mainAppointmentId: 3,
           },
           {
             id: 2,
@@ -287,7 +287,7 @@ describe('View appointments', () => {
             hearingType: 'POST',
             createdByUsername: 'username1',
             madeByTheCourt: true,
-            videoLinkBookingId: 1,
+            mainAppointmentId: 3,
           },
           {
             id: 3,
@@ -297,7 +297,7 @@ describe('View appointments', () => {
             hearingType: 'MAIN',
             createdByUsername: 'username1',
             madeByTheCourt: true,
-            videoLinkBookingId: 2,
+            mainAppointmentId: 3,
           },
         ],
       })
@@ -339,7 +339,7 @@ describe('View appointments', () => {
               { text: 'Medical - Other' },
               { html: 'HEALTH CARE' },
               {
-                html: `<a href="/appointment-details/1" class="govuk-link" aria-label="View details of Offender One's appointment">View details </a>`,
+                html: `<a href="/appointment-details/3" class="govuk-link" aria-label="View details of Offender One's appointment">View details </a>`,
                 classes: 'govuk-!-display-none-print',
               },
             ],
@@ -353,7 +353,7 @@ describe('View appointments', () => {
               { text: 'Gym - Exercise' },
               { html: 'GYM' },
               {
-                html: `<a href="/appointment-details/2" class="govuk-link" aria-label="View details of Offender Two's appointment">View details </a>`,
+                html: `<a href="/appointment-details/3" class="govuk-link" aria-label="View details of Offender Two's appointment">View details </a>`,
                 classes: 'govuk-!-display-none-print',
               },
             ],
