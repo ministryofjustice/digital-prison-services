@@ -26,23 +26,23 @@ describe('Activity list controller', () => {
     res.status = jest.fn()
   })
   describe('Error handling', () => {
-    it('should NOT log timeout error with ECONNRESET code', async () => {
+    it('should log timeout error with ECONNRESET code', async () => {
       activityListService.getActivityList.mockRejectedValue(makeResetError())
 
       await getActivityListController(req, res)
 
-      expect(logError.mock.calls.length).toBe(0)
-      expect(res.json.mock.calls.length).toBe(0)
+      expect(logError.mock.calls.length).toBe(1)
+      expect(res.json.mock.calls.length).toBe(1)
       expect(res.end).toHaveBeenCalled()
     })
 
-    it('should NOT log timeout error with timeout in stack', async () => {
+    it('should log timeout error with timeout in stack', async () => {
       activityListService.getActivityList.mockRejectedValue(makeResetErrorWithStack())
 
       await getActivityListController(req, res)
 
-      expect(logError.mock.calls.length).toBe(0)
-      expect(res.json.mock.calls.length).toBe(0)
+      expect(logError.mock.calls.length).toBe(1)
+      expect(res.json.mock.calls.length).toBe(1)
       expect(res.end).toHaveBeenCalled()
     })
 
