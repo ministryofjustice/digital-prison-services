@@ -46,9 +46,10 @@ const setup = ({ prisonApi, whereaboutsApi, oauthApi, caseNotesApi }) => {
   router.use(async (req, res, next) => {
     res.locals = {
       ...res.locals,
-      currentUrlPath: req.originalUrl,
-      prisonerSearchUrl: req.session.prisonerSearchUrl,
       authUrl: config.apis.oauth2.url,
+      currentUrlPath: req.originalUrl,
+      hostname: req.hostname,
+      prisonerSearchUrl: req.session.prisonerSearchUrl,
     }
     next()
   })
