@@ -174,6 +174,18 @@ describe('prisoner profile quick look', () => {
         )
       })
 
+      it('should not call prisoner-search-service if there is a release date', async () => {
+        prisonApi.getPrisonerDetails.mockResolvedValue([
+          { imprisonmentStatus: 'LIFE', imprisonmentStatusDesc: 'Serving Life Imprisonment' },
+        ])
+        prisonApi.getPrisonerSentenceDetails.mockResolvedValue({ sentenceDetail: { releaseDate: '2099-12-12' } })
+
+        await controller(req, res)
+
+        expect(systemOauthClient.getClientCredentialsTokens).not.toHaveBeenCalled()
+        expect(offenderSearchApi.getPrisonersDetails).not.toHaveBeenCalled()
+      })
+
       it('should show Life Imprisonment alongside the release date if no release date is set and the offender has a life term', async () => {
         prisonApi.getPrisonerDetails.mockResolvedValue([
           { imprisonmentStatus: 'LIFE', imprisonmentStatusDesc: 'Serving Life Imprisonment' },
@@ -183,6 +195,7 @@ describe('prisoner profile quick look', () => {
 
         await controller(req, res)
 
+        expect(systemOauthClient.getClientCredentialsTokens).toHaveBeenCalledTimes(1)
         expect(res.render).toHaveBeenCalledWith(
           'prisonerProfile/prisonerQuickLook/prisonerQuickLook.njk',
           expect.objectContaining({
@@ -213,6 +226,7 @@ describe('prisoner profile quick look', () => {
 
         await controller(req, res)
 
+        expect(systemOauthClient.getClientCredentialsTokens).toHaveBeenCalledTimes(1)
         expect(res.render).toHaveBeenCalledWith(
           'prisonerProfile/prisonerQuickLook/prisonerQuickLook.njk',
           expect.objectContaining({
