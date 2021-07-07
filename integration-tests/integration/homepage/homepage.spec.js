@@ -25,7 +25,7 @@ context('Homepage', () => {
       page
         .manageAccountLink()
         .should('have.attr', 'href')
-        .then(href => {
+        .then((href) => {
           expect(href).to.equal('http://localhost:9191/auth/account-details')
         })
 
@@ -57,7 +57,7 @@ context('Homepage', () => {
         .changeLocationLink()
         .should('be.visible')
         .should('have.attr', 'href')
-        .then(href => {
+        .then((href) => {
           expect(href).to.equal('/change-caseload')
         })
     })
@@ -183,21 +183,23 @@ context('Homepage', () => {
 
       page.soc().should('exist')
     })
+  })
 
-    it('should show covid unit task', () => {
-      cy.task('stubUserMeRoles', [{ roleCode: 'PRISON' }])
-
-      const page = homepagePage.goTo()
-
-      page.covidUnits().should('exist')
-    })
-
-    it('should show bulk appointments task', () => {
-      cy.task('stubUserMeRoles', [{ roleCode: 'BULK_APPOINTMENTS' }])
+  describe('Footer', () => {
+    it('should display the feedback banner with the correct href', () => {
+      cy.task('stubLogin', { username: 'ITAG_USER', caseload: 'MDI' })
+      cy.login()
 
       const page = homepagePage.goTo()
 
-      page.bulkAppointments().should('exist')
+      page
+        .feedbackBanner()
+        .find('a')
+        .should('contain', 'Give feedback on this service')
+        .should('have.attr', 'href')
+        .then((href) => {
+          expect(href).to.equal('https://eu.surveymonkey.com/r/GYB8Y9Q?source=localhost/')
+        })
     })
   })
 })

@@ -1,5 +1,5 @@
 const moment = require('moment')
-const { DATE_TIME_FORMAT_SPEC, buildDateTime } = require('../../../src/dateHelpers')
+const { DATE_TIME_FORMAT_SPEC, buildDateTime } = require('../../../common/dateHelpers')
 const { capitalize } = require('../../utils')
 const { repeatTypes, getValidationMessages, endRecurringEndingDate } = require('../../shared/appointmentConstants')
 

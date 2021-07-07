@@ -38,10 +38,10 @@
   <h1 class="govuk-heading-l">{{title}}</h1>
   {{ printLink(align = "right") }}
 
-  <div class="govuk-!-padding-3 govuk-!-margin-bottom-5 form-background">
+  <div class="govuk-!-padding-3 govuk-!-margin-bottom-5 form-background govuk-!-display-none-print">
     <h2 class="govuk-heading-m">View by</h2>
 
-    <form class="horizontal-form govuk-!-display-none-print">
+    <form class="horizontal-form">
       {{ datePicker({
         id: 'date',
         label: 'Date',
@@ -146,7 +146,8 @@
           }
         },
          {
-          text: ""
+          text: "",
+          classes: "govuk-!-display-none-print"
         }
       ],
       rows: appointmentRows,
@@ -155,8 +156,6 @@
   {% else %}
     <p class="govuk-body" data-qa="no-results-message">There are no appointments for what you have selected.</p>
   {% endif %}
-
-  {{ printLink() }}
 {% endblock %}
 
 {% block bodyEnd %}

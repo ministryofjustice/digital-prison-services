@@ -1,6 +1,6 @@
 const moment = require('moment')
 const { properCaseName, formatName } = require('../../utils')
-const { buildDateTime, DATE_TIME_FORMAT_SPEC, DAY_MONTH_YEAR } = require('../../../src/dateHelpers')
+const { buildDateTime, DATE_TIME_FORMAT_SPEC, DAY_MONTH_YEAR } = require('../../../common/dateHelpers')
 const { repeatTypes, endRecurringEndingDate, validateComments } = require('../../shared/appointmentConstants')
 
 const validateDate = (date, errors) => {

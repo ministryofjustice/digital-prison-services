@@ -20,6 +20,7 @@ import ModalContainer from './Components/ModalContainer'
 import { userType } from './types'
 import IncentiveLevelSlipContainer from './IncentiveLevelSlipContainer'
 import PrisonersUnaccountedForContainer from './PrisonersUnaccountedFor/PrisonersUnaccountedForContainer'
+import FeedbackBanner from './Components/FeedbackBanner/FeedbackBanner'
 
 import {
   getAbsentReasons,
@@ -334,7 +335,8 @@ class App extends React.Component {
                   />
                   {shouldShowTerms && <Terms close={() => this.hideTermsAndConditions()} />}
                   {innerContent}
-                  <FooterContainer supportUrl={`${config.supportUrl}feedback-and-support`} prisonStaffHubUrl="/" />
+                  <FeedbackBanner />
+                  <FooterContainer supportUrl={config.supportUrl} prisonStaffHubUrl="/" />
                 </ScrollToTop>
               </div>
             )}

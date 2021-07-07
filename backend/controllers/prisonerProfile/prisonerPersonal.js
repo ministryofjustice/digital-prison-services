@@ -38,7 +38,7 @@ module.exports =
       adjustments,
       agencies,
       allocationManager,
-      learnerProfiles,
+      learningDifficulty,
     ] = await Promise.all(
       [
         prisonerProfileService.getPrisonerProfileData(res.locals, offenderNo),
@@ -52,7 +52,7 @@ module.exports =
         prisonApi.getReasonableAdjustments(res.locals, bookingId, treatmentCodes),
         prisonApi.getAgencies(res.locals),
         allocationManagerApi.getPomByOffenderNo(res.locals, offenderNo),
-        esweService.getLearnerProfiles(offenderNo),
+        esweService.getLatestLearningDifficulty(offenderNo),
       ].map((apiCall) => logErrorAndContinue(apiCall))
     )
 
@@ -128,7 +128,7 @@ module.exports =
         personal: nextOfKinsWithContact,
       }),
       professionalContacts,
-      learnerProfiles,
+      learningDifficulty,
       addresses: addressesViewModel({ addresses }),
       careNeedsAndAdjustments: careNeedsViewModel({
         personalCareNeeds: careNeeds && careNeeds.personalCareNeeds,

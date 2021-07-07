@@ -10,6 +10,7 @@ module.exports = (app) => {
     {
       autoescape: true,
       express: app,
+      noCache: !config.app.production,
     }
   )
 

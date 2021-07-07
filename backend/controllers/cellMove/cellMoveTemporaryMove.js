@@ -1,4 +1,4 @@
-const { putLastNameFirst, formatLocation } = require('../../utils')
+const { putLastNameFirst, formatLocation, formatName } = require('../../utils')
 
 module.exports =
   ({ prisonApi }) =>
@@ -42,6 +42,7 @@ module.exports =
         ...prisoner,
         assignedLivingUnitDesc: formatLocation(prisoner.assignedLivingUnitDesc),
         name: putLastNameFirst(prisoner.firstName, prisoner.lastName),
+        formattedName: formatName(prisoner.firstName, prisoner.lastName),
         cellHistoryUrl: `/prisoner/${prisoner.offenderNo}/cell-history`,
         cellMoveUrl: `/prisoner/${prisoner.offenderNo}/cell-move/confirm-cell-move?cellId=C-SWAP`,
       }))

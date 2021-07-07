@@ -21,7 +21,7 @@ const caseNotesApiResponse = [
         sequence: 1,
         creationDateTime: '2018-12-01T13:45:00',
         authorUserName: 'USER1',
-        authorName: 'Mickey Mouse',
+        authorName: 'Mouse, Mickey',
         additionalNoteText: 'Some Additional Text',
         authorUserId: 12345,
       },
@@ -176,7 +176,7 @@ describe('Case notes controller', () => {
             amendLink: undefined,
             amendments: [
               {
-                authorName: 'John Smith',
+                authorName: 'Mickey Mouse',
                 date: '1 December 2018',
                 day: 'Saturday',
                 deleteLink: false,

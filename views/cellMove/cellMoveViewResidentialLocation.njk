@@ -71,16 +71,16 @@
       {% set rows = [] %}
       {% for prisoner in results %}
         {% set prisonerImageHtml %}
-          <img src="/app/images/{{prisoner.offenderNo}}/data" alt="Image of {{prisoner.name}}" class="prisoner-search__results-list__image" />
+          <img src="/app/images/{{prisoner.offenderNo}}/data" alt="Photograph of {{ prisoner.formattedName }}" class="prisoner-search__results-list__image" />
         {% endset -%}
         {% set prisonerLinkHtml %}
-          <a href="/prisoner/{{prisoner.offenderNo}}" class="govuk-link">{{prisoner.name}}</a>
+          <a href="/prisoner/{{prisoner.offenderNo}}" class="govuk-link">{{ prisoner.name }}</a>
         {% endset -%}
         {% set cellHistoryLinkHtml %}
-          <a href="{{prisoner.cellHistoryUrl}}" class="govuk-link" data-test="prisoner-cell-history-link">View cell history</a>
+          <a href="{{prisoner.cellHistoryUrl}}" class="govuk-link" data-test="prisoner-cell-history-link">View cell history<span class="govuk-visually-hidden"> for {{ prisoner.formattedName }}</span></a>
         {% endset -%}
         {% set cellSearchLinkHtml %}
-          <a href="{{prisoner.cellSearchUrl}}" class="govuk-link" data-test="prisoner-cell-search-link">Change cell</a>
+          <a href="{{prisoner.cellSearchUrl}}" class="govuk-link" data-test="prisoner-cell-search-link"><span class="govuk-visually-hidden">{{ prisoner.formattedName }} - </span>Change cell</a>
         {% endset -%}
         {% set rows = (rows.push([
           { html: prisonerImageHtml },

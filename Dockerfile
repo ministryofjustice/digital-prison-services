@@ -48,20 +48,7 @@ COPY --from=builder --chown=appuser:appgroup \
         /app/node_modules ./node_modules
 
 COPY --from=builder --chown=appuser:appgroup \
-        /app/views ./views
-
-COPY --from=builder --chown=appuser:appgroup \
-        /app/backend/. ./backend/
-
-COPY --from=builder --chown=appuser:appgroup \
-        /app/build/. ./build/
-
-COPY --from=builder --chown=appuser:appgroup \
-        /app/src/dateHelpers.js ./src/dateHelpers.js
-
-COPY --from=builder --chown=appuser:appgroup \
-        /app/src/BulkAppointments/RecurringAppointments.js ./src/BulkAppointments/RecurringAppointments.js
-
+        /app/dist ./dist
 
 ENV PORT=3000
 ENV DISABLE_WEBPACK=true

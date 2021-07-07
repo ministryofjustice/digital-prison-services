@@ -1,4 +1,4 @@
-const { buildDateTime, DATE_TIME_FORMAT_SPEC } = require('../../src/dateHelpers')
+const { buildDateTime, DATE_TIME_FORMAT_SPEC } = require('../../common/dateHelpers')
 
 describe('Date helpers', () => {
   it('should return a valid date time with 0 as hours and minutes', () => {

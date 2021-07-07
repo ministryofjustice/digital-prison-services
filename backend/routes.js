@@ -1,3 +1,5 @@
+import whereaboutsHomepage from './controllers/whereabouts/whereaboutsHomepage'
+
 const express = require('express')
 const { logError } = require('./logError')
 
@@ -20,7 +22,7 @@ const bulkAppointmentsClashesRouter = require('./routes/appointments/bulkAppoint
 const changeCaseloadRouter = require('./routes/changeCaseloadRouter')
 const addAppointmentRouter = require('./routes/appointments/addAppointmentRouter')
 const prepostAppointmentRouter = require('./routes/appointments/prepostAppointmentsRouter')
-const viewAppointmentsRouter = require('./routes/appointments/viewAppointmentsRouter')
+const viewAppointments = require('./controllers/appointments/viewAppointments')
 const confirmAppointmentRouter = require('./routes/appointments/confirmAppointmentRouter')
 const prisonerProfileRouter = require('./routes/prisonerProfileRouter')
 const retentionReasonsRouter = require('./routes/retentionReasonsRouter')
@@ -47,7 +49,6 @@ const systemOauthClient = require('./api/systemOauthClient')
 const { notifyClient } = require('./shared/notifyClient')
 
 const { raiseAnalyticsEvent } = require('./raiseAnalyticsEvent')
-const whereaboutsHomepageController = require('./controllers/whereabouts/whereaboutsHomepage')
 const backToStart = require('./controllers/backToStart')
 const permit = require('./controllers/permit')
 const appointmentDetailsServiceFactory = require('./services/appointmentDetailsService')
@@ -82,7 +83,7 @@ const setup = ({
     next()
   })
 
-  router.get('/manage-prisoner-whereabouts', whereaboutsHomepageController())
+  router.use('/manage-prisoner-whereabouts', whereaboutsHomepage({ oauthApi, prisonApi }))
 
   router.post('/notification/dismiss', notificationDismiss({ notificationCookie }))
   router.use(
@@ -170,7 +171,7 @@ const setup = ({
     prepostAppointmentRouter({ prisonApi, logError, oauthApi, whereaboutsApi, notifyClient, raiseAnalyticsEvent })
   )
 
-  router.use('/view-all-appointments', viewAppointmentsRouter({ prisonApi, whereaboutsApi, oauthApi, logError }))
+  router.use('/view-all-appointments', viewAppointments({ prisonApi, whereaboutsApi, oauthApi, logError }))
 
   router.use('/offenders/:offenderNo/confirm-appointment', confirmAppointmentRouter({ prisonApi, logError }))
 

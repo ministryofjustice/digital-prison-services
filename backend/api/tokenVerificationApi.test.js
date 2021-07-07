@@ -1,6 +1,6 @@
-const nock = require('nock')
+import clientFactory from './oauthEnabledClient'
 
-const clientFactory = require('./oauthEnabledClient')
+const nock = require('nock')
 const { tokenVerificationApiFactory } = require('./tokenVerificationApi')
 const config = require('../config')
 

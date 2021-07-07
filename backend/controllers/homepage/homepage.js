@@ -1,10 +1,12 @@
+import { hasAnyRole } from '../../shared/permissions'
+
 const {
   applications: { licences, manageaccounts, moic, pecs },
   apis: { omic, useOfForce, pathfinder, categorisation, soc, pinPhones },
 } = require('../../config')
 
 const getTasks = ({ activeCaseLoadId, locations, staffId, whereaboutsConfig, keyworkerPrisonStatus, roleCodes }) => {
-  const userHasRoles = (roles) => roles.find((role) => roleCodes.includes(role))
+  const userHasRoles = (roles) => hasAnyRole(roleCodes, roles)
 
   return [
     {
@@ -24,7 +26,7 @@ const getTasks = ({ activeCaseLoadId, locations, staffId, whereaboutsConfig, key
     {
       id: 'manage-prisoner-whereabouts',
       heading: 'Manage prisoner whereabouts',
-      description: 'View unlock lists and manage attendance.',
+      description: 'View unlock lists, all appointments and COVID units, manage attendance and add bulk appointments.',
       href: '/manage-prisoner-whereabouts',
       roles: null,
       enabled: () => whereaboutsConfig?.enabled,
@@ -35,20 +37,6 @@ const getTasks = ({ activeCaseLoadId, locations, staffId, whereaboutsConfig, key
       description: 'Complete a cell move and view the 7 day history of all cell moves completed in your establishment.',
       href: '/change-someones-cell',
       enabled: () => userHasRoles(['CELL_MOVE']),
-    },
-    {
-      id: 'bulk-appointments',
-      heading: 'Add bulk appointments',
-      description: 'Upload a spreadsheet to add appointments for multiple people.',
-      href: '/bulk-appointments/need-to-upload-file',
-      enabled: () => userHasRoles(['BULK_APPOINTMENTS']),
-    },
-    {
-      id: 'covid-units',
-      heading: 'View COVID units',
-      description: 'View who is in each COVID unit in your establishment.',
-      href: '/current-covid-units',
-      enabled: () => userHasRoles(['PRISON']),
     },
     {
       id: 'use-of-force',
@@ -175,7 +163,7 @@ module.exports =
         prisonApi.userLocations(res.locals),
         prisonApi.getStaffRoles(res.locals, staffId, activeCaseLoadId),
         oauthApi.userRoles(res.locals),
-        whereaboutsApi.getWhereaboutsConfig(res.locals, activeCaseLoadId),
+        whereaboutsApi.getWhereaboutsConfig(res.locals, activeCaseLoadId).catch(() => null),
         keyworkerApi.getPrisonMigrationStatus(res.locals, activeCaseLoadId),
       ])
 

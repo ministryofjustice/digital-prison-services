@@ -1,4 +1,5 @@
 $govuk-page-width: 1170px;
+$govuk-font-family-print: 'GDS Transport';
 @import 'node_modules/govuk-frontend/govuk/all';
 @import 'node_modules/@ministryofjustice/frontend/moj/components/sortable-table/sortable-table';
 @import 'node_modules/@ministryofjustice/frontend/moj/all';
@@ -29,7 +30,8 @@ $govuk-page-width: 1170px;
 @import 'views/components/timePicker/timePicker';
 @import 'views/components/movementSlip/movementSlip';
 @import 'views/components/scheduledEvents/scheduledEvents';
-@import 'views/components/notificationBar/notificationBar.scss';
+@import 'views/components/notificationBar/notificationBar';
+@import 'views/components/feedbackBanner/feedbackBanner';
 
 @import 'govuk-overrides';
 @import 'moj-overrides';

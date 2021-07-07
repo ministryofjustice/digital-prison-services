@@ -1,15 +1,14 @@
-const path = require('path')
 const asyncMiddleware = require('../middleware/asyncHandler')
 const log = require('../log')
 
-const placeHolder = path.join(__dirname, '../assets/images/image-missing.jpg')
+const placeHolderImagePath = '/images/image-missing.jpg'
 
 const imageFactory = (prisonApi) => {
   const image = asyncMiddleware(async (req, res) => {
     const { imageId } = req.params
 
     if (!imageId) {
-      res.sendFile(placeHolder)
+      res.redirect(placeHolderImagePath)
     } else {
       prisonApi
         .getImage(res.locals, imageId)
@@ -24,7 +23,7 @@ const imageFactory = (prisonApi) => {
           if (error.status !== 404) {
             log.error(error)
           }
-          res.sendFile(placeHolder)
+          res.redirect(placeHolderImagePath)
         })
     }
   })
@@ -34,7 +33,7 @@ const imageFactory = (prisonApi) => {
     const { fullSizeImage } = req.query
 
     if (!offenderNo || offenderNo === 'placeholder') {
-      res.sendFile(placeHolder)
+      res.redirect(placeHolderImagePath)
     } else {
       prisonApi
         .getPrisonerImage(res.locals, offenderNo, fullSizeImage)
@@ -49,7 +48,7 @@ const imageFactory = (prisonApi) => {
           if (error.status !== 404) {
             log.error(error)
           }
-          res.sendFile(placeHolder)
+          res.redirect(placeHolderImagePath)
         })
     }
   })

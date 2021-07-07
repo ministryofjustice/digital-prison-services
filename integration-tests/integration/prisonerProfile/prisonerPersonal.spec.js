@@ -170,13 +170,11 @@ context('Prisoner personal', () => {
 
     context('Personal section', () => {
       it('Should show correct labels and values', () => {
-        cy.get('[data-test="personal-summary"]').then($summary => {
+        cy.get('[data-test="personal-summary"]').then(($summary) => {
           cy.get($summary)
             .find('dt')
-            .then($summaryLabels => {
-              cy.get($summaryLabels)
-                .its('length')
-                .should('eq', 15)
+            .then(($summaryLabels) => {
+              cy.get($summaryLabels).its('length').should('eq', 15)
               expect($summaryLabels.get(0).innerText).to.contain('Age')
               expect($summaryLabels.get(1).innerText).to.contain('Date of Birth')
               expect($summaryLabels.get(2).innerText).to.contain('Place of Birth')
@@ -196,10 +194,8 @@ context('Prisoner personal', () => {
 
           cy.get($summary)
             .find('dd')
-            .then($summaryValues => {
-              cy.get($summaryValues)
-                .its('length')
-                .should('eq', 15)
+            .then(($summaryValues) => {
+              cy.get($summaryValues).its('length').should('eq', 15)
               expect($summaryValues.get(0).innerText).to.contain(notEnteredText)
               expect($summaryValues.get(1).innerText).to.contain(notEnteredText)
               expect($summaryValues.get(2).innerText).to.contain(notEnteredText)
@@ -222,13 +218,11 @@ context('Prisoner personal', () => {
 
     context('Physical characteristics section', () => {
       it('Should show correct labels and values', () => {
-        cy.get('[data-test="physical-characteristics-summary"]').then($summary => {
+        cy.get('[data-test="physical-characteristics-summary"]').then(($summary) => {
           cy.get($summary)
             .find('dt')
-            .then($summaryLabels => {
-              cy.get($summaryLabels)
-                .its('length')
-                .should('eq', 9)
+            .then(($summaryLabels) => {
+              cy.get($summaryLabels).its('length').should('eq', 9)
               expect($summaryLabels.get(0).innerText).to.contain('Height')
               expect($summaryLabels.get(1).innerText).to.contain('Weight')
               expect($summaryLabels.get(2).innerText).to.contain('Hair colour')
@@ -242,10 +236,8 @@ context('Prisoner personal', () => {
 
           cy.get($summary)
             .find('dd')
-            .then($summaryValues => {
-              cy.get($summaryValues)
-                .its('length')
-                .should('eq', 9)
+            .then(($summaryValues) => {
+              cy.get($summaryValues).its('length').should('eq', 9)
               expect($summaryValues.get(0).innerText).to.contain(notEnteredText)
               expect($summaryValues.get(1).innerText).to.contain(notEnteredText)
               expect($summaryValues.get(2).innerText).to.contain(notEnteredText)
@@ -262,7 +254,7 @@ context('Prisoner personal', () => {
 
     context('Distinguishing marks section', () => {
       it('Should show correct missing content text', () => {
-        cy.get('[data-test="distinguishing-marks-summary"]').then($section => {
+        cy.get('[data-test="distinguishing-marks-summary"]').then(($section) => {
           expect($section).to.contain.text('None')
         })
       })
@@ -270,7 +262,7 @@ context('Prisoner personal', () => {
 
     context('Personal care needs section', () => {
       it('Should show correct missing content text', () => {
-        cy.get('[data-test="care-needs-summary"]').then($section => {
+        cy.get('[data-test="care-needs-summary"]').then(($section) => {
           expect($section).to.contain.text('None')
         })
       })
@@ -278,22 +270,23 @@ context('Prisoner personal', () => {
 
     context('Neurodiversity summary section', () => {
       it('Should display a description of the section', () => {
-        cy.get('[data-test="neurodiversity-summary"]').then($section => {
-          expect($section).to.contain.text('This is self-declared by the prisoner')
-          expect($section).to.contain.text('Also known as learning difficulties and disabilities (LDD).')
+        cy.get('[data-test="neurodiversity-summary"]').then(($section) => {
+          expect($section).to.contain.text('This is self-declared by the prisoner.')
+          expect($section).to.contain.text(
+            'Neurodiversity is also known as learning difficulties and disabilities (LDD).'
+          )
         })
       })
       it('Should display learning difficulties', () => {
-        cy.get('[data-test="neurodiversity-summary"]').then($section => {
-          expect($section).to.contain.text('Dyslexia')
-          expect($section).to.contain.text('Autistic spectrum disorder')
+        cy.get('[data-test="neurodiversity-summary"]').then(($section) => {
+          expect($section).to.contain.text('No data found')
         })
       })
     })
 
     context('Languages section', () => {
       it('Should show correct missing content text', () => {
-        cy.get('[data-test="languages-summary"]').then($section => {
+        cy.get('[data-test="languages-summary"]').then(($section) => {
           expect($section).to.contain.text('No language entered')
         })
       })
@@ -301,7 +294,7 @@ context('Prisoner personal', () => {
 
     context('Aliases section', () => {
       it('Should show correct missing content text', () => {
-        cy.get('[data-test="aliases-summary"]').then($section => {
+        cy.get('[data-test="aliases-summary"]').then(($section) => {
           expect($section).to.contain.text('None')
         })
       })
@@ -309,22 +302,18 @@ context('Prisoner personal', () => {
 
     context('Identifiers section', () => {
       it('Should show correct labels and values', () => {
-        cy.get('[data-test="identifiers-summary"]').then($summary => {
+        cy.get('[data-test="identifiers-summary"]').then(($summary) => {
           cy.get($summary)
             .find('dt')
-            .then($summaryLabels => {
-              cy.get($summaryLabels)
-                .its('length')
-                .should('eq', 1)
+            .then(($summaryLabels) => {
+              cy.get($summaryLabels).its('length').should('eq', 1)
               expect($summaryLabels.get(0).innerText).to.contain('PNC number')
             })
 
           cy.get($summary)
             .find('dd')
-            .then($summaryValues => {
-              cy.get($summaryValues)
-                .its('length')
-                .should('eq', 1)
+            .then(($summaryValues) => {
+              cy.get($summaryValues).its('length').should('eq', 1)
               expect($summaryValues.get(0).innerText).to.contain(notEnteredText)
             })
         })
@@ -333,7 +322,7 @@ context('Prisoner personal', () => {
 
     context("Prisoner's addresses section", () => {
       it('Should show correct missing content text', () => {
-        cy.get('[data-test="addresses-summary"]').then($section => {
+        cy.get('[data-test="addresses-summary"]').then(($section) => {
           expect($section).to.contain.text('No active, primary address entered')
         })
       })
@@ -342,24 +331,20 @@ context('Prisoner personal', () => {
     context('Personal contacts section', () => {
       context('When there is no data at all', () => {
         it('Should show correct missing content text', () => {
-          cy.get('[data-test="personal-contacts-summary"]').then($section => {
+          cy.get('[data-test="personal-contacts-summary"]').then(($section) => {
             cy.get($section)
               .find('p')
-              .then($text => {
-                cy.get($text)
-                  .its('length')
-                  .should('eq', 1)
+              .then(($text) => {
+                cy.get($text).its('length').should('eq', 1)
                 expect($text.get(0).innerText).to.contain('None')
               })
           })
 
-          cy.get('[data-test="professional-contacts-summary"]').then($section => {
+          cy.get('[data-test="professional-contacts-summary"]').then(($section) => {
             cy.get($section)
               .find('p')
-              .then($text => {
-                cy.get($text)
-                  .its('length')
-                  .should('eq', 1)
+              .then(($text) => {
+                cy.get($text).its('length').should('eq', 1)
                 expect($text.get(0).innerText).to.contain('None')
               })
           })
@@ -383,32 +368,26 @@ context('Prisoner personal', () => {
         })
 
         it('Should show correct missing value text', () => {
-          cy.get('[data-test="personal-contacts-summary"]').then($section => {
+          cy.get('[data-test="personal-contacts-summary"]').then(($section) => {
             cy.get($section)
               .find('h3')
-              .then($headings => {
-                cy.get($headings)
-                  .its('length')
-                  .should('eq', 1)
+              .then(($headings) => {
+                cy.get($headings).its('length').should('eq', 1)
                 expect($headings.get(0).innerText).to.contain('John Smith')
               })
 
             cy.get($section)
               .find('p')
-              .then($text => {
-                cy.get($text)
-                  .its('length')
-                  .should('eq', 2)
+              .then(($text) => {
+                cy.get($text).its('length').should('eq', 2)
                 expect($text.get(0).innerText).to.contain('Next of kin')
                 expect($text.get(1).innerText).to.contain('Emergency contact')
               })
 
             cy.get($section)
               .find('dt')
-              .then($summaryLabels => {
-                cy.get($summaryLabels)
-                  .its('length')
-                  .should('eq', 6)
+              .then(($summaryLabels) => {
+                cy.get($summaryLabels).its('length').should('eq', 6)
                 expect($summaryLabels.get(0).innerText).to.contain('Relationship')
                 expect($summaryLabels.get(1).innerText).to.contain('Address')
                 expect($summaryLabels.get(2).innerText).to.contain('Town')
@@ -419,10 +398,8 @@ context('Prisoner personal', () => {
 
             cy.get($section)
               .find('dd')
-              .then($summaryValues => {
-                cy.get($summaryValues)
-                  .its('length')
-                  .should('eq', 6)
+              .then(($summaryValues) => {
+                cy.get($summaryValues).its('length').should('eq', 6)
                 expect($summaryValues.get(0).innerText).to.contain('Cousin')
                 expect($summaryValues.get(1).innerText).to.contain(notEnteredText)
                 expect($summaryValues.get(2).innerText).to.contain(notEnteredText)
@@ -438,13 +415,11 @@ context('Prisoner personal', () => {
     context('Professional contacts section', () => {
       context('When there is no data at all', () => {
         it('Should show correct missing content text', () => {
-          cy.get('[data-test="professional-contacts-summary"]').then($section => {
+          cy.get('[data-test="professional-contacts-summary"]').then(($section) => {
             cy.get($section)
               .find('p')
-              .then($text => {
-                cy.get($text)
-                  .its('length')
-                  .should('eq', 1)
+              .then(($text) => {
+                cy.get($text).its('length').should('eq', 1)
                 expect($text.get(0).innerText).to.contain('None')
               })
           })
@@ -468,13 +443,11 @@ context('Prisoner personal', () => {
         })
 
         it('Should show correct missing value text', () => {
-          cy.get('[data-test="professional-contacts-summary"]').then($section => {
+          cy.get('[data-test="professional-contacts-summary"]').then(($section) => {
             cy.get($section)
               .find('h3')
-              .then($headings => {
-                cy.get($headings)
-                  .its('length')
-                  .should('eq', 5)
+              .then(($headings) => {
+                cy.get($headings).its('length').should('eq', 5)
                 expect($headings.get(0).innerText).to.contain('Trevor Smith')
                 expect($headings.get(1).innerText).to.contain('Uriualche Lydyle')
                 expect($headings.get(2).innerText).to.contain('Anne Jones')
@@ -484,10 +457,8 @@ context('Prisoner personal', () => {
 
             cy.get($section)
               .find('p')
-              .then($summaryValues => {
-                cy.get($summaryValues)
-                  .its('length')
-                  .should('eq', 5)
+              .then(($summaryValues) => {
+                cy.get($summaryValues).its('length').should('eq', 5)
                 expect($summaryValues.get(0).innerText).to.contain('Case Administrator')
                 expect($summaryValues.get(1).innerText).to.contain('Case Administrator')
                 expect($summaryValues.get(2).innerText).to.contain('Community Offender Manager')
@@ -497,23 +468,19 @@ context('Prisoner personal', () => {
 
             cy.get($section)
               .find('a')
-              .then($contactsUrl => {
-                cy.get($contactsUrl)
-                  .its('length')
-                  .should('eq', 1)
+              .then(($contactsUrl) => {
+                cy.get($contactsUrl).its('length').should('eq', 1)
                 expect($contactsUrl.get(0).innerText).to.contain(
                   'View all professional contacts and their contact details'
                 )
               })
           })
 
-          cy.get('[data-test="personal-contacts-summary"]').then($section => {
+          cy.get('[data-test="personal-contacts-summary"]').then(($section) => {
             cy.get($section)
               .find('p')
-              .then($text => {
-                cy.get($text)
-                  .its('length')
-                  .should('eq', 1)
+              .then(($text) => {
+                cy.get($text).its('length').should('eq', 1)
                 expect($text.get(0).innerText).to.contain('None')
               })
           })
@@ -679,7 +646,10 @@ context('Prisoner personal', () => {
           },
           personAddresses: addresses,
           personEmails: [{ email: 'test1@email.com' }, { email: 'test2@email.com' }],
-          personPhones: [{ number: '02222222222', type: 'MOB' }, { number: '033333333333', type: 'BUS', ext: '123' }],
+          personPhones: [
+            { number: '02222222222', type: 'MOB' },
+            { number: '033333333333', type: 'BUS', ext: '123' },
+          ],
           treatmentTypes: [
             {
               domain: 'HEALTH_TREAT',
@@ -769,13 +739,11 @@ context('Prisoner personal', () => {
       })
       context('Personal section', () => {
         it('Should show correct labels and values', () => {
-          cy.get('[data-test="personal-summary"]').then($summary => {
+          cy.get('[data-test="personal-summary"]').then(($summary) => {
             cy.get($summary)
               .find('dt')
-              .then($summaryLabels => {
-                cy.get($summaryLabels)
-                  .its('length')
-                  .should('eq', 25)
+              .then(($summaryLabels) => {
+                cy.get($summaryLabels).its('length').should('eq', 25)
                 expect($summaryLabels.get(0).innerText).to.contain('Age')
                 expect($summaryLabels.get(1).innerText).to.contain('Date of Birth')
                 expect($summaryLabels.get(2).innerText).to.contain('Place of Birth')
@@ -805,10 +773,8 @@ context('Prisoner personal', () => {
 
             cy.get($summary)
               .find('dd')
-              .then($summaryValues => {
-                cy.get($summaryValues)
-                  .its('length')
-                  .should('eq', 25)
+              .then(($summaryValues) => {
+                cy.get($summaryValues).its('length').should('eq', 25)
                 expect($summaryValues.get(0).innerText).to.contain('29')
                 expect($summaryValues.get(1).innerText).to.contain('12/10/1990')
                 expect($summaryValues.get(2).innerText).to.contain('Doncaster')
@@ -841,13 +807,11 @@ context('Prisoner personal', () => {
 
       context('Physical characteristics section', () => {
         it('Should show correct labels and values', () => {
-          cy.get('[data-test="physical-characteristics-summary"]').then($summary => {
+          cy.get('[data-test="physical-characteristics-summary"]').then(($summary) => {
             cy.get($summary)
               .find('dt')
-              .then($summaryLabels => {
-                cy.get($summaryLabels)
-                  .its('length')
-                  .should('eq', 9)
+              .then(($summaryLabels) => {
+                cy.get($summaryLabels).its('length').should('eq', 9)
                 expect($summaryLabels.get(0).innerText).to.contain('Height')
                 expect($summaryLabels.get(1).innerText).to.contain('Weight')
                 expect($summaryLabels.get(2).innerText).to.contain('Hair colour')
@@ -861,10 +825,8 @@ context('Prisoner personal', () => {
 
             cy.get($summary)
               .find('dd')
-              .then($summaryValues => {
-                cy.get($summaryValues)
-                  .its('length')
-                  .should('eq', 9)
+              .then(($summaryValues) => {
+                cy.get($summaryValues).its('length').should('eq', 9)
                 expect($summaryValues.get(0).innerText).to.contain('1.91m')
                 expect($summaryValues.get(1).innerText).to.contain('86kg')
                 expect($summaryValues.get(2).innerText).to.contain('Brown')
@@ -881,28 +843,21 @@ context('Prisoner personal', () => {
 
       context('Distinguishing marks section', () => {
         it('Should show correct headings, images, labels and values', () => {
-          cy.get('[data-test="distinguishing-marks-summary"]').then($section => {
+          cy.get('[data-test="distinguishing-marks-summary"]').then(($section) => {
             cy.get($section)
               .find('h3')
-              .then($headings => {
-                cy.get($headings)
-                  .its('length')
-                  .should('eq', 2)
+              .then(($headings) => {
+                cy.get($headings).its('length').should('eq', 2)
                 expect($headings.get(0).innerText).to.contain('Tattoo')
                 expect($headings.get(1).innerText).to.contain('Tattoo')
               })
 
-            cy.get($section)
-              .find('img')
-              .should('have.attr', 'src')
-              .should('include', '/app/image/123/data')
+            cy.get($section).find('img').should('have.attr', 'src').should('include', '/app/image/123/data')
 
             cy.get($section)
               .find('dt')
-              .then($summaryLabels => {
-                cy.get($summaryLabels)
-                  .its('length')
-                  .should('eq', 8)
+              .then(($summaryLabels) => {
+                cy.get($summaryLabels).its('length').should('eq', 8)
                 expect($summaryLabels.get(0).innerText).to.contain('Body part')
                 expect($summaryLabels.get(1).innerText).to.contain('Side')
                 expect($summaryLabels.get(2).innerText).to.contain('Orientation')
@@ -915,10 +870,8 @@ context('Prisoner personal', () => {
 
             cy.get($section)
               .find('dd')
-              .then($summaryValues => {
-                cy.get($summaryValues)
-                  .its('length')
-                  .should('eq', 8)
+              .then(($summaryValues) => {
+                cy.get($summaryValues).its('length').should('eq', 8)
                 expect($summaryValues.get(0).innerText).to.contain('Arm')
                 expect($summaryValues.get(1).innerText).to.contain('Left')
                 expect($summaryValues.get(2).innerText).to.contain('Facing up')
@@ -934,13 +887,11 @@ context('Prisoner personal', () => {
 
       context('Personal care needs section', () => {
         it('Should show correct headings, images, labels and values', () => {
-          cy.get('[data-test="care-needs-summary"]').then($section => {
+          cy.get('[data-test="care-needs-summary"]').then(($section) => {
             cy.get($section)
               .find('h3')
-              .then($headings => {
-                cy.get($headings)
-                  .its('length')
-                  .should('eq', 3)
+              .then(($headings) => {
+                cy.get($headings).its('length').should('eq', 3)
                 expect($headings.get(0).innerText).to.contain('Psychological Bi-Polar')
                 expect($headings.get(1).innerText).to.contain('Reasonable adjustment Flexible refreshment breaks')
                 expect($headings.get(2).innerText).to.contain('Reasonable adjustment Amplified telephone')
@@ -948,10 +899,8 @@ context('Prisoner personal', () => {
 
             cy.get($section)
               .find('dt')
-              .then($summaryLabels => {
-                cy.get($summaryLabels)
-                  .its('length')
-                  .should('eq', 9)
+              .then(($summaryLabels) => {
+                cy.get($summaryLabels).its('length').should('eq', 9)
                 expect($summaryLabels.get(0).innerText).to.contain('Description')
                 expect($summaryLabels.get(1).innerText).to.contain('From')
                 expect($summaryLabels.get(2).innerText).to.contain('Status')
@@ -965,10 +914,8 @@ context('Prisoner personal', () => {
 
             cy.get($section)
               .find('dd')
-              .then($summaryValues => {
-                cy.get($summaryValues)
-                  .its('length')
-                  .should('eq', 9)
+              .then(($summaryValues) => {
+                cy.get($summaryValues).its('length').should('eq', 9)
                 expect($summaryValues.get(0).innerText).to.contain('Bi polar comment text')
                 expect($summaryValues.get(1).innerText).to.contain('19 May 2020')
                 expect($summaryValues.get(2).innerText).to.contain('Ongoing')
@@ -984,30 +931,24 @@ context('Prisoner personal', () => {
       })
       context('Languages section', () => {
         it('Should show correct languages content', () => {
-          cy.get('[data-test="languages-summary"]').then($section => {
+          cy.get('[data-test="languages-summary"]').then(($section) => {
             cy.get($section)
               .find('[data-test="language-speaks-different"]')
               .should('contain.text', '\n        English  - interpreter required \n    ')
 
-            cy.get($section)
-              .find('[data-test="language-written-different"]')
-              .should('contain.text', 'Russian (writes)')
+            cy.get($section).find('[data-test="language-written-different"]').should('contain.text', 'Russian (writes)')
 
             cy.get($section)
               .find('h3')
-              .then($headings => {
-                cy.get($headings)
-                  .its('length')
-                  .should('eq', 1)
+              .then(($headings) => {
+                cy.get($headings).its('length').should('eq', 1)
                 expect($headings.get(0).innerText).to.contain('Other languages')
               })
 
             cy.get($section)
               .find('dt')
-              .then($summaryLabels => {
-                cy.get($summaryLabels)
-                  .its('length')
-                  .should('eq', 1)
+              .then(($summaryLabels) => {
+                cy.get($summaryLabels).its('length').should('eq', 1)
                 expect($summaryLabels.get(0).innerText).to.contain('English')
               })
           })
@@ -1016,23 +957,19 @@ context('Prisoner personal', () => {
 
       context('Aliases section', () => {
         it('Should show correct labels and values', () => {
-          cy.get('[data-test="aliases-summary"]').then($section => {
+          cy.get('[data-test="aliases-summary"]').then(($section) => {
             cy.get($section)
               .find('dt')
-              .then($summaryLabels => {
-                cy.get($summaryLabels)
-                  .its('length')
-                  .should('eq', 2)
+              .then(($summaryLabels) => {
+                cy.get($summaryLabels).its('length').should('eq', 2)
                 expect($summaryLabels.get(0).innerText).to.contain('Alias, First')
                 expect($summaryLabels.get(1).innerText).to.contain('Alias, Second')
               })
 
             cy.get($section)
               .find('dd')
-              .then($summaryValues => {
-                cy.get($summaryValues)
-                  .its('length')
-                  .should('eq', 2)
+              .then(($summaryValues) => {
+                cy.get($summaryValues).its('length').should('eq', 2)
                 expect($summaryValues.get(0).innerText).to.contain('31/08/1985')
                 expect($summaryValues.get(1).innerText).to.contain('20/05/1986')
               })
@@ -1042,13 +979,11 @@ context('Prisoner personal', () => {
 
       context('Identifiers section', () => {
         it('Should show correct labels and values', () => {
-          cy.get('[data-test="identifiers-summary"]').then($summary => {
+          cy.get('[data-test="identifiers-summary"]').then(($summary) => {
             cy.get($summary)
               .find('dt')
-              .then($summaryLabels => {
-                cy.get($summaryLabels)
-                  .its('length')
-                  .should('eq', 5)
+              .then(($summaryLabels) => {
+                cy.get($summaryLabels).its('length').should('eq', 5)
                 expect($summaryLabels.get(0).innerText).to.contain('PNC number')
                 expect($summaryLabels.get(1).innerText).to.contain('CRO number')
                 expect($summaryLabels.get(2).innerText).to.contain('National insurance number')
@@ -1058,10 +993,8 @@ context('Prisoner personal', () => {
 
             cy.get($summary)
               .find('dd')
-              .then($summaryValues => {
-                cy.get($summaryValues)
-                  .its('length')
-                  .should('eq', 5)
+              .then(($summaryValues) => {
+                cy.get($summaryValues).its('length').should('eq', 5)
                 expect($summaryValues.get(0).innerText).to.contain('1234')
                 expect($summaryValues.get(1).innerText).to.contain('2345')
                 expect($summaryValues.get(2).innerText).to.contain('3456')
@@ -1074,32 +1007,26 @@ context('Prisoner personal', () => {
 
       context('Addresses section', () => {
         it('Should show correct headings, labels and values', () => {
-          cy.get('[data-test="addresses-summary"]').then($section => {
+          cy.get('[data-test="addresses-summary"]').then(($section) => {
             cy.get($section)
               .find('h3')
-              .then($headings => {
-                cy.get($headings)
-                  .its('length')
-                  .should('eq', 1)
+              .then(($headings) => {
+                cy.get($headings).its('length').should('eq', 1)
                 expect($headings.get(0).innerText).to.contain('Primary address')
               })
 
             cy.get($section)
               .find('[data-test="address-type"]')
-              .then($addressTypes => {
-                cy.get($addressTypes)
-                  .its('length')
-                  .should('eq', 2)
+              .then(($addressTypes) => {
+                cy.get($addressTypes).its('length').should('eq', 2)
                 expect($addressTypes.get(0).innerText).to.contain('HDC Address')
                 expect($addressTypes.get(1).innerText).to.contain('Approved Premises')
               })
 
             cy.get($section)
               .find('dt')
-              .then($summaryLabels => {
-                cy.get($summaryLabels)
-                  .its('length')
-                  .should('eq', 8)
+              .then(($summaryLabels) => {
+                cy.get($summaryLabels).its('length').should('eq', 8)
                 expect($summaryLabels.get(0).innerText).to.contain('Address')
                 expect($summaryLabels.get(1).innerText).to.contain('Town')
                 expect($summaryLabels.get(2).innerText).to.contain('County')
@@ -1112,10 +1039,8 @@ context('Prisoner personal', () => {
 
             cy.get($section)
               .find('dd')
-              .then($summaryValues => {
-                cy.get($summaryValues)
-                  .its('length')
-                  .should('eq', 8)
+              .then(($summaryValues) => {
+                cy.get($summaryValues).its('length').should('eq', 8)
                 expect($summaryValues.get(0).innerText).to.contain('Flat A, 13, High Street')
                 expect($summaryValues.get(1).innerText).to.contain('Ulverston')
                 expect($summaryValues.get(2).innerText).to.contain('West Yorkshire')
@@ -1131,32 +1056,26 @@ context('Prisoner personal', () => {
 
       context('Personal contacts section', () => {
         it('Should show correct headings, labels and values', () => {
-          cy.get('[data-test="personal-contacts-summary"]').then($section => {
+          cy.get('[data-test="personal-contacts-summary"]').then(($section) => {
             cy.get($section)
               .find('h3')
-              .then($headings => {
-                cy.get($headings)
-                  .its('length')
-                  .should('eq', 1)
+              .then(($headings) => {
+                cy.get($headings).its('length').should('eq', 1)
                 expect($headings.get(0).innerText).to.contain('John Smith')
               })
 
             cy.get($section)
               .find('p')
-              .then($headings => {
-                cy.get($headings)
-                  .its('length')
-                  .should('eq', 2)
+              .then(($headings) => {
+                cy.get($headings).its('length').should('eq', 2)
                 expect($headings.get(0).innerText).to.contain('Next of kin')
                 expect($headings.get(1).innerText).to.contain('Emergency contact')
               })
 
             cy.get($section)
               .find('dt')
-              .then($summaryLabels => {
-                cy.get($summaryLabels)
-                  .its('length')
-                  .should('eq', 10)
+              .then(($summaryLabels) => {
+                cy.get($summaryLabels).its('length').should('eq', 10)
                 expect($summaryLabels.get(0).innerText).to.contain('Relationship')
                 expect($summaryLabels.get(1).innerText).to.contain('Phone number')
                 expect($summaryLabels.get(2).innerText).to.contain('Email')
@@ -1171,10 +1090,8 @@ context('Prisoner personal', () => {
 
             cy.get($section)
               .find('dd')
-              .then($summaryValues => {
-                cy.get($summaryValues)
-                  .its('length')
-                  .should('eq', 10)
+              .then(($summaryValues) => {
+                cy.get($summaryValues).its('length').should('eq', 10)
                 expect($summaryValues.get(0).innerText).to.contain('Cousin')
                 expect($summaryValues.get(1).innerText).to.contain('02222222222,\n033333333333 extension number 123')
                 expect($summaryValues.get(2).innerText).to.contain('test1@email.com, test2@email.com')
@@ -1192,13 +1109,11 @@ context('Prisoner personal', () => {
 
       context('Professional contacts section', () => {
         it('Should show correct headings, labels and values', () => {
-          cy.get('[data-test="professional-contacts-summary"]').then($section => {
+          cy.get('[data-test="professional-contacts-summary"]').then(($section) => {
             cy.get($section)
               .find('h3')
-              .then($headings => {
-                cy.get($headings)
-                  .its('length')
-                  .should('eq', 7)
+              .then(($headings) => {
+                cy.get($headings).its('length').should('eq', 7)
                 expect($headings.get(0).innerText).to.contain('Trevor Smith')
                 expect($headings.get(1).innerText).to.contain('Uriualche Lydyle')
                 expect($headings.get(2).innerText).to.contain('Anne Jones')
@@ -1210,10 +1125,8 @@ context('Prisoner personal', () => {
 
             cy.get($section)
               .find('p')
-              .then($summaryValues => {
-                cy.get($summaryValues)
-                  .its('length')
-                  .should('eq', 7)
+              .then(($summaryValues) => {
+                cy.get($summaryValues).its('length').should('eq', 7)
                 expect($summaryValues.get(0).innerText).to.contain('Case Administrator')
                 expect($summaryValues.get(1).innerText).to.contain('Case Administrator')
                 expect($summaryValues.get(2).innerText).to.contain('Community Offender Manager')
@@ -1225,10 +1138,8 @@ context('Prisoner personal', () => {
 
             cy.get($section)
               .find('a')
-              .then($contactsUrl => {
-                cy.get($contactsUrl)
-                  .its('length')
-                  .should('eq', 1)
+              .then(($contactsUrl) => {
+                cy.get($contactsUrl).its('length').should('eq', 1)
                 expect($contactsUrl.get(0).innerText).to.contain(
                   'View all professional contacts and their contact details'
                 )
@@ -1246,19 +1157,15 @@ context('Prisoner personal', () => {
       })
 
       it('Should show the correct content in the address section', () => {
-        cy.get('[data-test="addresses-summary"]').then($section => {
+        cy.get('[data-test="addresses-summary"]').then(($section) => {
           cy.get($section)
             .find('h3')
-            .then($headings => {
-              cy.get($headings)
-                .its('length')
-                .should('eq', 1)
+            .then(($headings) => {
+              cy.get($headings).its('length').should('eq', 1)
               expect($headings.get(0).innerText).to.contain('Primary address')
             })
 
-          cy.get($section)
-            .find('[data-test="no-fixed-abode"]')
-            .should('have.text', 'No fixed abode')
+          cy.get($section).find('[data-test="no-fixed-abode"]').should('have.text', 'No fixed abode')
         })
       })
     })
@@ -1274,22 +1181,18 @@ context('Prisoner personal', () => {
       })
 
       it('Should show the correct content in the active contacts section', () => {
-        cy.get('[data-test="personal-contacts-summary"]').then($section => {
+        cy.get('[data-test="personal-contacts-summary"]').then(($section) => {
           cy.get($section)
             .find('h3')
-            .then($headings => {
-              cy.get($headings)
-                .its('length')
-                .should('eq', 1)
+            .then(($headings) => {
+              cy.get($headings).its('length').should('eq', 1)
               expect($headings.get(0).innerText).to.contain('John Smith')
             })
 
           cy.get($section)
             .find('p')
-            .then($text => {
-              cy.get($text)
-                .its('length')
-                .should('eq', 3)
+            .then(($text) => {
+              cy.get($text).its('length').should('eq', 3)
               expect($text.get(0).innerText).to.contain('Next of kin')
               expect($text.get(1).innerText).to.contain('Emergency contact')
               expect($text.get(2).innerText).to.contain('No fixed abode')
@@ -1297,19 +1200,15 @@ context('Prisoner personal', () => {
 
           cy.get($section)
             .find('dt')
-            .then($summaryLabels => {
-              cy.get($summaryLabels)
-                .its('length')
-                .should('eq', 1)
+            .then(($summaryLabels) => {
+              cy.get($summaryLabels).its('length').should('eq', 1)
               expect($summaryLabels.get(0).innerText).to.contain('Relationship')
             })
 
           cy.get($section)
             .find('dd')
-            .then($summaryValues => {
-              cy.get($summaryValues)
-                .its('length')
-                .should('eq', 1)
+            .then(($summaryValues) => {
+              cy.get($summaryValues).its('length').should('eq', 1)
               expect($summaryValues.get(0).innerText).to.contain('Cousin')
             })
         })

@@ -1,5 +1,5 @@
 const moment = require('moment')
-const { DATE_TIME_FORMAT_SPEC } = require('../src/dateHelpers')
+const { DATE_TIME_FORMAT_SPEC } = require('../common/dateHelpers')
 
 const switchDateFormat = (displayDate, fromFormat = 'DD/MM/YYYY') => {
   if (displayDate) {

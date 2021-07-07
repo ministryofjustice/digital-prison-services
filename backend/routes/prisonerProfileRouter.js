@@ -1,3 +1,5 @@
+import EsweService from '../services/esweService'
+
 const express = require('express')
 const nunjucks = require('nunjucks')
 const telemetry = require('../azure-appinsights')
@@ -19,6 +21,7 @@ const prisonerIncentiveLevelDetails = require('../controllers/prisonerProfile/pr
 const prisonerChangeIncentiveLevelDetails = require('../controllers/prisonerProfile/prisonerChangeIncentiveLevelDetails')
 const prisonerCsraHistory = require('../controllers/prisonerProfile/prisonerCsraHistory')
 const prisonerCsraReview = require('../controllers/prisonerProfile/prisonerCsraReview')
+const prisonerWorkAndSkills = require('../controllers/prisonerProfile/prisonerWorkAndSkills')
 
 const prisonerDamageObligations = require('../controllers/prisonerProfile/prisonerFinances/prisonerDamageObligations')
 const prisonerPrivateCash = require('../controllers/prisonerProfile/prisonerFinances/prisonerPrivateCash')
@@ -33,7 +36,6 @@ const paginationService = require('../services/paginationService')
 const referenceCodesServiceFactory = require('../controllers/reference-codes-service')
 
 const adjudicationsHistoryService = require('../services/adjudicationHistory')
-const EsweService = require('../services/esweService')
 
 const router = express.Router({ mergeParams: true })
 
@@ -68,7 +70,7 @@ const controller = ({
   const prisonerFinanceService = prisonerFinanceServiceFactory(prisonApi)
   const referenceCodesService = referenceCodesServiceFactory(prisonApi)
   const adjudicationHistoryService = adjudicationsHistoryService(prisonApi)
-  const esweService = EsweService.create(curiousApi, prisonApi)
+  const esweService = EsweService.create(curiousApi, systemOauthClient)
 
   router.get('/', prisonerQuickLook({ prisonerProfileService, prisonApi, telemetry, offenderSearchApi, logError }))
   router.get('/image', prisonerFullImage({ prisonApi, logError }))
@@ -96,6 +98,7 @@ const controller = ({
     '/sentence-and-release',
     prisonerSentenceAndRelease({ prisonerProfileService, prisonApi, systemOauthClient, offenderSearchApi, logError })
   )
+  router.get('/work-and-skills', prisonerWorkAndSkills({ prisonerProfileService, esweService }))
   router.get('/visits', prisonerVisits({ prisonApi, logError }))
   router.get('/schedule', prisonerSchedule({ prisonApi, logError }))
   router.get(

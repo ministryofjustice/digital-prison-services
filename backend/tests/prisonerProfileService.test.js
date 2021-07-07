@@ -229,6 +229,7 @@ describe('prisoner profile service', () => {
         physicalCharacteristics: undefined,
         physicalMarks: undefined,
         profileInformation: undefined,
+        esweEnabled: false,
       })
 
       expect(getPrisonerProfileData).toEqual(
