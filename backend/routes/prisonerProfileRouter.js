@@ -72,7 +72,10 @@ const controller = ({
   const adjudicationHistoryService = adjudicationsHistoryService(prisonApi)
   const esweService = EsweService.create(curiousApi, systemOauthClient)
 
-  router.get('/', prisonerQuickLook({ prisonerProfileService, prisonApi, telemetry, offenderSearchApi, logError }))
+  router.get(
+    '/',
+    prisonerQuickLook({ prisonerProfileService, prisonApi, telemetry, offenderSearchApi, systemOauthClient, logError })
+  )
   router.get('/image', prisonerFullImage({ prisonApi, logError }))
   router.get(
     '/personal',

@@ -31,7 +31,7 @@ module.exports =
     const courtCases = courtCasesViewModel({ courtCaseData, sentenceTermsData, offenceHistory })
 
     const determineLifeSentence = async () => {
-      const prisonerDetails = await offenderSearchApi.getPrisonersDetails(res.locals, [offenderNo])
+      const prisonerDetails = await offenderSearchApi.getPrisonersDetails(systemContext, [offenderNo])
       return prisonerDetails && prisonerDetails[0]?.indeterminateSentence ? 'Life sentence' : undefined
     }
 

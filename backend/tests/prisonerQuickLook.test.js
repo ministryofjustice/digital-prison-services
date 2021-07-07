@@ -22,6 +22,7 @@ describe('prisoner profile quick look', () => {
   const offenderSearchApi = {}
   const prisonerProfileService = {}
   const telemetry = {}
+  const systemOauthClient = {}
 
   let req
   let res
@@ -67,7 +68,16 @@ describe('prisoner profile quick look', () => {
 
     offenderSearchApi.getPrisonersDetails = jest.fn().mockResolvedValue([])
 
-    controller = prisonerQuickLook({ prisonerProfileService, prisonApi, telemetry, offenderSearchApi, logError })
+    systemOauthClient.getClientCredentialsTokens = jest.fn().mockReturnValue({})
+
+    controller = prisonerQuickLook({
+      prisonerProfileService,
+      prisonApi,
+      telemetry,
+      offenderSearchApi,
+      systemOauthClient,
+      logError,
+    })
   })
 
   it('should make a call for the basic details of a prisoner and the prisoner header details and render them', async () => {
