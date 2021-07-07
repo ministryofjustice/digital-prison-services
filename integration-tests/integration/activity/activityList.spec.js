@@ -402,7 +402,7 @@ context('Activity list page', () => {
       .should('have.attr', 'href')
       .then((href) => {
         expect(href).to.equal(
-          'https://eu.surveymonkey.com/r/GYB8Y9Q?source=/manage-prisoner-whereabouts/activity-results'
+          'https://eu.surveymonkey.com/r/GYB8Y9Q?source=localhost/manage-prisoner-whereabouts/activity-results'
         )
       })
   })

@@ -198,7 +198,7 @@ context('Homepage', () => {
         .should('contain', 'Give feedback on this service')
         .should('have.attr', 'href')
         .then((href) => {
-          expect(href).to.equal('https://eu.surveymonkey.com/r/GYB8Y9Q?source=/')
+          expect(href).to.equal('https://eu.surveymonkey.com/r/GYB8Y9Q?source=localhost/')
         })
     })
   })
