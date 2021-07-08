@@ -1,7 +1,7 @@
 const { raiseAnalyticsEvent } = require('../../raiseAnalyticsEvent')
 
 const { properCaseName, putLastNameFirst } = require('../../utils')
-const { getBackLinkData } = require('./cellMoveUtils')
+const { getConfirmBackLinkData } = require('./cellMoveUtils')
 
 const CSWAP = 'C-SWAP'
 
@@ -38,6 +38,7 @@ module.exports = ({ prisonApi, whereaboutsApi }) => {
 
     const cellMoveReasonRadioValues = isCellSwap ? undefined : await cellMoveReasons(res, prisonApi, reason)
 
+    const { backLink, backLinkText } = getConfirmBackLinkData(req.headers.referer, offenderNo)
     return res.render('cellMove/confirmCellMove.njk', {
       showWarning: !isCellSwap,
       offenderNo,
@@ -51,7 +52,8 @@ module.exports = ({ prisonApi, whereaboutsApi }) => {
       formValues: {
         comment,
       },
-      backLink: getBackLinkData(req.headers.referer, offenderNo).backLink,
+      backLink,
+      backLinkText,
       showCommentInput: !isCellSwap,
     })
   }

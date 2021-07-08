@@ -79,7 +79,7 @@ context('A user can confirm the cell move', () => {
   it('should navigate back to search for cell', () => {
     const page = ConfirmCellMovePage.goTo('A12345', 1, 'Bob Doe', 'MDI-1-1')
 
-    page.backLink().contains('Cancel')
+    page.backLink().contains('Select another cell')
     page.backLink().click()
 
     cy.location('pathname').should('eq', '/prisoner/A12345/cell-move/search-for-cell')
