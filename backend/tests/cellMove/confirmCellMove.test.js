@@ -73,6 +73,7 @@ describe('Change cell play back details', () => {
 
       expect(res.render).toHaveBeenCalledWith('cellMove/confirmCellMove.njk', {
         backLink: '/prisoner/A12345/cell-move/search-for-cell',
+        backLinkText: 'Select another cell',
         errors: undefined,
         formValues: {
           comment: undefined,
@@ -105,6 +106,7 @@ describe('Change cell play back details', () => {
 
       expect(res.render).toHaveBeenCalledWith('cellMove/confirmCellMove.njk', {
         backLink: '/prisoner/A12345/cell-move/search-for-cell',
+        backLinkText: 'Select another cell',
         breadcrumbPrisonerName: 'Doe, Bob',
         cellId: 'C-SWAP',
         cellMoveReasonRadioValues: undefined,
@@ -258,18 +260,27 @@ describe('Change cell play back details', () => {
       )
     })
 
-    it('sets the back link when referer data is present', async () => {
-      req.headers = { referer: `/prisoner/A12345/cell-move/select-cell` }
+    test.each`
+      referer                                         | backLinkText
+      ${'/prisoner/A12345/cell-move/select-cell'}     | ${'Cancel'}
+      ${'/prisoner/A12345/cell-move/consider-risks'}  | ${'Cancel'}
+      ${'/prisoner/A12345/cell-move/search-for-cell'} | ${'Select another cell'}
+    `(
+      'The back link button content is $backLinkText when the referer is $referer',
+      async ({ referer, backLinkText }) => {
+        req.headers = { referer }
 
-      await controller.index(req, res)
+        await controller.index(req, res)
 
-      expect(res.render).toHaveBeenCalledWith(
-        'cellMove/confirmCellMove.njk',
-        expect.objectContaining({
-          backLink: `/prisoner/A12345/cell-move/select-cell`,
-        })
-      )
-    })
+        expect(res.render).toHaveBeenCalledWith(
+          'cellMove/confirmCellMove.njk',
+          expect.objectContaining({
+            backLink: referer,
+            backLinkText,
+          })
+        )
+      }
+    )
   })
 
   describe('Post handle normal cell move', () => {

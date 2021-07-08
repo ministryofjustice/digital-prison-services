@@ -21,6 +21,16 @@ const getBackLinkData = (referer, offenderNo) => {
   }
 }
 
+const getConfirmBackLinkData = (referer, offenderNo) => {
+  const backLink = referer || `/prisoner/${offenderNo}/cell-move/search-for-cell`
+  return {
+    backLink,
+    backLinkText: ['select-cell', 'consider-risks'].some((part) => backLink.includes(part))
+      ? 'Cancel'
+      : 'Select another cell',
+  }
+}
+
 const renderLocationOptions = (locations) => [
   { text: 'All residential units', value: 'ALL' },
   ...locations.map((location) => ({ text: location.name, value: location.key })),
@@ -42,5 +52,6 @@ module.exports = {
   getBackLinkData,
   userHasAccess,
   renderLocationOptions,
+  getConfirmBackLinkData,
   cellAttributes,
 }
