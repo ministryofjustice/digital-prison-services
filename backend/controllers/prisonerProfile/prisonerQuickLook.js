@@ -46,7 +46,7 @@ const createFinanceLink = (offenderNo, path, value) =>
   )}</a>`
 
 module.exports =
-  ({ prisonerProfileService, prisonApi, telemetry, offenderSearchApi }) =>
+  ({ prisonerProfileService, prisonApi, telemetry, offenderSearchApi, systemOauthClient }) =>
   async (req, res) => {
     const {
       user: { activeCaseLoad },
@@ -128,8 +128,9 @@ module.exports =
     trackEvent(telemetry, username, activeCaseLoad)
 
     const getLifeImprisonmentLabel = async () => {
+      const systemContext = await systemOauthClient.getClientCredentialsTokens(username)
       const prisonerDetailsResponse = await captureErrorAndContinue(
-        offenderSearchApi.getPrisonersDetails(res.locals, [offenderNo])
+        offenderSearchApi.getPrisonersDetails(systemContext, [offenderNo])
       )
 
       if (prisonerDetailsResponse.error) {
