@@ -105,72 +105,79 @@ export default class EsweService {
       return createFlaggedContent({})
     }
 
-    const context = await this.systemOauthClient.getClientCredentialsTokens()
-    const learnerLatestAssessments = await this.curiousApi.getLearnerLatestAssessments(context, nomisId)
+    let skillLevels: Record<string, unknown> = null
+    try {
+      const context = await this.systemOauthClient.getClientCredentialsTokens()
+      const learnerLatestAssessments = await this.curiousApi.getLearnerLatestAssessments(context, nomisId)
 
-    const compareByDateDesc = (a: curious.LearnerAssessment, b: curious.LearnerAssessment) =>
-      compareByDate(parseDate(a.qualification.assessmentDate), parseDate(b.qualification.assessmentDate))
+      const compareByDateDesc = (a: curious.LearnerAssessment, b: curious.LearnerAssessment) =>
+        compareByDate(parseDate(a.qualification.assessmentDate), parseDate(b.qualification.assessmentDate))
 
-    const getLatestGrade = (
-      functionalSkillLevels: curious.LearnerLatestAssessment[],
-      qualificationType: AssessmentQualificationType
-    ): curious.LearnerAssessment => {
-      const emptyAssessment: curious.LearnerAssessment = {
-        qualification: {
-          qualificationType,
-        },
+      const getLatestGrade = (
+        functionalSkillLevels: curious.LearnerLatestAssessment[],
+        qualificationType: AssessmentQualificationType
+      ): curious.LearnerAssessment => {
+        const emptyAssessment: curious.LearnerAssessment = {
+          qualification: {
+            qualificationType,
+          },
+        }
+        if (Array.isArray(functionalSkillLevels) && functionalSkillLevels.length > 0) {
+          const { qualifications } = functionalSkillLevels[0]
+          const learnerAssessment = qualifications
+            .filter(
+              (functionalSkillLevel) => functionalSkillLevel.qualification.qualificationType === qualificationType
+            )
+            .sort(compareByDateDesc)[0]
+
+          return learnerAssessment || emptyAssessment
+        }
+
+        return emptyAssessment
       }
-      if (Array.isArray(functionalSkillLevels) && functionalSkillLevels.length > 0) {
-        const { qualifications } = functionalSkillLevels[0]
-        const learnerAssessment = qualifications
-          .filter((functionalSkillLevel) => functionalSkillLevel.qualification.qualificationType === qualificationType)
-          .sort(compareByDateDesc)[0]
 
-        return learnerAssessment || emptyAssessment
-      }
+      const englishGrade = getLatestGrade(learnerLatestAssessments, AssessmentQualificationType.English)
+      const mathsGrade = getLatestGrade(learnerLatestAssessments, AssessmentQualificationType.Maths)
+      const digitalLiteracyGrade = getLatestGrade(learnerLatestAssessments, AssessmentQualificationType.DigitalLiteracy)
 
-      return emptyAssessment
-    }
+      const createSkillAssessmentSummary = (learnerAssessment: curious.LearnerAssessment) => {
+        const { qualification, establishmentName } = learnerAssessment || {}
+        const { qualificationType, qualificationGrade, assessmentDate } = qualification || {}
 
-    const englishGrade = getLatestGrade(learnerLatestAssessments, AssessmentQualificationType.English)
-    const mathsGrade = getLatestGrade(learnerLatestAssessments, AssessmentQualificationType.Maths)
-    const digitalLiteracyGrade = getLatestGrade(learnerLatestAssessments, AssessmentQualificationType.DigitalLiteracy)
+        if (!assessmentDate) {
+          return [
+            {
+              label: qualificationType,
+              value: 'Awaiting assessment',
+            },
+          ]
+        }
 
-    const createSkillAssessmentSummary = (learnerAssessment: curious.LearnerAssessment) => {
-      const { qualification, establishmentName } = learnerAssessment || {}
-      const { qualificationType, qualificationGrade, assessmentDate } = qualification || {}
-
-      if (!assessmentDate) {
         return [
           {
-            label: qualificationType,
-            value: 'Awaiting assessment',
+            label: qualificationType === AssessmentQualificationType.English ? 'English/Welsh' : qualificationType,
+            value: qualificationGrade,
+          },
+          {
+            label: 'Assessment date',
+            value: readableDateFormat(assessmentDate, CURIOUS_DATE_FORMAT),
+          },
+          {
+            label: 'Assessment location',
+            value: establishmentName,
           },
         ]
       }
 
-      return [
-        {
-          label: qualificationType === AssessmentQualificationType.English ? 'English/Welsh' : qualificationType,
-          value: qualificationGrade,
-        },
-        {
-          label: 'Assessment date',
-          value: readableDateFormat(assessmentDate, CURIOUS_DATE_FORMAT),
-        },
-        {
-          label: 'Assessment location',
-          value: establishmentName,
-        },
-      ]
+      skillLevels = {
+        english: createSkillAssessmentSummary(englishGrade),
+        maths: createSkillAssessmentSummary(mathsGrade),
+        digiLit: createSkillAssessmentSummary(digitalLiteracyGrade),
+      }
+    } catch (e) {
+      log.warn(`Failed to get latest learning assessments. Reason: ${e.message}`)
     }
 
-    const functionalSkillLevels = {
-      english: createSkillAssessmentSummary(englishGrade),
-      maths: createSkillAssessmentSummary(mathsGrade),
-      digiLit: createSkillAssessmentSummary(digitalLiteracyGrade),
-    }
-
-    return createFlaggedContent(functionalSkillLevels)
+    return createFlaggedContent(skillLevels)
   }
 }
