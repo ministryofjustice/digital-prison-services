@@ -175,9 +175,32 @@ export default class EsweService {
         digiLit: createSkillAssessmentSummary(digitalLiteracyGrade),
       }
     } catch (e) {
-      log.warn(`Failed to get latest learning assessments. Reason: ${e.message}`)
+      if (e.response?.body?.errorCode === 'VC500') {
+        log.info(`Offender record not found in Curious.`)
+        skillLevels = {
+          english: [
+            {
+              label: 'English/Welsh',
+              value: 'Awaiting assessment',
+            },
+          ],
+          maths: [
+            {
+              label: 'Maths',
+              value: 'Awaiting assessment',
+            },
+          ],
+          digiLit: [
+            {
+              label: 'Digital Literacy',
+              value: 'Awaiting assessment',
+            },
+          ],
+        }
+      } else {
+        log.warn(`Failed to get latest learning assessments.`)
+      }
     }
-
     return createFlaggedContent(skillLevels)
   }
 }
