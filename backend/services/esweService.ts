@@ -147,7 +147,7 @@ export default class EsweService {
         if (!assessmentDate) {
           return [
             {
-              label: qualificationType,
+              label: qualificationType === AssessmentQualificationType.English ? 'English/Welsh' : qualificationType,
               value: 'Awaiting assessment',
             },
           ]

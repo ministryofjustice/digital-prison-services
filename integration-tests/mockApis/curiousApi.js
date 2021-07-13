@@ -5,14 +5,14 @@ module.exports = {
     stubFor({
       request: {
         method: 'GET',
-        url: `/latestLearnerAssessments/.+?\\`,
+        urlPattern: `/sequation-virtual-campus2-api/latestLearnerAssessments/.+?`,
       },
       response: {
         status,
         headers: {
           'Content-Type': 'application/json;charset=UTF-8',
         },
-        jsonBody: learnerAssessments || {},
+        jsonBody: learnerAssessments || [],
       },
     }),
 }
