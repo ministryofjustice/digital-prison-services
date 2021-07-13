@@ -20,6 +20,27 @@ const createFlaggedContent = <T>(content: T) => ({
 
 const CURIOUS_DATE_FORMAT = 'YYYY-MM-DD'
 
+const DEFAULT_SKILL_LEVELS = {
+  english: [
+    {
+      label: 'English/Welsh',
+      value: 'Awaiting assessment',
+    },
+  ],
+  maths: [
+    {
+      label: 'Maths',
+      value: 'Awaiting assessment',
+    },
+  ],
+  digiLit: [
+    {
+      label: 'Digital Literacy',
+      value: 'Awaiting assessment',
+    },
+  ],
+}
+
 const parseDate = (value: string) => moment(value, CURIOUS_DATE_FORMAT)
 
 const compareByDate = (dateA: Moment, dateB: Moment, descending = true) => {
@@ -177,29 +198,9 @@ export default class EsweService {
     } catch (e) {
       if (e.response?.body?.errorCode === 'VC500') {
         log.info(`Offender record not found in Curious.`)
-        skillLevels = {
-          english: [
-            {
-              label: 'English/Welsh',
-              value: 'Awaiting assessment',
-            },
-          ],
-          maths: [
-            {
-              label: 'Maths',
-              value: 'Awaiting assessment',
-            },
-          ],
-          digiLit: [
-            {
-              label: 'Digital Literacy',
-              value: 'Awaiting assessment',
-            },
-          ],
-        }
-      } else {
-        log.warn(`Failed to get latest learning assessments. Reason: ${e}`)
+        return createFlaggedContent(DEFAULT_SKILL_LEVELS)
       }
+      log.error(`Failed to get latest learning assessments. Reason: ${e.message}`)
     }
     return createFlaggedContent(skillLevels)
   }
