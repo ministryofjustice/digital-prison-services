@@ -198,7 +198,7 @@ export default class EsweService {
           ],
         }
       } else {
-        log.warn(`Failed to get latest learning assessments.`)
+        log.warn(`Failed to get latest learning assessments. Reason: ${e}`)
       }
     }
     return createFlaggedContent(skillLevels)
