@@ -1,4 +1,4 @@
-import EsweService from '../services/esweService'
+import { EsweService, DEFAULT_SKILL_LEVELS } from '../services/esweService'
 import { app } from '../config'
 import CuriousApi from '../api/curious/curiousApi'
 
@@ -114,7 +114,7 @@ describe('Education skills and work experience', () => {
     describe('functional skills assessment', () => {
       const nomisId = 'G2823GV'
 
-      it('should return expected assessments when there is one of each subject available', async () => {
+      it('should return expected assessments when there are one of each available', async () => {
         const dummyFunctionalSkillsLevels = {
           prn: 'G8346GA',
           qualifications: [
@@ -174,45 +174,26 @@ describe('Education skills and work experience', () => {
         expect(getLearnerLatestAssessmentsMock).toHaveBeenCalledTimes(1)
         expect(getLearnerLatestAssessmentsMock).toHaveBeenCalledWith(credentialsRef, nomisId)
       })
-
-      it('should return expected assessments when there are multiple assessments for a subject available', async () => {
+      it('should return expected response when there are no assessments available for one subject', async () => {
         const dummyFunctionalSkillsLevels = {
-          prn: 'G8346GA',
+          prn: 'G8930UW',
           qualifications: [
             {
-              establishmentId: 2,
-              establishmentName: 'HMP Winchester',
-              qualification: {
-                qualificationType: 'English',
-                qualificationGrade: 'Entry Level 2',
-                assessmentDate: '2021-03-02',
-              },
-            },
-            {
-              establishmentId: 2,
-              establishmentName: 'HMP Winchester',
-              qualification: {
-                qualificationType: 'English',
-                qualificationGrade: 'Entry Level 3',
-                assessmentDate: '2021-06-30',
-              },
-            },
-            {
-              establishmentId: 2,
-              establishmentName: 'HMP Winchester',
-              qualification: {
-                qualificationType: 'Digital Literacy',
-                qualificationGrade: 'Entry Level 2',
-                assessmentDate: '2021-06-01',
-              },
-            },
-            {
-              establishmentId: 2,
-              establishmentName: 'HMP Winchester',
+              establishmentId: 8,
+              establishmentName: 'HMP Moorland',
               qualification: {
                 qualificationType: 'Maths',
                 qualificationGrade: 'Entry Level 1',
-                assessmentDate: '2021-05-27',
+                assessmentDate: '2021-07-01',
+              },
+            },
+            {
+              establishmentId: 8,
+              establishmentName: 'HMP Moorland',
+              qualification: {
+                qualificationType: 'Digital Literacy',
+                qualificationGrade: 'Entry Level 1',
+                assessmentDate: '2021-07-01',
               },
             },
           ],
@@ -220,23 +201,18 @@ describe('Education skills and work experience', () => {
 
         jest.spyOn(app, 'esweEnabled', 'get').mockReturnValue(true)
         getLearnerLatestAssessmentsMock.mockResolvedValue([dummyFunctionalSkillsLevels])
-
         const expectedResult = {
           digiLit: [
-            { label: 'Digital Literacy', value: 'Entry Level 2' },
-            { label: 'Assessment date', value: '1 June 2021' },
-            { label: 'Assessment location', value: 'HMP Winchester' },
-          ],
-          english: [
-            { label: 'English/Welsh', value: 'Entry Level 3' },
-            { label: 'Assessment date', value: '30 June 2021' },
-            { label: 'Assessment location', value: 'HMP Winchester' },
+            { label: 'Digital Literacy', value: 'Entry Level 1' },
+            { label: 'Assessment date', value: '1 July 2021' },
+            { label: 'Assessment location', value: 'HMP Moorland' },
           ],
           maths: [
             { label: 'Maths', value: 'Entry Level 1' },
-            { label: 'Assessment date', value: '27 May 2021' },
-            { label: 'Assessment location', value: 'HMP Winchester' },
+            { label: 'Assessment date', value: '1 July 2021' },
+            { label: 'Assessment location', value: 'HMP Moorland' },
           ],
+          english: [{ label: 'English/Welsh', value: 'Awaiting assessment' }],
         }
 
         const actual = await service.getLearnerLatestAssessments(nomisId)
@@ -246,50 +222,13 @@ describe('Education skills and work experience', () => {
         expect(getLearnerLatestAssessmentsMock).toHaveBeenCalledWith(credentialsRef, nomisId)
       })
 
-      it('should return expected response when there are no assessments available for a subject', async () => {
-        const dummyFunctionalSkillsLevels = {
-          prn: 'G8346GA',
-          qualifications: [
-            {
-              establishmentId: 2,
-              establishmentName: 'HMP Winchester',
-              qualification: {
-                qualificationType: 'English',
-                qualificationGrade: 'Entry Level 2',
-                assessmentDate: '2021-05-02',
-              },
-            },
-            {
-              establishmentId: 2,
-              establishmentName: 'HMP Winchester',
-              qualification: {
-                qualificationType: 'Digital Literacy',
-                qualificationGrade: 'Entry Level 2',
-                assessmentDate: '2021-06-01',
-              },
-            },
-          ],
-        }
-
+      it('should return the expected response when there are no assessments available for any subejct', async () => {
         jest.spyOn(app, 'esweEnabled', 'get').mockReturnValue(true)
-        getLearnerLatestAssessmentsMock.mockResolvedValue([dummyFunctionalSkillsLevels])
-        const expectedResult = {
-          digiLit: [
-            { label: 'Digital Literacy', value: 'Entry Level 2' },
-            { label: 'Assessment date', value: '1 June 2021' },
-            { label: 'Assessment location', value: 'HMP Winchester' },
-          ],
-          english: [
-            { label: 'English/Welsh', value: 'Entry Level 2' },
-            { label: 'Assessment date', value: '2 May 2021' },
-            { label: 'Assessment location', value: 'HMP Winchester' },
-          ],
-          maths: [{ label: 'Maths', value: 'Awaiting assessment' }],
-        }
+        getLearnerLatestAssessmentsMock.mockResolvedValue([])
 
         const actual = await service.getLearnerLatestAssessments(nomisId)
         expect(actual.enabled).toBeTruthy()
-        expect(actual.content).toStrictEqual(expectedResult)
+        expect(actual.content).toStrictEqual(DEFAULT_SKILL_LEVELS)
         expect(getLearnerLatestAssessmentsMock).toHaveBeenCalledTimes(1)
         expect(getLearnerLatestAssessmentsMock).toHaveBeenCalledWith(credentialsRef, nomisId)
       })
@@ -304,14 +243,9 @@ describe('Education skills and work experience', () => {
         }
         jest.spyOn(app, 'esweEnabled', 'get').mockReturnValue(true)
         getLearnerLatestAssessmentsMock.mockRejectedValue(error)
-        const expectedResult = {
-          digiLit: [{ label: 'Digital Literacy', value: 'Awaiting assessment' }],
-          english: [{ label: 'English/Welsh', value: 'Awaiting assessment' }],
-          maths: [{ label: 'Maths', value: 'Awaiting assessment' }],
-        }
         const actual = await service.getLearnerLatestAssessments(nomisId)
         expect(actual.enabled).toBeTruthy()
-        expect(actual.content).toEqual(expectedResult)
+        expect(actual.content).toEqual(DEFAULT_SKILL_LEVELS)
       })
       it('should return null content on error', async () => {
         jest.spyOn(app, 'esweEnabled', 'get').mockReturnValue(true)

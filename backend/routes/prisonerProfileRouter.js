@@ -1,4 +1,4 @@
-import EsweService from '../services/esweService'
+import { EsweService } from '../services/esweService'
 
 const express = require('express')
 const nunjucks = require('nunjucks')
