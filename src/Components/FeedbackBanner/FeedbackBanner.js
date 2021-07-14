@@ -4,7 +4,7 @@ const FeedbackBanner = () => {
   const { hostname, pathname } = window.location
 
   return (
-    <div className="feedback-banner" data-test="feedback-banner">
+    <div className="feedback-banner no-print" data-test="feedback-banner">
       <a
         href={`https://eu.surveymonkey.com/r/GYB8Y9Q?source=${hostname}${pathname}`}
         className="govuk-link govuk-link--inverse govuk-!-font-size-16"
