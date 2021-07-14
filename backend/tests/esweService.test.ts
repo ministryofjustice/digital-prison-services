@@ -293,6 +293,32 @@ describe('Education skills and work experience', () => {
         expect(getLearnerLatestAssessmentsMock).toHaveBeenCalledTimes(1)
         expect(getLearnerLatestAssessmentsMock).toHaveBeenCalledWith(credentialsRef, nomisId)
       })
+
+      it('should return expected response when the prisoner is not registered in Curious', async () => {
+        const error = {
+          response: {
+            body: {
+              errorCode: 'VC500',
+            },
+          },
+        }
+        jest.spyOn(app, 'esweEnabled', 'get').mockReturnValue(true)
+        getLearnerLatestAssessmentsMock.mockRejectedValue(error)
+        const expectedResult = {
+          digiLit: [{ label: 'Digital Literacy', value: 'Awaiting assessment' }],
+          english: [{ label: 'English/Welsh', value: 'Awaiting assessment' }],
+          maths: [{ label: 'Maths', value: 'Awaiting assessment' }],
+        }
+        const actual = await service.getLearnerLatestAssessments(nomisId)
+        expect(actual.enabled).toBeTruthy()
+        expect(actual.content).toEqual(expectedResult)
+      })
+      it('should return null content on error', async () => {
+        jest.spyOn(app, 'esweEnabled', 'get').mockReturnValue(true)
+        getLearnerLatestAssessmentsMock.mockRejectedValue(new Error('error'))
+        const actual = await service.getLearnerLatestAssessments(nomisId)
+        expect(actual.content).toBeNull()
+      })
     })
   })
 })
