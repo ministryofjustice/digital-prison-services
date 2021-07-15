@@ -205,7 +205,8 @@ module.exports = (on) => {
     stubPrisonerDetails: (prisonerDetails) => prisonApi.stubPrisonerDetails(prisonerDetails),
     stubLatestLearnerAssessments: (functionalSkillsAssessments) =>
       curiousApi.stubLatestLearnerAssessments(functionalSkillsAssessments),
-    stubLatestLearnerAssessmentsError: (error) => curiousApi.stubLatestLearnerAssessments(error, 500),
+    stubLatestLearnerAssessments500Error: (error) => curiousApi.stubLatestLearnerAssessments(error, 500),
+    stubLatestLearnerAssessments404Error: (error) => curiousApi.stubLatestLearnerAssessments(error, 404),
     stubPersonal: ({
       identifiers,
       aliases,
