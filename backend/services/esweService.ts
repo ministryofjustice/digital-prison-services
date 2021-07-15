@@ -168,7 +168,7 @@ export class EsweService {
         functionalSkillLevels: curious.LearnerLatestAssessment[],
         qualificationType: AssessmentQualificationType
       ): curious.LearnerAssessment => {
-        const emptyAssessment = {
+        const emptyAssessment: curious.LearnerAssessment = {
           qualification: {
             qualificationType,
           },
