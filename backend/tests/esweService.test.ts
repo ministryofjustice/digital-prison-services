@@ -1,4 +1,4 @@
-import { EsweService, DEFAULT_SKILL_LEVELS } from '../services/esweService'
+import EsweService, { DEFAULT_SKILL_LEVELS } from '../services/esweService'
 import { app } from '../config'
 import CuriousApi from '../api/curious/curiousApi'
 

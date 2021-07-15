@@ -92,7 +92,7 @@ const createSkillAssessmentSummary = (learnerAssessment: curious.LearnerAssessme
 /**
  * Education skills and work experience (ESWE)
  */
-export class EsweService {
+export default class EsweService {
   static create(curiousApi: CuriousApi, systemOauthClient: any): EsweService {
     return new EsweService(curiousApi, systemOauthClient)
   }
