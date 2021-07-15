@@ -114,7 +114,7 @@ describe('Education skills and work experience', () => {
     describe('functional skills assessment', () => {
       const nomisId = 'G2823GV'
 
-      it('should return expected assessments when there are one of each available', async () => {
+      it('should return expected response when there is one assessment of each skill available', async () => {
         const dummyFunctionalSkillsLevels = {
           prn: 'G8346GA',
           qualifications: [
@@ -174,7 +174,7 @@ describe('Education skills and work experience', () => {
         expect(getLearnerLatestAssessmentsMock).toHaveBeenCalledTimes(1)
         expect(getLearnerLatestAssessmentsMock).toHaveBeenCalledWith(credentialsRef, nomisId)
       })
-      it('should return expected response when there are no assessments available for one subject', async () => {
+      it('should return expected response when there are no assessments available for a subject', async () => {
         const dummyFunctionalSkillsLevels = {
           prn: 'G8930UW',
           qualifications: [
@@ -235,11 +235,7 @@ describe('Education skills and work experience', () => {
 
       it('should return expected response when the prisoner is not registered in Curious', async () => {
         const error = {
-          response: {
-            body: {
-              errorCode: 'VC500',
-            },
-          },
+          status: 404,
         }
         jest.spyOn(app, 'esweEnabled', 'get').mockReturnValue(true)
         getLearnerLatestAssessmentsMock.mockRejectedValue(error)

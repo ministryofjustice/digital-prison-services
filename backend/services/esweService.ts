@@ -57,7 +57,7 @@ const compareByDate = (dateA: Moment, dateB: Moment, descending = true) => {
   return 0
 }
 
-const renameEnglishAssessmentLabel = (qualificationType) =>
+const renameAssessmentLabel = (qualificationType) =>
   qualificationType === AssessmentQualificationType.English ? 'English/Welsh' : qualificationType
 
 const createSkillAssessmentSummary = (learnerAssessment: curious.LearnerAssessment) => {
@@ -67,7 +67,7 @@ const createSkillAssessmentSummary = (learnerAssessment: curious.LearnerAssessme
   if (!assessmentDate) {
     return [
       {
-        label: renameEnglishAssessmentLabel(qualificationType),
+        label: renameAssessmentLabel(qualificationType),
         value: AWAITING_ASSESSMENT_CONTENT,
       },
     ]
@@ -75,7 +75,7 @@ const createSkillAssessmentSummary = (learnerAssessment: curious.LearnerAssessme
 
   return [
     {
-      label: renameEnglishAssessmentLabel(qualificationType),
+      label: renameAssessmentLabel(qualificationType),
       value: qualificationGrade,
     },
     {
@@ -197,7 +197,7 @@ export class EsweService {
         digiLit: createSkillAssessmentSummary(digitalLiteracyGrade),
       })
     } catch (e) {
-      if (e.response?.body?.errorCode === 'VC500') {
+      if (e.status === 404) {
         log.info(`Offender record not found in Curious.`)
         return createFlaggedContent(DEFAULT_SKILL_LEVELS)
       }
