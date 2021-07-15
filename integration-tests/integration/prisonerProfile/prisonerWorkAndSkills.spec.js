@@ -34,7 +34,7 @@ context('Prisoner Work and Skills', () => {
         caseNoteSummary: {},
         offenderNo,
       })
-      cy.task('stubLatestLearnerAssessmentsError', {})
+      cy.task('stubLatestLearnerAssessments500Error', {})
       visitWorkAndSkillsAndExpandAccordions()
     })
 
@@ -46,10 +46,6 @@ context('Prisoner Work and Skills', () => {
   })
 
   context('When the prisoner is not in Curious', () => {
-    const curiousNotFoundError = {
-      errorCode: 'VC500',
-    }
-
     before(() => {
       cy.task('stubPrisonerProfileHeaderData', {
         offenderBasicDetails,
@@ -58,7 +54,7 @@ context('Prisoner Work and Skills', () => {
         caseNoteSummary: {},
         offenderNo,
       })
-      cy.task('stubLatestLearnerAssessmentsError', curiousNotFoundError)
+      cy.task('stubLatestLearnerAssessments404Error', {})
       visitWorkAndSkillsAndExpandAccordions()
     })
 
