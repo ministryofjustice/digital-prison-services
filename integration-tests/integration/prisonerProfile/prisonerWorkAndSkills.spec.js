@@ -47,7 +47,7 @@ context('Prisoner Work and Skills', () => {
 
   context('When the prisoner is not in Curious', () => {
     const curiousNotFoundError = {
-      errorCode: 'VC500',
+      status: 404,
     }
 
     before(() => {
