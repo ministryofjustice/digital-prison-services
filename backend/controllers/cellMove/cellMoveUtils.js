@@ -23,11 +23,14 @@ const getBackLinkData = (referer, offenderNo) => {
 
 const getConfirmBackLinkData = (referer, offenderNo) => {
   const backLink = referer || `/prisoner/${offenderNo}/cell-move/search-for-cell`
+
   return {
-    backLink,
-    backLinkText: ['select-cell', 'consider-risks'].some((part) => backLink.includes(part))
-      ? 'Cancel'
-      : 'Select another cell',
+    backLink: ['consider-risks', 'select-cell'].some((part) => backLink.includes(part))
+      ? `/prisoner/${offenderNo}/cell-move/select-cell`
+      : backLink,
+    backLinkText: ['consider-risks', 'select-cell'].some((part) => backLink.includes(part))
+      ? 'Select another cell'
+      : 'Cancel',
   }
 }
 
