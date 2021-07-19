@@ -24,7 +24,7 @@ context('Prisoner Work and Skills', () => {
   })
 
   context('When there is no data because of an api call failure', () => {
-    const apiErrorText = 'Unable to show this detail.'
+    const apiErrorText = 'We cannot show these details right now. Try reloading the page.'
 
     before(() => {
       cy.task('stubPrisonerProfileHeaderData', {
