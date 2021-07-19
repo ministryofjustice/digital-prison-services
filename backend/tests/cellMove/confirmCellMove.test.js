@@ -73,7 +73,7 @@ describe('Change cell play back details', () => {
 
       expect(res.render).toHaveBeenCalledWith('cellMove/confirmCellMove.njk', {
         backLink: '/prisoner/A12345/cell-move/search-for-cell',
-        backLinkText: 'Select another cell',
+        backLinkText: 'Cancel',
         errors: undefined,
         formValues: {
           comment: undefined,
@@ -106,7 +106,7 @@ describe('Change cell play back details', () => {
 
       expect(res.render).toHaveBeenCalledWith('cellMove/confirmCellMove.njk', {
         backLink: '/prisoner/A12345/cell-move/search-for-cell',
-        backLinkText: 'Select another cell',
+        backLinkText: 'Cancel',
         breadcrumbPrisonerName: 'Doe, Bob',
         cellId: 'C-SWAP',
         cellMoveReasonRadioValues: undefined,
@@ -261,10 +261,11 @@ describe('Change cell play back details', () => {
     })
 
     test.each`
-      referer                                         | backLinkText
-      ${'/prisoner/A12345/cell-move/select-cell'}     | ${'Cancel'}
-      ${'/prisoner/A12345/cell-move/consider-risks'}  | ${'Cancel'}
-      ${'/prisoner/A12345/cell-move/search-for-cell'} | ${'Select another cell'}
+      referer                                                   | backLinkText
+      ${'/prisoner/A12345/cell-move/select-cell'}               | ${'Select another cell'}
+      ${'/prisoner/A12345/cell-move/consider-risks'}            | ${'Select another cell'}
+      ${'/prisoner/A12345/cell-move/search-for-cell'}           | ${'Cancel'}
+      ${'/change-someones-cell/temporary-move?keywords=A12345'} | ${'Cancel'}
     `(
       'The back link button content is $backLinkText when the referer is $referer',
       async ({ referer, backLinkText }) => {
@@ -275,7 +276,10 @@ describe('Change cell play back details', () => {
         expect(res.render).toHaveBeenCalledWith(
           'cellMove/confirmCellMove.njk',
           expect.objectContaining({
-            backLink: referer,
+            backLink:
+              referer === '/prisoner/A12345/cell-move/consider-risks'
+                ? '/prisoner/A12345/cell-move/select-cell'
+                : referer,
             backLinkText,
           })
         )
