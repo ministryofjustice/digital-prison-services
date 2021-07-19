@@ -179,14 +179,13 @@
     "whatwg-fetch": "2.0.4"
   },
   "scripts": {
-    "start": "DISABLE_WEBPACK=true node dist/backend/index.js",
+    "start": "DISABLE_WEBPACK=true node dist/index.js",
     "start:dev": "nodemon",
     "start-feature": "npm run compile-sass && export $(cat $npm_config_env) && npm run start:dev",
     "start-feature-no-webpack": "export $(cat $npm_config_env) && npm run build && npm run start",
-    "build": "rm -rf dist && npm run build:frontend && npm run build:backend && npm run build:copy",
+    "build": "rm -rf dist && npm run build:frontend && npm run build:backend",
     "build:backend": "tsc",
     "build:frontend": "webpack --mode=production && npm run compile-sass",
-    "build:copy": "cp -R views dist/views && cp -R build dist/build",
     "build:analyse": "BUNDLE_ANALYSE=true npm run build",
     "test": "jest --env=jsdom",
     "test-watch": "jest --env=jsdom --watch",
@@ -267,6 +266,6 @@
     "ignore": [
       "**/*.test.*"
     ],
-    "exec": "ts-node ./backend/index.js | bunyan -o simple"
+    "exec": "ts-node ./backend/index.ts | bunyan -o simple"
   }
 }

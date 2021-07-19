@@ -69,11 +69,19 @@
         "import/no-extraneous-dependencies": ["error", {"devDependencies": true}],
         "no-use-before-define": 0,
         "@typescript-eslint/no-use-before-define": 0,
+        "@typescript-eslint/no-var-requires": 0,
+        "@typescript-eslint/no-empty-function": 0,
         "class-methods-use-this": 0,
         "no-useless-constructor": 0,
         "no-shadow": "off", // https://github.com/typescript-eslint/typescript-eslint/issues/2484
         "@typescript-eslint/no-shadow": ["error"],
-        "@typescript-eslint/no-unused-vars": ["error", { "ignoreRestSiblings": true }]
+        "@typescript-eslint/no-unused-vars": [
+          1,
+          {
+            "argsIgnorePattern": "res|next|^err|_",
+            "ignoreRestSiblings": true
+          }
+        ]
       },
       "globals": { "Atomics": "readonly", "SharedArrayBuffer": "readonly" },
       "parserOptions": {

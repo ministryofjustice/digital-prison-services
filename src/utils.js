@@ -135,6 +135,18 @@ const pascalToString = (value) =>
     .replace(/([A-Z])/g, ' $1')
     .toLowerCase()
 
+const stripAgencyPrefix = (location, agency) => {
+  const parts = location && location.split('-')
+  if (parts && parts.length > 0) {
+    const index = parts.findIndex((p) => p === agency)
+    if (index >= 0) {
+      return location.substring(parts[index].length + 1, location.length)
+    }
+  }
+
+  return null
+}
+
 module.exports = {
   properCase,
   properCaseName,
@@ -153,4 +165,5 @@ module.exports = {
   linkOnClick,
   pascalToString,
   isWithinNextTwoWorkingDays,
+  stripAgencyPrefix,
 }
