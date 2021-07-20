@@ -1,12 +1,9 @@
-// @ts-expect-error ts-migrate(2451) FIXME: Cannot redeclare block-scoped variable 'express'.
-const express = require('express')
-// @ts-expect-error ts-migrate(2451) FIXME: Cannot redeclare block-scoped variable 'config'.
-const config = require('./config')
+import express from 'express'
+import config from './config'
 
-// @ts-expect-error ts-migrate(2451) FIXME: Cannot redeclare block-scoped variable 'router'.
 const router = express.Router()
 
-module.exports = () => {
+export default () => {
   router.get('/add-bulk-appointments', (req, res) => res.redirect(301, '/bulk-appointments/need-to-upload-file'))
 
   router.get('/content/support', (req, res) => res.redirect(301, config.app.supportUrl))

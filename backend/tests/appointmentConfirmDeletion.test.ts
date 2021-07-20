@@ -1,6 +1,6 @@
 import { makeNotFoundError } from './helpers'
 
-const appointmentConfirmDeletion = require('../controllers/appointmentConfirmDeletion')
+import appointmentConfirmDeletion from '../controllers/appointmentConfirmDeletion'
 
 const res = { locals: {}, send: jest.fn(), redirect: jest.fn() }
 const whereaboutsApi = {}

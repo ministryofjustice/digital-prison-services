@@ -1,9 +1,6 @@
-// @ts-expect-error ts-migrate(2451) FIXME: Cannot redeclare block-scoped variable 'moment'.
-const moment = require('moment')
-// @ts-expect-error ts-migrate(2451) FIXME: Cannot redeclare block-scoped variable 'DATE_ONLY_... Remove this comment to see the full error message
-const { DATE_ONLY_FORMAT_SPEC } = require('../../common/dateHelpers')
-// @ts-expect-error ts-migrate(2451) FIXME: Cannot redeclare block-scoped variable 'existingEv... Remove this comment to see the full error message
-const existingEventsService = require('../services/existingEventsService')
+import moment from 'moment'
+import { DATE_ONLY_FORMAT_SPEC } from '../../common/dateHelpers'
+import existingEventsService from '../services/existingEventsService'
 
 describe('existing events', () => {
   const prisonApi = {}

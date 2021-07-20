@@ -1,5 +1,4 @@
-// @ts-expect-error ts-migrate(2451) FIXME: Cannot redeclare block-scoped variable 'getHousebl... Remove this comment to see the full error message
-const getHouseblockLocationsFactory = ({ whereaboutsApi, logError }) => {
+export const getHouseblockLocationsFactory = ({ whereaboutsApi, logError }) => {
   const getHouseblockLocations = async (req, res) => {
     try {
       const response = await whereaboutsApi.searchGroups(res.locals, req.query.agencyId)
@@ -18,4 +17,4 @@ const getHouseblockLocationsFactory = ({ whereaboutsApi, logError }) => {
   return { getHouseblockLocations }
 }
 
-module.exports = { getHouseblockLocationsFactory }
+export default { getHouseblockLocationsFactory }

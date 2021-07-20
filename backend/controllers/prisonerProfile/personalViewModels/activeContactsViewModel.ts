@@ -1,11 +1,8 @@
-// @ts-expect-error ts-migrate(2451) FIXME: Cannot redeclare block-scoped variable 'moment'.
-const moment = require('moment')
-// @ts-expect-error ts-migrate(2451) FIXME: Cannot redeclare block-scoped variable 'formatName... Remove this comment to see the full error message
-const { formatName, hasLength, sortByDateTime } = require('../../../utils')
-// @ts-expect-error ts-migrate(2451) FIXME: Cannot redeclare block-scoped variable 'getPhone'.
-const { getPhone, getAddress } = require('../../../shared/addressHelpers')
+import moment from 'moment'
+import { formatName, hasLength, sortByDateTime } from '../../../utils'
+import { getPhone, getAddress } from '../../../shared/addressHelpers'
 
-module.exports = ({ personal, professional }) => {
+export default ({ personal, professional }) => {
   const getContactView = (showEmergencyContact) => (contact) => {
     const { phones, emails } = contact
 

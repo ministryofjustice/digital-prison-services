@@ -1,6 +1,5 @@
-// @ts-expect-error ts-migrate(2451) FIXME: Cannot redeclare block-scoped variable 'moment'.
-const moment = require('moment')
-const formatEvent = require('./formatEvent')
+import moment from 'moment'
+import formatEvent from './formatEvent'
 
 const filterMorning = (activities) =>
   activities && activities.filter((activity) => moment(activity.startTime).get('hour') < 12)
@@ -28,7 +27,7 @@ const byStartTimeThenByEndTime = (a, b) => {
   return 0
 }
 
-module.exports = (events) => {
+export default (events) => {
   const morningActivity = filterMorning(events)
   const afternoonActivity = filterAfternoon(events)
   const eveningDuties = filterEveningDuties(events)

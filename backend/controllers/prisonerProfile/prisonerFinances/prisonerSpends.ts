@@ -1,10 +1,6 @@
-// @ts-expect-error ts-migrate(2451) FIXME: Cannot redeclare block-scoped variable 'moment'.
-const moment = require('moment')
-
-// @ts-expect-error ts-migrate(2451) FIXME: Cannot redeclare block-scoped variable 'createTran... Remove this comment to see the full error message
-const createTransactionViewModel = require('../../../shared/createTransactionViewModel')
-// @ts-expect-error ts-migrate(2451) FIXME: Cannot redeclare block-scoped variable 'formatTime... Remove this comment to see the full error message
-const { formatTimestampToDate } = require('../../../utils')
+import moment from 'moment'
+import createTransactionViewModel from '../../../shared/createTransactionViewModel'
+import { formatTimestampToDate } from '../../../utils'
 
 const batchTransactionsOnly = (transaction) => transaction?.relatedOffenderTransactions?.length
 
@@ -18,8 +14,7 @@ const sortByRecentEntryDateThenByRecentCalendarDate = (left, right) => {
   return 0
 }
 
-module.exports =
-  ({ prisonApi, prisonerFinanceService }) =>
+export default ({ prisonApi, prisonerFinanceService }) =>
   async (req, res) => {
     const { month, year } = req.query
     const { offenderNo } = req.params

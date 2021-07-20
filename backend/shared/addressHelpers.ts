@@ -1,8 +1,6 @@
-// @ts-expect-error ts-migrate(2451) FIXME: Cannot redeclare block-scoped variable 'capitalize... Remove this comment to see the full error message
-const { capitalize } = require('../utils')
+import { capitalize } from '../utils'
 
-// @ts-expect-error ts-migrate(2451) FIXME: Cannot redeclare block-scoped variable 'getPhone'.
-const getPhone = (phones) =>
+export const getPhone = (phones) =>
   phones &&
   phones
     .map((phone) => {
@@ -15,8 +13,7 @@ const getPhone = (phones) =>
     })
     .join(',<br>')
 
-// @ts-expect-error ts-migrate(2451) FIXME: Cannot redeclare block-scoped variable 'getAddress... Remove this comment to see the full error message
-const getAddress = ({ address = {}, showType = true, phoneLabel = 'Address phone' }) => {
+export const getAddress = ({ address = {}, showType = true, phoneLabel = 'Address phone' }) => {
   // @ts-expect-error ts-migrate(2339) FIXME: Property 'flat' does not exist on type '{}'.
   const flat = address.flat && `Flat ${address.flat}`
   // @ts-expect-error ts-migrate(2339) FIXME: Property 'premise' does not exist on type '{}'.
@@ -47,8 +44,7 @@ const getAddress = ({ address = {}, showType = true, phoneLabel = 'Address phone
   ]
 }
 
-// @ts-expect-error ts-migrate(2451) FIXME: Cannot redeclare block-scoped variable 'getFormatt... Remove this comment to see the full error message
-const getFormattedAddress = ({ address = {} }) => {
+export const getFormattedAddress = ({ address = {} }) => {
   // @ts-expect-error ts-migrate(2339) FIXME: Property 'flat' does not exist on type '{}'.
   const flat = address.flat && `Flat ${address.flat}`
   // @ts-expect-error ts-migrate(2339) FIXME: Property 'street' does not exist on type '{}'.
@@ -76,7 +72,7 @@ const getFormattedAddress = ({ address = {} }) => {
   ]
 }
 
-module.exports = {
+export default {
   getPhone,
   getAddress,
   getFormattedAddress,

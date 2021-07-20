@@ -1,19 +1,13 @@
-// @ts-expect-error ts-migrate(2451) FIXME: Cannot redeclare block-scoped variable 'moment'.
-const moment = require('moment')
-// @ts-expect-error ts-migrate(2451) FIXME: Cannot redeclare block-scoped variable 'querystrin... Remove this comment to see the full error message
-const querystring = require('querystring')
-
-// @ts-expect-error ts-migrate(2451) FIXME: Cannot redeclare block-scoped variable 'DATE_TIME_... Remove this comment to see the full error message
-const { DATE_TIME_FORMAT_SPEC, MOMENT_DAY_OF_THE_WEEK, MOMENT_TIME } = require('../../../common/dateHelpers')
-// @ts-expect-error ts-migrate(2451) FIXME: Cannot redeclare block-scoped variable 'getNamesFr... Remove this comment to see the full error message
-const { getNamesFromString } = require('../../utils')
+import moment from 'moment'
+import querystring from 'querystring'
+import { DATE_TIME_FORMAT_SPEC, MOMENT_DAY_OF_THE_WEEK, MOMENT_TIME } from '../../../common/dateHelpers'
+import { getNamesFromString } from '../../utils'
 
 const templatePath = 'prisonerProfile/prisonerCaseNotes'
-// @ts-expect-error ts-migrate(2451) FIXME: Cannot redeclare block-scoped variable 'perPage'.
 const perPage = 20
 const SECURE_CASE_NOTE_SOURCE = 'OCNS'
 
-module.exports = ({ caseNotesApi, prisonerProfileService, paginationService, nunjucks, oauthApi }) => {
+export default ({ caseNotesApi, prisonerProfileService, paginationService, nunjucks, oauthApi }) => {
   const getTotalResults = async (locals, offenderNo, { type, subType, fromDate, toDate }) => {
     const { totalElements } = await caseNotesApi.getCaseNotes(locals, offenderNo, {
       pageNumber: 0,

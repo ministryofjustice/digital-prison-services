@@ -1,6 +1,6 @@
-// @ts-expect-error ts-migrate(6200) FIXME: Definitions of the following identifiers conflict ... Remove this comment to see the full error message
-const moment = require('moment')
-const {
+import moment from 'moment'
+
+import {
   formatName,
   formatTimestampToDate,
   formatTimestampToDateTime,
@@ -10,10 +10,9 @@ const {
   isTemporaryLocation,
   groupBy,
   hasLength,
-} = require('../../utils')
+} from '../../utils'
 
-module.exports =
-  ({ oauthApi, prisonApi, page = 0 }) =>
+export default ({ oauthApi, prisonApi, page = 0 }) =>
   async (req, res) => {
     const { offenderNo } = req.params
 

@@ -1,7 +1,5 @@
-// @ts-expect-error ts-migrate(2451) FIXME: Cannot redeclare block-scoped variable 'config'.
-const config = require('../config')
-// @ts-expect-error ts-migrate(2451) FIXME: Cannot redeclare block-scoped variable 'homepageCo... Remove this comment to see the full error message
-const homepageController = require('../controllers/homepage/homepage')
+import config from '../config'
+import homepageController from '../controllers/homepage/homepage'
 
 describe('Homepage', () => {
   const oauthApi = {}

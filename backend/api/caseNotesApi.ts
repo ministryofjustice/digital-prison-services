@@ -1,13 +1,8 @@
-// @ts-expect-error ts-migrate(2451) FIXME: Cannot redeclare block-scoped variable 'moment'.
-const moment = require('moment')
-// @ts-expect-error ts-migrate(2451) FIXME: Cannot redeclare block-scoped variable 'qs'.
-const qs = require('querystring')
+import moment from 'moment'
+import qs from 'querystring'
+import contextProperties from '../contextProperties'
 
-// @ts-expect-error ts-migrate(2451) FIXME: Cannot redeclare block-scoped variable 'contextPro... Remove this comment to see the full error message
-const contextProperties = require('../contextProperties')
-
-// @ts-expect-error ts-migrate(2451) FIXME: Cannot redeclare block-scoped variable 'processRes... Remove this comment to see the full error message
-const processResponse = (context) => (response) => {
+export const processResponse = (context) => (response) => {
   if (!response.body.pageable) {
     contextProperties.setResponsePagination(context, response.headers)
     return response.body
@@ -21,35 +16,34 @@ const processResponse = (context) => (response) => {
   return response.body
 }
 
-// @ts-expect-error ts-migrate(2451) FIXME: Cannot redeclare block-scoped variable 'processErr... Remove this comment to see the full error message
-const processError = (error) => {
+export const processError = (error) => {
   if (!error.response) throw error
   if (!error.response.status) throw error
   if (error.response.status !== 404) throw error // Not Found
   return {}
 }
-// @ts-expect-error ts-migrate(2451) FIXME: Cannot redeclare block-scoped variable 'DATE_ONLY_... Remove this comment to see the full error message
-const DATE_ONLY_FORMAT_SPEC = 'DD/MM/YYYY'
-const ISO_8601_DATE_FORMAT_START_OF_DAY = 'YYYY-MM-DDT00:00:00'
-const ISO_8601_DATE_FORMAT_END_OF_DAY = 'YYYY-MM-DDT23:59:59'
-const momentTo8601DateString = (m, f) => (m ? m.format(f) : '')
-const momentFromDateOnlyFormatString = (s) => (s ? moment(s, DATE_ONLY_FORMAT_SPEC) : null)
-const dateOnlyFormatTo8601 = (s, f) => momentTo8601DateString(momentFromDateOnlyFormatString(s), f)
+export const DATE_ONLY_FORMAT_SPEC = 'DD/MM/YYYY'
+export const ISO_8601_DATE_FORMAT_START_OF_DAY = 'YYYY-MM-DDT00:00:00'
+export const ISO_8601_DATE_FORMAT_END_OF_DAY = 'YYYY-MM-DDT23:59:59'
+export const momentTo8601DateString = (m, f) => (m ? m.format(f) : '')
+export const momentFromDateOnlyFormatString = (s) => (s ? moment(s, DATE_ONLY_FORMAT_SPEC) : null)
+export const dateOnlyFormatTo8601 = (s, f) => momentTo8601DateString(momentFromDateOnlyFormatString(s), f)
 
-const toFormatStartOfDay = (date) => (date ? dateOnlyFormatTo8601(date, ISO_8601_DATE_FORMAT_START_OF_DAY) : null)
-const toFormatEndOfDay = (date) => (date ? dateOnlyFormatTo8601(date, ISO_8601_DATE_FORMAT_END_OF_DAY) : null)
+export const toFormatStartOfDay = (date) =>
+  date ? dateOnlyFormatTo8601(date, ISO_8601_DATE_FORMAT_START_OF_DAY) : null
+export const toFormatEndOfDay = (date) => (date ? dateOnlyFormatTo8601(date, ISO_8601_DATE_FORMAT_END_OF_DAY) : null)
 
-const caseNotesApiFactory = (client) => {
+export const caseNotesApiFactory = (client) => {
   const get = (context, url) => client.get(context, url).then(processResponse(context)).catch(processError)
 
-  const getCaseNotes = (context, offenderNo, { perPage, pageNumber, type, subType, startDate, endDate }) => {
+  const getCaseNotes = (context, offenderNo, data) => {
     const query = {
-      size: perPage,
-      page: pageNumber,
-      type,
-      subType,
-      startDate: toFormatStartOfDay(startDate),
-      endDate: toFormatEndOfDay(endDate),
+      size: data.perPage,
+      page: data.pageNumber,
+      type: data.type,
+      subType: data.subType,
+      startDate: toFormatStartOfDay(data.startDate),
+      endDate: toFormatEndOfDay(data.endDate),
     }
     return client
       .get(context, `/case-notes/${offenderNo}?${qs.stringify(query)}`)
@@ -57,10 +51,10 @@ const caseNotesApiFactory = (client) => {
       .catch(processError)
   }
 
-  const addCaseNote = (context, offenderNo, data) =>
+  const addCaseNote = (context, offenderNo, data?) =>
     client.post(context, `/case-notes/${offenderNo}`, data).then(processResponse(context))
 
-  const amendCaseNote = (context, offenderNo, caseNoteId, data) =>
+  const amendCaseNote = (context, offenderNo, caseNoteId, data?) =>
     client.put(context, `/case-notes/${offenderNo}/${caseNoteId}`, data).then(processResponse(context))
 
   const getCaseNoteTypes = (context) => get(context, '/case-notes/types')
@@ -88,4 +82,4 @@ const caseNotesApiFactory = (client) => {
   }
 }
 
-module.exports = { caseNotesApiFactory }
+export default { caseNotesApiFactory }

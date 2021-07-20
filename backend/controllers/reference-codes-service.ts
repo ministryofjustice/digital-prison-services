@@ -33,4 +33,4 @@ const referenceCodesServiceFactory = (prisonApi) => {
   }
 }
 
-module.exports = referenceCodesServiceFactory
+export default referenceCodesServiceFactory

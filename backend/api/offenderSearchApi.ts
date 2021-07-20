@@ -1,9 +1,7 @@
-// @ts-expect-error ts-migrate(2451) FIXME: Cannot redeclare block-scoped variable 'contextPro... Remove this comment to see the full error message
-const contextProperties = require('../contextProperties')
-// @ts-expect-error ts-migrate(2451) FIXME: Cannot redeclare block-scoped variable 'mapToQuery... Remove this comment to see the full error message
-const { mapToQueryString } = require('../utils')
+import contextProperties from '../contextProperties'
+import { mapToQueryString } from '../utils'
 
-const offenderSearchApiFactory = (client) => {
+export const offenderSearchApiFactory = (client) => {
   const processResponse = (context) => (response) => {
     contextProperties.setPaginationFromPageRequest(context, response.body)
     return response.body.content
@@ -46,4 +44,4 @@ const offenderSearchApiFactory = (client) => {
   }
 }
 
-module.exports = { offenderSearchApiFactory }
+export default { offenderSearchApiFactory }

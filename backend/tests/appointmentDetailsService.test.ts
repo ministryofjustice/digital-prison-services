@@ -1,6 +1,6 @@
 import { makeNotFoundError } from './helpers'
 
-const appointmentDetailsServiceFactory = require('../services/appointmentDetailsService')
+import appointmentDetailsServiceFactory from '../services/appointmentDetailsService'
 
 describe('appointment details', () => {
   const testAppointment = {

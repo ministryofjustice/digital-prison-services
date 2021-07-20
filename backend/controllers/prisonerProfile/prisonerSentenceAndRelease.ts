@@ -1,11 +1,9 @@
-const releaseDatesViewModel = require('./sentenceAndReleaseViewModels/releaseDatesViewModel')
-const sentenceAdjustmentsViewModel = require('./sentenceAndReleaseViewModels/sentenceAdjustmentsViewModel')
-const courtCasesViewModel = require('./sentenceAndReleaseViewModels/courtCasesViewModel')
-// @ts-expect-error ts-migrate(2451) FIXME: Cannot redeclare block-scoped variable 'readableDa... Remove this comment to see the full error message
-const { readableDateFormat } = require('../../utils')
+import releaseDatesViewModel from './sentenceAndReleaseViewModels/releaseDatesViewModel'
+import sentenceAdjustmentsViewModel from './sentenceAndReleaseViewModels/sentenceAdjustmentsViewModel'
+import courtCasesViewModel from './sentenceAndReleaseViewModels/courtCasesViewModel'
+import { readableDateFormat } from '../../utils'
 
-module.exports =
-  ({ prisonerProfileService, prisonApi, systemOauthClient, offenderSearchApi }) =>
+export default ({ prisonerProfileService, prisonApi, systemOauthClient, offenderSearchApi }) =>
   async (req, res) => {
     const { offenderNo } = req.params
 

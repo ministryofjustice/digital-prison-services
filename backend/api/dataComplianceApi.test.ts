@@ -1,10 +1,7 @@
-// @ts-expect-error ts-migrate(2451) FIXME: Cannot redeclare block-scoped variable 'dataCompli... Remove this comment to see the full error message
-const { dataComplianceApiFactory } = require('./dataComplianceApi')
+import { dataComplianceApiFactory } from './dataComplianceApi'
 
-// @ts-expect-error ts-migrate(2451) FIXME: Cannot redeclare block-scoped variable 'client'.
 const client = {}
 const dataComplianceApi = dataComplianceApiFactory(client)
-// @ts-expect-error ts-migrate(2451) FIXME: Cannot redeclare block-scoped variable 'context'.
 const context = { some: 'context' }
 
 describe('data compliance api', () => {

@@ -1,21 +1,11 @@
+import { getActivityListFactory, getActivityListFactory as factory } from '../controllers/attendance/activityList'
+
 Reflect.deleteProperty(process.env, 'APPINSIGHTS_INSTRUMENTATIONKEY')
-// @ts-expect-error ts-migrate(2451) FIXME: Cannot redeclare block-scoped variable 'factory'.
-const factory = require('../controllers/attendance/activityList').getActivityListFactory
 
-// @ts-expect-error ts-migrate(2451) FIXME: Cannot redeclare block-scoped variable 'prisonApi'... Remove this comment to see the full error message
 const prisonApi = {}
-// @ts-expect-error ts-migrate(2451) FIXME: Cannot redeclare block-scoped variable 'whereabout... Remove this comment to see the full error message
 const whereaboutsApi = {}
-// @ts-expect-error ts-migrate(2451) FIXME: Cannot redeclare block-scoped variable 'config'.
-const config = {
-  app: { production: true },
-}
 
-const activityList = require('../controllers/attendance/activityList').getActivityListFactory(
-  prisonApi,
-  whereaboutsApi,
-  config
-).getActivityList
+const activityList = getActivityListFactory(prisonApi, whereaboutsApi).getActivityList
 
 function createActivitiesResponse() {
   return [
@@ -799,7 +789,7 @@ describe('Activity list controller', () => {
     // @ts-expect-error ts-migrate(2339) FIXME: Property 'getAbsenceReasons' does not exist on typ... Remove this comment to see the full error message
     whereaboutsApi.getAbsenceReasons.mockResolvedValue([])
 
-    // @ts-expect-error ts-migrate(2339) FIXME: Property 'getActivityList' does not exist on type ... Remove this comment to see the full error message
+    // @ts-expect-error ts-migrate(2554) FIXME: Expected 2 arguments, but got 3.
     const { getActivityList: service } = factory(prisonApi, whereaboutsApi, {
       app: { production: false },
     })

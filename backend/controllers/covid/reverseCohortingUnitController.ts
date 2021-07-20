@@ -1,11 +1,8 @@
-// @ts-expect-error ts-migrate(2451) FIXME: Cannot redeclare block-scoped variable 'moment'.
-const moment = require('moment')
-// @ts-expect-error ts-migrate(2451) FIXME: Cannot redeclare block-scoped variable 'isBeforeTo... Remove this comment to see the full error message
-const { isBeforeToday, sortByDateTime } = require('../../utils')
-// @ts-expect-error ts-migrate(2451) FIXME: Cannot redeclare block-scoped variable 'alerts'.
-const { alerts } = require('../../services/covidService')
+import moment from 'moment'
+import { isBeforeToday, sortByDateTime } from '../../utils'
+import { alerts } from '../../services/covidService'
 
-module.exports = ({ covidService }) => {
+export default ({ covidService }) => {
   const formatResult = (result) => {
     const alertCreated = moment(result.alertCreated)
     const expectedMoveDate = moment(result.alertCreated).add(14, 'days')

@@ -1,6 +1,5 @@
-// @ts-expect-error ts-migrate(2451) FIXME: Cannot redeclare block-scoped variable 'config'.
-const config = require('../config')
-const notificationHandlerFactory = require('./notificationHandler')
+import config from '../config'
+import notificationHandlerFactory from './notificationHandler'
 
 describe('Notification handler', () => {
   const contentfulService = {}

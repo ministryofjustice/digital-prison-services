@@ -1,9 +1,6 @@
-// @ts-expect-error ts-migrate(2451) FIXME: Cannot redeclare block-scoped variable 'alertFlagL... Remove this comment to see the full error message
-const { alertFlagLabels, cellMoveAlertCodes } = require('../../shared/alertFlagValues')
-// @ts-expect-error ts-migrate(2451) FIXME: Cannot redeclare block-scoped variable 'putLastNam... Remove this comment to see the full error message
-const { putLastNameFirst, formatLocation, formatName } = require('../../utils')
+import { alertFlagLabels, cellMoveAlertCodes } from '../../shared/alertFlagValues'
+import { putLastNameFirst, formatLocation, formatName } from '../../utils'
 
-// @ts-expect-error ts-migrate(2451) FIXME: Cannot redeclare block-scoped variable 'prisonApiL... Remove this comment to see the full error message
 const prisonApiLocationDescription = async (res, whereaboutsApi, locationKey, userCaseLoad) => {
   const fullLocationPrefix = await whereaboutsApi.getAgencyGroupLocationPrefix(res.locals, userCaseLoad, locationKey)
   if (fullLocationPrefix) {
@@ -13,8 +10,7 @@ const prisonApiLocationDescription = async (res, whereaboutsApi, locationKey, us
   return `${userCaseLoad}-${locationKey}`
 }
 
-module.exports =
-  ({ prisonApi, whereaboutsApi }) =>
+export default ({ prisonApi, whereaboutsApi }) =>
   async (req, res) => {
     const {
       user: { activeCaseLoad },

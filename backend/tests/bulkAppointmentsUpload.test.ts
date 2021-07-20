@@ -1,15 +1,11 @@
-// @ts-expect-error ts-migrate(2451) FIXME: Cannot redeclare block-scoped variable 'bulkAppoin... Remove this comment to see the full error message
-const { bulkAppointmentsUploadFactory } = require('../controllers/appointments/bulkAppointmentsUpload')
+import { bulkAppointmentsUploadFactory } from '../controllers/appointments/bulkAppointmentsUpload'
 
 Reflect.deleteProperty(process.env, 'APPINSIGHTS_INSTRUMENTATIONKEY')
 
-// @ts-expect-error ts-migrate(2451) FIXME: Cannot redeclare block-scoped variable 'logError'.
 const logError = jest.fn()
 const csvParser = {}
 const offenderLoader = {}
-// @ts-expect-error ts-migrate(2451) FIXME: Cannot redeclare block-scoped variable 'prisonApi'... Remove this comment to see the full error message
 const prisonApi = {}
-// @ts-expect-error ts-migrate(2451) FIXME: Cannot redeclare block-scoped variable 'controller... Remove this comment to see the full error message
 const controller = bulkAppointmentsUploadFactory(csvParser, offenderLoader, prisonApi, logError)
 
 describe('bulk appointments upload', () => {
@@ -44,7 +40,6 @@ describe('bulk appointments upload', () => {
   describe('index', () => {
     describe('when there are no errors', () => {
       it('should render the appointments csv upload page', async () => {
-        // @ts-expect-error ts-migrate(2339) FIXME: Property 'index' does not exist on type '({ prison... Remove this comment to see the full error message
         await controller.index(req, res)
 
         expect(res.render).toBeCalledWith('uploadOffenders.njk', {
@@ -62,7 +57,6 @@ describe('bulk appointments upload', () => {
       })
 
       it('should redirect to start when session is invalid', async () => {
-        // @ts-expect-error ts-migrate(2339) FIXME: Property 'index' does not exist on type '({ prison... Remove this comment to see the full error message
         await controller.index(req, res)
 
         expect(res.redirect).toBeCalledWith('/bulk-appointments/add-appointment-details')
@@ -125,7 +119,6 @@ describe('bulk appointments upload', () => {
         offenderLoader.loadFromCsvContent.mockReturnValue(prisonerList)
         res.redirect = jest.fn()
 
-        // @ts-expect-error ts-migrate(2339) FIXME: Property 'post' does not exist on type '({ prisonA... Remove this comment to see the full error message
         await controller.post(req, res)
 
         expect(req.session.data).toEqual({
@@ -177,7 +170,6 @@ describe('bulk appointments upload', () => {
         offenderLoader.loadFromCsvContent.mockReturnValue(prisonerList)
         res.redirect = jest.fn()
 
-        // @ts-expect-error ts-migrate(2339) FIXME: Property 'post' does not exist on type '({ prisonA... Remove this comment to see the full error message
         await controller.post(req, res)
         expect(req.session.data).toEqual(expect.objectContaining({ prisonersNotFound: ['BADNUMBER'] }))
         expect(res.redirect).toBeCalledWith('/bulk-appointments/invalid-numbers')
@@ -195,7 +187,6 @@ describe('bulk appointments upload', () => {
         offenderLoader.loadFromCsvContent.mockReturnValue([])
         res.redirect = jest.fn()
 
-        // @ts-expect-error ts-migrate(2339) FIXME: Property 'post' does not exist on type '({ prisonA... Remove this comment to see the full error message
         await controller.post(req, res)
         expect(res.redirect).toBeCalledWith('/bulk-appointments/no-appointments-added?reason=offendersNotFound')
       })
@@ -212,7 +203,6 @@ describe('bulk appointments upload', () => {
         offenderLoader.loadFromCsvContent.mockReturnValue([])
         res.redirect = jest.fn()
 
-        // @ts-expect-error ts-migrate(2339) FIXME: Property 'post' does not exist on type '({ prisonA... Remove this comment to see the full error message
         await controller.post(req, res)
         expect(req.session.data).toEqual(
           expect.objectContaining({
@@ -231,7 +221,6 @@ describe('bulk appointments upload', () => {
         })
       })
       it('should return handle errors with the csv parsing service', async () => {
-        // @ts-expect-error ts-migrate(2339) FIXME: Property 'post' does not exist on type '({ prisonA... Remove this comment to see the full error message
         await controller.post(req, res)
 
         expect(logError).toBeCalledWith(

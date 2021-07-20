@@ -1,4 +1,4 @@
-const prisonerAlerts = require('../controllers/prisonerProfile/prisonerAlerts')
+import prisonerAlerts from '../controllers/prisonerProfile/prisonerAlerts'
 
 describe('prisoner alerts', () => {
   const offenderNo = 'G3878UK'
@@ -62,6 +62,7 @@ describe('prisoner alerts', () => {
       paginationService,
       prisonApi,
       oauthApi,
+      // @ts-expect-error ts-migrate(2345) FIXME: Argument of type '{ prisonerProfileService: {}; re... Remove this comment to see the full error message
       logError,
     })
   })

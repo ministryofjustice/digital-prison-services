@@ -1,14 +1,9 @@
-// @ts-expect-error ts-migrate(2451) FIXME: Cannot redeclare block-scoped variable 'moment'.
-const moment = require('moment')
-// @ts-expect-error ts-migrate(2451) FIXME: Cannot redeclare block-scoped variable 'DATE_TIME_... Remove this comment to see the full error message
-const { DATE_TIME_FORMAT_SPEC, DAY_MONTH_YEAR, Time } = require('../../../common/dateHelpers')
+import moment from 'moment'
+import { DATE_TIME_FORMAT_SPEC, DAY_MONTH_YEAR, Time } from '../../../common/dateHelpers'
+import { notifications } from '../../config'
+import { properCaseName } from '../../utils'
 
-const {
-  notifications: { confirmBookingPrisonTemplateId, emails },
-} = require('../../config')
-
-// @ts-expect-error ts-migrate(2451) FIXME: Cannot redeclare block-scoped variable 'properCase... Remove this comment to see the full error message
-const { properCaseName } = require('../../utils')
+const { confirmBookingPrisonTemplateId, emails } = notifications
 
 const APPOINTMENT_DURATION_MINS = 15
 
@@ -58,8 +53,7 @@ const getLinks = (offenderNo) => ({
   cancel: `/offenders/${offenderNo}/prepost-appointments/cancel`,
 })
 
-// @ts-expect-error ts-migrate(2451) FIXME: Cannot redeclare block-scoped variable 'prepostApp... Remove this comment to see the full error message
-const prepostAppointmentsFactory = ({
+export const prepostAppointmentsFactory = ({
   prisonApi,
   oauthApi,
   whereaboutsApi,
@@ -436,6 +430,6 @@ const prepostAppointmentsFactory = ({
   }
 }
 
-module.exports = {
+export default {
   prepostAppointmentsFactory,
 }

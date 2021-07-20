@@ -1,4 +1,4 @@
-const prisonerProfessionalContacts = require('../controllers/prisonerProfile/prisonerProfessionalContacts')
+import prisonerProfessionalContacts from '../controllers/prisonerProfile/prisonerProfessionalContacts'
 
 describe('Prisoner professional contacts', () => {
   const offenderNo = 'ABC123'
@@ -32,6 +32,7 @@ describe('Prisoner professional contacts', () => {
     // @ts-expect-error ts-migrate(2339) FIXME: Property 'getPomByOffenderNo' does not exist on ty... Remove this comment to see the full error message
     allocationManagerApi.getPomByOffenderNo = jest.fn().mockResolvedValue({})
 
+    // @ts-expect-error ts-migrate(2345) FIXME: Argument of type '{ prisonApi: {}; personService: ... Remove this comment to see the full error message
     controller = prisonerProfessionalContacts({ prisonApi, personService, allocationManagerApi, logError })
   })
 

@@ -1,8 +1,5 @@
-// @ts-expect-error ts-migrate(2451) FIXME: Cannot redeclare block-scoped variable 'moment'.
-const moment = require('moment')
-
-// @ts-expect-error ts-migrate(2451) FIXME: Cannot redeclare block-scoped variable 'formatName... Remove this comment to see the full error message
-const { formatName, formatLocation, stripAgencyPrefix, putLastNameFirst } = require('../../utils')
+import moment from 'moment'
+import { formatName, formatLocation, stripAgencyPrefix, putLastNameFirst } from '../../utils'
 
 const latestBedAssignment = (left, right) => right.bedAssignmentHistorySequence - left.bedAssignmentHistorySequence
 const formatLocationDescription = (description, agencyId) => formatLocation(stripAgencyPrefix(description, agencyId))
@@ -26,7 +23,6 @@ const sortByMostEarliestFirst = (left, right) => {
   return 0
 }
 
-// @ts-expect-error ts-migrate(2451) FIXME: Cannot redeclare block-scoped variable 'prisonApiL... Remove this comment to see the full error message
 const prisonApiLocationDescription = async (res, whereaboutsApi, locationKey, userCaseLoad) => {
   const fullLocationPrefix = await whereaboutsApi.getAgencyGroupLocationPrefix(res.locals, userCaseLoad, locationKey)
   if (fullLocationPrefix) {
@@ -36,8 +32,7 @@ const prisonApiLocationDescription = async (res, whereaboutsApi, locationKey, us
   return `${userCaseLoad}-${locationKey}`
 }
 
-module.exports =
-  ({ prisonApi, whereaboutsApi }) =>
+export default ({ prisonApi, whereaboutsApi }) =>
   async (req, res) => {
     if (!req?.query?.date) return res.redirect('/change-someones-cell/recent-cell-moves')
 

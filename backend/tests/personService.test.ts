@@ -1,4 +1,4 @@
-const personService = require('../services/personService')
+import personService from '../services/personService'
 
 describe('person service', () => {
   const context = {}

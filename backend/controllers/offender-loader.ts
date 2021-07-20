@@ -1,10 +1,8 @@
-// @ts-expect-error ts-migrate(2451) FIXME: Cannot redeclare block-scoped variable 'logger'.
-const logger = require('../log')
+import logger from '../log'
 
 const removeDuplicates = (array) => [...new Set(array)]
 
-// @ts-expect-error ts-migrate(2451) FIXME: Cannot redeclare block-scoped variable 'offenderLo... Remove this comment to see the full error message
-const offenderLoaderFactory = (prisonApi) => {
+export const offenderLoaderFactory = (prisonApi) => {
   const loadFromCsvContent = async (context, rows, agencyId) => {
     logger.debug(`Csv file was imported with ${rows.length} rows of data`)
     const offenderNumbers = removeDuplicates(rows.map((row) => row[0]))
@@ -21,6 +19,6 @@ const offenderLoaderFactory = (prisonApi) => {
   }
 }
 
-module.exports = {
+export default {
   offenderLoaderFactory,
 }

@@ -1,4 +1,4 @@
-const viewResidentialLocationController = require('../../controllers/cellMove/cellMoveViewResidentialLocation')
+import viewResidentialLocationController from '../../controllers/cellMove/cellMoveViewResidentialLocation'
 
 describe('View Residential Location', () => {
   const prisonApi = {}

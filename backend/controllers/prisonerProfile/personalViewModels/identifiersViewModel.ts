@@ -1,7 +1,6 @@
-// @ts-expect-error ts-migrate(2451) FIXME: Cannot redeclare block-scoped variable 'getValueBy... Remove this comment to see the full error message
-const getValueByType = require('../../../shared/getValueByType')
+import getValueByType from '../../../shared/getValueByType'
 
-module.exports = ({ identifiers }) => {
+export default ({ identifiers }) => {
   const croValue = getValueByType('CRO', identifiers, 'value')
   const ninoValue = getValueByType('NINO', identifiers, 'value')
   const horefValue = getValueByType('HOREF', identifiers, 'value')

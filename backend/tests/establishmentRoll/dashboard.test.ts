@@ -1,6 +1,5 @@
-const dashboard = require('../../controllers/establishmentRoll/dashboard')
+import dashboard from '../../controllers/establishmentRoll/dashboard'
 
-// @ts-expect-error ts-migrate(2451) FIXME: Cannot redeclare block-scoped variable 'prisonApi'... Remove this comment to see the full error message
 const prisonApi = {}
 
 describe('Establishment Roll', () => {
@@ -93,6 +92,7 @@ describe('Establishment Roll', () => {
       { description: 'CSWAP', locationId: 2 },
     ])
 
+    // @ts-expect-error ts-migrate(2345) FIXME: Argument of type '{ prisonApi: {}; logError: jest.... Remove this comment to see the full error message
     controller = dashboard({ prisonApi, logError })
     // @ts-expect-error ts-migrate(2339) FIXME: Property 'render' does not exist on type '{ locals... Remove this comment to see the full error message
     res.render = jest.fn()

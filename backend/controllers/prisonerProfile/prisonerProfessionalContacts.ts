@@ -1,11 +1,9 @@
-// @ts-expect-error ts-migrate(2451) FIXME: Cannot redeclare block-scoped variable 'moment'.
-const moment = require('moment')
-// @ts-expect-error ts-migrate(2451) FIXME: Cannot redeclare block-scoped variable 'logErrorAn... Remove this comment to see the full error message
-const logErrorAndContinue = require('../../shared/logErrorAndContinue')
-// @ts-expect-error ts-migrate(2451) FIXME: Cannot redeclare block-scoped variable 'formatName... Remove this comment to see the full error message
-const { formatName, putLastNameFirst, hasLength, groupBy, sortByDateTime, getNamesFromString } = require('../../utils')
-// @ts-expect-error ts-migrate(2451) FIXME: Cannot redeclare block-scoped variable 'getPhone'.
-const { getPhone, getFormattedAddress } = require('../../shared/addressHelpers')
+import moment from 'moment'
+import logErrorAndContinue from '../../shared/logErrorAndContinue'
+
+import { formatName, putLastNameFirst, hasLength, groupBy, sortByDateTime, getNamesFromString } from '../../utils'
+
+import { getPhone, getFormattedAddress } from '../../shared/addressHelpers'
 
 const getContactView = (contact) => {
   const { address, phones, emails, jobTitle } = contact
@@ -31,8 +29,7 @@ const sortByPrimaryAndStartDate = (left, right) => {
   return sortByDateTime(right.startDate, left.startDate) // Most recently added first
 }
 
-module.exports =
-  ({ prisonApi, personService, allocationManagerApi }) =>
+export default ({ prisonApi, personService, allocationManagerApi }) =>
   async (req, res) => {
     const { offenderNo } = req.params
 
@@ -46,6 +43,7 @@ module.exports =
       ].map((apiCall) => logErrorAndContinue(apiCall))
     )
 
+    // @ts-expect-error ts-migrate(2339) FIXME: Property 'otherContacts' does not exist on type '{... Remove this comment to see the full error message
     const { otherContacts } = contacts || {}
 
     const activeOfficialContacts = otherContacts
@@ -86,10 +84,8 @@ module.exports =
     const pomStaff =
       allocationManager &&
       Object.entries(allocationManager)
-        // @ts-expect-error ts-migrate(2339) FIXME: Property 'name' does not exist on type 'unknown'.
         .filter(([, value]) => value.name)
         .map(([key, value]) => ({
-          // @ts-expect-error ts-migrate(2339) FIXME: Property 'name' does not exist on type 'unknown'.
           name: getNamesFromString(value.name).join(' '),
           jobTitle: key === 'secondary_pom' && 'Co-worker',
         }))

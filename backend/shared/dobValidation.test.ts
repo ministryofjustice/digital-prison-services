@@ -1,5 +1,4 @@
-// @ts-expect-error ts-migrate(2451) FIXME: Cannot redeclare block-scoped variable 'dobValidat... Remove this comment to see the full error message
-const dobValidation = require('./dobValidation')
+import dobValidation from './dobValidation'
 
 describe('date of birth validation', () => {
   it('should error when missing the day', () => {

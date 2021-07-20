@@ -1,10 +1,7 @@
-// @ts-expect-error ts-migrate(2451) FIXME: Cannot redeclare block-scoped variable 'qs'.
-const qs = require('qs')
-// @ts-expect-error ts-migrate(2451) FIXME: Cannot redeclare block-scoped variable 'formatTime... Remove this comment to see the full error message
-const { formatTimestampToDate, formatTimestampToDateTime } = require('../utils')
+import qs from 'qs'
+import { formatTimestampToDate, formatTimestampToDateTime } from '../utils'
 
-// @ts-expect-error ts-migrate(2451) FIXME: Cannot redeclare block-scoped variable 'retentionR... Remove this comment to see the full error message
-const retentionReasonsFactory = (prisonApi, dataComplianceApi) => {
+export const retentionReasonsFactory = (prisonApi, dataComplianceApi) => {
   const sortReasonsByDisplayOrder = (reasons) => reasons.sort((r1, r2) => (r1.displayOrder > r2.displayOrder ? 1 : -1))
 
   const getOffenderUrl = (offenderNo) => `/prisoner/${offenderNo}`
@@ -73,7 +70,7 @@ const retentionReasonsFactory = (prisonApi, dataComplianceApi) => {
   const post = async (req, res) => {
     const { offenderNo } = req.params
     const { reasons, version } = qs.parse(req.body)
-    const selectedReasons = reasons.filter((reason) => reason.reasonCode)
+    const selectedReasons = (reasons as any).filter((reason) => reason.reasonCode)
 
     const pageErrors = validateOptionsSelected(selectedReasons)
     if (pageErrors.length > 0) return renderTemplate({ req, res, selectedReasons, pageErrors })
@@ -91,6 +88,6 @@ const retentionReasonsFactory = (prisonApi, dataComplianceApi) => {
   return { index, post }
 }
 
-module.exports = {
+export default {
   retentionReasonsFactory,
 }

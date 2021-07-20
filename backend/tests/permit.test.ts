@@ -1,4 +1,4 @@
-const permitController = require('../controllers/permit')
+import permitController from '../controllers/permit'
 
 describe('Permit', () => {
   const oauthApi = {}

@@ -1,8 +1,6 @@
-// @ts-expect-error ts-migrate(2451) FIXME: Cannot redeclare block-scoped variable 'moment'.
-const moment = require('moment')
+import moment from 'moment'
 
-module.exports =
-  ({ prisonApi, logError, existingEventsService }) =>
+export default ({ prisonApi, logError, existingEventsService }) =>
   async (req, res) => {
     const { activeCaseLoadId: agencyId } = req.session.userDetails
     const { date, locationId } = req.query

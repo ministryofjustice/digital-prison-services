@@ -1,5 +1,4 @@
-// @ts-expect-error ts-migrate(2451) FIXME: Cannot redeclare block-scoped variable 'retentionR... Remove this comment to see the full error message
-const { retentionReasonsFactory } = require('../controllers/retentionReasons')
+import { retentionReasonsFactory } from '../controllers/retentionReasons'
 
 describe('retention reasons', () => {
   const prisonApi = {}

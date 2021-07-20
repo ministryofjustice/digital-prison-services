@@ -1,27 +1,15 @@
-// @ts-expect-error ts-migrate(2451) FIXME: Cannot redeclare block-scoped variable 'moment'.
-const moment = require('moment')
-// @ts-expect-error ts-migrate(2451) FIXME: Cannot redeclare block-scoped variable 'putLastNam... Remove this comment to see the full error message
-const { putLastNameFirst, hasLength, formatName, getNamesFromString, formatLocation } = require('../utils')
-// @ts-expect-error ts-migrate(2451) FIXME: Cannot redeclare block-scoped variable 'alertFlagL... Remove this comment to see the full error message
-const { alertFlagLabels, profileAlertCodes } = require('../shared/alertFlagValues')
-// @ts-expect-error ts-migrate(2451) FIXME: Cannot redeclare block-scoped variable 'csraTransl... Remove this comment to see the full error message
-const { csraTranslations } = require('../shared/csraHelpers')
-const {
-  apis: {
-    categorisation: { ui_url: categorisationUrl },
-    pathfinder: { ui_url: pathfinderUrl },
-    soc: { url: socUrl, enabled: socEnabled },
-    useOfForce: { prisons: useOfForcePrisons, ui_url: useOfForceUrl },
-    complexity,
-  },
-  app: { displayRetentionLink, esweEnabled },
-} = require('../config')
-// @ts-expect-error ts-migrate(2451) FIXME: Cannot redeclare block-scoped variable 'logErrorAn... Remove this comment to see the full error message
-const logErrorAndContinue = require('../shared/logErrorAndContinue')
+import moment from 'moment'
 
-const isComplexityEnabledFor = (agencyId) => complexity.enabled_prisons?.includes(agencyId)
+import { putLastNameFirst, hasLength, formatName, getNamesFromString, formatLocation } from '../utils'
 
-module.exports = ({
+import { alertFlagLabels, profileAlertCodes } from '../shared/alertFlagValues'
+import { csraTranslations } from '../shared/csraHelpers'
+import config from '../config'
+import logErrorAndContinue from '../shared/logErrorAndContinue'
+
+export const isComplexityEnabledFor = (agencyId) => config.apis.complexity.enabled_prisons?.includes(agencyId)
+
+export default ({
   prisonApi,
   keyworkerApi,
   oauthApi,
@@ -32,6 +20,16 @@ module.exports = ({
   allocationManagerApi,
   complexityApi,
 }) => {
+  const {
+    apis: {
+      categorisation: { ui_url: categorisationUrl },
+      pathfinder: { ui_url: pathfinderUrl },
+      soc: { url: socUrl, enabled: socEnabled },
+      useOfForce: { prisons: useOfForcePrisons, ui_url: useOfForceUrl },
+    },
+    app: { displayRetentionLink, esweEnabled },
+  } = config
+
   const getPrisonerProfileData = async (context, offenderNo, username) => {
     const [currentUser, prisonerDetails] = await Promise.all([
       oauthApi.currentUser(context),
@@ -102,12 +100,14 @@ module.exports = ({
       )
     )
 
-    const canViewInactivePrisoner = userRoles && userRoles.some((role) => role.roleCode === 'INACTIVE_BOOKINGS')
-    const offenderInCaseload = userCaseloads && userCaseloads.some((caseload) => caseload.caseLoadId === agencyId)
+    const canViewInactivePrisoner =
+      userRoles && (userRoles as any).some((role) => role.roleCode === 'INACTIVE_BOOKINGS')
+    const offenderInCaseload =
+      userCaseloads && (userCaseloads as any).some((caseload) => caseload.caseLoadId === agencyId)
 
     const isCatToolUser = Boolean(
       userRoles &&
-        userRoles.some((role) =>
+        (userRoles as any).some((role) =>
           [
             'CREATE_CATEGORISATION',
             'CREATE_RECATEGORISATION',
@@ -118,12 +118,12 @@ module.exports = ({
     )
 
     const canViewProbationDocuments = Boolean(
-      userRoles && userRoles.some((role) => ['VIEW_PROBATION_DOCUMENTS', 'POM'].includes(role.roleCode))
+      userRoles && (userRoles as any).some((role) => ['VIEW_PROBATION_DOCUMENTS', 'POM'].includes(role.roleCode))
     )
 
     const isPathfinderUser = Boolean(
       userRoles &&
-        userRoles.some((role) =>
+        (userRoles as any).some((role) =>
           [
             'PF_STD_PRISON',
             'PF_STD_PROBATION',
@@ -139,14 +139,16 @@ module.exports = ({
 
     const isPathfinderReadWriteUser = Boolean(
       userRoles &&
-        userRoles.some((role) => ['PF_STD_PRISON', 'PF_STD_PROBATION', 'PF_APPROVAL', 'PF_HQ'].includes(role.roleCode))
+        (userRoles as any).some((role) =>
+          ['PF_STD_PRISON', 'PF_STD_PROBATION', 'PF_APPROVAL', 'PF_HQ'].includes(role.roleCode)
+        )
     )
 
     const canViewPathfinderLink = Boolean(isPathfinderUser && pathfinderDetails)
     const useOfForceEnabledPrisons = useOfForcePrisons.split(',').map((prison) => prison.trim().toUpperCase())
 
     const isSocUser = Boolean(
-      userRoles && userRoles.some((role) => ['SOC_CUSTODY', 'SOC_COMMUNITY'].includes(role.roleCode))
+      userRoles && (userRoles as any).some((role) => ['SOC_CUSTODY', 'SOC_COMMUNITY'].includes(role.roleCode))
     )
 
     const canViewSocLink = Boolean(isSocUser && socDetails)
@@ -166,11 +168,11 @@ module.exports = ({
       canViewProbationDocuments,
       canViewPathfinderLink,
       pathfinderProfileUrl:
-        pathfinderUrl && pathfinderDetails && `${pathfinderUrl}nominal/${String(pathfinderDetails.id)}`,
+        pathfinderUrl && pathfinderDetails && `${pathfinderUrl}nominal/${String((pathfinderDetails as any).id)}`,
       showPathfinderReferButton: Boolean(!pathfinderDetails && isPathfinderReadWriteUser),
       pathfinderReferUrl: pathfinderUrl && `${pathfinderUrl}refer/offender/${offenderNo}`,
       canViewSocLink: socEnabled && canViewSocLink,
-      socProfileUrl: socEnabled && socUrl && socDetails && `${socUrl}/nominal/${String(socDetails.id)}`,
+      socProfileUrl: socEnabled && socUrl && socDetails && `${socUrl}/nominal/${String((socDetails as any).id)}`,
       showSocReferButton: Boolean(socEnabled && !socDetails && isSocUser),
       socReferUrl: socEnabled && socUrl && `${socUrl}/refer/offender/${offenderNo}`,
       categorisationLink: `${categorisationUrl}${bookingId}`,
@@ -183,14 +185,15 @@ module.exports = ({
       incentiveLevel: iepDetails && iepDetails[0] && iepDetails[0].iepLevel,
       keyWorkerLastSession:
         keyworkerSessions && keyworkerSessions[0] && moment(keyworkerSessions[0].latestCaseNote).format('D MMMM YYYY'),
-      keyWorkerName: keyworkerDetails && formatName(keyworkerDetails.firstName, keyworkerDetails.lastName),
+      keyWorkerName:
+        keyworkerDetails && formatName((keyworkerDetails as any).firstName, (keyworkerDetails as any).lastName),
       isHighComplexity,
       inactiveAlertCount,
       location: formatLocation(assignedLivingUnit.description),
       offenderName: putLastNameFirst(prisonerDetails.firstName, prisonerDetails.lastName),
       offenderNo,
       offenderRecordRetained: offenderRetentionRecord && hasLength(offenderRetentionRecord.retentionReasons),
-      showAddKeyworkerSession: staffRoles && staffRoles.some((role) => role.role === 'KW'),
+      showAddKeyworkerSession: staffRoles && (staffRoles as any).some((role) => role.role === 'KW'),
       showReportUseOfForce: useOfForceEnabledPrisons.includes(currentUser.activeCaseLoadId),
       useOfForceUrl: `${useOfForceUrl}/report/${bookingId}/report-use-of-force`,
       userCanEdit: (canViewInactivePrisoner && ['OUT', 'TRN'].includes(agencyId)) || offenderInCaseload,

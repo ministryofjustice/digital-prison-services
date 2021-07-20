@@ -1,7 +1,5 @@
-// @ts-expect-error ts-migrate(2451) FIXME: Cannot redeclare block-scoped variable 'moment'.
-const moment = require('moment')
-// @ts-expect-error ts-migrate(2451) FIXME: Cannot redeclare block-scoped variable 'properCase... Remove this comment to see the full error message
-const { properCaseName, capitalize, pascalToString } = require('../utils')
+import moment from 'moment'
+import { properCaseName, capitalize, pascalToString } from '../utils'
 
 const toActivitiesMap = (activities) =>
   activities.reduce(
@@ -41,8 +39,8 @@ const sortByLastNameThenByDate = (activitiesMap) => (left, right) => {
 
   return 0
 }
-module.exports =
-  ({ prisonApi, whereaboutsApi, oauthApi }) =>
+
+export default ({ prisonApi, whereaboutsApi, oauthApi }) =>
   async (req, res) => {
     const { agencyId, fromDateTime, toDateTime, subHeading } = req.query
 

@@ -1,51 +1,35 @@
-require('dotenv').config()
+import './bootstrap'
 
-// Do appinsights first as it does some magic instrumentation work, i.e. it affects other 'require's
-// In particular, applicationinsights automatically collects bunyan logs
-require('./azure-appinsights')
+import './azure-appinsights'
 
-// @ts-expect-error ts-migrate(2451) FIXME: Cannot redeclare block-scoped variable 'express'.
-const express = require('express')
-require('express-async-errors')
+import express from 'express'
+import 'express-async-errors'
 
-const csrf = require('csurf')
-const cookieParser = require('cookie-parser')
+import csrf from 'csurf'
+import cookieParser from 'cookie-parser'
 
-// @ts-expect-error ts-migrate(2451) FIXME: Cannot redeclare block-scoped variable 'app'.
+import apis from './apis'
+import config from './config'
+import routes from './routes'
+import setupWebSession from './setupWebSession'
+import setupHealthChecks from './setupHealthChecks'
+import setupBodyParsers from './setupBodyParsers'
+import setupWebSecurity from './setupWebSecurity'
+import setupAuth from './setupAuth'
+import setupStaticContent from './setupStaticContent'
+import nunjucksSetup from './utils/nunjucksSetup'
+import setupRedirects from './setupRedirects'
+import setupApiRoutes from './setupApiRoutes'
+import setupReactRoutes from './setupReactRoutes'
+import phaseNameSetup from './phaseNameSetup'
+import currentUser from './middleware/currentUser'
+import returnUrl from './middleware/returnUrl'
+import pageNotFound from './setUpPageNotFound'
+import errorHandler from './middleware/errorHandler'
+import { logError } from './logError'
+import homepageController from './controllers/homepage/homepage'
+
 const app = express()
-
-const apis = require('./apis')
-// @ts-expect-error ts-migrate(2451) FIXME: Cannot redeclare block-scoped variable 'config'.
-const config = require('./config')
-const routes = require('./routes')
-
-const setupWebSession = require('./setupWebSession')
-const setupHealthChecks = require('./setupHealthChecks')
-const setupBodyParsers = require('./setupBodyParsers')
-const setupWebSecurity = require('./setupWebSecurity')
-const setupAuth = require('./setupAuth')
-const setupStaticContent = require('./setupStaticContent')
-const nunjucksSetup = require('./utils/nunjucksSetup')
-// @ts-expect-error ts-migrate(2451) FIXME: Cannot redeclare block-scoped variable 'setupRedir... Remove this comment to see the full error message
-const setupRedirects = require('./setupRedirects')
-const setupApiRoutes = require('./setupApiRoutes')
-const setupReactRoutes = require('./setupReactRoutes')
-const phaseNameSetup = require('./phaseNameSetup')
-// @ts-expect-error ts-migrate(2451) FIXME: Cannot redeclare block-scoped variable 'currentUse... Remove this comment to see the full error message
-const currentUser = require('./middleware/currentUser')
-// @ts-expect-error ts-migrate(2451) FIXME: Cannot redeclare block-scoped variable 'returnUrl'... Remove this comment to see the full error message
-const returnUrl = require('./middleware/returnUrl')
-
-const pageNotFound = require('./setUpPageNotFound')
-const errorHandler = require('./middleware/errorHandler')
-
-// @ts-expect-error ts-migrate(2451) FIXME: Cannot redeclare block-scoped variable 'logError'.
-const { logError } = require('./logError')
-// @ts-expect-error ts-migrate(2451) FIXME: Cannot redeclare block-scoped variable 'homepageCo... Remove this comment to see the full error message
-const homepageController = require('./controllers/homepage/homepage')
-
-// eslint-disable-next-line  global-require
-const setupWebpackForDev = !config.app.disableWebpack && require('./setupWebpackForDev')
 
 app.set('trust proxy', 1) // trust first proxy
 app.set('view engine', 'njk')
@@ -65,7 +49,10 @@ app.use(setupAuth({ oauthApi: apis.oauthApi, tokenVerificationApi: apis.tokenVer
 app.use(currentUser({ prisonApi: apis.prisonApi, oauthApi: apis.oauthApi }))
 app.use(returnUrl())
 
-if (!config.app.disableWebpack) app.use(setupWebpackForDev())
+if (!config.app.disableWebpack) {
+  // eslint-disable-next-line global-require
+  app.use(require('./setupWebpackForDev').default())
+}
 
 app.use(
   setupApiRoutes({

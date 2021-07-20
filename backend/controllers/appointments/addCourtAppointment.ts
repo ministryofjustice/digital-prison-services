@@ -1,14 +1,9 @@
-// @ts-expect-error ts-migrate(2451) FIXME: Cannot redeclare block-scoped variable 'moment'.
-const moment = require('moment')
-// @ts-expect-error ts-migrate(2451) FIXME: Cannot redeclare block-scoped variable 'DAY_MONTH_... Remove this comment to see the full error message
-const { DAY_MONTH_YEAR, DATE_TIME_FORMAT_SPEC, buildDateTime } = require('../../../common/dateHelpers')
-// @ts-expect-error ts-migrate(2451) FIXME: Cannot redeclare block-scoped variable 'formatName... Remove this comment to see the full error message
-const { formatName } = require('../../utils')
-// @ts-expect-error ts-migrate(2451) FIXME: Cannot redeclare block-scoped variable 'serviceUna... Remove this comment to see the full error message
-const { serviceUnavailableMessage } = require('../../common-messages')
+import moment from 'moment'
+import { DAY_MONTH_YEAR, formatDate, buildDateTime } from '../../../common/dateHelpers'
+import { formatName } from '../../utils'
+import { serviceUnavailableMessage } from '../../common-messages'
 
-// @ts-expect-error ts-migrate(2451) FIXME: Cannot redeclare block-scoped variable 'addCourtAp... Remove this comment to see the full error message
-const addCourtAppointmentsFactory = (prisonApi, logError) => {
+export const addCourtAppointmentsFactory = (prisonApi, logError) => {
   const getValidationMessages = (fields) => {
     const {
       date,
@@ -144,8 +139,8 @@ const addCourtAppointmentsFactory = (prisonApi, logError) => {
       appointmentType: 'VLB',
       bookingId,
       date,
-      startTime: startTime.format(DATE_TIME_FORMAT_SPEC),
-      endTime: endTime.format(DATE_TIME_FORMAT_SPEC),
+      startTime: formatDate(startTime),
+      endTime: formatDate(endTime),
       startTimeHours,
       startTimeMinutes,
       endTimeHours,
@@ -166,6 +161,6 @@ const addCourtAppointmentsFactory = (prisonApi, logError) => {
   return { index, validateInput, goToCourtSelection }
 }
 
-module.exports = {
+export default {
   addCourtAppointmentsFactory,
 }

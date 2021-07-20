@@ -1,7 +1,6 @@
-// @ts-expect-error ts-migrate(2451) FIXME: Cannot redeclare block-scoped variable 'log'.
-const log = require('../log')
+import log from '../log'
 
-module.exports = function ensureSec(req, res, next) {
+export default function ensureSec(req, res, next) {
   if (req.secure) {
     next()
     return

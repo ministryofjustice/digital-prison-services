@@ -1,4 +1,3 @@
-// @ts-expect-error ts-migrate(2306) FIXME: File 'prisonstaf... Remove this comment to see the full error message
 import { offenderLoaderFactory } from '../controllers/offender-loader'
 
 describe('offender loader', () => {
@@ -11,6 +10,7 @@ describe('offender loader', () => {
   })
 
   it('should make a request for offenders', async () => {
+    // @ts-expect-error ts-migrate(2554) FIXME: Expected 3 arguments, but got 2.
     await offenderLoaderFactory(prisonApi).loadFromCsvContent(context, [['A111111'], ['A222222']])
 
     // @ts-expect-error ts-migrate(2339) FIXME: Property 'getBasicInmateDetailsForOffenders' does ... Remove this comment to see the full error message
@@ -24,6 +24,7 @@ describe('offender loader', () => {
       { bookingId: 1, offenderNo: 'A111111' },
     ])
 
+    // @ts-expect-error ts-migrate(2554) FIXME: Expected 3 arguments, but got 2.
     const response = await offenderLoaderFactory(prisonApi).loadFromCsvContent(context, [
       ['A111111'],
       ['A222222'],
@@ -36,6 +37,7 @@ describe('offender loader', () => {
   })
 
   it('should remove duplicates from the file', async () => {
+    // @ts-expect-error ts-migrate(2554) FIXME: Expected 3 arguments, but got 2.
     await offenderLoaderFactory(prisonApi).loadFromCsvContent(context, [['A111111'], ['A111111']])
 
     // @ts-expect-error ts-migrate(2339) FIXME: Property 'getBasicInmateDetailsForOffenders' does ... Remove this comment to see the full error message

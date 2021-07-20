@@ -1,5 +1,4 @@
-// @ts-expect-error ts-migrate(2451) FIXME: Cannot redeclare block-scoped variable 'shieldingU... Remove this comment to see the full error message
-const shieldingUnitController = require('../controllers/covid/refusingToShieldController')
+import shieldingUnitController from '../controllers/covid/refusingToShieldController'
 
 describe('refusing to shield', () => {
   let req
@@ -19,6 +18,7 @@ describe('refusing to shield', () => {
     covidService = {
       getAlertList: jest.fn(),
     }
+    // @ts-expect-error ts-migrate(2345) FIXME: Argument of type '{ covidService: any; logError: a... Remove this comment to see the full error message
     controller = shieldingUnitController({ covidService, logError })
   })
 

@@ -1,7 +1,6 @@
-// @ts-expect-error ts-migrate(2451) FIXME: Cannot redeclare block-scoped variable 'alerts'.
-const { alerts } = require('../../services/covidService')
+import { alerts } from '../../services/covidService'
 
-module.exports = ({ covidService }) => {
+export default ({ covidService }) => {
   const loadStats = async (res) => {
     const [
       prisonPopulation,

@@ -1,10 +1,7 @@
-// @ts-expect-error ts-migrate(2451) FIXME: Cannot redeclare block-scoped variable 'fs'.
-const fs = require('fs')
+import fs from 'fs'
 
-// @ts-expect-error ts-migrate(2451) FIXME: Cannot redeclare block-scoped variable 'packageDat... Remove this comment to see the full error message
-const packageData = JSON.parse(fs.readFileSync('./package.json'))
-// @ts-expect-error ts-migrate(2451) FIXME: Cannot redeclare block-scoped variable 'buildNumbe... Remove this comment to see the full error message
-const buildNumber = fs.existsSync('./build-info.json')
-  ? JSON.parse(fs.readFileSync('./build-info.json')).buildNumber
+export const packageData = JSON.parse(fs.readFileSync('./package.json', 'utf-8'))
+export const buildNumber = fs.existsSync('./build-info.json')
+  ? JSON.parse(fs.readFileSync('./build-info.json', 'utf-8')).buildNumber
   : packageData.version
-module.exports = { buildNumber, packageData }
+export default { buildNumber, packageData }

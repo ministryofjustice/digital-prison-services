@@ -1,4 +1,4 @@
-const prisonerCsraReview = require('../controllers/prisonerProfile/prisonerCsraReview')
+import prisonerCsraReview from '../controllers/prisonerProfile/prisonerCsraReview'
 
 describe('Prisoner CSRA Review', () => {
   const offenderNo = 'ABC123'

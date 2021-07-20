@@ -1,4 +1,4 @@
-const prisonerQuickLook = require('../controllers/prisonerProfile/prisonerQuickLook')
+import prisonerQuickLook from '../controllers/prisonerProfile/prisonerQuickLook'
 
 describe('prisoner profile quick look', () => {
   const offenderNo = 'ABC123'
@@ -92,6 +92,7 @@ describe('prisoner profile quick look', () => {
       telemetry,
       offenderSearchApi,
       systemOauthClient,
+      // @ts-expect-error ts-migrate(2345) FIXME: Argument of type '{ prisonerProfileService: {}; pr... Remove this comment to see the full error message
       logError,
     })
   })

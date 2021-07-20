@@ -1,4 +1,4 @@
-module.exports = () => {
+export default () => {
   const renderTemplate = (req, res) => {
     const { multipleDeleted } = req.query
 

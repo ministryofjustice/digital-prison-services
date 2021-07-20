@@ -1,16 +1,13 @@
-const axios = require('axios')
-// @ts-expect-error ts-migrate(2451) FIXME: Cannot redeclare block-scoped variable 'querystrin... Remove this comment to see the full error message
-const querystring = require('querystring')
-// @ts-expect-error ts-migrate(2451) FIXME: Cannot redeclare block-scoped variable 'logger'.
-const logger = require('../log')
-// @ts-expect-error ts-migrate(2451) FIXME: Cannot redeclare block-scoped variable 'errorStatu... Remove this comment to see the full error message
-const errorStatusCode = require('../error-status-code')
+import axios from 'axios'
+import querystring from 'querystring'
+import logger from '../log'
+import errorStatusCode from '../error-status-code'
 
 const AuthClientErrorName = 'AuthClientError'
 const AuthClientError = (message) => ({ name: AuthClientErrorName, message, stack: new Error().stack })
 
-// @ts-expect-error ts-migrate(2451) FIXME: Cannot redeclare block-scoped variable 'apiClientC... Remove this comment to see the full error message
-const apiClientCredentials = (clientId, clientSecret) => Buffer.from(`${clientId}:${clientSecret}`).toString('base64')
+export const apiClientCredentials = (clientId, clientSecret) =>
+  Buffer.from(`${clientId}:${clientSecret}`).toString('base64')
 
 /**
  * Return an oauthApi built using the supplied configuration.
@@ -20,8 +17,7 @@ const apiClientCredentials = (clientId, clientSecret) => Buffer.from(`${clientId
  * @param url
  * @returns a configured oauthApi instance
  */
-// @ts-expect-error ts-migrate(2451) FIXME: Cannot redeclare block-scoped variable 'oauthApiFa... Remove this comment to see the full error message
-const oauthApiFactory = (client, { clientId, clientSecret, url }) => {
+export const oauthApiFactory = (client, { clientId, clientSecret, url }) => {
   const get = (context, path) => client.get(context, path).then((response) => response.body)
   const currentUser = (context) => get(context, '/api/user/me')
   const userRoles = (context) => get(context, '/api/user/me/roles')
@@ -97,4 +93,4 @@ const oauthApiFactory = (client, { clientId, clientSecret, url }) => {
   }
 }
 
-module.exports = { oauthApiFactory, AuthClientError, AuthClientErrorName, apiClientCredentials }
+export default { oauthApiFactory, AuthClientError, AuthClientErrorName, apiClientCredentials }

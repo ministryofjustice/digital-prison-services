@@ -1,9 +1,6 @@
-// @ts-expect-error ts-migrate(2451) FIXME: Cannot redeclare block-scoped variable 'switchDate... Remove this comment to see the full error message
-const { switchDateFormat, sortByDateTime } = require('../../utils')
-// @ts-expect-error ts-migrate(2451) FIXME: Cannot redeclare block-scoped variable 'getExterna... Remove this comment to see the full error message
-const getExternalEventsForOffenders = require('../../shared/getExternalEventsForOffenders')
-// @ts-expect-error ts-migrate(2451) FIXME: Cannot redeclare block-scoped variable 'absentReas... Remove this comment to see the full error message
-const { absentReasonMapper } = require('../../mappers')
+import { switchDateFormat, sortByDateTime } from '../../utils'
+import getExternalEventsForOffenders from '../../shared/getExternalEventsForOffenders'
+import { absentReasonMapper } from '../../mappers'
 
 const offenderNumberMultiMap = (offenderNumbers) =>
   offenderNumbers.reduce((map, offenderNumber) => map.set(offenderNumber, []), new Map())
@@ -45,7 +42,7 @@ const extractAttendanceInfo = (attendanceInformation, event, absentReasons = [])
   return null
 }
 
-const getActivityListFactory = (prisonApi, whereaboutsApi) => {
+export const getActivityListFactory = (prisonApi, whereaboutsApi) => {
   const getEventsForOffenderNumbers = async (context, { agencyId, date, timeSlot, offenderNumbers }) => {
     const searchCriteria = { agencyId, date, timeSlot, offenderNumbers }
     const eventsByKind = await Promise.all([
@@ -141,4 +138,4 @@ const getActivityListFactory = (prisonApi, whereaboutsApi) => {
   }
 }
 
-module.exports = { getActivityListFactory }
+export default { getActivityListFactory }

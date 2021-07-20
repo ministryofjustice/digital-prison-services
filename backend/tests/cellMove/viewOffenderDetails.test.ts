@@ -1,6 +1,6 @@
-Reflect.deleteProperty(process.env, 'APPINSIGHTS_INSTRUMENTATIONKEY')
+import viewOffenderDetails from '../../controllers/cellMove/viewOffenderDetails'
 
-const viewOffenderDetails = require('../../controllers/cellMove/viewOffenderDetails')
+Reflect.deleteProperty(process.env, 'APPINSIGHTS_INSTRUMENTATIONKEY')
 
 describe('view offender details', () => {
   let req
@@ -53,6 +53,7 @@ describe('view offender details', () => {
       },
     ])
 
+    // @ts-expect-error ts-migrate(2345) FIXME: Argument of type '{ prisonApi: {}; logError: any; ... Remove this comment to see the full error message
     controller = viewOffenderDetails({ prisonApi, logError })
   })
 

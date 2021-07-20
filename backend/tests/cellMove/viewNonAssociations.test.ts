@@ -1,8 +1,7 @@
-Reflect.deleteProperty(process.env, 'APPINSIGHTS_INSTRUMENTATIONKEY')
-// @ts-expect-error ts-migrate(2451) FIXME: Cannot redeclare block-scoped variable 'moment'.
-const moment = require('moment')
+import moment from 'moment'
+import viewNonAssociations from '../../controllers/cellMove/viewNonAssociations'
 
-const viewNonAssociations = require('../../controllers/cellMove/viewNonAssociations')
+Reflect.deleteProperty(process.env, 'APPINSIGHTS_INSTRUMENTATIONKEY')
 
 describe('view non associations', () => {
   let req
@@ -122,6 +121,7 @@ describe('view non associations', () => {
       ],
     })
 
+    // @ts-expect-error ts-migrate(2345) FIXME: Argument of type '{ prisonApi: {}; logError: any; ... Remove this comment to see the full error message
     controller = viewNonAssociations({ prisonApi, logError })
   })
 

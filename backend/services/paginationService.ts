@@ -36,21 +36,19 @@ Rules:
                 ^
  */
 
-// @ts-expect-error ts-migrate(2451) FIXME: Cannot redeclare block-scoped variable 'calculateN... Remove this comment to see the full error message
-const calculateNextUrl = (offset, limit, totalResults, url) => {
+export const calculateNextUrl = (offset, limit, totalResults, url) => {
   const newOffset = offset + limit >= totalResults ? offset : offset + limit
   url.searchParams.set('pageOffsetOption', newOffset)
   return url.href
 }
 
-// @ts-expect-error ts-migrate(2451) FIXME: Cannot redeclare block-scoped variable 'calculateP... Remove this comment to see the full error message
-const calculatePreviousUrl = (offset, limit, url) => {
+export const calculatePreviousUrl = (offset, limit, url) => {
   const newOffset = offset > 0 ? offset - limit : 0
   url.searchParams.set('pageOffsetOption', newOffset)
   return url.href
 }
 
-const getPagination = (totalResults, offset, limit, url) => {
+export const getPagination = (totalResults, offset, limit, url) => {
   const toPageNumberNode = (page) => {
     const pageOffset = limit * page
 
@@ -115,6 +113,6 @@ const getPagination = (totalResults, offset, limit, url) => {
   }
 }
 
-module.exports = {
+export default {
   getPagination,
 }

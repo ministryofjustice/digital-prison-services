@@ -1,17 +1,14 @@
-// @ts-expect-error ts-migrate(2451) FIXME: Cannot redeclare block-scoped variable 'express'.
-const express = require('express')
-const redis = require('redis')
-// @ts-expect-error ts-migrate(2451) FIXME: Cannot redeclare block-scoped variable 'session'.
-const session = require('express-session')
+import express from 'express'
+import redis from 'redis'
+import session from 'express-session'
+
+import config from './config'
+
 const RedisStore = require('connect-redis')(session)
 
-// @ts-expect-error ts-migrate(2451) FIXME: Cannot redeclare block-scoped variable 'config'.
-const config = require('./config')
-
-// @ts-expect-error ts-migrate(2451) FIXME: Cannot redeclare block-scoped variable 'router'.
 const router = express.Router()
 
-module.exports = () => {
+export default () => {
   const getSessionStore = () => {
     const { enabled, host, port, password } = config.redis
     if (!enabled || !host) return null

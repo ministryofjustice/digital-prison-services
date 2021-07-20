@@ -1,9 +1,7 @@
-// @ts-expect-error ts-migrate(2451) FIXME: Cannot redeclare block-scoped variable 'capitalize... Remove this comment to see the full error message
-const { capitalize, formatName, putLastNameFirst } = require('../utils')
-// @ts-expect-error ts-migrate(2451) FIXME: Cannot redeclare block-scoped variable 'serviceUna... Remove this comment to see the full error message
-const { serviceUnavailableMessage } = require('../common-messages')
+import { capitalize, formatName, putLastNameFirst } from '../utils'
+import { serviceUnavailableMessage } from '../common-messages'
 
-module.exports = ({ prisonApi, caseNotesApi, logError }) => {
+export default ({ prisonApi, caseNotesApi, logError }) => {
   const index = async (req, res) => {
     const { offenderNo, caseNoteId } = req.params
 

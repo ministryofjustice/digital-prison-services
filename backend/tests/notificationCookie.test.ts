@@ -1,4 +1,4 @@
-const notificationCookie = require('../services/notificationCookie')
+import notificationCookie from '../services/notificationCookie'
 
 describe('Notification cookie', () => {
   let res

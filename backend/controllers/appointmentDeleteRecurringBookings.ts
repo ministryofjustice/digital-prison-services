@@ -1,9 +1,6 @@
-// @ts-expect-error ts-migrate(2451) FIXME: Cannot redeclare block-scoped variable 'moment'.
-const moment = require('moment')
-// @ts-expect-error ts-migrate(2451) FIXME: Cannot redeclare block-scoped variable 'endRecurri... Remove this comment to see the full error message
-const { endRecurringEndingDate } = require('../shared/appointmentConstants')
-// @ts-expect-error ts-migrate(2451) FIXME: Cannot redeclare block-scoped variable 'getDate'.
-const { getDate } = require('../utils')
+import moment from 'moment'
+import { endRecurringEndingDate } from '../shared/appointmentConstants'
+import { getDate } from '../utils'
 
 const repeatTypeDescriptions = [
   { value: 'WEEKLY', text: 'weekly' },
@@ -41,13 +38,14 @@ const deleteRecurringAppointmentSequence = async (res, whereaboutsApi, id) => {
   }
 }
 
-module.exports = ({ whereaboutsApi }) => {
+export default ({ whereaboutsApi }) => {
   const index = async (req, res) => {
     try {
       const { id } = req.params
 
       const appointmentDetails = await whereaboutsApi.getAppointment(res.locals, id)
 
+      // @ts-expect-error ts-migrate(2345) FIXME: Argument of type '{ date: string; repeats: any; ti... Remove this comment to see the full error message
       const lastAppointmentDate = endRecurringEndingDate({
         date: moment(appointmentDetails.recurring.startTime).format('DD/MM/YYYY'),
         repeats: appointmentDetails.recurring.repeatPeriod,

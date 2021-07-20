@@ -1,10 +1,7 @@
-// @ts-expect-error ts-migrate(2451) FIXME: Cannot redeclare block-scoped variable 'addCourtAp... Remove this comment to see the full error message
-const { addCourtAppointmentsFactory } = require('../controllers/appointments/addCourtAppointment')
+import { addCourtAppointmentsFactory } from '../controllers/appointments/addCourtAppointment'
 
-// @ts-expect-error ts-migrate(2451) FIXME: Cannot redeclare block-scoped variable 'prisonApi'... Remove this comment to see the full error message
 const prisonApi = {}
 
-// @ts-expect-error ts-migrate(2451) FIXME: Cannot redeclare block-scoped variable 'req'.
 const req = {
   session: {
     userDetails: {},
@@ -14,7 +11,6 @@ const req = {
     agencyId: 'MDI',
   },
 }
-// @ts-expect-error ts-migrate(2451) FIXME: Cannot redeclare block-scoped variable 'res'.
 const res = { locals: {}, send: jest.fn(), redirect: jest.fn() }
 
 describe('Add court appointment', () => {

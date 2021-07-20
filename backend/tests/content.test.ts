@@ -1,4 +1,4 @@
-const content = require('../controllers/content')
+import content from '../controllers/content'
 
 describe('content', () => {
   let req
@@ -19,6 +19,7 @@ describe('content', () => {
 
     // @ts-expect-error ts-migrate(2339) FIXME: Property 'getPagesAsHtml' does not exist on type '... Remove this comment to see the full error message
     contentfulService.getPagesAsHtml = jest.fn()
+    // @ts-expect-error ts-migrate(2345) FIXME: Argument of type '{ logError: any; contentfulServi... Remove this comment to see the full error message
     controller = content({ logError, contentfulService })
   })
 

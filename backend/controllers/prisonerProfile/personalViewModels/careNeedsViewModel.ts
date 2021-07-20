@@ -1,9 +1,7 @@
-// @ts-expect-error ts-migrate(2451) FIXME: Cannot redeclare block-scoped variable 'moment'.
-const moment = require('moment')
-// @ts-expect-error ts-migrate(2451) FIXME: Cannot redeclare block-scoped variable 'sortByDate... Remove this comment to see the full error message
-const { sortByDateTime } = require('../../../utils')
+import moment from 'moment'
+import { sortByDateTime } from '../../../utils'
 
-module.exports = ({ personalCareNeeds, reasonableAdjustments, treatmentTypes, healthTypes, agencies }) => {
+export default ({ personalCareNeeds, reasonableAdjustments, treatmentTypes, healthTypes, agencies }) => {
   const healthTypeCodes = healthTypes.map((healthType) => healthType.code)
 
   return {

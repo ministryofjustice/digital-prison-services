@@ -1,4 +1,4 @@
-const prisonerFinanceService = require('../services/prisonerFinanceService')
+import prisonerFinanceService from '../services/prisonerFinanceService'
 
 describe('Prisoner finance service', () => {
   const context = {}

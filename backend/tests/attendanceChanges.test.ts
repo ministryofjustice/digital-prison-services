@@ -1,4 +1,4 @@
-const attendanceChangeRouter = require('../routes/attendanceChangesRouter')
+import attendanceChangeRouter from '../routes/attendanceChangesRouter'
 
 describe('Attendance change router', () => {
   const prisonApi = {}
@@ -29,6 +29,7 @@ describe('Attendance change router', () => {
 
     logError = jest.fn()
 
+    // @ts-expect-error ts-migrate(2345) FIXME: Argument of type '{ prisonApi: {}; whereaboutsApi:... Remove this comment to see the full error message
     router = attendanceChangeRouter({ prisonApi, whereaboutsApi, oauthApi, logError })
     // @ts-expect-error ts-migrate(2339) FIXME: Property 'render' does not exist on type '{ locals... Remove this comment to see the full error message
     res.render = jest.fn()

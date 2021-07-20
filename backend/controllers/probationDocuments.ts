@@ -1,22 +1,14 @@
-// @ts-expect-error ts-migrate(2451) FIXME: Cannot redeclare block-scoped variable 'moment'.
-const moment = require('moment')
-// @ts-expect-error ts-migrate(2451) FIXME: Cannot redeclare block-scoped variable 'properCase... Remove this comment to see the full error message
-const { properCaseName } = require('../utils')
-// @ts-expect-error ts-migrate(2451) FIXME: Cannot redeclare block-scoped variable 'logError'.
-const { logError } = require('../logError')
-// @ts-expect-error ts-migrate(2451) FIXME: Cannot redeclare block-scoped variable 'formatTime... Remove this comment to see the full error message
-const { formatTimestampToDate } = require('../utils')
-// @ts-expect-error ts-migrate(2451) FIXME: Cannot redeclare block-scoped variable 'telemetry'... Remove this comment to see the full error message
-const telemetry = require('../azure-appinsights')
+import moment from 'moment'
+import { properCaseName, formatTimestampToDate } from '../utils'
+import { logError } from '../logError'
 
-// @ts-expect-error ts-migrate(2451) FIXME: Cannot redeclare block-scoped variable 'serviceUna... Remove this comment to see the full error message
+import telemetry from '../azure-appinsights'
+
 const serviceUnavailableMessage = 'Sorry, the service is unavailable'
 const offenderNotFoundInProbationMessage =
   'We are unable to display documents for this prisoner because we cannot find the offender record in the probation system'
-// @ts-expect-error ts-migrate(2451) FIXME: Cannot redeclare block-scoped variable 'getOffende... Remove this comment to see the full error message
 const getOffenderUrl = (offenderNo) => `/prisoner/${offenderNo}`
 
-// @ts-expect-error ts-migrate(2451) FIXME: Cannot redeclare block-scoped variable 'trackEvent... Remove this comment to see the full error message
 const trackEvent = (offenderNo, suffix, { username }) => {
   if (telemetry) {
     telemetry.trackEvent({
@@ -26,7 +18,7 @@ const trackEvent = (offenderNo, suffix, { username }) => {
   }
 }
 
-const probationDocumentsFactory = (oauthApi, prisonApi, communityApi, systemOauthClient) => {
+export const probationDocumentsFactory = (oauthApi, prisonApi, communityApi, systemOauthClient) => {
   const renderTemplate = (req, res, pageData) => {
     const { pageErrors, offenderDetails, ...rest } = pageData
 
@@ -84,10 +76,10 @@ const probationDocumentsFactory = (oauthApi, prisonApi, communityApi, systemOaut
           date: formatTimestampToDate(conviction.referralDate),
           active: conviction.active,
           documents: conviction.documents.sort(documentSorter).map(documentMapper),
+          institutionName: undefined,
         }
 
         if (conviction.custody) {
-          // @ts-expect-error ts-migrate(2339) FIXME: Property 'institutionName' does not exist on type ... Remove this comment to see the full error message
           convictionSummary.institutionName =
             conviction.custody.institution && conviction.custody.institution.institutionName
         }
@@ -162,7 +154,6 @@ const probationDocumentsFactory = (oauthApi, prisonApi, communityApi, systemOaut
         name: `${properCaseName(lastName)}, ${properCaseName(firstName)}`,
       }
 
-      // @ts-expect-error ts-migrate(2554) FIXME: Expected 4 arguments, but got 3.
       trackEvent(offenderNo, 'Success', user)
 
       renderTemplate(req, res, {
@@ -181,7 +172,6 @@ const probationDocumentsFactory = (oauthApi, prisonApi, communityApi, systemOaut
     } catch (error) {
       logError(req.originalUrl, error, serviceUnavailableMessage)
       pageErrors.push({ text: serviceUnavailableMessage })
-      // @ts-expect-error ts-migrate(2554) FIXME: Expected 4 arguments, but got 3.
       trackEvent(offenderNo, 'Failure', { username: 'unknown' })
       renderTemplate(req, res, { pageErrors })
     }
@@ -189,4 +179,4 @@ const probationDocumentsFactory = (oauthApi, prisonApi, communityApi, systemOaut
   return { displayProbationDocumentsPage }
 }
 
-module.exports = { probationDocumentsFactory }
+export default { probationDocumentsFactory }

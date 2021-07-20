@@ -1,5 +1,4 @@
-// @ts-expect-error ts-migrate(2451) FIXME: Cannot redeclare block-scoped variable 'ignoreNotF... Remove this comment to see the full error message
-const ignoreNotFoundErrors = require('./ignoreNotFound')
+import ignoreNotFoundErrors from './ignoreNotFound'
 
 describe('Ignore http NotFound errors telemetry processor', () => {
   it('should return false when a base type of RemoteDependencyData and resultCode equals 404', () => {

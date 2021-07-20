@@ -1,9 +1,7 @@
-// @ts-expect-error ts-migrate(2451) FIXME: Cannot redeclare block-scoped variable 'config'.
-const config = require('../config')
-// @ts-expect-error ts-migrate(2451) FIXME: Cannot redeclare block-scoped variable 'log'.
-const log = require('../log')
+import config from '../config'
+import log from '../log'
 
-const tokenVerificationApiFactory = (client) => {
+export const tokenVerificationApiFactory = (client) => {
   const verifyToken = (context) => {
     if (!config.apis.tokenverification.enabled) {
       log.debug('Token verification disabled, returning token is valid')
@@ -18,4 +16,4 @@ const tokenVerificationApiFactory = (client) => {
   return { verifyToken }
 }
 
-module.exports = { tokenVerificationApiFactory }
+export default { tokenVerificationApiFactory }

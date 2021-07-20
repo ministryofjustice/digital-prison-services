@@ -1,11 +1,7 @@
-// @ts-expect-error ts-migrate(2451) FIXME: Cannot redeclare block-scoped variable 'moment'.
-const moment = require('moment')
-// @ts-expect-error ts-migrate(2451) FIXME: Cannot redeclare block-scoped variable 'DATE_TIME_... Remove this comment to see the full error message
-const { DATE_TIME_FORMAT_SPEC } = require('../../common/dateHelpers')
-// @ts-expect-error ts-migrate(2451) FIXME: Cannot redeclare block-scoped variable 'switchDate... Remove this comment to see the full error message
-const { switchDateFormat, getTime, sortByDateTime } = require('../utils')
-// @ts-expect-error ts-migrate(2451) FIXME: Cannot redeclare block-scoped variable 'appointmen... Remove this comment to see the full error message
-const { appointmentsServiceFactory } = require('./appointmentsService')
+import moment from 'moment'
+import { DATE_TIME_FORMAT_SPEC } from '../../common/dateHelpers'
+import { switchDateFormat, getTime, sortByDateTime } from '../utils'
+import { appointmentsServiceFactory } from './appointmentsService'
 
 const getEventDescription = ({ eventDescription, eventLocation, comment }) => {
   const description = eventDescription === 'Prison Activities' ? 'Activity' : eventDescription
@@ -24,7 +20,7 @@ const toEvent = (event) => ({
   eventDescription: getEventDescription(event),
 })
 
-module.exports = (prisonApi) => {
+export default (prisonApi) => {
   const getExistingEventsForOffender = async (context, agencyId, date, offenderNo) => {
     const formattedDate = switchDateFormat(date)
     const searchCriteria = { agencyId, date: formattedDate, offenderNumbers: [offenderNo] }

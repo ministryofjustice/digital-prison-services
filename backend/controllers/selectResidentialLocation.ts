@@ -1,11 +1,8 @@
-// @ts-expect-error ts-migrate(2451) FIXME: Cannot redeclare block-scoped variable 'moment'.
-const moment = require('moment')
+import moment from 'moment'
+import { getCurrentPeriod } from '../utils'
 
-// @ts-expect-error ts-migrate(2451) FIXME: Cannot redeclare block-scoped variable 'getCurrent... Remove this comment to see the full error message
-const { getCurrentPeriod } = require('../utils')
-
-module.exports = (whereaboutsApi) => {
-  const renderTemplate = async (req, res, pageData) => {
+export default (whereaboutsApi) => {
+  const renderTemplate = async (req, res, pageData?) => {
     const today = moment()
     const { errors, formValues } = pageData || {}
     try {
@@ -26,7 +23,6 @@ module.exports = (whereaboutsApi) => {
     }
   }
 
-  // @ts-expect-error ts-migrate(2554) FIXME: Expected 3 arguments, but got 2.
   const index = async (req, res) => renderTemplate(req, res)
 
   const post = (req, res) => {

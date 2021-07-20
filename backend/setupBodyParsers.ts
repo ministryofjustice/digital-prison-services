@@ -1,14 +1,11 @@
-// @ts-expect-error ts-migrate(2451) FIXME: Cannot redeclare block-scoped variable 'express'.
-const express = require('express')
-// @ts-expect-error ts-migrate(2451) FIXME: Cannot redeclare block-scoped variable 'bodyParser... Remove this comment to see the full error message
-const bodyParser = require('body-parser')
-const formData = require('express-form-data')
-const os = require('os')
+import express from 'express'
+import bodyParser from 'body-parser'
+import formData from 'express-form-data'
+import os from 'os'
 
-// @ts-expect-error ts-migrate(2451) FIXME: Cannot redeclare block-scoped variable 'router'.
 const router = express.Router()
 
-module.exports = () => {
+export default () => {
   router.use(
     formData.parse({
       uploadDir: os.tmpdir(),

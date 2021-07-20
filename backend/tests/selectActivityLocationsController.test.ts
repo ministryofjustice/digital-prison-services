@@ -1,6 +1,5 @@
-const selectActivityLocationController = require('../controllers/selectActivityLocation')
-// @ts-expect-error ts-migrate(2451) FIXME: Cannot redeclare block-scoped variable 'makeResetE... Remove this comment to see the full error message
-const { makeResetError } = require('./helpers')
+import selectActivityLocationController from '../controllers/selectActivityLocation'
+import { makeResetError } from './helpers'
 
 describe('Select activity locations controller', () => {
   const agencyId = 'MDI'

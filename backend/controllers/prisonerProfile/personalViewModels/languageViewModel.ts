@@ -12,7 +12,7 @@ const getSecondaryLanguageLabel = (lang) => {
   return null
 }
 
-module.exports = ({ language, writtenLanguage, interpreterRequired, secondaryLanguages = [] }) => {
+export default ({ language, writtenLanguage, interpreterRequired, secondaryLanguages = [] }) => {
   const speaksAndWritesSamePreferredLanguage = Boolean(language && writtenLanguage && language === writtenLanguage)
   const writesOnlyInPreferredLanguage = Boolean(writtenLanguage && !language)
   const speaksOnlyInPreferredLanguage = Boolean(language && !writtenLanguage)

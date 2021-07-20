@@ -1,4 +1,4 @@
-const cellMoveConfirmation = require('../../controllers/cellMove/cellMoveConfirmation')
+import cellMoveConfirmation from '../../controllers/cellMove/cellMoveConfirmation'
 
 describe('Cell move confirmation', () => {
   let controller
@@ -13,6 +13,7 @@ describe('Cell move confirmation', () => {
     prisonApi.getDetails = jest.fn().mockResolvedValue({ firstName: 'Bob', lastName: 'Doe', agencyId: 'MDI' })
     // @ts-expect-error ts-migrate(2339) FIXME: Property 'getLocation' does not exist on type '{}'... Remove this comment to see the full error message
     prisonApi.getLocation = jest.fn().mockResolvedValue({ description: 'A-1-012' })
+    // @ts-expect-error ts-migrate(2345) FIXME: Argument of type '{ prisonApi: {}; logError: any; ... Remove this comment to see the full error message
     controller = cellMoveConfirmation({ prisonApi, logError })
 
     res = { locals: {}, status: jest.fn(), render: jest.fn() }

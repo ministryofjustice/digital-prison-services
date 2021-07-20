@@ -1,7 +1,6 @@
-// @ts-expect-error ts-migrate(2451) FIXME: Cannot redeclare block-scoped variable 'capitalize... Remove this comment to see the full error message
-const { capitalize, formatName, putLastNameFirst } = require('../utils')
+import { capitalize, formatName, putLastNameFirst } from '../utils'
 
-module.exports = ({ prisonApi, caseNotesApi, oauthApi }) => {
+export default ({ prisonApi, caseNotesApi, oauthApi }) => {
   const index = async (req, res) => {
     const { offenderNo, caseNoteId, caseNoteAmendmentId } = req.params
 

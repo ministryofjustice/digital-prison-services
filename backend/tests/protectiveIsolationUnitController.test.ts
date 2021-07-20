@@ -1,6 +1,5 @@
-// @ts-expect-error ts-migrate(2451) FIXME: Cannot redeclare block-scoped variable 'moment'.
-const moment = require('moment')
-const protectiveIsolationUnit = require('../controllers/covid/protectiveIsolationUnitController')
+import moment from 'moment'
+import protectiveIsolationUnit from '../controllers/covid/protectiveIsolationUnitController'
 
 describe('protective isolation unit', () => {
   let req
@@ -22,6 +21,7 @@ describe('protective isolation unit', () => {
     covidService = {
       getAlertList: jest.fn(),
     }
+    // @ts-expect-error ts-migrate(2740) FIXME: Type '() => Moment' is missing the following prope... Remove this comment to see the full error message
     controller = protectiveIsolationUnit({ covidService, logError, nowGetter: () => now })
   })
 

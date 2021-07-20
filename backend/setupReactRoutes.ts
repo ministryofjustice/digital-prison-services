@@ -1,12 +1,8 @@
-// @ts-expect-error ts-migrate(2451) FIXME: Cannot redeclare block-scoped variable 'express'.
-const express = require('express')
-// @ts-expect-error ts-migrate(2451) FIXME: Cannot redeclare block-scoped variable 'path'.
-const path = require('path')
+import express from 'express'
+import path from 'path'
 
-// @ts-expect-error ts-migrate(2451) FIXME: Cannot redeclare block-scoped variable 'router'.
 const router = express.Router()
 
-// @ts-expect-error ts-migrate(2451) FIXME: Cannot redeclare block-scoped variable 'setup'.
 const setup = () => {
   // These are routes defined in the react router
   // They are listed here so the express app also knows about
@@ -23,4 +19,5 @@ const setup = () => {
   return router
 }
 
-module.exports = (dependencies) => setup(dependencies)
+// @ts-expect-error ts-migrate(2554) FIXME: Expected 0 arguments, but got 1.
+export default (dependencies?) => setup(dependencies)

@@ -1,9 +1,6 @@
-const confirmCellMove = require('../../controllers/cellMove/confirmCellMove')
-// @ts-expect-error ts-migrate(2451) FIXME: Cannot redeclare block-scoped variable 'makeError'... Remove this comment to see the full error message
-const { makeError } = require('../helpers')
-
-// @ts-expect-error ts-migrate(2451) FIXME: Cannot redeclare block-scoped variable 'raiseAnaly... Remove this comment to see the full error message
-const { raiseAnalyticsEvent } = require('../../raiseAnalyticsEvent')
+import confirmCellMove from '../../controllers/cellMove/confirmCellMove'
+import { makeError } from '../helpers'
+import { raiseAnalyticsEvent } from '../../raiseAnalyticsEvent'
 
 jest.mock('../../raiseAnalyticsEvent', () => ({
   raiseAnalyticsEvent: jest.fn(),
@@ -45,6 +42,7 @@ describe('Change cell play back details', () => {
     // @ts-expect-error ts-migrate(2339) FIXME: Property 'getCellMoveReasonTypes' does not exist o... Remove this comment to see the full error message
     prisonApi.getCellMoveReasonTypes = jest.fn().mockResolvedValue([])
 
+    // @ts-expect-error ts-migrate(2345) FIXME: Argument of type '{ prisonApi: {}; whereaboutsApi:... Remove this comment to see the full error message
     controller = confirmCellMove({ prisonApi, whereaboutsApi, logError, caseNotesApi })
 
     req.params = {

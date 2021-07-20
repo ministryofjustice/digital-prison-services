@@ -1,4 +1,4 @@
-const pathfinderApiFactory = (client) => {
+export const pathfinderApiFactory = (client) => {
   const processResponse = () => (response) => response.body
 
   const get = (context, url) => client.get(context, url).then(processResponse())
@@ -10,6 +10,6 @@ const pathfinderApiFactory = (client) => {
   }
 }
 
-module.exports = {
+export default {
   pathfinderApiFactory,
 }

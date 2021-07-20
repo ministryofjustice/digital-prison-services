@@ -1,12 +1,8 @@
-// @ts-expect-error ts-migrate(2451) FIXME: Cannot redeclare block-scoped variable 'moment'.
-const moment = require('moment')
-// @ts-expect-error ts-migrate(2451) FIXME: Cannot redeclare block-scoped variable 'serviceUna... Remove this comment to see the full error message
-const { serviceUnavailableMessage } = require('../../common-messages')
-// @ts-expect-error ts-migrate(2451) FIXME: Cannot redeclare block-scoped variable 'getTime'.
-const { getTime, properCaseName, getCurrentPeriod, formatName } = require('../../utils')
+import moment from 'moment'
+import { serviceUnavailableMessage } from '../../common-messages'
+import { getTime, properCaseName, getCurrentPeriod, formatName } from '../../utils'
 
-// @ts-expect-error ts-migrate(2451) FIXME: Cannot redeclare block-scoped variable 'prisonApiL... Remove this comment to see the full error message
-const prisonApiLocationDescription = async (res, whereaboutsApi, locationKey, userCaseLoad) => {
+export const prisonApiLocationDescription = async (res, whereaboutsApi, locationKey, userCaseLoad) => {
   const fullLocationPrefix = await whereaboutsApi.getAgencyGroupLocationPrefix(res.locals, userCaseLoad, locationKey)
 
   if (fullLocationPrefix) {
@@ -16,8 +12,7 @@ const prisonApiLocationDescription = async (res, whereaboutsApi, locationKey, us
   return `${userCaseLoad}-${locationKey}`
 }
 
-module.exports =
-  ({ prisonApi, whereaboutsApi, logError }) =>
+export default ({ prisonApi, whereaboutsApi, logError }) =>
   async (req, res) => {
     // @ts-expect-error ts-migrate(2554) FIXME: Expected 1 arguments, but got 0.
     const { date, timeSlot = getCurrentPeriod(), type, locationId, residentialLocation } = req.query

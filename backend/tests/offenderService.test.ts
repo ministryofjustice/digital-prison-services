@@ -1,7 +1,9 @@
+import getOffenderService from '../services/offenderService'
+
 Reflect.deleteProperty(process.env, 'APPINSIGHTS_INSTRUMENTATIONKEY')
-// @ts-expect-error ts-migrate(2451) FIXME: Cannot redeclare block-scoped variable 'prisonApi'... Remove this comment to see the full error message
+
 const prisonApi = {}
-const offenderService = require('../services/offenderService')(prisonApi)
+const offenderService = getOffenderService(prisonApi)
 
 beforeEach(() => {
   // @ts-expect-error ts-migrate(2339) FIXME: Property 'getDetails' does not exist on type '{}'.

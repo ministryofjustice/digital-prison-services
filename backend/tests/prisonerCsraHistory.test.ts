@@ -1,4 +1,4 @@
-const prisonerCsraHistory = require('../controllers/prisonerProfile/prisonerCsraHistory')
+import prisonerCsraHistory from '../controllers/prisonerProfile/prisonerCsraHistory'
 
 describe('Prisoner CSRA History', () => {
   const offenderNo = 'ABC123'

@@ -1,21 +1,14 @@
-// @ts-expect-error ts-migrate(2451) FIXME: Cannot redeclare block-scoped variable 'express'.
-const express = require('express')
-// @ts-expect-error ts-migrate(2451) FIXME: Cannot redeclare block-scoped variable 'passport'.
-const passport = require('passport')
-// @ts-expect-error ts-migrate(2451) FIXME: Cannot redeclare block-scoped variable 'flash'.
-const flash = require('connect-flash')
-const tokenRefresherFactory = require('./tokenRefresher').factory
-// @ts-expect-error ts-migrate(2451) FIXME: Cannot redeclare block-scoped variable 'sessionMan... Remove this comment to see the full error message
-const sessionManagementRoutes = require('./sessionManagementRoutes')
-// @ts-expect-error ts-migrate(2451) FIXME: Cannot redeclare block-scoped variable 'auth'.
-const auth = require('./auth')
-// @ts-expect-error ts-migrate(2451) FIXME: Cannot redeclare block-scoped variable 'config'.
-const config = require('./config')
+import express from 'express'
+import passport from 'passport'
+import flash from 'connect-flash'
+import { factory as tokenRefresherFactory } from './tokenRefresher'
+import sessionManagementRoutes from './sessionManagementRoutes'
+import auth from './auth'
+import config from './config'
 
-// @ts-expect-error ts-migrate(2451) FIXME: Cannot redeclare block-scoped variable 'router'.
 const router = express.Router()
 
-module.exports = ({ oauthApi, tokenVerificationApi }) => {
+export default ({ oauthApi, tokenVerificationApi }) => {
   auth.init()
   const tokenRefresher = tokenRefresherFactory(oauthApi.refresh, config.app.tokenRefreshThresholdSeconds)
 

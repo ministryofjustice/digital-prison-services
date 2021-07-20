@@ -1,20 +1,17 @@
-Reflect.deleteProperty(process.env, 'APPINSIGHTS_INSTRUMENTATIONKEY')
-// @ts-expect-error ts-migrate(2451) FIXME: Cannot redeclare block-scoped variable 'moment'.
-const moment = require('moment')
-// @ts-expect-error ts-migrate(2451) FIXME: Cannot redeclare block-scoped variable 'makeError'... Remove this comment to see the full error message
-const { makeError } = require('./helpers')
+import moment from 'moment'
+import { makeError } from './helpers'
+import { logError } from '../logError'
+import { raiseAnalyticsEvent } from '../raiseAnalyticsEvent'
 
-// @ts-expect-error ts-migrate(2451) FIXME: Cannot redeclare block-scoped variable 'prisonApi'... Remove this comment to see the full error message
+import alertController from '../controllers/alert'
+
+Reflect.deleteProperty(process.env, 'APPINSIGHTS_INSTRUMENTATIONKEY')
+
 const prisonApi = {}
-// @ts-expect-error ts-migrate(2451) FIXME: Cannot redeclare block-scoped variable 'oauthApi'.
 const oauthApi = {}
 const referenceCodesService = {}
-// @ts-expect-error ts-migrate(2451) FIXME: Cannot redeclare block-scoped variable 'logError'.
-const { logError } = require('../logError')
-// @ts-expect-error ts-migrate(2451) FIXME: Cannot redeclare block-scoped variable 'raiseAnaly... Remove this comment to see the full error message
-const { raiseAnalyticsEvent } = require('../raiseAnalyticsEvent')
 const { handleCreateAlertForm, displayCreateAlertPage, displayEditAlertPage, handleEditAlertForm } =
-  require('../controllers/alert').alertFactory(oauthApi, prisonApi, referenceCodesService)
+  alertController.alertFactory(oauthApi, prisonApi, referenceCodesService)
 
 jest.mock('../raiseAnalyticsEvent', () => ({
   raiseAnalyticsEvent: jest.fn(),
@@ -85,7 +82,7 @@ describe('alert management', () => {
     }
     // @ts-expect-error ts-migrate(2339) FIXME: Property 'getDetails' does not exist on type '{}'.
     prisonApi.getDetails = jest.fn().mockReturnValue(getDetailsResponse)
-    oauthApi.currentUser = jest.fn().mockReturnValue({ name: 'Test User' })
+    ;(oauthApi as any).currentUser = jest.fn().mockReturnValue({ name: 'Test User' })
     // @ts-expect-error ts-migrate(2339) FIXME: Property 'userCaseLoads' does not exist on type '{... Remove this comment to see the full error message
     prisonApi.userCaseLoads = jest.fn().mockReturnValue([
       {
@@ -103,7 +100,7 @@ describe('alert management', () => {
         currentlyActive: true,
       },
     ])
-    oauthApi.userRoles = jest.fn().mockReturnValue([])
+    ;(oauthApi as any).userRoles = jest.fn().mockReturnValue([])
   })
 
   afterEach(() => {
@@ -407,7 +404,8 @@ describe('alert management', () => {
   describe('displayCreateAlertPage()', () => {
     it('should return an error when there is a problem loading the form', async () => {
       const error = new Error('There has been an error')
-      oauthApi.userRoles = jest.fn().mockRejectedValueOnce(error)
+
+      ;(oauthApi as any).userRoles = jest.fn().mockRejectedValueOnce(error)
 
       const req = { ...mockCreateReq, params: { offenderNo }, headers: {} }
       res.status = jest.fn()
@@ -435,7 +433,7 @@ describe('alert management', () => {
           },
         ],
       }))
-      oauthApi.userRoles = jest.fn().mockReturnValue([{ roleCode: 'UPDATE_ALERT' }])
+      ;(oauthApi as any).userRoles = jest.fn().mockReturnValue([{ roleCode: 'UPDATE_ALERT' }])
       const req = { ...mockCreateReq, params: { offenderNo }, headers: {} }
 
       await displayCreateAlertPage(req, res)

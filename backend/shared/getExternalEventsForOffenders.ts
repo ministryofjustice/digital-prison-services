@@ -1,5 +1,4 @@
-// @ts-expect-error ts-migrate(2451) FIXME: Cannot redeclare block-scoped variable 'sortByDate... Remove this comment to see the full error message
-const { sortByDateTime, isViewableFlag, isAfterToday } = require('../utils')
+import { sortByDateTime, isViewableFlag, isAfterToday } from '../utils'
 
 const getExternalEvents = (prisonApi, context, { offenderNumbers, agencyId, formattedDate }) =>
   Promise.all([
@@ -135,7 +134,7 @@ const reduceToMap = (
     return map.set(offenderNumber, offenderData)
   }, new Map())
 
-module.exports = async (prisonApi, context, { offenderNumbers, formattedDate, agencyId }) => {
+export default async (prisonApi, context, { offenderNumbers, formattedDate, agencyId }) => {
   if (!offenderNumbers || offenderNumbers.length === 0) return []
 
   const [releaseScheduleData, courtEventData, transferData, alertData, assessmentData] = await getExternalEvents(

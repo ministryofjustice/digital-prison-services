@@ -1,16 +1,13 @@
-// @ts-expect-error ts-migrate(2451) FIXME: Cannot redeclare block-scoped variable 'contextPro... Remove this comment to see the full error message
-const contextProperties = require('../contextProperties')
-// @ts-expect-error ts-migrate(2451) FIXME: Cannot redeclare block-scoped variable 'arrayToQue... Remove this comment to see the full error message
-const { arrayToQueryString, mapToQueryString } = require('../utils')
+import contextProperties from '../contextProperties'
+import { arrayToQueryString, mapToQueryString } from '../utils'
 
-// @ts-expect-error ts-migrate(2451) FIXME: Cannot redeclare block-scoped variable 'prisonApiF... Remove this comment to see the full error message
-const prisonApiFactory = (client) => {
+export const prisonApiFactory = (client) => {
   const processResponse = (context) => (response) => {
     contextProperties.setResponsePagination(context, response.headers)
     return response.body
   }
 
-  const get = (context, url, resultsLimit) => client.get(context, url, { resultsLimit }).then(processResponse(context))
+  const get = (context, url, resultsLimit?) => client.get(context, url, { resultsLimit }).then(processResponse(context))
 
   const getStream = (context, url) => client.getStream(context, url)
 
@@ -18,9 +15,7 @@ const prisonApiFactory = (client) => {
 
   const put = (context, url, data) => client.put(context, url, data).then(processResponse(context))
 
-  // @ts-expect-error ts-migrate(2554) FIXME: Expected 3 arguments, but got 2.
   const userLocations = (context) => (context.authSource !== 'auth' ? get(context, '/api/users/me/locations') : [])
-  // @ts-expect-error ts-migrate(2554) FIXME: Expected 3 arguments, but got 2.
   const userCaseLoads = (context) => (context.authSource !== 'auth' ? get(context, '/api/users/me/caseLoads') : [])
 
   // NB. This function expects a caseload object.
@@ -32,7 +27,6 @@ const prisonApiFactory = (client) => {
     post(context, `/api/schedules/${agencyId}/events-by-location-ids?date=${date}&timeSlot=${timeSlot}`, locationIds)
 
   const getActivityList = (context, { agencyId, locationId, usage, date, timeSlot }) =>
-    // @ts-expect-error ts-migrate(2554) FIXME: Expected 3 arguments, but got 2.
     get(
       context,
       `/api/schedules/${agencyId}/locations/${locationId}/usage/${usage}?${
@@ -41,7 +35,6 @@ const prisonApiFactory = (client) => {
     )
 
   const getActivitiesAtLocation = (context, { locationId, date, timeSlot, includeSuspended = false }) =>
-    // @ts-expect-error ts-migrate(2554) FIXME: Expected 3 arguments, but got 2.
     get(
       context,
       `/api/schedules/locations/${locationId}/activities?${
@@ -57,10 +50,8 @@ const prisonApiFactory = (client) => {
     )
 
   const getVisitsForBookingWithVisitors = (context, bookingId, params) =>
-    // @ts-expect-error ts-migrate(2554) FIXME: Expected 3 arguments, but got 2.
     get(context, `/api/bookings/${bookingId}/visits-with-visitors?${mapToQueryString(params)}`)
 
-  // @ts-expect-error ts-migrate(2554) FIXME: Expected 3 arguments, but got 2.
   const getNextVisit = (context, bookingId) => get(context, `/api/bookings/${bookingId}/visits/next`)
 
   const getAppointments = (context, { agencyId, date, timeSlot, offenderNumbers }) =>
@@ -77,7 +68,6 @@ const prisonApiFactory = (client) => {
       timeSlot,
     })
 
-    // @ts-expect-error ts-migrate(2554) FIXME: Expected 3 arguments, but got 2.
     return get(context, `/api/schedules/${agencyId}/appointments?${searchParams}`)
   }
 
@@ -88,16 +78,12 @@ const prisonApiFactory = (client) => {
       offenderNumbers
     )
 
-  // @ts-expect-error ts-migrate(2554) FIXME: Expected 3 arguments, but got 2.
   const getAgencies = (context) => get(context, '/api/agencies/prison')
 
-  // @ts-expect-error ts-migrate(2554) FIXME: Expected 3 arguments, but got 2.
   const getAgencyDetails = (context, agencyId) => get(context, `/api/agencies/${agencyId}?activeOnly=false`)
 
-  // @ts-expect-error ts-migrate(2554) FIXME: Expected 3 arguments, but got 2.
   const getAgencyIepLevels = (context, agencyId) => get(context, `/api/agencies/${agencyId}/iepLevels`)
 
-  // @ts-expect-error ts-migrate(2554) FIXME: Expected 3 arguments, but got 2.
   const getStaffDetails = (context, staffId) => get(context, `/api/users/${staffId}`)
 
   const getCourtEvents = (context, { agencyId, date, offenderNumbers }) =>
@@ -112,7 +98,6 @@ const prisonApiFactory = (client) => {
 
   const getAlertsForBooking = (context, { bookingId, query }, headers) => {
     contextProperties.setCustomRequestHeaders(context, headers)
-    // @ts-expect-error ts-migrate(2554) FIXME: Expected 3 arguments, but got 2.
     return get(context, `/api/bookings/${bookingId}/alerts${query}`)
   }
 
@@ -126,27 +111,21 @@ const prisonApiFactory = (client) => {
     post(context, `/api/offender-assessments/csra/list`, offenderNumbers)
 
   const getCsraAssessmentsForPrisoner = (context, offenderNumber) =>
-    // @ts-expect-error ts-migrate(2554) FIXME: Expected 3 arguments, but got 2.
     get(context, `/api/offender-assessments/csra/${offenderNumber}`)
 
   const getCsraReviewForBooking = (context, bookingId, assessmentSeq) =>
-    // @ts-expect-error ts-migrate(2554) FIXME: Expected 3 arguments, but got 2.
     get(context, `/api/offender-assessments/csra/${bookingId}/assessment/${assessmentSeq}`)
 
   const getEstablishmentRollBlocksCount = (context, agencyId, unassigned) =>
-    // @ts-expect-error ts-migrate(2554) FIXME: Expected 3 arguments, but got 2.
     get(context, `/api/movements/rollcount/${agencyId}?unassigned=${unassigned}`)
 
   const getEstablishmentRollMovementsCount = (context, agencyId) =>
-    // @ts-expect-error ts-migrate(2554) FIXME: Expected 3 arguments, but got 2.
     get(context, `/api/movements/rollcount/${agencyId}/movements`)
 
   const getEstablishmentRollEnrouteCount = (context, agencyId) =>
-    // @ts-expect-error ts-migrate(2554) FIXME: Expected 3 arguments, but got 2.
     get(context, `/api/movements/rollcount/${agencyId}/enroute`)
 
   const searchActivityLocations = (context, agencyId, bookedOnDay, timeSlot) =>
-    // @ts-expect-error ts-migrate(2554) FIXME: Expected 3 arguments, but got 2.
     get(context, `/api/agencies/${agencyId}/eventLocationsBooked?bookedOnDay=${bookedOnDay}&timeSlot=${timeSlot}`)
 
   const getSentenceData = (context, offenderNumbers) => post(context, `/api/offender-sentences`, offenderNumbers)
@@ -179,57 +158,43 @@ const prisonApiFactory = (client) => {
     )
 
   const getMovementsIn = (context, agencyId, movementDate) =>
-    // @ts-expect-error ts-migrate(2554) FIXME: Expected 3 arguments, but got 2.
     get(context, `/api/movements/${agencyId}/in/${movementDate}`)
 
   const getMovementsInBetween = (context, agencyId, params) =>
-    // @ts-expect-error ts-migrate(2554) FIXME: Expected 3 arguments, but got 2.
     get(context, `/api/movements/${agencyId}/in?${mapToQueryString(params)}`)
 
   const getMovementsOut = (context, agencyId, movementDate) =>
-    // @ts-expect-error ts-migrate(2554) FIXME: Expected 3 arguments, but got 2.
     get(context, `/api/movements/${agencyId}/out/${movementDate}`)
 
   const getOffendersInReception = (context, agencyId) =>
-    // @ts-expect-error ts-migrate(2554) FIXME: Expected 3 arguments, but got 2.
     get(context, `/api/movements/rollcount/${agencyId}/in-reception`)
 
   const getIepSummary = (context, bookings) =>
-    // @ts-expect-error ts-migrate(2554) FIXME: Expected 3 arguments, but got 2.
     get(context, `/api/bookings/offenders/iepSummary?${arrayToQueryString(bookings, 'bookings')}`)
 
   const getIepSummaryForBooking = (context, bookingId, withDetails) =>
-    // @ts-expect-error ts-migrate(2554) FIXME: Expected 3 arguments, but got 2.
     get(context, `/api/bookings/${bookingId}/iepSummary?withDetails=${withDetails}`)
 
   const getDetails = (context, offenderNo, fullInfo = false) =>
-    // @ts-expect-error ts-migrate(2554) FIXME: Expected 3 arguments, but got 2.
     get(context, `/api/bookings/offenderNo/${offenderNo}?fullInfo=${fullInfo}&csraSummary=${fullInfo}`)
 
   const getOffendersCurrentlyOutOfLivingUnit = (context, livingUnitId) =>
-    // @ts-expect-error ts-migrate(2554) FIXME: Expected 3 arguments, but got 2.
     get(context, `/api/movements/livingUnit/${livingUnitId}/currently-out`)
 
   const getOffendersCurrentlyOutOfAgency = (context, agencyId) =>
-    // @ts-expect-error ts-migrate(2554) FIXME: Expected 3 arguments, but got 2.
     get(context, `/api/movements/agency/${agencyId}/currently-out`)
 
-  // @ts-expect-error ts-migrate(2554) FIXME: Expected 3 arguments, but got 2.
   const getLocation = (context, livingUnitId) => get(context, `/api/locations/${livingUnitId}`)
 
-  // @ts-expect-error ts-migrate(2554) FIXME: Expected 3 arguments, but got 2.
   const getOffendersEnRoute = (context, agencyId) => get(context, `/api/movements/${agencyId}/enroute`)
 
   const getBasicInmateDetailsForOffenders = (context, offenders) => post(context, `/api/bookings/offenders`, offenders)
 
-  // @ts-expect-error ts-migrate(2554) FIXME: Expected 3 arguments, but got 2.
   const getLocationsForAgency = (context, agencyId) => get(context, `/api/agencies/${agencyId}/locations`)
 
   const getLocationsForAppointments = (context, agencyId) =>
-    // @ts-expect-error ts-migrate(2554) FIXME: Expected 3 arguments, but got 2.
     get(context, `/api/agencies/${agencyId}/locations?eventType=APP`)
 
-  // @ts-expect-error ts-migrate(2554) FIXME: Expected 3 arguments, but got 2.
   const getAppointmentTypes = (context) => get(context, '/api/reference-domains/scheduleReasons?eventType=APP')
 
   const getAdjudicationFindingTypes = (context) => get(context, '/api/reference-domains/domains/OIC_FINDING', 1000)
@@ -240,7 +205,6 @@ const prisonApiFactory = (client) => {
       'page-limit': pageLimit || 10,
     })
 
-    // @ts-expect-error ts-migrate(2554) FIXME: Expected 3 arguments, but got 2.
     const response = await get(
       context,
       `/api/offenders/${offenderNumber}/adjudications${params && `?${mapToQueryString(params)}`}`
@@ -257,10 +221,8 @@ const prisonApiFactory = (client) => {
   }
 
   const getAdjudicationDetails = (context, offenderNumber, adjudicationNumber) =>
-    // @ts-expect-error ts-migrate(2554) FIXME: Expected 3 arguments, but got 2.
     get(context, `/api/offenders/${offenderNumber}/adjudications/${adjudicationNumber}`)
 
-  // @ts-expect-error ts-migrate(2554) FIXME: Expected 3 arguments, but got 2.
   const getAdjudicationsForBooking = (context, bookingId) => get(context, `/api/bookings/${bookingId}/adjudications`)
 
   const addAppointments = (context, body) => post(context, '/api/appointments', body)
@@ -271,11 +233,9 @@ const prisonApiFactory = (client) => {
   const changeIepLevel = (context, bookingId, body) => post(context, `/api/bookings/${bookingId}/iepLevels`, body)
 
   const getOffenderActivities = (context, { agencyId, date, period }) =>
-    // @ts-expect-error ts-migrate(2554) FIXME: Expected 3 arguments, but got 2.
     get(context, `/api/schedules/${agencyId}/activities?date=${date}&timeSlot=${period}`)
 
   const getOffenderActivitiesOverDateRange = (context, { agencyId, fromDate, toDate, period }) =>
-    // @ts-expect-error ts-migrate(2554) FIXME: Expected 3 arguments, but got 2.
     get(
       context,
       `/api/schedules/${agencyId}/activities-by-date-range?fromDate=${fromDate}&toDate=${toDate}&timeSlot=${period}&includeSuspended=true`
@@ -285,7 +245,6 @@ const prisonApiFactory = (client) => {
 
   const createAlert = (context, bookingId, body) => post(context, `/api/bookings/${bookingId}/alert`, body)
 
-  // @ts-expect-error ts-migrate(2554) FIXME: Expected 3 arguments, but got 2.
   const getAlert = (context, bookingId, alertId) => get(context, `/api/bookings/${bookingId}/alerts/${alertId}`)
 
   const updateAlert = (context, bookingId, alertId, body) =>
@@ -295,53 +254,38 @@ const prisonApiFactory = (client) => {
     get(context, `/api/bookings?${arrayToQueryString(offenderNo, 'offenderNo')}`, 100)
 
   const getCaseNoteSummaryByTypes = (context, params) =>
-    // @ts-expect-error ts-migrate(2554) FIXME: Expected 3 arguments, but got 2.
     get(context, `/api/case-notes/summary?${mapToQueryString(params)}`)
 
-  // @ts-expect-error ts-migrate(2554) FIXME: Expected 3 arguments, but got 2.
   const getMainOffence = (context, bookingId) => get(context, `/api/bookings/${bookingId}/mainOffence`)
 
-  // @ts-expect-error ts-migrate(2554) FIXME: Expected 3 arguments, but got 2.
   const getStaffRoles = (context, staffId, agencyId) => get(context, `/api/staff/${staffId}/${agencyId}/roles`)
 
-  // @ts-expect-error ts-migrate(2554) FIXME: Expected 3 arguments, but got 2.
   const getPrisonerBalances = (context, bookingId) => get(context, `/api/bookings/${bookingId}/balances`)
 
-  // @ts-expect-error ts-migrate(2554) FIXME: Expected 3 arguments, but got 2.
   const getPrisonerDetails = (context, offenderNo) => get(context, `/api/prisoners/${offenderNo}`)
 
-  // @ts-expect-error ts-migrate(2554) FIXME: Expected 3 arguments, but got 2.
   const getPrisonerSentenceDetails = (context, offenderNo) => get(context, `/api/offenders/${offenderNo}/sentences`)
 
   const getPositiveCaseNotes = (context, bookingId, fromDate, toDate) =>
-    // @ts-expect-error ts-migrate(2554) FIXME: Expected 3 arguments, but got 2.
     get(context, `/api/bookings/${bookingId}/caseNotes/POS/IEP_ENC/count?fromDate=${fromDate}&toDate=${toDate}`)
 
   const getNegativeCaseNotes = (context, bookingId, fromDate, toDate) =>
-    // @ts-expect-error ts-migrate(2554) FIXME: Expected 3 arguments, but got 2.
     get(context, `/api/bookings/${bookingId}/caseNotes/NEG/IEP_WARN/count?fromDate=${fromDate}&toDate=${toDate}`)
 
   const getPrisonerVisitBalances = (context, offenderNo) =>
-    // @ts-expect-error ts-migrate(2554) FIXME: Expected 3 arguments, but got 2.
     get(context, `/api/bookings/offenderNo/${offenderNo}/visit/balances`)
 
-  // @ts-expect-error ts-migrate(2554) FIXME: Expected 3 arguments, but got 2.
   const getEventsForToday = (context, bookingId) => get(context, `/api/bookings/${bookingId}/events/today`)
 
-  // @ts-expect-error ts-migrate(2554) FIXME: Expected 3 arguments, but got 2.
   const getIdentifiers = (context, bookingId) => get(context, `/api/bookings/${bookingId}/identifiers`)
 
-  // @ts-expect-error ts-migrate(2554) FIXME: Expected 3 arguments, but got 2.
   const getOffenderAliases = (context, bookingId) => get(context, `/api/bookings/${bookingId}/aliases`)
 
-  // @ts-expect-error ts-migrate(2554) FIXME: Expected 3 arguments, but got 2.
   const getPhysicalAttributes = (context, bookingId) => get(context, `/api/bookings/${bookingId}/physicalAttributes`)
 
   const getPhysicalCharacteristics = (context, bookingId) =>
-    // @ts-expect-error ts-migrate(2554) FIXME: Expected 3 arguments, but got 2.
     get(context, `/api/bookings/${bookingId}/physicalCharacteristics`)
 
-  // @ts-expect-error ts-migrate(2554) FIXME: Expected 3 arguments, but got 2.
   const getPhysicalMarks = (context, bookingId) => get(context, `/api/bookings/${bookingId}/physicalMarks`)
 
   const getScheduledActivities = (context, { agencyId, eventIds }) =>
@@ -349,53 +293,39 @@ const prisonApiFactory = (client) => {
 
   const getImage = (context, imageId) => getStream(context, `/api/images/${imageId}/data`)
 
-  // @ts-expect-error ts-migrate(2554) FIXME: Expected 3 arguments, but got 2.
   const getPrisonerProperty = (context, bookingId) => get(context, `/api/bookings/${bookingId}/property`)
 
-  // @ts-expect-error ts-migrate(2554) FIXME: Expected 3 arguments, but got 2.
   const getPrisonerDetail = (context, bookingId) => get(context, `/api/bookings/${bookingId}`)
 
-  // @ts-expect-error ts-migrate(2554) FIXME: Expected 3 arguments, but got 2.
   const getPrisonerContacts = (context, bookingId) => get(context, `/api/bookings/${bookingId}/contacts`)
 
-  // @ts-expect-error ts-migrate(2554) FIXME: Expected 3 arguments, but got 2.
   const getPersonAddresses = (context, personId) => get(context, `/api/persons/${personId}/addresses`)
 
-  // @ts-expect-error ts-migrate(2554) FIXME: Expected 3 arguments, but got 2.
   const getPersonEmails = (context, personId) => get(context, `/api/persons/${personId}/emails`)
 
-  // @ts-expect-error ts-migrate(2554) FIXME: Expected 3 arguments, but got 2.
   const getPersonPhones = (context, personId) => get(context, `/api/persons/${personId}/phones`)
 
   const getInmates = (context, locationId, params) =>
-    // @ts-expect-error ts-migrate(2554) FIXME: Expected 3 arguments, but got 2.
     get(context, `/api/locations/description/${locationId}/inmates?${mapToQueryString(params)}`)
 
-  // @ts-expect-error ts-migrate(2554) FIXME: Expected 3 arguments, but got 2.
   const getLocationDetails = (context, locationId) => get(context, `/api/locations/${locationId}`)
 
   const getInmatesAtLocation = (context, locationId, params) =>
-    // @ts-expect-error ts-migrate(2554) FIXME: Expected 3 arguments, but got 2.
     get(context, `/api/locations/${locationId}/inmates?${mapToQueryString(params)}`)
 
   const getInmatesAtLocationPrefix = (context, locationPrefix) =>
     get(context, `/api/locations/description/${locationPrefix}/inmates`, 1000)
 
-  // @ts-expect-error ts-migrate(2554) FIXME: Expected 3 arguments, but got 2.
   const getProfileInformation = (context, bookingId) => get(context, `/api/bookings/${bookingId}/profileInformation`)
 
-  // @ts-expect-error ts-migrate(2554) FIXME: Expected 3 arguments, but got 2.
   const getSecondaryLanguages = (context, bookingId) => get(context, `/api/bookings/${bookingId}/secondary-languages`)
 
-  // @ts-expect-error ts-migrate(2554) FIXME: Expected 3 arguments, but got 2.
   const getPrisonerAddresses = (context, offenderNo) => get(context, `/api/offenders/${offenderNo}/addresses`)
 
   const getPersonalCareNeeds = (context, bookingId, types) =>
-    // @ts-expect-error ts-migrate(2554) FIXME: Expected 3 arguments, but got 2.
     get(context, `/api/bookings/${bookingId}/personal-care-needs?type=${types}`)
 
   const getReasonableAdjustments = (context, bookingId, types) =>
-    // @ts-expect-error ts-migrate(2554) FIXME: Expected 3 arguments, but got 2.
     get(context, `/api/bookings/${bookingId}/reasonable-adjustments?type=${types}`)
 
   const getTreatmentTypes = (context) => get(context, '/api/reference-domains/domains/HEALTH_TREAT', 1000)
@@ -408,36 +338,28 @@ const prisonApiFactory = (client) => {
 
   const getCellMoveReasonTypes = (context) => get(context, '/api/reference-domains/domains/CHG_HOUS_RSN', 1000)
 
-  // @ts-expect-error ts-migrate(2554) FIXME: Expected 3 arguments, but got 2.
   const getSentenceAdjustments = (context, bookingId) => get(context, `/api/bookings/${bookingId}/sentenceAdjustments`)
 
-  // @ts-expect-error ts-migrate(2554) FIXME: Expected 3 arguments, but got 2.
   const getCourtCases = (context, bookingId) => get(context, `/api/bookings/${bookingId}/court-cases`)
 
   const getOffenceHistory = (context, offenderNo) =>
-    // @ts-expect-error ts-migrate(2554) FIXME: Expected 3 arguments, but got 2.
     get(context, `/api/bookings/offenderNo/${offenderNo}/offenceHistory`)
 
   const getSentenceTerms = (context, bookingId) =>
-    // @ts-expect-error ts-migrate(2554) FIXME: Expected 3 arguments, but got 2.
     get(
       context,
       `/api/offender-sentences/booking/${bookingId}/sentenceTerms?filterBySentenceTermCodes=IMP&filterBySentenceTermCodes=LIC`
     )
 
   const getScheduledEventsForThisWeek = (context, bookingId) =>
-    // @ts-expect-error ts-migrate(2554) FIXME: Expected 3 arguments, but got 2.
     get(context, `/api/bookings/${bookingId}/events/thisWeek`)
 
   const getScheduledEventsForNextWeek = (context, bookingId) =>
-    // @ts-expect-error ts-migrate(2554) FIXME: Expected 3 arguments, but got 2.
     get(context, `/api/bookings/${bookingId}/events/nextWeek`)
 
-  // @ts-expect-error ts-migrate(2554) FIXME: Expected 3 arguments, but got 2.
   const getNonAssociations = (context, bookingId) => get(context, `/api/bookings/${bookingId}/non-association-details`)
 
   const getCellsWithCapacity = (context, agencyId, attribute) =>
-    // @ts-expect-error ts-migrate(2554) FIXME: Expected 3 arguments, but got 2.
     get(
       context,
       attribute
@@ -446,28 +368,22 @@ const prisonApiFactory = (client) => {
     )
 
   const getOffenderCellHistory = (context, bookingId, params) =>
-    // @ts-expect-error ts-migrate(2554) FIXME: Expected 3 arguments, but got 2.
     get(context, `/api/bookings/${bookingId}/cell-history?${mapToQueryString(params)}`)
 
-  // @ts-expect-error ts-migrate(2554) FIXME: Expected 3 arguments, but got 2.
   const getAttributesForLocation = (context, locationId) => get(context, `/api/cell/${locationId}/attributes`)
 
   const getHistoryForLocation = (context, { locationId, fromDate, toDate }) =>
-    // @ts-expect-error ts-migrate(2554) FIXME: Expected 3 arguments, but got 2.
     get(context, `/api/cell/${locationId}/history?fromDate=${fromDate}&toDate=${toDate}`)
 
   const getHistoryByDate = (context, { assignmentDate, agencyId }) =>
-    // @ts-expect-error ts-migrate(2554) FIXME: Expected 3 arguments, but got 2.
     get(context, `/api/cell/${agencyId}/history/${assignmentDate}`)
 
   const moveToCellSwap = (context, { bookingId }) => put(context, `/api/bookings/${bookingId}/move-to-cell-swap`, {})
 
   const getOffenderDamageObligations = (context, offenderNo) =>
-    // @ts-expect-error ts-migrate(2554) FIXME: Expected 3 arguments, but got 2.
     get(context, `/api/offenders/${offenderNo}/damage-obligations`)
 
   const getTransactionHistory = (context, offenderNo, params) =>
-    // @ts-expect-error ts-migrate(2554) FIXME: Expected 3 arguments, but got 2.
     get(context, `/api/offenders/${offenderNo}/transaction-history?${mapToQueryString(params)}`)
 
   const getPrisoners = (context, searchCriteria) => post(context, `/api/prisoners`, searchCriteria)
@@ -595,4 +511,4 @@ const prisonApiFactory = (client) => {
   }
 }
 
-module.exports = { prisonApiFactory }
+export default { prisonApiFactory }

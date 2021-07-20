@@ -1,4 +1,4 @@
-const selectResidentialLocationController = require('../controllers/selectResidentialLocation')
+import selectResidentialLocationController from '../controllers/selectResidentialLocation'
 
 describe('Select residential location controller', () => {
   let req

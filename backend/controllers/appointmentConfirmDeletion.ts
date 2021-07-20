@@ -1,4 +1,4 @@
-module.exports = ({ whereaboutsApi, appointmentDetailsService }) => {
+export default ({ whereaboutsApi, appointmentDetailsService }) => {
   const renderTemplate = (req, res, id, appointmentViewModel, errors) => {
     const { isRecurring, additionalDetails, basicDetails, prepostData, recurringDetails, timeDetails } =
       appointmentViewModel

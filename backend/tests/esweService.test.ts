@@ -1,5 +1,4 @@
 import EsweService, { DEFAULT_SKILL_LEVELS } from '../services/esweService'
-// @ts-expect-error ts-migrate(2306) FIXME: File 'prisonstaf... Remove this comment to see the full error message
 import { app } from '../config'
 import CuriousApi from '../api/curious/curiousApi'
 

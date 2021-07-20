@@ -1,10 +1,6 @@
-// @ts-expect-error ts-migrate(2451) FIXME: Cannot redeclare block-scoped variable 'raiseAnaly... Remove this comment to see the full error message
-const { raiseAnalyticsEvent } = require('../../raiseAnalyticsEvent')
-
-// @ts-expect-error ts-migrate(2451) FIXME: Cannot redeclare block-scoped variable 'properCase... Remove this comment to see the full error message
-const { properCaseName, putLastNameFirst } = require('../../utils')
-// @ts-expect-error ts-migrate(2451) FIXME: Cannot redeclare block-scoped variable 'getConfirm... Remove this comment to see the full error message
-const { getConfirmBackLinkData } = require('./cellMoveUtils')
+import { raiseAnalyticsEvent } from '../../raiseAnalyticsEvent'
+import { properCaseName, putLastNameFirst } from '../../utils'
+import { getConfirmBackLinkData } from './cellMoveUtils'
 
 const CSWAP = 'C-SWAP'
 
@@ -22,7 +18,7 @@ const cellMoveReasons = async (res, prisonApi, selectedReason) => {
     }))
 }
 
-module.exports = ({ prisonApi, whereaboutsApi }) => {
+export default ({ prisonApi, whereaboutsApi }) => {
   const index = async (req, res) => {
     const { offenderNo } = req.params
     const { cellId } = req.query
@@ -80,7 +76,6 @@ module.exports = ({ prisonApi, whereaboutsApi }) => {
       throw error
     }
 
-    // @ts-expect-error ts-migrate(2554) FIXME: Expected 4 arguments, but got 3.
     raiseAnalyticsEvent(
       'Cell move',
       `Cell move for ${agencyId}`,
@@ -93,7 +88,6 @@ module.exports = ({ prisonApi, whereaboutsApi }) => {
   const makeCSwap = async (res, { bookingId, agencyId, offenderNo }) => {
     await prisonApi.moveToCellSwap(res.locals, { bookingId })
 
-    // @ts-expect-error ts-migrate(2554) FIXME: Expected 4 arguments, but got 3.
     raiseAnalyticsEvent('Cell move', `Cell move for ${agencyId}`, `Cell type - C-SWAP`)
 
     return res.redirect(`/prisoner/${offenderNo}/cell-move/space-created`)

@@ -1,19 +1,9 @@
-// @ts-expect-error ts-migrate(2451) FIXME: Cannot redeclare block-scoped variable 'moment'.
-const moment = require('moment')
-// @ts-expect-error ts-migrate(2451) FIXME: Cannot redeclare block-scoped variable 'alertFlagL... Remove this comment to see the full error message
-const { alertFlagLabels, cellMoveAlertCodes } = require('../../shared/alertFlagValues')
-// @ts-expect-error ts-migrate(2451) FIXME: Cannot redeclare block-scoped variable 'putLastNam... Remove this comment to see the full error message
-const { putLastNameFirst, hasLength, groupBy, properCaseName, formatName, formatLocation } = require('../../utils')
-const {
-  // @ts-expect-error ts-migrate(2451) FIXME: Cannot redeclare block-scoped variable 'userHasAcc... Remove this comment to see the full error message
-  userHasAccess,
-  // @ts-expect-error ts-migrate(2451) FIXME: Cannot redeclare block-scoped variable 'getNonAsso... Remove this comment to see the full error message
-  getNonAssocationsInEstablishment,
-  // @ts-expect-error ts-migrate(2451) FIXME: Cannot redeclare block-scoped variable 'renderLoca... Remove this comment to see the full error message
-  renderLocationOptions,
-  // @ts-expect-error ts-migrate(2451) FIXME: Cannot redeclare block-scoped variable 'cellAttrib... Remove this comment to see the full error message
-  cellAttributes,
-} = require('./cellMoveUtils')
+import moment from 'moment'
+import { alertFlagLabels, cellMoveAlertCodes } from '../../shared/alertFlagValues'
+
+import { putLastNameFirst, hasLength, groupBy, properCaseName, formatName, formatLocation } from '../../utils'
+
+import { userHasAccess, getNonAssocationsInEstablishment, renderLocationOptions, cellAttributes } from './cellMoveUtils'
 
 const defaultSubLocationsValue = { text: 'Select area in residential unit', value: '' }
 const noAreasSelectedDropDownValue = { text: 'No areas to select', value: '' }
@@ -122,8 +112,7 @@ const getResidentialLevelNonAssociations = async (res, { prisonApi, nonAssociati
   )
 }
 
-module.exports =
-  ({ oauthApi, prisonApi, whereaboutsApi }) =>
+export default ({ oauthApi, prisonApi, whereaboutsApi }) =>
   async (req, res) => {
     const { offenderNo } = req.params
     const { location = 'ALL', subLocation, cellType, locationId } = req.query

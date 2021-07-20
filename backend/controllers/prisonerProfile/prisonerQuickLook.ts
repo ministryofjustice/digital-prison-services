@@ -1,18 +1,11 @@
-// @ts-expect-error ts-migrate(2451) FIXME: Cannot redeclare block-scoped variable 'moment'.
-const moment = require('moment')
-// @ts-expect-error ts-migrate(2451) FIXME: Cannot redeclare block-scoped variable 'formatCurr... Remove this comment to see the full error message
-const { formatCurrency, capitalizeUppercaseString } = require('../../utils')
-const formatAward = require('../../shared/formatAward')
-// @ts-expect-error ts-migrate(2451) FIXME: Cannot redeclare block-scoped variable 'filterActi... Remove this comment to see the full error message
-const filterActivitiesByPeriod = require('../../shared/filterActivitiesByPeriod')
-// @ts-expect-error ts-migrate(2451) FIXME: Cannot redeclare block-scoped variable 'getValueBy... Remove this comment to see the full error message
-const getValueByType = require('../../shared/getValueByType')
+import moment from 'moment'
+import { formatCurrency, capitalizeUppercaseString } from '../../utils'
+import formatAward from '../../shared/formatAward'
+import filterActivitiesByPeriod from '../../shared/filterActivitiesByPeriod'
+import getValueByType from '../../shared/getValueByType'
+import log from '../../log'
 
-// @ts-expect-error ts-migrate(2451) FIXME: Cannot redeclare block-scoped variable 'log'.
-const log = require('../../log')
-
-// @ts-expect-error ts-migrate(2451) FIXME: Cannot redeclare block-scoped variable 'trackEvent... Remove this comment to see the full error message
-const trackEvent = (telemetry, username, activeCaseLoad) => {
+export const trackEvent = (telemetry, username, activeCaseLoad) => {
   if (telemetry) {
     telemetry.trackEvent({
       name: `ViewPrisonerProfile`,
@@ -52,8 +45,7 @@ const createFinanceLink = (offenderNo, path, value) =>
     formatCurrency(value || 0)
   }</a>`
 
-module.exports =
-  ({ prisonerProfileService, prisonApi, telemetry, offenderSearchApi, systemOauthClient }) =>
+export default ({ prisonerProfileService, prisonApi, telemetry, offenderSearchApi, systemOauthClient }) =>
   async (req, res) => {
     const {
       user: { activeCaseLoad },
@@ -133,7 +125,6 @@ module.exports =
 
     const daysSinceReview = (iepSummary && iepSummary.daysSinceReview) || 0
 
-    // @ts-expect-error ts-migrate(2554) FIXME: Expected 4 arguments, but got 3.
     trackEvent(telemetry, username, activeCaseLoad)
 
     const getLifeImprisonmentLabel = async () => {

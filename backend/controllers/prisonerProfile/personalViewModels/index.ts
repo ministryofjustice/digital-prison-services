@@ -1,9 +1,9 @@
-exports.personalDetailsViewModel = require('./personalDetailsViewModel')
-exports.physicalCharacteristicsViewModel = require('./physicalCharacteristicsViewModel')
-exports.identifiersViewModel = require('./identifiersViewModel')
-exports.distinguishingMarksViewModel = require('./distinguishingMarksViewModel')
-exports.aliasesViewModel = require('./aliasesViewModel')
-exports.activeContactsViewModel = require('./activeContactsViewModel')
-exports.languageViewModel = require('./languageViewModel')
-exports.addressesViewModel = require('./addressesViewModel')
-exports.careNeedsViewModel = require('./careNeedsViewModel')
+export { default as personalDetailsViewModel } from './personalDetailsViewModel'
+export { default as physicalCharacteristicsViewModel } from './physicalCharacteristicsViewModel'
+export { default as identifiersViewModel } from './identifiersViewModel'
+export { default as distinguishingMarksViewModel } from './distinguishingMarksViewModel'
+export { default as aliasesViewModel } from './aliasesViewModel'
+export { default as activeContactsViewModel } from './activeContactsViewModel'
+export { default as languageViewModel } from './languageViewModel'
+export { default as addressesViewModel } from './addressesViewModel'
+export { default as careNeedsViewModel } from './careNeedsViewModel'

@@ -1,9 +1,7 @@
-Reflect.deleteProperty(process.env, 'APPINSIGHTS_INSTRUMENTATIONKEY')
-// @ts-expect-error ts-migrate(2451) FIXME: Cannot redeclare block-scoped variable 'moment'.
-const moment = require('moment')
+import moment from 'moment'
+import considerRisksController from '../../controllers/cellMove/considerRisks'
 
-// @ts-expect-error ts-migrate(2451) FIXME: Cannot redeclare block-scoped variable 'considerRi... Remove this comment to see the full error message
-const considerRisksController = require('../../controllers/cellMove/considerRisks')
+Reflect.deleteProperty(process.env, 'APPINSIGHTS_INSTRUMENTATIONKEY')
 
 describe('move validation', () => {
   let req

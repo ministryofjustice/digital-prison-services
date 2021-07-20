@@ -1,10 +1,7 @@
-// @ts-expect-error ts-migrate(2451) FIXME: Cannot redeclare block-scoped variable 'communityA... Remove this comment to see the full error message
-const { communityApiFactory } = require('./communityApi')
+import { communityApiFactory } from './communityApi'
 
-// @ts-expect-error ts-migrate(2451) FIXME: Cannot redeclare block-scoped variable 'client'.
 const client = {}
 const communityApi = communityApiFactory(client, '/someprefix')
-// @ts-expect-error ts-migrate(2451) FIXME: Cannot redeclare block-scoped variable 'context'.
 const context = { some: 'context' }
 
 describe('communityapi api', () => {

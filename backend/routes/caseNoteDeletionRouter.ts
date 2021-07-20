@@ -1,14 +1,10 @@
-// @ts-expect-error ts-migrate(2451) FIXME: Cannot redeclare block-scoped variable 'express'.
-const express = require('express')
+import express from 'express'
+import deleteCaseNoteController from '../controllers/deleteCaseNote'
 
-// @ts-expect-error ts-migrate(2451) FIXME: Cannot redeclare block-scoped variable 'deleteCase... Remove this comment to see the full error message
-const deleteCaseNoteController = require('../controllers/deleteCaseNote')
-
-// @ts-expect-error ts-migrate(2451) FIXME: Cannot redeclare block-scoped variable 'router'.
 const router = express.Router({ mergeParams: true })
 
-// @ts-expect-error ts-migrate(2451) FIXME: Cannot redeclare block-scoped variable 'controller... Remove this comment to see the full error message
 const controller = ({ prisonApi, caseNotesApi, oauthApi, logError }) => {
+  // @ts-expect-error ts-migrate(2345) FIXME: Argument of type '{ prisonApi: any; caseNotesApi: ... Remove this comment to see the full error message
   const { index, post } = deleteCaseNoteController({ prisonApi, caseNotesApi, oauthApi, logError })
 
   router.get('/', index)
@@ -17,4 +13,4 @@ const controller = ({ prisonApi, caseNotesApi, oauthApi, logError }) => {
   return router
 }
 
-module.exports = (dependencies) => controller(dependencies)
+export default (dependencies) => controller(dependencies)

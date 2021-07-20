@@ -1,15 +1,9 @@
-// @ts-expect-error ts-migrate(2451) FIXME: Cannot redeclare block-scoped variable 'passport'.
-const passport = require('passport')
-// @ts-expect-error ts-migrate(2451) FIXME: Cannot redeclare block-scoped variable 'querystrin... Remove this comment to see the full error message
-const querystring = require('querystring')
-// @ts-expect-error ts-migrate(2451) FIXME: Cannot redeclare block-scoped variable 'logger'.
-const logger = require('./log')
-// @ts-expect-error ts-migrate(2451) FIXME: Cannot redeclare block-scoped variable 'contextPro... Remove this comment to see the full error message
-const contextProperties = require('./contextProperties')
-// @ts-expect-error ts-migrate(2451) FIXME: Cannot redeclare block-scoped variable 'config'.
-const config = require('./config')
+import passport from 'passport'
+import querystring from 'querystring'
+import logger from './log'
+import contextProperties from './contextProperties'
+import config from './config'
 
-// @ts-expect-error ts-migrate(2451) FIXME: Cannot redeclare block-scoped variable 'isXHRReque... Remove this comment to see the full error message
 const isXHRRequest = (req) =>
   req.xhr ||
   (req.headers.accept && (req.headers.accept.indexOf('json') > -1 || req.headers.accept.indexOf('image/*') > -1)) ||
@@ -23,7 +17,7 @@ const isXHRRequest = (req) =>
  * @param tokenVerifier a function which uses the 'context' object to check whether the token is valid (returns a promise).
  * @param homeLink The URL for the home page.
  */
-const configureRoutes = ({ app, tokenRefresher, tokenVerifier, homeLink }) => {
+export const configureRoutes = ({ app, tokenRefresher, tokenVerifier, homeLink }) => {
   const authLogoutUrl = `${config.apis.oauth2.ui_url}logout?client_id=${config.apis.oauth2.clientId}&redirect_uri=${config.app.url}`
 
   const remoteLoginIndex = (req, res, next) => {
@@ -159,4 +153,4 @@ const configureRoutes = ({ app, tokenRefresher, tokenVerifier, homeLink }) => {
   })
 }
 
-module.exports = { configureRoutes }
+export default { configureRoutes }

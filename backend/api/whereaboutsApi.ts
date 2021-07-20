@@ -1,7 +1,6 @@
-// @ts-expect-error ts-migrate(2451) FIXME: Cannot redeclare block-scoped variable 'mapToQuery... Remove this comment to see the full error message
-const { mapToQueryString } = require('../utils')
+import { mapToQueryString } from '../utils'
 
-const whereaboutsApiFactory = (client) => {
+export const whereaboutsApiFactory = (client) => {
   const processResponse = () => (response) => response.body
 
   const map404ToNull = (error) => {
@@ -143,6 +142,6 @@ const whereaboutsApiFactory = (client) => {
   }
 }
 
-module.exports = {
+export default {
   whereaboutsApiFactory,
 }

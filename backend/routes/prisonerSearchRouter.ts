@@ -1,16 +1,10 @@
-// @ts-expect-error ts-migrate(2451) FIXME: Cannot redeclare block-scoped variable 'express'.
-const express = require('express')
-// @ts-expect-error ts-migrate(2451) FIXME: Cannot redeclare block-scoped variable 'prisonerSe... Remove this comment to see the full error message
-const prisonerSearchController = require('../controllers/search/prisonerSearch')
-// @ts-expect-error ts-migrate(2451) FIXME: Cannot redeclare block-scoped variable 'pagination... Remove this comment to see the full error message
-const paginationService = require('../services/paginationService')
-// @ts-expect-error ts-migrate(2451) FIXME: Cannot redeclare block-scoped variable 'telemetry'... Remove this comment to see the full error message
-const telemetry = require('../azure-appinsights')
+import express from 'express'
+import prisonerSearchController from '../controllers/search/prisonerSearch'
+import paginationService from '../services/paginationService'
+import telemetry from '../azure-appinsights'
 
-// @ts-expect-error ts-migrate(2451) FIXME: Cannot redeclare block-scoped variable 'router'.
 const router = express.Router()
 
-// @ts-expect-error ts-migrate(2451) FIXME: Cannot redeclare block-scoped variable 'controller... Remove this comment to see the full error message
 const controller = ({ prisonApi, logError }) => {
   const { index, post } = prisonerSearchController({ paginationService, prisonApi, telemetry, logError })
   router.get('/', index)
@@ -19,4 +13,4 @@ const controller = ({ prisonApi, logError }) => {
   return router
 }
 
-module.exports = (dependencies) => controller(dependencies)
+export default (dependencies) => controller(dependencies)

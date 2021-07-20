@@ -1,13 +1,11 @@
-// @ts-expect-error ts-migrate(2451) FIXME: Cannot redeclare block-scoped variable 'putLastNam... Remove this comment to see the full error message
-const { putLastNameFirst, formatName, formatTimestampToDate, sortByDateTime } = require('../../utils')
+import { putLastNameFirst, formatName, formatTimestampToDate, sortByDateTime } from '../../utils'
 
 const csraOptions = [
   { value: 'STANDARD', text: 'Standard' },
   { value: 'HI', text: 'High' },
 ]
 
-module.exports =
-  ({ prisonApi }) =>
+export default ({ prisonApi }) =>
   async (req, res) => {
     const { offenderNo } = req.params
     const { csra, location } = req.query

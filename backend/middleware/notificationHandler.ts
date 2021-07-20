@@ -1,8 +1,6 @@
-// @ts-expect-error ts-migrate(2451) FIXME: Cannot redeclare block-scoped variable 'app'.
-const { app } = require('../config')
+import { app } from '../config'
 
-module.exports =
-  ({ contentfulService, logError }) =>
+export default ({ contentfulService, logError }) =>
   async (req, res, next) => {
     try {
       if (!app.contentfulSpaceId) return next()

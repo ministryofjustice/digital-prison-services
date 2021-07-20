@@ -1,8 +1,8 @@
+import nock from 'nock'
 import clientFactory from './oauthEnabledClient'
 
-const nock = require('nock')
-const { tokenVerificationApiFactory } = require('./tokenVerificationApi')
-const config = require('../config')
+import { tokenVerificationApiFactory } from './tokenVerificationApi'
+import config from '../config'
 
 const hostname = 'http://localhost:8080'
 

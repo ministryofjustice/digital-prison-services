@@ -1,10 +1,6 @@
-// @ts-expect-error ts-migrate(2451) FIXME: Cannot redeclare block-scoped variable 'prisonerSe... Remove this comment to see the full error message
-const prisonerSearchController = require('../controllers/search/prisonerSearch')
-// @ts-expect-error ts-migrate(2451) FIXME: Cannot redeclare block-scoped variable 'serviceUna... Remove this comment to see the full error message
-const { serviceUnavailableMessage } = require('../common-messages')
-
-// @ts-expect-error ts-migrate(2451) FIXME: Cannot redeclare block-scoped variable 'makeResetE... Remove this comment to see the full error message
-const { makeResetError, makeResetErrorWithStack } = require('./helpers')
+import prisonerSearchController from '../controllers/search/prisonerSearch'
+import { serviceUnavailableMessage } from '../common-messages'
+import { makeResetError, makeResetErrorWithStack } from './helpers'
 
 describe('Prisoner search', () => {
   const prisonApi = {}

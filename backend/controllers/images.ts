@@ -1,12 +1,9 @@
-// @ts-expect-error ts-migrate(2451) FIXME: Cannot redeclare block-scoped variable 'asyncMiddl... Remove this comment to see the full error message
-const asyncMiddleware = require('../middleware/asyncHandler')
-// @ts-expect-error ts-migrate(2451) FIXME: Cannot redeclare block-scoped variable 'log'.
-const log = require('../log')
+import asyncMiddleware from '../middleware/asyncHandler'
+import log from '../log'
 
 const placeHolderImagePath = '/images/image-missing.jpg'
 
-// @ts-expect-error ts-migrate(2451) FIXME: Cannot redeclare block-scoped variable 'imageFacto... Remove this comment to see the full error message
-const imageFactory = (prisonApi) => {
+export const imageFactory = (prisonApi) => {
   const image = asyncMiddleware(async (req, res) => {
     const { imageId } = req.params
 
@@ -62,6 +59,6 @@ const imageFactory = (prisonApi) => {
   }
 }
 
-module.exports = {
+export default {
   imageFactory,
 }

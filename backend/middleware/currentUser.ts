@@ -1,9 +1,7 @@
-// @ts-expect-error ts-migrate(2451) FIXME: Cannot redeclare block-scoped variable 'logger'.
-const logger = require('../log')
-// @ts-expect-error ts-migrate(2451) FIXME: Cannot redeclare block-scoped variable 'forenameTo... Remove this comment to see the full error message
-const { forenameToInitial } = require('../utils')
+import logger from '../log'
+import { forenameToInitial } from '../utils'
 
-module.exports = ({ prisonApi, oauthApi }) => {
+export default ({ prisonApi, oauthApi }) => {
   const getActiveCaseload = async (req, res) => {
     const { activeCaseLoadId, username } = req.session.userDetails
     const { allCaseloads: caseloads } = req.session

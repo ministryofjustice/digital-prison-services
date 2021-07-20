@@ -1,8 +1,5 @@
-// @ts-expect-error ts-migrate(2451) FIXME: Cannot redeclare block-scoped variable 'moment'.
-const moment = require('moment')
-
-// @ts-expect-error ts-migrate(2451) FIXME: Cannot redeclare block-scoped variable 'formatCurr... Remove this comment to see the full error message
-const { formatCurrency, readableDateFormat } = require('../../../utils')
+import moment from 'moment'
+import { formatCurrency, readableDateFormat } from '../../../utils'
 
 const onlyValidValues = (value) => Boolean(value)
 
@@ -71,7 +68,7 @@ const findConsecutiveSentence = ({ sentences, consecutiveTo }) => {
   return sentence && sentence.lineSeq
 }
 
-module.exports = ({ courtCaseData, sentenceTermsData, offenceHistory }) => {
+export default ({ courtCaseData, sentenceTermsData, offenceHistory }) => {
   const caseIds = [
     // Only show charge codes of Imprisonment (1002 & 1510), Recall (1501) and YOI (1024)
     ...new Set(

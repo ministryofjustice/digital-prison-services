@@ -1,5 +1,4 @@
-// @ts-expect-error ts-migrate(2451) FIXME: Cannot redeclare block-scoped variable 'spaceCreat... Remove this comment to see the full error message
-const spaceCreatedController = require('../../controllers/cellMove/spaceCreated')
+import spaceCreatedController from '../../controllers/cellMove/spaceCreated'
 
 describe('Space created', () => {
   let req

@@ -1,24 +1,13 @@
-/* eslint-disable no-unused-expressions, prefer-promise-reject-errors */
-// @ts-expect-error ts-migrate(2451) FIXME: Cannot redeclare block-scoped variable 'request'.
-const request = require('supertest')
-// @ts-expect-error ts-migrate(2451) FIXME: Cannot redeclare block-scoped variable 'express'.
-const express = require('express')
-// @ts-expect-error ts-migrate(2451) FIXME: Cannot redeclare block-scoped variable 'bodyParser... Remove this comment to see the full error message
-const bodyParser = require('body-parser')
-// @ts-expect-error ts-migrate(2451) FIXME: Cannot redeclare block-scoped variable 'session'.
-const session = require('express-session')
-// @ts-expect-error ts-migrate(2451) FIXME: Cannot redeclare block-scoped variable 'passport'.
-const passport = require('passport')
-// @ts-expect-error ts-migrate(2451) FIXME: Cannot redeclare block-scoped variable 'flash'.
-const flash = require('connect-flash')
-const setCookie = require('set-cookie-parser')
-
-// @ts-expect-error ts-migrate(2451) FIXME: Cannot redeclare block-scoped variable 'sessionMan... Remove this comment to see the full error message
-const sessionManagementRoutes = require('../sessionManagementRoutes')
-// @ts-expect-error ts-migrate(2451) FIXME: Cannot redeclare block-scoped variable 'auth'.
-const auth = require('../auth')
-// @ts-expect-error ts-migrate(2451) FIXME: Cannot redeclare block-scoped variable 'config'.
-const config = require('../config')
+import request from 'supertest'
+import express from 'express'
+import bodyParser from 'body-parser'
+import session from 'express-session'
+import passport from 'passport'
+import flash from 'connect-flash'
+import setCookie from 'set-cookie-parser'
+import sessionManagementRoutes from '../sessionManagementRoutes'
+import auth from '../auth'
+import config from '../config'
 
 const hmppsCookieName = 'testCookie'
 
@@ -64,6 +53,7 @@ describe('Test the routes and middleware installed by sessionManagementRoutes', 
   sessionManagementRoutes.configureRoutes({
     app,
     tokenRefresher,
+    // @ts-expect-error ts-migrate(2345) FIXME: Argument of type '{ app: Express; tokenRefresher: ... Remove this comment to see the full error message
     mailTo: 'test@site.com',
   })
 

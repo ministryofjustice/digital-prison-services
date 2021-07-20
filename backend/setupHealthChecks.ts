@@ -1,12 +1,8 @@
-// @ts-expect-error ts-migrate(2451) FIXME: Cannot redeclare block-scoped variable 'express'.
-const express = require('express')
-// @ts-expect-error ts-migrate(2451) FIXME: Cannot redeclare block-scoped variable 'config'.
-const config = require('./config')
-const healthFactory = require('./services/healthCheck')
-// @ts-expect-error ts-migrate(2451) FIXME: Cannot redeclare block-scoped variable 'joinUrlPat... Remove this comment to see the full error message
-const { joinUrlPath } = require('./utils')
+import express from 'express'
+import config from './config'
+import healthFactory from './services/healthCheck'
+import { joinUrlPath } from './utils'
 
-// @ts-expect-error ts-migrate(2451) FIXME: Cannot redeclare block-scoped variable 'router'.
 const router = express.Router()
 
 const health = healthFactory(
@@ -22,7 +18,7 @@ const health = healthFactory(
   joinUrlPath(config.apis.complexity.url, '/ping')
 )
 
-module.exports = () => {
+export default () => {
   router.get('/health', (req, res, next) => {
     health((err, result) => {
       if (err) {

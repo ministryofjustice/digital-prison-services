@@ -1,12 +1,7 @@
-// @ts-expect-error ts-migrate(2451) FIXME: Cannot redeclare block-scoped variable 'express'.
-const express = require('express')
-// @ts-expect-error ts-migrate(2451) FIXME: Cannot redeclare block-scoped variable 'request'.
-const request = require('supertest')
-
-// @ts-expect-error ts-migrate(2451) FIXME: Cannot redeclare block-scoped variable 'setupRedir... Remove this comment to see the full error message
-const setupRedirects = require('../setupRedirects')
-// @ts-expect-error ts-migrate(2451) FIXME: Cannot redeclare block-scoped variable 'config'.
-const config = require('../config')
+import express from 'express'
+import request from 'supertest'
+import setupRedirects from '../setupRedirects'
+import config from '../config'
 
 config.app.supportUrl = '//supportUrl'
 config.apis.bookVideoLink.url = '//bvl'

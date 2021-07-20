@@ -1,4 +1,4 @@
-const selectCellFactory = require('../../controllers/cellMove/selectCell')
+import selectCellFactory from '../../controllers/cellMove/selectCell'
 
 const someOffenderNumber = 'A12345'
 const someBookingId = -10
@@ -82,6 +82,7 @@ describe('Select a cell', () => {
     // @ts-expect-error ts-migrate(2339) FIXME: Property 'render' does not exist on type '{ locals... Remove this comment to see the full error message
     res.render = jest.fn()
     logError = jest.fn()
+    // @ts-expect-error ts-migrate(2345) FIXME: Argument of type '{ oauthApi: {}; prisonApi: {}; w... Remove this comment to see the full error message
     controller = selectCellFactory({ oauthApi, prisonApi, whereaboutsApi, logError })
 
     req = {

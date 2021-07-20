@@ -1,11 +1,11 @@
-const Logger = require('bunyan')
+import Logger from 'bunyan'
 
-module.exports = new Logger({
+export default new Logger({
   name: 'prisonStaffHub',
   streams: [
     {
       stream: process.stdout,
-      level: process.env.LOG_LEVEL || 'info',
+      level: (process.env.LOG_LEVEL as Logger.LogLevel) || 'info',
     },
   ],
 })

@@ -1,10 +1,7 @@
-// @ts-expect-error ts-migrate(2451) FIXME: Cannot redeclare block-scoped variable 'moment'.
-const moment = require('moment')
-// @ts-expect-error ts-migrate(2451) FIXME: Cannot redeclare block-scoped variable 'DAY_MONTH_... Remove this comment to see the full error message
-const { DAY_MONTH_YEAR, DATE_TIME_FORMAT_SPEC } = require('../../../common/dateHelpers')
+import moment from 'moment'
+import { DAY_MONTH_YEAR, DATE_TIME_FORMAT_SPEC } from '../../../common/dateHelpers'
 
-// @ts-expect-error ts-migrate(2451) FIXME: Cannot redeclare block-scoped variable 'bulkAppoin... Remove this comment to see the full error message
-const bulkAppointmentsUploadFactory = (csvParserService, offenderLoader, prisonApi, logError) => {
+export const bulkAppointmentsUploadFactory = (csvParserService, offenderLoader, prisonApi, logError) => {
   const renderError = (req, res, error) => {
     if (error) logError(req.originalUrl, error, 'Sorry, the service is unavailable')
 
@@ -113,4 +110,4 @@ const bulkAppointmentsUploadFactory = (csvParserService, offenderLoader, prisonA
   }
 }
 
-module.exports = { bulkAppointmentsUploadFactory }
+export default { bulkAppointmentsUploadFactory }

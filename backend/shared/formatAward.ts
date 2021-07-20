@@ -1,5 +1,4 @@
-// @ts-expect-error ts-migrate(2451) FIXME: Cannot redeclare block-scoped variable 'formatTime... Remove this comment to see the full error message
-const { formatTimestampToDate, formatCurrency } = require('../utils')
+import { formatTimestampToDate, formatCurrency } from '../utils'
 
 const pluraliseDay = (days) => (days > 1 ? 'days' : 'day')
 const pluraliseMonth = (months) => (months > 1 ? 'months' : 'month')
@@ -31,7 +30,7 @@ const descriptionWithLimit = (award) => {
   }
 }
 
-module.exports = (award) => ({
+export default (award) => ({
   ...award,
   sanctionCodeDescription: descriptionWithLimit(award),
   effectiveDate: formatTimestampToDate(award.effectiveDate),

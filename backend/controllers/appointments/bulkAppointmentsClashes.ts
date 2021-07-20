@@ -1,12 +1,8 @@
-// @ts-expect-error ts-migrate(2451) FIXME: Cannot redeclare block-scoped variable 'switchDate... Remove this comment to see the full error message
-const { switchDateFormat } = require('../../utils')
-// @ts-expect-error ts-migrate(2451) FIXME: Cannot redeclare block-scoped variable 'DATE_TIME_... Remove this comment to see the full error message
-const { DATE_TIME_FORMAT_SPEC, buildDateTime } = require('../../../common/dateHelpers')
-// @ts-expect-error ts-migrate(2451) FIXME: Cannot redeclare block-scoped variable 'raiseAnaly... Remove this comment to see the full error message
-const { raiseAnalyticsEvent } = require('../../raiseAnalyticsEvent')
+import { switchDateFormat } from '../../utils'
+import { DATE_TIME_FORMAT_SPEC, buildDateTime } from '../../../common/dateHelpers'
+import { raiseAnalyticsEvent } from '../../raiseAnalyticsEvent'
 
-// @ts-expect-error ts-migrate(2451) FIXME: Cannot redeclare block-scoped variable 'bulkAppoin... Remove this comment to see the full error message
-const bulkAppointmentsClashesFactory = (prisonApi) => {
+export const bulkAppointmentsClashesFactory = (prisonApi) => {
   const renderTemplate = (req, res, pageData) => {
     const { appointmentDetails, prisonersWithClashes } = pageData
 
@@ -117,7 +113,7 @@ const bulkAppointmentsClashesFactory = (prisonApi) => {
         comment: comments,
         locationId: Number(location),
         appointmentType,
-        startTime: startTime || buildDateTime({ date, hours: 23, minutes: 59 }).format(DATE_TIME_FORMAT_SPEC),
+        startTime: startTime || (buildDateTime({ date, hours: 23, minutes: 59 }) as any).format(DATE_TIME_FORMAT_SPEC),
         endTime,
       },
       appointments: remainingPrisoners.map((prisoner) => ({
@@ -151,6 +147,6 @@ const bulkAppointmentsClashesFactory = (prisonApi) => {
   return { index, post, getOtherEvents }
 }
 
-module.exports = {
+export default {
   bulkAppointmentsClashesFactory,
 }

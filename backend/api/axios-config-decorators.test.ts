@@ -1,6 +1,5 @@
-const decorators = require('./axios-config-decorators')
-// @ts-expect-error ts-migrate(2451) FIXME: Cannot redeclare block-scoped variable 'contextPro... Remove this comment to see the full error message
-const contextProperties = require('../contextProperties')
+import decorators from './axios-config-decorators'
+import contextProperties from '../contextProperties'
 
 describe('Axios request configuration decorator tests', () => {
   it('should return paging and auth headers', () => {

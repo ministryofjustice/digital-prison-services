@@ -1,9 +1,11 @@
 import { hasAnyRole } from '../../shared/permissions'
 
+import config from '../../config'
+
 const {
   applications: { licences, manageaccounts, moic, pecs },
   apis: { omic, useOfForce, pathfinder, categorisation, soc, pinPhones },
-} = require('../../config')
+} = config
 
 const getTasks = ({ activeCaseLoadId, locations, staffId, whereaboutsConfig, keyworkerPrisonStatus, roleCodes }) => {
   const userHasRoles = (roles) => hasAnyRole(roleCodes, roles)
@@ -154,8 +156,7 @@ const getTasks = ({ activeCaseLoadId, locations, staffId, whereaboutsConfig, key
   ]
 }
 
-module.exports =
-  ({ oauthApi, prisonApi, whereaboutsApi, keyworkerApi, logError }) =>
+export default ({ oauthApi, prisonApi, whereaboutsApi, keyworkerApi, logError }) =>
   async (req, res) => {
     try {
       const { activeCaseLoadId, staffId } = req.session.userDetails

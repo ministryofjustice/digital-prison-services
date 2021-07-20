@@ -1,4 +1,4 @@
-const prisonerFullImage = require('../controllers/prisonerProfile/prisonerFullImage')
+import prisonerFullImage from '../controllers/prisonerProfile/prisonerFullImage'
 
 describe('prisoner profile full image', () => {
   const offenderNo = 'ABC123'
@@ -24,6 +24,7 @@ describe('prisoner profile full image', () => {
     // @ts-expect-error ts-migrate(2339) FIXME: Property 'getDetails' does not exist on type '{}'.
     prisonApi.getDetails.mockReturnValue({ firstName: 'Test', lastName: 'Prisoner' })
 
+    // @ts-expect-error ts-migrate(2345) FIXME: Argument of type '{ prisonApi: {}; logError: any; ... Remove this comment to see the full error message
     controller = prisonerFullImage({ prisonApi, logError })
   })
 

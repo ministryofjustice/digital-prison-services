@@ -1,20 +1,9 @@
-// @ts-expect-error ts-migrate(2451) FIXME: Cannot redeclare block-scoped variable 'alertFlagL... Remove this comment to see the full error message
-const { alertFlagLabels, cellMoveAlertCodes } = require('../../shared/alertFlagValues')
-// @ts-expect-error ts-migrate(2451) FIXME: Cannot redeclare block-scoped variable 'putLastNam... Remove this comment to see the full error message
-const { putLastNameFirst, formatName, formatLocation } = require('../../utils')
-const {
-  // @ts-expect-error ts-migrate(2451) FIXME: Cannot redeclare block-scoped variable 'userHasAcc... Remove this comment to see the full error message
-  userHasAccess,
-  // @ts-expect-error ts-migrate(2451) FIXME: Cannot redeclare block-scoped variable 'getNonAsso... Remove this comment to see the full error message
-  getNonAssocationsInEstablishment,
-  // @ts-expect-error ts-migrate(2451) FIXME: Cannot redeclare block-scoped variable 'renderLoca... Remove this comment to see the full error message
-  renderLocationOptions,
-  // @ts-expect-error ts-migrate(2451) FIXME: Cannot redeclare block-scoped variable 'cellAttrib... Remove this comment to see the full error message
-  cellAttributes,
-} = require('./cellMoveUtils')
+import { alertFlagLabels, cellMoveAlertCodes } from '../../shared/alertFlagValues'
+import { putLastNameFirst, formatName, formatLocation } from '../../utils'
 
-module.exports =
-  ({ oauthApi, prisonApi, whereaboutsApi }) =>
+import { userHasAccess, getNonAssocationsInEstablishment, renderLocationOptions, cellAttributes } from './cellMoveUtils'
+
+export default ({ oauthApi, prisonApi, whereaboutsApi }) =>
   async (req, res) => {
     const { offenderNo } = req.params
 

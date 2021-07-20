@@ -3,9 +3,7 @@ import { Response } from 'express'
 import Agent, { HttpsAgent } from 'agentkeepalive'
 import * as stream from 'stream'
 import { ClientRequest } from 'http'
-// @ts-expect-error ts-migrate(2306) FIXME: File 'prisonstaf... Remove this comment to see the full error message
 import logger from '../log'
-// @ts-expect-error ts-migrate(2306) FIXME: File 'prisonstaf... Remove this comment to see the full error message
 import { getHeaders } from './axios-config-decorators'
 
 type RequestOptions = {
@@ -97,7 +95,11 @@ export class OauthApiClient {
    * @param customTimeout value in milliseconds to override default timeout
    * @returns A Promise which settles to the superagent result object if the promise is resolved, otherwise to the 'error' object.
    */
-  getWithCustomTimeout = <T>(context, path, { resultsLimit, customTimeout }): Promise<ClientResponse<T>> => {
+  getWithCustomTimeout = <T>(
+    context,
+    path,
+    { resultsLimit = undefined, customTimeout = this.timeout }
+  ): Promise<ClientResponse<T>> => {
     return superagent
       .get(this.createUrl(path))
       .agent(this.keepaliveAgent)

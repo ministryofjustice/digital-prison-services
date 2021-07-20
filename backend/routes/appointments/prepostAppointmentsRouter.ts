@@ -1,15 +1,10 @@
-// @ts-expect-error ts-migrate(2451) FIXME: Cannot redeclare block-scoped variable 'express'.
-const express = require('express')
-const prepostAppointments = require('../../controllers/appointments/prepostAppoinments')
-// @ts-expect-error ts-migrate(2451) FIXME: Cannot redeclare block-scoped variable 'appointmen... Remove this comment to see the full error message
-const { appointmentsServiceFactory } = require('../../services/appointmentsService')
-// @ts-expect-error ts-migrate(2451) FIXME: Cannot redeclare block-scoped variable 'existingEv... Remove this comment to see the full error message
-const existingEventsServiceFactory = require('../../services/existingEventsService')
+import express from 'express'
+import prepostAppointments from '../../controllers/appointments/prepostAppoinments'
+import { appointmentsServiceFactory } from '../../services/appointmentsService'
+import existingEventsServiceFactory from '../../services/existingEventsService'
 
-// @ts-expect-error ts-migrate(2451) FIXME: Cannot redeclare block-scoped variable 'router'.
 const router = express.Router({ mergeParams: true })
 
-// @ts-expect-error ts-migrate(2451) FIXME: Cannot redeclare block-scoped variable 'controller... Remove this comment to see the full error message
 const controller = ({ prisonApi, logError, oauthApi, whereaboutsApi, notifyClient, raiseAnalyticsEvent }) => {
   const appointmentsService = appointmentsServiceFactory(prisonApi)
   const existingEventsService = existingEventsServiceFactory(prisonApi)
@@ -18,6 +13,7 @@ const controller = ({ prisonApi, logError, oauthApi, whereaboutsApi, notifyClien
     oauthApi,
     whereaboutsApi,
     notifyClient,
+    // @ts-expect-error ts-migrate(2345) FIXME: Argument of type '{ prisonApi: any; oauthApi: any;... Remove this comment to see the full error message
     logError,
     appointmentsService,
     existingEventsService,
@@ -31,4 +27,4 @@ const controller = ({ prisonApi, logError, oauthApi, whereaboutsApi, notifyClien
   return router
 }
 
-module.exports = (dependencies) => controller(dependencies)
+export default (dependencies) => controller(dependencies)

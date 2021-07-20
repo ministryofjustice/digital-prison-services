@@ -1,21 +1,14 @@
-// @ts-expect-error ts-migrate(2451) FIXME: Cannot redeclare block-scoped variable 'moment'.
-const moment = require('moment')
-// @ts-expect-error ts-migrate(2451) FIXME: Cannot redeclare block-scoped variable 'notEntered... Remove this comment to see the full error message
-const { notEnteredMessage } = require('../../common-messages')
-const {
-  // @ts-expect-error ts-migrate(2451) FIXME: Cannot redeclare block-scoped variable 'formatName... Remove this comment to see the full error message
+import moment from 'moment'
+import { notEnteredMessage } from '../../common-messages'
+
+import {
   formatName,
-  // @ts-expect-error ts-migrate(2451) FIXME: Cannot redeclare block-scoped variable 'formatTime... Remove this comment to see the full error message
   formatTimestampToDateTime,
-  // @ts-expect-error ts-migrate(2451) FIXME: Cannot redeclare block-scoped variable 'sortByDate... Remove this comment to see the full error message
   sortByDateTime,
-  // @ts-expect-error ts-migrate(2451) FIXME: Cannot redeclare block-scoped variable 'putLastNam... Remove this comment to see the full error message
   putLastNameFirst,
-  // @ts-expect-error ts-migrate(2451) FIXME: Cannot redeclare block-scoped variable 'hasLength'... Remove this comment to see the full error message
   hasLength,
-  // @ts-expect-error ts-migrate(2451) FIXME: Cannot redeclare block-scoped variable 'extractLoc... Remove this comment to see the full error message
   extractLocation,
-} = require('../../utils')
+} from '../../utils'
 
 const fetchStaffName = (context, staffId, prisonApi) =>
   prisonApi.getStaffDetails(context, staffId).then((staff) => formatName(staff.firstName, staff.lastName))
@@ -42,8 +35,7 @@ const fetchWhatHappened = async (
 const mapReasonToCellMoveReasonDescription = ({ cellMoveReasonTypes, assignmentReason }) =>
   cellMoveReasonTypes.find((type) => type.code === assignmentReason)?.description
 
-module.exports =
-  ({ prisonApi, whereaboutsApi, caseNotesApi }) =>
+export default ({ prisonApi, whereaboutsApi, caseNotesApi }) =>
   async (req, res) => {
     const { offenderNo } = req.params
     const { agencyId, locationId, fromDate, toDate = moment().format('YYYY-MM-DD') } = req.query

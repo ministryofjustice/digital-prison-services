@@ -1,4 +1,3 @@
-// @ts-expect-error ts-migrate(2306) FIXME: File 'prisonstaf... Remove this comment to see the full error message
 import { probationDocumentsFactory } from '../controllers/probationDocuments'
 
 function aDocument(overrides = {}) {

@@ -21,13 +21,19 @@ import {
   mapToQueryString,
   properCaseName,
   putLastNameFirst,
-  // @ts-expect-error ts-migrate(2306) FIXME: File 'prisonstaf... Remove this comment to see the full error message
 } from './utils'
-import { makeNotFoundError, makeServerError } from './tests/helpers'
+
+class TestError extends Error {
+  constructor(key, error) {
+    super()
+    this[key] = error
+  }
+}
 
 describe('capitalize()', () => {
   describe('when a string IS NOT provided', () => {
     it('should return an empty string', () => {
+      // @ts-expect-error ts-migrate(2554) FIXME: Expected 1 arguments, but got 0.
       expect(capitalize()).toEqual('')
       expect(capitalize(['array item 1, array item 2'])).toEqual('')
       expect(capitalize({ key: 'value' })).toEqual('')
@@ -307,6 +313,7 @@ describe('getDate()', () => {
   })
 
   it('should return Invalid message if no date time string is used', () => {
+    // @ts-expect-error ts-migrate(2554) FIXME: Expected 1-2 arguments, but got 0.
     expect(getDate()).toEqual('Invalid date or time')
   })
 })
@@ -321,6 +328,7 @@ describe('getTime()', () => {
   })
 
   it('should return Invalid message if no date time string is used', () => {
+    // @ts-expect-error ts-migrate(2554) FIXME: Expected 1 arguments, but got 0.
     expect(getTime()).toEqual('Invalid date or time')
   })
 })
@@ -338,6 +346,7 @@ describe('chunkArray()', () => {
 
 describe('putLastNameFirst()', () => {
   it('should return null if no names specified', () => {
+    // @ts-expect-error ts-migrate(2554) FIXME: Expected 2 arguments, but got 0.
     expect(putLastNameFirst()).toEqual(null)
   })
 
@@ -346,6 +355,7 @@ describe('putLastNameFirst()', () => {
   })
 
   it('should return correctly formatted first name if no last name specified', () => {
+    // @ts-expect-error ts-migrate(2554) FIXME: Expected 2 arguments, but got 1.
     expect(putLastNameFirst('FIRSTNAME')).toEqual('Firstname')
   })
 
@@ -364,6 +374,7 @@ describe('getNamesFromString()', () => {
   })
 
   it('should return undefined if nothing passed', () => {
+    // @ts-expect-error ts-migrate(2554) FIXME: Expected 1 arguments, but got 0.
     expect(getNamesFromString()).toEqual(undefined)
   })
 })
@@ -446,18 +457,18 @@ describe('getWith404AsNull', () => {
     const details = { test: true }
     const result = await getWith404AsNull(Promise.resolve(details))
 
-    expect(result.test).toBeTruthy()
+    expect((result as any).test).toBeTruthy()
   })
   it('should return null when the request returns a 404', async () => {
-    const result = await getWith404AsNull(Promise.reject(makeNotFoundError()))
+    const result = await getWith404AsNull(Promise.reject(new TestError('response', { status: 404 })))
     expect(result).toBeNull()
   })
 
   it('should throw an error for any none successful response code', async () => {
     try {
-      await getWith404AsNull(Promise.reject(makeServerError()))
+      await getWith404AsNull(Promise.reject(new TestError('response', { status: 500 })))
     } catch (error) {
-      expect(error).toEqual(makeServerError())
+      expect(error).toEqual(new TestError('response', { status: 500 }))
     }
   })
 })

@@ -1,8 +1,6 @@
-// @ts-expect-error ts-migrate(2451) FIXME: Cannot redeclare block-scoped variable 'contextPro... Remove this comment to see the full error message
-const contextProperties = require('../contextProperties')
+import contextProperties from '../contextProperties'
 
-// @ts-expect-error ts-migrate(2451) FIXME: Cannot redeclare block-scoped variable 'dataCompli... Remove this comment to see the full error message
-const dataComplianceApiFactory = (client) => {
+export const dataComplianceApiFactory = (client) => {
   const getResponseBody = (response) => response.body
 
   const includeETagInBody = (response) => ({
@@ -35,4 +33,4 @@ const dataComplianceApiFactory = (client) => {
   }
 }
 
-module.exports = { dataComplianceApiFactory }
+export default { dataComplianceApiFactory }

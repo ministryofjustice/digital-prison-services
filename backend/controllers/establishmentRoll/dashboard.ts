@@ -1,16 +1,12 @@
-// @ts-expect-error ts-migrate(2451) FIXME: Cannot redeclare block-scoped variable 'moment'.
-const moment = require('moment')
-
-// @ts-expect-error ts-migrate(2451) FIXME: Cannot redeclare block-scoped variable 'capitalize... Remove this comment to see the full error message
-const { capitalize } = require('../../utils')
+import moment from 'moment'
+import { capitalize } from '../../utils'
 
 const zeroIfNotDefined = (number) => number || 0
 
 const getTotals = (array, figure) =>
   array.reduce((accumulator, block) => accumulator + zeroIfNotDefined(block[figure]), 0)
 
-module.exports =
-  ({ prisonApi }) =>
+export default ({ prisonApi }) =>
   async (req, res) => {
     const { caseLoadId, description: caseLoadDescription } = res.locals.user.activeCaseLoad
     const [assignedResponse, unassignedResponse, movementsResponse, enroute, caseLoadLocations] = await Promise.all([

@@ -1,18 +1,13 @@
-// @ts-expect-error ts-migrate(2451) FIXME: Cannot redeclare block-scoped variable 'moment'.
-const moment = require('moment')
-const shortid = require('shortid')
-const {
-  // @ts-expect-error ts-migrate(2451) FIXME: Cannot redeclare block-scoped variable 'formatName... Remove this comment to see the full error message
+import moment from 'moment'
+import shortid from 'shortid'
+
+import {
   formatName,
-  // @ts-expect-error ts-migrate(2451) FIXME: Cannot redeclare block-scoped variable 'formatMont... Remove this comment to see the full error message
   formatMonthsAndDays,
-  // @ts-expect-error ts-migrate(2451) FIXME: Cannot redeclare block-scoped variable 'formatTime... Remove this comment to see the full error message
   formatTimestampToDateTime,
-  // @ts-expect-error ts-migrate(2451) FIXME: Cannot redeclare block-scoped variable 'formatTime... Remove this comment to see the full error message
   formatTimestampToDate,
-  // @ts-expect-error ts-migrate(2451) FIXME: Cannot redeclare block-scoped variable 'sortByDate... Remove this comment to see the full error message
   sortByDateTime,
-} = require('../utils')
+} from '../utils'
 
 const AdjudciationHistoryServiceFactory = (prisonApi) => {
   const getAdjudications = async (context, offenderNumber, params, pageOffsetOption, perPage) => {
@@ -105,4 +100,4 @@ const AdjudciationHistoryServiceFactory = (prisonApi) => {
   }
 }
 
-module.exports = AdjudciationHistoryServiceFactory
+export default AdjudciationHistoryServiceFactory
