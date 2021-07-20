@@ -1,6 +1,7 @@
 import supertest from 'supertest'
 import express from 'express'
 import whereaboutsHomepage, { whereaboutsTasks } from '../controllers/whereabouts/whereaboutsHomepage'
+// @ts-expect-error ts-migrate(2306) FIXME: File 'prisonstaf... Remove this comment to see the full error message
 import nunjucksSetup from '../utils/nunjucksSetup'
 
 describe('Homepage', () => {
