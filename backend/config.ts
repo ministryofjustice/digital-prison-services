@@ -159,6 +159,9 @@ export const notifications = {
     EYI: {
       omu: process.env.ELMLEY_OMU_EMAIL,
     },
+    BNI: {
+      omu: process.env.BULLINGDON_OMU_EMAIL,
+    },
   },
 }
 

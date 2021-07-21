@@ -105,7 +105,13 @@ env:
       secretKeyRef:
         name: {{ template "app.name" . }}
         key: NOTTINGHAM_OMU_EMAIL
-    
+
+  - name: BULLINGDON_OMU_EMAIL
+    valueFrom:
+      secretKeyRef:
+        name: {{ template "app.name" . }}
+        key: BULLINGDON_OMU_EMAIL
+        
   - name: REDIS_HOST
     valueFrom:
       secretKeyRef:
