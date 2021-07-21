@@ -1,22 +1,16 @@
+import { raiseAnalyticsEvent } from '../raiseAnalyticsEvent'
+import { bulkAppointmentsClashesFactory } from '../controllers/appointments/bulkAppointmentsClashes'
+
 Reflect.deleteProperty(process.env, 'APPINSIGHTS_INSTRUMENTATIONKEY')
-// @ts-expect-error ts-migrate(2451) FIXME: Cannot redeclare block-scoped variable 'prisonApi'... Remove this comment to see the full error message
 const prisonApi = {}
-// @ts-expect-error ts-migrate(2451) FIXME: Cannot redeclare block-scoped variable 'raiseAnaly... Remove this comment to see the full error message
-const { raiseAnalyticsEvent } = require('../raiseAnalyticsEvent')
-// @ts-expect-error ts-migrate(2451) FIXME: Cannot redeclare block-scoped variable 'bulkAppoin... Remove this comment to see the full error message
-const { bulkAppointmentsClashesFactory } = require('../controllers/appointments/bulkAppointmentsClashes')
 
 jest.mock('../raiseAnalyticsEvent', () => ({
   raiseAnalyticsEvent: jest.fn(),
 }))
 
-// @ts-expect-error ts-migrate(2451) FIXME: Cannot redeclare block-scoped variable 'req'.
 let req
-// @ts-expect-error ts-migrate(2451) FIXME: Cannot redeclare block-scoped variable 'res'.
 let res
-// @ts-expect-error ts-migrate(2451) FIXME: Cannot redeclare block-scoped variable 'logError'.
 let logError
-// @ts-expect-error ts-migrate(2451) FIXME: Cannot redeclare block-scoped variable 'controller... Remove this comment to see the full error message
 let controller
 
 beforeEach(() => {
@@ -83,7 +77,6 @@ beforeEach(() => {
     },
   ])
 
-  // @ts-expect-error ts-migrate(2588) FIXME: Cannot assign to 'req' because it is a constant.
   req = {
     originalUrl: '/bulk-appointments/confirm-appointment/',
     session: {
@@ -94,15 +87,12 @@ beforeEach(() => {
     body: {},
     flash: jest.fn(),
   }
-  // @ts-expect-error ts-migrate(2588) FIXME: Cannot assign to 'res' because it is a constant.
   res = { locals: {}, render: jest.fn(), redirect: jest.fn() }
-  // @ts-expect-error ts-migrate(2588) FIXME: Cannot assign to 'logError' because it is a consta... Remove this comment to see the full error message
   logError = jest.fn()
-  // @ts-expect-error ts-migrate(2588) FIXME: Cannot assign to 'controller' because it is a cons... Remove this comment to see the full error message
+  // @ts-expect-error ts-migrate(2554) FIXME: Expected 1 arguments, but got 2.
   controller = bulkAppointmentsClashesFactory(prisonApi, logError)
 })
 
-// @ts-expect-error ts-migrate(2451) FIXME: Cannot redeclare block-scoped variable 'appointmen... Remove this comment to see the full error message
 const appointmentDetails = {
   appointmentType: 'TEST',
   appointmentTypeDescription: 'Test Type',
@@ -145,7 +135,6 @@ describe('appointment clashes', () => {
   describe('and viewing page', () => {
     describe('and there is data', () => {
       beforeEach(() => {
-        // @ts-expect-error ts-migrate(2339) FIXME: Property 'data' does not exist on type '{ userDeta... Remove this comment to see the full error message
         req.session.data = { ...appointmentDetails }
       })
 
@@ -156,7 +145,6 @@ describe('appointment clashes', () => {
           offenderNumbers: ['G1683VN', 'G4803UT', 'G4346UT', 'G5402VR'],
         }
 
-        // @ts-expect-error ts-migrate(2339) FIXME: Property 'index' does not exist on type '({ prison... Remove this comment to see the full error message
         await controller.index(req, res)
 
         // @ts-expect-error ts-migrate(2339) FIXME: Property 'getVisits' does not exist on type '{}'.
@@ -170,7 +158,6 @@ describe('appointment clashes', () => {
       })
 
       it('should render the appointments clashes page with the correct data', async () => {
-        // @ts-expect-error ts-migrate(2339) FIXME: Property 'index' does not exist on type '({ prison... Remove this comment to see the full error message
         await controller.index(req, res)
 
         const expectedTemplateObject = {
@@ -250,14 +237,12 @@ describe('appointment clashes', () => {
             },
           ],
         }
-        // @ts-expect-error ts-migrate(2339) FIXME: Property 'render' does not exist on type '{ locals... Remove this comment to see the full error message
         expect(res.render).toBeCalledWith('bulkAppointmentsClashes.njk', expectedTemplateObject)
       })
     })
 
     describe('and there is no data', () => {
       it('should redirect to the add appointment page', async () => {
-        // @ts-expect-error ts-migrate(2339) FIXME: Property 'index' does not exist on type '({ prison... Remove this comment to see the full error message
         await controller.index(req, res)
 
         expect(res.redirect).toBeCalledWith('/bulk-appointments/add-appointment-details')
@@ -273,14 +258,10 @@ describe('appointment clashes', () => {
       })
 
       it('should log an error and render the error page', async () => {
-        // @ts-expect-error ts-migrate(2339) FIXME: Property 'data' does not exist on type '{ userDeta... Remove this comment to see the full error message
         req.session.data = { ...appointmentDetails }
-        // @ts-expect-error ts-migrate(2339) FIXME: Property 'status' does not exist on type '{ locals... Remove this comment to see the full error message
         res.status = jest.fn()
 
-        // @ts-expect-error ts-migrate(2339) FIXME: Property 'index' does not exist on type '({ prison... Remove this comment to see the full error message
         await expect(controller.index(req, res)).rejects.toThrowError(error)
-        // @ts-expect-error ts-migrate(2339) FIXME: Property 'redirectUrl' does not exist on type '{}'... Remove this comment to see the full error message
         expect(res.locals.redirectUrl).toBe('/bulk-appointments/need-to-upload-file')
       })
     })
@@ -292,15 +273,12 @@ describe('appointment clashes', () => {
         beforeEach(() => {
           // @ts-expect-error ts-migrate(2339) FIXME: Property 'addAppointments' does not exist on type ... Remove this comment to see the full error message
           prisonApi.addAppointments = jest.fn().mockReturnValue('All good')
-          // @ts-expect-error ts-migrate(2339) FIXME: Property 'data' does not exist on type '{ userDeta... Remove this comment to see the full error message
           req.session.data = { ...appointmentDetails }
         })
 
         it('should submit the correct data, clear the session data, and redirect to the appointments added page', async () => {
-          // @ts-expect-error ts-migrate(2339) FIXME: Property 'body' does not exist on type '{ session:... Remove this comment to see the full error message
           req.body = { G1683VN: 'remove', G4803UT: 'remove' }
 
-          // @ts-expect-error ts-migrate(2339) FIXME: Property 'post' does not exist on type '({ prisonA... Remove this comment to see the full error message
           await controller.post(req, res)
 
           // @ts-expect-error ts-migrate(2339) FIXME: Property 'addAppointments' does not exist on type ... Remove this comment to see the full error message
@@ -315,10 +293,8 @@ describe('appointment clashes', () => {
             appointments: [{ bookingId: '333' }, { bookingId: '444' }],
           })
 
-          // @ts-expect-error ts-migrate(2339) FIXME: Property 'data' does not exist on type '{ userDeta... Remove this comment to see the full error message
           expect(req.session.data).toEqual(null)
 
-          // @ts-expect-error ts-migrate(2339) FIXME: Property 'appointmentSlipsData' does not exist on ... Remove this comment to see the full error message
           expect(req.session.appointmentSlipsData).toEqual({
             appointmentDetails: {
               appointmentTypeDescription: appointmentDetails.appointmentTypeDescription,
@@ -346,10 +322,7 @@ describe('appointment clashes', () => {
 
           expect(raiseAnalyticsEvent).toBeCalledWith(
             'Bulk Appointments',
-            `Appointments created at ${
-              // @ts-expect-error ts-migrate(2339) FIXME: Property 'activeCaseLoadId' does not exist on type... Remove this comment to see the full error message
-              req.session.userDetails.activeCaseLoadId
-            }`,
+            `Appointments created at ${req.session.userDetails.activeCaseLoadId}`,
             `Appointment type - ${appointmentDetails.appointmentTypeDescription}`,
             2
           )
@@ -360,15 +333,12 @@ describe('appointment clashes', () => {
         beforeEach(() => {
           // @ts-expect-error ts-migrate(2339) FIXME: Property 'addAppointments' does not exist on type ... Remove this comment to see the full error message
           prisonApi.addAppointments = jest.fn().mockReturnValue('All good')
-          // @ts-expect-error ts-migrate(2339) FIXME: Property 'data' does not exist on type '{ userDeta... Remove this comment to see the full error message
           req.session.data = { ...appointmentDetails }
         })
 
         it('should not submit any appointments and redirect to the no appointments added page', async () => {
-          // @ts-expect-error ts-migrate(2339) FIXME: Property 'body' does not exist on type '{ session:... Remove this comment to see the full error message
           req.body = { G1683VN: 'remove', G4803UT: 'remove', G4346UT: 'remove', G5402VR: 'remove' }
 
-          // @ts-expect-error ts-migrate(2339) FIXME: Property 'post' does not exist on type '({ prisonA... Remove this comment to see the full error message
           await controller.post(req, res)
           // @ts-expect-error ts-migrate(2339) FIXME: Property 'addAppointments' does not exist on type ... Remove this comment to see the full error message
           expect(prisonApi.addAppointments).not.toBeCalled()
@@ -380,7 +350,6 @@ describe('appointment clashes', () => {
         beforeEach(() => {
           // @ts-expect-error ts-migrate(2339) FIXME: Property 'addAppointments' does not exist on type ... Remove this comment to see the full error message
           prisonApi.addAppointments = jest.fn().mockReturnValue('All good')
-          // @ts-expect-error ts-migrate(2339) FIXME: Property 'data' does not exist on type '{ userDeta... Remove this comment to see the full error message
           req.session.data = {
             ...appointmentDetails,
             recurring: 'yes',
@@ -390,7 +359,6 @@ describe('appointment clashes', () => {
         })
 
         it('should submit the correct data and redirect to the appointments added page', async () => {
-          // @ts-expect-error ts-migrate(2339) FIXME: Property 'post' does not exist on type '({ prisonA... Remove this comment to see the full error message
           await controller.post(req, res)
 
           // @ts-expect-error ts-migrate(2339) FIXME: Property 'addAppointments' does not exist on type ... Remove this comment to see the full error message
@@ -413,10 +381,7 @@ describe('appointment clashes', () => {
 
           expect(raiseAnalyticsEvent).toBeCalledWith(
             'Bulk Appointments',
-            `Appointments created at ${
-              // @ts-expect-error ts-migrate(2339) FIXME: Property 'activeCaseLoadId' does not exist on type... Remove this comment to see the full error message
-              req.session.userDetails.activeCaseLoadId
-            }`,
+            `Appointments created at ${req.session.userDetails.activeCaseLoadId}`,
             `Appointment type - ${appointmentDetails.appointmentTypeDescription}`,
             20
           )
@@ -428,7 +393,6 @@ describe('appointment clashes', () => {
       beforeEach(() => {
         // @ts-expect-error ts-migrate(2339) FIXME: Property 'addAppointments' does not exist on type ... Remove this comment to see the full error message
         prisonApi.addAppointments = jest.fn().mockReturnValue('All good')
-        // @ts-expect-error ts-migrate(2339) FIXME: Property 'data' does not exist on type '{ userDeta... Remove this comment to see the full error message
         req.session.data = {
           appointmentType: 'TEST',
           location: 1,
@@ -468,7 +432,6 @@ describe('appointment clashes', () => {
       it('submit the data and redirect to the appointments added page', async () => {
         jest.spyOn(Date, 'now').mockImplementation(() => 1569481200000) // Thursday 2019-09-26T07:00:00.000Z
 
-        // @ts-expect-error ts-migrate(2339) FIXME: Property 'post' does not exist on type '({ prisonA... Remove this comment to see the full error message
         await controller.post(req, res)
 
         // @ts-expect-error ts-migrate(2339) FIXME: Property 'addAppointments' does not exist on type ... Remove this comment to see the full error message

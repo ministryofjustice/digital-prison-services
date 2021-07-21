@@ -1,12 +1,8 @@
-// @ts-expect-error ts-migrate(2451) FIXME: Cannot redeclare block-scoped variable 'moment'.
-const moment = require('moment')
-// @ts-expect-error ts-migrate(2451) FIXME: Cannot redeclare block-scoped variable 'putLastNam... Remove this comment to see the full error message
-const { putLastNameFirst, hasLength } = require('../../utils')
-// @ts-expect-error ts-migrate(2451) FIXME: Cannot redeclare block-scoped variable 'getBackLin... Remove this comment to see the full error message
-const { getBackLinkData } = require('./cellMoveUtils')
+import moment from 'moment'
+import { putLastNameFirst, hasLength } from '../../utils'
+import { getBackLinkData } from './cellMoveUtils'
 
-module.exports =
-  ({ prisonApi }) =>
+export default ({ prisonApi }) =>
   async (req, res) => {
     const { offenderNo } = req.params
 

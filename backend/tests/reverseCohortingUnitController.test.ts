@@ -1,6 +1,5 @@
-// @ts-expect-error ts-migrate(2451) FIXME: Cannot redeclare block-scoped variable 'moment'.
-const moment = require('moment')
-const reverseCohortingUnit = require('../controllers/covid/reverseCohortingUnitController')
+import moment from 'moment'
+import reverseCohortingUnit from '../controllers/covid/reverseCohortingUnitController'
 
 describe('reverse cohorting unit', () => {
   let req
@@ -21,6 +20,7 @@ describe('reverse cohorting unit', () => {
       getAlertList: jest.fn(),
       getUnassignedNewEntrants: jest.fn(),
     }
+    // @ts-expect-error ts-migrate(2345) FIXME: Argument of type '{ covidService: any; logError: a... Remove this comment to see the full error message
     controller = reverseCohortingUnit({ covidService, logError })
   })
 

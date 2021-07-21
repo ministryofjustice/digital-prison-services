@@ -1,7 +1,7 @@
+import nock from 'nock'
 import clientFactory from './oauthEnabledClient'
 
-const nock = require('nock')
-const { caseNotesApiFactory } = require('./caseNotesApi')
+import { caseNotesApiFactory } from './caseNotesApi'
 
 const hostname = 'http://localhost:8080'
 
@@ -17,7 +17,7 @@ describe('caseNoteApi tests', () => {
   describe('GET requests', () => {
     it('Extracts GET response data', async () => {
       mock.get('/case-notes/types').reply(200, { test: 'test' })
-      const data = await caseNoteAPi.getCaseNoteTypes({}, 'test')
+      const data = await caseNoteAPi.getCaseNoteTypes({})
       expect(data).toEqual({ test: 'test' })
     })
   })

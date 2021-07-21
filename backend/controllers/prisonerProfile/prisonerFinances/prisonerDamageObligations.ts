@@ -1,18 +1,6 @@
-const {
-  // @ts-expect-error ts-migrate(2451) FIXME: Cannot redeclare block-scoped variable 'formatCurr... Remove this comment to see the full error message
-  formatCurrency,
-  // @ts-expect-error ts-migrate(2451) FIXME: Cannot redeclare block-scoped variable 'formatTime... Remove this comment to see the full error message
-  formatTimestampToDate,
-  // @ts-expect-error ts-migrate(2451) FIXME: Cannot redeclare block-scoped variable 'putLastNam... Remove this comment to see the full error message
-  putLastNameFirst,
-  // @ts-expect-error ts-migrate(2451) FIXME: Cannot redeclare block-scoped variable 'formatName... Remove this comment to see the full error message
-  formatName,
-  // @ts-expect-error ts-migrate(2451) FIXME: Cannot redeclare block-scoped variable 'sortByDate... Remove this comment to see the full error message
-  sortByDateTime,
-} = require('../../../utils')
+import { formatCurrency, formatTimestampToDate, putLastNameFirst, formatName, sortByDateTime } from '../../../utils'
 
-module.exports =
-  ({ prisonApi }) =>
+export default ({ prisonApi }) =>
   async (req, res) => {
     const { offenderNo } = req.params
 

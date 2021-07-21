@@ -1,5 +1,4 @@
-// @ts-expect-error ts-migrate(2451) FIXME: Cannot redeclare block-scoped variable 'returnUrl'... Remove this comment to see the full error message
-const returnUrl = require('./returnUrl')
+import returnUrl from './returnUrl'
 
 describe('Return URL', () => {
   const res = {}

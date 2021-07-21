@@ -1,8 +1,6 @@
-// @ts-expect-error ts-migrate(2451) FIXME: Cannot redeclare block-scoped variable 'formatName... Remove this comment to see the full error message
-const { formatName, putLastNameFirst, getTime, stripAgencyPrefix } = require('../../utils')
+import { formatName, putLastNameFirst, getTime, stripAgencyPrefix } from '../../utils'
 
-module.exports =
-  ({ oauthApi, prisonApi }) =>
+export default ({ oauthApi, prisonApi }) =>
   async (req, res) => {
     const {
       user: { activeCaseLoad },

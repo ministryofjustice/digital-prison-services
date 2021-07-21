@@ -1,20 +1,16 @@
-// @ts-expect-error ts-migrate(6200) FIXME: Definitions of the following identifiers conflict ... Remove this comment to see the full error message
-const moment = require('moment')
+import moment from 'moment'
+import { stripWarning } from '../../mappers'
 
-// @ts-expect-error ts-migrate(2451) FIXME: Cannot redeclare block-scoped variable 'stripWarni... Remove this comment to see the full error message
-const { stripWarning } = require('../../mappers')
-
-const {
+import {
   capitalize,
   capitalizeStart,
   switchDateFormat,
   getCurrentPeriod,
-  // @ts-expect-error ts-migrate(2451) FIXME: Cannot redeclare block-scoped variable 'pascalToSt... Remove this comment to see the full error message
   pascalToString,
   readableDateFormat,
   stripAgencyPrefix,
   properCaseName,
-} = require('../../utils')
+} from '../../utils'
 
 const attendanceReasonStatsUrl = '/manage-prisoner-whereabouts/attendance-reason-statistics'
 
@@ -197,7 +193,7 @@ const getSubheading = ({ fromDate, toDate, displayPeriod }) => {
   )}  - ${displayPeriod}`
 }
 
-const attendanceStatisticsFactory = (oauthApi, prisonApi, whereaboutsApi) => {
+export const attendanceStatisticsFactory = (oauthApi, prisonApi, whereaboutsApi) => {
   const attendanceStatistics = async (req, res) => {
     const currentPeriod = getCurrentPeriod(moment().format())
 
@@ -457,4 +453,4 @@ const attendanceStatisticsFactory = (oauthApi, prisonApi, whereaboutsApi) => {
   }
 }
 
-module.exports = { attendanceStatisticsFactory }
+export default { attendanceStatisticsFactory }

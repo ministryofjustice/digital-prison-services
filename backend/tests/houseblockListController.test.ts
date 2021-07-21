@@ -1,7 +1,6 @@
-// @ts-expect-error ts-migrate(2306) FIXME: File 'prisonstaf... Remove this comment to see the full error message
 import { factory } from '../controllers/controller'
 
-const { makeResetError, makeError, makeResetErrorWithStack } = require('./helpers')
+import { makeResetError, makeError, makeResetErrorWithStack } from './helpers'
 
 describe('Activity list controller', () => {
   const houseblockListService = {}
@@ -15,6 +14,7 @@ describe('Activity list controller', () => {
     logError = jest.fn()
     // @ts-expect-error ts-migrate(2339) FIXME: Property 'getHouseblockList' does not exist on typ... Remove this comment to see the full error message
     houseblockListService.getHouseblockList = jest.fn()
+    // @ts-expect-error ts-migrate(2345) FIXME: Argument of type '{ houseblockListService: {}; log... Remove this comment to see the full error message
     getHouseblockList = factory({ houseblockListService, logError }).getHouseblockList
 
     // @ts-expect-error ts-migrate(2339) FIXME: Property 'query' does not exist on type '{ origina... Remove this comment to see the full error message

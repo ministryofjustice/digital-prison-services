@@ -1,9 +1,7 @@
-// @ts-expect-error ts-migrate(2451) FIXME: Cannot redeclare block-scoped variable 'service'.
-const service = require('../services/paginationService')
+import service from '../services/paginationService'
 
 describe('Pagination service 2', () => {
   it('should display one to ten when the page count is above ten', () => {
-    // @ts-expect-error ts-migrate(2339) FIXME: Property 'getPagination' does not exist on type '(... Remove this comment to see the full error message
     const response = service.getPagination(110, 0, 10, new URL('http://localhost/'))
 
     expect(response).toEqual({
@@ -27,7 +25,6 @@ describe('Pagination service 2', () => {
   })
 
   it('should show 5 pages before the current page and 5 pages inclusive after the current page', () => {
-    // @ts-expect-error ts-migrate(2339) FIXME: Property 'getPagination' does not exist on type '(... Remove this comment to see the full error message
     const response = service.getPagination(220, 60, 10, new URL('http://localhost/'))
 
     expect(response).toEqual({
@@ -51,7 +48,6 @@ describe('Pagination service 2', () => {
   })
 
   it('should handle being on the last few pages', () => {
-    // @ts-expect-error ts-migrate(2339) FIXME: Property 'getPagination' does not exist on type '(... Remove this comment to see the full error message
     const response = service.getPagination(200, 90, 10, new URL('http://localhost/'))
 
     expect(response).toEqual({
@@ -85,7 +81,6 @@ describe('Pagination service 2', () => {
   })
 
   it('should handle being on the last pages', () => {
-    // @ts-expect-error ts-migrate(2339) FIXME: Property 'getPagination' does not exist on type '(... Remove this comment to see the full error message
     const response = service.getPagination(200, 210, 10, new URL('http://localhost/'))
 
     expect(response).toEqual({
@@ -119,7 +114,6 @@ describe('Pagination service 2', () => {
   })
 
   it('should handle a current page being in the upper middle position', async () => {
-    // @ts-expect-error ts-migrate(2339) FIXME: Property 'getPagination' does not exist on type '(... Remove this comment to see the full error message
     const response = service.getPagination(274, 220, 20, new URL('http://localhost/'))
 
     expect(response).toEqual({
@@ -153,7 +147,6 @@ describe('Pagination service 2', () => {
   })
 
   it('should deal with less than ten pages', async () => {
-    // @ts-expect-error ts-migrate(2339) FIXME: Property 'getPagination' does not exist on type '(... Remove this comment to see the full error message
     const response = service.getPagination(70, 0, 10, new URL('http://localhost/'))
 
     expect(response).toEqual({
@@ -184,7 +177,6 @@ describe('Pagination service 2', () => {
   })
 
   it('should not throw error when totalResults is undefined', () => {
-    // @ts-expect-error ts-migrate(2339) FIXME: Property 'getPagination' does not exist on type '(... Remove this comment to see the full error message
     service.getPagination(undefined, 10, 0, new URL('http://localhost/'))
   })
 })

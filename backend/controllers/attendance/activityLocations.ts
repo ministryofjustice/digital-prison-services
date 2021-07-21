@@ -1,8 +1,6 @@
-// @ts-expect-error ts-migrate(2451) FIXME: Cannot redeclare block-scoped variable 'switchDate... Remove this comment to see the full error message
-const { switchDateFormat } = require('../../utils')
+import { switchDateFormat } from '../../utils'
 
-// @ts-expect-error ts-migrate(2451) FIXME: Cannot redeclare block-scoped variable 'getActivit... Remove this comment to see the full error message
-const getActivityLocationsFactory = ({ prisonApi, logError }) => {
+export const getActivityLocationsFactory = ({ prisonApi, logError }) => {
   const getActivityLocations = async (req, res) => {
     try {
       const date = switchDateFormat(req.query.bookedOnDay)
@@ -28,4 +26,4 @@ const getActivityLocationsFactory = ({ prisonApi, logError }) => {
   }
 }
 
-module.exports = { getActivityLocationsFactory }
+export default { getActivityLocationsFactory }

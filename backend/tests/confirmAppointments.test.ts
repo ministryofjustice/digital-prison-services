@@ -1,6 +1,5 @@
-const confirmAppointments = require('../controllers/appointments/confirmAppointment')
-// @ts-expect-error ts-migrate(2451) FIXME: Cannot redeclare block-scoped variable 'raiseAnaly... Remove this comment to see the full error message
-const { raiseAnalyticsEvent } = require('../raiseAnalyticsEvent')
+import confirmAppointments from '../controllers/appointments/confirmAppointment'
+import { raiseAnalyticsEvent } from '../raiseAnalyticsEvent'
 
 jest.mock('../raiseAnalyticsEvent', () => ({
   raiseAnalyticsEvent: jest.fn(),

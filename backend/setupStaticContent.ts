@@ -1,12 +1,9 @@
-// @ts-expect-error ts-migrate(2451) FIXME: Cannot redeclare block-scoped variable 'express'.
-const express = require('express')
-// @ts-expect-error ts-migrate(2451) FIXME: Cannot redeclare block-scoped variable 'path'.
-const path = require('path')
+import express from 'express'
+import path from 'path'
 
-// @ts-expect-error ts-migrate(2451) FIXME: Cannot redeclare block-scoped variable 'router'.
 const router = express.Router()
 
-module.exports = () => {
+export default () => {
   const rootDirectory = process.cwd()
   router.use('/app/bundle.js', express.static(path.join(__dirname, '../build/app/bundle.js')))
   router.use('/static', express.static(path.join(__dirname, '../build/static')))

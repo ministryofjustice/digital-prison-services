@@ -1,4 +1,4 @@
-const existingEventsForOffenderFactory = require('../controllers/attendance/getExistingEvents')
+import existingEventsForOffenderFactory from '../controllers/attendance/getExistingEvents'
 
 describe('Existing events for offenders', () => {
   const prisonApi = {}

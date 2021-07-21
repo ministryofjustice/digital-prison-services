@@ -1,4 +1,4 @@
-const prisonerPersonal = require('../controllers/prisonerProfile/prisonerPersonal')
+import prisonerPersonal from '../controllers/prisonerProfile/prisonerPersonal'
 
 describe('prisoner personal', () => {
   const offenderNo = 'ABC123'
@@ -77,6 +77,7 @@ describe('prisoner personal', () => {
       personService,
       prisonApi,
       allocationManagerApi,
+      // @ts-expect-error ts-migrate(2345) FIXME: Argument of type '{ prisonerProfileService: {}; pe... Remove this comment to see the full error message
       logError,
       esweService,
     })

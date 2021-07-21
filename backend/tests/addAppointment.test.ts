@@ -1,11 +1,7 @@
-// @ts-expect-error ts-migrate(2451) FIXME: Cannot redeclare block-scoped variable 'moment'.
-const moment = require('moment')
-// @ts-expect-error ts-migrate(2451) FIXME: Cannot redeclare block-scoped variable 'addAppoint... Remove this comment to see the full error message
-const { addAppointmentFactory } = require('../controllers/appointments/addAppointment')
-// @ts-expect-error ts-migrate(2451) FIXME: Cannot redeclare block-scoped variable 'DAY_MONTH_... Remove this comment to see the full error message
-const { DAY_MONTH_YEAR } = require('../../common/dateHelpers')
-// @ts-expect-error ts-migrate(2451) FIXME: Cannot redeclare block-scoped variable 'repeatType... Remove this comment to see the full error message
-const { repeatTypes } = require('../shared/appointmentConstants')
+import moment from 'moment'
+import { addAppointmentFactory } from '../controllers/appointments/addAppointment'
+import { DAY_MONTH_YEAR } from '../../common/dateHelpers'
+import { repeatTypes } from '../shared/appointmentConstants'
 
 describe('Add appointment', () => {
   const prisonApi = {}

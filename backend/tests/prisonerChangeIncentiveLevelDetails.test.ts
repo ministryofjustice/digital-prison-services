@@ -1,6 +1,5 @@
-const prisonerChangeIncentiveLevelDetails = require('../controllers/prisonerProfile/prisonerChangeIncentiveLevelDetails')
-// @ts-expect-error ts-migrate(2451) FIXME: Cannot redeclare block-scoped variable 'raiseAnaly... Remove this comment to see the full error message
-const { raiseAnalyticsEvent } = require('../raiseAnalyticsEvent')
+import prisonerChangeIncentiveLevelDetails from '../controllers/prisonerProfile/prisonerChangeIncentiveLevelDetails'
+import { raiseAnalyticsEvent } from '../raiseAnalyticsEvent'
 
 jest.mock('../raiseAnalyticsEvent', () => ({
   raiseAnalyticsEvent: jest.fn(),
@@ -74,6 +73,7 @@ describe('Prisoner change incentive level details', () => {
     // @ts-expect-error ts-migrate(2339) FIXME: Property 'changeIepLevel' does not exist on type '... Remove this comment to see the full error message
     prisonApi.changeIepLevel = jest.fn()
 
+    // @ts-expect-error ts-migrate(2345) FIXME: Argument of type '{ prisonApi: {}; logError: any; ... Remove this comment to see the full error message
     controller = prisonerChangeIncentiveLevelDetails({ prisonApi, logError })
   })
 

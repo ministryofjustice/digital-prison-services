@@ -1,26 +1,18 @@
-// @ts-expect-error ts-migrate(2451) FIXME: Cannot redeclare block-scoped variable 'express'.
-const express = require('express')
+import express from 'express'
+import searchForCellController from '../controllers/cellMove/searchForCell'
+import selectCellController from '../controllers/cellMove/selectCell'
+import nonAssociationsController from '../controllers/cellMove/viewNonAssociations'
+import offenderDetailsController from '../controllers/cellMove/viewOffenderDetails'
+import cellSharingRiskAssessmentController from '../controllers/cellMove/viewCellSharingAssessmentDetails'
+import considerRisksController from '../controllers/cellMove/considerRisks'
+import confirmCellMoveController from '../controllers/cellMove/confirmCellMove'
+import cellMoveConfirmationController from '../controllers/cellMove/cellMoveConfirmation'
+import spaceCreatedController from '../controllers/cellMove/spaceCreated'
+import cellNotAvailable from '../controllers/cellMove/cellNotAvailable'
+import { raiseAnalyticsEvent } from '../raiseAnalyticsEvent'
 
-const searchForCellController = require('../controllers/cellMove/searchForCell')
-const selectCellController = require('../controllers/cellMove/selectCell')
-const nonAssociationsController = require('../controllers/cellMove/viewNonAssociations')
-const offenderDetailsController = require('../controllers/cellMove/viewOffenderDetails')
-const cellSharingRiskAssessmentController = require('../controllers/cellMove/viewCellSharingAssessmentDetails')
-// @ts-expect-error ts-migrate(2451) FIXME: Cannot redeclare block-scoped variable 'considerRi... Remove this comment to see the full error message
-const considerRisksController = require('../controllers/cellMove/considerRisks')
-const confirmCellMoveController = require('../controllers/cellMove/confirmCellMove')
-const cellMoveConfirmationController = require('../controllers/cellMove/cellMoveConfirmation')
-// @ts-expect-error ts-migrate(2451) FIXME: Cannot redeclare block-scoped variable 'spaceCreat... Remove this comment to see the full error message
-const spaceCreatedController = require('../controllers/cellMove/spaceCreated')
-// @ts-expect-error ts-migrate(2451) FIXME: Cannot redeclare block-scoped variable 'cellNotAva... Remove this comment to see the full error message
-const cellNotAvailable = require('../controllers/cellMove/cellNotAvailable')
-// @ts-expect-error ts-migrate(2451) FIXME: Cannot redeclare block-scoped variable 'raiseAnaly... Remove this comment to see the full error message
-const { raiseAnalyticsEvent } = require('../raiseAnalyticsEvent')
-
-// @ts-expect-error ts-migrate(2451) FIXME: Cannot redeclare block-scoped variable 'router'.
 const router = express.Router({ mergeParams: true })
 
-// @ts-expect-error ts-migrate(2451) FIXME: Cannot redeclare block-scoped variable 'controller... Remove this comment to see the full error message
 const controller = ({ oauthApi, prisonApi, whereaboutsApi, caseNotesApi, logError }) => {
   const { index: considerRisksIndex, post: considerRisksPost } = considerRisksController({
     prisonApi,
@@ -30,23 +22,32 @@ const controller = ({ oauthApi, prisonApi, whereaboutsApi, caseNotesApi, logErro
   const { index: confirmCellMoveIndex, post: confirmCellMovePost } = confirmCellMoveController({
     prisonApi,
     whereaboutsApi,
+    // @ts-expect-error ts-migrate(2345) FIXME: Argument of type '{ prisonApi: any; whereaboutsApi... Remove this comment to see the full error message
     caseNotesApi,
     logError,
   })
 
+  // @ts-expect-error ts-migrate(2345) FIXME: Argument of type '{ oauthApi: any; prisonApi: any;... Remove this comment to see the full error message
   router.get('/search-for-cell', searchForCellController({ oauthApi, prisonApi, whereaboutsApi, logError }))
+  // @ts-expect-error ts-migrate(2345) FIXME: Argument of type '{ prisonApi: any; logError: any;... Remove this comment to see the full error message
   router.get('/non-associations', nonAssociationsController({ prisonApi, logError }))
+  // @ts-expect-error ts-migrate(2345) FIXME: Argument of type '{ prisonApi: any; logError: any;... Remove this comment to see the full error message
   router.get('/offender-details', offenderDetailsController({ prisonApi, logError }))
+  // @ts-expect-error ts-migrate(2345) FIXME: Argument of type '{ prisonApi: any; logError: any;... Remove this comment to see the full error message
   router.get('/cell-sharing-risk-assessment-details', cellSharingRiskAssessmentController({ prisonApi, logError }))
+  // @ts-expect-error ts-migrate(2345) FIXME: Argument of type '{ oauthApi: any; prisonApi: any;... Remove this comment to see the full error message
   router.get('/select-cell', selectCellController({ oauthApi, prisonApi, whereaboutsApi, logError }))
   router.get('/confirm-cell-move', confirmCellMoveIndex)
   router.post('/confirm-cell-move', confirmCellMovePost)
   router.get('/consider-risks', considerRisksIndex)
   router.post('/consider-risks', considerRisksPost)
+  // @ts-expect-error ts-migrate(2345) FIXME: Argument of type '{ prisonApi: any; logError: any;... Remove this comment to see the full error message
   router.get('/confirmation', cellMoveConfirmationController({ prisonApi, logError }))
+  // @ts-expect-error ts-migrate(2345) FIXME: Argument of type '{ prisonApi: any; logError: any;... Remove this comment to see the full error message
   router.get('/space-created', spaceCreatedController({ prisonApi, logError }))
+  // @ts-expect-error ts-migrate(2345) FIXME: Argument of type '{ prisonApi: any; logError: any;... Remove this comment to see the full error message
   router.get('/cell-not-available', cellNotAvailable({ prisonApi, logError }))
   return router
 }
 
-module.exports = (dependencies) => controller(dependencies)
+export default (dependencies) => controller(dependencies)

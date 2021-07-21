@@ -1,20 +1,16 @@
-// @ts-expect-error ts-migrate(2451) FIXME: Cannot redeclare block-scoped variable 'express'.
-const express = require('express')
-const bunyanMiddleware = require('bunyan-middleware')
-const helmet = require('helmet')
-const noCache = require('nocache')
-// @ts-expect-error ts-migrate(2451) FIXME: Cannot redeclare block-scoped variable 'config'.
-const config = require('./config')
-// @ts-expect-error ts-migrate(2451) FIXME: Cannot redeclare block-scoped variable 'log'.
-const log = require('./log')
-const ensureHttps = require('./middleware/ensureHttps')
+import express from 'express'
+import bunyanMiddleware from 'bunyan-middleware'
+import helmet from 'helmet'
+import noCache from 'nocache'
+import config from './config'
+import log from './log'
+import ensureHttps from './middleware/ensureHttps'
 
 const sixtyDaysInSeconds = 5184000
 
-// @ts-expect-error ts-migrate(2451) FIXME: Cannot redeclare block-scoped variable 'router'.
 const router = express.Router()
 
-module.exports = () => {
+export default () => {
   router.use(
     helmet({
       contentSecurityPolicy: false,

@@ -1,6 +1,5 @@
-const totalCurrentlyOut = require('../../controllers/establishmentRoll/totalCurrentlyOut')
+import totalCurrentlyOut from '../../controllers/establishmentRoll/totalCurrentlyOut'
 
-// @ts-expect-error ts-migrate(2451) FIXME: Cannot redeclare block-scoped variable 'movementsS... Remove this comment to see the full error message
 const movementsService = {}
 
 describe('Currently out', () => {
@@ -39,6 +38,7 @@ describe('Currently out', () => {
     // @ts-expect-error ts-migrate(2339) FIXME: Property 'getOffendersCurrentlyOutOfAgency' does n... Remove this comment to see the full error message
     movementsService.getOffendersCurrentlyOutOfAgency = jest.fn()
     logError = jest.fn()
+    // @ts-expect-error ts-migrate(2345) FIXME: Argument of type '{ movementsService: {}; logError... Remove this comment to see the full error message
     controller = totalCurrentlyOut({ movementsService, logError })
     // @ts-expect-error ts-migrate(2339) FIXME: Property 'render' does not exist on type '{ locals... Remove this comment to see the full error message
     res.render = jest.fn()

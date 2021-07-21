@@ -1,10 +1,7 @@
-// @ts-expect-error ts-migrate(2451) FIXME: Cannot redeclare block-scoped variable 'forenameTo... Remove this comment to see the full error message
-const { forenameToInitial, chunkArray } = require('../../utils')
-// @ts-expect-error ts-migrate(2451) FIXME: Cannot redeclare block-scoped variable 'serviceUna... Remove this comment to see the full error message
-const { serviceUnavailableMessage } = require('../../common-messages')
+import { forenameToInitial, chunkArray } from '../../utils'
+import { serviceUnavailableMessage } from '../../common-messages'
 
-module.exports =
-  ({ prisonApi, logError }) =>
+export default ({ prisonApi, logError }) =>
   async (req, res) => {
     const renderError = (error) => {
       if (error) logError(req.originalUrl, error, serviceUnavailableMessage)

@@ -1,5 +1,4 @@
-module.exports =
-  ({ contentfulService }) =>
+export default ({ contentfulService }) =>
   async (req, res) => {
     const { path } = req.params
 

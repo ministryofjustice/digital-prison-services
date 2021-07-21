@@ -1,5 +1,4 @@
 import moment from 'moment'
-// @ts-expect-error ts-migrate(2306) FIXME: File 'prisonstaf... Remove this comment to see the full error message
 import { attendanceStatisticsFactory } from '../controllers/attendance/attendanceStatistics'
 
 const mockDateToSunday012017 = () => jest.spyOn(Date, 'now').mockImplementation(() => 1483228800000) // Sunday 2017-01-01T00:00:00.000Z
@@ -118,6 +117,7 @@ describe('Attendance reason statistics', () => {
       // @ts-expect-error ts-migrate(2339) FIXME: Property 'getAttendanceStats' does not exist on ty... Remove this comment to see the full error message
       whereaboutsApi.getAttendanceStats.mockReturnValue(stats)
 
+      // @ts-expect-error ts-migrate(2554) FIXME: Expected 3 arguments, but got 4.
       const { attendanceStatistics } = attendanceStatisticsFactory(oauthApi, prisonApi, whereaboutsApi, jest.fn())
 
       const req = { query: { agencyId, toDate, fromDate, period: null } }
@@ -135,6 +135,7 @@ describe('Attendance reason statistics', () => {
     })
 
     it('should validate against future fromDate', async () => {
+      // @ts-expect-error ts-migrate(2554) FIXME: Expected 3 arguments, but got 4.
       const { attendanceStatistics } = attendanceStatisticsFactory(oauthApi, prisonApi, whereaboutsApi, jest.fn())
 
       const tomorrow = moment().add(1, 'days').format('DD/MM/YYYY')
@@ -160,6 +161,7 @@ describe('Attendance reason statistics', () => {
       // @ts-expect-error ts-migrate(2339) FIXME: Property 'getAttendanceStats' does not exist on ty... Remove this comment to see the full error message
       whereaboutsApi.getAttendanceStats.mockReturnValue(stats)
 
+      // @ts-expect-error ts-migrate(2554) FIXME: Expected 3 arguments, but got 4.
       const { attendanceStatistics } = attendanceStatisticsFactory(oauthApi, prisonApi, whereaboutsApi, jest.fn())
 
       const req = { query: { agencyId, toDate, fromDate, period } }
@@ -183,6 +185,7 @@ describe('Attendance reason statistics', () => {
       // @ts-expect-error ts-migrate(2339) FIXME: Property 'getAttendanceStats' does not exist on ty... Remove this comment to see the full error message
       whereaboutsApi.getAttendanceStats.mockReturnValue(stats)
 
+      // @ts-expect-error ts-migrate(2554) FIXME: Expected 3 arguments, but got 4.
       const { attendanceStatistics } = attendanceStatisticsFactory(oauthApi, prisonApi, whereaboutsApi, jest.fn())
 
       const req = { query: { agencyId, toDate, fromDate, period } }
@@ -207,6 +210,7 @@ describe('Attendance reason statistics', () => {
       // @ts-expect-error ts-migrate(2339) FIXME: Property 'getAttendanceStats' does not exist on ty... Remove this comment to see the full error message
       whereaboutsApi.getAttendanceStats.mockReturnValue(stats)
 
+      // @ts-expect-error ts-migrate(2554) FIXME: Expected 3 arguments, but got 4.
       const { attendanceStatistics } = attendanceStatisticsFactory(oauthApi, prisonApi, whereaboutsApi, jest.fn())
 
       const req = { query: { agencyId, toDate, fromDate, period } }
@@ -226,6 +230,7 @@ describe('Attendance reason statistics', () => {
     })
 
     it('should validate that the date range does not exceed two weeks', async () => {
+      // @ts-expect-error ts-migrate(2554) FIXME: Expected 3 arguments, but got 4.
       const { attendanceStatistics } = attendanceStatisticsFactory(oauthApi, prisonApi, whereaboutsApi, jest.fn())
 
       const today = moment().format('DD/MM/YYYY')
@@ -250,6 +255,7 @@ describe('Attendance reason statistics', () => {
       // @ts-expect-error ts-migrate(2339) FIXME: Property 'userRoles' does not exist on type '{}'.
       oauthApi.userRoles.mockReturnValue({})
 
+      // @ts-expect-error ts-migrate(2554) FIXME: Expected 3 arguments, but got 4.
       const { attendanceStatistics } = attendanceStatisticsFactory(oauthApi, prisonApi, whereaboutsApi, jest.fn())
       const res = { render: jest.fn(), locals: context, status: jest.fn() }
       const req = { query: { agencyId, fromDate, toDate, period } }
@@ -271,6 +277,7 @@ describe('Attendance reason statistics', () => {
       // @ts-expect-error ts-migrate(2339) FIXME: Property 'userRoles' does not exist on type '{}'.
       oauthApi.userRoles.mockReturnValue({})
 
+      // @ts-expect-error ts-migrate(2554) FIXME: Expected 3 arguments, but got 4.
       const { attendanceStatistics } = attendanceStatisticsFactory(oauthApi, prisonApi, whereaboutsApi, jest.fn())
       const req = { query: { agencyId, fromDate, toDate, period: 'AM_PM' } }
       const res = { render: jest.fn(), locals: context, status: jest.fn() }
@@ -287,6 +294,7 @@ describe('Attendance reason statistics', () => {
     })
 
     it('should call whereabouts attendance changes api with the correct parameters for AM+PM', async () => {
+      // @ts-expect-error ts-migrate(2554) FIXME: Expected 3 arguments, but got 4.
       const { attendanceStatistics } = attendanceStatisticsFactory(oauthApi, prisonApi, whereaboutsApi, jest.fn())
       const req = { query: { agencyId, fromDate, toDate, period: 'AM_PM' } }
       const res = { render: jest.fn(), locals: context, status: jest.fn() }
@@ -301,6 +309,7 @@ describe('Attendance reason statistics', () => {
     })
 
     it('should call whereabouts attendance changes api with the correct parameters for AM', async () => {
+      // @ts-expect-error ts-migrate(2554) FIXME: Expected 3 arguments, but got 4.
       const { attendanceStatistics } = attendanceStatisticsFactory(oauthApi, prisonApi, whereaboutsApi, jest.fn())
       const req = { query: { agencyId, fromDate, toDate, period: 'AM' } }
       const res = { render: jest.fn(), locals: context, status: jest.fn() }
@@ -315,6 +324,7 @@ describe('Attendance reason statistics', () => {
     })
 
     it('should call whereabouts attendance changes api with the correct parameters for PM', async () => {
+      // @ts-expect-error ts-migrate(2554) FIXME: Expected 3 arguments, but got 4.
       const { attendanceStatistics } = attendanceStatisticsFactory(oauthApi, prisonApi, whereaboutsApi, jest.fn())
       const req = { query: { agencyId, fromDate, toDate, period: 'PM' } }
       const res = { render: jest.fn(), locals: context, status: jest.fn() }
@@ -337,6 +347,7 @@ describe('Attendance reason statistics', () => {
       const now = moment().format('DD/MM/YYYY')
       const nowPlus1 = moment().add(1, 'day').format('DD/MM/YYYY')
 
+      // @ts-expect-error ts-migrate(2554) FIXME: Expected 3 arguments, but got 4.
       const { attendanceStatistics } = attendanceStatisticsFactory(oauthApi, prisonApi, whereaboutsApi, jest.fn())
       const req = { query: { agencyId, fromDate: now, toDate: nowPlus1, period: 'AM_PM' } }
       const res = { render: jest.fn() }
@@ -357,6 +368,7 @@ describe('Attendance reason statistics', () => {
       // @ts-expect-error ts-migrate(2339) FIXME: Property 'getAttendanceChanges' does not exist on ... Remove this comment to see the full error message
       whereaboutsApi.getAttendanceChanges.mockReturnValue({ changes: [{ prisonId: 'MDI' }, { prisonId: 'LEI' }] })
 
+      // @ts-expect-error ts-migrate(2554) FIXME: Expected 3 arguments, but got 4.
       const { attendanceStatistics } = attendanceStatisticsFactory(oauthApi, prisonApi, whereaboutsApi, jest.fn())
       const req = { query: { agencyId, fromDate, toDate, period: 'AM_PM' } }
       const res = { render: jest.fn() }
@@ -440,6 +452,7 @@ describe('Attendance reason statistics', () => {
       // @ts-expect-error ts-migrate(2339) FIXME: Property 'getAttendanceStats' does not exist on ty... Remove this comment to see the full error message
       whereaboutsApi.getAttendanceStats.mockReturnValue(stats)
 
+      // @ts-expect-error ts-migrate(2554) FIXME: Expected 3 arguments, but got 4.
       const { attendanceStatistics } = attendanceStatisticsFactory(oauthApi, prisonApi, whereaboutsApi, jest.fn())
       const req = { query: { agencyId, fromDate, toDate, period: 'AM_PM' } }
       const res = { render: jest.fn() }
@@ -488,6 +501,7 @@ describe('Attendance reason statistics', () => {
         oauthApi,
         prisonApi,
         whereaboutsApi,
+        // @ts-expect-error ts-migrate(2554) FIXME: Expected 3 arguments, but got 4.
         jest.fn()
       )
 
@@ -573,6 +587,7 @@ describe('Attendance reason statistics', () => {
         oauthApi,
         prisonApi,
         whereaboutsApi,
+        // @ts-expect-error ts-migrate(2554) FIXME: Expected 3 arguments, but got 4.
         jest.fn()
       )
       const req = { query: { agencyId, fromDate, toDate, period: 'AM_PM' }, params: { reason: 'AcceptableAbsence' } }
@@ -740,6 +755,7 @@ describe('Attendance reason statistics', () => {
         oauthApi,
         prisonApi,
         whereaboutsApi,
+        // @ts-expect-error ts-migrate(2554) FIXME: Expected 3 arguments, but got 4.
         jest.fn()
       )
 
@@ -767,6 +783,7 @@ describe('Attendance reason statistics', () => {
         oauthApi,
         prisonApi,
         whereaboutsApi,
+        // @ts-expect-error ts-migrate(2554) FIXME: Expected 3 arguments, but got 4.
         jest.fn()
       )
 

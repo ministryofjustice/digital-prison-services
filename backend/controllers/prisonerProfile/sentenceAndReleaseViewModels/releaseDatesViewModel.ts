@@ -1,9 +1,7 @@
-// @ts-expect-error ts-migrate(2451) FIXME: Cannot redeclare block-scoped variable 'moment'.
-const moment = require('moment')
-// @ts-expect-error ts-migrate(2451) FIXME: Cannot redeclare block-scoped variable 'readableDa... Remove this comment to see the full error message
-const { readableDateFormat } = require('../../../utils')
+import moment from 'moment'
+import { readableDateFormat } from '../../../utils'
 
-module.exports = (sentenceDetails) => {
+export default (sentenceDetails) => {
   const conditionalRelease = sentenceDetails.conditionalReleaseOverrideDate || sentenceDetails.conditionalReleaseDate
   const postRecallDate = sentenceDetails.postRecallReleaseOverrideDate || sentenceDetails.postRecallReleaseDate
   const automaticReleaseDate = sentenceDetails.automaticReleaseOverrideDate || sentenceDetails.automaticReleaseDate

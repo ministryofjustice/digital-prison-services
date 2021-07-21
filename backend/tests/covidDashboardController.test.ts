@@ -1,4 +1,4 @@
-const covidDashboard = require('../controllers/covid/covidDashboardController')
+import covidDashboard from '../controllers/covid/covidDashboardController'
 
 describe('covid dashboard', () => {
   let req
@@ -19,6 +19,7 @@ describe('covid dashboard', () => {
       getCount: jest.fn(),
       getUnassignedNewEntrants: jest.fn(),
     }
+    // @ts-expect-error ts-migrate(2345) FIXME: Argument of type '{ covidService: any; logError: a... Remove this comment to see the full error message
     controller = covidDashboard({ covidService, logError })
   })
 

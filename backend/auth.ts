@@ -1,10 +1,7 @@
-// @ts-expect-error ts-migrate(2451) FIXME: Cannot redeclare block-scoped variable 'passport'.
-const passport = require('passport')
-const OAuth2Strategy = require('passport-oauth2').Strategy
-// @ts-expect-error ts-migrate(2451) FIXME: Cannot redeclare block-scoped variable 'apiClientC... Remove this comment to see the full error message
-const { apiClientCredentials } = require('./api/oauthApi')
-// @ts-expect-error ts-migrate(2451) FIXME: Cannot redeclare block-scoped variable 'config'.
-const config = require('./config')
+import passport from 'passport'
+import { Strategy as OAuth2Strategy } from 'passport-oauth2'
+import { apiClientCredentials } from './api/oauthApi'
+import config from './config'
 
 passport.serializeUser((user, done) => {
   // Not used but required for Passport
@@ -16,7 +13,7 @@ passport.deserializeUser((user, done) => {
   done(null, user)
 })
 
-const init = () => {
+export const init = () => {
   passport.use(
     new OAuth2Strategy(
       {
@@ -36,4 +33,6 @@ const init = () => {
   )
 }
 
-module.exports.init = init
+export default {
+  init,
+}

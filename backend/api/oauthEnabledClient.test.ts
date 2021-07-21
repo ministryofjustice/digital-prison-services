@@ -1,10 +1,7 @@
-// @ts-expect-error ts-migrate(2451) FIXME: Cannot redeclare block-scoped variable 'nock'.
-const nock = require('nock')
-const clientFactory = require('./oauthEnabledClient').default
-// @ts-expect-error ts-migrate(2451) FIXME: Cannot redeclare block-scoped variable 'contextPro... Remove this comment to see the full error message
-const contextProperties = require('../contextProperties')
-// @ts-expect-error ts-migrate(2451) FIXME: Cannot redeclare block-scoped variable 'logger'.
-const logger = require('../log')
+import nock from 'nock'
+import clientFactory from './oauthEnabledClient'
+import contextProperties from '../contextProperties'
+import logger from '../log'
 
 const hostname = 'http://localhost:8080'
 
@@ -33,12 +30,12 @@ describe('Test clients built by oauthEnabledClient', () => {
       const response = await client.get(context, '/api/users/me')
 
       expect(response.status).toEqual(200)
-      expect(response.request.header.authorization).toEqual('Bearer a')
+      expect(response.req.getHeaders().authorization).toEqual('Bearer a')
     })
 
     it('Should succeed when there are no authorization headers', async () => {
       const response = await client.get({}, '/api/users/me')
-      expect(response.request.header.authorization).toBeUndefined()
+      expect(response.req.getHeaders().authorization).toBeUndefined()
     })
 
     it('Should set the pagination headers on requests', async () => {
@@ -47,7 +44,7 @@ describe('Test clients built by oauthEnabledClient', () => {
 
       const response = await client.get(context, '/api/users/me')
 
-      expect(response.request.header).toEqual(expect.objectContaining({ 'page-offset': '0', 'page-limit': '10' }))
+      expect(response.req.getHeaders()).toEqual(expect.objectContaining({ 'page-offset': '0', 'page-limit': '10' }))
     })
 
     it('Should set the results limit header override on requests', async () => {
@@ -56,7 +53,7 @@ describe('Test clients built by oauthEnabledClient', () => {
 
       const response = await client.get(context, '/api/users/me', { resultsLimit: 500 })
 
-      expect(response.request.header).toEqual(expect.objectContaining({ 'page-offset': '0', 'page-limit': '500' }))
+      expect(response.req.getHeaders()).toEqual(expect.objectContaining({ 'page-offset': '0', 'page-limit': '500' }))
     })
 
     it('Should set custom headers on requests', async () => {
@@ -65,7 +62,7 @@ describe('Test clients built by oauthEnabledClient', () => {
 
       const response = await client.get(context, '/api/users/me')
 
-      expect(response.request.header).toEqual(expect.objectContaining({ 'custom-header': 'custom-value' }))
+      expect(response.req.getHeaders()).toEqual(expect.objectContaining({ 'custom-header': 'custom-value' }))
     })
   })
 
@@ -262,7 +259,7 @@ describe('Test clients built by oauthEnabledClient', () => {
         const pipe = new Promise((resolve) => {
           mock.get('/api/users/me').reply(200, Buffer.from('some binary data'), {
             'Content-Type': 'image/png',
-            'Content-Length': 123,
+            'Content-Length': '123',
           })
 
           client.pipe({}, '/api/users/me', {
@@ -292,9 +289,10 @@ describe('Test clients built by oauthEnabledClient', () => {
       const context = {}
       contextProperties.setTokens({ access_token: 'a', refresh_token: 'b' }, context)
 
-      const response = await client.get(context, '/api/users/me')
+      const path = '/api/users/me'
+      const response = await client.get(context, path)
 
-      expect(response.request.url).toEqual('http://localhost:8080/api/users/me')
+      expect(response.req.path).toEqual(path)
     })
 
     it("Should set the url correctly if doesn't end with a /", async () => {
@@ -304,9 +302,10 @@ describe('Test clients built by oauthEnabledClient', () => {
       const context = {}
       contextProperties.setTokens({ access_token: 'a', refresh_token: 'b' }, context)
 
-      const response = await client.get(context, '/api/users/me')
+      const path = '/api/users/me'
+      const response = await client.get(context, path)
 
-      expect(response.request.url).toEqual('http://localhost:8080/api/users/me')
+      expect(response.req.path).toEqual(path)
     })
   })
 

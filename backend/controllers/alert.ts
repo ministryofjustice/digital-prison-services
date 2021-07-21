@@ -1,17 +1,10 @@
-// @ts-expect-error ts-migrate(2451) FIXME: Cannot redeclare block-scoped variable 'moment'.
-const moment = require('moment')
-// @ts-expect-error ts-migrate(2451) FIXME: Cannot redeclare block-scoped variable 'nunjucks'.
-const nunjucks = require('nunjucks')
-// @ts-expect-error ts-migrate(2451) FIXME: Cannot redeclare block-scoped variable 'properCase... Remove this comment to see the full error message
-const { properCaseName, formatName } = require('../utils')
-// @ts-expect-error ts-migrate(2451) FIXME: Cannot redeclare block-scoped variable 'logError'.
-const { logError } = require('../logError')
-// @ts-expect-error ts-migrate(2451) FIXME: Cannot redeclare block-scoped variable 'raiseAnaly... Remove this comment to see the full error message
-const { raiseAnalyticsEvent } = require('../raiseAnalyticsEvent')
-// @ts-expect-error ts-migrate(2451) FIXME: Cannot redeclare block-scoped variable 'serviceUna... Remove this comment to see the full error message
-const { serviceUnavailableMessage } = require('../common-messages')
+import moment from 'moment'
+import nunjucks from 'nunjucks'
+import { properCaseName, formatName } from '../utils'
+import { logError } from '../logError'
+import { raiseAnalyticsEvent } from '../raiseAnalyticsEvent'
+import { serviceUnavailableMessage } from '../common-messages'
 
-// @ts-expect-error ts-migrate(2451) FIXME: Cannot redeclare block-scoped variable 'getOffende... Remove this comment to see the full error message
 const getOffenderUrl = (offenderNo) => `/prisoner/${offenderNo}`
 
 const getUpdateParameters = ({ comment, expiryDate }) => {
@@ -23,10 +16,8 @@ const getUpdateParameters = ({ comment, expiryDate }) => {
 
 const fireAnalyticsEvent = ({ closeAlert, alertCode, caseLoadId }) => {
   if (closeAlert) {
-    // @ts-expect-error ts-migrate(2554) FIXME: Expected 4 arguments, but got 3.
     raiseAnalyticsEvent('Alert Closed', `Alert closed for ${caseLoadId}`, `Alert type - ${alertCode}`)
   } else {
-    // @ts-expect-error ts-migrate(2554) FIXME: Expected 4 arguments, but got 3.
     raiseAnalyticsEvent('Alert comment updated', `Alert comment updated for ${caseLoadId}`, `Alert type - ${alertCode}`)
   }
 }
@@ -56,7 +47,7 @@ const getValidationErrors = ({ alertStatus, comment }) => {
   return errors
 }
 
-const alertFactory = (oauthApi, prisonApi, referenceCodesService) => {
+export const alertFactory = (oauthApi, prisonApi, referenceCodesService) => {
   const renderTemplate = (req, res, pageData) => {
     const { alert, pageErrors, offenderDetails, ...rest } = pageData
     const formAction = offenderDetails && alert && `/edit-alert/${offenderDetails.bookingId}/${alert.alertId}`
@@ -393,7 +384,6 @@ const alertFactory = (oauthApi, prisonApi, referenceCodesService) => {
       alertDate: moment(alertDate, 'DD/MM/YYYY').format('YYYY-MM-DD'),
     })
 
-    // @ts-expect-error ts-migrate(2554) FIXME: Expected 4 arguments, but got 3.
     raiseAnalyticsEvent(
       'Alert Created',
       `Alert type - ${alertCode}`,
@@ -406,4 +396,4 @@ const alertFactory = (oauthApi, prisonApi, referenceCodesService) => {
   return { handleCreateAlertForm, displayCreateAlertPage, displayEditAlertPage, handleEditAlertForm }
 }
 
-module.exports = { alertFactory }
+export default { alertFactory }

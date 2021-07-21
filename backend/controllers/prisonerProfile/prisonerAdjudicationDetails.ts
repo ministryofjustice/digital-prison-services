@@ -1,8 +1,6 @@
-// @ts-expect-error ts-migrate(2451) FIXME: Cannot redeclare block-scoped variable 'formatTime... Remove this comment to see the full error message
-const { formatTimestampToDate, formatTimestampToDateTime, putLastNameFirst, sortByDateTime } = require('../../utils')
+import { formatTimestampToDate, formatTimestampToDateTime, putLastNameFirst, sortByDateTime } from '../../utils'
 
-module.exports =
-  ({ prisonApi }) =>
+export default ({ prisonApi }) =>
   async (req, res) => {
     const { offenderNo, adjudicationNumber } = req.params
 

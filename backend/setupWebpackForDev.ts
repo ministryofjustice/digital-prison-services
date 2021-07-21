@@ -1,19 +1,15 @@
-// @ts-expect-error ts-migrate(2451) FIXME: Cannot redeclare block-scoped variable 'express'.
-const express = require('express')
-const webpack = require('webpack')
-const middleware = require('webpack-dev-middleware')
-const hrm = require('webpack-hot-middleware')
+import express from 'express'
+import webpack, { Configuration } from 'webpack'
+import middleware from 'webpack-dev-middleware'
+import hrm from 'webpack-hot-middleware'
+import webpackConfig from '../webpack.config'
+import config from './config'
 
-const webpackConfig = require('../webpack.config')
-// @ts-expect-error ts-migrate(2451) FIXME: Cannot redeclare block-scoped variable 'config'.
-const config = require('./config')
-
-// @ts-expect-error ts-migrate(2451) FIXME: Cannot redeclare block-scoped variable 'router'.
 const router = express.Router()
 
-module.exports = () => {
+export default () => {
   if (config.app.production === false && config.app.disableWebpack === false) {
-    const compiler = webpack(webpackConfig)
+    const compiler = webpack(webpackConfig as Configuration)
     router.use('/app', middleware(compiler, { writeToDisk: true }))
     router.use('/app', hrm(compiler, {}))
   }

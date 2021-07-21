@@ -1,6 +1,5 @@
-const inToday = require('../../controllers/establishmentRoll/inToday')
+import inToday from '../../controllers/establishmentRoll/inToday'
 
-// @ts-expect-error ts-migrate(2451) FIXME: Cannot redeclare block-scoped variable 'movementsS... Remove this comment to see the full error message
 const movementsService = {}
 
 describe('In today', () => {
@@ -42,6 +41,7 @@ describe('In today', () => {
     // @ts-expect-error ts-migrate(2339) FIXME: Property 'getMovementsIn' does not exist on type '... Remove this comment to see the full error message
     movementsService.getMovementsIn = jest.fn()
     logError = jest.fn()
+    // @ts-expect-error ts-migrate(2345) FIXME: Argument of type '{ movementsService: {}; logError... Remove this comment to see the full error message
     controller = inToday({ movementsService, logError })
     // @ts-expect-error ts-migrate(2339) FIXME: Property 'render' does not exist on type '{ locals... Remove this comment to see the full error message
     res.render = jest.fn()

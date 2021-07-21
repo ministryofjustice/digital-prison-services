@@ -1,11 +1,8 @@
-// @ts-expect-error ts-migrate(2451) FIXME: Cannot redeclare block-scoped variable 'moment'.
-const moment = require('moment')
-// @ts-expect-error ts-migrate(2451) FIXME: Cannot redeclare block-scoped variable 'hasLength'... Remove this comment to see the full error message
-const { hasLength, formatName, putLastNameFirst, sortByDateTime } = require('../../utils')
-const generatePagination = require('../../shared/generatePagination')
+import moment from 'moment'
+import { hasLength, formatName, putLastNameFirst, sortByDateTime } from '../../utils'
+import generatePagination from '../../shared/generatePagination'
 
-module.exports =
-  ({ prisonApi, pageSize = 20 }) =>
+export default ({ prisonApi, pageSize = 20 }) =>
   async (req, res, next) => {
     const { offenderNo } = req.params
     const { visitType, fromDate, toDate, page = 0 } = req.query

@@ -1,8 +1,6 @@
-const jwtDecode = require('jwt-decode')
-// @ts-expect-error ts-migrate(2451) FIXME: Cannot redeclare block-scoped variable 'contextPro... Remove this comment to see the full error message
-const contextProperties = require('./contextProperties')
-// @ts-expect-error ts-migrate(2451) FIXME: Cannot redeclare block-scoped variable 'logger'.
-const logger = require('./log')
+import jwtDecode from 'jwt-decode'
+import contextProperties from './contextProperties'
+import logger from './log'
 
 /**
  * Does the supplied JWT token expire before the supplied time, expressed as seconds since the Posix Epoch?
@@ -12,14 +10,20 @@ const logger = require('./log')
  * @param encodedToken An Encoded JWT token.  It is assumed that the token has an 'exp' (expiration time) claim.
  * @param timeSinceTheEpochInSeconds
  */
-const tokenExpiresBefore = (encodedToken, timeSinceTheEpochInSeconds) => {
+export const tokenExpiresBefore = (encodedToken, timeSinceTheEpochInSeconds) => {
   const token = jwtDecode(encodedToken)
-  if (token.exp < timeSinceTheEpochInSeconds) {
-    logger.info(`Token expiring: user_name '${token.user_name}', exp ${token.exp} >= ${timeSinceTheEpochInSeconds}`)
+  if ((token as any).exp < timeSinceTheEpochInSeconds) {
+    logger.info(
+      `Token expiring: user_name '${(token as any).user_name}', exp ${
+        (token as any).exp
+      } >= ${timeSinceTheEpochInSeconds}`
+    )
   } else {
-    logger.debug(`Token OK: user_name '${token.user_name}', exp ${token.exp} < ${timeSinceTheEpochInSeconds}`)
+    logger.debug(
+      `Token OK: user_name '${(token as any).user_name}', exp ${(token as any).exp} < ${timeSinceTheEpochInSeconds}`
+    )
   }
-  return token.exp < timeSinceTheEpochInSeconds
+  return (token as any).exp < timeSinceTheEpochInSeconds
 }
 
 /**
@@ -30,8 +34,7 @@ const tokenExpiresBefore = (encodedToken, timeSinceTheEpochInSeconds) => {
  * @returns A Function which takes a 'context' object holding JWT auth and refresh tokens.  Returns a Promise which settles when
  * the check and refresh are complete.
  */
-// @ts-expect-error ts-migrate(2451) FIXME: Cannot redeclare block-scoped variable 'factory'.
-const factory =
+export const factory =
   (refreshFunction, secondsToExpiry) =>
   /**
    * Refresh the JWT tokens in context if the access token has less than secondsToExpiry before it expires.
@@ -49,7 +52,7 @@ const factory =
     }
   }
 
-module.exports = {
+export default {
   factory,
   tokenExpiresBefore,
 }

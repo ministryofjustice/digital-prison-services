@@ -1,7 +1,5 @@
-// @ts-expect-error ts-migrate(2451) FIXME: Cannot redeclare block-scoped variable 'logError'.
-const { logError } = require('../logError')
+import { logError } from '../logError'
 
-// @ts-expect-error ts-migrate(2451) FIXME: Cannot redeclare block-scoped variable 'asyncMiddl... Remove this comment to see the full error message
 const asyncMiddleware = (fn) => (req, res, next) => {
   Promise.resolve(fn(req, res, next)).catch((error) => {
     // Note this is the final catch-all for backend errors
@@ -22,4 +20,4 @@ const asyncMiddleware = (fn) => (req, res, next) => {
   })
 }
 
-module.exports = asyncMiddleware
+export default asyncMiddleware

@@ -1,14 +1,9 @@
-// @ts-expect-error ts-migrate(2451) FIXME: Cannot redeclare block-scoped variable 'moment'.
-const moment = require('moment')
-// @ts-expect-error ts-migrate(2451) FIXME: Cannot redeclare block-scoped variable 'properCase... Remove this comment to see the full error message
-const { properCaseName, formatName } = require('../../utils')
-// @ts-expect-error ts-migrate(2451) FIXME: Cannot redeclare block-scoped variable 'buildDateT... Remove this comment to see the full error message
-const { buildDateTime, DATE_TIME_FORMAT_SPEC, DAY_MONTH_YEAR } = require('../../../common/dateHelpers')
-// @ts-expect-error ts-migrate(2451) FIXME: Cannot redeclare block-scoped variable 'repeatType... Remove this comment to see the full error message
-const { repeatTypes, endRecurringEndingDate, validateComments } = require('../../shared/appointmentConstants')
+import moment from 'moment'
+import { properCaseName, formatName } from '../../utils'
+import { buildDateTime, formatDate, DAY_MONTH_YEAR } from '../../../common/dateHelpers'
+import { repeatTypes, endRecurringEndingDate, validateComments } from '../../shared/appointmentConstants'
 
-// @ts-expect-error ts-migrate(2451) FIXME: Cannot redeclare block-scoped variable 'validateDa... Remove this comment to see the full error message
-const validateDate = (date, errors) => {
+export const validateDate = (date, errors) => {
   const now = moment()
   if (!date) errors.push({ text: 'Select the appointment date', href: '#date' })
 
@@ -19,8 +14,7 @@ const validateDate = (date, errors) => {
     errors.push({ text: 'Select a date that is not in the past', href: '#date' })
 }
 
-// @ts-expect-error ts-migrate(2451) FIXME: Cannot redeclare block-scoped variable 'validateSt... Remove this comment to see the full error message
-const validateStartEndTime = (date, startTime, endTime, errors) => {
+export const validateStartEndTime = (date, startTime, endTime, errors) => {
   const now = moment()
   const isToday = date ? moment(date, DAY_MONTH_YEAR).isSame(now, 'day') : false
   const startTimeDuration = moment.duration(now.diff(startTime))
@@ -36,8 +30,7 @@ const validateStartEndTime = (date, startTime, endTime, errors) => {
   }
 }
 
-// @ts-expect-error ts-migrate(2451) FIXME: Cannot redeclare block-scoped variable 'getValidat... Remove this comment to see the full error message
-const getValidationMessages = (fields) => {
+export const getValidationMessages = (fields) => {
   const { appointmentType, location, date, startTime, endTime, comments, recurring, repeats, times } = fields
   const errors = []
 
@@ -89,8 +82,7 @@ const getValidationMessages = (fields) => {
   return errors
 }
 
-// @ts-expect-error ts-migrate(2451) FIXME: Cannot redeclare block-scoped variable 'addAppoint... Remove this comment to see the full error message
-const addAppointmentFactory = (appointmentsService, existingEventsService, prisonApi, whereaboutsApi) => {
+export const addAppointmentFactory = (appointmentsService, existingEventsService, prisonApi, whereaboutsApi) => {
   const createAppointments = ({
     locals,
     comments,
@@ -107,8 +99,8 @@ const addAppointmentFactory = (appointmentsService, existingEventsService, priso
       comment: comments,
       locationId: Number(location),
       appointmentType,
-      startTime: startTime.format(DATE_TIME_FORMAT_SPEC),
-      endTime: endTime && endTime.format(DATE_TIME_FORMAT_SPEC),
+      startTime: formatDate(startTime),
+      endTime: formatDate(endTime),
     }
 
     const request = {
@@ -264,8 +256,8 @@ const addAppointmentFactory = (appointmentsService, existingEventsService, priso
       comment: comments,
       locationId: Number(location),
       appointmentType,
-      startTime: startTime.format(DATE_TIME_FORMAT_SPEC),
-      endTime: endTime && endTime.format(DATE_TIME_FORMAT_SPEC),
+      startTime: formatDate(startTime),
+      endTime: formatDate(endTime),
     }
 
     try {
@@ -302,6 +294,6 @@ const addAppointmentFactory = (appointmentsService, existingEventsService, priso
   return { index, post }
 }
 
-module.exports = {
+export default {
   addAppointmentFactory,
 }

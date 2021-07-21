@@ -1,7 +1,5 @@
-// @ts-expect-error ts-migrate(2451) FIXME: Cannot redeclare block-scoped variable 'moment'.
-const moment = require('moment')
-// @ts-expect-error ts-migrate(2451) FIXME: Cannot redeclare block-scoped variable 'notInUnitC... Remove this comment to see the full error message
-const notInUnitController = require('../controllers/covid/notInUnitController')
+import moment from 'moment'
+import notInUnitController from '../controllers/covid/notInUnitController'
 
 describe('not in unit', () => {
   let req
@@ -21,6 +19,7 @@ describe('not in unit', () => {
     covidService = {
       getUnassignedNewEntrants: jest.fn(),
     }
+    // @ts-expect-error ts-migrate(2345) FIXME: Argument of type '{ covidService: any; logError: a... Remove this comment to see the full error message
     controller = notInUnitController({ covidService, logError })
   })
 

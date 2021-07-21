@@ -1,10 +1,7 @@
-// @ts-expect-error ts-migrate(2451) FIXME: Cannot redeclare block-scoped variable 'moment'.
-const moment = require('moment')
-// @ts-expect-error ts-migrate(2451) FIXME: Cannot redeclare block-scoped variable 'toMap'.
-const { toMap } = require('../utils')
+import moment from 'moment'
+import { toMap } from '../utils'
 
-// @ts-expect-error ts-migrate(2451) FIXME: Cannot redeclare block-scoped variable 'movementsS... Remove this comment to see the full error message
-const movementsServiceFactory = (prisonApi, systemOauthClient) => {
+export const movementsServiceFactory = (prisonApi, systemOauthClient) => {
   const getAssessmentMap = async (context, offenderNumbers) => {
     const assessments = (await prisonApi.getAssessments(context, { code: 'CATEGORY', offenderNumbers })) || []
     return toMap('offenderNo', assessments)
@@ -189,6 +186,6 @@ const movementsServiceFactory = (prisonApi, systemOauthClient) => {
   }
 }
 
-module.exports = {
+export default {
   movementsServiceFactory,
 }

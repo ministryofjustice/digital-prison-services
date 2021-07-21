@@ -6,7 +6,7 @@
  */
 
 // eslint-disable-next-line camelcase
-const setTokens = ({ access_token, refresh_token, authSource }, context) => {
+export const setTokens = ({ access_token, refresh_token, authSource = undefined }, context) => {
   // eslint-disable-next-line no-param-reassign,camelcase
   context.access_token = access_token
   // eslint-disable-next-line no-param-reassign,camelcase
@@ -15,13 +15,13 @@ const setTokens = ({ access_token, refresh_token, authSource }, context) => {
   context.authSource = authSource
 }
 
-const hasTokens = (context) => Boolean(context && context.access_token && context.refresh_token)
+export const hasTokens = (context) => Boolean(context && context.access_token && context.refresh_token)
 
-const getAccessToken = (context) => (context && context.access_token ? context.access_token : null)
+export const getAccessToken = (context) => (context && context.access_token ? context.access_token : null)
 
-const getRefreshToken = (context) => (context && context.refresh_token ? context.refresh_token : null)
+export const getRefreshToken = (context) => (context && context.refresh_token ? context.refresh_token : null)
 
-const normalizeHeaderNames = (srcHeaders) =>
+export const normalizeHeaderNames = (srcHeaders) =>
   Object.keys(srcHeaders).reduce(
     (previous, headerName) => ({
       ...previous,
@@ -30,7 +30,7 @@ const normalizeHeaderNames = (srcHeaders) =>
     {}
   )
 
-const copyNamedHeaders = (headerNames, srcHeaders) =>
+export const copyNamedHeaders = (headerNames, srcHeaders) =>
   headerNames.reduce((previous, name) => {
     if (srcHeaders[name]) {
       return {
@@ -41,22 +41,22 @@ const copyNamedHeaders = (headerNames, srcHeaders) =>
     return previous
   }, {})
 
-const setRequestPagination = (context, headers) => {
+export const setRequestPagination = (context, headers) => {
   const headerNames = ['page-offset', 'page-limit', 'sort-fields', 'sort-order']
   // eslint-disable-next-line no-param-reassign
   context.requestHeaders = copyNamedHeaders(headerNames, (headers && normalizeHeaderNames(headers)) || {})
 }
 
-const getRequestPagination = (context) => context.requestHeaders || {}
+export const getRequestPagination = (context) => context.requestHeaders || {}
 
-const setResponsePagination = (context, headers) => {
+export const setResponsePagination = (context, headers) => {
   const headerNames = ['page-offset', 'page-limit', 'sort-fields', 'sort-order', 'total-records']
 
   // eslint-disable-next-line no-param-reassign
   context.responseHeaders = copyNamedHeaders(headerNames, (headers && normalizeHeaderNames(headers)) || {})
 }
 
-const getPaginationForPageRequest = ({ requestHeaders }) => {
+export const getPaginationForPageRequest = ({ requestHeaders }) => {
   if (!requestHeaders) return { page: 0, size: 20 }
 
   const pageOffset = requestHeaders['page-offset']
@@ -66,21 +66,21 @@ const getPaginationForPageRequest = ({ requestHeaders }) => {
   return { page, size }
 }
 
-const setPaginationFromPageRequest = (context, { totalElements, pageable: { pageSize, offset } }) => {
+export const setPaginationFromPageRequest = (context, { totalElements, pageable: { pageSize, offset } }) => {
   const c = context
   c.responseHeaders = { 'page-offset': offset, 'page-limit': pageSize, 'total-records': totalElements }
 }
 
-const getResponsePagination = (context) => context.responseHeaders || {}
+export const getResponsePagination = (context) => context.responseHeaders || {}
 
-const setCustomRequestHeaders = (context, headers) => {
+export const setCustomRequestHeaders = (context, headers) => {
   // eslint-disable-next-line no-param-reassign
   context.customRequestHeaders = (headers && normalizeHeaderNames(headers)) || {}
 }
 
-const getCustomRequestHeaders = (context) => context.customRequestHeaders || {}
+export const getCustomRequestHeaders = (context) => context.customRequestHeaders || {}
 
-module.exports = {
+export default {
   setTokens,
   hasTokens,
   getAccessToken,

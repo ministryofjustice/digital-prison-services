@@ -1,9 +1,7 @@
-// @ts-expect-error ts-migrate(2451) FIXME: Cannot redeclare block-scoped variable 'moment'.
-const moment = require('moment')
-// @ts-expect-error ts-migrate(2451) FIXME: Cannot redeclare block-scoped variable 'formatCurr... Remove this comment to see the full error message
-const { formatCurrency, putLastNameFirst, formatName } = require('../utils')
+import moment from 'moment'
+import { formatCurrency, putLastNameFirst, formatName } from '../utils'
 
-module.exports = (prisonApi) => {
+export default (prisonApi) => {
   const today = moment()
   const currentMonth = today.month()
   const currentYear = today.year()
@@ -39,6 +37,7 @@ module.exports = (prisonApi) => {
 
     return {
       currentBalance: formatCurrency(balanceData?.[accountCode] || 0, balanceData?.currency),
+      // @ts-expect-error ts-migrate(2345) FIXME: Argument of type 'number' is not assignable to par... Remove this comment to see the full error message
       formValues: { selectedMonth: parseInt(month, 10), selectedYear: parseInt(year, 10) },
       monthOptions: moment.months().map((m, i) => ({ value: i, text: m })),
       period: moment().set({ month, year }).format('MMMM YYYY'),

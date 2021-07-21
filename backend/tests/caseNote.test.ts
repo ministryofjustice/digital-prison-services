@@ -1,16 +1,13 @@
-Reflect.deleteProperty(process.env, 'APPINSIGHTS_INSTRUMENTATIONKEY')
-// @ts-expect-error ts-migrate(2451) FIXME: Cannot redeclare block-scoped variable 'moment'.
-const moment = require('moment')
-// @ts-expect-error ts-migrate(2451) FIXME: Cannot redeclare block-scoped variable 'makeError'... Remove this comment to see the full error message
-const { makeError } = require('./helpers')
+import moment from 'moment'
+import { makeError } from './helpers'
+import caseNoteCtrl from '../controllers/caseNote'
 
-// @ts-expect-error ts-migrate(2451) FIXME: Cannot redeclare block-scoped variable 'prisonApi'... Remove this comment to see the full error message
+Reflect.deleteProperty(process.env, 'APPINSIGHTS_INSTRUMENTATIONKEY')
+
 const prisonApi = {}
 const caseNotesApi = {}
-const { displayCreateCaseNotePage, handleCreateCaseNoteForm } = require('../controllers/caseNote').caseNoteFactory(
-  prisonApi,
-  caseNotesApi
-)
+
+const { displayCreateCaseNotePage, handleCreateCaseNoteForm } = caseNoteCtrl.caseNoteFactory(prisonApi, caseNotesApi)
 
 jest.mock('../logError', () => ({
   logError: jest.fn(),
@@ -233,7 +230,7 @@ describe('case note management', () => {
         expect(res.render).toHaveBeenCalledWith(
           'caseNotes/addCaseNoteForm.njk',
           expect.objectContaining({
-            errors: [{ href: '#text', text: error400.response.body.userMessage }],
+            errors: [{ href: '#text', text: (error400 as any).response.body.userMessage }],
           })
         )
       })

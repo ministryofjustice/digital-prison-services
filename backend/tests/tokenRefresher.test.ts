@@ -1,6 +1,5 @@
-// @ts-expect-error ts-migrate(2451) FIXME: Cannot redeclare block-scoped variable 'contextPro... Remove this comment to see the full error message
-const contextProperties = require('../contextProperties')
-const tokenRefresher = require('../tokenRefresher')
+import contextProperties from '../contextProperties'
+import tokenRefresher from '../tokenRefresher'
 
 const ACCESS_TOKEN =
   'eyJhbGciOiJSUzI1NiIsInR5cCI6IkpXVCJ9.eyJpbnRlcm5hbFVzZXIiOnRydWUsInVzZXJfbmFtZSI6IlBCRUxMIiwic2NvcGUiOlsicmVhZCIsIndyaXRlIl0sImV4cCI6MTUzMDAzMTYzMywiYXV0aG9yaXRpZXMiOlsiUk9MRV85NjIiLCJST0xFX0xJQ0VOQ0VfQ0EiLCJST0xFXzEwMCIsIlJPTEVfMjAyIl0sImp0aSI6IjkzMWEyNDIyLTRkNDYtNGVjMC1iZmJjLWFjMjVlYjIyMjYzYiIsImNsaWVudF9pZCI6ImVsaXRlMmFwaWNsaWVudCJ9.Wej_D4Coa_nogBNX_pzgNbKX4VTMJFIdLSns0NOAMeiNlV8GAJbWGE3IpeCKkDTVhRonvNq3TVmtsBopVgUuF7-80sxzf4Bwjdjx50s3F4MUxbCPEF8oEIEuN1WWf9ofQuHic8BICotQRq8ZvkbP8eUHMx-72o96WV32qBrryaz8rhjE5KPPq_01fgr5w_dzx2Kzw6pwBjjK-aD3X1RGm1WAIdCe_-MwV1-M5h52s3wif9z8twhK7TXNHxaAYRJb-BYzQtXzi7VYjhrWXh3tpcBYL0YIH0AcoCenE6FJi-pjK1yS5Igbnlc9SgU2FdPIv0XHxRTYnOsdUb5cZXdsiQ'

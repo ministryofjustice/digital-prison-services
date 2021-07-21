@@ -1,5 +1,4 @@
-// @ts-expect-error ts-migrate(2451) FIXME: Cannot redeclare block-scoped variable 'controller... Remove this comment to see the full error message
-const controllerFactory = require('../controllers/prisonerProfile/prisonerCaseNotes')
+import controllerFactory from '../controllers/prisonerProfile/prisonerCaseNotes'
 
 const caseNotesApiResponse = [
   {
@@ -97,6 +96,7 @@ describe('Case notes controller', () => {
       prisonerProfileService,
       nunjucks,
       paginationService,
+      // @ts-expect-error ts-migrate(2345) FIXME: Argument of type '{ caseNotesApi: {}; prisonerProf... Remove this comment to see the full error message
       logError,
       oauthApi,
     })

@@ -1,8 +1,7 @@
-Reflect.deleteProperty(process.env, 'APPINSIGHTS_INSTRUMENTATIONKEY')
-// @ts-expect-error ts-migrate(2451) FIXME: Cannot redeclare block-scoped variable 'moment'.
-const moment = require('moment')
+import moment from 'moment'
+import searchForCell from '../../controllers/cellMove/searchForCell'
 
-const searchForCell = require('../../controllers/cellMove/searchForCell')
+Reflect.deleteProperty(process.env, 'APPINSIGHTS_INSTRUMENTATIONKEY')
 
 describe('select location', () => {
   let req
@@ -145,6 +144,7 @@ describe('select location', () => {
     // @ts-expect-error ts-migrate(2339) FIXME: Property 'userCaseLoads' does not exist on type '{... Remove this comment to see the full error message
     prisonApi.userCaseLoads = jest.fn().mockResolvedValue([{ caseLoadId: 'MDI' }])
 
+    // @ts-expect-error ts-migrate(2345) FIXME: Argument of type '{ oauthApi: {}; prisonApi: {}; w... Remove this comment to see the full error message
     controller = searchForCell({ oauthApi, prisonApi, whereaboutsApi, logError })
   })
 

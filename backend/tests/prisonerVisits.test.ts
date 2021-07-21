@@ -1,6 +1,5 @@
-// @ts-expect-error ts-migrate(2451) FIXME: Cannot redeclare block-scoped variable 'moment'.
-const moment = require('moment')
-const prisonerVisits = require('../controllers/prisonerProfile/prisonerVisits')
+import moment from 'moment'
+import prisonerVisits from '../controllers/prisonerProfile/prisonerVisits'
 
 describe('Prisoner visits', () => {
   const pageSize = 2
@@ -37,6 +36,7 @@ describe('Prisoner visits', () => {
       },
     })
 
+    // @ts-expect-error ts-migrate(2345) FIXME: Argument of type '{ prisonApi: {}; logError: any; ... Remove this comment to see the full error message
     controller = prisonerVisits({ prisonApi, logError, pageSize })
   })
 

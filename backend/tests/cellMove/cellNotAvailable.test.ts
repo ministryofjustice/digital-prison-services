@@ -1,5 +1,4 @@
-// @ts-expect-error ts-migrate(2451) FIXME: Cannot redeclare block-scoped variable 'cellNotAva... Remove this comment to see the full error message
-const cellNotAvailable = require('../../controllers/cellMove/cellNotAvailable')
+import cellNotAvailable from '../../controllers/cellMove/cellNotAvailable'
 
 describe('Cell not available', () => {
   const res = { locals: {} }
@@ -23,6 +22,7 @@ describe('Cell not available', () => {
     // @ts-expect-error ts-migrate(2339) FIXME: Property 'status' does not exist on type '{ locals... Remove this comment to see the full error message
     res.status = jest.fn()
 
+    // @ts-expect-error ts-migrate(2345) FIXME: Argument of type '{ prisonApi: {}; logError: any; ... Remove this comment to see the full error message
     controller = cellNotAvailable({ prisonApi, logError })
 
     req = {

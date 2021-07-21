@@ -1,5 +1,4 @@
-// @ts-expect-error ts-migrate(2451) FIXME: Cannot redeclare block-scoped variable 'properCase... Remove this comment to see the full error message
-const { properCaseName } = require('../utils')
+import { properCaseName } from '../utils'
 
 const OffenderServiceFactory = (prisonApi) => {
   const getOffender = async (context, offenderNo) => {
@@ -17,4 +16,4 @@ const OffenderServiceFactory = (prisonApi) => {
   }
 }
 
-module.exports = OffenderServiceFactory
+export default OffenderServiceFactory

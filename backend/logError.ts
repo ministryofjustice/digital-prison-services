@@ -1,8 +1,6 @@
-// @ts-expect-error ts-migrate(2451) FIXME: Cannot redeclare block-scoped variable 'log'.
-const log = require('./log')
+import log from './log'
 
-// @ts-expect-error ts-migrate(2451) FIXME: Cannot redeclare block-scoped variable 'logError'.
-const logError = (url, error, msg) => {
+export const logError = (url, error, msg) => {
   if (error.response) {
     log.error(
       {
@@ -39,6 +37,6 @@ const logError = (url, error, msg) => {
   }
 }
 
-module.exports = {
+export default {
   logError,
 }

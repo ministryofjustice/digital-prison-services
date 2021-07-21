@@ -1,11 +1,9 @@
-// @ts-expect-error ts-migrate(2451) FIXME: Cannot redeclare block-scoped variable 'NotifyClie... Remove this comment to see the full error message
-const { NotifyClient } = require('notifications-node-client')
-// @ts-expect-error ts-migrate(2451) FIXME: Cannot redeclare block-scoped variable 'config'.
-const config = require('./config')
+import { NotifyClient } from 'notifications-node-client'
+import config from './config'
 
-// @ts-expect-error ts-migrate(2451) FIXME: Cannot redeclare block-scoped variable 'notifyClie... Remove this comment to see the full error message
+// @ts-expect-error ts-migrate(2339) FIXME: Property 'notifyClient' does not exist on type '{ ... Remove this comment to see the full error message
 const notifyClient = config.notifyClient.enabled ? new NotifyClient(config.notifications.notifyKey) : { sendEmail() {} }
 
-module.exports = {
+export default {
   notifyClient,
 }

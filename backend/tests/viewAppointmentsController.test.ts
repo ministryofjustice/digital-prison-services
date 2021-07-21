@@ -1,4 +1,4 @@
-const viewAppointments = require('../controllers/appointments/viewAppointments')
+import viewAppointments from '../controllers/appointments/viewAppointments'
 
 describe('View appointments', () => {
   const prisonApi = {}
@@ -80,6 +80,7 @@ describe('View appointments', () => {
       name: 'Bob Doe',
     })
 
+    // @ts-expect-error ts-migrate(2345) FIXME: Argument of type '{ prisonApi: {}; whereaboutsApi:... Remove this comment to see the full error message
     controller = viewAppointments({ prisonApi, whereaboutsApi, logError, oauthApi })
   })
 

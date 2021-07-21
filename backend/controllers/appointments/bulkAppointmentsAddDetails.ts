@@ -1,11 +1,7 @@
-// @ts-expect-error ts-migrate(2451) FIXME: Cannot redeclare block-scoped variable 'moment'.
-const moment = require('moment')
-// @ts-expect-error ts-migrate(2451) FIXME: Cannot redeclare block-scoped variable 'DATE_TIME_... Remove this comment to see the full error message
-const { DATE_TIME_FORMAT_SPEC, buildDateTime } = require('../../../common/dateHelpers')
-// @ts-expect-error ts-migrate(2451) FIXME: Cannot redeclare block-scoped variable 'capitalize... Remove this comment to see the full error message
-const { capitalize } = require('../../utils')
-// @ts-expect-error ts-migrate(2451) FIXME: Cannot redeclare block-scoped variable 'repeatType... Remove this comment to see the full error message
-const { repeatTypes, getValidationMessages, endRecurringEndingDate } = require('../../shared/appointmentConstants')
+import moment from 'moment'
+import { DATE_TIME_FORMAT_SPEC, buildDateTime } from '../../../common/dateHelpers'
+import { capitalize } from '../../utils'
+import { repeatTypes, getValidationMessages, endRecurringEndingDate } from '../../shared/appointmentConstants'
 
 const setSelected = (value, items) =>
   items.map((item) =>
@@ -26,8 +22,7 @@ const extractHoursMinutes = (dateTime) => {
   }
 }
 
-// @ts-expect-error ts-migrate(2451) FIXME: Cannot redeclare block-scoped variable 'bulkAppoin... Remove this comment to see the full error message
-const bulkAppointmentsAddDetailsFactory = (appointmentsService) => {
+export const bulkAppointmentsAddDetailsFactory = (appointmentsService) => {
   const getAppointmentTypesAndLocations = async (locals, activeCaseLoadId) => {
     const { appointmentTypes, locationTypes } = await appointmentsService.getAppointmentOptions(
       locals,
@@ -181,6 +176,6 @@ const bulkAppointmentsAddDetailsFactory = (appointmentsService) => {
   }
 }
 
-module.exports = {
+export default {
   bulkAppointmentsAddDetailsFactory,
 }

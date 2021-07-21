@@ -1,17 +1,11 @@
-// @ts-expect-error ts-migrate(2451) FIXME: Cannot redeclare block-scoped variable 'moment'.
-const moment = require('moment')
-// @ts-expect-error ts-migrate(2451) FIXME: Cannot redeclare block-scoped variable 'repeatType... Remove this comment to see the full error message
-const { repeatTypes, endRecurringEndingDate } = require('../shared/appointmentConstants')
-// @ts-expect-error ts-migrate(2451) FIXME: Cannot redeclare block-scoped variable 'DATE_TIME_... Remove this comment to see the full error message
-const { DATE_TIME_FORMAT_SPEC, Time } = require('../../common/dateHelpers')
-// @ts-expect-error ts-migrate(2451) FIXME: Cannot redeclare block-scoped variable 'properCase... Remove this comment to see the full error message
-const { properCaseName } = require('../utils')
+import moment from 'moment'
+import { repeatTypes, endRecurringEndingDate } from '../shared/appointmentConstants'
+import { DATE_TIME_FORMAT_SPEC, Time } from '../../common/dateHelpers'
+import { properCaseName } from '../utils'
 
-// @ts-expect-error ts-migrate(2451) FIXME: Cannot redeclare block-scoped variable 'isVideoLin... Remove this comment to see the full error message
-const isVideoLinkBooking = (appointmentType) => appointmentType === 'VLB'
+export const isVideoLinkBooking = (appointmentType) => appointmentType === 'VLB'
 
-// @ts-expect-error ts-migrate(2451) FIXME: Cannot redeclare block-scoped variable 'toAppointm... Remove this comment to see the full error message
-const toAppointmentDetailsSummary = ({
+export const toAppointmentDetailsSummary = ({
   firstName,
   lastName,
   offenderNo,
@@ -31,7 +25,9 @@ const toAppointmentDetailsSummary = ({
     !isVideoLinkBooking(appointmentType) && {
       howOften: repeatTypes.find((repeat) => repeat.value === repeats).text,
       numberOfAppointments: times,
+      // @ts-expect-error ts-migrate(2345) FIXME: Argument of type '{ startTime: any; repeats: any; ... Remove this comment to see the full error message
       endDate: endRecurringEndingDate({ startTime, repeats, times }).endOfPeriod.format('dddd D MMMM YYYY'),
+      // @ts-expect-error ts-migrate(2345) FIXME: Argument of type '{ startTime: any; repeats: any; ... Remove this comment to see the full error message
       endDateShortFormat: endRecurringEndingDate({ startTime, repeats, times }).endOfPeriod.format('D MMMM YYYY'),
     }
 
@@ -68,8 +64,7 @@ const mapAppointmentType = (appointment) => ({
   text: appointment.description,
 })
 
-// @ts-expect-error ts-migrate(2451) FIXME: Cannot redeclare block-scoped variable 'appointmen... Remove this comment to see the full error message
-const appointmentsServiceFactory = (prisonApi) => {
+export const appointmentsServiceFactory = (prisonApi) => {
   const getLocations = async (context, agency, filterByLocationType) =>
     filterByLocationType
       ? (await prisonApi.getLocationsForAppointments(context, agency))
@@ -111,7 +106,7 @@ const appointmentsServiceFactory = (prisonApi) => {
   }
 }
 
-module.exports = {
+export default {
   appointmentsServiceFactory,
   isVideoLinkBooking,
   toAppointmentDetailsSummary,

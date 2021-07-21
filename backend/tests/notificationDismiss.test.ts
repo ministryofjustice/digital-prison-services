@@ -1,4 +1,4 @@
-const notificationDismissFactory = require('../controllers/notificationDismiss')
+import notificationDismissFactory from '../controllers/notificationDismiss'
 
 describe('Notification dismiss', () => {
   const notificationCookie = {}

@@ -1,5 +1,4 @@
-// @ts-expect-error ts-migrate(2451) FIXME: Cannot redeclare block-scoped variable 'errorStatu... Remove this comment to see the full error message
-const errorStatusCode = require('../error-status-code')
+import errorStatusCode from '../error-status-code'
 
 describe('Should translate errors', () => {
   describe('error has response', () => {

@@ -1,5 +1,4 @@
-// @ts-expect-error ts-migrate(2451) FIXME: Cannot redeclare block-scoped variable 'alertFlagL... Remove this comment to see the full error message
-const alertFlagLabels = [
+export const alertFlagLabels = [
   { alertCodes: ['HA'], classes: 'alert-status alert-status--acct', label: 'ACCT open' },
   {
     alertCodes: ['HA1'],
@@ -101,8 +100,7 @@ const alertFlagLabels = [
   { alertCodes: ['VIP'], classes: 'alert-status alert-status--isolated-prisoner', label: 'Isolated' },
 ].sort((a, b) => a.label.localeCompare(b.label))
 
-// @ts-expect-error ts-migrate(2451) FIXME: Cannot redeclare block-scoped variable 'cellMoveAl... Remove this comment to see the full error message
-const cellMoveAlertCodes = [
+export const cellMoveAlertCodes = [
   'PEEP',
   'RTP',
   'RLG',
@@ -124,8 +122,7 @@ const cellMoveAlertCodes = [
   'RTP',
 ]
 
-// @ts-expect-error ts-migrate(2451) FIXME: Cannot redeclare block-scoped variable 'profileAle... Remove this comment to see the full error message
-const profileAlertCodes = [
+export const profileAlertCodes = [
   'HA',
   'HA1',
   'XSA',
@@ -155,7 +152,7 @@ const profileAlertCodes = [
   'URS',
 ]
 
-module.exports = {
+export default {
   alertFlagLabels,
   cellMoveAlertCodes,
   profileAlertCodes,

@@ -1,16 +1,10 @@
-// @ts-expect-error ts-migrate(2451) FIXME: Cannot redeclare block-scoped variable 'moment'.
-const moment = require('moment')
-// @ts-expect-error ts-migrate(2451) FIXME: Cannot redeclare block-scoped variable 'switchDate... Remove this comment to see the full error message
-const { switchDateFormat } = require('../../utils')
-// @ts-expect-error ts-migrate(2451) FIXME: Cannot redeclare block-scoped variable 'DAY_MONTH_... Remove this comment to see the full error message
-const { DAY_MONTH_YEAR, DATE_TIME_FORMAT_SPEC, buildDateTime } = require('../../../common/dateHelpers')
-// @ts-expect-error ts-migrate(2451) FIXME: Cannot redeclare block-scoped variable 'raiseAnaly... Remove this comment to see the full error message
-const { raiseAnalyticsEvent } = require('../../raiseAnalyticsEvent')
-// @ts-expect-error ts-migrate(2451) FIXME: Cannot redeclare block-scoped variable 'bulkAppoin... Remove this comment to see the full error message
-const { bulkAppointmentsClashesFactory } = require('./bulkAppointmentsClashes')
+import moment from 'moment'
+import { switchDateFormat } from '../../utils'
+import { DAY_MONTH_YEAR, DATE_TIME_FORMAT_SPEC, buildDateTime } from '../../../common/dateHelpers'
+import { raiseAnalyticsEvent } from '../../raiseAnalyticsEvent'
+import { bulkAppointmentsClashesFactory } from './bulkAppointmentsClashes'
 
-// @ts-expect-error ts-migrate(2451) FIXME: Cannot redeclare block-scoped variable 'bulkAppoin... Remove this comment to see the full error message
-const bulkAppointmentsConfirmFactory = (prisonApi, logError) => {
+export const bulkAppointmentsConfirmFactory = (prisonApi, logError) => {
   const renderTemplate = (req, res, pageData) => {
     const {
       appointmentDetails,
@@ -137,7 +131,7 @@ const bulkAppointmentsConfirmFactory = (prisonApi, logError) => {
         comment: comments,
         locationId: Number(location),
         appointmentType,
-        startTime: startTime || buildDateTime({ date, hours: 23, minutes: 59 }).format(DATE_TIME_FORMAT_SPEC),
+        startTime: startTime || (buildDateTime({ date, hours: 23, minutes: 59 }) as any).format(DATE_TIME_FORMAT_SPEC),
         endTime,
       },
       appointments: prisonersWithAppointmentTimes.map((prisoner) => ({
@@ -197,6 +191,6 @@ const bulkAppointmentsConfirmFactory = (prisonApi, logError) => {
   return { index, post }
 }
 
-module.exports = {
+export default {
   bulkAppointmentsConfirmFactory,
 }

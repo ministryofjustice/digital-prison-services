@@ -1,16 +1,11 @@
-// @ts-expect-error ts-migrate(2451) FIXME: Cannot redeclare block-scoped variable 'moment'.
-const moment = require('moment')
-// @ts-expect-error ts-migrate(2451) FIXME: Cannot redeclare block-scoped variable 'log'.
-const log = require('../log')
-// @ts-expect-error ts-migrate(2451) FIXME: Cannot redeclare block-scoped variable 'isPrisoner... Remove this comment to see the full error message
-const { isPrisonerIdentifier, putLastNameFirst } = require('../utils')
-// @ts-expect-error ts-migrate(2451) FIXME: Cannot redeclare block-scoped variable 'dobValidat... Remove this comment to see the full error message
-const dobValidation = require('../shared/dobValidation')
-const {
-  app: { licencesUrl },
-} = require('../config')
+import moment from 'moment'
+import log from '../log'
+import { isPrisonerIdentifier, putLastNameFirst } from '../utils'
+import dobValidation from '../shared/dobValidation'
+import { app } from '../config'
 
-// @ts-expect-error ts-migrate(2451) FIXME: Cannot redeclare block-scoped variable 'trackEvent... Remove this comment to see the full error message
+const { licencesUrl } = app
+
 const trackEvent = (telemetry, prisonerResults, searchText, filters, username, activeCaseLoad) => {
   if (telemetry) {
     const offenderNos = prisonerResults?.map((prisonerResult) => prisonerResult.offenderNo)
@@ -31,7 +26,7 @@ const trackEvent = (telemetry, prisonerResults, searchText, filters, username, a
   }
 }
 
-module.exports = ({ paginationService, offenderSearchApi, oauthApi, telemetry }) => {
+export default ({ paginationService, offenderSearchApi, oauthApi, telemetry }) => {
   const searchByOffender = (context, offenderNo, gender, location, dateOfBirth, pageLimit) =>
     offenderSearchApi.globalSearch(
       context,
@@ -122,7 +117,6 @@ module.exports = ({ paginationService, offenderSearchApi, oauthApi, telemetry })
     const userCanViewInactive = userRoles.includes('INACTIVE_BOOKINGS')
 
     if (prisonerResults?.length > 0) {
-      // @ts-expect-error ts-migrate(2554) FIXME: Expected 4 arguments, but got 6.
       trackEvent(telemetry, prisonerResults, searchText, filters, username, activeCaseLoad)
     }
 

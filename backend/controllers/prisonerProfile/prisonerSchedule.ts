@@ -1,12 +1,8 @@
-// @ts-expect-error ts-migrate(2451) FIXME: Cannot redeclare block-scoped variable 'moment'.
-const moment = require('moment')
-// @ts-expect-error ts-migrate(2451) FIXME: Cannot redeclare block-scoped variable 'filterActi... Remove this comment to see the full error message
-const filterActivitiesByPeriod = require('../../shared/filterActivitiesByPeriod')
-// @ts-expect-error ts-migrate(2451) FIXME: Cannot redeclare block-scoped variable 'formatName... Remove this comment to see the full error message
-const { formatName, putLastNameFirst, groupBy, times } = require('../../utils')
+import moment from 'moment'
+import filterActivitiesByPeriod from '../../shared/filterActivitiesByPeriod'
+import { formatName, putLastNameFirst, groupBy, times } from '../../utils'
 
-module.exports =
-  ({ prisonApi }) =>
+export default ({ prisonApi }) =>
   async (req, res) => {
     let schedule
     const { when } = req.query

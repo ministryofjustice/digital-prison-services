@@ -1,16 +1,17 @@
-// @ts-expect-error ts-migrate(2451) FIXME: Cannot redeclare block-scoped variable 'config'.
-const config = require('../config')
+import config from '../config'
+import prisonerProfileService from '../services/prisonerProfileService'
 
 config.app.displayRetentionLink = true
+// @ts-expect-error ts-migrate(2741) FIXME: Property 'timeoutSeconds' is missing in type '{ ui... Remove this comment to see the full error message
 config.apis.pathfinder = {
   ui_url: 'http://pathfinder-ui/',
   url: 'http://pathfinder-api/',
 }
+// @ts-expect-error ts-migrate(2741) FIXME: Property 'timeoutSeconds' is missing in type '{ ur... Remove this comment to see the full error message
 config.apis.soc = {
   url: 'http://soc',
   enabled: true,
 }
-const prisonerProfileService = require('../services/prisonerProfileService')
 
 describe('prisoner profile service', () => {
   const context = {}
@@ -171,6 +172,7 @@ describe('prisoner profile service', () => {
       // @ts-expect-error ts-migrate(2339) FIXME: Property 'getPomByOffenderNo' does not exist on ty... Remove this comment to see the full error message
       allocationManagerApi.getPomByOffenderNo.mockReturnValue({ primary_pom: { name: 'SMITH, JANE' } })
 
+      // @ts-expect-error ts-migrate(2322) FIXME: Type 'undefined[]' is not assignable to type 'stri... Remove this comment to see the full error message
       config.apis.complexity.enabled_prisons = []
     })
 
@@ -376,6 +378,7 @@ describe('prisoner profile service', () => {
 
       describe('When the offender has a measured complexity of need', () => {
         beforeEach(() => {
+          // @ts-expect-error ts-migrate(2322) FIXME: Type 'string[]' is not assignable to type 'string'... Remove this comment to see the full error message
           config.apis.complexity.enabled_prisons = ['MDI']
         })
 
@@ -429,6 +432,7 @@ describe('prisoner profile service', () => {
         })
 
         it('should only check for complex offenders when the feature is enabled', async () => {
+          // @ts-expect-error ts-migrate(2322) FIXME: Type 'string[]' is not assignable to type 'string'... Remove this comment to see the full error message
           config.apis.complexity.enabled_prisons = ['LEI']
 
           const getPrisonerProfileData = await service.getPrisonerProfileData(context, offenderNo)

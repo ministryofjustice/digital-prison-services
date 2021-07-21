@@ -1,4 +1,4 @@
-const keyworkerApiFactory = (client) => {
+export const keyworkerApiFactory = (client) => {
   const processResponse = () => (response) => response.body
 
   const get = (context, url) => client.get(context, url).then(processResponse())
@@ -14,6 +14,6 @@ const keyworkerApiFactory = (client) => {
   }
 }
 
-module.exports = {
+export default {
   keyworkerApiFactory,
 }

@@ -1,6 +1,4 @@
-/* eslint-disable no-unused-expressions */
-// @ts-expect-error ts-migrate(2451) FIXME: Cannot redeclare block-scoped variable 'contextPro... Remove this comment to see the full error message
-const contextProperties = require('../contextProperties')
+import contextProperties from '../contextProperties'
 
 describe('Should read/write properties', () => {
   describe('Should set / get tokens', () => {
@@ -46,6 +44,7 @@ describe('Should read/write properties', () => {
     const context = {}
 
     it('no tokens', () => {
+      // @ts-expect-error ts-migrate(2345) FIXME: Argument of type '{}' is not assignable to paramet... Remove this comment to see the full error message
       contextProperties.setTokens({}, context)
       expect(contextProperties.hasTokens(context)).toBe(false)
     })
@@ -142,6 +141,7 @@ describe('Should read/write properties', () => {
         'page-offset': 20,
         'page-limit': 10,
       }
+      // @ts-expect-error ts-migrate(2345) FIXME: Argument of type '{}' is not assignable to paramet... Remove this comment to see the full error message
       expect(contextProperties.getPaginationForPageRequest(context)).toStrictEqual({
         page: 2,
         size: 10,

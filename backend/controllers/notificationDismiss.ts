@@ -1,5 +1,4 @@
-module.exports =
-  ({ notificationCookie }) =>
+export default ({ notificationCookie }) =>
   async (req, res) => {
     const { id, revision } = req.body || {}
 

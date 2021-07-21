@@ -1,12 +1,8 @@
-// @ts-expect-error ts-migrate(2451) FIXME: Cannot redeclare block-scoped variable 'putLastNam... Remove this comment to see the full error message
-const { putLastNameFirst, formatName, formatTimestampToDate } = require('../../utils')
-// @ts-expect-error ts-migrate(2451) FIXME: Cannot redeclare block-scoped variable 'notEntered... Remove this comment to see the full error message
-const { notEnteredMessage } = require('../../common-messages')
-// @ts-expect-error ts-migrate(2451) FIXME: Cannot redeclare block-scoped variable 'csraTransl... Remove this comment to see the full error message
-const { csraTranslations } = require('../../shared/csraHelpers')
+import { putLastNameFirst, formatName, formatTimestampToDate } from '../../utils'
+import { notEnteredMessage } from '../../common-messages'
+import { csraTranslations } from '../../shared/csraHelpers'
 
-module.exports =
-  ({ prisonApi }) =>
+export default ({ prisonApi }) =>
   async (req, res, next) => {
     const { offenderNo } = req.params
     const { assessmentSeq, bookingId } = req.query

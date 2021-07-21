@@ -1,13 +1,8 @@
-// @ts-expect-error ts-migrate(2451) FIXME: Cannot redeclare block-scoped variable 'moment'.
-const moment = require('moment')
+import moment from 'moment'
+import { alertFlagLabels } from '../../shared/alertFlagValues'
+import { putLastNameFirst, stripAgencyPrefix } from '../../utils'
 
-// @ts-expect-error ts-migrate(2451) FIXME: Cannot redeclare block-scoped variable 'alertFlagL... Remove this comment to see the full error message
-const { alertFlagLabels } = require('../../shared/alertFlagValues')
-// @ts-expect-error ts-migrate(2451) FIXME: Cannot redeclare block-scoped variable 'putLastNam... Remove this comment to see the full error message
-const { putLastNameFirst, stripAgencyPrefix } = require('../../utils')
-
-module.exports =
-  ({ movementsService }) =>
+export default ({ movementsService }) =>
   async (req, res) => {
     const { livingUnitId } = req.params
     const response = await movementsService.getOffendersCurrentlyOutOfLivingUnit(res.locals, livingUnitId)

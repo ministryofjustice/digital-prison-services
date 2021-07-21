@@ -1,7 +1,5 @@
-// @ts-expect-error ts-migrate(2451) FIXME: Cannot redeclare block-scoped variable 'serviceChe... Remove this comment to see the full error message
-const { serviceCheckFactory } = require('../controllers/healthCheck')
+import { serviceCheckFactory } from '../controllers/healthCheck'
 
-// @ts-expect-error ts-migrate(2451) FIXME: Cannot redeclare block-scoped variable 'service'.
 const service = (name, url) => {
   const check = serviceCheckFactory(name, url)
 
@@ -33,7 +31,7 @@ const addAppInfo = (result) => {
   return { ...result, ...buildInfo }
 }
 
-module.exports = function healthcheckFactory(
+export default function healthcheckFactory(
   authUrl,
   prisonApiUrl,
   whereaboutsUrl,

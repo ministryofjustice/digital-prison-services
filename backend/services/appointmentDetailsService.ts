@@ -1,11 +1,8 @@
-// @ts-expect-error ts-migrate(2451) FIXME: Cannot redeclare block-scoped variable 'moment'.
-const moment = require('moment')
-// @ts-expect-error ts-migrate(2451) FIXME: Cannot redeclare block-scoped variable 'endRecurri... Remove this comment to see the full error message
-const { endRecurringEndingDate, repeatTypes } = require('../shared/appointmentConstants')
-// @ts-expect-error ts-migrate(2451) FIXME: Cannot redeclare block-scoped variable 'formatName... Remove this comment to see the full error message
-const { formatName, getDate, getTime, getWith404AsNull } = require('../utils')
+import moment from 'moment'
+import { endRecurringEndingDate, repeatTypes } from '../shared/appointmentConstants'
+import { formatName, getDate, getTime, getWith404AsNull } from '../utils'
 
-module.exports = ({ prisonApi }) => {
+export default ({ prisonApi }) => {
   const getAddedByUser = async (res, appointment) => {
     const staffDetails = await getWith404AsNull(prisonApi.getStaffDetails(res.locals, appointment.createUserId))
     // @ts-expect-error ts-migrate(2339) FIXME: Property 'firstName' does not exist on type 'unkno... Remove this comment to see the full error message
@@ -25,6 +22,7 @@ module.exports = ({ prisonApi }) => {
 
     const lastAppointmentDate =
       recurring &&
+      // @ts-expect-error ts-migrate(2345) FIXME: Argument of type '{ date: string; repeats: any; ti... Remove this comment to see the full error message
       endRecurringEndingDate({
         date: moment(recurring.startTime).format('DD/MM/YYYY'),
         repeats: recurring.repeatPeriod,

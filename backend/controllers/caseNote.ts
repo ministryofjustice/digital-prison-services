@@ -1,14 +1,10 @@
-// @ts-expect-error ts-migrate(2451) FIXME: Cannot redeclare block-scoped variable 'moment'.
-const moment = require('moment')
-// @ts-expect-error ts-migrate(2451) FIXME: Cannot redeclare block-scoped variable 'nunjucks'.
-const nunjucks = require('nunjucks')
-// @ts-expect-error ts-migrate(2451) FIXME: Cannot redeclare block-scoped variable 'properCase... Remove this comment to see the full error message
-const { properCaseName } = require('../utils')
+import moment from 'moment'
+import nunjucks from 'nunjucks'
+import { properCaseName } from '../utils'
 
-// @ts-expect-error ts-migrate(2451) FIXME: Cannot redeclare block-scoped variable 'getOffende... Remove this comment to see the full error message
 const getOffenderUrl = (offenderNo) => `/prisoner/${offenderNo}`
 
-const caseNoteFactory = (prisonApi, caseNotesApi) => {
+export const caseNoteFactory = (prisonApi, caseNotesApi) => {
   const displayCreateCaseNotePage = async (req, res) => {
     const { offenderNo } = req.params
     const { type, subType } = req.query || {}
@@ -256,4 +252,4 @@ const caseNoteFactory = (prisonApi, caseNotesApi) => {
   return { displayCreateCaseNotePage, handleCreateCaseNoteForm }
 }
 
-module.exports = { caseNoteFactory }
+export default { caseNoteFactory }

@@ -1,6 +1,6 @@
 const OnlyValidValues = (entry) => Boolean(entry.value)
 
-module.exports = (sentenceAdjustments) => {
+export default (sentenceAdjustments) => {
   const {
     additionalDaysAwarded,
     unlawfullyAtLarge,

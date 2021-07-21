@@ -1,22 +1,12 @@
-// @ts-expect-error ts-migrate(2451) FIXME: Cannot redeclare block-scoped variable 'moment'.
-const moment = require('moment')
+import moment from 'moment'
+import { DATE_TIME_FORMAT_SPEC } from '../../../common/dateHelpers'
+import { raiseAnalyticsEvent } from '../../raiseAnalyticsEvent'
+import { properCaseName, formatName } from '../../utils'
+import { serviceUnavailableMessage } from '../../common-messages'
+import { prepostDurations } from '../../shared/appointmentConstants'
+import { toAppointmentDetailsSummary, isVideoLinkBooking } from '../../services/appointmentsService'
 
-// @ts-expect-error ts-migrate(2451) FIXME: Cannot redeclare block-scoped variable 'DATE_TIME_... Remove this comment to see the full error message
-const { DATE_TIME_FORMAT_SPEC } = require('../../../common/dateHelpers')
-// @ts-expect-error ts-migrate(2451) FIXME: Cannot redeclare block-scoped variable 'raiseAnaly... Remove this comment to see the full error message
-const { raiseAnalyticsEvent } = require('../../raiseAnalyticsEvent')
-
-// @ts-expect-error ts-migrate(2451) FIXME: Cannot redeclare block-scoped variable 'properCase... Remove this comment to see the full error message
-const { properCaseName, formatName } = require('../../utils')
-// @ts-expect-error ts-migrate(2451) FIXME: Cannot redeclare block-scoped variable 'serviceUna... Remove this comment to see the full error message
-const { serviceUnavailableMessage } = require('../../common-messages')
-
-// @ts-expect-error ts-migrate(2451) FIXME: Cannot redeclare block-scoped variable 'prepostDur... Remove this comment to see the full error message
-const { prepostDurations } = require('../../shared/appointmentConstants')
-// @ts-expect-error ts-migrate(2451) FIXME: Cannot redeclare block-scoped variable 'toAppointm... Remove this comment to see the full error message
-const { toAppointmentDetailsSummary, isVideoLinkBooking } = require('../../services/appointmentsService')
-
-const confirmAppointmentFactory = ({ prisonApi, appointmentsService, logError }) => {
+export const confirmAppointmentFactory = ({ prisonApi, appointmentsService, logError }) => {
   const index = async (req, res) => {
     const { offenderNo } = req.params
     const { activeCaseLoadId, authSource } = req.session.userDetails
@@ -80,6 +70,7 @@ const confirmAppointmentFactory = ({ prisonApi, appointmentsService, logError })
         ],
       }
 
+      // @ts-expect-error ts-migrate(2345) FIXME: Argument of type '{ firstName: any; lastName: any;... Remove this comment to see the full error message
       const details = toAppointmentDetailsSummary({
         firstName,
         lastName,
@@ -169,7 +160,6 @@ const confirmAppointmentFactory = ({ prisonApi, appointmentsService, logError })
           })
         }
 
-        // @ts-expect-error ts-migrate(2554) FIXME: Expected 4 arguments, but got 3.
         raiseAnalyticsEvent(
           'VLB Appointments',
           `Video link booked for ${details.court}`,
@@ -218,6 +208,6 @@ const confirmAppointmentFactory = ({ prisonApi, appointmentsService, logError })
   return { index }
 }
 
-module.exports = {
+export default {
   confirmAppointmentFactory,
 }

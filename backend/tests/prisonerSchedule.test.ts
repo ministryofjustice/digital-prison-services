@@ -1,4 +1,4 @@
-const prisonerSchedule = require('../controllers/prisonerProfile/prisonerSchedule')
+import prisonerSchedule from '../controllers/prisonerProfile/prisonerSchedule'
 
 describe('Prisoner schedule', () => {
   const offenderNo = 'ABC123'
@@ -29,6 +29,7 @@ describe('Prisoner schedule', () => {
     // @ts-expect-error ts-migrate(2339) FIXME: Property 'getScheduledEventsForNextWeek' does not ... Remove this comment to see the full error message
     prisonApi.getScheduledEventsForNextWeek = jest.fn().mockResolvedValue([])
 
+    // @ts-expect-error ts-migrate(2345) FIXME: Argument of type '{ prisonApi: {}; logError: any; ... Remove this comment to see the full error message
     controller = prisonerSchedule({ prisonApi, logError })
 
     jest.spyOn(Date, 'now').mockImplementation(() => 1595548800000) // Friday, 24 July 2020 00:00:00

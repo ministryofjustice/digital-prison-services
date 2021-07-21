@@ -1,4 +1,4 @@
-const socApiFactory = (client) => {
+export const socApiFactory = (client) => {
   const processResponse = () => (response) => response.body
   const get = (context, url) => client.get(context, url).then(processResponse())
   const getSocDetails = (context, offenderNo, socEnabled) =>
@@ -8,6 +8,6 @@ const socApiFactory = (client) => {
   }
 }
 
-module.exports = {
+export default {
   socApiFactory,
 }

@@ -1,7 +1,5 @@
-// @ts-expect-error ts-migrate(2451) FIXME: Cannot redeclare block-scoped variable 'moment'.
-const moment = require('moment')
-// @ts-expect-error ts-migrate(2451) FIXME: Cannot redeclare block-scoped variable 'putLastNam... Remove this comment to see the full error message
-const { putLastNameFirst, properCaseName, formatDaysInYears, formatName } = require('../../utils')
+import moment from 'moment'
+import { putLastNameFirst, properCaseName, formatDaysInYears, formatName } from '../../utils'
 
 const filterData = (data, fields) => {
   let filteredResults = data
@@ -26,8 +24,7 @@ const filterData = (data, fields) => {
   return filteredResults
 }
 
-module.exports =
-  ({ prisonApi, oauthApi }) =>
+export default ({ prisonApi, oauthApi }) =>
   async (req, res) => {
     const { offenderNo } = req.params
     const { agencyId, incentiveLevel, fromDate, toDate } = req.query

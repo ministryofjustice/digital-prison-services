@@ -1,11 +1,8 @@
-// @ts-expect-error ts-migrate(2451) FIXME: Cannot redeclare block-scoped variable 'moment'.
-const moment = require('moment')
-// @ts-expect-error ts-migrate(2451) FIXME: Cannot redeclare block-scoped variable 'capitalize... Remove this comment to see the full error message
-const { capitalize } = require('../../../utils')
-// @ts-expect-error ts-migrate(2451) FIXME: Cannot redeclare block-scoped variable 'getValueBy... Remove this comment to see the full error message
-const getValueByType = require('../../../shared/getValueByType')
+import moment from 'moment'
+import { capitalize } from '../../../utils'
+import getValueByType from '../../../shared/getValueByType'
 
-module.exports = ({ prisonerDetails, property }) => {
+export default ({ prisonerDetails, property }) => {
   const { age, dateOfBirth, birthPlace, profileInformation, physicalAttributes } = prisonerDetails || {}
   const { gender, ethnicity, raceCode } = physicalAttributes || {}
 

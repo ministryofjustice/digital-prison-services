@@ -1,15 +1,9 @@
-// @ts-expect-error ts-migrate(2451) FIXME: Cannot redeclare block-scoped variable 'moment'.
-const moment = require('moment')
-// @ts-expect-error ts-migrate(2451) FIXME: Cannot redeclare block-scoped variable 'switchDate... Remove this comment to see the full error message
-const { switchDateFormat } = require('../../utils')
-// @ts-expect-error ts-migrate(2451) FIXME: Cannot redeclare block-scoped variable 'log'.
-const log = require('../../log')
+import moment from 'moment'
+import { switchDateFormat } from '../../utils'
+import log from '../../log'
+import { absentReasonMapper } from '../../mappers'
 
-// @ts-expect-error ts-migrate(2451) FIXME: Cannot redeclare block-scoped variable 'absentReas... Remove this comment to see the full error message
-const { absentReasonMapper } = require('../../mappers')
-
-// @ts-expect-error ts-migrate(2451) FIXME: Cannot redeclare block-scoped variable 'attendance... Remove this comment to see the full error message
-const attendanceFactory = (whereaboutsApi) => {
+export const attendanceFactory = (whereaboutsApi) => {
   const sortByName = (a, b) => {
     if (a.name < b.name) {
       return -1
@@ -97,4 +91,4 @@ const attendanceFactory = (whereaboutsApi) => {
   }
 }
 
-module.exports = { attendanceFactory }
+export default { attendanceFactory }

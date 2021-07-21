@@ -1,10 +1,7 @@
-// @ts-expect-error ts-migrate(2451) FIXME: Cannot redeclare block-scoped variable 'asyncMiddl... Remove this comment to see the full error message
-const asyncMiddleware = require('../middleware/asyncHandler')
-// @ts-expect-error ts-migrate(2451) FIXME: Cannot redeclare block-scoped variable 'serviceUna... Remove this comment to see the full error message
-const { serviceUnavailableMessage } = require('../common-messages')
+import asyncMiddleware from '../middleware/asyncHandler'
+import { serviceUnavailableMessage } from '../common-messages'
 
-// @ts-expect-error ts-migrate(2451) FIXME: Cannot redeclare block-scoped variable 'factory'.
-const factory = ({
+export const factory = ({
   activityListService,
   houseblockListService,
   attendanceService,
@@ -125,6 +122,6 @@ const factory = ({
   }
 }
 
-module.exports = {
+export default {
   factory,
 }

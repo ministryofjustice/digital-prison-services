@@ -1,22 +1,17 @@
-Reflect.deleteProperty(process.env, 'APPINSIGHTS_INSTRUMENTATIONKEY')
-// @ts-expect-error ts-migrate(2451) FIXME: Cannot redeclare block-scoped variable 'prisonApi'... Remove this comment to see the full error message
-const prisonApi = {}
-const { largePrisonersListed, largePrisonersListedWithCell } = require('./bulkAppointmentsTestData')
-const bulkAppointmentsSlipsRouter = require('../routes/appointments/bulkAppointmentsSlipsRouter')
+import { largePrisonersListed, largePrisonersListedWithCell } from './bulkAppointmentsTestData'
+import bulkAppointmentsSlipsRouter from '../routes/appointments/bulkAppointmentsSlipsRouter'
 
-// @ts-expect-error ts-migrate(2451) FIXME: Cannot redeclare block-scoped variable 'req'.
+Reflect.deleteProperty(process.env, 'APPINSIGHTS_INSTRUMENTATIONKEY')
+const prisonApi = {}
+
 let req
-// @ts-expect-error ts-migrate(2451) FIXME: Cannot redeclare block-scoped variable 'res'.
 let res
-// @ts-expect-error ts-migrate(2451) FIXME: Cannot redeclare block-scoped variable 'logError'.
 let logError
-// @ts-expect-error ts-migrate(2451) FIXME: Cannot redeclare block-scoped variable 'controller... Remove this comment to see the full error message
 let controller
 
 beforeEach(() => {
   // @ts-expect-error ts-migrate(2339) FIXME: Property 'getOffenderSummaries' does not exist on ... Remove this comment to see the full error message
   prisonApi.getOffenderSummaries = jest.fn()
-  // @ts-expect-error ts-migrate(2588) FIXME: Cannot assign to 'req' because it is a constant.
   req = {
     originalUrl: '/bulk-appointments/confirm-appointment/',
     session: {
@@ -28,15 +23,11 @@ beforeEach(() => {
     },
     body: {},
   }
-  // @ts-expect-error ts-migrate(2588) FIXME: Cannot assign to 'res' because it is a constant.
   res = { locals: {}, render: jest.fn(), redirect: jest.fn() }
-  // @ts-expect-error ts-migrate(2588) FIXME: Cannot assign to 'logError' because it is a consta... Remove this comment to see the full error message
   logError = jest.fn()
-  // @ts-expect-error ts-migrate(2588) FIXME: Cannot assign to 'controller' because it is a cons... Remove this comment to see the full error message
   controller = bulkAppointmentsSlipsRouter({ prisonApi, logError })
 })
 
-// @ts-expect-error ts-migrate(2451) FIXME: Cannot redeclare block-scoped variable 'appointmen... Remove this comment to see the full error message
 const appointmentDetails = {
   startTime: '2019-09-23T15:30:00',
   endTime: '2019-09-30T16:30:00',
@@ -76,24 +67,19 @@ describe('appointment movement slips', () => {
   describe('and viewing page', () => {
     describe('and there is no data', () => {
       it('should render the error page', async () => {
-        // @ts-expect-error ts-migrate(2554) FIXME: Expected 1 arguments, but got 2.
         await controller(req, res)
 
-        // @ts-expect-error ts-migrate(2339) FIXME: Property 'render' does not exist on type '{ locals... Remove this comment to see the full error message
         expect(res.render).toBeCalledWith('error.njk', { url: '/bulk-appointments/need-to-upload-file' })
       })
     })
 
     describe('and there is a small amount of data', () => {
       beforeEach(() => {
-        // @ts-expect-error ts-migrate(2339) FIXME: Property 'appointmentSlipsData' does not exist on ... Remove this comment to see the full error message
         req.session.appointmentSlipsData = { appointmentDetails, prisonersListed }
-        // @ts-expect-error ts-migrate(2339) FIXME: Property 'status' does not exist on type '{ locals... Remove this comment to see the full error message
         res.status = jest.fn()
       })
 
       it('should call the correct endpoint for the extra required offender information', async () => {
-        // @ts-expect-error ts-migrate(2554) FIXME: Expected 1 arguments, but got 2.
         await controller(req, res)
 
         // @ts-expect-error ts-migrate(2339) FIXME: Property 'getOffenderSummaries' does not exist on ... Remove this comment to see the full error message
@@ -114,10 +100,8 @@ describe('appointment movement slips', () => {
           { offenderNo: 'G5402VR', assignedLivingUnitDesc: 'CELL 4' },
         ])
 
-        // @ts-expect-error ts-migrate(2554) FIXME: Expected 1 arguments, but got 2.
         await controller(req, res)
 
-        // @ts-expect-error ts-migrate(2339) FIXME: Property 'render' does not exist on type '{ locals... Remove this comment to see the full error message
         expect(res.render).toHaveBeenCalledWith('movementSlipsPage.njk', {
           appointmentDetails: {
             ...appointmentDetails,
@@ -158,14 +142,11 @@ describe('appointment movement slips', () => {
 
       describe('and there is a large amount of data', () => {
         beforeEach(() => {
-          // @ts-expect-error ts-migrate(2339) FIXME: Property 'appointmentSlipsData' does not exist on ... Remove this comment to see the full error message
           req.session.appointmentSlipsData = { appointmentDetails, prisonersListed: largePrisonersListed }
-          // @ts-expect-error ts-migrate(2339) FIXME: Property 'status' does not exist on type '{ locals... Remove this comment to see the full error message
           res.status = jest.fn()
         })
 
         it('should call the correct endpoint the correct amount of times for the extra required offender information', async () => {
-          // @ts-expect-error ts-migrate(2554) FIXME: Expected 1 arguments, but got 2.
           await controller(req, res)
 
           // @ts-expect-error ts-migrate(2339) FIXME: Property 'getOffenderSummaries' does not exist on ... Remove this comment to see the full error message
@@ -192,10 +173,8 @@ describe('appointment movement slips', () => {
             .mockReturnValueOnce(largePrisonersListedWithCell.slice(0, 100))
             .mockReturnValueOnce(largePrisonersListedWithCell.slice(100, 200))
             .mockReturnValueOnce(largePrisonersListedWithCell.slice(200, 201))
-          // @ts-expect-error ts-migrate(2554) FIXME: Expected 1 arguments, but got 2.
           await controller(req, res)
 
-          // @ts-expect-error ts-migrate(2339) FIXME: Property 'render' does not exist on type '{ locals... Remove this comment to see the full error message
           expect(res.render).toHaveBeenCalledWith('movementSlipsPage.njk', {
             appointmentDetails: {
               ...appointmentDetails,

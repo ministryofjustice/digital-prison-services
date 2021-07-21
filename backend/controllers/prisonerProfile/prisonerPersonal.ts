@@ -1,22 +1,19 @@
-// @ts-expect-error ts-migrate(2451) FIXME: Cannot redeclare block-scoped variable 'logErrorAn... Remove this comment to see the full error message
-const logErrorAndContinue = require('../../shared/logErrorAndContinue')
-// @ts-expect-error ts-migrate(2451) FIXME: Cannot redeclare block-scoped variable 'getNamesFr... Remove this comment to see the full error message
-const { getNamesFromString } = require('../../utils')
-const {
+import logErrorAndContinue from '../../shared/logErrorAndContinue'
+import { getNamesFromString } from '../../utils'
+
+import {
   aliasesViewModel,
   distinguishingMarksViewModel,
   identifiersViewModel,
   personalDetailsViewModel,
   physicalCharacteristicsViewModel,
   activeContactsViewModel,
-  // @ts-expect-error ts-migrate(2451) FIXME: Cannot redeclare block-scoped variable 'languageVi... Remove this comment to see the full error message
   languageViewModel,
   addressesViewModel,
   careNeedsViewModel,
-} = require('./personalViewModels')
+} from './personalViewModels'
 
-module.exports =
-  ({ prisonerProfileService, personService, prisonApi, allocationManagerApi, esweService }) =>
+export default ({ prisonerProfileService, personService, prisonApi, allocationManagerApi, esweService }) =>
   async (req, res) => {
     const { offenderNo } = req.params
     const [basicPrisonerDetails, treatmentTypes, healthTypes] = await Promise.all([
@@ -59,6 +56,7 @@ module.exports =
       ].map((apiCall) => logErrorAndContinue(apiCall))
     )
 
+    // @ts-expect-error ts-migrate(2339) FIXME: Property 'nextOfKin' does not exist on type '{}'.
     const { nextOfKin, otherContacts } = contacts || {}
     const activeNextOfKins = nextOfKin && nextOfKin.filter((kin) => kin.activeFlag)
 
@@ -83,9 +81,9 @@ module.exports =
 
     const prisonOffenderManager =
       allocationManager &&
-      allocationManager.primary_pom &&
-      allocationManager.primary_pom.name &&
-      getNamesFromString(allocationManager.primary_pom.name)
+      (allocationManager as any).primary_pom &&
+      (allocationManager as any).primary_pom.name &&
+      getNamesFromString((allocationManager as any).primary_pom.name)
 
     if (prisonOffenderManager) {
       professionalContacts.push({
@@ -97,9 +95,9 @@ module.exports =
 
     const coworkingPrisonOffenderManager =
       allocationManager &&
-      allocationManager.secondary_pom &&
-      allocationManager.secondary_pom.name &&
-      getNamesFromString(allocationManager.secondary_pom.name)
+      (allocationManager as any).secondary_pom &&
+      (allocationManager as any).secondary_pom.name &&
+      getNamesFromString((allocationManager as any).secondary_pom.name)
 
     if (coworkingPrisonOffenderManager) {
       professionalContacts.push({
@@ -117,16 +115,20 @@ module.exports =
       return 0
     })
 
+    // @ts-expect-error ts-migrate(2339) FIXME: Property 'physicalAttributes' does not exist on ty... Remove this comment to see the full error message
     const { physicalAttributes, physicalCharacteristics, physicalMarks } = prisonerProfileData || {}
+    // @ts-expect-error ts-migrate(2339) FIXME: Property 'language' does not exist on type '{}'.
     const { language, writtenLanguage, interpreterRequired } = prisonerProfileData
     return res.render('prisonerProfile/prisonerPersonal/prisonerPersonal.njk', {
       prisonerProfileData,
+      // @ts-expect-error ts-migrate(2740) FIXME: Type '{}' is missing the following properties from... Remove this comment to see the full error message
       languages: languageViewModel({ language, writtenLanguage, interpreterRequired, secondaryLanguages }),
       aliases: aliasesViewModel({ aliases }),
       distinguishingMarks: distinguishingMarksViewModel({ physicalMarks }),
       identifiers: identifiersViewModel({ identifiers }),
       personalDetails: personalDetailsViewModel({ prisonerDetails: prisonerProfileData, property }),
       physicalCharacteristics: physicalCharacteristicsViewModel({ physicalAttributes, physicalCharacteristics }),
+      // @ts-expect-error ts-migrate(2345) FIXME: Argument of type '{ personal: [unknown, unknown, u... Remove this comment to see the full error message
       ...activeContactsViewModel({
         personal: nextOfKinsWithContact,
       }),
@@ -134,8 +136,8 @@ module.exports =
       learningDifficulty,
       addresses: addressesViewModel({ addresses }),
       careNeedsAndAdjustments: careNeedsViewModel({
-        personalCareNeeds: careNeeds && careNeeds.personalCareNeeds,
-        reasonableAdjustments: adjustments && adjustments.reasonableAdjustments,
+        personalCareNeeds: careNeeds && (careNeeds as any).personalCareNeeds,
+        reasonableAdjustments: adjustments && (adjustments as any).reasonableAdjustments,
         treatmentTypes,
         healthTypes,
         agencies,

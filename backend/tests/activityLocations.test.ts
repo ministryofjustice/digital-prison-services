@@ -1,7 +1,5 @@
-// @ts-expect-error ts-migrate(2451) FIXME: Cannot redeclare block-scoped variable 'getActivit... Remove this comment to see the full error message
-const { getActivityLocationsFactory } = require('../controllers/attendance/activityLocations')
-// @ts-expect-error ts-migrate(2451) FIXME: Cannot redeclare block-scoped variable 'makeError'... Remove this comment to see the full error message
-const { makeError, makeResetError, makeResetErrorWithStack } = require('./helpers')
+import { getActivityLocationsFactory } from '../controllers/attendance/activityLocations'
+import { makeError, makeResetError, makeResetErrorWithStack } from './helpers'
 
 describe('Activity locations', () => {
   let getActivityLocations

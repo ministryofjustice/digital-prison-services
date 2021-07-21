@@ -42,7 +42,7 @@ const whereaboutsTasks = (prisonName) => [
   },
 ]
 
-module.exports = (req, res) => {
+export default (req, res) => {
   const { activeCaseLoad } = res.locals.user
 
   return res.render('cellMove/cellMoveHomepage', {

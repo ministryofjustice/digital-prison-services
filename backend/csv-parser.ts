@@ -1,10 +1,8 @@
-const parse = require('csv-parse')
-// @ts-expect-error ts-migrate(2451) FIXME: Cannot redeclare block-scoped variable 'config'.
-const config = require('./config')
-// @ts-expect-error ts-migrate(2451) FIXME: Cannot redeclare block-scoped variable 'logger'.
-const logger = require('./log')
+import parse from 'csv-parse'
+import config from './config'
+import logger from './log'
 
-const validationMessages = {
+export const validationMessages = {
   invalidFile: 'Select a CSV file - the file you have chosen is not a CSV file',
   maxFileSizeReached: `Select a CSV file less than ${config.app.maximumFileUploadSizeInMb}MB - the file you selected is too big`,
   noFileInput: `Select a file`,
@@ -12,8 +10,7 @@ const validationMessages = {
   parsingError: 'There was a problem importing your file, please use the template provided',
 }
 
-// @ts-expect-error ts-migrate(2451) FIXME: Cannot redeclare block-scoped variable 'csvParserS... Remove this comment to see the full error message
-const csvParserService = ({ fs, isBinaryFileSync }) => {
+export const csvParserService = ({ fs, isBinaryFileSync }) => {
   const parseCsvData = async (data) => {
     const output = []
     // eslint-disable-next-line prefer-arrow-callback
@@ -71,13 +68,13 @@ const csvParserService = ({ fs, isBinaryFileSync }) => {
     }
   }
 
-  const loadAndParseCsvFile = async ({ path, originalFilename }) => {
-    await validateCsvFile({ path, originalFilename })
+  const loadAndParseCsvFile = async (args) => {
+    await validateCsvFile({ path: args.path, originalFilename: args.originalFilename })
     try {
-      const data = await readFile(path)
+      const data = await readFile(args.path)
       return await parseCsvData(data)
     } catch (error) {
-      logger.error(`There was parsing error - ${(error && error.message) || error}, filename ${originalFilename}`)
+      logger.error(`There was parsing error - ${(error && error.message) || error}, filename ${args.originalFilename}`)
       throw new Error(validationMessages.parsingError)
     }
   }
@@ -87,7 +84,7 @@ const csvParserService = ({ fs, isBinaryFileSync }) => {
   }
 }
 
-module.exports = {
+export default {
   csvParserService,
   validationMessages,
 }

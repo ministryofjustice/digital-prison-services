@@ -1,5 +1,4 @@
-module.exports =
-  (oauthApi, permittedRoles = []) =>
+export default (oauthApi, permittedRoles = []) =>
   async (req, res, next) => {
     const userRoles = await oauthApi.userRoles(res.locals)
     const roleCodes = userRoles.map((userRole) => userRole.roleCode)

@@ -1,4 +1,4 @@
-const prisonerAdjudicationDetails = require('../controllers/prisonerProfile/prisonerAdjudicationDetails')
+import prisonerAdjudicationDetails from '../controllers/prisonerProfile/prisonerAdjudicationDetails'
 
 describe('Prisoner adjudication details', () => {
   const offenderNo = 'ABC123'
@@ -24,6 +24,7 @@ describe('Prisoner adjudication details', () => {
     // @ts-expect-error ts-migrate(2339) FIXME: Property 'getAdjudicationDetails' does not exist o... Remove this comment to see the full error message
     prisonApi.getAdjudicationDetails = jest.fn().mockResolvedValue({})
 
+    // @ts-expect-error ts-migrate(2345) FIXME: Argument of type '{ prisonApi: {}; logError: any; ... Remove this comment to see the full error message
     controller = prisonerAdjudicationDetails({ prisonApi, logError })
   })
 

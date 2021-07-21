@@ -1,4 +1,4 @@
-const cellMoveHomepageController = require('../controllers/cellMove/cellMoveHomepage')
+import cellMoveHomepageController from '../controllers/cellMove/cellMoveHomepage'
 
 describe('Homepage', () => {
   const req = {}

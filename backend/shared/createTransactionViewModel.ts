@@ -1,7 +1,6 @@
-// @ts-expect-error ts-migrate(2451) FIXME: Cannot redeclare block-scoped variable 'formatCurr... Remove this comment to see the full error message
-const { formatCurrency, formatTimestampToDate } = require('../utils')
+import { formatCurrency, formatTimestampToDate } from '../utils'
 
-module.exports = (transactions, prisons, showBalance = true, mergeAmounts = false) =>
+export default (transactions, prisons, showBalance = true, mergeAmounts = false) =>
   transactions.map((transaction) => {
     const { description: prisonName } = prisons.find((agency) => transaction.agencyId === agency.agencyId)
     const { penceAmount, currentBalance } = transaction

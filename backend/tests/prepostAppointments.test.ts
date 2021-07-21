@@ -1,11 +1,7 @@
-// @ts-expect-error ts-migrate(2451) FIXME: Cannot redeclare block-scoped variable 'prepostApp... Remove this comment to see the full error message
-const { prepostAppointmentsFactory } = require('../controllers/appointments/prepostAppoinments')
-// @ts-expect-error ts-migrate(2451) FIXME: Cannot redeclare block-scoped variable 'Time'.
-const { Time } = require('../../common/dateHelpers')
-// @ts-expect-error ts-migrate(2451) FIXME: Cannot redeclare block-scoped variable 'notifyClie... Remove this comment to see the full error message
-const { notifyClient } = require('../shared/notifyClient')
-// @ts-expect-error ts-migrate(2451) FIXME: Cannot redeclare block-scoped variable 'config'.
-const config = require('../config')
+import { prepostAppointmentsFactory } from '../controllers/appointments/prepostAppoinments'
+import { Time } from '../../common/dateHelpers'
+import { notifyClient } from '../shared/notifyClient'
+import config from '../config'
 
 describe('Pre post appointments', () => {
   let body

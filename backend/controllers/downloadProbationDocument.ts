@@ -1,14 +1,12 @@
-// @ts-expect-error ts-migrate(2451) FIXME: Cannot redeclare block-scoped variable 'telemetry'... Remove this comment to see the full error message
-const telemetry = require('../azure-appinsights')
+import telemetry from '../azure-appinsights'
 
-const ensureAllowedPageAccess = (userRoles) => {
+export const ensureAllowedPageAccess = (userRoles) => {
   if (!userRoles.find((role) => role.roleCode === 'VIEW_PROBATION_DOCUMENTS' || role.roleCode === 'POM')) {
     throw new Error('You do not have the correct role to access this page')
   }
 }
 
-// @ts-expect-error ts-migrate(2451) FIXME: Cannot redeclare block-scoped variable 'trackEvent... Remove this comment to see the full error message
-const trackEvent = (offenderNo, documentId, suffix, { username }) => {
+export const trackEvent = (offenderNo, documentId, suffix, { username }) => {
   if (telemetry) {
     telemetry.trackEvent({
       name: `DownloadProbationDocument${suffix}`,
@@ -17,7 +15,7 @@ const trackEvent = (offenderNo, documentId, suffix, { username }) => {
   }
 }
 
-const downloadProbationDocumentFactory = (oauthApi, communityApi, systemOauthClient) => {
+export const downloadProbationDocumentFactory = (oauthApi, communityApi, systemOauthClient) => {
   const downloadDocument = async (req, res) => {
     const { offenderNo, documentId } = req.params
     try {
@@ -40,4 +38,4 @@ const downloadProbationDocumentFactory = (oauthApi, communityApi, systemOauthCli
   return { downloadDocument }
 }
 
-module.exports = { downloadProbationDocumentFactory }
+export default { downloadProbationDocumentFactory }

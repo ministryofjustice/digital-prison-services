@@ -1,4 +1,3 @@
-// @ts-expect-error ts-migrate(2306) FIXME: File 'prisonstaf... Remove this comment to see the full error message
 import { movementsServiceFactory } from '../services/movementsService'
 
 describe('Movement service', () => {
@@ -55,6 +54,7 @@ describe('Movement service', () => {
     })
 
     it('handles no offenders out today', async () => {
+      // @ts-expect-error ts-migrate(2554) FIXME: Expected 2 arguments, but got 1.
       const response = await movementsServiceFactory(prisonApi).getMovementsOut({}, 'LEI')
       expect(response).toEqual([])
     })

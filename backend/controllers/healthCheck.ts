@@ -1,8 +1,7 @@
-const superagent = require('superagent')
-const Agent = require('agentkeepalive')
-const { HttpsAgent } = require('agentkeepalive')
-// @ts-expect-error ts-migrate(2451) FIXME: Cannot redeclare block-scoped variable 'logger'.
-const logger = require('../log')
+import superagent from 'superagent'
+import Agent, { HttpsAgent } from 'agentkeepalive'
+
+import logger from '../log'
 
 const agentOptions = {
   maxSockets: 100,
@@ -10,8 +9,7 @@ const agentOptions = {
   freeSocketTimeout: 30000,
 }
 
-// @ts-expect-error ts-migrate(2451) FIXME: Cannot redeclare block-scoped variable 'serviceChe... Remove this comment to see the full error message
-function serviceCheckFactory(name, url) {
+export function serviceCheckFactory(name, url) {
   const keepaliveAgent = url.startsWith('https') ? new HttpsAgent(agentOptions) : new Agent(agentOptions)
 
   return () =>
@@ -40,6 +38,6 @@ function serviceCheckFactory(name, url) {
     })
 }
 
-module.exports = {
+export default {
   serviceCheckFactory,
 }

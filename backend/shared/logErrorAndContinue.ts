@@ -1,7 +1,6 @@
-// @ts-expect-error ts-migrate(2451) FIXME: Cannot redeclare block-scoped variable 'log'.
-const log = require('../log')
+import log from '../log'
 
-module.exports = (apiCall) =>
+export default (apiCall) =>
   new Promise((resolve) => {
     apiCall
       .then((response) => resolve(response))

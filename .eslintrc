@@ -37,6 +37,7 @@
     "react/jsx-props-no-spreading": 0, // disable as AirBnb says sparce usage is okay, and we mostly use in tests
     "no-underscore-dangle": ["error", { "allow": ["__REDUX_DEVTOOLS_EXTENSION_COMPOSE__"] }],
     "import/no-named-as-default": 0, // disable as we use connected components
+    "import/no-named-as-default-member": 0, // disable as we use connected components
     "jsx-a11y/label-has-associated-control": [2, { "assert": "either" }],
     "jsx-a11y/label-has-for": 0, // disable as has been deprecated and replaced by label-has-associated-control
     "react/forbid-prop-types": 0,

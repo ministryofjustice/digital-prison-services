@@ -1,5 +1,4 @@
-// @ts-expect-error ts-migrate(2451) FIXME: Cannot redeclare block-scoped variable 'globalSear... Remove this comment to see the full error message
-const globalSearchController = require('../controllers/globalSearch')
+import globalSearchController from '../controllers/globalSearch'
 
 describe('Global search', () => {
   const offenderSearchApi = {}
@@ -51,6 +50,7 @@ describe('Global search', () => {
     // @ts-expect-error ts-migrate(2339) FIXME: Property 'trackEvent' does not exist on type '{}'.
     telemetry.trackEvent = jest.fn().mockResolvedValue([])
 
+    // @ts-expect-error ts-migrate(2345) FIXME: Argument of type '{ paginationService: {}; offende... Remove this comment to see the full error message
     controller = globalSearchController({ paginationService, offenderSearchApi, oauthApi, telemetry, logError })
   })
 

@@ -1,4 +1,4 @@
-const prisonerIncentiveLevelDetails = require('../controllers/prisonerProfile/prisonerIncentiveLevelDetails')
+import prisonerIncentiveLevelDetails from '../controllers/prisonerProfile/prisonerIncentiveLevelDetails'
 
 describe('Prisoner incentive level details', () => {
   const offenderNo = 'ABC123'
@@ -81,6 +81,7 @@ describe('Prisoner incentive level details', () => {
     // @ts-expect-error ts-migrate(2339) FIXME: Property 'userRoles' does not exist on type '{}'.
     oauthApi.userRoles = jest.fn().mockReturnValue([])
 
+    // @ts-expect-error ts-migrate(2345) FIXME: Argument of type '{ prisonApi: {}; oauthApi: {}; l... Remove this comment to see the full error message
     controller = prisonerIncentiveLevelDetails({ prisonApi, oauthApi, logError })
   })
 

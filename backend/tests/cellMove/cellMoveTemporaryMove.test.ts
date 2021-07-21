@@ -1,4 +1,4 @@
-const temporaryMoveController = require('../../controllers/cellMove/cellMoveTemporaryMove')
+import temporaryMoveController from '../../controllers/cellMove/cellMoveTemporaryMove'
 
 describe('Move someone temporarily out of a cell', () => {
   const prisonApi = {}

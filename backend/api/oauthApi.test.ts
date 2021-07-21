@@ -1,18 +1,13 @@
-// @ts-expect-error ts-migrate(2451) FIXME: Cannot redeclare block-scoped variable 'nock'.
-const nock = require('nock')
-// @ts-expect-error ts-migrate(2451) FIXME: Cannot redeclare block-scoped variable 'oauthApiFa... Remove this comment to see the full error message
-const { oauthApiFactory } = require('./oauthApi')
+import nock from 'nock'
+import { oauthApiFactory } from './oauthApi'
 
 const clientId = 'clientId'
 const url = 'http://localhost/'
 const clientSecret = 'clientSecret'
 
-// @ts-expect-error ts-migrate(2451) FIXME: Cannot redeclare block-scoped variable 'client'.
 const client = {}
-// @ts-expect-error ts-migrate(2451) FIXME: Cannot redeclare block-scoped variable 'oauthApi'.
 const oauthApi = oauthApiFactory(client, { url, clientId, clientSecret })
 const mock = nock(url, { reqheaders: { 'Content-Type': 'application/x-www-form-urlencoded' } })
-// @ts-expect-error ts-migrate(2451) FIXME: Cannot redeclare block-scoped variable 'context'.
 const context = { some: 'context' }
 
 describe('oauthApi tests', () => {

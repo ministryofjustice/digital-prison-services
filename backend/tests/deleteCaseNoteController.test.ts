@@ -1,5 +1,4 @@
-// @ts-expect-error ts-migrate(2451) FIXME: Cannot redeclare block-scoped variable 'deleteCase... Remove this comment to see the full error message
-const deleteCaseNoteController = require('../controllers/deleteCaseNote')
+import deleteCaseNoteController from '../controllers/deleteCaseNote'
 
 describe('Delete case note', () => {
   const caseNotesApi = {}
@@ -39,6 +38,7 @@ describe('Delete case note', () => {
     // @ts-expect-error ts-migrate(2339) FIXME: Property 'userRoles' does not exist on type '{}'.
     oauthApi.userRoles = jest.fn().mockResolvedValue([{ roleCode: 'DELETE_SENSITIVE_CASE_NOTES' }])
 
+    // @ts-expect-error ts-migrate(2345) FIXME: Argument of type '{ caseNotesApi: {}; prisonApi: {... Remove this comment to see the full error message
     controller = deleteCaseNoteController({ caseNotesApi, prisonApi, logError: jest.fn(), oauthApi })
 
     // @ts-expect-error ts-migrate(2339) FIXME: Property 'render' does not exist on type '{ locals... Remove this comment to see the full error message

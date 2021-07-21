@@ -1,9 +1,6 @@
-// @ts-expect-error ts-migrate(2451) FIXME: Cannot redeclare block-scoped variable 'moment'.
-const moment = require('moment')
-// @ts-expect-error ts-migrate(2451) FIXME: Cannot redeclare block-scoped variable 'formatName... Remove this comment to see the full error message
-const { formatName, putLastNameFirst } = require('../../utils')
+import moment from 'moment'
+import { formatName, putLastNameFirst } from '../../utils'
 
-// @ts-expect-error ts-migrate(2451) FIXME: Cannot redeclare block-scoped variable 'perPage'.
 const perPage = 10
 
 const sortByDateTimeDesc = (left, right) => {
@@ -15,8 +12,7 @@ const sortByDateTimeDesc = (left, right) => {
 
 const sortByTextAlphabetically = (left, right) => left.text.localeCompare(right.text)
 
-module.exports =
-  ({ adjudicationHistoryService, prisonApi, paginationService }) =>
+export default ({ adjudicationHistoryService, prisonApi, paginationService }) =>
   async (req, res) => {
     const { offenderNo } = req.params
     const fullUrl = new URL(`${req.protocol}://${req.get('host')}${req.originalUrl}`)

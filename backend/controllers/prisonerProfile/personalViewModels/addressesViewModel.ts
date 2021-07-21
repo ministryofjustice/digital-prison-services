@@ -1,9 +1,7 @@
-// @ts-expect-error ts-migrate(2451) FIXME: Cannot redeclare block-scoped variable 'moment'.
-const moment = require('moment')
-// @ts-expect-error ts-migrate(2451) FIXME: Cannot redeclare block-scoped variable 'getAddress... Remove this comment to see the full error message
-const { getAddress } = require('../../../shared/addressHelpers')
+import moment from 'moment'
+import { getAddress } from '../../../shared/addressHelpers'
 
-module.exports = ({ addresses }) => {
+export default ({ addresses }) => {
   const activeAddresses =
     addresses && addresses.filter((address) => !address.endDate || moment(address.endDate).isAfter())
   const primaryAddress = activeAddresses && activeAddresses.find((address) => address.primary)

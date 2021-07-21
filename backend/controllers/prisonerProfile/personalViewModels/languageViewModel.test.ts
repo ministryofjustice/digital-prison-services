@@ -1,5 +1,4 @@
-// @ts-expect-error ts-migrate(2451) FIXME: Cannot redeclare block-scoped variable 'languageVi... Remove this comment to see the full error message
-const languageViewModel = require('./languageViewModel')
+import languageViewModel from './languageViewModel'
 
 const defaults = {
   interpreterRequired: false,
@@ -128,6 +127,7 @@ describe('Language view model', () => {
   })
 
   it('should return speaks and writes for preferred language', () => {
+    // @ts-expect-error ts-migrate(2345) FIXME: Argument of type '{ language: string; writtenLangu... Remove this comment to see the full error message
     const model = languageViewModel({ language: 'english', writtenLanguage: 'english' })
 
     expect(model).toEqual(
@@ -138,6 +138,7 @@ describe('Language view model', () => {
   })
 
   it('should return speaks and writes for different preferred languages', () => {
+    // @ts-expect-error ts-migrate(2345) FIXME: Argument of type '{ language: string; writtenLangu... Remove this comment to see the full error message
     const model = languageViewModel({ language: 'english', writtenLanguage: 'russian' })
 
     expect(model).toEqual(
@@ -148,6 +149,7 @@ describe('Language view model', () => {
   })
 
   it('should return writes only in preferred language', () => {
+    // @ts-expect-error ts-migrate(2345) FIXME: Argument of type '{ language: null; writtenLanguag... Remove this comment to see the full error message
     const model = languageViewModel({ language: null, writtenLanguage: 'english' })
 
     expect(model).toEqual(
@@ -158,6 +160,7 @@ describe('Language view model', () => {
   })
 
   it('should return speaks only in preferred language', () => {
+    // @ts-expect-error ts-migrate(2345) FIXME: Argument of type '{ language: string; writtenLangu... Remove this comment to see the full error message
     const model = languageViewModel({ language: 'english', writtenLanguage: null })
 
     expect(model).toEqual(
@@ -168,6 +171,7 @@ describe('Language view model', () => {
   })
 
   it('should return no preferred language entered', () => {
+    // @ts-expect-error ts-migrate(2345) FIXME: Argument of type '{ language: null; writtenLanguag... Remove this comment to see the full error message
     const model = languageViewModel({ language: null, writtenLanguage: null })
 
     expect(model).toEqual(

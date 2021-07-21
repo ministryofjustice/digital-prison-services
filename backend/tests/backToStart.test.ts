@@ -1,4 +1,4 @@
-const backToStart = require('../controllers/backToStart')
+import backToStart from '../controllers/backToStart'
 
 describe('Back to start url', () => {
   const prisonApi = {}

@@ -1,13 +1,9 @@
-// @ts-expect-error ts-migrate(2451) FIXME: Cannot redeclare block-scoped variable 'moment'.
-const moment = require('moment')
-// @ts-expect-error ts-migrate(2451) FIXME: Cannot redeclare block-scoped variable 'prisonApiF... Remove this comment to see the full error message
-const { prisonApiFactory } = require('../api/prisonApi')
+import moment from 'moment'
+import { prisonApiFactory } from '../api/prisonApi'
+import externalEvents from '../shared/getExternalEventsForOffenders'
+import { switchDateFormat } from '../utils'
 
-// @ts-expect-error ts-migrate(2451) FIXME: Cannot redeclare block-scoped variable 'prisonApi'... Remove this comment to see the full error message
 const prisonApi = prisonApiFactory(null)
-const externalEvents = require('../shared/getExternalEventsForOffenders')
-// @ts-expect-error ts-migrate(2451) FIXME: Cannot redeclare block-scoped variable 'switchDate... Remove this comment to see the full error message
-const { switchDateFormat } = require('../utils')
 
 function createSentenceDataResponse() {
   return [
@@ -153,20 +149,16 @@ describe('External events', () => {
   const offenderWithNoData = 'ABCDEEE'
 
   beforeEach(() => {
-    // @ts-expect-error ts-migrate(2339) FIXME: Property 'getSentenceData' does not exist on type ... Remove this comment to see the full error message
     prisonApi.getSentenceData = jest.fn()
-    // @ts-expect-error ts-migrate(2339) FIXME: Property 'getCourtEvents' does not exist on type '... Remove this comment to see the full error message
     prisonApi.getCourtEvents = jest.fn()
-    // @ts-expect-error ts-migrate(2339) FIXME: Property 'getExternalTransfers' does not exist on ... Remove this comment to see the full error message
     prisonApi.getExternalTransfers = jest.fn()
-    // @ts-expect-error ts-migrate(2339) FIXME: Property 'getAlerts' does not exist on type '{}'.
     prisonApi.getAlerts = jest.fn()
-    // @ts-expect-error ts-migrate(2339) FIXME: Property 'getAssessments' does not exist on type '... Remove this comment to see the full error message
     prisonApi.getAssessments = jest.fn()
   })
 
   it('should handle empty offender numbers', async () => {
     const context = {}
+    // @ts-expect-error ts-migrate(2345) FIXME: Argument of type '{}' is not assignable to paramet... Remove this comment to see the full error message
     const response = await externalEvents(prisonApi, context, {})
     expect(response).toEqual([])
   })
@@ -174,11 +166,11 @@ describe('External events', () => {
   it('should deal with empty responses', async () => {
     const today = moment()
 
-    // @ts-expect-error ts-migrate(2339) FIXME: Property 'getSentenceData' does not exist on type ... Remove this comment to see the full error message
+    // @ts-expect-error ts-migrate(2339) FIXME: Property 'mockImplementationOnce' does not exist o... Remove this comment to see the full error message
     prisonApi.getSentenceData.mockImplementationOnce(() => null)
-    // @ts-expect-error ts-migrate(2339) FIXME: Property 'getCourtEvents' does not exist on type '... Remove this comment to see the full error message
+    // @ts-expect-error ts-migrate(2339) FIXME: Property 'mockImplementationOnce' does not exist o... Remove this comment to see the full error message
     prisonApi.getCourtEvents.mockImplementationOnce(() => [])
-    // @ts-expect-error ts-migrate(2339) FIXME: Property 'getExternalTransfers' does not exist on ... Remove this comment to see the full error message
+    // @ts-expect-error ts-migrate(2339) FIXME: Property 'mockImplementationOnce' does not exist o... Remove this comment to see the full error message
     prisonApi.getExternalTransfers.mockImplementationOnce(() => undefined)
 
     const response = await externalEvents(
@@ -197,15 +189,15 @@ describe('External events', () => {
     expect(response.get(offenderWithData).alertFlags.length).toBe(0)
     expect(response.get(offenderWithData).category).toEqual('')
 
-    // @ts-expect-error ts-migrate(2339) FIXME: Property 'getCourtEvents' does not exist on type '... Remove this comment to see the full error message
+    // @ts-expect-error ts-migrate(2339) FIXME: Property 'mock' does not exist on type '(context: ... Remove this comment to see the full error message
     expect(prisonApi.getCourtEvents.mock.calls.length).toBe(1)
-    // @ts-expect-error ts-migrate(2339) FIXME: Property 'getExternalTransfers' does not exist on ... Remove this comment to see the full error message
+    // @ts-expect-error ts-migrate(2339) FIXME: Property 'mock' does not exist on type '(context: ... Remove this comment to see the full error message
     expect(prisonApi.getExternalTransfers.mock.calls.length).toBe(1)
-    // @ts-expect-error ts-migrate(2339) FIXME: Property 'getSentenceData' does not exist on type ... Remove this comment to see the full error message
+    // @ts-expect-error ts-migrate(2339) FIXME: Property 'mock' does not exist on type '(context: ... Remove this comment to see the full error message
     expect(prisonApi.getSentenceData.mock.calls.length).toBe(1)
-    // @ts-expect-error ts-migrate(2339) FIXME: Property 'getAlerts' does not exist on type '{}'.
+    // @ts-expect-error ts-migrate(2339) FIXME: Property 'mock' does not exist on type '(context: ... Remove this comment to see the full error message
     expect(prisonApi.getAlerts.mock.calls.length).toBe(1)
-    // @ts-expect-error ts-migrate(2339) FIXME: Property 'getAssessments' does not exist on type '... Remove this comment to see the full error message
+    // @ts-expect-error ts-migrate(2339) FIXME: Property 'mock' does not exist on type '(context: ... Remove this comment to see the full error message
     expect(prisonApi.getAssessments.mock.calls.length).toBe(1)
   })
 
@@ -220,7 +212,6 @@ describe('External events', () => {
         formattedDate: switchDateFormat(today),
       }
     )
-    // @ts-expect-error ts-migrate(2339) FIXME: Property 'getSentenceData' does not exist on type ... Remove this comment to see the full error message
     expect(prisonApi.getSentenceData).toHaveBeenCalledWith({}, [offenderWithData, offenderWithNoData])
   })
 
@@ -235,7 +226,6 @@ describe('External events', () => {
         formattedDate: switchDateFormat(today),
       }
     )
-    // @ts-expect-error ts-migrate(2339) FIXME: Property 'getCourtEvents' does not exist on type '... Remove this comment to see the full error message
     expect(prisonApi.getCourtEvents).toHaveBeenCalledWith(
       {},
       {
@@ -257,7 +247,6 @@ describe('External events', () => {
         formattedDate: switchDateFormat(today),
       }
     )
-    // @ts-expect-error ts-migrate(2339) FIXME: Property 'getExternalTransfers' does not exist on ... Remove this comment to see the full error message
     expect(prisonApi.getExternalTransfers).toHaveBeenCalledWith(
       {},
       {
@@ -272,12 +261,12 @@ describe('External events', () => {
     await externalEvents(
       prisonApi,
       {},
+      // @ts-expect-error ts-migrate(2345) FIXME: Argument of type '{ agencyId: string; offenderNumb... Remove this comment to see the full error message
       {
         agencyId: 'LEI',
         offenderNumbers: [offenderWithData, offenderWithNoData],
       }
     )
-    // @ts-expect-error ts-migrate(2339) FIXME: Property 'getAlerts' does not exist on type '{}'.
     expect(prisonApi.getAlerts).toHaveBeenCalledWith(
       {},
       {
@@ -291,11 +280,11 @@ describe('External events', () => {
     await externalEvents(
       prisonApi,
       {},
+      // @ts-expect-error ts-migrate(2345) FIXME: Argument of type '{ offenderNumbers: string[]; }' ... Remove this comment to see the full error message
       {
         offenderNumbers: [offenderWithData, offenderWithNoData],
       }
     )
-    // @ts-expect-error ts-migrate(2339) FIXME: Property 'getAssessments' does not exist on type '... Remove this comment to see the full error message
     expect(prisonApi.getAssessments).toHaveBeenCalledWith(
       {},
       {
@@ -308,15 +297,15 @@ describe('External events', () => {
   it('should extend the offender data with additional call data', async () => {
     const today = moment()
 
-    // @ts-expect-error ts-migrate(2339) FIXME: Property 'getSentenceData' does not exist on type ... Remove this comment to see the full error message
+    // @ts-expect-error ts-migrate(2339) FIXME: Property 'mockImplementationOnce' does not exist o... Remove this comment to see the full error message
     prisonApi.getSentenceData.mockImplementationOnce(createSentenceDataResponse)
-    // @ts-expect-error ts-migrate(2339) FIXME: Property 'getCourtEvents' does not exist on type '... Remove this comment to see the full error message
+    // @ts-expect-error ts-migrate(2339) FIXME: Property 'mockImplementationOnce' does not exist o... Remove this comment to see the full error message
     prisonApi.getCourtEvents.mockImplementationOnce(createCourtEventResponse)
-    // @ts-expect-error ts-migrate(2339) FIXME: Property 'getExternalTransfers' does not exist on ... Remove this comment to see the full error message
+    // @ts-expect-error ts-migrate(2339) FIXME: Property 'mockImplementationOnce' does not exist o... Remove this comment to see the full error message
     prisonApi.getExternalTransfers.mockImplementationOnce(createTransfersResponse)
-    // @ts-expect-error ts-migrate(2339) FIXME: Property 'getAlerts' does not exist on type '{}'.
+    // @ts-expect-error ts-migrate(2339) FIXME: Property 'mockImplementationOnce' does not exist o... Remove this comment to see the full error message
     prisonApi.getAlerts.mockImplementationOnce(createAlertsResponse)
-    // @ts-expect-error ts-migrate(2339) FIXME: Property 'getAssessments' does not exist on type '... Remove this comment to see the full error message
+    // @ts-expect-error ts-migrate(2339) FIXME: Property 'mockImplementationOnce' does not exist o... Remove this comment to see the full error message
     prisonApi.getAssessments.mockImplementationOnce(createAssessmentsResponse)
 
     const response = await externalEvents(
@@ -341,22 +330,22 @@ describe('External events', () => {
     expect(response.get(offenderWithNoData).alertFlags.length).toBe(0)
     expect(response.get(offenderWithNoData).category).not.toBeDefined()
 
-    // @ts-expect-error ts-migrate(2339) FIXME: Property 'getCourtEvents' does not exist on type '... Remove this comment to see the full error message
+    // @ts-expect-error ts-migrate(2339) FIXME: Property 'mock' does not exist on type '(context: ... Remove this comment to see the full error message
     expect(prisonApi.getCourtEvents.mock.calls.length).toBe(1)
-    // @ts-expect-error ts-migrate(2339) FIXME: Property 'getExternalTransfers' does not exist on ... Remove this comment to see the full error message
+    // @ts-expect-error ts-migrate(2339) FIXME: Property 'mock' does not exist on type '(context: ... Remove this comment to see the full error message
     expect(prisonApi.getExternalTransfers.mock.calls.length).toBe(1)
-    // @ts-expect-error ts-migrate(2339) FIXME: Property 'getSentenceData' does not exist on type ... Remove this comment to see the full error message
+    // @ts-expect-error ts-migrate(2339) FIXME: Property 'mock' does not exist on type '(context: ... Remove this comment to see the full error message
     expect(prisonApi.getSentenceData.mock.calls.length).toBe(1)
-    // @ts-expect-error ts-migrate(2339) FIXME: Property 'getAlerts' does not exist on type '{}'.
+    // @ts-expect-error ts-migrate(2339) FIXME: Property 'mock' does not exist on type '(context: ... Remove this comment to see the full error message
     expect(prisonApi.getAlerts.mock.calls.length).toBe(1)
-    // @ts-expect-error ts-migrate(2339) FIXME: Property 'getAssessments' does not exist on type '... Remove this comment to see the full error message
+    // @ts-expect-error ts-migrate(2339) FIXME: Property 'mock' does not exist on type '(context: ... Remove this comment to see the full error message
     expect(prisonApi.getAssessments.mock.calls.length).toBe(1)
   })
 
   it('should return multiple scheduled transfers along with status descriptions', async () => {
     const today = moment()
 
-    // @ts-expect-error ts-migrate(2339) FIXME: Property 'getExternalTransfers' does not exist on ... Remove this comment to see the full error message
+    // @ts-expect-error ts-migrate(2339) FIXME: Property 'mockImplementationOnce' does not exist o... Remove this comment to see the full error message
     prisonApi.getExternalTransfers.mockImplementationOnce(() => createAllTransferTypes())
 
     const response = await externalEvents(
@@ -392,7 +381,7 @@ describe('External events', () => {
   it('should show the latest completed court event when there are more than one', async () => {
     const today = moment()
 
-    // @ts-expect-error ts-migrate(2339) FIXME: Property 'getCourtEvents' does not exist on type '... Remove this comment to see the full error message
+    // @ts-expect-error ts-migrate(2339) FIXME: Property 'mockImplementationOnce' does not exist o... Remove this comment to see the full error message
     prisonApi.getCourtEvents.mockImplementationOnce(() => [
       {
         eventId: 1,
@@ -441,7 +430,7 @@ describe('External events', () => {
     const thisTimeTomorrow = switchDateFormat(moment().add(1, 'day'))
 
     it('should not return scheduled transfers', async () => {
-      // @ts-expect-error ts-migrate(2339) FIXME: Property 'getExternalTransfers' does not exist on ... Remove this comment to see the full error message
+      // @ts-expect-error ts-migrate(2339) FIXME: Property 'mockReturnValueOnce' does not exist on t... Remove this comment to see the full error message
       prisonApi.getExternalTransfers.mockReturnValueOnce([
         {
           eventId: 1,
@@ -466,7 +455,7 @@ describe('External events', () => {
     })
 
     it('should not return scheduled court visits', async () => {
-      // @ts-expect-error ts-migrate(2339) FIXME: Property 'getCourtEvents' does not exist on type '... Remove this comment to see the full error message
+      // @ts-expect-error ts-migrate(2339) FIXME: Property 'mockReturnValueOnce' does not exist on t... Remove this comment to see the full error message
       prisonApi.getCourtEvents.mockReturnValueOnce([
         {
           eventId: 1,
@@ -494,7 +483,7 @@ describe('External events', () => {
     })
 
     it('should not return release dates', async () => {
-      // @ts-expect-error ts-migrate(2339) FIXME: Property 'getSentenceData' does not exist on type ... Remove this comment to see the full error message
+      // @ts-expect-error ts-migrate(2339) FIXME: Property 'mockReturnValueOnce' does not exist on t... Remove this comment to see the full error message
       prisonApi.getSentenceData.mockReturnValueOnce([
         {
           offenderNo: 'A1234AA',

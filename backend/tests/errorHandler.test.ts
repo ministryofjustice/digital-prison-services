@@ -1,4 +1,4 @@
-const errorHandlerFactory = require('../middleware/errorHandler')
+import errorHandlerFactory from '../middleware/errorHandler'
 
 const serverError = {
   ...new Error('error'),

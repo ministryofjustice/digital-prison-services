@@ -1,7 +1,6 @@
-const prisonerLocationHistory = require('../controllers/prisonerProfile/prisonerLocationHistory')
-// @ts-expect-error ts-migrate(2451) FIXME: Cannot redeclare block-scoped variable 'notEntered... Remove this comment to see the full error message
-const { notEnteredMessage } = require('../common-messages')
-const { makeNotFoundError } = require('./helpers')
+import prisonerLocationHistory from '../controllers/prisonerProfile/prisonerLocationHistory'
+import { notEnteredMessage } from '../common-messages'
+import { makeNotFoundError } from './helpers'
 
 describe('Prisoner location sharing history', () => {
   const offenderNo = 'ABC123'
@@ -58,6 +57,7 @@ describe('Prisoner location sharing history', () => {
     // @ts-expect-error ts-migrate(2339) FIXME: Property 'getCellMoveReason' does not exist on typ... Remove this comment to see the full error message
     whereaboutsApi.getCellMoveReason = jest.fn().mockResolvedValue({ cellMoveReason: { caseNoteId: 123 } })
 
+    // @ts-expect-error ts-migrate(2345) FIXME: Argument of type '{ prisonApi: {}; whereaboutsApi:... Remove this comment to see the full error message
     controller = prisonerLocationHistory({ prisonApi, whereaboutsApi, caseNotesApi, logError })
 
     jest.spyOn(Date, 'now').mockImplementation(() => 1578787200000) // Sun Jan 12 2020 00:00:00

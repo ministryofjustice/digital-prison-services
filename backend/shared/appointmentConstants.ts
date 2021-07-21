@@ -1,11 +1,8 @@
-// @ts-expect-error ts-migrate(2451) FIXME: Cannot redeclare block-scoped variable 'moment'.
-const moment = require('moment')
-// @ts-expect-error ts-migrate(2451) FIXME: Cannot redeclare block-scoped variable 'DAY_MONTH_... Remove this comment to see the full error message
-const { DAY_MONTH_YEAR } = require('../../common/dateHelpers')
-const { calculateEndDate } = require('../../common/BulkAppointments/RecurringAppointments')
+import moment from 'moment'
+import { DAY_MONTH_YEAR } from '../../common/dateHelpers'
+import { calculateEndDate } from '../../common/BulkAppointments/RecurringAppointments'
 
-// @ts-expect-error ts-migrate(2451) FIXME: Cannot redeclare block-scoped variable 'repeatType... Remove this comment to see the full error message
-const repeatTypes = [
+export const repeatTypes = [
   { value: 'WEEKLY', text: 'Weekly' },
   { value: 'DAILY', text: 'Daily' },
   { value: 'WEEKDAYS', text: 'Weekday (Monday to Friday)' },
@@ -13,16 +10,14 @@ const repeatTypes = [
   { value: 'FORTNIGHTLY', text: 'Fortnightly' },
 ]
 
-// @ts-expect-error ts-migrate(2451) FIXME: Cannot redeclare block-scoped variable 'prepostDur... Remove this comment to see the full error message
-const prepostDurations = {
+export const prepostDurations = {
   15: '15 minutes',
   30: '30 minutes',
   45: '45 minutes',
   60: '1 hour',
 }
 
-// @ts-expect-error ts-migrate(2451) FIXME: Cannot redeclare block-scoped variable 'endRecurri... Remove this comment to see the full error message
-const endRecurringEndingDate = ({ date, startTime, times, repeats }) => {
+export const endRecurringEndingDate = ({ date, startTime, times, repeats }) => {
   const recurringStartTime = (startTime && moment(startTime)) || moment(date, DAY_MONTH_YEAR).hours(0).minutes(0)
 
   const endOfPeriod = calculateEndDate({
@@ -37,8 +32,7 @@ const endRecurringEndingDate = ({ date, startTime, times, repeats }) => {
   }
 }
 
-// @ts-expect-error ts-migrate(2451) FIXME: Cannot redeclare block-scoped variable 'validateDa... Remove this comment to see the full error message
-const validateDate = (date, errors) => {
+export const validateDate = (date, errors) => {
   const now = moment()
   if (!date) errors.push({ text: 'Select a date', href: '#date' })
 
@@ -49,8 +43,7 @@ const validateDate = (date, errors) => {
     errors.push({ text: 'Select a date that is not in the past', href: '#date' })
 }
 
-// @ts-expect-error ts-migrate(2451) FIXME: Cannot redeclare block-scoped variable 'validateSt... Remove this comment to see the full error message
-const validateStartEndTime = (date, startTime, endTime, errors) => {
+export const validateStartEndTime = (date, startTime, endTime, errors) => {
   const now = moment()
   const isToday = date ? moment(date, DAY_MONTH_YEAR).isSame(now, 'day') : false
   const startTimeDuration = moment.duration(now.diff(startTime))
@@ -66,14 +59,12 @@ const validateStartEndTime = (date, startTime, endTime, errors) => {
   }
 }
 
-// @ts-expect-error ts-migrate(2451) FIXME: Cannot redeclare block-scoped variable 'validateCo... Remove this comment to see the full error message
-const validateComments = (comments, errors) => {
+export const validateComments = (comments, errors) => {
   if (comments && comments.length > 3600)
     errors.push({ text: 'Maximum length should not exceed 3600 characters', href: '#comments' })
 }
 
-// @ts-expect-error ts-migrate(2451) FIXME: Cannot redeclare block-scoped variable 'getValidat... Remove this comment to see the full error message
-const getValidationMessages = (fields, singleAppointment) => {
+export const getValidationMessages = (fields, singleAppointment?) => {
   const {
     appointmentType,
     location,
@@ -142,7 +133,7 @@ const getValidationMessages = (fields, singleAppointment) => {
   return errors
 }
 
-module.exports = {
+export default {
   endRecurringEndingDate,
   validateDate,
   validateStartEndTime,

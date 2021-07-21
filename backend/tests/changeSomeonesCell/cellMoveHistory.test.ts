@@ -1,4 +1,4 @@
-const cellMoveHistoryFactory = require('../../controllers/cellMove/cellMoveHistory')
+import cellMoveHistoryFactory from '../../controllers/cellMove/cellMoveHistory'
 
 describe('Cell move history', () => {
   const prisonApi = {}

@@ -1,16 +1,13 @@
-Reflect.deleteProperty(process.env, 'APPINSIGHTS_INSTRUMENTATIONKEY')
-// @ts-expect-error ts-migrate(2451) FIXME: Cannot redeclare block-scoped variable 'moment'.
-const moment = require('moment')
-// @ts-expect-error ts-migrate(2451) FIXME: Cannot redeclare block-scoped variable 'prisonApiF... Remove this comment to see the full error message
-const { prisonApiFactory } = require('../api/prisonApi')
-// @ts-expect-error ts-migrate(2451) FIXME: Cannot redeclare block-scoped variable 'factory'.
-const factory = require('../controllers/attendance/houseblockList').getHouseblockListFactory
+import moment from 'moment'
+import { prisonApiFactory } from '../api/prisonApi'
+import { getHouseblockListFactory as factory } from '../controllers/attendance/houseblockList'
 
-// @ts-expect-error ts-migrate(2451) FIXME: Cannot redeclare block-scoped variable 'prisonApi'... Remove this comment to see the full error message
+import { distinct, switchDateFormat } from '../utils'
+
+Reflect.deleteProperty(process.env, 'APPINSIGHTS_INSTRUMENTATIONKEY')
+
 const prisonApi = prisonApiFactory(null)
-// @ts-expect-error ts-migrate(2451) FIXME: Cannot redeclare block-scoped variable 'whereabout... Remove this comment to see the full error message
 const whereaboutsApi = {}
-// @ts-expect-error ts-migrate(2451) FIXME: Cannot redeclare block-scoped variable 'config'.
 const config = {
   app: {
     production: true,
@@ -21,9 +18,6 @@ const houseblockList = require('../controllers/attendance/houseblockList').getHo
   whereaboutsApi,
   config
 ).getHouseblockList
-
-// @ts-expect-error ts-migrate(2451) FIXME: Cannot redeclare block-scoped variable 'distinct'.
-const { distinct, switchDateFormat } = require('../utils')
 
 // There can be more than one occupant of a cell, the results are ordered by cell,offenderNo or cell,surname from the api.
 function createResponse() {
@@ -190,17 +184,11 @@ function createMultipleUnpaid() {
 
 describe('Houseblock list controller', () => {
   beforeEach(() => {
-    // @ts-expect-error ts-migrate(2339) FIXME: Property 'getHouseblockList' does not exist on typ... Remove this comment to see the full error message
     prisonApi.getHouseblockList = jest.fn()
-    // @ts-expect-error ts-migrate(2339) FIXME: Property 'getSentenceData' does not exist on type ... Remove this comment to see the full error message
     prisonApi.getSentenceData = jest.fn()
-    // @ts-expect-error ts-migrate(2339) FIXME: Property 'getExternalTransfers' does not exist on ... Remove this comment to see the full error message
     prisonApi.getExternalTransfers = jest.fn()
-    // @ts-expect-error ts-migrate(2339) FIXME: Property 'getCourtEvents' does not exist on type '... Remove this comment to see the full error message
     prisonApi.getCourtEvents = jest.fn()
-    // @ts-expect-error ts-migrate(2339) FIXME: Property 'getAlerts' does not exist on type '{}'.
     prisonApi.getAlerts = jest.fn()
-    // @ts-expect-error ts-migrate(2339) FIXME: Property 'getAssessments' does not exist on type '... Remove this comment to see the full error message
     prisonApi.getAssessments = jest.fn()
     // @ts-expect-error ts-migrate(2339) FIXME: Property 'getAbsenceReasons' does not exist on typ... Remove this comment to see the full error message
     whereaboutsApi.getAbsenceReasons = jest.fn()
@@ -219,14 +207,14 @@ describe('Houseblock list controller', () => {
   })
 
   it('Should add visit and appointment details to array', async () => {
-    // @ts-expect-error ts-migrate(2339) FIXME: Property 'getHouseblockList' does not exist on typ... Remove this comment to see the full error message
+    // @ts-expect-error ts-migrate(2339) FIXME: Property 'mockImplementationOnce' does not exist o... Remove this comment to see the full error message
     prisonApi.getHouseblockList.mockImplementationOnce(() => createResponse())
 
     const response = await houseblockList({})
 
     // @ts-expect-error ts-migrate(2339) FIXME: Property 'getAgencyGroupLocations' does not exist ... Remove this comment to see the full error message
     expect(whereaboutsApi.getAgencyGroupLocations.mock.calls.length).toBe(1)
-    // @ts-expect-error ts-migrate(2339) FIXME: Property 'getHouseblockList' does not exist on typ... Remove this comment to see the full error message
+    // @ts-expect-error ts-migrate(2339) FIXME: Property 'mock' does not exist on type '(context: ... Remove this comment to see the full error message
     expect(prisonApi.getHouseblockList.mock.calls.length).toBe(1)
 
     expect(response.length).toBe(4)
@@ -278,16 +266,16 @@ describe('Houseblock list controller', () => {
   it('Should pass location Ids to getHouseblockList', async () => {
     // @ts-expect-error ts-migrate(2339) FIXME: Property 'getAgencyGroupLocations' does not exist ... Remove this comment to see the full error message
     whereaboutsApi.getAgencyGroupLocations.mockReturnValue([{ locationId: 1 }, { locationId: 2 }])
-    // @ts-expect-error ts-migrate(2339) FIXME: Property 'getHouseblockList' does not exist on typ... Remove this comment to see the full error message
+    // @ts-expect-error ts-migrate(2339) FIXME: Property 'mockImplementationOnce' does not exist o... Remove this comment to see the full error message
     prisonApi.getHouseblockList.mockImplementationOnce(() => createResponse())
 
     await houseblockList({})
 
     // @ts-expect-error ts-migrate(2339) FIXME: Property 'getAgencyGroupLocations' does not exist ... Remove this comment to see the full error message
     expect(whereaboutsApi.getAgencyGroupLocations.mock.calls.length).toBe(1)
-    // @ts-expect-error ts-migrate(2339) FIXME: Property 'getHouseblockList' does not exist on typ... Remove this comment to see the full error message
+    // @ts-expect-error ts-migrate(2339) FIXME: Property 'mock' does not exist on type '(context: ... Remove this comment to see the full error message
     expect(prisonApi.getHouseblockList.mock.calls.length).toBe(1)
-    // @ts-expect-error ts-migrate(2339) FIXME: Property 'getHouseblockList' does not exist on typ... Remove this comment to see the full error message
+    // @ts-expect-error ts-migrate(2339) FIXME: Property 'mock' does not exist on type '(context: ... Remove this comment to see the full error message
     expect(prisonApi.getHouseblockList.mock.calls[0][2]).toStrictEqual([1, 2])
   })
 
@@ -296,20 +284,20 @@ describe('Houseblock list controller', () => {
     whereaboutsApi.getAgencyGroupLocations = jest.fn()
     // @ts-expect-error ts-migrate(2339) FIXME: Property 'getAgencyGroupLocations' does not exist ... Remove this comment to see the full error message
     whereaboutsApi.getAgencyGroupLocations.mockReturnValue([])
-    // @ts-expect-error ts-migrate(2339) FIXME: Property 'getHouseblockList' does not exist on typ... Remove this comment to see the full error message
+    // @ts-expect-error ts-migrate(2339) FIXME: Property 'mockImplementationOnce' does not exist o... Remove this comment to see the full error message
     prisonApi.getHouseblockList.mockImplementationOnce(() => createResponse())
 
     const response = await houseblockList({})
 
     // @ts-expect-error ts-migrate(2339) FIXME: Property 'getAgencyGroupLocations' does not exist ... Remove this comment to see the full error message
     expect(whereaboutsApi.getAgencyGroupLocations.mock.calls.length).toBe(1)
-    // @ts-expect-error ts-migrate(2339) FIXME: Property 'getHouseblockList' does not exist on typ... Remove this comment to see the full error message
+    // @ts-expect-error ts-migrate(2339) FIXME: Property 'mock' does not exist on type '(context: ... Remove this comment to see the full error message
     expect(prisonApi.getHouseblockList.mock.calls.length).toBe(0)
     expect(response).toStrictEqual([])
   })
 
   it('Should correctly choose main activity', async () => {
-    // @ts-expect-error ts-migrate(2339) FIXME: Property 'getHouseblockList' does not exist on typ... Remove this comment to see the full error message
+    // @ts-expect-error ts-migrate(2339) FIXME: Property 'mockImplementationOnce' does not exist o... Remove this comment to see the full error message
     prisonApi.getHouseblockList.mockImplementationOnce(() => createMultipleActivities())
 
     const response = await houseblockList({})
@@ -328,7 +316,7 @@ describe('Houseblock list controller', () => {
   })
 
   it('Should correctly choose between multiple unpaid', async () => {
-    // @ts-expect-error ts-migrate(2339) FIXME: Property 'getHouseblockList' does not exist on typ... Remove this comment to see the full error message
+    // @ts-expect-error ts-migrate(2339) FIXME: Property 'mockImplementationOnce' does not exist o... Remove this comment to see the full error message
     prisonApi.getHouseblockList.mockImplementationOnce(() => createMultipleUnpaid())
 
     const response = await houseblockList({})
@@ -346,42 +334,41 @@ describe('Houseblock list controller', () => {
   })
 
   it('Should handle no response data', async () => {
-    // @ts-expect-error ts-migrate(2339) FIXME: Property 'getHouseblockList' does not exist on typ... Remove this comment to see the full error message
+    // @ts-expect-error ts-migrate(2339) FIXME: Property 'mockImplementationOnce' does not exist o... Remove this comment to see the full error message
     prisonApi.getHouseblockList.mockImplementationOnce(() => [])
 
     const response = await houseblockList({})
 
-    // @ts-expect-error ts-migrate(2339) FIXME: Property 'getHouseblockList' does not exist on typ... Remove this comment to see the full error message
+    // @ts-expect-error ts-migrate(2339) FIXME: Property 'mock' does not exist on type '(context: ... Remove this comment to see the full error message
     expect(prisonApi.getHouseblockList.mock.calls.length).toBe(1)
     expect(response.length).toBe(0)
 
-    // @ts-expect-error ts-migrate(2339) FIXME: Property 'getSentenceData' does not exist on type ... Remove this comment to see the full error message
+    // @ts-expect-error ts-migrate(2339) FIXME: Property 'mock' does not exist on type '(context: ... Remove this comment to see the full error message
     expect(prisonApi.getSentenceData.mock.calls.length).toBe(0)
-    // @ts-expect-error ts-migrate(2339) FIXME: Property 'getCourtEvents' does not exist on type '... Remove this comment to see the full error message
+    // @ts-expect-error ts-migrate(2339) FIXME: Property 'mock' does not exist on type '(context: ... Remove this comment to see the full error message
     expect(prisonApi.getCourtEvents.mock.calls.length).toBe(0)
-    // @ts-expect-error ts-migrate(2339) FIXME: Property 'getExternalTransfers' does not exist on ... Remove this comment to see the full error message
+    // @ts-expect-error ts-migrate(2339) FIXME: Property 'mock' does not exist on type '(context: ... Remove this comment to see the full error message
     expect(prisonApi.getExternalTransfers.mock.calls.length).toBe(0)
   })
 
   it('should fetch sentence data for all offenders in a house block', async () => {
-    // @ts-expect-error ts-migrate(2339) FIXME: Property 'getHouseblockList' does not exist on typ... Remove this comment to see the full error message
+    // @ts-expect-error ts-migrate(2339) FIXME: Property 'mockImplementationOnce' does not exist o... Remove this comment to see the full error message
     prisonApi.getHouseblockList.mockImplementationOnce(() => createMultipleUnpaid())
 
     await houseblockList({})
 
     const offenderNumbers = createMultipleUnpaid().map((e) => e.offenderNo)
 
-    // @ts-expect-error ts-migrate(2339) FIXME: Property 'getSentenceData' does not exist on type ... Remove this comment to see the full error message
     expect(prisonApi.getSentenceData).toHaveBeenCalledWith({}, distinct(offenderNumbers))
   })
 
   it('should return multiple scheduled transfers along with status descriptions', async () => {
     const today = moment()
 
-    // @ts-expect-error ts-migrate(2339) FIXME: Property 'getHouseblockList' does not exist on typ... Remove this comment to see the full error message
+    // @ts-expect-error ts-migrate(2339) FIXME: Property 'mockImplementationOnce' does not exist o... Remove this comment to see the full error message
     prisonApi.getHouseblockList.mockImplementationOnce(() => createMultipleUnpaid())
 
-    // @ts-expect-error ts-migrate(2339) FIXME: Property 'getExternalTransfers' does not exist on ... Remove this comment to see the full error message
+    // @ts-expect-error ts-migrate(2339) FIXME: Property 'mockImplementationOnce' does not exist o... Remove this comment to see the full error message
     prisonApi.getExternalTransfers.mockImplementationOnce(() => [
       {
         firstName: 'BYSJANHKUMAR',
@@ -437,7 +424,7 @@ describe('Houseblock list controller', () => {
 
   describe('Attendance information', () => {
     it('should call getAttendance with correct parameters', async () => {
-      // @ts-expect-error ts-migrate(2339) FIXME: Property 'getHouseblockList' does not exist on typ... Remove this comment to see the full error message
+      // @ts-expect-error ts-migrate(2339) FIXME: Property 'mockImplementationOnce' does not exist o... Remove this comment to see the full error message
       prisonApi.getHouseblockList.mockImplementationOnce(() => createResponse())
 
       await houseblockList({}, 'LEI', 'Houseblock 1', '15/10/2017', 'PM')
@@ -450,7 +437,7 @@ describe('Houseblock list controller', () => {
     })
 
     it('should load attendance details for a list of booking ids', async () => {
-      // @ts-expect-error ts-migrate(2339) FIXME: Property 'getHouseblockList' does not exist on typ... Remove this comment to see the full error message
+      // @ts-expect-error ts-migrate(2339) FIXME: Property 'mockImplementationOnce' does not exist o... Remove this comment to see the full error message
       prisonApi.getHouseblockList.mockImplementationOnce(() => [
         {
           bookingId: 1,
@@ -675,7 +662,7 @@ describe('Houseblock list controller', () => {
     })
 
     it('should not call getAttendanceForBookings if there are no offenders', async () => {
-      // @ts-expect-error ts-migrate(2339) FIXME: Property 'getHouseblockList' does not exist on typ... Remove this comment to see the full error message
+      // @ts-expect-error ts-migrate(2339) FIXME: Property 'mockImplementationOnce' does not exist o... Remove this comment to see the full error message
       prisonApi.getHouseblockList.mockImplementationOnce(() => [])
       await houseblockList({}, 'LEI', 'Houseblock 1', '15/10/2017', 'PM')
 
@@ -684,7 +671,7 @@ describe('Houseblock list controller', () => {
     })
 
     it('should only request attendance for prison that have been enabled', async () => {
-      // @ts-expect-error ts-migrate(2339) FIXME: Property 'getHouseblockList' does not exist on typ... Remove this comment to see the full error message
+      // @ts-expect-error ts-migrate(2339) FIXME: Property 'mockReturnValue' does not exist on type ... Remove this comment to see the full error message
       prisonApi.getHouseblockList.mockReturnValue([
         {
           bookingId: 1,
@@ -703,14 +690,16 @@ describe('Houseblock list controller', () => {
       ])
       // @ts-expect-error ts-migrate(2339) FIXME: Property 'getAttendanceForBookings' does not exist... Remove this comment to see the full error message
       whereaboutsApi.getAttendanceForBookings.mockReturnValue([])
-      // @ts-expect-error ts-migrate(2339) FIXME: Property 'getHouseblockList' does not exist on typ... Remove this comment to see the full error message
+      // @ts-expect-error ts-migrate(2554) FIXME: Expected 2 arguments, but got 3.
       const { getHouseblockList: service } = factory(prisonApi, whereaboutsApi, {
         app: {
           production: true,
         },
       })
 
+      // @ts-expect-error ts-migrate(2554) FIXME: Expected 6 arguments, but got 5.
       await service({}, 'LEI', 'Houseblock 1', '15/10/2017', 'PM')
+      // @ts-expect-error ts-migrate(2554) FIXME: Expected 6 arguments, but got 5.
       await service({}, 'MDI', 'Houseblock 1', '15/10/2017', 'PM')
 
       // @ts-expect-error ts-migrate(2339) FIXME: Property 'getAbsenceReasons' does not exist on typ... Remove this comment to see the full error message
@@ -720,7 +709,7 @@ describe('Houseblock list controller', () => {
     })
 
     it('should enable attendance for everyone in dev', async () => {
-      // @ts-expect-error ts-migrate(2339) FIXME: Property 'getHouseblockList' does not exist on typ... Remove this comment to see the full error message
+      // @ts-expect-error ts-migrate(2339) FIXME: Property 'mockReturnValue' does not exist on type ... Remove this comment to see the full error message
       prisonApi.getHouseblockList.mockReturnValue([
         {
           bookingId: 1,
@@ -739,14 +728,16 @@ describe('Houseblock list controller', () => {
       ])
       // @ts-expect-error ts-migrate(2339) FIXME: Property 'getAttendanceForBookings' does not exist... Remove this comment to see the full error message
       whereaboutsApi.getAttendanceForBookings.mockReturnValue([])
-      // @ts-expect-error ts-migrate(2339) FIXME: Property 'getHouseblockList' does not exist on typ... Remove this comment to see the full error message
+      // @ts-expect-error ts-migrate(2554) FIXME: Expected 2 arguments, but got 3.
       const { getHouseblockList: service } = factory(prisonApi, whereaboutsApi, {
         app: {
           production: false,
         },
       })
 
+      // @ts-expect-error ts-migrate(2554) FIXME: Expected 6 arguments, but got 5.
       await service({}, 'LEI', 'Houseblock 1', '15/10/2017', 'PM')
+      // @ts-expect-error ts-migrate(2554) FIXME: Expected 6 arguments, but got 5.
       await service({}, 'MDI', 'Houseblock 1', '15/10/2017', 'PM')
 
       // @ts-expect-error ts-migrate(2339) FIXME: Property 'getAbsenceReasons' does not exist on typ... Remove this comment to see the full error message
@@ -850,7 +841,7 @@ describe('Houseblock list controller', () => {
     ]
 
     it('should return only offenders leaving the wing', async () => {
-      // @ts-expect-error ts-migrate(2339) FIXME: Property 'getHouseblockList' does not exist on typ... Remove this comment to see the full error message
+      // @ts-expect-error ts-migrate(2339) FIXME: Property 'mockImplementationOnce' does not exist o... Remove this comment to see the full error message
       prisonApi.getHouseblockList.mockImplementationOnce(() => responseWithOneLeavingWing)
 
       const response = await houseblockList({}, 'LEI', 'Houseblock 1', '15/10/2017', 'ED', 'leaving')
@@ -915,7 +906,7 @@ describe('Houseblock list controller', () => {
     })
 
     it('should return only offenders staying on the wing', async () => {
-      // @ts-expect-error ts-migrate(2339) FIXME: Property 'getHouseblockList' does not exist on typ... Remove this comment to see the full error message
+      // @ts-expect-error ts-migrate(2339) FIXME: Property 'mockImplementationOnce' does not exist o... Remove this comment to see the full error message
       prisonApi.getHouseblockList.mockImplementationOnce(() => responseWithOneLeavingWing)
 
       const response = await houseblockList({}, 'LEI', 'Houseblock 1', '15/10/2017', 'ED', 'staying')

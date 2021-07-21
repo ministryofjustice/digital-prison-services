@@ -1,4 +1,4 @@
-const noCellAllocated = require('../../controllers/establishmentRoll/noCellAllocated')
+import noCellAllocated from '../../controllers/establishmentRoll/noCellAllocated'
 
 describe('No cell allocated', () => {
   const prisonApi = {}

@@ -1,61 +1,54 @@
+import express from 'express'
 import whereaboutsHomepage from './controllers/whereabouts/whereaboutsHomepage'
 
-const express = require('express')
-const { logError } = require('./logError')
-
-const { alertFactory } = require('./controllers/alert')
-const { caseNoteFactory } = require('./controllers/caseNote')
-const { probationDocumentsFactory } = require('./controllers/probationDocuments')
-const { downloadProbationDocumentFactory } = require('./controllers/downloadProbationDocument')
-const { attendanceStatisticsFactory } = require('./controllers/attendance/attendanceStatistics')
-const referenceCodesService = require('./controllers/reference-codes-service')
-const contentController = require('./controllers/content')
-const selectResidentialLocationController = require('./controllers/selectResidentialLocation')
-
-const bulkAppointmentsAddDetailsRouter = require('./routes/appointments/bulkAppointmentsAddDetailsRouter')
-const bulkAppointmentsConfirmRouter = require('./routes/appointments/bulkAppointmentsConfirmRouter')
-const bulkAppointmentsInvalidNumbersRouter = require('./routes/appointments/bulkAppointmentsInvalidNumbersRouter')
-const bulkAppointmentsAddedRouter = require('./routes/appointments/bulkAppointmentsAddedRouter')
-const bulkAppointmentsSlipsRouter = require('./routes/appointments/bulkAppointmentsSlipsRouter')
-const bulkAppointmentsUploadRouter = require('./routes/appointments/bulkAppointmentsUploadRouter')
-const bulkAppointmentsClashesRouter = require('./routes/appointments/bulkAppointmentsClashesRouter')
-const changeCaseloadRouter = require('./routes/changeCaseloadRouter')
-const addAppointmentRouter = require('./routes/appointments/addAppointmentRouter')
-const prepostAppointmentRouter = require('./routes/appointments/prepostAppointmentsRouter')
-const viewAppointments = require('./controllers/appointments/viewAppointments')
-const confirmAppointmentRouter = require('./routes/appointments/confirmAppointmentRouter')
-const prisonerProfileRouter = require('./routes/prisonerProfileRouter')
-const retentionReasonsRouter = require('./routes/retentionReasonsRouter')
-const attendanceChangeRouter = require('./routes/attendanceChangesRouter')
-const covidRouter = require('./routes/covidRouter')
-const prisonerSearchRouter = require('./routes/prisonerSearchRouter')
-const cellMoveRouter = require('./routes/cellMoveRouter')
-const establishmentRollRouter = require('./routes/establishmentRollRouter')
-const changeSomeonesCellRouter = require('./routes/changeSomeonesCellRouter')
-const globalSearchRouter = require('./routes/globalSearchRouter')
-
-const amendCaseNoteRouter = require('./routes/caseNoteAmendmentRouter')
-const deleteCaseNoteRouter = require('./routes/caseNoteDeletionRouter')
-
-const selectActivityLocation = require('./controllers/selectActivityLocation')
-
-const contentfulServiceFactory = require('./services/contentfulService')
-const notificationCookie = require('./services/notificationCookie')
-const notificationDismiss = require('./controllers/notificationDismiss')
-const contentfulClient = require('./contentfulClient')
-const notificationBar = require('./middleware/notificationHandler')
-
-const systemOauthClient = require('./api/systemOauthClient')
-const { notifyClient } = require('./shared/notifyClient')
-
-const { raiseAnalyticsEvent } = require('./raiseAnalyticsEvent')
-const backToStart = require('./controllers/backToStart')
-const permit = require('./controllers/permit')
-const appointmentDetailsServiceFactory = require('./services/appointmentDetailsService')
-const appointmentDetails = require('./controllers/appointmentDetails')
-const appointmentConfirmDeletion = require('./controllers/appointmentConfirmDeletion')
-const appointmentDeleteRecurringBookings = require('./controllers/appointmentDeleteRecurringBookings')
-const appointmentDeleted = require('./controllers/appointmentDeleted')
+import { logError } from './logError'
+import { alertFactory } from './controllers/alert'
+import { caseNoteFactory } from './controllers/caseNote'
+import { probationDocumentsFactory } from './controllers/probationDocuments'
+import { downloadProbationDocumentFactory } from './controllers/downloadProbationDocument'
+import { attendanceStatisticsFactory } from './controllers/attendance/attendanceStatistics'
+import referenceCodesService from './controllers/reference-codes-service'
+import contentController from './controllers/content'
+import selectResidentialLocationController from './controllers/selectResidentialLocation'
+import bulkAppointmentsAddDetailsRouter from './routes/appointments/bulkAppointmentsAddDetailsRouter'
+import bulkAppointmentsConfirmRouter from './routes/appointments/bulkAppointmentsConfirmRouter'
+import bulkAppointmentsInvalidNumbersRouter from './routes/appointments/bulkAppointmentsInvalidNumbersRouter'
+import bulkAppointmentsAddedRouter from './routes/appointments/bulkAppointmentsAddedRouter'
+import bulkAppointmentsSlipsRouter from './routes/appointments/bulkAppointmentsSlipsRouter'
+import bulkAppointmentsUploadRouter from './routes/appointments/bulkAppointmentsUploadRouter'
+import bulkAppointmentsClashesRouter from './routes/appointments/bulkAppointmentsClashesRouter'
+import changeCaseloadRouter from './routes/changeCaseloadRouter'
+import addAppointmentRouter from './routes/appointments/addAppointmentRouter'
+import prepostAppointmentRouter from './routes/appointments/prepostAppointmentsRouter'
+import viewAppointments from './controllers/appointments/viewAppointments'
+import confirmAppointmentRouter from './routes/appointments/confirmAppointmentRouter'
+import prisonerProfileRouter from './routes/prisonerProfileRouter'
+import retentionReasonsRouter from './routes/retentionReasonsRouter'
+import attendanceChangeRouter from './routes/attendanceChangesRouter'
+import covidRouter from './routes/covidRouter'
+import prisonerSearchRouter from './routes/prisonerSearchRouter'
+import cellMoveRouter from './routes/cellMoveRouter'
+import establishmentRollRouter from './routes/establishmentRollRouter'
+import changeSomeonesCellRouter from './routes/changeSomeonesCellRouter'
+import globalSearchRouter from './routes/globalSearchRouter'
+import amendCaseNoteRouter from './routes/caseNoteAmendmentRouter'
+import deleteCaseNoteRouter from './routes/caseNoteDeletionRouter'
+import selectActivityLocation from './controllers/selectActivityLocation'
+import contentfulServiceFactory from './services/contentfulService'
+import notificationCookie from './services/notificationCookie'
+import notificationDismiss from './controllers/notificationDismiss'
+import contentfulClient from './contentfulClient'
+import notificationBar from './middleware/notificationHandler'
+import systemOauthClient from './api/systemOauthClient'
+import { notifyClient } from './shared/notifyClient'
+import { raiseAnalyticsEvent } from './raiseAnalyticsEvent'
+import backToStart from './controllers/backToStart'
+import permit from './controllers/permit'
+import appointmentDetailsServiceFactory from './services/appointmentDetailsService'
+import appointmentDetails from './controllers/appointmentDetails'
+import appointmentConfirmDeletion from './controllers/appointmentConfirmDeletion'
+import appointmentDeleteRecurringBookings from './controllers/appointmentDeleteRecurringBookings'
+import appointmentDeleted from './controllers/appointmentDeleted'
 
 const router = express.Router()
 
@@ -90,7 +83,6 @@ const setup = ({
     notificationBar({
       contentfulService: contentfulServiceFactory({ notificationCookie, contentfulClient }),
       logError,
-      notificationCookie,
     })
   )
 
@@ -111,16 +103,16 @@ const setup = ({
   router.post('/prisoner/:offenderNo/add-case-note', caseNoteFactory(prisonApi, caseNotesApi).handleCreateCaseNoteForm)
   router.get(
     '/manage-prisoner-whereabouts/attendance-reason-statistics',
-    attendanceStatisticsFactory(oauthApi, prisonApi, whereaboutsApi, logError).attendanceStatistics
+    attendanceStatisticsFactory(oauthApi, prisonApi, whereaboutsApi).attendanceStatistics
   )
   router.get(
     '/manage-prisoner-whereabouts/attendance-reason-statistics/reason/:reason',
-    attendanceStatisticsFactory(oauthApi, prisonApi, whereaboutsApi, logError).attendanceStatisticsOffendersList
+    attendanceStatisticsFactory(oauthApi, prisonApi, whereaboutsApi).attendanceStatisticsOffendersList
   )
 
   router.get(
     '/manage-prisoner-whereabouts/attendance-reason-statistics/suspended',
-    attendanceStatisticsFactory(oauthApi, prisonApi, whereaboutsApi, logError).attendanceStatisticsSuspendedList
+    attendanceStatisticsFactory(oauthApi, prisonApi, whereaboutsApi).attendanceStatisticsSuspendedList
   )
 
   router.get(
@@ -171,7 +163,7 @@ const setup = ({
     prepostAppointmentRouter({ prisonApi, logError, oauthApi, whereaboutsApi, notifyClient, raiseAnalyticsEvent })
   )
 
-  router.use('/view-all-appointments', viewAppointments({ prisonApi, whereaboutsApi, oauthApi, logError }))
+  router.use('/view-all-appointments', viewAppointments({ prisonApi, whereaboutsApi, logError }))
 
   router.use('/offenders/:offenderNo/confirm-appointment', confirmAppointmentRouter({ prisonApi, logError }))
 
@@ -233,7 +225,7 @@ const setup = ({
 
   router.use('/current-covid-units', covidRouter(prisonApi, logError))
 
-  router.use('/attendance-changes', attendanceChangeRouter({ prisonApi, whereaboutsApi, oauthApi, logError }))
+  router.use('/attendance-changes', attendanceChangeRouter({ prisonApi, whereaboutsApi, oauthApi }))
 
   router.use('/prisoner-search', prisonerSearchRouter({ prisonApi, logError }))
 
@@ -249,7 +241,7 @@ const setup = ({
 
   router.get(
     ['/content', '/content/:path'],
-    contentController({ contentfulService: contentfulServiceFactory({ contentfulClient }) })
+    contentController({ contentfulService: contentfulServiceFactory({ contentfulClient, notificationCookie }) })
   )
 
   router.use('/global-search', globalSearchRouter({ offenderSearchApi, oauthApi, logError }))
@@ -299,4 +291,4 @@ const setup = ({
   return router
 }
 
-module.exports = (dependencies) => setup(dependencies)
+export default (dependencies) => setup(dependencies)

@@ -1,7 +1,5 @@
-// @ts-expect-error ts-migrate(2451) FIXME: Cannot redeclare block-scoped variable 'moment'.
-const moment = require('moment')
-
-const contentfulServiceFactory = require('../services/contentfulService')
+import moment from 'moment'
+import contentfulServiceFactory from '../services/contentfulService'
 
 const contentfulPages = {
   items: [

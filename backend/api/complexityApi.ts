@@ -1,7 +1,6 @@
-// @ts-expect-error ts-migrate(2451) FIXME: Cannot redeclare block-scoped variable 'contextPro... Remove this comment to see the full error message
-const contextProperties = require('../contextProperties')
+import contextProperties from '../contextProperties'
 
-const complexityApiFactory = (client) => {
+export const complexityApiFactory = (client) => {
   const processResponse = (context) => (response) => {
     contextProperties.setResponsePagination(context, response.headers)
     return response.body
@@ -17,6 +16,6 @@ const complexityApiFactory = (client) => {
   }
 }
 
-module.exports = {
+export default {
   complexityApiFactory,
 }

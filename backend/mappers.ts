@@ -1,10 +1,8 @@
-// @ts-expect-error ts-migrate(2451) FIXME: Cannot redeclare block-scoped variable 'pascalToSt... Remove this comment to see the full error message
-const { pascalToString } = require('./utils')
+import { pascalToString } from './utils'
 
-const warning = 'Incentive Level warning'
+export const warning = 'Incentive Level warning'
 
-// @ts-expect-error ts-migrate(2451) FIXME: Cannot redeclare block-scoped variable 'absentReas... Remove this comment to see the full error message
-const absentReasonMapper = (absenceReasons) => (absentReason) => {
+export const absentReasonMapper = (absenceReasons) => (absentReason) => {
   const { triggersIEPWarning } = absenceReasons
 
   const absentReasonMap = {
@@ -25,14 +23,13 @@ const absentReasonMapper = (absenceReasons) => (absentReason) => {
   )
 }
 
-// @ts-expect-error ts-migrate(2451) FIXME: Cannot redeclare block-scoped variable 'stripWarni... Remove this comment to see the full error message
-const stripWarning = (reason) =>
+export const stripWarning = (reason) =>
   (reason &&
     reason.toUpperCase().indexOf(warning.toUpperCase()) > 0 &&
     ` ${reason.replace(warning.toLowerCase(), '').trim()}`.trimStart()) ||
   reason
 
-module.exports = {
+export default {
   absentReasonMapper,
   warning,
   stripWarning,

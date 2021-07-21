@@ -1,6 +1,6 @@
 import { makeError } from './helpers'
 
-const amendCaseNoteController = require('../controllers/amendmentCaseNote')
+import amendCaseNoteController from '../controllers/amendmentCaseNote'
 
 describe('Amendment case note', () => {
   const caseNotesApi = {}

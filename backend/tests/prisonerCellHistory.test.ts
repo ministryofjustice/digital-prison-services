@@ -1,4 +1,4 @@
-const prisonerCellHistory = require('../controllers/prisonerProfile/prisonerCellHistory')
+import prisonerCellHistory from '../controllers/prisonerProfile/prisonerCellHistory'
 
 describe('Prisoner cell history', () => {
   const offenderNo = 'ABC123'
@@ -97,6 +97,7 @@ describe('Prisoner cell history', () => {
     // @ts-expect-error ts-migrate(2339) FIXME: Property 'getStaffDetails' does not exist on type ... Remove this comment to see the full error message
     prisonApi.getStaffDetails = jest.fn()
 
+    // @ts-expect-error ts-migrate(2345) FIXME: Argument of type '{ oauthApi: {}; prisonApi: {}; l... Remove this comment to see the full error message
     controller = prisonerCellHistory({ oauthApi, prisonApi, logError })
 
     jest.spyOn(Date, 'now').mockImplementation(() => 1603988100000) // Friday, 29 Oct 2020 16:15 UTC (avoid BST)

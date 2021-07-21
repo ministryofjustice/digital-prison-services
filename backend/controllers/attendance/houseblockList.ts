@@ -1,14 +1,8 @@
-/* eslint-disable no-lonely-if */
-// @ts-expect-error ts-migrate(2451) FIXME: Cannot redeclare block-scoped variable 'moment'.
-const moment = require('moment')
-// @ts-expect-error ts-migrate(2451) FIXME: Cannot redeclare block-scoped variable 'getExterna... Remove this comment to see the full error message
-const getExternalEventsForOffenders = require('../../shared/getExternalEventsForOffenders')
-// @ts-expect-error ts-migrate(2451) FIXME: Cannot redeclare block-scoped variable 'log'.
-const log = require('../../log')
-// @ts-expect-error ts-migrate(2451) FIXME: Cannot redeclare block-scoped variable 'switchDate... Remove this comment to see the full error message
-const { switchDateFormat, distinct } = require('../../utils')
-// @ts-expect-error ts-migrate(2451) FIXME: Cannot redeclare block-scoped variable 'absentReas... Remove this comment to see the full error message
-const { absentReasonMapper } = require('../../mappers')
+import moment from 'moment'
+import getExternalEventsForOffenders from '../../shared/getExternalEventsForOffenders'
+import log from '../../log'
+import { switchDateFormat, distinct } from '../../utils'
+import { absentReasonMapper } from '../../mappers'
 
 function safeTimeCompare(a, b) {
   if (a && b) return moment(b).isBefore(a)
@@ -62,7 +56,7 @@ const addToActivities = (offender, activity) => ({
   stayingOnWing: isStayingOnWing([...offender.activities, activity]),
 })
 
-const getHouseblockListFactory = (prisonApi, whereaboutsApi) => {
+export const getHouseblockListFactory = (prisonApi, whereaboutsApi) => {
   const getHouseblockList = async (context, agencyId, groupName, date, timeSlot, wingStatus) => {
     const locations = await whereaboutsApi.getAgencyGroupLocations(context, agencyId, groupName)
     if (locations.length === 0) {
@@ -174,4 +168,4 @@ const getHouseblockListFactory = (prisonApi, whereaboutsApi) => {
   }
 }
 
-module.exports = { getHouseblockListFactory }
+export default { getHouseblockListFactory }

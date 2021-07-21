@@ -1,4 +1,4 @@
-module.exports = (event) => {
+export default (event) => {
   const { startTime, endTime, eventStatus, eventSubType, eventSubTypeDesc, eventSourceDesc } = event
   const comment = eventSubType === 'PA' ? null : eventSourceDesc
 

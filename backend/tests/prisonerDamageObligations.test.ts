@@ -1,4 +1,4 @@
-const prisonerDamageObligations = require('../controllers/prisonerProfile/prisonerFinances/prisonerDamageObligations')
+import prisonerDamageObligations from '../controllers/prisonerProfile/prisonerFinances/prisonerDamageObligations'
 
 describe('Prisoner damage obligations', () => {
   const offenderNo = 'ABC123'

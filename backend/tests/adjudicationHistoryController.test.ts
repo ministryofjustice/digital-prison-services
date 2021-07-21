@@ -1,4 +1,4 @@
-const adjudicationsHistoryController = require('../controllers/prisonerProfile/adjudicationHistory')
+import adjudicationsHistoryController from '../controllers/prisonerProfile/adjudicationHistory'
 
 const offenderNo = 'A12345'
 
@@ -66,6 +66,7 @@ describe('Adjudications history controller', () => {
     // @ts-expect-error ts-migrate(2339) FIXME: Property 'render' does not exist on type '{ locals... Remove this comment to see the full error message
     res.render = jest.fn()
 
+    // @ts-expect-error ts-migrate(2345) FIXME: Argument of type '{ adjudicationHistoryService: {}... Remove this comment to see the full error message
     controller = adjudicationsHistoryController({ adjudicationHistoryService, paginationService, prisonApi, logError })
 
     req = { originalUrl: 'http://localhost', params: { offenderNo }, get: () => {} }

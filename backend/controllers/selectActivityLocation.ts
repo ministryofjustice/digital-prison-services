@@ -1,10 +1,7 @@
-// @ts-expect-error ts-migrate(2451) FIXME: Cannot redeclare block-scoped variable 'moment'.
-const moment = require('moment')
+import moment from 'moment'
+import { switchDateFormat, getCurrentPeriod } from '../utils'
 
-// @ts-expect-error ts-migrate(2451) FIXME: Cannot redeclare block-scoped variable 'switchDate... Remove this comment to see the full error message
-const { switchDateFormat, getCurrentPeriod } = require('../utils')
-
-module.exports = ({ prisonApi }) => {
+export default ({ prisonApi }) => {
   const index = async (req, res) => {
     try {
       const {

@@ -1,5 +1,4 @@
-// @ts-expect-error ts-migrate(2451) FIXME: Cannot redeclare block-scoped variable 'bulkAppoin... Remove this comment to see the full error message
-const bulkAppointmentsInvalidNumbersFactory = () => {
+export const bulkAppointmentsInvalidNumbersFactory = () => {
   const index = async (req, res) => {
     const { prisonersNotFound, prisonersDuplicated } = req.session.data
 
@@ -8,6 +7,6 @@ const bulkAppointmentsInvalidNumbersFactory = () => {
   return { index }
 }
 
-module.exports = {
+export default {
   bulkAppointmentsInvalidNumbersFactory,
 }

@@ -1,7 +1,6 @@
-// @ts-expect-error ts-migrate(2451) FIXME: Cannot redeclare block-scoped variable 'moment'.
-const moment = require('moment')
-const { documentToHtmlString } = require('@contentful/rich-text-html-renderer')
-const { BLOCKS, MARKS, INLINES } = require('@contentful/rich-text-types')
+import moment from 'moment'
+import { documentToHtmlString } from '@contentful/rich-text-html-renderer'
+import { BLOCKS, MARKS, INLINES } from '@contentful/rich-text-types'
 
 const options = {
   renderMark: {
@@ -16,7 +15,7 @@ const options = {
   },
 }
 
-module.exports = ({ contentfulClient, notificationCookie }) => {
+export default ({ contentfulClient, notificationCookie }) => {
   const getMostRecentNotificationAsHtml = async (req) => {
     const response = await contentfulClient.getEntries({
       content_type: 'notification',

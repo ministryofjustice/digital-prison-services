@@ -1,4 +1,4 @@
-module.exports = ({ physicalMarks }) =>
+export default ({ physicalMarks }) =>
   physicalMarks &&
   physicalMarks.map((physicalMark) => ({
     label: physicalMark.type,

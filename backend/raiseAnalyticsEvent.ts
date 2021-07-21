@@ -1,9 +1,7 @@
-const ua = require('universal-analytics')
-// @ts-expect-error ts-migrate(2451) FIXME: Cannot redeclare block-scoped variable 'config'.
-const config = require('./config')
+import ua from 'universal-analytics'
+import config from './config'
 
-// @ts-expect-error ts-migrate(2451) FIXME: Cannot redeclare block-scoped variable 'raiseAnaly... Remove this comment to see the full error message
-const raiseAnalyticsEvent = (category, action, label, value) => {
+export const raiseAnalyticsEvent = (category, action, label, value?) => {
   if (!config.analytics.googleAnalyticsId) return Promise.resolve()
   const ga = ua(config.analytics.googleAnalyticsId)
   const data = {
@@ -15,6 +13,6 @@ const raiseAnalyticsEvent = (category, action, label, value) => {
   return ga.event(data).send()
 }
 
-module.exports = {
+export default {
   raiseAnalyticsEvent,
 }

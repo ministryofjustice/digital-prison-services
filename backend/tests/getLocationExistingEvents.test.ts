@@ -1,4 +1,4 @@
-const getLocationExistingEventsFactory = require('../controllers/attendance/getLocationExistingEvents')
+import getLocationExistingEventsFactory from '../controllers/attendance/getLocationExistingEvents'
 
 describe('Get location existing events', () => {
   const prisonApi = {}

@@ -1,5 +1,4 @@
-// @ts-expect-error ts-migrate(2451) FIXME: Cannot redeclare block-scoped variable 'communityA... Remove this comment to see the full error message
-const communityApiFactory = (client, apiPrefix) => {
+export const communityApiFactory = (client, apiPrefix) => {
   const processResponse = () => (response) => response.body
 
   const get = (context, url) => client.get(context, url).then(processResponse())
@@ -24,6 +23,6 @@ const communityApiFactory = (client, apiPrefix) => {
   }
 }
 
-module.exports = {
+export default {
   communityApiFactory,
 }

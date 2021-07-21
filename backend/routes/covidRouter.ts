@@ -1,26 +1,28 @@
-// @ts-expect-error ts-migrate(2451) FIXME: Cannot redeclare block-scoped variable 'express'.
-const express = require('express')
-const { covidServiceFactory } = require('../services/covidService')
-const covidDashboardController = require('../controllers/covid/covidDashboardController')
-const reverseCohortingUnitController = require('../controllers/covid/reverseCohortingUnitController')
-const protectiveIsolationUnitController = require('../controllers/covid/protectiveIsolationUnitController')
-// @ts-expect-error ts-migrate(2451) FIXME: Cannot redeclare block-scoped variable 'shieldingU... Remove this comment to see the full error message
-const shieldingUnitController = require('../controllers/covid/shieldingUnitController')
-const refusingToShieldController = require('../controllers/covid/refusingToShieldController')
-// @ts-expect-error ts-migrate(2451) FIXME: Cannot redeclare block-scoped variable 'notInUnitC... Remove this comment to see the full error message
-const notInUnitController = require('../controllers/covid/notInUnitController')
+import express from 'express'
+import { covidServiceFactory } from '../services/covidService'
+import covidDashboardController from '../controllers/covid/covidDashboardController'
+import reverseCohortingUnitController from '../controllers/covid/reverseCohortingUnitController'
+import protectiveIsolationUnitController from '../controllers/covid/protectiveIsolationUnitController'
+import shieldingUnitController from '../controllers/covid/shieldingUnitController'
+import refusingToShieldController from '../controllers/covid/refusingToShieldController'
+import notInUnitController from '../controllers/covid/notInUnitController'
 
-// @ts-expect-error ts-migrate(2451) FIXME: Cannot redeclare block-scoped variable 'router'.
 const router = express.Router({ mergeParams: true })
 
-module.exports = (prisonApi, logError) => {
+export default (prisonApi, logError) => {
   const covidService = covidServiceFactory(prisonApi)
 
+  // @ts-expect-error ts-migrate(2345) FIXME: Argument of type '{ covidService: { getCount(res: ... Remove this comment to see the full error message
   router.get('/', covidDashboardController({ covidService, logError }))
+  // @ts-expect-error ts-migrate(2345) FIXME: Argument of type '{ covidService: { getCount(res: ... Remove this comment to see the full error message
   router.get('/reverse-cohorting-unit', reverseCohortingUnitController({ covidService, logError }))
+  // @ts-expect-error ts-migrate(2345) FIXME: Argument of type '{ covidService: { getCount(res: ... Remove this comment to see the full error message
   router.get('/protective-isolation-unit', protectiveIsolationUnitController({ covidService, logError }))
+  // @ts-expect-error ts-migrate(2345) FIXME: Argument of type '{ covidService: { getCount(res: ... Remove this comment to see the full error message
   router.get('/shielding-unit', shieldingUnitController({ covidService, logError }))
+  // @ts-expect-error ts-migrate(2345) FIXME: Argument of type '{ covidService: { getCount(res: ... Remove this comment to see the full error message
   router.get('/refusing-to-shield', refusingToShieldController({ covidService, logError }))
+  // @ts-expect-error ts-migrate(2345) FIXME: Argument of type '{ covidService: { getCount(res: ... Remove this comment to see the full error message
   router.get('/not-in-unit', notInUnitController({ covidService, logError }))
   return router
 }

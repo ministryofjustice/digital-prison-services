@@ -1,9 +1,7 @@
-// @ts-expect-error ts-migrate(2451) FIXME: Cannot redeclare block-scoped variable 'putLastNam... Remove this comment to see the full error message
-const { putLastNameFirst, formatName } = require('../../utils')
-// @ts-expect-error ts-migrate(2451) FIXME: Cannot redeclare block-scoped variable 'raiseAnaly... Remove this comment to see the full error message
-const { raiseAnalyticsEvent } = require('../../raiseAnalyticsEvent')
+import { putLastNameFirst, formatName } from '../../utils'
+import { raiseAnalyticsEvent } from '../../raiseAnalyticsEvent'
 
-module.exports = ({ prisonApi }) => {
+export default ({ prisonApi }) => {
   const renderTemplate = async (req, res, pageData) => {
     const { offenderNo } = req.params
     const { errors, formValues = {} } = pageData || {}
@@ -73,7 +71,6 @@ module.exports = ({ prisonApi }) => {
         comment: reason,
       })
 
-      // @ts-expect-error ts-migrate(2554) FIXME: Expected 4 arguments, but got 3.
       raiseAnalyticsEvent(
         'Update Incentive level',
         `Level changed from ${iepLevel} to ${newIepLevel} at ${agencyId}`,

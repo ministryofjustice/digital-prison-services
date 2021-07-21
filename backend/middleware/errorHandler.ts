@@ -1,8 +1,6 @@
-// @ts-expect-error ts-migrate(2451) FIXME: Cannot redeclare block-scoped variable 'isXHRReque... Remove this comment to see the full error message
-const { isXHRRequest } = require('../utils')
+import { isXHRRequest } from '../utils'
 
-module.exports =
-  ({ logError }) =>
+export default ({ logError }) =>
   (error, req, res, next) => {
     const status = error?.response?.status || 500
 

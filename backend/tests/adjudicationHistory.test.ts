@@ -1,12 +1,13 @@
+import adjudicationHistoryService from '../services/adjudicationHistory'
+
 Reflect.deleteProperty(process.env, 'APPINSIGHTS_INSTRUMENTATIONKEY')
-// @ts-expect-error ts-migrate(2451) FIXME: Cannot redeclare block-scoped variable 'prisonApi'... Remove this comment to see the full error message
 const prisonApi = {}
 
 jest.mock('shortid', () => ({
   generate: () => '123',
 }))
 
-const adjudicationHistory = require('../services/adjudicationHistory')(prisonApi)
+const adjudicationHistory = adjudicationHistoryService(prisonApi)
 
 beforeEach(() => {
   // @ts-expect-error ts-migrate(2339) FIXME: Property 'getAdjudicationDetails' does not exist o... Remove this comment to see the full error message
@@ -247,6 +248,7 @@ describe('Adjudication History Service', () => {
     // @ts-expect-error ts-migrate(2339) FIXME: Property 'getAdjudicationFindingTypes' does not ex... Remove this comment to see the full error message
     prisonApi.getAdjudicationFindingTypes.mockReturnValue(findings)
 
+    // @ts-expect-error ts-migrate(2554) FIXME: Expected 5 arguments, but got 3.
     const response = await adjudicationHistory.getAdjudications({}, 'OFF-1', {})
     expect(response).toEqual({
       agencies: [],
@@ -283,6 +285,7 @@ describe('Adjudication History Service', () => {
     // @ts-expect-error ts-migrate(2339) FIXME: Property 'getAdjudicationFindingTypes' does not ex... Remove this comment to see the full error message
     prisonApi.getAdjudicationFindingTypes.mockReturnValue(findings)
 
+    // @ts-expect-error ts-migrate(2554) FIXME: Expected 5 arguments, but got 3.
     const response = await adjudicationHistory.getAdjudications({}, 'OFF-1', {})
     expect(response).toEqual(expectedResult)
   })
@@ -368,6 +371,7 @@ describe('Adjudication History Service', () => {
 
     const context = { anotherAttribute: 1, requestHeaders: { pageOffset: 1, pageLimit: 20 } }
 
+    // @ts-expect-error ts-migrate(2554) FIXME: Expected 5 arguments, but got 3.
     const response = await adjudicationHistory.getAdjudications(context, 'OFF-1', {})
 
     expect(response).toEqual(expectedResult)

@@ -1,5 +1,4 @@
-// @ts-expect-error ts-migrate(2451) FIXME: Cannot redeclare block-scoped variable 'changeCase... Remove this comment to see the full error message
-const { changeCaseloadFactory } = require('../controllers/changeCaseload')
+import { changeCaseloadFactory } from '../controllers/changeCaseload'
 
 describe('index', () => {
   const prisonApi = {}

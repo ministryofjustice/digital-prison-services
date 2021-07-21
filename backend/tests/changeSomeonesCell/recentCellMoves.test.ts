@@ -1,4 +1,4 @@
-const recentCellMovesFactory = require('../../controllers/cellMove/recentCellMoves')
+import recentCellMovesFactory from '../../controllers/cellMove/recentCellMoves'
 
 const dataSets = {
   '2020-02-01': [

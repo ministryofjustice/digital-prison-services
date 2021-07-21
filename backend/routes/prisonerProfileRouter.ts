@@ -1,41 +1,35 @@
+import express from 'express'
+import nunjucks from 'nunjucks'
 import EsweService from '../services/esweService'
-
-const express = require('express')
-const nunjucks = require('nunjucks')
-const telemetry = require('../azure-appinsights')
-
-const prisonerQuickLook = require('../controllers/prisonerProfile/prisonerQuickLook')
-const prisonerFullImage = require('../controllers/prisonerProfile/prisonerFullImage')
-const prisonerPersonal = require('../controllers/prisonerProfile/prisonerPersonal')
-const prisonerAlerts = require('../controllers/prisonerProfile/prisonerAlerts')
-const prisonerCaseNotes = require('../controllers/prisonerProfile/prisonerCaseNotes')
-const prisonerSentenceAndRelease = require('../controllers/prisonerProfile/prisonerSentenceAndRelease')
-const prisonerVisits = require('../controllers/prisonerProfile/prisonerVisits')
-const prisonerSchedule = require('../controllers/prisonerProfile/prisonerSchedule')
-const prisonerProfessionalContacts = require('../controllers/prisonerProfile/prisonerProfessionalContacts')
-const prisonerCellHistory = require('../controllers/prisonerProfile/prisonerCellHistory')
-const prisonerLocationHistory = require('../controllers/prisonerProfile/prisonerLocationHistory')
-const prisonerAdjudicationDetails = require('../controllers/prisonerProfile/prisonerAdjudicationDetails')
-const adjudicationsController = require('../controllers/prisonerProfile/adjudicationHistory')
-const prisonerIncentiveLevelDetails = require('../controllers/prisonerProfile/prisonerIncentiveLevelDetails')
-const prisonerChangeIncentiveLevelDetails = require('../controllers/prisonerProfile/prisonerChangeIncentiveLevelDetails')
-const prisonerCsraHistory = require('../controllers/prisonerProfile/prisonerCsraHistory')
-const prisonerCsraReview = require('../controllers/prisonerProfile/prisonerCsraReview')
-const prisonerWorkAndSkills = require('../controllers/prisonerProfile/prisonerWorkAndSkills')
-
-const prisonerDamageObligations = require('../controllers/prisonerProfile/prisonerFinances/prisonerDamageObligations')
-const prisonerPrivateCash = require('../controllers/prisonerProfile/prisonerFinances/prisonerPrivateCash')
-const prisonerSpends = require('../controllers/prisonerProfile/prisonerFinances/prisonerSpends')
-const prisonerSavings = require('../controllers/prisonerProfile/prisonerFinances/prisonerSavings')
-
-const prisonerProfileServiceFactory = require('../services/prisonerProfileService')
-const prisonerFinanceServiceFactory = require('../services/prisonerFinanceService')
-const personServiceFactory = require('../services/personService')
-const paginationService = require('../services/paginationService')
-
-const referenceCodesServiceFactory = require('../controllers/reference-codes-service')
-
-const adjudicationsHistoryService = require('../services/adjudicationHistory')
+import telemetry from '../azure-appinsights'
+import prisonerQuickLook from '../controllers/prisonerProfile/prisonerQuickLook'
+import prisonerFullImage from '../controllers/prisonerProfile/prisonerFullImage'
+import prisonerPersonal from '../controllers/prisonerProfile/prisonerPersonal'
+import prisonerAlerts from '../controllers/prisonerProfile/prisonerAlerts'
+import prisonerCaseNotes from '../controllers/prisonerProfile/prisonerCaseNotes'
+import prisonerSentenceAndRelease from '../controllers/prisonerProfile/prisonerSentenceAndRelease'
+import prisonerVisits from '../controllers/prisonerProfile/prisonerVisits'
+import prisonerSchedule from '../controllers/prisonerProfile/prisonerSchedule'
+import prisonerProfessionalContacts from '../controllers/prisonerProfile/prisonerProfessionalContacts'
+import prisonerCellHistory from '../controllers/prisonerProfile/prisonerCellHistory'
+import prisonerLocationHistory from '../controllers/prisonerProfile/prisonerLocationHistory'
+import prisonerAdjudicationDetails from '../controllers/prisonerProfile/prisonerAdjudicationDetails'
+import adjudicationsController from '../controllers/prisonerProfile/adjudicationHistory'
+import prisonerIncentiveLevelDetails from '../controllers/prisonerProfile/prisonerIncentiveLevelDetails'
+import prisonerChangeIncentiveLevelDetails from '../controllers/prisonerProfile/prisonerChangeIncentiveLevelDetails'
+import prisonerCsraHistory from '../controllers/prisonerProfile/prisonerCsraHistory'
+import prisonerCsraReview from '../controllers/prisonerProfile/prisonerCsraReview'
+import prisonerWorkAndSkills from '../controllers/prisonerProfile/prisonerWorkAndSkills'
+import prisonerDamageObligations from '../controllers/prisonerProfile/prisonerFinances/prisonerDamageObligations'
+import prisonerPrivateCash from '../controllers/prisonerProfile/prisonerFinances/prisonerPrivateCash'
+import prisonerSpends from '../controllers/prisonerProfile/prisonerFinances/prisonerSpends'
+import prisonerSavings from '../controllers/prisonerProfile/prisonerFinances/prisonerSavings'
+import prisonerProfileServiceFactory from '../services/prisonerProfileService'
+import prisonerFinanceServiceFactory from '../services/prisonerFinanceService'
+import personServiceFactory from '../services/personService'
+import paginationService from '../services/paginationService'
+import referenceCodesServiceFactory from '../controllers/reference-codes-service'
+import adjudicationsHistoryService from '../services/adjudicationHistory'
 
 const router = express.Router({ mergeParams: true })
 
@@ -74,15 +68,19 @@ const controller = ({
 
   router.get(
     '/',
+    // @ts-expect-error ts-migrate(2345) FIXME: Argument of type '{ prisonerProfileService: { getP... Remove this comment to see the full error message
     prisonerQuickLook({ prisonerProfileService, prisonApi, telemetry, offenderSearchApi, systemOauthClient, logError })
   )
+  // @ts-expect-error ts-migrate(2345) FIXME: Argument of type '{ prisonApi: any; logError: any;... Remove this comment to see the full error message
   router.get('/image', prisonerFullImage({ prisonApi, logError }))
   router.get(
     '/personal',
+    // @ts-expect-error ts-migrate(2345) FIXME: Argument of type '{ prisonerProfileService: { getP... Remove this comment to see the full error message
     prisonerPersonal({ prisonerProfileService, personService, prisonApi, allocationManagerApi, logError, esweService })
   )
   router.get(
     '/alerts',
+    // @ts-expect-error ts-migrate(2345) FIXME: Argument of type '{ prisonerProfileService: { getP... Remove this comment to see the full error message
     prisonerAlerts({ prisonerProfileService, referenceCodesService, paginationService, prisonApi, oauthApi, logError })
   )
   router.get(
@@ -90,6 +88,7 @@ const controller = ({
     prisonerCaseNotes({
       caseNotesApi,
       prisonerProfileService,
+      // @ts-expect-error ts-migrate(2345) FIXME: Argument of type '{ caseNotesApi: any; prisonerPro... Remove this comment to see the full error message
       prisonApi,
       paginationService,
       nunjucks,
@@ -99,19 +98,26 @@ const controller = ({
   )
   router.get(
     '/sentence-and-release',
+    // @ts-expect-error ts-migrate(2345) FIXME: Argument of type '{ prisonerProfileService: { getP... Remove this comment to see the full error message
     prisonerSentenceAndRelease({ prisonerProfileService, prisonApi, systemOauthClient, offenderSearchApi, logError })
   )
   router.get('/work-and-skills', prisonerWorkAndSkills({ prisonerProfileService, esweService }))
+  // @ts-expect-error ts-migrate(2345) FIXME: Argument of type '{ prisonApi: any; logError: any;... Remove this comment to see the full error message
   router.get('/visits', prisonerVisits({ prisonApi, logError }))
+  // @ts-expect-error ts-migrate(2345) FIXME: Argument of type '{ prisonApi: any; logError: any;... Remove this comment to see the full error message
   router.get('/schedule', prisonerSchedule({ prisonApi, logError }))
   router.get(
     '/professional-contacts',
+    // @ts-expect-error ts-migrate(2345) FIXME: Argument of type '{ prisonApi: any; personService:... Remove this comment to see the full error message
     prisonerProfessionalContacts({ prisonApi, personService, allocationManagerApi, logError })
   )
 
+  // @ts-expect-error ts-migrate(2345) FIXME: Argument of type '{ oauthApi: any; prisonApi: any;... Remove this comment to see the full error message
   router.get('/cell-history', prisonerCellHistory({ oauthApi, prisonApi, logError }))
+  // @ts-expect-error ts-migrate(2345) FIXME: Argument of type '{ prisonApi: any; whereaboutsApi... Remove this comment to see the full error message
   router.get('/location-history', prisonerLocationHistory({ prisonApi, whereaboutsApi, caseNotesApi, logError }))
 
+  // @ts-expect-error ts-migrate(2345) FIXME: Argument of type '{ prisonApi: any; logError: any;... Remove this comment to see the full error message
   router.get('/adjudications/:adjudicationNumber', prisonerAdjudicationDetails({ prisonApi, logError }))
 
   router.use(
@@ -120,17 +126,21 @@ const controller = ({
       adjudicationHistoryService,
       paginationService,
       prisonApi,
+      // @ts-expect-error ts-migrate(2345) FIXME: Argument of type '{ adjudicationHistoryService: { ... Remove this comment to see the full error message
       logError,
     })
   )
 
+  // @ts-expect-error ts-migrate(2345) FIXME: Argument of type '{ prisonApi: any; oauthApi: any;... Remove this comment to see the full error message
   router.get('/incentive-level-details', prisonerIncentiveLevelDetails({ prisonApi, oauthApi, logError }))
   router.get(
     '/incentive-level-details/change-incentive-level',
+    // @ts-expect-error ts-migrate(2345) FIXME: Argument of type '{ prisonApi: any; logError: any;... Remove this comment to see the full error message
     prisonerChangeIncentiveLevelDetails({ prisonApi, logError }).index
   )
   router.post(
     '/incentive-level-details/change-incentive-level',
+    // @ts-expect-error ts-migrate(2345) FIXME: Argument of type '{ prisonApi: any; logError: any;... Remove this comment to see the full error message
     prisonerChangeIncentiveLevelDetails({ prisonApi, logError }).post
   )
 
@@ -145,4 +155,4 @@ const controller = ({
   return router
 }
 
-module.exports = (dependencies) => controller(dependencies)
+export default (dependencies) => controller(dependencies)

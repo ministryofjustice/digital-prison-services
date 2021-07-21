@@ -1,14 +1,9 @@
-// @ts-expect-error ts-migrate(2451) FIXME: Cannot redeclare block-scoped variable 'qs'.
-const qs = require('querystring')
-// @ts-expect-error ts-migrate(2451) FIXME: Cannot redeclare block-scoped variable 'serviceUna... Remove this comment to see the full error message
-const { serviceUnavailableMessage } = require('../../common-messages')
-// @ts-expect-error ts-migrate(2451) FIXME: Cannot redeclare block-scoped variable 'alertFlagL... Remove this comment to see the full error message
-const { alertFlagLabels, profileAlertCodes } = require('../../shared/alertFlagValues')
-// @ts-expect-error ts-migrate(2451) FIXME: Cannot redeclare block-scoped variable 'putLastNam... Remove this comment to see the full error message
-const { putLastNameFirst, hasLength, formatLocation } = require('../../utils')
+import qs from 'querystring'
+import { serviceUnavailableMessage } from '../../common-messages'
+import { alertFlagLabels, profileAlertCodes } from '../../shared/alertFlagValues'
+import { putLastNameFirst, hasLength, formatLocation } from '../../utils'
 
-// @ts-expect-error ts-migrate(2451) FIXME: Cannot redeclare block-scoped variable 'trackEvent... Remove this comment to see the full error message
-const trackEvent = (telemetry, results, searchQueries, username, activeCaseLoad) => {
+export const trackEvent = (telemetry, results, searchQueries, username, activeCaseLoad) => {
   if (telemetry) {
     const offenderNos = results?.map((result) => result.offenderNo)
     // Remove empty terms and the alerts[] property (which is a duplicate of the alerts property)
@@ -28,7 +23,7 @@ const trackEvent = (telemetry, results, searchQueries, username, activeCaseLoad)
   }
 }
 
-module.exports = ({ paginationService, prisonApi, telemetry, logError }) => {
+export default ({ paginationService, prisonApi, telemetry, logError }) => {
   const index = async (req, res) => {
     const {
       user: { activeCaseLoad },
@@ -101,12 +96,12 @@ module.exports = ({ paginationService, prisonApi, telemetry, logError }) => {
       const searchQueries = { ...req.query, ...(alerts ? { 'alerts[]': alerts } : {}) }
 
       if (results?.length > 0) {
-        // @ts-expect-error ts-migrate(2554) FIXME: Expected 4 arguments, but got 5.
         trackEvent(telemetry, results, searchQueries, username, activeCaseLoad)
       }
 
       return res.render('prisonerSearch/prisonerSearch.njk', {
         alertOptions: alertFlagLabels
+          // @ts-expect-error ts-migrate(2556) FIXME: Expected 1-2 arguments, but got 0 or more.
           .filter(({ alertCodes }) => profileAlertCodes.includes(...alertCodes))
           .map(({ alertCodes, label }) => ({
             value: alertCodes,

@@ -1,12 +1,7 @@
-// @ts-expect-error ts-migrate(2451) FIXME: Cannot redeclare block-scoped variable 'moment'.
-const moment = require('moment')
-// @ts-expect-error ts-migrate(2451) FIXME: Cannot redeclare block-scoped variable 'bulkAppoin... Remove this comment to see the full error message
-const { bulkAppointmentsAddDetailsFactory } = require('../controllers/appointments/bulkAppointmentsAddDetails')
-// @ts-expect-error ts-migrate(2451) FIXME: Cannot redeclare block-scoped variable 'repeatType... Remove this comment to see the full error message
-const { repeatTypes } = require('../shared/appointmentConstants')
-
-// @ts-expect-error ts-migrate(2451) FIXME: Cannot redeclare block-scoped variable 'DATE_TIME_... Remove this comment to see the full error message
-const { DATE_TIME_FORMAT_SPEC, DAY_MONTH_YEAR } = require('../../common/dateHelpers')
+import moment from 'moment'
+import { bulkAppointmentsAddDetailsFactory } from '../controllers/appointments/bulkAppointmentsAddDetails'
+import { repeatTypes } from '../shared/appointmentConstants'
+import { DATE_TIME_FORMAT_SPEC, DAY_MONTH_YEAR } from '../../common/dateHelpers'
 
 const buildBodyForDate = (date) => {
   const startTime = moment().add(1, 'hours')
