@@ -1,4 +1,4 @@
-import appInsights from 'applicationinsights'
+import * as appInsights from 'applicationinsights'
 import applicationVersion from './application-version'
 import ignoreNotFoundErrors from './telemetryProcessors/ignoreNotFound'
 
