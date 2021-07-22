@@ -7,7 +7,7 @@ jobs:
   build:
     executor:
       name: hmpps/node
-      tag: 14.16-browsers
+      tag: 14.17-browsers
     steps:
       - checkout
       - restore_cache:
