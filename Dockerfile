@@ -1,4 +1,4 @@
-FROM node:14.16-buster as builder
+FROM node:14.17-buster as builder
 
 ARG BUILD_NUMBER
 ARG GIT_REF
