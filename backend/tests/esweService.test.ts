@@ -250,6 +250,11 @@ describe('Education skills and work experience', () => {
         expect(actual.content).toBeNull()
       })
     })
+    describe('learner history', () => {
+      const nomisId = 'G2823GV'
+
+      it('', () => {})
+    })
   })
 })
 

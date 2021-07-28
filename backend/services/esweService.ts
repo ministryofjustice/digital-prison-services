@@ -12,6 +12,7 @@ type FeatureFlagged<T> = {
 
 type LearnerProfiles = FeatureFlagged<curious.LearnerProfile[]>
 type LearnerLatestAssessments = FeatureFlagged<curious.FunctionalSkillsLevels>
+type LearnerEducationHistory = FeatureFlagged<curious.LearnerHistory>
 
 const createFlaggedContent = <T>(content: T) => ({
   enabled: app.esweEnabled,
@@ -41,6 +42,14 @@ export const DEFAULT_SKILL_LEVELS = {
       value: AWAITING_ASSESSMENT_CONTENT,
     },
   ],
+}
+
+export const DEFAULT_LEARNER_HISTORY = {
+  total: '0',
+  inProgress: '0',
+  achieved: '0',
+  failed: '0',
+  withdrawn: '0',
 }
 
 const parseDate = (value: string) => moment(value, CURIOUS_DATE_FORMAT)
@@ -203,6 +212,42 @@ export default class EsweService {
       }
       log.error(`Failed to get latest learning assessments. Reason: ${e.message}`)
     }
+    return createFlaggedContent(null)
+  }
+
+  async getLearnerEducation(nomisId: string): Promise<LearnerEducationHistory> {
+    if (!app.esweEnabled) {
+      return createFlaggedContent({})
+    }
+    try {
+      const context = await this.systemOauthClient.getClientCredentialsTokens()
+      const content = await this.curiousApi.getLearnerEducation(context, nomisId)
+
+      const inProgress = content.filter((course) => course.completionStatus.includes('continuing')).length
+      const achieved = content.filter((course) =>
+        ['Achieved', 'Partial achievement', 'Achieved waiting Certificate'].includes(course.outcome)
+      ).length
+      const failed = content.filter((course) => course.outcomeGrade === 'Fail').length
+      const withdrawn = content.filter((course) => course.completionStatus.includes('withdrawn')).length
+      const total = (inProgress + achieved + failed + withdrawn).toString()
+
+      const learningHistoryCounts = {
+        total,
+        inProgress: inProgress.toString(),
+        achieved: achieved.toString(),
+        failed: failed.toString(),
+        withdrawn: withdrawn.toString(),
+      }
+
+      return createFlaggedContent(learningHistoryCounts)
+    } catch (e) {
+      if (e.status === 404) {
+        log.info(`Offender record not found in Curious.`)
+        return createFlaggedContent(DEFAULT_LEARNER_HISTORY)
+      }
+      log.warn(`Failed to fetch learner history. Reason: ${e.message}`)
+    }
+
     return createFlaggedContent(null)
   }
 }

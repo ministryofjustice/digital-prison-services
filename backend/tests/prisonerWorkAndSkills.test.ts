@@ -39,6 +39,14 @@ describe('Prisoner work and skills controller', () => {
     english: [{ label: 'English/Welsh', value: 'Awaiting assessment' }],
   }
 
+  const learningHistory = {
+    total: '7',
+    inProgress: '1',
+    achieved: '2',
+    failed: '1',
+    withdrawn: '3',
+  }
+
   const prisonerProfileService = {}
   const esweService = {}
 
@@ -55,8 +63,10 @@ describe('Prisoner work and skills controller', () => {
     res.status = jest.fn()
     // @ts-expect-error ts-migrate(2339) FIXME: Property 'getPrisonerProfileData' does not exist o... Remove this comment to see the full error message
     prisonerProfileService.getPrisonerProfileData = jest.fn().mockResolvedValue(prisonerProfileData)
-    // @ts-expect-error ts-migrate(2339) FIXME: Property 'getLatestLearningDifficulty' does not ex... Remove this comment to see the full error message
+    // @ts-expect-error ts-migrate(2339) FIXME
     esweService.getLearnerLatestAssessments = jest.fn().mockResolvedValue(functionalSkillLevels)
+    // @ts-expect-error ts-migrate(2339) FIXME
+    esweService.getLearnerEducation = jest.fn().mockResolvedValue(learningHistory)
     controller = prisonerWorkAndSkills({
       prisonerProfileService,
       esweService,
@@ -75,6 +85,7 @@ describe('Prisoner work and skills controller', () => {
       expect.objectContaining({
         prisonerProfileData,
         functionalSkillLevels,
+        learningHistory,
       })
     )
   })

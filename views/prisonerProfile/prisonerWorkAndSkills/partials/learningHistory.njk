@@ -1,0 +1,47 @@
+{%- from "govuk/components/tag/macro.njk" import govukTag -%}
+
+{% block prisonerProfileSection %}
+
+  {% if learningHistory %}
+    <ul class="govuk-list">
+        <li>
+            {{govukTag({
+            text: 4,
+            classes: "govuk-!-margin-right-1 govuk-tag--grey"
+            })}}
+            Total courses
+        </li>
+        <li>
+            {{govukTag({
+            text: 1,
+            classes: "govuk-!-margin-right-1 govuk-tag--yellow"
+            })}}
+            In progress
+        </li>
+        <li>
+            {{govukTag({
+            text: 2,
+            classes: "govuk-!-margin-right-1 govuk-tag--green"
+            })}}
+            Achieved
+        </li>
+        <li>
+            {{govukTag({
+            text: 0,
+            classes: "govuk-!-margin-right-1 govuk-tag--red"
+            })}}
+            Failed
+        </li>
+        <li>
+            {{govukTag({
+            text: 1,
+            classes: "govuk-!-margin-right-1 govuk-tag--red"
+            })}}
+            Withdrawn
+        </li>
+    </ul>
+  {% else %}
+    <p class="govuk-body" data-test="curious-api-errorMessage">{{ errorMessage }}</p>
+  {% endif %}
+
+{% endblock %}
