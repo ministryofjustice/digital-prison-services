@@ -42,7 +42,8 @@ env:
   PATHFINDER_ENDPOINT_API_URL: https://preprod-api.pathfinder.service.justice.gov.uk/
   PIN_PHONES_URL: https://pin-phone-monitor-qa.prison.service.justice.gov.uk/
   REDIS_ENABLED: true
-  SOC_URL: https://manage-soc-cases-preprod.hmpps.service.justice.gov.uk
+  SOC_UI_URL: https://manage-soc-cases-preprod.hmpps.service.justice.gov.uk/
+  SOC_API_URL: https://manage-soc-cases-api-preprod.hmpps.service.justice.gov.uk/
   SOC_API_ENABLED: true
   OFFENDER_SEARCH_API_URL: https://prisoner-offender-search-preprod.prison.service.justice.gov.uk
   SUPPORT_URL: https://support-preprod.hmpps.service.justice.gov.uk/
