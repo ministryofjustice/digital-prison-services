@@ -143,8 +143,8 @@ const getTasks = ({ activeCaseLoadId, locations, staffId, whereaboutsConfig, key
       id: 'soc',
       heading: 'Manage SOC cases',
       description: 'Manage your Serious and Organised Crime (SOC) caseload.',
-      href: soc.url,
-      enabled: () => soc.url && userHasRoles(['SOC_CUSTODY', 'SOC_COMMUNITY', 'SOC_HQ']),
+      href: soc.ui_url,
+      enabled: () => soc.ui_url && userHasRoles(['SOC_CUSTODY', 'SOC_COMMUNITY', 'SOC_HQ']),
     },
     {
       id: 'pin-phones',

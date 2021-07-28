@@ -455,7 +455,7 @@ describe('Homepage', () => {
     })
 
     it('should render home page with the serious organised crime task', async () => {
-      config.apis.soc.url = 'http://soc-url'
+      config.apis.soc.ui_url = 'http://soc-url'
 
       // @ts-expect-error ts-migrate(2339) FIXME: Property 'userRoles' does not exist on type '{}'.
       oauthApi.userRoles.mockResolvedValue([{ roleCode: 'SOC_CUSTODY' }, { roleCode: 'SOC_COMMUNITY' }])
@@ -478,7 +478,7 @@ describe('Homepage', () => {
     })
 
     it('should render home page with the serious organised crime task when the user has the SOC_HQ role', async () => {
-      config.apis.soc.url = 'http://soc-url'
+      config.apis.soc.ui_url = 'http://soc-url'
 
       // @ts-expect-error ts-migrate(2339) FIXME: Property 'userRoles' does not exist on type '{}'.
       oauthApi.userRoles.mockResolvedValue([{ roleCode: 'SOC_HQ' }])

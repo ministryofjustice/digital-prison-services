@@ -223,8 +223,11 @@ env:
   - name: PIN_PHONES_URL
     value: {{ .Values.env.PIN_PHONES_URL | quote }}
 
-  - name: SOC_URL
-    value: {{ .Values.env.SOC_URL | quote }}
+  - name: SOC_UI_URL
+    value: {{ .Values.env.SOC_UI_URL | quote }}
+
+  - name: SOC_API_URL
+    value: {{ .Values.env.SOC_API_URL | quote }}
 
   - name: SOC_API_ENABLED
     value: {{ .Values.env.SOC_API_ENABLED | quote }}
