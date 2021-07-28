@@ -111,7 +111,7 @@ export const apis = {
   },
   soc: {
     url: process.env.SOC_API_URL || '',
-    ui_url: process.env.SOC_UI_URL,
+    ui_url: process.env.SOC_UI_URL || '',
     timeoutSeconds: 10,
     enabled: process.env.SOC_API_ENABLED === 'true',
   },

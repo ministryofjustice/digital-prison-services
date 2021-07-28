@@ -3,7 +3,7 @@ export const pathfinderApiFactory = (client) => {
 
   const get = (context, url) => client.get(context, url).then(processResponse())
 
-  const getPathfinderDetails = (context, offenderNo) => get(context, `/soc/nominal/nomsId/${offenderNo}`)
+  const getPathfinderDetails = (context, offenderNo) => get(context, `/pathfinder/offender/${offenderNo}`)
 
   return {
     getPathfinderDetails,
