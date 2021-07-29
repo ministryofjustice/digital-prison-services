@@ -6,35 +6,35 @@
     <ul class="govuk-list">
         <li>
             {{govukTag({
-            text: 4,
+            text: learningHistory['total'],
             classes: "govuk-!-margin-right-1 govuk-tag--grey"
             })}}
             Total courses
         </li>
         <li>
             {{govukTag({
-            text: 1,
+            text: learningHistory['inProgress'],
             classes: "govuk-!-margin-right-1 govuk-tag--yellow"
             })}}
             In progress
         </li>
         <li>
             {{govukTag({
-            text: 2,
+            text: learningHistory['achieved'],
             classes: "govuk-!-margin-right-1 govuk-tag--green"
             })}}
             Achieved
         </li>
         <li>
             {{govukTag({
-            text: 0,
+            text: learningHistory['failed'],
             classes: "govuk-!-margin-right-1 govuk-tag--red"
             })}}
             Failed
         </li>
         <li>
             {{govukTag({
-            text: 1,
+            text: learningHistory['withdrawn'],
             classes: "govuk-!-margin-right-1 govuk-tag--red"
             })}}
             Withdrawn

@@ -217,18 +217,19 @@ export default class EsweService {
 
   async getLearnerEducation(nomisId: string): Promise<LearnerEducationHistory> {
     if (!app.esweEnabled) {
-      return createFlaggedContent({})
+      return createFlaggedContent(null)
     }
     try {
       const context = await this.systemOauthClient.getClientCredentialsTokens()
       const content = await this.curiousApi.getLearnerEducation(context, nomisId)
 
-      const inProgress = content.filter((course) => course.completionStatus.includes('continuing')).length
-      const achieved = content.filter((course) =>
-        ['Achieved', 'Partial achievement', 'Achieved waiting Certificate'].includes(course.outcome)
+      const inProgress = content.filter((course) => course.completionStatus?.includes('continuing')).length
+      const achieved = content.filter(
+        (course) =>
+          course.outcome && ['Achieved', 'Partial achievement', 'Achieved waiting Certificate'].includes(course.outcome)
       ).length
       const failed = content.filter((course) => course.outcomeGrade === 'Fail').length
-      const withdrawn = content.filter((course) => course.completionStatus.includes('withdrawn')).length
+      const withdrawn = content.filter((course) => course.completionStatus?.includes('withdrawn')).length
       const total = (inProgress + achieved + failed + withdrawn).toString()
 
       const learningHistoryCounts = {

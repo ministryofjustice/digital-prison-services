@@ -77,7 +77,7 @@ describe('Prisoner work and skills controller', () => {
     await controller(req, res)
     expect(res.render).toHaveBeenCalledTimes(0)
   })
-  it('should make a call for the prisoner details and the latest learner assessments and render the right template', async () => {
+  it('should make expected calls and render the right template', async () => {
     jest.spyOn(app, 'esweEnabled', 'get').mockReturnValue(true)
     await controller(req, res)
     expect(res.render).toHaveBeenCalledWith(
