@@ -277,9 +277,8 @@ describe('Education skills and work experience', () => {
         expect(actual.content).toEqual(DEFAULT_LEARNER_HISTORY)
       })
       it('should return the expected response if there are no courses available', async () => {
-        const dummyLearningHistory = {}
         jest.spyOn(app, 'esweEnabled', 'get').mockReturnValue(true)
-        getLearnerEducationMock.mockResolvedValue([dummyLearningHistory])
+        getLearnerEducationMock.mockResolvedValue([])
         const actual = await service.getLearnerEducation(nomisId)
         expect(actual.enabled).toBeTruthy()
         expect(actual.content).toEqual(DEFAULT_LEARNER_HISTORY)

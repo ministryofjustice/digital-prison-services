@@ -3,7 +3,7 @@
 {% block prisonerProfileSection %}
 
   {% if learningHistory %}
-    <ul class="govuk-list">
+    <ul class="govuk-list" data-test="learning-history-list">
         <li>
             {{govukTag({
             text: learningHistory['total'],
@@ -41,7 +41,7 @@
         </li>
     </ul>
   {% else %}
-    <p class="govuk-body" data-test="curious-api-errorMessage">{{ errorMessage }}</p>
+    <p class="govuk-body" data-test="learner-history-errorMessage">{{ errorMessage }}</p>
   {% endif %}
 
 {% endblock %}
