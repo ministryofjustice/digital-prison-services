@@ -226,9 +226,12 @@ export default class EsweService {
       const inProgress = content.filter((course) => course.completionStatus?.includes('continuing')).length
       const achieved = content.filter(
         (course) =>
-          course.outcome && ['Achieved', 'Partial achievement', 'Achieved waiting Certificate'].includes(course.outcome)
+          course.completionStatus?.includes('completed') &&
+          ['Achieved', 'Partial achievement', 'Achieved awaiting Certificate'].includes(course.outcome)
       ).length
-      const failed = content.filter((course) => course.outcomeGrade === 'Fail').length
+      const failed = content.filter(
+        (course) => course.completionStatus?.includes('completed') && course.outcomeGrade === 'Fail'
+      ).length
       const withdrawn = content.filter((course) => course.completionStatus?.includes('withdrawn')).length
       const total = (inProgress + achieved + failed + withdrawn).toString()
 
