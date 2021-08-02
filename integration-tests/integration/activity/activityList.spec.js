@@ -406,4 +406,38 @@ context('Activity list page', () => {
         )
       })
   })
+
+  context('Missing query string parameters', () => {
+    const verifyOnSelectLocationPage = () => cy.get('h1').contains('View by activity or appointment location')
+
+    beforeEach(() => {
+      cy.task('stubGetActivityList', { caseload, locationId: 2, timeSlot: 'AM', date })
+      cy.task('stubGetAttendance', { caseload, locationId: 2, timeSlot: 'AM', date })
+    })
+    context('redirects to /select-location', () => {
+      it('when all query string parameters are missing', () => {
+        cy.visit('/manage-prisoner-whereabouts/activity-results')
+
+        verifyOnSelectLocationPage()
+      })
+
+      it('when all but the date is missing', () => {
+        cy.visit('/manage-prisoner-whereabouts/activity-results?date=02/08/2021')
+
+        verifyOnSelectLocationPage()
+      })
+
+      it('when all but the locationId is missing', () => {
+        cy.visit('/manage-prisoner-whereabouts/activity-results?date=02/08/2021&period=AM')
+
+        verifyOnSelectLocationPage()
+      })
+
+      it('when all but the period is missing', () => {
+        cy.visit('/manage-prisoner-whereabouts/activity-results?location=27219&date=02/08/2021&')
+
+        verifyOnSelectLocationPage()
+      })
+    })
+  })
 })
