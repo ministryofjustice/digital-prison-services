@@ -427,4 +427,42 @@ declare namespace curious {
      */
     digiLit?: Array
   }
+
+  /**
+   *
+   * @export
+   * @interface LearnerHistory
+   */
+  export interface LearnerHistory {
+    /**
+     *
+     * @type {String<LearnerHistory>}
+     * @memberof LearnerHistory
+     */
+    total?: string
+    /**
+     *
+     * @type {String<LearnerHistory>}
+     * @memberof LearnerHistory
+     */
+    inProgress?: string
+    /**
+     *
+     * @type {String<LearnerHistory>}
+     * @memberof LearnerHistory
+     */
+    achieved?: string
+    /**
+     *
+     * @type {String<LearnerHistory>}
+     * @memberof LearnerHistory
+     */
+    failed?: string
+    /**
+     *
+     * @type {String<LearnerHistory>}
+     * @memberof LearnerHistory
+     */
+    withdrawn?: string
+  }
 }

@@ -1,4 +1,4 @@
-import EsweService, { DEFAULT_SKILL_LEVELS } from '../services/esweService'
+import EsweService, { DEFAULT_LEARNER_HISTORY, DEFAULT_SKILL_LEVELS } from '../services/esweService'
 import { app } from '../config'
 import CuriousApi from '../api/curious/curiousApi'
 
@@ -250,6 +250,53 @@ describe('Education skills and work experience', () => {
         expect(actual.content).toBeNull()
       })
     })
+    describe('learner history', () => {
+      const nomisId = 'G2823GV'
+      it('should return null when feature flag is disabled', async () => {
+        jest.spyOn(app, 'esweEnabled', 'get').mockReturnValue(false)
+        const actual = await service.getLearnerEducation(nomisId)
+        expect(actual.enabled).toBeFalsy()
+        expect(actual.content).toBeNull()
+        expect(getLearnerEducationMock).not.toHaveBeenCalled()
+        expect(systemOauthClient.getClientCredentialsTokens).not.toHaveBeenCalled()
+      })
+      it('should return null content on error', async () => {
+        jest.spyOn(app, 'esweEnabled', 'get').mockReturnValue(true)
+        getLearnerEducationMock.mockRejectedValue(new Error('error'))
+        const actual = await service.getLearnerEducation(nomisId)
+        expect(actual.content).toBeNull()
+      })
+      it('should return expected response when the prisoner is not registered in Curious', async () => {
+        const error = {
+          status: 404,
+        }
+        jest.spyOn(app, 'esweEnabled', 'get').mockReturnValue(true)
+        getLearnerEducationMock.mockRejectedValue(error)
+        const actual = await service.getLearnerEducation(nomisId)
+        expect(actual.enabled).toBeTruthy()
+        expect(actual.content).toEqual(DEFAULT_LEARNER_HISTORY)
+      })
+      it('should return the expected response if there are no courses available', async () => {
+        jest.spyOn(app, 'esweEnabled', 'get').mockReturnValue(true)
+        getLearnerEducationMock.mockResolvedValue([])
+        const actual = await service.getLearnerEducation(nomisId)
+        expect(actual.enabled).toBeTruthy()
+        expect(actual.content).toEqual(DEFAULT_LEARNER_HISTORY)
+      })
+      it('should return the expected response if there are courses available', async () => {
+        const expected = {
+          total: '4',
+          inProgress: '1',
+          achieved: '1',
+          failed: '1',
+          withdrawn: '1',
+        }
+        jest.spyOn(app, 'esweEnabled', 'get').mockReturnValue(true)
+        const actual = await service.getLearnerEducation(nomisId)
+        expect(actual.enabled).toBeTruthy()
+        expect(actual.content).toEqual(expected)
+      })
+    })
   })
 })
 
@@ -383,6 +430,96 @@ function getDummyEducations(): curious.LearnerEducation[] {
       unitType: null,
       fundingType: 'PEF',
       deliveryMethodType: null,
+      alevelIndicator: null,
+    },
+    {
+      prn: 'A1234AA',
+      establishmentId: 8,
+      establishmentName: 'HMP Moorland',
+      courseName: 'Foundation Degree in Arts in Equestrian Practice and Technology',
+      courseCode: '300082',
+      isAccredited: true,
+      aimSequenceNumber: null,
+      learningStartDate: '2021-07-19',
+      learningPlannedEndDate: '2022-06-16',
+      learningActualEndDate: '2021-07-21',
+      learnersAimType: 'Programme aim',
+      miNotionalNVQLevelV2: 'Level 5',
+      sectorSubjectAreaTier1: 'Agriculture, Horticulture and Animal Care',
+      sectorSubjectAreaTier2: 'Animal Care and Veterinary Science',
+      occupationalIndicator: false,
+      accessHEIndicator: false,
+      keySkillsIndicator: false,
+      functionalSkillsIndicator: false,
+      gceIndicator: false,
+      gcsIndicator: false,
+      asLevelIndicator: false,
+      a2LevelIndicator: false,
+      qcfIndicator: false,
+      qcfDiplomaIndicator: false,
+      qcfCertificateIndicator: false,
+      lrsGLH: 0,
+      attendedGLH: null,
+      actualGLH: 200,
+      outcome: 'No achievement',
+      outcomeGrade: 'Fail',
+      employmentOutcome: null,
+      withdrawalReasons: null,
+      prisonWithdrawalReason: null,
+      completionStatus: 'The learner has completed the learning activities leading to the learning aim',
+      withdrawalReasonAgreed: false,
+      fundingModel: 'Adult skills',
+      fundingAdjustmentPriorLearning: null,
+      subcontractedPartnershipUKPRN: null,
+      deliveryLocationPostCode: 'DN7 6BW',
+      unitType: 'QUALIFICATION',
+      fundingType: 'DPS',
+      deliveryMethodType: null,
+      alevelIndicator: false,
+    },
+    {
+      prn: 'A1234AA',
+      establishmentId: 8,
+      establishmentName: 'HMP Moorland',
+      courseName: 'Human Science',
+      courseCode: '008HUM001',
+      isAccredited: false,
+      aimSequenceNumber: 2,
+      learningStartDate: '2020-09-01',
+      learningPlannedEndDate: '2020-12-19',
+      learningActualEndDate: '2020-12-02',
+      learnersAimType: null,
+      miNotionalNVQLevelV2: null,
+      sectorSubjectAreaTier1: null,
+      sectorSubjectAreaTier2: null,
+      occupationalIndicator: null,
+      accessHEIndicator: null,
+      keySkillsIndicator: null,
+      functionalSkillsIndicator: null,
+      gceIndicator: null,
+      gcsIndicator: null,
+      asLevelIndicator: null,
+      a2LevelIndicator: null,
+      qcfIndicator: null,
+      qcfDiplomaIndicator: null,
+      qcfCertificateIndicator: null,
+      lrsGLH: null,
+      attendedGLH: null,
+      actualGLH: 100,
+      outcome: 'Achieved',
+      outcomeGrade: 'Pass',
+      employmentOutcome: null,
+      withdrawalReasons: null,
+      prisonWithdrawalReason: null,
+      completionStatus: 'The learner has completed the learning activities leading to the learning aim',
+      withdrawalReasonAgreed: false,
+      fundingModel: 'Adult skills',
+      fundingAdjustmentPriorLearning: null,
+      subcontractedPartnershipUKPRN: null,
+      deliveryLocationPostCode: 'DN7 6BW',
+      unitType: null,
+      fundingType: 'DPS',
+      deliveryMethodType: 'Classroom Only Learning',
       alevelIndicator: null,
     },
   ]

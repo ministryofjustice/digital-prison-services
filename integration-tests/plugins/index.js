@@ -203,10 +203,16 @@ module.exports = (on) => {
         prisonApi.stubProfileInformation(null, 500),
       ]),
     stubPrisonerDetails: (prisonerDetails) => prisonApi.stubPrisonerDetails(prisonerDetails),
+
     stubLatestLearnerAssessments: (functionalSkillsAssessments) =>
       curiousApi.stubLatestLearnerAssessments(functionalSkillsAssessments),
     stubLatestLearnerAssessments500Error: (error) => curiousApi.stubLatestLearnerAssessments(error, 500),
     stubLatestLearnerAssessments404Error: (error) => curiousApi.stubLatestLearnerAssessments(error, 404),
+
+    stubLearnerEducation: (learnerHistory) => curiousApi.stubLearnerEducation(learnerHistory),
+    stubLearnerEducation500Error: (error) => curiousApi.stubLearnerEducation(error, 500),
+    stubLearnerEducation404Error: (error) => curiousApi.stubLearnerEducation(error, 404),
+
     stubPersonal: ({
       identifiers,
       aliases,
