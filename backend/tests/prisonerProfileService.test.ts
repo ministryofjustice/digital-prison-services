@@ -9,7 +9,8 @@ config.apis.pathfinder = {
 }
 // @ts-expect-error ts-migrate(2741) FIXME: Property 'timeoutSeconds' is missing in type '{ ur... Remove this comment to see the full error message
 config.apis.soc = {
-  url: 'http://soc',
+  url: 'http://soc-api/',
+  ui_url: 'http://soc-ui/',
   enabled: true,
 }
 
@@ -225,7 +226,7 @@ describe('prisoner profile service', () => {
         socProfileUrl: null,
         canViewSocLink: false,
         showSocReferButton: false,
-        socReferUrl: 'http://soc/refer/offender/ABC123',
+        socReferUrl: 'http://soc-ui/refer/offender/ABC123',
         alerts: [
           {
             alertCodes: ['XA'],
@@ -687,7 +688,7 @@ describe('prisoner profile service', () => {
         const profileData = await service.getPrisonerProfileData(context, offenderNo)
 
         expect(profileData.canViewSocLink).toBe(true)
-        expect(profileData.socProfileUrl).toBe('http://soc/nominal/1')
+        expect(profileData.socProfileUrl).toBe('http://soc-ui/nominal/1')
       })
 
       it('should enable SOC when the user has the SOC_COMMUNITY role', async () => {
