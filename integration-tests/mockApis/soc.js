@@ -1,11 +1,11 @@
 const { stubFor } = require('./wiremock')
 
 module.exports = {
-  stubGetOffenderDetails: details => {
-    return stubFor({
+  stubGetOffenderDetails: (details) =>
+    stubFor({
       request: {
         method: 'GET',
-        urlPattern: `/soc/api/offender/${details.offenderNumber}`,
+        urlPattern: `/soc/nominal/nomsId/${details.offenderNumber}`,
       },
       response: {
         headers: {
@@ -14,6 +14,5 @@ module.exports = {
         status: details.status,
         jsonBody: details.body,
       },
-    })
-  },
+    }),
 }

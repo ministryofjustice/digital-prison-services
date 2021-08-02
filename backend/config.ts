@@ -110,7 +110,8 @@ export const apis = {
     timeoutSeconds: toNumber(process.env.API_ENDPOINT_TIMEOUT_SECONDS) || 30,
   },
   soc: {
-    url: process.env.SOC_URL || '',
+    url: process.env.SOC_API_URL || '',
+    ui_url: process.env.SOC_UI_URL || '',
     timeoutSeconds: 10,
     enabled: process.env.SOC_API_ENABLED === 'true',
   },
