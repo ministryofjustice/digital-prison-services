@@ -11,7 +11,7 @@
       {{ prisonerSummarySection(functionalSkillLevels.digiLit, '', {"data-test": "digital-literacy-assessment"}, false, 'govuk-summary-list--no-border') }}
 
   {% else %}
-    <p class="govuk-body" data-test="curious-api-errorMessage">{{ errorMessage }}</p>
+    <p class="govuk-body" data-test="learner-latest-assessments-errorMessage">{{ errorMessage }}</p>
   {% endif %}
 
 {% endblock %}

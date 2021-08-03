@@ -1,0 +1,47 @@
+{%- from "govuk/components/tag/macro.njk" import govukTag -%}
+
+{% block prisonerProfileSection %}
+
+  {% if learningHistory %}
+    <ul class="govuk-list" data-test="learning-history-list">
+        <li>
+            {{govukTag({
+            text: learningHistory['total'],
+            classes: "govuk-!-margin-right-1 govuk-tag--grey app-!-font-family-tabular-bold"
+            })}}
+            Total courses
+        </li>
+        <li>
+            {{govukTag({
+            text: learningHistory['inProgress'],
+            classes: "govuk-!-margin-right-1 govuk-tag--yellow app-!-font-family-tabular-bold"
+            })}}
+            In progress
+        </li>
+        <li>
+            {{govukTag({
+            text: learningHistory['achieved'],
+            classes: "govuk-!-margin-right-1 govuk-tag--green app-!-font-family-tabular-bold"
+            })}}
+            Achieved
+        </li>
+        <li>
+            {{govukTag({
+            text: learningHistory['failed'],
+            classes: "govuk-!-margin-right-1 govuk-tag--red app-!-font-family-tabular-bold"
+            })}}
+            Failed
+        </li>
+        <li>
+            {{govukTag({
+            text: learningHistory['withdrawn'],
+            classes: "govuk-!-margin-right-1 govuk-tag--red app-!-font-family-tabular-bold"
+            })}}
+            Withdrawn
+        </li>
+    </ul>
+  {% else %}
+    <p class="govuk-body" data-test="learner-history-errorMessage">{{ errorMessage }}</p>
+  {% endif %}
+
+{% endblock %}
