@@ -15,9 +15,8 @@ const gatherCheckInfo = (total, currentValue) => ({ ...total, [currentValue.name
 
 const getBuild = () => {
   try {
-    return JSON.parse(fs.readFileSync(path.join(__dirname, '../../../build-info.json'), 'utf-8'))
+    return JSON.parse(fs.readFileSync(path.join(process.cwd(), './build-info.json'), 'utf-8'))
   } catch (ex) {
-    console.error(ex)
     return null
   }
 }
