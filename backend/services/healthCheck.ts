@@ -1,3 +1,5 @@
+import path from 'path'
+import fs from 'fs'
 import { serviceCheckFactory } from '../controllers/healthCheck'
 
 const service = (name, url) => {
@@ -13,19 +15,20 @@ const gatherCheckInfo = (total, currentValue) => ({ ...total, [currentValue.name
 
 const getBuild = () => {
   try {
-    // eslint-disable-next-line import/no-unresolved,global-require
-    return require('../../build-info.json')
+    return JSON.parse(fs.readFileSync(path.join(__dirname, '../../../build-info.json'), 'utf-8'))
   } catch (ex) {
+    console.error(ex)
     return null
   }
 }
 
 const addAppInfo = (result) => {
   const buildInformation = getBuild()
+  console.error({ buildInformation })
   const buildInfo = {
     uptime: process.uptime(),
     build: buildInformation,
-    version: (buildInformation && buildInformation.buildNumber) || 'Not available',
+    version: buildInformation?.buildNumber || 'Not available',
   }
 
   return { ...result, ...buildInfo }
