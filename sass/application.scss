@@ -126,3 +126,12 @@ pre {
   white-space: -moz-pre-wrap; /* Mozilla, since 1999 */
   word-wrap: break-word; /* Internet Explorer 5.5+ */
 }
+
+//tabular data font
+.app-\!-font-family-tabular {
+  @include govuk-font($size: false, $tabular: true);
+}
+
+.app-\!-font-family-tabular-bold {
+  @include govuk-font($size: false, $tabular: true, $weight: bold);
+}
