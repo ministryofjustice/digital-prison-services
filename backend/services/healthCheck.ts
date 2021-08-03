@@ -24,7 +24,6 @@ const getBuild = () => {
 
 const addAppInfo = (result) => {
   const buildInformation = getBuild()
-  console.error({ buildInformation })
   const buildInfo = {
     uptime: process.uptime(),
     build: buildInformation,
