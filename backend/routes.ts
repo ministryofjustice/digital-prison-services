@@ -70,7 +70,7 @@ const setup = ({
   router.use(async (req, res, next) => {
     res.locals = {
       ...res.locals,
-      currentUrlPath: req.originalUrl,
+      currentUrlPath: req.baseUrl + req.path,
       prisonerSearchUrl: req.session.prisonerSearchUrl,
     }
     next()
