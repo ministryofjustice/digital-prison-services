@@ -5,7 +5,6 @@ import PropTypes from 'prop-types'
 import { connect } from 'react-redux'
 import Notifications from 'react-notify-toast'
 import ReactGA from 'react-ga'
-import { FooterContainer } from 'new-nomis-shared-components'
 import ErrorComponent from './Error/index'
 import Terms from './Footer/terms-and-conditions'
 import './App.scss'
@@ -38,6 +37,7 @@ import {
   setTermsVisibility,
   setUserDetails,
 } from './redux/actions/index'
+import FooterContainer from './Components/FooterContainer'
 
 const axios = require('axios')
 

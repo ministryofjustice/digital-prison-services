@@ -3,8 +3,8 @@ import React from 'react'
 import { Provider } from 'react-redux'
 import ReactDOM from 'react-dom'
 import { shallow, mount } from 'enzyme'
-import { FooterContainer } from 'new-nomis-shared-components'
 import App from './App'
+import FooterContainer from './Components/FooterContainer'
 
 jest.mock('./Spinner/index', () => '')
 

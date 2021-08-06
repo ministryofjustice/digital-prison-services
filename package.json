@@ -19,6 +19,7 @@
     "@govuk-react/error-summary": "^0.9.0",
     "@govuk-react/error-text": "^0.9.0",
     "@govuk-react/fieldset": "^0.9.0",
+    "@govuk-react/footer": "^0.9.0",
     "@govuk-react/grid-col": "^0.9.0",
     "@govuk-react/grid-row": "^0.9.0",
     "@govuk-react/heading": "^0.9.0",
@@ -42,7 +43,7 @@
     "@types/superagent": "^4.1.11",
     "agentkeepalive": "^4.1.3",
     "applicationinsights": "^1.8.8",
-    "applicationinsights-native-metrics": "^0.0.5",
+    "applicationinsights-native-metrics": "0.0.6",
     "axios": "0.21.1",
     "body-parser": "^1.19.0",
     "bunyan": "^1.8.14",
@@ -74,7 +75,6 @@
     "jwt-decode": "^3.1.2",
     "moment": "^2.29.1",
     "moment-business-days": "^1.2.0",
-    "new-nomis-shared-components": "^3.3.0",
     "nocache": "^2.1.0",
     "nock": "^13.0.5",
     "notifications-node-client": "^5.1.0",
@@ -229,7 +229,7 @@
       "^(?!.*\\.(js|jsx|mjs|css|json)$)": "<rootDir>/config/jest/fileTransform.js"
     },
     "transformIgnorePatterns": [
-      "[/\\\\]node_modules[/\\\\](?!(new-nomis-shared-components|spin.js)/).+\\.(js|jsx|mjs)$"
+      "[/\\\\]node_modules[/\\\\](?!(spin.js)/).+\\.(js|jsx|mjs)$"
     ],
     "moduleNameMapper": {
       "^react-native$": "react-native-web"
