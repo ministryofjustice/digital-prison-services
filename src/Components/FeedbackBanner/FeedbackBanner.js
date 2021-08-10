@@ -11,7 +11,7 @@ const FeedbackBanner = () => {
         target="_blank"
         rel="noopener noreferrer"
       >
-        Give feedback on this service
+        Give feedback on Digital Prison Services (opens in a new tab)
       </a>
     </div>
   )
