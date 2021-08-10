@@ -153,6 +153,7 @@ export default ({
 
     const isHighComplexity = Boolean(complexityLevel?.length > 0 && complexityLevel[0]?.level === 'high')
 
+    // @ts-expect-error ts-migrate(2339) FIXME: Property 'primary_pom' does not exist on ty... Remove this comment to see the full error message
     const pomStaff = allocationManager?.primary_pom && getNamesFromString(allocationManager.primary_pom.name).join(' ')
 
     return {
