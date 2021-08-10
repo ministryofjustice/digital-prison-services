@@ -543,6 +543,7 @@ describe('prisoner profile service', () => {
         keyworkerApi.getKeyworkerByCaseloadAndOffenderNo.mockRejectedValue(new Error('Network error'))
         // @ts-expect-error ts-migrate(2339) FIXME: Property 'userRoles' does not exist on type '{}'.
         oauthApi.userRoles.mockRejectedValue(new Error('Network error'))
+        // @ts-expect-error ts-migrate(2339) FIXME: Property 'getPomByOffenderNo' does not exist on ty... Remove this comment to see the full error message
         allocationManagerApi.getPomByOffenderNo.mockRejectedValue(new Error('Network error'))
       })
 
