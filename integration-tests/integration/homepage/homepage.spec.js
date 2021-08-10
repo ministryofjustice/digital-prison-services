@@ -195,7 +195,7 @@ context('Homepage', () => {
       page
         .feedbackBanner()
         .find('a')
-        .should('contain', 'Give feedback on this service')
+        .should('contain', 'Give feedback on Digital Prison Services (opens in a new tab)')
         .should('have.attr', 'href')
         .then((href) => {
           expect(href).to.equal('https://eu.surveymonkey.com/r/GYB8Y9Q?source=localhost/')
