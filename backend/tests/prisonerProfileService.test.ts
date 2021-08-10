@@ -171,8 +171,7 @@ describe('prisoner profile service', () => {
       // @ts-expect-error ts-migrate(2339) FIXME: Property 'getOffenderRetentionRecord' does not exi... Remove this comment to see the full error message
       dataComplianceApi.getOffenderRetentionRecord.mockReturnValue({})
       // @ts-expect-error ts-migrate(2339) FIXME: Property 'getPomByOffenderNo' does not exist on ty... Remove this comment to see the full error message
-      allocationManagerApi.getPomByOffenderNo.mockReturnValue({ primary_pom: { name: 'SMITH, JANE' } })
-
+      allocationManagerApi.getPomByOffenderNo.mockResolvedValue({ primary_pom: { name: 'SMITH, JANE' } })
       // @ts-expect-error ts-migrate(2322) FIXME: Type 'undefined[]' is not assignable to type 'stri... Remove this comment to see the full error message
       config.apis.complexity.enabled_prisons = []
     })
@@ -544,6 +543,8 @@ describe('prisoner profile service', () => {
         keyworkerApi.getKeyworkerByCaseloadAndOffenderNo.mockRejectedValue(new Error('Network error'))
         // @ts-expect-error ts-migrate(2339) FIXME: Property 'userRoles' does not exist on type '{}'.
         oauthApi.userRoles.mockRejectedValue(new Error('Network error'))
+        // @ts-expect-error ts-migrate(2339) FIXME: Property 'getPomByOffenderNo' does not exist on ty... Remove this comment to see the full error message
+        allocationManagerApi.getPomByOffenderNo.mockRejectedValue(new Error('Network error'))
       })
 
       it('should still pass those values as null', async () => {
@@ -555,6 +556,7 @@ describe('prisoner profile service', () => {
             keyWorkerLastSession: null,
             showAddKeyworkerSession: null,
             userCanEdit: null,
+            pomStaff: undefined,
           })
         )
       })
