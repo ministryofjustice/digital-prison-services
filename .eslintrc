@@ -37,6 +37,7 @@
     "react/jsx-props-no-spreading": 0, // disable as AirBnb says sparce usage is okay, and we mostly use in tests
     "no-underscore-dangle": ["error", { "allow": ["__REDUX_DEVTOOLS_EXTENSION_COMPOSE__"] }],
     "import/no-named-as-default": 0, // disable as we use connected components
+    "import/no-named-as-default-member": 0, // disable as we use connected components
     "jsx-a11y/label-has-associated-control": [2, { "assert": "either" }],
     "jsx-a11y/label-has-for": 0, // disable as has been deprecated and replaced by label-has-associated-control
     "react/forbid-prop-types": 0,
@@ -69,11 +70,19 @@
         "import/no-extraneous-dependencies": ["error", {"devDependencies": true}],
         "no-use-before-define": 0,
         "@typescript-eslint/no-use-before-define": 0,
+        "@typescript-eslint/no-var-requires": 0,
+        "@typescript-eslint/no-empty-function": 0,
         "class-methods-use-this": 0,
         "no-useless-constructor": 0,
         "no-shadow": "off", // https://github.com/typescript-eslint/typescript-eslint/issues/2484
         "@typescript-eslint/no-shadow": ["error"],
-        "@typescript-eslint/no-unused-vars": ["error", { "ignoreRestSiblings": true }]
+        "@typescript-eslint/no-unused-vars": [
+          1,
+          {
+            "argsIgnorePattern": "res|next|^err|_",
+            "ignoreRestSiblings": true
+          }
+        ]
       },
       "globals": { "Atomics": "readonly", "SharedArrayBuffer": "readonly" },
       "parserOptions": {

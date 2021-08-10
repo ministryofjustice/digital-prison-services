@@ -12,6 +12,7 @@ type FeatureFlagged<T> = {
 
 type LearnerProfiles = FeatureFlagged<curious.LearnerProfile[]>
 type LearnerLatestAssessments = FeatureFlagged<curious.FunctionalSkillsLevels>
+type LearnerEducationHistory = FeatureFlagged<curious.LearnerHistory>
 
 const createFlaggedContent = <T>(content: T) => ({
   enabled: app.esweEnabled,
@@ -19,6 +20,37 @@ const createFlaggedContent = <T>(content: T) => ({
 })
 
 const CURIOUS_DATE_FORMAT = 'YYYY-MM-DD'
+
+const AWAITING_ASSESSMENT_CONTENT = 'Awaiting assessment'
+
+export const DEFAULT_SKILL_LEVELS = {
+  english: [
+    {
+      label: 'English/Welsh',
+      value: AWAITING_ASSESSMENT_CONTENT,
+    },
+  ],
+  maths: [
+    {
+      label: 'Maths',
+      value: AWAITING_ASSESSMENT_CONTENT,
+    },
+  ],
+  digiLit: [
+    {
+      label: 'Digital Literacy',
+      value: AWAITING_ASSESSMENT_CONTENT,
+    },
+  ],
+}
+
+export const DEFAULT_LEARNER_HISTORY = {
+  total: '0',
+  inProgress: '0',
+  achieved: '0',
+  failed: '0',
+  withdrawn: '0',
+}
 
 const parseDate = (value: string) => moment(value, CURIOUS_DATE_FORMAT)
 
@@ -32,6 +64,38 @@ const compareByDate = (dateA: Moment, dateB: Moment, descending = true) => {
     return 1 * order
   }
   return 0
+}
+
+const renameAssessmentLabel = (qualificationType) =>
+  qualificationType === AssessmentQualificationType.English ? 'English/Welsh' : qualificationType
+
+const createSkillAssessmentSummary = (learnerAssessment: curious.LearnerAssessment) => {
+  const { qualification, establishmentName } = learnerAssessment || {}
+  const { qualificationType, qualificationGrade, assessmentDate } = qualification || {}
+
+  if (!assessmentDate) {
+    return [
+      {
+        label: renameAssessmentLabel(qualificationType),
+        value: AWAITING_ASSESSMENT_CONTENT,
+      },
+    ]
+  }
+
+  return [
+    {
+      label: renameAssessmentLabel(qualificationType),
+      value: qualificationGrade,
+    },
+    {
+      label: 'Assessment date',
+      value: readableDateFormat(assessmentDate, CURIOUS_DATE_FORMAT),
+    },
+    {
+      label: 'Assessment location',
+      value: establishmentName,
+    },
+  ]
 }
 
 /**
@@ -105,72 +169,89 @@ export default class EsweService {
       return createFlaggedContent({})
     }
 
-    const context = await this.systemOauthClient.getClientCredentialsTokens()
-    const learnerLatestAssessments = await this.curiousApi.getLearnerLatestAssessments(context, nomisId)
+    try {
+      const context = await this.systemOauthClient.getClientCredentialsTokens()
+      const learnerLatestAssessments = await this.curiousApi.getLearnerLatestAssessments(context, nomisId)
 
-    const compareByDateDesc = (a: curious.LearnerAssessment, b: curious.LearnerAssessment) =>
-      compareByDate(parseDate(a.qualification.assessmentDate), parseDate(b.qualification.assessmentDate))
-
-    const getLatestGrade = (
-      functionalSkillLevels: curious.LearnerLatestAssessment[],
-      qualificationType: AssessmentQualificationType
-    ): curious.LearnerAssessment => {
-      const emptyAssessment: curious.LearnerAssessment = {
-        qualification: {
-          qualificationType,
-        },
-      }
-      if (Array.isArray(functionalSkillLevels) && functionalSkillLevels.length > 0) {
-        const { qualifications } = functionalSkillLevels[0]
-        const learnerAssessment = qualifications
-          .filter((functionalSkillLevel) => functionalSkillLevel.qualification.qualificationType === qualificationType)
-          .sort(compareByDateDesc)[0]
-
-        return learnerAssessment || emptyAssessment
-      }
-
-      return emptyAssessment
-    }
-
-    const englishGrade = getLatestGrade(learnerLatestAssessments, AssessmentQualificationType.English)
-    const mathsGrade = getLatestGrade(learnerLatestAssessments, AssessmentQualificationType.Maths)
-    const digitalLiteracyGrade = getLatestGrade(learnerLatestAssessments, AssessmentQualificationType.DigitalLiteracy)
-
-    const createSkillAssessmentSummary = (learnerAssessment: curious.LearnerAssessment) => {
-      const { qualification, establishmentName } = learnerAssessment || {}
-      const { qualificationType, qualificationGrade, assessmentDate } = qualification || {}
-
-      if (!assessmentDate) {
-        return [
-          {
-            label: qualificationType,
-            value: 'Awaiting assessment',
+      const getSubjectGrade = (
+        functionalSkillLevels: curious.LearnerLatestAssessment[],
+        qualificationType: AssessmentQualificationType
+      ): curious.LearnerAssessment => {
+        const emptyAssessment: curious.LearnerAssessment = {
+          qualification: {
+            qualificationType,
           },
-        ]
+        }
+
+        if (Array.isArray(functionalSkillLevels) && functionalSkillLevels.length > 0) {
+          const { qualifications } = functionalSkillLevels[0]
+          const learnerAssessment = qualifications.filter(
+            (functionalSkillLevel) => functionalSkillLevel.qualification.qualificationType === qualificationType
+          )
+          return learnerAssessment[0] || emptyAssessment
+        }
+        return emptyAssessment
       }
 
-      return [
-        {
-          label: qualificationType === AssessmentQualificationType.English ? 'English/Welsh' : qualificationType,
-          value: qualificationGrade,
-        },
-        {
-          label: 'Assessment date',
-          value: readableDateFormat(assessmentDate, CURIOUS_DATE_FORMAT),
-        },
-        {
-          label: 'Assessment location',
-          value: establishmentName,
-        },
-      ]
+      const englishGrade = getSubjectGrade(learnerLatestAssessments, AssessmentQualificationType.English)
+      const mathsGrade = getSubjectGrade(learnerLatestAssessments, AssessmentQualificationType.Maths)
+      const digitalLiteracyGrade = getSubjectGrade(
+        learnerLatestAssessments,
+        AssessmentQualificationType.DigitalLiteracy
+      )
+
+      return createFlaggedContent({
+        english: createSkillAssessmentSummary(englishGrade),
+        maths: createSkillAssessmentSummary(mathsGrade),
+        digiLit: createSkillAssessmentSummary(digitalLiteracyGrade),
+      })
+    } catch (e) {
+      if (e.status === 404) {
+        log.info(`Offender record not found in Curious.`)
+        return createFlaggedContent(DEFAULT_SKILL_LEVELS)
+      }
+      log.error(`Failed to get latest learning assessments. Reason: ${e.message}`)
+    }
+    return createFlaggedContent(null)
+  }
+
+  async getLearnerEducation(nomisId: string): Promise<LearnerEducationHistory> {
+    if (!app.esweEnabled) {
+      return createFlaggedContent(null)
+    }
+    try {
+      const context = await this.systemOauthClient.getClientCredentialsTokens()
+      const content = await this.curiousApi.getLearnerEducation(context, nomisId)
+
+      const inProgress = content.filter((course) => course.completionStatus?.includes('continuing')).length
+      const achieved = content.filter(
+        (course) =>
+          course.completionStatus?.includes('completed') &&
+          ['Achieved', 'Partial achievement', 'Achieved awaiting Certificate'].includes(course.outcome)
+      ).length
+      const failed = content.filter(
+        (course) => course.completionStatus?.includes('completed') && course.outcomeGrade === 'Fail'
+      ).length
+      const withdrawn = content.filter((course) => course.completionStatus?.includes('withdrawn')).length
+      const total = (inProgress + achieved + failed + withdrawn).toString()
+
+      const learningHistoryCounts = {
+        total,
+        inProgress: inProgress.toString(),
+        achieved: achieved.toString(),
+        failed: failed.toString(),
+        withdrawn: withdrawn.toString(),
+      }
+
+      return createFlaggedContent(learningHistoryCounts)
+    } catch (e) {
+      if (e.status === 404) {
+        log.info(`Offender record not found in Curious.`)
+        return createFlaggedContent(DEFAULT_LEARNER_HISTORY)
+      }
+      log.warn(`Failed to fetch learner history. Reason: ${e.message}`)
     }
 
-    const functionalSkillLevels = {
-      english: createSkillAssessmentSummary(englishGrade),
-      maths: createSkillAssessmentSummary(mathsGrade),
-      digiLit: createSkillAssessmentSummary(digitalLiteracyGrade),
-    }
-
-    return createFlaggedContent(functionalSkillLevels)
+    return createFlaggedContent(null)
   }
 }

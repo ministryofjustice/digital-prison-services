@@ -12,5 +12,6 @@ declare namespace Express {
 
   interface Request {
     session: session.Session & Partial<session.SessionData> & prisonstaffhub.UserSession
+    csrfToken?: () => string
   }
 }

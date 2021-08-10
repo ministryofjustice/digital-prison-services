@@ -19,8 +19,9 @@ import {
   getHoursMinutes,
   getListSizeClass,
   getLongDateFormat,
+  stripAgencyPrefix,
 } from '../utils'
-import { stripAgencyPrefix } from '../../backend/utils'
+
 import OtherActivitiesView from '../OtherActivityListView'
 import AlertFlags from '../AlertFlags'
 import SortableColumn from '../tablesorting/SortableColumn'

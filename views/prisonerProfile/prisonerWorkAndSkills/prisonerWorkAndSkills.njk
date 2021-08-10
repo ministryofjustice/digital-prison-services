@@ -6,9 +6,10 @@
 
 {% set title = "Work and Skills" %}
 {% set containerClasses = "prisoner-profile" %}
-{% set missingLevel = "Missing data" %}
+{% set errorMessage = "We cannot show these details right now. Try reloading the page." %}
 
 {% set functionalSkillLevels = functionalSkillLevels.content %}
+{% set learningHistory = learningHistory.content %}
 
 {% set functionalSkillsLevel %}
   <div data-test="functional-skills-level-summary">
@@ -16,8 +17,15 @@
   </div>
 {% endset %}
 
+{% set learningHistory %}
+  <div data-test="learning-history-summary">
+    {% include "./partials/learningHistory.njk" %}
+  </div>
+{% endset %}
+
 {% set leftSections = [
-    { heading: 'Functional skills level', html: functionalSkillsLevel }
+    { heading: 'Functional skills level', html: functionalSkillsLevel },
+    { heading: 'Learning history', html: learningHistory }
   ]
 %}
 

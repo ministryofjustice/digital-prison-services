@@ -19,6 +19,13 @@ const buildDateTime = ({ date, hours, minutes, dateFormat = DAY_MONTH_YEAR }) =>
   return time ? time.hour(Number(hours)).minutes(Number(minutes)) : ''
 }
 
+const formatDate = (value) => {
+  if (moment.isMoment(value)) {
+    return value.format(DATE_TIME_FORMAT_SPEC)
+  }
+  return undefined
+}
+
 module.exports = {
   DATE_TIME_FORMAT_SPEC,
   DATE_ONLY_FORMAT_SPEC,
@@ -29,4 +36,5 @@ module.exports = {
   DayMonthYear,
   Time,
   buildDateTime,
+  formatDate,
 }

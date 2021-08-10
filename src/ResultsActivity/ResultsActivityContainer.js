@@ -42,8 +42,8 @@ class ResultsActivityContainer extends Component {
 
     const { date, period, location } = queryString.parse(search)
 
-    if (!date && !period && !location) {
-      window.location = '/manage-prisoner-whereabouts'
+    if (!date || !period || !location) {
+      window.location = '/manage-prisoner-whereabouts/select-location'
     } else {
       getAbsentReasonsDispatch()
       await this.getActivityList({ date, period, location })
@@ -131,6 +131,11 @@ class ResultsActivityContainer extends Component {
           timeSlot: period,
         },
       })
+      if (response?.data?.error) {
+        handleError(response.data.error)
+        setLoadedDispatch(true)
+        return
+      }
       const activityData = response.data
 
       const orderField = 'activity'

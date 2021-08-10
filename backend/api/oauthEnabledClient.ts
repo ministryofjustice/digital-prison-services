@@ -95,7 +95,11 @@ export class OauthApiClient {
    * @param customTimeout value in milliseconds to override default timeout
    * @returns A Promise which settles to the superagent result object if the promise is resolved, otherwise to the 'error' object.
    */
-  getWithCustomTimeout = <T>(context, path, { resultsLimit, customTimeout }): Promise<ClientResponse<T>> => {
+  getWithCustomTimeout = <T>(
+    context,
+    path,
+    { resultsLimit = undefined, customTimeout = this.timeout }
+  ): Promise<ClientResponse<T>> => {
     return superagent
       .get(this.createUrl(path))
       .agent(this.keepaliveAgent)

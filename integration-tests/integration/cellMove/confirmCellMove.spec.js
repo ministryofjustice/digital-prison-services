@@ -31,12 +31,12 @@ context('A user can confirm the cell move', () => {
     })
     cy.task('stubCellMoveTypes', [
       {
-        code: 'ADM', 
+        code: 'ADM',
         activeFlag: 'Y',
         description: 'Administrative',
       },
       {
-        code: 'BEH', 
+        code: 'BEH',
         activeFlag: 'Y',
         description: 'Behaviour',
       },
@@ -52,18 +52,9 @@ context('A user can confirm the cell move', () => {
   it('should make a call to update an offenders cell', () => {
     const page = ConfirmCellMovePage.goTo(offenderNo, 1, 'Bob Doe', 'MDI-1-1')
     const comment = 'Hello world'
-    page
-      .form()
-      .reason()
-      .click()
-    page
-      .form()
-      .comment()
-      .type(comment)
-    page
-      .form()
-      .submitButton()
-      .click()
+    page.form().reason().click()
+    page.form().comment().type(comment)
+    page.form().submitButton().click()
 
     cy.task('verifyMoveToCell', {
       bookingId,
@@ -90,20 +81,11 @@ context('A user can confirm the cell move', () => {
 
     page.warning().should('not.exist')
 
-    page
-      .form()
-      .reason()
-      .should('not.exist')
+    page.form().reason().should('not.exist')
 
-    page
-      .form()
-      .comment()
-      .should('not.exist')
+    page.form().comment().should('not.exist')
 
-    page
-      .form()
-      .submitButton()
-      .click()
+    page.form().submitButton().click()
 
     cy.task('verifyMoveToCellSwap', { bookingId: 1234 }).then(assertHasRequestCount(1))
 

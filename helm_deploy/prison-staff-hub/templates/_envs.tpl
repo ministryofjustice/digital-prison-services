@@ -105,7 +105,13 @@ env:
       secretKeyRef:
         name: {{ template "app.name" . }}
         key: NOTTINGHAM_OMU_EMAIL
-    
+
+  - name: BULLINGDON_OMU_EMAIL
+    valueFrom:
+      secretKeyRef:
+        name: {{ template "app.name" . }}
+        key: BULLINGDON_OMU_EMAIL
+        
   - name: REDIS_HOST
     valueFrom:
       secretKeyRef:
@@ -217,8 +223,11 @@ env:
   - name: PIN_PHONES_URL
     value: {{ .Values.env.PIN_PHONES_URL | quote }}
 
-  - name: SOC_URL
-    value: {{ .Values.env.SOC_URL | quote }}
+  - name: SOC_UI_URL
+    value: {{ .Values.env.SOC_UI_URL | quote }}
+
+  - name: SOC_API_URL
+    value: {{ .Values.env.SOC_API_URL | quote }}
 
   - name: SOC_API_ENABLED
     value: {{ .Values.env.SOC_API_ENABLED | quote }}

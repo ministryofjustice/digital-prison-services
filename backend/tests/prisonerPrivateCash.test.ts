@@ -1,0 +1,260 @@
+import prisonerPrivateCash from '../controllers/prisonerProfile/prisonerFinances/prisonerPrivateCash'
+
+describe('Prisoner private cash', () => {
+  const offenderNo = 'ABC123'
+  const prisonApi = {}
+  const prisonerFinanceService = {}
+
+  let req
+  let res
+  let controller
+
+  const templateDataResponse = {
+    currentBalance: '£95.00',
+    formValues: {
+      selectedMonth: 10,
+      selectedYear: 2020,
+    },
+    monthOptions: [
+      { text: 'January', value: 0 },
+      { text: 'February', value: 1 },
+      { text: 'March', value: 2 },
+      { text: 'April', value: 3 },
+      { text: 'May', value: 4 },
+      { text: 'June', value: 5 },
+      { text: 'July', value: 6 },
+      { text: 'August', value: 7 },
+      { text: 'September', value: 8 },
+      { text: 'October', value: 9 },
+      { text: 'November', value: 10 },
+      { text: 'December', value: 11 },
+    ],
+    prisoner: {
+      name: 'John Smith',
+      nameForBreadcrumb: 'Smith, John',
+      offenderNo: 'ABC123',
+    },
+    showDamageObligationsLink: false,
+    yearOptions: [
+      { text: 2017, value: 2017 },
+      { text: 2018, value: 2018 },
+      { text: 2019, value: 2019 },
+      { text: 2020, value: 2020 },
+    ],
+  }
+
+  beforeEach(() => {
+    req = {
+      originalUrl: 'http://localhost',
+      params: { offenderNo },
+      query: {},
+    }
+    res = { locals: {}, render: jest.fn() }
+
+    // @ts-expect-error ts-migrate(2339) FIXME: Property 'getTransactionsForDateRange' does not ex... Remove this comment to see the full error message
+    prisonerFinanceService.getTransactionsForDateRange = jest.fn().mockResolvedValue([])
+    // @ts-expect-error ts-migrate(2339) FIXME: Property 'getTemplateData' does not exist on type ... Remove this comment to see the full error message
+    prisonerFinanceService.getTemplateData = jest.fn().mockResolvedValue(templateDataResponse)
+
+    // @ts-expect-error ts-migrate(2339) FIXME: Property 'getTransactionHistory' does not exist on... Remove this comment to see the full error message
+    prisonApi.getTransactionHistory = jest.fn().mockResolvedValue([])
+    // @ts-expect-error ts-migrate(2339) FIXME: Property 'getAgencyDetails' does not exist on type... Remove this comment to see the full error message
+    prisonApi.getAgencyDetails = jest.fn().mockResolvedValue({})
+
+    controller = prisonerPrivateCash({ prisonApi, prisonerFinanceService })
+  })
+
+  it('should make the expected calls', async () => {
+    const params = [res.locals, offenderNo, 'cash', undefined, undefined]
+
+    await controller(req, res)
+
+    // @ts-expect-error ts-migrate(2339) FIXME: Property 'getTransactionHistory' does not exist on... Remove this comment to see the full error message
+    expect(prisonApi.getTransactionHistory).toHaveBeenCalledWith(res.locals, offenderNo, {
+      account_code: 'cash',
+      transaction_type: 'HOA',
+    })
+    // @ts-expect-error ts-migrate(2339) FIXME: Property 'getTransactionHistory' does not exist on... Remove this comment to see the full error message
+    expect(prisonApi.getTransactionHistory).toHaveBeenCalledWith(res.locals, offenderNo, {
+      account_code: 'cash',
+      transaction_type: 'WHF',
+    })
+    // @ts-expect-error ts-migrate(2339) FIXME: Property 'getTransactionsForDateRange' does not ex... Remove this comment to see the full error message
+    expect(prisonerFinanceService.getTransactionsForDateRange).toHaveBeenCalledWith(...params)
+    // @ts-expect-error ts-migrate(2339) FIXME: Property 'getTemplateData' does not exist on type ... Remove this comment to see the full error message
+    expect(prisonerFinanceService.getTemplateData).toHaveBeenCalledWith(...params)
+    // @ts-expect-error ts-migrate(2339) FIXME: Property 'getAgencyDetails' does not exist on type... Remove this comment to see the full error message
+    expect(prisonApi.getAgencyDetails).not.toHaveBeenCalled()
+  })
+
+  describe('with transaction data', () => {
+    beforeEach(() => {
+      const holds = [
+        {
+          offenderId: 1,
+          transactionId: 234,
+          transactionEntrySequence: 1,
+          entryDate: '2020-11-27',
+          createDateTime: '2020-11-27T10:00',
+          transactionType: 'HOA',
+          entryDescription: 'HOLD',
+          referenceNumber: null,
+          currency: 'GBP',
+          penceAmount: 1000,
+          accountType: 'REG',
+          postingType: 'DR',
+          agencyId: 'MDI',
+        },
+        {
+          offenderId: 1,
+          transactionId: 235,
+          transactionEntrySequence: 2,
+          entryDate: '2020-11-27',
+          createDateTime: '2020-11-27T09:00',
+          transactionType: 'HOA',
+          entryDescription: 'HOLD',
+          referenceNumber: null,
+          currency: 'GBP',
+          penceAmount: 2000,
+          accountType: 'REG',
+          postingType: 'DR',
+          agencyId: 'MDI',
+          holdingCleared: 'Y',
+        },
+      ]
+      const withHolds = [
+        {
+          offenderId: 1,
+          transactionId: 236,
+          transactionEntrySequence: 1,
+          entryDate: '2020-11-26',
+          createDateTime: '2020-11-26T10:00',
+          transactionType: 'WHF',
+          entryDescription: 'WITHHELD',
+          referenceNumber: null,
+          currency: 'GBP',
+          penceAmount: null,
+          accountType: 'REG',
+          postingType: 'DR',
+          agencyId: 'MDI',
+        },
+      ]
+
+      // @ts-expect-error ts-migrate(2339) FIXME: Property 'getTransactionsForDateRange' does not ex... Remove this comment to see the full error message
+      prisonerFinanceService.getTransactionsForDateRange = jest.fn().mockResolvedValue([
+        {
+          offenderId: 1,
+          transactionId: 789,
+          transactionEntrySequence: 1,
+          entryDate: '2020-11-16',
+          createDateTime: '2020-11-16T10:00',
+          transactionType: 'POST',
+          entryDescription: 'Bought some food',
+          referenceNumber: null,
+          currency: 'GBP',
+          penceAmount: 10000,
+          accountType: 'REG',
+          postingType: 'DR',
+          agencyId: 'LEI',
+          currentBalance: 500,
+        },
+        ...withHolds,
+        ...holds,
+      ])
+      // @ts-expect-error ts-migrate(2339) FIXME: Property 'getTransactionHistory' does not exist on... Remove this comment to see the full error message
+      prisonApi.getTransactionHistory = jest.fn().mockResolvedValue(holds).mockResolvedValueOnce(withHolds)
+
+      // @ts-expect-error ts-migrate(2339) FIXME: Property 'getAgencyDetails' does not exist on type... Remove this comment to see the full error message
+      prisonApi.getAgencyDetails = jest
+        .fn()
+        .mockResolvedValue({ description: 'Moorland', agencyId: 'MDI' })
+        .mockResolvedValueOnce({ description: 'Leeds', agencyId: 'LEI' })
+    })
+
+    it('should make additional expected API calls for agency data', async () => {
+      await controller(req, res)
+
+      // @ts-expect-error ts-migrate(2339) FIXME: Property 'getAgencyDetails' does not exist on type... Remove this comment to see the full error message
+      expect(prisonApi.getAgencyDetails).toHaveBeenCalledWith({}, 'MDI')
+      // @ts-expect-error ts-migrate(2339) FIXME: Property 'getAgencyDetails' does not exist on type... Remove this comment to see the full error message
+      expect(prisonApi.getAgencyDetails).toHaveBeenCalledWith({}, 'LEI')
+    })
+
+    it('should render the correct template with the correct information', async () => {
+      await controller(req, res)
+
+      expect(res.render).toHaveBeenCalledWith('prisonerProfile/prisonerFinance/privateCash.njk', {
+        ...templateDataResponse,
+        privateTransactionsRows: [
+          [
+            { text: '27/11/2020' },
+            { text: '' },
+            { text: '-£10.00' },
+            { text: '' },
+            { text: 'HOLD' },
+            { text: 'Moorland' },
+          ],
+          [
+            { text: '27/11/2020' },
+            { text: '' },
+            { text: '-£20.00' },
+            { text: '' },
+            { text: 'HOLD' },
+            { text: 'Moorland' },
+          ],
+          [
+            { text: '26/11/2020' },
+            { text: '' },
+            { text: '' },
+            { text: '' },
+            { text: 'WITHHELD' },
+            { text: 'Moorland' },
+          ],
+          [
+            { text: '16/11/2020' },
+            { text: '' },
+            { text: '-£100.00' },
+            { text: '£5.00' },
+            { text: 'Bought some food' },
+            { text: 'Leeds' },
+          ],
+        ],
+        pendingBalance: '£10.00',
+        pendingRows: [
+          [{ text: '27/11/2020' }, { text: '£10.00' }, { text: 'HOLD' }, { text: 'Moorland' }],
+          [{ text: '26/11/2020' }, { text: '' }, { text: 'WITHHELD' }, { text: 'Moorland' }],
+        ],
+      })
+    })
+  })
+
+  describe('when selecting a month and year', () => {
+    beforeEach(() => {
+      req.query = {
+        month: '6',
+        year: '2020',
+      }
+    })
+
+    it('should pass make the correct calls to prisonerFinanceService', async () => {
+      const params = [res.locals, offenderNo, 'cash', '6', '2020']
+      await controller(req, res)
+
+      // @ts-expect-error ts-migrate(2339) FIXME: Property 'getTransactionsForDateRange' does not ex... Remove this comment to see the full error message
+      expect(prisonerFinanceService.getTransactionsForDateRange).toHaveBeenCalledWith(...params)
+      // @ts-expect-error ts-migrate(2339) FIXME: Property 'getTemplateData' does not exist on type ... Remove this comment to see the full error message
+      expect(prisonerFinanceService.getTemplateData).toHaveBeenCalledWith(...params)
+    })
+  })
+
+  describe('when there are errors', () => {
+    it('set the redirect url and throw the error', async () => {
+      const error = new Error('Network error')
+      // @ts-expect-error ts-migrate(2339) FIXME: Property 'getTransactionsForDateRange' does not ex... Remove this comment to see the full error message
+      prisonerFinanceService.getTransactionsForDateRange.mockRejectedValue(error)
+
+      await expect(controller(req, res)).rejects.toThrowError(error)
+      expect(res.locals.redirectUrl).toBe(`/prisoner/${offenderNo}`)
+    })
+  })
+})

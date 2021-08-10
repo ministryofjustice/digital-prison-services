@@ -1,6 +1,6 @@
 import PropTypes from 'prop-types'
 import { connect } from 'react-redux'
-import { stripAgencyPrefix } from '../../backend/utils'
+import { stripAgencyPrefix } from '../utils'
 
 const Location = (props) => {
   const { location, agencyId } = props

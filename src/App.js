@@ -5,7 +5,6 @@ import PropTypes from 'prop-types'
 import { connect } from 'react-redux'
 import Notifications from 'react-notify-toast'
 import ReactGA from 'react-ga'
-import { FooterContainer } from 'new-nomis-shared-components'
 import ErrorComponent from './Error/index'
 import Terms from './Footer/terms-and-conditions'
 import './App.scss'
@@ -20,6 +19,7 @@ import ModalContainer from './Components/ModalContainer'
 import { userType } from './types'
 import IncentiveLevelSlipContainer from './IncentiveLevelSlipContainer'
 import PrisonersUnaccountedForContainer from './PrisonersUnaccountedFor/PrisonersUnaccountedForContainer'
+import FeedbackBanner from './Components/FeedbackBanner/FeedbackBanner'
 
 import {
   getAbsentReasons,
@@ -37,6 +37,7 @@ import {
   setTermsVisibility,
   setUserDetails,
 } from './redux/actions/index'
+import FooterContainer from './Components/FooterContainer'
 
 const axios = require('axios')
 
@@ -334,6 +335,7 @@ class App extends React.Component {
                   />
                   {shouldShowTerms && <Terms close={() => this.hideTermsAndConditions()} />}
                   {innerContent}
+                  <FeedbackBanner />
                   <FooterContainer supportUrl={config.supportUrl} prisonStaffHubUrl="/" />
                 </ScrollToTop>
               </div>

@@ -1,1 +1,0 @@
-exports.releaseDatesViewModel = require('./releaseDatesViewModel')
