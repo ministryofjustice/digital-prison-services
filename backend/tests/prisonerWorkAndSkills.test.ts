@@ -85,7 +85,6 @@ describe('Prisoner work and skills controller', () => {
       expect.objectContaining({
         prisonerProfileData,
         functionalSkillLevels,
-        learningHistory,
       })
     )
   })
