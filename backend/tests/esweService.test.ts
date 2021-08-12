@@ -1,4 +1,4 @@
-import EsweService, { DEFAULT_LEARNER_HISTORY, DEFAULT_SKILL_LEVELS } from '../services/esweService'
+import EsweService, { DEFAULT_SKILL_LEVELS } from '../services/esweService'
 import { app } from '../config'
 import CuriousApi from '../api/curious/curiousApi'
 
@@ -248,53 +248,6 @@ describe('Education skills and work experience', () => {
         getLearnerLatestAssessmentsMock.mockRejectedValue(new Error('error'))
         const actual = await service.getLearnerLatestAssessments(nomisId)
         expect(actual.content).toBeNull()
-      })
-    })
-    describe('learner history', () => {
-      const nomisId = 'G2823GV'
-      it('should return null when feature flag is disabled', async () => {
-        jest.spyOn(app, 'esweEnabled', 'get').mockReturnValue(false)
-        const actual = await service.getLearnerEducation(nomisId)
-        expect(actual.enabled).toBeFalsy()
-        expect(actual.content).toBeNull()
-        expect(getLearnerEducationMock).not.toHaveBeenCalled()
-        expect(systemOauthClient.getClientCredentialsTokens).not.toHaveBeenCalled()
-      })
-      it('should return null content on error', async () => {
-        jest.spyOn(app, 'esweEnabled', 'get').mockReturnValue(true)
-        getLearnerEducationMock.mockRejectedValue(new Error('error'))
-        const actual = await service.getLearnerEducation(nomisId)
-        expect(actual.content).toBeNull()
-      })
-      it('should return expected response when the prisoner is not registered in Curious', async () => {
-        const error = {
-          status: 404,
-        }
-        jest.spyOn(app, 'esweEnabled', 'get').mockReturnValue(true)
-        getLearnerEducationMock.mockRejectedValue(error)
-        const actual = await service.getLearnerEducation(nomisId)
-        expect(actual.enabled).toBeTruthy()
-        expect(actual.content).toEqual(DEFAULT_LEARNER_HISTORY)
-      })
-      it('should return the expected response if there are no courses available', async () => {
-        jest.spyOn(app, 'esweEnabled', 'get').mockReturnValue(true)
-        getLearnerEducationMock.mockResolvedValue([])
-        const actual = await service.getLearnerEducation(nomisId)
-        expect(actual.enabled).toBeTruthy()
-        expect(actual.content).toEqual(DEFAULT_LEARNER_HISTORY)
-      })
-      it('should return the expected response if there are courses available', async () => {
-        const expected = {
-          total: '4',
-          inProgress: '1',
-          achieved: '1',
-          failed: '1',
-          withdrawn: '1',
-        }
-        jest.spyOn(app, 'esweEnabled', 'get').mockReturnValue(true)
-        const actual = await service.getLearnerEducation(nomisId)
-        expect(actual.enabled).toBeTruthy()
-        expect(actual.content).toEqual(expected)
       })
     })
   })
