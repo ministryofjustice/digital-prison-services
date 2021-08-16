@@ -358,14 +358,14 @@ module.exports = {
     stubFor({
       request: {
         method: 'GET',
-        urlPattern: '/api/bookings/[0-9]+?/alerts\\?query=.+?',
+        urlPattern: '/api/bookings/[0-9]+?/alerts/v2\\?.+?',
       },
       response: {
         status: 200,
         headers: {
           'Content-Type': 'application/json;charset=UTF-8',
         },
-        jsonBody: alerts || [],
+        jsonBody: { content: alerts || [] },
       },
     }),
 

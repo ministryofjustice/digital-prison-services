@@ -5,36 +5,14 @@ export default ({ prisonerProfileService, referenceCodesService, paginationServi
   async (req, res) => {
     const { offenderNo } = req.params
     const { fromDate, toDate, alertType, active, pageOffsetOption } = req.query
-    const fomattedFromDate = fromDate && moment(fromDate, 'DD/MM/YYYY').format('YYYY-MM-DD')
-    const fomattedToDate = toDate && moment(toDate, 'DD/MM/YYYY').format('YYYY-MM-DD')
-    const pageLimit = 20
+    const from = (fromDate && moment(fromDate, 'DD/MM/YYYY').format('YYYY-MM-DD')) || ''
+    const to = (toDate && moment(toDate, 'DD/MM/YYYY').format('YYYY-MM-DD')) || ''
+    const size = 20
     const pageOffset = parseInt(pageOffsetOption, 10) || 0
+    const page = pageOffset / size
     const fullUrl = new URL(`${req.protocol}://${req.get('host')}${req.originalUrl}`)
 
     const { bookingId } = await prisonApi.getDetails(res.locals, offenderNo)
-
-    const alertTypeQuery = (type) => (type ? `alertType:in:'${type}'` : '')
-    const fromQuery = (date) => (date ? `dateCreated:gteq:DATE'${date}'` : '')
-    const toQuery = (date) => (date ? `dateCreated:lteq:DATE'${date}'` : '')
-    const activeQuery = (activeFlag) => (activeFlag ? `active:eq:'${activeFlag}'` : "active:eq:'ACTIVE'")
-
-    const queryParts = [
-      alertTypeQuery(alertType),
-      fromQuery(fomattedFromDate),
-      toQuery(fomattedToDate),
-      activeQuery(active),
-    ]
-      .filter((value) => value)
-      .join(',and:')
-
-    const query = queryParts ? `?query=${queryParts}` : ''
-
-    const headers = {
-      'Sort-Order': 'DESC',
-      'Sort-Fields': 'dateCreated',
-      'Page-Offset': pageOffset,
-      'Page-Limit': pageLimit,
-    }
 
     const [prisonerProfileData, alertTypes, roles] = await Promise.all([
       prisonerProfileService.getPrisonerProfileData(res.locals, offenderNo),
@@ -43,10 +21,19 @@ export default ({ prisonerProfileService, referenceCodesService, paginationServi
     ])
     const { userCanEdit } = prisonerProfileData
     const canUpdateAlerts = roles && roles.some((role) => role.roleCode === 'UPDATE_ALERT') && userCanEdit
-    const alerts = await prisonApi.getAlertsForBooking(res.locals, { bookingId, query }, headers)
-    const totalAlerts = res.locals.responseHeaders['total-records']
+    const alerts = await prisonApi.getAlertsForBookingV2(res.locals, {
+      bookingId,
+      alertType: alertType || '',
+      from,
+      to,
+      alertStatus: active || 'ACTIVE',
+      page,
+      sort: 'dateCreated,desc',
+      size,
+    })
+    const totalAlerts = alerts.totalElements
 
-    const activeAlerts = alerts
+    const activeAlerts = alerts.content
       .filter((alert) => alert.active && !alert.expired)
       .map((alert) => [
         { text: `${alert.alertTypeDescription} (${alert.alertType})` },
@@ -61,7 +48,7 @@ export default ({ prisonerProfileService, referenceCodesService, paginationServi
           classes: 'govuk-table__cell--numeric',
         },
       ])
-    const inactiveAlerts = alerts
+    const inactiveAlerts = alerts.content
       .filter((alert) => !alert.active && alert.expired)
       .map((alert) => [
         { text: `${alert.alertTypeDescription} (${alert.alertType})` },
@@ -100,7 +87,7 @@ export default ({ prisonerProfileService, referenceCodesService, paginationServi
       activeAlerts,
       inactiveAlerts,
       alertTypeValues,
-      pagination: paginationService.getPagination(totalAlerts, pageOffset, pageLimit, fullUrl),
+      pagination: paginationService.getPagination(totalAlerts, pageOffset, size, fullUrl),
       createLink: `/offenders/${offenderNo}/create-alert`,
       canUpdateAlerts,
     })

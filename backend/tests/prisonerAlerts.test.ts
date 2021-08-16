@@ -53,7 +53,34 @@ describe('prisoner alerts', () => {
     // @ts-expect-error ts-migrate(2339) FIXME: Property 'getPagination' does not exist on type '{... Remove this comment to see the full error message
     paginationService.getPagination = jest.fn().mockReturnValue([])
     // @ts-expect-error ts-migrate(2339) FIXME: Property 'getAlertsForBooking' does not exist on t... Remove this comment to see the full error message
-    prisonApi.getAlertsForBooking = jest.fn().mockResolvedValue([])
+    prisonApi.getAlertsForBookingV2 = jest.fn().mockResolvedValue({
+      content: [],
+      pageable: {
+        sort: {
+          sorted: true,
+          unsorted: false,
+          empty: false,
+        },
+        offset: 0,
+        pageSize: 20,
+        pageNumber: 0,
+        paged: true,
+        unpaged: false,
+      },
+      last: true,
+      totalElements: 0,
+      totalPages: 0,
+      size: 20,
+      number: 0,
+      sort: {
+        sorted: true,
+        unsorted: false,
+        empty: false,
+      },
+      first: true,
+      numberOfElements: 0,
+      empty: false,
+    })
     // @ts-expect-error ts-migrate(2339) FIXME: Property 'userRoles' does not exist on type '{}'.
     oauthApi.userRoles = jest.fn().mockResolvedValue([{ roleCode: 'UPDATE_ALERT' }])
     controller = prisonerAlerts({
@@ -74,15 +101,17 @@ describe('prisoner alerts', () => {
 
     // @ts-expect-error ts-migrate(2339) FIXME: Property 'getDetails' does not exist on type '{}'.
     expect(prisonApi.getDetails).toHaveBeenCalledWith(res.locals, offenderNo)
-    // @ts-expect-error ts-migrate(2339) FIXME: Property 'getAlertsForBooking' does not exist on t... Remove this comment to see the full error message
-    expect(prisonApi.getAlertsForBooking).toHaveBeenCalledWith(
-      res.locals,
-      {
-        bookingId: '14',
-        query: "?query=active:eq:'ACTIVE'",
-      },
-      { 'Page-Limit': 20, 'Page-Offset': 0, 'Sort-Fields': 'dateCreated', 'Sort-Order': 'DESC' }
-    )
+    // @ts-expect-error ts-migrate(2339) FIXME: Property 'getAlertsForBookingV2' does not exist on t... Remove this comment to see the full error message
+    expect(prisonApi.getAlertsForBookingV2).toHaveBeenCalledWith(res.locals, {
+      bookingId: '14',
+      alertType: '',
+      from: '',
+      to: '',
+      alertStatus: 'ACTIVE',
+      page: 0,
+      sort: 'dateCreated,desc',
+      size: 20,
+    })
     // @ts-expect-error ts-migrate(2339) FIXME: Property 'getPrisonerProfileData' does not exist o... Remove this comment to see the full error message
     expect(prisonerProfileService.getPrisonerProfileData).toHaveBeenCalledWith(res.locals, offenderNo)
     // @ts-expect-error ts-migrate(2339) FIXME: Property 'getAlertTypes' does not exist on type '{... Remove this comment to see the full error message
@@ -111,8 +140,6 @@ describe('prisoner alerts', () => {
       active: 'ACTIVE',
     }
 
-    res.locals.responseHeaders['total-records'] = 1
-
     // @ts-expect-error ts-migrate(2339) FIXME: Property 'getPagination' does not exist on type '{... Remove this comment to see the full error message
     paginationService.getPagination.mockReturnValue({
       classes: 'govuk-!-font-size-19',
@@ -123,16 +150,18 @@ describe('prisoner alerts', () => {
     })
     await controller(req, res)
 
-    // @ts-expect-error ts-migrate(2339) FIXME: Property 'getAlertsForBooking' does not exist on t... Remove this comment to see the full error message
-    expect(prisonApi.getAlertsForBooking).toHaveBeenCalledWith(
-      res.locals,
-      {
-        bookingId: '14',
-        query:
-          "?query=alertType:in:'X',and:dateCreated:gteq:DATE'2019-10-10',and:dateCreated:lteq:DATE'2019-10-11',and:active:eq:'ACTIVE'",
-      },
-      { 'Page-Limit': 20, 'Page-Offset': 0, 'Sort-Fields': 'dateCreated', 'Sort-Order': 'DESC' }
-    )
+    // @ts-expect-error ts-migrate(2339) FIXME: Property 'getAlertsForBookingV2' does not exist on t... Remove this comment to see the full error message
+    expect(prisonApi.getAlertsForBookingV2).toHaveBeenCalledWith(res.locals, {
+      bookingId: '14',
+      alertType: 'X',
+      from: '2019-10-10',
+      to: '2019-10-11',
+      alertStatus: 'ACTIVE',
+      page: 0,
+      sort: 'dateCreated,desc',
+      size: 20,
+    })
+
     // @ts-expect-error ts-migrate(2339) FIXME: Property 'getPrisonerProfileData' does not exist o... Remove this comment to see the full error message
     expect(prisonerProfileService.getPrisonerProfileData).toHaveBeenCalledWith(res.locals, offenderNo)
     expect(res.render).toHaveBeenCalledWith(
@@ -145,7 +174,7 @@ describe('prisoner alerts', () => {
           { text: 'Child Communication Measures', value: 'C' },
           { text: 'Social Care', value: 'A' },
         ],
-        totalAlerts: 1,
+        totalAlerts: 0,
         alertType: 'X',
         active: 'ACTIVE',
         fromDate: '10/10/2019',
@@ -166,44 +195,71 @@ describe('prisoner alerts', () => {
       // @ts-expect-error ts-migrate(2339) FIXME: Property 'getDetails' does not exist on type '{}'.
       prisonApi.getDetails.mockResolvedValue({ bookingId })
       // @ts-expect-error ts-migrate(2339) FIXME: Property 'getAlertsForBooking' does not exist on t... Remove this comment to see the full error message
-      prisonApi.getAlertsForBooking.mockResolvedValue([
-        {
-          active: true,
-          addedByFirstName: 'John',
-          addedByLastName: 'Smith',
-          alertCode: 'XC',
-          alertCodeDescription: 'Risk to females',
-          alertId: 1,
-          alertType: 'X',
-          alertTypeDescription: 'Security',
-          bookingId: 14,
-          comment: 'has a large poster on cell wall',
-          dateCreated: '2019-08-20',
-          dateExpires: '',
-          expired: false,
-          expiredByFirstName: 'John',
-          expiredByLastName: 'Smith',
-          offenderNo: 'G3878UK',
+      prisonApi.getAlertsForBookingV2.mockResolvedValue({
+        content: [
+          {
+            active: true,
+            addedByFirstName: 'John',
+            addedByLastName: 'Smith',
+            alertCode: 'XC',
+            alertCodeDescription: 'Risk to females',
+            alertId: 1,
+            alertType: 'X',
+            alertTypeDescription: 'Security',
+            bookingId: 14,
+            comment: 'has a large poster on cell wall',
+            dateCreated: '2019-08-20',
+            dateExpires: '',
+            expired: false,
+            expiredByFirstName: 'John',
+            expiredByLastName: 'Smith',
+            offenderNo: 'G3878UK',
+          },
+          {
+            active: false,
+            addedByFirstName: 'John',
+            addedByLastName: 'Smith',
+            alertCode: 'XC',
+            alertCodeDescription: 'Risk to females',
+            alertId: 2,
+            alertType: 'X',
+            alertTypeDescription: 'Security',
+            bookingId: 14,
+            comment: 'has a large poster on cell wall',
+            dateCreated: '2019-08-20',
+            dateExpires: '2019-08-21',
+            expired: true,
+            expiredByFirstName: 'John',
+            expiredByLastName: 'Smith',
+            offenderNo: 'G3878UK',
+          },
+        ],
+        pageable: {
+          sort: {
+            sorted: true,
+            unsorted: false,
+            empty: false,
+          },
+          offset: 0,
+          pageSize: 100,
+          pageNumber: 0,
+          paged: true,
+          unpaged: false,
         },
-        {
-          active: false,
-          addedByFirstName: 'John',
-          addedByLastName: 'Smith',
-          alertCode: 'XC',
-          alertCodeDescription: 'Risk to females',
-          alertId: 2,
-          alertType: 'X',
-          alertTypeDescription: 'Security',
-          bookingId: 14,
-          comment: 'has a large poster on cell wall',
-          dateCreated: '2019-08-20',
-          dateExpires: '2019-08-21',
-          expired: true,
-          expiredByFirstName: 'John',
-          expiredByLastName: 'Smith',
-          offenderNo: 'G3878UK',
+        last: true,
+        totalElements: 2,
+        totalPages: 1,
+        size: 20,
+        number: 0,
+        sort: {
+          sorted: true,
+          unsorted: false,
+          empty: false,
         },
-      ])
+        first: true,
+        numberOfElements: 2,
+        empty: false,
+      })
     })
 
     it('should render the alerts template with the correctly formatted data', async () => {
@@ -248,8 +304,8 @@ describe('prisoner alerts', () => {
   describe('when there are errors with retrieving information', () => {
     it('should redirect to error page', async () => {
       const error = new Error('Problem retrieving alerts')
-      // @ts-expect-error ts-migrate(2339) FIXME: Property 'getAlertsForBooking' does not exist on t... Remove this comment to see the full error message
-      prisonApi.getAlertsForBooking.mockRejectedValue(error)
+      // @ts-expect-error ts-migrate(2339) FIXME: Property 'getAlertsForBookingV2' does not exist on t... Remove this comment to see the full error message
+      prisonApi.getAlertsForBookingV2.mockRejectedValue(error)
 
       await expect(controller(req, res)).rejects.toThrowError(error)
     })
