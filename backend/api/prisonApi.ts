@@ -101,6 +101,13 @@ export const prisonApiFactory = (client) => {
     return get(context, `/api/bookings/${bookingId}/alerts${query}`)
   }
 
+  const getAlertsForBookingV2 = (context, { bookingId, alertType, from, to, alertStatus, page, sort }) => {
+    return get(
+      context,
+      `/api/bookings/${bookingId}/alerts/v2?alertType=${alertType}&from=${from}&to=${to}&alertStatus=${alertStatus}&page=${page}&sort=${sort}`
+    )
+  }
+
   const getAlertsSystem = (context, offenderNumbers) =>
     post(context, '/api/bookings/offenderNo/alerts', offenderNumbers)
 
@@ -413,6 +420,7 @@ export const prisonApiFactory = (client) => {
     getExternalTransfers,
     getAlerts,
     getAlertsForBooking,
+    getAlertsForBookingV2,
     getAlertsSystem,
     getAssessments,
     getEstablishmentRollBlocksCount,
