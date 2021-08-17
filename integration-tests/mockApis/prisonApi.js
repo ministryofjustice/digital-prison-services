@@ -5,11 +5,15 @@ const assessmentsResponse = require('./responses/assessmentsResponse.json')
 const activity3 = require('./responses/activity3.json')
 
 module.exports = {
-  verifyMoveToCell: body => verifyPosts('/whereabouts/cell/make-cell-move', body),
+  verifyMoveToCell: (body) => verifyPosts('/whereabouts/cell/make-cell-move', body),
   verifyMoveToCellSwap: ({ bookingId }) => verifyPut(`/api/bookings/${bookingId}/move-to-cell-swap`),
   verifyAdjudicationsHistory: ({ offenderNo, agencyId, finding, fromDate, toDate }) =>
     verifyGet(
       `/api/offenders/${offenderNo}/adjudications?agencyId=${agencyId}&finding=${finding}&fromDate=${fromDate}&toDate=${toDate}`
+    ),
+  verifyAlertsBookingGet: ({ bookingId, alertType, from, to, alertStatus, page, sort, size }) =>
+    verifyGet(
+      `/api/bookings/${bookingId}/alerts/v2?alertType=${alertType}&from=${from}&to=${to}&alertStatus=${alertStatus}&page=${page}&sort=${sort}&size=${size}`
     ),
   stubHealth: (status = 200) =>
     stubFor({
@@ -43,7 +47,7 @@ module.exports = {
         },
       },
     }),
-  stubUserCaseloads: caseloads =>
+  stubUserCaseloads: (caseloads) =>
     stubFor({
       request: {
         method: 'GET',
@@ -76,7 +80,7 @@ module.exports = {
         },
       },
     }),
-  stubUserLocations: locations =>
+  stubUserLocations: (locations) =>
     stubFor({
       request: {
         method: 'GET',
@@ -114,7 +118,7 @@ module.exports = {
         ],
       },
     }),
-  stubUserScheduledActivities: activities =>
+  stubUserScheduledActivities: (activities) =>
     stubFor({
       request: {
         method: 'POST',
@@ -142,7 +146,7 @@ module.exports = {
         jsonBody: suspensions,
       },
     }),
-  stubOffenderActivities: activities =>
+  stubOffenderActivities: (activities) =>
     stubFor({
       request: {
         method: 'GET',
@@ -250,7 +254,7 @@ module.exports = {
         jsonBody: review,
       },
     }),
-  stubIepSummaryForBookingIds: results =>
+  stubIepSummaryForBookingIds: (results) =>
     stubFor({
       request: {
         method: 'GET',
@@ -284,7 +288,7 @@ module.exports = {
         ],
       },
     }),
-  stubOffenderFullDetails: details =>
+  stubOffenderFullDetails: (details) =>
     stubFor({
       request: {
         method: 'GET',
@@ -298,7 +302,7 @@ module.exports = {
         jsonBody: details || {},
       },
     }),
-  stubOffenderBasicDetails: offender =>
+  stubOffenderBasicDetails: (offender) =>
     stubFor({
       request: {
         method: 'GET',
@@ -312,7 +316,7 @@ module.exports = {
         jsonBody: offender || {},
       },
     }),
-  stubOffenderCaseNoteSummary: summary =>
+  stubOffenderCaseNoteSummary: (summary) =>
     stubFor({
       request: {
         method: 'GET',
@@ -326,7 +330,7 @@ module.exports = {
         jsonBody: summary || [],
       },
     }),
-  stubStaffRoles: roles =>
+  stubStaffRoles: (roles) =>
     stubFor({
       request: {
         method: 'GET',
@@ -354,7 +358,7 @@ module.exports = {
         jsonBody: alertTypes,
       },
     }),
-  stubAlertsForBooking: alerts =>
+  stubAlertsForBooking: (alerts) =>
     stubFor({
       request: {
         method: 'GET',
@@ -797,7 +801,7 @@ module.exports = {
         jsonBody: aliases || [],
       },
     }),
-  stubPrisonerProperty: property =>
+  stubPrisonerProperty: (property) =>
     stubFor({
       request: {
         method: 'GET',
@@ -811,7 +815,7 @@ module.exports = {
         jsonBody: property || [],
       },
     }),
-  stubPrisonerContacts: contacts =>
+  stubPrisonerContacts: (contacts) =>
     stubFor({
       request: {
         method: 'GET',
@@ -825,7 +829,7 @@ module.exports = {
         jsonBody: contacts || [],
       },
     }),
-  stubSecondaryLanguages: secondaryLanguages =>
+  stubSecondaryLanguages: (secondaryLanguages) =>
     stubFor({
       request: {
         method: 'GET',
@@ -839,7 +843,7 @@ module.exports = {
         jsonBody: secondaryLanguages || [],
       },
     }),
-  stubPrisonerAddresses: addresses =>
+  stubPrisonerAddresses: (addresses) =>
     stubFor({
       request: {
         method: 'GET',
@@ -853,7 +857,7 @@ module.exports = {
         jsonBody: addresses || [],
       },
     }),
-  stubPersonAddresses: addresses =>
+  stubPersonAddresses: (addresses) =>
     stubFor({
       request: {
         method: 'GET',
@@ -867,7 +871,7 @@ module.exports = {
         jsonBody: addresses || [],
       },
     }),
-  stubPersonEmails: emails =>
+  stubPersonEmails: (emails) =>
     stubFor({
       request: {
         method: 'GET',
@@ -881,7 +885,7 @@ module.exports = {
         jsonBody: emails || [],
       },
     }),
-  stubPersonPhones: phones =>
+  stubPersonPhones: (phones) =>
     stubFor({
       request: {
         method: 'GET',
@@ -895,7 +899,7 @@ module.exports = {
         jsonBody: phones || [],
       },
     }),
-  stubTreatmentTypes: treatmentTypes =>
+  stubTreatmentTypes: (treatmentTypes) =>
     stubFor({
       request: {
         method: 'GET',
@@ -909,7 +913,7 @@ module.exports = {
         jsonBody: treatmentTypes || [],
       },
     }),
-  stubHealthTypes: healthTypes =>
+  stubHealthTypes: (healthTypes) =>
     stubFor({
       request: {
         method: 'GET',
@@ -923,7 +927,7 @@ module.exports = {
         jsonBody: healthTypes || [],
       },
     }),
-  stubPersonalCareNeeds: careNeeds =>
+  stubPersonalCareNeeds: (careNeeds) =>
     stubFor({
       request: {
         method: 'GET',
@@ -937,7 +941,7 @@ module.exports = {
         jsonBody: careNeeds || {},
       },
     }),
-  stubReasonableAdjustments: reasonableAdjustments =>
+  stubReasonableAdjustments: (reasonableAdjustments) =>
     stubFor({
       request: {
         method: 'GET',
@@ -951,7 +955,7 @@ module.exports = {
         jsonBody: reasonableAdjustments || {},
       },
     }),
-  stubAgencies: agencies =>
+  stubAgencies: (agencies) =>
     stubFor({
       request: {
         method: 'GET',
@@ -965,7 +969,7 @@ module.exports = {
         jsonBody: agencies || [],
       },
     }),
-  stubGetSentenceAdjustments: response =>
+  stubGetSentenceAdjustments: (response) =>
     stubFor({
       request: {
         method: 'GET',
@@ -1339,7 +1343,7 @@ module.exports = {
         jsonBody: offenders || [],
       },
     }),
-  stubCourtCases: courtCases =>
+  stubCourtCases: (courtCases) =>
     stubFor({
       request: {
         method: 'GET',
@@ -1353,7 +1357,7 @@ module.exports = {
         jsonBody: courtCases || [],
       },
     }),
-  stubOffenceHistory: offenceHistory =>
+  stubOffenceHistory: (offenceHistory) =>
     stubFor({
       request: {
         method: 'GET',
@@ -1367,7 +1371,7 @@ module.exports = {
         jsonBody: offenceHistory || [],
       },
     }),
-  stubSentenceTerms: sentenceTerms =>
+  stubSentenceTerms: (sentenceTerms) =>
     stubFor({
       request: {
         method: 'GET',
@@ -1426,7 +1430,7 @@ module.exports = {
         },
       ],
     }),
-  stubBookingDetails: details =>
+  stubBookingDetails: (details) =>
     stubFor({
       request: {
         method: 'GET',
@@ -1440,7 +1444,7 @@ module.exports = {
         jsonBody: details || {},
       },
     }),
-  stubBookingNonAssociations: response =>
+  stubBookingNonAssociations: (response) =>
     stubFor({
       request: {
         method: 'GET',
@@ -1468,7 +1472,7 @@ module.exports = {
         jsonBody: cellAttributes,
       },
     }),
-  stubCellsWithCapacity: cells =>
+  stubCellsWithCapacity: (cells) =>
     stubFor({
       request: {
         method: 'GET',
@@ -1483,7 +1487,7 @@ module.exports = {
       },
     }),
 
-  stubInmatesAtLocation: inmates =>
+  stubInmatesAtLocation: (inmates) =>
     stubFor({
       request: {
         method: 'GET',
@@ -1498,7 +1502,7 @@ module.exports = {
       },
     }),
 
-  stubOffenderCellHistory: history =>
+  stubOffenderCellHistory: (history) =>
     stubFor({
       request: {
         method: 'GET',
@@ -1512,7 +1516,7 @@ module.exports = {
         jsonBody: history || { content: [] },
       },
     }),
-  stubHistoryForLocation: locationHistory =>
+  stubHistoryForLocation: (locationHistory) =>
     stubFor({
       request: {
         method: 'GET',
@@ -1526,7 +1530,7 @@ module.exports = {
         jsonBody: locationHistory || [],
       },
     }),
-  stubAttributesForLocation: locationAttributes =>
+  stubAttributesForLocation: (locationAttributes) =>
     stubFor({
       request: {
         method: 'GET',
@@ -1568,7 +1572,7 @@ module.exports = {
         jsonBody: movements || {},
       },
     }),
-  stubGetAdjudicationDetails: adjudicationDetails =>
+  stubGetAdjudicationDetails: (adjudicationDetails) =>
     stubFor({
       request: {
         method: 'GET',
@@ -1638,7 +1642,7 @@ module.exports = {
         jsonBody: {},
       },
     }),
-  stubAdjudicationFindingTypes: types =>
+  stubAdjudicationFindingTypes: (types) =>
     stubFor({
       request: {
         method: 'GET',
@@ -1667,7 +1671,7 @@ module.exports = {
         jsonBody: response,
       },
     }),
-  stubPrisonApiGlobalSearch: response =>
+  stubPrisonApiGlobalSearch: (response) =>
     stubFor({
       request: {
         method: 'GET',
@@ -1682,7 +1686,7 @@ module.exports = {
       },
     }),
   resetAdjudicationsStub: () => resetStub({ requestUrl: '/api/offenders/A12345/adjudications', method: 'GET' }),
-  stubSystemAlerts: alerts =>
+  stubSystemAlerts: (alerts) =>
     stubFor({
       request: {
         method: 'POST',
@@ -1696,7 +1700,7 @@ module.exports = {
         jsonBody: alerts || [],
       },
     }),
-  stubGetAgencyIepLevels: response =>
+  stubGetAgencyIepLevels: (response) =>
     stubFor({
       request: {
         method: 'GET',
@@ -1710,7 +1714,7 @@ module.exports = {
         jsonBody: response,
       },
     }),
-  stubChangeIepLevel: body =>
+  stubChangeIepLevel: (body) =>
     stubFor({
       request: {
         method: 'POST',
@@ -1724,7 +1728,7 @@ module.exports = {
         jsonBody: body,
       },
     }),
-  stubGetPrisonerDamageObligations: response =>
+  stubGetPrisonerDamageObligations: (response) =>
     stubFor({
       request: {
         method: 'GET',
@@ -1768,7 +1772,7 @@ module.exports = {
         jsonBody: response || {},
       },
     }),
-  stubGetDetailsFailure: status =>
+  stubGetDetailsFailure: (status) =>
     stubFor({
       request: {
         method: 'GET',
@@ -1781,7 +1785,7 @@ module.exports = {
         },
       },
     }),
-  stubGetPrisoners: body =>
+  stubGetPrisoners: (body) =>
     stubFor({
       request: {
         method: 'POST',
@@ -1795,7 +1799,7 @@ module.exports = {
         jsonBody: body,
       },
     }),
-  stubGetUserDetailsList: body =>
+  stubGetUserDetailsList: (body) =>
     stubFor({
       request: {
         method: 'POST',
@@ -1823,7 +1827,7 @@ module.exports = {
         jsonBody: cellMoves,
       },
     }),
-  stubCellMoveTypes: types =>
+  stubCellMoveTypes: (types) =>
     stubFor({
       request: {
         method: 'GET',

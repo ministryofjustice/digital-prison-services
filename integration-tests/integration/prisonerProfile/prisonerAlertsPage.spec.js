@@ -1,6 +1,7 @@
 const PrisonerAlertsPage = require('../../pages/prisonerProfile/prisonerAlertsPage')
 const offenderBasicDetails = require('../../mockApis/responses/offenderBasicDetails.json')
 const offenderFullDetails = require('../../mockApis/responses/offenderFullDetails.json')
+const { assertHasRequestCount } = require('../assertions')
 
 context('A user can view alerts for a prisoner', () => {
   const inactiveAlerts = [
@@ -73,6 +74,17 @@ context('A user can view alerts for a prisoner', () => {
     it('Users can view inactive alerts', () => {
       cy.task('stubAlertsForBooking', inactiveAlerts)
       cy.visit('/prisoner/G3878UK/alerts')
+      cy.task('verifyAlertsBooking', {
+        bookingId: 14,
+        alertType: '',
+        from: '',
+        to: '',
+        alertStatus: 'ACTIVE',
+        page: 0,
+        sort: 'dateCreated,desc',
+        size: 20,
+      }).then(assertHasRequestCount(1))
+
       const prisonerAlertsPage = PrisonerAlertsPage.verifyOnPage('Smith, John')
       const filterForm = prisonerAlertsPage.getFilterForm()
       filterForm.activeFilter().select('INACTIVE')
@@ -87,6 +99,30 @@ context('A user can view alerts for a prisoner', () => {
       inactiveTable.createdByClosedBy().contains('John Smith')
       cy.get('[data-test="inactive-create-alerts-link"]').should('contain.text', 'Create an alert')
     })
+    it('Users can filter alerts', () => {
+      cy.task('stubAlertsForBooking', inactiveAlerts)
+      cy.visit('/prisoner/G3878UK/alerts')
+
+      const prisonerAlertsPage = PrisonerAlertsPage.verifyOnPage('Smith, John')
+      const filterForm = prisonerAlertsPage.getFilterForm()
+      filterForm.activeFilter().select('INACTIVE')
+      filterForm.typeFilter().select('Medical')
+      filterForm.fromFilter().type('05/08/2020', { force: true }).type('{esc}', { force: true })
+      filterForm.toFilter().type('30/11/2020', { force: true }).type('{esc}', { force: true })
+      filterForm.applyButton().click()
+
+      cy.task('verifyAlertsBooking', {
+        bookingId: 14,
+        alertType: 'M',
+        from: '2020-08-05',
+        to: '2020-11-30',
+        alertStatus: 'INACTIVE',
+        page: 0,
+        sort: 'dateCreated,desc',
+        size: 20,
+      }).then(assertHasRequestCount(1))
+      PrisonerAlertsPage.verifyOnPage('Smith, John')
+    })
 
     it('Users can view active alerts', () => {
       cy.task('stubAlertsForBooking', activeAlerts)
@@ -100,10 +136,7 @@ context('A user can view alerts for a prisoner', () => {
       activeTable.comments().contains('has a large poster on cell wall')
       activeTable.dateFrom().contains('20 August 2019')
       activeTable.createdBy().contains('John Smith')
-      activeTable
-        .editCreateButton()
-        .find('a')
-        .contains('Change or close')
+      activeTable.editCreateButton().find('a').contains('Change or close')
       cy.get('[data-test="active-create-alerts-link"]').should('contain.text', 'Create an alert')
     })
 
@@ -148,10 +181,7 @@ context('A user can view alerts for a prisoner', () => {
       const prisonerAlertsPage = PrisonerAlertsPage.verifyOnPage('Smith, John')
       const activeTable = prisonerAlertsPage.getActiveAlertsRows(0)
 
-      activeTable
-        .editCreateButton()
-        .find('a')
-        .should('not.exist')
+      activeTable.editCreateButton().find('a').should('not.exist')
       cy.get('[data-test="active-create-alerts-link"]').should('not.exist')
     })
 
