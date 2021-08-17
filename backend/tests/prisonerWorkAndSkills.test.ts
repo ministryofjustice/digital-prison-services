@@ -39,7 +39,7 @@ describe('Prisoner work and skills controller', () => {
     english: [{ label: 'English', value: 'Awaiting assessment' }],
   }
 
-  const goals = {
+  const targets = {
     employmentGoals: ['To be a plumber'],
     personalGoals: ['To be able to support my family'],
   }
@@ -63,7 +63,7 @@ describe('Prisoner work and skills controller', () => {
     // @ts-expect-error ts-migrate(2339) FIXME
     esweService.getLearnerLatestAssessments = jest.fn().mockResolvedValue(functionalSkillLevels)
     // @ts-expect-error ts-migrate(2339) FIXME
-    esweService.getLearnerGoals = jest.fn().mockResolvedValue(goals)
+    esweService.getLearnerGoals = jest.fn().mockResolvedValue(targets)
     controller = prisonerWorkAndSkills({
       prisonerProfileService,
       esweService,
@@ -82,7 +82,7 @@ describe('Prisoner work and skills controller', () => {
       expect.objectContaining({
         prisonerProfileData,
         functionalSkillLevels,
-        goals,
+        targets,
       })
     )
   })

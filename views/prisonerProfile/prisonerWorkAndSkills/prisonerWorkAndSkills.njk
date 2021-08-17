@@ -9,15 +9,15 @@
 {% set errorMessage = "We cannot show these details right now. Try reloading the page." %}
 
 {% set functionalSkillLevels = functionalSkillLevels.content %}
-{% set goals = goals.content %}
+{% set goals = targets.content %}
 
-{% set functionalSkillsLevel %}
+{% set functionalSkillsLevelSection %}
   <div data-test="functional-skills-level-summary">
     {% include "./partials/learnerLatestAssessments.njk" %}
   </div>
 {% endset %}
 
-{% set goals %}
+{% set offenderGoalsSection %}
   <div data-test="goals-summary">
     {% include "./partials/prisonerGoals.njk" %}
   </div>
@@ -35,8 +35,8 @@
     { heading: 'Lorem ipsum', html: blank }
 ] %}
 {% set rightSections = [
-    { heading: 'Goals', html: goals },
-    { heading: 'Functional skills level', html: functionalSkillsLevel }
+    { heading: 'Goals', html: offenderGoalsSection },
+    { heading: 'Functional skills level', html: functionalSkillsLevelSection }
   ]
 %}
 

@@ -9,7 +9,7 @@ export default ({ prisonerProfileService, esweService }) =>
       return res.redirect(`/prisoner/${offenderNo}`)
     }
 
-    const [prisonerProfileData, functionalSkillLevels, goals] = await Promise.all(
+    const [prisonerProfileData, functionalSkillLevels, targets] = await Promise.all(
       [
         prisonerProfileService.getPrisonerProfileData(res.locals, offenderNo),
         esweService.getLearnerLatestAssessments(offenderNo),
@@ -20,6 +20,6 @@ export default ({ prisonerProfileService, esweService }) =>
     return res.render('prisonerProfile/prisonerWorkAndSkills/prisonerWorkAndSkills.njk', {
       prisonerProfileData,
       functionalSkillLevels,
-      goals,
+      targets,
     })
   }
