@@ -12,6 +12,7 @@ type FeatureFlagged<T> = {
 
 type LearnerProfiles = FeatureFlagged<curious.LearnerProfile[]>
 type LearnerLatestAssessments = FeatureFlagged<curious.FunctionalSkillsLevels>
+type OffenderGoals = FeatureFlagged<curious.LearnerGoals>
 
 const createFlaggedContent = <T>(content: T) => ({
   enabled: app.esweEnabled,
@@ -20,7 +21,14 @@ const createFlaggedContent = <T>(content: T) => ({
 
 const CURIOUS_DATE_FORMAT = 'YYYY-MM-DD'
 
+const DATA_NOT_ADDED = 'Not entered'
+
 const AWAITING_ASSESSMENT_CONTENT = 'Awaiting assessment'
+
+export const DEFAULT_GOALS = {
+  employmentGoals: null,
+  personalGoals: null,
+}
 
 export const DEFAULT_SKILL_LEVELS = {
   english: [
@@ -201,5 +209,33 @@ export default class EsweService {
       log.error(`Failed to get latest learning assessments. Reason: ${e.message}`)
     }
     return createFlaggedContent(null)
+  }
+
+  async getLearnerGoals(nomisId: string): Promise<OffenderGoals> {
+    if (!app.esweEnabled) {
+      return createFlaggedContent(null)
+    }
+    try {
+      const context = await this.systemOauthClient.getClientCredentialsTokens()
+      const goals = await this.curiousApi.getLearnerGoals(context, nomisId)
+
+      const { employmentGoals, personalGoals } = goals
+
+      if (!employmentGoals.length && !personalGoals.length) {
+        return createFlaggedContent(DEFAULT_GOALS)
+      }
+
+      const displayedGoals = {
+        employmentGoals: employmentGoals.length ? employmentGoals : [DATA_NOT_ADDED],
+        personalGoals: personalGoals.length ? personalGoals : [DATA_NOT_ADDED],
+      }
+      return createFlaggedContent(displayedGoals)
+    } catch (e) {
+      if (e.status === 404) {
+        log.info(`Offender record not found in Curious.`)
+        return createFlaggedContent(DEFAULT_GOALS)
+      }
+      return createFlaggedContent(null)
+    }
   }
 }

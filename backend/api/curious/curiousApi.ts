@@ -30,6 +30,10 @@ export default class CuriousApi {
       .then((response) => response.body)
   }
 
+  getLearnerGoals(context: ClientContext, nomisId: string): Promise<curious.LearnerGoals> {
+    return this.client.get<curious.LearnerGoals>(context, `/learnerGoals/${nomisId}`).then((response) => response.body)
+  }
+
   private applyQuery = (path, query?: Record<string, unknown>) =>
     this.hasNonEmptyValues(query) ? `${path}?${querystring.stringify(query)}` : path
 
