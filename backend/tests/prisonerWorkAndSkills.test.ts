@@ -36,15 +36,12 @@ describe('Prisoner work and skills controller', () => {
       { label: 'Assessment date', value: '1 July 2021' },
       { label: 'Assessment location', value: 'HMP Moorland' },
     ],
-    english: [{ label: 'English/Welsh', value: 'Awaiting assessment' }],
+    english: [{ label: 'English', value: 'Awaiting assessment' }],
   }
 
-  const learningHistory = {
-    total: '7',
-    inProgress: '1',
-    achieved: '2',
-    failed: '1',
-    withdrawn: '3',
+  const targets = {
+    employmentGoals: ['To be a plumber'],
+    personalGoals: ['To be able to support my family'],
   }
 
   const prisonerProfileService = {}
@@ -66,7 +63,7 @@ describe('Prisoner work and skills controller', () => {
     // @ts-expect-error ts-migrate(2339) FIXME
     esweService.getLearnerLatestAssessments = jest.fn().mockResolvedValue(functionalSkillLevels)
     // @ts-expect-error ts-migrate(2339) FIXME
-    esweService.getLearnerEducation = jest.fn().mockResolvedValue(learningHistory)
+    esweService.getLearnerGoals = jest.fn().mockResolvedValue(targets)
     controller = prisonerWorkAndSkills({
       prisonerProfileService,
       esweService,
@@ -85,6 +82,7 @@ describe('Prisoner work and skills controller', () => {
       expect.objectContaining({
         prisonerProfileData,
         functionalSkillLevels,
+        targets,
       })
     )
   })
