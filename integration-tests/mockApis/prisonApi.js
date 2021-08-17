@@ -11,6 +11,10 @@ module.exports = {
     verifyGet(
       `/api/offenders/${offenderNo}/adjudications?agencyId=${agencyId}&finding=${finding}&fromDate=${fromDate}&toDate=${toDate}`
     ),
+  verifyAlertsBookingGet: ({ bookingId, alertType, from, to, alertStatus, page, sort, size }) =>
+    verifyGet(
+      `/api/bookings/${bookingId}/alerts/v2?alertType=${alertType}&from=${from}&to=${to}&alertStatus=${alertStatus}&page=${page}&sort=${sort}&size=${size}`
+    ),
   stubHealth: (status = 200) =>
     stubFor({
       request: {

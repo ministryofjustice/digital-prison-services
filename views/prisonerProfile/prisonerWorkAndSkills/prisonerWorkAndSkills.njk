@@ -16,7 +16,18 @@
   </div>
 {% endset %}
 
+{% set blank %}
+  <div>
+    <p class="govuk-body">Sed fringilla augue at eleifend varius. In et faucibus elit. Vestibulum in turpis id eros vestibulum volutpat. 
+    Pellentesque dignissim tellus libero, ac vestibulum libero sagittis vitae. In non pellentesque tellus, sit amet malesuada ligula. 
+    Fusce nec risus et ante ullamcorper sollicitudin.</p>
+  </div>
+{% endset %}
+
 {% set leftSections = [
+    { heading: 'Lorem ipsum', html: blank }
+] %}
+{% set rightSections = [
     { heading: 'Functional skills level', html: functionalSkillsLevel }
   ]
 %}
@@ -24,13 +35,15 @@
 {% block prisonerProfileSection %}
   <div class="govuk-accordion govuk-accordion--split" data-module="govuk-accordion" id="prisoner-eswe-accordion">
     <div class="govuk-grid-row">
-      <div class="govuk-grid-column-two-thirds">
+      <div class="govuk-grid-column-one-half">
         {% for section in leftSections %}
           {{ accordionSection(section.heading, section.html, loop.index) }}
         {% endfor %}
       </div>
-
-      <div class="govuk-grid-column-one-third"></div>
-    </div>
+      <div class="govuk-grid-column-one-half">
+        {% for section in rightSections %}
+          {{ accordionSection(section.heading, section.html, loop.index) }}
+        {% endfor %}
+      </div>    </div>
   </div>
 {% endblock %} 

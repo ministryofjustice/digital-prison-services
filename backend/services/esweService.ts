@@ -25,7 +25,7 @@ const AWAITING_ASSESSMENT_CONTENT = 'Awaiting assessment'
 export const DEFAULT_SKILL_LEVELS = {
   english: [
     {
-      label: 'English/Welsh',
+      label: 'English',
       value: AWAITING_ASSESSMENT_CONTENT,
     },
   ],
@@ -57,9 +57,6 @@ const compareByDate = (dateA: Moment, dateB: Moment, descending = true) => {
   return 0
 }
 
-const renameAssessmentLabel = (qualificationType) =>
-  qualificationType === AssessmentQualificationType.English ? 'English/Welsh' : qualificationType
-
 const createSkillAssessmentSummary = (learnerAssessment: curious.LearnerAssessment) => {
   const { qualification, establishmentName } = learnerAssessment || {}
   const { qualificationType, qualificationGrade, assessmentDate } = qualification || {}
@@ -67,7 +64,7 @@ const createSkillAssessmentSummary = (learnerAssessment: curious.LearnerAssessme
   if (!assessmentDate) {
     return [
       {
-        label: renameAssessmentLabel(qualificationType),
+        label: qualificationType,
         value: AWAITING_ASSESSMENT_CONTENT,
       },
     ]
@@ -75,7 +72,7 @@ const createSkillAssessmentSummary = (learnerAssessment: curious.LearnerAssessme
 
   return [
     {
-      label: renameAssessmentLabel(qualificationType),
+      label: qualificationType,
       value: qualificationGrade,
     },
     {
