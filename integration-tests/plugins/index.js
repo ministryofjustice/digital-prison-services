@@ -424,6 +424,8 @@ module.exports = (on) => {
     stubAdjudications: ({ response, headers }) => prisonApi.stubAdjudications(response, headers),
     verifyAdjudicationsHistory: ({ offenderNo, agencyId, finding, fromDate, toDate }) =>
       prisonApi.verifyAdjudicationsHistory({ offenderNo, agencyId, finding, fromDate, toDate }),
+    verifyAlertsBooking: ({ bookingId, alertType, from, to, alertStatus, page, sort, size }) =>
+      prisonApi.verifyAlertsBookingGet({ bookingId, alertType, from, to, alertStatus, page, sort, size }),
     resetAdjudicationsStub: () => prisonApi.resetAdjudicationsStub(),
     stubConvictions: ({ offenderNo, convictions }) => community.stubConvictions(offenderNo, convictions),
     stubOffenderDetails: ({ offenderNo, details }) => community.stubOffenderDetails(offenderNo, details),
