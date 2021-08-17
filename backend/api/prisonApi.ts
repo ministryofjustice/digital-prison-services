@@ -96,9 +96,11 @@ export const prisonApiFactory = (client) => {
   const getAlerts = (context, { agencyId, offenderNumbers }) =>
     post(context, `/api/bookings/offenderNo/${agencyId}/alerts`, offenderNumbers)
 
-  const getAlertsForBooking = (context, { bookingId, query }, headers) => {
-    contextProperties.setCustomRequestHeaders(context, headers)
-    return get(context, `/api/bookings/${bookingId}/alerts${query}`)
+  const getAlertsForBookingV2 = (context, { bookingId, alertType, from, to, alertStatus, page, sort, size }) => {
+    return get(
+      context,
+      `/api/bookings/${bookingId}/alerts/v2?alertType=${alertType}&from=${from}&to=${to}&alertStatus=${alertStatus}&page=${page}&sort=${sort}&size=${size}`
+    )
   }
 
   const getAlertsSystem = (context, offenderNumbers) =>
@@ -412,7 +414,7 @@ export const prisonApiFactory = (client) => {
     globalSearch,
     getExternalTransfers,
     getAlerts,
-    getAlertsForBooking,
+    getAlertsForBookingV2,
     getAlertsSystem,
     getAssessments,
     getEstablishmentRollBlocksCount,

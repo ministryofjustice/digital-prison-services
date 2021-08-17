@@ -4,7 +4,7 @@ const CreateAlertPage = require('../../pages/alerts/createAlertPage')
 const PrisonerAlertsPage = require('../../pages/prisonerProfile/prisonerAlertsPage')
 const NotFoundPage = require('../../pages/notFound')
 
-context('A user can add an appointment', () => {
+context('A user can add an alert', () => {
   before(() => {
     cy.clearCookies()
     cy.task('resetAndStubTokenVerification')
