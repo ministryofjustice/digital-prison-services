@@ -157,7 +157,7 @@ describe('Education skills and work experience', () => {
             { label: 'Assessment location', value: 'HMP Winchester' },
           ],
           english: [
-            { label: 'English/Welsh', value: 'Entry Level 2' },
+            { label: 'English', value: 'Entry Level 2' },
             { label: 'Assessment date', value: '2 May 2021' },
             { label: 'Assessment location', value: 'HMP Winchester' },
           ],
@@ -212,7 +212,7 @@ describe('Education skills and work experience', () => {
             { label: 'Assessment date', value: '1 July 2021' },
             { label: 'Assessment location', value: 'HMP Moorland' },
           ],
-          english: [{ label: 'English/Welsh', value: 'Awaiting assessment' }],
+          english: [{ label: 'English', value: 'Awaiting assessment' }],
         }
 
         const actual = await service.getLearnerLatestAssessments(nomisId)
