@@ -96,10 +96,10 @@ export const prisonApiFactory = (client) => {
   const getAlerts = (context, { agencyId, offenderNumbers }) =>
     post(context, `/api/bookings/offenderNo/${agencyId}/alerts`, offenderNumbers)
 
-  const getAlertsForBookingV2 = (context, { bookingId, alertType, from, to, alertStatus, page, sort }) => {
+  const getAlertsForBookingV2 = (context, { bookingId, alertType, from, to, alertStatus, page, sort, size }) => {
     return get(
       context,
-      `/api/bookings/${bookingId}/alerts/v2?alertType=${alertType}&from=${from}&to=${to}&alertStatus=${alertStatus}&page=${page}&sort=${sort}`
+      `/api/bookings/${bookingId}/alerts/v2?alertType=${alertType}&from=${from}&to=${to}&alertStatus=${alertStatus}&page=${page}&sort=${sort}&size=${size}`
     )
   }
 
