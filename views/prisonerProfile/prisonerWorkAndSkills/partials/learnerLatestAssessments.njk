@@ -4,9 +4,9 @@
 {% block prisonerProfileSection %}
 
   {% if functionalSkillLevels %}
-      {{ prisonerSummarySection(functionalSkillLevels.maths, '', {"data-test": "maths-assessment"}, false, 'govuk-summary-list--no-border') }}
-      <hr class="govuk-section-break govuk-section-break--m govuk-section-break--visible">
       {{ prisonerSummarySection(functionalSkillLevels.english, '', {"data-test": "english-assessment"}, false, 'govuk-summary-list--no-border') }}
+      <hr class="govuk-section-break govuk-section-break--m govuk-section-break--visible">
+      {{ prisonerSummarySection(functionalSkillLevels.maths, '', {"data-test": "maths-assessment"}, false, 'govuk-summary-list--no-border') }}
       <hr class="govuk-section-break govuk-section-break--m govuk-section-break--visible">
       {{ prisonerSummarySection(functionalSkillLevels.digiLit, '', {"data-test": "digital-literacy-assessment"}, false, 'govuk-summary-list--no-border') }}
 
