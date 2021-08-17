@@ -35,6 +35,7 @@ context('Prisoner Work and Skills', () => {
         offenderNo,
       })
       cy.task('stubLatestLearnerAssessments500Error', {})
+      cy.task('stubLearnerGoals500Error', {})
       visitWorkAndSkillsAndExpandAccordions()
     })
 
@@ -43,9 +44,19 @@ context('Prisoner Work and Skills', () => {
         cy.get('[data-test="learner-latest-assessments-errorMessage"]').should('have.text', apiErrorText)
       })
     })
+    context('goals section', () => {
+      it('should show correct error message', () => {
+        cy.get('[data-test="goals-errorMessage"]').should('have.text', apiErrorText)
+      })
+    })
   })
 
   context('When the prisoner is not in Curious', () => {
+    const error = {
+      errorCode: 'VC404',
+      errorMessage: 'Resource not found',
+      httpStatusCode: 404,
+    }
     before(() => {
       cy.task('stubPrisonerProfileHeaderData', {
         offenderBasicDetails,
@@ -54,7 +65,8 @@ context('Prisoner Work and Skills', () => {
         caseNoteSummary: {},
         offenderNo,
       })
-      cy.task('stubLatestLearnerAssessments404Error', {})
+      cy.task('stubLatestLearnerAssessments404Error', error)
+      cy.task('stubLearnerGoals404Error', error)
       visitWorkAndSkillsAndExpandAccordions()
     })
 
@@ -69,12 +81,28 @@ context('Prisoner Work and Skills', () => {
         })
       })
     })
+    context('goals section', () => {
+      it('should show default message', () => {
+        cy.get('[data-test="goals-noGoals"]').then(($message) => {
+          cy.get($message).then(($goalsMessage) => {
+            cy.get($goalsMessage).should('have.text', 'John Smith has not set any goals')
+          })
+        })
+      })
+    })
   })
 
   context('When the user is in Curious but there is no data', () => {
     const functionalSkillsAssessments = {
       prn: 'G1670VU',
       qualifications: [],
+    }
+    const emptyGoals = {
+      prn: 'G9981UK',
+      employmentGoals: [],
+      personalGoals: [],
+      longTermGoals: [],
+      shortTermGoals: [],
     }
     before(() => {
       cy.task('stubPrisonerProfileHeaderData', {
@@ -85,6 +113,7 @@ context('Prisoner Work and Skills', () => {
         offenderNo,
       })
       cy.task('stubLatestLearnerAssessments', [functionalSkillsAssessments])
+      cy.task('stubLearnerGoals', emptyGoals)
       visitWorkAndSkillsAndExpandAccordions()
     })
 
@@ -99,6 +128,15 @@ context('Prisoner Work and Skills', () => {
               expect($summaryLabels.get(1).innerText).to.contain('Maths')
               expect($summaryLabels.get(2).innerText).to.contain('Digital Literacy')
             })
+        })
+      })
+    })
+    context('goals section', () => {
+      it('should show default message', () => {
+        cy.get('[data-test="goals-noGoals"]').then(($message) => {
+          cy.get($message).then(($goalsMessage) => {
+            cy.get($goalsMessage).should('have.text', 'John Smith has not set any goals')
+          })
         })
       })
     })
@@ -139,6 +177,17 @@ context('Prisoner Work and Skills', () => {
         ],
       },
     ]
+    const dummyGoals = {
+      prn: 'G8346GA',
+      employmentGoals: ['To be a plumber', 'To get a plumbing qualification'],
+      personalGoals: [
+        'To be able to support my family',
+        'To get a 100% attendance record on my classes',
+        'To make my mum proud',
+      ],
+      longTermGoals: ['To buy a house'],
+      shortTermGoals: ['To get out of my overdraft'],
+    }
 
     before(() => {
       cy.task('stubPrisonerProfileHeaderData', {
@@ -149,6 +198,7 @@ context('Prisoner Work and Skills', () => {
         offenderNo,
       })
       cy.task('stubLatestLearnerAssessments', functionalSkillsAssessments)
+      cy.task('stubLearnerGoals', dummyGoals)
       visitWorkAndSkillsAndExpandAccordions()
     })
 
@@ -183,6 +233,31 @@ context('Prisoner Work and Skills', () => {
               expect($summaryValues.get(6).innerText).to.contain('Level 2')
               expect($summaryValues.get(7).innerText).to.contain('19 May 2021')
               expect($summaryValues.get(8).innerText).to.contain('HMP Moorland')
+            })
+        })
+      })
+    })
+    context('goals section', () => {
+      it('should show the list of employment goals', () => {
+        cy.get('[data-test="employment-goals"]').then(($ul) => {
+          cy.get($ul)
+            .find('li')
+            .then(($listElement) => {
+              cy.get($listElement).its('length').should('eq', 2)
+              expect($listElement.get(0)).to.contain('To be a plumber')
+              expect($listElement.get(1)).to.contain('To get a plumbing qualification')
+            })
+        })
+      })
+      it('should show the list of personal goals', () => {
+        cy.get('[data-test="personal-goals"]').then(($ul) => {
+          cy.get($ul)
+            .find('li')
+            .then(($listElement) => {
+              cy.get($listElement).its('length').should('eq', 3)
+              expect($listElement.get(0)).to.contain('To be able to support my family')
+              expect($listElement.get(1)).to.contain('To get a 100% attendance record on my classes')
+              expect($listElement.get(2)).to.contain('To make my mum proud')
             })
         })
       })

@@ -209,6 +209,10 @@ module.exports = (on) => {
     stubLatestLearnerAssessments500Error: (error) => curiousApi.stubLatestLearnerAssessments(error, 500),
     stubLatestLearnerAssessments404Error: (error) => curiousApi.stubLatestLearnerAssessments(error, 404),
 
+    stubLearnerGoals: (learnerGoals) => curiousApi.stubLearnerGoals(learnerGoals),
+    stubLearnerGoals500Error: (error) => curiousApi.stubLearnerGoals(error, 500),
+    stubLearnerGoals404Error: (error) => curiousApi.stubLearnerGoals(error, 404),
+
     stubPersonal: ({
       identifiers,
       aliases,
