@@ -32,7 +32,7 @@ const prisonApiLocationDescription = async (res, whereaboutsApi, locationKey, us
   return `${userCaseLoad}-${locationKey}`
 }
 
-export default ({ prisonApi, whereaboutsApi }) =>
+export default ({ systemOauthClient, prisonApi, whereaboutsApi }) =>
   async (req, res) => {
     if (!req?.query?.date) return res.redirect('/change-someones-cell/recent-cell-moves')
 
@@ -71,8 +71,9 @@ export default ({ prisonApi, whereaboutsApi }) =>
       text: subType.description,
     }))
 
+    const systemContext = await systemOauthClient.getClientCredentialsTokens()
     const offenders = await prisonApi.getPrisoners(
-      { ...res.locals, requestHeaders: { 'page-offset': 0, 'page-limit': offenderNos.length } },
+      { ...systemContext, requestHeaders: { 'page-offset': 0, 'page-limit': offenderNos.length } },
       { offenderNos }
     )
 

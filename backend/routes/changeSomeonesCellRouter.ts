@@ -8,14 +8,13 @@ import cellMoveTemporaryMove from '../controllers/cellMove/cellMoveTemporaryMove
 
 const router = express.Router({ mergeParams: true })
 
-const controller = ({ caseNotesApi, prisonApi, whereaboutsApi }) => {
+const controller = ({ systemOauthClient, prisonApi, whereaboutsApi }) => {
   router.get('/', cellMoveHomepage)
   router.get('/prisoner-search', cellMovePrisonerSearch({ prisonApi }))
   router.get('/view-residential-location', cellMoveViewResidentialLocation({ prisonApi, whereaboutsApi }))
   router.get('/temporary-move', cellMoveTemporaryMove({ prisonApi }))
   router.get('/recent-cell-moves', recentCellMoves({ prisonApi }))
-  // @ts-expect-error ts-migrate(2345) FIXME: Argument of type '{ prisonApi: any; caseNotesApi: ... Remove this comment to see the full error message
-  router.get('/recent-cell-moves/history', cellMoveHistory({ prisonApi, caseNotesApi, whereaboutsApi }))
+  router.get('/recent-cell-moves/history', cellMoveHistory({ systemOauthClient, prisonApi, whereaboutsApi }))
 
   return router
 }

@@ -1,13 +1,18 @@
 import cellMoveHistoryFactory from '../../controllers/cellMove/cellMoveHistory'
 
 describe('Cell move history', () => {
+  const systemOauthClient = {}
   const prisonApi = {}
   const whereaboutsApi = {}
+
+  const credentialsRef = { token: 'example' }
 
   let req
   let res
   let controller
   beforeEach(() => {
+    // @ts-expect-error ts-migrate(2339) FIXME: Property 'getClientCredentialsTokens' does not exi... Remove this comment to see the full error message
+    systemOauthClient.getClientCredentialsTokens = jest.fn().mockResolvedValue(credentialsRef)
     // @ts-expect-error ts-migrate(2339) FIXME: Property 'getHistoryByDate' does not exist on type... Remove this comment to see the full error message
     prisonApi.getHistoryByDate = jest.fn().mockResolvedValue([])
     // @ts-expect-error ts-migrate(2339) FIXME: Property 'getStaffDetails' does not exist on type ... Remove this comment to see the full error message
@@ -38,7 +43,7 @@ describe('Cell move history', () => {
         user: { activeCaseLoad: { caseLoadId: 'MDI' } },
       },
     }
-    controller = cellMoveHistoryFactory({ prisonApi, whereaboutsApi })
+    controller = cellMoveHistoryFactory({ systemOauthClient, prisonApi, whereaboutsApi })
   })
 
   it('should redirect back to the parent page when no date is supplied', async () => {
@@ -274,6 +279,24 @@ describe('Cell move history', () => {
         },
         undefined,
         { page: 0, size: 20 }
+      )
+    })
+
+    it('should make a call to get prisoner data using client credentials and limiting paged results by 20', async () => {
+      await controller(req, res)
+
+      // @ts-expect-error ts-migrate(2339) FIXME: Property 'getClientCredentialsTokens' does not exi... Remove this comment to see the full error message
+      expect(systemOauthClient.getClientCredentialsTokens).toHaveBeenCalledTimes(1)
+      // @ts-expect-error ts-migrate(2339) FIXME: Property 'getPrisoners' does not exist on type '{}... Remove this comment to see the full error message
+      expect(prisonApi.getPrisoners).toHaveBeenCalledWith(
+        {
+          requestHeaders: {
+            'page-limit': 1,
+            'page-offset': 0,
+          },
+          ...credentialsRef,
+        },
+        { offenderNos: ['A12345'] }
       )
     })
 

@@ -1,6 +1,6 @@
 import { formatName, putLastNameFirst, getTime, stripAgencyPrefix } from '../../utils'
 
-export default ({ oauthApi, prisonApi }) =>
+export default ({ oauthApi, systemOauthClient, prisonApi }) =>
   async (req, res) => {
     const {
       user: { activeCaseLoad },
@@ -16,9 +16,10 @@ export default ({ oauthApi, prisonApi }) =>
 
       const offenderNumbers = offendersInCellSwap.map((offender) => offender.offenderNo)
 
+      const systemContext = await systemOauthClient.getClientCredentialsTokens()
       const allOffendersDetails = offenderNumbers.length
         ? await prisonApi.getPrisoners(
-            { ...res.locals, requestHeaders: { 'page-offset': 0, 'page-limit': 2000 } },
+            { ...systemContext, requestHeaders: { 'page-offset': 0, 'page-limit': 2000 } },
             { offenderNos: offenderNumbers }
           )
         : []
