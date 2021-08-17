@@ -106,7 +106,17 @@ export const factory = ({
   const getCaseNote = asyncMiddleware(async (req, res) => {
     const { offenderNumber, caseNoteId } = req.params
     const caseNote = await caseNotesApi.getCaseNote(res.locals, offenderNumber, caseNoteId)
-    res.json(caseNote)
+
+    const translateToFirstLast = (lastNameFirstName) => {
+      if (!lastNameFirstName) return ''
+      const reversed = lastNameFirstName.split(',').reverse()
+      return `${reversed[0].trim()}, ${reversed[1].trim()}`
+    }
+
+    res.json({
+      ...caseNote,
+      authorName: translateToFirstLast(caseNote.authorName),
+    })
   })
 
   return {
