@@ -3,6 +3,9 @@ import noCellAllocated from '../../controllers/establishmentRoll/noCellAllocated
 describe('No cell allocated', () => {
   const prisonApi = {}
   const oauthApi = {}
+  const systemOauthClient = {}
+
+  const credentialsRef = { token: 'example' }
 
   let req
   let res
@@ -13,6 +16,9 @@ describe('No cell allocated', () => {
       originalUrl: 'http://localhost',
     }
     res = { locals: { user: { activeCaseLoad: { caseLoadId: 'MDI' } } }, render: jest.fn() }
+
+    // @ts-expect-error ts-migrate(2339) FIXME: Property 'getClientCredentialsTokens' does not exi... Remove this comment to see the full error message
+    systemOauthClient.getClientCredentialsTokens = jest.fn().mockResolvedValue(credentialsRef)
 
     // @ts-expect-error ts-migrate(2339) FIXME: Property 'getInmatesAtLocationPrefix' does not exi... Remove this comment to see the full error message
     prisonApi.getInmatesAtLocationPrefix = jest.fn()
@@ -26,7 +32,7 @@ describe('No cell allocated', () => {
     // @ts-expect-error ts-migrate(2339) FIXME: Property 'userRoles' does not exist on type '{}'.
     oauthApi.userRoles = jest.fn()
 
-    controller = noCellAllocated({ oauthApi, prisonApi })
+    controller = noCellAllocated({ oauthApi, systemOauthClient, prisonApi })
   })
 
   describe('with no data', () => {
@@ -160,11 +166,14 @@ describe('No cell allocated', () => {
         page: 0,
         size: 10000,
       })
+
+      // @ts-expect-error ts-migrate(2339) FIXME: Property 'getClientCredentialsTokens' does not exi... Remove this comment to see the full error message
+      expect(systemOauthClient.getClientCredentialsTokens).toHaveBeenCalledTimes(1)
       // @ts-expect-error ts-migrate(2339) FIXME: Property 'getPrisoners' does not exist on type '{}... Remove this comment to see the full error message
       expect(prisonApi.getPrisoners).toHaveBeenCalledTimes(1)
       // @ts-expect-error ts-migrate(2339) FIXME: Property 'getPrisoners' does not exist on type '{}... Remove this comment to see the full error message
       expect(prisonApi.getPrisoners).toHaveBeenCalledWith(
-        { ...res.locals, requestHeaders: { 'page-offset': 0, 'page-limit': 2000 } },
+        { ...credentialsRef, requestHeaders: { 'page-offset': 0, 'page-limit': 2000 } },
         { offenderNos: ['A7777DY'] }
       )
       // @ts-expect-error ts-migrate(2339) FIXME: Property 'getUserDetailsList' does not exist on ty... Remove this comment to see the full error message

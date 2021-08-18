@@ -217,7 +217,7 @@ const setup = ({
     '/change-someones-cell',
     permit(oauthApi, ['CELL_MOVE']),
     changeSomeonesCellRouter({
-      caseNotesApi,
+      systemOauthClient,
       prisonApi,
       whereaboutsApi,
     })

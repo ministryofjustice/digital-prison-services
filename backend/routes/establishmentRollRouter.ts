@@ -29,7 +29,7 @@ const controller = ({ oauthApi, prisonApi, systemOauthClient, logError }) => {
   // @ts-expect-error ts-migrate(2345) FIXME: Argument of type '{ movementsService: { getMovemen... Remove this comment to see the full error message
   router.get('/out-today', outTodayController({ movementsService, logError }))
   // @ts-expect-error ts-migrate(2345) FIXME: Argument of type '{ oauthApi: any; prisonApi: any;... Remove this comment to see the full error message
-  router.get('/no-cell-allocated', noCellAllocatedController({ oauthApi, prisonApi, logError }))
+  router.get('/no-cell-allocated', noCellAllocatedController({ oauthApi, systemOauthClient, prisonApi, logError }))
   return router
 }
 
