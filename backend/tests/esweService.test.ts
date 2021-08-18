@@ -77,12 +77,12 @@ describe('Education skills and work experience', () => {
     })
   })
 
-  describe('latest learning difficulty', () => {
-    const nomisId = 'G2823GV'
+  describe('Learning difficulties', () => {
+    const nomisId = 'G8930UW'
 
     it('should return null content when feature flag is disabled', async () => {
       jest.spyOn(app, 'esweEnabled', 'get').mockReturnValue(false)
-      const actual = await service.getLatestLearningDifficulty(nomisId)
+      const actual = await service.getLearningDifficulties(nomisId)
       expect(actual.enabled).toBeFalsy()
       expect(actual.content).toBeNull()
       expect(getLearnerProfilesMock).not.toHaveBeenCalled()
@@ -90,29 +90,17 @@ describe('Education skills and work experience', () => {
       expect(systemOauthClient.getClientCredentialsTokens).not.toHaveBeenCalled()
     })
 
-    it('should set enabled to true and return content', async () => {
-      jest.spyOn(app, 'esweEnabled', 'get').mockReturnValue(true)
-
-      const actual = await service.getLatestLearningDifficulty(nomisId)
-
-      expect(actual.enabled).toBeTruthy()
-      expect(actual.content).toBe('Dyslexia')
-      expect(getLearnerProfilesMock).toHaveBeenCalledTimes(1)
-      expect(getLearnerEducationMock).toHaveBeenCalledTimes(1)
-      expect(systemOauthClient.getClientCredentialsTokens).toHaveBeenCalledTimes(1)
-      expect(getLearnerProfilesMock).toHaveBeenCalledWith(credentialsRef, nomisId)
-      expect(getLearnerEducationMock).toHaveBeenCalledWith(credentialsRef, nomisId)
-    })
-
     it('should return null content on error', async () => {
       jest.spyOn(app, 'esweEnabled', 'get').mockReturnValue(true)
-
-      getLearnerEducationMock.mockRejectedValue(new Error('error'))
-
-      const actual = await service.getLatestLearningDifficulty(nomisId)
-
+      getLearnerProfilesMock.mockRejectedValue(new Error('error'))
+      const actual = await service.getLearningDifficulties(nomisId)
       expect(actual.content).toBeNull()
     })
+
+    it('should return expected response when the prisoner is not registered in Curious', async () => {})
+    it('should return expected response when the prisoner is in Curious but has listed no LDD information', async () => {})
+    it('should return expected response when the prisoner is in Curious and there is LDD information from one caseload', async () => {})
+    it('should order the LDD information alphabetically by establishment name if there is data from multiple caseloads', async () => {})
   })
 
   describe('Work and skills tab', () => {
@@ -330,38 +318,71 @@ describe('Education skills and work experience', () => {
 function getDummyLearnerProfiles(): curious.LearnerProfile[] {
   return [
     {
-      prn: 'G8346GA',
-      establishmentId: 2,
-      establishmentName: 'HMP Winchester',
-      uln: '345455',
-      lddHealthProblem: 'Dyslexia',
-      priorAttainment: '',
+      prn: 'G6123VU',
+      establishmentId: 8,
+      establishmentName: 'HMP Moorland',
+      uln: '1234123412',
+      lddHealthProblem:
+        'Learner considers himself or herself to have a learning difficulty and/or disability and/or health problem.',
+      priorAttainment: 'Full level 3',
       qualifications: [
         {
           qualificationType: 'English',
-          qualificationGrade: 'c',
-          assessmentDate: '2021-06-22',
+          qualificationGrade: 'Level 1',
+          assessmentDate: '2021-05-13',
         },
-      ],
-      languageStatus: 'string',
-      plannedHours: 8,
-    },
-    {
-      prn: 'G8346GA',
-      establishmentId: 3,
-      establishmentName: 'HMP Winchester',
-      uln: '345455',
-      lddHealthProblem: 'Autistic spectrum disorder',
-      priorAttainment: '',
-      qualifications: [
         {
           qualificationType: 'Maths',
-          qualificationGrade: 'A',
-          assessmentDate: '2021-06-22',
+          qualificationGrade: 'Level 1',
+          assessmentDate: '2021-05-20',
+        },
+        {
+          qualificationType: 'Digital Literacy',
+          qualificationGrade: 'Level 2',
+          assessmentDate: '2021-05-19',
         },
       ],
-      languageStatus: 'string',
-      plannedHours: 8,
+      languageStatus: 'English',
+      plannedHours: 200,
+      rapidAssessmentDate: null,
+      inDepthAssessmentDate: null,
+      primaryLLDDAndHealthProblem: 'Visual impairment',
+      additionalLLDDAndHealthProblems: [
+        'Hearing impairment',
+        'Social and emotional difficulties',
+        'Mental health difficulty',
+      ],
+    },
+    {
+      prn: 'G6123VU',
+      establishmentId: 76,
+      establishmentName: 'HMP Wakefield',
+      uln: '9876987654',
+      lddHealthProblem: null,
+      priorAttainment: null,
+      qualifications: [
+        {
+          qualificationType: 'English',
+          qualificationGrade: 'Entry Level 1',
+          assessmentDate: '2019-03-01',
+        },
+        {
+          qualificationType: 'Maths',
+          qualificationGrade: 'Entry Level 1',
+          assessmentDate: '2019-03-01',
+        },
+        {
+          qualificationType: 'Digital Literacy',
+          qualificationGrade: 'Entry Level 1',
+          assessmentDate: '2019-03-01',
+        },
+      ],
+      languageStatus: 'English',
+      plannedHours: null,
+      rapidAssessmentDate: null,
+      inDepthAssessmentDate: null,
+      primaryLLDDAndHealthProblem: null,
+      additionalLLDDAndHealthProblems: [],
     },
   ]
 }

@@ -11,6 +11,7 @@ export default ({ logError }) =>
       return res.end()
     }
 
+    console.log(error)
     res.status(status)
 
     if (status === 403 || status === 404) return res.render('notFound.njk', { url: req.headers.referer || '/' })
