@@ -137,7 +137,6 @@ export default class EsweService {
           if (a.establishmentName > b.establishmentName) return 1
           return 0
         })
-
         return createFlaggedContent(LddList)
       }
     } catch (e) {

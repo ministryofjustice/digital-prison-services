@@ -97,10 +97,101 @@ describe('Education skills and work experience', () => {
       expect(actual.content).toBeNull()
     })
 
-    it('should return expected response when the prisoner is not registered in Curious', async () => {})
-    it('should return expected response when the prisoner is in Curious but has listed no LDD information', async () => {})
-    it('should return expected response when the prisoner is in Curious and there is LDD information from one caseload', async () => {})
-    it('should order the LDD information alphabetically by establishment name if there is data from multiple caseloads', async () => {})
+    it('should return expected response when the prisoner is not registered in Curious', async () => {
+      const error = {
+        status: 404,
+      }
+      jest.spyOn(app, 'esweEnabled', 'get').mockReturnValue(true)
+      getLearnerProfilesMock.mockRejectedValue(error)
+      const actual = await service.getLearningDifficulties(nomisId)
+      expect(actual.enabled).toBeTruthy()
+      expect(actual.content).toEqual([])
+    })
+    it('should return expected response when the prisoner is in Curious but has listed no LDD information', async () => {
+      const noLDD = [
+        {
+          prn: 'G3609VL',
+          establishmentName: 'HMP New Hall',
+          primaryLLDDAndHealthProblem: null,
+          additionalLLDDAndHealthProblems: [],
+        },
+      ]
+      jest.spyOn(app, 'esweEnabled', 'get').mockReturnValue(true)
+      getLearnerProfilesMock.mockResolvedValue(noLDD)
+      const actual = await service.getLearningDifficulties(nomisId)
+      expect(actual.content).toStrictEqual([])
+      expect(getLearnerProfilesMock).toHaveBeenCalledTimes(1)
+      expect(getLearnerProfilesMock).toHaveBeenCalledWith(credentialsRef, nomisId)
+    })
+    it('should return expected response when the prisoner is in Curious and there is LDD information from one caseload', async () => {
+      const oneCaseloadLDD = [
+        {
+          prn: 'G6123VU',
+          establishmentName: 'HMP Moorland',
+          lddHealthProblem:
+            'Learner considers himself or herself to have a learning difficulty and/or disability and/or health problem.',
+          primaryLLDDAndHealthProblem: 'Visual impairment',
+          additionalLLDDAndHealthProblems: [
+            'Hearing impairment',
+            'Social and emotional difficulties',
+            'Mental health difficulty',
+          ],
+        },
+      ]
+      const expected = [
+        {
+          details: [
+            {
+              html: "<p class='govuk-body'>Visual impairment</p><p class='govuk-body'>Hearing impairment</p><p class='govuk-body'>Mental health difficulty</p><p class='govuk-body'>Social and emotional difficulties</p>",
+              label: 'Description',
+            },
+            {
+              label: 'Location',
+              value: 'HMP Moorland',
+            },
+          ],
+          establishmentName: 'HMP Moorland',
+        },
+      ]
+      jest.spyOn(app, 'esweEnabled', 'get').mockReturnValue(true)
+      getLearnerProfilesMock.mockResolvedValue(oneCaseloadLDD)
+      const actual = await service.getLearningDifficulties(nomisId)
+      expect(actual.content).toStrictEqual(expected)
+    })
+    it('should order the LDD information alphabetically by establishment name if there is data from multiple caseloads, and ignore caseloads where there are no LDD listed', async () => {
+      const expected = [
+        {
+          details: [
+            {
+              html: "<p class='govuk-body'>Visual impairment</p><p class='govuk-body'>Hearing impairment</p><p class='govuk-body'>Mental health difficulty</p><p class='govuk-body'>Social and emotional difficulties</p>",
+              label: 'Description',
+            },
+            {
+              label: 'Location',
+              value: 'HMP Moorland',
+            },
+          ],
+          establishmentName: 'HMP Moorland',
+        },
+        {
+          details: [
+            {
+              html: "<p class='govuk-body'>Dyslexia</p><p class='govuk-body'>Autism</p><p class='govuk-body'>Hearing impairment</p><p class='govuk-body'>Social and emotional difficulties</p>",
+              label: 'Description',
+            },
+            {
+              label: 'Location',
+              value: 'HMP New Hall',
+            },
+          ],
+          establishmentName: 'HMP New Hall',
+        },
+      ]
+      jest.spyOn(app, 'esweEnabled', 'get').mockReturnValue(true)
+      getLearnerProfilesMock.mockResolvedValue(dummyLearnerProfiles)
+      const actual = await service.getLearningDifficulties(nomisId)
+      expect(actual.content).toStrictEqual(expected)
+    })
   })
 
   describe('Work and skills tab', () => {
@@ -264,7 +355,6 @@ describe('Education skills and work experience', () => {
           status: 404,
         }
         jest.spyOn(app, 'esweEnabled', 'get').mockReturnValue(true)
-        getLearnerEducationMock.mockRejectedValue(error)
         getLearnerGoalsMock.mockRejectedValue(error)
         const actual = await service.getLearnerGoals(nomisId)
         expect(actual.enabled).toBeTruthy()
@@ -317,6 +407,37 @@ describe('Education skills and work experience', () => {
 
 function getDummyLearnerProfiles(): curious.LearnerProfile[] {
   return [
+    {
+      prn: 'G6123VU',
+      establishmentId: 12,
+      establishmentName: 'HMP New Hall',
+      uln: '9876987654',
+      lddHealthProblem: null,
+      priorAttainment: null,
+      qualifications: [
+        {
+          qualificationType: 'English',
+          qualificationGrade: 'Entry Level 1',
+          assessmentDate: '2019-03-01',
+        },
+        {
+          qualificationType: 'Maths',
+          qualificationGrade: 'Entry Level 1',
+          assessmentDate: '2019-03-01',
+        },
+        {
+          qualificationType: 'Digital Literacy',
+          qualificationGrade: 'Entry Level 1',
+          assessmentDate: '2019-03-01',
+        },
+      ],
+      languageStatus: 'English',
+      plannedHours: null,
+      rapidAssessmentDate: null,
+      inDepthAssessmentDate: null,
+      primaryLLDDAndHealthProblem: 'Dyslexia',
+      additionalLLDDAndHealthProblems: ['Hearing impairment', 'Social and emotional difficulties', 'Autism'],
+    },
     {
       prn: 'G6123VU',
       establishmentId: 8,

@@ -2090,31 +2090,42 @@ describe('prisoner personal', () => {
     })
   })
 
-  // describe('learner profile data', () => {
-  //   beforeEach(() => {
-  //     // @ts-expect-error ts-migrate(2339) FIXME: Property 'getLatestLearningDifficulties' does not ex... Remove this comment to see the full error message
-  //     esweService.getLatestLearningDifficulties = jest.fn()
-  //   })
+  describe('learner profile data', () => {
+    beforeEach(() => {
+      // @ts-expect-error ts-migrate(2339) FIXME: Property 'getLatestLearningDifficulties' does not ex... Remove this comment to see the full error message
+      esweService.getLearningDifficulties = jest.fn()
+    })
 
-  // it('should return null for a failed request', async () => {
-  //   // @ts-expect-error ts-migrate(2339) FIXME: Property 'getLatestLearningDifficulties' does not ex... Remove this comment to see the full error message
-  //   esweService.getLatestLearningDifficulties.mockRejectedValue(new Error())
-  //   await controller(req, res)
-  //   expect(res.render).toHaveBeenCalledWith(
-  //     'prisonerProfile/prisonerPersonal/prisonerPersonal.njk',
-  //     expect.objectContaining({ learningDifficulty: null })
-  //   )
-  // })
+    it('should return null for a failed request', async () => {
+      // @ts-expect-error ts-migrate(2339) FIXME: Property 'getLatestLearningDifficulties' does not ex... Remove this comment to see the full error message
+      esweService.getLearningDifficulties.mockRejectedValue(new Error())
+      await controller(req, res)
+      expect(res.render).toHaveBeenCalledWith(
+        'prisonerProfile/prisonerPersonal/prisonerPersonal.njk',
+        expect.objectContaining({ learningDifficulties: null })
+      )
+    })
 
-  // it('should return a list of learner profiles for a successful request', async () => {
-  //   const learningDifficulty = 'Dyslexia'
-  //   // @ts-expect-error ts-migrate(2339) FIXME: Property 'getLatestLearningDifficulties' does not ex... Remove this comment to see the full error message
-  //   esweService.getLatestLearningDifficulties.mockResolvedValue(learningDifficulty)
-  //   await controller(req, res)
-  //   expect(res.render).toHaveBeenCalledWith(
-  //     'prisonerProfile/prisonerPersonal/prisonerPersonal.njk',
-  //     expect.objectContaining({ learningDifficulty })
-  //   )
-  // })
-  // })
+    it('should return a list of learner profiles for a successful request', async () => {
+      const learningDifficulties = [
+        {
+          establishmentName: 'HMP Moorland',
+          details: [
+            {
+              label: 'Description',
+              html: "<p class='govuk-body'>Visual impairment</p><p class='govuk-body'>Dyslexia</p>",
+            },
+            { label: 'Location', value: 'HMP Moorland' },
+          ],
+        },
+      ]
+      // @ts-expect-error ts-migrate(2339) FIXME: Property 'getLatestLearningDifficulties' does not ex... Remove this comment to see the full error message
+      esweService.getLearningDifficulties.mockResolvedValue(learningDifficulties)
+      await controller(req, res)
+      expect(res.render).toHaveBeenCalledWith(
+        'prisonerProfile/prisonerPersonal/prisonerPersonal.njk',
+        expect.objectContaining({ learningDifficulties })
+      )
+    })
+  })
 })

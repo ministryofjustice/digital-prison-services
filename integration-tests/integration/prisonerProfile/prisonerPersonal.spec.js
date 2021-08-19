@@ -260,26 +260,13 @@ context('Prisoner personal', () => {
       })
     })
 
-    context('Personal care needs section', () => {
+    context('Disabilities and adjustments section', () => {
       it('Should show correct missing content text', () => {
+        cy.get('[data-test="learningDifficulties-summary"]').then(($section) => {
+          expect($section).to.contain.text('We cannot show these details right now. Try reloading the page.')
+        })
         cy.get('[data-test="care-needs-summary"]').then(($section) => {
           expect($section).to.contain.text('None')
-        })
-      })
-    })
-
-    context('Neurodiversity summary section', () => {
-      it('Should display a description of the section', () => {
-        cy.get('[data-test="neurodiversity-summary"]').then(($section) => {
-          expect($section).to.contain.text('This is self-declared by the prisoner.')
-          expect($section).to.contain.text(
-            'Neurodiversity is also known as learning difficulties and disabilities (LDD).'
-          )
-        })
-      })
-      it('Should display learning difficulties', () => {
-        cy.get('[data-test="neurodiversity-summary"]').then(($section) => {
-          expect($section).to.contain.text('No data found')
         })
       })
     })
@@ -674,6 +661,44 @@ context('Prisoner personal', () => {
               description: 'Psychological',
             },
           ],
+          learningDifficulties: [
+            {
+              prn: 'G6123VU',
+              establishmentId: 8,
+              establishmentName: 'HMP Moorland',
+              uln: '1234123412',
+              lddHealthProblem:
+                'Learner considers himself or herself to have a learning difficulty and/or disability and/or health problem.',
+              priorAttainment: 'Full level 3',
+              qualifications: [
+                {
+                  qualificationType: 'English',
+                  qualificationGrade: 'Level 1',
+                  assessmentDate: '2021-05-13',
+                },
+                {
+                  qualificationType: 'Maths',
+                  qualificationGrade: 'Level 1',
+                  assessmentDate: '2021-05-20',
+                },
+                {
+                  qualificationType: 'Digital Literacy',
+                  qualificationGrade: 'Level 2',
+                  assessmentDate: '2021-05-19',
+                },
+              ],
+              languageStatus: 'English',
+              plannedHours: 200,
+              rapidAssessmentDate: null,
+              inDepthAssessmentDate: null,
+              primaryLLDDAndHealthProblem: 'Visual impairment',
+              additionalLLDDAndHealthProblems: [
+                'Hearing impairment',
+                'Social and emotional difficulties',
+                'Mental health difficulty',
+              ],
+            },
+          ],
           careNeeds: {
             personalCareNeeds: [
               {
@@ -885,8 +910,29 @@ context('Prisoner personal', () => {
         })
       })
 
-      context('Personal care needs section', () => {
+      context('Disabilities and adjustments section', () => {
         it('Should show correct headings, images, labels and values', () => {
+          cy.get('[data-test="learningDifficulties-summary"]').then(($section) => {
+            cy.get($section)
+              .find('dt')
+              .then(($summaryLabels) => {
+                cy.get($summaryLabels).its('length').should('eq', 2)
+                expect($summaryLabels.get(0).innerText).to.contain('Description')
+                expect($summaryLabels.get(1).innerText).to.contain('Location')
+              })
+
+            cy.get($section)
+              .find('dd')
+              .then(($summaryValues) => {
+                cy.get($summaryValues).its('length').should('eq', 2)
+                expect($summaryValues.get(0).innerText).to.contain('Visual impairment')
+                expect($summaryValues.get(0).innerText).to.contain('Hearing impairment')
+                expect($summaryValues.get(0).innerText).to.contain('Mental health difficulty')
+                expect($summaryValues.get(0).innerText).to.contain('Social and emotional difficulties')
+                expect($summaryValues.get(1).innerText).to.contain('HMP Moorland')
+              })
+          })
+
           cy.get('[data-test="care-needs-summary"]').then(($section) => {
             cy.get($section)
               .find('h3')
