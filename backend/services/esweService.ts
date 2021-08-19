@@ -1,4 +1,3 @@
-import moment, { Moment } from 'moment'
 import { app } from '../config'
 import { readableDateFormat } from '../utils'
 import type CuriousApi from '../api/curious/curiousApi'
@@ -13,6 +12,7 @@ type FeatureFlagged<T> = {
 type LearnerProfiles = FeatureFlagged<curious.LearnerProfile[]>
 type LearnerLatestAssessments = FeatureFlagged<curious.FunctionalSkillsLevels>
 type OffenderGoals = FeatureFlagged<curious.LearnerGoals>
+type LearningDifficulties = FeatureFlagged<curious.LearningDifficultiesDisabilities[]>
 
 const createFlaggedContent = <T>(content: T) => ({
   enabled: app.esweEnabled,
@@ -49,20 +49,6 @@ export const DEFAULT_SKILL_LEVELS = {
       value: AWAITING_ASSESSMENT_CONTENT,
     },
   ],
-}
-
-const parseDate = (value: string) => moment(value, CURIOUS_DATE_FORMAT)
-
-const compareByDate = (dateA: Moment, dateB: Moment, descending = true) => {
-  const order = descending ? 1 : -1
-
-  if (dateA.isAfter(dateB)) {
-    return -1 * order
-  }
-  if (dateB.isAfter(dateA)) {
-    return 1 * order
-  }
-  return 0
 }
 
 const createSkillAssessmentSummary = (learnerAssessment: curious.LearnerAssessment) => {
@@ -120,44 +106,50 @@ export default class EsweService {
     return createFlaggedContent(content)
   }
 
-  async getLatestLearningDifficulty(nomisId: string): Promise<FeatureFlagged<string>> {
+  async getLearningDifficulties(nomisId: string): Promise<LearningDifficulties> {
     if (!app.esweEnabled) {
       return createFlaggedContent(null)
     }
 
-    let content: string = null
     try {
       const context = await this.systemOauthClient.getClientCredentialsTokens()
+      const profiles = await this.curiousApi.getLearnerProfiles(context, nomisId)
 
-      // TODO: speak with curious to see if filtering/sorting can be added to their api
-      const [educations, profiles] = await Promise.all([
-        this.curiousApi.getLearnerEducation(context, nomisId),
-        this.curiousApi.getLearnerProfiles(context, nomisId),
-      ])
-
-      const compareByDateDesc = (a: curious.LearnerEducation, b: curious.LearnerEducation) =>
-        compareByDate(parseDate(a.learningStartDate), parseDate(b.learningStartDate))
-
-      educations.sort(compareByDateDesc)
-
-      const profilesByEstablishment = profiles.reduce(
-        (acc, current) => ({
-          ...acc,
-          [current.establishmentId]: current,
-        }),
-        {}
-      )
-
-      const lddHealthProblem = educations
-        .map(({ establishmentId }) => profilesByEstablishment[establishmentId]?.lddHealthProblem)
-        .find((value) => !!value)
-
-      content = lddHealthProblem ?? ''
+      if (profiles?.length) {
+        const lddList = profiles
+          .map((profile) => {
+            if (profile.primaryLLDDAndHealthProblem) {
+              const combinedLdd = [
+                profile.primaryLLDDAndHealthProblem,
+                ...profile.additionalLLDDAndHealthProblems.sort(),
+              ]
+              const formattedLdd = combinedLdd.map((entry) => `<p class='govuk-body'>${entry}</p>`)
+              return {
+                establishmentName: profile.establishmentName,
+                details: [
+                  { label: 'Description', html: formattedLdd.join('') },
+                  { label: 'Location', value: profile.establishmentName },
+                ],
+              }
+            }
+            return null
+          })
+          .filter((profile) => profile)
+          .sort((a, b) => {
+            if (a.establishmentName < b.establishmentName) return -1
+            if (a.establishmentName > b.establishmentName) return 1
+            return 0
+          })
+        return createFlaggedContent(lddList)
+      }
     } catch (e) {
-      log.warn(`Failed to get latest learning difficulty. Reason: ${e.message}`)
+      if (e.status === 404) {
+        log.info(`Offender record not found in Curious.`)
+        return createFlaggedContent([])
+      }
+      log.error(`Failed to get learning difficulties. Reason: ${e.message}`)
     }
-
-    return createFlaggedContent(content)
+    return createFlaggedContent(null)
   }
 
   async getLearnerLatestAssessments(nomisId: string): Promise<LearnerLatestAssessments> {

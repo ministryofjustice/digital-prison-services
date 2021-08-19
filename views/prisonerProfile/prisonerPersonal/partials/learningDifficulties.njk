@@ -1,0 +1,16 @@
+{% from "../../macros/prisonerSummarySection.njk" import prisonerSummarySection %}
+
+{% set lddInfo = learningDifficulties.content %}
+{% set offenderName = (prisonerProfileData.offenderName).split(',')[1].trim() + " " +(prisonerProfileData.offenderName).split(',')[0] %}
+
+{% if lddInfo %}
+    {% for entry in lddInfo %}
+    {{ prisonerSummarySection(entry.details, indentKey = true) }}
+    {% endfor %}
+
+    {% if not lddInfo.length %}
+    <p class="govuk-body">{{ offenderName }} has not declared any learning difficulties.</p>
+    {% endif %}
+{% else %}
+    <p class="govuk-body" data-test="goals-errorMessage">{{ errorMessage }}</p>
+{% endif %}

@@ -12,6 +12,6 @@
   {{ prisonerSummarySection(reasonableAdjustment.details, indentKey = true) }}
 {% endfor %}
 
-{% if not careNeedsAndAdjustments.personalCareNeeds.length and not careNeedsAndAdjustments.reasonableAdjustment.length %}
+{% if not careNeedsAndAdjustments.personalCareNeeds.length and not careNeedsAndAdjustments.reasonableAdjustments.length %}
   <p class="govuk-body">None</p>
 {% endif %}

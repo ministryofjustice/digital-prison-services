@@ -7,6 +7,8 @@
 {% set title = "Personal" %}
 {% set containerClasses = "prisoner-profile" %}
 {% set missingEntry = "Not entered" %}
+{% set errorMessage = "We cannot show these details right now. Try reloading the page." %}
+
 
 {% set physicalCharacteristicsContent %}
   <div data-test="physical-characteristics-summary">
@@ -69,31 +71,35 @@
 {% endset %}
 
 {% set careNeedsContent %}
+  {% if learningDifficulties.enabled %}
+    <h3 class="govuk-summary-list-title govuk-heading-m">Self-declared learning difficulties</h3>
+    <div data-test="learningDifficulties-summary">
+      {% include "./partials/learningDifficulties.njk" %}
+    </div>
+    <h3 class="govuk-summary-list-title govuk-heading-m">Personal care needs</h3>
+  {% endif %}
   <div data-test="care-needs-summary">
     {% include "./partials/careNeedsAndAdjustments.njk" %}
-  </div>
-{% endset %}
-
-
-{% set neurodiversityContent %}
-  <div data-test="neurodiversity-summary">
-    {% include "./partials/neurodiversity.njk" %}
   </div>
 {% endset %}
 
 {% set leftSections = [
     { heading: 'Personal details', html: personalContent },
     { heading: 'Physical characteristics', html: physicalCharacteristicsContent },
-    { heading: 'Distinguishing marks', html: distinguishingMarksContent },
-    { heading: 'Personal care needs', html: careNeedsContent }
+    { heading: 'Distinguishing marks', html: distinguishingMarksContent }
   ]
 %}
 
-{% if learningDifficulty.enabled %}
-    {% set leftSections = (
-        leftSections.push({ heading: 'Neurodiversity', html: neurodiversityContent }),
-        leftSections
-    ) %}
+{% if learningDifficulties.enabled %}
+  {% set leftSections = (
+      leftSections.push({ heading: 'Disabilities and adjustments', html: careNeedsContent }),
+      leftSections
+  ) %}
+{% else %}
+  {% set leftSections = (
+      leftSections.push({ heading: 'Personal care needs', html: careNeedsContent }),
+      leftSections
+  ) %}
 {% endif %}
 
 {% set leftSections = (

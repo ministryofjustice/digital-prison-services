@@ -1,6 +1,20 @@
 const { stubFor } = require('./wiremock')
 
 module.exports = {
+  stubLearnerProfiles: (learnerProfiles, status = 200) =>
+    stubFor({
+      request: {
+        method: 'GET',
+        urlPattern: `/sequation-virtual-campus2-api/learnerProfile/.+?`,
+      },
+      response: {
+        status,
+        headers: {
+          'Content-Type': 'application/json;charset=UTF-8',
+        },
+        jsonBody: learnerProfiles || [],
+      },
+    }),
   stubLatestLearnerAssessments: (learnerAssessments, status = 200) =>
     stubFor({
       request: {
@@ -40,7 +54,7 @@ module.exports = {
         headers: {
           'Content-Type': 'application/json;charset=UTF-8',
         },
-        jsonBody: learnerGoals,
+        jsonBody: learnerGoals || {},
       },
     }),
 }

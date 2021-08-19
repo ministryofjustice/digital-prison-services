@@ -323,9 +323,35 @@ declare namespace curious {
   /**
    *
    * @export
+   * @interface LearningDifficultiesDisabilities
+   */
+  interface LearningDifficultiesDisabilities {
+    /**
+     * Establishment Name
+     * @type {string}
+     * @memberof LearningDifficultiesDisabilities
+     */
+    establishmentName?: string
+    /**
+     * Primary learning difficulty or disability
+     * @type {string}
+     * @memberof LearningDifficultiesDisabilities
+     */
+    primaryLDD?: Array
+    /**
+     * Additional learning difficulties or disabilities
+     * @type {string}
+     * @memberof LearningDifficultiesDisabilities
+     */
+    additionalLDD?: Array
+  }
+
+  /**
+   *
+   * @export
    * @interface LearnerProfile
    */
-  export interface LearnerProfile {
+  interface LearnerProfile {
     /**
      * Establishment (prison) identifier
      * @type {number}
@@ -333,17 +359,29 @@ declare namespace curious {
      */
     establishmentId?: number
     /**
+     * Language status
+     * @type {string}
+     * @memberof LearnerProfile
+     */
+    languageStatus?: string
+    /**
+     * Rapid assessment date
+     * @type {string}
+     * @memberof LearnerProfile
+     */
+    rapidAssessmentDate?: string
+    /**
+     * In depth assessment date
+     * @type {string}
+     * @memberof LearnerProfile
+     */
+    inDepthAssessmentDate?: string
+    /**
      * Establishment (prison) name
      * @type {string}
      * @memberof LearnerProfile
      */
     establishmentName?: string
-    /**
-     * Language Status
-     * @type {string}
-     * @memberof LearnerProfile
-     */
-    languageStatus?: string
     /**
      * Learner Self Assessment LDD and Health Problem
      * @type {string}
@@ -380,6 +418,18 @@ declare namespace curious {
      * @memberof LearnerProfile
      */
     uln?: string
+    /**
+     * Additional LLDD and Health Problems
+     * @type {Array<string>}
+     * @memberof LearnerProfile
+     */
+    additionalLLDDAndHealthProblems?: Array
+    /**
+     * Primary LLDD and Health Problem
+     * @type {string}
+     * @memberof LearnerProfile
+     */
+    primaryLLDDAndHealthProblem?: string
   }
 
   /**

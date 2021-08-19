@@ -42,8 +42,8 @@ describe('prisoner personal', () => {
 
     // @ts-expect-error ts-migrate(2339) FIXME: Property 'getPersonContactDetails' does not exist ... Remove this comment to see the full error message
     personService.getPersonContactDetails = jest.fn().mockResolvedValue({})
-    // @ts-expect-error ts-migrate(2339) FIXME: Property 'getLatestLearningDifficulty' does not ex... Remove this comment to see the full error message
-    esweService.getLatestLearningDifficulty = jest.fn().mockResolvedValue('')
+    // @ts-expect-error ts-migrate(2339) FIXME: Property 'getLatestLearningDifficulties' does not ex... Remove this comment to see the full error message
+    esweService.getLatestLearningDifficulties = jest.fn().mockResolvedValue('')
 
     // @ts-expect-error ts-migrate(2339) FIXME: Property 'getDetails' does not exist on type '{}'.
     prisonApi.getDetails = jest.fn().mockResolvedValue({})
@@ -71,6 +71,8 @@ describe('prisoner personal', () => {
     prisonApi.getAgencies = jest.fn().mockResolvedValue([])
     // @ts-expect-error ts-migrate(2339) FIXME: Property 'getPomByOffenderNo' does not exist on ty... Remove this comment to see the full error message
     allocationManagerApi.getPomByOffenderNo = jest.fn().mockResolvedValue({})
+    // @ts-expect-error ts-migrate(2339) FIXME: Property 'getLearningDifficulties' does not exist on type '{}'... Remove this comment to see the full error message
+    esweService.getLearningDifficulties = jest.fn().mockResolvedValue([])
 
     controller = prisonerPersonal({
       prisonerProfileService,
@@ -2090,28 +2092,39 @@ describe('prisoner personal', () => {
 
   describe('learner profile data', () => {
     beforeEach(() => {
-      // @ts-expect-error ts-migrate(2339) FIXME: Property 'getLatestLearningDifficulty' does not ex... Remove this comment to see the full error message
-      esweService.getLatestLearningDifficulty = jest.fn()
+      // @ts-expect-error ts-migrate(2339) FIXME: Property 'getLatestLearningDifficulties' does not ex... Remove this comment to see the full error message
+      esweService.getLearningDifficulties = jest.fn()
     })
 
     it('should return null for a failed request', async () => {
-      // @ts-expect-error ts-migrate(2339) FIXME: Property 'getLatestLearningDifficulty' does not ex... Remove this comment to see the full error message
-      esweService.getLatestLearningDifficulty.mockRejectedValue(new Error())
+      // @ts-expect-error ts-migrate(2339) FIXME: Property 'getLatestLearningDifficulties' does not ex... Remove this comment to see the full error message
+      esweService.getLearningDifficulties.mockRejectedValue(new Error())
       await controller(req, res)
       expect(res.render).toHaveBeenCalledWith(
         'prisonerProfile/prisonerPersonal/prisonerPersonal.njk',
-        expect.objectContaining({ learningDifficulty: null })
+        expect.objectContaining({ learningDifficulties: null })
       )
     })
 
     it('should return a list of learner profiles for a successful request', async () => {
-      const learningDifficulty = 'Dyslexia'
-      // @ts-expect-error ts-migrate(2339) FIXME: Property 'getLatestLearningDifficulty' does not ex... Remove this comment to see the full error message
-      esweService.getLatestLearningDifficulty.mockResolvedValue(learningDifficulty)
+      const learningDifficulties = [
+        {
+          establishmentName: 'HMP Moorland',
+          details: [
+            {
+              label: 'Description',
+              html: "<p class='govuk-body'>Visual impairment</p><p class='govuk-body'>Dyslexia</p>",
+            },
+            { label: 'Location', value: 'HMP Moorland' },
+          ],
+        },
+      ]
+      // @ts-expect-error ts-migrate(2339) FIXME: Property 'getLatestLearningDifficulties' does not ex... Remove this comment to see the full error message
+      esweService.getLearningDifficulties.mockResolvedValue(learningDifficulties)
       await controller(req, res)
       expect(res.render).toHaveBeenCalledWith(
         'prisonerProfile/prisonerPersonal/prisonerPersonal.njk',
-        expect.objectContaining({ learningDifficulty })
+        expect.objectContaining({ learningDifficulties })
       )
     })
   })
