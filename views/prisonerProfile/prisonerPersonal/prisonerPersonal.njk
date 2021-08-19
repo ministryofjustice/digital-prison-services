@@ -91,15 +91,15 @@
 %}
 
 {% if learningDifficulties.enabled %}
-{% set leftSections = (
-    leftSections.push({ heading: 'Disabilities and adjustments', html: careNeedsContent }),
-    leftSections
-) %}
+  {% set leftSections = (
+      leftSections.push({ heading: 'Disabilities and adjustments', html: careNeedsContent }),
+      leftSections
+  ) %}
 {% else %}
-{% set leftSections = (
-    leftSections.push({ heading: 'Personal care needs', html: careNeedsContent }),
-    leftSections
-) %}
+  {% set leftSections = (
+      leftSections.push({ heading: 'Personal care needs', html: careNeedsContent }),
+      leftSections
+  ) %}
 {% endif %}
 
 {% set leftSections = (

@@ -115,13 +115,13 @@ export default class EsweService {
       const context = await this.systemOauthClient.getClientCredentialsTokens()
       const profiles = await this.curiousApi.getLearnerProfiles(context, nomisId)
 
-      const LddList = []
-      if (Array.isArray(profiles) && profiles.length > 0) {
+      const lddList = []
+      if (profiles?.length) {
         profiles.map((profile) => {
           const combinedLdd = [profile.primaryLLDDAndHealthProblem, ...profile.additionalLLDDAndHealthProblems.sort()]
           if (profile.primaryLLDDAndHealthProblem) {
             const formattedLdd = combinedLdd.map((entry) => `<p class='govuk-body'>${entry}</p>`)
-            LddList.push({
+            lddList.push({
               establishmentName: profile.establishmentName,
               details: [
                 { label: 'Description', html: formattedLdd.join('') },
@@ -129,14 +129,14 @@ export default class EsweService {
               ],
             })
           }
-          return LddList
+          return lddList
         })
-        LddList.sort((a, b) => {
+        lddList.sort((a, b) => {
           if (a.establishmentName < b.establishmentName) return -1
           if (a.establishmentName > b.establishmentName) return 1
           return 0
         })
-        return createFlaggedContent(LddList)
+        return createFlaggedContent(lddList)
       }
     } catch (e) {
       if (e.status === 404) {
