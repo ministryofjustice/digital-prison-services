@@ -115,27 +115,31 @@ export default class EsweService {
       const context = await this.systemOauthClient.getClientCredentialsTokens()
       const profiles = await this.curiousApi.getLearnerProfiles(context, nomisId)
 
-      const lddList = []
       if (profiles?.length) {
-        profiles.map((profile) => {
-          const combinedLdd = [profile.primaryLLDDAndHealthProblem, ...profile.additionalLLDDAndHealthProblems.sort()]
-          if (profile.primaryLLDDAndHealthProblem) {
-            const formattedLdd = combinedLdd.map((entry) => `<p class='govuk-body'>${entry}</p>`)
-            lddList.push({
-              establishmentName: profile.establishmentName,
-              details: [
-                { label: 'Description', html: formattedLdd.join('') },
-                { label: 'Location', value: profile.establishmentName },
-              ],
-            })
-          }
-          return lddList
-        })
-        lddList.sort((a, b) => {
-          if (a.establishmentName < b.establishmentName) return -1
-          if (a.establishmentName > b.establishmentName) return 1
-          return 0
-        })
+        const lddList = profiles
+          .map((profile) => {
+            if (profile.primaryLLDDAndHealthProblem) {
+              const combinedLdd = [
+                profile.primaryLLDDAndHealthProblem,
+                ...profile.additionalLLDDAndHealthProblems.sort(),
+              ]
+              const formattedLdd = combinedLdd.map((entry) => `<p class='govuk-body'>${entry}</p>`)
+              return {
+                establishmentName: profile.establishmentName,
+                details: [
+                  { label: 'Description', html: formattedLdd.join('') },
+                  { label: 'Location', value: profile.establishmentName },
+                ],
+              }
+            }
+            return null
+          })
+          .filter((profile) => profile)
+          .sort((a, b) => {
+            if (a.establishmentName < b.establishmentName) return -1
+            if (a.establishmentName > b.establishmentName) return 1
+            return 0
+          })
         return createFlaggedContent(lddList)
       }
     } catch (e) {
