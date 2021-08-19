@@ -118,14 +118,13 @@ export default class EsweService {
       const LddList = []
       if (Array.isArray(profiles) && profiles.length > 0) {
         profiles.map((profile) => {
-          profile.additionalLLDDAndHealthProblems.sort()
-          const allLdd = [profile.primaryLLDDAndHealthProblem, ...profile.additionalLLDDAndHealthProblems]
+          const combinedLdd = [profile.primaryLLDDAndHealthProblem, ...profile.additionalLLDDAndHealthProblems.sort()]
           if (profile.primaryLLDDAndHealthProblem) {
-            const newLdd = allLdd.map((entry) => `<p class='govuk-body'>${entry}</p>`)
+            const formattedLdd = combinedLdd.map((entry) => `<p class='govuk-body'>${entry}</p>`)
             LddList.push({
               establishmentName: profile.establishmentName,
               details: [
-                { label: 'Description', html: newLdd.join('') },
+                { label: 'Description', html: formattedLdd.join('') },
                 { label: 'Location', value: profile.establishmentName },
               ],
             })
