@@ -1,0 +1,27 @@
+
+{% from "../../macros/prisonerSummarySection.njk" import prisonerSummarySection %}
+{% from "govuk/components/summary-list/macro.njk" import govukSummaryList %}
+
+{% set offenderName = (prisonerProfileData.offenderName).split(',')[1].trim() + " " +(prisonerProfileData.offenderName).split(',')[0] %}
+
+{% if courses.currentCourseData.length %}
+    <h3 class="govuk-heading-s card__heading">Current courses</h3>
+    {{ prisonerSummarySection(courses.currentCourseData, '', {"data-test": "courses-currentCourses"}, false, '') }}
+{% elseif courses.historicalCoursesPresent %}
+    <h3 class="govuk-heading-s card__heading">Current courses</h3>
+    <p class="govuk-body" data-test="courses-noCurrent">{{ offenderName }} is not currently doing any courses</p>
+{% endif %}
+
+{% if courses.historicalCoursesPresent %}
+    <a class="govuk-link" href=''>View courses and qualifications details</a>
+{% endif %}
+
+{% if not courses.historicalCoursesPresent and not courses.currentCourseData.length  %}
+    <p class="govuk-body" data-test="courses-noData">{{ offenderName }} has no courses or qualifications</p>
+{% endif %}
+
+{% if not courses %}
+    <p class="govuk-body" data-test="courses-errorMessage">{{ errorMessage }}</p>
+{% endif %}
+
+

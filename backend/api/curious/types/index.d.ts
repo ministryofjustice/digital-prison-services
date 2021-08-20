@@ -323,6 +323,26 @@ declare namespace curious {
   /**
    *
    * @export
+   * @interface currentCoursesEnhanced
+   */
+  interface currentCoursesEnhanced {
+    /**
+     * Courses
+     * @type {any}
+     * @memberof currentCoursesEnhanced
+     */
+    currentCourseData?: Array
+    /**
+     * Historical courses
+     * @type {string}
+     * @memberof currentCoursesEnhanced
+     */
+    historicalCoursesPresent?: boolean
+  }
+
+  /**
+   *
+   * @export
    * @interface LearningDifficultiesDisabilities
    */
   interface LearningDifficultiesDisabilities {

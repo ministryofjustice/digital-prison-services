@@ -1,3 +1,4 @@
+import moment, { Moment } from 'moment'
 import { app } from '../config'
 import { readableDateFormat } from '../utils'
 import type CuriousApi from '../api/curious/curiousApi'
@@ -13,6 +14,7 @@ type LearnerProfiles = FeatureFlagged<curious.LearnerProfile[]>
 type LearnerLatestAssessments = FeatureFlagged<curious.FunctionalSkillsLevels>
 type OffenderGoals = FeatureFlagged<curious.LearnerGoals>
 type LearningDifficulties = FeatureFlagged<curious.LearningDifficultiesDisabilities[]>
+type LearnerCourses = FeatureFlagged<curious.currentCoursesEnhanced>
 
 const createFlaggedContent = <T>(content: T) => ({
   enabled: app.esweEnabled,
@@ -28,6 +30,11 @@ const AWAITING_ASSESSMENT_CONTENT = 'Awaiting assessment'
 export const DEFAULT_GOALS = {
   employmentGoals: null,
   personalGoals: null,
+}
+
+export const DEFAULT_COURSE_DATA = {
+  historicalCoursesPresent: false,
+  currentCourseData: [],
 }
 
 export const DEFAULT_SKILL_LEVELS = {
@@ -49,6 +56,20 @@ export const DEFAULT_SKILL_LEVELS = {
       value: AWAITING_ASSESSMENT_CONTENT,
     },
   ],
+}
+
+const parseDate = (value: string) => moment(value, CURIOUS_DATE_FORMAT)
+
+const compareByDate = (dateA: Moment, dateB: Moment, descending = true) => {
+  const order = descending ? 1 : -1
+
+  if (dateA.isAfter(dateB)) {
+    return -1 * order
+  }
+  if (dateB.isAfter(dateA)) {
+    return 1 * order
+  }
+  return 0
 }
 
 const createSkillAssessmentSummary = (learnerAssessment: curious.LearnerAssessment) => {
@@ -227,7 +248,51 @@ export default class EsweService {
         log.info(`Offender record not found in Curious.`)
         return createFlaggedContent(DEFAULT_GOALS)
       }
+      log.error(`Failed to get learner goals. Reason: ${e.message}`)
+    }
+    return createFlaggedContent(null)
+  }
+
+  async getLearnerEducation(nomisId: string): Promise<LearnerCourses> {
+    if (!app.esweEnabled) {
       return createFlaggedContent(null)
     }
+
+    const compareByDateAsc = (a, b) =>
+      compareByDate(parseDate(a.learningPlannedEndDate), parseDate(b.learningPlannedEndDate), false)
+
+    try {
+      const context = await this.systemOauthClient.getClientCredentialsTokens()
+      const courses = await this.curiousApi.getLearnerEducation(context, nomisId)
+
+      if (courses.length) {
+        const currentCourses = courses
+          .filter(
+            (course) =>
+              course.completionStatus.includes('continuing') || course.completionStatus.includes('temporarily')
+          )
+          .sort(compareByDateAsc)
+          .map((course) => {
+            return {
+              label: course.courseName,
+              value: `Planned end date on ${readableDateFormat(course.learningPlannedEndDate, CURIOUS_DATE_FORMAT)}`,
+            }
+          })
+
+        const fullCourseData = {
+          historicalCoursesPresent: courses.length > currentCourses.length,
+          currentCourseData: currentCourses,
+        }
+        return createFlaggedContent(fullCourseData)
+      }
+      return createFlaggedContent(DEFAULT_COURSE_DATA)
+    } catch (e) {
+      if (e.status === 404) {
+        log.info(`Offender record not found in Curious.`)
+        return createFlaggedContent(DEFAULT_COURSE_DATA)
+      }
+      log.error(`Failed to get learner education. Reason: ${e.message}`)
+    }
+    return createFlaggedContent(null)
   }
 }

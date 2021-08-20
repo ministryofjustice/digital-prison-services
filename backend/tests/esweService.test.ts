@@ -1,4 +1,4 @@
-import EsweService, { DEFAULT_SKILL_LEVELS, DEFAULT_GOALS } from '../services/esweService'
+import EsweService, { DEFAULT_SKILL_LEVELS, DEFAULT_GOALS, DEFAULT_COURSE_DATA } from '../services/esweService'
 import { app } from '../config'
 import CuriousApi from '../api/curious/curiousApi'
 
@@ -403,6 +403,110 @@ describe('Education skills and work experience', () => {
       })
     })
   })
+  describe('Courses and qualifications', () => {
+    const nomisId = 'G3609VL'
+    it('should return null when feature flag is disabled', async () => {
+      jest.spyOn(app, 'esweEnabled', 'get').mockReturnValue(false)
+      const actual = await service.getLearnerEducation(nomisId)
+      expect(actual.enabled).toBeFalsy()
+      expect(actual.content).toBeNull()
+      expect(getLearnerEducationMock).not.toHaveBeenCalled()
+      expect(systemOauthClient.getClientCredentialsTokens).not.toHaveBeenCalled()
+    })
+    it('should return null content on error', async () => {
+      jest.spyOn(app, 'esweEnabled', 'get').mockReturnValue(true)
+      getLearnerEducationMock.mockRejectedValue(new Error('error'))
+      const actual = await service.getLearnerEducation(nomisId)
+      expect(actual.content).toBeNull()
+    })
+    it('should return expected response when the prisoner is not registered in Curious', async () => {
+      const error = {
+        status: 404,
+      }
+      jest.spyOn(app, 'esweEnabled', 'get').mockReturnValue(true)
+      getLearnerEducationMock.mockRejectedValue(error)
+      const actual = await service.getLearnerEducation(nomisId)
+      expect(actual.content).toEqual(DEFAULT_COURSE_DATA)
+    })
+    it('should return the expected response if the user has no courses', async () => {
+      jest.spyOn(app, 'esweEnabled', 'get').mockReturnValue(true)
+      getLearnerEducationMock.mockResolvedValue([])
+      const actual = await service.getLearnerEducation(nomisId)
+      expect(actual.content).toEqual(DEFAULT_COURSE_DATA)
+    })
+    it('should return the expected response if there are only current courses and no historical courses', async () => {
+      const courses = [
+        {
+          prn: 'G3609VL',
+          courseName: 'Human Science',
+          learningPlannedEndDate: '2022-01-05',
+          completionStatus:
+            'The learner is continuing or intending to continue the learning activities leading to the learning aim',
+        },
+        {
+          prn: 'G3609VL',
+          courseName: 'Ocean Science',
+          learningPlannedEndDate: '2023-09-30',
+          completionStatus:
+            'The learner is continuing or intending to continue the learning activities leading to the learning aim',
+        },
+      ]
+      const expected = {
+        historicalCoursesPresent: false,
+        currentCourseData: [
+          { label: 'Human Science', value: `Planned end date on 5 January 2022` },
+          { label: 'Ocean Science', value: `Planned end date on 30 September 2023` },
+        ],
+      }
+      jest.spyOn(app, 'esweEnabled', 'get').mockReturnValue(true)
+      getLearnerEducationMock.mockResolvedValue(courses)
+      const actual = await service.getLearnerEducation(nomisId)
+      expect(actual.content).toEqual(expected)
+    })
+    it('should return the expected response if there are only historical courses and no current courses', async () => {
+      const courses = [
+        {
+          prn: 'G3609VL',
+          courseName: 'Human Science',
+          learningPlannedEndDate: '2021-01-05',
+          completionStatus: 'The learner has withdrawn from the learning activities leading to the learning aim',
+        },
+        {
+          prn: 'G3609VL',
+          courseName: 'Ocean Science',
+          learningPlannedEndDate: '2021-09-03',
+          completionStatus: 'The learner has completed the learning activities leading to the learning aim',
+        },
+      ]
+      const expected = {
+        historicalCoursesPresent: true,
+        currentCourseData: [],
+      }
+      jest.spyOn(app, 'esweEnabled', 'get').mockReturnValue(true)
+      getLearnerEducationMock.mockResolvedValue(courses)
+      const actual = await service.getLearnerEducation(nomisId)
+      expect(actual.content).toEqual(expected)
+    })
+    it('should return the expected response if there are both current and historical courses', async () => {
+      const expected = {
+        historicalCoursesPresent: true,
+        currentCourseData: [
+          {
+            label: 'Instructing group cycling sessions',
+            value: 'Planned end date on 1 August 2019',
+          },
+          {
+            label: 'Ocean Science',
+            value: 'Planned end date on 31 December 2019',
+          },
+        ],
+      }
+      jest.spyOn(app, 'esweEnabled', 'get').mockReturnValue(true)
+      getLearnerEducationMock.mockResolvedValue(dummyEducations)
+      const actual = await service.getLearnerEducation(nomisId)
+      expect(actual.content).toEqual(expected)
+    })
+  })
 })
 
 function getDummyLearnerProfiles(): curious.LearnerProfile[] {
@@ -570,7 +674,7 @@ function getDummyEducations(): curious.LearnerEducation[] {
       prn: 'G8346GA',
       establishmentId: 2,
       establishmentName: 'HMP Bristol',
-      courseName: 'testAmar',
+      courseName: 'Ocean Science',
       courseCode: '004TES006',
       isAccredited: false,
       aimSequenceNumber: 1,

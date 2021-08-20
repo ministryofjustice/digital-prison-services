@@ -10,6 +10,7 @@
 
 {% set functionalSkillLevels = functionalSkillLevels.content %}
 {% set goals = targets.content %}
+{% set courses = coursesAndQualifications.content %}
 
 {% set functionalSkillsLevelSection %}
   <div data-test="functional-skills-level-summary">
@@ -23,16 +24,14 @@
   </div>
 {% endset %}
 
-{% set blank %}
-  <div>
-    <p class="govuk-body">Sed fringilla augue at eleifend varius. In et faucibus elit. Vestibulum in turpis id eros vestibulum volutpat. 
-    Pellentesque dignissim tellus libero, ac vestibulum libero sagittis vitae. In non pellentesque tellus, sit amet malesuada ligula. 
-    Fusce nec risus et ante ullamcorper sollicitudin.</p>
+{% set CoursesAndQualificationsSection %}
+  <div data-test="courses-summary">
+    {% include "./partials/CoursesAndQualifications.njk" %}
   </div>
 {% endset %}
 
 {% set leftSections = [
-    { heading: 'Lorem ipsum', html: blank }
+    { heading: 'Courses and qualifications', html: CoursesAndQualificationsSection }
 ] %}
 {% set rightSections = [
     { heading: 'Goals', html: offenderGoalsSection },
