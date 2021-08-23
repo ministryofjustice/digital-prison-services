@@ -61,261 +61,335 @@ declare namespace curious {
    */
   export interface LearnerEducation {
     /**
-     * Course Indicator from LRS
+     * Content
+     * @type {Array}
+     * @memberof LearnerEducation
+     */
+    content?: LearnerCourses[]
+    /**
+     * Number
+     * @type {number}
+     * @memberof LearnerEducation
+     */
+    number?: number
+    /**
+     * Size
+     * @type {number}
+     * @memberof LearnerEducation
+     */
+    size?: number
+    /**
+     * Total Elements
+     * @type {number}
+     * @memberof LearnerEducation
+     */
+    totalElements?: number
+    /**
+     * First entry
+     * @type {number}
+     * @memberof LearnerEducation
+     */
+    first?: boolean
+    /**
+     * Last entry
      * @type {boolean}
      * @memberof LearnerEducation
+     */
+    last?: boolean
+    /**
+     * Has content
+     * @type {boolean}
+     * @memberof LearnerEducation
+     */
+    hasContent?: boolean
+    /**
+     * Number of Element
+     * @type {number}
+     * @memberof LearnerEducation
+     */
+    numberOfElements?: number
+    /**
+     * Total number of pages
+     * @type {number}
+     * @memberof LearnerEducation
+     */
+    totalPages?: number
+    /**
+     * Empty
+     * @type {string}
+     * @memberof LearnerEducation
+     */
+    pageable?: Record<string, unknown>
+    /**
+     * Empty
+     * @type {boolean}
+     * @memberof LearnerEducation
+     */
+    empty?: boolean
+  }
+
+  /**
+   *
+   * @export
+   * @interface LearnerCourses
+   */
+  export interface LearnerCourses {
+    /**
+     * Course Indicator from LRS
+     * @type {boolean}
+     * @memberof LearnerCourses
      */
     a2LevelIndicator?: boolean
     /**
      * Course Indicator from LRS
      * @type {boolean}
-     * @memberof LearnerEducation
+     * @memberof LearnerCourses
      */
     accessHEIndicator?: boolean
     /**
      * Actual Guided Learning Hours allocated to course
      * @type {number}
-     * @memberof LearnerEducation
+     * @memberof LearnerCourses
      */
     actualGLH?: number
     /**
      * The sequence number of Course for a learner
      * @type {number}
-     * @memberof LearnerEducation
+     * @memberof LearnerCourses
      */
     aimSequenceNumber?: number
     /**
      *
      * @type {boolean}
-     * @memberof LearnerEducation
+     * @memberof LearnerCourses
      */
     alevelIndicator?: boolean
     /**
      * Course Indicator from LRS
      * @type {boolean}
-     * @memberof LearnerEducation
+     * @memberof LearnerCourses
      */
     asLevelIndicator?: boolean
     /**
      * Actual attended Guided Learning Hours by learner on course
      * @type {number}
-     * @memberof LearnerEducation
+     * @memberof LearnerCourses
      */
     attendedGLH?: number
     /**
      * Course completion Status
      * @type {string}
-     * @memberof LearnerEducation
+     * @memberof LearnerCourses
      */
     completionStatus?: string
     /**
      * Unique Course Code
      * @type {string}
-     * @memberof LearnerEducation
+     * @memberof LearnerCourses
      */
     courseCode?: string
     /**
      * Course Name
      * @type {string}
-     * @memberof LearnerEducation
+     * @memberof LearnerCourses
      */
     courseName?: string
     /**
      * Post code of a location where this course is getting delivered
      * @type {string}
-     * @memberof LearnerEducation
+     * @memberof LearnerCourses
      */
     deliveryLocationPostCode?: string
     /**
      * Course Delivery Method
      * @type {string}
-     * @memberof LearnerEducation
+     * @memberof LearnerCourses
      */
     deliveryMethodType?: LearnerEducationDeliveryMethodType
     /**
      * Employment Outcome gained status associated with the course (with training, without training)
      * @type {string}
-     * @memberof LearnerEducation
+     * @memberof LearnerCourses
      */
     employmentOutcome?: string
     /**
      * Establishment (prison) identifier
      * @type {number}
-     * @memberof LearnerEducation
+     * @memberof LearnerCourses
      */
     establishmentId?: number
     /**
      * Establishment (prison) name
      * @type {string}
-     * @memberof LearnerEducation
+     * @memberof LearnerCourses
      */
     establishmentName?: string
     /**
      * Course Indicator from LRS
      * @type {boolean}
-     * @memberof LearnerEducation
+     * @memberof LearnerCourses
      */
     functionalSkillsIndicator?: boolean
     /**
      * Funding adjustment hours from prior learning
      * @type {number}
-     * @memberof LearnerEducation
+     * @memberof LearnerCourses
      */
     fundingAdjustmentPriorLearning?: number
     /**
      * Funding Model for a Course
      * @type {string}
-     * @memberof LearnerEducation
+     * @memberof LearnerCourses
      */
     fundingModel?: string
     /**
      * Funding type for a course
      * @type {string}
-     * @memberof LearnerEducation
+     * @memberof LearnerCourses
      */
     fundingType?: string
     /**
      * Course Indicator from LRS
      * @type {boolean}
-     * @memberof LearnerEducation
+     * @memberof LearnerCourses
      */
     gceIndicator?: boolean
     /**
      * Course Indicator from LRS
      * @type {boolean}
-     * @memberof LearnerEducation
+     * @memberof LearnerCourses
      */
     gcsIndicator?: boolean
     /**
      * Indicates if the course is accredited
      * @type {boolean}
-     * @memberof LearnerEducation
+     * @memberof LearnerCourses
      */
     isAccredited?: boolean
     /**
      * Course Indicator from LRS
      * @type {boolean}
-     * @memberof LearnerEducation
+     * @memberof LearnerCourses
      */
     keySkillsIndicator?: boolean
     /**
      * Learners aim on Course
      * @type {string}
-     * @memberof LearnerEducation
+     * @memberof LearnerCourses
      */
     learnersAimType?: string
     /**
      * Actual Course end date
      * @type {string}
-     * @memberof LearnerEducation
+     * @memberof LearnerCourses
      */
     learningActualEndDate?: string
     /**
      * Planned Course end date
      * @type {string}
-     * @memberof LearnerEducation
+     * @memberof LearnerCourses
      */
     learningPlannedEndDate?: string
     /**
      * Course start date
      * @type {string}
-     * @memberof LearnerEducation
+     * @memberof LearnerCourses
      */
     learningStartDate?: string
     /**
      * Number of Guided Learning hours from LRS
      * @type {number}
-     * @memberof LearnerEducation
+     * @memberof LearnerCourses
      */
     lrsGLH?: number
     /**
      * Course Indicator from LRS
      * @type {string}
-     * @memberof LearnerEducation
+     * @memberof LearnerCourses
      */
     miNotionalNVQLevelV2?: string
     /**
      * Course Indicator from LRS
      * @type {boolean}
-     * @memberof LearnerEducation
+     * @memberof LearnerCourses
      */
     occupationalIndicator?: boolean
     /**
      * Outcome of Course
      * @type {string}
-     * @memberof LearnerEducation
+     * @memberof LearnerCourses
      */
     outcome?: string
     /**
      * Outcome grade of Course
      * @type {string}
-     * @memberof LearnerEducation
+     * @memberof LearnerCourses
      */
     outcomeGrade?: string
     /**
      * Withdrawal reason if the learner withdraws from course
      * @type {string}
-     * @memberof LearnerEducation
+     * @memberof LearnerCourses
      */
     prisonWithdrawalReason?: string
     /**
      * NOMIS Assigned Offender Number (Prisoner Identifier)
      * @type {string}
-     * @memberof LearnerEducation
+     * @memberof LearnerCourses
      */
     prn?: string
     /**
      * Course Indicator from LRS
      * @type {boolean}
-     * @memberof LearnerEducation
+     * @memberof LearnerCourses
      */
     qcfCertificateIndicator?: boolean
     /**
      * Course Indicator from LRS
      * @type {boolean}
-     * @memberof LearnerEducation
+     * @memberof LearnerCourses
      */
     qcfDiplomaIndicator?: boolean
     /**
      * Course Indicator from LRS
      * @type {boolean}
-     * @memberof LearnerEducation
+     * @memberof LearnerCourses
      */
     qcfIndicator?: boolean
     /**
      * Course Indicator from LRS
      * @type {string}
-     * @memberof LearnerEducation
+     * @memberof LearnerCourses
      */
     sectorSubjectAreaTier1?: string
     /**
      * Course Indicator from LRS
      * @type {string}
-     * @memberof LearnerEducation
+     * @memberof LearnerCourses
      */
     sectorSubjectAreaTier2?: string
     /**
      * Course Indicator from LRS
      * @type {number}
-     * @memberof LearnerEducation
+     * @memberof LearnerCourses
      */
     subcontractedPartnershipUKPRN?: number
     /**
      * Course Indicator from LRS
      * @type {string}
-     * @memberof LearnerEducation
+     * @memberof LearnerCourses
      */
     unitType?: string
     /**
      * Indicates if withdrawal is agreed or not
      * @type {boolean}
-     * @memberof LearnerEducation
+     * @memberof LearnerCourses
      */
     withdrawalReasonAgreed?: boolean
     /**
      * Withdrawal reason (defaulted to Other) populated for the courses which are withdrawn
      * @type {string}
-     * @memberof LearnerEducation
+     * @memberof LearnerCourses
      */
     withdrawalReasons?: string
   }
@@ -323,19 +397,19 @@ declare namespace curious {
   /**
    *
    * @export
-   * @interface currentCoursesEnhanced
+   * @interface CurrentCoursesEnhanced
    */
-  interface currentCoursesEnhanced {
+  interface CurrentCoursesEnhanced {
     /**
      * Courses
      * @type {any}
-     * @memberof currentCoursesEnhanced
+     * @memberof CurrentCoursesEnhanced
      */
     currentCourseData?: Array
     /**
      * Historical courses
      * @type {string}
-     * @memberof currentCoursesEnhanced
+     * @memberof CurrentCoursesEnhanced
      */
     historicalCoursesPresent?: boolean
   }
