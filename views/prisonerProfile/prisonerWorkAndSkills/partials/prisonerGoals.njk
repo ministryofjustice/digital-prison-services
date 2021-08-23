@@ -22,7 +22,7 @@
     </ul>
 
   {% elseif goals.employmentGoals === null %} 
-    <p class="govuk-body" data-test="goals-noGoals">{{ offenderName }} has not set any goals</p>
+    <p class="govuk-body" data-test="goals-noGoals">{{ offenderName }} has not set any goals.</p>
   {% else %}
     <p class="govuk-body" data-test="goals-errorMessage">{{ errorMessage }}</p>
   {% endif %}

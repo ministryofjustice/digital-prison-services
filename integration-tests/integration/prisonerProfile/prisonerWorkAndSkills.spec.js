@@ -92,7 +92,7 @@ context('Prisoner Work and Skills', () => {
       it('should show default message', () => {
         cy.get('[data-test="goals-noGoals"]').then(($message) => {
           cy.get($message).then(($goalsMessage) => {
-            cy.get($goalsMessage).should('have.text', 'John Smith has not set any goals')
+            cy.get($goalsMessage).should('have.text', 'John Smith has not set any goals.')
           })
         })
       })
@@ -152,7 +152,7 @@ context('Prisoner Work and Skills', () => {
       it('should show default message', () => {
         cy.get('[data-test="goals-noGoals"]').then(($message) => {
           cy.get($message).then(($goalsMessage) => {
-            cy.get($goalsMessage).should('have.text', 'John Smith has not set any goals')
+            cy.get($goalsMessage).should('have.text', 'John Smith has not set any goals.')
           })
         })
       })
