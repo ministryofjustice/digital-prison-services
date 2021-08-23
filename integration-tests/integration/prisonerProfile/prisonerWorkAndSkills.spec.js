@@ -10,43 +10,48 @@ context('Prisoner Work and Skills', () => {
     clickIfExist('.govuk-accordion__open-all[aria-expanded="false"]')
   }
 
-  before(() => {
-    cy.clearCookies()
-    cy.task('resetAndStubTokenVerification')
-    cy.task('stubLogin', { username: 'ITAG_USER', caseload: 'MDI' })
-    cy.login()
-  })
-
-  beforeEach(() => {
-    Cypress.Cookies.preserveOnce('hmpps-session-dev')
-    cy.task('stubPathFinderOffenderDetails', null)
-    cy.task('stubClientCredentialsRequest')
-  })
+  const prisonerProfileHeaderData = {
+    offenderBasicDetails,
+    offenderFullDetails,
+    iepSummary: {},
+    caseNoteSummary: {},
+    offenderNo,
+  }
 
   context('When there is no data because of an api call failure', () => {
     const apiErrorText = 'We cannot show these details right now. Try reloading the page.'
 
     before(() => {
-      cy.task('stubPrisonerProfileHeaderData', {
-        offenderBasicDetails,
-        offenderFullDetails,
-        iepSummary: {},
-        caseNoteSummary: {},
-        offenderNo,
-      })
-      cy.task('stubLatestLearnerAssessments500Error', {})
-      cy.task('stubLearnerGoals500Error', {})
-      visitWorkAndSkillsAndExpandAccordions()
+      cy.clearCookies()
+      cy.task('reset')
+      cy.task('stubLogin', { username: 'ITAG_USER', caseload: 'MDI' })
+      cy.login()
+
+      cy.task('stubPrisonerProfileHeaderData', prisonerProfileHeaderData)
+
+      cy.task('stubWorkAndSkillsApi500Errors')
+    })
+
+    beforeEach(() => {
+      Cypress.Cookies.preserveOnce('hmpps-session-dev')
     })
 
     context('functional skills section', () => {
       it('should show correct error message', () => {
+        visitWorkAndSkillsAndExpandAccordions()
         cy.get('[data-test="learner-latest-assessments-errorMessage"]').should('have.text', apiErrorText)
       })
     })
     context('goals section', () => {
       it('should show correct error message', () => {
+        visitWorkAndSkillsAndExpandAccordions()
         cy.get('[data-test="goals-errorMessage"]').should('have.text', apiErrorText)
+      })
+    })
+    context('courses and qualifications section', () => {
+      it('should show correct error message', () => {
+        visitWorkAndSkillsAndExpandAccordions()
+        cy.get('[data-test="courses-errorMessage"]').should('have.text', apiErrorText)
       })
     })
   })
@@ -57,21 +62,26 @@ context('Prisoner Work and Skills', () => {
       errorMessage: 'Resource not found',
       httpStatusCode: 404,
     }
+
     before(() => {
-      cy.task('stubPrisonerProfileHeaderData', {
-        offenderBasicDetails,
-        offenderFullDetails,
-        iepSummary: {},
-        caseNoteSummary: {},
-        offenderNo,
-      })
-      cy.task('stubLatestLearnerAssessments404Error', error)
-      cy.task('stubLearnerGoals404Error', error)
-      visitWorkAndSkillsAndExpandAccordions()
+      cy.task('reset')
+      cy.clearCookies()
+      cy.task('reset')
+      cy.task('stubLogin', { username: 'ITAG_USER', caseload: 'MDI' })
+      cy.login()
+
+      cy.task('stubPrisonerProfileHeaderData', prisonerProfileHeaderData)
+
+      cy.task('stubWorkAndSkillsApi404Errors', error)
+    })
+
+    beforeEach(() => {
+      Cypress.Cookies.preserveOnce('hmpps-session-dev')
     })
 
     context('functional skills section', () => {
       it('should show "awaiting assessments" content for each skill', () => {
+        visitWorkAndSkillsAndExpandAccordions()
         cy.get('[data-test="functional-skills-level-summary"]').then(($summary) => {
           cy.get($summary)
             .find('dt')
@@ -83,6 +93,7 @@ context('Prisoner Work and Skills', () => {
     })
     context('goals section', () => {
       it('should show default message', () => {
+        visitWorkAndSkillsAndExpandAccordions()
         cy.get('[data-test="goals-noGoals"]').then(($message) => {
           cy.get($message).then(($goalsMessage) => {
             cy.get($goalsMessage).should('have.text', 'John Smith has not set any goals.')
@@ -90,13 +101,25 @@ context('Prisoner Work and Skills', () => {
         })
       })
     })
+    context('courses and qualifications section', () => {
+      it('should show default message', () => {
+        visitWorkAndSkillsAndExpandAccordions()
+        cy.get('[data-test="courses-noData"]').then(($message) => {
+          cy.get($message).then(($noCoursesMessage) => {
+            cy.get($noCoursesMessage).should('have.text', 'John Smith has no courses or qualifications')
+          })
+        })
+      })
+    })
   })
 
   context('When the user is in Curious but there is no data', () => {
-    const functionalSkillsAssessments = {
-      prn: 'G1670VU',
-      qualifications: [],
-    }
+    const functionalSkillsAssessments = [
+      {
+        prn: 'G1670VU',
+        qualifications: [],
+      },
+    ]
     const emptyGoals = {
       prn: 'G9981UK',
       employmentGoals: [],
@@ -104,21 +127,42 @@ context('Prisoner Work and Skills', () => {
       longTermGoals: [],
       shortTermGoals: [],
     }
+
+    const emptyCourses = {
+      content: [],
+      number: 0,
+      size: 10,
+      totalElements: 0,
+      first: true,
+      last: true,
+      hasContent: false,
+      numberOfElements: 0,
+      totalPages: 0,
+      pageable: {},
+      empty: true,
+    }
+
     before(() => {
-      cy.task('stubPrisonerProfileHeaderData', {
-        offenderBasicDetails,
-        offenderFullDetails,
-        iepSummary: {},
-        caseNoteSummary: {},
-        offenderNo,
-      })
-      cy.task('stubLatestLearnerAssessments', [functionalSkillsAssessments])
+      cy.task('reset')
+      cy.clearCookies()
+      cy.task('reset')
+      cy.task('stubLogin', { username: 'ITAG_USER', caseload: 'MDI' })
+      cy.login()
+
+      cy.task('stubPrisonerProfileHeaderData', prisonerProfileHeaderData)
+
+      cy.task('stubLatestLearnerAssessments', functionalSkillsAssessments)
       cy.task('stubLearnerGoals', emptyGoals)
-      visitWorkAndSkillsAndExpandAccordions()
+      cy.task('stubLearnerEducation', emptyCourses)
+    })
+
+    beforeEach(() => {
+      Cypress.Cookies.preserveOnce('hmpps-session-dev')
     })
 
     context('functional skills section', () => {
       it('should show three subjects in the correct format and awaiting assessments content', () => {
+        visitWorkAndSkillsAndExpandAccordions()
         cy.get('[data-test="functional-skills-level-summary"]').then(($summary) => {
           cy.get($summary)
             .find('dt')
@@ -133,9 +177,20 @@ context('Prisoner Work and Skills', () => {
     })
     context('goals section', () => {
       it('should show default message', () => {
+        visitWorkAndSkillsAndExpandAccordions()
         cy.get('[data-test="goals-noGoals"]').then(($message) => {
           cy.get($message).then(($goalsMessage) => {
             cy.get($goalsMessage).should('have.text', 'John Smith has not set any goals.')
+          })
+        })
+      })
+    })
+    context('courses and qualification section', () => {
+      it('should show default message', () => {
+        visitWorkAndSkillsAndExpandAccordions()
+        cy.get('[data-test="courses-noData"]').then(($message) => {
+          cy.get($message).then(($noCoursesMessage) => {
+            cy.get($noCoursesMessage).should('have.text', 'John Smith has no courses or qualifications')
           })
         })
       })
@@ -189,21 +244,52 @@ context('Prisoner Work and Skills', () => {
       shortTermGoals: ['To get out of my overdraft'],
     }
 
+    const dummyEducation = {
+      content: [
+        {
+          prn: 'G6123VU',
+          courseName: 'Pink',
+          learningPlannedEndDate: '2022-02-27',
+          completionStatus:
+            'The learner is continuing or intending to continue the learning activities leading to the learning aim',
+        },
+        {
+          prn: 'G6123VU',
+          courseName: 'Running',
+          learningPlannedEndDate: '2022-01-01',
+          completionStatus:
+            'The learner is continuing or intending to continue the learning activities leading to the learning aim',
+        },
+        {
+          prn: 'G6123VU',
+          courseName: 'Cycling',
+          learningPlannedEndDate: '2022-04-30',
+          completionStatus: 'The learner has withdrawn from the learning activities leading to the learning aim',
+        },
+      ],
+    }
+
     before(() => {
-      cy.task('stubPrisonerProfileHeaderData', {
-        offenderBasicDetails,
-        offenderFullDetails,
-        iepSummary: {},
-        caseNoteSummary: {},
-        offenderNo,
-      })
+      cy.task('reset')
+      cy.clearCookies()
+      cy.task('reset')
+      cy.task('stubLogin', { username: 'ITAG_USER', caseload: 'MDI' })
+      cy.login()
+
+      cy.task('stubPrisonerProfileHeaderData', prisonerProfileHeaderData)
+
       cy.task('stubLatestLearnerAssessments', functionalSkillsAssessments)
       cy.task('stubLearnerGoals', dummyGoals)
-      visitWorkAndSkillsAndExpandAccordions()
+      cy.task('stubLearnerEducation', dummyEducation)
+    })
+
+    beforeEach(() => {
+      Cypress.Cookies.preserveOnce('hmpps-session-dev')
     })
 
     context('functional skills section', () => {
       it('should have the correct labels and values', () => {
+        visitWorkAndSkillsAndExpandAccordions()
         cy.get('[data-test="functional-skills-level-summary"]').then(($summary) => {
           cy.get($summary)
             .find('dt')
@@ -239,6 +325,7 @@ context('Prisoner Work and Skills', () => {
     })
     context('goals section', () => {
       it('should show the list of employment goals', () => {
+        visitWorkAndSkillsAndExpandAccordions()
         cy.get('[data-test="employment-goals"]').then(($ul) => {
           cy.get($ul)
             .find('li')
@@ -250,6 +337,8 @@ context('Prisoner Work and Skills', () => {
         })
       })
       it('should show the list of personal goals', () => {
+        visitWorkAndSkillsAndExpandAccordions()
+
         cy.get('[data-test="personal-goals"]').then(($ul) => {
           cy.get($ul)
             .find('li')
@@ -259,6 +348,40 @@ context('Prisoner Work and Skills', () => {
               expect($listElement.get(1)).to.contain('To get a 100% attendance record on my classes')
               expect($listElement.get(2)).to.contain('To make my mum proud')
             })
+        })
+      })
+    })
+    context('courses and qualifications section', () => {
+      it('should display the correct courses as labels, ordered by date', () => {
+        visitWorkAndSkillsAndExpandAccordions()
+        cy.get('[data-test="courses-currentCourses"]').then(($summary) => {
+          cy.get($summary)
+            .find('dt')
+            .then(($summaryLabels) => {
+              cy.get($summaryLabels).its('length').should('eq', 2)
+              expect($summaryLabels.get(0).innerText).to.contain('Running')
+              expect($summaryLabels.get(1).innerText).to.contain('Pink')
+            })
+        })
+      })
+      it('should display the correct planned end dates as values, ordered by date', () => {
+        visitWorkAndSkillsAndExpandAccordions()
+
+        cy.get('[data-test="courses-currentCourses"]').then(($summary) => {
+          cy.get($summary)
+            .find('dd')
+            .then(($summaryValues) => {
+              cy.get($summaryValues).its('length').should('eq', 2)
+              expect($summaryValues.get(0).innerText).to.contain('Planned end date on 1 January 2022')
+              expect($summaryValues.get(1).innerText).to.contain('Planned end date on 27 February 2022')
+            })
+        })
+      })
+      it('should display the link to the details page if there are historical courses', () => {
+        visitWorkAndSkillsAndExpandAccordions()
+
+        cy.get('[data-test="courses-detailsLink"]').then(($link) => {
+          cy.get($link).should('have.text', 'View courses and qualifications details')
         })
       })
     })
