@@ -1,5 +1,5 @@
-import querystring from 'qs'
 import type { ClientContext, OauthApiClient } from '../oauthEnabledClient'
+import { mapToQueryString } from '../../utils'
 
 export default class CuriousApi {
   static create(client: OauthApiClient): CuriousApi {
@@ -18,9 +18,38 @@ export default class CuriousApi {
       .then((response) => response.body)
   }
 
-  getLearnerEducation(context: ClientContext, nomisId: string): Promise<curious.LearnerEducation> {
+  getLearnerEducation(
+    context: ClientContext,
+    nomisId: string,
+    sort?: string,
+    actualGLH?: number,
+    courseCode?: string,
+    courseName?: string,
+    establishmentId?: number,
+    isAccredited?: boolean,
+    isCurrent?: boolean,
+    learningPlannedEndDate?: string,
+    learningStartDate?: string,
+    page?: number,
+    size?: number
+  ): Promise<curious.LearnerEducation> {
     return this.client
-      .get<curious.LearnerEducation>(context, `/learnerEducation/${nomisId}`)
+      .get<curious.LearnerEducation>(
+        context,
+        this.applyQuery(`/learnerEducation/${nomisId}`, {
+          sort,
+          courseCode,
+          courseName,
+          isAccredited,
+          isCurrent,
+          establishmentId,
+          learningPlannedEndDate,
+          page,
+          size,
+          learningStartDate,
+          actualGLH,
+        })
+      )
       .then((response) => response.body)
   }
 
@@ -34,8 +63,10 @@ export default class CuriousApi {
     return this.client.get<curious.LearnerGoals>(context, `/learnerGoals/${nomisId}`).then((response) => response.body)
   }
 
-  private applyQuery = (path, query?: Record<string, unknown>) =>
-    this.hasNonEmptyValues(query) ? `${path}?${querystring.stringify(query)}` : path
+  private applyQuery = (path, query?: Record<string, unknown>) => {
+    const queries = mapToQueryString(query)
+    return this.hasNonEmptyValues(query) ? `${path}?${queries}` : path
+  }
 
   private hasNonEmptyValues = (object?: Record<string, unknown>) =>
     object && Object.values(object).filter((value) => !!value).length > 0
