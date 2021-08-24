@@ -1,4 +1,5 @@
 import EsweService, { DEFAULT_SKILL_LEVELS, DEFAULT_GOALS, DEFAULT_COURSE_DATA } from '../services/esweService'
+import { makeNotFoundError } from './helpers'
 import { app } from '../config'
 import CuriousApi from '../api/curious/curiousApi'
 
@@ -98,11 +99,8 @@ describe('Education skills and work experience', () => {
     })
 
     it('should return expected response when the prisoner is not registered in Curious', async () => {
-      const error = {
-        status: 404,
-      }
       jest.spyOn(app, 'esweEnabled', 'get').mockReturnValue(true)
-      getLearnerProfilesMock.mockRejectedValue(error)
+      getLearnerProfilesMock.mockRejectedValue(makeNotFoundError())
       const actual = await service.getLearningDifficulties(nomisId)
       expect(actual.enabled).toBeTruthy()
       expect(actual.content).toEqual([])
@@ -318,11 +316,8 @@ describe('Education skills and work experience', () => {
       })
 
       it('should return expected response when the prisoner is not registered in Curious', async () => {
-        const error = {
-          status: 404,
-        }
         jest.spyOn(app, 'esweEnabled', 'get').mockReturnValue(true)
-        getLearnerLatestAssessmentsMock.mockRejectedValue(error)
+        getLearnerLatestAssessmentsMock.mockRejectedValue(makeNotFoundError())
         const actual = await service.getLearnerLatestAssessments(nomisId)
         expect(actual.enabled).toBeTruthy()
         expect(actual.content).toEqual(DEFAULT_SKILL_LEVELS)
@@ -351,11 +346,8 @@ describe('Education skills and work experience', () => {
         expect(actual.content).toBeNull()
       })
       it('should return expected response when the prisoner is not registered in Curious', async () => {
-        const error = {
-          status: 404,
-        }
         jest.spyOn(app, 'esweEnabled', 'get').mockReturnValue(true)
-        getLearnerGoalsMock.mockRejectedValue(error)
+        getLearnerGoalsMock.mockRejectedValue(makeNotFoundError())
         const actual = await service.getLearnerGoals(nomisId)
         expect(actual.enabled).toBeTruthy()
         expect(actual.content).toEqual(DEFAULT_GOALS)
@@ -418,12 +410,15 @@ describe('Education skills and work experience', () => {
         const actual = await service.getLearnerEducation(nomisId)
         expect(actual.content).toBeNull()
       })
-      it('should return expected response when the prisoner is not registered in Curious', async () => {
-        const error = {
-          status: 404,
-        }
+      it('should call the endpoint with the correct prn and context', async () => {
         jest.spyOn(app, 'esweEnabled', 'get').mockReturnValue(true)
-        getLearnerEducationMock.mockRejectedValue(error)
+        await service.getLearnerEducation(nomisId)
+        expect(systemOauthClient.getClientCredentialsTokens).toHaveBeenCalledTimes(1)
+        expect(getLearnerEducationMock).toHaveBeenCalledWith(credentialsRef, nomisId)
+      })
+      it('should return expected response when the prisoner is not registered in Curious', async () => {
+        jest.spyOn(app, 'esweEnabled', 'get').mockReturnValue(true)
+        getLearnerEducationMock.mockRejectedValue(makeNotFoundError())
         const actual = await service.getLearnerEducation(nomisId)
         expect(actual.content).toEqual(DEFAULT_COURSE_DATA)
       })

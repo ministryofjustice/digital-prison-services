@@ -164,7 +164,7 @@ export default class EsweService {
         return createFlaggedContent(lddList)
       }
     } catch (e) {
-      if (e.status === 404) {
+      if (e.response?.status === 404) {
         log.info(`Offender record not found in Curious.`)
         return createFlaggedContent([])
       }
@@ -215,7 +215,7 @@ export default class EsweService {
         digiLit: createSkillAssessmentSummary(digitalLiteracyGrade),
       })
     } catch (e) {
-      if (e.status === 404) {
+      if (e.response?.status === 404) {
         log.info(`Offender record not found in Curious.`)
         return createFlaggedContent(DEFAULT_SKILL_LEVELS)
       }
@@ -244,7 +244,7 @@ export default class EsweService {
       }
       return createFlaggedContent(displayedGoals)
     } catch (e) {
-      if (e.status === 404) {
+      if (e.response?.status === 404) {
         log.info(`Offender record not found in Curious.`)
         return createFlaggedContent(DEFAULT_GOALS)
       }
@@ -274,12 +274,10 @@ export default class EsweService {
               course.completionStatus.includes('continuing') || course.completionStatus.includes('temporarily')
           )
           .sort(compareByDateAsc)
-          .map((course) => {
-            return {
-              label: course.courseName,
-              value: `Planned end date on ${readableDateFormat(course.learningPlannedEndDate, CURIOUS_DATE_FORMAT)}`,
-            }
-          })
+          .map((course) => ({
+            label: course.courseName,
+            value: `Planned end date on ${readableDateFormat(course.learningPlannedEndDate, CURIOUS_DATE_FORMAT)}`,
+          }))
 
         const fullCourseData = {
           historicalCoursesPresent: content.length > currentCourses.length,
@@ -289,7 +287,7 @@ export default class EsweService {
       }
       return createFlaggedContent(DEFAULT_COURSE_DATA)
     } catch (e) {
-      if (e.status === 404) {
+      if (e.response?.status === 404) {
         log.info(`Offender record not found in Curious.`)
         return createFlaggedContent(DEFAULT_COURSE_DATA)
       }
