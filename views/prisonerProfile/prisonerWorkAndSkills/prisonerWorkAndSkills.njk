@@ -13,21 +13,21 @@
 {% set courses = coursesAndQualifications.content %}
 
 {% set functionalSkillsLevelSection %}
-  <div data-test="functional-skills-level-summary">
-    {% include "./partials/learnerLatestAssessments.njk" %}
-  </div>
+    <div data-test="functional-skills-level-summary">
+        {% include "./partials/learnerLatestAssessments.njk" %}
+    </div>
 {% endset %}
 
 {% set offenderGoalsSection %}
-  <div data-test="goals-summary">
-    {% include "./partials/prisonerGoals.njk" %}
-  </div>
+    <div data-test="goals-summary">
+        {% include "./partials/prisonerGoals.njk" %}
+    </div>
 {% endset %}
 
 {% set CoursesAndQualificationsSection %}
-  <div data-test="courses-summary">
-    {% include "./partials/CoursesAndQualifications.njk" %}
-  </div>
+    <div data-test="courses-summary">
+        {% include "./partials/coursesAndQualifications.njk" %}
+    </div>
 {% endset %}
 
 {% set leftSections = [
@@ -36,21 +36,21 @@
 {% set rightSections = [
     { heading: 'Goals', html: offenderGoalsSection },
     { heading: 'Functional skills level', html: functionalSkillsLevelSection }
-  ]
-%}
+] %}
 
 {% block prisonerProfileSection %}
-  <div class="govuk-accordion govuk-accordion--split" data-module="govuk-accordion" id="prisoner-eswe-accordion">
-    <div class="govuk-grid-row">
-      <div class="govuk-grid-column-one-half">
-        {% for section in leftSections %}
-          {{ accordionSection(section.heading, section.html, loop.index) }}
-        {% endfor %}
-      </div>
-      <div class="govuk-grid-column-one-half">
-        {% for section in rightSections %}
-          {{ accordionSection(section.heading, section.html, loop.index) }}
-        {% endfor %}
-      </div>    </div>
-  </div>
+    <div class="govuk-accordion govuk-accordion--split" data-module="govuk-accordion" id="prisoner-eswe-accordion">
+        <div class="govuk-grid-row">
+            <div class="govuk-grid-column-one-half">
+                {% for section in leftSections %}
+                    {{ accordionSection(section.heading, section.html, loop.index) }}
+                {% endfor %}
+            </div>
+            <div class="govuk-grid-column-one-half">
+                {% for section in rightSections %}
+                    {{ accordionSection(section.heading, section.html, loop.index) }}
+                {% endfor %}
+            </div>
+        </div>
+    </div>
 {% endblock %} 
