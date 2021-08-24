@@ -106,7 +106,7 @@ context('Prisoner Work and Skills', () => {
         visitWorkAndSkillsAndExpandAccordions()
         cy.get('[data-test="courses-noData"]').then(($message) => {
           cy.get($message).then(($noCoursesMessage) => {
-            cy.get($noCoursesMessage).should('have.text', 'John Smith has no courses or qualifications')
+            cy.get($noCoursesMessage).should('have.text', 'John Smith has no courses or qualifications.')
           })
         })
       })
@@ -190,7 +190,7 @@ context('Prisoner Work and Skills', () => {
         visitWorkAndSkillsAndExpandAccordions()
         cy.get('[data-test="courses-noData"]').then(($message) => {
           cy.get($message).then(($noCoursesMessage) => {
-            cy.get($noCoursesMessage).should('have.text', 'John Smith has no courses or qualifications')
+            cy.get($noCoursesMessage).should('have.text', 'John Smith has no courses or qualifications.')
           })
         })
       })
