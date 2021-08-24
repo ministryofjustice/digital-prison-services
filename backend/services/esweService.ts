@@ -14,7 +14,7 @@ type LearnerProfiles = FeatureFlagged<curious.LearnerProfile[]>
 type LearnerLatestAssessments = FeatureFlagged<curious.FunctionalSkillsLevels>
 type OffenderGoals = FeatureFlagged<curious.LearnerGoals>
 type LearningDifficulties = FeatureFlagged<curious.LearningDifficultiesDisabilities[]>
-type LearnerCourses = FeatureFlagged<curious.currentCoursesEnhanced>
+type CurrentCoursesEnhanced = FeatureFlagged<curious.CurrentCoursesEnhanced>
 
 const createFlaggedContent = <T>(content: T) => ({
   enabled: app.esweEnabled,
@@ -253,7 +253,7 @@ export default class EsweService {
     return createFlaggedContent(null)
   }
 
-  async getLearnerEducation(nomisId: string): Promise<LearnerCourses> {
+  async getLearnerEducation(nomisId: string): Promise<CurrentCoursesEnhanced> {
     if (!app.esweEnabled) {
       return createFlaggedContent(null)
     }
@@ -265,8 +265,10 @@ export default class EsweService {
       const context = await this.systemOauthClient.getClientCredentialsTokens()
       const courses = await this.curiousApi.getLearnerEducation(context, nomisId)
 
-      if (courses.length) {
-        const currentCourses = courses
+      const { content } = courses
+
+      if (content.length) {
+        const currentCourses = content
           .filter(
             (course) =>
               course.completionStatus.includes('continuing') || course.completionStatus.includes('temporarily')
@@ -280,7 +282,7 @@ export default class EsweService {
           })
 
         const fullCourseData = {
-          historicalCoursesPresent: courses.length > currentCourses.length,
+          historicalCoursesPresent: content.length > currentCourses.length,
           currentCourseData: currentCourses,
         }
         return createFlaggedContent(fullCourseData)
