@@ -18,9 +18,9 @@ export default class CuriousApi {
       .then((response) => response.body)
   }
 
-  getLearnerEducation(context: ClientContext, nomisId: string): Promise<curious.LearnerEducation[]> {
+  getLearnerEducation(context: ClientContext, nomisId: string): Promise<curious.LearnerEducation> {
     return this.client
-      .get<curious.LearnerEducation[]>(context, `/learnerEducation/${nomisId}`)
+      .get<curious.LearnerEducation>(context, `/learnerEducation/${nomisId}`)
       .then((response) => response.body)
   }
 

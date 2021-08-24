@@ -1,4 +1,5 @@
-import EsweService, { DEFAULT_SKILL_LEVELS, DEFAULT_GOALS } from '../services/esweService'
+import EsweService, { DEFAULT_SKILL_LEVELS, DEFAULT_GOALS, DEFAULT_COURSE_DATA } from '../services/esweService'
+import { makeNotFoundError } from './helpers'
 import { app } from '../config'
 import CuriousApi from '../api/curious/curiousApi'
 
@@ -98,11 +99,8 @@ describe('Education skills and work experience', () => {
     })
 
     it('should return expected response when the prisoner is not registered in Curious', async () => {
-      const error = {
-        status: 404,
-      }
       jest.spyOn(app, 'esweEnabled', 'get').mockReturnValue(true)
-      getLearnerProfilesMock.mockRejectedValue(error)
+      getLearnerProfilesMock.mockRejectedValue(makeNotFoundError())
       const actual = await service.getLearningDifficulties(nomisId)
       expect(actual.enabled).toBeTruthy()
       expect(actual.content).toEqual([])
@@ -318,11 +316,8 @@ describe('Education skills and work experience', () => {
       })
 
       it('should return expected response when the prisoner is not registered in Curious', async () => {
-        const error = {
-          status: 404,
-        }
         jest.spyOn(app, 'esweEnabled', 'get').mockReturnValue(true)
-        getLearnerLatestAssessmentsMock.mockRejectedValue(error)
+        getLearnerLatestAssessmentsMock.mockRejectedValue(makeNotFoundError())
         const actual = await service.getLearnerLatestAssessments(nomisId)
         expect(actual.enabled).toBeTruthy()
         expect(actual.content).toEqual(DEFAULT_SKILL_LEVELS)
@@ -351,11 +346,8 @@ describe('Education skills and work experience', () => {
         expect(actual.content).toBeNull()
       })
       it('should return expected response when the prisoner is not registered in Curious', async () => {
-        const error = {
-          status: 404,
-        }
         jest.spyOn(app, 'esweEnabled', 'get').mockReturnValue(true)
-        getLearnerGoalsMock.mockRejectedValue(error)
+        getLearnerGoalsMock.mockRejectedValue(makeNotFoundError())
         const actual = await service.getLearnerGoals(nomisId)
         expect(actual.enabled).toBeTruthy()
         expect(actual.content).toEqual(DEFAULT_GOALS)
@@ -399,6 +391,117 @@ describe('Education skills and work experience', () => {
         })
         const actual = await service.getLearnerGoals(nomisId)
         expect(actual.enabled).toBeTruthy()
+        expect(actual.content).toEqual(expected)
+      })
+    })
+    describe('Courses and qualifications', () => {
+      const nomisId = 'G3609VL'
+      it('should return null when feature flag is disabled', async () => {
+        jest.spyOn(app, 'esweEnabled', 'get').mockReturnValue(false)
+        const actual = await service.getLearnerEducation(nomisId)
+        expect(actual.enabled).toBeFalsy()
+        expect(actual.content).toBeNull()
+        expect(getLearnerEducationMock).not.toHaveBeenCalled()
+        expect(systemOauthClient.getClientCredentialsTokens).not.toHaveBeenCalled()
+      })
+      it('should return null content on error', async () => {
+        jest.spyOn(app, 'esweEnabled', 'get').mockReturnValue(true)
+        getLearnerEducationMock.mockRejectedValue(new Error('error'))
+        const actual = await service.getLearnerEducation(nomisId)
+        expect(actual.content).toBeNull()
+      })
+      it('should call the endpoint with the correct prn and context', async () => {
+        jest.spyOn(app, 'esweEnabled', 'get').mockReturnValue(true)
+        await service.getLearnerEducation(nomisId)
+        expect(systemOauthClient.getClientCredentialsTokens).toHaveBeenCalledTimes(1)
+        expect(getLearnerEducationMock).toHaveBeenCalledWith(credentialsRef, nomisId)
+      })
+      it('should return expected response when the prisoner is not registered in Curious', async () => {
+        jest.spyOn(app, 'esweEnabled', 'get').mockReturnValue(true)
+        getLearnerEducationMock.mockRejectedValue(makeNotFoundError())
+        const actual = await service.getLearnerEducation(nomisId)
+        expect(actual.content).toEqual(DEFAULT_COURSE_DATA)
+      })
+      it('should return the expected response if the user has no courses', async () => {
+        jest.spyOn(app, 'esweEnabled', 'get').mockReturnValue(true)
+        getLearnerEducationMock.mockResolvedValue({ content: [] })
+        const actual = await service.getLearnerEducation(nomisId)
+        expect(actual.content).toEqual(DEFAULT_COURSE_DATA)
+      })
+      it('should return the expected response if there are only current courses and no historical courses', async () => {
+        const courses = {
+          content: [
+            {
+              prn: 'G3609VL',
+              courseName: 'Human Science',
+              learningPlannedEndDate: '2022-01-05',
+              completionStatus:
+                'The learner is continuing or intending to continue the learning activities leading to the learning aim',
+            },
+            {
+              prn: 'G3609VL',
+              courseName: 'Ocean Science',
+              learningPlannedEndDate: '2023-09-30',
+              completionStatus:
+                'The learner is continuing or intending to continue the learning activities leading to the learning aim',
+            },
+          ],
+        }
+        const expected = {
+          historicalCoursesPresent: false,
+          currentCourseData: [
+            { label: 'Human Science', value: `Planned end date on 5 January 2022` },
+            { label: 'Ocean Science', value: `Planned end date on 30 September 2023` },
+          ],
+        }
+        jest.spyOn(app, 'esweEnabled', 'get').mockReturnValue(true)
+        getLearnerEducationMock.mockResolvedValue(courses)
+        const actual = await service.getLearnerEducation(nomisId)
+        expect(actual.content).toEqual(expected)
+      })
+      it('should return the expected response if there are only historical courses and no current courses', async () => {
+        const courses = {
+          content: [
+            {
+              prn: 'G3609VL',
+              courseName: 'Human Science',
+              learningPlannedEndDate: '2021-01-05',
+              completionStatus: 'The learner has withdrawn from the learning activities leading to the learning aim',
+            },
+            {
+              prn: 'G3609VL',
+              courseName: 'Ocean Science',
+              learningPlannedEndDate: '2021-09-03',
+              completionStatus: 'The learner has completed the learning activities leading to the learning aim',
+            },
+          ],
+        }
+        const expected = {
+          historicalCoursesPresent: true,
+          currentCourseData: [],
+        }
+        jest.spyOn(app, 'esweEnabled', 'get').mockReturnValue(true)
+        getLearnerEducationMock.mockResolvedValue(courses)
+        const actual = await service.getLearnerEducation(nomisId)
+        expect(actual.content).toEqual(expected)
+      })
+      it('should return the expected response if there are both current and historical courses', async () => {
+        const expected = {
+          historicalCoursesPresent: true,
+          currentCourseData: [
+            {
+              label: 'Instructing group cycling sessions',
+              value: 'Planned end date on 1 August 2019',
+            },
+            {
+              label: 'Ocean Science',
+              value: 'Planned end date on 31 December 2019',
+            },
+          ],
+        }
+        jest.spyOn(app, 'esweEnabled', 'get').mockReturnValue(true)
+        getLearnerEducationMock.mockResolvedValue(dummyEducations)
+        const actual = await service.getLearnerEducation(nomisId)
         expect(actual.content).toEqual(expected)
       })
     })
@@ -518,188 +621,297 @@ function getDummyGoals(): curious.LearnerGoals {
   }
 }
 
-function getDummyEducations(): curious.LearnerEducation[] {
-  return [
-    {
-      prn: 'G8346GA',
-      establishmentId: 3,
-      establishmentName: 'HMP Leyhill',
-      courseName: 'Instructing group cycling sessions',
-      courseCode: 'Y6174024',
-      isAccredited: true,
-      aimSequenceNumber: 1,
-      learningStartDate: '2019-08-01',
-      learningPlannedEndDate: '2019-08-01',
-      learningActualEndDate: null,
-      learnersAimType: 'Component learning aim within a programme',
-      miNotionalNVQLevelV2: 'Level 2',
-      sectorSubjectAreaTier1: 'Leisure, Travel and Tourism',
-      sectorSubjectAreaTier2: 'Sport, Leisure and Recreation',
-      occupationalIndicator: false,
-      accessHEIndicator: false,
-      keySkillsIndicator: false,
-      functionalSkillsIndicator: false,
-      gceIndicator: false,
-      gcsIndicator: false,
-      asLevelIndicator: false,
-      a2LevelIndicator: false,
-      qcfIndicator: true,
-      qcfDiplomaIndicator: false,
-      qcfCertificateIndicator: false,
-      lrsGLH: 21,
-      attendedGLH: null,
-      actualGLH: 7634,
-      outcome: null,
-      outcomeGrade: null,
-      employmentOutcome: null,
-      withdrawalReasons: null,
-      prisonWithdrawalReason: null,
-      completionStatus:
-        'The learner is continuing or intending to continue the learning activities leading to the learning aim',
-      withdrawalReasonAgreed: false,
-      fundingModel: 'Adult skills',
-      fundingAdjustmentPriorLearning: null,
-      subcontractedPartnershipUKPRN: null,
-      deliveryLocationPostCode: 'CF1 1BH',
-      unitType: 'UNIT',
-      fundingType: 'DPS',
-      deliveryMethodType: null,
-      alevelIndicator: false,
+function getDummyEducations(): curious.LearnerEducation {
+  return {
+    content: [
+      {
+        prn: 'A1234AA',
+        establishmentId: 8,
+        establishmentName: 'HMP Moorland',
+        courseName: 'Foundation Degree in Arts in Equestrian Practice and Technology',
+        courseCode: '300082',
+        isAccredited: true,
+        aimSequenceNumber: null,
+        learningStartDate: '2021-07-19',
+        learningPlannedEndDate: '2022-06-16',
+        learningActualEndDate: '2021-07-21',
+        learnersAimType: 'Programme aim',
+        miNotionalNVQLevelV2: 'Level 5',
+        sectorSubjectAreaTier1: 'Agriculture, Horticulture and Animal Care',
+        sectorSubjectAreaTier2: 'Animal Care and Veterinary Science',
+        occupationalIndicator: false,
+        accessHEIndicator: false,
+        keySkillsIndicator: false,
+        functionalSkillsIndicator: false,
+        gceIndicator: false,
+        gcsIndicator: false,
+        asLevelIndicator: false,
+        a2LevelIndicator: false,
+        qcfIndicator: false,
+        qcfDiplomaIndicator: false,
+        qcfCertificateIndicator: false,
+        lrsGLH: 0,
+        attendedGLH: null,
+        actualGLH: 200,
+        outcome: 'No achievement',
+        outcomeGrade: 'Fail',
+        employmentOutcome: null,
+        withdrawalReasons: null,
+        prisonWithdrawalReason: null,
+        completionStatus: 'The learner has completed the learning activities leading to the learning aim',
+        withdrawalReasonAgreed: false,
+        fundingModel: 'Adult skills',
+        fundingAdjustmentPriorLearning: null,
+        subcontractedPartnershipUKPRN: null,
+        deliveryLocationPostCode: 'DN7 6BW',
+        unitType: 'QUALIFICATION',
+        fundingType: 'DPS',
+        deliveryMethodType: null,
+        alevelIndicator: false,
+      },
+      {
+        prn: 'A1234AA',
+        establishmentId: 8,
+        establishmentName: 'HMP Moorland',
+        courseName: 'Certificate of Management',
+        courseCode: '101448',
+        isAccredited: true,
+        aimSequenceNumber: 1,
+        learningStartDate: '2021-07-01',
+        learningPlannedEndDate: '2021-07-31',
+        learningActualEndDate: '2021-07-08',
+        learnersAimType: 'Component learning aim within a programme',
+        miNotionalNVQLevelV2: 'Level 4',
+        sectorSubjectAreaTier1: 'Business, Administration and Law',
+        sectorSubjectAreaTier2: 'Business Management',
+        occupationalIndicator: false,
+        accessHEIndicator: false,
+        keySkillsIndicator: false,
+        functionalSkillsIndicator: false,
+        gceIndicator: false,
+        gcsIndicator: false,
+        asLevelIndicator: false,
+        a2LevelIndicator: false,
+        qcfIndicator: false,
+        qcfDiplomaIndicator: false,
+        qcfCertificateIndicator: false,
+        lrsGLH: 0,
+        attendedGLH: 5678,
+        actualGLH: 1234,
+        outcome: 'Achieved',
+        outcomeGrade: null,
+        employmentOutcome: null,
+        withdrawalReasons: 'Other',
+        prisonWithdrawalReason: 'Changes in their risk profile meaning they can no longer take part in the learning',
+        completionStatus: 'The learner has withdrawn from the learning activities leading to the learning aim',
+        withdrawalReasonAgreed: true,
+        fundingModel: 'Adult skills',
+        fundingAdjustmentPriorLearning: null,
+        subcontractedPartnershipUKPRN: null,
+        deliveryLocationPostCode: 'DN7 6BW',
+        unitType: 'QUALIFICATION',
+        fundingType: 'DPS',
+        deliveryMethodType: null,
+        alevelIndicator: false,
+      },
+      {
+        prn: 'A1234AA',
+        establishmentId: 8,
+        establishmentName: 'HMP Moorland',
+        courseName: 'Human Science',
+        courseCode: '008HUM001',
+        isAccredited: false,
+        aimSequenceNumber: 2,
+        learningStartDate: '2020-09-01',
+        learningPlannedEndDate: '2020-12-19',
+        learningActualEndDate: '2020-12-02',
+        learnersAimType: null,
+        miNotionalNVQLevelV2: null,
+        sectorSubjectAreaTier1: null,
+        sectorSubjectAreaTier2: null,
+        occupationalIndicator: null,
+        accessHEIndicator: null,
+        keySkillsIndicator: null,
+        functionalSkillsIndicator: null,
+        gceIndicator: null,
+        gcsIndicator: null,
+        asLevelIndicator: null,
+        a2LevelIndicator: null,
+        qcfIndicator: null,
+        qcfDiplomaIndicator: null,
+        qcfCertificateIndicator: null,
+        lrsGLH: null,
+        attendedGLH: null,
+        actualGLH: 100,
+        outcome: 'Achieved',
+        outcomeGrade: 'Pass',
+        employmentOutcome: null,
+        withdrawalReasons: null,
+        prisonWithdrawalReason: null,
+        completionStatus: 'The learner has completed the learning activities leading to the learning aim',
+        withdrawalReasonAgreed: false,
+        fundingModel: 'Adult skills',
+        fundingAdjustmentPriorLearning: null,
+        subcontractedPartnershipUKPRN: null,
+        deliveryLocationPostCode: 'DN7 6BW',
+        unitType: null,
+        fundingType: 'DPS',
+        deliveryMethodType: 'Face to Face Assessment',
+        alevelIndicator: null,
+      },
+      {
+        prn: 'A1234AA',
+        establishmentId: 4,
+        establishmentName: 'HMP Bristol',
+        courseName: 'Ocean Science',
+        courseCode: '004TES006',
+        isAccredited: false,
+        aimSequenceNumber: 1,
+        learningStartDate: '2019-12-15',
+        learningPlannedEndDate: '2019-12-31',
+        learningActualEndDate: '2020-03-31',
+        learnersAimType: null,
+        miNotionalNVQLevelV2: null,
+        sectorSubjectAreaTier1: null,
+        sectorSubjectAreaTier2: null,
+        occupationalIndicator: null,
+        accessHEIndicator: null,
+        keySkillsIndicator: null,
+        functionalSkillsIndicator: null,
+        gceIndicator: null,
+        gcsIndicator: null,
+        asLevelIndicator: null,
+        a2LevelIndicator: null,
+        qcfIndicator: null,
+        qcfDiplomaIndicator: null,
+        qcfCertificateIndicator: null,
+        lrsGLH: null,
+        attendedGLH: 4356,
+        actualGLH: 5250,
+        outcome: null,
+        outcomeGrade: null,
+        employmentOutcome: null,
+        withdrawalReasons: 'Other',
+        prisonWithdrawalReason: 'Significant ill health causing them to be unable to attend education',
+        completionStatus: 'Learner has temporarily withdrawn from the aim due to an agreed break in learning',
+        withdrawalReasonAgreed: true,
+        fundingModel: 'Adult skills',
+        fundingAdjustmentPriorLearning: null,
+        subcontractedPartnershipUKPRN: null,
+        deliveryLocationPostCode: 'BS7 8PS',
+        unitType: null,
+        fundingType: 'PEF',
+        deliveryMethodType: null,
+        alevelIndicator: null,
+      },
+      {
+        prn: 'A1234AA',
+        establishmentId: 17,
+        establishmentName: 'HMP Dartmoor',
+        courseName: 'Foundation Degree in Cricket Coaching - (Myerscough College)',
+        courseCode: '301409',
+        isAccredited: true,
+        aimSequenceNumber: null,
+        learningStartDate: '2019-10-01',
+        learningPlannedEndDate: '2019-10-02',
+        learningActualEndDate: '2019-10-02',
+        learnersAimType: 'Component learning aim within a programme',
+        miNotionalNVQLevelV2: 'Level 5',
+        sectorSubjectAreaTier1: 'Leisure, Travel and Tourism',
+        sectorSubjectAreaTier2: 'Sport, Leisure and Recreation',
+        occupationalIndicator: false,
+        accessHEIndicator: false,
+        keySkillsIndicator: false,
+        functionalSkillsIndicator: false,
+        gceIndicator: false,
+        gcsIndicator: false,
+        asLevelIndicator: false,
+        a2LevelIndicator: false,
+        qcfIndicator: false,
+        qcfDiplomaIndicator: false,
+        qcfCertificateIndicator: false,
+        lrsGLH: 0,
+        attendedGLH: 13,
+        actualGLH: 56,
+        outcome: null,
+        outcomeGrade: null,
+        employmentOutcome: null,
+        withdrawalReasons: 'Other',
+        prisonWithdrawalReason: 'Changes in their risk profile meaning they can no longer take part in the learning',
+        completionStatus: 'The learner has withdrawn from the learning activities leading to the learning aim',
+        withdrawalReasonAgreed: true,
+        fundingModel: 'Adult skills',
+        fundingAdjustmentPriorLearning: null,
+        subcontractedPartnershipUKPRN: null,
+        deliveryLocationPostCode: 'PL20 6RR',
+        unitType: 'QUALIFICATION',
+        fundingType: 'DPS',
+        deliveryMethodType: null,
+        alevelIndicator: false,
+      },
+      {
+        prn: 'A1234AA',
+        establishmentId: 7,
+        establishmentName: 'HMP Leyhill',
+        courseName: 'Instructing group cycling sessions',
+        courseCode: 'Y6174024',
+        isAccredited: true,
+        aimSequenceNumber: 1,
+        learningStartDate: '2019-08-01',
+        learningPlannedEndDate: '2019-08-01',
+        learningActualEndDate: null,
+        learnersAimType: 'Component learning aim within a programme',
+        miNotionalNVQLevelV2: 'Level 2',
+        sectorSubjectAreaTier1: 'Leisure, Travel and Tourism',
+        sectorSubjectAreaTier2: 'Sport, Leisure and Recreation',
+        occupationalIndicator: false,
+        accessHEIndicator: false,
+        keySkillsIndicator: false,
+        functionalSkillsIndicator: false,
+        gceIndicator: false,
+        gcsIndicator: false,
+        asLevelIndicator: false,
+        a2LevelIndicator: false,
+        qcfIndicator: true,
+        qcfDiplomaIndicator: false,
+        qcfCertificateIndicator: false,
+        lrsGLH: 21,
+        attendedGLH: null,
+        actualGLH: 7634,
+        outcome: null,
+        outcomeGrade: null,
+        employmentOutcome: null,
+        withdrawalReasons: null,
+        prisonWithdrawalReason: null,
+        completionStatus:
+          'The learner is continuing or intending to continue the learning activities leading to the learning aim',
+        withdrawalReasonAgreed: false,
+        fundingModel: 'Adult skills',
+        fundingAdjustmentPriorLearning: null,
+        subcontractedPartnershipUKPRN: null,
+        deliveryLocationPostCode: 'CF1 1BH',
+        unitType: 'UNIT',
+        fundingType: 'DPS',
+        deliveryMethodType: null,
+        alevelIndicator: false,
+      },
+    ],
+    number: 0,
+    size: 10,
+    totalElements: 6,
+    first: true,
+    last: true,
+    hasContent: true,
+    numberOfElements: 6,
+    totalPages: 1,
+    pageable: {
+      sort: [],
+      pageSize: 10,
+      pageNumber: 0,
+      offset: 0,
+      unpaged: false,
+      paged: true,
     },
-    {
-      prn: 'G8346GA',
-      establishmentId: 2,
-      establishmentName: 'HMP Bristol',
-      courseName: 'testAmar',
-      courseCode: '004TES006',
-      isAccredited: false,
-      aimSequenceNumber: 1,
-      learningStartDate: '2019-12-15',
-      learningPlannedEndDate: '2019-12-31',
-      learningActualEndDate: '2020-03-31',
-      learnersAimType: null,
-      miNotionalNVQLevelV2: null,
-      sectorSubjectAreaTier1: null,
-      sectorSubjectAreaTier2: null,
-      occupationalIndicator: null,
-      accessHEIndicator: null,
-      keySkillsIndicator: null,
-      functionalSkillsIndicator: null,
-      gceIndicator: null,
-      gcsIndicator: null,
-      asLevelIndicator: null,
-      a2LevelIndicator: null,
-      qcfIndicator: null,
-      qcfDiplomaIndicator: null,
-      qcfCertificateIndicator: null,
-      lrsGLH: null,
-      attendedGLH: 4356,
-      actualGLH: 5250,
-      outcome: null,
-      outcomeGrade: null,
-      employmentOutcome: null,
-      withdrawalReasons: 'Other',
-      prisonWithdrawalReason: 'Significant ill health causing them to be unable to attend education',
-      completionStatus: 'Learner has temporarily withdrawn from the aim due to an agreed break in learning',
-      withdrawalReasonAgreed: true,
-      fundingModel: 'Adult skills',
-      fundingAdjustmentPriorLearning: null,
-      subcontractedPartnershipUKPRN: null,
-      deliveryLocationPostCode: 'BS7 8PS',
-      unitType: null,
-      fundingType: 'PEF',
-      deliveryMethodType: null,
-      alevelIndicator: null,
-    },
-    {
-      prn: 'A1234AA',
-      establishmentId: 8,
-      establishmentName: 'HMP Moorland',
-      courseName: 'Foundation Degree in Arts in Equestrian Practice and Technology',
-      courseCode: '300082',
-      isAccredited: true,
-      aimSequenceNumber: null,
-      learningStartDate: '2021-07-19',
-      learningPlannedEndDate: '2022-06-16',
-      learningActualEndDate: '2021-07-21',
-      learnersAimType: 'Programme aim',
-      miNotionalNVQLevelV2: 'Level 5',
-      sectorSubjectAreaTier1: 'Agriculture, Horticulture and Animal Care',
-      sectorSubjectAreaTier2: 'Animal Care and Veterinary Science',
-      occupationalIndicator: false,
-      accessHEIndicator: false,
-      keySkillsIndicator: false,
-      functionalSkillsIndicator: false,
-      gceIndicator: false,
-      gcsIndicator: false,
-      asLevelIndicator: false,
-      a2LevelIndicator: false,
-      qcfIndicator: false,
-      qcfDiplomaIndicator: false,
-      qcfCertificateIndicator: false,
-      lrsGLH: 0,
-      attendedGLH: null,
-      actualGLH: 200,
-      outcome: 'No achievement',
-      outcomeGrade: 'Fail',
-      employmentOutcome: null,
-      withdrawalReasons: null,
-      prisonWithdrawalReason: null,
-      completionStatus: 'The learner has completed the learning activities leading to the learning aim',
-      withdrawalReasonAgreed: false,
-      fundingModel: 'Adult skills',
-      fundingAdjustmentPriorLearning: null,
-      subcontractedPartnershipUKPRN: null,
-      deliveryLocationPostCode: 'DN7 6BW',
-      unitType: 'QUALIFICATION',
-      fundingType: 'DPS',
-      deliveryMethodType: null,
-      alevelIndicator: false,
-    },
-    {
-      prn: 'A1234AA',
-      establishmentId: 8,
-      establishmentName: 'HMP Moorland',
-      courseName: 'Human Science',
-      courseCode: '008HUM001',
-      isAccredited: false,
-      aimSequenceNumber: 2,
-      learningStartDate: '2020-09-01',
-      learningPlannedEndDate: '2020-12-19',
-      learningActualEndDate: '2020-12-02',
-      learnersAimType: null,
-      miNotionalNVQLevelV2: null,
-      sectorSubjectAreaTier1: null,
-      sectorSubjectAreaTier2: null,
-      occupationalIndicator: null,
-      accessHEIndicator: null,
-      keySkillsIndicator: null,
-      functionalSkillsIndicator: null,
-      gceIndicator: null,
-      gcsIndicator: null,
-      asLevelIndicator: null,
-      a2LevelIndicator: null,
-      qcfIndicator: null,
-      qcfDiplomaIndicator: null,
-      qcfCertificateIndicator: null,
-      lrsGLH: null,
-      attendedGLH: null,
-      actualGLH: 100,
-      outcome: 'Achieved',
-      outcomeGrade: 'Pass',
-      employmentOutcome: null,
-      withdrawalReasons: null,
-      prisonWithdrawalReason: null,
-      completionStatus: 'The learner has completed the learning activities leading to the learning aim',
-      withdrawalReasonAgreed: false,
-      fundingModel: 'Adult skills',
-      fundingAdjustmentPriorLearning: null,
-      subcontractedPartnershipUKPRN: null,
-      deliveryLocationPostCode: 'DN7 6BW',
-      unitType: null,
-      fundingType: 'DPS',
-      deliveryMethodType: 'Classroom Only Learning',
-      alevelIndicator: null,
-    },
-  ]
+    empty: false,
+  }
 }
