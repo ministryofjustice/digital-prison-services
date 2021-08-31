@@ -1165,7 +1165,7 @@ context('Prisoner personal', () => {
                 expect($headings.get(2).innerText).to.contain('Anne Jones')
                 expect($headings.get(3).innerText).to.contain('Anne Jones')
                 expect($headings.get(4).innerText).to.contain('Jane Smith')
-                expect($headings.get(5).innerText).to.contain('John doe')
+                expect($headings.get(5).innerText).to.contain('John Doe')
                 expect($headings.get(6).innerText).to.contain('Areneng Kimbur')
               })
 
