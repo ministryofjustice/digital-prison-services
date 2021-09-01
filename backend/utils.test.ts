@@ -369,8 +369,8 @@ describe('getNamesFromString()', () => {
     expect(getNamesFromString('SMITH, JOHN')).toEqual(['John', 'Smith'])
   })
 
-  it('should return the passed name if it doesn not match format', () => {
-    expect(getNamesFromString('John smith')).toEqual(['John smith'])
+  it('should split correctly when name is in FIRST_NAME LASTNAME format', () => {
+    expect(getNamesFromString('John smith')).toEqual(['John', 'Smith'])
   })
 
   it('should return undefined if nothing passed', () => {
