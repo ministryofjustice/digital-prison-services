@@ -47,7 +47,7 @@
       <div class="govuk-grid-column-full">
         {{ printLink(align = "right") }}
         <div class="courses-qualifications-pagination-print-alignment">
-          <p class="moj-pagination__results" >Showing <b>{{ coursesDetailsList.length }}</b> results</p>
+          <p class="moj-pagination__results" >Showing <b>{{ coursesDetailsList.length }}</b> {% if coursesDetailsList.length > 1 %}results{% else %}result{% endif %}</p>
         </div>
         <div class="results-table results-table__results">
 
