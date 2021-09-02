@@ -206,12 +206,24 @@ module.exports = (on) => {
 
     stubLatestLearnerAssessments: (functionalSkillsAssessments) =>
       curiousApi.stubLatestLearnerAssessments(functionalSkillsAssessments),
-    stubLatestLearnerAssessments500Error: (error) => curiousApi.stubLatestLearnerAssessments(error, 500),
-    stubLatestLearnerAssessments404Error: (error) => curiousApi.stubLatestLearnerAssessments(error, 404),
 
     stubLearnerGoals: (learnerGoals) => curiousApi.stubLearnerGoals(learnerGoals),
-    stubLearnerGoals500Error: (error) => curiousApi.stubLearnerGoals(error, 500),
-    stubLearnerGoals404Error: (error) => curiousApi.stubLearnerGoals(error, 404),
+
+    stubLearnerEducation: (learnerEducation) => curiousApi.stubLearnerEducation(learnerEducation),
+
+    stubWorkAndSkillsApi500Errors: () =>
+      Promise.all([
+        curiousApi.stubLatestLearnerAssessments({}, 500),
+        curiousApi.stubLearnerGoals({}, 500),
+        curiousApi.stubLearnerEducation({}, 500),
+      ]),
+
+    stubWorkAndSkillsApi404Errors: (error) =>
+      Promise.all([
+        curiousApi.stubLatestLearnerAssessments(error, 404),
+        curiousApi.stubLearnerGoals(error, 404),
+        curiousApi.stubLearnerEducation(error, 404),
+      ]),
 
     stubPersonal: ({
       identifiers,

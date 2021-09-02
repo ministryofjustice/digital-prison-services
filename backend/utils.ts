@@ -211,11 +211,13 @@ export const putLastNameFirst = (firstName, lastName) => {
 
 export const hasLength = (array) => array && array.length > 0
 
-export const getNamesFromString = (string) =>
+export const getNamesFromString = (string: string): string[] =>
   string &&
   string
     .split(', ')
     .reverse()
+    .join(' ')
+    .split(' ')
     .map((name) => properCaseName(name))
 
 export const groupBy = (array, key) =>

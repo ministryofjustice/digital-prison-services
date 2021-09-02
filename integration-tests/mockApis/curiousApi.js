@@ -40,7 +40,7 @@ module.exports = {
         headers: {
           'Content-Type': 'application/json;charset=UTF-8',
         },
-        jsonBody: learnerHistory || [],
+        jsonBody: learnerHistory || {},
       },
     }),
   stubLearnerGoals: (learnerGoals, status = 200) =>

@@ -1,6 +1,9 @@
 import log from './log'
+import config from './config'
 
 export const logError = (url, error, msg) => {
+  if (!config.app.production) log.error(error)
+
   if (error.response) {
     log.error(
       {

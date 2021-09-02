@@ -44,6 +44,11 @@ describe('Prisoner work and skills controller', () => {
     personalGoals: ['To be able to support my family'],
   }
 
+  const coursesAndQualifications = {
+    historicalCoursesPresent: false,
+    currentCourseData: [{ label: 'Ocean Science', value: `Planned end date on 30 September 2023` }],
+  }
+
   const prisonerProfileService = {}
   const esweService = {}
 
@@ -64,6 +69,8 @@ describe('Prisoner work and skills controller', () => {
     esweService.getLearnerLatestAssessments = jest.fn().mockResolvedValue(functionalSkillLevels)
     // @ts-expect-error ts-migrate(2339) FIXME
     esweService.getLearnerGoals = jest.fn().mockResolvedValue(targets)
+    // @ts-expect-error ts-migrate(2339) FIXME
+    esweService.getLearnerEducation = jest.fn().mockResolvedValue(coursesAndQualifications)
     controller = prisonerWorkAndSkills({
       prisonerProfileService,
       esweService,
@@ -83,6 +90,7 @@ describe('Prisoner work and skills controller', () => {
         prisonerProfileData,
         functionalSkillLevels,
         targets,
+        coursesAndQualifications,
       })
     )
   })
