@@ -192,6 +192,105 @@ describe('Education skills and work experience', () => {
     })
   })
 
+  describe('Courses and qualifications details', () => {
+    const nomisId = 'G8930UW'
+
+    it('should return null content when feature flag is disabled', async () => {
+      jest.spyOn(app, 'esweEnabled', 'get').mockReturnValue(false)
+      const actual = await service.getLearnerEducationFullDetails(nomisId)
+      expect(actual.enabled).toBeFalsy()
+      expect(actual.content).toBeNull()
+      expect(getLearnerEducationMock).not.toHaveBeenCalled()
+      expect(systemOauthClient.getClientCredentialsTokens).not.toHaveBeenCalled()
+    })
+
+    it('should return null content on error', async () => {
+      jest.spyOn(app, 'esweEnabled', 'get').mockReturnValue(true)
+      getLearnerEducationMock.mockRejectedValue(new Error('error'))
+      const actual = await service.getLearnerEducationFullDetails(nomisId)
+      expect(actual.content).toBeNull()
+    })
+
+    it('should return expected response when the prisoner is not registered in Curious', async () => {
+      jest.spyOn(app, 'esweEnabled', 'get').mockReturnValue(true)
+      getLearnerEducationMock.mockRejectedValue(makeNotFoundError())
+      const actual = await service.getLearnerEducationFullDetails(nomisId)
+      expect(actual.enabled).toBeTruthy()
+      expect(actual.content).toEqual([])
+    })
+
+    it('should return expected response when the prisoner is in Curious but has no courses', async () => {
+      jest.spyOn(app, 'esweEnabled', 'get').mockReturnValue(true)
+      getLearnerEducationMock.mockResolvedValue({ content: [] })
+      const actual = await service.getLearnerEducationFullDetails(nomisId)
+      expect(actual.content).toStrictEqual([])
+    })
+
+    it('should return the expected response, sorted by dateTo descending, when the prisoner is in Curious with courses', async () => {
+      const expected = [
+        {
+          courseName: 'Foundation Degree in Arts in Equestrian Practice and Technology',
+          dateFrom: '2021-07-19',
+          dateTo: '2021-07-21',
+          location: 'HMP Moorland',
+          outcome: 'Fail',
+          outcomeDetails: 'No achievement',
+          type: 'Accredited',
+        },
+        {
+          courseName: 'Certificate of Management',
+          dateFrom: '2021-07-01',
+          dateTo: '2021-07-08',
+          location: 'HMP Moorland',
+          outcome: 'Withdrawn',
+          outcomeDetails: 'Changes in their risk profile meaning they can no longer take part in the learning',
+          type: 'Accredited',
+        },
+        {
+          courseName: 'Human Science',
+          dateFrom: '2020-09-01',
+          dateTo: '2020-12-02',
+          location: 'HMP Moorland',
+          outcome: 'Pass',
+          outcomeDetails: 'Achieved',
+          type: 'Non-accredited',
+        },
+        {
+          courseName: 'Ocean Science',
+          dateFrom: '2019-12-15',
+          dateTo: '2020-03-31',
+          location: 'HMP Bristol',
+          outcome: 'In progress',
+          outcomeDetails: '',
+          type: 'Non-accredited',
+        },
+        {
+          courseName: 'Foundation Degree in Cricket Coaching - (Myerscough College)',
+          dateFrom: '2019-10-01',
+          dateTo: '2019-10-02',
+          location: 'HMP Dartmoor',
+          outcome: 'Withdrawn',
+          outcomeDetails: 'Changes in their risk profile meaning they can no longer take part in the learning',
+          type: 'Accredited',
+        },
+        {
+          courseName: 'Instructing group cycling sessions',
+          dateFrom: '2019-08-01',
+          dateTo: '2019-08-01',
+          location: 'HMP Leyhill',
+          outcome: 'In progress',
+          outcomeDetails: '',
+          type: 'Accredited',
+        },
+      ]
+
+      jest.spyOn(app, 'esweEnabled', 'get').mockReturnValue(true)
+      getLearnerEducationMock.mockResolvedValue(dummyEducations)
+      const actual = await service.getLearnerEducationFullDetails(nomisId)
+      expect(actual.content).toEqual(expected)
+    })
+  })
+
   describe('Work and skills tab', () => {
     describe('Functional skills level', () => {
       const nomisId = 'G2823GV'

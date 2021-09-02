@@ -15,6 +15,7 @@ type LearnerLatestAssessments = FeatureFlagged<curious.FunctionalSkillsLevels>
 type OffenderGoals = FeatureFlagged<curious.LearnerGoals>
 type LearningDifficulties = FeatureFlagged<curious.LearningDifficultiesDisabilities[]>
 type CurrentCoursesEnhanced = FeatureFlagged<curious.CurrentCoursesEnhanced>
+type LearnerEducationFullDetails = FeatureFlagged<curious.LearnerEducationFullDetails[]>
 
 const createFlaggedContent = <T>(content: T) => ({
   enabled: app.esweEnabled,
@@ -290,6 +291,58 @@ export default class EsweService {
       if (e.response?.status === 404) {
         log.info(`Offender record not found in Curious.`)
         return createFlaggedContent(DEFAULT_COURSE_DATA)
+      }
+      log.error(`Failed to get learner education. Reason: ${e.message}`)
+    }
+    return createFlaggedContent(null)
+  }
+
+  async getLearnerEducationFullDetails(nomisId: string): Promise<LearnerEducationFullDetails> {
+    if (!app.esweEnabled) {
+      return createFlaggedContent(null)
+    }
+    try {
+      const context = await this.systemOauthClient.getClientCredentialsTokens()
+      const courses = await this.curiousApi.getLearnerEducation(context, nomisId)
+
+      const { content } = courses
+
+      const getOutcome = (course: curious.LearnerCourses) => {
+        if (course.outcomeGrade) return course.outcomeGrade
+        if (course.completionStatus.includes('continuing') || course.completionStatus.includes('temporarily withdrawn'))
+          return 'In progress'
+        if (course.completionStatus.includes('withdrawn') && !course.completionStatus.includes('temporarily'))
+          return 'Withdrawn'
+        return 'Completed'
+      }
+
+      const getOutcomeDetails = (course: curious.LearnerCourses) => {
+        if (course.outcome && !course.completionStatus.includes('withdrawn')) return course.outcome
+        if (!course.completionStatus.includes('temporarily withdrawn') && course.prisonWithdrawalReason)
+          return course.prisonWithdrawalReason
+        return ''
+      }
+
+      if (content.length) {
+        const fullCourseDetails = content.map((course) => ({
+          type: course.isAccredited ? 'Accredited' : 'Non-accredited',
+          courseName: course.courseName,
+          location: course.establishmentName,
+          dateFrom: course.learningStartDate,
+          dateTo: course.learningActualEndDate ? course.learningActualEndDate : course.learningPlannedEndDate,
+          outcome: getOutcome(course),
+          outcomeDetails: getOutcomeDetails(course),
+        }))
+
+        fullCourseDetails.sort((a, b) => compareByDate(parseDate(a.dateTo), parseDate(b.dateTo), true))
+
+        return createFlaggedContent(fullCourseDetails)
+      }
+      return createFlaggedContent([])
+    } catch (e) {
+      if (e.response?.status === 404) {
+        log.info(`Offender record not found in Curious.`)
+        return createFlaggedContent([])
       }
       log.error(`Failed to get learner education. Reason: ${e.message}`)
     }

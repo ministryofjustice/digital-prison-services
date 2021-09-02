@@ -3,7 +3,15 @@ import path from 'path'
 import nunjucks from 'nunjucks'
 import config from '../config'
 
-import { getDate, getTime, pascalToString, capitalize, hyphenatedStringToCamel, possessive } from '../utils'
+import {
+  getDate,
+  getTime,
+  pascalToString,
+  capitalize,
+  hyphenatedStringToCamel,
+  possessive,
+  formatTimestampToDate,
+} from '../utils'
 
 export default (app) => {
   const njkEnv = nunjucks.configure(
@@ -143,6 +151,7 @@ export default (app) => {
   njkEnv.addFilter('getTime', getTime)
   njkEnv.addFilter('truthy', (data) => Boolean(data))
   njkEnv.addFilter('possessive', possessive)
+  njkEnv.addFilter('formatTimestampToDate', formatTimestampToDate)
   njkEnv.addGlobal('googleTagManagerId', config.analytics.googleTagManagerId)
   njkEnv.addGlobal('supportUrl', config.app.supportUrl)
 

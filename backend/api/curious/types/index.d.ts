@@ -417,6 +417,56 @@ declare namespace curious {
   /**
    *
    * @export
+   * @interface LearnerEducationFullDetails
+   */
+  interface LearnerEducationFullDetails {
+    /**
+     * Type
+     * @type {string}
+     * @memberof LearnerEducationFullDetails
+     */
+    type?: string
+    /**
+     * Course name
+     * @type {string}
+     * @memberof LearnerEducationFullDetails
+     */
+    courseName?: string
+    /**
+     * Location - establishment
+     * @type {string}
+     * @memberof LearnerEducationFullDetails
+     */
+    location?: string
+    /**
+     * Date from (learning start date)
+     * @type {string}
+     * @memberof LearnerEducationFullDetails
+     */
+    dateFrom?: string
+    /**
+     * Date to (learning end date, or planned end date)
+     * @type {string}
+     * @memberof LearnerEducationFullDetails
+     */
+    dateTo?: string
+    /**
+     * Outcome
+     * @type {string}
+     * @memberof LearnerEducationFullDetails
+     */
+    outcome?: string
+    /**
+     * Outcome details
+     * @type {string}
+     * @memberof LearnerEducationFullDetails
+     */
+    outcomeDetails?: string
+  }
+
+  /**
+   *
+   * @export
    * @interface LearningDifficultiesDisabilities
    */
   interface LearningDifficultiesDisabilities {
