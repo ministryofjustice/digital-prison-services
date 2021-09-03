@@ -139,16 +139,12 @@ export default class EsweService {
       if (profiles?.length) {
         const lddList = profiles
           .map((profile) => {
-            if (profile.primaryLLDDAndHealthProblem) {
-              const combinedLdd = [
-                profile.primaryLLDDAndHealthProblem,
-                ...profile.additionalLLDDAndHealthProblems.sort(),
-              ]
-              const formattedLdd = combinedLdd.map((entry) => `<p class='govuk-body'>${entry}</p>`)
+            if (profile.primaryLDDAndHealthProblem) {
+              const combinedLdd = [profile.primaryLDDAndHealthProblem, ...profile.additionalLDDAndHealthProblems.sort()]
               return {
                 establishmentName: profile.establishmentName,
                 details: [
-                  { label: 'Description', html: formattedLdd.join('') },
+                  { label: 'Description', ldd: combinedLdd },
                   { label: 'Location', value: profile.establishmentName },
                 ],
               }
@@ -161,6 +157,8 @@ export default class EsweService {
             if (a.establishmentName > b.establishmentName) return 1
             return 0
           })
+
+        lddList.map((item) => console.log(item.details))
         return createFlaggedContent(lddList)
       }
     } catch (e) {

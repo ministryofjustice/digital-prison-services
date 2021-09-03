@@ -691,8 +691,8 @@ context('Prisoner personal', () => {
               plannedHours: 200,
               rapidAssessmentDate: null,
               inDepthAssessmentDate: null,
-              primaryLLDDAndHealthProblem: 'Visual impairment',
-              additionalLLDDAndHealthProblems: [
+              primaryLDDAndHealthProblem: 'Visual impairment',
+              additionalLDDAndHealthProblems: [
                 'Hearing impairment',
                 'Social and emotional difficulties',
                 'Mental health difficulty',
