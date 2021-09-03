@@ -11,8 +11,12 @@ jest.mock('../config', () => ({
 
 describe('Prisoner courses and qualifications details controller', () => {
   const offenderNo = 'G3878UK'
-  const prisonApi = {}
-  const esweService = {}
+  const prisonApi = {
+    getDetails: jest.fn(),
+  }
+  const esweService = {
+    getLearnerEducationFullDetails: jest.fn(),
+  }
 
   const coursesAndQualifications = [
     {
@@ -83,9 +87,7 @@ describe('Prisoner courses and qualifications details controller', () => {
     req.get.mockReturnValue('localhost')
     res.status = jest.fn()
 
-    // @ts-expect-error ts-migrate(2339) FIXME
     esweService.getLearnerEducationFullDetails = jest.fn().mockResolvedValue(coursesAndQualifications)
-    // @ts-expect-error ts-migrate(2339) FIXME
     prisonApi.getDetails = jest.fn().mockResolvedValue({
       firstName: 'Apoustius',
       lastName: 'Ignian',
@@ -116,5 +118,19 @@ describe('Prisoner courses and qualifications details controller', () => {
         coursesAndQualifications,
       })
     )
+  })
+  describe('When there are API errors', () => {
+    const error = new Error('Network error')
+
+    it('should redirect to prisoner profile and throw error when prisonAPI fails', async () => {
+      prisonApi.getDetails.mockImplementation(() => Promise.reject(error))
+      await expect(controller(req, res)).rejects.toThrowError(error)
+      expect(res.locals.redirectUrl).toBe(`/prisoner/${offenderNo}`)
+    })
+    it('should redirect to prisoner profile and throw error when curious API fails', async () => {
+      esweService.getLearnerEducationFullDetails.mockImplementation(() => Promise.reject(error))
+      await expect(controller(req, res)).rejects.toThrowError(error)
+      expect(res.locals.redirectUrl).toBe(`/prisoner/${offenderNo}`)
+    })
   })
 })
