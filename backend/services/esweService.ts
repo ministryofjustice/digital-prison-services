@@ -158,7 +158,6 @@ export default class EsweService {
             return 0
           })
 
-        lddList.map((item) => console.log(item.details))
         return createFlaggedContent(lddList)
       }
     } catch (e) {
