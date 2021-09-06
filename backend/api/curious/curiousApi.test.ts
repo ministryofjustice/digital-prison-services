@@ -76,7 +76,7 @@ describe('curiousApi', () => {
       const expected = [
         {
           prn: 'G3609VL',
-          establishmentId: 102,
+          establishmentId: 'NEW',
           establishmentName: 'HMP New Hall',
           courseName: 'CIMA Strategic Level',
           courseCode: '270828',
@@ -121,7 +121,7 @@ describe('curiousApi', () => {
         },
         {
           prn: 'G3609VL',
-          establishmentId: 8,
+          establishmentId: 'MDI',
           establishmentName: 'HMP Moorland',
           courseName: 'Ocean Science',
           courseCode: '008OCE001',
@@ -166,7 +166,7 @@ describe('curiousApi', () => {
         },
         {
           prn: 'G3609VL',
-          establishmentId: 76,
+          establishmentId: 'WAK',
           establishmentName: 'HMP Wakefield',
           courseName: 'Foundation Degree in Welfare of Animals (Animal Collections)',
           courseCode: '246674',

@@ -25,7 +25,7 @@ export default class CuriousApi {
     actualGLH?: number,
     courseCode?: string,
     courseName?: string,
-    establishmentId?: number,
+    establishmentId?: string,
     isAccredited?: boolean,
     isCurrent?: boolean,
     learningPlannedEndDate?: string,
