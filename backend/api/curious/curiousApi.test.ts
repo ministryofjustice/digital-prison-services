@@ -85,7 +85,7 @@ function getDummyLearnerProfiles(): curious.LearnerProfile[] {
   return [
     {
       prn: 'G6123VU',
-      establishmentId: 8,
+      establishmentId: 'MDI',
       establishmentName: 'HMP Moorland',
       uln: '1234123412',
       lddHealthProblem:
@@ -121,7 +121,7 @@ function getDummyLearnerProfiles(): curious.LearnerProfile[] {
     },
     {
       prn: 'G6123VU',
-      establishmentId: 76,
+      establishmentId: 'QWER',
       establishmentName: 'HMP Wakefield',
       uln: '9876987654',
       lddHealthProblem: null,
@@ -158,7 +158,7 @@ function getDummyEducations(): curious.LearnerEducation {
     content: [
       {
         prn: 'G8346GA',
-        establishmentId: 1,
+        establishmentId: 'LEY',
         establishmentName: 'HMP Leyhill',
         courseName: 'Instructing group cycling sessions',
         courseCode: 'Y6174024',
@@ -204,7 +204,7 @@ function getDummyEducations(): curious.LearnerEducation {
       },
       {
         prn: 'G8346GA',
-        establishmentId: 2,
+        establishmentId: 'DAR',
         establishmentName: 'HMP Dartmoor',
         courseName: 'Foundation Degree in Cricket Coaching - (Myerscough College)',
         courseCode: '301409',
@@ -257,7 +257,7 @@ function getDummyLearnerLatestAssessments(): curious.LearnerLatestAssessment[] {
       prn: 'G8346GA',
       qualifications: [
         {
-          establishmentId: 2,
+          establishmentId: 'WIN',
           establishmentName: 'HMP Winchester',
           qualification: {
             qualificationType: 'English',
@@ -266,7 +266,7 @@ function getDummyLearnerLatestAssessments(): curious.LearnerLatestAssessment[] {
           },
         },
         {
-          establishmentId: 2,
+          establishmentId: 'WIN',
           establishmentName: 'HMP Winchester',
           qualification: {
             qualificationType: 'English',
@@ -275,7 +275,7 @@ function getDummyLearnerLatestAssessments(): curious.LearnerLatestAssessment[] {
           },
         },
         {
-          establishmentId: 2,
+          establishmentId: 'WIN',
           establishmentName: 'HMP Winchester',
           qualification: {
             qualificationType: 'Digital Literacy',
@@ -284,7 +284,7 @@ function getDummyLearnerLatestAssessments(): curious.LearnerLatestAssessment[] {
           },
         },
         {
-          establishmentId: 2,
+          establishmentId: 'WIN',
           establishmentName: 'HMP Winchester',
           qualification: {
             qualificationType: 'Digital Literacy',
@@ -293,7 +293,7 @@ function getDummyLearnerLatestAssessments(): curious.LearnerLatestAssessment[] {
           },
         },
         {
-          establishmentId: 2,
+          establishmentId: 'WIN',
           establishmentName: 'HMP Winchester',
           qualification: {
             qualificationType: 'Maths',
