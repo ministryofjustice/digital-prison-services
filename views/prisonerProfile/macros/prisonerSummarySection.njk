@@ -17,7 +17,13 @@
 
   {% for detail in array %}
 
-    {% if detail.html %}
+    {% if detail.ldd %}
+      {% set lddList = [] %}
+      {% for item in detail.ldd %}
+        {% set lddList = (lddList.push('<p class="govuk-body">'+item+'</p>'), lddList) %}
+      {% endfor %}
+      {% set value = {html: lddList.join('') | showDefault(missingValueText)} %}
+    {% elseif detail.html %}
       {% set value = {html: detail.html | showDefault(missingValueText)} %}
     {% else %}
       {% set value = {text: detail.value | showDefault(missingValueText)} %}

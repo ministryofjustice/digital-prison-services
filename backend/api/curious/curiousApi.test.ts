@@ -112,8 +112,8 @@ function getDummyLearnerProfiles(): curious.LearnerProfile[] {
       plannedHours: 200,
       rapidAssessmentDate: null,
       inDepthAssessmentDate: null,
-      primaryLLDDAndHealthProblem: 'Visual impairment',
-      additionalLLDDAndHealthProblems: [
+      primaryLDDAndHealthProblem: 'Visual impairment',
+      additionalLDDAndHealthProblems: [
         'Hearing impairment',
         'Social and emotional difficulties',
         'Mental health difficulty',
@@ -147,8 +147,8 @@ function getDummyLearnerProfiles(): curious.LearnerProfile[] {
       plannedHours: null,
       rapidAssessmentDate: null,
       inDepthAssessmentDate: null,
-      primaryLLDDAndHealthProblem: null,
-      additionalLLDDAndHealthProblems: [],
+      primaryLDDAndHealthProblem: null,
+      additionalLDDAndHealthProblems: [],
     },
   ]
 }

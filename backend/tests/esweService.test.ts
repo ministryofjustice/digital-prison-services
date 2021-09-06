@@ -110,8 +110,8 @@ describe('Education skills and work experience', () => {
         {
           prn: 'G3609VL',
           establishmentName: 'HMP New Hall',
-          primaryLLDDAndHealthProblem: null,
-          additionalLLDDAndHealthProblems: [],
+          primaryLDDAndHealthProblem: null,
+          additionalLDDAndHealthProblems: [],
         },
       ]
       jest.spyOn(app, 'esweEnabled', 'get').mockReturnValue(true)
@@ -128,8 +128,8 @@ describe('Education skills and work experience', () => {
           establishmentName: 'HMP Moorland',
           lddHealthProblem:
             'Learner considers himself or herself to have a learning difficulty and/or disability and/or health problem.',
-          primaryLLDDAndHealthProblem: 'Visual impairment',
-          additionalLLDDAndHealthProblems: [
+          primaryLDDAndHealthProblem: 'Visual impairment',
+          additionalLDDAndHealthProblems: [
             'Hearing impairment',
             'Social and emotional difficulties',
             'Mental health difficulty',
@@ -140,7 +140,12 @@ describe('Education skills and work experience', () => {
         {
           details: [
             {
-              html: "<p class='govuk-body'>Visual impairment</p><p class='govuk-body'>Hearing impairment</p><p class='govuk-body'>Mental health difficulty</p><p class='govuk-body'>Social and emotional difficulties</p>",
+              ldd: [
+                'Visual impairment',
+                'Hearing impairment',
+                'Mental health difficulty',
+                'Social and emotional difficulties',
+              ],
               label: 'Description',
             },
             {
@@ -161,7 +166,12 @@ describe('Education skills and work experience', () => {
         {
           details: [
             {
-              html: "<p class='govuk-body'>Visual impairment</p><p class='govuk-body'>Hearing impairment</p><p class='govuk-body'>Mental health difficulty</p><p class='govuk-body'>Social and emotional difficulties</p>",
+              ldd: [
+                'Visual impairment',
+                'Hearing impairment',
+                'Mental health difficulty',
+                'Social and emotional difficulties',
+              ],
               label: 'Description',
             },
             {
@@ -174,7 +184,7 @@ describe('Education skills and work experience', () => {
         {
           details: [
             {
-              html: "<p class='govuk-body'>Dyslexia</p><p class='govuk-body'>Autism</p><p class='govuk-body'>Hearing impairment</p><p class='govuk-body'>Social and emotional difficulties</p>",
+              ldd: ['Dyslexia', 'Autism', 'Hearing impairment', 'Social and emotional difficulties'],
               label: 'Description',
             },
             {
@@ -538,8 +548,8 @@ function getDummyLearnerProfiles(): curious.LearnerProfile[] {
       plannedHours: null,
       rapidAssessmentDate: null,
       inDepthAssessmentDate: null,
-      primaryLLDDAndHealthProblem: 'Dyslexia',
-      additionalLLDDAndHealthProblems: ['Hearing impairment', 'Social and emotional difficulties', 'Autism'],
+      primaryLDDAndHealthProblem: 'Dyslexia',
+      additionalLDDAndHealthProblems: ['Hearing impairment', 'Social and emotional difficulties', 'Autism'],
     },
     {
       prn: 'G6123VU',
@@ -570,8 +580,8 @@ function getDummyLearnerProfiles(): curious.LearnerProfile[] {
       plannedHours: 200,
       rapidAssessmentDate: null,
       inDepthAssessmentDate: null,
-      primaryLLDDAndHealthProblem: 'Visual impairment',
-      additionalLLDDAndHealthProblems: [
+      primaryLDDAndHealthProblem: 'Visual impairment',
+      additionalLDDAndHealthProblems: [
         'Hearing impairment',
         'Social and emotional difficulties',
         'Mental health difficulty',
@@ -605,8 +615,8 @@ function getDummyLearnerProfiles(): curious.LearnerProfile[] {
       plannedHours: null,
       rapidAssessmentDate: null,
       inDepthAssessmentDate: null,
-      primaryLLDDAndHealthProblem: null,
-      additionalLLDDAndHealthProblems: [],
+      primaryLDDAndHealthProblem: null,
+      additionalLDDAndHealthProblems: [],
     },
   ]
 }

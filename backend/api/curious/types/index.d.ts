@@ -517,13 +517,13 @@ declare namespace curious {
      * @type {Array<string>}
      * @memberof LearnerProfile
      */
-    additionalLLDDAndHealthProblems?: Array
+    additionalLDDAndHealthProblems?: Array
     /**
      * Primary LLDD and Health Problem
      * @type {string}
      * @memberof LearnerProfile
      */
-    primaryLLDDAndHealthProblem?: string
+    primaryLDDAndHealthProblem?: string
   }
 
   /**

@@ -5,7 +5,8 @@
 
 {% if lddInfo %}
     {% for entry in lddInfo %}
-    {{ prisonerSummarySection(entry.details, indentKey = true) }}
+    {{ prisonerSummarySection(entry.details, '', {}, false, 'govuk-summary-list--no-border', false) }}
+    <hr class="govuk-section-break govuk-section-break--m govuk-section-break--visible">
     {% endfor %}
 
     {% if not lddInfo.length %}
