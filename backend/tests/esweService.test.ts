@@ -211,7 +211,7 @@ describe('Education skills and work experience', () => {
           prn: 'G8346GA',
           qualifications: [
             {
-              establishmentId: 2,
+              establishmentId: 'WIN',
               establishmentName: 'HMP Winchester',
               qualification: {
                 qualificationType: 'English',
@@ -220,7 +220,7 @@ describe('Education skills and work experience', () => {
               },
             },
             {
-              establishmentId: 2,
+              establishmentId: 'WIN',
               establishmentName: 'HMP Winchester',
               qualification: {
                 qualificationType: 'Digital Literacy',
@@ -229,7 +229,7 @@ describe('Education skills and work experience', () => {
               },
             },
             {
-              establishmentId: 2,
+              establishmentId: 'WIN',
               establishmentName: 'HMP Winchester',
               qualification: {
                 qualificationType: 'Maths',
@@ -271,7 +271,7 @@ describe('Education skills and work experience', () => {
           prn: 'G8930UW',
           qualifications: [
             {
-              establishmentId: 8,
+              establishmentId: 'MDI',
               establishmentName: 'HMP Moorland',
               qualification: {
                 qualificationType: 'Maths',
@@ -280,7 +280,7 @@ describe('Education skills and work experience', () => {
               },
             },
             {
-              establishmentId: 8,
+              establishmentId: 'MDI',
               establishmentName: 'HMP Moorland',
               qualification: {
                 qualificationType: 'Digital Literacy',
@@ -522,7 +522,7 @@ function getDummyLearnerProfiles(): curious.LearnerProfile[] {
   return [
     {
       prn: 'G6123VU',
-      establishmentId: 12,
+      establishmentId: 'NHA',
       establishmentName: 'HMP New Hall',
       uln: '9876987654',
       lddHealthProblem: null,
@@ -553,7 +553,7 @@ function getDummyLearnerProfiles(): curious.LearnerProfile[] {
     },
     {
       prn: 'G6123VU',
-      establishmentId: 8,
+      establishmentId: 'MDI',
       establishmentName: 'HMP Moorland',
       uln: '1234123412',
       lddHealthProblem:
@@ -589,7 +589,7 @@ function getDummyLearnerProfiles(): curious.LearnerProfile[] {
     },
     {
       prn: 'G6123VU',
-      establishmentId: 76,
+      establishmentId: 'WAK',
       establishmentName: 'HMP Wakefield',
       uln: '9876987654',
       lddHealthProblem: null,
@@ -636,7 +636,7 @@ function getDummyEducations(): curious.LearnerEducation {
     content: [
       {
         prn: 'A1234AA',
-        establishmentId: 8,
+        establishmentId: 'MDI',
         establishmentName: 'HMP Moorland',
         courseName: 'Foundation Degree in Arts in Equestrian Practice and Technology',
         courseCode: '300082',
@@ -681,7 +681,7 @@ function getDummyEducations(): curious.LearnerEducation {
       },
       {
         prn: 'A1234AA',
-        establishmentId: 8,
+        establishmentId: 'MDI',
         establishmentName: 'HMP Moorland',
         courseName: 'Certificate of Management',
         courseCode: '101448',
@@ -726,7 +726,7 @@ function getDummyEducations(): curious.LearnerEducation {
       },
       {
         prn: 'A1234AA',
-        establishmentId: 8,
+        establishmentId: 'MDI',
         establishmentName: 'HMP Moorland',
         courseName: 'Human Science',
         courseCode: '008HUM001',
@@ -771,7 +771,7 @@ function getDummyEducations(): curious.LearnerEducation {
       },
       {
         prn: 'A1234AA',
-        establishmentId: 4,
+        establishmentId: 'BRI',
         establishmentName: 'HMP Bristol',
         courseName: 'Ocean Science',
         courseCode: '004TES006',
@@ -816,7 +816,7 @@ function getDummyEducations(): curious.LearnerEducation {
       },
       {
         prn: 'A1234AA',
-        establishmentId: 17,
+        establishmentId: 'DAR',
         establishmentName: 'HMP Dartmoor',
         courseName: 'Foundation Degree in Cricket Coaching - (Myerscough College)',
         courseCode: '301409',
@@ -861,7 +861,7 @@ function getDummyEducations(): curious.LearnerEducation {
       },
       {
         prn: 'A1234AA',
-        establishmentId: 7,
+        establishmentId: 'LEY',
         establishmentName: 'HMP Leyhill',
         courseName: 'Instructing group cycling sessions',
         courseCode: 'Y6174024',

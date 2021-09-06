@@ -36,10 +36,10 @@ declare namespace curious {
   export interface LearnerAssessment {
     /**
      * Establishment (prison) identifier
-     * @type {number}
+     * @type {string}
      * @memberof LearnerAssessment
      */
-    establishmentId?: number
+    establishmentId?: string
     /**
      * Establishment (prison) name
      * @type {string}
@@ -214,10 +214,10 @@ declare namespace curious {
     employmentOutcome?: string
     /**
      * Establishment (prison) identifier
-     * @type {number}
+     * @type {string}
      * @memberof LearnerCourses
      */
-    establishmentId?: number
+    establishmentId?: string
     /**
      * Establishment (prison) name
      * @type {string}
@@ -448,10 +448,10 @@ declare namespace curious {
   interface LearnerProfile {
     /**
      * Establishment (prison) identifier
-     * @type {number}
+     * @type {string}
      * @memberof LearnerProfile
      */
-    establishmentId?: number
+    establishmentId?: string
     /**
      * Language status
      * @type {string}
