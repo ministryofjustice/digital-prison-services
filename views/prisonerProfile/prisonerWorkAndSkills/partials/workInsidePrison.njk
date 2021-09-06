@@ -1,0 +1,33 @@
+
+{% from "../../macros/prisonerSummarySection.njk" import prisonerSummarySection %}
+{% from "govuk/components/summary-list/macro.njk" import govukSummaryList %}
+
+{% set offenderName = (prisonerProfileData.offenderName).split(',')[1].trim() + " " +(prisonerProfileData.offenderName).split(',')[0] %}
+
+{% if not work %}
+    <p class="govuk-body" data-test="courses-errorMessage">{{ errorMessage }}</p>
+{% endif %}
+
+{% if work.currentJobs.length %}
+    <h3 class="govuk-heading-s card__heading">Current role</h3>
+    {{ prisonerSummarySection(work.currentJobs, '', {"data-test": "work-currentWork"}, false, '', true) }}
+    <hr class="govuk-section-break govuk-section-break--m govuk-section-break--visible">
+{% elseif work.workHistoryPresent %}
+    <h3 class="govuk-heading-s card__heading">Current role</h3>
+    <p class="govuk-body" data-test="work-noCurrent">{{ offenderName }} is not currently doing any work inside prison.</p>
+{% endif %}
+
+{% if work.workHistoryPresent or work.currentJobs.length %}
+    <p class="govuk-body">
+        <a class="govuk-link" href='' data-test="work-detailsLink">View work details</a>
+    </p>
+{% endif %}
+
+{% if work and not work.workHistoryPresent and not work.currentJobs.length  %}
+    <p class="govuk-body" data-test="work-noData">{{ offenderName }} has no current or previous work inside prison.</p>
+{% endif %}
+
+<p class="govuk-body">
+    <a class="govuk-link" href='/prisoner/{{ offenderNo }}/schedule' data-test="work-scheduleLink">View 7 day schedule</a>
+</p>
+

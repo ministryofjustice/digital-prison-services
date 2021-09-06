@@ -49,6 +49,11 @@ describe('Prisoner work and skills controller', () => {
     currentCourseData: [{ label: 'Ocean Science', value: `Planned end date on 30 September 2023` }],
   }
 
+  const currentWork = {
+    workHistoryPresent: false,
+    currentJobs: [{ label: 'Cleaner HB1 AM', value: 'Started on 19 August 2021' }],
+  }
+
   const prisonerProfileService = {}
   const esweService = {}
 
@@ -71,6 +76,8 @@ describe('Prisoner work and skills controller', () => {
     esweService.getLearnerGoals = jest.fn().mockResolvedValue(targets)
     // @ts-expect-error ts-migrate(2339) FIXME
     esweService.getLearnerEducation = jest.fn().mockResolvedValue(coursesAndQualifications)
+    // @ts-expect-error ts-migrate(2339) FIXME
+    esweService.getCurrentWork = jest.fn().mockResolvedValue(currentWork)
     controller = prisonerWorkAndSkills({
       prisonerProfileService,
       esweService,
@@ -91,6 +98,7 @@ describe('Prisoner work and skills controller', () => {
         functionalSkillLevels,
         targets,
         coursesAndQualifications,
+        currentWork,
       })
     )
   })
