@@ -664,7 +664,7 @@ context('Prisoner personal', () => {
           learningDifficulties: [
             {
               prn: 'G6123VU',
-              establishmentId: 8,
+              establishmentId: 'MDI',
               establishmentName: 'HMP Moorland',
               uln: '1234123412',
               lddHealthProblem:
@@ -691,8 +691,8 @@ context('Prisoner personal', () => {
               plannedHours: 200,
               rapidAssessmentDate: null,
               inDepthAssessmentDate: null,
-              primaryLLDDAndHealthProblem: 'Visual impairment',
-              additionalLLDDAndHealthProblems: [
+              primaryLDDAndHealthProblem: 'Visual impairment',
+              additionalLDDAndHealthProblems: [
                 'Hearing impairment',
                 'Social and emotional difficulties',
                 'Mental health difficulty',

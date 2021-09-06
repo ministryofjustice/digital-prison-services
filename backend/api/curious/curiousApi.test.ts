@@ -255,7 +255,7 @@ function getDummyLearnerProfiles(): curious.LearnerProfile[] {
   return [
     {
       prn: 'G6123VU',
-      establishmentId: 8,
+      establishmentId: 'MDI',
       establishmentName: 'HMP Moorland',
       uln: '1234123412',
       lddHealthProblem:
@@ -282,8 +282,8 @@ function getDummyLearnerProfiles(): curious.LearnerProfile[] {
       plannedHours: 200,
       rapidAssessmentDate: null,
       inDepthAssessmentDate: null,
-      primaryLLDDAndHealthProblem: 'Visual impairment',
-      additionalLLDDAndHealthProblems: [
+      primaryLDDAndHealthProblem: 'Visual impairment',
+      additionalLDDAndHealthProblems: [
         'Hearing impairment',
         'Social and emotional difficulties',
         'Mental health difficulty',
@@ -291,7 +291,7 @@ function getDummyLearnerProfiles(): curious.LearnerProfile[] {
     },
     {
       prn: 'G6123VU',
-      establishmentId: 76,
+      establishmentId: 'QWER',
       establishmentName: 'HMP Wakefield',
       uln: '9876987654',
       lddHealthProblem: null,
@@ -317,8 +317,8 @@ function getDummyLearnerProfiles(): curious.LearnerProfile[] {
       plannedHours: null,
       rapidAssessmentDate: null,
       inDepthAssessmentDate: null,
-      primaryLLDDAndHealthProblem: null,
-      additionalLLDDAndHealthProblems: [],
+      primaryLDDAndHealthProblem: null,
+      additionalLDDAndHealthProblems: [],
     },
   ]
 }
@@ -328,7 +328,7 @@ function getDummyEducations(): curious.LearnerEducation {
     content: [
       {
         prn: 'G3609VL',
-        establishmentId: 8,
+        establishmentId: 'MDI',
         establishmentName: 'HMP Moorland',
         courseName: 'Ocean Science',
         courseCode: '008OCE001',
@@ -373,7 +373,7 @@ function getDummyEducations(): curious.LearnerEducation {
       },
       {
         prn: 'G3609VL',
-        establishmentId: 76,
+        establishmentId: 'WAK',
         establishmentName: 'HMP Wakefield',
         courseName: 'Foundation Degree in Welfare of Animals (Animal Collections)',
         courseCode: '246674',
@@ -418,7 +418,7 @@ function getDummyEducations(): curious.LearnerEducation {
       },
       {
         prn: 'G3609VL',
-        establishmentId: 102,
+        establishmentId: 'NEW',
         establishmentName: 'HMP New Hall',
         courseName: 'CIMA Strategic Level',
         courseCode: '270828',
@@ -488,7 +488,7 @@ function getDummyLearnerLatestAssessments(): curious.LearnerLatestAssessment[] {
       prn: 'G8346GA',
       qualifications: [
         {
-          establishmentId: 2,
+          establishmentId: 'WIN',
           establishmentName: 'HMP Winchester',
           qualification: {
             qualificationType: 'English',
@@ -497,7 +497,7 @@ function getDummyLearnerLatestAssessments(): curious.LearnerLatestAssessment[] {
           },
         },
         {
-          establishmentId: 2,
+          establishmentId: 'WIN',
           establishmentName: 'HMP Winchester',
           qualification: {
             qualificationType: 'English',
@@ -506,7 +506,7 @@ function getDummyLearnerLatestAssessments(): curious.LearnerLatestAssessment[] {
           },
         },
         {
-          establishmentId: 2,
+          establishmentId: 'WIN',
           establishmentName: 'HMP Winchester',
           qualification: {
             qualificationType: 'Digital Literacy',
@@ -515,7 +515,7 @@ function getDummyLearnerLatestAssessments(): curious.LearnerLatestAssessment[] {
           },
         },
         {
-          establishmentId: 2,
+          establishmentId: 'WIN',
           establishmentName: 'HMP Winchester',
           qualification: {
             qualificationType: 'Digital Literacy',
@@ -524,7 +524,7 @@ function getDummyLearnerLatestAssessments(): curious.LearnerLatestAssessment[] {
           },
         },
         {
-          establishmentId: 2,
+          establishmentId: 'WIN',
           establishmentName: 'HMP Winchester',
           qualification: {
             qualificationType: 'Maths',

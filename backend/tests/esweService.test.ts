@@ -110,8 +110,8 @@ describe('Education skills and work experience', () => {
         {
           prn: 'G3609VL',
           establishmentName: 'HMP New Hall',
-          primaryLLDDAndHealthProblem: null,
-          additionalLLDDAndHealthProblems: [],
+          primaryLDDAndHealthProblem: null,
+          additionalLDDAndHealthProblems: [],
         },
       ]
       jest.spyOn(app, 'esweEnabled', 'get').mockReturnValue(true)
@@ -128,8 +128,8 @@ describe('Education skills and work experience', () => {
           establishmentName: 'HMP Moorland',
           lddHealthProblem:
             'Learner considers himself or herself to have a learning difficulty and/or disability and/or health problem.',
-          primaryLLDDAndHealthProblem: 'Visual impairment',
-          additionalLLDDAndHealthProblems: [
+          primaryLDDAndHealthProblem: 'Visual impairment',
+          additionalLDDAndHealthProblems: [
             'Hearing impairment',
             'Social and emotional difficulties',
             'Mental health difficulty',
@@ -140,7 +140,12 @@ describe('Education skills and work experience', () => {
         {
           details: [
             {
-              html: "<p class='govuk-body'>Visual impairment</p><p class='govuk-body'>Hearing impairment</p><p class='govuk-body'>Mental health difficulty</p><p class='govuk-body'>Social and emotional difficulties</p>",
+              ldd: [
+                'Visual impairment',
+                'Hearing impairment',
+                'Mental health difficulty',
+                'Social and emotional difficulties',
+              ],
               label: 'Description',
             },
             {
@@ -161,7 +166,12 @@ describe('Education skills and work experience', () => {
         {
           details: [
             {
-              html: "<p class='govuk-body'>Visual impairment</p><p class='govuk-body'>Hearing impairment</p><p class='govuk-body'>Mental health difficulty</p><p class='govuk-body'>Social and emotional difficulties</p>",
+              ldd: [
+                'Visual impairment',
+                'Hearing impairment',
+                'Mental health difficulty',
+                'Social and emotional difficulties',
+              ],
               label: 'Description',
             },
             {
@@ -174,7 +184,7 @@ describe('Education skills and work experience', () => {
         {
           details: [
             {
-              html: "<p class='govuk-body'>Dyslexia</p><p class='govuk-body'>Autism</p><p class='govuk-body'>Hearing impairment</p><p class='govuk-body'>Social and emotional difficulties</p>",
+              ldd: ['Dyslexia', 'Autism', 'Hearing impairment', 'Social and emotional difficulties'],
               label: 'Description',
             },
             {
@@ -300,7 +310,7 @@ describe('Education skills and work experience', () => {
           prn: 'G8346GA',
           qualifications: [
             {
-              establishmentId: 2,
+              establishmentId: 'WIN',
               establishmentName: 'HMP Winchester',
               qualification: {
                 qualificationType: 'English',
@@ -309,7 +319,7 @@ describe('Education skills and work experience', () => {
               },
             },
             {
-              establishmentId: 2,
+              establishmentId: 'WIN',
               establishmentName: 'HMP Winchester',
               qualification: {
                 qualificationType: 'Digital Literacy',
@@ -318,7 +328,7 @@ describe('Education skills and work experience', () => {
               },
             },
             {
-              establishmentId: 2,
+              establishmentId: 'WIN',
               establishmentName: 'HMP Winchester',
               qualification: {
                 qualificationType: 'Maths',
@@ -360,7 +370,7 @@ describe('Education skills and work experience', () => {
           prn: 'G8930UW',
           qualifications: [
             {
-              establishmentId: 8,
+              establishmentId: 'MDI',
               establishmentName: 'HMP Moorland',
               qualification: {
                 qualificationType: 'Maths',
@@ -369,7 +379,7 @@ describe('Education skills and work experience', () => {
               },
             },
             {
-              establishmentId: 8,
+              establishmentId: 'MDI',
               establishmentName: 'HMP Moorland',
               qualification: {
                 qualificationType: 'Digital Literacy',
@@ -611,7 +621,7 @@ function getDummyLearnerProfiles(): curious.LearnerProfile[] {
   return [
     {
       prn: 'G6123VU',
-      establishmentId: 12,
+      establishmentId: 'NHA',
       establishmentName: 'HMP New Hall',
       uln: '9876987654',
       lddHealthProblem: null,
@@ -637,12 +647,12 @@ function getDummyLearnerProfiles(): curious.LearnerProfile[] {
       plannedHours: null,
       rapidAssessmentDate: null,
       inDepthAssessmentDate: null,
-      primaryLLDDAndHealthProblem: 'Dyslexia',
-      additionalLLDDAndHealthProblems: ['Hearing impairment', 'Social and emotional difficulties', 'Autism'],
+      primaryLDDAndHealthProblem: 'Dyslexia',
+      additionalLDDAndHealthProblems: ['Hearing impairment', 'Social and emotional difficulties', 'Autism'],
     },
     {
       prn: 'G6123VU',
-      establishmentId: 8,
+      establishmentId: 'MDI',
       establishmentName: 'HMP Moorland',
       uln: '1234123412',
       lddHealthProblem:
@@ -669,8 +679,8 @@ function getDummyLearnerProfiles(): curious.LearnerProfile[] {
       plannedHours: 200,
       rapidAssessmentDate: null,
       inDepthAssessmentDate: null,
-      primaryLLDDAndHealthProblem: 'Visual impairment',
-      additionalLLDDAndHealthProblems: [
+      primaryLDDAndHealthProblem: 'Visual impairment',
+      additionalLDDAndHealthProblems: [
         'Hearing impairment',
         'Social and emotional difficulties',
         'Mental health difficulty',
@@ -678,7 +688,7 @@ function getDummyLearnerProfiles(): curious.LearnerProfile[] {
     },
     {
       prn: 'G6123VU',
-      establishmentId: 76,
+      establishmentId: 'WAK',
       establishmentName: 'HMP Wakefield',
       uln: '9876987654',
       lddHealthProblem: null,
@@ -704,8 +714,8 @@ function getDummyLearnerProfiles(): curious.LearnerProfile[] {
       plannedHours: null,
       rapidAssessmentDate: null,
       inDepthAssessmentDate: null,
-      primaryLLDDAndHealthProblem: null,
-      additionalLLDDAndHealthProblems: [],
+      primaryLDDAndHealthProblem: null,
+      additionalLDDAndHealthProblems: [],
     },
   ]
 }
@@ -725,7 +735,7 @@ function getDummyEducations(): curious.LearnerEducation {
     content: [
       {
         prn: 'A1234AA',
-        establishmentId: 8,
+        establishmentId: 'MDI',
         establishmentName: 'HMP Moorland',
         courseName: 'Foundation Degree in Arts in Equestrian Practice and Technology',
         courseCode: '300082',
@@ -770,7 +780,7 @@ function getDummyEducations(): curious.LearnerEducation {
       },
       {
         prn: 'A1234AA',
-        establishmentId: 8,
+        establishmentId: 'MDI',
         establishmentName: 'HMP Moorland',
         courseName: 'Certificate of Management',
         courseCode: '101448',
@@ -815,7 +825,7 @@ function getDummyEducations(): curious.LearnerEducation {
       },
       {
         prn: 'A1234AA',
-        establishmentId: 8,
+        establishmentId: 'MDI',
         establishmentName: 'HMP Moorland',
         courseName: 'Human Science',
         courseCode: '008HUM001',
@@ -860,7 +870,7 @@ function getDummyEducations(): curious.LearnerEducation {
       },
       {
         prn: 'A1234AA',
-        establishmentId: 4,
+        establishmentId: 'BRI',
         establishmentName: 'HMP Bristol',
         courseName: 'Ocean Science',
         courseCode: '004TES006',
@@ -905,7 +915,7 @@ function getDummyEducations(): curious.LearnerEducation {
       },
       {
         prn: 'A1234AA',
-        establishmentId: 17,
+        establishmentId: 'DAR',
         establishmentName: 'HMP Dartmoor',
         courseName: 'Foundation Degree in Cricket Coaching - (Myerscough College)',
         courseCode: '301409',
@@ -950,7 +960,7 @@ function getDummyEducations(): curious.LearnerEducation {
       },
       {
         prn: 'A1234AA',
-        establishmentId: 7,
+        establishmentId: 'LEY',
         establishmentName: 'HMP Leyhill',
         courseName: 'Instructing group cycling sessions',
         courseCode: 'Y6174024',

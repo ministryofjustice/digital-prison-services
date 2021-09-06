@@ -11,7 +11,7 @@ export default class CuriousApi {
   getLearnerProfiles(
     context: ClientContext,
     nomisId: string,
-    establishmentId?: number
+    establishmentId?: string
   ): Promise<curious.LearnerProfile[]> {
     return this.client
       .get<curious.LearnerProfile[]>(context, this.applyQuery(`/learnerProfile/${nomisId}`, { establishmentId }))
