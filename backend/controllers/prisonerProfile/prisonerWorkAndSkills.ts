@@ -23,5 +23,6 @@ export default ({ prisonerProfileService, esweService }) =>
       functionalSkillLevels,
       targets,
       coursesAndQualifications,
+      profileUrl: `/prisoner/${offenderNo}`,
     })
   }
