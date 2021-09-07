@@ -42,7 +42,7 @@ describe('curiousApi', () => {
 
   describe('getLearnerEducation', () => {
     const dummyEducations = getDummyEducations()
-    it('should return the expected response data with no queries', async () => {
+    it('should return the expected response data', async () => {
       const nomisId = dummyEducations.content[0].prn
       mock
         .get(`/learnerEducation/${nomisId}`)
@@ -52,173 +52,25 @@ describe('curiousApi', () => {
       const actual = await curiousApi.getLearnerEducation({ access_token: accessToken }, nomisId)
       expect(actual).toEqual(dummyEducations)
     })
-    it('should return the expected response data with filter in query', async () => {
+    it('should call the api with the correct parameters', async () => {
       const nomisId = dummyEducations.content[1].prn
       const { establishmentId } = dummyEducations.content[1]
       mock
-        .get(`/learnerEducation/${nomisId}?establishmentId=${establishmentId}`)
+        .get(
+          `/learnerEducation/${nomisId}?sort=establishmentName&isCurrent=true&establishmentId=${establishmentId}&page=1&size=5`
+        )
         .matchHeader('authorization', `Bearer ${accessToken}`)
         .reply(200, [dummyEducations.content[1]])
 
-      const actual = await curiousApi.getLearnerEducation(
+      await curiousApi.getLearnerEducation(
         { access_token: accessToken },
         nomisId,
-        null,
-        null,
-        establishmentId
+        'establishmentName',
+        true,
+        establishmentId,
+        1,
+        5
       )
-      expect(actual).toEqual([dummyEducations.content[1]])
-    })
-    it('should return the expected response data with sort in query', async () => {
-      const nomisId = dummyEducations.content[1].prn
-      const expected = [
-        {
-          prn: 'G3609VL',
-          establishmentId: 'NEW',
-          establishmentName: 'HMP New Hall',
-          courseName: 'CIMA Strategic Level',
-          courseCode: '270828',
-          isAccredited: true,
-          aimSequenceNumber: 1,
-          learningStartDate: '2016-07-15',
-          learningPlannedEndDate: '2017-01-01',
-          learningActualEndDate: '2016-12-08',
-          learnersAimType: 'Component learning aim within a programme',
-          miNotionalNVQLevelV2: 'Higher',
-          sectorSubjectAreaTier1: 'Business, Administration and Law',
-          sectorSubjectAreaTier2: 'Accounting and Finance',
-          occupationalIndicator: false,
-          accessHEIndicator: false,
-          keySkillsIndicator: false,
-          functionalSkillsIndicator: false,
-          gceIndicator: false,
-          gcsIndicator: false,
-          asLevelIndicator: false,
-          a2LevelIndicator: false,
-          qcfIndicator: false,
-          qcfDiplomaIndicator: false,
-          qcfCertificateIndicator: false,
-          lrsGLH: 0,
-          attendedGLH: null,
-          actualGLH: 200,
-          outcome: 'Achieved',
-          outcomeGrade: 'Pass',
-          employmentOutcome: null,
-          withdrawalReasons: null,
-          prisonWithdrawalReason: null,
-          completionStatus: 'The learner has completed the learning activities leading to the learning aim',
-          withdrawalReasonAgreed: false,
-          fundingModel: 'Adult skills',
-          fundingAdjustmentPriorLearning: null,
-          subcontractedPartnershipUKPRN: null,
-          deliveryLocationPostCode: 'WF4 4XX',
-          unitType: 'QUALIFICATION',
-          fundingType: 'DPS',
-          deliveryMethodType: null,
-          alevelIndicator: false,
-        },
-        {
-          prn: 'G3609VL',
-          establishmentId: 'MDI',
-          establishmentName: 'HMP Moorland',
-          courseName: 'Ocean Science',
-          courseCode: '008OCE001',
-          isAccredited: false,
-          aimSequenceNumber: 1,
-          learningStartDate: '2021-07-01',
-          learningPlannedEndDate: '2021-10-03',
-          learningActualEndDate: '2021-08-04',
-          learnersAimType: null,
-          miNotionalNVQLevelV2: null,
-          sectorSubjectAreaTier1: null,
-          sectorSubjectAreaTier2: null,
-          occupationalIndicator: null,
-          accessHEIndicator: null,
-          keySkillsIndicator: null,
-          functionalSkillsIndicator: null,
-          gceIndicator: null,
-          gcsIndicator: null,
-          asLevelIndicator: null,
-          a2LevelIndicator: null,
-          qcfIndicator: null,
-          qcfDiplomaIndicator: null,
-          qcfCertificateIndicator: null,
-          lrsGLH: null,
-          attendedGLH: null,
-          actualGLH: 100,
-          outcome: 'No achievement',
-          outcomeGrade: 'Fail',
-          employmentOutcome: null,
-          withdrawalReasons: null,
-          prisonWithdrawalReason: null,
-          completionStatus: 'The learner has completed the learning activities leading to the learning aim',
-          withdrawalReasonAgreed: false,
-          fundingModel: 'Adult skills',
-          fundingAdjustmentPriorLearning: null,
-          subcontractedPartnershipUKPRN: null,
-          deliveryLocationPostCode: 'DN7 6BW',
-          unitType: null,
-          fundingType: 'DPS',
-          deliveryMethodType: 'Face to Face Assessment',
-          alevelIndicator: null,
-        },
-        {
-          prn: 'G3609VL',
-          establishmentId: 'WAK',
-          establishmentName: 'HMP Wakefield',
-          courseName: 'Foundation Degree in Welfare of Animals (Animal Collections)',
-          courseCode: '246674',
-          isAccredited: true,
-          aimSequenceNumber: null,
-          learningStartDate: '2021-06-07',
-          learningPlannedEndDate: '2022-01-30',
-          learningActualEndDate: '2021-07-08',
-          learnersAimType: 'Learning aim that is not part of a programme',
-          miNotionalNVQLevelV2: 'Level 5',
-          sectorSubjectAreaTier1: 'Science and Mathematics',
-          sectorSubjectAreaTier2: 'Science',
-          occupationalIndicator: false,
-          accessHEIndicator: false,
-          keySkillsIndicator: false,
-          functionalSkillsIndicator: false,
-          gceIndicator: false,
-          gcsIndicator: false,
-          asLevelIndicator: false,
-          a2LevelIndicator: false,
-          qcfIndicator: false,
-          qcfDiplomaIndicator: false,
-          qcfCertificateIndicator: false,
-          lrsGLH: 0,
-          attendedGLH: 100,
-          actualGLH: 300,
-          outcome: null,
-          outcomeGrade: null,
-          employmentOutcome: null,
-          withdrawalReasons: 'Other',
-          prisonWithdrawalReason: 'Changes in their risk profile meaning they can no longer take part in the learning',
-          completionStatus: 'The learner has withdrawn from the learning activities leading to the learning aim',
-          withdrawalReasonAgreed: true,
-          fundingModel: 'Adult skills',
-          fundingAdjustmentPriorLearning: null,
-          subcontractedPartnershipUKPRN: null,
-          deliveryLocationPostCode: 'WF2 9AG',
-          unitType: 'QUALIFICATION',
-          fundingType: 'DPS',
-          deliveryMethodType: null,
-          alevelIndicator: false,
-        },
-      ]
-      mock
-        .get(`/learnerEducation/${nomisId}?sort=learningPlannedEndDate`)
-        .matchHeader('authorization', `Bearer ${accessToken}`)
-        .reply(200, expected)
-
-      const actual = await curiousApi.getLearnerEducation(
-        { access_token: accessToken },
-        nomisId,
-        'learningPlannedEndDate'
-      )
-      expect(actual).toEqual(expected)
     })
   })
 
