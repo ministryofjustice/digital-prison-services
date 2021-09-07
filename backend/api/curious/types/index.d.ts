@@ -36,10 +36,10 @@ declare namespace curious {
   export interface LearnerAssessment {
     /**
      * Establishment (prison) identifier
-     * @type {number}
+     * @type {string}
      * @memberof LearnerAssessment
      */
-    establishmentId?: number
+    establishmentId?: string
     /**
      * Establishment (prison) name
      * @type {string}
@@ -214,10 +214,10 @@ declare namespace curious {
     employmentOutcome?: string
     /**
      * Establishment (prison) identifier
-     * @type {number}
+     * @type {string}
      * @memberof LearnerCourses
      */
-    establishmentId?: number
+    establishmentId?: string
     /**
      * Establishment (prison) name
      * @type {string}
@@ -393,53 +393,6 @@ declare namespace curious {
      */
     withdrawalReasons?: string
   }
-
-  /**
-   *
-   * @export
-   * @interface CurrentCoursesEnhanced
-   */
-  interface CurrentCoursesEnhanced {
-    /**
-     * Courses
-     * @type {any}
-     * @memberof CurrentCoursesEnhanced
-     */
-    currentCourseData?: Array
-    /**
-     * Historical courses
-     * @type {string}
-     * @memberof CurrentCoursesEnhanced
-     */
-    historicalCoursesPresent?: boolean
-  }
-
-  /**
-   *
-   * @export
-   * @interface LearningDifficultiesDisabilities
-   */
-  interface LearningDifficultiesDisabilities {
-    /**
-     * Establishment Name
-     * @type {string}
-     * @memberof LearningDifficultiesDisabilities
-     */
-    establishmentName?: string
-    /**
-     * Primary learning difficulty or disability
-     * @type {string}
-     * @memberof LearningDifficultiesDisabilities
-     */
-    primaryLDD?: Array
-    /**
-     * Additional learning difficulties or disabilities
-     * @type {string}
-     * @memberof LearningDifficultiesDisabilities
-     */
-    additionalLDD?: Array
-  }
-
   /**
    *
    * @export
@@ -448,10 +401,10 @@ declare namespace curious {
   interface LearnerProfile {
     /**
      * Establishment (prison) identifier
-     * @type {number}
+     * @type {string}
      * @memberof LearnerProfile
      */
-    establishmentId?: number
+    establishmentId?: string
     /**
      * Language status
      * @type {string}
@@ -544,32 +497,6 @@ declare namespace curious {
      * @memberof LearnerLatestAssessment
      */
     qualifications?: LearnerAssessment[]
-  }
-
-  /**
-   *
-   * @export
-   * @interface FunctionalSkillsLevels
-   */
-  export interface FunctionalSkillsLevels {
-    /**
-     *
-     * @type {Array<FunctionalSkillsLevels>}
-     * @memberof FunctionalSkillsLevels
-     */
-    english?: Array
-    /**
-     *
-     * @type {Array<FunctionalSkillsLevels>}
-     * @memberof FunctionalSkillsLevels
-     */
-    maths?: Array
-    /**
-     *
-     * @type {Array<FunctionalSkillsLevels>}
-     * @memberof FunctionalSkillsLevels
-     */
-    digiLit?: Array
   }
 
   /**

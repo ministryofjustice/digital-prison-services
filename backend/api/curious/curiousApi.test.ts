@@ -85,8 +85,8 @@ function getDummyLearnerProfiles(): curious.LearnerProfile[] {
   return [
     {
       prn: 'G6123VU',
-      establishmentId: 8,
-      establishmentName: 'HMP Moorland',
+      establishmentId: 'MDI',
+      establishmentName: 'MOORLAND (HMP & YOI)',
       uln: '1234123412',
       lddHealthProblem:
         'Learner considers himself or herself to have a learning difficulty and/or disability and/or health problem.',
@@ -121,8 +121,8 @@ function getDummyLearnerProfiles(): curious.LearnerProfile[] {
     },
     {
       prn: 'G6123VU',
-      establishmentId: 76,
-      establishmentName: 'HMP Wakefield',
+      establishmentId: 'WDI',
+      establishmentName: 'WAKEFIELD (HMP)',
       uln: '9876987654',
       lddHealthProblem: null,
       priorAttainment: null,
@@ -158,8 +158,8 @@ function getDummyEducations(): curious.LearnerEducation {
     content: [
       {
         prn: 'G8346GA',
-        establishmentId: 1,
-        establishmentName: 'HMP Leyhill',
+        establishmentId: 'LYI',
+        establishmentName: 'LEYHILL (HMP)',
         courseName: 'Instructing group cycling sessions',
         courseCode: 'Y6174024',
         isAccredited: true,
@@ -204,8 +204,8 @@ function getDummyEducations(): curious.LearnerEducation {
       },
       {
         prn: 'G8346GA',
-        establishmentId: 2,
-        establishmentName: 'HMP Dartmoor',
+        establishmentId: 'DAI',
+        establishmentName: 'DARTMOOR (HMP)',
         courseName: 'Foundation Degree in Cricket Coaching - (Myerscough College)',
         courseCode: '301409',
         isAccredited: true,
@@ -257,8 +257,8 @@ function getDummyLearnerLatestAssessments(): curious.LearnerLatestAssessment[] {
       prn: 'G8346GA',
       qualifications: [
         {
-          establishmentId: 2,
-          establishmentName: 'HMP Winchester',
+          establishmentId: 'WDI',
+          establishmentName: 'WAKEFIELD (HMP)',
           qualification: {
             qualificationType: 'English',
             qualificationGrade: 'Entry Level 2',
@@ -266,8 +266,8 @@ function getDummyLearnerLatestAssessments(): curious.LearnerLatestAssessment[] {
           },
         },
         {
-          establishmentId: 2,
-          establishmentName: 'HMP Winchester',
+          establishmentId: 'WDI',
+          establishmentName: 'WAKEFIELD (HMP)',
           qualification: {
             qualificationType: 'English',
             qualificationGrade: 'Entry Level 2',
@@ -275,8 +275,8 @@ function getDummyLearnerLatestAssessments(): curious.LearnerLatestAssessment[] {
           },
         },
         {
-          establishmentId: 2,
-          establishmentName: 'HMP Winchester',
+          establishmentId: 'WDI',
+          establishmentName: 'WAKEFIELD (HMP)',
           qualification: {
             qualificationType: 'Digital Literacy',
             qualificationGrade: 'Entry Level 1',
@@ -284,8 +284,8 @@ function getDummyLearnerLatestAssessments(): curious.LearnerLatestAssessment[] {
           },
         },
         {
-          establishmentId: 2,
-          establishmentName: 'HMP Winchester',
+          establishmentId: 'WDI',
+          establishmentName: 'WAKEFIELD (HMP)',
           qualification: {
             qualificationType: 'Digital Literacy',
             qualificationGrade: 'Entry Level 2',
@@ -293,8 +293,8 @@ function getDummyLearnerLatestAssessments(): curious.LearnerLatestAssessment[] {
           },
         },
         {
-          establishmentId: 2,
-          establishmentName: 'HMP Winchester',
+          establishmentId: 'WDI',
+          establishmentName: 'WAKEFIELD (HMP)',
           qualification: {
             qualificationType: 'Maths',
             qualificationGrade: 'Entry Level 2',

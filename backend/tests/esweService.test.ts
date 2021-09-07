@@ -1,4 +1,9 @@
-import EsweService, { DEFAULT_SKILL_LEVELS, DEFAULT_GOALS, DEFAULT_COURSE_DATA } from '../services/esweService'
+import EsweService, {
+  DEFAULT_SKILL_LEVELS,
+  DEFAULT_GOALS,
+  DEFAULT_COURSE_DATA,
+  DEFAULT_WORK_DATA,
+} from '../services/esweService'
 import { makeNotFoundError } from './helpers'
 import { app } from '../config'
 import CuriousApi from '../api/curious/curiousApi'
@@ -15,8 +20,11 @@ describe('Education skills and work experience', () => {
   const dummyLearnerProfiles = getDummyLearnerProfiles()
   const dummyEducations = getDummyEducations()
   const dummyGoals = getDummyGoals()
+  const dummyCurrentWork = getDummyCurrentWork()
+  const dummyWorkHistory = getDummyWorkHistory()
   const credentialsRef = {}
   const curiousApi = {} as CuriousApi
+  const prisonApi = {}
   const systemOauthClient = {
     getClientCredentialsTokens: jest.fn(),
   }
@@ -25,23 +33,33 @@ describe('Education skills and work experience', () => {
   let getLearnerEducationMock
   let getLearnerLatestAssessmentsMock
   let getLearnerGoalsMock
+  let getLearnerCurrentWorkMock
+  let getLearnerWorkHistoryMock
   beforeEach(() => {
     getLearnerProfilesMock = jest.fn()
     getLearnerEducationMock = jest.fn()
     getLearnerLatestAssessmentsMock = jest.fn()
     getLearnerGoalsMock = jest.fn()
+    getLearnerCurrentWorkMock = jest.fn()
+    getLearnerWorkHistoryMock = jest.fn()
     curiousApi.getLearnerProfiles = getLearnerProfilesMock
     curiousApi.getLearnerEducation = getLearnerEducationMock
     curiousApi.getLearnerLatestAssessments = getLearnerLatestAssessmentsMock
     curiousApi.getLearnerGoals = getLearnerGoalsMock
+    // @ts-expect-error FIX ME
+    prisonApi.getOffenderCurrentWork = getLearnerCurrentWorkMock
+    // @ts-expect-error FIX ME
+    prisonApi.getOffenderWorkHistory = getLearnerWorkHistoryMock
     systemOauthClient.getClientCredentialsTokens.mockReset()
 
     getLearnerProfilesMock.mockResolvedValue(dummyLearnerProfiles)
     getLearnerEducationMock.mockResolvedValue(dummyEducations)
     getLearnerGoalsMock.mockResolvedValue(dummyGoals)
+    getLearnerCurrentWorkMock.mockResolvedValue(dummyCurrentWork)
+    getLearnerWorkHistoryMock.mockResolvedValue(dummyWorkHistory)
 
     systemOauthClient.getClientCredentialsTokens.mockReturnValue(credentialsRef)
-    service = EsweService.create(curiousApi, systemOauthClient)
+    service = EsweService.create(curiousApi, systemOauthClient, prisonApi)
   })
 
   describe('learner profiles', () => {
@@ -211,7 +229,7 @@ describe('Education skills and work experience', () => {
           prn: 'G8346GA',
           qualifications: [
             {
-              establishmentId: 2,
+              establishmentId: 'BOB',
               establishmentName: 'HMP Winchester',
               qualification: {
                 qualificationType: 'English',
@@ -220,7 +238,7 @@ describe('Education skills and work experience', () => {
               },
             },
             {
-              establishmentId: 2,
+              establishmentId: 'BOB',
               establishmentName: 'HMP Winchester',
               qualification: {
                 qualificationType: 'Digital Literacy',
@@ -229,7 +247,7 @@ describe('Education skills and work experience', () => {
               },
             },
             {
-              establishmentId: 2,
+              establishmentId: 'BOB',
               establishmentName: 'HMP Winchester',
               qualification: {
                 qualificationType: 'Maths',
@@ -271,7 +289,7 @@ describe('Education skills and work experience', () => {
           prn: 'G8930UW',
           qualifications: [
             {
-              establishmentId: 8,
+              establishmentId: 'BOB',
               establishmentName: 'HMP Moorland',
               qualification: {
                 qualificationType: 'Maths',
@@ -280,7 +298,7 @@ describe('Education skills and work experience', () => {
               },
             },
             {
-              establishmentId: 8,
+              establishmentId: 'BOB',
               establishmentName: 'HMP Moorland',
               qualification: {
                 qualificationType: 'Digital Literacy',
@@ -515,6 +533,69 @@ describe('Education skills and work experience', () => {
         expect(actual.content).toEqual(expected)
       })
     })
+    describe('Work inside prison', () => {
+      const nomisId = 'G3609VL'
+      it('should return null when feature flag is disabled', async () => {
+        jest.spyOn(app, 'esweEnabled', 'get').mockReturnValue(false)
+        const actual = await service.getCurrentWork(nomisId)
+        expect(actual.enabled).toBeFalsy()
+        expect(actual.content).toBeNull()
+        expect(getLearnerEducationMock).not.toHaveBeenCalled()
+        expect(systemOauthClient.getClientCredentialsTokens).not.toHaveBeenCalled()
+      })
+      it('should return null content on error', async () => {
+        jest.spyOn(app, 'esweEnabled', 'get').mockReturnValue(true)
+        getLearnerCurrentWorkMock.mockRejectedValue(new Error('error'))
+        const actual = await service.getCurrentWork(nomisId)
+        expect(actual.content).toBeNull()
+      })
+      it('should call the endpoint with the correct prn and context', async () => {
+        jest.spyOn(app, 'esweEnabled', 'get').mockReturnValue(true)
+        await service.getCurrentWork(nomisId)
+        expect(systemOauthClient.getClientCredentialsTokens).toHaveBeenCalledTimes(1)
+        expect(getLearnerCurrentWorkMock).toHaveBeenCalledWith(credentialsRef, nomisId)
+        expect(getLearnerWorkHistoryMock).toHaveBeenCalledWith(credentialsRef, nomisId, '2020-01-01')
+      })
+      it('should return expected response when the prisoner is not found', async () => {
+        jest.spyOn(app, 'esweEnabled', 'get').mockReturnValue(true)
+        getLearnerCurrentWorkMock.mockRejectedValue(makeNotFoundError())
+        const actual = await service.getCurrentWork(nomisId)
+        expect(actual.content).toEqual(DEFAULT_WORK_DATA)
+      })
+      it('should return the expected response if the user has no work', async () => {
+        jest.spyOn(app, 'esweEnabled', 'get').mockReturnValue(true)
+        getLearnerCurrentWorkMock.mockResolvedValue({ workActivities: [] })
+        getLearnerWorkHistoryMock.mockResolvedValue({ workActivities: [] })
+        const actual = await service.getCurrentWork(nomisId)
+        expect(actual.content).toEqual(DEFAULT_WORK_DATA)
+      })
+      it('should return the expected response if the user has no current work but has historical work', async () => {
+        jest.spyOn(app, 'esweEnabled', 'get').mockReturnValue(true)
+        getLearnerCurrentWorkMock.mockResolvedValue({ workActivities: [] })
+        getLearnerWorkHistoryMock.mockResolvedValue(dummyWorkHistory)
+        const actual = await service.getCurrentWork(nomisId)
+
+        const expected = {
+          currentJobs: [],
+          workHistoryPresent: true,
+        }
+        expect(actual.content).toEqual(expected)
+      })
+      it('should return the expected response if the user has current work and historical work', async () => {
+        jest.spyOn(app, 'esweEnabled', 'get').mockReturnValue(true)
+        const actual = await service.getCurrentWork(nomisId)
+        const expected = {
+          currentJobs: [
+            {
+              label: 'Cleaner HB1 AM',
+              value: 'Started on 19 August 2021',
+            },
+          ],
+          workHistoryPresent: true,
+        }
+        expect(actual.content).toEqual(expected)
+      })
+    })
   })
 })
 
@@ -522,7 +603,7 @@ function getDummyLearnerProfiles(): curious.LearnerProfile[] {
   return [
     {
       prn: 'G6123VU',
-      establishmentId: 12,
+      establishmentId: 'BOB',
       establishmentName: 'HMP New Hall',
       uln: '9876987654',
       lddHealthProblem: null,
@@ -553,7 +634,7 @@ function getDummyLearnerProfiles(): curious.LearnerProfile[] {
     },
     {
       prn: 'G6123VU',
-      establishmentId: 8,
+      establishmentId: 'BOB',
       establishmentName: 'HMP Moorland',
       uln: '1234123412',
       lddHealthProblem:
@@ -589,7 +670,7 @@ function getDummyLearnerProfiles(): curious.LearnerProfile[] {
     },
     {
       prn: 'G6123VU',
-      establishmentId: 76,
+      establishmentId: 'BOB',
       establishmentName: 'HMP Wakefield',
       uln: '9876987654',
       lddHealthProblem: null,
@@ -631,12 +712,58 @@ function getDummyGoals(): curious.LearnerGoals {
   }
 }
 
+function getDummyCurrentWork(): eswe.CurrentWork {
+  return {
+    offenderNo: 'G6123VU',
+    workActivities: [
+      {
+        bookingId: 1102484,
+        agencyLocationId: 'MDI',
+        agencyLocationDescription: 'Moorland (HMP & YOI)',
+        description: 'Cleaner HB1 AM',
+        startDate: '2021-08-19',
+      },
+    ],
+  }
+}
+
+function getDummyWorkHistory(): eswe.WorkHistory {
+  return {
+    offenderNo: 'G6123VU',
+    workActivities: [
+      {
+        bookingId: 1102484,
+        agencyLocationId: 'MDI',
+        agencyLocationDescription: 'Moorland (HMP & YOI)',
+        description: 'Cleaner HB1 AM',
+        startDate: '2021-08-19',
+      },
+      {
+        bookingId: 1102484,
+        agencyLocationId: 'MDI',
+        agencyLocationDescription: 'Moorland (HMP & YOI)',
+        description: 'Cleaner HB1 AM',
+        startDate: '2021-07-20',
+        endDate: '2021-07-23',
+      },
+      {
+        bookingId: 1102484,
+        agencyLocationId: 'MDI',
+        agencyLocationDescription: 'Moorland (HMP & YOI)',
+        description: 'Cleaner HB1 PM',
+        startDate: '2021-07-20',
+        endDate: '2021-07-23',
+      },
+    ],
+  }
+}
+
 function getDummyEducations(): curious.LearnerEducation {
   return {
     content: [
       {
         prn: 'A1234AA',
-        establishmentId: 8,
+        establishmentId: 'BOB',
         establishmentName: 'HMP Moorland',
         courseName: 'Foundation Degree in Arts in Equestrian Practice and Technology',
         courseCode: '300082',
@@ -681,7 +808,7 @@ function getDummyEducations(): curious.LearnerEducation {
       },
       {
         prn: 'A1234AA',
-        establishmentId: 8,
+        establishmentId: 'BOB',
         establishmentName: 'HMP Moorland',
         courseName: 'Certificate of Management',
         courseCode: '101448',
@@ -726,7 +853,7 @@ function getDummyEducations(): curious.LearnerEducation {
       },
       {
         prn: 'A1234AA',
-        establishmentId: 8,
+        establishmentId: 'BOB',
         establishmentName: 'HMP Moorland',
         courseName: 'Human Science',
         courseCode: '008HUM001',
@@ -771,7 +898,7 @@ function getDummyEducations(): curious.LearnerEducation {
       },
       {
         prn: 'A1234AA',
-        establishmentId: 4,
+        establishmentId: 'BOB',
         establishmentName: 'HMP Bristol',
         courseName: 'Ocean Science',
         courseCode: '004TES006',
@@ -816,7 +943,7 @@ function getDummyEducations(): curious.LearnerEducation {
       },
       {
         prn: 'A1234AA',
-        establishmentId: 17,
+        establishmentId: 'BOB',
         establishmentName: 'HMP Dartmoor',
         courseName: 'Foundation Degree in Cricket Coaching - (Myerscough College)',
         courseCode: '301409',
@@ -861,7 +988,7 @@ function getDummyEducations(): curious.LearnerEducation {
       },
       {
         prn: 'A1234AA',
-        establishmentId: 7,
+        establishmentId: 'BOB',
         establishmentName: 'HMP Leyhill',
         courseName: 'Instructing group cycling sessions',
         courseCode: 'Y6174024',

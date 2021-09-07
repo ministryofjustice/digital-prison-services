@@ -10,22 +10,12 @@ type FeatureFlagged<T> = {
   content: T
 }
 
-type OffenderCurrentWork = {
-  workHistoryPresent: boolean
-  currentJobs: OffenderCurrentJobs[]
-}
-
-type OffenderCurrentJobs = {
-  label: string
-  value: string
-}
-
 type LearnerProfiles = FeatureFlagged<curious.LearnerProfile[]>
-type LearnerLatestAssessments = FeatureFlagged<curious.FunctionalSkillsLevels>
+type LearnerLatestAssessments = FeatureFlagged<eswe.FunctionalSkillsLevels>
 type OffenderGoals = FeatureFlagged<curious.LearnerGoals>
-type LearningDifficulties = FeatureFlagged<curious.LearningDifficultiesDisabilities[]>
-type CurrentCoursesEnhanced = FeatureFlagged<curious.CurrentCoursesEnhanced>
-type CurrentWork = FeatureFlagged<OffenderCurrentWork>
+type LearningDifficulties = FeatureFlagged<eswe.LearningDifficultiesDisabilities[]>
+type CurrentCoursesEnhanced = FeatureFlagged<eswe.CurrentCoursesEnhanced>
+type CurrentWork = FeatureFlagged<eswe.OffenderCurrentWork>
 
 const createFlaggedContent = <T>(content: T) => ({
   enabled: app.esweEnabled,
@@ -320,15 +310,19 @@ export default class EsweService {
 
     try {
       const context = await this.systemOauthClient.getClientCredentialsTokens()
-      const currentWork = await this.prisonApi.getOffenderCurrentWork(context, nomisId)
-      const workHistory = await this.prisonApi.getOffenderWorkHistory(context, nomisId, '2021-01-01')
+      const [currentWork, workHistory] = await Promise.all([
+        this.prisonApi.getOffenderCurrentWork(context, nomisId),
+        this.prisonApi.getOffenderWorkHistory(context, nomisId, '2020-01-01'),
+      ])
 
-      if (currentWork.workActivities.length) {
+      if (workHistory.workActivities.length) {
         const workHistoryPresent = !!workHistory.workActivities.length
-        const currentJobs = currentWork.workActivities.map((job) => ({
-          label: job.description,
-          value: `Started on ${readableDateFormat(job.startDate, DATE_FORMAT)}`,
-        }))
+        const currentJobs = currentWork.workActivities
+          .map((job) => ({
+            label: job.description.trim(),
+            value: `Started on ${readableDateFormat(job.startDate, DATE_FORMAT)}`,
+          }))
+          .sort((a, b) => a.label.localeCompare(b.label))
         const currentWorkData = {
           workHistoryPresent,
           currentJobs,
