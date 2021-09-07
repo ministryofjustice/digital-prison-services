@@ -55,7 +55,7 @@ describe('curiousApi', () => {
     it('should return the expected response data with filter in query', async () => {
       const nomisId = dummyEducations.content[1].prn
       const { establishmentId } = dummyEducations.content[1]
-      nock(hostname)
+      mock
         .get(`/learnerEducation/${nomisId}?establishmentId=${establishmentId}`)
         .matchHeader('authorization', `Bearer ${accessToken}`)
         .reply(200, [dummyEducations.content[1]])
@@ -63,8 +63,6 @@ describe('curiousApi', () => {
       const actual = await curiousApi.getLearnerEducation(
         { access_token: accessToken },
         nomisId,
-        null,
-        null,
         null,
         null,
         establishmentId
@@ -210,7 +208,7 @@ describe('curiousApi', () => {
           alevelIndicator: false,
         },
       ]
-      nock(hostname)
+      mock
         .get(`/learnerEducation/${nomisId}?sort=learningPlannedEndDate`)
         .matchHeader('authorization', `Bearer ${accessToken}`)
         .reply(200, expected)

@@ -22,14 +22,8 @@ export default class CuriousApi {
     context: ClientContext,
     nomisId: string,
     sort?: string,
-    actualGLH?: number,
-    courseCode?: string,
-    courseName?: string,
-    establishmentId?: string,
-    isAccredited?: boolean,
     isCurrent?: boolean,
-    learningPlannedEndDate?: string,
-    learningStartDate?: string,
+    establishmentId?: string,
     page?: number,
     size?: number
   ): Promise<curious.LearnerEducation> {
@@ -38,16 +32,10 @@ export default class CuriousApi {
         context,
         this.applyQuery(`/learnerEducation/${nomisId}`, {
           sort,
-          courseCode,
-          courseName,
-          isAccredited,
           isCurrent,
           establishmentId,
-          learningPlannedEndDate,
           page,
           size,
-          learningStartDate,
-          actualGLH,
         })
       )
       .then((response) => response.body)
