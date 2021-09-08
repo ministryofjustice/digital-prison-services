@@ -96,12 +96,14 @@ describe('appointment movement slips', () => {
 
       it('should render the movement slips page with the correct details', async () => {
         // @ts-expect-error ts-migrate(2339) FIXME: Property 'getOffenderSummaries' does not exist on ... Remove this comment to see the full error message
-        prisonApi.getOffenderSummaries = jest.fn().mockReturnValue({ content: [
-          { offenderNo: 'G1683VN', assignedLivingUnitDesc: 'CELL 1' },
-          { offenderNo: 'G4803UT', assignedLivingUnitDesc: 'CELL 2' },
-          { offenderNo: 'G4346UT', assignedLivingUnitDesc: 'CELL 3' },
-          { offenderNo: 'G5402VR', assignedLivingUnitDesc: 'CELL 4' },
-        ] })
+        prisonApi.getOffenderSummaries = jest.fn().mockReturnValue({
+          content: [
+            { offenderNo: 'G1683VN', assignedLivingUnitDesc: 'CELL 1' },
+            { offenderNo: 'G4803UT', assignedLivingUnitDesc: 'CELL 2' },
+            { offenderNo: 'G4346UT', assignedLivingUnitDesc: 'CELL 3' },
+            { offenderNo: 'G5402VR', assignedLivingUnitDesc: 'CELL 4' },
+          ],
+        })
 
         await controller(req, res)
 
