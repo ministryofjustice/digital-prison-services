@@ -310,9 +310,10 @@ export default class EsweService {
 
     try {
       const context = await this.systemOauthClient.getClientCredentialsTokens()
+      const threeMonthsAgo = moment().subtract(3, 'months').format('YYYY-MM-DD')
       const [currentWork, workHistory] = await Promise.all([
         this.prisonApi.getOffenderCurrentWork(context, nomisId),
-        this.prisonApi.getOffenderWorkHistory(context, nomisId, '2020-01-01'),
+        this.prisonApi.getOffenderWorkHistory(context, nomisId, threeMonthsAgo),
       ])
 
       if (workHistory.workActivities.length) {

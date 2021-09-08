@@ -1,3 +1,4 @@
+import moment from 'moment'
 import EsweService, {
   DEFAULT_SKILL_LEVELS,
   DEFAULT_GOALS,
@@ -549,12 +550,13 @@ describe('Education skills and work experience', () => {
         const actual = await service.getCurrentWork(nomisId)
         expect(actual.content).toBeNull()
       })
-      it('should call the endpoint with the correct prn and context', async () => {
+      it('should call the endpoints with the correct prn, context and dates', async () => {
         jest.spyOn(app, 'esweEnabled', 'get').mockReturnValue(true)
+        const threeMonthsAgo = moment().subtract(3, 'months').format('YYYY-MM-DD')
         await service.getCurrentWork(nomisId)
         expect(systemOauthClient.getClientCredentialsTokens).toHaveBeenCalledTimes(1)
         expect(getLearnerCurrentWorkMock).toHaveBeenCalledWith(credentialsRef, nomisId)
-        expect(getLearnerWorkHistoryMock).toHaveBeenCalledWith(credentialsRef, nomisId, '2020-01-01')
+        expect(getLearnerWorkHistoryMock).toHaveBeenCalledWith(credentialsRef, nomisId, threeMonthsAgo)
       })
       it('should return expected response when the prisoner is not found', async () => {
         jest.spyOn(app, 'esweEnabled', 'get').mockReturnValue(true)

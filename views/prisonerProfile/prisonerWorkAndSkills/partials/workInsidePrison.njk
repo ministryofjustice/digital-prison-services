@@ -6,7 +6,7 @@
 {% set offenderNo = prisonerProfileData.offenderNo %}
 
 {% if not work %}
-    <p class="govuk-body" data-test="courses-errorMessage">{{ errorMessage }}</p>
+    <p class="govuk-body" data-test="work-errorMessage">{{ errorMessage }}</p>
 {% endif %}
 
 {% if work.currentJobs.length %}

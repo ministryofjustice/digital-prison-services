@@ -211,18 +211,28 @@ module.exports = (on) => {
 
     stubLearnerEducation: (learnerEducation) => curiousApi.stubLearnerEducation(learnerEducation),
 
-    stubWorkAndSkillsApi500Errors: () =>
+    stubForOffenderCurrentWork: (currentWork, offenderNo) =>
+      prisonApi.stubForOffenderCurrentWork(currentWork, offenderNo),
+
+    stubForOffenderWorkHistory: (currentWork, offenderNo, earliestEndDate) =>
+      prisonApi.stubForOffenderWorkHistory(currentWork, offenderNo, earliestEndDate),
+
+    stubWorkAndSkillsApi500Errors: (offenderNo, earliestEndDate) =>
       Promise.all([
         curiousApi.stubLatestLearnerAssessments({}, 500),
         curiousApi.stubLearnerGoals({}, 500),
         curiousApi.stubLearnerEducation({}, 500),
+        prisonApi.stubForOffenderCurrentWork({}, offenderNo, 500),
+        prisonApi.stubForOffenderWorkHistory({}, offenderNo, earliestEndDate, 500),
       ]),
 
-    stubWorkAndSkillsApi404Errors: (error) =>
+    stubWorkAndSkillsApi404Errors: (error, offenderNo, earliestEndDate) =>
       Promise.all([
         curiousApi.stubLatestLearnerAssessments(error, 404),
         curiousApi.stubLearnerGoals(error, 404),
         curiousApi.stubLearnerEducation(error, 404),
+        prisonApi.stubForOffenderCurrentWork(error, offenderNo, 404),
+        prisonApi.stubForOffenderWorkHistory(error, offenderNo, earliestEndDate, 404),
       ]),
 
     stubPersonal: ({

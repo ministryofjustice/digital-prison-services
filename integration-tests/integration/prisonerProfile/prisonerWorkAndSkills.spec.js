@@ -29,7 +29,7 @@ context('Prisoner Work and Skills', () => {
 
       cy.task('stubPrisonerProfileHeaderData', prisonerProfileHeaderData)
 
-      cy.task('stubWorkAndSkillsApi500Errors')
+      cy.task('stubWorkAndSkillsApi500Errors', null, offenderNo)
     })
 
     beforeEach(() => {
@@ -52,6 +52,12 @@ context('Prisoner Work and Skills', () => {
       it('should show correct error message', () => {
         visitWorkAndSkillsAndExpandAccordions()
         cy.get('[data-test="courses-errorMessage"]').should('have.text', apiErrorText)
+      })
+    })
+    context('work inside prison section', () => {
+      it('should show correct error message', () => {
+        visitWorkAndSkillsAndExpandAccordions()
+        cy.get('[data-test="work-errorMessage"]').should('have.text', apiErrorText)
       })
     })
   })
