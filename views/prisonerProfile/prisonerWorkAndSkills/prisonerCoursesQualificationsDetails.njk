@@ -28,7 +28,7 @@
     { text: course.type },
     { text: course.courseName },
     { text: course.location },
-    { html: course.dateTo | formatTimestampToDate + '<br> to ' + course.dateTo | formatTimestampToDate, attributes: {
+    { html: course.dateFrom | formatTimestampToDate + '<br> to ' + course.dateTo | formatTimestampToDate, attributes: {
           "data-sort-value": course.dateTo
         } },
     { text: course.outcome },
