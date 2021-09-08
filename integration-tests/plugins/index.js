@@ -211,28 +211,32 @@ module.exports = (on) => {
 
     stubLearnerEducation: (learnerEducation) => curiousApi.stubLearnerEducation(learnerEducation),
 
-    stubForOffenderCurrentWork: (currentWork, offenderNo) =>
-      prisonApi.stubForOffenderCurrentWork(currentWork, offenderNo),
+    stubForCurrentAndHistoricalWork: (currentWork, workHistory) =>
+      Promise.all([
+        prisonApi.stubForOffenderCurrentWork(currentWork),
+        prisonApi.stubForOffenderWorkHistory(workHistory),
+      ]),
 
-    stubForOffenderWorkHistory: (currentWork, offenderNo, earliestEndDate) =>
-      prisonApi.stubForOffenderWorkHistory(currentWork, offenderNo, earliestEndDate),
+    stubForOffenderCurrentWork: (currentWork) => prisonApi.stubForOffenderCurrentWork(currentWork),
 
-    stubWorkAndSkillsApi500Errors: (offenderNo, earliestEndDate) =>
+    stubForOffenderWorkHistory: (workHistory) => prisonApi.stubForOffenderWorkHistory(workHistory),
+
+    stubWorkAndSkillsApi500Errors: () =>
       Promise.all([
         curiousApi.stubLatestLearnerAssessments({}, 500),
         curiousApi.stubLearnerGoals({}, 500),
         curiousApi.stubLearnerEducation({}, 500),
-        prisonApi.stubForOffenderCurrentWork({}, offenderNo, 500),
-        prisonApi.stubForOffenderWorkHistory({}, offenderNo, earliestEndDate, 500),
+        prisonApi.stubForOffenderCurrentWork({}, 500),
+        prisonApi.stubForOffenderWorkHistory({}, 500),
       ]),
 
-    stubWorkAndSkillsApi404Errors: (error, offenderNo, earliestEndDate) =>
+    stubWorkAndSkillsApi404Errors: (error) =>
       Promise.all([
         curiousApi.stubLatestLearnerAssessments(error, 404),
         curiousApi.stubLearnerGoals(error, 404),
         curiousApi.stubLearnerEducation(error, 404),
-        prisonApi.stubForOffenderCurrentWork(error, offenderNo, 404),
-        prisonApi.stubForOffenderWorkHistory(error, offenderNo, earliestEndDate, 404),
+        prisonApi.stubForOffenderCurrentWork(error, 404),
+        prisonApi.stubForOffenderWorkHistory(error, 404),
       ]),
 
     stubPersonal: ({

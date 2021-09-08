@@ -1841,11 +1841,11 @@ module.exports = {
         jsonBody: types,
       },
     }),
-  stubForOffenderCurrentWork: (currentWork, offenderNo, status = 200) =>
+  stubForOffenderCurrentWork: (currentWork, status = 200) =>
     stubFor({
       request: {
         method: 'GET',
-        urlPattern: `/api/offender-activities/${offenderNo}/current-work`,
+        urlPattern: `/api/offender-activities/.+?/current-work`,
       },
       response: {
         status,
@@ -1855,18 +1855,18 @@ module.exports = {
         jsonBody: currentWork || {},
       },
     }),
-  stubForOffenderWorkHistory: (currentWork, offenderNo, earliestEndDate, status = 200) =>
+  stubForOffenderWorkHistory: (workHistory, status = 200) =>
     stubFor({
       request: {
         method: 'GET',
-        urlPattern: `/api/offender-activities/${offenderNo}/work-history?earliestEndDate=${earliestEndDate}`,
+        urlPattern: `/api/offender-activities/.+?/work-history?earliestEndDate=.+?`,
       },
       response: {
         status,
         headers: {
           'Content-Type': 'application/json;charset=UTF-8',
         },
-        jsonBody: currentWork || {},
+        jsonBody: workHistory || {},
       },
     }),
 }

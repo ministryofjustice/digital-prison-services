@@ -29,7 +29,7 @@ context('Prisoner Work and Skills', () => {
 
       cy.task('stubPrisonerProfileHeaderData', prisonerProfileHeaderData)
 
-      cy.task('stubWorkAndSkillsApi500Errors', null, offenderNo)
+      cy.task('stubWorkAndSkillsApi500Errors')
     })
 
     beforeEach(() => {
@@ -117,6 +117,16 @@ context('Prisoner Work and Skills', () => {
         })
       })
     })
+    context('work inside prison section', () => {
+      it('should show default message', () => {
+        visitWorkAndSkillsAndExpandAccordions()
+        cy.get('[data-test="work-noData"]').then(($message) => {
+          cy.get($message).then(($noCoursesMessage) => {
+            cy.get($noCoursesMessage).should('have.text', 'John Smith has no current or previous work inside prison.')
+          })
+        })
+      })
+    })
   })
 
   context('When the user is in Curious but there is no data', () => {
@@ -148,6 +158,11 @@ context('Prisoner Work and Skills', () => {
       empty: true,
     }
 
+    const emptyWork = {
+      offenderNo: 'G9981UK',
+      workActivities: [],
+    }
+
     before(() => {
       cy.task('reset')
       cy.clearCookies()
@@ -160,6 +175,8 @@ context('Prisoner Work and Skills', () => {
       cy.task('stubLatestLearnerAssessments', functionalSkillsAssessments)
       cy.task('stubLearnerGoals', emptyGoals)
       cy.task('stubLearnerEducation', emptyCourses)
+      cy.task('stubForOffenderCurrentWork', emptyWork)
+      cy.task('stubForOffenderWorkHistory', emptyWork)
     })
 
     beforeEach(() => {
@@ -197,6 +214,16 @@ context('Prisoner Work and Skills', () => {
         cy.get('[data-test="courses-noData"]').then(($message) => {
           cy.get($message).then(($noCoursesMessage) => {
             cy.get($noCoursesMessage).should('have.text', 'John Smith has no courses or qualifications.')
+          })
+        })
+      })
+    })
+    context('work inside prison section', () => {
+      it('should show default message', () => {
+        visitWorkAndSkillsAndExpandAccordions()
+        cy.get('[data-test="work-noData"]').then(($message) => {
+          cy.get($message).then(($noCoursesMessage) => {
+            cy.get($noCoursesMessage).should('have.text', 'John Smith has no current or previous work inside prison.')
           })
         })
       })
@@ -275,6 +302,48 @@ context('Prisoner Work and Skills', () => {
       ],
     }
 
+    const dummyCurrentWork = {
+      offenderNo,
+      workActivities: [
+        {
+          bookingId: 1102484,
+          agencyLocationId: 'MDI',
+          agencyLocationDescription: 'Moorland (HMP & YOI)',
+          description: 'Cleaner HB1 AM',
+          startDate: '2021-08-19',
+        },
+      ],
+    }
+
+    const dummyWorkHistory = {
+      offenderNo,
+      workActivities: [
+        {
+          bookingId: 1102484,
+          agencyLocationId: 'MDI',
+          agencyLocationDescription: 'Moorland (HMP & YOI)',
+          description: 'Cleaner HB1 AM',
+          startDate: '2021-08-19',
+        },
+        {
+          bookingId: 1102484,
+          agencyLocationId: 'MDI',
+          agencyLocationDescription: 'Moorland (HMP & YOI)',
+          description: 'Cleaner HB1 AM',
+          startDate: '2021-07-20',
+          endDate: '2021-07-23',
+        },
+        {
+          bookingId: 1102484,
+          agencyLocationId: 'MDI',
+          agencyLocationDescription: 'Moorland (HMP & YOI)',
+          description: 'Cleaner HB1 PM',
+          startDate: '2021-07-20',
+          endDate: '2021-07-23',
+        },
+      ],
+    }
+
     before(() => {
       cy.task('reset')
       cy.clearCookies()
@@ -287,6 +356,7 @@ context('Prisoner Work and Skills', () => {
       cy.task('stubLatestLearnerAssessments', functionalSkillsAssessments)
       cy.task('stubLearnerGoals', dummyGoals)
       cy.task('stubLearnerEducation', dummyEducation)
+      cy.task('stubForCurrentAndHistoricalWork', dummyCurrentWork, dummyWorkHistory)
     })
 
     beforeEach(() => {
@@ -389,6 +459,26 @@ context('Prisoner Work and Skills', () => {
         cy.get('[data-test="courses-detailsLink"]').then(($link) => {
           cy.get($link).should('have.text', 'View courses and qualifications details')
         })
+      })
+    })
+    context('work in prison section', () => {
+      it('should display the list of current jobs and their start dates', () => {
+        visitWorkAndSkillsAndExpandAccordions()
+        // cy.get('[data-test="work-summary"]').then(($summary) => {
+        //   cy.get($summary)
+        //     .find('dt')
+        //     .then(($summaryLabels) => {
+        //       cy.get($summaryLabels).its('length').should('eq', 1)
+        //       expect($summaryLabels.get(0).innerText).to.contain('Cleaner HB1 AM')
+        //     })
+
+        //   cy.get($summary)
+        //     .find('dd')
+        //     .then(($summaryValues) => {
+        //       cy.get($summaryValues).its('length').should('eq', 1)
+        //       expect($summaryValues.get(0).innerText).to.contain('Started on 19 August 2021')
+        //     })
+        // })
       })
     })
   })
