@@ -31,7 +31,9 @@ export default ({ prisonApi, logError }) =>
       await Promise.all(
         offenderSummaryApiCalls.map((apiCall) => apiCall.getOffenderSummaries(res.locals, apiCall.offenders))
       )
-    ).map(offenderSummaryData => offenderSummaryData.content).reduce((flattenedOffenders, offender) => flattenedOffenders.concat(offender), [])
+    )
+      .map((offenderSummaryData) => offenderSummaryData.content)
+      .reduce((flattenedOffenders, offender) => flattenedOffenders.concat(offender), [])
 
     const prisonersListedWithCellInfo = prisonersListed.map((prisoner) => {
       const prisonerDetails = offenderSummaries.find((offender) => prisoner?.offenderNo === offender?.offenderNo)
