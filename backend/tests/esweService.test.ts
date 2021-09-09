@@ -270,8 +270,8 @@ describe('Education skills and work experience', () => {
           dateFrom: '2019-12-15',
           dateTo: '2020-03-31',
           location: 'HMP Bristol',
-          outcome: 'In progress',
-          outcomeDetails: '',
+          outcome: 'Temporarily withdrawn',
+          outcomeDetails: 'Significant ill health causing them to be unable to attend education',
           type: 'Non-accredited',
         },
         {

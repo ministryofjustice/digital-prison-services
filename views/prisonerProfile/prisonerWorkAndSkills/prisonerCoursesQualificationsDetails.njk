@@ -28,7 +28,7 @@
     { text: course.type },
     { text: course.courseName },
     { text: course.location },
-    { html: course.dateTo | formatTimestampToDate + '<br> to ' + course.dateTo | formatTimestampToDate, attributes: {
+    { html: course.dateFrom | formatTimestampToDate + '<br> to ' + course.dateTo | formatTimestampToDate, attributes: {
           "data-sort-value": course.dateTo
         } },
     { text: course.outcome },
@@ -48,7 +48,7 @@
       <div class="govuk-grid-column-full">
         {{ printLink(align = "right") }}
         <div class="courses-qualifications-pagination-print-alignment">
-          <p class="moj-pagination__results" >Showing <b>{{ coursesDetailsList.length }}</b> {% if coursesDetailsList.length > 1 %}results{% else %}result{% endif %}</p>
+          <p class="moj-pagination__results" data-test='courses-quals-result-number'>Showing <b>{{ coursesDetailsList.length }}</b> {% if coursesDetailsList.length > 1 %}results{% else %}result{% endif %}</p>
         </div>
         <div class="results-table results-table__results">
 
@@ -88,7 +88,7 @@
     {% endif %}
     <div class="govuk-grid-row">
       <div class="govuk-grid-column-two-thirds">
-        <a href={{ profileUrl }} class="govuk-link govuk-!-display-none-print">Return to prisoner profile</a>
+        <a href={{ profileUrl }} class="govuk-link govuk-!-display-none-print" data-test='courses-qualifications-returnLink'>Return to prisoner profile</a>
       </div>
     </div>
     
