@@ -306,8 +306,8 @@ export default class EsweService {
 
       const getOutcome = (course: curious.LearnerCourses) => {
         if (course.outcomeGrade) return course.outcomeGrade
-        if (course.completionStatus.includes('continuing') || course.completionStatus.includes('temporarily withdrawn'))
-          return 'In progress'
+        if (course.completionStatus.includes('continuing')) return 'In progress'
+        if (course.completionStatus.includes('temporarily withdrawn')) return 'Temporarily withdrawn'
         if (course.completionStatus.includes('withdrawn') && !course.completionStatus.includes('temporarily'))
           return 'Withdrawn'
         return 'Completed'
@@ -315,8 +315,7 @@ export default class EsweService {
 
       const getOutcomeDetails = (course: curious.LearnerCourses) => {
         if (course.outcome && !course.completionStatus.includes('withdrawn')) return course.outcome
-        if (!course.completionStatus.includes('temporarily withdrawn') && course.prisonWithdrawalReason)
-          return course.prisonWithdrawalReason
+        if (course.prisonWithdrawalReason) return course.prisonWithdrawalReason
         return ''
       }
 
