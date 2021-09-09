@@ -311,14 +311,14 @@ export default class EsweService {
     try {
       const context = await this.systemOauthClient.getClientCredentialsTokens()
       const threeMonthsAgo = moment().subtract(3, 'months').format('YYYY-MM-DD')
-      const [currentWork, workHistory] = await Promise.all([
-        this.prisonApi.getOffenderCurrentWork(context, nomisId),
-        this.prisonApi.getOffenderWorkHistory(context, nomisId, threeMonthsAgo),
-      ])
+      const workHistory = await this.prisonApi.getOffenderWorkHistory(context, nomisId, threeMonthsAgo)
 
-      if (workHistory.workActivities.length) {
-        const workHistoryPresent = !!workHistory.workActivities.length
-        const currentJobs = currentWork.workActivities
+      const { workActivities } = workHistory
+
+      if (workActivities.length) {
+        const workHistoryPresent = !!workActivities.length
+        const currentJobs = workActivities
+          .filter((job) => !job.endDate)
           .map((job) => ({
             label: job.description.trim(),
             value: `Started on ${readableDateFormat(job.startDate, DATE_FORMAT)}`,
@@ -333,7 +333,7 @@ export default class EsweService {
       return createFlaggedContent(DEFAULT_WORK_DATA)
     } catch (e) {
       if (e.response?.status === 404) {
-        log.info(`Offender record not found in Curious.`)
+        log.info(`Offender record not found.`)
         return createFlaggedContent(DEFAULT_WORK_DATA)
       }
       log.error(`Failed to get learner work history. Reason: ${e.message}`)

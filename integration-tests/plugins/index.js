@@ -211,8 +211,6 @@ module.exports = (on) => {
 
     stubLearnerEducation: (learnerEducation) => curiousApi.stubLearnerEducation(learnerEducation),
 
-    stubOffenderCurrentWork: (currentWork) => prisonApi.stubForOffenderCurrentWork(currentWork),
-
     stubOffenderWorkHistory: (workHistory) => prisonApi.stubForOffenderWorkHistory(workHistory),
 
     stubWorkAndSkillsApi500Errors: () =>
@@ -220,8 +218,7 @@ module.exports = (on) => {
         curiousApi.stubLatestLearnerAssessments({}, 500),
         curiousApi.stubLearnerGoals({}, 500),
         curiousApi.stubLearnerEducation({}, 500),
-        // prisonApi.stubForOffenderCurrentWork({}, 500),
-        // prisonApi.stubForOffenderWorkHistory({}, 500),
+        prisonApi.stubForOffenderWorkHistory({}, 500),
       ]),
 
     stubWorkAndSkillsApi404Errors: (error) =>
@@ -229,8 +226,7 @@ module.exports = (on) => {
         curiousApi.stubLatestLearnerAssessments(error, 404),
         curiousApi.stubLearnerGoals(error, 404),
         curiousApi.stubLearnerEducation(error, 404),
-        // prisonApi.stubForOffenderCurrentWork(error, 404),
-        // prisonApi.stubForOffenderWorkHistory(error, 404),
+        prisonApi.stubForOffenderWorkHistory(error, 404),
       ]),
 
     stubPersonal: ({

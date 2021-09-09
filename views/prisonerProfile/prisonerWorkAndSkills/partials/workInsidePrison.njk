@@ -10,7 +10,7 @@
 {% endif %}
 
 {% if work.currentJobs.length %}
-    <h3 class="govuk-heading-s card__heading">Current role</h3>
+    <h3 class="govuk-heading-s card__heading" data-test="work-header">Current roles</h3>
     {{ prisonerSummarySection(work.currentJobs, '', {"data-test": "work-currentWork"}, false, 'govuk-!-margin-bottom-1', true) }}
     <hr class="govuk-section-break govuk-section-break--visible">
 {% elseif work.workHistoryPresent %}

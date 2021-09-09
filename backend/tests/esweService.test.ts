@@ -21,7 +21,6 @@ describe('Education skills and work experience', () => {
   const dummyLearnerProfiles = getDummyLearnerProfiles()
   const dummyEducations = getDummyEducations()
   const dummyGoals = getDummyGoals()
-  const dummyCurrentWork = getDummyCurrentWork()
   const dummyWorkHistory = getDummyWorkHistory()
   const credentialsRef = {}
   const curiousApi = {} as CuriousApi
@@ -34,21 +33,17 @@ describe('Education skills and work experience', () => {
   let getLearnerEducationMock
   let getLearnerLatestAssessmentsMock
   let getLearnerGoalsMock
-  let getLearnerCurrentWorkMock
   let getLearnerWorkHistoryMock
   beforeEach(() => {
     getLearnerProfilesMock = jest.fn()
     getLearnerEducationMock = jest.fn()
     getLearnerLatestAssessmentsMock = jest.fn()
     getLearnerGoalsMock = jest.fn()
-    getLearnerCurrentWorkMock = jest.fn()
     getLearnerWorkHistoryMock = jest.fn()
     curiousApi.getLearnerProfiles = getLearnerProfilesMock
     curiousApi.getLearnerEducation = getLearnerEducationMock
     curiousApi.getLearnerLatestAssessments = getLearnerLatestAssessmentsMock
     curiousApi.getLearnerGoals = getLearnerGoalsMock
-    // @ts-expect-error FIX ME
-    prisonApi.getOffenderCurrentWork = getLearnerCurrentWorkMock
     // @ts-expect-error FIX ME
     prisonApi.getOffenderWorkHistory = getLearnerWorkHistoryMock
     systemOauthClient.getClientCredentialsTokens.mockReset()
@@ -56,7 +51,6 @@ describe('Education skills and work experience', () => {
     getLearnerProfilesMock.mockResolvedValue(dummyLearnerProfiles)
     getLearnerEducationMock.mockResolvedValue(dummyEducations)
     getLearnerGoalsMock.mockResolvedValue(dummyGoals)
-    getLearnerCurrentWorkMock.mockResolvedValue(dummyCurrentWork)
     getLearnerWorkHistoryMock.mockResolvedValue(dummyWorkHistory)
 
     systemOauthClient.getClientCredentialsTokens.mockReturnValue(credentialsRef)
@@ -546,7 +540,7 @@ describe('Education skills and work experience', () => {
       })
       it('should return null content on error', async () => {
         jest.spyOn(app, 'esweEnabled', 'get').mockReturnValue(true)
-        getLearnerCurrentWorkMock.mockRejectedValue(new Error('error'))
+        getLearnerWorkHistoryMock.mockRejectedValue(new Error('error'))
         const actual = await service.getCurrentWork(nomisId)
         expect(actual.content).toBeNull()
       })
@@ -555,26 +549,44 @@ describe('Education skills and work experience', () => {
         const threeMonthsAgo = moment().subtract(3, 'months').format('YYYY-MM-DD')
         await service.getCurrentWork(nomisId)
         expect(systemOauthClient.getClientCredentialsTokens).toHaveBeenCalledTimes(1)
-        expect(getLearnerCurrentWorkMock).toHaveBeenCalledWith(credentialsRef, nomisId)
         expect(getLearnerWorkHistoryMock).toHaveBeenCalledWith(credentialsRef, nomisId, threeMonthsAgo)
       })
       it('should return expected response when the prisoner is not found', async () => {
         jest.spyOn(app, 'esweEnabled', 'get').mockReturnValue(true)
-        getLearnerCurrentWorkMock.mockRejectedValue(makeNotFoundError())
+        getLearnerWorkHistoryMock.mockRejectedValue(makeNotFoundError())
         const actual = await service.getCurrentWork(nomisId)
         expect(actual.content).toEqual(DEFAULT_WORK_DATA)
       })
       it('should return the expected response if the user has no work', async () => {
         jest.spyOn(app, 'esweEnabled', 'get').mockReturnValue(true)
-        getLearnerCurrentWorkMock.mockResolvedValue({ workActivities: [] })
         getLearnerWorkHistoryMock.mockResolvedValue({ workActivities: [] })
         const actual = await service.getCurrentWork(nomisId)
         expect(actual.content).toEqual(DEFAULT_WORK_DATA)
       })
       it('should return the expected response if the user has no current work but has historical work', async () => {
         jest.spyOn(app, 'esweEnabled', 'get').mockReturnValue(true)
-        getLearnerCurrentWorkMock.mockResolvedValue({ workActivities: [] })
-        getLearnerWorkHistoryMock.mockResolvedValue(dummyWorkHistory)
+        const dummyWorkHistoryNoCurrent = {
+          offenderNo: 'G6123VU',
+          workActivities: [
+            {
+              bookingId: 1102484,
+              agencyLocationId: 'MDI',
+              agencyLocationDescription: 'Moorland (HMP & YOI)',
+              description: 'Cleaner HB1 AM',
+              startDate: '2021-07-20',
+              endDate: '2021-07-23',
+            },
+            {
+              bookingId: 1102484,
+              agencyLocationId: 'MDI',
+              agencyLocationDescription: 'Moorland (HMP & YOI)',
+              description: 'Cleaner HB1 PM',
+              startDate: '2021-07-20',
+              endDate: '2021-07-23',
+            },
+          ],
+        }
+        getLearnerWorkHistoryMock.mockResolvedValue(dummyWorkHistoryNoCurrent)
         const actual = await service.getCurrentWork(nomisId)
 
         const expected = {
