@@ -24,7 +24,7 @@ describe('Education skills and work experience', () => {
   const dummyWorkHistory = getDummyWorkHistory()
   const credentialsRef = {}
   const curiousApi = {} as CuriousApi
-  const prisonApi = {}
+  const prisonApi = {} as any
   const systemOauthClient = {
     getClientCredentialsTokens: jest.fn(),
   }
@@ -44,7 +44,6 @@ describe('Education skills and work experience', () => {
     curiousApi.getLearnerEducation = getLearnerEducationMock
     curiousApi.getLearnerLatestAssessments = getLearnerLatestAssessmentsMock
     curiousApi.getLearnerGoals = getLearnerGoalsMock
-    // @ts-expect-error FIX ME
     prisonApi.getOffenderWorkHistory = getLearnerWorkHistoryMock
     systemOauthClient.getClientCredentialsTokens.mockReset()
 
