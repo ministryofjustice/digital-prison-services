@@ -215,6 +215,105 @@ describe('Education skills and work experience', () => {
     })
   })
 
+  describe('Courses and qualifications details', () => {
+    const nomisId = 'G8930UW'
+
+    it('should return null content when feature flag is disabled', async () => {
+      jest.spyOn(app, 'esweEnabled', 'get').mockReturnValue(false)
+      const actual = await service.getLearnerEducationFullDetails(nomisId)
+      expect(actual.enabled).toBeFalsy()
+      expect(actual.content).toBeNull()
+      expect(getLearnerEducationMock).not.toHaveBeenCalled()
+      expect(systemOauthClient.getClientCredentialsTokens).not.toHaveBeenCalled()
+    })
+
+    it('should return null content on error', async () => {
+      jest.spyOn(app, 'esweEnabled', 'get').mockReturnValue(true)
+      getLearnerEducationMock.mockRejectedValue(new Error('error'))
+      const actual = await service.getLearnerEducationFullDetails(nomisId)
+      expect(actual.content).toBeNull()
+    })
+
+    it('should return expected response when the prisoner is not registered in Curious', async () => {
+      jest.spyOn(app, 'esweEnabled', 'get').mockReturnValue(true)
+      getLearnerEducationMock.mockRejectedValue(makeNotFoundError())
+      const actual = await service.getLearnerEducationFullDetails(nomisId)
+      expect(actual.enabled).toBeTruthy()
+      expect(actual.content).toEqual([])
+    })
+
+    it('should return expected response when the prisoner is in Curious but has no courses', async () => {
+      jest.spyOn(app, 'esweEnabled', 'get').mockReturnValue(true)
+      getLearnerEducationMock.mockResolvedValue({ content: [] })
+      const actual = await service.getLearnerEducationFullDetails(nomisId)
+      expect(actual.content).toStrictEqual([])
+    })
+
+    it('should return the expected response, sorted by dateTo descending, when the prisoner is in Curious with courses', async () => {
+      const expected = [
+        {
+          courseName: 'Foundation Degree in Arts in Equestrian Practice and Technology',
+          dateFrom: '2021-07-19',
+          dateTo: '2021-07-21',
+          location: 'HMP Moorland',
+          outcome: 'Fail',
+          outcomeDetails: 'No achievement',
+          type: 'Accredited',
+        },
+        {
+          courseName: 'Certificate of Management',
+          dateFrom: '2021-07-01',
+          dateTo: '2021-07-08',
+          location: 'HMP Moorland',
+          outcome: 'Withdrawn',
+          outcomeDetails: 'Changes in their risk profile meaning they can no longer take part in the learning',
+          type: 'Accredited',
+        },
+        {
+          courseName: 'Human Science',
+          dateFrom: '2020-09-01',
+          dateTo: '2020-12-02',
+          location: 'HMP Moorland',
+          outcome: 'Pass',
+          outcomeDetails: 'Achieved',
+          type: 'Non-accredited',
+        },
+        {
+          courseName: 'Ocean Science',
+          dateFrom: '2019-12-15',
+          dateTo: '2020-03-31',
+          location: 'HMP Bristol',
+          outcome: 'Temporarily withdrawn',
+          outcomeDetails: 'Significant ill health causing them to be unable to attend education',
+          type: 'Non-accredited',
+        },
+        {
+          courseName: 'Foundation Degree in Cricket Coaching - (Myerscough College)',
+          dateFrom: '2019-10-01',
+          dateTo: '2019-10-02',
+          location: 'HMP Dartmoor',
+          outcome: 'Withdrawn',
+          outcomeDetails: 'Changes in their risk profile meaning they can no longer take part in the learning',
+          type: 'Accredited',
+        },
+        {
+          courseName: 'Instructing group cycling sessions',
+          dateFrom: '2019-08-01',
+          dateTo: '2019-08-01',
+          location: 'HMP Leyhill',
+          outcome: 'In progress',
+          outcomeDetails: '',
+          type: 'Accredited',
+        },
+      ]
+
+      jest.spyOn(app, 'esweEnabled', 'get').mockReturnValue(true)
+      getLearnerEducationMock.mockResolvedValue(dummyEducations)
+      const actual = await service.getLearnerEducationFullDetails(nomisId)
+      expect(actual.content).toEqual(expected)
+    })
+  })
+
   describe('Work and skills tab', () => {
     describe('Functional skills level', () => {
       const nomisId = 'G2823GV'
@@ -224,7 +323,7 @@ describe('Education skills and work experience', () => {
           prn: 'G8346GA',
           qualifications: [
             {
-              establishmentId: 'BOB',
+              establishmentId: 'WIN',
               establishmentName: 'HMP Winchester',
               qualification: {
                 qualificationType: 'English',
@@ -233,7 +332,7 @@ describe('Education skills and work experience', () => {
               },
             },
             {
-              establishmentId: 'BOB',
+              establishmentId: 'WIN',
               establishmentName: 'HMP Winchester',
               qualification: {
                 qualificationType: 'Digital Literacy',
@@ -242,7 +341,7 @@ describe('Education skills and work experience', () => {
               },
             },
             {
-              establishmentId: 'BOB',
+              establishmentId: 'WIN',
               establishmentName: 'HMP Winchester',
               qualification: {
                 qualificationType: 'Maths',
@@ -284,7 +383,7 @@ describe('Education skills and work experience', () => {
           prn: 'G8930UW',
           qualifications: [
             {
-              establishmentId: 'BOB',
+              establishmentId: 'MDI',
               establishmentName: 'HMP Moorland',
               qualification: {
                 qualificationType: 'Maths',
@@ -293,7 +392,7 @@ describe('Education skills and work experience', () => {
               },
             },
             {
-              establishmentId: 'BOB',
+              establishmentId: 'MDI',
               establishmentName: 'HMP Moorland',
               qualification: {
                 qualificationType: 'Digital Literacy',
@@ -617,7 +716,7 @@ function getDummyLearnerProfiles(): curious.LearnerProfile[] {
   return [
     {
       prn: 'G6123VU',
-      establishmentId: 'BOB',
+      establishmentId: 'NHA',
       establishmentName: 'HMP New Hall',
       uln: '9876987654',
       lddHealthProblem: null,
@@ -648,7 +747,7 @@ function getDummyLearnerProfiles(): curious.LearnerProfile[] {
     },
     {
       prn: 'G6123VU',
-      establishmentId: 'BOB',
+      establishmentId: 'MDI',
       establishmentName: 'HMP Moorland',
       uln: '1234123412',
       lddHealthProblem:
@@ -684,7 +783,7 @@ function getDummyLearnerProfiles(): curious.LearnerProfile[] {
     },
     {
       prn: 'G6123VU',
-      establishmentId: 'BOB',
+      establishmentId: 'WAK',
       establishmentName: 'HMP Wakefield',
       uln: '9876987654',
       lddHealthProblem: null,
@@ -726,21 +825,6 @@ function getDummyGoals(): curious.LearnerGoals {
   }
 }
 
-function getDummyCurrentWork(): eswe.CurrentWork {
-  return {
-    offenderNo: 'G6123VU',
-    workActivities: [
-      {
-        bookingId: 1102484,
-        agencyLocationId: 'MDI',
-        agencyLocationDescription: 'Moorland (HMP & YOI)',
-        description: 'Cleaner HB1 AM',
-        startDate: '2021-08-19',
-      },
-    ],
-  }
-}
-
 function getDummyWorkHistory(): eswe.WorkHistory {
   return {
     offenderNo: 'G6123VU',
@@ -777,7 +861,7 @@ function getDummyEducations(): curious.LearnerEducation {
     content: [
       {
         prn: 'A1234AA',
-        establishmentId: 'BOB',
+        establishmentId: 'MDI',
         establishmentName: 'HMP Moorland',
         courseName: 'Foundation Degree in Arts in Equestrian Practice and Technology',
         courseCode: '300082',
@@ -822,7 +906,7 @@ function getDummyEducations(): curious.LearnerEducation {
       },
       {
         prn: 'A1234AA',
-        establishmentId: 'BOB',
+        establishmentId: 'MDI',
         establishmentName: 'HMP Moorland',
         courseName: 'Certificate of Management',
         courseCode: '101448',
@@ -867,7 +951,7 @@ function getDummyEducations(): curious.LearnerEducation {
       },
       {
         prn: 'A1234AA',
-        establishmentId: 'BOB',
+        establishmentId: 'MDI',
         establishmentName: 'HMP Moorland',
         courseName: 'Human Science',
         courseCode: '008HUM001',
@@ -912,7 +996,7 @@ function getDummyEducations(): curious.LearnerEducation {
       },
       {
         prn: 'A1234AA',
-        establishmentId: 'BOB',
+        establishmentId: 'BRI',
         establishmentName: 'HMP Bristol',
         courseName: 'Ocean Science',
         courseCode: '004TES006',
@@ -957,7 +1041,7 @@ function getDummyEducations(): curious.LearnerEducation {
       },
       {
         prn: 'A1234AA',
-        establishmentId: 'BOB',
+        establishmentId: 'DAR',
         establishmentName: 'HMP Dartmoor',
         courseName: 'Foundation Degree in Cricket Coaching - (Myerscough College)',
         courseCode: '301409',
@@ -1002,7 +1086,7 @@ function getDummyEducations(): curious.LearnerEducation {
       },
       {
         prn: 'A1234AA',
-        establishmentId: 'BOB',
+        establishmentId: 'LEY',
         establishmentName: 'HMP Leyhill',
         courseName: 'Instructing group cycling sessions',
         courseCode: 'Y6174024',

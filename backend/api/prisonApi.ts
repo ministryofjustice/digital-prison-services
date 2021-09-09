@@ -252,9 +252,9 @@ export const prisonApiFactory = (client) => {
   const updateAlert = (context, bookingId, alertId, body) =>
     put(context, `/api/bookings/${bookingId}/alert/${alertId}`, body)
 
-  const getOffenderSummaries = (context, offenderNo) =>
-    get(context, `/api/bookings?${arrayToQueryString(offenderNo, 'offenderNo')}`, 100)
-
+  const getOffenderSummaries = (context, offenderNo) => {
+    return get(context, `/api/bookings/v2?${arrayToQueryString(offenderNo, 'offenderNo')}&size=100`)
+  }
   const getCaseNoteSummaryByTypes = (context, params) =>
     get(context, `/api/case-notes/summary?${mapToQueryString(params)}`)
 

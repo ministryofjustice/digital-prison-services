@@ -42,25 +42,7 @@ declare namespace eswe {
      */
     endDate?: string
   }
-  /**
-   *
-   * @export
-   * @interface CurrentWork
-   */
-  export interface CurrentWork {
-    /**
-     * Offender Number
-     * @type {string}
-     * @memberof CurrentWork
-     */
-    offenderNo: string
-    /**
-     * work activities
-     * @type {array}
-     * @memberof CurrentWork
-     */
-    workActivities: WorkActivity[]
-  }
+
   /**
    *
    * @export
@@ -186,5 +168,75 @@ declare namespace eswe {
      * @memberof FunctionalSkillsLevels
      */
     digiLit?: Array
+  }
+
+  /**
+   *
+   * @export
+   * @interface CurrentCoursesEnhanced
+   */
+  interface CurrentCoursesEnhanced {
+    /**
+     * Courses
+     * @type {any}
+     * @memberof CurrentCoursesEnhanced
+     */
+    currentCourseData?: Array
+    /**
+     * Historical courses
+     * @type {string}
+     * @memberof CurrentCoursesEnhanced
+     */
+    historicalCoursesPresent?: boolean
+  }
+
+  /**
+   *
+   * @export
+   * @interface LearnerEducationFullDetails
+   */
+  interface LearnerEducationFullDetails {
+    /**
+     * Type
+     * @type {string}
+     * @memberof LearnerEducationFullDetails
+     */
+    type?: string
+    /**
+     * Course name
+     * @type {string}
+     * @memberof LearnerEducationFullDetails
+     */
+    courseName?: string
+    /**
+     * Location - establishment
+     * @type {string}
+     * @memberof LearnerEducationFullDetails
+     */
+    location?: string
+    /**
+     * Date from (learning start date)
+     * @type {string}
+     * @memberof LearnerEducationFullDetails
+     */
+    dateFrom?: string
+    /**
+     * Date to (learning end date, or planned end date)
+     * @type {string}
+     * @memberof LearnerEducationFullDetails
+     */
+    dateTo?: string
+    /**
+     * Outcome
+     * @type {string}
+     * @memberof LearnerEducationFullDetails
+     */
+    outcome?: string
+    /**
+     * Outcome details
+     * @type {string}
+     * @memberof LearnerEducationFullDetails
+     */
+    outcomeDetails?: string
   }
 }

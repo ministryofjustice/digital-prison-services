@@ -230,7 +230,7 @@ context('Prisoner Work and Skills', () => {
         prn: 'G6123VU',
         qualifications: [
           {
-            establishmentId: 8,
+            establishmentId: 'MDI',
             establishmentName: 'HMP Moorland',
             qualification: {
               qualificationType: 'English',
@@ -239,7 +239,7 @@ context('Prisoner Work and Skills', () => {
             },
           },
           {
-            establishmentId: 8,
+            establishmentId: 'MDI',
             establishmentName: 'HMP Moorland',
             qualification: {
               qualificationType: 'Maths',
@@ -248,7 +248,7 @@ context('Prisoner Work and Skills', () => {
             },
           },
           {
-            establishmentId: 8,
+            establishmentId: 'MDI',
             establishmentName: 'HMP Moorland',
             qualification: {
               qualificationType: 'Digital Literacy',

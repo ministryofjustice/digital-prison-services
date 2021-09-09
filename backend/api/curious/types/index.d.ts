@@ -393,6 +393,33 @@ declare namespace curious {
      */
     withdrawalReasons?: string
   }
+
+  /**
+   *
+   * @export
+   * @interface LearningDifficultiesDisabilities
+   */
+  interface LearningDifficultiesDisabilities {
+    /**
+     * Establishment Name
+     * @type {string}
+     * @memberof LearningDifficultiesDisabilities
+     */
+    establishmentName?: string
+    /**
+     * Primary learning difficulty or disability
+     * @type {string}
+     * @memberof LearningDifficultiesDisabilities
+     */
+    primaryLDD?: Array
+    /**
+     * Additional learning difficulties or disabilities
+     * @type {string}
+     * @memberof LearningDifficultiesDisabilities
+     */
+    additionalLDD?: Array
+  }
+
   /**
    *
    * @export

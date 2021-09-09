@@ -64,7 +64,7 @@ describe('Prisoner work and skills controller', () => {
   beforeEach(() => {
     req = { params: { offenderNo }, session: { userDetails: { username: 'ITAG_USER' } } }
     res = { locals: {}, render: jest.fn(), redirect: jest.fn() }
-    req.originalUrl = '/sentence-and-release'
+    req.originalUrl = '/work-and-skills'
     req.get = jest.fn()
     req.get.mockReturnValue('localhost')
     res.status = jest.fn()

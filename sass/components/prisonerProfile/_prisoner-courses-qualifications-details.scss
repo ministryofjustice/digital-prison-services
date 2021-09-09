@@ -1,0 +1,19 @@
+
+.courses-qualifications-details-width-20 {
+    width: 20%;
+  }
+  
+  .courses-qualifications-details-width-15 {
+    width: 15%;
+  }
+  
+  .courses-qualifications-details-width-10 {
+    width: 10%;
+  }
+  
+  .courses-qualifications-pagination-print-alignment {
+    text-align: right;
+    @media print {
+      text-align: left;
+    }
+  }

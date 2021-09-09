@@ -26,5 +26,6 @@ export default ({ prisonerProfileService, esweService }) =>
       targets,
       coursesAndQualifications,
       currentWork,
+      profileUrl: `/prisoner/${offenderNo}`,
     })
   }

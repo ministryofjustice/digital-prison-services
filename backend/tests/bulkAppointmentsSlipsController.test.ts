@@ -80,6 +80,9 @@ describe('appointment movement slips', () => {
       })
 
       it('should call the correct endpoint for the extra required offender information', async () => {
+        // @ts-expect-error ts-migrate(2339) FIXME: Property 'getOffenderSummaries' does not exist on ... Remove this comment to see the full error message
+        prisonApi.getOffenderSummaries = jest.fn().mockReturnValue({ content: [] })
+
         await controller(req, res)
 
         // @ts-expect-error ts-migrate(2339) FIXME: Property 'getOffenderSummaries' does not exist on ... Remove this comment to see the full error message
@@ -93,12 +96,14 @@ describe('appointment movement slips', () => {
 
       it('should render the movement slips page with the correct details', async () => {
         // @ts-expect-error ts-migrate(2339) FIXME: Property 'getOffenderSummaries' does not exist on ... Remove this comment to see the full error message
-        prisonApi.getOffenderSummaries = jest.fn().mockReturnValue([
-          { offenderNo: 'G1683VN', assignedLivingUnitDesc: 'CELL 1' },
-          { offenderNo: 'G4803UT', assignedLivingUnitDesc: 'CELL 2' },
-          { offenderNo: 'G4346UT', assignedLivingUnitDesc: 'CELL 3' },
-          { offenderNo: 'G5402VR', assignedLivingUnitDesc: 'CELL 4' },
-        ])
+        prisonApi.getOffenderSummaries = jest.fn().mockReturnValue({
+          content: [
+            { offenderNo: 'G1683VN', assignedLivingUnitDesc: 'CELL 1' },
+            { offenderNo: 'G4803UT', assignedLivingUnitDesc: 'CELL 2' },
+            { offenderNo: 'G4346UT', assignedLivingUnitDesc: 'CELL 3' },
+            { offenderNo: 'G5402VR', assignedLivingUnitDesc: 'CELL 4' },
+          ],
+        })
 
         await controller(req, res)
 
@@ -147,6 +152,9 @@ describe('appointment movement slips', () => {
         })
 
         it('should call the correct endpoint the correct amount of times for the extra required offender information', async () => {
+          // @ts-expect-error ts-migrate(2339) FIXME: Property 'getOffenderSummaries' does not exist on ... Remove this comment to see the full error message
+          prisonApi.getOffenderSummaries = jest.fn().mockReturnValue({ content: [] })
+
           await controller(req, res)
 
           // @ts-expect-error ts-migrate(2339) FIXME: Property 'getOffenderSummaries' does not exist on ... Remove this comment to see the full error message
@@ -170,9 +178,9 @@ describe('appointment movement slips', () => {
           // @ts-expect-error ts-migrate(2339) FIXME: Property 'getOffenderSummaries' does not exist on ... Remove this comment to see the full error message
           prisonApi.getOffenderSummaries = jest
             .fn()
-            .mockReturnValueOnce(largePrisonersListedWithCell.slice(0, 100))
-            .mockReturnValueOnce(largePrisonersListedWithCell.slice(100, 200))
-            .mockReturnValueOnce(largePrisonersListedWithCell.slice(200, 201))
+            .mockReturnValueOnce({ content: largePrisonersListedWithCell.slice(0, 100) })
+            .mockReturnValueOnce({ content: largePrisonersListedWithCell.slice(100, 200) })
+            .mockReturnValueOnce({ content: largePrisonersListedWithCell.slice(200, 201) })
           await controller(req, res)
 
           expect(res.render).toHaveBeenCalledWith('movementSlipsPage.njk', {
