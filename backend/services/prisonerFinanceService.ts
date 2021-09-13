@@ -2,17 +2,15 @@ import moment from 'moment'
 import { formatCurrency, putLastNameFirst, formatName } from '../utils'
 
 export default (prisonApi) => {
-  const today = moment()
-  const currentMonth = today.month()
-  const currentYear = today.year()
-
   const getTransactionsForDateRange = async (
     context,
     offenderNo,
     accountCode,
-    month = currentMonth,
-    year = currentYear
+    month = moment().month(),
+    year = moment().year()
   ) => {
+    const today = moment()
+
     const selectedMonthAndYear = moment().set({ month, year })
     const isCurrentMonthAndYear = selectedMonthAndYear.isSame(today, 'month')
     const isFutureMonthAndYear = selectedMonthAndYear.isAfter(today, 'month')
@@ -28,9 +26,18 @@ export default (prisonApi) => {
     })
   }
 
-  const getTemplateData = async (context, offenderNo, accountCode, month = currentMonth, year = currentYear) => {
+  const getTemplateData = async (
+    context,
+    offenderNo,
+    accountCode,
+    month = moment().month(),
+    year = moment().year()
+  ) => {
     const noOfSelectableYears = 4
-    const yearOptions = Array.from({ length: noOfSelectableYears }, (v, i) => currentYear - noOfSelectableYears + i + 1)
+    const yearOptions = Array.from(
+      { length: noOfSelectableYears },
+      (v, i) => moment().year() - noOfSelectableYears + i + 1
+    )
 
     const prisonerDetails = await prisonApi.getDetails(context, offenderNo)
     const balanceData = await prisonApi.getPrisonerBalances(context, prisonerDetails.bookingId)

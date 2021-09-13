@@ -82,7 +82,7 @@ describe('Test the routes and middleware installed by sessionManagementRoutes', 
       .expect(302)
       .expect(
         'location',
-        'http://localhost:9090/auth/logout?client_id=prisonapiclient&redirect_uri=https://digital.prison.url/'
+        'http://localhost:9090/auth/logout?client_id=elite2apiclient&redirect_uri=https://digital.prison.url/'
       ))
 
   it('After logout get "/" should redirect to "/login"', () =>

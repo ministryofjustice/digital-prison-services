@@ -158,6 +158,45 @@ describe('Prisoner finance service', () => {
       })
     })
 
+    it('should return the correct data when selecting a previous date', async () => {
+      const templateData = await service.getTemplateData(context, offenderNo, 'cash', '6', '2020')
+
+      expect(templateData).toEqual({
+        currentBalance: '£0.00',
+        formValues: {
+          selectedMonth: 6,
+          selectedYear: 2020,
+        },
+        monthOptions: [
+          { text: 'January', value: 0 },
+          { text: 'February', value: 1 },
+          { text: 'March', value: 2 },
+          { text: 'April', value: 3 },
+          { text: 'May', value: 4 },
+          { text: 'June', value: 5 },
+          { text: 'July', value: 6 },
+          { text: 'August', value: 7 },
+          { text: 'September', value: 8 },
+          { text: 'October', value: 9 },
+          { text: 'November', value: 10 },
+          { text: 'December', value: 11 },
+        ],
+        period: 'July 2020',
+        prisoner: {
+          name: 'John Smith',
+          nameForBreadcrumb: 'Smith, John',
+          offenderNo: 'ABC123',
+        },
+        showDamageObligationsLink: false,
+        yearOptions: [
+          { text: 2017, value: 2017 },
+          { text: 2018, value: 2018 },
+          { text: 2019, value: 2019 },
+          { text: 2020, value: 2020 },
+        ],
+      })
+    })
+
     describe('when there are balances', () => {
       beforeEach(() => {
         // @ts-expect-error ts-migrate(2339) FIXME: Property 'getPrisonerBalances' does not exist on t... Remove this comment to see the full error message
