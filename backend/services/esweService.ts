@@ -368,7 +368,6 @@ export default class EsweService {
       const { workActivities } = workHistory
 
       if (workActivities.length) {
-        const workHistoryPresent = !!workActivities.length
         const currentJobs = workActivities
           .filter((job) => !job.endDate)
           .map((job) => ({
@@ -377,7 +376,7 @@ export default class EsweService {
           }))
           .sort((a, b) => a.label.localeCompare(b.label))
         const currentWorkData = {
-          workHistoryPresent,
+          workHistoryPresent: true,
           currentJobs,
         }
         return createFlaggedContent(currentWorkData)

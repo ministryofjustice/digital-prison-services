@@ -18,13 +18,13 @@
     <p class="govuk-body" data-test="work-noCurrent">{{ offenderName }} is not currently doing any work inside prison.</p>
 {% endif %}
 
-{% if work.workHistoryPresent or work.currentJobs.length %}
+{% if work.workHistoryPresent %}
     <p class="govuk-body govuk-!-margin-top-3">
         <a class="govuk-link" href='' data-test="work-detailsLink">View work details</a>
     </p>
 {% endif %}
 
-{% if work and not work.workHistoryPresent and not work.currentJobs.length  %}
+{% if work and not work.workHistoryPresent  %}
     <p class="govuk-body" data-test="work-noData">{{ offenderName }} has no current or previous work inside prison.</p>
 {% endif %}
 
