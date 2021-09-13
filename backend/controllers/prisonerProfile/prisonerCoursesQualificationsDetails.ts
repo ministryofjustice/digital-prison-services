@@ -16,7 +16,7 @@ type PrisonerDetails = {
 
 type CoursesAndQuals = {
   enabled: boolean
-  content: curious.LearnerEducationFullDetails[]
+  content: eswe.LearnerEducationFullDetails[]
 }
 
 export default ({ prisonApi, esweService }) =>

@@ -397,76 +397,6 @@ declare namespace curious {
   /**
    *
    * @export
-   * @interface CurrentCoursesEnhanced
-   */
-  interface CurrentCoursesEnhanced {
-    /**
-     * Courses
-     * @type {any}
-     * @memberof CurrentCoursesEnhanced
-     */
-    currentCourseData?: Array
-    /**
-     * Historical courses
-     * @type {string}
-     * @memberof CurrentCoursesEnhanced
-     */
-    historicalCoursesPresent?: boolean
-  }
-
-  /**
-   *
-   * @export
-   * @interface LearnerEducationFullDetails
-   */
-  interface LearnerEducationFullDetails {
-    /**
-     * Type
-     * @type {string}
-     * @memberof LearnerEducationFullDetails
-     */
-    type?: string
-    /**
-     * Course name
-     * @type {string}
-     * @memberof LearnerEducationFullDetails
-     */
-    courseName?: string
-    /**
-     * Location - establishment
-     * @type {string}
-     * @memberof LearnerEducationFullDetails
-     */
-    location?: string
-    /**
-     * Date from (learning start date)
-     * @type {string}
-     * @memberof LearnerEducationFullDetails
-     */
-    dateFrom?: string
-    /**
-     * Date to (learning end date, or planned end date)
-     * @type {string}
-     * @memberof LearnerEducationFullDetails
-     */
-    dateTo?: string
-    /**
-     * Outcome
-     * @type {string}
-     * @memberof LearnerEducationFullDetails
-     */
-    outcome?: string
-    /**
-     * Outcome details
-     * @type {string}
-     * @memberof LearnerEducationFullDetails
-     */
-    outcomeDetails?: string
-  }
-
-  /**
-   *
-   * @export
    * @interface LearningDifficultiesDisabilities
    */
   interface LearningDifficultiesDisabilities {
@@ -594,32 +524,6 @@ declare namespace curious {
      * @memberof LearnerLatestAssessment
      */
     qualifications?: LearnerAssessment[]
-  }
-
-  /**
-   *
-   * @export
-   * @interface FunctionalSkillsLevels
-   */
-  export interface FunctionalSkillsLevels {
-    /**
-     *
-     * @type {Array<FunctionalSkillsLevels>}
-     * @memberof FunctionalSkillsLevels
-     */
-    english?: Array
-    /**
-     *
-     * @type {Array<FunctionalSkillsLevels>}
-     * @memberof FunctionalSkillsLevels
-     */
-    maths?: Array
-    /**
-     *
-     * @type {Array<FunctionalSkillsLevels>}
-     * @memberof FunctionalSkillsLevels
-     */
-    digiLit?: Array
   }
 
   /**
