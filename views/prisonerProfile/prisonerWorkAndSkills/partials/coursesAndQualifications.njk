@@ -11,14 +11,16 @@
 {% if courses.currentCourseData.length %}
     <h3 class="govuk-heading-s card__heading">Current courses</h3>
     {{ prisonerSummarySection(courses.currentCourseData, '', {"data-test": "courses-currentCourses"}, false, '', true) }}
-          <hr class="govuk-section-break govuk-section-break--m govuk-section-break--visible">
+        <hr class="govuk-section-break govuk-section-break--m govuk-section-break--visible">
 {% elseif courses.historicalCoursesPresent %}
     <h3 class="govuk-heading-s card__heading">Current courses</h3>
     <p class="govuk-body" data-test="courses-noCurrent">{{ offenderName }} is not currently doing any courses.</p>
 {% endif %}
 
 {% if courses.historicalCoursesPresent or courses.currentCourseData.length %}
-    <a class="govuk-link" href="{{ profileUrl }}/courses-qualifications" data-test="courses-detailsLink">View courses and qualifications details</a>
+    <p class="govuk-body">
+      <a class="govuk-link" href="{{ profileUrl }}/courses-qualifications" data-test="courses-detailsLink">View courses and qualifications details</a>
+    </p>
 {% endif %}
 
 {% if courses and not courses.historicalCoursesPresent and not courses.currentCourseData.length  %}

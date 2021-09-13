@@ -32,7 +32,7 @@
           "data-sort-value": course.dateTo
         } },
     { text: course.outcome },
-    { html: course.outcomeDetails or "<span class="govuk-visually-hidden">No outcome details</span>"  }
+    { html: course.outcomeDetails or "<span class='govuk-visually-hidden'>No outcome details</span>"  }
   ]), rows) %}
 {% endfor %}
 
@@ -88,7 +88,9 @@
     {% endif %}
     <div class="govuk-grid-row">
       <div class="govuk-grid-column-two-thirds">
-        <a href={{ profileUrl }} class="govuk-link govuk-!-display-none-print" data-test="courses-qualifications">Return to prisoner profile</a>
+        <p class="govuk-body">
+          <a href={{ profileUrl }} class="govuk-link govuk-!-display-none-print" data-test="courses-qualifications-returnLink">Return to prisoner profile</a>
+        </p>
       </div>
     </div>
     
