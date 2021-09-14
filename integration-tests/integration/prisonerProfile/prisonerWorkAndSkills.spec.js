@@ -597,6 +597,7 @@ context('Prisoner Work and Skills', () => {
             description: 'Cleaner HB1 AM',
             startDate: '2021-08-19',
             endDate: '2021-05-21',
+            isCurrentActivity: false,
           },
           {
             bookingId: 1102484,
@@ -605,6 +606,7 @@ context('Prisoner Work and Skills', () => {
             description: 'Cleaner HB1 AM',
             startDate: '2021-07-20',
             endDate: '2021-07-23',
+            isCurrentActivity: false,
           },
           {
             bookingId: 1102484,
@@ -612,7 +614,7 @@ context('Prisoner Work and Skills', () => {
             agencyLocationDescription: 'Moorland (HMP & YOI)',
             description: 'Cleaner HB1 PM',
             startDate: '2021-07-20',
-            endDate: '2021-07-23',
+            isCurrentActivity: false,
           },
         ],
       }
@@ -660,6 +662,7 @@ context('Prisoner Work and Skills', () => {
             agencyLocationDescription: 'Moorland (HMP & YOI)',
             description: 'Cleaner HB1 AM',
             startDate: '2021-08-19',
+            isCurrentActivity: true,
           },
           {
             bookingId: 1102484,
@@ -668,6 +671,7 @@ context('Prisoner Work and Skills', () => {
             description: 'Cleaner HB1 AM',
             startDate: '2021-07-20',
             endDate: '2021-07-23',
+            isCurrentActivity: false,
           },
           {
             bookingId: 1102484,
@@ -675,6 +679,7 @@ context('Prisoner Work and Skills', () => {
             agencyLocationDescription: 'Moorland (HMP & YOI)',
             description: 'Cleaner HB1 PM',
             startDate: '2021-07-20',
+            isCurrentActivity: true,
           },
         ],
       }

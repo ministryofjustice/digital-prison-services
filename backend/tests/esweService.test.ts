@@ -644,10 +644,10 @@ describe('Education skills and work experience', () => {
       })
       it('should call the endpoints with the correct prn, context and dates', async () => {
         jest.spyOn(app, 'esweEnabled', 'get').mockReturnValue(true)
-        const threeMonthsAgo = moment().subtract(3, 'months').format('YYYY-MM-DD')
+        const oneYearAgo = moment().subtract(1, 'year').format('YYYY-MM-DD')
         await service.getCurrentWork(nomisId)
         expect(systemOauthClient.getClientCredentialsTokens).toHaveBeenCalledTimes(1)
-        expect(getLearnerWorkHistoryMock).toHaveBeenCalledWith(credentialsRef, nomisId, threeMonthsAgo)
+        expect(getLearnerWorkHistoryMock).toHaveBeenCalledWith(credentialsRef, nomisId, oneYearAgo)
       })
       it('should return expected response when the prisoner is not found', async () => {
         jest.spyOn(app, 'esweEnabled', 'get').mockReturnValue(true)
@@ -673,6 +673,7 @@ describe('Education skills and work experience', () => {
               description: 'Cleaner HB1 AM',
               startDate: '2021-07-20',
               endDate: '2021-07-23',
+              isCurrentActivity: false,
             },
             {
               bookingId: 1102484,
@@ -680,7 +681,7 @@ describe('Education skills and work experience', () => {
               agencyLocationDescription: 'Moorland (HMP & YOI)',
               description: 'Cleaner HB1 PM',
               startDate: '2021-07-20',
-              endDate: '2021-07-23',
+              isCurrentActivity: false,
             },
           ],
         }
@@ -834,6 +835,7 @@ function getDummyWorkHistory(): eswe.WorkHistory {
         agencyLocationDescription: 'Moorland (HMP & YOI)',
         description: 'Cleaner HB1 AM',
         startDate: '2021-08-19',
+        isCurrentActivity: true,
       },
       {
         bookingId: 1102484,
@@ -842,6 +844,7 @@ function getDummyWorkHistory(): eswe.WorkHistory {
         description: 'Cleaner HB1 AM',
         startDate: '2021-07-20',
         endDate: '2021-07-23',
+        isCurrentActivity: false,
       },
       {
         bookingId: 1102484,
@@ -849,7 +852,7 @@ function getDummyWorkHistory(): eswe.WorkHistory {
         agencyLocationDescription: 'Moorland (HMP & YOI)',
         description: 'Cleaner HB1 PM',
         startDate: '2021-07-20',
-        endDate: '2021-07-23',
+        isCurrentActivity: false,
       },
     ],
   }
