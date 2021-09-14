@@ -41,6 +41,12 @@ declare namespace eswe {
      * @memberof WorkActivity
      */
     endDate?: string
+    /**
+     * isCurrentActivity
+     * @type {boolean}
+     * @memberof WorkActivity
+     */
+    isCurrentActivity: boolean
   }
 
   /**
