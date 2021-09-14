@@ -17,6 +17,7 @@ type LearningDifficulties = FeatureFlagged<eswe.LearningDifficultiesDisabilities
 type CurrentCoursesEnhanced = FeatureFlagged<eswe.CurrentCoursesEnhanced>
 type LearnerEducationFullDetails = FeatureFlagged<eswe.LearnerEducationFullDetails[]>
 type CurrentWork = FeatureFlagged<eswe.OffenderCurrentWork>
+type workHistoryFullDetails = FeatureFlagged<eswe.workHistoryFullDetails[]>
 
 const createFlaggedContent = <T>(content: T) => ({
   enabled: app.esweEnabled,
@@ -388,6 +389,44 @@ export default class EsweService {
         return createFlaggedContent(DEFAULT_WORK_DATA)
       }
       log.error(`Failed to get learner work history. Reason: ${e.message}`)
+    }
+    return createFlaggedContent(null)
+  }
+
+  async getWorkHistoryDetails(nomisId: string): Promise<workHistoryFullDetails> {
+    if (!app.esweEnabled) {
+      return createFlaggedContent(null)
+    }
+
+    try {
+      const context = await this.systemOauthClient.getClientCredentialsTokens()
+      const oneYearAgo = moment().subtract(1, 'year').format('YYYY-MM-DD')
+      const workHistory = await this.prisonApi.getOffenderWorkHistory(context, nomisId, oneYearAgo)
+
+      const { workActivities } = workHistory
+
+      const getEndDate = (job: eswe.WorkActivity) => {
+        if (job.isCurrentActivity) return null
+        return job.endDate
+      }
+
+      if (workActivities.length) {
+        const fullDetails = workActivities.map((job) => ({
+          role: job.description.trim(),
+          location: job.agencyLocationDescription,
+          startDate: job.startDate,
+          endDate: getEndDate(job),
+        }))
+        fullDetails.sort((a, b) => compareByDate(parseDate(a.endDate), parseDate(b.endDate), true))
+        return createFlaggedContent(fullDetails)
+      }
+      return createFlaggedContent([])
+    } catch (e) {
+      if (e.response?.status === 404) {
+        log.info(`Offender record not found in Curious.`)
+        return createFlaggedContent([])
+      }
+      log.error(`Failed to get offender work. Reason: ${e.message}`)
     }
     return createFlaggedContent(null)
   }

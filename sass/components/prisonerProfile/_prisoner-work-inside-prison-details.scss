@@ -1,0 +1,19 @@
+
+.work-inside-prison-details-width-20 {
+    width: 20%;
+  }
+  
+  .work-inside-prison-details-width-15 {
+    width: 15%;
+  }
+  
+  .work-inside-prison-details-width-10 {
+    width: 10%;
+  }
+  
+  .work-inside-prison-pagination-print-alignment {
+    text-align: right;
+    @media print {
+      text-align: left;
+    }
+  }

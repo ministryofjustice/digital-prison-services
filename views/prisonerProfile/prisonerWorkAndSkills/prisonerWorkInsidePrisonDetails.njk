@@ -1,0 +1,93 @@
+{% extends "../../partials/layout.njk" %}
+{% from "govuk/components/table/macro.njk" import govukTable %}
+{% from "../../macros/printLink.njk" import printLink %}
+
+
+{% set title =  "Work and activities inside prison for the last 12 months" %}
+{% set workDetailsList =  workHistoryInsidePrison.content %}
+
+{% block beforeContent %}
+  {{ govukBreadcrumbs({
+    items: [
+      {
+        text: "Digital Prison Services",
+        href: "/"
+      },
+      {
+        text: breadcrumbPrisonerName,
+        href: profileUrl
+      }
+    ],
+    classes: "govuk-!-display-none-print"
+  }) }}
+{% endblock %}
+
+{% set rows = [] %}
+{% for job in workDetailsList %}
+  {% set rows = (rows.push([
+    { text: job.role },
+    { text: job.location },
+    { text: job.startDate | formatTimestampToDate },
+    { text: job.endDate |formatTimestampToDate if job.endDate else 'Ongoing'}
+  ]), rows) %}
+{% endfor %}
+
+{% block content %}
+    <div class="govuk-grid-row">
+        <div class="govuk-grid-column-full">
+            <h1 class="govuk-heading-l">{{ prisonerName | possessive | safe }} work inside prison for the last 12 months</h1>
+        </div>
+    </div>
+    {% if workDetailsList.length > 0 %}
+    <div class="govuk-grid-row">
+      <div class="govuk-grid-column-full">
+        {{ printLink(align = "right") }}
+        <div class="work-inside-prison-pagination-print-alignment">
+          <p class="moj-pagination__results" data-test="courses-quals-result-number">Showing <b>{{ workDetailsList.length }}</b> {% if workDetailsList.length > 1 %}results{% else %}result{% endif %}</p>
+        </div>
+        <div class="results-table results-table__results">
+
+            {{ govukTable({
+                head: [
+                    {text: "Role"},
+                    { text: "Location", attributes: {
+                        "aria-sort": "none"
+                    } },
+                    { text: "Start date", classes: "", attributes: {
+                        "aria-sort": "none"
+                    } },
+                    { text: "End date", classes: "", attributes: {
+                        "aria-sort": "descending"
+                    } }
+                ],
+                rows: rows,
+                attributes: { "data-test": "work-inside-prison-table" }
+            }) }}
+        </div>
+      </div>
+    </div>
+    {% else %}
+    <div class="govuk-grid-row">
+        <div class="govuk-grid-column-three-quarters">
+            <p class="govuk-body" data-test="no-work-inside-prison">{{ prisonerName }} has no work inside prison for the last 12 months.</p>
+        </div>
+    </div>
+    {% endif %}
+    <div class="govuk-grid-row">
+      <div class="govuk-grid-column-two-thirds">
+        <p class="govuk-body">
+          <a href={{ profileUrl }} class="govuk-link govuk-!-display-none-print" data-test="work-inside-prison-returnLink">Return to prisoner profile</a>
+        </p>
+      </div>
+    </div>
+{% endblock %}
+
+{% block bodyEnd %}
+  {{ super() }}
+  <script src="/assets/moj/components/sortable-table/sortable-table.js"></script>
+  <script>
+    new MOJFrontend.SortableTable({
+      table: $("table")[0],
+    })
+  </script>
+{% endblock %}

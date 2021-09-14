@@ -31,6 +31,7 @@ import paginationService from '../services/paginationService'
 import referenceCodesServiceFactory from '../controllers/reference-codes-service'
 import adjudicationsHistoryService from '../services/adjudicationHistory'
 import coursesQualifications from '../controllers/prisonerProfile/prisonerCoursesQualificationsDetails'
+import workInsidePrison from '../controllers/prisonerProfile/prisonerWorkInsidePrisonDetails'
 
 const router = express.Router({ mergeParams: true })
 
@@ -104,6 +105,7 @@ const controller = ({
   )
   router.get('/work-and-skills', prisonerWorkAndSkills({ prisonerProfileService, esweService }))
   router.get('/courses-qualifications', coursesQualifications({ prisonApi, esweService }))
+  router.get('/work-inside-prison', workInsidePrison({ prisonApi, esweService }))
   // @ts-expect-error ts-migrate(2345) FIXME: Argument of type '{ prisonApi: any; logError: any;... Remove this comment to see the full error message
   router.get('/visits', prisonerVisits({ prisonApi, logError }))
   // @ts-expect-error ts-migrate(2345) FIXME: Argument of type '{ prisonApi: any; logError: any;... Remove this comment to see the full error message
