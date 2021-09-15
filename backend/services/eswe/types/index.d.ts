@@ -245,4 +245,36 @@ declare namespace eswe {
      */
     outcomeDetails?: string
   }
+
+  /**
+   *
+   * @export
+   * @interface workHistoryFullDetails
+   */
+  interface workHistoryFullDetails {
+    /**
+     * Role
+     * @type {string}
+     * @memberof workHistoryFullDetails
+     */
+    role: string
+    /**
+     * location
+     * @type {string}
+     * @memberof workHistoryFullDetails
+     */
+    location: string
+    /**
+     * start date
+     * @type {string}
+     * @memberof workHistoryFullDetails
+     */
+    startDate: string
+    /**
+     * end date
+     * @type {string}
+     * @memberof workHistoryFullDetails
+     */
+    endDate: string
+  }
 }
