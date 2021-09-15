@@ -26,7 +26,7 @@ const shouldPromoteToMainActivity = (offender, newActivity) => {
 }
 
 const isStayingOnWing = (activities) => {
-  const stayingOnWingCodes = ['WOW', 'STAYONWING', 'UNEMPLOYED', 'RETIRED']
+  const stayingOnWingCodes = ['WOW', 'STAYONWING', 'UNEMPLOYED', 'RETIRED', 'IN_CELL']
   const leavingWingActivities = activities.filter((activity) => !stayingOnWingCodes.includes(activity.locationCode))
 
   return leavingWingActivities.length === 0
