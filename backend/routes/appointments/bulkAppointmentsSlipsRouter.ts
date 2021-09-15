@@ -34,8 +34,6 @@ export default ({ prisonApi, logError }) =>
       .map((offenderSummaryData) => offenderSummaryData.content)
       .reduce((flattenedOffenders, offender) => flattenedOffenders.concat(offender), [])
 
-    console.error({ offenderSummaries })
-
     const prisonersListedWithCellInfo = prisonersListed.map((prisoner) => {
       const prisonerDetails = offenderSummaries.find((offender) => prisoner?.offenderNo === offender?.offenderNo)
 
