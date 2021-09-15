@@ -27,8 +27,8 @@
   {% set rows = (rows.push([
     { text: job.role },
     { text: job.location },
-    { text: job.startDate | formatTimestampToDate },
-    { text: job.endDate |formatTimestampToDate if job.endDate else 'Ongoing'}
+    { text: job.startDate | formatTimestampToDate, attributes: { "data-sort-value": job.startDate | formatDate("X") } },
+    { text: job.endDate | formatTimestampToDate if job.endDate else "Ongoing", attributes: { "data-sort-value": job.endDate | checkValidAndFormatDate } }
   ]), rows) %}
 {% endfor %}
 
@@ -43,7 +43,7 @@
       <div class="govuk-grid-column-full">
         {{ printLink(align = "right") }}
         <div class="work-inside-prison-pagination-print-alignment">
-          <p class="moj-pagination__results" data-test="courses-quals-result-number">Showing <b>{{ workDetailsList.length }}</b> {% if workDetailsList.length > 1 %}results{% else %}result{% endif %}</p>
+          <p class="moj-pagination__results" data-test="workInsidePrison-result-number">Showing <b>{{ workDetailsList.length }}</b> {% if workDetailsList.length > 1 %}results{% else %}result{% endif %}</p>
         </div>
         <div class="results-table results-table__results">
 
@@ -54,10 +54,13 @@
                         "aria-sort": "none"
                     } },
                     { text: "Start date", classes: "", attributes: {
-                        "aria-sort": "none"
+                        "aria-sort": "none",
+                        "data-test": "workInsidePrison-start-date-header"
                     } },
                     { text: "End date", classes: "", attributes: {
-                        "aria-sort": "descending"
+                        "aria-sort": "descending",
+                        "data-test": "workInsidePrison-end-date-header"
+
                     } }
                 ],
                 rows: rows,

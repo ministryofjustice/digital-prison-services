@@ -357,6 +357,12 @@ describe('Education skills and work experience', () => {
           startDate: '2021-07-20',
         },
         {
+          endDate: '2021-07-22',
+          location: 'Moorland (HMP & YOI)',
+          role: 'Library HB1 AM',
+          startDate: '2019-07-20',
+        },
+        {
           endDate: '2021-05-11',
           location: 'Moorland (HMP & YOI)',
           role: 'Cleaner HB1 PM',
@@ -901,6 +907,15 @@ function getDummyWorkHistory(): eswe.WorkHistory {
         description: 'Cleaner HB1 AM',
         startDate: '2021-07-20',
         endDate: '2021-07-23',
+        isCurrentActivity: false,
+      },
+      {
+        bookingId: 1102484,
+        agencyLocationId: 'MDI',
+        agencyLocationDescription: 'Moorland (HMP & YOI)',
+        description: 'Library HB1 AM',
+        startDate: '2019-07-20',
+        endDate: '2021-07-22',
         isCurrentActivity: false,
       },
       {
