@@ -130,7 +130,7 @@
     "@typescript-eslint/eslint-plugin": "^4.28.0",
     "@typescript-eslint/parser": "^4.28.0",
     "audit-ci": "^3.1.1",
-    "axios-mock-adapter": "^1.19.0",
+    "axios-mock-adapter": "^1.20.0",
     "babel-jest": "^27.0.5",
     "babel-loader": "^8.2.2",
     "copy-webpack-plugin": "^7.0.0",
