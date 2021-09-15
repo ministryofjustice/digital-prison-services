@@ -838,6 +838,21 @@ describe('Houseblock list controller', () => {
         endTime: '2017-10-15T18:30:00',
         locationCode: 'RETIRED',
       },
+      {
+        bookingId: 6,
+        offenderNo: 'A1234AF',
+        firstName: 'JIM',
+        lastName: 'BROWN',
+        cellLocation: 'LEI-A-1-6',
+        event: 'WORK',
+        eventType: 'PRISON_ACT',
+        payRate: 1.4,
+        eventDescription: 'Do some work',
+        comment: 'comment14',
+        startTime: '2017-10-16T18:00:00',
+        endTime: '2017-10-16T18:30:00',
+        locationCode: 'IN_CELL',
+      },
     ]
 
     it('should return only offenders leaving the wing', async () => {
@@ -911,7 +926,7 @@ describe('Houseblock list controller', () => {
 
       const response = await houseblockList({}, 'LEI', 'Houseblock 1', '15/10/2017', 'ED', 'staying')
 
-      expect(response.length).toEqual(3)
+      expect(response.length).toEqual(4)
       expect(response).toEqual(
         expect.arrayContaining([
           expect.objectContaining({
@@ -976,6 +991,28 @@ describe('Houseblock list controller', () => {
                 eventType: 'PRISON_ACT',
                 mainActivity: true,
                 locationCode: 'RETIRED',
+              }),
+            ]),
+          }),
+        ]),
+        expect.arrayContaining([
+          expect.objectContaining({
+            bookingId: 6,
+            firstName: 'JIM',
+            lastName: 'BROWN',
+            offenderNo: 'A1234AF',
+            stayingOnWing: true,
+            activities: expect.arrayContaining([
+              expect.objectContaining({
+                bookingId: 6,
+                firstName: 'JIM',
+                lastName: 'BROWN',
+                offenderNo: 'A1234AF',
+                event: 'WORK',
+                eventDescription: 'Do some work',
+                eventType: 'PRISON_ACT',
+                mainActivity: true,
+                locationCode: 'IN_CELL',
               }),
             ]),
           }),
