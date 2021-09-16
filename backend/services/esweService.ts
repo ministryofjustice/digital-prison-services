@@ -123,6 +123,13 @@ export default class EsweService {
     private readonly prisonApi: any
   ) {}
 
+  callWorkHistoryApi = async (nomisId: string) => {
+    const context = await this.systemOauthClient.getClientCredentialsTokens()
+    const oneYearAgo = moment().subtract(1, 'year').format('YYYY-MM-DD')
+    const workHistory = await this.prisonApi.getOffenderWorkHistory(context, nomisId, oneYearAgo)
+    return workHistory.workActivities
+  }
+
   async getLearnerProfiles(nomisId: string): Promise<LearnerProfiles> {
     if (!app.esweEnabled) {
       return createFlaggedContent([])
@@ -362,11 +369,7 @@ export default class EsweService {
     }
 
     try {
-      const context = await this.systemOauthClient.getClientCredentialsTokens()
-      const oneYearAgo = moment().subtract(1, 'year').format('YYYY-MM-DD')
-      const workHistory = await this.prisonApi.getOffenderWorkHistory(context, nomisId, oneYearAgo)
-
-      const { workActivities } = workHistory
+      const workActivities = await this.callWorkHistoryApi(nomisId)
 
       if (workActivities.length) {
         const currentJobs = workActivities
@@ -399,11 +402,7 @@ export default class EsweService {
     }
 
     try {
-      const context = await this.systemOauthClient.getClientCredentialsTokens()
-      const oneYearAgo = moment().subtract(1, 'year').format('YYYY-MM-DD')
-      const workHistory = await this.prisonApi.getOffenderWorkHistory(context, nomisId, oneYearAgo)
-
-      const { workActivities } = workHistory
+      const workActivities = await this.callWorkHistoryApi(nomisId)
 
       const getEndDate = (job: eswe.WorkActivity) => {
         if (job.isCurrentActivity) return null
