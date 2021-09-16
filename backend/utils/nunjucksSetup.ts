@@ -47,7 +47,7 @@ export default (app) => {
 
   njkEnv.addFilter('formatDate', (value, format) => (value ? moment(value).format(format) : null))
 
-  njkEnv.addFilter('checkValidAndFormatDate', (value, format) => {
+  njkEnv.addFilter('defaultSortDate', (value, format) => {
     if (value) {
       return Number(value) ? value : moment(value).format(format)
     }
@@ -152,10 +152,6 @@ export default (app) => {
     if (value === 0) return value
 
     return value || specifiedText || '--'
-  })
-
-  njkEnv.addFilter('sortableDate', (date) => {
-    return moment(date).format('YYYYMMDD')
   })
 
   njkEnv.addFilter('getDate', getDate)
