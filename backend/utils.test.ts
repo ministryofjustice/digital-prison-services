@@ -21,6 +21,7 @@ import {
   mapToQueryString,
   properCaseName,
   putLastNameFirst,
+  stringWithAbbreviationsProcessor,
 } from './utils'
 
 class TestError extends Error {
@@ -470,5 +471,32 @@ describe('getWith404AsNull', () => {
     } catch (error) {
       expect(error).toEqual(new TestError('response', { status: 500 }))
     }
+  })
+})
+
+describe('stringWithAbbreviationsProcessor', () => {
+  it('should return null when the string passed in is null', () => {
+    const actual = stringWithAbbreviationsProcessor(null)
+    expect(actual).toEqual(null)
+  })
+  it('should the string in sentence case with abbreviations intact and uppercase', () => {
+    const actual = stringWithAbbreviationsProcessor('MOORLAND (HMP & YOI)')
+    expect(actual).toEqual('Moorland (HMP & YOI)')
+  })
+  it('should the string in sentence case with abbreviations intact and uppercase', () => {
+    const actual = stringWithAbbreviationsProcessor('THORN CROSS (HMPYOI)')
+    expect(actual).toEqual('Thorn Cross (HMPYOI)')
+  })
+  it('should the string in sentence case if there are no abbreviations', () => {
+    const actual = stringWithAbbreviationsProcessor('DOVER IMMIGRATION REMOVAL CENTRE')
+    expect(actual).toEqual('Dover Immigration Removal Centre')
+  })
+  it('should return the string in sentence case and naked abbreviation in capitals', () => {
+    const actual = stringWithAbbreviationsProcessor('HMP HEWELL')
+    expect(actual).toEqual('HMP Hewell')
+  })
+  it('should return the string in sentence case when there is more than one abbreviation, naked or in brackets', () => {
+    const actual = stringWithAbbreviationsProcessor('HMP BUCKLEY HALL (CASU)')
+    expect(actual).toEqual('HMP Buckley Hall (CASU)')
   })
 })

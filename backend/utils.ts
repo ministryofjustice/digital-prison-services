@@ -1,5 +1,6 @@
 import moment from 'moment'
 import { DATE_TIME_FORMAT_SPEC } from '../common/dateHelpers'
+import abbreviations from '../common/abbreviations'
 
 export const switchDateFormat = (displayDate, fromFormat = 'DD/MM/YYYY') => {
   if (displayDate) {
@@ -193,13 +194,15 @@ export const hyphenatedStringToCamel = (string) => string.replace(/[-\s]([a-z])/
 export const formatCurrency = (number, currency) =>
   typeof number === 'number' ? number.toLocaleString('en-GB', { style: 'currency', currency: currency || 'GBP' }) : ''
 
-export const capitalizeUppercaseString = (string) =>
-  string
-    ? string
-        .split(' ')
-        .map((name) => capitalize(name))
-        .join(' ')
-    : null
+export const capitalizeUppercaseString = (string) => {
+  if (!string) return null
+  return string
+    .replace('(', '( ')
+    .split(' ')
+    .map((name) => capitalize(name))
+    .join(' ')
+    .replace('( ', '(')
+}
 
 export const putLastNameFirst = (firstName, lastName) => {
   if (!firstName && !lastName) return null
@@ -305,6 +308,21 @@ export const getWith404AsNull = async (apiCall) =>
       })
   )
 
+export const stringWithAbbreviationsProcessor = (string) => {
+  if (string === null) return null
+  let capitalizedString = capitalizeUppercaseString(string)
+  const matches = abbreviations.filter((abbr) => string.includes(abbr))
+  if (matches.length) {
+    return matches
+      .map((abbr) => {
+        capitalizedString = capitalizedString.replace(capitalizeUppercaseString(abbr), abbr.toUpperCase())
+        return capitalizedString
+      })
+      .pop()
+  }
+  return capitalizedString
+}
+
 export default {
   isBeforeToday,
   isToday,
@@ -353,4 +371,5 @@ export default {
   isXHRRequest,
   joinUrlPath,
   getWith404AsNull,
+  stringWithAbbreviationsProcessor,
 }
