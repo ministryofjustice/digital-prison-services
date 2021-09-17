@@ -145,4 +145,37 @@ context('A user can add a case note', () => {
         expect($errors.get(4).innerText).to.contain('Enter the minutes using 59 or less')
       })
   })
+
+  it('Should show OMiC open case note warning when error messages shown', () => {
+    const page = CreateCaseNotePage.verifyOnPage()
+    const form = page.form()
+    cy.get('form').click()
+    form.hours().clear()
+    form.minutes().clear()
+
+    cy.server()
+    cy.route({ method: 'GET', url: '/prisoner/A12345/add-case-note?typeCode=OMIC' }).as('getOmicTypes')
+    form.type().select('OMIC')
+    cy.wait('@getOmicTypes')
+
+    form.subType().select('OPEN_COMM')
+    page.omicOpenWarning().should('be.visible')
+    page.omicOpenHint().should('be.visible')
+
+    form.submitButton().click()
+
+    CreateCaseNotePage.verifyOnPage()
+    page.errorSummaryTitle().contains('There is a problem')
+    page
+      .errorSummaryList()
+      .find('li')
+      .then(($errors) => {
+        expect($errors.get(0).innerText).to.contain('Enter what happened')
+        expect($errors.get(1).innerText).to.contain('Enter an hour which is 23 or less')
+        expect($errors.get(2).innerText).to.contain('Enter the minutes using 59 or less')
+      })
+
+    page.omicOpenWarning().should('be.visible')
+    page.omicOpenHint().should('be.visible')
+  })
 })

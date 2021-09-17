@@ -4,6 +4,12 @@ $(function () {
   var subTypesUrl = $('#subTypesUrl').val()
   var omicOpenWarnings = $('.case-notes-omic-open')
 
+  if (omicOpenWarnings.length) {
+    var selectedSubTypeOption = subTypeSelect.children('option:selected').val()
+    var style = selectedSubTypeOption == 'OPEN_COMM' ? 'block' : 'none'
+    if (omicOpenWarnings.length) omicOpenWarnings.prop('style', 'display: ' + style)
+  }
+
   typeSelect.on('change', function (e) {
     var selectedTypeOption = e.target && e.target.options && e.target.options[e.target.options.selectedIndex]
     if (!selectedTypeOption) return
