@@ -479,15 +479,15 @@ describe('stringWithAbbreviationsProcessor', () => {
     const actual = stringWithAbbreviationsProcessor(null)
     expect(actual).toEqual(null)
   })
-  it('should the string in sentence case with abbreviations intact and uppercase', () => {
+  it('should return the string in sentence case with abbreviations intact and uppercase - one word name and two word acronym', () => {
     const actual = stringWithAbbreviationsProcessor('MOORLAND (HMP & YOI)')
     expect(actual).toEqual('Moorland (HMP & YOI)')
   })
-  it('should the string in sentence case with abbreviations intact and uppercase', () => {
+  it('should return the string in sentence case with abbreviations intact and uppercase - two word name and one word acronym', () => {
     const actual = stringWithAbbreviationsProcessor('THORN CROSS (HMPYOI)')
     expect(actual).toEqual('Thorn Cross (HMPYOI)')
   })
-  it('should the string in sentence case if there are no abbreviations', () => {
+  it('should return the string in sentence case if there are no abbreviations', () => {
     const actual = stringWithAbbreviationsProcessor('DOVER IMMIGRATION REMOVAL CENTRE')
     expect(actual).toEqual('Dover Immigration Removal Centre')
   })
