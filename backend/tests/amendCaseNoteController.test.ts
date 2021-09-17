@@ -144,6 +144,48 @@ describe('Amendment case note', () => {
         postAmendmentUrl: 'http://localhost:3002/prisoner/case-notes/amend-case-note/1',
         prisonerName: 'Bob Smith',
         amendments: [{ text: 'This is an amendment' }, { text: 'This is an amendment' }],
+        isOmicOpenCaseNote: false,
+      })
+    })
+
+    it('should return case note details for omic open case note', async () => {
+      // @ts-expect-error ts-migrate(2339) FIXME: Property 'getCaseNote' does not exist on type '{}'... Remove this comment to see the full error message
+      caseNotesApi.getCaseNote = jest.fn().mockResolvedValue({
+        caseNoteId: 1,
+        authorUserId: '1',
+        offenderIdentifier: 'A12345',
+        type: 'OMIC',
+        typeDescription: 'OMiC',
+        subType: 'OPEN_COMM',
+        subTypeDescription: 'Open Case Note',
+        source: 'INST',
+        text: 'This is some text',
+        amendments: [
+          {
+            additionalNoteText: 'This is an amendment',
+          },
+          {
+            additionalNoteText: 'This is an amendment',
+          },
+        ],
+      })
+
+      await controller.index(req, res)
+
+      // @ts-expect-error ts-migrate(2339) FIXME: Property 'render' does not exist on type '{}'.
+      expect(res.render).toHaveBeenCalledWith('amendCaseNote.njk', {
+        errors: undefined,
+        formValues: undefined,
+        prisonerNameForBreadcrumb: 'Smith, Bob',
+        backToCaseNotes: '/prisoner/A12345/case-notes',
+        caseNoteId: 1,
+        prisonNumber: 'A12345',
+        typeSubType: 'Omic: Open case note',
+        caseNoteText: 'This is some text',
+        postAmendmentUrl: 'http://localhost:3002/prisoner/case-notes/amend-case-note/1',
+        prisonerName: 'Bob Smith',
+        amendments: [{ text: 'This is an amendment' }, { text: 'This is an amendment' }],
+        isOmicOpenCaseNote: true,
       })
     })
   })
