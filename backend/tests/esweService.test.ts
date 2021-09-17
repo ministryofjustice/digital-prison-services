@@ -22,6 +22,7 @@ describe('Education skills and work experience', () => {
   const dummyEducations = getDummyEducations()
   const dummyGoals = getDummyGoals()
   const dummyWorkHistory = getDummyWorkHistory()
+  const dummyPrisonerDetails = getDummyPrisonerDetails()
   const credentialsRef = {}
   const curiousApi = {} as CuriousApi
   const prisonApi = {} as any
@@ -34,23 +35,27 @@ describe('Education skills and work experience', () => {
   let getLearnerLatestAssessmentsMock
   let getLearnerGoalsMock
   let getLearnerWorkHistoryMock
+  let getPrisonerDetailsMock
   beforeEach(() => {
     getLearnerProfilesMock = jest.fn()
     getLearnerEducationMock = jest.fn()
     getLearnerLatestAssessmentsMock = jest.fn()
     getLearnerGoalsMock = jest.fn()
     getLearnerWorkHistoryMock = jest.fn()
+    getPrisonerDetailsMock = jest.fn()
     curiousApi.getLearnerProfiles = getLearnerProfilesMock
     curiousApi.getLearnerEducation = getLearnerEducationMock
     curiousApi.getLearnerLatestAssessments = getLearnerLatestAssessmentsMock
     curiousApi.getLearnerGoals = getLearnerGoalsMock
     prisonApi.getOffenderWorkHistory = getLearnerWorkHistoryMock
+    prisonApi.getPrisonerDetails = getPrisonerDetailsMock
     systemOauthClient.getClientCredentialsTokens.mockReset()
 
     getLearnerProfilesMock.mockResolvedValue(dummyLearnerProfiles)
     getLearnerEducationMock.mockResolvedValue(dummyEducations)
     getLearnerGoalsMock.mockResolvedValue(dummyGoals)
     getLearnerWorkHistoryMock.mockResolvedValue(dummyWorkHistory)
+    getPrisonerDetailsMock.mockResolvedValue(dummyPrisonerDetails)
 
     systemOauthClient.getClientCredentialsTokens.mockReturnValue(credentialsRef)
     service = EsweService.create(curiousApi, systemOauthClient, prisonApi)
@@ -349,6 +354,12 @@ describe('Education skills and work experience', () => {
           location: 'Moorland (HMP & YOI)',
           role: 'Cleaner BB1 AM',
           startDate: '2021-08-19',
+        },
+        {
+          endDate: null,
+          location: 'Wayland (HMP)',
+          role: 'Library AM',
+          startDate: '2020-06-18',
         },
         {
           endDate: '2021-07-23',
@@ -697,11 +708,18 @@ describe('Education skills and work experience', () => {
         expect(actual.enabled).toBeFalsy()
         expect(actual.content).toBeNull()
         expect(getLearnerEducationMock).not.toHaveBeenCalled()
+        expect(getPrisonerDetailsMock).not.toHaveBeenCalled()
         expect(systemOauthClient.getClientCredentialsTokens).not.toHaveBeenCalled()
       })
-      it('should return null content on error', async () => {
+      it('should return null content on work history api error', async () => {
         jest.spyOn(app, 'esweEnabled', 'get').mockReturnValue(true)
         getLearnerWorkHistoryMock.mockRejectedValue(new Error('error'))
+        const actual = await service.getCurrentWork(nomisId)
+        expect(actual.content).toBeNull()
+      })
+      it('should return null content on prisoner details api error', async () => {
+        jest.spyOn(app, 'esweEnabled', 'get').mockReturnValue(true)
+        getPrisonerDetailsMock.mockRejectedValue(new Error('error'))
         const actual = await service.getCurrentWork(nomisId)
         expect(actual.content).toBeNull()
       })
@@ -757,6 +775,20 @@ describe('Education skills and work experience', () => {
         }
         expect(actual.content).toEqual(expected)
       })
+      it('should filter out work that is not in the current castload', async () => {
+        jest.spyOn(app, 'esweEnabled', 'get').mockReturnValue(true)
+        const actual = await service.getCurrentWork(nomisId)
+        const expected = {
+          currentJobs: [
+            {
+              label: 'Cleaner BB1 AM',
+              value: 'Started on 19 August 2021',
+            },
+          ],
+          workHistoryPresent: true,
+        }
+        expect(actual.content).toEqual(expected)
+      })
       it('should return the expected response if the user has current work and historical work', async () => {
         jest.spyOn(app, 'esweEnabled', 'get').mockReturnValue(true)
         const actual = await service.getCurrentWork(nomisId)
@@ -774,6 +806,38 @@ describe('Education skills and work experience', () => {
     })
   })
 })
+
+function getDummyPrisonerDetails() {
+  return [
+    {
+      offenderNo: 'G6123VU',
+      firstName: 'JOHN',
+      lastName: 'SAUNDERS',
+      dateOfBirth: '1990-10-12',
+      gender: 'Male',
+      sexCode: 'M',
+      nationalities: 'multiple nationalities field',
+      currentlyInPrison: 'Y',
+      latestBookingId: 1102484,
+      latestLocationId: 'MDI',
+      latestLocation: 'Moorland (HMP & YOI)',
+      internalLocation: 'MDI-3-2-026',
+      pncNumber: '08/359381C',
+      croNumber: '400862/08W',
+      ethnicity: 'White: Eng./Welsh/Scot./N.Irish/British',
+      ethnicityCode: 'W1',
+      birthCountry: 'England',
+      religion: 'Celestial Church of God',
+      religionCode: 'CCOG',
+      convictedStatus: 'Convicted',
+      legalStatus: 'RECALL',
+      imprisonmentStatus: 'CUR_ORA',
+      imprisonmentStatusDesc: 'ORA Recalled from Curfew Conditions',
+      receptionDate: '2016-05-30',
+      maritalStatus: 'No',
+    },
+  ]
+}
 
 function getDummyLearnerProfiles(): curious.LearnerProfile[] {
   return [
@@ -898,6 +962,14 @@ function getDummyWorkHistory(): eswe.WorkHistory {
         agencyLocationDescription: 'Moorland (HMP & YOI)',
         description: 'Cleaner BB1 AM',
         startDate: '2021-08-19',
+        isCurrentActivity: true,
+      },
+      {
+        bookingId: 1102484,
+        agencyLocationId: 'MDI',
+        agencyLocationDescription: 'Wayland (HMP)',
+        description: 'Library AM',
+        startDate: '2020-06-18',
         isCurrentActivity: true,
       },
       {

@@ -18,6 +18,36 @@ context('Prisoner Work and Skills', () => {
     offenderNo,
   }
 
+  const prisonerDetails = [
+    {
+      offenderNo: 'G6123VU',
+      firstName: 'JOHN',
+      lastName: 'SAUNDERS',
+      dateOfBirth: '1990-10-12',
+      gender: 'Male',
+      sexCode: 'M',
+      nationalities: 'multiple nationalities field',
+      currentlyInPrison: 'Y',
+      latestBookingId: 1102484,
+      latestLocationId: 'MDI',
+      latestLocation: 'Moorland (HMP & YOI)',
+      internalLocation: 'MDI-3-2-026',
+      pncNumber: '08/359381C',
+      croNumber: '400862/08W',
+      ethnicity: 'White: Eng./Welsh/Scot./N.Irish/British',
+      ethnicityCode: 'W1',
+      birthCountry: 'England',
+      religion: 'Celestial Church of God',
+      religionCode: 'CCOG',
+      convictedStatus: 'Convicted',
+      legalStatus: 'RECALL',
+      imprisonmentStatus: 'CUR_ORA',
+      imprisonmentStatusDesc: 'ORA Recalled from Curfew Conditions',
+      receptionDate: '2016-05-30',
+      maritalStatus: 'No',
+    },
+  ]
+
   context('functional skills section', () => {
     context('When there is no data because of an api call failure', () => {
       const apiErrorText = 'We cannot show these details right now. Try reloading the page.'
@@ -544,6 +574,7 @@ context('Prisoner Work and Skills', () => {
 
         cy.task('stubPrisonerProfileHeaderData', prisonerProfileHeaderData)
         cy.task('stubOffenderWorkHistory', emptyWork)
+        cy.task('stubPrisonerDetails', prisonerDetails)
       })
 
       beforeEach(() => {
@@ -570,7 +601,7 @@ context('Prisoner Work and Skills', () => {
           {
             bookingId: 1102484,
             agencyLocationId: 'MDI',
-            agencyLocationDescription: 'MOORLAND (HMP & YOI)',
+            agencyLocationDescription: 'Moorland (HMP & YOI)',
             description: 'Cleaner HB1 AM',
             startDate: '2021-08-19',
             endDate: '2021-05-21',
@@ -579,7 +610,7 @@ context('Prisoner Work and Skills', () => {
           {
             bookingId: 1102484,
             agencyLocationId: 'MDI',
-            agencyLocationDescription: 'MOORLAND (HMP & YOI)',
+            agencyLocationDescription: 'Moorland (HMP & YOI)',
             description: 'Cleaner HB1 AM',
             startDate: '2021-07-20',
             endDate: '2021-07-23',
@@ -588,7 +619,7 @@ context('Prisoner Work and Skills', () => {
           {
             bookingId: 1102484,
             agencyLocationId: 'MDI',
-            agencyLocationDescription: 'MOORLAND (HMP & YOI)',
+            agencyLocationDescription: 'Moorland (HMP & YOI)',
             description: 'Cleaner HB1 PM',
             startDate: '2021-07-20',
             isCurrentActivity: false,
@@ -604,6 +635,7 @@ context('Prisoner Work and Skills', () => {
 
         cy.task('stubPrisonerProfileHeaderData', prisonerProfileHeaderData)
         cy.task('stubOffenderWorkHistory', dummyWorkHistory)
+        cy.task('stubPrisonerDetails', prisonerDetails)
       })
 
       beforeEach(() => {
@@ -636,7 +668,7 @@ context('Prisoner Work and Skills', () => {
           {
             bookingId: 1102484,
             agencyLocationId: 'MDI',
-            agencyLocationDescription: 'MOORLAND (HMP & YOI)',
+            agencyLocationDescription: 'Moorland (HMP & YOI)',
             description: 'Cleaner HB1 AM',
             startDate: '2021-08-19',
             isCurrentActivity: true,
@@ -644,7 +676,7 @@ context('Prisoner Work and Skills', () => {
           {
             bookingId: 1102484,
             agencyLocationId: 'MDI',
-            agencyLocationDescription: 'MOORLAND (HMP & YOI)',
+            agencyLocationDescription: 'Moorland (HMP & YOI)',
             description: 'Cleaner HB1 AM',
             startDate: '2021-07-20',
             endDate: '2021-07-23',
@@ -653,9 +685,17 @@ context('Prisoner Work and Skills', () => {
           {
             bookingId: 1102484,
             agencyLocationId: 'MDI',
-            agencyLocationDescription: 'MOORLAND (HMP & YOI)',
+            agencyLocationDescription: 'Moorland (HMP & YOI)',
             description: 'Cleaner HB1 PM',
             startDate: '2021-07-20',
+            isCurrentActivity: true,
+          },
+          {
+            bookingId: 1102484,
+            agencyLocationId: 'MDI',
+            agencyLocationDescription: 'Wayland (HMP)',
+            description: 'Library PM',
+            startDate: '2020-02-01',
             isCurrentActivity: true,
           },
         ],
@@ -670,6 +710,7 @@ context('Prisoner Work and Skills', () => {
 
         cy.task('stubPrisonerProfileHeaderData', prisonerProfileHeaderData)
         cy.task('stubOffenderWorkHistory', dummyWorkHistory)
+        cy.task('stubPrisonerDetails', prisonerDetails)
       })
 
       beforeEach(() => {
