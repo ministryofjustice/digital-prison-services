@@ -119,7 +119,7 @@ context('Prisoner Work and Skills', () => {
           qualifications: [
             {
               establishmentId: 'MDI',
-              establishmentName: 'HMP Moorland',
+              establishmentName: 'MOORLAND (HMP & YOI)',
               qualification: {
                 qualificationType: 'English',
                 qualificationGrade: 'Level 1',
@@ -128,7 +128,7 @@ context('Prisoner Work and Skills', () => {
             },
             {
               establishmentId: 'MDI',
-              establishmentName: 'HMP Moorland',
+              establishmentName: 'MOORLAND (HMP & YOI)',
               qualification: {
                 qualificationType: 'Maths',
                 qualificationGrade: 'Level 1',
@@ -137,7 +137,7 @@ context('Prisoner Work and Skills', () => {
             },
             {
               establishmentId: 'MDI',
-              establishmentName: 'HMP Moorland',
+              establishmentName: 'MOORLAND (HMP & YOI)',
               qualification: {
                 qualificationType: 'Digital Literacy',
                 qualificationGrade: 'Level 2',
@@ -185,13 +185,13 @@ context('Prisoner Work and Skills', () => {
               cy.get($summaryValues).its('length').should('eq', 9)
               expect($summaryValues.get(0).innerText).to.contain('Level 1')
               expect($summaryValues.get(1).innerText).to.contain('13 May 2021')
-              expect($summaryValues.get(2).innerText).to.contain('HMP Moorland')
+              expect($summaryValues.get(2).innerText).to.contain('Moorland (HMP & YOI)')
               expect($summaryValues.get(3).innerText).to.contain('Level 1')
               expect($summaryValues.get(4).innerText).to.contain('20 May 2021')
-              expect($summaryValues.get(5).innerText).to.contain('HMP Moorland')
+              expect($summaryValues.get(5).innerText).to.contain('Moorland (HMP & YOI)')
               expect($summaryValues.get(6).innerText).to.contain('Level 2')
               expect($summaryValues.get(7).innerText).to.contain('19 May 2021')
-              expect($summaryValues.get(8).innerText).to.contain('HMP Moorland')
+              expect($summaryValues.get(8).innerText).to.contain('Moorland (HMP & YOI)')
             })
         })
       })
@@ -529,29 +529,6 @@ context('Prisoner Work and Skills', () => {
         cy.get('[data-test="work-header"]').should('not.exist')
       })
     })
-    // context('When the prisoner is not in Curious', () => {
-    //   const error = {
-    //     errorCode: 'VC404',
-    //     errorMessage: 'Resource not found',
-    //     httpStatusCode: 404,
-    //   }
-
-    //   before(() => {
-    //     cy.task('reset')
-    //     cy.clearCookies()
-    //     cy.task('reset')
-    //     cy.task('stubLogin', { username: 'ITAG_USER', caseload: 'MDI' })
-    //     cy.login()
-
-    //     cy.task('stubPrisonerProfileHeaderData', prisonerProfileHeaderData)
-
-    //     cy.task('stubWorkAndSkillsApi404Errors', error)
-    //   })
-
-    //   beforeEach(() => {
-    //     Cypress.Cookies.preserveOnce('hmpps-session-dev')
-    //   })
-    // })
     context('When there is no data', () => {
       const emptyWork = {
         offenderNo: 'G9981UK',
@@ -593,7 +570,7 @@ context('Prisoner Work and Skills', () => {
           {
             bookingId: 1102484,
             agencyLocationId: 'MDI',
-            agencyLocationDescription: 'Moorland (HMP & YOI)',
+            agencyLocationDescription: 'MOORLAND (HMP & YOI)',
             description: 'Cleaner HB1 AM',
             startDate: '2021-08-19',
             endDate: '2021-05-21',
@@ -602,7 +579,7 @@ context('Prisoner Work and Skills', () => {
           {
             bookingId: 1102484,
             agencyLocationId: 'MDI',
-            agencyLocationDescription: 'Moorland (HMP & YOI)',
+            agencyLocationDescription: 'MOORLAND (HMP & YOI)',
             description: 'Cleaner HB1 AM',
             startDate: '2021-07-20',
             endDate: '2021-07-23',
@@ -611,7 +588,7 @@ context('Prisoner Work and Skills', () => {
           {
             bookingId: 1102484,
             agencyLocationId: 'MDI',
-            agencyLocationDescription: 'Moorland (HMP & YOI)',
+            agencyLocationDescription: 'MOORLAND (HMP & YOI)',
             description: 'Cleaner HB1 PM',
             startDate: '2021-07-20',
             isCurrentActivity: false,
@@ -659,7 +636,7 @@ context('Prisoner Work and Skills', () => {
           {
             bookingId: 1102484,
             agencyLocationId: 'MDI',
-            agencyLocationDescription: 'Moorland (HMP & YOI)',
+            agencyLocationDescription: 'MOORLAND (HMP & YOI)',
             description: 'Cleaner HB1 AM',
             startDate: '2021-08-19',
             isCurrentActivity: true,
@@ -667,7 +644,7 @@ context('Prisoner Work and Skills', () => {
           {
             bookingId: 1102484,
             agencyLocationId: 'MDI',
-            agencyLocationDescription: 'Moorland (HMP & YOI)',
+            agencyLocationDescription: 'MOORLAND (HMP & YOI)',
             description: 'Cleaner HB1 AM',
             startDate: '2021-07-20',
             endDate: '2021-07-23',
@@ -676,7 +653,7 @@ context('Prisoner Work and Skills', () => {
           {
             bookingId: 1102484,
             agencyLocationId: 'MDI',
-            agencyLocationDescription: 'Moorland (HMP & YOI)',
+            agencyLocationDescription: 'MOORLAND (HMP & YOI)',
             description: 'Cleaner HB1 PM',
             startDate: '2021-07-20',
             isCurrentActivity: true,

@@ -1,6 +1,6 @@
 import moment, { Moment } from 'moment'
 import { app } from '../config'
-import { readableDateFormat } from '../utils'
+import { readableDateFormat, stringWithAbbreviationsProcessor } from '../utils'
 import type CuriousApi from '../api/curious/curiousApi'
 import log from '../log'
 import AssessmentQualificationType from '../api/curious/types/AssessmentQualificationType'
@@ -104,7 +104,7 @@ const createSkillAssessmentSummary = (learnerAssessment: curious.LearnerAssessme
     },
     {
       label: 'Assessment location',
-      value: establishmentName,
+      value: stringWithAbbreviationsProcessor(establishmentName),
     },
   ]
 }
@@ -341,7 +341,7 @@ export default class EsweService {
         const fullCourseDetails = content.map((course) => ({
           type: course.isAccredited ? 'Accredited' : 'Non-accredited',
           courseName: course.courseName,
-          location: course.establishmentName,
+          location: stringWithAbbreviationsProcessor(course.establishmentName),
           dateFrom: course.learningStartDate,
           dateTo: course.learningActualEndDate ? course.learningActualEndDate : course.learningPlannedEndDate,
           outcome: getOutcome(course),
