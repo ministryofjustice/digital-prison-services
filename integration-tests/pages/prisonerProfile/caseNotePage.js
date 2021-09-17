@@ -1,10 +1,10 @@
 const page = require('../page')
 
-const caseNotePage = offenderName =>
+const caseNotePage = (offenderName) =>
   page(offenderName, {
     filterForm: () => ({
       typeSelect: () => cy.get('#type'),
-      subTypeSelect: () => cy.get('#subType'),
+      subTypeSelect: () => cy.get('#sub-type'),
       fromDate: () => cy.get('#fromDate'),
       toDate: () => cy.get('#toDate'),
       applyButton: () => cy.get('button'),
@@ -24,7 +24,7 @@ const caseNotePage = offenderName =>
 
 export default {
   verifyOnPage: caseNotePage,
-  goTo: offenderNo => {
+  goTo: (offenderNo) => {
     cy.visit(`/prisoner/${offenderNo}/case-notes`)
     return caseNotePage()
   },
