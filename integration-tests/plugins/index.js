@@ -202,6 +202,7 @@ module.exports = (on) => {
         prisonApi.stubEventsForToday([], 500),
         prisonApi.stubProfileInformation(null, 500),
       ]),
+
     stubPrisonerDetails: (prisonerDetails) => prisonApi.stubPrisonerDetails(prisonerDetails),
 
     stubLatestLearnerAssessments: (functionalSkillsAssessments) =>
@@ -219,6 +220,7 @@ module.exports = (on) => {
         curiousApi.stubLearnerGoals({}, 500),
         curiousApi.stubLearnerEducation({}, 500),
         prisonApi.stubForOffenderWorkHistory({}, 500),
+        prisonApi.stubPrisonerDetails({}, 500),
       ]),
 
     stubWorkAndSkillsApi404Errors: (error) =>
@@ -227,6 +229,7 @@ module.exports = (on) => {
         curiousApi.stubLearnerGoals(error, 404),
         curiousApi.stubLearnerEducation(error, 404),
         prisonApi.stubForOffenderWorkHistory(error, 404),
+        prisonApi.stubPrisonerDetails(error, 404),
       ]),
 
     stubPersonal: ({

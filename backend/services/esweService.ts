@@ -123,8 +123,7 @@ export default class EsweService {
     private readonly prisonApi: any
   ) {}
 
-  callWorkHistoryApi = async (nomisId: string) => {
-    const context = await this.systemOauthClient.getClientCredentialsTokens()
+  callWorkHistoryApi = async (context, nomisId: string) => {
     const oneYearAgo = moment().subtract(1, 'year').format('YYYY-MM-DD')
     const workHistory = await this.prisonApi.getOffenderWorkHistory(context, nomisId, oneYearAgo)
     return workHistory.workActivities
@@ -164,7 +163,7 @@ export default class EsweService {
                 establishmentName: profile.establishmentName,
                 details: [
                   { label: 'Description', ldd: combinedLdd },
-                  { label: 'Location', value: profile.establishmentName },
+                  { label: 'Location', value: stringWithAbbreviationsProcessor(profile.establishmentName) },
                 ],
               }
             }
@@ -369,11 +368,15 @@ export default class EsweService {
     }
 
     try {
-      const workActivities = await this.callWorkHistoryApi(nomisId)
+      const context = await this.systemOauthClient.getClientCredentialsTokens()
+      const prisonerDetails = await this.prisonApi.getPrisonerDetails(context, nomisId)
+      const workActivities = await this.callWorkHistoryApi(context, nomisId)
 
-      if (workActivities.length) {
+      const { latestLocation } = prisonerDetails[0]
+
+      if (workActivities.length && latestLocation) {
         const currentJobs = workActivities
-          .filter((job) => job.isCurrentActivity)
+          .filter((job) => job.isCurrentActivity && job.agencyLocationDescription === latestLocation)
           .map((job) => ({
             label: job.description.trim(),
             value: `Started on ${readableDateFormat(job.startDate, DATE_FORMAT)}`,
@@ -402,7 +405,8 @@ export default class EsweService {
     }
 
     try {
-      const workActivities = await this.callWorkHistoryApi(nomisId)
+      const context = await this.systemOauthClient.getClientCredentialsTokens()
+      const workActivities = await this.callWorkHistoryApi(context, nomisId)
 
       const getEndDate = (job: eswe.WorkActivity) => {
         if (job.isCurrentActivity) return null
