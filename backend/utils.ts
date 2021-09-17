@@ -310,17 +310,12 @@ export const getWith404AsNull = async (apiCall) =>
 
 export const stringWithAbbreviationsProcessor = (string) => {
   if (string === null) return null
-  let capitalizedString = capitalizeUppercaseString(string)
   const matches = abbreviations.filter((abbr) => string.includes(abbr))
-  if (matches.length) {
-    return matches
-      .map((abbr) => {
-        capitalizedString = capitalizedString.replace(capitalizeUppercaseString(abbr), abbr.toUpperCase())
-        return capitalizedString
-      })
-      .pop()
-  }
-  return capitalizedString
+  const establishmentName = matches.reduce(
+    (result, abbr) => result.replace(capitalizeUppercaseString(abbr), abbr.toUpperCase()),
+    capitalizeUppercaseString(string)
+  )
+  return establishmentName
 }
 
 export default {
