@@ -36,7 +36,7 @@ export const caseNoteFactory = (prisonApi, caseNotesApi) => {
       if (req.xhr) {
         const { typeCode } = req.query
         const filteredSubTypes = subTypes.filter((st) => st.type === typeCode)
-        return res.send(nunjucks.render('caseNotes/partials/subTypesSelect.njk', { subTypes: filteredSubTypes }))
+        return res.send(nunjucks.render('caseNotes/partials/subTypesOptions.njk', { subTypes: filteredSubTypes }))
       }
 
       const offenderDetails = {
