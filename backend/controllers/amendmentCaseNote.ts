@@ -35,6 +35,7 @@ export default ({ prisonApi, caseNotesApi, logError }) => {
           caseNote.amendments.map((amendment) => ({
             text: amendment.additionalNoteText,
           })),
+        isOmicOpenCaseNote: caseNote.subType === 'OPEN_COMM',
       })
     } catch (error) {
       res.locals.redirectUrl = `/prisoner/${offenderNo}/case-notes`
