@@ -2,6 +2,7 @@
 {% from "govuk/components/error-summary/macro.njk" import govukErrorSummary %}
 {% from "govuk/components/textarea/macro.njk" import govukTextarea %}
 {% from "govuk/components/button/macro.njk" import govukButton %}
+{% from "govuk/components/warning-text/macro.njk" import govukWarningText %}
 
 {% set title = 'Add more details to case note' %}
 
@@ -58,14 +59,32 @@
     {% endfor %}
 
     <form action="{{ postAmendment }}" method="post">
+        {% if isOmicOpenCaseNote %}
+          <div class="govuk-grid-row">
+            {{ govukWarningText({
+                text: "This case note could be read by anyone with access to Digital Prison Services.  Check all information recorded here is appropriate and necessary to share across the prison.",
+                iconFallbackText: "Warning",
+                classes: 'case-notes-omic-open-warning govuk-grid-column-one-third',
+                attributes: { 'data-test': 'omic-open-warning'}
+            }) }}
+          </div>
+        {% endif %}
+
         <input type="hidden" name="_csrf" value="{{ csrfToken }}" />
+          {% if isOmicOpenCaseNote %}
+            {% set hintText = {
+              text: 'Do not save any sensitive information as an OMiC open case note.',
+              attributes: { 'data-test': 'omic-open-hint'}
+            } %}
+          {% endif %}
         {{ govukTextarea({
             name: "moreDetail",
             id: "moreDetail",
             value: formValues.moreDetail,
             errorMessage: errors | findError('moreDetail'),
             rows: 10,
-            classes: 'govuk-!-width-one-half'
+            classes: 'govuk-!-width-one-half',
+            hint: hintText
         }) }}
 
 

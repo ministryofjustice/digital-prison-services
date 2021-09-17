@@ -9,7 +9,7 @@ $(function () {
     if (!selectedTypeOption) return
 
     subTypeSelect.prop('disabled', true)
-    omicOpenWarnings.prop('style', 'display: none')
+    if (omicOpenWarnings.length) omicOpenWarnings.prop('style', 'display: none')
 
     $.ajax({
       url: subTypesUrl,
@@ -35,6 +35,6 @@ $(function () {
     if (!selectedSubTypeOption) return
 
     var style = selectedSubTypeOption.value == 'OPEN_COMM' ? 'block' : 'none'
-    omicOpenWarnings.prop('style', 'display: ' + style)
+    if (omicOpenWarnings.length) omicOpenWarnings.prop('style', 'display: ' + style)
   })
 })
