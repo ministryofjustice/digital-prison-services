@@ -78,8 +78,8 @@ module.exports = (on) => {
     stubGroups: (caseload) => whereabouts.stubGroups(caseload),
     stubAddVideoLinkBooking: () => whereabouts.stubAddVideoLinkBooking(),
     getBookingRequest: () => whereabouts.getBookingRequest(),
-    stubCaseNotes: (response) => caseNotes.stubCaseNotes(response),
-    stubCaseNoteTypes: (types) => caseNotes.stubCaseNoteTypes(types),
+    stubCaseNotes: caseNotes.stubCaseNotes,
+    stubCaseNoteTypes: caseNotes.stubCaseNoteTypes,
 
     stubForAttendance: ({ caseload, locationId, timeSlot, date, activities }) => {
       const offenderNumbers = extractOffenderNumbers(activities)

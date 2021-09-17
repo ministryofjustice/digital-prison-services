@@ -1,14 +1,15 @@
-$(function() {
+$(function () {
   var typeSelect = $('#type')
-  var subTypeSelect = $('#subType')
-  var subTypesDiv = $('#subTypes')
+  var subTypeSelect = $('#sub-type')
   var subTypesUrl = $('#subTypesUrl').val()
+  var omicOpenWarnings = $('.case-notes-omic-open')
 
-  typeSelect.on('change', function(e) {
+  typeSelect.on('change', function (e) {
     var selectedTypeOption = e.target && e.target.options && e.target.options[e.target.options.selectedIndex]
     if (!selectedTypeOption) return
 
     subTypeSelect.prop('disabled', true)
+    omicOpenWarnings.prop('style', 'display: none')
 
     $.ajax({
       url: subTypesUrl,
@@ -19,13 +20,21 @@ $(function() {
         typeCode: selectedTypeOption.value,
       },
     })
-      .done(function(partialHtml) {
+      .done(function (partialHtml) {
         subTypeSelect.prop('disabled', false)
-        subTypesDiv.html(partialHtml)
+        subTypeSelect.html(partialHtml)
       })
-      .error(function() {
+      .error(function () {
         subTypeSelect.prop('disabled', false)
         typeSelect.val('Select')
       })
+  })
+
+  subTypeSelect.on('change', function (e) {
+    var selectedSubTypeOption = e.target && e.target.options && e.target.options[e.target.options.selectedIndex]
+    if (!selectedSubTypeOption) return
+
+    var style = selectedSubTypeOption.value == 'OPEN_COMM' ? 'block' : 'none'
+    omicOpenWarnings.prop('style', 'display: ' + style)
   })
 })

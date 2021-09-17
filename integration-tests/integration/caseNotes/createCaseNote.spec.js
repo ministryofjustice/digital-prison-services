@@ -56,6 +56,74 @@ context('A user can add a case note', () => {
     })
   })
 
+  it('A user can successfully add an OMiC open case note', () => {
+    cy.task('stubClientCredentialsRequest')
+    cy.task('stubPrisonerProfileHeaderData', {
+      offenderBasicDetails,
+      offenderFullDetails,
+      iepSummary: {},
+      caseNoteSummary: {},
+      offenderNo: 'A12345',
+    })
+    cy.task('stubCaseNoteTypes')
+    cy.task('stubCaseNotes', { totalElements: 1, content: [] })
+
+    cy.server()
+    cy.route({ method: 'GET', url: '/prisoner/A12345/add-case-note?typeCode=OMIC' }).as('getTypes')
+
+    const createCaseNotePage = CreateCaseNotePage.verifyOnPage()
+    const form = createCaseNotePage.form()
+    form.type().select('OMIC')
+
+    cy.wait('@getTypes')
+
+    form.subType().select('OPEN_COMM')
+    createCaseNotePage.omicOpenWarning().should('be.visible')
+    createCaseNotePage.omicOpenHint().should('be.visible')
+    form.text().type('Test comment')
+    form.submitButton().click()
+    PrisonerCaseNotePage.verifyOnPage('Smith, John')
+  })
+
+  it('OMiC open case note warnings only valid for OMiC Open case note', () => {
+    cy.task('stubClientCredentialsRequest')
+    cy.task('stubPrisonerProfileHeaderData', {
+      offenderBasicDetails,
+      offenderFullDetails,
+      iepSummary: {},
+      caseNoteSummary: {},
+      offenderNo: 'A12345',
+    })
+    cy.task('stubCaseNoteTypes')
+    cy.task('stubCaseNotes', { totalElements: 1, content: [] })
+
+    cy.server()
+    cy.route({ method: 'GET', url: '/prisoner/A12345/add-case-note?typeCode=OMIC' }).as('getOmicTypes')
+    cy.route({ method: 'GET', url: '/prisoner/A12345/add-case-note?typeCode=OBSERVE' }).as('getObserveTypes')
+
+    const page = CreateCaseNotePage.verifyOnPage()
+    const form = page.form()
+    page.omicOpenWarning().should('not.be.visible')
+    page.omicOpenHint().should('not.be.visible')
+    form.type().select('OMIC')
+    cy.wait('@getOmicTypes')
+
+    form.subType().select('OPEN_COMM')
+    page.omicOpenWarning().should('be.visible')
+    page.omicOpenHint().should('be.visible')
+    form.subType().select('COMM')
+    page.omicOpenWarning().should('not.be.visible')
+    page.omicOpenHint().should('not.be.visible')
+    form.subType().select('OPEN_COMM')
+    page.omicOpenWarning().should('be.visible')
+    page.omicOpenHint().should('be.visible')
+    form.type().select('OBSERVE')
+    cy.wait('@getObserveTypes')
+
+    page.omicOpenWarning().should('not.be.visible')
+    page.omicOpenHint().should('not.be.visible')
+  })
+
   it('Should show correct error messages', () => {
     const createCaseNotePage = CreateCaseNotePage.verifyOnPage()
     const form = createCaseNotePage.form()
@@ -69,7 +137,7 @@ context('A user can add a case note', () => {
     createCaseNotePage
       .errorSummaryList()
       .find('li')
-      .then($errors => {
+      .then(($errors) => {
         expect($errors.get(0).innerText).to.contain('Select the case note type')
         expect($errors.get(1).innerText).to.contain('Select the case note sub-type')
         expect($errors.get(2).innerText).to.contain('Enter what happened')

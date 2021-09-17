@@ -123,6 +123,13 @@ $govuk-font-family-print: 'GDS Transport';
   flex-basis: 80%;
 }
 
+.case-notes-omic-open {
+  display: none;
+}
+.case-notes-omic-open-warning {
+  margin-left: 15px;
+}
+
 pre {
   white-space: pre-wrap; /* css-3 */
   white-space: -moz-pre-wrap; /* Mozilla, since 1999 */
