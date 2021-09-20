@@ -290,7 +290,9 @@ export default class EsweService {
           )
           .sort(compareByDateAsc)
           .map((course) => ({
-            label: course.courseName,
+            label: course.completionStatus.includes('temporarily')
+              ? `${course.courseName} (prisoner temporarily withdrawn)`
+              : course.courseName,
             value: `Planned end date on ${readableDateFormat(course.learningPlannedEndDate, DATE_FORMAT)}`,
           }))
 

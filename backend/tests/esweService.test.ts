@@ -689,7 +689,7 @@ describe('Education skills and work experience', () => {
               value: 'Planned end date on 1 August 2019',
             },
             {
-              label: 'Ocean Science',
+              label: 'Ocean Science (prisoner temporarily withdrawn)',
               value: 'Planned end date on 31 December 2019',
             },
           ],
