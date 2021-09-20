@@ -475,8 +475,7 @@ context('Prisoner Work and Skills', () => {
             prn: 'G6123VU',
             courseName: 'Running',
             learningPlannedEndDate: '2022-01-01',
-            completionStatus:
-              'The learner is continuing or intending to continue the learning activities leading to the learning aim',
+            completionStatus: 'Learner has temporarily withdrawn from the aim due to an agreed break in learning',
           },
           {
             prn: 'G6123VU',
@@ -507,7 +506,7 @@ context('Prisoner Work and Skills', () => {
             .find('dt')
             .then(($summaryLabels) => {
               cy.get($summaryLabels).its('length').should('eq', 2)
-              expect($summaryLabels.get(0).innerText).to.contain('Running')
+              expect($summaryLabels.get(0).innerText).to.contain('Running (prisoner temporarily withdrawn)')
               expect($summaryLabels.get(1).innerText).to.contain('Pink')
             })
         })
