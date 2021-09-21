@@ -4,46 +4,53 @@ import { properCaseName } from '../utils'
 
 const getOffenderUrl = (offenderNo) => `/prisoner/${offenderNo}`
 
-export const caseNoteFactory = (prisonApi, caseNotesApi) => {
-  const displayCreateCaseNotePage = async (req, res) => {
-    const { offenderNo } = req.params
-    const { type, subType } = req.query || {}
-    try {
-      const { firstName, lastName } = await prisonApi.getDetails(res.locals, offenderNo)
+const getOffenderDetails = async (prisonApi, res, offenderNo) => {
+  const { firstName, lastName } = await prisonApi.getDetails(res.locals, offenderNo)
 
-      const caseNoteTypes = await caseNotesApi.myCaseNoteTypes(res.locals)
+  return {
+    offenderNo,
+    profileUrl: getOffenderUrl(offenderNo),
+    name: `${properCaseName(firstName)} ${properCaseName(lastName)}`,
+  }
+}
 
-      const types = caseNoteTypes
-        .filter((caseNoteType) => caseNoteType.activeFlag === 'Y')
-        .map((caseNoteType) => ({
-          value: caseNoteType.code,
-          text: caseNoteType.description,
+const getCaseNoteTypes = async (caseNotesApi, res, type) => {
+  const caseNoteTypes = (await caseNotesApi.myCaseNoteTypes(res.locals)).filter(
+    (caseNoteType) => caseNoteType.activeFlag === 'Y'
+  )
+
+  const types = caseNoteTypes.map((caseNoteType) => ({
+    value: caseNoteType.code,
+    text: caseNoteType.description,
+  }))
+
+  const subTypes = caseNoteTypes
+    .filter((caseNoteType) => caseNoteType.code === type)
+    .map((caseNoteType) =>
+      caseNoteType.subCodes
+        .filter((sub) => sub.activeFlag === 'Y')
+        .map((subCode) => ({
+          type: caseNoteType.code,
+          value: subCode.code,
+          text: subCode.description,
         }))
+    )
+    .reduce((result, subCodes) => result.concat(subCodes), [])
+  return { types, subTypes }
+}
 
-      const subTypes = caseNoteTypes
-        .filter((caseNoteType) => caseNoteType.activeFlag === 'Y')
-        .map((caseNoteType) =>
-          caseNoteType.subCodes
-            .filter((sub) => sub.activeFlag === 'Y')
-            .map((subCode) => ({
-              type: caseNoteType.code,
-              value: subCode.code,
-              text: subCode.description,
-            }))
-        )
-        .reduce((result, subCodes) => result.concat(subCodes), [])
-
+export const caseNoteFactory = ({ prisonApi, caseNotesApi }) => {
+  const index = async (req, res) => {
+    const { offenderNo } = req.params
+    try {
       if (req.xhr) {
         const { typeCode } = req.query
-        const filteredSubTypes = subTypes.filter((st) => st.type === typeCode)
-        return res.send(nunjucks.render('caseNotes/partials/subTypesOptions.njk', { subTypes: filteredSubTypes }))
+        const { subTypes } = await getCaseNoteTypes(caseNotesApi, res, typeCode)
+        return res.send(nunjucks.render('caseNotes/partials/subTypesOptions.njk', { subTypes }))
       }
-
-      const offenderDetails = {
-        offenderNo,
-        profileUrl: getOffenderUrl(offenderNo),
-        name: `${properCaseName(firstName)} ${properCaseName(lastName)}`,
-      }
+      const { type, subType } = req.query || {}
+      const { types, subTypes } = await getCaseNoteTypes(caseNotesApi, res, type)
+      const offenderDetails = await getOffenderDetails(prisonApi, res, offenderNo)
 
       const currentDateTime = moment()
 
@@ -69,7 +76,7 @@ export const caseNoteFactory = (prisonApi, caseNotesApi) => {
     }
   }
 
-  const handleCreateCaseNoteForm = async (req, res) => {
+  const post = async (req, res) => {
     const { offenderNo } = req.params
     const { type, subType, text, date, hours, minutes } = req.body
     const errors = []
@@ -203,37 +210,8 @@ export const caseNoteFactory = (prisonApi, caseNotesApi) => {
     }
 
     if (errors.length > 0) {
-      const { firstName, lastName } = await prisonApi.getDetails(res.locals, offenderNo)
-
-      const caseNoteTypes = await caseNotesApi.myCaseNoteTypes(res.locals)
-
-      const types = caseNoteTypes.map((caseNoteType) => ({
-        value: caseNoteType.code,
-        text: caseNoteType.description,
-      }))
-
-      const subTypes = caseNoteTypes
-        .map((caseNoteType) =>
-          caseNoteType.subCodes.map((subCode) => ({
-            type: caseNoteType.code,
-            value: subCode.code,
-            text: subCode.description,
-          }))
-        )
-        .reduce((result, subCodes) => result.concat(subCodes), [])
-        .filter((sub) => (type === undefined ? true : sub.type === type))
-
-      if (req.xhr) {
-        const { typeCode } = req.query
-        const filteredSubTypes = subTypes.filter((st) => st.type === typeCode)
-        return res.send(nunjucks.render('caseNotes/partials/subTypesSelect.njk', { subTypes: filteredSubTypes }))
-      }
-
-      const offenderDetails = {
-        offenderNo,
-        profileUrl: getOffenderUrl(offenderNo),
-        name: `${properCaseName(firstName)} ${properCaseName(lastName)}`,
-      }
+      const { types, subTypes } = await getCaseNoteTypes(caseNotesApi, res, type)
+      const offenderDetails = await getOffenderDetails(prisonApi, res, offenderNo)
       return res.render('caseNotes/addCaseNoteForm.njk', {
         errors,
         offenderNo,
@@ -249,7 +227,7 @@ export const caseNoteFactory = (prisonApi, caseNotesApi) => {
     return res.redirect(`${getOffenderUrl(offenderNo)}/case-notes`)
   }
 
-  return { displayCreateCaseNotePage, handleCreateCaseNoteForm }
+  return { index, post }
 }
 
 export default { caseNoteFactory }

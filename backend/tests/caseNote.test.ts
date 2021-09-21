@@ -7,7 +7,7 @@ Reflect.deleteProperty(process.env, 'APPINSIGHTS_INSTRUMENTATIONKEY')
 const prisonApi = {}
 const caseNotesApi = {}
 
-const { displayCreateCaseNotePage, handleCreateCaseNoteForm } = caseNoteCtrl.caseNoteFactory(prisonApi, caseNotesApi)
+const { index, post } = caseNoteCtrl.caseNoteFactory({ prisonApi, caseNotesApi })
 
 jest.mock('../logError', () => ({
   logError: jest.fn(),
@@ -81,7 +81,7 @@ describe('case note management', () => {
     mockReq.flash.mockRestore()
   })
 
-  describe('displayCreateCaseNotePage()', () => {
+  describe('index()', () => {
     const DATE_2020_10_29_16_15 = 1603988100000 // Friday, 29 Oct 2020 16:15 UTC (avoid BST)
     const DATE_2020_10_29_16_06 = 1603987560000 // Friday, 29 Oct 2020 16:06 UTC
 
@@ -90,7 +90,7 @@ describe('case note management', () => {
 
       const req = { ...mockCreateReq, params: { offenderNo } }
 
-      await displayCreateCaseNotePage(req, res)
+      await index(req, res)
 
       expect(res.render).toBeCalledWith(
         'caseNotes/addCaseNoteForm.njk',
@@ -114,7 +114,7 @@ describe('case note management', () => {
       const req = { ...mockCreateReq, params: { offenderNo } }
       res.status = jest.fn()
 
-      await expect(displayCreateCaseNotePage(req, res)).rejects.toThrowError(error)
+      await expect(index(req, res)).rejects.toThrowError(error)
 
       expect(res.locals.redirectUrl).toBe('/prisoner/ABC123/case-notes')
     })
@@ -124,7 +124,7 @@ describe('case note management', () => {
 
       const req = { ...mockCreateReq, params: { offenderNo } }
 
-      await displayCreateCaseNotePage(req, res)
+      await index(req, res)
 
       expect(res.render).toBeCalledWith('caseNotes/addCaseNoteForm.njk', {
         offenderDetails: {
@@ -144,10 +144,37 @@ describe('case note management', () => {
           { value: 'OBSERVE', text: 'Observations' },
           { value: 'ACHIEVEMENTS', text: 'Achievements' },
         ],
-        subTypes: [
-          { value: 'OBS1', text: 'Observation 1', type: 'OBSERVE' },
-          { value: 'ACH1', text: 'Achievement 1', type: 'ACHIEVEMENTS' },
+        subTypes: [],
+      })
+
+      // @ts-expect-error ts-migrate(2339) FIXME: Property 'mockRestore' does not exist on type '() ... Remove this comment to see the full error message
+      Date.now.mockRestore()
+    })
+
+    it('should filter the sub types if a type is selected', async () => {
+      jest.spyOn(Date, 'now').mockImplementation(() => DATE_2020_10_29_16_15)
+      await index({ ...mockCreateReq, params: { offenderNo }, query: { type: 'OBSERVE' } }, res)
+
+      expect(res.render).toBeCalledWith('caseNotes/addCaseNoteForm.njk', {
+        offenderDetails: {
+          name: 'Test User',
+          offenderNo: 'ABC123',
+          profileUrl: '/prisoner/ABC123',
+        },
+        offenderNo,
+        homeUrl: '/prisoner/ABC123/case-notes',
+        caseNotesRootUrl: '/prisoner/ABC123/add-case-note',
+        formValues: {
+          date: '29/10/2020',
+          hours: '16',
+          minutes: '15',
+          type: 'OBSERVE',
+        },
+        types: [
+          { value: 'OBSERVE', text: 'Observations' },
+          { value: 'ACHIEVEMENTS', text: 'Achievements' },
         ],
+        subTypes: [{ value: 'OBS1', text: 'Observation 1', type: 'OBSERVE' }],
       })
 
       // @ts-expect-error ts-migrate(2339) FIXME: Property 'mockRestore' does not exist on type '() ... Remove this comment to see the full error message
@@ -158,7 +185,7 @@ describe('case note management', () => {
       jest.spyOn(Date, 'now').mockImplementation(() => DATE_2020_10_29_16_15)
 
       const req = { ...mockCreateReq, params: { offenderNo }, query: { type: 'KS', subType: 'KS' } }
-      await displayCreateCaseNotePage(req, res)
+      await index(req, res)
 
       expect(res.render).toBeCalledWith(
         'caseNotes/addCaseNoteForm.njk',
@@ -177,7 +204,7 @@ describe('case note management', () => {
     })
   })
 
-  describe('handleCreateCaseNoteForm()', () => {
+  describe('post()', () => {
     describe('when there are errors', () => {
       const error = new Error('There has been an error')
       const error400 = makeError('response', {
@@ -206,7 +233,7 @@ describe('case note management', () => {
         caseNotesApi.addCaseNote = jest.fn().mockRejectedValue(error)
         res.status = jest.fn()
 
-        await expect(handleCreateCaseNoteForm(req, res)).rejects.toThrowError(error)
+        await expect(post(req, res)).rejects.toThrowError(error)
       })
 
       it('should return the specific error in case of a 400 response', async () => {
@@ -225,7 +252,7 @@ describe('case note management', () => {
         // @ts-expect-error ts-migrate(2339) FIXME: Property 'addCaseNote' does not exist on type '{}'... Remove this comment to see the full error message
         caseNotesApi.addCaseNote = jest.fn().mockRejectedValue(error400)
 
-        await handleCreateCaseNoteForm(req, res)
+        await post(req, res)
 
         expect(res.render).toHaveBeenCalledWith(
           'caseNotes/addCaseNoteForm.njk',
@@ -242,7 +269,7 @@ describe('case note management', () => {
           body: { offenderNo, text: 'test', date: '2020-07-20' },
         }
 
-        await handleCreateCaseNoteForm(req, res)
+        await post(req, res)
 
         expect(res.render).toHaveBeenCalledWith(
           'caseNotes/addCaseNoteForm.njk',
@@ -271,7 +298,7 @@ describe('case note management', () => {
           body: { offenderNo, text },
         }
 
-        await handleCreateCaseNoteForm(req, res)
+        await post(req, res)
         expect(res.render).toHaveBeenCalledWith(
           'caseNotes/addCaseNoteForm.njk',
           expect.objectContaining({
@@ -300,7 +327,7 @@ describe('case note management', () => {
           },
         }
 
-        await handleCreateCaseNoteForm(req, res)
+        await post(req, res)
         expect(res.render).toHaveBeenCalledWith(
           'caseNotes/addCaseNoteForm.njk',
           expect.objectContaining({
@@ -326,7 +353,7 @@ describe('case note management', () => {
           },
         }
 
-        await handleCreateCaseNoteForm(req, res)
+        await post(req, res)
         expect(res.render).toHaveBeenCalledWith(
           'caseNotes/addCaseNoteForm.njk',
           expect.objectContaining({
@@ -354,7 +381,7 @@ describe('case note management', () => {
           },
         }
 
-        await handleCreateCaseNoteForm(req, res)
+        await post(req, res)
         expect(res.render).toHaveBeenCalledWith(
           'caseNotes/addCaseNoteForm.njk',
           expect.objectContaining({
@@ -379,7 +406,7 @@ describe('case note management', () => {
           },
         }
 
-        await handleCreateCaseNoteForm(req, res)
+        await post(req, res)
 
         expect(res.redirect).toBeCalledWith('/prisoner/ABC123/case-notes')
       })
