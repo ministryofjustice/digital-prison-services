@@ -3,7 +3,6 @@ import whereaboutsHomepage from './controllers/whereabouts/whereaboutsHomepage'
 
 import { logError } from './logError'
 import { alertFactory } from './controllers/alert'
-import { caseNoteFactory } from './controllers/caseNote'
 import { probationDocumentsFactory } from './controllers/probationDocuments'
 import { downloadProbationDocumentFactory } from './controllers/downloadProbationDocument'
 import { attendanceStatisticsFactory } from './controllers/attendance/attendanceStatistics'
@@ -32,6 +31,7 @@ import establishmentRollRouter from './routes/establishmentRollRouter'
 import changeSomeonesCellRouter from './routes/changeSomeonesCellRouter'
 import globalSearchRouter from './routes/globalSearchRouter'
 import amendCaseNoteRouter from './routes/caseNoteAmendmentRouter'
+import createCaseNoteRouter from './routes/caseNoteCreationRouter'
 import deleteCaseNoteRouter from './routes/caseNoteDeletionRouter'
 import selectActivityLocation from './controllers/selectActivityLocation'
 import contentfulServiceFactory from './services/contentfulService'
@@ -99,8 +99,7 @@ const setup = ({
     '/offenders/:offenderNo/create-alert',
     alertFactory(oauthApi, prisonApi, referenceCodesService(prisonApi)).handleCreateAlertForm
   )
-  router.get('/prisoner/:offenderNo/add-case-note', caseNoteFactory(prisonApi, caseNotesApi).displayCreateCaseNotePage)
-  router.post('/prisoner/:offenderNo/add-case-note', caseNoteFactory(prisonApi, caseNotesApi).handleCreateCaseNoteForm)
+  router.use('/prisoner/:offenderNo/add-case-note', createCaseNoteRouter({ prisonApi, caseNotesApi }))
   router.get(
     '/manage-prisoner-whereabouts/attendance-reason-statistics',
     attendanceStatisticsFactory(oauthApi, prisonApi, whereaboutsApi).attendanceStatistics
