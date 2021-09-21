@@ -144,10 +144,37 @@ describe('case note management', () => {
           { value: 'OBSERVE', text: 'Observations' },
           { value: 'ACHIEVEMENTS', text: 'Achievements' },
         ],
-        subTypes: [
-          { value: 'OBS1', text: 'Observation 1', type: 'OBSERVE' },
-          { value: 'ACH1', text: 'Achievement 1', type: 'ACHIEVEMENTS' },
+        subTypes: [],
+      })
+
+      // @ts-expect-error ts-migrate(2339) FIXME: Property 'mockRestore' does not exist on type '() ... Remove this comment to see the full error message
+      Date.now.mockRestore()
+    })
+
+    it('should filter the sub types if a type is selected', async () => {
+      jest.spyOn(Date, 'now').mockImplementation(() => DATE_2020_10_29_16_15)
+      await index({ ...mockCreateReq, params: { offenderNo }, query: { type: 'OBSERVE' } }, res)
+
+      expect(res.render).toBeCalledWith('caseNotes/addCaseNoteForm.njk', {
+        offenderDetails: {
+          name: 'Test User',
+          offenderNo: 'ABC123',
+          profileUrl: '/prisoner/ABC123',
+        },
+        offenderNo,
+        homeUrl: '/prisoner/ABC123/case-notes',
+        caseNotesRootUrl: '/prisoner/ABC123/add-case-note',
+        formValues: {
+          date: '29/10/2020',
+          hours: '16',
+          minutes: '15',
+          type: 'OBSERVE',
+        },
+        types: [
+          { value: 'OBSERVE', text: 'Observations' },
+          { value: 'ACHIEVEMENTS', text: 'Achievements' },
         ],
+        subTypes: [{ value: 'OBS1', text: 'Observation 1', type: 'OBSERVE' }],
       })
 
       // @ts-expect-error ts-migrate(2339) FIXME: Property 'mockRestore' does not exist on type '() ... Remove this comment to see the full error message

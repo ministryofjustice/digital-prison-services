@@ -14,18 +14,18 @@ const getOffenderDetails = async (prisonApi, res, offenderNo) => {
   }
 }
 
-const getCaseNoteTypes = async (caseNotesApi, res) => {
-  const caseNoteTypes = await caseNotesApi.myCaseNoteTypes(res.locals)
+const getCaseNoteTypes = async (caseNotesApi, res, type) => {
+  const caseNoteTypes = (await caseNotesApi.myCaseNoteTypes(res.locals)).filter(
+    (caseNoteType) => caseNoteType.activeFlag === 'Y'
+  )
 
-  const types = caseNoteTypes
-    .filter((caseNoteType) => caseNoteType.activeFlag === 'Y')
-    .map((caseNoteType) => ({
-      value: caseNoteType.code,
-      text: caseNoteType.description,
-    }))
+  const types = caseNoteTypes.map((caseNoteType) => ({
+    value: caseNoteType.code,
+    text: caseNoteType.description,
+  }))
 
   const subTypes = caseNoteTypes
-    .filter((caseNoteType) => caseNoteType.activeFlag === 'Y')
+    .filter((caseNoteType) => caseNoteType.code === type)
     .map((caseNoteType) =>
       caseNoteType.subCodes
         .filter((sub) => sub.activeFlag === 'Y')
@@ -42,15 +42,14 @@ const getCaseNoteTypes = async (caseNotesApi, res) => {
 export const caseNoteFactory = ({ prisonApi, caseNotesApi }) => {
   const index = async (req, res) => {
     const { offenderNo } = req.params
-    const { type, subType } = req.query || {}
     try {
-      const { types, subTypes } = await getCaseNoteTypes(caseNotesApi, res)
-
       if (req.xhr) {
         const { typeCode } = req.query
-        const filteredSubTypes = subTypes.filter((st) => st.type === typeCode)
-        return res.send(nunjucks.render('caseNotes/partials/subTypesOptions.njk', { subTypes: filteredSubTypes }))
+        const { subTypes } = await getCaseNoteTypes(caseNotesApi, res, typeCode)
+        return res.send(nunjucks.render('caseNotes/partials/subTypesOptions.njk', { subTypes }))
       }
+      const { type, subType } = req.query || {}
+      const { types, subTypes } = await getCaseNoteTypes(caseNotesApi, res, type)
       const offenderDetails = await getOffenderDetails(prisonApi, res, offenderNo)
 
       const currentDateTime = moment()
@@ -211,7 +210,7 @@ export const caseNoteFactory = ({ prisonApi, caseNotesApi }) => {
     }
 
     if (errors.length > 0) {
-      const { types, subTypes } = await getCaseNoteTypes(caseNotesApi, res)
+      const { types, subTypes } = await getCaseNoteTypes(caseNotesApi, res, type)
       const offenderDetails = await getOffenderDetails(prisonApi, res, offenderNo)
       return res.render('caseNotes/addCaseNoteForm.njk', {
         errors,
