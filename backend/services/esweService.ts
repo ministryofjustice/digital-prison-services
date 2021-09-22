@@ -13,7 +13,7 @@ type FeatureFlagged<T> = {
 type LearnerProfiles = FeatureFlagged<curious.LearnerProfile[]>
 type LearnerLatestAssessments = FeatureFlagged<eswe.FunctionalSkillsLevels>
 type OffenderGoals = FeatureFlagged<curious.LearnerGoals>
-type LearningDifficulties = FeatureFlagged<eswe.LearningDifficultiesDisabilities[]>
+type Neurodiversities = FeatureFlagged<eswe.Neurodiversities[]>
 type CurrentCoursesEnhanced = FeatureFlagged<eswe.CurrentCoursesEnhanced>
 type LearnerEducationFullDetails = FeatureFlagged<eswe.LearnerEducationFullDetails[]>
 type CurrentWork = FeatureFlagged<eswe.OffenderCurrentWork>
@@ -145,7 +145,7 @@ export default class EsweService {
     return createFlaggedContent(content)
   }
 
-  async getLearningDifficulties(nomisId: string): Promise<LearningDifficulties> {
+  async getNeurodiversities(nomisId: string): Promise<Neurodiversities> {
     if (!app.esweEnabled) {
       return createFlaggedContent(null)
     }

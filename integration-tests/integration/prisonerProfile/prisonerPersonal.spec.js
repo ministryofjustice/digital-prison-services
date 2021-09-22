@@ -262,7 +262,7 @@ context('Prisoner personal', () => {
 
     context('Disabilities and adjustments section', () => {
       it('Should show correct missing content text', () => {
-        cy.get('[data-test="learningDifficulties-summary"]').then(($section) => {
+        cy.get('[data-test="neurodiversity-summary"]').then(($section) => {
           expect($section).to.contain.text('We cannot show these details right now. Try reloading the page.')
         })
         cy.get('[data-test="care-needs-summary"]').then(($section) => {
@@ -661,7 +661,7 @@ context('Prisoner personal', () => {
               description: 'Psychological',
             },
           ],
-          learningDifficulties: [
+          neurodiversities: [
             {
               prn: 'G6123VU',
               establishmentId: 'MDI',
@@ -912,7 +912,7 @@ context('Prisoner personal', () => {
 
       context('Disabilities and adjustments section', () => {
         it('Should show correct headings, images, labels and values', () => {
-          cy.get('[data-test="learningDifficulties-summary"]').then(($section) => {
+          cy.get('[data-test="neurodiversity-summary"]').then(($section) => {
             cy.get($section)
               .find('dt')
               .then(($summaryLabels) => {
