@@ -100,7 +100,7 @@ describe('Education skills and work experience', () => {
 
     it('should return null content when feature flag is disabled', async () => {
       jest.spyOn(app, 'esweEnabled', 'get').mockReturnValue(false)
-      const actual = await service.getLearningDifficulties(nomisId)
+      const actual = await service.getNeurodiversities(nomisId)
       expect(actual.enabled).toBeFalsy()
       expect(actual.content).toBeNull()
       expect(getLearnerProfilesMock).not.toHaveBeenCalled()
@@ -111,14 +111,14 @@ describe('Education skills and work experience', () => {
     it('should return null content on error', async () => {
       jest.spyOn(app, 'esweEnabled', 'get').mockReturnValue(true)
       getLearnerProfilesMock.mockRejectedValue(new Error('error'))
-      const actual = await service.getLearningDifficulties(nomisId)
+      const actual = await service.getNeurodiversities(nomisId)
       expect(actual.content).toBeNull()
     })
 
     it('should return expected response when the prisoner is not registered in Curious', async () => {
       jest.spyOn(app, 'esweEnabled', 'get').mockReturnValue(true)
       getLearnerProfilesMock.mockRejectedValue(makeNotFoundError())
-      const actual = await service.getLearningDifficulties(nomisId)
+      const actual = await service.getNeurodiversities(nomisId)
       expect(actual.enabled).toBeTruthy()
       expect(actual.content).toEqual([])
     })
@@ -133,7 +133,7 @@ describe('Education skills and work experience', () => {
       ]
       jest.spyOn(app, 'esweEnabled', 'get').mockReturnValue(true)
       getLearnerProfilesMock.mockResolvedValue(noLDD)
-      const actual = await service.getLearningDifficulties(nomisId)
+      const actual = await service.getNeurodiversities(nomisId)
       expect(actual.content).toStrictEqual([])
       expect(getLearnerProfilesMock).toHaveBeenCalledTimes(1)
       expect(getLearnerProfilesMock).toHaveBeenCalledWith(credentialsRef, nomisId)
@@ -175,7 +175,7 @@ describe('Education skills and work experience', () => {
       ]
       jest.spyOn(app, 'esweEnabled', 'get').mockReturnValue(true)
       getLearnerProfilesMock.mockResolvedValue(oneCaseloadLDD)
-      const actual = await service.getLearningDifficulties(nomisId)
+      const actual = await service.getNeurodiversities(nomisId)
       expect(actual.content).toStrictEqual(expected)
     })
     it('should order the LDD information alphabetically by establishment name if there is data from multiple caseloads, and ignore caseloads where there are no LDD listed', async () => {
@@ -214,7 +214,7 @@ describe('Education skills and work experience', () => {
       ]
       jest.spyOn(app, 'esweEnabled', 'get').mockReturnValue(true)
       getLearnerProfilesMock.mockResolvedValue(dummyLearnerProfiles)
-      const actual = await service.getLearningDifficulties(nomisId)
+      const actual = await service.getNeurodiversities(nomisId)
       expect(actual.content).toStrictEqual(expected)
     })
   })

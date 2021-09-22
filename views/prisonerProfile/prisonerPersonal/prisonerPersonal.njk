@@ -71,10 +71,10 @@
 {% endset %}
 
 {% set careNeedsContent %}
-  {% if learningDifficulties.enabled %}
-    <h3 class="govuk-summary-list-title govuk-heading-m">Self-declared learning difficulties</h3>
-    <div data-test="learningDifficulties-summary">
-      {% include "./partials/learningDifficulties.njk" %}
+  {% if neurodiversities.enabled %}
+    <h3 class="govuk-summary-list-title govuk-heading-m">Self-declared neurodiversity needs</h3>
+    <div data-test="neurodiversity-summary">
+      {% include "./partials/neurodiversities.njk" %}
     </div>
     <h3 class="govuk-summary-list-title govuk-heading-m">Personal care needs</h3>
   {% endif %}
@@ -90,7 +90,7 @@
   ]
 %}
 
-{% if learningDifficulties.enabled %}
+{% if neurodiversities.enabled %}
   {% set leftSections = (
       leftSections.push({ heading: 'Disabilities and adjustments', html: careNeedsContent }),
       leftSections

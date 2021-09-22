@@ -248,7 +248,7 @@ module.exports = (on) => {
       reasonableAdjustments,
       agencies,
       prisonOffenderManagers,
-      learningDifficulties,
+      neurodiversities,
     }) =>
       Promise.all([
         prisonApi.stubIdentifiers(identifiers),
@@ -266,7 +266,7 @@ module.exports = (on) => {
         prisonApi.stubReasonableAdjustments(reasonableAdjustments),
         prisonApi.stubAgencies(agencies),
         allocationManager.stubGetPomForOffender(prisonOffenderManagers),
-        curiousApi.stubLearnerProfiles(learningDifficulties),
+        curiousApi.stubLearnerProfiles(neurodiversities),
       ]),
     stubReleaseDatesOffenderNo: (releaseDates) => Promise.all([prisonApi.stubPrisonerSentenceDetails(releaseDates)]),
     stubVerifyToken: (active = true) => tokenverification.stubVerifyToken(active),

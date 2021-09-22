@@ -128,25 +128,25 @@ declare namespace eswe {
   /**
    *
    * @export
-   * @interface LearningDifficultiesDisabilities
+   * @interface Neurodiversities
    */
-  interface LearningDifficultiesDisabilities {
+  interface Neurodiversities {
     /**
      * Establishment Name
      * @type {string}
-     * @memberof LearningDifficultiesDisabilities
+     * @memberof Neurodiversities
      */
     establishmentName?: string
     /**
      * Primary learning difficulty or disability
      * @type {string}
-     * @memberof LearningDifficultiesDisabilities
+     * @memberof Neurodiversities
      */
     primaryLDD?: Array
     /**
      * Additional learning difficulties or disabilities
      * @type {string}
-     * @memberof LearningDifficultiesDisabilities
+     * @memberof Neurodiversities
      */
     additionalLDD?: Array
   }
