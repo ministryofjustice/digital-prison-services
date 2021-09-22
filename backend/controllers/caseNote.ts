@@ -4,67 +4,80 @@ import { properCaseName } from '../utils'
 
 const getOffenderUrl = (offenderNo) => `/prisoner/${offenderNo}`
 
-const getOffenderDetails = async (prisonApi, res, offenderNo) => {
-  const { firstName, lastName } = await prisonApi.getDetails(res.locals, offenderNo)
-
-  return {
-    offenderNo,
-    profileUrl: getOffenderUrl(offenderNo),
-    name: `${properCaseName(firstName)} ${properCaseName(lastName)}`,
-  }
-}
-
-const getCaseNoteTypes = async (caseNotesApi, res, type) => {
-  const caseNoteTypes = (await caseNotesApi.myCaseNoteTypes(res.locals)).filter(
-    (caseNoteType) => caseNoteType.activeFlag === 'Y'
-  )
-
-  const types = caseNoteTypes.map((caseNoteType) => ({
-    value: caseNoteType.code,
-    text: caseNoteType.description,
-  }))
-
-  const subTypes = caseNoteTypes
-    .filter((caseNoteType) => caseNoteType.code === type)
-    .map((caseNoteType) =>
-      caseNoteType.subCodes
-        .filter((sub) => sub.activeFlag === 'Y')
-        .map((subCode) => ({
-          type: caseNoteType.code,
-          value: subCode.code,
-          text: subCode.description,
-        }))
-    )
-    .reduce((result, subCodes) => result.concat(subCodes), [])
-  return { types, subTypes }
-}
-
 export const caseNoteFactory = ({ prisonApi, caseNotesApi }) => {
+  const getOffenderDetails = async (res, offenderNo) => {
+    const { firstName, lastName } = await prisonApi.getDetails(res.locals, offenderNo)
+
+    return {
+      offenderNo,
+      profileUrl: getOffenderUrl(offenderNo),
+      name: `${properCaseName(firstName)} ${properCaseName(lastName)}`,
+    }
+  }
+
+  const getCaseNoteTypes = async (res, type) => {
+    const caseNoteTypes = (await caseNotesApi.myCaseNoteTypes(res.locals)).filter(
+      (caseNoteType) => caseNoteType.activeFlag === 'Y'
+    )
+
+    const types = caseNoteTypes.map((caseNoteType) => ({
+      value: caseNoteType.code,
+      text: caseNoteType.description,
+    }))
+
+    const subTypes = caseNoteTypes
+      .filter((caseNoteType) => caseNoteType.code === type)
+      .map((caseNoteType) =>
+        caseNoteType.subCodes
+          .filter((sub) => sub.activeFlag === 'Y')
+          .map((subCode) => ({
+            type: caseNoteType.code,
+            value: subCode.code,
+            text: subCode.description,
+          }))
+      )
+      .reduce((result, subCodes) => result.concat(subCodes), [])
+    return { types, subTypes }
+  }
+  const stashStateAndRedirectToAddCaseNote = (req, res, caseNote, offenderNo, errors) => {
+    if (errors.length > 0) req.flash('caseNoteErrors', errors)
+    req.flash('caseNote', caseNote)
+    return res.redirect(`${getOffenderUrl(offenderNo)}/add-case-note`)
+  }
+
+  const getOrConstructFormValues = (req) => {
+    const caseNoteFlashed = req.flash('caseNote')
+    if (caseNoteFlashed?.length) return caseNoteFlashed[0]
+
+    const { type, subType } = req.query || {}
+    const currentDateTime = moment()
+    return {
+      type,
+      subType,
+      date: currentDateTime.format('DD/MM/YYYY'),
+      hours: currentDateTime.format('H'),
+      minutes: currentDateTime.format('mm'),
+      text: undefined,
+    }
+  }
+
   const index = async (req, res) => {
     const { offenderNo } = req.params
     try {
       if (req.xhr) {
         const { typeCode } = req.query
-        const { subTypes } = await getCaseNoteTypes(caseNotesApi, res, typeCode)
+        const { subTypes } = await getCaseNoteTypes(res, typeCode)
         return res.send(nunjucks.render('caseNotes/partials/subTypesOptions.njk', { subTypes }))
       }
-      const { type, subType } = req.query || {}
-      const { types, subTypes } = await getCaseNoteTypes(caseNotesApi, res, type)
-      const offenderDetails = await getOffenderDetails(prisonApi, res, offenderNo)
-
-      const currentDateTime = moment()
+      const formValues = getOrConstructFormValues(req)
+      const { types, subTypes } = await getCaseNoteTypes(res, formValues.type)
+      const offenderDetails = await getOffenderDetails(res, offenderNo)
 
       return res.render('caseNotes/addCaseNoteForm.njk', {
+        errors: req.flash('caseNoteErrors'),
         offenderDetails,
         offenderNo,
-        formValues: {
-          type,
-          subType,
-          ...req.body,
-          date: currentDateTime.format('DD/MM/YYYY'),
-          hours: currentDateTime.format('H'),
-          minutes: currentDateTime.format('mm'),
-        },
+        formValues,
         types,
         subTypes,
         homeUrl: `${getOffenderUrl(offenderNo)}/case-notes`,
@@ -76,9 +89,7 @@ export const caseNoteFactory = ({ prisonApi, caseNotesApi }) => {
     }
   }
 
-  const post = async (req, res) => {
-    const { offenderNo } = req.params
-    const { type, subType, text, date, hours, minutes } = req.body
+  const validate = (type, subType, text, date, hours, minutes) => {
     const errors = []
 
     if (!type) {
@@ -184,10 +195,32 @@ export const caseNoteFactory = ({ prisonApi, caseNotesApi }) => {
       // Do nothing, will only fail if the date inputs are invalid, which
       // has been handled by the above validations
     }
+    return errors
+  }
 
+  const post = async (req, res) => {
+    const { offenderNo } = req.params
+    const { type, subType, text, date, hours, minutes } = req.body
+    const errors = validate(type, subType, text, date, hours, minutes)
+
+    const caseNote = {
+      offenderNo,
+      type,
+      subType,
+      text,
+      date,
+      hours,
+      minutes,
+    }
     if (errors.length === 0) {
       try {
+        if (subType === 'OPEN_COMM') {
+          req.session.draftCaseNote = caseNote
+          return res.redirect(`${getOffenderUrl(offenderNo)}/add-case-note/confirm`)
+        }
+
         await caseNotesApi.addCaseNote(res.locals, offenderNo, {
+          offenderNo,
           type,
           subType,
           text,
@@ -199,35 +232,59 @@ export const caseNoteFactory = ({ prisonApi, caseNotesApi }) => {
         })
       } catch (err) {
         if (err?.response?.status === 400) {
-          errors.push({
-            text: err.response.body.userMessage,
-            href: '#text',
-          })
-        } else {
-          throw err
-        }
+          errors.push({ text: err.response.body.userMessage, href: '#text' })
+        } else throw err
       }
     }
 
-    if (errors.length > 0) {
-      const { types, subTypes } = await getCaseNoteTypes(caseNotesApi, res, type)
-      const offenderDetails = await getOffenderDetails(prisonApi, res, offenderNo)
-      return res.render('caseNotes/addCaseNoteForm.njk', {
-        errors,
-        offenderNo,
-        formValues: { ...req.body },
-        offenderDetails,
-        types,
-        subTypes,
-        homeUrl: `${getOffenderUrl(offenderNo)}/case-notes`,
-        alertsRootUrl: `/prisoner/${offenderNo}/add-case-note`,
-      })
-    }
+    if (errors.length > 0) return stashStateAndRedirectToAddCaseNote(req, res, caseNote, offenderNo, errors)
 
     return res.redirect(`${getOffenderUrl(offenderNo)}/case-notes`)
   }
 
-  return { index, post }
+  const areYouSure = async (req, res) => {
+    const { offenderNo } = req.params
+    const offenderDetails = await getOffenderDetails(res, offenderNo)
+
+    return res.render('caseNotes/addCaseNoteConfirm.njk', {
+      offenderNo,
+      offenderDetails,
+      homeUrl: `${getOffenderUrl(offenderNo)}/case-notes`,
+      caseNotesRootUrl: `/prisoner/${offenderNo}/add-case-note`,
+    })
+  }
+
+  const confirm = async (req, res) => {
+    const { offenderNo } = req.params
+    const caseNote = req.session.draftCaseNote
+    delete req.session.draftCaseNote
+
+    const { confirmed } = req.body
+    const errors = []
+    if (confirmed === 'Yes') {
+      try {
+        await caseNotesApi.addCaseNote(res.locals, offenderNo, {
+          ...caseNote,
+          occurrenceDateTime: moment(caseNote.date, 'DD/MM/YYYY')
+            .hours(caseNote.hours)
+            .minutes(caseNote.minutes)
+            .seconds(0)
+            .format('YYYY-MM-DDTHH:mm:ss'),
+        })
+      } catch (err) {
+        if (err?.response?.status === 400) {
+          errors.push({ text: err.response.body.userMessage, href: '#text' })
+        } else throw err
+      }
+    }
+
+    if (errors.length > 0 || confirmed !== 'Yes') {
+      return stashStateAndRedirectToAddCaseNote(req, res, caseNote, offenderNo, errors)
+    }
+    return res.redirect(`${getOffenderUrl(offenderNo)}/case-notes`)
+  }
+
+  return { index, post, areYouSure, confirm }
 }
 
 export default { caseNoteFactory }
