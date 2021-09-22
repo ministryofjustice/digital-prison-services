@@ -1,7 +1,8 @@
 import React from 'react'
 import { shallow } from 'enzyme'
 import moment from 'moment'
-import { ResultsHouseblock, PrintLink } from './ResultsHouseblock'
+import { ResultsHouseblock } from './ResultsHouseblock'
+import PrintLink from '../Components/PrintLink/PrintLink'
 import OtherActivitiesView from '../OtherActivityListView'
 
 const PRISON = 'LEI'
