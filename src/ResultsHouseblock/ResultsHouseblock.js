@@ -9,8 +9,6 @@ import PropTypes from 'prop-types'
 import { withRouter } from 'react-router'
 import moment from 'moment'
 import styled from 'styled-components'
-import { FONT_SIZE } from '@govuk-react/constants'
-import { LINK_HOVER_COLOUR, LINK_COLOUR } from 'govuk-colours'
 import {
   isAfterToday,
   getHoursMinutes,
