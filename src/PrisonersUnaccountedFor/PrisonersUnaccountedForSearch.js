@@ -71,7 +71,7 @@ const PrisonersUnaccountedForSearch = ({
             )}
           </FullWidthSelect>
         </GridCol>
-        <GridCol>
+        <GridCol className="no-print">
           <RightAlignContainer>
             <PrintLink data-qa="print-button" onClick={() => window.print()} id="printButton">
               Print this page
