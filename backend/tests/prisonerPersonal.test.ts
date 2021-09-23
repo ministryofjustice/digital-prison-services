@@ -42,8 +42,8 @@ describe('prisoner personal', () => {
 
     // @ts-expect-error ts-migrate(2339) FIXME: Property 'getPersonContactDetails' does not exist ... Remove this comment to see the full error message
     personService.getPersonContactDetails = jest.fn().mockResolvedValue({})
-    // @ts-expect-error ts-migrate(2339) FIXME: Property 'getLatestLearningDifficulties' does not ex... Remove this comment to see the full error message
-    esweService.getLatestLearningDifficulties = jest.fn().mockResolvedValue('')
+    // @ts-expect-error ts-migrate(2339) FIXME: Property 'getNeurodiversities' does not ex... Remove this comment to see the full error message
+    esweService.getNeurodiversities = jest.fn().mockResolvedValue('')
 
     // @ts-expect-error ts-migrate(2339) FIXME: Property 'getDetails' does not exist on type '{}'.
     prisonApi.getDetails = jest.fn().mockResolvedValue({})
@@ -71,8 +71,8 @@ describe('prisoner personal', () => {
     prisonApi.getAgencies = jest.fn().mockResolvedValue([])
     // @ts-expect-error ts-migrate(2339) FIXME: Property 'getPomByOffenderNo' does not exist on ty... Remove this comment to see the full error message
     allocationManagerApi.getPomByOffenderNo = jest.fn().mockResolvedValue({})
-    // @ts-expect-error ts-migrate(2339) FIXME: Property 'getLearningDifficulties' does not exist on type '{}'... Remove this comment to see the full error message
-    esweService.getLearningDifficulties = jest.fn().mockResolvedValue([])
+    // @ts-expect-error ts-migrate(2339) FIXME: Property 'getNeurodiversities' does not exist on type '{}'... Remove this comment to see the full error message
+    esweService.getNeurodiversities = jest.fn().mockResolvedValue([])
 
     controller = prisonerPersonal({
       prisonerProfileService,
@@ -2092,22 +2092,22 @@ describe('prisoner personal', () => {
 
   describe('learner profile data', () => {
     beforeEach(() => {
-      // @ts-expect-error ts-migrate(2339) FIXME: Property 'getLatestLearningDifficulties' does not ex... Remove this comment to see the full error message
-      esweService.getLearningDifficulties = jest.fn()
+      // @ts-expect-error ts-migrate(2339) FIXME: Property 'getNeurodiversities' does not ex... Remove this comment to see the full error message
+      esweService.getNeurodiversities = jest.fn()
     })
 
     it('should return null for a failed request', async () => {
-      // @ts-expect-error ts-migrate(2339) FIXME: Property 'getLatestLearningDifficulties' does not ex... Remove this comment to see the full error message
-      esweService.getLearningDifficulties.mockRejectedValue(new Error())
+      // @ts-expect-error ts-migrate(2339) FIXME: Property 'getNeurodiversities' does not ex... Remove this comment to see the full error message
+      esweService.getNeurodiversities.mockRejectedValue(new Error())
       await controller(req, res)
       expect(res.render).toHaveBeenCalledWith(
         'prisonerProfile/prisonerPersonal/prisonerPersonal.njk',
-        expect.objectContaining({ learningDifficulties: null })
+        expect.objectContaining({ neurodiversities: null })
       )
     })
 
     it('should return a list of learner profiles for a successful request', async () => {
-      const learningDifficulties = [
+      const neurodiversities = [
         {
           establishmentName: 'HMP Moorland',
           details: [
@@ -2119,12 +2119,12 @@ describe('prisoner personal', () => {
           ],
         },
       ]
-      // @ts-expect-error ts-migrate(2339) FIXME: Property 'getLatestLearningDifficulties' does not ex... Remove this comment to see the full error message
-      esweService.getLearningDifficulties.mockResolvedValue(learningDifficulties)
+      // @ts-expect-error ts-migrate(2339) FIXME: Property 'getNeurodiversities' does not ex... Remove this comment to see the full error message
+      esweService.getNeurodiversities.mockResolvedValue(neurodiversities)
       await controller(req, res)
       expect(res.render).toHaveBeenCalledWith(
         'prisonerProfile/prisonerPersonal/prisonerPersonal.njk',
-        expect.objectContaining({ learningDifficulties })
+        expect.objectContaining({ neurodiversities })
       )
     })
   })

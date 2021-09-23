@@ -122,4 +122,9 @@ module.exports = {
       method: 'PUT',
       urlPathPattern: '/casenotes/case-notes/A12345/1',
     }).then((data) => data.body.requests),
+  verifySaveCaseNote: () =>
+    getMatchingRequests({
+      method: 'POST',
+      urlPattern: '/casenotes/case-notes/.+?',
+    }).then((data) => data.body.requests),
 }
