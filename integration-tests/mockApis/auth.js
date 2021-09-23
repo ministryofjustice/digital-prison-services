@@ -21,7 +21,7 @@ const getLoginUrl = () =>
   getMatchingRequests({
     method: 'GET',
     urlPath: '/auth/oauth/authorize',
-  }).then(data => {
+  }).then((data) => {
     const { requests } = data.body
     const stateValue = requests[requests.length - 1].queryParams.state.values[0]
     return `/login/callback?code=codexxxx&state=${stateValue}`
@@ -147,7 +147,7 @@ const stubUserMeRoles = (roles = ['ROLE']) =>
     },
   })
 
-const stubEmail = username =>
+const stubEmail = (username) =>
   stubFor({
     request: {
       method: 'GET',
@@ -165,7 +165,7 @@ const stubEmail = username =>
     },
   })
 
-const stubUnverifiedEmail = username =>
+const stubUnverifiedEmail = (username) =>
   stubFor({
     request: {
       method: 'GET',
@@ -220,7 +220,7 @@ module.exports = {
       stubUser(username, caseloadId),
       stubUserLocations(),
       stubStaffRoles(),
-      stubLocationConfig({ agencyId: 'MDI', response: { enabled: false } }),
+      stubLocationConfig({ agencyId: caseloadId, response: { enabled: false } }),
     ]),
   stubLoginCourt: () =>
     Promise.all([
@@ -231,8 +231,8 @@ module.exports = {
       stubUserMe(),
       stubUserMeRoles([{ roleCode: 'GLOBAL_SEARCH' }, { roleCode: 'VIDEO_LINK_COURT_USER' }]),
     ]),
-  stubUserDetailsRetrieval: username => Promise.all([stubUser(username), stubEmail(username)]),
-  stubUnverifiedUserDetailsRetrieval: username => Promise.all([stubUser(username), stubUnverifiedEmail(username)]),
+  stubUserDetailsRetrieval: (username) => Promise.all([stubUser(username), stubEmail(username)]),
+  stubUnverifiedUserDetailsRetrieval: (username) => Promise.all([stubUser(username), stubUnverifiedEmail(username)]),
   stubUserMe,
   stubUserMeRoles,
   stubUser,
