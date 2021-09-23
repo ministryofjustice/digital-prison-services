@@ -12,7 +12,7 @@ type FeatureFlagged<T> = {
 
 type LearnerProfiles = FeatureFlagged<curious.LearnerProfile[]>
 type LearnerLatestAssessments = FeatureFlagged<eswe.FunctionalSkillsLevels>
-type OffenderGoals = FeatureFlagged<curious.LearnerGoals>
+type OffenderGoals = FeatureFlagged<eswe.LearnerGoals>
 type Neurodiversities = FeatureFlagged<eswe.Neurodiversities[]>
 type CurrentCoursesEnhanced = FeatureFlagged<eswe.CurrentCoursesEnhanced>
 type LearnerEducationFullDetails = FeatureFlagged<eswe.LearnerEducationFullDetails[]>
@@ -247,15 +247,17 @@ export default class EsweService {
       const context = await this.systemOauthClient.getClientCredentialsTokens()
       const goals = await this.curiousApi.getLearnerGoals(context, nomisId)
 
-      const { employmentGoals, personalGoals } = goals
+      const { employmentGoals, personalGoals, longTermGoals, shortTermGoals } = goals
 
-      if (!employmentGoals.length && !personalGoals.length) {
+      if (!employmentGoals.length && !personalGoals.length && !longTermGoals.length && !shortTermGoals.length) {
         return createFlaggedContent(DEFAULT_GOALS)
       }
 
       const displayedGoals = {
         employmentGoals: employmentGoals.length ? employmentGoals : [DATA_NOT_ADDED],
         personalGoals: personalGoals.length ? personalGoals : [DATA_NOT_ADDED],
+        longTermGoals: longTermGoals.length ? longTermGoals : [DATA_NOT_ADDED],
+        shortTermGoals: shortTermGoals.length ? shortTermGoals : [DATA_NOT_ADDED],
       }
       return createFlaggedContent(displayedGoals)
     } catch (e) {

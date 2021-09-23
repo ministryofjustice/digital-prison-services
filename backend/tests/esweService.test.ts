@@ -561,10 +561,12 @@ describe('Education skills and work experience', () => {
         expect(actual.enabled).toBeTruthy()
         expect(actual.content).toEqual(DEFAULT_GOALS)
       })
-      it('should return the expected response if there are goals available for both goal types', async () => {
+      it('should return the expected response if there are goals available for all goal types', async () => {
         const expected = {
           employmentGoals: ['To be an electrician', 'To get an electrics qualification'],
           personalGoals: ['To support my family', 'To be healthy'],
+          longTermGoals: ['I would like to own my own flat', 'I would like a full time job'],
+          shortTermGoals: ['I would like to improve my English skills'],
         }
         jest.spyOn(app, 'esweEnabled', 'get').mockReturnValue(true)
         const actual = await service.getLearnerGoals(nomisId)
@@ -575,6 +577,8 @@ describe('Education skills and work experience', () => {
         const expected = {
           employmentGoals: ['To be an electrician', 'To get an electrics qualification'],
           personalGoals: ['Not entered'],
+          longTermGoals: ['Not entered'],
+          shortTermGoals: ['Not entered'],
         }
         jest.spyOn(app, 'esweEnabled', 'get').mockReturnValue(true)
         getLearnerGoalsMock.mockResolvedValue({
@@ -947,8 +951,8 @@ function getDummyGoals(): curious.LearnerGoals {
     prn: 'G3609VL',
     employmentGoals: ['To be an electrician', 'To get an electrics qualification'],
     personalGoals: ['To support my family', 'To be healthy'],
-    longTermGoals: ['To be rich'],
-    shortTermGoals: ['Earn money'],
+    longTermGoals: ['I would like to own my own flat', 'I would like a full time job'],
+    shortTermGoals: ['I would like to improve my English skills'],
   }
 }
 
