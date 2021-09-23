@@ -201,6 +201,8 @@ export const prisonApiFactory = (client) => {
 
   const getAdjudicationFindingTypes = (context) => get(context, '/api/reference-domains/domains/OIC_FINDING', 1000)
 
+  const getMovementReasons = (context) => get(context, '/api/reference-domains/domains/MOVE_RSN', 1000)
+
   const getAdjudications = async (context, offenderNumber, params, pageOffset, pageLimit) => {
     contextProperties.setCustomRequestHeaders(context, {
       'page-offset': pageOffset || 0,
@@ -518,6 +520,7 @@ export const prisonApiFactory = (client) => {
     getHistoryByDate,
     getOffenderCurrentWork,
     getOffenderWorkHistory,
+    getMovementReasons,
   }
 }
 
