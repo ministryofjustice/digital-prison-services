@@ -68,6 +68,7 @@ declare namespace eswe {
      */
     workActivities: WorkActivity[]
   }
+
   /**
    *
    * @export
@@ -285,34 +286,28 @@ declare namespace eswe {
    */
   export interface LearnerGoals {
     /**
-     * NOMIS Assigned Offender Number (Prisoner Identifier)
-     * @type {string}
+     *
+     * @type {Array<string>}
      * @memberof LearnerGoals
      */
-    prn?: string
+    employmentGoals: Array
     /**
      *
      * @type {Array<string>}
      * @memberof LearnerGoals
      */
-    employmentGoals?: Array
+    personalGoals: Array
     /**
      *
      * @type {Array<string>}
      * @memberof LearnerGoals
      */
-    personalGoals?: Array
+    longTermGoals: Array
     /**
      *
      * @type {Array<string>}
      * @memberof LearnerGoals
      */
-    longTermGoals?: Array
-    /**
-     *
-     * @type {Array<string>}
-     * @memberof LearnerGoals
-     */
-    shortTermGoals?: Array
+    shortTermGoals: Array
   }
 }
