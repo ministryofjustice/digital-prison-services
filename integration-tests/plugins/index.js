@@ -490,5 +490,6 @@ module.exports = (on) => {
     stubDeleteRecurringAppointmentSequence: ({ id, status }) =>
       whereabouts.stubDeleteRecurringAppointmentSequence({ id, status }),
     stubPrisonerSearch: () => offenderSearch.stubPrisonerSearch(),
+    stubMovementReasons: (reasons) => prisonApi.stubMovementReasons(reasons),
   })
 }
