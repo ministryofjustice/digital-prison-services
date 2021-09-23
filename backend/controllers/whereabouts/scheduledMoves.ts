@@ -13,7 +13,6 @@ export default ({ prisonApi }) => {
     const dateForTitle = moment(date, 'DD/MM/YYYY').format('D MMMM YYYY')
 
     return res.render('whereabouts/scheduledMoves.njk', {
-      title: `People due to leave ${agencyDetails.description} on ${dateForTitle}`,
       dateForTitle,
       agencyDescription: agencyDetails.description,
       formValues: {
