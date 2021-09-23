@@ -346,6 +346,7 @@ module.exports = (on) => {
     stubVideoLinkAppointments: whereabouts.stubVideoLinkAppointments,
     stubCreateAlert: prisonApi.stubCreateAlert,
     stubCreateCaseNote: caseNotes.stubCreateCaseNote,
+    verifySaveCaseNote: caseNotes.verifySaveCaseNote,
     stubDeleteCaseNote: caseNotes.stubDeleteCaseNote,
     stubDeleteCaseNoteAmendment: caseNotes.stubDeleteCaseNoteAmendment,
     stubCaseNoteTypesForUser: caseNotes.stubCaseNoteTypesForUser,
