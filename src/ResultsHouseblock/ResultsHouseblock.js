@@ -9,8 +9,6 @@ import PropTypes from 'prop-types'
 import { withRouter } from 'react-router'
 import moment from 'moment'
 import styled from 'styled-components'
-import { FONT_SIZE } from '@govuk-react/constants'
-import { LINK_HOVER_COLOUR, LINK_COLOUR } from 'govuk-colours'
 import {
   isAfterToday,
   getHoursMinutes,
@@ -31,6 +29,7 @@ import WhereaboutsDatePicker from '../DatePickers/WhereaboutsDatePicker'
 import TotalResults from '../Components/ResultsTable/elements/TotalResults'
 import AttendanceOptions from '../Attendance/AttendanceOptions'
 import { linkOnClick } from '../helpers'
+import PrintLink from '../Components/PrintLink/PrintLink'
 
 const ManageResults = styled.div`
   display: flex;
@@ -64,23 +63,6 @@ export const PrintButton = styled(Button)`
 
 const TitleLinkContainer = styled('div')`
   margin: -15px 0 15px;
-`
-
-export const PrintLink = styled(Link)`
-  font-size: ${FONT_SIZE.SIZE_16};
-  color: ${LINK_COLOUR};
-  cursor: pointer;
-  text-decoration: underline;
-  display: inline-block;
-  margin: 0 0 15px -10px;
-  position: relative;
-  padding: 0.5em 0 0.5em 38px;
-  background: url('/images/Printer_icon.png') no-repeat 10px 50%;
-  background-size: 16px 18px;
-
-  &:hover {
-    color: ${LINK_HOVER_COLOUR};
-  }
 `
 
 class ResultsHouseblock extends Component {
