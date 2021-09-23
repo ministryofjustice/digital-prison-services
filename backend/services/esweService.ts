@@ -33,6 +33,8 @@ const AWAITING_ASSESSMENT_CONTENT = 'Awaiting assessment'
 export const DEFAULT_GOALS = {
   employmentGoals: null,
   personalGoals: null,
+  shortTermGoals: null,
+  longTermGoals: null,
 }
 
 export const DEFAULT_COURSE_DATA = {
