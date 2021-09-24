@@ -5,8 +5,8 @@ context('Deleted appointment page', () => {
   before(() => {
     cy.clearCookies()
     cy.task('resetAndStubTokenVerification')
-    cy.task('stubLogin', { username: 'ITAG_USER', caseload: 'WWI' })
-    cy.login()
+    cy.task('stubSignIn', { username: 'ITAG_USER', caseload: 'WWI' })
+    cy.signIn()
   })
 
   beforeEach(() => {
@@ -20,7 +20,7 @@ context('Deleted appointment page', () => {
     deletedSingleAppointmentPage
       .finishLink()
       .should('have.attr', 'href')
-      .then(href => {
+      .then((href) => {
         expect(href).to.equal('/view-all-appointments')
       })
   })
@@ -32,7 +32,7 @@ context('Deleted appointment page', () => {
     deletedMultipleAppointmentPage
       .finishLink()
       .should('have.attr', 'href')
-      .then(href => {
+      .then((href) => {
         expect(href).to.equal('/view-all-appointments')
       })
   })

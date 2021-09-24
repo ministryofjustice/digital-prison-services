@@ -9,7 +9,7 @@ const pageUrl = '/manage-prisoner-whereabouts/prisoners-unaccounted-for'
 const offenderNo1 = 'A12345'
 const offenderNo2 = 'A12346'
 
-const toOffender = $cell => ({
+const toOffender = ($cell) => ({
   name: $cell[0]?.textContent,
   location: $cell[1]?.textContent,
   prisonNo: $cell[2]?.textContent,
@@ -26,16 +26,14 @@ context('Prisoners unaccounted for', () => {
   before(() => {
     cy.clearCookies()
     cy.task('resetAndStubTokenVerification')
-    cy.task('stubLogin', { username: 'ITAG_USER', caseload: 'MDI', roles: [{ roleCode: 'ACTIVITY_HUB' }] })
-    cy.login()
+    cy.task('stubSignIn', { username: 'ITAG_USER', caseload: 'MDI', roles: [{ roleCode: 'ACTIVITY_HUB' }] })
+    cy.signIn()
   })
 
   beforeEach(() => {
     Cypress.Cookies.preserveOnce('hmpps-session-dev')
 
-    const yesterday = moment()
-      .subtract(1, 'day')
-      .format('YYYY-MM-DD')
+    const yesterday = moment().subtract(1, 'day').format('YYYY-MM-DD')
 
     cy.task('stubOffenderActivities', [
       {
@@ -88,12 +86,10 @@ context('Prisoners unaccounted for', () => {
       cy.get('[data-qa="results-table"]')
         .find('tbody')
         .find('tr')
-        .then($tableRows => {
-          cy.get($tableRows)
-            .its('length')
-            .should('eq', 2)
+        .then(($tableRows) => {
+          cy.get($tableRows).its('length').should('eq', 2)
 
-          const offenders = Array.from($tableRows).map($row => toOffender($row.cells))
+          const offenders = Array.from($tableRows).map(($row) => toOffender($row.cells))
 
           expect(offenders[0].name).to.eq('Doe, Bob')
           expect(offenders[0].location).to.eq('1-1')
@@ -116,7 +112,7 @@ context('Prisoners unaccounted for', () => {
 
     cy.visit(pageUrl)
       .wait('@request')
-      .then(xhr => {
+      .then((xhr) => {
         const queryStringStartIndex = xhr?.url?.indexOf('?') + 1
         const { agencyId, date } = queryString.parse(xhr.url.substring(queryStringStartIndex))
 
@@ -134,7 +130,7 @@ context('Prisoners unaccounted for', () => {
       .then(() => {
         datePickerDriver(cy).pickDate(2, 0, 2020)
 
-        cy.wait('@request').then(xhr => {
+        cy.wait('@request').then((xhr) => {
           const queryStringStartIndex = xhr?.url?.indexOf('?') + 1
           const { agencyId, date } = queryString.parse(xhr.url.substring(queryStringStartIndex))
 
@@ -158,7 +154,7 @@ context('Prisoners unaccounted for', () => {
       .find(`input[name="${offenderNo1 + event}"]`)
       .click()
 
-    cy.wait('@request').then(xhr => {
+    cy.wait('@request').then((xhr) => {
       const requestBody = xhr.request.body
 
       expect(requestBody.attended).to.eq(true)
@@ -191,7 +187,7 @@ context('Prisoners unaccounted for', () => {
 
     attendanceDialogDriver(cy).markAsPaidAbsence()
 
-    cy.wait('@request').then(xhr => {
+    cy.wait('@request').then((xhr) => {
       const requestBody = xhr.request.body
 
       expect(requestBody.absentReason).to.eq('AcceptableAbsence')

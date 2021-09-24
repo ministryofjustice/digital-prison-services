@@ -5,8 +5,8 @@ context('Prisoner CSRA review', () => {
   before(() => {
     cy.clearCookies()
     cy.task('reset')
-    cy.task('stubLogin', { username: 'ITAG_USER', caseload: 'MDI' })
-    cy.login()
+    cy.task('stubSignIn', { username: 'ITAG_USER', caseload: 'MDI' })
+    cy.signIn()
   })
 
   beforeEach(() => {
@@ -60,13 +60,11 @@ context('Prisoner CSRA review', () => {
 
     cy.get('h1').contains('CSRA review on 15 March 2011')
 
-    cy.get('[data-test="review-summary"]').then($summary => {
+    cy.get('[data-test="review-summary"]').then(($summary) => {
       cy.get($summary)
         .find('dt')
-        .then($summaryLabels => {
-          cy.get($summaryLabels)
-            .its('length')
-            .should('eq', 7)
+        .then(($summaryLabels) => {
+          cy.get($summaryLabels).its('length').should('eq', 7)
           expect($summaryLabels.get(0).innerText).to.contain('CSRA')
           expect($summaryLabels.get(1).innerText).to.contain('Override reason')
           expect($summaryLabels.get(2).innerText).to.contain('Authorised by')
@@ -78,10 +76,8 @@ context('Prisoner CSRA review', () => {
 
       cy.get($summary)
         .find('dd')
-        .then($summaryValues => {
-          cy.get($summaryValues)
-            .its('length')
-            .should('eq', 7)
+        .then(($summaryValues) => {
+          cy.get($summaryValues).its('length').should('eq', 7)
           expect($summaryValues.get(0).innerText).to.contain('Standard - this is an override from Low')
           expect($summaryValues.get(1).innerText).to.contain('Previous History')
           expect($summaryValues.get(2).innerText).to.contain('Review Board')
@@ -91,20 +87,16 @@ context('Prisoner CSRA review', () => {
           expect($summaryValues.get(6).innerText).to.contain('13 June 2011')
         })
 
-      cy.get('[data-test="review-question"]').then($questions => {
-        cy.get($questions)
-          .its('length')
-          .should('eq', 1)
+      cy.get('[data-test="review-question"]').then(($questions) => {
+        cy.get($questions).its('length').should('eq', 1)
 
         expect($questions.get(0).innerText).to.contain(
           'Is there a reason to suspect that the prisoner is abusing drugs / alcohol?'
         )
       })
 
-      cy.get('[data-test="review-answer"]').then($answers => {
-        cy.get($answers)
-          .its('length')
-          .should('eq', 1)
+      cy.get('[data-test="review-answer"]').then(($answers) => {
+        cy.get($answers).its('length').should('eq', 1)
 
         expect($answers.get(0).innerText).to.contain('No')
       })

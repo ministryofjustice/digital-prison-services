@@ -1,6 +1,6 @@
 const HomePage = require('../../pages/homepage/homepagePage')
 
-context('Login functionality', () => {
+context('Sign in functionality', () => {
   before(() => {
     cy.clearCookies()
   })
@@ -14,34 +14,34 @@ context('Login functionality', () => {
     cy.task('stubKeyworkerMigrated')
   })
 
-  it('Root (/) redirects to the auth login page if not logged in', () => {
+  it('Root (/) redirects to the auth sign in page if not signed in', () => {
     cy.task('stubSignInPage')
     cy.visit('/')
     cy.url().should('include', 'authorize')
     cy.get('h1').should('contain.text', 'Sign in')
   })
 
-  it('Login page redirects to the auth login page if not logged in', () => {
+  it('Sign in page redirects to the auth sign in page if not signed in', () => {
     cy.task('stubSignInPage')
-    cy.visit('/login')
+    cy.visit('/sign-in')
     cy.url().should('include', 'authorize')
     cy.get('h1').should('contain.text', 'Sign in')
   })
 
-  it('Page redirects to the auth login page if not logged in', () => {
+  it('Page redirects to the auth sign in page if not signed in', () => {
     cy.task('stubSignIn', {})
-    cy.visit('/login')
+    cy.visit('/sign-in')
     cy.url().should('include', 'authorize')
     cy.get('h1').should('contain.text', 'Sign in')
   })
 
-  it('Logout takes user to login page', () => {
+  it('Sign in takes user to sign in page', () => {
     cy.task('stubSignIn', {})
     cy.signIn()
     HomePage.verifyOnPage()
 
     // can't do a visit here as cypress requires only one domain
-    cy.request('/auth/logout').its('body').should('contain', 'Sign in')
+    cy.request('/auth/sign-out').its('body').should('contain', 'Sign in')
   })
 
   it('Token verification failure takes user to sign in page', () => {
@@ -71,7 +71,7 @@ context('Login functionality', () => {
     homePage.loggedInName().contains('B. Brown')
   })
 
-  it('Log in as ordinary user', () => {
+  it('Sign in as ordinary user', () => {
     cy.task('stubSignIn', {})
     cy.signIn()
     HomePage.verifyOnPage()

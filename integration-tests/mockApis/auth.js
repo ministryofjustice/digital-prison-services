@@ -17,14 +17,14 @@ const createToken = () => {
   return token
 }
 
-const getLoginUrl = () =>
+const getSignInUrl = () =>
   getMatchingRequests({
     method: 'GET',
     urlPath: '/auth/oauth/authorize',
-  }).then(data => {
+  }).then((data) => {
     const { requests } = data.body
     const stateValue = requests[requests.length - 1].queryParams.state.values[0]
-    return `/login/callback?code=codexxxx&state=${stateValue}`
+    return `/sign-in/callback?code=codexxxx&state=${stateValue}`
   })
 
 const favicon = () =>
@@ -48,17 +48,17 @@ const redirect = () =>
       status: 200,
       headers: {
         'Content-Type': 'text/html',
-        Location: 'http://localhost:3008/login/callback?code=codexxxx&state=stateyyyy',
+        Location: 'http://localhost:3008/sign-in/callback?code=codexxxx&state=stateyyyy',
       },
       body: '<html><body>Login page<h1>Sign in</h1></body></html>',
     },
   })
 
-const logout = () =>
+const signOut = () =>
   stubFor({
     request: {
       method: 'GET',
-      urlPath: '/auth/logout',
+      urlPath: '/auth/sign-out',
     },
     response: {
       status: 200,
@@ -79,7 +79,7 @@ const token = () =>
       status: 200,
       headers: {
         'Content-Type': 'application/json;charset=UTF-8',
-        Location: 'http://localhost:3008/login/callback?code=codexxxx&state=stateyyyy',
+        Location: 'http://localhost:3008/sign-in/callback?code=codexxxx&state=stateyyyy',
       },
       jsonBody: {
         access_token: createToken(),
@@ -147,7 +147,7 @@ const stubUserMeRoles = (roles = ['ROLE']) =>
     },
   })
 
-const stubEmail = username =>
+const stubEmail = (username) =>
   stubFor({
     request: {
       method: 'GET',
@@ -165,7 +165,7 @@ const stubEmail = username =>
     },
   })
 
-const stubUnverifiedEmail = username =>
+const stubUnverifiedEmail = (username) =>
   stubFor({
     request: {
       method: 'GET',
@@ -208,12 +208,12 @@ const stubClientCredentialsRequest = () =>
 
 module.exports = {
   stubHealth,
-  getLoginUrl,
-  stubLogin: (username, caseloadId, roles = []) =>
+  getSignInUrl,
+  stubSignIn: (username, caseloadId, roles = []) =>
     Promise.all([
       favicon(),
       redirect(),
-      logout(),
+      signOut(),
       token(),
       stubUserMe(),
       stubUserMeRoles([{ roleCode: 'UPDATE_ALERT' }, ...roles]),
@@ -222,17 +222,17 @@ module.exports = {
       stubStaffRoles(),
       stubLocationConfig({ agencyId: 'MDI', response: { enabled: false } }),
     ]),
-  stubLoginCourt: () =>
+  stubSignInCourt: () =>
     Promise.all([
       favicon(),
       redirect(),
-      logout(),
+      signOut(),
       token(),
       stubUserMe(),
       stubUserMeRoles([{ roleCode: 'GLOBAL_SEARCH' }, { roleCode: 'VIDEO_LINK_COURT_USER' }]),
     ]),
-  stubUserDetailsRetrieval: username => Promise.all([stubUser(username), stubEmail(username)]),
-  stubUnverifiedUserDetailsRetrieval: username => Promise.all([stubUser(username), stubUnverifiedEmail(username)]),
+  stubUserDetailsRetrieval: (username) => Promise.all([stubUser(username), stubEmail(username)]),
+  stubUnverifiedUserDetailsRetrieval: (username) => Promise.all([stubUser(username), stubUnverifiedEmail(username)]),
   stubUserMe,
   stubUserMeRoles,
   stubUser,

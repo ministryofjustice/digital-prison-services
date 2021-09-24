@@ -4,14 +4,14 @@ context('Global search', () => {
   before(() => {
     cy.clearCookies()
     cy.task('reset')
-    cy.task('stubLogin', { username: 'ITAG_USER', caseload: 'MDI' })
-    cy.login('/global-search')
+    cy.task('stubSignIn', { username: 'ITAG_USER', caseload: 'MDI' })
+    cy.signIn('/global-search')
   })
 
   beforeEach(() => {
     Cypress.Cookies.preserveOnce('hmpps-session-dev')
     cy.task('resetAndStubTokenVerification')
-    cy.task('stubLogin', {})
+    cy.task('stubSignIn', {})
     cy.task('stubOffenderImage')
   })
 
@@ -244,7 +244,7 @@ context('Global search', () => {
 
   describe('when user can has INACTIVE_BOOKINGS role', () => {
     beforeEach(() => {
-      cy.task('stubLogin', {
+      cy.task('stubSignIn', {
         username: 'ITAG_USER',
         caseload: 'MDI',
         roles: [{ roleCode: 'INACTIVE_BOOKINGS' }],
@@ -278,7 +278,7 @@ context('Global search', () => {
 
   describe('when user has LICENCE_RO role', () => {
     beforeEach(() => {
-      cy.task('stubLogin', {
+      cy.task('stubSignIn', {
         username: 'ITAG_USER',
         caseload: 'MDI',
         roles: [{ roleCode: 'LICENCE_RO' }],
@@ -305,7 +305,7 @@ context('Global search', () => {
 
   describe('when user has LICENCE_RO and LICENCE_VARY roles', () => {
     beforeEach(() => {
-      cy.task('stubLogin', {
+      cy.task('stubSignIn', {
         username: 'ITAG_USER',
         caseload: 'MDI',
         roles: [{ roleCode: 'LICENCE_RO' }, { roleCode: 'LICENCE_VARY' }],
