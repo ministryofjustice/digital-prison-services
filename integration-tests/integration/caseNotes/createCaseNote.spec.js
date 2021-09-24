@@ -138,6 +138,11 @@ context('A user can add a case note', () => {
     form.submitButton().click()
 
     const caseNoteConfirmPage = CaseNoteConfirmPage.verifyOnPage()
+    caseNoteConfirmPage.form().submitButton().click()
+    CaseNoteConfirmPage.verifyOnPage()
+    caseNoteConfirmPage.errorSummaryTitle().contains('There is a problem')
+    caseNoteConfirmPage.errorSummaryList().contains('Select yes if this information is appropriate to share')
+
     caseNoteConfirmPage.form().confirmRadio().check('No')
     caseNoteConfirmPage.form().submitButton().click()
 

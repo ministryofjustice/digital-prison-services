@@ -77,14 +77,14 @@ export default ({ prisonApi, caseNotesApi, logError }) => {
     }
   }
 
+  const maximumLengthValidation = {
+    href: '#moreDetail',
+    text: `Enter more details using 4,000 characters or less`,
+  }
+
   const post = async (req, res) => {
     const { offenderNo, caseNoteId } = req.params
     const { moreDetail, isOmicOpenCaseNote } = req.body
-
-    const maximumLengthValidation = {
-      href: '#moreDetail',
-      text: `Enter more details using 4,000 characters or less`,
-    }
 
     try {
       const errors = []
@@ -113,6 +113,7 @@ export default ({ prisonApi, caseNotesApi, logError }) => {
     const offenderDetails = await getOffenderDetails(res, offenderNo)
 
     return res.render('caseNotes/addCaseNoteConfirm.njk', {
+      errors: req.flash('confirmErrors'),
       offenderNo,
       offenderDetails,
       homeUrl: `/prisoner/${offenderNo}/case-notes`,
@@ -122,10 +123,15 @@ export default ({ prisonApi, caseNotesApi, logError }) => {
 
   const confirm = async (req, res) => {
     const { offenderNo, caseNoteId } = req.params
+    const { confirmed } = req.body
+    if (!confirmed) {
+      const errors = [{ href: '#confirmed', text: 'Select yes if this information is appropriate to share' }]
+      req.flash('confirmErrors', errors)
+      return res.redirect(`/prisoner/${offenderNo}/case-notes/amend-case-note/${caseNoteId}/confirm`)
+    }
+
     const { moreDetail } = req.session.draftCaseNoteDetail
     delete req.session.draftCaseNoteDetail
-
-    const { confirmed } = req.body
     if (confirmed === 'Yes') return makeAmendment(req, res, { offenderNo, caseNoteId, moreDetail })
     return stashStateAndRedirectToAmendCaseNote(req, res, moreDetail, [], offenderNo, caseNoteId)
   }

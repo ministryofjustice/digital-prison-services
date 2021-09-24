@@ -325,8 +325,9 @@ describe('Amendment case note', () => {
     })
 
     it('should redirect if user does not confirm', async () => {
-      req.body = {}
-      req.session = { draftCaseNoteDetail: { moreDetail: 'hello' } }
+      req.body = { confirmed: 'No' }
+
+      req.session = { draftCaseNoteDetail: { moreDetail: 'hello' }, body: { confirmed: 'No' } }
 
       await controller.confirm(req, res)
 
@@ -334,6 +335,20 @@ describe('Amendment case note', () => {
       expect(req.flash).toHaveBeenNthCalledWith(1, 'formValues', {
         moreDetail: 'hello',
       })
+      expect(res.redirect).toBeCalledWith('/prisoner/A12345/case-notes/amend-case-note/1')
+    })
+
+    it('should show error if user does not enter a choice', async () => {
+      req.body = {}
+      req.session = { draftCaseNoteDetail: { moreDetail: 'hello' } }
+
+      await controller.confirm(req, res)
+
+      expect(caseNotesApi.amendCaseNote).not.toHaveBeenCalled()
+      expect(req.flash).toBeCalledWith('confirmErrors', [
+        { href: '#confirmed', text: 'Select yes if this information is appropriate to share' },
+      ])
+      expect(res.redirect).toBeCalledWith('/prisoner/A12345/case-notes/amend-case-note/1/confirm')
     })
   })
 })
