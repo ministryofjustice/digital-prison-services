@@ -86,12 +86,8 @@ context('Prisoner cell history', () => {
         .cellDetailsLink()
         .should('contain.text', 'View details for location 1-02')
         .should('have.attr', 'href')
-        .and(
-          'include',
-          `/location-history?fromDate=2020-05-01T12:48:33&toDate=${moment().format(
-            'YYYY-MM-DDTHH:mm:ss'
-          )}&locationId=1&agencyId=MDI`
-        )
+        .and('contains', `/location-history?fromDate=2020-05-01T12:48:33&toDate=${moment().format('YYYY-MM-DDTHH:mm')}`)
+        .and('contains', 'locationId=1&agencyId=MDI')
       prisonerCellHistoryPage.agencyHeading().contains('Moorland from 01/03/2020 to 01/05/2020')
 
       prisonerCellHistoryPage.results().then(($table) => {
