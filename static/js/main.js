@@ -1,5 +1,21 @@
-$(document).ready(function() {
-  $('.date-input').each(function(index, element) {
+$(document).ready(function () {
+  $('.modal_dialog_button').click(function () {
+    console.log('OPENING!!')
+    const dialogue = document.querySelector('[data-module="govuk-modal-dialogue"]')
+    const dialogueButtonResume = document.querySelector('.govuk-modal-dialogue__continue')
+
+    if (dialogue && dialogueButtonResume) {
+      console.log('OPENED!!')
+      new window.ModalDialogue(dialogue).init({
+        focusElement: dialogueButtonResume,
+        onClose: function () {
+          console.log('CLOSED!!')
+        },
+      })
+    }
+  })
+
+  $('.date-input').each(function (index, element) {
     const disableFutureDates = Boolean($(element).data('disable-future-date'))
     const disablePastDates = Boolean($(element).data('disable-past-date'))
     const maxDate = disableFutureDates ? '0' : undefined
@@ -18,12 +34,12 @@ $(document).ready(function() {
     $(element).attr('readonly', 'true')
   })
 
-  $('.js-prisoner-search-clear-alerts').click(function(e) {
+  $('.js-prisoner-search-clear-alerts').click(function (e) {
     e.preventDefault()
     $('.js-prisoner-search-alerts input[type=checkbox]').prop('checked', false)
   })
 
-  $('#notification_dismiss_box').click(function() {
+  $('#notification_dismiss_box').click(function () {
     let $notification = $('#notification-bar')
     let id = $('#notification_id').val()
     let revision = $('#notification_revision').val()
@@ -40,10 +56,10 @@ $(document).ready(function() {
         revision,
       },
     })
-      .done(function() {
+      .done(function () {
         $notification.hide()
       })
-      .fail(function() {
+      .fail(function () {
         window.location = '/'
       })
   })

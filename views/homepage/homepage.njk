@@ -12,6 +12,37 @@
     <h1 class="govuk-heading-l govuk-!-margin-top-7">Digital Prison Services</h1>
   </div>
 
+  <div class="doit">
+<a href="#" class="govuk-link govuk-link--no-visited-state modal_dialog_button" data-test="prisoner-search-clear-alerts">
+  Do stuff
+</a>
+   </div>
+
+  <div data-module="govuk-modal-dialogue" class="govuk-modal-dialogue__wrapper">
+    <dialog class="govuk-modal-dialogue__box" aria-labelledby="{{ labelledBy }}" aria-describedby="{{ describedBy }}" aria-modal="true" role="{{ params.role | default('dialog') }}" tabindex="0"
+    {%- for attribute, value in params.attributes %} {{ attribute }}{% if value %}="{{ value }}"{% endif %}{% endfor %}{% if params.open %} open{% endif %}>
+      <div class="govuk-modal-dialogue__header">
+        {{ govukButton
+        ({text: "×", type: "button",
+          classes: "govuk-modal-dialogue__close govuk-modal-dialogue__continue",
+          attributes: {
+            "aria-label": "Close modal dialogue"
+          }
+        })
+        }}
+      </div>
+      <div class="govuk-modal-dialogue__content">
+        <h2 class="govuk-modal-dialogue__heading govuk-heading-l" id="{{ params.id }}-title">
+          Params heading html
+        </h2>
+        <div class="govuk-modal-dialogue__description" id="{{ params.id }}-description">
+          Params description html
+        </div>
+      </div>
+    </dialog>
+  </div>
+
+
   <div class="homepage-search">
     <div class="govuk-width-container">     
       <h2 class="govuk-heading-m govuk-!-margin-bottom-1">Search for a prisoner</h1>
