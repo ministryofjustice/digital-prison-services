@@ -247,6 +247,7 @@ export const caseNoteFactory = ({ prisonApi, caseNotesApi }) => {
     const offenderDetails = await getOffenderDetails(res, offenderNo)
 
     return res.render('caseNotes/addCaseNoteConfirm.njk', {
+      errors: req.flash('confirmErrors'),
       offenderNo,
       offenderDetails,
       homeUrl: `${getOffenderUrl(offenderNo)}/case-notes`,
@@ -257,6 +258,11 @@ export const caseNoteFactory = ({ prisonApi, caseNotesApi }) => {
   const confirm = async (req, res) => {
     const { offenderNo } = req.params
     const { confirmed } = req.body
+    if (!confirmed) {
+      const errors = [{ href: '#confirmed', text: 'Select yes if this information is appropriate to share' }]
+      req.flash('confirmErrors', errors)
+      return res.redirect(`${getOffenderUrl(offenderNo)}/add-case-note/confirm`)
+    }
     const errors = []
     const caseNote = req.session.draftCaseNote
     delete req.session.draftCaseNote

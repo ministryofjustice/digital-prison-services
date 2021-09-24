@@ -525,14 +525,32 @@ describe('case note management', () => {
         ...mockCreateReq,
         params: { offenderNo },
         session: { draftCaseNote: { text: 'hello' } },
+        body: { confirmed: 'No' },
       }
 
       await confirm(req, res)
 
       expect(caseNotesApi.addCaseNote).not.toHaveBeenCalled()
-      expect(req.flash).toHaveBeenNthCalledWith(1, 'caseNote', {
+      expect(req.flash).toBeCalledWith('caseNote', {
         text: 'hello',
       })
+      expect(res.redirect).toBeCalledWith('/prisoner/ABC123/add-case-note')
+    })
+
+    it('should show error if user does not enter a choice', async () => {
+      const req = {
+        ...mockCreateReq,
+        params: { offenderNo },
+        session: { draftCaseNote: { text: 'hello' } },
+      }
+
+      await confirm(req, res)
+
+      expect(caseNotesApi.addCaseNote).not.toHaveBeenCalled()
+      expect(req.flash).toBeCalledWith('confirmErrors', [
+        { href: '#confirmed', text: 'Select yes if this information is appropriate to share' },
+      ])
+      expect(res.redirect).toBeCalledWith('/prisoner/ABC123/add-case-note/confirm')
     })
   })
 })

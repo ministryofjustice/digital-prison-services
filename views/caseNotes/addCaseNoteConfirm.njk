@@ -49,6 +49,7 @@
               text: "Only save this case note if it needs to be shared across the prison.  If you need to record any sensitive information, go back and choose a different type of case note."
             }
           },
+          errorMessage: errors | findError('confirmed'),
           items: [
             {
               value: "Yes",
