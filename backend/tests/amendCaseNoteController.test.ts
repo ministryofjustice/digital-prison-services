@@ -3,17 +3,20 @@ import { makeError } from './helpers'
 import amendCaseNoteController from '../controllers/amendmentCaseNote'
 
 describe('Amendment case note', () => {
-  const caseNotesApi = {}
-  const prisonApi = {}
+  const caseNotesApi = { amendCaseNote: {}, getCaseNote: {} }
+  const prisonApi = { getDetails: {} }
 
   let controller
   const req = {
-    originalUrl: 'http://localhost:3002/prisoner/case-notes/amend-case-note/1',
+    flash: {},
+    headers: {},
+    session: {},
+    body: {},
+    originalUrl: '/prisoner/A12345/case-notes/amend-case-note/1',
   }
-  const res = {}
+  const res = { render: {}, redirect: {}, locals: {} }
 
   beforeEach(() => {
-    // @ts-expect-error ts-migrate(2339) FIXME: Property 'getCaseNote' does not exist on type '{}'... Remove this comment to see the full error message
     caseNotesApi.getCaseNote = jest.fn().mockResolvedValue({
       authorUserId: '1',
       caseNoteId: 1,
@@ -25,9 +28,7 @@ describe('Amendment case note', () => {
       source: 'INST',
       text: 'This is some text',
     })
-    // @ts-expect-error ts-migrate(2339) FIXME: Property 'amendCaseNote' does not exist on type '{... Remove this comment to see the full error message
     caseNotesApi.amendCaseNote = jest.fn()
-    // @ts-expect-error ts-migrate(2339) FIXME: Property 'getDetails' does not exist on type '{}'.
     prisonApi.getDetails = jest.fn().mockResolvedValue({
       firstName: 'BOB',
       lastName: 'SMITH',
@@ -35,17 +36,11 @@ describe('Amendment case note', () => {
 
     controller = amendCaseNoteController({ caseNotesApi, prisonApi, logError: jest.fn() })
 
-    // @ts-expect-error ts-migrate(2339) FIXME: Property 'render' does not exist on type '{}'.
     res.render = jest.fn()
-    // @ts-expect-error ts-migrate(2339) FIXME: Property 'redirect' does not exist on type '{}'.
     res.redirect = jest.fn()
-    // @ts-expect-error ts-migrate(2339) FIXME: Property 'locals' does not exist on type '{}'.
     res.locals = {}
-    // @ts-expect-error ts-migrate(2339) FIXME: Property 'flash' does not exist on type '{ origina... Remove this comment to see the full error message
     req.flash = jest.fn()
-    // @ts-expect-error ts-migrate(2339) FIXME: Property 'session' does not exist on type '{ origi... Remove this comment to see the full error message
     req.session = { userDetails: { staffId: 1 } }
-    // @ts-expect-error ts-migrate(2339) FIXME: Property 'headers' does not exist on type '{ origi... Remove this comment to see the full error message
     req.headers = {}
 
     // @ts-expect-error ts-migrate(2339) FIXME: Property 'params' does not exist on type '{ origin... Remove this comment to see the full error message
@@ -57,7 +52,6 @@ describe('Amendment case note', () => {
 
   describe('index', () => {
     it('should redirect user to the page not found page when accessing a case note that they did not author', async () => {
-      // @ts-expect-error ts-migrate(2339) FIXME: Property 'getCaseNote' does not exist on type '{}'... Remove this comment to see the full error message
       caseNotesApi.getCaseNote = jest.fn().mockResolvedValue({
         authorUserId: '12345',
         caseNoteId: 1,
@@ -69,7 +63,6 @@ describe('Amendment case note', () => {
         source: 'INST',
         text: 'This is some text',
       })
-      // @ts-expect-error ts-migrate(2339) FIXME: Property 'session' does not exist on type '{ origi... Remove this comment to see the full error message
       req.session = {
         userDetails: {
           staffId: 1,
@@ -78,7 +71,6 @@ describe('Amendment case note', () => {
 
       await controller.index(req, res)
 
-      // @ts-expect-error ts-migrate(2339) FIXME: Property 'render' does not exist on type '{}'.
       expect(res.render).toHaveBeenCalledWith('notFound.njk', { url: '/prisoner/A12345/case-notes' })
     })
     it('should render error page on exception', async () => {
@@ -96,19 +88,16 @@ describe('Amendment case note', () => {
     it('should make a request for an offenders case note', async () => {
       await controller.index(req, res)
 
-      // @ts-expect-error ts-migrate(2339) FIXME: Property 'getCaseNote' does not exist on type '{}'... Remove this comment to see the full error message
       expect(caseNotesApi.getCaseNote).toHaveBeenCalledWith({}, 'A12345', 1)
     })
 
     it('should make a call to retrieve an prisoners name', async () => {
       await controller.index(req, res)
 
-      // @ts-expect-error ts-migrate(2339) FIXME: Property 'getDetails' does not exist on type '{}'.
       expect(prisonApi.getDetails).toHaveBeenCalledWith({}, 'A12345')
     })
 
     it('should return case note details', async () => {
-      // @ts-expect-error ts-migrate(2339) FIXME: Property 'getCaseNote' does not exist on type '{}'... Remove this comment to see the full error message
       caseNotesApi.getCaseNote = jest.fn().mockResolvedValue({
         caseNoteId: 1,
         authorUserId: '1',
@@ -131,7 +120,6 @@ describe('Amendment case note', () => {
 
       await controller.index(req, res)
 
-      // @ts-expect-error ts-migrate(2339) FIXME: Property 'render' does not exist on type '{}'.
       expect(res.render).toHaveBeenCalledWith('amendCaseNote.njk', {
         errors: undefined,
         formValues: undefined,
@@ -141,7 +129,7 @@ describe('Amendment case note', () => {
         prisonNumber: 'A12345',
         typeSubType: 'Key worker: Key worker session',
         caseNoteText: 'This is some text',
-        postAmendmentUrl: 'http://localhost:3002/prisoner/case-notes/amend-case-note/1',
+        postAmendmentUrl: '/prisoner/A12345/case-notes/amend-case-note/1',
         prisonerName: 'Bob Smith',
         amendments: [{ text: 'This is an amendment' }, { text: 'This is an amendment' }],
         isOmicOpenCaseNote: false,
@@ -149,7 +137,6 @@ describe('Amendment case note', () => {
     })
 
     it('should return case note details for omic open case note', async () => {
-      // @ts-expect-error ts-migrate(2339) FIXME: Property 'getCaseNote' does not exist on type '{}'... Remove this comment to see the full error message
       caseNotesApi.getCaseNote = jest.fn().mockResolvedValue({
         caseNoteId: 1,
         authorUserId: '1',
@@ -172,7 +159,6 @@ describe('Amendment case note', () => {
 
       await controller.index(req, res)
 
-      // @ts-expect-error ts-migrate(2339) FIXME: Property 'render' does not exist on type '{}'.
       expect(res.render).toHaveBeenCalledWith('amendCaseNote.njk', {
         errors: undefined,
         formValues: undefined,
@@ -182,7 +168,7 @@ describe('Amendment case note', () => {
         prisonNumber: 'A12345',
         typeSubType: 'Omic: Open case note',
         caseNoteText: 'This is some text',
-        postAmendmentUrl: 'http://localhost:3002/prisoner/case-notes/amend-case-note/1',
+        postAmendmentUrl: '/prisoner/A12345/case-notes/amend-case-note/1',
         prisonerName: 'Bob Smith',
         amendments: [{ text: 'This is an amendment' }, { text: 'This is an amendment' }],
         isOmicOpenCaseNote: true,
@@ -198,12 +184,8 @@ describe('Amendment case note', () => {
         caseNoteId: 1,
       }
 
-      // @ts-expect-error ts-migrate(2339) FIXME: Property 'body' does not exist on type '{ original... Remove this comment to see the full error message
-      req.body = {
-        moreDetail: 'Hello, world',
-      }
+      req.body = { moreDetail: 'Hello, world', isOmicOpenCaseNote: undefined }
 
-      // @ts-expect-error ts-migrate(2339) FIXME: Property 'getCaseNote' does not exist on type '{}'... Remove this comment to see the full error message
       caseNotesApi.getCaseNote = jest.fn().mockResolvedValue({ text: '' })
     })
 
@@ -212,30 +194,25 @@ describe('Amendment case note', () => {
       caseNotesApi.amendCaseNote.mockRejectedValue(new Error('error'))
       await controller.post(req, res)
 
-      // @ts-expect-error ts-migrate(2339) FIXME: Property 'render' does not exist on type '{}'.
       expect(res.render).toHaveBeenCalledWith('error.njk', { url: '/prisoner/A12345/case-notes' })
     })
 
     it('should make an amendment', async () => {
       await controller.post(req, res)
 
-      // @ts-expect-error ts-migrate(2339) FIXME: Property 'amendCaseNote' does not exist on type '{... Remove this comment to see the full error message
       expect(caseNotesApi.amendCaseNote).toHaveBeenCalledWith({}, 'A12345', 1, { text: 'Hello, world' })
     })
 
     it('should validate the presence of an amendment', async () => {
-      // @ts-expect-error ts-migrate(2339) FIXME: Property 'body' does not exist on type '{ original... Remove this comment to see the full error message
       req.body = {}
 
       await controller.post(req, res)
 
-      // @ts-expect-error ts-migrate(2339) FIXME: Property 'flash' does not exist on type '{ origina... Remove this comment to see the full error message
       expect(req.flash).toHaveBeenCalledWith('amendmentErrors', [
         { href: '#moreDetail', text: 'Enter more details to case note' },
       ])
 
-      // @ts-expect-error ts-migrate(2339) FIXME: Property 'redirect' does not exist on type '{}'.
-      expect(res.redirect).toHaveBeenCalledWith('http://localhost:3002/prisoner/case-notes/amend-case-note/1')
+      expect(res.redirect).toHaveBeenCalledWith('/prisoner/A12345/case-notes/amend-case-note/1')
     })
 
     it('should validate the length of the amendment', async () => {
@@ -244,20 +221,28 @@ describe('Amendment case note', () => {
 
       await controller.post(req, res)
 
-      // @ts-expect-error ts-migrate(2339) FIXME: Property 'flash' does not exist on type '{ origina... Remove this comment to see the full error message
       expect(req.flash).toHaveBeenCalledWith('amendmentErrors', [
         { href: '#moreDetail', text: 'Enter more details using 4,000 characters or less' },
       ])
 
-      // @ts-expect-error ts-migrate(2339) FIXME: Property 'redirect' does not exist on type '{}'.
-      expect(res.redirect).toHaveBeenCalledWith('http://localhost:3002/prisoner/case-notes/amend-case-note/1')
+      expect(res.redirect).toHaveBeenCalledWith('/prisoner/A12345/case-notes/amend-case-note/1')
     })
 
     it('should redirect back to case notes on save', async () => {
       await controller.post(req, res)
 
-      // @ts-expect-error ts-migrate(2339) FIXME: Property 'redirect' does not exist on type '{}'.
       expect(res.redirect).toHaveBeenCalledWith('/prisoner/A12345/case-notes')
+    })
+
+    it('should take user to confirm page if omic open case note', async () => {
+      req.body = { moreDetail: 'some comment', isOmicOpenCaseNote: 'true' }
+      await controller.post(req, res)
+
+      expect(res.redirect).toHaveBeenCalledWith('/prisoner/A12345/case-notes/amend-case-note/1/confirm')
+      expect(req.session).toEqual({
+        draftCaseNoteDetail: { moreDetail: 'some comment' },
+        userDetails: { staffId: 1 },
+      })
     })
 
     it('should show validation message when the api returns a 400', async () => {
@@ -274,7 +259,6 @@ describe('Amendment case note', () => {
 
       await controller.post(req, res)
 
-      // @ts-expect-error ts-migrate(2339) FIXME: Property 'flash' does not exist on type '{ origina... Remove this comment to see the full error message
       expect(req.flash).toHaveBeenCalledWith('amendmentErrors', [
         {
           href: '#moreDetail',
@@ -282,8 +266,74 @@ describe('Amendment case note', () => {
         },
       ])
 
-      // @ts-expect-error ts-migrate(2339) FIXME: Property 'redirect' does not exist on type '{}'.
-      expect(res.redirect).toHaveBeenCalledWith('http://localhost:3002/prisoner/case-notes/amend-case-note/1')
+      expect(res.redirect).toHaveBeenCalledWith('/prisoner/A12345/case-notes/amend-case-note/1')
+    })
+  })
+
+  describe('areYouSure()', () => {
+    it('should render the confirm page', async () => {
+      await controller.areYouSure(req, res)
+
+      expect(res.render).toBeCalledWith('caseNotes/addCaseNoteConfirm.njk', {
+        offenderDetails: {
+          name: 'Smith, Bob',
+          profileUrl: '/prisoner/A12345',
+        },
+        offenderNo: 'A12345',
+        homeUrl: '/prisoner/A12345/case-notes',
+        breadcrumbText: 'Add more details to case note',
+      })
+    })
+  })
+
+  describe('confirm()', () => {
+    it('should save the case note if confirmed', async () => {
+      req.session = { draftCaseNoteDetail: { moreDetail: 'hello' } }
+      req.body = { confirmed: 'Yes' }
+
+      await controller.confirm(req, res)
+
+      expect(caseNotesApi.amendCaseNote).toBeCalledWith(res.locals, 'A12345', 1, {
+        text: 'hello',
+      })
+      expect(res.redirect).toBeCalledWith('/prisoner/A12345/case-notes')
+    })
+
+    it('should redirect if case note save fails', async () => {
+      req.session = { draftCaseNoteDetail: { moreDetail: 'hello' } }
+      req.body = { confirmed: 'Yes' }
+      const error400 = makeError('response', {
+        status: 400,
+        body: {
+          userMessage: 'createCaseNote.caseNote.text: Value is too long: max length is 4000',
+          developerMessage: 'createCaseNote.caseNote.text: Value too long: max length is 4000',
+        },
+      })
+      caseNotesApi.amendCaseNote = jest.fn().mockRejectedValue(error400)
+
+      await controller.confirm(req, res)
+
+      expect(caseNotesApi.amendCaseNote).toBeCalledWith(res.locals, 'A12345', 1, {
+        text: 'hello',
+      })
+      expect(req.flash).toHaveBeenNthCalledWith(1, 'amendmentErrors', [
+        { href: '#moreDetail', text: (error400 as any).response.body.userMessage },
+      ])
+      expect(req.flash).toHaveBeenNthCalledWith(2, 'formValues', {
+        moreDetail: 'hello',
+      })
+    })
+
+    it('should redirect if user does not confirm', async () => {
+      req.body = {}
+      req.session = { draftCaseNoteDetail: { moreDetail: 'hello' } }
+
+      await controller.confirm(req, res)
+
+      expect(caseNotesApi.amendCaseNote).not.toHaveBeenCalled()
+      expect(req.flash).toHaveBeenNthCalledWith(1, 'formValues', {
+        moreDetail: 'hello',
+      })
     })
   })
 })
