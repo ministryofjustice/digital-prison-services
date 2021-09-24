@@ -74,7 +74,7 @@ ModalDialogue.prototype.handleOpen = function (event) {
   this.$dialogBox.style.zIndex = '1'
 
   const background = document.querySelector('.homepage-search')
-  background.classList.add('FooterSignature')
+  background.classList.add('dialog-background')
 
   // Skip open if already open
   if (this.$dialogBox.hasAttribute('open')) {
@@ -113,6 +113,9 @@ ModalDialogue.prototype.handleClose = function (event) {
   if (typeof this.options.onClose === 'function') {
     this.options.onClose.call(this)
   }
+
+  const background = document.querySelector('.homepage-search')
+  background.classList.remove('dialog-background')
 
   // Remove escape key and trap focus listener
   document.removeEventListener('keydown', this.boundKeyDown, true)

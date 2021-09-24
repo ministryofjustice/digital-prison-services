@@ -1,11 +1,15 @@
+.dialog-background {
+  opacity: 0.6;
+}
+
 .page-header {
-  font-family: "nta", Arial, sans-serif;
+  font-family: 'nta', Arial, sans-serif;
   display: flex;
   flex-direction: row;
   align-items: center;
   justify-content: start;
-  color: #FFFFFF;
-  background-color: #0B0C0C;
+  color: #ffffff;
+  background-color: #0b0c0c;
   z-index: 999;
   height: 60px;
   width: 100%;
@@ -75,7 +79,7 @@
   align-items: center;
   justify-content: center;
   width: 100%;
-  background-color: #DEE0E2;
+  background-color: #dee0e2;
   vertical-align: baseline;
   height: 100px;
   bottom: 0;
@@ -109,7 +113,7 @@
 .FooterLink {
   float: left;
   padding: 0 19px;
-  border-right: 1px solid #0B0C0C;
+  border-right: 1px solid #0b0c0c;
   height: 19px;
   cursor: pointer;
 }
@@ -125,11 +129,11 @@
 
 .FooterLink a {
   /*text-decoration: underline;*/
-  color: #454A4C;
+  color: #454a4c;
 }
 
 .FooterLink a:visited {
-  color: #454A4C;
+  color: #454a4c;
 }
 
 .FooterLink a:hover {
