@@ -2,6 +2,14 @@ import { capitalize, formatName, putLastNameFirst } from '../utils'
 import { serviceUnavailableMessage } from '../common-messages'
 
 export default ({ prisonApi, caseNotesApi, logError }) => {
+  const getOffenderDetails = async (res, offenderNo) => {
+    const { firstName, lastName } = await prisonApi.getDetails(res.locals, offenderNo)
+
+    return {
+      profileUrl: `/prisoner/${offenderNo}`,
+      name: putLastNameFirst(firstName, lastName),
+    }
+  }
   const index = async (req, res) => {
     const { offenderNo, caseNoteId } = req.params
 
@@ -43,12 +51,10 @@ export default ({ prisonApi, caseNotesApi, logError }) => {
     }
   }
 
-  const stashSateAndRedirectToIndex = (req, res, moreDetail, errors) => {
-    req.flash('amendmentErrors', errors)
-    req.flash('formValues', {
-      moreDetail,
-    })
-    return res.redirect(req.originalUrl)
+  const stashStateAndRedirectToAmendCaseNote = (req, res, moreDetail, errors, offenderNo, caseNoteId) => {
+    if (errors.length > 0) req.flash('amendmentErrors', errors)
+    req.flash('formValues', { moreDetail })
+    return res.redirect(`/prisoner/${offenderNo}/case-notes/amend-case-note/${caseNoteId}`)
   }
 
   const makeAmendment = async (req, res, { offenderNo, caseNoteId, moreDetail }) => {
@@ -64,7 +70,7 @@ export default ({ prisonApi, caseNotesApi, logError }) => {
           href: '#moreDetail',
           text: apiError.response.body?.userMessage,
         }
-        return stashSateAndRedirectToIndex(req, res, moreDetail, [errorData])
+        return stashStateAndRedirectToAmendCaseNote(req, res, moreDetail, [errorData], offenderNo, caseNoteId)
       }
       logError(req.originalUrl, apiError, serviceUnavailableMessage)
       return res.render('error.njk', { url: `/prisoner/${offenderNo}/case-notes` })
@@ -73,7 +79,7 @@ export default ({ prisonApi, caseNotesApi, logError }) => {
 
   const post = async (req, res) => {
     const { offenderNo, caseNoteId } = req.params
-    const { moreDetail } = req.body
+    const { moreDetail, isOmicOpenCaseNote } = req.body
 
     const maximumLengthValidation = {
       href: '#moreDetail',
@@ -87,7 +93,13 @@ export default ({ prisonApi, caseNotesApi, logError }) => {
 
       if (moreDetail && moreDetail.length > 4000) errors.push(maximumLengthValidation)
 
-      if (errors.length > 0) return stashSateAndRedirectToIndex(req, res, moreDetail, errors)
+      if (errors.length > 0)
+        return stashStateAndRedirectToAmendCaseNote(req, res, moreDetail, errors, offenderNo, caseNoteId)
+
+      if (isOmicOpenCaseNote === 'true') {
+        req.session.draftCaseNoteDetail = { moreDetail }
+        return res.redirect(`/prisoner/${offenderNo}/case-notes/amend-case-note/${caseNoteId}/confirm`)
+      }
 
       return makeAmendment(req, res, { offenderNo, caseNoteId, moreDetail })
     } catch (error) {
@@ -96,8 +108,27 @@ export default ({ prisonApi, caseNotesApi, logError }) => {
     }
   }
 
-  return {
-    index,
-    post,
+  const areYouSure = async (req, res) => {
+    const { offenderNo } = req.params
+    const offenderDetails = await getOffenderDetails(res, offenderNo)
+
+    return res.render('caseNotes/addCaseNoteConfirm.njk', {
+      offenderNo,
+      offenderDetails,
+      homeUrl: `/prisoner/${offenderNo}/case-notes`,
+      breadcrumbText: 'Add more details to case note',
+    })
   }
+
+  const confirm = async (req, res) => {
+    const { offenderNo, caseNoteId } = req.params
+    const { moreDetail } = req.session.draftCaseNoteDetail
+    delete req.session.draftCaseNoteDetail
+
+    const { confirmed } = req.body
+    if (confirmed === 'Yes') return makeAmendment(req, res, { offenderNo, caseNoteId, moreDetail })
+    return stashStateAndRedirectToAmendCaseNote(req, res, moreDetail, [], offenderNo, caseNoteId)
+  }
+
+  return { index, post, areYouSure, confirm }
 }

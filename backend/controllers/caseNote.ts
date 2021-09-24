@@ -213,12 +213,12 @@ export const caseNoteFactory = ({ prisonApi, caseNotesApi }) => {
       minutes,
     }
     if (errors.length === 0) {
-      try {
-        if (subType === 'OPEN_COMM') {
-          req.session.draftCaseNote = caseNote
-          return res.redirect(`${getOffenderUrl(offenderNo)}/add-case-note/confirm`)
-        }
+      if (subType === 'OPEN_COMM') {
+        req.session.draftCaseNote = caseNote
+        return res.redirect(`${getOffenderUrl(offenderNo)}/add-case-note/confirm`)
+      }
 
+      try {
         await caseNotesApi.addCaseNote(res.locals, offenderNo, {
           offenderNo,
           type,
@@ -250,17 +250,17 @@ export const caseNoteFactory = ({ prisonApi, caseNotesApi }) => {
       offenderNo,
       offenderDetails,
       homeUrl: `${getOffenderUrl(offenderNo)}/case-notes`,
-      caseNotesRootUrl: `/prisoner/${offenderNo}/add-case-note`,
+      breadcrumbText: 'Add a case note',
     })
   }
 
   const confirm = async (req, res) => {
     const { offenderNo } = req.params
+    const { confirmed } = req.body
+    const errors = []
     const caseNote = req.session.draftCaseNote
     delete req.session.draftCaseNote
 
-    const { confirmed } = req.body
-    const errors = []
     if (confirmed === 'Yes') {
       try {
         await caseNotesApi.addCaseNote(res.locals, offenderNo, {
