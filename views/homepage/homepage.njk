@@ -18,7 +18,8 @@
 </a>
    </div>
 
-  <div data-module="govuk-modal-dialogue" class="govuk-modal-dialogue__wrapper">
+  <div data-module="govuk-modal-dialogue" class="govuk-modal-dialogue__wrapper" style="display: none">
+    <div class="govuk-modal-dialogue__overlay"></div>
     <dialog class="govuk-modal-dialogue__box" aria-labelledby="{{ labelledBy }}" aria-describedby="{{ describedBy }}" aria-modal="true" role="{{ params.role | default('dialog') }}" tabindex="0"
     {%- for attribute, value in params.attributes %} {{ attribute }}{% if value %}="{{ value }}"{% endif %}{% endfor %}{% if params.open %} open{% endif %}>
       <div class="govuk-modal-dialogue__header">
