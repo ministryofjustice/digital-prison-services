@@ -1,18 +1,22 @@
 $(document).ready(function () {
-  $('.modal_dialog_button').click(function () {
-    console.log('OPENING!!')
-    const dialogue = document.querySelector('[data-module="govuk-modal-dialogue"]')
-    const dialogueButtonResume = document.querySelector('.govuk-modal-dialogue__continue')
+  $('.modal_dialog_button').each(function (index, element) {
+    $(element).click(function (e) {
+      console.log('OPENING!!')
+      const clickedElement = e.currentTarget
+      const dialogDataModuleSuffix = clickedElement.dataset.module
+      const dialogue = document.querySelector(`[data-module="govuk-modal-dialogue-${dialogDataModuleSuffix}"]`)
+      const dialogueButtonResume = document.querySelector(`.govuk-modal-dialogue__continue-${dialogDataModuleSuffix}`)
 
-    if (dialogue && dialogueButtonResume) {
-      console.log('OPENED!!')
-      new window.ModalDialogue(dialogue).init({
-        focusElement: dialogueButtonResume,
-        onClose: function () {
-          console.log('CLOSED!!')
-        },
-      })
-    }
+      if (dialogue && dialogueButtonResume) {
+        console.log('OPENED!!')
+        new window.ModalDialogue(dialogue).init({
+          focusElement: dialogueButtonResume,
+          onClose: function () {
+            console.log('CLOSED!!')
+          },
+        })
+      }
+    })
   })
 
   $('.date-input').each(function (index, element) {

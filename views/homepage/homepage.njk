@@ -13,19 +13,19 @@
   </div>
 
   <div class="doit">
-<a href="#" class="govuk-link govuk-link--no-visited-state modal_dialog_button" data-test="prisoner-search-clear-alerts">
+<a href="#" class="govuk-link govuk-link--no-visited-state modal_dialog_button" data-module="0">
   Do stuff
 </a>
    </div>
 
-  <div data-module="govuk-modal-dialogue" class="govuk-modal-dialogue__wrapper" style="display: none">
+  <div data-module="govuk-modal-dialogue-0" class="govuk-modal-dialogue__wrapper" style="display: none">
     <div class="govuk-modal-dialogue__overlay"></div>
     <dialog class="govuk-modal-dialogue__box" aria-labelledby="{{ labelledBy }}" aria-describedby="{{ describedBy }}" aria-modal="true" role="{{ params.role | default('dialog') }}" tabindex="0"
     {%- for attribute, value in params.attributes %} {{ attribute }}{% if value %}="{{ value }}"{% endif %}{% endfor %}{% if params.open %} open{% endif %}>
       <div class="govuk-modal-dialogue__header">
         {{ govukButton
         ({text: "×", type: "button",
-          classes: "govuk-modal-dialogue__close govuk-modal-dialogue__continue",
+          classes: "govuk-modal-dialogue__close govuk-modal-dialogue__continue-0",
           attributes: {
             "aria-label": "Close modal dialogue"
           }
@@ -38,6 +38,38 @@
         </h2>
         <div class="govuk-modal-dialogue__description" id="{{ params.id }}-description">
           Params description html
+        </div>
+      </div>
+    </dialog>
+  </div>
+
+
+  <div class="doit">
+<a href="#" class="govuk-link govuk-link--no-visited-state modal_dialog_button" data-module="1">
+  Do stuff 2
+</a>
+   </div>
+
+  <div data-module="govuk-modal-dialogue-1" class="govuk-modal-dialogue__wrapper" style="display: none">
+    <div class="govuk-modal-dialogue__overlay"></div>
+    <dialog class="govuk-modal-dialogue__box" aria-labelledby="{{ labelledBy }}" aria-describedby="{{ describedBy }}" aria-modal="true" role="{{ params.role | default('dialog') }}" tabindex="0"
+    {%- for attribute, value in params.attributes %} {{ attribute }}{% if value %}="{{ value }}"{% endif %}{% endfor %}{% if params.open %} open{% endif %}>
+      <div class="govuk-modal-dialogue__header">
+        {{ govukButton
+        ({text: "×", type: "button",
+          classes: "govuk-modal-dialogue__close govuk-modal-dialogue__continue-1",
+          attributes: {
+            "aria-label": "Close modal dialogue"
+          }
+        })
+        }}
+      </div>
+      <div class="govuk-modal-dialogue__content">
+        <h2 class="govuk-modal-dialogue__heading govuk-heading-l" id="{{ params.id }}-title">
+          Other heading html
+        </h2>
+        <div class="govuk-modal-dialogue__description" id="{{ params.id }}-description">
+          Other description html
         </div>
       </div>
     </dialog>
