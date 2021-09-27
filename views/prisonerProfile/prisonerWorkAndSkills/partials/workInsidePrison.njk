@@ -10,22 +10,22 @@
 {% endif %}
 
 {% if work.currentJobs.length %}
-    <h3 class="govuk-heading-s card__heading" data-test="work-header">Current roles</h3>
+    <h3 class="govuk-heading-s card__heading" data-test="work-header">Current activities</h3>
     {{ prisonerSummarySection(work.currentJobs, '', {"data-test": "work-currentWork"}, false, 'govuk-!-margin-bottom-1', true) }}
     <hr class="govuk-section-break govuk-section-break--visible">
 {% elseif work.workHistoryPresent %}
     <h3 class="govuk-heading-s card__heading">Current role</h3>
-    <p class="govuk-body" data-test="work-noCurrent">{{ offenderName }} is not currently doing any work inside prison.</p>
+    <p class="govuk-body" data-test="work-noCurrent">{{ offenderName }} has no current work or activities.</p>
 {% endif %}
 
 {% if work.workHistoryPresent %}
     <p class="govuk-body govuk-!-margin-top-3">
-        <a class="govuk-link" href='/prisoner/{{offenderNo}}/work-inside-prison' data-test="work-detailsLink">View work details</a>
+        <a class="govuk-link" href='/prisoner/{{offenderNo}}/work-activities' data-test="work-detailsLink">View work and activities for the last 12 months</a>
     </p>
 {% endif %}
 
 {% if work and not work.workHistoryPresent  %}
-    <p class="govuk-body" data-test="work-noData">{{ offenderName }} has no current or previous work inside prison.</p>
+    <p class="govuk-body" data-test="work-noData">{{ offenderName }} has no work or activities.</p>
 {% endif %}
 
 <p class="govuk-body">
