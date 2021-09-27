@@ -60,6 +60,7 @@
 
     <form action="{{ postAmendment }}" method="post">
         {% if isOmicOpenCaseNote %}
+          <input type="hidden" name="isOmicOpenCaseNote" value="true" />
           <div class="govuk-grid-row">
             {{ govukWarningText({
                 text: "This case note could be read by anyone with access to Digital Prison Services.  Check all information recorded here is appropriate and necessary to share across the prison.",
