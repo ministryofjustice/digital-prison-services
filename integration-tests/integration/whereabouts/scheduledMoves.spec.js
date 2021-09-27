@@ -11,10 +11,10 @@ context('Scheduled movements', () => {
 
   beforeEach(() => {
     cy.task('reset')
-    cy.task('stubLogin', { username: 'ITAG_USER', caseload: 'MDI' })
+    cy.task('stubSignIn', { username: 'ITAG_USER', caseload: 'MDI' })
     cy.task('stubAgencyDetails', { agencyId: 'MDI', details: agencyDetails })
     cy.task('stubMovementReasons', movementReasons)
-    cy.login()
+    cy.signIn()
     cy.visit('/manage-prisoner-whereabouts/scheduled-moves')
   })
 
