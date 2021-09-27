@@ -141,7 +141,7 @@ context('Scheduled movements', () => {
         cy.task('stubPrisonerProperty', propertyResponse)
       })
 
-      it('should display court events in the table correctly', () => {
+      it('should display court appearances in the table correctly', () => {
         cy.visit('/manage-prisoner-whereabouts/scheduled-moves')
 
         cy.get('[data-qa="court-events-table"]')
