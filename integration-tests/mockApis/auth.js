@@ -220,7 +220,7 @@ module.exports = {
       stubUser(username, caseloadId),
       stubUserLocations(),
       stubStaffRoles(),
-      stubLocationConfig({ agencyId: 'MDI', response: { enabled: false } }),
+      stubLocationConfig({ agencyId: caseloadId, response: { enabled: false } }),
     ]),
   stubSignInCourt: () =>
     Promise.all([

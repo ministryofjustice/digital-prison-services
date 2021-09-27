@@ -68,6 +68,7 @@ declare namespace eswe {
      */
     workActivities: WorkActivity[]
   }
+
   /**
    *
    * @export
@@ -276,5 +277,37 @@ declare namespace eswe {
      * @memberof workHistoryFullDetails
      */
     endDate: string
+  }
+
+  /**
+   *
+   * @export
+   * @interface LearnerGoals
+   */
+  export interface LearnerGoals {
+    /**
+     *
+     * @type {Array<string>}
+     * @memberof LearnerGoals
+     */
+    employmentGoals: Array
+    /**
+     *
+     * @type {Array<string>}
+     * @memberof LearnerGoals
+     */
+    personalGoals: Array
+    /**
+     *
+     * @type {Array<string>}
+     * @memberof LearnerGoals
+     */
+    longTermGoals: Array
+    /**
+     *
+     * @type {Array<string>}
+     * @memberof LearnerGoals
+     */
+    shortTermGoals: Array
   }
 }

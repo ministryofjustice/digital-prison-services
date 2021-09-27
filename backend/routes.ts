@@ -1,5 +1,4 @@
 import express from 'express'
-import whereaboutsHomepage from './controllers/whereabouts/whereaboutsHomepage'
 
 import { logError } from './logError'
 import { alertFactory } from './controllers/alert'
@@ -50,6 +49,8 @@ import appointmentConfirmDeletion from './controllers/appointmentConfirmDeletion
 import appointmentDeleteRecurringBookings from './controllers/appointmentDeleteRecurringBookings'
 import appointmentDeleted from './controllers/appointmentDeleted'
 
+import whereaboutsRouter from './routes/whereabouts/whereaboutsRouter'
+
 const router = express.Router()
 
 const setup = ({
@@ -76,7 +77,7 @@ const setup = ({
     next()
   })
 
-  router.use('/manage-prisoner-whereabouts', whereaboutsHomepage({ oauthApi, prisonApi }))
+  router.use('/manage-prisoner-whereabouts', whereaboutsRouter({ oauthApi, prisonApi }))
 
   router.post('/notification/dismiss', notificationDismiss({ notificationCookie }))
   router.use(

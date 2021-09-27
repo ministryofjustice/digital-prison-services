@@ -1,6 +1,6 @@
 const page = require('../page')
 
-const createCaseNoteConfirmPage = () =>
+const caseNoteConfirmPage = () =>
   page('Is this information appropriate to share as an OMiC open case note?', {
     prisonNumber: () => cy.get('[data-test="prison-number"]'),
     form: () => ({
@@ -12,9 +12,9 @@ const createCaseNoteConfirmPage = () =>
   })
 
 export default {
-  verifyOnPage: createCaseNoteConfirmPage,
+  verifyOnPage: caseNoteConfirmPage,
   goTo: (offenderNo) => {
     cy.visit(`/prisoner/${offenderNo}/add-case-note/confirm`)
-    return createCaseNoteConfirmPage()
+    return caseNoteConfirmPage()
   },
 }
