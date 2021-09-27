@@ -68,6 +68,7 @@ declare namespace eswe {
      */
     workActivities: WorkActivity[]
   }
+
   /**
    *
    * @export
@@ -128,25 +129,25 @@ declare namespace eswe {
   /**
    *
    * @export
-   * @interface LearningDifficultiesDisabilities
+   * @interface Neurodiversities
    */
-  interface LearningDifficultiesDisabilities {
+  interface Neurodiversities {
     /**
      * Establishment Name
      * @type {string}
-     * @memberof LearningDifficultiesDisabilities
+     * @memberof Neurodiversities
      */
     establishmentName?: string
     /**
      * Primary learning difficulty or disability
      * @type {string}
-     * @memberof LearningDifficultiesDisabilities
+     * @memberof Neurodiversities
      */
     primaryLDD?: Array
     /**
      * Additional learning difficulties or disabilities
      * @type {string}
-     * @memberof LearningDifficultiesDisabilities
+     * @memberof Neurodiversities
      */
     additionalLDD?: Array
   }
@@ -276,5 +277,37 @@ declare namespace eswe {
      * @memberof workHistoryFullDetails
      */
     endDate: string
+  }
+
+  /**
+   *
+   * @export
+   * @interface LearnerGoals
+   */
+  export interface LearnerGoals {
+    /**
+     *
+     * @type {Array<string>}
+     * @memberof LearnerGoals
+     */
+    employmentGoals: Array
+    /**
+     *
+     * @type {Array<string>}
+     * @memberof LearnerGoals
+     */
+    personalGoals: Array
+    /**
+     *
+     * @type {Array<string>}
+     * @memberof LearnerGoals
+     */
+    longTermGoals: Array
+    /**
+     *
+     * @type {Array<string>}
+     * @memberof LearnerGoals
+     */
+    shortTermGoals: Array
   }
 }

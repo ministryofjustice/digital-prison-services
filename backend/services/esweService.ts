@@ -12,8 +12,8 @@ type FeatureFlagged<T> = {
 
 type LearnerProfiles = FeatureFlagged<curious.LearnerProfile[]>
 type LearnerLatestAssessments = FeatureFlagged<eswe.FunctionalSkillsLevels>
-type OffenderGoals = FeatureFlagged<curious.LearnerGoals>
-type LearningDifficulties = FeatureFlagged<eswe.LearningDifficultiesDisabilities[]>
+type OffenderGoals = FeatureFlagged<eswe.LearnerGoals>
+type Neurodiversities = FeatureFlagged<eswe.Neurodiversities[]>
 type CurrentCoursesEnhanced = FeatureFlagged<eswe.CurrentCoursesEnhanced>
 type LearnerEducationFullDetails = FeatureFlagged<eswe.LearnerEducationFullDetails[]>
 type CurrentWork = FeatureFlagged<eswe.OffenderCurrentWork>
@@ -33,6 +33,8 @@ const AWAITING_ASSESSMENT_CONTENT = 'Awaiting assessment'
 export const DEFAULT_GOALS = {
   employmentGoals: null,
   personalGoals: null,
+  shortTermGoals: null,
+  longTermGoals: null,
 }
 
 export const DEFAULT_COURSE_DATA = {
@@ -145,7 +147,7 @@ export default class EsweService {
     return createFlaggedContent(content)
   }
 
-  async getLearningDifficulties(nomisId: string): Promise<LearningDifficulties> {
+  async getNeurodiversities(nomisId: string): Promise<Neurodiversities> {
     if (!app.esweEnabled) {
       return createFlaggedContent(null)
     }
@@ -247,15 +249,17 @@ export default class EsweService {
       const context = await this.systemOauthClient.getClientCredentialsTokens()
       const goals = await this.curiousApi.getLearnerGoals(context, nomisId)
 
-      const { employmentGoals, personalGoals } = goals
+      const { employmentGoals, personalGoals, longTermGoals, shortTermGoals } = goals
 
-      if (!employmentGoals.length && !personalGoals.length) {
+      if (!employmentGoals.length && !personalGoals.length && !longTermGoals.length && !shortTermGoals.length) {
         return createFlaggedContent(DEFAULT_GOALS)
       }
 
       const displayedGoals = {
         employmentGoals: employmentGoals.length ? employmentGoals : [DATA_NOT_ADDED],
         personalGoals: personalGoals.length ? personalGoals : [DATA_NOT_ADDED],
+        longTermGoals: longTermGoals.length ? longTermGoals : [DATA_NOT_ADDED],
+        shortTermGoals: shortTermGoals.length ? shortTermGoals : [DATA_NOT_ADDED],
       }
       return createFlaggedContent(displayedGoals)
     } catch (e) {

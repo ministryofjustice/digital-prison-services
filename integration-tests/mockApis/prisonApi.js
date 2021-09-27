@@ -1860,4 +1860,18 @@ module.exports = {
         jsonBody: workHistory || {},
       },
     }),
+  stubMovementReasons: (reasons) =>
+    stubFor({
+      request: {
+        method: 'GET',
+        urlPath: '/api/reference-domains/domains/MOVE_RSN',
+      },
+      response: {
+        status: 200,
+        headers: {
+          'Content-Type': 'application/json;charset=UTF-8',
+        },
+        jsonBody: reasons,
+      },
+    }),
 }

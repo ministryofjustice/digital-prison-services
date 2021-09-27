@@ -1,6 +1,7 @@
 import supertest from 'supertest'
 import express from 'express'
-import whereaboutsHomepage, { whereaboutsTasks } from '../controllers/whereabouts/whereaboutsHomepage'
+import { whereaboutsTasks } from '../controllers/whereabouts/homePage'
+import whereaboutsHomepage from '../routes/whereabouts/whereaboutsRouter'
 import nunjucksSetup from '../utils/nunjucksSetup'
 
 describe('Homepage', () => {

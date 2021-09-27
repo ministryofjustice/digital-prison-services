@@ -1,4 +1,3 @@
-import { Router, Request } from 'express'
 import { hasAnyRole } from '../../shared/permissions'
 
 type TaskType = {
@@ -63,10 +62,8 @@ export const whereaboutsTasks: TaskType[] = [
   },
 ]
 
-export default ({ oauthApi, prisonApi }: any): Router => {
-  const router = Router()
-
-  router.get('/', async (req: Request, res) => {
+export default ({ oauthApi, prisonApi }: any) => {
+  const index = async (req, res) => {
     const { activeCaseLoadId, staffId } = req.session.userDetails
     const [staffRoles, userRoles] = await Promise.all([
       prisonApi.getStaffRoles(res.locals, staffId, activeCaseLoadId),
@@ -79,7 +76,9 @@ export default ({ oauthApi, prisonApi }: any): Router => {
     res.render('whereabouts/whereaboutsHomepage.njk', {
       tasks: whereaboutsTasks.filter((task) => task.enabled({ roles })).map(({ enabled, ...task }) => task),
     })
-  })
+  }
 
-  return router
+  return {
+    index,
+  }
 }
