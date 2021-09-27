@@ -4,8 +4,8 @@ import caseNoteCtrl from '../controllers/caseNote'
 
 Reflect.deleteProperty(process.env, 'APPINSIGHTS_INSTRUMENTATIONKEY')
 
-const prisonApi = {}
-const caseNotesApi = { addCaseNote: {} }
+const prisonApi = { getDetails: {} }
+const caseNotesApi = { addCaseNote: {}, myCaseNoteTypes: {} }
 
 const { index, post, areYouSure, confirm } = caseNoteCtrl.caseNoteFactory({ prisonApi, caseNotesApi })
 
@@ -14,7 +14,6 @@ jest.mock('../logError', () => ({
 }))
 
 describe('case note management', () => {
-  let mockReq
   let res
 
   const mockCreateReq = {
@@ -62,10 +61,7 @@ describe('case note management', () => {
 
   beforeEach(() => {
     res = { render: jest.fn(), redirect: jest.fn(), locals: {} }
-    mockReq = { flash: jest.fn().mockReturnValue([]), originalUrl: '/add-case-note/', get: jest.fn(), body: {} }
-    // @ts-expect-error ts-migrate(2339) FIXME: Property 'getDetails' does not exist on type '{}'.
     prisonApi.getDetails = jest.fn().mockReturnValue(getDetailsResponse)
-    // @ts-expect-error ts-migrate(2339) FIXME: Property 'myCaseNoteTypes' does not exist on type ... Remove this comment to see the full error message
     caseNotesApi.myCaseNoteTypes = jest.fn().mockReturnValue(caseNoteTypes)
     caseNotesApi.addCaseNote = jest.fn()
   })
@@ -424,6 +420,27 @@ describe('case note management', () => {
 
         expect(res.redirect).toBeCalledWith('/prisoner/ABC123/case-notes')
       })
+      it('should take the user to confirm page if omic open case note', async () => {
+        const caseNote = {
+          type: 'OMIC',
+          subType: 'OPEN_COMM',
+          date: moment().format('DD/MM/YYYY'),
+          hours: moment().format('H'),
+          minutes: moment().format('mm'),
+          text: 'test',
+        }
+        const req = {
+          ...mockCreateReq,
+          params: { offenderNo },
+          body: caseNote,
+          session: {},
+        }
+
+        await post(req, res)
+
+        expect(res.redirect).toBeCalledWith('/prisoner/ABC123/add-case-note/confirm')
+        expect(req.session).toEqual({ draftCaseNote: { ...caseNote, offenderNo } })
+      })
     })
   })
 
@@ -441,7 +458,7 @@ describe('case note management', () => {
         },
         offenderNo,
         homeUrl: '/prisoner/ABC123/case-notes',
-        caseNotesRootUrl: '/prisoner/ABC123/add-case-note',
+        breadcrumbText: 'Add a case note',
       })
     })
   })
@@ -508,14 +525,32 @@ describe('case note management', () => {
         ...mockCreateReq,
         params: { offenderNo },
         session: { draftCaseNote: { text: 'hello' } },
+        body: { confirmed: 'No' },
       }
 
       await confirm(req, res)
 
       expect(caseNotesApi.addCaseNote).not.toHaveBeenCalled()
-      expect(req.flash).toHaveBeenNthCalledWith(1, 'caseNote', {
+      expect(req.flash).toBeCalledWith('caseNote', {
         text: 'hello',
       })
+      expect(res.redirect).toBeCalledWith('/prisoner/ABC123/add-case-note')
+    })
+
+    it('should show error if user does not enter a choice', async () => {
+      const req = {
+        ...mockCreateReq,
+        params: { offenderNo },
+        session: { draftCaseNote: { text: 'hello' } },
+      }
+
+      await confirm(req, res)
+
+      expect(caseNotesApi.addCaseNote).not.toHaveBeenCalled()
+      expect(req.flash).toBeCalledWith('confirmErrors', [
+        { href: '#confirmed', text: 'Select yes if this information is appropriate to share' },
+      ])
+      expect(res.redirect).toBeCalledWith('/prisoner/ABC123/add-case-note/confirm')
     })
   })
 })

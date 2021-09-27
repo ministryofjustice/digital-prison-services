@@ -3,7 +3,7 @@ const moment = require('moment')
 const offenderBasicDetails = require('../../mockApis/responses/offenderBasicDetails.json')
 const offenderFullDetails = require('../../mockApis/responses/offenderFullDetails.json')
 const CreateCaseNotePage = require('../../pages/caseNotes/createCaseNotePage')
-const CreateCaseNoteConfirmPage = require('../../pages/caseNotes/createCaseNoteConfirmPage')
+const CaseNoteConfirmPage = require('../../pages/caseNotes/caseNoteConfirmPage')
 const PrisonerCaseNotePage = require('../../pages/prisonerProfile/caseNotePage')
 
 context('A user can add a case note', () => {
@@ -90,9 +90,9 @@ context('A user can add a case note', () => {
     form.minutes().clear().type('10')
     form.submitButton().click()
 
-    const createCaseNoteConfirmPage = CreateCaseNoteConfirmPage.verifyOnPage()
-    createCaseNoteConfirmPage.form().confirmRadio().check('Yes')
-    createCaseNoteConfirmPage.form().submitButton().click()
+    const caseNoteConfirmPage = CaseNoteConfirmPage.verifyOnPage()
+    caseNoteConfirmPage.form().confirmRadio().check('Yes')
+    caseNoteConfirmPage.form().submitButton().click()
 
     PrisonerCaseNotePage.verifyOnPage('Smith, John')
 
@@ -137,9 +137,14 @@ context('A user can add a case note', () => {
     form.text().type('Test comment')
     form.submitButton().click()
 
-    const createCaseNoteConfirmPage = CreateCaseNoteConfirmPage.verifyOnPage()
-    createCaseNoteConfirmPage.form().confirmRadio().check('No')
-    createCaseNoteConfirmPage.form().submitButton().click()
+    const caseNoteConfirmPage = CaseNoteConfirmPage.verifyOnPage()
+    caseNoteConfirmPage.form().submitButton().click()
+    CaseNoteConfirmPage.verifyOnPage()
+    caseNoteConfirmPage.errorSummaryTitle().contains('There is a problem')
+    caseNoteConfirmPage.errorSummaryList().contains('Select yes if this information is appropriate to share')
+
+    caseNoteConfirmPage.form().confirmRadio().check('No')
+    caseNoteConfirmPage.form().submitButton().click()
 
     const createCaseNotePage2 = CreateCaseNotePage.verifyOnPage()
     createCaseNotePage2.omicOpenWarning().should('be.visible')
