@@ -1,8 +1,11 @@
 {% extends "../partials/layout.njk" %}
 
+{% from "govuk/components/table/macro.njk" import govukTable %}
 {% from "govuk/components/button/macro.njk" import govukButton %}
 {% from "components/datePicker/datePicker.njk" import datePicker %}
 {% from "govuk/components/select/macro.njk" import govukSelect %}
+
+{% from "../macros/alertFlags.njk" import alertFlags %}
 
 {% block beforeContent %}
     {{ govukBreadcrumbs({
@@ -30,9 +33,10 @@
         }) }}
     {% endif %}
 
+
     <div class="govuk-grid-row govuk-body">
         <div class="govuk-grid-column-full">
-            <h1 class="govuk-heading-l">People due to leave {{ agencyDescription }} on {{ dateForTitle }}</h1>
+            <h1 class="govuk-heading-m">People due to leave {{ agencyDescription }} on {{ dateForTitle }}</h1>
         </div>
 
         <div class="govuk-grid-column-two-thirds">
@@ -41,8 +45,6 @@
                   class="form-background govuk-!-padding-3 govuk-!-margin-bottom-5 govuk-!-display-none-print"
                   method="get">
                 <h2 class="govuk-heading-m">View by</h2>
-
-                <input type="hidden" name="date" value="{{ formValues.date }}" />
 
                 <div class="horizontal-form govuk-!-margin-bottom-3">
 
@@ -73,7 +75,20 @@
             </form>
         </div>
 
+        <div class="govuk-grid-column-full">
+            {% include("./partials/courtEvents.njk") %}
+        </div>
 
     </div>
 
+{% endblock %}
+
+{% block bodyEnd %}
+    {{ super() }}
+    <script src="/assets/moj/components/sortable-table/sortable-table.js"></script>
+    <script>
+      new MOJFrontend.SortableTable({
+        table: $('table')[0],
+      })
+    </script>
 {% endblock %}

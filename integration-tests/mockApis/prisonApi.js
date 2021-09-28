@@ -1874,4 +1874,19 @@ module.exports = {
         jsonBody: reasons,
       },
     }),
+  stubTransfers: (response) =>
+    stubFor({
+      request: {
+        method: 'GET',
+        urlPath: '/api/movements/transfers',
+      },
+      response: {
+        status: 200,
+        headers: {
+          'Content-Type': 'application/json;charset=UTF-8',
+        },
+        jsonBody: response,
+      },
+    }),
+  resetTransfersStub: () => resetStub({ requestUrl: '/api/movements/transfers', method: 'GET' }),
 }
