@@ -111,7 +111,7 @@
     "universal-analytics": "^0.4.23",
     "webpack": "^5.40.0",
     "webpack-dev-middleware": "^5.0.0",
-    "webpack-hot-middleware": "^2.22.1"
+    "webpack-hot-middleware": "^2.25.1"
   },
   "devDependencies": {
     "@babel/core": "^7.15.5",
