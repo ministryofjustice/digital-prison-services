@@ -1,5 +1,15 @@
+import querystring from 'querystring'
 import contextProperties from '../contextProperties'
 import { arrayToQueryString, mapToQueryString } from '../utils'
+
+export type GetTransferParameters = {
+  courtEvents: boolean
+  releaseEvents: boolean
+  transferEvents: boolean
+  fromDateTime: string
+  toDateTime: string
+  agencyId: string
+}
 
 export const prisonApiFactory = (client) => {
   const processResponse = (context) => (response) => {
@@ -201,6 +211,8 @@ export const prisonApiFactory = (client) => {
 
   const getAdjudicationFindingTypes = (context) => get(context, '/api/reference-domains/domains/OIC_FINDING', 1000)
 
+  const getMovementReasons = (context) => get(context, '/api/reference-domains/domains/MOVE_RSN', 1000)
+
   const getAdjudications = async (context, offenderNumber, params, pageOffset, pageLimit) => {
     contextProperties.setCustomRequestHeaders(context, {
       'page-offset': pageOffset || 0,
@@ -392,6 +404,15 @@ export const prisonApiFactory = (client) => {
 
   const getUserDetailsList = (context, users) => post(context, `/api/users/list`, users)
 
+  const getOffenderCurrentWork = (context, offenderNo) =>
+    get(context, `/api/offender-activities/${offenderNo}/current-work`)
+
+  const getOffenderWorkHistory = (context, offenderNo, earliestEndDate) =>
+    get(context, `/api/offender-activities/${offenderNo}/work-history?earliestEndDate=${earliestEndDate}`)
+
+  const getTransfers = (context, parameters: GetTransferParameters) =>
+    get(context, `/api/movements/transfers?${querystring.stringify(parameters)}`)
+
   return {
     userLocations,
     userCaseLoads,
@@ -510,6 +531,10 @@ export const prisonApiFactory = (client) => {
     getPrisoners,
     getUserDetailsList,
     getHistoryByDate,
+    getOffenderCurrentWork,
+    getOffenderWorkHistory,
+    getMovementReasons,
+    getTransfers,
   }
 }
 

@@ -1,14 +1,21 @@
-$(function() {
+$(function () {
   var typeSelect = $('#type')
-  var subTypeSelect = $('#subType')
-  var subTypesDiv = $('#subTypes')
+  var subTypeSelect = $('#sub-type')
   var subTypesUrl = $('#subTypesUrl').val()
+  var omicOpenWarnings = $('.case-notes-omic-open')
 
-  typeSelect.on('change', function(e) {
+  if (omicOpenWarnings.length) {
+    var selectedSubTypeOption = subTypeSelect.children('option:selected').val()
+    var style = selectedSubTypeOption == 'OPEN_COMM' ? 'block' : 'none'
+    if (omicOpenWarnings.length) omicOpenWarnings.prop('style', 'display: ' + style)
+  }
+
+  typeSelect.on('change', function (e) {
     var selectedTypeOption = e.target && e.target.options && e.target.options[e.target.options.selectedIndex]
     if (!selectedTypeOption) return
 
     subTypeSelect.prop('disabled', true)
+    if (omicOpenWarnings.length) omicOpenWarnings.prop('style', 'display: none')
 
     $.ajax({
       url: subTypesUrl,
@@ -19,13 +26,21 @@ $(function() {
         typeCode: selectedTypeOption.value,
       },
     })
-      .done(function(partialHtml) {
+      .done(function (partialHtml) {
         subTypeSelect.prop('disabled', false)
-        subTypesDiv.html(partialHtml)
+        subTypeSelect.html(partialHtml)
       })
-      .error(function() {
+      .error(function () {
         subTypeSelect.prop('disabled', false)
         typeSelect.val('Select')
       })
+  })
+
+  subTypeSelect.on('change', function (e) {
+    var selectedSubTypeOption = e.target && e.target.options && e.target.options[e.target.options.selectedIndex]
+    if (!selectedSubTypeOption) return
+
+    var style = selectedSubTypeOption.value == 'OPEN_COMM' ? 'block' : 'none'
+    if (omicOpenWarnings.length) omicOpenWarnings.prop('style', 'display: ' + style)
   })
 })

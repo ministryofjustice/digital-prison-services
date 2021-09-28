@@ -24,8 +24,8 @@ context('A user can select a cell', () => {
   before(() => {
     cy.clearCookies()
     cy.task('resetAndStubTokenVerification')
-    cy.task('stubLogin', { username: 'ITAG_USER', caseload: 'MDI' })
-    cy.login()
+    cy.task('stubSignIn', { username: 'ITAG_USER', caseload: 'MDI' })
+    cy.signIn()
   })
   beforeEach(() => {
     Cypress.Cookies.preserveOnce('hmpps-session-dev')
@@ -87,7 +87,10 @@ context('A user can select a cell', () => {
   context('with cell data', () => {
     const response = [
       {
-        attributes: [{ description: 'Special Cell', code: 'SPC' }, { description: 'Gated Cell', code: 'GC' }],
+        attributes: [
+          { description: 'Special Cell', code: 'SPC' },
+          { description: 'Gated Cell', code: 'GC' },
+        ],
         capacity: 2,
         description: 'LEI-1-2',
         id: 1,
@@ -95,7 +98,10 @@ context('A user can select a cell', () => {
         userDescription: 'LEI-1-1',
       },
       {
-        attributes: [{ code: 'LC', description: 'Listener Cell' }, { description: 'Gated Cell', code: 'GC' }],
+        attributes: [
+          { code: 'LC', description: 'Listener Cell' },
+          { description: 'Gated Cell', code: 'GC' },
+        ],
         capacity: 3,
         description: 'LEI-1-1',
         id: 1,
@@ -118,13 +124,11 @@ context('A user can select a cell', () => {
     it('should display the correct cell information', () => {
       const page = SelectCellPage.goTo(offenderNo)
 
-      page.cellResults().then($table => {
+      page.cellResults().then(($table) => {
         cy.get($table)
           .find('tr')
-          .then($tableRows => {
-            cy.get($tableRows)
-              .its('length')
-              .should('eq', 9)
+          .then(($tableRows) => {
+            cy.get($tableRows).its('length').should('eq', 9)
 
             const columns = $tableRows.find('td')
 
@@ -243,7 +247,7 @@ context('A user can select a cell', () => {
       page
         .selectCswapLink()
         .invoke('attr', 'href')
-        .then(href => {
+        .then((href) => {
           expect(href).to.equal('/prisoner/A12345/cell-move/confirm-cell-move?cellId=C-SWAP')
         })
     })

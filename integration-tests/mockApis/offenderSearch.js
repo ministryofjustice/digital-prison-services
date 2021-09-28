@@ -53,7 +53,7 @@ module.exports = {
       body: {
         totalElements: 2,
         pageable: { pageSize: 20, offset: 0 },
-        content:  [
+        content: [
           {
             prisonerNumber: 'A1234AC',
             indeterminiteSentence: false,
@@ -69,7 +69,7 @@ module.exports = {
     getMatchingRequests({
       method: 'POST',
       urlPath: '/offenderSearch/global-search',
-    }).then(data => data.body.requests),
+    }).then((data) => data.body.requests),
 
   stubGlobalSearchMultiplePages: () => {
     const resultsPerPage = 20
@@ -94,4 +94,18 @@ module.exports = {
       }),
     ])
   },
+  stubPrisonerSearchDetails: (response) =>
+    stubFor({
+      request: {
+        method: 'POST',
+        urlPath: '/offenderSearch/prisoner-search/prisoner-numbers',
+      },
+      response: {
+        status: 200,
+        headers: {
+          'Content-Type': 'application/json;charset=UTF-8',
+        },
+        jsonBody: response,
+      },
+    }),
 }

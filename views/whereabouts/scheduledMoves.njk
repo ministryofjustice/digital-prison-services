@@ -1,0 +1,94 @@
+{% extends "../partials/layout.njk" %}
+
+{% from "govuk/components/table/macro.njk" import govukTable %}
+{% from "govuk/components/button/macro.njk" import govukButton %}
+{% from "components/datePicker/datePicker.njk" import datePicker %}
+{% from "govuk/components/select/macro.njk" import govukSelect %}
+
+{% from "../macros/alertFlags.njk" import alertFlags %}
+
+{% block beforeContent %}
+    {{ govukBreadcrumbs({
+        items: [
+            {
+                text: "Digital Prison Services",
+                href: "/"
+            },
+            {
+                text: "Manage prisoner whereabouts",
+                href: "/manage-prisoner-whereabouts"
+            }
+        ]
+    }) }}
+{% endblock %}
+
+
+{% block content %}
+
+    {% if errors.length > 0 %}
+        {{ govukErrorSummary({
+            titleText: "There is a problem",
+            errorList: errors,
+            attributes: { 'data-qa-errors': true }
+        }) }}
+    {% endif %}
+
+
+    <div class="govuk-grid-row govuk-body">
+        <div class="govuk-grid-column-full">
+            <h1 class="govuk-heading-m">People due to leave {{ agencyDescription }} on {{ dateForTitle }}</h1>
+        </div>
+
+        <div class="govuk-grid-column-two-thirds">
+
+            <form novalidate="novalidate"
+                  class="form-background govuk-!-padding-3 govuk-!-margin-bottom-5 govuk-!-display-none-print"
+                  method="get">
+                <h2 class="govuk-heading-m">View by</h2>
+
+                <div class="horizontal-form govuk-!-margin-bottom-3">
+
+                    {{ datePicker({
+                        id: 'date',
+                        label: 'Date',
+                        name: 'date',
+                        date: formValues.date,
+                        errorMessage: errors | findError('date')
+                    }) }}
+
+                    {{ govukSelect({
+                        name: 'movementReason',
+                        id: 'movementReason',
+                        label: {
+                            text: 'Reason for leaving'
+                        },
+                        items: movementReasons  | addDefaultSelectedVale('All') | setSelected(formValues.movementReason)
+                    }) }}
+
+
+                    {{ govukButton({
+                        text: "View",
+                        preventDoubleClick: true,
+                        type: "submit"
+                    }) }}
+                </div>
+            </form>
+        </div>
+
+        <div class="govuk-grid-column-full">
+            {% include("./partials/courtEvents.njk") %}
+        </div>
+
+    </div>
+
+{% endblock %}
+
+{% block bodyEnd %}
+    {{ super() }}
+    <script src="/assets/moj/components/sortable-table/sortable-table.js"></script>
+    <script>
+      new MOJFrontend.SortableTable({
+        table: $('table')[0],
+      })
+    </script>
+{% endblock %}

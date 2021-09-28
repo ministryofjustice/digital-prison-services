@@ -106,7 +106,7 @@ function getDummyLearnerProfiles(): curious.LearnerProfile[] {
     {
       prn: 'G6123VU',
       establishmentId: 'MDI',
-      establishmentName: 'HMP Moorland',
+      establishmentName: 'MOORLAND (HMP & YOI)',
       uln: '1234123412',
       lddHealthProblem:
         'Learner considers himself or herself to have a learning difficulty and/or disability and/or health problem.',
@@ -141,8 +141,8 @@ function getDummyLearnerProfiles(): curious.LearnerProfile[] {
     },
     {
       prn: 'G6123VU',
-      establishmentId: 'QWER',
-      establishmentName: 'HMP Wakefield',
+      establishmentId: 'WDI',
+      establishmentName: 'WAKEFIELD (HMP)',
       uln: '9876987654',
       lddHealthProblem: null,
       priorAttainment: null,
@@ -177,12 +177,12 @@ function getDummyEducations(): curious.LearnerEducation {
   return {
     content: [
       {
-        prn: 'G3609VL',
-        establishmentId: 'MDI',
-        establishmentName: 'HMP Moorland',
-        courseName: 'Ocean Science',
-        courseCode: '008OCE001',
-        isAccredited: false,
+        prn: 'G8346GA',
+        establishmentId: 'LYI',
+        establishmentName: 'LEYHILL (HMP)',
+        courseName: 'Instructing group cycling sessions',
+        courseCode: 'Y6174024',
+        isAccredited: true,
         aimSequenceNumber: 1,
         learningStartDate: '2021-07-01',
         learningPlannedEndDate: '2021-10-03',
@@ -267,11 +267,11 @@ function getDummyEducations(): curious.LearnerEducation {
         alevelIndicator: false,
       },
       {
-        prn: 'G3609VL',
-        establishmentId: 'NEW',
-        establishmentName: 'HMP New Hall',
-        courseName: 'CIMA Strategic Level',
-        courseCode: '270828',
+        prn: 'G8346GA',
+        establishmentId: 'DAI',
+        establishmentName: 'DARTMOOR (HMP)',
+        courseName: 'Foundation Degree in Cricket Coaching - (Myerscough College)',
+        courseCode: '301409',
         isAccredited: true,
         aimSequenceNumber: 1,
         learningStartDate: '2016-07-15',
@@ -338,8 +338,8 @@ function getDummyLearnerLatestAssessments(): curious.LearnerLatestAssessment[] {
       prn: 'G8346GA',
       qualifications: [
         {
-          establishmentId: 'WIN',
-          establishmentName: 'HMP Winchester',
+          establishmentId: 'WDI',
+          establishmentName: 'WAKEFIELD (HMP)',
           qualification: {
             qualificationType: 'English',
             qualificationGrade: 'Entry Level 2',
@@ -347,8 +347,8 @@ function getDummyLearnerLatestAssessments(): curious.LearnerLatestAssessment[] {
           },
         },
         {
-          establishmentId: 'WIN',
-          establishmentName: 'HMP Winchester',
+          establishmentId: 'WDI',
+          establishmentName: 'WAKEFIELD (HMP)',
           qualification: {
             qualificationType: 'English',
             qualificationGrade: 'Entry Level 2',
@@ -356,8 +356,8 @@ function getDummyLearnerLatestAssessments(): curious.LearnerLatestAssessment[] {
           },
         },
         {
-          establishmentId: 'WIN',
-          establishmentName: 'HMP Winchester',
+          establishmentId: 'WDI',
+          establishmentName: 'WAKEFIELD (HMP)',
           qualification: {
             qualificationType: 'Digital Literacy',
             qualificationGrade: 'Entry Level 1',
@@ -365,8 +365,8 @@ function getDummyLearnerLatestAssessments(): curious.LearnerLatestAssessment[] {
           },
         },
         {
-          establishmentId: 'WIN',
-          establishmentName: 'HMP Winchester',
+          establishmentId: 'WDI',
+          establishmentName: 'WAKEFIELD (HMP)',
           qualification: {
             qualificationType: 'Digital Literacy',
             qualificationGrade: 'Entry Level 2',
@@ -374,8 +374,8 @@ function getDummyLearnerLatestAssessments(): curious.LearnerLatestAssessment[] {
           },
         },
         {
-          establishmentId: 'WIN',
-          establishmentName: 'HMP Winchester',
+          establishmentId: 'WDI',
+          establishmentName: 'WAKEFIELD (HMP)',
           qualification: {
             qualificationType: 'Maths',
             qualificationGrade: 'Entry Level 2',

@@ -131,6 +131,44 @@ declare namespace curious {
   /**
    *
    * @export
+   * @interface LearnerGoals
+   */
+  export interface LearnerGoals {
+    /**
+     * NOMIS Assigned Offender Number (Prisoner Identifier)
+     * @type {string}
+     * @memberof LearnerGoals
+     */
+    prn: string
+    /**
+     *
+     * @type {Array<string>}
+     * @memberof LearnerGoals
+     */
+    employmentGoals: Array
+    /**
+     *
+     * @type {Array<string>}
+     * @memberof LearnerGoals
+     */
+    personalGoals: Array
+    /**
+     *
+     * @type {Array<string>}
+     * @memberof LearnerGoals
+     */
+    longTermGoals: Array
+    /**
+     *
+     * @type {Array<string>}
+     * @memberof LearnerGoals
+     */
+    shortTermGoals: Array
+  }
+
+  /**
+   *
+   * @export
    * @interface LearnerCourses
    */
   export interface LearnerCourses {
@@ -397,102 +435,6 @@ declare namespace curious {
   /**
    *
    * @export
-   * @interface CurrentCoursesEnhanced
-   */
-  interface CurrentCoursesEnhanced {
-    /**
-     * Courses
-     * @type {any}
-     * @memberof CurrentCoursesEnhanced
-     */
-    currentCourseData?: Array
-    /**
-     * Historical courses
-     * @type {string}
-     * @memberof CurrentCoursesEnhanced
-     */
-    historicalCoursesPresent?: boolean
-  }
-
-  /**
-   *
-   * @export
-   * @interface LearnerEducationFullDetails
-   */
-  interface LearnerEducationFullDetails {
-    /**
-     * Type
-     * @type {string}
-     * @memberof LearnerEducationFullDetails
-     */
-    type?: string
-    /**
-     * Course name
-     * @type {string}
-     * @memberof LearnerEducationFullDetails
-     */
-    courseName?: string
-    /**
-     * Location - establishment
-     * @type {string}
-     * @memberof LearnerEducationFullDetails
-     */
-    location?: string
-    /**
-     * Date from (learning start date)
-     * @type {string}
-     * @memberof LearnerEducationFullDetails
-     */
-    dateFrom?: string
-    /**
-     * Date to (learning end date, or planned end date)
-     * @type {string}
-     * @memberof LearnerEducationFullDetails
-     */
-    dateTo?: string
-    /**
-     * Outcome
-     * @type {string}
-     * @memberof LearnerEducationFullDetails
-     */
-    outcome?: string
-    /**
-     * Outcome details
-     * @type {string}
-     * @memberof LearnerEducationFullDetails
-     */
-    outcomeDetails?: string
-  }
-
-  /**
-   *
-   * @export
-   * @interface LearningDifficultiesDisabilities
-   */
-  interface LearningDifficultiesDisabilities {
-    /**
-     * Establishment Name
-     * @type {string}
-     * @memberof LearningDifficultiesDisabilities
-     */
-    establishmentName?: string
-    /**
-     * Primary learning difficulty or disability
-     * @type {string}
-     * @memberof LearningDifficultiesDisabilities
-     */
-    primaryLDD?: Array
-    /**
-     * Additional learning difficulties or disabilities
-     * @type {string}
-     * @memberof LearningDifficultiesDisabilities
-     */
-    additionalLDD?: Array
-  }
-
-  /**
-   *
-   * @export
    * @interface LearnerProfile
    */
   interface LearnerProfile {
@@ -593,70 +535,6 @@ declare namespace curious {
      * @type {Array<LearnerAssessment>}
      * @memberof LearnerLatestAssessment
      */
-    qualifications?: LearnerAssessment[]
-  }
-
-  /**
-   *
-   * @export
-   * @interface FunctionalSkillsLevels
-   */
-  export interface FunctionalSkillsLevels {
-    /**
-     *
-     * @type {Array<FunctionalSkillsLevels>}
-     * @memberof FunctionalSkillsLevels
-     */
-    english?: Array
-    /**
-     *
-     * @type {Array<FunctionalSkillsLevels>}
-     * @memberof FunctionalSkillsLevels
-     */
-    maths?: Array
-    /**
-     *
-     * @type {Array<FunctionalSkillsLevels>}
-     * @memberof FunctionalSkillsLevels
-     */
-    digiLit?: Array
-  }
-
-  /**
-   *
-   * @export
-   * @interface LearnerGoals
-   */
-  export interface LearnerGoals {
-    /**
-     * NOMIS Assigned Offender Number (Prisoner Identifier)
-     * @type {string}
-     * @memberof LearnerGoals
-     */
-    prn?: string
-    /**
-     *
-     * @type {Array<string>}
-     * @memberof LearnerGoals
-     */
-    employmentGoals?: Array
-    /**
-     *
-     * @type {Array<string>}
-     * @memberof LearnerGoals
-     */
-    personalGoals?: Array
-    /**
-     *
-     * @type {Array<string>}
-     * @memberof LearnerGoals
-     */
-    longTermGoals?: Array
-    /**
-     *
-     * @type {Array<string>}
-     * @memberof LearnerGoals
-     */
-    shortTermGoals?: Array
+    qualifications: LearnerAssessment[]
   }
 }

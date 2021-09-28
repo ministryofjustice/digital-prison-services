@@ -3,7 +3,8 @@ import { shallow } from 'enzyme'
 import moment from 'moment'
 import axios from 'axios'
 import MockAdapter from 'axios-mock-adapter'
-import { ResultsActivity, PrintLink } from './ResultsActivity'
+import { ResultsActivity } from './ResultsActivity'
+import PrintLink from '../Components/PrintLink/PrintLink'
 import OtherActivitiesView from '../OtherActivityListView'
 import AttendanceNotRequiredForm from '../Attendance/AttendanceNotRequiredForm'
 
@@ -565,13 +566,6 @@ describe('Offender activity list results component', () => {
   })
 
   it('should call the attendAll function when the link is clicked', async () => {
-    const component = shallow(
-      <ResultsActivity {...props} totalAttended={0} totalAbsent={0} activityData={response} date={today} period="AM" />
-    )
-
-    const attendAllLink = component.find('BatchControls').shallow().find('#attendAllLink')
-    attendAllLink.props().onClick()
-
     mockAxios.onPost('/api/attendance/batch').reply(200, [
       {
         offenderNo: 'A1234AA',
@@ -607,6 +601,13 @@ describe('Offender activity list results component', () => {
         eventDate: '29/06/2019',
       },
     ])
+
+    const component = shallow(
+      <ResultsActivity {...props} totalAttended={0} totalAbsent={0} activityData={response} date={today} period="AM" />
+    )
+    const attendAllLink = component.find('BatchControls').shallow().find('#attendAllLink')
+
+    attendAllLink.props().onClick()
 
     expect(component.state().attendingAll).toBe(true)
 

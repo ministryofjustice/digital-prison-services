@@ -1,6 +1,6 @@
 import 'cypress-file-upload'
 
-Cypress.Commands.add('login', (url = '/') => {
+Cypress.Commands.add('signIn', (url = '/') => {
   cy.request(url)
-  cy.task('getLoginUrl').then(cy.visit)
+  cy.task('getSignInUrl').then(cy.visit)
 })

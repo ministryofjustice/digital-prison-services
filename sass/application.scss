@@ -19,6 +19,7 @@ $govuk-font-family-print: 'GDS Transport';
 @import 'components/prisonerProfile/prisoner-visits';
 @import 'components/prisonerProfile/prisoner-schedule';
 @import 'components/prisonerProfile/_prisoner-courses-qualifications-details';
+@import 'components/prisonerProfile/_prisoner-work-inside-prison-details';
 @import 'components/covid/dashboard';
 @import 'components/prisonerSearch/prisoner-search';
 @import 'components/prisonerSearch/prisoner-panel';
@@ -120,6 +121,13 @@ $govuk-font-family-print: 'GDS Transport';
 
 .case-notes-details {
   flex-basis: 80%;
+}
+
+.case-notes-omic-open {
+  display: none;
+}
+.case-notes-omic-open-warning {
+  margin-left: 15px;
 }
 
 pre {

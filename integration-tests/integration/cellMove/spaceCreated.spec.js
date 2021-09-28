@@ -6,8 +6,8 @@ context('A user get confirmation of a cell move', () => {
   before(() => {
     cy.clearCookies()
     cy.task('resetAndStubTokenVerification')
-    cy.task('stubLogin', { username: 'ITAG_USER', caseload: 'MDI' })
-    cy.login()
+    cy.task('stubSignIn', { username: 'ITAG_USER', caseload: 'MDI' })
+    cy.signIn()
   })
   beforeEach(() => {
     Cypress.Cookies.preserveOnce('hmpps-session-dev')
@@ -33,7 +33,7 @@ context('A user get confirmation of a cell move', () => {
     page
       .backToSearchLink()
       .invoke('attr', 'href')
-      .then(href => {
+      .then((href) => {
         expect(href).to.equal('/prisoner-search')
       })
   })

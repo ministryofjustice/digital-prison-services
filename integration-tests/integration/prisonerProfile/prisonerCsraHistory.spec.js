@@ -4,15 +4,15 @@ context('Prisoner CSRA history', () => {
   before(() => {
     cy.clearCookies()
     cy.task('reset')
-    cy.task('stubLogin', { username: 'ITAG_USER', caseload: 'MDI' })
-    cy.login()
+    cy.task('stubSignIn', { username: 'ITAG_USER', caseload: 'MDI' })
+    cy.signIn()
   })
 
   beforeEach(() => {
     Cypress.Cookies.preserveOnce('hmpps-session-dev')
     cy.task('stubOffenderBasicDetails', { firstName: 'John', lastName: 'Smith', agencyId: 'MDI' })
     cy.task('stubCsraAssessmentsForPrisoner', {
-      offenderNo, 
+      offenderNo,
       assessments: [
         {
           bookingId: 1,
@@ -51,7 +51,7 @@ context('Prisoner CSRA history', () => {
           assessmentComment: 'comment',
           assessorUser: 'DQL61T',
         },
-      ]
+      ],
     })
     cy.task('stubAgencyDetails', {
       agencyId: 'DNI',
@@ -73,14 +73,12 @@ context('Prisoner CSRA history', () => {
     cy.visit(`/prisoner/${offenderNo}/csra-history`)
 
     cy.get('h1').contains('CSRA history for John Smith')
-    cy.get('[data-test="csra-table"]').then($table => {
+    cy.get('[data-test="csra-table"]').then(($table) => {
       cy.get($table)
         .find('tbody')
         .find('tr')
-        .then($tableRows => {
-          cy.get($tableRows)
-            .its('length')
-            .should('eq', 2)
+        .then(($tableRows) => {
+          cy.get($tableRows).its('length').should('eq', 2)
           expect($tableRows.get(0).innerText).to.contain('10/11/2014\tHigh\tDoncaster\tcomment')
           expect($tableRows.get(1).innerText).to.contain('02/06/2011\t\tMoorland\tNot entered')
         })
@@ -92,7 +90,7 @@ context('Prisoner CSRA history', () => {
     cy.get('[data-test="csra-select"]').select('STANDARD')
     cy.get('[data-test="location-select"]').select('DNI')
     cy.get('[type="submit"]').click()
-    cy.location().should(loc => {
+    cy.location().should((loc) => {
       expect(loc.search).to.eq('?csra=STANDARD&location=DNI')
     })
     cy.get('[data-test="csra-select"]').should('have.value', 'STANDARD')

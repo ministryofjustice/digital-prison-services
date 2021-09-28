@@ -6,9 +6,8 @@ import moment from 'moment'
 import GridRow from '@govuk-react/grid-row'
 import GridCol from '@govuk-react/grid-col'
 
-import Button from '@govuk-react/button'
 import LeadParagraph from '@govuk-react/lead-paragraph'
-
+import PrintLink from '../Components/PrintLink/PrintLink'
 import WhereaboutsDatePicker from '../DatePickers/WhereaboutsDatePicker'
 import { LAST_NAME, ACTIVITY, CELL_LOCATION } from '../tablesorting/sortColumns'
 import SortLov from '../tablesorting/SortLov'
@@ -72,11 +71,11 @@ const PrisonersUnaccountedForSearch = ({
             )}
           </FullWidthSelect>
         </GridCol>
-        <GridCol>
+        <GridCol className="no-print">
           <RightAlignContainer>
-            <Button data-qa="print-button" className="no-print" onClick={() => window.print()}>
-              Print list
-            </Button>
+            <PrintLink data-qa="print-button" onClick={() => window.print()} id="printButton">
+              Print this page
+            </PrintLink>
           </RightAlignContainer>
         </GridCol>
       </GridRow>

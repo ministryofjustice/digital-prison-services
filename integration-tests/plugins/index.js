@@ -19,7 +19,7 @@ const offenderSearch = require('../mockApis/offenderSearch')
 const complexity = require('../mockApis/complexity')
 const curiousApi = require('../mockApis/curiousApi')
 
-const { resetStubs } = require('../mockApis/wiremock')
+const { resetStubs, resetStub } = require('../mockApis/wiremock')
 
 const extractOffenderNumbers = (activityList) => {
   const result = Object.keys(activityList).reduce((r, k) => r.concat(activityList[k]), [])
@@ -55,16 +55,16 @@ module.exports = (on) => {
         offenderSearch.stubHealth(),
         complexity.stubHealth(),
       ]),
-    getLoginUrl: auth.getLoginUrl,
-    stubLogin: ({ username = 'ITAG_USER', caseload = 'MDI', roles = [], caseloads }) =>
+    getSignInUrl: auth.getSignInUrl,
+    stubSignIn: ({ username = 'ITAG_USER', caseload = 'MDI', roles = [], caseloads }) =>
       Promise.all([
-        auth.stubLogin(username, caseload, roles),
+        auth.stubSignIn(username, caseload, roles),
         auth.stubUserMe(),
         prisonApi.stubUserCaseloads(caseloads),
         tokenverification.stubVerifyToken(true),
       ]),
-    stubLoginCourt: () =>
-      Promise.all([auth.stubLoginCourt(), prisonApi.stubUserCaseloads(), tokenverification.stubVerifyToken(true)]),
+    stubSignInCourt: () =>
+      Promise.all([auth.stubSignInCourt(), prisonApi.stubUserCaseloads(), tokenverification.stubVerifyToken(true)]),
 
     stubUserEmail: (username) => Promise.all([auth.stubEmail(username)]),
     stubUser: (username, caseload) => Promise.all([auth.stubUser(username, caseload)]),
@@ -78,8 +78,8 @@ module.exports = (on) => {
     stubGroups: (caseload) => whereabouts.stubGroups(caseload),
     stubAddVideoLinkBooking: () => whereabouts.stubAddVideoLinkBooking(),
     getBookingRequest: () => whereabouts.getBookingRequest(),
-    stubCaseNotes: (response) => caseNotes.stubCaseNotes(response),
-    stubCaseNoteTypes: (types) => caseNotes.stubCaseNoteTypes(types),
+    stubCaseNotes: caseNotes.stubCaseNotes,
+    stubCaseNoteTypes: caseNotes.stubCaseNoteTypes,
 
     stubForAttendance: ({ caseload, locationId, timeSlot, date, activities }) => {
       const offenderNumbers = extractOffenderNumbers(activities)
@@ -202,6 +202,7 @@ module.exports = (on) => {
         prisonApi.stubEventsForToday([], 500),
         prisonApi.stubProfileInformation(null, 500),
       ]),
+
     stubPrisonerDetails: (prisonerDetails) => prisonApi.stubPrisonerDetails(prisonerDetails),
 
     stubLatestLearnerAssessments: (functionalSkillsAssessments) =>
@@ -211,11 +212,15 @@ module.exports = (on) => {
 
     stubLearnerEducation: (learnerEducation) => curiousApi.stubLearnerEducation(learnerEducation),
 
+    stubOffenderWorkHistory: (workHistory) => prisonApi.stubForOffenderWorkHistory(workHistory),
+
     stubWorkAndSkillsApi500Errors: () =>
       Promise.all([
         curiousApi.stubLatestLearnerAssessments({}, 500),
         curiousApi.stubLearnerGoals({}, 500),
         curiousApi.stubLearnerEducation({}, 500),
+        prisonApi.stubForOffenderWorkHistory({}, 500),
+        prisonApi.stubPrisonerDetails({}, 500),
       ]),
 
     stubWorkAndSkillsApi404Errors: (error) =>
@@ -223,6 +228,8 @@ module.exports = (on) => {
         curiousApi.stubLatestLearnerAssessments(error, 404),
         curiousApi.stubLearnerGoals(error, 404),
         curiousApi.stubLearnerEducation(error, 404),
+        prisonApi.stubForOffenderWorkHistory(error, 404),
+        prisonApi.stubPrisonerDetails(error, 404),
       ]),
 
     stubPersonal: ({
@@ -241,7 +248,7 @@ module.exports = (on) => {
       reasonableAdjustments,
       agencies,
       prisonOffenderManagers,
-      learningDifficulties,
+      neurodiversities,
     }) =>
       Promise.all([
         prisonApi.stubIdentifiers(identifiers),
@@ -259,11 +266,11 @@ module.exports = (on) => {
         prisonApi.stubReasonableAdjustments(reasonableAdjustments),
         prisonApi.stubAgencies(agencies),
         allocationManager.stubGetPomForOffender(prisonOffenderManagers),
-        curiousApi.stubLearnerProfiles(learningDifficulties),
+        curiousApi.stubLearnerProfiles(neurodiversities),
       ]),
     stubReleaseDatesOffenderNo: (releaseDates) => Promise.all([prisonApi.stubPrisonerSentenceDetails(releaseDates)]),
     stubVerifyToken: (active = true) => tokenverification.stubVerifyToken(active),
-    stubLoginPage: auth.redirect,
+    stubSignInPage: auth.redirect,
     stubGetAbsences: ({ agencyId, reason, absences }) =>
       Promise.all([whereabouts.stubGetAbsences(agencyId, reason, absences)]),
     stubGetAbsenceReasons: (response) => Promise.all([whereabouts.stubGetAbsenceReasons()]),
@@ -339,6 +346,7 @@ module.exports = (on) => {
     stubVideoLinkAppointments: whereabouts.stubVideoLinkAppointments,
     stubCreateAlert: prisonApi.stubCreateAlert,
     stubCreateCaseNote: caseNotes.stubCreateCaseNote,
+    verifySaveCaseNote: caseNotes.verifySaveCaseNote,
     stubDeleteCaseNote: caseNotes.stubDeleteCaseNote,
     stubDeleteCaseNoteAmendment: caseNotes.stubDeleteCaseNoteAmendment,
     stubCaseNoteTypesForUser: caseNotes.stubCaseNoteTypesForUser,
@@ -481,6 +489,11 @@ module.exports = (on) => {
     stubDeleteAppointment: ({ id, status }) => whereabouts.stubDeleteAppointment({ id, status }),
     stubDeleteRecurringAppointmentSequence: ({ id, status }) =>
       whereabouts.stubDeleteRecurringAppointmentSequence({ id, status }),
-    stubPrisonerSearch: () => offenderSearch.stubPrisonerSearch(),
+    stubPrisonerSearch: (response) => offenderSearch.stubPrisonerSearch(response),
+    stubMovementReasons: (reasons) => prisonApi.stubMovementReasons(reasons),
+    stubTransfers: (response) => prisonApi.stubTransfers(response),
+    resetTransfersStub: () => prisonApi.resetTransfersStub(),
+    stubPrisonerSearchDetails: (response) => offenderSearch.stubPrisonerSearchDetails(response),
+    stubPrisonerProperty: (property) => prisonApi.stubPrisonerProperty(property),
   })
 }

@@ -11,6 +11,7 @@
 {% set functionalSkillLevels = functionalSkillLevels.content %}
 {% set goals = targets.content %}
 {% set courses = coursesAndQualifications.content %}
+{% set work = currentWork.content %}
 
 {% set functionalSkillsLevelSection %}
     <div data-test="functional-skills-level-summary">
@@ -30,8 +31,15 @@
     </div>
 {% endset %}
 
+{% set workAndActivitiesSection %}
+    <div data-test="work-summary" id="work-summary">
+        {% include "./partials/workInsidePrison.njk" %}
+    </div>
+{% endset %}
+
 {% set leftSections = [
-    { heading: 'Courses and qualifications', html: CoursesAndQualificationsSection }
+    { heading: 'Courses and qualifications', html: CoursesAndQualificationsSection },
+    { heading: 'Work and activities', html: workAndActivitiesSection }
 ] %}
 {% set rightSections = [
     { heading: 'Goals', html: offenderGoalsSection },

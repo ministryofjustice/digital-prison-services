@@ -4,8 +4,8 @@ context('A user can see the data in the dashbaord', () => {
   before(() => {
     cy.clearCookies()
     cy.task('resetAndStubTokenVerification')
-    cy.task('stubLogin', { username: 'ITAG_USER', caseload: 'MDI' })
-    cy.login()
+    cy.task('stubSignIn', { username: 'ITAG_USER', caseload: 'MDI' })
+    cy.signIn()
   })
   beforeEach(() => {
     Cypress.Cookies.preserveOnce('hmpps-session-dev')
@@ -62,7 +62,10 @@ context('A user can see the data in the dashbaord', () => {
     })
     cy.task('stubLocationsForAgency', {
       agency: 'MDI',
-      locations: [{ description: '1-1', locationId: 1 }, { description: 'CSWAP', locationId: 2 }],
+      locations: [
+        { description: '1-1', locationId: 1 },
+        { description: 'CSWAP', locationId: 2 },
+      ],
     })
     cy.task('stubAttributesForLocation', { noOfOccupants: 3 })
   })
@@ -79,14 +82,12 @@ context('A user can see the data in the dashbaord', () => {
     cy.get('[data-test="enroute"]').should('contain', '6')
     cy.get('[data-test="no-cell-allocated"]').should('contain', '3')
 
-    cy.get('[data-test="establishment-roll-table"]').then($table => {
+    cy.get('[data-test="establishment-roll-table"]').then(($table) => {
       cy.get($table)
         .find('tbody')
         .find('tr')
-        .then($tableRows => {
-          cy.get($tableRows)
-            .its('length')
-            .should('eq', 3)
+        .then(($tableRows) => {
+          cy.get($tableRows).its('length').should('eq', 3)
           expect($tableRows.get(0).innerText).to.contain('Houseblock 1\t156\t154\t2\t170\t14\t0')
           expect($tableRows.get(1).innerText).to.contain('Houseblock 2\t172\t172\t0\t180\t8\t1')
           expect($tableRows.get(2).innerText).to.contain('Moorland\t328\t326\t2\t350\t22\t1')

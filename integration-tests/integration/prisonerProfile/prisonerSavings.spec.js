@@ -42,8 +42,8 @@ context('Prisoner savings', () => {
   before(() => {
     cy.clearCookies()
     cy.task('reset')
-    cy.task('stubLogin', { username: 'ITAG_USER', caseload: 'MDI' })
-    cy.login()
+    cy.task('stubSignIn', { username: 'ITAG_USER', caseload: 'MDI' })
+    cy.signIn()
   })
 
   context('With data', () => {
@@ -91,14 +91,12 @@ context('Prisoner savings', () => {
       cy.get('[data-test="savings-current-balance"]').contains('£10.00')
       cy.get('[data-test="savings-month"]').should('have.value', '10')
       cy.get('[data-test="savings-year"]').should('have.value', '2020')
-      cy.get('[data-test="savings-table"]').then($table => {
+      cy.get('[data-test="savings-table"]').then(($table) => {
         cy.get($table)
           .find('tbody')
           .find('tr')
-          .then($tableRows => {
-            cy.get($tableRows)
-              .its('length')
-              .should('eq', 2)
+          .then(($tableRows) => {
+            cy.get($tableRows).its('length').should('eq', 2)
             expect($tableRows.get(0).innerText).to.contain(
               '02/12/2020\t£10.00\t\t£215.00\tSub-Account Transfer\tMoorland'
             )
@@ -115,9 +113,7 @@ context('Prisoner savings', () => {
       cy.task('stubGetTransactionHistory', {
         accountCode: 'savings',
         response: [],
-        fromDate: moment()
-          .startOf('month')
-          .format('YYYY-MM-DD'),
+        fromDate: moment().startOf('month').format('YYYY-MM-DD'),
         toDate: moment().format('YYYY-MM-DD'),
       })
       cy.task('stubPrisonerBalances', {

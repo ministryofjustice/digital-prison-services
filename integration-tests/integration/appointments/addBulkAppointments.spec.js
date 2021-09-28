@@ -11,8 +11,8 @@ context('A user can add a bulk appointment', () => {
   before(() => {
     cy.clearCookies()
     cy.task('resetAndStubTokenVerification')
-    cy.task('stubLogin', { username: 'ITAG_USER', caseload: 'MDI' })
-    cy.login()
+    cy.task('stubSignIn', { username: 'ITAG_USER', caseload: 'MDI' })
+    cy.signIn()
   })
   beforeEach(() => {
     Cypress.Cookies.preserveOnce('hmpps-session-dev')
@@ -25,9 +25,7 @@ context('A user can add a bulk appointment', () => {
     cy.task('stubSchedules', {
       agency: 'MDI',
       location: 1,
-      date: moment()
-        .add(1, 'days')
-        .format('yyyy-MM-DD'),
+      date: moment().add(1, 'days').format('yyyy-MM-DD'),
       appointments: [],
       visits: [],
       activities: [],
@@ -64,11 +62,7 @@ context('A user can add a bulk appointment', () => {
     const bulkAppointmentsConfirmPage = BulkAppointmentsConfirmPage.verifyOnPage()
     bulkAppointmentsConfirmPage.appointmentType().contains('Activities')
     bulkAppointmentsConfirmPage.appointmentLocation().contains('Adj')
-    bulkAppointmentsConfirmPage.appointmentStartDate().contains(
-      moment()
-        .add(10, 'days')
-        .format('dddd D MMMM YYYY')
-    )
+    bulkAppointmentsConfirmPage.appointmentStartDate().contains(moment().add(10, 'days').format('dddd D MMMM YYYY'))
     bulkAppointmentsConfirmPage.appointmentStartTime().contains('10:10')
     bulkAppointmentsConfirmPage.prisonersFound().contains('Doe John')
     bulkAppointmentsConfirmPage.submitButton().click()
@@ -93,11 +87,7 @@ context('A user can add a bulk appointment', () => {
     const bulkAppointmentsConfirmPage = BulkAppointmentsConfirmPage.verifyOnPage()
     bulkAppointmentsConfirmPage.appointmentType().contains('Activities')
     bulkAppointmentsConfirmPage.appointmentLocation().contains('Adj')
-    bulkAppointmentsConfirmPage.appointmentStartDate().contains(
-      moment()
-        .add(10, 'days')
-        .format('dddd D MMMM YYYY')
-    )
+    bulkAppointmentsConfirmPage.appointmentStartDate().contains(moment().add(10, 'days').format('dddd D MMMM YYYY'))
     bulkAppointmentsConfirmPage.prisonersFound().contains('Doe John')
     const timesForm = bulkAppointmentsConfirmPage.form('A12345')
     timesForm.startTimeHours().select('10')
@@ -130,21 +120,14 @@ context('A user can add a bulk appointment', () => {
     const bulkAppointmentsConfirmPage = BulkAppointmentsConfirmPage.verifyOnPage()
     bulkAppointmentsConfirmPage.appointmentType().contains('Activities')
     bulkAppointmentsConfirmPage.appointmentLocation().contains('Adj')
-    bulkAppointmentsConfirmPage.appointmentStartDate().contains(
-      moment()
-        .add(10, 'days')
-        .format('dddd D MMMM YYYY')
-    )
+    bulkAppointmentsConfirmPage.appointmentStartDate().contains(moment().add(10, 'days').format('dddd D MMMM YYYY'))
     bulkAppointmentsConfirmPage.appointmentStartTime().contains('10:10')
     bulkAppointmentsConfirmPage.prisonersFound().contains('Doe John')
     bulkAppointmentsConfirmPage.appointmentsHowOften().contains('Weekly')
     bulkAppointmentsConfirmPage.appointmentsOccurrences().contains('5')
-    bulkAppointmentsConfirmPage.appointmentsEndDate().contains(
-      moment()
-        .add(10, 'days')
-        .add(4, 'w')
-        .format('dddd D MMMM YYYY')
-    )
+    bulkAppointmentsConfirmPage
+      .appointmentsEndDate()
+      .contains(moment().add(10, 'days').add(4, 'w').format('dddd D MMMM YYYY'))
     bulkAppointmentsConfirmPage.submitButton().click()
 
     BulkAppointmentsAddedPage.verifyOnPage()
@@ -154,9 +137,7 @@ context('A user can add a bulk appointment', () => {
     cy.task('stubSchedules', {
       agency: 'MDI',
       location: 1,
-      date: moment()
-        .add(10, 'days')
-        .format('yyyy-MM-DD'),
+      date: moment().add(10, 'days').format('yyyy-MM-DD'),
       appointments: [
         {
           offenderNo: 'A12345',
@@ -277,11 +258,7 @@ context('A user can add a bulk appointment', () => {
     const bulkAppointmentsConfirmPage = BulkAppointmentsConfirmPage.verifyOnPage()
     bulkAppointmentsConfirmPage.appointmentType().contains('Activities')
     bulkAppointmentsConfirmPage.appointmentLocation().contains('Adj')
-    bulkAppointmentsConfirmPage.appointmentStartDate().contains(
-      moment()
-        .add(10, 'days')
-        .format('dddd D MMMM YYYY')
-    )
+    bulkAppointmentsConfirmPage.appointmentStartDate().contains(moment().add(10, 'days').format('dddd D MMMM YYYY'))
     bulkAppointmentsConfirmPage.appointmentStartTime().contains('10:10')
     bulkAppointmentsConfirmPage.prisonersFound().contains('Doe John')
     bulkAppointmentsConfirmPage.submitButton().click()
@@ -312,11 +289,7 @@ context('A user can add a bulk appointment', () => {
     const bulkAppointmentsConfirmPage = BulkAppointmentsConfirmPage.verifyOnPage()
     bulkAppointmentsConfirmPage.appointmentType().contains('Activities')
     bulkAppointmentsConfirmPage.appointmentLocation().contains('Adj')
-    bulkAppointmentsConfirmPage.appointmentStartDate().contains(
-      moment()
-        .add(10, 'days')
-        .format('dddd D MMMM YYYY')
-    )
+    bulkAppointmentsConfirmPage.appointmentStartDate().contains(moment().add(10, 'days').format('dddd D MMMM YYYY'))
     bulkAppointmentsConfirmPage.appointmentStartTime().contains('10:10')
     bulkAppointmentsConfirmPage.prisonersFound().contains('Doe John')
     bulkAppointmentsConfirmPage.submitButton().click()

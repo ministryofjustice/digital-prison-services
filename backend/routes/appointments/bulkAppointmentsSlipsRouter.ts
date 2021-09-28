@@ -1,4 +1,4 @@
-import { forenameToInitial, chunkArray } from '../../utils'
+import { chunkArray, forenameToInitial } from '../../utils'
 import { serviceUnavailableMessage } from '../../common-messages'
 
 export default ({ prisonApi, logError }) =>
@@ -22,14 +22,13 @@ export default ({ prisonApi, logError }) =>
     const offenderNumbers = prisonersListed.map((prisoner) => prisoner.offenderNo)
     const chunkedOffenderNumbers = chunkArray(offenderNumbers, 100)
 
-    const offenderSummaryApiCalls = chunkedOffenderNumbers.map((offendersChunk) => ({
-      getOffenderSummaries: prisonApi.getOffenderSummaries,
+    const chunkedOffenders = chunkedOffenderNumbers.map((offendersChunk) => ({
       offenders: offendersChunk,
     }))
 
     const offenderSummaries = (
       await Promise.all(
-        offenderSummaryApiCalls.map((apiCall) => apiCall.getOffenderSummaries(res.locals, apiCall.offenders))
+        chunkedOffenders.map((apiCall) => prisonApi.getOffenderSummaries(res.locals, apiCall.offenders))
       )
     )
       .map((offenderSummaryData) => offenderSummaryData.content)

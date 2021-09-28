@@ -4,17 +4,16 @@ import caseNoteCtrl from '../controllers/caseNote'
 
 Reflect.deleteProperty(process.env, 'APPINSIGHTS_INSTRUMENTATIONKEY')
 
-const prisonApi = {}
-const caseNotesApi = {}
+const prisonApi = { getDetails: {} }
+const caseNotesApi = { addCaseNote: {}, myCaseNoteTypes: {} }
 
-const { displayCreateCaseNotePage, handleCreateCaseNoteForm } = caseNoteCtrl.caseNoteFactory(prisonApi, caseNotesApi)
+const { index, post, areYouSure, confirm } = caseNoteCtrl.caseNoteFactory({ prisonApi, caseNotesApi })
 
 jest.mock('../logError', () => ({
   logError: jest.fn(),
 }))
 
 describe('case note management', () => {
-  let mockReq
   let res
 
   const mockCreateReq = {
@@ -62,12 +61,8 @@ describe('case note management', () => {
 
   beforeEach(() => {
     res = { render: jest.fn(), redirect: jest.fn(), locals: {} }
-    mockReq = { flash: jest.fn().mockReturnValue([]), originalUrl: '/add-case-note/', get: jest.fn(), body: {} }
-    // @ts-expect-error ts-migrate(2339) FIXME: Property 'getDetails' does not exist on type '{}'.
     prisonApi.getDetails = jest.fn().mockReturnValue(getDetailsResponse)
-    // @ts-expect-error ts-migrate(2339) FIXME: Property 'myCaseNoteTypes' does not exist on type ... Remove this comment to see the full error message
     caseNotesApi.myCaseNoteTypes = jest.fn().mockReturnValue(caseNoteTypes)
-    // @ts-expect-error ts-migrate(2339) FIXME: Property 'addCaseNote' does not exist on type '{}'... Remove this comment to see the full error message
     caseNotesApi.addCaseNote = jest.fn()
   })
 
@@ -78,10 +73,10 @@ describe('case note management', () => {
     caseNotesApi.myCaseNoteTypes.mockRestore()
     // @ts-expect-error ts-migrate(2339) FIXME: Property 'addCaseNote' does not exist on type '{}'... Remove this comment to see the full error message
     caseNotesApi.addCaseNote.mockRestore()
-    mockReq.flash.mockRestore()
+    mockCreateReq.flash.mockReset()
   })
 
-  describe('displayCreateCaseNotePage()', () => {
+  describe('index()', () => {
     const DATE_2020_10_29_16_15 = 1603988100000 // Friday, 29 Oct 2020 16:15 UTC (avoid BST)
     const DATE_2020_10_29_16_06 = 1603987560000 // Friday, 29 Oct 2020 16:06 UTC
 
@@ -90,7 +85,7 @@ describe('case note management', () => {
 
       const req = { ...mockCreateReq, params: { offenderNo } }
 
-      await displayCreateCaseNotePage(req, res)
+      await index(req, res)
 
       expect(res.render).toBeCalledWith(
         'caseNotes/addCaseNoteForm.njk',
@@ -114,7 +109,7 @@ describe('case note management', () => {
       const req = { ...mockCreateReq, params: { offenderNo } }
       res.status = jest.fn()
 
-      await expect(displayCreateCaseNotePage(req, res)).rejects.toThrowError(error)
+      await expect(index(req, res)).rejects.toThrowError(error)
 
       expect(res.locals.redirectUrl).toBe('/prisoner/ABC123/case-notes')
     })
@@ -124,7 +119,7 @@ describe('case note management', () => {
 
       const req = { ...mockCreateReq, params: { offenderNo } }
 
-      await displayCreateCaseNotePage(req, res)
+      await index(req, res)
 
       expect(res.render).toBeCalledWith('caseNotes/addCaseNoteForm.njk', {
         offenderDetails: {
@@ -144,10 +139,37 @@ describe('case note management', () => {
           { value: 'OBSERVE', text: 'Observations' },
           { value: 'ACHIEVEMENTS', text: 'Achievements' },
         ],
-        subTypes: [
-          { value: 'OBS1', text: 'Observation 1', type: 'OBSERVE' },
-          { value: 'ACH1', text: 'Achievement 1', type: 'ACHIEVEMENTS' },
+        subTypes: [],
+      })
+
+      // @ts-expect-error ts-migrate(2339) FIXME: Property 'mockRestore' does not exist on type '() ... Remove this comment to see the full error message
+      Date.now.mockRestore()
+    })
+
+    it('should filter the sub types if a type is selected', async () => {
+      jest.spyOn(Date, 'now').mockImplementation(() => DATE_2020_10_29_16_15)
+      await index({ ...mockCreateReq, params: { offenderNo }, query: { type: 'OBSERVE' } }, res)
+
+      expect(res.render).toBeCalledWith('caseNotes/addCaseNoteForm.njk', {
+        offenderDetails: {
+          name: 'Test User',
+          offenderNo: 'ABC123',
+          profileUrl: '/prisoner/ABC123',
+        },
+        offenderNo,
+        homeUrl: '/prisoner/ABC123/case-notes',
+        caseNotesRootUrl: '/prisoner/ABC123/add-case-note',
+        formValues: {
+          date: '29/10/2020',
+          hours: '16',
+          minutes: '15',
+          type: 'OBSERVE',
+        },
+        types: [
+          { value: 'OBSERVE', text: 'Observations' },
+          { value: 'ACHIEVEMENTS', text: 'Achievements' },
         ],
+        subTypes: [{ value: 'OBS1', text: 'Observation 1', type: 'OBSERVE' }],
       })
 
       // @ts-expect-error ts-migrate(2339) FIXME: Property 'mockRestore' does not exist on type '() ... Remove this comment to see the full error message
@@ -157,8 +179,8 @@ describe('case note management', () => {
     it('should default type and subType to the values supplied via query parameters', async () => {
       jest.spyOn(Date, 'now').mockImplementation(() => DATE_2020_10_29_16_15)
 
-      const req = { ...mockCreateReq, params: { offenderNo }, query: { type: 'KS', subType: 'KS' } }
-      await displayCreateCaseNotePage(req, res)
+      const req = { ...mockCreateReq, params: { offenderNo }, query: { type: 'KA', subType: 'KS' } }
+      await index(req, res)
 
       expect(res.render).toBeCalledWith(
         'caseNotes/addCaseNoteForm.njk',
@@ -168,7 +190,35 @@ describe('case note management', () => {
             hours: '16',
             minutes: '15',
             subType: 'KS',
-            type: 'KS',
+            type: 'KA',
+          },
+        })
+      )
+      // @ts-expect-error ts-migrate(2339) FIXME: Property 'mockRestore' does not exist on type '() ... Remove this comment to see the full error message
+      Date.now.mockRestore()
+    })
+
+    it('should copy information from flash scope', async () => {
+      jest.spyOn(Date, 'now').mockImplementation(() => DATE_2020_10_29_16_15)
+
+      const req = { ...mockCreateReq, params: { offenderNo }, query: { type: 'KA', subType: 'KS' } }
+      req.flash
+        .mockReturnValueOnce([
+          { type: 'OMIC', subType: 'OMIC_COMM', text: 'Test comment', date: '03/02/2020', minutes: '02', hours: '1' },
+        ])
+        .mockReturnValue([])
+      await index(req, res)
+
+      expect(res.render).toBeCalledWith(
+        'caseNotes/addCaseNoteForm.njk',
+        expect.objectContaining({
+          formValues: {
+            date: '03/02/2020',
+            hours: '1',
+            minutes: '02',
+            subType: 'OMIC_COMM',
+            type: 'OMIC',
+            text: 'Test comment',
           },
         })
       )
@@ -177,7 +227,7 @@ describe('case note management', () => {
     })
   })
 
-  describe('handleCreateCaseNoteForm()', () => {
+  describe('post()', () => {
     describe('when there are errors', () => {
       const error = new Error('There has been an error')
       const error400 = makeError('response', {
@@ -202,11 +252,10 @@ describe('case note management', () => {
           },
         }
 
-        // @ts-expect-error ts-migrate(2339) FIXME: Property 'addCaseNote' does not exist on type '{}'... Remove this comment to see the full error message
         caseNotesApi.addCaseNote = jest.fn().mockRejectedValue(error)
         res.status = jest.fn()
 
-        await expect(handleCreateCaseNoteForm(req, res)).rejects.toThrowError(error)
+        await expect(post(req, res)).rejects.toThrowError(error)
       })
 
       it('should return the specific error in case of a 400 response', async () => {
@@ -222,17 +271,23 @@ describe('case note management', () => {
             text: 'test',
           },
         }
-        // @ts-expect-error ts-migrate(2339) FIXME: Property 'addCaseNote' does not exist on type '{}'... Remove this comment to see the full error message
         caseNotesApi.addCaseNote = jest.fn().mockRejectedValue(error400)
 
-        await handleCreateCaseNoteForm(req, res)
+        await post(req, res)
 
-        expect(res.render).toHaveBeenCalledWith(
-          'caseNotes/addCaseNoteForm.njk',
-          expect.objectContaining({
-            errors: [{ href: '#text', text: (error400 as any).response.body.userMessage }],
-          })
-        )
+        expect(res.redirect).toBeCalledWith('/prisoner/ABC123/add-case-note')
+        expect(req.flash).toHaveBeenNthCalledWith(1, 'caseNoteErrors', [
+          { href: '#text', text: (error400 as any).response.body.userMessage },
+        ])
+        expect(req.flash).toHaveBeenNthCalledWith(2, 'caseNote', {
+          date: '20/07/2020',
+          hours: '10',
+          minutes: '10',
+          offenderNo: 'ABC123',
+          subType: 'PI',
+          text: 'test',
+          type: 'P',
+        })
       })
 
       it('should return an error if missing data', async () => {
@@ -242,20 +297,21 @@ describe('case note management', () => {
           body: { offenderNo, text: 'test', date: '2020-07-20' },
         }
 
-        await handleCreateCaseNoteForm(req, res)
+        await post(req, res)
 
-        expect(res.render).toHaveBeenCalledWith(
-          'caseNotes/addCaseNoteForm.njk',
-          expect.objectContaining({
-            errors: [
-              { href: '#type', text: 'Select the case note type' },
-              { href: '#sub-type', text: 'Select the case note sub-type' },
-              { href: '#date', text: 'Enter a real date in the format DD/MM/YYYY - for example, 27/03/2020' },
-              { href: '#hours', text: 'Enter an hour which is 23 or less' },
-              { href: '#minutes', text: 'Enter the minutes using 59 or less' },
-            ],
-          })
-        )
+        expect(res.redirect).toBeCalledWith('/prisoner/ABC123/add-case-note')
+        expect(req.flash).toHaveBeenNthCalledWith(1, 'caseNoteErrors', [
+          { href: '#type', text: 'Select the case note type' },
+          { href: '#sub-type', text: 'Select the case note sub-type' },
+          { href: '#date', text: 'Enter a real date in the format DD/MM/YYYY - for example, 27/03/2020' },
+          { href: '#hours', text: 'Enter an hour which is 23 or less' },
+          { href: '#minutes', text: 'Enter the minutes using 59 or less' },
+        ])
+        expect(req.flash).toHaveBeenNthCalledWith(2, 'caseNote', {
+          date: '2020-07-20',
+          offenderNo: 'ABC123',
+          text: 'test',
+        })
       })
     })
 
@@ -271,20 +327,15 @@ describe('case note management', () => {
           body: { offenderNo, text },
         }
 
-        await handleCreateCaseNoteForm(req, res)
-        expect(res.render).toHaveBeenCalledWith(
-          'caseNotes/addCaseNoteForm.njk',
-          expect.objectContaining({
-            errors: [
-              { href: '#type', text: 'Select the case note type' },
-              { href: '#sub-type', text: 'Select the case note sub-type' },
-              { href: '#text', text: 'Enter what happened using 4,000 characters or less' },
-              { href: '#date', text: 'Select the date when this happened' },
-              { href: '#hours', text: 'Enter an hour which is 23 or less' },
-              { href: '#minutes', text: 'Enter the minutes using 59 or less' },
-            ],
-          })
-        )
+        await post(req, res)
+        expect(req.flash).toHaveBeenNthCalledWith(1, 'caseNoteErrors', [
+          { href: '#type', text: 'Select the case note type' },
+          { href: '#sub-type', text: 'Select the case note sub-type' },
+          { href: '#text', text: 'Enter what happened using 4,000 characters or less' },
+          { href: '#date', text: 'Select the date when this happened' },
+          { href: '#hours', text: 'Enter an hour which is 23 or less' },
+          { href: '#minutes', text: 'Enter the minutes using 59 or less' },
+        ])
       })
 
       it('should validate time is not in the future', async () => {
@@ -300,17 +351,12 @@ describe('case note management', () => {
           },
         }
 
-        await handleCreateCaseNoteForm(req, res)
-        expect(res.render).toHaveBeenCalledWith(
-          'caseNotes/addCaseNoteForm.njk',
-          expect.objectContaining({
-            errors: [
-              { href: '#type', text: 'Select the case note type' },
-              { href: '#sub-type', text: 'Select the case note sub-type' },
-              { href: '#hours', text: 'Enter a time which is not in the future' },
-            ],
-          })
-        )
+        await post(req, res)
+        expect(req.flash).toHaveBeenNthCalledWith(1, 'caseNoteErrors', [
+          { href: '#type', text: 'Select the case note type' },
+          { href: '#sub-type', text: 'Select the case note sub-type' },
+          { href: '#hours', text: 'Enter a time which is not in the future' },
+        ])
       })
 
       it('should validate time is a number', async () => {
@@ -326,18 +372,13 @@ describe('case note management', () => {
           },
         }
 
-        await handleCreateCaseNoteForm(req, res)
-        expect(res.render).toHaveBeenCalledWith(
-          'caseNotes/addCaseNoteForm.njk',
-          expect.objectContaining({
-            errors: [
-              { href: '#type', text: 'Select the case note type' },
-              { href: '#sub-type', text: 'Select the case note sub-type' },
-              { href: '#hours', text: 'Enter a time using numbers only' },
-              { href: '#minutes', text: 'Enter a time using numbers only' },
-            ],
-          })
-        )
+        await post(req, res)
+        expect(req.flash).toHaveBeenNthCalledWith(1, 'caseNoteErrors', [
+          { href: '#type', text: 'Select the case note type' },
+          { href: '#sub-type', text: 'Select the case note sub-type' },
+          { href: '#hours', text: 'Enter a time using numbers only' },
+          { href: '#minutes', text: 'Enter a time using numbers only' },
+        ])
       })
 
       it('should validate the case note is not blank', async () => {
@@ -354,13 +395,9 @@ describe('case note management', () => {
           },
         }
 
-        await handleCreateCaseNoteForm(req, res)
-        expect(res.render).toHaveBeenCalledWith(
-          'caseNotes/addCaseNoteForm.njk',
-          expect.objectContaining({
-            errors: [{ href: '#text', text: 'Enter what happened' }],
-          })
-        )
+        await post(req, res)
+
+        expect(req.flash).toHaveBeenNthCalledWith(1, 'caseNoteErrors', [{ href: '#text', text: 'Enter what happened' }])
       })
     })
 
@@ -379,10 +416,141 @@ describe('case note management', () => {
           },
         }
 
-        await handleCreateCaseNoteForm(req, res)
+        await post(req, res)
 
         expect(res.redirect).toBeCalledWith('/prisoner/ABC123/case-notes')
       })
+      it('should take the user to confirm page if omic open case note', async () => {
+        const caseNote = {
+          type: 'OMIC',
+          subType: 'OPEN_COMM',
+          date: moment().format('DD/MM/YYYY'),
+          hours: moment().format('H'),
+          minutes: moment().format('mm'),
+          text: 'test',
+        }
+        const req = {
+          ...mockCreateReq,
+          params: { offenderNo },
+          body: caseNote,
+          session: {},
+        }
+
+        await post(req, res)
+
+        expect(res.redirect).toBeCalledWith('/prisoner/ABC123/add-case-note/confirm')
+        expect(req.session).toEqual({ draftCaseNote: { ...caseNote, offenderNo } })
+      })
+    })
+  })
+
+  describe('areYouSure()', () => {
+    it('should render the confirm page', async () => {
+      const req = { ...mockCreateReq, params: { offenderNo } }
+
+      await areYouSure(req, res)
+
+      expect(res.render).toBeCalledWith('caseNotes/addCaseNoteConfirm.njk', {
+        offenderDetails: {
+          name: 'Test User',
+          offenderNo: 'ABC123',
+          profileUrl: '/prisoner/ABC123',
+        },
+        offenderNo,
+        homeUrl: '/prisoner/ABC123/case-notes',
+        breadcrumbText: 'Add a case note',
+      })
+    })
+  })
+
+  describe('confirm()', () => {
+    it('should save the case note if confirmed', async () => {
+      const req = {
+        ...mockCreateReq,
+        params: { offenderNo },
+        session: { draftCaseNote: { text: 'hello', date: '20/01/2020', hours: '23', minutes: '10' } },
+        body: { confirmed: 'Yes' },
+      }
+
+      await confirm(req, res)
+
+      expect(caseNotesApi.addCaseNote).toBeCalledWith(res.locals, offenderNo, {
+        text: 'hello',
+        date: '20/01/2020',
+        hours: '23',
+        minutes: '10',
+        occurrenceDateTime: '2020-01-20T23:10:00',
+      })
+      expect(res.redirect).toBeCalledWith('/prisoner/ABC123/case-notes')
+    })
+
+    it('should redirect if case note save fails', async () => {
+      const req = {
+        ...mockCreateReq,
+        params: { offenderNo },
+        session: { draftCaseNote: { text: 'hello', date: '20/01/2020', hours: '23', minutes: '10' } },
+        body: { confirmed: 'Yes' },
+      }
+      const error400 = makeError('response', {
+        status: 400,
+        body: {
+          userMessage: 'createCaseNote.caseNote.text: Value is too long: max length is 4000',
+          developerMessage: 'createCaseNote.caseNote.text: Value too long: max length is 4000',
+        },
+      })
+      caseNotesApi.addCaseNote = jest.fn().mockRejectedValue(error400)
+
+      await confirm(req, res)
+
+      expect(caseNotesApi.addCaseNote).toBeCalledWith(res.locals, offenderNo, {
+        text: 'hello',
+        date: '20/01/2020',
+        hours: '23',
+        minutes: '10',
+        occurrenceDateTime: '2020-01-20T23:10:00',
+      })
+      expect(req.flash).toHaveBeenNthCalledWith(1, 'caseNoteErrors', [
+        { href: '#text', text: (error400 as any).response.body.userMessage },
+      ])
+      expect(req.flash).toHaveBeenNthCalledWith(2, 'caseNote', {
+        text: 'hello',
+        date: '20/01/2020',
+        hours: '23',
+        minutes: '10',
+      })
+    })
+
+    it('should redirect if user does not confirm', async () => {
+      const req = {
+        ...mockCreateReq,
+        params: { offenderNo },
+        session: { draftCaseNote: { text: 'hello' } },
+        body: { confirmed: 'No' },
+      }
+
+      await confirm(req, res)
+
+      expect(caseNotesApi.addCaseNote).not.toHaveBeenCalled()
+      expect(req.flash).toBeCalledWith('caseNote', {
+        text: 'hello',
+      })
+      expect(res.redirect).toBeCalledWith('/prisoner/ABC123/add-case-note')
+    })
+
+    it('should show error if user does not enter a choice', async () => {
+      const req = {
+        ...mockCreateReq,
+        params: { offenderNo },
+        session: { draftCaseNote: { text: 'hello' } },
+      }
+
+      await confirm(req, res)
+
+      expect(caseNotesApi.addCaseNote).not.toHaveBeenCalled()
+      expect(req.flash).toBeCalledWith('confirmErrors', [
+        { href: '#confirmed', text: 'Select yes if this information is appropriate to share' },
+      ])
+      expect(res.redirect).toBeCalledWith('/prisoner/ABC123/add-case-note/confirm')
     })
   })
 })

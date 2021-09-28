@@ -1,6 +1,6 @@
 import moment, { Moment } from 'moment'
 import { app } from '../config'
-import { readableDateFormat } from '../utils'
+import { readableDateFormat, stringWithAbbreviationsProcessor } from '../utils'
 import type CuriousApi from '../api/curious/curiousApi'
 import log from '../log'
 import AssessmentQualificationType from '../api/curious/types/AssessmentQualificationType'
@@ -11,18 +11,20 @@ type FeatureFlagged<T> = {
 }
 
 type LearnerProfiles = FeatureFlagged<curious.LearnerProfile[]>
-type LearnerLatestAssessments = FeatureFlagged<curious.FunctionalSkillsLevels>
-type OffenderGoals = FeatureFlagged<curious.LearnerGoals>
-type LearningDifficulties = FeatureFlagged<curious.LearningDifficultiesDisabilities[]>
-type CurrentCoursesEnhanced = FeatureFlagged<curious.CurrentCoursesEnhanced>
-type LearnerEducationFullDetails = FeatureFlagged<curious.LearnerEducationFullDetails[]>
+type LearnerLatestAssessments = FeatureFlagged<eswe.FunctionalSkillsLevels>
+type OffenderGoals = FeatureFlagged<eswe.LearnerGoals>
+type Neurodiversities = FeatureFlagged<eswe.Neurodiversities[]>
+type CurrentCoursesEnhanced = FeatureFlagged<eswe.CurrentCoursesEnhanced>
+type LearnerEducationFullDetails = FeatureFlagged<eswe.LearnerEducationFullDetails[]>
+type CurrentWork = FeatureFlagged<eswe.OffenderCurrentWork>
+type workHistoryFullDetails = FeatureFlagged<eswe.workHistoryFullDetails[]>
 
 const createFlaggedContent = <T>(content: T) => ({
   enabled: app.esweEnabled,
   content,
 })
 
-const CURIOUS_DATE_FORMAT = 'YYYY-MM-DD'
+const DATE_FORMAT = 'YYYY-MM-DD'
 
 const DATA_NOT_ADDED = 'Not entered'
 
@@ -31,11 +33,18 @@ const AWAITING_ASSESSMENT_CONTENT = 'Awaiting assessment'
 export const DEFAULT_GOALS = {
   employmentGoals: null,
   personalGoals: null,
+  shortTermGoals: null,
+  longTermGoals: null,
 }
 
 export const DEFAULT_COURSE_DATA = {
   historicalCoursesPresent: false,
   currentCourseData: [],
+}
+
+export const DEFAULT_WORK_DATA = {
+  workHistoryPresent: false,
+  currentJobs: [],
 }
 
 export const DEFAULT_SKILL_LEVELS = {
@@ -59,7 +68,7 @@ export const DEFAULT_SKILL_LEVELS = {
   ],
 }
 
-const parseDate = (value: string) => moment(value, CURIOUS_DATE_FORMAT)
+const parseDate = (value: string) => moment(value, DATE_FORMAT)
 
 const compareByDate = (dateA: Moment, dateB: Moment, descending = true) => {
   const order = descending ? 1 : -1
@@ -93,11 +102,11 @@ const createSkillAssessmentSummary = (learnerAssessment: curious.LearnerAssessme
     },
     {
       label: 'Assessment date',
-      value: readableDateFormat(assessmentDate, CURIOUS_DATE_FORMAT),
+      value: readableDateFormat(assessmentDate, DATE_FORMAT),
     },
     {
       label: 'Assessment location',
-      value: establishmentName,
+      value: stringWithAbbreviationsProcessor(establishmentName),
     },
   ]
 }
@@ -106,11 +115,21 @@ const createSkillAssessmentSummary = (learnerAssessment: curious.LearnerAssessme
  * Education skills and work experience (ESWE)
  */
 export default class EsweService {
-  static create(curiousApi: CuriousApi, systemOauthClient: any): EsweService {
-    return new EsweService(curiousApi, systemOauthClient)
+  static create(curiousApi: CuriousApi, systemOauthClient: any, prisonApi: any): EsweService {
+    return new EsweService(curiousApi, systemOauthClient, prisonApi)
   }
 
-  constructor(private readonly curiousApi: CuriousApi, private readonly systemOauthClient: any) {}
+  constructor(
+    private readonly curiousApi: CuriousApi,
+    private readonly systemOauthClient: any,
+    private readonly prisonApi: any
+  ) {}
+
+  callWorkHistoryApi = async (context, nomisId: string) => {
+    const oneYearAgo = moment().subtract(1, 'year').format('YYYY-MM-DD')
+    const workHistory = await this.prisonApi.getOffenderWorkHistory(context, nomisId, oneYearAgo)
+    return workHistory.workActivities
+  }
 
   async getLearnerProfiles(nomisId: string): Promise<LearnerProfiles> {
     if (!app.esweEnabled) {
@@ -128,7 +147,7 @@ export default class EsweService {
     return createFlaggedContent(content)
   }
 
-  async getLearningDifficulties(nomisId: string): Promise<LearningDifficulties> {
+  async getNeurodiversities(nomisId: string): Promise<Neurodiversities> {
     if (!app.esweEnabled) {
       return createFlaggedContent(null)
     }
@@ -146,7 +165,7 @@ export default class EsweService {
                 establishmentName: profile.establishmentName,
                 details: [
                   { label: 'Description', ldd: combinedLdd },
-                  { label: 'Location', value: profile.establishmentName },
+                  { label: 'Location', value: stringWithAbbreviationsProcessor(profile.establishmentName) },
                 ],
               }
             }
@@ -230,15 +249,17 @@ export default class EsweService {
       const context = await this.systemOauthClient.getClientCredentialsTokens()
       const goals = await this.curiousApi.getLearnerGoals(context, nomisId)
 
-      const { employmentGoals, personalGoals } = goals
+      const { employmentGoals, personalGoals, longTermGoals, shortTermGoals } = goals
 
-      if (!employmentGoals.length && !personalGoals.length) {
+      if (!employmentGoals.length && !personalGoals.length && !longTermGoals.length && !shortTermGoals.length) {
         return createFlaggedContent(DEFAULT_GOALS)
       }
 
       const displayedGoals = {
         employmentGoals: employmentGoals.length ? employmentGoals : [DATA_NOT_ADDED],
         personalGoals: personalGoals.length ? personalGoals : [DATA_NOT_ADDED],
+        longTermGoals: longTermGoals.length ? longTermGoals : [DATA_NOT_ADDED],
+        shortTermGoals: shortTermGoals.length ? shortTermGoals : [DATA_NOT_ADDED],
       }
       return createFlaggedContent(displayedGoals)
     } catch (e) {
@@ -273,8 +294,10 @@ export default class EsweService {
           )
           .sort(compareByDateAsc)
           .map((course) => ({
-            label: course.courseName,
-            value: `Planned end date on ${readableDateFormat(course.learningPlannedEndDate, CURIOUS_DATE_FORMAT)}`,
+            label: course.completionStatus.includes('temporarily')
+              ? `${course.courseName} (prisoner temporarily withdrawn)`
+              : course.courseName,
+            value: `Planned end date on ${readableDateFormat(course.learningPlannedEndDate, DATE_FORMAT)}`,
           }))
 
         const fullCourseData = {
@@ -306,8 +329,8 @@ export default class EsweService {
 
       const getOutcome = (course: curious.LearnerCourses) => {
         if (course.outcomeGrade) return course.outcomeGrade
-        if (course.completionStatus.includes('continuing') || course.completionStatus.includes('temporarily withdrawn'))
-          return 'In progress'
+        if (course.completionStatus.includes('continuing')) return 'In progress'
+        if (course.completionStatus.includes('temporarily withdrawn')) return 'Temporarily withdrawn'
         if (course.completionStatus.includes('withdrawn') && !course.completionStatus.includes('temporarily'))
           return 'Withdrawn'
         return 'Completed'
@@ -315,8 +338,7 @@ export default class EsweService {
 
       const getOutcomeDetails = (course: curious.LearnerCourses) => {
         if (course.outcome && !course.completionStatus.includes('withdrawn')) return course.outcome
-        if (!course.completionStatus.includes('temporarily withdrawn') && course.prisonWithdrawalReason)
-          return course.prisonWithdrawalReason
+        if (course.prisonWithdrawalReason) return course.prisonWithdrawalReason
         return ''
       }
 
@@ -324,7 +346,7 @@ export default class EsweService {
         const fullCourseDetails = content.map((course) => ({
           type: course.isAccredited ? 'Accredited' : 'Non-accredited',
           courseName: course.courseName,
-          location: course.establishmentName,
+          location: stringWithAbbreviationsProcessor(course.establishmentName),
           dateFrom: course.learningStartDate,
           dateTo: course.learningActualEndDate ? course.learningActualEndDate : course.learningPlannedEndDate,
           outcome: getOutcome(course),
@@ -342,6 +364,78 @@ export default class EsweService {
         return createFlaggedContent([])
       }
       log.error(`Failed to get learner education. Reason: ${e.message}`)
+    }
+    return createFlaggedContent(null)
+  }
+
+  async getCurrentWork(nomisId: string): Promise<CurrentWork> {
+    if (!app.esweEnabled) {
+      return createFlaggedContent(null)
+    }
+
+    try {
+      const context = await this.systemOauthClient.getClientCredentialsTokens()
+      const prisonerDetails = await this.prisonApi.getPrisonerDetails(context, nomisId)
+      const workActivities = await this.callWorkHistoryApi(context, nomisId)
+
+      const { latestLocation } = prisonerDetails[0]
+
+      if (workActivities.length && latestLocation) {
+        const currentJobs = workActivities
+          .filter((job) => job.isCurrentActivity && job.agencyLocationDescription === latestLocation)
+          .map((job) => ({
+            label: job.description.trim(),
+            value: `Started on ${readableDateFormat(job.startDate, DATE_FORMAT)}`,
+          }))
+          .sort((a, b) => a.label.localeCompare(b.label))
+        const currentWorkData = {
+          workHistoryPresent: true,
+          currentJobs,
+        }
+        return createFlaggedContent(currentWorkData)
+      }
+      return createFlaggedContent(DEFAULT_WORK_DATA)
+    } catch (e) {
+      if (e.response?.status === 404) {
+        log.info(`Offender record not found.`)
+        return createFlaggedContent(DEFAULT_WORK_DATA)
+      }
+      log.error(`Failed to get learner work history. Reason: ${e.message}`)
+    }
+    return createFlaggedContent(null)
+  }
+
+  async getWorkHistoryDetails(nomisId: string): Promise<workHistoryFullDetails> {
+    if (!app.esweEnabled) {
+      return createFlaggedContent(null)
+    }
+
+    try {
+      const context = await this.systemOauthClient.getClientCredentialsTokens()
+      const workActivities = await this.callWorkHistoryApi(context, nomisId)
+
+      const getEndDate = (job: eswe.WorkActivity) => {
+        if (job.isCurrentActivity) return null
+        return job.endDate
+      }
+
+      if (workActivities.length) {
+        const fullDetails = workActivities.map((job) => ({
+          role: job.description.trim(),
+          location: job.agencyLocationDescription,
+          startDate: job.startDate,
+          endDate: getEndDate(job),
+        }))
+        fullDetails.sort((a, b) => compareByDate(parseDate(a.endDate), parseDate(b.endDate), true))
+        return createFlaggedContent(fullDetails)
+      }
+      return createFlaggedContent([])
+    } catch (e) {
+      if (e.response?.status === 404) {
+        log.info(`Offender record not found in Curious.`)
+        return createFlaggedContent([])
+      }
+      log.error(`Failed to get offender work. Reason: ${e.message}`)
     }
     return createFlaggedContent(null)
   }

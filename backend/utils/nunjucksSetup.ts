@@ -47,6 +47,13 @@ export default (app) => {
 
   njkEnv.addFilter('formatDate', (value, format) => (value ? moment(value).format(format) : null))
 
+  njkEnv.addFilter('defaultSortDate', (value, format) => {
+    if (value) {
+      return Number(value) ? value : moment(value).format(format)
+    }
+    return null
+  })
+
   njkEnv.addFilter('hasErrorWithPrefix', (errorsArray, prefixes) => {
     if (!errorsArray) return null
     const formattedPrefixes = prefixes.map((field) => `#${field}`)
