@@ -1,4 +1,4 @@
-const offenderFullDetails = require('../../mockApis/responses/offenderFullDetails')
+const offenderFullDetails = require('../../mockApis/responses/offenderFullDetails.json')
 const OffenderDetailsPage = require('../../pages/cellMove/offenderDetailsPage')
 
 const offenderNo = 'A12345'
@@ -7,8 +7,8 @@ context('A user can view non associations', () => {
   before(() => {
     cy.clearCookies()
     cy.task('resetAndStubTokenVerification')
-    cy.task('stubLogin', { username: 'ITAG_USER', caseload: 'MDI' })
-    cy.login()
+    cy.task('stubSignIn', { username: 'ITAG_USER', caseload: 'MDI' })
+    cy.signIn()
   })
   beforeEach(() => {
     Cypress.Cookies.preserveOnce('hmpps-session-dev')
@@ -20,7 +20,10 @@ context('A user can view non associations', () => {
         ethnicity: 'White',
         raceCode: 'W1',
       },
-      profileInformation: [{ type: 'SEXO', resultValue: 'Heterosexual' }, { type: 'SMOKE', resultValue: 'No' }],
+      profileInformation: [
+        { type: 'SEXO', resultValue: 'Heterosexual' },
+        { type: 'SMOKE', resultValue: 'No' },
+      ],
     })
     cy.task('stubMainOffence', [{ offenceDescription: '13 hours overwork' }])
   })
@@ -28,13 +31,11 @@ context('A user can view non associations', () => {
   it('Shows the correct data for non-associations', () => {
     cy.visit(`/prisoner/${offenderNo}/cell-move/offender-details`)
     const offenderDetailsPage = OffenderDetailsPage.verifyOnPage()
-    cy.get('.govuk-summary-list--no-border').then($section => {
+    cy.get('.govuk-summary-list--no-border').then(($section) => {
       cy.get($section)
         .find('dt')
-        .then($headings => {
-          cy.get($headings)
-            .its('length')
-            .should('eq', 9)
+        .then(($headings) => {
+          cy.get($headings).its('length').should('eq', 9)
           expect($headings.get(0).innerText).to.contain('Cell location')
           expect($headings.get(1).innerText).to.contain('Name')
           expect($headings.get(2).innerText).to.contain('Prison number')
@@ -48,10 +49,8 @@ context('A user can view non associations', () => {
 
       cy.get($section)
         .find('dd')
-        .then($summaryValues => {
-          cy.get($summaryValues)
-            .its('length')
-            .should('eq', 9)
+        .then(($summaryValues) => {
+          cy.get($summaryValues).its('length').should('eq', 9)
           expect($summaryValues.get(0).innerText).to.contain('HMP Moorland')
           expect($summaryValues.get(1).innerText).to.contain('Smith, John')
           expect($summaryValues.get(2).innerText).to.contain('A12345')

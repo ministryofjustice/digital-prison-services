@@ -96,7 +96,7 @@ context('Scheduled movements', () => {
 
   beforeEach(() => {
     cy.task('reset')
-    cy.task('stubLogin', { username: 'ITAG_USER', caseload: 'MDI' })
+    cy.task('stubSignIn', { username: 'ITAG_USER', caseload: 'MDI' })
     cy.task('stubAgencyDetails', { agencyId: 'MDI', details: agencyDetails })
     cy.task('stubMovementReasons', movementReasons)
     cy.task('stubTransfers', {
@@ -104,7 +104,7 @@ context('Scheduled movements', () => {
       transferEvents: [],
       releaseEvents: [],
     })
-    cy.login()
+    cy.signIn()
   })
 
   it('should load page with the correct title', () => {

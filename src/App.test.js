@@ -98,7 +98,7 @@ describe('App component', () => {
       const appInstance = component.instance()
 
       beforeEach(() => {
-        appInstance.displayAlertAndLogout = jest.fn()
+        appInstance.displayAlertAndSignOut = jest.fn()
         window.scrollTo = jest.fn()
       })
 
@@ -106,24 +106,24 @@ describe('App component', () => {
         appInstance.handleError({
           response: { status: 401, data: { message: 'Session expired', reason: 'session-expired' } },
         })
-        expect(appInstance.displayAlertAndLogout).toBeCalledWith(
-          'Your session has expired, please click OK to be redirected back to the login page'
+        expect(appInstance.displayAlertAndSignOut).toBeCalledWith(
+          'Your session has expired, please click OK to be redirected back to the sign in page'
         )
       })
 
       it('should not display alert if unauthorised', () => {
         appInstance.handleError({ response: { status: 401, data: { message: 'another 401' } } })
-        expect(appInstance.displayAlertAndLogout).not.toBeCalled()
+        expect(appInstance.displayAlertAndSignOut).not.toBeCalled()
       })
 
       it('should not display alert if bad request', () => {
         appInstance.handleError({ response: { status: 400 } })
-        expect(appInstance.displayAlertAndLogout).not.toBeCalled()
+        expect(appInstance.displayAlertAndSignOut).not.toBeCalled()
       })
 
       it('should not display alert if unknown error', () => {
         appInstance.handleError({})
-        expect(appInstance.displayAlertAndLogout).not.toBeCalled()
+        expect(appInstance.displayAlertAndSignOut).not.toBeCalled()
         expect(window.scrollTo).toHaveBeenCalled()
       })
     })

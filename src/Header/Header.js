@@ -51,7 +51,7 @@ const Header = ({ authUrl, user }) => {
               </li>
 
               <li className="dps-header__navigation__item">
-                <a className="dps-header__link" href="/auth/logout">
+                <a className="dps-header__link" href="/auth/sign-out">
                   Sign out
                 </a>
               </li>

@@ -6,14 +6,14 @@ const ProtectiveIsolationUnitPage = require('../../pages/covid/protectiveIsolati
 const ShieldingUnitPage = require('../../pages/covid/shieldingUnitPage')
 const RefusingToShieldPage = require('../../pages/covid/refusingToShieldPage')
 
-const alert = val => ({ alerts: { equalTo: val } })
+const alert = (val) => ({ alerts: { equalTo: val } })
 
 context('Covid dashboard page', () => {
   beforeEach(() => {
     cy.clearCookies()
     cy.task('reset')
-    cy.task('stubLogin', { username: 'ITAG_USER', caseload: 'WWI' })
-    cy.login()
+    cy.task('stubSignIn', { username: 'ITAG_USER', caseload: 'WWI' })
+    cy.signIn()
 
     cy.task('stubAlerts', { locationId: 'MDI', alerts: [] })
 
@@ -25,10 +25,7 @@ context('Covid dashboard page', () => {
 
     cy.task('stubMovementsBetween', {
       locationId: 'MDI',
-      fromDate: moment()
-        .startOf('day')
-        .subtract(14, 'days')
-        .format('YYYY-MM-DDTHH:mm:ss'),
+      fromDate: moment().startOf('day').subtract(14, 'days').format('YYYY-MM-DDTHH:mm:ss'),
       movements: [
         {
           offenderNo: 'AA1234A',
@@ -80,41 +77,31 @@ context('Covid dashboard page', () => {
   })
 
   it('A user can navigate to the reverse cohorting unit', () => {
-    DashboardPage.goTo()
-      .reverseCohortingUnitLink()
-      .click()
+    DashboardPage.goTo().reverseCohortingUnitLink().click()
 
     ReverseCohortingUnitPage.verifyOnPage()
   })
 
   it('A user can navigate to the not in unit page', () => {
-    DashboardPage.goTo()
-      .notInUnitLink()
-      .click()
+    DashboardPage.goTo().notInUnitLink().click()
 
     NotInUnitPage.verifyOnPage()
   })
 
   it('A user can navigate to the protective isolation unit', () => {
-    DashboardPage.goTo()
-      .protectiveIsolationUnitLink()
-      .click()
+    DashboardPage.goTo().protectiveIsolationUnitLink().click()
 
     ProtectiveIsolationUnitPage.verifyOnPage()
   })
 
   it('A user can navigate to the shielding unit', () => {
-    DashboardPage.goTo()
-      .shieldingUnitLink()
-      .click()
+    DashboardPage.goTo().shieldingUnitLink().click()
 
     ShieldingUnitPage.verifyOnPage()
   })
 
   it('A user can navigate to the refusing to shield list', () => {
-    DashboardPage.goTo()
-      .refusingToShieldLink()
-      .click()
+    DashboardPage.goTo().refusingToShieldLink().click()
 
     RefusingToShieldPage.verifyOnPage()
   })

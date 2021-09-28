@@ -18,8 +18,8 @@ context('Appointment details page', () => {
   before(() => {
     cy.clearCookies()
     cy.task('resetAndStubTokenVerification')
-    cy.task('stubLogin', { username: 'ITAG_USER', caseload: 'MDI' })
-    cy.login()
+    cy.task('stubSignIn', { username: 'ITAG_USER', caseload: 'MDI' })
+    cy.signIn()
   })
 
   beforeEach(() => {
@@ -66,9 +66,7 @@ context('Appointment details page', () => {
     cy.get('.qa-lastAppointment-value').should('not.exist')
     cy.get('.qa-comments-value').should('contain', 'Not entered')
     cy.get('.qa-addedBy-value').should('contain', 'Test User')
-    cy.get('[data-test="return-link"]')
-      .should('have.attr', 'href')
-      .should('include', '/view-all-appointments')
+    cy.get('[data-test="return-link"]').should('have.attr', 'href').should('include', '/view-all-appointments')
   })
 
   it('Should show delete button and go to the confirm deletion page when clicked', () => {
@@ -87,7 +85,7 @@ context('Appointment details page', () => {
 
     it('Should not show delete button', () => {
       cy.visit('/appointment-details/1')
-  
+
       cy.get('#confirmDeletion').should('not.exist')
     })
   })
@@ -126,9 +124,7 @@ context('Appointment details page', () => {
       cy.get('.qa-lastAppointment-value').should('contain', '22 July 2021')
       cy.get('.qa-comments-value').should('contain', 'Not entered')
       cy.get('.qa-addedBy-value').should('contain', 'Test User')
-      cy.get('[data-test="return-link"]')
-        .should('have.attr', 'href')
-        .should('include', '/view-all-appointments')
+      cy.get('[data-test="return-link"]').should('have.attr', 'href').should('include', '/view-all-appointments')
     })
   })
 
@@ -190,9 +186,7 @@ context('Appointment details page', () => {
       cy.get('.qa-lastAppointment-value').should('not.exist')
       cy.get('.qa-comments-value').should('contain', 'Test appointment comments')
       cy.get('.qa-addedBy-value').should('contain', 'Test User')
-      cy.get('[data-test="return-link"]')
-        .should('have.attr', 'href')
-        .should('include', '/view-all-appointments')
+      cy.get('[data-test="return-link"]').should('have.attr', 'href').should('include', '/view-all-appointments')
     })
   })
 })
