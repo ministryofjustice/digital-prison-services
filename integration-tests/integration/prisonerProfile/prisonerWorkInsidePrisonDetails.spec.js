@@ -21,7 +21,7 @@ context('Work inside prison details page', () => {
       Cypress.Cookies.preserveOnce('hmpps-session-dev')
     })
     it('should show correct content and no table', () => {
-      cy.visit(`/prisoner/${offenderNo}/work-inside-prison`)
+      cy.visit(`/prisoner/${offenderNo}/work-activities`)
       cy.get('h1').should('have.text', 'John Smith’s work inside prison for the last 12 months')
       cy.get('[data-test="no-work-inside-prison"]').should('exist')
       cy.get('[data-test="work-inside-prison-returnLink"]').should('exist')
@@ -59,7 +59,7 @@ context('Work inside prison details page', () => {
     })
 
     it('should show the correct content and number of results', () => {
-      cy.visit(`/prisoner/${offenderNo}/work-inside-prison`)
+      cy.visit(`/prisoner/${offenderNo}/work-activities`)
       cy.get('h1').should('have.text', 'John Smith’s work inside prison for the last 12 months')
       cy.get('[data-test="workInsidePrison-result-number"]').should('have.text', 'Showing 1 result')
       cy.get('[data-test="work-inside-prison-returnLink"]').should('exist')
@@ -132,7 +132,7 @@ context('Work inside prison details page', () => {
     })
 
     it('should render the page with correct data', () => {
-      cy.visit(`/prisoner/${offenderNo}/work-inside-prison`)
+      cy.visit(`/prisoner/${offenderNo}/work-activities`)
       cy.get('h1').should('have.text', 'John Smith’s work inside prison for the last 12 months')
       cy.get('[data-test="workInsidePrison-result-number"]').should('have.text', 'Showing 4 results')
       cy.get('[data-test="work-inside-prison-returnLink"]').should('exist')
@@ -166,7 +166,7 @@ context('Work inside prison details page', () => {
     })
 
     it('should sort manually', () => {
-      cy.visit(`/prisoner/${offenderNo}/work-inside-prison`)
+      cy.visit(`/prisoner/${offenderNo}/work-activities`)
       cy.get('[data-test="workInsidePrison-start-date-header"]').children().click()
       cy.get('tbody')
         .find('tr')

@@ -533,7 +533,7 @@ context('Prisoner Work and Skills', () => {
       })
     })
   })
-  context('work inside prison section', () => {
+  context('work and activities section', () => {
     context('When there is no data because of an api call failure', () => {
       const apiErrorText = 'We cannot show these details right now. Try reloading the page.'
 
@@ -584,7 +584,7 @@ context('Prisoner Work and Skills', () => {
         visitWorkAndSkillsAndExpandAccordions()
         cy.get('[data-test="work-noData"]').then(($message) => {
           cy.get($message).then(($noCoursesMessage) => {
-            cy.get($noCoursesMessage).should('have.text', 'John Smith has no current or previous work inside prison.')
+            cy.get($noCoursesMessage).should('have.text', 'John Smith has no work or activities.')
           })
         })
         cy.get('[data-test="work-scheduleLink"]').then(($workScheduleLink) => {
@@ -645,14 +645,11 @@ context('Prisoner Work and Skills', () => {
         visitWorkAndSkillsAndExpandAccordions()
         cy.get('[data-test="work-noCurrent"]').then(($message) => {
           cy.get($message).then(($noCurrentCoursesMessage) => {
-            cy.get($noCurrentCoursesMessage).should(
-              'have.text',
-              'John Smith is not currently doing any work inside prison.'
-            )
+            cy.get($noCurrentCoursesMessage).should('have.text', 'John Smith has no current work or activities.')
           })
         })
         cy.get('[data-test="work-detailsLink"]').then(($workDetailsLink) => {
-          cy.get($workDetailsLink).should('have.text', 'View work details')
+          cy.get($workDetailsLink).should('have.text', 'View work and activities for the last 12 months')
         })
 
         cy.get('[data-test="work-scheduleLink"]').then(($workScheduleLink) => {
@@ -719,7 +716,7 @@ context('Prisoner Work and Skills', () => {
       it('should display the list of current jobs and their start dates when there are current jobs', () => {
         visitWorkAndSkillsAndExpandAccordions()
         cy.get('[data-test="work-header"]').then(($header) => {
-          cy.get($header).should('have.text', 'Current roles')
+          cy.get($header).should('have.text', 'Current activities')
         })
         cy.get('[data-test="work-summary"]').then(($summary) => {
           cy.get($summary)
@@ -739,7 +736,7 @@ context('Prisoner Work and Skills', () => {
             })
 
           cy.get('[data-test="work-detailsLink"]').then(($workDetailsLink) => {
-            cy.get($workDetailsLink).should('have.text', 'View work details')
+            cy.get($workDetailsLink).should('have.text', 'View work and activities for the last 12 months')
           })
 
           cy.get('[data-test="work-scheduleLink"]').then(($workScheduleLink) => {
