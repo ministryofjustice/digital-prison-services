@@ -6,7 +6,7 @@ import { forenameToInitial } from '../utils'
 const Header = ({ authUrl, user }) => {
   const getPrisonDescription = () => {
     const caseLoadOption = user.caseLoadOptions
-      ? user.caseLoadOptions.find(option => option.caseLoadId === user.activeCaseLoadId)
+      ? user.caseLoadOptions.find((option) => option.caseLoadId === user.activeCaseLoadId)
       : undefined
     return caseLoadOption ? caseLoadOption.description : user.activeCaseLoadId
   }
@@ -51,7 +51,7 @@ const Header = ({ authUrl, user }) => {
               </li>
 
               <li className="dps-header__navigation__item">
-                <a className="dps-header__link" href="/auth/logout">
+                <a className="dps-header__link" href="/auth/sign-out">
                   Sign out
                 </a>
               </li>
@@ -64,12 +64,11 @@ const Header = ({ authUrl, user }) => {
         <span className="location-bar__location" data-test="active-location">
           {getPrisonDescription()}
         </span>
-        {user.caseLoadOptions &&
-          user.caseLoadOptions.length && (
-            <a className="location-bar__link" href="/change-caseload" data-test="change-location-link">
-              Change location
-            </a>
-          )}
+        {user.caseLoadOptions && user.caseLoadOptions.length && (
+          <a className="location-bar__link" href="/change-caseload" data-test="change-location-link">
+            Change your location
+          </a>
+        )}
       </div>
     </>
   )

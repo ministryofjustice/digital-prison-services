@@ -1,0 +1,17 @@
+{% from "../../macros/prisonerSummarySection.njk" import prisonerSummarySection %}
+{% from "govuk/components/summary-list/macro.njk" import govukSummaryList %}
+
+{% block prisonerProfileSection %}
+
+  {% if functionalSkillLevels %}
+      {{ prisonerSummarySection(functionalSkillLevels.english, '', {"data-test": "english-assessment"}, false, 'govuk-summary-list--no-border') }}
+      <hr class="govuk-section-break govuk-section-break--m govuk-section-break--visible">
+      {{ prisonerSummarySection(functionalSkillLevels.maths, '', {"data-test": "maths-assessment"}, false, 'govuk-summary-list--no-border') }}
+      <hr class="govuk-section-break govuk-section-break--m govuk-section-break--visible">
+      {{ prisonerSummarySection(functionalSkillLevels.digiLit, '', {"data-test": "digital-literacy-assessment"}, false, 'govuk-summary-list--no-border') }}
+
+  {% else %}
+    <p class="govuk-body" data-test="learner-latest-assessments-errorMessage">{{ errorMessage }}</p>
+  {% endif %}
+
+{% endblock %}

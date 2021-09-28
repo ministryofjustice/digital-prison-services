@@ -90,7 +90,7 @@ const PrisonersUnaccountedFor = ({
           <Table.Cell colSpan="7">No results found</Table.Cell>
         </Table.Row>
       )}
-      {prisonersUnaccountedFor.map(prisonerActivity => (
+      {prisonersUnaccountedFor.map((prisonerActivity) => (
         <Table.Row data-qa="result-row" key={prisonerActivity.eventId}>
           <Table.Cell>
             {prisonerActivity.inCaseLoad && (

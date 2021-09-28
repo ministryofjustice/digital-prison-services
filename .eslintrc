@@ -1,6 +1,16 @@
 {
-  "extends": ["airbnb", "prettier", "prettier/react"],
-  "parser": "babel-eslint",
+  "extends": ["airbnb", "prettier"],
+  "settings": {
+    "import/parsers": {
+      "@typescript-eslint/parser": [".ts", ".tsx"]
+    },
+    "import/resolver": {
+      "node": {
+        "extensions": [".js", ".jsx", ".ts", ".tsx", ".json"]
+      }
+    }
+  },
+  "parser": "@babel/eslint-parser",
   "parserOptions": {
     "ecmaVersion": 6,
     "ecmaFeatures": {
@@ -27,10 +37,59 @@
     "react/jsx-props-no-spreading": 0, // disable as AirBnb says sparce usage is okay, and we mostly use in tests
     "no-underscore-dangle": ["error", { "allow": ["__REDUX_DEVTOOLS_EXTENSION_COMPOSE__"] }],
     "import/no-named-as-default": 0, // disable as we use connected components
+    "import/no-named-as-default-member": 0, // disable as we use connected components
     "jsx-a11y/label-has-associated-control": [2, { "assert": "either" }],
     "jsx-a11y/label-has-for": 0, // disable as has been deprecated and replaced by label-has-associated-control
     "react/forbid-prop-types": 0,
-    "no-only-tests/no-only-tests": "error"
+    "no-only-tests/no-only-tests": "error",
+    "import/extensions": [
+      "error",
+      "ignorePackages",
+      {
+        "js": "never",
+        "jsx": "never",
+        "ts": "never",
+        "tsx": "never"
+      }
+    ]
   },
-  "plugins": ["prettier", "no-only-tests"]
+  "plugins": ["prettier", "no-only-tests", "import"],
+  "overrides": [
+    {
+      "plugins": ["@typescript-eslint"],
+      "parser": "@typescript-eslint/parser",
+      "files": ["**/*.ts"],
+      "excludedFiles": "*.js",
+      "extends": [
+        "plugin:@typescript-eslint/eslint-recommended",
+        "plugin:@typescript-eslint/recommended",
+        "plugin:prettier/recommended"
+      ],
+      "rules": {
+        "import/no-unresolved": "off",
+        "import/no-extraneous-dependencies": ["error", {"devDependencies": true}],
+        "no-use-before-define": 0,
+        "@typescript-eslint/no-use-before-define": 0,
+        "@typescript-eslint/no-var-requires": 0,
+        "@typescript-eslint/no-empty-function": 0,
+        "class-methods-use-this": 0,
+        "no-useless-constructor": 0,
+        "no-shadow": "off", // https://github.com/typescript-eslint/typescript-eslint/issues/2484
+        "@typescript-eslint/no-shadow": ["error"],
+        "@typescript-eslint/no-unused-vars": [
+          1,
+          {
+            "argsIgnorePattern": "res|next|^err|_",
+            "ignoreRestSiblings": true
+          }
+        ]
+      },
+      "globals": { "Atomics": "readonly", "SharedArrayBuffer": "readonly" },
+      "parserOptions": {
+        "ecmaFeatures": { "jsx": true },
+        "ecmaVersion": 2018,
+        "sourceType": "module"
+      }
+    }
+  ]
 }

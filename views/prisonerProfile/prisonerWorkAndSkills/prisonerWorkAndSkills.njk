@@ -1,0 +1,64 @@
+{% extends "../layouts/prisonerLayout.njk" %}
+{% from "../macros/prisonerAccordionSection.njk" import accordionSection %}
+{% from "govuk/components/accordion/macro.njk" import govukAccordion %}
+{% from "../macros/prisonerSummarySection.njk" import prisonerSummarySection %}
+{% from "govuk/components/summary-list/macro.njk" import govukSummaryList %}
+
+{% set title = "Work and Skills" %}
+{% set containerClasses = "prisoner-profile" %}
+{% set errorMessage = "We cannot show these details right now. Try reloading the page." %}
+
+{% set functionalSkillLevels = functionalSkillLevels.content %}
+{% set goals = targets.content %}
+{% set courses = coursesAndQualifications.content %}
+{% set work = currentWork.content %}
+
+{% set functionalSkillsLevelSection %}
+    <div data-test="functional-skills-level-summary">
+        {% include "./partials/learnerLatestAssessments.njk" %}
+    </div>
+{% endset %}
+
+{% set offenderGoalsSection %}
+    <div data-test="goals-summary">
+        {% include "./partials/prisonerGoals.njk" %}
+    </div>
+{% endset %}
+
+{% set CoursesAndQualificationsSection %}
+    <div data-test="courses-summary" id="courses-summary">
+        {% include "./partials/coursesAndQualifications.njk" %}
+    </div>
+{% endset %}
+
+{% set workAndActivitiesSection %}
+    <div data-test="work-summary" id="work-summary">
+        {% include "./partials/workInsidePrison.njk" %}
+    </div>
+{% endset %}
+
+{% set leftSections = [
+    { heading: 'Courses and qualifications', html: CoursesAndQualificationsSection },
+    { heading: 'Work and activities', html: workAndActivitiesSection }
+] %}
+{% set rightSections = [
+    { heading: 'Goals', html: offenderGoalsSection },
+    { heading: 'Functional skills level', html: functionalSkillsLevelSection }
+] %}
+
+{% block prisonerProfileSection %}
+    <div class="govuk-accordion govuk-accordion--split" data-module="govuk-accordion" id="prisoner-eswe-accordion">
+        <div class="govuk-grid-row">
+            <div class="govuk-grid-column-one-half">
+                {% for section in leftSections %}
+                    {{ accordionSection(section.heading, section.html, loop.index) }}
+                {% endfor %}
+            </div>
+            <div class="govuk-grid-column-one-half">
+                {% for section in rightSections %}
+                    {{ accordionSection(section.heading, section.html, loop.index) }}
+                {% endfor %}
+            </div>
+        </div>
+    </div>
+{% endblock %} 

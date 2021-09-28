@@ -41,11 +41,15 @@ env:
   ALLOCATION_MANAGER_ENDPOINT_URL: https://allocation-manager-staging.apps.live-1.cloud-platform.service.justice.gov.uk/
   PATHFINDER_UI_URL: https://dev.pathfinder.service.justice.gov.uk/
   PATHFINDER_ENDPOINT_API_URL: https://dev-api.pathfinder.service.justice.gov.uk/
+  PIN_PHONES_URL: https://pin-phone-monitor-dev.prison.service.justice.gov.uk/
   REDIS_ENABLED: true
-  SOC_URL: https://manage-soc-cases-dev.hmpps.service.justice.gov.uk
+  SOC_UI_URL: https://manage-soc-cases-dev.hmpps.service.justice.gov.uk/
+  SOC_API_URL: https://manage-soc-cases-api-dev.hmpps.service.justice.gov.uk/
   SOC_API_ENABLED: true
   OFFENDER_SEARCH_API_URL: https://prisoner-offender-search-dev.prison.service.justice.gov.uk
   SUPPORT_URL: https://support-dev.hmpps.service.justice.gov.uk/
+  ESWE_ENABLED: true
+  CURIOUS_URL: https://testservices.sequation.net/sequation-virtual-campus2-api/
 
   SYSTEM_PHASE: DEV
   BVL_URL: https://book-video-link-dev.prison.service.justice.gov.uk

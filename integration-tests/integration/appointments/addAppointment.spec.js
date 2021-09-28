@@ -11,8 +11,8 @@ context('A user can add an appointment', () => {
   before(() => {
     cy.clearCookies()
     cy.task('resetAndStubTokenVerification')
-    cy.task('stubLogin', { username: 'ITAG_USER', caseload: 'WWI' })
-    cy.login()
+    cy.task('stubSignIn', { username: 'ITAG_USER', caseload: 'WWI' })
+    cy.signIn()
   })
   beforeEach(() => {
     Cypress.Cookies.preserveOnce('hmpps-session-dev')
@@ -24,7 +24,7 @@ context('A user can add an appointment', () => {
     ])
     cy.task('stubAppointmentsAtAgency', 'MDI', [])
     cy.task('stubVisitsAtAgency', 'MDI', [])
-    cy.task('stubPostAppointments')
+    cy.task('stubCreateAppointment')
     cy.task('stubSchedules', {
       agency: 'MDI',
       location: 1,
@@ -146,11 +146,7 @@ context('A user can add an appointment', () => {
     addAppointmentPage
       .lastAppointmentDate()
       .get('#appointment-end-date')
-      .contains(
-        moment()
-          .add(2, 'days')
-          .format('dddd D MMMM YYYY')
-      )
+      .contains(moment().add(2, 'days').format('dddd D MMMM YYYY'))
 
     form.submitButton().click()
     ConfirmSingleAppointmentPage.verifyOnPage(`John Smith’s`)
@@ -175,8 +171,8 @@ context('A user can add an appointment', () => {
     const prePostAppointmentsPage = PrePostAppointmentsPage.verifyOnPage()
     const prePostForm = prePostAppointmentsPage.form()
 
+    prePostForm.preAppointmentYes().click()
     prePostForm.preAppointmentLocation().select('1')
-    prePostForm.preAppointmentDuration().select('20')
     prePostForm.postAppointmentNo().click()
     prePostForm.court().select('Leeds')
     prePostForm.submitButton().click()
@@ -184,15 +180,15 @@ context('A user can add an appointment', () => {
     const confirmVideoLinkPrisonPage = ConfirmVideoLinkPrisonPage.verifyOnPage()
     confirmVideoLinkPrisonPage.courtLocation().contains('Leeds')
 
-    cy.task('getBookingRequest').then(request => {
+    cy.task('getBookingRequest').then((request) => {
       expect(request).to.deep.equal({
         bookingId: 14,
-        court: 'Leeds',
+        courtId: 'LDS',
         comment: 'Test comment',
         madeByTheCourt: false,
         pre: {
           locationId: 1,
-          startTime: moment().format(`YYYY-MM-DD[T22:35:00]`),
+          startTime: moment().format(`YYYY-MM-DD[T22:40:00]`),
           endTime: moment().format(`YYYY-MM-DD[T22:55:00]`),
         },
         main: {
@@ -223,11 +219,13 @@ context('A user can add an appointment', () => {
     const prePostAppointmentsPage = PrePostAppointmentsPage.verifyOnPage()
     const prePostForm = prePostAppointmentsPage.form()
 
+    prePostForm.preAppointmentYes().click()
+    prePostForm.postAppointmentYes().click()
     prePostForm.submitButton().click()
     prePostAppointmentsPage
       .errorSummary()
       .find('li')
-      .then($errorItems => {
+      .then(($errorItems) => {
         expect($errorItems.get(0).innerText).to.contain('Select a room for the pre-court hearing briefing')
         expect($errorItems.get(1).innerText).to.contain('Select a room for the post-court hearing briefing')
         expect($errorItems.get(2).innerText).to.contain('Select which court the hearing is for')
@@ -253,8 +251,8 @@ context('A user can add an appointment', () => {
     const prePostAppointmentsPage = PrePostAppointmentsPage.verifyOnPage()
     const prePostForm = prePostAppointmentsPage.form()
 
+    prePostForm.preAppointmentYes().click()
     prePostForm.preAppointmentLocation().select('1')
-    prePostForm.preAppointmentDuration().select('20')
     prePostForm.postAppointmentNo().click()
     prePostForm.court().select('Other')
     prePostForm.submitButton().click()
@@ -268,7 +266,7 @@ context('A user can add an appointment', () => {
     const confirmVideoLinkPrisonPage = ConfirmVideoLinkPrisonPage.verifyOnPage()
     confirmVideoLinkPrisonPage.courtLocation().contains('test')
 
-    cy.task('getBookingRequest').then(request => {
+    cy.task('getBookingRequest').then((request) => {
       expect(request).to.deep.equal({
         bookingId: 14,
         court: 'test',
@@ -276,7 +274,7 @@ context('A user can add an appointment', () => {
         madeByTheCourt: false,
         pre: {
           locationId: 1,
-          startTime: moment().format(`YYYY-MM-DD[T22:35:00]`),
+          startTime: moment().format(`YYYY-MM-DD[T22:40:00]`),
           endTime: moment().format(`YYYY-MM-DD[T22:55:00]`),
         },
         main: {
@@ -307,8 +305,8 @@ context('A user can add an appointment', () => {
     const prePostAppointmentsPage = PrePostAppointmentsPage.verifyOnPage()
     const prePostForm = prePostAppointmentsPage.form()
 
+    prePostForm.preAppointmentYes().click()
     prePostForm.preAppointmentLocation().select('1')
-    prePostForm.preAppointmentDuration().select('20')
     prePostForm.postAppointmentNo().click()
     prePostForm.court().select('Other')
     prePostForm.submitButton().click()
@@ -321,7 +319,7 @@ context('A user can add an appointment', () => {
     otherCourtPage
       .errorSummary()
       .find('li')
-      .then($errorItems => {
+      .then(($errorItems) => {
         expect($errorItems.get(0).innerText).to.contain('Enter the name of the court')
       })
   })
@@ -345,8 +343,8 @@ context('A user can add an appointment', () => {
     const prePostAppointmentsPage = PrePostAppointmentsPage.verifyOnPage()
     const prePostForm = prePostAppointmentsPage.form()
 
+    prePostForm.preAppointmentYes().click()
     prePostForm.preAppointmentLocation().select('1')
-    prePostForm.preAppointmentDuration().select('20')
     prePostForm.postAppointmentNo().click()
     prePostForm.court().select('Other')
     prePostForm.submitButton().click()
@@ -357,21 +355,8 @@ context('A user can add an appointment', () => {
     otherCourtForm.cancelButton().click()
     const returnPrePostAppointmentsPage = PrePostAppointmentsPage.verifyOnPage()
 
-    returnPrePostAppointmentsPage
-      .form()
-      .preAppointmentYes()
-      .should('be.checked')
-    returnPrePostAppointmentsPage
-      .form()
-      .preAppointmentLocation()
-      .contains('1')
-    returnPrePostAppointmentsPage
-      .form()
-      .preAppointmentDuration()
-      .contains('20')
-    returnPrePostAppointmentsPage
-      .form()
-      .postAppointmentNo()
-      .should('be.checked')
+    returnPrePostAppointmentsPage.form().preAppointmentYes().should('be.checked')
+    returnPrePostAppointmentsPage.form().preAppointmentLocation().contains('1')
+    returnPrePostAppointmentsPage.form().postAppointmentNo().should('be.checked')
   })
 })

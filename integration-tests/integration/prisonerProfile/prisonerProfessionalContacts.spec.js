@@ -98,8 +98,8 @@ context('Prisoner professional contacts', () => {
   before(() => {
     cy.clearCookies()
     cy.task('resetAndStubTokenVerification')
-    cy.task('stubLogin', { username: 'ITAG_USER', caseload: 'MDI' })
-    cy.login()
+    cy.task('stubSignIn', { username: 'ITAG_USER', caseload: 'MDI' })
+    cy.signIn()
   })
 
   beforeEach(() => {
@@ -153,7 +153,10 @@ context('Prisoner professional contacts', () => {
         contacts: { otherContacts },
         personAddresses: [businessPrimary, businessNonPrimary],
         personEmails: [{ email: 'test1@email.com' }, { email: 'test2@email.com' }],
-        personPhones: [{ number: '02222222222', type: 'MOB' }, { number: '033333333333', type: 'BUS', ext: '123' }],
+        personPhones: [
+          { number: '02222222222', type: 'MOB' },
+          { number: '033333333333', type: 'BUS', ext: '123' },
+        ],
         prisonOffenderManagers: {
           primary_pom: { staffId: 1, name: 'SMITH, JANE' },
           secondary_pom: { staffId: 2, name: 'DOE, JOHN' },
@@ -164,10 +167,8 @@ context('Prisoner professional contacts', () => {
     })
 
     it('Should show the correct relationship descriptions in alphabetical order', () => {
-      cy.get('[data-test="professional-contacts-relationship"]').then($relationships => {
-        cy.get($relationships)
-          .its('length')
-          .should('eq', 5)
+      cy.get('[data-test="professional-contacts-relationship"]').then(($relationships) => {
+        cy.get($relationships).its('length').should('eq', 5)
         expect($relationships.get(0).innerText).to.contain('Case Administrator')
         expect($relationships.get(1).innerText).to.contain('Community Offender Manager')
         expect($relationships.get(2).innerText).to.contain('Offender Supervisor')
@@ -177,10 +178,8 @@ context('Prisoner professional contacts', () => {
     })
 
     it('Should show the correct contacts', () => {
-      cy.get('[data-test="professional-contacts-contact"]').then($contacts => {
-        cy.get($contacts)
-          .its('length')
-          .should('eq', 12)
+      cy.get('[data-test="professional-contacts-contact"]').then(($contacts) => {
+        cy.get($contacts).its('length').should('eq', 12)
         expect($contacts.get(0).innerText).to.contain('Trevor Smith')
         expect($contacts.get(1).innerText).to.contain('Trevor Smith')
         expect($contacts.get(2).innerText).to.contain('Uriualche Lydyle')

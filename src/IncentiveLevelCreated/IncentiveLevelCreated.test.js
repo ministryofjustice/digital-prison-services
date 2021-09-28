@@ -31,20 +31,14 @@ describe('<IncentiveLevelCreated />', () => {
   wrapper = shallow(<IncentiveLevelCreated {...props} />)
 
   it('should handle clicking print', () => {
-    wrapper
-      .find(Button)
-      .props()
-      .onClick()
+    wrapper.find(Button).props().onClick()
     expect(global.open).toHaveBeenCalled()
     expect(props.showModal).toHaveBeenCalledWith(false)
     expect(setStorageSpy).toHaveBeenCalled()
   })
 
   it('should close the Incentive Level created modal when cancelled', () => {
-    wrapper
-      .find('ButtonCancel')
-      .props()
-      .onClick()
+    wrapper.find('ButtonCancel').props().onClick()
     expect(props.showModal).toHaveBeenCalledWith(false)
   })
 

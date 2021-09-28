@@ -1,4 +1,5 @@
 $govuk-page-width: 1170px;
+$govuk-font-family-print: 'GDS Transport';
 @import 'node_modules/govuk-frontend/govuk/all';
 @import 'node_modules/@ministryofjustice/frontend/moj/components/sortable-table/sortable-table';
 @import 'node_modules/@ministryofjustice/frontend/moj/all';
@@ -17,6 +18,8 @@ $govuk-page-width: 1170px;
 @import 'components/prisonerProfile/prisoner-alerts';
 @import 'components/prisonerProfile/prisoner-visits';
 @import 'components/prisonerProfile/prisoner-schedule';
+@import 'components/prisonerProfile/_prisoner-courses-qualifications-details';
+@import 'components/prisonerProfile/_prisoner-work-inside-prison-details';
 @import 'components/covid/dashboard';
 @import 'components/prisonerSearch/prisoner-search';
 @import 'components/prisonerSearch/prisoner-panel';
@@ -29,7 +32,8 @@ $govuk-page-width: 1170px;
 @import 'views/components/timePicker/timePicker';
 @import 'views/components/movementSlip/movementSlip';
 @import 'views/components/scheduledEvents/scheduledEvents';
-@import 'views/components/notificationBar/notificationBar.scss';
+@import 'views/components/notificationBar/notificationBar';
+@import 'views/components/feedbackBanner/feedbackBanner';
 
 @import 'govuk-overrides';
 @import 'moj-overrides';
@@ -119,8 +123,24 @@ $govuk-page-width: 1170px;
   flex-basis: 80%;
 }
 
+.case-notes-omic-open {
+  display: none;
+}
+.case-notes-omic-open-warning {
+  margin-left: 15px;
+}
+
 pre {
   white-space: pre-wrap; /* css-3 */
   white-space: -moz-pre-wrap; /* Mozilla, since 1999 */
   word-wrap: break-word; /* Internet Explorer 5.5+ */
+}
+
+//tabular data font
+.app-\!-font-family-tabular {
+  @include govuk-font($size: false, $tabular: true);
+}
+
+.app-\!-font-family-tabular-bold {
+  @include govuk-font($size: false, $tabular: true, $weight: bold);
 }

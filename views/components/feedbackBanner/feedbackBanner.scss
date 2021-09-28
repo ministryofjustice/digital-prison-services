@@ -1,0 +1,9 @@
+.feedback-banner {
+  background: $govuk-brand-colour;
+  padding: govuk-spacing(4);
+
+  // Only neccessary because of the React template layout
+  width: 100%;
+  max-width: 1170px;
+  margin: 0 auto;
+}

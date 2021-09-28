@@ -1,4 +1,4 @@
-const toCellMove = $cell => ({
+const toCellMove = ($cell) => ({
   name: $cell[0]?.textContent,
   movedFrom: $cell[1]?.textContent,
   movedTo: $cell[2]?.textContent,
@@ -11,12 +11,13 @@ context('Cell move history', () => {
   before(() => {
     cy.clearCookies()
     cy.task('resetAndStubTokenVerification')
-    cy.task('stubLogin', { username: 'ITAG_USER', caseload: 'MDI' })
-    cy.login()
+    cy.task('stubSignIn', { username: 'ITAG_USER', caseload: 'MDI', roles: [{ roleCode: 'CELL_MOVE' }] })
+    cy.signIn()
   })
   beforeEach(() => {
     cy.task('stubCellMoveHistory', {
       assignmentDate: '2021-04-30',
+      agencyId: 'MDI',
       cellMoves: [
         {
           bookingId: -34,
@@ -67,11 +68,11 @@ context('Cell move history', () => {
   it('should display cell move history for date', () => {
     cy.visit('/change-someones-cell/recent-cell-moves/history?date=2021-04-30')
 
-    cy.get('[data-test="cell-history-table"]').then($table => {
+    cy.get('[data-test="cell-history-table"]').then(($table) => {
       cy.get($table)
         .find('tr')
-        .then($tableRows => {
-          const cellMoves = Array.from($tableRows).map($row => toCellMove($row.cells))
+        .then(($tableRows) => {
+          const cellMoves = Array.from($tableRows).map(($row) => toCellMove($row.cells))
 
           expect(cellMoves[1].name).to.contain('Doe, Bob')
           expect(cellMoves[1].movedFrom).to.eq('No cell allocated')
@@ -80,6 +81,19 @@ context('Cell move history', () => {
           expect(cellMoves[1].reason).to.contain('Administrative')
           expect(cellMoves[1].time).to.contain('11:00')
         })
+    })
+  })
+
+  context('When the user does not have the correct cell move roles', () => {
+    beforeEach(() => {
+      cy.task('stubSignIn', { username: 'ITAG_USER', caseload: 'MDI', roles: [] })
+      cy.signIn()
+    })
+
+    it('should display page not found', () => {
+      cy.visit('/change-someones-cell', { failOnStatusCode: false })
+
+      cy.get('h1').contains('Page not found')
     })
   })
 })

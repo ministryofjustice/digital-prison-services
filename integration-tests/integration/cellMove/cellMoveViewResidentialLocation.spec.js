@@ -1,4 +1,4 @@
-const toOffender = $cell => ({
+const toOffender = ($cell) => ({
   name: $cell[1]?.textContent,
   prisonNo: $cell[2]?.textContent,
   location: $cell[3]?.textContent,
@@ -36,8 +36,8 @@ context('Cell move view residential location', () => {
   before(() => {
     cy.clearCookies()
     cy.task('resetAndStubTokenVerification')
-    cy.task('stubLogin', { username: 'ITAG_USER', caseload: 'MDI' })
-    cy.login()
+    cy.task('stubSignIn', { username: 'ITAG_USER', caseload: 'MDI', roles: [{ roleCode: 'CELL_MOVE' }] })
+    cy.signIn()
   })
 
   beforeEach(() => {
@@ -52,12 +52,16 @@ context('Cell move view residential location', () => {
     it('should display the search box with the expected data only', () => {
       cy.visit(`/change-someones-cell/view-residential-location`)
 
-      cy.get('[data-test="prisoner-search-form"]').should('be.visible').within(($form) => {
-        cy.get('[data-test="prisoner-search-location"]').children('option').then(options => {
-          const actual = [...options].map(o => o.value)
-          expect(actual).to.deep.eq(['SELECT', '1', '2', '3'])
+      cy.get('[data-test="prisoner-search-form"]')
+        .should('be.visible')
+        .within(() => {
+          cy.get('[data-test="prisoner-search-location"]')
+            .children('option')
+            .then((options) => {
+              const actual = [...options].map((o) => o.value)
+              expect(actual).to.deep.eq(['SELECT', '1', '2', '3'])
+            })
         })
-      })
       cy.get('[data-test="prisoner-search-results-table"]').should('not.exist')
     })
   })
@@ -75,15 +79,13 @@ context('Cell move view residential location', () => {
       })
       cy.visit(`/change-someones-cell/view-residential-location?location=1`)
 
-      cy.get('[data-test="prisoner-search-results-table"]').then($table => {
+      cy.get('[data-test="prisoner-search-results-table"]').then(($table) => {
         cy.get($table)
           .find('tr')
-          .then($tableRows => {
-            cy.get($tableRows)
-              .its('length')
-              .should('eq', 3) // 2 results plus table header
+          .then(($tableRows) => {
+            cy.get($tableRows).its('length').should('eq', 3) // 2 results plus table header
 
-            const offenders = Array.from($tableRows).map($row => toOffender($row.cells))
+            const offenders = Array.from($tableRows).map(($row) => toOffender($row.cells))
 
             expect(offenders[1].name).to.contain('Smith, John')
             expect(offenders[1].prisonNo).to.eq('A1234BC')
@@ -109,23 +111,34 @@ context('Cell move view residential location', () => {
       })
       cy.visit(`/change-someones-cell/view-residential-location?location=2`)
 
-      cy.get('[data-test="prisoner-cell-history-link"]').then($prisonerProfileLinks => {
-        cy.get($prisonerProfileLinks)
-          .its('length')
-          .should('eq', 1)
+      cy.get('[data-test="prisoner-cell-history-link"]').then(($prisonerProfileLinks) => {
+        cy.get($prisonerProfileLinks).its('length').should('eq', 1)
         cy.get($prisonerProfileLinks.get(0))
+          .should('have.text', 'View cell history for John Smith')
           .should('have.attr', 'href')
           .should('include', '/prisoner/A1234BC/cell-history')
       })
 
-      cy.get('[data-test="prisoner-cell-search-link"]').then($prisonerProfileLinks => {
-        cy.get($prisonerProfileLinks)
-          .its('length')
-          .should('eq', 1)
+      cy.get('[data-test="prisoner-cell-search-link"]').then(($prisonerProfileLinks) => {
+        cy.get($prisonerProfileLinks).its('length').should('eq', 1)
         cy.get($prisonerProfileLinks.get(0))
+          .should('have.text', 'John Smith - Change cell')
           .should('have.attr', 'href')
           .should('include', '/prisoner/A1234BC/cell-move/search-for-cell')
       })
+    })
+  })
+
+  context('When the user does not have the correct cell move roles', () => {
+    beforeEach(() => {
+      cy.task('stubSignIn', { username: 'ITAG_USER', caseload: 'MDI', roles: [] })
+      cy.signIn()
+    })
+
+    it('should display page not found', () => {
+      cy.visit('/change-someones-cell', { failOnStatusCode: false })
+
+      cy.get('h1').contains('Page not found')
     })
   })
 })

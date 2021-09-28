@@ -1,7 +1,4 @@
-const offenderBasicDetails = require('../../mockApis/responses/offenderBasicDetails.json')
-const offenderFullDetails = require('../../mockApis/responses/offenderFullDetails.json')
-
-const toOffender = $cell => ({
+const toOffender = ($cell) => ({
   name: $cell[1]?.textContent,
   prisonNo: $cell[2]?.textContent,
   location: $cell[3]?.textContent,
@@ -38,8 +35,8 @@ context('Move someone temporarily out of a cell', () => {
   before(() => {
     cy.clearCookies()
     cy.task('resetAndStubTokenVerification')
-    cy.task('stubLogin', { username: 'ITAG_USER', caseload: 'MDI' })
-    cy.login()
+    cy.task('stubSignIn', { username: 'ITAG_USER', caseload: 'MDI', roles: [{ roleCode: 'CELL_MOVE' }] })
+    cy.signIn()
   })
 
   beforeEach(() => {
@@ -74,15 +71,13 @@ context('Move someone temporarily out of a cell', () => {
       cy.visit(`/change-someones-cell/temporary-move?keywords=SMITH`)
 
       cy.get('[data-test="prisoner-search-help-text"]').should('not.exist')
-      cy.get('[data-test="prisoner-search-results-table"]').then($table => {
+      cy.get('[data-test="prisoner-search-results-table"]').then(($table) => {
         cy.get($table)
           .find('tr')
-          .then($tableRows => {
-            cy.get($tableRows)
-              .its('length')
-              .should('eq', 3) // 2 results plus table header
+          .then(($tableRows) => {
+            cy.get($tableRows).its('length').should('eq', 3) // 2 results plus table header
 
-            const offenders = Array.from($tableRows).map($row => toOffender($row.cells))
+            const offenders = Array.from($tableRows).map(($row) => toOffender($row.cells))
 
             expect(offenders[1].name).to.contain('Smith, John')
             expect(offenders[1].prisonNo).to.eq('A1234BC')
@@ -107,23 +102,34 @@ context('Move someone temporarily out of a cell', () => {
       })
       cy.visit(`/change-someones-cell/temporary-move?keywords=A1234BC`)
 
-      cy.get('[data-test="prisoner-cell-history-link"]').then($prisonerProfileLinks => {
-        cy.get($prisonerProfileLinks)
-          .its('length')
-          .should('eq', 1)
+      cy.get('[data-test="prisoner-cell-history-link"]').then(($prisonerProfileLinks) => {
+        cy.get($prisonerProfileLinks).its('length').should('eq', 1)
         cy.get($prisonerProfileLinks.get(0))
+          .should('have.text', 'View cell history for John Smith')
           .should('have.attr', 'href')
           .should('include', '/prisoner/A1234BC/cell-history')
       })
 
-      cy.get('[data-test="prisoner-cell-move-link"]').then($prisonerProfileLinks => {
-        cy.get($prisonerProfileLinks)
-          .its('length')
-          .should('eq', 1)
+      cy.get('[data-test="prisoner-cell-move-link"]').then(($prisonerProfileLinks) => {
+        cy.get($prisonerProfileLinks).its('length').should('eq', 1)
         cy.get($prisonerProfileLinks.get(0))
+          .should('have.text', 'John Smith - Move out of cell')
           .should('have.attr', 'href')
           .should('include', '/prisoner/A1234BC/cell-move/confirm-cell-move')
       })
+    })
+  })
+
+  context('When the user does not have the correct cell move roles', () => {
+    beforeEach(() => {
+      cy.task('stubSignIn', { username: 'ITAG_USER', caseload: 'MDI', roles: [] })
+      cy.signIn()
+    })
+
+    it('should display page not found', () => {
+      cy.visit('/change-someones-cell', { failOnStatusCode: false })
+
+      cy.get('h1').contains('Page not found')
     })
   })
 })

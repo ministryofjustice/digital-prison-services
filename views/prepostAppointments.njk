@@ -22,22 +22,6 @@
                 items: locations | addDefaultSelectedVale('Select') | setSelected(params.location),
                 errorMessage: errors | findError(params.name + "Location")
             }) }}
-
-            {{ govukSelect({
-                name: params.name + "Duration",
-                id: params.name + "Duration",
-                label: {
-                    text: "Duration"
-                },
-                items: [
-                    { text: '20 minutes', value: '20' },
-                    { text: '30 minutes', value: '30' },
-                    { text: '40 minutes', value: '40' },
-                    { text: '50 minutes', value: '50' },
-                    { text: '1 hour', value: '60' }
-                ] | setSelected(params.duration),
-                errorMessage: errors | findError(params.name + "Duration")
-            }) }}
         </div>
 
         <div id="{{ 'location-events-' + params.name }}" class="govuk-grid-column-one-half">
@@ -49,11 +33,11 @@
 {% endmacro %}
 
 {% set preAppointmentHtml %}
-    {{ appointment({name:"preAppointment",locations: locations, location: formValues.preAppointmentLocation, duration: formValues.preAppointmentDuration}) }}
+    {{ appointment({name:"preAppointment",locations: locations, location: formValues.preAppointmentLocation }) }}
 {% endset -%}
 
 {% set postAppointmentHtml %}
-    {{ appointment({name:"postAppointment",locations: locations, location: formValues.postAppointmentLocation, duration: formValues.postAppointmentDuration}) }}
+    {{ appointment({name:"postAppointment",locations: locations, location: formValues.postAppointmentLocation }) }}
 {% endset -%}
 
 {% block content %}

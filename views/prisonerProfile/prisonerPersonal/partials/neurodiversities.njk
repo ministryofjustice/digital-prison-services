@@ -1,0 +1,17 @@
+{% from "../../macros/prisonerSummarySection.njk" import prisonerSummarySection %}
+
+{% set neurodiversityInfo = neurodiversities.content %}
+{% set offenderName = (prisonerProfileData.offenderName).split(',')[1].trim() + " " +(prisonerProfileData.offenderName).split(',')[0] %}
+
+{% if neurodiversityInfo %}
+    {% for entry in neurodiversityInfo %}
+    {{ prisonerSummarySection(entry.details, '', {}, false, 'govuk-summary-list--no-border', false) }}
+    <hr class="govuk-section-break govuk-section-break--m govuk-section-break--visible">
+    {% endfor %}
+
+    {% if not neurodiversityInfo.length %}
+    <p class="govuk-body">{{ offenderName }} has not declared any learning difficulties.</p>
+    {% endif %}
+{% else %}
+    <p class="govuk-body" data-test="goals-errorMessage">{{ errorMessage }}</p>
+{% endif %}

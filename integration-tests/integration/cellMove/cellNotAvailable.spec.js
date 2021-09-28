@@ -6,8 +6,8 @@ context('A user is presented with a cell no longer available error page', () => 
   before(() => {
     cy.clearCookies()
     cy.task('resetAndStubTokenVerification')
-    cy.task('stubLogin', { username: 'ITAG_USER', caseload: 'MDI' })
-    cy.login()
+    cy.task('stubSignIn', { username: 'ITAG_USER', caseload: 'MDI' })
+    cy.signIn()
   })
   beforeEach(() => {
     Cypress.Cookies.preserveOnce('hmpps-session-dev')
@@ -36,7 +36,7 @@ context('A user is presented with a cell no longer available error page', () => 
     page
       .selectAnotherCellLink()
       .invoke('attr', 'href')
-      .then(href => {
+      .then((href) => {
         expect(href).to.equal('/prisoner/A12345/cell-move/select-cell')
       })
   })
@@ -46,7 +46,7 @@ context('A user is presented with a cell no longer available error page', () => 
     page
       .breadcrumbNodes()
       .find('li')
-      .then($el => {
+      .then(($el) => {
         expect($el[0].innerText).to.equal('Home')
         expect($el[1].innerText).to.equal('Doe, Bob')
         expect($el[2].innerText).to.equal('Select cell')

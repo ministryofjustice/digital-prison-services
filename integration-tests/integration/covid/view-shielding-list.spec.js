@@ -2,7 +2,7 @@ const moment = require('moment')
 
 const ShieldingUnitPage = require('../../pages/covid/shieldingUnitPage')
 
-const alert = val => ({ alerts: { equalTo: val } })
+const alert = (val) => ({ alerts: { equalTo: val } })
 
 const dayBeforeYesterday = moment().subtract(2, 'day')
 
@@ -10,8 +10,8 @@ context('A user can view the protective isolation list', () => {
   before(() => {
     cy.clearCookies()
     cy.task('reset')
-    cy.task('stubLogin', { username: 'ITAG_USER', caseload: 'MDI' })
-    cy.login()
+    cy.task('stubSignIn', { username: 'ITAG_USER', caseload: 'MDI' })
+    cy.signIn()
 
     cy.task('stubAlerts', {
       locationId: 'MDI',

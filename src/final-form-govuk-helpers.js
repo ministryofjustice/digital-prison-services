@@ -4,11 +4,11 @@ import { Field } from 'react-final-form'
 import { OnChange } from 'react-final-form-listeners'
 
 const lookupError = (name, errors) => {
-  const error = errors && errors.find(s => s.targetName === name)
+  const error = errors && errors.find((s) => s.targetName === name)
   return error && error.text
 }
 
-export const FieldWithError = props => {
+export const FieldWithError = (props) => {
   const { name, errors } = props
   const error = lookupError(name, errors)
   const meta = {
@@ -27,7 +27,7 @@ const WhenFieldChanges = ({ field, becomes, set, to }) => (
       { input: { onChange } }
     ) => (
       <OnChange name={field}>
-        {value => {
+        {(value) => {
           if (value === becomes) {
             onChange(to)
           }
@@ -55,6 +55,6 @@ FieldWithError.defaultProps = {
 
 export { WhenFieldChanges }
 
-export const onHandleErrorClick = targetName => {
+export const onHandleErrorClick = (targetName) => {
   document.getElementsByName(targetName)[0].focus()
 }

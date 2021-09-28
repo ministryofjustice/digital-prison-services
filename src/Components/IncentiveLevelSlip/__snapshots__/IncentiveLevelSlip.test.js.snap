@@ -1,0 +1,555 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`<IncentiveLevelSlip /> renders correctly 1`] = `
+<div
+  className="sc-bdVaJa kdwVCv"
+>
+  <div
+    className="sc-bwzfXH djUGzB"
+  >
+    <div
+      className="sc-htpNat eOjbqm"
+    >
+      <h2
+        className="heading__StyledHeading-sc-1sovo83-0 jdjFtq"
+        size="MEDIUM"
+      >
+        Incentive Level warning
+      </h2>
+    </div>
+    <div
+      className="sc-htpNat eOjbqm"
+    >
+      Date and time: 
+      <span
+        className="sc-bxivhb iPvUcL"
+      >
+        1 January 2019, 12:00 am
+      </span>
+    </div>
+  </div>
+  <div
+    className="sc-bwzfXH djUGzB"
+  >
+    <div
+      className="sc-htpNat eOjbqm"
+    >
+      Name: 
+      <span
+        className="sc-bxivhb fFRjPw"
+      >
+        An Offender
+      </span>
+    </div>
+    <div
+      className="sc-htpNat eOjbqm"
+    >
+      Number: 
+      <span
+        className="sc-bxivhb fFRjPw"
+      >
+        ABC123
+      </span>
+    </div>
+    <div
+      className="sc-htpNat eOjbqm"
+    >
+      Location: 
+      <span
+        className="sc-bxivhb fFRjPw"
+      >
+        LEI-123
+      </span>
+    </div>
+  </div>
+  <div
+    className="sc-bwzfXH djUGzB"
+  >
+    <div
+      className="sc-htpNat eOjbqm"
+    >
+      Reason:
+      <span
+        className="sc-bxivhb fFRjPw"
+      >
+        Refused: Did not want to work
+      </span>
+    </div>
+  </div>
+  <div
+    className="sc-bwzfXH eHUHef"
+  >
+    <div
+      className="sc-htpNat eOjbqm"
+    >
+      Raised by: 
+      <span
+        className="sc-bxivhb iPvUcL"
+      >
+        A. Officer
+      </span>
+    </div>
+    <div
+      className="sc-htpNat eOjbqm"
+    >
+      Date: 
+      <span
+        className="sc-bxivhb iPvUcL"
+      >
+        1 January 2019
+      </span>
+    </div>
+  </div>
+  <div
+    className="sc-bwzfXH eHUHef"
+  >
+    <div
+      className="sc-htpNat eOjbqm"
+    >
+      Issued by: 
+      <span
+        className="sc-bxivhb iPvUcL"
+      />
+    </div>
+    <div
+      className="sc-htpNat eOjbqm"
+    >
+      Date: 
+      <span
+        className="sc-bxivhb iPvUcL"
+      >
+        1 January 2019
+      </span>
+    </div>
+  </div>
+</div>
+`;
+
+exports[`<IncentiveLevelSlip /> renders with amendments 1`] = `
+<div
+  className="sc-bdVaJa kdwVCv"
+>
+  <div
+    className="sc-bwzfXH djUGzB"
+  >
+    <div
+      className="sc-htpNat eOjbqm"
+    >
+      <h2
+        className="heading__StyledHeading-sc-1sovo83-0 jdjFtq"
+        size="MEDIUM"
+      >
+        Incentive Level warning
+      </h2>
+    </div>
+    <div
+      className="sc-htpNat eOjbqm"
+    >
+      Date and time: 
+      <span
+        className="sc-bxivhb iPvUcL"
+      >
+        1 January 2019, 12:00 am
+      </span>
+    </div>
+  </div>
+  <div
+    className="sc-bwzfXH djUGzB"
+  >
+    <div
+      className="sc-htpNat eOjbqm"
+    >
+      Name: 
+      <span
+        className="sc-bxivhb fFRjPw"
+      >
+        An Offender
+      </span>
+    </div>
+    <div
+      className="sc-htpNat eOjbqm"
+    >
+      Number: 
+      <span
+        className="sc-bxivhb fFRjPw"
+      >
+        ABC123
+      </span>
+    </div>
+    <div
+      className="sc-htpNat eOjbqm"
+    >
+      Location: 
+      <span
+        className="sc-bxivhb fFRjPw"
+      >
+        LEI-123
+      </span>
+    </div>
+  </div>
+  <div
+    className="sc-bwzfXH djUGzB"
+  >
+    <div
+      className="sc-htpNat eOjbqm"
+    >
+      Reason:
+      <span
+        className="sc-bxivhb fFRjPw"
+      >
+        Refused: Did not want to work
+      </span>
+      <div
+        className="sc-ifAKCX dGVVEy"
+      >
+        Amendment: 
+        <span
+          className="sc-bxivhb fFRjPw"
+        >
+          Rescinded
+        </span>
+        <div>
+          1 January 2019, 2:17 pm
+        </div>
+        <div>
+          A. Amendment
+        </div>
+      </div>
+      <div
+        className="sc-ifAKCX dGVVEy"
+      >
+        Amendment: 
+        <span
+          className="sc-bxivhb fFRjPw"
+        >
+          Updated
+        </span>
+        <div>
+          1 January 2019, 3:17 pm
+        </div>
+        <div>
+          A. Author
+        </div>
+      </div>
+    </div>
+  </div>
+  <div
+    className="sc-bwzfXH eHUHef"
+  >
+    <div
+      className="sc-htpNat eOjbqm"
+    >
+      Raised by: 
+      <span
+        className="sc-bxivhb iPvUcL"
+      >
+        A. Officer
+      </span>
+    </div>
+    <div
+      className="sc-htpNat eOjbqm"
+    >
+      Date: 
+      <span
+        className="sc-bxivhb iPvUcL"
+      >
+        1 January 2019
+      </span>
+    </div>
+  </div>
+  <div
+    className="sc-bwzfXH eHUHef"
+  >
+    <div
+      className="sc-htpNat eOjbqm"
+    >
+      Issued by: 
+      <span
+        className="sc-bxivhb iPvUcL"
+      />
+    </div>
+    <div
+      className="sc-htpNat eOjbqm"
+    >
+      Date: 
+      <span
+        className="sc-bxivhb iPvUcL"
+      >
+        1 January 2019
+      </span>
+    </div>
+  </div>
+</div>
+`;
+
+exports[`<IncentiveLevelSlip /> renders with an activity or area 1`] = `
+<div
+  className="sc-bdVaJa kdwVCv"
+>
+  <div
+    className="sc-bwzfXH djUGzB"
+  >
+    <div
+      className="sc-htpNat eOjbqm"
+    >
+      <h2
+        className="heading__StyledHeading-sc-1sovo83-0 jdjFtq"
+        size="MEDIUM"
+      >
+        Incentive Level warning
+      </h2>
+    </div>
+    <div
+      className="sc-htpNat eOjbqm"
+    >
+      Date and time: 
+      <span
+        className="sc-bxivhb iPvUcL"
+      >
+        1 January 2019, 12:00 am
+      </span>
+    </div>
+  </div>
+  <div
+    className="sc-bwzfXH djUGzB"
+  >
+    <div
+      className="sc-htpNat eOjbqm"
+    >
+      Name: 
+      <span
+        className="sc-bxivhb fFRjPw"
+      >
+        An Offender
+      </span>
+    </div>
+    <div
+      className="sc-htpNat eOjbqm"
+    >
+      Number: 
+      <span
+        className="sc-bxivhb fFRjPw"
+      >
+        ABC123
+      </span>
+    </div>
+    <div
+      className="sc-htpNat eOjbqm"
+    >
+      Location: 
+      <span
+        className="sc-bxivhb fFRjPw"
+      >
+        LEI-123
+      </span>
+    </div>
+    <div
+      className="sc-htpNat eOjbqm"
+    >
+      Activity or area: 
+      <span
+        className="sc-bxivhb fFRjPw"
+      >
+        Gym
+      </span>
+    </div>
+  </div>
+  <div
+    className="sc-bwzfXH djUGzB"
+  >
+    <div
+      className="sc-htpNat eOjbqm"
+    >
+      Reason:
+      <span
+        className="sc-bxivhb fFRjPw"
+      >
+        Refused: Did not want to work
+      </span>
+    </div>
+  </div>
+  <div
+    className="sc-bwzfXH eHUHef"
+  >
+    <div
+      className="sc-htpNat eOjbqm"
+    >
+      Raised by: 
+      <span
+        className="sc-bxivhb iPvUcL"
+      >
+        A. Officer
+      </span>
+    </div>
+    <div
+      className="sc-htpNat eOjbqm"
+    >
+      Date: 
+      <span
+        className="sc-bxivhb iPvUcL"
+      >
+        1 January 2019
+      </span>
+    </div>
+  </div>
+  <div
+    className="sc-bwzfXH eHUHef"
+  >
+    <div
+      className="sc-htpNat eOjbqm"
+    >
+      Issued by: 
+      <span
+        className="sc-bxivhb iPvUcL"
+      />
+    </div>
+    <div
+      className="sc-htpNat eOjbqm"
+    >
+      Date: 
+      <span
+        className="sc-bxivhb iPvUcL"
+      >
+        1 January 2019
+      </span>
+    </div>
+  </div>
+</div>
+`;
+
+exports[`<IncentiveLevelSlip /> renders with an issued by name 1`] = `
+<div
+  className="sc-bdVaJa kdwVCv"
+>
+  <div
+    className="sc-bwzfXH djUGzB"
+  >
+    <div
+      className="sc-htpNat eOjbqm"
+    >
+      <h2
+        className="heading__StyledHeading-sc-1sovo83-0 jdjFtq"
+        size="MEDIUM"
+      >
+        Incentive Level warning
+      </h2>
+    </div>
+    <div
+      className="sc-htpNat eOjbqm"
+    >
+      Date and time: 
+      <span
+        className="sc-bxivhb iPvUcL"
+      >
+        1 January 2019, 12:00 am
+      </span>
+    </div>
+  </div>
+  <div
+    className="sc-bwzfXH djUGzB"
+  >
+    <div
+      className="sc-htpNat eOjbqm"
+    >
+      Name: 
+      <span
+        className="sc-bxivhb fFRjPw"
+      >
+        An Offender
+      </span>
+    </div>
+    <div
+      className="sc-htpNat eOjbqm"
+    >
+      Number: 
+      <span
+        className="sc-bxivhb fFRjPw"
+      >
+        ABC123
+      </span>
+    </div>
+    <div
+      className="sc-htpNat eOjbqm"
+    >
+      Location: 
+      <span
+        className="sc-bxivhb fFRjPw"
+      >
+        LEI-123
+      </span>
+    </div>
+    <div
+      className="sc-htpNat eOjbqm"
+    >
+      Activity or area: 
+      <span
+        className="sc-bxivhb fFRjPw"
+      >
+        Gym
+      </span>
+    </div>
+  </div>
+  <div
+    className="sc-bwzfXH djUGzB"
+  >
+    <div
+      className="sc-htpNat eOjbqm"
+    >
+      Reason:
+      <span
+        className="sc-bxivhb fFRjPw"
+      >
+        Refused: Did not want to work
+      </span>
+    </div>
+  </div>
+  <div
+    className="sc-bwzfXH eHUHef"
+  >
+    <div
+      className="sc-htpNat eOjbqm"
+    >
+      Raised by: 
+      <span
+        className="sc-bxivhb iPvUcL"
+      >
+        A. Officer
+      </span>
+    </div>
+    <div
+      className="sc-htpNat eOjbqm"
+    >
+      Date: 
+      <span
+        className="sc-bxivhb iPvUcL"
+      >
+        1 January 2019
+      </span>
+    </div>
+  </div>
+  <div
+    className="sc-bwzfXH eHUHef"
+  >
+    <div
+      className="sc-htpNat eOjbqm"
+    >
+      Issued by: 
+      <span
+        className="sc-bxivhb iPvUcL"
+      >
+        A. Officer
+      </span>
+    </div>
+    <div
+      className="sc-htpNat eOjbqm"
+    >
+      Date: 
+      <span
+        className="sc-bxivhb iPvUcL"
+      >
+        1 January 2019
+      </span>
+    </div>
+  </div>
+</div>
+`;

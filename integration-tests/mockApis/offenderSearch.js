@@ -47,11 +47,29 @@ module.exports = {
         ],
       },
     }),
+  stubPrisonerSearch: () =>
+    postFor({
+      urlPattern: '/offenderSearch/prisoner-search/prisoner-numbers',
+      body: {
+        totalElements: 2,
+        pageable: { pageSize: 20, offset: 0 },
+        content: [
+          {
+            prisonerNumber: 'A1234AC',
+            indeterminiteSentence: false,
+          },
+          {
+            prisonerNumber: 'A1234AA',
+            indeterminiteSentence: false,
+          },
+        ],
+      },
+    }),
   verifyGlobalSearch: () =>
     getMatchingRequests({
       method: 'POST',
       urlPath: '/offenderSearch/global-search',
-    }).then(data => data.body.requests),
+    }).then((data) => data.body.requests),
 
   stubGlobalSearchMultiplePages: () => {
     const resultsPerPage = 20
@@ -76,4 +94,18 @@ module.exports = {
       }),
     ])
   },
+  stubPrisonerSearchDetails: (response) =>
+    stubFor({
+      request: {
+        method: 'POST',
+        urlPath: '/offenderSearch/prisoner-search/prisoner-numbers',
+      },
+      response: {
+        status: 200,
+        headers: {
+          'Content-Type': 'application/json;charset=UTF-8',
+        },
+        jsonBody: response,
+      },
+    }),
 }

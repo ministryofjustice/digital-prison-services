@@ -6,7 +6,7 @@ const termsAndConditions = ({ close }) => (
     <h1 className="heading-large"> Terms and conditions </h1>
 
     <div>
-      <p>Access to, and use of, this system is restricted to authorized Prison-NOMIS account users only.</p>
+      <p>Access to, and use of, this system is restricted to authorized Prison-NOMIS account users only.</p>
 
       <p>
         All users must read and conform to the Prison-NOMIS Security Operating Procedures, together with any additional

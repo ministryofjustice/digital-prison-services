@@ -1,0 +1,58 @@
+{% extends "./partials/layout.njk" %}
+{% from "govuk/components/error-summary/macro.njk" import govukErrorSummary %}
+{% from "govuk/components/radios/macro.njk" import govukRadios %}
+{% from "govuk/components/button/macro.njk" import govukButton %}
+
+{% set title = 'Delete recurring appointment' %}
+
+{% block content %}
+    {% if errors.length > 0 %}
+        {{ govukErrorSummary({
+            titleText: "There is a problem",
+            errorList: errors,
+            attributes: { 'data-qa-errors': true }
+        }) }}
+    {% endif %}
+
+    <h1 class="govuk-heading-l">This appointment had recurring bookings</h1>
+
+    <p class="govuk-body" data-qa="recurring-description">
+      Appointments were also booked {{recurringFrequencyDescription}} until {{lastAppointment}}.
+    </p>
+
+    <p class="govuk-body" data-qa="delete-recurring-question">
+      Do you want to delete all of these appointments?
+    </p>
+
+    <form action="{{ postAmendment }}" method="post">
+        <input type="hidden" name="_csrf" value="{{ csrfToken }}" />
+        <input type="hidden" name="recurringAppointmentId" value="{{ recurringAppointmentId }}" />
+
+        {{ govukRadios({
+          classes: "govuk-radios--inline",
+          idPrefix: "deleteRecurringSequence",
+          name: "deleteRecurringSequence",
+          errorMessage: errors | findError('deleteRecurringSequence'),
+          fieldset: {
+              attributes: { 'data-test': 'delete-recurring-sequence-input' },
+              legend: {
+                  text: confirmationQuestionLabel,
+                  classes: "govuk-fieldset__legend--s"
+              }
+          },
+          items: [
+            {
+              value: "yes",
+              text: "Yes"
+            },
+            {
+              value: "no",
+              text: "No"
+            }
+            ]
+        }) }}
+
+        {{ govukButton({ text: "Confirm", type: "submit" }) }}
+    </form>
+
+{% endblock %}

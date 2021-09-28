@@ -10,39 +10,38 @@ const {
   courtEventsWithDifferentStatusResponse,
   externalTransfersResponse,
 } = require('../mockApis/responses/houseBlockResponse')
-const alertsResponse = require('../mockApis/responses/alertsResponse')
+const alertsResponse = require('../mockApis/responses/alertsResponse.json')
 const allocationManager = require('../mockApis/allocationManager')
 const community = require('../mockApis/community')
 const pathfinder = require('../mockApis/pathfinder')
 const socApi = require('../mockApis/soc')
 const offenderSearch = require('../mockApis/offenderSearch')
 const complexity = require('../mockApis/complexity')
+const curiousApi = require('../mockApis/curiousApi')
 
-const { resetStubs } = require('../mockApis/wiremock')
+const { resetStubs, resetStub } = require('../mockApis/wiremock')
 
-const extractOffenderNumbers = activityList => {
-  const result = Object.keys(activityList).reduce((r, k) => {
-    return r.concat(activityList[k])
-  }, [])
-  return [...new Set(result.map(item => item.offenderNo))]
+const extractOffenderNumbers = (activityList) => {
+  const result = Object.keys(activityList).reduce((r, k) => r.concat(activityList[k]), [])
+  return [...new Set(result.map((item) => item.offenderNo))]
 }
 
-module.exports = on => {
+module.exports = (on) => {
   on('task', {
     reset: resetStubs,
     resetAndStubTokenVerification: async () => {
       await resetStubs()
       return tokenverification.stubVerifyToken(true)
     },
-    stubAuthHealth: status => auth.stubHealth(status),
-    stubPrisonApiHealth: status => prisonApi.stubHealth(status),
-    stubWhereaboutsHealth: status => whereabouts.stubHealth(status),
-    stubAllocationManagerHealth: status => allocationManager.stubHealth(status),
-    stubKeyworkerHealth: status => keyworker.stubHealth(status),
-    stubCaseNotesHealth: status => caseNotes.stubHealth(status),
-    stubCommunityHealth: status => community.stubHealth(status),
-    stubTokenverificationHealth: status => tokenverification.stubHealth(status),
-    stubOffenderSearchHealth: status => offenderSearch.stubHealth(status),
+    stubAuthHealth: (status) => auth.stubHealth(status),
+    stubPrisonApiHealth: (status) => prisonApi.stubHealth(status),
+    stubWhereaboutsHealth: (status) => whereabouts.stubHealth(status),
+    stubAllocationManagerHealth: (status) => allocationManager.stubHealth(status),
+    stubKeyworkerHealth: (status) => keyworker.stubHealth(status),
+    stubCaseNotesHealth: (status) => caseNotes.stubHealth(status),
+    stubCommunityHealth: (status) => community.stubHealth(status),
+    stubTokenverificationHealth: (status) => tokenverification.stubHealth(status),
+    stubOffenderSearchHealth: (status) => offenderSearch.stubHealth(status),
     stubHealthAllHealthy: () =>
       Promise.all([
         auth.stubHealth(),
@@ -56,31 +55,31 @@ module.exports = on => {
         offenderSearch.stubHealth(),
         complexity.stubHealth(),
       ]),
-    getLoginUrl: auth.getLoginUrl,
-    stubLogin: ({ username = 'ITAG_USER', caseload = 'MDI', roles = [], caseloads }) =>
+    getSignInUrl: auth.getSignInUrl,
+    stubSignIn: ({ username = 'ITAG_USER', caseload = 'MDI', roles = [], caseloads }) =>
       Promise.all([
-        auth.stubLogin(username, caseload, roles),
+        auth.stubSignIn(username, caseload, roles),
         auth.stubUserMe(),
         prisonApi.stubUserCaseloads(caseloads),
         tokenverification.stubVerifyToken(true),
       ]),
-    stubLoginCourt: () =>
-      Promise.all([auth.stubLoginCourt(), prisonApi.stubUserCaseloads(), tokenverification.stubVerifyToken(true)]),
+    stubSignInCourt: () =>
+      Promise.all([auth.stubSignInCourt(), prisonApi.stubUserCaseloads(), tokenverification.stubVerifyToken(true)]),
 
-    stubUserEmail: username => Promise.all([auth.stubEmail(username)]),
+    stubUserEmail: (username) => Promise.all([auth.stubEmail(username)]),
     stubUser: (username, caseload) => Promise.all([auth.stubUser(username, caseload)]),
     stubStaff: ({ staffId, details }) => Promise.all([prisonApi.stubStaff(staffId, details)]),
-    stubScheduledActivities: response => Promise.all([prisonApi.stubUserScheduledActivities(response)]),
+    stubScheduledActivities: (response) => Promise.all([prisonApi.stubUserScheduledActivities(response)]),
     stubProgEventsAtLocation: ({ caseload, locationId, timeSlot, date, activities }) =>
       Promise.all([prisonApi.stubProgEventsAtLocation(caseload, locationId, timeSlot, date, activities)]),
 
-    stubAttendanceChanges: response => Promise.all([whereabouts.stubAttendanceChanges(response)]),
-    stubCourts: courts => Promise.all([whereabouts.stubCourtLocations(courts)]),
-    stubGroups: caseload => whereabouts.stubGroups(caseload),
+    stubAttendanceChanges: (response) => Promise.all([whereabouts.stubAttendanceChanges(response)]),
+    stubCourts: whereabouts.stubCourtLocations,
+    stubGroups: (caseload) => whereabouts.stubGroups(caseload),
     stubAddVideoLinkBooking: () => whereabouts.stubAddVideoLinkBooking(),
     getBookingRequest: () => whereabouts.getBookingRequest(),
-    stubCaseNotes: response => caseNotes.stubCaseNotes(response),
-    stubCaseNoteTypes: types => caseNotes.stubCaseNoteTypes(types),
+    stubCaseNotes: caseNotes.stubCaseNotes,
+    stubCaseNoteTypes: caseNotes.stubCaseNoteTypes,
 
     stubForAttendance: ({ caseload, locationId, timeSlot, date, activities }) => {
       const offenderNumbers = extractOffenderNumbers(activities)
@@ -154,7 +153,7 @@ module.exports = on => {
       ]),
 
     stubAlertTypes: () => Promise.all([prisonApi.stubAlertTypes()]),
-    stubAlertsForBooking: alerts => Promise.all([prisonApi.stubAlertsForBooking(alerts)]),
+    stubAlertsForBooking: (alerts) => Promise.all([prisonApi.stubAlertsForBooking(alerts)]),
     stubAlerts: prisonApi.stubAlerts,
 
     stubInmates: prisonApi.stubInmates,
@@ -203,6 +202,36 @@ module.exports = on => {
         prisonApi.stubEventsForToday([], 500),
         prisonApi.stubProfileInformation(null, 500),
       ]),
+
+    stubPrisonerDetails: (prisonerDetails) => prisonApi.stubPrisonerDetails(prisonerDetails),
+
+    stubLatestLearnerAssessments: (functionalSkillsAssessments) =>
+      curiousApi.stubLatestLearnerAssessments(functionalSkillsAssessments),
+
+    stubLearnerGoals: (learnerGoals) => curiousApi.stubLearnerGoals(learnerGoals),
+
+    stubLearnerEducation: (learnerEducation) => curiousApi.stubLearnerEducation(learnerEducation),
+
+    stubOffenderWorkHistory: (workHistory) => prisonApi.stubForOffenderWorkHistory(workHistory),
+
+    stubWorkAndSkillsApi500Errors: () =>
+      Promise.all([
+        curiousApi.stubLatestLearnerAssessments({}, 500),
+        curiousApi.stubLearnerGoals({}, 500),
+        curiousApi.stubLearnerEducation({}, 500),
+        prisonApi.stubForOffenderWorkHistory({}, 500),
+        prisonApi.stubPrisonerDetails({}, 500),
+      ]),
+
+    stubWorkAndSkillsApi404Errors: (error) =>
+      Promise.all([
+        curiousApi.stubLatestLearnerAssessments(error, 404),
+        curiousApi.stubLearnerGoals(error, 404),
+        curiousApi.stubLearnerEducation(error, 404),
+        prisonApi.stubForOffenderWorkHistory(error, 404),
+        prisonApi.stubPrisonerDetails(error, 404),
+      ]),
+
     stubPersonal: ({
       identifiers,
       aliases,
@@ -219,6 +248,7 @@ module.exports = on => {
       reasonableAdjustments,
       agencies,
       prisonOffenderManagers,
+      neurodiversities,
     }) =>
       Promise.all([
         prisonApi.stubIdentifiers(identifiers),
@@ -236,25 +266,28 @@ module.exports = on => {
         prisonApi.stubReasonableAdjustments(reasonableAdjustments),
         prisonApi.stubAgencies(agencies),
         allocationManager.stubGetPomForOffender(prisonOffenderManagers),
+        curiousApi.stubLearnerProfiles(neurodiversities),
       ]),
-    stubReleaseDatesOffenderNo: releaseDates => Promise.all([prisonApi.stubPrisonerSentenceDetails(releaseDates)]),
+    stubReleaseDatesOffenderNo: (releaseDates) => Promise.all([prisonApi.stubPrisonerSentenceDetails(releaseDates)]),
     stubVerifyToken: (active = true) => tokenverification.stubVerifyToken(active),
-    stubLoginPage: auth.redirect,
-    stubGetAbsenceReasons: response => Promise.all([whereabouts.stubGetAbsenceReasons()]),
+    stubSignInPage: auth.redirect,
+    stubGetAbsences: ({ agencyId, reason, absences }) =>
+      Promise.all([whereabouts.stubGetAbsences(agencyId, reason, absences)]),
+    stubGetAbsenceReasons: (response) => Promise.all([whereabouts.stubGetAbsenceReasons()]),
     stubGetAttendance: ({ caseload, locationId, timeSlot, date, data }) =>
       Promise.all([whereabouts.stubGetAttendance(caseload, locationId, timeSlot, date, data)]),
-    stubPostAttendance: response => whereabouts.stubPostAttendance(response),
-    stubPutAttendance: response => whereabouts.stubPutAttendance(response),
+    stubPostAttendance: (response) => whereabouts.stubPostAttendance(response),
+    stubPutAttendance: (response) => whereabouts.stubPutAttendance(response),
     verifyPostAttendance: () => whereabouts.verifyPostAttendance(),
-    stubSentenceAdjustments: response => prisonApi.stubGetSentenceAdjustments(response),
+    stubSentenceAdjustments: (response) => prisonApi.stubGetSentenceAdjustments(response),
     stubMovementsBetween: prisonApi.stubMovementsBetween,
-    stubOffenderBasicDetails: basicDetails => Promise.all([prisonApi.stubOffenderBasicDetails(basicDetails)]),
-    stubOffenderFullDetails: fullDetails => Promise.all([prisonApi.stubOffenderFullDetails(fullDetails)]),
-    stubAppointmentTypes: types => Promise.all([prisonApi.stubAppointmentTypes(types)]),
+    stubOffenderBasicDetails: (basicDetails) => Promise.all([prisonApi.stubOffenderBasicDetails(basicDetails)]),
+    stubOffenderFullDetails: (fullDetails) => Promise.all([prisonApi.stubOffenderFullDetails(fullDetails)]),
+    stubAppointmentTypes: (types) => Promise.all([prisonApi.stubAppointmentTypes(types)]),
     stubAppointmentsAtAgency: (agency, locations) =>
       Promise.all([prisonApi.stubUsageAtAgency(agency, 'APP', locations)]),
     stubVisitsAtAgency: (agency, locations) => Promise.all([prisonApi.stubUsageAtAgency(agency, 'VISIT', locations)]),
-    stubActivityLocations: status => prisonApi.stubActivityLocations(status),
+    stubActivityLocations: (status) => prisonApi.stubActivityLocations(status),
     stubPostAppointments: () => Promise.all([prisonApi.stubPostAppointments()]),
     stubSchedules: ({ agency, location, date, appointments, visits, activities }) =>
       Promise.all([
@@ -269,29 +302,34 @@ module.exports = on => {
         prisonApi.stubAppointments(appointments),
         prisonApi.stubActivities(activities),
       ]),
-    stubOffenderActivities: activities => prisonApi.stubOffenderActivities(activities),
-    stubAttendanceForScheduledActivities: attendances => whereabouts.stubAttendanceForScheduledActivities(attendances),
-    stubAppointments: appointments => prisonApi.stubAppointments(appointments),
-    stubVisits: visits => prisonApi.stubVisits(visits),
-    stubSentenceData: details => prisonApi.stubSentenceData(details),
+    stubOffenderActivitiesOverDateRange: ({ agencyId, fromDate, toDate, period, suspensions }) =>
+      Promise.all([prisonApi.stubOffenderActivitiesOverDateRange(agencyId, fromDate, toDate, period, suspensions)]),
+    stubOffenderActivities: (activities) => prisonApi.stubOffenderActivities(activities),
+    stubAttendanceForScheduledActivities: (attendances) =>
+      whereabouts.stubAttendanceForScheduledActivities(attendances),
+    stubAttendanceForBookings: ({ agencyId, fromDate, toDate, period, attendances }) =>
+      whereabouts.stubAttendanceForBookings(agencyId, fromDate, toDate, period, attendances),
+    stubAppointments: (appointments) => prisonApi.stubAppointments(appointments),
+    stubVisits: (visits) => prisonApi.stubVisits(visits),
+    stubSentenceData: (details) => prisonApi.stubSentenceData(details),
     stubLocation: ({ locationId, locationData }) => Promise.all([prisonApi.stubLocation(locationId, locationData)]),
     stubAgencyDetails: ({ agencyId, details }) => Promise.all([prisonApi.stubAgencyDetails(agencyId, details)]),
     stubLocationsForAgency: ({ agency, locations }) =>
       Promise.all([prisonApi.stubLocationsForAgency(agency, locations)]),
     stubAppointmentLocations: ({ agency, locations }) =>
       Promise.all([prisonApi.stubAppointmentLocations(agency, locations)]),
-    stubBookingOffenders: offenders => Promise.all([prisonApi.stubBookingOffenders(offenders)]),
-    stubAgencies: agencies => Promise.all([prisonApi.stubAgencies(agencies)]),
+    stubBookingOffenders: (offenders) => Promise.all([prisonApi.stubBookingOffenders(offenders)]),
+    stubAgencies: (agencies) => Promise.all([prisonApi.stubAgencies(agencies)]),
     stubAppointmentsAtAgencyLocation: ({ agency, location, date, appointments }) =>
       Promise.all([prisonApi.stubSchedulesAtAgency(agency, location, 'APP', date, appointments)]),
-    stubCourtCases: courtCases => prisonApi.stubCourtCases(courtCases),
-    stubOffenceHistory: offenceHistory => prisonApi.stubOffenceHistory(offenceHistory),
-    stubSentenceTerms: sentenceTerms => prisonApi.stubSentenceTerms(sentenceTerms),
+    stubCourtCases: (courtCases) => prisonApi.stubCourtCases(courtCases),
+    stubOffenceHistory: (offenceHistory) => prisonApi.stubOffenceHistory(offenceHistory),
+    stubSentenceTerms: (sentenceTerms) => prisonApi.stubSentenceTerms(sentenceTerms),
     stubClientCredentialsRequest: () => auth.stubClientCredentialsRequest(),
-    stubUserMeRoles: roles => auth.stubUserMeRoles(roles),
+    stubUserMeRoles: (roles) => auth.stubUserMeRoles(roles),
     stubUserMe: ({ username, staffId, name }) => auth.stubUserMe(username, staffId, name),
-    stubPathFinderOffenderDetails: details => pathfinder.getOffenderDetails(details),
-    stubSocOffenderDetails: details => socApi.stubGetOffenderDetails(details),
+    stubPathFinderOffenderDetails: (details) => pathfinder.getOffenderDetails(details),
+    stubSocOffenderDetails: (details) => socApi.stubGetOffenderDetails(details),
     stubVisitsWithVisitors: ({ visitsWithVisitors, offenderBasicDetails, visitTypes }) =>
       Promise.all([
         prisonApi.stubVisitsWithVisitors(visitsWithVisitors),
@@ -308,6 +346,7 @@ module.exports = on => {
     stubVideoLinkAppointments: whereabouts.stubVideoLinkAppointments,
     stubCreateAlert: prisonApi.stubCreateAlert,
     stubCreateCaseNote: caseNotes.stubCreateCaseNote,
+    verifySaveCaseNote: caseNotes.verifySaveCaseNote,
     stubDeleteCaseNote: caseNotes.stubDeleteCaseNote,
     stubDeleteCaseNoteAmendment: caseNotes.stubDeleteCaseNoteAmendment,
     stubCaseNoteTypesForUser: caseNotes.stubCaseNoteTypesForUser,
@@ -317,14 +356,14 @@ module.exports = on => {
     stubOffenderImage: prisonApi.stubOffenderImage,
     verifyGlobalSearch: offenderSearch.verifyGlobalSearch,
     stubOffenderMovements: prisonApi.stubOffenderMovements,
-    stubGetCaseNote: caseNote => caseNotes.stubGetCaseNote(caseNote),
+    stubGetCaseNote: (caseNote) => caseNotes.stubGetCaseNote(caseNote),
     stubGetOffenderCaseNote: ({ offenderId, caseNoteId, caseNote }) =>
       caseNotes.stubGetOffenderCaseNote(offenderId, caseNoteId, caseNote),
-    stubBookingDetails: details => prisonApi.stubBookingDetails(details),
+    stubBookingDetails: (details) => prisonApi.stubBookingDetails(details),
     verifySaveAmendment: caseNotes.verifySaveAmendment,
     stubGetCaseNoteTypes: caseNotes.stubGetCaseNoteTypes,
     stubSaveAmendment: caseNotes.stubSaveAmendment,
-    stubBookingNonAssociations: response => prisonApi.stubBookingNonAssociations(response),
+    stubBookingNonAssociations: (response) => prisonApi.stubBookingNonAssociations(response),
     stubProfessionalContacts: ({
       offenderBasicDetails,
       contacts,
@@ -341,13 +380,13 @@ module.exports = on => {
         prisonApi.stubPersonPhones(personPhones),
         allocationManager.stubGetPomForOffender(prisonOffenderManagers),
       ]),
-    stubUserCaseLoads: caseloads => prisonApi.stubUserCaseloads(caseloads),
+    stubUserCaseLoads: (caseloads) => prisonApi.stubUserCaseloads(caseloads),
     stubUpdateCaseload: prisonApi.stubUpdateCaseload,
     stubCellAttributes: prisonApi.stubCellAttributes,
-    stubMainOffence: offence => prisonApi.stubMainOffence(offence),
+    stubMainOffence: (offence) => prisonApi.stubMainOffence(offence),
     stubCsraAssessments: ({ offenderNumbers, assessments }) =>
       prisonApi.stubCsraAssessments(offenderNumbers, assessments),
-    stubCsraAssessmentsForPrisoner: assessments => prisonApi.stubCsraAssessmentsForPrisoner(assessments),
+    stubCsraAssessmentsForPrisoner: (assessments) => prisonApi.stubCsraAssessmentsForPrisoner(assessments),
     stubCsraReviewForPrisoner: ({ bookingId, assessmentSeq, review }) =>
       prisonApi.stubCsraReviewForPrisoner({ bookingId, assessmentSeq, review }),
     stubNoExistingOffenderRecord: ({ offenderNo }) => dataComplianceApi.stubNoExistingOffenderRecord(offenderNo),
@@ -369,14 +408,14 @@ module.exports = on => {
         alert,
         status,
       }),
-    stubHistoryForLocation: locationHistory => prisonApi.stubHistoryForLocation(locationHistory),
-    stubAttributesForLocation: locationAttributes => prisonApi.stubAttributesForLocation(locationAttributes),
+    stubHistoryForLocation: (locationHistory) => prisonApi.stubHistoryForLocation(locationHistory),
+    stubAttributesForLocation: (locationAttributes) => prisonApi.stubAttributesForLocation(locationAttributes),
     stubPrisonerDetail: ({ prisonerDetail, bookingId }) => prisonApi.stubPrisonerDetail(prisonerDetail, bookingId),
     stubPrisonerFullDetail: ({ prisonerDetail, offenderNo, fullInfo }) =>
       prisonApi.stubPrisonerFullDetail(prisonerDetail, offenderNo, fullInfo),
     stubMoveToCell: () => whereabouts.stubMoveToCell(),
     stubMoveToCellSwap: () => prisonApi.stubMoveToCellSwap(),
-    verifyMoveToCell: body => prisonApi.verifyMoveToCell(body),
+    verifyMoveToCell: (body) => prisonApi.verifyMoveToCell(body),
     stubGetLocationPrefix: ({ agencyId, groupName, response }) =>
       whereabouts.stubGetLocationPrefix({ agencyId, groupName, response }),
     verifyMoveToCellSwap: ({ bookingId }) => prisonApi.verifyMoveToCellSwap({ bookingId }),
@@ -389,30 +428,32 @@ module.exports = on => {
         prisonApi.stubRollcountByType(agencyId, 'movements', movements),
         prisonApi.stubRollcountByType(agencyId, 'enroute', enroute),
       ]),
-    stubCourtEvents: courtEvents => prisonApi.stubCourtEvents(courtEvents),
+    stubCourtEvents: (courtEvents) => prisonApi.stubCourtEvents(courtEvents),
     stubGetEventsByLocationIds: ({ agencyId, date, timeSlot, response }) =>
       prisonApi.stubGetEventsByLocationIds(agencyId, date, timeSlot, response),
-    stubExternalTransfers: response => prisonApi.stubExternalTransfers(response),
-    stubAssessments: offenderNumbers => prisonApi.stubAssessments(offenderNumbers),
+    stubExternalTransfers: (response) => prisonApi.stubExternalTransfers(response),
+    stubAssessments: (offenderNumbers) => prisonApi.stubAssessments(offenderNumbers),
     stubGetAgencyGroupLocations: ({ agencyId, groupName, response }) =>
       whereabouts.stubGetAgencyGroupLocations({ agencyId, groupName, response }),
-    stubLocationGroups: locationGroups => whereabouts.stubLocationGroups(locationGroups),
+    stubLocationGroups: (locationGroups) => whereabouts.stubLocationGroups(locationGroups),
     stubActivityLocationsByDateAndPeriod: ({ locations, date, period, withFault }) =>
       prisonApi.stubActivityLocationsByDateAndPeriod(locations, date, period, withFault),
     stubActivityLocationsConnectionResetFault: () => prisonApi.stubActivityLocationsConnectionResetFault(),
     stubGetAttendancesForBookings: ({ agencyId, timeSlot, date, data }) =>
       whereabouts.stubGetAttendancesForBookings(agencyId, timeSlot, date, data),
-    stubGetAdjudicationDetails: adjudicationDetails => prisonApi.stubGetAdjudicationDetails(adjudicationDetails),
-    stubAdjudicationFindingTypes: types => prisonApi.stubAdjudicationFindingTypes(types),
+    stubGetAdjudicationDetails: (adjudicationDetails) => prisonApi.stubGetAdjudicationDetails(adjudicationDetails),
+    stubAdjudicationFindingTypes: (types) => prisonApi.stubAdjudicationFindingTypes(types),
     stubAdjudications: ({ response, headers }) => prisonApi.stubAdjudications(response, headers),
     verifyAdjudicationsHistory: ({ offenderNo, agencyId, finding, fromDate, toDate }) =>
       prisonApi.verifyAdjudicationsHistory({ offenderNo, agencyId, finding, fromDate, toDate }),
+    verifyAlertsBooking: ({ bookingId, alertType, from, to, alertStatus, page, sort, size }) =>
+      prisonApi.verifyAlertsBookingGet({ bookingId, alertType, from, to, alertStatus, page, sort, size }),
     resetAdjudicationsStub: () => prisonApi.resetAdjudicationsStub(),
     stubConvictions: ({ offenderNo, convictions }) => community.stubConvictions(offenderNo, convictions),
     stubOffenderDetails: ({ offenderNo, details }) => community.stubOffenderDetails(offenderNo, details),
     stubDocuments: ({ offenderNo, documents }) => community.stubDocuments(offenderNo, documents),
     stubDocument: ({ offenderNo, documentId, content }) => community.stubDocument(offenderNo, documentId, content),
-    stubIepSummaryForBooking: iepSummary => prisonApi.stubIepSummaryForBooking(iepSummary),
+    stubIepSummaryForBooking: (iepSummary) => prisonApi.stubIepSummaryForBooking(iepSummary),
     stubMovementsIn: ({ agencyId, fromDate, movements }) =>
       prisonApi.stubMovementsIn({ agencyId, fromDate, movements }),
     stubMovementsOut: ({ agencyId, fromDate, movements }) =>
@@ -423,24 +464,36 @@ module.exports = on => {
     stubEnRoute: ({ agencyId, results }) => prisonApi.stubEnRoute(agencyId, results),
     stubCurrentlyOut: ({ livingUnitId, movements }) => prisonApi.stubCurrentlyOut(livingUnitId, movements),
     stubTotalCurrentlyOut: ({ agencyId, movements }) => prisonApi.stubTotalCurrentlyOut(agencyId, movements),
-    stubGetAgencyIepLevels: response => prisonApi.stubGetAgencyIepLevels(response),
-    stubChangeIepLevel: body => prisonApi.stubChangeIepLevel(body),
-    stubGetPrisonerDamageObligations: response => prisonApi.stubGetPrisonerDamageObligations(response),
+    stubGetAgencyIepLevels: (response) => prisonApi.stubGetAgencyIepLevels(response),
+    stubChangeIepLevel: (body) => prisonApi.stubChangeIepLevel(body),
+    stubGetPrisonerDamageObligations: (response) => prisonApi.stubGetPrisonerDamageObligations(response),
     stubGetTransactionHistory: ({ response, accountCode, transactionType, fromDate, toDate }) =>
       prisonApi.stubGetTransactionHistory({ response, accountCode, transactionType, fromDate, toDate }),
-    stubPrisonerBalances: response => prisonApi.stubPrisonerBalances(response),
+    stubPrisonerBalances: (response) => prisonApi.stubPrisonerBalances(response),
     stubGetCellMoveReason: ({ bookingId, bedAssignmentHistorySequence, cellMoveReason, status }) =>
       whereabouts.stubGetCellMoveReason(bookingId, bedAssignmentHistorySequence, cellMoveReason, status),
     stubGetStaffDetails: ({ staffId, response }) => prisonApi.stubGetStaffDetails(staffId, response),
-    stubStaffRoles: response => prisonApi.stubStaffRoles(response),
+    stubStaffRoles: (response) => prisonApi.stubStaffRoles(response),
     stubLocationConfig: ({ agencyId, response }) => whereabouts.stubLocationConfig({ agencyId, response }),
     stubGetDetailsFailure: ({ status }) => prisonApi.stubGetDetailsFailure(status),
-    stubGetPrisoners: response => prisonApi.stubGetPrisoners(response),
-    stubGetUserDetailsList: response => Promise.all([prisonApi.stubGetUserDetailsList(response)]),
-    stubGetComplexOffenders: offenders => complexity.stubGetComplexOffenders(offenders),
-    stubCellMoveHistory: ({ assignmentDate, cellMoves }) =>
-      prisonApi.stubCellMoveHistory({ assignmentDate, cellMoves }),
-    stubCellMoveTypes: types => prisonApi.stubCellMoveTypes(types),
+    stubGetPrisoners: (response) => prisonApi.stubGetPrisoners(response),
+    stubGetUserDetailsList: (response) => Promise.all([prisonApi.stubGetUserDetailsList(response)]),
+    stubGetComplexOffenders: (offenders) => complexity.stubGetComplexOffenders(offenders),
+    stubCellMoveHistory: ({ assignmentDate, agencyId, cellMoves }) =>
+      prisonApi.stubCellMoveHistory({ assignmentDate, agencyId, cellMoves }),
+    stubCellMoveTypes: (types) => prisonApi.stubCellMoveTypes(types),
     stubKeyworkerMigrated: () => keyworker.stubKeyworkerMigrated(),
+    stubGetWhereaboutsAppointments: (appointments) => whereabouts.stubGetWhereaboutsAppointments(appointments),
+    stubCreateAppointment: () => whereabouts.stubCreateAppointment(),
+    stubGetAppointment: ({ appointment, id, status }) => whereabouts.stubGetAppointment({ appointment, id, status }),
+    stubDeleteAppointment: ({ id, status }) => whereabouts.stubDeleteAppointment({ id, status }),
+    stubDeleteRecurringAppointmentSequence: ({ id, status }) =>
+      whereabouts.stubDeleteRecurringAppointmentSequence({ id, status }),
+    stubPrisonerSearch: (response) => offenderSearch.stubPrisonerSearch(response),
+    stubMovementReasons: (reasons) => prisonApi.stubMovementReasons(reasons),
+    stubTransfers: (response) => prisonApi.stubTransfers(response),
+    resetTransfersStub: () => prisonApi.resetTransfersStub(),
+    stubPrisonerSearchDetails: (response) => offenderSearch.stubPrisonerSearchDetails(response),
+    stubPrisonerProperty: (property) => prisonApi.stubPrisonerProperty(property),
   })
 }

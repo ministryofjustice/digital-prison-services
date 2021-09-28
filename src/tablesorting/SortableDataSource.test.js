@@ -17,7 +17,7 @@ const ExampleComponent = ({ rows, sortOrder, setColumnSort }) => (
       setColumnSort={setColumnSort}
       sortColumn={LAST_NAME}
     />
-    {rows.map(row => (
+    {rows.map((row) => (
       <div className="row" key={row.offenderNo}>
         <span> {row.firstName}</span>
         <span>{row.lastName}</span>

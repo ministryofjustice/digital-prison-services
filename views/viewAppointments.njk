@@ -36,64 +36,82 @@
   }}
   {% endif %}
   <h1 class="govuk-heading-l">{{title}}</h1>
-  {{ printLink() }}
+  {{ printLink(align = "right") }}
 
-  <form class="horizontal-form govuk-!-display-none-print">
-    <input type="hidden" name="_csrf" value="{{ csrfToken }}" />
-    {{ datePicker({
-      id: 'date',
-      label: 'Date',
-      name: 'date',
-      date: date,
-      errorMessage: errors | findError('date')
-    }) }}
+  <div class="govuk-!-padding-3 govuk-!-margin-bottom-5 form-background govuk-!-display-none-print">
+    <h2 class="govuk-heading-m">View by</h2>
 
-    {{ govukSelect({
-      name: 'timeSlot',
-      id: 'timeSlot',
-      label: {
-          text: "Period"
-      },
-      items: [
-          { text: 'All', value: 'All' },
-          { text: 'AM', value: 'AM' },
-          { text: 'PM', value: 'PM' },
-          { text: 'ED', value: 'ED' }
-      ] | setSelected(timeSlot),
-      errorMessage: errors | findError(timeSlot)
-    }) }}
+    <form class="horizontal-form">
+      {{ datePicker({
+        id: 'date',
+        label: 'Date',
+        name: 'date',
+        date: date,
+        errorMessage: errors | findError('date')
+      }) }}
 
-    {{ govukSelect({
-      name: 'type',
-      id: 'type',
-      label: {
-          text: "Type"
-      },
-      items: types | addDefaultSelectedVale('All', true) | setSelected(type),
-      errorMessage: errors | findError(type)
-    }) }}
+      {{ govukSelect({
+        name: 'timeSlot',
+        id: 'timeSlot',
+        label: {
+            text: "Period"
+        },
+        items: [
+            { text: 'All', value: 'All' },
+            { text: 'AM', value: 'AM' },
+            { text: 'PM', value: 'PM' },
+            { text: 'ED', value: 'ED' }
+        ] | setSelected(timeSlot),
+        errorMessage: errors | findError(timeSlot)
+      }) }}
 
-    {{ govukSelect({
-      name: 'locationId',
-      id: 'locationId',
-      label: {
-          text: "Appointment location"
-      },
-      items: locations | addDefaultSelectedVale('All', true) | setSelected(locationId),
-      errorMessage: errors | findError(locationId)
-    }) }}
+       {{ govukSelect({
+        name: 'residentialLocation',
+        id: 'residentialLocation',
+        label: {
+            text: "Residential location"
+        },
+        items: residentialLocationOptions | addDefaultSelectedVale('All', true) | setSelected(residentialLocation),
+        errorMessage: errors | findError(residentialLocation)
+      }) }}
 
-    {{ govukButton({
-      text: "Update results",
-      preventDoubleClick: true,
-      type: "submit"
-    }) }}
-  </form>
+      {{ govukSelect({
+        name: 'type',
+        id: 'type',
+        label: {
+            text: "Appointment type"
+        },
+        formGroup: {
+            classes: 'govuk-!-width-one-quarter'
+        },
+        items: types | addDefaultSelectedVale('All', true) | setSelected(type),
+        errorMessage: errors | findError(type)
+      }) }}
 
-  <hr class="govuk-section-break govuk-section-break--l govuk-section-break--visible">
+      {{ govukSelect({
+        name: 'locationId',
+        id: 'locationId',
+        label: {
+            text: "Appointment location"
+        },
+        formGroup: {
+            classes: 'govuk-!-width-one-quarter'
+        },
+        items: locations | addDefaultSelectedVale('All', true) | setSelected(locationId),
+        errorMessage: errors | findError(locationId)
+      }) }}
+
+      {{ govukButton({
+        text: "View",
+        preventDoubleClick: true,
+        classes: 'govuk-!-margin-top-3',
+        type: "submit"
+      }) }}
+    </form>
+  </div>
 
   {% if appointmentRows.length %}
-    <p class="govuk-body-l"><strong>Total:</strong> {{ appointmentRows.length }}</p>
+    <p class="govuk-body pull-right"><strong>Appointments listed:</strong> {{ appointmentRows.length }}</p>
 
     {{ govukTable({
       head: [
@@ -127,21 +145,17 @@
             "aria-sort": "none"
           }
         },
-        {
-          text: "Added by",
-          attributes: {
-            "aria-sort": "none"
-          }
+         {
+          text: "",
+          classes: "govuk-!-display-none-print"
         }
       ],
       rows: appointmentRows,
       attributes: { "data-qa": "appointments-table" }
     }) }}
   {% else %}
-    <p class="govuk-body" data-qa="no-results-message">There are no results for the selections you have made.</p>
+    <p class="govuk-body" data-qa="no-results-message">There are no appointments for what you have selected.</p>
   {% endif %}
-
-  {{ printLink() }}
 {% endblock %}
 
 {% block bodyEnd %}

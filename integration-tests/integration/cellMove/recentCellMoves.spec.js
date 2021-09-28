@@ -4,15 +4,9 @@ const verifyOnPage = () => cy.get('h1').contains('7 day cell move history')
 
 context('7 day cell move history page', () => {
   const today = moment().format('YYYY-MM-DD')
-  const yesterday = moment()
-    .subtract(1, 'day')
-    .format('YYYY-MM-DD')
+  const yesterday = moment().subtract(1, 'day').format('YYYY-MM-DD')
 
-  const lastSevenDays = [...Array(7).keys()].map(days =>
-    moment()
-      .subtract(days, 'day')
-      .format('YYYY-MM-DD')
-  )
+  const lastSevenDays = [...Array(7).keys()].map((days) => moment().subtract(days, 'day').format('YYYY-MM-DD'))
 
   const dataSets = {
     [today]: [
@@ -53,13 +47,14 @@ context('7 day cell move history page', () => {
   before(() => {
     cy.clearCookies()
     cy.task('reset')
-    cy.task('stubLogin', { username: 'ITAG_USER', caseload: 'MDI' })
-    cy.login()
+    cy.task('stubSignIn', { username: 'ITAG_USER', caseload: 'MDI', roles: [{ roleCode: 'CELL_MOVE' }] })
+    cy.signIn()
   })
   beforeEach(() => {
-    lastSevenDays.forEach(assignmentDate =>
+    lastSevenDays.forEach((assignmentDate) =>
       cy.task('stubCellMoveHistory', {
         assignmentDate,
+        agencyId: 'MDI',
         cellMoves: dataSets[assignmentDate] || [],
       })
     )
@@ -69,14 +64,27 @@ context('7 day cell move history page', () => {
 
     verifyOnPage()
 
-    cy.get(`[data-qa="daily-stats-${today}"]`).then($element => {
+    cy.get(`[data-qa="daily-stats-${today}"]`).then(($element) => {
       expect($element[0].innerText).to.eq('1')
       expect($element[0].innerHTML).contains(`/change-someones-cell/recent-cell-moves/history?date=${today}`)
     })
 
-    cy.get(`[data-qa="daily-stats-${yesterday}"]`).then($element => {
+    cy.get(`[data-qa="daily-stats-${yesterday}"]`).then(($element) => {
       expect($element[0].innerText).to.eq('2')
       expect($element[0].innerHTML).contains(`/change-someones-cell/recent-cell-moves/history?date=${yesterday}`)
+    })
+  })
+
+  context('When the user does not have the correct cell move roles', () => {
+    beforeEach(() => {
+      cy.task('stubSignIn', { username: 'ITAG_USER', caseload: 'MDI', roles: [] })
+      cy.signIn()
+    })
+
+    it('should display page not found', () => {
+      cy.visit('/change-someones-cell', { failOnStatusCode: false })
+
+      cy.get('h1').contains('Page not found')
     })
   })
 })

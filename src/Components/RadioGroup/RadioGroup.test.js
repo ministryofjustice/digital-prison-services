@@ -5,7 +5,10 @@ import RadioGroup from '.'
 describe('<RadioGroup />', () => {
   const props = {
     label: 'Does this test pass?',
-    options: [{ title: 'Yes', value: 'yes' }, { title: 'No', value: 'no' }],
+    options: [
+      { title: 'Yes', value: 'yes' },
+      { title: 'No', value: 'no' },
+    ],
   }
 
   it('should match the default snapshot', () => {
@@ -29,7 +32,10 @@ describe('<RadioGroup />', () => {
   it('should display image if one is provided', () => {
     const propsImage = {
       label: 'Does this test pass?',
-      options: [{ title: 'Yes', value: 'yes', image: 'image.png' }, { title: 'No', value: 'no', image: 'image1.png' }],
+      options: [
+        { title: 'Yes', value: 'yes', image: 'image.png' },
+        { title: 'No', value: 'no', image: 'image1.png' },
+      ],
     }
 
     const tree = renderer

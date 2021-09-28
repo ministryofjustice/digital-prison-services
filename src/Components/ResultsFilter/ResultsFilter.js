@@ -12,7 +12,7 @@ const StyledResultsFilter = styled.div`
   @media screen and (min-width: ${BREAKPOINTS.DESKTOP}) {
     display: flex;
     flex-wrap: wrap;
-    border-bottom: ${props => (props.noBorder ? 'none' : `1px solid ${GREY_2}`)};
+    border-bottom: ${(props) => (props.noBorder ? 'none' : `1px solid ${GREY_2}`)};
     ${spacing.withWhiteSpace({ padding: { size: 4, direction: 'bottom' } })};
 
     div {

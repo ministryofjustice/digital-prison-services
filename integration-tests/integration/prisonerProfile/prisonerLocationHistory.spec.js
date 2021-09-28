@@ -7,8 +7,8 @@ context('Prisoner location history', () => {
   before(() => {
     cy.clearCookies()
     cy.task('reset')
-    cy.task('stubLogin', { username: 'ITAG_USER', caseload: 'MDI' })
-    cy.login()
+    cy.task('stubSignIn', { username: 'ITAG_USER', caseload: 'MDI' })
+    cy.signIn()
   })
 
   context('Basic page functionality', () => {
@@ -101,32 +101,32 @@ context('Prisoner location history', () => {
 
       cy.task('stubCellMoveTypes', [
         {
-          code: 'ADM', 
+          code: 'ADM',
           activeFlag: 'Y',
           description: 'Administrative',
         },
         {
-          code: 'BEH', 
+          code: 'BEH',
           activeFlag: 'Y',
           description: 'Behaviour',
         },
         {
-          code: 'CLA', 
+          code: 'CLA',
           activeFlag: 'N',
           description: 'Classification or re-classification',
         },
         {
-          code: 'CON', 
+          code: 'CON',
           activeFlag: 'N',
           description: 'Conflict with other prisoners',
         },
         {
-          code: 'LN', 
+          code: 'LN',
           activeFlag: 'N',
           description: 'Local needs',
         },
         {
-          code: 'VP', 
+          code: 'VP',
           activeFlag: 'Y',
           description: 'Vulnerable prisoner',
         },
@@ -143,13 +143,11 @@ context('Prisoner location history', () => {
       prisonerLocationHistoryPage.movedOut().contains('Current cell')
       prisonerLocationHistoryPage.type().contains('Double occupancy')
 
-      prisonerLocationHistoryPage.results().then($table => {
+      prisonerLocationHistoryPage.results().then(($table) => {
         cy.get($table)
           .find('td')
-          .then($tableCells => {
-            cy.get($tableCells)
-              .its('length')
-              .should('eq', 8) // 2 rows of 4 cells
+          .then(($tableCells) => {
+            cy.get($tableCells).its('length').should('eq', 8) // 2 rows of 4 cells
 
             expect($tableCells.get(0)).to.contain('Jones, Steve')
             expect($tableCells.get(1)).to.contain('ABC456')
@@ -212,13 +210,11 @@ context('Prisoner location history', () => {
       prisonerLocationHistoryPage.movedOut().contains('28/08/2020 - 12:00')
       prisonerLocationHistoryPage.type().contains('Double occupancy')
 
-      prisonerLocationHistoryPage.results().then($table => {
+      prisonerLocationHistoryPage.results().then(($table) => {
         cy.get($table)
           .find('td')
-          .then($tableCells => {
-            cy.get($tableCells)
-              .its('length')
-              .should('eq', 8) // 2 rows of 4 cells
+          .then(($tableCells) => {
+            cy.get($tableCells).its('length').should('eq', 8) // 2 rows of 4 cells
 
             expect($tableCells.get(0)).to.contain('Jones, Steve')
             expect($tableCells.get(1)).to.contain('ABC456')

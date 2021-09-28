@@ -8,23 +8,19 @@ const attendanceUpdated = (offenderAttendanceData, agencyId) => {
   }
 }
 
-const attendAll = (numberOfOffenders, agencyId) => {
-  return {
-    category: 'Pay and attendance',
-    action: `Bulk pay at ${agencyId}`,
-    label: 'Pay',
-    value: numberOfOffenders,
-  }
-}
+const attendAll = (numberOfOffenders, agencyId) => ({
+  category: 'Pay and attendance',
+  action: `Bulk pay at ${agencyId}`,
+  label: 'Pay',
+  value: numberOfOffenders,
+})
 
-const allNotRequired = (numberOfOffenders, agencyId) => {
-  return {
-    category: 'Pay and attendance',
-    action: `Bulk not required at ${agencyId}`,
-    label: 'Other - Not Required',
-    value: numberOfOffenders,
-  }
-}
+const allNotRequired = (numberOfOffenders, agencyId) => ({
+  category: 'Pay and attendance',
+  action: `Bulk not required at ${agencyId}`,
+  label: 'Other - Not Required',
+  value: numberOfOffenders,
+})
 
 module.exports = {
   attendanceUpdated,

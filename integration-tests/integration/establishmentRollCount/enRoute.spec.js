@@ -2,8 +2,8 @@ context('A user can see the list of offenders in reception', () => {
   before(() => {
     cy.clearCookies()
     cy.task('resetAndStubTokenVerification')
-    cy.task('stubLogin', { username: 'ITAG_USER', caseload: 'MDI' })
-    cy.login()
+    cy.task('stubSignIn', { username: 'ITAG_USER', caseload: 'MDI' })
+    cy.signIn()
   })
   beforeEach(() => {
     Cypress.Cookies.preserveOnce('hmpps-session-dev')
@@ -73,7 +73,7 @@ context('A user can see the list of offenders in reception', () => {
     cy.get('h1').contains('En route to Moorland')
     cy.get('table tr')
       .find('td')
-      .then($cells => {
+      .then(($cells) => {
         expect($cells.length).to.eq(16)
 
         expect($cells.get(1)).to.contain('Lastname1, Firstname1')

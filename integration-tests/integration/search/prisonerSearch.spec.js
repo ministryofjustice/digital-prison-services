@@ -35,8 +35,8 @@ context('Prisoner search', () => {
   before(() => {
     cy.clearCookies()
     cy.task('resetAndStubTokenVerification')
-    cy.task('stubLogin', { username: 'ITAG_USER', caseload: 'MDI' })
-    cy.login()
+    cy.task('stubSignIn', { username: 'ITAG_USER', caseload: 'MDI' })
+    cy.signIn()
   })
 
   beforeEach(() => {
@@ -56,13 +56,11 @@ context('Prisoner search', () => {
       })
       cy.visit(`/prisoner-search`)
 
-      cy.get('[data-test="prisoner-search-results-table"]').then($table => {
+      cy.get('[data-test="prisoner-search-results-table"]').then(($table) => {
         cy.get($table)
           .find('tr')
-          .then($tableRows => {
-            cy.get($tableRows)
-              .its('length')
-              .should('eq', 3) // 2 results plus table header
+          .then(($tableRows) => {
+            cy.get($tableRows).its('length').should('eq', 3) // 2 results plus table header
             expect($tableRows.get(1).innerText).to.contain(
               '\tSaunders, John\tA1234BC\tUNIT-1\tStandard\t29\t\nARSONIST\n\nCAT A'
             )
@@ -88,10 +86,10 @@ context('Prisoner search', () => {
       cy.get('[data-test="prisoner-search-keywords"]').should('have.value', 'Saunders')
       cy.get('[data-test="prisoner-search-location"]').should('have.value', 'MDI')
       cy.get('[data-test="prisoner-search-alerts-container"]').should('have.attr', 'open')
-      cy.get('[data-test="prisoner-search-alerts"]').then($alerts => {
+      cy.get('[data-test="prisoner-search-alerts"]').then(($alerts) => {
         cy.get($alerts)
           .find('input')
-          .then($inputs => {
+          .then(($inputs) => {
             cy.get($inputs.get(2)).should('have.attr', 'checked')
           })
       })
@@ -105,10 +103,10 @@ context('Prisoner search', () => {
       })
       cy.visit(`/prisoner-search?keywords=Saunders&location=MDI&alerts%5B%5D=XA`)
 
-      cy.get('[data-test="prisoner-search-alerts"]').then($alerts => {
+      cy.get('[data-test="prisoner-search-alerts"]').then(($alerts) => {
         cy.get($alerts)
           .find('input')
-          .then($inputs => {
+          .then(($inputs) => {
             cy.get($inputs.get(2)).should('have.attr', 'checked')
           })
       })
@@ -116,10 +114,10 @@ context('Prisoner search', () => {
       cy.get('[data-test="prisoner-search-clear-alerts"]').click()
       cy.get('[data-test="prisoner-search-form"]').submit()
       cy.get('[data-test="prisoner-search-alerts-container"]').should('not.have.attr', 'open')
-      cy.get('[data-test="prisoner-search-alerts"]').then($alerts => {
+      cy.get('[data-test="prisoner-search-alerts"]').then(($alerts) => {
         cy.get($alerts)
           .find('input')
-          .then($inputs => {
+          .then(($inputs) => {
             cy.get($inputs.get(2)).should('not.have.attr', 'checked')
           })
       })
@@ -133,13 +131,11 @@ context('Prisoner search', () => {
       })
       cy.visit(`/prisoner-search`)
 
-      cy.get('[data-test="prisoner-search-order"]').then($select => {
+      cy.get('[data-test="prisoner-search-order"]').then(($select) => {
         cy.get($select)
           .find('option')
-          .then($options => {
-            cy.get($options)
-              .its('length')
-              .should('eq', 6)
+          .then(($options) => {
+            cy.get($options).its('length').should('eq', 6)
             cy.get($options.get(0)).should('have.value', 'lastName,firstName:ASC')
             cy.get($options.get(1)).should('have.value', 'lastName,firstName:DESC')
             cy.get($options.get(2)).should('have.value', 'assignedLivingUnitDesc:ASC')
@@ -158,10 +154,8 @@ context('Prisoner search', () => {
       })
       cy.visit(`/prisoner-search?pageLimitOption=1`)
 
-      cy.get('[data-test="prisoner-search-view-all-link"]').then($link => {
-        cy.get($link)
-          .should('contain.text', 'View all results')
-          .click()
+      cy.get('[data-test="prisoner-search-view-all-link"]').then(($link) => {
+        cy.get($link).should('contain.text', 'View all results').click()
         cy.get($link).should('not.exist')
       })
     })
@@ -174,13 +168,11 @@ context('Prisoner search', () => {
       })
       cy.visit(`/prisoner-search?view=grid`)
 
-      cy.get('[data-test="prisoner-search-order"]').then($select => {
+      cy.get('[data-test="prisoner-search-order"]').then(($select) => {
         cy.get($select)
           .find('option')
-          .then($options => {
-            cy.get($options)
-              .its('length')
-              .should('eq', 4)
+          .then(($options) => {
+            cy.get($options).its('length').should('eq', 4)
             cy.get($options.get(0)).should('have.value', 'lastName,firstName:ASC')
             cy.get($options.get(1)).should('have.value', 'lastName,firstName:DESC')
             cy.get($options.get(2)).should('have.value', 'assignedLivingUnitDesc:ASC')
@@ -197,16 +189,10 @@ context('Prisoner search', () => {
       })
       cy.visit(`/prisoner-search?view=grid`)
 
-      cy.get('[data-test="prisoner-profile-link"]').then($prisonerProfileLinks => {
-        cy.get($prisonerProfileLinks)
-          .its('length')
-          .should('eq', 2)
-        cy.get($prisonerProfileLinks.get(0))
-          .should('have.attr', 'href')
-          .should('include', '/prisoner/A1234BC')
-        cy.get($prisonerProfileLinks.get(1))
-          .should('have.attr', 'href')
-          .should('include', '/prisoner/B4567CD')
+      cy.get('[data-test="prisoner-profile-link"]').then(($prisonerProfileLinks) => {
+        cy.get($prisonerProfileLinks).its('length').should('eq', 2)
+        cy.get($prisonerProfileLinks.get(0)).should('have.attr', 'href').should('include', '/prisoner/A1234BC')
+        cy.get($prisonerProfileLinks.get(1)).should('have.attr', 'href').should('include', '/prisoner/B4567CD')
       })
     })
 
@@ -219,21 +205,21 @@ context('Prisoner search', () => {
       cy.visit(`/prisoner-search?keywords=Saunders&location=MDI&alerts%5B%5D=XA`)
 
       cy.get('[data-test="prisoner-search-order"]').select('assignedLivingUnitDesc:ASC')
-      cy.get('[data-test="prisoner-search-order-form-submit"]').should('contain.text', 'Order')
+      cy.get('[data-test="prisoner-search-order-form-submit"]').should('contain.text', 'Reorder')
       cy.get('[data-test="prisoner-search-order-form"]').submit()
 
       cy.get('[data-test="prisoner-search-keywords"]').should('have.value', 'Saunders')
       cy.get('[data-test="prisoner-search-location"]').should('have.value', 'MDI')
       cy.get('[data-test="prisoner-search-alerts-container"]').should('have.attr', 'open')
-      cy.get('[data-test="prisoner-search-alerts"]').then($alerts => {
+      cy.get('[data-test="prisoner-search-alerts"]').then(($alerts) => {
         cy.get($alerts)
           .find('input')
-          .then($inputs => {
+          .then(($inputs) => {
             cy.get($inputs.get(2)).should('have.attr', 'checked')
           })
       })
 
-      cy.location().should(loc => {
+      cy.location().should((loc) => {
         expect(loc.search).to.eq(
           '?keywords=Saunders&location=MDI&alerts%5B%5D=XA&sortFieldsWithOrder=assignedLivingUnitDesc%3AASC'
         )
@@ -260,13 +246,11 @@ context('Prisoner search', () => {
       cy.task('stubClientCredentialsRequest')
       cy.visit(searchUrl)
 
-      cy.get('[data-test="prisoner-search-results-table"]').then($table => {
+      cy.get('[data-test="prisoner-search-results-table"]').then(($table) => {
         cy.get($table)
           .find('tr')
-          .then($tableRows => {
-            cy.get($tableRows)
-              .find('a')
-              .click()
+          .then(($tableRows) => {
+            cy.get($tableRows).find('a').click()
           })
       })
 
