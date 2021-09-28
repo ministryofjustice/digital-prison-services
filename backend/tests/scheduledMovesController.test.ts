@@ -421,6 +421,17 @@ describe('Scheduled moves controller', () => {
       )
     })
 
+    it('should handle duplicate offender numbers returned from the transfer request', async () => {
+      prisonApi.getTransfers = jest.fn().mockResolvedValue({
+        courtEvents: [{ offenderNo: 'A12234' }],
+        transferEvents: [{ offenderNo: 'A12234' }],
+        releaseEvents: [{ offenderNo: 'A12234' }],
+      })
+      await controller.index(req, res)
+
+      expect(offenderSearchApi.getPrisonersDetails).toHaveBeenLastCalledWith(res.locals, ['A12234'])
+    })
+
     describe('Court events', () => {
       it('should format names correctly', async () => {
         await controller.index(req, res)
@@ -442,7 +453,7 @@ describe('Scheduled moves controller', () => {
         await controller.index(req, res)
 
         expectCourtEventsToContain(res, {
-          prisonerProperty: [
+          personalProperty: [
             {
               containerType: 'Valuables',
               boxNumber: 'Box 14',
@@ -459,7 +470,7 @@ describe('Scheduled moves controller', () => {
         await controller.index(req, res)
 
         expectCourtEventsToContain(res, {
-          relevantAlerts: [
+          relevantAlertFlagLabels: [
             {
               classes: 'alert-status alert-status--acct',
               img: null,
