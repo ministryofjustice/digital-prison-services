@@ -54,8 +54,8 @@ context('Prisoner Work and Skills', () => {
       before(() => {
         cy.clearCookies()
         cy.task('reset')
-        cy.task('stubLogin', { username: 'ITAG_USER', caseload: 'MDI' })
-        cy.login()
+        cy.task('stubSignIn', { username: 'ITAG_USER', caseload: 'MDI' })
+        cy.signIn()
 
         cy.task('stubPrisonerProfileHeaderData', prisonerProfileHeaderData)
         cy.task('stubWorkAndSkillsApi500Errors')
@@ -81,8 +81,8 @@ context('Prisoner Work and Skills', () => {
         cy.task('reset')
         cy.clearCookies()
         cy.task('reset')
-        cy.task('stubLogin', { username: 'ITAG_USER', caseload: 'MDI' })
-        cy.login()
+        cy.task('stubSignIn', { username: 'ITAG_USER', caseload: 'MDI' })
+        cy.signIn()
 
         cy.task('stubPrisonerProfileHeaderData', prisonerProfileHeaderData)
 
@@ -117,8 +117,8 @@ context('Prisoner Work and Skills', () => {
         cy.task('reset')
         cy.clearCookies()
         cy.task('reset')
-        cy.task('stubLogin', { username: 'ITAG_USER', caseload: 'MDI' })
-        cy.login()
+        cy.task('stubSignIn', { username: 'ITAG_USER', caseload: 'MDI' })
+        cy.signIn()
 
         cy.task('stubPrisonerProfileHeaderData', prisonerProfileHeaderData)
         cy.task('stubLatestLearnerAssessments', functionalSkillsAssessments)
@@ -181,8 +181,8 @@ context('Prisoner Work and Skills', () => {
         cy.task('reset')
         cy.clearCookies()
         cy.task('reset')
-        cy.task('stubLogin', { username: 'ITAG_USER', caseload: 'MDI' })
-        cy.login()
+        cy.task('stubSignIn', { username: 'ITAG_USER', caseload: 'MDI' })
+        cy.signIn()
 
         cy.task('stubPrisonerProfileHeaderData', prisonerProfileHeaderData)
         cy.task('stubLatestLearnerAssessments', functionalSkillsAssessments)
@@ -234,8 +234,8 @@ context('Prisoner Work and Skills', () => {
       before(() => {
         cy.clearCookies()
         cy.task('reset')
-        cy.task('stubLogin', { username: 'ITAG_USER', caseload: 'MDI' })
-        cy.login()
+        cy.task('stubSignIn', { username: 'ITAG_USER', caseload: 'MDI' })
+        cy.signIn()
 
         cy.task('stubPrisonerProfileHeaderData', prisonerProfileHeaderData)
         cy.task('stubWorkAndSkillsApi500Errors')
@@ -260,8 +260,8 @@ context('Prisoner Work and Skills', () => {
         cy.task('reset')
         cy.clearCookies()
         cy.task('reset')
-        cy.task('stubLogin', { username: 'ITAG_USER', caseload: 'MDI' })
-        cy.login()
+        cy.task('stubSignIn', { username: 'ITAG_USER', caseload: 'MDI' })
+        cy.signIn()
 
         cy.task('stubPrisonerProfileHeaderData', prisonerProfileHeaderData)
 
@@ -293,8 +293,8 @@ context('Prisoner Work and Skills', () => {
         cy.task('reset')
         cy.clearCookies()
         cy.task('reset')
-        cy.task('stubLogin', { username: 'ITAG_USER', caseload: 'MDI' })
-        cy.login()
+        cy.task('stubSignIn', { username: 'ITAG_USER', caseload: 'MDI' })
+        cy.signIn()
 
         cy.task('stubPrisonerProfileHeaderData', prisonerProfileHeaderData)
         cy.task('stubLearnerGoals', emptyGoals)
@@ -328,8 +328,8 @@ context('Prisoner Work and Skills', () => {
         cy.task('reset')
         cy.clearCookies()
         cy.task('reset')
-        cy.task('stubLogin', { username: 'ITAG_USER', caseload: 'MDI' })
-        cy.login()
+        cy.task('stubSignIn', { username: 'ITAG_USER', caseload: 'MDI' })
+        cy.signIn()
 
         cy.task('stubPrisonerProfileHeaderData', prisonerProfileHeaderData)
         cy.task('stubLearnerGoals', dummyGoals)
@@ -374,8 +374,8 @@ context('Prisoner Work and Skills', () => {
       before(() => {
         cy.clearCookies()
         cy.task('reset')
-        cy.task('stubLogin', { username: 'ITAG_USER', caseload: 'MDI' })
-        cy.login()
+        cy.task('stubSignIn', { username: 'ITAG_USER', caseload: 'MDI' })
+        cy.signIn()
 
         cy.task('stubPrisonerProfileHeaderData', prisonerProfileHeaderData)
 
@@ -402,8 +402,8 @@ context('Prisoner Work and Skills', () => {
         cy.task('reset')
         cy.clearCookies()
         cy.task('reset')
-        cy.task('stubLogin', { username: 'ITAG_USER', caseload: 'MDI' })
-        cy.login()
+        cy.task('stubSignIn', { username: 'ITAG_USER', caseload: 'MDI' })
+        cy.signIn()
 
         cy.task('stubPrisonerProfileHeaderData', prisonerProfileHeaderData)
 
@@ -441,8 +441,8 @@ context('Prisoner Work and Skills', () => {
         cy.task('reset')
         cy.clearCookies()
         cy.task('reset')
-        cy.task('stubLogin', { username: 'ITAG_USER', caseload: 'MDI' })
-        cy.login()
+        cy.task('stubSignIn', { username: 'ITAG_USER', caseload: 'MDI' })
+        cy.signIn()
 
         cy.task('stubPrisonerProfileHeaderData', prisonerProfileHeaderData)
         cy.task('stubLearnerEducation', emptyCourses)
@@ -489,8 +489,8 @@ context('Prisoner Work and Skills', () => {
         cy.task('reset')
         cy.clearCookies()
         cy.task('reset')
-        cy.task('stubLogin', { username: 'ITAG_USER', caseload: 'MDI' })
-        cy.login()
+        cy.task('stubSignIn', { username: 'ITAG_USER', caseload: 'MDI' })
+        cy.signIn()
 
         cy.task('stubPrisonerProfileHeaderData', prisonerProfileHeaderData)
         cy.task('stubLearnerEducation', dummyEducation)
@@ -540,8 +540,8 @@ context('Prisoner Work and Skills', () => {
       before(() => {
         cy.clearCookies()
         cy.task('reset')
-        cy.task('stubLogin', { username: 'ITAG_USER', caseload: 'MDI' })
-        cy.login()
+        cy.task('stubSignIn', { username: 'ITAG_USER', caseload: 'MDI' })
+        cy.signIn()
 
         cy.task('stubPrisonerProfileHeaderData', prisonerProfileHeaderData)
 
@@ -568,8 +568,8 @@ context('Prisoner Work and Skills', () => {
         cy.task('reset')
         cy.clearCookies()
         cy.task('reset')
-        cy.task('stubLogin', { username: 'ITAG_USER', caseload: 'MDI' })
-        cy.login()
+        cy.task('stubSignIn', { username: 'ITAG_USER', caseload: 'MDI' })
+        cy.signIn()
 
         cy.task('stubPrisonerProfileHeaderData', prisonerProfileHeaderData)
         cy.task('stubOffenderWorkHistory', emptyWork)
@@ -629,8 +629,8 @@ context('Prisoner Work and Skills', () => {
         cy.task('reset')
         cy.clearCookies()
         cy.task('reset')
-        cy.task('stubLogin', { username: 'ITAG_USER', caseload: 'MDI' })
-        cy.login()
+        cy.task('stubSignIn', { username: 'ITAG_USER', caseload: 'MDI' })
+        cy.signIn()
 
         cy.task('stubPrisonerProfileHeaderData', prisonerProfileHeaderData)
         cy.task('stubOffenderWorkHistory', dummyWorkHistory)
@@ -701,8 +701,8 @@ context('Prisoner Work and Skills', () => {
         cy.task('reset')
         cy.clearCookies()
         cy.task('reset')
-        cy.task('stubLogin', { username: 'ITAG_USER', caseload: 'MDI' })
-        cy.login()
+        cy.task('stubSignIn', { username: 'ITAG_USER', caseload: 'MDI' })
+        cy.signIn()
 
         cy.task('stubPrisonerProfileHeaderData', prisonerProfileHeaderData)
         cy.task('stubOffenderWorkHistory', dummyWorkHistory)

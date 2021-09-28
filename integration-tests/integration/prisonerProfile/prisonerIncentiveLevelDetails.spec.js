@@ -42,8 +42,8 @@ context('Prisoner incentive level details', () => {
   before(() => {
     cy.clearCookies()
     cy.task('reset')
-    cy.task('stubLogin', { username: 'ITAG_USER', caseload: 'MDI' })
-    cy.login()
+    cy.task('stubSignIn', { username: 'ITAG_USER', caseload: 'MDI' })
+    cy.signIn()
   })
 
   context('Basic page functionality', () => {
@@ -91,7 +91,7 @@ context('Prisoner incentive level details', () => {
       cy.get('h1').should('contain', title)
       cy.get('[data-test="change-incentive-level-link"]')
         .invoke('attr', 'href')
-        .then(href => {
+        .then((href) => {
           expect(href).to.equal('/prisoner/A1234A/incentive-level-details/change-incentive-level')
         })
     })
@@ -109,13 +109,11 @@ context('Prisoner incentive level details', () => {
     it('should show correct history', () => {
       cy.task('stubIepSummaryForBooking', iepSummaryResponse)
 
-      cy.get('[data-test="incentive-level-history"]').then($table => {
+      cy.get('[data-test="incentive-level-history"]').then(($table) => {
         cy.get($table)
           .find('td')
-          .then($tableCells => {
-            cy.get($tableCells)
-              .its('length')
-              .should('eq', 15) // 2 rows with 5 cells
+          .then(($tableCells) => {
+            cy.get($tableCells).its('length').should('eq', 15) // 2 rows with 5 cells
 
             expect($tableCells.get(0)).to.contain('15 August 2017 - 16:04')
             expect($tableCells.get(1)).to.contain('Standard')
@@ -147,13 +145,11 @@ context('Prisoner incentive level details', () => {
       cy.get('[data-test="incentive-level-select"]').select('Basic')
       cy.get('[data-test="filter-submit"]').click()
 
-      cy.get('[data-test="incentive-level-history"]').then($table => {
+      cy.get('[data-test="incentive-level-history"]').then(($table) => {
         cy.get($table)
           .find('td')
-          .then($tableCells => {
-            cy.get($tableCells)
-              .its('length')
-              .should('eq', 5) // 2 rows with 5 cells
+          .then(($tableCells) => {
+            cy.get($tableCells).its('length').should('eq', 5) // 2 rows with 5 cells
 
             expect($tableCells.get(0)).to.contain('10 August 2017 - 16:04')
             expect($tableCells.get(1)).to.contain('Basic')

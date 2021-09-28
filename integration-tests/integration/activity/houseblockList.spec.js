@@ -133,8 +133,8 @@ const eventsAtLocation = [
 context('Houseblock list page list page', () => {
   beforeEach(() => {
     cy.task('reset')
-    cy.task('stubLogin', { username: 'ITAG_USER', caseload })
-    cy.login()
+    cy.task('stubSignIn', { username: 'ITAG_USER', caseload })
+    cy.signIn()
     cy.task('stubGroups', { id: caseload })
     cy.task('stubActivityLocations')
     cy.task('stubGetAgencyGroupLocations', { agencyId: caseload, groupName: 1, response: [1] })
@@ -179,7 +179,7 @@ context('Houseblock list page list page', () => {
     houseblockPage
       .tableRows()
       .find('td:not(no-display):not(.no-print)')
-      .then($cells => {
+      .then(($cells) => {
         expect($cells.get(0)).to.contain('Anderson, Arthur')
         expect($cells.get(1)).to.contain('A-1-1')
         expect($cells.get(2)).to.contain('A1234AA')
@@ -205,15 +205,13 @@ context('Houseblock list page list page', () => {
     houseblockPage
       .tableRows()
       .find('td.no-print')
-      .then($cells => {
+      .then(($cells) => {
         expect($cells.get(2)).to.contain('Received')
       })
 
     cy.task('stubGetAbsenceReasons')
     cy.get('[data-qa="other-message"').contains('Unacceptable - Incentive Level warning')
-    cy.get('[data-qa="other-message"')
-      .parent()
-      .click({ multiple: true })
+    cy.get('[data-qa="other-message"').parent().click({ multiple: true })
     cy.get('[name="absentReason"]').contains('Unacceptable - Incentive Level warning')
     cy.get('[name="comments"]').contains('Never turned up')
   })
@@ -272,7 +270,7 @@ context('Houseblock list page list page', () => {
     houseblockPage
       .tableRows()
       .find('td:not(no-display):not(.no-print)')
-      .then($cells => {
+      .then(($cells) => {
         expect($cells.get(0)).to.contain('Anderson, Arthur')
         expect($cells.get(1)).to.contain('A-1-1')
         expect($cells.get(2)).to.contain('A1234AA')
@@ -487,7 +485,7 @@ context('Houseblock list page list page', () => {
     houseblockPage
       .tableRows()
       .find('td:not(no-display):not(.no-print)')
-      .then($cells => {
+      .then(($cells) => {
         expect($cells.get(0)).to.contain('Anderson, Arthur')
         expect($cells.get(1)).to.contain('A-1-1')
         expect($cells.get(2)).to.contain('A1234AA')
@@ -531,7 +529,7 @@ context('Houseblock list page list page', () => {
     houseblockPage
       .tableRows()
       .find('td:not(no-display):not(.no-print)')
-      .then($cells => {
+      .then(($cells) => {
         expect($cells.get(0)).to.contain('Anderson, Arthur')
         expect($cells.get(1)).to.contain('A-1-1')
         expect($cells.get(2)).to.contain('A1234AA')
@@ -557,7 +555,7 @@ context('Houseblock list page list page', () => {
     houseblockPage
       .tableRows()
       .find('td.no-print')
-      .then($cells => {
+      .then(($cells) => {
         expect($cells.get(2)).to.contain('Received')
       })
     cy.get('[name="A1234AC40"').click()
@@ -566,7 +564,7 @@ context('Houseblock list page list page', () => {
     cy.get('[name="comments"').type('Never turned up')
     cy.get('button[name="confirm"]').click()
 
-    cy.wait('@request').then(xhr => {
+    cy.wait('@request').then((xhr) => {
       const requestBody = xhr.request.body
 
       expect(requestBody.attended).to.eq(false)
@@ -622,14 +620,14 @@ context('Houseblock list page list page', () => {
     houseblockPage.location().contains('All')
     houseblockPage.locationOrderLink().contains('Location')
 
-    cy.wait('@getHouseBlockList').then(_ => {
+    cy.wait('@getHouseBlockList').then((_) => {
       datePickerDriver(cy).pickDate(yesterday.date(), yesterday.month(), yesterday.year())
 
-      cy.wait('@getHouseBlockList').then(__ => {
+      cy.wait('@getHouseBlockList').then((__) => {
         houseblockPage
           .tableRows()
           .find('td:not(no-display):not(.no-print)')
-          .then($cells => {
+          .then(($cells) => {
             expect($cells.get(0)).to.contain('Anderson, Arthur')
             expect($cells.get(1)).to.contain('A-1-1')
             expect($cells.get(2)).to.contain('A1234AA')
@@ -655,7 +653,7 @@ context('Houseblock list page list page', () => {
         houseblockPage
           .tableRows()
           .find('td.no-print')
-          .then($cells => {
+          .then(($cells) => {
             expect($cells.get(2)).to.contain('Received')
           })
         cy.get('[name="A1234AC40"').click()
@@ -664,7 +662,7 @@ context('Houseblock list page list page', () => {
         cy.get('[name="comments"').type('Never turned up')
         cy.get('button[name="confirm"]').click()
 
-        cy.wait('@request').then(xhr => {
+        cy.wait('@request').then((xhr) => {
           const requestBody = xhr.request.body
 
           expect(requestBody.attended).to.eq(false)

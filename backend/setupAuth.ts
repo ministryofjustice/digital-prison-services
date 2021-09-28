@@ -16,7 +16,7 @@ export default ({ oauthApi, tokenVerificationApi }) => {
   router.use(passport.session())
   router.use(flash())
 
-  /* login, logout, token refresh etc */
+  /* sign in, sign out, token refresh etc */
   sessionManagementRoutes.configureRoutes({
     app: router,
     tokenRefresher,

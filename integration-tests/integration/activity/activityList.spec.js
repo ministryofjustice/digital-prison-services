@@ -7,8 +7,8 @@ context('Activity list page', () => {
   beforeEach(() => {
     cy.task('reset')
     cy.task('stubGroups', { id: caseload })
-    cy.task('stubLogin', { username: 'ITAG_USER', caseload })
-    cy.login()
+    cy.task('stubSignIn', { username: 'ITAG_USER', caseload })
+    cy.signIn()
     cy.task('stubActivityLocations')
 
     const offenders = [
