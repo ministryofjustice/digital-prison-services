@@ -6,6 +6,7 @@ const plugins = [
   ['@babel/plugin-proposal-class-properties', { loose: true }],
   '@babel/plugin-proposal-throw-expressions',
   ['@babel/plugin-proposal-private-methods', { loose: true }],
+  ['@babel/plugin-proposal-private-property-in-object', { loose: true }],
 ]
 
 const ignore = ['.spec.js', '.test.js', '.spec.ts', '.test.ts', '-test.js', '/__tests__/']
