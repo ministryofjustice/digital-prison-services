@@ -46,6 +46,12 @@ app.use(setupStaticContent())
 app.use(setupWebSession())
 app.use(setupAuth({ oauthApi: apis.oauthApi, tokenVerificationApi: apis.tokenVerificationApi }))
 
+app.use((req, res, next) => {
+  console.log('Request recieved from host', req.hostname)
+  console.log('Request recieved from url', req.originalUrl)
+  next()
+})
+
 app.use(currentUser({ prisonApi: apis.prisonApi, oauthApi: apis.oauthApi }))
 app.use(returnUrl())
 
