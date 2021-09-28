@@ -29,25 +29,28 @@ export default ({ prisonApi, offenderSearchApi }) => {
     const { activeCaseLoadId } = userDetails
     const date = req.query?.date || moment().format('DD/MM/YYYY')
 
-    const movementReasons = await prisonApi.getMovementReasons(res.locals)
-    const agencyDetails = await prisonApi.getAgencyDetails(res.locals, activeCaseLoadId)
+    const [movementReasons, agencyDetails, transfers] = await Promise.all([
+      prisonApi.getMovementReasons(res.locals),
+      prisonApi.getAgencyDetails(res.locals, activeCaseLoadId),
+      prisonApi.getTransfers(res.locals, {
+        fromDateTime: isoDateTimeStartOfDay(date, 'DD/MM/YYYY'),
+        toDateTime: isoDateTimeEndOfDay(date, 'DD/MM/YYYY'),
+        agencyId: activeCaseLoadId,
+        courtEvents: true,
+        transferEvents: true,
+        releaseEvents: true,
+      }),
+    ])
 
-    const transfers = await prisonApi.getTransfers(res.locals, {
-      fromDateTime: isoDateTimeStartOfDay(date, 'DD/MM/YYYY'),
-      toDateTime: isoDateTimeEndOfDay(date, 'DD/MM/YYYY'),
-      agencyId: activeCaseLoadId,
-      courtEvents: true,
-      transferEvents: true,
-      releaseEvents: true,
-    })
-
-    const offenderNumbers = [
-      ...transfers.courtEvents.map((ce) => ce.offenderNo),
-      ...transfers.transferEvents.map((te) => te.offenderNo),
-      ...transfers.releaseEvents.map((re) => re.offenderNo),
+    const uniqueOffenderNumbers = [
+      ...new Set([
+        ...transfers.courtEvents.map((ce) => ce.offenderNo),
+        ...transfers.transferEvents.map((te) => te.offenderNo),
+        ...transfers.releaseEvents.map((re) => re.offenderNo),
+      ]),
     ]
 
-    if (offenderNumbers.length === 0) {
+    if (uniqueOffenderNumbers.length === 0) {
       return renderTemplate(res, {
         date,
         agencyDetails,
@@ -56,11 +59,14 @@ export default ({ prisonApi, offenderSearchApi }) => {
       })
     }
 
-    const searchResult = await offenderSearchApi.getPrisonersDetails(res.locals, offenderNumbers)
+    const prisonerDetailsForOffenderNumbers = await offenderSearchApi.getPrisonersDetails(
+      res.locals,
+      uniqueOffenderNumbers
+    )
 
-    const prisonerProperty =
+    const personalPropertyForPrisoners =
       (await Promise.all(
-        searchResult.flatMap((sr) =>
+        prisonerDetailsForOffenderNumbers.flatMap((sr) =>
           prisonApi.getPrisonerProperty(res.locals, sr.bookingId).then((property) =>
             property.map((prop) => ({
               containerType: prop.containerType,
@@ -72,16 +78,20 @@ export default ({ prisonApi, offenderSearchApi }) => {
         )
       )) || []
 
-    const prisonerCommonShared = searchResult.map((details) => {
-      const alertCodes = details.alerts
+    const scheduledMoveDetailsForPrisoners = prisonerDetailsForOffenderNumbers.map((details) => {
+      const relevantAlertCodesForScheduledMoves = details.alerts
         .map((alert) => alert.alertCode)
         .filter((alert) => relevantAlertsForTransfer.includes(alert))
 
-      const relevantAlertLabels = alertFlagLabels.filter((flag) =>
-        flag.alertCodes.some((code) => alertCodes.includes(code))
-      )
+      const relevantAlertFlagLabels = alertFlagLabels
+        .filter((flag) => flag.alertCodes.some((code) => relevantAlertCodesForScheduledMoves.includes(code)))
+        .map((alert) => ({
+          img: alert.img || null,
+          label: alert.label,
+          classes: alert.classes,
+        }))
 
-      const property = prisonerProperty
+      const personalProperty = personalPropertyForPrisoners
         .flatMap((p) => p)
         .filter((p) => p.prisonerNumber === details.prisonerNumber)
         .map((p) => ({
@@ -93,17 +103,13 @@ export default ({ prisonApi, offenderSearchApi }) => {
         prisonerNumber: details.prisonerNumber,
         name: `${properCaseName(details.lastName)}, ${properCaseName(details.firstName)} - ${details.prisonerNumber}`,
         cellLocation: details.cellLocation,
-        relevantAlerts: relevantAlertLabels.map((alert) => ({
-          img: alert.img || null,
-          label: alert.label,
-          classes: alert.classes,
-        })),
-        prisonerProperty: property,
+        relevantAlertFlagLabels,
+        personalProperty,
       }
     })
 
     const courtEvents = transfers.courtEvents.map((courtEvent) => ({
-      ...prisonerCommonShared.find((sr) => sr.prisonerNumber === courtEvent.offenderNo),
+      ...scheduledMoveDetailsForPrisoners.find((sr) => sr.prisonerNumber === courtEvent.offenderNo),
       reasonDescription: movementReasons.find((reason) => reason.code === courtEvent.eventType)?.description,
       destinationLocationDescription: courtEvent.toAgencyDescription,
     }))

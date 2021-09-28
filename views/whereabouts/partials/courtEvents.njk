@@ -8,10 +8,10 @@
         {% endset -%}
 
         {% set propertyColumn %}
-            {% if courtEvent.prisonerProperty.length === 0 %}
+            {% if courtEvent.personalProperty.length === 0 %}
                 None
             {% else %}
-                {% for property in courtEvent.prisonerProperty %}
+                {% for property in courtEvent.personalProperty %}
                     <div>
                         {{ property.containerType }} - {{ property.boxNumber }}
                     </div>
@@ -20,10 +20,10 @@
         {% endset -%}
 
         {% set alertsColumn %}
-            {% if courtEvent.relevantAlerts.length === 0 %}
+            {% if courtEvent.relevantAlertFlagLabels.length === 0 %}
                 None
             {% else %}
-                {{ alertFlags(courtEvent.relevantAlerts, newLine=true) }}
+                {{ alertFlags(courtEvent.relevantAlertFlagLabels, newLine=true) }}
             {% endif %}
         {% endset -%}
 
