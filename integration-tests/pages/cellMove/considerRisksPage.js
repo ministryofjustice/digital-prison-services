@@ -14,6 +14,7 @@ const considerRisksPage = () =>
     categoryWarning: () => cy.get("[data-test='category-warning']"),
     errorSummary: () => cy.get('.govuk-error-summary'),
     form: () => ({
+      confirmationInput: () => cy.get("[data-test='confirmation-input']"),
       confirmationYes: () => cy.get('#confirmation'),
       confirmationNo: () => cy.get('#confirmation-2'),
       submitButton: () => cy.get('button[type="submit"]'),

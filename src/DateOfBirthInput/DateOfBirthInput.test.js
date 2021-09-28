@@ -24,7 +24,7 @@ describe('DateOfBirthInput', () => {
     const handleDateOfBirthChange = jest.fn()
     const dob = mount(<DateOfBirthInput handleDateOfBirthChange={handleDateOfBirthChange} />)
     expect(handleDateOfBirthChange).toHaveBeenCalledWith({ valid: false, blank: true })
-    const textinputs = dob.find('input[type="number"]')
+    const textinputs = dob.find('input')
 
     textinputs.at(0).simulate('change', { target: { value: '1' } })
     expect(handleDateOfBirthChange).toHaveBeenCalledWith({ valid: false, blank: false })
@@ -41,7 +41,7 @@ describe('DateOfBirthInput', () => {
     const dob = mount(<DateOfBirthInput handleDateOfBirthChange={handleDateOfBirthChange} />)
     expect(handleDateOfBirthChange).toHaveBeenCalledWith({ valid: false, blank: true })
     dob
-      .find('input[type="number"]')
+      .find('input')
       .at(0)
       .simulate('change', { target: { value: '1' } })
     expect(dob.instance().errorText()).toBeUndefined()
@@ -52,7 +52,7 @@ describe('DateOfBirthInput', () => {
     const dob = mount(<DateOfBirthInput handleDateOfBirthChange={handleDateOfBirthChange} showErrors />)
     expect(handleDateOfBirthChange).toHaveBeenCalledWith({ valid: false, blank: true })
     dob
-      .find('input[type="number"]')
+      .find('input')
       .at(0)
       .simulate('change', { target: { value: '1' } })
     expect(dob.instance().errorText()).toEqual('Enter a real date of birth')
@@ -63,7 +63,7 @@ describe('DateOfBirthInput', () => {
     const dob = mount(<DateOfBirthInput handleDateOfBirthChange={handleDateOfBirthChange} showErrors />)
     expect(handleDateOfBirthChange).toHaveBeenCalledWith({ valid: false, blank: true })
 
-    const textinputs = dob.find('input[type="number"]')
+    const textinputs = dob.find('input')
     textinputs.at(0).instance().value = '31'
     textinputs.at(1).instance().value = '12'
     textinputs.at(2).simulate('change', { target: { value: '1899' } })
@@ -76,7 +76,7 @@ describe('DateOfBirthInput', () => {
     const dob = mount(<DateOfBirthInput handleDateOfBirthChange={handleDateOfBirthChange} showErrors />)
     expect(handleDateOfBirthChange).toHaveBeenCalledWith({ valid: false, blank: true })
 
-    const textinputs = dob.find('input[type="number"]')
+    const textinputs = dob.find('input')
     textinputs.at(0).instance().value = '1'
     textinputs.at(1).instance().value = '1'
     textinputs.at(2).simulate('change', { target: { value: '1900' } })
@@ -92,7 +92,7 @@ describe('DateOfBirthInput', () => {
 
     const yesterday = moment().subtract(1, 'days')
 
-    const textinputs = dob.find('input[type="number"]')
+    const textinputs = dob.find('input')
     textinputs.at(0).instance().value = yesterday.date()
     textinputs.at(1).instance().value = yesterday.month() + 1
     textinputs.at(2).simulate('change', { target: { value: yesterday.year() } })
@@ -112,7 +112,7 @@ describe('DateOfBirthInput', () => {
 
     const today = moment()
 
-    const textinputs = dob.find('input[type="number"]')
+    const textinputs = dob.find('input')
     textinputs.at(0).instance().value = today.date()
     textinputs.at(1).instance().value = today.month() + 1
     textinputs.at(2).simulate('change', { target: { value: today.year() } })

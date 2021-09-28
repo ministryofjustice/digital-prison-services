@@ -28,7 +28,7 @@ class Spinner extends Component {
   }
 
   render() {
-    const spinner = el => {
+    const spinner = (el) => {
       this.spinner = el
     }
     return (

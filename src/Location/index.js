@@ -1,8 +1,8 @@
 import PropTypes from 'prop-types'
 import { connect } from 'react-redux'
-import { stripAgencyPrefix } from '../../backend/utils'
+import { stripAgencyPrefix } from '../utils'
 
-const Location = props => {
+const Location = (props) => {
   const { location, agencyId } = props
   if (!location) return '--'
   return stripAgencyPrefix(location, agencyId) || '--'
@@ -13,7 +13,7 @@ Location.propTypes = {
   location: PropTypes.string,
 }
 
-const mapStateToProps = state => ({
+const mapStateToProps = (state) => ({
   agencyId: state.app.user.activeCaseLoadId,
 })
 

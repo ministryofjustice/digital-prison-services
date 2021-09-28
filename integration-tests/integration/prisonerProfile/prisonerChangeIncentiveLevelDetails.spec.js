@@ -6,8 +6,8 @@ context('Prisoner change incentive level details', () => {
   before(() => {
     cy.clearCookies()
     cy.task('reset')
-    cy.task('stubLogin', { username: 'ITAG_USER', caseload: 'MDI' })
-    cy.login()
+    cy.task('stubSignIn', { username: 'ITAG_USER', caseload: 'MDI' })
+    cy.signIn()
   })
 
   context('Basic page functionality', () => {
@@ -59,8 +59,7 @@ context('Prisoner change incentive level details', () => {
     it('should display the change incentive level link', () => {
       cy.visit(`/prisoner/${offenderNo}/incentive-level-details/change-incentive-level`)
 
-      cy.get('h1').should('contain', 'Change incentive level for John Smith')
-      cy.get('[data-test="prisoner-number"]').should('contain', 'A1234A')
+      cy.get('h1').should('contain', 'Select John Smith’s incentive level')
       cy.get('[data-test="current-incentive-level"]').should('contain', 'Standard')
     })
 
@@ -69,10 +68,8 @@ context('Prisoner change incentive level details', () => {
 
       cy.get('[data-test="new-level"]')
         .find('[type="radio"]')
-        .then($radios => {
-          cy.get($radios)
-            .first()
-            .check()
+        .then(($radios) => {
+          cy.get($radios).first().check()
         })
       cy.get('[data-test="change-reason"]').type('Test comment')
       cy.get('[data-test="submit-change').click()
@@ -86,9 +83,9 @@ context('Prisoner change incentive level details', () => {
 
       cy.get('[data-test="form-errors"]')
         .find('li')
-        .then($errors => {
-          expect($errors.get(0)).to.contain('Select a level')
-          expect($errors.get(1)).to.contain('Enter reason for incentive level change')
+        .then(($errors) => {
+          expect($errors.get(0)).to.contain('Select an incentive level')
+          expect($errors.get(1)).to.contain('Enter a reason for your selected incentive label')
         })
     })
 
@@ -100,8 +97,8 @@ context('Prisoner change incentive level details', () => {
 
       cy.get('[data-test="form-errors"]')
         .find('li')
-        .then($errors => {
-          expect($errors.get(1)).to.contain('Reason must be 240 characters or less')
+        .then(($errors) => {
+          expect($errors.get(1)).to.contain('The reason must be 240 characters or less')
         })
     })
   })

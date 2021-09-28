@@ -52,6 +52,12 @@ env:
         name: {{ template "app.name" . }}
         key: GOOGLE_ANALYTICS_ID
 
+  - name: GOOGLE_TAG_MANAGER_ID
+    valueFrom:
+      secretKeyRef:
+        name: {{ template "app.name" . }}
+        key: GOOGLE_TAG_MANAGER_ID
+
   - name: SESSION_COOKIE_SECRET
     valueFrom:
       secretKeyRef:
@@ -81,7 +87,31 @@ env:
       secretKeyRef:
         name: {{ template "app.name" . }}
         key: HEWELL_OMU_EMAIL
+
+  - name: BERWYN_OMU_EMAIL
+    valueFrom:
+      secretKeyRef:
+        name: {{ template "app.name" . }}
+        key: BERWYN_OMU_EMAIL
     
+  - name: ELMLEY_OMU_EMAIL
+    valueFrom:
+      secretKeyRef:
+        name: {{ template "app.name" . }}
+        key: ELMLEY_OMU_EMAIL
+
+  - name: NOTTINGHAM_OMU_EMAIL
+    valueFrom:
+      secretKeyRef:
+        name: {{ template "app.name" . }}
+        key: NOTTINGHAM_OMU_EMAIL
+
+  - name: BULLINGDON_OMU_EMAIL
+    valueFrom:
+      secretKeyRef:
+        name: {{ template "app.name" . }}
+        key: BULLINGDON_OMU_EMAIL
+        
   - name: REDIS_HOST
     valueFrom:
       secretKeyRef:
@@ -175,6 +205,9 @@ env:
   - name: SUPPORT_URL
     value: {{ .Values.env.SUPPORT_URL | quote }}
 
+  - name: COMPLEXITY_OF_NEED_URI
+    value: {{ .Values.env.COMPLEXITY_OF_NEED_URI | quote }}
+
   - name: NODE_ENV
     value: production
 
@@ -187,11 +220,23 @@ env:
   - name: PATHFINDER_ENDPOINT_API_URL
     value: {{ .Values.env.PATHFINDER_ENDPOINT_API_URL | quote }}
 
-  - name: SOC_URL
-    value: {{ .Values.env.SOC_URL | quote }}
+  - name: PIN_PHONES_URL
+    value: {{ .Values.env.PIN_PHONES_URL | quote }}
+
+  - name: SOC_UI_URL
+    value: {{ .Values.env.SOC_UI_URL | quote }}
+
+  - name: SOC_API_URL
+    value: {{ .Values.env.SOC_API_URL | quote }}
 
   - name: SOC_API_ENABLED
     value: {{ .Values.env.SOC_API_ENABLED | quote }}
+
+  - name: CURIOUS_URL
+    value: {{ .Values.env.CURIOUS_URL | quote }}
+
+  - name: ESWE_ENABLED
+    value: {{ .Values.env.ESWE_ENABLED | quote }}
 
   - name: BVL_URL
     value: {{ .Values.env.BVL_URL | quote }}
@@ -207,4 +252,8 @@ env:
 
   - name: OMIC_URL
     value: {{ .Values.env.OMIC_URL | quote }}
+
+  - name: PRISONS_WITH_OFFENDERS_THAT_HAVE_COMPLEX_NEEDS
+    value: {{ .Values.env.PRISONS_WITH_OFFENDERS_THAT_HAVE_COMPLEX_NEEDS | quote }}
+    
 {{- end -}}

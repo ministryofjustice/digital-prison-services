@@ -183,8 +183,9 @@
           name: "confirmation",
           errorMessage: errors | findError('confirmation'),
           fieldset: {
+              attributes: { 'data-test': 'confirmation-input' },
               legend: {
-                  text: "Are you sure you want to move " + currentOffenderName + " into a cell with " + stringListOfCurrentOccupantsNames +"?",
+                  text: confirmationQuestionLabel,
                   classes: "govuk-fieldset__legend--s"
               }
           },

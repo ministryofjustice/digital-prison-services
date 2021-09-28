@@ -19,7 +19,11 @@
         flex-basis: 10%;
       }
 
-      :last-child {
+      &:last-child {
+        padding-right: 0;
+      }
+
+      &:last-child {
         margin-bottom: 0;
       }
     }

@@ -4,12 +4,12 @@ import PropTypes from 'prop-types'
 import axios from 'axios'
 import moment from 'moment'
 
-import { stripAgencyPrefix } from '../../backend/utils'
 import Page from '../Components/Page'
 import PrisonersUnaccountedForSearch from './PrisonersUnaccountedForSearch'
 import PrisonersUnaccountedFor from './PrisonersUnaccountedFor'
 import { LAST_NAME } from '../tablesorting/sortColumns'
 import sortResults from '../ResultsActivity/activityResultsSorter'
+import { stripAgencyPrefix } from '../utils'
 
 function PrisonersUnaccountedForContainer({
   setLoadedDispatch,
@@ -41,47 +41,44 @@ function PrisonersUnaccountedForContainer({
   }
 
   const activityHubUser = userRoles.includes('ACTIVITY_HUB')
-  const uniqueOffenderNos = new Set(prisonersUnaccountedFor.map(prisoner => prisoner.offenderNo))
+  const uniqueOffenderNos = new Set(prisonersUnaccountedFor.map((prisoner) => prisoner.offenderNo))
 
-  useEffect(
-    () => {
-      const getPrisonersUnaccountedFor = async () => {
-        resetErrorDispatch()
-        setLoadedDispatch(false)
+  useEffect(() => {
+    const getPrisonersUnaccountedFor = async () => {
+      resetErrorDispatch()
+      setLoadedDispatch(false)
 
-        try {
-          const response = await axios.get('/api/prisoners-unaccounted-for', {
-            params: {
-              agencyId,
-              timeSlot: period,
-              date: date === 'Today' ? moment().format('DD/MM/YYYY') : date.format('DD/MM/YYYY'),
-            },
-          })
+      try {
+        const response = await axios.get('/api/prisoners-unaccounted-for', {
+          params: {
+            agencyId,
+            timeSlot: period,
+            date: date === 'Today' ? moment().format('DD/MM/YYYY') : date.format('DD/MM/YYYY'),
+          },
+        })
 
-          const offenders = response.data.map((offender, index) => ({
-            eventLocationId: offender.locationId,
-            offenderIndex: index,
-            inCaseLoad: stripAgencyPrefix(offender.cellLocation, agencyId),
-            ...offender,
-          }))
+        const offenders = response.data.map((offender, index) => ({
+          eventLocationId: offender.locationId,
+          offenderIndex: index,
+          inCaseLoad: stripAgencyPrefix(offender.cellLocation, agencyId),
+          ...offender,
+        }))
 
-          setPrisonersUnaccountedFor(offenders)
-          getAbsentReasonsDispatch()
-          sortResults(offenders, sortOrder.orderColumn, sortOrder.orderDirection)
-        } catch (error) {
-          handleError(error)
-        }
-
-        setLoadedDispatch(true)
+        setPrisonersUnaccountedFor(offenders)
+        getAbsentReasonsDispatch()
+        sortResults(offenders, sortOrder.orderColumn, sortOrder.orderDirection)
+      } catch (error) {
+        handleError(error)
       }
 
-      getPrisonersUnaccountedFor()
-      setReloadPage(false)
+      setLoadedDispatch(true)
+    }
 
-      return resetErrorDispatch
-    },
-    [period, date, reloadPage]
-  )
+    getPrisonersUnaccountedFor()
+    setReloadPage(false)
+
+    return resetErrorDispatch
+  }, [period, date, reloadPage])
 
   return (
     <Page title="Prisoners unaccounted for" alwaysRender>
@@ -132,7 +129,7 @@ PrisonersUnaccountedForContainer.propTypes = {
   userRoles: PropTypes.arrayOf(PropTypes.string.isRequired).isRequired,
 }
 
-const mapStateToProps = state => ({
+const mapStateToProps = (state) => ({
   date: state.search.date,
   period: state.search.period,
   agencyId: state.app.user.activeCaseLoadId,

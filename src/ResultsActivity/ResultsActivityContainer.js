@@ -42,8 +42,8 @@ class ResultsActivityContainer extends Component {
 
     const { date, period, location } = queryString.parse(search)
 
-    if (!date && !period && !location) {
-      window.location = '/manage-prisoner-whereabouts'
+    if (!date || !period || !location) {
+      window.location = '/manage-prisoner-whereabouts/select-location'
     } else {
       getAbsentReasonsDispatch()
       await this.getActivityList({ date, period, location })
@@ -53,6 +53,32 @@ class ResultsActivityContainer extends Component {
   componentWillUnmount() {
     const { activityDataDispatch } = this.props
     activityDataDispatch([])
+  }
+
+  handlePrint(version) {
+    const { raiseAnalyticsEvent } = this.props
+
+    if (version === 'redacted') {
+      this.setState({ redactedPrint: true }, () => {
+        window.print()
+      })
+
+      raiseAnalyticsEvent({
+        category: 'Redacted Activity list',
+        action: 'Print list',
+      })
+    }
+
+    if (!version) {
+      this.setState({ redactedPrint: false }, () => {
+        window.print()
+      })
+
+      raiseAnalyticsEvent({
+        category: 'Activity list',
+        action: 'Print list',
+      })
+    }
   }
 
   onListCriteriaChange({ dateValue, periodValue }) {
@@ -105,6 +131,11 @@ class ResultsActivityContainer extends Component {
           timeSlot: period,
         },
       })
+      if (response?.data?.error) {
+        handleError(response.data.error)
+        setLoadedDispatch(true)
+        return
+      }
       const activityData = response.data
 
       const orderField = 'activity'
@@ -144,9 +175,9 @@ class ResultsActivityContainer extends Component {
 
     return (
       activities
-        .filter(a => a.locationId === Number(activity))
-        .map(a => a.userDescription)
-        .find(a => !!a) || null
+        .filter((a) => a.locationId === Number(activity))
+        .map((a) => a.userDescription)
+        .find((a) => !!a) || null
     )
   }
 
@@ -154,32 +185,6 @@ class ResultsActivityContainer extends Component {
     const { date, period, activity } = this.props
 
     return this.getActivityList({ period, date, location: activity })
-  }
-
-  handlePrint(version) {
-    const { raiseAnalyticsEvent } = this.props
-
-    if (version === 'redacted') {
-      this.setState({ redactedPrint: true }, () => {
-        window.print()
-      })
-
-      raiseAnalyticsEvent({
-        category: 'Redacted Activity list',
-        action: 'Print list',
-      })
-    }
-
-    if (!version) {
-      this.setState({ redactedPrint: false }, () => {
-        window.print()
-      })
-
-      raiseAnalyticsEvent({
-        category: 'Activity list',
-        action: 'Print list',
-      })
-    }
   }
 
   render() {
@@ -282,7 +287,7 @@ ResultsActivityContainer.defaultProps = {
   error: '',
 }
 
-const mapStateToProps = state => ({
+const mapStateToProps = (state) => ({
   activities: state.search.activities,
   activity: state.search.activity,
   date: state.search.date,
@@ -298,22 +303,17 @@ const mapStateToProps = state => ({
   userRoles: state.app.user.roles,
 })
 
-const mapDispatchToProps = dispatch => ({
-  orderDispatch: field => dispatch(setOrderField(field)),
-  sortOrderDispatch: field => dispatch(setSortOrder(field)),
-  activitiesDispatch: text => dispatch(setSearchActivities(text)),
-  setLoadedDispatch: status => dispatch(setLoaded(status)),
+const mapDispatchToProps = (dispatch) => ({
+  orderDispatch: (field) => dispatch(setOrderField(field)),
+  sortOrderDispatch: (field) => dispatch(setSortOrder(field)),
+  activitiesDispatch: (text) => dispatch(setSearchActivities(text)),
+  setLoadedDispatch: (status) => dispatch(setLoaded(status)),
   resetErrorDispatch: () => dispatch(resetError()),
-  setErrorDispatch: error => dispatch(setError(error)),
-  activityDataDispatch: data => dispatch(setActivityData(data)),
+  setErrorDispatch: (error) => dispatch(setError(error)),
+  activityDataDispatch: (data) => dispatch(setActivityData(data)),
   setOffenderPaymentDataDispatch: (offenderIndex, data) => dispatch(setActivityOffenderAttendance(offenderIndex, data)),
   getAbsentReasonsDispatch: () => dispatch(getAbsentReasons()),
-  searchActivity: locationId => dispatch(setSearchActivity(locationId)),
+  searchActivity: (locationId) => dispatch(setSearchActivity(locationId)),
 })
 
-export default withRouter(
-  connect(
-    mapStateToProps,
-    mapDispatchToProps
-  )(ResultsActivityContainer)
-)
+export default withRouter(connect(mapStateToProps, mapDispatchToProps)(ResultsActivityContainer))

@@ -33,15 +33,17 @@ env:
   KEYWORKER_API_URL: https://keyworker-api-preprod.prison.service.justice.gov.uk/
   CATEGORISATION_UI_URL: https://preprod.offender-categorisation.service.justice.gov.uk/
   USE_OF_FORCE_URL: https://preprod.use-of-force.service.justice.gov.uk
-  USE_OF_FORCE_PRISONS: "AGI,AYI,BAI,BCI,BFI,BHI,BLI,BNI,BRI,BXI,CDI,CLI,CWI,DAI,DGI,DHI,DMI,DTI,DWI,EEI,EHI,ESI,EWI,EXI,EYI,FDI,FHI,FKI,FMI,FNI,GHI,GMI,GNI,GTI,HBI,HCI,HDI,HHI,HII,HLI,HMI,HOI,HPI,HVI,ISI,IWI,KMI,KVI,LEI,LFI,LHI,LLI,LNI,LPI,LTI,LWI,LYI,MDI,MRI,MSI,MTI,NHI,NWI,PDI,PNI,PVI,RCI,RSI,SDI,SLI,SPI,STI,TCI,VEI,WCI,WDI,WEI,WHI,WII,WLI,WMI,WRI,WSI,WWI"
+  USE_OF_FORCE_PRISONS: "ACI,AGI,ASI,AYI,BAI,BCI,BFI,BHI,BLI,BMI,BNI,BRI,BSI,BWI,BXI,BZI,CDI,CFI,CLI,CWI,DAI,DGI,DHI,DMI,DNI,DTI,DWI,EEI,EHI,ESI,EWI,EXI,EYI,FBI,FDI,FHI,FKI,FMI,FNI,FSI,GHI,GMI,GNI,GTI,HBI,HCI,HDI,HEI,HHI,HII,HLI,HMI,HOI,HPI,HVI,ISI,IWI,KMI,KVI,LCI,LEI,LFI,LGI,LHI,LII,LLI,LNI,LPI,LTI,LWI,LYI,MDI,MHI,MRI,MSI,MTI,NHI,NLI,NMI,NSI,NWI,ONI,OWI,PBI,PDI,PFI,PNI,PRI,PVI,RCI,RHI,RNI,RSI,SDI,SFI,SHI,SKI,SLI,SNI,SPI,STI,SUI,SWI,TCI,TSI,UKI,UPI,VEI,WCI,WDI,WEI,WHI,WII,WLI,WMI,WRI,WSI,WTI,WWI"
   TOKENVERIFICATION_API_URL: https://token-verification-api-preprod.prison.service.justice.gov.uk
   TOKENVERIFICATION_API_ENABLED: true
   CASENOTES_API_URL: https://preprod.offender-case-notes.service.justice.gov.uk/
   ALLOCATION_MANAGER_ENDPOINT_URL: https://allocation-manager-preprod.apps.live-1.cloud-platform.service.justice.gov.uk/
   PATHFINDER_UI_URL: https://preprod.pathfinder.service.justice.gov.uk/
   PATHFINDER_ENDPOINT_API_URL: https://preprod-api.pathfinder.service.justice.gov.uk/
+  PIN_PHONES_URL: https://pin-phone-monitor-qa.prison.service.justice.gov.uk/
   REDIS_ENABLED: true
-  SOC_URL: https://manage-soc-cases-preprod.hmpps.service.justice.gov.uk
+  SOC_UI_URL: https://manage-soc-cases-preprod.hmpps.service.justice.gov.uk/
+  SOC_API_URL: https://manage-soc-cases-api-preprod.hmpps.service.justice.gov.uk/
   SOC_API_ENABLED: true
   OFFENDER_SEARCH_API_URL: https://prisoner-offender-search-preprod.prison.service.justice.gov.uk
   SUPPORT_URL: https://support-preprod.hmpps.service.justice.gov.uk/
@@ -51,6 +53,10 @@ env:
   OMIC_URL: https://preprod.manage-key-workers.service.justice.gov.uk
   MANAGE_AUTH_ACCOUNTS_URL: https://manage-hmpps-auth-accounts-preprod.prison.service.justice.gov.uk
   PECS_URL: http://hmpps-book-secure-move-frontend-preprod.apps.live-1.cloud-platform.service.justice.gov.uk
+  COMPLEXITY_OF_NEED_URI: https://complexity-of-need-preprod.hmpps.service.justice.gov.uk
+  PRISONS_WITH_OFFENDERS_THAT_HAVE_COMPLEX_NEEDS: "AGI,BZI,DHI,DWI,ESI,EWI,FHI,LNI,NHI,PFI,SDI,STI"
+  ESWE_ENABLED: false
+  CURIOUS_URL: https://testservices.sequation.net/sequation-virtual-campus2-api/
 
 allowlist:
   office: "217.33.148.210/32"
@@ -63,6 +69,9 @@ allowlist:
   j5-phones-1: "35.177.125.252/32"
   j5-phones-2: "35.177.137.160/32"
   sodexo-northumberland: "88.98.48.10/32"
+  sodexo-northumberland2: "51.148.47.137/32"
+  sodoxeo-forest-bank: "51.155.85.249/32"
+  sodexo-peterborough: "51.155.55.241/32"
   serco: "217.22.14.0/24"
   ark-nps-hmcts-ttp1: "195.59.75.0/24"
   ark-nps-hmcts-ttp2: "194.33.192.0/25"

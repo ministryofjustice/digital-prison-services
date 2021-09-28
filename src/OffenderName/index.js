@@ -1,7 +1,7 @@
 import PropTypes from 'prop-types'
 import { properCaseName } from '../utils'
 
-const OffenderName = props => {
+const OffenderName = (props) => {
   const { lastName, firstName } = props
   return `${properCaseName(lastName)}, ${properCaseName(firstName)}`
 }

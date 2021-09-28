@@ -1,11 +1,11 @@
 const { stubFor } = require('./wiremock')
 
 module.exports = {
-  stubHealth: (status = 200) => {
-    return stubFor({
+  stubHealth: (status = 200) =>
+    stubFor({
       request: {
         method: 'GET',
-        url: '/allocation/health/',
+        urlPath: '/allocation/health/',
       },
       response: {
         status,
@@ -14,10 +14,9 @@ module.exports = {
         },
         body: 'ping',
       },
-    })
-  },
-  stubGetPomForOffender: (response, status = 200) => {
-    return stubFor({
+    }),
+  stubGetPomForOffender: (response, status = 200) =>
+    stubFor({
       request: {
         method: 'GET',
         urlPattern: '/allocation/api/allocation/.+?',
@@ -29,6 +28,5 @@ module.exports = {
         },
         jsonBody: response || {},
       },
-    })
-  },
+    }),
 }

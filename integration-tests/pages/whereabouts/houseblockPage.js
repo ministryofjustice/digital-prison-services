@@ -1,11 +1,11 @@
 const page = require('../page')
 
-const houseblockPage = title =>
+const houseblockPage = (title) =>
   page(title, {
     location: () => cy.get('#housing-location-select'),
     period: () => cy.get('#period-select'),
     searchDate: () => cy.get('[name="search-date"]'),
-    printButton: () => cy.get('button'),
+    printButton: () => cy.get('[data-test="print-button"]'),
     tableRows: () => cy.get('table.row-gutters tr'),
     nameOrderLink: () => cy.get('th #Name-sortable-column'),
     locationOrderLink: () => cy.get('th #Location-sortable-column'),

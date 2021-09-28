@@ -1,13 +1,13 @@
 const { stubFor, verifyPosts, getMatchingRequests } = require('./wiremock')
-const absenceReasons = require('./responses/absenceReasons')
-const attendance = require('./responses/attendance')
+const absenceReasons = require('./responses/absenceReasons.json')
+const attendance = require('./responses/attendance.json')
 
 module.exports = {
-  stubHealth: (status = 200) => {
-    return stubFor({
+  stubHealth: (status = 200) =>
+    stubFor({
       request: {
         method: 'GET',
-        url: '/whereabouts/health/ping',
+        urlPath: '/whereabouts/health/ping',
       },
       response: {
         status,
@@ -15,10 +15,9 @@ module.exports = {
           'Content-Type': 'application/json;charset=UTF-8',
         },
       },
-    })
-  },
-  stubAttendanceChanges: (changes, status = 200) => {
-    return stubFor({
+    }),
+  stubAttendanceChanges: (changes, status = 200) =>
+    stubFor({
       request: {
         method: 'GET',
         urlPattern: '/whereabouts/attendances/changes\\?fromDateTime=.+?&toDateTime=.+?',
@@ -32,10 +31,9 @@ module.exports = {
           changes,
         },
       },
-    })
-  },
-  stubAttendanceStats: (agencyId, fromDate, period, stats, status = 200) => {
-    return stubFor({
+    }),
+  stubAttendanceStats: (agencyId, fromDate, period, stats, status = 200) =>
+    stubFor({
       request: {
         method: 'GET',
         url: `/whereabouts/attendance-statistics/${agencyId}/over-date-range?fromDate=${fromDate}&toDate=${fromDate}&period=${period}`,
@@ -47,10 +45,25 @@ module.exports = {
         },
         jsonBody: stats,
       },
-    })
-  },
-  stubGetAbsenceReasons: () => {
-    return stubFor({
+    }),
+  stubGetAbsences: (agencyId, reason, absences) =>
+    stubFor({
+      request: {
+        method: 'GET',
+        urlPattern: `/whereabouts/attendances/${agencyId}/absences-for-scheduled-activities/${reason}?.*`,
+      },
+      response: {
+        status: 200,
+        headers: {
+          'Content-Type': 'application/json;charset=UTF-8',
+        },
+        jsonBody: {
+          absences,
+        },
+      },
+    }),
+  stubGetAbsenceReasons: () =>
+    stubFor({
       request: {
         method: 'GET',
         urlPattern: '/whereabouts/absence-reasons',
@@ -62,30 +75,32 @@ module.exports = {
         },
         jsonBody: absenceReasons,
       },
-    })
-  },
-  stubCourtLocations: (locations, status = 200) => {
-    return stubFor({
+    }),
+  stubCourtLocations: (locations, status = 200) =>
+    stubFor({
       request: {
         method: 'GET',
-        url: '/whereabouts/court/all-courts',
+        url: '/whereabouts/court/courts',
       },
       response: {
         status,
         headers: {
           'Content-Type': 'application/json;charset=UTF-8',
         },
-        jsonBody: locations || {
-          courtLocations: ['London', 'Sheffield', 'Leeds'],
-        },
+        jsonBody: locations || [
+          { id: 'LDN', name: 'London' },
+          { id: 'SHF', name: 'Sheffield' },
+          { id: 'LDS', name: 'Leeds' },
+        ],
       },
-    })
-  },
+    }),
   stubGetAttendance: (caseload, locationId, timeSlot, date, data = attendance) => {
+    const dateAndTimeSlotParameters = date ? `date=${date}&period=${timeSlot}` : '.*'
+
     return stubFor({
       request: {
         method: 'GET',
-        urlPattern: `/whereabouts/attendances/.+?/${locationId}\\?date=${date}&period=${timeSlot}`,
+        urlPattern: `/whereabouts/attendances/.+?/${locationId}\\?${dateAndTimeSlotParameters}`,
       },
       response: {
         status: 200,
@@ -96,8 +111,8 @@ module.exports = {
       },
     })
   },
-  stubGetAttendancesForBookings: (caseload, timeSlot, date, data = []) => {
-    return stubFor({
+  stubGetAttendancesForBookings: (caseload, timeSlot, date, data = []) =>
+    stubFor({
       request: {
         method: 'POST',
         url: `/whereabouts/attendances/${caseload}?date=${date}&period=${timeSlot}`,
@@ -109,10 +124,9 @@ module.exports = {
         },
         jsonBody: data,
       },
-    })
-  },
-  stubPostAttendance: attendanceToReturn => {
-    return stubFor({
+    }),
+  stubPostAttendance: (attendanceToReturn) =>
+    stubFor({
       request: {
         method: 'POST',
         urlPattern: `/whereabouts/attendance`,
@@ -124,10 +138,9 @@ module.exports = {
         },
         jsonBody: attendanceToReturn,
       },
-    })
-  },
-  stubPutAttendance: attendanceToReturn => {
-    return stubFor({
+    }),
+  stubPutAttendance: (attendanceToReturn) =>
+    stubFor({
       request: {
         method: 'PUT',
         urlPattern: `/whereabouts/attendances/${attendanceToReturn.id}`,
@@ -139,10 +152,9 @@ module.exports = {
         },
         jsonBody: attendanceToReturn,
       },
-    })
-  },
-  stubAddVideoLinkBooking: (status = 200) => {
-    return stubFor({
+    }),
+  stubAddVideoLinkBooking: (status = 200) =>
+    stubFor({
       request: {
         method: 'POST',
         url: '/whereabouts/court/video-link-bookings',
@@ -154,18 +166,17 @@ module.exports = {
         },
         jsonBody: 1 || {},
       },
-    })
-  },
+    }),
   getBookingRequest: () =>
     getMatchingRequests({
       method: 'POST',
       urlPath: '/whereabouts/court/video-link-bookings',
-    }).then(data => {
+    }).then((data) => {
       const { requests } = data.body
       return JSON.parse(requests.slice(-1)[0].body)
     }),
-  stubVideoLinkAppointments: (appointments, status = 200) => {
-    return stubFor({
+  stubVideoLinkAppointments: (appointments, status = 200) =>
+    stubFor({
       request: {
         method: 'POST',
         url: '/whereabouts/court/video-link-appointments',
@@ -177,11 +188,8 @@ module.exports = {
         },
         jsonBody: appointments || [],
       },
-    })
-  },
-  verifyPostAttendance: () => {
-    return verifyPosts('/whereabouts/attendance')
-  },
+    }),
+  verifyPostAttendance: () => verifyPosts('/whereabouts/attendance'),
   stubGroups: (caseload, status = 200) => {
     const json = [
       {
@@ -332,7 +340,7 @@ module.exports = {
         jsonBody: response,
       },
     }),
-  stubLocationGroups: locationGroups =>
+  stubLocationGroups: (locationGroups) =>
     stubFor({
       request: {
         method: 'GET',
@@ -388,7 +396,7 @@ module.exports = {
         jsonBody: cellMoveReasonResponse,
       },
     }),
-  stubAttendanceForScheduledActivities: attendances =>
+  stubAttendanceForScheduledActivities: (attendances) =>
     stubFor({
       request: {
         method: 'GET',
@@ -397,6 +405,88 @@ module.exports = {
       response: {
         status: 200,
         jsonBody: attendances || {},
+      },
+    }),
+  stubAttendanceForBookings: (agencyId, fromDate, toDate, period, attendances, status = 200) =>
+    stubFor({
+      request: {
+        method: 'POST',
+        url: `/whereabouts/attendances/${agencyId}/attendance-over-date-range?fromDate=${fromDate}&toDate=${toDate}&period=${period}`,
+      },
+      response: {
+        status,
+        headers: {
+          'Content-Type': 'application/json;charset=UTF-8',
+        },
+        jsonBody: attendances,
+      },
+    }),
+  stubGetWhereaboutsAppointments: (appointments, status = 200) =>
+    stubFor({
+      request: {
+        method: 'GET',
+        urlPattern: '/whereabouts/appointments/[A-Z].+?',
+      },
+      response: {
+        status,
+        headers: {
+          'Content-Type': 'application/json;charset=UTF-8',
+        },
+        jsonBody: appointments || [],
+      },
+    }),
+  stubCreateAppointment: (appointments, status = 201) =>
+    stubFor({
+      request: {
+        method: 'POST',
+        urlPattern: '/whereabouts/appointment',
+      },
+      response: {
+        status,
+        headers: {
+          'Content-Type': 'application/json;charset=UTF-8',
+        },
+        jsonBody: appointments || [],
+      },
+    }),
+  stubGetAppointment: ({ appointment = {}, id, status = 200 }) =>
+    stubFor({
+      request: {
+        method: 'GET',
+        urlPattern: `/whereabouts/appointment/${id}`,
+      },
+      response: {
+        status,
+        headers: {
+          'Content-Type': 'application/json;charset=UTF-8',
+        },
+        jsonBody: appointment,
+      },
+    }),
+  stubDeleteAppointment: ({ id, status = 200 }) =>
+    stubFor({
+      request: {
+        method: 'DELETE',
+        urlPattern: `/whereabouts/appointment/${id}`,
+      },
+      response: {
+        status,
+        headers: {
+          'Content-Type': 'application/json;charset=UTF-8',
+        },
+      },
+    }),
+  stubDeleteRecurringAppointmentSequence: ({ id, status = 200 }) =>
+    stubFor({
+      request: {
+        method: 'DELETE',
+        urlPattern: `/whereabouts/appointment/recurring/${id}`,
+      },
+      response: {
+        status,
+        headers: {
+          'Content-Type': 'application/json;charset=UTF-8',
+        },
       },
     }),
 }

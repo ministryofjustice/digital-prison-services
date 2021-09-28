@@ -84,22 +84,14 @@ describe('SortLov', () => {
     const component = mount(
       <SortLov sortColumns={[LAST_NAME]} sortColumn={LAST_NAME} sortOrder={ASC} setColumnSort={setColumnSort} />
     )
-    expect(
-      component
-        .find('select')
-        .first()
-        .props().value
-    ).toEqual('lastName_ASC')
+    expect(component.find('select').first().props().value).toEqual('lastName_ASC')
   })
 
   it('passes new selection values to the serColumnSort function when the selection changes', () => {
     const wrapper = mount(
       <SortLov sortColumns={[LAST_NAME]} sortColumn={LAST_NAME} sortOrder={ASC} setColumnSort={setColumnSort} />
     )
-    wrapper
-      .find('option')
-      .at(1)
-      .simulate('change', {})
+    wrapper.find('option').at(1).simulate('change', {})
     expect(setColumnSort).toHaveBeenCalledWith(LAST_NAME, DESC)
   })
 })

@@ -15,7 +15,7 @@ class SortableDataSource extends Component {
   }
 
   setColumnSort(sortColumn, sortOrder) {
-    this.setState(currentState => {
+    this.setState((currentState) => {
       const copy = currentState.rows.slice()
 
       return { sortOrder, rows: this.sortOffenders(copy, sortOrder) }
@@ -37,7 +37,7 @@ class SortableDataSource extends Component {
     const { rows, sortOrder } = this.state
     const { children } = this.props
 
-    const cloneWithProps = child =>
+    const cloneWithProps = (child) =>
       React.cloneElement(child, {
         ...this.props,
         rows: this.sortOffenders(rows, sortOrder),
@@ -45,7 +45,7 @@ class SortableDataSource extends Component {
         setColumnSort: this.setColumnSort,
       })
 
-    if (children.length) return children.map(child => cloneWithProps(child))
+    if (children.length) return children.map((child) => cloneWithProps(child))
 
     return cloneWithProps(children)
   }

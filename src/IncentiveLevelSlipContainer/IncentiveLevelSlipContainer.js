@@ -1,8 +1,8 @@
 import React, { useEffect, useState } from 'react'
 import axios from 'axios'
 import styled from 'styled-components'
-import { IncentiveLevelSlip } from 'new-nomis-shared-components'
 import { spacing } from '@govuk-react/lib'
+import IncentiveLevelSlip from '../Components/IncentiveLevelSlip'
 
 const qs = require('qs')
 
@@ -25,7 +25,7 @@ function IncentiveLevelSlipContainer() {
         )
         const caseNoteData = await axios
           .get(`/api/get-case-note/${offenderNo}/${casenoteId}`)
-          .then(promise => promise.data)
+          .then((promise) => promise.data)
 
         setIepData({
           type: caseNoteData.subTypeDescription,

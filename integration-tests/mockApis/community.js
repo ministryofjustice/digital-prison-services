@@ -1,11 +1,11 @@
 const { stubFor } = require('./wiremock')
 
 module.exports = {
-  stubHealth: (status = 200) => {
-    return stubFor({
+  stubHealth: (status = 200) =>
+    stubFor({
       request: {
         method: 'GET',
-        url: '/community/health/ping',
+        urlPath: '/community/health/ping',
       },
       response: {
         status,
@@ -13,11 +13,10 @@ module.exports = {
           'Content-Type': 'application/json;charset=UTF-8',
         },
       },
-    })
-  },
+    }),
 
-  stubConvictions: (offenderNo, convictions) => {
-    return stubFor({
+  stubConvictions: (offenderNo, convictions) =>
+    stubFor({
       request: {
         method: 'GET',
         url: `/community/api/offenders/nomsNumber/${offenderNo}/convictions`,
@@ -29,11 +28,10 @@ module.exports = {
         },
         jsonBody: convictions || [],
       },
-    })
-  },
+    }),
 
-  stubOffenderDetails: (offenderNo, details) => {
-    return stubFor({
+  stubOffenderDetails: (offenderNo, details) =>
+    stubFor({
       request: {
         method: 'GET',
         url: `/community/api/offenders/nomsNumber/${offenderNo}`,
@@ -45,11 +43,10 @@ module.exports = {
         },
         jsonBody: details || [],
       },
-    })
-  },
+    }),
 
-  stubDocument: (offenderNo, documentId, content) => {
-    return stubFor({
+  stubDocument: (offenderNo, documentId, content) =>
+    stubFor({
       request: {
         method: 'GET',
         url: `/community/api/offenders/nomsNumber/${offenderNo}/documents/${documentId}`,
@@ -61,11 +58,10 @@ module.exports = {
         },
         jsonBody: content || [],
       },
-    })
-  },
+    }),
 
-  stubDocuments: (offenderNo, documents) => {
-    return stubFor({
+  stubDocuments: (offenderNo, documents) =>
+    stubFor({
       request: {
         method: 'GET',
         url: `/community/api/offenders/nomsNumber/${offenderNo}/documents/grouped`,
@@ -77,6 +73,5 @@ module.exports = {
         },
         jsonBody: documents || [],
       },
-    })
-  },
+    }),
 }

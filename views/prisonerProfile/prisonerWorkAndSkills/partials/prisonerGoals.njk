@@ -1,0 +1,52 @@
+{% from "../../macros/prisonerSummarySection.njk" import prisonerSummarySection %}
+{% from "govuk/components/summary-list/macro.njk" import govukSummaryList %}
+
+{% set employmentGoals = goals.employmentGoals %}
+{% set personalGoals = goals.personalGoals %}
+{% set shortTermGoals = goals.shortTermGoals %}
+{% set longTermGoals = goals.longTermGoals %}
+{% set offenderName = (prisonerProfileData.offenderName).split(',')[1].trim() + " " +(prisonerProfileData.offenderName).split(',')[0] %}
+
+{% block prisonerProfileSection %}
+  {% if goals.employmentGoals %}
+   <h3 class="govuk-heading-s card__heading">Employment goals</h3>
+    <ul class="govuk-list" data-test="employment-goals">
+        {% for entry in employmentGoals %}
+            <li class="govuk-body govuk-!-margin-bottom-4">{{ entry }}</li>
+        {% endfor %}
+    </ul>
+
+    <hr class="govuk-section-break govuk-section-break--m govuk-section-break--visible">
+
+    <h3 class="govuk-heading-s card__heading">Personal goals</h3>
+    <ul class="govuk-list" data-test="personal-goals">
+        {% for entry in personalGoals %}
+            <li class="govuk-body govuk-!-margin-bottom-4">{{ entry }}</li>
+        {% endfor %}
+    </ul>
+
+    <hr class="govuk-section-break govuk-section-break--m govuk-section-break--visible">
+
+    <h3 class="govuk-heading-s card__heading">Short-term goals</h3>
+    <ul class="govuk-list" data-test="short-term-goals">
+        {% for entry in shortTermGoals %}
+            <li class="govuk-body govuk-!-margin-bottom-4">{{ entry }}</li>
+        {% endfor %}
+    </ul>
+
+    <hr class="govuk-section-break govuk-section-break--m govuk-section-break--visible">
+
+    <h3 class="govuk-heading-s card__heading">Long-term goals</h3>
+    <ul class="govuk-list" data-test="long-term-goals">
+        {% for entry in longTermGoals %}
+            <li class="govuk-body govuk-!-margin-bottom-4">{{ entry }}</li>
+        {% endfor %}
+    </ul>
+
+  {% elseif goals.employmentGoals === null %} 
+    <p class="govuk-body" data-test="goals-noGoals">{{ offenderName }} has not set any goals.</p>
+  {% else %}
+    <p class="govuk-body" data-test="goals-errorMessage">{{ errorMessage }}</p>
+  {% endif %}
+
+{% endblock %}

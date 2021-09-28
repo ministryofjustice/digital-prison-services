@@ -2,8 +2,8 @@ context('No cell allocated page', () => {
   before(() => {
     cy.clearCookies()
     cy.task('resetAndStubTokenVerification')
-    cy.task('stubLogin', { username: 'ITAG_USER', caseload: 'MDI' })
-    cy.login()
+    cy.task('stubSignIn', { username: 'ITAG_USER', caseload: 'MDI' })
+    cy.signIn()
   })
 
   beforeEach(() => {
@@ -106,24 +106,18 @@ context('No cell allocated page', () => {
 
     cy.get('h1').should('contain', 'No cell allocated')
 
-    cy.get('[data-test="no-cell-allocated-table"]').then($table => {
+    cy.get('[data-test="no-cell-allocated-table"]').then(($table) => {
       cy.get($table)
         .find('tbody')
         .find('tr')
-        .then($tableRows => {
-          cy.get($tableRows)
-            .its('length')
-            .should('eq', 1)
+        .then(($tableRows) => {
+          cy.get($tableRows).its('length').should('eq', 1)
           expect($tableRows.get(0).innerText).to.contain('\tBiggles, Tommy\tA7777DY\tRECP\t16:56\tBarry Smith\t')
         })
     })
-    cy.get('[data-test="prisoner-profile-link"]').then($prisonerProfileLinks => {
-      cy.get($prisonerProfileLinks)
-        .its('length')
-        .should('eq', 1)
-      cy.get($prisonerProfileLinks.get(0))
-        .should('have.attr', 'href')
-        .should('include', '/prisoner/A7777DY')
+    cy.get('[data-test="prisoner-profile-link"]').then(($prisonerProfileLinks) => {
+      cy.get($prisonerProfileLinks).its('length').should('eq', 1)
+      cy.get($prisonerProfileLinks.get(0)).should('have.attr', 'href').should('include', '/prisoner/A7777DY')
     })
     cy.get('[data-test="allocate-cell-link"]').should('not.exist')
   })
@@ -132,13 +126,33 @@ context('No cell allocated page', () => {
     cy.task('stubUserMeRoles', [{ roleCode: 'CELL_MOVE' }])
     cy.visit('/establishment-roll/no-cell-allocated')
 
-    cy.get('[data-test="allocate-cell-link"]').then($allocateCellLink => {
-      cy.get($allocateCellLink)
-        .its('length')
-        .should('eq', 1)
+    cy.get('[data-test="allocate-cell-link"]').then(($allocateCellLink) => {
+      cy.get($allocateCellLink).its('length').should('eq', 1)
       cy.get($allocateCellLink.get(0))
         .should('have.attr', 'href')
         .should('include', '/prisoner/A7777DY/cell-move/search-for-cell')
+    })
+  })
+
+  describe('when there are no inmates to be shown', () => {
+    beforeEach(() => {
+      cy.task('stubInmates', {
+        locationId: 'MDI',
+        count: 0,
+        data: [],
+      })
+    })
+
+    it('should show a message that there are no results only', () => {
+      cy.visit('/establishment-roll/no-cell-allocated')
+
+      cy.get('h1').should('contain', 'No cell allocated')
+
+      cy.get('[data-test="no-results-message"]').should('exist')
+      cy.get('[data-test="results-message"]').should('not.exist')
+      cy.get('[data-test="no-cell-allocated-table"]').should('not.exist')
+      cy.get('[data-test="prisoner-profile-link"]').should('not.exist')
+      cy.get('[data-test="allocate-cell-link"]').should('not.exist')
     })
   })
 })

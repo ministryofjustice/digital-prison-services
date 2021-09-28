@@ -5,7 +5,7 @@ import './fullFlags.scss'
 import OffenderLink from '../OffenderLink'
 
 const Flags = ({ alerts, category, offenderNo }) => {
-  const withLink = content =>
+  const withLink = (content) =>
     offenderNo ? (
       <OffenderLink offenderNo={offenderNo} alerts>
         {content}

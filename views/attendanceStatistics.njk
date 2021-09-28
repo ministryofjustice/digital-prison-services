@@ -103,11 +103,11 @@
     <div class="govuk-grid-row">
       <div class="govuk-grid-column-one-quarter">
         <p class="govuk-body">Unaccounted for</p>
-        <span class="govuk-body govuk-!-font-size-48 govuk-!-font-weight-bold" data-qa="unaccountedfor">{{dashboardStats.notRecorded}}</span>
+        <span class="govuk-body govuk-!-font-size-36 govuk-!-font-weight-bold" data-qa="unaccountedfor">{{dashboardStats.notRecorded}}</span>
       </div>
       <div class="govuk-grid-column-one-quarter">
         <p class="govuk-body">Suspended</p>
-        <span class="govuk-body govuk-!-font-size-48 govuk-!-font-weight-bold" data-qa="suspended">
+        <span class="govuk-body govuk-!-font-size-36 govuk-!-font-weight-bold" data-qa="suspended">
             {% if dashboardStats.suspended > 0 %}
               <a href="/manage-prisoner-whereabouts/attendance-reason-statistics/suspended?agencyId={{caseLoadId}}&fromDate={{clickThrough.fromDate}}&toDate={{clickThrough.toDate}}&period={{clickThrough.period}}" class="govuk-link--no-visited-state">
                 {{dashboardStats.suspended}}
@@ -120,7 +120,7 @@
 
         <div class="govuk-grid-column-one-quarter">
             <p class="govuk-body">Reason changes</p>
-            <span class="govuk-body govuk-!-font-size-48 govuk-!-font-weight-bold" data-qa="changes">
+            <span class="govuk-body govuk-!-font-size-36 govuk-!-font-weight-bold" data-qa="changes">
             {% if dashboardStats.changes > 0 %}
                 <a href="/attendance-changes?agencyId={{caseLoadId}}&fromDateTime={{changeClickThrough.fromDateTime}}&toDateTime={{changeClickThrough.toDateTime}}&subHeading={{changeClickThrough.subHeading}}" class="govuk-link--no-visited-state">
                 {{dashboardStats.changes}}
@@ -135,17 +135,17 @@
     <hr class="govuk-section-break govuk-section-break--m govuk-section-break--visible">
     <h2 class="govuk-heading-m">Paid reasons</h2>
 
-    <div class="govuk-grid-row ">
+    <div class="govuk-grid-row">
 
     <div class="govuk-grid-column-one-quarter">
       <p class="govuk-body">Attended</p>
-      <span class="govuk-body govuk-!-font-size-48 govuk-!-font-weight-bold" data-qa="attended">{{dashboardStats.attended}}</span>
+      <span class="govuk-body govuk-!-font-size-36 govuk-!-font-weight-bold" data-qa="attended">{{dashboardStats.attended}}</span>
     </div>
 
      {% for paidReasons in dashboardStats.paidReasons | sort(attribute = "name") %}
         <div class="govuk-grid-column-one-quarter govuk-!-padding-bottom-3">
           <p class="govuk-body">{{paidReasons.name}}</p>
-          <span class="govuk-body govuk-!-font-size-48 govuk-!-font-weight-bold" data-qa="{{ paidReasons.id }}">
+          <span class="govuk-body govuk-!-font-size-36 govuk-!-font-weight-bold" data-qa="{{ paidReasons.id }}">
             {% if paidReasons.value > 0 %}
               <a href="/manage-prisoner-whereabouts/attendance-reason-statistics/reason/{{paidReasons.id}}?agencyId={{caseLoadId}}&fromDate={{clickThrough.fromDate}}&toDate={{clickThrough.toDate}}&period={{clickThrough.period}}" class="govuk-link--no-visited-state">
                 {{paidReasons.value}}
@@ -165,7 +165,7 @@
       {% for unpaidReasons in dashboardStats.unpaidReasons | sort(attribute = "name") %}
         <div class="govuk-grid-column-one-quarter govuk-!-padding-bottom-3">
           <p class="govuk-body">{{unpaidReasons.name}}</p>
-          <span class="govuk-body govuk-!-font-size-48 govuk-!-font-weight-bold" data-qa="{{ unpaidReasons.id}}">
+          <span class="govuk-body govuk-!-font-size-36 govuk-!-font-weight-bold" data-qa="{{ unpaidReasons.id}}">
             {% if unpaidReasons.value > 0 %}
               <a href="/manage-prisoner-whereabouts/attendance-reason-statistics/reason/{{unpaidReasons.id}}?agencyId={{caseLoadId}}&fromDate={{clickThrough.fromDate}}&toDate={{clickThrough.toDate}}&period={{clickThrough.period}}" class="govuk-link--no-visited-state">
                 {{unpaidReasons.value}}

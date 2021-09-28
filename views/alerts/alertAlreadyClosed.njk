@@ -1,0 +1,41 @@
+{% extends "../partials/layout.njk" %}
+{% set mainClasses = "govuk-main-wrapper--l" %}
+{% from "govuk/components/button/macro.njk" import govukButton %}
+
+{% set title = 'This alert has already been closed' %}
+
+{% block beforeContent %}
+  {{ govukBreadcrumbs({
+  items: [
+    {
+      text: "Home",
+      href: '/'
+    },
+    {
+      text: name,
+      href: profileUrl
+    }
+  ]
+})
+}}
+{% endblock %}
+
+{% block content %}
+    <div class="govuk-grid-row">
+        <div class="govuk-grid-column-two-thirds">
+            <h1 class="govuk-heading-xl">This alert has already been closed</h1>
+            <p class="govuk-body">
+                This alert has already been closed by someone else.
+            </p>
+            <p class="govuk-body">
+                Any comments you have added will not be saved.
+            </p>
+            <p class="govuk-body">
+                {{ govukButton({
+                    text: "Continue",
+                    href: url
+                }) }}
+            </p>
+        </div>
+    </div>
+{% endblock %}

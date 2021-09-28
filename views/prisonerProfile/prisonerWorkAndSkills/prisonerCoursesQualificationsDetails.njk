@@ -1,0 +1,108 @@
+{% extends "../../partials/layout.njk" %}
+{% from "govuk/components/table/macro.njk" import govukTable %}
+{% from "../../macros/printLink.njk" import printLink %}
+
+
+{% set title =  "Courses and qualifications" %}
+{% set coursesDetailsList =  coursesAndQualifications.content %}
+
+{% block beforeContent %}
+  {{ govukBreadcrumbs({
+    items: [
+      {
+        text: "Digital Prison Services",
+        href: "/"
+      },
+      {
+        text: breadcrumbPrisonerName,
+        href: profileUrl
+      }
+    ],
+    classes: "govuk-!-display-none-print"
+  }) }}
+{% endblock %}
+
+{% set rows = [] %}
+{% for course in coursesDetailsList %}
+  {% set rows = (rows.push([
+    { text: course.type },
+    { text: course.courseName },
+    { text: course.location },
+    { html: course.dateFrom | formatTimestampToDate + "<br> to " + course.dateTo | formatTimestampToDate, attributes: {
+          "data-sort-value": course.dateTo
+        } },
+    { text: course.outcome },
+    { html: course.outcomeDetails or "<span class='govuk-visually-hidden'>No outcome details</span>"  }
+  ]), rows) %}
+{% endfor %}
+
+{% block content %}
+
+    <div class="govuk-grid-row">
+        <div class="govuk-grid-column-three-quarters">
+            <h1 class="govuk-heading-l">{{ prisonerName | possessive | safe }} courses and qualifications</h1>
+        </div>
+    </div>
+    {% if coursesDetailsList.length > 0 %}
+    <div class="govuk-grid-row">
+      <div class="govuk-grid-column-full">
+        {{ printLink(align = "right") }}
+        <div class="courses-qualifications-pagination-print-alignment">
+          <p class="moj-pagination__results" data-test="courses-quals-result-number">Showing <b>{{ coursesDetailsList.length }}</b> {% if coursesDetailsList.length > 1 %}results{% else %}result{% endif %}</p>
+        </div>
+        <div class="results-table results-table__results">
+
+            {{ govukTable({
+                head: [
+                    {
+                    text: "Type",
+                    classes: "courses-qualifications-details-width-15",
+                    attributes: {
+                        "aria-sort": "none"
+                    }
+                    },
+                    { text: "Course name" },
+                    { text: "Location", attributes: {
+                        "aria-sort": "none"
+                    } },
+                    { text: "Dates", classes: "courses-qualifications-details-width-15", attributes: {
+                        "aria-sort": "descending"
+                    } },
+                    { text: "Outcome", classes: "courses-qualifications-details-width-10", attributes: {
+                        "aria-sort": "none"
+                    } },
+                    { text: "Outcome details", classes: "courses-qualifications-details-width-20" }
+                ],
+                rows: rows,
+                attributes: { "data-test": "courses-qualifications-table" }
+            }) }}
+        </div>
+      </div>
+    </div>
+    {% else %}
+    <div class="govuk-grid-row">
+        <div class="govuk-grid-column-three-quarters">
+            <p class="govuk-body" data-test="no-courses-qualifications">{{ prisonerName }} has no courses or qualifications</p>
+        </div>
+    </div>
+    {% endif %}
+    <div class="govuk-grid-row">
+      <div class="govuk-grid-column-two-thirds">
+        <p class="govuk-body">
+          <a href={{ profileUrl }} class="govuk-link govuk-!-display-none-print" data-test="courses-qualifications-returnLink">Return to prisoner profile</a>
+        </p>
+      </div>
+    </div>
+    
+
+{% endblock %}
+
+{% block bodyEnd %}
+  {{ super() }}
+  <script src="/assets/moj/components/sortable-table/sortable-table.js"></script>
+  <script>
+    new MOJFrontend.SortableTable({
+      table: $("table")[0],
+    })
+  </script>
+{% endblock %}

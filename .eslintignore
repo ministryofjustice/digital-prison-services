@@ -6,6 +6,7 @@ docs
 bin
 static
 audit-ci.json
+package.json
 package-lock.json
 cypress.json
 cypress-reporter-config.json

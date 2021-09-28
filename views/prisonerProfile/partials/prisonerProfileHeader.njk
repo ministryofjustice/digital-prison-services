@@ -2,145 +2,165 @@
 {% from "../../macros/alertFlags.njk" import alertFlags %}
 {% from "../../macros/categoryFlag.njk" import categoryFlag %}
 
-{% macro headerItem(label, content, missingValue, classes) %}
-  <li class="{{ classes }}">
-    <strong>{{ label }}</strong>
-    <br>
-    {{ content | showDefault(missingValue or 'Not entered') | safe}}
-  </li>
+{% macro headerItem(label, content, missingValue, classes, dataTest) %}
+    <li class="{{ classes }}">
+        <strong>{{ label }}</strong>
+        <br>
+        <span data-test="{{ dataTest }}">
+             {{ content | showDefault(missingValue or 'Not entered') | safe }}
+      </span>
+    </li>
 {% endmacro %}
 
 {% set alertNumbersHtml %}
-  <span>{{ prisonerProfileData.activeAlertCount }} active, {{ prisonerProfileData.inactiveAlertCount }} inactive</span>
-  <br>
-  <a data-test="view-alerts-link" class="govuk-link" href="{{ '/prisoner/' + prisonerProfileData.offenderNo + '/alerts' }}">
-    View alerts
-  </a>
+    <span>{{ prisonerProfileData.activeAlertCount }} active, {{ prisonerProfileData.inactiveAlertCount }} inactive</span>
+    <br>
+    <a data-test="view-alerts-link" class="govuk-link"
+       href="{{ '/prisoner/' + prisonerProfileData.offenderNo + '/alerts' }}">
+        View alerts
+    </a>
 {% endset %}
 
 {% set incentiveLevelHtml %}
-  <span>{{ prisonerProfileData.incentiveLevel | showDefault('Not entered') }}</span>
-  {% if prisonerProfileData.userCanEdit %}
-    <br>
-    <a data-test="iep-details-link" class="govuk-link" href="{{ '/prisoner/' + prisonerProfileData.offenderNo + '/incentive-level-details' }}">
-      View details <span class="govuk-visually-hidden">for Incentive Level</span>
-    </a>
-  {% endif %}
+    <span>{{ prisonerProfileData.incentiveLevel | showDefault('Not entered') }}</span>
+    {% if prisonerProfileData.userCanEdit %}
+        <br>
+        <a data-test="iep-details-link" class="govuk-link"
+           href="{{ '/prisoner/' + prisonerProfileData.offenderNo + '/incentive-level-details' }}">
+            View details <span class="govuk-visually-hidden">for Incentive Level</span>
+        </a>
+    {% endif %}
 {% endset %}
 
 {% set categoryHtml %}
-  {{ categoryFlag(prisonerProfileData.category, prisonerProfileData.categoryCode) }}
+    {{ categoryFlag(prisonerProfileData.category, prisonerProfileData.categoryCode) }}
 
-  {% if prisonerProfileData.categorisationLinkText %}
-    <br>
-    <a data-qa="categorisation-external-link" class="govuk-link" href="{{ prisonerProfileData.categorisationLink }}">
-      {{ prisonerProfileData.categorisationLinkText }}
-    </a>
-  {% endif %}
+    {% if prisonerProfileData.categorisationLinkText %}
+        <br>
+        <a data-qa="categorisation-external-link" class="govuk-link"
+           href="{{ prisonerProfileData.categorisationLink }}">
+            {{ prisonerProfileData.categorisationLinkText }}
+        </a>
+    {% endif %}
 {% endset %}
 
 {% set locationHtml %}
-  {{ prisonerProfileData.location}}
-  <br>
-  {{ prisonerProfileData.agencyName}}
-  <br>
-  <a data-qa="cell-history-link" class="govuk-link" href="{{ '/prisoner/' + prisonerProfileData.offenderNo + '/cell-history' }}">
-      View details
+    {{ prisonerProfileData.location }}
+    <br>
+    {{ prisonerProfileData.agencyName }}
+    <br>
+    <a data-qa="cell-history-link" class="govuk-link"
+       href="{{ '/prisoner/' + prisonerProfileData.offenderNo + '/cell-history' }}">
+        View details
     </a>
 {% endset %}
 
 {% set csraHtml %}
-  <span data-test="csra-details">{{ prisonerProfileData.csra }} - {{ prisonerProfileData.lastReviewDate or 'No previous review' }}</span>
-  <br>
-  {# <a data-test="csra-link" class="govuk-link" href="{{ '/prisoner/' + prisonerProfileData.offenderNo + '/csra-history' }}">
-    View details <span class="govuk-visually-hidden">of CSRA</span>
-  </a> #}
+    <span data-test="csra-details">{{ prisonerProfileData.csra }} - {{ prisonerProfileData.csraReviewDate or 'No previous review' }}</span>
+    <br>
+    <a data-test="csra-link" class="govuk-link"
+       href="{{ '/prisoner/' + prisonerProfileData.offenderNo + '/csra-history' }}">
+        View details <span class="govuk-visually-hidden">of CSRA</span>
+    </a>
 {% endset %}
 
 <div class="header-with-link">
     <h1 class="govuk-heading-l">{{ prisonerProfileData.offenderName }}</h1>
-    {%  if prisonerProfileData.canViewPathfinderLink %}
+    {% if prisonerProfileData.canViewPathfinderLink %}
         <span class="govuk-body">
             <a class="govuk-link" data-qa="path-finder-link" href="{{ prisonerProfileData.pathfinderProfileUrl }}">View Pathfinder profile</a>
         </span>
     {% endif %}
-    {%  if prisonerProfileData.canViewSocLink %}
+    {% if prisonerProfileData.canViewSocLink %}
         <span class="govuk-body">
-            <a class="govuk-link" data-qa="soc-link" href="{{ prisonerProfileData.socProfileUrl }}" data-test="soc-profile-link">View SOC profile</a>
+            <a class="govuk-link" data-qa="soc-link" href="{{ prisonerProfileData.socProfileUrl }}"
+               data-test="soc-profile-link">View SOC profile</a>
         </span>
     {% endif %}
 </div>
 
 <div class="prisoner-header">
-  <div class="prisoner-header__image-container">
-    <a href="{{ '/prisoner/' + prisonerProfileData.offenderNo + '/image'}}">
-      <img src="{{ '/app/images/' + prisonerProfileData.offenderNo + '/data' }}" alt="{{ 'Picture of ' + prisonerProfileData.offenderName }}"  class="prisoner-image" />
-    </a>
-  </div>
-
-  <div class="prisoner-header__details">
-    <div class="prisoner-header__details__alerts">
-      {{ alertFlags(prisonerProfileData.alerts) }}
+    <div class="prisoner-header__image-container">
+        <a href="{{ '/prisoner/' + prisonerProfileData.offenderNo + '/image' }}">
+            <img src="{{ '/app/images/' + prisonerProfileData.offenderNo + '/data' }}"
+                 alt="{{ 'Picture of ' + prisonerProfileData.offenderName }}" class="prisoner-image" />
+        </a>
     </div>
 
-    <ul class="prisoner-header__details__information">
-      {{ headerItem('Prison number', prisonerProfileData.offenderNo) }}
-      {{ headerItem('Category', categoryHtml) }}
-      {{ headerItem('Incentive level', incentiveLevelHtml) }}
-      {{ headerItem('Location', locationHtml) }}
-      {{ headerItem('CSRA', csraHtml, classes="govuk-!-margin-bottom-4") }}
-      {{ headerItem('Alerts', alertNumbersHtml) }}
-      {{ headerItem('Key worker', prisonerProfileData.keyWorkerName, 'None assigned', 'govuk-!-margin-bottom-0') }}
-      {{ headerItem('Last session', prisonerProfileData.keyWorkerLastSession, 'No previous session') }}
-      {{ headerItem('Prison Offender Manager', prisonerProfileData.pomStaff, 'None assigned', 'govuk-!-margin-bottom-0') }}
-    </ul>
+    <div class="prisoner-header__details">
+        <div class="prisoner-header__details__alerts">
+            {{ alertFlags(prisonerProfileData.alerts) }}
+        </div>
 
-    <div class="prisoner-header__details__actions">
-        {% if prisonerProfileData.showPathfinderReferButton %}
-            <a  href="{{ prisonerProfileData.pathfinderReferUrl }}" class="govuk-button govuk-button--link govuk-!-margin-bottom-3" data-module="govuk-button" target="_blank" rel="noopener noreferrer">
-                Refer to Pathfinder
-            </a>
-        {% endif %}
+        <ul class="prisoner-header__details__information">
+            {{ headerItem('Prison number', prisonerProfileData.offenderNo) }}
+            {{ headerItem('Category', categoryHtml) }}
+            {{ headerItem('Incentive level', incentiveLevelHtml) }}
+            {{ headerItem('Location', locationHtml) }}
+            {{ headerItem('CSRA', csraHtml, classes="govuk-!-margin-bottom-4") }}
+            {{ headerItem('Alerts', alertNumbersHtml) }}
 
-        {% if prisonerProfileData.showSocReferButton %}
-            <a  href="{{ prisonerProfileData.socReferUrl }}" class="govuk-button govuk-button--link govuk-!-margin-bottom-3" data-module="govuk-button" target="_blank"  rel="noopener noreferrer" data-test="soc-referral-button">
-                Add to SOC
-            </a>
-        {% endif %}
+            {% if prisonerProfileData.isHighComplexity %}
+                {{ headerItem('Key worker', 'None - high complexity of need', '', 'govuk-!-margin-bottom-0', 'keyworker-name') }}
+                <li></li>
+            {% else %}
+                {{ headerItem('Key worker', prisonerProfileData.keyWorkerName, 'Not allocated', 'govuk-!-margin-bottom-0', 'keyworker-name') }}
+                {{ headerItem('Last session', prisonerProfileData.keyWorkerLastSession, 'No previous session', null, 'last-session') }}
+            {% endif %}
 
-        {% if prisonerProfileData.userCanEdit %}
-            {{ govukButton({
-              text: "Add a case note",
-              element: "a",
-              classes: "govuk-button--link govuk-!-margin-bottom-3",
-              href: "/prisoner/" + prisonerProfileData.offenderNo + "/add-case-note"
-            }) }}
+            {{ headerItem('Prison offender manager', prisonerProfileData.pomStaff, 'None assigned', 'govuk-!-margin-bottom-0') }}
+        </ul>
 
-        {% if prisonerProfileData.showAddKeyworkerSession %}
-          {{ govukButton({
-            text: "Add key worker session",
-            element: "a",
-            classes: "govuk-button--link govuk-!-margin-bottom-3",
-            href:  "/prisoner/" + prisonerProfileData.offenderNo + "/add-case-note?type=KA&subType=KS"
-          }) }}
-        {% endif %}
+        <div class="prisoner-header__details__actions">
+            {% if prisonerProfileData.showPathfinderReferButton %}
+                <a href="{{ prisonerProfileData.pathfinderReferUrl }}"
+                   class="govuk-button govuk-button--link govuk-!-margin-bottom-3" data-module="govuk-button"
+                   target="_blank" rel="noopener noreferrer">
+                    Refer to Pathfinder
+                </a>
+            {% endif %}
 
-        {{ govukButton({
-          text: "Add an appointment",
-          element: "a",
-          classes: "govuk-button--link govuk-!-margin-bottom-3",
-          href: "/offenders/" + prisonerProfileData.offenderNo + "/add-appointment"
-        }) }}
+            {% if prisonerProfileData.showSocReferButton %}
+                <a href="{{ prisonerProfileData.socReferUrl }}"
+                   class="govuk-button govuk-button--link govuk-!-margin-bottom-3" data-module="govuk-button"
+                   target="_blank" rel="noopener noreferrer" data-test="soc-referral-button">
+                    Add to SOC
+                </a>
+            {% endif %}
 
-        {% if prisonerProfileData.showReportUseOfForce %}
-          {{ govukButton({
-            text: "Report use of force",
-            element: "a",
-            classes: "govuk-button--link govuk-!-margin-bottom-3",
-            href: prisonerProfileData.useOfForceUrl
-          }) }}
-        {% endif %}
-      {% endif %}
+            {% if prisonerProfileData.userCanEdit %}
+                {{ govukButton({
+                    text: "Add a case note",
+                    element: "a",
+                    classes: "govuk-button--link govuk-!-margin-bottom-3",
+                    href: "/prisoner/" + prisonerProfileData.offenderNo + "/add-case-note"
+                }) }}
+
+                {% if prisonerProfileData.showAddKeyworkerSession %}
+                    {{ govukButton({
+                        text: "Add key worker session",
+                        element: "a",
+                        classes: "govuk-button--link govuk-!-margin-bottom-3",
+                        href:  "/prisoner/" + prisonerProfileData.offenderNo + "/add-case-note?type=KA&subType=KS"
+                    }) }}
+                {% endif %}
+
+                {{ govukButton({
+                    text: "Add an appointment",
+                    element: "a",
+                    classes: "govuk-button--link govuk-!-margin-bottom-3",
+                    href: "/offenders/" + prisonerProfileData.offenderNo + "/add-appointment"
+                }) }}
+
+                {% if prisonerProfileData.showReportUseOfForce %}
+                    {{ govukButton({
+                        text: "Report use of force",
+                        element: "a",
+                        classes: "govuk-button--link govuk-!-margin-bottom-3",
+                        href: prisonerProfileData.useOfForceUrl
+                    }) }}
+                {% endif %}
+            {% endif %}
+        </div>
     </div>
-  </div>
 </div>

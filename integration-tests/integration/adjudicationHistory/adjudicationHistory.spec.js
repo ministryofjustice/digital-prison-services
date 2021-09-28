@@ -49,8 +49,8 @@ context('A user can confirm the cell move', () => {
   before(() => {
     cy.clearCookies()
     cy.task('resetAndStubTokenVerification')
-    cy.task('stubLogin', { username: 'ITAG_USER', caseload: 'MDI' })
-    cy.login()
+    cy.task('stubSignIn', { username: 'ITAG_USER', caseload: 'MDI' })
+    cy.signIn()
   })
   beforeEach(() => {
     Cypress.Cookies.preserveOnce('hmpps-session-dev')
@@ -70,7 +70,7 @@ context('A user can confirm the cell move', () => {
     page
       .tableRows()
       .find('td')
-      .then($columns => {
+      .then(($columns) => {
         expect($columns[0].innerText).to.equal('1234567')
         expect($columns[0].innerHTML).to.equal(
           '<a href="/prisoner/A12345/adjudications/1234567" class="govuk-link"> 1234567 </a>'
@@ -85,31 +85,14 @@ context('A user can confirm the cell move', () => {
   it('should make a request with the correct filters supplied by the form', () => {
     const page = adjudicationsPage.goTo(offenderNo, offenderName)
 
-    page
-      .form()
-      .establishment()
-      .select('MDI')
-    page
-      .form()
-      .finding()
-      .select('type 1')
+    page.form().establishment().select('MDI')
+    page.form().finding().select('type 1')
 
-    page
-      .form()
-      .fromDate()
-      .type('01/08/2020', { force: true })
-      .type('{esc}', { force: true })
+    page.form().fromDate().type('01/08/2020', { force: true }).type('{esc}', { force: true })
 
-    page
-      .form()
-      .toDate()
-      .type('05/08/2020', { force: true })
-      .type('{esc}', { force: true })
+    page.form().toDate().type('05/08/2020', { force: true }).type('{esc}', { force: true })
 
-    page
-      .form()
-      .applyFilters()
-      .click()
+    page.form().applyFilters().click()
 
     page.checkStillOnPage()
 
@@ -157,22 +140,11 @@ context('A user can confirm the cell move', () => {
 
     const page = adjudicationsPage.goTo(offenderNo, offenderName)
 
-    page
-      .form()
-      .fromDate()
-      .type('01/08/2020', { force: true })
-      .type('{esc}', { force: true })
+    page.form().fromDate().type('01/08/2020', { force: true }).type('{esc}', { force: true })
 
-    page
-      .form()
-      .toDate()
-      .type('05/08/2020', { force: true })
-      .type('{esc}', { force: true })
+    page.form().toDate().type('05/08/2020', { force: true }).type('{esc}', { force: true })
 
-    page
-      .form()
-      .applyFilters()
-      .click()
+    page.form().applyFilters().click()
 
     page.checkStillOnPage()
 

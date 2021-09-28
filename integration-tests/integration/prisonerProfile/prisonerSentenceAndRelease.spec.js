@@ -6,8 +6,8 @@ context('Prisoner sentence and release', () => {
   before(() => {
     cy.clearCookies()
     cy.task('resetAndStubTokenVerification')
-    cy.task('stubLogin', { username: 'ITAG_USER', caseload: 'MDI' })
-    cy.login()
+    cy.task('stubSignIn', { username: 'ITAG_USER', caseload: 'MDI' })
+    cy.signIn()
   })
 
   beforeEach(() => {
@@ -21,6 +21,7 @@ context('Prisoner sentence and release', () => {
       offenderNo: 'A12345',
     })
     cy.task('stubOffenderBasicDetails', { bookingId: 1 })
+    cy.task('stubPrisonerSearch')
     cy.task('stubClientCredentialsRequest')
   })
 
@@ -71,87 +72,57 @@ context('Prisoner sentence and release', () => {
     prisonerSentenceAndReleasePage
       .currentReleaseDates()
       .find('dt')
-      .then($summaryKeys => {
-        expect($summaryKeys.get(0).innerText).to.eq('\n          Approved for home detention curfew\n        ')
-        expect($summaryKeys.get(1).innerText).to.eq('\n          Parole eligibility\n        ')
-        expect($summaryKeys.get(2).innerText).to.eq('\n          Conditional release\n        ')
-        expect($summaryKeys.get(3).innerText).to.eq('\n          Post recall release\n        ')
-        expect($summaryKeys.get(4).innerText).to.eq('\n          Mid transfer\n        ')
-        expect($summaryKeys.get(5).innerText).to.eq('\n          Automatic release\n        ')
-        expect($summaryKeys.get(6).innerText).to.eq('\n          Non parole\n        ')
-        expect($summaryKeys.get(7).innerText).to.eq('\n          Detention training post recall\n        ')
+      .then(($summaryKeys) => {
+        expect($summaryKeys.length).to.eq(7)
       })
 
     prisonerSentenceAndReleasePage
       .currentReleaseDates()
       .find('dd')
-      .then($summaryValues => {
-        expect($summaryValues.get(0).innerText).to.eq('\n          2 June 2021\n        ')
-        expect($summaryValues.get(1).innerText).to.eq('\n          3 February 2022\n        ')
-        expect($summaryValues.get(2).innerText).to.eq('\n          1 February 2020\n        ')
-        expect($summaryValues.get(3).innerText).to.eq('\n          3 February 2021\n        ')
-        expect($summaryValues.get(4).innerText).to.eq('\n          10 August 2020\n        ')
-        expect($summaryValues.get(5).innerText).to.eq('\n          1 January 2020\n        ')
-        expect($summaryValues.get(6).innerText).to.eq('\n          3 February 2019\n        ')
-        expect($summaryValues.get(7).innerText).to.eq('\n          16 October 2020\n        ')
+      .then(($summaryValues) => {
+        expect($summaryValues.length).to.eq(7)
       })
 
     prisonerSentenceAndReleasePage
       .earlyTemporaryDates()
       .find('dt')
-      .then($summaryKeys => {
-        expect($summaryKeys.get(0).innerText).to.eq('\n          Home detention curfew\n        ')
-        expect($summaryKeys.get(1).innerText).to.eq('\n          Release on temporary licence\n        ')
-        expect($summaryKeys.get(2).innerText).to.eq('\n          Early removal scheme\n        ')
-        expect($summaryKeys.get(3).innerText).to.eq('\n          Tariff early removal scheme\n        ')
-        expect($summaryKeys.get(4).innerText).to.eq('\n          Approved for parole\n        ')
-        expect($summaryKeys.get(5).innerText).to.eq('\n          Early transfer\n        ')
+      .then(($summaryKeys) => {
+        expect($summaryKeys.length).to.eq(7)
       })
 
     prisonerSentenceAndReleasePage
       .earlyTemporaryDates()
       .find('dd')
-      .then($summaryValues => {
-        expect($summaryValues.get(0).innerText).to.eq('\n          3 July 2019\n        ')
-        expect($summaryValues.get(1).innerText).to.eq('\n          3 February 2025\n        ')
-        expect($summaryValues.get(2).innerText).to.eq('\n          12 November 2018\n        ')
-        expect($summaryValues.get(3).innerText).to.eq('\n          10 October 2017\n        ')
-        expect($summaryValues.get(4).innerText).to.eq('\n          3 April 2020\n        ')
-        expect($summaryValues.get(5).innerText).to.eq('\n          9 August 2019\n        ')
+      .then(($summaryValues) => {
+        expect($summaryValues.length).to.eq(7)
       })
 
     prisonerSentenceAndReleasePage
       .licenceDates()
       .find('dt')
-      .then($summaryKeys => {
-        expect($summaryKeys.get(0).innerText).to.eq('\n          Licence expiry\n        ')
-        expect($summaryKeys.get(1).innerText).to.eq('\n          Sentence expiry\n        ')
-        expect($summaryKeys.get(2).innerText).to.eq('\n          Top up supervision expiry\n        ')
+      .then(($summaryKeys) => {
+        expect($summaryKeys.length).to.eq(3)
       })
 
     prisonerSentenceAndReleasePage
       .licenceDates()
       .find('dd')
-      .then($summaryValues => {
-        expect($summaryValues.get(0).innerText).to.eq('\n          4 February 2020\n        ')
-        expect($summaryValues.get(1).innerText).to.eq('\n          19 February 2020\n        ')
-        expect($summaryValues.get(2).innerText).to.eq('\n          14 October 2020\n        ')
+      .then(($summaryValues) => {
+        expect($summaryValues.length).to.eq(3)
       })
 
     prisonerSentenceAndReleasePage
       .otherReleaseDates()
       .find('dt')
-      .then($summaryKeys => {
-        expect($summaryKeys.get(0).innerText).to.eq('\n          Late transfer\n        ')
-        expect($summaryKeys.get(1).innerText).to.eq('\n          Tariff\n        ')
+      .then(($summaryKeys) => {
+        expect($summaryKeys.length).to.eq(2)
       })
 
     prisonerSentenceAndReleasePage
       .otherReleaseDates()
       .find('dd')
-      .then($summaryValues => {
-        expect($summaryValues.get(0).innerText).to.eq('\n          11 August 2021\n        ')
-        expect($summaryValues.get(1).innerText).to.eq('\n          7 May 2021\n        ')
+      .then(($summaryValues) => {
+        expect($summaryValues.length).to.eq(2)
       })
   })
 
@@ -208,17 +179,17 @@ context('Prisoner sentence and release', () => {
     prisonerSentenceAndReleasePage
       .otherReleaseDates()
       .find('dt')
-      .then($summaryKeys => {
-        expect($summaryKeys.get(0).innerText).to.eq('\n          Late transfer\n        ')
-        expect($summaryKeys.get(1).innerText).to.eq('\n          Tariff\n        ')
+      .then(($summaryKeys) => {
+        expect($summaryKeys.get(0).innerText).to.eq('\n          Tariff\n        ')
+        expect($summaryKeys.get(1).innerText).to.eq('\n          Late transfer\n        ')
       })
 
     prisonerSentenceAndReleasePage
       .otherReleaseDates()
       .find('dd')
-      .then($summaryValues => {
-        expect($summaryValues.get(0).innerText).to.eq('\n          11 August 2021\n        ')
-        expect($summaryValues.get(1).innerText).to.eq('\n          7 May 2021\n        ')
+      .then(($summaryValues) => {
+        expect($summaryValues.get(0).innerText).to.eq('\n          7 May 2021\n        ')
+        expect($summaryValues.get(1).innerText).to.eq('\n          11 August 2021\n        ')
       })
   })
 
@@ -276,7 +247,7 @@ context('Prisoner sentence and release', () => {
     prisonerSentenceAndReleasePage
       .sentenceAdjustmentsDaysRemovedSection()
       .find('dd')
-      .then($summaryValues => {
+      .then(($summaryValues) => {
         expect($summaryValues.get(0).innerText.trim()).to.eq('1')
         expect($summaryValues.get(1).innerText.trim()).to.eq('3')
         expect($summaryValues.get(2).innerText.trim()).to.eq('4')
@@ -314,7 +285,7 @@ context('Prisoner sentence and release', () => {
     prisonerSentenceAndReleasePage
       .sentenceAdjustmentsDaysAddedSection()
       .find('dd')
-      .then($summaryValues => {
+      .then(($summaryValues) => {
         expect($summaryValues.get(0).innerText.trim()).to.eq('1')
         expect($summaryValues.get(1).innerText.trim()).to.eq('2')
       })
@@ -348,7 +319,7 @@ context('Prisoner sentence and release', () => {
     prisonerSentenceAndReleasePage
       .sentenceAdjustmentsDaysRemainingSection()
       .find('dd')
-      .then($summaryValues => {
+      .then(($summaryValues) => {
         expect($summaryValues.get(0).innerText.trim()).to.eq('1')
       })
   })
@@ -419,7 +390,7 @@ context('Prisoner sentence and release', () => {
     page
       .sentenceTerms()
       .find('dd')
-      .then($termValues => {
+      .then(($termValues) => {
         expect($termValues.get(0).innerText.trim()).to.eq('1 January 2017')
         expect($termValues.get(1).innerText.trim()).to.eq('12 years, 2 months, 1 day')
 
@@ -430,7 +401,7 @@ context('Prisoner sentence and release', () => {
     page
       .effectiveSentenceEndDate()
       .find('dd')
-      .then($value => {
+      .then(($value) => {
         expect($value.get(0).innerText.trim()).to.eq('19 March 2022')
       })
   })

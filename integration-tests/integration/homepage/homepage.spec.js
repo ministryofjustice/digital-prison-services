@@ -9,12 +9,13 @@ context('Homepage', () => {
     cy.task('stubUserLocations')
     cy.task('stubStaffRoles', [])
     cy.task('stubLocationConfig', { agencyId: 'MDI', response: { enabled: false } })
+    cy.task('stubKeyworkerMigrated')
   })
 
   describe('Header', () => {
     it('should display the correct details for the logged in user', () => {
-      cy.task('stubLogin', { username: 'ITAG_USER', caseload: 'MDI' })
-      cy.login()
+      cy.task('stubSignIn', { username: 'ITAG_USER', caseload: 'MDI' })
+      cy.signIn()
 
       const page = homepagePage.goTo()
 
@@ -24,7 +25,7 @@ context('Homepage', () => {
       page
         .manageAccountLink()
         .should('have.attr', 'href')
-        .then(href => {
+        .then((href) => {
           expect(href).to.equal('http://localhost:9191/auth/account-details')
         })
 
@@ -32,7 +33,7 @@ context('Homepage', () => {
     })
 
     it('should show change location link when user has more than 1 caseload', () => {
-      cy.task('stubLogin', {
+      cy.task('stubSignIn', {
         username: 'ITAG_USER',
         caseload: 'MDI',
         caseloads: [
@@ -48,7 +49,7 @@ context('Homepage', () => {
           },
         ],
       })
-      cy.login()
+      cy.signIn()
 
       const page = homepagePage.goTo()
 
@@ -56,7 +57,7 @@ context('Homepage', () => {
         .changeLocationLink()
         .should('be.visible')
         .should('have.attr', 'href')
-        .then(href => {
+        .then((href) => {
           expect(href).to.equal('/change-caseload')
         })
     })
@@ -64,8 +65,8 @@ context('Homepage', () => {
 
   describe('Search', () => {
     it('should should submit to the correct location with the correct search terms', () => {
-      cy.task('stubLogin', { username: 'ITAG_USER', caseload: 'MDI' })
-      cy.login()
+      cy.task('stubSignIn', { username: 'ITAG_USER', caseload: 'MDI' })
+      cy.signIn()
 
       const page = homepagePage.goTo()
 
@@ -79,8 +80,8 @@ context('Homepage', () => {
 
   describe('Tasks', () => {
     beforeEach(() => {
-      cy.task('stubLogin', { username: 'ITAG_USER', caseload: 'MDI' })
-      cy.login()
+      cy.task('stubSignIn', { username: 'ITAG_USER', caseload: 'MDI' })
+      cy.signIn()
     })
 
     it('should show use of force', () => {
@@ -111,6 +112,14 @@ context('Homepage', () => {
       page.managePrisonerWhereabouts().should('exist')
     })
 
+    it('should show change someones cell task', () => {
+      cy.task('stubUserMeRoles', [{ roleCode: 'CELL_MOVE' }])
+
+      const page = homepagePage.goTo()
+
+      page.changeSomeonesCell().should('exist')
+    })
+
     it('should show pathfinder', () => {
       cy.task('stubUserMeRoles', [{ roleCode: 'PF_STD_PRISON' }])
 
@@ -128,7 +137,7 @@ context('Homepage', () => {
     })
 
     it('should show manage key workers', () => {
-      cy.task('stubUserMeRoles', [{ roleCode: 'OMIC_ADMIN' }])
+      cy.task('stubUserMeRoles', [{ roleCode: 'OMIC_ADMIN' }, { roleCode: 'KW_MIGRATION' }])
 
       const page = homepagePage.goTo()
 
@@ -174,21 +183,23 @@ context('Homepage', () => {
 
       page.soc().should('exist')
     })
+  })
 
-    it('should show covid unit task', () => {
-      cy.task('stubUserMeRoles', [{ roleCode: 'PRISON' }])
-
-      const page = homepagePage.goTo()
-
-      page.covidUnits().should('exist')
-    })
-
-    it('should show bulk appointments task', () => {
-      cy.task('stubUserMeRoles', [{ roleCode: 'BULK_APPOINTMENTS' }])
+  describe('Footer', () => {
+    it('should display the feedback banner with the correct href', () => {
+      cy.task('stubSignIn', { username: 'ITAG_USER', caseload: 'MDI' })
+      cy.signIn()
 
       const page = homepagePage.goTo()
 
-      page.bulkAppointments().should('exist')
+      page
+        .feedbackBanner()
+        .find('a')
+        .should('contain', 'Give feedback on Digital Prison Services (opens in a new tab)')
+        .should('have.attr', 'href')
+        .then((href) => {
+          expect(href).to.equal('https://eu.surveymonkey.com/r/GYB8Y9Q?source=localhost/')
+        })
     })
   })
 })

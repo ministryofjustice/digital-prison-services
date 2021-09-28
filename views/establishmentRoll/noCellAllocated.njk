@@ -7,15 +7,12 @@
   {{ govukBreadcrumbs({
     items: [
       {
-          text: "Home",
-          href: '/'
+        text: "Digital Prison Services",
+        href: "/"
       },
       {
-          text: 'Establishment roll',
-          href: '/establishment-roll'
-      },
-      {
-          text: title
+        text: "Today’s establishment roll",
+        href: "/establishment-roll"
       }
     ],
     classes: "govuk-!-display-none-print"
@@ -41,33 +38,43 @@
 {% endfor %}
 
 {% block content %}
-  <div class="govuk-grid-row">
-    <div class="govuk-grid-column-two-thirds">
-      <h1 class="govuk-heading-l">{{ title }}</h1>
-      <p class="govuk-body">These people have been moved out of their cell to create a space for someone else and do not currently have a cell allocated.</p>
+    
+  {% if rows.length %}
+    <div class="govuk-grid-row">
+      <div class="govuk-grid-column-two-thirds">
+        <h1 class="govuk-heading-l">{{ title }}</h1>
+        <p class="govuk-body" data-test="results-message">These people have been moved out of their cell to create a space for someone else and do not currently have a cell allocated.</p>
+      </div>
     </div>
-  </div>
 
-  <div class="results-table results-table__results">
-    {{ govukTable({
-      head: [
-        { html: '<span class="govuk-visually-hidden">Picture</span>' },
-        {
-          text: "Name",
-          attributes: {
-            "aria-sort": "ascending"
-          }
-        },
-        { text: "Prison number" },
-        { text: "Previous cell" },
-        { text: "Time moved out" },
-        { text: "Moved out by" },
-        { html: '<span class="govuk-visually-hidden">Allocate</span>' } if userCanAllocateCell
-      ],
-      rows: rows,
-      attributes: { "data-test": "no-cell-allocated-table" }
-    }) }}
-  </div>
+    <div class="results-table results-table__results">
+      {{ govukTable({
+        head: [
+          { html: '<span class="govuk-visually-hidden">Picture</span>' },
+          {
+            text: "Name",
+            attributes: {
+              "aria-sort": "ascending"
+            }
+          },
+          { text: "Prison number" },
+          { text: "Previous cell" },
+          { text: "Time moved out" },
+          { text: "Moved out by" },
+          { html: '<span class="govuk-visually-hidden">Allocate</span>' } if userCanAllocateCell
+        ],
+        rows: rows,
+        attributes: { "data-test": "no-cell-allocated-table" }
+      }) }}
+    </div>
+  {% else %}
+    <div class="govuk-grid-row">
+      <div class="govuk-grid-column-two-thirds">
+        <h1 class="govuk-heading-l">{{ title }}</h1>
+        <p class="govuk-body" data-test="no-results-message">There are no prisoners without a cell.</p>
+      </div>
+    </div>
+  {% endif %}
 {% endblock %}
 
 {% block bodyEnd %}

@@ -5,7 +5,7 @@ const initialState = {
   prisoners: [],
 }
 
-const mapToAppointmentDetails = appointmentDetails => {
+const mapToAppointmentDetails = (appointmentDetails) => {
   const {
     date,
     appointmentType,
@@ -28,8 +28,8 @@ const mapToAppointmentDetails = appointmentDetails => {
     startTime,
     endTime,
     comments,
-    appointmentTypeDescription: appointmentTypes.find(apt => apt.id === appointmentType).description,
-    locationDescription: locationTypes.find(loc => loc.id === Number(location)).description,
+    appointmentTypeDescription: appointmentTypes.find((apt) => apt.id === appointmentType).description,
+    locationDescription: locationTypes.find((loc) => loc.id === Number(location)).description,
     recurring,
     times,
     repeats,

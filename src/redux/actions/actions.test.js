@@ -19,7 +19,7 @@ describe('actions', () => {
     expect(actions.setConfig({ mailTo: 'a@b.com' })).toEqual(expectedAction)
   })
 
-  it('should create an action to setup login details', () => {
+  it('should create an action to setup sign in details', () => {
     const user = { field: 'user' }
     const expectedAction = {
       type: types.SET_USER_DETAILS,

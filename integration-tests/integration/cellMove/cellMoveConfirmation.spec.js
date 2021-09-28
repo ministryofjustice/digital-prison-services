@@ -7,8 +7,8 @@ context('A user get confirmation of a cell move', () => {
   before(() => {
     cy.clearCookies()
     cy.task('resetAndStubTokenVerification')
-    cy.task('stubLogin', { username: 'ITAG_USER', caseload: 'MDI' })
-    cy.login()
+    cy.task('stubSignIn', { username: 'ITAG_USER', caseload: 'MDI' })
+    cy.signIn()
   })
   beforeEach(() => {
     Cypress.Cookies.preserveOnce('hmpps-session-dev')
@@ -28,26 +28,18 @@ context('A user get confirmation of a cell move', () => {
   it('should page with the correct offender name and cell description', () => {
     const page = cellConfirmationPage.goTo({ offenderNo, cellId, cellDescription: 'MDI-1-1', name: 'Bob Doe' })
 
-    page.backLink().should('be.visible')
+    cy.title().should('eq', 'The prisoner’s cell has been changed - Digital Prison Services')
     page
-      .backLink()
+      .backToStart()
       .invoke('attr', 'href')
-      .then(href => {
-        expect(href).to.equal('/prisoner/A1234A')
-      })
-
-    page.backToSearchLink().should('be.visible')
-    page
-      .backToSearchLink()
-      .invoke('attr', 'href')
-      .then(href => {
-        expect(href).to.equal('/prisoner-search')
+      .then((href) => {
+        expect(href).to.equal('/back-to-start')
       })
 
     cy.get("[data-test='exit-survey-link']")
       .invoke('attr', 'href')
-      .then(href => {
-        expect(href).to.equal('https://www.surveymonkey.co.uk/r/5QLYDWY')
+      .then((href) => {
+        expect(href).to.equal('https://eu.surveymonkey.com/r/3JHPDDD')
       })
   })
 })

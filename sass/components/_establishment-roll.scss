@@ -10,6 +10,27 @@
   @include govuk-media-query($from: desktop) {
     width: 75%;
   }
+
+  &__results {
+    &-list {
+      overflow: auto;
+
+      &__image {
+        width: 90px;
+
+        @media print {
+          width: 60px;
+        }
+      }
+
+      .govuk-table__header {
+        vertical-align: bottom;
+      }
+
+      .govuk-table__cell {
+        vertical-align: middle;
+      }
+    }
 }
 
 .establishment-roll__label-and-value {
@@ -27,4 +48,5 @@
       flex-basis: 33%;
     }
   }
+}
 }

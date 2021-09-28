@@ -87,6 +87,44 @@ class ResultsHouseblockContainer extends Component {
     wingStatusDispatch('all')
   }
 
+  handlePrint(version) {
+    const { raiseAnalyticsEvent } = this.props
+
+    if (version === 'redacted') {
+      this.setState({ redactedPrint: true }, () => {
+        window.print()
+      })
+
+      raiseAnalyticsEvent({
+        category: 'Redacted Residential list',
+        action: 'Print list',
+      })
+    }
+
+    if (!version) {
+      this.setState({ redactedPrint: false }, () => {
+        window.print()
+      })
+
+      raiseAnalyticsEvent({
+        category: 'House block list',
+        action: 'Print list',
+      })
+    }
+  }
+
+  handleSubLocationChange(event) {
+    const { subLocationDispatch } = this.props
+
+    subLocationDispatch(event.target.value)
+  }
+
+  handleWingStatusChange(event) {
+    const { wingStatusDispatch } = this.props
+
+    wingStatusDispatch(event.target.value)
+  }
+
   setColumnSort(sortColumn, sortOrder) {
     const { orderDispatch, sortOrderDispatch, houseblockData, houseblockDataDispatch } = this.props
     orderDispatch(sortColumn)
@@ -129,7 +167,7 @@ class ResultsHouseblockContainer extends Component {
     } = this.props
 
     try {
-      this.setState(state => ({
+      this.setState((state) => ({
         ...state,
         activeSubLocation: currentSubLocation,
       }))
@@ -191,51 +229,15 @@ class ResultsHouseblockContainer extends Component {
     history.replace(location.pathname)
   }
 
-  handlePrint(version) {
-    const { raiseAnalyticsEvent } = this.props
-
-    if (version === 'redacted') {
-      this.setState({ redactedPrint: true }, () => {
-        window.print()
-      })
-
-      raiseAnalyticsEvent({
-        category: 'Redacted Residential list',
-        action: 'Print list',
-      })
-    }
-
-    if (!version) {
-      this.setState({ redactedPrint: false }, () => {
-        window.print()
-      })
-
-      raiseAnalyticsEvent({
-        category: 'House block list',
-        action: 'Print list',
-      })
-    }
-  }
-
-  handleSubLocationChange(event) {
-    const { subLocationDispatch } = this.props
-
-    subLocationDispatch(event.target.value)
-  }
-
-  handleWingStatusChange(event) {
-    const { wingStatusDispatch } = this.props
-
-    wingStatusDispatch(event.target.value)
-  }
-
   titleString() {
     const { activeSubLocation } = this.state
     const { locations, subLocations, currentLocation, wingStatus } = this.props
-    const locationName = locations.filter(location => location.key === currentLocation).map(it => it.name)[0]
+    const locationName = locations.filter((location) => location.key === currentLocation).map((it) => it.name)[0]
     let title = locationName
     if (activeSubLocation && activeSubLocation !== '--') {
-      const subLocationName = subLocations.filter(location => location.key === activeSubLocation).map(it => it.name)[0]
+      const subLocationName = subLocations
+        .filter((location) => location.key === activeSubLocation)
+        .map((it) => it.name)[0]
       title = `${locationName} - ${subLocationName}`
     }
     return `${title} - ${properCase(wingStatus)}`
@@ -320,11 +322,11 @@ ResultsHouseblockContainer.defaultProps = {
 const extractSubLocations = (locations, currentLocation) => {
   if (!locations) return []
   if (!currentLocation) return []
-  const children = locations.filter(l => l.key === currentLocation).map(l => (l.children ? l.children : []))
+  const children = locations.filter((l) => l.key === currentLocation).map((l) => (l.children ? l.children : []))
   return children.length > 0 ? children[0] : []
 }
 
-const mapStateToProps = state => ({
+const mapStateToProps = (state) => ({
   agencyId: state.app.user.activeCaseLoadId,
   currentLocation: state.search.location,
   currentSubLocation: state.search.subLocation,
@@ -342,27 +344,22 @@ const mapStateToProps = state => ({
   totalAttended: state.events.totalAttended,
 })
 
-const mapDispatchToProps = dispatch => ({
-  houseblockDataDispatch: data => dispatch(setHouseblockData(data)),
-  orderDispatch: field => dispatch(setOrderField(field)),
+const mapDispatchToProps = (dispatch) => ({
+  houseblockDataDispatch: (data) => dispatch(setHouseblockData(data)),
+  orderDispatch: (field) => dispatch(setOrderField(field)),
   resetErrorDispatch: () => dispatch(resetError()),
-  setErrorDispatch: error => dispatch(setError(error)),
-  setLoadedDispatch: status => dispatch(setLoaded(status)),
-  sortOrderDispatch: field => dispatch(setSortOrder(field)),
-  subLocationDispatch: text => dispatch(setSearchSubLocation(text)),
-  wingStatusDispatch: status => dispatch(setSearchWingStatus(status)),
+  setErrorDispatch: (error) => dispatch(setError(error)),
+  setLoadedDispatch: (status) => dispatch(setLoaded(status)),
+  sortOrderDispatch: (field) => dispatch(setSortOrder(field)),
+  subLocationDispatch: (text) => dispatch(setSearchSubLocation(text)),
+  wingStatusDispatch: (status) => dispatch(setSearchWingStatus(status)),
   setOffenderPaymentDataDispatch: (offenderIndex, data) =>
     dispatch(setHouseblockOffenderAttendance(offenderIndex, data)),
   getAbsentReasonsDispatch: () => dispatch(getAbsentReasons()),
-  locationsDispatch: locations => dispatch(setSearchLocations(locations)),
-  setSearchParametersDispatch: params => dispatch(setSearchParameters(params)),
+  locationsDispatch: (locations) => dispatch(setSearchLocations(locations)),
+  setSearchParametersDispatch: (params) => dispatch(setSearchParameters(params)),
 })
 
 export { ResultsHouseblockContainer, extractSubLocations }
 
-export default withRouter(
-  connect(
-    mapStateToProps,
-    mapDispatchToProps
-  )(ResultsHouseblockContainer)
-)
+export default withRouter(connect(mapStateToProps, mapDispatchToProps)(ResultsHouseblockContainer))

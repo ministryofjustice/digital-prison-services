@@ -22,24 +22,23 @@ export function defaultPeriod(time) {
   return 'ED'
 }
 
-const countAttended = data =>
+const countAttended = (data) =>
   data
-    .map(
-      event =>
-        event && event.attendanceInfo && event.attendanceInfo.paid && !event.attendanceInfo.absentReason ? 1 : 0
+    .map((event) =>
+      event && event.attendanceInfo && event.attendanceInfo.paid && !event.attendanceInfo.absentReason ? 1 : 0
     )
     .reduce((acc, current) => acc + current, 0)
 
-const countWithAbsentReason = data =>
+const countWithAbsentReason = (data) =>
   data
-    .map(event => (event.attendanceInfo && event.attendanceInfo.absentReason ? 1 : 0))
+    .map((event) => (event.attendanceInfo && event.attendanceInfo.absentReason ? 1 : 0))
     .reduce((acc, current) => acc + current, 0)
 
-const getHouseBlockMainActivities = houseBlockData =>
+const getHouseBlockMainActivities = (houseBlockData) =>
   houseBlockData
-    .map(data => data.activities)
+    .map((data) => data.activities)
     .reduce((acc, current) => acc.concat(current), [])
-    .filter(activity => activity && activity.mainActivity)
+    .filter((activity) => activity && activity.mainActivity)
 
 const appInitialState = {
   config: { mailTo: '', licencesUrl: '' },
@@ -253,11 +252,11 @@ export function events(state = eventsInitialState, action) {
     case ActionTypes.SET_HOUSEBLOCK_OFFENDER_ATTENDANCE: {
       const houseblockData = state.houseblockData.map((offender, i) => {
         if (i === action.offenderIndex) {
-          const mainActivity = offender.activities.find(activity => activity.mainActivity)
+          const mainActivity = offender.activities.find((activity) => activity.mainActivity)
           mainActivity.attendanceInfo = action.attendanceInfo
 
           const otherActivities =
-            offender.activities && offender.activities.filter(activity => activity !== mainActivity)
+            offender.activities && offender.activities.filter((activity) => activity !== mainActivity)
 
           return { ...offender, activities: [mainActivity, ...otherActivities] }
         }
