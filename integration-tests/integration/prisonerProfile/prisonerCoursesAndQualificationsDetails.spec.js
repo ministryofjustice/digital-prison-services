@@ -5,8 +5,8 @@ context('Prisoner courses and qualifications details page', () => {
     before(() => {
       cy.clearCookies()
       cy.task('reset')
-      cy.task('stubLogin', { username: 'ITAG_USER', caseload: 'MDI' })
-      cy.login()
+      cy.task('stubSignIn', { username: 'ITAG_USER', caseload: 'MDI' })
+      cy.signIn()
       cy.task('stubOffenderBasicDetails', { bookingId: 1, firstName: 'John', lastName: 'Smith', agencyId: 'MDI' })
     })
 
@@ -29,7 +29,7 @@ context('Prisoner courses and qualifications details page', () => {
       content: [
         {
           prn: 'G6123VU',
-          establishmentName: 'HMP Moorland',
+          establishmentName: 'MOORLAND (HMP & YOI)',
           courseName: 'Ocean Science',
           isAccredited: false,
           learningStartDate: '2021-02-13',
@@ -48,8 +48,8 @@ context('Prisoner courses and qualifications details page', () => {
     before(() => {
       cy.clearCookies()
       cy.task('reset')
-      cy.task('stubLogin', { username: 'ITAG_USER', caseload: 'MDI' })
-      cy.login()
+      cy.task('stubSignIn', { username: 'ITAG_USER', caseload: 'MDI' })
+      cy.signIn()
       cy.task('stubOffenderBasicDetails', { bookingId: 1, firstName: 'John', lastName: 'Smith', agencyId: 'MDI' })
       cy.task('stubLearnerEducation', dummyEducation)
     })
@@ -69,7 +69,7 @@ context('Prisoner courses and qualifications details page', () => {
           expect($cells.length).to.eq(6)
           expect($cells.get(0).innerText).to.contain('Non-accredited')
           expect($cells.get(1).innerText).to.contain('Ocean Science')
-          expect($cells.get(2).innerText).to.contain('HMP Moorland')
+          expect($cells.get(2).innerText).to.contain('Moorland (HMP & YOI)')
           expect($cells.get(3).innerText).to.contain('13/02/2021\nto 08/06/2021')
           expect($cells.get(4).innerText).to.contain('In progress')
           expect($cells.get(5).innerText).to.contain('')
@@ -81,7 +81,7 @@ context('Prisoner courses and qualifications details page', () => {
       content: [
         {
           prn: 'G6123VU',
-          establishmentName: 'HMP Moorland',
+          establishmentName: 'MOORLAND (HMP & YOI)',
           courseName: 'Ocean Science',
           isAccredited: false,
           learningStartDate: '2021-05-13',
@@ -97,7 +97,7 @@ context('Prisoner courses and qualifications details page', () => {
         },
         {
           prn: 'A1234AA',
-          establishmentName: 'HMP Moorland',
+          establishmentName: 'MOORLAND (HMP & YOI)',
           courseName: 'Foundation Degree in Arts in Equestrian Practice and Technology',
           isAccredited: true,
           learningStartDate: '2021-07-19',
@@ -112,7 +112,7 @@ context('Prisoner courses and qualifications details page', () => {
         },
         {
           prn: 'A1234AA',
-          establishmentName: 'HMP Moorland',
+          establishmentName: 'MOORLAND (HMP & YOI)',
           courseName: 'Certificate of Management',
           isAccredited: true,
           learningStartDate: '2021-07-01',
@@ -127,7 +127,7 @@ context('Prisoner courses and qualifications details page', () => {
         },
         {
           prn: 'A1234AA',
-          establishmentName: 'HMP Moorland',
+          establishmentName: 'MOORLAND (HMP & YOI)',
           courseName: 'Certificate of Help',
           isAccredited: true,
           learningStartDate: '2021-07-01',
@@ -146,8 +146,8 @@ context('Prisoner courses and qualifications details page', () => {
     before(() => {
       cy.clearCookies()
       cy.task('reset')
-      cy.task('stubLogin', { username: 'ITAG_USER', caseload: 'MDI' })
-      cy.login()
+      cy.task('stubSignIn', { username: 'ITAG_USER', caseload: 'MDI' })
+      cy.signIn()
       cy.task('stubOffenderBasicDetails', { bookingId: 1, firstName: 'John', lastName: 'Smith', agencyId: 'MDI' })
       cy.task('stubLearnerEducation', dummyEducation)
     })

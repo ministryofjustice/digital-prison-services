@@ -2,7 +2,7 @@ const moment = require('moment')
 
 const RefusingToShieldPage = require('../../pages/covid/refusingToShieldPage')
 
-const alert = val => ({ alerts: { equalTo: val } })
+const alert = (val) => ({ alerts: { equalTo: val } })
 
 const dayBeforeYesterday = moment().subtract(2, 'day')
 
@@ -10,8 +10,8 @@ context('A user can view the refusing to shield list', () => {
   beforeEach(() => {
     cy.clearCookies()
     cy.task('reset')
-    cy.task('stubLogin', { username: 'ITAG_USER', caseload: 'MDI' })
-    cy.login()
+    cy.task('stubSignIn', { username: 'ITAG_USER', caseload: 'MDI' })
+    cy.signIn()
 
     cy.task('stubAlerts', {
       locationId: 'MDI',

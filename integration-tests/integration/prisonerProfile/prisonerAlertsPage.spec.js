@@ -49,8 +49,8 @@ context('A user can view alerts for a prisoner', () => {
   before(() => {
     cy.clearCookies()
     cy.task('resetAndStubTokenVerification')
-    cy.task('stubLogin', { username: 'ITAG_USER', caseload: 'MDI' })
-    cy.login()
+    cy.task('stubSignIn', { username: 'ITAG_USER', caseload: 'MDI' })
+    cy.signIn()
   })
 
   context('When a prisoner is in a users caseload', () => {
@@ -136,10 +136,7 @@ context('A user can view alerts for a prisoner', () => {
       activeTable.comments().contains('has a large poster on cell wall')
       activeTable.dateFrom().contains('20 August 2019')
       activeTable.createdBy().contains('John Smith')
-      activeTable
-        .editCreateButton()
-        .find('a')
-        .contains('Change or close')
+      activeTable.editCreateButton().find('a').contains('Change or close')
       cy.get('[data-test="active-create-alerts-link"]').should('contain.text', 'Create an alert')
     })
 
@@ -184,10 +181,7 @@ context('A user can view alerts for a prisoner', () => {
       const prisonerAlertsPage = PrisonerAlertsPage.verifyOnPage('Smith, John')
       const activeTable = prisonerAlertsPage.getActiveAlertsRows(0)
 
-      activeTable
-        .editCreateButton()
-        .find('a')
-        .should('not.exist')
+      activeTable.editCreateButton().find('a').should('not.exist')
       cy.get('[data-test="active-create-alerts-link"]').should('not.exist')
     })
 

@@ -7,7 +7,7 @@ const toDate = '11/10/2010'
 const period = 'AM'
 const agencyId = 'WWI'
 
-const toSuspension = $cell => ({
+const toSuspension = ($cell) => ({
   name: $cell[0]?.textContent,
   offenderNo: $cell[1]?.textContent,
   location: $cell[2]?.textContent,
@@ -19,8 +19,8 @@ context('A user can view suspensions', () => {
   before(() => {
     cy.clearCookies()
     cy.task('resetAndStubTokenVerification')
-    cy.task('stubLogin', { username: 'ITAG_USER', caseload: 'WWI' })
-    cy.login()
+    cy.task('stubSignIn', { username: 'ITAG_USER', caseload: 'WWI' })
+    cy.signIn()
   })
 
   beforeEach(() => {
@@ -122,15 +122,13 @@ context('A user can view suspensions', () => {
     attendanceStatsSuspendedPage.numberOfSuspensions().should('have.text', 'Number of suspensions: 3')
     attendanceStatsSuspendedPage.offenderCount().should('have.text', 'Prisoners listed: 3')
 
-    attendanceStatsSuspendedPage.offenderList().then($table => {
+    attendanceStatsSuspendedPage.offenderList().then(($table) => {
       cy.get($table)
         .find('tr')
-        .then($tableRows => {
-          cy.get($tableRows)
-            .its('length')
-            .should('eq', 4) // 2 results plus table header
+        .then(($tableRows) => {
+          cy.get($tableRows).its('length').should('eq', 4) // 2 results plus table header
 
-          const suspensions = Array.from($tableRows).map($row => toSuspension($row.cells))
+          const suspensions = Array.from($tableRows).map(($row) => toSuspension($row.cells))
 
           expect(suspensions[1].name).to.contain('Smith, Adam')
           expect(suspensions[1].offenderNo).to.eq('G8974UK')
@@ -175,11 +173,8 @@ context('A user can view suspensions', () => {
 
     const attendanceStatsSuspendedPage = AttendanceStatsSuspendedPage.verifyOnPage()
 
-    attendanceStatsSuspendedPage.offenderList().then($table => {
-      cy.get($table)
-        .find('tr')
-        .its('length')
-        .should('eq', 1)
+    attendanceStatsSuspendedPage.offenderList().then(($table) => {
+      cy.get($table).find('tr').its('length').should('eq', 1)
     })
   })
 })

@@ -28,7 +28,7 @@
     { text: job.role },
     { text: job.location },
     { text: job.startDate | formatTimestampToDate, attributes: { "data-sort-value": job.startDate | formatDate("X") } },
-    { text: job.endDate | formatTimestampToDate if job.endDate else "Ongoing", attributes: { "data-sort-value": job.endDate | checkValidAndFormatDate } }
+    { text: job.endDate | formatTimestampToDate if job.endDate else "Ongoing", attributes: { "data-sort-value": job.endDate | defaultSortDate } }
   ]), rows) %}
 {% endfor %}
 

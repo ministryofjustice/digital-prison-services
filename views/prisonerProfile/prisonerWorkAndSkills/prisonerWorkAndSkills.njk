@@ -31,15 +31,15 @@
     </div>
 {% endset %}
 
-{% set workInsidePrisonSection %}
-    <div data-test="work-summary">
+{% set workAndActivitiesSection %}
+    <div data-test="work-summary" id="work-summary">
         {% include "./partials/workInsidePrison.njk" %}
     </div>
 {% endset %}
 
 {% set leftSections = [
     { heading: 'Courses and qualifications', html: CoursesAndQualificationsSection },
-    { heading: 'Work inside prison', html: workInsidePrisonSection }
+    { heading: 'Work and activities', html: workAndActivitiesSection }
 ] %}
 {% set rightSections = [
     { heading: 'Goals', html: offenderGoalsSection },

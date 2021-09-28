@@ -1,6 +1,6 @@
 import moment, { Moment } from 'moment'
 import { app } from '../config'
-import { readableDateFormat } from '../utils'
+import { readableDateFormat, stringWithAbbreviationsProcessor } from '../utils'
 import type CuriousApi from '../api/curious/curiousApi'
 import log from '../log'
 import AssessmentQualificationType from '../api/curious/types/AssessmentQualificationType'
@@ -12,8 +12,8 @@ type FeatureFlagged<T> = {
 
 type LearnerProfiles = FeatureFlagged<curious.LearnerProfile[]>
 type LearnerLatestAssessments = FeatureFlagged<eswe.FunctionalSkillsLevels>
-type OffenderGoals = FeatureFlagged<curious.LearnerGoals>
-type LearningDifficulties = FeatureFlagged<eswe.LearningDifficultiesDisabilities[]>
+type OffenderGoals = FeatureFlagged<eswe.LearnerGoals>
+type Neurodiversities = FeatureFlagged<eswe.Neurodiversities[]>
 type CurrentCoursesEnhanced = FeatureFlagged<eswe.CurrentCoursesEnhanced>
 type LearnerEducationFullDetails = FeatureFlagged<eswe.LearnerEducationFullDetails[]>
 type CurrentWork = FeatureFlagged<eswe.OffenderCurrentWork>
@@ -33,6 +33,8 @@ const AWAITING_ASSESSMENT_CONTENT = 'Awaiting assessment'
 export const DEFAULT_GOALS = {
   employmentGoals: null,
   personalGoals: null,
+  shortTermGoals: null,
+  longTermGoals: null,
 }
 
 export const DEFAULT_COURSE_DATA = {
@@ -104,7 +106,7 @@ const createSkillAssessmentSummary = (learnerAssessment: curious.LearnerAssessme
     },
     {
       label: 'Assessment location',
-      value: establishmentName,
+      value: stringWithAbbreviationsProcessor(establishmentName),
     },
   ]
 }
@@ -123,6 +125,12 @@ export default class EsweService {
     private readonly prisonApi: any
   ) {}
 
+  callWorkHistoryApi = async (context, nomisId: string) => {
+    const oneYearAgo = moment().subtract(1, 'year').format('YYYY-MM-DD')
+    const workHistory = await this.prisonApi.getOffenderWorkHistory(context, nomisId, oneYearAgo)
+    return workHistory.workActivities
+  }
+
   async getLearnerProfiles(nomisId: string): Promise<LearnerProfiles> {
     if (!app.esweEnabled) {
       return createFlaggedContent([])
@@ -139,7 +147,7 @@ export default class EsweService {
     return createFlaggedContent(content)
   }
 
-  async getLearningDifficulties(nomisId: string): Promise<LearningDifficulties> {
+  async getNeurodiversities(nomisId: string): Promise<Neurodiversities> {
     if (!app.esweEnabled) {
       return createFlaggedContent(null)
     }
@@ -157,7 +165,7 @@ export default class EsweService {
                 establishmentName: profile.establishmentName,
                 details: [
                   { label: 'Description', ldd: combinedLdd },
-                  { label: 'Location', value: profile.establishmentName },
+                  { label: 'Location', value: stringWithAbbreviationsProcessor(profile.establishmentName) },
                 ],
               }
             }
@@ -241,15 +249,17 @@ export default class EsweService {
       const context = await this.systemOauthClient.getClientCredentialsTokens()
       const goals = await this.curiousApi.getLearnerGoals(context, nomisId)
 
-      const { employmentGoals, personalGoals } = goals
+      const { employmentGoals, personalGoals, longTermGoals, shortTermGoals } = goals
 
-      if (!employmentGoals.length && !personalGoals.length) {
+      if (!employmentGoals.length && !personalGoals.length && !longTermGoals.length && !shortTermGoals.length) {
         return createFlaggedContent(DEFAULT_GOALS)
       }
 
       const displayedGoals = {
         employmentGoals: employmentGoals.length ? employmentGoals : [DATA_NOT_ADDED],
         personalGoals: personalGoals.length ? personalGoals : [DATA_NOT_ADDED],
+        longTermGoals: longTermGoals.length ? longTermGoals : [DATA_NOT_ADDED],
+        shortTermGoals: shortTermGoals.length ? shortTermGoals : [DATA_NOT_ADDED],
       }
       return createFlaggedContent(displayedGoals)
     } catch (e) {
@@ -284,7 +294,9 @@ export default class EsweService {
           )
           .sort(compareByDateAsc)
           .map((course) => ({
-            label: course.courseName,
+            label: course.completionStatus.includes('temporarily')
+              ? `${course.courseName} (prisoner temporarily withdrawn)`
+              : course.courseName,
             value: `Planned end date on ${readableDateFormat(course.learningPlannedEndDate, DATE_FORMAT)}`,
           }))
 
@@ -334,7 +346,7 @@ export default class EsweService {
         const fullCourseDetails = content.map((course) => ({
           type: course.isAccredited ? 'Accredited' : 'Non-accredited',
           courseName: course.courseName,
-          location: course.establishmentName,
+          location: stringWithAbbreviationsProcessor(course.establishmentName),
           dateFrom: course.learningStartDate,
           dateTo: course.learningActualEndDate ? course.learningActualEndDate : course.learningPlannedEndDate,
           outcome: getOutcome(course),
@@ -363,14 +375,14 @@ export default class EsweService {
 
     try {
       const context = await this.systemOauthClient.getClientCredentialsTokens()
-      const oneYearAgo = moment().subtract(1, 'year').format('YYYY-MM-DD')
-      const workHistory = await this.prisonApi.getOffenderWorkHistory(context, nomisId, oneYearAgo)
+      const prisonerDetails = await this.prisonApi.getPrisonerDetails(context, nomisId)
+      const workActivities = await this.callWorkHistoryApi(context, nomisId)
 
-      const { workActivities } = workHistory
+      const { latestLocation } = prisonerDetails[0]
 
-      if (workActivities.length) {
+      if (workActivities.length && latestLocation) {
         const currentJobs = workActivities
-          .filter((job) => job.isCurrentActivity)
+          .filter((job) => job.isCurrentActivity && job.agencyLocationDescription === latestLocation)
           .map((job) => ({
             label: job.description.trim(),
             value: `Started on ${readableDateFormat(job.startDate, DATE_FORMAT)}`,
@@ -400,10 +412,7 @@ export default class EsweService {
 
     try {
       const context = await this.systemOauthClient.getClientCredentialsTokens()
-      const oneYearAgo = moment().subtract(1, 'year').format('YYYY-MM-DD')
-      const workHistory = await this.prisonApi.getOffenderWorkHistory(context, nomisId, oneYearAgo)
-
-      const { workActivities } = workHistory
+      const workActivities = await this.callWorkHistoryApi(context, nomisId)
 
       const getEndDate = (job: eswe.WorkActivity) => {
         if (job.isCurrentActivity) return null

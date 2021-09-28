@@ -14,11 +14,29 @@ const caseNoteTypes = [
       },
     ],
   },
+  {
+    code: 'OMIC',
+    description: 'OMiC',
+    activeFlag: 'Y',
+    source: 'OCNS',
+    subCodes: [
+      {
+        code: 'OPEN_COMM',
+        description: 'Open Case Note',
+        activeFlag: 'Y',
+      },
+      {
+        code: 'COMM',
+        description: 'OMiC Communication',
+        activeFlag: 'Y',
+      },
+    ],
+  },
 ]
 
 module.exports = {
-  stubHealth: (status = 200) => {
-    return getFor({
+  stubHealth: (status = 200) =>
+    getFor({
       request: {
         method: 'GET',
         urlPath: '/casenotes/health/ping',
@@ -29,16 +47,14 @@ module.exports = {
           'Content-Type': 'application/json;charset=UTF-8',
         },
       },
-    })
-  },
-  stubCaseNotes: body => {
-    return getFor({
+    }),
+  stubCaseNotes: (body) =>
+    getFor({
       urlPath: '/casenotes/case-notes/A12345',
       body,
-    })
-  },
-  stubCreateCaseNote: body => {
-    return stubFor({
+    }),
+  stubCreateCaseNote: (body) =>
+    stubFor({
       request: {
         method: 'POST',
         urlPattern: '/casenotes/case-notes/.+?',
@@ -50,10 +66,9 @@ module.exports = {
         },
         jsonBody: body,
       },
-    })
-  },
-  stubDeleteCaseNote: () => {
-    return stubFor({
+    }),
+  stubDeleteCaseNote: () =>
+    stubFor({
       request: {
         method: 'DELETE',
         urlPattern: '/casenotes/case-notes/A12345/.+?',
@@ -61,10 +76,9 @@ module.exports = {
       response: {
         status: 200,
       },
-    })
-  },
-  stubDeleteCaseNoteAmendment: () => {
-    return stubFor({
+    }),
+  stubDeleteCaseNoteAmendment: () =>
+    stubFor({
       request: {
         method: 'DELETE',
         urlPattern: '/casenotes/case-notes/amendment/A12345/.+?',
@@ -72,34 +86,29 @@ module.exports = {
       response: {
         status: 200,
       },
-    })
-  },
-  stubCaseNoteTypes: types => {
-    return getFor({
+    }),
+  stubCaseNoteTypes: (types) =>
+    getFor({
       urlPattern: '/casenotes/case-notes/types',
       body: types || caseNoteTypes,
-    })
-  },
-  stubCaseNoteTypesForUser: () => {
-    return getFor({
+    }),
+  stubCaseNoteTypesForUser: () =>
+    getFor({
       urlPattern: '/casenotes/case-notes/types-for-user',
       body: caseNoteTypes,
-    })
-  },
-  stubGetCaseNote: response => {
-    return getFor({
+    }),
+  stubGetCaseNote: (response) =>
+    getFor({
       urlPattern: '/casenotes/case-notes/A12345/1',
       body: response,
-    })
-  },
-  stubGetOffenderCaseNote: (offenderId, caseNoteId, caseNoteResponse) => {
-    return getFor({
+    }),
+  stubGetOffenderCaseNote: (offenderId, caseNoteId, caseNoteResponse) =>
+    getFor({
       urlPattern: `/casenotes/case-notes/${offenderId}/${caseNoteId}`,
       body: caseNoteResponse,
-    })
-  },
-  stubSaveAmendment: () => {
-    return stubFor({
+    }),
+  stubSaveAmendment: () =>
+    stubFor({
       request: {
         method: 'PUT',
         urlPattern: '/casenotes/case-notes/A12345/1',
@@ -107,11 +116,15 @@ module.exports = {
       response: {
         status: 201,
       },
-    })
-  },
+    }),
   verifySaveAmendment: () =>
     getMatchingRequests({
       method: 'PUT',
       urlPathPattern: '/casenotes/case-notes/A12345/1',
-    }).then(data => data.body.requests),
+    }).then((data) => data.body.requests),
+  verifySaveCaseNote: () =>
+    getMatchingRequests({
+      method: 'POST',
+      urlPattern: '/casenotes/case-notes/.+?',
+    }).then((data) => data.body.requests),
 }

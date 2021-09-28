@@ -4,8 +4,8 @@ context('Prisoner damage obligations', () => {
   before(() => {
     cy.clearCookies()
     cy.task('reset')
-    cy.task('stubLogin', { username: 'ITAG_USER', caseload: 'MDI' })
-    cy.login()
+    cy.task('stubSignIn', { username: 'ITAG_USER', caseload: 'MDI' })
+    cy.signIn()
   })
 
   context('Basic page functionality', () => {
@@ -81,14 +81,12 @@ context('Prisoner damage obligations', () => {
         .parent()
         .should('have.class', 'govuk-tabs__list-item--selected')
 
-      cy.get('[data-test="damage-obligations-table"]').then($table => {
+      cy.get('[data-test="damage-obligations-table"]').then(($table) => {
         cy.get($table)
           .find('tbody')
           .find('tr')
-          .then($tableRows => {
-            cy.get($tableRows)
-              .its('length')
-              .should('eq', 2)
+          .then(($tableRows) => {
+            cy.get($tableRows).its('length').should('eq', 2)
             expect($tableRows.get(0).innerText).to.contain(
               '2\t456\t10/01/2019 to 10/01/2020\t£100.00\t£40.00\t£60.00\tLeeds'
             )

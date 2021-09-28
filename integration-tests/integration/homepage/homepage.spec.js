@@ -14,8 +14,8 @@ context('Homepage', () => {
 
   describe('Header', () => {
     it('should display the correct details for the logged in user', () => {
-      cy.task('stubLogin', { username: 'ITAG_USER', caseload: 'MDI' })
-      cy.login()
+      cy.task('stubSignIn', { username: 'ITAG_USER', caseload: 'MDI' })
+      cy.signIn()
 
       const page = homepagePage.goTo()
 
@@ -33,7 +33,7 @@ context('Homepage', () => {
     })
 
     it('should show change location link when user has more than 1 caseload', () => {
-      cy.task('stubLogin', {
+      cy.task('stubSignIn', {
         username: 'ITAG_USER',
         caseload: 'MDI',
         caseloads: [
@@ -49,7 +49,7 @@ context('Homepage', () => {
           },
         ],
       })
-      cy.login()
+      cy.signIn()
 
       const page = homepagePage.goTo()
 
@@ -65,8 +65,8 @@ context('Homepage', () => {
 
   describe('Search', () => {
     it('should should submit to the correct location with the correct search terms', () => {
-      cy.task('stubLogin', { username: 'ITAG_USER', caseload: 'MDI' })
-      cy.login()
+      cy.task('stubSignIn', { username: 'ITAG_USER', caseload: 'MDI' })
+      cy.signIn()
 
       const page = homepagePage.goTo()
 
@@ -80,8 +80,8 @@ context('Homepage', () => {
 
   describe('Tasks', () => {
     beforeEach(() => {
-      cy.task('stubLogin', { username: 'ITAG_USER', caseload: 'MDI' })
-      cy.login()
+      cy.task('stubSignIn', { username: 'ITAG_USER', caseload: 'MDI' })
+      cy.signIn()
     })
 
     it('should show use of force', () => {
@@ -187,8 +187,8 @@ context('Homepage', () => {
 
   describe('Footer', () => {
     it('should display the feedback banner with the correct href', () => {
-      cy.task('stubLogin', { username: 'ITAG_USER', caseload: 'MDI' })
-      cy.login()
+      cy.task('stubSignIn', { username: 'ITAG_USER', caseload: 'MDI' })
+      cy.signIn()
 
       const page = homepagePage.goTo()
 

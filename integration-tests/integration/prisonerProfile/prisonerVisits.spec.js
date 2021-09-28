@@ -7,8 +7,8 @@ context('Prisoner visits', () => {
   before(() => {
     cy.clearCookies()
     cy.task('reset')
-    cy.task('stubLogin', { username: 'ITAG_USER', caseload: 'MDI' })
-    cy.login()
+    cy.task('stubSignIn', { username: 'ITAG_USER', caseload: 'MDI' })
+    cy.signIn()
   })
 
   context('Basic page functionality', () => {
@@ -57,16 +57,14 @@ context('Prisoner visits', () => {
     })
 
     it('should have the same number of table rows as individual visitors from all visits', () => {
-      const individualVisitors = visitsWithVisitors.content.reduce((acc, item) => {
-        return acc + item.visitors.length
-      }, 0)
+      const individualVisitors = visitsWithVisitors.content.reduce((acc, item) => acc + item.visitors.length, 0)
 
       cy.visit(`/prisoner/${offenderNo}/visits`)
 
-      cy.get('[data-test="prisoner-visits-results"]').then($table => {
+      cy.get('[data-test="prisoner-visits-results"]').then(($table) => {
         cy.get($table)
           .find('tr')
-          .then($tableRows => {
+          .then(($tableRows) => {
             cy.get($tableRows)
               .its('length')
               .should('eq', individualVisitors + 1) // results plus table header

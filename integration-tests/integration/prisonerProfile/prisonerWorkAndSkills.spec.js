@@ -18,14 +18,44 @@ context('Prisoner Work and Skills', () => {
     offenderNo,
   }
 
+  const prisonerDetails = [
+    {
+      offenderNo: 'G6123VU',
+      firstName: 'JOHN',
+      lastName: 'SAUNDERS',
+      dateOfBirth: '1990-10-12',
+      gender: 'Male',
+      sexCode: 'M',
+      nationalities: 'multiple nationalities field',
+      currentlyInPrison: 'Y',
+      latestBookingId: 1102484,
+      latestLocationId: 'MDI',
+      latestLocation: 'Moorland (HMP & YOI)',
+      internalLocation: 'MDI-3-2-026',
+      pncNumber: '08/359381C',
+      croNumber: '400862/08W',
+      ethnicity: 'White: Eng./Welsh/Scot./N.Irish/British',
+      ethnicityCode: 'W1',
+      birthCountry: 'England',
+      religion: 'Celestial Church of God',
+      religionCode: 'CCOG',
+      convictedStatus: 'Convicted',
+      legalStatus: 'RECALL',
+      imprisonmentStatus: 'CUR_ORA',
+      imprisonmentStatusDesc: 'ORA Recalled from Curfew Conditions',
+      receptionDate: '2016-05-30',
+      maritalStatus: 'No',
+    },
+  ]
+
   context('functional skills section', () => {
     context('When there is no data because of an api call failure', () => {
       const apiErrorText = 'We cannot show these details right now. Try reloading the page.'
       before(() => {
         cy.clearCookies()
         cy.task('reset')
-        cy.task('stubLogin', { username: 'ITAG_USER', caseload: 'MDI' })
-        cy.login()
+        cy.task('stubSignIn', { username: 'ITAG_USER', caseload: 'MDI' })
+        cy.signIn()
 
         cy.task('stubPrisonerProfileHeaderData', prisonerProfileHeaderData)
         cy.task('stubWorkAndSkillsApi500Errors')
@@ -51,8 +81,8 @@ context('Prisoner Work and Skills', () => {
         cy.task('reset')
         cy.clearCookies()
         cy.task('reset')
-        cy.task('stubLogin', { username: 'ITAG_USER', caseload: 'MDI' })
-        cy.login()
+        cy.task('stubSignIn', { username: 'ITAG_USER', caseload: 'MDI' })
+        cy.signIn()
 
         cy.task('stubPrisonerProfileHeaderData', prisonerProfileHeaderData)
 
@@ -87,8 +117,8 @@ context('Prisoner Work and Skills', () => {
         cy.task('reset')
         cy.clearCookies()
         cy.task('reset')
-        cy.task('stubLogin', { username: 'ITAG_USER', caseload: 'MDI' })
-        cy.login()
+        cy.task('stubSignIn', { username: 'ITAG_USER', caseload: 'MDI' })
+        cy.signIn()
 
         cy.task('stubPrisonerProfileHeaderData', prisonerProfileHeaderData)
         cy.task('stubLatestLearnerAssessments', functionalSkillsAssessments)
@@ -119,7 +149,7 @@ context('Prisoner Work and Skills', () => {
           qualifications: [
             {
               establishmentId: 'MDI',
-              establishmentName: 'HMP Moorland',
+              establishmentName: 'MOORLAND (HMP & YOI)',
               qualification: {
                 qualificationType: 'English',
                 qualificationGrade: 'Level 1',
@@ -128,7 +158,7 @@ context('Prisoner Work and Skills', () => {
             },
             {
               establishmentId: 'MDI',
-              establishmentName: 'HMP Moorland',
+              establishmentName: 'MOORLAND (HMP & YOI)',
               qualification: {
                 qualificationType: 'Maths',
                 qualificationGrade: 'Level 1',
@@ -137,7 +167,7 @@ context('Prisoner Work and Skills', () => {
             },
             {
               establishmentId: 'MDI',
-              establishmentName: 'HMP Moorland',
+              establishmentName: 'MOORLAND (HMP & YOI)',
               qualification: {
                 qualificationType: 'Digital Literacy',
                 qualificationGrade: 'Level 2',
@@ -151,8 +181,8 @@ context('Prisoner Work and Skills', () => {
         cy.task('reset')
         cy.clearCookies()
         cy.task('reset')
-        cy.task('stubLogin', { username: 'ITAG_USER', caseload: 'MDI' })
-        cy.login()
+        cy.task('stubSignIn', { username: 'ITAG_USER', caseload: 'MDI' })
+        cy.signIn()
 
         cy.task('stubPrisonerProfileHeaderData', prisonerProfileHeaderData)
         cy.task('stubLatestLearnerAssessments', functionalSkillsAssessments)
@@ -185,13 +215,13 @@ context('Prisoner Work and Skills', () => {
               cy.get($summaryValues).its('length').should('eq', 9)
               expect($summaryValues.get(0).innerText).to.contain('Level 1')
               expect($summaryValues.get(1).innerText).to.contain('13 May 2021')
-              expect($summaryValues.get(2).innerText).to.contain('HMP Moorland')
+              expect($summaryValues.get(2).innerText).to.contain('Moorland (HMP & YOI)')
               expect($summaryValues.get(3).innerText).to.contain('Level 1')
               expect($summaryValues.get(4).innerText).to.contain('20 May 2021')
-              expect($summaryValues.get(5).innerText).to.contain('HMP Moorland')
+              expect($summaryValues.get(5).innerText).to.contain('Moorland (HMP & YOI)')
               expect($summaryValues.get(6).innerText).to.contain('Level 2')
               expect($summaryValues.get(7).innerText).to.contain('19 May 2021')
-              expect($summaryValues.get(8).innerText).to.contain('HMP Moorland')
+              expect($summaryValues.get(8).innerText).to.contain('Moorland (HMP & YOI)')
             })
         })
       })
@@ -204,8 +234,8 @@ context('Prisoner Work and Skills', () => {
       before(() => {
         cy.clearCookies()
         cy.task('reset')
-        cy.task('stubLogin', { username: 'ITAG_USER', caseload: 'MDI' })
-        cy.login()
+        cy.task('stubSignIn', { username: 'ITAG_USER', caseload: 'MDI' })
+        cy.signIn()
 
         cy.task('stubPrisonerProfileHeaderData', prisonerProfileHeaderData)
         cy.task('stubWorkAndSkillsApi500Errors')
@@ -230,8 +260,8 @@ context('Prisoner Work and Skills', () => {
         cy.task('reset')
         cy.clearCookies()
         cy.task('reset')
-        cy.task('stubLogin', { username: 'ITAG_USER', caseload: 'MDI' })
-        cy.login()
+        cy.task('stubSignIn', { username: 'ITAG_USER', caseload: 'MDI' })
+        cy.signIn()
 
         cy.task('stubPrisonerProfileHeaderData', prisonerProfileHeaderData)
 
@@ -263,8 +293,8 @@ context('Prisoner Work and Skills', () => {
         cy.task('reset')
         cy.clearCookies()
         cy.task('reset')
-        cy.task('stubLogin', { username: 'ITAG_USER', caseload: 'MDI' })
-        cy.login()
+        cy.task('stubSignIn', { username: 'ITAG_USER', caseload: 'MDI' })
+        cy.signIn()
 
         cy.task('stubPrisonerProfileHeaderData', prisonerProfileHeaderData)
         cy.task('stubLearnerGoals', emptyGoals)
@@ -298,8 +328,8 @@ context('Prisoner Work and Skills', () => {
         cy.task('reset')
         cy.clearCookies()
         cy.task('reset')
-        cy.task('stubLogin', { username: 'ITAG_USER', caseload: 'MDI' })
-        cy.login()
+        cy.task('stubSignIn', { username: 'ITAG_USER', caseload: 'MDI' })
+        cy.signIn()
 
         cy.task('stubPrisonerProfileHeaderData', prisonerProfileHeaderData)
         cy.task('stubLearnerGoals', dummyGoals)
@@ -344,8 +374,8 @@ context('Prisoner Work and Skills', () => {
       before(() => {
         cy.clearCookies()
         cy.task('reset')
-        cy.task('stubLogin', { username: 'ITAG_USER', caseload: 'MDI' })
-        cy.login()
+        cy.task('stubSignIn', { username: 'ITAG_USER', caseload: 'MDI' })
+        cy.signIn()
 
         cy.task('stubPrisonerProfileHeaderData', prisonerProfileHeaderData)
 
@@ -372,8 +402,8 @@ context('Prisoner Work and Skills', () => {
         cy.task('reset')
         cy.clearCookies()
         cy.task('reset')
-        cy.task('stubLogin', { username: 'ITAG_USER', caseload: 'MDI' })
-        cy.login()
+        cy.task('stubSignIn', { username: 'ITAG_USER', caseload: 'MDI' })
+        cy.signIn()
 
         cy.task('stubPrisonerProfileHeaderData', prisonerProfileHeaderData)
 
@@ -411,8 +441,8 @@ context('Prisoner Work and Skills', () => {
         cy.task('reset')
         cy.clearCookies()
         cy.task('reset')
-        cy.task('stubLogin', { username: 'ITAG_USER', caseload: 'MDI' })
-        cy.login()
+        cy.task('stubSignIn', { username: 'ITAG_USER', caseload: 'MDI' })
+        cy.signIn()
 
         cy.task('stubPrisonerProfileHeaderData', prisonerProfileHeaderData)
         cy.task('stubLearnerEducation', emptyCourses)
@@ -445,8 +475,7 @@ context('Prisoner Work and Skills', () => {
             prn: 'G6123VU',
             courseName: 'Running',
             learningPlannedEndDate: '2022-01-01',
-            completionStatus:
-              'The learner is continuing or intending to continue the learning activities leading to the learning aim',
+            completionStatus: 'Learner has temporarily withdrawn from the aim due to an agreed break in learning',
           },
           {
             prn: 'G6123VU',
@@ -460,8 +489,8 @@ context('Prisoner Work and Skills', () => {
         cy.task('reset')
         cy.clearCookies()
         cy.task('reset')
-        cy.task('stubLogin', { username: 'ITAG_USER', caseload: 'MDI' })
-        cy.login()
+        cy.task('stubSignIn', { username: 'ITAG_USER', caseload: 'MDI' })
+        cy.signIn()
 
         cy.task('stubPrisonerProfileHeaderData', prisonerProfileHeaderData)
         cy.task('stubLearnerEducation', dummyEducation)
@@ -477,7 +506,7 @@ context('Prisoner Work and Skills', () => {
             .find('dt')
             .then(($summaryLabels) => {
               cy.get($summaryLabels).its('length').should('eq', 2)
-              expect($summaryLabels.get(0).innerText).to.contain('Running')
+              expect($summaryLabels.get(0).innerText).to.contain('Running (prisoner temporarily withdrawn)')
               expect($summaryLabels.get(1).innerText).to.contain('Pink')
             })
         })
@@ -504,15 +533,15 @@ context('Prisoner Work and Skills', () => {
       })
     })
   })
-  context('work inside prison section', () => {
+  context('work and activities section', () => {
     context('When there is no data because of an api call failure', () => {
       const apiErrorText = 'We cannot show these details right now. Try reloading the page.'
 
       before(() => {
         cy.clearCookies()
         cy.task('reset')
-        cy.task('stubLogin', { username: 'ITAG_USER', caseload: 'MDI' })
-        cy.login()
+        cy.task('stubSignIn', { username: 'ITAG_USER', caseload: 'MDI' })
+        cy.signIn()
 
         cy.task('stubPrisonerProfileHeaderData', prisonerProfileHeaderData)
 
@@ -529,29 +558,6 @@ context('Prisoner Work and Skills', () => {
         cy.get('[data-test="work-header"]').should('not.exist')
       })
     })
-    // context('When the prisoner is not in Curious', () => {
-    //   const error = {
-    //     errorCode: 'VC404',
-    //     errorMessage: 'Resource not found',
-    //     httpStatusCode: 404,
-    //   }
-
-    //   before(() => {
-    //     cy.task('reset')
-    //     cy.clearCookies()
-    //     cy.task('reset')
-    //     cy.task('stubLogin', { username: 'ITAG_USER', caseload: 'MDI' })
-    //     cy.login()
-
-    //     cy.task('stubPrisonerProfileHeaderData', prisonerProfileHeaderData)
-
-    //     cy.task('stubWorkAndSkillsApi404Errors', error)
-    //   })
-
-    //   beforeEach(() => {
-    //     Cypress.Cookies.preserveOnce('hmpps-session-dev')
-    //   })
-    // })
     context('When there is no data', () => {
       const emptyWork = {
         offenderNo: 'G9981UK',
@@ -562,11 +568,12 @@ context('Prisoner Work and Skills', () => {
         cy.task('reset')
         cy.clearCookies()
         cy.task('reset')
-        cy.task('stubLogin', { username: 'ITAG_USER', caseload: 'MDI' })
-        cy.login()
+        cy.task('stubSignIn', { username: 'ITAG_USER', caseload: 'MDI' })
+        cy.signIn()
 
         cy.task('stubPrisonerProfileHeaderData', prisonerProfileHeaderData)
         cy.task('stubOffenderWorkHistory', emptyWork)
+        cy.task('stubPrisonerDetails', prisonerDetails)
       })
 
       beforeEach(() => {
@@ -577,7 +584,7 @@ context('Prisoner Work and Skills', () => {
         visitWorkAndSkillsAndExpandAccordions()
         cy.get('[data-test="work-noData"]').then(($message) => {
           cy.get($message).then(($noCoursesMessage) => {
-            cy.get($noCoursesMessage).should('have.text', 'John Smith has no current or previous work inside prison.')
+            cy.get($noCoursesMessage).should('have.text', 'John Smith has no work or activities.')
           })
         })
         cy.get('[data-test="work-scheduleLink"]').then(($workScheduleLink) => {
@@ -622,11 +629,12 @@ context('Prisoner Work and Skills', () => {
         cy.task('reset')
         cy.clearCookies()
         cy.task('reset')
-        cy.task('stubLogin', { username: 'ITAG_USER', caseload: 'MDI' })
-        cy.login()
+        cy.task('stubSignIn', { username: 'ITAG_USER', caseload: 'MDI' })
+        cy.signIn()
 
         cy.task('stubPrisonerProfileHeaderData', prisonerProfileHeaderData)
         cy.task('stubOffenderWorkHistory', dummyWorkHistory)
+        cy.task('stubPrisonerDetails', prisonerDetails)
       })
 
       beforeEach(() => {
@@ -637,14 +645,11 @@ context('Prisoner Work and Skills', () => {
         visitWorkAndSkillsAndExpandAccordions()
         cy.get('[data-test="work-noCurrent"]').then(($message) => {
           cy.get($message).then(($noCurrentCoursesMessage) => {
-            cy.get($noCurrentCoursesMessage).should(
-              'have.text',
-              'John Smith is not currently doing any work inside prison.'
-            )
+            cy.get($noCurrentCoursesMessage).should('have.text', 'John Smith has no current work or activities.')
           })
         })
         cy.get('[data-test="work-detailsLink"]').then(($workDetailsLink) => {
-          cy.get($workDetailsLink).should('have.text', 'View work details')
+          cy.get($workDetailsLink).should('have.text', 'View work and activities for the last 12 months')
         })
 
         cy.get('[data-test="work-scheduleLink"]').then(($workScheduleLink) => {
@@ -681,6 +686,14 @@ context('Prisoner Work and Skills', () => {
             startDate: '2021-07-20',
             isCurrentActivity: true,
           },
+          {
+            bookingId: 1102484,
+            agencyLocationId: 'MDI',
+            agencyLocationDescription: 'Wayland (HMP)',
+            description: 'Library PM',
+            startDate: '2020-02-01',
+            isCurrentActivity: true,
+          },
         ],
       }
 
@@ -688,11 +701,12 @@ context('Prisoner Work and Skills', () => {
         cy.task('reset')
         cy.clearCookies()
         cy.task('reset')
-        cy.task('stubLogin', { username: 'ITAG_USER', caseload: 'MDI' })
-        cy.login()
+        cy.task('stubSignIn', { username: 'ITAG_USER', caseload: 'MDI' })
+        cy.signIn()
 
         cy.task('stubPrisonerProfileHeaderData', prisonerProfileHeaderData)
         cy.task('stubOffenderWorkHistory', dummyWorkHistory)
+        cy.task('stubPrisonerDetails', prisonerDetails)
       })
 
       beforeEach(() => {
@@ -702,7 +716,7 @@ context('Prisoner Work and Skills', () => {
       it('should display the list of current jobs and their start dates when there are current jobs', () => {
         visitWorkAndSkillsAndExpandAccordions()
         cy.get('[data-test="work-header"]').then(($header) => {
-          cy.get($header).should('have.text', 'Current roles')
+          cy.get($header).should('have.text', 'Current activities')
         })
         cy.get('[data-test="work-summary"]').then(($summary) => {
           cy.get($summary)
@@ -722,7 +736,7 @@ context('Prisoner Work and Skills', () => {
             })
 
           cy.get('[data-test="work-detailsLink"]').then(($workDetailsLink) => {
-            cy.get($workDetailsLink).should('have.text', 'View work details')
+            cy.get($workDetailsLink).should('have.text', 'View work and activities for the last 12 months')
           })
 
           cy.get('[data-test="work-scheduleLink"]').then(($workScheduleLink) => {

@@ -2,10 +2,10 @@
 
 {{ govukSelect({
     name: 'subType',
-    id: 'subType',
+    id: 'sub-type',
     label: {
         text: "Sub-type"
     },
     items: subTypes | addDefaultSelectedVale('Select', true),
-    errorMessage: errors | findError(subType)
+    errorMessage: errors | findError('sub-type')
 }) }}

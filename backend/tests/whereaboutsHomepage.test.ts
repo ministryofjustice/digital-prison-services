@@ -1,6 +1,7 @@
 import supertest from 'supertest'
 import express from 'express'
-import whereaboutsHomepage, { whereaboutsTasks } from '../controllers/whereabouts/whereaboutsHomepage'
+import { whereaboutsTasks } from '../controllers/whereabouts/homePage'
+import whereaboutsHomepage from '../routes/whereabouts/whereaboutsRouter'
 import nunjucksSetup from '../utils/nunjucksSetup'
 
 describe('Homepage', () => {
@@ -10,6 +11,7 @@ describe('Homepage', () => {
   const prisonApi = {
     getStaffRoles: jest.fn(),
   }
+  const offenderSearchApi = {}
 
   let req
   let res
@@ -38,7 +40,7 @@ describe('Homepage', () => {
     next()
   })
 
-  app.use('/', whereaboutsHomepage({ prisonApi, oauthApi }))
+  app.use('/', whereaboutsHomepage({ prisonApi, oauthApi, offenderSearchApi }))
 
   const getTasks = (excluding: string[] = []) =>
     whereaboutsTasks.filter(({ id }) => !excluding.includes(id)).map(({ enabled, ...rest }) => rest)
