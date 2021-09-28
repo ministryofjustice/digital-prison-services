@@ -19,7 +19,7 @@ const offenderSearch = require('../mockApis/offenderSearch')
 const complexity = require('../mockApis/complexity')
 const curiousApi = require('../mockApis/curiousApi')
 
-const { resetStubs } = require('../mockApis/wiremock')
+const { resetStubs, resetStub } = require('../mockApis/wiremock')
 
 const extractOffenderNumbers = (activityList) => {
   const result = Object.keys(activityList).reduce((r, k) => r.concat(activityList[k]), [])
@@ -489,7 +489,11 @@ module.exports = (on) => {
     stubDeleteAppointment: ({ id, status }) => whereabouts.stubDeleteAppointment({ id, status }),
     stubDeleteRecurringAppointmentSequence: ({ id, status }) =>
       whereabouts.stubDeleteRecurringAppointmentSequence({ id, status }),
-    stubPrisonerSearch: () => offenderSearch.stubPrisonerSearch(),
+    stubPrisonerSearch: (response) => offenderSearch.stubPrisonerSearch(response),
     stubMovementReasons: (reasons) => prisonApi.stubMovementReasons(reasons),
+    stubTransfers: (response) => prisonApi.stubTransfers(response),
+    resetTransfersStub: () => prisonApi.resetTransfersStub(),
+    stubPrisonerSearchDetails: (response) => offenderSearch.stubPrisonerSearchDetails(response),
+    stubPrisonerProperty: (property) => prisonApi.stubPrisonerProperty(property),
   })
 }
