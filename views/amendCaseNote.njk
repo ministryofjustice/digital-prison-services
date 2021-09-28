@@ -58,7 +58,7 @@
         </div>
     {% endfor %}
 
-    <form action="{{ postAmendment }}" method="post">
+    <form action="{{ postAmendment }}" method="post" autocomplete="off">
         {% if isOmicOpenCaseNote %}
           <input type="hidden" name="isOmicOpenCaseNote" value="true" />
           <div class="govuk-grid-row">
