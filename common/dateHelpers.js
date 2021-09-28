@@ -26,6 +26,11 @@ const formatDate = (value) => {
   return undefined
 }
 
+const isoDateTimeStartOfDay = (date, originalFormat) =>
+  moment(date, originalFormat).startOf('day').format('YYYY-MM-DDTHH:mm:ss')
+const isoDateTimeEndOfDay = (date, originalFormat) =>
+  moment(date, originalFormat).endOf('day').format('YYYY-MM-DDTHH:mm:ss')
+
 module.exports = {
   DATE_TIME_FORMAT_SPEC,
   DATE_ONLY_FORMAT_SPEC,
@@ -37,4 +42,6 @@ module.exports = {
   Time,
   buildDateTime,
   formatDate,
+  isoDateTimeStartOfDay,
+  isoDateTimeEndOfDay,
 }

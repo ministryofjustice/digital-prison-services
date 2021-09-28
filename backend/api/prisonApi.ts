@@ -1,6 +1,15 @@
 import contextProperties from '../contextProperties'
 import { arrayToQueryString, mapToQueryString } from '../utils'
 
+export type GetTransferParameters = {
+  courtEvents: boolean
+  releaseEvents: boolean
+  transferEvents: boolean
+  fromDateTime: string
+  toDateTime: string
+  agencyId: string
+}
+
 export const prisonApiFactory = (client) => {
   const processResponse = (context) => (response) => {
     contextProperties.setResponsePagination(context, response.headers)
@@ -400,6 +409,12 @@ export const prisonApiFactory = (client) => {
   const getOffenderWorkHistory = (context, offenderNo, earliestEndDate) =>
     get(context, `/api/offender-activities/${offenderNo}/work-history?earliestEndDate=${earliestEndDate}`)
 
+  const getTransfers = (context, parameters: GetTransferParameters) =>
+    get(
+      context,
+      `/api/movements/transfers?agencyId=${parameters.agencyId}&fromDateTime=${parameters.fromDateTime}&toDateTime=${parameters.toDateTime}&releaseEvents=${parameters.releaseEvents}&courtEvents=${parameters.courtEvents}&transferEvents=${parameters.transferEvents}`
+    )
+
   return {
     userLocations,
     userCaseLoads,
@@ -521,6 +536,7 @@ export const prisonApiFactory = (client) => {
     getOffenderCurrentWork,
     getOffenderWorkHistory,
     getMovementReasons,
+    getTransfers,
   }
 }
 

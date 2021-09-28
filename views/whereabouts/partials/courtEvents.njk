@@ -1,0 +1,73 @@
+<h2 class="govuk-heading-s">Court appearances</h2>
+{% if courtEvents.length !== 0 %}
+    {% set courtEventRows = [] %}
+    {% for courtEvent in courtEvents %}
+        {% set prisonerProfileLink %}
+            <a href="{{ "/prisoner/" + courtEvent.prisonerNumber }}" class="govuk-link govuk-body"
+               data-test="cell-details-link">{{ courtEvent.name }}</a>
+        {% endset -%}
+
+        {% set propertyColumn %}
+            {% if courtEvent.prisonerProperty.length === 0 %}
+                None
+            {% else %}
+                {% for property in courtEvent.prisonerProperty %}
+                    <div>
+                        {{ property.containerType }} - {{ property.boxNumber }}
+                    </div>
+                {% endfor %}
+            {% endif %}
+        {% endset -%}
+
+        {% set alertsColumn %}
+            {% if courtEvent.relevantAlerts.length === 0 %}
+                None
+            {% else %}
+                {{ alertFlags(courtEvent.relevantAlerts, newLine=true) }}
+            {% endif %}
+        {% endset -%}
+
+        {% set courtEventRows = (courtEventRows.push([
+            { html: prisonerProfileLink },
+            { text: courtEvent.cellLocation },
+            { html: propertyColumn },
+            { html: alertsColumn},
+            { text: courtEvent.reasonDescription },
+            { text: courtEvent.destinationLocationDescription }
+        ]), courtEventRows) %}
+    {% endfor %}
+
+    <p class="govuk-body pull-right"><strong>Prisoners listed:</strong> {{ courtEventRows.length }}</p>
+    {{ govukTable({
+        head: [
+            {
+                text: "Name and prisoner number",
+                attributes: {"aria-sort": "ascending"}
+            },
+            {
+                text: "Cell",
+                attributes: {"aria-sort": "ascending"}
+            },
+            {
+                text: "Property"
+            },
+            {
+                text: "Relevant details"
+
+            },
+            {
+                text: "Reason"
+            },
+            {
+                text: "Destination location",
+                attributes: {"aria-sort": "ascending"}
+            }
+        ],
+        rows: courtEventRows,
+        attributes: { "data-qa": "court-events-table" }
+    }) }}
+{% else %}
+    <p id="no-court-events">
+        There are no court appearances arranged for {{ dateForTitle }}
+    </p>
+{% endif %}
