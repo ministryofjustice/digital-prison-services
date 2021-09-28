@@ -21,6 +21,13 @@ context('Sign in functionality', () => {
     cy.get('h1').should('contain.text', 'Sign in')
   })
 
+  it('Direct access to login callback takes user to sign in page', () => {
+    cy.task('stubSignIn', {})
+    cy.visit('/login/callback')
+    cy.url().should('include', 'authorize')
+    cy.get('h1').should('contain.text', 'Sign in')
+  })
+
   it('Sign in page redirects to the auth sign in page if not signed in', () => {
     cy.task('stubSignInPage')
     cy.visit('/sign-in')
