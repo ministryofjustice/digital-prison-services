@@ -1,3 +1,4 @@
+import querystring from 'querystring'
 import contextProperties from '../contextProperties'
 import { arrayToQueryString, mapToQueryString } from '../utils'
 
@@ -410,10 +411,7 @@ export const prisonApiFactory = (client) => {
     get(context, `/api/offender-activities/${offenderNo}/work-history?earliestEndDate=${earliestEndDate}`)
 
   const getTransfers = (context, parameters: GetTransferParameters) =>
-    get(
-      context,
-      `/api/movements/transfers?agencyId=${parameters.agencyId}&fromDateTime=${parameters.fromDateTime}&toDateTime=${parameters.toDateTime}&releaseEvents=${parameters.releaseEvents}&courtEvents=${parameters.courtEvents}&transferEvents=${parameters.transferEvents}`
-    )
+    get(context, `/api/movements/transfers?${querystring.stringify(parameters)}`)
 
   return {
     userLocations,

@@ -4,16 +4,14 @@ const offenderBasicDetails = require('../../mockApis/responses/offenderBasicDeta
 const NonAssociationsPage = require('../../pages/cellMove/nonAssociationsPage')
 
 const offenderNo = 'A12345'
-const tomorrow = moment()
-  .add(1, 'days')
-  .format('YYYY-MM-DDTHH:mm:ss')
+const tomorrow = moment().add(1, 'days').format('YYYY-MM-DDTHH:mm:ss')
 
 context('A user can view non associations', () => {
   before(() => {
     cy.clearCookies()
     cy.task('resetAndStubTokenVerification')
-    cy.task('stubLogin', { username: 'ITAG_USER', caseload: 'MDI' })
-    cy.login()
+    cy.task('stubSignIn', { username: 'ITAG_USER', caseload: 'MDI' })
+    cy.signIn()
   })
   beforeEach(() => {
     Cypress.Cookies.preserveOnce('hmpps-session-dev')
@@ -90,13 +88,11 @@ context('A user can view non associations', () => {
     const nonAssociationsPage = NonAssociationsPage.verifyOnPage()
     nonAssociationsPage.message().contains('You must check any local processes for non-association details.')
     nonAssociationsPage.backLink().contains('Return to search for a cell')
-    cy.get(`[data-test="non-association-summary-ABC125"]`).then($section => {
+    cy.get(`[data-test="non-association-summary-ABC125"]`).then(($section) => {
       cy.get($section)
         .find('dt')
-        .then($headings => {
-          cy.get($headings)
-            .its('length')
-            .should('eq', 8)
+        .then(($headings) => {
+          cy.get($headings).its('length').should('eq', 8)
           expect($headings.get(0).innerText).to.contain('Name')
           expect($headings.get(1).innerText).to.contain('Prison number')
           expect($headings.get(2).innerText).to.contain('Location')
@@ -109,10 +105,8 @@ context('A user can view non associations', () => {
 
       cy.get($section)
         .find('dd')
-        .then($summaryValues => {
-          cy.get($summaryValues)
-            .its('length')
-            .should('eq', 8)
+        .then(($summaryValues) => {
+          cy.get($summaryValues).its('length').should('eq', 8)
           expect($summaryValues.get(0).innerText).to.contain('Bloggs, Jim')
           expect($summaryValues.get(1).innerText).to.contain('ABC125')
           expect($summaryValues.get(2).innerText).to.contain('MDI-2-1-3')
@@ -124,13 +118,11 @@ context('A user can view non associations', () => {
         })
     })
 
-    cy.get(`[data-test="non-association-summary-ABC124"]`).then($section => {
+    cy.get(`[data-test="non-association-summary-ABC124"]`).then(($section) => {
       cy.get($section)
         .find('dt')
-        .then($headings => {
-          cy.get($headings)
-            .its('length')
-            .should('eq', 8)
+        .then(($headings) => {
+          cy.get($headings).its('length').should('eq', 8)
           expect($headings.get(0).innerText).to.contain('Name')
           expect($headings.get(1).innerText).to.contain('Prison number')
           expect($headings.get(2).innerText).to.contain('Location')
@@ -143,10 +135,8 @@ context('A user can view non associations', () => {
 
       cy.get($section)
         .find('dd')
-        .then($summaryValues => {
-          cy.get($summaryValues)
-            .its('length')
-            .should('eq', 8)
+        .then(($summaryValues) => {
+          cy.get($summaryValues).its('length').should('eq', 8)
           expect($summaryValues.get(0).innerText).to.contain('Bloggs, Joseph')
           expect($summaryValues.get(1).innerText).to.contain('ABC124')
           expect($summaryValues.get(2).innerText).to.contain('MDI-2-1-2')
@@ -154,11 +144,7 @@ context('A user can view non associations', () => {
           expect($summaryValues.get(4).innerText).to.contain('Victim')
           expect($summaryValues.get(5).innerText).to.contain('Perpetrator')
           expect($summaryValues.get(6).innerText).to.contain('Test comment 1')
-          expect($summaryValues.get(7).innerText).to.contain(
-            moment()
-              .subtract(10, 'days')
-              .format('D MMMM YYYY')
-          )
+          expect($summaryValues.get(7).innerText).to.contain(moment().subtract(10, 'days').format('D MMMM YYYY'))
         })
     })
   })

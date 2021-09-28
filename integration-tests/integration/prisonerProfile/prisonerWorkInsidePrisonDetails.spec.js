@@ -12,8 +12,8 @@ context('Work inside prison details page', () => {
     before(() => {
       cy.clearCookies()
       cy.task('reset')
-      cy.task('stubLogin', { username: 'ITAG_USER', caseload: 'MDI' })
-      cy.login()
+      cy.task('stubSignIn', { username: 'ITAG_USER', caseload: 'MDI' })
+      cy.signIn()
       cy.task('stubOffenderBasicDetails', { bookingId: 1, firstName: 'John', lastName: 'Smith', agencyId: 'MDI' })
     })
 
@@ -48,8 +48,8 @@ context('Work inside prison details page', () => {
     before(() => {
       cy.clearCookies()
       cy.task('reset')
-      cy.task('stubLogin', { username: 'ITAG_USER', caseload: 'MDI' })
-      cy.login()
+      cy.task('stubSignIn', { username: 'ITAG_USER', caseload: 'MDI' })
+      cy.signIn()
       cy.task('stubOffenderBasicDetails', { bookingId: 1, firstName: 'John', lastName: 'Smith', agencyId: 'MDI' })
       cy.task('stubOffenderWorkHistory', dummyWorkHistory)
     })
@@ -121,8 +121,8 @@ context('Work inside prison details page', () => {
     before(() => {
       cy.clearCookies()
       cy.task('reset')
-      cy.task('stubLogin', { username: 'ITAG_USER', caseload: 'MDI' })
-      cy.login()
+      cy.task('stubSignIn', { username: 'ITAG_USER', caseload: 'MDI' })
+      cy.signIn()
       cy.task('stubOffenderBasicDetails', { bookingId: 1, firstName: 'John', lastName: 'Smith', agencyId: 'MDI' })
       cy.task('stubOffenderWorkHistory', dummyWorkHistory)
     })

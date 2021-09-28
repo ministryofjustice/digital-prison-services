@@ -24,8 +24,8 @@ context('Delete recurring appointment page', () => {
   before(() => {
     cy.clearCookies()
     cy.task('resetAndStubTokenVerification')
-    cy.task('stubLogin', { username: 'ITAG_USER', caseload: 'WWI' })
-    cy.login()
+    cy.task('stubSignIn', { username: 'ITAG_USER', caseload: 'WWI' })
+    cy.signIn()
   })
 
   beforeEach(() => {
@@ -40,8 +40,14 @@ context('Delete recurring appointment page', () => {
     cy.visit('/appointment-details/1/delete-recurring-bookings')
 
     cy.get('h1').should('contain', 'This appointment had recurring bookings')
-    cy.get('[data-qa="recurring-description"]').should('contain', 'Appointments were also booked weekly until 22 July 2021.')
-    cy.get('[data-qa="delete-recurring-question"]').should('contain', 'Do you want to delete all of these appointments?')
+    cy.get('[data-qa="recurring-description"]').should(
+      'contain',
+      'Appointments were also booked weekly until 22 July 2021.'
+    )
+    cy.get('[data-qa="delete-recurring-question"]').should(
+      'contain',
+      'Do you want to delete all of these appointments?'
+    )
   })
 
   it('Should show an error if nothing selected', () => {
@@ -50,7 +56,9 @@ context('Delete recurring appointment page', () => {
     const form = deleteRecurringAppointmentBookingsPage.form()
     form.submitButton().click()
 
-    deleteRecurringAppointmentBookingsPage.errorSummary().should('contain', 'Select yes if you want to delete all of these appointments')
+    deleteRecurringAppointmentBookingsPage
+      .errorSummary()
+      .should('contain', 'Select yes if you want to delete all of these appointments')
   })
 
   context('when single appointment deletion requested', () => {

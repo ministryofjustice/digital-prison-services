@@ -2,7 +2,7 @@ context('Caseloads witched page behaves correctly', () => {
   before(() => {
     cy.clearCookies()
     cy.task('reset')
-    cy.task('stubLogin', {
+    cy.task('stubSignIn', {
       username: 'ITAG_USER',
       caseload: 'MDI',
       caseloads: [
@@ -18,7 +18,7 @@ context('Caseloads witched page behaves correctly', () => {
         },
       ],
     })
-    cy.login()
+    cy.signIn()
   })
   it('should successfully change caseload', () => {
     cy.task('stubUserMe', {})

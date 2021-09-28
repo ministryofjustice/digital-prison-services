@@ -7,9 +7,9 @@ context('Select residential location', () => {
   beforeEach(() => {
     cy.task('reset')
     cy.task('stubGroups', { id: 'caseload' })
-    cy.task('stubLogin', { username: 'ITAG_USER', caseload })
+    cy.task('stubSignIn', { username: 'ITAG_USER', caseload })
     cy.task('stubGroups', { id: 'MDI' })
-    cy.login()
+    cy.signIn()
   })
 
   it('should display the correct form with correct content', () => {

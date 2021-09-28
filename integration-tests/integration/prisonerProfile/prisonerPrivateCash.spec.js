@@ -1,6 +1,6 @@
 const moment = require('moment')
 
-const toTransaction = $cell => ({
+const toTransaction = ($cell) => ({
   date: $cell[0]?.textContent,
   moneyIn: $cell[1]?.textContent,
   moneyOut: $cell[2]?.textContent,
@@ -104,8 +104,8 @@ context('Prisoner private cash', () => {
   before(() => {
     cy.clearCookies()
     cy.task('reset')
-    cy.task('stubLogin', { username: 'ITAG_USER', caseload: 'MDI' })
-    cy.login()
+    cy.task('stubSignIn', { username: 'ITAG_USER', caseload: 'MDI' })
+    cy.signIn()
   })
 
   context('With data', () => {
@@ -162,16 +162,14 @@ context('Prisoner private cash', () => {
       // cy.get('[data-test="private-cash-pending-balance"]').contains('-£30.00')
       cy.get('[data-test="private-cash-month"]').should('have.value', '10')
       cy.get('[data-test="private-cash-year"]').should('have.value', '2020')
-      cy.get('[data-test="private-cash-pending-table"]').then($table => {
+      cy.get('[data-test="private-cash-pending-table"]').then(($table) => {
         cy.get($table)
           .find('tbody')
           .find('tr')
-          .then($tableRows => {
-            cy.get($tableRows)
-              .its('length')
-              .should('eq', 2)
+          .then(($tableRows) => {
+            cy.get($tableRows).its('length').should('eq', 2)
 
-            const transactions = Array.from($tableRows).map($row => toTransaction($row.cells))
+            const transactions = Array.from($tableRows).map(($row) => toTransaction($row.cells))
 
             expect(transactions).to.deep.equal([
               {
@@ -193,16 +191,14 @@ context('Prisoner private cash', () => {
             ])
           })
       })
-      cy.get('[data-test="private-cash-non-pending-table"]').then($table => {
+      cy.get('[data-test="private-cash-non-pending-table"]').then(($table) => {
         cy.get($table)
           .find('tbody')
           .find('tr')
-          .then($tableRows => {
-            cy.get($tableRows)
-              .its('length')
-              .should('eq', 5)
+          .then(($tableRows) => {
+            cy.get($tableRows).its('length').should('eq', 5)
 
-            const transactions = Array.from($tableRows).map($row => toTransaction($row.cells))
+            const transactions = Array.from($tableRows).map(($row) => toTransaction($row.cells))
 
             expect(transactions).to.deep.equal([
               {
@@ -268,9 +264,7 @@ context('Prisoner private cash', () => {
       cy.task('stubGetTransactionHistory', {
         accountCode: 'cash',
         response: [],
-        fromDate: moment()
-          .startOf('month')
-          .format('YYYY-MM-DD'),
+        fromDate: moment().startOf('month').format('YYYY-MM-DD'),
         toDate: moment().format('YYYY-MM-DD'),
       })
       cy.task('stubPrisonerBalances', {

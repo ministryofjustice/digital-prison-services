@@ -52,7 +52,7 @@ class App extends React.Component {
           alert(
             "There is a newer version of this website available, click ok to ensure you're using the latest version."
           )
-          window.location = '/auth/logout'
+          window.location = '/auth/sign-out'
         }
         return config
       },
@@ -142,9 +142,9 @@ class App extends React.Component {
     }
   }
 
-  displayAlertAndLogout = (message) => {
+  displayAlertAndSignOut = (message) => {
     alert(message) // eslint-disable-line no-alert
-    window.location = '/auth/logout'
+    window.location = '/auth/sign-out'
   }
 
   shouldDisplayInnerContent = () => {
@@ -178,7 +178,7 @@ class App extends React.Component {
       error.response.data &&
       error.response.data.reason === 'session-expired'
     ) {
-      this.displayAlertAndLogout('Your session has expired, please click OK to be redirected back to the login page')
+      this.displayAlertAndSignOut('Your session has expired, please click OK to be redirected back to the sign in page')
     } else {
       window.scrollTo(0, 0)
       setErrorDispatch((error.response && error.response.data) || `Something went wrong: ${error}`)

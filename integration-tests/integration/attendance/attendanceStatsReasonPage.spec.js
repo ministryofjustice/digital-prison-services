@@ -6,7 +6,7 @@ const period = 'AM'
 const agencyId = 'WWI'
 const reason = 'Refused'
 
-const toReason = $cell => ({
+const toReason = ($cell) => ({
   name: $cell[0]?.textContent,
   offenderNo: $cell[1]?.textContent,
   location: $cell[2]?.textContent,
@@ -19,8 +19,8 @@ context('A user can view attendance reasons', () => {
   before(() => {
     cy.clearCookies()
     cy.task('resetAndStubTokenVerification')
-    cy.task('stubLogin', { username: 'ITAG_USER', caseload: agencyId })
-    cy.login()
+    cy.task('stubSignIn', { username: 'ITAG_USER', caseload: agencyId })
+    cy.signIn()
   })
 
   beforeEach(() => {
@@ -85,25 +85,21 @@ context('A user can view attendance reasons', () => {
 
     attendanceStatsReasonPage.timespan().should('have.text', '10 October 2010 to 11 October 2010 - AM')
 
-    attendanceStatsReasonPage.sortSelect().then($select => {
+    attendanceStatsReasonPage.sortSelect().then(($select) => {
       cy.get($select)
         .find('option')
-        .then($options => {
-          cy.get($options)
-            .its('length')
-            .should('eq', 6)
+        .then(($options) => {
+          cy.get($options).its('length').should('eq', 6)
         })
     })
 
-    attendanceStatsReasonPage.reasonOccurrences().then($table => {
+    attendanceStatsReasonPage.reasonOccurrences().then(($table) => {
       cy.get($table)
         .find('tr')
-        .then($tableRows => {
-          cy.get($tableRows)
-            .its('length')
-            .should('eq', 3) // 2 results plus table header
+        .then(($tableRows) => {
+          cy.get($tableRows).its('length').should('eq', 3) // 2 results plus table header
 
-          const reasons = Array.from($tableRows).map($row => toReason($row.cells))
+          const reasons = Array.from($tableRows).map(($row) => toReason($row.cells))
 
           expect(reasons[1].name).to.contain('Bo, Jim')
           expect(reasons[1].offenderNo).to.eq('G1234UK')
@@ -129,11 +125,11 @@ context('A user can view attendance reasons', () => {
     const attendanceStatsReasonPage = AttendanceStatsReasonPage.verifyOnPage('Refused with warning')
     attendanceStatsReasonPage.sortSelect().select('2_ascending')
 
-    attendanceStatsReasonPage.reasonOccurrences().then($table => {
+    attendanceStatsReasonPage.reasonOccurrences().then(($table) => {
       cy.get($table)
         .find('tr')
-        .then($tableRows => {
-          const reasons = Array.from($tableRows).map($row => toReason($row.cells))
+        .then(($tableRows) => {
+          const reasons = Array.from($tableRows).map(($row) => toReason($row.cells))
 
           expect(reasons[1].name).to.contain('Smith, Adam')
           expect(reasons[2].name).to.contain('Bo, Jim')
@@ -150,11 +146,8 @@ context('A user can view attendance reasons', () => {
 
     const attendanceStatsReasonPage = AttendanceStatsReasonPage.verifyOnPage('Refused with warning')
 
-    attendanceStatsReasonPage.reasonOccurrences().then($table => {
-      cy.get($table)
-        .find('tr')
-        .its('length')
-        .should('eq', 1)
+    attendanceStatsReasonPage.reasonOccurrences().then(($table) => {
+      cy.get($table).find('tr').its('length').should('eq', 1)
     })
   })
 })

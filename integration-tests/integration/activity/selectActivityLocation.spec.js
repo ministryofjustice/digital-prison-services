@@ -1,7 +1,4 @@
-const moment = require('moment')
-
 const caseload = 'MDI'
-const date = new Date().toISOString().split('T')[0]
 
 context('Select activity location', () => {
   const headerText = 'View by activity or appointment location'
@@ -9,8 +6,8 @@ context('Select activity location', () => {
   beforeEach(() => {
     cy.task('reset')
     cy.task('stubGroups', { id: caseload })
-    cy.task('stubLogin', { username: 'ITAG_USER', caseload })
-    cy.login()
+    cy.task('stubSignIn', { username: 'ITAG_USER', caseload })
+    cy.signIn()
     cy.task('stubActivityLocations')
 
     const offenders = [
@@ -35,15 +32,13 @@ context('Select activity location', () => {
         offenderNo: 'A1234AA',
       },
     ]
-    offenders.forEach(offender => {
+    offenders.forEach((offender) => {
       cy.task('stubOffenderBasicDetails', offender)
     })
     cy.task('stubGetAbsenceReasons')
   })
 
   it('should redirect to the activity lists page', () => {
-    const now = moment()
-
     cy.task('stubGetActivityList', { caseload, locationId: 2 })
     cy.task('stubGetAttendance', { caseload, locationId: 2 })
 

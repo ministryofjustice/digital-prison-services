@@ -4,8 +4,8 @@ context('Global errors', () => {
   before(() => {
     cy.clearCookies()
     cy.task('reset')
-    cy.task('stubLogin', { username: 'ITAG_USER', caseload: 'MDI' })
-    cy.login()
+    cy.task('stubSignIn', { username: 'ITAG_USER', caseload: 'MDI' })
+    cy.signIn()
     cy.task('stubKeyworkerMigrated')
   })
   it('should render 404 page', () => {

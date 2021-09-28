@@ -5,8 +5,8 @@ context('A user can see the list of offenders out today', () => {
   before(() => {
     cy.clearCookies()
     cy.task('resetAndStubTokenVerification')
-    cy.task('stubLogin', { username: 'ITAG_USER', caseload: 'MDI' })
-    cy.login()
+    cy.task('stubSignIn', { username: 'ITAG_USER', caseload: 'MDI' })
+    cy.signIn()
   })
   beforeEach(() => {
     Cypress.Cookies.preserveOnce('hmpps-session-dev')
@@ -52,7 +52,7 @@ context('A user can see the list of offenders out today', () => {
     cy.get('h1').contains('Out today')
     cy.get('table tr')
       .find('td')
-      .then($cells => {
+      .then(($cells) => {
         expect($cells.length).to.eq(14)
 
         expect($cells.get(1)).to.contain('Aaaaa, Aaaaa')

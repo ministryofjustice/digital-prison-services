@@ -6,8 +6,8 @@ context('Prisoner adjudication details', () => {
   before(() => {
     cy.clearCookies()
     cy.task('reset')
-    cy.task('stubLogin', { username: 'ITAG_USER', caseload: 'MDI' })
-    cy.login()
+    cy.task('stubSignIn', { username: 'ITAG_USER', caseload: 'MDI' })
+    cy.signIn()
   })
 
   context('Basic page functionality', () => {
@@ -93,64 +93,44 @@ context('Prisoner adjudication details', () => {
 
       cy.get('[data-test="hearing"]')
         .eq(0)
-        .then($hearing => {
+        .then(($hearing) => {
           cy.get($hearing)
             .find('[data-test="hearing-title"]')
             .should('contain', 'Hearing held on 25 October 2018 - 10:00')
 
-          cy.get($hearing)
-            .find('[data-test="hearing-type"]')
-            .should('contain', "Governor's Hearing Adult")
+          cy.get($hearing).find('[data-test="hearing-type"]').should('contain', "Governor's Hearing Adult")
 
-          cy.get($hearing)
-            .find('[data-test="hearing-location"]')
-            .should('contain', 'Adj')
+          cy.get($hearing).find('[data-test="hearing-location"]').should('contain', 'Adj')
 
-          cy.get($hearing)
-            .find('[data-test="hearing-heard-by"]')
-            .should('contain', 'Jones, Steve')
+          cy.get($hearing).find('[data-test="hearing-heard-by"]').should('contain', 'Jones, Steve')
 
-          cy.get($hearing)
-            .find('[data-test="hearing-comments"]')
-            .should('contain', 'A hearing comment')
+          cy.get($hearing).find('[data-test="hearing-comments"]').should('contain', 'A hearing comment')
 
-          cy.get($hearing)
-            .find('[data-test="hearing-results"]')
-            .should('not.exist')
+          cy.get($hearing).find('[data-test="hearing-results"]').should('not.exist')
         })
 
       cy.get('[data-test="hearing"]')
         .eq(1)
-        .then($hearing => {
+        .then(($hearing) => {
           cy.get($hearing)
             .find('[data-test="hearing-title"]')
             .should('contain', 'Hearing held on 21 October 2016 - 10:00')
 
-          cy.get($hearing)
-            .find('[data-test="hearing-type"]')
-            .should('contain', "Governor's Hearing Adult")
+          cy.get($hearing).find('[data-test="hearing-type"]').should('contain', "Governor's Hearing Adult")
 
-          cy.get($hearing)
-            .find('[data-test="hearing-location"]')
-            .should('contain', 'Adj')
+          cy.get($hearing).find('[data-test="hearing-location"]').should('contain', 'Adj')
 
-          cy.get($hearing)
-            .find('[data-test="hearing-heard-by"]')
-            .should('contain', 'Smith, John')
+          cy.get($hearing).find('[data-test="hearing-heard-by"]').should('contain', 'Smith, John')
 
-          cy.get($hearing)
-            .find('[data-test="hearing-comments"]')
-            .should('contain', 'Not entered')
+          cy.get($hearing).find('[data-test="hearing-comments"]').should('contain', 'Not entered')
 
           cy.get($hearing)
             .find('[data-test="hearing-results"]')
-            .then($table => {
+            .then(($table) => {
               cy.get($table)
                 .find('td')
-                .then($tableCells => {
-                  cy.get($tableCells)
-                    .its('length')
-                    .should('eq', 5) // 1 row with 5 cells
+                .then(($tableCells) => {
+                  cy.get($tableCells).its('length').should('eq', 5) // 1 row with 5 cells
 
                   expect($tableCells.get(0)).to.contain('51:16')
                   expect($tableCells.get(1)).to.contain('Prison Rule 51')
@@ -162,13 +142,11 @@ context('Prisoner adjudication details', () => {
                 })
             })
 
-          cy.get('[data-test="hearing-awards"]').then($table => {
+          cy.get('[data-test="hearing-awards"]').then(($table) => {
             cy.get($table)
               .find('td')
-              .then($tableCells => {
-                cy.get($tableCells)
-                  .its('length')
-                  .should('eq', 10) // 2 rows with 5 cells
+              .then(($tableCells) => {
+                cy.get($tableCells).its('length').should('eq', 10) // 2 rows with 5 cells
 
                 expect($tableCells.get(0)).to.contain('Forfeiture of Privileges')
                 expect($tableCells.get(1)).to.contain('14 days')
@@ -184,15 +162,9 @@ context('Prisoner adjudication details', () => {
               })
           })
 
-          cy.get($hearing)
-            .find('[data-test="award-comment"]')
-            .eq(0)
-            .should('contain', 'No privileges comment')
+          cy.get($hearing).find('[data-test="award-comment"]').eq(0).should('contain', 'No privileges comment')
 
-          cy.get($hearing)
-            .find('[data-test="award-comment"]')
-            .eq(1)
-            .should('contain', 'Confinement comment')
+          cy.get($hearing).find('[data-test="award-comment"]').eq(1).should('contain', 'Confinement comment')
         })
     })
   })
