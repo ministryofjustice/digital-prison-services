@@ -28,6 +28,7 @@ import pageNotFound from './setUpPageNotFound'
 import errorHandler from './middleware/errorHandler'
 import { logError } from './logError'
 import homepageController from './controllers/homepage/homepage'
+import deprecatedUrlPage from './controllers/deprecatedUrlPage'
 
 const app = express()
 
@@ -46,10 +47,8 @@ app.use(setupStaticContent())
 app.use(setupWebSession())
 app.use(setupAuth({ oauthApi: apis.oauthApi, tokenVerificationApi: apis.tokenVerificationApi }))
 
-app.use('/redirect*', (req, res, next) => {
-  logError(req.originalUrl, 'Redirect request recieved - base url = ', req.baseUrl.substr(9))
-  next()
-})
+// The redirect base URL is defined in the values*.yaml
+app.use('/redirect*', deprecatedUrlPage(`/redirect`))
 
 app.use(currentUser({ prisonApi: apis.prisonApi, oauthApi: apis.oauthApi }))
 app.use(returnUrl())
