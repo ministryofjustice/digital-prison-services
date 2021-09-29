@@ -404,9 +404,6 @@ export const prisonApiFactory = (client) => {
 
   const getUserDetailsList = (context, users) => post(context, `/api/users/list`, users)
 
-  const getOffenderCurrentWork = (context, offenderNo) =>
-    get(context, `/api/offender-activities/${offenderNo}/current-work`)
-
   const getOffenderWorkHistory = (context, offenderNo, earliestEndDate) =>
     get(context, `/api/offender-activities/${offenderNo}/work-history?earliestEndDate=${earliestEndDate}`)
 
@@ -531,7 +528,6 @@ export const prisonApiFactory = (client) => {
     getPrisoners,
     getUserDetailsList,
     getHistoryByDate,
-    getOffenderCurrentWork,
     getOffenderWorkHistory,
     getMovementReasons,
     getTransfers,

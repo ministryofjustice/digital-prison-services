@@ -17,6 +17,7 @@ describe('Prisoner work inside prison details controller', () => {
   const esweService = {
     getWorkHistoryDetails: jest.fn(),
   }
+  const paginationService = {}
 
   const workHistoryInsidePrison = [
     { endDate: null, location: 'Moorland (HMP & YOI)', role: 'Cleaner HB1 AM', startDate: '2021-08-19' },
@@ -29,7 +30,7 @@ describe('Prisoner work inside prison details controller', () => {
   let controller
 
   beforeEach(() => {
-    req = { params: { offenderNo }, session: { userDetails: { username: 'ITAG_USER' } } }
+    req = { params: { offenderNo }, session: { userDetails: { username: 'ITAG_USER' } }, query: {} }
     res = { locals: {}, render: jest.fn(), redirect: jest.fn() }
     req.originalUrl = '/work-inside-prison'
     req.get = jest.fn()
@@ -43,6 +44,7 @@ describe('Prisoner work inside prison details controller', () => {
     })
 
     controller = prisonerWorkInsidePrisonDetails({
+      paginationService,
       prisonApi,
       esweService,
     })

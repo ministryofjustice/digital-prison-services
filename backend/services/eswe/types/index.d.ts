@@ -47,6 +47,18 @@ declare namespace eswe {
      * @memberof WorkActivity
      */
     isCurrentActivity: boolean
+    /**
+     * endReasonDescription
+     * @type {boolean}
+     * @memberof WorkActivity
+     */
+    endReasonDescription?: string
+    /**
+     * endCommentText
+     * @type {boolean}
+     * @memberof WorkActivity
+     */
+    endCommentText?: string
   }
 
   /**

@@ -6,9 +6,11 @@ context('Work inside prison details page', () => {
     location: $cells[1]?.textContent,
     startDate: $cells[2]?.textContent,
     endDate: $cells[3]?.textContent,
+    endReason: $cells[4]?.textContent,
+    endComment: $cells[5]?.textContent,
   })
 
-  context('no course data available', () => {
+  context('no data available', () => {
     before(() => {
       cy.clearCookies()
       cy.task('reset')
@@ -22,12 +24,12 @@ context('Work inside prison details page', () => {
     })
     it('should show correct content and no table', () => {
       cy.visit(`/prisoner/${offenderNo}/work-activities`)
-      cy.get('h1').should('have.text', 'John Smith’s work inside prison for the last 12 months')
+      cy.get('h1').should('have.text', 'John Smith’s work and activities for the last 12 months')
       cy.get('[data-test="no-work-inside-prison"]').should('exist')
       cy.get('[data-test="work-inside-prison-returnLink"]').should('exist')
       cy.get('[data-test="no-work-inside-prison"]').should(
         'have.text',
-        'John Smith has no work inside prison for the last 12 months.'
+        'John Smith has no work or activities for the last 12 months.'
       )
     })
   })
@@ -60,7 +62,7 @@ context('Work inside prison details page', () => {
 
     it('should show the correct content and number of results', () => {
       cy.visit(`/prisoner/${offenderNo}/work-activities`)
-      cy.get('h1').should('have.text', 'John Smith’s work inside prison for the last 12 months')
+      cy.get('h1').should('have.text', 'John Smith’s work and activities for the last 12 months')
       cy.get('[data-test="workInsidePrison-result-number"]').should('have.text', 'Showing 1 result')
       cy.get('[data-test="work-inside-prison-returnLink"]').should('exist')
       cy.get('tbody')
@@ -105,6 +107,8 @@ context('Work inside prison details page', () => {
           startDate: '2020-01-20',
           endDate: '2021-09-01',
           isCurrentActivity: false,
+          endReasonDescription: 'Personal Reason',
+          endCommentText: "John's been getting personal again.",
         },
         {
           bookingId: 1102484,
@@ -114,6 +118,8 @@ context('Work inside prison details page', () => {
           startDate: '2021-07-20',
           endDate: '2021-07-23',
           isCurrentActivity: false,
+          endReasonDescription: 'Removed',
+          endCommentText: "John's been sneaking Monster into his water bottle again",
         },
       ],
     }
@@ -133,7 +139,7 @@ context('Work inside prison details page', () => {
 
     it('should render the page with correct data', () => {
       cy.visit(`/prisoner/${offenderNo}/work-activities`)
-      cy.get('h1').should('have.text', 'John Smith’s work inside prison for the last 12 months')
+      cy.get('h1').should('have.text', 'John Smith’s work and activities for the last 12 months')
       cy.get('[data-test="workInsidePrison-result-number"]').should('have.text', 'Showing 4 results')
       cy.get('[data-test="work-inside-prison-returnLink"]').should('exist')
       cy.get('[data-test="no-work-inside-prison"]').should('not.exist')
@@ -147,21 +153,29 @@ context('Work inside prison details page', () => {
           expect(job[0].location).to.contain('Moorland (HMP & YOI)')
           expect(job[0].startDate).to.contain('19/08/2021')
           expect(job[0].endDate).to.contain('Ongoing')
+          expect(job[0].endReason).to.contain('')
+          expect(job[0].endComment).to.contain('')
 
           expect(job[1].role).to.contain('Library PR1 PM')
           expect(job[1].location).to.contain('Moorland (HMP & YOI)')
           expect(job[1].startDate).to.contain('20/01/2020')
           expect(job[1].endDate).to.contain('01/09/2021')
+          expect(job[1].endReason).to.contain('Personal Reason')
+          expect(job[1].endComment).to.contain("John's been getting personal again.")
 
           expect(job[2].role).to.contain('Cleaner HB1 AM')
           expect(job[2].location).to.contain('Moorland (HMP & YOI)')
           expect(job[2].startDate).to.contain('20/07/2021')
           expect(job[2].endDate).to.contain('23/07/2021')
+          expect(job[2].endReason).to.contain('Removed')
+          expect(job[2].endComment).to.contain("John's been sneaking Monster into his water bottle again")
 
           expect(job[3].role).to.contain('Cleaner HB1 PM')
           expect(job[3].location).to.contain('Moorland (HMP & YOI)')
           expect(job[3].startDate).to.contain('20/07/2020')
           expect(job[3].endDate).to.contain('11/05/2021')
+          expect(job[3].endReason).to.contain('')
+          expect(job[3].endComment).to.contain('')
         })
     })
 

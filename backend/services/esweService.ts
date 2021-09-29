@@ -425,6 +425,8 @@ export default class EsweService {
           location: job.agencyLocationDescription,
           startDate: job.startDate,
           endDate: getEndDate(job),
+          endReason: job.endReasonDescription || null,
+          endComment: job.endCommentText || null,
         }))
         fullDetails.sort((a, b) => compareByDate(parseDate(a.endDate), parseDate(b.endDate), true))
         return createFlaggedContent(fullDetails)

@@ -19,9 +19,13 @@ type workHistoryInPrison = {
   content: eswe.workHistoryFullDetails[]
 }
 
-export default ({ prisonApi, esweService }) =>
+export default ({ paginationService, prisonApi, esweService }) =>
   async (req, res) => {
     const { offenderNo } = req.params
+    const fullUrl = new URL(`${req.protocol}://${req.get('host')}${req.originalUrl}`)
+    const { pageLimitOption, pageOffsetOption } = req.query
+    const pageLimit = (pageLimitOption && parseInt(pageLimitOption, 10)) || 20
+    const pageOffset = (pageOffsetOption && parseInt(pageOffsetOption, 10)) || 0
 
     if (!app.esweEnabled) {
       return res.redirect(`/prisoner/${offenderNo}`)
