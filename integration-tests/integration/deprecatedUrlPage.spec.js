@@ -29,11 +29,14 @@ context('Redirect from old bookmark', () => {
 
   it('should show the warning then continue to the supplied url', () => {
     cy.task('stubUserMe', {})
-    cy.visit('/redirect/manage-prisoner-whereabouts')
+    cy.visit('/redirect/manage-prisoner-whereabouts?exampleparam=true')
 
     cy.get('h1').should('have.text', 'The address you are using will soon be deleted')
     cy.get('[data-test="continue-button"]').click()
 
-    cy.location('pathname').should('eq', '/manage-prisoner-whereabouts')
+    cy.location().should((loc) => {
+      expect(loc.pathname).to.eq('/manage-prisoner-whereabouts')
+      expect(loc.search).to.eq('?exampleparam=true')
+    })
   })
 })
