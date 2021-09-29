@@ -126,9 +126,9 @@ export default ({ prisonApi, offenderSearchApi }) => {
       destinationLocationDescription: courtEvent.toAgencyDescription,
     }))
 
-    const releaseEvents = scheduledMovements.releaseEvents.map((releaseEvents) => ({
-      ...scheduledMoveDetailsForPrisoners.find((sr) => sr.prisonerNumber === releaseEvents.offenderNo),
-      reasonDescription: releaseEvents.movementReasonDescription,
+    const releaseEvents = scheduledMovements.releaseEvents.map((re) => ({
+      ...scheduledMoveDetailsForPrisoners.find((sr) => sr.prisonerNumber === re.offenderNo),
+      reasonDescription: re.movementReasonDescription,
     }))
 
     const transferEvents = scheduledMovements.transferEvents.map((courtEvent) => ({
