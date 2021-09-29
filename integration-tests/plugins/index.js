@@ -55,16 +55,16 @@ module.exports = (on) => {
         offenderSearch.stubHealth(),
         complexity.stubHealth(),
       ]),
-    getLoginUrl: auth.getLoginUrl,
-    stubLogin: ({ username = 'ITAG_USER', caseload = 'MDI', roles = [], caseloads }) =>
+    getSignInUrl: auth.getSignInUrl,
+    stubSignIn: ({ username = 'ITAG_USER', caseload = 'MDI', roles = [], caseloads }) =>
       Promise.all([
-        auth.stubLogin(username, caseload, roles),
+        auth.stubSignIn(username, caseload, roles),
         auth.stubUserMe(),
         prisonApi.stubUserCaseloads(caseloads),
         tokenverification.stubVerifyToken(true),
       ]),
-    stubLoginCourt: () =>
-      Promise.all([auth.stubLoginCourt(), prisonApi.stubUserCaseloads(), tokenverification.stubVerifyToken(true)]),
+    stubSignInCourt: () =>
+      Promise.all([auth.stubSignInCourt(), prisonApi.stubUserCaseloads(), tokenverification.stubVerifyToken(true)]),
 
     stubUserEmail: (username) => Promise.all([auth.stubEmail(username)]),
     stubUser: (username, caseload) => Promise.all([auth.stubUser(username, caseload)]),
@@ -270,7 +270,7 @@ module.exports = (on) => {
       ]),
     stubReleaseDatesOffenderNo: (releaseDates) => Promise.all([prisonApi.stubPrisonerSentenceDetails(releaseDates)]),
     stubVerifyToken: (active = true) => tokenverification.stubVerifyToken(active),
-    stubLoginPage: auth.redirect,
+    stubSignInPage: auth.redirect,
     stubGetAbsences: ({ agencyId, reason, absences }) =>
       Promise.all([whereabouts.stubGetAbsences(agencyId, reason, absences)]),
     stubGetAbsenceReasons: (response) => Promise.all([whereabouts.stubGetAbsenceReasons()]),

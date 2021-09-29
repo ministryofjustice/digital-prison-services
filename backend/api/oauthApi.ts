@@ -41,7 +41,7 @@ export const oauthApiFactory = (client, { clientId, clientSecret, url }) => {
   })
 
   const translateAuthClientError = (error) => {
-    logger.info(`login error description = ${error}`)
+    logger.info(`Sign in error description = ${error}`)
 
     if (error.includes('has expired')) return 'Your password has expired.'
     if (error.includes('is locked')) return 'Your user account is locked.'

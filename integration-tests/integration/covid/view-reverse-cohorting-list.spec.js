@@ -2,7 +2,7 @@ const moment = require('moment')
 
 const ReverseCohortingUnitPage = require('../../pages/covid/reverseCohortingUnitPage')
 
-const alert = val => ({ alerts: { equalTo: val } })
+const alert = (val) => ({ alerts: { equalTo: val } })
 
 const dayBeforeYesterday = moment().subtract(2, 'day')
 const dayBeforeYesterdayOverDue = moment(dayBeforeYesterday).add(14, 'day')
@@ -11,8 +11,8 @@ context('A user can view the reverse cohorting list', () => {
   beforeEach(() => {
     cy.clearCookies()
     cy.task('reset')
-    cy.task('stubLogin', { username: 'ITAG_USER', caseload: 'MDI' })
-    cy.login()
+    cy.task('stubSignIn', { username: 'ITAG_USER', caseload: 'MDI' })
+    cy.signIn()
 
     cy.task('stubAlerts', {
       locationId: 'MDI',
@@ -52,10 +52,7 @@ context('A user can view the reverse cohorting list', () => {
 
     cy.task('stubMovementsBetween', {
       locationId: 'MDI',
-      fromDate: moment()
-        .startOf('day')
-        .subtract(14, 'days')
-        .format('YYYY-MM-DDTHH:mm:ss'),
+      fromDate: moment().startOf('day').subtract(14, 'days').format('YYYY-MM-DDTHH:mm:ss'),
       movements: [
         {
           offenderNo: 'AA1234A',

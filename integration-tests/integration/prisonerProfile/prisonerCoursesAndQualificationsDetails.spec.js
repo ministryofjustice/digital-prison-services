@@ -5,8 +5,8 @@ context('Prisoner courses and qualifications details page', () => {
     before(() => {
       cy.clearCookies()
       cy.task('reset')
-      cy.task('stubLogin', { username: 'ITAG_USER', caseload: 'MDI' })
-      cy.login()
+      cy.task('stubSignIn', { username: 'ITAG_USER', caseload: 'MDI' })
+      cy.signIn()
       cy.task('stubOffenderBasicDetails', { bookingId: 1, firstName: 'John', lastName: 'Smith', agencyId: 'MDI' })
     })
 
@@ -48,8 +48,8 @@ context('Prisoner courses and qualifications details page', () => {
     before(() => {
       cy.clearCookies()
       cy.task('reset')
-      cy.task('stubLogin', { username: 'ITAG_USER', caseload: 'MDI' })
-      cy.login()
+      cy.task('stubSignIn', { username: 'ITAG_USER', caseload: 'MDI' })
+      cy.signIn()
       cy.task('stubOffenderBasicDetails', { bookingId: 1, firstName: 'John', lastName: 'Smith', agencyId: 'MDI' })
       cy.task('stubLearnerEducation', dummyEducation)
     })
@@ -146,8 +146,8 @@ context('Prisoner courses and qualifications details page', () => {
     before(() => {
       cy.clearCookies()
       cy.task('reset')
-      cy.task('stubLogin', { username: 'ITAG_USER', caseload: 'MDI' })
-      cy.login()
+      cy.task('stubSignIn', { username: 'ITAG_USER', caseload: 'MDI' })
+      cy.signIn()
       cy.task('stubOffenderBasicDetails', { bookingId: 1, firstName: 'John', lastName: 'Smith', agencyId: 'MDI' })
       cy.task('stubLearnerEducation', dummyEducation)
     })
