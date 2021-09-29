@@ -1,19 +1,18 @@
-<h2 class="govuk-heading-s">Court appearances</h2>
-{% if courtEvents.length !== 0 %}
-    {% set courtEventRows = [] %}
-    {% for event in courtEvents %}
-
-        {% set courtEventRows = (courtEventRows.push([
+<h2 class="govuk-heading-s">Transfers</h2>
+{% if transferEvents.length !== 0 %}
+    {% set transferEventRows = [] %}
+    {% for event in transferEvents %}
+        {% set releaseEventRow = (transferEventRows.push([
             { html: prisonerProfileLink(event.prisonerNumber, event.name) },
             { text: event.cellLocation },
             { html: propertyColumn(event.personalProperty) },
             { html: alertsColumn(event.relevantAlertFlagLabels)},
             { text: event.reasonDescription },
             { text: event.destinationLocationDescription }
-        ]), courtEventRows) %}
+        ]), transferEventRows) %}
     {% endfor %}
 
-    <p class="govuk-body pull-right"><strong>Prisoners listed:</strong> {{ courtEventRows.length }}</p>
+    <p class="govuk-body pull-right"><strong>Prisoners listed:</strong> {{ transferEventRows.length }}</p>
     {{ govukTable({
         head: [
             {
@@ -39,11 +38,11 @@
                 attributes: {"aria-sort": "ascending"}
             }
         ],
-        rows: courtEventRows,
-        attributes: { "data-qa": "court-events-table" }
+        rows: transferEventRows,
+        attributes: { "data-qa": "transfer-events-table" }
     }) }}
 {% else %}
-    <p id="no-court-events">
-        There are no court appearances arranged for {{ dateForTitle }}
+    <p id="no-transfer-events">
+        There are no transfers arranged for {{ dateForTitle }}
     </p>
 {% endif %}

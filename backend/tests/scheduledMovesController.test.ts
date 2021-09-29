@@ -5,136 +5,84 @@ const MOCK_DATE_TO_01_01_2027 = () => jest.spyOn(Date, 'now').mockImplementation
 
 const agencyDetails = { agencyId: 'LEI', description: 'Leeds (HMP)' }
 const movementReasons = [
-  {
-    domain: 'MOVE_RSN',
-    code: 'C9',
-    description: 'Attend Religious Service',
-    parentCode: 'TAP',
-    activeFlag: 'Y',
-    listSeq: 109,
-    systemDataFlag: 'Y',
-    subCodes: [],
-  },
-  {
-    domain: 'MOVE_RSN',
-    code: 'CA',
-    description: 'Court Appearance',
-    parentDomain: 'MOVE_TYPE',
-    parentCode: 'CRT',
-    activeFlag: 'N',
-    listSeq: 32,
-    systemDataFlag: 'Y',
-    expiredDate: '2009-05-23',
-    subCodes: [],
-  },
-  {
-    domain: 'MOVE_RSN',
-    code: 'CE',
-    description: 'Cond Release Extended Sentence CJA 2003',
-    parentDomain: 'MOVE_TYPE',
-    parentCode: 'CRT',
-    activeFlag: 'Y',
-    listSeq: 32,
-    systemDataFlag: 'Y',
-    subCodes: [],
-  },
-  {
-    domain: 'MOVE_RSN',
-    code: 'COM',
-    description: 'Committal Hearing',
-    parentDomain: 'MOVE_TYPE',
-    parentCode: 'CRT',
-    activeFlag: 'Y',
-    listSeq: 999,
-    systemDataFlag: 'Y',
-    subCodes: [],
-  },
-  {
-    domain: 'MOVE_RSN',
-    code: 'CRT',
-    description: 'Court Appearance',
-    parentDomain: 'MOVE_TYPE',
-    parentCode: 'CRT',
-    activeFlag: 'Y',
-    listSeq: 32,
-    systemDataFlag: 'Y',
-    subCodes: [],
-  },
+  { code: 'CR', description: 'Conditional Release' },
+  { code: 'CA', description: 'Court Appearance' },
+  { code: 'CE', description: 'Cond Release Extended Sentence CJA 2003' },
+  { code: 'COM', description: 'Committal Hearing' },
+  { code: 'CRT', description: 'Court Appearance' },
+  { code: 'TRN', description: 'Normal Transfer' },
 ]
 
-const transferResponse = {
-  courtEvents: [
-    {
-      offenderNo: 'G4797UD',
-      createDateTime: '2021-09-24T09:22:21.350125',
-      eventId: 449548211,
-      fromAgency: 'MDI',
-      fromAgencyDescription: 'Moorland (HMP & YOI)',
-      toAgency: 'ABDSUM',
-      toAgencyDescription: "Aberdeen Sheriff's Court (ABDSHF)",
-      eventDate: '2021-09-29',
-      startTime: '2021-09-29T21:00:00',
-      endTime: null,
-      eventClass: 'EXT_MOV',
-      eventType: 'CRT',
-      eventSubType: '19',
-      eventStatus: 'SCH',
-      judgeName: null,
-      directionCode: 'OUT',
-      commentText: null,
-      bookingActiveFlag: true,
-      bookingInOutStatus: 'IN',
-    },
-  ],
-  transferEvents: [
-    {
-      offenderNo: 'G5966UI',
-      createDateTime: '2021-09-22T10:26:50.745683',
-      eventId: 449330572,
-      fromAgency: 'MDI',
-      fromAgencyDescription: 'Moorland (HMP & YOI)',
-      toAgency: 'LEI',
-      toAgencyDescription: 'LEEDS (HMP)',
-      toCity: null,
-      eventStatus: 'SCH',
-      eventClass: 'EXT_MOV',
-      eventType: 'TRN',
-      eventSubType: 'NOTR',
-      eventDate: '2021-09-29',
-      startTime: '2021-09-29T10:00:00',
-      endTime: null,
-      outcomeReasonCode: null,
-      judgeName: null,
-      engagementCode: null,
-      escortCode: 'GEOAME',
-      performanceCode: null,
-      directionCode: 'OUT',
-      bookingActiveFlag: true,
-      bookingInOutStatus: 'IN',
-    },
-  ],
-  releaseEvents: [
-    {
-      offenderNo: 'G3854UD',
-      createDateTime: '2016-11-07T15:13:59.268001',
-      eventId: 320696788,
-      fromAgency: 'MDI',
-      fromAgencyDescription: 'Moorland (HMP & YOI)',
-      releaseDate: '2021-09-29',
-      approvedReleaseDate: null,
-      eventClass: 'EXT_MOV',
-      eventStatus: 'SCH',
-      movementTypeCode: 'REL',
-      movementTypeDescription: 'Release',
-      movementReasonCode: 'CR',
-      movementReasonDescription: 'Conditional Release (CJA91) -SH Term>1YR',
-      commentText: null,
-      bookingActiveFlag: true,
-      bookingInOutStatus: 'OUT',
-    },
-  ],
-  movements: [],
-}
+const courtEvents = [
+  {
+    offenderNo: 'G4797UD',
+    createDateTime: '2021-09-24T09:22:21.350125',
+    eventId: 449548211,
+    fromAgency: 'MDI',
+    fromAgencyDescription: 'Moorland (HMP & YOI)',
+    toAgency: 'ABDSUM',
+    toAgencyDescription: "Aberdeen Sheriff's Court (ABDSHF)",
+    eventDate: '2021-09-29',
+    startTime: '2021-09-29T21:00:00',
+    endTime: null,
+    eventClass: 'EXT_MOV',
+    eventType: 'CRT',
+    eventSubType: '19',
+    eventStatus: 'SCH',
+    judgeName: null,
+    directionCode: 'OUT',
+    commentText: null,
+    bookingActiveFlag: true,
+    bookingInOutStatus: 'IN',
+  },
+]
+const transferEvents = [
+  {
+    offenderNo: 'G5966UI',
+    createDateTime: '2021-09-22T10:26:50.745683',
+    eventId: 449330572,
+    fromAgency: 'MDI',
+    fromAgencyDescription: 'Moorland (HMP & YOI)',
+    toAgency: 'LEI',
+    toAgencyDescription: 'Leeds (HMP)',
+    toCity: null,
+    eventStatus: 'SCH',
+    eventClass: 'EXT_MOV',
+    eventType: 'TRN',
+    eventSubType: 'NOTR',
+    eventDate: '2021-09-29',
+    startTime: '2021-09-29T10:00:00',
+    endTime: null,
+    outcomeReasonCode: null,
+    judgeName: null,
+    engagementCode: null,
+    escortCode: 'GEOAME',
+    performanceCode: null,
+    directionCode: 'OUT',
+    bookingActiveFlag: true,
+    bookingInOutStatus: 'IN',
+  },
+]
+const releaseEvents = [
+  {
+    offenderNo: 'G3854XD',
+    createDateTime: '2016-11-07T15:13:59.268001',
+    eventId: 320696788,
+    fromAgency: 'MDI',
+    fromAgencyDescription: 'Moorland (HMP & YOI)',
+    releaseDate: '2021-09-29',
+    approvedReleaseDate: null,
+    eventClass: 'EXT_MOV',
+    eventStatus: 'SCH',
+    movementTypeCode: 'REL',
+    movementTypeDescription: 'Release',
+    movementReasonCode: 'CR',
+    movementReasonDescription: 'Conditional Release (CJA91) -SH Term>1YR',
+    commentText: null,
+    bookingActiveFlag: true,
+    bookingInOutStatus: 'OUT',
+  },
+]
 
 const alerts = [
   {
@@ -193,7 +141,7 @@ const prisonerSearchResult = [
     alerts,
   },
   {
-    prisonerNumber: 'G3854UD',
+    prisonerNumber: 'G3854XD',
     bookingId: 3,
     firstName: 'DAVE',
     lastName: 'SHAVE',
@@ -242,6 +190,22 @@ const expectCourtEventsToContain = (res, data) =>
     })
   )
 
+const expectReleaseEventsToContain = (res, data) =>
+  expect(res.render).toHaveBeenCalledWith(
+    expect.anything(),
+    expect.objectContaining({
+      releaseEvents: expect.arrayContaining([expect.objectContaining(data)]),
+    })
+  )
+
+const expectTransferEventsToContain = (res, data) =>
+  expect(res.render).toHaveBeenCalledWith(
+    expect.anything(),
+    expect.objectContaining({
+      transferEvents: expect.arrayContaining([expect.objectContaining(data)]),
+    })
+  )
+
 describe('Scheduled moves controller', () => {
   const prisonApi = {
     getMovementReasons: () => {},
@@ -275,7 +239,11 @@ describe('Scheduled moves controller', () => {
     today = moment().format('DD/MM/YYYY')
     prisonApi.getMovementReasons = jest.fn().mockResolvedValue(movementReasons)
     prisonApi.getAgencyDetails = jest.fn().mockResolvedValue(agencyDetails)
-    prisonApi.getTransfers = jest.fn().mockResolvedValue(transferResponse)
+    prisonApi.getTransfers = jest.fn().mockResolvedValue({
+      courtEvents: [],
+      transferEvents: [],
+      releaseEvents: [],
+    })
     prisonApi.getPrisonerProperty = jest.fn().mockResolvedValue(propertyResponse)
 
     offenderSearchApi.getPrisonersDetails = jest.fn().mockResolvedValue(prisonerSearchResult)
@@ -338,24 +306,25 @@ describe('Scheduled moves controller', () => {
         expect.anything(),
         expect.objectContaining({
           movementReasons: [
-            { text: 'Attend Religious Service', value: 'C9' },
             {
               text: 'Committal Hearing',
               value: 'COM',
             },
             { text: 'Cond Release Extended Sentence CJA 2003', value: 'CE' },
             {
-              text: 'Court Appearance',
-              value: 'CA',
+              text: 'Conditional Release',
+              value: 'CR',
             },
+            { text: 'Court Appearance', value: 'CA' },
             { text: 'Court Appearance', value: 'CRT' },
+            { text: 'Normal Transfer', value: 'TRN' },
           ],
         })
       )
     })
   })
 
-  describe('Transfers', () => {
+  describe('Scheduled movements', () => {
     beforeEach(() => {
       req.query = { date: '12/10/2021' }
     })
@@ -373,12 +342,18 @@ describe('Scheduled moves controller', () => {
     })
 
     it('should make a call to retrieve booking ids for each prisoner returned by the transfer request', async () => {
+      prisonApi.getTransfers = jest.fn().mockResolvedValue({
+        courtEvents: [{ offenderNo: 'G4797UD' }],
+        transferEvents: [{ offenderNo: 'G5966UI' }],
+        releaseEvents: [{ offenderNo: 'G3854XD' }],
+      })
+
       await controller.index(req, res)
 
       expect(offenderSearchApi.getPrisonersDetails).toHaveBeenLastCalledWith(res.locals, [
         'G4797UD',
         'G5966UI',
-        'G3854UD',
+        'G3854XD',
       ])
     })
 
@@ -407,14 +382,15 @@ describe('Scheduled moves controller', () => {
         expect.objectContaining({
           agencyDescription: 'Leeds (HMP)',
           courtEvents: [],
+          releaseEvents: [],
           dateForTitle: '12 October 2021',
           formValues: {
             date: '12/10/2021',
           },
           movementReasons: expect.arrayContaining([
             {
-              text: 'Attend Religious Service',
-              value: 'C9',
+              text: 'Court Appearance',
+              value: 'CRT',
             },
           ]),
         })
@@ -433,6 +409,14 @@ describe('Scheduled moves controller', () => {
     })
 
     describe('Court events', () => {
+      beforeEach(() => {
+        prisonApi.getTransfers = jest.fn().mockResolvedValue({
+          courtEvents,
+          transferEvents: [],
+          releaseEvents: [],
+        })
+      })
+
       it('should format names correctly', async () => {
         await controller.index(req, res)
 
@@ -514,6 +498,184 @@ describe('Scheduled moves controller', () => {
 
         expectCourtEventsToContain(res, {
           destinationLocationDescription: "Aberdeen Sheriff's Court (ABDSHF)",
+        })
+      })
+    })
+
+    describe('Release events', () => {
+      beforeEach(() => {
+        prisonApi.getTransfers = jest.fn().mockResolvedValue({
+          courtEvents: [],
+          transferEvents: [],
+          releaseEvents,
+        })
+      })
+      it('should format names correctly', async () => {
+        await controller.index(req, res)
+
+        expectReleaseEventsToContain(res, {
+          name: 'Shave, Dave - G3854XD',
+        })
+      })
+
+      it('should return the cell location', async () => {
+        await controller.index(req, res)
+
+        expectReleaseEventsToContain(res, {
+          cellLocation: '1-2-008',
+        })
+      })
+
+      it('should return prisoner property', async () => {
+        await controller.index(req, res)
+
+        expectReleaseEventsToContain(res, {
+          personalProperty: [
+            {
+              containerType: 'Valuables',
+              boxNumber: 'Box 14',
+            },
+            {
+              containerType: 'Confiscated',
+              boxNumber: 'Box 15',
+            },
+          ],
+        })
+      })
+
+      it('should return only relevant alerts', async () => {
+        await controller.index(req, res)
+
+        expectReleaseEventsToContain(res, {
+          relevantAlertFlagLabels: [
+            {
+              classes: 'alert-status alert-status--acct',
+              img: null,
+              label: 'ACCT open',
+            },
+            {
+              classes: 'alert-status alert-status--acct-post-closure',
+              img: null,
+              label: 'ACCT post closure',
+            },
+            {
+              classes: 'alert-status alert-status--controlled-unlock',
+              img: null,
+              label: 'Controlled unlock',
+            },
+            {
+              classes: 'alert-status alert-status--hostage-taker',
+              img: null,
+              label: 'Hostage taker',
+            },
+            {
+              classes: 'alert-status alert-status--disability',
+              img: '/images/Disability_icon.png',
+              label: 'PEEP',
+            },
+            { classes: 'alert-status alert-status--risk-females', img: null, label: 'Risk to females' },
+          ],
+        })
+      })
+
+      it('should return the movement reason description', async () => {
+        await controller.index(req, res)
+
+        expectReleaseEventsToContain(res, {
+          reasonDescription: 'Conditional Release (CJA91) -SH Term>1YR',
+        })
+      })
+    })
+
+    describe('Transfer events', () => {
+      beforeEach(() => {
+        prisonApi.getTransfers = jest.fn().mockResolvedValue({
+          courtEvents: [],
+          transferEvents,
+          releaseEvents: [],
+        })
+      })
+      it('should format names correctly', async () => {
+        await controller.index(req, res)
+
+        expectTransferEventsToContain(res, {
+          name: 'Shark, Mark - G5966UI',
+        })
+      })
+
+      it('should return the cell location', async () => {
+        await controller.index(req, res)
+
+        expectTransferEventsToContain(res, {
+          cellLocation: '1-2-007',
+        })
+      })
+
+      it('should return prisoner property', async () => {
+        await controller.index(req, res)
+
+        expectTransferEventsToContain(res, {
+          personalProperty: [
+            {
+              containerType: 'Valuables',
+              boxNumber: 'Box 14',
+            },
+            {
+              containerType: 'Confiscated',
+              boxNumber: 'Box 15',
+            },
+          ],
+        })
+      })
+
+      it('should return only relevant alerts', async () => {
+        await controller.index(req, res)
+
+        expectTransferEventsToContain(res, {
+          relevantAlertFlagLabels: [
+            {
+              classes: 'alert-status alert-status--acct',
+              img: null,
+              label: 'ACCT open',
+            },
+            {
+              classes: 'alert-status alert-status--acct-post-closure',
+              img: null,
+              label: 'ACCT post closure',
+            },
+            {
+              classes: 'alert-status alert-status--controlled-unlock',
+              img: null,
+              label: 'Controlled unlock',
+            },
+            {
+              classes: 'alert-status alert-status--hostage-taker',
+              img: null,
+              label: 'Hostage taker',
+            },
+            {
+              classes: 'alert-status alert-status--disability',
+              img: '/images/Disability_icon.png',
+              label: 'PEEP',
+            },
+            { classes: 'alert-status alert-status--risk-females', img: null, label: 'Risk to females' },
+          ],
+        })
+      })
+
+      it('should return the movement reason description', async () => {
+        await controller.index(req, res)
+
+        expectTransferEventsToContain(res, {
+          reasonDescription: 'Normal Transfer',
+        })
+      })
+
+      it('should return the destination location', async () => {
+        await controller.index(req, res)
+
+        expectTransferEventsToContain(res, {
+          destinationLocationDescription: 'Leeds (HMP)',
         })
       })
     })
