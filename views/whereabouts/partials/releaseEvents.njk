@@ -1,19 +1,17 @@
-<h2 class="govuk-heading-s">Court appearances</h2>
-{% if courtEvents.length !== 0 %}
-    {% set courtEventRows = [] %}
-    {% for event in courtEvents %}
-
-        {% set courtEventRows = (courtEventRows.push([
+<h2 class="govuk-heading-s">Releases</h2>
+{% if releaseEvents.length !== 0 %}
+    {% set releaseEventRows = [] %}
+    {% for event in releaseEvents %}
+        {% set releaseEventRow = (releaseEventRows.push([
             { html: prisonerProfileLink(event.prisonerNumber, event.name) },
             { text: event.cellLocation },
             { html: propertyColumn(event.personalProperty) },
             { html: alertsColumn(event.relevantAlertFlagLabels)},
-            { text: event.reasonDescription },
-            { text: event.destinationLocationDescription }
-        ]), courtEventRows) %}
+            { text: event.reasonDescription }
+        ]), releaseEventRows) %}
     {% endfor %}
 
-    <p class="govuk-body pull-right"><strong>Prisoners listed:</strong> {{ courtEventRows.length }}</p>
+    <p class="govuk-body pull-right"><strong>Prisoners listed:</strong> {{ releaseEventRows.length }}</p>
     {{ govukTable({
         head: [
             {
@@ -33,17 +31,13 @@
             },
             {
                 text: "Reason"
-            },
-            {
-                text: "Destination location",
-                attributes: {"aria-sort": "ascending"}
             }
         ],
-        rows: courtEventRows,
-        attributes: { "data-qa": "court-events-table" }
+        rows: releaseEventRows,
+        attributes: { "data-qa": "release-events-table" }
     }) }}
 {% else %}
-    <p id="no-court-events">
-        There are no court appearances arranged for {{ dateForTitle }}
+    <p id="no-release-events">
+        There are no releases arranged for {{ dateForTitle }}
     </p>
 {% endif %}
