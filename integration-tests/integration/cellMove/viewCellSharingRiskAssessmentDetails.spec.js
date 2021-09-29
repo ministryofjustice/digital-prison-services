@@ -1,4 +1,4 @@
-const offenderFullDetails = require('../../mockApis/responses/offenderFullDetails')
+const offenderFullDetails = require('../../mockApis/responses/offenderFullDetails.json')
 const CellSharingRiskAssessmentPage = require('../../pages/cellMove/cellSharingRiskAssessmentDetailsPage')
 
 const offenderNo = 'A12345'
@@ -7,8 +7,8 @@ context('A user can view non associations', () => {
   before(() => {
     cy.clearCookies()
     cy.task('resetAndStubTokenVerification')
-    cy.task('stubLogin', { username: 'ITAG_USER', caseload: 'MDI' })
-    cy.login()
+    cy.task('stubSignIn', { username: 'ITAG_USER', caseload: 'MDI' })
+    cy.signIn()
   })
   beforeEach(() => {
     Cypress.Cookies.preserveOnce('hmpps-session-dev')
@@ -42,13 +42,11 @@ context('A user can view non associations', () => {
   it('Shows the correct data for non-associations', () => {
     cy.visit(`/prisoner/${offenderNo}/cell-move/cell-sharing-risk-assessment-details`)
     const cellSharingRiskAssessmentDetailsPage = CellSharingRiskAssessmentPage.verifyOnPage()
-    cy.get('.govuk-summary-list--no-border').then($section => {
+    cy.get('.govuk-summary-list--no-border').then(($section) => {
       cy.get($section)
         .find('dt')
-        .then($headings => {
-          cy.get($headings)
-            .its('length')
-            .should('eq', 6)
+        .then(($headings) => {
+          cy.get($headings).its('length').should('eq', 6)
           expect($headings.get(0).innerText).to.contain('Cell location')
           expect($headings.get(1).innerText).to.contain('Name')
           expect($headings.get(2).innerText).to.contain('CSRA level')
@@ -59,10 +57,8 @@ context('A user can view non associations', () => {
 
       cy.get($section)
         .find('dd')
-        .then($summaryValues => {
-          cy.get($summaryValues)
-            .its('length')
-            .should('eq', 6)
+        .then(($summaryValues) => {
+          cy.get($summaryValues).its('length').should('eq', 6)
           expect($summaryValues.get(0).innerText).to.contain('HMP Moorland')
           expect($summaryValues.get(1).innerText).to.contain('Smith, John')
           expect($summaryValues.get(2).innerText).to.contain('Standard')

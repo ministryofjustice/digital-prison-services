@@ -8,8 +8,8 @@ context('A user can add an alert', () => {
   before(() => {
     cy.clearCookies()
     cy.task('resetAndStubTokenVerification')
-    cy.task('stubLogin', { username: 'ITAG_USER', caseload: 'MDI' })
-    cy.login()
+    cy.task('stubSignIn', { username: 'ITAG_USER', caseload: 'MDI' })
+    cy.signIn()
   })
   beforeEach(() => {
     Cypress.Cookies.preserveOnce('hmpps-session-dev')
@@ -61,7 +61,7 @@ context('A user can add an alert', () => {
     createAlertPage
       .errorSummaryList()
       .find('li')
-      .then($errors => {
+      .then(($errors) => {
         expect($errors.get(0).innerText).to.contain('Select the type of alert')
         expect($errors.get(1).innerText).to.contain('Select the alert')
         expect($errors.get(2).innerText).to.contain('Enter why you are creating this alert')
@@ -91,7 +91,7 @@ context('A user can add an alert', () => {
       createAlertPage
         .errorSummaryList()
         .find('li')
-        .then($errors => {
+        .then(($errors) => {
           expect($errors.get(0).innerText).to.contain('Select an alert that does not already exist for this offender')
         })
     })

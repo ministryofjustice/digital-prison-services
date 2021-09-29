@@ -8,8 +8,8 @@ context('A user can view attendance changes', () => {
   before(() => {
     cy.clearCookies()
     cy.task('resetAndStubTokenVerification')
-    cy.task('stubLogin', { username: 'ITAG_USER', caseload: 'WWI' })
-    cy.login()
+    cy.task('stubSignIn', { username: 'ITAG_USER', caseload: 'WWI' })
+    cy.signIn()
   })
 
   beforeEach(() => {

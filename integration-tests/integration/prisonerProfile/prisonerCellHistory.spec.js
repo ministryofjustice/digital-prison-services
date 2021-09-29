@@ -8,8 +8,8 @@ context('Prisoner cell history', () => {
   before(() => {
     cy.clearCookies()
     cy.task('reset')
-    cy.task('stubLogin', { username: 'ITAG_USER', caseload: 'MDI' })
-    cy.login()
+    cy.task('stubSignIn', { username: 'ITAG_USER', caseload: 'MDI' })
+    cy.signIn()
   })
 
   context('Basic page functionality', () => {
@@ -86,21 +86,15 @@ context('Prisoner cell history', () => {
         .cellDetailsLink()
         .should('contain.text', 'View details for location 1-02')
         .should('have.attr', 'href')
-        .and(
-          'include',
-          `/location-history?fromDate=2020-05-01T12:48:33&toDate=${moment().format(
-            'YYYY-MM-DDTHH:mm:ss'
-          )}&locationId=1&agencyId=MDI`
-        )
+        .and('contains', `/location-history?fromDate=2020-05-01T12:48:33&toDate=${moment().format('YYYY-MM-DDTHH:mm')}`)
+        .and('contains', 'locationId=1&agencyId=MDI')
       prisonerCellHistoryPage.agencyHeading().contains('Moorland from 01/03/2020 to 01/05/2020')
 
-      prisonerCellHistoryPage.results().then($table => {
+      prisonerCellHistoryPage.results().then(($table) => {
         cy.get($table)
           .find('td')
-          .then($tableCells => {
-            cy.get($tableCells)
-              .its('length')
-              .should('eq', 10) // 2 rows with 5 cells
+          .then(($tableCells) => {
+            cy.get($tableCells).its('length').should('eq', 10) // 2 rows with 5 cells
 
             expect($tableCells.get(0)).to.contain('1-03')
             expect($tableCells.get(1)).to.contain(moment('2020-04-01T12:48:33.375').format('DD/MM/YYYY - HH:mm'))

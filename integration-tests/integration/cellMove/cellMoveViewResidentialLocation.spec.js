@@ -36,8 +36,8 @@ context('Cell move view residential location', () => {
   before(() => {
     cy.clearCookies()
     cy.task('resetAndStubTokenVerification')
-    cy.task('stubLogin', { username: 'ITAG_USER', caseload: 'MDI', roles: [{ roleCode: 'CELL_MOVE' }] })
-    cy.login()
+    cy.task('stubSignIn', { username: 'ITAG_USER', caseload: 'MDI', roles: [{ roleCode: 'CELL_MOVE' }] })
+    cy.signIn()
   })
 
   beforeEach(() => {
@@ -131,8 +131,8 @@ context('Cell move view residential location', () => {
 
   context('When the user does not have the correct cell move roles', () => {
     beforeEach(() => {
-      cy.task('stubLogin', { username: 'ITAG_USER', caseload: 'MDI', roles: [] })
-      cy.login()
+      cy.task('stubSignIn', { username: 'ITAG_USER', caseload: 'MDI', roles: [] })
+      cy.signIn()
     })
 
     it('should display page not found', () => {

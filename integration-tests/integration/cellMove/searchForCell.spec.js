@@ -9,8 +9,8 @@ context('A user can search for a cell', () => {
   before(() => {
     cy.clearCookies()
     cy.task('resetAndStubTokenVerification')
-    cy.task('stubLogin', { username: 'ITAG_USER', caseload: 'MDI' })
-    cy.login()
+    cy.task('stubSignIn', { username: 'ITAG_USER', caseload: 'MDI' })
+    cy.signIn()
   })
   beforeEach(() => {
     Cypress.Cookies.preserveOnce('hmpps-session-dev')
@@ -24,13 +24,11 @@ context('A user can search for a cell', () => {
   it('Shows the correct data for no non-associations and no csra comment', () => {
     cy.visit(`/prisoner/${offenderNo}/cell-move/search-for-cell`)
     const page = SearchForCellPage.verifyOnPage()
-    cy.get('[data-test="cell-move-header-information"]').then($header => {
+    cy.get('[data-test="cell-move-header-information"]').then(($header) => {
       cy.get($header)
         .find('h3')
-        .then($headings => {
-          cy.get($headings)
-            .its('length')
-            .should('eq', 5)
+        .then(($headings) => {
+          cy.get($headings).its('length').should('eq', 5)
           expect($headings.get(0).innerText).to.contain('Name')
           expect($headings.get(1).innerText).to.contain('Current location')
           expect($headings.get(2).innerText).to.contain('CSRA rating')
@@ -92,13 +90,11 @@ context('A user can search for a cell', () => {
     })
     const page = SearchForCellPage.verifyOnPage()
     cy.visit(`/prisoner/${offenderNo}/cell-move/search-for-cell`)
-    cy.get('[data-test="cell-move-header-information"]').then($header => {
+    cy.get('[data-test="cell-move-header-information"]').then(($header) => {
       cy.get($header)
         .find('h3')
-        .then($headings => {
-          cy.get($headings)
-            .its('length')
-            .should('eq', 5)
+        .then(($headings) => {
+          cy.get($headings).its('length').should('eq', 5)
           expect($headings.get(0).innerText).to.contain('Name')
           expect($headings.get(1).innerText).to.contain('Current location')
           expect($headings.get(2).innerText).to.contain('CSRA rating')
@@ -122,10 +118,7 @@ context('A user can search for a cell', () => {
     const page = SearchForCellPage.verifyOnPage()
     const form = page.form()
     form.location().select('1')
-    form
-      .cellType()
-      .find('input[value="SO"]')
-      .check()
+    form.cellType().find('input[value="SO"]').check()
     form.submitButton().click()
     cy.url().should('include', 'select-cell?location=1&cellType=SO')
   })
@@ -140,7 +133,10 @@ context('A user can search for a cell', () => {
         ethnicity: 'White',
         raceCode: 'W1',
       },
-      profileInformation: [{ type: 'SEXO', resultValue: 'Heterosexual' }, { type: 'SMOKE', resultValue: 'No' }],
+      profileInformation: [
+        { type: 'SEXO', resultValue: 'Heterosexual' },
+        { type: 'SMOKE', resultValue: 'No' },
+      ],
     })
     cy.task('stubMainOffence', [{ offenceDescription: '13 hours overwork' }])
     const page = SearchForCellPage.verifyOnPage()
@@ -164,7 +160,7 @@ context('A user can search for a cell', () => {
     page
       .selectCswapLink()
       .invoke('attr', 'href')
-      .then(href => {
+      .then((href) => {
         expect(href).to.equal('/prisoner/A12345/cell-move/confirm-cell-move?cellId=C-SWAP')
       })
   })

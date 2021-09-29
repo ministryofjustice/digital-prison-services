@@ -46,6 +46,11 @@ app.use(setupStaticContent())
 app.use(setupWebSession())
 app.use(setupAuth({ oauthApi: apis.oauthApi, tokenVerificationApi: apis.tokenVerificationApi }))
 
+app.use('/redirect*', (req, res, next) => {
+  logError(req.originalUrl, 'Redirect request recieved - base url = ', req.baseUrl.substr(9))
+  next()
+})
+
 app.use(currentUser({ prisonApi: apis.prisonApi, oauthApi: apis.oauthApi }))
 app.use(returnUrl())
 

@@ -10,9 +10,7 @@ const quickLookFullDetails = {
   prisonerDetails: [
     {
       imprisonmentStatusDesc: 'Adult Imprisonment Without Option CJA03',
-      dateOfBirth: moment()
-        .subtract(21, 'years')
-        .format('YYYY-MM-DD'),
+      dateOfBirth: moment().subtract(21, 'years').format('YYYY-MM-DD'),
       pncNumber: '12/3456A',
       croNumber: '12345/57B',
     },
@@ -142,8 +140,8 @@ context('Prisoner quick look data retrieval errors', () => {
   before(() => {
     cy.clearCookies()
     cy.task('reset')
-    cy.task('stubLogin', { username: 'ITAG_USER', caseload: 'MDI' })
-    cy.login()
+    cy.task('stubSignIn', { username: 'ITAG_USER', caseload: 'MDI' })
+    cy.signIn()
 
     cy.task('stubPrisonerProfileHeaderData', {
       offenderBasicDetails,
@@ -162,7 +160,7 @@ context('Prisoner quick look data retrieval errors', () => {
 
     cy.get('[data-test="offender-offences"]')
       .find('p')
-      .then($element => {
+      .then(($element) => {
         expect($element.get(0).innerText).to.eq('Unable to show any of these details. You can try reloading the page.')
       })
   })
@@ -172,7 +170,7 @@ context('Prisoner quick look data retrieval errors', () => {
 
     cy.get('[data-test="offender-balances"]')
       .find('p')
-      .then($element => {
+      .then(($element) => {
         expect($element.get(0).innerText).to.eq('Unable to show any of these details. You can try reloading the page.')
       })
   })
@@ -182,7 +180,7 @@ context('Prisoner quick look data retrieval errors', () => {
 
     cy.get('[data-test="incentives-and-adjudications"]')
       .find('p')
-      .then($element => {
+      .then(($element) => {
         expect($element.get(0).innerText).to.eq('Unable to show any of these details. You can try reloading the page.')
       })
   })
@@ -191,7 +189,7 @@ context('Prisoner quick look data retrieval errors', () => {
   it.skip('Should display the appropriate message when there was an error requesting personal details', () => {
     cy.get('[data-test="personal-details"]')
       .find('p')
-      .then($element => {
+      .then(($element) => {
         expect($element.get(0).innerText).to.eq('Unable to show any of these details. You can try reloading the page.')
       })
   })
@@ -199,7 +197,7 @@ context('Prisoner quick look data retrieval errors', () => {
   it('Should display the appropriate message when there was an error requesting visits', () => {
     cy.get('[data-test="visit-details"]')
       .find('p')
-      .then($element => {
+      .then(($element) => {
         expect($element.get(0).innerText).to.eq('Unable to show any of these details. You can try reloading the page.')
       })
   })
@@ -207,7 +205,7 @@ context('Prisoner quick look data retrieval errors', () => {
   it('Should display the appropriate message when there was an error requesting schedules', () => {
     cy.get('[data-test="schedules"]')
       .find('p')
-      .then($element => {
+      .then(($element) => {
         expect($element.get(0).innerText).to.eq('Unable to show any of these details. You can try reloading the page.')
       })
   })
@@ -228,8 +226,8 @@ context('Prisoner profile header', () => {
     cy.task('reset')
     cy.clearCookies()
     cy.task('reset')
-    cy.task('stubLogin', { username: 'ITAG_USER', caseload: 'MDI' })
-    cy.login()
+    cy.task('stubSignIn', { username: 'ITAG_USER', caseload: 'MDI' })
+    cy.signIn()
 
     cy.task('stubQuickLook', quickLookFullDetails)
   })
@@ -278,8 +276,8 @@ context('Prisoner quick look', () => {
     cy.task('reset')
     cy.clearCookies()
     cy.task('reset')
-    cy.task('stubLogin', { username: 'ITAG_USER', caseload: 'MDI' })
-    cy.login()
+    cy.task('stubSignIn', { username: 'ITAG_USER', caseload: 'MDI' })
+    cy.signIn()
 
     cy.task('stubQuickLook', quickLookFullDetails)
   })
@@ -303,7 +301,7 @@ context('Prisoner quick look', () => {
 
       cy.get('ul.govuk-tabs__list')
         .find('li')
-        .then($tabs => {
+        .then(($tabs) => {
           expect($tabs.get(0).innerText).to.contain('Quick look')
           expect($tabs.get(1).innerText).to.contain('Personal')
           expect($tabs.get(2).innerText).to.contain('Alerts')
@@ -319,7 +317,7 @@ context('Prisoner quick look', () => {
 
       cy.get('[data-test="offence-summary"]')
         .find('dd')
-        .then($summaryValues => {
+        .then(($summaryValues) => {
           expect($summaryValues.get(0).innerText).to.eq('Have blade/article which was sharply pointed in public place')
           expect($summaryValues.get(1).innerText).to.eq('Adult Imprisonment Without Option CJA03')
           expect($summaryValues.get(2).innerText).to.eq('13 December 2020')
@@ -329,7 +327,7 @@ context('Prisoner quick look', () => {
     it('Should show correct Money details', () => {
       cy.get('[data-test="money-summary"]')
         .find('dd')
-        .then($summaryValues => {
+        .then(($summaryValues) => {
           expect($summaryValues.get(0).innerText).to.eq('£100.00')
           expect($summaryValues.get(1).innerText).to.eq('£75.50')
           expect($summaryValues.get(2).innerText).to.eq('£50.00')
@@ -339,7 +337,7 @@ context('Prisoner quick look', () => {
     it('Should show correct Case notes and adjudications details', () => {
       cy.get('[data-test="incentives-summary"]')
         .find('dd')
-        .then($summaryValues => {
+        .then(($summaryValues) => {
           expect($summaryValues.get(0).innerText).to.eq('1')
           expect($summaryValues.get(1).innerText).to.eq('2')
           expect($summaryValues.get(2).innerText).to.eq('40 days ago')
@@ -347,7 +345,7 @@ context('Prisoner quick look', () => {
 
       cy.get('[data-test="adjudications-summary"]')
         .find('dd')
-        .then($summaryValues => {
+        .then(($summaryValues) => {
           expect($summaryValues.get(0).innerText).to.eq('3')
           expect($summaryValues.get(1).innerText).to.eq(
             '14 days Stoppage of Earnings (50%)\n16/04/2020\n14 days Stoppage of Earnings (£50.00)\n14x SOE 50%, 14x LOC, 14x LOA 14x LOGYM, 14x LOTV 14x CC\n16/04/2020'
@@ -358,7 +356,7 @@ context('Prisoner quick look', () => {
     it('Should show correct Visits details', () => {
       cy.get('[data-test="visits-summary"]')
         .find('dd')
-        .then($summaryValues => {
+        .then(($summaryValues) => {
           expect($summaryValues.get(0).innerText).to.eq('24')
           expect($summaryValues.get(1).innerText).to.eq('4')
           expect($summaryValues.get(2).innerText).to.eq('17 April 2020')
@@ -370,7 +368,7 @@ context('Prisoner quick look', () => {
     it('Should show correct Personal information details', () => {
       cy.get('[data-test="personal-info-summary"]')
         .find('dd')
-        .then($summaryValues => {
+        .then(($summaryValues) => {
           expect($summaryValues.get(0).innerText).to.eq('21')
           expect($summaryValues.get(1).innerText).to.eq('British')
           expect($summaryValues.get(2).innerText).to.eq('12/3456A')
@@ -381,7 +379,7 @@ context('Prisoner quick look', () => {
     it('Should show correct Schedule details', () => {
       cy.get('[data-test="schedule-summary"]')
         .find('dd')
-        .then($summaryValues => {
+        .then(($summaryValues) => {
           expect($summaryValues.get(0).innerText).to.eq('Education\n09:00 to 10:00')
           expect($summaryValues.get(1).innerText).to.eq(
             'Case - Benefits - Test Comment\n13:00 to 14:00\nGym - Sports Halls Activity - Test comment\n(cancelled)\n15:00 to 15:30'
@@ -644,8 +642,8 @@ context('Finances section', () => {
       cy.task('reset')
       cy.clearCookies()
       cy.task('reset')
-      cy.task('stubLogin', { username: 'ITAG_USER', caseload: 'MDI' })
-      cy.login()
+      cy.task('stubSignIn', { username: 'ITAG_USER', caseload: 'MDI' })
+      cy.signIn()
 
       quickLookFullDetails.balances.damageObligations = 0
       cy.task('stubQuickLook', quickLookFullDetails)
@@ -673,7 +671,7 @@ context('Finances section', () => {
 
         cy.get('[data-test="money-summary"]')
           .find('dd')
-          .then($summaryValues => {
+          .then(($summaryValues) => {
             expect($summaryValues.length).to.eq(3)
             expect($summaryValues.get(0).innerText).to.eq('£100.00')
             expect($summaryValues.get(1).innerText).to.eq('£75.50')
@@ -688,8 +686,8 @@ context('Finances section', () => {
       cy.task('reset')
       cy.clearCookies()
       cy.task('reset')
-      cy.task('stubLogin', { username: 'ITAG_USER', caseload: 'MDI' })
-      cy.login()
+      cy.task('stubSignIn', { username: 'ITAG_USER', caseload: 'MDI' })
+      cy.signIn()
 
       quickLookFullDetails.balances.damageObligations = 65
       cy.task('stubQuickLook', quickLookFullDetails)
@@ -717,7 +715,7 @@ context('Finances section', () => {
 
         cy.get('[data-test="money-summary"]')
           .find('dd')
-          .then($summaryValues => {
+          .then(($summaryValues) => {
             expect($summaryValues.length).to.eq(4)
             expect($summaryValues.get(0).innerText).to.eq('£100.00')
             expect($summaryValues.get(1).innerText).to.eq('£75.50')
