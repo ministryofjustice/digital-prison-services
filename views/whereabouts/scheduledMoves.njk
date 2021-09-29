@@ -4,8 +4,8 @@
 {% from "govuk/components/button/macro.njk" import govukButton %}
 {% from "components/datePicker/datePicker.njk" import datePicker %}
 {% from "govuk/components/select/macro.njk" import govukSelect %}
+{% from "./partials/sharedMovementDetails.njk" import prisonerProfileLink, propertyColumn, alertsColumn %}
 
-{% from "../macros/alertFlags.njk" import alertFlags %}
 
 {% block beforeContent %}
     {{ govukBreadcrumbs({
@@ -62,7 +62,7 @@
                         label: {
                             text: 'Reason for leaving'
                         },
-                        items: movementReasons  | addDefaultSelectedVale('All') | setSelected(formValues.movementReason)
+                        items: movementReasons  | addDefaultSelectedVale('All', true) | setSelected(formValues.movementReason)
                     }) }}
 
 
@@ -79,6 +79,14 @@
             {% include("./partials/courtEvents.njk") %}
         </div>
 
+        <div class="govuk-grid-column-full">
+            {% include("./partials/releaseEvents.njk") %}
+        </div>
+
+        <div class="govuk-grid-column-full">
+            {% include("./partials/transferEvents.njk") %}
+        </div>
+
     </div>
 
 {% endblock %}
@@ -87,8 +95,10 @@
     {{ super() }}
     <script src="/assets/moj/components/sortable-table/sortable-table.js"></script>
     <script>
-      new MOJFrontend.SortableTable({
-        table: $('table')[0],
+      $('table').each(function() {
+        new MOJFrontend.SortableTable({
+          table: $(this),
+        })
       })
     </script>
 {% endblock %}
