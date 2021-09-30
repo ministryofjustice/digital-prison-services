@@ -4,7 +4,7 @@ const agencyDetails = { agencyId: 'MDI', description: 'Moorland (HMP & YOI)' }
 const movementReasons = [
   { code: '1', description: 'Visit Dying Relative' },
   { code: 'CRT', description: 'Court Appearance' },
-  { code: 'TRN', description: 'Normal Transfer' },
+  { code: 'NOTR', description: 'Normal Transfer' },
 ]
 
 const courtEvents = [

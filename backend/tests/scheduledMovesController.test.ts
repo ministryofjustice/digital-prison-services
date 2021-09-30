@@ -10,7 +10,7 @@ const movementReasons = [
   { code: 'CE', description: 'Cond Release Extended Sentence CJA 2003' },
   { code: 'COM', description: 'Committal Hearing' },
   { code: 'CRT', description: 'Court Appearance' },
-  { code: 'TRN', description: 'Normal Transfer' },
+  { code: 'NOTR', description: 'Normal Transfer' },
 ]
 
 const courtEvents = [
@@ -262,7 +262,8 @@ describe('Scheduled moves controller', () => {
     expect(res.render).toHaveBeenLastCalledWith('whereabouts/scheduledMoves.njk', expect.anything())
   })
 
-  it('should render template with the default date', async () => {
+  it('should render template with the default date and movement reason', async () => {
+    req.query.movementReason = 'A'
     await controller.index(req, res)
 
     expect(res.render).toHaveBeenLastCalledWith(
@@ -270,6 +271,7 @@ describe('Scheduled moves controller', () => {
       expect.objectContaining({
         formValues: {
           date: today,
+          movementReason: 'A',
         },
       })
     )
@@ -317,7 +319,7 @@ describe('Scheduled moves controller', () => {
             },
             { text: 'Court Appearance', value: 'CA' },
             { text: 'Court Appearance', value: 'CRT' },
-            { text: 'Normal Transfer', value: 'TRN' },
+            { text: 'Normal Transfer', value: 'NOTR' },
           ],
         })
       )
@@ -500,6 +502,42 @@ describe('Scheduled moves controller', () => {
           destinationLocationDescription: "Aberdeen Sheriff's Court (ABDSHF)",
         })
       })
+
+      it('should return an empty set when filtering by the incorrect movement reason', async () => {
+        req.query.movementReason = 'A'
+
+        await controller.index(req, res)
+
+        expect(res.render).toHaveBeenLastCalledWith(
+          expect.anything(),
+          expect.objectContaining({
+            courtEvents: [],
+          })
+        )
+      })
+
+      it('should return a single entry for CRT', async () => {
+        req.query.movementReason = 'CRT'
+
+        await controller.index(req, res)
+
+        expect(res.render).toHaveBeenLastCalledWith(
+          expect.anything(),
+          expect.objectContaining({
+            courtEvents: [
+              {
+                cellLocation: '1-2-006',
+                destinationLocationDescription: "Aberdeen Sheriff's Court (ABDSHF)",
+                name: 'Cob, Bob - G4797UD',
+                personalProperty: expect.anything(),
+                prisonerNumber: 'G4797UD',
+                reasonDescription: 'Court Appearance',
+                relevantAlertFlagLabels: expect.anything(),
+              },
+            ],
+          })
+        )
+      })
     })
 
     describe('Release events', () => {
@@ -584,6 +622,41 @@ describe('Scheduled moves controller', () => {
         expectReleaseEventsToContain(res, {
           reasonDescription: 'Conditional Release (CJA91) -SH Term>1YR',
         })
+      })
+
+      it('should return an empty set when filtering by the incorrect movement reason', async () => {
+        req.query.movementReason = 'A'
+
+        await controller.index(req, res)
+
+        expect(res.render).toHaveBeenLastCalledWith(
+          expect.anything(),
+          expect.objectContaining({
+            releaseEvents: [],
+          })
+        )
+      })
+
+      it('should return a single entry for CR', async () => {
+        req.query.movementReason = 'CR'
+
+        await controller.index(req, res)
+
+        expect(res.render).toHaveBeenLastCalledWith(
+          expect.anything(),
+          expect.objectContaining({
+            releaseEvents: [
+              {
+                cellLocation: '1-2-008',
+                name: 'Shave, Dave - G3854XD',
+                personalProperty: expect.anything(),
+                prisonerNumber: 'G3854XD',
+                reasonDescription: 'Conditional Release (CJA91) -SH Term>1YR',
+                relevantAlertFlagLabels: expect.anything(),
+              },
+            ],
+          })
+        )
       })
     })
 
@@ -677,6 +750,42 @@ describe('Scheduled moves controller', () => {
         expectTransferEventsToContain(res, {
           destinationLocationDescription: 'Leeds (HMP)',
         })
+      })
+
+      it('should return an empty set when filtering by the incorrect movement reason', async () => {
+        req.query.movementReason = 'A'
+
+        await controller.index(req, res)
+
+        expect(res.render).toHaveBeenLastCalledWith(
+          expect.anything(),
+          expect.objectContaining({
+            transferEvents: [],
+          })
+        )
+      })
+
+      it('should return a single entry for NOTR', async () => {
+        req.query.movementReason = 'NOTR'
+
+        await controller.index(req, res)
+
+        expect(res.render).toHaveBeenLastCalledWith(
+          expect.anything(),
+          expect.objectContaining({
+            transferEvents: [
+              {
+                cellLocation: '1-2-007',
+                name: 'Shark, Mark - G5966UI',
+                personalProperty: expect.anything(),
+                prisonerNumber: 'G5966UI',
+                reasonDescription: 'Normal Transfer',
+                destinationLocationDescription: 'Leeds (HMP)',
+                relevantAlertFlagLabels: expect.anything(),
+              },
+            ],
+          })
+        )
       })
     })
   })
