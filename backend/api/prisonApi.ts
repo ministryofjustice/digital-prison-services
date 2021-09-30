@@ -11,6 +11,25 @@ export type GetTransferParameters = {
   agencyId: string
 }
 
+export type PrisonerPersonalPropertyLocation = {
+  agencyId: string
+  currentOccupancy: number
+  description: string
+  internalLocationCode: string
+  locationId: number
+  locationPrefix: string
+  locationType: string
+  locationUsage: string
+  operationalCapacity: number
+  parentLocationId: number
+  userDescription: string
+}
+export type PrisonerPersonalProperty = {
+  containerType: string
+  location: PrisonerPersonalPropertyLocation
+  sealMark: string
+}
+
 export const prisonApiFactory = (client) => {
   const processResponse = (context) => (response) => {
     contextProperties.setResponsePagination(context, response.headers)
@@ -307,7 +326,8 @@ export const prisonApiFactory = (client) => {
 
   const getImage = (context, imageId) => getStream(context, `/api/images/${imageId}/data`)
 
-  const getPrisonerProperty = (context, bookingId) => get(context, `/api/bookings/${bookingId}/property`)
+  const getPrisonerProperty = (context, bookingId: number): Array<PrisonerPersonalProperty> =>
+    get(context, `/api/bookings/${bookingId}/property`)
 
   const getPrisonerDetail = (context, bookingId) => get(context, `/api/bookings/${bookingId}`)
 
