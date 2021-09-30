@@ -104,6 +104,10 @@ export const configureRoutes = ({ app, tokenRefresher, tokenVerifier, homeLink }
     res.redirect('sign-in/callback')
   })
 
+  app.get('/login', (req, res) => {
+    res.redirect('/sign-in')
+  })
+
   app.get('/sign-in/callback', (req, res, next) => {
     passport.authenticate('oauth2', (err, user, info) => {
       if (err) {
