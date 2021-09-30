@@ -1,0 +1,29 @@
+{% extends "./partials/layout.njk" %}
+{% from "govuk/components/button/macro.njk" import govukButton %}
+
+{% set title = 'Home' %}
+
+{% block main %}
+  <div class="govuk-width-container">
+    <h1 class="govuk-heading-l govuk-!-margin-top-7">The address you are using will soon be deleted</h1>
+  </div>
+
+  <div class="govuk-width-container">     
+    <p class="govuk-body">The address you are using to access DPS will soon be deleted. 
+      When the address is deleted, you will not be able to use it to access DPS.</p>
+    <p class="govuk-body">You should use the DPS icon on your desktop to access this service.</p>
+    <p class="govuk-body">If you are using a bookmark, it will stop working soon.</p>
+  </div>
+
+  <div class="govuk-width-container govuk-!-margin-top-5">     
+    {{ govukButton({
+      text: 'Continue',
+      element: 'a',
+      href: originalUrl,
+      attributes: {
+          'data-test': 'continue-button'
+      }
+    }) }}
+  </div>
+
+{% endblock %}
