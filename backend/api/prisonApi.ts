@@ -36,7 +36,8 @@ export const prisonApiFactory = (client) => {
     return response.body
   }
 
-  const get = (context, url, resultsLimit?) => client.get(context, url, { resultsLimit }).then(processResponse(context))
+  const get = (context, url, resultsLimit?, retryOverride?) =>
+    client.get(context, url, { resultsLimit, retryOverride }).then(processResponse(context))
 
   const getStream = (context, url) => client.getStream(context, url)
 
@@ -431,7 +432,7 @@ export const prisonApiFactory = (client) => {
     get(context, `/api/offender-activities/${offenderNo}/work-history?earliestEndDate=${earliestEndDate}`)
 
   const getTransfers = (context, parameters: GetTransferParameters) =>
-    get(context, `/api/movements/transfers?${querystring.stringify(parameters)}`)
+    get(context, `/api/movements/transfers?${querystring.stringify(parameters)}`, { retryOverride: 5 })
 
   return {
     userLocations,
