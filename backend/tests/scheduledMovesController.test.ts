@@ -263,7 +263,7 @@ describe('Scheduled moves controller', () => {
   })
 
   it('should render template with the default date and movement reason', async () => {
-    req.query.movementReason = 'A'
+    req.query.scheduledType = 'A'
     await controller.index(req, res)
 
     expect(res.render).toHaveBeenLastCalledWith(
@@ -271,7 +271,7 @@ describe('Scheduled moves controller', () => {
       expect.objectContaining({
         formValues: {
           date: today,
-          movementReason: 'A',
+          scheduledType: 'A',
         },
       })
     )
@@ -282,6 +282,7 @@ describe('Scheduled moves controller', () => {
 
     expect(prisonApi.getAgencyDetails).toHaveBeenLastCalledWith(res.locals, 'LEI')
   })
+
   it('should render template with the agency description and formatted date ', async () => {
     await controller.index(req, res)
 
@@ -290,6 +291,66 @@ describe('Scheduled moves controller', () => {
       expect.objectContaining({
         dateForTitle: '1 January 2017',
         agencyDescription: 'Leeds (HMP)',
+      })
+    )
+  })
+
+  it('should set show court appearances, transfers and releases to true when the scheduled type is null', async () => {
+    req.query.scheduledType = null
+
+    await controller.index(req, res)
+
+    expect(res.render).toHaveBeenLastCalledWith(
+      expect.anything(),
+      expect.objectContaining({
+        showCourtAppearances: true,
+        showTransfers: true,
+        showReleases: true,
+      })
+    )
+  })
+
+  it('should set show transfers and releases to false', async () => {
+    req.query.scheduledType = 'Court'
+
+    await controller.index(req, res)
+
+    expect(res.render).toHaveBeenLastCalledWith(
+      expect.anything(),
+      expect.objectContaining({
+        showCourtAppearances: true,
+        showTransfers: false,
+        showReleases: false,
+      })
+    )
+  })
+
+  it('should set show court and releases to false', async () => {
+    req.query.scheduledType = 'Transfers'
+
+    await controller.index(req, res)
+
+    expect(res.render).toHaveBeenLastCalledWith(
+      expect.anything(),
+      expect.objectContaining({
+        showCourtAppearances: false,
+        showTransfers: true,
+        showReleases: false,
+      })
+    )
+  })
+
+  it('should set show transfers and court to false', async () => {
+    req.query.scheduledType = 'Releases'
+
+    await controller.index(req, res)
+
+    expect(res.render).toHaveBeenLastCalledWith(
+      expect.anything(),
+      expect.objectContaining({
+        showCourtAppearances: false,
+        showTransfers: false,
+        showReleases: true,
       })
     )
   })
@@ -307,19 +368,19 @@ describe('Scheduled moves controller', () => {
       expect(res.render).toHaveBeenLastCalledWith(
         expect.anything(),
         expect.objectContaining({
-          movementReasons: [
+          scheduledTypes: [
             {
-              text: 'Committal Hearing',
-              value: 'COM',
+              text: 'Court',
+              value: 'Court',
             },
-            { text: 'Cond Release Extended Sentence CJA 2003', value: 'CE' },
             {
-              text: 'Conditional Release',
-              value: 'CR',
+              text: 'Releases',
+              value: 'Releases',
             },
-            { text: 'Court Appearance', value: 'CA' },
-            { text: 'Court Appearance', value: 'CRT' },
-            { text: 'Normal Transfer', value: 'NOTR' },
+            {
+              text: 'Transfers',
+              value: 'Transfers',
+            },
           ],
         })
       )
@@ -389,10 +450,10 @@ describe('Scheduled moves controller', () => {
           formValues: {
             date: '12/10/2021',
           },
-          movementReasons: expect.arrayContaining([
+          scheduledTypes: expect.arrayContaining([
             {
-              text: 'Court Appearance',
-              value: 'CRT',
+              text: 'Court',
+              value: 'Court',
             },
           ]),
         })
@@ -504,7 +565,7 @@ describe('Scheduled moves controller', () => {
       })
 
       it('should return an empty set when filtering by the incorrect movement reason', async () => {
-        req.query.movementReason = 'A'
+        req.query.scheduledType = 'A'
 
         await controller.index(req, res)
 
@@ -517,7 +578,7 @@ describe('Scheduled moves controller', () => {
       })
 
       it('should return a single entry for CRT', async () => {
-        req.query.movementReason = 'CRT'
+        req.query.movementReason = 'Court'
 
         await controller.index(req, res)
 
@@ -625,7 +686,7 @@ describe('Scheduled moves controller', () => {
       })
 
       it('should return an empty set when filtering by the incorrect movement reason', async () => {
-        req.query.movementReason = 'A'
+        req.query.scheduledType = 'A'
 
         await controller.index(req, res)
 
@@ -638,7 +699,7 @@ describe('Scheduled moves controller', () => {
       })
 
       it('should return a single entry for CR', async () => {
-        req.query.movementReason = 'CR'
+        req.query.scheduledType = 'Releases'
 
         await controller.index(req, res)
 
@@ -753,7 +814,7 @@ describe('Scheduled moves controller', () => {
       })
 
       it('should return an empty set when filtering by the incorrect movement reason', async () => {
-        req.query.movementReason = 'A'
+        req.query.scheduledType = 'A'
 
         await controller.index(req, res)
 
@@ -766,7 +827,7 @@ describe('Scheduled moves controller', () => {
       })
 
       it('should return a single entry for NOTR', async () => {
-        req.query.movementReason = 'NOTR'
+        req.query.scheduledType = 'Transfers'
 
         await controller.index(req, res)
 

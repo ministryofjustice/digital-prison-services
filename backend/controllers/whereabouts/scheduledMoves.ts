@@ -8,8 +8,11 @@ import { PrisonerPersonalProperty } from '../../api/prisonApi'
 
 const relevantAlertsForTransfer: Array<string> = ['HA', 'HA1', 'XCU', 'XHT', 'PEEP', 'XRF']
 const formatPropertyDescription = (description: string): string => description.replace('Property', '').trimStart()
-const sortTextAlphabetically = (left: SelectValue, right: SelectValue): number => left.text.localeCompare(right.text)
-
+const scheduledTypes: Array<SelectValue> = [
+  { text: 'Court', value: 'Court' },
+  { text: 'Releases', value: 'Releases' },
+  { text: 'Transfers', value: 'Transfers' },
+]
 type PersonalProperty = {
   containerType: string
   boxNumber: string
@@ -23,26 +26,21 @@ type ScheduledMovementDetails = {
 }
 
 export default ({ prisonApi, offenderSearchApi }) => {
-  const renderTemplate = (
-    res,
-    { date, agencyDetails, movementReasons, courtEvents, releaseEvents, transferEvents, movementReason }
-  ) =>
+  const renderTemplate = (res, { date, agencyDetails, courtEvents, releaseEvents, transferEvents, scheduledType }) =>
     res.render('whereabouts/scheduledMoves.njk', {
       dateForTitle: moment(date, 'DD/MM/YYYY').format('D MMMM YYYY'),
       agencyDescription: agencyDetails.description,
       formValues: {
         date,
-        movementReason,
+        scheduledType,
       },
-      movementReasons: movementReasons
-        .map((values) => ({
-          value: values.code,
-          text: values.description,
-        }))
-        .sort(sortTextAlphabetically),
+      scheduledTypes,
       courtEvents,
       releaseEvents,
       transferEvents,
+      showCourtAppearances: !scheduledType || scheduledType === 'Court',
+      showReleases: !scheduledType || scheduledType === 'Releases',
+      showTransfers: !scheduledType || scheduledType === 'Transfers',
     })
 
   const getRelevantAlertFlagLabels = (alerts: Array<Alert>): Array<AlertLabelFlag> => {
@@ -99,7 +97,7 @@ export default ({ prisonApi, offenderSearchApi }) => {
     const { userDetails } = req.session
     const { activeCaseLoadId } = userDetails
     const date = req.query?.date || moment().format('DD/MM/YYYY')
-    const { movementReason } = req.query
+    const { scheduledType } = req.query
 
     const [movementReasons, agencyDetails, scheduledMovements] = await Promise.all([
       prisonApi.getMovementReasons(res.locals),
@@ -126,11 +124,10 @@ export default ({ prisonApi, offenderSearchApi }) => {
       return renderTemplate(res, {
         date,
         agencyDetails,
-        movementReasons,
+        scheduledType,
         courtEvents: [],
         releaseEvents: [],
         transferEvents: [],
-        movementReason,
       })
     }
 
@@ -145,7 +142,7 @@ export default ({ prisonApi, offenderSearchApi }) => {
     )
 
     const courtEvents = scheduledMovements.courtEvents
-      .filter((courtEvent) => !movementReason || courtEvent.eventType === movementReason)
+      .filter((_) => !scheduledType || scheduledType === 'Court')
       .map((courtEvent) => ({
         ...scheduledMoveDetailsForPrisoners.find((sr) => sr.prisonerNumber === courtEvent.offenderNo),
         reasonDescription: movementReasons.find((reason) => reason.code === courtEvent.eventType)?.description,
@@ -153,14 +150,14 @@ export default ({ prisonApi, offenderSearchApi }) => {
       }))
 
     const releaseEvents = scheduledMovements.releaseEvents
-      .filter((courtEvent) => !movementReason || courtEvent.movementReasonCode === movementReason)
+      .filter((_) => !scheduledType || scheduledType === 'Releases')
       .map((re) => ({
         ...scheduledMoveDetailsForPrisoners.find((sr) => sr.prisonerNumber === re.offenderNo),
         reasonDescription: re.movementReasonDescription,
       }))
 
     const transferEvents = scheduledMovements.transferEvents
-      .filter((transferEvent) => !movementReason || transferEvent.eventSubType === movementReason)
+      .filter((_) => !scheduledType || scheduledType === 'Transfers')
       .map((transferEvent) => ({
         ...scheduledMoveDetailsForPrisoners.find((sr) => sr.prisonerNumber === transferEvent.offenderNo),
         reasonDescription: movementReasons.find((reason) => reason.code === transferEvent.eventSubType)?.description,
@@ -170,11 +167,10 @@ export default ({ prisonApi, offenderSearchApi }) => {
     return renderTemplate(res, {
       date,
       agencyDetails,
-      movementReasons,
       courtEvents,
       releaseEvents,
       transferEvents,
-      movementReason,
+      scheduledType,
     })
   }
 

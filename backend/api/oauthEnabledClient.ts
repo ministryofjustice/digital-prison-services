@@ -9,6 +9,7 @@ import { getHeaders } from './axios-config-decorators'
 type RequestOptions = {
   resultsLimit?: number
   customTimeout?: number
+  retryOverride?: number
 }
 
 type OauthApiClientOptions = {
@@ -77,7 +78,7 @@ export class OauthApiClient {
       .get(this.createUrl(path))
       .agent(this.keepaliveAgent)
       .set(getHeaders(context, options.resultsLimit))
-      .retry(2, this.retryHandler)
+      .retry(options.retryOverride || 2, this.retryHandler)
       .timeout({ deadline: options.customTimeout ?? this.timeout / 3 })
       .catch(errorLogger)
       .then(resultLogger)

@@ -185,8 +185,30 @@ context('Scheduled movements', () => {
 
   it('should load all movement reasons into the select box', () => {
     cy.visit('/manage-prisoner-whereabouts/scheduled-moves')
-    cy.get('#movementReason').contains('Visit Dying Relative')
-    cy.get('#movementReason').contains('Court Appearance')
+    cy.get('#scheduledType').contains('Court')
+    cy.get('#scheduledType').contains('Releases')
+    cy.get('#scheduledType').contains('Transfers')
+  })
+
+  it('should hide the release and transfer sections when the court scheduled type has been selected', () => {
+    cy.visit('/manage-prisoner-whereabouts/scheduled-moves?scheduledType=Court')
+    cy.get('#court').should('be.visible')
+    cy.get('#releases').should('not.exist')
+    cy.get('#transfers').should('not.exist')
+  })
+
+  it('should hide the court and release sections when the transfer scheduled type has been selected', () => {
+    cy.visit('/manage-prisoner-whereabouts/scheduled-moves?scheduledType=Transfers')
+    cy.get('#transfers').should('be.visible')
+    cy.get('#releases').should('not.exist')
+    cy.get('#court').should('not.exist')
+  })
+
+  it('should hide the court and transfer sections when the releases scheduled type has been selected', () => {
+    cy.visit('/manage-prisoner-whereabouts/scheduled-moves?scheduledType=Releases')
+    cy.get('#releases').should('be.visible')
+    cy.get('#court').should('not.exist')
+    cy.get('#transfers').should('not.exist')
   })
 
   context('Court appearances', () => {
