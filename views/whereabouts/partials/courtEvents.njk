@@ -2,7 +2,7 @@
 {% if courtEvents.length !== 0 %}
     {% set courtEventRows = [] %}
     {% for event in courtEvents %}
-        {% set releaseEventRow = (courtEventRows.push([
+        {% set courtEventRows = (courtEventRows.push([
             { html: prisonerProfileLink(event.prisonerNumber, event.name) },
             { text: event.cellLocation },
             { html: propertyColumn(event.personalProperty) },
