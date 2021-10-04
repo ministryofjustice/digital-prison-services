@@ -21,7 +21,7 @@ const courtEvents = [
     endTime: null,
     eventClass: 'EXT_MOV',
     eventType: 'CRT',
-    eventSubType: '19',
+    eventSubType: 'CRT',
     eventStatus: 'SCH',
     judgeName: null,
     directionCode: 'OUT',

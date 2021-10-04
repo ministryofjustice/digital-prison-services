@@ -27,7 +27,7 @@ const courtEvents = [
     endTime: null,
     eventClass: 'EXT_MOV',
     eventType: 'CRT',
-    eventSubType: '19',
+    eventSubType: 'CRT',
     eventStatus: 'SCH',
     judgeName: null,
     directionCode: 'OUT',
@@ -599,6 +599,25 @@ describe('Scheduled moves controller', () => {
           })
         )
       })
+
+      it('should not return video link booking appointments', async () => {
+        prisonApi.getTransfers = jest.fn().mockResolvedValue({
+          courtEvents: [{ offenderNo: 'A12234', eventSubType: 'VLC' }],
+          transferEvents: [{ offenderNo: 'A12234' }],
+          releaseEvents: [{ offenderNo: 'A12234' }],
+        })
+
+        req.query.movementReason = 'Court'
+
+        await controller.index(req, res)
+
+        expect(res.render).toHaveBeenLastCalledWith(
+          expect.anything(),
+          expect.objectContaining({
+            courtEvents: [],
+          })
+        )
+      })
     })
 
     describe('Release events', () => {
@@ -845,6 +864,25 @@ describe('Scheduled moves controller', () => {
                 relevantAlertFlagLabels: expect.anything(),
               },
             ],
+          })
+        )
+      })
+
+      it('should not return video link booking appointments', async () => {
+        prisonApi.getTransfers = jest.fn().mockResolvedValue({
+          courtEvents: [{ offenderNo: 'A12234' }],
+          transferEvents: [{ offenderNo: 'A12234', eventSubType: 'VLC' }],
+          releaseEvents: [{ offenderNo: 'A12234' }],
+        })
+
+        req.query.movementReason = 'Court'
+
+        await controller.index(req, res)
+
+        expect(res.render).toHaveBeenLastCalledWith(
+          expect.anything(),
+          expect.objectContaining({
+            transferEvents: [],
           })
         )
       })
