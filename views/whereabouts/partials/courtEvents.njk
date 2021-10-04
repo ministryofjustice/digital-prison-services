@@ -1,9 +1,8 @@
 <h2 class="govuk-heading-s">Court appearances</h2>
-{% if courtEvents.length !== 0 %}
+{% if courtEventRows.length !== 0 %}
     {% set courtEventRows = [] %}
     {% for event in courtEvents %}
-
-        {% set courtEventRows = (courtEventRows.push([
+        {% set releaseEventRow = (courtEventRows.push([
             { html: prisonerProfileLink(event.prisonerNumber, event.name) },
             { text: event.cellLocation },
             { html: propertyColumn(event.personalProperty) },
@@ -40,7 +39,7 @@
             }
         ],
         rows: courtEventRows,
-        attributes: { "data-qa": "court-events-table" }
+        attributes: { "id": "court-events-table", "data-qa": "court-events-table" }
     }) }}
 {% else %}
     <p id="no-court-events">
