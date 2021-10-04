@@ -1,5 +1,5 @@
 <h2 class="govuk-heading-s">Court appearances</h2>
-{% if courtEventRows.length !== 0 %}
+{% if courtEvents.length !== 0 %}
     {% set courtEventRows = [] %}
     {% for event in courtEvents %}
         {% set releaseEventRow = (courtEventRows.push([
