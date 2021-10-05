@@ -16,7 +16,7 @@ ingress:
   cert_secret: notm-cert
   path: /
   host2: whereabouts-preprod.prison.service.justice.gov.uk
-  cert_secret2: prison-staff-hub-cert
+  cert_secret2: digital-prison-services-cert
   redirect_host2: https://digital-preprod.prison.service.justice.gov.uk/redirect
 
 env:
