@@ -4,7 +4,7 @@
 replicaCount: 4
 
 image:
-  repository: quay.io/hmpps/prisonstaffhub
+  repository: quay.io/hmpps/digital-prison-services
   tag: latest
   pullPolicy: IfNotPresent
   port: 3000
