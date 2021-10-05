@@ -3,12 +3,12 @@
     {% set courtEventRows = [] %}
     {% for event in courtEvents %}
         {% set courtEventRows = (courtEventRows.push([
-            { html: prisonerProfileLink(event.prisonerNumber, event.name) },
+            { html: prisonerProfileLink(event.prisonerNumber, event.name)},
             { text: event.cellLocation },
             { html: propertyColumn(event.personalProperty) },
             { html: alertsColumn(event.relevantAlertFlagLabels)},
             { text: event.reasonDescription },
-            { text: event.destinationLocationDescription }
+            { text: event.destinationLocationDescription, classes: 'govuk-input--width-4' }
         ]), courtEventRows) %}
     {% endfor %}
 
@@ -34,7 +34,8 @@
                 text: "Reason"
             },
             {
-                text: "Destination location",
+                html: "Destination location",
+                classes: 'govuk-input--width-2',
                 attributes: {"aria-sort": "ascending"}
             }
         ],

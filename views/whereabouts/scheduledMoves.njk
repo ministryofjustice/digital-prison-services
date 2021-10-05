@@ -19,7 +19,8 @@
                 text: "Manage prisoner whereabouts",
                 href: "/manage-prisoner-whereabouts"
             }
-        ]
+        ],
+        classes: 'govuk-!-display-none-print'
     }) }}
 {% endblock %}
 
@@ -38,7 +39,6 @@
                 <h2 class="govuk-heading-m">View by</h2>
 
                 <div class="horizontal-form govuk-!-margin-bottom-3">
-
                     {{ datePicker({
                         id: 'date',
                         label: 'Date',
@@ -65,8 +65,9 @@
             </form>
         </div>
 
-
-        {{ printLink('Print displayed results', 'right') }}
+        <div>
+            {{ printLink('Print this page', 'right') }}
+        </div>
 
         {% if showCourtAppearances %}
             <div id="court" class="govuk-grid-column-full">
@@ -88,4 +89,20 @@
 
     </div>
 
+{% endblock %}
+
+{% block bodyEnd %}
+    {{ super() }}
+    <script src="/assets/moj/components/sortable-table/sortable-table.js"></script>
+    <script>
+      new MOJFrontend.SortableTable({
+        table: $('#court-events-table'),
+      })
+      new MOJFrontend.SortableTable({
+        table: $('#release-events-table'),
+      })
+      new MOJFrontend.SortableTable({
+        table: $('#transfer-events-table'),
+      })
+    </script>
 {% endblock %}

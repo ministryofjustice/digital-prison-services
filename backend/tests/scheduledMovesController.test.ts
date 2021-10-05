@@ -875,7 +875,7 @@ describe('Scheduled moves controller', () => {
           releaseEvents: [{ offenderNo: 'A12234' }],
         })
 
-        req.query.movementReason = 'Court'
+        req.query.scheduledType = 'Transfers'
 
         await controller.index(req, res)
 

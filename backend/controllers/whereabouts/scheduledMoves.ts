@@ -144,9 +144,8 @@ export default ({ prisonApi, offenderSearchApi }) => {
     )
 
     const courtEvents = scheduledMovements.courtEvents
-      .filter(
-        (courtEvent) => (!scheduledType && !isVideoLinkBooking(courtEvent.eventSubType)) || scheduledType === 'Court'
-      )
+      .filter((courtEvent) => !isVideoLinkBooking(courtEvent.eventSubType))
+      .filter((_) => !scheduledType || scheduledType === 'Court')
       .map((courtEvent) => ({
         ...scheduledMoveDetailsForPrisoners.find((sr) => sr.prisonerNumber === courtEvent.offenderNo),
         reasonDescription: movementReasons.find((reason) => reason.code === courtEvent.eventSubType)?.description,
@@ -161,9 +160,8 @@ export default ({ prisonApi, offenderSearchApi }) => {
       }))
 
     const transferEvents = scheduledMovements.transferEvents
-      .filter(
-        (transfer) => (!scheduledType && !isVideoLinkBooking(transfer.eventSubType)) || scheduledType === 'Transfers'
-      )
+      .filter((transferEvent) => !isVideoLinkBooking(transferEvent.eventSubType))
+      .filter((_) => !scheduledType || scheduledType === 'Transfers')
       .map((transferEvent) => ({
         ...scheduledMoveDetailsForPrisoners.find((sr) => sr.prisonerNumber === transferEvent.offenderNo),
         reasonDescription: movementReasons.find((reason) => reason.code === transferEvent.eventSubType)?.description,
