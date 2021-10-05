@@ -13,10 +13,10 @@ ingress:
   enabled: true
   enable_allowlist: true
   host: digital-preprod.prison.service.justice.gov.uk
-  cert_secret: notm-cert
+  cert_secret: digital-prison-services-cert
   path: /
   host2: whereabouts-preprod.prison.service.justice.gov.uk
-  cert_secret2: digital-prison-services-cert
+  cert_secret2: prison-staff-hub-cert
   redirect_host2: https://digital-preprod.prison.service.justice.gov.uk/redirect
 
 env:
