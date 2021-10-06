@@ -15,15 +15,34 @@ describe('Prisoner work inside prison details controller', () => {
     getDetails: jest.fn(),
   }
   const esweService = {
-    getWorkHistoryDetails: jest.fn(),
+    getActivitiesHistoryDetails: jest.fn(),
   }
-  const paginationService = {}
+  const paginationService = {
+    getPagination: jest.fn(),
+  }
 
-  const workHistoryInsidePrison = [
-    { endDate: null, location: 'Moorland (HMP & YOI)', role: 'Cleaner HB1 AM', startDate: '2021-08-19' },
-    { endDate: '2021-07-23', location: 'Moorland (HMP & YOI)', role: 'Cleaner HB1 AM', startDate: '2021-07-20' },
-    { endDate: '2021-07-23', location: 'Moorland (HMP & YOI)', role: 'Cleaner HB1 PM', startDate: '2021-07-20' },
-  ]
+  // const activitiesHistory = {
+  //   fullDetails: [
+  //     { endDate: null, location: 'Moorland (HMP & YOI)', role: 'Cleaner HB1 AM', startDate: '2021-08-19' },
+  //     { endDate: '2021-07-23', location: 'Moorland (HMP & YOI)', role: 'Cleaner HB1 AM', startDate: '2021-07-20' },
+  //     { endDate: '2021-07-23', location: 'Moorland (HMP & YOI)', role: 'Cleaner HB1 PM', startDate: '2021-07-20' },
+  //   ],
+  //   pagination: {
+  //     totalRecords: 3,
+  //     offset: 0,
+  //     limit: 20,
+  //   }
+  // }
+  const activitiesHistory = {
+    content: {
+      fullDetails: [
+        { endDate: null, location: 'Moorland (HMP & YOI)', role: 'Cleaner HB1 AM', startDate: '2021-08-19' },
+        { endDate: '2021-07-23', location: 'Moorland (HMP & YOI)', role: 'Cleaner HB1 AM', startDate: '2021-07-20' },
+        { endDate: '2021-07-23', location: 'Moorland (HMP & YOI)', role: 'Cleaner HB1 PM', startDate: '2021-07-20' },
+      ],
+      pagination: { limit: 20, offset: 0, totalRecords: 3 },
+    },
+  }
 
   let req
   let res
@@ -37,11 +56,12 @@ describe('Prisoner work inside prison details controller', () => {
     req.get.mockReturnValue('localhost')
     res.status = jest.fn()
 
-    esweService.getWorkHistoryDetails = jest.fn().mockResolvedValue(workHistoryInsidePrison)
+    esweService.getActivitiesHistoryDetails = jest.fn().mockResolvedValue(activitiesHistory)
     prisonApi.getDetails = jest.fn().mockResolvedValue({
       firstName: 'Apoustius',
       lastName: 'Ignian',
     })
+    paginationService.getPagination.mockReturnValue({})
 
     controller = prisonerWorkInsidePrisonDetails({
       paginationService,
@@ -66,7 +86,8 @@ describe('Prisoner work inside prison details controller', () => {
         breadcrumbPrisonerName,
         prisonerName,
         profileUrl,
-        workHistoryInsidePrison,
+        activitiesHistory: activitiesHistory.content.fullDetails,
+        pagination: {},
       })
     )
   })
@@ -79,7 +100,7 @@ describe('Prisoner work inside prison details controller', () => {
       expect(res.locals.redirectUrl).toBe(`/prisoner/${offenderNo}`)
     })
     it('should redirect to prisoner profile and throw error when curious API fails', async () => {
-      esweService.getWorkHistoryDetails.mockImplementation(() => Promise.reject(error))
+      esweService.getActivitiesHistoryDetails.mockImplementation(() => Promise.reject(error))
       await expect(controller(req, res)).rejects.toThrowError(error)
       expect(res.locals.redirectUrl).toBe(`/prisoner/${offenderNo}`)
     })

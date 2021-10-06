@@ -404,8 +404,13 @@ export const prisonApiFactory = (client) => {
 
   const getUserDetailsList = (context, users) => post(context, `/api/users/list`, users)
 
-  const getOffenderActivitiesHistory = (context, offenderNo, earliestEndDate) =>
-    get(context, `/api/offender-activities/${offenderNo}/activities-history?earliestEndDate=${earliestEndDate}`)
+  const getOffenderActivitiesHistory = (context, offenderNo, earliestEndDate, params) =>
+    get(
+      context,
+      `/api/offender-activities/${offenderNo}/activities-history?earliestEndDate=${earliestEndDate}&${mapToQueryString(
+        params
+      )}`
+    )
 
   const getTransfers = (context, parameters: GetTransferParameters) =>
     get(context, `/api/movements/transfers?${querystring.stringify(parameters)}`)

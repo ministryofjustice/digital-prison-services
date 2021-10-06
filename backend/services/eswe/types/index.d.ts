@@ -266,31 +266,41 @@ declare namespace eswe {
   /**
    *
    * @export
-   * @interface workHistoryFullDetails
+   * @interface activitiesHistory
    */
-  interface workHistoryFullDetails {
+  interface activitiesHistory {
+    fullDetails: activitiesHistoryFullDetails[]
+    pagination: Record<string, unknown>
+  }
+
+  /**
+   *
+   * @export
+   * @interface activitiesHistoryFullDetails
+   */
+  interface activitiesHistoryFullDetails {
     /**
      * Role
      * @type {string}
-     * @memberof workHistoryFullDetails
+     * @memberof activitiesHistoryFullDetails
      */
     role: string
     /**
      * location
      * @type {string}
-     * @memberof workHistoryFullDetails
+     * @memberof activitiesHistoryFullDetails
      */
     location: string
     /**
      * start date
      * @type {string}
-     * @memberof workHistoryFullDetails
+     * @memberof activitiesHistoryFullDetails
      */
     startDate: string
     /**
      * end date
      * @type {string}
-     * @memberof workHistoryFullDetails
+     * @memberof activitiesHistoryFullDetails
      */
     endDate: string
   }

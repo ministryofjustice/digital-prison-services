@@ -17,7 +17,7 @@ type Neurodiversities = FeatureFlagged<eswe.Neurodiversities[]>
 type CurrentCoursesEnhanced = FeatureFlagged<eswe.CurrentCoursesEnhanced>
 type LearnerEducationFullDetails = FeatureFlagged<eswe.LearnerEducationFullDetails[]>
 type CurrentWork = FeatureFlagged<eswe.OffenderCurrentWork>
-type workHistoryFullDetails = FeatureFlagged<eswe.workHistoryFullDetails[]>
+type activitiesHistory = FeatureFlagged<eswe.activitiesHistory>
 
 const createFlaggedContent = <T>(content: T) => ({
   enabled: app.esweEnabled,
@@ -45,6 +45,15 @@ export const DEFAULT_COURSE_DATA = {
 export const DEFAULT_WORK_DATA = {
   workHistoryPresent: false,
   currentJobs: [],
+}
+
+export const DEFAULT_ACTIVITIES_TABLE_DATA = {
+  fullDetails: [],
+  pagination: {
+    totalRecords: 0,
+    offset: 0,
+    limit: 20,
+  },
 }
 
 export const DEFAULT_SKILL_LEVELS = {
@@ -125,9 +134,9 @@ export default class EsweService {
     private readonly prisonApi: any
   ) {}
 
-  callActivitiesHistoryApi = async (context, nomisId: string) => {
+  callActivitiesHistoryApi = async (context, nomisId: string, params) => {
     const oneYearAgo = moment().subtract(1, 'year').format('YYYY-MM-DD')
-    const activitiesHistory = await this.prisonApi.getOffenderActivitiesHistory(context, nomisId, oneYearAgo)
+    const activitiesHistory = await this.prisonApi.getOffenderActivitiesHistory(context, nomisId, oneYearAgo, params)
     return activitiesHistory
   }
 
@@ -368,7 +377,7 @@ export default class EsweService {
     return createFlaggedContent(null)
   }
 
-  async getCurrentWork(nomisId: string): Promise<CurrentWork> {
+  async getCurrentActivities(nomisId: string): Promise<CurrentWork> {
     if (!app.esweEnabled) {
       return createFlaggedContent(null)
     }
@@ -376,7 +385,7 @@ export default class EsweService {
     try {
       const context = await this.systemOauthClient.getClientCredentialsTokens()
       const prisonerDetails = await this.prisonApi.getPrisonerDetails(context, nomisId)
-      const workActivities = await this.callActivitiesHistoryApi(context, nomisId)
+      const workActivities = await this.callActivitiesHistoryApi(context, nomisId, {})
 
       const { content } = workActivities
       const { latestLocation } = prisonerDetails[0]
@@ -406,14 +415,14 @@ export default class EsweService {
     return createFlaggedContent(null)
   }
 
-  async getWorkHistoryDetails(nomisId: string): Promise<workHistoryFullDetails> {
+  async getActivitiesHistoryDetails(nomisId: string, pageOffset: number): Promise<activitiesHistory> {
     if (!app.esweEnabled) {
       return createFlaggedContent(null)
     }
 
     try {
       const context = await this.systemOauthClient.getClientCredentialsTokens()
-      const workActivities = await this.callActivitiesHistoryApi(context, nomisId)
+      const workActivities = await this.callActivitiesHistoryApi(context, nomisId, { pageOffset })
 
       const { content } = workActivities
 
@@ -431,14 +440,22 @@ export default class EsweService {
           endReason: job.endReasonDescription || null,
           endComment: job.endCommentText || null,
         }))
-        fullDetails.sort((a, b) => compareByDate(parseDate(a.endDate), parseDate(b.endDate), true))
-        return createFlaggedContent(fullDetails)
+        const withPagination = {
+          fullDetails,
+          pagination: {
+            totalRecords: workActivities.totalElements,
+            offset: workActivities.pageable.offset,
+            limit: workActivities.pageable.pageSize,
+          },
+        }
+        // fullDetails.sort((a, b) => compareByDate(parseDate(a.endDate), parseDate(b.endDate), true))
+        return createFlaggedContent(withPagination)
       }
-      return createFlaggedContent([])
+      return createFlaggedContent(DEFAULT_ACTIVITIES_TABLE_DATA)
     } catch (e) {
       if (e.response?.status === 404) {
         log.info(`Offender record not found in Curious.`)
-        return createFlaggedContent([])
+        return createFlaggedContent(DEFAULT_ACTIVITIES_TABLE_DATA)
       }
       log.error(`Failed to get offender work. Reason: ${e.message}`)
     }

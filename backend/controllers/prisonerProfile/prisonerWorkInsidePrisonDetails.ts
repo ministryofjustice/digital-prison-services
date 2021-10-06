@@ -14,17 +14,16 @@ type PrisonerDetails = {
   assignedLivingUnitId: number
 }
 
-type workHistoryInPrison = {
+type activitiesInPrison = {
   enabled: boolean
-  content: eswe.workHistoryFullDetails[]
+  content: eswe.activitiesHistory
 }
 
 export default ({ paginationService, prisonApi, esweService }) =>
   async (req, res) => {
     const { offenderNo } = req.params
     const fullUrl = new URL(`${req.protocol}://${req.get('host')}${req.originalUrl}`)
-    const { pageLimitOption, pageOffsetOption } = req.query
-    const pageLimit = (pageLimitOption && parseInt(pageLimitOption, 10)) || 20
+    const { pageOffsetOption } = req.query
     const pageOffset = (pageOffsetOption && parseInt(pageOffsetOption, 10)) || 0
 
     if (!app.esweEnabled) {
@@ -32,18 +31,25 @@ export default ({ paginationService, prisonApi, esweService }) =>
     }
 
     try {
-      const [prisonerDetails, workHistoryInsidePrison]: [PrisonerDetails, workHistoryInPrison] = await Promise.all([
+      const [prisonerDetails, activitiesHistory]: [PrisonerDetails, activitiesInPrison] = await Promise.all([
         prisonApi.getDetails(res.locals, offenderNo),
-        esweService.getWorkHistoryDetails(offenderNo),
+        esweService.getActivitiesHistoryDetails(offenderNo, pageOffset),
       ])
 
       const { firstName, lastName } = prisonerDetails
+      const { fullDetails, pagination } = activitiesHistory.content
 
       return res.render('prisonerProfile/prisonerWorkAndSkills/prisonerWorkInsidePrisonDetails.njk', {
         breadcrumbPrisonerName: putLastNameFirst(firstName, lastName),
         prisonerName: formatName(firstName, lastName),
         profileUrl: `/prisoner/${offenderNo}/work-and-skills#work-summary`,
-        workHistoryInsidePrison,
+        activitiesHistory: fullDetails,
+        pagination: paginationService.getPagination(
+          pagination.totalRecords,
+          pageOffset || pagination.offset,
+          pagination.limit,
+          fullUrl
+        ),
       })
     } catch (error) {
       res.locals.redirectUrl = `/prisoner/${offenderNo}`
