@@ -1,0 +1,42 @@
+.dialog-background {
+  opacity: 0.6;
+}
+
+.govuk-modal-dialogue__wrapper {
+  display: none;
+  position: fixed;
+  z-index: 1000;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  overflow-x: hidden;
+  overflow-y: scroll;
+  outline: 0;
+}
+
+.govuk-modal-dialogue__overlay {
+  position: fixed;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  opacity: 0.4;
+  background: #0b0c0c;
+  pointer-events: none;
+  touch-action: none;
+}
+
+.govuk-modal-dialogue__box {
+  position: relative;
+  top: inherit;
+  right: inherit;
+  bottom: inherit;
+  left: inherit;
+  margin-top: 30px;
+  margin-right: auto;
+  margin-bottom: 30px;
+  margin-left: auto;
+}

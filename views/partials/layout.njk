@@ -24,6 +24,7 @@
 
   <link href = "https://code.jquery.com/ui/1.12.1/themes/ui-lightness/jquery-ui.css" rel = "stylesheet">
   <link href="/static/stylesheets/application.css" rel="stylesheet" />
+  <link href="/static/styles/modal-dialog.css" rel="stylesheet" />
   <title>{% block pageTitle %}{% if errors.length %}Error: {% endif %}{{title}} - Digital Prison Services{% endblock %}</title>
   <!--<![endif]-->
 
@@ -52,6 +53,8 @@
 {% block bodyEnd %}
 {# Run JavaScript at end of the
 <body>, to avoid blocking the initial render. #}
+<script src="/static/js/modal-dialog.js"></script>
+<script>window.ModalDialog.init();</script>
 <script src="/assets/govuk/all.js"></script>
 <script src="/static/js/main.js"></script>
 <script>window.GOVUKFrontend.initAll();</script>
