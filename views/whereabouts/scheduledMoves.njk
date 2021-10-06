@@ -26,14 +26,6 @@
 
 {% block content %}
 
-    {% if errors.length > 0 %}
-        {{ govukErrorSummary({
-            titleText: "There is a problem",
-            errorList: errors,
-            attributes: { 'data-qa-errors': true }
-        }) }}
-    {% endif %}
-
     <div class="govuk-grid-row govuk-body">
         <div class="govuk-grid-column-full">
             <h1 class="govuk-heading-m">People due to leave {{ agencyDescription }} on {{ dateForTitle }}</h1>
@@ -51,8 +43,7 @@
                         id: 'date',
                         label: 'Date',
                         name: 'date',
-                        date: formValues.date,
-                        errorMessage: errors | findError('date')
+                        date: formValues.date
                     }) }}
 
                     {{ govukSelect({
@@ -74,7 +65,8 @@
             </form>
         </div>
 
-        {{ printLink('Print displayed results', 'right')}}
+
+        {{ printLink('Print displayed results', 'right') }}
 
         {% if showCourtAppearances %}
             <div id="court" class="govuk-grid-column-full">
@@ -96,16 +88,4 @@
 
     </div>
 
-{% endblock %}
-
-{% block bodyEnd %}
-    {{ super() }}
-    <script src="/assets/moj/components/sortable-table/sortable-table.js"></script>
-    <script>
-      $('table').each(function() {
-        new MOJFrontend.SortableTable({
-          table: $(this),
-        })
-      })
-    </script>
 {% endblock %}

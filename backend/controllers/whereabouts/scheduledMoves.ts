@@ -7,7 +7,9 @@ import { Alert, PrisonerSearchResult } from '../../api/offenderSearchApi'
 import { PrisonerPersonalProperty } from '../../api/prisonApi'
 
 const relevantAlertsForTransfer: Array<string> = ['HA', 'HA1', 'XCU', 'XHT', 'PEEP', 'XRF']
+const isVideoLinkBooking = (movementReason: string): boolean => movementReason?.startsWith('VL')
 const formatPropertyDescription = (description: string): string => description.replace('Property', '').trimStart()
+
 const scheduledTypes: Array<SelectValue> = [
   { text: 'Court', value: 'Court' },
   { text: 'Releases', value: 'Releases' },
@@ -142,10 +144,12 @@ export default ({ prisonApi, offenderSearchApi }) => {
     )
 
     const courtEvents = scheduledMovements.courtEvents
-      .filter((_) => !scheduledType || scheduledType === 'Court')
+      .filter(
+        (courtEvent) => (!scheduledType && !isVideoLinkBooking(courtEvent.eventSubType)) || scheduledType === 'Court'
+      )
       .map((courtEvent) => ({
         ...scheduledMoveDetailsForPrisoners.find((sr) => sr.prisonerNumber === courtEvent.offenderNo),
-        reasonDescription: movementReasons.find((reason) => reason.code === courtEvent.eventType)?.description,
+        reasonDescription: movementReasons.find((reason) => reason.code === courtEvent.eventSubType)?.description,
         destinationLocationDescription: courtEvent.toAgencyDescription,
       }))
 
@@ -157,7 +161,9 @@ export default ({ prisonApi, offenderSearchApi }) => {
       }))
 
     const transferEvents = scheduledMovements.transferEvents
-      .filter((_) => !scheduledType || scheduledType === 'Transfers')
+      .filter(
+        (transfer) => (!scheduledType && !isVideoLinkBooking(transfer.eventSubType)) || scheduledType === 'Transfers'
+      )
       .map((transferEvent) => ({
         ...scheduledMoveDetailsForPrisoners.find((sr) => sr.prisonerNumber === transferEvent.offenderNo),
         reasonDescription: movementReasons.find((reason) => reason.code === transferEvent.eventSubType)?.description,
