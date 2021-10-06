@@ -46,7 +46,7 @@ describe('prisoner profile full image', () => {
   })
 
   it('should render with the correct back url if there is a referer', async () => {
-    const refererUrl = `//digitalPrisonServices/prisoner/${offenderNo}/personal`
+    const refererUrl = `//digitalPrisonServicesUrl/prisoner/${offenderNo}/personal`
 
     req.headers.referer = refererUrl
 
