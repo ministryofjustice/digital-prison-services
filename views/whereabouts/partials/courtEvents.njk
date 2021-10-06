@@ -6,7 +6,7 @@
             { html: prisonerProfileLink(event.prisonerNumber, event.name) },
             { text: event.cellLocation },
             { html: propertyColumn(event.personalProperty) },
-            { html: alertsColumn(event.relevantAlertFlagLabels)},
+            { html: alertsColumn(event.relevantAlertFlagLabels, event.holdAgainstTransferAlerts)},
             { text: event.reasonDescription },
             { text: event.destinationLocationDescription }
         ]), courtEventRows) %}

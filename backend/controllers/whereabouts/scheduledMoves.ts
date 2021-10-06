@@ -1,12 +1,14 @@
 import moment from 'moment'
+import { v4 as uuidv4 } from 'uuid'
 import { alertFlagLabels, AlertLabelFlag } from '../../shared/alertFlagValues'
 import { isoDateTimeEndOfDay, isoDateTimeStartOfDay } from '../../../common/dateHelpers'
-import { properCaseName } from '../../utils'
+import { properCaseName, formatName } from '../../utils'
 import { SelectValue } from '../../shared/commonTypes'
 import { Alert, PrisonerSearchResult } from '../../api/offenderSearchApi'
 import { PrisonerPersonalProperty } from '../../api/prisonApi'
 
 const relevantAlertsForTransfer: Array<string> = ['HA', 'HA1', 'XCU', 'XHT', 'PEEP', 'XRF']
+const relevantAlertsForHoldAgainstTransfer: Array<string> = ['TAP', 'TAH', 'TCPA', 'TG', 'TM', 'TPR', 'TSE']
 const isVideoLinkBooking = (movementReason: string): boolean => movementReason?.startsWith('VL')
 const formatPropertyDescription = (description: string): string => description.replace('Property', '').trimStart()
 
@@ -18,6 +20,18 @@ const scheduledTypes: Array<SelectValue> = [
 type PersonalProperty = {
   containerType: string
   boxNumber: string
+}
+type HoldAgainstTransferAlertDetails = {
+  description: string
+  comments: string
+  dateAdded: string
+  createdBy: string
+}
+type HoldAgainstTransferAlerts = {
+  prisonerNumber: string
+  displayId: string
+  fullName: string
+  alerts: Array<HoldAgainstTransferAlertDetails>
 }
 type ScheduledMovementDetails = {
   prisonerNumber: string
@@ -58,6 +72,39 @@ export default ({ prisonApi, offenderSearchApi }) => {
         classes: alert.classes,
       }))
   }
+
+  const getHoldAgainstTransferAlertDetails = async (
+    context,
+    prisonerDetails: PrisonerSearchResult
+  ): Promise<HoldAgainstTransferAlerts> => {
+    const activeHoldAgainstTransferAlerts = prisonerDetails.alerts.filter((alert) =>
+      relevantAlertsForHoldAgainstTransfer.includes(alert.alertCode)
+    )
+
+    if (activeHoldAgainstTransferAlerts.length === 0) {
+      return null
+    }
+
+    const activeHoldAgainstTransferAlertDetails = await prisonApi.getAlertsForLatestBooking(context, {
+      offenderNo: prisonerDetails.prisonerNumber,
+      alertCodes: relevantAlertsForHoldAgainstTransfer,
+      sortBy: 'dateCreated',
+      sortDirection: 'DESC',
+    })
+
+    return {
+      prisonerNumber: prisonerDetails.prisonerNumber,
+      displayId: uuidv4(),
+      fullName: formatName(prisonerDetails.firstName, prisonerDetails.lastName),
+      alerts: activeHoldAgainstTransferAlertDetails.map((alertDetails) => ({
+        description: `${alertDetails.alertCodeDescription} (${alertDetails.alertCode})`,
+        comments: alertDetails.comment,
+        dateAdded: moment(alertDetails.dateCreated, 'YYYY-MM-DD').format('D MMMM YYYY'),
+        createdBy: formatName(alertDetails.addedByFirstName, alertDetails.addedByLastName),
+      })),
+    }
+  }
+
   const getScheduledMovementDetails = async (
     context,
     prisonerDetailsForOffenderNumbers: Array<PrisonerSearchResult>
@@ -76,6 +123,11 @@ export default ({ prisonApi, offenderSearchApi }) => {
         )
       )) || []
 
+    const holdAgainstTransferAlertsForPrisoners =
+      (await Promise.all(
+        prisonerDetailsForOffenderNumbers.flatMap((sr) => getHoldAgainstTransferAlertDetails(context, sr))
+      )) || []
+
     return prisonerDetailsForOffenderNumbers.map((details) => {
       const personalProperty: Array<PersonalProperty> = personalPropertyForPrisoners
         .flatMap((p) => p)
@@ -85,11 +137,16 @@ export default ({ prisonApi, offenderSearchApi }) => {
           boxNumber: p.userDescription,
         }))
 
+      const holdAgainstTransferAlerts: HoldAgainstTransferAlerts = holdAgainstTransferAlertsForPrisoners.find(
+        (p) => p && p.prisonerNumber === details.prisonerNumber
+      )
+
       return {
         prisonerNumber: details.prisonerNumber,
         name: `${properCaseName(details.lastName)}, ${properCaseName(details.firstName)} - ${details.prisonerNumber}`,
         cellLocation: details.cellLocation,
         relevantAlertFlagLabels: getRelevantAlertFlagLabels(details.alerts),
+        holdAgainstTransferAlerts,
         personalProperty,
       }
     })
