@@ -24,10 +24,20 @@ export type PrisonerPersonalPropertyLocation = {
   parentLocationId: number
   userDescription: string
 }
+
 export type PrisonerPersonalProperty = {
   containerType: string
   location: PrisonerPersonalPropertyLocation
   sealMark: string
+}
+
+export type AlertDetails = {
+  alertCode: string
+  alertCodeDescription: string
+  comment?: string
+  dateCreated: string
+  addedByFirstName: string
+  addedByLastName: string
 }
 
 export const prisonApiFactory = (client) => {
@@ -132,6 +142,12 @@ export const prisonApiFactory = (client) => {
       `/api/bookings/${bookingId}/alerts/v2?alertType=${alertType}&from=${from}&to=${to}&alertStatus=${alertStatus}&page=${page}&sort=${sort}&size=${size}`
     )
   }
+
+  const getAlertsForLatestBooking = (context, { offenderNo, alertCodes, sortBy, sortDirection }): Array<AlertDetails> =>
+    get(
+      context,
+      `/api/offenders/${offenderNo}/bookings/latest/alerts?alertCodes=${alertCodes.toString()}&sort=${sortBy}&direction=${sortDirection}`
+    )
 
   const getAlertsSystem = (context, offenderNumbers) =>
     post(context, '/api/bookings/offenderNo/alerts', offenderNumbers)
@@ -457,6 +473,7 @@ export const prisonApiFactory = (client) => {
     getExternalTransfers,
     getAlerts,
     getAlertsForBookingV2,
+    getAlertsForLatestBooking,
     getAlertsSystem,
     getAssessments,
     getEstablishmentRollBlocksCount,
