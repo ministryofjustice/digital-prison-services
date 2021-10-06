@@ -1,7 +1,7 @@
 import Logger from 'bunyan'
 
 export default new Logger({
-  name: 'prisonStaffHub',
+  name: 'digital-prison-services',
   streams: [
     {
       stream: process.stdout,

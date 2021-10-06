@@ -61,7 +61,7 @@ export default function healthcheckFactory(
     Promise.all(checks.map((fn) => fn())).then((checkResults) => {
       const allOk = checkResults.every((item) => item.status === 'UP') ? 'UP' : 'DOWN'
       const result = {
-        name: 'prisonstaffhub',
+        name: 'digital-prison-services',
         status: allOk,
         api: checkResults.reduce(gatherCheckInfo, {}),
       }
