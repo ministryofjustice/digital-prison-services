@@ -186,6 +186,14 @@ const prisonerSearchResult = [
     cellLocation: '1-2-008',
     alerts,
   },
+  {
+    prisonerNumber: 'G123456',
+    bookingId: 3,
+    firstName: 'D',
+    lastName: 'S',
+    cellLocation: 'CSWAP',
+    alerts: [],
+  },
 ]
 
 const holdAgainstTransferAlertDetailsReponse = [
@@ -754,6 +762,92 @@ describe('Scheduled moves controller', () => {
           })
         )
       })
+
+      it('should replace CSWAP with the correct content for the cell location', async () => {
+        prisonApi.getTransfers = jest.fn().mockResolvedValue({
+          courtEvents: [{ offenderNo: 'G123456', eventSubType: 'CRT', eventStatus: 'SCH' }],
+          transferEvents: [],
+          releaseEvents: [],
+        })
+
+        req.query.scheduledType = 'Court'
+
+        await controller.index(req, res)
+
+        expect(res.render).toHaveBeenLastCalledWith(
+          expect.anything(),
+          expect.objectContaining({
+            courtEvents: [
+              expect.objectContaining({
+                cellLocation: 'No cell allocated',
+                prisonerNumber: 'G123456',
+              }),
+            ],
+          })
+        )
+      })
+
+      it('should apply default sort on surname', async () => {
+        prisonApi.getTransfers = jest.fn().mockResolvedValue({
+          courtEvents: [
+            { offenderNo: 'G4797UD', eventSubType: 'CRT', eventStatus: 'SCH' },
+            { offenderNo: 'G5966UI', eventSubType: 'CRT', eventStatus: 'SCH' },
+            { offenderNo: 'G3854XD', eventSubType: 'CRT', eventStatus: 'SCH' },
+          ],
+          transferEvents: [],
+          releaseEvents: [],
+        })
+
+        req.query.scheduledType = 'Court'
+
+        await controller.index(req, res)
+
+        expect(res.render).toHaveBeenLastCalledWith(
+          expect.anything(),
+          expect.objectContaining({
+            courtEvents: [
+              expect.objectContaining({
+                name: 'Cob, Bob - G4797UD',
+              }),
+              expect.objectContaining({
+                name: 'Shark, Mark - G5966UI',
+              }),
+              expect.objectContaining({
+                name: 'Shave, Dave - G3854XD',
+              }),
+            ],
+          })
+        )
+      })
+
+      it('should only show scheduled court events', async () => {
+        prisonApi.getTransfers = jest.fn().mockResolvedValue({
+          courtEvents: [
+            { offenderNo: 'G4797UD', eventSubType: 'CRT', eventStatus: 'SCH' },
+            { offenderNo: 'G5966UI', eventSubType: 'CRT' },
+            { offenderNo: 'G3854XD', eventSubType: 'CRT' },
+          ],
+          transferEvents: [],
+          releaseEvents: [],
+        })
+
+        req.query.movementReason = 'Court'
+
+        await controller.index(req, res)
+
+        expect(res.render).toHaveBeenLastCalledWith(
+          expect.anything(),
+          expect.objectContaining({
+            courtEvents: [
+              expect.objectContaining({
+                name: 'Cob, Bob - G4797UD',
+                prisonerNumber: 'G4797UD',
+                reasonDescription: 'Court Appearance',
+              }),
+            ],
+          })
+        )
+      })
     })
 
     describe('Release events', () => {
@@ -910,6 +1004,91 @@ describe('Scheduled moves controller', () => {
                 relevantAlertFlagLabels: expect.anything(),
                 holdAgainstTransferAlerts: expect.anything(),
               },
+            ],
+          })
+        )
+      })
+
+      it('should replace CSWAP with the correct content for the cell location', async () => {
+        prisonApi.getTransfers = jest.fn().mockResolvedValue({
+          courtEvents: [],
+          transferEvents: [],
+          releaseEvents: [{ offenderNo: 'G123456', eventSubType: 'CR', eventStatus: 'SCH' }],
+        })
+
+        req.query.scheduledType = 'Releases'
+
+        await controller.index(req, res)
+
+        expect(res.render).toHaveBeenLastCalledWith(
+          expect.anything(),
+          expect.objectContaining({
+            releaseEvents: [
+              expect.objectContaining({
+                cellLocation: 'No cell allocated',
+                prisonerNumber: 'G123456',
+              }),
+            ],
+          })
+        )
+      })
+
+      it('should apply default sort on surname', async () => {
+        prisonApi.getTransfers = jest.fn().mockResolvedValue({
+          courtEvents: [],
+          transferEvents: [],
+          releaseEvents: [
+            { offenderNo: 'G4797UD', eventSubType: 'CR', eventStatus: 'SCH' },
+            { offenderNo: 'G5966UI', eventSubType: 'CR', eventStatus: 'SCH' },
+            { offenderNo: 'G3854XD', eventSubType: 'CR', eventStatus: 'SCH' },
+          ],
+        })
+
+        req.query.scheduledType = 'Releases'
+
+        await controller.index(req, res)
+
+        expect(res.render).toHaveBeenLastCalledWith(
+          expect.anything(),
+          expect.objectContaining({
+            releaseEvents: [
+              expect.objectContaining({
+                name: 'Cob, Bob - G4797UD',
+              }),
+              expect.objectContaining({
+                name: 'Shark, Mark - G5966UI',
+              }),
+              expect.objectContaining({
+                name: 'Shave, Dave - G3854XD',
+              }),
+            ],
+          })
+        )
+      })
+
+      it('should only show scheduled release events', async () => {
+        prisonApi.getTransfers = jest.fn().mockResolvedValue({
+          courtEvents: [],
+          transferEvents: [],
+          releaseEvents: [
+            { offenderNo: 'G4797UD', eventStatus: 'SCH' },
+            { offenderNo: 'G5966UI' },
+            { offenderNo: 'G3854XD' },
+          ],
+        })
+
+        req.query.scheduledType = 'Releases'
+
+        await controller.index(req, res)
+
+        expect(res.render).toHaveBeenLastCalledWith(
+          expect.anything(),
+          expect.objectContaining({
+            releaseEvents: [
+              expect.objectContaining({
+                name: 'Cob, Bob - G4797UD',
+                prisonerNumber: 'G4797UD',
+              }),
             ],
           })
         )
@@ -1091,7 +1270,7 @@ describe('Scheduled moves controller', () => {
           releaseEvents: [{ offenderNo: 'A12234' }],
         })
 
-        req.query.movementReason = 'Court'
+        req.query.scheduledType = 'Transfers'
 
         await controller.index(req, res)
 
@@ -1099,6 +1278,92 @@ describe('Scheduled moves controller', () => {
           expect.anything(),
           expect.objectContaining({
             transferEvents: [],
+          })
+        )
+      })
+
+      it('should replace CSWAP with the correct content for the cell location', async () => {
+        prisonApi.getTransfers = jest.fn().mockResolvedValue({
+          courtEvents: [],
+          transferEvents: [{ offenderNo: 'G123456', eventSubType: 'NTOR', eventStatus: 'SCH' }],
+          releaseEvents: [],
+        })
+
+        req.query.scheduledType = 'Transfers'
+
+        await controller.index(req, res)
+
+        expect(res.render).toHaveBeenLastCalledWith(
+          expect.anything(),
+          expect.objectContaining({
+            transferEvents: [
+              expect.objectContaining({
+                cellLocation: 'No cell allocated',
+                prisonerNumber: 'G123456',
+              }),
+            ],
+          })
+        )
+      })
+
+      it('should apply default sort on surname', async () => {
+        prisonApi.getTransfers = jest.fn().mockResolvedValue({
+          courtEvents: [],
+          transferEvents: [
+            { offenderNo: 'G4797UD', eventSubType: 'NOTR', eventStatus: 'SCH' },
+            { offenderNo: 'G5966UI', eventSubType: 'NOTR', eventStatus: 'SCH' },
+            { offenderNo: 'G3854XD', eventSubType: 'NOTR', eventStatus: 'SCH' },
+          ],
+          releaseEvents: [],
+        })
+
+        req.query.scheduledType = 'Transfers'
+
+        await controller.index(req, res)
+
+        expect(res.render).toHaveBeenLastCalledWith(
+          expect.anything(),
+          expect.objectContaining({
+            transferEvents: [
+              expect.objectContaining({
+                name: 'Cob, Bob - G4797UD',
+              }),
+              expect.objectContaining({
+                name: 'Shark, Mark - G5966UI',
+              }),
+              expect.objectContaining({
+                name: 'Shave, Dave - G3854XD',
+              }),
+            ],
+          })
+        )
+      })
+
+      it('should only show scheduled transfers', async () => {
+        prisonApi.getTransfers = jest.fn().mockResolvedValue({
+          courtEvents: [],
+          transferEvents: [
+            { offenderNo: 'G4797UD', eventSubType: 'NOTR', eventStatus: 'SCH' },
+            { offenderNo: 'G5966UI', eventSubType: 'NOTR' },
+            { offenderNo: 'G3854XD', eventSubType: 'NOTR' },
+          ],
+          releaseEvents: [],
+        })
+
+        req.query.scheduledType = 'Transfers'
+
+        await controller.index(req, res)
+
+        expect(res.render).toHaveBeenLastCalledWith(
+          expect.anything(),
+          expect.objectContaining({
+            transferEvents: [
+              expect.objectContaining({
+                name: 'Cob, Bob - G4797UD',
+                prisonerNumber: 'G4797UD',
+                reasonDescription: 'Normal Transfer',
+              }),
+            ],
           })
         )
       })
