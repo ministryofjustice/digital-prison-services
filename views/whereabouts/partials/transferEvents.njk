@@ -2,11 +2,11 @@
 {% if transferEvents.length !== 0 %}
     {% set transferEventRows = [] %}
     {% for event in transferEvents %}
-        {% set releaseEventRow = (transferEventRows.push([
+        {% set transferEventRows = (transferEventRows.push([
             { html: prisonerProfileLink(event.prisonerNumber, event.name) },
             { text: event.cellLocation },
             { html: propertyColumn(event.personalProperty) },
-            { html: alertsColumn(event.relevantAlertFlagLabels)},
+            { html: alertsColumn(event.relevantAlertFlagLabels, event.holdAgainstTransferAlerts)},
             { text: event.reasonDescription },
             { text: event.destinationLocationDescription }
         ]), transferEventRows) %}
@@ -20,7 +20,7 @@
                 attributes: {"aria-sort": "ascending"}
             },
             {
-                text: "Cell",
+                text: "Location",
                 attributes: {"aria-sort": "ascending"}
             },
             {
@@ -34,8 +34,7 @@
                 text: "Reason"
             },
             {
-                text: "Destination location",
-                attributes: {"aria-sort": "ascending"}
+                text: "Destination location"
             }
         ],
         rows: transferEventRows,

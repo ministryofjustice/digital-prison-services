@@ -88,7 +88,6 @@ workflows:
             - build
       - hmpps/helm_lint:
           name: helm_lint
-          chart_name: "digital-prison-services"
       - hmpps/build_docker:
           name: build_docker
           image_name: "quay.io/hmpps/digital-prison-services"
@@ -97,8 +96,6 @@ workflows:
               only:
                 - main
       - hmpps/deploy_env:
-          chart_name: digital-prison-services
-          release_name: digital-prison-services
           name: deploy_dev
           env: "dev"
           context:
@@ -114,8 +111,6 @@ workflows:
           requires:
             - deploy_dev
       - hmpps/deploy_env:
-          chart_name: digital-prison-services
-          release_name: digital-prison-services
           name: deploy_preprod
           env: "preprod"
           context:
@@ -128,8 +123,6 @@ workflows:
           requires:
             - deploy_preprod
       - hmpps/deploy_env:
-          chart_name: digital-prison-services
-          release_name: digital-prison-services
           name: deploy_prod
           env: "prod"
           slack_notification: true

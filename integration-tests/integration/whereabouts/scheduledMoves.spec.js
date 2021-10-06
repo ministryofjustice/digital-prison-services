@@ -89,6 +89,51 @@ const alerts = [
   },
 ]
 
+const holdAgainstTransferAlerts = [
+  {
+    alertType: 'T',
+    alertCode: 'TCPA',
+    active: true,
+    expired: false,
+  },
+]
+
+const holdAgainstTransferAlertDetailsReponse = [
+  {
+    alertId: 3,
+    bookingId: 42739,
+    offenderNo: 'G5966UI',
+    alertType: 'T',
+    alertTypeDescription: 'Hold Against Transfer',
+    alertCode: 'TAH',
+    alertCodeDescription: 'Allocation Hold',
+    comment: 'Comment text here',
+    dateCreated: '2009-11-24',
+    expired: false,
+    active: true,
+    addedByFirstName: 'ODRAHOON',
+    addedByLastName: 'MARSHALD',
+    expiredByFirstName: 'ADMIN&ONB',
+    expiredByLastName: 'CNOMIS',
+  },
+  {
+    alertId: 1,
+    bookingId: 42739,
+    offenderNo: 'G5966UI',
+    alertType: 'T',
+    alertTypeDescription: 'Hold Against Transfer',
+    alertCode: 'TSE',
+    alertCodeDescription: 'Security Hold',
+    dateCreated: '2009-09-27',
+    expired: false,
+    active: true,
+    addedByFirstName: 'XTAG',
+    addedByLastName: 'XTAG',
+    expiredByFirstName: 'ADMIN&ONB',
+    expiredByLastName: 'CNOMIS',
+  },
+]
+
 const propertyResponse = [
   {
     location: {
@@ -121,7 +166,7 @@ const propertyResponse = [
   },
 ]
 
-const prisonerSearchDetails = [
+const prisonerSearchDetailsForCourtEvents = [
   {
     prisonerNumber: 'G4797UD',
     bookingId: 1,
@@ -130,6 +175,9 @@ const prisonerSearchDetails = [
     cellLocation: '1-2-006',
     alerts,
   },
+]
+
+const prisonerSearchDetailsForReleaseEvents = [
   {
     prisonerNumber: 'G3854XD',
     bookingId: 3,
@@ -138,13 +186,16 @@ const prisonerSearchDetails = [
     cellLocation: '1-2-008',
     alerts,
   },
+]
+
+const prisonerSearchDetailsForTransferEvents = [
   {
     prisonerNumber: 'G5966UI',
     bookingId: 2,
     firstName: 'MARK',
     lastName: 'SHARK',
     cellLocation: '1-2-007',
-    alerts,
+    alerts: alerts.concat(holdAgainstTransferAlerts),
   },
 ]
 
@@ -225,7 +276,7 @@ context('Scheduled movements', () => {
           transferEvents: [],
           releaseEvents: [],
         })
-        cy.task('stubPrisonerSearchDetails', prisonerSearchDetails)
+        cy.task('stubPrisonerSearchDetails', prisonerSearchDetailsForCourtEvents)
         cy.task('stubPrisonerProperty', propertyResponse)
       })
 
@@ -266,7 +317,7 @@ context('Scheduled movements', () => {
           transferEvents: [],
           releaseEvents,
         })
-        cy.task('stubPrisonerSearchDetails', prisonerSearchDetails)
+        cy.task('stubPrisonerSearchDetails', prisonerSearchDetailsForReleaseEvents)
         cy.task('stubPrisonerProperty', propertyResponse)
       })
 
@@ -298,7 +349,7 @@ context('Scheduled movements', () => {
       cy.get('#no-transfer-events').contains(`There are no transfers arranged for ${today.format('D MMMM YYYY')}`)
     })
 
-    context('With releases', () => {
+    context('With transfers', () => {
       beforeEach(() => {
         cy.task('resetTransfersStub')
         cy.task('stubTransfers', {
@@ -306,8 +357,9 @@ context('Scheduled movements', () => {
           transferEvents,
           releaseEvents: [],
         })
-        cy.task('stubPrisonerSearchDetails', prisonerSearchDetails)
+        cy.task('stubPrisonerSearchDetails', prisonerSearchDetailsForTransferEvents)
         cy.task('stubPrisonerProperty', propertyResponse)
+        cy.task('stubAlertsForLatestBooking', holdAgainstTransferAlertDetailsReponse)
       })
 
       it('should display releases in the table correctly', () => {
@@ -317,7 +369,8 @@ context('Scheduled movements', () => {
           .find('tbody')
           .find('tr')
           .then(($tableRows) => {
-            cy.get($tableRows).its('length').should('eq', 1)
+            // Row count includes the alert details dialog table
+            cy.get($tableRows).its('length').should('eq', 4)
 
             const rows = Array.from($tableRows).map(($row) => toScheduledMove($row.cells))
 
@@ -326,6 +379,7 @@ context('Scheduled movements', () => {
             expect(rows[0].property).contains('Valuables - Box 14')
             expect(rows[0].property).contains('Confiscated - Box 15')
             expect(rows[0].alerts).contains('ACCT open')
+            expect(rows[0].alerts).contains('Hold against transfer')
             expect(rows[0].reason).eq('Normal Transfer')
             expect(rows[0].destination).eq('Leeds (HMP)')
           })
