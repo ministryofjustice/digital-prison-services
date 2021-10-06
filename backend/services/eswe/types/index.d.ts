@@ -68,17 +68,21 @@ declare namespace eswe {
    */
   export interface WorkHistory {
     /**
-     * Offender Number
-     * @type {string}
-     * @memberof WorkHistory
-     */
-    offenderNo: string
-    /**
-     * work activities
+     * Work history
      * @type {array}
      * @memberof WorkHistory
      */
-    workActivities: WorkActivity[]
+    content: WorkActivity[]
+    pageable: Record<string, unknown>
+    last: boolean
+    totalElements: number
+    totalPages: number
+    size: number
+    number: number
+    sort: Record<string, unknwon>
+    first: boolean
+    numberOfElements: number
+    empty: boolean
   }
 
   /**

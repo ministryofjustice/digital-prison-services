@@ -125,10 +125,10 @@ export default class EsweService {
     private readonly prisonApi: any
   ) {}
 
-  callWorkHistoryApi = async (context, nomisId: string) => {
+  callActivitiesHistoryApi = async (context, nomisId: string) => {
     const oneYearAgo = moment().subtract(1, 'year').format('YYYY-MM-DD')
-    const workHistory = await this.prisonApi.getOffenderWorkHistory(context, nomisId, oneYearAgo)
-    return workHistory.workActivities
+    const activitiesHistory = await this.prisonApi.getOffenderActivitiesHistory(context, nomisId, oneYearAgo)
+    return activitiesHistory
   }
 
   async getLearnerProfiles(nomisId: string): Promise<LearnerProfiles> {
@@ -376,12 +376,13 @@ export default class EsweService {
     try {
       const context = await this.systemOauthClient.getClientCredentialsTokens()
       const prisonerDetails = await this.prisonApi.getPrisonerDetails(context, nomisId)
-      const workActivities = await this.callWorkHistoryApi(context, nomisId)
+      const workActivities = await this.callActivitiesHistoryApi(context, nomisId)
 
+      const { content } = workActivities
       const { latestLocation } = prisonerDetails[0]
 
-      if (workActivities.length && latestLocation) {
-        const currentJobs = workActivities
+      if (content.length && latestLocation) {
+        const currentJobs = content
           .filter((job) => job.isCurrentActivity && job.agencyLocationDescription === latestLocation)
           .map((job) => ({
             label: job.description.trim(),
@@ -412,15 +413,17 @@ export default class EsweService {
 
     try {
       const context = await this.systemOauthClient.getClientCredentialsTokens()
-      const workActivities = await this.callWorkHistoryApi(context, nomisId)
+      const workActivities = await this.callActivitiesHistoryApi(context, nomisId)
+
+      const { content } = workActivities
 
       const getEndDate = (job: eswe.WorkActivity) => {
         if (job.isCurrentActivity) return null
         return job.endDate
       }
 
-      if (workActivities.length) {
-        const fullDetails = workActivities.map((job) => ({
+      if (content.length) {
+        const fullDetails = content.map((job) => ({
           role: job.description.trim(),
           location: job.agencyLocationDescription,
           startDate: job.startDate,

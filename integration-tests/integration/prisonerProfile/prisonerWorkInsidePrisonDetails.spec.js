@@ -35,8 +35,7 @@ context('Work inside prison details page', () => {
   })
   context('One job available', () => {
     const dummyWorkHistory = {
-      offenderNo: 'G6123VU',
-      workActivities: [
+      content: [
         {
           bookingId: 1102484,
           agencyLocationId: 'MDI',
@@ -80,8 +79,7 @@ context('Work inside prison details page', () => {
   })
   context('data available', () => {
     const dummyWorkHistory = {
-      offenderNo: 'G6123VU',
-      workActivities: [
+      content: [
         {
           bookingId: 1102484,
           agencyLocationId: 'MDI',
@@ -174,8 +172,8 @@ context('Work inside prison details page', () => {
           expect(job[3].location).to.contain('Moorland (HMP & YOI)')
           expect(job[3].startDate).to.contain('20/07/2020')
           expect(job[3].endDate).to.contain('11/05/2021')
-          expect(job[3].endReason).to.contain('')
-          expect(job[3].endComment).to.contain('')
+          expect(job[3].endReason).to.contain('Not entered')
+          expect(job[3].endComment).to.contain('Not entered')
         })
     })
 
@@ -191,21 +189,29 @@ context('Work inside prison details page', () => {
           expect(job[0].location).to.contain('Moorland (HMP & YOI)')
           expect(job[0].startDate).to.contain('20/01/2020')
           expect(job[0].endDate).to.contain('01/09/2021')
+          expect(job[0].endReason).to.contain('Personal Reason')
+          expect(job[0].endComment).to.contain("John's been getting personal again.")
 
           expect(job[1].role).to.contain('Cleaner HB1 PM')
           expect(job[1].location).to.contain('Moorland (HMP & YOI)')
           expect(job[1].startDate).to.contain('20/07/2020')
           expect(job[1].endDate).to.contain('11/05/2021')
+          expect(job[1].endReason).to.contain('Not entered')
+          expect(job[1].endComment).to.contain('Not entered')
 
           expect(job[2].role).to.contain('Cleaner HB1 AM')
           expect(job[2].location).to.contain('Moorland (HMP & YOI)')
           expect(job[2].startDate).to.contain('20/07/2021')
           expect(job[2].endDate).to.contain('23/07/2021')
+          expect(job[2].endReason).to.contain('Removed')
+          expect(job[2].endComment).to.contain("John's been sneaking Monster into his water bottle again")
 
           expect(job[3].role).to.contain('Cleaner BB1 AM')
           expect(job[3].location).to.contain('Moorland (HMP & YOI)')
           expect(job[3].startDate).to.contain('19/08/2021')
           expect(job[3].endDate).to.contain('Ongoing')
+          expect(job[3].endReason).to.contain('')
+          expect(job[3].endComment).to.contain('')
         })
       cy.get('[data-test="workInsidePrison-start-date-header"]').children().click()
       cy.get('tbody')

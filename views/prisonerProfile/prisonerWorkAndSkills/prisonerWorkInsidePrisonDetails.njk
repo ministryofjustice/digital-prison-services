@@ -29,8 +29,8 @@
     { text: job.location },
     { text: job.startDate | formatTimestampToDate, attributes: { "data-sort-value": job.startDate | formatDate("X") } },
     { text: job.endDate | formatTimestampToDate if job.endDate else "Ongoing", attributes: { "data-sort-value": job.endDate | defaultSortDate } },
-    { text: job.endReason },
-    { text: job.endComment }
+    { text: job.endReason or "Not entered" if job.endDate else "" },
+    { text: job.endComment or "Not entered" if job.endDate else "" }
   ]), rows) %}
 {% endfor %}
 

@@ -1841,11 +1841,11 @@ module.exports = {
         jsonBody: types,
       },
     }),
-  stubForOffenderWorkHistory: (workHistory, status = 200) =>
+  stubForOffenderWorkHistory: (activitiesHistory, status = 200) =>
     stubFor({
       request: {
         method: 'GET',
-        urlPathPattern: '/api/offender-activities/.+?/work-history',
+        urlPathPattern: '/api/offender-activities/.+?/activities-history',
         queryParameters: {
           earliestEndDate: {
             matches: '.+?',
@@ -1857,7 +1857,7 @@ module.exports = {
         headers: {
           'Content-Type': 'application/json;charset=UTF-8',
         },
-        jsonBody: workHistory || {},
+        jsonBody: activitiesHistory || {},
       },
     }),
   stubMovementReasons: (reasons) =>

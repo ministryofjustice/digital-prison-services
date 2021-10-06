@@ -47,7 +47,7 @@ describe('Education skills and work experience', () => {
     curiousApi.getLearnerEducation = getLearnerEducationMock
     curiousApi.getLearnerLatestAssessments = getLearnerLatestAssessmentsMock
     curiousApi.getLearnerGoals = getLearnerGoalsMock
-    prisonApi.getOffenderWorkHistory = getLearnerWorkHistoryMock
+    prisonApi.getOffenderActivitiesHistory = getLearnerWorkHistoryMock
     prisonApi.getPrisonerDetails = getPrisonerDetailsMock
     systemOauthClient.getClientCredentialsTokens.mockReset()
 
@@ -343,7 +343,7 @@ describe('Education skills and work experience', () => {
     })
     it('should return the expected response if the user has no work', async () => {
       jest.spyOn(app, 'esweEnabled', 'get').mockReturnValue(true)
-      getLearnerWorkHistoryMock.mockResolvedValue({ workActivities: [] })
+      getLearnerWorkHistoryMock.mockResolvedValue({ content: [] })
       const actual = await service.getWorkHistoryDetails(nomisId)
       expect(actual.content).toEqual([])
     })
@@ -752,15 +752,14 @@ describe('Education skills and work experience', () => {
       })
       it('should return the expected response if the user has no work', async () => {
         jest.spyOn(app, 'esweEnabled', 'get').mockReturnValue(true)
-        getLearnerWorkHistoryMock.mockResolvedValue({ workActivities: [] })
+        getLearnerWorkHistoryMock.mockResolvedValue({ content: [] })
         const actual = await service.getCurrentWork(nomisId)
         expect(actual.content).toEqual(DEFAULT_WORK_DATA)
       })
       it('should return the expected response if the user has no current work but has historical work', async () => {
         jest.spyOn(app, 'esweEnabled', 'get').mockReturnValue(true)
         const dummyWorkHistoryNoCurrent = {
-          offenderNo: 'G6123VU',
-          workActivities: [
+          content: [
             {
               bookingId: 1102484,
               agencyLocationId: 'MDI',
@@ -968,8 +967,7 @@ function getDummyGoals(): curious.LearnerGoals {
 
 function getDummyWorkHistory(): eswe.WorkHistory {
   return {
-    offenderNo: 'G6123VU',
-    workActivities: [
+    content: [
       {
         bookingId: 1102484,
         agencyLocationId: 'MDI',
@@ -1016,6 +1014,21 @@ function getDummyWorkHistory(): eswe.WorkHistory {
         isCurrentActivity: false,
       },
     ],
+    pageable: {
+      sort: {
+        empty: true,
+        sorted: false,
+        unsorted: true,
+      },
+      offset: 0,
+      pageSize: 20,
+      pageNumber: 0,
+      paged: true,
+      unpaged: false,
+    },
+    last: true,
+    totalElements: 5,
+    totalPages: 1,
   }
 }
 

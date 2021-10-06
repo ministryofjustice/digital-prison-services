@@ -560,8 +560,7 @@ context('Prisoner Work and Skills', () => {
     })
     context('When there is no data', () => {
       const emptyWork = {
-        offenderNo: 'G9981UK',
-        workActivities: [],
+        content: [],
       }
 
       before(() => {
@@ -595,8 +594,7 @@ context('Prisoner Work and Skills', () => {
     })
     context('When the user exists, they have no current work, but they have work history', () => {
       const dummyWorkHistory = {
-        offenderNo: 'G6123VU',
-        workActivities: [
+        content: [
           {
             bookingId: 1102484,
             agencyLocationId: 'MDI',
@@ -659,8 +657,7 @@ context('Prisoner Work and Skills', () => {
     })
     context('When there is data available', () => {
       const dummyWorkHistory = {
-        offenderNo: 'G6123VU',
-        workActivities: [
+        content: [
           {
             bookingId: 1102484,
             agencyLocationId: 'MDI',
