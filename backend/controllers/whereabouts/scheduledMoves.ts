@@ -2,7 +2,7 @@ import moment from 'moment'
 import { v4 as uuidv4 } from 'uuid'
 import { alertFlagLabels, AlertLabelFlag } from '../../shared/alertFlagValues'
 import { isoDateTimeEndOfDay, isoDateTimeStartOfDay } from '../../../common/dateHelpers'
-import { properCaseName, formatName } from '../../utils'
+import { formatName, properCaseName } from '../../utils'
 import { SelectValue } from '../../shared/commonTypes'
 import { Alert, PrisonerSearchResult } from '../../api/offenderSearchApi'
 import { PrisonerPersonalProperty } from '../../api/prisonApi'
@@ -11,6 +11,8 @@ const relevantAlertsForTransfer: Array<string> = ['HA', 'HA1', 'XCU', 'XHT', 'PE
 const relevantAlertsForHoldAgainstTransfer: Array<string> = ['TAP', 'TAH', 'TCPA', 'TG', 'TM', 'TPR', 'TSE']
 const isVideoLinkBooking = (movementReason: string): boolean => movementReason?.startsWith('VL')
 const formatPropertyDescription = (description: string): string => description.replace('Property', '').trimStart()
+const formatCellLocation = (cellLocation: string): string => cellLocation.replace('CSWAP', 'No cell allocated')
+const isScheduled = (eventStatus: string): boolean => eventStatus === 'SCH'
 
 const scheduledTypes: Array<SelectValue> = [
   { text: 'Court', value: 'Court' },
@@ -144,7 +146,7 @@ export default ({ prisonApi, offenderSearchApi }) => {
       return {
         prisonerNumber: details.prisonerNumber,
         name: `${properCaseName(details.lastName)}, ${properCaseName(details.firstName)} - ${details.prisonerNumber}`,
-        cellLocation: details.cellLocation,
+        cellLocation: formatCellLocation(details.cellLocation),
         relevantAlertFlagLabels: getRelevantAlertFlagLabels(details.alerts),
         holdAgainstTransferAlerts,
         personalProperty,
@@ -201,24 +203,28 @@ export default ({ prisonApi, offenderSearchApi }) => {
     )
 
     const courtEvents = scheduledMovements.courtEvents
-      .filter((courtEvent) => !isVideoLinkBooking(courtEvent.eventSubType))
       .filter((_) => !scheduledType || scheduledType === 'Court')
+      .filter((courtEvent) => !isVideoLinkBooking(courtEvent.eventSubType) && isScheduled(courtEvent.eventStatus))
       .map((courtEvent) => ({
         ...scheduledMoveDetailsForPrisoners.find((sr) => sr.prisonerNumber === courtEvent.offenderNo),
         reasonDescription: movementReasons.find((reason) => reason.code === courtEvent.eventSubType)?.description,
         destinationLocationDescription: courtEvent.toAgencyDescription,
       }))
+      .sort((left, right) => left.name.localeCompare(right.name))
 
     const releaseEvents = scheduledMovements.releaseEvents
       .filter((_) => !scheduledType || scheduledType === 'Releases')
+      .filter((releaseEvent) => isScheduled(releaseEvent.eventStatus))
       .map((re) => ({
         ...scheduledMoveDetailsForPrisoners.find((sr) => sr.prisonerNumber === re.offenderNo),
         reasonDescription: re.movementReasonDescription,
       }))
 
     const transferEvents = scheduledMovements.transferEvents
-      .filter((transferEvent) => !isVideoLinkBooking(transferEvent.eventSubType))
       .filter((_) => !scheduledType || scheduledType === 'Transfers')
+      .filter(
+        (transferEvent) => !isVideoLinkBooking(transferEvent.eventSubType) && isScheduled(transferEvent.eventStatus)
+      )
       .map((transferEvent) => ({
         ...scheduledMoveDetailsForPrisoners.find((sr) => sr.prisonerNumber === transferEvent.offenderNo),
         reasonDescription: movementReasons.find((reason) => reason.code === transferEvent.eventSubType)?.description,
