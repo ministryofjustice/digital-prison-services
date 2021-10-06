@@ -2,4 +2,4 @@
 # Values here are the same across all environments
 
 generic-prometheus-alerts:
-  targetApplication: prison-staff-hub
+  targetApplication: digital-prison-services

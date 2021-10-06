@@ -88,17 +88,14 @@ workflows:
             - build
       - hmpps/helm_lint:
           name: helm_lint
-          chart_name: "prison-staff-hub"
       - hmpps/build_docker:
           name: build_docker
-          image_name: "quay.io/hmpps/prisonstaffhub"
+          image_name: "quay.io/hmpps/digital-prison-services"
           filters:
             branches:
               only:
                 - main
       - hmpps/deploy_env:
-          chart_name: prison-staff-hub
-          release_name: prison-staff-hub
           name: deploy_dev
           env: "dev"
           context:
@@ -114,12 +111,10 @@ workflows:
           requires:
             - deploy_dev
       - hmpps/deploy_env:
-          chart_name: prison-staff-hub
-          release_name: prison-staff-hub
           name: deploy_preprod
           env: "preprod"
           context:
-            - prison-staff-hub-preprod
+            - digital-prison-services-preprod
             - hmpps-common-vars
           requires:
             - request-preprod-approval
@@ -128,13 +123,11 @@ workflows:
           requires:
             - deploy_preprod
       - hmpps/deploy_env:
-          chart_name: prison-staff-hub
-          release_name: prison-staff-hub
           name: deploy_prod
           env: "prod"
           slack_notification: true
           context:
-            - prison-staff-hub-prod
+            - digital-prison-services-prod
             - hmpps-common-vars 
           requires:
             - request-prod-approval
