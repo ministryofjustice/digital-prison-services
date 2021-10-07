@@ -25,7 +25,7 @@ const StyledFooter = styled(Footer)`
   }
 `
 
-const FooterContainer = ({ supportUrl, prisonStaffHubUrl }) => {
+const FooterContainer = ({ supportUrl, digitalPrisonServicesUrl }) => {
   const copyright = {
     text: 'Crown copyright',
     link: 'https://www.nationalarchives.gov.uk/information-management/re-using-public-sector-information/uk-government-licensing-framework/crown-copyright/',
@@ -39,7 +39,7 @@ const FooterContainer = ({ supportUrl, prisonStaffHubUrl }) => {
   const meta = (
     <Footer.MetaLinks heading="Support links">
       <Footer.Link href={supportUrl}>Feedback and support</Footer.Link>
-      <Footer.Link href={`${prisonStaffHubUrl}content/terms-conditions`} target="_blank">
+      <Footer.Link href={`${digitalPrisonServicesUrl}content/terms-conditions`} target="_blank">
         Terms and conditions
       </Footer.Link>
     </Footer.MetaLinks>
@@ -50,11 +50,11 @@ const FooterContainer = ({ supportUrl, prisonStaffHubUrl }) => {
 
 FooterContainer.propTypes = {
   supportUrl: PropTypes.string.isRequired,
-  prisonStaffHubUrl: PropTypes.string,
+  digitalPrisonServicesUrl: PropTypes.string,
 }
 
 FooterContainer.defaultProps = {
-  prisonStaffHubUrl: undefined,
+  digitalPrisonServicesUrl: undefined,
 }
 
 export default FooterContainer

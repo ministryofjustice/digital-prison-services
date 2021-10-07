@@ -1,8 +1,8 @@
 {
-  "name": "prisonstaffhub",
+  "name": "digital-prison-sevices",
   "version": "0.0.1",
   "private": false,
-  "repository": "git@github.com:ministryofjustice/prisonstaffhub.git",
+  "repository": "git@github.com:ministryofjustice/digital-prison-sevices.git",
   "license": "MIT",
   "engines": {
     "npm": ">=6",
