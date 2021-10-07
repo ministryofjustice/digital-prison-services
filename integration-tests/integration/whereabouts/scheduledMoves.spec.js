@@ -376,8 +376,7 @@ context('Scheduled movements', () => {
           .find('tbody')
           .find('tr')
           .then(($tableRows) => {
-            // Row count includes the alert details dialog table
-            cy.get($tableRows).its('length').should('eq', 4)
+            cy.get($tableRows).its('length').should('eq', 1)
 
             const rows = Array.from($tableRows).map(($row) => toScheduledMove($row.cells))
 
