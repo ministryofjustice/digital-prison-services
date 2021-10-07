@@ -87,12 +87,14 @@ export default ({ prisonApi, offenderSearchApi }) => {
       return null
     }
 
-    const activeHoldAgainstTransferAlertDetails = await prisonApi.getAlertsForLatestBooking(context, {
+    const holdAgainstTransferAlertDetails = await prisonApi.getAlertsForLatestBooking(context, {
       offenderNo: prisonerDetails.prisonerNumber,
       alertCodes: relevantAlertsForHoldAgainstTransfer,
       sortBy: 'dateCreated',
       sortDirection: 'DESC',
     })
+
+    const activeHoldAgainstTransferAlertDetails = holdAgainstTransferAlertDetails.filter((a) => a.active)
 
     return {
       prisonerNumber: prisonerDetails.prisonerNumber,
