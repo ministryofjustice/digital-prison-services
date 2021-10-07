@@ -208,6 +208,13 @@ const toScheduledMove = ($cell) => ({
   destination: $cell[5]?.textContent,
 })
 
+const toHoldAgainstTransferAlert = ($cell) => ({
+  description: $cell[0]?.textContent,
+  comment: $cell[1]?.textContent,
+  dateCreated: $cell[2]?.textContent,
+  createdBy: $cell[3]?.textContent,
+})
+
 context('Scheduled movements', () => {
   const today = moment()
 
@@ -383,6 +390,37 @@ context('Scheduled movements', () => {
             expect(rows[0].reason).eq('Normal Transfer')
             expect(rows[0].destination).eq('Leeds (HMP)')
           })
+      })
+
+      it('should show hold-on-transfer details dialog when clicked', () => {
+        cy.visit('/manage-prisoner-whereabouts/scheduled-moves')
+
+        cy.get('[data-qa="hold-against-transfer-alerts-table"]').should('not.be.visible')
+
+        cy.get('[data-qa="transfer-events-table"]').find('[data-qa="hold_against_transfer_details"]').click()
+
+        cy.get('[data-qa="hold-against-transfer-alerts-table"]')
+          .find('tbody')
+          .find('tr')
+          .should('be.visible')
+          .then(($tableRows) => {
+            cy.get($tableRows).its('length').should('eq', 2)
+
+            const rows = Array.from($tableRows).map(($row) => toHoldAgainstTransferAlert($row.cells))
+
+            expect(rows[0].description).to.eq('Allocation Hold (TAH)')
+            expect(rows[0].comment).to.eq('Comment text here')
+            expect(rows[0].dateCreated).to.eq('24 November 2009')
+            expect(rows[0].createdBy).contains('Odrahoon Marshald')
+            expect(rows[1].description).to.eq('Security Hold (TSE)')
+            expect(rows[1].comment).to.eq('')
+            expect(rows[1].dateCreated).to.eq('27 September 2009')
+            expect(rows[1].createdBy).contains('Xtag Xtag')
+          })
+
+        cy.get("[data-qa='hold-against-transfer-dialog-close']").click()
+
+        cy.get('[data-qa="hold-against-transfer-alerts-table"]').should('not.be.visible')
       })
     })
   })
