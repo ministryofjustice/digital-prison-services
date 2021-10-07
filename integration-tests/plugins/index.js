@@ -154,7 +154,7 @@ module.exports = (on) => {
 
     stubAlertTypes: () => Promise.all([prisonApi.stubAlertTypes()]),
     stubAlertsForBooking: (alerts) => Promise.all([prisonApi.stubAlertsForBooking(alerts)]),
-    stubAlertsForLatestBooking: (alerts) => Promise.all([prisonApi.stubAlertsForLatestBooking(alerts)]),
+    stubAlertsForLatestBooking: (alerts) => prisonApi.stubAlertsForLatestBooking(alerts),
     stubAlerts: prisonApi.stubAlerts,
 
     stubInmates: prisonApi.stubInmates,

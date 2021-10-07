@@ -78,7 +78,7 @@ export default ({ prisonApi, offenderSearchApi }) => {
   const getHoldAgainstTransferAlertDetails = async (
     context,
     prisonerDetails: PrisonerSearchResult
-  ): Promise<HoldAgainstTransferAlerts> => {
+  ): Promise<HoldAgainstTransferAlerts | null> => {
     const activeHoldAgainstTransferAlerts = prisonerDetails.alerts.filter((alert) =>
       relevantAlertsForHoldAgainstTransfer.includes(alert.alertCode)
     )
