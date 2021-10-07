@@ -2,7 +2,7 @@
   {% set dialogId = holdAgainstTransferAlerts.displayId %}
   <div>
     Hold against transfer<br>
-    <a href="#anchor-{{dialogId}}" class="govuk-link govuk-link--no-visited-state modal_dialog_button" 
+    <a href="#anchor-{{dialogId}}" class="govuk-link govuk-link--no-visited-state modal_dialog_button govuk-!-display-none-print" 
       data-qa="hold_against_transfer_details" data-targetdialogid={{ dialogId }}>View alerts
       <span class="govuk-visually-hidden"> for {{ holdAgainstTransferAlerts.fullName }}</span>
     </a>
