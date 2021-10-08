@@ -432,14 +432,17 @@ export default class EsweService {
       }
 
       if (content.length) {
-        const fullDetails = content.map((job) => ({
-          role: job.description.trim(),
-          location: job.agencyLocationDescription,
-          startDate: job.startDate,
-          endDate: getEndDate(job),
-          endReason: job.endReasonDescription || null,
-          endComment: job.endCommentText || null,
-        }))
+        const fullDetails = content
+          .map((job) => ({
+            role: job.description.trim(),
+            location: job.agencyLocationDescription,
+            startDate: job.startDate,
+            endDate: getEndDate(job),
+            endReason: job.endReasonDescription || null,
+            endComment: job.endCommentText || null,
+          }))
+          .sort((a, b) => compareByDate(parseDate(a.endDate), parseDate(b.endDate), true))
+
         const withPagination = {
           fullDetails,
           pagination: {
@@ -448,7 +451,7 @@ export default class EsweService {
             limit: workActivities.pageable.pageSize,
           },
         }
-        // fullDetails.sort((a, b) => compareByDate(parseDate(a.endDate), parseDate(b.endDate), true))
+
         return createFlaggedContent(withPagination)
       }
       return createFlaggedContent(DEFAULT_ACTIVITIES_TABLE_DATA)
