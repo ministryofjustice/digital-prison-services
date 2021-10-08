@@ -3,6 +3,9 @@ import scheduledMoves from '../controllers/whereabouts/scheduledMoves'
 
 const MOCK_DATE_TO_01_01_2027 = () => jest.spyOn(Date, 'now').mockImplementation(() => 1483228800000)
 
+const MOCK_DIALOG_DISPLAY_ID = '1234'
+jest.mock('uuid', () => ({ v4: () => MOCK_DIALOG_DISPLAY_ID }))
+
 const agencyDetails = { agencyId: 'LEI', description: 'Leeds (HMP)' }
 const movementReasons = [
   { code: 'CR', description: 'Conditional Release' },
@@ -10,7 +13,7 @@ const movementReasons = [
   { code: 'CE', description: 'Cond Release Extended Sentence CJA 2003' },
   { code: 'COM', description: 'Committal Hearing' },
   { code: 'CRT', description: 'Court Appearance' },
-  { code: 'TRN', description: 'Normal Transfer' },
+  { code: 'NOTR', description: 'Normal Transfer' },
 ]
 
 const courtEvents = [
@@ -27,7 +30,7 @@ const courtEvents = [
     endTime: null,
     eventClass: 'EXT_MOV',
     eventType: 'CRT',
-    eventSubType: '19',
+    eventSubType: 'CRT',
     eventStatus: 'SCH',
     judgeName: null,
     directionCode: 'OUT',
@@ -83,6 +86,29 @@ const releaseEvents = [
     bookingInOutStatus: 'OUT',
   },
 ]
+const courtEventsWithoutTransferOnHoldAlerts = [
+  {
+    offenderNo: 'G1234BB',
+    createDateTime: '2021-09-24T09:22:21.350125',
+    eventId: 449548211,
+    fromAgency: 'MDI',
+    fromAgencyDescription: 'Moorland (HMP & YOI)',
+    toAgency: 'ABDSUM',
+    toAgencyDescription: "Aberdeen Sheriff's Court (ABDSHF)",
+    eventDate: '2021-09-29',
+    startTime: '2021-09-29T21:00:00',
+    endTime: null,
+    eventClass: 'EXT_MOV',
+    eventType: 'CRT',
+    eventSubType: 'CRT',
+    eventStatus: 'SCH',
+    judgeName: null,
+    directionCode: 'OUT',
+    commentText: null,
+    bookingActiveFlag: true,
+    bookingInOutStatus: 'IN',
+  },
+]
 
 const alerts = [
   {
@@ -121,6 +147,18 @@ const alerts = [
     active: true,
     expired: false,
   },
+  {
+    alertType: 'T',
+    alertCode: 'TSE',
+    active: true,
+    expired: false,
+  },
+  {
+    alertType: 'T',
+    alertCode: 'TAH',
+    active: true,
+    expired: false,
+  },
 ]
 
 const prisonerSearchResult = [
@@ -147,6 +185,86 @@ const prisonerSearchResult = [
     lastName: 'SHAVE',
     cellLocation: '1-2-008',
     alerts,
+  },
+  {
+    prisonerNumber: 'G123456',
+    bookingId: 3,
+    firstName: 'D',
+    lastName: 'S',
+    cellLocation: 'CSWAP',
+    alerts: [],
+  },
+]
+
+const holdAgainstTransferAlertDetailsReponse = [
+  {
+    alertId: 3,
+    bookingId: 42739,
+    offenderNo: 'G0204GW',
+    alertType: 'T',
+    alertTypeDescription: 'Hold Against Transfer',
+    alertCode: 'TAH',
+    alertCodeDescription: 'Allocation Hold',
+    comment: 'Comment text here',
+    dateCreated: '2009-11-24',
+    expired: false,
+    active: true,
+    addedByFirstName: 'ODRAHOON',
+    addedByLastName: 'MARSHALD',
+    expiredByFirstName: 'ADMIN&ONB',
+    expiredByLastName: 'CNOMIS',
+  },
+  {
+    alertId: 2,
+    bookingId: 42739,
+    offenderNo: 'G0204GW',
+    alertType: 'T',
+    alertTypeDescription: 'Hold Against Transfer',
+    alertCode: 'TCPA',
+    alertCodeDescription: 'Security Hold',
+    dateCreated: '2009-08-27',
+    expired: true,
+    active: false,
+    addedByFirstName: 'XTAG',
+    addedByLastName: 'XTAG',
+    expiredByFirstName: 'ADMIN&ONB',
+    expiredByLastName: 'CNOMIS',
+  },
+  {
+    alertId: 1,
+    bookingId: 42739,
+    offenderNo: 'G0204GW',
+    alertType: 'T',
+    alertTypeDescription: 'Hold Against Transfer',
+    alertCode: 'TSE',
+    alertCodeDescription: 'Security Hold',
+    dateCreated: '2009-09-27',
+    expired: false,
+    active: true,
+    addedByFirstName: 'XTAG',
+    addedByLastName: 'XTAG',
+    expiredByFirstName: 'ADMIN&ONB',
+    expiredByLastName: 'CNOMIS',
+  },
+]
+
+const alertsWithoutHoldOnTransfer = [
+  {
+    alertType: 'T',
+    alertCode: 'HA',
+    active: true,
+    expired: false,
+  },
+]
+
+const prisonerSearchResultWithoutHoldOnTransfer = [
+  {
+    prisonerNumber: 'G1234BB',
+    bookingId: 4,
+    firstName: 'TIM',
+    lastName: 'SMITH',
+    cellLocation: '1-2-009',
+    alerts: alertsWithoutHoldOnTransfer,
   },
 ]
 
@@ -211,6 +329,7 @@ describe('Scheduled moves controller', () => {
     getMovementReasons: () => {},
     getAgencyDetails: () => {},
     getTransfers: () => {},
+    getAlertsForLatestBooking: () => {},
     getPrisonerProperty: () => {},
   }
   const offenderSearchApi = {
@@ -245,6 +364,7 @@ describe('Scheduled moves controller', () => {
       releaseEvents: [],
     })
     prisonApi.getPrisonerProperty = jest.fn().mockResolvedValue(propertyResponse)
+    prisonApi.getAlertsForLatestBooking = jest.fn().mockResolvedValue(holdAgainstTransferAlertDetailsReponse)
 
     offenderSearchApi.getPrisonersDetails = jest.fn().mockResolvedValue(prisonerSearchResult)
 
@@ -262,7 +382,8 @@ describe('Scheduled moves controller', () => {
     expect(res.render).toHaveBeenLastCalledWith('whereabouts/scheduledMoves.njk', expect.anything())
   })
 
-  it('should render template with the default date', async () => {
+  it('should render template with the default date and movement reason', async () => {
+    req.query.scheduledType = 'A'
     await controller.index(req, res)
 
     expect(res.render).toHaveBeenLastCalledWith(
@@ -270,6 +391,7 @@ describe('Scheduled moves controller', () => {
       expect.objectContaining({
         formValues: {
           date: today,
+          scheduledType: 'A',
         },
       })
     )
@@ -280,6 +402,7 @@ describe('Scheduled moves controller', () => {
 
     expect(prisonApi.getAgencyDetails).toHaveBeenLastCalledWith(res.locals, 'LEI')
   })
+
   it('should render template with the agency description and formatted date ', async () => {
     await controller.index(req, res)
 
@@ -288,6 +411,66 @@ describe('Scheduled moves controller', () => {
       expect.objectContaining({
         dateForTitle: '1 January 2017',
         agencyDescription: 'Leeds (HMP)',
+      })
+    )
+  })
+
+  it('should set show court appearances, transfers and releases to true when the scheduled type is null', async () => {
+    req.query.scheduledType = null
+
+    await controller.index(req, res)
+
+    expect(res.render).toHaveBeenLastCalledWith(
+      expect.anything(),
+      expect.objectContaining({
+        showCourtAppearances: true,
+        showTransfers: true,
+        showReleases: true,
+      })
+    )
+  })
+
+  it('should set show transfers and releases to false', async () => {
+    req.query.scheduledType = 'Court'
+
+    await controller.index(req, res)
+
+    expect(res.render).toHaveBeenLastCalledWith(
+      expect.anything(),
+      expect.objectContaining({
+        showCourtAppearances: true,
+        showTransfers: false,
+        showReleases: false,
+      })
+    )
+  })
+
+  it('should set show court and releases to false', async () => {
+    req.query.scheduledType = 'Transfers'
+
+    await controller.index(req, res)
+
+    expect(res.render).toHaveBeenLastCalledWith(
+      expect.anything(),
+      expect.objectContaining({
+        showCourtAppearances: false,
+        showTransfers: true,
+        showReleases: false,
+      })
+    )
+  })
+
+  it('should set show transfers and court to false', async () => {
+    req.query.scheduledType = 'Releases'
+
+    await controller.index(req, res)
+
+    expect(res.render).toHaveBeenLastCalledWith(
+      expect.anything(),
+      expect.objectContaining({
+        showCourtAppearances: false,
+        showTransfers: false,
+        showReleases: true,
       })
     )
   })
@@ -305,19 +488,19 @@ describe('Scheduled moves controller', () => {
       expect(res.render).toHaveBeenLastCalledWith(
         expect.anything(),
         expect.objectContaining({
-          movementReasons: [
+          scheduledTypes: [
             {
-              text: 'Committal Hearing',
-              value: 'COM',
+              text: 'Court',
+              value: 'Court',
             },
-            { text: 'Cond Release Extended Sentence CJA 2003', value: 'CE' },
             {
-              text: 'Conditional Release',
-              value: 'CR',
+              text: 'Releases',
+              value: 'Releases',
             },
-            { text: 'Court Appearance', value: 'CA' },
-            { text: 'Court Appearance', value: 'CRT' },
-            { text: 'Normal Transfer', value: 'TRN' },
+            {
+              text: 'Transfers',
+              value: 'Transfers',
+            },
           ],
         })
       )
@@ -387,10 +570,10 @@ describe('Scheduled moves controller', () => {
           formValues: {
             date: '12/10/2021',
           },
-          movementReasons: expect.arrayContaining([
+          scheduledTypes: expect.arrayContaining([
             {
-              text: 'Court Appearance',
-              value: 'CRT',
+              text: 'Court',
+              value: 'Court',
             },
           ]),
         })
@@ -485,6 +668,45 @@ describe('Scheduled moves controller', () => {
         })
       })
 
+      it('should make a call to retrieve hold-on-transfer details for each prisoner with any such alert', async () => {
+        await controller.index(req, res)
+
+        expect(prisonApi.getAlertsForLatestBooking).toHaveBeenCalledWith(
+          {},
+          {
+            alertCodes: ['TAP', 'TAH', 'TCPA', 'TG', 'TM', 'TPR', 'TSE'],
+            offenderNo: 'G4797UD',
+            sortBy: 'dateCreated',
+            sortDirection: 'DESC',
+          }
+        )
+      })
+
+      it('should return hold-against-transfer alert details', async () => {
+        await controller.index(req, res)
+
+        expectCourtEventsToContain(res, {
+          holdAgainstTransferAlerts: {
+            alerts: [
+              {
+                comments: 'Comment text here',
+                createdBy: 'Odrahoon Marshald',
+                dateAdded: '24 November 2009',
+                description: 'Allocation Hold (TAH)',
+              },
+              {
+                createdBy: 'Xtag Xtag',
+                dateAdded: '27 September 2009',
+                description: 'Security Hold (TSE)',
+              },
+            ],
+            displayId: MOCK_DIALOG_DISPLAY_ID,
+            fullName: 'Bob Cob',
+            prisonerNumber: 'G4797UD',
+          },
+        })
+      })
+
       it('should return the movement reason description', async () => {
         await controller.index(req, res)
 
@@ -499,6 +721,148 @@ describe('Scheduled moves controller', () => {
         expectCourtEventsToContain(res, {
           destinationLocationDescription: "Aberdeen Sheriff's Court (ABDSHF)",
         })
+      })
+
+      it('should return an empty set when filtering by the incorrect movement reason', async () => {
+        req.query.scheduledType = 'A'
+
+        await controller.index(req, res)
+
+        expect(res.render).toHaveBeenLastCalledWith(
+          expect.anything(),
+          expect.objectContaining({
+            courtEvents: [],
+          })
+        )
+      })
+
+      it('should return a single entry for CRT', async () => {
+        req.query.movementReason = 'Court'
+
+        await controller.index(req, res)
+
+        expect(res.render).toHaveBeenLastCalledWith(
+          expect.anything(),
+          expect.objectContaining({
+            courtEvents: [
+              {
+                cellLocation: '1-2-006',
+                destinationLocationDescription: "Aberdeen Sheriff's Court (ABDSHF)",
+                name: 'Cob, Bob - G4797UD',
+                personalProperty: expect.anything(),
+                prisonerNumber: 'G4797UD',
+                reasonDescription: 'Court Appearance',
+                relevantAlertFlagLabels: expect.anything(),
+                holdAgainstTransferAlerts: expect.anything(),
+              },
+            ],
+          })
+        )
+      })
+
+      it('should not return video link booking appointments', async () => {
+        prisonApi.getTransfers = jest.fn().mockResolvedValue({
+          courtEvents: [{ offenderNo: 'A12234', eventSubType: 'VLC' }],
+          transferEvents: [{ offenderNo: 'A12234' }],
+          releaseEvents: [{ offenderNo: 'A12234' }],
+        })
+
+        req.query.movementReason = 'Court'
+
+        await controller.index(req, res)
+
+        expect(res.render).toHaveBeenLastCalledWith(
+          expect.anything(),
+          expect.objectContaining({
+            courtEvents: [],
+          })
+        )
+      })
+
+      it('should replace CSWAP with the correct content for the cell location', async () => {
+        prisonApi.getTransfers = jest.fn().mockResolvedValue({
+          courtEvents: [{ offenderNo: 'G123456', eventSubType: 'CRT', eventStatus: 'SCH' }],
+          transferEvents: [],
+          releaseEvents: [],
+        })
+
+        req.query.scheduledType = 'Court'
+
+        await controller.index(req, res)
+
+        expect(res.render).toHaveBeenLastCalledWith(
+          expect.anything(),
+          expect.objectContaining({
+            courtEvents: [
+              expect.objectContaining({
+                cellLocation: 'No cell allocated',
+                prisonerNumber: 'G123456',
+              }),
+            ],
+          })
+        )
+      })
+
+      it('should apply default sort on surname', async () => {
+        prisonApi.getTransfers = jest.fn().mockResolvedValue({
+          courtEvents: [
+            { offenderNo: 'G4797UD', eventSubType: 'CRT', eventStatus: 'SCH' },
+            { offenderNo: 'G5966UI', eventSubType: 'CRT', eventStatus: 'SCH' },
+            { offenderNo: 'G3854XD', eventSubType: 'CRT', eventStatus: 'SCH' },
+          ],
+          transferEvents: [],
+          releaseEvents: [],
+        })
+
+        req.query.scheduledType = 'Court'
+
+        await controller.index(req, res)
+
+        expect(res.render).toHaveBeenLastCalledWith(
+          expect.anything(),
+          expect.objectContaining({
+            courtEvents: [
+              expect.objectContaining({
+                name: 'Cob, Bob - G4797UD',
+              }),
+              expect.objectContaining({
+                name: 'Shark, Mark - G5966UI',
+              }),
+              expect.objectContaining({
+                name: 'Shave, Dave - G3854XD',
+              }),
+            ],
+          })
+        )
+      })
+
+      it('should only show scheduled court events', async () => {
+        prisonApi.getTransfers = jest.fn().mockResolvedValue({
+          courtEvents: [
+            { offenderNo: 'G4797UD', eventSubType: 'CRT', eventStatus: 'SCH' },
+            { offenderNo: 'G5966UI', eventSubType: 'CRT' },
+            { offenderNo: 'G3854XD', eventSubType: 'CRT' },
+          ],
+          transferEvents: [],
+          releaseEvents: [],
+        })
+
+        req.query.movementReason = 'Court'
+
+        await controller.index(req, res)
+
+        expect(res.render).toHaveBeenLastCalledWith(
+          expect.anything(),
+          expect.objectContaining({
+            courtEvents: [
+              expect.objectContaining({
+                name: 'Cob, Bob - G4797UD',
+                prisonerNumber: 'G4797UD',
+                reasonDescription: 'Court Appearance',
+              }),
+            ],
+          })
+        )
       })
     })
 
@@ -578,12 +942,172 @@ describe('Scheduled moves controller', () => {
         })
       })
 
+      it('should make a call to retrieve hold-on-transfer details for each prisoner with any such alert', async () => {
+        await controller.index(req, res)
+
+        expect(prisonApi.getAlertsForLatestBooking).toHaveBeenCalledWith(
+          {},
+          {
+            alertCodes: ['TAP', 'TAH', 'TCPA', 'TG', 'TM', 'TPR', 'TSE'],
+            offenderNo: 'G4797UD',
+            sortBy: 'dateCreated',
+            sortDirection: 'DESC',
+          }
+        )
+      })
+
+      it('should return hold-against-transfer alert details', async () => {
+        await controller.index(req, res)
+
+        expectReleaseEventsToContain(res, {
+          holdAgainstTransferAlerts: {
+            alerts: [
+              {
+                comments: 'Comment text here',
+                createdBy: 'Odrahoon Marshald',
+                dateAdded: '24 November 2009',
+                description: 'Allocation Hold (TAH)',
+              },
+              {
+                createdBy: 'Xtag Xtag',
+                dateAdded: '27 September 2009',
+                description: 'Security Hold (TSE)',
+              },
+            ],
+            displayId: MOCK_DIALOG_DISPLAY_ID,
+            fullName: 'Dave Shave',
+            prisonerNumber: 'G3854XD',
+          },
+        })
+      })
+
       it('should return the movement reason description', async () => {
         await controller.index(req, res)
 
         expectReleaseEventsToContain(res, {
           reasonDescription: 'Conditional Release (CJA91) -SH Term>1YR',
         })
+      })
+
+      it('should return an empty set when filtering by the incorrect movement reason', async () => {
+        req.query.scheduledType = 'A'
+
+        await controller.index(req, res)
+
+        expect(res.render).toHaveBeenLastCalledWith(
+          expect.anything(),
+          expect.objectContaining({
+            releaseEvents: [],
+          })
+        )
+      })
+
+      it('should return a single entry for CR', async () => {
+        req.query.scheduledType = 'Releases'
+
+        await controller.index(req, res)
+
+        expect(res.render).toHaveBeenLastCalledWith(
+          expect.anything(),
+          expect.objectContaining({
+            releaseEvents: [
+              {
+                cellLocation: '1-2-008',
+                name: 'Shave, Dave - G3854XD',
+                personalProperty: expect.anything(),
+                prisonerNumber: 'G3854XD',
+                reasonDescription: 'Conditional Release (CJA91) -SH Term>1YR',
+                relevantAlertFlagLabels: expect.anything(),
+                holdAgainstTransferAlerts: expect.anything(),
+              },
+            ],
+          })
+        )
+      })
+
+      it('should replace CSWAP with the correct content for the cell location', async () => {
+        prisonApi.getTransfers = jest.fn().mockResolvedValue({
+          courtEvents: [],
+          transferEvents: [],
+          releaseEvents: [{ offenderNo: 'G123456', eventSubType: 'CR', eventStatus: 'SCH' }],
+        })
+
+        req.query.scheduledType = 'Releases'
+
+        await controller.index(req, res)
+
+        expect(res.render).toHaveBeenLastCalledWith(
+          expect.anything(),
+          expect.objectContaining({
+            releaseEvents: [
+              expect.objectContaining({
+                cellLocation: 'No cell allocated',
+                prisonerNumber: 'G123456',
+              }),
+            ],
+          })
+        )
+      })
+
+      it('should apply default sort on surname', async () => {
+        prisonApi.getTransfers = jest.fn().mockResolvedValue({
+          courtEvents: [],
+          transferEvents: [],
+          releaseEvents: [
+            { offenderNo: 'G4797UD', eventSubType: 'CR', eventStatus: 'SCH' },
+            { offenderNo: 'G5966UI', eventSubType: 'CR', eventStatus: 'SCH' },
+            { offenderNo: 'G3854XD', eventSubType: 'CR', eventStatus: 'SCH' },
+          ],
+        })
+
+        req.query.scheduledType = 'Releases'
+
+        await controller.index(req, res)
+
+        expect(res.render).toHaveBeenLastCalledWith(
+          expect.anything(),
+          expect.objectContaining({
+            releaseEvents: [
+              expect.objectContaining({
+                name: 'Cob, Bob - G4797UD',
+              }),
+              expect.objectContaining({
+                name: 'Shark, Mark - G5966UI',
+              }),
+              expect.objectContaining({
+                name: 'Shave, Dave - G3854XD',
+              }),
+            ],
+          })
+        )
+      })
+
+      it('should only show scheduled release events', async () => {
+        prisonApi.getTransfers = jest.fn().mockResolvedValue({
+          courtEvents: [],
+          transferEvents: [],
+          releaseEvents: [
+            { offenderNo: 'G4797UD', eventStatus: 'SCH' },
+            { offenderNo: 'G5966UI' },
+            { offenderNo: 'G3854XD' },
+          ],
+        })
+
+        req.query.scheduledType = 'Releases'
+
+        await controller.index(req, res)
+
+        expect(res.render).toHaveBeenLastCalledWith(
+          expect.anything(),
+          expect.objectContaining({
+            releaseEvents: [
+              expect.objectContaining({
+                name: 'Cob, Bob - G4797UD',
+                prisonerNumber: 'G4797UD',
+              }),
+            ],
+          })
+        )
       })
     })
 
@@ -663,6 +1187,45 @@ describe('Scheduled moves controller', () => {
         })
       })
 
+      it('should make a call to retrieve hold-on-transfer details for each prisoner with any such alert', async () => {
+        await controller.index(req, res)
+
+        expect(prisonApi.getAlertsForLatestBooking).toHaveBeenCalledWith(
+          {},
+          {
+            alertCodes: ['TAP', 'TAH', 'TCPA', 'TG', 'TM', 'TPR', 'TSE'],
+            offenderNo: 'G5966UI',
+            sortBy: 'dateCreated',
+            sortDirection: 'DESC',
+          }
+        )
+      })
+
+      it('should return hold-against-transfer alert details', async () => {
+        await controller.index(req, res)
+
+        expectTransferEventsToContain(res, {
+          holdAgainstTransferAlerts: {
+            alerts: [
+              {
+                comments: 'Comment text here',
+                createdBy: 'Odrahoon Marshald',
+                dateAdded: '24 November 2009',
+                description: 'Allocation Hold (TAH)',
+              },
+              {
+                createdBy: 'Xtag Xtag',
+                dateAdded: '27 September 2009',
+                description: 'Security Hold (TSE)',
+              },
+            ],
+            displayId: MOCK_DIALOG_DISPLAY_ID,
+            fullName: 'Mark Shark',
+            prisonerNumber: 'G5966UI',
+          },
+        })
+      })
+
       it('should return the movement reason description', async () => {
         await controller.index(req, res)
 
@@ -677,6 +1240,165 @@ describe('Scheduled moves controller', () => {
         expectTransferEventsToContain(res, {
           destinationLocationDescription: 'Leeds (HMP)',
         })
+      })
+
+      it('should return an empty set when filtering by the incorrect movement reason', async () => {
+        req.query.scheduledType = 'A'
+
+        await controller.index(req, res)
+
+        expect(res.render).toHaveBeenLastCalledWith(
+          expect.anything(),
+          expect.objectContaining({
+            transferEvents: [],
+          })
+        )
+      })
+
+      it('should return a single entry for NOTR', async () => {
+        req.query.scheduledType = 'Transfers'
+
+        await controller.index(req, res)
+
+        expect(res.render).toHaveBeenLastCalledWith(
+          expect.anything(),
+          expect.objectContaining({
+            transferEvents: [
+              {
+                cellLocation: '1-2-007',
+                name: 'Shark, Mark - G5966UI',
+                personalProperty: expect.anything(),
+                prisonerNumber: 'G5966UI',
+                reasonDescription: 'Normal Transfer',
+                destinationLocationDescription: 'Leeds (HMP)',
+                relevantAlertFlagLabels: expect.anything(),
+                holdAgainstTransferAlerts: expect.anything(),
+              },
+            ],
+          })
+        )
+      })
+
+      it('should not return video link booking appointments', async () => {
+        prisonApi.getTransfers = jest.fn().mockResolvedValue({
+          courtEvents: [{ offenderNo: 'A12234' }],
+          transferEvents: [{ offenderNo: 'A12234', eventSubType: 'VLC' }],
+          releaseEvents: [{ offenderNo: 'A12234' }],
+        })
+
+        req.query.scheduledType = 'Transfers'
+
+        await controller.index(req, res)
+
+        expect(res.render).toHaveBeenLastCalledWith(
+          expect.anything(),
+          expect.objectContaining({
+            transferEvents: [],
+          })
+        )
+      })
+
+      it('should replace CSWAP with the correct content for the cell location', async () => {
+        prisonApi.getTransfers = jest.fn().mockResolvedValue({
+          courtEvents: [],
+          transferEvents: [{ offenderNo: 'G123456', eventSubType: 'NTOR', eventStatus: 'SCH' }],
+          releaseEvents: [],
+        })
+
+        req.query.scheduledType = 'Transfers'
+
+        await controller.index(req, res)
+
+        expect(res.render).toHaveBeenLastCalledWith(
+          expect.anything(),
+          expect.objectContaining({
+            transferEvents: [
+              expect.objectContaining({
+                cellLocation: 'No cell allocated',
+                prisonerNumber: 'G123456',
+              }),
+            ],
+          })
+        )
+      })
+
+      it('should apply default sort on surname', async () => {
+        prisonApi.getTransfers = jest.fn().mockResolvedValue({
+          courtEvents: [],
+          transferEvents: [
+            { offenderNo: 'G4797UD', eventSubType: 'NOTR', eventStatus: 'SCH' },
+            { offenderNo: 'G5966UI', eventSubType: 'NOTR', eventStatus: 'SCH' },
+            { offenderNo: 'G3854XD', eventSubType: 'NOTR', eventStatus: 'SCH' },
+          ],
+          releaseEvents: [],
+        })
+
+        req.query.scheduledType = 'Transfers'
+
+        await controller.index(req, res)
+
+        expect(res.render).toHaveBeenLastCalledWith(
+          expect.anything(),
+          expect.objectContaining({
+            transferEvents: [
+              expect.objectContaining({
+                name: 'Cob, Bob - G4797UD',
+              }),
+              expect.objectContaining({
+                name: 'Shark, Mark - G5966UI',
+              }),
+              expect.objectContaining({
+                name: 'Shave, Dave - G3854XD',
+              }),
+            ],
+          })
+        )
+      })
+
+      it('should only show scheduled transfers', async () => {
+        prisonApi.getTransfers = jest.fn().mockResolvedValue({
+          courtEvents: [],
+          transferEvents: [
+            { offenderNo: 'G4797UD', eventSubType: 'NOTR', eventStatus: 'SCH' },
+            { offenderNo: 'G5966UI', eventSubType: 'NOTR' },
+            { offenderNo: 'G3854XD', eventSubType: 'NOTR' },
+          ],
+          releaseEvents: [],
+        })
+
+        req.query.scheduledType = 'Transfers'
+
+        await controller.index(req, res)
+
+        expect(res.render).toHaveBeenLastCalledWith(
+          expect.anything(),
+          expect.objectContaining({
+            transferEvents: [
+              expect.objectContaining({
+                name: 'Cob, Bob - G4797UD',
+                prisonerNumber: 'G4797UD',
+                reasonDescription: 'Normal Transfer',
+              }),
+            ],
+          })
+        )
+      })
+    })
+
+    describe('Events without hold on transfer alerts', () => {
+      beforeEach(() => {
+        prisonApi.getTransfers = jest.fn().mockResolvedValue({
+          courtEvents: courtEventsWithoutTransferOnHoldAlerts,
+          transferEvents: [],
+          releaseEvents: [],
+        })
+        offenderSearchApi.getPrisonersDetails = jest.fn().mockResolvedValue(prisonerSearchResultWithoutHoldOnTransfer)
+      })
+
+      it('should not make a call to retrieve hold on transfer details', async () => {
+        await controller.index(req, res)
+
+        expect(prisonApi.getAlertsForLatestBooking).not.toHaveBeenCalled()
       })
     })
   })

@@ -1,12 +1,14 @@
+{% from "../../macros/holdAgainstTransferDetailsDialog.njk" import holdAgainstTransferDetailsDialog %}
+
 <h2 class="govuk-heading-s">Transfers</h2>
 {% if transferEvents.length !== 0 %}
     {% set transferEventRows = [] %}
     {% for event in transferEvents %}
-        {% set releaseEventRow = (transferEventRows.push([
+        {% set transferEventRows = (transferEventRows.push([
             { html: prisonerProfileLink(event.prisonerNumber, event.name) },
             { text: event.cellLocation },
             { html: propertyColumn(event.personalProperty) },
-            { html: alertsColumn(event.relevantAlertFlagLabels)},
+            { html: alertsColumn(event.relevantAlertFlagLabels, event.holdAgainstTransferAlerts)},
             { text: event.reasonDescription },
             { text: event.destinationLocationDescription }
         ]), transferEventRows) %}
@@ -20,7 +22,7 @@
                 attributes: {"aria-sort": "ascending"}
             },
             {
-                text: "Cell",
+                text: "Location",
                 attributes: {"aria-sort": "ascending"}
             },
             {
@@ -34,13 +36,18 @@
                 text: "Reason"
             },
             {
-                text: "Destination location",
-                attributes: {"aria-sort": "ascending"}
+                text: "Destination location"
             }
         ],
         rows: transferEventRows,
-        attributes: { "data-qa": "transfer-events-table" }
+        attributes: { "id": "transfer-events-table", "data-qa": "transfer-events-table" }
     }) }}
+
+    {% for event in transferEvents %}
+        {% if event.holdAgainstTransferAlerts %}
+            {{ holdAgainstTransferDetailsDialog(event.holdAgainstTransferAlerts) }}
+        {% endif %}
+    {% endfor %}
 {% else %}
     <p id="no-transfer-events">
         There are no transfers arranged for {{ dateForTitle }}

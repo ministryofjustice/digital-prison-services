@@ -338,7 +338,7 @@ export function globalSearch(state = globalSearchInitialState, action) {
   }
 }
 
-const prisonStaffHubApp = combineReducers({
+const digitalPrisonServicesApp = combineReducers({
   events,
   app,
   search,
@@ -351,4 +351,4 @@ const prisonStaffHubApp = combineReducers({
   flags: createFlagsReducer({}),
 })
 
-export default prisonStaffHubApp
+export default digitalPrisonServicesApp

@@ -1,0 +1,55 @@
+{% from "govuk/components/table/macro.njk" import govukTable %}
+{% from "govuk/components/button/macro.njk" import govukButton %}
+
+{% macro holdAgainstTransferDetailsDialog(holdAgainstTransferAlerts) %}
+  {% if holdAgainstTransferAlerts.alerts.length %}
+    {% set resultsRows = [] %}
+
+    {% for alert in holdAgainstTransferAlerts.alerts %}
+      {% set resultsRows = (resultsRows.push([
+        { text: alert.description },
+        { html: alert.comments, classes: 'govuk-input--width-10' },
+        { text: alert.dateAdded },
+        { text: alert.createdBy }
+      ]), resultsRows) %}
+    {% endfor %}
+
+    {% set dialogId = holdAgainstTransferAlerts.displayId %}
+    <div id="anchor-{{dialogId}}" data-dialogid={{ dialogId }} class="govuk-modal-dialogue__wrapper" style="display: none">
+      <div class="govuk-modal-dialogue__overlay"></div>
+      <dialog class="govuk-modal-dialogue__box" aria-labelledby="{{ labelledBy }}" aria-describedby="{{ describedBy }}" aria-modal="true" role="{{ params.role | default('dialog') }}" tabindex="0">
+        <h3 class="govuk-heading-l">Hold against transfer details for {{holdAgainstTransferAlerts.fullName}}</h3>
+
+        {{ govukTable({
+          head: [
+            {
+              text: "Alert"
+            },
+            {
+              text: "Comments"
+            },
+            {
+              text: "Date added"
+            },
+            {
+              text: "Created by"
+            }
+          ],
+          rows: resultsRows,
+          attributes: {
+            "data-qa": 'hold-against-transfer-alerts-table'
+          }
+        }) }}
+        {{ govukButton ({
+          text: "Close", 
+          type: "button",
+          classes: "govuk-modal-dialogue__close",
+          attributes: {
+            "aria-label": "Close modal dialogue",
+            'data-qa': 'hold-against-transfer-dialog-close'
+          }
+        }) }}
+      </dialog>
+    </div>
+  {% endif %}
+{% endmacro %}

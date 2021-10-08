@@ -1,4 +1,4 @@
-declare namespace prisonstaffhub {
+declare namespace digitalprisonservices {
   interface UserSession {
     userDetails: {
       activeCaseLoadId: string
@@ -11,7 +11,7 @@ declare namespace Express {
   import session = require('express-session')
 
   interface Request {
-    session: session.Session & Partial<session.SessionData> & prisonstaffhub.UserSession
+    session: session.Session & Partial<session.SessionData> & digitalprisonservices.UserSession
     csrfToken?: () => string
   }
 }

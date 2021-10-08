@@ -152,6 +152,12 @@ export const profileAlertCodes = [
   'URS',
 ]
 
+export type AlertLabelFlag = {
+  img: string
+  label: string
+  classes: string
+}
+
 export default {
   alertFlagLabels,
   cellMoveAlertCodes,

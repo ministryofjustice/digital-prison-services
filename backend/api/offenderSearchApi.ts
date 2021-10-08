@@ -1,6 +1,19 @@
 import contextProperties from '../contextProperties'
 import { mapToQueryString } from '../utils'
 
+export type Alert = {
+  alertCode: string
+}
+
+export type PrisonerSearchResult = {
+  firstName: string
+  lastName: string
+  bookingId: number
+  prisonerNumber: string
+  cellLocation: string
+  alerts: Array<Alert>
+}
+
 export const offenderSearchApiFactory = (client) => {
   const processResponse = (context) => (response) => {
     contextProperties.setPaginationFromPageRequest(context, response.body)
@@ -33,7 +46,7 @@ export const offenderSearchApiFactory = (client) => {
     )
   }
 
-  const getPrisonersDetails = async (context, prisonerNumbers) => {
+  const getPrisonersDetails = async (context, prisonerNumbers: Array<string>): Promise<Array<PrisonerSearchResult>> => {
     const res = await client.post(context, '/prisoner-search/prisoner-numbers', { prisonerNumbers })
     return res.body
   }

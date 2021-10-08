@@ -4,7 +4,7 @@ const agencyDetails = { agencyId: 'MDI', description: 'Moorland (HMP & YOI)' }
 const movementReasons = [
   { code: '1', description: 'Visit Dying Relative' },
   { code: 'CRT', description: 'Court Appearance' },
-  { code: 'TRN', description: 'Normal Transfer' },
+  { code: 'NOTR', description: 'Normal Transfer' },
 ]
 
 const courtEvents = [
@@ -21,7 +21,7 @@ const courtEvents = [
     endTime: null,
     eventClass: 'EXT_MOV',
     eventType: 'CRT',
-    eventSubType: '19',
+    eventSubType: 'CRT',
     eventStatus: 'SCH',
     judgeName: null,
     directionCode: 'OUT',
@@ -89,6 +89,51 @@ const alerts = [
   },
 ]
 
+const holdAgainstTransferAlerts = [
+  {
+    alertType: 'T',
+    alertCode: 'TCPA',
+    active: true,
+    expired: false,
+  },
+]
+
+const holdAgainstTransferAlertDetailsReponse = [
+  {
+    alertId: 3,
+    bookingId: 42739,
+    offenderNo: 'G5966UI',
+    alertType: 'T',
+    alertTypeDescription: 'Hold Against Transfer',
+    alertCode: 'TAH',
+    alertCodeDescription: 'Allocation Hold',
+    comment: 'Comment text here',
+    dateCreated: '2009-11-24',
+    expired: false,
+    active: true,
+    addedByFirstName: 'ODRAHOON',
+    addedByLastName: 'MARSHALD',
+    expiredByFirstName: 'ADMIN&ONB',
+    expiredByLastName: 'CNOMIS',
+  },
+  {
+    alertId: 1,
+    bookingId: 42739,
+    offenderNo: 'G5966UI',
+    alertType: 'T',
+    alertTypeDescription: 'Hold Against Transfer',
+    alertCode: 'TSE',
+    alertCodeDescription: 'Security Hold',
+    dateCreated: '2009-09-27',
+    expired: false,
+    active: true,
+    addedByFirstName: 'XTAG',
+    addedByLastName: 'XTAG',
+    expiredByFirstName: 'ADMIN&ONB',
+    expiredByLastName: 'CNOMIS',
+  },
+]
+
 const propertyResponse = [
   {
     location: {
@@ -121,7 +166,7 @@ const propertyResponse = [
   },
 ]
 
-const prisonerSearchDetails = [
+const prisonerSearchDetailsForCourtEvents = [
   {
     prisonerNumber: 'G4797UD',
     bookingId: 1,
@@ -130,6 +175,9 @@ const prisonerSearchDetails = [
     cellLocation: '1-2-006',
     alerts,
   },
+]
+
+const prisonerSearchDetailsForReleaseEvents = [
   {
     prisonerNumber: 'G3854XD',
     bookingId: 3,
@@ -138,13 +186,16 @@ const prisonerSearchDetails = [
     cellLocation: '1-2-008',
     alerts,
   },
+]
+
+const prisonerSearchDetailsForTransferEvents = [
   {
     prisonerNumber: 'G5966UI',
     bookingId: 2,
     firstName: 'MARK',
     lastName: 'SHARK',
     cellLocation: '1-2-007',
-    alerts,
+    alerts: alerts.concat(holdAgainstTransferAlerts),
   },
 ]
 
@@ -155,6 +206,13 @@ const toScheduledMove = ($cell) => ({
   alerts: $cell[3]?.textContent,
   reason: $cell[4]?.textContent,
   destination: $cell[5]?.textContent,
+})
+
+const toHoldAgainstTransferAlert = ($cell) => ({
+  description: $cell[0]?.textContent,
+  comment: $cell[1]?.textContent,
+  dateCreated: $cell[2]?.textContent,
+  createdBy: $cell[3]?.textContent,
 })
 
 context('Scheduled movements', () => {
@@ -185,8 +243,30 @@ context('Scheduled movements', () => {
 
   it('should load all movement reasons into the select box', () => {
     cy.visit('/manage-prisoner-whereabouts/scheduled-moves')
-    cy.get('#movementReason').contains('Visit Dying Relative')
-    cy.get('#movementReason').contains('Court Appearance')
+    cy.get('#scheduledType').contains('Court')
+    cy.get('#scheduledType').contains('Releases')
+    cy.get('#scheduledType').contains('Transfers')
+  })
+
+  it('should hide the release and transfer sections when the court scheduled type has been selected', () => {
+    cy.visit('/manage-prisoner-whereabouts/scheduled-moves?scheduledType=Court')
+    cy.get('#court').should('be.visible')
+    cy.get('#releases').should('not.exist')
+    cy.get('#transfers').should('not.exist')
+  })
+
+  it('should hide the court and release sections when the transfer scheduled type has been selected', () => {
+    cy.visit('/manage-prisoner-whereabouts/scheduled-moves?scheduledType=Transfers')
+    cy.get('#transfers').should('be.visible')
+    cy.get('#releases').should('not.exist')
+    cy.get('#court').should('not.exist')
+  })
+
+  it('should hide the court and transfer sections when the releases scheduled type has been selected', () => {
+    cy.visit('/manage-prisoner-whereabouts/scheduled-moves?scheduledType=Releases')
+    cy.get('#releases').should('be.visible')
+    cy.get('#court').should('not.exist')
+    cy.get('#transfers').should('not.exist')
   })
 
   context('Court appearances', () => {
@@ -203,7 +283,7 @@ context('Scheduled movements', () => {
           transferEvents: [],
           releaseEvents: [],
         })
-        cy.task('stubPrisonerSearchDetails', prisonerSearchDetails)
+        cy.task('stubPrisonerSearchDetails', prisonerSearchDetailsForCourtEvents)
         cy.task('stubPrisonerProperty', propertyResponse)
       })
 
@@ -244,7 +324,7 @@ context('Scheduled movements', () => {
           transferEvents: [],
           releaseEvents,
         })
-        cy.task('stubPrisonerSearchDetails', prisonerSearchDetails)
+        cy.task('stubPrisonerSearchDetails', prisonerSearchDetailsForReleaseEvents)
         cy.task('stubPrisonerProperty', propertyResponse)
       })
 
@@ -276,7 +356,7 @@ context('Scheduled movements', () => {
       cy.get('#no-transfer-events').contains(`There are no transfers arranged for ${today.format('D MMMM YYYY')}`)
     })
 
-    context('With releases', () => {
+    context('With transfers', () => {
       beforeEach(() => {
         cy.task('resetTransfersStub')
         cy.task('stubTransfers', {
@@ -284,8 +364,9 @@ context('Scheduled movements', () => {
           transferEvents,
           releaseEvents: [],
         })
-        cy.task('stubPrisonerSearchDetails', prisonerSearchDetails)
+        cy.task('stubPrisonerSearchDetails', prisonerSearchDetailsForTransferEvents)
         cy.task('stubPrisonerProperty', propertyResponse)
+        cy.task('stubAlertsForLatestBooking', holdAgainstTransferAlertDetailsReponse)
       })
 
       it('should display releases in the table correctly', () => {
@@ -304,9 +385,41 @@ context('Scheduled movements', () => {
             expect(rows[0].property).contains('Valuables - Box 14')
             expect(rows[0].property).contains('Confiscated - Box 15')
             expect(rows[0].alerts).contains('ACCT open')
+            expect(rows[0].alerts).contains('Hold against transfer')
             expect(rows[0].reason).eq('Normal Transfer')
             expect(rows[0].destination).eq('Leeds (HMP)')
           })
+      })
+
+      it('should show hold-on-transfer details dialog when clicked', () => {
+        cy.visit('/manage-prisoner-whereabouts/scheduled-moves')
+
+        cy.get('[data-qa="hold-against-transfer-alerts-table"]').should('not.be.visible')
+
+        cy.get('[data-qa="transfer-events-table"]').find('[data-qa="hold_against_transfer_details"]').click()
+
+        cy.get('[data-qa="hold-against-transfer-alerts-table"]')
+          .find('tbody')
+          .find('tr')
+          .should('be.visible')
+          .then(($tableRows) => {
+            cy.get($tableRows).its('length').should('eq', 2)
+
+            const rows = Array.from($tableRows).map(($row) => toHoldAgainstTransferAlert($row.cells))
+
+            expect(rows[0].description).to.eq('Allocation Hold (TAH)')
+            expect(rows[0].comment).to.eq('Comment text here')
+            expect(rows[0].dateCreated).to.eq('24 November 2009')
+            expect(rows[0].createdBy).contains('Odrahoon Marshald')
+            expect(rows[1].description).to.eq('Security Hold (TSE)')
+            expect(rows[1].comment).to.eq('')
+            expect(rows[1].dateCreated).to.eq('27 September 2009')
+            expect(rows[1].createdBy).contains('Xtag Xtag')
+          })
+
+        cy.get("[data-qa='hold-against-transfer-dialog-close']").click()
+
+        cy.get('[data-qa="hold-against-transfer-alerts-table"]').should('not.be.visible')
       })
     })
   })

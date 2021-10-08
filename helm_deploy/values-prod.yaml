@@ -4,7 +4,7 @@
 replicaCount: 4
 
 image:
-  repository: quay.io/hmpps/prisonstaffhub
+  repository: quay.io/hmpps/digital-prison-services
   tag: latest
   pullPolicy: IfNotPresent
   port: 3000
@@ -13,11 +13,11 @@ ingress:
   enabled: true
   enable_allowlist: true
   host: digital.prison.service.justice.gov.uk
-  cert_secret: notm-cert
+  cert_secret: digital-prison-services-cert
   path: /
   host2: whereabouts.prison.service.justice.gov.uk
   cert_secret2: prison-staff-hub-cert
-  redirect_host2: https://digital.prison.service.justice.gov.uk
+  redirect_host2: https://digital.prison.service.justice.gov.uk/redirect
 
 env:
   API_ENDPOINT_URL: https://api.prison.service.justice.gov.uk/
@@ -49,7 +49,7 @@ env:
   BVL_URL: https://book-video-link.prison.service.justice.gov.uk
   MOIC_URL: https://moic.service.justice.gov.uk
   OMIC_URL: https://manage-key-workers.service.justice.gov.uk
-  MANAGE_AUTH_ACCOUNTS_URL: https://manage-hmpps-auth-accounts.prison.service.justice.gov.uk
+  MANAGE_AUTH_ACCOUNTS_URL: https://manage-users.hmpps.service.justice.gov.uk
   PECS_URL: https://bookasecuremove.service.justice.gov.uk
   COMPLEXITY_OF_NEED_URI: https://complexity-of-need.hmpps.service.justice.gov.uk
   PRISONS_WITH_OFFENDERS_THAT_HAVE_COMPLEX_NEEDS: "AGI,BZI,DHI,DWI,ESI,EWI,FHI,LNI,NHI,PFI,SDI,STI"

@@ -5,6 +5,7 @@
 {% from "components/datePicker/datePicker.njk" import datePicker %}
 {% from "govuk/components/select/macro.njk" import govukSelect %}
 {% from "./partials/sharedMovementDetails.njk" import prisonerProfileLink, propertyColumn, alertsColumn %}
+{% from "../macros/printLink.njk" import printLink %}
 
 
 {% block beforeContent %}
@@ -18,21 +19,13 @@
                 text: "Manage prisoner whereabouts",
                 href: "/manage-prisoner-whereabouts"
             }
-        ]
+        ],
+        classes: 'govuk-!-display-none-print'
     }) }}
 {% endblock %}
 
 
 {% block content %}
-
-    {% if errors.length > 0 %}
-        {{ govukErrorSummary({
-            titleText: "There is a problem",
-            errorList: errors,
-            attributes: { 'data-qa-errors': true }
-        }) }}
-    {% endif %}
-
 
     <div class="govuk-grid-row govuk-body">
         <div class="govuk-grid-column-full">
@@ -40,29 +33,26 @@
         </div>
 
         <div class="govuk-grid-column-two-thirds">
-
             <form novalidate="novalidate"
                   class="form-background govuk-!-padding-3 govuk-!-margin-bottom-5 govuk-!-display-none-print"
                   method="get">
                 <h2 class="govuk-heading-m">View by</h2>
 
                 <div class="horizontal-form govuk-!-margin-bottom-3">
-
                     {{ datePicker({
                         id: 'date',
                         label: 'Date',
                         name: 'date',
-                        date: formValues.date,
-                        errorMessage: errors | findError('date')
+                        date: formValues.date
                     }) }}
 
                     {{ govukSelect({
-                        name: 'movementReason',
-                        id: 'movementReason',
+                        name: 'scheduledType',
+                        id: 'scheduledType',
                         label: {
                             text: 'Reason for leaving'
                         },
-                        items: movementReasons  | addDefaultSelectedVale('All', true) | setSelected(formValues.movementReason)
+                        items: scheduledTypes  | addDefaultSelectedVale('All', true) | setSelected(formValues.scheduledType)
                     }) }}
 
 
@@ -75,17 +65,27 @@
             </form>
         </div>
 
-        <div class="govuk-grid-column-full">
-            {% include("./partials/courtEvents.njk") %}
+        <div>
+            {{ printLink('Print this page', 'right') }}
         </div>
 
-        <div class="govuk-grid-column-full">
-            {% include("./partials/releaseEvents.njk") %}
-        </div>
+        {% if showCourtAppearances %}
+            <div id="court" class="govuk-grid-column-full">
+                {% include("./partials/courtEvents.njk") %}
+            </div>
+        {% endif %}
 
-        <div class="govuk-grid-column-full">
-            {% include("./partials/transferEvents.njk") %}
-        </div>
+        {% if showReleases %}
+            <div id="releases" class="govuk-grid-column-full">
+                {% include("./partials/releaseEvents.njk") %}
+            </div>
+        {% endif %}
+
+        {% if showTransfers %}
+            <div id="transfers" class="govuk-grid-column-full">
+                {% include("./partials/transferEvents.njk") %}
+            </div>
+        {% endif %}
 
     </div>
 
@@ -95,10 +95,14 @@
     {{ super() }}
     <script src="/assets/moj/components/sortable-table/sortable-table.js"></script>
     <script>
-      $('table').each(function() {
-        new MOJFrontend.SortableTable({
-          table: $(this),
-        })
+      new MOJFrontend.SortableTable({
+        table: $('#court-events-table'),
+      })
+      new MOJFrontend.SortableTable({
+        table: $('#release-events-table'),
+      })
+      new MOJFrontend.SortableTable({
+        table: $('#transfer-events-table'),
       })
     </script>
 {% endblock %}

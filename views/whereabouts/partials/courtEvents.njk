@@ -1,15 +1,16 @@
+{% from "../../macros/holdAgainstTransferDetailsDialog.njk" import holdAgainstTransferDetailsDialog %}
+
 <h2 class="govuk-heading-s">Court appearances</h2>
 {% if courtEvents.length !== 0 %}
     {% set courtEventRows = [] %}
     {% for event in courtEvents %}
-
         {% set courtEventRows = (courtEventRows.push([
-            { html: prisonerProfileLink(event.prisonerNumber, event.name) },
+            { html: prisonerProfileLink(event.prisonerNumber, event.name)},
             { text: event.cellLocation },
             { html: propertyColumn(event.personalProperty) },
-            { html: alertsColumn(event.relevantAlertFlagLabels)},
+            { html: alertsColumn(event.relevantAlertFlagLabels, event.holdAgainstTransferAlerts)},
             { text: event.reasonDescription },
-            { text: event.destinationLocationDescription }
+            { text: event.destinationLocationDescription, classes: 'govuk-input--width-4' }
         ]), courtEventRows) %}
     {% endfor %}
 
@@ -21,7 +22,7 @@
                 attributes: {"aria-sort": "ascending"}
             },
             {
-                text: "Cell",
+                text: "Location",
                 attributes: {"aria-sort": "ascending"}
             },
             {
@@ -35,13 +36,19 @@
                 text: "Reason"
             },
             {
-                text: "Destination location",
-                attributes: {"aria-sort": "ascending"}
+                html: "Destination location",
+                classes: 'govuk-input--width-2'
             }
         ],
         rows: courtEventRows,
-        attributes: { "data-qa": "court-events-table" }
+        attributes: { "id": "court-events-table", "data-qa": "court-events-table" }
     }) }}
+
+    {% for event in courtEvents %}
+        {% if event.holdAgainstTransferAlerts %}
+            {{ holdAgainstTransferDetailsDialog(event.holdAgainstTransferAlerts) }}
+        {% endif %}
+    {% endfor %}
 {% else %}
     <p id="no-court-events">
         There are no court appearances arranged for {{ dateForTitle }}

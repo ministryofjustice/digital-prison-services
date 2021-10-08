@@ -372,6 +372,20 @@ module.exports = {
         jsonBody: { content: alerts || [] },
       },
     }),
+  stubAlertsForLatestBooking: (alerts) =>
+    stubFor({
+      request: {
+        method: 'GET',
+        urlPattern: '/api/offenders/.+?/bookings/latest/alerts\\?.+?',
+      },
+      response: {
+        status: 200,
+        headers: {
+          'Content-Type': 'application/json;charset=UTF-8',
+        },
+        jsonBody: alerts,
+      },
+    }),
 
   stubAlerts: ({ alerts }) =>
     stubFor({

@@ -11,13 +11,43 @@ export type GetTransferParameters = {
   agencyId: string
 }
 
+export type PrisonerPersonalPropertyLocation = {
+  agencyId: string
+  currentOccupancy: number
+  description: string
+  internalLocationCode: string
+  locationId: number
+  locationPrefix: string
+  locationType: string
+  locationUsage: string
+  operationalCapacity: number
+  parentLocationId: number
+  userDescription: string
+}
+
+export type PrisonerPersonalProperty = {
+  containerType: string
+  location: PrisonerPersonalPropertyLocation
+  sealMark: string
+}
+
+export type AlertDetails = {
+  alertCode: string
+  alertCodeDescription: string
+  comment?: string
+  dateCreated: string
+  addedByFirstName: string
+  addedByLastName: string
+}
+
 export const prisonApiFactory = (client) => {
   const processResponse = (context) => (response) => {
     contextProperties.setResponsePagination(context, response.headers)
     return response.body
   }
 
-  const get = (context, url, resultsLimit?) => client.get(context, url, { resultsLimit }).then(processResponse(context))
+  const get = (context, url, resultsLimit?, retryOverride?) =>
+    client.get(context, url, { resultsLimit, retryOverride }).then(processResponse(context))
 
   const getStream = (context, url) => client.getStream(context, url)
 
@@ -112,6 +142,12 @@ export const prisonApiFactory = (client) => {
       `/api/bookings/${bookingId}/alerts/v2?alertType=${alertType}&from=${from}&to=${to}&alertStatus=${alertStatus}&page=${page}&sort=${sort}&size=${size}`
     )
   }
+
+  const getAlertsForLatestBooking = (context, { offenderNo, alertCodes, sortBy, sortDirection }): Array<AlertDetails> =>
+    get(
+      context,
+      `/api/offenders/${offenderNo}/bookings/latest/alerts?alertCodes=${alertCodes.toString()}&sort=${sortBy}&direction=${sortDirection}`
+    )
 
   const getAlertsSystem = (context, offenderNumbers) =>
     post(context, '/api/bookings/offenderNo/alerts', offenderNumbers)
@@ -307,7 +343,8 @@ export const prisonApiFactory = (client) => {
 
   const getImage = (context, imageId) => getStream(context, `/api/images/${imageId}/data`)
 
-  const getPrisonerProperty = (context, bookingId) => get(context, `/api/bookings/${bookingId}/property`)
+  const getPrisonerProperty = (context, bookingId: number): Array<PrisonerPersonalProperty> =>
+    get(context, `/api/bookings/${bookingId}/property`)
 
   const getPrisonerDetail = (context, bookingId) => get(context, `/api/bookings/${bookingId}`)
 
@@ -413,7 +450,7 @@ export const prisonApiFactory = (client) => {
     )
 
   const getTransfers = (context, parameters: GetTransferParameters) =>
-    get(context, `/api/movements/transfers?${querystring.stringify(parameters)}`)
+    get(context, `/api/movements/transfers?${querystring.stringify(parameters)}`, { retryOverride: 5 })
 
   return {
     userLocations,
@@ -438,6 +475,7 @@ export const prisonApiFactory = (client) => {
     getExternalTransfers,
     getAlerts,
     getAlertsForBookingV2,
+    getAlertsForLatestBooking,
     getAlertsSystem,
     getAssessments,
     getEstablishmentRollBlocksCount,

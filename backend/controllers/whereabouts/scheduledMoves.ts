@@ -1,33 +1,68 @@
 import moment from 'moment'
-import { alertFlagLabels } from '../../shared/alertFlagValues'
+import { v4 as uuidv4 } from 'uuid'
+import { alertFlagLabels, AlertLabelFlag } from '../../shared/alertFlagValues'
 import { isoDateTimeEndOfDay, isoDateTimeStartOfDay } from '../../../common/dateHelpers'
-import { properCaseName } from '../../utils'
+import { formatName, properCaseName } from '../../utils'
+import { SelectValue } from '../../shared/commonTypes'
+import { Alert, PrisonerSearchResult } from '../../api/offenderSearchApi'
+import { PrisonerPersonalProperty } from '../../api/prisonApi'
 
-const relevantAlertsForTransfer = ['HA', 'HA1', 'XCU', 'XHT', 'PEEP', 'XRF']
-const formatPropertyDescription = (description) => description.replace('Property', '').trimStart()
-const sortTextAlphabetically = (left, right) => left.text.localeCompare(right.text)
+const relevantAlertsForTransfer: Array<string> = ['HA', 'HA1', 'XCU', 'XHT', 'PEEP', 'XRF']
+const relevantAlertsForHoldAgainstTransfer: Array<string> = ['TAP', 'TAH', 'TCPA', 'TG', 'TM', 'TPR', 'TSE']
+const isVideoLinkBooking = (movementReason: string): boolean => movementReason?.startsWith('VL')
+const formatPropertyDescription = (description: string): string => description.replace('Property', '').trimStart()
+const formatCellLocation = (cellLocation: string): string => cellLocation.replace('CSWAP', 'No cell allocated')
+const isScheduled = (eventStatus: string): boolean => eventStatus === 'SCH'
+
+const scheduledTypes: Array<SelectValue> = [
+  { text: 'Court', value: 'Court' },
+  { text: 'Releases', value: 'Releases' },
+  { text: 'Transfers', value: 'Transfers' },
+]
+type PersonalProperty = {
+  containerType: string
+  boxNumber: string
+}
+type HoldAgainstTransferAlertDetails = {
+  description: string
+  comments: string
+  dateAdded: string
+  createdBy: string
+}
+type HoldAgainstTransferAlerts = {
+  prisonerNumber: string
+  displayId: string
+  fullName: string
+  alerts: Array<HoldAgainstTransferAlertDetails>
+}
+type ScheduledMovementDetails = {
+  prisonerNumber: string
+  name: string
+  cellLocation: string
+  relevantAlertFlagLabels: Array<AlertLabelFlag>
+  personalProperty: Array<PersonalProperty>
+}
 
 export default ({ prisonApi, offenderSearchApi }) => {
-  const renderTemplate = (res, { date, agencyDetails, movementReasons, courtEvents, releaseEvents, transferEvents }) =>
+  const renderTemplate = (res, { date, agencyDetails, courtEvents, releaseEvents, transferEvents, scheduledType }) =>
     res.render('whereabouts/scheduledMoves.njk', {
       dateForTitle: moment(date, 'DD/MM/YYYY').format('D MMMM YYYY'),
       agencyDescription: agencyDetails.description,
       formValues: {
         date,
+        scheduledType,
       },
-      movementReasons: movementReasons
-        .map((values) => ({
-          value: values.code,
-          text: values.description,
-        }))
-        .sort(sortTextAlphabetically),
+      scheduledTypes,
       courtEvents,
       releaseEvents,
       transferEvents,
+      showCourtAppearances: !scheduledType || scheduledType === 'Court',
+      showReleases: !scheduledType || scheduledType === 'Releases',
+      showTransfers: !scheduledType || scheduledType === 'Transfers',
     })
 
-  const getRelevantAlertFlagLabels = (alerts) => {
-    const relevantAlertCodesForScheduledMoves = alerts
+  const getRelevantAlertFlagLabels = (alerts: Array<Alert>): Array<AlertLabelFlag> => {
+    const relevantAlertCodesForScheduledMoves: Array<string> = alerts
       .map((alert) => alert.alertCode)
       .filter((alert) => relevantAlertsForTransfer.includes(alert))
 
@@ -39,11 +74,49 @@ export default ({ prisonApi, offenderSearchApi }) => {
         classes: alert.classes,
       }))
   }
-  const getScheduledMovementDetails = async (context, prisonerDetailsForOffenderNumbers) => {
+
+  const getHoldAgainstTransferAlertDetails = async (
+    context,
+    prisonerDetails: PrisonerSearchResult
+  ): Promise<HoldAgainstTransferAlerts | null> => {
+    const activeHoldAgainstTransferAlerts = prisonerDetails.alerts.filter((alert) =>
+      relevantAlertsForHoldAgainstTransfer.includes(alert.alertCode)
+    )
+
+    if (activeHoldAgainstTransferAlerts.length === 0) {
+      return null
+    }
+
+    const holdAgainstTransferAlertDetails = await prisonApi.getAlertsForLatestBooking(context, {
+      offenderNo: prisonerDetails.prisonerNumber,
+      alertCodes: relevantAlertsForHoldAgainstTransfer,
+      sortBy: 'dateCreated',
+      sortDirection: 'DESC',
+    })
+
+    const activeHoldAgainstTransferAlertDetails = holdAgainstTransferAlertDetails.filter((a) => a.active)
+
+    return {
+      prisonerNumber: prisonerDetails.prisonerNumber,
+      displayId: uuidv4(),
+      fullName: formatName(prisonerDetails.firstName, prisonerDetails.lastName),
+      alerts: activeHoldAgainstTransferAlertDetails.map((alertDetails) => ({
+        description: `${alertDetails.alertCodeDescription} (${alertDetails.alertCode})`,
+        comments: alertDetails.comment,
+        dateAdded: moment(alertDetails.dateCreated, 'YYYY-MM-DD').format('D MMMM YYYY'),
+        createdBy: formatName(alertDetails.addedByFirstName, alertDetails.addedByLastName),
+      })),
+    }
+  }
+
+  const getScheduledMovementDetails = async (
+    context,
+    prisonerDetailsForOffenderNumbers: Array<PrisonerSearchResult>
+  ): Promise<Array<ScheduledMovementDetails>> => {
     const personalPropertyForPrisoners =
       (await Promise.all(
         prisonerDetailsForOffenderNumbers.flatMap((sr) =>
-          prisonApi.getPrisonerProperty(context, sr.bookingId).then((property) =>
+          prisonApi.getPrisonerProperty(context, sr.bookingId).then((property: Array<PrisonerPersonalProperty>) =>
             property.map((prop) => ({
               containerType: prop.containerType,
               userDescription: formatPropertyDescription(prop.location.userDescription),
@@ -54,8 +127,13 @@ export default ({ prisonApi, offenderSearchApi }) => {
         )
       )) || []
 
+    const holdAgainstTransferAlertsForPrisoners =
+      (await Promise.all(
+        prisonerDetailsForOffenderNumbers.flatMap((sr) => getHoldAgainstTransferAlertDetails(context, sr))
+      )) || []
+
     return prisonerDetailsForOffenderNumbers.map((details) => {
-      const personalProperty = personalPropertyForPrisoners
+      const personalProperty: Array<PersonalProperty> = personalPropertyForPrisoners
         .flatMap((p) => p)
         .filter((p) => p.prisonerNumber === details.prisonerNumber)
         .map((p) => ({
@@ -63,11 +141,16 @@ export default ({ prisonApi, offenderSearchApi }) => {
           boxNumber: p.userDescription,
         }))
 
+      const holdAgainstTransferAlerts: HoldAgainstTransferAlerts = holdAgainstTransferAlertsForPrisoners.find(
+        (p) => p && p.prisonerNumber === details.prisonerNumber
+      )
+
       return {
         prisonerNumber: details.prisonerNumber,
         name: `${properCaseName(details.lastName)}, ${properCaseName(details.firstName)} - ${details.prisonerNumber}`,
-        cellLocation: details.cellLocation,
+        cellLocation: formatCellLocation(details.cellLocation),
         relevantAlertFlagLabels: getRelevantAlertFlagLabels(details.alerts),
+        holdAgainstTransferAlerts,
         personalProperty,
       }
     })
@@ -77,6 +160,7 @@ export default ({ prisonApi, offenderSearchApi }) => {
     const { userDetails } = req.session
     const { activeCaseLoadId } = userDetails
     const date = req.query?.date || moment().format('DD/MM/YYYY')
+    const { scheduledType } = req.query
 
     const [movementReasons, agencyDetails, scheduledMovements] = await Promise.all([
       prisonApi.getMovementReasons(res.locals),
@@ -91,7 +175,7 @@ export default ({ prisonApi, offenderSearchApi }) => {
       }),
     ])
 
-    const uniqueOffenderNumbers = [
+    const uniqueOffenderNumbers: Array<string> = [
       ...new Set([
         ...scheduledMovements.courtEvents.map((ce) => ce.offenderNo),
         ...scheduledMovements.transferEvents.map((te) => te.offenderNo),
@@ -103,47 +187,59 @@ export default ({ prisonApi, offenderSearchApi }) => {
       return renderTemplate(res, {
         date,
         agencyDetails,
-        movementReasons,
+        scheduledType,
         courtEvents: [],
         releaseEvents: [],
         transferEvents: [],
       })
     }
 
-    const prisonerDetailsForOffenderNumbers = await offenderSearchApi.getPrisonersDetails(
+    const prisonerDetailsForOffenderNumbers: Array<PrisonerSearchResult> = await offenderSearchApi.getPrisonersDetails(
       res.locals,
       uniqueOffenderNumbers
     )
 
-    const scheduledMoveDetailsForPrisoners = await getScheduledMovementDetails(
+    const scheduledMoveDetailsForPrisoners: Array<ScheduledMovementDetails> = await getScheduledMovementDetails(
       res.locals,
       prisonerDetailsForOffenderNumbers
     )
 
-    const courtEvents = scheduledMovements.courtEvents.map((courtEvent) => ({
-      ...scheduledMoveDetailsForPrisoners.find((sr) => sr.prisonerNumber === courtEvent.offenderNo),
-      reasonDescription: movementReasons.find((reason) => reason.code === courtEvent.eventType)?.description,
-      destinationLocationDescription: courtEvent.toAgencyDescription,
-    }))
+    const courtEvents = scheduledMovements.courtEvents
+      .filter((_) => !scheduledType || scheduledType === 'Court')
+      .filter((courtEvent) => !isVideoLinkBooking(courtEvent.eventSubType) && isScheduled(courtEvent.eventStatus))
+      .map((courtEvent) => ({
+        ...scheduledMoveDetailsForPrisoners.find((sr) => sr.prisonerNumber === courtEvent.offenderNo),
+        reasonDescription: movementReasons.find((reason) => reason.code === courtEvent.eventSubType)?.description,
+        destinationLocationDescription: courtEvent.toAgencyDescription,
+      }))
+      .sort((left, right) => left.name.localeCompare(right.name))
 
-    const releaseEvents = scheduledMovements.releaseEvents.map((re) => ({
-      ...scheduledMoveDetailsForPrisoners.find((sr) => sr.prisonerNumber === re.offenderNo),
-      reasonDescription: re.movementReasonDescription,
-    }))
+    const releaseEvents = scheduledMovements.releaseEvents
+      .filter((_) => !scheduledType || scheduledType === 'Releases')
+      .filter((releaseEvent) => isScheduled(releaseEvent.eventStatus))
+      .map((re) => ({
+        ...scheduledMoveDetailsForPrisoners.find((sr) => sr.prisonerNumber === re.offenderNo),
+        reasonDescription: re.movementReasonDescription,
+      }))
 
-    const transferEvents = scheduledMovements.transferEvents.map((courtEvent) => ({
-      ...scheduledMoveDetailsForPrisoners.find((sr) => sr.prisonerNumber === courtEvent.offenderNo),
-      reasonDescription: movementReasons.find((reason) => reason.code === courtEvent.eventType)?.description,
-      destinationLocationDescription: courtEvent.toAgencyDescription,
-    }))
+    const transferEvents = scheduledMovements.transferEvents
+      .filter((_) => !scheduledType || scheduledType === 'Transfers')
+      .filter(
+        (transferEvent) => !isVideoLinkBooking(transferEvent.eventSubType) && isScheduled(transferEvent.eventStatus)
+      )
+      .map((transferEvent) => ({
+        ...scheduledMoveDetailsForPrisoners.find((sr) => sr.prisonerNumber === transferEvent.offenderNo),
+        reasonDescription: movementReasons.find((reason) => reason.code === transferEvent.eventSubType)?.description,
+        destinationLocationDescription: transferEvent.toAgencyDescription,
+      }))
 
     return renderTemplate(res, {
       date,
       agencyDetails,
-      movementReasons,
       courtEvents,
       releaseEvents,
       transferEvents,
+      scheduledType,
     })
   }
 

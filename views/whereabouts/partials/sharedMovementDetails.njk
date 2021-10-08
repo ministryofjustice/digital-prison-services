@@ -1,7 +1,8 @@
 {% from "../../macros/alertFlags.njk" import alertFlags %}
+{% from "../../macros/holdAgainstTransferAlertLink.njk" import holdAgainstTransferAlertLink %}
 
 {% macro prisonerProfileLink(prisonerNumber, text) %}
-    <a href="{{ "/prisoner/" + prisonerNumber }}" class="govuk-link govuk-body"
+    <a href="{{ "/prisoner/" + prisonerNumber }}" class="govuk-link"
        data-test="cell-details-link">{{ text }}</a>
 {% endmacro %}
 
@@ -17,11 +18,14 @@
     {% endif %}
 {% endmacro %}
 
-{% macro alertsColumn(relevantAlertFlagLabels) %}
-    {% if relevantAlertFlagLabels.length === 0 %}
+{% macro alertsColumn(relevantAlertFlagLabels, holdAgainstTransferAlerts = undefined) %}
+    {% if relevantAlertFlagLabels.length === 0 and not holdAgainstTransferAlerts %}
         None
     {% else %}
         {{ alertFlags(relevantAlertFlagLabels, newLine=true) }}
+        {% if holdAgainstTransferAlerts %}
+            {{ holdAgainstTransferAlertLink(holdAgainstTransferAlerts) }}
+        {% endif %}
     {% endif %}
 {% endmacro %}
 
