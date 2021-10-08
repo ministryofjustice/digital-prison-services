@@ -25,6 +25,7 @@ export default ({ paginationService, prisonApi, esweService }) =>
     const fullUrl = new URL(`${req.protocol}://${req.get('host')}${req.originalUrl}`)
     const { pageOffsetOption } = req.query
     const pageOffset = (pageOffsetOption && parseInt(pageOffsetOption, 10)) || 0
+    const page = pageOffset / 20
 
     if (!app.esweEnabled) {
       return res.redirect(`/prisoner/${offenderNo}`)
@@ -33,7 +34,7 @@ export default ({ paginationService, prisonApi, esweService }) =>
     try {
       const [prisonerDetails, activitiesHistory]: [PrisonerDetails, activitiesInPrison] = await Promise.all([
         prisonApi.getDetails(res.locals, offenderNo),
-        esweService.getActivitiesHistoryDetails(offenderNo, pageOffset),
+        esweService.getActivitiesHistoryDetails(offenderNo, page),
       ])
 
       const { firstName, lastName } = prisonerDetails

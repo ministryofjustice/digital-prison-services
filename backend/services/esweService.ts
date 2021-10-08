@@ -134,10 +134,9 @@ export default class EsweService {
     private readonly prisonApi: any
   ) {}
 
-  callActivitiesHistoryApi = async (context, nomisId: string, params) => {
+  callActivitiesHistoryApi = (context, nomisId: string, params) => {
     const oneYearAgo = moment().subtract(1, 'year').format('YYYY-MM-DD')
-    const activitiesHistory = await this.prisonApi.getOffenderActivitiesHistory(context, nomisId, oneYearAgo, params)
-    return activitiesHistory
+    return this.prisonApi.getOffenderActivitiesHistory(context, nomisId, oneYearAgo, params)
   }
 
   async getLearnerProfiles(nomisId: string): Promise<LearnerProfiles> {
@@ -415,14 +414,14 @@ export default class EsweService {
     return createFlaggedContent(null)
   }
 
-  async getActivitiesHistoryDetails(nomisId: string, pageOffset: number): Promise<activitiesHistory> {
+  async getActivitiesHistoryDetails(nomisId: string, page: number): Promise<activitiesHistory> {
     if (!app.esweEnabled) {
       return createFlaggedContent(null)
     }
 
     try {
       const context = await this.systemOauthClient.getClientCredentialsTokens()
-      const workActivities = await this.callActivitiesHistoryApi(context, nomisId, { pageOffset })
+      const workActivities = await this.callActivitiesHistoryApi(context, nomisId, { page })
 
       const { content } = workActivities
 

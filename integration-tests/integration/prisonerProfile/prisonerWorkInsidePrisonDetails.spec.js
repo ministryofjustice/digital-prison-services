@@ -187,7 +187,7 @@ context('Work inside prison details page', () => {
       Cypress.Cookies.preserveOnce('hmpps-session-dev')
     })
 
-    it.skip('should render the page with correct data', () => {
+    it('should render the page with correct data', () => {
       cy.visit(`/prisoner/${offenderNo}/work-activities`)
       cy.get('h1').should('have.text', 'John Smith’s work and activities for the last 12 months')
       cy.get('.moj-pagination__results').then((array) => {
@@ -231,7 +231,7 @@ context('Work inside prison details page', () => {
         })
     })
 
-    it.skip('should sort manually', () => {
+    it('should sort manually', () => {
       cy.visit(`/prisoner/${offenderNo}/work-activities`)
       cy.get('[data-test="workInsidePrison-start-date-header"]').children().click()
       cy.get('tbody')
