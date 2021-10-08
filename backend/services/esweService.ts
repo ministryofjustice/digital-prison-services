@@ -384,7 +384,8 @@ export default class EsweService {
     try {
       const context = await this.systemOauthClient.getClientCredentialsTokens()
       const prisonerDetails = await this.prisonApi.getPrisonerDetails(context, nomisId)
-      const workActivities = await this.callActivitiesHistoryApi(context, nomisId, {})
+      // Set page size to get all
+      const workActivities = await this.callActivitiesHistoryApi(context, nomisId, { size: 1000 })
 
       const { content } = workActivities
       const { latestLocation } = prisonerDetails[0]

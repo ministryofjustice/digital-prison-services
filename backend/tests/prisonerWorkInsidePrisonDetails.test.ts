@@ -21,18 +21,6 @@ describe('Prisoner work inside prison details controller', () => {
     getPagination: jest.fn(),
   }
 
-  // const activitiesHistory = {
-  //   fullDetails: [
-  //     { endDate: null, location: 'Moorland (HMP & YOI)', role: 'Cleaner HB1 AM', startDate: '2021-08-19' },
-  //     { endDate: '2021-07-23', location: 'Moorland (HMP & YOI)', role: 'Cleaner HB1 AM', startDate: '2021-07-20' },
-  //     { endDate: '2021-07-23', location: 'Moorland (HMP & YOI)', role: 'Cleaner HB1 PM', startDate: '2021-07-20' },
-  //   ],
-  //   pagination: {
-  //     totalRecords: 3,
-  //     offset: 0,
-  //     limit: 20,
-  //   }
-  // }
   const activitiesHistory = {
     content: {
       fullDetails: [

@@ -746,7 +746,9 @@ describe('Education skills and work experience', () => {
         const oneYearAgo = moment().subtract(1, 'year').format('YYYY-MM-DD')
         await service.getCurrentActivities(nomisId)
         expect(systemOauthClient.getClientCredentialsTokens).toHaveBeenCalledTimes(1)
-        expect(getLearnerActivitiesHistoryMock).toHaveBeenCalledWith(credentialsRef, nomisId, oneYearAgo, {})
+        expect(getLearnerActivitiesHistoryMock).toHaveBeenCalledWith(credentialsRef, nomisId, oneYearAgo, {
+          size: 1000,
+        })
       })
       it('should return expected response when the prisoner is not found', async () => {
         jest.spyOn(app, 'esweEnabled', 'get').mockReturnValue(true)
