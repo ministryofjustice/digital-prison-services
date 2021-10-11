@@ -1,3 +1,5 @@
+import moment from "moment";
+
 context('Work inside prison details page', () => {
   const offenderNo = 'G6123VU'
 
@@ -9,6 +11,51 @@ context('Work inside prison details page', () => {
     endReason: $cells[4]?.textContent,
     endComment: $cells[5]?.textContent,
   })
+
+  const generateHistory = (page) => {
+    const data = []
+    const endDate = moment('2021-08-10')
+    for (var i = page * 20; i < (page + 1) * 20; i++) {
+      data.push({
+        bookingId: 1000200,
+        agencyLocationId: 'BXI',
+        agencyLocationDescription: 'Brixton (HMP & YOI)',
+        description: `Activity ${i + 1}`,
+        startDate: '2021-07-31',
+        endDate: endDate.add(1, 'days').format('YYYY-MM-DD'),
+        isCurrentActivity: false,
+      })
+    }
+    const iStart = page * 20
+    return {
+      content: data,
+      pageable: {
+        sort: {
+          empty: true,
+          sorted: false,
+          unsorted: true,
+        },
+        offset: iStart % 20,
+        pageSize: 20,
+        pageNumber: iStart / 20,
+        paged: true,
+        unpaged: false,
+      },
+      last: iStart >= 40,
+      totalElements: 55,
+      totalPages: 3,
+      size: 20,
+      number: iStart / 20,
+      sort: {
+        empty: true,
+        sorted: false,
+        unsorted: true,
+      },
+      first: iStart < 20,
+      numberOfElements: 20,
+      empty: false,
+    }
+  }
 
   context('no data available', () => {
     before(() => {
@@ -180,7 +227,7 @@ context('Work inside prison details page', () => {
       cy.task('stubSignIn', { username: 'ITAG_USER', caseload: 'MDI' })
       cy.signIn()
       cy.task('stubOffenderBasicDetails', { bookingId: 1, firstName: 'John', lastName: 'Smith', agencyId: 'MDI' })
-      cy.task('stubOffenderWorkHistory', dummyWorkHistory)
+      cy.task('stubKeyworkerMigrated')
     })
 
     beforeEach(() => {
@@ -188,6 +235,8 @@ context('Work inside prison details page', () => {
     })
 
     it('should render the page with correct data', () => {
+      cy.task('stubOffenderWorkHistory', dummyWorkHistory)
+
       cy.visit(`/prisoner/${offenderNo}/work-activities`)
       cy.get('h1').should('have.text', 'John Smith’s work and activities for the last 12 months')
       cy.get('.moj-pagination__results').then((array) => {
@@ -231,7 +280,43 @@ context('Work inside prison details page', () => {
         })
     })
 
+    it('should render subsequent page with correct data', () => {
+      cy.task('stubOffenderWorkHistory', generateHistory(0))
+
+      cy.visit(`/prisoner/${offenderNo}/work-activities`)
+      cy.get('h1').should('have.text', 'John Smith’s work and activities for the last 12 months')
+      cy.get('.moj-pagination__results').then((array) => {
+        cy.get(array[0]).should('have.text', 'Showing 1 to 20 of 55 results')
+      })
+      cy.get('tbody')
+        .find('tr')
+        .then(($tRows) => {
+          cy.get($tRows).its('length').should('eq', 20)
+          const job = Array.from($tRows).map(($row) => tableData($row.cells))
+
+          expect(job[0].role).to.contain('Activity 20') // sorted by descending end date
+          expect(job[19].role).to.contain('Activity 1')
+        })
+
+      cy.task('stubOffenderWorkHistory', generateHistory(1))
+      cy.contains('Next').click()
+      cy.get('.moj-pagination__results').then((array) => {
+        cy.get(array[0]).should('have.text', 'Showing 21 to 40 of 55 results')
+      })
+      cy.get('tbody')
+        .find('tr')
+        .then(($tRows) => {
+          cy.get($tRows).its('length').should('eq', 20)
+          const job = Array.from($tRows).map(($row) => tableData($row.cells))
+
+          expect(job[0].role).to.contain('Activity 40')
+          expect(job[19].role).to.contain('Activity 21')
+        })
+    })
+
     it('should sort manually', () => {
+      cy.task('stubOffenderWorkHistory', dummyWorkHistory)
+
       cy.visit(`/prisoner/${offenderNo}/work-activities`)
       cy.get('[data-test="workInsidePrison-start-date-header"]').children().click()
       cy.get('tbody')
