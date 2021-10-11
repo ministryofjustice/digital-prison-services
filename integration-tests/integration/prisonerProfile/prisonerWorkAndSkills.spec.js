@@ -528,7 +528,7 @@ context('Prisoner Work and Skills', () => {
         visitWorkAndSkillsAndExpandAccordions()
 
         cy.get('[data-test="courses-detailsLink"]').then(($link) => {
-          cy.get($link).should('have.text', 'View courses and qualifications details')
+          cy.get($link).should('have.text', 'View full course history')
         })
       })
     })
