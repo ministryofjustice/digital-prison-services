@@ -1,10 +1,9 @@
 {% extends "../../partials/layout.njk" %}
 {% from "govuk/components/table/macro.njk" import govukTable %}
 {% from "../../macros/printLink.njk" import printLink %}
+{% from "moj/components/pagination/macro.njk" import mojPagination %}
 
-
-{% set title =  "Work and activities inside prison for the last 12 months" %}
-{% set workDetailsList =  workHistoryInsidePrison.content %}
+{% set title =  "Work and activities for the last 12 months" %}
 
 {% block beforeContent %}
   {{ govukBreadcrumbs({
@@ -23,33 +22,35 @@
 {% endblock %}
 
 {% set rows = [] %}
-{% for job in workDetailsList %}
+{% for job in activitiesHistory %}
   {% set rows = (rows.push([
     { text: job.role },
     { text: job.location },
     { text: job.startDate | formatTimestampToDate, attributes: { "data-sort-value": job.startDate | formatDate("X") } },
-    { text: job.endDate | formatTimestampToDate if job.endDate else "Ongoing", attributes: { "data-sort-value": job.endDate | defaultSortDate } }
+    { text: job.endDate | formatTimestampToDate if job.endDate else "Ongoing", attributes: { "data-sort-value": job.endDate | defaultSortDate } },
+    { text: job.endReason or "Not entered" if job.endDate else "" },
+    { text: job.endComment or "Not entered" if job.endDate else "" }
   ]), rows) %}
 {% endfor %}
 
 {% block content %}
     <div class="govuk-grid-row">
         <div class="govuk-grid-column-full">
-            <h1 class="govuk-heading-l">{{ prisonerName | possessive | safe }} work inside prison for the last 12 months</h1>
+            <h1 class="govuk-heading-l">{{ prisonerName | possessive | safe }} work and activities for the last 12 months</h1>
         </div>
     </div>
-    {% if workDetailsList.length > 0 %}
+    {% if activitiesHistory.length > 0 %}
     <div class="govuk-grid-row">
       <div class="govuk-grid-column-full">
         {{ printLink(align = "right") }}
-        <div class="work-inside-prison-pagination-print-alignment">
-          <p class="moj-pagination__results" data-test="workInsidePrison-result-number">Showing <b>{{ workDetailsList.length }}</b> {% if workDetailsList.length > 1 %}results{% else %}result{% endif %}</p>
-        </div>
+
+        {{ mojPagination(pagination) }}
+
         <div class="results-table results-table__results">
 
             {{ govukTable({
                 head: [
-                    {text: "Role"},
+                    { text: "Activity", classes: "work-inside-prison-details-width-20"},
                     { text: "Location", attributes: {
                         "aria-sort": "none"
                     } },
@@ -60,29 +61,43 @@
                     { text: "End date", classes: "", attributes: {
                         "aria-sort": "descending",
                         "data-test": "workInsidePrison-end-date-header"
-
+                    } },
+                    { text: "End reason", classes: "", attributes: {
+                      "data-test": "workInsidePrison-end-reason-header"
+                    } },
+                    { text: "End comment", classes: "", attributes: {
+                      "data-test": "workInsidePrison-end-comment-header"
                     } }
                 ],
                 rows: rows,
                 attributes: { "data-test": "work-inside-prison-table" }
             }) }}
+
         </div>
       </div>
+    </div>
+    <div class="govuk-!-display-none-print">
+      {{ mojPagination(pagination) }}
     </div>
     {% else %}
     <div class="govuk-grid-row">
         <div class="govuk-grid-column-three-quarters">
-            <p class="govuk-body" data-test="no-work-inside-prison">{{ prisonerName }} has no work inside prison for the last 12 months.</p>
+            <p class="govuk-body" data-test="no-work-inside-prison">{{ prisonerName }} has no work or activities for the last 12 months.</p>
         </div>
     </div>
     {% endif %}
     <div class="govuk-grid-row">
       <div class="govuk-grid-column-two-thirds">
         <p class="govuk-body">
-          <a href={{ profileUrl }} class="govuk-link govuk-!-display-none-print" data-test="work-inside-prison-returnLink">Return to prisoner profile</a>
+          <a href="{{ profileUrl }}" class="govuk-link govuk-!-display-none-print" data-test="work-inside-prison-returnLink">Return to prisoner profile</a>
         </p>
       </div>
     </div>
+    <div class="app-contact-panel">
+      <h2 class="app-contact-panel__heading">This is a new page</h2>
+      <p class="govuk-body app-contact-panel__body"><a class="govuk-link govuk-link--no-visited-state" target="_blank" href="https://eu.surveymonkey.com/r/BBDMFLN">Give feedback to help us improve it (opens in a new tab)</a>.
+      </p>
+    </div>    
 {% endblock %}
 
 {% block bodyEnd %}

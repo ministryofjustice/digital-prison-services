@@ -16,7 +16,7 @@ export default ({ prisonerProfileService, esweService }) =>
           esweService.getLearnerLatestAssessments(offenderNo),
           esweService.getLearnerGoals(offenderNo),
           esweService.getLearnerEducation(offenderNo),
-          esweService.getCurrentWork(offenderNo),
+          esweService.getCurrentActivities(offenderNo),
         ].map((apiCall) => logErrorAndContinue(apiCall))
       )
 

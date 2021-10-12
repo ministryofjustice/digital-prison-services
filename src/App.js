@@ -336,7 +336,7 @@ class App extends React.Component {
                   {shouldShowTerms && <Terms close={() => this.hideTermsAndConditions()} />}
                   {innerContent}
                   <FeedbackBanner />
-                  <FooterContainer supportUrl={config.supportUrl} prisonStaffHubUrl="/" />
+                  <FooterContainer supportUrl={config.supportUrl} digitalPrisonServicesUrl="/" />
                 </ScrollToTop>
               </div>
             )}

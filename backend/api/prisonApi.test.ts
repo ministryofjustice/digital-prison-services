@@ -48,4 +48,41 @@ describe('Prison Api', () => {
       releaseEvents: [],
     })
   })
+
+  it('calls /api/offenders/{offenderNo}/bookings/latest/alerts correctly', async () => {
+    mock
+      .get('/api/offenders/AA1234A/bookings/latest/alerts')
+      .query({
+        alertCodes: 'ABC,DEF',
+        sort: 'dateCreated',
+        direction: 'DESC',
+      })
+      .reply(200, [
+        {
+          alertId: 1,
+        },
+        {
+          alertId: 2,
+        },
+      ])
+
+    const response = await prisonAPi.getAlertsForLatestBooking(
+      {},
+      {
+        offenderNo: 'AA1234A',
+        alertCodes: ['ABC', 'DEF'],
+        sortBy: 'dateCreated',
+        sortDirection: 'DESC',
+      }
+    )
+
+    expect(response).toEqual([
+      {
+        alertId: 1,
+      },
+      {
+        alertId: 2,
+      },
+    ])
+  })
 })

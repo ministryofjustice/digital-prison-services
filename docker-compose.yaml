@@ -43,7 +43,7 @@ services:
       - SPRING_PROFILES_ACTIVE=nomis-hsqldb
 
   whereaboutsapi:
-    image: 'mojdigitalstudio/whereabouts-api:latest'
+    image: 'quay.io/hmpps/whereabouts-api:latest'
     container_name: whereaboutsapi
     depends_on:
       - oauth

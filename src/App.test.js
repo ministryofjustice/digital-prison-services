@@ -134,7 +134,7 @@ describe('App component', () => {
 
     expect(component.find(FooterContainer).props()).toEqual({
       supportUrl: props.config.supportUrl,
-      prisonStaffHubUrl: '/',
+      digitalPrisonServicesUrl: '/',
     })
   })
 })

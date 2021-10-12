@@ -24,10 +24,20 @@ export type PrisonerPersonalPropertyLocation = {
   parentLocationId: number
   userDescription: string
 }
+
 export type PrisonerPersonalProperty = {
   containerType: string
   location: PrisonerPersonalPropertyLocation
   sealMark: string
+}
+
+export type AlertDetails = {
+  alertCode: string
+  alertCodeDescription: string
+  comment?: string
+  dateCreated: string
+  addedByFirstName: string
+  addedByLastName: string
 }
 
 export const prisonApiFactory = (client) => {
@@ -132,6 +142,12 @@ export const prisonApiFactory = (client) => {
       `/api/bookings/${bookingId}/alerts/v2?alertType=${alertType}&from=${from}&to=${to}&alertStatus=${alertStatus}&page=${page}&sort=${sort}&size=${size}`
     )
   }
+
+  const getAlertsForLatestBooking = (context, { offenderNo, alertCodes, sortBy, sortDirection }): Array<AlertDetails> =>
+    get(
+      context,
+      `/api/offenders/${offenderNo}/bookings/latest/alerts?alertCodes=${alertCodes.toString()}&sort=${sortBy}&direction=${sortDirection}`
+    )
 
   const getAlertsSystem = (context, offenderNumbers) =>
     post(context, '/api/bookings/offenderNo/alerts', offenderNumbers)
@@ -425,11 +441,13 @@ export const prisonApiFactory = (client) => {
 
   const getUserDetailsList = (context, users) => post(context, `/api/users/list`, users)
 
-  const getOffenderCurrentWork = (context, offenderNo) =>
-    get(context, `/api/offender-activities/${offenderNo}/current-work`)
-
-  const getOffenderWorkHistory = (context, offenderNo, earliestEndDate) =>
-    get(context, `/api/offender-activities/${offenderNo}/work-history?earliestEndDate=${earliestEndDate}`)
+  const getOffenderActivitiesHistory = (context, offenderNo, earliestEndDate, params) =>
+    get(
+      context,
+      `/api/offender-activities/${offenderNo}/activities-history?earliestEndDate=${earliestEndDate}&${mapToQueryString(
+        params
+      )}`
+    )
 
   const getTransfers = (context, parameters: GetTransferParameters) =>
     get(context, `/api/movements/transfers?${querystring.stringify(parameters)}`, { retryOverride: 5 })
@@ -457,6 +475,7 @@ export const prisonApiFactory = (client) => {
     getExternalTransfers,
     getAlerts,
     getAlertsForBookingV2,
+    getAlertsForLatestBooking,
     getAlertsSystem,
     getAssessments,
     getEstablishmentRollBlocksCount,
@@ -552,8 +571,7 @@ export const prisonApiFactory = (client) => {
     getPrisoners,
     getUserDetailsList,
     getHistoryByDate,
-    getOffenderCurrentWork,
-    getOffenderWorkHistory,
+    getOffenderActivitiesHistory,
     getMovementReasons,
     getTransfers,
   }

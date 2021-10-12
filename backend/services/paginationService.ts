@@ -53,7 +53,6 @@ export const getPagination = (totalResults, offset, limit, url) => {
     const pageOffset = limit * page
 
     url.searchParams.set('pageOffsetOption', pageOffset)
-
     return {
       text: page + 1,
       href: url.href,

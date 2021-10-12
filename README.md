@@ -14,26 +14,26 @@ Run locally as docker
 
 ```bash
 docker run -p 3000:3000 -d \
-     --name prisonstaffhub \
-     mojdigitalstudio/prisonstaffhub:latest
+     --name digital-prison-services \
+     quay.io/hmpps/digital-prison-services:latest
 ```
 
 Run remotely as docker
 
 ```bash
 docker run -p 3000:3000 -d \
-     --name prisonstaffhub \
+     --name digital-prison-services \
      -e API_ENDPOINT_URL=https://api-dev.prison.service.justice.gov.uk/ \
      -e OAUTH_ENDPOINT_URL=https://sign-in-dev.hmpps.service.justice.gov.uk/auth/ \
      -e API_GATEWAY_TOKEN=<add here> \
      -e API_CLIENT_SECRET=<add here> \
      -e API_GATEWAY_PRIVATE_KEY=<add here> \
-     mojdigitalstudio/prisonstaffhub:latest
+     quay.io/hmpps/digital-prison-services:latest
 ```
 
 ## Cypress integration tests
 
-The `integration-tests` directory contains a set of Cypress integration tests for the `prisonstaffhub` application.
+The `integration-tests` directory contains a set of Cypress integration tests for the `digital-prison-services` application.
 These tests use WireMock to stub the application's dependencies on the prisonApi, oauth and whereabouts RESTful APIs.
 
 ### Running the Cypress tests

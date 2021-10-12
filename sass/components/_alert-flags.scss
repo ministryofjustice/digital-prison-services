@@ -17,10 +17,10 @@
   }
 
   @media print {
-    padding-top: 0.7em;
+    margin-bottom: 0px !important;
     font-size: 12px;
     color: black !important;
-    border: none;
+    border: none !important;
     background: none !important;
     min-width: auto;
   }
