@@ -618,6 +618,28 @@ describe('Scheduled moves controller', () => {
           })
         )
       })
+
+      it('should return a count of unique prisoners scheduled to attend court', async () => {
+        prisonApi.getTransfers = jest.fn().mockResolvedValue({
+          courtEvents: [
+            { offenderNo: 'A12234', eventSubType: 'CTR', eventStatus: 'SCH' },
+            { offenderNo: 'A12234', eventSubType: 'CTR', eventStatus: 'SCH' },
+          ],
+          transferEvents: [],
+          releaseEvents: [],
+        })
+
+        req.query.movementReason = 'Court'
+
+        await controller.index(req, res)
+
+        expect(res.render).toHaveBeenLastCalledWith(
+          expect.anything(),
+          expect.objectContaining({
+            prisonersListedForCourt: 1,
+          })
+        )
+      })
     })
 
     describe('Release events', () => {
@@ -735,6 +757,28 @@ describe('Scheduled moves controller', () => {
                 relevantAlertFlagLabels: expect.anything(),
               },
             ],
+          })
+        )
+      })
+
+      it('should return a count of unique prisoners scheduled to be released', async () => {
+        prisonApi.getTransfers = jest.fn().mockResolvedValue({
+          courtEvents: [],
+          transferEvents: [],
+          releaseEvents: [
+            { offenderNo: 'A12234', eventSubType: 'CR', eventStatus: 'SCH' },
+            { offenderNo: 'A12234', eventSubType: 'CR', eventStatus: 'SCH' },
+          ],
+        })
+
+        req.query.movementReason = 'Court'
+
+        await controller.index(req, res)
+
+        expect(res.render).toHaveBeenLastCalledWith(
+          expect.anything(),
+          expect.objectContaining({
+            prisonersListedForRelease: 1,
           })
         )
       })
@@ -883,6 +927,28 @@ describe('Scheduled moves controller', () => {
           expect.anything(),
           expect.objectContaining({
             transferEvents: [],
+          })
+        )
+      })
+
+      it('should return a count of unique prisoners scheduled to be transferred', async () => {
+        prisonApi.getTransfers = jest.fn().mockResolvedValue({
+          courtEvents: [],
+          transferEvents: [
+            { offenderNo: 'A12234', eventSubType: 'NTOR', eventStatus: 'SCH' },
+            { offenderNo: 'A12234', eventSubType: 'NTOR', eventStatus: 'SCH' },
+          ],
+          releaseEvents: [],
+        })
+
+        req.query.movementReason = 'Court'
+
+        await controller.index(req, res)
+
+        expect(res.render).toHaveBeenLastCalledWith(
+          expect.anything(),
+          expect.objectContaining({
+            prisonersListedForTransfer: 1,
           })
         )
       })

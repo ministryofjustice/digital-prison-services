@@ -12,7 +12,7 @@
         ]), courtEventRows) %}
     {% endfor %}
 
-    <p class="govuk-body pull-right"><strong>Prisoners listed:</strong> {{ courtEventRows.length }}</p>
+    <p class="govuk-body pull-right"><strong>Prisoners listed:</strong> {{ prisonersListedForCourt }}</p>
     {{ govukTable({
         head: [
             {

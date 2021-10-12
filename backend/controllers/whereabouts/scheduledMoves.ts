@@ -6,10 +6,6 @@ import { SelectValue } from '../../shared/commonTypes'
 import { Alert, PrisonerSearchResult } from '../../api/offenderSearchApi'
 import { PrisonerPersonalProperty } from '../../api/prisonApi'
 
-const relevantAlertsForTransfer: Array<string> = ['HA', 'HA1', 'XCU', 'XHT', 'PEEP', 'XRF']
-const isVideoLinkBooking = (movementReason: string): boolean => movementReason?.startsWith('VL')
-const formatPropertyDescription = (description: string): string => description.replace('Property', '').trimStart()
-
 const scheduledTypes: Array<SelectValue> = [
   { text: 'Court', value: 'Court' },
   { text: 'Releases', value: 'Releases' },
@@ -27,6 +23,17 @@ type ScheduledMovementDetails = {
   personalProperty: Array<PersonalProperty>
 }
 
+type Event = {
+  prisonerNumber: string
+}
+
+const relevantAlertsForTransfer: Array<string> = ['HA', 'HA1', 'XCU', 'XHT', 'PEEP', 'XRF']
+const isVideoLinkBooking = (movementReason: string): boolean => movementReason?.startsWith('VL')
+const formatPropertyDescription = (description: string): string => description.replace('Property', '').trimStart()
+
+const countResultsOncePerPrisonerNumber = (events: Event[]): number =>
+  [...new Set(events.flatMap((event) => event.prisonerNumber))].length
+
 export default ({ prisonApi, offenderSearchApi }) => {
   const renderTemplate = (res, { date, agencyDetails, courtEvents, releaseEvents, transferEvents, scheduledType }) =>
     res.render('whereabouts/scheduledMoves.njk', {
@@ -37,8 +44,11 @@ export default ({ prisonApi, offenderSearchApi }) => {
         scheduledType,
       },
       scheduledTypes,
+      prisonersListedForCourt: countResultsOncePerPrisonerNumber(courtEvents),
       courtEvents,
+      prisonersListedForRelease: countResultsOncePerPrisonerNumber(releaseEvents),
       releaseEvents,
+      prisonersListedForTransfer: countResultsOncePerPrisonerNumber(transferEvents),
       transferEvents,
       showCourtAppearances: !scheduledType || scheduledType === 'Court',
       showReleases: !scheduledType || scheduledType === 'Releases',
