@@ -222,7 +222,7 @@ export default ({ prisonApi, offenderSearchApi }) => {
         reasonDescription: movementReasons.find((reason) => reason.code === courtEvent.eventSubType)?.description,
         destinationLocationDescription: courtEvent.toAgencyDescription,
       }))
-      .sort((left, right) => left.name.localeCompare(right.name))
+      .sort((left, right) => left.name?.localeCompare(right.name))
 
     const releaseEvents = scheduledMovements.releaseEvents
       .filter((_) => !scheduledType || scheduledType === 'Releases')
