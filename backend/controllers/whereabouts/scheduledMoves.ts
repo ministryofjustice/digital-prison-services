@@ -43,7 +43,8 @@ type Event = {
 const relevantAlertsForTransfer: Array<string> = ['HA', 'HA1', 'XCU', 'XHT', 'PEEP', 'XRF']
 const relevantAlertsForHoldAgainstTransfer: Array<string> = ['TAP', 'TAH', 'TCPA', 'TG', 'TM', 'TPR', 'TSE']
 const isVideoLinkBooking = (movementReason: string): boolean => movementReason?.startsWith('VL')
-const formatPropertyDescription = (description: string): string => description.replace('Property', '').trimStart()
+const formatPropertyDescription = (description: string): string =>
+  description?.replace('Property', '').trimStart() || 'None'
 const formatCellLocation = (cellLocation: string): string =>
   cellLocation?.replace('CSWAP', 'No cell allocated') || 'None'
 const isScheduled = (eventStatus: string): boolean => eventStatus === 'SCH'
@@ -130,7 +131,7 @@ export default ({ prisonApi, offenderSearchApi }) => {
           prisonApi.getPrisonerProperty(context, sr.bookingId).then((property: Array<PrisonerPersonalProperty>) =>
             property.map((prop) => ({
               containerType: prop.containerType,
-              userDescription: formatPropertyDescription(prop.location.userDescription),
+              userDescription: formatPropertyDescription(prop?.location?.userDescription),
               bookingId: sr.bookingId,
               prisonerNumber: sr.prisonerNumber,
             }))
