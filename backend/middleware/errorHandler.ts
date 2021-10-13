@@ -4,8 +4,6 @@ export default ({ logError }) =>
   (error, req, res, next) => {
     const status = error?.response?.status || 500
 
-    console.error(error)
-
     if (status >= 500) logError(req.originalUrl, error, 'There was a problem loading page')
 
     if (isXHRRequest(req)) {
