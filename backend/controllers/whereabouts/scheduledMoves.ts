@@ -44,7 +44,8 @@ const relevantAlertsForTransfer: Array<string> = ['HA', 'HA1', 'XCU', 'XHT', 'PE
 const relevantAlertsForHoldAgainstTransfer: Array<string> = ['TAP', 'TAH', 'TCPA', 'TG', 'TM', 'TPR', 'TSE']
 const isVideoLinkBooking = (movementReason: string): boolean => movementReason?.startsWith('VL')
 const formatPropertyDescription = (description: string): string => description.replace('Property', '').trimStart()
-const formatCellLocation = (cellLocation: string): string => cellLocation?.replace('CSWAP', 'No cell allocated') || 'None'
+const formatCellLocation = (cellLocation: string): string =>
+  cellLocation?.replace('CSWAP', 'No cell allocated') || 'None'
 const isScheduled = (eventStatus: string): boolean => eventStatus === 'SCH'
 
 const countResultsOncePerPrisonerNumber = (events: Event[]): number =>
@@ -87,10 +88,10 @@ export default ({ prisonApi, offenderSearchApi }) => {
 
   const getHoldAgainstTransferAlertDetails = async (
     context,
-    prisonerDetails: PrisonerSearchResult,
+    prisonerDetails: PrisonerSearchResult
   ): Promise<HoldAgainstTransferAlerts | null> => {
     const activeHoldAgainstTransferAlerts = prisonerDetails.alerts.filter((alert) =>
-      relevantAlertsForHoldAgainstTransfer.includes(alert.alertCode),
+      relevantAlertsForHoldAgainstTransfer.includes(alert.alertCode)
     )
 
     if (activeHoldAgainstTransferAlerts.length === 0) {
@@ -121,7 +122,7 @@ export default ({ prisonApi, offenderSearchApi }) => {
 
   const getScheduledMovementDetails = async (
     context,
-    prisonerDetailsForOffenderNumbers: Array<PrisonerSearchResult>,
+    prisonerDetailsForOffenderNumbers: Array<PrisonerSearchResult>
   ): Promise<Array<ScheduledMovementDetails>> => {
     const personalPropertyForPrisoners =
       (await Promise.all(
@@ -132,14 +133,14 @@ export default ({ prisonApi, offenderSearchApi }) => {
               userDescription: formatPropertyDescription(prop.location.userDescription),
               bookingId: sr.bookingId,
               prisonerNumber: sr.prisonerNumber,
-            })),
-          ),
-        ),
+            }))
+          )
+        )
       )) || []
 
     const holdAgainstTransferAlertsForPrisoners =
       (await Promise.all(
-        prisonerDetailsForOffenderNumbers.flatMap((sr) => getHoldAgainstTransferAlertDetails(context, sr)),
+        prisonerDetailsForOffenderNumbers.flatMap((sr) => getHoldAgainstTransferAlertDetails(context, sr))
       )) || []
 
     return prisonerDetailsForOffenderNumbers.map((details) => {
@@ -152,7 +153,7 @@ export default ({ prisonApi, offenderSearchApi }) => {
         }))
 
       const holdAgainstTransferAlerts: HoldAgainstTransferAlerts = holdAgainstTransferAlertsForPrisoners.find(
-        (p) => p && p.prisonerNumber === details.prisonerNumber,
+        (p) => p && p.prisonerNumber === details.prisonerNumber
       )
 
       return {
@@ -206,12 +207,12 @@ export default ({ prisonApi, offenderSearchApi }) => {
 
     const prisonerDetailsForOffenderNumbers: Array<PrisonerSearchResult> = await offenderSearchApi.getPrisonersDetails(
       res.locals,
-      uniqueOffenderNumbers,
+      uniqueOffenderNumbers
     )
 
     const scheduledMoveDetailsForPrisoners: Array<ScheduledMovementDetails> = await getScheduledMovementDetails(
       res.locals,
-      prisonerDetailsForOffenderNumbers,
+      prisonerDetailsForOffenderNumbers
     )
 
     const courtEvents = scheduledMovements.courtEvents
@@ -235,7 +236,7 @@ export default ({ prisonApi, offenderSearchApi }) => {
     const transferEvents = scheduledMovements.transferEvents
       .filter((_) => !scheduledType || scheduledType === 'Transfers')
       .filter(
-        (transferEvent) => !isVideoLinkBooking(transferEvent.eventSubType) && isScheduled(transferEvent.eventStatus),
+        (transferEvent) => !isVideoLinkBooking(transferEvent.eventSubType) && isScheduled(transferEvent.eventStatus)
       )
       .map((transferEvent) => ({
         ...scheduledMoveDetailsForPrisoners.find((sr) => sr.prisonerNumber === transferEvent.offenderNo),
