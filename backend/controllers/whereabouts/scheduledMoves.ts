@@ -44,7 +44,8 @@ const relevantAlertsForTransfer: Array<string> = ['HA', 'HA1', 'XCU', 'XHT', 'PE
 const relevantAlertsForHoldAgainstTransfer: Array<string> = ['TAP', 'TAH', 'TCPA', 'TG', 'TM', 'TPR', 'TSE']
 const isVideoLinkBooking = (movementReason: string): boolean => movementReason?.startsWith('VL')
 const formatPropertyDescription = (description: string): string => description.replace('Property', '').trimStart()
-const formatCellLocation = (cellLocation: string): string => cellLocation.replace('CSWAP', 'No cell allocated')
+const formatCellLocation = (cellLocation: string): string =>
+  cellLocation?.replace('CSWAP', 'No cell allocated') || 'None'
 const isScheduled = (eventStatus: string): boolean => eventStatus === 'SCH'
 
 const countResultsOncePerPrisonerNumber = (events: Event[]): number =>
@@ -145,7 +146,7 @@ export default ({ prisonApi, offenderSearchApi }) => {
     return prisonerDetailsForOffenderNumbers.map((details) => {
       const personalProperty: Array<PersonalProperty> = personalPropertyForPrisoners
         .flatMap((p) => p)
-        .filter((p) => p.prisonerNumber === details.prisonerNumber)
+        .filter((p) => p?.prisonerNumber === details.prisonerNumber)
         .map((p) => ({
           containerType: p.containerType,
           boxNumber: p.userDescription,
