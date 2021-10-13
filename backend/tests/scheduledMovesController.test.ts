@@ -24,7 +24,7 @@ const courtEvents = [
     fromAgency: 'MDI',
     fromAgencyDescription: 'Moorland (HMP & YOI)',
     toAgency: 'ABDSUM',
-    toAgencyDescription: "Aberdeen Sheriff's Court (ABDSHF)",
+    toAgencyDescription: 'Aberdeen Sheriff\'s Court (ABDSHF)',
     eventDate: '2021-09-29',
     startTime: '2021-09-29T21:00:00',
     endTime: null,
@@ -94,7 +94,7 @@ const courtEventsWithoutTransferOnHoldAlerts = [
     fromAgency: 'MDI',
     fromAgencyDescription: 'Moorland (HMP & YOI)',
     toAgency: 'ABDSUM',
-    toAgencyDescription: "Aberdeen Sheriff's Court (ABDSHF)",
+    toAgencyDescription: 'Aberdeen Sheriff\'s Court (ABDSHF)',
     eventDate: '2021-09-29',
     startTime: '2021-09-29T21:00:00',
     endTime: null,
@@ -193,6 +193,13 @@ const prisonerSearchResult = [
     lastName: 'S',
     cellLocation: 'CSWAP',
     alerts: [],
+  },
+  {
+    prisonerNumber: 'A112233',
+    bookingId: 4,
+    firstName: 'FREE',
+    lastName: 'PERSON',
+    alerts,
   },
 ]
 
@@ -305,7 +312,7 @@ const expectCourtEventsToContain = (res, data) =>
     expect.anything(),
     expect.objectContaining({
       courtEvents: expect.arrayContaining([expect.objectContaining(data)]),
-    })
+    }),
   )
 
 const expectReleaseEventsToContain = (res, data) =>
@@ -313,7 +320,7 @@ const expectReleaseEventsToContain = (res, data) =>
     expect.anything(),
     expect.objectContaining({
       releaseEvents: expect.arrayContaining([expect.objectContaining(data)]),
-    })
+    }),
   )
 
 const expectTransferEventsToContain = (res, data) =>
@@ -321,19 +328,25 @@ const expectTransferEventsToContain = (res, data) =>
     expect.anything(),
     expect.objectContaining({
       transferEvents: expect.arrayContaining([expect.objectContaining(data)]),
-    })
+    }),
   )
 
 describe('Scheduled moves controller', () => {
   const prisonApi = {
-    getMovementReasons: () => {},
-    getAgencyDetails: () => {},
-    getTransfers: () => {},
-    getAlertsForLatestBooking: () => {},
-    getPrisonerProperty: () => {},
+    getMovementReasons: () => {
+    },
+    getAgencyDetails: () => {
+    },
+    getTransfers: () => {
+    },
+    getAlertsForLatestBooking: () => {
+    },
+    getPrisonerProperty: () => {
+    },
   }
   const offenderSearchApi = {
-    getPrisonersDetails: () => {},
+    getPrisonersDetails: () => {
+    },
   }
   let controller
   let req
@@ -393,7 +406,7 @@ describe('Scheduled moves controller', () => {
           date: today,
           scheduledType: 'A',
         },
-      })
+      }),
     )
   })
 
@@ -411,7 +424,7 @@ describe('Scheduled moves controller', () => {
       expect.objectContaining({
         dateForTitle: '1 January 2017',
         agencyDescription: 'Leeds (HMP)',
-      })
+      }),
     )
   })
 
@@ -426,7 +439,7 @@ describe('Scheduled moves controller', () => {
         showCourtAppearances: true,
         showTransfers: true,
         showReleases: true,
-      })
+      }),
     )
   })
 
@@ -441,7 +454,7 @@ describe('Scheduled moves controller', () => {
         showCourtAppearances: true,
         showTransfers: false,
         showReleases: false,
-      })
+      }),
     )
   })
 
@@ -456,7 +469,7 @@ describe('Scheduled moves controller', () => {
         showCourtAppearances: false,
         showTransfers: true,
         showReleases: false,
-      })
+      }),
     )
   })
 
@@ -471,7 +484,7 @@ describe('Scheduled moves controller', () => {
         showCourtAppearances: false,
         showTransfers: false,
         showReleases: true,
-      })
+      }),
     )
   })
 
@@ -502,7 +515,7 @@ describe('Scheduled moves controller', () => {
               value: 'Transfers',
             },
           ],
-        })
+        }),
       )
     })
   })
@@ -576,7 +589,7 @@ describe('Scheduled moves controller', () => {
               value: 'Court',
             },
           ]),
-        })
+        }),
       )
     })
 
@@ -633,6 +646,16 @@ describe('Scheduled moves controller', () => {
         })
       })
 
+      it('should handle situation with no property', async () => {
+        prisonApi.getPrisonerProperty = jest.fn().mockResolvedValue([])
+
+        await controller.index(req, res)
+
+        expectCourtEventsToContain(res, {
+          personalProperty: [],
+        })
+      })
+
       it('should return only relevant alerts', async () => {
         await controller.index(req, res)
 
@@ -678,7 +701,7 @@ describe('Scheduled moves controller', () => {
             offenderNo: 'G4797UD',
             sortBy: 'dateCreated',
             sortDirection: 'DESC',
-          }
+          },
         )
       })
 
@@ -719,7 +742,7 @@ describe('Scheduled moves controller', () => {
         await controller.index(req, res)
 
         expectCourtEventsToContain(res, {
-          destinationLocationDescription: "Aberdeen Sheriff's Court (ABDSHF)",
+          destinationLocationDescription: 'Aberdeen Sheriff\'s Court (ABDSHF)',
         })
       })
 
@@ -732,7 +755,7 @@ describe('Scheduled moves controller', () => {
           expect.anything(),
           expect.objectContaining({
             courtEvents: [],
-          })
+          }),
         )
       })
 
@@ -747,7 +770,7 @@ describe('Scheduled moves controller', () => {
             courtEvents: [
               {
                 cellLocation: '1-2-006',
-                destinationLocationDescription: "Aberdeen Sheriff's Court (ABDSHF)",
+                destinationLocationDescription: 'Aberdeen Sheriff\'s Court (ABDSHF)',
                 name: 'Cob, Bob - G4797UD',
                 personalProperty: expect.anything(),
                 prisonerNumber: 'G4797UD',
@@ -756,7 +779,7 @@ describe('Scheduled moves controller', () => {
                 holdAgainstTransferAlerts: expect.anything(),
               },
             ],
-          })
+          }),
         )
       })
 
@@ -775,7 +798,7 @@ describe('Scheduled moves controller', () => {
           expect.anything(),
           expect.objectContaining({
             courtEvents: [],
-          })
+          }),
         )
       })
 
@@ -799,7 +822,7 @@ describe('Scheduled moves controller', () => {
                 prisonerNumber: 'G123456',
               }),
             ],
-          })
+          }),
         )
       })
 
@@ -832,7 +855,7 @@ describe('Scheduled moves controller', () => {
                 name: 'Shave, Dave - G3854XD',
               }),
             ],
-          })
+          }),
         )
       })
 
@@ -861,7 +884,7 @@ describe('Scheduled moves controller', () => {
                 reasonDescription: 'Court Appearance',
               }),
             ],
-          })
+          }),
         )
       })
 
@@ -883,7 +906,7 @@ describe('Scheduled moves controller', () => {
           expect.anything(),
           expect.objectContaining({
             prisonersListedForCourt: 1,
-          })
+          }),
         )
       })
 
@@ -905,7 +928,7 @@ describe('Scheduled moves controller', () => {
           expect.anything(),
           expect.objectContaining({
             prisonersListedForRelease: 1,
-          })
+          }),
         )
       })
 
@@ -927,7 +950,7 @@ describe('Scheduled moves controller', () => {
           expect.anything(),
           expect.objectContaining({
             prisonersListedForTransfer: 1,
-          })
+          }),
         )
       })
     })
@@ -973,6 +996,16 @@ describe('Scheduled moves controller', () => {
         })
       })
 
+      it('should handle situation with no property', async () => {
+        prisonApi.getPrisonerProperty = jest.fn().mockResolvedValue([])
+
+        await controller.index(req, res)
+
+        expectReleaseEventsToContain(res, {
+          personalProperty: [],
+        })
+      })
+
       it('should return only relevant alerts', async () => {
         await controller.index(req, res)
 
@@ -1018,7 +1051,7 @@ describe('Scheduled moves controller', () => {
             offenderNo: 'G4797UD',
             sortBy: 'dateCreated',
             sortDirection: 'DESC',
-          }
+          },
         )
       })
 
@@ -1064,7 +1097,7 @@ describe('Scheduled moves controller', () => {
           expect.anything(),
           expect.objectContaining({
             releaseEvents: [],
-          })
+          }),
         )
       })
 
@@ -1087,7 +1120,7 @@ describe('Scheduled moves controller', () => {
                 holdAgainstTransferAlerts: expect.anything(),
               },
             ],
-          })
+          }),
         )
       })
 
@@ -1111,7 +1144,7 @@ describe('Scheduled moves controller', () => {
                 prisonerNumber: 'G123456',
               }),
             ],
-          })
+          }),
         )
       })
 
@@ -1144,7 +1177,7 @@ describe('Scheduled moves controller', () => {
                 name: 'Shave, Dave - G3854XD',
               }),
             ],
-          })
+          }),
         )
       })
 
@@ -1172,7 +1205,37 @@ describe('Scheduled moves controller', () => {
                 prisonerNumber: 'G4797UD',
               }),
             ],
-          })
+          }),
+        )
+      })
+
+      it('should show None when no cell is configured', async () => {
+        prisonApi.getTransfers = jest.fn().mockResolvedValue({
+          courtEvents: [],
+          transferEvents: [],
+          releaseEvents: [
+            {
+              offenderNo: 'A112233',
+              createDateTime: '2016-11-07T15:13:59.268001',
+              fromAgencyDescription: 'Moorland (HMP & YOI)',
+              eventStatus: 'SCH',
+              movementTypeCode: 'REL',
+              movementReasonCode: 'CR',
+            },
+          ],
+        })
+
+        await controller.index(req, res)
+
+        expect(res.render).toHaveBeenLastCalledWith(
+          expect.anything(),
+          expect.objectContaining({
+            releaseEvents: [
+              expect.objectContaining({
+                cellLocation: 'None',
+              }),
+            ],
+          }),
         )
       })
     })
@@ -1215,6 +1278,16 @@ describe('Scheduled moves controller', () => {
               boxNumber: 'Box 15',
             },
           ],
+        })
+      })
+
+      it('should handle situation with no property', async () => {
+        prisonApi.getPrisonerProperty = jest.fn().mockResolvedValue([])
+
+        await controller.index(req, res)
+
+        expectTransferEventsToContain(res, {
+          personalProperty: [],
         })
       })
 
@@ -1263,7 +1336,7 @@ describe('Scheduled moves controller', () => {
             offenderNo: 'G5966UI',
             sortBy: 'dateCreated',
             sortDirection: 'DESC',
-          }
+          },
         )
       })
 
@@ -1317,7 +1390,7 @@ describe('Scheduled moves controller', () => {
           expect.anything(),
           expect.objectContaining({
             transferEvents: [],
-          })
+          }),
         )
       })
 
@@ -1341,7 +1414,7 @@ describe('Scheduled moves controller', () => {
                 holdAgainstTransferAlerts: expect.anything(),
               },
             ],
-          })
+          }),
         )
       })
 
@@ -1360,7 +1433,7 @@ describe('Scheduled moves controller', () => {
           expect.anything(),
           expect.objectContaining({
             transferEvents: [],
-          })
+          }),
         )
       })
 
@@ -1384,7 +1457,7 @@ describe('Scheduled moves controller', () => {
                 prisonerNumber: 'G123456',
               }),
             ],
-          })
+          }),
         )
       })
 
@@ -1417,7 +1490,7 @@ describe('Scheduled moves controller', () => {
                 name: 'Shave, Dave - G3854XD',
               }),
             ],
-          })
+          }),
         )
       })
 
@@ -1446,7 +1519,7 @@ describe('Scheduled moves controller', () => {
                 reasonDescription: 'Normal Transfer',
               }),
             ],
-          })
+          }),
         )
       })
     })
