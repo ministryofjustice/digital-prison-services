@@ -24,7 +24,7 @@ const courtEvents = [
     fromAgency: 'MDI',
     fromAgencyDescription: 'Moorland (HMP & YOI)',
     toAgency: 'ABDSUM',
-    toAgencyDescription: 'Aberdeen Sheriff\'s Court (ABDSHF)',
+    toAgencyDescription: "Aberdeen Sheriff's Court (ABDSHF)",
     eventDate: '2021-09-29',
     startTime: '2021-09-29T21:00:00',
     endTime: null,
@@ -94,7 +94,7 @@ const courtEventsWithoutTransferOnHoldAlerts = [
     fromAgency: 'MDI',
     fromAgencyDescription: 'Moorland (HMP & YOI)',
     toAgency: 'ABDSUM',
-    toAgencyDescription: 'Aberdeen Sheriff\'s Court (ABDSHF)',
+    toAgencyDescription: "Aberdeen Sheriff's Court (ABDSHF)",
     eventDate: '2021-09-29',
     startTime: '2021-09-29T21:00:00',
     endTime: null,
@@ -312,7 +312,7 @@ const expectCourtEventsToContain = (res, data) =>
     expect.anything(),
     expect.objectContaining({
       courtEvents: expect.arrayContaining([expect.objectContaining(data)]),
-    }),
+    })
   )
 
 const expectReleaseEventsToContain = (res, data) =>
@@ -320,7 +320,7 @@ const expectReleaseEventsToContain = (res, data) =>
     expect.anything(),
     expect.objectContaining({
       releaseEvents: expect.arrayContaining([expect.objectContaining(data)]),
-    }),
+    })
   )
 
 const expectTransferEventsToContain = (res, data) =>
@@ -328,25 +328,19 @@ const expectTransferEventsToContain = (res, data) =>
     expect.anything(),
     expect.objectContaining({
       transferEvents: expect.arrayContaining([expect.objectContaining(data)]),
-    }),
+    })
   )
 
 describe('Scheduled moves controller', () => {
   const prisonApi = {
-    getMovementReasons: () => {
-    },
-    getAgencyDetails: () => {
-    },
-    getTransfers: () => {
-    },
-    getAlertsForLatestBooking: () => {
-    },
-    getPrisonerProperty: () => {
-    },
+    getMovementReasons: () => {},
+    getAgencyDetails: () => {},
+    getTransfers: () => {},
+    getAlertsForLatestBooking: () => {},
+    getPrisonerProperty: () => {},
   }
   const offenderSearchApi = {
-    getPrisonersDetails: () => {
-    },
+    getPrisonersDetails: () => {},
   }
   let controller
   let req
@@ -406,7 +400,7 @@ describe('Scheduled moves controller', () => {
           date: today,
           scheduledType: 'A',
         },
-      }),
+      })
     )
   })
 
@@ -424,7 +418,7 @@ describe('Scheduled moves controller', () => {
       expect.objectContaining({
         dateForTitle: '1 January 2017',
         agencyDescription: 'Leeds (HMP)',
-      }),
+      })
     )
   })
 
@@ -439,7 +433,7 @@ describe('Scheduled moves controller', () => {
         showCourtAppearances: true,
         showTransfers: true,
         showReleases: true,
-      }),
+      })
     )
   })
 
@@ -454,7 +448,7 @@ describe('Scheduled moves controller', () => {
         showCourtAppearances: true,
         showTransfers: false,
         showReleases: false,
-      }),
+      })
     )
   })
 
@@ -469,7 +463,7 @@ describe('Scheduled moves controller', () => {
         showCourtAppearances: false,
         showTransfers: true,
         showReleases: false,
-      }),
+      })
     )
   })
 
@@ -484,7 +478,7 @@ describe('Scheduled moves controller', () => {
         showCourtAppearances: false,
         showTransfers: false,
         showReleases: true,
-      }),
+      })
     )
   })
 
@@ -515,7 +509,7 @@ describe('Scheduled moves controller', () => {
               value: 'Transfers',
             },
           ],
-        }),
+        })
       )
     })
   })
@@ -589,7 +583,7 @@ describe('Scheduled moves controller', () => {
               value: 'Court',
             },
           ]),
-        }),
+        })
       )
     })
 
@@ -701,7 +695,7 @@ describe('Scheduled moves controller', () => {
             offenderNo: 'G4797UD',
             sortBy: 'dateCreated',
             sortDirection: 'DESC',
-          },
+          }
         )
       })
 
@@ -742,7 +736,7 @@ describe('Scheduled moves controller', () => {
         await controller.index(req, res)
 
         expectCourtEventsToContain(res, {
-          destinationLocationDescription: 'Aberdeen Sheriff\'s Court (ABDSHF)',
+          destinationLocationDescription: "Aberdeen Sheriff's Court (ABDSHF)",
         })
       })
 
@@ -755,7 +749,7 @@ describe('Scheduled moves controller', () => {
           expect.anything(),
           expect.objectContaining({
             courtEvents: [],
-          }),
+          })
         )
       })
 
@@ -770,7 +764,7 @@ describe('Scheduled moves controller', () => {
             courtEvents: [
               {
                 cellLocation: '1-2-006',
-                destinationLocationDescription: 'Aberdeen Sheriff\'s Court (ABDSHF)',
+                destinationLocationDescription: "Aberdeen Sheriff's Court (ABDSHF)",
                 name: 'Cob, Bob - G4797UD',
                 personalProperty: expect.anything(),
                 prisonerNumber: 'G4797UD',
@@ -779,7 +773,7 @@ describe('Scheduled moves controller', () => {
                 holdAgainstTransferAlerts: expect.anything(),
               },
             ],
-          }),
+          })
         )
       })
 
@@ -798,7 +792,7 @@ describe('Scheduled moves controller', () => {
           expect.anything(),
           expect.objectContaining({
             courtEvents: [],
-          }),
+          })
         )
       })
 
@@ -822,7 +816,7 @@ describe('Scheduled moves controller', () => {
                 prisonerNumber: 'G123456',
               }),
             ],
-          }),
+          })
         )
       })
 
@@ -855,7 +849,7 @@ describe('Scheduled moves controller', () => {
                 name: 'Shave, Dave - G3854XD',
               }),
             ],
-          }),
+          })
         )
       })
 
@@ -884,7 +878,7 @@ describe('Scheduled moves controller', () => {
                 reasonDescription: 'Court Appearance',
               }),
             ],
-          }),
+          })
         )
       })
 
@@ -906,7 +900,7 @@ describe('Scheduled moves controller', () => {
           expect.anything(),
           expect.objectContaining({
             prisonersListedForCourt: 1,
-          }),
+          })
         )
       })
 
@@ -928,7 +922,7 @@ describe('Scheduled moves controller', () => {
           expect.anything(),
           expect.objectContaining({
             prisonersListedForRelease: 1,
-          }),
+          })
         )
       })
 
@@ -950,7 +944,7 @@ describe('Scheduled moves controller', () => {
           expect.anything(),
           expect.objectContaining({
             prisonersListedForTransfer: 1,
-          }),
+          })
         )
       })
     })
@@ -1051,7 +1045,7 @@ describe('Scheduled moves controller', () => {
             offenderNo: 'G4797UD',
             sortBy: 'dateCreated',
             sortDirection: 'DESC',
-          },
+          }
         )
       })
 
@@ -1097,7 +1091,7 @@ describe('Scheduled moves controller', () => {
           expect.anything(),
           expect.objectContaining({
             releaseEvents: [],
-          }),
+          })
         )
       })
 
@@ -1120,7 +1114,7 @@ describe('Scheduled moves controller', () => {
                 holdAgainstTransferAlerts: expect.anything(),
               },
             ],
-          }),
+          })
         )
       })
 
@@ -1144,7 +1138,7 @@ describe('Scheduled moves controller', () => {
                 prisonerNumber: 'G123456',
               }),
             ],
-          }),
+          })
         )
       })
 
@@ -1177,7 +1171,7 @@ describe('Scheduled moves controller', () => {
                 name: 'Shave, Dave - G3854XD',
               }),
             ],
-          }),
+          })
         )
       })
 
@@ -1205,7 +1199,7 @@ describe('Scheduled moves controller', () => {
                 prisonerNumber: 'G4797UD',
               }),
             ],
-          }),
+          })
         )
       })
 
@@ -1235,7 +1229,7 @@ describe('Scheduled moves controller', () => {
                 cellLocation: 'None',
               }),
             ],
-          }),
+          })
         )
       })
     })
@@ -1336,7 +1330,7 @@ describe('Scheduled moves controller', () => {
             offenderNo: 'G5966UI',
             sortBy: 'dateCreated',
             sortDirection: 'DESC',
-          },
+          }
         )
       })
 
@@ -1390,7 +1384,7 @@ describe('Scheduled moves controller', () => {
           expect.anything(),
           expect.objectContaining({
             transferEvents: [],
-          }),
+          })
         )
       })
 
@@ -1414,7 +1408,7 @@ describe('Scheduled moves controller', () => {
                 holdAgainstTransferAlerts: expect.anything(),
               },
             ],
-          }),
+          })
         )
       })
 
@@ -1433,7 +1427,7 @@ describe('Scheduled moves controller', () => {
           expect.anything(),
           expect.objectContaining({
             transferEvents: [],
-          }),
+          })
         )
       })
 
@@ -1457,7 +1451,7 @@ describe('Scheduled moves controller', () => {
                 prisonerNumber: 'G123456',
               }),
             ],
-          }),
+          })
         )
       })
 
@@ -1490,7 +1484,7 @@ describe('Scheduled moves controller', () => {
                 name: 'Shave, Dave - G3854XD',
               }),
             ],
-          }),
+          })
         )
       })
 
@@ -1519,7 +1513,7 @@ describe('Scheduled moves controller', () => {
                 reasonDescription: 'Normal Transfer',
               }),
             ],
-          }),
+          })
         )
       })
     })
