@@ -107,6 +107,10 @@ export default ({ prisonApi, offenderSearchApi }) => {
 
     const activeHoldAgainstTransferAlertDetails = holdAgainstTransferAlertDetails.filter((a) => a.active)
 
+    if (activeHoldAgainstTransferAlertDetails.length === 0) {
+      return null
+    }
+
     return {
       prisonerNumber: prisonerDetails.prisonerNumber,
       displayId: uuidv4(),
