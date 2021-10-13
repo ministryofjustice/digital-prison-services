@@ -109,6 +109,29 @@ const courtEventsWithoutTransferOnHoldAlerts = [
     bookingInOutStatus: 'IN',
   },
 ]
+const courtEventsWithOnlyInactiveTransferOnHoldAlerts = [
+  {
+    offenderNo: 'G1234CC',
+    createDateTime: '2021-09-24T09:22:21.350125',
+    eventId: 449548212,
+    fromAgency: 'MDI',
+    fromAgencyDescription: 'Moorland (HMP & YOI)',
+    toAgency: 'ABDSUM',
+    toAgencyDescription: "Aberdeen Sheriff's Court (ABDSHF)",
+    eventDate: '2021-09-29',
+    startTime: '2021-09-29T21:00:00',
+    endTime: null,
+    eventClass: 'EXT_MOV',
+    eventType: 'CRT',
+    eventSubType: 'CRT',
+    eventStatus: 'SCH',
+    judgeName: null,
+    directionCode: 'OUT',
+    commentText: null,
+    bookingActiveFlag: true,
+    bookingInOutStatus: 'IN',
+  },
+]
 
 const alerts = [
   {
@@ -272,6 +295,46 @@ const prisonerSearchResultWithoutHoldOnTransfer = [
     lastName: 'SMITH',
     cellLocation: '1-2-009',
     alerts: alertsWithoutHoldOnTransfer,
+  },
+]
+
+const alertsWithInactiveHoldOnTransfer = [
+  {
+    alertType: 'T',
+    alertCode: 'TAH',
+    active: false,
+    expired: true,
+  },
+]
+
+const prisonerSearchResultWithOnlyInactiveHoldOnTransfer = [
+  {
+    prisonerNumber: 'G1234CC',
+    bookingId: 5,
+    firstName: 'DAN',
+    lastName: 'SMITT',
+    cellLocation: '1-2-010',
+    alerts: alertsWithInactiveHoldOnTransfer,
+  },
+]
+
+const holdAgainstTransferWithOnlyInactiveAlertDetailsReponse = [
+  {
+    alertId: 1,
+    bookingId: 42739,
+    offenderNo: 'G1234CC',
+    alertType: 'T',
+    alertTypeDescription: 'Hold Against Transfer',
+    alertCode: 'TAH',
+    alertCodeDescription: 'Allocation Hold',
+    comment: 'Comment text here',
+    dateCreated: '2009-11-24',
+    expired: true,
+    active: false,
+    addedByFirstName: 'ODRAHOON',
+    addedByLastName: 'MARSHALD',
+    expiredByFirstName: 'ADMIN&ONB',
+    expiredByLastName: 'CNOMIS',
   },
 ]
 
@@ -647,6 +710,31 @@ describe('Scheduled moves controller', () => {
 
         expectCourtEventsToContain(res, {
           personalProperty: [],
+        })
+      })
+
+      it('should handle situation with no property user description', async () => {
+        prisonApi.getPrisonerProperty = jest.fn().mockResolvedValue([
+          {
+            location: {
+              locationId: 26169,
+              locationType: 'BOX',
+              description: 'PROP_BOXES-PB014',
+              agencyId: 'MDI',
+              parentLocationId: 26155,
+              currentOccupancy: 0,
+              locationPrefix: 'MDI-PROP_BOXES-PB014',
+              internalLocationCode: 'PB014',
+            },
+            sealMark: 'MDA646165646',
+            containerType: 'Valuables',
+          },
+        ])
+
+        await controller.index(req, res)
+
+        expectCourtEventsToContain(res, {
+          personalProperty: [{ boxNumber: 'None', containerType: 'Valuables' }],
         })
       })
 
@@ -1232,6 +1320,31 @@ describe('Scheduled moves controller', () => {
           })
         )
       })
+
+      it('should handle situation with no property user description', async () => {
+        prisonApi.getPrisonerProperty = jest.fn().mockResolvedValue([
+          {
+            location: {
+              locationId: 26169,
+              locationType: 'BOX',
+              description: 'PROP_BOXES-PB014',
+              agencyId: 'MDI',
+              parentLocationId: 26155,
+              currentOccupancy: 0,
+              locationPrefix: 'MDI-PROP_BOXES-PB014',
+              internalLocationCode: 'PB014',
+            },
+            sealMark: 'MDA646165646',
+            containerType: 'Valuables',
+          },
+        ])
+
+        await controller.index(req, res)
+
+        expectReleaseEventsToContain(res, {
+          personalProperty: [{ boxNumber: 'None', containerType: 'Valuables' }],
+        })
+      })
     })
 
     describe('Transfer events', () => {
@@ -1516,9 +1629,34 @@ describe('Scheduled moves controller', () => {
           })
         )
       })
+
+      it('should handle situation with no property user description', async () => {
+        prisonApi.getPrisonerProperty = jest.fn().mockResolvedValue([
+          {
+            location: {
+              locationId: 26169,
+              locationType: 'BOX',
+              description: 'PROP_BOXES-PB014',
+              agencyId: 'MDI',
+              parentLocationId: 26155,
+              currentOccupancy: 0,
+              locationPrefix: 'MDI-PROP_BOXES-PB014',
+              internalLocationCode: 'PB014',
+            },
+            sealMark: 'MDA646165646',
+            containerType: 'Valuables',
+          },
+        ])
+
+        await controller.index(req, res)
+
+        expectTransferEventsToContain(res, {
+          personalProperty: [{ boxNumber: 'None', containerType: 'Valuables' }],
+        })
+      })
     })
 
-    describe('Events without hold on transfer alerts', () => {
+    describe('Events without any hold-against-transfer alerts', () => {
       beforeEach(() => {
         prisonApi.getTransfers = jest.fn().mockResolvedValue({
           courtEvents: courtEventsWithoutTransferOnHoldAlerts,
@@ -1532,6 +1670,44 @@ describe('Scheduled moves controller', () => {
         await controller.index(req, res)
 
         expect(prisonApi.getAlertsForLatestBooking).not.toHaveBeenCalled()
+      })
+
+      it('should not show hold-against-transfer details', async () => {
+        await controller.index(req, res)
+
+        expectCourtEventsToContain(res, {
+          holdAgainstTransferAlerts: undefined,
+        })
+      })
+    })
+  })
+
+  describe('Events with only inactive hold-against-transfer alerts', () => {
+    beforeEach(() => {
+      prisonApi.getTransfers = jest.fn().mockResolvedValue({
+        courtEvents: courtEventsWithOnlyInactiveTransferOnHoldAlerts,
+        transferEvents: [],
+        releaseEvents: [],
+      })
+      offenderSearchApi.getPrisonersDetails = jest
+        .fn()
+        .mockResolvedValue(prisonerSearchResultWithOnlyInactiveHoldOnTransfer)
+      prisonApi.getAlertsForLatestBooking = jest
+        .fn()
+        .mockResolvedValue(holdAgainstTransferWithOnlyInactiveAlertDetailsReponse)
+    })
+
+    it('should make a call to retrieve hold on transfer details', async () => {
+      await controller.index(req, res)
+
+      expect(prisonApi.getAlertsForLatestBooking).toHaveBeenCalled()
+    })
+
+    it('should not show hold-against-transfer details', async () => {
+      await controller.index(req, res)
+
+      expectCourtEventsToContain(res, {
+        holdAgainstTransferAlerts: undefined,
       })
     })
   })
