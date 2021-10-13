@@ -50,7 +50,7 @@ export const whereaboutsTasks: TaskType[] = [
     id: 'view-people-due-to-leave',
     heading: 'People due to leave',
     description: 'View people due to leave this establishment for court appearances, transfers or being released.',
-    href: '/scheduled-moves',
+    href: '/manage-prisoner-whereabouts/scheduled-moves',
     enabled: isEnabled,
   },
   {
