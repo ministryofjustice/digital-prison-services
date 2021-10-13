@@ -194,6 +194,13 @@ const prisonerSearchResult = [
     cellLocation: 'CSWAP',
     alerts: [],
   },
+  {
+    prisonerNumber: 'A112233',
+    bookingId: 4,
+    firstName: 'FREE',
+    lastName: 'PERSON',
+    alerts,
+  },
 ]
 
 const holdAgainstTransferAlertDetailsReponse = [
@@ -633,6 +640,16 @@ describe('Scheduled moves controller', () => {
         })
       })
 
+      it('should handle situation with no property', async () => {
+        prisonApi.getPrisonerProperty = jest.fn().mockResolvedValue([])
+
+        await controller.index(req, res)
+
+        expectCourtEventsToContain(res, {
+          personalProperty: [],
+        })
+      })
+
       it('should return only relevant alerts', async () => {
         await controller.index(req, res)
 
@@ -864,6 +881,72 @@ describe('Scheduled moves controller', () => {
           })
         )
       })
+
+      it('should return a count of unique prisoners scheduled to attend court', async () => {
+        prisonApi.getTransfers = jest.fn().mockResolvedValue({
+          courtEvents: [
+            { offenderNo: 'A12234', eventSubType: 'CTR', eventStatus: 'SCH' },
+            { offenderNo: 'A12234', eventSubType: 'CTR', eventStatus: 'SCH' },
+          ],
+          transferEvents: [],
+          releaseEvents: [],
+        })
+
+        req.query.movementReason = 'Court'
+
+        await controller.index(req, res)
+
+        expect(res.render).toHaveBeenLastCalledWith(
+          expect.anything(),
+          expect.objectContaining({
+            prisonersListedForCourt: 1,
+          })
+        )
+      })
+
+      it('should return a count of unique prisoners scheduled to be released', async () => {
+        prisonApi.getTransfers = jest.fn().mockResolvedValue({
+          courtEvents: [],
+          transferEvents: [],
+          releaseEvents: [
+            { offenderNo: 'A12234', eventSubType: 'CR', eventStatus: 'SCH' },
+            { offenderNo: 'A12234', eventSubType: 'CR', eventStatus: 'SCH' },
+          ],
+        })
+
+        req.query.movementReason = 'Court'
+
+        await controller.index(req, res)
+
+        expect(res.render).toHaveBeenLastCalledWith(
+          expect.anything(),
+          expect.objectContaining({
+            prisonersListedForRelease: 1,
+          })
+        )
+      })
+
+      it('should return a count of unique prisoners scheduled to be transferred', async () => {
+        prisonApi.getTransfers = jest.fn().mockResolvedValue({
+          courtEvents: [],
+          transferEvents: [
+            { offenderNo: 'A12234', eventSubType: 'NTOR', eventStatus: 'SCH' },
+            { offenderNo: 'A12234', eventSubType: 'NTOR', eventStatus: 'SCH' },
+          ],
+          releaseEvents: [],
+        })
+
+        req.query.movementReason = 'Court'
+
+        await controller.index(req, res)
+
+        expect(res.render).toHaveBeenLastCalledWith(
+          expect.anything(),
+          expect.objectContaining({
+            prisonersListedForTransfer: 1,
+          })
+        )
+      })
     })
 
     describe('Release events', () => {
@@ -904,6 +987,16 @@ describe('Scheduled moves controller', () => {
               boxNumber: 'Box 15',
             },
           ],
+        })
+      })
+
+      it('should handle situation with no property', async () => {
+        prisonApi.getPrisonerProperty = jest.fn().mockResolvedValue([])
+
+        await controller.index(req, res)
+
+        expectReleaseEventsToContain(res, {
+          personalProperty: [],
         })
       })
 
@@ -1109,6 +1202,36 @@ describe('Scheduled moves controller', () => {
           })
         )
       })
+
+      it('should show None when no cell is configured', async () => {
+        prisonApi.getTransfers = jest.fn().mockResolvedValue({
+          courtEvents: [],
+          transferEvents: [],
+          releaseEvents: [
+            {
+              offenderNo: 'A112233',
+              createDateTime: '2016-11-07T15:13:59.268001',
+              fromAgencyDescription: 'Moorland (HMP & YOI)',
+              eventStatus: 'SCH',
+              movementTypeCode: 'REL',
+              movementReasonCode: 'CR',
+            },
+          ],
+        })
+
+        await controller.index(req, res)
+
+        expect(res.render).toHaveBeenLastCalledWith(
+          expect.anything(),
+          expect.objectContaining({
+            releaseEvents: [
+              expect.objectContaining({
+                cellLocation: 'None',
+              }),
+            ],
+          })
+        )
+      })
     })
 
     describe('Transfer events', () => {
@@ -1149,6 +1272,16 @@ describe('Scheduled moves controller', () => {
               boxNumber: 'Box 15',
             },
           ],
+        })
+      })
+
+      it('should handle situation with no property', async () => {
+        prisonApi.getPrisonerProperty = jest.fn().mockResolvedValue([])
+
+        await controller.index(req, res)
+
+        expectTransferEventsToContain(res, {
+          personalProperty: [],
         })
       })
 

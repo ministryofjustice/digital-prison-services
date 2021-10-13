@@ -47,6 +47,13 @@ export const whereaboutsTasks: TaskType[] = [
     enabled: isEnabled,
   },
   {
+    id: 'view-people-due-to-leave',
+    heading: 'People due to leave',
+    description: 'View people due to leave this establishment for court appearances, transfers or being released.',
+    href: '/manage-prisoner-whereabouts/scheduled-moves',
+    enabled: isEnabled,
+  },
+  {
     id: 'view-covid-units',
     heading: 'View COVID units',
     description: 'View who is in each COVID unit in your establishment.',

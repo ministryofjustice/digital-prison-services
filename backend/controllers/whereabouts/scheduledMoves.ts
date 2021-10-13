@@ -7,18 +7,12 @@ import { SelectValue } from '../../shared/commonTypes'
 import { Alert, PrisonerSearchResult } from '../../api/offenderSearchApi'
 import { PrisonerPersonalProperty } from '../../api/prisonApi'
 
-const relevantAlertsForTransfer: Array<string> = ['HA', 'HA1', 'XCU', 'XHT', 'PEEP', 'XRF']
-const relevantAlertsForHoldAgainstTransfer: Array<string> = ['TAP', 'TAH', 'TCPA', 'TG', 'TM', 'TPR', 'TSE']
-const isVideoLinkBooking = (movementReason: string): boolean => movementReason?.startsWith('VL')
-const formatPropertyDescription = (description: string): string => description.replace('Property', '').trimStart()
-const formatCellLocation = (cellLocation: string): string => cellLocation.replace('CSWAP', 'No cell allocated')
-const isScheduled = (eventStatus: string): boolean => eventStatus === 'SCH'
-
 const scheduledTypes: Array<SelectValue> = [
   { text: 'Court', value: 'Court' },
   { text: 'Releases', value: 'Releases' },
   { text: 'Transfers', value: 'Transfers' },
 ]
+
 type PersonalProperty = {
   containerType: string
   boxNumber: string
@@ -42,6 +36,20 @@ type ScheduledMovementDetails = {
   relevantAlertFlagLabels: Array<AlertLabelFlag>
   personalProperty: Array<PersonalProperty>
 }
+type Event = {
+  prisonerNumber: string
+}
+
+const relevantAlertsForTransfer: Array<string> = ['HA', 'HA1', 'XCU', 'XHT', 'PEEP', 'XRF']
+const relevantAlertsForHoldAgainstTransfer: Array<string> = ['TAP', 'TAH', 'TCPA', 'TG', 'TM', 'TPR', 'TSE']
+const isVideoLinkBooking = (movementReason: string): boolean => movementReason?.startsWith('VL')
+const formatPropertyDescription = (description: string): string => description.replace('Property', '').trimStart()
+const formatCellLocation = (cellLocation: string): string =>
+  cellLocation?.replace('CSWAP', 'No cell allocated') || 'None'
+const isScheduled = (eventStatus: string): boolean => eventStatus === 'SCH'
+
+const countResultsOncePerPrisonerNumber = (events: Event[]): number =>
+  [...new Set(events.flatMap((event) => event.prisonerNumber))].length
 
 export default ({ prisonApi, offenderSearchApi }) => {
   const renderTemplate = (res, { date, agencyDetails, courtEvents, releaseEvents, transferEvents, scheduledType }) =>
@@ -54,8 +62,11 @@ export default ({ prisonApi, offenderSearchApi }) => {
       },
       scheduledTypes,
       courtEvents,
+      prisonersListedForCourt: countResultsOncePerPrisonerNumber(courtEvents),
       releaseEvents,
+      prisonersListedForRelease: countResultsOncePerPrisonerNumber(releaseEvents),
       transferEvents,
+      prisonersListedForTransfer: countResultsOncePerPrisonerNumber(transferEvents),
       showCourtAppearances: !scheduledType || scheduledType === 'Court',
       showReleases: !scheduledType || scheduledType === 'Releases',
       showTransfers: !scheduledType || scheduledType === 'Transfers',
@@ -135,7 +146,7 @@ export default ({ prisonApi, offenderSearchApi }) => {
     return prisonerDetailsForOffenderNumbers.map((details) => {
       const personalProperty: Array<PersonalProperty> = personalPropertyForPrisoners
         .flatMap((p) => p)
-        .filter((p) => p.prisonerNumber === details.prisonerNumber)
+        .filter((p) => p?.prisonerNumber === details.prisonerNumber)
         .map((p) => ({
           containerType: p.containerType,
           boxNumber: p.userDescription,
@@ -212,7 +223,7 @@ export default ({ prisonApi, offenderSearchApi }) => {
         reasonDescription: movementReasons.find((reason) => reason.code === courtEvent.eventSubType)?.description,
         destinationLocationDescription: courtEvent.toAgencyDescription,
       }))
-      .sort((left, right) => left.name.localeCompare(right.name))
+      .sort((left, right) => left.name?.localeCompare(right.name))
 
     const releaseEvents = scheduledMovements.releaseEvents
       .filter((_) => !scheduledType || scheduledType === 'Releases')

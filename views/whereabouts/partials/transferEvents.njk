@@ -14,7 +14,7 @@
         ]), transferEventRows) %}
     {% endfor %}
 
-    <p class="govuk-body pull-right"><strong>Prisoners listed:</strong> {{ transferEventRows.length }}</p>
+    <p class="govuk-body pull-right"><strong>Prisoners listed:</strong> {{ prisonersListedForTransfer }}</p>
     {{ govukTable({
         head: [
             {
