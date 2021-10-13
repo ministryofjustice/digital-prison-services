@@ -713,6 +713,31 @@ describe('Scheduled moves controller', () => {
         })
       })
 
+      it('should handle situation with no property user description', async () => {
+        prisonApi.getPrisonerProperty = jest.fn().mockResolvedValue([
+          {
+            location: {
+              locationId: 26169,
+              locationType: 'BOX',
+              description: 'PROP_BOXES-PB014',
+              agencyId: 'MDI',
+              parentLocationId: 26155,
+              currentOccupancy: 0,
+              locationPrefix: 'MDI-PROP_BOXES-PB014',
+              internalLocationCode: 'PB014',
+            },
+            sealMark: 'MDA646165646',
+            containerType: 'Valuables',
+          },
+        ])
+
+        await controller.index(req, res)
+
+        expectCourtEventsToContain(res, {
+          personalProperty: [{ boxNumber: 'None', containerType: 'Valuables' }],
+        })
+      })
+
       it('should return only relevant alerts', async () => {
         await controller.index(req, res)
 
@@ -1295,6 +1320,31 @@ describe('Scheduled moves controller', () => {
           })
         )
       })
+
+      it('should handle situation with no property user description', async () => {
+        prisonApi.getPrisonerProperty = jest.fn().mockResolvedValue([
+          {
+            location: {
+              locationId: 26169,
+              locationType: 'BOX',
+              description: 'PROP_BOXES-PB014',
+              agencyId: 'MDI',
+              parentLocationId: 26155,
+              currentOccupancy: 0,
+              locationPrefix: 'MDI-PROP_BOXES-PB014',
+              internalLocationCode: 'PB014',
+            },
+            sealMark: 'MDA646165646',
+            containerType: 'Valuables',
+          },
+        ])
+
+        await controller.index(req, res)
+
+        expectReleaseEventsToContain(res, {
+          personalProperty: [{ boxNumber: 'None', containerType: 'Valuables' }],
+        })
+      })
     })
 
     describe('Transfer events', () => {
@@ -1578,6 +1628,31 @@ describe('Scheduled moves controller', () => {
             ],
           })
         )
+      })
+
+      it('should handle situation with no property user description', async () => {
+        prisonApi.getPrisonerProperty = jest.fn().mockResolvedValue([
+          {
+            location: {
+              locationId: 26169,
+              locationType: 'BOX',
+              description: 'PROP_BOXES-PB014',
+              agencyId: 'MDI',
+              parentLocationId: 26155,
+              currentOccupancy: 0,
+              locationPrefix: 'MDI-PROP_BOXES-PB014',
+              internalLocationCode: 'PB014',
+            },
+            sealMark: 'MDA646165646',
+            containerType: 'Valuables',
+          },
+        ])
+
+        await controller.index(req, res)
+
+        expectTransferEventsToContain(res, {
+          personalProperty: [{ boxNumber: 'None', containerType: 'Valuables' }],
+        })
       })
     })
 
