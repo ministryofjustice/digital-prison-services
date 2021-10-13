@@ -421,8 +421,9 @@ export default class EsweService {
     }
 
     try {
+      const sort = 'endDate,desc'
       const context = await this.systemOauthClient.getClientCredentialsTokens()
-      const workActivities = await this.callActivitiesHistoryApi(context, nomisId, { page })
+      const workActivities = await this.callActivitiesHistoryApi(context, nomisId, { page, sort })
 
       const { content } = workActivities
 
