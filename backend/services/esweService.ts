@@ -140,10 +140,6 @@ export default class EsweService {
   }
 
   async getLearnerProfiles(nomisId: string): Promise<LearnerProfiles> {
-    if (!app.esweEnabled) {
-      return createFlaggedContent([])
-    }
-
     let content: curious.LearnerProfile[] = null
     try {
       const context = await this.systemOauthClient.getClientCredentialsTokens()
@@ -156,10 +152,6 @@ export default class EsweService {
   }
 
   async getNeurodiversities(nomisId: string): Promise<Neurodiversities> {
-    if (!app.esweEnabled) {
-      return createFlaggedContent(null)
-    }
-
     try {
       const context = await this.systemOauthClient.getClientCredentialsTokens()
       const profiles = await this.curiousApi.getLearnerProfiles(context, nomisId)
@@ -199,10 +191,6 @@ export default class EsweService {
   }
 
   async getLearnerLatestAssessments(nomisId: string): Promise<LearnerLatestAssessments> {
-    if (!app.esweEnabled) {
-      return createFlaggedContent({})
-    }
-
     try {
       const context = await this.systemOauthClient.getClientCredentialsTokens()
       const learnerLatestAssessments = await this.curiousApi.getLearnerLatestAssessments(context, nomisId)
@@ -250,9 +238,6 @@ export default class EsweService {
   }
 
   async getLearnerGoals(nomisId: string): Promise<OffenderGoals> {
-    if (!app.esweEnabled) {
-      return createFlaggedContent(null)
-    }
     try {
       const context = await this.systemOauthClient.getClientCredentialsTokens()
       const goals = await this.curiousApi.getLearnerGoals(context, nomisId)
@@ -281,10 +266,6 @@ export default class EsweService {
   }
 
   async getLearnerEducation(nomisId: string): Promise<CurrentCoursesEnhanced> {
-    if (!app.esweEnabled) {
-      return createFlaggedContent(null)
-    }
-
     const compareByDateAsc = (a, b) =>
       compareByDate(parseDate(a.learningPlannedEndDate), parseDate(b.learningPlannedEndDate), false)
 
@@ -326,9 +307,6 @@ export default class EsweService {
   }
 
   async getLearnerEducationFullDetails(nomisId: string): Promise<LearnerEducationFullDetails> {
-    if (!app.esweEnabled) {
-      return createFlaggedContent(null)
-    }
     try {
       const context = await this.systemOauthClient.getClientCredentialsTokens()
       const courses = await this.curiousApi.getLearnerEducation(context, nomisId)
@@ -377,10 +355,6 @@ export default class EsweService {
   }
 
   async getCurrentActivities(nomisId: string): Promise<CurrentWork> {
-    if (!app.esweEnabled) {
-      return createFlaggedContent(null)
-    }
-
     try {
       const context = await this.systemOauthClient.getClientCredentialsTokens()
       const prisonerDetails = await this.prisonApi.getPrisonerDetails(context, nomisId)
@@ -416,10 +390,6 @@ export default class EsweService {
   }
 
   async getActivitiesHistoryDetails(nomisId: string, page: number): Promise<activitiesHistory> {
-    if (!app.esweEnabled) {
-      return createFlaggedContent(null)
-    }
-
     try {
       const sort = 'endDate,desc'
       const context = await this.systemOauthClient.getClientCredentialsTokens()

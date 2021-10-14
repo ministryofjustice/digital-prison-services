@@ -65,14 +65,6 @@ describe('Education skills and work experience', () => {
   describe('learner profiles', () => {
     const nomisId = 'G2823GV'
 
-    it('should return expected learner profiles', async () => {
-      const actual = await service.getLearnerProfiles(nomisId)
-      expect(actual.enabled).toBeFalsy()
-      expect(actual.content).toHaveLength(0)
-      expect(getLearnerProfilesMock).not.toHaveBeenCalled()
-      expect(systemOauthClient.getClientCredentialsTokens).not.toHaveBeenCalled()
-    })
-
     it('should set enabled to true', async () => {
       jest.spyOn(app, 'esweEnabled', 'get').mockReturnValue(true)
 
@@ -98,16 +90,6 @@ describe('Education skills and work experience', () => {
 
   describe('Learning difficulties', () => {
     const nomisId = 'G8930UW'
-
-    it('should return null content when feature flag is disabled', async () => {
-      jest.spyOn(app, 'esweEnabled', 'get').mockReturnValue(false)
-      const actual = await service.getNeurodiversities(nomisId)
-      expect(actual.enabled).toBeFalsy()
-      expect(actual.content).toBeNull()
-      expect(getLearnerProfilesMock).not.toHaveBeenCalled()
-      expect(getLearnerEducationMock).not.toHaveBeenCalled()
-      expect(systemOauthClient.getClientCredentialsTokens).not.toHaveBeenCalled()
-    })
 
     it('should return null content on error', async () => {
       jest.spyOn(app, 'esweEnabled', 'get').mockReturnValue(true)
@@ -223,15 +205,6 @@ describe('Education skills and work experience', () => {
   describe('Courses and qualifications details', () => {
     const nomisId = 'G8930UW'
 
-    it('should return null content when feature flag is disabled', async () => {
-      jest.spyOn(app, 'esweEnabled', 'get').mockReturnValue(false)
-      const actual = await service.getLearnerEducationFullDetails(nomisId)
-      expect(actual.enabled).toBeFalsy()
-      expect(actual.content).toBeNull()
-      expect(getLearnerEducationMock).not.toHaveBeenCalled()
-      expect(systemOauthClient.getClientCredentialsTokens).not.toHaveBeenCalled()
-    })
-
     it('should return null content on error', async () => {
       jest.spyOn(app, 'esweEnabled', 'get').mockReturnValue(true)
       getLearnerEducationMock.mockRejectedValue(new Error('error'))
@@ -321,15 +294,6 @@ describe('Education skills and work experience', () => {
 
   describe('Work inside prison details', () => {
     const nomisId = 'G8930UW'
-
-    it('should return null content when feature flag is disabled', async () => {
-      jest.spyOn(app, 'esweEnabled', 'get').mockReturnValue(false)
-      const actual = await service.getActivitiesHistoryDetails(nomisId)
-      expect(actual.enabled).toBeFalsy()
-      expect(actual.content).toBeNull()
-      expect(getLearnerActivitiesHistoryMock).not.toHaveBeenCalled()
-      expect(systemOauthClient.getClientCredentialsTokens).not.toHaveBeenCalled()
-    })
     it('should return null content on error', async () => {
       jest.spyOn(app, 'esweEnabled', 'get').mockReturnValue(true)
       getLearnerActivitiesHistoryMock.mockRejectedValue(new Error('error'))
@@ -540,14 +504,6 @@ describe('Education skills and work experience', () => {
     })
     describe('Goals', () => {
       const nomisId = 'G3609VL'
-      it('should return null when feature flag is disabled', async () => {
-        jest.spyOn(app, 'esweEnabled', 'get').mockReturnValue(false)
-        const actual = await service.getLearnerGoals(nomisId)
-        expect(actual.enabled).toBeFalsy()
-        expect(actual.content).toBeNull()
-        expect(getLearnerGoalsMock).not.toHaveBeenCalled()
-        expect(systemOauthClient.getClientCredentialsTokens).not.toHaveBeenCalled()
-      })
       it('should return null content on error', async () => {
         jest.spyOn(app, 'esweEnabled', 'get').mockReturnValue(true)
         getLearnerGoalsMock.mockRejectedValue(new Error('error'))
@@ -609,14 +565,6 @@ describe('Education skills and work experience', () => {
     })
     describe('Courses and qualifications', () => {
       const nomisId = 'G3609VL'
-      it('should return null when feature flag is disabled', async () => {
-        jest.spyOn(app, 'esweEnabled', 'get').mockReturnValue(false)
-        const actual = await service.getLearnerEducation(nomisId)
-        expect(actual.enabled).toBeFalsy()
-        expect(actual.content).toBeNull()
-        expect(getLearnerEducationMock).not.toHaveBeenCalled()
-        expect(systemOauthClient.getClientCredentialsTokens).not.toHaveBeenCalled()
-      })
       it('should return null content on error', async () => {
         jest.spyOn(app, 'esweEnabled', 'get').mockReturnValue(true)
         getLearnerEducationMock.mockRejectedValue(new Error('error'))
@@ -720,15 +668,6 @@ describe('Education skills and work experience', () => {
     })
     describe('Work inside prison', () => {
       const nomisId = 'G3609VL'
-      it('should return null when feature flag is disabled', async () => {
-        jest.spyOn(app, 'esweEnabled', 'get').mockReturnValue(false)
-        const actual = await service.getCurrentActivities(nomisId)
-        expect(actual.enabled).toBeFalsy()
-        expect(actual.content).toBeNull()
-        expect(getLearnerEducationMock).not.toHaveBeenCalled()
-        expect(getPrisonerDetailsMock).not.toHaveBeenCalled()
-        expect(systemOauthClient.getClientCredentialsTokens).not.toHaveBeenCalled()
-      })
       it('should return null content on work history api error', async () => {
         jest.spyOn(app, 'esweEnabled', 'get').mockReturnValue(true)
         getLearnerActivitiesHistoryMock.mockRejectedValue(new Error('error'))

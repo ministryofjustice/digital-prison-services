@@ -83,11 +83,6 @@ describe('Prisoner work and skills controller', () => {
       esweService,
     })
   })
-  it('should redirect to prisoner profile if esweEnabled is false', async () => {
-    jest.spyOn(app, 'esweEnabled', 'get').mockReturnValue(false)
-    await controller(req, res)
-    expect(res.render).toHaveBeenCalledTimes(0)
-  })
   it('should make expected calls and render the right template', async () => {
     jest.spyOn(app, 'esweEnabled', 'get').mockReturnValue(true)
     await controller(req, res)
