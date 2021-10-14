@@ -52,6 +52,8 @@ const isScheduled = (eventStatus: string): boolean => eventStatus === 'SCH'
 const countResultsOncePerPrisonerNumber = (events: Event[]): number =>
   [...new Set(events.flatMap((event) => event.prisonerNumber))].length
 
+const onlyActiveIn = (result: PrisonerSearchResult): boolean => result?.status === 'ACTIVE IN'
+
 export default ({ prisonApi, offenderSearchApi }) => {
   const renderTemplate = (res, { date, agencyDetails, courtEvents, releaseEvents, transferEvents, scheduledType }) =>
     res.render('whereabouts/scheduledMoves.njk', {
@@ -215,12 +217,20 @@ export default ({ prisonApi, offenderSearchApi }) => {
       uniqueOffenderNumbers
     )
 
+    const prisonerDetailsForOffenderNumbersThatAreActivelyInside =
+      prisonerDetailsForOffenderNumbers.filter(onlyActiveIn)
+
     const scheduledMoveDetailsForPrisoners: Array<ScheduledMovementDetails> = await getScheduledMovementDetails(
       res.locals,
-      prisonerDetailsForOffenderNumbers
+      prisonerDetailsForOffenderNumbersThatAreActivelyInside
     )
 
+    const prisonerNumbersForOffenderNumbersThatAreOutside = prisonerDetailsForOffenderNumbers
+      .filter((r) => !onlyActiveIn(r))
+      .map((r) => r.prisonerNumber)
+
     const courtEvents = scheduledMovements.courtEvents
+      .filter((courtEvent) => !prisonerNumbersForOffenderNumbersThatAreOutside.includes(courtEvent.offenderNo))
       .filter((_) => !scheduledType || scheduledType === 'Court')
       .filter((courtEvent) => !isVideoLinkBooking(courtEvent.eventSubType) && isScheduled(courtEvent.eventStatus))
       .map((courtEvent) => ({
@@ -231,6 +241,7 @@ export default ({ prisonApi, offenderSearchApi }) => {
       .sort((left, right) => left.name?.localeCompare(right.name))
 
     const releaseEvents = scheduledMovements.releaseEvents
+      .filter((releaseEvent) => !prisonerNumbersForOffenderNumbersThatAreOutside.includes(releaseEvent.offenderNo))
       .filter((_) => !scheduledType || scheduledType === 'Releases')
       .filter((releaseEvent) => isScheduled(releaseEvent.eventStatus))
       .map((re) => ({
@@ -239,6 +250,7 @@ export default ({ prisonApi, offenderSearchApi }) => {
       }))
 
     const transferEvents = scheduledMovements.transferEvents
+      .filter((transferEvent) => !prisonerNumbersForOffenderNumbersThatAreOutside.includes(transferEvent.offenderNo))
       .filter((_) => !scheduledType || scheduledType === 'Transfers')
       .filter(
         (transferEvent) => !isVideoLinkBooking(transferEvent.eventSubType) && isScheduled(transferEvent.eventStatus)
