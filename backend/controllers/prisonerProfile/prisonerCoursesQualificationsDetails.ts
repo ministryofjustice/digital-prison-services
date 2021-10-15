@@ -23,10 +23,6 @@ export default ({ prisonApi, esweService }) =>
   async (req, res) => {
     const { offenderNo } = req.params
 
-    if (!app.esweEnabled) {
-      return res.redirect(`/prisoner/${offenderNo}`)
-    }
-
     try {
       const [prisonerDetails, coursesAndQualifications]: [PrisonerDetails, CoursesAndQuals] = await Promise.all([
         prisonApi.getDetails(res.locals, offenderNo),

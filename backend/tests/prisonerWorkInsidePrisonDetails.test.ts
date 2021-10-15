@@ -57,11 +57,6 @@ describe('Prisoner work inside prison details controller', () => {
       esweService,
     })
   })
-  it('should redirect to prisoner profile if esweEnabled is false', async () => {
-    jest.spyOn(app, 'esweEnabled', 'get').mockReturnValue(false)
-    await controller(req, res)
-    expect(res.render).toHaveBeenCalledTimes(0)
-  })
   it('should make expected calls and render the right template', async () => {
     const prisonerName = 'Apoustius Ignian'
     const breadcrumbPrisonerName = 'Ignian, Apoustius'
