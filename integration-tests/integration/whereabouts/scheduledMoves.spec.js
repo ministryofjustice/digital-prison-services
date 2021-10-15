@@ -98,7 +98,7 @@ const holdAgainstTransferAlerts = [
   },
 ]
 
-const holdAgainstTransferAlertDetailsReponse = [
+const holdAgainstTransferAlertDetailsResponse = [
   {
     alertId: 3,
     bookingId: 42739,
@@ -173,6 +173,7 @@ const prisonerSearchDetailsForCourtEvents = [
     firstName: 'BOB',
     lastName: 'COB',
     cellLocation: '1-2-006',
+    status: 'ACTIVE IN',
     alerts,
   },
 ]
@@ -184,6 +185,7 @@ const prisonerSearchDetailsForReleaseEvents = [
     firstName: 'DAVE',
     lastName: 'SHAVE',
     cellLocation: '1-2-008',
+    status: 'ACTIVE IN',
     alerts,
   },
 ]
@@ -195,6 +197,7 @@ const prisonerSearchDetailsForTransferEvents = [
     firstName: 'MARK',
     lastName: 'SHARK',
     cellLocation: '1-2-007',
+    status: 'ACTIVE IN',
     alerts: alerts.concat(holdAgainstTransferAlerts),
   },
 ]
@@ -366,7 +369,7 @@ context('Scheduled movements', () => {
         })
         cy.task('stubPrisonerSearchDetails', prisonerSearchDetailsForTransferEvents)
         cy.task('stubPrisonerProperty', propertyResponse)
-        cy.task('stubAlertsForLatestBooking', holdAgainstTransferAlertDetailsReponse)
+        cy.task('stubAlertsForLatestBooking', holdAgainstTransferAlertDetailsResponse)
       })
 
       it('should display releases in the table correctly', () => {

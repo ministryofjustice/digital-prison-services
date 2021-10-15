@@ -11,6 +11,7 @@ export type PrisonerSearchResult = {
   bookingId: number
   prisonerNumber: string
   cellLocation: string
+  status: string
   alerts: Array<Alert>
 }
 
