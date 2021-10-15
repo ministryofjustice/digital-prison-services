@@ -174,6 +174,22 @@ export default ({ prisonApi, offenderSearchApi }) => {
     })
   }
 
+  const toScheduledEventWithADestination = ({
+    events,
+    prisonerNumbersForOffenderNumbersThatAreOutside,
+    scheduledMoveDetailsForPrisoners,
+    movementReasons,
+  }) =>
+    events
+      .filter((event) => !prisonerNumbersForOffenderNumbersThatAreOutside.includes(event.offenderNo))
+      .filter((event) => !isVideoLinkBooking(event.eventSubType) && isScheduled(event.eventStatus))
+      .map((event) => ({
+        ...scheduledMoveDetailsForPrisoners.find((sr) => sr.prisonerNumber === event.offenderNo),
+        reasonDescription: movementReasons.find((reason) => reason.code === event.eventSubType)?.description,
+        destinationLocationDescription: event.toAgencyDescription,
+      }))
+      .sort((left, right) => left.name?.localeCompare(right.name))
+
   const index = async (req, res) => {
     const { userDetails } = req.session
     const { activeCaseLoadId } = userDetails
@@ -229,36 +245,29 @@ export default ({ prisonApi, offenderSearchApi }) => {
       .filter((r) => !onlyActiveIn(r))
       .map((r) => r.prisonerNumber)
 
-    const courtEvents = scheduledMovements.courtEvents
-      .filter((_) => !scheduledType || scheduledType === 'Court')
-      .filter((courtEvent) => !prisonerNumbersForOffenderNumbersThatAreOutside.includes(courtEvent.offenderNo))
-      .filter((courtEvent) => !isVideoLinkBooking(courtEvent.eventSubType) && isScheduled(courtEvent.eventStatus))
-      .map((courtEvent) => ({
-        ...scheduledMoveDetailsForPrisoners.find((sr) => sr.prisonerNumber === courtEvent.offenderNo),
-        reasonDescription: movementReasons.find((reason) => reason.code === courtEvent.eventSubType)?.description,
-        destinationLocationDescription: courtEvent.toAgencyDescription,
-      }))
-      .sort((left, right) => left.name?.localeCompare(right.name))
+    const allCourtEvents = scheduledType && scheduledType !== 'Court' ? [] : scheduledMovements.courtEvents
+    const courtEvents = toScheduledEventWithADestination({
+      events: allCourtEvents,
+      prisonerNumbersForOffenderNumbersThatAreOutside,
+      scheduledMoveDetailsForPrisoners,
+      movementReasons,
+    })
 
-    const releaseEvents = scheduledMovements.releaseEvents
-      .filter((_) => !scheduledType || scheduledType === 'Releases')
+    const allTransferEvents = scheduledType && scheduledType !== 'Transfers' ? [] : scheduledMovements.transferEvents
+    const transferEvents = toScheduledEventWithADestination({
+      events: allTransferEvents,
+      prisonerNumbersForOffenderNumbersThatAreOutside,
+      scheduledMoveDetailsForPrisoners,
+      movementReasons,
+    })
+
+    const allReleaseEvents = scheduledType && scheduledType !== 'Releases' ? [] : scheduledMovements.releaseEvents
+    const releaseEvents = allReleaseEvents
       .filter((releaseEvent) => !prisonerNumbersForOffenderNumbersThatAreOutside.includes(releaseEvent.offenderNo))
       .filter((releaseEvent) => isScheduled(releaseEvent.eventStatus))
       .map((re) => ({
         ...scheduledMoveDetailsForPrisoners.find((sr) => sr.prisonerNumber === re.offenderNo),
         reasonDescription: re.movementReasonDescription,
-      }))
-
-    const transferEvents = scheduledMovements.transferEvents
-      .filter((_) => !scheduledType || scheduledType === 'Transfers')
-      .filter((transferEvent) => !prisonerNumbersForOffenderNumbersThatAreOutside.includes(transferEvent.offenderNo))
-      .filter(
-        (transferEvent) => !isVideoLinkBooking(transferEvent.eventSubType) && isScheduled(transferEvent.eventStatus)
-      )
-      .map((transferEvent) => ({
-        ...scheduledMoveDetailsForPrisoners.find((sr) => sr.prisonerNumber === transferEvent.offenderNo),
-        reasonDescription: movementReasons.find((reason) => reason.code === transferEvent.eventSubType)?.description,
-        destinationLocationDescription: transferEvent.toAgencyDescription,
       }))
 
     return renderTemplate(res, {
