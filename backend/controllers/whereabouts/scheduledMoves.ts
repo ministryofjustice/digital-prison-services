@@ -230,8 +230,8 @@ export default ({ prisonApi, offenderSearchApi }) => {
       .map((r) => r.prisonerNumber)
 
     const courtEvents = scheduledMovements.courtEvents
-      .filter((courtEvent) => !prisonerNumbersForOffenderNumbersThatAreOutside.includes(courtEvent.offenderNo))
       .filter((_) => !scheduledType || scheduledType === 'Court')
+      .filter((courtEvent) => !prisonerNumbersForOffenderNumbersThatAreOutside.includes(courtEvent.offenderNo))
       .filter((courtEvent) => !isVideoLinkBooking(courtEvent.eventSubType) && isScheduled(courtEvent.eventStatus))
       .map((courtEvent) => ({
         ...scheduledMoveDetailsForPrisoners.find((sr) => sr.prisonerNumber === courtEvent.offenderNo),
@@ -241,8 +241,8 @@ export default ({ prisonApi, offenderSearchApi }) => {
       .sort((left, right) => left.name?.localeCompare(right.name))
 
     const releaseEvents = scheduledMovements.releaseEvents
-      .filter((releaseEvent) => !prisonerNumbersForOffenderNumbersThatAreOutside.includes(releaseEvent.offenderNo))
       .filter((_) => !scheduledType || scheduledType === 'Releases')
+      .filter((releaseEvent) => !prisonerNumbersForOffenderNumbersThatAreOutside.includes(releaseEvent.offenderNo))
       .filter((releaseEvent) => isScheduled(releaseEvent.eventStatus))
       .map((re) => ({
         ...scheduledMoveDetailsForPrisoners.find((sr) => sr.prisonerNumber === re.offenderNo),
@@ -250,8 +250,8 @@ export default ({ prisonApi, offenderSearchApi }) => {
       }))
 
     const transferEvents = scheduledMovements.transferEvents
-      .filter((transferEvent) => !prisonerNumbersForOffenderNumbersThatAreOutside.includes(transferEvent.offenderNo))
       .filter((_) => !scheduledType || scheduledType === 'Transfers')
+      .filter((transferEvent) => !prisonerNumbersForOffenderNumbersThatAreOutside.includes(transferEvent.offenderNo))
       .filter(
         (transferEvent) => !isVideoLinkBooking(transferEvent.eventSubType) && isScheduled(transferEvent.eventStatus)
       )
