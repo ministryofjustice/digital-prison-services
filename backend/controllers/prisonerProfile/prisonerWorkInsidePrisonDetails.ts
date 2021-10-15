@@ -27,10 +27,6 @@ export default ({ paginationService, prisonApi, esweService }) =>
     const pageOffset = (pageOffsetOption && parseInt(pageOffsetOption, 10)) || 0
     const page = pageOffset / 20
 
-    if (!app.esweEnabled) {
-      return res.redirect(`/prisoner/${offenderNo}`)
-    }
-
     try {
       const [prisonerDetails, activitiesHistory]: [PrisonerDetails, activitiesInPrison] = await Promise.all([
         prisonApi.getDetails(res.locals, offenderNo),

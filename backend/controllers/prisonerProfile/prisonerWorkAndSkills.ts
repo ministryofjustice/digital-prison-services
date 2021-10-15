@@ -5,10 +5,6 @@ export default ({ prisonerProfileService, esweService }) =>
   async (req, res) => {
     const { offenderNo } = req.params
 
-    if (!app.esweEnabled) {
-      return res.redirect(`/prisoner/${offenderNo}`)
-    }
-
     const [prisonerProfileData, functionalSkillLevels, targets, coursesAndQualifications, currentWork] =
       await Promise.all(
         [
