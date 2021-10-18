@@ -92,7 +92,7 @@
 
 {% if neurodiversities.enabled %}
   {% set leftSections = (
-      leftSections.push({ heading: 'Disabilities and adjustments', html: careNeedsContent }),
+      leftSections.push({ heading: 'Disabilities and adjustments', html: careNeedsContent, education: true }),
       leftSections
   ) %}
 {% else %}
@@ -121,16 +121,20 @@
     <div class="govuk-grid-row">
       <div class="govuk-grid-column-one-half">
         {% for section in leftSections %}
-          {{ accordionSection(section.heading, section.html, loop.index) }}
+          {{ accordionSection(section.heading, section.html, loop.index, section.education) }}
         {% endfor %}
       </div>
 
       <div class="govuk-grid-column-one-half">
         {% for section in rightSections %}
           {% set overallIndex = leftSections.length + loop.index %}
-          {{ accordionSection(section.heading, section.html, overallIndex) }}
+          {{ accordionSection(section.heading, section.html, overallIndex, section.education) }}
         {% endfor %}
       </div>
     </div>
   </div>
+{% endblock %}
+
+{% block pageScripts %}
+    <script src="/static/js/education-actions.js"></script>
 {% endblock %}
