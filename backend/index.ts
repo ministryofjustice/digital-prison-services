@@ -29,6 +29,7 @@ import errorHandler from './middleware/errorHandler'
 import { logError } from './logError'
 import homepageController from './controllers/homepage/homepage'
 import deprecatedUrlPage from './controllers/deprecatedUrlPage'
+import requestLimiter from './middleware/requestLimiter'
 
 const app = express()
 
@@ -57,6 +58,8 @@ if (!config.app.disableWebpack) {
   // eslint-disable-next-line global-require
   app.use(require('./setupWebpackForDev').default())
 }
+
+app.use(requestLimiter())
 
 app.use(
   setupApiRoutes({
