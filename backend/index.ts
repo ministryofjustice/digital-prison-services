@@ -59,7 +59,7 @@ if (!config.app.disableWebpack) {
   app.use(require('./setupWebpackForDev').default())
 }
 
-if (config.app.enableRequestLimiter) app.use(requestLimiter())
+if (!config.app.disableRequestLimiter) app.use(requestLimiter())
 
 app.use(
   setupApiRoutes({
