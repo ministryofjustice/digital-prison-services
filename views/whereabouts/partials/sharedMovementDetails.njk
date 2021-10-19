@@ -2,7 +2,7 @@
 {% from "../../macros/holdAgainstTransferAlertLink.njk" import holdAgainstTransferAlertLink %}
 
 {% macro prisonerProfileLink(prisonerNumber, text) %}
-    <a href="{{ "/prisoner/" + prisonerNumber }}" class="govuk-link govuk-body"
+    <a href="{{ "/prisoner/" + prisonerNumber }}" class="govuk-link"
        data-test="cell-details-link">{{ text }}</a>
 {% endmacro %}
 

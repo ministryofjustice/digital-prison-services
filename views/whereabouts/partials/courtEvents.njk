@@ -1,3 +1,5 @@
+{% from "../../macros/holdAgainstTransferDetailsDialog.njk" import holdAgainstTransferDetailsDialog %}
+
 <h2 class="govuk-heading-s">Court appearances</h2>
 {% if courtEvents.length !== 0 %}
     {% set courtEventRows = [] %}
@@ -12,7 +14,7 @@
         ]), courtEventRows) %}
     {% endfor %}
 
-    <p class="govuk-body pull-right"><strong>Prisoners listed:</strong> {{ courtEventRows.length }}</p>
+    <p class="govuk-body pull-right"><strong>Prisoners listed:</strong> {{ prisonersListedForCourt }}</p>
     {{ govukTable({
         head: [
             {
@@ -41,6 +43,12 @@
         rows: courtEventRows,
         attributes: { "id": "court-events-table", "data-qa": "court-events-table" }
     }) }}
+
+    {% for event in courtEvents %}
+        {% if event.holdAgainstTransferAlerts %}
+            {{ holdAgainstTransferDetailsDialog(event.holdAgainstTransferAlerts) }}
+        {% endif %}
+    {% endfor %}
 {% else %}
     <p id="no-court-events">
         There are no court appearances arranged for {{ dateForTitle }}

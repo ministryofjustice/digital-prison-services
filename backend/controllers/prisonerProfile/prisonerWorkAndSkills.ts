@@ -5,10 +5,6 @@ export default ({ prisonerProfileService, esweService }) =>
   async (req, res) => {
     const { offenderNo } = req.params
 
-    if (!app.esweEnabled) {
-      return res.redirect(`/prisoner/${offenderNo}`)
-    }
-
     const [prisonerProfileData, functionalSkillLevels, targets, coursesAndQualifications, currentWork] =
       await Promise.all(
         [
@@ -16,7 +12,7 @@ export default ({ prisonerProfileService, esweService }) =>
           esweService.getLearnerLatestAssessments(offenderNo),
           esweService.getLearnerGoals(offenderNo),
           esweService.getLearnerEducation(offenderNo),
-          esweService.getCurrentWork(offenderNo),
+          esweService.getCurrentActivities(offenderNo),
         ].map((apiCall) => logErrorAndContinue(apiCall))
       )
 

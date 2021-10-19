@@ -1,3 +1,5 @@
+{% from "../../macros/holdAgainstTransferDetailsDialog.njk" import holdAgainstTransferDetailsDialog %}
+
 <h2 class="govuk-heading-s">Releases</h2>
 {% if releaseEvents.length !== 0 %}
     {% set releaseEventRows = [] %}
@@ -11,7 +13,7 @@
         ]), releaseEventRows) %}
     {% endfor %}
 
-    <p class="govuk-body pull-right"><strong>Prisoners listed:</strong> {{ releaseEventRows.length }}</p>
+    <p class="govuk-body pull-right"><strong>Prisoners listed:</strong> {{ prisonersListedForRelease }}</p>
     {{ govukTable({
         head: [
             {
@@ -36,6 +38,12 @@
         rows: releaseEventRows,
         attributes: { "id": "release-events-table" , "data-qa": "release-events-table" }
     }) }}
+
+    {% for event in releaseEvents %}
+        {% if event.holdAgainstTransferAlerts %}
+            {{ holdAgainstTransferDetailsDialog(event.holdAgainstTransferAlerts) }}
+        {% endif %}
+    {% endfor %}
 {% else %}
     <p id="no-release-events">
         There are no releases arranged for {{ dateForTitle }}

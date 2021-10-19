@@ -109,6 +109,29 @@ const courtEventsWithoutTransferOnHoldAlerts = [
     bookingInOutStatus: 'IN',
   },
 ]
+const courtEventsWithOnlyInactiveTransferOnHoldAlerts = [
+  {
+    offenderNo: 'G1234CC',
+    createDateTime: '2021-09-24T09:22:21.350125',
+    eventId: 449548212,
+    fromAgency: 'MDI',
+    fromAgencyDescription: 'Moorland (HMP & YOI)',
+    toAgency: 'ABDSUM',
+    toAgencyDescription: "Aberdeen Sheriff's Court (ABDSHF)",
+    eventDate: '2021-09-29',
+    startTime: '2021-09-29T21:00:00',
+    endTime: null,
+    eventClass: 'EXT_MOV',
+    eventType: 'CRT',
+    eventSubType: 'CRT',
+    eventStatus: 'SCH',
+    judgeName: null,
+    directionCode: 'OUT',
+    commentText: null,
+    bookingActiveFlag: true,
+    bookingInOutStatus: 'IN',
+  },
+]
 
 const alerts = [
   {
@@ -168,6 +191,7 @@ const prisonerSearchResult = [
     firstName: 'BOB',
     lastName: 'COB',
     cellLocation: '1-2-006',
+    status: 'ACTIVE IN',
     alerts,
   },
   {
@@ -176,6 +200,7 @@ const prisonerSearchResult = [
     firstName: 'MARK',
     lastName: 'SHARK',
     cellLocation: '1-2-007',
+    status: 'ACTIVE IN',
     alerts,
   },
   {
@@ -184,6 +209,7 @@ const prisonerSearchResult = [
     firstName: 'DAVE',
     lastName: 'SHAVE',
     cellLocation: '1-2-008',
+    status: 'ACTIVE IN',
     alerts,
   },
   {
@@ -192,11 +218,20 @@ const prisonerSearchResult = [
     firstName: 'D',
     lastName: 'S',
     cellLocation: 'CSWAP',
+    status: 'ACTIVE IN',
     alerts: [],
+  },
+  {
+    prisonerNumber: 'A112233',
+    bookingId: 4,
+    firstName: 'FREE',
+    lastName: 'PERSON',
+    status: 'ACTIVE IN',
+    alerts,
   },
 ]
 
-const holdAgainstTransferAlertDetailsReponse = [
+const holdAgainstTransferAlertDetailsResponse = [
   {
     alertId: 3,
     bookingId: 42739,
@@ -211,6 +246,22 @@ const holdAgainstTransferAlertDetailsReponse = [
     active: true,
     addedByFirstName: 'ODRAHOON',
     addedByLastName: 'MARSHALD',
+    expiredByFirstName: 'ADMIN&ONB',
+    expiredByLastName: 'CNOMIS',
+  },
+  {
+    alertId: 2,
+    bookingId: 42739,
+    offenderNo: 'G0204GW',
+    alertType: 'T',
+    alertTypeDescription: 'Hold Against Transfer',
+    alertCode: 'TCPA',
+    alertCodeDescription: 'Security Hold',
+    dateCreated: '2009-08-27',
+    expired: true,
+    active: false,
+    addedByFirstName: 'XTAG',
+    addedByLastName: 'XTAG',
     expiredByFirstName: 'ADMIN&ONB',
     expiredByLastName: 'CNOMIS',
   },
@@ -248,7 +299,49 @@ const prisonerSearchResultWithoutHoldOnTransfer = [
     firstName: 'TIM',
     lastName: 'SMITH',
     cellLocation: '1-2-009',
+    status: 'ACTIVE IN',
     alerts: alertsWithoutHoldOnTransfer,
+  },
+]
+
+const alertsWithInactiveHoldOnTransfer = [
+  {
+    alertType: 'T',
+    alertCode: 'TAH',
+    active: false,
+    expired: true,
+  },
+]
+
+const prisonerSearchResultWithOnlyInactiveHoldOnTransfer = [
+  {
+    prisonerNumber: 'G1234CC',
+    bookingId: 5,
+    firstName: 'DAN',
+    lastName: 'SMITT',
+    cellLocation: '1-2-010',
+    alerts: alertsWithInactiveHoldOnTransfer,
+    status: 'ACTIVE IN',
+  },
+]
+
+const holdAgainstTransferWithOnlyInactiveAlertDetailsResponse = [
+  {
+    alertId: 1,
+    bookingId: 42739,
+    offenderNo: 'G1234CC',
+    alertType: 'T',
+    alertTypeDescription: 'Hold Against Transfer',
+    alertCode: 'TAH',
+    alertCodeDescription: 'Allocation Hold',
+    comment: 'Comment text here',
+    dateCreated: '2009-11-24',
+    expired: true,
+    active: false,
+    addedByFirstName: 'ODRAHOON',
+    addedByLastName: 'MARSHALD',
+    expiredByFirstName: 'ADMIN&ONB',
+    expiredByLastName: 'CNOMIS',
   },
 ]
 
@@ -348,7 +441,7 @@ describe('Scheduled moves controller', () => {
       releaseEvents: [],
     })
     prisonApi.getPrisonerProperty = jest.fn().mockResolvedValue(propertyResponse)
-    prisonApi.getAlertsForLatestBooking = jest.fn().mockResolvedValue(holdAgainstTransferAlertDetailsReponse)
+    prisonApi.getAlertsForLatestBooking = jest.fn().mockResolvedValue(holdAgainstTransferAlertDetailsResponse)
 
     offenderSearchApi.getPrisonersDetails = jest.fn().mockResolvedValue(prisonerSearchResult)
 
@@ -575,6 +668,146 @@ describe('Scheduled moves controller', () => {
       expect(offenderSearchApi.getPrisonersDetails).toHaveBeenLastCalledWith(res.locals, ['A12234'])
     })
 
+    describe('Ignore prisoners that are outside', () => {
+      const assertOnlyRequestAdditionalDataForPrisonersInPrison = () => {
+        expect(prisonApi.getPrisonerProperty).toHaveBeenCalledTimes(1)
+        expect(prisonApi.getAlertsForLatestBooking).toHaveBeenCalledTimes(1)
+        expect(prisonApi.getPrisonerProperty).toHaveBeenCalledWith(res.locals, 1)
+        expect(prisonApi.getAlertsForLatestBooking).toHaveBeenCalledWith(
+          res.locals,
+          expect.objectContaining({
+            offenderNo: 'A12345',
+          })
+        )
+      }
+
+      beforeEach(() => {
+        offenderSearchApi.getPrisonersDetails = jest.fn().mockResolvedValue([
+          {
+            prisonerNumber: 'A12345',
+            bookingId: 1,
+            status: 'ACTIVE IN',
+            firstName: 'firstName1',
+            lastName: 'lastName1',
+            alerts: [{ alertType: 'T', alertTypeDescription: 'Hold Against Transfer', alertCode: 'TAH' }],
+          },
+          {
+            prisonerNumber: 'A12346',
+            status: 'ACTIVE OUT',
+            firstName: 'firstName2',
+            lastName: 'lastName2',
+            alert: [],
+          },
+        ])
+      })
+
+      describe('Court events', () => {
+        beforeEach(() => {
+          prisonApi.getTransfers = jest.fn().mockResolvedValue({
+            courtEvents: [
+              { offenderNo: 'A12345', eventStatus: 'SCH' },
+              { offenderNo: 'A12346', eventStatus: 'SCH' },
+            ],
+            releaseEvents: [],
+            transferEvents: [],
+          })
+        })
+
+        it('should return only one court event', async () => {
+          await controller.index(req, res)
+
+          expect(res.render).toHaveBeenLastCalledWith(
+            expect.anything(),
+            expect.objectContaining({
+              courtEvents: [
+                expect.objectContaining({
+                  cellLocation: 'None',
+                  name: 'Lastname1, Firstname1 - A12345',
+                  prisonerNumber: 'A12345',
+                }),
+              ],
+            })
+          )
+        })
+
+        it('only enhance court events for prisoners actively inside', async () => {
+          await controller.index(req, res)
+
+          assertOnlyRequestAdditionalDataForPrisonersInPrison()
+        })
+      })
+
+      describe('Transfer events', () => {
+        beforeEach(() => {
+          prisonApi.getTransfers = jest.fn().mockResolvedValue({
+            courtEvents: [],
+            releaseEvents: [],
+            transferEvents: [
+              { offenderNo: 'A12345', eventStatus: 'SCH' },
+              { offenderNo: 'A12346', eventStatus: 'SCH' },
+            ],
+          })
+        })
+
+        it('should return only one transfer event', async () => {
+          await controller.index(req, res)
+
+          expect(res.render).toHaveBeenLastCalledWith(
+            expect.anything(),
+            expect.objectContaining({
+              transferEvents: [
+                expect.objectContaining({
+                  cellLocation: 'None',
+                  name: 'Lastname1, Firstname1 - A12345',
+                  prisonerNumber: 'A12345',
+                }),
+              ],
+            })
+          )
+        })
+        it('only enhance transfer events for prisoners actively inside', async () => {
+          await controller.index(req, res)
+
+          assertOnlyRequestAdditionalDataForPrisonersInPrison()
+        })
+      })
+
+      describe('Release events', () => {
+        beforeEach(() => {
+          prisonApi.getTransfers = jest.fn().mockResolvedValue({
+            courtEvents: [],
+            releaseEvents: [
+              { offenderNo: 'A12345', eventStatus: 'SCH' },
+              { offenderNo: 'A12346', eventStatus: 'SCH' },
+            ],
+            transferEvents: [],
+          })
+        })
+
+        it('should return only one release event', async () => {
+          await controller.index(req, res)
+
+          expect(res.render).toHaveBeenLastCalledWith(
+            expect.anything(),
+            expect.objectContaining({
+              releaseEvents: [
+                expect.objectContaining({
+                  cellLocation: 'None',
+                  name: 'Lastname1, Firstname1 - A12345',
+                  prisonerNumber: 'A12345',
+                }),
+              ],
+            })
+          )
+        })
+        it('only enhance release events for prisoners actively inside', async () => {
+          await controller.index(req, res)
+
+          assertOnlyRequestAdditionalDataForPrisonersInPrison()
+        })
+      })
+    })
+
     describe('Court events', () => {
       beforeEach(() => {
         prisonApi.getTransfers = jest.fn().mockResolvedValue({
@@ -614,6 +847,41 @@ describe('Scheduled moves controller', () => {
               boxNumber: 'Box 15',
             },
           ],
+        })
+      })
+
+      it('should handle situation with no property', async () => {
+        prisonApi.getPrisonerProperty = jest.fn().mockResolvedValue([])
+
+        await controller.index(req, res)
+
+        expectCourtEventsToContain(res, {
+          personalProperty: [],
+        })
+      })
+
+      it('should handle situation with no property user description', async () => {
+        prisonApi.getPrisonerProperty = jest.fn().mockResolvedValue([
+          {
+            location: {
+              locationId: 26169,
+              locationType: 'BOX',
+              description: 'PROP_BOXES-PB014',
+              agencyId: 'MDI',
+              parentLocationId: 26155,
+              currentOccupancy: 0,
+              locationPrefix: 'MDI-PROP_BOXES-PB014',
+              internalLocationCode: 'PB014',
+            },
+            sealMark: 'MDA646165646',
+            containerType: 'Valuables',
+          },
+        ])
+
+        await controller.index(req, res)
+
+        expectCourtEventsToContain(res, {
+          personalProperty: [{ boxNumber: 'None', containerType: 'Valuables' }],
         })
       })
 
@@ -848,6 +1116,72 @@ describe('Scheduled moves controller', () => {
           })
         )
       })
+
+      it('should return a count of unique prisoners scheduled to attend court', async () => {
+        prisonApi.getTransfers = jest.fn().mockResolvedValue({
+          courtEvents: [
+            { offenderNo: 'A12234', eventSubType: 'CTR', eventStatus: 'SCH' },
+            { offenderNo: 'A12234', eventSubType: 'CTR', eventStatus: 'SCH' },
+          ],
+          transferEvents: [],
+          releaseEvents: [],
+        })
+
+        req.query.movementReason = 'Court'
+
+        await controller.index(req, res)
+
+        expect(res.render).toHaveBeenLastCalledWith(
+          expect.anything(),
+          expect.objectContaining({
+            prisonersListedForCourt: 1,
+          })
+        )
+      })
+
+      it('should return a count of unique prisoners scheduled to be released', async () => {
+        prisonApi.getTransfers = jest.fn().mockResolvedValue({
+          courtEvents: [],
+          transferEvents: [],
+          releaseEvents: [
+            { offenderNo: 'A12234', eventSubType: 'CR', eventStatus: 'SCH' },
+            { offenderNo: 'A12234', eventSubType: 'CR', eventStatus: 'SCH' },
+          ],
+        })
+
+        req.query.movementReason = 'Court'
+
+        await controller.index(req, res)
+
+        expect(res.render).toHaveBeenLastCalledWith(
+          expect.anything(),
+          expect.objectContaining({
+            prisonersListedForRelease: 1,
+          })
+        )
+      })
+
+      it('should return a count of unique prisoners scheduled to be transferred', async () => {
+        prisonApi.getTransfers = jest.fn().mockResolvedValue({
+          courtEvents: [],
+          transferEvents: [
+            { offenderNo: 'A12234', eventSubType: 'NTOR', eventStatus: 'SCH' },
+            { offenderNo: 'A12234', eventSubType: 'NTOR', eventStatus: 'SCH' },
+          ],
+          releaseEvents: [],
+        })
+
+        req.query.movementReason = 'Court'
+
+        await controller.index(req, res)
+
+        expect(res.render).toHaveBeenLastCalledWith(
+          expect.anything(),
+          expect.objectContaining({
+            prisonersListedForTransfer: 1,
+          })
+        )
+      })
     })
 
     describe('Release events', () => {
@@ -888,6 +1222,16 @@ describe('Scheduled moves controller', () => {
               boxNumber: 'Box 15',
             },
           ],
+        })
+      })
+
+      it('should handle situation with no property', async () => {
+        prisonApi.getPrisonerProperty = jest.fn().mockResolvedValue([])
+
+        await controller.index(req, res)
+
+        expectReleaseEventsToContain(res, {
+          personalProperty: [],
         })
       })
 
@@ -1093,6 +1437,61 @@ describe('Scheduled moves controller', () => {
           })
         )
       })
+
+      it('should show None when no cell is configured', async () => {
+        prisonApi.getTransfers = jest.fn().mockResolvedValue({
+          courtEvents: [],
+          transferEvents: [],
+          releaseEvents: [
+            {
+              offenderNo: 'A112233',
+              createDateTime: '2016-11-07T15:13:59.268001',
+              fromAgencyDescription: 'Moorland (HMP & YOI)',
+              eventStatus: 'SCH',
+              movementTypeCode: 'REL',
+              movementReasonCode: 'CR',
+            },
+          ],
+        })
+
+        await controller.index(req, res)
+
+        expect(res.render).toHaveBeenLastCalledWith(
+          expect.anything(),
+          expect.objectContaining({
+            releaseEvents: [
+              expect.objectContaining({
+                cellLocation: 'None',
+              }),
+            ],
+          })
+        )
+      })
+
+      it('should handle situation with no property user description', async () => {
+        prisonApi.getPrisonerProperty = jest.fn().mockResolvedValue([
+          {
+            location: {
+              locationId: 26169,
+              locationType: 'BOX',
+              description: 'PROP_BOXES-PB014',
+              agencyId: 'MDI',
+              parentLocationId: 26155,
+              currentOccupancy: 0,
+              locationPrefix: 'MDI-PROP_BOXES-PB014',
+              internalLocationCode: 'PB014',
+            },
+            sealMark: 'MDA646165646',
+            containerType: 'Valuables',
+          },
+        ])
+
+        await controller.index(req, res)
+
+        expectReleaseEventsToContain(res, {
+          personalProperty: [{ boxNumber: 'None', containerType: 'Valuables' }],
+        })
+      })
     })
 
     describe('Transfer events', () => {
@@ -1133,6 +1532,16 @@ describe('Scheduled moves controller', () => {
               boxNumber: 'Box 15',
             },
           ],
+        })
+      })
+
+      it('should handle situation with no property', async () => {
+        prisonApi.getPrisonerProperty = jest.fn().mockResolvedValue([])
+
+        await controller.index(req, res)
+
+        expectTransferEventsToContain(res, {
+          personalProperty: [],
         })
       })
 
@@ -1367,9 +1776,34 @@ describe('Scheduled moves controller', () => {
           })
         )
       })
+
+      it('should handle situation with no property user description', async () => {
+        prisonApi.getPrisonerProperty = jest.fn().mockResolvedValue([
+          {
+            location: {
+              locationId: 26169,
+              locationType: 'BOX',
+              description: 'PROP_BOXES-PB014',
+              agencyId: 'MDI',
+              parentLocationId: 26155,
+              currentOccupancy: 0,
+              locationPrefix: 'MDI-PROP_BOXES-PB014',
+              internalLocationCode: 'PB014',
+            },
+            sealMark: 'MDA646165646',
+            containerType: 'Valuables',
+          },
+        ])
+
+        await controller.index(req, res)
+
+        expectTransferEventsToContain(res, {
+          personalProperty: [{ boxNumber: 'None', containerType: 'Valuables' }],
+        })
+      })
     })
 
-    describe('Events without hold on transfer alerts', () => {
+    describe('Events without any hold-against-transfer alerts', () => {
       beforeEach(() => {
         prisonApi.getTransfers = jest.fn().mockResolvedValue({
           courtEvents: courtEventsWithoutTransferOnHoldAlerts,
@@ -1383,6 +1817,44 @@ describe('Scheduled moves controller', () => {
         await controller.index(req, res)
 
         expect(prisonApi.getAlertsForLatestBooking).not.toHaveBeenCalled()
+      })
+
+      it('should not show hold-against-transfer details', async () => {
+        await controller.index(req, res)
+
+        expectCourtEventsToContain(res, {
+          holdAgainstTransferAlerts: undefined,
+        })
+      })
+    })
+  })
+
+  describe('Events with only inactive hold-against-transfer alerts', () => {
+    beforeEach(() => {
+      prisonApi.getTransfers = jest.fn().mockResolvedValue({
+        courtEvents: courtEventsWithOnlyInactiveTransferOnHoldAlerts,
+        transferEvents: [],
+        releaseEvents: [],
+      })
+      offenderSearchApi.getPrisonersDetails = jest
+        .fn()
+        .mockResolvedValue(prisonerSearchResultWithOnlyInactiveHoldOnTransfer)
+      prisonApi.getAlertsForLatestBooking = jest
+        .fn()
+        .mockResolvedValue(holdAgainstTransferWithOnlyInactiveAlertDetailsResponse)
+    })
+
+    it('should make a call to retrieve hold on transfer details', async () => {
+      await controller.index(req, res)
+
+      expect(prisonApi.getAlertsForLatestBooking).toHaveBeenCalled()
+    })
+
+    it('should not show hold-against-transfer details', async () => {
+      await controller.index(req, res)
+
+      expectCourtEventsToContain(res, {
+        holdAgainstTransferAlerts: undefined,
       })
     })
   })

@@ -14,32 +14,39 @@ type PrisonerDetails = {
   assignedLivingUnitId: number
 }
 
-type workHistoryInPrison = {
+type activitiesInPrison = {
   enabled: boolean
-  content: eswe.workHistoryFullDetails[]
+  content: eswe.activitiesHistory
 }
 
-export default ({ prisonApi, esweService }) =>
+export default ({ paginationService, prisonApi, esweService }) =>
   async (req, res) => {
     const { offenderNo } = req.params
-
-    if (!app.esweEnabled) {
-      return res.redirect(`/prisoner/${offenderNo}`)
-    }
+    const fullUrl = new URL(`${req.protocol}://${req.get('host')}${req.originalUrl}`)
+    const { pageOffsetOption } = req.query
+    const pageOffset = (pageOffsetOption && parseInt(pageOffsetOption, 10)) || 0
+    const page = pageOffset / 20
 
     try {
-      const [prisonerDetails, workHistoryInsidePrison]: [PrisonerDetails, workHistoryInPrison] = await Promise.all([
+      const [prisonerDetails, activitiesHistory]: [PrisonerDetails, activitiesInPrison] = await Promise.all([
         prisonApi.getDetails(res.locals, offenderNo),
-        esweService.getWorkHistoryDetails(offenderNo),
+        esweService.getActivitiesHistoryDetails(offenderNo, page),
       ])
 
       const { firstName, lastName } = prisonerDetails
+      const { fullDetails, pagination } = activitiesHistory.content
 
       return res.render('prisonerProfile/prisonerWorkAndSkills/prisonerWorkInsidePrisonDetails.njk', {
         breadcrumbPrisonerName: putLastNameFirst(firstName, lastName),
         prisonerName: formatName(firstName, lastName),
         profileUrl: `/prisoner/${offenderNo}/work-and-skills#work-summary`,
-        workHistoryInsidePrison,
+        activitiesHistory: fullDetails,
+        pagination: paginationService.getPagination(
+          pagination.totalRecords,
+          pageOffset || pagination.offset,
+          pagination.limit,
+          fullUrl
+        ),
       })
     } catch (error) {
       res.locals.redirectUrl = `/prisoner/${offenderNo}`

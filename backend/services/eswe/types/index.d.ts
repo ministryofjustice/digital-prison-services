@@ -47,6 +47,18 @@ declare namespace eswe {
      * @memberof WorkActivity
      */
     isCurrentActivity: boolean
+    /**
+     * endReasonDescription
+     * @type {boolean}
+     * @memberof WorkActivity
+     */
+    endReasonDescription?: string
+    /**
+     * endCommentText
+     * @type {boolean}
+     * @memberof WorkActivity
+     */
+    endCommentText?: string
   }
 
   /**
@@ -56,17 +68,21 @@ declare namespace eswe {
    */
   export interface WorkHistory {
     /**
-     * Offender Number
-     * @type {string}
-     * @memberof WorkHistory
-     */
-    offenderNo: string
-    /**
-     * work activities
+     * Work history
      * @type {array}
      * @memberof WorkHistory
      */
-    workActivities: WorkActivity[]
+    content: WorkActivity[]
+    pageable: Record<string, unknown>
+    last: boolean
+    totalElements: number
+    totalPages: number
+    size: number
+    number: number
+    sort: Record<string, unknwon>
+    first: boolean
+    numberOfElements: number
+    empty: boolean
   }
 
   /**
@@ -250,31 +266,41 @@ declare namespace eswe {
   /**
    *
    * @export
-   * @interface workHistoryFullDetails
+   * @interface activitiesHistory
    */
-  interface workHistoryFullDetails {
+  interface activitiesHistory {
+    fullDetails: activitiesHistoryFullDetails[]
+    pagination: Record<string, unknown>
+  }
+
+  /**
+   *
+   * @export
+   * @interface activitiesHistoryFullDetails
+   */
+  interface activitiesHistoryFullDetails {
     /**
      * Role
      * @type {string}
-     * @memberof workHistoryFullDetails
+     * @memberof activitiesHistoryFullDetails
      */
     role: string
     /**
      * location
      * @type {string}
-     * @memberof workHistoryFullDetails
+     * @memberof activitiesHistoryFullDetails
      */
     location: string
     /**
      * start date
      * @type {string}
-     * @memberof workHistoryFullDetails
+     * @memberof activitiesHistoryFullDetails
      */
     startDate: string
     /**
      * end date
      * @type {string}
-     * @memberof workHistoryFullDetails
+     * @memberof activitiesHistoryFullDetails
      */
     endDate: string
   }

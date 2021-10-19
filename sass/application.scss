@@ -144,3 +144,40 @@ pre {
 .app-\!-font-family-tabular-bold {
   @include govuk-font($size: false, $tabular: true, $weight: bold);
 }
+
+.app-contact-panel {
+  margin-top: 40px;
+  padding-top: 15px;
+  border-top: 2px solid #1d70b8;
+}
+
+.app-contact-panel__heading:first-child {
+  padding-top: 0
+}
+
+.app-content h2 {    
+  max-width: 20em;
+}
+  
+.app-contact-panel__heading {    
+  padding-top: 10px;
+}
+
+.app-contact-panel__heading, .app-contact-panel__body, .app-contact-panel__link {     
+  max-width: 100%;
+}
+
+.app-contact-panel__heading, .app-prose-scope h3 {    
+  color: #0b0c0c;    
+  font-family: "GDS Transport",
+  arial,sans-serif;    
+  -webkit-font-smoothing: antialiased;    
+  -moz-osx-font-smoothing: grayscale;    
+  font-weight: 700;    
+  font-size: 18px;    
+  font-size: 1.125rem;    
+  line-height: 1.11111;    
+  display: block;    
+  margin-top: 0;    
+  margin-bottom: 15px;
+}

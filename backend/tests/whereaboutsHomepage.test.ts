@@ -40,7 +40,7 @@ describe('Homepage', () => {
     next()
   })
 
-  app.use('/', whereaboutsHomepage({ prisonApi, oauthApi, offenderSearchApi }))
+  app.use('/', whereaboutsHomepage({ prisonApi, oauthApi, offenderSearchApi, systemOauthClient: {} }))
 
   const getTasks = (excluding: string[] = []) =>
     whereaboutsTasks.filter(({ id }) => !excluding.includes(id)).map(({ enabled, ...rest }) => rest)

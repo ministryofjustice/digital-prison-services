@@ -77,16 +77,11 @@ describe('Prisoner work and skills controller', () => {
     // @ts-expect-error ts-migrate(2339) FIXME
     esweService.getLearnerEducation = jest.fn().mockResolvedValue(coursesAndQualifications)
     // @ts-expect-error ts-migrate(2339) FIXME
-    esweService.getCurrentWork = jest.fn().mockResolvedValue(currentWork)
+    esweService.getCurrentActivities = jest.fn().mockResolvedValue(currentWork)
     controller = prisonerWorkAndSkills({
       prisonerProfileService,
       esweService,
     })
-  })
-  it('should redirect to prisoner profile if esweEnabled is false', async () => {
-    jest.spyOn(app, 'esweEnabled', 'get').mockReturnValue(false)
-    await controller(req, res)
-    expect(res.render).toHaveBeenCalledTimes(0)
   })
   it('should make expected calls and render the right template', async () => {
     jest.spyOn(app, 'esweEnabled', 'get').mockReturnValue(true)

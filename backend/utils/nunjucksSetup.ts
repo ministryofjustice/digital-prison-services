@@ -159,6 +159,7 @@ export default (app) => {
   njkEnv.addFilter('truthy', (data) => Boolean(data))
   njkEnv.addFilter('possessive', possessive)
   njkEnv.addFilter('formatTimestampToDate', formatTimestampToDate)
+  njkEnv.addGlobal('googleAnalyticsId', config.analytics.googleAnalyticsId)
   njkEnv.addGlobal('googleTagManagerId', config.analytics.googleTagManagerId)
   njkEnv.addGlobal('supportUrl', config.app.supportUrl)
 

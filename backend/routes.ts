@@ -77,7 +77,10 @@ const setup = ({
     next()
   })
 
-  router.use('/manage-prisoner-whereabouts', whereaboutsRouter({ oauthApi, prisonApi, offenderSearchApi }))
+  router.use(
+    '/manage-prisoner-whereabouts',
+    whereaboutsRouter({ oauthApi, prisonApi, offenderSearchApi, systemOauthClient })
+  )
 
   router.post('/notification/dismiss', notificationDismiss({ notificationCookie }))
   router.use(

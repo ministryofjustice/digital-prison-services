@@ -1,25 +1,10 @@
-{% from "govuk/components/button/macro.njk" import govukButton %}
-{% from "./holdAgainstTransferDetails.njk" import holdAgainstTransferDetails %}
-
 {% macro holdAgainstTransferAlertLink(holdAgainstTransferAlerts) %}
   {% set dialogId = holdAgainstTransferAlerts.displayId %}
-  <div class="govuk-body">
+  <div>
     Hold against transfer<br>
-    <a href="#anchor-{{dialogId}}" class="govuk-link govuk-link--no-visited-state modal_dialog_button" data-qa="hold_against_transfer_details" data-targetdialogid={{ dialogId }}>View alerts</a>
-    <div id="anchor-{{dialogId}}" data-dialogid={{ dialogId }} class="govuk-modal-dialogue__wrapper" style="display: none">
-      <div class="govuk-modal-dialogue__overlay"></div>
-      <dialog class="govuk-modal-dialogue__box" aria-labelledby="{{ labelledBy }}" aria-describedby="{{ describedBy }}" aria-modal="true" role="{{ params.role | default('dialog') }}" tabindex="0">
-        {{ holdAgainstTransferDetails(holdAgainstTransferAlerts.fullName, holdAgainstTransferAlerts.alerts) }}
-        {{ govukButton ({
-          text: "Close", 
-          type: "button",
-          classes: "govuk-modal-dialogue__close",
-          attributes: {
-            "aria-label": "Close modal dialogue",
-            'data-qa': 'hold-against-transfer-dialog-close'
-          }
-        }) }}
-      </dialog>
-    </div>
+    <a href="#anchor-{{dialogId}}" class="govuk-link govuk-link--no-visited-state modal_dialog_button govuk-!-display-none-print" 
+      data-qa="hold_against_transfer_details" data-targetdialogid={{ dialogId }}>View alerts
+      <span class="govuk-visually-hidden"> for {{ holdAgainstTransferAlerts.fullName }}</span>
+    </a>
   </div>
 {% endmacro %}
