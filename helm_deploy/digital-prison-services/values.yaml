@@ -3,3 +3,10 @@
 
 generic-prometheus-alerts:
   targetApplication: digital-prison-services
+
+ingress:
+  # live-1 is blue, live is green
+  contextColour: blue
+  annotations:
+    external-dns.alpha.kubernetes.io/aws-weight: "100"
+    nginx.ingress.kubernetes.io/custom-http-errors: "418"
