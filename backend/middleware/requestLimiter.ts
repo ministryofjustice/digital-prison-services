@@ -15,7 +15,10 @@ export default (maxConnections?) =>
     }),
     windowMs: 30 * 1000, // 30 seconds
     max: () => maxConnections || 10, // max connection limit
-    keyGenerator: (req) => req.ip + req.originalUrl,
+    keyGenerator: (req) => {
+      const username = req.session?.userDetails?.username
+      return username + req.originalUrl
+    },
     delayMs: 0, // disable delaying - full speed until the max limit is reached
   })
 
