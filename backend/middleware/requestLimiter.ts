@@ -7,7 +7,7 @@ import config from '../config'
 // If more than 10 requests are made to the same url and ip address within 30 seconds
 // the rate limiter will kick in and the user will receive "Too many requests, please try again later."
 // and an HTTP 429 status code
-export default ({ maxConnections }) =>
+export default (maxConnections?) =>
   new RateLimit({
     ...initRedisStoreIfEnabled({
       ...config.redis,
