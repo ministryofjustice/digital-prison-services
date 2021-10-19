@@ -5,7 +5,7 @@ import requestLimiter from './requestLimiter'
 
 const app = express()
 
-app.get('/hello', requestLimiter({ maxConnections: 2 }), (req, res) => res.status(200).json({ message: 'world' }))
+app.get('/hello', requestLimiter({ maxConnections: 2 }), (req, res) => res.status(200).end())
 
 describe('Request rate limiter', () => {
   it('responds with json', async () => {
