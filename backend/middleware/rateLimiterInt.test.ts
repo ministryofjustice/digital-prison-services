@@ -5,7 +5,12 @@ import requestLimiter from './requestLimiter'
 
 const app = express()
 
-app.get('/hello', requestLimiter(2), (req, res) => res.status(200).end())
+const setDefaultUsername = (req, res, next) => {
+  req.session = { userDetails: { username: 'test' } }
+  return next()
+}
+
+app.get('/hello', setDefaultUsername, requestLimiter(2), (req, res) => res.status(200).end())
 
 describe('Request rate limiter', () => {
   it('responds with json', async () => {
