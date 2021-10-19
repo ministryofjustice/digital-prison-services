@@ -17,6 +17,7 @@ export const app = {
   contentfulSpaceId: process.env.CONTENTFUL_SPACE_ID || '1',
   contentfulAccessToken: process.env.CONTENTFUL_ACCESS_TOKEN || '1',
   esweEnabled: process.env.ESWE_ENABLED === 'true',
+  disableRequestLimiter: process.env.DISABLE_REQUEST_LIMITER ? process.env.DISABLE_REQUEST_LIMITER === 'true' : false,
 }
 
 export const analytics = {
