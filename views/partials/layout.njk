@@ -2,6 +2,8 @@
 
 {% extends "govuk/template.njk" %}
 
+{% block pageTitle %}{% if errors.length %}Error: {% endif %}{{title}} - Digital Prison Services{% endblock %}
+
 {% block head %}
   {% if googleTagManagerId %}
     <!-- Google Tag Manager -->
@@ -36,7 +38,6 @@
   <link href = "https://code.jquery.com/ui/1.12.1/themes/ui-lightness/jquery-ui.css" rel = "stylesheet">
   <link href="/static/stylesheets/application.css" rel="stylesheet" />
   <link href="/static/styles/modal-dialog.css" rel="stylesheet" />
-  <title>{% block pageTitle %}{% if errors.length %}Error: {% endif %}{{title}} - Digital Prison Services{% endblock %}</title>
   <!--<![endif]-->
 
   {% block headIcons %}
