@@ -38,7 +38,7 @@ export default ({ prisonerProfileService, personService, prisonApi, allocationMa
       adjustments,
       agencies,
       allocationManager,
-      // neurodiversities,
+      neurodiversities,
     ] = await Promise.all(
       [
         prisonerProfileService.getPrisonerProfileData(res.locals, offenderNo),
@@ -52,7 +52,7 @@ export default ({ prisonerProfileService, personService, prisonApi, allocationMa
         prisonApi.getReasonableAdjustments(res.locals, bookingId, treatmentCodes),
         prisonApi.getAgencies(res.locals),
         allocationManagerApi.getPomByOffenderNo(res.locals, offenderNo),
-        // esweService.getNeurodiversities(offenderNo),
+        esweService.getNeurodiversities(offenderNo),
       ].map((apiCall) => logErrorAndContinue(apiCall))
     )
 
@@ -133,7 +133,7 @@ export default ({ prisonerProfileService, personService, prisonApi, allocationMa
         personal: nextOfKinsWithContact,
       }),
       professionalContacts,
-      neurodiversities: null,
+      neurodiversities,
       addresses: addressesViewModel({ addresses }),
       careNeedsAndAdjustments: careNeedsViewModel({
         personalCareNeeds: careNeeds && (careNeeds as any).personalCareNeeds,
