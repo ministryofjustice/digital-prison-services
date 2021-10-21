@@ -4,7 +4,7 @@ import config from '../../config'
 
 const {
   applications: { licences, manageaccounts, moic, pecs },
-  apis: { omic, useOfForce, pathfinder, categorisation, soc, pinPhones },
+  apis: { omic, useOfForce, pathfinder, categorisation, soc, pinPhones, manageAdjudications },
 } = config
 
 const getTasks = ({ activeCaseLoadId, locations, staffId, whereaboutsConfig, keyworkerPrisonStatus, roleCodes }) => {
@@ -152,6 +152,14 @@ const getTasks = ({ activeCaseLoadId, locations, staffId, whereaboutsConfig, key
       description: 'Access to the pin phone service.',
       href: pinPhones.ui_url,
       enabled: () => pinPhones.ui_url && userHasRoles(['PPM_ANALYST', 'PPM_AUTHORISING_OFFICER', 'PPM_GLOBAL_ADMIN']),
+    },
+    {
+      id: 'manage-adjudications',
+      heading: 'Manage adjudications',
+      description: 'Manage adjudications',
+      href: manageAdjudications.ui_url,
+      enabled: () =>
+        manageAdjudications.ui_url && manageAdjudications.enabled_prisons.split(',').includes(activeCaseLoadId),
     },
   ]
 }
