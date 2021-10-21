@@ -81,7 +81,7 @@ env:
       secretKeyRef:
         name: {{ template "app.name" . }}
         key: THAMESIDE_OMU_EMAIL
-    
+
   - name: HEWELL_OMU_EMAIL
     valueFrom:
       secretKeyRef:
@@ -93,7 +93,7 @@ env:
       secretKeyRef:
         name: {{ template "app.name" . }}
         key: BERWYN_OMU_EMAIL
-    
+
   - name: ELMLEY_OMU_EMAIL
     valueFrom:
       secretKeyRef:
@@ -111,7 +111,7 @@ env:
       secretKeyRef:
         name: {{ template "app.name" . }}
         key: BULLINGDON_OMU_EMAIL
-        
+
   - name: REDIS_HOST
     valueFrom:
       secretKeyRef:
@@ -246,7 +246,7 @@ env:
 
   - name: MANAGE_AUTH_ACCOUNTS_URL
     value: {{ .Values.env.MANAGE_AUTH_ACCOUNTS_URL | quote }}
-    
+
   - name: PECS_URL
     value: {{ .Values.env.PECS_URL | quote }}
 
@@ -255,5 +255,10 @@ env:
 
   - name: PRISONS_WITH_OFFENDERS_THAT_HAVE_COMPLEX_NEEDS
     value: {{ .Values.env.PRISONS_WITH_OFFENDERS_THAT_HAVE_COMPLEX_NEEDS | quote }}
-    
+
+  - name: PRISONS_WITH_OFFENDERS_THAT_HAVE_COMPLEX_NEEDS
+    value: {{ .Values.env.PRISONS_WITH_OFFENDERS_THAT_HAVE_COMPLEX_NEEDS | quote }}
+
+
+
 {{- end -}}
