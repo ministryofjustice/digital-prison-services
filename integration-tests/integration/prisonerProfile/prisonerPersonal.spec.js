@@ -260,16 +260,16 @@ context('Prisoner personal', () => {
       })
     })
 
-    // context('Disabilities and adjustments section', () => {
-    //   it('Should show correct missing content text', () => {
-    //     cy.get('[data-test="neurodiversity-summary"]').then(($section) => {
-    //       expect($section).to.contain.text('We cannot show these details right now. Try reloading the page.')
-    //     })
-    //     cy.get('[data-test="care-needs-summary"]').then(($section) => {
-    //       expect($section).to.contain.text('None')
-    //     })
-    //   })
-    // })
+    context('Disabilities and adjustments section', () => {
+      it('Should show correct missing content text', () => {
+        cy.get('[data-test="neurodiversity-summary"]').then(($section) => {
+          expect($section).to.contain.text('We cannot show these details right now. Try reloading the page.')
+        })
+        cy.get('[data-test="care-needs-summary"]').then(($section) => {
+          expect($section).to.contain.text('None')
+        })
+      })
+    })
 
     context('Languages section', () => {
       it('Should show correct missing content text', () => {
@@ -910,71 +910,71 @@ context('Prisoner personal', () => {
         })
       })
 
-      // context('Disabilities and adjustments section', () => {
-      //   it('Should show correct headings, images, labels and values', () => {
-      //     cy.get('[data-test="neurodiversity-summary"]').then(($section) => {
-      //       cy.get($section)
-      //         .find('dt')
-      //         .then(($summaryLabels) => {
-      //           cy.get($summaryLabels).its('length').should('eq', 2)
-      //           expect($summaryLabels.get(0).innerText).to.contain('Description')
-      //           expect($summaryLabels.get(1).innerText).to.contain('Location')
-      //         })
+      context('Disabilities and adjustments section', () => {
+        it('Should show correct headings, images, labels and values', () => {
+          cy.get('[data-test="neurodiversity-summary"]').then(($section) => {
+            cy.get($section)
+              .find('dt')
+              .then(($summaryLabels) => {
+                cy.get($summaryLabels).its('length').should('eq', 2)
+                expect($summaryLabels.get(0).innerText).to.contain('Description')
+                expect($summaryLabels.get(1).innerText).to.contain('Location')
+              })
 
-      //       cy.get($section)
-      //         .find('dd')
-      //         .then(($summaryValues) => {
-      //           cy.get($summaryValues).its('length').should('eq', 2)
-      //           expect($summaryValues.get(0).innerText).to.contain('Visual impairment')
-      //           expect($summaryValues.get(0).innerText).to.contain('Hearing impairment')
-      //           expect($summaryValues.get(0).innerText).to.contain('Mental health difficulty')
-      //           expect($summaryValues.get(0).innerText).to.contain('Social and emotional difficulties')
-      //           expect($summaryValues.get(1).innerText).to.contain('HMP Moorland')
-      //         })
-      //     })
+            cy.get($section)
+              .find('dd')
+              .then(($summaryValues) => {
+                cy.get($summaryValues).its('length').should('eq', 2)
+                expect($summaryValues.get(0).innerText).to.contain('Visual impairment')
+                expect($summaryValues.get(0).innerText).to.contain('Hearing impairment')
+                expect($summaryValues.get(0).innerText).to.contain('Mental health difficulty')
+                expect($summaryValues.get(0).innerText).to.contain('Social and emotional difficulties')
+                expect($summaryValues.get(1).innerText).to.contain('HMP Moorland')
+              })
+          })
 
-      //     cy.get('[data-test="care-needs-summary"]').then(($section) => {
-      //       cy.get($section)
-      //         .find('h3')
-      //         .then(($headings) => {
-      //           cy.get($headings).its('length').should('eq', 3)
-      //           expect($headings.get(0).innerText).to.contain('Psychological Bi-Polar')
-      //           expect($headings.get(1).innerText).to.contain('Reasonable adjustment Flexible refreshment breaks')
-      //           expect($headings.get(2).innerText).to.contain('Reasonable adjustment Amplified telephone')
-      //         })
+          cy.get('[data-test="care-needs-summary"]').then(($section) => {
+            cy.get($section)
+              .find('h3')
+              .then(($headings) => {
+                cy.get($headings).its('length').should('eq', 3)
+                expect($headings.get(0).innerText).to.contain('Psychological Bi-Polar')
+                expect($headings.get(1).innerText).to.contain('Reasonable adjustment Flexible refreshment breaks')
+                expect($headings.get(2).innerText).to.contain('Reasonable adjustment Amplified telephone')
+              })
 
-      //       cy.get($section)
-      //         .find('dt')
-      //         .then(($summaryLabels) => {
-      //           cy.get($summaryLabels).its('length').should('eq', 9)
-      //           expect($summaryLabels.get(0).innerText).to.contain('Description')
-      //           expect($summaryLabels.get(1).innerText).to.contain('From')
-      //           expect($summaryLabels.get(2).innerText).to.contain('Status')
-      //           expect($summaryLabels.get(3).innerText).to.contain('Establishment')
-      //           expect($summaryLabels.get(4).innerText).to.contain('Date provided')
-      //           expect($summaryLabels.get(5).innerText).to.contain('Comment')
-      //           expect($summaryLabels.get(6).innerText).to.contain('Establishment')
-      //           expect($summaryLabels.get(7).innerText).to.contain('Date provided')
-      //           expect($summaryLabels.get(8).innerText).to.contain('Comment')
-      //         })
+            cy.get($section)
+              .find('dt')
+              .then(($summaryLabels) => {
+                cy.get($summaryLabels).its('length').should('eq', 9)
+                expect($summaryLabels.get(0).innerText).to.contain('Description')
+                expect($summaryLabels.get(1).innerText).to.contain('From')
+                expect($summaryLabels.get(2).innerText).to.contain('Status')
+                expect($summaryLabels.get(3).innerText).to.contain('Establishment')
+                expect($summaryLabels.get(4).innerText).to.contain('Date provided')
+                expect($summaryLabels.get(5).innerText).to.contain('Comment')
+                expect($summaryLabels.get(6).innerText).to.contain('Establishment')
+                expect($summaryLabels.get(7).innerText).to.contain('Date provided')
+                expect($summaryLabels.get(8).innerText).to.contain('Comment')
+              })
 
-      //       cy.get($section)
-      //         .find('dd')
-      //         .then(($summaryValues) => {
-      //           cy.get($summaryValues).its('length').should('eq', 9)
-      //           expect($summaryValues.get(0).innerText).to.contain('Bi polar comment text')
-      //           expect($summaryValues.get(1).innerText).to.contain('19 May 2020')
-      //           expect($summaryValues.get(2).innerText).to.contain('Ongoing')
-      //           expect($summaryValues.get(3).innerText).to.contain('MOORLAND (HMP & YOI)')
-      //           expect($summaryValues.get(4).innerText).to.contain('01 May 2020')
-      //           expect($summaryValues.get(5).innerText).to.contain('Flexible drinks comments')
-      //           expect($summaryValues.get(6).innerText).to.contain('MOORLAND (HMP & YOI)')
-      //           expect($summaryValues.get(7).innerText).to.contain('19 May 2020')
-      //           expect($summaryValues.get(8).innerText).to.contain('Amped telephone comment')
-      //         })
-      //     })
-      //   })
-      // })
+            cy.get($section)
+              .find('dd')
+              .then(($summaryValues) => {
+                cy.get($summaryValues).its('length').should('eq', 9)
+                expect($summaryValues.get(0).innerText).to.contain('Bi polar comment text')
+                expect($summaryValues.get(1).innerText).to.contain('19 May 2020')
+                expect($summaryValues.get(2).innerText).to.contain('Ongoing')
+                expect($summaryValues.get(3).innerText).to.contain('MOORLAND (HMP & YOI)')
+                expect($summaryValues.get(4).innerText).to.contain('01 May 2020')
+                expect($summaryValues.get(5).innerText).to.contain('Flexible drinks comments')
+                expect($summaryValues.get(6).innerText).to.contain('MOORLAND (HMP & YOI)')
+                expect($summaryValues.get(7).innerText).to.contain('19 May 2020')
+                expect($summaryValues.get(8).innerText).to.contain('Amped telephone comment')
+              })
+          })
+        })
+      })
       context('Languages section', () => {
         it('Should show correct languages content', () => {
           cy.get('[data-test="languages-summary"]').then(($section) => {

@@ -64,9 +64,8 @@ export default ({ prisonerProfileService, personService, prisonApi, allocationMa
     const {
       app: { neurodiversityEnabledUsernames },
     } = config
-    const neuroVisibleTo = neurodiversityEnabledUsernames.split(',') || []
     const { username } = req.session.userDetails
-    const displayNeurodiversity = neuroVisibleTo.includes(username)
+    const displayNeurodiversity = neurodiversityEnabledUsernames?.includes(username)
 
     const nextOfKinsWithContact =
       activeNextOfKins &&
