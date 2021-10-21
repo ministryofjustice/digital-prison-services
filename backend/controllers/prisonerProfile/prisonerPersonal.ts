@@ -1,5 +1,6 @@
 import logErrorAndContinue from '../../shared/logErrorAndContinue'
 import { getNamesFromString } from '../../utils'
+import config from '../../config'
 
 import {
   aliasesViewModel,
@@ -59,6 +60,13 @@ export default ({ prisonerProfileService, personService, prisonApi, allocationMa
     // @ts-expect-error ts-migrate(2339) FIXME: Property 'nextOfKin' does not exist on type '{}'.
     const { nextOfKin, otherContacts } = contacts || {}
     const activeNextOfKins = nextOfKin && nextOfKin.filter((kin) => kin.activeFlag)
+
+    const {
+      app: { neurodiversityEnabledUsernames },
+    } = config
+    const neuroVisibleTo = neurodiversityEnabledUsernames.split(',') || []
+    const { username } = req.session.userDetails
+    const displayNeurodiversity = neuroVisibleTo.includes(username)
 
     const nextOfKinsWithContact =
       activeNextOfKins &&
@@ -134,6 +142,7 @@ export default ({ prisonerProfileService, personService, prisonApi, allocationMa
       }),
       professionalContacts,
       neurodiversities,
+      displayNeurodiversity,
       addresses: addressesViewModel({ addresses }),
       careNeedsAndAdjustments: careNeedsViewModel({
         personalCareNeeds: careNeeds && (careNeeds as any).personalCareNeeds,
