@@ -71,7 +71,7 @@
 {% endset %}
 
 {% set careNeedsContent %}
-  {% if neurodiversities.enabled %}
+  {% if displayNeurodiversity %}
     <h3 class="govuk-summary-list-title govuk-heading-m">Neurodiversity needs</h3>
     <div data-test="neurodiversity-summary">
       {% include "./partials/neurodiversities.njk" %}
@@ -90,7 +90,7 @@
   ]
 %}
 
-{% if neurodiversities.enabled %}
+{% if displayNeurodiversity %}
   {% set leftSections = (
       leftSections.push({ heading: 'Disabilities and adjustments', html: careNeedsContent, education: true }),
       leftSections

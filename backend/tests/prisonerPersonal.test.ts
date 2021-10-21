@@ -1,4 +1,5 @@
 import prisonerPersonal from '../controllers/prisonerProfile/prisonerPersonal'
+import config from '../config'
 
 describe('prisoner personal', () => {
   const offenderNo = 'ABC123'
@@ -32,8 +33,9 @@ describe('prisoner personal', () => {
   let controller
 
   beforeEach(() => {
-    req = { params: { offenderNo } }
+    req = { params: { offenderNo }, session: { userDetails: { username: 'ITAG_USER' } } }
     res = { locals: {}, render: jest.fn() }
+    config.app.neurodiversityEnabledUsernames = 'ITAG_USER'
 
     logError = jest.fn()
 
@@ -2125,6 +2127,29 @@ describe('prisoner personal', () => {
       expect(res.render).toHaveBeenCalledWith(
         'prisonerProfile/prisonerPersonal/prisonerPersonal.njk',
         expect.objectContaining({ neurodiversities })
+      )
+    })
+
+    it('should return false for displaying neurodiversity feature if the username is not flagged', async () => {
+      const neurodiversities = [
+        {
+          establishmentName: 'HMP Moorland',
+          details: [
+            {
+              label: 'Description',
+              html: "<p class='govuk-body'>Visual impairment</p><p class='govuk-body'>Dyslexia</p>",
+            },
+            { label: 'Location', value: 'HMP Moorland' },
+          ],
+        },
+      ]
+      // @ts-expect-error ts-migrate(2339) FIXME: Property 'getNeurodiversities' does not ex... Remove this comment to see the full error message
+      esweService.getNeurodiversities.mockResolvedValue(neurodiversities)
+      config.app.neurodiversityEnabledUsernames = ''
+      await controller(req, res)
+      expect(res.render).toHaveBeenCalledWith(
+        'prisonerProfile/prisonerPersonal/prisonerPersonal.njk',
+        expect.objectContaining({ displayNeurodiversity: false })
       )
     })
   })
