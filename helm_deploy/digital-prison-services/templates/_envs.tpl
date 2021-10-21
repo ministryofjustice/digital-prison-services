@@ -259,6 +259,4 @@ env:
   - name: PRISONS_WITH_OFFENDERS_THAT_HAVE_COMPLEX_NEEDS
     value: {{ .Values.env.PRISONS_WITH_OFFENDERS_THAT_HAVE_COMPLEX_NEEDS | quote }}
 
-
-
 {{- end -}}
