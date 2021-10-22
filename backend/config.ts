@@ -138,6 +138,10 @@ export const apis = {
   curious: {
     url: process.env.CURIOUS_URL || '',
   },
+  manageAdjudications: {
+    ui_url: process.env.MANAGE_ADJUDICAIONS_URL || '',
+    enabled_prisons: process.env.PRISONS_WITH_MANAGE_ADJUDICATIONS_ENABLED || '',
+  },
 }
 export const notifications = {
   enabled: process.env.NOTIFY_ENABLED ? process.env.NOTIFY_ENABLED === 'true' : true,
