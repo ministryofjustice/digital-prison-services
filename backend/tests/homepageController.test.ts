@@ -16,8 +16,6 @@ describe('Homepage', () => {
     config.apis.useOfForce.ui_url = undefined
     config.apis.useOfForce.prisons = undefined
     config.apis.omic.url = undefined
-    config.apis.manageAdjudications.enabled_prisons = undefined
-    config.apis.manageAdjudications.ui_url = undefined
 
     req = {
       session: {
@@ -196,25 +194,6 @@ describe('Homepage', () => {
               description: 'Manage and view incident reports and statements.',
               href: 'http://use-of-force-url',
             },
-          ],
-        })
-      )
-    })
-
-    it('should render home page with the manage adjudications task', async () => {
-      config.apis.manageAdjudications.ui_url = 'http://manage-adjudications-url'
-      config.apis.manageAdjudications.enabled_prisons = 'MDI'
-
-      await controller(req, res)
-
-      expect(res.render).toHaveBeenCalledWith(
-        'homepage/homepage.njk',
-        expect.objectContaining({
-          tasks: [
-            expect.objectContaining({
-              id: 'manage-adjudications',
-              href: 'http://manage-adjudications-url',
-            }),
           ],
         })
       )
