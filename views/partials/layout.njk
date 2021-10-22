@@ -14,7 +14,6 @@
     })(window,document,'script','dataLayer','{{ googleTagManagerId }}');</script>
     <!-- End Google Tag Manager -->
   {% endif %}
-
   {% if googleAnalyticsId %}
     <!-- Global site tag (gtag.js) - Google Analytics -->
     <script async src="https://www.googletagmanager.com/gtag/js?id={{ googleAnalyticsId }}"></script>
@@ -22,7 +21,7 @@
       window.dataLayer = window.dataLayer || [];
       function gtag(){window.dataLayer.push(arguments);}
       gtag('js', new Date());
-      gtag('config', '{{ googleAnalyticsId }}');
+      gtag('config', '{{ googleAnalyticsId }}', { 'send_page_view': false }); // Avoid duplicate page view
     </script>
   {% endif %}
 
