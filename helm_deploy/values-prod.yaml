@@ -56,6 +56,7 @@ env:
   PRISONS_WITH_MANAGE_ADJUDICATIONS_ENABLED: ""
   MANAGE_ADJUDICAIONS_URL: https://manage-adjudications.hmpps.service.justice.gov.uk/
   ESWE_ENABLED: false
+  NEURODIVERSITY_ENABLED_USERNAMES: "CN004364,DBULL_GEN,J_DRAPER"
   CURIOUS_URL: https://liveservices.sequation.com/sequation-virtual-campus2-api/
   DISABLE_REQUEST_LIMITER: true
 
