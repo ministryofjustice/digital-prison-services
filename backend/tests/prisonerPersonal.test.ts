@@ -2130,7 +2130,7 @@ describe('prisoner personal', () => {
       )
     })
 
-    it('should return false for displaying neurodiversity feature if the username is not flagged', async () => {
+    it('should return true for displaying neurodiversity feature if no username is flagged', async () => {
       const neurodiversities = [
         {
           establishmentName: 'HMP Moorland',
@@ -2146,6 +2146,28 @@ describe('prisoner personal', () => {
       // @ts-expect-error ts-migrate(2339) FIXME: Property 'getNeurodiversities' does not ex... Remove this comment to see the full error message
       esweService.getNeurodiversities.mockResolvedValue(neurodiversities)
       config.app.neurodiversityEnabledUsernames = ''
+      await controller(req, res)
+      expect(res.render).toHaveBeenCalledWith(
+        'prisonerProfile/prisonerPersonal/prisonerPersonal.njk',
+        expect.objectContaining({ displayNeurodiversity: true })
+      )
+    })
+    it('should return false for displaying neurodiversity feature if the username is not flagged but there are some other flagged usernames', async () => {
+      const neurodiversities = [
+        {
+          establishmentName: 'HMP Moorland',
+          details: [
+            {
+              label: 'Description',
+              html: "<p class='govuk-body'>Visual impairment</p><p class='govuk-body'>Dyslexia</p>",
+            },
+            { label: 'Location', value: 'HMP Moorland' },
+          ],
+        },
+      ]
+      // @ts-expect-error ts-migrate(2339) FIXME: Property 'getNeurodiversities' does not ex... Remove this comment to see the full error message
+      esweService.getNeurodiversities.mockResolvedValue(neurodiversities)
+      config.app.neurodiversityEnabledUsernames = 'DBULL_GEN'
       await controller(req, res)
       expect(res.render).toHaveBeenCalledWith(
         'prisonerProfile/prisonerPersonal/prisonerPersonal.njk',

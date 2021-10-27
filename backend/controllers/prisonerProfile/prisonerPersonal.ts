@@ -65,7 +65,10 @@ export default ({ prisonerProfileService, personService, prisonApi, allocationMa
       app: { neurodiversityEnabledUsernames },
     } = config
     const { username } = req.session.userDetails
-    const displayNeurodiversity = neurodiversityEnabledUsernames?.includes(username)
+
+    const displayNeurodiversity = !neurodiversityEnabledUsernames
+      ? true
+      : neurodiversityEnabledUsernames?.includes(username)
 
     const nextOfKinsWithContact =
       activeNextOfKins &&
@@ -121,7 +124,6 @@ export default ({ prisonerProfileService, personService, prisonApi, allocationMa
       if (right.firstName > left.firstName) return -1
       return 0
     })
-
     // @ts-expect-error ts-migrate(2339) FIXME: Property 'physicalAttributes' does not exist on ty... Remove this comment to see the full error message
     const { physicalAttributes, physicalCharacteristics, physicalMarks } = prisonerProfileData || {}
     // @ts-expect-error ts-migrate(2339) FIXME: Property 'language' does not exist on type '{}'.
