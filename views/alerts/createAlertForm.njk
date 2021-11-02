@@ -6,7 +6,7 @@
 
 {% extends "../partials/layout.njk" %}
 
-{% set title = "Create an alert for " + offenderDetails.name %}
+{% set title = "Create an alert" %}
 {% block beforeContent %}
   {{ govukBreadcrumbs({
   items: [
@@ -35,7 +35,7 @@
       }) }}
     {% endif %}
       <h1 class="govuk-heading-l">
-        {{title}}
+        {{title +  " for " + offenderDetails.name}}
         <span class="govuk-caption-l">Prison number: {{offenderNo}}</span>
       </h1>
 
