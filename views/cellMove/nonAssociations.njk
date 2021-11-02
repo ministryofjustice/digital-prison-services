@@ -1,10 +1,10 @@
 {% extends "../partials/layout.njk" %}
 {% from "govuk/components/summary-list/macro.njk" import govukSummaryList %}
 
-{% set title = "Active non-association details for " + prisonerName %}
+{% set title = "Active non-association details" %}
 
 {% block content %}
-  <h1 class="govuk-heading-l">{{title}}</h1>
+  <h1 class="govuk-heading-l">{{"Active non-association details for " + prisonerName}}</h1>
 
   <p class="govuk-body" data-test="message">You must check any local processes for non-association details.</p>
   {% for nonAssociation in nonAssociationsRows %}

@@ -8,7 +8,7 @@
 
 {% extends "../partials/layout.njk" %}
 
-{% set title = "Add a case note for " + offenderDetails.name %}
+{% set title = "Add a case note" %}
 {% block beforeContent %}
   {{ govukBreadcrumbs({
   items: [
@@ -38,7 +38,7 @@
     {% endif %}
 
   <h1 class="govuk-heading-l">
-    {{title}}
+    {{"Add a case note for " + offenderDetails.name}}
   </h1>
   <p class="govuk-body" data-test="prison-number"><span class="govuk-!-font-weight-bold">Prison number:</span> {{offenderNo}}</p>
 
