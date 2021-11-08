@@ -142,6 +142,9 @@ export const apis = {
     ui_url: process.env.MANAGE_ADJUDICAIONS_URL || '',
     enabled_prisons: process.env.PRISONS_WITH_MANAGE_ADJUDICATIONS_ENABLED || '',
   },
+  bookAPrisonVisit: {
+    ui_url: process.env.PVB_URL || '',
+  },
 }
 export const notifications = {
   enabled: process.env.NOTIFY_ENABLED ? process.env.NOTIFY_ENABLED === 'true' : true,

@@ -18,6 +18,7 @@ describe('Homepage', () => {
     config.apis.omic.url = undefined
     config.apis.manageAdjudications.enabled_prisons = undefined
     config.apis.manageAdjudications.ui_url = undefined
+    config.apis.bookAPrisonVisit.ui_url = undefined
 
     req = {
       session: {
@@ -214,6 +215,28 @@ describe('Homepage', () => {
             expect.objectContaining({
               id: 'manage-adjudications',
               href: 'http://manage-adjudications-url',
+            }),
+          ],
+        })
+      )
+    })
+
+    it.skip('should render home page with the book a prison visit task', async () => {
+      // @ts-expect-error ts-migrate(2339) FIXME: Property 'userRoles' does not exist on type '{}'.
+      oauthApi.userRoles.mockResolvedValue([{ roleCode: 'PVB_ADMIN' }])
+      config.apis.bookAPrisonVisit.ui_url = 'http://book-a-prison-visit-url'
+
+      await controller(req, res)
+
+      expect(res.render).toHaveBeenCalledWith(
+        'homepage/homepage.njk',
+        expect.objectContaining({
+          tasks: [
+            expect.objectContaining({
+              id: 'book-a-prison-visit',
+              href: 'http://book-a-prison-visit-url',
+              heading: 'Manage prison visits',
+              description: 'Book, view and cancel a prisoner’s social visits.',
             }),
           ],
         })
