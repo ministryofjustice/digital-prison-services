@@ -259,4 +259,7 @@ env:
   - name: NEURODIVERSITY_ENABLED_USERNAMES
     value: {{ .Values.env.NEURODIVERSITY_ENABLED_USERNAMES | quote }}
 
+  - name: PVB_URL
+    value: {{ .Values.env.PVB_URL | quote }}
+
 {{- end -}}
