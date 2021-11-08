@@ -4,7 +4,7 @@ import config from '../../config'
 
 const {
   applications: { licences, manageaccounts, moic, pecs },
-  apis: { omic, useOfForce, pathfinder, categorisation, soc, pinPhones, manageAdjudications },
+  apis: { omic, useOfForce, pathfinder, categorisation, soc, pinPhones, manageAdjudications, bookAPrisonVisit },
 } = config
 
 const getTasks = ({ activeCaseLoadId, locations, staffId, whereaboutsConfig, keyworkerPrisonStatus, roleCodes }) => {
@@ -160,6 +160,13 @@ const getTasks = ({ activeCaseLoadId, locations, staffId, whereaboutsConfig, key
       href: manageAdjudications.ui_url,
       enabled: () =>
         manageAdjudications.ui_url && manageAdjudications.enabled_prisons.split(',').includes(activeCaseLoadId),
+    },
+    {
+      id: 'book-a-prison-visit',
+      heading: 'Manage prison visits',
+      description: 'Book, view and cancel a prisoner’s social visits.',
+      href: bookAPrisonVisit.ui_url,
+      enabled: () => bookAPrisonVisit.ui_url && userHasRoles(['PVB_STAFF']),
     },
   ]
 }

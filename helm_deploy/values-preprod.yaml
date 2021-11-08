@@ -61,6 +61,7 @@ env:
   NEURODIVERSITY_ENABLED_USERNAMES: 'NCLAMP_GEN,CN004364,DBULL_GEN'
   CURIOUS_URL: https://testservices.sequation.net/sequation-virtual-campus2-api/
   DISABLE_REQUEST_LIMITER: true
+  PVB_URL: https://manage-a-prison-visit-preprod.hmpps.service.justice.gov.uk/
 
 allowlist:
   office: "217.33.148.210/32"
