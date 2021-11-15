@@ -82,6 +82,12 @@ context('A user can confirm the cell move', () => {
       })
   })
 
+  it('should render the feedback banner with header and link', () => {
+    const page = adjudicationsPage.goTo(offenderNo, offenderName)
+    page.feedbackBannerTitle().contains('Help us improve the new adjudications digital service')
+    page.feedbackBannerLink().contains('Tell us about your experience with adjudications (opens in a new tab)')
+  })
+
   it('should make a request with the correct filters supplied by the form', () => {
     const page = adjudicationsPage.goTo(offenderNo, offenderName)
 
@@ -151,3 +157,5 @@ context('A user can confirm the cell move', () => {
     page.noRecordsFoundMessage().contains('There are no adjudications for the selections you have made')
   })
 })
+
+context('feedback banner', () => {})
