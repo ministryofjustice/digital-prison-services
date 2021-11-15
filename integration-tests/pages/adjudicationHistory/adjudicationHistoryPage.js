@@ -1,6 +1,6 @@
 const page = require('../page')
 
-const adjudicationHistoryPage = offenderName =>
+const adjudicationHistoryPage = (offenderName) =>
   page(`${offenderName} adjudication history`, {
     form: () => ({
       establishment: () => cy.get('#agencyId'),
@@ -13,6 +13,8 @@ const adjudicationHistoryPage = offenderName =>
     tableRows: () => cy.get('[data-qa="adjudications-history-table"]'),
     errorSummaryTitle: () => cy.get('#error-summary-title'),
     errorSummaryList: () => cy.get('.govuk-error-summary__list'),
+    feedbackBannerTitle: () => cy.get('[data-qa="feedback-survey-header"]'),
+    feedbackBannerLink: () => cy.get('[data-qa="feedback-survey-link"]'),
   })
 
 export default {
