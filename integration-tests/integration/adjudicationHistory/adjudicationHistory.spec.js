@@ -84,9 +84,7 @@ context('A user can confirm the cell move', () => {
 
   it('should render the feedback banner with header and link', () => {
     const page = adjudicationsPage.goTo(offenderNo, offenderName)
-    page.feedbackBannerTitle().exists()
     page.feedbackBannerTitle().contains('Help us improve the new adjudications digital service')
-    page.feedbackBannerLink().exists()
     page.feedbackBannerLink().contains('Tell us about your experience with adjudications (opens in a new tab)')
   })
 
