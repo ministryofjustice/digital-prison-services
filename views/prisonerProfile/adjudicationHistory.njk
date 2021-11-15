@@ -12,7 +12,7 @@
 {% set title = 'Adjudication history' %}
 
 {% block beforeContent %}
-    {{ govukBreadcrumbs({
+	{{ govukBreadcrumbs({
         items: [
             {
                 text: "Home",
@@ -30,40 +30,38 @@
 {% endblock %}
 
 {% block content %}
-    {% if errors.length > 0 %}
-        {{ govukErrorSummary({
+	{% if errors.length > 0 %}
+		{{ govukErrorSummary({
             titleText: "There is a problem",
             errorList: errors,
             attributes: { 'data-qa-errors': true }
         }) }}
-    {% endif %}
+	{% endif %}
 
+	<h1 class="govuk-heading-l">{{ prisonerName | possessive | safe }} adjudication history </h1>
 
-    <h1 class="govuk-heading-l">{{ prisonerName | possessive | safe }} adjudication history </h1>
+	<div class="govuk-!-padding-3 govuk-!-margin-bottom-5 form-background">
+		<h2 class="govuk-heading-m">View by</h2>
+		<form class="horizontal-form govuk-body govuk-!-margin-bottom-3" method="GET">
+			{{ govukSelect({
+				name: 'agencyId',
+				id: 'agencyId',
+				label: {
+						text: 'Establishment'
+				},
+				items: agencies | addDefaultSelectedVale('All', true) | setSelected(formValues.agencyId)
+			}) }}
 
-    <div class="govuk-!-padding-3 govuk-!-margin-bottom-5 form-background">
-        <h2 class="govuk-heading-m">View by</h2>
-        <form class="horizontal-form govuk-body govuk-!-margin-bottom-3" method="GET">
-            {{ govukSelect({
-                name: 'agencyId',
-                id: 'agencyId',
-                label: {
-                    text: 'Establishment'
-                },
-                items: agencies | addDefaultSelectedVale('All', true) | setSelected(formValues.agencyId)
-            }) }}
+			{{ govukSelect({
+				name: 'finding',
+				id: 'finding',
+				label: {
+						text: 'Finding'
+				},
+				items: findingTypes  | addDefaultSelectedVale('All', true) | setSelected(formValues.finding)
+			}) }}
 
-            {{ govukSelect({
-                name: 'finding',
-                id: 'finding',
-                label: {
-                    text: 'Finding'
-                },
-                items: findingTypes  | addDefaultSelectedVale('All', true) | setSelected(formValues.finding)
-            }) }}
-
-
-            {{ datePicker({
+			{{ datePicker({
                 id: 'fromDate',
                 label: 'Date from',
                 name: 'fromDate',
@@ -71,58 +69,60 @@
                 errorMessage: errors | findError('fromDate')
             }) }}
 
-            {{ datePicker({
-                id: 'toDate',
-                label: 'Date to',
-                name: 'toDate',
-                date: formValues.toDate,
-                errorMessage: errors | findError('toDate')
-            }) }}
+			{{ datePicker({
+				id: 'toDate',
+				label: 'Date to',
+				name: 'toDate',
+				date: formValues.toDate,
+				errorMessage: errors | findError('toDate')
+			}) }}
 
-            {{ govukButton({
-                text: "View",
-                preventDoubleClick: true,
-                type: "submit"
-            }) }}
+			{{ govukButton({
+				text: "View",
+				preventDoubleClick: true,
+				type: "submit"
+			}) }}
 
-            <a href="{{ clearLink }}" class="govuk-link">Clear</a>
-        </form>
-    </div>
+			<a href="{{ clearLink }}" class="govuk-link">Clear</a>
+		</form>
+	</div>
 
-    {% if noRecordsFoundMessage != null %}
-        <p class="govuk-body" data-qa="no-records-found-message"> {{ noRecordsFoundMessage }} </p>
-    {% else %}
-        {{ mojPagination(pagination) }}
+	{% if noRecordsFoundMessage != null %}
+		<p class="govuk-body" data-qa="no-records-found-message">
+			{{ noRecordsFoundMessage }}
+		</p>
+	{% else %}
+		{{ mojPagination(pagination) }}
 
-        {{ govukTable({
-            head: [
-                {
-                    text: "Adjudication number"
-                },
-                {
-                    text: "Report date and time"
-                },
-                {
-                    text: "Establishment"
-                },
-                {
-                    text: "Offence description"
-                },
-                {
-                    text: "Finding"
-                }
-            ],
-            rows: rows,
-            attributes: { "data-qa": "adjudications-history-table" }
-        }) }}
+		{{ govukTable({
+			head: [
+					{
+							text: "Adjudication number"
+					},
+					{
+							text: "Report date and time"
+					},
+					{
+							text: "Establishment"
+					},
+					{
+							text: "Offence description"
+					},
+					{
+							text: "Finding"
+					}
+			],
+			rows: rows,
+			attributes: { "data-qa": "adjudications-history-table" }
+		}) }}
 
-        {{ mojPagination(pagination) }}
-    {% endif %}
+		{{ mojPagination(pagination) }}
+	{% endif %}
 
-		<div>
-			<hr class="govuk-section-break govuk-section-break--m govuk-section-break--visible" id="adjudication-survey-break">
-			<h2 class="govuk-heading-s govuk-!-font-weight-bold" data-qa="feedback-survey-header">Help us improve the new adjudications digital service</h2>
-			<a class="govuk-body govuk-link govuk-link--no-visited-state" href="https://eu.surveymonkey.com/r/PJ59TTW" target="_blank" data-qa="feedback-survey-link">Tell us about your experience with adjudications (opens in a new tab)</a>
-		</div>
+	<div>
+		<hr class="govuk-section-break govuk-section-break--m govuk-section-break--visible" id="adjudication-survey-break">
+		<h2 class="govuk-heading-s govuk-!-font-weight-bold" data-qa="feedback-survey-header">Help us improve the new adjudications digital service</h2>
+		<a class="govuk-body govuk-link govuk-link--no-visited-state" href="https://eu.surveymonkey.com/r/PJ59TTW" target="_blank" data-qa="feedback-survey-link">Tell us about your experience with adjudications (opens in a new tab)</a>
+	</div>
 
 {% endblock %}
