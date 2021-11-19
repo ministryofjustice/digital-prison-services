@@ -1,12 +1,8 @@
 import telemetry from '../azure-appinsights'
+import canAccessProbationDocuments from '../shared/probationDocumentsAccess'
 
-const ensureAllowedPageAccess = (offenderInCaseload: boolean, userRoles) => {
-  if (
-    !(
-      offenderInCaseload &&
-      userRoles.find((role) => role.roleCode === 'VIEW_PROBATION_DOCUMENTS' || role.roleCode === 'POM')
-    )
-  ) {
+const ensureAllowedPageAccess = (userRoles: [{ roleCode: string }], caseloads: [{ caseLoadId }], agencyId: string) => {
+  if (!canAccessProbationDocuments(userRoles, caseloads, agencyId)) {
     throw new Error('You do not have the correct role or caseload to access this page')
   }
 }
@@ -31,10 +27,7 @@ export const downloadProbationDocumentFactory = (oauthApi, communityApi, systemO
         prisonApi.getDetails(res.locals, offenderNo),
       ])
       try {
-        const offenderInCaseload =
-          caseloads && (caseloads as [{ caseLoadId: string }]).some((caseload) => caseload.caseLoadId === agencyId)
-
-        ensureAllowedPageAccess(offenderInCaseload, userRoles)
+        ensureAllowedPageAccess(userRoles, caseloads, agencyId)
         const systemContext = await systemOauthClient.getClientCredentialsTokens()
         communityApi.pipeOffenderDocument(systemContext, { offenderNo, documentId, res })
 

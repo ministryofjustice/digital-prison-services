@@ -6,6 +6,7 @@ import { alertFlagLabels, profileAlertCodes } from '../shared/alertFlagValues'
 import { csraTranslations } from '../shared/csraHelpers'
 import config from '../config'
 import logErrorAndContinue from '../shared/logErrorAndContinue'
+import canAccessProbationDocuments from '../shared/probationDocumentsAccess'
 
 export const isComplexityEnabledFor = (agencyId) => config.apis.complexity.enabled_prisons?.includes(agencyId)
 
@@ -112,10 +113,10 @@ export default ({
         )
     )
 
-    const canViewProbationDocuments = Boolean(
-      offenderInCaseload &&
-        userRoles &&
-        (userRoles as any).some((role) => ['VIEW_PROBATION_DOCUMENTS', 'POM'].includes(role.roleCode))
+    const canViewProbationDocuments = canAccessProbationDocuments(
+      userRoles as [{ roleCode: string }],
+      userCaseloads as [{ caseLoadId: string }],
+      agencyId
     )
 
     const isPathfinderUser = Boolean(

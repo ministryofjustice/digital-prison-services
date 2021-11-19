@@ -3,7 +3,13 @@ import { properCaseName, formatTimestampToDate } from '../utils'
 import { logError } from '../logError'
 
 import telemetry from '../azure-appinsights'
+import canAccessProbationDocuments from '../shared/probationDocumentsAccess'
 
+const ensureAllowedPageAccess = (userRoles: [{ roleCode: string }], caseloads: [{ caseLoadId }], agencyId: string) => {
+  if (!canAccessProbationDocuments(userRoles, caseloads, agencyId)) {
+    throw new Error('You do not have the correct role or caseload to access this page')
+  }
+}
 const serviceUnavailableMessage = 'Sorry, the service is unavailable'
 const offenderNotFoundInProbationMessage =
   'We are unable to display documents for this prisoner because we cannot find the offender record in the probation system'
@@ -135,21 +141,7 @@ export const probationDocumentsFactory = (oauthApi, prisonApi, communityApi, sys
         getCommunityDocuments(offenderNo),
       ])
 
-      const offenderInCaseload = caseloads && (caseloads as any).some((caseload) => caseload.caseLoadId === agencyId)
-
-      const ensureAllowedPageAccess = () => {
-        if (
-          !(
-            offenderInCaseload &&
-            userRoles.find((role) => role.roleCode === 'VIEW_PROBATION_DOCUMENTS' || role.roleCode === 'POM')
-          )
-        ) {
-          throw new Error('You do not have the correct role or caseload to access this page')
-        }
-      }
-
-      // maybe move this to middleware? Just not sure about the need for "authApi.userRoles(res.locals)"
-      ensureAllowedPageAccess()
+      ensureAllowedPageAccess(userRoles, caseloads, agencyId)
 
       const activeCaseLoad = caseloads.find((cl) => cl.currentlyActive)
       const activeCaseLoadId = activeCaseLoad ? activeCaseLoad.caseLoadId : null
