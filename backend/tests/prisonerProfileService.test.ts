@@ -483,14 +483,78 @@ describe('prisoner profile service', () => {
           oauthApi.userRoles.mockResolvedValue([{ roleCode: 'VIEW_PROBATION_DOCUMENTS' }])
         })
 
-        it('should let the user view probation documents', async () => {
-          const getPrisonerProfileData = await service.getPrisonerProfileData(context, offenderNo)
+        describe('when prisoner is in active caseload', () => {
+          beforeEach(() => {
+            // @ts-expect-error ts-migrate(2339)
+            prisonApi.userCaseLoads.mockResolvedValue([{ caseLoadId: 'MDI' }, { caseLoadId: 'LEI' }])
+            // @ts-expect-error ts-migrate(2339)
+            oauthApi.currentUser.mockReturnValue({ staffId: 111, activeCaseLoadId: 'MDI' })
+          })
+          it('should let the user view probation documents', async () => {
+            const getPrisonerProfileData = await service.getPrisonerProfileData(context, offenderNo)
 
-          expect(getPrisonerProfileData).toEqual(
-            expect.objectContaining({
-              canViewProbationDocuments: true,
+            expect(getPrisonerProfileData).toEqual(
+              expect.objectContaining({
+                canViewProbationDocuments: true,
+              })
+            )
+          })
+        })
+        describe('when prisoner is in another one for your caseload', () => {
+          beforeEach(() => {
+            // @ts-expect-error ts-migrate(2339)
+            prisonApi.userCaseLoads.mockResolvedValue([{ caseLoadId: 'MDI' }])
+            // @ts-expect-error ts-migrate(2339)
+            oauthApi.currentUser.mockReturnValue({ staffId: 111, activeCaseLoadId: 'LEI' })
+          })
+          it('should let the user view probation documents', async () => {
+            const getPrisonerProfileData = await service.getPrisonerProfileData(context, offenderNo)
+
+            expect(getPrisonerProfileData).toEqual(
+              expect.objectContaining({
+                canViewProbationDocuments: true,
+              })
+            )
+          })
+        })
+        describe('when prisoner is not in any of your caseloads', () => {
+          beforeEach(() => {
+            // @ts-expect-error ts-migrate(2339)
+            prisonApi.userCaseLoads.mockResolvedValue([{ caseLoadId: 'BXI' }, { caseLoadId: 'WWI' }])
+            // @ts-expect-error ts-migrate(2339)
+            oauthApi.currentUser.mockReturnValue({ staffId: 111, activeCaseLoadId: 'BXI' })
+          })
+          it('should let the user view probation documents', async () => {
+            const getPrisonerProfileData = await service.getPrisonerProfileData(context, offenderNo)
+
+            expect(getPrisonerProfileData).toEqual(
+              expect.objectContaining({
+                canViewProbationDocuments: false,
+              })
+            )
+          })
+        })
+        describe('when prisoner is OUT of prison', () => {
+          beforeEach(() => {
+            // @ts-expect-error ts-migrate(2339)
+            prisonApi.userCaseLoads.mockResolvedValue([{ caseLoadId: 'MDI' }, { caseLoadId: 'LEI' }])
+            // @ts-expect-error ts-migrate(2339)
+            oauthApi.currentUser.mockReturnValue({ staffId: 111, activeCaseLoadId: 'MDI' })
+            // @ts-expect-error ts-migrate(2339)
+            prisonApi.getDetails.mockReturnValue({
+              ...prisonerDetails,
+              agencyId: 'OUT',
             })
-          )
+          })
+          it('should let the user view probation documents', async () => {
+            const getPrisonerProfileData = await service.getPrisonerProfileData(context, offenderNo)
+
+            expect(getPrisonerProfileData).toEqual(
+              expect.objectContaining({
+                canViewProbationDocuments: false,
+              })
+            )
+          })
         })
       })
 
@@ -498,6 +562,10 @@ describe('prisoner profile service', () => {
         beforeEach(() => {
           // @ts-expect-error ts-migrate(2339) FIXME: Property 'userRoles' does not exist on type '{}'.
           oauthApi.userRoles.mockResolvedValue([{ roleCode: 'POM' }])
+          // @ts-expect-error ts-migrate(2339)
+          prisonApi.userCaseLoads.mockResolvedValue([{ caseLoadId: 'MDI' }, { caseLoadId: 'LEI' }])
+          // @ts-expect-error ts-migrate(2339)
+          oauthApi.currentUser.mockReturnValue({ staffId: 111, activeCaseLoadId: 'MDI' })
         })
 
         it('should let the user view probation documents', async () => {

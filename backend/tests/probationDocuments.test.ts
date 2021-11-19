@@ -123,7 +123,7 @@ describe('Probation documents', () => {
   const prisonApi = {}
   const communityApi = {}
   const systemOauthClient = {}
-  const getDetailsResponse = { bookingId: 1234, firstName: 'Test', lastName: 'User' }
+  const getDetailsResponse = { agencyId: 'LEI', bookingId: 1234, firstName: 'Test', lastName: 'User' }
 
   describe('Controller', () => {
     const mockReq = { flash: jest.fn().mockReturnValue([]), originalUrl: '/offenders/G9542VP/probation-documents' }
@@ -716,6 +716,120 @@ describe('Probation documents', () => {
         // @ts-expect-error ts-migrate(2339) FIXME: Property 'getOffenderConvictions' does not exist o... Remove this comment to see the full error message
         expect(communityApi.getOffenderConvictions).toHaveBeenCalledWith({ token: 'ABC' }, { offenderNo: 'G9542VP' })
       })
+      describe('access to the page based on role and caseload', () => {
+        it('should not allow access to page if user does not have role', async () => {
+          // @ts-expect-error ts-migrate(2339) FIXME: Property 'userRoles' does not exist on type '{}'.
+          oauthApi.userRoles.mockReturnValue([{ roleCode: 'SOME_OTHER_ROLE' }])
+          await page(req, res)
+
+          // @ts-expect-error ts-migrate(2339) FIXME: Property 'render' does not exist on type '{}'.
+          expect(res.render).toHaveBeenCalledWith(
+            'probationDocuments.njk',
+            expect.objectContaining({
+              errors: [
+                {
+                  text: 'Sorry, the service is unavailable',
+                },
+              ],
+            })
+          )
+        })
+
+        it('should not allow access to page if user does not have the correct caseload', async () => {
+          // @ts-expect-error ts-migrate(2339) FIXME: Property 'getDetails' does not exist on type '{}'.
+          prisonApi.getDetails = jest.fn().mockReturnValue({ ...getDetailsResponse, agencyId: 'MDI' })
+          // @ts-expect-error ts-migrate(2339)
+          prisonApi.userCaseLoads.mockResolvedValue([
+            { caseLoadId: 'BXI', currentlyActive: true },
+            { caseLoadId: 'WWI' },
+          ])
+          // @ts-expect-error ts-migrate(2339)
+          oauthApi.currentUser.mockReturnValue({ staffId: 111, activeCaseLoadId: 'BXI' })
+
+          await page(req, res)
+
+          // @ts-expect-error ts-migrate(2339) FIXME: Property 'render' does not exist on type '{}'.
+          expect(res.render).toHaveBeenCalledWith(
+            'probationDocuments.njk',
+            expect.objectContaining({
+              errors: [
+                {
+                  text: 'Sorry, the service is unavailable',
+                },
+              ],
+            })
+          )
+        })
+        it('should not allow access to page if prisoner is no longer in prison', async () => {
+          // @ts-expect-error ts-migrate(2339) FIXME: Property 'getDetails' does not exist on type '{}'.
+          prisonApi.getDetails = jest.fn().mockReturnValue({ ...getDetailsResponse, agencyId: 'OUT' })
+          // @ts-expect-error ts-migrate(2339)
+          prisonApi.userCaseLoads.mockResolvedValue([
+            { caseLoadId: 'BXI', currentlyActive: true },
+            { caseLoadId: 'WWI' },
+          ])
+          // @ts-expect-error ts-migrate(2339)
+          oauthApi.currentUser.mockReturnValue({ staffId: 111, activeCaseLoadId: 'BXI' })
+
+          await page(req, res)
+
+          // @ts-expect-error ts-migrate(2339) FIXME: Property 'render' does not exist on type '{}'.
+          expect(res.render).toHaveBeenCalledWith(
+            'probationDocuments.njk',
+            expect.objectContaining({
+              errors: [
+                {
+                  text: 'Sorry, the service is unavailable',
+                },
+              ],
+            })
+          )
+        })
+
+        it('should allow access to page if user has the correct role and in your active caseload', async () => {
+          // @ts-expect-error ts-migrate(2339) FIXME: Property 'getDetails' does not exist on type '{}'.
+          prisonApi.getDetails = jest.fn().mockReturnValue({ ...getDetailsResponse, agencyId: 'BXI' })
+          // @ts-expect-error ts-migrate(2339)
+          prisonApi.userCaseLoads.mockResolvedValue([
+            { caseLoadId: 'BXI', currentlyActive: true },
+            { caseLoadId: 'WWI' },
+          ])
+          // @ts-expect-error ts-migrate(2339)
+          oauthApi.currentUser.mockReturnValue({ staffId: 111, activeCaseLoadId: 'BXI' })
+
+          await page(req, res)
+          // @ts-expect-error ts-migrate(2339) FIXME: Property 'render' does not exist on type '{}'.
+          expect(res.render).toHaveBeenCalledWith(
+            'probationDocuments.njk',
+            expect.objectContaining({
+              errors: [],
+            })
+          )
+        })
+
+        it('should allow access to page if user has the correct role and is in one of your other caseloads', async () => {
+          // @ts-expect-error ts-migrate(2339) FIXME: Property 'userRoles' does not exist on type '{}'.
+          oauthApi.userRoles.mockReturnValue([{ roleCode: 'VIEW_PROBATION_DOCUMENTS' }])
+          // @ts-expect-error ts-migrate(2339) FIXME: Property 'getDetails' does not exist on type '{}'.
+          prisonApi.getDetails = jest.fn().mockReturnValue({ ...getDetailsResponse, agencyId: 'WWI' })
+          // @ts-expect-error ts-migrate(2339)
+          prisonApi.userCaseLoads.mockResolvedValue([
+            { caseLoadId: 'BXI', currentlyActive: true },
+            { caseLoadId: 'WWI' },
+          ])
+          // @ts-expect-error ts-migrate(2339)
+          oauthApi.currentUser.mockReturnValue({ staffId: 111, activeCaseLoadId: 'BXI' })
+
+          await page(req, res)
+          // @ts-expect-error ts-migrate(2339) FIXME: Property 'render' does not exist on type '{}'.
+          expect(res.render).toHaveBeenCalledWith(
+            'probationDocuments.njk',
+            expect.objectContaining({
+              errors: [],
+            })
+          )
+        })
+      })
     })
     describe('when rendering page with errors', () => {
       const res = {}
@@ -741,27 +855,6 @@ describe('Probation documents', () => {
         req = { ...mockReq, params: { offenderNo: 'G9542VP' } }
       })
 
-      describe('when missing role', () => {
-        beforeEach(() => {
-          // @ts-expect-error ts-migrate(2339) FIXME: Property 'userRoles' does not exist on type '{}'.
-          oauthApi.userRoles.mockReturnValue([{ roleCode: 'SOME_OTHER_ROLE' }])
-        })
-        it('should render page with unavailable message with missing role', async () => {
-          await page(req, res)
-
-          // @ts-expect-error ts-migrate(2339) FIXME: Property 'render' does not exist on type '{}'.
-          expect(res.render).toHaveBeenCalledWith(
-            'probationDocuments.njk',
-            expect.objectContaining({
-              errors: [
-                {
-                  text: 'Sorry, the service is unavailable',
-                },
-              ],
-            })
-          )
-        })
-      })
       describe('when offender not found in probation', () => {
         beforeEach(() => {
           // @ts-expect-error ts-migrate(2339) FIXME: Property 'getOffenderConvictions' does not exist o... Remove this comment to see the full error message
