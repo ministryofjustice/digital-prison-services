@@ -1,8 +1,13 @@
 import telemetry from '../azure-appinsights'
 
-export const ensureAllowedPageAccess = (userRoles) => {
-  if (!userRoles.find((role) => role.roleCode === 'VIEW_PROBATION_DOCUMENTS' || role.roleCode === 'POM')) {
-    throw new Error('You do not have the correct role to access this page')
+const ensureAllowedPageAccess = (offenderInCaseload: boolean, userRoles) => {
+  if (
+    !(
+      offenderInCaseload &&
+      userRoles.find((role) => role.roleCode === 'VIEW_PROBATION_DOCUMENTS' || role.roleCode === 'POM')
+    )
+  ) {
+    throw new Error('You do not have the correct role or caseload to access this page')
   }
 }
 
@@ -15,13 +20,21 @@ export const trackEvent = (offenderNo, documentId, suffix, { username }) => {
   }
 }
 
-export const downloadProbationDocumentFactory = (oauthApi, communityApi, systemOauthClient) => {
+export const downloadProbationDocumentFactory = (oauthApi, communityApi, systemOauthClient, prisonApi) => {
   const downloadDocument = async (req, res) => {
     const { offenderNo, documentId } = req.params
     try {
-      const [user, userRoles] = await Promise.all([oauthApi.currentUser(res.locals), oauthApi.userRoles(res.locals)])
+      const [user, userRoles, caseloads, { agencyId }] = await Promise.all([
+        oauthApi.currentUser(res.locals),
+        oauthApi.userRoles(res.locals),
+        prisonApi.userCaseLoads(res.locals),
+        prisonApi.getDetails(res.locals, offenderNo),
+      ])
       try {
-        ensureAllowedPageAccess(userRoles)
+        const offenderInCaseload =
+          caseloads && (caseloads as [{ caseLoadId: string }]).some((caseload) => caseload.caseLoadId === agencyId)
+
+        ensureAllowedPageAccess(offenderInCaseload, userRoles)
         const systemContext = await systemOauthClient.getClientCredentialsTokens()
         communityApi.pipeOffenderDocument(systemContext, { offenderNo, documentId, res })
 

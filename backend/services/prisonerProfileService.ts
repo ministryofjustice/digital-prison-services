@@ -113,7 +113,9 @@ export default ({
     )
 
     const canViewProbationDocuments = Boolean(
-      userRoles && (userRoles as any).some((role) => ['VIEW_PROBATION_DOCUMENTS', 'POM'].includes(role.roleCode))
+      offenderInCaseload &&
+        userRoles &&
+        (userRoles as any).some((role) => ['VIEW_PROBATION_DOCUMENTS', 'POM'].includes(role.roleCode))
     )
 
     const isPathfinderUser = Boolean(

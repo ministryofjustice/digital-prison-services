@@ -133,7 +133,7 @@ const setup = ({
   )
   router.get(
     '/offenders/:offenderNo/probation-documents/:documentId/download',
-    downloadProbationDocumentFactory(oauthApi, communityApi, systemOauthClient).downloadDocument
+    downloadProbationDocumentFactory(oauthApi, communityApi, systemOauthClient, prisonApi).downloadDocument
   )
 
   router.get('/bulk-appointments/need-to-upload-file', async (req, res) => {

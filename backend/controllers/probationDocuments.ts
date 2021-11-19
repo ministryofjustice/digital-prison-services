@@ -33,12 +33,6 @@ export const probationDocumentsFactory = (oauthApi, prisonApi, communityApi, sys
   const displayProbationDocumentsPage = async (req, res) => {
     const pageErrors = []
 
-    const ensureAllowedPageAccess = (userRoles) => {
-      if (!userRoles.find((role) => role.roleCode === 'VIEW_PROBATION_DOCUMENTS' || role.roleCode === 'POM')) {
-        throw new Error('You do not have the correct role to access this page')
-      }
-    }
-
     const getCommunityDocuments = async (offenderNo) => {
       const sentenceLength = (sentence) => {
         if (!sentence.originalLength || !sentence.originalLengthUnits) {
@@ -132,7 +126,7 @@ export const probationDocumentsFactory = (oauthApi, prisonApi, communityApi, sys
     const { offenderNo } = req.params
 
     try {
-      const { bookingId, firstName, lastName } = await prisonApi.getDetails(res.locals, offenderNo)
+      const { bookingId, firstName, lastName, agencyId } = await prisonApi.getDetails(res.locals, offenderNo)
 
       const [caseloads, user, userRoles, communityDocuments] = await Promise.all([
         prisonApi.userCaseLoads(res.locals),
@@ -141,8 +135,21 @@ export const probationDocumentsFactory = (oauthApi, prisonApi, communityApi, sys
         getCommunityDocuments(offenderNo),
       ])
 
+      const offenderInCaseload = caseloads && (caseloads as any).some((caseload) => caseload.caseLoadId === agencyId)
+
+      const ensureAllowedPageAccess = () => {
+        if (
+          !(
+            offenderInCaseload &&
+            userRoles.find((role) => role.roleCode === 'VIEW_PROBATION_DOCUMENTS' || role.roleCode === 'POM')
+          )
+        ) {
+          throw new Error('You do not have the correct role or caseload to access this page')
+        }
+      }
+
       // maybe move this to middleware? Just not sure about the need for "authApi.userRoles(res.locals)"
-      ensureAllowedPageAccess(userRoles)
+      ensureAllowedPageAccess()
 
       const activeCaseLoad = caseloads.find((cl) => cl.currentlyActive)
       const activeCaseLoadId = activeCaseLoad ? activeCaseLoad.caseLoadId : null
