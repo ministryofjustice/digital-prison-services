@@ -490,42 +490,85 @@ context('Prisoner quick look', () => {
   })
 
   context('When a user has VIEW_PROBATION_DOCUMENTS role', () => {
-    beforeEach(() => {
-      Cypress.Cookies.preserveOnce('hmpps-session-dev')
-      cy.task('stubPrisonerProfileHeaderData', {
-        offenderBasicDetails,
-        offenderFullDetails,
-        iepSummary: {},
-        caseNoteSummary: {},
-        userRoles: [{ roleCode: 'VIEW_PROBATION_DOCUMENTS' }],
-        offenderNo,
+    context('when offender in caseload', () => {
+      beforeEach(() => {
+        Cypress.Cookies.preserveOnce('hmpps-session-dev')
+        cy.task('stubPrisonerProfileHeaderData', {
+          offenderBasicDetails,
+          offenderFullDetails,
+          iepSummary: {},
+          caseNoteSummary: {},
+          userRoles: [{ roleCode: 'VIEW_PROBATION_DOCUMENTS' }],
+          offenderNo,
+        })
+      })
+
+      it('Should show the View documents held by probation link', () => {
+        cy.visit(`/prisoner/${offenderNo}`)
+
+        cy.get('[data-test="probation-documents-link"]').should('contain.text', 'View documents held by probation')
       })
     })
+    context('when offender not in caseload', () => {
+      beforeEach(() => {
+        Cypress.Cookies.preserveOnce('hmpps-session-dev')
+        cy.task('stubPrisonerProfileHeaderData', {
+          offenderBasicDetails: { ...offenderBasicDetails, agencyId: 'LEI' },
+          offenderFullDetails,
+          iepSummary: {},
+          caseNoteSummary: {},
+          userRoles: [{ roleCode: 'VIEW_PROBATION_DOCUMENTS' }],
+          offenderNo,
+        })
+      })
 
-    it('Should show the View documents held by probation link', () => {
-      cy.visit(`/prisoner/${offenderNo}`)
+      it('Should not show the View documents held by probation link', () => {
+        cy.visit(`/prisoner/${offenderNo}`)
 
-      cy.get('[data-test="probation-documents-link"]').should('contain.text', 'View documents held by probation')
+        cy.get('[data-test="probation-documents-link"]').should('not.exist')
+      })
     })
   })
 
   context('When a user has POM role', () => {
-    beforeEach(() => {
-      Cypress.Cookies.preserveOnce('hmpps-session-dev')
-      cy.task('stubPrisonerProfileHeaderData', {
-        offenderBasicDetails,
-        offenderFullDetails,
-        iepSummary: {},
-        caseNoteSummary: {},
-        userRoles: [{ roleCode: 'POM' }],
-        offenderNo,
+    context('when offender not in caseload', () => {
+      beforeEach(() => {
+        Cypress.Cookies.preserveOnce('hmpps-session-dev')
+        cy.task('stubPrisonerProfileHeaderData', {
+          offenderBasicDetails,
+          offenderFullDetails,
+          iepSummary: {},
+          caseNoteSummary: {},
+          userRoles: [{ roleCode: 'POM' }],
+          offenderNo,
+        })
+      })
+
+      it('Should show the View documents held by probation link', () => {
+        cy.visit(`/prisoner/${offenderNo}`)
+
+        cy.get('[data-test="probation-documents-link"]').should('contain.text', 'View documents held by probation')
       })
     })
 
-    it('Should show the View documents held by probation link', () => {
-      cy.visit(`/prisoner/${offenderNo}`)
+    context('when offender not in caseload', () => {
+      beforeEach(() => {
+        Cypress.Cookies.preserveOnce('hmpps-session-dev')
+        cy.task('stubPrisonerProfileHeaderData', {
+          offenderBasicDetails: { ...offenderBasicDetails, agencyId: 'LEI' },
+          offenderFullDetails,
+          iepSummary: {},
+          caseNoteSummary: {},
+          userRoles: [{ roleCode: 'POM' }],
+          offenderNo,
+        })
+      })
 
-      cy.get('[data-test="probation-documents-link"]').should('contain.text', 'View documents held by probation')
+      it('Should not show the View documents held by probation link', () => {
+        cy.visit(`/prisoner/${offenderNo}`)
+
+        cy.get('[data-test="probation-documents-link"]').should('not.exist')
+      })
     })
   })
 
