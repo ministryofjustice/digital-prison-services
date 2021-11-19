@@ -1,5 +1,3 @@
-import exp from 'constants'
-
 const canAccessProbationDocuments = (
   userRoles: [{ roleCode: string }],
   caseloads: [{ caseLoadId }],
