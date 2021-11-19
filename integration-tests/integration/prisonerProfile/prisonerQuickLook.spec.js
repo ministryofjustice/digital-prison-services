@@ -514,7 +514,7 @@ context('Prisoner quick look', () => {
         Cypress.Cookies.preserveOnce('hmpps-session-dev')
         cy.task('stubPrisonerProfileHeaderData', {
           offenderBasicDetails: { ...offenderBasicDetails, agencyId: 'LEI' },
-          offenderFullDetails,
+          offenderFullDetails: { ...offenderFullDetails, agencyId: 'LEI' },
           iepSummary: {},
           caseNoteSummary: {},
           userRoles: [{ roleCode: 'VIEW_PROBATION_DOCUMENTS' }],
@@ -556,7 +556,7 @@ context('Prisoner quick look', () => {
         Cypress.Cookies.preserveOnce('hmpps-session-dev')
         cy.task('stubPrisonerProfileHeaderData', {
           offenderBasicDetails: { ...offenderBasicDetails, agencyId: 'LEI' },
-          offenderFullDetails,
+          offenderFullDetails: { ...offenderFullDetails, agencyId: 'LEI' },
           iepSummary: {},
           caseNoteSummary: {},
           userRoles: [{ roleCode: 'POM' }],
