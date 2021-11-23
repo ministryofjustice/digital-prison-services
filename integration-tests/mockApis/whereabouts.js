@@ -125,7 +125,7 @@ module.exports = {
         jsonBody: data,
       },
     }),
-  stubPostAttendance: attendanceToReturn =>
+  stubPostAttendance: (attendanceToReturn) =>
     stubFor({
       request: {
         method: 'POST',
@@ -139,7 +139,7 @@ module.exports = {
         jsonBody: attendanceToReturn,
       },
     }),
-  stubPutAttendance: attendanceToReturn =>
+  stubPutAttendance: (attendanceToReturn) =>
     stubFor({
       request: {
         method: 'PUT',
@@ -171,7 +171,7 @@ module.exports = {
     getMatchingRequests({
       method: 'POST',
       urlPath: '/whereabouts/court/video-link-bookings',
-    }).then(data => {
+    }).then((data) => {
       const { requests } = data.body
       return JSON.parse(requests.slice(-1)[0].body)
     }),
@@ -340,7 +340,7 @@ module.exports = {
         jsonBody: response,
       },
     }),
-  stubLocationGroups: locationGroups =>
+  stubLocationGroups: (locationGroups) =>
     stubFor({
       request: {
         method: 'GET',
@@ -396,7 +396,7 @@ module.exports = {
         jsonBody: cellMoveReasonResponse,
       },
     }),
-  stubAttendanceForScheduledActivities: attendances =>
+  stubAttendanceForScheduledActivities: (attendances) =>
     stubFor({
       request: {
         method: 'GET',
@@ -487,6 +487,20 @@ module.exports = {
         headers: {
           'Content-Type': 'application/json;charset=UTF-8',
         },
+      },
+    }),
+  stubGetUnacceptableAbsenceCount: ({ offenderNo, unacceptableAbsence }) =>
+    stubFor({
+      request: {
+        method: 'GET',
+        urlPattern: `/whereabouts/attendances/offender/${offenderNo}/unacceptable-absence-count\\?fromDate=.+&toDate=.+`,
+      },
+      response: {
+        status: 200,
+        headers: {
+          'Content-Type': 'application/json;charset=UTF-8',
+        },
+        jsonBody: { acceptableAbsence: 5, unacceptableAbsence, total: 25 },
       },
     }),
 }

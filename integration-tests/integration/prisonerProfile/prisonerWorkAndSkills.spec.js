@@ -587,7 +587,7 @@ context('Prisoner Work and Skills', () => {
           })
         })
         cy.get('[data-test="work-scheduleLink"]').then(($workScheduleLink) => {
-          cy.get($workScheduleLink).should('have.text', 'View 7 day schedule')
+          cy.get($workScheduleLink).contains('View 7 day schedule')
         })
         cy.get('[data-test="work-header"]').should('not.exist')
       })
@@ -633,6 +633,7 @@ context('Prisoner Work and Skills', () => {
         cy.task('stubPrisonerProfileHeaderData', prisonerProfileHeaderData)
         cy.task('stubOffenderWorkHistory', dummyWorkHistory)
         cy.task('stubPrisonerDetails', prisonerDetails)
+        cy.task('stubGetUnacceptableAbsenceCount', { offenderNo: 'G6123VU', unacceptableAbsence: 4 })
       })
 
       beforeEach(() => {
@@ -647,12 +648,16 @@ context('Prisoner Work and Skills', () => {
           })
         })
         cy.get('[data-test="work-detailsLink"]').then(($workDetailsLink) => {
-          cy.get($workDetailsLink).should('have.text', 'View work and activities for the last 12 months')
+          cy.get($workDetailsLink).contains('View work and activities for the last 12 months')
         })
 
         cy.get('[data-test="work-scheduleLink"]').then(($workScheduleLink) => {
-          cy.get($workScheduleLink).should('have.text', 'View 7 day schedule')
+          cy.get($workScheduleLink).contains('View 7 day schedule')
         })
+
+        cy.get('[data-test="work-unacceptableAbsence"]').contains('Last 30 days')
+        cy.get('[data-test="work-unacceptableAbsence"]').contains('4')
+        cy.get('[data-test="work-absencesLink"]').contains('View unacceptable absences for the last 6 months')
       })
     })
     context('When there is data available', () => {
@@ -704,6 +709,7 @@ context('Prisoner Work and Skills', () => {
         cy.task('stubPrisonerProfileHeaderData', prisonerProfileHeaderData)
         cy.task('stubOffenderWorkHistory', dummyWorkHistory)
         cy.task('stubPrisonerDetails', prisonerDetails)
+        cy.task('stubGetUnacceptableAbsenceCount', { offenderNo: 'G6123VU', unacceptableAbsence: 0 })
       })
 
       beforeEach(() => {
@@ -719,26 +725,32 @@ context('Prisoner Work and Skills', () => {
           cy.get($summary)
             .find('dt')
             .then(($summaryLabels) => {
-              cy.get($summaryLabels).its('length').should('eq', 2)
+              cy.get($summaryLabels).its('length').should('eq', 3)
               expect($summaryLabels.get(0).innerText).to.contain('Cleaner HB1 AM')
               expect($summaryLabels.get(1).innerText).to.contain('Cleaner HB1 PM')
+              expect($summaryLabels.get(2).innerText).to.contain('Last 30 days')
             })
 
           cy.get($summary)
             .find('dd')
             .then(($summaryValues) => {
-              cy.get($summaryValues).its('length').should('eq', 2)
+              cy.get($summaryValues).its('length').should('eq', 3)
               expect($summaryValues.get(0).innerText).to.contain('Started on 19 August 2021')
               expect($summaryValues.get(1).innerText).to.contain('Started on 20 July 2021')
+              expect($summaryValues.get(2).innerText).to.contain('0')
             })
 
           cy.get('[data-test="work-detailsLink"]').then(($workDetailsLink) => {
-            cy.get($workDetailsLink).should('have.text', 'View work and activities for the last 12 months')
+            cy.get($workDetailsLink).contains('View work and activities for the last 12 months')
           })
 
           cy.get('[data-test="work-scheduleLink"]').then(($workScheduleLink) => {
-            cy.get($workScheduleLink).should('have.text', 'View 7 day schedule')
+            cy.get($workScheduleLink).contains('View 7 day schedule')
           })
+          cy.get('[data-test="work-absencesLink"]').should('not.exist')
+          cy.get('[data-test="work-summary"]').contains(
+            'John Smith has no unacceptable absences in the last 6 months'
+          )
         })
       })
     })

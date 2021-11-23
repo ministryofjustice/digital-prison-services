@@ -56,6 +56,9 @@ export const whereaboutsApiFactory = (client) => {
       { customTimeout: 30000 }
     )
 
+  const getUnacceptableAbsences = (context, offenderNo, fromDate, toDate) =>
+    get(context, `/attendances/offender/${offenderNo}/unacceptable-absence-count?fromDate=${fromDate}&toDate=${toDate}`)
+
   const searchGroups = (context, agencyId) => get(context, `/agencies/${agencyId}/locations/groups`)
 
   const getAgencyGroupLocationPrefix = (context, agencyId, groupName) =>
@@ -123,6 +126,7 @@ export const whereaboutsApiFactory = (client) => {
     postAttendances,
     getAttendanceStats,
     getAbsences,
+    getUnacceptableAbsences,
     searchGroups,
     getAgencyGroupLocationPrefix,
     getAgencyGroupLocations,

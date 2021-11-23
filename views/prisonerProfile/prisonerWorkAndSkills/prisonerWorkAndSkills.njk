@@ -11,7 +11,8 @@
 {% set functionalSkillLevels = functionalSkillLevels.content %}
 {% set goals = targets.content %}
 {% set courses = coursesAndQualifications.content %}
-{% set work = currentWork.content %}
+{% set work = currentWork.content.currentWorkData %}
+{% set absence = currentWork.content.unacceptableAbsenceSummary %}
 
 {% set functionalSkillsLevelSection %}
     <div data-test="functional-skills-level-summary">

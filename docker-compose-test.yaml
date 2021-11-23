@@ -1,14 +1,15 @@
-version: '3.1'
+version: '3.8'
 services:
   digital-prison-services-wiremock:
     image: rodolpheche/wiremock
-    container_name: digital-prison-services-wiremock
-    restart: always
+    container_name: digital-prison-services-test-wiremock
+    restart: unless-stopped
     ports:
       - "9191:8080"
 
   digital-prison-services-test-redis:
     image: redis
     container_name: digital-prison-services-test-redis
+    restart: unless-stopped
     ports:
       - 6379:6379
