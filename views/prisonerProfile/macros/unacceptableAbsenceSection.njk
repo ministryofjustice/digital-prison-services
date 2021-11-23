@@ -1,0 +1,15 @@
+{% from "govuk/components/summary-list/macro.njk" import govukSummaryList %}
+
+{% macro unacceptableAbsenceSection(absence, attributes = {},  classes='') %}
+
+    {% set labelClass = "govuk-!-font-weight-regular" %}
+
+    {{ govukSummaryList({
+        rows: [{
+            key: { text: 'Last 30 days', classes: labelClass },
+            value: { text:  absence.unacceptableAbsence }
+        }],
+        classes: classes,
+        attributes: attributes
+    }) }}
+{% endmacro %}

@@ -66,7 +66,7 @@ const controller = ({
   const prisonerFinanceService = prisonerFinanceServiceFactory(prisonApi)
   const referenceCodesService = referenceCodesServiceFactory(prisonApi)
   const adjudicationHistoryService = adjudicationsHistoryService(prisonApi)
-  const esweService = EsweService.create(curiousApi, systemOauthClient, prisonApi)
+  const esweService = EsweService.create(curiousApi, systemOauthClient, prisonApi, whereaboutsApi)
 
   router.get(
     '/',

@@ -27,9 +27,11 @@ describe('Education skills and work experience', () => {
   const credentialsRef = {}
   const curiousApi = {} as CuriousApi
   const prisonApi = {} as any
+  const whereaboutsApi = {} as any
   const systemOauthClient = {
     getClientCredentialsTokens: jest.fn(),
   }
+  const whereaboutsContext = 'TOKEN'
   let service
   let getLearnerProfilesMock
   let getLearnerEducationMock
@@ -37,6 +39,7 @@ describe('Education skills and work experience', () => {
   let getLearnerGoalsMock
   let getLearnerActivitiesHistoryMock
   let getPrisonerDetailsMock
+  let getUnacceptableAbsencesMock
   beforeEach(() => {
     getLearnerProfilesMock = jest.fn()
     getLearnerEducationMock = jest.fn()
@@ -44,11 +47,13 @@ describe('Education skills and work experience', () => {
     getLearnerGoalsMock = jest.fn()
     getLearnerActivitiesHistoryMock = jest.fn()
     getPrisonerDetailsMock = jest.fn()
+    getUnacceptableAbsencesMock = jest.fn()
     curiousApi.getLearnerProfiles = getLearnerProfilesMock
     curiousApi.getLearnerEducation = getLearnerEducationMock
     curiousApi.getLearnerLatestAssessments = getLearnerLatestAssessmentsMock
     curiousApi.getLearnerGoals = getLearnerGoalsMock
     prisonApi.getOffenderActivitiesHistory = getLearnerActivitiesHistoryMock
+    whereaboutsApi.getUnacceptableAbsences = getUnacceptableAbsencesMock
     prisonApi.getPrisonerDetails = getPrisonerDetailsMock
     systemOauthClient.getClientCredentialsTokens.mockReset()
 
@@ -59,7 +64,7 @@ describe('Education skills and work experience', () => {
     getPrisonerDetailsMock.mockResolvedValue(dummyPrisonerDetails)
 
     systemOauthClient.getClientCredentialsTokens.mockReturnValue(credentialsRef)
-    service = EsweService.create(curiousApi, systemOauthClient, prisonApi)
+    service = EsweService.create(curiousApi, systemOauthClient, prisonApi, whereaboutsApi)
   })
 
   describe('learner profiles', () => {
@@ -669,40 +674,40 @@ describe('Education skills and work experience', () => {
     describe('Work inside prison', () => {
       const nomisId = 'G3609VL'
       it('should return null content on work history api error', async () => {
-        jest.spyOn(app, 'esweEnabled', 'get').mockReturnValue(true)
         getLearnerActivitiesHistoryMock.mockRejectedValue(new Error('error'))
-        const actual = await service.getCurrentActivities(nomisId)
-        expect(actual.content).toBeNull()
+        const actual = await service.getCurrentActivities(whereaboutsContext, nomisId)
+        expect(actual.content.currentWorkData).toBeNull()
+      })
+      it('should return null content on Unacceptable Absences api error', async () => {
+        getUnacceptableAbsencesMock.mockRejectedValue(new Error('whereabouts api error'))
+        const actual = await service.getCurrentActivities(whereaboutsContext, nomisId)
+        expect(actual.content.unacceptableAbsenceSummary).toBeNull()
       })
       it('should return null content on prisoner details api error', async () => {
-        jest.spyOn(app, 'esweEnabled', 'get').mockReturnValue(true)
         getPrisonerDetailsMock.mockRejectedValue(new Error('error'))
-        const actual = await service.getCurrentActivities(nomisId)
-        expect(actual.content).toBeNull()
+        const actual = await service.getCurrentActivities(whereaboutsContext, nomisId)
+        expect(actual.content.currentWorkData).toBeNull()
       })
       it('should call the endpoints with the correct prn, context and dates', async () => {
-        jest.spyOn(app, 'esweEnabled', 'get').mockReturnValue(true)
         const oneYearAgo = moment().subtract(1, 'year').format('YYYY-MM-DD')
-        await service.getCurrentActivities(nomisId)
+        await service.getCurrentActivities(whereaboutsContext, nomisId)
         expect(systemOauthClient.getClientCredentialsTokens).toHaveBeenCalledTimes(1)
         expect(getLearnerActivitiesHistoryMock).toHaveBeenCalledWith(credentialsRef, nomisId, oneYearAgo, {
           size: 1000,
         })
+        expect(getUnacceptableAbsencesMock).toHaveBeenCalledTimes(2) // may change
       })
       it('should return expected response when the prisoner is not found', async () => {
-        jest.spyOn(app, 'esweEnabled', 'get').mockReturnValue(true)
         getLearnerActivitiesHistoryMock.mockRejectedValue(makeNotFoundError())
-        const actual = await service.getCurrentActivities(nomisId)
-        expect(actual.content).toEqual(DEFAULT_WORK_DATA)
+        const actual = await service.getCurrentActivities(whereaboutsContext, nomisId)
+        expect(actual.content.currentWorkData).toEqual(DEFAULT_WORK_DATA)
       })
       it('should return the expected response if the user has no work', async () => {
-        jest.spyOn(app, 'esweEnabled', 'get').mockReturnValue(true)
         getLearnerActivitiesHistoryMock.mockResolvedValue({ content: [] })
-        const actual = await service.getCurrentActivities(nomisId)
-        expect(actual.content).toEqual(DEFAULT_WORK_DATA)
+        const actual = await service.getCurrentActivities(whereaboutsContext, nomisId)
+        expect(actual.content.currentWorkData).toEqual(DEFAULT_WORK_DATA)
       })
       it('should return the expected response if the user has no current work but has historical work', async () => {
-        jest.spyOn(app, 'esweEnabled', 'get').mockReturnValue(true)
         const dummyActivitiesHistoryNoCurrent = {
           content: [
             {
@@ -725,17 +730,16 @@ describe('Education skills and work experience', () => {
           ],
         }
         getLearnerActivitiesHistoryMock.mockResolvedValue(dummyActivitiesHistoryNoCurrent)
-        const actual = await service.getCurrentActivities(nomisId)
+        const actual = await service.getCurrentActivities(whereaboutsContext, nomisId)
 
         const expected = {
           currentJobs: [],
           workHistoryPresent: true,
         }
-        expect(actual.content).toEqual(expected)
+        expect(actual.content.currentWorkData).toEqual(expected)
       })
-      it('should filter out work that is not in the current castload', async () => {
-        jest.spyOn(app, 'esweEnabled', 'get').mockReturnValue(true)
-        const actual = await service.getCurrentActivities(nomisId)
+      it('should filter out work that is not in the current caseload', async () => {
+        const actual = await service.getCurrentActivities(whereaboutsContext, nomisId)
         const expected = {
           currentJobs: [
             {
@@ -745,11 +749,10 @@ describe('Education skills and work experience', () => {
           ],
           workHistoryPresent: true,
         }
-        expect(actual.content).toEqual(expected)
+        expect(actual.content.currentWorkData).toEqual(expected)
       })
       it('should return the expected response if the user has current work and historical work', async () => {
-        jest.spyOn(app, 'esweEnabled', 'get').mockReturnValue(true)
-        const actual = await service.getCurrentActivities(nomisId)
+        const actual = await service.getCurrentActivities(whereaboutsContext, nomisId)
         const expected = {
           currentJobs: [
             {
@@ -759,7 +762,29 @@ describe('Education skills and work experience', () => {
           ],
           workHistoryPresent: true,
         }
-        expect(actual.content).toEqual(expected)
+        expect(actual.content.currentWorkData).toEqual(expected)
+      })
+      it('should return the expected unacceptable absences data with absences', async () => {
+        getUnacceptableAbsencesMock.mockResolvedValue(getDummyUnacceptableAbsenceSummary(4))
+        const actual = await service.getCurrentActivities(whereaboutsContext, nomisId)
+        const expected = {
+          acceptableAbsence: 7,
+          unacceptableAbsence: 4,
+          total: 42,
+          noneInSixMonths: false,
+        }
+        expect(actual.content.unacceptableAbsenceSummary).toEqual(expected)
+      })
+      it('should return the expected unacceptable absences data if no such absences', async () => {
+        getUnacceptableAbsencesMock.mockResolvedValue(getDummyUnacceptableAbsenceSummary(0))
+        const actual = await service.getCurrentActivities(whereaboutsContext, nomisId)
+        const expected = {
+          acceptableAbsence: 7,
+          unacceptableAbsence: 0,
+          total: 42,
+          noneInSixMonths: true,
+        }
+        expect(actual.content.unacceptableAbsenceSummary).toEqual(expected)
       })
     })
   })
@@ -795,6 +820,14 @@ function getDummyPrisonerDetails() {
       maritalStatus: 'No',
     },
   ]
+}
+
+function getDummyUnacceptableAbsenceSummary(unacceptableAbsence) {
+  return {
+    acceptableAbsence: 7,
+    unacceptableAbsence,
+    total: 42,
+  }
 }
 
 function getDummyLearnerProfiles(): curious.LearnerProfile[] {
