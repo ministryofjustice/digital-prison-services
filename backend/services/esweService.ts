@@ -152,6 +152,18 @@ export default class EsweService {
     return createFlaggedContent(content)
   }
 
+  async getLearnerEmployabilitySkills(nomisId: string): Promise<curious.LearnerEmployabilitySkills> {
+    let result: curious.LearnerEmployabilitySkills = null
+    try {
+      const context = await this.systemOauthClient.getClientCredentialsTokens()
+      result = await this.curiousApi.getLearnerEmployabilitySkills(context, nomisId)
+    } catch (e) {
+      log.warn(`Failed in getLearnerEmployabilitySkills. Reason: ${e.message}`)
+    }
+
+    return result
+  }
+
   async getNeurodiversities(nomisId: string): Promise<Neurodiversities> {
     try {
       const context = await this.systemOauthClient.getClientCredentialsTokens()

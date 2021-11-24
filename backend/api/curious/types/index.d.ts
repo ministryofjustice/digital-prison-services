@@ -2,6 +2,20 @@ declare namespace curious {
   type AssessmentQualificationType = import('AssessmentQualificationType')
   type LearnerEducationDeliveryMethodType = import('LearnerEducationDeliveryMethodType')
 
+  type Sort = {
+    empty?: boolean
+    sorted?: boolean
+    unsorted?: boolean
+  }
+  type Pageable = {
+    offset?: number
+    pageNumber?: number
+    pageSize?: number
+    paged?: boolean
+    sort?: Sort
+    unpaged?: boolean
+  }
+
   /**
    *
    * @export
@@ -430,6 +444,51 @@ declare namespace curious {
      * @memberof LearnerCourses
      */
     withdrawalReasons?: string
+  }
+
+  /**
+   *
+   * @export
+   * @interface LearnerEmployabilitySkills
+   */
+  interface LearnerEmployabilitySkillsDTO {
+    /** Activity End Date */
+    activityEndDate?: string
+    /** Activity Location */
+    activityLocation?: string
+    /** Activity Start Date */
+    activityStartDate?: string
+    /** Prison Post code of a location where this skill is under taken */
+    deliveryLocationPostCode?: string
+    /** Skill Delivery Method */
+    deliveryMethodType?: 'Face to Face, Blended Learning, Classroom Only Learning, Pack Only Learning'
+    /** Employability Skill */
+    employabilitySkill?: 'Adaptability, Attitudes and Behaviour, Communication, Creativity, Initiative, Organisation, Planning, Problem Solving, Reliability, Timekeeping'
+    /** Establishment (prison) identifier */
+    establishmentId?: string
+    /** Establishment (prison) name */
+    establishmentName?: string
+    /** NOMIS Assigned Offender Number (Prisoner Identifier) */
+    prn?: string
+  }
+
+  /**
+   *
+   * @export
+   * @interface LearnerEmployabilitySkills
+   */
+  export interface LearnerEmployabilitySkills {
+    content?: LearnerEmployabilitySkillsDTO[]
+    empty?: boolean
+    first?: boolean
+    last?: boolean
+    number?: number
+    numberOfElements?: number
+    pageable?: components['schemas']['Pageable']
+    size?: number
+    sort?: components['schemas']['Sort']
+    totalElements?: number
+    totalPages?: number
   }
 
   /**

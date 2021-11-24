@@ -51,6 +51,12 @@ export default class CuriousApi {
     return this.client.get<curious.LearnerGoals>(context, `/learnerGoals/${nomisId}`).then((response) => response.body)
   }
 
+  getLearnerEmployabilitySkills(context: ClientContext, nomisId: string): Promise<curious.LearnerEmployabilitySkills> {
+    return this.client
+      .get<curious.LearnerEmployabilitySkills>(context, `/learnerEmployabilitySkills/${nomisId}?size=1000`)
+      .then((response) => response.body)
+  }
+
   private applyQuery = (path, query?: Record<string, unknown>) => {
     const queries = mapToQueryString(query)
     return this.hasNonEmptyValues(query) ? `${path}?${queries}` : path
