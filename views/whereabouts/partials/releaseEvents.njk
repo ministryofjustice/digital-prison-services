@@ -1,6 +1,12 @@
 {% from "../../macros/holdAgainstTransferDetailsDialog.njk" import holdAgainstTransferDetailsDialog %}
 
-<h2 class="govuk-heading-s">Releases</h2>
+<div class="horizontal-information">
+    <h2 class="govuk-heading-s horizontal-information__item scheduled-moves__section_heading">Releases</h2>
+    {% if releaseEvents.length !== 0 %}
+        <p class="govuk-body horizontal-information__item pull-right"><strong>Prisoners listed:</strong> {{ prisonersListedForRelease }}</p>
+    {% endif %}
+</div>
+
 {% if releaseEvents.length !== 0 %}
     {% set releaseEventRows = [] %}
     {% for event in releaseEvents %}
@@ -13,7 +19,6 @@
         ]), releaseEventRows) %}
     {% endfor %}
 
-    <p class="govuk-body pull-right"><strong>Prisoners listed:</strong> {{ prisonersListedForRelease }}</p>
     {{ govukTable({
         head: [
             {
