@@ -8,7 +8,7 @@ import { Alert, PrisonerSearchResult } from '../../api/offenderSearchApi'
 import { PrisonerPersonalProperty } from '../../api/prisonApi'
 
 const scheduledTypes: Array<SelectValue> = [
-  { text: 'Court', value: 'Court' },
+  { text: 'Court appearances', value: 'Court' },
   { text: 'Releases', value: 'Releases' },
   { text: 'Transfers', value: 'Transfers' },
 ]
@@ -254,8 +254,9 @@ export default ({ prisonApi, offenderSearchApi }) => {
     })
 
     const allTransferEvents = scheduledType && scheduledType !== 'Transfers' ? [] : scheduledMovements.transferEvents
+    const transferEventsWithoutRotl = allTransferEvents.filter((transferEvent) => transferEvent.eventType !== 'TAP')
     const transferEvents = toScheduledEventWithADestination({
-      events: allTransferEvents,
+      events: transferEventsWithoutRotl,
       prisonerNumbersForOffenderNumbersThatAreOutside,
       scheduledMoveDetailsForPrisoners,
       movementReasons,
