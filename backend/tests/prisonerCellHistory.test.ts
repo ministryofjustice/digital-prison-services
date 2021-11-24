@@ -46,7 +46,7 @@ describe('Prisoner cell history', () => {
         {
           agencyId: 'RNI',
           assignmentDate: '2020-02-01',
-          assignmentDateTime: '2020-02-01T12:48:33.375Z',
+          assignmentDateTime: '2020-02-01T12:48:33.375',
           assignmentReason: 'ADM',
           bookingId,
           description: 'RNI-1-03',
@@ -57,7 +57,7 @@ describe('Prisoner cell history', () => {
         {
           agencyId: 'MDI',
           assignmentDate: '2020-05-01',
-          assignmentDateTime: '2020-05-01T12:48:33.375Z', // Avoid BST
+          assignmentDateTime: '2020-05-01T12:48:33.375',
           assignmentReason: 'ADM',
           bookingId,
           description: 'MDI-1-02',
@@ -67,9 +67,9 @@ describe('Prisoner cell history', () => {
         {
           agencyId: 'MDI',
           assignmentDate: '2020-03-01',
-          assignmentDateTime: '2020-03-01T12:48:33.375Z',
+          assignmentDateTime: '2020-03-01T12:48:33.375',
           assignmentEndDate: '2020-04-01',
-          assignmentEndDateTime: '2020-04-01T12:48:33.375Z',
+          assignmentEndDateTime: '2020-04-01T12:48:33.375',
           assignmentReason: 'ADM',
           bookingId,
           description: 'MDI-RECP',
@@ -79,9 +79,9 @@ describe('Prisoner cell history', () => {
         {
           agencyId: 'MDI',
           assignmentDate: '2020-04-01',
-          assignmentDateTime: '2020-04-01T12:48:33.375Z',
+          assignmentDateTime: '2020-04-01T12:48:33.375',
           assignmentEndDate: '2020-05-01',
-          assignmentEndDateTime: '2020-05-01T12:48:33.375Z',
+          assignmentEndDateTime: '2020-05-01T12:48:33.375',
           assignmentReason: 'ADM',
           bookingId,
           description: 'MDI-1-03',

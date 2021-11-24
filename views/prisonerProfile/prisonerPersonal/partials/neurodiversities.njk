@@ -3,6 +3,9 @@
 {% set neurodiversityInfo = neurodiversities.content %}
 {% set offenderName = (prisonerProfileData.offenderName).split(',')[1].trim() + " " +(prisonerProfileData.offenderName).split(',')[0] %}
 
+<p class="govuk-body govuk-!-margin-bottom-2">
+    This is information captured by the education team, not a medical diagnosis. Contact the local education team to find out more.
+</p>
 {% if neurodiversityInfo %}
     {% for entry in neurodiversityInfo %}
     {{ prisonerSummarySection(entry.details, '', {}, false, 'govuk-summary-list--no-border', false) }}
