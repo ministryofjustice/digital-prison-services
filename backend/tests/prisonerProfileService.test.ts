@@ -255,7 +255,7 @@ describe('prisoner profile service', () => {
         offenderNo: 'ABC123',
         offenderRecordRetained: undefined,
         showAddKeyworkerSession: false,
-        showCalculateRelseaseDates: false,
+        showCalculateReleaseDates: false,
         showReportUseOfForce: false,
         useOfForceUrl: '//useOfForceUrl/report/123/report-use-of-force',
         userCanEdit: false,
@@ -822,7 +822,7 @@ describe('prisoner profile service', () => {
 
           expect(getPrisonerProfileData).toEqual(
             expect.objectContaining({
-              showCalculateRelseaseDates: true,
+              showCalculateReleaseDates: true,
               calculateReleaseDatesUrl: 'http://crd-ui/?prisonId=ABC123',
             })
           )
@@ -840,7 +840,7 @@ describe('prisoner profile service', () => {
 
           expect(getPrisonerProfileData).toEqual(
             expect.objectContaining({
-              showCalculateRelseaseDates: false,
+              showCalculateReleaseDates: false,
             })
           )
         })
@@ -859,7 +859,7 @@ describe('prisoner profile service', () => {
 
           expect(getPrisonerProfileData).toEqual(
             expect.objectContaining({
-              showCalculateRelseaseDates: false,
+              showCalculateReleaseDates: false,
             })
           )
         })

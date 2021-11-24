@@ -62,5 +62,5 @@ env:
   PRISONS_WITH_MANAGE_ADJUDICATIONS_ENABLED: ""
   MANAGE_ADJUDICAIONS_URL: https://manage-adjudications-dev.hmpps.service.justice.gov.uk/
   PVB_URL: https://manage-a-prison-visit-dev.hmpps.service.justice.gov.uk/
-  CALCULATE_RELEASE_DATES_URL: https://calculate-release-dates-dev.hmpps.service.justice.gov.uk/
+  CALCULATE_RELEASE_DATES_URL: https://calculate-release-dates-dev.hmpps.service.justice.gov.uk
 

@@ -139,20 +139,20 @@ env:
   - name: API_WHEREABOUTS_ENDPOINT_URL
     value: {{ .Values.env.API_WHEREABOUTS_ENDPOINT_URL | quote }}
 
-  {{- if .Values.env.SYSTEM_PHASE }}
+{{- if .Values.env.SYSTEM_PHASE }}
   - name: SYSTEM_PHASE
     value: {{ .Values.env.SYSTEM_PHASE | quote }}
-  {{- end }}
+{{- end }}
 
-  {{- if .Values.env.API_DATA_COMPLIANCE_ENDPOINT_URL }}
+{{- if .Values.env.API_DATA_COMPLIANCE_ENDPOINT_URL }}
   - name: API_DATA_COMPLIANCE_ENDPOINT_URL
     value: {{ .Values.env.API_DATA_COMPLIANCE_ENDPOINT_URL | quote }}
-  {{- end }}
+{{- end }}
 
-  {{- if .Values.env.DISPLAY_RETENTION_LINK }}
+{{- if .Values.env.DISPLAY_RETENTION_LINK }}
   - name: DISPLAY_RETENTION_LINK
     value: {{ .Values.env.DISPLAY_RETENTION_LINK | quote }}
-  {{- end }}
+{{- end }}
 
   - name: UPDATE_ATTENDANCE_PRISONS
     value: {{ .Values.env.UPDATE_ATTENDANCE_PRISONS | quote }}
@@ -261,5 +261,8 @@ env:
 
   - name: PVB_URL
     value: {{ .Values.env.PVB_URL | quote }}
+
+  - name: CALCULATE_RELEASE_DATES_URL
+    value: {{ .Values.env.CALCULATE_RELEASE_DATES_URL | quote }}
 
 {{- end -}}

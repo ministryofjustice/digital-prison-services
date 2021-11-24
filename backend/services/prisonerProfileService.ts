@@ -200,7 +200,7 @@ export default ({
       offenderNo,
       offenderRecordRetained: offenderRetentionRecord && hasLength(offenderRetentionRecord.retentionReasons),
       showAddKeyworkerSession: staffRoles && (staffRoles as any).some((role) => role.role === 'KW'),
-      showCalculateRelseaseDates: offenderInCaseload && canCalculateReleaseDate,
+      showCalculateReleaseDates: offenderInCaseload && canCalculateReleaseDate,
       showReportUseOfForce: useOfForceEnabledPrisons.includes(currentUser.activeCaseLoadId),
       useOfForceUrl: `${useOfForceUrl}/report/${bookingId}/report-use-of-force`,
       userCanEdit: (canViewInactivePrisoner && ['OUT', 'TRN'].includes(agencyId)) || offenderInCaseload,
