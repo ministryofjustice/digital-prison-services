@@ -5,6 +5,9 @@
 {% set offenderName = (prisonerProfileData.offenderName).split(',')[1].trim() + " " +(prisonerProfileData.offenderName).split(',')[0] %}
 {% set offenderNo = prisonerProfileData.offenderNo %}
 
+<p class="govuk-body govuk-!-margin-bottom-2">
+    This includes anything that’s logged as an activity using NOMIS.
+</p>
 {% if not work %}
     <p class="govuk-body" data-test="work-errorMessage">{{ errorMessage }}</p>
 {% elseif work.currentJobs.length %}
