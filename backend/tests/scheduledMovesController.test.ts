@@ -65,6 +65,31 @@ const transferEvents = [
     bookingActiveFlag: true,
     bookingInOutStatus: 'IN',
   },
+  {
+    offenderNo: 'G5966UT',
+    createDateTime: '2021-09-22T11:26:50.745683',
+    eventId: 449330573,
+    fromAgency: 'MDI',
+    fromAgencyDescription: 'Moorland (HMP & YOI)',
+    toAgency: 'LEI',
+    toAgencyDescription: 'Leeds (HMP)',
+    toCity: null,
+    eventStatus: 'SCH',
+    eventClass: 'EXT_MOV',
+    eventType: 'TAP',
+    eventSubType: 'NOTR',
+    eventDate: '2021-09-29',
+    startTime: '2021-09-29T11:00:00',
+    endTime: null,
+    outcomeReasonCode: null,
+    judgeName: null,
+    engagementCode: null,
+    escortCode: 'GEOAME',
+    performanceCode: null,
+    directionCode: 'OUT',
+    bookingActiveFlag: true,
+    bookingInOutStatus: 'IN',
+  },
 ]
 const releaseEvents = [
   {
@@ -567,7 +592,7 @@ describe('Scheduled moves controller', () => {
         expect.objectContaining({
           scheduledTypes: [
             {
-              text: 'Court',
+              text: 'Court appearances',
               value: 'Court',
             },
             {
@@ -649,7 +674,7 @@ describe('Scheduled moves controller', () => {
           },
           scheduledTypes: expect.arrayContaining([
             {
-              text: 'Court',
+              text: 'Court appearances',
               value: 'Court',
             },
           ]),
@@ -1648,7 +1673,7 @@ describe('Scheduled moves controller', () => {
         )
       })
 
-      it('should return a single entry for NOTR', async () => {
+      it('should return a single entry for NOTR, excluding ROTLa (i.e TAP event type)', async () => {
         req.query.scheduledType = 'Transfers'
 
         await controller.index(req, res)

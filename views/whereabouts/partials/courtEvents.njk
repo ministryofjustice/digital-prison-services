@@ -1,6 +1,12 @@
 {% from "../../macros/holdAgainstTransferDetailsDialog.njk" import holdAgainstTransferDetailsDialog %}
 
-<h2 class="govuk-heading-s">Court appearances</h2>
+<div class="horizontal-information">
+    <h2 class="govuk-heading-s horizontal-information__item scheduled-moves__section_heading">Court appearances</h2>
+    {% if courtEvents.length !== 0 %}
+        <p class="govuk-body horizontal-information__item pull-right"><strong>Prisoners listed:</strong> {{ prisonersListedForCourt }}</p>
+    {% endif %}
+</div>
+
 {% if courtEvents.length !== 0 %}
     {% set courtEventRows = [] %}
     {% for event in courtEvents %}
@@ -14,7 +20,6 @@
         ]), courtEventRows) %}
     {% endfor %}
 
-    <p class="govuk-body pull-right"><strong>Prisoners listed:</strong> {{ prisonersListedForCourt }}</p>
     {{ govukTable({
         head: [
             {
@@ -37,7 +42,8 @@
             },
             {
                 html: "Destination location",
-                classes: 'govuk-input--width-2'
+                classes: 'govuk-input--width-2',
+                attributes: {"aria-sort": "ascending"}
             }
         ],
         rows: courtEventRows,
