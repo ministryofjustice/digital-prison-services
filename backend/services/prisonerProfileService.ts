@@ -23,6 +23,7 @@ export default ({
 }) => {
   const {
     apis: {
+      calculateReleaseDates: { ui_url: calculateReleaseDatesUrl },
       categorisation: { ui_url: categorisationUrl },
       pathfinder: { ui_url: pathfinderUrl },
       soc: { ui_url: socUrl, enabled: socEnabled },
@@ -159,6 +160,9 @@ export default ({
     // @ts-expect-error ts-migrate(2339) FIXME: Property 'primary_pom' does not exist on ty... Remove this comment to see the full error message
     const pomStaff = allocationManager?.primary_pom && getNamesFromString(allocationManager.primary_pom.name).join(' ')
 
+    const canCalculateReleaseDate =
+      userRoles && (userRoles as any).some((role) => role.roleCode === 'RELEASE_DATES_CALCULATOR')
+
     return {
       activeAlertCount,
       agencyName: assignedLivingUnit.agencyName,
@@ -176,6 +180,7 @@ export default ({
       socProfileUrl: socEnabled && socUrl && socDetails && `${socUrl}nominal/${String((socDetails as any).id)}`,
       showSocReferButton: Boolean(socEnabled && !socDetails && isSocUser),
       socReferUrl: socEnabled && socUrl && `${socUrl}refer/offender/${offenderNo}`,
+      calculateReleaseDatesUrl: `${calculateReleaseDatesUrl}?prisonId=${offenderNo}`,
       categorisationLink: `${categorisationUrl}${bookingId}`,
       categorisationLinkText: (isCatToolUser && 'Manage category') || (offenderInCaseload && 'View category') || '',
       category,
@@ -195,6 +200,7 @@ export default ({
       offenderNo,
       offenderRecordRetained: offenderRetentionRecord && hasLength(offenderRetentionRecord.retentionReasons),
       showAddKeyworkerSession: staffRoles && (staffRoles as any).some((role) => role.role === 'KW'),
+      showCalculateReleaseDates: offenderInCaseload && canCalculateReleaseDate,
       showReportUseOfForce: useOfForceEnabledPrisons.includes(currentUser.activeCaseLoadId),
       useOfForceUrl: `${useOfForceUrl}/report/${bookingId}/report-use-of-force`,
       userCanEdit: (canViewInactivePrisoner && ['OUT', 'TRN'].includes(agencyId)) || offenderInCaseload,

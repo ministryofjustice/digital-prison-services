@@ -14,6 +14,10 @@ config.apis.soc = {
   enabled: true,
 }
 
+config.apis.calculateReleaseDates = {
+  ui_url: 'http://crd-ui/',
+}
+
 describe('prisoner profile service', () => {
   const context = {}
   const prisonApi = {}
@@ -237,6 +241,7 @@ describe('prisoner profile service', () => {
         age: undefined,
         dateOfBirth: undefined,
         birthPlace: undefined,
+        calculateReleaseDatesUrl: 'http://crd-ui/?prisonId=ABC123',
         category: 'Cat C',
         csra: 'High',
         csraReviewDate: '23/11/2016',
@@ -250,6 +255,7 @@ describe('prisoner profile service', () => {
         offenderNo: 'ABC123',
         offenderRecordRetained: undefined,
         showAddKeyworkerSession: false,
+        showCalculateReleaseDates: false,
         showReportUseOfForce: false,
         useOfForceUrl: '//useOfForceUrl/report/123/report-use-of-force',
         userCanEdit: false,
@@ -796,6 +802,67 @@ describe('prisoner profile service', () => {
         const profileData = await service.getPrisonerProfileData(context, offenderNo)
 
         expect(profileData.location).toBe('No cell allocated')
+      })
+    })
+    describe('when the user has the RELEASE_DATES_CALCULATOR role', () => {
+      beforeEach(() => {
+        // @ts-expect-error ts-migrate(2339) FIXME: Property 'userRoles' does not exist on type '{}'.
+        oauthApi.userRoles.mockResolvedValue([{ roleCode: 'RELEASE_DATES_CALCULATOR' }])
+      })
+
+      describe('when prisoner is in active caseload', () => {
+        beforeEach(() => {
+          // @ts-expect-error ts-migrate(2339)
+          prisonApi.userCaseLoads.mockResolvedValue([{ caseLoadId: 'MDI' }, { caseLoadId: 'LEI' }])
+          // @ts-expect-error ts-migrate(2339)
+          oauthApi.currentUser.mockReturnValue({ staffId: 111, activeCaseLoadId: 'MDI' })
+        })
+        it('should show the user the calculate release dates button', async () => {
+          const getPrisonerProfileData = await service.getPrisonerProfileData(context, offenderNo)
+
+          expect(getPrisonerProfileData).toEqual(
+            expect.objectContaining({
+              showCalculateReleaseDates: true,
+              calculateReleaseDatesUrl: 'http://crd-ui/?prisonId=ABC123',
+            })
+          )
+        })
+      })
+      describe('when prisoner is not in active caseload', () => {
+        beforeEach(() => {
+          // @ts-expect-error ts-migrate(2339)
+          prisonApi.userCaseLoads.mockResolvedValue([{ caseLoadId: 'LEI' }])
+          // @ts-expect-error ts-migrate(2339)
+          oauthApi.currentUser.mockReturnValue({ staffId: 111, activeCaseLoadId: 'MDI' })
+        })
+        it('should not show the user the calculate release dates button', async () => {
+          const getPrisonerProfileData = await service.getPrisonerProfileData(context, offenderNo)
+
+          expect(getPrisonerProfileData).toEqual(
+            expect.objectContaining({
+              showCalculateReleaseDates: false,
+            })
+          )
+        })
+      })
+    })
+    describe('when the user does not have the RELEASE_DATES_CALCULATOR role', () => {
+      describe('when prisoner is in active caseload', () => {
+        beforeEach(() => {
+          // @ts-expect-error ts-migrate(2339)
+          prisonApi.userCaseLoads.mockResolvedValue([{ caseLoadId: 'MDI' }, { caseLoadId: 'LEI' }])
+          // @ts-expect-error ts-migrate(2339)
+          oauthApi.currentUser.mockReturnValue({ staffId: 111, activeCaseLoadId: 'MDI' })
+        })
+        it('should not show the user the calculate release dates button', async () => {
+          const getPrisonerProfileData = await service.getPrisonerProfileData(context, offenderNo)
+
+          expect(getPrisonerProfileData).toEqual(
+            expect.objectContaining({
+              showCalculateReleaseDates: false,
+            })
+          )
+        })
       })
     })
   })
