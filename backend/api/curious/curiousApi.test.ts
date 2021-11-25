@@ -1,6 +1,8 @@
 import nock from 'nock'
 import CuriousApi from './curiousApi'
 import clientFactory from '../oauthEnabledClient'
+import { AssessmentQualificationType, LearnerEducationDeliveryMethodType } from './types/Enums'
+import { LearnerGoals, LearnerLatestAssessment, LearnerProfile, PageLearnerEducation } from './types/Types'
 
 const hostname = 'http://localhost:8080'
 
@@ -101,7 +103,7 @@ describe('curiousApi', () => {
   })
 })
 
-function getDummyLearnerProfiles(): curious.LearnerProfile[] {
+function getDummyLearnerProfiles(): LearnerProfile[] {
   return [
     {
       prn: 'G6123VU',
@@ -113,17 +115,17 @@ function getDummyLearnerProfiles(): curious.LearnerProfile[] {
       priorAttainment: 'Full level 3',
       qualifications: [
         {
-          qualificationType: 'English',
+          qualificationType: AssessmentQualificationType.English,
           qualificationGrade: 'Level 1',
           assessmentDate: '2021-05-13',
         },
         {
-          qualificationType: 'Maths',
+          qualificationType: AssessmentQualificationType.Maths,
           qualificationGrade: 'Level 1',
           assessmentDate: '2021-05-20',
         },
         {
-          qualificationType: 'Digital Literacy',
+          qualificationType: AssessmentQualificationType.DigitalLiteracy,
           qualificationGrade: 'Level 2',
           assessmentDate: '2021-05-19',
         },
@@ -148,17 +150,17 @@ function getDummyLearnerProfiles(): curious.LearnerProfile[] {
       priorAttainment: null,
       qualifications: [
         {
-          qualificationType: 'English',
+          qualificationType: AssessmentQualificationType.English,
           qualificationGrade: 'Entry Level 1',
           assessmentDate: '2019-03-01',
         },
         {
-          qualificationType: 'Maths',
+          qualificationType: AssessmentQualificationType.Maths,
           qualificationGrade: 'Entry Level 1',
           assessmentDate: '2019-03-01',
         },
         {
-          qualificationType: 'Digital Literacy',
+          qualificationType: AssessmentQualificationType.DigitalLiteracy,
           qualificationGrade: 'Entry Level 1',
           assessmentDate: '2019-03-01',
         },
@@ -173,7 +175,7 @@ function getDummyLearnerProfiles(): curious.LearnerProfile[] {
   ]
 }
 
-function getDummyEducations(): curious.LearnerEducation {
+function getDummyEducations(): PageLearnerEducation {
   return {
     content: [
       {
@@ -218,7 +220,7 @@ function getDummyEducations(): curious.LearnerEducation {
         deliveryLocationPostCode: 'DN7 6BW',
         unitType: null,
         fundingType: 'DPS',
-        deliveryMethodType: 'Face to Face Assessment',
+        deliveryMethodType: LearnerEducationDeliveryMethodType.PackOnlyLearning,
         alevelIndicator: null,
       },
       {
@@ -317,11 +319,9 @@ function getDummyEducations(): curious.LearnerEducation {
     totalElements: 3,
     first: true,
     last: true,
-    hasContent: true,
     numberOfElements: 3,
     totalPages: 1,
     pageable: {
-      sort: [],
       pageSize: 10,
       pageNumber: 0,
       offset: 0,
@@ -332,7 +332,7 @@ function getDummyEducations(): curious.LearnerEducation {
   }
 }
 
-function getDummyLearnerLatestAssessments(): curious.LearnerLatestAssessment[] {
+function getDummyLearnerLatestAssessments(): LearnerLatestAssessment[] {
   return [
     {
       prn: 'G8346GA',
@@ -341,7 +341,7 @@ function getDummyLearnerLatestAssessments(): curious.LearnerLatestAssessment[] {
           establishmentId: 'WDI',
           establishmentName: 'WAKEFIELD (HMP)',
           qualification: {
-            qualificationType: 'English',
+            qualificationType: AssessmentQualificationType.English,
             qualificationGrade: 'Entry Level 2',
             assessmentDate: '2021-05-02',
           },
@@ -350,7 +350,7 @@ function getDummyLearnerLatestAssessments(): curious.LearnerLatestAssessment[] {
           establishmentId: 'WDI',
           establishmentName: 'WAKEFIELD (HMP)',
           qualification: {
-            qualificationType: 'English',
+            qualificationType: AssessmentQualificationType.English,
             qualificationGrade: 'Entry Level 2',
             assessmentDate: '2020-12-02',
           },
@@ -359,7 +359,7 @@ function getDummyLearnerLatestAssessments(): curious.LearnerLatestAssessment[] {
           establishmentId: 'WDI',
           establishmentName: 'WAKEFIELD (HMP)',
           qualification: {
-            qualificationType: 'Digital Literacy',
+            qualificationType: AssessmentQualificationType.DigitalLiteracy,
             qualificationGrade: 'Entry Level 1',
             assessmentDate: '2020-06-01',
           },
@@ -368,7 +368,7 @@ function getDummyLearnerLatestAssessments(): curious.LearnerLatestAssessment[] {
           establishmentId: 'WDI',
           establishmentName: 'WAKEFIELD (HMP)',
           qualification: {
-            qualificationType: 'Digital Literacy',
+            qualificationType: AssessmentQualificationType.DigitalLiteracy,
             qualificationGrade: 'Entry Level 2',
             assessmentDate: '2021-06-01',
           },
@@ -377,7 +377,7 @@ function getDummyLearnerLatestAssessments(): curious.LearnerLatestAssessment[] {
           establishmentId: 'WDI',
           establishmentName: 'WAKEFIELD (HMP)',
           qualification: {
-            qualificationType: 'Maths',
+            qualificationType: AssessmentQualificationType.Maths,
             qualificationGrade: 'Entry Level 2',
             assessmentDate: '2021-06-06',
           },
@@ -387,7 +387,7 @@ function getDummyLearnerLatestAssessments(): curious.LearnerLatestAssessment[] {
   ]
 }
 
-function getDummyLearnerGoals(): curious.LearnerGoals {
+function getDummyLearnerGoals(): LearnerGoals {
   return {
     prn: 'G6415GD',
     employmentGoals: [

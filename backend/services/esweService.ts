@@ -3,14 +3,21 @@ import { app } from '../config'
 import { readableDateFormat, stringWithAbbreviationsProcessor } from '../utils'
 import type CuriousApi from '../api/curious/curiousApi'
 import log from '../log'
-import AssessmentQualificationType from '../api/curious/types/AssessmentQualificationType'
+import { AssessmentQualificationType } from '../api/curious/types/Enums'
+import {
+  LearnerAssessment,
+  LearnerLatestAssessment,
+  LearnerProfile,
+  LearnerEducation,
+  LearnerEmployabilitySkills,
+} from '../api/curious/types/Types'
 
 type FeatureFlagged<T> = {
   enabled: boolean
   content: T
 }
 
-type LearnerProfiles = FeatureFlagged<curious.LearnerProfile[]>
+type LearnerProfiles = FeatureFlagged<LearnerProfile[]>
 type LearnerLatestAssessments = FeatureFlagged<eswe.FunctionalSkillsLevels>
 type OffenderGoals = FeatureFlagged<eswe.LearnerGoals>
 type Neurodiversities = FeatureFlagged<eswe.Neurodiversities[]>
@@ -91,7 +98,7 @@ const compareByDate = (dateA: Moment, dateB: Moment, descending = true) => {
   return 0
 }
 
-const createSkillAssessmentSummary = (learnerAssessment: curious.LearnerAssessment) => {
+const createSkillAssessmentSummary = (learnerAssessment: LearnerAssessment) => {
   const { qualification, establishmentName } = learnerAssessment || {}
   const { qualificationType, qualificationGrade, assessmentDate } = qualification || {}
 
@@ -141,7 +148,7 @@ export default class EsweService {
   }
 
   async getLearnerProfiles(nomisId: string): Promise<LearnerProfiles> {
-    let content: curious.LearnerProfile[] = null
+    let content: LearnerProfile[] = null
     try {
       const context = await this.systemOauthClient.getClientCredentialsTokens()
       content = await this.curiousApi.getLearnerProfiles(context, nomisId)
@@ -152,8 +159,8 @@ export default class EsweService {
     return createFlaggedContent(content)
   }
 
-  async getLearnerEmployabilitySkills(nomisId: string): Promise<curious.LearnerEmployabilitySkills> {
-    let result: curious.LearnerEmployabilitySkills = null
+  async getLearnerEmployabilitySkills(nomisId: string): Promise<LearnerEmployabilitySkills> {
+    let result: LearnerEmployabilitySkills = null
     try {
       const context = await this.systemOauthClient.getClientCredentialsTokens()
       result = await this.curiousApi.getLearnerEmployabilitySkills(context, nomisId)
@@ -209,10 +216,10 @@ export default class EsweService {
       const learnerLatestAssessments = await this.curiousApi.getLearnerLatestAssessments(context, nomisId)
 
       const getSubjectGrade = (
-        functionalSkillLevels: curious.LearnerLatestAssessment[],
+        functionalSkillLevels: LearnerLatestAssessment[],
         qualificationType: AssessmentQualificationType
-      ): curious.LearnerAssessment => {
-        const emptyAssessment: curious.LearnerAssessment = {
+      ): LearnerAssessment => {
+        const emptyAssessment: LearnerAssessment = {
           qualification: {
             qualificationType,
           },
@@ -326,7 +333,7 @@ export default class EsweService {
 
       const { content } = courses
 
-      const getOutcome = (course: curious.LearnerCourses) => {
+      const getOutcome = (course: LearnerEducation) => {
         if (course.outcomeGrade) return course.outcomeGrade
         if (course.completionStatus.includes('continuing')) return 'In progress'
         if (course.completionStatus.includes('temporarily withdrawn')) return 'Temporarily withdrawn'
@@ -335,7 +342,7 @@ export default class EsweService {
         return 'Completed'
       }
 
-      const getOutcomeDetails = (course: curious.LearnerCourses) => {
+      const getOutcomeDetails = (course: LearnerEducation) => {
         if (course.outcome && !course.completionStatus.includes('withdrawn')) return course.outcome
         if (course.prisonWithdrawalReason) return course.prisonWithdrawalReason
         return ''

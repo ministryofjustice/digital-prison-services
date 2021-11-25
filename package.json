@@ -246,6 +246,7 @@
       "node",
       "mjs",
       "ts",
+      "d.ts",
       "tsc"
     ],
     "unmockedModulePathPatterns": [
@@ -266,7 +267,7 @@
       "backend",
       "common"
     ],
-    "ext": "ts,tsx,json,js,jsx,mjs",
+    "ext": "ts,d.ts,tsx,json,js,jsx,mjs",
     "ignore": [
       "**/*.test.*"
     ],
