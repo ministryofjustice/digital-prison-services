@@ -1,6 +1,12 @@
 {% from "../../macros/holdAgainstTransferDetailsDialog.njk" import holdAgainstTransferDetailsDialog %}
 
-<h2 class="govuk-heading-s">Transfers</h2>
+<div class="horizontal-information">
+    <h2 class="govuk-heading-s horizontal-information__item scheduled-moves__section_heading">Transfers</h2>
+    {% if transferEvents.length !== 0 %}
+        <p class="govuk-body horizontal-information__item pull-right"><strong>Prisoners listed:</strong> {{ prisonersListedForTransfer }}</p>
+    {% endif %}
+</div>
+
 {% if transferEvents.length !== 0 %}
     {% set transferEventRows = [] %}
     {% for event in transferEvents %}
@@ -14,7 +20,6 @@
         ]), transferEventRows) %}
     {% endfor %}
 
-    <p class="govuk-body pull-right"><strong>Prisoners listed:</strong> {{ prisonersListedForTransfer }}</p>
     {{ govukTable({
         head: [
             {
@@ -36,7 +41,8 @@
                 text: "Reason"
             },
             {
-                text: "Destination location"
+                text: "Destination location",
+                attributes: {"aria-sort": "ascending"}
             }
         ],
         rows: transferEventRows,

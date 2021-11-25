@@ -124,14 +124,15 @@ const createSkillAssessmentSummary = (learnerAssessment: curious.LearnerAssessme
  * Education skills and work experience (ESWE)
  */
 export default class EsweService {
-  static create(curiousApi: CuriousApi, systemOauthClient: any, prisonApi: any): EsweService {
-    return new EsweService(curiousApi, systemOauthClient, prisonApi)
+  static create(curiousApi: CuriousApi, systemOauthClient: any, prisonApi: any, whereaboutsApi: any): EsweService {
+    return new EsweService(curiousApi, systemOauthClient, prisonApi, whereaboutsApi)
   }
 
   constructor(
     private readonly curiousApi: CuriousApi,
     private readonly systemOauthClient: any,
-    private readonly prisonApi: any
+    private readonly prisonApi: any,
+    private readonly whereaboutsApi: any
   ) {}
 
   callActivitiesHistoryApi = (context, nomisId: string, params) => {
@@ -354,7 +355,28 @@ export default class EsweService {
     return createFlaggedContent(null)
   }
 
-  async getCurrentActivities(nomisId: string): Promise<CurrentWork> {
+  async getCurrentActivities(whereaboutsContext, nomisId: string): Promise<CurrentWork> {
+    const yesterday = moment().subtract(1, 'd').format('YYYY-MM-DD')
+    let unacceptableAbsenceSummary
+    let currentWorkData = DEFAULT_WORK_DATA
+    try {
+      const sixMonthCheck = await this.whereaboutsApi.getUnacceptableAbsences(
+        whereaboutsContext,
+        nomisId,
+        moment().subtract(6, 'month').format('YYYY-MM-DD'),
+        yesterday
+      )
+      const thirtyDaySummary = await this.whereaboutsApi.getUnacceptableAbsences(
+        whereaboutsContext,
+        nomisId,
+        moment().subtract(30, 'd').format('YYYY-MM-DD'),
+        yesterday
+      )
+      unacceptableAbsenceSummary = { ...thirtyDaySummary, noneInSixMonths: sixMonthCheck.unacceptableAbsence === 0 }
+    } catch (e) {
+      log.error(e, 'Failed to get learner unacceptable absences')
+      unacceptableAbsenceSummary = null
+    }
     try {
       const context = await this.systemOauthClient.getClientCredentialsTokens()
       const prisonerDetails = await this.prisonApi.getPrisonerDetails(context, nomisId)
@@ -372,21 +394,17 @@ export default class EsweService {
             value: `Started on ${readableDateFormat(job.startDate, DATE_FORMAT)}`,
           }))
           .sort((a, b) => a.label.localeCompare(b.label))
-        const currentWorkData = {
-          workHistoryPresent: true,
-          currentJobs,
-        }
-        return createFlaggedContent(currentWorkData)
+        currentWorkData = { workHistoryPresent: true, currentJobs }
       }
-      return createFlaggedContent(DEFAULT_WORK_DATA)
     } catch (e) {
       if (e.response?.status === 404) {
         log.info(`Offender record not found.`)
-        return createFlaggedContent(DEFAULT_WORK_DATA)
+      } else {
+        currentWorkData = null
       }
-      log.error(`Failed to get learner work history. Reason: ${e.message}`)
+      log.error(e, 'Failed to get learner work history')
     }
-    return createFlaggedContent(null)
+    return createFlaggedContent({ currentWorkData, unacceptableAbsenceSummary })
   }
 
   async getActivitiesHistoryDetails(nomisId: string, page: number): Promise<activitiesHistory> {

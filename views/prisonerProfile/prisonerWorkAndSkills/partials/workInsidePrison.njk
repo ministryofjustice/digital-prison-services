@@ -1,15 +1,16 @@
-
 {% from "../../macros/prisonerSummarySection.njk" import prisonerSummarySection %}
+{% from "../../macros/unacceptableAbsenceSection.njk" import unacceptableAbsenceSection %}
 {% from "govuk/components/summary-list/macro.njk" import govukSummaryList %}
 
 {% set offenderName = (prisonerProfileData.offenderName).split(',')[1].trim() + " " +(prisonerProfileData.offenderName).split(',')[0] %}
 {% set offenderNo = prisonerProfileData.offenderNo %}
 
+<p class="govuk-body govuk-!-margin-bottom-2">
+    This includes anything that’s logged as an activity using NOMIS.
+</p>
 {% if not work %}
     <p class="govuk-body" data-test="work-errorMessage">{{ errorMessage }}</p>
-{% endif %}
-
-{% if work.currentJobs.length %}
+{% elseif work.currentJobs.length %}
     <h3 class="govuk-heading-s card__heading" data-test="work-header">Current activities</h3>
     {{ prisonerSummarySection(work.currentJobs, '', {"data-test": "work-currentWork"}, false, 'govuk-!-margin-bottom-1', true) }}
     <hr class="govuk-section-break govuk-section-break--visible">
@@ -22,9 +23,7 @@
     <p class="govuk-body govuk-!-margin-top-3">
         <a class="govuk-link" href='/prisoner/{{offenderNo}}/work-activities' data-test="work-detailsLink">View work and activities for the last 12 months</a>
     </p>
-{% endif %}
-
-{% if work and not work.workHistoryPresent  %}
+{% elseif work and not work.workHistoryPresent %}
     <p class="govuk-body" data-test="work-noData">{{ offenderName }} has no work or activities.</p>
 {% endif %}
 
@@ -32,3 +31,23 @@
     <a class="govuk-link" href='/prisoner/{{offenderNo}}/schedule' data-test="work-scheduleLink">View 7 day schedule</a>
 </p>
 
+<hr class="govuk-section-break govuk-section-break--visible"/>
+<h3 class="govuk-heading-m card__heading govuk-!-margin-top-3" data-test="work-header-2">Unacceptable absences</h3>
+{% if not absence %}
+    <p class="govuk-body">
+        We cannot show these details right now. Try reloading the page.
+    </p>
+{% else %}
+    {{ unacceptableAbsenceSection(absence, {"data-test": "work-unacceptableAbsence"}, 'govuk-!-margin-bottom-1') }}
+{% endif %}
+<hr class="govuk-section-break govuk-section-break--visible"/>
+<p class="govuk-body govuk-!-margin-top-3">
+    {% if absence %}
+        {% if absence.noneInSixMonths %}
+            {{ offenderName }} has no unacceptable absences in the last 6 months
+        {% else %}
+            <a class="govuk-link" href='/prisoner/{{ offenderNo }}/work-and-skills#TODO'
+               data-test="work-absencesLink">View unacceptable absences for the last 6 months</a>
+        {% endif %}
+    {% endif %}
+</p>

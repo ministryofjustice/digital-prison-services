@@ -1,5 +1,4 @@
 import logErrorAndContinue from '../../shared/logErrorAndContinue'
-import { app } from '../../config'
 
 export default ({ prisonerProfileService, esweService }) =>
   async (req, res) => {
@@ -12,7 +11,7 @@ export default ({ prisonerProfileService, esweService }) =>
           esweService.getLearnerLatestAssessments(offenderNo),
           esweService.getLearnerGoals(offenderNo),
           esweService.getLearnerEducation(offenderNo),
-          esweService.getCurrentActivities(offenderNo),
+          esweService.getCurrentActivities(res.locals, offenderNo),
         ].map((apiCall) => logErrorAndContinue(apiCall))
       )
 

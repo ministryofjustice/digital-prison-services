@@ -91,18 +91,25 @@ declare namespace eswe {
    * @interface OffenderCurrentWork
    */
   export interface OffenderCurrentWork {
-    /**
-     * workHistoryPresent
-     * @type {boolean}
-     * @memberof OffenderCurrentWork
-     */
-    workHistoryPresent: boolean
-    /**
-     * currentJobs
-     * @type {array}
-     * @memberof OffenderCurrentWork
-     */
-    currentJobs: OffenderCurrentWorkDetail[]
+    currentWorkData: {
+      /**
+       * workHistoryPresent
+       * @type {boolean}
+       * @memberof OffenderCurrentWork
+       */
+      workHistoryPresent: boolean
+      /**
+       * currentJobs
+       * @type {array}
+       * @memberof OffenderCurrentWork
+       */
+      currentJobs: OffenderCurrentWorkDetail[]
+    }
+    unacceptableAbsenceSummary?: {
+      acceptableAbsence?: int
+      total?: int
+      unacceptableAbsence?: int
+    }
   }
   /**
    *
