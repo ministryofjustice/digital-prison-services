@@ -175,6 +175,9 @@ export const notifications = {
     BNI: {
       omu: process.env.BULLINGDON_OMU_EMAIL,
     },
+    PBI: {
+      omu: process.env.PETERBOROUGH_OMU_EMAIL,
+    },
   },
 }
 
