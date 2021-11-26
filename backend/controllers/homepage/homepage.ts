@@ -3,7 +3,7 @@ import { hasAnyRole } from '../../shared/permissions'
 import config from '../../config'
 
 const {
-  applications: { licences, manageaccounts, moic, pecs },
+  applications: { licences, manageaccounts, moic, pecs, sendLegalMail },
   apis: { omic, useOfForce, pathfinder, categorisation, soc, pinPhones, manageAdjudications, bookAPrisonVisit },
 } = config
 
@@ -167,6 +167,13 @@ const getTasks = ({ activeCaseLoadId, locations, staffId, whereaboutsConfig, key
       description: 'Book, view and cancel a prisoner’s social visits.',
       href: bookAPrisonVisit.ui_url,
       enabled: () => bookAPrisonVisit.ui_url && userHasRoles(['PVB_STAFF']),
+    },
+    {
+      id: 'send-legal-mail',
+      heading: 'Send Legal Mail',
+      description: 'Scan barcodes and view history of Rule 39 legal mail.',
+      href: sendLegalMail.url,
+      enabled: () => sendLegalMail.url && userHasRoles(['ROLE_SLM_SCAN_BARCODE', 'ROLE_SLM_SECURITY_ANALYST']),
     },
   ]
 }
