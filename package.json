@@ -5,7 +5,7 @@
   "repository": "git@github.com:ministryofjustice/digital-prison-sevices.git",
   "license": "MIT",
   "engines": {
-    "npm": ">=6",
+    "npm": ">=7",
     "node": ">=14.*"
   },
   "dependencies": {
@@ -43,7 +43,6 @@
     "@types/superagent": "^4.1.13",
     "agentkeepalive": "^4.1.4",
     "applicationinsights": "^2.1.8",
-    "applicationinsights-native-metrics": "0.0.6",
     "axios": "0.21.4",
     "body-parser": "^1.19.0",
     "bunyan": "^2.0.5",
@@ -110,7 +109,7 @@
     "spin.js": "^3.1.0",
     "styled-components": "^4.1.3",
     "superagent": "^6.0.0",
-    "universal-analytics": "^0.4.23",
+    "universal-analytics": "^0.5.1",
     "uuid": "^8.3.2",
     "webpack": "^5.56.1",
     "webpack-dev-middleware": "^5.2.1",
