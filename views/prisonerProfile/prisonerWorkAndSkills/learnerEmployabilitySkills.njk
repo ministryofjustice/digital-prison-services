@@ -1,0 +1,26 @@
+{% extends "../../partials/layout.njk" %}
+{% from "govuk/components/table/macro.njk" import govukTable %}
+{% from "../../macros/printLink.njk" import printLink %}
+
+{% set title =  "Learner employability skills" %}
+
+{% block beforeContent %}
+    {{ govukBreadcrumbs({
+        items: [
+            { text: "Digital Prison Services", href: "/" },
+            { text: breadcrumbPrisonerName, href: profileUrl }
+        ],
+        classes: "govuk-!-display-none-print"
+    }) }}
+{% endblock %}
+
+{% block content %}
+    <div class="govuk-grid-row">
+        <div class="govuk-grid-column-three-quarters">
+            <h1 class="govuk-heading-l">{{ prisonerName | possessive | safe }} Learner employability skills</h1>
+        </div>
+    </div>
+
+    <pre> {{ learnerEmployabilitySkills | dump(2) }}</pre>
+
+{% endblock %}

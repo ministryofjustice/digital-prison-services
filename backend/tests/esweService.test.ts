@@ -9,6 +9,14 @@ import EsweService, {
 import { makeNotFoundError } from './helpers'
 import { app } from '../config'
 import CuriousApi from '../api/curious/curiousApi'
+import { AssessmentQualificationType, LearnerEducationDeliveryMethodType } from '../api/curious/types/Enums'
+import {
+  LearnerGoals,
+  LearnerLatestAssessment,
+  LearnerProfile,
+  PageLearnerEducation,
+  // eslint-disable-next-line-NO import/extensions
+} from '../api/curious/types/Types'
 
 jest.mock('../config', () => ({
   app: {
@@ -375,14 +383,14 @@ describe('Education skills and work experience', () => {
       const nomisId = 'G2823GV'
 
       it('should return expected response when there is one assessment of each skill available', async () => {
-        const dummyFunctionalSkillsLevels = {
+        const dummyFunctionalSkillsLevels: LearnerLatestAssessment = {
           prn: 'G8346GA',
           qualifications: [
             {
               establishmentId: 'WIN',
               establishmentName: 'HMP Winchester',
               qualification: {
-                qualificationType: 'English',
+                qualificationType: AssessmentQualificationType.English,
                 qualificationGrade: 'Entry Level 2',
                 assessmentDate: '2021-05-02',
               },
@@ -391,7 +399,7 @@ describe('Education skills and work experience', () => {
               establishmentId: 'WIN',
               establishmentName: 'HMP Winchester',
               qualification: {
-                qualificationType: 'Digital Literacy',
+                qualificationType: AssessmentQualificationType.DigitalLiteracy,
                 qualificationGrade: 'Entry Level 2',
                 assessmentDate: '2021-06-01',
               },
@@ -400,7 +408,7 @@ describe('Education skills and work experience', () => {
               establishmentId: 'WIN',
               establishmentName: 'HMP Winchester',
               qualification: {
-                qualificationType: 'Maths',
+                qualificationType: AssessmentQualificationType.Maths,
                 qualificationGrade: 'Entry Level 1',
                 assessmentDate: '2021-05-27',
               },
@@ -830,7 +838,7 @@ function getDummyUnacceptableAbsenceSummary(unacceptableAbsence) {
   }
 }
 
-function getDummyLearnerProfiles(): curious.LearnerProfile[] {
+function getDummyLearnerProfiles(): LearnerProfile[] {
   return [
     {
       prn: 'G6123VU',
@@ -841,17 +849,17 @@ function getDummyLearnerProfiles(): curious.LearnerProfile[] {
       priorAttainment: null,
       qualifications: [
         {
-          qualificationType: 'English',
+          qualificationType: AssessmentQualificationType.English,
           qualificationGrade: 'Entry Level 1',
           assessmentDate: '2019-03-01',
         },
         {
-          qualificationType: 'Maths',
+          qualificationType: AssessmentQualificationType.Maths,
           qualificationGrade: 'Entry Level 1',
           assessmentDate: '2019-03-01',
         },
         {
-          qualificationType: 'Digital Literacy',
+          qualificationType: AssessmentQualificationType.DigitalLiteracy,
           qualificationGrade: 'Entry Level 1',
           assessmentDate: '2019-03-01',
         },
@@ -873,17 +881,17 @@ function getDummyLearnerProfiles(): curious.LearnerProfile[] {
       priorAttainment: 'Full level 3',
       qualifications: [
         {
-          qualificationType: 'English',
+          qualificationType: AssessmentQualificationType.English,
           qualificationGrade: 'Level 1',
           assessmentDate: '2021-05-13',
         },
         {
-          qualificationType: 'Maths',
+          qualificationType: AssessmentQualificationType.Maths,
           qualificationGrade: 'Level 1',
           assessmentDate: '2021-05-20',
         },
         {
-          qualificationType: 'Digital Literacy',
+          qualificationType: AssessmentQualificationType.DigitalLiteracy,
           qualificationGrade: 'Level 2',
           assessmentDate: '2021-05-19',
         },
@@ -908,17 +916,17 @@ function getDummyLearnerProfiles(): curious.LearnerProfile[] {
       priorAttainment: null,
       qualifications: [
         {
-          qualificationType: 'English',
+          qualificationType: AssessmentQualificationType.English,
           qualificationGrade: 'Entry Level 1',
           assessmentDate: '2019-03-01',
         },
         {
-          qualificationType: 'Maths',
+          qualificationType: AssessmentQualificationType.Maths,
           qualificationGrade: 'Entry Level 1',
           assessmentDate: '2019-03-01',
         },
         {
-          qualificationType: 'Digital Literacy',
+          qualificationType: AssessmentQualificationType.DigitalLiteracy,
           qualificationGrade: 'Entry Level 1',
           assessmentDate: '2019-03-01',
         },
@@ -933,7 +941,7 @@ function getDummyLearnerProfiles(): curious.LearnerProfile[] {
   ]
 }
 
-function getDummyGoals(): curious.LearnerGoals {
+function getDummyGoals(): LearnerGoals {
   return {
     prn: 'G3609VL',
     employmentGoals: ['To be an electrician', 'To get an electrics qualification'],
@@ -1020,7 +1028,7 @@ function getdummyActivitiesHistory(): eswe.WorkHistory {
   }
 }
 
-function getDummyEducations(): curious.LearnerEducation {
+function getDummyEducations(): PageLearnerEducation {
   return {
     content: [
       {
@@ -1155,7 +1163,7 @@ function getDummyEducations(): curious.LearnerEducation {
         deliveryLocationPostCode: 'DN7 6BW',
         unitType: null,
         fundingType: 'DPS',
-        deliveryMethodType: 'Face to Face Assessment',
+        deliveryMethodType: LearnerEducationDeliveryMethodType.BlendedLearning,
         alevelIndicator: null,
       },
       {
@@ -1300,11 +1308,9 @@ function getDummyEducations(): curious.LearnerEducation {
     totalElements: 6,
     first: true,
     last: true,
-    hasContent: true,
     numberOfElements: 6,
     totalPages: 1,
     pageable: {
-      sort: [],
       pageSize: 10,
       pageNumber: 0,
       offset: 0,

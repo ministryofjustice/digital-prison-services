@@ -1,5 +1,13 @@
 import type { ClientContext, OauthApiClient } from '../oauthEnabledClient'
 import { mapToQueryString } from '../../utils'
+import {
+  LearnerGoals,
+  LearnerLatestAssessment,
+  LearnerProfile,
+  LearnerEducation,
+  LearnerEmployabilitySkills,
+  PageLearnerEducation,
+} from './types/Types'
 
 export default class CuriousApi {
   static create(client: OauthApiClient): CuriousApi {
@@ -8,13 +16,9 @@ export default class CuriousApi {
 
   constructor(private readonly client: OauthApiClient) {}
 
-  getLearnerProfiles(
-    context: ClientContext,
-    nomisId: string,
-    establishmentId?: string
-  ): Promise<curious.LearnerProfile[]> {
+  getLearnerProfiles(context: ClientContext, nomisId: string, establishmentId?: string): Promise<LearnerProfile[]> {
     return this.client
-      .get<curious.LearnerProfile[]>(context, this.applyQuery(`/learnerProfile/${nomisId}`, { establishmentId }))
+      .get<LearnerProfile[]>(context, this.applyQuery(`/learnerProfile/${nomisId}`, { establishmentId }))
       .then((response) => response.body)
   }
 
@@ -26,9 +30,9 @@ export default class CuriousApi {
     establishmentId?: string,
     page?: number,
     size?: number
-  ): Promise<curious.LearnerEducation> {
+  ): Promise<PageLearnerEducation> {
     return this.client
-      .get<curious.LearnerEducation>(
+      .get<LearnerEducation>(
         context,
         this.applyQuery(`/learnerEducation/${nomisId}`, {
           sort,
@@ -41,14 +45,20 @@ export default class CuriousApi {
       .then((response) => response.body)
   }
 
-  getLearnerLatestAssessments(context: ClientContext, nomisId: string): Promise<curious.LearnerLatestAssessment[]> {
+  getLearnerLatestAssessments(context: ClientContext, nomisId: string): Promise<LearnerLatestAssessment[]> {
     return this.client
-      .get<curious.LearnerProfile[]>(context, `/latestLearnerAssessments/${nomisId}`)
+      .get<LearnerProfile[]>(context, `/latestLearnerAssessments/${nomisId}`)
       .then((response) => response.body)
   }
 
-  getLearnerGoals(context: ClientContext, nomisId: string): Promise<curious.LearnerGoals> {
-    return this.client.get<curious.LearnerGoals>(context, `/learnerGoals/${nomisId}`).then((response) => response.body)
+  getLearnerGoals(context: ClientContext, nomisId: string): Promise<LearnerGoals> {
+    return this.client.get<LearnerGoals>(context, `/learnerGoals/${nomisId}`).then((response) => response.body)
+  }
+
+  getLearnerEmployabilitySkills(context: ClientContext, nomisId: string): Promise<LearnerEmployabilitySkills> {
+    return this.client
+      .get<LearnerEmployabilitySkills>(context, `/learnerEmployabilitySkills/${nomisId}?size=1000`)
+      .then((response) => response.body)
   }
 
   private applyQuery = (path, query?: Record<string, unknown>) => {
