@@ -61,6 +61,7 @@ env:
   DISABLE_REQUEST_LIMITER: true
   PVB_URL: https://manage-a-prison-visit.hmpps.service.justice.gov.uk/
   CALCULATE_RELEASE_DATES_URL: https://calculate-release-dates.hmpps.service.justice.gov.uk
+  SEND_LEGAL_MAIL_URL: ""
 
 allowlist:
   office: "217.33.148.210/32"

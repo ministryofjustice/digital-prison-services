@@ -19,6 +19,7 @@ describe('Homepage', () => {
     config.apis.manageAdjudications.enabled_prisons = undefined
     config.apis.manageAdjudications.ui_url = undefined
     config.apis.bookAPrisonVisit.ui_url = undefined
+    config.applications.sendLegalMail.url = undefined
 
     req = {
       session: {
@@ -551,6 +552,31 @@ describe('Homepage', () => {
       await controller(req, res)
 
       expect(res.redirect).toHaveBeenCalledWith('/videolink')
+    })
+  })
+
+  it('should render home page with the send legal mail task', () => {
+    config.applications.sendLegalMail.url = 'http://send-legal-mail'
+
+    Array.of('SLM_SCAN_BARCODE', 'SLM_SECURITY_ANALYST').forEach(async (roleCode) => {
+      // @ts-expect-error ts-migrate(2339) FIXME: Property 'userRoles' does not exist on type '{}'.
+      oauthApi.userRoles.mockResolvedValue([{ roleCode }])
+
+      await controller(req, res)
+
+      expect(res.render).toHaveBeenCalledWith(
+        'homepage/homepage.njk',
+        expect.objectContaining({
+          tasks: [
+            {
+              id: 'send-legal-mail',
+              heading: 'Check Rule 39 mail',
+              description: 'Scan barcodes on mail from law firms and other approved senders.',
+              href: 'http://send-legal-mail',
+            },
+          ],
+        })
+      )
     })
   })
 })
