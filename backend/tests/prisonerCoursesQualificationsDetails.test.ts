@@ -9,6 +9,9 @@ jest.mock('../config', () => ({
   },
 }))
 
+const PAGINATION_IN = { totalRecords: 4, offset: 1, limit: 3 }
+const PAGINATION_OUT = { page: 1, size: 2 }
+
 describe('Prisoner courses and qualifications details controller', () => {
   const offenderNo = 'G3878UK'
   const prisonApi = {
@@ -16,6 +19,9 @@ describe('Prisoner courses and qualifications details controller', () => {
   }
   const esweService = {
     getLearnerEducationFullDetails: jest.fn(),
+  }
+  const paginationService = {
+    getPagination: jest.fn(),
   }
 
   const coursesAndQualifications = [
@@ -85,15 +91,18 @@ describe('Prisoner courses and qualifications details controller', () => {
     req.originalUrl = '/courses-qualifications'
     req.get = jest.fn()
     req.get.mockReturnValue('localhost')
+    req.query = { pageOffsetOption: 3 }
     res.status = jest.fn()
 
-    esweService.getLearnerEducationFullDetails = jest.fn().mockResolvedValue(coursesAndQualifications)
-    prisonApi.getDetails = jest.fn().mockResolvedValue({
-      firstName: 'Apoustius',
-      lastName: 'Ignian',
+    esweService.getLearnerEducationFullDetails = jest.fn().mockResolvedValue({
+      enabled: true,
+      content: { fullDetails: coursesAndQualifications, pagination: PAGINATION_IN },
     })
+    prisonApi.getDetails = jest.fn().mockResolvedValue({ firstName: 'Apoustius', lastName: 'Ignian' })
+    paginationService.getPagination = jest.fn().mockReturnValue(PAGINATION_OUT)
 
     controller = prisonerCoursesQualificationsDetails({
+      paginationService,
       prisonApi,
       esweService,
     })
@@ -102,7 +111,7 @@ describe('Prisoner courses and qualifications details controller', () => {
     const prisonerName = 'Apoustius Ignian'
     const breadcrumbPrisonerName = 'Ignian, Apoustius'
     const profileUrl = `/prisoner/G3878UK/work-and-skills#courses-summary`
-    jest.spyOn(app, 'esweEnabled', 'get').mockReturnValue(true)
+    const pagination = {}
     await controller(req, res)
     expect(res.render).toHaveBeenCalledWith(
       'prisonerProfile/prisonerWorkAndSkills/prisonerCoursesQualificationsDetails.njk',
@@ -110,10 +119,15 @@ describe('Prisoner courses and qualifications details controller', () => {
         breadcrumbPrisonerName,
         prisonerName,
         profileUrl,
-        coursesAndQualifications,
+        coursesAndQualifications: {
+          content: { fullDetails: coursesAndQualifications, pagination: PAGINATION_IN },
+          enabled: true,
+        },
+        pagination: PAGINATION_OUT,
       })
     )
   })
+
   describe('When there are API errors', () => {
     const error = new Error('Network error')
 

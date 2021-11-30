@@ -15,7 +15,7 @@ context('Work inside prison details page', () => {
   const generateHistory = (page) => {
     const data = []
     const endDate = moment('2021-08-10')
-    for (var i = page * 20; i < (page + 1) * 20; i++) {
+    for (let i = page * 20; i < (page + 1) * 20; i++) {
       data.push({
         bookingId: 1000200,
         agencyLocationId: 'BXI',

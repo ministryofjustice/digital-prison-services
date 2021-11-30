@@ -1,5 +1,59 @@
+import moment from "moment";
+
 context('Prisoner courses and qualifications details page', () => {
   const offenderNo = 'G6123VU'
+
+  const generateHistory = (page) => {
+    const data = []
+    const endDate = moment('2021-08-10')
+    for (let i = page * 20; i < (page + 1) * 20; i++) {
+      data.push({
+        prn: 'G6123VU',
+        establishmentName: 'MOORLAND (HMP & YOI)',
+        courseName: `Course ${i + 1}`,
+        isAccredited: false,
+        learningStartDate: '2021-02-13',
+        learningPlannedEndDate: endDate.add(1, 'days').format('YYYY-MM-DD'),
+        learningActualEndDate: null,
+        outcome: null,
+        outcomeGrade: null,
+        withdrawalReasons: null,
+        prisonWithdrawalReason: null,
+        completionStatus:
+          'The learner is continuing or intending to continue the learning activities leading to the learning aim',
+        withdrawalReasonAgreed: false,
+      })
+    }
+    const iStart = page * 20
+    return {
+      content: data,
+      pageable: {
+        sort: {
+          empty: true,
+          sorted: false,
+          unsorted: true,
+        },
+        offset: iStart % 20,
+        pageSize: 20,
+        pageNumber: iStart / 20,
+        paged: true,
+        unpaged: false,
+      },
+      last: iStart >= 40,
+      totalElements: 55,
+      totalPages: 3,
+      size: 20,
+      number: iStart / 20,
+      sort: {
+        empty: true,
+        sorted: false,
+        unsorted: true,
+      },
+      first: iStart < 20,
+      numberOfElements: 20,
+      empty: false,
+    }
+  }
 
   context('no course data available', () => {
     before(() => {
@@ -10,7 +64,7 @@ context('Prisoner courses and qualifications details page', () => {
       cy.task('stubOffenderBasicDetails', { bookingId: 1, firstName: 'John', lastName: 'Smith', agencyId: 'MDI' })
     })
 
-    beforeEach(() => {
+       beforeEach(() => {
       Cypress.Cookies.preserveOnce('hmpps-session-dev')
     })
     it('should show correct content and no table', () => {
@@ -24,6 +78,7 @@ context('Prisoner courses and qualifications details page', () => {
       )
     })
   })
+
   context('One piece of data available', () => {
     const dummyEducation = {
       content: [
@@ -44,6 +99,31 @@ context('Prisoner courses and qualifications details page', () => {
           withdrawalReasonAgreed: false,
         },
       ],
+      pageable: {
+        sort: {
+          empty: true,
+          sorted: false,
+          unsorted: true,
+        },
+        offset: 0,
+        pageSize: 20,
+        pageNumber: 0,
+        paged: true,
+        unpaged: false,
+      },
+      last: true,
+      totalElements: 1,
+      totalPages: 1,
+      size: 20,
+      number: 0,
+      sort: {
+        empty: true,
+        sorted: false,
+        unsorted: true,
+      },
+      first: true,
+      numberOfElements: 1,
+      empty: false,
     }
     before(() => {
       cy.clearCookies()
@@ -51,7 +131,6 @@ context('Prisoner courses and qualifications details page', () => {
       cy.task('stubSignIn', { username: 'ITAG_USER', caseload: 'MDI' })
       cy.signIn()
       cy.task('stubOffenderBasicDetails', { bookingId: 1, firstName: 'John', lastName: 'Smith', agencyId: 'MDI' })
-      cy.task('stubLearnerEducation', dummyEducation)
     })
 
     beforeEach(() => {
@@ -59,9 +138,13 @@ context('Prisoner courses and qualifications details page', () => {
     })
 
     it('should show the correct content and number of results', () => {
+      cy.task('stubLearnerEducation', dummyEducation)
+
       cy.visit(`/prisoner/${offenderNo}/courses-qualifications`)
       cy.get('h1').should('have.text', 'John Smith’s courses and qualifications')
-      cy.get('[data-test="courses-quals-result-number"]').should('have.text', 'Showing 1 result')
+      cy.get('.moj-pagination__results').then((array) => {
+        cy.get(array[0]).should('have.text', 'Showing 1 to 1 of 1 results')
+      })
       cy.get('[data-test="courses-qualifications-returnLink"]').should('exist')
       cy.get('tbody tr')
         .find('td')
@@ -141,6 +224,31 @@ context('Prisoner courses and qualifications details page', () => {
           withdrawalReasonAgreed: true,
         },
       ],
+      pageable: {
+        sort: {
+          empty: true,
+          sorted: false,
+          unsorted: true,
+        },
+        offset: 0,
+        pageSize: 20,
+        pageNumber: 0,
+        paged: true,
+        unpaged: false,
+      },
+      last: true,
+      totalElements: 4,
+      totalPages: 1,
+      size: 20,
+      number: 0,
+      sort: {
+        empty: true,
+        sorted: false,
+        unsorted: true,
+      },
+      first: true,
+      numberOfElements: 4,
+      empty: false,
     }
 
     before(() => {
@@ -149,7 +257,6 @@ context('Prisoner courses and qualifications details page', () => {
       cy.task('stubSignIn', { username: 'ITAG_USER', caseload: 'MDI' })
       cy.signIn()
       cy.task('stubOffenderBasicDetails', { bookingId: 1, firstName: 'John', lastName: 'Smith', agencyId: 'MDI' })
-      cy.task('stubLearnerEducation', dummyEducation)
     })
 
     beforeEach(() => {
@@ -157,9 +264,13 @@ context('Prisoner courses and qualifications details page', () => {
     })
 
     it('should render the page with correct data', () => {
+      cy.task('stubLearnerEducation', dummyEducation)
+
       cy.visit(`/prisoner/${offenderNo}/courses-qualifications`)
       cy.get('h1').should('have.text', 'John Smith’s courses and qualifications')
-      cy.get('[data-test="courses-quals-result-number"]').should('have.text', 'Showing 4 results')
+      cy.get('.moj-pagination__results').then((array) => {
+        cy.get(array[0]).should('have.text', 'Showing 1 to 4 of 4 results')
+      })
       cy.get('[data-test="no-courses-qualifications"]').should('not.exist')
       cy.get('[data-test="courses-qualifications-returnLink"]').should('exist')
       cy.get('thead')
@@ -191,6 +302,40 @@ context('Prisoner courses and qualifications details page', () => {
           expect($cells.get(23).innerText).to.contain(
             'Significant ill health causing them to be unable to attend education'
           )
+        })
+    })
+
+    it('should render subsequent page with correct data', () => {
+      cy.task('stubLearnerEducation', generateHistory(0))
+
+      cy.visit(`/prisoner/${offenderNo}/courses-qualifications`)
+      cy.get('h1').should('have.text', 'John Smith’s courses and qualifications')
+      cy.get('.moj-pagination__results').then((array) => {
+        cy.get(array[0]).should('have.text', 'Showing 1 to 20 of 55 results')
+      })
+      cy.get('tbody')
+        .find('tr')
+        .then(($tRows) => {
+          cy.get($tRows).its('length').should('eq', 20)
+          const row = Array.from($tRows).map(($row) => $row.cells['1'])
+
+          expect(row[0].textContent).to.contain('Course 20') // sorted by descending end date
+          expect(row[19].textContent).to.contain('Course 1')
+        })
+
+      cy.task('stubLearnerEducation', generateHistory(1))
+      cy.contains('Next').click()
+      cy.get('.moj-pagination__results').then((array) => {
+        cy.get(array[0]).should('have.text', 'Showing 21 to 40 of 55 results')
+      })
+      cy.get('tbody')
+        .find('tr')
+        .then(($tRows) => {
+          cy.get($tRows).its('length').should('eq', 20)
+          const row = Array.from($tRows).map(($row) => $row.cells['1'])
+
+          expect(row[0].textContent).to.contain('Course 40')
+          expect(row[19].textContent).to.contain('Course 21')
         })
     })
   })

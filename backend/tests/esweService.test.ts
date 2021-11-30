@@ -4,7 +4,7 @@ import EsweService, {
   DEFAULT_GOALS,
   DEFAULT_COURSE_DATA,
   DEFAULT_WORK_DATA,
-  DEFAULT_ACTIVITIES_TABLE_DATA,
+  DEFAULT_TABLE_DATA,
 } from '../services/esweService'
 import { makeNotFoundError } from './helpers'
 import { app } from '../config'
@@ -230,14 +230,14 @@ describe('Education skills and work experience', () => {
       getLearnerEducationMock.mockRejectedValue(makeNotFoundError())
       const actual = await service.getLearnerEducationFullDetails(nomisId)
       expect(actual.enabled).toBeTruthy()
-      expect(actual.content).toEqual([])
+      expect(actual.content).toEqual(DEFAULT_TABLE_DATA)
     })
 
     it('should return expected response when the prisoner is in Curious but has no courses', async () => {
       jest.spyOn(app, 'esweEnabled', 'get').mockReturnValue(true)
       getLearnerEducationMock.mockResolvedValue({ content: [] })
       const actual = await service.getLearnerEducationFullDetails(nomisId)
-      expect(actual.content).toStrictEqual([])
+      expect(actual.content).toStrictEqual(DEFAULT_TABLE_DATA)
     })
 
     it('should return the expected response, sorted by dateTo descending, when the prisoner is in Curious with courses', async () => {
@@ -300,8 +300,11 @@ describe('Education skills and work experience', () => {
 
       jest.spyOn(app, 'esweEnabled', 'get').mockReturnValue(true)
       getLearnerEducationMock.mockResolvedValue(dummyEducations)
-      const actual = await service.getLearnerEducationFullDetails(nomisId)
-      expect(actual.content).toEqual(expected)
+      const actual = await service.getLearnerEducationFullDetails(nomisId, 2)
+      expect(actual.content).toEqual({
+        fullDetails: expected,
+        pagination: { limit: 10, offset: 0, totalRecords: 6 },
+      })
     })
   })
 
@@ -317,13 +320,13 @@ describe('Education skills and work experience', () => {
       jest.spyOn(app, 'esweEnabled', 'get').mockReturnValue(true)
       getLearnerActivitiesHistoryMock.mockRejectedValue(makeNotFoundError())
       const actual = await service.getActivitiesHistoryDetails(nomisId)
-      expect(actual.content).toEqual(DEFAULT_ACTIVITIES_TABLE_DATA)
+      expect(actual.content).toEqual(DEFAULT_TABLE_DATA)
     })
     it('should return the expected response if the user has no work', async () => {
       jest.spyOn(app, 'esweEnabled', 'get').mockReturnValue(true)
       getLearnerActivitiesHistoryMock.mockResolvedValue({ content: [] })
       const actual = await service.getActivitiesHistoryDetails(nomisId)
-      expect(actual.content).toEqual(DEFAULT_ACTIVITIES_TABLE_DATA)
+      expect(actual.content).toEqual(DEFAULT_TABLE_DATA)
     })
     it('should return the expected response if the user has work', async () => {
       const expected = {
