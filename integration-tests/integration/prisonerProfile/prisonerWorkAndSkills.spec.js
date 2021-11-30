@@ -657,7 +657,7 @@ context('Prisoner Work and Skills', () => {
 
         cy.get('[data-test="work-unacceptableAbsence"]').contains('Last 30 days')
         cy.get('[data-test="work-unacceptableAbsence"]').contains('4')
-        cy.get('[data-test="work-absencesLink"]').contains('View unacceptable absences for the last 6 months')
+        // cy.get('[data-test="work-absencesLink"]').contains('View unacceptable absences for the last 6 months')
       })
     })
     context('When there is data available', () => {
