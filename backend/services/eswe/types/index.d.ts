@@ -225,7 +225,7 @@ declare namespace eswe {
    * @export
    * @interface LearnerEducationFullDetails
    */
-  interface LearnerEducationFullDetails {
+  interface LearnerEducation {
     /**
      * Type
      * @type {string}
@@ -268,6 +268,11 @@ declare namespace eswe {
      * @memberof LearnerEducationFullDetails
      */
     outcomeDetails?: string
+  }
+
+  interface LearnerEducationFullDetails {
+    fullDetails: LearnerEducation[]
+    pagination: Record<string, unknown>
   }
 
   /**

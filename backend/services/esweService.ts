@@ -22,7 +22,7 @@ type LearnerLatestAssessments = FeatureFlagged<eswe.FunctionalSkillsLevels>
 type OffenderGoals = FeatureFlagged<eswe.LearnerGoals>
 type Neurodiversities = FeatureFlagged<eswe.Neurodiversities[]>
 type CurrentCoursesEnhanced = FeatureFlagged<eswe.CurrentCoursesEnhanced>
-type LearnerEducationFullDetails = FeatureFlagged<eswe.LearnerEducationFullDetails[]>
+type LearnerEducationFullDetails = FeatureFlagged<eswe.LearnerEducationFullDetails>
 type CurrentWork = FeatureFlagged<eswe.OffenderCurrentWork>
 type activitiesHistory = FeatureFlagged<eswe.activitiesHistory>
 
@@ -36,6 +36,8 @@ const DATE_FORMAT = 'YYYY-MM-DD'
 const DATA_NOT_ADDED = 'Not entered'
 
 const AWAITING_ASSESSMENT_CONTENT = 'Awaiting assessment'
+
+export const PAGE_SIZE = 20
 
 export const DEFAULT_GOALS = {
   employmentGoals: null,
@@ -54,12 +56,12 @@ export const DEFAULT_WORK_DATA = {
   currentJobs: [],
 }
 
-export const DEFAULT_ACTIVITIES_TABLE_DATA = {
+export const DEFAULT_TABLE_DATA = {
   fullDetails: [],
   pagination: {
     totalRecords: 0,
     offset: 0,
-    limit: 20,
+    limit: PAGE_SIZE,
   },
 }
 
@@ -326,10 +328,18 @@ export default class EsweService {
     return createFlaggedContent(null)
   }
 
-  async getLearnerEducationFullDetails(nomisId: string): Promise<LearnerEducationFullDetails> {
+  async getLearnerEducationFullDetails(nomisId: string, page: number): Promise<LearnerEducationFullDetails> {
     try {
       const context = await this.systemOauthClient.getClientCredentialsTokens()
-      const courses = await this.curiousApi.getLearnerEducation(context, nomisId)
+      const courses = await this.curiousApi.getLearnerEducation(
+        context,
+        nomisId,
+        'learningPlannedEndDate,desc',
+        false,
+        null,
+        page,
+        PAGE_SIZE
+      )
 
       const { content } = courses
 
@@ -349,7 +359,7 @@ export default class EsweService {
       }
 
       if (content.length) {
-        const fullCourseDetails = content.map((course) => ({
+        const fullDetails = content.map((course) => ({
           type: course.isAccredited ? 'Accredited' : 'Non-accredited',
           courseName: course.courseName,
           location: stringWithAbbreviationsProcessor(course.establishmentName),
@@ -359,15 +369,24 @@ export default class EsweService {
           outcomeDetails: getOutcomeDetails(course),
         }))
 
-        fullCourseDetails.sort((a, b) => compareByDate(parseDate(a.dateTo), parseDate(b.dateTo), true))
+        fullDetails.sort((a, b) => compareByDate(parseDate(a.dateTo), parseDate(b.dateTo), true))
 
-        return createFlaggedContent(fullCourseDetails)
+        const withPagination = {
+          fullDetails,
+          pagination: {
+            totalRecords: courses.totalElements,
+            offset: courses.pageable.offset,
+            limit: courses.pageable.pageSize,
+          },
+        }
+
+        return createFlaggedContent(withPagination)
       }
-      return createFlaggedContent([])
+      return createFlaggedContent(DEFAULT_TABLE_DATA)
     } catch (e) {
       if (e.response?.status === 404) {
         log.info(`Offender record not found in Curious.`)
-        return createFlaggedContent([])
+        return createFlaggedContent(DEFAULT_TABLE_DATA)
       }
       log.error(`Failed to get learner education. Reason: ${e.message}`)
     }
@@ -462,11 +481,11 @@ export default class EsweService {
 
         return createFlaggedContent(withPagination)
       }
-      return createFlaggedContent(DEFAULT_ACTIVITIES_TABLE_DATA)
+      return createFlaggedContent(DEFAULT_TABLE_DATA)
     } catch (e) {
       if (e.response?.status === 404) {
         log.info(`Offender record not found in Curious.`)
-        return createFlaggedContent(DEFAULT_ACTIVITIES_TABLE_DATA)
+        return createFlaggedContent(DEFAULT_TABLE_DATA)
       }
       log.error(`Failed to get offender work. Reason: ${e.message}`)
     }
