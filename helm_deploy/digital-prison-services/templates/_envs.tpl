@@ -271,4 +271,7 @@ env:
   - name: CALCULATE_RELEASE_DATES_URL
     value: {{ .Values.env.CALCULATE_RELEASE_DATES_URL | quote }}
 
+  - name: SEND_LEGAL_MAIL_URL
+    value: {{ .Values.env.SEND_LEGAL_MAIL_URL | quote }}
+
 {{- end -}}

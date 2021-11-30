@@ -54,6 +54,9 @@ export const applications = {
       process.env.PECS_URL ||
       'https://hmpps-book-secure-move-frontend-staging.apps.live-1.cloud-platform.service.justice.gov.uk',
   },
+  sendLegalMail: {
+    url: process.env.SEND_LEGAL_MAIL_URL,
+  },
 }
 export const apis = {
   oauth2: {

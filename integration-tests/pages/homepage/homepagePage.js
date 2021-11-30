@@ -23,6 +23,7 @@ const homepagePage = () =>
     pom: () => cy.get('[data-test="pom"]'),
     soc: () => cy.get('[data-test="soc"]'),
     feedbackBanner: () => cy.get('[data-test="feedback-banner"]'),
+    sendLegalMail: () => cy.get('[data-test="send-legal-mail"]'),
   })
 
 export default {
