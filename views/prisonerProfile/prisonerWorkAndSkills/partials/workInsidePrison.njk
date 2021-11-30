@@ -40,7 +40,7 @@
 {% else %}
     {{ unacceptableAbsenceSection(absence, {"data-test": "work-unacceptableAbsence"}, 'govuk-!-margin-bottom-1') }}
 {% endif %}
-<hr class="govuk-section-break govuk-section-break--visible"/>
+{#<hr class="govuk-section-break govuk-section-break--visible"/>
 <p class="govuk-body govuk-!-margin-top-3">
     {% if absence %}
         {% if absence.noneInSixMonths %}
@@ -50,4 +50,4 @@
                data-test="work-absencesLink">View unacceptable absences for the last 6 months</a>
         {% endif %}
     {% endif %}
-</p>
+</p>#}
