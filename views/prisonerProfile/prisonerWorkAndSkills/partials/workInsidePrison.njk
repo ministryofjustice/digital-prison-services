@@ -31,23 +31,25 @@
     <a class="govuk-link" href='/prisoner/{{offenderNo}}/schedule' data-test="work-scheduleLink">View 7 day schedule</a>
 </p>
 
-<hr class="govuk-section-break govuk-section-break--visible"/>
-<h3 class="govuk-heading-m card__heading govuk-!-margin-top-3" data-test="work-header-2">Unacceptable absences</h3>
-{% if not absence %}
-    <p class="govuk-body">
-        We cannot show these details right now. Try reloading the page.
-    </p>
-{% else %}
-    {{ unacceptableAbsenceSection(absence, {"data-test": "work-unacceptableAbsence"}, 'govuk-!-margin-bottom-1') }}
-{% endif %}
-{#<hr class="govuk-section-break govuk-section-break--visible"/>
-<p class="govuk-body govuk-!-margin-top-3">
-    {% if absence %}
-        {% if absence.noneInSixMonths %}
-            {{ offenderName }} has no unacceptable absences in the last 6 months
-        {% else %}
-            <a class="govuk-link" href='/prisoner/{{ offenderNo }}/work-and-skills#TODO'
-               data-test="work-absencesLink">View unacceptable absences for the last 6 months</a>
-        {% endif %}
+{% if prisonerProfileData.esweEnabled %}
+    <hr class="govuk-section-break govuk-section-break--visible"/>
+    <h3 class="govuk-heading-m card__heading govuk-!-margin-top-3" data-test="work-header-2">Unacceptable absences</h3>
+    {% if not absence %}
+        <p class="govuk-body">
+            We cannot show these details right now. Try reloading the page.
+        </p>
+    {% else %}
+        {{ unacceptableAbsenceSection(absence, {"data-test": "work-unacceptableAbsence"}, 'govuk-!-margin-bottom-1') }}
     {% endif %}
-</p>#}
+    <hr class="govuk-section-break govuk-section-break--visible"/>
+    <p class="govuk-body govuk-!-margin-top-3">
+        {% if absence %}
+            {% if absence.noneInSixMonths %}
+                {{ offenderName }} has no unacceptable absences in the last 6 months
+            {% else %}
+                <a class="govuk-link" href='/prisoner/{{ offenderNo }}/work-and-skills#TODO'
+                   data-test="work-absencesLink">View unacceptable absences for the last 6 months</a>
+            {% endif %}
+        {% endif %}
+    </p>
+{% endif %}
