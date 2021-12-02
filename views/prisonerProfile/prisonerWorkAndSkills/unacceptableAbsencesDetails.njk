@@ -1,0 +1,129 @@
+{% extends "../../partials/layout.njk" %}
+{% from "govuk/components/table/macro.njk" import govukTable %}
+{% from "../../macros/printLink.njk" import printLink %}
+{% from "moj/components/pagination/macro.njk" import mojPagination %}
+
+{% set title =  "Unacceptable absences" %}
+
+{% block beforeContent %}
+    {{ govukBreadcrumbs({
+        items: [
+            {
+                text: "Digital Prison Services",
+                href: "/"
+            },
+            {
+                text: breadcrumbPrisonerName,
+                href: profileUrl
+            }
+        ],
+        classes: "govuk-!-display-none-print"
+    }) }}
+{% endblock %}
+
+{% set rows = [] %}
+{% for job in fullDetails %}
+    {% set rows = (rows.push([
+        { text: job.eventDate | formatDate('ddd D MMM YYYY'), attributes: { "data-sort-value": job.eventDate } },
+        { text: job.activityName },
+        { text: job.activityDescription },
+        { text: prisons.get(job.location) },
+        { text: job.comments }
+    ]), rows) %}
+{% endfor %}
+
+{% block content %}
+    <div class="govuk-grid-row">
+        <div class="govuk-grid-column-full">
+            <h1 class="govuk-heading-l">{{ prisonerName | possessive | safe }} unacceptable absences for the last 6
+                months</h1>
+            <h2 class="govuk-heading-m"> [DD Month YYYY] to [DD Month YYYY]</h2>
+        </div>
+    </div>
+    {% if fullDetails.length > 0 %}
+        <div class="govuk-grid-row">
+            <div class="govuk-grid-column-full">
+                {{ printLink(align = "right") }}
+
+                {{ mojPagination(pagination) }}
+
+                <div class="results-table results-table__results">
+
+                    {{ govukTable({
+                        head: [
+                            {
+                                text: "Date",
+                                classes: "",
+                                attributes: { "aria-sort": "descending", "data-test": "date-header" }
+                            },
+                            {
+                                text: "Activity",
+                                classes: "work-inside-prison-details-width-20",
+                                attributes: {  "aria-sort": "none", "data-test": "activity-header" }
+                            },
+                            {
+                                text: "Activity description",
+                                classes: "work-inside-prison-details-width-20",
+                                attributes: { "data-test": "activity-description-header" }
+                            },
+                            {
+                                text: "Location",
+                                classes: "",
+                                attributes: { "data-test": "location-header" }
+                            },
+                            {
+                                text: "Comment",
+                                classes: "",
+                                attributes: { "data-test": "comment-header" }
+                            }
+                        ],
+                        rows: rows,
+                        attributes: { "data-test": "unacceptable-absences-table" }
+                    }) }}
+
+                </div>
+            </div>
+        </div>
+        <div class="govuk-!-display-none-print">
+            {{ mojPagination(pagination) }}
+        </div>
+    {% else %}
+        <div class="govuk-grid-row">
+            <div class="govuk-grid-column-three-quarters">
+                <p class="govuk-body" data-test="no-unacceptable-absences">{{ prisonerName }} has no unacceptable
+                    absences for the last 6 months.</p>
+            </div>
+        </div>
+    {% endif %}
+    <div class="govuk-grid-row">
+        <div class="govuk-grid-column-two-thirds">
+            <p class="govuk-body">
+                <a href="{{ profileUrl }}" class="govuk-link govuk-!-display-none-print"
+                   data-test="work-inside-prison-returnLink">Return to prisoner profile</a>
+            </p>
+        </div>
+    </div>
+    <div class="app-contact-panel govuk-!-display-none-print">
+        <h2 class="app-contact-panel__heading">This is a new page</h2>
+        <p class="govuk-body app-contact-panel__body">
+            <a class="govuk-link govuk-link--no-visited-state" target="_blank"
+               href="https://eu.surveymonkey.com/r/BBDMFLN">Give feedback to help us improve it (opens in a new tab)</a>.
+        </p>
+    </div>
+    <pre> prisons = {{ prisons | dump(2) }} </pre>
+    <pre> RNI = {{ prisons.get('RNI') }} </pre>
+{% endblock %}
+
+{% block bodyEnd %}
+    {{ super() }}
+    <script src="/assets/moj/components/sortable-table/sortable-table.js"></script>
+    <script>
+      new MOJFrontend.SortableTable({
+        table: $("table")[0]
+      });
+    </script>
+{% endblock %}
+
+{% block pageScripts %}
+    <script src="/static/js/education-actions.js"></script>
+{% endblock %}

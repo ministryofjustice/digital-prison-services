@@ -25,6 +25,7 @@ type CurrentCoursesEnhanced = FeatureFlagged<eswe.CurrentCoursesEnhanced>
 type LearnerEducationFullDetails = FeatureFlagged<eswe.LearnerEducationFullDetails>
 type CurrentWork = FeatureFlagged<eswe.OffenderCurrentWork>
 type activitiesHistory = FeatureFlagged<eswe.activitiesHistory>
+type attendanceDetails = FeatureFlagged<eswe.attendanceDetails>
 
 const createFlaggedContent = <T>(content: T) => ({
   enabled: app.esweEnabled,
@@ -440,7 +441,7 @@ export default class EsweService {
       } else {
         currentWorkData = null
       }
-      log.error(e, 'Failed to get learner work history')
+      log.error(e, 'Failed in getCurrentActivities()')
     }
     return createFlaggedContent({ currentWorkData, unacceptableAbsenceSummary })
   }
@@ -484,10 +485,55 @@ export default class EsweService {
       return createFlaggedContent(DEFAULT_TABLE_DATA)
     } catch (e) {
       if (e.response?.status === 404) {
-        log.info(`Offender record not found in Curious.`)
+        log.info(`Offender record not found in prison-api.`)
         return createFlaggedContent(DEFAULT_TABLE_DATA)
       }
-      log.error(`Failed to get offender work. Reason: ${e.message}`)
+      log.error(`Failed in getActivitiesHistoryDetails(). Reason: ${e.message}`)
+    }
+    return createFlaggedContent(null)
+  }
+
+  async getAttendanceDetails(nomisId: string, page: number): Promise<attendanceDetails> {
+    try {
+      // const sort = 'endDate,desc'
+      const context = await this.systemOauthClient.getClientCredentialsTokens()
+      const yesterday = moment().subtract(1, 'd').format('YYYY-MM-DD')
+      const sixMonthsAgo = moment().subtract(6, 'month').format('YYYY-MM-DD')
+      const data = await this.whereaboutsApi.getUnacceptableAbsenceDetail(
+        context,
+        nomisId,
+        yesterday,
+        sixMonthsAgo,
+        page
+      )
+
+      // const fullDetails =
+      //   .map((job) => ({
+      //     role: job.description.trim(),
+      //     location: job.agencyLocationDescription,
+      //     startDate: job.startDate,
+      //     endDate: getEndDate(job),
+      //     endReason: job.endReasonDescription || null,
+      //     endComment: job.endCommentText || null,
+      //   }))
+      //   .sort((a, b) => compareByDate(parseDate(a.endDate), parseDate(b.endDate), true))
+
+      const withPagination = {
+        fullDetails: data.content,
+        pagination: {
+          totalRecords: data.totalElements,
+          offset: data.pageable.offset,
+          limit: data.pageable.pageSize,
+        },
+      }
+
+      return createFlaggedContent(withPagination)
+    } catch (e) {
+      if (e.response?.status === 404) {
+        log.info(`Offender record not found in Whereabouts api.`)
+        return createFlaggedContent(DEFAULT_TABLE_DATA)
+      }
+      log.error(`Failed in getAttendanceDetails(). Reason: ${e.message}`)
     }
     return createFlaggedContent(null)
   }
