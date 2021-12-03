@@ -156,7 +156,7 @@ export default class EsweService {
       const context = await this.systemOauthClient.getClientCredentialsTokens()
       content = await this.curiousApi.getLearnerProfiles(context, nomisId)
     } catch (e) {
-      log.warn(`Failed to fetch learner profiles. Reason: ${e.message}`)
+      log.error(`Failed to fetch learner profiles. Reason: ${e.message}`)
     }
 
     return createFlaggedContent(content)
@@ -168,7 +168,7 @@ export default class EsweService {
       const context = await this.systemOauthClient.getClientCredentialsTokens()
       result = await this.curiousApi.getLearnerEmployabilitySkills(context, nomisId)
     } catch (e) {
-      log.warn(`Failed in getLearnerEmployabilitySkills. Reason: ${e.message}`)
+      log.error(`Failed in getLearnerEmployabilitySkills. Reason: ${e.message}`)
     }
 
     return result
@@ -389,7 +389,7 @@ export default class EsweService {
         log.info(`Offender record not found in Curious.`)
         return createFlaggedContent(DEFAULT_TABLE_DATA)
       }
-      log.error(`Failed to get learner education. Reason: ${e.message}`)
+      log.error(`Failed to get learner education details. Reason: ${e.message}`)
     }
     return createFlaggedContent(null)
   }
@@ -413,7 +413,7 @@ export default class EsweService {
       )
       unacceptableAbsenceSummary = { ...thirtyDaySummary, noneInSixMonths: sixMonthCheck.unacceptableAbsence === 0 }
     } catch (e) {
-      log.error(e, 'Failed to get learner unacceptable absences')
+      log.error(`Failed to get learner unacceptable absences (whereabouts). Reason: ${e.message}`)
       unacceptableAbsenceSummary = null
     }
     try {
@@ -441,7 +441,7 @@ export default class EsweService {
       } else {
         currentWorkData = null
       }
-      log.error(e, 'Failed in getCurrentActivities()')
+      log.error(`Failed to get learner unacceptable absences. Reason: ${e.message}`)
     }
     return createFlaggedContent({ currentWorkData, unacceptableAbsenceSummary })
   }
@@ -506,17 +506,6 @@ export default class EsweService {
         sixMonthsAgo,
         page
       )
-
-      // const fullDetails =
-      //   .map((job) => ({
-      //     role: job.description.trim(),
-      //     location: job.agencyLocationDescription,
-      //     startDate: job.startDate,
-      //     endDate: getEndDate(job),
-      //     endReason: job.endReasonDescription || null,
-      //     endComment: job.endCommentText || null,
-      //   }))
-      //   .sort((a, b) => compareByDate(parseDate(a.endDate), parseDate(b.endDate), true))
 
       const withPagination = {
         fullDetails: data.content,
