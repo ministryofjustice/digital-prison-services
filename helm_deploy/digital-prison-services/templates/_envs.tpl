@@ -274,7 +274,7 @@ env:
   - name: SEND_LEGAL_MAIL_URL
     value: {{ .Values.env.SEND_LEGAL_MAIL_URL | quote }}
 
-  - name: PPRISONS_WITH_MANAGE_ADJUDICATIONS_ENABLED
+  - name: PRISONS_WITH_MANAGE_ADJUDICATIONS_ENABLED
     value: {{ .Values.env.PRISONS_WITH_MANAGE_ADJUDICATIONS_ENABLED | quote }}
 
 {{- end -}}
