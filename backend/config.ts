@@ -145,7 +145,7 @@ export const apis = {
     url: process.env.CURIOUS_URL || '',
   },
   manageAdjudications: {
-    ui_url: process.env.MANAGE_ADJUDICAIONS_URL || '',
+    ui_url: process.env.MANAGE_ADJUDICATIONS_URL || '',
     enabled_prisons: process.env.PRISONS_WITH_MANAGE_ADJUDICATIONS_ENABLED || '',
   },
   bookAPrisonVisit: {
