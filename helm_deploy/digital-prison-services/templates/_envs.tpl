@@ -277,4 +277,7 @@ env:
   - name: PRISONS_WITH_MANAGE_ADJUDICATIONS_ENABLED
     value: {{ .Values.env.PRISONS_WITH_MANAGE_ADJUDICATIONS_ENABLED | quote }}
 
+  - name: MANAGE_ADJUDICATIONS_URL
+    value: {{ .Values.env.MANAGE_ADJUDICATIONS_URL | quote }}
+
 {{- end -}}
