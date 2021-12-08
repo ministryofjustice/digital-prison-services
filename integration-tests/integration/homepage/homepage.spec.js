@@ -93,11 +93,12 @@ context('Homepage', () => {
     it('should show welcome people into prison task with correct content', () => {
       const page = homepagePage.goTo()
 
-      page.welcomePeopleIntoPrison().should('exist')
-      page.welcomePeopleIntoPrisonTitleText().contains('Welcome people into prison')
-      page.welcomePeopleIntoPrisonLink().should('have.attr', 'href', 'https://welcome-people-into-prison')
+      page.welcomePeopleIntoPrison().tile().should('exist')
+      page.welcomePeopleIntoPrison().title().contains('Welcome people into prison')
+      page.welcomePeopleIntoPrison().link().should('have.attr', 'href', 'https://welcome-people-into-prison')
       page
-        .welcomePeopleIntoPrisonParagraphText()
+        .welcomePeopleIntoPrison()
+        .description()
         .contains('View prisoners booked to arrive today and add them to the establishment roll')
     })
 
