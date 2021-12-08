@@ -130,6 +130,10 @@ export const apis = {
   bookVideoLink: {
     url: process.env.BVL_URL || 'http://localhost:3000',
   },
+  welcomePeopleIntoPrison: {
+    url: process.env.WELCOME_PEOPLE_INTO_PRISON_URL,
+    enabled_prisons: process.env.WELCOME_PEOPLE_INTO_PRISON_ENABLED_PRISONS || '',
+  },
   omic: {
     url: process.env.OMIC_URL || 'http://localhost:3001',
   },

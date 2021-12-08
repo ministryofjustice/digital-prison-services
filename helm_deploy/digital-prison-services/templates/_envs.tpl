@@ -279,5 +279,11 @@ env:
 
   - name: MANAGE_ADJUDICATIONS_URL
     value: {{ .Values.env.MANAGE_ADJUDICATIONS_URL | quote }}
+  
+  - name: WELCOME_PEOPLE_INTO_PRISON_URL
+    value: {{ .Values.env.WELCOME_PEOPLE_INTO_PRISON_URL | quote }}
+
+  - name: WELCOME_PEOPLE_INTO_PRISON_ENABLED_PRISONS
+    value: {{ .Values.env.WELCOME_PEOPLE_INTO_PRISON_ENABLED_PRISONS | quote }}
 
 {{- end -}}
