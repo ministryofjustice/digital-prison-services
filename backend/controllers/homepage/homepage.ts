@@ -4,7 +4,17 @@ import config from '../../config'
 
 const {
   applications: { licences, manageaccounts, moic, pecs, sendLegalMail },
-  apis: { omic, useOfForce, pathfinder, categorisation, soc, pinPhones, manageAdjudications, bookAPrisonVisit },
+  apis: {
+    omic,
+    useOfForce,
+    pathfinder,
+    categorisation,
+    soc,
+    pinPhones,
+    manageAdjudications,
+    bookAPrisonVisit,
+    welcomePeopleIntoPrison,
+  },
 } = config
 
 const getTasks = ({ activeCaseLoadId, locations, staffId, whereaboutsConfig, keyworkerPrisonStatus, roleCodes }) => {
@@ -174,6 +184,15 @@ const getTasks = ({ activeCaseLoadId, locations, staffId, whereaboutsConfig, key
       description: 'Scan barcodes on mail from law firms and other approved senders.',
       href: sendLegalMail.url,
       enabled: () => sendLegalMail.url && userHasRoles(['SLM_SCAN_BARCODE', 'SLM_SECURITY_ANALYST']),
+    },
+    {
+      id: 'welcome-people-into-prison',
+      heading: 'Welcome people into prison',
+      description: 'View prisoners booked to arrive today and add them to the establishment roll.',
+      href: welcomePeopleIntoPrison.url,
+      roles: null,
+      enabled: () =>
+        welcomePeopleIntoPrison.url && welcomePeopleIntoPrison.enabled_prisons.split(',').includes(activeCaseLoadId),
     },
   ]
 }
