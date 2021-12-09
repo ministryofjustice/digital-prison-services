@@ -65,5 +65,5 @@ env:
   CALCULATE_RELEASE_DATES_URL: https://calculate-release-dates-dev.hmpps.service.justice.gov.uk
   SEND_LEGAL_MAIL_URL: https://send-legal-mail-dev.prison.service.justice.gov.uk
   WELCOME_PEOPLE_INTO_PRISON_URL: https://welcome-dev.prison.service.justice.gov.uk/
-  WELCOME_PEOPLE_INTO_PRISON_ENABLED_PRISONS: "NMI"
+  WELCOME_PEOPLE_INTO_PRISON_ENABLED_PRISONS: "NMI,MDI"
 
