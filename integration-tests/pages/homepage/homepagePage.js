@@ -24,6 +24,12 @@ const homepagePage = () =>
     soc: () => cy.get('[data-test="soc"]'),
     feedbackBanner: () => cy.get('[data-test="feedback-banner"]'),
     sendLegalMail: () => cy.get('[data-test="send-legal-mail"]'),
+    welcomePeopleIntoPrison: () => ({
+      tile: () => cy.get('[data-test="welcome-people-into-prison"]'),
+      title: () => cy.get('[data-test="welcome-people-into-prison"] h2'),
+      link: () => cy.get('[data-test="welcome-people-into-prison"] a'),
+      description: () => cy.get('[data-test="welcome-people-into-prison"] p'),
+    }),
   })
 
 export default {

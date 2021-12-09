@@ -90,6 +90,18 @@ context('Homepage', () => {
       page.useOfForce().should('exist')
     })
 
+    it('should show welcome people into prison task with correct content', () => {
+      const page = homepagePage.goTo()
+
+      page.welcomePeopleIntoPrison().tile().should('exist')
+      page.welcomePeopleIntoPrison().title().contains('Welcome people into prison')
+      page.welcomePeopleIntoPrison().link().should('have.attr', 'href', 'https://welcome-people-into-prison')
+      page
+        .welcomePeopleIntoPrison()
+        .description()
+        .contains('View prisoners booked to arrive today and add them to the establishment roll')
+    })
+
     it('should show establishment roll', () => {
       const page = homepagePage.goTo()
 

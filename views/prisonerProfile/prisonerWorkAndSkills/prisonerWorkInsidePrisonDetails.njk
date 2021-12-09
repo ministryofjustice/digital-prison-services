@@ -1,4 +1,5 @@
 {% extends "../../partials/layout.njk" %}
+{% from "govuk/components/notification-banner/macro.njk" import govukNotificationBanner %}
 {% from "govuk/components/table/macro.njk" import govukTable %}
 {% from "../../macros/printLink.njk" import printLink %}
 {% from "moj/components/pagination/macro.njk" import mojPagination %}
@@ -21,6 +22,11 @@
   }) }}
 {% endblock %}
 
+{% set notificationHtml %}
+    <p class="govuk-notification-banner__heading">This is a new page</p>
+        <a class="govuk-link govuk-link--no-visited-state" target="_blank" href="https://eu.surveymonkey.com/r/BBDMFLN">Give feedback to help us improve it (opens in a new tab)</a>.
+{% endset %}
+
 {% set rows = [] %}
 {% for job in activitiesHistory %}
   {% set rows = (rows.push([
@@ -34,6 +40,12 @@
 {% endfor %}
 
 {% block content %}
+    {{ govukNotificationBanner({
+        classes: 'govuk-!-display-none-print',
+        titleText: 'Feedback',
+        html: notificationHtml
+    }) }}
+
     <div class="govuk-grid-row">
         <div class="govuk-grid-column-full">
             <h1 class="govuk-heading-l">{{ prisonerName | possessive | safe }} work and activities for the last 12 months</h1>
@@ -93,11 +105,6 @@
         </p>
       </div>
     </div>
-    <div class="app-contact-panel govuk-!-display-none-print">
-      <h2 class="app-contact-panel__heading">This is a new page</h2>
-      <p class="govuk-body app-contact-panel__body"><a class="govuk-link govuk-link--no-visited-state" target="_blank" href="https://eu.surveymonkey.com/r/BBDMFLN">Give feedback to help us improve it (opens in a new tab)</a>.
-      </p>
-    </div>    
 {% endblock %}
 
 {% block bodyEnd %}

@@ -20,6 +20,8 @@ describe('Homepage', () => {
     config.apis.manageAdjudications.ui_url = undefined
     config.apis.bookAPrisonVisit.ui_url = undefined
     config.applications.sendLegalMail.url = undefined
+    config.apis.welcomePeopleIntoPrison.enabled_prisons = undefined
+    config.apis.welcomePeopleIntoPrison.url = undefined
 
     req = {
       session: {
@@ -578,5 +580,39 @@ describe('Homepage', () => {
         })
       )
     })
+  })
+  it('should not display the Welcome people into prison task on the home page', async () => {
+    config.apis.welcomePeopleIntoPrison.url = 'https://welcome.prison.service.justice.gov.uk'
+    config.apis.welcomePeopleIntoPrison.enabled_prisons = 'LEI, NMI'
+
+    await controller(req, res)
+
+    expect(res.render).toHaveBeenCalledWith(
+      'homepage/homepage.njk',
+      expect.objectContaining({
+        tasks: [],
+      })
+    )
+  })
+
+  it('should display the Welcome people into prison task on the home page', async () => {
+    config.apis.welcomePeopleIntoPrison.url = 'https://wpipUrl.prison.service.justice.gov.uk'
+    config.apis.welcomePeopleIntoPrison.enabled_prisons = 'LEI,NMI,MDI'
+
+    await controller(req, res)
+
+    expect(res.render).toHaveBeenCalledWith(
+      'homepage/homepage.njk',
+      expect.objectContaining({
+        tasks: [
+          {
+            description: 'View prisoners booked to arrive today and add them to the establishment roll.',
+            heading: 'Welcome people into prison',
+            href: 'https://wpipUrl.prison.service.justice.gov.uk',
+            id: 'welcome-people-into-prison',
+          },
+        ],
+      })
+    )
   })
 })
