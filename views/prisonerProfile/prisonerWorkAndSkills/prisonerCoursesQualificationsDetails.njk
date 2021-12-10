@@ -1,5 +1,4 @@
 {% extends "../../partials/layout.njk" %}
-{% from "govuk/components/notification-banner/macro.njk" import govukNotificationBanner %}
 {% from "govuk/components/table/macro.njk" import govukTable %}
 {% from "moj/components/pagination/macro.njk" import mojPagination %}
 {% from "../../macros/printLink.njk" import printLink %}
@@ -9,6 +8,12 @@
 {% set coursesDetailsList =  coursesAndQualifications.content.fullDetails %}
 
 {% block beforeContent %}
+  <div class="bottom-line">
+    <p class="govuk-body-s govuk-!-margin-top-4">This is a new page -
+      <a class="govuk-link govuk-link--no-visited-state" target="_blank" href="https://eu.surveymonkey.com/r/BX3PPQS">give feedback to help us improve it (opens in a new tab)</a>
+    </p>
+  </div>
+
   {{ govukBreadcrumbs({
     items: [
       {
@@ -23,11 +28,6 @@
     classes: "govuk-!-display-none-print"
   }) }}
 {% endblock %}
-
-{% set notificationHtml %}
-    <p class="govuk-notification-banner__heading">This is a new page</p>
-    <a class="govuk-link govuk-link--no-visited-state" target="_blank" href="https://eu.surveymonkey.com/r/BX3PPQS">Give feedback to help us improve it (opens in a new tab)</a>.
-{% endset %}
 
 {% set rows = [] %}
 {% for course in coursesDetailsList %}
@@ -44,12 +44,6 @@
 {% endfor %}
 
 {% block content %}
-    {{ govukNotificationBanner({
-        classes: 'govuk-!-display-none-print',
-        titleText: 'Feedback',
-        html: notificationHtml
-    }) }}
-
     <div class="govuk-grid-row">
         <div class="govuk-grid-column-three-quarters">
             <h1 class="govuk-heading-l">{{ prisonerName | possessive | safe }} courses and qualifications</h1>
