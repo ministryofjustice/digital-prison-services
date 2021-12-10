@@ -4,6 +4,8 @@ import { formatTimestampToDate } from '../../../utils'
 
 const batchTransactionsOnly = (transaction) => transaction?.relatedOffenderTransactions?.length
 
+const nonZeroInputPaymentsOnly = (relatedTransaction) => relatedTransaction?.penceAmount !== 0
+
 const sortByRecentEntryDateThenByRecentCalendarDate = (left, right) => {
   const entryDateDiff = moment(right.entryDate).valueOf() - moment(left.entryDate).valueOf()
   if (entryDateDiff !== 0) return entryDateDiff
@@ -33,18 +35,20 @@ export default ({ prisonApi, prisonerFinanceService }) =>
       const relatedTransactions = allTransactionsForDateRange
         .filter(batchTransactionsOnly)
         .flatMap((batchTransaction) => {
-          const related = batchTransaction.relatedOffenderTransactions.map((relatedTransaction) => ({
-            id: batchTransaction.id,
-            entryDate: batchTransaction.entryDate,
-            agencyId: batchTransaction.agencyId,
-            penceAmount: relatedTransaction.payAmount,
-            currentBalance: relatedTransaction.currentBalance,
-            entryDescription: `${relatedTransaction.paymentDescription} from ${formatTimestampToDate(
-              relatedTransaction.calendarDate
-            )}`,
-            postingType: 'CR',
-            calendarDate: relatedTransaction.calendarDate,
-          }))
+          const related = batchTransaction.relatedOffenderTransactions
+            .map((relatedTransaction) => ({
+              id: batchTransaction.id,
+              entryDate: batchTransaction.entryDate,
+              agencyId: batchTransaction.agencyId,
+              penceAmount: relatedTransaction.payAmount,
+              currentBalance: relatedTransaction.currentBalance,
+              entryDescription: `${relatedTransaction.paymentDescription} from ${formatTimestampToDate(
+                relatedTransaction.calendarDate
+              )}`,
+              postingType: 'CR',
+              calendarDate: relatedTransaction.calendarDate,
+            }))
+            .filter(nonZeroInputPaymentsOnly)
 
           return related
         })
