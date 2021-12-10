@@ -35,18 +35,20 @@ export default ({ prisonApi, prisonerFinanceService }) =>
       const relatedTransactions = allTransactionsForDateRange
         .filter(batchTransactionsOnly)
         .flatMap((batchTransaction) => {
-          const related = batchTransaction.relatedOffenderTransactions.map((relatedTransaction) => ({
-            id: batchTransaction.id,
-            entryDate: batchTransaction.entryDate,
-            agencyId: batchTransaction.agencyId,
-            penceAmount: relatedTransaction.payAmount,
-            currentBalance: relatedTransaction.currentBalance,
-            entryDescription: `${relatedTransaction.paymentDescription} from ${formatTimestampToDate(
-              relatedTransaction.calendarDate
-            )}`,
-            postingType: 'CR',
-            calendarDate: relatedTransaction.calendarDate,
-          }))
+          const related = batchTransaction.relatedOffenderTransactions
+            .map((relatedTransaction) => ({
+              id: batchTransaction.id,
+              entryDate: batchTransaction.entryDate,
+              agencyId: batchTransaction.agencyId,
+              penceAmount: relatedTransaction.payAmount,
+              currentBalance: relatedTransaction.currentBalance,
+              entryDescription: `${relatedTransaction.paymentDescription} from ${formatTimestampToDate(
+                relatedTransaction.calendarDate
+              )}`,
+              postingType: 'CR',
+              calendarDate: relatedTransaction.calendarDate,
+            }))
+            .filter(nonZeroInputPaymentsOnly)
 
           return related
         })
