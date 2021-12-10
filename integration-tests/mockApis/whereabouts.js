@@ -507,7 +507,7 @@ module.exports = {
     stubFor({
       request: {
         method: 'GET',
-        urlPattern: `/whereabouts/attendances/offender/${offenderNo}/attendance-detail\\?fromDate=.+&toDate=.+&page=.+`,
+        urlPattern: `/whereabouts/attendances/offender/${offenderNo}/unacceptable-absences\\?fromDate=.+&toDate=.+&page=.+`,
       },
       response: {
         status: 200,

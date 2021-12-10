@@ -62,7 +62,7 @@ export const whereaboutsApiFactory = (client) => {
   const getUnacceptableAbsenceDetail = (context, offenderNo, fromDate, toDate, page) =>
     get(
       context,
-      `/attendances/offender/${offenderNo}/attendance-detail?fromDate=${fromDate}&toDate=${toDate}&page=${page}`
+      `/attendances/offender/${offenderNo}/unacceptable-absences?fromDate=${fromDate}&toDate=${toDate}&page=${page}`
     )
 
   const searchGroups = (context, agencyId) => get(context, `/agencies/${agencyId}/locations/groups`)

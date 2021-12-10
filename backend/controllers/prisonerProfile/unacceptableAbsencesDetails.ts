@@ -35,13 +35,14 @@ export default ({ paginationService, prisonApi, esweService }) =>
         ])
 
       const { firstName, lastName } = prisonerDetails
-      const { fullDetails, pagination } = attendanceDetails.content
+      const { fullDetails, dateRange, pagination } = attendanceDetails.content
 
       return res.render('prisonerProfile/prisonerWorkAndSkills/unacceptableAbsencesDetails.njk', {
         breadcrumbPrisonerName: putLastNameFirst(firstName, lastName),
         prisonerName: formatName(firstName, lastName),
         profileUrl: `/prisoner/${offenderNo}/work-and-skills#work-summary`,
         fullDetails,
+        dateRange,
         pagination: paginationService.getPagination(
           pagination.totalRecords,
           pageOffset || pagination.offset,

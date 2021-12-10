@@ -351,6 +351,7 @@ declare namespace eswe {
 
   interface attendanceDetails {
     fullDetails: attendanceFullDetails[]
+    dateRange: { fromDate: moment.Moment; toDate: moment.Moment }
     pagination: Record<string, unknown>
   }
 

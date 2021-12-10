@@ -1,9 +1,8 @@
 {% extends "../../partials/layout.njk" %}
 {% from "govuk/components/table/macro.njk" import govukTable %}
-{% from "../../macros/printLink.njk" import printLink %}
 {% from "moj/components/pagination/macro.njk" import mojPagination %}
 
-{% set title =  "Unacceptable absences" %}
+{% set title = "Unacceptable absences" %}
 
 {% block beforeContent %}
     <div class="bottom-line">
@@ -14,14 +13,8 @@
 
     {{ govukBreadcrumbs({
         items: [
-            {
-                text: "Digital Prison Services",
-                href: "/"
-            },
-            {
-                text: breadcrumbPrisonerName,
-                href: profileUrl
-            }
+            { text: "Digital Prison Services", href: "/"        },
+            { text: breadcrumbPrisonerName,    href: profileUrl }
         ],
         classes: "govuk-!-display-none-print"
     }) }}
@@ -41,15 +34,16 @@
 {% block content %}
     <div class="govuk-grid-row">
         <div class="govuk-grid-column-full">
-            <h1 class="govuk-heading-l">{{ prisonerName | possessive | safe }} unacceptable absences for the last 6
+            <h1 class="govuk-heading-l govuk-!-margin-bottom-2">{{ prisonerName | possessive | safe }} unacceptable absences for the last 6
                 months</h1>
-            <h2 class="govuk-heading-m"> [DD Month YYYY] to [DD Month YYYY]</h2>
+            {% if dateRange %}
+                <p class="govuk-body-l govuk-!-margin-bottom-2"> {{ dateRange.fromDate.format('DD MMMM YYYY') }} to {{ dateRange.toDate.format('DD MMMM YYYY') }}</p>
+            {% endif %}
         </div>
     </div>
     {% if fullDetails.length > 0 %}
         <div class="govuk-grid-row">
             <div class="govuk-grid-column-full">
-                {{ printLink(align = "right") }}
 
                 {{ mojPagination(pagination) }}
 

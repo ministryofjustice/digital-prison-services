@@ -494,21 +494,21 @@ export default class EsweService {
   }
 
   async getAttendanceDetails(nomisId: string, page: number): Promise<attendanceDetails> {
+    const sixMonthsAgo = moment().startOf('day').subtract(6, 'month')
+    const yesterday = moment().startOf('day').subtract(1, 'd')
     try {
-      // const sort = 'endDate,desc'
       const context = await this.systemOauthClient.getClientCredentialsTokens()
-      const yesterday = moment().subtract(1, 'd').format('YYYY-MM-DD')
-      const sixMonthsAgo = moment().subtract(6, 'month').format('YYYY-MM-DD')
       const data = await this.whereaboutsApi.getUnacceptableAbsenceDetail(
         context,
         nomisId,
-        yesterday,
-        sixMonthsAgo,
+        sixMonthsAgo.format('YYYY-MM-DD'),
+        yesterday.format('YYYY-MM-DD'),
         page
       )
 
       const withPagination = {
         fullDetails: data.content,
+        dateRange: { fromDate: sixMonthsAgo, toDate: yesterday },
         pagination: {
           totalRecords: data.totalElements,
           offset: data.pageable.offset,
@@ -520,7 +520,7 @@ export default class EsweService {
     } catch (e) {
       if (e.response?.status === 404) {
         log.info(`Offender record not found in Whereabouts api.`)
-        return createFlaggedContent(DEFAULT_TABLE_DATA)
+        return createFlaggedContent({ ...DEFAULT_TABLE_DATA, dateRange: { fromDate: sixMonthsAgo, toDate: yesterday } })
       }
       log.error(`Failed in getAttendanceDetails(). Reason: ${e.message}`)
     }

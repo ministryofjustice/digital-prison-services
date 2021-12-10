@@ -26,6 +26,9 @@ jest.mock('../config', () => ({
   },
 }))
 
+const sixMonthsAgo = moment().startOf('day').subtract(6, 'month')
+const yesterday = moment().startOf('day').subtract(1, 'd')
+
 describe('Education skills and work experience', () => {
   const dummyLearnerProfiles = getDummyLearnerProfiles()
   const dummyEducations = getDummyEducations()
@@ -380,7 +383,10 @@ describe('Education skills and work experience', () => {
     it('should return expected response when the prisoner is not found', async () => {
       getUnacceptableAbsenceDetailMock.mockRejectedValue(makeNotFoundError())
       const actual = await service.getAttendanceDetails(nomisId)
-      expect(actual.content).toEqual(DEFAULT_TABLE_DATA)
+      expect(actual.content).toEqual({
+        ...DEFAULT_TABLE_DATA,
+        dateRange: { fromDate: sixMonthsAgo, toDate: yesterday },
+      })
     })
 
     it('should return the expected response if the user has no data', async () => {
@@ -389,23 +395,30 @@ describe('Education skills and work experience', () => {
         pageable: { offset: 0, pageSize: 20 },
         totalElements: 0,
       })
-      const actual = await service.getAttendanceDetails(nomisId)
-      expect(actual.content).toEqual(DEFAULT_TABLE_DATA)
+
+      const actual = await service.getAttendanceDetails(nomisId, 3)
+
+      expect(actual.content).toEqual({
+        ...DEFAULT_TABLE_DATA,
+        dateRange: { fromDate: sixMonthsAgo, toDate: yesterday },
+      })
+      expect(getUnacceptableAbsenceDetailMock).toHaveBeenCalledWith(
+        credentialsRef,
+        nomisId,
+        sixMonthsAgo.format('YYYY-MM-DD'),
+        yesterday.format('YYYY-MM-DD'),
+        3
+      )
     })
 
     it('should return the expected response if the user has data', async () => {
       const list = [
-        {
-          eventDate: '2021-09-21',
-          activity: 'Activity1',
-        },
-        {
-          eventDate: '2021-09-22',
-          activity: 'Activity2',
-        },
+        { eventDate: '2021-09-21', activity: 'Activity1' },
+        { eventDate: '2021-09-22', activity: 'Activity2' },
       ]
       const expected = {
         fullDetails: list,
+        dateRange: { fromDate: sixMonthsAgo, toDate: yesterday },
         pagination: { limit: 20, offset: 0, totalRecords: 2 },
       }
       getUnacceptableAbsenceDetailMock.mockResolvedValue({
@@ -413,8 +426,17 @@ describe('Education skills and work experience', () => {
         pageable: { offset: 0, pageSize: 20 },
         totalElements: 2,
       })
-      const actual = await service.getAttendanceDetails(nomisId)
+
+      const actual = await service.getAttendanceDetails(nomisId, 4)
+
       expect(actual.content).toEqual(expected)
+      expect(getUnacceptableAbsenceDetailMock).toHaveBeenCalledWith(
+        credentialsRef,
+        nomisId,
+        sixMonthsAgo.format('YYYY-MM-DD'),
+        yesterday.format('YYYY-MM-DD'),
+        4
+      )
     })
   })
 
