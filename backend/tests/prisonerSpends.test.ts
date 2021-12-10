@@ -152,6 +152,23 @@ describe('Prisoner spends', () => {
             },
           ],
         },
+        {
+          offenderId: 1,
+          transactionId: 466,
+          transactionEntrySequence: 1,
+          entryDate: '2020-12-04',
+          transactionType: 'OT',
+          entryDescription: 'Cash To Spends Transfer',
+          referenceNumber: null,
+          currency: 'GBP',
+          penceAmount: 0,
+          accountType: 'SPND',
+          postingType: 'CR',
+          offenderNo,
+          agencyId: 'MDI',
+          relatedOffenderTransactions: [],
+          currentBalance: 450,
+        },
       ])
 
       // @ts-expect-error ts-migrate(2339) FIXME: Property 'getAgencyDetails' does not exist on type... Remove this comment to see the full error message
