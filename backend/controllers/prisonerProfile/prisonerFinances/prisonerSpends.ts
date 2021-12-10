@@ -35,20 +35,18 @@ export default ({ prisonApi, prisonerFinanceService }) =>
       const relatedTransactions = allTransactionsForDateRange
         .filter(batchTransactionsOnly)
         .flatMap((batchTransaction) => {
-          const related = batchTransaction.relatedOffenderTransactions
-            .map((relatedTransaction) => ({
-              id: batchTransaction.id,
-              entryDate: batchTransaction.entryDate,
-              agencyId: batchTransaction.agencyId,
-              penceAmount: relatedTransaction.payAmount,
-              currentBalance: relatedTransaction.currentBalance,
-              entryDescription: `${relatedTransaction.paymentDescription} from ${formatTimestampToDate(
-                relatedTransaction.calendarDate
-              )}`,
-              postingType: 'CR',
-              calendarDate: relatedTransaction.calendarDate,
-            }))
-            .filter(nonZeroInputPaymentsOnly)
+          const related = batchTransaction.relatedOffenderTransactions.map((relatedTransaction) => ({
+            id: batchTransaction.id,
+            entryDate: batchTransaction.entryDate,
+            agencyId: batchTransaction.agencyId,
+            penceAmount: relatedTransaction.payAmount,
+            currentBalance: relatedTransaction.currentBalance,
+            entryDescription: `${relatedTransaction.paymentDescription} from ${formatTimestampToDate(
+              relatedTransaction.calendarDate
+            )}`,
+            postingType: 'CR',
+            calendarDate: relatedTransaction.calendarDate,
+          }))
 
           return related
         })
@@ -57,9 +55,9 @@ export default ({ prisonApi, prisonerFinanceService }) =>
         (transaction) => !batchTransactionsOnly(transaction)
       )
 
-      const allTransactions = [...transactionsExcludingRelated, ...relatedTransactions].sort(
-        sortByRecentEntryDateThenByRecentCalendarDate
-      )
+      const allTransactions = [...transactionsExcludingRelated, ...relatedTransactions]
+        .filter(nonZeroInputPaymentsOnly)
+        .sort(sortByRecentEntryDateThenByRecentCalendarDate)
 
       return res.render('prisonerProfile/prisonerFinance/spends.njk', {
         ...templateData,
