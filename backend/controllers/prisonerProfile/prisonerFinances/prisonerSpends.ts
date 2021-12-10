@@ -4,6 +4,8 @@ import { formatTimestampToDate } from '../../../utils'
 
 const batchTransactionsOnly = (transaction) => transaction?.relatedOffenderTransactions?.length
 
+const nonZeroInputPaymentsOnly = (relatedTransaction) => relatedTransaction?.penceAmount !== 0
+
 const sortByRecentEntryDateThenByRecentCalendarDate = (left, right) => {
   const entryDateDiff = moment(right.entryDate).valueOf() - moment(left.entryDate).valueOf()
   if (entryDateDiff !== 0) return entryDateDiff
@@ -53,9 +55,9 @@ export default ({ prisonApi, prisonerFinanceService }) =>
         (transaction) => !batchTransactionsOnly(transaction)
       )
 
-      const allTransactions = [...transactionsExcludingRelated, ...relatedTransactions].sort(
-        sortByRecentEntryDateThenByRecentCalendarDate
-      )
+      const allTransactions = [...transactionsExcludingRelated, ...relatedTransactions]
+        .filter(nonZeroInputPaymentsOnly)
+        .sort(sortByRecentEntryDateThenByRecentCalendarDate)
 
       return res.render('prisonerProfile/prisonerFinance/spends.njk', {
         ...templateData,
