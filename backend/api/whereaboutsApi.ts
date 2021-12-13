@@ -59,6 +59,12 @@ export const whereaboutsApiFactory = (client) => {
   const getUnacceptableAbsences = (context, offenderNo, fromDate, toDate) =>
     get(context, `/attendances/offender/${offenderNo}/unacceptable-absence-count?fromDate=${fromDate}&toDate=${toDate}`)
 
+  const getUnacceptableAbsenceDetail = (context, offenderNo, fromDate, toDate, page) =>
+    get(
+      context,
+      `/attendances/offender/${offenderNo}/unacceptable-absences?fromDate=${fromDate}&toDate=${toDate}&page=${page}`
+    )
+
   const searchGroups = (context, agencyId) => get(context, `/agencies/${agencyId}/locations/groups`)
 
   const getAgencyGroupLocationPrefix = (context, agencyId, groupName) =>
@@ -127,6 +133,7 @@ export const whereaboutsApiFactory = (client) => {
     getAttendanceStats,
     getAbsences,
     getUnacceptableAbsences,
+    getUnacceptableAbsenceDetail,
     searchGroups,
     getAgencyGroupLocationPrefix,
     getAgencyGroupLocations,

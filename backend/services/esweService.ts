@@ -25,6 +25,7 @@ type CurrentCoursesEnhanced = FeatureFlagged<eswe.CurrentCoursesEnhanced>
 type LearnerEducationFullDetails = FeatureFlagged<eswe.LearnerEducationFullDetails>
 type CurrentWork = FeatureFlagged<eswe.OffenderCurrentWork>
 type activitiesHistory = FeatureFlagged<eswe.activitiesHistory>
+type attendanceDetails = FeatureFlagged<eswe.attendanceDetails>
 
 const createFlaggedContent = <T>(content: T) => ({
   enabled: app.esweEnabled,
@@ -155,7 +156,7 @@ export default class EsweService {
       const context = await this.systemOauthClient.getClientCredentialsTokens()
       content = await this.curiousApi.getLearnerProfiles(context, nomisId)
     } catch (e) {
-      log.warn(`Failed to fetch learner profiles. Reason: ${e.message}`)
+      log.error(`Failed to fetch learner profiles. Reason: ${e.message}`)
     }
 
     return createFlaggedContent(content)
@@ -167,7 +168,7 @@ export default class EsweService {
       const context = await this.systemOauthClient.getClientCredentialsTokens()
       result = await this.curiousApi.getLearnerEmployabilitySkills(context, nomisId)
     } catch (e) {
-      log.warn(`Failed in getLearnerEmployabilitySkills. Reason: ${e.message}`)
+      log.error(`Failed in getLearnerEmployabilitySkills. Reason: ${e.message}`)
     }
 
     return result
@@ -388,7 +389,7 @@ export default class EsweService {
         log.info(`Offender record not found in Curious.`)
         return createFlaggedContent(DEFAULT_TABLE_DATA)
       }
-      log.error(`Failed to get learner education. Reason: ${e.message}`)
+      log.error(`Failed to get learner education details. Reason: ${e.message}`)
     }
     return createFlaggedContent(null)
   }
@@ -412,7 +413,7 @@ export default class EsweService {
       )
       unacceptableAbsenceSummary = { ...thirtyDaySummary, noneInSixMonths: sixMonthCheck.unacceptableAbsence === 0 }
     } catch (e) {
-      log.error(e, 'Failed to get learner unacceptable absences')
+      log.error(`Failed to get learner unacceptable absences (whereabouts). Reason: ${e.message}`)
       unacceptableAbsenceSummary = null
     }
     try {
@@ -440,7 +441,7 @@ export default class EsweService {
       } else {
         currentWorkData = null
       }
-      log.error(e, 'Failed to get learner work history')
+      log.error(`Failed to get learner unacceptable absences. Reason: ${e.message}`)
     }
     return createFlaggedContent({ currentWorkData, unacceptableAbsenceSummary })
   }
@@ -484,10 +485,44 @@ export default class EsweService {
       return createFlaggedContent(DEFAULT_TABLE_DATA)
     } catch (e) {
       if (e.response?.status === 404) {
-        log.info(`Offender record not found in Curious.`)
+        log.info(`Offender record not found in prison-api.`)
         return createFlaggedContent(DEFAULT_TABLE_DATA)
       }
-      log.error(`Failed to get offender work. Reason: ${e.message}`)
+      log.error(`Failed in getActivitiesHistoryDetails(). Reason: ${e.message}`)
+    }
+    return createFlaggedContent(null)
+  }
+
+  async getAttendanceDetails(nomisId: string, page: number): Promise<attendanceDetails> {
+    const sixMonthsAgo = moment().startOf('day').subtract(6, 'month')
+    const yesterday = moment().startOf('day').subtract(1, 'd')
+    try {
+      const context = await this.systemOauthClient.getClientCredentialsTokens()
+      const data = await this.whereaboutsApi.getUnacceptableAbsenceDetail(
+        context,
+        nomisId,
+        sixMonthsAgo.format('YYYY-MM-DD'),
+        yesterday.format('YYYY-MM-DD'),
+        page
+      )
+
+      const withPagination = {
+        fullDetails: data.content,
+        dateRange: { fromDate: sixMonthsAgo, toDate: yesterday },
+        pagination: {
+          totalRecords: data.totalElements,
+          offset: data.pageable.offset,
+          limit: data.pageable.pageSize,
+        },
+      }
+
+      return createFlaggedContent(withPagination)
+    } catch (e) {
+      if (e.response?.status === 404) {
+        log.info(`Offender record not found in Whereabouts api.`)
+        return createFlaggedContent({ ...DEFAULT_TABLE_DATA, dateRange: { fromDate: sixMonthsAgo, toDate: yesterday } })
+      }
+      log.error(`Failed in getAttendanceDetails(). Reason: ${e.message}`)
     }
     return createFlaggedContent(null)
   }
