@@ -26,9 +26,6 @@ jest.mock('../config', () => ({
   },
 }))
 
-const sixMonthsAgo = moment().startOf('day').subtract(6, 'month')
-const yesterday = moment().startOf('day').subtract(1, 'd')
-
 describe('Education skills and work experience', () => {
   const dummyLearnerProfiles = getDummyLearnerProfiles()
   const dummyEducations = getDummyEducations()
@@ -51,7 +48,6 @@ describe('Education skills and work experience', () => {
   let getLearnerActivitiesHistoryMock
   let getPrisonerDetailsMock
   let getUnacceptableAbsencesMock
-  let getUnacceptableAbsenceDetailMock
   beforeEach(() => {
     getLearnerProfilesMock = jest.fn()
     getLearnerEducationMock = jest.fn()
@@ -60,17 +56,14 @@ describe('Education skills and work experience', () => {
     getLearnerActivitiesHistoryMock = jest.fn()
     getPrisonerDetailsMock = jest.fn()
     getUnacceptableAbsencesMock = jest.fn()
-    getUnacceptableAbsenceDetailMock = jest.fn()
     curiousApi.getLearnerProfiles = getLearnerProfilesMock
     curiousApi.getLearnerEducation = getLearnerEducationMock
     curiousApi.getLearnerLatestAssessments = getLearnerLatestAssessmentsMock
     curiousApi.getLearnerGoals = getLearnerGoalsMock
     prisonApi.getOffenderActivitiesHistory = getLearnerActivitiesHistoryMock
     whereaboutsApi.getUnacceptableAbsences = getUnacceptableAbsencesMock
-    whereaboutsApi.getUnacceptableAbsenceDetail = getUnacceptableAbsenceDetailMock
     prisonApi.getPrisonerDetails = getPrisonerDetailsMock
     systemOauthClient.getClientCredentialsTokens.mockReset()
-    jest.spyOn(app, 'esweEnabled', 'get').mockReturnValue(true)
 
     getLearnerProfilesMock.mockResolvedValue(dummyLearnerProfiles)
     getLearnerEducationMock.mockResolvedValue(dummyEducations)
@@ -86,6 +79,8 @@ describe('Education skills and work experience', () => {
     const nomisId = 'G2823GV'
 
     it('should set enabled to true', async () => {
+      jest.spyOn(app, 'esweEnabled', 'get').mockReturnValue(true)
+
       const actual = await service.getLearnerProfiles(nomisId)
 
       expect(actual.enabled).toBeTruthy()
@@ -96,6 +91,8 @@ describe('Education skills and work experience', () => {
     })
 
     it('should return null content', async () => {
+      jest.spyOn(app, 'esweEnabled', 'get').mockReturnValue(true)
+
       getLearnerProfilesMock.mockRejectedValue(new Error('error'))
 
       const actual = await service.getLearnerProfiles(nomisId)
@@ -108,12 +105,14 @@ describe('Education skills and work experience', () => {
     const nomisId = 'G8930UW'
 
     it('should return null content on error', async () => {
+      jest.spyOn(app, 'esweEnabled', 'get').mockReturnValue(true)
       getLearnerProfilesMock.mockRejectedValue(new Error('error'))
       const actual = await service.getNeurodiversities(nomisId)
       expect(actual.content).toBeNull()
     })
 
     it('should return expected response when the prisoner is not registered in Curious', async () => {
+      jest.spyOn(app, 'esweEnabled', 'get').mockReturnValue(true)
       getLearnerProfilesMock.mockRejectedValue(makeNotFoundError())
       const actual = await service.getNeurodiversities(nomisId)
       expect(actual.enabled).toBeTruthy()
@@ -128,6 +127,7 @@ describe('Education skills and work experience', () => {
           additionalLDDAndHealthProblems: [],
         },
       ]
+      jest.spyOn(app, 'esweEnabled', 'get').mockReturnValue(true)
       getLearnerProfilesMock.mockResolvedValue(noLDD)
       const actual = await service.getNeurodiversities(nomisId)
       expect(actual.content).toStrictEqual([])
@@ -169,6 +169,7 @@ describe('Education skills and work experience', () => {
           establishmentName: 'HMP Moorland',
         },
       ]
+      jest.spyOn(app, 'esweEnabled', 'get').mockReturnValue(true)
       getLearnerProfilesMock.mockResolvedValue(oneCaseloadLDD)
       const actual = await service.getNeurodiversities(nomisId)
       expect(actual.content).toStrictEqual(expected)
@@ -207,6 +208,7 @@ describe('Education skills and work experience', () => {
           establishmentName: 'HMP New Hall',
         },
       ]
+      jest.spyOn(app, 'esweEnabled', 'get').mockReturnValue(true)
       getLearnerProfilesMock.mockResolvedValue(dummyLearnerProfiles)
       const actual = await service.getNeurodiversities(nomisId)
       expect(actual.content).toStrictEqual(expected)
@@ -217,12 +219,14 @@ describe('Education skills and work experience', () => {
     const nomisId = 'G8930UW'
 
     it('should return null content on error', async () => {
+      jest.spyOn(app, 'esweEnabled', 'get').mockReturnValue(true)
       getLearnerEducationMock.mockRejectedValue(new Error('error'))
       const actual = await service.getLearnerEducationFullDetails(nomisId)
       expect(actual.content).toBeNull()
     })
 
     it('should return expected response when the prisoner is not registered in Curious', async () => {
+      jest.spyOn(app, 'esweEnabled', 'get').mockReturnValue(true)
       getLearnerEducationMock.mockRejectedValue(makeNotFoundError())
       const actual = await service.getLearnerEducationFullDetails(nomisId)
       expect(actual.enabled).toBeTruthy()
@@ -230,6 +234,7 @@ describe('Education skills and work experience', () => {
     })
 
     it('should return expected response when the prisoner is in Curious but has no courses', async () => {
+      jest.spyOn(app, 'esweEnabled', 'get').mockReturnValue(true)
       getLearnerEducationMock.mockResolvedValue({ content: [] })
       const actual = await service.getLearnerEducationFullDetails(nomisId)
       expect(actual.content).toStrictEqual(DEFAULT_TABLE_DATA)
@@ -293,6 +298,7 @@ describe('Education skills and work experience', () => {
         },
       ]
 
+      jest.spyOn(app, 'esweEnabled', 'get').mockReturnValue(true)
       getLearnerEducationMock.mockResolvedValue(dummyEducations)
       const actual = await service.getLearnerEducationFullDetails(nomisId, 2)
       expect(actual.content).toEqual({
@@ -305,16 +311,19 @@ describe('Education skills and work experience', () => {
   describe('Work inside prison details', () => {
     const nomisId = 'G8930UW'
     it('should return null content on error', async () => {
+      jest.spyOn(app, 'esweEnabled', 'get').mockReturnValue(true)
       getLearnerActivitiesHistoryMock.mockRejectedValue(new Error('error'))
       const actual = await service.getActivitiesHistoryDetails(nomisId)
       expect(actual.content).toBeNull()
     })
     it('should return expected response when the prisoner is not found', async () => {
+      jest.spyOn(app, 'esweEnabled', 'get').mockReturnValue(true)
       getLearnerActivitiesHistoryMock.mockRejectedValue(makeNotFoundError())
       const actual = await service.getActivitiesHistoryDetails(nomisId)
       expect(actual.content).toEqual(DEFAULT_TABLE_DATA)
     })
     it('should return the expected response if the user has no work', async () => {
+      jest.spyOn(app, 'esweEnabled', 'get').mockReturnValue(true)
       getLearnerActivitiesHistoryMock.mockResolvedValue({ content: [] })
       const actual = await service.getActivitiesHistoryDetails(nomisId)
       expect(actual.content).toEqual(DEFAULT_TABLE_DATA)
@@ -365,78 +374,10 @@ describe('Education skills and work experience', () => {
         ],
         pagination: { limit: 20, offset: 0, totalRecords: 5 },
       }
+      jest.spyOn(app, 'esweEnabled', 'get').mockReturnValue(true)
       getLearnerActivitiesHistoryMock.mockResolvedValue(dummyActivitiesHistory)
       const actual = await service.getActivitiesHistoryDetails(nomisId)
       expect(actual.content).toEqual(expected)
-    })
-  })
-
-  describe('Unacceptable absences details', () => {
-    const nomisId = 'G8930UW'
-
-    it('should return null content on error', async () => {
-      getUnacceptableAbsenceDetailMock.mockRejectedValue(new Error('error'))
-      const actual = await service.getAttendanceDetails(nomisId)
-      expect(actual.content).toBeNull()
-    })
-
-    it('should return expected response when the prisoner is not found', async () => {
-      getUnacceptableAbsenceDetailMock.mockRejectedValue(makeNotFoundError())
-      const actual = await service.getAttendanceDetails(nomisId)
-      expect(actual.content).toEqual({
-        ...DEFAULT_TABLE_DATA,
-        dateRange: { fromDate: sixMonthsAgo, toDate: yesterday },
-      })
-    })
-
-    it('should return the expected response if the user has no data', async () => {
-      getUnacceptableAbsenceDetailMock.mockResolvedValue({
-        content: [],
-        pageable: { offset: 0, pageSize: 20 },
-        totalElements: 0,
-      })
-
-      const actual = await service.getAttendanceDetails(nomisId, 3)
-
-      expect(actual.content).toEqual({
-        ...DEFAULT_TABLE_DATA,
-        dateRange: { fromDate: sixMonthsAgo, toDate: yesterday },
-      })
-      expect(getUnacceptableAbsenceDetailMock).toHaveBeenCalledWith(
-        credentialsRef,
-        nomisId,
-        sixMonthsAgo.format('YYYY-MM-DD'),
-        yesterday.format('YYYY-MM-DD'),
-        3
-      )
-    })
-
-    it('should return the expected response if the user has data', async () => {
-      const list = [
-        { eventDate: '2021-09-21', activity: 'Activity1' },
-        { eventDate: '2021-09-22', activity: 'Activity2' },
-      ]
-      const expected = {
-        fullDetails: list,
-        dateRange: { fromDate: sixMonthsAgo, toDate: yesterday },
-        pagination: { limit: 20, offset: 0, totalRecords: 2 },
-      }
-      getUnacceptableAbsenceDetailMock.mockResolvedValue({
-        content: list,
-        pageable: { offset: 0, pageSize: 20 },
-        totalElements: 2,
-      })
-
-      const actual = await service.getAttendanceDetails(nomisId, 4)
-
-      expect(actual.content).toEqual(expected)
-      expect(getUnacceptableAbsenceDetailMock).toHaveBeenCalledWith(
-        credentialsRef,
-        nomisId,
-        sixMonthsAgo.format('YYYY-MM-DD'),
-        yesterday.format('YYYY-MM-DD'),
-        4
-      )
     })
   })
 
@@ -478,6 +419,7 @@ describe('Education skills and work experience', () => {
           ],
         }
 
+        jest.spyOn(app, 'esweEnabled', 'get').mockReturnValue(true)
         getLearnerLatestAssessmentsMock.mockResolvedValue([dummyFunctionalSkillsLevels])
         const expectedResult = {
           digiLit: [
@@ -528,6 +470,7 @@ describe('Education skills and work experience', () => {
           ],
         }
 
+        jest.spyOn(app, 'esweEnabled', 'get').mockReturnValue(true)
         getLearnerLatestAssessmentsMock.mockResolvedValue([dummyFunctionalSkillsLevels])
         const expectedResult = {
           digiLit: [
@@ -551,6 +494,7 @@ describe('Education skills and work experience', () => {
       })
 
       it('should return the expected response when there are no assessments available for any subejct', async () => {
+        jest.spyOn(app, 'esweEnabled', 'get').mockReturnValue(true)
         getLearnerLatestAssessmentsMock.mockResolvedValue([])
 
         const actual = await service.getLearnerLatestAssessments(nomisId)
@@ -561,12 +505,14 @@ describe('Education skills and work experience', () => {
       })
 
       it('should return expected response when the prisoner is not registered in Curious', async () => {
+        jest.spyOn(app, 'esweEnabled', 'get').mockReturnValue(true)
         getLearnerLatestAssessmentsMock.mockRejectedValue(makeNotFoundError())
         const actual = await service.getLearnerLatestAssessments(nomisId)
         expect(actual.enabled).toBeTruthy()
         expect(actual.content).toEqual(DEFAULT_SKILL_LEVELS)
       })
       it('should return null content on error', async () => {
+        jest.spyOn(app, 'esweEnabled', 'get').mockReturnValue(true)
         getLearnerLatestAssessmentsMock.mockRejectedValue(new Error('error'))
         const actual = await service.getLearnerLatestAssessments(nomisId)
         expect(actual.content).toBeNull()
@@ -575,11 +521,13 @@ describe('Education skills and work experience', () => {
     describe('Goals', () => {
       const nomisId = 'G3609VL'
       it('should return null content on error', async () => {
+        jest.spyOn(app, 'esweEnabled', 'get').mockReturnValue(true)
         getLearnerGoalsMock.mockRejectedValue(new Error('error'))
         const actual = await service.getLearnerGoals(nomisId)
         expect(actual.content).toBeNull()
       })
       it('should return expected response when the prisoner is not registered in Curious', async () => {
+        jest.spyOn(app, 'esweEnabled', 'get').mockReturnValue(true)
         getLearnerGoalsMock.mockRejectedValue(makeNotFoundError())
         const actual = await service.getLearnerGoals(nomisId)
         expect(actual.enabled).toBeTruthy()
@@ -593,6 +541,7 @@ describe('Education skills and work experience', () => {
           longTermGoals: [],
           shortTermGoals: [],
         }
+        jest.spyOn(app, 'esweEnabled', 'get').mockReturnValue(true)
         getLearnerGoalsMock.mockResolvedValue(emptyResponse)
         const actual = await service.getLearnerGoals(nomisId)
         expect(actual.enabled).toBeTruthy()
@@ -605,6 +554,7 @@ describe('Education skills and work experience', () => {
           longTermGoals: ['I would like to own my own flat', 'I would like a full time job'],
           shortTermGoals: ['I would like to improve my English skills'],
         }
+        jest.spyOn(app, 'esweEnabled', 'get').mockReturnValue(true)
         const actual = await service.getLearnerGoals(nomisId)
         expect(actual.enabled).toBeTruthy()
         expect(actual.content).toEqual(expected)
@@ -616,6 +566,7 @@ describe('Education skills and work experience', () => {
           longTermGoals: ['Not entered'],
           shortTermGoals: ['Not entered'],
         }
+        jest.spyOn(app, 'esweEnabled', 'get').mockReturnValue(true)
         getLearnerGoalsMock.mockResolvedValue({
           prn: 'G3609VL',
           employmentGoals: ['To be an electrician', 'To get an electrics qualification'],
@@ -631,21 +582,25 @@ describe('Education skills and work experience', () => {
     describe('Courses and qualifications', () => {
       const nomisId = 'G3609VL'
       it('should return null content on error', async () => {
+        jest.spyOn(app, 'esweEnabled', 'get').mockReturnValue(true)
         getLearnerEducationMock.mockRejectedValue(new Error('error'))
         const actual = await service.getLearnerEducation(nomisId)
         expect(actual.content).toBeNull()
       })
       it('should call the endpoint with the correct prn and context', async () => {
+        jest.spyOn(app, 'esweEnabled', 'get').mockReturnValue(true)
         await service.getLearnerEducation(nomisId)
         expect(systemOauthClient.getClientCredentialsTokens).toHaveBeenCalledTimes(1)
         expect(getLearnerEducationMock).toHaveBeenCalledWith(credentialsRef, nomisId)
       })
       it('should return expected response when the prisoner is not registered in Curious', async () => {
+        jest.spyOn(app, 'esweEnabled', 'get').mockReturnValue(true)
         getLearnerEducationMock.mockRejectedValue(makeNotFoundError())
         const actual = await service.getLearnerEducation(nomisId)
         expect(actual.content).toEqual(DEFAULT_COURSE_DATA)
       })
       it('should return the expected response if the user has no courses', async () => {
+        jest.spyOn(app, 'esweEnabled', 'get').mockReturnValue(true)
         getLearnerEducationMock.mockResolvedValue({ content: [] })
         const actual = await service.getLearnerEducation(nomisId)
         expect(actual.content).toEqual(DEFAULT_COURSE_DATA)
@@ -676,6 +631,7 @@ describe('Education skills and work experience', () => {
             { label: 'Ocean Science', value: `Planned end date on 30 September 2023` },
           ],
         }
+        jest.spyOn(app, 'esweEnabled', 'get').mockReturnValue(true)
         getLearnerEducationMock.mockResolvedValue(courses)
         const actual = await service.getLearnerEducation(nomisId)
         expect(actual.content).toEqual(expected)
@@ -701,6 +657,7 @@ describe('Education skills and work experience', () => {
           historicalCoursesPresent: true,
           currentCourseData: [],
         }
+        jest.spyOn(app, 'esweEnabled', 'get').mockReturnValue(true)
         getLearnerEducationMock.mockResolvedValue(courses)
         const actual = await service.getLearnerEducation(nomisId)
         expect(actual.content).toEqual(expected)
@@ -719,6 +676,7 @@ describe('Education skills and work experience', () => {
             },
           ],
         }
+        jest.spyOn(app, 'esweEnabled', 'get').mockReturnValue(true)
         getLearnerEducationMock.mockResolvedValue(dummyEducations)
         const actual = await service.getLearnerEducation(nomisId)
         expect(actual.content).toEqual(expected)
@@ -728,7 +686,6 @@ describe('Education skills and work experience', () => {
       const nomisId = 'G3609VL'
       it('should return null content on work history api error', async () => {
         getLearnerActivitiesHistoryMock.mockRejectedValue(new Error('error'))
-        getUnacceptableAbsencesMock.mockResolvedValue(getDummyUnacceptableAbsenceSummary(0))
         const actual = await service.getCurrentActivities(whereaboutsContext, nomisId)
         expect(actual.content.currentWorkData).toBeNull()
       })
@@ -739,7 +696,6 @@ describe('Education skills and work experience', () => {
       })
       it('should return null content on prisoner details api error', async () => {
         getPrisonerDetailsMock.mockRejectedValue(new Error('error'))
-        getUnacceptableAbsencesMock.mockResolvedValue(getDummyUnacceptableAbsenceSummary(0))
         const actual = await service.getCurrentActivities(whereaboutsContext, nomisId)
         expect(actual.content.currentWorkData).toBeNull()
       })
@@ -754,13 +710,11 @@ describe('Education skills and work experience', () => {
       })
       it('should return expected response when the prisoner is not found', async () => {
         getLearnerActivitiesHistoryMock.mockRejectedValue(makeNotFoundError())
-        getUnacceptableAbsencesMock.mockResolvedValue(getDummyUnacceptableAbsenceSummary(0))
         const actual = await service.getCurrentActivities(whereaboutsContext, nomisId)
         expect(actual.content.currentWorkData).toEqual(DEFAULT_WORK_DATA)
       })
       it('should return the expected response if the user has no work', async () => {
         getLearnerActivitiesHistoryMock.mockResolvedValue({ content: [] })
-        getUnacceptableAbsencesMock.mockResolvedValue(getDummyUnacceptableAbsenceSummary(0))
         const actual = await service.getCurrentActivities(whereaboutsContext, nomisId)
         expect(actual.content.currentWorkData).toEqual(DEFAULT_WORK_DATA)
       })
@@ -787,7 +741,6 @@ describe('Education skills and work experience', () => {
           ],
         }
         getLearnerActivitiesHistoryMock.mockResolvedValue(dummyActivitiesHistoryNoCurrent)
-        getUnacceptableAbsencesMock.mockResolvedValue(getDummyUnacceptableAbsenceSummary(0))
         const actual = await service.getCurrentActivities(whereaboutsContext, nomisId)
 
         const expected = {

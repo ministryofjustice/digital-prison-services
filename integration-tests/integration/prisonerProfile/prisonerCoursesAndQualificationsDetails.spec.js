@@ -1,4 +1,4 @@
-import moment from 'moment'
+import moment from "moment";
 
 context('Prisoner courses and qualifications details page', () => {
   const offenderNo = 'G6123VU'
@@ -6,7 +6,6 @@ context('Prisoner courses and qualifications details page', () => {
   const generateHistory = (page) => {
     const data = []
     const endDate = moment('2021-08-10')
-    // eslint-disable-next-line no-plusplus
     for (let i = page * 20; i < (page + 1) * 20; i++) {
       data.push({
         prn: 'G6123VU',
@@ -65,7 +64,7 @@ context('Prisoner courses and qualifications details page', () => {
       cy.task('stubOffenderBasicDetails', { bookingId: 1, firstName: 'John', lastName: 'Smith', agencyId: 'MDI' })
     })
 
-    beforeEach(() => {
+       beforeEach(() => {
       Cypress.Cookies.preserveOnce('hmpps-session-dev')
     })
     it('should show correct content and no table', () => {

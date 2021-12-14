@@ -1,4 +1,5 @@
 import prisonerWorkInsidePrisonDetails from '../controllers/prisonerProfile/prisonerWorkInsidePrisonDetails'
+import { app } from '../config'
 
 jest.mock('../config', () => ({
   app: {
@@ -60,6 +61,7 @@ describe('Prisoner work inside prison details controller', () => {
     const prisonerName = 'Apoustius Ignian'
     const breadcrumbPrisonerName = 'Ignian, Apoustius'
     const profileUrl = `/prisoner/G3878UK/work-and-skills#work-summary`
+    jest.spyOn(app, 'esweEnabled', 'get').mockReturnValue(true)
     await controller(req, res)
     expect(res.render).toHaveBeenCalledWith(
       'prisonerProfile/prisonerWorkAndSkills/prisonerWorkInsidePrisonDetails.njk',
