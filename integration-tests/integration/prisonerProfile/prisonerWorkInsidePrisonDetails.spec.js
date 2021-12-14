@@ -1,4 +1,4 @@
-import moment from 'moment'
+import moment from "moment";
 
 context('Work inside prison details page', () => {
   const offenderNo = 'G6123VU'
@@ -15,7 +15,6 @@ context('Work inside prison details page', () => {
   const generateHistory = (page) => {
     const data = []
     const endDate = moment('2021-08-10')
-    // eslint-disable-next-line no-plusplus
     for (let i = page * 20; i < (page + 1) * 20; i++) {
       data.push({
         bookingId: 1000200,

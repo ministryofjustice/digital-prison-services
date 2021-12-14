@@ -348,18 +348,4 @@ declare namespace eswe {
      */
     shortTermGoals: Array
   }
-
-  interface attendanceDetails {
-    fullDetails: attendanceFullDetails[]
-    dateRange: { fromDate: moment.Moment; toDate: moment.Moment }
-    pagination: Record<string, unknown>
-  }
-
-  interface attendanceFullDetails {
-    eventDate: string
-    activityName: string
-    activityDescription: string
-    location: string
-    comments: string
-  }
 }

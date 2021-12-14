@@ -1,4 +1,5 @@
 import prisonerWorkAndSkills from '../controllers/prisonerProfile/prisonerWorkAndSkills'
+import { app } from '../config'
 
 jest.mock('../config', () => ({
   app: {
@@ -83,6 +84,7 @@ describe('Prisoner work and skills controller', () => {
     })
   })
   it('should make expected calls and render the right template', async () => {
+    jest.spyOn(app, 'esweEnabled', 'get').mockReturnValue(true)
     await controller(req, res)
     expect(res.render).toHaveBeenCalledWith(
       'prisonerProfile/prisonerWorkAndSkills/prisonerWorkAndSkills.njk',

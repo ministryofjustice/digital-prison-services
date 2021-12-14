@@ -503,18 +503,4 @@ module.exports = {
         jsonBody: { acceptableAbsence: 5, unacceptableAbsence, total: 25 },
       },
     }),
-  stubGetUnacceptableAbsenceDetail: ({ offenderNo, unacceptableAbsence }) =>
-    stubFor({
-      request: {
-        method: 'GET',
-        urlPattern: `/whereabouts/attendances/offender/${offenderNo}/unacceptable-absences\\?fromDate=.+&toDate=.+&page=.+`,
-      },
-      response: {
-        status: 200,
-        headers: {
-          'Content-Type': 'application/json;charset=UTF-8',
-        },
-        jsonBody: unacceptableAbsence,
-      },
-    }),
 }

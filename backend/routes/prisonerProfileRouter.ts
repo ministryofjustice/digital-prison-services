@@ -33,7 +33,6 @@ import adjudicationsHistoryService from '../services/adjudicationHistory'
 import coursesQualifications from '../controllers/prisonerProfile/prisonerCoursesQualificationsDetails'
 import learnerEmployabilitySkills from '../controllers/prisonerProfile/learnerEmployabilitySkillsDetails'
 import workInsidePrison from '../controllers/prisonerProfile/prisonerWorkInsidePrisonDetails'
-import unacceptableAbsencesDetails from '../controllers/prisonerProfile/unacceptableAbsencesDetails'
 
 const router = express.Router({ mergeParams: true })
 
@@ -106,7 +105,6 @@ const controller = ({
     prisonerSentenceAndRelease({ prisonerProfileService, prisonApi, systemOauthClient, offenderSearchApi, logError })
   )
   router.get('/work-and-skills', prisonerWorkAndSkills({ prisonerProfileService, esweService }))
-  router.get('/unacceptable-absences', unacceptableAbsencesDetails({ paginationService, prisonApi, esweService }))
   router.get('/courses-qualifications', coursesQualifications({ paginationService, prisonApi, esweService }))
   router.get('/learner-employability-skills', learnerEmployabilitySkills({ prisonApi, esweService }))
   router.get('/work-activities', workInsidePrison({ paginationService, prisonApi, esweService }))
