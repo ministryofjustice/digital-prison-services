@@ -491,6 +491,7 @@ module.exports = (on) => {
     stubDeleteRecurringAppointmentSequence: ({ id, status }) =>
       whereabouts.stubDeleteRecurringAppointmentSequence({ id, status }),
     stubGetUnacceptableAbsenceCount: (args) => whereabouts.stubGetUnacceptableAbsenceCount(args),
+    stubGetUnacceptableAbsenceDetail: (args) => whereabouts.stubGetUnacceptableAbsenceDetail(args),
     stubPrisonerSearch: (response) => offenderSearch.stubPrisonerSearch(response),
     stubMovementReasons: (reasons) => prisonApi.stubMovementReasons(reasons),
     stubTransfers: (response) => prisonApi.stubTransfers(response),

@@ -47,7 +47,7 @@
             {% if absence.noneInSixMonths %}
                 {{ offenderName }} has no unacceptable absences in the last 6 months
             {% else %}
-                <a class="govuk-link" href='/prisoner/{{ offenderNo }}/work-and-skills#TODO'
+                <a class="govuk-link" href='/prisoner/{{ offenderNo }}/unacceptable-absences'
                    data-test="work-absencesLink">View unacceptable absences for the last 6 months</a>
             {% endif %}
         {% endif %}
