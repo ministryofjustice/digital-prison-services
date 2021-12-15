@@ -10,7 +10,7 @@ context('Unacceptable absences details page', () => {
 
   const tableData = ($cells) => ({
     eventDate: $cells[0]?.textContent,
-    activityName: $cells[1]?.textContent,
+    activity: $cells[1]?.textContent,
     activityDescription: $cells[2]?.textContent,
     location: $cells[3]?.textContent,
     comments: $cells[4]?.textContent,
@@ -23,7 +23,7 @@ context('Unacceptable absences details page', () => {
     for (let i = page * 20; i < (page + 1) * 20; i++) {
       data.push({
         eventDate: eventDate.add(1, 'days').format('YYYY-MM-DD'),
-        activityName: `Program ${i + 1}`,
+        activity: `Program ${i + 1}`,
         activityDescription: `Activity ${i + 1}`,
         location: 'BXI',
         comments: `comment ${i + 1}`,
@@ -77,7 +77,7 @@ context('Unacceptable absences details page', () => {
       content: [
         {
           eventDate: '2021-07-14',
-          activityName: 'Name 1',
+          activity: 'Name 1',
           activityDescription: 'Description 1',
           location: 'RNI',
           comments: 'Test comment 1',
@@ -127,7 +127,7 @@ context('Unacceptable absences details page', () => {
           const jobs = Array.from($tableRows).map(($row) => tableData($row.cells))
 
           expect(jobs[0].eventDate).to.contain('Wed 14 Jul 2021')
-          expect(jobs[0].activityName).to.contain('Name 1')
+          expect(jobs[0].activity).to.contain('Name 1')
           expect(jobs[0].activityDescription).to.contain('Description 1')
           expect(jobs[0].location).to.contain('Ranby (HMP)')
           expect(jobs[0].comments).to.contain('Test comment 1')
@@ -140,14 +140,14 @@ context('Unacceptable absences details page', () => {
       content: [
         {
           eventDate: '2021-07-14',
-          activityName: 'Name 1',
+          activity: 'Name 1',
           activityDescription: 'Description 1',
           location: 'RNI',
           comments: 'Test comment 1',
         },
         {
           eventDate: '2021-07-16',
-          activityName: 'Name 2',
+          activity: 'Name 2',
           activityDescription: 'Description 2',
           location: 'WWI',
           comments: 'Test comment 2',
@@ -201,13 +201,13 @@ context('Unacceptable absences details page', () => {
           const job = Array.from($tRows).map(($row) => tableData($row.cells))
 
           expect(job[0].eventDate).to.contain('Wed 14 Jul 2021')
-          expect(job[0].activityName).to.contain('Name 1')
+          expect(job[0].activity).to.contain('Name 1')
           expect(job[0].activityDescription).to.contain('Description 1')
           expect(job[0].location).to.contain('Ranby (HMP)')
           expect(job[0].comments).to.contain('Test comment 1')
 
           expect(job[1].eventDate).to.contain('Fri 16 Jul 2021')
-          expect(job[1].activityName).to.contain('Name 2')
+          expect(job[1].activity).to.contain('Name 2')
           expect(job[1].activityDescription).to.contain('Description 2')
           expect(job[1].location).to.contain('Wandsworth (HMP)')
           expect(job[1].comments).to.contain('Test comment 2')
@@ -229,8 +229,8 @@ context('Unacceptable absences details page', () => {
           cy.get($tRows).its('length').should('eq', 20)
           const job = Array.from($tRows).map(($row) => tableData($row.cells))
 
-          expect(job[0].activityName).to.contain('Program 1')
-          expect(job[19].activityName).to.contain('Program 20')
+          expect(job[0].activity).to.contain('Program 1')
+          expect(job[19].activity).to.contain('Program 20')
         })
 
       cy.task('stubGetUnacceptableAbsenceDetail', { offenderNo, unacceptableAbsence: generateHistory(1) })
@@ -244,8 +244,8 @@ context('Unacceptable absences details page', () => {
           cy.get($tRows).its('length').should('eq', 20)
           const job = Array.from($tRows).map(($row) => tableData($row.cells))
 
-          expect(job[0].activityName).to.contain('Program 21')
-          expect(job[19].activityName).to.contain('Program 40')
+          expect(job[0].activity).to.contain('Program 21')
+          expect(job[19].activity).to.contain('Program 40')
         })
     })
 
@@ -259,8 +259,8 @@ context('Unacceptable absences details page', () => {
         .then(($tRows) => {
           const job = Array.from($tRows).map(($row) => tableData($row.cells))
 
-          expect(job[0].activityName).to.contain('Name 1')
-          expect(job[1].activityName).to.contain('Name 2')
+          expect(job[0].activity).to.contain('Name 1')
+          expect(job[1].activity).to.contain('Name 2')
         })
       cy.get('[data-test="activity-header"]').children().click()
       cy.get('tbody')
@@ -268,8 +268,8 @@ context('Unacceptable absences details page', () => {
         .then(($tRows) => {
           const job = Array.from($tRows).map(($row) => tableData($row.cells))
 
-          expect(job[0].activityName).to.contain('Name 2')
-          expect(job[1].activityName).to.contain('Name 1')
+          expect(job[0].activity).to.contain('Name 2')
+          expect(job[1].activity).to.contain('Name 1')
         })
       cy.get('[data-test="date-header"]').children().click()
       cy.get('tbody')
@@ -277,8 +277,8 @@ context('Unacceptable absences details page', () => {
         .then(($tRows) => {
           const job = Array.from($tRows).map(($row) => tableData($row.cells))
 
-          expect(job[0].activityName).to.contain('Name 1')
-          expect(job[1].activityName).to.contain('Name 2')
+          expect(job[0].activity).to.contain('Name 1')
+          expect(job[1].activity).to.contain('Name 2')
         })
     })
   })

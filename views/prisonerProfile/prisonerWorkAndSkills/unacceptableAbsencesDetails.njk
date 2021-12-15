@@ -24,7 +24,7 @@
 {% for job in fullDetails %}
     {% set rows = (rows.push([
         { text: job.eventDate | formatDate('ddd D MMM YYYY'), attributes: { "data-sort-value": job.eventDate } },
-        { text: job.activityName },
+        { text: job.activity },
         { text: job.activityDescription },
         { text: prisons.get(job.location) },
         { text: job.comments }
