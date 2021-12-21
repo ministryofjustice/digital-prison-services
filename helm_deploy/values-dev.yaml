@@ -61,6 +61,7 @@ env:
   PRISONS_WITH_OFFENDERS_THAT_HAVE_COMPLEX_NEEDS: "MDI,LEI"
   PRISONS_WITH_MANAGE_ADJUDICATIONS_ENABLED: "MDI"
   MANAGE_ADJUDICATIONS_URL: https://manage-adjudications-dev.hmpps.service.justice.gov.uk/
+  MANAGE_RESTRICTED_PATIENTS_URL: https://manage-restricted-patients-dev.hmpps.service.justice.gov.uk/
   PVB_URL: https://manage-a-prison-visit-dev.hmpps.service.justice.gov.uk/
   CALCULATE_RELEASE_DATES_URL: https://calculate-release-dates-dev.hmpps.service.justice.gov.uk
   SEND_LEGAL_MAIL_URL: https://send-legal-mail-dev.prison.service.justice.gov.uk

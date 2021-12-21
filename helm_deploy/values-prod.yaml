@@ -55,6 +55,7 @@ env:
   PRISONS_WITH_OFFENDERS_THAT_HAVE_COMPLEX_NEEDS: "AGI,BZI,DHI,DWI,ESI,EWI,FHI,LNI,NHI,PFI,SDI,STI"
   PRISONS_WITH_MANAGE_ADJUDICATIONS_ENABLED: ""
   MANAGE_ADJUDICATIONS_URL: https://manage-adjudications.hmpps.service.justice.gov.uk/
+  MANAGE_RESTRICTED_PATIENTS_URL: https://manage-restricted-patients.hmpps.service.justice.gov.uk/
   ESWE_ENABLED: false
   NEURODIVERSITY_ENABLED_USERNAMES: "CN004364,DBULL_GEN,J_DRAPER"
   CURIOUS_URL: https://liveservices.sequation.com/sequation-virtual-campus2-api/
