@@ -197,11 +197,10 @@ context('Homepage', () => {
     })
 
     it('should show manage restricted patients', () => {
-      cy.task('stubUserMeRoles', [
-        { roleCode: 'SEARCH_RESTRICTED_PATIENT' },
-        { roleCode: 'PRISON_RECEPTION' },
-        { roleCode: 'REMOVE_RESTRICTED_PATIENT' },
-      ])
+      Array.of('SEARCH_RESTRICTED_PATIENT', 'PRISON_RECEPTION', 'REMOVE_RESTRICTED_PATIENT').forEach((roleCode) => {
+        cy.task('stubUserMeRoles', [{ roleCode }])
+      })
+
       const page = homepagePage.goTo()
 
       page.manageRestrictedPatients().should('exist')
