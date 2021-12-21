@@ -201,7 +201,6 @@ const getTasks = ({ activeCaseLoadId, locations, staffId, whereaboutsConfig, key
       description:
         'View all restricted patients in a secure hospital, move someone to a secure hospital, and remove someone from restricted patients.',
       href: manageRestrictedPatients.ui_url,
-      roles: null,
       enabled: () =>
         manageRestrictedPatients.ui_url &&
         userHasRoles(['SEARCH_RESTRICTED_PATIENT', 'PRISON_RECEPTION', 'REMOVE_RESTRICTED_PATIENT']),
