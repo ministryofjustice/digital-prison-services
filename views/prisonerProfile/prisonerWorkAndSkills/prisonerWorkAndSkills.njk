@@ -38,9 +38,16 @@
     </div>
 {% endset %}
 
+{% set employabilitySkillsSection %}
+    <div data-test="employability-skills-summary" id="employability-skills-summary">
+        {% include "./partials/employabilitySkills.njk" %}
+    </div>
+{% endset %}
+
 {% set leftSections = [
     { heading: 'Courses and qualifications', html: CoursesAndQualificationsSection },
-    { heading: 'Work and activities', html: workAndActivitiesSection }
+    { heading: 'Work and activities', html: workAndActivitiesSection },
+    { heading: 'Employability skills', html: employabilitySkillsSection }
 ] %}
 {% set rightSections = [
     { heading: 'Goals', html: offenderGoalsSection },

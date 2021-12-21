@@ -5,6 +5,9 @@
 import enums from './Enums'
 
 export interface paths {
+  '/sequation-virtual-campus2-api/ping': {
+    get: operations['getHealthUsingGET']
+  }
   '/sequation-virtual-campus2-api/latestLearnerAssessments/{prn}': {
     get: operations['getLearnerLatestAssessmentsUsingGET']
   }
@@ -31,6 +34,14 @@ export interface components {
       qualificationGrade?: string
       /** Assessment Type */
       qualificationType?: enums.AssessmentQualificationType
+    }
+    EmployabilitySkillsReviewDTO: {
+      /** Any comments on the review */
+      comment?: string
+      /** Employability Skill progression status and score on a scale of 1 to 5 (1 - Not demonstrated, 5 - Outstanding demonstration) */
+      currentProgression?: string
+      /** Date when the employability skill was reviewed */
+      reviewDate?: string
     }
     LearnerAssessmentDTO: {
       /** Establishment (prison) identifier */
@@ -145,6 +156,7 @@ export interface components {
       establishmentName?: string
       /** NOMIS Assigned Offender Number (Prisoner Identifier) */
       prn?: string
+      reviews?: components['schemas']['EmployabilitySkillsReviewDTO'][]
     }
     LearnerGoalsDTO: {
       employmentGoals?: string[]
@@ -228,6 +240,22 @@ export interface components {
 }
 
 export interface operations {
+  getHealthUsingGET: {
+    responses: {
+      /** Success */
+      200: {
+        content: {
+          '*/*': string
+        }
+      }
+      /** Invalid token */
+      401: unknown
+      /** Access denied */
+      403: unknown
+      /** Not Found */
+      404: unknown
+    }
+  }
   getLearnerLatestAssessmentsUsingGET: {
     parameters: {
       path: {
@@ -315,7 +343,7 @@ export interface operations {
       /** Success */
       200: {
         content: {
-          'application/json': components['schemas']['Page┬½LearnerEducationDTO┬╗']
+          'application/json': components['schemas']['PageLearnerEducationDTO']
         }
       }
       /** Authentication required */
@@ -349,7 +377,7 @@ export interface operations {
       /** Success */
       200: {
         content: {
-          'application/json': components['schemas']['Page┬½LearnerEmployabilitySkillsDTO┬╗']
+          'application/json': components['schemas']['PageLearnerEmployabilitySkillsDTO']
         }
       }
       /** Authentication required */
