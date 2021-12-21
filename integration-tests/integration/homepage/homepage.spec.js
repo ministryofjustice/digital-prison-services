@@ -197,9 +197,7 @@ context('Homepage', () => {
     })
 
     it('should show manage restricted patients', () => {
-      Array.of('SEARCH_RESTRICTED_PATIENT', 'PRISON_RECEPTION', 'REMOVE_RESTRICTED_PATIENT').forEach((roleCode) => {
-        cy.task('stubUserMeRoles', [{ roleCode }])
-      })
+      cy.task('stubUserMeRoles', [{ roleCode: 'PRISON_RECEPTION' }])
 
       const page = homepagePage.goTo()
 
