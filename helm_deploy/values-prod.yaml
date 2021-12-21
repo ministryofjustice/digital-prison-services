@@ -135,6 +135,10 @@ allowlist:
   police-south-york-atlas: "51.231.157.222"
   police-humberside-public: "80.100.176.162"
   police-humberside-priory: "51.231.157.226"
+  sscl-enhanced-external-subnet: "37.26.90.144/29"
+  sscl-enhanced-additional-nat: "51.179.197.16/28"
+  sscl-fb-standard-external-subnet: "185.40.10.8/29"
+  sscl-cor-standard-external-subnet: "83.151.219.160/29"
 
 
 # determine which slack channel alerts are sent to, via the correct Alert Manager receiver
