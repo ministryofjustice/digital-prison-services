@@ -196,14 +196,6 @@ context('Homepage', () => {
       page.soc().should('exist')
     })
 
-    it('should show manage restricted patients', () => {
-      cy.task('stubUserMeRoles', [{ roleCode: 'PRISON_RECEPTION' }])
-
-      const page = homepagePage.goTo()
-
-      page.manageRestrictedPatients().should('exist')
-    })
-
     it('should show send legal mail task task given user with supported role', () => {
       Array.of('SLM_SCAN_BARCODE', 'SLM_SECURITY_ANALYST').forEach((roleCode) => {
         cy.task('stubUserMeRoles', [{ roleCode }])
