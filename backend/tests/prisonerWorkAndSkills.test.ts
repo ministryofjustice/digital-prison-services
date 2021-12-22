@@ -1,4 +1,5 @@
 import prisonerWorkAndSkills from '../controllers/prisonerProfile/prisonerWorkAndSkills'
+import Mock = jest.Mock
 
 jest.mock('../config', () => ({
   app: {
@@ -53,8 +54,16 @@ describe('Prisoner work and skills controller', () => {
     currentJobs: [{ label: 'Cleaner HB1 AM', value: 'Started on 19 August 2021' }],
   }
 
-  const prisonerProfileService = {}
-  const esweService = {}
+  const prisonerProfileService: {
+    getPrisonerProfileData?: Mock
+  } = {}
+  const esweService: {
+    getLearnerLatestAssessments?: Mock
+    getLearnerGoals?: Mock
+    getLearnerEducation?: Mock
+    getLearnerEmployabilitySkills?: Mock
+    getCurrentActivities?: Mock
+  } = {}
 
   let req
   let res
@@ -67,21 +76,18 @@ describe('Prisoner work and skills controller', () => {
     req.get = jest.fn()
     req.get.mockReturnValue('localhost')
     res.status = jest.fn()
-    // @ts-expect-error ts-migrate(2339) FIXME: Property 'getPrisonerProfileData' does not exist o... Remove this comment to see the full error message
     prisonerProfileService.getPrisonerProfileData = jest.fn().mockResolvedValue(prisonerProfileData)
-    // @ts-expect-error ts-migrate(2339) FIXME
     esweService.getLearnerLatestAssessments = jest.fn().mockResolvedValue(functionalSkillLevels)
-    // @ts-expect-error ts-migrate(2339) FIXME
     esweService.getLearnerGoals = jest.fn().mockResolvedValue(targets)
-    // @ts-expect-error ts-migrate(2339) FIXME
     esweService.getLearnerEducation = jest.fn().mockResolvedValue(coursesAndQualifications)
-    // @ts-expect-error ts-migrate(2339) FIXME
     esweService.getCurrentActivities = jest.fn().mockResolvedValue(currentWork)
+    esweService.getLearnerEmployabilitySkills = jest.fn().mockResolvedValue([])
     controller = prisonerWorkAndSkills({
       prisonerProfileService,
       esweService,
     })
   })
+
   it('should make expected calls and render the right template', async () => {
     await controller(req, res)
     expect(res.render).toHaveBeenCalledWith(

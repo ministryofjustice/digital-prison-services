@@ -20,7 +20,7 @@ export default ({ prisonApi, esweService }) =>
     try {
       const [prisonerDetails, learnerEmployabilitySkills]: [PrisonerDetails, any] = await Promise.all([
         prisonApi.getDetails(res.locals, offenderNo),
-        esweService.getLearnerEmployabilitySkills(offenderNo),
+        esweService.getLearnerEmployabilitySkillsDetails(offenderNo),
       ])
 
       const { firstName, lastName } = prisonerDetails
