@@ -205,6 +205,25 @@ context('Homepage', () => {
         page.sendLegalMail().should('exist')
       })
     })
+
+    it('should show manage restricted patients', () => {
+      cy.task('stubUserMeRoles', [
+        { roleCode: 'SEARCH_RESTRICTED_PATIENT' },
+        { roleCode: 'PRISON_RECEPTION' },
+        { roleCode: 'REMOVE_RESTRICTED_PATIENT' },
+      ])
+      const page = homepagePage.goTo()
+
+      page.manageRestrictedPatients().tile().should('exist')
+      page.manageRestrictedPatients().title().contains('Manage Restricted Patients')
+      page.manageRestrictedPatients().link().should('exist')
+      page
+        .manageRestrictedPatients()
+        .description()
+        .contains(
+          'View all restricted patients in a secure hospital, move someone to a secure hospital, and remove someone from restricted patients.'
+        )
+    })
   })
 
   describe('Footer', () => {

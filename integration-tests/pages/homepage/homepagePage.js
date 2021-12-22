@@ -30,7 +30,12 @@ const homepagePage = () =>
       link: () => cy.get('[data-test="welcome-people-into-prison"] a'),
       description: () => cy.get('[data-test="welcome-people-into-prison"] p'),
     }),
-    manageRestrictedPatients: () => cy.get('[data-test="manage-restricted-patients"]'),
+    manageRestrictedPatients: () => ({
+      tile: () => cy.get('[data-test="manage-restricted-patients"]'),
+      title: () => cy.get('[data-test="manage-restricted-patients"] h2'),
+      link: () => cy.get('[data-test="manage-restricted-patients"] a'),
+      description: () => cy.get('[data-test="manage-restricted-patients"] p'),
+    }),
   })
 
 export default {
