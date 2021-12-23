@@ -468,7 +468,7 @@ describe('Education skills and work experience', () => {
       expect(actual.content).toEqual(new Map<EmployabilitySkill, EmployabilitySkillsReview>())
     })
 
-    it('should return the expected response if there are skills present', async () => {
+    it('should return all reviews where there are skills present', async () => {
       getLearnerEmployabilitySkillsMock.mockResolvedValue(employabilitySkillsData)
       const expected = new Map()
         .set('skill1', [review1, review3, latestReview1])
@@ -908,7 +908,7 @@ describe('Education skills and work experience', () => {
         expect(actual.content).toEqual(new Map<EmployabilitySkill, EmployabilitySkillsReview>())
       })
 
-      it('should return the expected response if there are skills present', async () => {
+      it('should return the latest reviews where there are skills present', async () => {
         getLearnerEmployabilitySkillsMock.mockResolvedValue(employabilitySkillsData)
         const expected = new Map().set('skill1', latestReview1).set('skill2', latestReview2)
 

@@ -1,8 +1,126 @@
 {% extends "../../partials/layout.njk" %}
+{% from "govuk/components/details/macro.njk" import govukDetails %}
 {% from "govuk/components/table/macro.njk" import govukTable %}
-{% from "../../macros/printLink.njk" import printLink %}
+{% from "moj/components/side-navigation/macro.njk" import mojSideNavigation %}
+{%- from "moj/components/pagination/macro.njk" import mojPagination -%}
 
-{% set title =  "Learner employability skills" %}
+{% set title = "Learner employability skills" %}
+{% set offenderNo = prisonerDetails.offenderNo %}
+
+
+{% set AdaptabilityHtml %}
+    <p class="govuk-body">'Adaptability' includes:</p>
+    <ul class="govuk-list govuk-list--bullet">
+        <li>acknowledging and accepting change</li>
+        <li>adjusting to a change in conditions or routine</li>
+        <li>being flexible to avoid setbacks</li>
+    </ul>
+{% endset %}
+
+{% set CommunicationHtml %}
+    <p class="govuk-body">'Communication' includes:</p>
+    <ul class="govuk-list govuk-list--bullet">
+        <li>speaking to people in an appropriate way</li>
+        <li>listening to others</li>
+        <li>taking part in group discussions</li>
+        <li>explaining their point of view in a respectful way</li>
+    </ul>
+{% endset %}
+
+{% set CreativityHtml %}
+    <p class="govuk-body">'Creativity' includes:</p>
+    <ul class="govuk-list govuk-list--bullet">
+        <li>using their imagination and own ideas to create something</li>
+        <li>thinking about a task or a problem in a creative way</li>
+        <li>seeing the potential in something</li>
+    </ul>
+{% endset %}
+
+{% set InitiativeHtml %}
+    <p class="govuk-body">'Initiative' includes:</p>
+    <ul class="govuk-list govuk-list--bullet">
+        <li>doing something independently without being told</li>
+        <li>finding out something by themselves</li>
+        <li>helping others without being asked</li>
+    </ul>
+{% endset %}
+
+{% set OrganisationHtml %}
+    <p class="govuk-body">'Organisation' includes:</p>
+    <ul class="govuk-list govuk-list--bullet">
+        <li>working efficiently to plan or complete a task</li>
+        <li>meeting deadlines</li>
+        <li>managing their work and equipment</li>
+    </ul>
+{% endset %}
+
+{% set PlanningHtml %}
+    <p class="govuk-body">'Planning' includes:</p>
+    <ul class="govuk-list govuk-list--bullet">
+        <li>thinking about how their actions and decisions could impact others</li>
+        <li>setting goals to achieve a task or for personal development</li>
+        <li>understanding how to approach a task and complete it</li>
+        <li>estimating time and resources needed to complete something</li>
+    </ul>
+{% endset %}
+
+{% set ProblemSolvingHtml %}
+    <p class="govuk-body">'Problem solving' includes:</p>
+    <ul class="govuk-list govuk-list--bullet">
+        <li>identifying a problem</li>
+        <li>creating ideas to solve a problem</li>
+        <li>choosing and completing a solution</li>
+        <li>understanding if the solution was successful</li>
+    </ul>
+{% endset %}
+
+{% set ReliabilityHtml %}
+    <p class="govuk-body">'Reliability' includes:</p>
+    <ul class="govuk-list govuk-list--bullet">
+        <li>doing what they said they will do and when</li>
+        <li>being trusted to complete a task to a good standard</li>
+        <li>being able to work in a safe and productive manner</li>
+    </ul>
+{% endset %}
+
+{% set TeamWorkingHtml %}
+    <p class="govuk-body">'Team working' includes:</p>
+    <ul class="govuk-list govuk-list--bullet">
+        <li>working well with, and helping others</li>
+        <li>sharing responsibility</li>
+        <li>discussing and agreeing actions to complete</li>
+        <li>compromising and managing different opinions</li>
+    </ul>
+{% endset %}
+
+{% set TimekeepingHtml %}
+    <p class="govuk-body">'Timekeeping' includes:</p>
+    <ul class="govuk-list govuk-list--bullet">
+        <li>arriving on time and ready for work</li>
+        <li>attending any sessions and appointments regularly</li>
+        <li>being able to manage your own time to complete a task within an agreed timescale</li>
+    </ul>
+{% endset %}
+
+{% macro showDetails(skill, Adaptability=AdaptabilityHtml) %}
+
+    {% set detailsHtml %}
+        {% switch skill %}
+        {% case 'Adaptability' %} {{ AdaptabilityHtml | safe }}
+        {% case 'Communication' %}{{ CommunicationHtml | safe }}
+        {% case 'Creativity' %}{{ CreativityHtml | safe }}
+        {% case 'Initiative' %}{{ InitiativeHtml | safe }}
+        {% case 'Organisation' %}{{ OrganisationHtml | safe }}
+        {% case 'Planning' %}{{ PlanningHtml | safe }}
+        {% case 'Problem Solving' %}{{ ProblemSolvingHtml | safe }}
+        {% case 'Reliability' %}{{ ReliabilityHtml | safe }}
+        {% case 'Team Working' %}{{ TeamWorkingHtml | safe }}
+        {% case 'Timekeeping' %}{{ TimekeepingHtml | safe }}
+        {% endswitch %}
+    {% endset %}
+
+    {{ govukDetails({ summaryText: "What does the skill '" + skill | lower +"' include?", html: detailsHtml }) }}
+{% endmacro %}
 
 {% block beforeContent %}
     {{ govukBreadcrumbs({
@@ -14,13 +132,108 @@
     }) }}
 {% endblock %}
 
+{% set rows = [] %}
+
+{% for review in currentReviewPage %}
+    {% set rows = (rows.push([
+        { text: review.currentProgression },
+        { text: review.reviewDate | formatDate('DD/MM/YYYY'), attributes: { "data-sort-value": review.reviewDate } },
+        { text: review.comment }
+    ]), rows) %}
+{% endfor %}
+
 {% block content %}
     <div class="govuk-grid-row">
+        <div class="govuk-grid-column-one-quarter">
+            {{ mojSideNavigation ({
+                sections: [{
+                    heading: { text: 'Employability skills' },
+                    items: [
+                        createEmployabilitySkillsDetailsRow('Adaptability'),
+                        createEmployabilitySkillsDetailsRow('Communication'),
+                        createEmployabilitySkillsDetailsRow('Creativity'),
+                        createEmployabilitySkillsDetailsRow('Initiative'),
+                        createEmployabilitySkillsDetailsRow('Organisation'),
+                        createEmployabilitySkillsDetailsRow('Planning'),
+                        createEmployabilitySkillsDetailsRow('Problem Solving'),
+                        createEmployabilitySkillsDetailsRow('Reliability'),
+                        createEmployabilitySkillsDetailsRow('Team Working'),
+                        createEmployabilitySkillsDetailsRow('Timekeeping')
+                    ]
+                }]
+            }) }}
+        </div>
         <div class="govuk-grid-column-three-quarters">
-            <h1 class="govuk-heading-l">{{ prisonerName | possessive | safe }} Learner employability skills</h1>
+            <h1 class="govuk-heading-l govuk-!-padding-top-4 govuk-!-padding-bottom-4">{{ prisonerName | possessive | safe }}
+                assessments for '{{ skill | lower }}'</h1>
+
+            {% if rows.length == 0 %}
+                <p class="govuk-body" data-test="no-employability-skills">{{ prisonerName }} has no
+                    assessments for this employability skill.</p>
+            {% endif %}
+
+            {{ showDetails(skill) }}
+
+            <div class="govuk-grid-row">
+                <div class="govuk-grid-column-full">
+                    {% if rows.length > 0 %}
+
+                        {{ mojPagination(pagination) }}
+
+                        <div class="results-table results-table__results">
+
+                            {{ govukTable({
+                                head: [
+                                    {
+                                        text: "Level",
+                                        classes: "NOT-work-inside-prison-details-width-20",
+                                        attributes: { "data-test": "level-header" }
+                                    },
+                                    {
+                                        text: "Assessment date",
+                                        classes: "",
+                                        attributes: { "aria-sort": "descending", "data-test": "date-header" }
+                                    },
+                                    {
+                                        text: "Comment",
+                                        classes: "",
+                                        attributes: { "data-test": "comment-header" }
+                                    }
+                                ],
+                                rows: rows,
+                                attributes: { "data-test": "employability-skills-table" }
+                            }) }}
+
+                        </div>
+                        <div class="govuk-!-display-none-print">
+                            {{ mojPagination(pagination) }}
+                        </div>
+                    {% endif %}
+                </div>
+            </div>
         </div>
     </div>
 
-    <pre> {{ learnerEmployabilitySkills | dump(2) }}</pre>
+    <div class="govuk-grid-row">
+        <div class="govuk-grid-column-two-thirds">
+            <p class="govuk-body">
+                <a href="{{ profileUrl }}" class="govuk-link govuk-!-display-none-print"
+                   data-test="employability-skills-returnLink">Return to prisoner profile</a>
+            </p>
+        </div>
+    </div>
+{% endblock %}
 
+{% block bodyEnd %}
+    {{ super() }}
+    <script src="/assets/moj/components/sortable-table/sortable-table.js"></script>
+    <script>
+      new MOJFrontend.SortableTable({
+        table: $("table")[0]
+      });
+    </script>
+{% endblock %}
+
+{% block pageScripts %}
+    <script src="/static/js/education-actions.js"></script>
 {% endblock %}
