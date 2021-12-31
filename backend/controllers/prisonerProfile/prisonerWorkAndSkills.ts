@@ -26,7 +26,7 @@ export default ({ prisonerProfileService, esweService }) =>
 
     const createEmployabilitySkillsRow = (skill) => ({
       key: {
-        html: `<a href="/prisoner/offenderNo/skills?${encodeURI(
+        html: `<a href="/prisoner/${offenderNo}/skills?skill=${encodeURI(
           skill
         )}" class="govuk-link govuk-!-font-weight-regular">${capitalize(skill)}</a>`,
       },
