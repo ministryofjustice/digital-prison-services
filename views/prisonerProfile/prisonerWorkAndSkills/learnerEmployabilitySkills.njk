@@ -7,7 +7,6 @@
 {% set title = "Learner employability skills" %}
 {% set offenderNo = prisonerDetails.offenderNo %}
 
-
 {% set AdaptabilityHtml %}
     <p class="govuk-body">'Adaptability' includes:</p>
     <ul class="govuk-list govuk-list--bullet">
@@ -123,6 +122,11 @@
 {% endmacro %}
 
 {% block beforeContent %}
+    <div class="bottom-line">
+        <p class="govuk-body-s govuk-!-margin-top-4">This is a new page -
+            <a class="govuk-link govuk-link--no-visited-state" target="_blank" href="https://eu.surveymonkey.com/r/KYNHT7D">give feedback to help us improve it (opens in a new tab)</a>
+        </p>
+    </div>
     {{ govukBreadcrumbs({
         items: [
             { text: "Digital Prison Services", href: "/" },
@@ -208,11 +212,6 @@
                     {% endif %}
                 </div>
             </div>
-        </div>
-    </div>
-
-    <div class="govuk-grid-row">
-        <div class="govuk-grid-column-two-thirds">
             <p class="govuk-body">
                 <a href="{{ profileUrl }}" class="govuk-link govuk-!-display-none-print"
                    data-test="employability-skills-returnLink">Return to prisoner profile</a>
