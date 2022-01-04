@@ -19,7 +19,6 @@ const {
 
 const getTasks = ({ activeCaseLoadId, locations, staffId, whereaboutsConfig, keyworkerPrisonStatus, roleCodes }) => {
   const userHasRoles = (roles) => hasAnyRole(roleCodes, roles)
-  const userRestrictedPatientsPermission = (url) => manageRestrictedPatientsAvailable(url)
 
   return [
     {
@@ -202,7 +201,7 @@ const getTasks = ({ activeCaseLoadId, locations, staffId, whereaboutsConfig, key
         'View all restricted patients in a secure hospital, move someone to a secure hospital, and remove someone from restricted patients.',
       href: manageRestrictedPatients.ui_url,
       enabled: () =>
-        manageRestrictedPatients.ui_url && userRestrictedPatientsPermission(manageRestrictedPatients.ui_url),
+        manageRestrictedPatients.ui_url && manageRestrictedPatientsAvailable(manageRestrictedPatients.ui_url),
     },
   ]
 }
