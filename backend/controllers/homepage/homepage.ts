@@ -179,7 +179,7 @@ const getTasks = ({ activeCaseLoadId, locations, staffId, whereaboutsConfig, key
       enabled: () => bookAPrisonVisit.ui_url && userHasRoles(['PVB_STAFF']),
     },
     {
-      id: 'send-legal-mail',
+      id: 'check-rule39-mail',
       heading: 'Check Rule 39 mail',
       description: 'Scan barcodes on mail from law firms and other approved senders.',
       href: sendLegalMail.url,
