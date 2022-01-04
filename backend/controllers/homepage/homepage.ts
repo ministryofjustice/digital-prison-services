@@ -1,5 +1,4 @@
-import { hasAnyRole } from '../../shared/permissions'
-
+import { hasAnyRole, manageRestrictedPatientsAvailable } from '../../shared/permissions'
 import config from '../../config'
 
 const {
@@ -20,6 +19,7 @@ const {
 
 const getTasks = ({ activeCaseLoadId, locations, staffId, whereaboutsConfig, keyworkerPrisonStatus, roleCodes }) => {
   const userHasRoles = (roles) => hasAnyRole(roleCodes, roles)
+  const userRestrictedPatientsPermission = (url) => manageRestrictedPatientsAvailable(url)
 
   return [
     {
@@ -202,8 +202,7 @@ const getTasks = ({ activeCaseLoadId, locations, staffId, whereaboutsConfig, key
         'View all restricted patients in a secure hospital, move someone to a secure hospital, and remove someone from restricted patients.',
       href: manageRestrictedPatients.ui_url,
       enabled: () =>
-        manageRestrictedPatients.ui_url &&
-        userHasRoles(['SEARCH_RESTRICTED_PATIENT', 'PRISON_RECEPTION', 'REMOVE_RESTRICTED_PATIENT']),
+        manageRestrictedPatients.ui_url && userRestrictedPatientsPermission(manageRestrictedPatients.ui_url),
     },
   ]
 }

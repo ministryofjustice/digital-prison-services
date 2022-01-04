@@ -206,7 +206,7 @@ context('Homepage', () => {
       })
     })
 
-    it('should show manage restricted patients', () => {
+    it.skip('should show manage restricted patients', () => {
       cy.task('stubUserMeRoles', [
         { roleCode: 'SEARCH_RESTRICTED_PATIENT' },
         { roleCode: 'PRISON_RECEPTION' },
