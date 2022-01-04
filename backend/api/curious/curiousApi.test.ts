@@ -101,6 +101,19 @@ describe('curiousApi', () => {
       expect(actual).toEqual(dummyLearnerGoals)
     })
   })
+
+  describe('getLearnerEmployabilitySkills', () => {
+    it('should return the expected response data', async () => {
+      const nomisId = 'A1234AA'
+      const dummyResponse = [{ field: 'value1' }, { field: 'value2' }]
+      mock
+        .get(`/learnerEmployabilitySkills/${nomisId}?size=10000`)
+        .matchHeader('authorization', `Bearer ${accessToken}`)
+        .reply(200, dummyResponse)
+      const actual = await curiousApi.getLearnerEmployabilitySkills({ access_token: accessToken }, nomisId)
+      expect(actual).toEqual(dummyResponse)
+    })
+  })
 })
 
 function getDummyLearnerProfiles(): LearnerProfile[] {

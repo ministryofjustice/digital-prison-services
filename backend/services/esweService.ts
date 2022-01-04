@@ -1,15 +1,15 @@
 import moment, { Moment } from 'moment'
 import { app } from '../config'
-import { readableDateFormat, stringWithAbbreviationsProcessor } from '../utils'
+import { readableDateFormat, sortByDateTime, stringWithAbbreviationsProcessor } from '../utils'
 import type CuriousApi from '../api/curious/curiousApi'
 import log from '../log'
-import { AssessmentQualificationType } from '../api/curious/types/Enums'
+import { AssessmentQualificationType, EmployabilitySkill } from '../api/curious/types/Enums'
 import {
+  EmployabilitySkillsReview,
   LearnerAssessment,
   LearnerLatestAssessment,
   LearnerProfile,
   LearnerEducation,
-  LearnerEmployabilitySkills,
 } from '../api/curious/types/Types'
 
 type FeatureFlagged<T> = {
@@ -23,6 +23,8 @@ type OffenderGoals = FeatureFlagged<eswe.LearnerGoals>
 type Neurodiversities = FeatureFlagged<eswe.Neurodiversities[]>
 type CurrentCoursesEnhanced = FeatureFlagged<eswe.CurrentCoursesEnhanced>
 type LearnerEducationFullDetails = FeatureFlagged<eswe.LearnerEducationFullDetails>
+type EmployabilitySkills = FeatureFlagged<Map<EmployabilitySkill, EmployabilitySkillsReview>>
+type EmployabilitySkillsDetails = FeatureFlagged<Map<EmployabilitySkill, EmployabilitySkillsReview[]>>
 type CurrentWork = FeatureFlagged<eswe.OffenderCurrentWork>
 type activitiesHistory = FeatureFlagged<eswe.activitiesHistory>
 type attendanceDetails = FeatureFlagged<eswe.attendanceDetails>
@@ -162,16 +164,78 @@ export default class EsweService {
     return createFlaggedContent(content)
   }
 
-  async getLearnerEmployabilitySkills(nomisId: string): Promise<LearnerEmployabilitySkills> {
-    let result: LearnerEmployabilitySkills = null
+  async getLearnerEmployabilitySkills(nomisId: string): Promise<EmployabilitySkills> {
+    const map = new Map<EmployabilitySkill, EmployabilitySkillsReview>()
     try {
       const context = await this.systemOauthClient.getClientCredentialsTokens()
-      result = await this.curiousApi.getLearnerEmployabilitySkills(context, nomisId)
+      const result = await this.curiousApi.getLearnerEmployabilitySkills(context, nomisId)
+
+      const findLatest = (latest, review) => {
+        return latest.reviewDate > review.reviewDate ? latest : review // ISO dates so can compare like strings
+      }
+
+      const setMapEntryToLatestReview = (acc, current) => {
+        if (current.reviews?.length) {
+          const reviewLatest = current.reviews.reduce(findLatest)
+          const latest = acc.get(current.employabilitySkill)
+          if (latest) {
+            if (reviewLatest?.reviewDate && reviewLatest.reviewDate > latest.reviewDate) {
+              acc.set(current.employabilitySkill, reviewLatest)
+            }
+          } else if (reviewLatest?.reviewDate) {
+            acc.set(current.employabilitySkill, reviewLatest)
+          }
+        }
+        return acc
+      }
+
+      return createFlaggedContent(result.content.reduce(setMapEntryToLatestReview, map))
     } catch (e) {
-      log.error(`Failed in getLearnerEmployabilitySkills. Reason: ${e.message}`)
+      if (e.response?.status === 404) {
+        log.info(`Offender record not found in getLearnerEmployabilitySkills().`)
+        return createFlaggedContent(map)
+      }
+      log.error(`Failed in getLearnerEmployabilitySkills(). Reason: ${e.message}`)
     }
 
-    return result
+    return createFlaggedContent(null)
+  }
+
+  private getOrPut = (map, key) => {
+    const value = map.get(key)
+    if (value) {
+      return value
+    }
+    const initialArray = []
+    map.set(key, initialArray)
+    return initialArray
+  }
+
+  async getLearnerEmployabilitySkillsDetails(nomisId: string): Promise<EmployabilitySkillsDetails> {
+    const map = new Map<EmployabilitySkill, EmployabilitySkillsReview[]>()
+    try {
+      const context = await this.systemOauthClient.getClientCredentialsTokens()
+      const curiousData = await this.curiousApi.getLearnerEmployabilitySkills(context, nomisId)
+
+      const appendArrayToMapEntry = (acc, current) => {
+        if (current.reviews?.length) {
+          const subarray = this.getOrPut(acc, current.employabilitySkill)
+          current.reviews.forEach((r) => subarray.push(r))
+        }
+        return acc
+      }
+
+      const content = curiousData.content.reduce(appendArrayToMapEntry, map)
+      return createFlaggedContent(content)
+    } catch (e) {
+      if (e.response?.status === 404) {
+        log.info(`Offender record not found in getLearnerEmployabilitySkillsDetails().`)
+        return createFlaggedContent(map)
+      }
+      log.error(`Failed in getLearnerEmployabilitySkillsDetails(). Reason: ${e.message}`)
+    }
+
+    return createFlaggedContent(null)
   }
 
   async getNeurodiversities(nomisId: string): Promise<Neurodiversities> {
@@ -437,7 +501,7 @@ export default class EsweService {
       }
     } catch (e) {
       if (e.response?.status === 404) {
-        log.info(`Offender record not found.`)
+        log.info(`Offender record not found in getCurrentActivities().`)
       } else {
         currentWorkData = null
       }

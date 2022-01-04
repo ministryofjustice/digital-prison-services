@@ -38,6 +38,12 @@
     </div>
 {% endset %}
 
+{% set employabilitySkillsSection %}
+    <div data-test="employability-skills-summary" id="employability-skills-summary">
+        {% include "./partials/employabilitySkills.njk" %}
+    </div>
+{% endset %}
+
 {% set leftSections = [
     { heading: 'Courses and qualifications', html: CoursesAndQualificationsSection },
     { heading: 'Work and activities', html: workAndActivitiesSection }
@@ -46,6 +52,9 @@
     { heading: 'Goals', html: offenderGoalsSection },
     { heading: 'Functional skills level', html: functionalSkillsLevelSection }
 ] %}
+{% if prisonerProfileData.esweEnabled %}
+    {% set leftSections = (leftSections.push({ heading: 'Employability skills', html: employabilitySkillsSection }), leftSections) %}
+{% endif %}
 
 {% block prisonerProfileSection %}
     <div class="govuk-accordion govuk-accordion--split" data-module="govuk-accordion" id="prisoner-eswe-accordion">

@@ -7,6 +7,7 @@ import {
   LearnerEducation,
   LearnerEmployabilitySkills,
   PageLearnerEducation,
+  PageLearnerEmployabilitySkills,
 } from './types/Types'
 
 export default class CuriousApi {
@@ -55,9 +56,9 @@ export default class CuriousApi {
     return this.client.get<LearnerGoals>(context, `/learnerGoals/${nomisId}`).then((response) => response.body)
   }
 
-  getLearnerEmployabilitySkills(context: ClientContext, nomisId: string): Promise<LearnerEmployabilitySkills> {
+  getLearnerEmployabilitySkills(context: ClientContext, nomisId: string): Promise<PageLearnerEmployabilitySkills> {
     return this.client
-      .get<LearnerEmployabilitySkills>(context, `/learnerEmployabilitySkills/${nomisId}?size=1000`)
+      .get<LearnerEmployabilitySkills>(context, `/learnerEmployabilitySkills/${nomisId}?size=10000`)
       .then((response) => response.body)
   }
 

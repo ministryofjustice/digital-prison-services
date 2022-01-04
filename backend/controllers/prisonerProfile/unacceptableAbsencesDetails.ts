@@ -1,4 +1,5 @@
 import { formatName, putLastNameFirst } from '../../utils'
+import { PAGE_SIZE } from '../../services/esweService'
 
 type PrisonerDetails = {
   offenderNo: string
@@ -24,7 +25,7 @@ export default ({ paginationService, prisonApi, esweService }) =>
     const fullUrl = new URL(`${req.protocol}://${req.get('host')}${req.originalUrl}`)
     const { pageOffsetOption } = req.query
     const pageOffset = (pageOffsetOption && parseInt(pageOffsetOption, 10)) || 0
-    const page = pageOffset / 20
+    const page = pageOffset / PAGE_SIZE
 
     try {
       const [prisonerDetails, attendanceDetails, prisonArray]: [PrisonerDetails, attendanceDetails, any[]] =

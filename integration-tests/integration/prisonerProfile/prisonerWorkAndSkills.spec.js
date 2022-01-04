@@ -401,7 +401,6 @@ context('Prisoner Work and Skills', () => {
       before(() => {
         cy.task('reset')
         cy.clearCookies()
-        cy.task('reset')
         cy.task('stubSignIn', { username: 'ITAG_USER', caseload: 'MDI' })
         cy.signIn()
 
@@ -440,7 +439,6 @@ context('Prisoner Work and Skills', () => {
       before(() => {
         cy.task('reset')
         cy.clearCookies()
-        cy.task('reset')
         cy.task('stubSignIn', { username: 'ITAG_USER', caseload: 'MDI' })
         cy.signIn()
 
@@ -488,7 +486,6 @@ context('Prisoner Work and Skills', () => {
       before(() => {
         cy.task('reset')
         cy.clearCookies()
-        cy.task('reset')
         cy.task('stubSignIn', { username: 'ITAG_USER', caseload: 'MDI' })
         cy.signIn()
 
@@ -566,7 +563,6 @@ context('Prisoner Work and Skills', () => {
       before(() => {
         cy.task('reset')
         cy.clearCookies()
-        cy.task('reset')
         cy.task('stubSignIn', { username: 'ITAG_USER', caseload: 'MDI' })
         cy.signIn()
 
@@ -626,7 +622,6 @@ context('Prisoner Work and Skills', () => {
       before(() => {
         cy.task('reset')
         cy.clearCookies()
-        cy.task('reset')
         cy.task('stubSignIn', { username: 'ITAG_USER', caseload: 'MDI' })
         cy.signIn()
 
@@ -702,7 +697,6 @@ context('Prisoner Work and Skills', () => {
       before(() => {
         cy.task('reset')
         cy.clearCookies()
-        cy.task('reset')
         cy.task('stubSignIn', { username: 'ITAG_USER', caseload: 'MDI' })
         cy.signIn()
 
@@ -751,6 +745,95 @@ context('Prisoner Work and Skills', () => {
           // cy.get('[data-test="work-summary"]').contains(
           //   'John Smith has no unacceptable absences in the last 6 months'
           // )
+        })
+      })
+    })
+  })
+
+  context('employability skills section', () => {
+    context('When there is no data because of an api call failure', () => {
+      const apiErrorText = 'We cannot show these details right now. Try reloading the page.'
+
+      before(() => {
+        cy.task('reset')
+        cy.clearCookies()
+        cy.task('stubSignIn', { username: 'ITAG_USER', caseload: 'MDI' })
+        cy.signIn()
+
+        cy.task('stubPrisonerProfileHeaderData', prisonerProfileHeaderData)
+
+        cy.task('stubWorkAndSkillsApi500Errors')
+      })
+
+      beforeEach(() => {
+        Cypress.Cookies.preserveOnce('hmpps-session-dev')
+      })
+
+      it('should show correct error message', () => {
+        visitWorkAndSkillsAndExpandAccordions()
+        cy.get('[data-test="employabilitySkills-errorMessage"]').should('have.text', apiErrorText)
+      })
+    })
+
+    context('When there is data available', () => {
+      const review1 = {
+        reviewDate: '2021-05-29',
+        currentProgression: '3 - Acceptable demonstration',
+        comment: 'test 1',
+      }
+      const review2 = {
+        reviewDate: '2021-06-29',
+        currentProgression: '2 - Minimal demonstration',
+        comment: 'test 1',
+      }
+      const employabilitySkillsData = {
+        content: [
+          {
+            employabilitySkill: 'Problem Solving',
+            reviews: [review1],
+          },
+          {
+            employabilitySkill: 'Adaptability',
+            reviews: [review2],
+          },
+        ],
+      }
+
+      before(() => {
+        cy.task('reset')
+        cy.clearCookies()
+        cy.task('stubSignIn', { username: 'ITAG_USER', caseload: 'MDI' })
+        cy.signIn()
+
+        cy.task('stubPrisonerProfileHeaderData', prisonerProfileHeaderData)
+        cy.task('stubLearnerEmployabilitySkills', employabilitySkillsData)
+      })
+
+      beforeEach(() => {
+        Cypress.Cookies.preserveOnce('hmpps-session-dev')
+      })
+
+      it('should display the correct skill levels', () => {
+        visitWorkAndSkillsAndExpandAccordions()
+        cy.get('[data-test="employability-skills-summary"]').then(($summary) => {
+          cy.get($summary)
+            .find('dt')
+            .then(($summaryLabels) => {
+              cy.get($summaryLabels).its('length').should('eq', 10)
+              expect($summaryLabels.get(0).innerText).to.contain('Adaptability')
+              expect($summaryLabels.get(1).innerText).to.contain('Communication')
+              expect($summaryLabels.get(6).innerText).to.contain('Problem solving')
+            })
+        })
+        cy.get('[data-test="employability-skills-summary"]').then(($summary) => {
+          cy.get($summary)
+            .find('dd')
+            .then(($summaryValues) => {
+              cy.get($summaryValues).its('length').should('eq', 10)
+              expect($summaryValues.get(0).innerText).to.contain('2 - Minimal demonstration')
+              expect($summaryValues.get(1).innerText).to.contain('Not assessed')
+              expect($summaryValues.get(6).innerText).to.contain('3 - Acceptable demonstration')
+            })
         })
       })
     })

@@ -9,8 +9,13 @@ import EsweService, {
 import { makeNotFoundError } from './helpers'
 import { app } from '../config'
 import CuriousApi from '../api/curious/curiousApi'
-import { AssessmentQualificationType, LearnerEducationDeliveryMethodType } from '../api/curious/types/Enums'
 import {
+  AssessmentQualificationType,
+  EmployabilitySkill,
+  LearnerEducationDeliveryMethodType,
+} from '../api/curious/types/Enums'
+import {
+  EmployabilitySkillsReview,
   LearnerGoals,
   LearnerLatestAssessment,
   LearnerProfile,
@@ -52,6 +57,7 @@ describe('Education skills and work experience', () => {
   let getPrisonerDetailsMock
   let getUnacceptableAbsencesMock
   let getUnacceptableAbsenceDetailMock
+  let getLearnerEmployabilitySkillsMock
   beforeEach(() => {
     getLearnerProfilesMock = jest.fn()
     getLearnerEducationMock = jest.fn()
@@ -61,10 +67,12 @@ describe('Education skills and work experience', () => {
     getPrisonerDetailsMock = jest.fn()
     getUnacceptableAbsencesMock = jest.fn()
     getUnacceptableAbsenceDetailMock = jest.fn()
+    getLearnerEmployabilitySkillsMock = jest.fn()
     curiousApi.getLearnerProfiles = getLearnerProfilesMock
     curiousApi.getLearnerEducation = getLearnerEducationMock
     curiousApi.getLearnerLatestAssessments = getLearnerLatestAssessmentsMock
     curiousApi.getLearnerGoals = getLearnerGoalsMock
+    curiousApi.getLearnerEmployabilitySkills = getLearnerEmployabilitySkillsMock
     prisonApi.getOffenderActivitiesHistory = getLearnerActivitiesHistoryMock
     whereaboutsApi.getUnacceptableAbsences = getUnacceptableAbsencesMock
     whereaboutsApi.getUnacceptableAbsenceDetail = getUnacceptableAbsenceDetailMock
@@ -440,6 +448,39 @@ describe('Education skills and work experience', () => {
     })
   })
 
+  describe('Employability Skills Details', () => {
+    const nomisId = 'G3609VL'
+
+    it('should return null content on error', async () => {
+      getLearnerEmployabilitySkillsMock.mockRejectedValue(new Error('error'))
+
+      const actual = await service.getLearnerEmployabilitySkillsDetails(nomisId)
+
+      expect(actual.content).toBeNull()
+    })
+
+    it('should return expected response when the prisoner is not registered in Curious', async () => {
+      getLearnerEmployabilitySkillsMock.mockRejectedValue(makeNotFoundError())
+
+      const actual = await service.getLearnerEmployabilitySkillsDetails(nomisId)
+
+      expect(actual.enabled).toBeTruthy()
+      expect(actual.content).toEqual(new Map<EmployabilitySkill, EmployabilitySkillsReview>())
+    })
+
+    it('should return all reviews where there are skills present', async () => {
+      getLearnerEmployabilitySkillsMock.mockResolvedValue(employabilitySkillsData)
+      const expected = new Map()
+        .set('skill1', [review1, review3, latestReview1])
+        .set('skill2', [latestReview2, review2])
+
+      const actual = await service.getLearnerEmployabilitySkillsDetails(nomisId)
+
+      expect(actual.enabled).toBeTruthy()
+      expect(actual.content).toEqual(expected)
+    })
+  })
+
   describe('Work and skills tab', () => {
     describe('Functional skills level', () => {
       const nomisId = 'G2823GV'
@@ -572,6 +613,7 @@ describe('Education skills and work experience', () => {
         expect(actual.content).toBeNull()
       })
     })
+
     describe('Goals', () => {
       const nomisId = 'G3609VL'
       it('should return null content on error', async () => {
@@ -628,6 +670,7 @@ describe('Education skills and work experience', () => {
         expect(actual.content).toEqual(expected)
       })
     })
+
     describe('Courses and qualifications', () => {
       const nomisId = 'G3609VL'
       it('should return null content on error', async () => {
@@ -724,6 +767,7 @@ describe('Education skills and work experience', () => {
         expect(actual.content).toEqual(expected)
       })
     })
+
     describe('Work inside prison', () => {
       const nomisId = 'G3609VL'
       it('should return null content on work history api error', async () => {
@@ -843,6 +887,35 @@ describe('Education skills and work experience', () => {
           noneInSixMonths: true,
         }
         expect(actual.content.unacceptableAbsenceSummary).toEqual(expected)
+      })
+    })
+
+    describe('Employability Skills', () => {
+      const nomisId = 'G3609VL'
+
+      it('should return null content on error', async () => {
+        getLearnerEmployabilitySkillsMock.mockRejectedValue(new Error('error'))
+        const actual = await service.getLearnerEmployabilitySkills(nomisId)
+        expect(actual.content).toBeNull()
+      })
+
+      it('should return expected response when the prisoner is not registered in Curious', async () => {
+        getLearnerEmployabilitySkillsMock.mockRejectedValue(makeNotFoundError())
+
+        const actual = await service.getLearnerEmployabilitySkills(nomisId)
+
+        expect(actual.enabled).toBeTruthy()
+        expect(actual.content).toEqual(new Map<EmployabilitySkill, EmployabilitySkillsReview>())
+      })
+
+      it('should return the latest reviews where there are skills present', async () => {
+        getLearnerEmployabilitySkillsMock.mockResolvedValue(employabilitySkillsData)
+        const expected = new Map().set('skill1', latestReview1).set('skill2', latestReview2)
+
+        const actual = await service.getLearnerEmployabilitySkills(nomisId)
+
+        expect(actual.enabled).toBeTruthy()
+        expect(actual.content).toEqual(expected)
       })
     })
   })
@@ -1369,4 +1442,53 @@ function getDummyEducations(): PageLearnerEducation {
     },
     empty: false,
   }
+}
+
+const latestReview1 = {
+  reviewDate: '2021-05-30',
+  currentProgression: '2',
+  comment: 'test 2',
+}
+const latestReview2 = {
+  reviewDate: '2021-06-30',
+  currentProgression: '2',
+  comment: 'test 2',
+}
+const review1 = {
+  reviewDate: '2021-05-29',
+  currentProgression: '2',
+  comment: 'test 1',
+}
+const review2 = {
+  reviewDate: '2021-06-29',
+  currentProgression: '2',
+  comment: 'test 1',
+}
+const review3 = {
+  reviewDate: '2021-05-28',
+  currentProgression: '2',
+  comment: 'test 1',
+}
+const employabilitySkillsData = {
+  content: [
+    {
+      employabilitySkill: 'skill1',
+      reviews: [review1],
+    },
+    {
+      employabilitySkill: 'skill2',
+      reviews: [latestReview2, review2],
+    },
+    {
+      employabilitySkill: 'skill1',
+      reviews: [review3, latestReview1],
+    },
+    {
+      employabilitySkill: 'skill3',
+      reviews: [],
+    },
+    {
+      employabilitySkill: 'skill4',
+    },
+  ],
 }
