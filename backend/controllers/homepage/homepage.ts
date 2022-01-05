@@ -1,4 +1,4 @@
-import { hasAnyRole, manageRestrictedPatientsAvailable } from '../../shared/permissions'
+import { hasAnyRole, checkRPHomepage } from '../../shared/permissions'
 import config from '../../config'
 
 const {
@@ -19,7 +19,7 @@ const {
 
 const getTasks = ({ activeCaseLoadId, locations, staffId, whereaboutsConfig, keyworkerPrisonStatus, roleCodes }) => {
   const userHasRoles = (roles) => hasAnyRole(roleCodes, roles)
-
+  const restrictedPatientsAvailable = (url) => checkRPHomepage(url).then((res) => res)
   return [
     {
       id: 'global-search',
@@ -200,8 +200,7 @@ const getTasks = ({ activeCaseLoadId, locations, staffId, whereaboutsConfig, key
       description:
         'View all restricted patients in a secure hospital, move someone to a secure hospital, and remove someone from restricted patients.',
       href: manageRestrictedPatients.ui_url,
-      enabled: () =>
-        manageRestrictedPatients.ui_url && manageRestrictedPatientsAvailable(manageRestrictedPatients.ui_url),
+      enabled: () => manageRestrictedPatients.ui_url && restrictedPatientsAvailable(manageRestrictedPatients.ui_url),
     },
   ]
 }

@@ -595,7 +595,6 @@ describe('Homepage', () => {
 
   it.skip('should not display the Manage Restricted Patients task on the homepage if none of the correct roles are present', async () => {
     config.apis.manageRestrictedPatients.ui_url = 'http://manage-restricted-patients-url'
-    oauthApi.userRoles.mockResolvedValue([])
     mockedAxios.get.mockResolvedValue({ status: 401 })
 
     await controller(req, res)
@@ -610,7 +609,6 @@ describe('Homepage', () => {
   })
   it('should display the Manage Restricted Patients task on the homepage if any of the correct roles are present', async () => {
     config.apis.manageRestrictedPatients.ui_url = 'http://manage-restricted-patients-url'
-    oauthApi.userRoles.mockResolvedValue([{ roleCode: 'SEARCH_RESTRICTED_PATIENT' }, { roleCode: 'PRISON_RECEPTION' }])
     mockedAxios.get.mockResolvedValue({ status: 200 })
 
     await controller(req, res)
