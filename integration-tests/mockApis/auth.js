@@ -27,6 +27,17 @@ const getSignInUrl = () =>
     return `/sign-in/callback?code=codexxxx&state=${stateValue}`
   })
 
+const checkRPHomepage = () =>
+  stubFor({
+    request: {
+      method: 'GET',
+      url: `/`,
+    },
+    response: {
+      status: 401,
+    },
+  })
+
 const favicon = () =>
   stubFor({
     request: {
@@ -239,4 +250,5 @@ module.exports = {
   stubEmail,
   redirect,
   stubClientCredentialsRequest,
+  checkRPHomepage,
 }

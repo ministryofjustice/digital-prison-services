@@ -40,6 +40,8 @@ describe('Homepage', () => {
     }
     res = { locals: {}, render: jest.fn(), redirect: jest.fn() }
 
+    mockedAxios.get.mockResolvedValue({ status: 401 })
+
     logError = jest.fn()
 
     prisonApi.userLocations = jest.fn().mockResolvedValue([])
@@ -593,10 +595,8 @@ describe('Homepage', () => {
     )
   })
 
-  it.skip('should not display the Manage Restricted Patients task on the homepage if none of the correct roles are present', async () => {
+  it('should not display the Manage Restricted Patients task on the homepage if none of the correct roles are present', async () => {
     config.apis.manageRestrictedPatients.ui_url = 'http://manage-restricted-patients-url'
-    mockedAxios.get.mockResolvedValue({ status: 401 })
-
     await controller(req, res)
 
     expect(mockedAxios.get).toHaveBeenCalledWith(config.apis.manageRestrictedPatients.ui_url)

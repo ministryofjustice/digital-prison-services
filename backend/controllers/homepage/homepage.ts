@@ -1,4 +1,4 @@
-import { hasAnyRole, checkRPHomepage } from '../../shared/permissions'
+import { hasAnyRole, checkHomepage } from '../../shared/permissions'
 import config from '../../config'
 
 const {
@@ -17,9 +17,16 @@ const {
   },
 } = config
 
-const getTasks = ({ activeCaseLoadId, locations, staffId, whereaboutsConfig, keyworkerPrisonStatus, roleCodes }) => {
+const getTasks = ({
+  activeCaseLoadId,
+  locations,
+  staffId,
+  whereaboutsConfig,
+  keyworkerPrisonStatus,
+  roleCodes,
+  checkRPHomepage,
+}) => {
   const userHasRoles = (roles) => hasAnyRole(roleCodes, roles)
-  const restrictedPatientsAvailable = (url) => checkRPHomepage(url).then((res) => res)
   return [
     {
       id: 'global-search',
@@ -200,7 +207,7 @@ const getTasks = ({ activeCaseLoadId, locations, staffId, whereaboutsConfig, key
       description:
         'View all restricted patients in a secure hospital, move someone to a secure hospital, and remove someone from restricted patients.',
       href: manageRestrictedPatients.ui_url,
-      enabled: () => manageRestrictedPatients.ui_url && restrictedPatientsAvailable(manageRestrictedPatients.ui_url),
+      enabled: () => manageRestrictedPatients.ui_url && checkRPHomepage,
     },
   ]
 }
@@ -209,13 +216,15 @@ export default ({ oauthApi, prisonApi, whereaboutsApi, keyworkerApi, logError })
   async (req, res) => {
     try {
       const { activeCaseLoadId, staffId } = req.session.userDetails
-      const [locations, staffRoles, userRoles, whereaboutsConfig, keyworkerPrisonStatus] = await Promise.all([
-        prisonApi.userLocations(res.locals),
-        prisonApi.getStaffRoles(res.locals, staffId, activeCaseLoadId),
-        oauthApi.userRoles(res.locals),
-        whereaboutsApi.getWhereaboutsConfig(res.locals, activeCaseLoadId).catch(() => null),
-        keyworkerApi.getPrisonMigrationStatus(res.locals, activeCaseLoadId),
-      ])
+      const [locations, staffRoles, userRoles, whereaboutsConfig, keyworkerPrisonStatus, checkRPHomepage] =
+        await Promise.all([
+          prisonApi.userLocations(res.locals),
+          prisonApi.getStaffRoles(res.locals, staffId, activeCaseLoadId),
+          oauthApi.userRoles(res.locals),
+          whereaboutsApi.getWhereaboutsConfig(res.locals, activeCaseLoadId).catch(() => null),
+          keyworkerApi.getPrisonMigrationStatus(res.locals, activeCaseLoadId),
+          checkHomepage(manageRestrictedPatients.ui_url),
+        ])
 
       const roleCodes = [
         ...userRoles.map((userRole) => userRole.roleCode),
@@ -231,6 +240,7 @@ export default ({ oauthApi, prisonApi, whereaboutsApi, keyworkerApi, logError })
         whereaboutsConfig,
         keyworkerPrisonStatus,
         roleCodes,
+        checkRPHomepage,
       })
 
       return res.render('homepage/homepage.njk', {
