@@ -19,7 +19,7 @@ const offenderSearch = require('../mockApis/offenderSearch')
 const complexity = require('../mockApis/complexity')
 const curiousApi = require('../mockApis/curiousApi')
 
-const { resetStubs, resetStub } = require('../mockApis/wiremock')
+const { resetStubs } = require('../mockApis/wiremock')
 
 const extractOffenderNumbers = (activityList) => {
   const result = Object.keys(activityList).reduce((r, k) => r.concat(activityList[k]), [])
@@ -59,7 +59,7 @@ module.exports = (on) => {
     stubSignIn: ({ username = 'ITAG_USER', caseload = 'MDI', roles = [], caseloads }) =>
       Promise.all([
         auth.stubSignIn(username, caseload, roles),
-        auth.stubUserMe(),
+        auth.stubUserMe(username, 12345, 'James Stuart', caseload),
         prisonApi.stubUserCaseloads(caseloads),
         tokenverification.stubVerifyToken(true),
       ]),
@@ -137,7 +137,6 @@ module.exports = (on) => {
       complexOffenders = [],
     }) =>
       Promise.all([
-        auth.stubUserMe(),
         auth.stubUserMeRoles([...userRoles, { roleCode: 'UPDATE_ALERT' }]),
         prisonApi.stubOffenderBasicDetails(offenderBasicDetails),
         prisonApi.stubOffenderFullDetails(offenderFullDetails),
