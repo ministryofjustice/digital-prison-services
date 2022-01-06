@@ -250,8 +250,8 @@ describe('Education skills and work experience', () => {
           dateFrom: '2021-07-19',
           dateTo: '2021-07-21',
           location: 'HMP Moorland',
-          outcome: 'Fail',
-          outcomeDetails: 'No achievement',
+          outcome: 'Completed',
+          outcomeDetails: 'No achievement<br/>Fail',
           type: 'Accredited',
         },
         {
@@ -268,8 +268,8 @@ describe('Education skills and work experience', () => {
           dateFrom: '2020-09-01',
           dateTo: '2020-12-02',
           location: 'HMP Moorland',
-          outcome: 'Pass',
-          outcomeDetails: 'Achieved',
+          outcome: 'Completed',
+          outcomeDetails: 'Achieved<br/>Pass',
           type: 'Non-accredited',
         },
         {
