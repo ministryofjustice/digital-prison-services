@@ -281,8 +281,8 @@ context('Prisoner courses and qualifications details page', () => {
           expect($columnHeader.get(1).innerText).to.contain('Course name')
           expect($columnHeader.get(2).innerText).to.contain('Location')
           expect($columnHeader.get(3).innerText).to.contain('Dates')
-          expect($columnHeader.get(4).innerText).to.contain('Outcome')
-          expect($columnHeader.get(5).innerText).to.contain('Outcome details')
+          expect($columnHeader.get(4).innerText).to.contain('Status')
+          expect($columnHeader.get(5).innerText).to.contain('Details')
         })
       cy.get('tbody tr')
         .find('td')
@@ -295,8 +295,8 @@ context('Prisoner courses and qualifications details page', () => {
           expect($cells.get(5).innerText).to.contain('')
           expect($cells.get(7).innerText).to.contain('Foundation Degree in Arts in Equestrian Practice and Technology')
           expect($cells.get(9).innerText).to.contain('19/07/2021\nto 21/07/2021')
-          expect($cells.get(10).innerText).to.contain('Fail')
-          expect($cells.get(11).innerText).to.contain('No achievement')
+          expect($cells.get(10).innerText).to.contain('Completed')
+          expect($cells.get(11).innerText).to.contain('No achievement\nFail')
           expect($cells.get(13).innerText).to.contain('Certificate of Management')
           expect($cells.get(15).innerText).to.contain('01/07/2021\nto 08/07/2021')
           expect($cells.get(22).innerText).to.contain('Temporarily withdrawn')
@@ -337,6 +337,82 @@ context('Prisoner courses and qualifications details page', () => {
 
           expect(row[0].textContent).to.contain('Course 40')
           expect(row[19].textContent).to.contain('Course 21')
+        })
+    })
+  })
+  context('display outcome grade if it exists', () => {
+    const dummyEducation = {
+      content: [
+        {
+          prn: 'G6123VU',
+          establishmentName: 'MOORLAND (HMP & YOI)',
+          courseName: 'Carpentry',
+          isAccredited: false,
+          learningStartDate: '2021-05-13',
+          learningPlannedEndDate: '2021-06-08',
+          learningActualEndDate: null,
+          outcome: 'Achieved',
+          outcomeGrade: 'Pass',
+          withdrawalReasons: null,
+          prisonWithdrawalReason: null,
+          completionStatus: 'The learner has completed the learning activities leading to the learning aim',
+          withdrawalReasonAgreed: false,
+        },
+      ],
+      pageable: {
+        sort: {
+          empty: true,
+          sorted: false,
+          unsorted: true,
+        },
+        offset: 0,
+        pageSize: 20,
+        pageNumber: 0,
+        paged: true,
+        unpaged: false,
+      },
+      last: true,
+      totalElements: 1,
+      totalPages: 1,
+      size: 20,
+      number: 0,
+      sort: {
+        empty: true,
+        sorted: false,
+        unsorted: true,
+      },
+      first: true,
+      numberOfElements: 1,
+      empty: false,
+    }
+    before(() => {
+      cy.clearCookies()
+      cy.task('reset')
+      cy.task('stubSignIn', { username: 'ITAG_USER', caseload: 'MDI' })
+      cy.signIn()
+      cy.task('stubOffenderBasicDetails', { bookingId: 1, firstName: 'John', lastName: 'Smith', agencyId: 'MDI' })
+    })
+
+    beforeEach(() => {
+      Cypress.Cookies.preserveOnce('hmpps-session-dev')
+    })
+
+    it('should show outcome grade below outcome', () => {
+      cy.task('stubLearnerEducation', dummyEducation)
+
+      cy.visit(`/prisoner/${offenderNo}/courses-qualifications`)
+      cy.get('h1').should('have.text', 'John Smith’s courses and qualifications')
+      // cy.get('[data-test="courses-qualifications-returnLink"]').should('exist')
+      cy.get('tbody tr')
+        .find('td')
+        .then(($cells) => {
+          expect($cells.length).to.eq(6)
+          expect($cells.get(0).innerText).to.contain('Non-accredited')
+          expect($cells.get(1).innerText).to.contain('Carpentry')
+          expect($cells.get(2).innerText).to.contain('Moorland (HMP & YOI)')
+          expect($cells.get(3).innerText).to.contain('13/05/2021\nto 08/06/2021')
+          expect($cells.get(4).innerText).to.contain('Completed')
+          expect($cells.get(5).innerText).to.contain('Achieved\nPass')
         })
     })
   })

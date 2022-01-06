@@ -409,7 +409,6 @@ export default class EsweService {
       const { content } = courses
 
       const getOutcome = (course: LearnerEducation) => {
-        if (course.outcomeGrade) return course.outcomeGrade
         if (course.completionStatus.includes('continuing')) return 'In progress'
         if (course.completionStatus.includes('temporarily withdrawn')) return 'Temporarily withdrawn'
         if (course.completionStatus.includes('withdrawn') && !course.completionStatus.includes('temporarily'))
@@ -418,6 +417,8 @@ export default class EsweService {
       }
 
       const getOutcomeDetails = (course: LearnerEducation) => {
+        if (course.outcome && course.outcomeGrade && !course.completionStatus.includes('withdrawn'))
+          return `${course.outcome}<br/>${course.outcomeGrade}`
         if (course.outcome && !course.completionStatus.includes('withdrawn')) return course.outcome
         if (course.prisonWithdrawalReason) return course.prisonWithdrawalReason
         return ''
