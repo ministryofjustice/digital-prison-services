@@ -24,7 +24,17 @@ context('Delete recurring appointment page', () => {
   before(() => {
     cy.clearCookies()
     cy.task('resetAndStubTokenVerification')
-    cy.task('stubSignIn', { username: 'ITAG_USER', caseload: 'WWI' })
+    cy.task('stubSignIn', {
+      username: 'ITAG_USER',
+      caseload: 'WWI',
+      caseloads: [
+        {
+          caseLoadId: 'WWI',
+          description: 'Wandsworth',
+          currentlyActive: true,
+        },
+      ],
+    })
     cy.signIn()
   })
 

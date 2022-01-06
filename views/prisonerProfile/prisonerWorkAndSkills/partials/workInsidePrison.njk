@@ -31,7 +31,7 @@
     <a class="govuk-link" href='/prisoner/{{offenderNo}}/schedule' data-test="work-scheduleLink">View 7 day schedule</a>
 </p>
 
-{% if prisonerProfileData.esweEnabled %}
+{% if prisonerProfileData.esweEnabled and isAccelerator %}
     <hr class="govuk-section-break govuk-section-break--visible"/>
     <h3 class="govuk-heading-m card__heading govuk-!-margin-top-3" data-test="work-header-2">Unacceptable absences</h3>
     {% if not absence %}

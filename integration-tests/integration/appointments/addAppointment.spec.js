@@ -11,7 +11,7 @@ context('A user can add an appointment', () => {
   before(() => {
     cy.clearCookies()
     cy.task('resetAndStubTokenVerification')
-    cy.task('stubSignIn', { username: 'ITAG_USER', caseload: 'WWI' })
+    cy.task('stubSignIn', { username: 'ITAG_USER', caseload: 'MDI' })
     cy.signIn()
   })
   beforeEach(() => {
