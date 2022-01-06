@@ -55,7 +55,7 @@ context('Case note amendments', () => {
   beforeEach(() => {
     cy.clearCookies()
     cy.task('reset')
-    cy.task('stubSignIn', { username: 'ITAG_USER', caseload: 'WWI' })
+    cy.task('stubSignIn', { username: 'ITAG_USER', caseload: 'MDI' })
     cy.signIn()
 
     cy.task('stubBookingDetails', { firstName: 'Bob', lastName: 'Smith' })

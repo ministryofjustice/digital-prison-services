@@ -63,6 +63,7 @@ context('A user can add a case note', () => {
 
   it('A user can successfully add an OMiC open case note', () => {
     cy.task('stubClientCredentialsRequest')
+    cy.task('stubUserMe', {})
     cy.task('stubPrisonerProfileHeaderData', {
       offenderBasicDetails,
       offenderFullDetails,
