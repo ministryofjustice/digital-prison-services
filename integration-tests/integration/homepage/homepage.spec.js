@@ -1,11 +1,10 @@
 const homepagePage = require('../../pages/homepage/homepagePage')
 
-context.skip('Homepage', () => {
+context('Homepage', () => {
   beforeEach(() => {
     cy.clearCookies()
     cy.task('reset')
     cy.task('stubUserMeRoles')
-    cy.task('stubCheckRPHomepage')
     cy.task('stubUserLocations')
     cy.task('stubStaffRoles', [])
     cy.task('stubLocationConfig', { agencyId: 'MDI', response: { enabled: false } })
@@ -207,6 +206,11 @@ context.skip('Homepage', () => {
     })
 
     it('should show manage restricted patients', () => {
+      cy.task('stubUserMeRoles', [
+        { roleCode: 'SEARCH_RESTRICTED_PATIENT' },
+        { roleCode: 'PRISON_RECEPTION' },
+        { roleCode: 'REMOVE_RESTRICTED_PATIENT' },
+      ])
       const page = homepagePage.goTo()
 
       page.manageRestrictedPatients().tile().should('exist')

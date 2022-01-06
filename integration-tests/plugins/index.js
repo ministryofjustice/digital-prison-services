@@ -65,7 +65,6 @@ module.exports = (on) => {
       ]),
     stubSignInCourt: () =>
       Promise.all([auth.stubSignInCourt(), prisonApi.stubUserCaseloads(), tokenverification.stubVerifyToken(true)]),
-    stubCheckRPHomepage: auth.checkRPHomepage,
     stubUserEmail: (username) => Promise.all([auth.stubEmail(username)]),
     stubUser: (username, caseload) => Promise.all([auth.stubUser(username, caseload)]),
     stubStaff: ({ staffId, details }) => Promise.all([prisonApi.stubStaff(staffId, details)]),
