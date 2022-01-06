@@ -101,7 +101,7 @@
     </ul>
 {% endset %}
 
-{% macro showDetails(skill, Adaptability=AdaptabilityHtml) %}
+{% macro showDetails(skill, showGovukDetails) %}
 
     {% set detailsHtml %}
         {% switch skill %}
@@ -118,13 +118,18 @@
         {% endswitch %}
     {% endset %}
 
-    {{ govukDetails({ summaryText: "What does the skill '" + skill | lower +"' include?", html: detailsHtml }) }}
+    {% if showGovukDetails %}
+        {{ govukDetails({ summaryText: "What does the skill '" + skill | lower +"' include?", html: detailsHtml }) }}
+    {% else %}
+        {{ detailsHtml | safe }}
+    {% endif %}
 {% endmacro %}
 
 {% block beforeContent %}
     <div class="bottom-line">
         <p class="govuk-body-s govuk-!-margin-top-4">This is a new page -
-            <a class="govuk-link govuk-link--no-visited-state" target="_blank" href="https://eu.surveymonkey.com/r/KYNHT7D">give feedback to help us improve it (opens in a new tab)</a>
+            <a class="govuk-link govuk-link--no-visited-state" target="_blank"
+               href="https://eu.surveymonkey.com/r/KYNHT7D">give feedback to help us improve it (opens in a new tab)</a>
         </p>
     </div>
     {{ govukBreadcrumbs({
@@ -176,11 +181,11 @@
                     assessments for this employability skill.</p>
             {% endif %}
 
-            {{ showDetails(skill) }}
+            {{ showDetails(skill, rows.length == 0) }}
 
-            <div class="govuk-grid-row">
-                <div class="govuk-grid-column-full">
-                    {% if rows.length > 0 %}
+            {% if rows.length > 0 %}
+                <div class="govuk-grid-row">
+                    <div class="govuk-grid-column-full">
 
                         {{ mojPagination(pagination) }}
 
@@ -209,9 +214,9 @@
                         <div class="govuk-!-display-none-print">
                             {{ mojPagination(pagination) }}
                         </div>
-                    {% endif %}
+                    </div>
                 </div>
-            </div>
+            {% endif %}
             <p class="govuk-body">
                 <a href="{{ profileUrl }}" class="govuk-link govuk-!-display-none-print"
                    data-test="employability-skills-returnLink">Return to prisoner profile</a>

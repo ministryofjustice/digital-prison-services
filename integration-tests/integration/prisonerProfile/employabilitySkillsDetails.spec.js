@@ -131,7 +131,8 @@ context('Employability skills details page', () => {
       cy.contains('Adaptability (2)').click()
       cy.get('.moj-pagination__results').contains('Showing 1 to 2 of 2 results')
       cy.contains('John Smith has no assessments for this employability skill').should('not.exist')
-      cy.contains("What does the skill 'adaptability' include?").click()
+      cy.contains("What does the skill 'adaptability' include?").should('not.exist')
+      cy.contains("'Adaptability' includes:")
       cy.get('ul.govuk-list--bullet > li').should('be.visible')
       cy.get('ul.govuk-list--bullet > li').contains('acknowledging and accepting change')
 

@@ -531,7 +531,7 @@ describe('Homepage', () => {
   })
 
   it('should render home page with the send legal mail task', () => {
-    config.applications.sendLegalMail.url = 'http://send-legal-mail'
+    config.applications.sendLegalMail.url = 'http://check-rule39-mail'
 
     Array.of('SLM_SCAN_BARCODE', 'SLM_SECURITY_ANALYST').forEach(async (roleCode) => {
       oauthApi.userRoles.mockResolvedValue([{ roleCode }])
@@ -543,10 +543,10 @@ describe('Homepage', () => {
         expect.objectContaining({
           tasks: [
             {
-              id: 'send-legal-mail',
+              id: 'check-rule39-mail',
               heading: 'Check Rule 39 mail',
               description: 'Scan barcodes on mail from law firms and other approved senders.',
-              href: 'http://send-legal-mail',
+              href: 'http://check-rule39-mail',
             },
           ],
         })
