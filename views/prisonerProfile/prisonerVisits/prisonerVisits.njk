@@ -30,7 +30,7 @@
 {% for visit in results %}
   {% set rows = (rows.push([  
     {
-      html: hideIfNotFirst(visit.date | getDate('D MMMM YYYY'), visit.isFirst),
+      html: hideIfNotFirst(visit.date | getDate('D MMMM YYYY HH:mm'), visit.isFirst),
       classes: 'govuk-table__cell--last' if visit.isLast 
     },
     {
@@ -44,10 +44,6 @@
     {
       text: visit.relationship,
       classes: 'govuk-table__cell--last' if visit.isLast 
-    },
-    {
-      html: hideIfNotFirst(visit.status, visit.isFirst),
-      classes: 'govuk-table__cell--last' if visit.isLast
     }
   ]), rows) %}
 {% endfor %}
@@ -67,8 +63,7 @@
             { text: "Date" },
             { text: "Visitor’s name" },
             { text: "Visitor’s age" },
-            { text: "Relationship to prisoner" },
-            { text: "Visit status" }
+            { text: "Relationship to prisoner" }
           ],
           rows: rows,
           attributes: { "data-test": "prisoner-visits-results" },
