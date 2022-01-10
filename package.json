@@ -111,7 +111,7 @@
     "superagent": "^6.0.0",
     "universal-analytics": "^0.4.23",
     "uuid": "^8.3.2",
-    "webpack": "^5.56.1",
+    "webpack": "^5.65.0",
     "webpack-dev-middleware": "^5.2.1",
     "webpack-hot-middleware": "^2.25.1"
   },
@@ -136,7 +136,7 @@
     "babel-jest": "^27.2.4",
     "babel-loader": "^8.2.2",
     "copy-webpack-plugin": "^7.0.0",
-    "css-loader": "1.0.0",
+    "css-loader": "^5.2.7",
     "cypress": "^9.1.1",
     "cypress-file-upload": "^5.0.8",
     "cypress-multi-reporters": "^1.5.0",

@@ -4,7 +4,7 @@ import PropTypes from 'prop-types'
 import moment from 'moment'
 
 import Datetime from 'react-datetime'
-import 'react-datetime/css/react-datetime.css'
+// import 'react-datetime/css/react-datetime.css'
 import LabelText from '@govuk-react/label-text'
 import Label from '@govuk-react/label'
 import ErrorText from '@govuk-react/error-text'

@@ -12,7 +12,7 @@ export const PrintLink = styled(Link)`
   margin: 0 0 15px -10px;
   position: relative;
   padding: 0.5em 0 0.5em 38px;
-  background: url('/images/Printer_icon.png') no-repeat 10px 50%;
+  background: url('../../public/images/Printer_icon.png') no-repeat 10px 50%;
   background-size: 16px 18px;
 
   &:hover {
