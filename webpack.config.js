@@ -114,9 +114,6 @@ module.exports = {
               },
               {
                 loader: 'css-loader',
-                options: {
-                  includePaths: ['node_modules/react-datetime/css'],
-                },
               },
             ],
           },
