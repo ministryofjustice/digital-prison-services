@@ -408,7 +408,7 @@ export default class EsweService {
 
       const { content } = courses
 
-      const getOutcome = (course: LearnerEducation) => {
+      const getOutcomeStatus = (course: LearnerEducation) => {
         if (course.completionStatus.includes('continuing')) return 'In progress'
         if (course.completionStatus.includes('temporarily withdrawn')) return 'Temporarily withdrawn'
         if (course.completionStatus.includes('withdrawn') && !course.completionStatus.includes('temporarily'))
@@ -431,7 +431,7 @@ export default class EsweService {
           location: stringWithAbbreviationsProcessor(course.establishmentName),
           dateFrom: course.learningStartDate,
           dateTo: course.learningActualEndDate ? course.learningActualEndDate : course.learningPlannedEndDate,
-          outcome: getOutcome(course),
+          outcome: getOutcomeStatus(course),
           outcomeDetails: getOutcomeDetails(course),
         }))
 
