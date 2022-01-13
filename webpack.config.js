@@ -53,7 +53,7 @@ module.exports = {
   output: {
     filename: './app/bundle.js',
     path: path.join(__dirname, 'build'),
-    publicPath: process.env.PUBLIC_URL || '/',
+    publicPath: process.env.PUBLIC_URL || '/dogpoo/',
     environment: {
       // The environment supports arrow functions ('() => { ... }').
       arrowFunction: true,
@@ -114,6 +114,17 @@ module.exports = {
               },
               {
                 loader: 'css-loader',
+                options: {
+                  url: {
+                    filter: (url, resourcePath) => {
+                      // Work-round for https://issueexplorer.com/issue/webpack-contrib/css-loader/1367
+                      if (/^data:/.test(url)) {
+                        return false
+                      }
+                      return true
+                    },
+                  },
+                },
               },
             ],
           },
@@ -124,7 +135,27 @@ module.exports = {
                 loader: 'style-loader',
               },
               {
-                loader: 'css-loader?url=false',
+                loader: 'css-loader',
+                options: {
+                  url: {
+                    filter: (url, resourcePath) => {
+                      if (
+                        url.includes('icon-steps') ||
+                        url.startsWith('icon-') ||
+                        url === 'separator.png' ||
+                        url.startsWith('separator-')
+                      ) {
+                        return false
+                      }
+                      // Work-round for https://issueexplorer.com/issue/webpack-contrib/css-loader/1367
+                      if (/^data:/.test(url)) {
+                        return false
+                      }
+
+                      return true
+                    },
+                  },
+                },
               },
               {
                 loader: 'sass-loader',
