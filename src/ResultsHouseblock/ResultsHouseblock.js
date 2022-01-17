@@ -265,7 +265,7 @@ class ResultsHouseblock extends Component {
             <span>Gone</span>
           </div>
         </th>
-        <th className="no-print bottom">Attendance</th>
+        <th className="no-print straight">Attendance</th>
       </tr>
     )
 
