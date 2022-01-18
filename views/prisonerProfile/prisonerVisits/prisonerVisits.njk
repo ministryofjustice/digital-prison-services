@@ -90,7 +90,11 @@
         {{ mojPagination(pagination) }}
       </div>
     {% else %}
-      <p class="govuk-body" data-test="no-visit-results">There are no visits for this prisoner</p>
+      {% if filterApplied %}
+        <p class="govuk-body" data-test="no-visit-results">There are no visits for what you have selected</p>
+      {% else %}
+        <p class="govuk-body" data-test="no-visit-results">There are no visits for this prisoner</p>
+      {% endif %}
     {% endif %}
   </div>
 {% endblock %}

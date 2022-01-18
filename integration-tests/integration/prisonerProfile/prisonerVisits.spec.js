@@ -18,22 +18,28 @@ context('Prisoner visits', () => {
     })
 
     it('should handle no results and have the correct page title', () => {
-      cy.visit(`/prisoner/${offenderNo}/visits`)
+      cy.visit(`/prisoner/${offenderNo}/visit-details`)
 
       cy.get('[data-test="no-visit-results"]').should('contain.text', 'There are no visits for this prisoner')
       cy.get('h1').should('have.text', 'John Smith’s visits')
     })
 
     it('should maintain form selections from search query', () => {
-      cy.visit(`/prisoner/${offenderNo}/visits?visitType=OFFI&fromDate=17%2F07%2F2020&toDate=17%2F08%2F2020`)
+      cy.visit(`/prisoner/${offenderNo}/visit-details?visitType=OFFI&fromDate=17%2F07%2F2020&toDate=17%2F08%2F2020`)
 
       cy.get('[data-test="prisoner-visits-type"]').should('have.value', 'OFFI')
       cy.get('[data-test="from-filter"]').should('have.value', '17/07/2020')
       cy.get('[data-test="to-filter"]').should('have.value', '17/08/2020')
     })
 
+    it('should handle no data on filtered results', () => {
+      cy.visit(`/prisoner/${offenderNo}/visit-details?visitType=OFFI&fromDate=17%2F07%2F2020&toDate=17%2F08%2F2020`)
+
+      cy.get('[data-test="no-visit-results"]').should('contain.text', 'There are no visits for what you have selected')
+    })
+
     it('should have a working clear link on the search form', () => {
-      cy.visit(`/prisoner/${offenderNo}/visits?visitType=OFFI&fromDate=17%2F07%2F2020&toDate=17%2F08%2F2020`)
+      cy.visit(`/prisoner/${offenderNo}/visit-details?visitType=OFFI&fromDate=17%2F07%2F2020&toDate=17%2F08%2F2020`)
 
       cy.get('[data-test="prisoner-visits-type"]').should('have.value', 'OFFI')
       cy.get('[data-test="from-filter"]').should('have.value', '17/07/2020')
@@ -59,7 +65,7 @@ context('Prisoner visits', () => {
     it('should have the same number of table rows as individual visitors from all visits', () => {
       const individualVisitors = visitsWithVisitors.content.reduce((acc, item) => acc + item.visitors.length, 0)
 
-      cy.visit(`/prisoner/${offenderNo}/visits`)
+      cy.visit(`/prisoner/${offenderNo}/visit-details`)
 
       cy.get('[data-test="prisoner-visits-results"]').then(($table) => {
         cy.get($table)
@@ -73,7 +79,7 @@ context('Prisoner visits', () => {
     })
 
     it('should render the correct data in the table', () => {
-      cy.visit(`/prisoner/${offenderNo}/visits`)
+      cy.visit(`/prisoner/${offenderNo}/visit-details`)
 
       cy.get('[data-test="prisoner-visits-results"]').then(($table) => {
         cy.get($table)
