@@ -1,6 +1,7 @@
 import moment from 'moment'
 import { hasLength, formatName, putLastNameFirst, sortByDateTime } from '../../utils'
 import generatePagination from '../../shared/generatePagination'
+import { DATE_TIME_FORMAT_SPEC, MOMENT_TIME } from '../../../common/dateHelpers'
 
 export default ({ prisonApi, pageSize = 20 }) =>
   async (req, res, next) => {
@@ -54,6 +55,9 @@ export default ({ prisonApi, pageSize = 20 }) =>
                   cancelReasonDescription,
                   eventOutcomeDescription,
                   startTime,
+                  endTime,
+                  visitTypeDescription,
+                  prison,
                 },
               } = visit
 
@@ -62,16 +66,20 @@ export default ({ prisonApi, pageSize = 20 }) =>
                   ? `${eventStatusDescription}: ${cancelReasonDescription}`
                   : eventOutcomeDescription
 
+              const start = moment(startTime, DATE_TIME_FORMAT_SPEC)
+              const end = moment(endTime, DATE_TIME_FORMAT_SPEC)
+
               return {
-                age: `${visitor.dateOfBirth ? moment().diff(visitor.dateOfBirth, 'years') : 'Not entered'}`,
-                date: startTime,
                 isFirst: i === 0,
                 isLast: i + 1 === arr.length,
-                name: `${formatName(visitor.firstName, visitor.lastName)} ${
-                  visitor.leadVisitor ? '(lead visitor)' : ''
-                }`,
-                relationship: visitor.relationship,
+                date: startTime,
+                time: `${start.format(MOMENT_TIME)} to ${end.format(MOMENT_TIME)}`,
+                type: visitTypeDescription.split(' ').shift(),
                 status,
+                name: formatName(visitor.firstName, visitor.lastName),
+                age: `${visitor.dateOfBirth ? moment().diff(visitor.dateOfBirth, 'years') : 'Not entered'}`,
+                relationship: visitor.relationship,
+                prison,
               }
             })
           )

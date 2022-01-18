@@ -14,9 +14,6 @@
       {
         text: breadcrumbPrisonerName,
         href: '/prisoner/' + offenderNo
-      },
-      {
-        text: 'Visits'
       }
     ]
   }) }}
@@ -30,12 +27,24 @@
 {% for visit in results %}
   {% set rows = (rows.push([  
     {
-      html: hideIfNotFirst(visit.date | getDate('D MMMM YYYY HH:mm'), visit.isFirst),
+      html: hideIfNotFirst(visit.date | getDate('DD/MM/YYYY'), visit.isFirst),
       classes: 'govuk-table__cell--last' if visit.isLast 
     },
     {
-      text: visit.name,
+      text: hideIfNotFirst(visit.time, visit.isFirst),
       classes: 'govuk-table__cell--last' if visit.isLast 
+    },
+    {
+      text: hideIfNotFirst(visit.type, visit.isFirst),
+      classes: 'govuk-table__cell--last' if visit.isLast
+    },
+    {
+      text: hideIfNotFirst(visit.status, visit.isFirst),
+      classes: 'govuk-table__cell--last' if visit.isLast
+    },
+    {
+      text: visit.name,
+      classes: 'govuk-table__cell--last' if visit.isLast
     },
     {
       text: visit.age,
@@ -43,7 +52,11 @@
     },
     {
       text: visit.relationship,
-      classes: 'govuk-table__cell--last' if visit.isLast 
+      classes: 'govuk-table__cell--last' if visit.isLast
+    },
+    {
+      text: hideIfNotFirst(visit.prison, visit.isFirst),
+      classes: 'govuk-table__cell--last' if visit.isLast
     }
   ]), rows) %}
 {% endfor %}
@@ -61,9 +74,13 @@
         {{ govukTable({
           head: [
             { text: "Date" },
-            { text: "Visitor’s name" },
-            { text: "Visitor’s age" },
-            { text: "Relationship to prisoner" }
+            { text: "Time" },
+            { text: "Type" },
+            { text: "Status" },
+            { text: "Scheduled visitors" },
+            { text: "Visitor's age" },
+            { text: "Relationship" },
+            { text: "Establishment" }
           ],
           rows: rows,
           attributes: { "data-test": "prisoner-visits-results" },
