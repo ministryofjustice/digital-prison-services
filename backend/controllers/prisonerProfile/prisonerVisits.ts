@@ -100,6 +100,7 @@ export default ({ prisonApi, pageSize = 20 }) =>
         prisonerName: formatName(details.firstName, details.lastName),
         results,
         visitTypes: hasLength(visitTypes) && visitTypes.map((type) => ({ value: type.code, text: type.description })),
+        filterApplied: fromDate || toDate || visitType,
       })
     } catch (error) {
       res.locals.redirectUrl = `/prisoner/${offenderNo}`
