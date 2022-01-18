@@ -3,25 +3,30 @@
     {
       "visitors": [
         {
+          "relationship": "Friend",
+          "attended": true,
           "personId": 4643753,
           "lastName": "ALFRES",
           "firstName": "DYTHISPAL",
           "dateOfBirth": "1985-01-10",
-          "leadVisitor": true,
-          "relationship": "Friend"
+          "leadVisitor": true
         }
       ],
       "visitDetails": {
-        "eventStatus": "SCH",
-        "eventStatusDescription": "Scheduled (Approved)",
+        "relationship": "FRI",
+        "location": "SOCIAL VISITS",
+        "prison": "Moorland (HMP & YOI)",
+        "attended": true,
+        "eventStatus": "EXP",
+        "eventStatusDescription": "Expired",
+        "completionStatus": "SCH",
+        "completionStatusDescription": "Scheduled",
         "visitType": "SCON",
         "visitTypeDescription": "Social Contact",
         "leadVisitor": "DYTHISPAL ALFRES",
-        "relationship": "FRI",
         "relationshipDescription": "Friend",
         "startTime": "2020-07-16T13:30:00",
         "endTime": "2020-07-16T16:00:00",
-        "location": "SOCIAL VISITS",
         "eventOutcome": "ATT",
         "eventOutcomeDescription": "Attended"
       }
@@ -29,52 +34,32 @@
     {
       "visitors": [
         {
-          "personId": 2532787,
-          "lastName": "BRADAR",
-          "firstName": "EVNELALU",
-          "leadVisitor": true,
-          "relationship": "Other - Official"
-        }
-      ],
-      "visitDetails": {
-        "eventStatus": "SCH",
-        "eventStatusDescription": "Scheduled (Approved)",
-        "visitType": "OFFI",
-        "visitTypeDescription": "Official Visit",
-        "leadVisitor": "EVNELALU BRADAR",
-        "relationship": "OTH",
-        "relationshipDescription": "Other - Official",
-        "startTime": "2020-07-16T09:00:00",
-        "endTime": "2020-07-16T11:45:00",
-        "location": "OFFICIAL VISITS",
-        "eventOutcome": "ATT",
-        "eventOutcomeDescription": "Attended"
-      }
-    },
-    {
-      "visitors": [
-        {
+          "relationship": "Friend",
+          "attended": true,
           "personId": 4643753,
           "lastName": "ALFRES",
           "firstName": "DYTHISPAL",
           "dateOfBirth": "1985-01-10",
-          "leadVisitor": true,
-          "relationship": "Friend"
+          "leadVisitor": true
         }
       ],
       "visitDetails": {
+        "relationship": "FRI",
+        "location": "OFFICIAL VISITS",
+        "prison": "Moorland (HMP & YOI)",
+        "attended": false,
         "eventStatus": "CANC",
         "eventStatusDescription": "Cancelled",
+        "completionStatus": "CANC",
+        "completionStatusDescription": "Cancelled",
         "visitType": "SCON",
         "visitTypeDescription": "Social Contact",
         "leadVisitor": "DYTHISPAL ALFRES",
-        "relationship": "FRI",
         "relationshipDescription": "Friend",
         "startTime": "2020-07-16T09:00:00",
         "endTime": "2020-07-16T11:45:00",
-        "location": "OFFICIAL VISITS",
-        "eventOutcome": "ATT",
-        "eventOutcomeDescription": "Attended",
+        "eventOutcome": "ABS",
+        "eventOutcomeDescription": "Absence",
         "cancellationReason": "HMP",
         "cancelReasonDescription": "Operational Reasons-All Visits Cancelled"
       }
@@ -82,25 +67,60 @@
     {
       "visitors": [
         {
+          "relationship": "Other - Official",
+          "attended": true,
+          "personId": 2532787,
+          "lastName": "BRADAR",
+          "firstName": "EVNELALU",
+          "leadVisitor": true
+        }
+      ],
+      "visitDetails": {
+        "relationship": "OTH",
+        "location": "OFFICIAL VISITS",
+        "prison": "Moorland (HMP & YOI)",
+        "attended": true,
+        "eventStatus": "EXP",
+        "eventStatusDescription": "Expired",
+        "completionStatus": "SCH",
+        "completionStatusDescription": "Scheduled",
+        "visitType": "OFFI",
+        "visitTypeDescription": "Official Visit",
+        "leadVisitor": "EVNELALU BRADAR",
+        "relationshipDescription": "Other - Official",
+        "startTime": "2020-07-16T09:00:00",
+        "endTime": "2020-07-16T11:45:00",
+        "eventOutcome": "ATT",
+        "eventOutcomeDescription": "Attended"
+      }
+    },
+    {
+      "visitors": [
+        {
+          "relationship": "Girlfriend",
+          "attended": true,
           "personId": 4631008,
           "lastName": "ROXUSTINE",
           "firstName": "AIYKELOON",
           "dateOfBirth": "1974-12-08",
-          "leadVisitor": true,
-          "relationship": "Girlfriend"
+          "leadVisitor": true
         }
       ],
       "visitDetails": {
+        "relationship": "GIF",
+        "location": "OFFICIAL VISITS",
+        "prison": "Moorland (HMP & YOI)",
+        "attended": true,
         "eventStatus": "COMP",
         "eventStatusDescription": "Completed",
+        "completionStatus": "HMPOP",
+        "completionStatusDescription": "Terminated By Staff",
         "visitType": "SCON",
         "visitTypeDescription": "Social Contact",
         "leadVisitor": "AIYKELOON ROXUSTINE",
-        "relationship": "GIF",
         "relationshipDescription": "Girlfriend",
         "startTime": "2020-07-15T09:00:00",
         "endTime": "2020-07-15T11:45:00",
-        "location": "OFFICIAL VISITS",
         "eventOutcome": "ATT",
         "eventOutcomeDescription": "Attended"
       }
@@ -108,49 +128,57 @@
     {
       "visitors": [
         {
+          "relationship": "Granddaughter",
+          "attended": true,
           "personId": 4631006,
           "lastName": "LAMANDO",
           "firstName": "AIYKELOON",
           "dateOfBirth": "2015-05-05",
-          "leadVisitor": false,
-          "relationship": "Granddaughter"
+          "leadVisitor": false
         },
         {
+          "relationship": "Daughter",
+          "attended": true,
           "personId": 4631007,
           "lastName": "GRIFFASINA",
           "firstName": "AIYKELOON",
           "dateOfBirth": "1995-09-19",
-          "leadVisitor": false,
-          "relationship": "Daughter"
+          "leadVisitor": false
         },
         {
+          "relationship": "Daughter",
+          "attended": true,
           "personId": 4631000,
           "lastName": "HENRETRIS",
           "firstName": "ESANARIE",
           "dateOfBirth": "1991-12-30",
-          "leadVisitor": true,
-          "relationship": "Daughter"
+          "leadVisitor": true
         },
         {
+          "relationship": "Wife",
+          "attended": true,
           "personId": 4631001,
           "lastName": "KENINDA",
           "firstName": "DIKMINNA",
           "dateOfBirth": "1963-01-16",
-          "leadVisitor": false,
-          "relationship": "Wife"
+          "leadVisitor": false
         }
       ],
       "visitDetails": {
+        "relationship": "DAU",
+        "location": "SOCIAL VISIT",
+        "prison": "Hull (HMP)",
+        "attended": true,
         "eventStatus": "EXP",
         "eventStatusDescription": "Expired",
+        "completionStatus": "SCH",
+        "completionStatusDescription": "Scheduled",
         "visitType": "SCON",
         "visitTypeDescription": "Social Contact",
         "leadVisitor": "ESANARIE HENRETRIS",
-        "relationship": "DAU",
         "relationshipDescription": "Daughter",
         "startTime": "2017-04-01T09:30:00",
         "endTime": "2017-04-01T11:30:00",
-        "location": "SOCIAL VISIT",
         "eventOutcome": "ATT",
         "eventOutcomeDescription": "Attended"
       }
@@ -158,33 +186,39 @@
     {
       "visitors": [
         {
+          "relationship": "Son",
+          "attended": true,
           "personId": 4631005,
           "lastName": "KELLIAN",
           "firstName": "ERUAIRLU",
           "dateOfBirth": "1992-05-25",
-          "leadVisitor": false,
-          "relationship": "Son"
+          "leadVisitor": false
         },
         {
+          "relationship": "Friend",
+          "attended": true,
           "personId": 4643753,
           "lastName": "ALFRES",
           "firstName": "DYTHISPAL",
           "dateOfBirth": "1985-01-10",
-          "leadVisitor": true,
-          "relationship": "Friend"
+          "leadVisitor": true
         }
       ],
       "visitDetails": {
+        "relationship": "FRI",
+        "location": "SOCIAL VISIT",
+        "prison": "Hull (HMP)",
+        "attended": true,
         "eventStatus": "EXP",
         "eventStatusDescription": "Expired",
+        "completionStatus": "SCH",
+        "completionStatusDescription": "Scheduled",
         "visitType": "SCON",
         "visitTypeDescription": "Social Contact",
         "leadVisitor": "DYTHISPAL ALFRES",
-        "relationship": "FRI",
         "relationshipDescription": "Friend",
         "startTime": "2017-03-24T09:00:00",
         "endTime": "2017-03-24T11:15:00",
-        "location": "SOCIAL VISIT",
         "eventOutcome": "ATT",
         "eventOutcomeDescription": "Attended"
       }
@@ -192,41 +226,48 @@
     {
       "visitors": [
         {
+          "relationship": "Daughter",
+          "attended": true,
           "personId": 4631007,
           "lastName": "GRIFFASINA",
           "firstName": "AIYKELOON",
           "dateOfBirth": "1995-09-19",
-          "leadVisitor": false,
-          "relationship": "Daughter"
+          "leadVisitor": true
         },
         {
+          "relationship": "Daughter",
+          "attended": true,
           "personId": 4631000,
           "lastName": "HENRETRIS",
           "firstName": "ESANARIE",
           "dateOfBirth": "1991-12-30",
-          "leadVisitor": true,
-          "relationship": "Daughter"
+          "leadVisitor": false
         },
         {
+          "relationship": "Wife",
+          "attended": true,
           "personId": 4631001,
           "lastName": "KENINDA",
           "firstName": "DIKMINNA",
           "dateOfBirth": "1963-01-16",
-          "leadVisitor": false,
-          "relationship": "Wife"
+          "leadVisitor": false
         }
       ],
       "visitDetails": {
+        "relationship": "DAU",
+        "location": "SOCIAL VISIT",
+        "prison": "Hull (HMP)",
+        "attended": true,
         "eventStatus": "EXP",
         "eventStatusDescription": "Expired",
+        "completionStatus": "SCH",
+        "completionStatusDescription": "Scheduled",
         "visitType": "SCON",
         "visitTypeDescription": "Social Contact",
         "leadVisitor": "AIYKELOON GRIFFASINA",
-        "relationship": "DAU",
         "relationshipDescription": "Daughter",
         "startTime": "2017-03-18T09:30:00",
         "endTime": "2017-03-18T11:30:00",
-        "location": "SOCIAL VISIT",
         "eventOutcome": "ATT",
         "eventOutcomeDescription": "Attended"
       }
@@ -234,25 +275,30 @@
     {
       "visitors": [
         {
+          "relationship": "Girlfriend",
+          "attended": true,
           "personId": 4631008,
           "lastName": "ROXUSTINE",
           "firstName": "AIYKELOON",
           "dateOfBirth": "1974-12-08",
-          "leadVisitor": true,
-          "relationship": "Girlfriend"
+          "leadVisitor": true
         }
       ],
       "visitDetails": {
+        "relationship": "GIF",
+        "location": "SOCIAL VISIT",
+        "prison": "Hull (HMP)",
+        "attended": true,
         "eventStatus": "EXP",
         "eventStatusDescription": "Expired",
+        "completionStatus": "SCH",
+        "completionStatusDescription": "Scheduled",
         "visitType": "SCON",
         "visitTypeDescription": "Social Contact",
         "leadVisitor": "AIYKELOON ROXUSTINE",
-        "relationship": "GIF",
         "relationshipDescription": "Girlfriend",
         "startTime": "2017-03-06T14:00:00",
         "endTime": "2017-03-06T16:15:00",
-        "location": "SOCIAL VISIT",
         "eventOutcome": "ATT",
         "eventOutcomeDescription": "Attended"
       }
@@ -260,49 +306,57 @@
     {
       "visitors": [
         {
+          "relationship": "Granddaughter",
+          "attended": true,
           "personId": 4631006,
           "lastName": "LAMANDO",
           "firstName": "AIYKELOON",
           "dateOfBirth": "2015-05-05",
-          "leadVisitor": false,
-          "relationship": "Granddaughter"
+          "leadVisitor": false
         },
         {
+          "relationship": "Daughter",
+          "attended": true,
           "personId": 4631007,
           "lastName": "GRIFFASINA",
           "firstName": "AIYKELOON",
           "dateOfBirth": "1995-09-19",
-          "leadVisitor": false,
-          "relationship": "Daughter"
+          "leadVisitor": false
         },
         {
+          "relationship": "Daughter",
+          "attended": true,
           "personId": 4631000,
           "lastName": "HENRETRIS",
           "firstName": "ESANARIE",
           "dateOfBirth": "1991-12-30",
-          "leadVisitor": true,
-          "relationship": "Daughter"
+          "leadVisitor": true
         },
         {
+          "relationship": "Wife",
+          "attended": true,
           "personId": 4631001,
           "lastName": "KENINDA",
           "firstName": "DIKMINNA",
           "dateOfBirth": "1963-01-16",
-          "leadVisitor": false,
-          "relationship": "Wife"
+          "leadVisitor": false
         }
       ],
       "visitDetails": {
+        "relationship": "DAU",
+        "location": "SOCIAL VISIT",
+        "prison": "Hull (HMP)",
+        "attended": true,
         "eventStatus": "EXP",
         "eventStatusDescription": "Expired",
+        "completionStatus": "SCH",
+        "completionStatusDescription": "Scheduled",
         "visitType": "SCON",
         "visitTypeDescription": "Social Contact",
         "leadVisitor": "ESANARIE HENRETRIS",
-        "relationship": "DAU",
         "relationshipDescription": "Daughter",
         "startTime": "2017-03-04T09:30:00",
         "endTime": "2017-03-04T11:30:00",
-        "location": "SOCIAL VISIT",
         "eventOutcome": "ATT",
         "eventOutcomeDescription": "Attended"
       }
@@ -310,25 +364,30 @@
     {
       "visitors": [
         {
+          "relationship": "Girlfriend",
+          "attended": true,
           "personId": 4631008,
           "lastName": "ROXUSTINE",
           "firstName": "AIYKELOON",
           "dateOfBirth": "1974-12-08",
-          "leadVisitor": true,
-          "relationship": "Girlfriend"
+          "leadVisitor": true
         }
       ],
       "visitDetails": {
+        "relationship": "GIF",
+        "location": "SOCIAL VISIT",
+        "prison": "Hull (HMP)",
+        "attended": true,
         "eventStatus": "EXP",
         "eventStatusDescription": "Expired",
+        "completionStatus": "SCH",
+        "completionStatusDescription": "Scheduled",
         "visitType": "SCON",
         "visitTypeDescription": "Social Contact",
         "leadVisitor": "AIYKELOON ROXUSTINE",
-        "relationship": "GIF",
         "relationshipDescription": "Girlfriend",
         "startTime": "2017-02-26T14:00:00",
         "endTime": "2017-02-26T16:00:00",
-        "location": "SOCIAL VISIT",
         "eventOutcome": "ATT",
         "eventOutcomeDescription": "Attended"
       }
@@ -336,61 +395,76 @@
     {
       "visitors": [
         {
+          "relationship": "Son",
+          "attended": true,
           "personId": 4631005,
           "lastName": "KELLIAN",
           "firstName": "ERUAIRLU",
           "dateOfBirth": "1992-05-25",
-          "leadVisitor": false,
-          "relationship": "Son"
+          "leadVisitor": false
         },
         {
+          "relationship": "Daughter",
+          "attended": true,
           "personId": 4631000,
           "lastName": "HENRETRIS",
           "firstName": "ESANARIE",
           "dateOfBirth": "1991-12-30",
-          "leadVisitor": true,
-          "relationship": "Daughter"
+          "leadVisitor": false
         },
         {
+          "relationship": "Wife",
+          "attended": true,
           "personId": 4631001,
           "lastName": "KENINDA",
           "firstName": "DIKMINNA",
           "dateOfBirth": "1963-01-16",
-          "leadVisitor": false,
-          "relationship": "Wife"
+          "leadVisitor": true
         }
       ],
       "visitDetails": {
+        "relationship": "WIFE",
+        "location": "SOCIAL VISIT",
+        "prison": "Hull (HMP)",
+        "attended": true,
         "eventStatus": "EXP",
         "eventStatusDescription": "Expired",
+        "completionStatus": "SCH",
+        "completionStatusDescription": "Scheduled",
         "visitType": "SCON",
         "visitTypeDescription": "Social Contact",
         "leadVisitor": "DIKMINNA KENINDA",
-        "relationship": "WIFE",
         "relationshipDescription": "Wife",
         "startTime": "2017-02-11T09:30:00",
         "endTime": "2017-02-11T11:30:00",
-        "location": "SOCIAL VISIT",
         "eventOutcome": "ATT",
         "eventOutcomeDescription": "Attended"
       }
     }
   ],
   "pageable": {
-    "sort": { "sorted": false, "unsorted": true, "empty": true },
+    "sort": {
+      "empty": true,
+      "sorted": false,
+      "unsorted": true
+    },
     "offset": 0,
-    "pageNumber": 0,
     "pageSize": 20,
+    "pageNumber": 0,
     "paged": true,
     "unpaged": false
   },
-  "totalPages": 1,
   "last": true,
   "totalElements": 11,
-  "sort": { "sorted": false, "unsorted": true, "empty": true },
-  "first": true,
-  "number": 0,
+  "totalPages": 1,
   "size": 20,
+  "number": 0,
+  "sort": {
+    "empty": true,
+    "sorted": false,
+    "unsorted": true
+  },
+  "first": true,
   "numberOfElements": 11,
   "empty": false
 }

@@ -13,16 +13,6 @@
     }
   }) %}
     <div class="horizontal-form govuk-!-margin-bottom-3">
-      {{ govukSelect({
-        id: "visitType",
-        name: "visitType",
-        label: {
-          text: "Visit type"
-        },
-        items: visitTypes | addDefaultSelectedVale('All', true) | setSelected(formValues.visitType),
-        attributes: { 'data-test': 'prisoner-visits-type' }
-      }) }}
-
       {{ datePicker({
         id: 'fromDate',
         label: 'Date from',
@@ -39,6 +29,14 @@
         date: formValues.toDate,
         errorMessage: errors | findError('toDate'),
         attributes: { "data-test": "to-filter" }
+      }) }}
+
+      {{ govukSelect({
+        id: "visitType",
+        name: "visitType",
+        label: { text: "Type" },
+        items: visitTypes | addDefaultSelectedVale('All', true) | setSelected(formValues.visitType),
+        attributes: { 'data-test': 'prisoner-visits-type' }
       }) }}
 
       {{ govukButton({
