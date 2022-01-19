@@ -90,7 +90,7 @@ context('Prisoner visits', () => {
             expect($tableCells.get(0)).to.contain.text('16/07/2020')
             expect($tableCells.get(1)).to.contain.text('13:30 to 16:00')
             expect($tableCells.get(2)).to.contain.text('Social')
-            expect($tableCells.get(3)).to.contain.text('Attended')
+            expect($tableCells.get(3)).to.contain.text('Not entered')
             expect($tableCells.get(4)).to.contain.text('Dythispal Alfres')
             expect($tableCells.get(5)).to.contain.text('37')
             expect($tableCells.get(6)).to.contain.text('Friend')

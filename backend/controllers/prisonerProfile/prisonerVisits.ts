@@ -7,6 +7,20 @@ export const VISIT_TYPES = [
   { value: 'SCON', text: 'Social' },
   { value: 'OFFI', text: 'Official' },
 ]
+
+const calculateStatus = ({ cancelReasonDescription, completionStatusDescription, completionStatus, startTime }) => {
+  switch (completionStatus) {
+    case 'CANC':
+      return `Cancellation: ${cancelReasonDescription}`
+    case 'SCH': {
+      const start = moment(startTime, DATE_TIME_FORMAT_SPEC)
+      return start.isAfter(moment(), 'minute') ? 'Scheduled' : 'Not entered'
+    }
+    default:
+      return `Completion: ${completionStatusDescription}`
+  }
+}
+
 export default ({ prisonApi, pageSize = 20 }) =>
   async (req, res, next) => {
     const { offenderNo } = req.params
@@ -50,22 +64,9 @@ export default ({ prisonApi, pageSize = 20 }) =>
           .map((visit) =>
             visit.visitors.sort(sortByLeadThenAgeThenSurname).map((visitor, i, arr) => {
               const {
-                visitDetails: {
-                  eventStatus,
-                  eventStatusDescription,
-                  cancelReasonDescription,
-                  eventOutcomeDescription,
-                  startTime,
-                  endTime,
-                  visitTypeDescription,
-                  prison,
-                },
+                visitDetails: { startTime, endTime, visitTypeDescription, prison },
               } = visit
-
-              const status =
-                eventStatus === 'CANC'
-                  ? `${eventStatusDescription}: ${cancelReasonDescription}`
-                  : eventOutcomeDescription
+              const status = calculateStatus(visit.visitDetails)
 
               const start = moment(startTime, DATE_TIME_FORMAT_SPEC)
               const end = moment(endTime, DATE_TIME_FORMAT_SPEC)

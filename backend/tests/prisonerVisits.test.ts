@@ -87,6 +87,8 @@ describe('Prisoner visits', () => {
               eventOutcomeDescription: 'Absence',
               visitTypeDescription: 'Official Visit',
               prison: 'Leeds (HMP)',
+              completionStatus: 'SCH',
+              completionStatusDescription: 'Scheduled',
             },
           },
           {
@@ -102,6 +104,8 @@ describe('Prisoner visits', () => {
               cancelReasonDescription: 'Operational Reasons-All Visits Cancelled',
               visitTypeDescription: 'Social Contact',
               prison: 'Leeds (HMP)',
+              completionStatus: 'CANC',
+              completionStatusDescription: 'Cancelled',
             },
           },
           {
@@ -121,6 +125,8 @@ describe('Prisoner visits', () => {
               eventOutcomeDescription: 'Absence',
               visitTypeDescription: 'Official Visit',
               prison: 'Leeds (HMP)',
+              completionStatus: 'SCH',
+              completionStatusDescription: 'Scheduled',
             },
           },
           {
@@ -140,6 +146,8 @@ describe('Prisoner visits', () => {
               eventOutcomeDescription: 'Attended',
               visitTypeDescription: 'Official Visit',
               prison: 'Leeds (HMP)',
+              completionStatus: 'VDE',
+              completionStatusDescription: 'Visitor Declined Entry',
             },
           },
         ],
@@ -226,7 +234,7 @@ describe('Prisoner visits', () => {
             isLast: true,
             name: 'Bloby Blob',
             relationship: 'Brother',
-            status: 'Cancelled: Operational Reasons-All Visits Cancelled',
+            status: 'Cancellation: Operational Reasons-All Visits Cancelled',
             prison: 'Leeds (HMP)',
           },
           {
@@ -238,7 +246,7 @@ describe('Prisoner visits', () => {
             isLast: true,
             name: 'John Smith',
             relationship: 'Grandson',
-            status: 'Absence',
+            status: 'Not entered',
             prison: 'Leeds (HMP)',
           },
           {
@@ -250,7 +258,7 @@ describe('Prisoner visits', () => {
             isLast: false,
             name: 'Alvrulemeka Victetris',
             relationship: 'Other - Social',
-            status: 'Absence',
+            status: 'Not entered',
             prison: 'Leeds (HMP)',
           },
           {
@@ -262,7 +270,7 @@ describe('Prisoner visits', () => {
             isLast: false,
             name: 'Dom Bull',
             relationship: 'Cousin',
-            status: 'Absence',
+            status: 'Not entered',
             prison: 'Leeds (HMP)',
           },
           {
@@ -274,7 +282,7 @@ describe('Prisoner visits', () => {
             isLast: false,
             name: 'Derek Andrews',
             relationship: 'Cousin',
-            status: 'Absence',
+            status: 'Not entered',
             prison: 'Leeds (HMP)',
           },
           {
@@ -286,7 +294,7 @@ describe('Prisoner visits', () => {
             isLast: false,
             name: 'Bloby Blob',
             relationship: 'Brother',
-            status: 'Absence',
+            status: 'Not entered',
             prison: 'Leeds (HMP)',
           },
           {
@@ -298,7 +306,7 @@ describe('Prisoner visits', () => {
             isLast: false,
             name: 'Dotty Calum',
             relationship: 'Brother',
-            status: 'Absence',
+            status: 'Not entered',
             prison: 'Leeds (HMP)',
           },
           {
@@ -310,7 +318,7 @@ describe('Prisoner visits', () => {
             isLast: true,
             name: 'Alan Dally',
             relationship: 'Brother',
-            status: 'Absence',
+            status: 'Not entered',
             prison: 'Leeds (HMP)',
           },
           {
@@ -322,7 +330,7 @@ describe('Prisoner visits', () => {
             isLast: true,
             name: 'Yrudypeter Cassoria',
             relationship: 'Probation Officer',
-            status: 'Attended',
+            status: 'Completion: Visitor Declined Entry',
             prison: 'Leeds (HMP)',
           },
         ],
