@@ -335,11 +335,10 @@ module.exports = (on) => {
     stubUserMe: ({ username, staffId, name }) => auth.stubUserMe(username, staffId, name),
     stubPathFinderOffenderDetails: (details) => pathfinder.getOffenderDetails(details),
     stubSocOffenderDetails: (details) => socApi.stubGetOffenderDetails(details),
-    stubVisitsWithVisitors: ({ visitsWithVisitors, offenderBasicDetails, visitTypes }) =>
+    stubVisitsWithVisitors: ({ visitsWithVisitors, offenderBasicDetails }) =>
       Promise.all([
         prisonApi.stubVisitsWithVisitors(visitsWithVisitors),
         prisonApi.stubOffenderBasicDetails(offenderBasicDetails),
-        prisonApi.stubVisitTypes(visitTypes),
       ]),
     stubSchedule: ({ offenderBasicDetails, thisWeeksSchedule, nextWeeksSchedule }) =>
       Promise.all([

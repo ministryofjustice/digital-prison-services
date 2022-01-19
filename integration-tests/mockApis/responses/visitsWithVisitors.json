@@ -311,7 +311,6 @@
           "personId": 4631006,
           "lastName": "LAMANDO",
           "firstName": "AIYKELOON",
-          "dateOfBirth": "2015-05-05",
           "leadVisitor": false
         },
         {
@@ -320,7 +319,6 @@
           "personId": 4631007,
           "lastName": "GRIFFASINA",
           "firstName": "AIYKELOON",
-          "dateOfBirth": "1995-09-19",
           "leadVisitor": false
         },
         {
@@ -329,7 +327,6 @@
           "personId": 4631000,
           "lastName": "HENRETRIS",
           "firstName": "ESANARIE",
-          "dateOfBirth": "1991-12-30",
           "leadVisitor": true
         },
         {
@@ -338,7 +335,6 @@
           "personId": 4631001,
           "lastName": "KENINDA",
           "firstName": "DIKMINNA",
-          "dateOfBirth": "1963-01-16",
           "leadVisitor": false
         }
       ],
