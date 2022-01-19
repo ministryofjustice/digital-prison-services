@@ -98,5 +98,22 @@ context('Prisoner visits', () => {
           })
       })
     })
+
+    it('should sort according to lead, dob and surname', () => {
+      cy.visit(`/prisoner/${offenderNo}/visit-details`)
+
+      cy.get('[data-test="prisoner-visits-results"]').then(($table) => {
+        // lead is Henretris, rest sorted by dob
+        cy.get($table).find('tr').eq(5).find('td').eq(4).should('contain.text', 'Esanarie Henretris')
+        cy.get($table).find('tr').eq(6).find('td').eq(4).should('contain.text', 'Dikminna Keninda')
+        cy.get($table).find('tr').eq(7).find('td').eq(4).should('contain.text', 'Aiykeloon Griffasina')
+        cy.get($table).find('tr').eq(8).find('td').eq(4).should('contain.text', 'Aiykeloon Lamando')
+        // lead is Henretis, rest sorted by surname
+        cy.get($table).find('tr').eq(15).find('td').eq(4).should('contain.text', 'Esanarie Henretris')
+        cy.get($table).find('tr').eq(16).find('td').eq(4).should('contain.text', 'Aiykeloon Griffasina')
+        cy.get($table).find('tr').eq(17).find('td').eq(4).should('contain.text', 'Dikminna Keninda')
+        cy.get($table).find('tr').eq(18).find('td').eq(4).should('contain.text', 'Aiykeloon Lamando')
+      })
+    })
   })
 })

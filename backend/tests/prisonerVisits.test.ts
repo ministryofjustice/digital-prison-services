@@ -26,8 +26,6 @@ describe('Prisoner visits', () => {
 
     // @ts-expect-error ts-migrate(2339) FIXME: Property 'getDetails' does not exist on type '{}'.
     prisonApi.getDetails = jest.fn().mockResolvedValue({})
-    // @ts-expect-error ts-migrate(2339) FIXME: Property 'getVisitTypes' does not exist on type '{... Remove this comment to see the full error message
-    prisonApi.getVisitTypes = jest.fn().mockResolvedValue([])
     // @ts-expect-error ts-migrate(2339) FIXME: Property 'getVisitsForBookingWithVisitors' does no... Remove this comment to see the full error message
     prisonApi.getVisitsForBookingWithVisitors = jest.fn().mockResolvedValue({
       pageable: {
@@ -40,13 +38,11 @@ describe('Prisoner visits', () => {
     controller = prisonerVisits({ prisonApi, logError, pageSize })
   })
 
-  it('should get the prisoner details and visit types', async () => {
+  it('should get the prisoner details', async () => {
     await controller(req, res)
 
     // @ts-expect-error ts-migrate(2339) FIXME: Property 'getDetails' does not exist on type '{}'.
     expect(prisonApi.getDetails).toHaveBeenCalledWith(res.locals, offenderNo)
-    // @ts-expect-error ts-migrate(2339) FIXME: Property 'getVisitTypes' does not exist on type '{... Remove this comment to see the full error message
-    expect(prisonApi.getVisitTypes).toHaveBeenCalledWith(res.locals)
   })
 
   describe('Visits results', () => {
@@ -65,12 +61,22 @@ describe('Prisoner visits', () => {
                 leadVisitor: true,
                 relationship: 'Other - Social',
               },
+              { personId: 4729490, lastName: 'Dally', firstName: 'ALAN', leadVisitor: false, relationship: 'Brother' },
+              { personId: 4729490, lastName: 'CALUM', firstName: 'DOTTY', leadVisitor: false, relationship: 'Brother' },
               { personId: 4729491, lastName: 'BLOB', firstName: 'BLOBY', leadVisitor: false, relationship: 'Brother' },
               {
                 personId: 4729489,
                 lastName: 'BULL',
                 firstName: 'DOM',
                 dateOfBirth: '1970-04-21',
+                leadVisitor: false,
+                relationship: 'Cousin',
+              },
+              {
+                personId: 4729489,
+                lastName: 'ANDREWS',
+                firstName: 'DEREK',
+                dateOfBirth: '1971-04-21',
                 leadVisitor: false,
                 relationship: 'Cousin',
               },
@@ -183,6 +189,7 @@ describe('Prisoner visits', () => {
         breadcrumbPrisonerName: 'Name, Prisoner',
         formValues: {},
         offenderNo: 'ABC123',
+        filterApplied: false,
         pagination: {
           classes: 'govuk-!-font-size-19',
           items: [
@@ -259,13 +266,49 @@ describe('Prisoner visits', () => {
             prison: 'Leeds (HMP)',
           },
           {
+            age: moment().diff('1971-04-21', 'years').toString(),
+            date: '2020-07-22T09:00:00',
+            time: '09:00 to 11:45',
+            type: 'Official',
+            isFirst: false,
+            isLast: false,
+            name: 'Derek Andrews',
+            relationship: 'Cousin',
+            status: 'Absence',
+            prison: 'Leeds (HMP)',
+          },
+          {
+            age: 'Not entered',
+            date: '2020-07-22T09:00:00',
+            time: '09:00 to 11:45',
+            type: 'Official',
+            isFirst: false,
+            isLast: false,
+            name: 'Bloby Blob',
+            relationship: 'Brother',
+            status: 'Absence',
+            prison: 'Leeds (HMP)',
+          },
+          {
+            age: 'Not entered',
+            date: '2020-07-22T09:00:00',
+            time: '09:00 to 11:45',
+            type: 'Official',
+            isFirst: false,
+            isLast: false,
+            name: 'Dotty Calum',
+            relationship: 'Brother',
+            status: 'Absence',
+            prison: 'Leeds (HMP)',
+          },
+          {
             age: 'Not entered',
             date: '2020-07-22T09:00:00',
             time: '09:00 to 11:45',
             type: 'Official',
             isFirst: false,
             isLast: true,
-            name: 'Bloby Blob',
+            name: 'Alan Dally',
             relationship: 'Brother',
             status: 'Absence',
             prison: 'Leeds (HMP)',
@@ -283,7 +326,10 @@ describe('Prisoner visits', () => {
             prison: 'Leeds (HMP)',
           },
         ],
-        visitTypes: false,
+        visitTypes: [
+          { value: 'SCON', text: 'Social' },
+          { value: 'OFFI', text: 'Official' },
+        ],
       })
     })
   })

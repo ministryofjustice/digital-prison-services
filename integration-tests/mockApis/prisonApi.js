@@ -728,23 +728,6 @@ module.exports = {
         },
       },
     }),
-  stubVisitTypes: (visitTypes, status) =>
-    stubFor({
-      request: {
-        method: 'GET',
-        urlPattern: '/api/reference-domains/domains/VISIT_TYPE',
-      },
-      response: {
-        status,
-        headers: {
-          'Content-Type': 'application/json;charset=UTF-8',
-        },
-        jsonBody: visitTypes || [
-          { code: 'OFFI', description: 'Official visit' },
-          { code: 'SCON', description: 'Social contact' },
-        ],
-      },
-    }),
   stubPrisonerVisitBalances: (visitBalances, status) =>
     stubFor({
       request: {

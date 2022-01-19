@@ -383,8 +383,6 @@ export const prisonApiFactory = (client) => {
 
   const getHealthTypes = (context) => get(context, '/api/reference-domains/domains/HEALTH', 1000)
 
-  const getVisitTypes = (context) => get(context, '/api/reference-domains/domains/VISIT_TYPE', 1000)
-
   const getCellAttributes = (context) => get(context, '/api/reference-domains/domains/HOU_UNIT_ATT', 1000)
 
   const getCellMoveReasonTypes = (context) => get(context, '/api/reference-domains/domains/CHG_HOUS_RSN', 1000)
@@ -545,7 +543,6 @@ export const prisonApiFactory = (client) => {
     getReasonableAdjustments,
     getTreatmentTypes,
     getHealthTypes,
-    getVisitTypes,
     getSentenceAdjustments,
     getCourtCases,
     getOffenceHistory,

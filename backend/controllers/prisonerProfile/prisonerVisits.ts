@@ -3,6 +3,10 @@ import { hasLength, formatName, putLastNameFirst, sortByDateTime } from '../../u
 import generatePagination from '../../shared/generatePagination'
 import { DATE_TIME_FORMAT_SPEC, MOMENT_TIME } from '../../../common/dateHelpers'
 
+export const VISIT_TYPES = [
+  { value: 'SCON', text: 'Social' },
+  { value: 'OFFI', text: 'Official' },
+]
 export default ({ prisonApi, pageSize = 20 }) =>
   async (req, res, next) => {
     const { offenderNo } = req.params
@@ -10,13 +14,7 @@ export default ({ prisonApi, pageSize = 20 }) =>
     const url = new URL(`${req.protocol}://${req.get('host')}${req.originalUrl}`)
 
     try {
-      const [details, visitTypes] = await Promise.all([
-        prisonApi.getDetails(res.locals, offenderNo),
-        prisonApi.getVisitTypes(res.locals),
-      ])
-        .then((data) => data)
-        .catch(next)
-
+      const details = await prisonApi.getDetails(res.locals, offenderNo)
       const { bookingId } = details || {}
 
       const visitsWithVisitors = await prisonApi.getVisitsForBookingWithVisitors(res.locals, bookingId, {
@@ -35,11 +33,14 @@ export default ({ prisonApi, pageSize = 20 }) =>
         totalPages,
       } = visitsWithVisitors
 
-      const sortByLeadThenAge = (left, right) => {
-        if (right.leadVisitor) return 1
-        if (!right.dateOfBirth) return -1
+      const sortByLastName = (a: string, b: string): number => a.localeCompare(b, 'en', { ignorePunctuation: true })
 
-        return sortByDateTime(left.dateOfBirth, right.dateOfBirth)
+      const sortByLeadThenAgeThenSurname = (left, right) => {
+        if (right.leadVisitor) return 1
+        if (left.leadVisitor) return -1
+
+        const dateOfBirthSort = sortByDateTime(left.dateOfBirth, right.dateOfBirth)
+        return dateOfBirthSort !== 0 ? dateOfBirthSort : sortByLastName(left.lastName, right.lastName)
       }
 
       const results =
@@ -47,7 +48,7 @@ export default ({ prisonApi, pageSize = 20 }) =>
         visits
           .sort((left, right) => sortByDateTime(right.visitDetails.startTime, left.visitDetails.startTime))
           .map((visit) =>
-            visit.visitors.sort(sortByLeadThenAge).map((visitor, i, arr) => {
+            visit.visitors.sort(sortByLeadThenAgeThenSurname).map((visitor, i, arr) => {
               const {
                 visitDetails: {
                   eventStatus,
@@ -99,8 +100,8 @@ export default ({ prisonApi, pageSize = 20 }) =>
         }),
         prisonerName: formatName(details.firstName, details.lastName),
         results,
-        visitTypes: hasLength(visitTypes) && visitTypes.map((type) => ({ value: type.code, text: type.description })),
-        filterApplied: fromDate || toDate || visitType,
+        visitTypes: VISIT_TYPES,
+        filterApplied: Boolean(fromDate || toDate || visitType),
       })
     } catch (error) {
       res.locals.redirectUrl = `/prisoner/${offenderNo}`
