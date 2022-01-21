@@ -39,6 +39,14 @@
         attributes: { 'data-test': 'prisoner-visits-type' }
       }) }}
 
+      {{ govukSelect({
+        id: "establishment",
+        name: "establishment",
+        label: { text: "Establishment" },
+        items: prisons | addDefaultSelectedVale('All', true) | setSelected(formValues.establishment),
+        attributes: { 'data-test': 'establishment-type' }
+      }) }}
+
       {{ govukButton({
         text: "View",
         type: "submit"

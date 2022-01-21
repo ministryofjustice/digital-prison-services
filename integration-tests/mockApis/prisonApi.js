@@ -1,4 +1,4 @@
-const { stubFor, postFor, verifyPut, verifyGet, verifyPosts, resetStub } = require('./wiremock')
+const { stubFor, postFor, verifyPut, verifyGet, verifyPosts, resetStub, getMatchingRequests } = require('./wiremock')
 const alertTypes = require('./responses/alertTypes.json')
 const cellAttributes = require('./responses/cellAttributes.json')
 const assessmentsResponse = require('./responses/assessmentsResponse.json')
@@ -726,6 +726,29 @@ module.exports = {
           numberOfElements: 0,
           empty: false,
         },
+      },
+    }),
+  stubVisitsPrisons: (visitsPrisons, status) =>
+    stubFor({
+      request: {
+        method: 'GET',
+        urlPattern: '/api/bookings/[0-9]+?/visits/prisons',
+      },
+      response: {
+        status,
+        headers: {
+          'Content-Type': 'application/json;charset=UTF-8',
+        },
+        jsonBody: visitsPrisons || [
+          {
+            prison: 'Moorland (HMP & YOI)',
+            prisonId: 'MDI',
+          },
+          {
+            prison: 'Hull (HMP)',
+            prisonId: 'HLI',
+          },
+        ],
       },
     }),
   stubPrisonerVisitBalances: (visitBalances, status) =>
@@ -1886,4 +1909,10 @@ module.exports = {
       },
     }),
   resetTransfersStub: () => resetStub({ requestUrl: '/api/movements/transfers', method: 'GET' }),
+
+  verifyVisitFilter: () =>
+    getMatchingRequests({
+      method: 'GET',
+      urlPattern: '/api/bookings/[0-9]+?/visits-with-visitors\\?.+?',
+    }).then((data) => data.body.requests),
 }
