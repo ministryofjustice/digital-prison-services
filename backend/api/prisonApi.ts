@@ -94,6 +94,8 @@ export const prisonApiFactory = (client) => {
 
   const getNextVisit = (context, bookingId) => get(context, `/api/bookings/${bookingId}/visits/next`)
 
+  const getVisitsPrisons = (context, bookingId) => get(context, `/api/bookings/${bookingId}/visits/prisons`)
+
   const getAppointments = (context, { agencyId, date, timeSlot, offenderNumbers }) =>
     post(
       context,
@@ -460,6 +462,7 @@ export const prisonApiFactory = (client) => {
     getVisits,
     getVisitsForBookingWithVisitors,
     getNextVisit,
+    getVisitsPrisons,
     getAppointments,
     getAppointmentsForAgency,
     getActivities,

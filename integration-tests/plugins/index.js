@@ -339,6 +339,7 @@ module.exports = (on) => {
       Promise.all([
         prisonApi.stubVisitsWithVisitors(visitsWithVisitors),
         prisonApi.stubOffenderBasicDetails(offenderBasicDetails),
+        prisonApi.stubVisitsPrisons(),
       ]),
     stubSchedule: ({ offenderBasicDetails, thisWeeksSchedule, nextWeeksSchedule }) =>
       Promise.all([
@@ -501,5 +502,6 @@ module.exports = (on) => {
     resetTransfersStub: () => prisonApi.resetTransfersStub(),
     stubPrisonerSearchDetails: (response) => offenderSearch.stubPrisonerSearchDetails(response),
     stubPrisonerProperty: (property) => prisonApi.stubPrisonerProperty(property),
+    verifyVisitFilter: prisonApi.verifyVisitFilter,
   })
 }
