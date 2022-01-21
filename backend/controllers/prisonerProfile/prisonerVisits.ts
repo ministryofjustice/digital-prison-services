@@ -11,34 +11,40 @@ export const VISIT_TYPES = [
 const calculateStatus = ({ cancelReasonDescription, completionStatusDescription, completionStatus, startTime }) => {
   switch (completionStatus) {
     case 'CANC':
-      return `Cancellation: ${cancelReasonDescription}`
+      return cancelReasonDescription ? `Cancelled: ${cancelReasonDescription}` : 'Cancelled'
     case 'SCH': {
       const start = moment(startTime, DATE_TIME_FORMAT_SPEC)
       return start.isAfter(moment(), 'minute') ? 'Scheduled' : 'Not entered'
     }
     default:
-      return `Completion: ${completionStatusDescription}`
+      return completionStatusDescription
   }
 }
 
 export default ({ prisonApi, pageSize = 20 }) =>
   async (req, res, next) => {
     const { offenderNo } = req.params
-    const { visitType, fromDate, toDate, page = 0 } = req.query
+    const { visitType, fromDate, toDate, page = 0, establishment } = req.query
     const url = new URL(`${req.protocol}://${req.get('host')}${req.originalUrl}`)
 
     try {
       const details = await prisonApi.getDetails(res.locals, offenderNo)
       const { bookingId } = details || {}
 
-      const visitsWithVisitors = await prisonApi.getVisitsForBookingWithVisitors(res.locals, bookingId, {
-        fromDate: fromDate && moment(fromDate, 'DD/MM/YYYY').format('YYYY-MM-DD'),
-        page,
-        paged: true,
-        size: pageSize,
-        toDate: toDate && moment(toDate, 'DD/MM/YYYY').format('YYYY-MM-DD'),
-        visitType,
-      })
+      const [visitsWithVisitors, prisons] = await Promise.all([
+        prisonApi.getVisitsForBookingWithVisitors(res.locals, bookingId, {
+          fromDate: fromDate && moment(fromDate, 'DD/MM/YYYY').format('YYYY-MM-DD'),
+          page,
+          paged: true,
+          size: pageSize,
+          toDate: toDate && moment(toDate, 'DD/MM/YYYY').format('YYYY-MM-DD'),
+          visitType,
+          prison: establishment,
+        }),
+        prisonApi.getVisitsPrisons(res.locals, bookingId),
+      ])
+        .then((data) => data)
+        .catch(next)
 
       const {
         content: visits,
@@ -80,7 +86,7 @@ export default ({ prisonApi, pageSize = 20 }) =>
                 status,
                 name: formatName(visitor.firstName, visitor.lastName),
                 age: `${visitor.dateOfBirth ? moment().diff(visitor.dateOfBirth, 'years') : 'Not entered'}`,
-                relationship: visitor.relationship,
+                relationship: visitor.relationship || 'Not entered',
                 prison,
               }
             })
@@ -103,6 +109,7 @@ export default ({ prisonApi, pageSize = 20 }) =>
         results,
         visitTypes: VISIT_TYPES,
         filterApplied: Boolean(fromDate || toDate || visitType),
+        prisons: hasLength(prisons) && prisons.map((type) => ({ value: type.prisonId, text: type.prison })),
       })
     } catch (error) {
       res.locals.redirectUrl = `/prisoner/${offenderNo}`

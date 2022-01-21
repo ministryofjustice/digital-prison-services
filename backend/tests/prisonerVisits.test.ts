@@ -5,11 +5,14 @@ describe('Prisoner visits', () => {
   const pageSize = 2
   const offenderNo = 'ABC123'
   const bookingId = '123'
-  const prisonApi = {}
+  const prisonApi = {
+    getDetails: jest.fn(),
+    getVisitsPrisons: jest.fn(),
+    getVisitsForBookingWithVisitors: jest.fn(),
+  }
 
   let req
   let res
-  let logError
   let controller
 
   beforeEach(() => {
@@ -22,34 +25,36 @@ describe('Prisoner visits', () => {
     }
     res = { locals: {}, render: jest.fn(), status: jest.fn() }
 
-    logError = jest.fn()
-
-    // @ts-expect-error ts-migrate(2339) FIXME: Property 'getDetails' does not exist on type '{}'.
-    prisonApi.getDetails = jest.fn().mockResolvedValue({})
-    // @ts-expect-error ts-migrate(2339) FIXME: Property 'getVisitsForBookingWithVisitors' does no... Remove this comment to see the full error message
-    prisonApi.getVisitsForBookingWithVisitors = jest.fn().mockResolvedValue({
+    controller = prisonerVisits({ prisonApi, pageSize })
+    prisonApi.getDetails.mockResolvedValue({ bookingId })
+    prisonApi.getVisitsPrisons.mockResolvedValue([
+      { prisonId: 'HLI', prison: 'Hull' },
+      { prisonId: 'MDI', prison: 'Moorland' },
+    ])
+    prisonApi.getVisitsForBookingWithVisitors.mockResolvedValue({
       pageable: {
         offset: {},
         pageNumber: {},
       },
     })
-
-    // @ts-expect-error ts-migrate(2345) FIXME: Argument of type '{ prisonApi: {}; logError: any; ... Remove this comment to see the full error message
-    controller = prisonerVisits({ prisonApi, logError, pageSize })
   })
 
-  it('should get the prisoner details', async () => {
+  afterEach(() => {
+    prisonApi.getDetails.mockReset()
+    prisonApi.getVisitsPrisons.mockReset()
+    prisonApi.getVisitsForBookingWithVisitors.mockReset()
+  })
+
+  it('should get the prisoner details and visits prisons', async () => {
     await controller(req, res)
 
-    // @ts-expect-error ts-migrate(2339) FIXME: Property 'getDetails' does not exist on type '{}'.
     expect(prisonApi.getDetails).toHaveBeenCalledWith(res.locals, offenderNo)
+    expect(prisonApi.getVisitsPrisons).toHaveBeenCalledWith(res.locals, bookingId)
   })
 
   describe('Visits results', () => {
     beforeEach(() => {
-      // @ts-expect-error ts-migrate(2339) FIXME: Property 'getDetails' does not exist on type '{}'.
       prisonApi.getDetails.mockResolvedValue({ bookingId, firstName: 'Prisoner', lastName: 'Name' })
-      // @ts-expect-error ts-migrate(2339) FIXME: Property 'getVisitsForBookingWithVisitors' does no... Remove this comment to see the full error message
       prisonApi.getVisitsForBookingWithVisitors.mockResolvedValue({
         content: [
           {
@@ -125,8 +130,8 @@ describe('Prisoner visits', () => {
               eventOutcomeDescription: 'Absence',
               visitTypeDescription: 'Official Visit',
               prison: 'Leeds (HMP)',
-              completionStatus: 'SCH',
-              completionStatusDescription: 'Scheduled',
+              completionStatus: 'CANC',
+              completionStatusDescription: 'Cancelled',
             },
           },
           {
@@ -179,7 +184,6 @@ describe('Prisoner visits', () => {
       }
       await controller(req, res)
 
-      // @ts-expect-error ts-migrate(2339) FIXME: Property 'getVisitsForBookingWithVisitors' does no... Remove this comment to see the full error message
       expect(prisonApi.getVisitsForBookingWithVisitors).toHaveBeenCalledWith(res.locals, bookingId, {
         fromDate: '2020-01-13',
         page: 0,
@@ -234,7 +238,7 @@ describe('Prisoner visits', () => {
             isLast: true,
             name: 'Bloby Blob',
             relationship: 'Brother',
-            status: 'Cancellation: Operational Reasons-All Visits Cancelled',
+            status: 'Cancelled: Operational Reasons-All Visits Cancelled',
             prison: 'Leeds (HMP)',
           },
           {
@@ -246,7 +250,7 @@ describe('Prisoner visits', () => {
             isLast: true,
             name: 'John Smith',
             relationship: 'Grandson',
-            status: 'Not entered',
+            status: 'Cancelled',
             prison: 'Leeds (HMP)',
           },
           {
@@ -330,13 +334,17 @@ describe('Prisoner visits', () => {
             isLast: true,
             name: 'Yrudypeter Cassoria',
             relationship: 'Probation Officer',
-            status: 'Completion: Visitor Declined Entry',
+            status: 'Visitor Declined Entry',
             prison: 'Leeds (HMP)',
           },
         ],
         visitTypes: [
           { value: 'SCON', text: 'Social' },
           { value: 'OFFI', text: 'Official' },
+        ],
+        prisons: [
+          { value: 'HLI', text: 'Hull' },
+          { value: 'MDI', text: 'Moorland' },
         ],
       })
     })
@@ -345,7 +353,6 @@ describe('Prisoner visits', () => {
   describe('Errors', () => {
     it('should render the error template with a link to the homepage if there is a problem retrieving prisoner details', async () => {
       const error = new Error('Network error')
-      // @ts-expect-error ts-migrate(2339) FIXME: Property 'getDetails' does not exist on type '{}'.
       prisonApi.getDetails.mockImplementation(() => Promise.reject(error))
 
       await expect(controller(req, res)).rejects.toThrowError(error)
@@ -354,7 +361,6 @@ describe('Prisoner visits', () => {
 
     it('should render the error template with a link to the prisoner profile if there is a problem retrieving visits', async () => {
       const error = new Error('Network error')
-      // @ts-expect-error ts-migrate(2339) FIXME: Property 'getVisitsForBookingWithVisitors' does no... Remove this comment to see the full error message
       prisonApi.getVisitsForBookingWithVisitors.mockImplementation(() => Promise.reject(error))
 
       await expect(controller(req, res)).rejects.toThrowError(error)
