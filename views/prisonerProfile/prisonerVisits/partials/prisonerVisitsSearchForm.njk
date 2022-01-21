@@ -47,6 +47,14 @@
         attributes: { 'data-test': 'establishment-type' }
       }) }}
 
+      {{ govukSelect({
+        id: "status",
+        name: "status",
+        label: { text: "Status" },
+        items: statuses | addDefaultSelectedVale('All', true) | setSelected(formValues.status),
+        attributes: { 'data-test': 'status-type' }
+      }) }}
+
       {{ govukButton({
         text: "View",
         type: "submit"

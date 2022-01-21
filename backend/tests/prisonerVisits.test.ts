@@ -9,6 +9,8 @@ describe('Prisoner visits', () => {
     getDetails: jest.fn(),
     getVisitsPrisons: jest.fn(),
     getVisitsForBookingWithVisitors: jest.fn(),
+    getVisitCancellationReasons: jest.fn(),
+    getVisitCompletionReasons: jest.fn(),
   }
 
   let req
@@ -37,12 +39,25 @@ describe('Prisoner visits', () => {
         pageNumber: {},
       },
     })
+    prisonApi.getVisitCancellationReasons.mockResolvedValue([
+      { code: 'ADMIN', description: 'Administrative Cancellation' },
+      { code: 'HMP', description: 'Operational Reasons-All Visits Cancelled' },
+      { code: 'NO_ID', description: 'No Identification - Refused Entry' },
+    ])
+    prisonApi.getVisitCompletionReasons.mockResolvedValue([
+      { code: 'CANC', description: 'Cancelled' },
+      { code: 'HMPOP', description: 'Terminated By Staff' },
+      { code: 'SCH', description: 'Scheduled' },
+      { code: 'NORM', description: 'Normal Completion' },
+    ])
   })
 
   afterEach(() => {
     prisonApi.getDetails.mockReset()
     prisonApi.getVisitsPrisons.mockReset()
     prisonApi.getVisitsForBookingWithVisitors.mockReset()
+    prisonApi.getVisitCancellationReasons.mockReset()
+    prisonApi.getVisitCompletionReasons.mockReset()
   })
 
   it('should get the prisoner details and visits prisons', async () => {
@@ -176,21 +191,143 @@ describe('Prisoner visits', () => {
       })
     })
 
-    it('should request a prisoners visits with visitors with the correct params', async () => {
-      req.query = {
-        fromDate: '13/01/2020',
-        toDate: '13/02/2020',
-        visitType: 'OFFI',
-      }
-      await controller(req, res)
+    describe('should request a prisoners visits with visitors with the correct params', () => {
+      const now = moment()
+      const pageArgs = { page: 0, paged: true, size: 2 }
+      it('from date and to date specified', async () => {
+        req.query = {
+          fromDate: '13/01/2020',
+          toDate: '13/02/2020',
+          visitType: 'OFFI',
+        }
+        await controller(req, res)
 
-      expect(prisonApi.getVisitsForBookingWithVisitors).toHaveBeenCalledWith(res.locals, bookingId, {
-        fromDate: '2020-01-13',
-        page: 0,
-        paged: true,
-        size: 2,
-        toDate: '2020-02-13',
-        visitType: 'OFFI',
+        expect(prisonApi.getVisitsForBookingWithVisitors).toHaveBeenCalledWith(res.locals, bookingId, {
+          fromDate: '2020-01-13',
+          toDate: '2020-02-13',
+          visitType: 'OFFI',
+          ...pageArgs,
+        })
+      })
+      it('scheduled status specified', async () => {
+        req.query = {
+          status: 'SCH',
+        }
+        await controller(req, res)
+
+        expect(prisonApi.getVisitsForBookingWithVisitors).toHaveBeenCalledWith(res.locals, bookingId, {
+          fromDate: now.format('YYYY-MM-DD'),
+          visitStatus: 'SCH',
+          ...pageArgs,
+        })
+      })
+      it('scheduled status specified with from date in past', async () => {
+        req.query = {
+          status: 'SCH',
+          fromDate: '13/01/2020',
+          toDate: '13/02/2020',
+        }
+        await controller(req, res)
+
+        expect(prisonApi.getVisitsForBookingWithVisitors).toHaveBeenCalledWith(res.locals, bookingId, {
+          fromDate: now.format('YYYY-MM-DD'),
+          toDate: '2020-02-13',
+          visitStatus: 'SCH',
+          ...pageArgs,
+        })
+      })
+      it('scheduled status specified with from date in future', async () => {
+        req.query = {
+          status: 'SCH',
+          fromDate: now.add('1w').format('DD/MM/YYYY'),
+        }
+        await controller(req, res)
+
+        expect(prisonApi.getVisitsForBookingWithVisitors).toHaveBeenCalledWith(res.locals, bookingId, {
+          fromDate: now.add('1w').format('YYYY-MM-DD'),
+          visitStatus: 'SCH',
+          ...pageArgs,
+        })
+      })
+      it('expired status specified', async () => {
+        req.query = {
+          status: 'EXP',
+        }
+        await controller(req, res)
+
+        expect(prisonApi.getVisitsForBookingWithVisitors).toHaveBeenCalledWith(res.locals, bookingId, {
+          toDate: now.format('YYYY-MM-DD'),
+          visitStatus: 'SCH',
+          ...pageArgs,
+        })
+      })
+      it('expired status specified with to date in past', async () => {
+        req.query = {
+          status: 'EXP',
+          fromDate: '13/01/2020',
+          toDate: '13/02/2020',
+        }
+        await controller(req, res)
+
+        expect(prisonApi.getVisitsForBookingWithVisitors).toHaveBeenCalledWith(res.locals, bookingId, {
+          toDate: '2020-02-13',
+          fromDate: '2020-01-13',
+          visitStatus: 'SCH',
+          ...pageArgs,
+        })
+      })
+      it('expired status specified with to date in future', async () => {
+        req.query = {
+          status: 'EXP',
+          toDate: now.add('1w').format('DD/MM/YYYY'),
+        }
+        await controller(req, res)
+
+        expect(prisonApi.getVisitsForBookingWithVisitors).toHaveBeenCalledWith(res.locals, bookingId, {
+          toDate: now.add('1w').format('YYYY-MM-DD'),
+          visitStatus: 'SCH',
+          ...pageArgs,
+        })
+      })
+      it('completion status specified', async () => {
+        req.query = {
+          status: 'COMP',
+        }
+        await controller(req, res)
+
+        expect(prisonApi.getVisitsForBookingWithVisitors).toHaveBeenCalledWith(res.locals, bookingId, {
+          visitStatus: 'COMP',
+          ...pageArgs,
+        })
+      })
+      it('cancel status specified', async () => {
+        req.query = {
+          status: 'CANC-NSHOW',
+        }
+        await controller(req, res)
+
+        expect(prisonApi.getVisitsForBookingWithVisitors).toHaveBeenCalledWith(res.locals, bookingId, {
+          visitStatus: 'CANC',
+          cancellationReason: 'NSHOW',
+          ...pageArgs,
+        })
+      })
+      it('all fields specified as empty strings', async () => {
+        req.query = {
+          toDate: '',
+          fromDate: '',
+          visitType: '',
+          status: '',
+          establishment: '',
+        }
+        await controller(req, res)
+
+        expect(prisonApi.getVisitsForBookingWithVisitors).toHaveBeenCalledWith(res.locals, bookingId, {
+          prison: '',
+          visitStatus: '',
+          visitType: '',
+          ...pageArgs,
+        })
       })
     })
 
@@ -345,6 +482,15 @@ describe('Prisoner visits', () => {
         prisons: [
           { value: 'HLI', text: 'Hull' },
           { value: 'MDI', text: 'Moorland' },
+        ],
+        statuses: [
+          { value: 'CANC-ADMIN', text: 'Cancelled: administrative cancellation' },
+          { value: 'CANC-HMP', text: 'Cancelled: operational reasons-all visits cancelled' },
+          { value: 'CANC-NO_ID', text: 'Cancelled: no identification - refused entry' },
+          { value: 'HMPOP', text: 'Terminated by staff' },
+          { value: 'NORM', text: 'Normal completion' },
+          { value: 'SCH', text: 'Scheduled' },
+          { value: 'EXP', text: 'Not entered' },
         ],
       })
     })
