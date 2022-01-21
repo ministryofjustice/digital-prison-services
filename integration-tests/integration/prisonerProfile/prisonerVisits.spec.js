@@ -131,11 +131,11 @@ context('Prisoner visits', () => {
         cy.get($table).find('tr').eq(6).find('td').eq(4).should('contain.text', 'Dikminna Keninda')
         cy.get($table).find('tr').eq(7).find('td').eq(4).should('contain.text', 'Aiykeloon Griffasina')
         cy.get($table).find('tr').eq(8).find('td').eq(4).should('contain.text', 'Aiykeloon Lamando')
-        // lead is Henretis, rest sorted by surname
+        // lead is Henretis, rest sorted by surname then forename
         cy.get($table).find('tr').eq(15).find('td').eq(4).should('contain.text', 'Esanarie Henretris')
         cy.get($table).find('tr').eq(16).find('td').eq(4).should('contain.text', 'Aiykeloon Griffasina')
-        cy.get($table).find('tr').eq(17).find('td').eq(4).should('contain.text', 'Dikminna Keninda')
-        cy.get($table).find('tr').eq(18).find('td').eq(4).should('contain.text', 'Aiykeloon Lamando')
+        cy.get($table).find('tr').eq(17).find('td').eq(4).should('contain.text', 'Aiykeloon Keninda')
+        cy.get($table).find('tr').eq(18).find('td').eq(4).should('contain.text', 'Dikminna Keninda')
       })
     })
 
@@ -143,8 +143,23 @@ context('Prisoner visits', () => {
       cy.visit(`/prisoner/${offenderNo}/visit-details`)
 
       cy.get('[data-test="prisoner-visits-results"]').then(($table) => {
-        cy.get($table).find('tr').eq(17).find('td').eq(6).should('contain.text', 'Not entered')
-        cy.get($table).find('tr').eq(18).find('td').eq(6).should('contain.text', 'Granddaughter')
+        cy.get($table).find('tr').eq(17).find('td').eq(6).should('contain.text', 'Granddaughter')
+        cy.get($table).find('tr').eq(18).find('td').eq(6).should('contain.text', 'Not entered')
+      })
+    })
+
+    it('should display correct status including search type', () => {
+      cy.visit(`/prisoner/${offenderNo}/visit-details`)
+
+      cy.get('[data-test="prisoner-visits-results"]').then(($table) => {
+        cy.get($table)
+          .find('tr')
+          .eq(2)
+          .find('td')
+          .eq(3)
+          .should('contain.text', 'Cancelled: operational reasons-all visits cancelled')
+        cy.get($table).find('tr').eq(3).find('td').eq(3).should('contain.text', 'Completed')
+        cy.get($table).find('tr').eq(4).find('td').eq(3).should('contain.text', 'Terminated by staff: rubdown level a')
       })
     })
   })
