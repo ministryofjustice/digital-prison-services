@@ -323,7 +323,7 @@ describe('Prisoner visits', () => {
         await controller(req, res)
 
         expect(prisonApi.getVisitsForBookingWithVisitors).toHaveBeenCalledWith(res.locals, bookingId, {
-          prison: '',
+          prisonId: '',
           visitStatus: '',
           visitType: '',
           ...pageArgs,

@@ -82,7 +82,7 @@ context('Prisoner visits', () => {
           visitType: { key: 'visitType', values: ['OFFI'] },
           visitStatus: { key: 'visitStatus', values: ['CANC'] },
           cancellationReason: { key: 'cancellationReason', values: ['NO_VO'] },
-          prison: { key: 'prison', values: ['HLI'] },
+          prisonId: { key: 'prisonId', values: ['HLI'] },
           paged: { key: 'paged', values: ['true'] },
           size: { key: 'size', values: ['20'] },
         })
