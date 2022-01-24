@@ -340,6 +340,8 @@ module.exports = (on) => {
         prisonApi.stubVisitsWithVisitors(visitsWithVisitors),
         prisonApi.stubOffenderBasicDetails(offenderBasicDetails),
         prisonApi.stubVisitsPrisons(),
+        prisonApi.stubCancellationReasons(),
+        prisonApi.stubCompletionReasons(),
       ]),
     stubSchedule: ({ offenderBasicDetails, thisWeeksSchedule, nextWeeksSchedule }) =>
       Promise.all([

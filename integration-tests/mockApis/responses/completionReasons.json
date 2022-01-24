@@ -1,0 +1,65 @@
+[
+  {
+    "domain": "VIS_COMPLETE",
+    "code": "CANC",
+    "description": "Cancelled",
+    "activeFlag": "Y",
+    "listSeq": 99,
+    "systemDataFlag": "Y",
+    "subCodes": []
+  },
+  {
+    "domain": "VIS_COMPLETE",
+    "code": "HMPOP",
+    "description": "Terminated By Staff",
+    "activeFlag": "Y",
+    "listSeq": 99,
+    "systemDataFlag": "N",
+    "subCodes": []
+  },
+  {
+    "domain": "VIS_COMPLETE",
+    "code": "NORM",
+    "description": "Normal Completion",
+    "activeFlag": "Y",
+    "listSeq": 2,
+    "systemDataFlag": "N",
+    "subCodes": []
+  },
+  {
+    "domain": "VIS_COMPLETE",
+    "code": "OFFEND",
+    "description": "Offender Completed Early",
+    "activeFlag": "Y",
+    "listSeq": 99,
+    "systemDataFlag": "N",
+    "subCodes": []
+  },
+  {
+    "domain": "VIS_COMPLETE",
+    "code": "SCH",
+    "description": "Scheduled",
+    "activeFlag": "Y",
+    "listSeq": 99,
+    "systemDataFlag": "Y",
+    "subCodes": []
+  },
+  {
+    "domain": "VIS_COMPLETE",
+    "code": "VDE",
+    "description": "Visitor Declined Entry",
+    "activeFlag": "Y",
+    "listSeq": 99,
+    "systemDataFlag": "N",
+    "subCodes": []
+  },
+  {
+    "domain": "VIS_COMPLETE",
+    "code": "VISITOR",
+    "description": "Visitor Completed Early",
+    "activeFlag": "Y",
+    "listSeq": 99,
+    "systemDataFlag": "N",
+    "subCodes": []
+  }
+]

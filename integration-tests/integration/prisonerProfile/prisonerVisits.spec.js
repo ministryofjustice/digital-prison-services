@@ -26,13 +26,14 @@ context('Prisoner visits', () => {
 
     it('should maintain form selections from search query', () => {
       cy.visit(
-        `/prisoner/${offenderNo}/visit-details?visitType=OFFI&fromDate=17%2F07%2F2020&toDate=17%2F08%2F2020&establishment=HLI`
+        `/prisoner/${offenderNo}/visit-details?visitType=OFFI&fromDate=17%2F07%2F2020&toDate=17%2F08%2F2020&establishment=HLI&status=SCH`
       )
 
       cy.get('[data-test="prisoner-visits-type"]').should('have.value', 'OFFI')
       cy.get('[data-test="from-filter"]').should('have.value', '17/07/2020')
       cy.get('[data-test="to-filter"]').should('have.value', '17/08/2020')
       cy.get('[data-test="establishment-type"]').should('have.value', 'HLI')
+      cy.get('[data-test="status-type"]').should('have.value', 'SCH')
     })
 
     it('should handle no data on filtered results', () => {
@@ -43,13 +44,14 @@ context('Prisoner visits', () => {
 
     it('should have a working clear link on the search form', () => {
       cy.visit(
-        `/prisoner/${offenderNo}/visit-details?visitType=OFFI&fromDate=17%2F07%2F2020&toDate=17%2F08%2F2020&establishment=HLI`
+        `/prisoner/${offenderNo}/visit-details?visitType=OFFI&fromDate=17%2F07%2F2020&toDate=17%2F08%2F2020&establishment=HLI&status=NORM`
       )
 
       cy.get('[data-test="prisoner-visits-type"]').should('have.value', 'OFFI')
       cy.get('[data-test="from-filter"]').should('have.value', '17/07/2020')
       cy.get('[data-test="to-filter"]').should('have.value', '17/08/2020')
       cy.get('[data-test="establishment-type"]').should('have.value', 'HLI')
+      cy.get('[data-test="status-type"]').should('have.value', 'NORM')
 
       cy.get('[data-test="clear-link"]').click()
 
@@ -57,17 +59,21 @@ context('Prisoner visits', () => {
       cy.get('[data-test="from-filter"]').should('have.value', '')
       cy.get('[data-test="to-filter"]').should('have.value', '')
       cy.get('[data-test="establishment-type"]').should('have.value', '')
+      cy.get('[data-test="status-type"]').should('have.value', '')
     })
 
     it('should submit the search with the correct filter parameters', () => {
       cy.visit(`/prisoner/${offenderNo}/visit-details`)
       cy.get('#visitType').select('Official').should('have.value', 'OFFI')
       cy.get('#establishment').select('Hull (HMP)').should('have.value', 'HLI')
+      cy.get('#status').select('Cancelled: no visiting order').should('have.value', 'CANC-NO_VO')
       cy.get('form').submit()
 
       cy.task('verifyVisitFilter').should((requests) => {
         expect(requests[requests.length - 1].queryParams).to.deep.equal({
           visitType: { key: 'visitType', values: ['OFFI'] },
+          visitStatus: { key: 'visitStatus', values: ['CANC'] },
+          cancellationReason: { key: 'cancellationReason', values: ['NO_VO'] },
           prison: { key: 'prison', values: ['HLI'] },
           paged: { key: 'paged', values: ['true'] },
           size: { key: 'size', values: ['20'] },

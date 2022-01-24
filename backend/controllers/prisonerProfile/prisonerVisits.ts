@@ -8,6 +8,19 @@ export const VISIT_TYPES = [
   { value: 'OFFI', text: 'Official' },
 ]
 
+const calculateDateAndStatusFilter = (status: string, fromDate: string, toDate: string) => {
+  const fromAsDate = fromDate ? moment(fromDate, 'DD/MM/YYYY') : undefined
+  const toAsDate = toDate ? moment(toDate, 'DD/MM/YYYY') : undefined
+
+  const now = moment().startOf('day')
+  if (status === 'EXP') return { visitStatus: 'SCH', fromAsDate, toAsDate: toAsDate?.isBefore(now) ? toAsDate : now }
+  if (status === 'SCH') return { visitStatus: 'SCH', fromAsDate: fromAsDate?.isAfter(now) ? fromAsDate : now, toAsDate }
+  const splitStatus = status?.split('-')
+  const visitStatus = splitStatus?.shift()
+  const cancellationReason = splitStatus?.shift()
+  return { visitStatus, cancellationReason, fromAsDate, toAsDate }
+}
+
 const calculateStatus = ({
   cancelReasonDescription,
   completionStatusDescription,
@@ -31,22 +44,37 @@ const calculateStatus = ({
 export default ({ prisonApi, pageSize = 20 }) =>
   async (req, res, next) => {
     const { offenderNo } = req.params
-    const { visitType, fromDate, toDate, page = 0, establishment } = req.query
+    const { visitType, fromDate, toDate, page = 0, status: statusFilter, establishment } = req.query
     const url = new URL(`${req.protocol}://${req.get('host')}${req.originalUrl}`)
 
     try {
-      const details = await prisonApi.getDetails(res.locals, offenderNo)
+      const [details, completionReasons, cancellationReasons] = await Promise.all([
+        prisonApi.getDetails(res.locals, offenderNo),
+        prisonApi.getVisitCompletionReasons(res.locals),
+        prisonApi.getVisitCancellationReasons(res.locals),
+      ])
+        .then((data) => data)
+        .catch(next)
+
       const { bookingId } = details || {}
+
+      const { visitStatus, cancellationReason, fromAsDate, toAsDate } = calculateDateAndStatusFilter(
+        statusFilter,
+        fromDate,
+        toDate
+      )
 
       const [visitsWithVisitors, prisons] = await Promise.all([
         prisonApi.getVisitsForBookingWithVisitors(res.locals, bookingId, {
-          fromDate: fromDate && moment(fromDate, 'DD/MM/YYYY').format('YYYY-MM-DD'),
+          fromDate: fromAsDate?.format('YYYY-MM-DD'),
           page,
           paged: true,
           size: pageSize,
-          toDate: toDate && moment(toDate, 'DD/MM/YYYY').format('YYYY-MM-DD'),
+          toDate: toAsDate?.format('YYYY-MM-DD'),
           visitType,
           prison: establishment,
+          visitStatus,
+          cancellationReason,
         }),
         prisonApi.getVisitsPrisons(res.locals, bookingId),
       ])
@@ -101,6 +129,18 @@ export default ({ prisonApi, pageSize = 20 }) =>
           )
           .flat()
 
+      const statuses = cancellationReasons
+        .map((type) => ({ value: `CANC-${type.code}`, text: `Cancelled: ${type.description.toLowerCase()}` }))
+        .concat(
+          completionReasons
+            .filter((reason) => reason.code !== 'CANC' && reason.code !== 'SCH')
+            .map((type) => ({ value: type.code, text: capitalize(type.description) }))
+        )
+        .concat([
+          { value: 'SCH', text: 'Scheduled' },
+          { value: 'EXP', text: 'Not entered' },
+        ])
+
       return res.render('prisonerProfile/prisonerVisits/prisonerVisits.njk', {
         breadcrumbPrisonerName: putLastNameFirst(details.firstName, details.lastName),
         formValues: req.query,
@@ -118,6 +158,7 @@ export default ({ prisonApi, pageSize = 20 }) =>
         visitTypes: VISIT_TYPES,
         filterApplied: Boolean(fromDate || toDate || visitType),
         prisons: hasLength(prisons) && prisons.map((type) => ({ value: type.prisonId, text: type.prison })),
+        statuses,
       })
     } catch (error) {
       res.locals.redirectUrl = `/prisoner/${offenderNo}`

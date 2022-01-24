@@ -389,6 +389,9 @@ export const prisonApiFactory = (client) => {
 
   const getCellMoveReasonTypes = (context) => get(context, '/api/reference-domains/domains/CHG_HOUS_RSN', 1000)
 
+  const getVisitCompletionReasons = (context) => get(context, '/api/reference-domains/domains/VIS_COMPLETE', 1000)
+  const getVisitCancellationReasons = (context) => get(context, '/api/reference-domains/domains/MOVE_CANC_RS', 1000)
+
   const getSentenceAdjustments = (context, bookingId) => get(context, `/api/bookings/${bookingId}/sentenceAdjustments`)
 
   const getCourtCases = (context, bookingId) => get(context, `/api/bookings/${bookingId}/court-cases`)
@@ -574,6 +577,8 @@ export const prisonApiFactory = (client) => {
     getOffenderActivitiesHistory,
     getMovementReasons,
     getTransfers,
+    getVisitCompletionReasons,
+    getVisitCancellationReasons,
   }
 }
 
