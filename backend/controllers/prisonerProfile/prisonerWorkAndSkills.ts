@@ -6,6 +6,7 @@ const eswePrisons = [
   'BLI', // Bristol
   'NHI', // New Hall
   'LII', // Lincoln
+  'SLI', // Swaleside
 ]
 
 export default ({ prisonerProfileService, esweService }) =>
