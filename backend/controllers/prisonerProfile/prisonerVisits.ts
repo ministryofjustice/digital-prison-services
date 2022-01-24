@@ -158,7 +158,7 @@ export default ({ prisonApi, pageSize = 20 }) =>
         prisonerName: formatName(details.firstName, details.lastName),
         results,
         visitTypes: VISIT_TYPES,
-        filterApplied: Boolean(fromDate || toDate || visitType),
+        filterApplied: Boolean(fromDate || toDate || visitType || statusFilter || establishment),
         prisons: hasLength(prisons) ? prisons.map((type) => ({ value: type.prisonId, text: type.prison })) : [],
         statuses,
         profileUrl: `/prisoner/${offenderNo}`,
