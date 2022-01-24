@@ -238,7 +238,7 @@ describe('Prisoner visits', () => {
             isLast: true,
             name: 'Bloby Blob',
             relationship: 'Brother',
-            status: 'Cancelled: Operational Reasons-All Visits Cancelled',
+            status: 'Cancelled: operational reasons-all visits cancelled',
             prison: 'Leeds (HMP)',
           },
           {
@@ -334,7 +334,7 @@ describe('Prisoner visits', () => {
             isLast: true,
             name: 'Yrudypeter Cassoria',
             relationship: 'Probation Officer',
-            status: 'Visitor Declined Entry',
+            status: 'Visitor declined entry',
             prison: 'Leeds (HMP)',
           },
         ],

@@ -80,10 +80,10 @@
         "location": "OFFICIAL VISITS",
         "prison": "Moorland (HMP & YOI)",
         "attended": true,
-        "eventStatus": "EXP",
-        "eventStatusDescription": "Expired",
-        "completionStatus": "SCH",
-        "completionStatusDescription": "Scheduled",
+        "eventStatus": "COMP",
+        "eventStatusDescription": "Completed",
+        "completionStatus": "COMP",
+        "completionStatusDescription": "Completed",
         "visitType": "OFFI",
         "visitTypeDescription": "Official Visit",
         "leadVisitor": "EVNELALU BRADAR",
@@ -122,7 +122,8 @@
         "startTime": "2020-07-15T09:00:00",
         "endTime": "2020-07-15T11:45:00",
         "eventOutcome": "ATT",
-        "eventOutcomeDescription": "Attended"
+        "eventOutcomeDescription": "Attended",
+        "searchType": "Rubdown Level A"
       }
     },
     {
@@ -309,7 +310,7 @@
           "relationship": "Granddaughter",
           "attended": true,
           "personId": 4631006,
-          "lastName": "LAMANDO",
+          "lastName": "KENINDA",
           "firstName": "AIYKELOON",
           "leadVisitor": false
         },
