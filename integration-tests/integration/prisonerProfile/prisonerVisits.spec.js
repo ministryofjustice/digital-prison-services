@@ -24,6 +24,14 @@ context('Prisoner visits', () => {
       cy.get('h1').should('have.text', 'John Smith’s visits')
     })
 
+    it('should display all establishments even if there are no results', () => {
+      cy.task('stubVisitsPrisons', [])
+      cy.visit(`/prisoner/${offenderNo}/visit-details`)
+      cy.get('[data-test="establishment-type"]').should('contain.text', 'All')
+
+      cy.get('[data-test="no-visit-results"]').should('contain.text', 'There are no visits for this prisoner')
+    })
+
     it('should maintain form selections from search query', () => {
       cy.visit(
         `/prisoner/${offenderNo}/visit-details?visitType=OFFI&fromDate=17%2F07%2F2020&toDate=17%2F08%2F2020&establishment=HLI&status=SCH`

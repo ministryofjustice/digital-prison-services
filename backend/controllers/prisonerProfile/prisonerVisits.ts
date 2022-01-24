@@ -157,8 +157,9 @@ export default ({ prisonApi, pageSize = 20 }) =>
         results,
         visitTypes: VISIT_TYPES,
         filterApplied: Boolean(fromDate || toDate || visitType),
-        prisons: hasLength(prisons) && prisons.map((type) => ({ value: type.prisonId, text: type.prison })),
+        prisons: hasLength(prisons) ? prisons.map((type) => ({ value: type.prisonId, text: type.prison })) : [],
         statuses,
+        profileUrl: `/prisoner/${offenderNo}`,
       })
     } catch (error) {
       res.locals.redirectUrl = `/prisoner/${offenderNo}`
