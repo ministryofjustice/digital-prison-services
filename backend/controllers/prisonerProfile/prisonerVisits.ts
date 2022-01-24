@@ -25,7 +25,7 @@ const calculateStatus = ({
   cancelReasonDescription,
   completionStatusDescription,
   completionStatus,
-  searchType,
+  searchTypeDescription,
   startTime,
 }) => {
   switch (completionStatus) {
@@ -34,10 +34,12 @@ const calculateStatus = ({
     case 'SCH': {
       const start = moment(startTime, DATE_TIME_FORMAT_SPEC)
       if (start.isAfter(moment(), 'minute')) return 'Scheduled'
-      return searchType || 'Not entered'
+      return searchTypeDescription || 'Not entered'
     }
     default:
-      return searchType ? `${completionStatusDescription}: ${searchType}` : completionStatusDescription
+      return searchTypeDescription
+        ? `${completionStatusDescription}: ${searchTypeDescription}`
+        : completionStatusDescription
   }
 }
 
