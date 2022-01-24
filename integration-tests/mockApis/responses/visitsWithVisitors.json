@@ -123,7 +123,7 @@
         "endTime": "2020-07-15T11:45:00",
         "eventOutcome": "ATT",
         "eventOutcomeDescription": "Attended",
-        "searchType": "Rubdown Level A"
+        "searchTypeDescription": "Rubdown Level A"
       }
     },
     {
