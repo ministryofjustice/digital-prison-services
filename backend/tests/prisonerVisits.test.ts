@@ -492,6 +492,7 @@ describe('Prisoner visits', () => {
           { value: 'SCH', text: 'Scheduled' },
           { value: 'EXP', text: 'Not entered' },
         ],
+        profileUrl: '/prisoner/ABC123',
       })
     })
   })
