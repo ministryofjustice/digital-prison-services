@@ -74,7 +74,7 @@ export default ({ prisonApi, pageSize = 20 }) =>
           size: pageSize,
           toDate: toAsDate?.format('YYYY-MM-DD'),
           visitType,
-          prison: establishment,
+          prisonId: establishment,
           visitStatus,
           cancellationReason,
         }),
