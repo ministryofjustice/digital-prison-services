@@ -33,6 +33,15 @@ export const sortByDateTime = (t1, t2) => {
   return 0
 }
 
+export const compareStrings = (l: string, r: string): number => l.localeCompare(r, 'en', { ignorePunctuation: true })
+
+export const compareNumbers = (l: number, r: number): number => {
+  if (!Number.isFinite(l) && !Number.isFinite(r)) return 0
+  if (!Number.isFinite(l)) return 1
+  if (!Number.isFinite(r)) return -1
+  return l - r
+}
+
 export const capitalize = (string) => {
   if (typeof string !== 'string') return ''
   const lowerCase = string.toLowerCase()

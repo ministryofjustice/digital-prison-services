@@ -41,14 +41,14 @@ describe('Prisoner visits', () => {
     })
     prisonApi.getVisitCancellationReasons.mockResolvedValue([
       { code: 'ADMIN', description: 'Administrative Cancellation' },
-      { code: 'HMP', description: 'Operational Reasons-All Visits Cancelled' },
+      { code: 'HMP', description: 'Operational Reasons-All Visits Cancelled', listSeq: 99 },
       { code: 'NO_ID', description: 'No Identification - Refused Entry' },
     ])
     prisonApi.getVisitCompletionReasons.mockResolvedValue([
       { code: 'CANC', description: 'Cancelled' },
       { code: 'HMPOP', description: 'Terminated By Staff' },
       { code: 'SCH', description: 'Scheduled' },
-      { code: 'NORM', description: 'Normal Completion' },
+      { code: 'NORM', description: 'Normal Completion', listSeq: 99 },
     ])
   })
 
@@ -375,7 +375,7 @@ describe('Prisoner visits', () => {
             isLast: true,
             name: 'Bloby Blob',
             relationship: 'Brother',
-            status: 'Cancelled: operational reasons-all visits cancelled',
+            status: 'Cancelled: Operational Reasons-All Visits Cancelled',
             prison: 'Leeds (HMP)',
           },
           {
@@ -471,7 +471,7 @@ describe('Prisoner visits', () => {
             isLast: true,
             name: 'Yrudypeter Cassoria',
             relationship: 'Probation Officer',
-            status: 'Visitor declined entry',
+            status: 'Visitor Declined Entry',
             prison: 'Leeds (HMP)',
           },
         ],
@@ -484,11 +484,11 @@ describe('Prisoner visits', () => {
           { value: 'MDI', text: 'Moorland' },
         ],
         statuses: [
-          { value: 'CANC-ADMIN', text: 'Cancelled: administrative cancellation' },
-          { value: 'CANC-HMP', text: 'Cancelled: operational reasons-all visits cancelled' },
-          { value: 'CANC-NO_ID', text: 'Cancelled: no identification - refused entry' },
-          { value: 'HMPOP', text: 'Terminated by staff' },
-          { value: 'NORM', text: 'Normal completion' },
+          { value: 'CANC-HMP', text: 'Cancelled: Operational Reasons-All Visits Cancelled' },
+          { value: 'CANC-ADMIN', text: 'Cancelled: Administrative Cancellation' },
+          { value: 'CANC-NO_ID', text: 'Cancelled: No Identification - Refused Entry' },
+          { value: 'NORM', text: 'Normal Completion' },
+          { value: 'HMPOP', text: 'Terminated By Staff' },
           { value: 'SCH', text: 'Scheduled' },
           { value: 'EXP', text: 'Not entered' },
         ],
