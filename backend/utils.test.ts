@@ -1,6 +1,8 @@
 import {
   capitalize,
   chunkArray,
+  compareNumbers,
+  compareStrings,
   formatDaysInYears,
   formatLocation,
   formatMonthsAndDays,
@@ -498,5 +500,22 @@ describe('stringWithAbbreviationsProcessor', () => {
   it('should return the string in sentence case when there is more than one abbreviation, naked or in brackets', () => {
     const actual = stringWithAbbreviationsProcessor('HMP BUCKLEY HALL (CASU)')
     expect(actual).toEqual('HMP Buckley Hall (CASU)')
+  })
+})
+
+describe('compareStrings', () => {
+  it('should sort a list of strings', () => {
+    const actual = ['', undefined, 'joe', 'a long string', ' ', 'joe 2'].sort(compareStrings)
+    expect(actual).toEqual(['', ' ', 'a long string', 'joe', 'joe 2', undefined])
+  })
+})
+
+describe('compareNumbers', () => {
+  it('should sort a list of numbers', () => {
+    const actual = [1, 23, undefined, 12345].sort(compareNumbers)
+    expect(actual).toEqual([1, 23, 12345, undefined])
+  })
+  it('should sort with undefined being equal', () => {
+    expect(compareNumbers(undefined, undefined)).toEqual(0)
   })
 })

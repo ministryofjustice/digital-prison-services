@@ -74,7 +74,7 @@ context('Prisoner visits', () => {
       cy.visit(`/prisoner/${offenderNo}/visit-details`)
       cy.get('#visitType').select('Official').should('have.value', 'OFFI')
       cy.get('#establishment').select('Hull (HMP)').should('have.value', 'HLI')
-      cy.get('#status').select('Cancelled: no visiting order').should('have.value', 'CANC-NO_VO')
+      cy.get('#status').select('Cancelled: No Visiting Order').should('have.value', 'CANC-NO_VO')
       cy.get('form').submit()
 
       cy.task('verifyVisitFilter').should((requests) => {
@@ -171,9 +171,9 @@ context('Prisoner visits', () => {
           .eq(2)
           .find('td')
           .eq(3)
-          .should('contain.text', 'Cancelled: operational reasons-all visits cancelled')
+          .should('contain.text', 'Cancelled: Operational Reasons-All Visits Cancelled')
         cy.get($table).find('tr').eq(3).find('td').eq(3).should('contain.text', 'Completed')
-        cy.get($table).find('tr').eq(4).find('td').eq(3).should('contain.text', 'Terminated by staff: rubdown level a')
+        cy.get($table).find('tr').eq(4).find('td').eq(3).should('contain.text', 'Terminated By Staff: Rubdown Level A')
       })
     })
   })
