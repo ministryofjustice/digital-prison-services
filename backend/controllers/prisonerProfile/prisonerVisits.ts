@@ -1,5 +1,5 @@
 import moment from 'moment'
-import { capitalize, formatName, hasLength, putLastNameFirst, sortByDateTime } from '../../utils'
+import { compareNumbers, compareStrings, formatName, hasLength, putLastNameFirst, sortByDateTime } from '../../utils'
 import generatePagination from '../../shared/generatePagination'
 import { DATE_TIME_FORMAT_SPEC, MOMENT_TIME } from '../../../common/dateHelpers'
 
@@ -7,6 +7,20 @@ export const VISIT_TYPES = [
   { value: 'SCON', text: 'Social' },
   { value: 'OFFI', text: 'Official' },
 ]
+
+const sortByListSequenceThenDescription = (left, right): number => {
+  const listSeqSort = compareNumbers(left.listSeq, right.listSeq)
+  return listSeqSort !== 0 ? listSeqSort : compareStrings(left.description, right.description)
+}
+
+const sortByLeadThenAgeThenLastNameFirstName = (left, right): number => {
+  if (right.leadVisitor) return 1
+  if (left.leadVisitor) return -1
+
+  const dateOfBirthSort = sortByDateTime(left.dateOfBirth, right.dateOfBirth)
+  const lastNameSort = dateOfBirthSort !== 0 ? dateOfBirthSort : compareStrings(left.lastName, right.lastName)
+  return lastNameSort !== 0 ? lastNameSort : compareStrings(left.firstName, right.firstName)
+}
 
 const calculateDateAndStatusFilter = (status: string, fromDate: string, toDate: string) => {
   const fromAsDate = fromDate ? moment(fromDate, 'DD/MM/YYYY') : undefined
@@ -90,17 +104,6 @@ export default ({ prisonApi, pageSize = 20 }) =>
         totalPages,
       } = visitsWithVisitors
 
-      const sortString = (a: string, b: string): number => a.localeCompare(b, 'en', { ignorePunctuation: true })
-
-      const sortByLeadThenAgeThenLastNameFirstName = (left, right) => {
-        if (right.leadVisitor) return 1
-        if (left.leadVisitor) return -1
-
-        const dateOfBirthSort = sortByDateTime(left.dateOfBirth, right.dateOfBirth)
-        const lastNameSort = dateOfBirthSort !== 0 ? dateOfBirthSort : sortString(left.lastName, right.lastName)
-        return lastNameSort !== 0 ? lastNameSort : sortString(left.firstName, right.firstName)
-      }
-
       const results =
         hasLength(visits) &&
         visits
@@ -110,7 +113,7 @@ export default ({ prisonApi, pageSize = 20 }) =>
               const {
                 visitDetails: { startTime, endTime, visitTypeDescription, prison },
               } = visit
-              const status = capitalize(calculateStatus(visit.visitDetails))
+              const status = calculateStatus(visit.visitDetails)
 
               const start = moment(startTime, DATE_TIME_FORMAT_SPEC)
               const end = moment(endTime, DATE_TIME_FORMAT_SPEC)
@@ -132,11 +135,13 @@ export default ({ prisonApi, pageSize = 20 }) =>
           .flat()
 
       const statuses = cancellationReasons
-        .map((type) => ({ value: `CANC-${type.code}`, text: `Cancelled: ${type.description.toLowerCase()}` }))
+        .sort(sortByListSequenceThenDescription)
+        .map((type) => ({ value: `CANC-${type.code}`, text: `Cancelled: ${type.description}` }))
         .concat(
           completionReasons
+            .sort(sortByListSequenceThenDescription)
             .filter((reason) => reason.code !== 'CANC' && reason.code !== 'SCH')
-            .map((type) => ({ value: type.code, text: capitalize(type.description) }))
+            .map((type) => ({ value: type.code, text: type.description }))
         )
         .concat([
           { value: 'SCH', text: 'Scheduled' },
