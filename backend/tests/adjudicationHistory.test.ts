@@ -3,9 +3,7 @@ import adjudicationHistoryService from '../services/adjudicationHistory'
 Reflect.deleteProperty(process.env, 'APPINSIGHTS_INSTRUMENTATIONKEY')
 const prisonApi = {}
 
-jest.mock('shortid', () => ({
-  generate: () => '123',
-}))
+jest.mock('nanoid', () => ({ nanoid: () => '123' }))
 
 const adjudicationHistory = adjudicationHistoryService(prisonApi)
 
