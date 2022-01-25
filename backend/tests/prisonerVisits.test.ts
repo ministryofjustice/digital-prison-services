@@ -5,11 +5,16 @@ describe('Prisoner visits', () => {
   const pageSize = 2
   const offenderNo = 'ABC123'
   const bookingId = '123'
-  const prisonApi = {}
+  const prisonApi = {
+    getDetails: jest.fn(),
+    getVisitsPrisons: jest.fn(),
+    getVisitsForBookingWithVisitors: jest.fn(),
+    getVisitCancellationReasons: jest.fn(),
+    getVisitCompletionReasons: jest.fn(),
+  }
 
   let req
   let res
-  let logError
   let controller
 
   beforeEach(() => {
@@ -22,34 +27,49 @@ describe('Prisoner visits', () => {
     }
     res = { locals: {}, render: jest.fn(), status: jest.fn() }
 
-    logError = jest.fn()
-
-    // @ts-expect-error ts-migrate(2339) FIXME: Property 'getDetails' does not exist on type '{}'.
-    prisonApi.getDetails = jest.fn().mockResolvedValue({})
-    // @ts-expect-error ts-migrate(2339) FIXME: Property 'getVisitsForBookingWithVisitors' does no... Remove this comment to see the full error message
-    prisonApi.getVisitsForBookingWithVisitors = jest.fn().mockResolvedValue({
+    controller = prisonerVisits({ prisonApi, pageSize })
+    prisonApi.getDetails.mockResolvedValue({ bookingId })
+    prisonApi.getVisitsPrisons.mockResolvedValue([
+      { prisonId: 'HLI', prison: 'Hull' },
+      { prisonId: 'MDI', prison: 'Moorland' },
+    ])
+    prisonApi.getVisitsForBookingWithVisitors.mockResolvedValue({
       pageable: {
         offset: {},
         pageNumber: {},
       },
     })
-
-    // @ts-expect-error ts-migrate(2345) FIXME: Argument of type '{ prisonApi: {}; logError: any; ... Remove this comment to see the full error message
-    controller = prisonerVisits({ prisonApi, logError, pageSize })
+    prisonApi.getVisitCancellationReasons.mockResolvedValue([
+      { code: 'ADMIN', description: 'Administrative Cancellation' },
+      { code: 'HMP', description: 'Operational Reasons-All Visits Cancelled', listSeq: 99 },
+      { code: 'NO_ID', description: 'No Identification - Refused Entry' },
+    ])
+    prisonApi.getVisitCompletionReasons.mockResolvedValue([
+      { code: 'CANC', description: 'Cancelled' },
+      { code: 'HMPOP', description: 'Terminated By Staff' },
+      { code: 'SCH', description: 'Scheduled' },
+      { code: 'NORM', description: 'Normal Completion', listSeq: 99 },
+    ])
   })
 
-  it('should get the prisoner details', async () => {
+  afterEach(() => {
+    prisonApi.getDetails.mockReset()
+    prisonApi.getVisitsPrisons.mockReset()
+    prisonApi.getVisitsForBookingWithVisitors.mockReset()
+    prisonApi.getVisitCancellationReasons.mockReset()
+    prisonApi.getVisitCompletionReasons.mockReset()
+  })
+
+  it('should get the prisoner details and visits prisons', async () => {
     await controller(req, res)
 
-    // @ts-expect-error ts-migrate(2339) FIXME: Property 'getDetails' does not exist on type '{}'.
     expect(prisonApi.getDetails).toHaveBeenCalledWith(res.locals, offenderNo)
+    expect(prisonApi.getVisitsPrisons).toHaveBeenCalledWith(res.locals, bookingId)
   })
 
   describe('Visits results', () => {
     beforeEach(() => {
-      // @ts-expect-error ts-migrate(2339) FIXME: Property 'getDetails' does not exist on type '{}'.
       prisonApi.getDetails.mockResolvedValue({ bookingId, firstName: 'Prisoner', lastName: 'Name' })
-      // @ts-expect-error ts-migrate(2339) FIXME: Property 'getVisitsForBookingWithVisitors' does no... Remove this comment to see the full error message
       prisonApi.getVisitsForBookingWithVisitors.mockResolvedValue({
         content: [
           {
@@ -125,8 +145,8 @@ describe('Prisoner visits', () => {
               eventOutcomeDescription: 'Absence',
               visitTypeDescription: 'Official Visit',
               prison: 'Leeds (HMP)',
-              completionStatus: 'SCH',
-              completionStatusDescription: 'Scheduled',
+              completionStatus: 'CANC',
+              completionStatusDescription: 'Cancelled',
             },
           },
           {
@@ -171,22 +191,143 @@ describe('Prisoner visits', () => {
       })
     })
 
-    it('should request a prisoners visits with visitors with the correct params', async () => {
-      req.query = {
-        fromDate: '13/01/2020',
-        toDate: '13/02/2020',
-        visitType: 'OFFI',
-      }
-      await controller(req, res)
+    describe('should request a prisoners visits with visitors with the correct params', () => {
+      const now = moment()
+      const pageArgs = { page: 0, paged: true, size: 2 }
+      it('from date and to date specified', async () => {
+        req.query = {
+          fromDate: '13/01/2020',
+          toDate: '13/02/2020',
+          visitType: 'OFFI',
+        }
+        await controller(req, res)
 
-      // @ts-expect-error ts-migrate(2339) FIXME: Property 'getVisitsForBookingWithVisitors' does no... Remove this comment to see the full error message
-      expect(prisonApi.getVisitsForBookingWithVisitors).toHaveBeenCalledWith(res.locals, bookingId, {
-        fromDate: '2020-01-13',
-        page: 0,
-        paged: true,
-        size: 2,
-        toDate: '2020-02-13',
-        visitType: 'OFFI',
+        expect(prisonApi.getVisitsForBookingWithVisitors).toHaveBeenCalledWith(res.locals, bookingId, {
+          fromDate: '2020-01-13',
+          toDate: '2020-02-13',
+          visitType: 'OFFI',
+          ...pageArgs,
+        })
+      })
+      it('scheduled status specified', async () => {
+        req.query = {
+          status: 'SCH',
+        }
+        await controller(req, res)
+
+        expect(prisonApi.getVisitsForBookingWithVisitors).toHaveBeenCalledWith(res.locals, bookingId, {
+          fromDate: now.format('YYYY-MM-DD'),
+          visitStatus: 'SCH',
+          ...pageArgs,
+        })
+      })
+      it('scheduled status specified with from date in past', async () => {
+        req.query = {
+          status: 'SCH',
+          fromDate: '13/01/2020',
+          toDate: '13/02/2020',
+        }
+        await controller(req, res)
+
+        expect(prisonApi.getVisitsForBookingWithVisitors).toHaveBeenCalledWith(res.locals, bookingId, {
+          fromDate: now.format('YYYY-MM-DD'),
+          toDate: '2020-02-13',
+          visitStatus: 'SCH',
+          ...pageArgs,
+        })
+      })
+      it('scheduled status specified with from date in future', async () => {
+        req.query = {
+          status: 'SCH',
+          fromDate: now.add('1w').format('DD/MM/YYYY'),
+        }
+        await controller(req, res)
+
+        expect(prisonApi.getVisitsForBookingWithVisitors).toHaveBeenCalledWith(res.locals, bookingId, {
+          fromDate: now.add('1w').format('YYYY-MM-DD'),
+          visitStatus: 'SCH',
+          ...pageArgs,
+        })
+      })
+      it('expired status specified', async () => {
+        req.query = {
+          status: 'EXP',
+        }
+        await controller(req, res)
+
+        expect(prisonApi.getVisitsForBookingWithVisitors).toHaveBeenCalledWith(res.locals, bookingId, {
+          toDate: now.format('YYYY-MM-DD'),
+          visitStatus: 'SCH',
+          ...pageArgs,
+        })
+      })
+      it('expired status specified with to date in past', async () => {
+        req.query = {
+          status: 'EXP',
+          fromDate: '13/01/2020',
+          toDate: '13/02/2020',
+        }
+        await controller(req, res)
+
+        expect(prisonApi.getVisitsForBookingWithVisitors).toHaveBeenCalledWith(res.locals, bookingId, {
+          toDate: '2020-02-13',
+          fromDate: '2020-01-13',
+          visitStatus: 'SCH',
+          ...pageArgs,
+        })
+      })
+      it('expired status specified with to date in future', async () => {
+        req.query = {
+          status: 'EXP',
+          toDate: now.add('1w').format('DD/MM/YYYY'),
+        }
+        await controller(req, res)
+
+        expect(prisonApi.getVisitsForBookingWithVisitors).toHaveBeenCalledWith(res.locals, bookingId, {
+          toDate: now.add('1w').format('YYYY-MM-DD'),
+          visitStatus: 'SCH',
+          ...pageArgs,
+        })
+      })
+      it('completion status specified', async () => {
+        req.query = {
+          status: 'COMP',
+        }
+        await controller(req, res)
+
+        expect(prisonApi.getVisitsForBookingWithVisitors).toHaveBeenCalledWith(res.locals, bookingId, {
+          visitStatus: 'COMP',
+          ...pageArgs,
+        })
+      })
+      it('cancel status specified', async () => {
+        req.query = {
+          status: 'CANC-NSHOW',
+        }
+        await controller(req, res)
+
+        expect(prisonApi.getVisitsForBookingWithVisitors).toHaveBeenCalledWith(res.locals, bookingId, {
+          visitStatus: 'CANC',
+          cancellationReason: 'NSHOW',
+          ...pageArgs,
+        })
+      })
+      it('all fields specified as empty strings', async () => {
+        req.query = {
+          toDate: '',
+          fromDate: '',
+          visitType: '',
+          status: '',
+          establishment: '',
+        }
+        await controller(req, res)
+
+        expect(prisonApi.getVisitsForBookingWithVisitors).toHaveBeenCalledWith(res.locals, bookingId, {
+          prisonId: '',
+          visitStatus: '',
+          visitType: '',
+          ...pageArgs,
+        })
       })
     })
 
@@ -234,7 +375,7 @@ describe('Prisoner visits', () => {
             isLast: true,
             name: 'Bloby Blob',
             relationship: 'Brother',
-            status: 'Cancellation: Operational Reasons-All Visits Cancelled',
+            status: 'Cancelled: Operational Reasons-All Visits Cancelled',
             prison: 'Leeds (HMP)',
           },
           {
@@ -246,7 +387,7 @@ describe('Prisoner visits', () => {
             isLast: true,
             name: 'John Smith',
             relationship: 'Grandson',
-            status: 'Not entered',
+            status: 'Cancelled',
             prison: 'Leeds (HMP)',
           },
           {
@@ -330,7 +471,7 @@ describe('Prisoner visits', () => {
             isLast: true,
             name: 'Yrudypeter Cassoria',
             relationship: 'Probation Officer',
-            status: 'Completion: Visitor Declined Entry',
+            status: 'Visitor Declined Entry',
             prison: 'Leeds (HMP)',
           },
         ],
@@ -338,6 +479,20 @@ describe('Prisoner visits', () => {
           { value: 'SCON', text: 'Social' },
           { value: 'OFFI', text: 'Official' },
         ],
+        prisons: [
+          { value: 'HLI', text: 'Hull' },
+          { value: 'MDI', text: 'Moorland' },
+        ],
+        statuses: [
+          { value: 'CANC-HMP', text: 'Cancelled: Operational Reasons-All Visits Cancelled' },
+          { value: 'CANC-ADMIN', text: 'Cancelled: Administrative Cancellation' },
+          { value: 'CANC-NO_ID', text: 'Cancelled: No Identification - Refused Entry' },
+          { value: 'NORM', text: 'Normal Completion' },
+          { value: 'HMPOP', text: 'Terminated By Staff' },
+          { value: 'SCH', text: 'Scheduled' },
+          { value: 'EXP', text: 'Not entered' },
+        ],
+        profileUrl: '/prisoner/ABC123',
       })
     })
   })
@@ -345,7 +500,6 @@ describe('Prisoner visits', () => {
   describe('Errors', () => {
     it('should render the error template with a link to the homepage if there is a problem retrieving prisoner details', async () => {
       const error = new Error('Network error')
-      // @ts-expect-error ts-migrate(2339) FIXME: Property 'getDetails' does not exist on type '{}'.
       prisonApi.getDetails.mockImplementation(() => Promise.reject(error))
 
       await expect(controller(req, res)).rejects.toThrowError(error)
@@ -354,7 +508,6 @@ describe('Prisoner visits', () => {
 
     it('should render the error template with a link to the prisoner profile if there is a problem retrieving visits', async () => {
       const error = new Error('Network error')
-      // @ts-expect-error ts-migrate(2339) FIXME: Property 'getVisitsForBookingWithVisitors' does no... Remove this comment to see the full error message
       prisonApi.getVisitsForBookingWithVisitors.mockImplementation(() => Promise.reject(error))
 
       await expect(controller(req, res)).rejects.toThrowError(error)

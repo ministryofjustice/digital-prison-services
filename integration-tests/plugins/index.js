@@ -28,6 +28,7 @@ const extractOffenderNumbers = (activityList) => {
 
 module.exports = (on) => {
   on('task', {
+    ...prisonApi,
     reset: resetStubs,
     resetAndStubTokenVerification: async () => {
       await resetStubs()
@@ -339,6 +340,9 @@ module.exports = (on) => {
       Promise.all([
         prisonApi.stubVisitsWithVisitors(visitsWithVisitors),
         prisonApi.stubOffenderBasicDetails(offenderBasicDetails),
+        prisonApi.stubVisitsPrisons(),
+        prisonApi.stubCancellationReasons(),
+        prisonApi.stubCompletionReasons(),
       ]),
     stubSchedule: ({ offenderBasicDetails, thisWeeksSchedule, nextWeeksSchedule }) =>
       Promise.all([
@@ -485,7 +489,6 @@ module.exports = (on) => {
     stubGetComplexOffenders: (offenders) => complexity.stubGetComplexOffenders(offenders),
     stubCellMoveHistory: ({ assignmentDate, agencyId, cellMoves }) =>
       prisonApi.stubCellMoveHistory({ assignmentDate, agencyId, cellMoves }),
-    stubCellMoveTypes: (types) => prisonApi.stubCellMoveTypes(types),
     stubKeyworkerMigrated: () => keyworker.stubKeyworkerMigrated(),
     stubGetWhereaboutsAppointments: (appointments) => whereabouts.stubGetWhereaboutsAppointments(appointments),
     stubCreateAppointment: () => whereabouts.stubCreateAppointment(),
@@ -496,10 +499,6 @@ module.exports = (on) => {
     stubGetUnacceptableAbsenceCount: (args) => whereabouts.stubGetUnacceptableAbsenceCount(args),
     stubGetUnacceptableAbsenceDetail: (args) => whereabouts.stubGetUnacceptableAbsenceDetail(args),
     stubPrisonerSearch: (response) => offenderSearch.stubPrisonerSearch(response),
-    stubMovementReasons: (reasons) => prisonApi.stubMovementReasons(reasons),
-    stubTransfers: (response) => prisonApi.stubTransfers(response),
-    resetTransfersStub: () => prisonApi.resetTransfersStub(),
     stubPrisonerSearchDetails: (response) => offenderSearch.stubPrisonerSearchDetails(response),
-    stubPrisonerProperty: (property) => prisonApi.stubPrisonerProperty(property),
   })
 }
