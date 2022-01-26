@@ -604,7 +604,7 @@ describe('prisoner profile quick look', () => {
           prisonApi.getPrisonerVisitBalances.mockResolvedValue({ remainingVo: 0, remainingPvo: 0 })
         })
 
-        it('should render the quick look template with the correctly formatted visit details', async () => {
+        it('should render the quick look template with the correctly formatted visits details', async () => {
           await controller(req, res)
 
           expect(res.render).toHaveBeenCalledWith(

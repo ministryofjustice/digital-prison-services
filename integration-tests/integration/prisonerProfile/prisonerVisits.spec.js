@@ -18,7 +18,7 @@ context('Prisoner visits', () => {
     })
 
     it('should handle no results and have the correct page title', () => {
-      cy.visit(`/prisoner/${offenderNo}/visit-details`)
+      cy.visit(`/prisoner/${offenderNo}/visits-details`)
 
       cy.get('[data-test="no-visit-results"]').should('contain.text', 'There are no visits for this prisoner')
       cy.get('h1').should('have.text', 'John Smith’s visits')
@@ -26,7 +26,7 @@ context('Prisoner visits', () => {
 
     it('should display all establishments even if there are no results', () => {
       cy.task('stubVisitsPrisons', [])
-      cy.visit(`/prisoner/${offenderNo}/visit-details`)
+      cy.visit(`/prisoner/${offenderNo}/visits-details`)
       cy.get('[data-test="establishment-type"]').should('contain.text', 'All')
 
       cy.get('[data-test="no-visit-results"]').should('contain.text', 'There are no visits for this prisoner')
@@ -34,7 +34,7 @@ context('Prisoner visits', () => {
 
     it('should maintain form selections from search query', () => {
       cy.visit(
-        `/prisoner/${offenderNo}/visit-details?visitType=OFFI&fromDate=17%2F07%2F2020&toDate=17%2F08%2F2020&establishment=HLI&status=SCH`
+        `/prisoner/${offenderNo}/visits-details?visitType=OFFI&fromDate=17%2F07%2F2020&toDate=17%2F08%2F2020&establishment=HLI&status=SCH`
       )
 
       cy.get('[data-test="prisoner-visits-type"]').should('have.value', 'OFFI')
@@ -45,14 +45,14 @@ context('Prisoner visits', () => {
     })
 
     it('should handle no data on filtered results', () => {
-      cy.visit(`/prisoner/${offenderNo}/visit-details?visitType=OFFI&fromDate=17%2F07%2F2020&toDate=17%2F08%2F2020`)
+      cy.visit(`/prisoner/${offenderNo}/visits-details?visitType=OFFI&fromDate=17%2F07%2F2020&toDate=17%2F08%2F2020`)
 
       cy.get('[data-test="no-visit-results"]').should('contain.text', 'There are no visits for what you have selected')
     })
 
     it('should have a working clear link on the search form', () => {
       cy.visit(
-        `/prisoner/${offenderNo}/visit-details?visitType=OFFI&fromDate=17%2F07%2F2020&toDate=17%2F08%2F2020&establishment=HLI&status=NORM`
+        `/prisoner/${offenderNo}/visits-details?visitType=OFFI&fromDate=17%2F07%2F2020&toDate=17%2F08%2F2020&establishment=HLI&status=NORM`
       )
 
       cy.get('[data-test="prisoner-visits-type"]').should('have.value', 'OFFI')
@@ -71,7 +71,7 @@ context('Prisoner visits', () => {
     })
 
     it('should submit the search with the correct filter parameters', () => {
-      cy.visit(`/prisoner/${offenderNo}/visit-details`)
+      cy.visit(`/prisoner/${offenderNo}/visits-details`)
       cy.get('#visitType').select('Official').should('have.value', 'OFFI')
       cy.get('#establishment').select('Hull (HMP)').should('have.value', 'HLI')
       cy.get('#status').select('Cancelled: No Visiting Order').should('have.value', 'CANC-NO_VO')
@@ -102,7 +102,7 @@ context('Prisoner visits', () => {
     it('should have the same number of table rows as individual visitors from all visits', () => {
       const individualVisitors = visitsWithVisitors.content.reduce((acc, item) => acc + item.visitors.length, 0)
 
-      cy.visit(`/prisoner/${offenderNo}/visit-details`)
+      cy.visit(`/prisoner/${offenderNo}/visits-details`)
 
       cy.get('[data-test="prisoner-visits-results"]').then(($table) => {
         cy.get($table)
@@ -116,7 +116,7 @@ context('Prisoner visits', () => {
     })
 
     it('should render the correct data in the table', () => {
-      cy.visit(`/prisoner/${offenderNo}/visit-details`)
+      cy.visit(`/prisoner/${offenderNo}/visits-details`)
 
       cy.get('[data-test="prisoner-visits-results"]').then(($table) => {
         cy.get($table)
@@ -137,7 +137,7 @@ context('Prisoner visits', () => {
     })
 
     it('should sort according to lead, dob and surname', () => {
-      cy.visit(`/prisoner/${offenderNo}/visit-details`)
+      cy.visit(`/prisoner/${offenderNo}/visits-details`)
 
       cy.get('[data-test="prisoner-visits-results"]').then(($table) => {
         // lead is Henretris, rest sorted by dob
@@ -154,7 +154,7 @@ context('Prisoner visits', () => {
     })
 
     it('should display not entered if no relationship', () => {
-      cy.visit(`/prisoner/${offenderNo}/visit-details`)
+      cy.visit(`/prisoner/${offenderNo}/visits-details`)
 
       cy.get('[data-test="prisoner-visits-results"]').then(($table) => {
         cy.get($table).find('tr').eq(17).find('td').eq(6).should('contain.text', 'Granddaughter')
@@ -163,7 +163,7 @@ context('Prisoner visits', () => {
     })
 
     it('should display correct status including search type', () => {
-      cy.visit(`/prisoner/${offenderNo}/visit-details`)
+      cy.visit(`/prisoner/${offenderNo}/visits-details`)
 
       cy.get('[data-test="prisoner-visits-results"]').then(($table) => {
         cy.get($table)
