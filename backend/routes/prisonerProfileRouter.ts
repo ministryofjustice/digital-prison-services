@@ -111,7 +111,7 @@ const controller = ({
   router.get('/skills', learnerEmployabilitySkills({ paginationService, prisonApi, esweService }))
   router.get('/work-activities', workInsidePrison({ paginationService, prisonApi, esweService }))
   // @ts-expect-error ts-migrate(2345) FIXME: Argument of type '{ prisonApi: any; logError: any;... Remove this comment to see the full error message
-  router.get('/visit-details', prisonerVisits({ prisonApi, logError }))
+  router.get('/visits-details', prisonerVisits({ prisonApi, logError }))
   // @ts-expect-error ts-migrate(2345) FIXME: Argument of type '{ prisonApi: any; logError: any;... Remove this comment to see the full error message
   router.get('/schedule', prisonerSchedule({ prisonApi, logError }))
   router.get(
