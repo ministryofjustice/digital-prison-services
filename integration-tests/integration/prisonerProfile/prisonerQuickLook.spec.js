@@ -359,10 +359,10 @@ context('Prisoner quick look', () => {
           expect($summaryValues.get(1).innerText).to.eq('4')
           expect($summaryValues.get(2).innerText).to.eq('17 April 2020')
         })
-      cy.get('[data-test="visit-details-link"]')
-        .should('contain.text', 'View visit details')
+      cy.get('[data-test="visits-details-link"]')
+        .should('contain.text', 'View visits details')
         .should('have.attr', 'href')
-        .should('include', '/prisoner/A1234A/visit-details')
+        .should('include', '/prisoner/A1234A/visits-details')
     })
 
     it('Should show correct Personal information details', () => {
