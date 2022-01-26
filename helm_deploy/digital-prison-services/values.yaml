@@ -6,7 +6,7 @@ generic-prometheus-alerts:
 
 ingress:
   # live-1 is blue, live is green
-  contextColour: blue
+  contextColour: green
   annotations:
     external-dns.alpha.kubernetes.io/aws-weight: "100"
     nginx.ingress.kubernetes.io/custom-http-errors: "418"
