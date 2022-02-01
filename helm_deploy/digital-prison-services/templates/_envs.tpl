@@ -196,6 +196,12 @@ env:
   - name: USE_OF_FORCE_PRISONS
     value: {{ .Values.env.USE_OF_FORCE_PRISONS | quote }}
 
+  - name: INCENTIVES_URL
+    value: {{ .Values.env.INCENTIVES_URL | quote }}
+
+  - name: INCENTIVES_PRISONS
+    value: {{ .Values.env.INCENTIVES_PRISONS | quote }}
+
   - name: TOKENVERIFICATION_API_URL
     value: {{ .Values.env.TOKENVERIFICATION_API_URL | quote }}
 
