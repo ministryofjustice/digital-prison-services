@@ -14,6 +14,7 @@ const {
     manageAdjudications,
     bookAPrisonVisit,
     welcomePeopleIntoPrison,
+    incentives,
   },
 } = config
 
@@ -49,6 +50,14 @@ const getTasks = ({ activeCaseLoadId, locations, staffId, whereaboutsConfig, key
       description: 'Complete a cell move and view the 7 day history of all cell moves completed in your establishment.',
       href: '/change-someones-cell',
       enabled: () => userHasRoles(['CELL_MOVE']),
+    },
+    {
+      id: 'incentives',
+      heading: 'Manage incentives',
+      description: 'See review dates, incentive levels and behaviour entries by residential location.',
+      href: incentives.ui_url,
+      roles: null,
+      enabled: () => incentives.ui_url && incentives.prisons.split(',').includes(activeCaseLoadId),
     },
     {
       id: 'use-of-force',
