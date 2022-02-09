@@ -89,8 +89,8 @@ const getTasks = ({ activeCaseLoadId, locations, staffId, whereaboutsConfig, key
     },
     {
       id: 'hdc-licences',
-      heading: 'HDC and licences',
-      description: 'Create and manage Home Detention Curfew and licences.',
+      heading: 'Home Detention Curfew',
+      description: 'Create and manage Home Detention Curfew.',
       href: licences.url,
       enabled: () =>
         licences.url &&
