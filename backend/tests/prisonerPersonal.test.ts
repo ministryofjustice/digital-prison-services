@@ -46,6 +46,8 @@ describe('prisoner personal', () => {
     personService.getPersonContactDetails = jest.fn().mockResolvedValue({})
     // @ts-expect-error ts-migrate(2339) FIXME: Property 'getNeurodiversities' does not ex... Remove this comment to see the full error message
     esweService.getNeurodiversities = jest.fn().mockResolvedValue('')
+    // @ts-expect-error ts-migrate(2339) FIXME: Property 'getNeurodiversities' does not ex... Remove this comment to see the full error message
+    esweService.getNeurodivergence = jest.fn().mockResolvedValue('')
 
     // @ts-expect-error ts-migrate(2339) FIXME: Property 'getDetails' does not exist on type '{}'.
     prisonApi.getDetails = jest.fn().mockResolvedValue({})
@@ -2167,6 +2169,90 @@ describe('prisoner personal', () => {
       ]
       // @ts-expect-error ts-migrate(2339) FIXME: Property 'getNeurodiversities' does not ex... Remove this comment to see the full error message
       esweService.getNeurodiversities.mockResolvedValue(neurodiversities)
+      config.app.neurodiversityEnabledUsernames = 'DBULL_GEN'
+      await controller(req, res)
+      expect(res.render).toHaveBeenCalledWith(
+        'prisonerProfile/prisonerPersonal/prisonerPersonal.njk',
+        expect.objectContaining({ displayNeurodiversity: false })
+      )
+    })
+  })
+
+  describe('learner profile data including neurodivergence info', () => {
+    beforeEach(() => {
+      // @ts-expect-error ts-migrate(2339) FIXME: Property 'getNeurodiversities' does not ex... Remove this comment to see the full error message
+      esweService.getNeurodivergence = jest.fn()
+    })
+
+    it('should return null for a failed request', async () => {
+      // @ts-expect-error ts-migrate(2339) FIXME: Property 'getNeurodiversities' does not ex... Remove this comment to see the full error message
+      esweService.getNeurodivergence.mockRejectedValue(new Error())
+      await controller(req, res)
+      expect(res.render).toHaveBeenCalledWith(
+        'prisonerProfile/prisonerPersonal/prisonerPersonal.njk',
+        expect.objectContaining({ neurodivergence: null })
+      )
+    })
+
+    it('should return a list of learner profiles for a successful request', async () => {
+      const neurodivergence = [
+        {
+          establishmentName: 'HMP Moorland',
+          details: [
+            {
+              label: 'Description',
+              html: "<p class='govuk-body'>Autism</p><p class='govuk-body'>Tourette Syndrome</p>",
+            },
+            { label: 'Location', value: 'HMP Moorland' },
+          ],
+        },
+      ]
+      // @ts-expect-error ts-migrate(2339) FIXME: Property 'getNeurodiversities' does not ex... Remove this comment to see the full error message
+      esweService.getNeurodivergence.mockResolvedValue(neurodivergence)
+      await controller(req, res)
+      expect(res.render).toHaveBeenCalledWith(
+        'prisonerProfile/prisonerPersonal/prisonerPersonal.njk',
+        expect.objectContaining({ neurodivergence })
+      )
+    })
+
+    it('should return true for displaying neurodiversity feature if no username is flagged', async () => {
+      const neurodivergence = [
+        {
+          establishmentName: 'HMP Moorland',
+          details: [
+            {
+              label: 'Description',
+              html: "<p class='govuk-body'>Visual impairment</p><p class='govuk-body'>Dyslexia</p>",
+            },
+            { label: 'Location', value: 'HMP Moorland' },
+          ],
+        },
+      ]
+      // @ts-expect-error ts-migrate(2339) FIXME: Property 'getNeurodiversities' does not ex... Remove this comment to see the full error message
+      esweService.getNeurodivergence.mockResolvedValue(neurodivergence)
+      config.app.neurodiversityEnabledUsernames = ''
+      await controller(req, res)
+      expect(res.render).toHaveBeenCalledWith(
+        'prisonerProfile/prisonerPersonal/prisonerPersonal.njk',
+        expect.objectContaining({ displayNeurodiversity: true })
+      )
+    })
+    it('should return false for displaying neurodiversity feature if the username is not flagged but there are some other flagged usernames', async () => {
+      const neurodivergence = [
+        {
+          establishmentName: 'HMP Moorland',
+          details: [
+            {
+              label: 'Description',
+              html: "<p class='govuk-body'>Visual impairment</p><p class='govuk-body'>Dyslexia</p>",
+            },
+            { label: 'Location', value: 'HMP Moorland' },
+          ],
+        },
+      ]
+      // @ts-expect-error ts-migrate(2339) FIXME: Property 'getNeurodiversities' does not ex... Remove this comment to see the full error message
+      esweService.getNeurodivergence.mockResolvedValue(neurodivergence)
       config.app.neurodiversityEnabledUsernames = 'DBULL_GEN'
       await controller(req, res)
       expect(res.render).toHaveBeenCalledWith(
