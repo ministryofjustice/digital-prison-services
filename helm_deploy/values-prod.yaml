@@ -63,7 +63,7 @@ env:
   DISABLE_REQUEST_LIMITER: true
   PVB_URL: https://manage-a-prison-visit.hmpps.service.justice.gov.uk/
   CALCULATE_RELEASE_DATES_URL: https://calculate-release-dates.hmpps.service.justice.gov.uk
-  SEND_LEGAL_MAIL_URL: ""
+  SEND_LEGAL_MAIL_URL: https://check-rule39-mail.prison.service.justice.gov.uk
   WELCOME_PEOPLE_INTO_PRISON_URL: https://welcome.prison.service.justice.gov.uk/
   WELCOME_PEOPLE_INTO_PRISON_ENABLED_PRISONS: "NMI"
 
