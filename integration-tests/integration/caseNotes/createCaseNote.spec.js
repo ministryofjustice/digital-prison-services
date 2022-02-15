@@ -250,4 +250,37 @@ context('A user can add a case note', () => {
     page.omicOpenWarning().should('be.visible')
     page.omicOpenHint().should('be.visible')
   })
+
+  it('A user can see behaviour entry prompts', () => {
+    const createCaseNotePage = CreateCaseNotePage.verifyOnPage()
+    const form = createCaseNotePage.form()
+    const prompts = createCaseNotePage.behaviourPrompts()
+
+    prompts.all().should('be.hidden')
+
+    form.type().select('POS')
+    prompts.positive().should('be.visible')
+    prompts.negative().should('be.hidden')
+
+    form.type().select('OBSERVE')
+    prompts.all().should('be.hidden')
+
+    form.type().select('NEG')
+    prompts.positive().should('be.hidden')
+    prompts.negative().should('be.visible')
+  })
+
+  Array.of(['positive', 'POS', 'visible', 'hidden'], ['negative', 'NEG', 'hidden', 'visible']).forEach(
+    ([name, caseNoteType, positivePromptState, negativePromptState]) => {
+      it(`A user can see behaviour entry prompt on load if "${name}" type is pre-selected`, () => {
+        cy.visit(`/prisoner/A12345/add-case-note?type=${caseNoteType}`)
+
+        const createCaseNotePage = CreateCaseNotePage.verifyOnPage()
+        const prompts = createCaseNotePage.behaviourPrompts()
+
+        prompts.positive().should(`be.${positivePromptState}`)
+        prompts.negative().should(`be.${negativePromptState}`)
+      })
+    }
+  )
 })

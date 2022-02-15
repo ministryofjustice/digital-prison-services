@@ -18,6 +18,11 @@ const createCaseNotePage = () =>
     errorSummaryList: () => cy.get('.govuk-error-summary__list'),
     omicOpenWarning: () => cy.get('[data-test="omic-open-warning"]'),
     omicOpenHint: () => cy.get('[data-test="omic-open-hint"]'),
+    behaviourPrompts: () => ({
+      all: () => cy.get('.case-notes-behaviour-prompt'),
+      positive: () => cy.get('.case-notes-behaviour-prompt--pos'),
+      negative: () => cy.get('.case-notes-behaviour-prompt--neg'),
+    }),
   })
 
 export default {
