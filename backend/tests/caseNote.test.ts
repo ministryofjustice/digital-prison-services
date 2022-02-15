@@ -7,7 +7,11 @@ Reflect.deleteProperty(process.env, 'APPINSIGHTS_INSTRUMENTATIONKEY')
 const prisonApi = { getDetails: {} }
 const caseNotesApi = { addCaseNote: {}, myCaseNoteTypes: {} }
 
-const { index, post, areYouSure, confirm } = caseNoteCtrl.caseNoteFactory({ prisonApi, caseNotesApi })
+const { index, post, areYouSure, confirm } = caseNoteCtrl.caseNoteFactory({
+  prisonApi,
+  caseNotesApi,
+  showBehaviourPrompts: false,
+})
 
 jest.mock('../logError', () => ({
   logError: jest.fn(),

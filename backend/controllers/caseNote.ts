@@ -1,10 +1,15 @@
 import moment from 'moment'
 import nunjucks from 'nunjucks'
+import config from '../config'
 import { properCaseName } from '../utils'
 
 const getOffenderUrl = (offenderNo) => `/prisoner/${offenderNo}`
 
-export const caseNoteFactory = ({ prisonApi, caseNotesApi, showBehaviourPrompts = false }) => {
+export const caseNoteFactory = ({
+  prisonApi,
+  caseNotesApi,
+  showBehaviourPrompts = config.app.caseNotesBehaviourPrompts,
+}) => {
   const getOffenderDetails = async (res, offenderNo) => {
     const { firstName, lastName } = await prisonApi.getDetails(res.locals, offenderNo)
 
