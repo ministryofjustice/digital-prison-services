@@ -5,6 +5,7 @@
 {% from "components/datePicker/datePicker.njk" import datePicker %}
 {% from "govuk/components/input/macro.njk" import govukInput %}
 {% from "govuk/components/warning-text/macro.njk" import govukWarningText %}
+{% from "govuk/components/details/macro.njk" import govukDetails %}
 
 {% extends "../partials/layout.njk" %}
 
@@ -55,6 +56,17 @@
           items: types | addDefaultSelectedVale('Select') | setSelected(formValues.type),
           errorMessage: errors | findError('type')
         }) }}
+
+    {{ govukDetails({
+      summaryText: "Why recognise positive behaviour?",
+      text: "Verbal praise delivered promptly is the most effective way of reinforcing good behaviour which can lead to long-term changes.",
+      classes: "case-notes-behaviour-prompt case-notes-behaviour-prompt--pos govuk-!-width-one-half"
+    }) }}
+    {{ govukDetails({
+      summaryText: "Creating long-term change",
+      text: "Evidence suggests noticing and praising something a prisoner does well is much more likely to lead to long-term changes than only noticing poor behaviour.",
+      classes: "case-notes-behaviour-prompt case-notes-behaviour-prompt--neg govuk-!-width-one-half"
+    }) }}
 
     <div id="subTypes">
       {{ govukSelect({
