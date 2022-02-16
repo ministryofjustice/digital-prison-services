@@ -348,7 +348,7 @@ const behaviourPrompts = {
     },
     {
       summary: 'What happens next?',
-      text: 'Things that might help after making an entry include: asking about circumstances around the behaviour, listening, and then agreeing how they could behave better next time.',
+      text: 'Things that might help after making an entry include: asking about circumstances around the behaviour, listening, and then agreeing what could improve next time.',
     },
     {
       summary: 'Talking about what happened',
