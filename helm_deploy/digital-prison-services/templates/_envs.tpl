@@ -292,4 +292,6 @@ env:
   - name: WELCOME_PEOPLE_INTO_PRISON_ENABLED_PRISONS
     value: {{ .Values.env.WELCOME_PEOPLE_INTO_PRISON_ENABLED_PRISONS | quote }}
 
+  - name: CASE_NOTES_BEHAVIOUR_PROMPTS
+    value: {{ .Values.env.CASE_NOTES_BEHAVIOUR_PROMPTS | quote }}
 {{- end -}}
