@@ -7,7 +7,11 @@ Reflect.deleteProperty(process.env, 'APPINSIGHTS_INSTRUMENTATIONKEY')
 const prisonApi = { getDetails: {} }
 const caseNotesApi = { addCaseNote: {}, myCaseNoteTypes: {} }
 
-const { index, post, areYouSure, confirm } = caseNoteCtrl.caseNoteFactory({ prisonApi, caseNotesApi })
+const { index, post, areYouSure, confirm } = caseNoteCtrl.caseNoteFactory({
+  prisonApi,
+  caseNotesApi,
+  showBehaviourPrompts: false,
+})
 
 jest.mock('../logError', () => ({
   logError: jest.fn(),
@@ -140,6 +144,7 @@ describe('case note management', () => {
           { value: 'ACHIEVEMENTS', text: 'Achievements' },
         ],
         subTypes: [],
+        behaviourPrompts: {},
       })
 
       // @ts-expect-error ts-migrate(2339) FIXME: Property 'mockRestore' does not exist on type '() ... Remove this comment to see the full error message
@@ -170,6 +175,7 @@ describe('case note management', () => {
           { value: 'ACHIEVEMENTS', text: 'Achievements' },
         ],
         subTypes: [{ value: 'OBS1', text: 'Observation 1', type: 'OBSERVE' }],
+        behaviourPrompts: {},
       })
 
       // @ts-expect-error ts-migrate(2339) FIXME: Property 'mockRestore' does not exist on type '() ... Remove this comment to see the full error message
@@ -224,6 +230,33 @@ describe('case note management', () => {
       )
       // @ts-expect-error ts-migrate(2339) FIXME: Property 'mockRestore' does not exist on type '() ... Remove this comment to see the full error message
       Date.now.mockRestore()
+    })
+
+    it('should chose some positive/negative behaviour entry prompts', async () => {
+      const { index: indexWithBehavourPrompts } = caseNoteCtrl.caseNoteFactory({
+        prisonApi,
+        caseNotesApi,
+        showBehaviourPrompts: true,
+      })
+
+      const req = { ...mockCreateReq, params: { offenderNo } }
+      await indexWithBehavourPrompts(req, res)
+
+      expect(res.render).toBeCalledWith(
+        'caseNotes/addCaseNoteForm.njk',
+        expect.objectContaining({
+          behaviourPrompts: {
+            pos: {
+              summary: expect.any(String),
+              text: expect.any(String),
+            },
+            neg: {
+              summary: expect.any(String),
+              text: expect.any(String),
+            },
+          },
+        })
+      )
     })
   })
 

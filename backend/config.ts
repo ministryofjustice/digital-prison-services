@@ -19,6 +19,7 @@ export const app = {
   esweEnabled: process.env.ESWE_ENABLED === 'true',
   neurodiversityEnabledUsernames: process.env.NEURODIVERSITY_ENABLED_USERNAMES,
   disableRequestLimiter: process.env.DISABLE_REQUEST_LIMITER ? process.env.DISABLE_REQUEST_LIMITER === 'true' : false,
+  caseNotesBehaviourPrompts: process.env.CASE_NOTES_BEHAVIOUR_PROMPTS === 'true',
 }
 
 export const analytics = {
