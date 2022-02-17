@@ -310,8 +310,8 @@ context('A user can add a case note', () => {
       .invoke('attr', 'data-ga-id')
       .then((gaId) => {
         expect(gtagCalls).to.deep.equal([
-          ['event', 'opened', { event_category: gaId }],
-          ['event', 'closed', { event_category: gaId }],
+          ['event', 'opened', { event_category: gaId, event_label: 'MDI' }],
+          ['event', 'closed', { event_category: gaId, event_label: 'MDI' }],
         ])
       })
   })

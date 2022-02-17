@@ -63,9 +63,13 @@ $(function () {
     behaviourPrompts.on('toggle', function (e) {
       var $prompt = $(e.target)
       var gaId = $prompt.data('ga-id')
+      var caseload = $prompt.data('case-load')
       var action = $prompt.prop('open') ? 'opened' : 'closed'
       if (gaId && typeof gtag === 'function') {
-        gtag('event', action, {event_category: gaId})
+        gtag('event', action, {
+          event_category: gaId,
+          event_label: caseload,
+        })
       }
     })
   }
