@@ -208,7 +208,7 @@ context('Homepage', () => {
     it('should show manage restricted patients', () => {
       cy.task('stubUserMeRoles', [
         { roleCode: 'SEARCH_RESTRICTED_PATIENT' },
-        { roleCode: 'PRISON_RECEPTION' },
+        { roleCode: 'TRANSFER_RESTRICTED_PATIENT' },
         { roleCode: 'REMOVE_RESTRICTED_PATIENT' },
       ])
       const page = homepagePage.goTo()

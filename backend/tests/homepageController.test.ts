@@ -602,7 +602,10 @@ describe('Homepage', () => {
   })
   it('should display the Manage Restricted Patients task on the homepage if any of the correct roles are present', async () => {
     config.apis.manageRestrictedPatients.ui_url = 'http://manage-restricted-patients-url'
-    oauthApi.userRoles.mockResolvedValue([{ roleCode: 'SEARCH_RESTRICTED_PATIENT' }, { roleCode: 'PRISON_RECEPTION' }])
+    oauthApi.userRoles.mockResolvedValue([
+      { roleCode: 'SEARCH_RESTRICTED_PATIENT' },
+      { roleCode: 'TRANSFER_RESTRICTED_PATIENT' },
+    ])
 
     await controller(req, res)
 

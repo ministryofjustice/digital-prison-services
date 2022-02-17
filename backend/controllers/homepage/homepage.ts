@@ -203,7 +203,7 @@ const getTasks = ({ activeCaseLoadId, locations, staffId, whereaboutsConfig, key
       href: manageRestrictedPatients.ui_url,
       enabled: () =>
         manageRestrictedPatients.ui_url &&
-        userHasRoles(['SEARCH_RESTRICTED_PATIENT', 'PRISON_RECEPTION', 'REMOVE_RESTRICTED_PATIENT']),
+        userHasRoles(['SEARCH_RESTRICTED_PATIENT', 'TRANSFER_RESTRICTED_PATIENT', 'REMOVE_RESTRICTED_PATIENT']),
     },
   ]
 }
