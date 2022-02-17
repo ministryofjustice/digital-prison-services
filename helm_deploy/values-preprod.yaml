@@ -68,10 +68,13 @@ env:
   SEND_LEGAL_MAIL_URL: https://check-rule39-mail-preprod.prison.service.justice.gov.uk
   WELCOME_PEOPLE_INTO_PRISON_URL: https://welcome-preprod.prison.service.justice.gov.uk/
   WELCOME_PEOPLE_INTO_PRISON_ENABLED_PRISONS: "NMI"
+  CASE_NOTES_BEHAVIOUR_PROMPTS: true
 
 allowlist:
   office: "217.33.148.210/32"
   quantum: "62.25.109.197/32"
+  petty-france-wifi: "213.121.161.112/28"
+  global-protect: "35.176.93.186/32"
   quantum_alt: "212.137.36.230/32"
   health-kick: "35.177.252.195/32"
   digitalprisons1: "52.56.112.98/32"

@@ -8,8 +8,7 @@
 </p>
 {% if neurodiversityInfo %}
     {% for entry in neurodiversityInfo %}
-    {{ neurodiversitySection(entry.details, '', {}, false, 'govuk-summary-list--no-border', false) }}
-    <hr class="govuk-section-break govuk-section-break--m govuk-section-break--visible">
+        {{ neurodiversitySection(entry, '', {}, false, 'govuk-summary-list--no-border', false) }}
     {% endfor %}
 
     {% if not neurodiversityInfo.length %}

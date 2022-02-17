@@ -288,7 +288,7 @@ export default class EsweService {
   async getNeurodivergence(nomisId: string, establishmentId: string): Promise<NeuroDivergence> {
     try {
       const context = await this.systemOauthClient.getClientCredentialsTokens()
-      const content = await this.curiousApi.getLearnerNeurodivergence(context, 'Y6754UI', establishmentId)
+      const content = await this.curiousApi.getLearnerNeurodivergence(context, nomisId, establishmentId)
 
       if (!content.length) {
         const lddlist = content.map((val) => ({
@@ -305,9 +305,10 @@ export default class EsweService {
 
       const displayAssessed = content.map((profile) => {
         if (profile.neurodivergenceAssessed) {
+          const combinedLdd = profile.neurodivergenceAssessed.slice(0)
           return {
-            diversityAssessed: [
-              { label: 'assessment', value: `${profile.neurodivergenceAssessed}` },
+            details: [
+              { label: 'From neurodiversity assessment', ldd: combinedLdd },
               { label: 'assessmentDate', value: `${readableDateFormat(profile.assessmentDate, DATE_FORMAT)}` },
             ],
           }
@@ -317,9 +318,10 @@ export default class EsweService {
 
       const displaySelfDeclared = content.map((profile) => {
         if (profile.neurodivergenceSelfDeclared) {
+          const combinedLdd = profile.neurodivergenceSelfDeclared.slice(0)
           return {
-            diversitySelfDeclared: [
-              { label: 'selfDeclared', value: `${profile.neurodivergenceSelfDeclared}` },
+            details: [
+              { label: 'From self-assessment', ldd: combinedLdd },
               { label: 'selfDeclaredDate', value: `${readableDateFormat(profile.selfDeclaredDate, DATE_FORMAT)}` },
             ],
           }
@@ -329,10 +331,11 @@ export default class EsweService {
 
       const displaySupport = content.map((profile) => {
         if (profile.neurodivergenceSupport) {
+          const combinedLdd = profile.neurodivergenceSupport.slice(0)
           return {
-            diversitySupport: [
-              { label: 'support', value: `${profile.neurodivergenceSupport}` },
-              { label: 'supportDate', value: `${readableDateFormat(profile.supportDate, DATE_FORMAT)}` },
+            details: [
+              { label: 'Support needed', ldd: combinedLdd },
+              { label: 'Recorded on', value: `${readableDateFormat(profile.supportDate, DATE_FORMAT)}` },
             ],
           }
         }

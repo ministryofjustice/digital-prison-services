@@ -1,9 +1,10 @@
 {% from "govuk/components/summary-list/macro.njk" import govukSummaryList %}
 
-{% macro prisonerSummarySection(array = [], missingValueText = 'Not entered', attributes = {}, indentKey = false, classes='', regularLabel = false) %}
+{% macro neurodiversitySection(diversities, missingValueText = 'Not entered', attributes = {}, indentKey = false, classes='', regularLabel = false) %}
   {% set rows = [] %}
   {% set indentClass = "govuk-summary-list__key--indent" if indentKey %}
   {% set regularLabelClass = "govuk-!-font-weight-regular" if regularLabel %}
+  {% set borderLine = "govuk-section-break govuk-section-break--m govuk-section-break--visible" %}
 
   {% if indentClass %}
     {% if regularLabelClass %}
@@ -15,30 +16,128 @@
     {% set labelClass = regularLabelClass %}
   {% endif %}
 
-  {% for detail in array %}
+  {% if diversities.divergenceSupport.length %}
+    {% set desc = diversities.divergenceSupport[0]["details"][0].label %}
+    {% set ldd = diversities.divergenceSupport[0]["details"][0].ldd %}
+    {% set dateOn = diversities.divergenceSupport[0]["details"][1].value %}
 
-    {% if detail.neurodivergenceSupport %}
-      {% set lddList = [] %}
-      {% for item in detail.neurodivergenceSupport %}
-        {% set lddList = (lddList.push('<p class="govuk-body">'+item+'</p>'), lddList) %}
-      {% endfor %}
-      {% set value = {html: lddList.join('') | showDefault(missingValueText)} %}
-    {% elseif detail.html %}
-      {% set value = {html: detail.html | showDefault(missingValueText)} %}
-    {% else %}
-      {% set value = {text: detail.value | showDefault(missingValueText)} %}
-    {% endif %}
+    {% set lddList = [] %}
+    {% for item in ldd %}
+      {% set lddList = (lddList.push('<p class="govuk-body">'+item+'</p>'), lddList) %}
+    {% endfor %}
+    {% set lddList = (lddList.push('<p class="govuk-hint govuk-!-margin-top-1 govuk-!-margin-bottom-3">Recorded on '+dateOn+'</p>'), lddList) %}
+    {% set value = {html: lddList.join('') | showDefault(missingValueText)} %}
 
     {% set rows = (rows.push(
       {
         key: {
-          text: detail.label,
-          classes: labelClass
-        },
+        text: desc,
+        classes: labelClass
+      },
         value: value
       }
     ), rows) %}
-  {% endfor %}
+  {% endif %}
+
+  {% if rows.length %}
+    {{ govukSummaryList({
+      rows: rows,
+      classes: borderLine,
+      attributes: attributes
+    }) }}
+  {% endif %}
+
+  {% set rows = [] %}
+
+  {% if diversities.divergenceAssessed.length %}
+    {% set desc = {text: diversities.divergenceAssessed[0]["details"][0].label | showDefault(missingValueText)} %}
+    {% set ldd = diversities.divergenceAssessed[0]["details"][0].ldd %}
+    {% set dateOn = diversities.divergenceAssessed[0]["details"][1].value %}
+
+    {% set lddList = [] %}
+    {% for item in ldd %}
+      {% set lddList = (lddList.push('<p class="govuk-body">'+item+'</p>'), lddList) %}
+    {% endfor %}
+    {% if lddList.length %}
+      {% set lddList = (lddList.push('<p class="govuk-hint govuk-!-margin-top-1 govuk-!-margin-bottom-3">Recorded on '+dateOn+'</p>'), lddList) %}
+      {% set value = {html: lddList.join('') | showDefault(missingValueText)} %}
+
+      {% set rows = (rows.push(
+        {
+          key: {
+          text: 'Conditions',
+          classes: labelClass
+        },
+          value: desc
+        }
+      ), rows) %}
+      {% set rows = (rows.push(
+        {
+          key: {
+          text: '',
+          classes: labelClass
+        },
+          value: value
+        }
+      ), rows) %}
+    {% endif %}
+  {% endif %}
+
+  {% if rows.length %}
+    {{ govukSummaryList({
+      rows: rows,
+      classes: classes,
+      attributes: attributes
+    }) }}
+  {% endif %}
+
+  {% set rows = [] %}
+  {% if diversities.divergenceSelfDeclared.length %}
+    {% set desc = {text: diversities.divergenceSelfDeclared[0]["details"][0].label | showDefault(missingValueText)} %}
+    {% set ldd = diversities.divergenceSelfDeclared[0]["details"][0].ldd %}
+    {% set dateOn = diversities.divergenceSelfDeclared[0]["details"][1].value %}
+
+    {% set lddList = [] %}
+    {% for item in ldd %}
+      {% set lddList = (lddList.push('<p class="govuk-body">'+item+'</p>'), lddList) %}
+    {% endfor %}
+    {% if lddList.length %}
+      {% set lddList = (lddList.push('<p class="govuk-hint govuk-!-margin-top-1 govuk-!-margin-bottom-3">Recorded on '+dateOn+'</p>'), lddList) %}
+      {% set value = {html: lddList.join('') | showDefault(missingValueText)} %}
+
+      {% if diversities.divergenceAssessed[0]["details"][0].ldd.length %}
+        {% set rows = (rows.push(
+          {
+            key: {
+            text: '',
+            classes: labelClass
+          },
+            value: desc
+          }
+        ), rows) %}
+        {% else %}
+          {% set rows = (rows.push(
+            {
+              key: {
+              text: 'Conditions',
+              classes: labelClass
+            },
+              value: desc
+            }
+          ), rows) %}
+      {% endif %}
+
+      {% set rows = (rows.push(
+        {
+          key: {
+          text: '',
+          classes: labelClass
+        },
+          value: value
+        }
+      ), rows) %}
+    {% endif %}
+  {% endif %}
 
   {% if rows.length %}
     {{ govukSummaryList({

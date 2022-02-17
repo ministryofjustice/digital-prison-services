@@ -3,6 +3,7 @@ $(function () {
   var subTypeSelect = $('#sub-type')
   var subTypesUrl = $('#subTypesUrl').val()
   var omicOpenWarnings = $('.case-notes-omic-open')
+  var behaviourPrompts = $('.case-notes-behaviour-prompt')
 
   if (omicOpenWarnings.length) {
     var selectedSubTypeOption = subTypeSelect.children('option:selected').val()
@@ -43,4 +44,20 @@ $(function () {
     var style = selectedSubTypeOption.value == 'OPEN_COMM' ? 'block' : 'none'
     if (omicOpenWarnings.length) omicOpenWarnings.prop('style', 'display: ' + style)
   })
+
+  if (behaviourPrompts.length) {
+    function toggleBehvaiourPrompts () {
+      behaviourPrompts.prop('open', false)
+      behaviourPrompts.hide()
+      var entryType = typeSelect.val()
+      if (entryType === 'POS') {
+        $('.case-notes-behaviour-prompt--pos').show()
+      } else if (entryType === 'NEG') {
+        $('.case-notes-behaviour-prompt--neg').show()
+      }
+    }
+
+    typeSelect.on('change', toggleBehvaiourPrompts)
+    toggleBehvaiourPrompts()
+  }
 })
