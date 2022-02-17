@@ -283,4 +283,36 @@ context('A user can add a case note', () => {
       })
     }
   )
+
+  it('A GA event is triggered when a behaviour entry prompt is opened', () => {
+    const createCaseNotePage = CreateCaseNotePage.verifyOnPage()
+    const form = createCaseNotePage.form()
+    const prompts = createCaseNotePage.behaviourPrompts()
+
+    const gtagCalls = []
+    const gtag = (...args) => {
+      gtagCalls.push(args)
+    }
+
+    // add gtag (global function variable for Google Tag Manager) spy to page
+    cy.window().then((win) => {
+      // eslint-disable-next-line no-param-reassign
+      win.gtag = gtag
+    })
+
+    form.type().select('POS')
+
+    // click to open and close the prompt
+    prompts.positive().find('summary').click().click()
+    // assert that gtag was called twice with correct event category (the one randomly chosen and displayed)
+    prompts
+      .positive()
+      .invoke('attr', 'data-ga-id')
+      .then((gaId) => {
+        expect(gtagCalls).to.deep.equal([
+          ['event', 'opened', { event_category: gaId }],
+          ['event', 'closed', { event_category: gaId }],
+        ])
+      })
+  })
 })
