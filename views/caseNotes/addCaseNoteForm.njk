@@ -61,7 +61,8 @@
     {{ govukDetails({
       summaryText: prompt.summary,
       text: prompt.text,
-      classes: "case-notes-behaviour-prompt case-notes-behaviour-prompt--" + behaviourType + " govuk-!-width-one-half"
+      classes: "case-notes-behaviour-prompt case-notes-behaviour-prompt--" + behaviourType + " govuk-!-width-one-half",
+      attributes: { "data-ga-id": prompt.gaId, "data-case-load": user.activeCaseLoad.caseLoadId | default("") }
     }) }}
     {% endfor %}
 

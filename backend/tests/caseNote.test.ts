@@ -1,6 +1,6 @@
 import moment from 'moment'
 import { makeError } from './helpers'
-import caseNoteCtrl from '../controllers/caseNote'
+import caseNoteCtrl, { behaviourPrompts } from '../controllers/caseNote'
 
 Reflect.deleteProperty(process.env, 'APPINSIGHTS_INSTRUMENTATIONKEY')
 
@@ -249,14 +249,40 @@ describe('case note management', () => {
             pos: {
               summary: expect.any(String),
               text: expect.any(String),
+              gaId: expect.any(String),
             },
             neg: {
               summary: expect.any(String),
               text: expect.any(String),
+              gaId: expect.any(String),
             },
           },
         })
       )
+    })
+
+    it('should should use unique GA ids for positive/negative behaviour entry prompts', async () => {
+      // take GA ids along with pos/neg key
+      const keyIdPairs = Object.entries(behaviourPrompts)
+        .map(([key, prompts]) => {
+          return prompts.map((prompt) => [key, prompt.gaId])
+        })
+        .flat()
+      // GA ids should indicate behvaiour type
+      expect(
+        keyIdPairs.every(([key, gaId]) =>
+          key === 'pos'
+            ? gaId.startsWith('Positive behaviour prompt: ')
+            : gaId.startsWith('Negative behaviour prompt: ')
+        )
+      ).toBeTruthy()
+      // GA ids should be unique
+      expect(
+        keyIdPairs.reduce((set, [_, gaID]) => {
+          set.add(gaID)
+          return set
+        }, new Set()).size
+      ).toEqual(keyIdPairs.length)
     })
   })
 
