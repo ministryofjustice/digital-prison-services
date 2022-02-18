@@ -149,7 +149,11 @@ allowlist:
   fivewells-2: "20.49.214.228/32"
   fivewells-3: "195.89.157.56/29"
   fivewells-4: "195.59.215.184/29"
-
+  fivewells-5: "51.149.250.0/24"
+  fivewells-6: "51.149.249.0/29"
+  fivewells-7: "194.33.249.0/29"
+  fivewells-8: "51.149.249.32/29"
+  fivewells-9: "194.33.248.0/29"
 
 # determine which slack channel alerts are sent to, via the correct Alert Manager receiver
 generic-prometheus-alerts:
