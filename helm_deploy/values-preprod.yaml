@@ -111,3 +111,6 @@ allowlist:
   moj-official-tgw-preprod: "51.149.251.0/24"
   crc-rrp: "62.253.83.37/32"
   crc-pp-wwm: "5.153.255.210/32"
+  # give BSI access for a PEN test - should be removed after 25th Feb 2022
+  bsi-1: "54.37.241.156/30"
+  bsi-2: "167.71.136.237/32"
