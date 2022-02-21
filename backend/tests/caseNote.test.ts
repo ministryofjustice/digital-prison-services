@@ -7,11 +7,7 @@ Reflect.deleteProperty(process.env, 'APPINSIGHTS_INSTRUMENTATIONKEY')
 const prisonApi = { getDetails: {} }
 const caseNotesApi = { addCaseNote: {}, myCaseNoteTypes: {} }
 
-const { index, post, areYouSure, confirm } = caseNoteCtrl.caseNoteFactory({
-  prisonApi,
-  caseNotesApi,
-  showBehaviourPrompts: false,
-})
+const { index, post, areYouSure, confirm } = caseNoteCtrl.caseNoteFactory({ prisonApi, caseNotesApi })
 
 jest.mock('../logError', () => ({
   logError: jest.fn(),
@@ -125,27 +121,29 @@ describe('case note management', () => {
 
       await index(req, res)
 
-      expect(res.render).toBeCalledWith('caseNotes/addCaseNoteForm.njk', {
-        offenderDetails: {
-          name: 'Test User',
-          offenderNo: 'ABC123',
-          profileUrl: '/prisoner/ABC123',
-        },
-        offenderNo,
-        homeUrl: '/prisoner/ABC123/case-notes',
-        caseNotesRootUrl: '/prisoner/ABC123/add-case-note',
-        formValues: {
-          date: '29/10/2020',
-          hours: '16',
-          minutes: '15',
-        },
-        types: [
-          { value: 'OBSERVE', text: 'Observations' },
-          { value: 'ACHIEVEMENTS', text: 'Achievements' },
-        ],
-        subTypes: [],
-        behaviourPrompts: {},
-      })
+      expect(res.render).toBeCalledWith(
+        'caseNotes/addCaseNoteForm.njk',
+        expect.objectContaining({
+          offenderDetails: {
+            name: 'Test User',
+            offenderNo: 'ABC123',
+            profileUrl: '/prisoner/ABC123',
+          },
+          offenderNo,
+          homeUrl: '/prisoner/ABC123/case-notes',
+          caseNotesRootUrl: '/prisoner/ABC123/add-case-note',
+          formValues: {
+            date: '29/10/2020',
+            hours: '16',
+            minutes: '15',
+          },
+          types: [
+            { value: 'OBSERVE', text: 'Observations' },
+            { value: 'ACHIEVEMENTS', text: 'Achievements' },
+          ],
+          subTypes: [],
+        })
+      )
 
       // @ts-expect-error ts-migrate(2339) FIXME: Property 'mockRestore' does not exist on type '() ... Remove this comment to see the full error message
       Date.now.mockRestore()
@@ -155,28 +153,30 @@ describe('case note management', () => {
       jest.spyOn(Date, 'now').mockImplementation(() => DATE_2020_10_29_16_15)
       await index({ ...mockCreateReq, params: { offenderNo }, query: { type: 'OBSERVE' } }, res)
 
-      expect(res.render).toBeCalledWith('caseNotes/addCaseNoteForm.njk', {
-        offenderDetails: {
-          name: 'Test User',
-          offenderNo: 'ABC123',
-          profileUrl: '/prisoner/ABC123',
-        },
-        offenderNo,
-        homeUrl: '/prisoner/ABC123/case-notes',
-        caseNotesRootUrl: '/prisoner/ABC123/add-case-note',
-        formValues: {
-          date: '29/10/2020',
-          hours: '16',
-          minutes: '15',
-          type: 'OBSERVE',
-        },
-        types: [
-          { value: 'OBSERVE', text: 'Observations' },
-          { value: 'ACHIEVEMENTS', text: 'Achievements' },
-        ],
-        subTypes: [{ value: 'OBS1', text: 'Observation 1', type: 'OBSERVE' }],
-        behaviourPrompts: {},
-      })
+      expect(res.render).toBeCalledWith(
+        'caseNotes/addCaseNoteForm.njk',
+        expect.objectContaining({
+          offenderDetails: {
+            name: 'Test User',
+            offenderNo: 'ABC123',
+            profileUrl: '/prisoner/ABC123',
+          },
+          offenderNo,
+          homeUrl: '/prisoner/ABC123/case-notes',
+          caseNotesRootUrl: '/prisoner/ABC123/add-case-note',
+          formValues: {
+            date: '29/10/2020',
+            hours: '16',
+            minutes: '15',
+            type: 'OBSERVE',
+          },
+          types: [
+            { value: 'OBSERVE', text: 'Observations' },
+            { value: 'ACHIEVEMENTS', text: 'Achievements' },
+          ],
+          subTypes: [{ value: 'OBS1', text: 'Observation 1', type: 'OBSERVE' }],
+        })
+      )
 
       // @ts-expect-error ts-migrate(2339) FIXME: Property 'mockRestore' does not exist on type '() ... Remove this comment to see the full error message
       Date.now.mockRestore()
@@ -233,14 +233,8 @@ describe('case note management', () => {
     })
 
     it('should chose some positive/negative behaviour entry prompts', async () => {
-      const { index: indexWithBehavourPrompts } = caseNoteCtrl.caseNoteFactory({
-        prisonApi,
-        caseNotesApi,
-        showBehaviourPrompts: true,
-      })
-
       const req = { ...mockCreateReq, params: { offenderNo } }
-      await indexWithBehavourPrompts(req, res)
+      await index(req, res)
 
       expect(res.render).toBeCalledWith(
         'caseNotes/addCaseNoteForm.njk',

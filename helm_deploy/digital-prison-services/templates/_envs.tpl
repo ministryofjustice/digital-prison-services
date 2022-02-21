@@ -111,7 +111,7 @@ env:
       secretKeyRef:
         name: {{ template "app.name" . }}
         key: BULLINGDON_OMU_EMAIL
-    
+
   - name: PETERBOROUGH_OMU_EMAIL
     valueFrom:
       secretKeyRef:
@@ -285,13 +285,10 @@ env:
 
   - name: MANAGE_ADJUDICATIONS_URL
     value: {{ .Values.env.MANAGE_ADJUDICATIONS_URL | quote }}
-  
+
   - name: WELCOME_PEOPLE_INTO_PRISON_URL
     value: {{ .Values.env.WELCOME_PEOPLE_INTO_PRISON_URL | quote }}
 
   - name: WELCOME_PEOPLE_INTO_PRISON_ENABLED_PRISONS
     value: {{ .Values.env.WELCOME_PEOPLE_INTO_PRISON_ENABLED_PRISONS | quote }}
-
-  - name: CASE_NOTES_BEHAVIOUR_PROMPTS
-    value: {{ .Values.env.CASE_NOTES_BEHAVIOUR_PROMPTS | quote }}
 {{- end -}}
