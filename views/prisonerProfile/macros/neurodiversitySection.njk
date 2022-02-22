@@ -5,6 +5,10 @@
   {% set indentClass = "govuk-summary-list__key--indent" if indentKey %}
   {% set regularLabelClass = "govuk-!-font-weight-regular" if regularLabel %}
   {% set borderLine = "govuk-section-break govuk-section-break--m govuk-section-break--visible" %}
+  {% set classBold = "govuk-body govuk-!-font-weight-bold" %}
+  {% set classDate = "govuk-hint govuk-!-margin-top-1 govuk-!-margin-bottom-3" %}
+  {% set NOT_SELFDECLARED = "No neurodiversity reported by the prisoner yet" %}
+  {% set NO_ASSESSMENT = "No neurodiversity identified yet" %}
 
   {% if indentClass %}
     {% if regularLabelClass %}
@@ -25,7 +29,7 @@
     {% for item in ldd %}
       {% set lddList = (lddList.push('<p class="govuk-body">'+item+'</p>'), lddList) %}
     {% endfor %}
-    {% set lddList = (lddList.push('<p class="govuk-hint govuk-!-margin-top-1 govuk-!-margin-bottom-3">Recorded on '+dateOn+'</p>'), lddList) %}
+    {% set lddList = (lddList.push('<p class=' + classDate + '>Recorded on ' +dateOn+'</p>'), lddList) %}
     {% set value = {html: lddList.join('') | showDefault(missingValueText)} %}
 
     {% set rows = (rows.push(
@@ -48,27 +52,28 @@
   {% endif %}
 
   {% set rows = [] %}
+  {% set lddList = [] %}
 
-  {% if diversities.divergenceAssessed.length %}
+  {% if diversities.divergenceAssessed[0]["details"][0].ldd.length %}
     {% set desc = {text: diversities.divergenceAssessed[0]["details"][0].label | showDefault(missingValueText)} %}
     {% set ldd = diversities.divergenceAssessed[0]["details"][0].ldd %}
     {% set dateOn = diversities.divergenceAssessed[0]["details"][1].value %}
 
-    {% set lddList = [] %}
     {% for item in ldd %}
       {% set lddList = (lddList.push('<p class="govuk-body">'+item+'</p>'), lddList) %}
     {% endfor %}
     {% if lddList.length %}
-      {% set lddList = (lddList.push('<p class="govuk-hint govuk-!-margin-top-1 govuk-!-margin-bottom-3">Recorded on '+dateOn+'</p>'), lddList) %}
+      {% set lddList = (lddList.push('<p class=' + classDate + '>Recorded on ' +dateOn+'</p>'), lddList) %}
       {% set value = {html: lddList.join('') | showDefault(missingValueText)} %}
 
       {% set rows = (rows.push(
         {
           key: {
-          text: 'Conditions',
+          text: 'Neurodiversity',
           classes: labelClass
         },
-          value: desc
+          value: desc,
+          classes: classBold
         }
       ), rows) %}
       {% set rows = (rows.push(
@@ -80,7 +85,20 @@
           value: value
         }
       ), rows) %}
+
     {% endif %}
+  {% else %}
+    {% set noValue = {text: NO_ASSESSMENT} %}
+    {% set rows = (rows.push(
+      {
+        key: {
+        text: '',
+        classes: labelClass
+      },
+        value: noValue,
+        classes: classBold
+      }
+    ), rows) %}
   {% endif %}
 
   {% if rows.length %}
@@ -92,17 +110,19 @@
   {% endif %}
 
   {% set rows = [] %}
-  {% if diversities.divergenceSelfDeclared.length %}
-    {% set desc = {text: diversities.divergenceSelfDeclared[0]["details"][0].label | showDefault(missingValueText)} %}
+  {% set lddList = [] %}
+
+  {% if diversities.divergenceSelfDeclared[0]["details"][0].ldd.length %}
+    {% set descLabel = diversities.divergenceSelfDeclared[0]["details"][0].label %}
+    {% set desc = {text: descLabel | showDefault(missingValueText)} %}
     {% set ldd = diversities.divergenceSelfDeclared[0]["details"][0].ldd %}
     {% set dateOn = diversities.divergenceSelfDeclared[0]["details"][1].value %}
 
-    {% set lddList = [] %}
     {% for item in ldd %}
       {% set lddList = (lddList.push('<p class="govuk-body">'+item+'</p>'), lddList) %}
     {% endfor %}
     {% if lddList.length %}
-      {% set lddList = (lddList.push('<p class="govuk-hint govuk-!-margin-top-1 govuk-!-margin-bottom-3">Recorded on '+dateOn+'</p>'), lddList) %}
+      {% set lddList = (lddList.push('<p class=' + classDate + '>Recorded on ' +dateOn+'</p>'), lddList) %}
       {% set value = {html: lddList.join('') | showDefault(missingValueText)} %}
 
       {% if diversities.divergenceAssessed[0]["details"][0].ldd.length %}
@@ -112,17 +132,19 @@
             text: '',
             classes: labelClass
           },
-            value: desc
+            value: desc,
+            classes: classBold
           }
         ), rows) %}
         {% else %}
           {% set rows = (rows.push(
             {
               key: {
-              text: 'Conditions',
+              text: 'Neurodiversity',
               classes: labelClass
             },
-              value: desc
+              value: desc,
+              classes: classBold
             }
           ), rows) %}
       {% endif %}
@@ -137,6 +159,20 @@
         }
       ), rows) %}
     {% endif %}
+
+  {% else %}
+
+    {% set noValue = {text: NOT_SELFDECLARED} %}
+    {% set rows = (rows.push(
+      {
+        key: {
+        text: '',
+        classes: labelClass
+      },
+        value: noValue,
+        classes: classBold
+      }
+    ), rows) %}
   {% endif %}
 
   {% if rows.length %}

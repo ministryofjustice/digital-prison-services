@@ -1,5 +1,6 @@
 import prisonerPersonal from '../controllers/prisonerProfile/prisonerPersonal'
 import config from '../config'
+import { curiousApi } from '../apis'
 
 describe('prisoner personal', () => {
   const offenderNo = 'ABC123'
@@ -2178,10 +2179,20 @@ describe('prisoner personal', () => {
     })
   })
 
-  describe('learner profile data including neurodivergence info', () => {
+  describe('learner neurodivergence information', () => {
     beforeEach(() => {
       // @ts-expect-error ts-migrate(2339) FIXME: Property 'getNeurodiversities' does not ex... Remove this comment to see the full error message
-      esweService.getNeurodivergence = jest.fn()
+      esweService.getNeurodivergence = jest.fn().mockResolvedValue({
+        prn: 'ABC123',
+        establishmentId: 'MDI',
+        establishmentName: 'Moorland (HMP & YOI)',
+        neurodivergenceSelfDeclared: 'Autism',
+        selfDeclaredDate: '10 February 2022',
+        neurodivergenceAssessed: 'Alzheimers',
+        assessmentDate: '12 February 2022',
+        neurodivergenceSupport: 'Reading support, Auditory support',
+        supportDate: '14 February 2022',
+      })
     })
 
     it('should return null for a failed request', async () => {
@@ -2194,25 +2205,24 @@ describe('prisoner personal', () => {
       )
     })
 
-    it('should return a list of learner profiles for a successful request', async () => {
-      const neurodivergence = [
-        {
-          establishmentName: 'HMP Moorland',
-          details: [
-            {
-              label: 'Description',
-              html: "<p class='govuk-body'>Autism</p><p class='govuk-body'>Tourette Syndrome</p>",
-            },
-            { label: 'Location', value: 'HMP Moorland' },
-          ],
-        },
-      ]
-      // @ts-expect-error ts-migrate(2339) FIXME: Property 'getNeurodiversities' does not ex... Remove this comment to see the full error message
-      esweService.getNeurodivergence.mockResolvedValue(neurodivergence)
+    it('should return learner neurodivergence details for a successful request', async () => {
       await controller(req, res)
+
       expect(res.render).toHaveBeenCalledWith(
         'prisonerProfile/prisonerPersonal/prisonerPersonal.njk',
-        expect.objectContaining({ neurodivergence })
+        expect.objectContaining({
+          neurodivergence: {
+            prn: 'ABC123',
+            establishmentId: 'MDI',
+            establishmentName: 'Moorland (HMP & YOI)',
+            neurodivergenceAssessed: 'Alzheimers',
+            assessmentDate: '12 February 2022',
+            neurodivergenceSelfDeclared: 'Autism',
+            selfDeclaredDate: '10 February 2022',
+            neurodivergenceSupport: 'Reading support, Auditory support',
+            supportDate: '14 February 2022',
+          },
+        })
       )
     })
 
@@ -2238,6 +2248,7 @@ describe('prisoner personal', () => {
         expect.objectContaining({ displayNeurodiversity: true })
       )
     })
+
     it('should return false for displaying neurodiversity feature if the username is not flagged but there are some other flagged usernames', async () => {
       const neurodivergence = [
         {
