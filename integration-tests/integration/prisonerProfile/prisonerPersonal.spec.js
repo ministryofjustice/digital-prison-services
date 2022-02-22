@@ -699,6 +699,28 @@ context('Prisoner personal', () => {
               ],
             },
           ],
+          neurodivergence: [
+            {
+              divergenceSelfDeclared: [
+                {
+                  selfDeclared: 'Autism',
+                  selfDeclaredDate: '10 February 2022',
+                },
+              ],
+              divergenceAssessed: [
+                {
+                  assessment: 'Alzheimers',
+                  assessmentDate: '12 February 2022',
+                },
+              ],
+              divergenceSupport: [
+                {
+                  support: 'Reading support, Auditory support',
+                  supportDate: '14 February 2022',
+                },
+              ],
+            },
+          ],
           careNeeds: {
             personalCareNeeds: [
               {
@@ -910,26 +932,16 @@ context('Prisoner personal', () => {
         })
       })
 
-      context('Disabilities and adjustments section', () => {
-        it('Should show correct headings, images, labels and values', () => {
-          cy.get('[data-test="neurodiversity-summary"]').then(($section) => {
-            cy.get($section)
-              .find('dt')
-              .then(($summaryLabels) => {
-                cy.get($summaryLabels).its('length').should('eq', 2)
-                expect($summaryLabels.get(0).innerText).to.contain('Description')
-                expect($summaryLabels.get(1).innerText).to.contain('Location')
-              })
-
-            cy.get($section)
-              .find('dd')
-              .then(($summaryValues) => {
-                cy.get($summaryValues).its('length').should('eq', 2)
-                expect($summaryValues.get(0).innerText).to.contain('Visual impairment')
-                expect($summaryValues.get(0).innerText).to.contain('Hearing impairment')
-                expect($summaryValues.get(0).innerText).to.contain('Mental health difficulty')
-                expect($summaryValues.get(0).innerText).to.contain('Social and emotional difficulties')
-                expect($summaryValues.get(1).innerText).to.contain('HMP Moorland')
+      context('Neurodiversity section', () => {
+        it('Should show appropriate message when neurodiversity is not present', () => {
+          cy.get('[data-test="neurodiversity-summary"]').then(($summary) => {
+            cy.get($summary)
+              // .find('dt')
+              .then(($SummaryValues) => {
+                cy.get($SummaryValues)
+                expect($SummaryValues.get(0).innerText).to.contain(
+                  'We cannot show these details right now. Try reloading the page'
+                )
               })
           })
 

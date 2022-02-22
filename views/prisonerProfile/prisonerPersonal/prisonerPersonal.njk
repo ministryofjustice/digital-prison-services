@@ -71,36 +71,25 @@
 {% endset %}
 
 {% set careNeedsContent %}
-  {% if displayNeurodiversity %}
-    <h3 class="govuk-summary-list-title govuk-heading-m">Neurodiversity needs</h3>
-    <div data-test="neurodiversity-summary">
-      {% include "./partials/neurodiversities.njk" %}
+    <div data-test="care-needs-summary">
+        {% include "./partials/careNeedsAndAdjustments.njk" %}
     </div>
-    <h3 class="govuk-summary-list-title govuk-heading-m">Personal care needs</h3>
-  {% endif %}
-  <div data-test="care-needs-summary">
-    {% include "./partials/careNeedsAndAdjustments.njk" %}
-  </div>
+{% endset %}
+
+{% set neurodiversitiesContent %}
+    <div data-test="neurodiversity-summary">
+        {% include "./partials/neurodiversities.njk" %}
+    </div>
 {% endset %}
 
 {% set leftSections = [
     { heading: 'Personal details', html: personalContent },
     { heading: 'Physical characteristics', html: physicalCharacteristicsContent },
-    { heading: 'Distinguishing marks', html: distinguishingMarksContent }
+    { heading: 'Distinguishing marks', html: distinguishingMarksContent },
+    { heading: 'Personal care needs', html: careNeedsContent },
+    { heading: 'Neurodiversity', html: neurodiversitiesContent }
   ]
 %}
-
-{% if displayNeurodiversity %}
-  {% set leftSections = (
-      leftSections.push({ heading: 'Disabilities and adjustments', html: careNeedsContent, education: true }),
-      leftSections
-  ) %}
-{% else %}
-  {% set leftSections = (
-      leftSections.push({ heading: 'Personal care needs', html: careNeedsContent }),
-      leftSections
-  ) %}
-{% endif %}
 
 {% set leftSections = (
     leftSections.push({ heading: 'Languages', html: languages }),

@@ -16,7 +16,7 @@ import {
 
 export default ({ prisonerProfileService, personService, prisonApi, allocationManagerApi, esweService }) =>
   async (req, res) => {
-    const { offenderNo } = req.params
+    const { offenderNo, establishmentId } = req.params
     const [basicPrisonerDetails, treatmentTypes, healthTypes] = await Promise.all([
       prisonApi.getDetails(res.locals, offenderNo),
       prisonApi.getTreatmentTypes(res.locals),
@@ -40,6 +40,7 @@ export default ({ prisonerProfileService, personService, prisonApi, allocationMa
       agencies,
       allocationManager,
       neurodiversities,
+      neurodivergence,
     ] = await Promise.all(
       [
         prisonerProfileService.getPrisonerProfileData(res.locals, offenderNo),
@@ -54,6 +55,7 @@ export default ({ prisonerProfileService, personService, prisonApi, allocationMa
         prisonApi.getAgencies(res.locals),
         allocationManagerApi.getPomByOffenderNo(res.locals, offenderNo),
         esweService.getNeurodiversities(offenderNo),
+        esweService.getNeurodivergence(offenderNo, establishmentId),
       ].map((apiCall) => logErrorAndContinue(apiCall))
     )
 
@@ -143,6 +145,7 @@ export default ({ prisonerProfileService, personService, prisonApi, allocationMa
       }),
       professionalContacts,
       neurodiversities,
+      neurodivergence,
       displayNeurodiversity,
       addresses: addressesViewModel({ addresses }),
       careNeedsAndAdjustments: careNeedsViewModel({

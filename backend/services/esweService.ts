@@ -1,6 +1,6 @@
 import moment, { Moment } from 'moment'
 import { app } from '../config'
-import { readableDateFormat, sortByDateTime, stringWithAbbreviationsProcessor } from '../utils'
+import { readableDateFormat, stringWithAbbreviationsProcessor } from '../utils'
 import type CuriousApi from '../api/curious/curiousApi'
 import log from '../log'
 import { AssessmentQualificationType, EmployabilitySkill } from '../api/curious/types/Enums'
@@ -10,6 +10,7 @@ import {
   LearnerLatestAssessment,
   LearnerProfile,
   LearnerEducation,
+  LearnerNeurodivergence,
 } from '../api/curious/types/Types'
 
 type FeatureFlagged<T> = {
@@ -28,6 +29,7 @@ type EmployabilitySkillsDetails = FeatureFlagged<Map<EmployabilitySkill, Employa
 type CurrentWork = FeatureFlagged<eswe.OffenderCurrentWork>
 type activitiesHistory = FeatureFlagged<eswe.activitiesHistory>
 type attendanceDetails = FeatureFlagged<eswe.attendanceDetails>
+type NeuroDivergence = FeatureFlagged<eswe.NeuroDivergence[]>
 
 const createFlaggedContent = <T>(content: T) => ({
   enabled: app.esweEnabled,
@@ -47,6 +49,12 @@ export const DEFAULT_GOALS = {
   personalGoals: null,
   shortTermGoals: null,
   longTermGoals: null,
+}
+
+export const DEFAULT_NEURODIVERGENCE = {
+  diversityAssessed: [],
+  diversitySelfDeclared: [],
+  diversitySupport: [],
 }
 
 export const DEFAULT_COURSE_DATA = {
@@ -275,6 +283,81 @@ export default class EsweService {
       log.error(`Failed to get learning difficulties. Reason: ${e.message}`)
     }
     return createFlaggedContent(null)
+  }
+
+  async getNeurodivergence(nomisId: string, establishmentId: string): Promise<NeuroDivergence> {
+    try {
+      const context = await this.systemOauthClient.getClientCredentialsTokens()
+      const content = await this.curiousApi.getLearnerNeurodivergence(context, nomisId, establishmentId)
+
+      if (!content.length) {
+        const lddlist = content.map((val) => ({
+          divergenceAssessed: val.neurodivergenceAssessed,
+          divergenceSelfDeclared: val.neurodivergenceSelfDeclared,
+          divergenceSupport: val.neurodivergenceSupport,
+        }))
+        const emptyContent = createFlaggedContent({ lddlist }[0])
+        if (!emptyContent.content) {
+          emptyContent.content = []
+        }
+        return emptyContent
+      }
+
+      const displayAssessed = content.map((profile) => {
+        if (profile.neurodivergenceAssessed) {
+          const combinedLdd = profile.neurodivergenceAssessed.slice(0)
+          return {
+            details: [
+              { label: 'From neurodiversity assessment', ldd: combinedLdd },
+              { label: 'assessmentDate', value: `${readableDateFormat(profile.assessmentDate, DATE_FORMAT)}` },
+            ],
+          }
+        }
+        return null
+      })
+
+      const displaySelfDeclared = content.map((profile) => {
+        if (profile.neurodivergenceSelfDeclared) {
+          const combinedLdd = profile.neurodivergenceSelfDeclared.slice(0)
+          return {
+            details: [
+              { label: 'From self-assessment', ldd: combinedLdd },
+              { label: 'selfDeclaredDate', value: `${readableDateFormat(profile.selfDeclaredDate, DATE_FORMAT)}` },
+            ],
+          }
+        }
+        return null
+      })
+
+      const displaySupport = content.map((profile) => {
+        if (profile.neurodivergenceSupport) {
+          const combinedLdd = profile.neurodivergenceSupport.slice(0)
+          return {
+            details: [
+              { label: 'Support needed', ldd: combinedLdd },
+              { label: 'Recorded on', value: `${readableDateFormat(profile.supportDate, DATE_FORMAT)}` },
+            ],
+          }
+        }
+        return null
+      })
+
+      const lddList = content.map((val) => ({
+        divergenceAssessed: displayAssessed,
+        divergenceSelfDeclared: displaySelfDeclared,
+        divergenceSupport: displaySupport,
+      }))
+      const diversityObject = createFlaggedContent({ lddList }[0])
+      diversityObject.content = lddList
+      return diversityObject
+    } catch (e) {
+      if (e.response?.status === 404) {
+        log.info(`Offender neurodivergence record not found in Curious`)
+        return null
+      }
+      log.error(`Failed to get neurodivergence details. Reason: ${e.message}`)
+    }
+    return null
   }
 
   async getLearnerLatestAssessments(nomisId: string): Promise<LearnerLatestAssessments> {

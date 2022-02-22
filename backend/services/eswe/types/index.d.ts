@@ -349,6 +349,24 @@ declare namespace eswe {
     shortTermGoals: Array
   }
 
+  export interface diversityAssessed {
+    assessmentDate?: string
+    assessment?: string[]
+  }
+  export interface diversitySelfDeclared {
+    selfDeclaredDate?: string
+    selfDeclared?: string[]
+  }
+  export interface diversitySupport {
+    supportDate?: string
+    support?: string[]
+  }
+  export interface NeuroDivergence {
+    divergenceAssessed?: diversityAssessed
+    divergenceSelfDeclared?: diversitySelfDeclared
+    divergenceSupport?: diversitySupport
+  }
+
   interface attendanceDetails {
     fullDetails: attendanceFullDetails[]
     dateRange: { fromDate: moment.Moment; toDate: moment.Moment }
