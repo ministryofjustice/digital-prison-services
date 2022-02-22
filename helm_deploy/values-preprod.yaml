@@ -68,7 +68,6 @@ env:
   SEND_LEGAL_MAIL_URL: https://check-rule39-mail-preprod.prison.service.justice.gov.uk
   WELCOME_PEOPLE_INTO_PRISON_URL: https://welcome-preprod.prison.service.justice.gov.uk/
   WELCOME_PEOPLE_INTO_PRISON_ENABLED_PRISONS: "NMI"
-  CASE_NOTES_BEHAVIOUR_PROMPTS: true
 
 allowlist:
   office: "217.33.148.210/32"
