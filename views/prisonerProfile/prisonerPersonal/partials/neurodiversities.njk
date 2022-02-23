@@ -1,20 +1,19 @@
-{% from "../../macros/prisonerSummarySection.njk" import prisonerSummarySection %}
+{% from "../../macros/neurodiversitySection.njk" import neurodiversitySection %}
 
-{% set neurodiversityInfo = neurodiversities.content %}
+{% set neurodiversityInfo = neurodivergence.content %}
 {% set offenderName = (prisonerProfileData.offenderName).split(',')[1].trim() + " " +(prisonerProfileData.offenderName).split(',')[0] %}
 
 <p class="govuk-hint govuk-!-margin-top-1 govuk-!-margin-bottom-3">
-    This is information captured by the education team, not a medical diagnosis. Contact the local education team to find out more.
+    Information from the local education team - not a medical diagnosis.
 </p>
 {% if neurodiversityInfo %}
     {% for entry in neurodiversityInfo %}
-    {{ prisonerSummarySection(entry.details, '', {}, false, 'govuk-summary-list--no-border', false) }}
-    <hr class="govuk-section-break govuk-section-break--m govuk-section-break--visible">
+        {{ neurodiversitySection(entry, '', {}, false, 'govuk-summary-list--no-border', false) }}
     {% endfor %}
 
     {% if not neurodiversityInfo.length %}
-    <p class="govuk-body">{{ offenderName }} has no neurodiversity needs.</p>
+    <p class="govuk-body">{{ offenderName }} has no recorded neurodiversity needs.</p>
     {% endif %}
 {% else %}
-    <p class="govuk-body" data-test="goals-errorMessage">{{ errorMessage }}</p>
+    <p class="govuk-body" data-test="neurodiversity-errorMessage">{{ errorMessage }}</p>
 {% endif %}

@@ -9,3 +9,4 @@ export type LearnerEmployabilitySkills = components['schemas']['LearnerEmployabi
 export type PageLearnerEmployabilitySkills = components['schemas']['PageLearnerEmployabilitySkillsDTO']
 export type LearnerAssessment = components['schemas']['LearnerAssessmentDTO']
 export type EmployabilitySkillsReview = components['schemas']['EmployabilitySkillsReviewDTO']
+export type LearnerNeurodivergence = components['schemas']['LearnerNeurodivergenceDTO']
