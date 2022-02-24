@@ -49,20 +49,20 @@ context('Prisoner Work and Skills', () => {
   ]
 
   context('functional skills section', () => {
+    beforeEach(() => {
+      cy.task('reset')
+      cy.clearCookies()
+      cy.task('stubPrisonerProfileHeaderData', prisonerProfileHeaderData)
+      cy.task('stubSignIn', { username: 'ITAG_USER', caseload: 'MDI' })
+      cy.signIn()
+    })
+
     context('When there is no data because of an api call failure', () => {
       const apiErrorText = 'We cannot show these details right now. Try reloading the page.'
-      before(() => {
-        cy.clearCookies()
-        cy.task('reset')
-        cy.task('stubSignIn', { username: 'ITAG_USER', caseload: 'MDI' })
-        cy.signIn()
-
-        cy.task('stubPrisonerProfileHeaderData', prisonerProfileHeaderData)
-        cy.task('stubWorkAndSkillsApi500Errors')
-      })
 
       beforeEach(() => {
         Cypress.Cookies.preserveOnce('hmpps-session-dev')
+        cy.task('stubWorkAndSkillsApi500Errors')
       })
 
       it('should show correct error message', () => {
@@ -77,20 +77,10 @@ context('Prisoner Work and Skills', () => {
         errorMessage: 'Resource not found',
         httpStatusCode: 404,
       }
-      before(() => {
-        cy.task('reset')
-        cy.clearCookies()
-        cy.task('reset')
-        cy.task('stubSignIn', { username: 'ITAG_USER', caseload: 'MDI' })
-        cy.signIn()
-
-        cy.task('stubPrisonerProfileHeaderData', prisonerProfileHeaderData)
-
-        cy.task('stubWorkAndSkillsApi404Errors', error)
-      })
 
       beforeEach(() => {
         Cypress.Cookies.preserveOnce('hmpps-session-dev')
+        cy.task('stubWorkAndSkillsApi404Errors', error)
       })
 
       it('should show "awaiting assessments" content for each skill', () => {
@@ -113,19 +103,9 @@ context('Prisoner Work and Skills', () => {
         },
       ]
 
-      before(() => {
-        cy.task('reset')
-        cy.clearCookies()
-        cy.task('reset')
-        cy.task('stubSignIn', { username: 'ITAG_USER', caseload: 'MDI' })
-        cy.signIn()
-
-        cy.task('stubPrisonerProfileHeaderData', prisonerProfileHeaderData)
-        cy.task('stubLatestLearnerAssessments', functionalSkillsAssessments)
-      })
-
       beforeEach(() => {
         Cypress.Cookies.preserveOnce('hmpps-session-dev')
+        cy.task('stubLatestLearnerAssessments', functionalSkillsAssessments)
       })
 
       it('should show three subjects in the correct format and awaiting assessments content', () => {
@@ -142,6 +122,7 @@ context('Prisoner Work and Skills', () => {
         })
       })
     })
+
     context('When there is data available', () => {
       const functionalSkillsAssessments = [
         {
@@ -177,19 +158,10 @@ context('Prisoner Work and Skills', () => {
           ],
         },
       ]
-      before(() => {
-        cy.task('reset')
-        cy.clearCookies()
-        cy.task('reset')
-        cy.task('stubSignIn', { username: 'ITAG_USER', caseload: 'MDI' })
-        cy.signIn()
-
-        cy.task('stubPrisonerProfileHeaderData', prisonerProfileHeaderData)
-        cy.task('stubLatestLearnerAssessments', functionalSkillsAssessments)
-      })
 
       beforeEach(() => {
         Cypress.Cookies.preserveOnce('hmpps-session-dev')
+        cy.task('stubLatestLearnerAssessments', functionalSkillsAssessments)
       })
       it('should have the correct labels and values', () => {
         visitWorkAndSkillsAndExpandAccordions()
@@ -229,20 +201,20 @@ context('Prisoner Work and Skills', () => {
   })
 
   context('goals section', () => {
+    beforeEach(() => {
+      cy.clearCookies()
+      cy.task('reset')
+      cy.task('stubPrisonerProfileHeaderData', prisonerProfileHeaderData)
+      cy.task('stubSignIn', { username: 'ITAG_USER', caseload: 'MDI' })
+      cy.signIn()
+    })
+
     context('When there is no data because of an api call failure', () => {
       const apiErrorText = 'We cannot show these details right now. Try reloading the page.'
-      before(() => {
-        cy.clearCookies()
-        cy.task('reset')
-        cy.task('stubSignIn', { username: 'ITAG_USER', caseload: 'MDI' })
-        cy.signIn()
-
-        cy.task('stubPrisonerProfileHeaderData', prisonerProfileHeaderData)
-        cy.task('stubWorkAndSkillsApi500Errors')
-      })
 
       beforeEach(() => {
         Cypress.Cookies.preserveOnce('hmpps-session-dev')
+        cy.task('stubWorkAndSkillsApi500Errors')
       })
       it('should show correct error message', () => {
         visitWorkAndSkillsAndExpandAccordions()
@@ -256,20 +228,9 @@ context('Prisoner Work and Skills', () => {
         httpStatusCode: 404,
       }
 
-      before(() => {
-        cy.task('reset')
-        cy.clearCookies()
-        cy.task('reset')
-        cy.task('stubSignIn', { username: 'ITAG_USER', caseload: 'MDI' })
-        cy.signIn()
-
-        cy.task('stubPrisonerProfileHeaderData', prisonerProfileHeaderData)
-
-        cy.task('stubWorkAndSkillsApi404Errors', error)
-      })
-
       beforeEach(() => {
         Cypress.Cookies.preserveOnce('hmpps-session-dev')
+        cy.task('stubWorkAndSkillsApi404Errors', error)
       })
 
       it('should show default message', () => {
@@ -289,19 +250,10 @@ context('Prisoner Work and Skills', () => {
         longTermGoals: [],
         shortTermGoals: [],
       }
-      before(() => {
-        cy.task('reset')
-        cy.clearCookies()
-        cy.task('reset')
-        cy.task('stubSignIn', { username: 'ITAG_USER', caseload: 'MDI' })
-        cy.signIn()
-
-        cy.task('stubPrisonerProfileHeaderData', prisonerProfileHeaderData)
-        cy.task('stubLearnerGoals', emptyGoals)
-      })
 
       beforeEach(() => {
         Cypress.Cookies.preserveOnce('hmpps-session-dev')
+        cy.task('stubLearnerGoals', emptyGoals)
       })
       it('should show default message', () => {
         visitWorkAndSkillsAndExpandAccordions()
@@ -324,19 +276,10 @@ context('Prisoner Work and Skills', () => {
         longTermGoals: ['To buy a house'],
         shortTermGoals: ['To get out of my overdraft'],
       }
-      before(() => {
-        cy.task('reset')
-        cy.clearCookies()
-        cy.task('reset')
-        cy.task('stubSignIn', { username: 'ITAG_USER', caseload: 'MDI' })
-        cy.signIn()
-
-        cy.task('stubPrisonerProfileHeaderData', prisonerProfileHeaderData)
-        cy.task('stubLearnerGoals', dummyGoals)
-      })
 
       beforeEach(() => {
         Cypress.Cookies.preserveOnce('hmpps-session-dev')
+        cy.task('stubLearnerGoals', dummyGoals)
       })
       it('should show the list of employment goals', () => {
         visitWorkAndSkillsAndExpandAccordions()
@@ -368,22 +311,20 @@ context('Prisoner Work and Skills', () => {
   })
 
   context('courses and qualifications section', () => {
+    beforeEach(() => {
+      cy.clearCookies()
+      cy.task('reset')
+      cy.task('stubPrisonerProfileHeaderData', prisonerProfileHeaderData)
+      cy.task('stubSignIn', { username: 'ITAG_USER', caseload: 'MDI' })
+      cy.signIn()
+    })
+
     context('When there is no data because of an api call failure', () => {
       const apiErrorText = 'We cannot show these details right now. Try reloading the page.'
 
-      before(() => {
-        cy.clearCookies()
-        cy.task('reset')
-        cy.task('stubSignIn', { username: 'ITAG_USER', caseload: 'MDI' })
-        cy.signIn()
-
-        cy.task('stubPrisonerProfileHeaderData', prisonerProfileHeaderData)
-
-        cy.task('stubWorkAndSkillsApi500Errors')
-      })
-
       beforeEach(() => {
         Cypress.Cookies.preserveOnce('hmpps-session-dev')
+        cy.task('stubWorkAndSkillsApi500Errors')
       })
 
       it('should show correct error message', () => {
@@ -391,6 +332,7 @@ context('Prisoner Work and Skills', () => {
         cy.get('[data-test="courses-errorMessage"]').should('have.text', apiErrorText)
       })
     })
+
     context('When the prisoner is not in Curious', () => {
       const error = {
         errorCode: 'VC404',
@@ -398,19 +340,9 @@ context('Prisoner Work and Skills', () => {
         httpStatusCode: 404,
       }
 
-      before(() => {
-        cy.task('reset')
-        cy.clearCookies()
-        cy.task('stubSignIn', { username: 'ITAG_USER', caseload: 'MDI' })
-        cy.signIn()
-
-        cy.task('stubPrisonerProfileHeaderData', prisonerProfileHeaderData)
-
-        cy.task('stubWorkAndSkillsApi404Errors', error)
-      })
-
       beforeEach(() => {
         Cypress.Cookies.preserveOnce('hmpps-session-dev')
+        cy.task('stubWorkAndSkillsApi404Errors', error)
       })
 
       it('should show default message', () => {
@@ -422,6 +354,7 @@ context('Prisoner Work and Skills', () => {
         })
       })
     })
+
     context('When there is no data', () => {
       const emptyCourses = {
         content: [],
@@ -436,18 +369,10 @@ context('Prisoner Work and Skills', () => {
         pageable: {},
         empty: true,
       }
-      before(() => {
-        cy.task('reset')
-        cy.clearCookies()
-        cy.task('stubSignIn', { username: 'ITAG_USER', caseload: 'MDI' })
-        cy.signIn()
-
-        cy.task('stubPrisonerProfileHeaderData', prisonerProfileHeaderData)
-        cy.task('stubLearnerEducation', emptyCourses)
-      })
 
       beforeEach(() => {
         Cypress.Cookies.preserveOnce('hmpps-session-dev')
+        cy.task('stubLearnerEducation', emptyCourses)
       })
 
       it('should show default message', () => {
@@ -459,6 +384,7 @@ context('Prisoner Work and Skills', () => {
         })
       })
     })
+
     context('When there is data available', () => {
       const dummyEducation = {
         content: [
@@ -483,18 +409,10 @@ context('Prisoner Work and Skills', () => {
           },
         ],
       }
-      before(() => {
-        cy.task('reset')
-        cy.clearCookies()
-        cy.task('stubSignIn', { username: 'ITAG_USER', caseload: 'MDI' })
-        cy.signIn()
-
-        cy.task('stubPrisonerProfileHeaderData', prisonerProfileHeaderData)
-        cy.task('stubLearnerEducation', dummyEducation)
-      })
 
       beforeEach(() => {
         Cypress.Cookies.preserveOnce('hmpps-session-dev')
+        cy.task('stubLearnerEducation', dummyEducation)
       })
       it('should display the correct courses as labels, ordered by date', () => {
         visitWorkAndSkillsAndExpandAccordions()
@@ -530,23 +448,33 @@ context('Prisoner Work and Skills', () => {
       })
     })
   })
+
   context('work and activities section', () => {
+    beforeEach(() => {
+      clickIfExist('a[href="/auth/sign-out"]') // cy.visit('/auth/sign-out')
+      cy.clearCookies()
+      cy.task('reset')
+      cy.task('stubPrisonerProfileHeaderData', prisonerProfileHeaderData)
+      cy.task('stubSignIn', {
+        username: 'ITAG_USER',
+        caseload: 'BLI',
+        caseloads: [
+          {
+            caseLoadId: 'BLI',
+            description: 'Bristol',
+            currentlyActive: true,
+          },
+        ],
+      })
+      cy.signIn()
+    })
+
     context('When there is no data because of an api call failure', () => {
       const apiErrorText = 'We cannot show these details right now. Try reloading the page.'
 
-      before(() => {
-        cy.clearCookies()
-        cy.task('reset')
-        cy.task('stubSignIn', { username: 'ITAG_USER', caseload: 'MDI' })
-        cy.signIn()
-
-        cy.task('stubPrisonerProfileHeaderData', prisonerProfileHeaderData)
-
-        cy.task('stubWorkAndSkillsApi500Errors')
-      })
-
       beforeEach(() => {
         Cypress.Cookies.preserveOnce('hmpps-session-dev')
+        cy.task('stubWorkAndSkillsApi500Errors')
       })
 
       it('should show correct error message', () => {
@@ -555,24 +483,16 @@ context('Prisoner Work and Skills', () => {
         cy.get('[data-test="work-header"]').should('not.exist')
       })
     })
+
     context('When there is no data', () => {
       const emptyWork = {
         content: [],
       }
 
-      before(() => {
-        cy.task('reset')
-        cy.clearCookies()
-        cy.task('stubSignIn', { username: 'ITAG_USER', caseload: 'MDI' })
-        cy.signIn()
-
-        cy.task('stubPrisonerProfileHeaderData', prisonerProfileHeaderData)
-        cy.task('stubOffenderWorkHistory', emptyWork)
-        cy.task('stubPrisonerDetails', prisonerDetails)
-      })
-
       beforeEach(() => {
         Cypress.Cookies.preserveOnce('hmpps-session-dev')
+        cy.task('stubOffenderWorkHistory', emptyWork)
+        cy.task('stubPrisonerDetails', prisonerDetails)
       })
 
       it('should show default message', () => {
@@ -588,6 +508,7 @@ context('Prisoner Work and Skills', () => {
         cy.get('[data-test="work-header"]').should('not.exist')
       })
     })
+
     context('When the user exists, they have no current work, but they have work history', () => {
       const dummyWorkHistory = {
         content: [
@@ -619,20 +540,12 @@ context('Prisoner Work and Skills', () => {
           },
         ],
       }
-      before(() => {
-        cy.task('reset')
-        cy.clearCookies()
-        cy.task('stubSignIn', { username: 'ITAG_USER', caseload: 'MDI' })
-        cy.signIn()
-
-        cy.task('stubPrisonerProfileHeaderData', prisonerProfileHeaderData)
-        cy.task('stubOffenderWorkHistory', dummyWorkHistory)
-        cy.task('stubPrisonerDetails', prisonerDetails)
-        cy.task('stubGetUnacceptableAbsenceCount', { offenderNo: 'G6123VU', unacceptableAbsence: 4 })
-      })
 
       beforeEach(() => {
         Cypress.Cookies.preserveOnce('hmpps-session-dev')
+        cy.task('stubOffenderWorkHistory', dummyWorkHistory)
+        cy.task('stubPrisonerDetails', prisonerDetails)
+        cy.task('stubGetUnacceptableAbsenceCount', { offenderNo: 'G6123VU', unacceptableAbsence: 4 })
       })
 
       it('it should display the correct content', () => {
@@ -652,9 +565,10 @@ context('Prisoner Work and Skills', () => {
 
         cy.get('[data-test="work-unacceptableAbsence"]').contains('Last 30 days')
         cy.get('[data-test="work-unacceptableAbsence"]').contains('4')
-        // cy.get('[data-test="work-absencesLink"]').contains('View unacceptable absences for the last 6 months')
+        cy.get('[data-test="work-absencesLink"]').contains('View unacceptable absences for the last 6 months')
       })
     })
+
     context('When there is data available', () => {
       const dummyWorkHistory = {
         content: [
@@ -694,20 +608,11 @@ context('Prisoner Work and Skills', () => {
         ],
       }
 
-      before(() => {
-        cy.task('reset')
-        cy.clearCookies()
-        cy.task('stubSignIn', { username: 'ITAG_USER', caseload: 'MDI' })
-        cy.signIn()
-
-        cy.task('stubPrisonerProfileHeaderData', prisonerProfileHeaderData)
+      beforeEach(() => {
+        Cypress.Cookies.preserveOnce('hmpps-session-dev')
         cy.task('stubOffenderWorkHistory', dummyWorkHistory)
         cy.task('stubPrisonerDetails', prisonerDetails)
         cy.task('stubGetUnacceptableAbsenceCount', { offenderNo: 'G6123VU', unacceptableAbsence: 0 })
-      })
-
-      beforeEach(() => {
-        Cypress.Cookies.preserveOnce('hmpps-session-dev')
       })
 
       it('should display the list of current jobs and their start dates when there are current jobs', () => {
@@ -741,32 +646,58 @@ context('Prisoner Work and Skills', () => {
           cy.get('[data-test="work-scheduleLink"]').then(($workScheduleLink) => {
             cy.get($workScheduleLink).contains('View 7 day schedule')
           })
-          // cy.get('[data-test="work-absencesLink"]').should('not.exist')
-          // cy.get('[data-test="work-summary"]').contains(
-          //   'John Smith has no unacceptable absences in the last 6 months'
-          // )
+          cy.get('[data-test="work-absencesLink"]').should('not.exist')
+          cy.get('[data-test="work-summary"]').contains('John Smith has no unacceptable absences in the last 6 months')
         })
+      })
+
+      it('should hide unacceptable absences in a non-accelerator prison', () => {
+        cy.contains('Sign out').click()
+        cy.task('stubSignIn', {
+          username: 'ITAG_USER',
+          caseload: 'MDI',
+          caseloads: [
+            {
+              caseLoadId: 'MDI',
+              description: 'Moorland',
+              currentlyActive: true,
+            },
+          ],
+        })
+        cy.signIn()
+
+        visitWorkAndSkillsAndExpandAccordions()
+        cy.contains('Unacceptable absences').should('not.exist')
       })
     })
   })
 
   context('employability skills section', () => {
+    beforeEach(() => {
+      clickIfExist('a[href="/auth/sign-out"]')
+      cy.task('reset')
+      cy.clearCookies()
+      cy.task('stubPrisonerProfileHeaderData', prisonerProfileHeaderData)
+      cy.task('stubSignIn', {
+        username: 'ITAG_USER',
+        caseload: 'LII',
+        caseloads: [
+          {
+            caseLoadId: 'LII',
+            description: 'Lincoln',
+            currentlyActive: true,
+          },
+        ],
+      })
+      cy.signIn()
+    })
+
     context('When there is no data because of an api call failure', () => {
       const apiErrorText = 'We cannot show these details right now. Try reloading the page.'
 
-      before(() => {
-        cy.task('reset')
-        cy.clearCookies()
-        cy.task('stubSignIn', { username: 'ITAG_USER', caseload: 'MDI' })
-        cy.signIn()
-
-        cy.task('stubPrisonerProfileHeaderData', prisonerProfileHeaderData)
-
-        cy.task('stubWorkAndSkillsApi500Errors')
-      })
-
       beforeEach(() => {
         Cypress.Cookies.preserveOnce('hmpps-session-dev')
+        cy.task('stubWorkAndSkillsApi500Errors')
       })
 
       it('should show correct error message', () => {
@@ -799,18 +730,9 @@ context('Prisoner Work and Skills', () => {
         ],
       }
 
-      before(() => {
-        cy.task('reset')
-        cy.clearCookies()
-        cy.task('stubSignIn', { username: 'ITAG_USER', caseload: 'MDI' })
-        cy.signIn()
-
-        cy.task('stubPrisonerProfileHeaderData', prisonerProfileHeaderData)
-        cy.task('stubLearnerEmployabilitySkills', employabilitySkillsData)
-      })
-
       beforeEach(() => {
         Cypress.Cookies.preserveOnce('hmpps-session-dev')
+        cy.task('stubLearnerEmployabilitySkills', employabilitySkillsData)
       })
 
       it('should display the correct skill levels', () => {
@@ -835,6 +757,25 @@ context('Prisoner Work and Skills', () => {
               expect($summaryValues.get(6).innerText).to.contain('3 - Acceptable demonstration')
             })
         })
+      })
+
+      it('should hide employability in a non-accelerator prison', () => {
+        cy.contains('Sign out').click()
+        cy.task('stubSignIn', {
+          username: 'ITAG_USER',
+          caseload: 'MDI',
+          caseloads: [
+            {
+              caseLoadId: 'MDI',
+              description: 'Moorland',
+              currentlyActive: true,
+            },
+          ],
+        })
+        cy.signIn()
+
+        visitWorkAndSkillsAndExpandAccordions()
+        cy.get('[data-test="employability-skills-summary"]').should('not.exist')
       })
     })
   })

@@ -1,6 +1,6 @@
 import moment from 'moment'
 import { makeError } from './helpers'
-import caseNoteCtrl from '../controllers/caseNote'
+import caseNoteCtrl, { behaviourPrompts } from '../controllers/caseNote'
 
 Reflect.deleteProperty(process.env, 'APPINSIGHTS_INSTRUMENTATIONKEY')
 
@@ -121,26 +121,29 @@ describe('case note management', () => {
 
       await index(req, res)
 
-      expect(res.render).toBeCalledWith('caseNotes/addCaseNoteForm.njk', {
-        offenderDetails: {
-          name: 'Test User',
-          offenderNo: 'ABC123',
-          profileUrl: '/prisoner/ABC123',
-        },
-        offenderNo,
-        homeUrl: '/prisoner/ABC123/case-notes',
-        caseNotesRootUrl: '/prisoner/ABC123/add-case-note',
-        formValues: {
-          date: '29/10/2020',
-          hours: '16',
-          minutes: '15',
-        },
-        types: [
-          { value: 'OBSERVE', text: 'Observations' },
-          { value: 'ACHIEVEMENTS', text: 'Achievements' },
-        ],
-        subTypes: [],
-      })
+      expect(res.render).toBeCalledWith(
+        'caseNotes/addCaseNoteForm.njk',
+        expect.objectContaining({
+          offenderDetails: {
+            name: 'Test User',
+            offenderNo: 'ABC123',
+            profileUrl: '/prisoner/ABC123',
+          },
+          offenderNo,
+          homeUrl: '/prisoner/ABC123/case-notes',
+          caseNotesRootUrl: '/prisoner/ABC123/add-case-note',
+          formValues: {
+            date: '29/10/2020',
+            hours: '16',
+            minutes: '15',
+          },
+          types: [
+            { value: 'OBSERVE', text: 'Observations' },
+            { value: 'ACHIEVEMENTS', text: 'Achievements' },
+          ],
+          subTypes: [],
+        })
+      )
 
       // @ts-expect-error ts-migrate(2339) FIXME: Property 'mockRestore' does not exist on type '() ... Remove this comment to see the full error message
       Date.now.mockRestore()
@@ -150,27 +153,30 @@ describe('case note management', () => {
       jest.spyOn(Date, 'now').mockImplementation(() => DATE_2020_10_29_16_15)
       await index({ ...mockCreateReq, params: { offenderNo }, query: { type: 'OBSERVE' } }, res)
 
-      expect(res.render).toBeCalledWith('caseNotes/addCaseNoteForm.njk', {
-        offenderDetails: {
-          name: 'Test User',
-          offenderNo: 'ABC123',
-          profileUrl: '/prisoner/ABC123',
-        },
-        offenderNo,
-        homeUrl: '/prisoner/ABC123/case-notes',
-        caseNotesRootUrl: '/prisoner/ABC123/add-case-note',
-        formValues: {
-          date: '29/10/2020',
-          hours: '16',
-          minutes: '15',
-          type: 'OBSERVE',
-        },
-        types: [
-          { value: 'OBSERVE', text: 'Observations' },
-          { value: 'ACHIEVEMENTS', text: 'Achievements' },
-        ],
-        subTypes: [{ value: 'OBS1', text: 'Observation 1', type: 'OBSERVE' }],
-      })
+      expect(res.render).toBeCalledWith(
+        'caseNotes/addCaseNoteForm.njk',
+        expect.objectContaining({
+          offenderDetails: {
+            name: 'Test User',
+            offenderNo: 'ABC123',
+            profileUrl: '/prisoner/ABC123',
+          },
+          offenderNo,
+          homeUrl: '/prisoner/ABC123/case-notes',
+          caseNotesRootUrl: '/prisoner/ABC123/add-case-note',
+          formValues: {
+            date: '29/10/2020',
+            hours: '16',
+            minutes: '15',
+            type: 'OBSERVE',
+          },
+          types: [
+            { value: 'OBSERVE', text: 'Observations' },
+            { value: 'ACHIEVEMENTS', text: 'Achievements' },
+          ],
+          subTypes: [{ value: 'OBS1', text: 'Observation 1', type: 'OBSERVE' }],
+        })
+      )
 
       // @ts-expect-error ts-migrate(2339) FIXME: Property 'mockRestore' does not exist on type '() ... Remove this comment to see the full error message
       Date.now.mockRestore()
@@ -224,6 +230,53 @@ describe('case note management', () => {
       )
       // @ts-expect-error ts-migrate(2339) FIXME: Property 'mockRestore' does not exist on type '() ... Remove this comment to see the full error message
       Date.now.mockRestore()
+    })
+
+    it('should chose some positive/negative behaviour entry prompts', async () => {
+      const req = { ...mockCreateReq, params: { offenderNo } }
+      await index(req, res)
+
+      expect(res.render).toBeCalledWith(
+        'caseNotes/addCaseNoteForm.njk',
+        expect.objectContaining({
+          behaviourPrompts: {
+            pos: {
+              summary: expect.any(String),
+              text: expect.any(String),
+              gaId: expect.any(String),
+            },
+            neg: {
+              summary: expect.any(String),
+              text: expect.any(String),
+              gaId: expect.any(String),
+            },
+          },
+        })
+      )
+    })
+
+    it('should should use unique GA ids for positive/negative behaviour entry prompts', async () => {
+      // take GA ids along with pos/neg key
+      const keyIdPairs = Object.entries(behaviourPrompts)
+        .map(([key, prompts]) => {
+          return prompts.map((prompt) => [key, prompt.gaId])
+        })
+        .flat()
+      // GA ids should indicate behvaiour type
+      expect(
+        keyIdPairs.every(([key, gaId]) =>
+          key === 'pos'
+            ? gaId.startsWith('Positive behaviour prompt: ')
+            : gaId.startsWith('Negative behaviour prompt: ')
+        )
+      ).toBeTruthy()
+      // GA ids should be unique
+      expect(
+        keyIdPairs.reduce((set, [_, gaID]) => {
+          set.add(gaID)
+          return set
+        }, new Set()).size
+      ).toEqual(keyIdPairs.length)
     })
   })
 

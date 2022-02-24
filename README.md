@@ -39,7 +39,7 @@ These tests use WireMock to stub the application's dependencies on the prisonApi
 ### Running the Cypress tests
 
 You need to fire up the wiremock server first:
-```docker-compose -f docker-compose-test.yaml up```
+```docker compose -f docker-compose-test.yaml up```
 
 This will give you useful feedback if the app is making requests that you haven't mocked out. You can see
 the request log at `localhost:9191/__admin/requests/` and a JSON representation of the mocks `localhost:9191/__admin/mappings`.
@@ -68,10 +68,6 @@ npm run int-test
 
 ### Useful links
 
-- Spock: http://spockframework.org/
-- Geb: http://www.gebish.org/
-- Groovy: http://groovy-lang.org/index.html
-- Gradle: https://gradle.org/
 - WireMock: http://wiremock.org/
 - Chromedriver: https://sites.google.com/a/chromium.org/chromedriver
 

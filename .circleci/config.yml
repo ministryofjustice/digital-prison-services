@@ -63,7 +63,7 @@ jobs:
           command: npx cypress install
       - run:
           name: Run the node app.
-          command: npm run start-feature --env=cypress.env
+          command: npm run start-feature
           background: true
       - run:
           name: Run Cypress Integration tests

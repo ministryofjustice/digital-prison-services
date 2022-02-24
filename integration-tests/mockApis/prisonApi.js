@@ -1,8 +1,10 @@
-const { stubFor, postFor, verifyPut, verifyGet, verifyPosts, resetStub } = require('./wiremock')
+const { stubFor, postFor, verifyPut, verifyGet, verifyPosts, resetStub, getMatchingRequests } = require('./wiremock')
 const alertTypes = require('./responses/alertTypes.json')
 const cellAttributes = require('./responses/cellAttributes.json')
 const assessmentsResponse = require('./responses/assessmentsResponse.json')
 const activity3 = require('./responses/activity3.json')
+const cancellationReasonsResponse = require('./responses/cancellationReasons.json')
+const completionReasonsResponse = require('./responses/completionReasons.json')
 
 module.exports = {
   verifyMoveToCell: (body) => verifyPosts('/whereabouts/cell/make-cell-move', body),
@@ -728,20 +730,26 @@ module.exports = {
         },
       },
     }),
-  stubVisitTypes: (visitTypes, status) =>
+  stubVisitsPrisons: (visitsPrisons, status) =>
     stubFor({
       request: {
         method: 'GET',
-        urlPattern: '/api/reference-domains/domains/VISIT_TYPE',
+        urlPattern: '/api/bookings/[0-9]+?/visits/prisons',
       },
       response: {
         status,
         headers: {
           'Content-Type': 'application/json;charset=UTF-8',
         },
-        jsonBody: visitTypes || [
-          { code: 'OFFI', description: 'Official visit' },
-          { code: 'SCON', description: 'Social contact' },
+        jsonBody: visitsPrisons || [
+          {
+            prison: 'Moorland (HMP & YOI)',
+            prisonId: 'MDI',
+          },
+          {
+            prison: 'Hull (HMP)',
+            prisonId: 'HLI',
+          },
         ],
       },
     }),
@@ -1903,4 +1911,38 @@ module.exports = {
       },
     }),
   resetTransfersStub: () => resetStub({ requestUrl: '/api/movements/transfers', method: 'GET' }),
+
+  verifyVisitFilter: () =>
+    getMatchingRequests({
+      method: 'GET',
+      urlPattern: '/api/bookings/[0-9]+?/visits-with-visitors\\?.+?',
+    }).then((data) => data.body.requests),
+  stubCancellationReasons: () =>
+    stubFor({
+      request: {
+        method: 'GET',
+        urlPattern: '/api/reference-domains/domains/MOVE_CANC_RS',
+      },
+      response: {
+        status: 200,
+        headers: {
+          'Content-Type': 'application/json;charset=UTF-8',
+        },
+        jsonBody: cancellationReasonsResponse,
+      },
+    }),
+  stubCompletionReasons: () =>
+    stubFor({
+      request: {
+        method: 'GET',
+        urlPattern: '/api/reference-domains/domains/VIS_COMPLETE',
+      },
+      response: {
+        status: 200,
+        headers: {
+          'Content-Type': 'application/json;charset=UTF-8',
+        },
+        jsonBody: completionReasonsResponse,
+      },
+    }),
 }

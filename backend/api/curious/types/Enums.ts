@@ -29,3 +29,55 @@ export enum EmployabilitySkill {
   Reliability = 'Reliability',
   Timekeeping = 'Timekeeping',
 }
+
+export enum NeurodivergenceSelfDeclared {
+  ADHD = 'ADHD',
+  Dyslexia = 'Dyslexia',
+  Autism = 'Autism',
+  Dyscalculia = 'Dyscalculia',
+}
+
+export enum NeurodivergenceAssessed {
+  AcquiredBrainInjury = 'Acquired Brain Injury',
+  AttentionDeficitHyperactivityDisorder = 'Attention Deficit Hyperactivity Disorder',
+  Alzheimers = 'Alzheimers',
+  Anxiety = 'Anxiety',
+  AttentionDeficitDisorder = 'Attention Deficit Disorder',
+  Autism = 'Autism',
+  AutismSpectrumCondition = 'Autism Spectrum Condition',
+  CerebralPalsy = 'Cerebral Palsy',
+  Dementia = 'Dementia',
+  DevelopmentalCoordinationDisorder = 'Developmental Coordination Disorder',
+  DevelopmentalLanguageDisorder = 'Developmental Language Disorder',
+  Dyscalculia = 'Dyscalculia',
+  Dysgraphia = 'Dysgraphia',
+  Dyslexia = 'Dyslexia',
+  DysphasiaAphasia = 'Dysphasia / Aphasia',
+  Dyspraxia = 'Dyspraxia',
+  Epilepsy = 'Epilepsy',
+  Fetalalcoholspectrumdisorders = 'Fetal alcohol spectrum disorders',
+  Hyperlexia = 'Hyperlexia',
+  LearningDisability = 'Learning Disability',
+  MearesIrlenSyndrome = 'Meares-Irlen Syndrome',
+  ObsessiveCompulsiveDisorder = 'Obsessive Compulsive Disorder (OCD)',
+  PersonaliltyDisorder = 'Personalilty Disorder',
+  Synesthesia = 'Synesthesia',
+  TicsandTourettesSyndrome = 'Ticsand Tourettes Syndrome',
+  TouretteSyndrome = 'Tourette Syndrome',
+  TraumaticBrainInjury = 'Traumatic Brain Injury',
+}
+
+export enum NeurodivergenceSupport {
+  Reading = 'Reading',
+  Support = 'Support',
+  WritingSupport = 'Writing Support',
+  SocialandinteractionSupport = 'Social and interaction Support',
+  Communications = 'Communications',
+  VisualSupport = 'Visual Support',
+  AuditorySupport = 'Auditory Support',
+  OrganisationSupport = 'Organisation Support',
+  MemorySupport = 'Memory Support',
+  NoidentifiedNeurodoversityNeed = 'No identified Neurodoversity Need',
+  TimemanagementSupport = 'Time management Support',
+  NoidentifiedSupportRequired = 'No identified Support Required',
+}

@@ -2,7 +2,7 @@
 {% from "govuk/components/table/macro.njk" import govukTable %}
 {% from "moj/components/pagination/macro.njk" import mojPagination %}
 
-{% set title = 'Visits' %}
+{% set title = 'Visits details' %}
 
 {% block beforeContent %}
   {{ govukBreadcrumbs({
@@ -14,9 +14,6 @@
       {
         text: breadcrumbPrisonerName,
         href: '/prisoner/' + offenderNo
-      },
-      {
-        text: 'Visits'
       }
     ]
   }) }}
@@ -30,12 +27,24 @@
 {% for visit in results %}
   {% set rows = (rows.push([  
     {
-      html: hideIfNotFirst(visit.date | getDate('D MMMM YYYY'), visit.isFirst),
+      html: hideIfNotFirst(visit.date | getDate('DD/MM/YYYY'), visit.isFirst),
       classes: 'govuk-table__cell--last' if visit.isLast 
     },
     {
-      text: visit.name,
+      text: hideIfNotFirst(visit.time, visit.isFirst),
       classes: 'govuk-table__cell--last' if visit.isLast 
+    },
+    {
+      text: hideIfNotFirst(visit.type, visit.isFirst),
+      classes: 'govuk-table__cell--last' if visit.isLast
+    },
+    {
+      text: hideIfNotFirst(visit.status, visit.isFirst),
+      classes: 'govuk-table__cell--last' if visit.isLast
+    },
+    {
+      text: visit.name,
+      classes: 'govuk-table__cell--last' if visit.isLast
     },
     {
       text: visit.age,
@@ -43,10 +52,10 @@
     },
     {
       text: visit.relationship,
-      classes: 'govuk-table__cell--last' if visit.isLast 
+      classes: 'govuk-table__cell--last' if visit.isLast
     },
     {
-      html: hideIfNotFirst(visit.status, visit.isFirst),
+      text: hideIfNotFirst(visit.prison, visit.isFirst),
       classes: 'govuk-table__cell--last' if visit.isLast
     }
   ]), rows) %}
@@ -65,20 +74,29 @@
         {{ govukTable({
           head: [
             { text: "Date" },
-            { text: "Visitor’s name" },
+            { text: "Time" },
+            { text: "Type" },
+            { text: "Status" },
+            { text: "Scheduled visitors" },
             { text: "Visitor’s age" },
-            { text: "Relationship to prisoner" },
-            { text: "Visit status" }
+            { text: "Relationship" },
+            { text: "Establishment" }
           ],
           rows: rows,
           attributes: { "data-test": "prisoner-visits-results" },
-          classes: 'govuk-table--with-child-rows'
+          classes: 'govuk-table--with-child-rows govuk-!-font-size-16'
         }) }}
       
         {{ mojPagination(pagination) }}
       </div>
     {% else %}
-      <p class="govuk-body" data-test="no-visit-results">There are no visits for this prisoner</p>
+      {% if filterApplied %}
+        <p class="govuk-body" data-test="no-visit-results">There are no visits for what you have selected</p>
+      {% else %}
+        <p class="govuk-body" data-test="no-visit-results">There are no visits for this prisoner</p>
+      {% endif %}
     {% endif %}
   </div>
+
+  <a class="govuk-body govuk-link" href="{{ profileUrl }}">Return to prisoner’s profile</a>
 {% endblock %}

@@ -19,7 +19,17 @@ context('A user can view attendance reasons', () => {
   before(() => {
     cy.clearCookies()
     cy.task('resetAndStubTokenVerification')
-    cy.task('stubSignIn', { username: 'ITAG_USER', caseload: agencyId })
+    cy.task('stubSignIn', {
+      username: 'ITAG_USER',
+      caseload: agencyId,
+      caseloads: [
+        {
+          caseLoadId: agencyId,
+          description: 'Wandsworth',
+          currentlyActive: true,
+        },
+      ],
+    })
     cy.signIn()
   })
 

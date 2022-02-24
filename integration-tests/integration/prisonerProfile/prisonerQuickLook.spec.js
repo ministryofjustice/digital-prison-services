@@ -195,7 +195,7 @@ context('Prisoner quick look data retrieval errors', () => {
   })
 
   it('Should display the appropriate message when there was an error requesting visits', () => {
-    cy.get('[data-test="visit-details"]')
+    cy.get('[data-test="visits-details"]')
       .find('p')
       .then(($element) => {
         expect($element.get(0).innerText).to.eq('Unable to show any of these details. You can try reloading the page.')

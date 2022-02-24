@@ -1,5 +1,5 @@
 import moment from 'moment'
-import shortid from 'shortid'
+import { nanoid } from 'nanoid'
 
 import {
   formatName,
@@ -87,10 +87,8 @@ const AdjudciationHistoryServiceFactory = (prisonApi) => {
       reportTime: formatTimestampToDateTime(otherDetails.reportTime),
       reporterName: formatName(details.reporterFirstName, details.reporterLastName),
       hearing,
-      results: results
-        .map(({ sanctions: ignored, ...rest }) => rest)
-        .map((result) => ({ id: shortid.generate(), ...result })),
-      sanctions: sanctions.map((sanction) => ({ id: shortid.generate(), ...sanction })),
+      results: results.map(({ sanctions: ignored, ...rest }) => rest).map((result) => ({ id: nanoid(), ...result })),
+      sanctions: sanctions.map((sanction) => ({ id: nanoid(), ...sanction })),
     }
   }
 

@@ -13,16 +13,6 @@
     }
   }) %}
     <div class="horizontal-form govuk-!-margin-bottom-3">
-      {{ govukSelect({
-        id: "visitType",
-        name: "visitType",
-        label: {
-          text: "Visit type"
-        },
-        items: visitTypes | addDefaultSelectedVale('All', true) | setSelected(formValues.visitType),
-        attributes: { 'data-test': 'prisoner-visits-type' }
-      }) }}
-
       {{ datePicker({
         id: 'fromDate',
         label: 'Date from',
@@ -41,12 +31,36 @@
         attributes: { "data-test": "to-filter" }
       }) }}
 
+      {{ govukSelect({
+        id: "visitType",
+        name: "visitType",
+        label: { text: "Type" },
+        items: visitTypes | addDefaultSelectedVale('All', true) | setSelected(formValues.visitType),
+        attributes: { 'data-test': 'prisoner-visits-type' }
+      }) }}
+
+      {{ govukSelect({
+        id: "status",
+        name: "status",
+        label: { text: "Status" },
+        items: statuses | addDefaultSelectedVale('All', true) | setSelected(formValues.status),
+        attributes: { 'data-test': 'status-type' }
+      }) }}
+
+      {{ govukSelect({
+        id: "establishment",
+        name: "establishment",
+        label: { text: "Establishment" },
+        items: prisons | addDefaultSelectedVale('All', true) | setSelected(formValues.establishment),
+        attributes: { 'data-test': 'establishment-type' }
+      }) }}
+
       {{ govukButton({
         text: "View",
         type: "submit"
       }) }}
 
-      <a href="./visits" data-test="clear-link" class="govuk-link govuk-link--no-visited-state govuk-!-padding-bottom-1 govuk-body govuk-!-margin-left-3">Clear</a>
+      <a href="./visits-details" data-test="clear-link" class="govuk-link govuk-link--no-visited-state govuk-!-padding-bottom-1 govuk-body govuk-!-margin-left-3">Clear</a>
     </div>
   {% endcall %}
 </form>

@@ -286,8 +286,8 @@ describe('Homepage', () => {
           tasks: [
             {
               id: 'hdc-licences',
-              heading: 'HDC and licences',
-              description: 'Create and manage Home Detention Curfew and licences.',
+              heading: 'Home Detention Curfew',
+              description: 'Create and manage Home Detention Curfew.',
               href: 'http://licences-url',
             },
           ],

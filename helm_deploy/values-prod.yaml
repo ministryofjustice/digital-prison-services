@@ -32,7 +32,9 @@ env:
   KEYWORKER_API_URL: https://keyworker-api.prison.service.justice.gov.uk/
   CATEGORISATION_UI_URL: https://offender-categorisation.service.justice.gov.uk/
   USE_OF_FORCE_URL: https://use-of-force.service.justice.gov.uk
-  USE_OF_FORCE_PRISONS: "ACI,AGI,ASI,AYI,BAI,BCI,BFI,BHI,BLI,BMI,BNI,BRI,BSI,BWI,BXI,BZI,CDI,CFI,CLI,CWI,DAI,DGI,DHI,DMI,DNI,DTI,DWI,EEI,EHI,ESI,EWI,EXI,EYI,FBI,FDI,FHI,FKI,FMI,FNI,FSI,GHI,GMI,GNI,GTI,HBI,HCI,HDI,HEI,HHI,HII,HLI,HMI,HOI,HPI,HVI,ISI,IWI,KMI,KVI,LCI,LEI,LFI,LGI,LHI,LII,LLI,LNI,LPI,LTI,LWI,LYI,MDI,MHI,MRI,MSI,MTI,NHI,NLI,NMI,NSI,NWI,ONI,OWI,PBI,PDI,PFI,PNI,PRI,PVI,RCI,RHI,RNI,RSI,SDI,SFI,SHI,SKI,SLI,SNI,SPI,STI,SUI,SWI,TCI,TSI,UKI,UPI,VEI,WCI,WDI,WEI,WHI,WII,WLI,WMI,WRI,WSI,WTI,WWI"
+  USE_OF_FORCE_PRISONS: "ACI,AGI,ASI,AYI,BAI,BCI,BFI,BHI,BLI,BMI,BNI,BRI,BSI,BWI,BXI,BZI,CDI,CFI,CLI,CWI,DAI,DGI,DHI,DMI,DNI,DTI,DWI,EEI,EHI,ESI,EWI,EXI,EYI,FBI,FDI,FHI,FKI,FMI,FNI,FSI,FWI,GHI,GMI,GNI,GTI,HBI,HCI,HDI,HEI,HHI,HII,HLI,HMI,HOI,HPI,HVI,ISI,IWI,KMI,KVI,LCI,LEI,LFI,LGI,LHI,LII,LLI,LNI,LPI,LTI,LWI,LYI,MDI,MHI,MRI,MSI,MTI,NHI,NLI,NMI,NSI,NWI,ONI,OWI,PBI,PDI,PFI,PNI,PRI,PVI,RCI,RHI,RNI,RSI,SDI,SFI,SHI,SKI,SLI,SNI,SPI,STI,SUI,SWI,TCI,TSI,UKI,UPI,VEI,WCI,WDI,WEI,WHI,WII,WLI,WMI,WRI,WSI,WTI,WWI"
+  INCENTIVES_URL: https://incentives-ui.hmpps.service.justice.gov.uk
+  INCENTIVES_PRISONS: "BLI,DTI,DWI,EXI,GHI,GNI,HGI,HLI,HMI,MDI,NWI,PBI,PDI,PFI,RSI,SPI,SKI,WRI"
   TOKENVERIFICATION_API_URL: https://token-verification-api.prison.service.justice.gov.uk
   TOKENVERIFICATION_API_ENABLED: true
   CASENOTES_API_URL: https://offender-case-notes.service.justice.gov.uk/
@@ -56,19 +58,21 @@ env:
   PRISONS_WITH_MANAGE_ADJUDICATIONS_ENABLED: ""
   MANAGE_ADJUDICATIONS_URL: https://manage-adjudications.hmpps.service.justice.gov.uk/
   MANAGE_RESTRICTED_PATIENTS_URL: https://manage-restricted-patients.hmpps.service.justice.gov.uk/
-  ESWE_ENABLED: false
+  ESWE_ENABLED: true
   NEURODIVERSITY_ENABLED_USERNAMES: "CN004364,DBULL_GEN,J_DRAPER"
   CURIOUS_URL: https://liveservices.sequation.com/sequation-virtual-campus2-api/
   DISABLE_REQUEST_LIMITER: true
   PVB_URL: https://manage-a-prison-visit.hmpps.service.justice.gov.uk/
   CALCULATE_RELEASE_DATES_URL: https://calculate-release-dates.hmpps.service.justice.gov.uk
-  SEND_LEGAL_MAIL_URL: ""
+  SEND_LEGAL_MAIL_URL: https://check-rule39-mail.prison.service.justice.gov.uk
   WELCOME_PEOPLE_INTO_PRISON_URL: https://welcome.prison.service.justice.gov.uk/
   WELCOME_PEOPLE_INTO_PRISON_ENABLED_PRISONS: "NMI"
 
 allowlist:
   office: "217.33.148.210/32"
   quantum: "62.25.109.197/32"
+  petty-france-wifi: "213.121.161.112/28"
+  global-protect: "35.176.93.186/32"
   quantum_alt: "212.137.36.230/32"
   health-kick: "35.177.252.195/32"
   digitalprisons1: "52.56.112.98/32"
@@ -140,7 +144,16 @@ allowlist:
   sscl-enhanced-additional-nat: "51.179.197.16/28"
   sscl-fb-standard-external-subnet: "185.40.10.8/29"
   sscl-cor-standard-external-subnet: "83.151.219.160/29"
-
+  sscl-dr: "18.132.131.80"
+  fivewells-1: "20.49.214.199/32"
+  fivewells-2: "20.49.214.228/32"
+  fivewells-3: "195.89.157.56/29"
+  fivewells-4: "195.59.215.184/29"
+  fivewells-5: "51.149.250.0/24"
+  fivewells-6: "51.149.249.0/29"
+  fivewells-7: "194.33.249.0/29"
+  fivewells-8: "51.149.249.32/29"
+  fivewells-9: "194.33.248.0/29"
 
 # determine which slack channel alerts are sent to, via the correct Alert Manager receiver
 generic-prometheus-alerts:

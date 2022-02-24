@@ -1,0 +1,79 @@
+[
+  {
+    "domain": "MOVE_CANC_RS",
+    "code": "ADMIN",
+    "description": "Administrative Cancellation",
+    "activeFlag": "Y",
+    "listSeq": 99,
+    "systemDataFlag": "N",
+    "subCodes": []
+  },
+  {
+    "domain": "MOVE_CANC_RS",
+    "code": "HMP",
+    "description": "Operational Reasons-All Visits Cancelled",
+    "activeFlag": "Y",
+    "listSeq": 99,
+    "systemDataFlag": "N",
+    "subCodes": []
+  },
+  {
+    "domain": "MOVE_CANC_RS",
+    "code": "NO_ID",
+    "description": "No Identification - Refused Entry",
+    "activeFlag": "Y",
+    "systemDataFlag": "N",
+    "subCodes": []
+  },
+  {
+    "domain": "MOVE_CANC_RS",
+    "code": "NO_VO",
+    "description": "No Visiting Order",
+    "activeFlag": "Y",
+    "systemDataFlag": "N",
+    "subCodes": []
+  },
+  {
+    "domain": "MOVE_CANC_RS",
+    "code": "NSHOW",
+    "description": "Visitor Did Not Arrive",
+    "activeFlag": "Y",
+    "systemDataFlag": "N",
+    "subCodes": []
+  },
+  {
+    "domain": "MOVE_CANC_RS",
+    "code": "OFFCANC",
+    "description": "Offender Cancelled",
+    "activeFlag": "Y",
+    "listSeq": 99,
+    "systemDataFlag": "N",
+    "subCodes": []
+  },
+  {
+    "domain": "MOVE_CANC_RS",
+    "code": "REFUSED",
+    "description": "Offender Refused Visit",
+    "activeFlag": "Y",
+    "systemDataFlag": "N",
+    "subCodes": []
+  },
+  {
+    "domain": "MOVE_CANC_RS",
+    "code": "VISCANC",
+    "description": "Visitor Cancelled",
+    "activeFlag": "Y",
+    "listSeq": 99,
+    "systemDataFlag": "N",
+    "subCodes": []
+  },
+  {
+    "domain": "MOVE_CANC_RS",
+    "code": "VO_CANCEL",
+    "description": "Visit Order Cancelled",
+    "activeFlag": "Y",
+    "listSeq": 99,
+    "systemDataFlag": "Y",
+    "subCodes": []
+  }
+]

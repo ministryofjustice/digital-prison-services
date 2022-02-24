@@ -33,11 +33,13 @@ env:
   KEYWORKER_API_URL: https://keyworker-api-preprod.prison.service.justice.gov.uk/
   CATEGORISATION_UI_URL: https://preprod.offender-categorisation.service.justice.gov.uk/
   USE_OF_FORCE_URL: https://preprod.use-of-force.service.justice.gov.uk
-  USE_OF_FORCE_PRISONS: "ACI,AGI,ASI,AYI,BAI,BCI,BFI,BHI,BLI,BMI,BNI,BRI,BSI,BWI,BXI,BZI,CDI,CFI,CLI,CWI,DAI,DGI,DHI,DMI,DNI,DTI,DWI,EEI,EHI,ESI,EWI,EXI,EYI,FBI,FDI,FHI,FKI,FMI,FNI,FSI,GHI,GMI,GNI,GTI,HBI,HCI,HDI,HEI,HHI,HII,HLI,HMI,HOI,HPI,HVI,ISI,IWI,KMI,KVI,LCI,LEI,LFI,LGI,LHI,LII,LLI,LNI,LPI,LTI,LWI,LYI,MDI,MHI,MRI,MSI,MTI,NHI,NLI,NMI,NSI,NWI,ONI,OWI,PBI,PDI,PFI,PNI,PRI,PVI,RCI,RHI,RNI,RSI,SDI,SFI,SHI,SKI,SLI,SNI,SPI,STI,SUI,SWI,TCI,TSI,UKI,UPI,VEI,WCI,WDI,WEI,WHI,WII,WLI,WMI,WRI,WSI,WTI,WWI"
+  USE_OF_FORCE_PRISONS: "ACI,AGI,ASI,AYI,BAI,BCI,BFI,BHI,BLI,BMI,BNI,BRI,BSI,BWI,BXI,BZI,CDI,CFI,CLI,CWI,DAI,DGI,DHI,DMI,DNI,DTI,DWI,EEI,EHI,ESI,EWI,EXI,EYI,FBI,FDI,FHI,FKI,FMI,FNI,FSI,FWI,GHI,GMI,GNI,GTI,HBI,HCI,HDI,HEI,HHI,HII,HLI,HMI,HOI,HPI,HVI,ISI,IWI,KMI,KVI,LCI,LEI,LFI,LGI,LHI,LII,LLI,LNI,LPI,LTI,LWI,LYI,MDI,MHI,MRI,MSI,MTI,NHI,NLI,NMI,NSI,NWI,ONI,OWI,PBI,PDI,PFI,PNI,PRI,PVI,RCI,RHI,RNI,RSI,SDI,SFI,SHI,SKI,SLI,SNI,SPI,STI,SUI,SWI,TCI,TSI,UKI,UPI,VEI,WCI,WDI,WEI,WHI,WII,WLI,WMI,WRI,WSI,WTI,WWI"
+  INCENTIVES_URL: https://incentives-ui-preprod.hmpps.service.justice.gov.uk
+  INCENTIVES_PRISONS: "BLI,DTI,DWI,EXI,GHI,GNI,HGI,HLI,HMI,MDI,NWI,PBI,PDI,PFI,RSI,SPI,SKI,WRI"
   TOKENVERIFICATION_API_URL: https://token-verification-api-preprod.prison.service.justice.gov.uk
   TOKENVERIFICATION_API_ENABLED: true
   CASENOTES_API_URL: https://preprod.offender-case-notes.service.justice.gov.uk/
-  ALLOCATION_MANAGER_ENDPOINT_URL: https://allocation-manager-preprod.apps.live-1.cloud-platform.service.justice.gov.uk/
+  ALLOCATION_MANAGER_ENDPOINT_URL: https://preprod.moic.service.justice.gov.uk
   PATHFINDER_UI_URL: https://preprod.pathfinder.service.justice.gov.uk/
   PATHFINDER_ENDPOINT_API_URL: https://preprod-api.pathfinder.service.justice.gov.uk/
   PIN_PHONES_URL: https://pin-phone-monitor-qa.prison.service.justice.gov.uk/
@@ -49,7 +51,7 @@ env:
   SUPPORT_URL: https://support-preprod.hmpps.service.justice.gov.uk/
   SYSTEM_PHASE: PRE-PRODUCTION
   BVL_URL: https://book-video-link-preprod.prison.service.justice.gov.uk
-  MOIC_URL: https://allocation-manager-preprod.apps.live-1.cloud-platform.service.justice.gov.uk
+  MOIC_URL: https://preprod.moic.service.justice.gov.uk
   OMIC_URL: https://preprod.manage-key-workers.service.justice.gov.uk
   MANAGE_AUTH_ACCOUNTS_URL: https://manage-users-preprod.hmpps.service.justice.gov.uk
   PECS_URL: http://hmpps-book-secure-move-frontend-preprod.apps.live-1.cloud-platform.service.justice.gov.uk
@@ -60,7 +62,7 @@ env:
   MANAGE_RESTRICTED_PATIENTS_URL: https://manage-restricted-patients-preprod.hmpps.service.justice.gov.uk/
   ESWE_ENABLED: true
   NEURODIVERSITY_ENABLED_USERNAMES: 'NCLAMP_GEN,CN004364,DBULL_GEN'
-  CURIOUS_URL: https://testservices.sequation.net/sequation-virtual-campus2-api/
+  CURIOUS_URL: https://preprodservices.sequation.net/sequation-virtual-campus2-api/
   DISABLE_REQUEST_LIMITER: true
   PVB_URL: https://manage-a-prison-visit-preprod.hmpps.service.justice.gov.uk/
   CALCULATE_RELEASE_DATES_URL: https://calculate-release-dates-preprod.hmpps.service.justice.gov.uk
@@ -71,6 +73,8 @@ env:
 allowlist:
   office: "217.33.148.210/32"
   quantum: "62.25.109.197/32"
+  petty-france-wifi: "213.121.161.112/28"
+  global-protect: "35.176.93.186/32"
   quantum_alt: "212.137.36.230/32"
   health-kick: "35.177.252.195/32"
   digitalprisons1: "52.56.112.98/32"

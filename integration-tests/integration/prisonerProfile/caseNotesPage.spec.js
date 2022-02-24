@@ -40,7 +40,17 @@ context('A user can view prisoner case notes', () => {
   before(() => {
     cy.clearCookies()
     cy.task('reset')
-    cy.task('stubSignIn', { username: 'ITAG_USER', caseload: 'WWI' })
+    cy.task('stubSignIn', {
+      username: 'ITAG_USER',
+      caseload: 'WWI',
+      caseloads: [
+        {
+          caseLoadId: 'WWI',
+          description: 'Wandsworth',
+          currentlyActive: true,
+        },
+      ],
+    })
     cy.signIn()
     cy.task('stubCaseNoteTypes')
 

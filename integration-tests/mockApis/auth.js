@@ -119,7 +119,7 @@ const stubUser = (username, caseload) => {
   })
 }
 
-const stubUserMe = (username = 'ITAG_USER', staffId = 12345, name = 'James Stuart') =>
+const stubUserMe = (username = 'ITAG_USER', staffId = 12345, name = 'James Stuart', caseload = 'MDI') =>
   getFor({
     urlPath: '/auth/api/user/me',
     body: {
@@ -127,7 +127,7 @@ const stubUserMe = (username = 'ITAG_USER', staffId = 12345, name = 'James Stuar
       lastName: 'STUART',
       name,
       username,
-      activeCaseLoadId: 'MDI',
+      activeCaseLoadId: caseload,
       staffId,
     },
   })
@@ -215,7 +215,7 @@ module.exports = {
       redirect(),
       signOut(),
       token(),
-      stubUserMe(),
+      stubUserMe(username, 12345, 'James Stuart', caseloadId),
       stubUserMeRoles([{ roleCode: 'UPDATE_ALERT' }, ...roles]),
       stubUser(username, caseloadId),
       stubUserLocations(),

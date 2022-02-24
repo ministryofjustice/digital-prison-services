@@ -5,6 +5,7 @@
 {% from "components/datePicker/datePicker.njk" import datePicker %}
 {% from "govuk/components/input/macro.njk" import govukInput %}
 {% from "govuk/components/warning-text/macro.njk" import govukWarningText %}
+{% from "govuk/components/details/macro.njk" import govukDetails %}
 
 {% extends "../partials/layout.njk" %}
 
@@ -55,6 +56,15 @@
           items: types | addDefaultSelectedVale('Select') | setSelected(formValues.type),
           errorMessage: errors | findError('type')
         }) }}
+
+    {% for behaviourType, prompt in behaviourPrompts %}
+    {{ govukDetails({
+      summaryText: prompt.summary,
+      text: prompt.text,
+      classes: "case-notes-behaviour-prompt case-notes-behaviour-prompt--" + behaviourType + " govuk-!-width-one-half",
+      attributes: { "data-ga-id": prompt.gaId, "data-case-load": user.activeCaseLoad.caseLoadId | default("") }
+    }) }}
+    {% endfor %}
 
     <div id="subTypes">
       {{ govukSelect({

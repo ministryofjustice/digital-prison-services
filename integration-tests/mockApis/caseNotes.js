@@ -32,6 +32,21 @@ const caseNoteTypes = [
       },
     ],
   },
+  {
+    code: 'POS',
+    description: 'Positive Behaviour',
+    activeFlag: 'Y',
+    subCodes: [{ code: 'IEP_ENC', description: 'Incentive Encouragement', activeFlag: 'Y' }],
+  },
+  {
+    code: 'NEG',
+    description: 'Negative Behaviour',
+    activeFlag: 'Y',
+    subCodes: [
+      { code: 'BEHAVEWARN', description: 'Behaviour Warning', activeFlag: 'Y' },
+      { code: 'IEP_WARN', description: 'Incentive Warning', activeFlag: 'Y' },
+    ],
+  },
 ]
 
 module.exports = {
@@ -92,10 +107,10 @@ module.exports = {
       urlPattern: '/casenotes/case-notes/types',
       body: types || caseNoteTypes,
     }),
-  stubCaseNoteTypesForUser: () =>
+  stubCaseNoteTypesForUser: (types) =>
     getFor({
       urlPattern: '/casenotes/case-notes/types-for-user',
-      body: caseNoteTypes,
+      body: types || caseNoteTypes,
     }),
   stubGetCaseNote: (response) =>
     getFor({

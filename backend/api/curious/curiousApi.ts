@@ -8,6 +8,7 @@ import {
   LearnerEmployabilitySkills,
   PageLearnerEducation,
   PageLearnerEmployabilitySkills,
+  LearnerNeurodivergence,
 } from './types/Types'
 
 export default class CuriousApi {
@@ -59,6 +60,19 @@ export default class CuriousApi {
   getLearnerEmployabilitySkills(context: ClientContext, nomisId: string): Promise<PageLearnerEmployabilitySkills> {
     return this.client
       .get<LearnerEmployabilitySkills>(context, `/learnerEmployabilitySkills/${nomisId}?size=10000`)
+      .then((response) => response.body)
+  }
+
+  getLearnerNeurodivergence(
+    context: ClientContext,
+    nomisId: string,
+    establishmentId?: string
+  ): Promise<LearnerNeurodivergence[]> {
+    return this.client
+      .get<LearnerNeurodivergence[]>(
+        context,
+        this.applyQuery(`/learnerNeurodivergence/${nomisId}`, { establishmentId })
+      )
       .then((response) => response.body)
   }
 

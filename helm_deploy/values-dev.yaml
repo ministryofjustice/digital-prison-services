@@ -34,11 +34,13 @@ env:
   KEYWORKER_API_URL: https://keyworker-api-dev.prison.service.justice.gov.uk/
   CATEGORISATION_UI_URL: https://dev.offender-categorisation.service.justice.gov.uk/
   USE_OF_FORCE_URL: https://dev.use-of-force.service.justice.gov.uk
-  USE_OF_FORCE_PRISONS: "WRI,MDI"
+  USE_OF_FORCE_PRISONS: "FWI,MDI,WRI"
+  INCENTIVES_URL: https://incentives-ui-dev.hmpps.service.justice.gov.uk
+  INCENTIVES_PRISONS: "BLI,DTI,DWI,EXI,GHI,GNI,HGI,HLI,HMI,MDI,NWI,PBI,PDI,PFI,RSI,SPI,SKI,WRI"
   TOKENVERIFICATION_API_URL: https://token-verification-api-dev.prison.service.justice.gov.uk
   TOKENVERIFICATION_API_ENABLED: true
   CASENOTES_API_URL: https://dev.offender-case-notes.service.justice.gov.uk/
-  ALLOCATION_MANAGER_ENDPOINT_URL: https://allocation-manager-staging.apps.live-1.cloud-platform.service.justice.gov.uk/
+  ALLOCATION_MANAGER_ENDPOINT_URL: https://dev.moic.service.justice.gov.uk/ 
   PATHFINDER_UI_URL: https://dev.pathfinder.service.justice.gov.uk/
   PATHFINDER_ENDPOINT_API_URL: https://dev-api.pathfinder.service.justice.gov.uk/
   PIN_PHONES_URL: https://pin-phone-monitor-dev.prison.service.justice.gov.uk/
@@ -48,12 +50,12 @@ env:
   SOC_API_ENABLED: true
   OFFENDER_SEARCH_API_URL: https://prisoner-offender-search-dev.prison.service.justice.gov.uk
   SUPPORT_URL: https://support-dev.hmpps.service.justice.gov.uk/
-  ESWE_ENABLED: true
+  ESWE_ENABLED: false
   NEURODIVERSITY_ENABLED_USERNAMES: ""
   CURIOUS_URL: https://testservices.sequation.net/sequation-virtual-campus2-api/
   SYSTEM_PHASE: DEV
   BVL_URL: https://book-video-link-dev.prison.service.justice.gov.uk
-  MOIC_URL: https://allocation-manager-staging.apps.live-1.cloud-platform.service.justice.gov.uk
+  MOIC_URL: https://dev.moic.service.justice.gov.uk 
   OMIC_URL: https://dev.manage-key-workers.service.justice.gov.uk
   MANAGE_AUTH_ACCOUNTS_URL: https://manage-users-dev.hmpps.service.justice.gov.uk
   PECS_URL: https://hmpps-book-secure-move-frontend-staging.apps.live-1.cloud-platform.service.justice.gov.uk
@@ -67,4 +69,3 @@ env:
   SEND_LEGAL_MAIL_URL: https://check-rule39-mail-dev.prison.service.justice.gov.uk
   WELCOME_PEOPLE_INTO_PRISON_URL: https://welcome-dev.prison.service.justice.gov.uk/
   WELCOME_PEOPLE_INTO_PRISON_ENABLED_PRISONS: "NMI,MDI"
-

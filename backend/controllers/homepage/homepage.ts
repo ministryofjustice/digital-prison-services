@@ -15,6 +15,7 @@ const {
     bookAPrisonVisit,
     welcomePeopleIntoPrison,
     manageRestrictedPatients,
+    incentives,
   },
 } = config
 
@@ -52,6 +53,14 @@ const getTasks = ({ activeCaseLoadId, locations, staffId, whereaboutsConfig, key
       enabled: () => userHasRoles(['CELL_MOVE']),
     },
     {
+      id: 'incentives',
+      heading: 'Manage incentives',
+      description: 'See review dates, incentive levels and behaviour entries by residential location.',
+      href: incentives.ui_url,
+      roles: null,
+      enabled: () => incentives.ui_url && incentives.prisons.split(',').includes(activeCaseLoadId),
+    },
+    {
       id: 'use-of-force',
       heading: 'Use of force incidents',
       description: 'Manage and view incident reports and statements.',
@@ -81,8 +90,8 @@ const getTasks = ({ activeCaseLoadId, locations, staffId, whereaboutsConfig, key
     },
     {
       id: 'hdc-licences',
-      heading: 'HDC and licences',
-      description: 'Create and manage Home Detention Curfew and licences.',
+      heading: 'Home Detention Curfew',
+      description: 'Create and manage Home Detention Curfew.',
       href: licences.url,
       enabled: () =>
         licences.url &&
