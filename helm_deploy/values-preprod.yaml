@@ -39,7 +39,7 @@ env:
   TOKENVERIFICATION_API_URL: https://token-verification-api-preprod.prison.service.justice.gov.uk
   TOKENVERIFICATION_API_ENABLED: true
   CASENOTES_API_URL: https://preprod.offender-case-notes.service.justice.gov.uk/
-  ALLOCATION_MANAGER_ENDPOINT_URL: https://allocation-manager-preprod.apps.live-1.cloud-platform.service.justice.gov.uk/
+  ALLOCATION_MANAGER_ENDPOINT_URL: https://preprod.moic.service.justice.gov.uk
   PATHFINDER_UI_URL: https://preprod.pathfinder.service.justice.gov.uk/
   PATHFINDER_ENDPOINT_API_URL: https://preprod-api.pathfinder.service.justice.gov.uk/
   PIN_PHONES_URL: https://pin-phone-monitor-qa.prison.service.justice.gov.uk/
@@ -51,7 +51,7 @@ env:
   SUPPORT_URL: https://support-preprod.hmpps.service.justice.gov.uk/
   SYSTEM_PHASE: PRE-PRODUCTION
   BVL_URL: https://book-video-link-preprod.prison.service.justice.gov.uk
-  MOIC_URL: https://allocation-manager-preprod.apps.live-1.cloud-platform.service.justice.gov.uk
+  MOIC_URL: https://preprod.moic.service.justice.gov.uk
   OMIC_URL: https://preprod.manage-key-workers.service.justice.gov.uk
   MANAGE_AUTH_ACCOUNTS_URL: https://manage-users-preprod.hmpps.service.justice.gov.uk
   PECS_URL: http://hmpps-book-secure-move-frontend-preprod.apps.live-1.cloud-platform.service.justice.gov.uk
