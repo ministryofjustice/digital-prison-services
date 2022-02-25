@@ -52,9 +52,12 @@ export const DEFAULT_GOALS = {
 }
 
 export const DEFAULT_NEURODIVERGENCE = {
-  diversityAssessed: [],
-  diversitySelfDeclared: [],
-  diversitySupport: [],
+  divergenceAssessed: ['Alzheimers', 'Anxiety'],
+  assessmentDate: '20 February 2022',
+  divergenceSelfDeclared: ['Dyslexia', 'Autism'],
+  selfDeclaredDate: '10 February 2022',
+  divergenceSupport: ['Reading support', 'Communication'],
+  supportDate: '15 February 2022',
 }
 
 export const DEFAULT_COURSE_DATA = {
@@ -353,7 +356,7 @@ export default class EsweService {
     } catch (e) {
       if (e.response?.status === 404) {
         log.info(`Offender neurodivergence record not found in Curious`)
-        return null
+        return createFlaggedContent([])
       }
       log.error(`Failed to get neurodivergence details. Reason: ${e.message}`)
     }

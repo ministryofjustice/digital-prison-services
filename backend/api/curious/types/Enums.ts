@@ -68,8 +68,7 @@ export enum NeurodivergenceAssessed {
 }
 
 export enum NeurodivergenceSupport {
-  Reading = 'Reading',
-  Support = 'Support',
+  Reading = 'Reading Support',
   WritingSupport = 'Writing Support',
   SocialandinteractionSupport = 'Social and interaction Support',
   Communications = 'Communications',

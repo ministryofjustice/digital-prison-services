@@ -9,6 +9,8 @@
   {% set classDate = "govuk-hint govuk-!-margin-top-1 govuk-!-margin-bottom-3" %}
   {% set NOT_SELFDECLARED = "No neurodiversity reported by the prisoner yet" %}
   {% set NO_ASSESSMENT = "No neurodiversity identified yet" %}
+  {% set conditionLabel = 'Neurodiversity' %}
+  {% set neurodiversityLabelExists = 'N' %}
 
   {% if indentClass %}
     {% if regularLabelClass %}
@@ -65,11 +67,12 @@
     {% if lddList.length %}
       {% set lddList = (lddList.push('<p class=' + classDate + '>Recorded on ' +dateOn+'</p>'), lddList) %}
       {% set value = {html: lddList.join('') | showDefault(missingValueText)} %}
+      {% set neurodiversityLabelExists = 'Y' %}
 
       {% set rows = (rows.push(
         {
           key: {
-          text: 'Neurodiversity',
+          text: conditionLabel,
           classes: labelClass
         },
           value: desc,
@@ -89,14 +92,24 @@
     {% endif %}
   {% else %}
     {% set noValue = {text: NO_ASSESSMENT} %}
+    {% set neurodiversityLabelExists = 'Y' %}
+    {% set rows = (rows.push(
+      {
+        key: {
+        text: conditionLabel,
+        classes: labelClass
+      },
+        value: {text: 'From neurodiversity assessment'},
+        classes: classBold
+      }
+    ), rows) %}
     {% set rows = (rows.push(
       {
         key: {
         text: '',
         classes: labelClass
       },
-        value: noValue,
-        classes: classBold
+        value: noValue
       }
     ), rows) %}
   {% endif %}
@@ -125,6 +138,8 @@
       {% set lddList = (lddList.push('<p class=' + classDate + '>Recorded on ' +dateOn+'</p>'), lddList) %}
       {% set value = {html: lddList.join('') | showDefault(missingValueText)} %}
 
+      {% set conditionLabel = '' if neurodiversityLabelExists == 'Y' %}
+
       {% if diversities.divergenceAssessed[0]["details"][0].ldd.length %}
         {% set rows = (rows.push(
           {
@@ -136,17 +151,17 @@
             classes: classBold
           }
         ), rows) %}
-        {% else %}
-          {% set rows = (rows.push(
-            {
-              key: {
-              text: 'Neurodiversity',
-              classes: labelClass
-            },
-              value: desc,
-              classes: classBold
-            }
-          ), rows) %}
+      {% else %}
+        {% set rows = (rows.push(
+          {
+            key: {
+            text: conditionLabel,
+            classes: labelClass
+          },
+            value: desc,
+            classes: classBold
+          }
+        ), rows) %}
       {% endif %}
 
       {% set rows = (rows.push(
@@ -169,8 +184,7 @@
         text: '',
         classes: labelClass
       },
-        value: noValue,
-        classes: classBold
+        value: noValue
       }
     ), rows) %}
   {% endif %}

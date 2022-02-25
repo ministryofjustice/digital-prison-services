@@ -263,7 +263,7 @@ context('Prisoner personal', () => {
     context('Disabilities and adjustments section', () => {
       it('Should show correct missing content text', () => {
         cy.get('[data-test="neurodiversity-summary"]').then(($section) => {
-          expect($section).to.contain.text('We cannot show these details right now. Try reloading the page.')
+          expect($section).to.contain.text('John Smith has no recorded neurodiversity needs.')
         })
         cy.get('[data-test="care-needs-summary"]').then(($section) => {
           expect($section).to.contain.text('None')
@@ -939,9 +939,7 @@ context('Prisoner personal', () => {
               // .find('dt')
               .then(($SummaryValues) => {
                 cy.get($SummaryValues)
-                expect($SummaryValues.get(0).innerText).to.contain(
-                  'We cannot show these details right now. Try reloading the page'
-                )
+                expect($SummaryValues.get(0).innerText).to.contain('John Smith has no recorded neurodiversity needs.')
               })
           })
 

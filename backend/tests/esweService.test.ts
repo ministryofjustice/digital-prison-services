@@ -20,6 +20,7 @@ import {
   LearnerLatestAssessment,
   LearnerProfile,
   PageLearnerEducation,
+  LearnerNeurodivergence,
   // eslint-disable-next-line-NO import/extensions
 } from '../api/curious/types/Types'
 
@@ -47,6 +48,7 @@ describe('Education skills and work experience', () => {
   const systemOauthClient = {
     getClientCredentialsTokens: jest.fn(),
   }
+  const dummyNeurodivergence = getDummyLearnerDivergence()
   const whereaboutsContext = 'TOKEN'
   let service
   let getLearnerProfilesMock
@@ -58,6 +60,7 @@ describe('Education skills and work experience', () => {
   let getUnacceptableAbsencesMock
   let getUnacceptableAbsenceDetailMock
   let getLearnerEmployabilitySkillsMock
+  let getLearnerdivergenceMock
   beforeEach(() => {
     getLearnerProfilesMock = jest.fn()
     getLearnerEducationMock = jest.fn()
@@ -68,10 +71,12 @@ describe('Education skills and work experience', () => {
     getUnacceptableAbsencesMock = jest.fn()
     getUnacceptableAbsenceDetailMock = jest.fn()
     getLearnerEmployabilitySkillsMock = jest.fn()
+    getLearnerdivergenceMock = jest.fn()
     curiousApi.getLearnerProfiles = getLearnerProfilesMock
     curiousApi.getLearnerEducation = getLearnerEducationMock
     curiousApi.getLearnerLatestAssessments = getLearnerLatestAssessmentsMock
     curiousApi.getLearnerGoals = getLearnerGoalsMock
+    curiousApi.getLearnerNeurodivergence = getLearnerdivergenceMock
     curiousApi.getLearnerEmployabilitySkills = getLearnerEmployabilitySkillsMock
     prisonApi.getOffenderActivitiesHistory = getLearnerActivitiesHistoryMock
     whereaboutsApi.getUnacceptableAbsences = getUnacceptableAbsencesMock
@@ -85,6 +90,7 @@ describe('Education skills and work experience', () => {
     getLearnerGoalsMock.mockResolvedValue(dummyGoals)
     getLearnerActivitiesHistoryMock.mockResolvedValue(dummyActivitiesHistory)
     getPrisonerDetailsMock.mockResolvedValue(dummyPrisonerDetails)
+    getLearnerdivergenceMock.mockResolvedValue(dummyNeurodivergence)
 
     systemOauthClient.getClientCredentialsTokens.mockReturnValue(credentialsRef)
     service = EsweService.create(curiousApi, systemOauthClient, prisonApi, whereaboutsApi)
@@ -918,6 +924,161 @@ describe('Education skills and work experience', () => {
         expect(actual.content).toEqual(expected)
       })
     })
+
+    describe('Learner neurodivergence', () => {
+      const nomisId = 'G3609VL'
+
+      it('should set enabled to true', async () => {
+        const actual = await service.getNeurodivergence(nomisId)
+
+        expect(actual.enabled).toBeTruthy()
+        expect(getLearnerdivergenceMock).toHaveBeenCalledTimes(1)
+        expect(systemOauthClient.getClientCredentialsTokens).toHaveBeenCalledTimes(1)
+      })
+      it('should return expected response when the prisoner is not registered in Curious', async () => {
+        getLearnerdivergenceMock.mockRejectedValue(makeNotFoundError())
+        const actual = await service.getNeurodivergence(nomisId)
+        expect(actual.enabled).toBeTruthy()
+        expect(actual.content).toEqual([])
+      })
+      it('should return expected response with appropriate message when no neurodiversity is recorded', async () => {
+        const noNeurodiversity = [
+          {
+            prn: 'G3609VL',
+            establishmentId: 'MDI',
+            establishmentName: 'HMP Moorland',
+            neurodivergenceSelfDeclared: [],
+            selfDeclaredDate: '',
+            neurodivergenceAssessed: [],
+            assessmentDate: '',
+            neurodivergenceSupport: [],
+            supportDate: '',
+          },
+        ]
+        getLearnerdivergenceMock.mockResolvedValue(noNeurodiversity)
+        const actual = await service.getNeurodivergence(nomisId)
+        expect(actual.content).toBeTruthy()
+        expect(getLearnerdivergenceMock).toHaveBeenCalledTimes(1)
+      })
+      it('should return a null content error', async () => {
+        getLearnerdivergenceMock.mockRejectedValue(new Error('error'))
+        const actual = await service.getNeurodivergence(nomisId)
+        expect(actual).toBeNull()
+      })
+      it('should return self-declared neurodiversity and support details when the prisoner is in Curious', async () => {
+        const selfAssessed = [
+          {
+            prn: 'G3609VL',
+            establishmentId: 'MDI',
+            establishmentName: 'HMP Moorland',
+            neurodivergenceSelfDeclared: ['ADHD', 'Autism'],
+            selfDeclaredDate: '22-02-10',
+            neurodivergenceSupport: ['Memory support', 'Reading'],
+            supportDate: '2022-02-20',
+          },
+        ]
+        const expected = [
+          {
+            divergenceAssessed: [null],
+            divergenceSelfDeclared: [
+              {
+                details: [
+                  {
+                    ldd: ['ADHD', 'Autism'],
+                    label: 'From self-assessment',
+                  },
+                  {
+                    label: 'selfDeclaredDate',
+                    value: '10 February 2022',
+                  },
+                ],
+              },
+            ],
+            divergenceSupport: [
+              {
+                details: [
+                  {
+                    ldd: ['Memory support', 'Reading'],
+                    label: 'Support needed',
+                  },
+                  {
+                    label: 'Recorded on',
+                    value: '20 February 2022',
+                  },
+                ],
+              },
+            ],
+          },
+        ]
+        getLearnerdivergenceMock.mockResolvedValue(selfAssessed)
+        const actual = await service.getNeurodivergence(nomisId)
+        expect(actual.content).toStrictEqual(expected)
+      })
+      it('should return self-declared and assessment neurodiversity inc. support details when the prisoner is in Curious', async () => {
+        const neurodiversity = [
+          {
+            prn: 'G3609VL',
+            establishmentId: 'MDI',
+            establishmentName: 'HMP Moorland',
+            neurodivergenceSelfDeclared: ['ADHD', 'Autism'],
+            selfDeclaredDate: '22-02-10',
+            neurodivergenceAssessed: ['Acquired brain injury'],
+            assessmentDate: '2022-02-15',
+            neurodivergenceSupport: ['Memory support', 'Reading'],
+            supportDate: '2022-02-20',
+          },
+        ]
+        const expected = [
+          {
+            divergenceAssessed: [
+              {
+                details: [
+                  {
+                    ldd: ['Acquired brain injury'],
+                    label: 'From neurodiversity assessment',
+                  },
+                  {
+                    label: 'assessmentDate',
+                    value: '15 February 2022',
+                  },
+                ],
+              },
+            ],
+            divergenceSelfDeclared: [
+              {
+                details: [
+                  {
+                    ldd: ['ADHD', 'Autism'],
+                    label: 'From self-assessment',
+                  },
+                  {
+                    label: 'selfDeclaredDate',
+                    value: '10 February 2022',
+                  },
+                ],
+              },
+            ],
+            divergenceSupport: [
+              {
+                details: [
+                  {
+                    ldd: ['Memory support', 'Reading'],
+                    label: 'Support needed',
+                  },
+                  {
+                    label: 'Recorded on',
+                    value: '20 February 2022',
+                  },
+                ],
+              },
+            ],
+          },
+        ]
+        getLearnerdivergenceMock.mockResolvedValue(neurodiversity)
+        const actual = await service.getNeurodivergence(nomisId)
+        expect(actual.content).toStrictEqual(expected)
+      })
+    })
   })
 })
 
@@ -1442,6 +1603,22 @@ function getDummyEducations(): PageLearnerEducation {
     },
     empty: false,
   }
+}
+
+function getDummyLearnerDivergence(): LearnerNeurodivergence[] {
+  return [
+    {
+      prn: 'G3609VL',
+      establishmentId: 'MDI',
+      establishmentName: 'HMP Moorland',
+      neurodivergenceSelfDeclared: ['ADHD', 'Autism'],
+      selfDeclaredDate: '22-02-10',
+      neurodivergenceAssessed: ['Acquired brain injury'],
+      assessmentDate: '2022-02-15',
+      neurodivergenceSupport: ['Memory support', 'Reading'],
+      supportDate: '2022-02-20',
+    },
+  ]
 }
 
 const latestReview1 = {

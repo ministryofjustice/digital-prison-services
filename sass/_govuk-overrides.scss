@@ -93,3 +93,57 @@
 #adjudication-survey-break {
 	border-bottom: 1px solid $govuk-brand-colour;
 }
+
+// Adjust column width in neurodiversity accordion's table
+.prisoner-profile-neurodiversity {
+  .govuk-summary-list-title-neurodiversity {
+    margin: 0 0 govuk-spacing(2);
+    padding: govuk-spacing(2) 0;
+
+    @include govuk-media-query($from: tablet) {
+      margin: 0;
+    }
+  }
+
+  .govuk-accordion__section-content {
+    > .govuk-summary-list:not(:first-child) {
+      border-top: 1px solid $govuk-border-colour;
+    }
+
+    // Remove last line of every summary within an accordion section
+    .govuk-summary-list {
+      .govuk-summary-list__row:last-child {
+        .govuk-summary-list__key,
+        .govuk-summary-list__value {
+          border-bottom: none;
+        }
+      }
+    }
+  }
+
+  .govuk-summary-list__key {
+    margin-bottom: govuk-spacing(1);
+    @include govuk-typography-weight-bold;
+    @include govuk-media-query($from: tablet) {
+      width: 30%;
+    }
+
+    &--indent {
+      @include govuk-media-query($from: desktop) {
+        padding-left: govuk-spacing(9);
+      }
+    }
+  }
+
+  .govuk-summary-list__value {
+    @include govuk-media-query($from: tablet) {
+      width: 70%;
+    }
+  }
+
+  .govuk-summary-list__value:last-child {
+    @include govuk-media-query($from: tablet) {
+      width: 70%;
+    }
+  }
+}
