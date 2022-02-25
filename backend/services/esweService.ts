@@ -51,15 +51,6 @@ export const DEFAULT_GOALS = {
   longTermGoals: null,
 }
 
-export const DEFAULT_NEURODIVERGENCE = {
-  divergenceAssessed: ['Alzheimers', 'Anxiety'],
-  assessmentDate: '20 February 2022',
-  divergenceSelfDeclared: ['Dyslexia', 'Autism'],
-  selfDeclaredDate: '10 February 2022',
-  divergenceSupport: ['Reading support', 'Communication'],
-  supportDate: '15 February 2022',
-}
-
 export const DEFAULT_COURSE_DATA = {
   historicalCoursesPresent: false,
   currentCourseData: [],
