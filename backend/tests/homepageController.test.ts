@@ -1,11 +1,12 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import config from '../config'
 import homepageController from '../controllers/homepage/homepage'
 
 describe('Homepage', () => {
-  const oauthApi = {}
-  const prisonApi = {}
-  const whereaboutsApi = {}
-  const keyworkerApi = {}
+  const oauthApi: any = {}
+  const prisonApi: any = {}
+  const whereaboutsApi: any = {}
+  const keyworkerApi: any = {}
 
   let req
   let res
@@ -18,6 +19,7 @@ describe('Homepage', () => {
     config.apis.omic.url = undefined
     config.apis.manageAdjudications.enabled_prisons = undefined
     config.apis.manageAdjudications.ui_url = undefined
+    config.apis.manageRestrictedPatients.ui_url = undefined
     config.apis.bookAPrisonVisit.ui_url = undefined
     config.applications.sendLegalMail.url = undefined
     config.apis.welcomePeopleIntoPrison.enabled_prisons = undefined
@@ -35,15 +37,10 @@ describe('Homepage', () => {
 
     logError = jest.fn()
 
-    // @ts-expect-error ts-migrate(2339) FIXME: Property 'userLocations' does not exist on type '{... Remove this comment to see the full error message
     prisonApi.userLocations = jest.fn().mockResolvedValue([])
-    // @ts-expect-error ts-migrate(2339) FIXME: Property 'getStaffRoles' does not exist on type '{... Remove this comment to see the full error message
     prisonApi.getStaffRoles = jest.fn().mockResolvedValue([])
-    // @ts-expect-error ts-migrate(2339) FIXME: Property 'userRoles' does not exist on type '{}'.
     oauthApi.userRoles = jest.fn().mockResolvedValue([])
-    // @ts-expect-error ts-migrate(2339) FIXME: Property 'getWhereaboutsConfig' does not exist on ... Remove this comment to see the full error message
     whereaboutsApi.getWhereaboutsConfig = jest.fn().mockResolvedValue({})
-    // @ts-expect-error ts-migrate(2339) FIXME: Property 'getPrisonMigrationStatus' does not exist... Remove this comment to see the full error message
     keyworkerApi.getPrisonMigrationStatus = jest.fn().mockResolvedValue({ migrated: true })
 
     controller = homepageController({ oauthApi, prisonApi, whereaboutsApi, keyworkerApi, logError })
@@ -52,19 +49,14 @@ describe('Homepage', () => {
   it('should make the required calls to endpoints', async () => {
     await controller(req, res)
 
-    // @ts-expect-error ts-migrate(2339) FIXME: Property 'userLocations' does not exist on type '{... Remove this comment to see the full error message
     expect(prisonApi.userLocations).toHaveBeenCalledWith({})
-    // @ts-expect-error ts-migrate(2339) FIXME: Property 'getStaffRoles' does not exist on type '{... Remove this comment to see the full error message
     expect(prisonApi.getStaffRoles).toHaveBeenCalledWith({}, 1, 'MDI')
-    // @ts-expect-error ts-migrate(2339) FIXME: Property 'userRoles' does not exist on type '{}'.
     expect(oauthApi.userRoles).toHaveBeenCalledWith({})
-    // @ts-expect-error ts-migrate(2339) FIXME: Property 'getWhereaboutsConfig' does not exist on ... Remove this comment to see the full error message
     expect(whereaboutsApi.getWhereaboutsConfig).toHaveBeenCalledWith({}, 'MDI')
   })
 
   describe('Search', () => {
     it('should render home page with the correct location options', async () => {
-      // @ts-expect-error ts-migrate(2339) FIXME: Property 'userLocations' does not exist on type '{... Remove this comment to see the full error message
       prisonApi.userLocations.mockResolvedValue([
         { description: 'Moorland (HMP & YOI)', locationPrefix: 'MDI' },
         { description: 'Houseblock 1', locationPrefix: 'MDI-1' },
@@ -97,7 +89,6 @@ describe('Homepage', () => {
     })
 
     it('should render home page with the the global search task', async () => {
-      // @ts-expect-error ts-migrate(2339) FIXME: Property 'userRoles' does not exist on type '{}'.
       oauthApi.userRoles.mockResolvedValue([{ roleCode: 'GLOBAL_SEARCH' }])
 
       await controller(req, res)
@@ -120,7 +111,6 @@ describe('Homepage', () => {
     it('should render home page with the my key worker allocation task', async () => {
       config.apis.omic.url = 'http://omic-url'
 
-      // @ts-expect-error ts-migrate(2339) FIXME: Property 'getStaffRoles' does not exist on type '{... Remove this comment to see the full error message
       prisonApi.getStaffRoles.mockResolvedValue([{ role: 'KW' }])
 
       await controller(req, res)
@@ -141,7 +131,6 @@ describe('Homepage', () => {
     })
 
     it('should render home page with the manage prisoner whereabouts task', async () => {
-      // @ts-expect-error ts-migrate(2339) FIXME: Property 'getWhereaboutsConfig' does not exist on ... Remove this comment to see the full error message
       whereaboutsApi.getWhereaboutsConfig.mockResolvedValue({ enabled: true })
 
       await controller(req, res)
@@ -163,7 +152,6 @@ describe('Homepage', () => {
     })
 
     it('should render page with the view change someones cell task', async () => {
-      // @ts-expect-error ts-migrate(2339) FIXME: Property 'userRoles' does not exist on type '{}'.
       oauthApi.userRoles.mockResolvedValue([{ roleCode: 'CELL_MOVE' }])
 
       await controller(req, res)
@@ -225,7 +213,6 @@ describe('Homepage', () => {
     })
 
     it.skip('should render home page with the book a prison visit task', async () => {
-      // @ts-expect-error ts-migrate(2339) FIXME: Property 'userRoles' does not exist on type '{}'.
       oauthApi.userRoles.mockResolvedValue([{ roleCode: 'PVB_ADMIN' }])
       config.apis.bookAPrisonVisit.ui_url = 'http://book-a-prison-visit-url'
 
@@ -249,7 +236,6 @@ describe('Homepage', () => {
     it('should render home page with the pathfinder task', async () => {
       config.apis.pathfinder.ui_url = 'http://pathfinder-url'
 
-      // @ts-expect-error ts-migrate(2339) FIXME: Property 'userRoles' does not exist on type '{}'.
       oauthApi.userRoles.mockResolvedValue([
         { roleCode: 'PF_STD_PRISON' },
         { roleCode: 'PF_STD_PROBATION' },
@@ -283,7 +269,6 @@ describe('Homepage', () => {
     it('should render home page with the hdc licences task', async () => {
       config.applications.licences.url = 'http://licences-url'
 
-      // @ts-expect-error ts-migrate(2339) FIXME: Property 'userRoles' does not exist on type '{}'.
       oauthApi.userRoles.mockResolvedValue([
         { roleCode: 'NOMIS_BATCHLOAD' },
         { roleCode: 'LICENCE_CA' },
@@ -311,7 +296,6 @@ describe('Homepage', () => {
     })
 
     it('should render home page with the establishment roll task', async () => {
-      // @ts-expect-error ts-migrate(2339) FIXME: Property 'userLocations' does not exist on type '{... Remove this comment to see the full error message
       prisonApi.userLocations.mockResolvedValue([
         { description: 'Moorland (HMP & YOI)', locationPrefix: 'MDI' },
         { description: 'Houseblock 1', locationPrefix: 'MDI-1' },
@@ -337,7 +321,6 @@ describe('Homepage', () => {
     it('should render home page with the manage key workers task', async () => {
       config.apis.omic.url = 'http://omic-url'
 
-      // @ts-expect-error ts-migrate(2339) FIXME: Property 'userRoles' does not exist on type '{}'.
       oauthApi.userRoles.mockResolvedValue([{ roleCode: 'OMIC_ADMIN' }, { roleCode: 'KEYWORKER_MONITOR' }])
 
       await controller(req, res)
@@ -359,11 +342,9 @@ describe('Homepage', () => {
 
     describe('when a prison has not been migrated for manage key workers', () => {
       beforeEach(() => {
-        // @ts-expect-error ts-migrate(2339) FIXME: Property 'getPrisonMigrationStatus' does not exist... Remove this comment to see the full error message
         keyworkerApi.getPrisonMigrationStatus = jest.fn().mockResolvedValue({ migrated: false })
       })
       it('should not show the manage key workers link', async () => {
-        // @ts-expect-error ts-migrate(2339) FIXME: Property 'userRoles' does not exist on type '{}'.
         oauthApi.userRoles.mockResolvedValue([{ roleCode: 'OMIC_ADMIN' }])
         await controller(req, res)
 
@@ -376,7 +357,6 @@ describe('Homepage', () => {
       })
 
       it('should show the manage key worker link if the user has the migrate role', async () => {
-        // @ts-expect-error ts-migrate(2339) FIXME: Property 'userRoles' does not exist on type '{}'.
         oauthApi.userRoles.mockResolvedValue([{ roleCode: 'KW_MIGRATION' }])
         await controller(req, res)
 
@@ -399,7 +379,6 @@ describe('Homepage', () => {
     it('should render home page with the manage users task', async () => {
       config.applications.manageaccounts.url = 'http://manage-auth-accounts-url'
 
-      // @ts-expect-error ts-migrate(2339) FIXME: Property 'userRoles' does not exist on type '{}'.
       oauthApi.userRoles.mockResolvedValue([
         { roleCode: 'MAINTAIN_ACCESS_ROLES' },
         { roleCode: 'MAINTAIN_ACCESS_ROLES_ADMIN' },
@@ -428,7 +407,6 @@ describe('Homepage', () => {
     it('should render home page with the categorisation task', async () => {
       config.apis.categorisation.ui_url = 'http://categorisation-url'
 
-      // @ts-expect-error ts-migrate(2339) FIXME: Property 'userRoles' does not exist on type '{}'.
       oauthApi.userRoles.mockResolvedValue([
         { roleCode: 'CREATE_CATEGORISATION' },
         { roleCode: 'CREATE_RECATEGORISATION' },
@@ -457,7 +435,6 @@ describe('Homepage', () => {
     it('should render home page with the book a secure move task', async () => {
       config.applications.pecs.url = 'http://pecs-url'
 
-      // @ts-expect-error ts-migrate(2339) FIXME: Property 'userRoles' does not exist on type '{}'.
       oauthApi.userRoles.mockResolvedValue([{ roleCode: 'PECS_OCA' }, { roleCode: 'PECS_PRISON' }])
 
       await controller(req, res)
@@ -481,7 +458,6 @@ describe('Homepage', () => {
     it('should render home page with the prison offender managers task', async () => {
       config.applications.moic.url = 'http://moic-url'
 
-      // @ts-expect-error ts-migrate(2339) FIXME: Property 'userRoles' does not exist on type '{}'.
       oauthApi.userRoles.mockResolvedValue([{ roleCode: 'ALLOC_MGR' }, { roleCode: 'ALLOC_CASE_MGR' }])
 
       await controller(req, res)
@@ -504,7 +480,6 @@ describe('Homepage', () => {
     it('should render home page with the serious organised crime task', async () => {
       config.apis.soc.ui_url = 'http://soc-url'
 
-      // @ts-expect-error ts-migrate(2339) FIXME: Property 'userRoles' does not exist on type '{}'.
       oauthApi.userRoles.mockResolvedValue([{ roleCode: 'SOC_CUSTODY' }, { roleCode: 'SOC_COMMUNITY' }])
 
       await controller(req, res)
@@ -527,7 +502,6 @@ describe('Homepage', () => {
     it('should render home page with the serious organised crime task when the user has the SOC_HQ role', async () => {
       config.apis.soc.ui_url = 'http://soc-url'
 
-      // @ts-expect-error ts-migrate(2339) FIXME: Property 'userRoles' does not exist on type '{}'.
       oauthApi.userRoles.mockResolvedValue([{ roleCode: 'SOC_HQ' }])
 
       await controller(req, res)
@@ -548,7 +522,6 @@ describe('Homepage', () => {
     })
 
     it('should redirect to video link booking for court users', async () => {
-      // @ts-expect-error ts-migrate(2339) FIXME: Property 'userRoles' does not exist on type '{}'.
       oauthApi.userRoles.mockResolvedValue([{ roleCode: 'VIDEO_LINK_COURT_USER' }])
 
       await controller(req, res)
@@ -561,7 +534,6 @@ describe('Homepage', () => {
     config.applications.sendLegalMail.url = 'http://check-rule39-mail'
 
     Array.of('SLM_SCAN_BARCODE', 'SLM_SECURITY_ANALYST').forEach(async (roleCode) => {
-      // @ts-expect-error ts-migrate(2339) FIXME: Property 'userRoles' does not exist on type '{}'.
       oauthApi.userRoles.mockResolvedValue([{ roleCode }])
 
       await controller(req, res)
@@ -611,6 +583,40 @@ describe('Homepage', () => {
             href: 'https://wpipUrl.prison.service.justice.gov.uk',
             id: 'welcome-people-into-prison',
           },
+        ],
+      })
+    )
+  })
+
+  it('should not display the Manage Restricted Patients task on the homepage if none of the correct roles are present', async () => {
+    config.apis.manageRestrictedPatients.ui_url = 'http://manage-restricted-patients-url'
+    oauthApi.userRoles.mockResolvedValue([])
+    await controller(req, res)
+
+    expect(res.render).toHaveBeenCalledWith(
+      'homepage/homepage.njk',
+      expect.objectContaining({
+        tasks: [],
+      })
+    )
+  })
+  it('should display the Manage Restricted Patients task on the homepage if any of the correct roles are present', async () => {
+    config.apis.manageRestrictedPatients.ui_url = 'http://manage-restricted-patients-url'
+    oauthApi.userRoles.mockResolvedValue([
+      { roleCode: 'SEARCH_RESTRICTED_PATIENT' },
+      { roleCode: 'TRANSFER_RESTRICTED_PATIENT' },
+    ])
+
+    await controller(req, res)
+
+    expect(res.render).toHaveBeenCalledWith(
+      'homepage/homepage.njk',
+      expect.objectContaining({
+        tasks: [
+          expect.objectContaining({
+            id: 'manage-restricted-patients',
+            href: 'http://manage-restricted-patients-url',
+          }),
         ],
       })
     )

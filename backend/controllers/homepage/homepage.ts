@@ -14,6 +14,7 @@ const {
     manageAdjudications,
     bookAPrisonVisit,
     welcomePeopleIntoPrison,
+    manageRestrictedPatients,
     incentives,
   },
 } = config
@@ -202,6 +203,16 @@ const getTasks = ({ activeCaseLoadId, locations, staffId, whereaboutsConfig, key
       roles: null,
       enabled: () =>
         welcomePeopleIntoPrison.url && welcomePeopleIntoPrison.enabled_prisons.split(',').includes(activeCaseLoadId),
+    },
+    {
+      id: 'manage-restricted-patients',
+      heading: 'Manage Restricted Patients',
+      description:
+        'View all restricted patients in a secure hospital, move someone to a secure hospital, and remove someone from restricted patients.',
+      href: manageRestrictedPatients.ui_url,
+      enabled: () =>
+        manageRestrictedPatients.ui_url &&
+        userHasRoles(['SEARCH_RESTRICTED_PATIENT', 'TRANSFER_RESTRICTED_PATIENT', 'REMOVE_RESTRICTED_PATIENT']),
     },
   ]
 }

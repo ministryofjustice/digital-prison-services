@@ -291,4 +291,8 @@ env:
 
   - name: WELCOME_PEOPLE_INTO_PRISON_ENABLED_PRISONS
     value: {{ .Values.env.WELCOME_PEOPLE_INTO_PRISON_ENABLED_PRISONS | quote }}
+
+  - name: MANAGE_RESTRICTED_PATIENTS_URL
+    value: {{ .Values.env.MANAGE_RESTRICTED_PATIENTS_URL | quote }}
+
 {{- end -}}
