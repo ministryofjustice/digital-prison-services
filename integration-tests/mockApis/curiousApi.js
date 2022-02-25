@@ -27,4 +27,7 @@ module.exports = {
 
   stubLearnerEmployabilitySkills: (learnerEmployabilitySkills, status = 200) =>
     doStub('learnerEmployabilitySkills', learnerEmployabilitySkills, status),
+
+  stubLearnerNeurodiversity: (learnerNeurodiversity, status = 200) =>
+    doStub('learnerNeurodiversity', learnerNeurodiversity, status),
 }
