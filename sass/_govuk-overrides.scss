@@ -125,7 +125,7 @@
     margin-bottom: govuk-spacing(1);
     @include govuk-typography-weight-bold;
     @include govuk-media-query($from: tablet) {
-      width: 30%;
+      width: 40%;
     }
 
     &--indent {
@@ -137,13 +137,13 @@
 
   .govuk-summary-list__value {
     @include govuk-media-query($from: tablet) {
-      width: 70%;
+      width: 60%;
     }
   }
 
   .govuk-summary-list__value:last-child {
     @include govuk-media-query($from: tablet) {
-      width: 70%;
+      width: 60%;
     }
   }
 }
