@@ -124,8 +124,6 @@ export const prisonApiFactory = (client) => {
 
   const getAgencyDetails = (context, agencyId) => get(context, `/api/agencies/${agencyId}?activeOnly=false`)
 
-  const getAgencyIepLevels = (context, agencyId) => get(context, `/api/agencies/${agencyId}/iepLevels`)
-
   const getStaffDetails = (context, staffId) => get(context, `/api/users/${staffId}`)
 
   const getCourtEvents = (context, { agencyId, date, offenderNumbers }) =>
@@ -471,7 +469,6 @@ export const prisonApiFactory = (client) => {
     getActivities,
     getAgencies,
     getAgencyDetails,
-    getAgencyIepLevels,
     getStaffDetails,
     getCourtEvents,
     getSentenceData,

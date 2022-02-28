@@ -1,7 +1,7 @@
 import { putLastNameFirst, formatName } from '../../utils'
 import { raiseAnalyticsEvent } from '../../raiseAnalyticsEvent'
 
-export default ({ prisonApi }) => {
+export default ({ prisonApi, incentivesApi }) => {
   const renderTemplate = async (req, res, pageData) => {
     const { offenderNo } = req.params
     const { errors, formValues = {} } = pageData || {}
@@ -12,7 +12,7 @@ export default ({ prisonApi }) => {
 
       const [iepSummary, iepLevels] = await Promise.all([
         prisonApi.getIepSummaryForBooking(res.locals, bookingId, true),
-        prisonApi.getAgencyIepLevels(res.locals, agencyId),
+        incentivesApi.getAgencyIepLevels(res.locals, agencyId),
       ])
 
       const { iepLevel } = iepSummary

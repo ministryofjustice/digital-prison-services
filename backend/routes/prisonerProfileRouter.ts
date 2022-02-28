@@ -52,6 +52,7 @@ const controller = ({
   complexityApi,
   offenderSearchApi,
   curiousApi,
+  incentivesApi,
 }) => {
   const prisonerProfileService = prisonerProfileServiceFactory({
     prisonApi,
@@ -144,12 +145,12 @@ const controller = ({
   router.get(
     '/incentive-level-details/change-incentive-level',
     // @ts-expect-error ts-migrate(2345) FIXME: Argument of type '{ prisonApi: any; logError: any;... Remove this comment to see the full error message
-    prisonerChangeIncentiveLevelDetails({ prisonApi, logError }).index
+    prisonerChangeIncentiveLevelDetails({ prisonApi, incentivesApi, logError }).index
   )
   router.post(
     '/incentive-level-details/change-incentive-level',
     // @ts-expect-error ts-migrate(2345) FIXME: Argument of type '{ prisonApi: any; logError: any;... Remove this comment to see the full error message
-    prisonerChangeIncentiveLevelDetails({ prisonApi, logError }).post
+    prisonerChangeIncentiveLevelDetails({ prisonApi, incentivesApi, logError }).post
   )
 
   router.get('/prisoner-finance-details/damage-obligations', prisonerDamageObligations({ prisonApi }))

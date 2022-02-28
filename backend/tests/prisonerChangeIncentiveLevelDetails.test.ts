@@ -9,6 +9,7 @@ describe('Prisoner change incentive level details', () => {
   const offenderNo = 'ABC123'
   const bookingId = '123'
   const prisonApi = {}
+  const incentivesApi = {}
 
   let req
   let res
@@ -64,7 +65,7 @@ describe('Prisoner change incentive level details', () => {
       ],
     })
     // @ts-expect-error ts-migrate(2339) FIXME: Property 'getAgencyIepLevels' does not exist on ty... Remove this comment to see the full error message
-    prisonApi.getAgencyIepLevels = jest.fn().mockReturnValue([
+    incentivesApi.getAgencyIepLevels = jest.fn().mockReturnValue([
       { iepLevel: 'ENT', iepDescription: 'Entry' },
       { iepLevel: 'BAS', iepDescription: 'Basic' },
       { iepLevel: 'STD', iepDescription: 'Standard' },
@@ -74,7 +75,7 @@ describe('Prisoner change incentive level details', () => {
     prisonApi.changeIepLevel = jest.fn()
 
     // @ts-expect-error ts-migrate(2345) FIXME: Argument of type '{ prisonApi: {}; logError: any; ... Remove this comment to see the full error message
-    controller = prisonerChangeIncentiveLevelDetails({ prisonApi, logError })
+    controller = prisonerChangeIncentiveLevelDetails({ prisonApi, incentivesApi, logError })
   })
 
   describe('index', () => {
@@ -87,7 +88,7 @@ describe('Prisoner change incentive level details', () => {
         // @ts-expect-error ts-migrate(2339) FIXME: Property 'getIepSummaryForBooking' does not exist ... Remove this comment to see the full error message
         expect(prisonApi.getIepSummaryForBooking).toHaveBeenCalledWith(res.locals, bookingId, true)
         // @ts-expect-error ts-migrate(2339) FIXME: Property 'getAgencyIepLevels' does not exist on ty... Remove this comment to see the full error message
-        expect(prisonApi.getAgencyIepLevels).toHaveBeenCalledWith(res.locals, 'MDI')
+        expect(incentivesApi.getAgencyIepLevels).toHaveBeenCalledWith(res.locals, 'MDI')
         expect(res.render).toHaveBeenCalledWith('prisonerProfile/prisonerChangeIncentiveLevelDetails.njk', {
           agencyId: 'MDI',
           bookingId: '123',

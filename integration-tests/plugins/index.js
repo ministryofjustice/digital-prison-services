@@ -1,5 +1,6 @@
 const auth = require('../mockApis/auth')
 const prisonApi = require('../mockApis/prisonApi')
+const incentivesApi = require('../mockApis/incentivesApi')
 const dataComplianceApi = require('../mockApis/dataCompliance')
 const whereabouts = require('../mockApis/whereabouts')
 const tokenverification = require('../mockApis/tokenverification')
@@ -471,7 +472,7 @@ module.exports = (on) => {
     stubEnRoute: ({ agencyId, results }) => prisonApi.stubEnRoute(agencyId, results),
     stubCurrentlyOut: ({ livingUnitId, movements }) => prisonApi.stubCurrentlyOut(livingUnitId, movements),
     stubTotalCurrentlyOut: ({ agencyId, movements }) => prisonApi.stubTotalCurrentlyOut(agencyId, movements),
-    stubGetAgencyIepLevels: (response) => prisonApi.stubGetAgencyIepLevels(response),
+    stubGetAgencyIepLevels: (response) => incentivesApi.stubGetAgencyIepLevels(response),
     stubChangeIepLevel: (body) => prisonApi.stubChangeIepLevel(body),
     stubGetPrisonerDamageObligations: (response) => prisonApi.stubGetPrisonerDamageObligations(response),
     stubGetTransactionHistory: ({ response, accountCode, transactionType, fromDate, toDate }) =>
