@@ -5,7 +5,7 @@ module.exports = {
     stubFor({
       request: {
         method: 'GET',
-        urlPattern: '/iep/levels/.+?',
+        urlPattern: '/incentives/iep/levels/.+?',
       },
       response: {
         status: 200,
