@@ -42,7 +42,8 @@ export default function healthcheckFactory(
   allocationManagerUrl,
   tokenverificationUrl,
   offenderSearchUrl,
-  complexityUrl
+  complexityUrl,
+  incentivesApiUrl
 ) {
   const checks = [
     service('auth', authUrl),
@@ -55,6 +56,7 @@ export default function healthcheckFactory(
     service('tokenverification', tokenverificationUrl),
     service('offenderSearch', offenderSearchUrl),
     service('complexity', complexityUrl),
+    service('incentivesApi', incentivesApiUrl),
   ]
 
   return (callback) =>
