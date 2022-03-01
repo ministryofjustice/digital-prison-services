@@ -19,6 +19,7 @@ context('Health page reports health correctly', () => {
         whereabouts: 'UP',
         offenderSearch: 'UP',
         complexity: 'UP',
+        incentivesApi: 'UP',
       })
     })
   })
@@ -42,6 +43,7 @@ context('Health page reports health correctly', () => {
         whereabouts: 'UP',
         offenderSearch: 'UP',
         complexity: 'UP',
+        incentivesApi: 'UP',
       })
     })
   })
