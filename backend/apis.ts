@@ -15,6 +15,7 @@ import { pathfinderApiFactory } from './api/pathfinderApi'
 import { socApiFactory } from './api/socApi'
 import { offenderSearchApiFactory } from './api/offenderSearchApi'
 import { complexityApiFactory } from './api/complexityApi'
+import { incentivesApiFactory } from './api/incentivesApi'
 
 export const prisonApi = prisonApiFactory(
   clientFactory({
@@ -109,6 +110,13 @@ export const complexityApi = complexityApiFactory(
   })
 )
 
+export const incentivesApi = incentivesApiFactory(
+  clientFactory({
+    baseUrl: config.apis.incentivesApi.url,
+    timeout: config.apis.incentivesApi.timeoutSeconds * 1000,
+  })
+)
+
 export const curiousApi = CuriousApi.create(clientFactory({ baseUrl: config.apis.curious.url }))
 
 export default {
@@ -126,4 +134,5 @@ export default {
   offenderSearchApi,
   complexityApi,
   curiousApi,
+  incentivesApi,
 }

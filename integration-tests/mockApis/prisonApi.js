@@ -1722,20 +1722,6 @@ module.exports = {
         jsonBody: alerts || [],
       },
     }),
-  stubGetAgencyIepLevels: (response) =>
-    stubFor({
-      request: {
-        method: 'GET',
-        urlPattern: '/api/agencies/.+?/iepLevels',
-      },
-      response: {
-        status: 200,
-        headers: {
-          'Content-Type': 'application/json;charset=UTF-8',
-        },
-        jsonBody: response,
-      },
-    }),
   stubChangeIepLevel: (body) =>
     stubFor({
       request: {
