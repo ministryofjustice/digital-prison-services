@@ -48,6 +48,7 @@ import appointmentDetails from './controllers/appointmentDetails'
 import appointmentConfirmDeletion from './controllers/appointmentConfirmDeletion'
 import appointmentDeleteRecurringBookings from './controllers/appointmentDeleteRecurringBookings'
 import appointmentDeleted from './controllers/appointmentDeleted'
+import { cacheFactory } from './utils/singleValueInMemoryCache'
 
 import whereaboutsRouter from './routes/whereabouts/whereaboutsRouter'
 
@@ -78,6 +79,8 @@ const setup = ({
     next()
   })
 
+  const contentfulCache = cacheFactory(30) // 30 second TTL
+
   router.use(
     '/manage-prisoner-whereabouts',
     whereaboutsRouter({ oauthApi, prisonApi, offenderSearchApi, systemOauthClient })
@@ -86,7 +89,7 @@ const setup = ({
   router.post('/notification/dismiss', notificationDismiss({ notificationCookie }))
   router.use(
     notificationBar({
-      contentfulService: contentfulServiceFactory({ notificationCookie, contentfulClient }),
+      contentfulService: contentfulServiceFactory({ notificationCookie, contentfulClient }, contentfulCache),
       logError,
     })
   )
@@ -246,7 +249,9 @@ const setup = ({
 
   router.get(
     ['/content', '/content/:path'],
-    contentController({ contentfulService: contentfulServiceFactory({ contentfulClient, notificationCookie }) })
+    contentController({
+      contentfulService: contentfulServiceFactory({ contentfulClient, notificationCookie }, contentfulCache),
+    })
   )
 
   router.use('/global-search', globalSearchRouter({ offenderSearchApi, oauthApi, logError }))
