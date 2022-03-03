@@ -15,8 +15,8 @@ const options = {
   },
 }
 
-export default ({ contentfulClient, notificationCookie }) => {
-  const getMostRecentNotificationAsHtml = async (req) => {
+export default ({ contentfulClient, notificationCookie }, cacheService: (cachePopulator: any) => any) => {
+  const getNotifications = async (): Promise<any> => {
     const response = await contentfulClient.getEntries({
       content_type: 'notification',
       order: '-sys.updatedAt',
@@ -24,7 +24,13 @@ export default ({ contentfulClient, notificationCookie }) => {
 
     if (!response.items?.length) return null
 
-    const latestNotification = response.items[0]
+    return response.items[0]
+  }
+
+  const getMostRecentNotificationAsHtml = async (req) => {
+    const latestNotification = await cacheService(getNotifications)
+
+    if (!latestNotification) return null
 
     const {
       sys: { id, revision },
