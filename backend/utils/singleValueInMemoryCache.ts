@@ -6,8 +6,6 @@ type StoredCachedData = {
   cachedData: any
 }
 
-let cachedValue: StoredCachedData = null
-
 class CacheHelper {
   private currentDateTime: moment.Moment = moment()
 
@@ -30,7 +28,7 @@ class CacheHelper {
 }
 
 export const cacheFactory = (ttlInSeconds) => {
-  cachedValue = null
+  let cachedValue: StoredCachedData = null
   return async (cachePopulator): Promise<any> => {
     const cacheHelper = new CacheHelper(ttlInSeconds)
 
