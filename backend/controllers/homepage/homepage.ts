@@ -58,7 +58,7 @@ const getTasks = ({ activeCaseLoadId, locations, staffId, whereaboutsConfig, key
       description: 'See review dates, incentive levels and behaviour entries by residential location.',
       href: incentives.ui_url,
       roles: null,
-      enabled: () => incentives.ui_url && incentives.prisons.split(',').includes(activeCaseLoadId),
+      enabled: () => incentives.ui_url,
     },
     {
       id: 'use-of-force',
