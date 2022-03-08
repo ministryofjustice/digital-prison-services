@@ -1,8 +1,20 @@
 import nock from 'nock'
 import CuriousApi from './curiousApi'
 import clientFactory from '../oauthEnabledClient'
-import { AssessmentQualificationType, LearnerEducationDeliveryMethodType } from './types/Enums'
-import { LearnerGoals, LearnerLatestAssessment, LearnerProfile, PageLearnerEducation } from './types/Types'
+import {
+  AssessmentQualificationType,
+  LearnerEducationDeliveryMethodType,
+  NeurodivergenceAssessed,
+  NeurodivergenceSelfDeclared,
+  NeurodivergenceSupport,
+} from './types/Enums'
+import {
+  LearnerGoals,
+  LearnerLatestAssessment,
+  LearnerNeurodivergence,
+  LearnerProfile,
+  PageLearnerEducation,
+} from './types/Types'
 
 const hostname = 'http://localhost:8080'
 
@@ -114,8 +126,48 @@ describe('curiousApi', () => {
       expect(actual).toEqual(dummyResponse)
     })
   })
-})
 
+  describe('getLearnerNeurodivergence', () => {
+    const dummLearnerNeurodivergence = getDummyLearnerneurodivergence()
+    it('should return the expected neurodivergence data', async () => {
+      const nomisId = dummLearnerNeurodivergence[0].prn
+      mock
+        .get(`/learnerNeurodivergence/${nomisId}`)
+        .matchHeader('authorization', `Bearer ${accessToken}`)
+        .reply(200, [dummLearnerNeurodivergence[0]])
+
+      const actual = await curiousApi.getLearnerNeurodivergence({ access_token: accessToken }, nomisId)
+      expect(actual).toContainEqual(dummLearnerNeurodivergence[0])
+    })
+
+    it('should return the expected neurodivergence data with establishment id in the query', async () => {
+      const nomisId = dummLearnerNeurodivergence[0].prn
+      const { establishmentId } = dummLearnerNeurodivergence[0]
+      mock
+        .get(`/learnerNeurodivergence/${nomisId}?establishmentId=${establishmentId}`)
+        .matchHeader('authorization', `Bearer ${accessToken}`)
+        .reply(200, [dummLearnerNeurodivergence[0]])
+
+      const actual = await curiousApi.getLearnerNeurodivergence({ access_token: accessToken }, nomisId, establishmentId)
+      expect(actual).toContainEqual(dummLearnerNeurodivergence[0])
+    })
+  })
+})
+function getDummyLearnerneurodivergence(): LearnerNeurodivergence[] {
+  return [
+    {
+      prn: 'A12345',
+      establishmentId: 'MDI',
+      establishmentName: 'HMP Moorland',
+      neurodivergenceSelfDeclared: [NeurodivergenceSelfDeclared.ADHD, NeurodivergenceSelfDeclared.Autism],
+      selfDeclaredDate: '2022-02-10',
+      neurodivergenceAssessed: [NeurodivergenceAssessed.AcquiredBrainInjury],
+      assessmentDate: '2022-02-15',
+      neurodivergenceSupport: [NeurodivergenceSupport.MemorySupport, NeurodivergenceSupport.Reading],
+      supportDate: '2022-02-20',
+    },
+  ]
+}
 function getDummyLearnerProfiles(): LearnerProfile[] {
   return [
     {

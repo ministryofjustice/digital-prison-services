@@ -238,6 +238,8 @@ module.exports = (on) => {
         prisonApi.stubPrisonerDetails(error, 404),
       ]),
 
+    stubLearnerNeurodiversity: (learnerNeurodiversity) => curiousApi.stubLearnerNeurodiversity(learnerNeurodiversity),
+
     stubPersonal: ({
       identifiers,
       aliases,
@@ -255,6 +257,7 @@ module.exports = (on) => {
       agencies,
       prisonOffenderManagers,
       neurodiversities,
+      neurodivergence,
     }) =>
       Promise.all([
         prisonApi.stubIdentifiers(identifiers),
@@ -273,6 +276,7 @@ module.exports = (on) => {
         prisonApi.stubAgencies(agencies),
         allocationManager.stubGetPomForOffender(prisonOffenderManagers),
         curiousApi.stubLearnerProfiles(neurodiversities),
+        curiousApi.stubLearnerNeurodiversity(neurodivergence),
       ]),
     stubReleaseDatesOffenderNo: (releaseDates) => Promise.all([prisonApi.stubPrisonerSentenceDetails(releaseDates)]),
     stubVerifyToken: (active = true) => tokenverification.stubVerifyToken(active),
