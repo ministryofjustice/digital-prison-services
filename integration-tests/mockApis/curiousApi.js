@@ -29,5 +29,5 @@ module.exports = {
     doStub('learnerEmployabilitySkills', learnerEmployabilitySkills, status),
 
   stubLearnerNeurodiversity: (learnerNeurodiversity, status = 200) =>
-    doStub('learnerNeurodiversity', learnerNeurodiversity, status),
+    doStub('learnerNeurodivergence', learnerNeurodiversity || [], status),
 }
