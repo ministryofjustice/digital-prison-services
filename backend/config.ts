@@ -107,7 +107,6 @@ export const apis = {
   },
   incentives: {
     ui_url: process.env.INCENTIVES_URL,
-    prisons: process.env.INCENTIVES_PRISONS || '',
   },
   calculateReleaseDates: {
     ui_url: process.env.CALCULATE_RELEASE_DATES_URL,

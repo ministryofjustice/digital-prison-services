@@ -199,9 +199,6 @@ env:
   - name: INCENTIVES_URL
     value: {{ .Values.env.INCENTIVES_URL | quote }}
 
-  - name: INCENTIVES_PRISONS
-    value: {{ .Values.env.INCENTIVES_PRISONS | quote }}
-
   - name: INCENTIVES_API_ENDPOINT_URL
     value: {{ .Values.env.INCENTIVES_API_ENDPOINT_URL | quote }}
 

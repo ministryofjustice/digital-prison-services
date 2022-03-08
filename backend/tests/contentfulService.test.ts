@@ -169,6 +169,10 @@ const contentfulNotification = (expiryTime) => ({
   ],
 })
 
+const passThruCacheService = (cachePopulator) => {
+  return cachePopulator()
+}
+
 describe('Contentful service', () => {
   const notificationCookie = {}
   const contentfulClient = {}
@@ -178,7 +182,7 @@ describe('Contentful service', () => {
   beforeEach(() => {
     // @ts-expect-error ts-migrate(2339) FIXME: Property 'alreadyDismissed' does not exist on type... Remove this comment to see the full error message
     notificationCookie.alreadyDismissed = jest.fn()
-    contentFulService = contentfulServiceFactory({ contentfulClient, notificationCookie })
+    contentFulService = contentfulServiceFactory({ contentfulClient, notificationCookie }, passThruCacheService)
   })
 
   describe('Pages', () => {
