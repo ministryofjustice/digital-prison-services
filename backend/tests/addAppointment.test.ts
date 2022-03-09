@@ -4,10 +4,10 @@ import { DAY_MONTH_YEAR } from '../../common/dateHelpers'
 import { repeatTypes } from '../shared/appointmentConstants'
 
 describe('Add appointment', () => {
-  const prisonApi = {}
-  const appointmentsService = {}
-  const existingEventsService = {}
-  const whereaboutsApi = {}
+  const prisonApi = {} as any
+  const appointmentsService = {} as any
+  const existingEventsService = {} as any
+  const whereaboutsApi = {} as any
   const offenderNo = 'ABC123'
   const bookingId = 123
 
@@ -33,28 +33,20 @@ describe('Add appointment', () => {
 
     logError = jest.fn()
 
-    // @ts-expect-error ts-migrate(2339) FIXME: Property 'getAppointmentOptions' does not exist on... Remove this comment to see the full error message
     appointmentsService.getAppointmentOptions = jest.fn()
-    // @ts-expect-error ts-migrate(2339) FIXME: Property 'getAppointmentOptions' does not exist on... Remove this comment to see the full error message
     appointmentsService.getAppointmentOptions.mockReturnValue({
       appointmentTypes: [],
       locationTypes: [],
     })
 
-    // @ts-expect-error ts-migrate(2339) FIXME: Property 'getExistingEventsForOffender' does not e... Remove this comment to see the full error message
     existingEventsService.getExistingEventsForOffender = jest.fn()
-    // @ts-expect-error ts-migrate(2339) FIXME: Property 'getExistingEventsForLocation' does not e... Remove this comment to see the full error message
     existingEventsService.getExistingEventsForLocation = jest.fn()
 
-    // @ts-expect-error ts-migrate(2339) FIXME: Property 'getDetails' does not exist on type '{}'.
     prisonApi.getDetails = jest.fn()
-    // @ts-expect-error ts-migrate(2339) FIXME: Property 'getLocation' does not exist on type '{}'... Remove this comment to see the full error message
     prisonApi.getLocation = jest.fn()
 
-    // @ts-expect-error ts-migrate(2339) FIXME: Property 'createAppointment' does not exist on typ... Remove this comment to see the full error message
     whereaboutsApi.createAppointment = jest.fn()
 
-    // @ts-expect-error ts-migrate(2554) FIXME: Expected 4 arguments, but got 5.
     controller = addAppointmentFactory(appointmentsService, existingEventsService, prisonApi, whereaboutsApi, logError)
   })
 
@@ -62,21 +54,19 @@ describe('Add appointment', () => {
     describe('when there are no errors', () => {
       beforeEach(() => {
         req.params.offenderNo = offenderNo
-        // @ts-expect-error ts-migrate(2339) FIXME: Property 'getDetails' does not exist on type '{}'.
         prisonApi.getDetails.mockReturnValue({
           bookingId,
           firstName: 'BARRY',
           lastName: 'SMITH',
+          agencyId: 'MDI',
         })
       })
 
       it('should make the correct calls for information and render the correct template', async () => {
         await controller.index(req, res)
 
-        // @ts-expect-error ts-migrate(2339) FIXME: Property 'getDetails' does not exist on type '{}'.
         expect(prisonApi.getDetails).toHaveBeenCalledWith(res.locals, offenderNo)
-        // @ts-expect-error ts-migrate(2339) FIXME: Property 'getAppointmentOptions' does not exist on... Remove this comment to see the full error message
-        expect(appointmentsService.getAppointmentOptions).toHaveBeenCalledWith(res.locals, 'LEI')
+        expect(appointmentsService.getAppointmentOptions).toHaveBeenCalledWith(res.locals, 'MDI')
         expect(res.render).toHaveBeenCalledWith('addAppointment/addAppointment.njk', {
           bookingId,
           offenderNo,
@@ -95,7 +85,6 @@ describe('Add appointment', () => {
       const error = new Error('Network error')
       beforeEach(() => {
         req.params.offenderNo = offenderNo
-        // @ts-expect-error ts-migrate(2339) FIXME: Property 'getDetails' does not exist on type '{}'.
         prisonApi.getDetails.mockRejectedValue(error)
       })
 
@@ -126,16 +115,14 @@ describe('Add appointment', () => {
 
     beforeEach(() => {
       req.params.offenderNo = offenderNo
-      // @ts-expect-error ts-migrate(2339) FIXME: Property 'getDetails' does not exist on type '{}'.
       prisonApi.getDetails.mockReturnValue({
         bookingId,
         firstName: 'BARRY',
         lastName: 'SMITH',
+        agencyId: 'MDI',
       })
 
-      // @ts-expect-error ts-migrate(2339) FIXME: Property 'getLocation' does not exist on type '{}'... Remove this comment to see the full error message
       prisonApi.getLocation = jest.fn().mockResolvedValue({ userDescription: 'Gym' })
-      // @ts-expect-error ts-migrate(2339) FIXME: Property 'getExistingEventsForLocation' does not e... Remove this comment to see the full error message
       existingEventsService.getExistingEventsForLocation = jest.fn().mockResolvedValue([{ eventId: 1 }, { eventId: 2 }])
     })
 
@@ -148,7 +135,6 @@ describe('Add appointment', () => {
         comment: 'Test comment',
       }
       beforeEach(() => {
-        // @ts-expect-error ts-migrate(2339) FIXME: Property 'addAppointments' does not exist on type ... Remove this comment to see the full error message
         prisonApi.addAppointments = jest.fn().mockReturnValue('All good')
         req.flash = jest.fn()
       })
@@ -159,7 +145,6 @@ describe('Add appointment', () => {
 
         await controller.post(req, res)
 
-        // @ts-expect-error ts-migrate(2339) FIXME: Property 'createAppointment' does not exist on typ... Remove this comment to see the full error message
         expect(whereaboutsApi.createAppointment).toHaveBeenCalledWith(res.locals, {
           ...appointmentDefaults,
           bookingId,
@@ -181,8 +166,8 @@ describe('Add appointment', () => {
           repeats: 'DAILY',
         })
 
-        // @ts-expect-error ts-migrate(2339) FIXME: Property 'mockRestore' does not exist on type '() ... Remove this comment to see the full error message
-        Date.now.mockRestore()
+        const spy = jest.spyOn(Date, 'now')
+        spy.mockRestore()
       })
 
       it('should redirect to the prepost appointment page when the appointment type is "VLB"', async () => {
@@ -193,8 +178,8 @@ describe('Add appointment', () => {
 
         expect(res.redirect).toHaveBeenCalledWith(`/offenders/${offenderNo}/prepost-appointments`)
 
-        // @ts-expect-error ts-migrate(2339) FIXME: Property 'mockRestore' does not exist on type '() ... Remove this comment to see the full error message
-        Date.now.mockRestore()
+        const spy = jest.spyOn(Date, 'now')
+        spy.mockRestore()
       })
     })
 
@@ -206,25 +191,24 @@ describe('Add appointment', () => {
 
         const error = new Error('Network error')
 
-        // @ts-expect-error ts-migrate(2339) FIXME: Property 'createAppointment' does not exist on typ... Remove this comment to see the full error message
         whereaboutsApi.createAppointment.mockRejectedValue(error)
 
         await expect(controller.post(req, res)).rejects.toThrowError(error)
         expect(res.locals.redirectUrl).toBe(`/prisoner/${offenderNo}`)
 
-        // @ts-expect-error ts-migrate(2339) FIXME: Property 'mockRestore' does not exist on type '() ... Remove this comment to see the full error message
-        Date.now.mockRestore()
+        const spy = jest.spyOn(Date, 'now')
+        spy.mockRestore()
       })
     })
 
     describe('when there are form errors', () => {
       beforeEach(() => {
         req.params.offenderNo = offenderNo
-        // @ts-expect-error ts-migrate(2339) FIXME: Property 'getDetails' does not exist on type '{}'.
         prisonApi.getDetails.mockReturnValue({
           bookingId,
           firstName: 'BARRY',
           lastName: 'SMITH',
+          agencyId: 'MDI',
         })
       })
 
@@ -253,8 +237,8 @@ describe('Add appointment', () => {
           })
         )
 
-        // @ts-expect-error ts-migrate(2339) FIXME: Property 'mockRestore' does not exist on type '() ... Remove this comment to see the full error message
-        Date.now.mockRestore()
+        const spy = jest.spyOn(Date, 'now')
+        spy.mockRestore()
       })
 
       it('should validate missing answer for a recurring appointment', async () => {
@@ -395,14 +379,11 @@ describe('Add appointment', () => {
           })
         )
 
-        // @ts-expect-error ts-migrate(2339) FIXME: Property 'getLocation' does not exist on type '{}'... Remove this comment to see the full error message
         expect(prisonApi.getLocation.mock.calls.length).toBe(0)
-        // @ts-expect-error ts-migrate(2339) FIXME: Property 'getExistingEventsForOffender' does not e... Remove this comment to see the full error message
         expect(existingEventsService.getExistingEventsForOffender.mock.calls.length).toBe(0)
       })
 
       it('should return prisoner name for John Smith', async () => {
-        // @ts-expect-error ts-migrate(2339) FIXME: Property 'getDetails' does not exist on type '{}'.
         prisonApi.getDetails = jest.fn().mockResolvedValue({ firstName: 'John', lastName: 'Smith' })
 
         await controller.post(req, res)
@@ -448,24 +429,19 @@ describe('Add appointment', () => {
             location: '3',
           }
 
-          // @ts-expect-error ts-migrate(2339) FIXME: Property 'getExistingEventsForOffender' does not e... Remove this comment to see the full error message
           existingEventsService.getExistingEventsForOffender.mockReturnValue(offenderEvents)
-          // @ts-expect-error ts-migrate(2339) FIXME: Property 'getExistingEventsForLocation' does not e... Remove this comment to see the full error message
           existingEventsService.getExistingEventsForLocation.mockReturnValue(locationEvents)
-          // @ts-expect-error ts-migrate(2339) FIXME: Property 'getLocation' does not exist on type '{}'... Remove this comment to see the full error message
           prisonApi.getLocation.mockReturnValue({ userDescription: 'Test location' })
 
           await controller.post(req, res)
 
-          // @ts-expect-error ts-migrate(2339) FIXME: Property 'getExistingEventsForOffender' does not e... Remove this comment to see the full error message
           expect(existingEventsService.getExistingEventsForOffender).toHaveBeenCalledWith(
             {},
-            'LEI',
+            'MDI',
             '29/03/2019',
             'ABC123'
           )
-          // @ts-expect-error ts-migrate(2339) FIXME: Property 'getExistingEventsForLocation' does not e... Remove this comment to see the full error message
-          expect(existingEventsService.getExistingEventsForLocation).toHaveBeenCalledWith({}, 'LEI', 3, '29/03/2019')
+          expect(existingEventsService.getExistingEventsForLocation).toHaveBeenCalledWith({}, 'MDI', 3, '29/03/2019')
 
           expect(res.render).toHaveBeenCalledWith(
             'addAppointment/addAppointment.njk',

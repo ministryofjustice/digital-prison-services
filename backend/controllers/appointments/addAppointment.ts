@@ -3,6 +3,12 @@ import { properCaseName, formatName } from '../../utils'
 import { buildDateTime, formatDate, DAY_MONTH_YEAR } from '../../../common/dateHelpers'
 import { repeatTypes, endRecurringEndingDate, validateComments } from '../../shared/appointmentConstants'
 
+export type PrePopulatedData = {
+  offenderEvents?: string[]
+  locationName?: string
+  locationEvents?: string[]
+}
+
 export const validateDate = (date, errors) => {
   const now = moment()
   if (!date) errors.push({ text: 'Select the appointment date', href: '#date' })
@@ -82,7 +88,13 @@ export const getValidationMessages = (fields) => {
   return errors
 }
 
-export const addAppointmentFactory = (appointmentsService, existingEventsService, prisonApi, whereaboutsApi) => {
+export const addAppointmentFactory = (
+  appointmentsService,
+  existingEventsService,
+  prisonApi,
+  whereaboutsApi,
+  _logError
+): { index; post } => {
   const createAppointments = ({
     locals,
     comments,
@@ -117,10 +129,10 @@ export const addAppointmentFactory = (appointmentsService, existingEventsService
 
     return whereaboutsApi.createAppointment(locals, request)
   }
-  const getAppointmentTypesAndLocations = async (locals, activeCaseLoadId) => {
+  const getAppointmentTypesAndLocations = async (locals, prisonerAgencyId) => {
     const { appointmentTypes, locationTypes } = await appointmentsService.getAppointmentOptions(
       locals,
-      activeCaseLoadId
+      prisonerAgencyId
     )
 
     return {
@@ -131,22 +143,17 @@ export const addAppointmentFactory = (appointmentsService, existingEventsService
   const renderTemplate = async (req, res, pageData) => {
     const { formValues } = pageData || {}
     const { offenderNo } = req.params
-    const { activeCaseLoadId } = req.session.userDetails
 
     try {
-      const prePopulatedData = {}
-      const { firstName, lastName, bookingId } = await prisonApi.getDetails(res.locals, offenderNo)
+      const prePopulatedData: PrePopulatedData = {}
+      const { firstName, lastName, bookingId, agencyId } = await prisonApi.getDetails(res.locals, offenderNo)
       const offenderName = `${properCaseName(lastName)}, ${properCaseName(firstName)}`
-      const { appointmentTypes, appointmentLocations } = await getAppointmentTypesAndLocations(
-        res.locals,
-        activeCaseLoadId
-      )
+      const { appointmentTypes, appointmentLocations } = await getAppointmentTypesAndLocations(res.locals, agencyId)
 
       if (formValues && formValues.date) {
-        // @ts-expect-error ts-migrate(2339) FIXME: Property 'offenderEvents' does not exist on type '... Remove this comment to see the full error message
         prePopulatedData.offenderEvents = await existingEventsService.getExistingEventsForOffender(
           res.locals,
-          activeCaseLoadId,
+          agencyId,
           formValues.date,
           offenderNo
         )
@@ -157,18 +164,15 @@ export const addAppointmentFactory = (appointmentsService, existingEventsService
           prisonApi.getLocation(res.locals, formValues.location),
           existingEventsService.getExistingEventsForLocation(
             res.locals,
-            activeCaseLoadId,
+            agencyId,
             formValues.location,
             formValues.date
           ),
         ])
 
-        // @ts-expect-error ts-migrate(2339) FIXME: Property 'locationName' does not exist on type '{}... Remove this comment to see the full error message
         prePopulatedData.locationName = locationDetails.userDescription
-        // @ts-expect-error ts-migrate(2339) FIXME: Property 'locationEvents' does not exist on type '... Remove this comment to see the full error message
         prePopulatedData.locationEvents = locationEvents
       }
-
       return res.render('addAppointment/addAppointment.njk', {
         ...pageData,
         ...prePopulatedData,
@@ -187,12 +191,10 @@ export const addAppointmentFactory = (appointmentsService, existingEventsService
     }
   }
 
-  // @ts-expect-error ts-migrate(2554) FIXME: Expected 3 arguments, but got 2.
-  const index = async (req, res) => renderTemplate(req, res)
+  const index = async (req, res) => renderTemplate(req, res, {})
 
   const post = async (req, res) => {
     const { offenderNo } = req.params
-    const { activeCaseLoadId } = req.session.userDetails
 
     const {
       appointmentType,
@@ -238,7 +240,12 @@ export const addAppointmentFactory = (appointmentsService, existingEventsService
       const [locationDetails, locationEvents] = (location &&
         (await Promise.all([
           prisonApi.getLocation(res.locals, Number(location)),
-          existingEventsService.getExistingEventsForLocation(res.locals, activeCaseLoadId, Number(location), date),
+          existingEventsService.getExistingEventsForLocation(
+            res.locals,
+            offenderDetails.agencyId,
+            Number(location),
+            date
+          ),
         ]))) || [{}, []]
 
       return renderTemplate(req, res, {
