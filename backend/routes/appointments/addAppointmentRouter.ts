@@ -11,7 +11,6 @@ const controller = ({ prisonApi, whereaboutsApi, logError }) => {
     existingEventsServiceFactory(prisonApi),
     prisonApi,
     whereaboutsApi,
-    // @ts-expect-error ts-migrate(2554) FIXME: Expected 4 arguments, but got 5.
     logError
   )
 

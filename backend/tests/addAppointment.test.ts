@@ -54,7 +54,6 @@ describe('Add appointment', () => {
     // @ts-expect-error ts-migrate(2339) FIXME: Property 'createAppointment' does not exist on typ... Remove this comment to see the full error message
     whereaboutsApi.createAppointment = jest.fn()
 
-    // @ts-expect-error ts-migrate(2554) FIXME: Expected 4 arguments, but got 5.
     controller = addAppointmentFactory(appointmentsService, existingEventsService, prisonApi, whereaboutsApi, logError)
   })
 
@@ -67,6 +66,7 @@ describe('Add appointment', () => {
           bookingId,
           firstName: 'BARRY',
           lastName: 'SMITH',
+          agencyId: 'MDI',
         })
       })
 
@@ -76,7 +76,7 @@ describe('Add appointment', () => {
         // @ts-expect-error ts-migrate(2339) FIXME: Property 'getDetails' does not exist on type '{}'.
         expect(prisonApi.getDetails).toHaveBeenCalledWith(res.locals, offenderNo)
         // @ts-expect-error ts-migrate(2339) FIXME: Property 'getAppointmentOptions' does not exist on... Remove this comment to see the full error message
-        expect(appointmentsService.getAppointmentOptions).toHaveBeenCalledWith(res.locals, 'LEI')
+        expect(appointmentsService.getAppointmentOptions).toHaveBeenCalledWith(res.locals, 'MDI')
         expect(res.render).toHaveBeenCalledWith('addAppointment/addAppointment.njk', {
           bookingId,
           offenderNo,
@@ -131,6 +131,7 @@ describe('Add appointment', () => {
         bookingId,
         firstName: 'BARRY',
         lastName: 'SMITH',
+        agencyId: 'MDI',
       })
 
       // @ts-expect-error ts-migrate(2339) FIXME: Property 'getLocation' does not exist on type '{}'... Remove this comment to see the full error message
@@ -225,6 +226,7 @@ describe('Add appointment', () => {
           bookingId,
           firstName: 'BARRY',
           lastName: 'SMITH',
+          agencyId: 'MDI',
         })
       })
 
@@ -460,12 +462,12 @@ describe('Add appointment', () => {
           // @ts-expect-error ts-migrate(2339) FIXME: Property 'getExistingEventsForOffender' does not e... Remove this comment to see the full error message
           expect(existingEventsService.getExistingEventsForOffender).toHaveBeenCalledWith(
             {},
-            'LEI',
+            'MDI',
             '29/03/2019',
             'ABC123'
           )
           // @ts-expect-error ts-migrate(2339) FIXME: Property 'getExistingEventsForLocation' does not e... Remove this comment to see the full error message
-          expect(existingEventsService.getExistingEventsForLocation).toHaveBeenCalledWith({}, 'LEI', 3, '29/03/2019')
+          expect(existingEventsService.getExistingEventsForLocation).toHaveBeenCalledWith({}, 'MDI', 3, '29/03/2019')
 
           expect(res.render).toHaveBeenCalledWith(
             'addAppointment/addAppointment.njk',
