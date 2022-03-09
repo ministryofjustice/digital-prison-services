@@ -13,9 +13,9 @@ const sortByListSequenceThenDescription = (left, right): number => {
   return listSeqSort !== 0 ? listSeqSort : compareStrings(left.description, right.description)
 }
 
-const sortByLeadThenAgeThenLastNameFirstName = (left, right): number => {
-  if (right.leadVisitor) return 1
-  if (left.leadVisitor) return -1
+const sortByLeadIf18OrOverThenAgeThenLastNameFirstName = (left, right): number => {
+  if (right.leadVisitor && right.age >= 18) return 1
+  if (left.leadVisitor && left.age >= 18) return -1
 
   const dateOfBirthSort = sortByDateTime(left.dateOfBirth, right.dateOfBirth)
   const lastNameSort = dateOfBirthSort !== 0 ? dateOfBirthSort : compareStrings(left.lastName, right.lastName)
@@ -33,6 +33,11 @@ const calculateDateAndStatusFilter = (status: string, fromDate: string, toDate: 
   const visitStatus = splitStatus?.shift()
   const cancellationReason = splitStatus?.shift()
   return { visitStatus, cancellationReason, fromAsDate, toAsDate }
+}
+
+const calculateChildAgeAsText = (age: number): string => {
+  if (age === 1) return ' - 1 year old'
+  return age < 18 ? ` - ${age} years old` : ''
 }
 
 const calculateStatus = ({
@@ -108,8 +113,16 @@ export default ({ prisonApi, pageSize = 20 }) =>
         hasLength(visits) &&
         visits
           .sort((left, right) => sortByDateTime(right.visitDetails.startTime, left.visitDetails.startTime))
-          .map((visit) =>
-            visit.visitors.sort(sortByLeadThenAgeThenLastNameFirstName).map((visitor, i, arr) => {
+          .map((visit) => {
+            const visitorsWithAge = visit.visitors.map((v) => ({
+              ...v,
+              age: v.dateOfBirth ? moment().diff(v.dateOfBirth, 'years') : 18,
+            }))
+
+            const sortedVisitors = visitorsWithAge.sort(sortByLeadIf18OrOverThenAgeThenLastNameFirstName)
+            const firstChildIndex = sortedVisitors.findIndex((v) => v.age < 18)
+
+            return sortedVisitors.reduce((arr, visitor, i) => {
               const {
                 visitDetails: { startTime, endTime, visitTypeDescription, prison },
               } = visit
@@ -118,20 +131,38 @@ export default ({ prisonApi, pageSize = 20 }) =>
               const start = moment(startTime, DATE_TIME_FORMAT_SPEC)
               const end = moment(endTime, DATE_TIME_FORMAT_SPEC)
 
-              return {
-                isFirst: i === 0,
-                isLast: i + 1 === arr.length,
+              const ageAsText = calculateChildAgeAsText(visitor.age)
+
+              if (i === firstChildIndex) {
+                arr.push({
+                  isFirst: i === 0,
+                  isLast: false,
+                  date: startTime,
+                  time: `${start.format(MOMENT_TIME)} to ${end.format(MOMENT_TIME)}`,
+                  type: visitTypeDescription.split(' ').shift(),
+                  status,
+                  nameWithChildAge: 'Children:',
+                  lastAdult: false,
+                  relationship: '',
+                  prison,
+                })
+              }
+
+              arr.push({
+                isFirst: i === 0 && i !== firstChildIndex,
+                isLast: i + 1 === sortedVisitors.length,
                 date: startTime,
                 time: `${start.format(MOMENT_TIME)} to ${end.format(MOMENT_TIME)}`,
                 type: visitTypeDescription.split(' ').shift(),
                 status,
-                name: formatName(visitor.firstName, visitor.lastName),
-                age: `${visitor.dateOfBirth ? moment().diff(visitor.dateOfBirth, 'years') : 'Not entered'}`,
+                nameWithChildAge: `${formatName(visitor.firstName, visitor.lastName)}${ageAsText}`,
+                lastAdult: i === firstChildIndex - 1,
                 relationship: visitor.relationship || 'Not entered',
                 prison,
-              }
-            })
-          )
+              })
+              return arr
+            }, [])
+          })
           .flat()
 
       const statuses = cancellationReasons
