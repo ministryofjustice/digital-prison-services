@@ -35,7 +35,11 @@ const calculateDateAndStatusFilter = (status: string, fromDate: string, toDate: 
   return { visitStatus, cancellationReason, fromAsDate, toAsDate }
 }
 
-const calculateChildAgeAsText = (age: number): string => {
+const calculateChildAgeAsText = (age: number, dateOfBirth: string): string => {
+  if (age === 0) {
+    const months = moment().diff(dateOfBirth, 'months')
+    return months === 0 ? ` - ${moment().diff(dateOfBirth, 'days')} days old` : ` - ${months} months old`
+  }
   if (age === 1) return ' - 1 year old'
   return age < 18 ? ` - ${age} years old` : ''
 }
@@ -49,16 +53,14 @@ const calculateStatus = ({
 }) => {
   switch (completionStatus) {
     case 'CANC':
-      return cancelReasonDescription ? `Cancelled: ${cancelReasonDescription}` : 'Cancelled'
+      return { status: 'Cancelled', subStatus: cancelReasonDescription }
     case 'SCH': {
       const start = moment(startTime, DATE_TIME_FORMAT_SPEC)
-      if (start.isAfter(moment(), 'minute')) return 'Scheduled'
-      return searchTypeDescription || 'Not entered'
+      if (start.isAfter(moment(), 'minute')) return { status: 'Scheduled' }
+      return { status: searchTypeDescription || 'Not entered' }
     }
     default:
-      return searchTypeDescription
-        ? `${completionStatusDescription}: ${searchTypeDescription}`
-        : completionStatusDescription
+      return { status: completionStatusDescription, subStatus: searchTypeDescription }
   }
 }
 
@@ -126,12 +128,12 @@ export default ({ prisonApi, pageSize = 20 }) =>
               const {
                 visitDetails: { startTime, endTime, visitTypeDescription, prison },
               } = visit
-              const status = calculateStatus(visit.visitDetails)
+              const { status, subStatus } = calculateStatus(visit.visitDetails)
 
               const start = moment(startTime, DATE_TIME_FORMAT_SPEC)
               const end = moment(endTime, DATE_TIME_FORMAT_SPEC)
 
-              const ageAsText = calculateChildAgeAsText(visitor.age)
+              const ageAsText = calculateChildAgeAsText(visitor.age, visitor.dateOfBirth)
 
               if (i === firstChildIndex) {
                 arr.push({
@@ -141,6 +143,7 @@ export default ({ prisonApi, pageSize = 20 }) =>
                   time: `${start.format(MOMENT_TIME)} to ${end.format(MOMENT_TIME)}`,
                   type: visitTypeDescription.split(' ').shift(),
                   status,
+                  subStatus,
                   nameWithChildAge: 'Children:',
                   lastAdult: false,
                   relationship: '',
@@ -155,6 +158,7 @@ export default ({ prisonApi, pageSize = 20 }) =>
                 time: `${start.format(MOMENT_TIME)} to ${end.format(MOMENT_TIME)}`,
                 type: visitTypeDescription.split(' ').shift(),
                 status,
+                subStatus,
                 nameWithChildAge: `${formatName(visitor.firstName, visitor.lastName)}${ageAsText}`,
                 lastAdult: i === firstChildIndex - 1,
                 relationship: visitor.relationship || 'Not entered',

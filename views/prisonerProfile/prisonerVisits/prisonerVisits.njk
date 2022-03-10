@@ -22,6 +22,14 @@
 {% macro hideIfNotFirst(text, first) %}
   <span class="{{ 'govuk-visually-hidden' if not first }}">{{ text }}</span>
 {% endmacro %}
+{% macro addBreakAndHideIfNotFirst(text1, text2, first) %}
+  {%- if text2 %}
+    <span class="{{ 'govuk-visually-hidden' if not first }} govuk-!-display-inline-block">{{ text1 }}:</span>
+    <span class="{{ 'govuk-visually-hidden' if not first }} govuk-!-display-inline-block">{{ text2 }}</span>
+  {%- else %}
+    <span class="{{ 'govuk-visually-hidden' if not first }}">{{ text1 }}</span>
+  {% endif %}
+{% endmacro %}
 
 {% set rows = [] %}
 {% for visit in results %}
@@ -39,7 +47,7 @@
       classes: 'govuk-table__cell--last' if visit.isLast
     },
     {
-      text: hideIfNotFirst(visit.status, visit.isFirst),
+      text: addBreakAndHideIfNotFirst(visit.status, visit.subStatus, visit.isFirst),
       classes: 'govuk-table__cell--last' if visit.isLast
     },
     {
