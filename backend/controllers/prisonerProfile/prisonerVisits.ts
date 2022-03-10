@@ -38,7 +38,12 @@ const calculateDateAndStatusFilter = (status: string, fromDate: string, toDate: 
 const calculateChildAgeAsText = (age: number, dateOfBirth: string): string => {
   if (age === 0) {
     const months = moment().diff(dateOfBirth, 'months')
-    return months === 0 ? ` - ${moment().diff(dateOfBirth, 'days')} days old` : ` - ${months} months old`
+    if (months === 1) return ' - 1 month old'
+    if (months === 0) {
+      const days = moment().diff(dateOfBirth, 'days')
+      return days === 1 ? ' - 1 day old' : ` - ${days} days old`
+    }
+    return ` - ${months} months old`
   }
   if (age === 1) return ' - 1 year old'
   return age < 18 ? ` - ${age} years old` : ''
