@@ -14,11 +14,11 @@ const sortByListSequenceThenDescription = (left, right): number => {
 }
 
 const sortByLeadIf18OrOverThenAgeThenLastNameFirstName = (left, right): number => {
-  if (right.leadVisitor && right.age >= 18) return 1
-  if (left.leadVisitor && left.age >= 18) return -1
+  if (right.leadVisitor && right.ageOr18IfNoDob >= 18) return 1
+  if (left.leadVisitor && left.ageOr18IfNoDob >= 18) return -1
 
   // age set to 18 for people with no dob - assumed to be adults.  Need to sort them above the children
-  if (right.age - left.age !== 0) return right.age - left.age
+  if (right.ageOr18IfNoDob - left.ageOr18IfNoDob !== 0) return right.ageOr18IfNoDob - left.ageOr18IfNoDob
 
   const dateOfBirthSort = sortByDateTime(left.dateOfBirth, right.dateOfBirth)
   const lastNameSort = dateOfBirthSort !== 0 ? dateOfBirthSort : compareStrings(left.lastName, right.lastName)
@@ -38,8 +38,8 @@ const calculateDateAndStatusFilter = (status: string, fromDate: string, toDate: 
   return { visitStatus, cancellationReason, fromAsDate, toAsDate }
 }
 
-const calculateChildAgeAsText = (age: number, dateOfBirth: string): string => {
-  if (age === 0) {
+const calculateChildAgeAsText = (ageOr18IfNoDob: number, dateOfBirth: string): string => {
+  if (ageOr18IfNoDob === 0) {
     const months = moment().diff(dateOfBirth, 'months')
     if (months === 1) return ' - 1 month old'
     if (months === 0) {
@@ -48,8 +48,8 @@ const calculateChildAgeAsText = (age: number, dateOfBirth: string): string => {
     }
     return ` - ${months} months old`
   }
-  if (age === 1) return ' - 1 year old'
-  return age < 18 ? ` - ${age} years old` : ''
+  if (ageOr18IfNoDob === 1) return ' - 1 year old'
+  return ageOr18IfNoDob < 18 ? ` - ${ageOr18IfNoDob} years old` : ''
 }
 
 const calculateStatus = ({
@@ -126,11 +126,11 @@ export default ({ prisonApi, pageSize = 20 }) =>
           .map((visit) => {
             const visitorsWithAge = visit.visitors.map((v) => ({
               ...v,
-              age: v.dateOfBirth ? moment().diff(v.dateOfBirth, 'years') : 18,
+              ageOr18IfNoDob: v.dateOfBirth ? moment().diff(v.dateOfBirth, 'years') : 18,
             }))
 
             const sortedVisitors = visitorsWithAge.sort(sortByLeadIf18OrOverThenAgeThenLastNameFirstName)
-            const firstChildIndex = sortedVisitors.findIndex((v) => v.age < 18)
+            const firstChildIndex = sortedVisitors.findIndex((v) => v.ageOr18IfNoDob < 18)
 
             return sortedVisitors.reduce((arr, visitor, i) => {
               const {
@@ -141,7 +141,7 @@ export default ({ prisonApi, pageSize = 20 }) =>
               const start = moment(startTime, DATE_TIME_FORMAT_SPEC)
               const end = moment(endTime, DATE_TIME_FORMAT_SPEC)
 
-              const ageAsText = calculateChildAgeAsText(visitor.age, visitor.dateOfBirth)
+              const ageAsText = calculateChildAgeAsText(visitor.ageOr18IfNoDob, visitor.dateOfBirth)
 
               if (i === firstChildIndex) {
                 arr.push({
