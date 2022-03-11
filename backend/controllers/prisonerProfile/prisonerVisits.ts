@@ -17,6 +17,9 @@ const sortByLeadIf18OrOverThenAgeThenLastNameFirstName = (left, right): number =
   if (right.leadVisitor && right.age >= 18) return 1
   if (left.leadVisitor && left.age >= 18) return -1
 
+  // age set to 18 for people with no dob - assumed to be adults.  Need to sort them above the children
+  if (right.age - left.age !== 0) return right.age - left.age
+
   const dateOfBirthSort = sortByDateTime(left.dateOfBirth, right.dateOfBirth)
   const lastNameSort = dateOfBirthSort !== 0 ? dateOfBirthSort : compareStrings(left.lastName, right.lastName)
   return lastNameSort !== 0 ? lastNameSort : compareStrings(left.firstName, right.firstName)
