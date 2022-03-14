@@ -221,11 +221,10 @@ const getTasks = ({ activeCaseLoadId, locations, staffId, whereaboutsConfig, key
       description: 'Create and vary standard determinate licences and post sentence supervision orders.',
       href: createAndVaryALicence.url,
       enabled: () =>
-        createAndVaryALicence.url && 
+        createAndVaryALicence.url &&
         createAndVaryALicence.enabled_prisons.split(',').includes(activeCaseLoadId) &&
         userHasRoles(['LICENCE_CA', 'LICENCE_DM', 'LICENCE_RO', 'LICENCE_ACO', 'LICENCE_ADMIN']),
     },
-
   ]
 }
 
