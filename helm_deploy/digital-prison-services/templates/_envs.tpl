@@ -295,4 +295,9 @@ env:
   - name: MANAGE_RESTRICTED_PATIENTS_URL
     value: {{ .Values.env.MANAGE_RESTRICTED_PATIENTS_URL | quote }}
 
+  - name: CREATE_AND_VARY_A_LICENCE_URL
+    value: {{ .Values.env.CREATE_AND_VARY_A_LICENCE_URL | quote }}
+
+  - name: CREATE_AND_VARY_A_LICENCE_ENABLED_PRISONS
+    value: {{ .Values.env.CREATE_AND_VARY_A_LICENCE_ENABLED_PRISONS | quote }}
 {{- end -}}

@@ -165,6 +165,10 @@ export const apis = {
   bookAPrisonVisit: {
     ui_url: process.env.PVB_URL || '',
   },
+  createAndVaryALicence: {
+    url: process.env.CREATE_AND_VARY_A_LICENCE_URL,
+    enabled_prisons: process.env.CREATE_AND_VARY_A_LICENCE_ENABLED_PRISONS || '',
+  },
 }
 export const notifications = {
   enabled: process.env.NOTIFY_ENABLED ? process.env.NOTIFY_ENABLED === 'true' : true,
