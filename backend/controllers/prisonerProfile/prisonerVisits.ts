@@ -13,9 +13,12 @@ const sortByListSequenceThenDescription = (left, right): number => {
   return listSeqSort !== 0 ? listSeqSort : compareStrings(left.description, right.description)
 }
 
-const sortByLeadThenAgeThenLastNameFirstName = (left, right): number => {
-  if (right.leadVisitor) return 1
-  if (left.leadVisitor) return -1
+const sortByLeadIf18OrOverThenAgeThenLastNameFirstName = (left, right): number => {
+  if (right.leadVisitor && right.ageOr18IfNoDob >= 18) return 1
+  if (left.leadVisitor && left.ageOr18IfNoDob >= 18) return -1
+
+  // age set to 18 for people with no dob - assumed to be adults.  Need to sort them above the children
+  if (right.ageOr18IfNoDob - left.ageOr18IfNoDob !== 0) return right.ageOr18IfNoDob - left.ageOr18IfNoDob
 
   const dateOfBirthSort = sortByDateTime(left.dateOfBirth, right.dateOfBirth)
   const lastNameSort = dateOfBirthSort !== 0 ? dateOfBirthSort : compareStrings(left.lastName, right.lastName)
@@ -35,6 +38,20 @@ const calculateDateAndStatusFilter = (status: string, fromDate: string, toDate: 
   return { visitStatus, cancellationReason, fromAsDate, toAsDate }
 }
 
+const calculateChildAgeAsText = (ageOr18IfNoDob: number, dateOfBirth: string): string => {
+  if (ageOr18IfNoDob === 0) {
+    const months = moment().diff(dateOfBirth, 'months')
+    if (months === 1) return ' - 1 month old'
+    if (months === 0) {
+      const days = moment().diff(dateOfBirth, 'days')
+      return days === 1 ? ' - 1 day old' : ` - ${days} days old`
+    }
+    return ` - ${months} months old`
+  }
+  if (ageOr18IfNoDob === 1) return ' - 1 year old'
+  return ageOr18IfNoDob < 18 ? ` - ${ageOr18IfNoDob} years old` : ''
+}
+
 const calculateStatus = ({
   cancelReasonDescription,
   completionStatusDescription,
@@ -44,16 +61,14 @@ const calculateStatus = ({
 }) => {
   switch (completionStatus) {
     case 'CANC':
-      return cancelReasonDescription ? `Cancelled: ${cancelReasonDescription}` : 'Cancelled'
+      return { status: 'Cancelled', subStatus: cancelReasonDescription }
     case 'SCH': {
       const start = moment(startTime, DATE_TIME_FORMAT_SPEC)
-      if (start.isAfter(moment(), 'minute')) return 'Scheduled'
-      return searchTypeDescription || 'Not entered'
+      if (start.isAfter(moment(), 'minute')) return { status: 'Scheduled' }
+      return { status: searchTypeDescription || 'Not entered' }
     }
     default:
-      return searchTypeDescription
-        ? `${completionStatusDescription}: ${searchTypeDescription}`
-        : completionStatusDescription
+      return { status: completionStatusDescription, subStatus: searchTypeDescription }
   }
 }
 
@@ -108,30 +123,58 @@ export default ({ prisonApi, pageSize = 20 }) =>
         hasLength(visits) &&
         visits
           .sort((left, right) => sortByDateTime(right.visitDetails.startTime, left.visitDetails.startTime))
-          .map((visit) =>
-            visit.visitors.sort(sortByLeadThenAgeThenLastNameFirstName).map((visitor, i, arr) => {
+          .map((visit) => {
+            const visitorsWithAge = visit.visitors.map((v) => ({
+              ...v,
+              ageOr18IfNoDob: v.dateOfBirth ? moment().diff(v.dateOfBirth, 'years') : 18,
+            }))
+
+            const sortedVisitors = visitorsWithAge.sort(sortByLeadIf18OrOverThenAgeThenLastNameFirstName)
+            const firstChildIndex = sortedVisitors.findIndex((v) => v.ageOr18IfNoDob < 18)
+
+            return sortedVisitors.reduce((arr, visitor, i) => {
               const {
                 visitDetails: { startTime, endTime, visitTypeDescription, prison },
               } = visit
-              const status = calculateStatus(visit.visitDetails)
+              const { status, subStatus } = calculateStatus(visit.visitDetails)
 
               const start = moment(startTime, DATE_TIME_FORMAT_SPEC)
               const end = moment(endTime, DATE_TIME_FORMAT_SPEC)
 
-              return {
-                isFirst: i === 0,
-                isLast: i + 1 === arr.length,
+              const ageAsText = calculateChildAgeAsText(visitor.ageOr18IfNoDob, visitor.dateOfBirth)
+
+              if (i === firstChildIndex) {
+                arr.push({
+                  isFirst: i === 0,
+                  isLast: false,
+                  date: startTime,
+                  time: `${start.format(MOMENT_TIME)} to ${end.format(MOMENT_TIME)}`,
+                  type: visitTypeDescription.split(' ').shift(),
+                  status,
+                  subStatus,
+                  nameWithChildAge: 'Children:',
+                  lastAdult: false,
+                  relationship: '',
+                  prison,
+                })
+              }
+
+              arr.push({
+                isFirst: i === 0 && i !== firstChildIndex,
+                isLast: i + 1 === sortedVisitors.length,
                 date: startTime,
                 time: `${start.format(MOMENT_TIME)} to ${end.format(MOMENT_TIME)}`,
                 type: visitTypeDescription.split(' ').shift(),
                 status,
-                name: formatName(visitor.firstName, visitor.lastName),
-                age: `${visitor.dateOfBirth ? moment().diff(visitor.dateOfBirth, 'years') : 'Not entered'}`,
+                subStatus,
+                nameWithChildAge: `${formatName(visitor.firstName, visitor.lastName)}${ageAsText}`,
+                lastAdult: i === firstChildIndex - 1,
                 relationship: visitor.relationship || 'Not entered',
                 prison,
-              }
-            })
-          )
+              })
+              return arr
+            }, [])
+          })
           .flat()
 
       const statuses = cancellationReasons

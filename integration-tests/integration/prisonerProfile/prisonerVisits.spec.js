@@ -99,7 +99,7 @@ context('Prisoner visits', () => {
       })
     })
 
-    it('should have the same number of table rows as individual visitors from all visits', () => {
+    it('should have one more table row than individual visitors from all visits', () => {
       const individualVisitors = visitsWithVisitors.content.reduce((acc, item) => acc + item.visitors.length, 0)
 
       cy.visit(`/prisoner/${offenderNo}/visits-details`)
@@ -110,7 +110,7 @@ context('Prisoner visits', () => {
           .then(($tableRows) => {
             cy.get($tableRows)
               .its('length')
-              .should('eq', individualVisitors + 1) // results plus table header
+              .should('eq', individualVisitors + 2) // results plus table header plus children: row
           })
       })
     })
@@ -129,9 +129,8 @@ context('Prisoner visits', () => {
             expect($tableCells.get(2)).to.contain.text('Social')
             expect($tableCells.get(3)).to.contain.text('Not entered')
             expect($tableCells.get(4)).to.contain.text('Dythispal Alfres')
-            expect($tableCells.get(5)).to.contain.text('37')
-            expect($tableCells.get(6)).to.contain.text('Friend')
-            expect($tableCells.get(7)).to.contain.text('Moorland (HMP & YOI)')
+            expect($tableCells.get(5)).to.contain.text('Friend')
+            expect($tableCells.get(6)).to.contain.text('Moorland (HMP & YOI)')
           })
       })
     })
@@ -144,12 +143,12 @@ context('Prisoner visits', () => {
         cy.get($table).find('tr').eq(5).find('td').eq(4).should('contain.text', 'Esanarie Henretris')
         cy.get($table).find('tr').eq(6).find('td').eq(4).should('contain.text', 'Dikminna Keninda')
         cy.get($table).find('tr').eq(7).find('td').eq(4).should('contain.text', 'Aiykeloon Griffasina')
-        cy.get($table).find('tr').eq(8).find('td').eq(4).should('contain.text', 'Aiykeloon Lamando')
+        cy.get($table).find('tr').eq(9).find('td').eq(4).should('contain.text', 'Aiykeloon Lamando - 6 years old')
         // lead is Henretis, rest sorted by surname then forename
-        cy.get($table).find('tr').eq(15).find('td').eq(4).should('contain.text', 'Esanarie Henretris')
-        cy.get($table).find('tr').eq(16).find('td').eq(4).should('contain.text', 'Aiykeloon Griffasina')
-        cy.get($table).find('tr').eq(17).find('td').eq(4).should('contain.text', 'Aiykeloon Keninda')
-        cy.get($table).find('tr').eq(18).find('td').eq(4).should('contain.text', 'Dikminna Keninda')
+        cy.get($table).find('tr').eq(16).find('td').eq(4).should('contain.text', 'Esanarie Henretris')
+        cy.get($table).find('tr').eq(17).find('td').eq(4).should('contain.text', 'Aiykeloon Griffasina')
+        cy.get($table).find('tr').eq(18).find('td').eq(4).should('contain.text', 'Aiykeloon Keninda')
+        cy.get($table).find('tr').eq(19).find('td').eq(4).should('contain.text', 'Dikminna Keninda')
       })
     })
 
@@ -157,8 +156,8 @@ context('Prisoner visits', () => {
       cy.visit(`/prisoner/${offenderNo}/visits-details`)
 
       cy.get('[data-test="prisoner-visits-results"]').then(($table) => {
-        cy.get($table).find('tr').eq(17).find('td').eq(6).should('contain.text', 'Granddaughter')
-        cy.get($table).find('tr').eq(18).find('td').eq(6).should('contain.text', 'Not entered')
+        cy.get($table).find('tr').eq(18).find('td').eq(5).should('contain.text', 'Granddaughter')
+        cy.get($table).find('tr').eq(19).find('td').eq(5).should('contain.text', 'Not entered')
       })
     })
 
@@ -171,9 +170,14 @@ context('Prisoner visits', () => {
           .eq(2)
           .find('td')
           .eq(3)
-          .should('contain.text', 'Cancelled: Operational Reasons-All Visits Cancelled')
+          .should('contain.text', 'Cancelled:\n    Operational Reasons-All Visits Cancelled')
         cy.get($table).find('tr').eq(3).find('td').eq(3).should('contain.text', 'Completed')
-        cy.get($table).find('tr').eq(4).find('td').eq(3).should('contain.text', 'Terminated By Staff: Rubdown Level A')
+        cy.get($table)
+          .find('tr')
+          .eq(4)
+          .find('td')
+          .eq(3)
+          .should('contain.text', 'Terminated By Staff:\n    Rubdown Level A')
       })
     })
   })
