@@ -69,7 +69,7 @@ export default ({ prisonerProfileService, prisonApi, telemetry, offenderSearchAp
       positiveCaseNotesResponse,
       negativeCaseNotesResponse,
       adjudicationsResponse,
-      visitsSummaryResponse,
+      nextVisitResponse,
       visitBalancesResponse,
       todaysEventsResponse,
     ] = await Promise.all(
@@ -83,7 +83,7 @@ export default ({ prisonerProfileService, prisonApi, telemetry, offenderSearchAp
         prisonApi.getPositiveCaseNotes(res.locals, bookingId, dateThreeMonthsAgo, today),
         prisonApi.getNegativeCaseNotes(res.locals, bookingId, dateThreeMonthsAgo, today),
         prisonApi.getAdjudicationsForBooking(res.locals, bookingId),
-        prisonApi.getVisitsSummary(res.locals, bookingId),
+        prisonApi.getNextVisit(res.locals, bookingId),
         prisonApi.getPrisonerVisitBalances(res.locals, offenderNo),
         prisonApi.getEventsForToday(res.locals, bookingId),
       ].map((apiCall) => captureErrorAndContinue(apiCall))
@@ -99,7 +99,7 @@ export default ({ prisonerProfileService, prisonApi, telemetry, offenderSearchAp
       positiveCaseNotes,
       negativeCaseNotes,
       adjudications,
-      visitsSummary,
+      nextVisit,
       visitBalances,
       todaysEvents,
     ] = [
@@ -112,7 +112,7 @@ export default ({ prisonerProfileService, prisonApi, telemetry, offenderSearchAp
       positiveCaseNotesResponse,
       negativeCaseNotesResponse,
       adjudicationsResponse,
-      visitsSummaryResponse,
+      nextVisitResponse,
       visitBalancesResponse,
       todaysEventsResponse,
       // @ts-expect-error ts-migrate(2554) FIXME: Expected 2 arguments, but got 1.
@@ -283,7 +283,7 @@ export default ({ prisonerProfileService, prisonApi, telemetry, offenderSearchAp
       ],
       visits: {
         // @ts-expect-error ts-migrate(2339) FIXME: Property 'error' does not exist on type 'unknown'.
-        visitSectionError: Boolean(visitBalancesResponse.error && visitsSummaryResponse.error),
+        visitSectionError: Boolean(visitBalancesResponse.error && nextVisitResponse.error),
         details: [
           {
             label: 'Remaining visits',
@@ -303,13 +303,22 @@ export default ({ prisonerProfileService, prisonApi, telemetry, offenderSearchAp
             label: 'Next visit date',
             value:
               // @ts-expect-error ts-migrate(2339) FIXME: Property 'error' does not exist on type 'unknown'.
-              (visitsSummaryResponse.error && unableToShowDetailMessage) ||
-              (visitsSummary && visitsSummary.startDateTime
-                ? moment(visitsSummary.startDateTime).format('D MMMM YYYY')
-                : 'None scheduled'),
+              (nextVisitResponse.error && unableToShowDetailMessage) ||
+              (nextVisit && nextVisit.startTime
+                ? moment(nextVisit.startTime).format('D MMMM YYYY')
+                : 'No upcoming visits'),
           },
         ],
-        displayLink: Boolean(visitsSummary && visitsSummary.hasVisits),
+        ...(nextVisit &&
+          nextVisit.startTime && {
+            nextVisitDetails: [
+              { label: 'Type of visit', value: nextVisit.visitTypeDescription },
+              {
+                label: 'Lead visitor',
+                value: `${capitalizeUppercaseString(nextVisit.leadVisitor)} (${nextVisit.relationshipDescription})`,
+              },
+            ],
+          }),
       },
       // @ts-expect-error ts-migrate(2339) FIXME: Property 'error' does not exist on type 'unknown'.
       scheduledActivityPeriodsSectionError: Boolean(todaysEventsResponse.error),

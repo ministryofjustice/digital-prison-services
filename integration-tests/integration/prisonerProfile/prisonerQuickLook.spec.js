@@ -61,9 +61,11 @@ const quickLookFullDetails = {
       },
     ],
   },
-  visitsSummary: {
-    startDateTime: '2020-04-17T13:30:00',
-    hasVisits: true,
+  nextVisit: {
+    visitTypeDescription: 'Social Contact',
+    leadVisitor: 'YRUDYPETER CASSORIA',
+    relationshipDescription: 'Probation Officer',
+    startTime: '2020-04-17T13:30:00',
   },
   visitBalances: { remainingVo: 24, remainingPvo: 4 },
   todaysEvents: [
@@ -358,11 +360,9 @@ context('Prisoner quick look', () => {
           expect($summaryValues.get(0).innerText).to.eq('24')
           expect($summaryValues.get(1).innerText).to.eq('4')
           expect($summaryValues.get(2).innerText).to.eq('17 April 2020')
+          expect($summaryValues.get(3).innerText).to.eq('Social Contact')
+          expect($summaryValues.get(4).innerText).to.eq('Yrudypeter Cassoria (Probation Officer)')
         })
-      cy.get('[data-test="visits-details-link"]')
-        .should('contain.text', 'View visits details')
-        .should('have.attr', 'href')
-        .should('include', '/prisoner/A1234A/visits-details')
     })
 
     it('Should show correct Personal information details', () => {
