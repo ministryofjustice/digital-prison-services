@@ -92,7 +92,7 @@ export const prisonApiFactory = (client) => {
   const getVisitsForBookingWithVisitors = (context, bookingId, params) =>
     get(context, `/api/bookings/${bookingId}/visits-with-visitors?${mapToQueryString(params)}`)
 
-  const getVisitsSummary = (context, bookingId) => get(context, `/api/bookings/${bookingId}/visits/summary`)
+  const getNextVisit = (context, bookingId) => get(context, `/api/bookings/${bookingId}/visits/next`)
 
   const getVisitsPrisons = (context, bookingId) => get(context, `/api/bookings/${bookingId}/visits/prisons`)
 
@@ -462,7 +462,7 @@ export const prisonApiFactory = (client) => {
     searchActivityLocations,
     getVisits,
     getVisitsForBookingWithVisitors,
-    getVisitsSummary,
+    getNextVisit,
     getVisitsPrisons,
     getAppointments,
     getAppointmentsForAgency,
