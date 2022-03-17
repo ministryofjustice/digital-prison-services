@@ -2,7 +2,7 @@
 {% for prisoner in results %}
   {% set prisonerImage = '<img src="/app/images/' + prisoner.offenderNo + '/data" alt="Image of ' + prisoner.name + '" class="prisoner-search__results-list__image" />' %}
   {% set prisonerLink = '<a href="/prisoner/' + prisoner.offenderNo + '" class="govuk-link" target="_blank" rel="noopener noreferrer" data-test="prisoner-profile-link">' + prisoner.name + '</a>' %}
-  {% set updateLicenceLink = '<a href="' + prisoner.updateLicenceLink + '" class="govuk-link" target="_blank" rel="noopener noreferrer" data-test="update-licence-link">Update licence</a>' %}
+  {% set updateLicenceLink = '<a href="' + prisoner.updateLicenceLink + '" class="govuk-link" target="_blank" rel="noopener noreferrer" data-test="update-licence-link">Update HDC licence</a>' %}
   {% set rows = (rows.push([
     { html: prisonerImage },
     { 

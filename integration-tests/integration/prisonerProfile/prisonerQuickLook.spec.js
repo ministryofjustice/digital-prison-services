@@ -61,9 +61,11 @@ const quickLookFullDetails = {
       },
     ],
   },
-  visitsSummary: {
-    startDateTime: '2020-04-17T13:30:00',
-    hasVisits: true,
+  nextVisit: {
+    visitTypeDescription: 'Social Contact',
+    leadVisitor: 'YRUDYPETER CASSORIA',
+    relationshipDescription: 'Probation Officer',
+    startTime: '2020-04-17T13:30:00',
   },
   visitBalances: { remainingVo: 24, remainingPvo: 4 },
   todaysEvents: [
@@ -358,11 +360,9 @@ context('Prisoner quick look', () => {
           expect($summaryValues.get(0).innerText).to.eq('24')
           expect($summaryValues.get(1).innerText).to.eq('4')
           expect($summaryValues.get(2).innerText).to.eq('17 April 2020')
+          expect($summaryValues.get(3).innerText).to.eq('Social Contact')
+          expect($summaryValues.get(4).innerText).to.eq('Yrudypeter Cassoria (Probation Officer)')
         })
-      cy.get('[data-test="visits-details-link"]')
-        .should('contain.text', 'View visits details')
-        .should('have.attr', 'href')
-        .should('include', '/prisoner/A1234A/visits-details')
     })
 
     it('Should show correct Personal information details', () => {
@@ -404,6 +404,31 @@ context('Prisoner quick look', () => {
       cy.get('[data-test="view-alerts-link"]').should('contain.text', 'View alerts')
       cy.get('[data-test="iep-details-link"]').should('contain.text', 'View details for Incentive Level')
       cy.get('[data-test="incentive-details-link"]').should('contain.text', 'View incentive level details')
+    })
+  })
+
+  context('When a prisoner is in users caseload but does not have any visit details (unsentenced)', () => {
+    beforeEach(() => {
+      Cypress.Cookies.preserveOnce('hmpps-session-dev')
+      cy.task('stubPrisonerProfileHeaderData', {
+        offenderBasicDetails,
+        offenderFullDetails: { ...offenderFullDetails },
+        iepSummary: {},
+        caseNoteSummary: {},
+        offenderNo,
+      })
+      cy.task('stubQuickLook', { ...quickLookFullDetails, visitBalances: {} })
+    })
+
+    it('Should show correct Visits details', () => {
+      cy.visit(`/prisoner/${offenderNo}`)
+      cy.get('[data-test="visits-summary"]')
+        .find('dd')
+        .then(($summaryValues) => {
+          expect($summaryValues.get(0).innerText).to.eq('17 April 2020')
+          expect($summaryValues.get(1).innerText).to.eq('Social Contact')
+          expect($summaryValues.get(2).innerText).to.eq('Yrudypeter Cassoria (Probation Officer)')
+        })
     })
   })
 

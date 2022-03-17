@@ -1,5 +1,5 @@
 import moment from 'moment'
-import { formatCurrency, capitalizeUppercaseString } from '../../utils'
+import { capitalizeUppercaseString, formatCurrency } from '../../utils'
 import formatAward from '../../shared/formatAward'
 import filterActivitiesByPeriod from '../../shared/filterActivitiesByPeriod'
 import getValueByType from '../../shared/getValueByType'
@@ -69,7 +69,7 @@ export default ({ prisonerProfileService, prisonApi, telemetry, offenderSearchAp
       positiveCaseNotesResponse,
       negativeCaseNotesResponse,
       adjudicationsResponse,
-      visitsSummaryResponse,
+      nextVisitResponse,
       visitBalancesResponse,
       todaysEventsResponse,
     ] = await Promise.all(
@@ -83,7 +83,7 @@ export default ({ prisonerProfileService, prisonApi, telemetry, offenderSearchAp
         prisonApi.getPositiveCaseNotes(res.locals, bookingId, dateThreeMonthsAgo, today),
         prisonApi.getNegativeCaseNotes(res.locals, bookingId, dateThreeMonthsAgo, today),
         prisonApi.getAdjudicationsForBooking(res.locals, bookingId),
-        prisonApi.getVisitsSummary(res.locals, bookingId),
+        prisonApi.getNextVisit(res.locals, bookingId),
         prisonApi.getPrisonerVisitBalances(res.locals, offenderNo),
         prisonApi.getEventsForToday(res.locals, bookingId),
       ].map((apiCall) => captureErrorAndContinue(apiCall))
@@ -99,7 +99,7 @@ export default ({ prisonerProfileService, prisonApi, telemetry, offenderSearchAp
       positiveCaseNotes,
       negativeCaseNotes,
       adjudications,
-      visitsSummary,
+      nextVisit,
       visitBalances,
       todaysEvents,
     ] = [
@@ -112,7 +112,7 @@ export default ({ prisonerProfileService, prisonApi, telemetry, offenderSearchAp
       positiveCaseNotesResponse,
       negativeCaseNotesResponse,
       adjudicationsResponse,
-      visitsSummaryResponse,
+      nextVisitResponse,
       visitBalancesResponse,
       todaysEventsResponse,
       // @ts-expect-error ts-migrate(2554) FIXME: Expected 2 arguments, but got 1.
@@ -141,6 +141,23 @@ export default ({ prisonerProfileService, prisonApi, telemetry, offenderSearchAp
       const prisonerDetail = prisonerDetailsResponse.response && prisonerDetailsResponse.response[0]
       return prisonerDetail?.indeterminateSentence ? 'Life sentence' : 'Not entered'
     }
+
+    const visitBalancesSection =
+      // @ts-expect-error ts-migrate(2339) FIXME: Property 'error' does not exist on type 'unknown'.
+      visitBalancesResponse.error || (visitBalances && Object.keys(visitBalances).length)
+        ? [
+            {
+              label: 'Remaining visits',
+              // @ts-expect-error ts-migrate(2339) FIXME: Property 'error' does not exist on type 'unknown'.
+              value: visitBalancesResponse.error ? unableToShowDetailMessage : visitBalances.remainingVo,
+            },
+            {
+              label: 'Remaining privileged visits',
+              // @ts-expect-error ts-migrate(2339) FIXME: Property 'error' does not exist on type 'unknown'.
+              value: visitBalancesResponse.error ? unableToShowDetailMessage : visitBalances.remainingPvo,
+            },
+          ]
+        : []
 
     return res.render('prisonerProfile/prisonerQuickLook/prisonerQuickLook.njk', {
       prisonerProfileData,
@@ -283,33 +300,29 @@ export default ({ prisonerProfileService, prisonApi, telemetry, offenderSearchAp
       ],
       visits: {
         // @ts-expect-error ts-migrate(2339) FIXME: Property 'error' does not exist on type 'unknown'.
-        visitSectionError: Boolean(visitBalancesResponse.error && visitsSummaryResponse.error),
+        visitSectionError: Boolean(visitBalancesResponse.error && nextVisitResponse.error),
         details: [
-          {
-            label: 'Remaining visits',
-            // @ts-expect-error ts-migrate(2339) FIXME: Property 'error' does not exist on type 'unknown'.
-            value: visitBalancesResponse.error
-              ? unableToShowDetailMessage
-              : visitBalances && (visitBalances.remainingVo === 0 ? 0 : visitBalances.remainingVo || 'Not entered'),
-          },
-          {
-            label: 'Remaining privileged visits',
-            // @ts-expect-error ts-migrate(2339) FIXME: Property 'error' does not exist on type 'unknown'.
-            value: visitBalancesResponse.error
-              ? unableToShowDetailMessage
-              : visitBalances && (visitBalances.remainingPvo === 0 ? 0 : visitBalances.remainingPvo || 'Not entered'),
-          },
+          ...visitBalancesSection,
           {
             label: 'Next visit date',
             value:
               // @ts-expect-error ts-migrate(2339) FIXME: Property 'error' does not exist on type 'unknown'.
-              (visitsSummaryResponse.error && unableToShowDetailMessage) ||
-              (visitsSummary && visitsSummary.startDateTime
-                ? moment(visitsSummary.startDateTime).format('D MMMM YYYY')
-                : 'None scheduled'),
+              (nextVisitResponse.error && unableToShowDetailMessage) ||
+              (nextVisit && nextVisit.startTime
+                ? moment(nextVisit.startTime).format('D MMMM YYYY')
+                : 'No upcoming visits'),
           },
         ],
-        displayLink: Boolean(visitsSummary && visitsSummary.hasVisits),
+        ...(nextVisit &&
+          nextVisit.startTime && {
+            nextVisitDetails: [
+              { label: 'Type of visit', value: nextVisit.visitTypeDescription },
+              {
+                label: 'Lead visitor',
+                value: `${capitalizeUppercaseString(nextVisit.leadVisitor)} (${nextVisit.relationshipDescription})`,
+              },
+            ],
+          }),
       },
       // @ts-expect-error ts-migrate(2339) FIXME: Property 'error' does not exist on type 'unknown'.
       scheduledActivityPeriodsSectionError: Boolean(todaysEventsResponse.error),

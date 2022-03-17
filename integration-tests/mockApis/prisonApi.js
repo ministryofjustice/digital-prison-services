@@ -684,6 +684,20 @@ module.exports = {
         jsonBody: adjudications || {},
       },
     }),
+  stubNextVisit: (nextVisit, status) =>
+    stubFor({
+      request: {
+        method: 'GET',
+        urlPattern: '/api/bookings/[0-9]+?/visits/next',
+      },
+      response: {
+        status,
+        headers: {
+          'Content-Type': 'application/json;charset=UTF-8',
+        },
+        jsonBody: nextVisit || {},
+      },
+    }),
   stubVisitsWithVisitors: (visitsWithVisitors, status) =>
     stubFor({
       request: {
@@ -739,28 +753,11 @@ module.exports = {
         ],
       },
     }),
-  stubVisitsSummary: (visitsSummary, status) =>
-    stubFor({
-      request: {
-        method: 'GET',
-        urlPattern: '/api/bookings/[0-9]+?/visits/summary',
-      },
-      response: {
-        status,
-        headers: {
-          'Content-Type': 'application/json;charset=UTF-8',
-        },
-        jsonBody: visitsSummary || {
-          startDateTime: '2021-04-17T13:30:00',
-          hasVisits: false,
-        },
-      },
-    }),
   stubPrisonerVisitBalances: (visitBalances, status) =>
     stubFor({
       request: {
         method: 'GET',
-        urlPattern: '/api/bookings/offenderNo/.+?/visit/balances',
+        urlPattern: '/api/bookings/offenderNo/.+?/visit/balances\\?allowNoContent=true',
       },
       response: {
         status,
