@@ -319,6 +319,8 @@ context('Global search', () => {
 
       globalSearchPage.updateLicenceLinks().then(($licenceLinks) => {
         cy.get($licenceLinks).its('length').should('eq', 2)
+        cy.get($licenceLinks).eq(0).should('contain.text', 'Update HDC licence')
+        cy.get($licenceLinks).eq(1).should('contain.text', 'Update HDC licence')
 
         cy.get($licenceLinks)
           .first()
