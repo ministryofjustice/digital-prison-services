@@ -407,6 +407,31 @@ context('Prisoner quick look', () => {
     })
   })
 
+  context('When a prisoner is in users caseload but does not have any visit details (unsentenced)', () => {
+    beforeEach(() => {
+      Cypress.Cookies.preserveOnce('hmpps-session-dev')
+      cy.task('stubPrisonerProfileHeaderData', {
+        offenderBasicDetails,
+        offenderFullDetails: { ...offenderFullDetails },
+        iepSummary: {},
+        caseNoteSummary: {},
+        offenderNo,
+      })
+      cy.task('stubQuickLook', { ...quickLookFullDetails, visitBalances: {} })
+    })
+
+    it('Should show correct Visits details', () => {
+      cy.visit(`/prisoner/${offenderNo}`)
+      cy.get('[data-test="visits-summary"]')
+        .find('dd')
+        .then(($summaryValues) => {
+          expect($summaryValues.get(0).innerText).to.eq('17 April 2020')
+          expect($summaryValues.get(1).innerText).to.eq('Social Contact')
+          expect($summaryValues.get(2).innerText).to.eq('Yrudypeter Cassoria (Probation Officer)')
+        })
+    })
+  })
+
   context('When a prisoner is NOT in users caseload', () => {
     beforeEach(() => {
       Cypress.Cookies.preserveOnce('hmpps-session-dev')

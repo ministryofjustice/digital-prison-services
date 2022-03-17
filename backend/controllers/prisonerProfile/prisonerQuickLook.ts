@@ -1,5 +1,5 @@
 import moment from 'moment'
-import { formatCurrency, capitalizeUppercaseString } from '../../utils'
+import { capitalizeUppercaseString, formatCurrency } from '../../utils'
 import formatAward from '../../shared/formatAward'
 import filterActivitiesByPeriod from '../../shared/filterActivitiesByPeriod'
 import getValueByType from '../../shared/getValueByType'
@@ -141,6 +141,23 @@ export default ({ prisonerProfileService, prisonApi, telemetry, offenderSearchAp
       const prisonerDetail = prisonerDetailsResponse.response && prisonerDetailsResponse.response[0]
       return prisonerDetail?.indeterminateSentence ? 'Life sentence' : 'Not entered'
     }
+
+    const visitBalancesSection =
+      // @ts-expect-error ts-migrate(2339) FIXME: Property 'error' does not exist on type 'unknown'.
+      visitBalancesResponse.error || (visitBalances && Object.keys(visitBalances).length)
+        ? [
+            {
+              label: 'Remaining visits',
+              // @ts-expect-error ts-migrate(2339) FIXME: Property 'error' does not exist on type 'unknown'.
+              value: visitBalancesResponse.error ? unableToShowDetailMessage : visitBalances.remainingVo,
+            },
+            {
+              label: 'Remaining privileged visits',
+              // @ts-expect-error ts-migrate(2339) FIXME: Property 'error' does not exist on type 'unknown'.
+              value: visitBalancesResponse.error ? unableToShowDetailMessage : visitBalances.remainingPvo,
+            },
+          ]
+        : []
 
     return res.render('prisonerProfile/prisonerQuickLook/prisonerQuickLook.njk', {
       prisonerProfileData,
@@ -285,20 +302,7 @@ export default ({ prisonerProfileService, prisonApi, telemetry, offenderSearchAp
         // @ts-expect-error ts-migrate(2339) FIXME: Property 'error' does not exist on type 'unknown'.
         visitSectionError: Boolean(visitBalancesResponse.error && nextVisitResponse.error),
         details: [
-          {
-            label: 'Remaining visits',
-            // @ts-expect-error ts-migrate(2339) FIXME: Property 'error' does not exist on type 'unknown'.
-            value: visitBalancesResponse.error
-              ? unableToShowDetailMessage
-              : visitBalances && (visitBalances.remainingVo === 0 ? 0 : visitBalances.remainingVo || 'Not entered'),
-          },
-          {
-            label: 'Remaining privileged visits',
-            // @ts-expect-error ts-migrate(2339) FIXME: Property 'error' does not exist on type 'unknown'.
-            value: visitBalancesResponse.error
-              ? unableToShowDetailMessage
-              : visitBalances && (visitBalances.remainingPvo === 0 ? 0 : visitBalances.remainingPvo || 'Not entered'),
-          },
+          ...visitBalancesSection,
           {
             label: 'Next visit date',
             value:

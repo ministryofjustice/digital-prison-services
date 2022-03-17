@@ -579,11 +579,7 @@ describe('prisoner profile quick look', () => {
             'prisonerProfile/prisonerQuickLook/prisonerQuickLook.njk',
             expect.objectContaining({
               visits: {
-                details: [
-                  { label: 'Remaining visits', value: 'Not entered' },
-                  { label: 'Remaining privileged visits', value: 'Not entered' },
-                  { label: 'Next visit date', value: 'No upcoming visits' },
-                ],
+                details: [{ label: 'Next visit date', value: 'No upcoming visits' }],
                 visitSectionError: false,
               },
             })

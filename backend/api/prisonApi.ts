@@ -323,7 +323,7 @@ export const prisonApiFactory = (client) => {
     get(context, `/api/bookings/${bookingId}/caseNotes/NEG/IEP_WARN/count?fromDate=${fromDate}&toDate=${toDate}`)
 
   const getPrisonerVisitBalances = (context, offenderNo) =>
-    get(context, `/api/bookings/offenderNo/${offenderNo}/visit/balances`)
+    get(context, `/api/bookings/offenderNo/${offenderNo}/visit/balances?allowNoContent=true`)
 
   const getEventsForToday = (context, bookingId) => get(context, `/api/bookings/${bookingId}/events/today`)
 
