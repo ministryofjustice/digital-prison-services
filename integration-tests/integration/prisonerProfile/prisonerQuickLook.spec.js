@@ -426,8 +426,6 @@ context('Prisoner quick look', () => {
         .find('dd')
         .then(($summaryValues) => {
           expect($summaryValues.get(0).innerText).to.eq('17 April 2020')
-          expect($summaryValues.get(1).innerText).to.eq('Social Contact')
-          expect($summaryValues.get(2).innerText).to.eq('Yrudypeter Cassoria (Probation Officer)')
         })
     })
   })
