@@ -85,31 +85,35 @@
   <h2 class="govuk-heading-m govuk-!-font-size-27">Previous locations</h2>
 
   {% for agency in cellHistoryGroupedByAgency %}
-    {% set rows = [] %}
+    {% if agency.isValidAgency %}
+      {% set rows = [] %}
 
-    {% for cell in agency.cellHistory %}
-      {% set rows = (rows.push([  
-        { text: cell.location },
-        { text: cell.movedIn },
-        { text: cell.movedInBy },
-        { text: cell.movedOut },
-        { html: '<a href="' + './location-history?fromDate=' + cell.assignmentDateTime + '&toDate=' + cell.assignmentEndDateTime + '&locationId=' + cell.livingUnitId + '&agencyId=' + cell.agencyId + '" class="govuk-link">View details<span class="govuk-visually-hidden"> for location ' + cell.location + '</span></a>' if not cell.isTemporaryLocation }
-      ]), rows) %}
-    {% endfor %}
+      {% for cell in agency.cellHistory %}
+        {% set rows = (rows.push([  
+          { text: cell.location },
+          { text: cell.movedIn },
+          { text: cell.movedInBy },
+          { text: cell.movedOut },
+          { html: '<a href="' + './location-history?fromDate=' + cell.assignmentDateTime + '&toDate=' + cell.assignmentEndDateTime + '&locationId=' + cell.livingUnitId + '&agencyId=' + cell.agencyId + '" class="govuk-link">View details<span class="govuk-visually-hidden"> for location ' + cell.location + '</span></a>' if not cell.isTemporaryLocation }
+        ]), rows) %}
+      {% endfor %}
 
-    <h3 class="govuk-heading-m" data-test="agency-heading">{{ agency.name }} <span class="govuk-!-font-weight-regular">{{ agency.datePeriod }}</span></h2>
+      <h3 class="govuk-heading-m" data-test="agency-heading">{{ agency.name }} <span class="govuk-!-font-weight-regular">{{ agency.datePeriod }}</span></h2>
 
-    {{ govukTable({
-      head: [
-        { text: "Location" },
-        { text: "Moved in" },
-        { text: "Moved in by" },
-        { text: "Moved out" },
-        { html: '<span class="govuk-visually-hidden">Details link</span>' }
-      ],
-      rows: rows,
-      attributes: { "data-test": "prisoner-cell-history" }
-    }) }}
+      {{ govukTable({
+        head: [
+          { text: "Location" },
+          { text: "Moved in" },
+          { text: "Moved in by" },
+          { text: "Moved out" },
+          { html: '<span class="govuk-visually-hidden">Details link</span>' }
+        ],
+        rows: rows,
+        attributes: { "data-test": "prisoner-cell-history" }
+      }) }}
+    {% else %}
+      <h3 class="govuk-heading-m" data-test="invalid-agency-heading">There is no known cell location <span class="govuk-!-font-weight-regular">{{ agency.datePeriod }}</span></h2>
+    {% endif %}
   {% endfor %}
 
   <div class="govuk-grid-row">
