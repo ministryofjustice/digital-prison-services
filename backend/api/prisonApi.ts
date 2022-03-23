@@ -92,7 +92,7 @@ export const prisonApiFactory = (client) => {
   const getVisitsForBookingWithVisitors = (context, bookingId, params) =>
     get(context, `/api/bookings/${bookingId}/visits-with-visitors?${mapToQueryString(params)}`)
 
-  const getNextVisit = (context, bookingId) => get(context, `/api/bookings/${bookingId}/visits/next`)
+  const getVisitsSummary = (context, bookingId) => get(context, `/api/bookings/${bookingId}/visits/summary`)
 
   const getVisitsPrisons = (context, bookingId) => get(context, `/api/bookings/${bookingId}/visits/prisons`)
 
@@ -323,7 +323,7 @@ export const prisonApiFactory = (client) => {
     get(context, `/api/bookings/${bookingId}/caseNotes/NEG/IEP_WARN/count?fromDate=${fromDate}&toDate=${toDate}`)
 
   const getPrisonerVisitBalances = (context, offenderNo) =>
-    get(context, `/api/bookings/offenderNo/${offenderNo}/visit/balances`)
+    get(context, `/api/bookings/offenderNo/${offenderNo}/visit/balances?allowNoContent=true`)
 
   const getEventsForToday = (context, bookingId) => get(context, `/api/bookings/${bookingId}/events/today`)
 
@@ -462,7 +462,7 @@ export const prisonApiFactory = (client) => {
     searchActivityLocations,
     getVisits,
     getVisitsForBookingWithVisitors,
-    getNextVisit,
+    getVisitsSummary,
     getVisitsPrisons,
     getAppointments,
     getAppointmentsForAgency,

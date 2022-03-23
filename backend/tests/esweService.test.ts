@@ -957,7 +957,7 @@ describe('Education skills and work experience', () => {
         ]
         getLearnerdivergenceMock.mockResolvedValue(noNeurodiversity)
         const actual = await service.getNeurodivergence(nomisId)
-        expect(actual.content).toBeTruthy()
+        expect(actual.content.neurodivergenceAssessed).toBeFalsy()
         expect(getLearnerdivergenceMock).toHaveBeenCalledTimes(1)
       })
       it('should return a null content error', async () => {

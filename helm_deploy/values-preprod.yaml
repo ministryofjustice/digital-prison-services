@@ -35,7 +35,6 @@ env:
   USE_OF_FORCE_URL: https://preprod.use-of-force.service.justice.gov.uk
   USE_OF_FORCE_PRISONS: "ACI,AGI,ASI,AYI,BAI,BCI,BFI,BHI,BLI,BMI,BNI,BRI,BSI,BWI,BXI,BZI,CDI,CFI,CLI,CWI,DAI,DGI,DHI,DMI,DNI,DTI,DWI,EEI,EHI,ESI,EWI,EXI,EYI,FBI,FDI,FHI,FKI,FMI,FNI,FSI,FWI,GHI,GMI,GNI,GTI,HBI,HCI,HDI,HEI,HHI,HII,HLI,HMI,HOI,HPI,HVI,ISI,IWI,KMI,KVI,LCI,LEI,LFI,LGI,LHI,LII,LLI,LNI,LPI,LTI,LWI,LYI,MDI,MHI,MRI,MSI,MTI,NHI,NLI,NMI,NSI,NWI,ONI,OWI,PBI,PDI,PFI,PNI,PRI,PVI,RCI,RHI,RNI,RSI,SDI,SFI,SHI,SKI,SLI,SNI,SPI,STI,SUI,SWI,TCI,TSI,UKI,UPI,VEI,WCI,WDI,WEI,WHI,WII,WLI,WMI,WRI,WSI,WTI,WWI"
   INCENTIVES_URL: https://incentives-ui-preprod.hmpps.service.justice.gov.uk
-  INCENTIVES_PRISONS: "BLI,DTI,DWI,EXI,GHI,GNI,HGI,HLI,HMI,MDI,NWI,PBI,PDI,PFI,RSI,SPI,SKI,WRI"
   INCENTIVES_API_ENDPOINT_URL: https://incentives-api-preprod.hmpps.service.justice.gov.uk
   TOKENVERIFICATION_API_URL: https://token-verification-api-preprod.prison.service.justice.gov.uk
   TOKENVERIFICATION_API_ENABLED: true
@@ -69,7 +68,7 @@ env:
   CALCULATE_RELEASE_DATES_URL: https://calculate-release-dates-preprod.hmpps.service.justice.gov.uk
   SEND_LEGAL_MAIL_URL: https://check-rule39-mail-preprod.prison.service.justice.gov.uk
   WELCOME_PEOPLE_INTO_PRISON_URL: https://welcome-preprod.prison.service.justice.gov.uk/
-  WELCOME_PEOPLE_INTO_PRISON_ENABLED_PRISONS: "NMI"
+  WELCOME_PEOPLE_INTO_PRISON_ENABLED_PRISONS: "NMI,LII"
 
 allowlist:
   office: "217.33.148.210/32"

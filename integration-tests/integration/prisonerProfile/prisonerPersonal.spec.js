@@ -1,6 +1,11 @@
 const offenderBasicDetails = require('../../mockApis/responses/offenderBasicDetails.json')
 const offenderFullDetails = require('../../mockApis/responses/offenderFullDetails.json')
 const { clickIfExist } = require('../../test-helpers')
+const {
+  NeurodivergenceSelfDeclared,
+  NeurodivergenceAssessed,
+  NeurodivergenceSupport,
+} = require('../../../backend/api/curious/types/Enums')
 
 context('Prisoner personal', () => {
   const offenderNo = 'A12345'
@@ -699,28 +704,6 @@ context('Prisoner personal', () => {
               ],
             },
           ],
-          neurodivergence: [
-            {
-              divergenceSelfDeclared: [
-                {
-                  selfDeclared: 'Autism',
-                  selfDeclaredDate: '10 February 2022',
-                },
-              ],
-              divergenceAssessed: [
-                {
-                  assessment: 'Alzheimers',
-                  assessmentDate: '12 February 2022',
-                },
-              ],
-              divergenceSupport: [
-                {
-                  support: 'Reading support, Auditory support',
-                  supportDate: '14 February 2022',
-                },
-              ],
-            },
-          ],
           careNeeds: {
             personalCareNeeds: [
               {
@@ -932,17 +915,8 @@ context('Prisoner personal', () => {
         })
       })
 
-      context('Neurodiversity section', () => {
-        it('Should show appropriate message when neurodiversity is not present', () => {
-          cy.get('[data-test="neurodiversity-summary"]').then(($summary) => {
-            cy.get($summary)
-              // .find('dt')
-              .then(($SummaryValues) => {
-                cy.get($SummaryValues)
-                expect($SummaryValues.get(0).innerText).to.contain('John Smith has no recorded neurodiversity needs.')
-              })
-          })
-
+      context('Care needs summary', () => {
+        it('Should show correct headings and labels', () => {
           cy.get('[data-test="care-needs-summary"]').then(($section) => {
             cy.get($section)
               .find('h3')
@@ -985,6 +959,7 @@ context('Prisoner personal', () => {
           })
         })
       })
+
       context('Languages section', () => {
         it('Should show correct languages content', () => {
           cy.get('[data-test="languages-summary"]').then(($section) => {
@@ -1267,6 +1242,155 @@ context('Prisoner personal', () => {
               cy.get($summaryValues).its('length').should('eq', 1)
               expect($summaryValues.get(0).innerText).to.contain('Cousin')
             })
+        })
+      })
+    })
+
+    context('Neurodivergence data - all', () => {
+      const neurodivergenceAll = {
+        prn: 'A12345',
+        establishmentId: 'MDI',
+        establishmentName: 'HMP Moorland',
+        neurodivergenceSelfDeclared: [NeurodivergenceSelfDeclared.ADHD, NeurodivergenceSelfDeclared.Autism],
+        selfDeclaredDate: '2022-02-10',
+        neurodivergenceAssessed: [NeurodivergenceAssessed.AcquiredBrainInjury],
+        assessmentDate: '2022-02-15',
+        neurodivergenceSupport: [NeurodivergenceSupport.MemorySupport, NeurodivergenceSupport.Reading],
+        supportDate: '2022-02-20',
+      }
+
+      before(() => {
+        cy.task('stubPrisonerProfileHeaderData', headerDetails)
+        cy.task('stubPersonal', {
+          neurodivergence: [neurodivergenceAll],
+        })
+        visitPersonalAndExpandAccordions()
+      })
+
+      it('Should list all neurodivergence info for learner', () => {
+        cy.get('[data-test="neurodiversity-summary"]').then(($summary) => {
+          cy.get($summary)
+            .find('dt')
+            .then(($summaryLabels) => {
+              cy.get($summaryLabels).its('length').should('eq', 5)
+              expect($summaryLabels.get(0).innerText).to.contain('Support needed')
+              expect($summaryLabels.get(1).innerText).to.contain('Neurodiversity')
+            })
+
+          cy.get($summary)
+            .find('dd')
+            .then(($summaryValues) => {
+              cy.get($summaryValues).its('length').should('eq', 5)
+              expect($summaryValues.get(0).innerText).to.contain('Memory Support').and.to.contain('Reading Support')
+              expect($summaryValues.get(1).innerText).to.contain('From self-assessment')
+              expect($summaryValues.get(2).innerText).to.contain('ADHD').and.to.contain('Autism')
+              expect($summaryValues.get(3).innerText).to.contain('From neurodiversity assessment')
+              expect($summaryValues.get(4).innerText)
+                .to.contain('Acquired Brain Injury')
+                .and.to.contain('Recorded on 15 February 2022')
+            })
+        })
+      })
+    })
+
+    context('Neurodivergence - from assessment', () => {
+      const neurodivergenceAssessed = {
+        prn: 'A12345',
+        establishmentId: 'MDI',
+        establishmentName: 'HMP Moorland',
+        neurodivergenceAssessed: [NeurodivergenceAssessed.Alzheimers],
+        assessmentDate: '2022-02-15',
+        neurodivergenceSupport: [NeurodivergenceSupport.MemorySupport],
+        supportDate: '2022-02-20',
+      }
+      before(() => {
+        cy.task('stubPersonal', {
+          neurodivergence: [neurodivergenceAssessed],
+        })
+        visitPersonalAndExpandAccordions()
+      })
+
+      it('Should only list support and assessed neurodivergence info for learner', () => {
+        cy.get('[data-test="neurodiversity-summary"]').then(($summary) => {
+          cy.get($summary)
+            .find('dt')
+            .then(($summaryLabels) => {
+              cy.get($summaryLabels).its('length').should('eq', 5)
+              expect($summaryLabels.get(0).innerText).to.contain('Support needed')
+              expect($summaryLabels.get(1).innerText).to.contain('Neurodiversity')
+            })
+
+          cy.get($summary)
+            .find('dd')
+            .then(($summaryValues) => {
+              cy.get($summaryValues).its('length').should('eq', 5)
+              expect($summaryValues.get(0).innerText).to.contain('Memory Support')
+              expect($summaryValues.get(1).innerText).to.contain('From self-assessment')
+              expect($summaryValues.get(2).innerText).to.contain('No neurodiversity reported by the prisoner yet')
+              expect($summaryValues.get(3).innerText).to.contain('From neurodiversity assessment')
+              expect($summaryValues.get(4).innerText)
+                .to.contain('Alzheimers')
+                .and.to.contain('Recorded on 15 February 2022')
+            })
+        })
+      })
+    })
+
+    context('Neurodivergence - self-declared', () => {
+      const neurodivergenceSelfAssessed = {
+        prn: 'A12345',
+        establishmentId: 'MDI',
+        establishmentName: 'HMP Moorland',
+        neurodivergenceSelfDeclared: [NeurodivergenceSelfDeclared.Dyscalculia],
+        selfDeclaredDate: '2022-02-15',
+        neurodivergenceSupport: [NeurodivergenceSupport.SocialandinteractionSupport],
+        supportDate: '2022-02-20',
+      }
+      before(() => {
+        cy.task('stubPersonal', {
+          neurodivergence: [neurodivergenceSelfAssessed],
+        })
+        visitPersonalAndExpandAccordions()
+      })
+
+      it('Should only list support and self-declared neurodivergence info for learner', () => {
+        cy.get('[data-test="neurodiversity-summary"]').then(($summary) => {
+          cy.get($summary)
+            .find('dt')
+            .then(($summaryLabels) => {
+              cy.get($summaryLabels).its('length').should('eq', 5)
+              expect($summaryLabels.get(0).innerText).to.contain('Support needed')
+              expect($summaryLabels.get(1).innerText).to.contain('Neurodiversity')
+            })
+
+          cy.get($summary)
+            .find('dd')
+            .then(($summaryValues) => {
+              cy.get($summaryValues).its('length').should('eq', 5)
+              expect($summaryValues.get(0).innerText)
+                .to.contain('Social and interaction Support')
+                .and.to.contain('Recorded on 20 February 2022')
+              expect($summaryValues.get(1).innerText).to.contain('From self-assessment')
+              expect($summaryValues.get(2).innerText)
+                .to.contain('Dyscalculia')
+                .and.to.contain('Recorded on 15 February 2022')
+              expect($summaryValues.get(3).innerText).to.contain('From neurodiversity assessment')
+              expect($summaryValues.get(4).innerText).to.contain('No neurodiversity identified yet')
+            })
+        })
+      })
+    })
+    context('Neurodivergence - none entered', () => {
+      before(() => {
+        cy.task('stubPersonal', {
+          neurodivergence: [],
+        })
+        visitPersonalAndExpandAccordions()
+      })
+
+      it('Should list no neurodivergence info for learner', () => {
+        cy.get('[data-test="neurodiversity-summary"]').then(($section) => {
+          expect($section).to.contain.text('John Smith has no recorded neurodiversity needs.')
         })
       })
     })

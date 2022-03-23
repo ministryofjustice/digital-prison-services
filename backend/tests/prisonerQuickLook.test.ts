@@ -70,8 +70,8 @@ describe('prisoner profile quick look', () => {
     prisonApi.getNegativeCaseNotes = jest.fn().mockResolvedValue({})
     // @ts-expect-error ts-migrate(2339) FIXME: Property 'getAdjudicationsForBooking' does not exi... Remove this comment to see the full error message
     prisonApi.getAdjudicationsForBooking = jest.fn().mockResolvedValue({})
-    // @ts-expect-error ts-migrate(2339) FIXME: Property 'getNextVisit' does not exist on type '{}... Remove this comment to see the full error message
-    prisonApi.getNextVisit = jest.fn().mockResolvedValue({})
+    // @ts-expect-error ts-migrate(2339) FIXME: Property 'getVisitsSummary' does not exist on type '{}... Remove this comment to see the full error message
+    prisonApi.getVisitsSummary = jest.fn().mockResolvedValue({})
     // @ts-expect-error ts-migrate(2339) FIXME: Property 'getPrisonerVisitBalances' does not exist... Remove this comment to see the full error message
     prisonApi.getPrisonerVisitBalances = jest.fn().mockResolvedValue({})
     // @ts-expect-error ts-migrate(2339) FIXME: Property 'getEventsForToday' does not exist on typ... Remove this comment to see the full error message
@@ -579,12 +579,9 @@ describe('prisoner profile quick look', () => {
             'prisonerProfile/prisonerQuickLook/prisonerQuickLook.njk',
             expect.objectContaining({
               visits: {
-                details: [
-                  { label: 'Remaining visits', value: 'Not entered' },
-                  { label: 'Remaining privileged visits', value: 'Not entered' },
-                  { label: 'Next visit date', value: 'No upcoming visits' },
-                ],
+                details: [{ label: 'Next visit date', value: 'None scheduled' }],
                 visitSectionError: false,
+                displayLink: false,
               },
             })
           )
@@ -593,12 +590,10 @@ describe('prisoner profile quick look', () => {
 
       describe('when there is visit data', () => {
         beforeEach(() => {
-          // @ts-expect-error ts-migrate(2339) FIXME: Property 'getNextVisit' does not exist on type '{}... Remove this comment to see the full error message
-          prisonApi.getNextVisit.mockResolvedValue({
-            visitTypeDescription: 'Social Contact',
-            leadVisitor: 'YRUDYPETER CASSORIA',
-            relationshipDescription: 'Probation Officer',
-            startTime: '2020-04-17T13:30:00',
+          // @ts-expect-error ts-migrate(2339) FIXME: Property 'getVisitsSummary' does not exist on type '{}... Remove this comment to see the full error message
+          prisonApi.getVisitsSummary.mockResolvedValue({
+            startDateTime: '2020-04-17T13:30:00',
+            hasVisits: true,
           })
           // @ts-expect-error ts-migrate(2339) FIXME: Property 'getPrisonerVisitBalances' does not exist... Remove this comment to see the full error message
           prisonApi.getPrisonerVisitBalances.mockResolvedValue({ remainingVo: 0, remainingPvo: 0 })
@@ -617,10 +612,7 @@ describe('prisoner profile quick look', () => {
                   { label: 'Remaining privileged visits', value: 0 },
                   { label: 'Next visit date', value: '17 April 2020' },
                 ],
-                nextVisitDetails: [
-                  { label: 'Type of visit', value: 'Social Contact' },
-                  { label: 'Lead visitor', value: 'Yrudypeter Cassoria (Probation Officer)' },
-                ],
+                displayLink: true,
               },
             })
           )
@@ -818,8 +810,8 @@ describe('prisoner profile quick look', () => {
       prisonApi.getNegativeCaseNotes.mockRejectedValue(new Error('Network error'))
       // @ts-expect-error ts-migrate(2339) FIXME: Property 'getAdjudicationsForBooking' does not exi... Remove this comment to see the full error message
       prisonApi.getAdjudicationsForBooking.mockRejectedValue(new Error('Network error'))
-      // @ts-expect-error ts-migrate(2339) FIXME: Property 'getNextVisit' does not exist on type '{}... Remove this comment to see the full error message
-      prisonApi.getNextVisit.mockRejectedValue(new Error('Network error'))
+      // @ts-expect-error ts-migrate(2339) FIXME: Property 'getVisitsSummary' does not exist on type '{}... Remove this comment to see the full error message
+      prisonApi.getVisitsSummary.mockRejectedValue(new Error('Network error'))
       // @ts-expect-error ts-migrate(2339) FIXME: Property 'getPrisonerVisitBalances' does not exist... Remove this comment to see the full error message
       prisonApi.getPrisonerVisitBalances.mockRejectedValue(new Error('Network error'))
       // @ts-expect-error ts-migrate(2339) FIXME: Property 'getEventsForToday' does not exist on typ... Remove this comment to see the full error message
@@ -1247,12 +1239,10 @@ describe('prisoner profile quick look', () => {
     })
 
     it('should handle api errors when requesting visit balances', async () => {
-      // @ts-expect-error ts-migrate(2339) FIXME: Property 'getNextVisit' does not exist on type '{}... Remove this comment to see the full error message
-      prisonApi.getNextVisit.mockResolvedValue({
-        startTime: '2020-04-17T13:30:00',
-        visitTypeDescription: 'room 1',
-        leadVisitor: 'mum',
-        relationshipDescription: 'parent',
+      // @ts-expect-error ts-migrate(2339) FIXME: Property 'getVisitsSummary' does not exist on type '{}... Remove this comment to see the full error message
+      prisonApi.getVisitsSummary.mockResolvedValue({
+        startDateTime: '2020-04-17T13:30:00',
+        hasVisits: true,
       })
       await controller(req, res)
 
@@ -1266,10 +1256,7 @@ describe('prisoner profile quick look', () => {
               { label: 'Remaining privileged visits', value: 'Unable to show this detail' },
               { label: 'Next visit date', value: '17 April 2020' },
             ],
-            nextVisitDetails: [
-              { label: 'Type of visit', value: 'room 1' },
-              { label: 'Lead visitor', value: 'Mum (parent)' },
-            ],
+            displayLink: true,
           },
         })
       )
@@ -1294,6 +1281,7 @@ describe('prisoner profile quick look', () => {
               { label: 'Remaining privileged visits', value: 10 },
               { label: 'Next visit date', value: 'Unable to show this detail' },
             ],
+            displayLink: false,
           },
         })
       )
@@ -1312,6 +1300,7 @@ describe('prisoner profile quick look', () => {
               { label: 'Next visit date', value: 'Unable to show this detail' },
             ],
             visitSectionError: true,
+            displayLink: false,
           },
         })
       )
@@ -1411,8 +1400,8 @@ describe('prisoner profile quick look', () => {
       prisonApi.getNegativeCaseNotes = jest.fn().mockResolvedValue({})
       // @ts-expect-error ts-migrate(2339) FIXME: Property 'getAdjudicationsForBooking' does not exi... Remove this comment to see the full error message
       prisonApi.getAdjudicationsForBooking = jest.fn().mockResolvedValue({})
-      // @ts-expect-error ts-migrate(2339) FIXME: Property 'getNextVisit' does not exist on type '{}... Remove this comment to see the full error message
-      prisonApi.getNextVisit = jest.fn().mockResolvedValue({})
+      // @ts-expect-error ts-migrate(2339) FIXME: Property 'getVisitsSummary' does not exist on type '{}... Remove this comment to see the full error message
+      prisonApi.getVisitsSummary = jest.fn().mockResolvedValue({})
       // @ts-expect-error ts-migrate(2339) FIXME: Property 'getPrisonerVisitBalances' does not exist... Remove this comment to see the full error message
       prisonApi.getPrisonerVisitBalances = jest.fn().mockResolvedValue({})
       // @ts-expect-error ts-migrate(2339) FIXME: Property 'getEventsForToday' does not exist on typ... Remove this comment to see the full error message
