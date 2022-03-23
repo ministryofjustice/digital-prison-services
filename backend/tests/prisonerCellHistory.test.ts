@@ -157,6 +157,7 @@ describe('Prisoner cell history', () => {
           {
             name: 'Moorland',
             datePeriod: 'from 01/03/2020 to 01/05/2020',
+            isValidAgency: true,
             cellHistory: [
               {
                 agencyId: 'MDI',
@@ -189,6 +190,7 @@ describe('Prisoner cell history', () => {
           {
             name: 'Ranby',
             datePeriod: 'from 01/02/2020 to Unknown',
+            isValidAgency: true,
             cellHistory: [
               {
                 agencyId: 'RNI',
@@ -208,6 +210,7 @@ describe('Prisoner cell history', () => {
           {
             name: 'Moorland',
             datePeriod: 'from 01/01/2020 to 01/02/2020',
+            isValidAgency: true,
             cellHistory: [
               {
                 agencyId: 'MDI',
@@ -254,6 +257,155 @@ describe('Prisoner cell history', () => {
           canViewCellMoveButton: true,
         })
       )
+    })
+  })
+
+  describe('cell history for offender with missing agency ids', () => {
+    beforeEach(() => {
+      // @ts-expect-error ts-migrate(2339) FIXME: Property 'getOffenderCellHistory' does not exist o... Remove this comment to see the full error message
+      prisonApi.getOffenderCellHistory = jest.fn().mockResolvedValue({
+        content: [
+          // Original location with agencyId
+          {
+            agencyId: 'MDI',
+            assignmentDate: '2020-01-01',
+            assignmentDateTime: '2020-01-01T11:48:33',
+            assignmentEndDate: '2020-01-11',
+            assignmentEndDateTime: '2020-01-11T11:48:33',
+            assignmentReason: 'ADM',
+            bookingId,
+            description: 'MDI-1-01',
+            livingUnitId: 1,
+            movementMadeBy: 'STAFF_1',
+          },
+          // Next location without agencyId
+          {
+            assignmentDate: '2020-01-11',
+            assignmentDateTime: '2020-01-11T12:48:33',
+            assignmentEndDate: '2020-02-01',
+            assignmentEndDateTime: '2020-02-01T11:48:33',
+            assignmentReason: 'ADM',
+            bookingId,
+            description: 'MDI-1-01',
+            livingUnitId: 1,
+            movementMadeBy: 'STAFF_1',
+          },
+          // Last location without agencyId
+          {
+            assignmentDate: '2020-02-01',
+            assignmentDateTime: '2020-02-01T12:48:33.375',
+            assignmentEndDate: '2020-05-01',
+            assignmentEndDateTime: '2020-05-01T11:48:33',
+            assignmentReason: 'ADM',
+            bookingId,
+            description: 'RNI-1-03',
+            livingUnitId: 3,
+            movementMadeBy: 'STAFF_2',
+          },
+          // Current location
+          {
+            agencyId: 'MDI',
+            assignmentDate: '2020-05-01',
+            assignmentDateTime: '2020-05-01T12:48:33.375',
+            assignmentReason: 'ADM',
+            bookingId,
+            description: 'MDI-1-02',
+            livingUnitId: 1,
+            movementMadeBy: 'STAFF_1',
+          },
+        ],
+      })
+
+      // @ts-expect-error ts-migrate(2339) FIXME: Property 'getAgencyDetails' does not exist on type... Remove this comment to see the full error message
+      prisonApi.getAgencyDetails = jest.fn().mockResolvedValueOnce({ agencyId: 'MDI', description: 'Moorland' })
+      // @ts-expect-error ts-migrate(2339) FIXME: Property 'getInmatesAtLocation' does not exist on ... Remove this comment to see the full error message
+      prisonApi.getInmatesAtLocation.mockResolvedValue([
+        { bookingId: '144', firstName: 'Another', lastName: 'Offender', offenderNo: 'B12345' },
+      ])
+      // @ts-expect-error ts-migrate(2339) FIXME: Property 'getStaffDetails' does not exist on type ... Remove this comment to see the full error message
+      prisonApi.getStaffDetails
+        .mockResolvedValueOnce({ firstName: 'Staff', lastName: 'Two', username: 'STAFF_2' })
+        .mockResolvedValueOnce({ firstName: 'Staff', lastName: 'Three', username: 'STAFF_3' })
+        .mockResolvedValue({ firstName: 'Staff', lastName: 'One', username: 'STAFF_1' })
+    })
+
+    it('sends the right data to the template', async () => {
+      await controller(req, res)
+
+      expect(res.render).toHaveBeenCalledWith('prisonerProfile/prisonerCellHistory.njk', {
+        breadcrumbPrisonerName: 'Smith, John',
+        canViewCellMoveButton: false,
+        cellHistoryGroupedByAgency: [
+          {
+            name: null,
+            datePeriod: 'from 11/01/2020 to 01/05/2020',
+            isValidAgency: false,
+            cellHistory: [
+              {
+                agencyId: undefined,
+                assignmentDateTime: '2020-02-01T12:48:33',
+                assignmentEndDateTime: '2020-05-01T11:48:33',
+                establishment: null,
+                establishmentWithAgencyLeaveDate: 'null2020-05-01T11:48:33',
+                livingUnitId: 3,
+                isTemporaryLocation: false,
+                location: undefined,
+                movedInBy: 'Staff Two',
+                movedIn: '01/02/2020 - 12:48',
+                movedOut: '01/05/2020 - 11:48',
+              },
+              {
+                agencyId: undefined,
+                assignmentDateTime: '2020-01-11T12:48:33',
+                assignmentEndDateTime: '2020-02-01T11:48:33',
+                establishment: null,
+                establishmentWithAgencyLeaveDate: 'null2020-05-01T11:48:33',
+                livingUnitId: 1,
+                isTemporaryLocation: false,
+                location: undefined,
+                movedInBy: 'Staff One',
+                movedIn: '11/01/2020 - 12:48',
+                movedOut: '01/02/2020 - 11:48',
+              },
+            ],
+          },
+          {
+            name: 'Moorland',
+            datePeriod: 'from 01/01/2020 to 11/01/2020',
+            isValidAgency: true,
+            cellHistory: [
+              {
+                agencyId: 'MDI',
+                assignmentDateTime: '2020-01-01T11:48:33',
+                assignmentEndDateTime: '2020-01-11T11:48:33',
+                establishment: 'Moorland',
+                establishmentWithAgencyLeaveDate: 'Moorland2020-01-11T11:48:33',
+                livingUnitId: 1,
+                isTemporaryLocation: false,
+                location: '1-01',
+                movedInBy: 'Staff One',
+                movedIn: '01/01/2020 - 11:48',
+                movedOut: '11/01/2020 - 11:48',
+              },
+            ],
+          },
+        ],
+        changeCellLink: '/prisoner/ABC123/cell-move/search-for-cell?returnUrl=/prisoner/ABC123',
+        currentLocation: {
+          agencyId: 'MDI',
+          assignmentDateTime: '2020-05-01T12:48:33',
+          assignmentEndDateTime: '2020-10-29T16:15:00',
+          establishment: 'Moorland',
+          livingUnitId: 1,
+          isTemporaryLocation: false,
+          location: '1-02',
+          movedIn: '01/05/2020 - 12:48',
+          movedInBy: 'Staff One',
+        },
+        occupants: [{ name: 'Offender, Another', profileUrl: '/prisoner/B12345' }],
+        prisonerName: 'John Smith',
+        profileUrl: '/prisoner/ABC123',
+      })
     })
   })
 })

@@ -20,6 +20,7 @@ export default ({ oauthApi, prisonApi, page = 0 }) =>
       Promise.all(
         cells
           .map((cell) => cell.agencyId)
+          .filter((a) => a !== undefined)
           .filter((v, i, a) => a.indexOf(v) === i)
           .map((agencyId) => prisonApi.getAgencyDetails(res.locals, agencyId))
       )
@@ -54,6 +55,7 @@ export default ({ oauthApi, prisonApi, page = 0 }) =>
           const toDateString = formatTimestampToDate(value[0].assignmentEndDateTime) || 'Unknown'
 
           return {
+            isValidAgency: !!value[0].establishment,
             name: value[0].establishment,
             datePeriod: `from ${fromDateString} to ${toDateString}`,
             cellHistory: value,
@@ -74,13 +76,15 @@ export default ({ oauthApi, prisonApi, page = 0 }) =>
       const cellData = cells.map((cell) => {
         // @ts-expect-error ts-migrate(2339) FIXME: Property 'username' does not exist on type 'unknow... Remove this comment to see the full error message
         const staffDetails = staff.find((user) => cell.movementMadeBy === user.username)
+        const agencyName = cell.agencyId
         // @ts-expect-error ts-migrate(2339) FIXME: Property 'agencyId' does not exist on type 'unknow... Remove this comment to see the full error message
-        const agency = agencyData.find((agencyDetails) => cell.agencyId === agencyDetails.agencyId)
+        const agency = agencyData.find((agencyDetails) => agencyName === agencyDetails.agencyId)
+        // @ts-expect-error ts-migrate(2339) FIXME: Property 'description' does not exist on type 'unk... Remove this comment to see the full error message
+        const agencyDescription = agency ? agency.description : null
 
         return {
-          // @ts-expect-error ts-migrate(2339) FIXME: Property 'description' does not exist on type 'unk... Remove this comment to see the full error message
-          establishment: agency.description,
-          location: extractLocation(cell.description, cell.agencyId),
+          establishment: agencyDescription,
+          location: extractLocation(cell.description, agencyName),
           isTemporaryLocation: isTemporaryLocation(cell.description),
           movedIn: cell.assignmentDateTime && formatTimestampToDateTime(cell.assignmentDateTime),
           movedOut: cell.assignmentEndDateTime && formatTimestampToDateTime(cell.assignmentEndDateTime),
@@ -89,7 +93,7 @@ export default ({ oauthApi, prisonApi, page = 0 }) =>
             ? moment(cell.assignmentEndDateTime).format('YYYY-MM-DDTHH:mm:ss')
             : undefined,
           livingUnitId: cell.livingUnitId,
-          agencyId: cell.agencyId,
+          agencyId: agencyName,
           // @ts-expect-error ts-migrate(2339) FIXME: Property 'firstName' does not exist on type 'unkno... Remove this comment to see the full error message
           movedInBy: formatName(staffDetails.firstName, staffDetails.lastName),
         }
