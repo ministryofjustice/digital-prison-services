@@ -109,7 +109,6 @@ export default ({ prisonApi, raiseAnalyticsEvent }) => {
 
       const currentOccupantsWithFormattedActiveAlerts = currentOccupantsDetails
         .map((currentOccupant) => ({
-          // @ts-expect-error ts-migrate(2339) FIXME: Property 'firstName' does not exist on type 'unkno... Remove this comment to see the full error message
           name: formatName(currentOccupant.firstName, currentOccupant.lastName),
           alerts: currentOccupant.alerts
             .filter(activeCellMoveAlertsExcludingDisabled)
