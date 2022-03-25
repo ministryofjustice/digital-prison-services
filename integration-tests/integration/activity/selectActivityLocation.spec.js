@@ -36,6 +36,7 @@ context('Select activity location', () => {
       cy.task('stubOffenderBasicDetails', offender)
     })
     cy.task('stubGetAbsenceReasons')
+    cy.task('stubGetAbsenceReasonsV2')
   })
 
   it('should redirect to the activity lists page', () => {

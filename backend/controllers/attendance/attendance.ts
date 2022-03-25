@@ -62,8 +62,12 @@ export const attendanceFactory = (whereaboutsApi) => {
   }
 
   const getAbsenceReasons = async (context) => {
-    const absenceReasons = await whereaboutsApi.getAbsenceReasons(context)
+    const [absenceReasons, absenceReasonsV2] = await Promise.all([
+      await whereaboutsApi.getAbsenceReasons(context),
+      await whereaboutsApi.getAbsenceReasonsV2(context),
+    ])
     const { paidReasons, unpaidReasons, triggersIEPWarning } = absenceReasons
+    const { triggersAbsentSubReason, paidSubReasons, unpaidSubReasons } = absenceReasonsV2
     const mapToAbsentReason = absentReasonMapper(absenceReasons)
 
     const approvedCourse = {
@@ -81,6 +85,9 @@ export const attendanceFactory = (whereaboutsApi) => {
       paidReasons: [approvedCourse, ...paidReasonsExcluding(approvedCourse.value)],
       unpaidReasons: unpaidReasons.map(mapToAbsentReason).sort(sortByName),
       triggersIEPWarning,
+      triggersAbsentSubReason,
+      paidSubReasons: paidSubReasons.map((r) => ({ value: r.code, name: r.name })),
+      unpaidSubReasons: unpaidSubReasons.map((r) => ({ value: r.code, name: r.name })),
     }
   }
 

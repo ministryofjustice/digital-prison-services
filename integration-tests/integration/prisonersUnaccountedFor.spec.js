@@ -75,6 +75,7 @@ context('Prisoners unaccounted for', () => {
       },
     ])
     cy.task('stubGetAbsenceReasons')
+    cy.task('stubGetAbsenceReasonsV2')
   })
 
   it('should display data for today', () => {
