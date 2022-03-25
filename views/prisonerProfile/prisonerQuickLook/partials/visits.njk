@@ -22,26 +22,14 @@
                 ), visitRows) %}
         {% endfor %}
 
-        {% if visits.nextVisitDetails %}
-            {% for nextVisitDetail in visits.nextVisitDetails %}
-                {% set visitRows = (visitRows.push(
-                    {
-                        key: {
-                        text: nextVisitDetail.label,
-                        classes: 'govuk-summary-list__key--indent'
-                    },
-                        value: {
-                        text: nextVisitDetail.value | showDefault
-                    }
-                    }
-                    ), visitRows) %}
-            {% endfor %}
-        {% endif %}
-
         {{ govukSummaryList({
             rows: visitRows,
             classes: "govuk-!-margin-bottom-2",
             attributes: { "data-test": "visits-summary" }
         }) }}
+
+        {% if visits.displayLink %}
+            <a href="/prisoner/{{prisonerProfileData.offenderNo}}/visits-details" class="govuk-link govuk-body govuk-!-margin-bottom-2 govuk-!-display-inline-block" data-test="visits-details-link">View visits details</a>
+        {% endif %}
     {% endif %}
 </div>
