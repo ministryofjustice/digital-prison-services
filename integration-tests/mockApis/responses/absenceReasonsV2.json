@@ -1,0 +1,122 @@
+{
+  "paidReasons": [
+    {
+      "code": "ApprovedCourse",
+      "name": "Approved course"
+    },
+    {
+      "code": "AcceptableAbsence",
+      "name": "Acceptable absence"
+    },
+    {
+      "code": "NotRequired",
+      "name": "Not required to attend"
+    }
+  ],
+  "unpaidReasons": [
+    {
+      "code": "SessionCancelled",
+      "name": "Session cancelled"
+    },
+    {
+      "code": "RestInCellOrSick",
+      "name": "Rest in cell or sick"
+    },
+    {
+      "code": "RestDay",
+      "name": "Rest day"
+    },
+    {
+      "code": "UnacceptableAbsence",
+      "name": "Unacceptable absence"
+    },
+    {
+      "code": "Refused",
+      "name": "Refused to attend"
+    },
+    {
+      "code": "RefusedIncentiveLevelWarning",
+      "name": "Refused to attend"
+    }
+  ],
+  "triggersIEPWarning": ["RefusedIncentiveLevelWarning", "UnacceptableAbsence"],
+  "triggersAbsentSubReason": [
+    "AcceptableAbsence",
+    "Refused",
+    "RefusedIncentiveLevelWarning",
+    "SessionCancelled",
+    "UnacceptableAbsence"
+  ],
+  "paidSubReasons": [
+    {
+      "code": "Activities",
+      "name": "Activities and education"
+    },
+    {
+      "code": "Courses",
+      "name": "Courses, programmes and interventions"
+    },
+    {
+      "code": "ExternalMoves",
+      "name": "External moves"
+    },
+    {
+      "code": "Healthcare",
+      "name": "Healthcare"
+    },
+    {
+      "code": "Operational",
+      "name": "Operational"
+    },
+    {
+      "code": "OverAllocated",
+      "name": "Over allocated or schedule clash"
+    },
+    {
+      "code": "Visits",
+      "name": "Visits"
+    },
+    {
+      "code": "NotListed",
+      "name": "Not listed"
+    }
+  ],
+  "unpaidSubReasons": [
+    {
+      "code": "Activities",
+      "name": "Activities and education"
+    },
+    {
+      "code": "Behaviour",
+      "name": "Behaviour"
+    },
+    {
+      "code": "Courses",
+      "name": "Courses, programmes and interventions"
+    },
+    {
+      "code": "ExternalMoves",
+      "name": "External moves"
+    },
+    {
+      "code": "Healthcare",
+      "name": "Healthcare"
+    },
+    {
+      "code": "Operational",
+      "name": "Operational"
+    },
+    {
+      "code": "OverAllocated",
+      "name": "Over allocated or schedule clash"
+    },
+    {
+      "code": "Visits",
+      "name": "Visits"
+    },
+    {
+      "code": "NotListed",
+      "name": "Not listed"
+    }
+  ]
+}
