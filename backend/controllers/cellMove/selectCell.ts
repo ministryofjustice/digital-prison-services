@@ -30,7 +30,6 @@ const getCellOccupants = async (res, { prisonApi, activeCaseLoadId, cells, nonAs
 
   if (!hasLength(currentCellOccupants)) return []
 
-  // @ts-expect-error ts-migrate(2339) FIXME: Property 'offenderNo' does not exist on type 'unkn... Remove this comment to see the full error message
   const occupantOffenderNos = Array.from(new Set(currentCellOccupants.map((occupant) => occupant.offenderNo)))
 
   const occupantAlerts = await prisonApi.getAlerts(res.locals, {
@@ -54,35 +53,28 @@ const getCellOccupants = async (res, { prisonApi, activeCaseLoadId, cells, nonAs
     .filter(Boolean)
 
   return cells.flatMap((cell) => {
-    // @ts-expect-error ts-migrate(2339) FIXME: Property 'assignedLivingUnitId' does not exist on ... Remove this comment to see the full error message
     const occupants = currentCellOccupants.filter((o) => o.assignedLivingUnitId === cell.id)
     return occupants.map((occupant) => {
-      // @ts-expect-error ts-migrate(2339) FIXME: Property 'offenderNo' does not exist on type 'unkn... Remove this comment to see the full error message
       const csraInfo = cellSharingAssessments.find((rating) => rating.offenderNo === occupant.offenderNo)
 
       const alertCodes = occupantAlerts
         .filter(
           (alert) =>
-            // @ts-expect-error ts-migrate(2339) FIXME: Property 'offenderNo' does not exist on type 'unkn... Remove this comment to see the full error message
             alert.offenderNo === occupant.offenderNo && !alert.expired && cellMoveAlertCodes.includes(alert.alertCode)
         )
         .map((alert) => alert.alertCode)
 
       return {
         cellId: cell.id,
-        // @ts-expect-error ts-migrate(2339) FIXME: Property 'lastName' does not exist on type 'unknow... Remove this comment to see the full error message
         name: `${properCaseName(occupant.lastName)}, ${properCaseName(occupant.firstName)}`,
-        // @ts-expect-error ts-migrate(2339) FIXME: Property 'offenderNo' does not exist on type 'unkn... Remove this comment to see the full error message
         viewOffenderDetails: `/prisoner/${occupant.offenderNo}/cell-move/offender-details`,
         alerts: alertFlagLabels.filter((label) => label.alertCodes.some((code) => alertCodes.includes(code))),
         nonAssociation: Boolean(
           nonAssociations &&
             nonAssociations.nonAssociations &&
-            // @ts-expect-error ts-migrate(2339) FIXME: Property 'offenderNo' does not exist on type 'unkn... Remove this comment to see the full error message
             nonAssociations.nonAssociations.find((na) => na.offenderNonAssociation.offenderNo === occupant.offenderNo)
         ),
         csra: csraInfo && csraInfo.classification,
-        // @ts-expect-error ts-migrate(2339) FIXME: Property 'offenderNo' does not exist on type 'unkn... Remove this comment to see the full error message
         csraDetailsUrl: `/prisoner/${occupant.offenderNo}/cell-move/cell-sharing-risk-assessment-details`,
       }
     })

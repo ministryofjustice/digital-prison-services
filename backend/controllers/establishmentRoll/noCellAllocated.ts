@@ -60,7 +60,6 @@ export default ({ oauthApi, systemOauthClient, prisonApi }) =>
 
       return res.render('establishmentRoll/noCellAllocated.njk', {
         results: offendersWithCellHistory.map((offender) => {
-          // @ts-expect-error ts-migrate(2339) FIXME: Property 'currentLocation' does not exist on type ... Remove this comment to see the full error message
           const { currentLocation, offenderNo, previousLocation, prisonerDetails } = offender
           const movementMadeBy = allStaffDetails.find(
             (staffUser) => staffUser.username === currentLocation.movementMadeBy

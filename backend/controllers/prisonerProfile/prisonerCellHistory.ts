@@ -74,12 +74,9 @@ export default ({ oauthApi, prisonApi, page = 0 }) =>
       const staff = await Promise.all(cells.map((cell) => prisonApi.getStaffDetails(res.locals, cell.movementMadeBy)))
 
       const cellData = cells.map((cell) => {
-        // @ts-expect-error ts-migrate(2339) FIXME: Property 'username' does not exist on type 'unknow... Remove this comment to see the full error message
         const staffDetails = staff.find((user) => cell.movementMadeBy === user.username)
         const agencyName = cell.agencyId
-        // @ts-expect-error ts-migrate(2339) FIXME: Property 'agencyId' does not exist on type 'unknow... Remove this comment to see the full error message
         const agency = agencyData.find((agencyDetails) => agencyName === agencyDetails.agencyId)
-        // @ts-expect-error ts-migrate(2339) FIXME: Property 'description' does not exist on type 'unk... Remove this comment to see the full error message
         const agencyDescription = agency ? agency.description : null
 
         return {
@@ -94,7 +91,6 @@ export default ({ oauthApi, prisonApi, page = 0 }) =>
             : undefined,
           livingUnitId: cell.livingUnitId,
           agencyId: agencyName,
-          // @ts-expect-error ts-migrate(2339) FIXME: Property 'firstName' does not exist on type 'unkno... Remove this comment to see the full error message
           movedInBy: formatName(staffDetails.firstName, staffDetails.lastName),
         }
       })

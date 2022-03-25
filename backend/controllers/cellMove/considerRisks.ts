@@ -78,19 +78,12 @@ export default ({ prisonApi, raiseAnalyticsEvent }) => {
 
       const currentNonHeteroOccupants = currentOccupantsDetails.filter(
         (currentOccupant) =>
-          // @ts-expect-error ts-migrate(2339) FIXME: Property 'profileInformation' does not exist on ty... Remove this comment to see the full error message
           !getValueByType('SEXO', currentOccupant.profileInformation, 'resultValue')?.toLowerCase().includes('hetero')
       )
 
       const currentNonHeteroOccupantsWithName = currentNonHeteroOccupants.map(
         (currentOccupant) =>
-          `${formatName(
-            // @ts-expect-error ts-migrate(2339) FIXME: Property 'firstName' does not exist on type 'unkno... Remove this comment to see the full error message
-            currentOccupant.firstName,
-            // @ts-expect-error ts-migrate(2339) FIXME: Property 'lastName' does not exist on type 'unknow... Remove this comment to see the full error message
-            currentOccupant.lastName
-          )} has a sexual orientation of ${
-            // @ts-expect-error ts-migrate(2339) FIXME: Property 'profileInformation' does not exist on ty... Remove this comment to see the full error message
+          `${formatName(currentOccupant.firstName, currentOccupant.lastName)} has a sexual orientation of ${
             getValueByType('SEXO', currentOccupant.profileInformation, 'resultValue') || missingDataString
           }`
       )
@@ -118,7 +111,6 @@ export default ({ prisonApi, raiseAnalyticsEvent }) => {
         .map((currentOccupant) => ({
           // @ts-expect-error ts-migrate(2339) FIXME: Property 'firstName' does not exist on type 'unkno... Remove this comment to see the full error message
           name: formatName(currentOccupant.firstName, currentOccupant.lastName),
-          // @ts-expect-error ts-migrate(2339) FIXME: Property 'alerts' does not exist on type 'unknown'... Remove this comment to see the full error message
           alerts: currentOccupant.alerts
             .filter(activeCellMoveAlertsExcludingDisabled)
             .filter((alert) => alert.alertCode !== 'RLG' || (alert.alertCode === 'RLG' && currentOffenderIsNonHetero))
@@ -236,7 +228,6 @@ export default ({ prisonApi, raiseAnalyticsEvent }) => {
         new Set(
           currentOccupantsDetails
             .flatMap((occupant) => occupant)
-            // @ts-expect-error ts-migrate(2339) FIXME: Property 'alerts' does not exist on type 'unknown'... Remove this comment to see the full error message
             .flatMap((occupant) => occupant.alerts)
             .filter(activeCellMoveAlertsExcludingDisabled)
             .map((alert) => alert.alertCode)
