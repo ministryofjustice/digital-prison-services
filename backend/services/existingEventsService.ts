@@ -89,9 +89,7 @@ export default (prisonApi) => {
           getAppointmentsAtLocationEnhanceWithLocationId(context, agency, location.value, date)
         )
       )
-    )
-      // @ts-expect-error ts-migrate(2339) FIXME: Property 'concat' does not exist on type 'unknown'... Remove this comment to see the full error message
-      .reduce((acc, current) => acc.concat(current), [])
+    ).reduce((acc, current) => acc.concat(current), [])
 
   const getAvailableLocations = async (context, { timeSlot, locations, eventsAtLocations }) => {
     const requestedStartTime = moment(timeSlot.startTime, DATE_TIME_FORMAT_SPEC)

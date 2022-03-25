@@ -108,20 +108,13 @@ export default ({ prisonApi, whereaboutsApi, caseNotesApi }) =>
         locationSharingHistory:
           hasLength(locationHistoryWithPrisoner) &&
           locationHistoryWithPrisoner
-            // @ts-expect-error ts-migrate(2339) FIXME: Property 'bookingId' does not exist on type 'unkno... Remove this comment to see the full error message
             .filter((prisoner) => prisoner.bookingId !== bookingId)
-            // @ts-expect-error ts-migrate(2339) FIXME: Property 'assignmentDateTime' does not exist on ty... Remove this comment to see the full error message
             .sort((left, right) => sortByDateTime(right.assignmentDateTime, left.assignmentDateTime))
             .map((prisoner) => ({
-              // @ts-expect-error ts-migrate(2339) FIXME: Property 'agencyId' does not exist on type 'unknow... Remove this comment to see the full error message
               shouldLink: hasLength(userCaseLoadIds) && userCaseLoadIds.includes(prisoner.agencyId),
-              // @ts-expect-error ts-migrate(2339) FIXME: Property 'firstName' does not exist on type 'unkno... Remove this comment to see the full error message
               name: putLastNameFirst(prisoner.firstName, prisoner.lastName),
-              // @ts-expect-error ts-migrate(2339) FIXME: Property 'offenderNo' does not exist on type 'unkn... Remove this comment to see the full error message
               number: prisoner.offenderNo,
-              // @ts-expect-error ts-migrate(2339) FIXME: Property 'assignmentDateTime' does not exist on ty... Remove this comment to see the full error message
               movedIn: prisoner.assignmentDateTime && formatTimestampToDateTime(prisoner.assignmentDateTime),
-              // @ts-expect-error ts-migrate(2339) FIXME: Property 'assignmentEndDateTime' does not exist on... Remove this comment to see the full error message
               movedOut: getMovedOutText(prisoner.assignmentEndDateTime),
             })),
         profileUrl: `/prisoner/${offenderNo}`,
