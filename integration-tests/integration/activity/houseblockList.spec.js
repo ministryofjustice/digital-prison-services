@@ -2,6 +2,7 @@
 const moment = require('moment')
 const HouseblockPage = require('../../pages/whereabouts/houseblockPage')
 const datePickerDriver = require('../../componentDrivers/datePickerDriver')
+const attendanceDialogDriver = require('../../componentDrivers/attendanceDialogDriver')
 
 const caseload = 'MDI'
 const date = new Date().toISOString().split('T')[0]
@@ -561,11 +562,12 @@ context('Houseblock list page list page', () => {
         expect($cells.get(2)).to.contain('Received')
       })
     cy.get('[name="A1234AC40"').click()
-    cy.get('[value="no"]').click()
-    cy.get('[name="absentReason"').select('Refused')
-    cy.get('[name="comments"').type('Never turned up')
-    cy.get('button[name="confirm"]').click()
 
+    attendanceDialogDriver(cy).markAbsence({
+      pay: 'no',
+      absentReason: 'RestDay',
+      comments: 'Never turned up',
+    })
     cy.wait('@request').then((xhr) => {
       const requestBody = xhr.request.body
 
@@ -576,9 +578,11 @@ context('Houseblock list page list page', () => {
       expect(requestBody.offenderNo).to.eq('A1234AC')
       expect(requestBody.paid).to.eq(false)
       expect(requestBody.prisonId).to.eq('MDI')
+      expect(requestBody.absentReason).to.eq('RestDay')
+      expect(requestBody.absentSubReason).to.eq(undefined)
     })
 
-    houseblockPage.incentiveLevelCreated().should('be.visible')
+    houseblockPage.incentiveLevelCreated().should('not.exist')
   })
 
   it('Marks attendance for new date selection', () => {
@@ -659,10 +663,13 @@ context('Houseblock list page list page', () => {
             expect($cells.get(2)).to.contain('Received')
           })
         cy.get('[name="A1234AC40"').click()
-        cy.get('[value="no"]').click()
-        cy.get('[name="absentReason"').select('Refused')
-        cy.get('[name="comments"').type('Never turned up')
-        cy.get('button[name="confirm"]').click()
+
+        attendanceDialogDriver(cy).markAbsence({
+          pay: 'no',
+          absentReason: 'Refused',
+          absentSubReason: 'Courses',
+          comments: 'Never turned up',
+        })
 
         cy.wait('@request').then((xhr) => {
           const requestBody = xhr.request.body
@@ -674,6 +681,8 @@ context('Houseblock list page list page', () => {
           expect(requestBody.offenderNo).to.eq('A1234AC')
           expect(requestBody.paid).to.eq(false)
           expect(requestBody.prisonId).to.eq('MDI')
+          expect(requestBody.absentReason).to.eq('Refused')
+          expect(requestBody.absentSubReason).to.eq('Courses')
         })
 
         houseblockPage.incentiveLevelCreated().should('be.visible')
