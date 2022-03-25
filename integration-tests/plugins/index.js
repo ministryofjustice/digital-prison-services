@@ -283,7 +283,8 @@ module.exports = (on) => {
     stubSignInPage: auth.redirect,
     stubGetAbsences: ({ agencyId, reason, absences }) =>
       Promise.all([whereabouts.stubGetAbsences(agencyId, reason, absences)]),
-    stubGetAbsenceReasons: (response) => Promise.all([whereabouts.stubGetAbsenceReasons()]),
+    stubGetAbsenceReasons: whereabouts.stubGetAbsenceReasons,
+    stubGetAbsenceReasonsV2: whereabouts.stubGetAbsenceReasonsV2,
     stubGetAttendance: ({ caseload, locationId, timeSlot, date, data }) =>
       Promise.all([whereabouts.stubGetAttendance(caseload, locationId, timeSlot, date, data)]),
     stubPostAttendance: (response) => whereabouts.stubPostAttendance(response),
