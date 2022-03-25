@@ -74,10 +74,30 @@ describe('Attendence and Pay controller', () => {
       // @ts-expect-error ts-migrate(2339) FIXME: Property 'getAbsenceReasons' does not exist on typ... Remove this comment to see the full error message
       whereaboutsApi.getAbsenceReasons = jest.fn()
       // @ts-expect-error ts-migrate(2339) FIXME: Property 'getAbsenceReasons' does not exist on typ... Remove this comment to see the full error message
+      whereaboutsApi.getAbsenceReasonsV2 = jest.fn()
+      // @ts-expect-error ts-migrate(2339) FIXME: Property 'getAbsenceReasons' does not exist on typ... Remove this comment to see the full error message
       whereaboutsApi.getAbsenceReasons.mockReturnValue({
         paidReasons: ['AcceptableAbsence', 'RestInCell', 'ApprovedCourse'],
         unpaidReasons: ['Refused', 'UnacceptableAbsence'],
         triggersIEPWarning: ['UnacceptableAbsence', 'Refused'],
+      })
+      // @ts-expect-error ts-migrate(2339) FIXME: Property 'getAbsenceReasons' does not exist on typ... Remove this comment to see the full error message
+      whereaboutsApi.getAbsenceReasonsV2.mockReturnValue({
+        triggersAbsentSubReason: [
+          'AcceptableAbsence',
+          'Refused',
+          'RefusedIncentiveLevelWarning',
+          'SessionCancelled',
+          'UnacceptableAbsence',
+        ],
+        paidSubReasons: [
+          { code: 'Activities', name: 'Activities and education' },
+          { code: 'Courses', name: 'Courses, programmes and interventions' },
+        ],
+        unpaidSubReasons: [
+          { code: 'Activities', name: 'Activities and education' },
+          { code: 'Behaviour', name: 'Behaviour' },
+        ],
       })
     })
 
@@ -95,6 +115,21 @@ describe('Attendence and Pay controller', () => {
           { name: 'Unacceptable - Incentive Level warning', value: 'UnacceptableAbsence' },
         ],
         triggersIEPWarning: ['UnacceptableAbsence', 'Refused'],
+        triggersAbsentSubReason: [
+          'AcceptableAbsence',
+          'Refused',
+          'RefusedIncentiveLevelWarning',
+          'SessionCancelled',
+          'UnacceptableAbsence',
+        ],
+        paidSubReasons: [
+          { value: 'Activities', name: 'Activities and education' },
+          { value: 'Courses', name: 'Courses, programmes and interventions' },
+        ],
+        unpaidSubReasons: [
+          { value: 'Activities', name: 'Activities and education' },
+          { value: 'Behaviour', name: 'Behaviour' },
+        ],
       })
     })
   })

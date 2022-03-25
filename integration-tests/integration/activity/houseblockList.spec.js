@@ -160,6 +160,7 @@ context('Houseblock list page list page', () => {
     cy.task('stubAssessments', ['A1234AA', 'A1234AB', 'A1234AC'])
 
     cy.task('stubGetAbsenceReasons')
+    cy.task('stubGetAbsenceReasonsV2')
   })
 
   it('Displays the houseblock list', () => {
@@ -210,6 +211,7 @@ context('Houseblock list page list page', () => {
       })
 
     cy.task('stubGetAbsenceReasons')
+    cy.task('stubGetAbsenceReasonsV2')
     cy.get('[data-qa="other-message"').contains('Unacceptable - Incentive Level warning')
     cy.get('[data-qa="other-message"').parent().click({ multiple: true })
     cy.get('[name="absentReason"]').contains('Unacceptable - Incentive Level warning')
