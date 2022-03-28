@@ -344,9 +344,7 @@ describe('<AttendanceOtherForm />', () => {
           <IncentiveLevelCreated
             activityName={props.activityName}
             iepValues={{
-              absentReason: expectedPayload.absentReason.value,
-              absentSubReason: 'Behaviour',
-              comments: expectedPayload.comments,
+              caseNote: 'Unacceptable: Behaviour. A supporting comment.',
               pay: 'no',
             }}
             offender={props.offender}

@@ -13,8 +13,7 @@ const props = {
   },
   iepValues: {
     pay: 'false',
-    absentReason: 'Refused',
-    comments: 'Refused to attend',
+    caseNote: 'Refused: Refused to attend',
   },
   activityName: 'Test activity',
   user: {
