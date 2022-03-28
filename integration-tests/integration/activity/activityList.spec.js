@@ -1,5 +1,4 @@
 const activityPage = require('../../pages/whereabouts/activityPage')
-const attendanceDialogDriver = require('../../componentDrivers/attendanceDialogDriver')
 
 const caseload = 'MDI'
 const date = new Date().toISOString().split('T')[0]
@@ -373,11 +372,7 @@ context('Activity list page', () => {
     aPage.getAbsenceReasonsInput().first().check()
 
     // then: "Fill out the absent reason form as an acceptable absence"
-    attendanceDialogDriver(cy).markAbsence({
-      pay: 'yes',
-      absentReason: 'AcceptableAbsence',
-      absentSubReason: 'Courses',
-    })
+    aPage.fillOutAbsentReason()
 
     // then: "Mark as attended"
     aPage.getAttendedValues().then(($inputs) => {
@@ -385,22 +380,8 @@ context('Activity list page', () => {
     })
 
     // then: "An attendance record should have been created and updated"
-    cy.task('verifyPostAttendance').then((requests) => {
-      expect(requests).to.have.lengthOf(1)
-      expect(JSON.parse(requests[0].body)).to.deep.equal({
-        absentReason: 'AcceptableAbsence',
-        absentSubReason: 'Courses',
-        attended: false,
-        bookingId: 101,
-        comments: 'test',
-        eventDate: date,
-        eventId: 100,
-        eventLocationId: 1,
-        offenderNo: 'A1234AA',
-        paid: true,
-        period: 'AM',
-        prisonId: 'MDI',
-      })
+    cy.task('verifyPostAttendance').then((val) => {
+      expect(JSON.parse(val.text).count).to.equal(1)
     })
   })
 

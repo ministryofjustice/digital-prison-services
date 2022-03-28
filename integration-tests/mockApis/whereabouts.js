@@ -1,4 +1,4 @@
-const { stubFor, getMatchingRequests } = require('./wiremock')
+const { stubFor, verifyPosts, getMatchingRequests } = require('./wiremock')
 const absenceReasons = require('./responses/absenceReasons.json')
 const absenceReasonsV2 = require('./responses/absenceReasonsV2.json')
 const attendance = require('./responses/attendance.json')
@@ -204,8 +204,7 @@ module.exports = {
         jsonBody: appointments || [],
       },
     }),
-  verifyPostAttendance: () =>
-    getMatchingRequests({ method: 'POST', urlPath: '/whereabouts/attendance' }).then((data) => data.body.requests),
+  verifyPostAttendance: () => verifyPosts('/whereabouts/attendance'),
   stubGroups: (caseload, status = 200) => {
     const json = [
       {

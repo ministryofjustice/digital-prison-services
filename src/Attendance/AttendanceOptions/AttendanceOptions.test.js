@@ -23,7 +23,6 @@ describe('<AttendanceOptions />', () => {
         paid: false,
         comments: undefined,
         absentReason: undefined,
-        absentSubReason: undefined,
         locked: false,
         other: false,
       },

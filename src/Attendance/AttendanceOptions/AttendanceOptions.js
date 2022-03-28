@@ -28,13 +28,12 @@ export const updateOffenderAttendance = async (
 ) => {
   let updateSuccess = false
   const eventDetails = { prisonId: agencyId, period, eventDate: date }
-  const { id, attended, paid, absentReason, absentSubReason, comments } = attendanceDetails || {}
+  const { id, attended, paid, absentReason, comments } = attendanceDetails || {}
 
   const offenderAttendanceData = {
     comments,
     paid,
     absentReason,
-    absentSubReason,
     pay: attended && paid,
     other: Boolean(absentReason),
   }

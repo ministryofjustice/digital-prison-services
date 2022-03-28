@@ -17,26 +17,6 @@ const toOffender = ($cell) => ({
   otherActivities: $cell[4]?.textContent,
 })
 
-const setupAttendanceDialog = (verifyOnPage) => {
-  cy.server()
-  cy.route('POST', /.\/api\/attendance*/).as('request')
-
-  cy.visit(pageUrl)
-
-  verifyOnPage()
-
-  const event = 1
-
-  const today = moment()
-
-  datePickerDriver(cy).pickDate(today.date(), today.month(), today.year())
-
-  cy.get('[data-qa="other-option"')
-    .find(`input[name="${offenderNo1 + event}"]`)
-    .click()
-  return today
-}
-
 context('Prisoners unaccounted for', () => {
   const verifyOnPage = () => {
     cy.get('h1').contains('Prisoners unaccounted for')
@@ -188,61 +168,30 @@ context('Prisoners unaccounted for', () => {
     })
   })
 
-  it('should make request to not pay someone without sub reason required', () => {
-    setupAttendanceDialog(verifyOnPage)
+  it('should make request to mark someone as none attended', () => {
+    cy.server()
+    cy.route('POST', /.\/api\/attendance*/).as('request')
 
-    attendanceDialogDriver(cy).markAbsence({ pay: 'yes', absentReason: 'NotRequired' })
-
-    cy.wait('@request').then((xhr) => {
-      const requestBody = xhr.request.body
-
-      expect(requestBody.absentReason).to.eq('NotRequired')
-      expect(requestBody.absentSubReason).to.eq(undefined)
-      expect(requestBody.comments).to.eq('test')
-      expect(requestBody.paid).to.eq(true)
-    })
-  })
-
-  it('should make require sub reason for some absence reasons', () => {
-    setupAttendanceDialog(verifyOnPage)
-
-    attendanceDialogDriver(cy).markAbsence({ pay: 'no', absentReason: 'Refused' })
+    cy.visit(pageUrl)
 
     verifyOnPage()
 
-    cy.get("[data-test='error-summary']").contains('There is a problem')
-    cy.get("[data-test='error-summary']")
-      .find('li')
-      .then(($errors) => {
-        expect($errors.get(0).innerText).to.contain('Select an absence reason')
-      })
+    const event = 1
 
-    attendanceDialogDriver(cy).markAbsence({ pay: 'no', absentReason: 'Refused', absentSubReason: 'Healthcare' })
+    const today = moment()
 
-    cy.wait('@request').then((xhr) => {
-      const requestBody = xhr.request.body
+    datePickerDriver(cy).pickDate(today.date(), today.month(), today.year())
 
-      expect(requestBody.absentReason).to.eq('Refused')
-      expect(requestBody.absentSubReason).to.eq('Healthcare')
-      expect(requestBody.comments).to.eq('testtest')
-      expect(requestBody.paid).to.eq(false)
-    })
-  })
+    cy.get('[data-qa="other-option"')
+      .find(`input[name="${offenderNo1 + event}"]`)
+      .click()
 
-  it('should make request to mark someone as not attended', () => {
-    const today = setupAttendanceDialog(verifyOnPage)
-
-    attendanceDialogDriver(cy).markAbsence({
-      pay: 'yes',
-      absentReason: 'AcceptableAbsence',
-      absentSubReason: 'Courses',
-    })
+    attendanceDialogDriver(cy).markAsPaidAbsence()
 
     cy.wait('@request').then((xhr) => {
       const requestBody = xhr.request.body
 
       expect(requestBody.absentReason).to.eq('AcceptableAbsence')
-      expect(requestBody.absentSubReason).to.eq('Courses')
       expect(requestBody.attended).to.eq(false)
       expect(requestBody.bookingId).to.eq(-1)
       expect(requestBody.comments).to.eq('test')
