@@ -8,7 +8,7 @@ import Button from '@govuk-react/button'
 
 import { ButtonContainer, ButtonCancel } from '../Components/Buttons'
 import { userType } from '../types'
-import { properCaseName, pascalToString } from '../utils'
+import { properCaseName } from '../utils'
 
 const IncentiveLevelCreatedMessage = styled.div`
   @media print {
@@ -23,7 +23,7 @@ const IncentiveLevelCreated = ({ showModal, offender, iepValues, activityName, u
       issuedBy: user.name,
       offenderNo: offender.offenderNo,
       offenderName: `${properCaseName(offender.firstName)} ${properCaseName(offender.lastName)}`,
-      caseNote: `${pascalToString(iepValues.absentReason)}: ${iepValues.comments}`,
+      caseNote: iepValues.caseNote,
       cellLocation: offender.cellLocation,
       activityName,
     }
@@ -79,8 +79,7 @@ IncentiveLevelCreated.propTypes = {
   activityName: PropTypes.string.isRequired,
   iepValues: PropTypes.shape({
     pay: PropTypes.string,
-    absentReason: PropTypes.string,
-    comments: PropTypes.string,
+    caseNote: PropTypes.string,
   }).isRequired,
 }
 
