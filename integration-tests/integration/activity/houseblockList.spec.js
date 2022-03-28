@@ -26,6 +26,7 @@ const attendances = [
   {
     id: 2,
     absentReason: 'UnacceptableAbsence',
+    absentSubReason: 'Courses',
     attended: true,
     bookingId: 3,
     caseNoteId: 0,
@@ -216,6 +217,7 @@ context('Houseblock list page list page', () => {
     cy.get('[data-qa="other-message"').contains('Unacceptable - Incentive Level warning')
     cy.get('[data-qa="other-message"').parent().click({ multiple: true })
     cy.get('[name="absentReason"]').contains('Unacceptable - Incentive Level warning')
+    cy.get('[name="absentSubReason"]').contains('Courses, programmes and interventions')
     cy.get('[name="comments"]').contains('Never turned up')
   })
 

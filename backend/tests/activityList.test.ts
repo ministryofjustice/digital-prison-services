@@ -561,6 +561,7 @@ describe('Activity list controller', () => {
           {
             id: 1,
             absentReason: 'AcceptableAbsence',
+            absentSubReason: 'Courses',
             attended: false,
             paid: true,
             bookingId: 1,
@@ -575,6 +576,7 @@ describe('Activity list controller', () => {
           {
             id: 2,
             absentReason: 'Refused',
+            absentSubReason: 'Behaviour',
             attended: true,
             paid: false,
             bookingId: 2,
@@ -629,6 +631,7 @@ describe('Activity list controller', () => {
               value: 'AcceptableAbsence',
               name: 'Acceptable',
             },
+            absentSubReason: 'Courses',
             comments: 'Some comments or case note text.',
             other: true,
             paid: true,
@@ -653,6 +656,7 @@ describe('Activity list controller', () => {
               value: 'Refused',
               name: 'Refused',
             },
+            absentSubReason: 'Behaviour',
             comments: undefined,
             other: true,
             paid: false,
@@ -691,16 +695,19 @@ describe('Activity list controller', () => {
             id: 1,
             absentReason: 'UnacceptableAbsence',
             bookingId: 1,
+            absentSubReason: 'Behaviour',
           },
           {
             id: 2,
             absentReason: 'RefusedIncentiveLevelWarning',
             bookingId: 2,
+            absentSubReason: 'ExternalMoves',
           },
           {
             id: 3,
             absentReason: 'AcceptableAbsence',
             bookingId: 3,
+            absentSubReason: 'Courses',
           },
         ],
       })
@@ -723,12 +730,15 @@ describe('Activity list controller', () => {
 
       expect(response[0].attendanceInfo.absentReason.value).toBe('UnacceptableAbsence')
       expect(response[0].attendanceInfo.absentReason.name).toBe('Unacceptable - Incentive Level warning')
+      expect(response[0].attendanceInfo.absentSubReason).toBe('Behaviour')
 
       expect(response[1].attendanceInfo.absentReason.value).toBe('RefusedIncentiveLevelWarning')
       expect(response[1].attendanceInfo.absentReason.name).toBe('Refused - Incentive Level warning')
+      expect(response[1].attendanceInfo.absentSubReason).toBe('ExternalMoves')
 
       expect(response[2].attendanceInfo.absentReason.value).toBe('AcceptableAbsence')
       expect(response[2].attendanceInfo.absentReason.name).toBe('Acceptable')
+      expect(response[2].attendanceInfo.absentSubReason).toBe('Courses')
     })
   })
 
@@ -746,6 +756,7 @@ describe('Activity list controller', () => {
         {
           id: 1,
           absentReason: 'UnacceptableAbsence',
+          absentSubReason: 'Behaviour',
           bookingId: 1,
           eventId: 2,
           eventLocationId: 2,
@@ -770,6 +781,7 @@ describe('Activity list controller', () => {
         name: 'Unacceptable - Incentive Level warning',
         value: 'UnacceptableAbsence',
       },
+      absentSubReason: 'Behaviour',
       comments: undefined,
       paid: undefined,
       locked: undefined,
