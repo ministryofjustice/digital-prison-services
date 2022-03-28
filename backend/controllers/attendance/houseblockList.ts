@@ -121,13 +121,14 @@ export const getHouseblockListFactory = (prisonApi, whereaboutsApi) => {
             event.eventLocationId === activityWithAttendance.eventLocationId
         )
 
-      const { id, absentReason, comments, locked, paid, attended } = attendanceInfo || {}
+      const { id, absentReason, absentSubReason, comments, locked, paid, attended } = attendanceInfo || {}
 
       const eventWithAttendance = {
         ...event,
         attendanceInfo: {
           id,
           absentReason: toAbsentReason && toAbsentReason(absentReason),
+          absentSubReason,
           comments,
           locked,
           paid,

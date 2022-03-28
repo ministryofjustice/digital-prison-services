@@ -16,6 +16,7 @@ import { properCaseName } from '../../utils'
 import { FieldWithError, WhenFieldChanges, onHandleErrorClick } from '../../final-form-govuk-helpers'
 import IncentiveLevelCreated from '../../IncentiveLevelCreated'
 import { userType } from '../../types'
+import { ConditionalRadio } from './AttendanceOtherForm.styles'
 
 export function AttendanceOtherForm({
   user,
@@ -177,26 +178,37 @@ export function AttendanceOtherForm({
               ]}
               inline
             />
-            <FieldWithError errors={errors} name="absentReason" component={Select} label="Select a reason">
-              <option value="" disabled>
-                Select
-              </option>
-              {getAbsentReasons(values.pay).map((reason) => (
-                <option key={reason.value} value={reason.value}>
-                  {reason.name}
+            {values.pay && (
+              <FieldWithError errors={errors} name="absentReason" component={Select} label="Select a reason">
+                <option value="" disabled>
+                  Select
                 </option>
-              ))}
-            </FieldWithError>
-            <FieldWithError errors={errors} name="absentSubReason" component={Select} label="Select an absence reason">
-              <option value="" disabled>
-                Select
-              </option>
-              {getAbsentSubReasons(values.pay, values.absentReason).map((reason) => (
-                <option key={reason.value} value={reason.value}>
-                  {reason.name}
-                </option>
-              ))}
-            </FieldWithError>
+                {getAbsentReasons(values.pay).map((reason) => (
+                  <option key={reason.value} value={reason.value}>
+                    {reason.name}
+                  </option>
+                ))}
+              </FieldWithError>
+            )}
+            {values.pay && shouldTriggerSubReason(values.absentReason) && (
+              <ConditionalRadio>
+                <FieldWithError
+                  errors={errors}
+                  name="absentSubReason"
+                  component={Select}
+                  label="Select an absence reason"
+                >
+                  <option value="" disabled>
+                    Select
+                  </option>
+                  {getAbsentSubReasons(values.pay, values.absentReason).map((reason) => (
+                    <option key={reason.value} value={reason.value}>
+                      {reason.name}
+                    </option>
+                  ))}
+                </FieldWithError>
+              </ConditionalRadio>
+            )}
             <FieldWithError errors={errors} name="comments" component={TextArea}>
               Enter {commentOrCaseNote(values.absentReason)}
             </FieldWithError>
@@ -240,6 +252,7 @@ AttendanceOtherForm.propTypes = {
     attendanceInfo: PropTypes.shape({
       paid: PropTypes.bool,
       absentReason: PropTypes.string,
+      absentSubReason: PropTypes.string,
       id: PropTypes.number,
       comments: PropTypes.string,
     }),

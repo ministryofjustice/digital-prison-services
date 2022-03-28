@@ -257,7 +257,9 @@ context('Activity list page', () => {
           attended: false,
           paid: false,
           absentReason: 'UnacceptableAbsence',
+          absentSubReason: 'Courses',
           eventDate: '2019-05-15',
+          comments: 'Never turned up',
         },
         {
           id: 2,
@@ -301,6 +303,11 @@ context('Activity list page', () => {
       expect($inputs.get(0).innerText).to.eq('Other')
       expect($inputs.get(1).innerText).to.eq('Unacceptable - Incentive Level warning')
     })
+    cy.get('[data-qa="other-message"').contains('Unacceptable - Incentive Level warning')
+    cy.get('[data-qa="other-message"').parent().click({ multiple: true })
+    cy.get('[name="absentReason"]').contains('Unacceptable - Incentive Level warning')
+    cy.get('[name="absentSubReason"]').contains('Courses, programmes and interventions')
+    cy.get('[name="comments"]').contains('Never turned up')
   })
 
   it('creates new non attendance with absent reason then updates to attended', () => {
