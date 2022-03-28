@@ -1,4 +1,5 @@
 const activityPage = require('../../pages/whereabouts/activityPage')
+const attendanceDialogDriver = require('../../componentDrivers/attendanceDialogDriver')
 
 const caseload = 'MDI'
 const date = new Date().toISOString().split('T')[0]
@@ -256,7 +257,9 @@ context('Activity list page', () => {
           attended: false,
           paid: false,
           absentReason: 'UnacceptableAbsence',
+          absentSubReason: 'Courses',
           eventDate: '2019-05-15',
+          comments: 'Never turned up',
         },
         {
           id: 2,
@@ -300,6 +303,11 @@ context('Activity list page', () => {
       expect($inputs.get(0).innerText).to.eq('Other')
       expect($inputs.get(1).innerText).to.eq('Unacceptable - Incentive Level warning')
     })
+    cy.get('[data-qa="other-message"').contains('Unacceptable - Incentive Level warning')
+    cy.get('[data-qa="other-message"').parent().click({ multiple: true })
+    cy.get('[name="absentReason"]').find(':selected').contains('Unacceptable - Incentive Level warning')
+    cy.get('[name="absentSubReason"]').find(':selected').contains('Courses, programmes and interventions')
+    cy.get('[name="comments"]').contains('Never turned up')
   })
 
   it('creates new non attendance with absent reason then updates to attended', () => {
@@ -372,7 +380,11 @@ context('Activity list page', () => {
     aPage.getAbsenceReasonsInput().first().check()
 
     // then: "Fill out the absent reason form as an acceptable absence"
-    aPage.fillOutAbsentReason()
+    attendanceDialogDriver(cy).markAbsence({
+      pay: 'yes',
+      absentReason: 'AcceptableAbsence',
+      absentSubReason: 'Courses',
+    })
 
     // then: "Mark as attended"
     aPage.getAttendedValues().then(($inputs) => {
@@ -380,8 +392,22 @@ context('Activity list page', () => {
     })
 
     // then: "An attendance record should have been created and updated"
-    cy.task('verifyPostAttendance').then((val) => {
-      expect(JSON.parse(val.text).count).to.equal(1)
+    cy.task('verifyPostAttendance').then((requests) => {
+      expect(requests).to.have.lengthOf(1)
+      expect(JSON.parse(requests[0].body)).to.deep.equal({
+        absentReason: 'AcceptableAbsence',
+        absentSubReason: 'Courses',
+        attended: false,
+        bookingId: 101,
+        comments: 'test',
+        eventDate: date,
+        eventId: 100,
+        eventLocationId: 1,
+        offenderNo: 'A1234AA',
+        paid: true,
+        period: 'AM',
+        prisonId: 'MDI',
+      })
     })
   })
 

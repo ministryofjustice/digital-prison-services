@@ -24,7 +24,6 @@ export default ({ prisonApi }) =>
       const rows = activeObligations
         .sort((left, right) => sortByDateTime(right.startDateTime, left.startDateTime))
         .map((obligation) => {
-          // @ts-expect-error ts-migrate(2339) FIXME: Property 'description' does not exist on type '{}'... Remove this comment to see the full error message
           const { description: prisonName } = prisons.find((prison) => prison.agencyId === obligation.prisonId)
           const { amountToPay, amountPaid, comment } = obligation
 

@@ -16,13 +16,14 @@ import { properCaseName } from '../../utils'
 import { FieldWithError, WhenFieldChanges, onHandleErrorClick } from '../../final-form-govuk-helpers'
 import IncentiveLevelCreated from '../../IncentiveLevelCreated'
 import { userType } from '../../types'
+import { ConditionalRadio } from './AttendanceOtherForm.styles'
 
 export function AttendanceOtherForm({
   user,
   offender,
   updateOffenderAttendance,
   absentReasons,
-  absentReasons: { triggersIEPWarning },
+  absentReasons: { triggersIEPWarning, triggersAbsentSubReason },
   showModal,
   activityName,
   resetErrorDispatch,
@@ -37,8 +38,10 @@ export function AttendanceOtherForm({
   date,
 }) {
   const { offenderNo, bookingId, eventId, eventLocationId, attendanceInfo } = offender
-  const { id, absentReason, comments } = attendanceInfo || {}
+  const { id, absentReason, absentSubReason, comments } = attendanceInfo || {}
   const shouldTriggerIEP = (selectedReason) => triggersIEPWarning && triggersIEPWarning.includes(selectedReason)
+  const shouldTriggerSubReason = (selectedReason) =>
+    triggersAbsentSubReason && triggersAbsentSubReason.includes(selectedReason)
   const commentOrCaseNote = (selectedReason) => (shouldTriggerIEP(selectedReason) ? 'case note' : 'comment')
 
   const validateThenSubmit = (submitHandler) => async (values) => {
@@ -51,6 +54,10 @@ export function AttendanceOtherForm({
 
     if (!values.absentReason) {
       formErrors.push({ targetName: 'absentReason', text: 'Select a reason' })
+    }
+
+    if (!values.absentSubReason && shouldTriggerSubReason(values.absentReason)) {
+      formErrors.push({ targetName: 'absentSubReason', text: 'Select an absence reason' })
     }
 
     if (!commentText) {
@@ -97,6 +104,7 @@ export function AttendanceOtherForm({
       eventId,
       eventLocationId,
       absentReason: reasons.find((ar) => ar.value === values.absentReason),
+      absentSubReason: values.absentSubReason,
       comments: values.comments,
       attended: false,
     }
@@ -122,6 +130,10 @@ export function AttendanceOtherForm({
     if (!pay) return []
     return pay === 'yes' ? absentReasons.paidReasons : absentReasons.unpaidReasons
   }
+  const getAbsentSubReasons = (pay, reason) => {
+    if (!pay || !shouldTriggerSubReason(reason)) return []
+    return pay === 'yes' ? absentReasons.paidSubReasons : absentReasons.unpaidSubReasons
+  }
 
   const getPreviousPayStatus = () => {
     if (id) return attendanceInfo.paid ? 'yes' : 'no'
@@ -131,6 +143,7 @@ export function AttendanceOtherForm({
   const initialValues = {
     pay: getPreviousPayStatus(),
     absentReason: absentReason && absentReason.value,
+    absentSubReason,
     comments,
   }
 
@@ -143,7 +156,12 @@ export function AttendanceOtherForm({
       render={({ handleSubmit, submitting, pristine, submitError: errors, values }) => (
         <form onSubmit={handleSubmit}>
           {errors && (
-            <ErrorSummary onHandleErrorClick={onHandleErrorClick} heading="There is a problem" errors={errors} />
+            <ErrorSummary
+              onHandleErrorClick={onHandleErrorClick}
+              heading="There is a problem"
+              errors={errors}
+              data-test="error-summary"
+            />
           )}
           <WhenFieldChanges field="pay" becomes={values.pay || ''} set="absentReason" to="" />
           <Fieldset>
@@ -160,16 +178,37 @@ export function AttendanceOtherForm({
               ]}
               inline
             />
-            <FieldWithError errors={errors} name="absentReason" component={Select} label="Select a reason">
-              <option value="" disabled>
-                Select
-              </option>
-              {getAbsentReasons(values.pay).map((reason) => (
-                <option key={reason.value} value={reason.value}>
-                  {reason.name}
+            {values.pay && (
+              <FieldWithError errors={errors} name="absentReason" component={Select} label="Select a reason">
+                <option value="" disabled>
+                  Select
                 </option>
-              ))}
-            </FieldWithError>
+                {getAbsentReasons(values.pay).map((reason) => (
+                  <option key={reason.value} value={reason.value}>
+                    {reason.name}
+                  </option>
+                ))}
+              </FieldWithError>
+            )}
+            {values.pay && shouldTriggerSubReason(values.absentReason) && (
+              <ConditionalRadio>
+                <FieldWithError
+                  errors={errors}
+                  name="absentSubReason"
+                  component={Select}
+                  label="Select an absence reason"
+                >
+                  <option value="" disabled>
+                    Select
+                  </option>
+                  {getAbsentSubReasons(values.pay, values.absentReason).map((reason) => (
+                    <option key={reason.value} value={reason.value}>
+                      {reason.name}
+                    </option>
+                  ))}
+                </FieldWithError>
+              </ConditionalRadio>
+            )}
             <FieldWithError errors={errors} name="comments" component={TextArea}>
               Enter {commentOrCaseNote(values.absentReason)}
             </FieldWithError>
@@ -195,6 +234,10 @@ AttendanceOtherForm.propTypes = {
     paidReasons: PropTypes.arrayOf(PropTypes.shape({ value: PropTypes.string, name: PropTypes.string })).isRequired,
     unpaidReasons: PropTypes.arrayOf(PropTypes.shape({ value: PropTypes.string, name: PropTypes.string })).isRequired,
     triggersIEPWarning: PropTypes.arrayOf(PropTypes.string).isRequired,
+    triggersAbsentSubReason: PropTypes.arrayOf(PropTypes.string).isRequired,
+    paidSubReasons: PropTypes.arrayOf(PropTypes.shape({ value: PropTypes.string, name: PropTypes.string })).isRequired,
+    unpaidSubReasons: PropTypes.arrayOf(PropTypes.shape({ value: PropTypes.string, name: PropTypes.string }))
+      .isRequired,
   }).isRequired,
 
   // props
@@ -209,6 +252,7 @@ AttendanceOtherForm.propTypes = {
     attendanceInfo: PropTypes.shape({
       paid: PropTypes.bool,
       absentReason: PropTypes.string,
+      absentSubReason: PropTypes.string,
       id: PropTypes.number,
       comments: PropTypes.string,
     }),

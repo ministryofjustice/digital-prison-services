@@ -24,11 +24,11 @@ const extractAttendanceInfo = (attendanceInformation, event, absentReasons = [])
     )
     if (!offenderAttendanceInfo) return null
 
-    const { id, absentReason, attended, paid, comments, locked } = offenderAttendanceInfo || {}
+    const { id, absentReason, absentSubReason, attended, paid, comments, locked } = offenderAttendanceInfo || {}
     const mapToAbsentReason = absentReasonMapper(absentReasons)
 
     const attendanceInfo = absentReason
-      ? { id, absentReason: mapToAbsentReason(absentReason), comments, paid, locked }
+      ? { id, absentReason: mapToAbsentReason(absentReason), absentSubReason, comments, paid, locked }
       : { id, comments, paid, locked }
 
     // @ts-expect-error ts-migrate(2339) FIXME: Property 'other' does not exist on type '{ id: any... Remove this comment to see the full error message

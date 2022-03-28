@@ -506,6 +506,7 @@ describe('Houseblock list controller', () => {
           },
           {
             absentReason: 'AcceptableAbsence',
+            absentSubReason: 'Courses',
             attended: false,
             bookingId: 2,
             caseNoteId: 0,
@@ -525,6 +526,7 @@ describe('Houseblock list controller', () => {
           },
           {
             absentReason: 'UnacceptableAbsence',
+            absentSubReason: 'Behaviour',
             attended: false,
             bookingId: 2,
             caseNoteId: 0,
@@ -553,6 +555,7 @@ describe('Houseblock list controller', () => {
             {
               attendanceInfo: {
                 absentReason: undefined,
+                absentSubReason: undefined,
                 comments: undefined,
                 id: 1,
                 locked: true,
@@ -596,6 +599,7 @@ describe('Houseblock list controller', () => {
                   value: 'AcceptableAbsence',
                   name: 'Acceptable',
                 },
+                absentSubReason: 'Courses',
                 comments: 'string',
                 id: 2,
                 locked: true,
@@ -623,6 +627,7 @@ describe('Houseblock list controller', () => {
                   value: 'UnacceptableAbsence',
                   name: 'Unacceptable - Incentive Level warning',
                 },
+                absentSubReason: 'Behaviour',
                 comments: 'string',
                 id: 2,
                 locked: true,
