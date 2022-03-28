@@ -143,7 +143,7 @@ export function AttendanceOtherForm({
   const initialValues = {
     pay: getPreviousPayStatus(),
     absentReason: absentReason && absentReason.value,
-    absentSubReason: absentSubReason && absentSubReason.value,
+    absentSubReason,
     comments,
   }
 

@@ -391,12 +391,14 @@ describe('<AttendanceOtherForm />', () => {
           value: 'AcceptableAbsence',
           name: 'Acceptable',
         },
+        absentSubReason: 'Courses',
         comments: 'Acceptable reason comment',
       }
       buildWrapper(mount(<AttendanceOtherForm {...props} />))
       expect(yesRadio.props().checked).toBe(true)
       expect(noRadio.props().checked).toBe(false)
       expect(reasonSelector().props().value).toBe('AcceptableAbsence')
+      expect(subReasonSelector().props().value).toBe('Courses')
       expect(commentInput.props().value).toBe('Acceptable reason comment')
     })
 
@@ -405,15 +407,17 @@ describe('<AttendanceOtherForm />', () => {
         id: 2,
         paid: false,
         absentReason: {
-          value: 'UncceptableAbsence',
+          value: 'UnacceptableAbsence',
           name: 'Unacceptable',
         },
+        absentSubReason: 'Courses',
         comments: 'Uncceptable reason comment',
       }
       buildWrapper(mount(<AttendanceOtherForm {...props} />))
       expect(yesRadio.props().checked).toBe(false)
       expect(noRadio.props().checked).toBe(true)
-      expect(reasonSelector().props().value).toBe('UncceptableAbsence')
+      expect(reasonSelector().props().value).toBe('UnacceptableAbsence')
+      expect(subReasonSelector().props().value).toBe('Courses')
       expect(commentInput.props().value).toBe('Uncceptable reason comment')
     })
   })
