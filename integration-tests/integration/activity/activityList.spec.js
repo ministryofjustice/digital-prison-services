@@ -305,8 +305,8 @@ context('Activity list page', () => {
     })
     cy.get('[data-qa="other-message"').contains('Unacceptable - Incentive Level warning')
     cy.get('[data-qa="other-message"').parent().click({ multiple: true })
-    cy.get('[name="absentReason"]').contains('Unacceptable - Incentive Level warning')
-    cy.get('[name="absentSubReason"]').contains('Courses, programmes and interventions')
+    cy.get('[name="absentReason"]').find(':selected').contains('Unacceptable - Incentive Level warning')
+    cy.get('[name="absentSubReason"]').find(':selected').contains('Courses, programmes and interventions')
     cy.get('[name="comments"]').contains('Never turned up')
   })
 
