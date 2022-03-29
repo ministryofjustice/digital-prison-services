@@ -88,7 +88,7 @@ export function AttendanceOtherForm({
       const caseNoteSuffix = absentSubReasonOption
         ? `${absentSubReasonOption.name}. ${values.comments}`
         : values.comments
-      const iepValues = { pay: values.pay, caseNote: `${absentReasonOption.name}: ${caseNoteSuffix}` }
+      const iepValues = { pay: values.pay, caseNote: `${absentReasonOption.name} - ${caseNoteSuffix}` }
       showModal(
         true,
         <IncentiveLevelCreated
