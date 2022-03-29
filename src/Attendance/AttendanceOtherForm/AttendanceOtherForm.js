@@ -77,12 +77,24 @@ export function AttendanceOtherForm({
     const attendanceUpdated = await submitHandler(values)
 
     if (attendanceUpdated && shouldTriggerIEP(values.absentReason)) {
+      const { reasons, subReasons } =
+        values.pay === 'yes'
+          ? { reasons: absentReasons.paidReasons, subReasons: absentReasons.paidSubReasons }
+          : { reasons: absentReasons.unpaidReasons, subReasons: absentReasons.unpaidSubReasons }
+      // need to find selected options so can put into the case note
+      const absentReasonOption = reasons.find((ar) => ar.value === values.absentReason)
+      const absentSubReasonOption = subReasons.find((ar) => ar.value === values.absentSubReason)
+
+      const caseNoteSuffix = absentSubReasonOption
+        ? `${absentSubReasonOption.name}. ${values.comments}`
+        : values.comments
+      const iepValues = { pay: values.pay, caseNote: `${absentReasonOption.name} - ${caseNoteSuffix}` }
       showModal(
         true,
         <IncentiveLevelCreated
           showModal={showModal}
           offender={offender}
-          iepValues={values}
+          iepValues={iepValues}
           activityName={activityName}
           user={user}
         />
@@ -164,6 +176,7 @@ export function AttendanceOtherForm({
             />
           )}
           <WhenFieldChanges field="pay" becomes={values.pay || ''} set="absentReason" to="" />
+          <WhenFieldChanges field="absentReason" becomes={values.absentReason || ''} set="absentSubReason" to="" />
           <Fieldset>
             <Fieldset.Legend size="MEDIUM" isPageHeading>
               Do you want to pay {properCaseName(offender.firstName)} {properCaseName(offender.lastName)}?
