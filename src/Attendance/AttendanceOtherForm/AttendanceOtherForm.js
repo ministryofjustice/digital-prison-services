@@ -176,6 +176,7 @@ export function AttendanceOtherForm({
             />
           )}
           <WhenFieldChanges field="pay" becomes={values.pay || ''} set="absentReason" to="" />
+          <WhenFieldChanges field="absentReason" becomes={values.absentReason || ''} set="absentSubReason" to="" />
           <Fieldset>
             <Fieldset.Legend size="MEDIUM" isPageHeading>
               Do you want to pay {properCaseName(offender.firstName)} {properCaseName(offender.lastName)}?
