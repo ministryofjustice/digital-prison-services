@@ -2,7 +2,6 @@ import moment from 'moment'
 import getExternalEventsForOffenders from '../../shared/getExternalEventsForOffenders'
 import log from '../../log'
 import { switchDateFormat, distinct } from '../../utils'
-import { absentReasonMapper } from '../../mappers'
 
 function safeTimeCompare(a, b) {
   if (a && b) return moment(b).isBefore(a)
@@ -80,8 +79,6 @@ export const getHouseblockListFactory = (prisonApi, whereaboutsApi) => {
 
     const bookings = Array.from(new Set(data.map((event) => event.bookingId)))
     const shouldGetAttendanceForBookings = bookings.length > 0
-    const absentReasons = await whereaboutsApi.getAbsenceReasons(context)
-    const toAbsentReason = absentReasonMapper(absentReasons)
 
     const attendanceInformation = shouldGetAttendanceForBookings
       ? await whereaboutsApi.getAttendanceForBookings(context, {
@@ -121,13 +118,14 @@ export const getHouseblockListFactory = (prisonApi, whereaboutsApi) => {
             event.eventLocationId === activityWithAttendance.eventLocationId
         )
 
-      const { id, absentReason, absentSubReason, comments, locked, paid, attended } = attendanceInfo || {}
+      const { id, absentReason, absentReasonDescription, absentSubReason, comments, locked, paid, attended } =
+        attendanceInfo || {}
 
       const eventWithAttendance = {
         ...event,
         attendanceInfo: {
           id,
-          absentReason: toAbsentReason && toAbsentReason(absentReason),
+          absentReason: absentReason && { value: absentReason, name: absentReasonDescription },
           absentSubReason,
           comments,
           locked,
