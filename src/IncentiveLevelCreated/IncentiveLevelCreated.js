@@ -17,12 +17,14 @@ const IncentiveLevelCreatedMessage = styled.div`
 `
 
 const IncentiveLevelCreated = ({ showModal, offender, iepValues, activityName, user }) => {
+  const offenderName = `${properCaseName(offender.firstName)} ${properCaseName(offender.lastName)}`
+
   const setPrintIepData = () => {
     const incentiveLevelSlipData = {
       raisedBy: user.name,
       issuedBy: user.name,
       offenderNo: offender.offenderNo,
-      offenderName: `${properCaseName(offender.firstName)} ${properCaseName(offender.lastName)}`,
+      offenderName,
       caseNote: iepValues.caseNote,
       cellLocation: offender.cellLocation,
       activityName,
@@ -38,18 +40,19 @@ const IncentiveLevelCreated = ({ showModal, offender, iepValues, activityName, u
   }
 
   const isMobile = /Mobi|Android/i.test(navigator.userAgent)
+  const offenderNamePlural = `${offenderName}’${offenderName.endsWith('s') ? '' : 's'}`
 
   return (
     <div data-qa="iep-created">
       <IncentiveLevelCreatedMessage>
-        <H1 size="MEDIUM">An Incentive Level warning has been created</H1>
+        <H1 size="MEDIUM">An incentive level warning has been created</H1>
         <ButtonContainer>
           {!isMobile && (
             <>
-              <Paragraph>Do you want to print an Incentive Level warning slip?</Paragraph>
-              <HintText>You can also print this later from their case notes.</HintText>
+              <Paragraph>Do you want to print a copy of the incentive level warning?</Paragraph>
+              <HintText>You can also print this later from {offenderNamePlural} case notes.</HintText>
               <Button onClick={handlePrint} mb={0}>
-                Yes - print slip
+                Yes
               </Button>
               <ButtonCancel mb={0} onClick={() => showModal(false)}>
                 No
