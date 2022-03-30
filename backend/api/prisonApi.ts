@@ -280,8 +280,6 @@ export const prisonApiFactory = (client) => {
   const addSingleAppointment = (context, bookingId, body) =>
     post(context, `/api/bookings/${bookingId}/appointments`, body)
 
-  const changeIepLevel = (context, bookingId, body) => post(context, `/api/bookings/${bookingId}/iepLevels`, body)
-
   const getOffenderActivities = (context, { agencyId, date, period }) =>
     get(context, `/api/schedules/${agencyId}/activities?date=${date}&timeSlot=${period}`)
 
@@ -506,7 +504,6 @@ export const prisonApiFactory = (client) => {
     getAdjudicationDetails,
     getAdjudicationsForBooking,
     addAppointments,
-    changeIepLevel,
     getOffenderActivities,
     getAlertTypes,
     createAlert,

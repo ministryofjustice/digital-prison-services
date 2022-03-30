@@ -66,7 +66,7 @@ export default ({ prisonApi, incentivesApi }) => {
     }
 
     try {
-      await prisonApi.changeIepLevel(res.locals, bookingId, {
+      await incentivesApi.changeIepLevel(res.locals, bookingId, {
         iepLevel: newIepLevel,
         comment: reason,
       })
