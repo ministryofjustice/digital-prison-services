@@ -26,6 +26,13 @@ context('A user can view attendance changes', () => {
         changedTo: 'Refused',
       },
     ])
+    cy.task('stubGetUserDetailsList', [
+      {
+        firstName: 'Terry',
+        lastName: 'Smith',
+        username: 'ITAG_USER',
+      },
+    ])
     cy.task('stubScheduledActivities', [
       { eventId: 1, comment: 'Houseblock 1', firstName: 'bob', lastName: 'sut', offenderNo: 'A123456' },
     ])
@@ -48,6 +55,6 @@ context('A user can view attendance changes', () => {
     tableDataRow.changedFrom().contains('Attended')
     tableDataRow.changedTo().contains('Refused')
     tableDataRow.dateAndTime().contains('10 October 2010 - 20:00')
-    tableDataRow.changedBy().contains('ITAG_USER name')
+    tableDataRow.changedBy().contains('Terry Smith')
   })
 })
