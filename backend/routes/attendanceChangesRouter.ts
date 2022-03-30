@@ -19,7 +19,7 @@ const toUserMap = (userDetails) =>
   userDetails.reduce(
     (acc, current) => ({
       ...acc,
-      [current.username]: current.name,
+      [current.username]: `${current.firstName} ${current.lastName}`,
     }),
     {}
   )
@@ -60,7 +60,7 @@ export default ({ prisonApi, whereaboutsApi, oauthApi }) =>
     const activities = await prisonApi.getScheduledActivities(res.locals, { agencyId, eventIds })
 
     const userNames = [...new Set(changes.map((change) => change.changedBy))]
-    const userDetails = await Promise.all(userNames.map((username) => oauthApi.userDetails(res.locals, username)))
+    const userDetails = await prisonApi.getUserDetailsList(res.locals, userNames)
 
     const activitiesMap = toActivitiesMap(activities)
     const userMap = toUserMap(userDetails)
