@@ -478,7 +478,7 @@ module.exports = (on) => {
     stubCurrentlyOut: ({ livingUnitId, movements }) => prisonApi.stubCurrentlyOut(livingUnitId, movements),
     stubTotalCurrentlyOut: ({ agencyId, movements }) => prisonApi.stubTotalCurrentlyOut(agencyId, movements),
     stubGetAgencyIepLevels: (response) => incentivesApi.stubGetAgencyIepLevels(response),
-    stubChangeIepLevel: (body) => prisonApi.stubChangeIepLevel(body),
+    stubChangeIepLevel: (body) => incentivesApi.stubChangeIepLevel(body),
     stubGetPrisonerDamageObligations: (response) => prisonApi.stubGetPrisonerDamageObligations(response),
     stubGetTransactionHistory: ({ response, accountCode, transactionType, fromDate, toDate }) =>
       prisonApi.stubGetTransactionHistory({ response, accountCode, transactionType, fromDate, toDate }),

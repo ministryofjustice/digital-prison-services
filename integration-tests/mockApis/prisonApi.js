@@ -1725,20 +1725,6 @@ module.exports = {
         jsonBody: alerts || [],
       },
     }),
-  stubChangeIepLevel: (body) =>
-    stubFor({
-      request: {
-        method: 'POST',
-        urlPattern: '/api/bookings/[0-9]+?/iepLevels',
-      },
-      response: {
-        status: 200,
-        headers: {
-          'Content-Type': 'application/json;charset=UTF-8',
-        },
-        jsonBody: body,
-      },
-    }),
   stubGetPrisonerDamageObligations: (response) =>
     stubFor({
       request: {
