@@ -1,6 +1,7 @@
 import React from 'react'
 import { shallow } from 'enzyme'
 import Button from '@govuk-react/button'
+import HintText from '@govuk-react/hint-text'
 import { mockUserAgent } from 'jest-useragent-mock'
 import IncentiveLevelCreated from '.'
 
@@ -44,6 +45,19 @@ describe('<IncentiveLevelCreated />', () => {
   it('close the Incentive Level created modal when print dialog has been closed', () => {
     global.afterPrint()
     expect(props.showModal).toHaveBeenCalledWith(false)
+  })
+
+  describe('display offender name with correct pluralisation', () => {
+    it('should display offender name with s on end', () => {
+      const hintText = wrapper.find(HintText)
+      expect(hintText.props().children[1]).toEqual('Test Offender’s')
+    })
+    it('should display offender name with apostrophe on end', () => {
+      props.offender.lastName = 'Jones'
+      wrapper = shallow(<IncentiveLevelCreated {...props} />)
+      const hintText = wrapper.find(HintText)
+      expect(hintText.props().children[1]).toEqual('Test Jones’')
+    })
   })
 
   it('should display a close button on mobile devices', () => {
