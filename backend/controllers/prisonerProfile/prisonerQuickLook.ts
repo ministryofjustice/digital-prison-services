@@ -45,7 +45,14 @@ const createFinanceLink = (offenderNo, path, value) =>
     formatCurrency(value || 0)
   }</a>`
 
-export default ({ prisonerProfileService, prisonApi, telemetry, offenderSearchApi, systemOauthClient }) =>
+export default ({
+    prisonerProfileService,
+    prisonApi,
+    telemetry,
+    offenderSearchApi,
+    systemOauthClient,
+    incentivesApi,
+  }) =>
   async (req, res) => {
     const {
       user: { activeCaseLoad },
@@ -79,7 +86,7 @@ export default ({ prisonerProfileService, prisonApi, telemetry, offenderSearchAp
         prisonApi.getPrisonerBalances(res.locals, bookingId),
         prisonApi.getPrisonerDetails(res.locals, offenderNo),
         prisonApi.getPrisonerSentenceDetails(res.locals, offenderNo),
-        prisonApi.getIepSummaryForBooking(res.locals, bookingId, false),
+        incentivesApi.getIepSummaryForBooking(res.locals, bookingId),
         prisonApi.getPositiveCaseNotes(res.locals, bookingId, dateThreeMonthsAgo, today),
         prisonApi.getNegativeCaseNotes(res.locals, bookingId, dateThreeMonthsAgo, today),
         prisonApi.getAdjudicationsForBooking(res.locals, bookingId),

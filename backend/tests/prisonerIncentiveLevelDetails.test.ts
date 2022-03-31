@@ -4,6 +4,7 @@ describe('Prisoner incentive level details', () => {
   const offenderNo = 'ABC123'
   const bookingId = '123'
   const prisonApi = {}
+  const incentivesApi = {}
   const oauthApi = {}
 
   let req
@@ -27,7 +28,7 @@ describe('Prisoner incentive level details', () => {
       .mockResolvedValue({ agencyId: 'MDI', bookingId, firstName: 'John', lastName: 'Smith' })
 
     // @ts-expect-error ts-migrate(2339) FIXME: Property 'getIepSummaryForBooking' does not exist ... Remove this comment to see the full error message
-    prisonApi.getIepSummaryForBooking = jest.fn().mockReturnValue({
+    incentivesApi.getIepSummaryForBooking = jest.fn().mockReturnValue({
       bookingId: -1,
       iepDate: '2017-08-15',
       iepTime: '2017-08-15T16:04:35',
@@ -82,7 +83,7 @@ describe('Prisoner incentive level details', () => {
     oauthApi.userRoles = jest.fn().mockReturnValue([])
 
     // @ts-expect-error ts-migrate(2345) FIXME: Argument of type '{ prisonApi: {}; oauthApi: {}; l... Remove this comment to see the full error message
-    controller = prisonerIncentiveLevelDetails({ prisonApi, oauthApi, logError })
+    controller = prisonerIncentiveLevelDetails({ prisonApi, incentivesApi, oauthApi, logError })
   })
 
   it('should make the expected API calls', async () => {
@@ -91,7 +92,7 @@ describe('Prisoner incentive level details', () => {
     // @ts-expect-error ts-migrate(2339) FIXME: Property 'getDetails' does not exist on type '{}'.
     expect(prisonApi.getDetails).toHaveBeenCalledWith(res.locals, offenderNo)
     // @ts-expect-error ts-migrate(2339) FIXME: Property 'getIepSummaryForBooking' does not exist ... Remove this comment to see the full error message
-    expect(prisonApi.getIepSummaryForBooking).toHaveBeenCalledWith(res.locals, bookingId, true)
+    expect(incentivesApi.getIepSummaryForBooking).toHaveBeenCalledWith(res.locals, bookingId)
     // @ts-expect-error ts-migrate(2339) FIXME: Property 'userRoles' does not exist on type '{}'.
     expect(oauthApi.userRoles).toHaveBeenCalledWith(res.locals)
   })
@@ -373,7 +374,7 @@ describe('Prisoner incentive level details', () => {
   it('should return default message for no incentive level history', async () => {
     req.query = {}
     // @ts-expect-error ts-migrate(2339) FIXME: Property 'getIepSummaryForBooking' does not exist ... Remove this comment to see the full error message
-    prisonApi.getIepSummaryForBooking = jest.fn().mockReturnValue({
+    incentivesApi.getIepSummaryForBooking = jest.fn().mockReturnValue({
       bookingId: -1,
       iepDate: '2017-08-15',
       iepTime: '2017-08-15T16:04:35',
@@ -397,7 +398,7 @@ describe('Prisoner incentive level details', () => {
     req.query = { fromDate: '10/08/2017', toDate: '10/08/2017' }
 
     // @ts-expect-error ts-migrate(2339) FIXME: Property 'getIepSummaryForBooking' does not exist ... Remove this comment to see the full error message
-    prisonApi.getIepSummaryForBooking = jest.fn().mockReturnValue({
+    incentivesApi.getIepSummaryForBooking = jest.fn().mockReturnValue({
       bookingId: -1,
       iepDate: '2017-08-15',
       iepTime: '2017-08-15T16:04:35',
