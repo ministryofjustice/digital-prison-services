@@ -466,7 +466,7 @@ module.exports = (on) => {
     stubOffenderDetails: ({ offenderNo, details }) => community.stubOffenderDetails(offenderNo, details),
     stubDocuments: ({ offenderNo, documents }) => community.stubDocuments(offenderNo, documents),
     stubDocument: ({ offenderNo, documentId, content }) => community.stubDocument(offenderNo, documentId, content),
-    stubIepSummaryForBooking: (iepSummary) => prisonApi.stubIepSummaryForBooking(iepSummary),
+    stubGetIepSummaryForBooking: (iepSummary) => incentivesApi.stubGetIepSummaryForBooking(iepSummary),
     stubMovementsIn: ({ agencyId, fromDate, movements }) =>
       prisonApi.stubMovementsIn({ agencyId, fromDate, movements }),
     stubMovementsOut: ({ agencyId, fromDate, movements }) =>

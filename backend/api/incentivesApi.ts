@@ -12,10 +12,13 @@ export const incentivesApiFactory = (client) => {
 
   const getAgencyIepLevels = (context, agencyId) => get(context, `/iep/levels/${agencyId}`)
 
+  const getIepSummaryForBooking = (context, bookingId) => get(context, `/iep/reviews/booking/${bookingId}`)
+
   const changeIepLevel = (context, bookingId, body) => post(context, `/iep/reviews/booking/${bookingId}`, body)
 
   return {
     getAgencyIepLevels,
+    getIepSummaryForBooking,
     changeIepLevel,
   }
 }
