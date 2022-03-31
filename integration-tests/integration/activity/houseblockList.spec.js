@@ -668,7 +668,7 @@ context('Houseblock list page list page', () => {
 
         attendanceDialogDriver(cy).markAbsence({
           pay: 'no',
-          absentReason: 'Refused',
+          absentReason: 'RefusedIncentiveLevelWarning',
           absentSubReason: 'Courses',
           comments: 'Never turned up',
         })
@@ -683,7 +683,7 @@ context('Houseblock list page list page', () => {
           expect(requestBody.offenderNo).to.eq('A1234AC')
           expect(requestBody.paid).to.eq(false)
           expect(requestBody.prisonId).to.eq('MDI')
-          expect(requestBody.absentReason).to.eq('Refused')
+          expect(requestBody.absentReason).to.eq('RefusedIncentiveLevelWarning')
           expect(requestBody.absentSubReason).to.eq('Courses')
         })
 
