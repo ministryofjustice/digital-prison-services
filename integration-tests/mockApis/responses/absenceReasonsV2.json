@@ -15,28 +15,28 @@
   ],
   "unpaidReasons": [
     {
-      "code": "Refused",
-      "name": "Refused to attend"
-    },
-    {
-      "code": "RefusedIncentiveLevelWarning",
-      "name": "Refused to attend"
-    },
-    {
-      "code": "RestDay",
-      "name": "Rest day"
+      "code": "SessionCancelled",
+      "name": "Session cancelled"
     },
     {
       "code": "RestInCellOrSick",
       "name": "Rest in cell or sick"
     },
     {
-      "code": "SessionCancelled",
-      "name": "Session cancelled"
+      "code": "RestDay",
+      "name": "Rest day"
     },
     {
       "code": "UnacceptableAbsence",
       "name": "Unacceptable absence"
+    },
+    {
+      "code": "Refused",
+      "name": "Refused to attend"
+    },
+    {
+      "code": "RefusedIncentiveLevelWarning",
+      "name": "Refused to attend"
     }
   ],
   "triggersIEPWarning": ["RefusedIncentiveLevelWarning", "UnacceptableAbsence"],

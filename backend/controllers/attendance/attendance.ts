@@ -1,8 +1,19 @@
 import moment from 'moment'
 import { switchDateFormat } from '../../utils'
 import log from '../../log'
+import { absentReasonMapper } from '../../mappers'
 
 export const attendanceFactory = (whereaboutsApi) => {
+  const sortByName = (a, b) => {
+    if (a.name < b.name) {
+      return -1
+    }
+    if (a.name > b.name) {
+      return 1
+    }
+    return 0
+  }
+
   const updateAttendance = async (context, attendance) => {
     if (!attendance || !attendance.bookingId) {
       throw new Error('Booking ID is missing')
@@ -51,22 +62,28 @@ export const attendanceFactory = (whereaboutsApi) => {
   }
 
   const getAbsenceReasons = async (context) => {
-    const absenceReasons = await whereaboutsApi.getAbsenceReasonsV2(context)
-    const {
-      paidReasons,
-      unpaidReasons,
-      triggersIEPWarning,
-      triggersAbsentSubReason,
-      paidSubReasons,
-      unpaidSubReasons,
-    } = absenceReasons
+    const [absenceReasons, absenceReasonsV2] = await Promise.all([
+      await whereaboutsApi.getAbsenceReasons(context),
+      await whereaboutsApi.getAbsenceReasonsV2(context),
+    ])
+    const { paidReasons, unpaidReasons, triggersIEPWarning } = absenceReasons
+    const { triggersAbsentSubReason, paidSubReasons, unpaidSubReasons } = absenceReasonsV2
+    const mapToAbsentReason = absentReasonMapper(absenceReasons)
+
+    const approvedCourse = {
+      value: 'ApprovedCourse',
+      name: 'Approved course',
+    }
+
+    const paidReasonsExcluding = (name) =>
+      paidReasons
+        .filter((reason) => reason !== name)
+        .map(mapToAbsentReason)
+        .sort(sortByName)
 
     return {
-      paidReasons: paidReasons.map((r) => ({ value: r.code, name: r.name })),
-      unpaidReasons: unpaidReasons.map((r) => ({
-        value: r.code,
-        name: triggersIEPWarning.includes(r.code) ? `${r.name} - incentive level warning` : r.name,
-      })),
+      paidReasons: [approvedCourse, ...paidReasonsExcluding(approvedCourse.value)],
+      unpaidReasons: unpaidReasons.map(mapToAbsentReason).sort(sortByName),
       triggersIEPWarning,
       triggersAbsentSubReason,
       paidSubReasons: paidSubReasons.map((r) => ({ value: r.code, name: r.name })),

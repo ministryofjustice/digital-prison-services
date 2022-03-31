@@ -190,10 +190,16 @@ describe('Houseblock list controller', () => {
     prisonApi.getCourtEvents = jest.fn()
     prisonApi.getAlerts = jest.fn()
     prisonApi.getAssessments = jest.fn()
+    // @ts-expect-error ts-migrate(2339) FIXME: Property 'getAbsenceReasons' does not exist on typ... Remove this comment to see the full error message
+    whereaboutsApi.getAbsenceReasons = jest.fn()
     // @ts-expect-error ts-migrate(2339) FIXME: Property 'getAttendanceForBookings' does not exist... Remove this comment to see the full error message
     whereaboutsApi.getAttendanceForBookings = jest.fn()
     // @ts-expect-error ts-migrate(2339) FIXME: Property 'getAttendanceForBookings' does not exist... Remove this comment to see the full error message
     whereaboutsApi.getAttendanceForBookings.mockReturnValue([])
+    // @ts-expect-error ts-migrate(2339) FIXME: Property 'getAbsenceReasons' does not exist on typ... Remove this comment to see the full error message
+    whereaboutsApi.getAbsenceReasons.mockReturnValue({
+      triggersIEPWarning: ['UnacceptableAbsence', 'Refused'],
+    })
     // @ts-expect-error ts-migrate(2339) FIXME: Property 'getAgencyGroupLocations' does not exist ... Remove this comment to see the full error message
     whereaboutsApi.getAgencyGroupLocations = jest.fn()
     // @ts-expect-error ts-migrate(2339) FIXME: Property 'getAgencyGroupLocations' does not exist ... Remove this comment to see the full error message
@@ -500,9 +506,7 @@ describe('Houseblock list controller', () => {
           },
           {
             absentReason: 'AcceptableAbsence',
-            absentReasonDescription: 'Acceptable absence',
             absentSubReason: 'Courses',
-            absentSubReasonDescription: 'Courses, programmes and interventions',
             attended: false,
             bookingId: 2,
             caseNoteId: 0,
@@ -522,9 +526,7 @@ describe('Houseblock list controller', () => {
           },
           {
             absentReason: 'UnacceptableAbsence',
-            absentReasonDescription: 'Unacceptable absence - incentive level warning',
             absentSubReason: 'Behaviour',
-            absentSubReasonDescription: 'Behaviour',
             attended: false,
             bookingId: 2,
             caseNoteId: 0,
@@ -595,7 +597,7 @@ describe('Houseblock list controller', () => {
               attendanceInfo: {
                 absentReason: {
                   value: 'AcceptableAbsence',
-                  name: 'Acceptable absence',
+                  name: 'Acceptable',
                 },
                 absentSubReason: 'Courses',
                 comments: 'string',
@@ -623,7 +625,7 @@ describe('Houseblock list controller', () => {
               attendanceInfo: {
                 absentReason: {
                   value: 'UnacceptableAbsence',
-                  name: 'Unacceptable absence - incentive level warning',
+                  name: 'Unacceptable - Incentive Level warning',
                 },
                 absentSubReason: 'Behaviour',
                 comments: 'string',
@@ -705,6 +707,8 @@ describe('Houseblock list controller', () => {
       // @ts-expect-error ts-migrate(2554) FIXME: Expected 6 arguments, but got 5.
       await service({}, 'MDI', 'Houseblock 1', '15/10/2017', 'PM')
 
+      // @ts-expect-error ts-migrate(2339) FIXME: Property 'getAbsenceReasons' does not exist on typ... Remove this comment to see the full error message
+      expect(whereaboutsApi.getAbsenceReasons.mock.calls.length).toBe(2)
       // @ts-expect-error ts-migrate(2339) FIXME: Property 'getAttendanceForBookings' does not exist... Remove this comment to see the full error message
       expect(whereaboutsApi.getAttendanceForBookings.mock.calls.length).toBe(2)
     })
@@ -741,6 +745,8 @@ describe('Houseblock list controller', () => {
       // @ts-expect-error ts-migrate(2554) FIXME: Expected 6 arguments, but got 5.
       await service({}, 'MDI', 'Houseblock 1', '15/10/2017', 'PM')
 
+      // @ts-expect-error ts-migrate(2339) FIXME: Property 'getAbsenceReasons' does not exist on typ... Remove this comment to see the full error message
+      expect(whereaboutsApi.getAbsenceReasons.mock.calls.length).toBe(2)
       // @ts-expect-error ts-migrate(2339) FIXME: Property 'getAttendanceForBookings' does not exist... Remove this comment to see the full error message
       expect(whereaboutsApi.getAttendanceForBookings.mock.calls.length).toBe(2)
     })
