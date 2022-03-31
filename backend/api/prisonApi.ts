@@ -220,9 +220,6 @@ export const prisonApiFactory = (client) => {
   const getIepSummary = (context, bookings) =>
     get(context, `/api/bookings/offenders/iepSummary?${arrayToQueryString(bookings, 'bookings')}`)
 
-  const getIepSummaryForBooking = (context, bookingId, withDetails) =>
-    get(context, `/api/bookings/${bookingId}/iepSummary?withDetails=${withDetails}`)
-
   const getDetails = (context, offenderNo, fullInfo = false) =>
     get(context, `/api/bookings/offenderNo/${offenderNo}?fullInfo=${fullInfo}&csraSummary=${fullInfo}`)
 
@@ -489,7 +486,6 @@ export const prisonApiFactory = (client) => {
     getOffendersInReception,
     getRecentMovements,
     getIepSummary,
-    getIepSummaryForBooking,
     getDetails,
     getOffendersCurrentlyOutOfLivingUnit,
     getOffendersCurrentlyOutOfAgency,

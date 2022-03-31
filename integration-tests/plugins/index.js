@@ -179,7 +179,7 @@ module.exports = (on) => {
         prisonApi.stubPrisonerDetails(prisonerDetails),
         prisonApi.stubPrisonerSentenceDetails(sentenceDetails),
         prisonApi.stubPrisonerBalances(balances),
-        prisonApi.stubIepSummaryForBooking(iepSummary),
+        incentivesApi.stubGetIepSummaryForBooking(iepSummary),
         prisonApi.stubPositiveCaseNotes(positiveCaseNotes),
         prisonApi.stubNegativeCaseNotes(negativeCaseNotes),
         prisonApi.stubAdjudicationsForBooking(adjudications),
@@ -194,7 +194,7 @@ module.exports = (on) => {
         prisonApi.stubPrisonerDetails([], 500),
         prisonApi.stubPrisonerSentenceDetails(null, 500),
         prisonApi.stubPrisonerBalances(null, 500),
-        prisonApi.stubIepSummaryForBooking(null, 500),
+        incentivesApi.stubGetIepSummaryForBooking(null, 500),
         prisonApi.stubPositiveCaseNotes(null, 500),
         prisonApi.stubNegativeCaseNotes(null, 500),
         prisonApi.stubAdjudicationsForBooking(null, 500),
@@ -466,7 +466,7 @@ module.exports = (on) => {
     stubOffenderDetails: ({ offenderNo, details }) => community.stubOffenderDetails(offenderNo, details),
     stubDocuments: ({ offenderNo, documents }) => community.stubDocuments(offenderNo, documents),
     stubDocument: ({ offenderNo, documentId, content }) => community.stubDocument(offenderNo, documentId, content),
-    stubIepSummaryForBooking: (iepSummary) => prisonApi.stubIepSummaryForBooking(iepSummary),
+    stubGetIepSummaryForBooking: (iepSummary) => incentivesApi.stubGetIepSummaryForBooking(iepSummary),
     stubMovementsIn: ({ agencyId, fromDate, movements }) =>
       prisonApi.stubMovementsIn({ agencyId, fromDate, movements }),
     stubMovementsOut: ({ agencyId, fromDate, movements }) =>

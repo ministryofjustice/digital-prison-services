@@ -24,7 +24,7 @@ const filterData = (data, fields) => {
   return filteredResults
 }
 
-export default ({ prisonApi, oauthApi }) =>
+export default ({ prisonApi, incentivesApi, oauthApi }) =>
   async (req, res) => {
     const { offenderNo } = req.params
     const { agencyId, incentiveLevel, fromDate, toDate } = req.query
@@ -40,7 +40,7 @@ export default ({ prisonApi, oauthApi }) =>
       ])
       const { bookingId, firstName, lastName } = prisonerDetails
 
-      const iepSummary = await prisonApi.getIepSummaryForBooking(res.locals, bookingId, true)
+      const iepSummary = await incentivesApi.getIepSummaryForBooking(res.locals, bookingId)
 
       if (fromDate && toDate && fromDateFormatted.isAfter(toDateFormatted, 'day')) {
         errors.push({ href: '#fromDate', text: 'Enter a from date which is not after the to date' })

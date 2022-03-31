@@ -628,20 +628,6 @@ module.exports = {
         jsonBody: balances || {},
       },
     }),
-  stubIepSummaryForBooking: (iepSummary, status = 200) =>
-    stubFor({
-      request: {
-        method: 'GET',
-        urlPattern: '/api/bookings/[0-9]+?/iepSummary\\?.+?',
-      },
-      response: {
-        status,
-        headers: {
-          'Content-Type': 'application/json;charset=UTF-8',
-        },
-        jsonBody: iepSummary || {},
-      },
-    }),
   stubPositiveCaseNotes: (positiveCaseNotes, status = 200) =>
     stubFor({
       request: {
