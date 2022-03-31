@@ -1,9 +1,7 @@
 Reflect.deleteProperty(process.env, 'APPINSIGHTS_INSTRUMENTATIONKEY')
 
-// @ts-expect-error ts-migrate(2451) FIXME: Cannot redeclare block-scoped variable 'context'.
 const context = {}
 const prisonApi = {}
-// @ts-expect-error ts-migrate(2451) FIXME: Cannot redeclare block-scoped variable 'whereabout... Remove this comment to see the full error message
 const whereaboutsApi = {}
 const { getPrisonersUnaccountedFor } = require('../controllers/attendance/offenderActivities').offenderActivitesFactory(
   prisonApi,
