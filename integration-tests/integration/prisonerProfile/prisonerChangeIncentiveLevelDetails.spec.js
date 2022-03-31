@@ -14,7 +14,7 @@ context('Prisoner change incentive level details', () => {
     beforeEach(() => {
       Cypress.Cookies.preserveOnce('hmpps-session-dev')
       cy.task('stubOffenderBasicDetails', offenderBasicDetails)
-      cy.task('stubIepSummaryForBooking', {
+      cy.task('stubGetIepSummaryForBooking', {
         bookingId: -1,
         iepDate: '2017-08-15',
         iepTime: '2017-08-15T16:04:35',

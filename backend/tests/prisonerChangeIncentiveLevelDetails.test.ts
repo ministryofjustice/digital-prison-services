@@ -31,7 +31,7 @@ describe('Prisoner change incentive level details', () => {
       .fn()
       .mockResolvedValue({ agencyId: 'MDI', bookingId, firstName: 'John', lastName: 'Smith' })
     // @ts-expect-error ts-migrate(2339) FIXME: Property 'getIepSummaryForBooking' does not exist ... Remove this comment to see the full error message
-    prisonApi.getIepSummaryForBooking = jest.fn().mockReturnValue({
+    incentivesApi.getIepSummaryForBooking = jest.fn().mockReturnValue({
       bookingId: -1,
       iepDate: '2017-08-15',
       iepTime: '2017-08-15T16:04:35',
@@ -72,7 +72,7 @@ describe('Prisoner change incentive level details', () => {
       { iepLevel: 'ENH', iepDescription: 'Enhanced' },
     ])
     // @ts-expect-error ts-migrate(2339) FIXME: Property 'changeIepLevel' does not exist on type '... Remove this comment to see the full error message
-    prisonApi.changeIepLevel = jest.fn()
+    incentivesApi.changeIepLevel = jest.fn()
 
     // @ts-expect-error ts-migrate(2345) FIXME: Argument of type '{ prisonApi: {}; logError: any; ... Remove this comment to see the full error message
     controller = prisonerChangeIncentiveLevelDetails({ prisonApi, incentivesApi, logError })
@@ -86,7 +86,7 @@ describe('Prisoner change incentive level details', () => {
         // @ts-expect-error ts-migrate(2339) FIXME: Property 'getDetails' does not exist on type '{}'.
         expect(prisonApi.getDetails).toHaveBeenCalledWith(res.locals, offenderNo)
         // @ts-expect-error ts-migrate(2339) FIXME: Property 'getIepSummaryForBooking' does not exist ... Remove this comment to see the full error message
-        expect(prisonApi.getIepSummaryForBooking).toHaveBeenCalledWith(res.locals, bookingId, true)
+        expect(incentivesApi.getIepSummaryForBooking).toHaveBeenCalledWith(res.locals, bookingId)
         // @ts-expect-error ts-migrate(2339) FIXME: Property 'getAgencyIepLevels' does not exist on ty... Remove this comment to see the full error message
         expect(incentivesApi.getAgencyIepLevels).toHaveBeenCalledWith(res.locals, 'MDI')
         expect(res.render).toHaveBeenCalledWith('prisonerProfile/prisonerChangeIncentiveLevelDetails.njk', {
@@ -142,7 +142,7 @@ describe('Prisoner change incentive level details', () => {
     describe('when there are no errors', () => {
       beforeEach(() => {
         // @ts-expect-error ts-migrate(2339) FIXME: Property 'changeIepLevel' does not exist on type '... Remove this comment to see the full error message
-        prisonApi.changeIepLevel = jest.fn().mockReturnValue('All good')
+        incentivesApi.changeIepLevel = jest.fn().mockReturnValue('All good')
       })
 
       it('should submit the appointment with the correct details and redirect', async () => {
@@ -157,7 +157,7 @@ describe('Prisoner change incentive level details', () => {
         await controller.post(req, res)
 
         // @ts-expect-error ts-migrate(2339) FIXME: Property 'changeIepLevel' does not exist on type '... Remove this comment to see the full error message
-        expect(prisonApi.changeIepLevel).toHaveBeenCalledWith(res.locals, bookingId, {
+        expect(incentivesApi.changeIepLevel).toHaveBeenCalledWith(res.locals, bookingId, {
           iepLevel: 'Enhanced',
           comment: 'A reason why it has changed',
         })
@@ -177,7 +177,7 @@ describe('Prisoner change incentive level details', () => {
         await controller.post(req, res)
 
         // @ts-expect-error ts-migrate(2339) FIXME: Property 'changeIepLevel' does not exist on type '... Remove this comment to see the full error message
-        expect(prisonApi.changeIepLevel).not.toHaveBeenCalled()
+        expect(incentivesApi.changeIepLevel).not.toHaveBeenCalled()
         expect(res.render).toHaveBeenCalledWith('prisonerProfile/prisonerChangeIncentiveLevelDetails.njk', {
           agencyId: 'MDI',
           bookingId: '123',
@@ -248,7 +248,7 @@ describe('Prisoner change incentive level details', () => {
         const error = new Error('Network error')
 
         // @ts-expect-error ts-migrate(2339) FIXME: Property 'changeIepLevel' does not exist on type '... Remove this comment to see the full error message
-        prisonApi.changeIepLevel.mockRejectedValue(error)
+        incentivesApi.changeIepLevel.mockRejectedValue(error)
 
         await expect(controller.post(req, res)).rejects.toThrowError(error)
       })

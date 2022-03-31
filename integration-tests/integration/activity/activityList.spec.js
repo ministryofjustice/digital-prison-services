@@ -37,7 +37,6 @@ context('Activity list page', () => {
     offenders.forEach((offender) => {
       cy.task('stubOffenderBasicDetails', offender)
     })
-    cy.task('stubGetAbsenceReasons')
     cy.task('stubGetAbsenceReasonsV2')
   })
 
@@ -257,7 +256,9 @@ context('Activity list page', () => {
           attended: false,
           paid: false,
           absentReason: 'UnacceptableAbsence',
+          absentReasonDescription: 'Unacceptable absence - incentive level warning added',
           absentSubReason: 'Courses',
+          absentSubReasonDescription: 'Courses, programmes and interventions',
           eventDate: '2019-05-15',
           comments: 'Never turned up',
         },
@@ -301,11 +302,11 @@ context('Activity list page', () => {
 
     aPage.getAbsenceReasons().then(($inputs) => {
       expect($inputs.get(0).innerText).to.eq('Other')
-      expect($inputs.get(1).innerText).to.eq('Unacceptable - Incentive Level warning')
+      expect($inputs.get(1).innerText).to.eq('Unacceptable absence - incentive level warning added')
     })
-    cy.get('[data-qa="other-message"').contains('Unacceptable - Incentive Level warning')
+    cy.get('[data-qa="other-message"').contains('Unacceptable absence - incentive level warning added')
     cy.get('[data-qa="other-message"').parent().click({ multiple: true })
-    cy.get('[name="absentReason"]').find(':selected').contains('Unacceptable - Incentive Level warning')
+    cy.get('[name="absentReason"]').find(':selected').contains('Unacceptable absence - incentive level warning')
     cy.get('[name="absentSubReason"]').find(':selected').contains('Courses, programmes and interventions')
     cy.get('[name="comments"]').contains('Never turned up')
   })

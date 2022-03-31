@@ -73,8 +73,16 @@ const controller = ({
 
   router.get(
     '/',
-    // @ts-expect-error ts-migrate(2345) FIXME: Argument of type '{ prisonerProfileService: { getP... Remove this comment to see the full error message
-    prisonerQuickLook({ prisonerProfileService, prisonApi, telemetry, offenderSearchApi, systemOauthClient, logError })
+    prisonerQuickLook({
+      prisonerProfileService,
+      prisonApi,
+      telemetry,
+      offenderSearchApi,
+      systemOauthClient,
+      incentivesApi,
+      // @ts-expect-error ts-migrate(2345) FIXME: Argument of type '{ prisonerProfileService: { getP... Remove this comment to see the full error message
+      logError,
+    })
   )
   // @ts-expect-error ts-migrate(2345) FIXME: Argument of type '{ prisonApi: any; logError: any;... Remove this comment to see the full error message
   router.get('/image', prisonerFullImage({ prisonApi, logError }))
@@ -140,8 +148,11 @@ const controller = ({
     })
   )
 
-  // @ts-expect-error ts-migrate(2345) FIXME: Argument of type '{ prisonApi: any; oauthApi: any;... Remove this comment to see the full error message
-  router.get('/incentive-level-details', prisonerIncentiveLevelDetails({ prisonApi, oauthApi, logError }))
+  router.get(
+    '/incentive-level-details',
+    // @ts-expect-error ts-migrate(2345) FIXME: Argument of type '{ prisonApi: any; oauthApi: any;... Remove this comment to see the full error message
+    prisonerIncentiveLevelDetails({ prisonApi, incentivesApi, oauthApi, logError })
+  )
   router.get(
     '/incentive-level-details/change-incentive-level',
     // @ts-expect-error ts-migrate(2345) FIXME: Argument of type '{ prisonApi: any; logError: any;... Remove this comment to see the full error message

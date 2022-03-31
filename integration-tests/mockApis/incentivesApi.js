@@ -15,5 +15,32 @@ module.exports = {
         jsonBody: response,
       },
     }),
-
+  stubGetIepSummaryForBooking: (iepSummary, status = 200) =>
+    stubFor({
+      request: {
+        method: 'GET',
+        urlPattern: '/incentives/iep/reviews/booking/[0-9]+?',
+      },
+      response: {
+        status,
+        headers: {
+          'Content-Type': 'application/json;charset=UTF-8',
+        },
+        jsonBody: iepSummary || {},
+      },
+    }),
+  stubChangeIepLevel: (body) =>
+    stubFor({
+      request: {
+        method: 'POST',
+        urlPattern: '/incentives/iep/reviews/booking/[0-9]+?',
+      },
+      response: {
+        status: 200,
+        headers: {
+          'Content-Type': 'application/json;charset=UTF-8',
+        },
+        jsonBody: body,
+      },
+    }),
 }

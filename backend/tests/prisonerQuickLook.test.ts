@@ -23,6 +23,7 @@ describe('prisoner profile quick look', () => {
   const prisonerProfileService = {}
   const telemetry = {}
   const systemOauthClient = {}
+  const incentivesApi = {}
 
   let req
   let res
@@ -63,7 +64,7 @@ describe('prisoner profile quick look', () => {
     // @ts-expect-error ts-migrate(2339) FIXME: Property 'getPrisonerSentenceDetails' does not exi... Remove this comment to see the full error message
     prisonApi.getPrisonerSentenceDetails = jest.fn().mockResolvedValue({})
     // @ts-expect-error ts-migrate(2339) FIXME: Property 'getIepSummaryForBooking' does not exist ... Remove this comment to see the full error message
-    prisonApi.getIepSummaryForBooking = jest.fn().mockResolvedValue({})
+    incentivesApi.getIepSummaryForBooking = jest.fn().mockResolvedValue({})
     // @ts-expect-error ts-migrate(2339) FIXME: Property 'getPositiveCaseNotes' does not exist on ... Remove this comment to see the full error message
     prisonApi.getPositiveCaseNotes = jest.fn().mockResolvedValue({})
     // @ts-expect-error ts-migrate(2339) FIXME: Property 'getNegativeCaseNotes' does not exist on ... Remove this comment to see the full error message
@@ -92,6 +93,7 @@ describe('prisoner profile quick look', () => {
       telemetry,
       offenderSearchApi,
       systemOauthClient,
+      incentivesApi,
       // @ts-expect-error ts-migrate(2345) FIXME: Argument of type '{ prisonerProfileService: {}; pr... Remove this comment to see the full error message
       logError,
     })
@@ -426,12 +428,11 @@ describe('prisoner profile quick look', () => {
       await controller(req, res)
 
       // @ts-expect-error ts-migrate(2339) FIXME: Property 'getIepSummaryForBooking' does not exist ... Remove this comment to see the full error message
-      expect(prisonApi.getIepSummaryForBooking).toHaveBeenCalledWith(
+      expect(incentivesApi.getIepSummaryForBooking).toHaveBeenCalledWith(
         {
           user: { activeCaseLoad: { caseLoadId: 'MDI' } },
         },
-        bookingId,
-        false
+        bookingId
       )
       // @ts-expect-error ts-migrate(2339) FIXME: Property 'getPositiveCaseNotes' does not exist on ... Remove this comment to see the full error message
       expect(prisonApi.getPositiveCaseNotes).toHaveBeenCalledWith(
@@ -472,7 +473,7 @@ describe('prisoner profile quick look', () => {
     describe('when there is case note and adjudications data', () => {
       beforeEach(() => {
         // @ts-expect-error ts-migrate(2339) FIXME: Property 'getIepSummaryForBooking' does not exist ... Remove this comment to see the full error message
-        prisonApi.getIepSummaryForBooking.mockResolvedValue({ daysSinceReview: 40 })
+        incentivesApi.getIepSummaryForBooking.mockResolvedValue({ daysSinceReview: 40 })
         // @ts-expect-error ts-migrate(2339) FIXME: Property 'getPositiveCaseNotes' does not exist on ... Remove this comment to see the full error message
         prisonApi.getPositiveCaseNotes.mockResolvedValue({ count: 2 })
         // @ts-expect-error ts-migrate(2339) FIXME: Property 'getNegativeCaseNotes' does not exist on ... Remove this comment to see the full error message
@@ -803,7 +804,7 @@ describe('prisoner profile quick look', () => {
       // @ts-expect-error ts-migrate(2339) FIXME: Property 'getPrisonerSentenceDetails' does not exi... Remove this comment to see the full error message
       prisonApi.getPrisonerSentenceDetails.mockRejectedValue(new Error('Network error'))
       // @ts-expect-error ts-migrate(2339) FIXME: Property 'getIepSummaryForBooking' does not exist ... Remove this comment to see the full error message
-      prisonApi.getIepSummaryForBooking.mockRejectedValue(new Error('Network error'))
+      incentivesApi.getIepSummaryForBooking.mockRejectedValue(new Error('Network error'))
       // @ts-expect-error ts-migrate(2339) FIXME: Property 'getPositiveCaseNotes' does not exist on ... Remove this comment to see the full error message
       prisonApi.getPositiveCaseNotes.mockRejectedValue(new Error('Network error'))
       // @ts-expect-error ts-migrate(2339) FIXME: Property 'getNegativeCaseNotes' does not exist on ... Remove this comment to see the full error message
@@ -941,7 +942,7 @@ describe('prisoner profile quick look', () => {
       // @ts-expect-error ts-migrate(2339) FIXME: Property 'getPositiveCaseNotes' does not exist on ... Remove this comment to see the full error message
       prisonApi.getPositiveCaseNotes.mockResolvedValue({ count: 10 })
       // @ts-expect-error ts-migrate(2339) FIXME: Property 'getIepSummaryForBooking' does not exist ... Remove this comment to see the full error message
-      prisonApi.getIepSummaryForBooking.mockResolvedValue({ daysSinceReview: 10 })
+      incentivesApi.getIepSummaryForBooking.mockResolvedValue({ daysSinceReview: 10 })
       // @ts-expect-error ts-migrate(2339) FIXME: Property 'getAdjudicationsForBooking' does not exi... Remove this comment to see the full error message
       prisonApi.getAdjudicationsForBooking.mockResolvedValue({
         adjudicationCount: 2,
@@ -998,7 +999,7 @@ describe('prisoner profile quick look', () => {
       // @ts-expect-error ts-migrate(2339) FIXME: Property 'getNegativeCaseNotes' does not exist on ... Remove this comment to see the full error message
       prisonApi.getNegativeCaseNotes.mockResolvedValue({ count: 10 })
       // @ts-expect-error ts-migrate(2339) FIXME: Property 'getIepSummaryForBooking' does not exist ... Remove this comment to see the full error message
-      prisonApi.getIepSummaryForBooking.mockResolvedValue({ daysSinceReview: 10 })
+      incentivesApi.getIepSummaryForBooking.mockResolvedValue({ daysSinceReview: 10 })
       // @ts-expect-error ts-migrate(2339) FIXME: Property 'getAdjudicationsForBooking' does not exi... Remove this comment to see the full error message
       prisonApi.getAdjudicationsForBooking.mockResolvedValue({
         adjudicationCount: 2,
@@ -1114,7 +1115,7 @@ describe('prisoner profile quick look', () => {
       // @ts-expect-error ts-migrate(2339) FIXME: Property 'getNegativeCaseNotes' does not exist on ... Remove this comment to see the full error message
       prisonApi.getNegativeCaseNotes.mockResolvedValue({ count: 10 })
       // @ts-expect-error ts-migrate(2339) FIXME: Property 'getIepSummaryForBooking' does not exist ... Remove this comment to see the full error message
-      prisonApi.getIepSummaryForBooking.mockResolvedValue({ daysSinceReview: 10 })
+      incentivesApi.getIepSummaryForBooking.mockResolvedValue({ daysSinceReview: 10 })
 
       await controller(req, res)
 
@@ -1393,7 +1394,7 @@ describe('prisoner profile quick look', () => {
       // @ts-expect-error ts-migrate(2339) FIXME: Property 'getPrisonerSentenceDetails' does not exi... Remove this comment to see the full error message
       prisonApi.getPrisonerSentenceDetails = jest.fn().mockResolvedValue({})
       // @ts-expect-error ts-migrate(2339) FIXME: Property 'getIepSummaryForBooking' does not exist ... Remove this comment to see the full error message
-      prisonApi.getIepSummaryForBooking = jest.fn().mockResolvedValue({})
+      incentivesApi.getIepSummaryForBooking = jest.fn().mockResolvedValue({})
       // @ts-expect-error ts-migrate(2339) FIXME: Property 'getPositiveCaseNotes' does not exist on ... Remove this comment to see the full error message
       prisonApi.getPositiveCaseNotes = jest.fn().mockResolvedValue({})
       // @ts-expect-error ts-migrate(2339) FIXME: Property 'getNegativeCaseNotes' does not exist on ... Remove this comment to see the full error message

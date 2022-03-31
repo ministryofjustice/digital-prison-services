@@ -11,7 +11,7 @@ export default ({ prisonApi, incentivesApi }) => {
       const { agencyId, bookingId, firstName, lastName } = prisonerDetails
 
       const [iepSummary, iepLevels] = await Promise.all([
-        prisonApi.getIepSummaryForBooking(res.locals, bookingId, true),
+        incentivesApi.getIepSummaryForBooking(res.locals, bookingId),
         incentivesApi.getAgencyIepLevels(res.locals, agencyId),
       ])
 
@@ -66,7 +66,7 @@ export default ({ prisonApi, incentivesApi }) => {
     }
 
     try {
-      await prisonApi.changeIepLevel(res.locals, bookingId, {
+      await incentivesApi.changeIepLevel(res.locals, bookingId, {
         iepLevel: newIepLevel,
         comment: reason,
       })

@@ -84,7 +84,7 @@ context('Prisoner incentive level details', () => {
     })
 
     it('should display the change incentive level link', () => {
-      cy.task('stubIepSummaryForBooking', iepSummaryResponse)
+      cy.task('stubGetIepSummaryForBooking', iepSummaryResponse)
 
       cy.visit(`/prisoner/${offenderNo}/incentive-level-details`)
 
@@ -97,7 +97,7 @@ context('Prisoner incentive level details', () => {
     })
 
     it('should not show change incentive level link if user does not have correct role', () => {
-      cy.task('stubIepSummaryForBooking', iepSummaryResponse)
+      cy.task('stubGetIepSummaryForBooking', iepSummaryResponse)
 
       cy.task('stubUserMeRoles', [{ roleCode: 'GLOBAL_SEARCH' }])
 
@@ -107,7 +107,7 @@ context('Prisoner incentive level details', () => {
     })
 
     it('should show correct history', () => {
-      cy.task('stubIepSummaryForBooking', iepSummaryResponse)
+      cy.task('stubGetIepSummaryForBooking', iepSummaryResponse)
 
       cy.get('[data-test="incentive-level-history"]').then(($table) => {
         cy.get($table)
@@ -137,7 +137,7 @@ context('Prisoner incentive level details', () => {
     })
 
     it('should filter correctly', () => {
-      cy.task('stubIepSummaryForBooking', iepSummaryResponse)
+      cy.task('stubGetIepSummaryForBooking', iepSummaryResponse)
 
       cy.visit(`/prisoner/${offenderNo}/incentive-level-details`)
 
@@ -161,7 +161,7 @@ context('Prisoner incentive level details', () => {
     })
 
     it('should show the default no incentive level history when there are no applied filters and no results', () => {
-      cy.task('stubIepSummaryForBooking', {
+      cy.task('stubGetIepSummaryForBooking', {
         bookingId: -1,
         iepDate: '2017-08-15',
         iepTime: '2017-08-15T16:04:35',
@@ -183,7 +183,7 @@ context('Prisoner incentive level details', () => {
     })
 
     it('should return default message when no incentive level history is returned for the supplied filters', () => {
-      cy.task('stubIepSummaryForBooking', {
+      cy.task('stubGetIepSummaryForBooking', {
         bookingId: -1,
         iepDate: '2017-08-15',
         iepTime: '2017-08-15T16:04:35',

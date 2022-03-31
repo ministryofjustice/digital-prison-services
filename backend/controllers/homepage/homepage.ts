@@ -56,7 +56,7 @@ const getTasks = ({ activeCaseLoadId, locations, staffId, whereaboutsConfig, key
     {
       id: 'incentives',
       heading: 'Manage incentives',
-      description: 'See review dates, incentive levels and behaviour entries by residential location.',
+      description: 'See incentive levels and behaviour entries by residential location.',
       href: incentives.ui_url,
       roles: null,
       enabled: () => incentives.ui_url,

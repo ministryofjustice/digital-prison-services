@@ -18,14 +18,20 @@ describe('Attendance change router', () => {
     // @ts-expect-error ts-migrate(2339) FIXME: Property 'getScheduledActivities' does not exist o... Remove this comment to see the full error message
     prisonApi.getScheduledActivities = jest.fn()
     // @ts-expect-error ts-migrate(2339) FIXME: Property 'userDetails' does not exist on type '{}'... Remove this comment to see the full error message
-    oauthApi.userDetails = jest.fn()
+    prisonApi.getUserDetailsList = jest.fn()
 
     // @ts-expect-error ts-migrate(2339) FIXME: Property 'getAttendanceChanges' does not exist on ... Remove this comment to see the full error message
     whereaboutsApi.getAttendanceChanges.mockReturnValue({ changes: [] })
     // @ts-expect-error ts-migrate(2339) FIXME: Property 'getScheduledActivities' does not exist o... Remove this comment to see the full error message
     prisonApi.getScheduledActivities.mockReturnValue([])
     // @ts-expect-error ts-migrate(2339) FIXME: Property 'userDetails' does not exist on type '{}'... Remove this comment to see the full error message
-    oauthApi.userDetails.mockReturnValue({ username: 'username1', name: 'First name last name' })
+    prisonApi.getUserDetailsList.mockReturnValue([
+      {
+        username: 'username1',
+        firstName: 'First name',
+        lastName: 'Last name',
+      },
+    ])
 
     logError = jest.fn()
 
@@ -88,9 +94,7 @@ describe('Attendance change router', () => {
     await router(req, res)
 
     // @ts-expect-error ts-migrate(2339) FIXME: Property 'userDetails' does not exist on type '{}'... Remove this comment to see the full error message
-    expect(oauthApi.userDetails).toHaveBeenCalledWith({}, 'username1')
-    // @ts-expect-error ts-migrate(2339) FIXME: Property 'userDetails' does not exist on type '{}'... Remove this comment to see the full error message
-    expect(oauthApi.userDetails).toHaveBeenCalledWith({}, 'username2')
+    expect(prisonApi.getUserDetailsList).toHaveBeenCalledWith({}, ['username1', 'username2'])
   })
 
   it('should return table rows in the right order and format', async () => {
@@ -123,7 +127,13 @@ describe('Attendance change router', () => {
     ])
 
     // @ts-expect-error ts-migrate(2339) FIXME: Property 'userDetails' does not exist on type '{}'... Remove this comment to see the full error message
-    oauthApi.userDetails.mockReturnValue({ name: 'staff full name', username: 'username' })
+    prisonApi.getUserDetailsList.mockReturnValue([
+      {
+        firstName: 'Peter',
+        lastName: 'Parker',
+        username: 'username',
+      },
+    ])
 
     await router(req, res)
 
@@ -143,7 +153,7 @@ describe('Attendance change router', () => {
             { text: 'Acceptable absence' },
             { text: 'Refused' },
             { attributes: { 'data-sort-value': expect.any(Number) }, text: '2 October 2020 - 11:00' },
-            { text: 'staff full name' },
+            { text: 'Peter Parker' },
           ],
           [
             {
@@ -155,7 +165,7 @@ describe('Attendance change router', () => {
             { text: 'Refused' },
             { text: 'Attended' },
             { attributes: { 'data-sort-value': expect.any(Number) }, text: '2 October 2020 - 17:00' },
-            { text: 'staff full name' },
+            { text: 'Peter Parker' },
           ],
         ],
       })
@@ -215,7 +225,7 @@ describe('Attendance change router', () => {
     ])
 
     // @ts-expect-error ts-migrate(2339) FIXME: Property 'userDetails' does not exist on type '{}'... Remove this comment to see the full error message
-    oauthApi.userDetails.mockReturnValue({ name: 'staff full name', username: 'username' })
+    prisonApi.getUserDetailsList.mockReturnValue([{ firstName: 'Steve', lastName: 'Walsh', username: 'username' }])
 
     await router(req, res)
 
@@ -235,7 +245,7 @@ describe('Attendance change router', () => {
             { text: 'Acceptable absence' },
             { text: 'Refused' },
             { attributes: { 'data-sort-value': expect.any(Number) }, text: '2 October 2020 - 11:00' },
-            { text: 'staff full name' },
+            { text: 'Steve Walsh' },
           ],
         ],
       })
