@@ -635,7 +635,7 @@ describe('Activity list controller', () => {
         attendances: [
           {
             id: 1,
-            absentReason: 'UnacceptableAbsence',
+            absentReason: 'UnacceptableAbsenceIncentiveLevelWarning',
             absentReasonDescription: 'Unacceptable absence - incentive level warning',
             bookingId: 1,
             absentSubReason: 'Behaviour',
@@ -669,7 +669,7 @@ describe('Activity list controller', () => {
 
       const response = await activityList({}, 'LEI', 1, '23/11/2018', 'PM')
 
-      expect(response[0].attendanceInfo.absentReason.value).toBe('UnacceptableAbsence')
+      expect(response[0].attendanceInfo.absentReason.value).toBe('UnacceptableAbsenceIncentiveLevelWarning')
       expect(response[0].attendanceInfo.absentReason.name).toBe('Unacceptable absence - incentive level warning')
       expect(response[0].attendanceInfo.absentSubReason).toBe('Behaviour')
 
@@ -693,7 +693,7 @@ describe('Activity list controller', () => {
       attendances: [
         {
           id: 1,
-          absentReason: 'UnacceptableAbsence',
+          absentReason: 'UnacceptableAbsenceIncentiveLevelWarning',
           absentReasonDescription: 'Unacceptable absence - incentive level warning',
           absentSubReason: 'Behaviour',
           absentSubReasonDescription: 'Behaviour',
@@ -714,7 +714,7 @@ describe('Activity list controller', () => {
       id: 1,
       absentReason: {
         name: 'Unacceptable absence - incentive level warning',
-        value: 'UnacceptableAbsence',
+        value: 'UnacceptableAbsenceIncentiveLevelWarning',
       },
       absentSubReason: 'Behaviour',
       comments: undefined,

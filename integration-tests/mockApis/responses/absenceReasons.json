@@ -5,9 +5,9 @@
     "RefusedIncentiveLevelWarning",
     "RestDay",
     "RestInCell",
-    "UnacceptableAbsence",
+    "UnacceptableAbsenceIncentiveLevelWarning",
     "SessionCancelled",
     "Sick"
   ],
-  "triggersIEPWarning": ["RefusedIncentiveLevelWarning", "UnacceptableAbsence"]
+  "triggersIEPWarning": ["RefusedIncentiveLevelWarning", "UnacceptableAbsenceIncentiveLevelWarning"]
 }
