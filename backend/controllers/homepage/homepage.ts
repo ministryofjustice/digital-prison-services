@@ -16,6 +16,7 @@ const {
     welcomePeopleIntoPrison,
     manageRestrictedPatients,
     incentives,
+    createAndVaryALicence,
   },
 } = config
 
@@ -213,6 +214,16 @@ const getTasks = ({ activeCaseLoadId, locations, staffId, whereaboutsConfig, key
       enabled: () =>
         manageRestrictedPatients.ui_url &&
         userHasRoles(['SEARCH_RESTRICTED_PATIENT', 'TRANSFER_RESTRICTED_PATIENT', 'REMOVE_RESTRICTED_PATIENT']),
+    },
+    {
+      id: 'create-and-vary-a-licence',
+      heading: 'Create and vary a licence',
+      description: 'Create and vary standard determinate licences and post sentence supervision orders.',
+      href: createAndVaryALicence.url,
+      enabled: () =>
+        createAndVaryALicence.url &&
+        createAndVaryALicence.enabled_prisons.split(',').includes(activeCaseLoadId) &&
+        userHasRoles(['LICENCE_CA', 'LICENCE_DM', 'LICENCE_RO', 'LICENCE_ACO', 'LICENCE_ADMIN']),
     },
   ]
 }
