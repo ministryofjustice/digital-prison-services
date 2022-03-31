@@ -1,5 +1,6 @@
 import { switchDateFormat, sortByDateTime } from '../../utils'
 import getExternalEventsForOffenders from '../../shared/getExternalEventsForOffenders'
+import { absentReasonMapper } from '../../mappers'
 
 const offenderNumberMultiMap = (offenderNumbers) =>
   offenderNumbers.reduce((map, offenderNumber) => map.set(offenderNumber, []), new Map())
@@ -16,25 +17,18 @@ const sortActivitiesByEventThenByLastName = (data) => {
   })
 }
 
-const extractAttendanceInfo = (attendanceInformation, event) => {
+const extractAttendanceInfo = (attendanceInformation, event, absentReasons = []) => {
   if (attendanceInformation && attendanceInformation.attendances && attendanceInformation.attendances.length > 0) {
     const offenderAttendanceInfo = attendanceInformation.attendances.find(
       (attendance) => attendance.bookingId === event.bookingId && attendance.eventId === event.eventId
     )
     if (!offenderAttendanceInfo) return null
 
-    const { id, absentReason, absentReasonDescription, absentSubReason, attended, paid, comments, locked } =
-      offenderAttendanceInfo || {}
+    const { id, absentReason, absentSubReason, attended, paid, comments, locked } = offenderAttendanceInfo || {}
+    const mapToAbsentReason = absentReasonMapper(absentReasons)
 
     const attendanceInfo = absentReason
-      ? {
-          id,
-          absentReason: { value: absentReason, name: absentReasonDescription },
-          absentSubReason,
-          comments,
-          paid,
-          locked,
-        }
+      ? { id, absentReason: mapToAbsentReason(absentReason), absentSubReason, comments, paid, locked }
       : { id, comments, paid, locked }
 
     // @ts-expect-error ts-migrate(2339) FIXME: Property 'other' does not exist on type '{ id: any... Remove this comment to see the full error message
@@ -67,6 +61,8 @@ export const getActivityListFactory = (prisonApi, whereaboutsApi) => {
     }
 
     const date = switchDateFormat(frontEndDate)
+
+    const absenceReasons = (await whereaboutsApi.getAbsenceReasons(context)) || []
 
     const apiParams = { agencyId, locationId, date, timeSlot }
     const eventsAtLocationByUsage = await Promise.all([
@@ -118,7 +114,7 @@ export const getActivityListFactory = (prisonApi, whereaboutsApi) => {
       const eventsElsewhereForOffender = eventsElsewhereByOffenderNumber
         .get(event.offenderNo)
         .sort((left, right) => sortByDateTime(left.startTime, right.startTime))
-      const attendanceInfo = extractAttendanceInfo(attendanceInformation, event)
+      const attendanceInfo = extractAttendanceInfo(attendanceInformation, event, absenceReasons)
 
       return {
         ...event,

@@ -233,7 +233,7 @@ const setup = ({
 
   router.use('/current-covid-units', covidRouter(prisonApi, logError))
 
-  router.use('/attendance-changes', attendanceChangeRouter({ prisonApi, whereaboutsApi, oauthApi }))
+  router.use('/attendance-changes', attendanceChangeRouter({ prisonApi, whereaboutsApi }))
 
   router.use('/prisoner-search', prisonerSearchRouter({ prisonApi, logError }))
 

@@ -1,13 +1,18 @@
+import attendanceController from '../controllers/attendance/attendance'
+
 Reflect.deleteProperty(process.env, 'APPINSIGHTS_INSTRUMENTATIONKEY')
 
-// @ts-expect-error ts-migrate(2451) FIXME: Cannot redeclare block-scoped variable 'context'.
-const context = {}
-// @ts-expect-error ts-migrate(2451) FIXME: Cannot redeclare block-scoped variable 'whereabout... Remove this comment to see the full error message
-const whereaboutsApi = {}
-const { updateAttendance, getAbsenceReasons, batchUpdateAttendance } =
-  require('../controllers/attendance/attendance').attendanceFactory(whereaboutsApi)
-
 describe('Attendence and Pay controller', () => {
+  const context = {}
+  const whereaboutsApi = {
+    postAttendance: jest.fn(),
+    putAttendance: jest.fn(),
+    getAbsenceReasons: jest.fn(),
+    getAbsenceReasonsV2: jest.fn(),
+    postAttendances: jest.fn(),
+  }
+  const { updateAttendance, getAbsenceReasons, batchUpdateAttendance } =
+    attendanceController.attendanceFactory(whereaboutsApi)
   const attendenceDetails = {
     offenderNo: 'ABC123',
     bookingId: 1,
@@ -22,17 +27,10 @@ describe('Attendence and Pay controller', () => {
   describe('updateAttendance', () => {
     it('should throw an error when offenderNo is null', () => {
       try {
-        updateAttendance(context)
+        updateAttendance(context, {})
       } catch (e) {
         expect(e).toEqual(new Error('Booking ID is missing'))
       }
-    })
-
-    beforeEach(() => {
-      // @ts-expect-error ts-migrate(2339) FIXME: Property 'postAttendance' does not exist on type '... Remove this comment to see the full error message
-      whereaboutsApi.postAttendance = jest.fn()
-      // @ts-expect-error ts-migrate(2339) FIXME: Property 'putAttendance' does not exist on type '{... Remove this comment to see the full error message
-      whereaboutsApi.putAttendance = jest.fn()
     })
 
     it('should postAttendance when there is no attendance ID', async () => {
@@ -41,7 +39,6 @@ describe('Attendence and Pay controller', () => {
         ...attendenceDetails,
       })
 
-      // @ts-expect-error ts-migrate(2339) FIXME: Property 'postAttendance' does not exist on type '... Remove this comment to see the full error message
       expect(whereaboutsApi.postAttendance).toHaveBeenCalledWith(context, {
         eventDate: '2019-10-10',
         ...attendenceDetails,
@@ -57,7 +54,6 @@ describe('Attendence and Pay controller', () => {
         ...attendenceDetails,
       })
 
-      // @ts-expect-error ts-migrate(2339) FIXME: Property 'putAttendance' does not exist on type '{... Remove this comment to see the full error message
       expect(whereaboutsApi.putAttendance).toHaveBeenCalledWith(
         context,
         {
@@ -71,22 +67,12 @@ describe('Attendence and Pay controller', () => {
 
   describe('getAbsenceReasons', () => {
     beforeEach(() => {
-      // @ts-expect-error ts-migrate(2339) FIXME: Property 'getAbsenceReasons' does not exist on typ... Remove this comment to see the full error message
-      whereaboutsApi.getAbsenceReasonsV2 = jest.fn()
-      // @ts-expect-error ts-migrate(2339) FIXME: Property 'getAbsenceReasons' does not exist on typ... Remove this comment to see the full error message
+      whereaboutsApi.getAbsenceReasons.mockReturnValue({
+        paidReasons: ['AcceptableAbsence', 'RestInCell', 'ApprovedCourse'],
+        unpaidReasons: ['Refused', 'UnacceptableAbsence'],
+        triggersIEPWarning: ['UnacceptableAbsence', 'Refused'],
+      })
       whereaboutsApi.getAbsenceReasonsV2.mockReturnValue({
-        paidReasons: [
-          { code: 'ApprovedCourse', name: 'Approved course' },
-          { code: 'AcceptableAbsence', name: 'Acceptable absence' },
-          { code: 'NotRequired', name: 'Not required to attend' },
-        ],
-        unpaidReasons: [
-          { code: 'RefusedIncentiveLevelWarning', name: 'Refused to attend' },
-          { code: 'RestInCellOrSick', name: 'Rest in cell or sick' },
-          { code: 'SessionCancelled', name: 'Session cancelled' },
-          { code: 'UnacceptableAbsence', name: 'Unacceptable absence' },
-        ],
-        triggersIEPWarning: ['UnacceptableAbsence', 'RefusedIncentiveLevelWarning'],
         triggersAbsentSubReason: [
           'AcceptableAbsence',
           'Refused',
@@ -111,16 +97,14 @@ describe('Attendence and Pay controller', () => {
       expect(response).toEqual({
         paidReasons: [
           { name: 'Approved course', value: 'ApprovedCourse' },
-          { name: 'Acceptable absence', value: 'AcceptableAbsence' },
-          { name: 'Not required to attend', value: 'NotRequired' },
+          { name: 'Acceptable', value: 'AcceptableAbsence' },
+          { name: 'Rest in cell', value: 'RestInCell' },
         ],
         unpaidReasons: [
-          { name: 'Refused to attend - incentive level warning', value: 'RefusedIncentiveLevelWarning' },
-          { name: 'Rest in cell or sick', value: 'RestInCellOrSick' },
-          { name: 'Session cancelled', value: 'SessionCancelled' },
-          { name: 'Unacceptable absence - incentive level warning', value: 'UnacceptableAbsence' },
+          { name: 'Refused - Incentive Level warning', value: 'Refused' },
+          { name: 'Unacceptable - Incentive Level warning', value: 'UnacceptableAbsence' },
         ],
-        triggersIEPWarning: ['UnacceptableAbsence', 'RefusedIncentiveLevelWarning'],
+        triggersIEPWarning: ['UnacceptableAbsence', 'Refused'],
         triggersAbsentSubReason: [
           'AcceptableAbsence',
           'Refused',
@@ -142,7 +126,6 @@ describe('Attendence and Pay controller', () => {
 
   describe('batchUpdateAttendance', () => {
     beforeEach(() => {
-      // @ts-expect-error ts-migrate(2339) FIXME: Property 'postAttendances' does not exist on type ... Remove this comment to see the full error message
       whereaboutsApi.postAttendances = jest.fn()
     })
 
@@ -184,9 +167,7 @@ describe('Attendence and Pay controller', () => {
 
     it('should call postAttendances with list of valid offenders', async () => {
       await batchUpdateAttendance(context, { attended: true, paid: true, offenders })
-      // @ts-expect-error ts-migrate(2339) FIXME: Property 'postAttendances' does not exist on type ... Remove this comment to see the full error message
       expect(whereaboutsApi.postAttendances).toHaveBeenCalledTimes(1)
-      // @ts-expect-error ts-migrate(2339) FIXME: Property 'postAttendances' does not exist on type ... Remove this comment to see the full error message
       expect(whereaboutsApi.postAttendances.mock.calls[0]).toEqual([
         context,
         {
@@ -219,9 +200,7 @@ describe('Attendence and Pay controller', () => {
       const reason = 'NotRequired'
 
       await batchUpdateAttendance(context, { attended: true, paid: true, offenders, comments, reason })
-      // @ts-expect-error ts-migrate(2339) FIXME: Property 'postAttendances' does not exist on type ... Remove this comment to see the full error message
       expect(whereaboutsApi.postAttendances).toHaveBeenCalledTimes(1)
-      // @ts-expect-error ts-migrate(2339) FIXME: Property 'postAttendances' does not exist on type ... Remove this comment to see the full error message
       expect(whereaboutsApi.postAttendances.mock.calls[0]).toEqual([
         context,
         {
