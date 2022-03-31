@@ -40,7 +40,7 @@ const sortByLastNameThenByDate = (activitiesMap) => (left, right) => {
   return 0
 }
 
-export default ({ prisonApi, whereaboutsApi, oauthApi }) =>
+export default ({ prisonApi, whereaboutsApi }) =>
   async (req, res) => {
     const { agencyId, fromDateTime, toDateTime, subHeading } = req.query
 
