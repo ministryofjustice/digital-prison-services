@@ -4,7 +4,7 @@ const fromDate = '10/10/2010'
 const toDate = '11/10/2010'
 const period = 'AM'
 const agencyId = 'WWI'
-const reason = 'Refused'
+const reason = 'RefusedIncentiveLevelWarning'
 
 const toReason = ($cell) => ({
   name: $cell[0]?.textContent,
