@@ -20,9 +20,6 @@ describe('Attendance change router', () => {
   let router
 
   beforeEach(() => {
-    prisonApi.getScheduledActivities = jest.fn()
-    prisonApi.getUserDetailsList = jest.fn()
-
     whereaboutsApi.getAttendanceChanges.mockReturnValue({ changes: [] })
     prisonApi.getScheduledActivities.mockReturnValue([])
     prisonApi.getUserDetailsList.mockReturnValue([
@@ -32,9 +29,6 @@ describe('Attendance change router', () => {
         lastName: 'Last name',
       },
     ])
-
-    res.redirect = jest.fn()
-
     router = attendanceChangeRouter({ prisonApi, whereaboutsApi })
 
     req = {
@@ -165,8 +159,8 @@ describe('Attendance change router', () => {
   })
 
   it('should render page when there are no changes', async () => {
+    res.redirect = jest.fn()
     await router(req, res)
-
     expect(res.redirect).toHaveBeenCalledTimes(0)
     expect(res.render).toHaveBeenCalledWith(
       'attendanceChanges.njk',
