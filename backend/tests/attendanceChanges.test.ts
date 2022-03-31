@@ -40,8 +40,6 @@ describe('Attendance change router', () => {
         subHeading: '3 November 2020 - AM + PM',
       },
     }
-
-    res.status = jest.fn()
   })
 
   it('should request changes for a given date time range', async () => {
