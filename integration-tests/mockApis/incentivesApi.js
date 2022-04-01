@@ -19,7 +19,7 @@ module.exports = {
     stubFor({
       request: {
         method: 'GET',
-        urlPattern: '/incentives/iep/reviews/booking/[0-9]+?',
+        urlPattern: '/incentives/iep/reviews/booking/[0-9]+?\\?.+?',
       },
       response: {
         status,
