@@ -432,7 +432,8 @@ describe('prisoner profile quick look', () => {
         {
           user: { activeCaseLoad: { caseLoadId: 'MDI' } },
         },
-        bookingId
+        bookingId,
+        false
       )
       // @ts-expect-error ts-migrate(2339) FIXME: Property 'getPositiveCaseNotes' does not exist on ... Remove this comment to see the full error message
       expect(prisonApi.getPositiveCaseNotes).toHaveBeenCalledWith(

@@ -92,7 +92,7 @@ describe('Prisoner incentive level details', () => {
     // @ts-expect-error ts-migrate(2339) FIXME: Property 'getDetails' does not exist on type '{}'.
     expect(prisonApi.getDetails).toHaveBeenCalledWith(res.locals, offenderNo)
     // @ts-expect-error ts-migrate(2339) FIXME: Property 'getIepSummaryForBooking' does not exist ... Remove this comment to see the full error message
-    expect(incentivesApi.getIepSummaryForBooking).toHaveBeenCalledWith(res.locals, bookingId)
+    expect(incentivesApi.getIepSummaryForBooking).toHaveBeenCalledWith(res.locals, bookingId, true)
     // @ts-expect-error ts-migrate(2339) FIXME: Property 'userRoles' does not exist on type '{}'.
     expect(oauthApi.userRoles).toHaveBeenCalledWith(res.locals)
   })
