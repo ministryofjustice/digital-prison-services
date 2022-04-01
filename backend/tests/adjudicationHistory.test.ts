@@ -1,18 +1,19 @@
 import adjudicationHistoryService from '../services/adjudicationHistory'
 
 Reflect.deleteProperty(process.env, 'APPINSIGHTS_INSTRUMENTATIONKEY')
-const prisonApi = {}
+const prisonApi = {
+  getAdjudicationDetails: jest.fn(),
+  getAdjudications: jest.fn(),
+  getAdjudicationFindingTypes: jest.fn(),
+}
 
 jest.mock('nanoid', () => ({ nanoid: () => '123' }))
 
 const adjudicationHistory = adjudicationHistoryService(prisonApi)
 
 beforeEach(() => {
-  // @ts-expect-error ts-migrate(2339) FIXME: Property 'getAdjudicationDetails' does not exist o... Remove this comment to see the full error message
   prisonApi.getAdjudicationDetails = jest.fn()
-  // @ts-expect-error ts-migrate(2339) FIXME: Property 'getAdjudications' does not exist on type... Remove this comment to see the full error message
   prisonApi.getAdjudications = jest.fn()
-  // @ts-expect-error ts-migrate(2339) FIXME: Property 'getAdjudicationFindingTypes' does not ex... Remove this comment to see the full error message
   prisonApi.getAdjudicationFindingTypes = jest.fn()
 })
 
@@ -241,13 +242,10 @@ const expectedResult = {
 }
 describe('Adjudication History Service', () => {
   it('handles no results', async () => {
-    // @ts-expect-error ts-migrate(2339) FIXME: Property 'getAdjudications' does not exist on type... Remove this comment to see the full error message
     prisonApi.getAdjudications.mockReturnValue(noAdjudications)
-    // @ts-expect-error ts-migrate(2339) FIXME: Property 'getAdjudicationFindingTypes' does not ex... Remove this comment to see the full error message
     prisonApi.getAdjudicationFindingTypes.mockReturnValue(findings)
 
-    // @ts-expect-error ts-migrate(2554) FIXME: Expected 5 arguments, but got 3.
-    const response = await adjudicationHistory.getAdjudications({}, 'OFF-1', {})
+    const response = await adjudicationHistory.getAdjudications({}, 'OFF-1', {}, {}, {})
     expect(response).toEqual({
       agencies: [],
       findingTypes: [
@@ -266,30 +264,22 @@ describe('Adjudication History Service', () => {
       results: [],
     })
 
-    // @ts-expect-error ts-migrate(2339) FIXME: Property 'getAdjudications' does not exist on type... Remove this comment to see the full error message
     expect(prisonApi.getAdjudications).toHaveBeenCalled()
-    // @ts-expect-error ts-migrate(2339) FIXME: Property 'getAdjudicationFindingTypes' does not ex... Remove this comment to see the full error message
     expect(prisonApi.getAdjudicationFindingTypes).toHaveBeenCalled()
 
-    // @ts-expect-error ts-migrate(2339) FIXME: Property 'getAdjudications' does not exist on type... Remove this comment to see the full error message
-    expect(prisonApi.getAdjudications.mock.calls[0]).toEqual([{}, 'OFF-1', {}, undefined, undefined])
-    // @ts-expect-error ts-migrate(2339) FIXME: Property 'getAdjudicationFindingTypes' does not ex... Remove this comment to see the full error message
+    expect(prisonApi.getAdjudications.mock.calls[0]).toEqual([{}, 'OFF-1', {}, {}, {}])
     expect(prisonApi.getAdjudicationFindingTypes.mock.calls[0]).toEqual([{}])
   })
 
   it('return adjudication history', async () => {
-    // @ts-expect-error ts-migrate(2339) FIXME: Property 'getAdjudications' does not exist on type... Remove this comment to see the full error message
     prisonApi.getAdjudications.mockReturnValue(adjudications)
-    // @ts-expect-error ts-migrate(2339) FIXME: Property 'getAdjudicationFindingTypes' does not ex... Remove this comment to see the full error message
     prisonApi.getAdjudicationFindingTypes.mockReturnValue(findings)
 
-    // @ts-expect-error ts-migrate(2554) FIXME: Expected 5 arguments, but got 3.
-    const response = await adjudicationHistory.getAdjudications({}, 'OFF-1', {})
+    const response = await adjudicationHistory.getAdjudications({}, 'OFF-1', {}, {}, {})
     expect(response).toEqual(expectedResult)
   })
 
   it('return adjudication detail with hearings and sanctions', async () => {
-    // @ts-expect-error ts-migrate(2339) FIXME: Property 'getAdjudicationDetails' does not exist o... Remove this comment to see the full error message
     prisonApi.getAdjudicationDetails.mockReturnValue({
       reporterFirstName: 'Laurie',
       reporterLastName: 'Jones',
@@ -334,12 +324,10 @@ describe('Adjudication History Service', () => {
       ],
     })
 
-    // @ts-expect-error ts-migrate(2339) FIXME: Property 'getAdjudicationDetails' does not exist o... Remove this comment to see the full error message
     expect(prisonApi.getAdjudicationDetails.mock.calls[0]).toEqual([{}, 'OFF-1', 'ADJ-1'])
   })
 
   it('return adjudication detail when no hearings', async () => {
-    // @ts-expect-error ts-migrate(2339) FIXME: Property 'getAdjudicationDetails' does not exist o... Remove this comment to see the full error message
     prisonApi.getAdjudicationDetails.mockReturnValue({})
 
     const response = await adjudicationHistory.getAdjudicationDetails({}, 'OFF-1', 'ADJ-1')
@@ -350,32 +338,25 @@ describe('Adjudication History Service', () => {
       sanctions: [],
     })
 
-    // @ts-expect-error ts-migrate(2339) FIXME: Property 'getAdjudicationDetails' does not exist o... Remove this comment to see the full error message
     expect(prisonApi.getAdjudicationDetails.mock.calls[0]).toEqual([{}, 'OFF-1', 'ADJ-1'])
   })
 
   it('pagination is only applied to adjudication retrieval requests', async () => {
-    // @ts-expect-error ts-migrate(2339) FIXME: Property 'getAdjudications' does not exist on type... Remove this comment to see the full error message
-    prisonApi.getAdjudications.mockImplementation((ctx) => {
+    prisonApi.getAdjudications.mockImplementationOnce((ctx) => {
       ctx.adjudicationResponseHeaders = true
       return adjudications
     })
-
-    // @ts-expect-error ts-migrate(2339) FIXME: Property 'getAdjudicationFindingTypes' does not ex... Remove this comment to see the full error message
-    prisonApi.getAdjudicationFindingTypes.mockImplementation((ctx) => {
+    prisonApi.getAdjudicationFindingTypes.mockImplementationOnce((ctx) => {
       ctx.findingResponseHeaders = true
       return findings
     })
 
     const context = { anotherAttribute: 1, requestHeaders: { pageOffset: 1, pageLimit: 20 } }
 
-    // @ts-expect-error ts-migrate(2554) FIXME: Expected 5 arguments, but got 3.
-    const response = await adjudicationHistory.getAdjudications(context, 'OFF-1', {})
+    const response = await adjudicationHistory.getAdjudications(context, 'OFF-1', {}, {}, {})
 
     expect(response).toEqual(expectedResult)
 
-    // Pagination Headers from request are passed through to the get adjudication call
-    // @ts-expect-error ts-migrate(2339) FIXME: Property 'getAdjudications' does not exist on type... Remove this comment to see the full error message
     expect(prisonApi.getAdjudications.mock.calls[0]).toEqual([
       {
         anotherAttribute: 1,
@@ -384,12 +365,11 @@ describe('Adjudication History Service', () => {
       },
       'OFF-1',
       {},
-      undefined,
-      undefined,
+      {},
+      {},
     ])
 
     // Pagination Headers from request are not passed through to the get findings call
-    // @ts-expect-error ts-migrate(2339) FIXME: Property 'getAdjudicationFindingTypes' does not ex... Remove this comment to see the full error message
     expect(prisonApi.getAdjudicationFindingTypes.mock.calls[0]).toEqual([
       {
         anotherAttribute: 1,

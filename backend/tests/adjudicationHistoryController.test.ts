@@ -46,28 +46,27 @@ const adjudicationHistoryResponse = {
 }
 
 describe('Adjudications history controller', () => {
-  const prisonApi = {}
-  const adjudicationHistoryService = {}
-  const paginationService = {}
+  const prisonApi = {
+    getDetails: jest.fn(),
+  }
+  const adjudicationHistoryService = {
+    getAdjudications: jest.fn(),
+  }
+  const paginationService = {
+    getPagination: jest.fn(),
+  }
   let req
-  const res = { locals: {} }
-  let logError
+  const res = { locals: {}, render: jest.fn() }
   let controller
 
   beforeEach(() => {
-    // @ts-expect-error ts-migrate(2339) FIXME: Property 'getPagination' does not exist on type '{... Remove this comment to see the full error message
     paginationService.getPagination = jest.fn()
-    // @ts-expect-error ts-migrate(2339) FIXME: Property 'getDetails' does not exist on type '{}'.
     prisonApi.getDetails = jest.fn().mockResolvedValue({ firstName: 'bob', lastName: 'doe' })
-    // @ts-expect-error ts-migrate(2339) FIXME: Property 'getAdjudications' does not exist on type... Remove this comment to see the full error message
     adjudicationHistoryService.getAdjudications = jest.fn().mockResolvedValue(adjudicationHistoryResponse)
 
-    logError = jest.fn()
-    // @ts-expect-error ts-migrate(2339) FIXME: Property 'render' does not exist on type '{ locals... Remove this comment to see the full error message
     res.render = jest.fn()
 
-    // @ts-expect-error ts-migrate(2345) FIXME: Argument of type '{ adjudicationHistoryService: {}... Remove this comment to see the full error message
-    controller = adjudicationsHistoryController({ adjudicationHistoryService, paginationService, prisonApi, logError })
+    controller = adjudicationsHistoryController({ adjudicationHistoryService, paginationService, prisonApi })
 
     req = { originalUrl: 'http://localhost', params: { offenderNo }, get: () => {} }
   })
@@ -82,7 +81,6 @@ describe('Adjudications history controller', () => {
 
     await controller(req, res)
 
-    // @ts-expect-error ts-migrate(2339) FIXME: Property 'getAdjudications' does not exist on type... Remove this comment to see the full error message
     expect(adjudicationHistoryService.getAdjudications).toHaveBeenCalledWith(
       {},
       offenderNo,
@@ -100,7 +98,6 @@ describe('Adjudications history controller', () => {
   it('should render view with the correct data in date time desc', async () => {
     await controller(req, res)
 
-    // @ts-expect-error ts-migrate(2339) FIXME: Property 'render' does not exist on type '{ locals... Remove this comment to see the full error message
     expect(res.render).toHaveBeenCalledWith(
       'prisonerProfile/adjudicationHistory.njk',
       expect.objectContaining({
@@ -204,7 +201,6 @@ describe('Adjudications history controller', () => {
 
     await controller(req, res)
 
-    // @ts-expect-error ts-migrate(2339) FIXME: Property 'getAdjudications' does not exist on type... Remove this comment to see the full error message
     expect(adjudicationHistoryService.getAdjudications).toHaveBeenCalledWith(
       {},
       offenderNo,
@@ -226,7 +222,6 @@ describe('Adjudications history controller', () => {
 
     await controller(req, res)
 
-    // @ts-expect-error ts-migrate(2339) FIXME: Property 'getAdjudications' does not exist on type... Remove this comment to see the full error message
     expect(adjudicationHistoryService.getAdjudications).toHaveBeenCalledWith(
       {},
       offenderNo,
@@ -237,7 +232,6 @@ describe('Adjudications history controller', () => {
       10
     )
 
-    // @ts-expect-error ts-migrate(2339) FIXME: Property 'render' does not exist on type '{ locals... Remove this comment to see the full error message
     expect(res.render).toHaveBeenCalledWith(
       'prisonerProfile/adjudicationHistory.njk',
       expect.objectContaining({
@@ -250,7 +244,6 @@ describe('Adjudications history controller', () => {
   })
 
   it('should return a no records found message for the blank date scenario', async () => {
-    // @ts-expect-error ts-migrate(2339) FIXME: Property 'getAdjudications' does not exist on type... Remove this comment to see the full error message
     adjudicationHistoryService.getAdjudications = jest.fn().mockResolvedValue({
       results: [],
       agencies: [{ agencyId: 'MDI', description: 'Moorland' }],
@@ -263,7 +256,6 @@ describe('Adjudications history controller', () => {
 
     await controller(req, res)
 
-    // @ts-expect-error ts-migrate(2339) FIXME: Property 'render' does not exist on type '{ locals... Remove this comment to see the full error message
     expect(res.render).toHaveBeenCalledWith(
       'prisonerProfile/adjudicationHistory.njk',
       expect.objectContaining({
@@ -278,7 +270,6 @@ describe('Adjudications history controller', () => {
       fromDate: '11/12/2020',
       agencyId: 'MDI',
     }
-    // @ts-expect-error ts-migrate(2339) FIXME: Property 'getAdjudications' does not exist on type... Remove this comment to see the full error message
     adjudicationHistoryService.getAdjudications = jest.fn().mockResolvedValue({
       results: [],
       agencies: [{ agencyId: 'MDI', description: 'Moorland' }],
@@ -291,7 +282,6 @@ describe('Adjudications history controller', () => {
 
     await controller(req, res)
 
-    // @ts-expect-error ts-migrate(2339) FIXME: Property 'render' does not exist on type '{ locals... Remove this comment to see the full error message
     expect(res.render).toHaveBeenCalledWith(
       'prisonerProfile/adjudicationHistory.njk',
       expect.objectContaining({
@@ -304,7 +294,6 @@ describe('Adjudications history controller', () => {
     req.query = {
       finding: 'PROVED',
     }
-    // @ts-expect-error ts-migrate(2339) FIXME: Property 'getAdjudications' does not exist on type... Remove this comment to see the full error message
     adjudicationHistoryService.getAdjudications = jest.fn().mockResolvedValue({
       results: [],
       agencies: [{ agencyId: 'MDI', description: 'Moorland' }],
@@ -317,7 +306,6 @@ describe('Adjudications history controller', () => {
 
     await controller(req, res)
 
-    // @ts-expect-error ts-migrate(2339) FIXME: Property 'render' does not exist on type '{ locals... Remove this comment to see the full error message
     expect(res.render).toHaveBeenCalledWith(
       'prisonerProfile/adjudicationHistory.njk',
       expect.objectContaining({
@@ -330,7 +318,6 @@ describe('Adjudications history controller', () => {
     req.query = {
       agencyId: 'MDI',
     }
-    // @ts-expect-error ts-migrate(2339) FIXME: Property 'getAdjudications' does not exist on type... Remove this comment to see the full error message
     adjudicationHistoryService.getAdjudications = jest.fn().mockResolvedValue({
       results: [],
       agencies: [{ agencyId: 'MDI', description: 'Moorland' }],
@@ -343,7 +330,6 @@ describe('Adjudications history controller', () => {
 
     await controller(req, res)
 
-    // @ts-expect-error ts-migrate(2339) FIXME: Property 'render' does not exist on type '{ locals... Remove this comment to see the full error message
     expect(res.render).toHaveBeenCalledWith(
       'prisonerProfile/adjudicationHistory.njk',
       expect.objectContaining({
@@ -353,7 +339,6 @@ describe('Adjudications history controller', () => {
   })
 
   it('should list the finding types alphabetically', async () => {
-    // @ts-expect-error ts-migrate(2339) FIXME: Property 'getAdjudications' does not exist on type... Remove this comment to see the full error message
     adjudicationHistoryService.getAdjudications = jest.fn().mockResolvedValue({
       ...adjudicationHistoryResponse,
       findingTypes: [
@@ -364,7 +349,6 @@ describe('Adjudications history controller', () => {
 
     await controller(req, res)
 
-    // @ts-expect-error ts-migrate(2339) FIXME: Property 'render' does not exist on type '{ locals... Remove this comment to see the full error message
     expect(res.render).toHaveBeenCalledWith(
       'prisonerProfile/adjudicationHistory.njk',
       expect.objectContaining({
@@ -390,7 +374,6 @@ describe('Adjudications history controller', () => {
 
     await controller(req, res)
 
-    // @ts-expect-error ts-migrate(2339) FIXME: Property 'getAdjudications' does not exist on type... Remove this comment to see the full error message
     expect(adjudicationHistoryService.getAdjudications).toHaveBeenCalledWith(
       {},
       offenderNo,
@@ -410,7 +393,6 @@ describe('Adjudications history controller', () => {
 
     await controller(req, res)
 
-    // @ts-expect-error ts-migrate(2339) FIXME: Property 'getAdjudications' does not exist on type... Remove this comment to see the full error message
     expect(adjudicationHistoryService.getAdjudications).toHaveBeenCalledWith(
       {},
       offenderNo,

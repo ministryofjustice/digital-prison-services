@@ -7,9 +7,20 @@ import alertController from '../controllers/alert'
 
 Reflect.deleteProperty(process.env, 'APPINSIGHTS_INSTRUMENTATIONKEY')
 
-const prisonApi = {}
-const oauthApi = {}
-const referenceCodesService = {}
+const prisonApi = {
+  getDetails: jest.fn(),
+  userCaseLoads: jest.fn(),
+  getAlert: jest.fn(),
+  updateAlert: jest.fn(),
+  createAlert: jest.fn(),
+}
+const oauthApi = {
+  currentUser: jest.fn(),
+  userRoles: jest.fn(),
+}
+const referenceCodesService = {
+  getAlertTypes: jest.fn(),
+}
 const { handleCreateAlertForm, displayCreateAlertPage, displayEditAlertPage, handleEditAlertForm } =
   alertController.alertFactory(oauthApi, prisonApi, referenceCodesService)
 
@@ -80,10 +91,8 @@ describe('alert management', () => {
       body: {},
       headers: {},
     }
-    // @ts-expect-error ts-migrate(2339) FIXME: Property 'getDetails' does not exist on type '{}'.
     prisonApi.getDetails = jest.fn().mockReturnValue(getDetailsResponse)
-    ;(oauthApi as any).currentUser = jest.fn().mockReturnValue({ name: 'Test User' })
-    // @ts-expect-error ts-migrate(2339) FIXME: Property 'userCaseLoads' does not exist on type '{... Remove this comment to see the full error message
+    oauthApi.currentUser = jest.fn().mockReturnValue({ name: 'Test User' })
     prisonApi.userCaseLoads = jest.fn().mockReturnValue([
       {
         caseLoadId: 'AKI',
@@ -100,13 +109,11 @@ describe('alert management', () => {
         currentlyActive: true,
       },
     ])
-    ;(oauthApi as any).userRoles = jest.fn().mockReturnValue([])
+    oauthApi.userRoles = jest.fn().mockReturnValue([])
   })
 
   afterEach(() => {
-    // @ts-expect-error ts-migrate(2339) FIXME: Property 'getDetails' does not exist on type '{}'.
     prisonApi.getDetails.mockRestore()
-    // @ts-expect-error ts-migrate(2339) FIXME: Property 'userCaseLoads' does not exist on type '{... Remove this comment to see the full error message
     prisonApi.userCaseLoads.mockRestore()
     mockReq.flash.mockRestore()
   })
@@ -114,7 +121,6 @@ describe('alert management', () => {
   describe('displayCloseAlertPage()', () => {
     describe('when there are errors', () => {
       it('should return an error when there is a problem retrieving the alert', async () => {
-        // @ts-expect-error ts-migrate(2339) FIXME: Property 'getAlert' does not exist on type '{}'.
         prisonApi.getAlert = jest.fn().mockImplementationOnce(() => {
           throw new Error('There has been an error')
         })
@@ -134,7 +140,6 @@ describe('alert management', () => {
       })
 
       it('should show the alertAlreadyClosed page if it has already expired', async () => {
-        // @ts-expect-error ts-migrate(2339) FIXME: Property 'getAlert' does not exist on type '{}'.
         prisonApi.getAlert = jest.fn().mockReturnValueOnce({ ...alert, expired: true })
 
         const req = { ...mockReq, query: { offenderNo, alertId: 1 } }
@@ -150,7 +155,6 @@ describe('alert management', () => {
     })
 
     it.skip('should render the closeAlertForm with the correctly formatted information', async () => {
-      // @ts-expect-error ts-migrate(2339) FIXME: Property 'getAlert' does not exist on type '{}'.
       prisonApi.getAlert = jest.fn().mockReturnValueOnce({ ...alert, expired: false })
 
       const req = { ...mockReq, query: { offenderNo, alertId: 1 } }
@@ -188,9 +192,7 @@ describe('alert management', () => {
 
   describe('handleCloseAlertForm()', () => {
     beforeEach(() => {
-      // @ts-expect-error ts-migrate(2339) FIXME: Property 'updateAlert' does not exist on type '{}'... Remove this comment to see the full error message
       prisonApi.updateAlert = jest.fn()
-      // @ts-expect-error ts-migrate(2339) FIXME: Property 'getAlert' does not exist on type '{}'.
       prisonApi.getAlert = jest.fn()
     })
 
@@ -204,7 +206,6 @@ describe('alert management', () => {
           body: { alertStatus: 'yes', offenderNo, comment: 'test' },
         }
 
-        // @ts-expect-error ts-migrate(2339) FIXME: Property 'updateAlert' does not exist on type '{}'... Remove this comment to see the full error message
         prisonApi.updateAlert = jest.fn().mockRejectedValue(error)
 
         await expect(handleEditAlertForm(req, res)).rejects.toThrowError(error)
@@ -226,7 +227,6 @@ describe('alert management', () => {
           body: { alertStatus: 'yes', offenderNo, comment: 'test' },
         }
 
-        // @ts-expect-error ts-migrate(2339) FIXME: Property 'updateAlert' does not exist on type '{}'... Remove this comment to see the full error message
         prisonApi.updateAlert = jest.fn().mockRejectedValue(error400)
 
         await handleEditAlertForm(req, res)
@@ -316,9 +316,7 @@ describe('alert management', () => {
       }
 
       it('should update the alert to INACTIVE and set the expiry date to the current date, then redirect back to the offender alerts page', async () => {
-        // @ts-expect-error ts-migrate(2339) FIXME: Property 'getAlert' does not exist on type '{}'.
         prisonApi.getAlert = jest.fn().mockReturnValue({ ...alert, expired: false })
-        // @ts-expect-error ts-migrate(2339) FIXME: Property 'userCaseLoads' does not exist on type '{... Remove this comment to see the full error message
         prisonApi.userCaseLoads = jest.fn().mockReturnValue([
           {
             caseLoadId: 'LEI',
@@ -328,7 +326,6 @@ describe('alert management', () => {
         jest.spyOn(Date, 'now').mockImplementation(() => 1553860800000) // Friday 2019-03-29T12:00:00.000Z
         await handleEditAlertForm(req, res)
 
-        // @ts-expect-error ts-migrate(2339) FIXME: Property 'updateAlert' does not exist on type '{}'... Remove this comment to see the full error message
         expect(prisonApi.updateAlert).toBeCalledWith(res.locals, getDetailsResponse.bookingId, req.params.alertId, {
           expiryDate: '2019-03-29',
           comment: 'test',
@@ -338,8 +335,8 @@ describe('alert management', () => {
 
         expect(res.redirect).toBeCalledWith('/prisoner/ABC123/alerts?alertStatus=closed')
 
-        // @ts-expect-error ts-migrate(2339) FIXME: Property 'mockRestore' does not exist on type '() ... Remove this comment to see the full error message
-        Date.now.mockRestore()
+        const spy = jest.spyOn(Date, 'now')
+        spy.mockRestore()
       })
     })
 
@@ -351,19 +348,17 @@ describe('alert management', () => {
       }
 
       it('should update the alert comment and expiry date', async () => {
-        // @ts-expect-error ts-migrate(2339) FIXME: Property 'getAlert' does not exist on type '{}'.
         prisonApi.getAlert = jest.fn().mockReturnValueOnce({ ...alert, expired: false })
         jest.spyOn(Date, 'now').mockImplementation(() => 1553860800000) // Friday 2019-03-29T12:00:00.000Z
 
         await handleEditAlertForm(req, res)
 
-        // @ts-expect-error ts-migrate(2339) FIXME: Property 'updateAlert' does not exist on type '{}'... Remove this comment to see the full error message
         expect(prisonApi.updateAlert).toBeCalledWith({}, '1234', 1, { comment: 'test', expiryDate: '2019-03-29' })
 
         expect(res.redirect).toBeCalledWith(`/prisoner/${req.body.offenderNo}/alerts?alertStatus=closed`)
 
-        // @ts-expect-error ts-migrate(2339) FIXME: Property 'mockRestore' does not exist on type '() ... Remove this comment to see the full error message
-        Date.now.mockRestore()
+        const spy = jest.spyOn(Date, 'now')
+        spy.mockRestore()
       })
     })
 
@@ -375,16 +370,12 @@ describe('alert management', () => {
       }
 
       beforeEach(() => {
-        // @ts-expect-error ts-migrate(2339) FIXME: Property 'getAlert' does not exist on type '{}'.
         prisonApi.getAlert = jest.fn().mockReturnValueOnce({ ...alert, expired: false })
-        // @ts-expect-error ts-migrate(2339) FIXME: Property 'mockRestore' does not exist on type '(ca... Remove this comment to see the full error message
-        raiseAnalyticsEvent.mockRestore()
       })
 
       it('should update the alert comment only', async () => {
         await handleEditAlertForm(req, res)
 
-        // @ts-expect-error ts-migrate(2339) FIXME: Property 'updateAlert' does not exist on type '{}'... Remove this comment to see the full error message
         expect(prisonApi.updateAlert).toBeCalledWith({}, '1234', 1, { comment: 'test' })
         expect(res.redirect).toBeCalledWith(`/prisoner/${req.body.offenderNo}/alerts?alertStatus=open`)
       })
@@ -405,7 +396,7 @@ describe('alert management', () => {
     it('should return an error when there is a problem loading the form', async () => {
       const error = new Error('There has been an error')
 
-      ;(oauthApi as any).userRoles = jest.fn().mockRejectedValueOnce(error)
+      oauthApi.userRoles = jest.fn().mockRejectedValueOnce(error)
 
       const req = { ...mockCreateReq, params: { offenderNo }, headers: {} }
       res.status = jest.fn()
@@ -415,7 +406,6 @@ describe('alert management', () => {
     })
 
     it('should render the createAlertForm with the correctly formatted information', async () => {
-      // @ts-expect-error ts-migrate(2339) FIXME: Property 'getAlertTypes' does not exist on type '{... Remove this comment to see the full error message
       referenceCodesService.getAlertTypes = jest.fn().mockImplementationOnce(() => ({
         alertTypes: [
           {
@@ -433,7 +423,7 @@ describe('alert management', () => {
           },
         ],
       }))
-      ;(oauthApi as any).userRoles = jest.fn().mockReturnValue([{ roleCode: 'UPDATE_ALERT' }])
+      oauthApi.userRoles = jest.fn().mockReturnValue([{ roleCode: 'UPDATE_ALERT' }])
       const req = { ...mockCreateReq, params: { offenderNo }, headers: {} }
 
       await displayCreateAlertPage(req, res)
@@ -459,11 +449,7 @@ describe('alert management', () => {
 
   describe('handleCreateAlertForm()', () => {
     beforeEach(() => {
-      // @ts-expect-error ts-migrate(2339) FIXME: Property 'mockRestore' does not exist on type '(ca... Remove this comment to see the full error message
-      raiseAnalyticsEvent.mockRestore()
-      // @ts-expect-error ts-migrate(2339) FIXME: Property 'createAlert' does not exist on type '{}'... Remove this comment to see the full error message
       prisonApi.createAlert = jest.fn()
-      // @ts-expect-error ts-migrate(2339) FIXME: Property 'getAlertTypes' does not exist on type '{... Remove this comment to see the full error message
       referenceCodesService.getAlertTypes = jest.fn().mockImplementationOnce(() => ({
         alertTypes: [
           {
@@ -500,7 +486,6 @@ describe('alert management', () => {
           },
         }
 
-        // @ts-expect-error ts-migrate(2339) FIXME: Property 'createAlert' does not exist on type '{}'... Remove this comment to see the full error message
         prisonApi.createAlert = jest.fn().mockRejectedValue(error)
 
         res.status = jest.fn()
@@ -625,7 +610,6 @@ describe('alert management', () => {
           },
         }
 
-        // @ts-expect-error ts-migrate(2339) FIXME: Property 'createAlert' does not exist on type '{}'... Remove this comment to see the full error message
         prisonApi.createAlert = jest.fn()
 
         await handleCreateAlertForm(req, res)
