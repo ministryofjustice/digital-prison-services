@@ -1,9 +1,21 @@
 import viewAppointments from '../controllers/appointments/viewAppointments'
 
 describe('View appointments', () => {
-  const prisonApi = {}
-  const whereaboutsApi = {}
-  const oauthApi = {}
+  const prisonApi = {
+    getAppointmentTypes: jest.fn(),
+    getLocationsForAppointments: jest.fn(),
+    getStaffDetails: jest.fn(),
+    getDetails: jest.fn(),
+  }
+  const whereaboutsApi = {
+    getAppointments: jest.fn(),
+    getVideoLinkAppointments: jest.fn(),
+    searchGroups: jest.fn(),
+    getAgencyGroupLocationPrefix: jest.fn(),
+  }
+  const oauthApi = {
+    userDetails: jest.fn(),
+  }
 
   let req
   let res
@@ -26,40 +38,24 @@ describe('View appointments', () => {
 
     logError = jest.fn()
 
-    // @ts-expect-error ts-migrate(2339) FIXME: Property 'userDetails' does not exist on type '{}'... Remove this comment to see the full error message
     oauthApi.userDetails = jest.fn()
-    // @ts-expect-error ts-migrate(2339) FIXME: Property 'getAppointmentTypes' does not exist on t... Remove this comment to see the full error message
     prisonApi.getAppointmentTypes = jest.fn()
-    // @ts-expect-error ts-migrate(2339) FIXME: Property 'getLocationsForAppointments' does not ex... Remove this comment to see the full error message
     prisonApi.getLocationsForAppointments = jest.fn()
-    // @ts-expect-error ts-migrate(2339) FIXME: Property 'getStaffDetails' does not exist on type ... Remove this comment to see the full error message
     prisonApi.getStaffDetails = jest.fn()
-    // @ts-expect-error ts-migrate(2339) FIXME: Property 'getDetails' does not exist on type '{}'.
     prisonApi.getDetails = jest.fn()
 
-    // @ts-expect-error ts-migrate(2339) FIXME: Property 'getAppointmentTypes' does not exist on t... Remove this comment to see the full error message
     prisonApi.getAppointmentTypes.mockReturnValue([{ description: 'Video link booking', code: 'VLB' }])
-    // @ts-expect-error ts-migrate(2339) FIXME: Property 'getLocationsForAppointments' does not ex... Remove this comment to see the full error message
     prisonApi.getLocationsForAppointments.mockReturnValue([{ userDescription: 'VCC Room 1', locationId: '1' }])
-    // @ts-expect-error ts-migrate(2339) FIXME: Property 'getStaffDetails' does not exist on type ... Remove this comment to see the full error message
     prisonApi.getStaffDetails.mockResolvedValue([])
-    // @ts-expect-error ts-migrate(2339) FIXME: Property 'getDetails' does not exist on type '{}'.
     prisonApi.getDetails.mockResolvedValue({})
 
-    // @ts-expect-error ts-migrate(2339) FIXME: Property 'getAppointments' does not exist on type ... Remove this comment to see the full error message
     whereaboutsApi.getAppointments = jest.fn()
-    // @ts-expect-error ts-migrate(2339) FIXME: Property 'getVideoLinkAppointments' does not exist... Remove this comment to see the full error message
     whereaboutsApi.getVideoLinkAppointments = jest.fn()
-    // @ts-expect-error ts-migrate(2339) FIXME: Property 'searchGroups' does not exist on type '{}... Remove this comment to see the full error message
     whereaboutsApi.searchGroups = jest.fn()
-    // @ts-expect-error ts-migrate(2339) FIXME: Property 'getAgencyGroupLocationPrefix' does not e... Remove this comment to see the full error message
     whereaboutsApi.getAgencyGroupLocationPrefix = jest.fn()
 
-    // @ts-expect-error ts-migrate(2339) FIXME: Property 'getVideoLinkAppointments' does not exist... Remove this comment to see the full error message
     whereaboutsApi.getVideoLinkAppointments.mockReturnValue({ appointments: [] })
-    // @ts-expect-error ts-migrate(2339) FIXME: Property 'getAppointments' does not exist on type ... Remove this comment to see the full error message
     whereaboutsApi.getAppointments.mockReturnValue([])
-    // @ts-expect-error ts-migrate(2339) FIXME: Property 'searchGroups' does not exist on type '{}... Remove this comment to see the full error message
     whereaboutsApi.searchGroups.mockReturnValue([
       {
         name: 'Houseblock 1',
@@ -70,18 +66,15 @@ describe('View appointments', () => {
         key: 'H 2',
       },
     ])
-    // @ts-expect-error ts-migrate(2339) FIXME: Property 'getAgencyGroupLocationPrefix' does not e... Remove this comment to see the full error message
     whereaboutsApi.getAgencyGroupLocationPrefix = jest.fn().mockReturnValue({
       locationPrefix: 'MDI-1-',
     })
 
-    // @ts-expect-error ts-migrate(2339) FIXME: Property 'userDetails' does not exist on type '{}'... Remove this comment to see the full error message
     oauthApi.userDetails.mockResolvedValue({
       name: 'Bob Doe',
     })
 
-    // @ts-expect-error ts-migrate(2345) FIXME: Argument of type '{ prisonApi: {}; whereaboutsApi:... Remove this comment to see the full error message
-    controller = viewAppointments({ prisonApi, whereaboutsApi, logError, oauthApi })
+    controller = viewAppointments({ prisonApi, whereaboutsApi, logError })
   })
 
   beforeAll(() => {
@@ -89,28 +82,23 @@ describe('View appointments', () => {
   })
 
   afterAll(() => {
-    // @ts-expect-error ts-migrate(2339) FIXME: Property 'mockRestore' does not exist on type '() ... Remove this comment to see the full error message
-    Date.now.mockRestore()
+    const spy = jest.spyOn(Date, 'now')
+    spy.mockRestore()
   })
 
   describe('when the page is first loaded with no results', () => {
     it('should make the correct API calls', async () => {
       await controller(req, res)
 
-      // @ts-expect-error ts-migrate(2339) FIXME: Property 'getAppointmentTypes' does not exist on t... Remove this comment to see the full error message
       expect(prisonApi.getAppointmentTypes).toHaveBeenCalledWith(res.locals)
-      // @ts-expect-error ts-migrate(2339) FIXME: Property 'getLocationsForAppointments' does not ex... Remove this comment to see the full error message
       expect(prisonApi.getLocationsForAppointments).toHaveBeenCalledWith(res.locals, activeCaseLoadId)
-      // @ts-expect-error ts-migrate(2339) FIXME: Property 'getAppointments' does not exist on type ... Remove this comment to see the full error message
       expect(whereaboutsApi.getAppointments).toHaveBeenCalledWith(res.locals, 'MDI', {
         date: '2020-01-01',
         locationId: undefined,
         offenderLocationPrefix: 'MDI',
         timeSlot: 'AM',
       })
-      // @ts-expect-error ts-migrate(2339) FIXME: Property 'getVideoLinkAppointments' does not exist... Remove this comment to see the full error message
       expect(whereaboutsApi.getVideoLinkAppointments).toHaveBeenCalledWith(res.locals, [])
-      // @ts-expect-error ts-migrate(2339) FIXME: Property 'getStaffDetails' does not exist on type ... Remove this comment to see the full error message
       expect(prisonApi.getStaffDetails).not.toHaveBeenCalled()
     })
 
@@ -142,7 +130,6 @@ describe('View appointments', () => {
 
       await controller(req, res)
 
-      // @ts-expect-error ts-migrate(2339) FIXME: Property 'getAppointments' does not exist on type ... Remove this comment to see the full error message
       expect(whereaboutsApi.getAppointments).toHaveBeenCalledWith(
         res.locals,
         'MDI',
@@ -163,7 +150,6 @@ describe('View appointments', () => {
 
       await controller(req, res)
 
-      // @ts-expect-error ts-migrate(2339) FIXME: Property 'getAppointments' does not exist on type ... Remove this comment to see the full error message
       expect(whereaboutsApi.getAppointments).toHaveBeenCalledWith(
         res.locals,
         'MDI',
@@ -182,7 +168,6 @@ describe('View appointments', () => {
 
   describe('when there are selected search parameters with results', () => {
     beforeEach(() => {
-      // @ts-expect-error ts-migrate(2339) FIXME: Property 'getAppointments' does not exist on type ... Remove this comment to see the full error message
       whereaboutsApi.getAppointments.mockReturnValue([
         {
           id: 1,
@@ -275,7 +260,6 @@ describe('View appointments', () => {
         },
       ])
 
-      // @ts-expect-error ts-migrate(2339) FIXME: Property 'getStaffDetails' does not exist on type ... Remove this comment to see the full error message
       prisonApi.getStaffDetails
         .mockResolvedValueOnce({
           staffId: 1,
@@ -291,13 +275,11 @@ describe('View appointments', () => {
           lastName: 'THREE',
         })
 
-      // @ts-expect-error ts-migrate(2339) FIXME: Property 'getDetails' does not exist on type '{}'.
       prisonApi.getDetails
         .mockResolvedValueOnce({ assignedLivingUnit: { description: '1-1-1' } })
         .mockResolvedValueOnce({ assignedLivingUnit: { description: '2-1-1' } })
         .mockResolvedValueOnce({ assignedLivingUnit: { description: '3-1-1' } })
 
-      // @ts-expect-error ts-migrate(2339) FIXME: Property 'getVideoLinkAppointments' does not exist... Remove this comment to see the full error message
       whereaboutsApi.getVideoLinkAppointments.mockReturnValue({
         appointments: [
           {
@@ -343,17 +325,13 @@ describe('View appointments', () => {
     it('should make the correct API calls', async () => {
       await controller(req, res)
 
-      // @ts-expect-error ts-migrate(2339) FIXME: Property 'getAppointments' does not exist on type ... Remove this comment to see the full error message
       expect(whereaboutsApi.getAppointments).toHaveBeenCalledWith(res.locals, 'MDI', {
         date: '2020-01-02',
         offenderLocationPrefix: 'MDI-1',
         timeSlot: 'PM',
       })
-      // @ts-expect-error ts-migrate(2339) FIXME: Property 'getVideoLinkAppointments' does not exist... Remove this comment to see the full error message
       expect(whereaboutsApi.getVideoLinkAppointments).toHaveBeenCalledWith(res.locals, [3, 4, 5, 6])
-      // @ts-expect-error ts-migrate(2339) FIXME: Property 'getAgencyGroupLocationPrefix' does not e... Remove this comment to see the full error message
       expect(whereaboutsApi.getAgencyGroupLocationPrefix).toHaveBeenCalledWith(res.locals, 'MDI', 'H 1')
-      // @ts-expect-error ts-migrate(2339) FIXME: Property 'getDetails' does not exist on type '{}'.
       expect(prisonApi.getDetails).toHaveBeenCalledTimes(6)
     })
 
@@ -507,7 +485,6 @@ describe('View appointments', () => {
 
       await controller(req, res)
 
-      // @ts-expect-error ts-migrate(2339) FIXME: Property 'getAppointments' does not exist on type ... Remove this comment to see the full error message
       expect(whereaboutsApi.getAppointments).toHaveBeenCalledWith(res.locals, 'MDI', {
         date: '2020-01-02',
         offenderLocationPrefix: 'MDI-1',
@@ -518,7 +495,6 @@ describe('View appointments', () => {
   describe('when there is an error retrieving information', () => {
     it('should render the error template', async () => {
       const error = new Error('Problem retrieving appointment types')
-      // @ts-expect-error ts-migrate(2339) FIXME: Property 'getAppointmentTypes' does not exist on t... Remove this comment to see the full error message
       prisonApi.getAppointmentTypes.mockRejectedValue(error)
 
       await expect(controller(req, res)).rejects.toThrowError(error)

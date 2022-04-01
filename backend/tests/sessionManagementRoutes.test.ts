@@ -53,8 +53,8 @@ describe('Test the routes and middleware installed by sessionManagementRoutes', 
   sessionManagementRoutes.configureRoutes({
     app,
     tokenRefresher,
-    // @ts-expect-error ts-migrate(2345) FIXME: Argument of type '{ app: Express; tokenRefresher: ... Remove this comment to see the full error message
-    mailTo: 'test@site.com',
+    tokenVerifier: {},
+    homeLink: {},
   })
 
   // some content to send for '/'

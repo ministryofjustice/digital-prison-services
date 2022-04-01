@@ -1,8 +1,15 @@
 import { retentionReasonsFactory } from '../controllers/retentionReasons'
 
 describe('retention reasons', () => {
-  const prisonApi = {}
-  const dataComplianceApi = {}
+  const prisonApi = {
+    getDetails: jest.fn(),
+    getAgencyDetails: jest.fn(),
+  }
+  const dataComplianceApi = {
+    getOffenderRetentionReasons: jest.fn(),
+    getOffenderRetentionRecord: jest.fn(),
+    putOffenderRetentionRecord: jest.fn(),
+  }
   const offenderNo = 'ABC123'
 
   let req
@@ -27,23 +34,16 @@ describe('retention reasons', () => {
 
     logError = jest.fn()
 
-    // @ts-expect-error ts-migrate(2339) FIXME: Property 'getDetails' does not exist on type '{}'.
     prisonApi.getDetails = jest.fn()
-    // @ts-expect-error ts-migrate(2339) FIXME: Property 'getAgencyDetails' does not exist on type... Remove this comment to see the full error message
     prisonApi.getAgencyDetails = jest.fn()
-    // @ts-expect-error ts-migrate(2339) FIXME: Property 'getOffenderRetentionReasons' does not ex... Remove this comment to see the full error message
     dataComplianceApi.getOffenderRetentionReasons = jest.fn()
-    // @ts-expect-error ts-migrate(2339) FIXME: Property 'getOffenderRetentionRecord' does not exi... Remove this comment to see the full error message
     dataComplianceApi.getOffenderRetentionRecord = jest.fn()
-    // @ts-expect-error ts-migrate(2339) FIXME: Property 'putOffenderRetentionRecord' does not exi... Remove this comment to see the full error message
     dataComplianceApi.putOffenderRetentionRecord = jest.fn()
 
-    // @ts-expect-error ts-migrate(2554) FIXME: Expected 2 arguments, but got 3.
-    controller = retentionReasonsFactory(prisonApi, dataComplianceApi, logError)
+    controller = retentionReasonsFactory(prisonApi, dataComplianceApi)
   })
 
   const mockApis = () => {
-    // @ts-expect-error ts-migrate(2339) FIXME: Property 'getDetails' does not exist on type '{}'.
     prisonApi.getDetails.mockReturnValue({
       offenderNo,
       firstName: 'BARRY',
@@ -51,9 +51,7 @@ describe('retention reasons', () => {
       dateOfBirth: '1990-02-01',
       agencyId: 'LEI',
     })
-    // @ts-expect-error ts-migrate(2339) FIXME: Property 'getAgencyDetails' does not exist on type... Remove this comment to see the full error message
     prisonApi.getAgencyDetails.mockReturnValue({ description: 'Leeds' })
-    // @ts-expect-error ts-migrate(2339) FIXME: Property 'getOffenderRetentionReasons' does not ex... Remove this comment to see the full error message
     dataComplianceApi.getOffenderRetentionReasons.mockResolvedValue([
       {
         reasonCode: 'OTHER',
@@ -66,7 +64,6 @@ describe('retention reasons', () => {
         displayOrder: 0,
       },
     ])
-    // @ts-expect-error ts-migrate(2339) FIXME: Property 'getOffenderRetentionRecord' does not exi... Remove this comment to see the full error message
     dataComplianceApi.getOffenderRetentionRecord.mockResolvedValue({
       etag: '"0"',
       userId: 'user1',
@@ -106,9 +103,7 @@ describe('retention reasons', () => {
       it('should make the correct calls for information and render the correct template', async () => {
         await controller.index(req, res)
 
-        // @ts-expect-error ts-migrate(2339) FIXME: Property 'getDetails' does not exist on type '{}'.
         expect(prisonApi.getDetails).toHaveBeenCalledWith(res.locals, offenderNo)
-        // @ts-expect-error ts-migrate(2339) FIXME: Property 'getAgencyDetails' does not exist on type... Remove this comment to see the full error message
         expect(prisonApi.getAgencyDetails).toHaveBeenCalledWith(res.locals, 'LEI')
         expect(res.render).toHaveBeenCalledWith('retentionReasons.njk', {
           retentionReasons: [
@@ -142,7 +137,6 @@ describe('retention reasons', () => {
           'reasons[1][reasonCode]': 'OTHER',
           'reasons[1][reasonDetails]': 'Some other reason',
         }
-        // @ts-expect-error ts-migrate(2339) FIXME: Property 'putOffenderRetentionRecord' does not exi... Remove this comment to see the full error message
         dataComplianceApi.putOffenderRetentionRecord.mockResolvedValue({})
       })
 
@@ -155,7 +149,6 @@ describe('retention reasons', () => {
             { reasonCode: 'OTHER', reasonDetails: 'Some other reason' },
           ],
         }
-        // @ts-expect-error ts-migrate(2339) FIXME: Property 'putOffenderRetentionRecord' does not exi... Remove this comment to see the full error message
         expect(dataComplianceApi.putOffenderRetentionRecord).toHaveBeenCalledWith(
           {},
           offenderNo,
