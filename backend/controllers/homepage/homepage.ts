@@ -172,7 +172,9 @@ const getTasks = ({ activeCaseLoadId, locations, staffId, whereaboutsConfig, key
       heading: 'Prisoner communication monitoring service',
       description: 'Access to the Prisoner communication monitoring service.',
       href: pinPhones.ui_url,
-      enabled: () => pinPhones.ui_url && userHasRoles(['PCMS_ANALYST', 'PCMS_AUTHORISING_OFFICER', 'PCMS_GLOBAL_ADMIN', 'PCMS_AUDIT']),
+      enabled: () =>
+        pinPhones.ui_url &&
+        userHasRoles(['PCMS_ANALYST', 'PCMS_AUTHORISING_OFFICER', 'PCMS_GLOBAL_ADMIN', 'PCMS_AUDIT']),
     },
     {
       id: 'manage-adjudications',
