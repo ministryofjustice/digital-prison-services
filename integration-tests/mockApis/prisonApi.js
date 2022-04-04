@@ -256,20 +256,6 @@ module.exports = {
         jsonBody: review,
       },
     }),
-  stubIepSummaryForBookingIds: (results) =>
-    stubFor({
-      request: {
-        method: 'GET',
-        urlPattern: '/api/bookings/offenders/iepSummary\\?.+?',
-      },
-      response: {
-        status: 200,
-        headers: {
-          'Content-Type': 'application/json;charset=UTF-8',
-        },
-        jsonBody: results,
-      },
-    }),
   stubOffenderSentences: (offenderNumbers, date) =>
     stubFor({
       request: {

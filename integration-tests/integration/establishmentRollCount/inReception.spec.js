@@ -8,7 +8,16 @@ context('A user can see the list of offenders in reception', () => {
   beforeEach(() => {
     Cypress.Cookies.preserveOnce('hmpps-session-dev')
     cy.task('stubClientCredentialsRequest')
-    cy.task('stubIepSummaryForBookingIds')
+    cy.task('stubGetIepSummaryForBookingIds', [
+      {
+        bookingId: -1,
+        iepLevel: 'Basic',
+      },
+      {
+        bookingId: -2,
+        iepLevel: 'Standard',
+      },
+    ])
     cy.task('stubSystemAlerts')
     cy.task('stubAssessments', ['A1234AA', 'G0000AA'])
     cy.task('stubOffenderMovements')
@@ -54,11 +63,13 @@ context('A user can see the list of offenders in reception', () => {
         expect($cells.get(2).innerText).to.contain('G0000AA')
         expect($cells.get(3).innerText).to.contain('31/12/1980')
         expect($cells.get(4).innerText).to.contain('Outside')
+        expect($cells.get(5).innerText).to.contain('Standard')
 
         expect($cells.get(8).innerText).to.contain('Aaaab, Aaaaa')
         expect($cells.get(9).innerText).to.contain('A1234AA')
         expect($cells.get(10).innerText).to.contain('01/01/1980')
         expect($cells.get(11).innerText).to.contain('Hull (HMP)')
+        expect($cells.get(12).innerText).to.contain('Basic')
       })
   })
 })

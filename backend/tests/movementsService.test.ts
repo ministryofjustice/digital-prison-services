@@ -3,6 +3,7 @@ import { movementsServiceFactory } from '../services/movementsService'
 describe('Movement service', () => {
   const prisonApi = {}
   const oauthClient = {}
+  const incentivesApi = {}
   const context = {}
   const agency = 'LEI'
   const offenders = [
@@ -63,7 +64,10 @@ describe('Movement service', () => {
       // @ts-expect-error ts-migrate(2339) FIXME: Property 'getMovementsOut' does not exist on type ... Remove this comment to see the full error message
       prisonApi.getMovementsOut.mockReturnValue(offenders)
 
-      const response = await movementsServiceFactory(prisonApi, oauthClient).getMovementsOut(context, agency)
+      const response = await movementsServiceFactory(prisonApi, oauthClient, incentivesApi).getMovementsOut(
+        context,
+        agency
+      )
 
       expect(response).toEqual([
         { offenderNo: 'offenderNo1', bookingId: 1 },
@@ -79,7 +83,7 @@ describe('Movement service', () => {
       // @ts-expect-error ts-migrate(2339) FIXME: Property 'getClientCredentialsTokens' does not exi... Remove this comment to see the full error message
       oauthClient.getClientCredentialsTokens.mockReturnValue(securityContext)
 
-      await movementsServiceFactory(prisonApi, oauthClient).getMovementsOut(context, agency)
+      await movementsServiceFactory(prisonApi, oauthClient, incentivesApi).getMovementsOut(context, agency)
 
       // @ts-expect-error ts-migrate(2339) FIXME: Property 'getAlertsSystem' does not exist on type ... Remove this comment to see the full error message
       expect(prisonApi.getAlertsSystem).toHaveBeenCalledWith(securityContext, offenderNumbers)
@@ -89,7 +93,7 @@ describe('Movement service', () => {
       // @ts-expect-error ts-migrate(2339) FIXME: Property 'getMovementsOut' does not exist on type ... Remove this comment to see the full error message
       prisonApi.getMovementsOut.mockReturnValue(offenders)
 
-      await movementsServiceFactory(prisonApi, oauthClient).getMovementsOut(context, agency)
+      await movementsServiceFactory(prisonApi, oauthClient, incentivesApi).getMovementsOut(context, agency)
 
       // @ts-expect-error ts-migrate(2339) FIXME: Property 'getAssessments' does not exist on type '... Remove this comment to see the full error message
       expect(prisonApi.getAssessments).toHaveBeenCalledWith(context, { code: 'CATEGORY', offenderNumbers })
@@ -101,7 +105,10 @@ describe('Movement service', () => {
       // @ts-expect-error ts-migrate(2339) FIXME: Property 'getAlertsSystem' does not exist on type ... Remove this comment to see the full error message
       prisonApi.getAlertsSystem.mockReturnValue(alertFlags)
 
-      const response = await movementsServiceFactory(prisonApi, oauthClient).getMovementsOut(context, agency)
+      const response = await movementsServiceFactory(prisonApi, oauthClient, incentivesApi).getMovementsOut(
+        context,
+        agency
+      )
       expect(response[0].alerts).toEqual(['HA', 'XEL'])
     })
   })
@@ -115,7 +122,7 @@ describe('Movement service', () => {
       // @ts-expect-error ts-migrate(2339) FIXME: Property 'getAssessments' does not exist on type '... Remove this comment to see the full error message
       prisonApi.getAssessments = jest.fn()
       // @ts-expect-error ts-migrate(2339) FIXME: Property 'getIepSummary' does not exist on type '{... Remove this comment to see the full error message
-      prisonApi.getIepSummary = jest.fn()
+      incentivesApi.getIepSummaryForBookingIds = jest.fn()
 
       // @ts-expect-error ts-migrate(2339) FIXME: Property 'getClientCredentialsTokens' does not exi... Remove this comment to see the full error message
       oauthClient.getClientCredentialsTokens = jest.fn()
@@ -125,14 +132,20 @@ describe('Movement service', () => {
       // @ts-expect-error ts-migrate(2339) FIXME: Property 'getMovementsIn' does not exist on type '... Remove this comment to see the full error message
       prisonApi.getMovementsIn.mockReturnValue([])
 
-      const response = await movementsServiceFactory(prisonApi, oauthClient).getMovementsIn(context, agency)
+      const response = await movementsServiceFactory(prisonApi, oauthClient, incentivesApi).getMovementsIn(
+        context,
+        agency
+      )
       expect(response).toHaveLength(0)
     })
 
     it('Returns movements in', async () => {
       // @ts-expect-error ts-migrate(2339) FIXME: Property 'getMovementsIn' does not exist on type '... Remove this comment to see the full error message
       prisonApi.getMovementsIn.mockReturnValue([{ offenderNo: 'G0000GG' }, { offenderNo: 'G0001GG' }])
-      const response = await movementsServiceFactory(prisonApi, oauthClient).getMovementsIn(context, agency)
+      const response = await movementsServiceFactory(prisonApi, oauthClient, incentivesApi).getMovementsIn(
+        context,
+        agency
+      )
       expect(response).toEqual([{ offenderNo: 'G0000GG' }, { offenderNo: 'G0001GG' }])
     })
 
@@ -145,7 +158,10 @@ describe('Movement service', () => {
         { offenderNo: 'G0001GG', expired: false, alertCode: 'XEL' },
       ])
 
-      const response = await movementsServiceFactory(prisonApi, oauthClient).getMovementsIn(context, agency)
+      const response = await movementsServiceFactory(prisonApi, oauthClient, incentivesApi).getMovementsIn(
+        context,
+        agency
+      )
       expect(response).toEqual([
         { offenderNo: 'G0000GG', alerts: [] },
         { offenderNo: 'G0001GG', alerts: ['XEL'] },
@@ -163,7 +179,10 @@ describe('Movement service', () => {
         { offenderNo: 'G0001GG', classificationCode: 'E' },
       ])
 
-      const response = await movementsServiceFactory(prisonApi, oauthClient).getMovementsIn(context, agency)
+      const response = await movementsServiceFactory(prisonApi, oauthClient, incentivesApi).getMovementsIn(
+        context,
+        agency
+      )
       expect(response).toEqual([
         { offenderNo: 'G0000GG', category: 'A', alerts: [] },
         { offenderNo: 'G0001GG', category: 'E', alerts: [] },
@@ -177,12 +196,15 @@ describe('Movement service', () => {
         { offenderNo: 'G0001GG', bookingId: 2 },
       ])
       // @ts-expect-error ts-migrate(2339) FIXME: Property 'getIepSummary' does not exist on type '{... Remove this comment to see the full error message
-      prisonApi.getIepSummary.mockReturnValue([
+      incentivesApi.getIepSummaryForBookingIds.mockReturnValue([
         { bookingId: 1, iepLevel: 'basic' },
         { bookingId: 2, iepLevel: 'standard' },
       ])
 
-      const response = await movementsServiceFactory(prisonApi, oauthClient).getMovementsIn(context, agency)
+      const response = await movementsServiceFactory(prisonApi, oauthClient, incentivesApi).getMovementsIn(
+        context,
+        agency
+      )
 
       expect(response).toEqual([
         {
@@ -212,19 +234,22 @@ describe('Movement service', () => {
       // @ts-expect-error ts-migrate(2339) FIXME: Property 'getClientCredentialsTokens' does not exi... Remove this comment to see the full error message
       oauthClient.getClientCredentialsTokens = jest.fn()
       // @ts-expect-error ts-migrate(2339) FIXME: Property 'getIepSummary' does not exist on type '{... Remove this comment to see the full error message
-      prisonApi.getIepSummary = jest.fn()
+      incentivesApi.getIepSummaryForBookingIds = jest.fn()
 
       // @ts-expect-error ts-migrate(2339) FIXME: Property 'getRecentMovements' does not exist on ty... Remove this comment to see the full error message
       prisonApi.getRecentMovements.mockReturnValue([])
       // @ts-expect-error ts-migrate(2339) FIXME: Property 'getIepSummary' does not exist on type '{... Remove this comment to see the full error message
-      prisonApi.getIepSummary.mockReturnValue([])
+      incentivesApi.getIepSummaryForBookingIds.mockReturnValue([])
     })
 
     it('returns a empty array when there are no offenders in reception ', async () => {
       // @ts-expect-error ts-migrate(2339) FIXME: Property 'getOffendersInReception' does not exist ... Remove this comment to see the full error message
       prisonApi.getOffendersInReception.mockReturnValue(undefined)
 
-      const response = await movementsServiceFactory(prisonApi, oauthClient).getOffendersInReception(context, agency)
+      const response = await movementsServiceFactory(prisonApi, oauthClient, incentivesApi).getOffendersInReception(
+        context,
+        agency
+      )
 
       expect(response).toEqual([])
     })
@@ -237,7 +262,7 @@ describe('Movement service', () => {
       // @ts-expect-error ts-migrate(2339) FIXME: Property 'getClientCredentialsTokens' does not exi... Remove this comment to see the full error message
       oauthClient.getClientCredentialsTokens.mockReturnValue(systemContext)
 
-      await movementsServiceFactory(prisonApi, oauthClient).getOffendersInReception(context, agency)
+      await movementsServiceFactory(prisonApi, oauthClient, incentivesApi).getOffendersInReception(context, agency)
 
       // @ts-expect-error ts-migrate(2339) FIXME: Property 'getRecentMovements' does not exist on ty... Remove this comment to see the full error message
       expect(prisonApi.getRecentMovements).toHaveBeenCalledWith(systemContext, offenderNumbers, [])
@@ -255,7 +280,10 @@ describe('Movement service', () => {
         },
       ])
 
-      const response = await movementsServiceFactory(prisonApi, oauthClient).getOffendersInReception(context, agency)
+      const response = await movementsServiceFactory(prisonApi, oauthClient, incentivesApi).getOffendersInReception(
+        context,
+        agency
+      )
 
       expect(response).toEqual([
         {
@@ -276,7 +304,7 @@ describe('Movement service', () => {
       // @ts-expect-error ts-migrate(2339) FIXME: Property 'getClientCredentialsTokens' does not exi... Remove this comment to see the full error message
       oauthClient.getClientCredentialsTokens.mockReturnValue({})
 
-      await movementsServiceFactory(prisonApi, oauthClient).getOffendersInReception(context, agency)
+      await movementsServiceFactory(prisonApi, oauthClient, incentivesApi).getOffendersInReception(context, agency)
 
       // @ts-expect-error ts-migrate(2339) FIXME: Property 'getAlertsSystem' does not exist on type ... Remove this comment to see the full error message
       expect(prisonApi.getAlertsSystem).toHaveBeenCalledWith(context, offenderNumbers)
@@ -290,7 +318,10 @@ describe('Movement service', () => {
       // @ts-expect-error ts-migrate(2339) FIXME: Property 'getRecentMovements' does not exist on ty... Remove this comment to see the full error message
       prisonApi.getRecentMovements.mockReturnValue([])
 
-      const response = await movementsServiceFactory(prisonApi, oauthClient).getOffendersInReception(context, agency)
+      const response = await movementsServiceFactory(prisonApi, oauthClient, incentivesApi).getOffendersInReception(
+        context,
+        agency
+      )
 
       expect(response).toEqual([
         {
@@ -308,12 +339,15 @@ describe('Movement service', () => {
       // @ts-expect-error ts-migrate(2339) FIXME: Property 'getOffendersInReception' does not exist ... Remove this comment to see the full error message
       prisonApi.getOffendersInReception.mockReturnValue(offenders)
       // @ts-expect-error ts-migrate(2339) FIXME: Property 'getIepSummary' does not exist on type '{... Remove this comment to see the full error message
-      prisonApi.getIepSummary.mockReturnValue([
+      incentivesApi.getIepSummaryForBookingIds.mockReturnValue([
         { ...offenders[0], iepLevel: 'basic' },
         { ...offenders[1], iepLevel: 'standard' },
       ])
 
-      const response = await movementsServiceFactory(prisonApi, oauthClient).getOffendersInReception(context, agency)
+      const response = await movementsServiceFactory(prisonApi, oauthClient, incentivesApi).getOffendersInReception(
+        context,
+        agency
+      )
 
       expect(response).toEqual([
         { ...offenders[0], iepLevel: 'basic' },
@@ -322,14 +356,14 @@ describe('Movement service', () => {
     })
 
     it('should not request extra information if there are no offenders in reception', async () => {
-      await movementsServiceFactory(prisonApi, oauthClient).getOffendersInReception(context, agency)
+      await movementsServiceFactory(prisonApi, oauthClient, incentivesApi).getOffendersInReception(context, agency)
 
       // @ts-expect-error ts-migrate(2339) FIXME: Property 'getAlertsSystem' does not exist on type ... Remove this comment to see the full error message
       expect(prisonApi.getAlertsSystem.mock.calls.length).toBe(0)
       // @ts-expect-error ts-migrate(2339) FIXME: Property 'getRecentMovements' does not exist on ty... Remove this comment to see the full error message
       expect(prisonApi.getRecentMovements.mock.calls.length).toBe(0)
       // @ts-expect-error ts-migrate(2339) FIXME: Property 'getIepSummary' does not exist on type '{... Remove this comment to see the full error message
-      expect(prisonApi.getIepSummary.mock.calls.length).toBe(0)
+      expect(incentivesApi.getIepSummaryForBookingIds.mock.calls.length).toBe(0)
       // @ts-expect-error ts-migrate(2339) FIXME: Property 'getAssessments' does not exist on type '... Remove this comment to see the full error message
       expect(prisonApi.getAssessments.mock.calls.length).toBe(0)
       // @ts-expect-error ts-migrate(2339) FIXME: Property 'getClientCredentialsTokens' does not exi... Remove this comment to see the full error message
@@ -362,10 +396,11 @@ describe('Movement service', () => {
       it('Returns an default result when there are no offenders currently out', async () => {
         // @ts-expect-error ts-migrate(2339) FIXME: Property 'getOffendersCurrentlyOutOfLivingUnit' do... Remove this comment to see the full error message
         prisonApi.getOffendersCurrentlyOutOfLivingUnit.mockReturnValue([])
-        const response = await movementsServiceFactory(prisonApi, oauthClient).getOffendersCurrentlyOutOfLivingUnit(
-          context,
-          key
-        )
+        const response = await movementsServiceFactory(
+          prisonApi,
+          oauthClient,
+          incentivesApi
+        ).getOffendersCurrentlyOutOfLivingUnit(context, key)
         expect(response).toEqual({ currentlyOut: [], location: 'location' })
       })
 
@@ -377,10 +412,11 @@ describe('Movement service', () => {
         // @ts-expect-error ts-migrate(2339) FIXME: Property 'getLocation' does not exist on type '{}'... Remove this comment to see the full error message
         prisonApi.getLocation.mockReturnValue({ internalLocationCode: 'internalLocationCode' })
 
-        const response = await movementsServiceFactory(prisonApi, oauthClient).getOffendersCurrentlyOutOfLivingUnit(
-          context,
-          key
-        )
+        const response = await movementsServiceFactory(
+          prisonApi,
+          oauthClient,
+          incentivesApi
+        ).getOffendersCurrentlyOutOfLivingUnit(context, key)
         expect(response).toEqual({
           location: 'internalLocationCode',
           currentlyOut: [{ offenderNo: 'G0000GG' }],
@@ -395,10 +431,11 @@ describe('Movement service', () => {
         // @ts-expect-error ts-migrate(2339) FIXME: Property 'getLocation' does not exist on type '{}'... Remove this comment to see the full error message
         prisonApi.getLocation.mockReturnValue({})
 
-        const response = await movementsServiceFactory(prisonApi, oauthClient).getOffendersCurrentlyOutOfLivingUnit(
-          context,
-          key
-        )
+        const response = await movementsServiceFactory(
+          prisonApi,
+          oauthClient,
+          incentivesApi
+        ).getOffendersCurrentlyOutOfLivingUnit(context, key)
         expect(response).toEqual({
           location: '',
           currentlyOut: [{ offenderNo: 'G0000GG' }],
@@ -413,10 +450,11 @@ describe('Movement service', () => {
         ])
         // @ts-expect-error ts-migrate(2339) FIXME: Property 'getRecentMovements' does not exist on ty... Remove this comment to see the full error message
         prisonApi.getRecentMovements.mockReturnValue([])
-        const response = await movementsServiceFactory(prisonApi, oauthClient).getOffendersCurrentlyOutOfLivingUnit(
-          context,
-          key
-        )
+        const response = await movementsServiceFactory(
+          prisonApi,
+          oauthClient,
+          incentivesApi
+        ).getOffendersCurrentlyOutOfLivingUnit(context, key)
         expect(response).toEqual({
           location: 'location',
           currentlyOut: [{ offenderNo: 'G0000GG' }, { offenderNo: 'G0001GG' }],
@@ -437,10 +475,11 @@ describe('Movement service', () => {
           { offenderNo: 'G0001GG', expired: false, alertCode: 'XEL' },
         ])
 
-        const response = await movementsServiceFactory(prisonApi, oauthClient).getOffendersCurrentlyOutOfLivingUnit(
-          context,
-          key
-        )
+        const response = await movementsServiceFactory(
+          prisonApi,
+          oauthClient,
+          incentivesApi
+        ).getOffendersCurrentlyOutOfLivingUnit(context, key)
         expect(response).toEqual({
           location: 'location',
           currentlyOut: [
@@ -466,10 +505,11 @@ describe('Movement service', () => {
           { offenderNo: 'G0001GG', classificationCode: 'E' },
         ])
 
-        const response = await movementsServiceFactory(prisonApi, oauthClient).getOffendersCurrentlyOutOfLivingUnit(
-          context,
-          key
-        )
+        const response = await movementsServiceFactory(
+          prisonApi,
+          oauthClient,
+          incentivesApi
+        ).getOffendersCurrentlyOutOfLivingUnit(context, key)
         expect(response).toEqual({
           location: 'location',
           currentlyOut: [
@@ -495,10 +535,11 @@ describe('Movement service', () => {
           },
         ])
 
-        const response = await movementsServiceFactory(prisonApi, oauthClient).getOffendersCurrentlyOutOfLivingUnit(
-          context,
-          key
-        )
+        const response = await movementsServiceFactory(
+          prisonApi,
+          oauthClient,
+          incentivesApi
+        ).getOffendersCurrentlyOutOfLivingUnit(context, key)
         expect(response).toEqual({
           location: 'location',
           currentlyOut: [
@@ -520,15 +561,16 @@ describe('Movement service', () => {
           { offenderNo: 'G0001GG', bookingId: 2 },
         ])
         // @ts-expect-error ts-migrate(2339) FIXME: Property 'getIepSummary' does not exist on type '{... Remove this comment to see the full error message
-        prisonApi.getIepSummary.mockReturnValue([
+        incentivesApi.getIepSummaryForBookingIds.mockReturnValue([
           { bookingId: 1, iepLevel: 'basic' },
           { bookingId: 2, iepLevel: 'standard' },
         ])
 
-        const response = await movementsServiceFactory(prisonApi, oauthClient).getOffendersCurrentlyOutOfLivingUnit(
-          context,
-          key
-        )
+        const response = await movementsServiceFactory(
+          prisonApi,
+          oauthClient,
+          incentivesApi
+        ).getOffendersCurrentlyOutOfLivingUnit(context, key)
 
         expect(response).toEqual({
           location: 'location',
@@ -572,10 +614,11 @@ describe('Movement service', () => {
       it('Returns an default result when there are no offenders currently out', async () => {
         // @ts-expect-error ts-migrate(2339) FIXME: Property 'getOffendersCurrentlyOutOfAgency' does n... Remove this comment to see the full error message
         prisonApi.getOffendersCurrentlyOutOfAgency.mockReturnValue([])
-        const response = await movementsServiceFactory(prisonApi, oauthClient).getOffendersCurrentlyOutOfAgency(
-          context,
-          key
-        )
+        const response = await movementsServiceFactory(
+          prisonApi,
+          oauthClient,
+          incentivesApi
+        ).getOffendersCurrentlyOutOfAgency(context, key)
         expect(response).toEqual([])
       })
 
@@ -587,10 +630,11 @@ describe('Movement service', () => {
         // @ts-expect-error ts-migrate(2339) FIXME: Property 'getLocation' does not exist on type '{}'... Remove this comment to see the full error message
         prisonApi.getLocation.mockReturnValue({ internalLocationCode: 'internalLocationCode' })
 
-        const response = await movementsServiceFactory(prisonApi, oauthClient).getOffendersCurrentlyOutOfAgency(
-          context,
-          key
-        )
+        const response = await movementsServiceFactory(
+          prisonApi,
+          oauthClient,
+          incentivesApi
+        ).getOffendersCurrentlyOutOfAgency(context, key)
         expect(response).toEqual([{ offenderNo: 'G0000GG' }])
       })
 
@@ -602,10 +646,11 @@ describe('Movement service', () => {
         // @ts-expect-error ts-migrate(2339) FIXME: Property 'getLocation' does not exist on type '{}'... Remove this comment to see the full error message
         prisonApi.getLocation.mockReturnValue({})
 
-        const response = await movementsServiceFactory(prisonApi, oauthClient).getOffendersCurrentlyOutOfAgency(
-          context,
-          key
-        )
+        const response = await movementsServiceFactory(
+          prisonApi,
+          oauthClient,
+          incentivesApi
+        ).getOffendersCurrentlyOutOfAgency(context, key)
         expect(response).toEqual([{ offenderNo: 'G0000GG' }])
       })
 
@@ -617,10 +662,11 @@ describe('Movement service', () => {
         ])
         // @ts-expect-error ts-migrate(2339) FIXME: Property 'getRecentMovements' does not exist on ty... Remove this comment to see the full error message
         prisonApi.getRecentMovements.mockReturnValue([])
-        const response = await movementsServiceFactory(prisonApi, oauthClient).getOffendersCurrentlyOutOfAgency(
-          context,
-          key
-        )
+        const response = await movementsServiceFactory(
+          prisonApi,
+          oauthClient,
+          incentivesApi
+        ).getOffendersCurrentlyOutOfAgency(context, key)
         expect(response).toEqual([{ offenderNo: 'G0000GG' }, { offenderNo: 'G0001GG' }])
       })
 
@@ -638,10 +684,11 @@ describe('Movement service', () => {
           { offenderNo: 'G0001GG', expired: false, alertCode: 'XEL' },
         ])
 
-        const response = await movementsServiceFactory(prisonApi, oauthClient).getOffendersCurrentlyOutOfAgency(
-          context,
-          key
-        )
+        const response = await movementsServiceFactory(
+          prisonApi,
+          oauthClient,
+          incentivesApi
+        ).getOffendersCurrentlyOutOfAgency(context, key)
         expect(response).toEqual([
           { offenderNo: 'G0000GG', alerts: [] },
           { offenderNo: 'G0001GG', alerts: ['XEL'] },
@@ -664,10 +711,11 @@ describe('Movement service', () => {
           { offenderNo: 'G0001GG', classificationCode: 'E' },
         ])
 
-        const response = await movementsServiceFactory(prisonApi, oauthClient).getOffendersCurrentlyOutOfAgency(
-          context,
-          key
-        )
+        const response = await movementsServiceFactory(
+          prisonApi,
+          oauthClient,
+          incentivesApi
+        ).getOffendersCurrentlyOutOfAgency(context, key)
         expect(response).toEqual([
           { offenderNo: 'G0000GG', category: 'A', alerts: [] },
           { offenderNo: 'G0001GG', category: 'E', alerts: [] },
@@ -690,10 +738,11 @@ describe('Movement service', () => {
           },
         ])
 
-        const response = await movementsServiceFactory(prisonApi, oauthClient).getOffendersCurrentlyOutOfAgency(
-          context,
-          key
-        )
+        const response = await movementsServiceFactory(
+          prisonApi,
+          oauthClient,
+          incentivesApi
+        ).getOffendersCurrentlyOutOfAgency(context, key)
         expect(response).toEqual([
           {
             offenderNo: 'G0000GG',
@@ -712,15 +761,16 @@ describe('Movement service', () => {
           { offenderNo: 'G0001GG', bookingId: 2 },
         ])
         // @ts-expect-error ts-migrate(2339) FIXME: Property 'getIepSummary' does not exist on type '{... Remove this comment to see the full error message
-        prisonApi.getIepSummary.mockReturnValue([
+        incentivesApi.getIepSummaryForBookingIds.mockReturnValue([
           { bookingId: 1, iepLevel: 'basic' },
           { bookingId: 2, iepLevel: 'standard' },
         ])
 
-        const response = await movementsServiceFactory(prisonApi, oauthClient).getOffendersCurrentlyOutOfAgency(
-          context,
-          key
-        )
+        const response = await movementsServiceFactory(
+          prisonApi,
+          oauthClient,
+          incentivesApi
+        ).getOffendersCurrentlyOutOfAgency(context, key)
 
         expect(response).toEqual([
           {
@@ -751,7 +801,7 @@ describe('Movement service', () => {
     })
 
     it('should make a request for offenders en-route to an establishment', async () => {
-      await movementsServiceFactory(prisonApi, oauthClient).getOffendersEnRoute(context, agency)
+      await movementsServiceFactory(prisonApi, oauthClient, incentivesApi).getOffendersEnRoute(context, agency)
 
       // @ts-expect-error ts-migrate(2339) FIXME: Property 'getOffendersEnRoute' does not exist on t... Remove this comment to see the full error message
       expect(prisonApi.getOffendersEnRoute).toHaveBeenCalledWith(context, agency)
@@ -765,7 +815,7 @@ describe('Movement service', () => {
       // @ts-expect-error ts-migrate(2339) FIXME: Property 'getClientCredentialsTokens' does not exi... Remove this comment to see the full error message
       oauthClient.getClientCredentialsTokens.mockReturnValue(securityContext)
 
-      await movementsServiceFactory(prisonApi, oauthClient).getOffendersEnRoute(context, agency)
+      await movementsServiceFactory(prisonApi, oauthClient, incentivesApi).getOffendersEnRoute(context, agency)
 
       // @ts-expect-error ts-migrate(2339) FIXME: Property 'getAlertsSystem' does not exist on type ... Remove this comment to see the full error message
       expect(prisonApi.getAlertsSystem).toHaveBeenCalledWith(securityContext, offenderNumbers)
@@ -775,7 +825,7 @@ describe('Movement service', () => {
       // @ts-expect-error ts-migrate(2339) FIXME: Property 'getOffendersEnRoute' does not exist on t... Remove this comment to see the full error message
       prisonApi.getOffendersEnRoute.mockReturnValue(offenders)
 
-      await movementsServiceFactory(prisonApi, oauthClient).getOffendersEnRoute(context, agency)
+      await movementsServiceFactory(prisonApi, oauthClient, incentivesApi).getOffendersEnRoute(context, agency)
 
       // @ts-expect-error ts-migrate(2339) FIXME: Property 'getAssessments' does not exist on type '... Remove this comment to see the full error message
       expect(prisonApi.getAssessments).toHaveBeenCalledWith(context, { code: 'CATEGORY', offenderNumbers })
@@ -787,7 +837,10 @@ describe('Movement service', () => {
       // @ts-expect-error ts-migrate(2339) FIXME: Property 'getAlertsSystem' does not exist on type ... Remove this comment to see the full error message
       prisonApi.getAlertsSystem.mockReturnValue(alertFlags)
 
-      const response = await movementsServiceFactory(prisonApi, oauthClient).getOffendersEnRoute(context, agency)
+      const response = await movementsServiceFactory(prisonApi, oauthClient, incentivesApi).getOffendersEnRoute(
+        context,
+        agency
+      )
       expect(response[0].alerts).toEqual(['HA', 'XEL'])
     })
   })

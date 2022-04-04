@@ -1,14 +1,14 @@
 import moment from 'moment'
 import { toMap } from '../utils'
 
-export const movementsServiceFactory = (prisonApi, systemOauthClient) => {
+export const movementsServiceFactory = (prisonApi, systemOauthClient, incentivesApi) => {
   const getAssessmentMap = async (context, offenderNumbers) => {
     const assessments = (await prisonApi.getAssessments(context, { code: 'CATEGORY', offenderNumbers })) || []
     return toMap('offenderNo', assessments)
   }
 
   const getIepMap = async (context, bookingIds) => {
-    const iepData = (await prisonApi.getIepSummary(context, bookingIds)) || []
+    const iepData = (await incentivesApi.getIepSummaryForBookingIds(context, bookingIds)) || []
     return toMap('bookingId', iepData)
   }
 
