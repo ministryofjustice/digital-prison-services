@@ -40,7 +40,7 @@ export default ({ prisonApi, incentivesApi, oauthApi }) =>
       ])
       const { bookingId, firstName, lastName } = prisonerDetails
 
-      const iepSummary = await incentivesApi.getIepSummaryForBooking(res.locals, bookingId)
+      const iepSummary = await incentivesApi.getIepSummaryForBooking(res.locals, bookingId, true)
 
       if (fromDate && toDate && fromDateFormatted.isAfter(toDateFormatted, 'day')) {
         errors.push({ href: '#fromDate', text: 'Enter a from date which is not after the to date' })
