@@ -20,8 +20,7 @@ describe('reverse cohorting unit', () => {
       getAlertList: jest.fn(),
       getUnassignedNewEntrants: jest.fn(),
     }
-    // @ts-expect-error ts-migrate(2345) FIXME: Argument of type '{ covidService: any; logError: a... Remove this comment to see the full error message
-    controller = reverseCohortingUnit({ covidService, logError })
+    controller = reverseCohortingUnit({ covidService })
   })
 
   it('should render view with results', async () => {

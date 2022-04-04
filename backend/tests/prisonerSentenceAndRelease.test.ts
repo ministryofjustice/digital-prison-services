@@ -16,10 +16,23 @@ describe('prisoner sentence and release', () => {
     offenderName: 'Prisoner, Test',
     offenderNo,
   }
-  const prisonerProfileService = {}
-  const prisonApi = {}
-  const systemOauthClient = {}
-  const offenderSearchApi = {}
+  const prisonerProfileService = {
+    getPrisonerProfileData: jest.fn(),
+  }
+  const prisonApi = {
+    getPrisonerSentenceDetails: jest.fn(),
+    getDetails: jest.fn(),
+    getSentenceAdjustments: jest.fn(),
+    getOffenceHistory: jest.fn(),
+    getCourtCases: jest.fn(),
+    getSentenceTerms: jest.fn(),
+  }
+  const systemOauthClient = {
+    getClientCredentialsTokens: jest.fn(),
+  }
+  const offenderSearchApi = {
+    getPrisonersDetails: jest.fn(),
+  }
 
   let req
   let res
@@ -37,9 +50,7 @@ describe('prisoner sentence and release', () => {
     req.get.mockReturnValue('localhost')
     res.status = jest.fn()
 
-    // @ts-expect-error ts-migrate(2339) FIXME: Property 'getPrisonerProfileData' does not exist o... Remove this comment to see the full error message
     prisonerProfileService.getPrisonerProfileData = jest.fn().mockResolvedValue(prisonerProfileData)
-    // @ts-expect-error ts-migrate(2339) FIXME: Property 'getPrisonerSentenceDetails' does not exi... Remove this comment to see the full error message
     prisonApi.getPrisonerSentenceDetails = jest.fn().mockResolvedValue({
       sentenceDetail: {
         sentenceStartDate: '2010-02-03',
@@ -76,17 +87,11 @@ describe('prisoner sentence and release', () => {
       },
     })
 
-    // @ts-expect-error ts-migrate(2339) FIXME: Property 'getDetails' does not exist on type '{}'.
     prisonApi.getDetails = jest.fn().mockResolvedValue({ bookingId: 1 })
-    // @ts-expect-error ts-migrate(2339) FIXME: Property 'getSentenceAdjustments' does not exist o... Remove this comment to see the full error message
     prisonApi.getSentenceAdjustments = jest.fn()
-    // @ts-expect-error ts-migrate(2339) FIXME: Property 'getOffenceHistory' does not exist on typ... Remove this comment to see the full error message
     prisonApi.getOffenceHistory = jest.fn().mockResolvedValue([])
-    // @ts-expect-error ts-migrate(2339) FIXME: Property 'getCourtCases' does not exist on type '{... Remove this comment to see the full error message
     prisonApi.getCourtCases = jest.fn().mockResolvedValue([])
-    // @ts-expect-error ts-migrate(2339) FIXME: Property 'getSentenceTerms' does not exist on type... Remove this comment to see the full error message
     prisonApi.getSentenceTerms = jest.fn().mockResolvedValue([])
-    // @ts-expect-error ts-migrate(2339) FIXME: Property 'getClientCredentialsTokens' does not exi... Remove this comment to see the full error message
     systemOauthClient.getClientCredentialsTokens = jest.fn().mockResolvedValue({})
 
     controller = prisonerSentenceAndRelease({
@@ -94,17 +99,13 @@ describe('prisoner sentence and release', () => {
       prisonApi,
       systemOauthClient,
       offenderSearchApi,
-      // @ts-expect-error ts-migrate(2345) FIXME: Argument of type '{ prisonerProfileService: {}; pr... Remove this comment to see the full error message
-      logError,
     })
   })
 
   it('should make a call for the prisoner details and the sentence details and render the right template', async () => {
     await controller(req, res)
 
-    // @ts-expect-error ts-migrate(2339) FIXME: Property 'getPrisonerProfileData' does not exist o... Remove this comment to see the full error message
     expect(prisonerProfileService.getPrisonerProfileData).toHaveBeenCalledWith(res.locals, offenderNo)
-    // @ts-expect-error ts-migrate(2339) FIXME: Property 'getPrisonerSentenceDetails' does not exi... Remove this comment to see the full error message
     expect(prisonApi.getPrisonerSentenceDetails).toHaveBeenCalledWith(res.locals, offenderNo)
     expect(res.render).toHaveBeenCalledWith(
       'prisonerProfile/prisonerSentenceAndRelease/prisonerSentenceAndRelease.njk',
@@ -174,7 +175,6 @@ describe('prisoner sentence and release', () => {
   })
 
   it('should only return sentence, offences and court cases where they result in imprisonment', async () => {
-    // @ts-expect-error ts-migrate(2339) FIXME: Property 'getCourtCases' does not exist on type '{... Remove this comment to see the full error message
     prisonApi.getCourtCases.mockResolvedValue([
       { id: 1, caseInfoNumber: 'T12345', agency: { description: 'Leeds' } },
       { id: 2, caseInfoNumber: 'T56789' },
@@ -183,7 +183,6 @@ describe('prisoner sentence and release', () => {
       { id: 5, caseInfoNumber: 'T56801', agency: { description: 'Leeds' } },
     ])
 
-    // @ts-expect-error ts-migrate(2339) FIXME: Property 'getOffenceHistory' does not exist on typ... Remove this comment to see the full error message
     prisonApi.getOffenceHistory.mockResolvedValue([
       {
         offenceDescription: 'Offence 1',
@@ -212,7 +211,6 @@ describe('prisoner sentence and release', () => {
       },
     ])
 
-    // @ts-expect-error ts-migrate(2339) FIXME: Property 'getSentenceTerms' does not exist on type... Remove this comment to see the full error message
     prisonApi.getSentenceTerms.mockResolvedValue([
       {
         lineSeq: 1,
@@ -359,15 +357,12 @@ describe('prisoner sentence and release', () => {
     )
   })
   it('should set showSentence to false', async () => {
-    // @ts-expect-error ts-migrate(2339) FIXME: Property 'getCourtCases' does not exist on type '{... Remove this comment to see the full error message
     prisonApi.getCourtCases.mockResolvedValue([
       { id: 1, caseInfoNumber: 'T12345', agency: { description: 'Leeds' } },
       { id: 2, caseInfoNumber: 'T56789' },
     ])
 
-    // @ts-expect-error ts-migrate(2339) FIXME: Property 'getOffenceHistory' does not exist on typ... Remove this comment to see the full error message
     prisonApi.getOffenceHistory.mockResolvedValue([])
-    // @ts-expect-error ts-migrate(2339) FIXME: Property 'getSentenceTerms' does not exist on type... Remove this comment to see the full error message
     prisonApi.getSentenceTerms.mockResolvedValue([])
 
     await controller(req, res)
@@ -381,15 +376,12 @@ describe('prisoner sentence and release', () => {
   })
 
   it('should show fine amount with sentence terms', async () => {
-    // @ts-expect-error ts-migrate(2339) FIXME: Property 'getCourtCases' does not exist on type '{... Remove this comment to see the full error message
     prisonApi.getCourtCases.mockResolvedValue([{ id: 1, caseInfoNumber: 'T12345' }])
 
-    // @ts-expect-error ts-migrate(2339) FIXME: Property 'getOffenceHistory' does not exist on typ... Remove this comment to see the full error message
     prisonApi.getOffenceHistory.mockResolvedValue([
       { offenceDescription: 'Offence 1', primaryResultCode: '1002', caseId: 1 },
     ])
 
-    // @ts-expect-error ts-migrate(2339) FIXME: Property 'getSentenceTerms' does not exist on type... Remove this comment to see the full error message
     prisonApi.getSentenceTerms.mockResolvedValue([
       {
         lineSeq: 1,
@@ -434,16 +426,13 @@ describe('prisoner sentence and release', () => {
   })
 
   it('should show licence length with sentence terms', async () => {
-    // @ts-expect-error ts-migrate(2339) FIXME: Property 'getCourtCases' does not exist on type '{... Remove this comment to see the full error message
     prisonApi.getCourtCases.mockResolvedValue([{ id: 1, caseInfoNumber: 'T12345' }])
 
-    // @ts-expect-error ts-migrate(2339) FIXME: Property 'getOffenceHistory' does not exist on typ... Remove this comment to see the full error message
     prisonApi.getOffenceHistory.mockResolvedValue([
       { offenceDescription: 'Offence 1', primaryResultCode: '1002', caseId: 1 },
       { offenceDescription: 'Offence 1', primaryResultCode: '1002', caseId: 1 },
     ])
 
-    // @ts-expect-error ts-migrate(2339) FIXME: Property 'getSentenceTerms' does not exist on type... Remove this comment to see the full error message
     prisonApi.getSentenceTerms.mockResolvedValue([
       {
         lineSeq: 1,
@@ -524,15 +513,12 @@ describe('prisoner sentence and release', () => {
   })
 
   it('should order sentences by sentence date, then by sentence length', async () => {
-    // @ts-expect-error ts-migrate(2339) FIXME: Property 'getCourtCases' does not exist on type '{... Remove this comment to see the full error message
     prisonApi.getCourtCases.mockResolvedValue([{ id: 1, caseInfoNumber: 'T12345' }])
 
-    // @ts-expect-error ts-migrate(2339) FIXME: Property 'getOffenceHistory' does not exist on typ... Remove this comment to see the full error message
     prisonApi.getOffenceHistory.mockResolvedValue([
       { offenceDescription: 'Offence 1', primaryResultCode: '1002', caseId: 1 },
     ])
 
-    // @ts-expect-error ts-migrate(2339) FIXME: Property 'getSentenceTerms' does not exist on type... Remove this comment to see the full error message
     prisonApi.getSentenceTerms.mockResolvedValue([
       {
         lineSeq: 2,
@@ -689,17 +675,14 @@ describe('prisoner sentence and release', () => {
   })
 
   it('should order offences alphabetically', async () => {
-    // @ts-expect-error ts-migrate(2339) FIXME: Property 'getCourtCases' does not exist on type '{... Remove this comment to see the full error message
     prisonApi.getCourtCases.mockResolvedValue([{ id: 1, caseInfoNumber: 'T12345' }])
 
-    // @ts-expect-error ts-migrate(2339) FIXME: Property 'getOffenceHistory' does not exist on typ... Remove this comment to see the full error message
     prisonApi.getOffenceHistory.mockResolvedValue([
       { offenceDescription: 'C', primaryResultCode: '1002', caseId: 1 },
       { offenceDescription: 'b', primaryResultCode: '1002', caseId: 1 },
       { offenceDescription: 'a', primaryResultCode: '1002', caseId: 1 },
     ])
 
-    // @ts-expect-error ts-migrate(2339) FIXME: Property 'getSentenceTerms' does not exist on type... Remove this comment to see the full error message
     prisonApi.getSentenceTerms.mockResolvedValue([
       {
         lineSeq: 6,
@@ -741,17 +724,14 @@ describe('prisoner sentence and release', () => {
   })
 
   it('should not show court cases and offences when there are no active sentences', async () => {
-    // @ts-expect-error ts-migrate(2339) FIXME: Property 'getCourtCases' does not exist on type '{... Remove this comment to see the full error message
     prisonApi.getCourtCases.mockResolvedValue([{ id: 1, caseInfoNumber: 'T12345' }])
 
-    // @ts-expect-error ts-migrate(2339) FIXME: Property 'getOffenceHistory' does not exist on typ... Remove this comment to see the full error message
     prisonApi.getOffenceHistory.mockResolvedValue([
       { offenceDescription: 'C', primaryResultCode: '1002', caseId: 1 },
       { offenceDescription: 'b', primaryResultCode: '1002', caseId: 1 },
       { offenceDescription: 'a', primaryResultCode: '1002', caseId: 1 },
     ])
 
-    // @ts-expect-error ts-migrate(2339) FIXME: Property 'getSentenceTerms' does not exist on type... Remove this comment to see the full error message
     prisonApi.getSentenceTerms.mockResolvedValue([])
 
     await controller(req, res)
@@ -765,17 +745,14 @@ describe('prisoner sentence and release', () => {
   })
 
   it('should return the sentence date using the oldest sentence start date', async () => {
-    // @ts-expect-error ts-migrate(2339) FIXME: Property 'getCourtCases' does not exist on type '{... Remove this comment to see the full error message
     prisonApi.getCourtCases.mockResolvedValue([{ id: 1, caseInfoNumber: 'T12345' }])
 
-    // @ts-expect-error ts-migrate(2339) FIXME: Property 'getOffenceHistory' does not exist on typ... Remove this comment to see the full error message
     prisonApi.getOffenceHistory.mockResolvedValue([
       { offenceDescription: 'C', primaryResultCode: '1002', caseId: 1 },
       { offenceDescription: 'b', primaryResultCode: '1002', caseId: 1 },
       { offenceDescription: 'a', primaryResultCode: '1002', caseId: 1 },
     ])
 
-    // @ts-expect-error ts-migrate(2339) FIXME: Property 'getSentenceTerms' does not exist on type... Remove this comment to see the full error message
     prisonApi.getSentenceTerms.mockResolvedValue([
       {
         lineSeq: 6,
@@ -836,19 +813,15 @@ describe('prisoner sentence and release', () => {
   })
 
   it('should make a system to system call when requesting offences', async () => {
-    // @ts-expect-error ts-migrate(2339) FIXME: Property 'getClientCredentialsTokens' does not exi... Remove this comment to see the full error message
     systemOauthClient.getClientCredentialsTokens = jest.fn().mockResolvedValue({ system: true })
 
     await controller(req, res)
 
-    // @ts-expect-error ts-migrate(2339) FIXME: Property 'getClientCredentialsTokens' does not exi... Remove this comment to see the full error message
     expect(systemOauthClient.getClientCredentialsTokens).toHaveBeenCalledWith('ITAG_USER')
-    // @ts-expect-error ts-migrate(2339) FIXME: Property 'getOffenceHistory' does not exist on typ... Remove this comment to see the full error message
     expect(prisonApi.getOffenceHistory).toHaveBeenCalledWith({ system: true }, 'G3878UK')
   })
 
   it('should return the right data when no overrides', async () => {
-    // @ts-expect-error ts-migrate(2339) FIXME: Property 'getPrisonerSentenceDetails' does not exi... Remove this comment to see the full error message
     prisonApi.getPrisonerSentenceDetails = jest.fn().mockResolvedValue({
       sentenceDetail: {
         sentenceStartDate: '2010-02-03',
@@ -880,9 +853,7 @@ describe('prisoner sentence and release', () => {
     })
     await controller(req, res)
 
-    // @ts-expect-error ts-migrate(2339) FIXME: Property 'getPrisonerProfileData' does not exist o... Remove this comment to see the full error message
     expect(prisonerProfileService.getPrisonerProfileData).toHaveBeenCalledWith(res.locals, offenderNo)
-    // @ts-expect-error ts-migrate(2339) FIXME: Property 'getPrisonerSentenceDetails' does not exi... Remove this comment to see the full error message
     expect(prisonApi.getPrisonerSentenceDetails).toHaveBeenCalledWith(res.locals, offenderNo)
     expect(res.render).toHaveBeenCalledWith(
       'prisonerProfile/prisonerSentenceAndRelease/prisonerSentenceAndRelease.njk',
@@ -921,7 +892,6 @@ describe('prisoner sentence and release', () => {
   })
 
   it('should return the right data when sections are empty', async () => {
-    // @ts-expect-error ts-migrate(2339) FIXME: Property 'getPrisonerSentenceDetails' does not exi... Remove this comment to see the full error message
     prisonApi.getPrisonerSentenceDetails = jest.fn().mockResolvedValue({
       sentenceDetail: {
         sentenceStartDate: '2010-02-03',
@@ -934,9 +904,7 @@ describe('prisoner sentence and release', () => {
     })
     await controller(req, res)
 
-    // @ts-expect-error ts-migrate(2339) FIXME: Property 'getPrisonerProfileData' does not exist o... Remove this comment to see the full error message
     expect(prisonerProfileService.getPrisonerProfileData).toHaveBeenCalledWith(res.locals, offenderNo)
-    // @ts-expect-error ts-migrate(2339) FIXME: Property 'getPrisonerSentenceDetails' does not exi... Remove this comment to see the full error message
     expect(prisonApi.getPrisonerSentenceDetails).toHaveBeenCalledWith(res.locals, offenderNo)
     expect(res.render).toHaveBeenCalledWith(
       'prisonerProfile/prisonerSentenceAndRelease/prisonerSentenceAndRelease.njk',
@@ -953,39 +921,31 @@ describe('prisoner sentence and release', () => {
   })
 
   it('should make a call to retrieve an offenders booking id', async () => {
-    // @ts-expect-error ts-migrate(2339) FIXME: Property 'getPrisonerSentenceDetails' does not exi... Remove this comment to see the full error message
     prisonApi.getPrisonerSentenceDetails = jest.fn().mockResolvedValue({
       sentenceDetail: { effectiveSentenceEndDate: '2021-10-16' },
     })
-    // @ts-expect-error ts-migrate(2339) FIXME: Property 'getSentenceAdjustments' does not exist o... Remove this comment to see the full error message
     prisonApi.getSentenceAdjustments = jest.fn().mockResolvedValue({})
 
     await controller(req, res)
 
-    // @ts-expect-error ts-migrate(2339) FIXME: Property 'getDetails' does not exist on type '{}'.
     expect(prisonApi.getDetails).toHaveBeenCalledWith({}, offenderNo)
   })
 
   it('should make a call for sentence adjustments', async () => {
-    // @ts-expect-error ts-migrate(2339) FIXME: Property 'getPrisonerSentenceDetails' does not exi... Remove this comment to see the full error message
     prisonApi.getPrisonerSentenceDetails = jest.fn().mockResolvedValue({
       sentenceDetail: { effectiveSentenceEndDate: '2021-10-16' },
     })
-    // @ts-expect-error ts-migrate(2339) FIXME: Property 'getSentenceAdjustments' does not exist o... Remove this comment to see the full error message
     prisonApi.getSentenceAdjustments = jest.fn().mockResolvedValue({})
 
     await controller(req, res)
 
-    // @ts-expect-error ts-migrate(2339) FIXME: Property 'getSentenceAdjustments' does not exist o... Remove this comment to see the full error message
     expect(prisonApi.getSentenceAdjustments).toHaveBeenCalledWith({}, 1)
   })
 
   it('should return the right data when values are available', async () => {
-    // @ts-expect-error ts-migrate(2339) FIXME: Property 'getPrisonerSentenceDetails' does not exi... Remove this comment to see the full error message
     prisonApi.getPrisonerSentenceDetails = jest.fn().mockResolvedValue({
       sentenceDetail: { effectiveSentenceEndDate: '2021-10-16' },
     })
-    // @ts-expect-error ts-migrate(2339) FIXME: Property 'getSentenceAdjustments' does not exist o... Remove this comment to see the full error message
     prisonApi.getSentenceAdjustments = jest.fn().mockResolvedValue({
       additionalDaysAwarded: 1,
       lawfullyAtLarge: 2,
@@ -1025,11 +985,9 @@ describe('prisoner sentence and release', () => {
   })
 
   it('should return the right data when no values are available', async () => {
-    // @ts-expect-error ts-migrate(2339) FIXME: Property 'getPrisonerSentenceDetails' does not exi... Remove this comment to see the full error message
     prisonApi.getPrisonerSentenceDetails = jest.fn().mockResolvedValue({
       sentenceDetail: { effectiveSentenceEndDate: '2021-10-16' },
     })
-    // @ts-expect-error ts-migrate(2339) FIXME: Property 'getSentenceAdjustments' does not exist o... Remove this comment to see the full error message
     prisonApi.getSentenceAdjustments = jest.fn().mockResolvedValue({
       additionalDaysAwarded: 0,
       lawfullyAtLarge: 0,
@@ -1052,10 +1010,8 @@ describe('prisoner sentence and release', () => {
   })
 
   it('should not trigger an undefined exception when a license comes first in the sentence terms data set', async () => {
-    // @ts-expect-error ts-migrate(2339) FIXME: Property 'getCourtCases' does not exist on type '{... Remove this comment to see the full error message
     prisonApi.getCourtCases.mockResolvedValue([{ id: 1, caseInfoNumber: 'T12345', agency: { description: 'Leeds' } }])
 
-    // @ts-expect-error ts-migrate(2339) FIXME: Property 'getOffenceHistory' does not exist on typ... Remove this comment to see the full error message
     prisonApi.getOffenceHistory.mockResolvedValue([
       {
         offenceDescription: 'Offence 1',
@@ -1064,7 +1020,6 @@ describe('prisoner sentence and release', () => {
       },
     ])
 
-    // @ts-expect-error ts-migrate(2339) FIXME: Property 'getSentenceTerms' does not exist on type... Remove this comment to see the full error message
     prisonApi.getSentenceTerms.mockResolvedValue([
       {
         lineSeq: 1,
@@ -1086,7 +1041,6 @@ describe('prisoner sentence and release', () => {
   })
 
   it('Should show Life Sentence in Effective Sentence End Date if the end date doesnt exist and it is a life sentence', async () => {
-    // @ts-expect-error ts-migrate(2339) FIXME: Property 'getPrisonerSentenceDetails' does not exi... Remove this comment to see the full error message
     prisonApi.getPrisonerSentenceDetails = jest.fn().mockResolvedValue({
       sentenceDetail: {
         sentenceStartDate: '2010-02-03',
@@ -1094,7 +1048,6 @@ describe('prisoner sentence and release', () => {
         releaseDate: '2020-04-01',
       },
     })
-    // @ts-expect-error ts-migrate(2339) FIXME: Property 'getPrisonersDetails' does not exist on t... Remove this comment to see the full error message
     offenderSearchApi.getPrisonersDetails = jest.fn().mockResolvedValue([{ indeterminateSentence: true }])
 
     await controller(req, res)
@@ -1108,7 +1061,6 @@ describe('prisoner sentence and release', () => {
   })
 
   it('Should return nothing in Effective Sentence End Date if the end date doesnt exist and it is not a life sentence', async () => {
-    // @ts-expect-error ts-migrate(2339) FIXME: Property 'getPrisonerSentenceDetails' does not exi... Remove this comment to see the full error message
     prisonApi.getPrisonerSentenceDetails = jest.fn().mockResolvedValue({
       sentenceDetail: {
         sentenceStartDate: '2010-02-03',
@@ -1116,7 +1068,6 @@ describe('prisoner sentence and release', () => {
         releaseDate: '2020-04-01',
       },
     })
-    // @ts-expect-error ts-migrate(2339) FIXME: Property 'getPrisonersDetails' does not exist on t... Remove this comment to see the full error message
     offenderSearchApi.getPrisonersDetails = jest.fn().mockResolvedValue([{ indeterminateSentence: false }])
 
     await controller(req, res)

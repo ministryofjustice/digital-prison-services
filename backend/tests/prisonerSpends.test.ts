@@ -2,8 +2,13 @@ import prisonerSpends from '../controllers/prisonerProfile/prisonerFinances/pris
 
 describe('Prisoner spends', () => {
   const offenderNo = 'ABC123'
-  const prisonApi = {}
-  const prisonerFinanceService = {}
+  const prisonApi = {
+    getAgencyDetails: jest.fn(),
+  }
+  const prisonerFinanceService = {
+    getTransactionsForDateRange: jest.fn(),
+    getTemplateData: jest.fn(),
+  }
 
   let req
   let res
@@ -51,12 +56,9 @@ describe('Prisoner spends', () => {
     }
     res = { locals: {}, render: jest.fn() }
 
-    // @ts-expect-error ts-migrate(2339) FIXME: Property 'getTransactionsForDateRange' does not ex... Remove this comment to see the full error message
     prisonerFinanceService.getTransactionsForDateRange = jest.fn().mockResolvedValue([])
-    // @ts-expect-error ts-migrate(2339) FIXME: Property 'getTemplateData' does not exist on type ... Remove this comment to see the full error message
     prisonerFinanceService.getTemplateData = jest.fn().mockResolvedValue(templateDataResponse)
 
-    // @ts-expect-error ts-migrate(2339) FIXME: Property 'getAgencyDetails' does not exist on type... Remove this comment to see the full error message
     prisonApi.getAgencyDetails = jest.fn().mockResolvedValue({})
 
     controller = prisonerSpends({ prisonApi, prisonerFinanceService })
@@ -66,17 +68,13 @@ describe('Prisoner spends', () => {
     const params = [res.locals, offenderNo, 'spends', undefined, undefined]
     await controller(req, res)
 
-    // @ts-expect-error ts-migrate(2339) FIXME: Property 'getTransactionsForDateRange' does not ex... Remove this comment to see the full error message
     expect(prisonerFinanceService.getTransactionsForDateRange).toHaveBeenCalledWith(...params)
-    // @ts-expect-error ts-migrate(2339) FIXME: Property 'getTemplateData' does not exist on type ... Remove this comment to see the full error message
     expect(prisonerFinanceService.getTemplateData).toHaveBeenCalledWith(...params)
-    // @ts-expect-error ts-migrate(2339) FIXME: Property 'getAgencyDetails' does not exist on type... Remove this comment to see the full error message
     expect(prisonApi.getAgencyDetails).not.toHaveBeenCalled()
   })
 
   describe('with transaction data', () => {
     beforeEach(() => {
-      // @ts-expect-error ts-migrate(2339) FIXME: Property 'getTransactionsForDateRange' does not ex... Remove this comment to see the full error message
       prisonerFinanceService.getTransactionsForDateRange = jest.fn().mockResolvedValue([
         {
           offenderId: 1,
@@ -171,7 +169,6 @@ describe('Prisoner spends', () => {
         },
       ])
 
-      // @ts-expect-error ts-migrate(2339) FIXME: Property 'getAgencyDetails' does not exist on type... Remove this comment to see the full error message
       prisonApi.getAgencyDetails = jest
         .fn()
         .mockResolvedValue({ description: 'Moorland', agencyId: 'MDI' })
@@ -181,9 +178,7 @@ describe('Prisoner spends', () => {
     it('should make additional expected API calls for agency data', async () => {
       await controller(req, res)
 
-      // @ts-expect-error ts-migrate(2339) FIXME: Property 'getAgencyDetails' does not exist on type... Remove this comment to see the full error message
       expect(prisonApi.getAgencyDetails).toHaveBeenCalledWith({}, 'MDI')
-      // @ts-expect-error ts-migrate(2339) FIXME: Property 'getAgencyDetails' does not exist on type... Remove this comment to see the full error message
       expect(prisonApi.getAgencyDetails).toHaveBeenCalledWith({}, 'LEI')
     })
 
@@ -234,9 +229,7 @@ describe('Prisoner spends', () => {
       const params = [res.locals, offenderNo, 'spends', '6', '2020']
       await controller(req, res)
 
-      // @ts-expect-error ts-migrate(2339) FIXME: Property 'getTransactionsForDateRange' does not ex... Remove this comment to see the full error message
       expect(prisonerFinanceService.getTransactionsForDateRange).toHaveBeenCalledWith(...params)
-      // @ts-expect-error ts-migrate(2339) FIXME: Property 'getTemplateData' does not exist on type ... Remove this comment to see the full error message
       expect(prisonerFinanceService.getTemplateData).toHaveBeenCalledWith(...params)
     })
   })
@@ -244,7 +237,6 @@ describe('Prisoner spends', () => {
   describe('when there are errors', () => {
     it('set the redirect url and throw the error', async () => {
       const error = new Error('Network error')
-      // @ts-expect-error ts-migrate(2339) FIXME: Property 'getTransactionsForDateRange' does not ex... Remove this comment to see the full error message
       prisonerFinanceService.getTransactionsForDateRange.mockRejectedValue(error)
 
       await expect(controller(req, res)).rejects.toThrowError(error)

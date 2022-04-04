@@ -3,13 +3,14 @@ import { makeResetError } from './helpers'
 
 describe('Select activity locations controller', () => {
   const agencyId = 'MDI'
-  const prisonApi = {}
+  const prisonApi = {
+    searchActivityLocations: jest.fn(),
+  }
   let controller
   let req
   let res
 
   beforeEach(() => {
-    // @ts-expect-error ts-migrate(2339) FIXME: Property 'searchActivityLocations' does not exist ... Remove this comment to see the full error message
     prisonApi.searchActivityLocations = jest.fn()
 
     res = {
@@ -31,15 +32,14 @@ describe('Select activity locations controller', () => {
   })
 
   afterEach(() => {
-    // @ts-expect-error ts-migrate(2339) FIXME: Property 'mockRestore' does not exist on type '() ... Remove this comment to see the full error message
-    Date.now.mockRestore()
+    const spy = jest.spyOn(Date, 'now')
+    spy.mockRestore()
   })
 
   describe('Index', () => {
     it('should use default values when there are no query parameters', async () => {
       await controller.index(req, res)
 
-      // @ts-expect-error ts-migrate(2339) FIXME: Property 'searchActivityLocations' does not exist ... Remove this comment to see the full error message
       expect(prisonApi.searchActivityLocations).toHaveBeenCalledWith(res.locals, agencyId, '2020-07-24', 'AM')
     })
 
@@ -51,7 +51,6 @@ describe('Select activity locations controller', () => {
 
       await controller.index(req, res)
 
-      // @ts-expect-error ts-migrate(2339) FIXME: Property 'searchActivityLocations' does not exist ... Remove this comment to see the full error message
       expect(prisonApi.searchActivityLocations).toHaveBeenCalledWith(res.locals, agencyId, '2020-12-10', 'PM')
     })
 
@@ -66,7 +65,6 @@ describe('Select activity locations controller', () => {
     })
 
     it('should render correct data using the query parameters', async () => {
-      // @ts-expect-error ts-migrate(2339) FIXME: Property 'searchActivityLocations' does not exist ... Remove this comment to see the full error message
       prisonApi.searchActivityLocations = jest.fn().mockResolvedValue([
         {
           locationId: 1,
@@ -91,7 +89,6 @@ describe('Select activity locations controller', () => {
     it('should set redirect and throw error', async () => {
       res.locals = {}
       const error = new Error('Network error')
-      // @ts-expect-error ts-migrate(2339) FIXME: Property 'searchActivityLocations' does not exist ... Remove this comment to see the full error message
       prisonApi.searchActivityLocations.mockRejectedValue(error)
 
       await expect(controller.index(req, res)).rejects.toThrowError
@@ -102,7 +99,6 @@ describe('Select activity locations controller', () => {
     describe('When there is a timeout error', () => {
       beforeEach(() => {
         const connectionResetError = makeResetError()
-        // @ts-expect-error ts-migrate(2339) FIXME: Property 'searchActivityLocations' does not exist ... Remove this comment to see the full error message
         prisonApi.searchActivityLocations.mockRejectedValue(connectionResetError)
       })
       it('should render error template using the req.originalUrl as the redirect url', async () => {
