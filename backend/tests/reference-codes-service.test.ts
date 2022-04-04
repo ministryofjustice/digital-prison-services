@@ -1,7 +1,9 @@
 import factory from '../controllers/reference-codes-service'
 
 const context = {}
-const prisonApi = {}
+const prisonApi = {
+  getAlertTypes: jest.fn(),
+}
 const service = factory(prisonApi)
 
 const getAlertAPIData = [
@@ -52,9 +54,7 @@ const getAlertAPIData = [
 
 describe('Reference codes service', () => {
   beforeEach(() => {
-    // @ts-expect-error ts-migrate(2339) FIXME: Property 'getAlertTypes' does not exist on type '{... Remove this comment to see the full error message
     prisonApi.getAlertTypes = jest.fn()
-    // @ts-expect-error ts-migrate(2339) FIXME: Property 'getAlertTypes' does not exist on type '{... Remove this comment to see the full error message
     prisonApi.getAlertTypes.mockReturnValue(getAlertAPIData)
   })
   it('should map to alert type sub type model', async () => {

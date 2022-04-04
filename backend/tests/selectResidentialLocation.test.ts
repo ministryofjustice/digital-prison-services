@@ -5,13 +5,14 @@ describe('Select residential location controller', () => {
   let res
   let controller
 
-  const whereaboutsApi = {}
+  const whereaboutsApi = {
+    searchGroups: jest.fn(),
+  }
 
   beforeEach(() => {
     req = {}
     res = { locals: { user: { activeCaseLoad: { caseLoadId: 'MDI' } } }, render: jest.fn(), redirect: jest.fn() }
 
-    // @ts-expect-error ts-migrate(2339) FIXME: Property 'searchGroups' does not exist on type '{}... Remove this comment to see the full error message
     whereaboutsApi.searchGroups = jest.fn().mockResolvedValue([
       { name: 'Houseblock 1', key: 'HB1', children: [] },
       { name: 'Houseblock 2', key: 'HB2', children: [] },
@@ -26,7 +27,6 @@ describe('Select residential location controller', () => {
     it('should makes the expected API calls', async () => {
       await controller.index(req, res)
 
-      // @ts-expect-error ts-migrate(2339) FIXME: Property 'searchGroups' does not exist on type '{}... Remove this comment to see the full error message
       expect(whereaboutsApi.searchGroups).toHaveBeenCalledWith(res.locals, 'MDI')
     })
 
@@ -47,7 +47,6 @@ describe('Select residential location controller', () => {
     describe('when there is an error retrieving data', () => {
       it('should set correct redirect url and throw error', async () => {
         const error = new Error('Network error')
-        // @ts-expect-error ts-migrate(2339) FIXME: Property 'searchGroups' does not exist on type '{}... Remove this comment to see the full error message
         whereaboutsApi.searchGroups = jest.fn().mockRejectedValue(error)
 
         await expect(controller.index(req, res)).rejects.toThrowError(error)
