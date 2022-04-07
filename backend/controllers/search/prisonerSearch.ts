@@ -1,7 +1,7 @@
 import qs from 'querystring'
 import { serviceUnavailableMessage } from '../../common-messages'
 import { alertFlagLabels, profileAlertCodes } from '../../shared/alertFlagValues'
-import { putLastNameFirst, hasLength, formatLocation } from '../../utils'
+import { putLastNameFirst, hasLength, formatLocation, toMap } from '../../utils'
 
 export const trackEvent = (telemetry, results, searchQueries, username, activeCaseLoad) => {
   if (telemetry) {
@@ -23,7 +23,7 @@ export const trackEvent = (telemetry, results, searchQueries, username, activeCa
   }
 }
 
-export default ({ paginationService, prisonApi, telemetry, logError }) => {
+export default ({ paginationService, prisonApi, incentivesApi, telemetry, logError }) => {
   const index = async (req, res) => {
     const {
       user: { activeCaseLoad },
@@ -68,13 +68,16 @@ export default ({ paginationService, prisonApi, telemetry, logError }) => {
         prisonApi.getInmates(context, location || currentUserCaseLoad, {
           keywords,
           alerts: selectedAlerts,
-          returnIep: 'true',
           returnAlerts: 'true',
           returnCategory: 'true',
         }),
       ])
 
       const totalRecords = context.responseHeaders['total-records']
+
+      const bookingIds = prisoners.map((prisoner) => prisoner.bookingId)
+      const [iepData] = await Promise.all([incentivesApi.getIepSummaryForBookingIds(context, bookingIds)])
+      const iepBookingIdMap = toMap('bookingId', iepData)
 
       const locationOptions =
         locations && locations.map((option) => ({ value: option.locationPrefix, text: option.description }))
@@ -83,6 +86,7 @@ export default ({ paginationService, prisonApi, telemetry, logError }) => {
         prisoners &&
         prisoners.map((prisoner) => ({
           ...prisoner,
+          iepLevel: iepBookingIdMap.get(prisoner.bookingId).iepLevel,
           assignedLivingUnitDesc: formatLocation(prisoner.assignedLivingUnitDesc),
           name: putLastNameFirst(prisoner.firstName, prisoner.lastName),
           alerts: alertFlagLabels.filter((alertFlag) =>
