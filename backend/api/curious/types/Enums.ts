@@ -76,7 +76,7 @@ export enum NeurodivergenceSupport {
   AuditorySupport = 'Auditory Support',
   OrganisationSupport = 'Organisation Support',
   MemorySupport = 'Memory Support',
-  NoidentifiedNeurodoversityNeed = 'No identified Neurodoversity Need',
+  NoidentifiedNeurodiversityNeed = 'No identified Neurodiversity Need',
   TimemanagementSupport = 'Time management Support',
   NoidentifiedSupportRequired = 'No identified Support Required',
 }
