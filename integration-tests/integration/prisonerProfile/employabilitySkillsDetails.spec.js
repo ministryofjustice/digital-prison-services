@@ -99,15 +99,14 @@ context('Employability skills details page', () => {
           cy.get($tRows).its('length').should('eq', 20)
         })
 
-      cy.get('th[data-test="date-header"]').click() // reverse order
-
+      cy.get('th[data-test="date-header"]').contains('Assessment date').click() // reverse order
       cy.get('tbody')
         .find('tr')
         .then(($tRows) => {
           const review = Array.from($tRows).map(($row) => tableData($row.cells))
 
-          expect(review[19].level).to.contain('Level 9')
-          expect(review[0].level).to.contain('Level 28')
+          expect(review[0].level).to.contain('Level 9')
+          expect(review[19].level).to.contain('Level 28')
         })
 
       cy.contains('Next').click()
