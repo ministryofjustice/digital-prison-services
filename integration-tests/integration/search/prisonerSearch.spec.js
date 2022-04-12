@@ -1,6 +1,11 @@
 const offenderBasicDetails = require('../../mockApis/responses/offenderBasicDetails.json')
 const offenderFullDetails = require('../../mockApis/responses/offenderFullDetails.json')
 const { quickLookFullDetails } = require('../prisonerProfile/prisonerQuickLook.spec')
+const {
+  NeurodivergenceSelfDeclared,
+  NeurodivergenceAssessed,
+  NeurodivergenceSupport,
+} = require('../../../backend/api/curious/types/Enums')
 
 context('Prisoner search', () => {
   const inmate1 = {
@@ -270,6 +275,86 @@ context('Prisoner search', () => {
       })
 
       cy.get('[data-test="recent-search-link"]').should('have.attr', 'href', searchUrl)
+    })
+  })
+
+  context('Neurodiversity flag', () => {
+    // eslint-disable-next-line no-script-url
+    const neurodivergenceLink = `javascript:expandLink('/prisoner/A1234BC/personal')`
+    const neurodivergenceAll = {
+      prn: 'A12345',
+      establishmentId: 'MDI',
+      establishmentName: 'HMP Moorland',
+      neurodivergenceSelfDeclared: [NeurodivergenceSelfDeclared.ADHD, NeurodivergenceSelfDeclared.Autism],
+      selfDeclaredDate: '2022-02-10',
+      neurodivergenceAssessed: [NeurodivergenceAssessed.AcquiredBrainInjury],
+      assessmentDate: '2022-02-15',
+      neurodivergenceSupport: [NeurodivergenceSupport.MemorySupport, NeurodivergenceSupport.Reading],
+      supportDate: '2022-02-20',
+    }
+    beforeEach(() => {
+      cy.task('stubUserLocations')
+    })
+
+    it('should display correct result including neurodiversity flag', () => {
+      const searchUrl = '/prisoner-search?keywords=Saunders&location=MDI&alerts%5B%5D=XA'
+
+      cy.task('stubInmates', {
+        locationId: 'MDI',
+        count: 1,
+        data: [inmate1],
+      })
+      cy.task('stubGetIepSummaryForBookingIds', [inmate1Iep])
+      cy.task('stubPrisonerProfileHeaderData', {
+        offenderBasicDetails,
+        offenderFullDetails,
+        iepSummary: [inmate1Iep],
+        caseNoteSummary: {},
+        offenderNo: 'A12345',
+      })
+      cy.task('stubQuickLook', quickLookFullDetails)
+      cy.task('stubPathFinderOffenderDetails', null)
+      cy.task('stubClientCredentialsRequest')
+      cy.task('stubLearnerNeurodiversity', [neurodivergenceAll])
+
+      cy.visit(searchUrl)
+
+      cy.get('[data-test="prisoner-search-results-table"]').then(($table) => {
+        cy.get($table)
+          .find('tr')
+          .then(($tableRows) => {
+            cy.get($tableRows).find('a').click()
+          })
+      })
+      cy.get('[data-test="view-neurodivergence-link"').should('have.attr', 'href', neurodivergenceLink)
+    })
+    it('should navigate to personal tab when link is followed', () => {
+      cy.task('stubPersonal', {
+        neurodivergence: [neurodivergenceAll],
+      })
+      cy.get('[data-test="view-neurodivergence-link"').click()
+      cy.get('[data-test="neurodiversity-summary"]').then(($summary) => {
+        cy.get($summary)
+          .find('dt')
+          .then(($summaryLabels) => {
+            cy.get($summaryLabels).its('length').should('eq', 5)
+            expect($summaryLabels.get(0).innerText).to.contain('Support needed')
+            expect($summaryLabels.get(1).innerText).to.contain('Neurodiversity')
+          })
+
+        cy.get($summary)
+          .find('dd')
+          .then(($summaryValues) => {
+            cy.get($summaryValues).its('length').should('eq', 5)
+            expect($summaryValues.get(0).innerText).to.contain('Memory Support').and.to.contain('Reading Support')
+            expect($summaryValues.get(1).innerText).to.contain('From self-assessment')
+            expect($summaryValues.get(2).innerText).to.contain('ADHD').and.to.contain('Autism')
+            expect($summaryValues.get(3).innerText).to.contain('From neurodiversity assessment')
+            expect($summaryValues.get(4).innerText)
+              .to.contain('Acquired Brain Injury')
+              .and.to.contain('Recorded on 15 February 2022')
+          })
+      })
     })
   })
 })

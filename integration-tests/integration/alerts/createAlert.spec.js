@@ -33,6 +33,7 @@ context('A user can add an alert', () => {
       offenderNo: 'A12345',
     })
     cy.task('stubAlertsForBooking', [])
+    cy.task('stubLearnerNeurodiversity', [])
     cy.server()
 
     cy.route({

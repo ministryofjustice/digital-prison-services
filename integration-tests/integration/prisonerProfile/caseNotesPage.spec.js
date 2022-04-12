@@ -61,6 +61,7 @@ context('A user can view prisoner case notes', () => {
       caseNoteSummary: {},
       offenderNo,
     })
+    cy.task('stubLearnerNeurodiversity', [])
   })
 
   it('A user can view a prisoners case notes', () => {

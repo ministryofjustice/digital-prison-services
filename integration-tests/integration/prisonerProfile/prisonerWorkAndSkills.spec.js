@@ -54,6 +54,7 @@ context('Prisoner Work and Skills', () => {
       cy.clearCookies()
       cy.task('stubPrisonerProfileHeaderData', prisonerProfileHeaderData)
       cy.task('stubSignIn', { username: 'ITAG_USER', caseload: 'MDI' })
+      cy.task('stubLearnerNeurodiversity', [])
       cy.signIn()
     })
 
@@ -206,6 +207,7 @@ context('Prisoner Work and Skills', () => {
       cy.task('reset')
       cy.task('stubPrisonerProfileHeaderData', prisonerProfileHeaderData)
       cy.task('stubSignIn', { username: 'ITAG_USER', caseload: 'MDI' })
+      cy.task('stubLearnerNeurodiversity', [])
       cy.signIn()
     })
 
@@ -316,6 +318,7 @@ context('Prisoner Work and Skills', () => {
       cy.task('reset')
       cy.task('stubPrisonerProfileHeaderData', prisonerProfileHeaderData)
       cy.task('stubSignIn', { username: 'ITAG_USER', caseload: 'MDI' })
+      cy.task('stubLearnerNeurodiversity', [])
       cy.signIn()
     })
 
@@ -466,6 +469,7 @@ context('Prisoner Work and Skills', () => {
           },
         ],
       })
+      cy.task('stubLearnerNeurodiversity', [])
       cy.signIn()
     })
 
@@ -689,6 +693,7 @@ context('Prisoner Work and Skills', () => {
           },
         ],
       })
+      cy.task('stubLearnerNeurodiversity', [])
       cy.signIn()
     })
 
