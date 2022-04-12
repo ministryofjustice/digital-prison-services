@@ -148,7 +148,7 @@ context('Prisoner quick look data retrieval errors', () => {
       caseNoteSummary: {},
       offenderNo,
     })
-
+    cy.task('stubLearnerNeurodiversity', [])
     cy.task('stubQuickLookApiErrors')
     cy.visit(`/prisoner/${offenderNo}`)
   })
@@ -228,6 +228,7 @@ context('Prisoner profile header', () => {
     cy.signIn()
 
     cy.task('stubQuickLook', quickLookFullDetails)
+    cy.task('stubLearnerNeurodiversity', [])
   })
 
   beforeEach(() => {
@@ -237,6 +238,7 @@ context('Prisoner profile header', () => {
   it('Should show correct header information', () => {
     cy.task('stubPrisonerProfileHeaderData', headerProfileData)
     cy.visit(`/prisoner/${offenderNo}`)
+    cy.task('stubLearnerNeurodiversity', [])
 
     prisonerQuickLookPage.verifyOnPage('Smith, John')
 
@@ -249,6 +251,7 @@ context('Prisoner profile header', () => {
       complexOffenders: [{ offenderNo, level: 'high' }],
       keyworkerDetails: {},
     })
+    cy.task('stubLearnerNeurodiversity', [])
     cy.visit(`/prisoner/${offenderNo}`)
 
     prisonerQuickLookPage.verifyOnPage('Smith, John')
@@ -278,6 +281,7 @@ context('Prisoner quick look', () => {
     cy.signIn()
 
     cy.task('stubQuickLook', quickLookFullDetails)
+    cy.task('stubLearnerNeurodiversity', [])
   })
 
   context('When a prisoner is in users caseload', () => {
@@ -713,6 +717,7 @@ context('Finances section', () => {
 
       quickLookFullDetails.balances.damageObligations = 0
       cy.task('stubQuickLook', quickLookFullDetails)
+      cy.task('stubLearnerNeurodiversity', [])
     })
 
     context('When a prisoner is in users caseload', () => {
@@ -772,6 +777,7 @@ context('Finances section', () => {
           caseNoteSummary: {},
           offenderNo,
         })
+        cy.task('stubLearnerNeurodiversity', [])
       })
 
       it('Should show damage obligations balance when it is of non-zero value', () => {

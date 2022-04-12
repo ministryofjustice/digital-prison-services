@@ -63,6 +63,7 @@ context('Employability skills details page', () => {
       cy.signIn()
       cy.task('stubOffenderBasicDetails', { bookingId: 1, firstName: 'John', lastName: 'Smith', agencyId: 'MDI' })
       cy.task('stubKeyworkerMigrated')
+      cy.task('stubLearnerNeurodiversity', [])
     })
 
     beforeEach(() => {
@@ -105,8 +106,8 @@ context('Employability skills details page', () => {
         .then(($tRows) => {
           const review = Array.from($tRows).map(($row) => tableData($row.cells))
 
-          expect(review[0].level).to.contain('Level 9')
-          expect(review[19].level).to.contain('Level 28')
+          expect(review[19].level).to.contain('Level 9')
+          expect(review[0].level).to.contain('Level 28')
         })
 
       cy.contains('Next').click()
