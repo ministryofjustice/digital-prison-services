@@ -134,6 +134,30 @@ describe('<AttendanceOptions />', () => {
       expect(detailsLink.length).toBe(1)
     })
 
+    it('should display added next to incentive warnings', () => {
+      props.offenderDetails.attendanceInfo.other = true
+      props.offenderDetails.attendanceInfo.absentReason = {
+        value: 'UnacceptableAbsence',
+        name: 'Unacceptable absence - incentive warning',
+      }
+      act(() => testRenderer.update(<AttendanceOptions {...props} />))
+      const detailsLink = testInstance.findAllByType(UpdateLink)
+      expect(detailsLink.length).toBe(1)
+      expect(getOtherMessage().props.children).toBe('Unacceptable absence - incentive warning added')
+    })
+
+    it('should not display added next to other absences', () => {
+      props.offenderDetails.attendanceInfo.other = true
+      props.offenderDetails.attendanceInfo.absentReason = {
+        value: 'AcceptableAbsence',
+        name: 'Acceptable absence',
+      }
+      act(() => testRenderer.update(<AttendanceOptions {...props} />))
+      const detailsLink = testInstance.findAllByType(UpdateLink)
+      expect(detailsLink.length).toBe(1)
+      expect(getOtherMessage().props.children).toBe('Acceptable absence')
+    })
+
     it('should call openModal when clicking on update link', () => {
       props.offenderDetails.attendanceInfo.other = true
       props.offenderDetails.attendanceInfo.absentReason = {

@@ -257,6 +257,7 @@ context('Activity list page', () => {
           attended: false,
           paid: false,
           absentReason: 'UnacceptableAbsence',
+          absentReasonDescription: 'Unacceptable absence - incentive level warning',
           absentSubReason: 'Courses',
           eventDate: '2019-05-15',
           comments: 'Never turned up',

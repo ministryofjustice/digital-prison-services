@@ -159,13 +159,16 @@ function AttendanceOptions({
     return null
   }
 
+  const absentReasonAddedSuffix = absentReason?.name?.endsWith('warning') ? ' added' : ''
+  const absentReasonWithAddedMessage = `${absentReason?.name}${absentReasonAddedSuffix}`
+
   return (
     <>
       {!noPay && (
         <>
           {absentReason && (
             <Option data-qa="absent-reason" printOnly>
-              {absentReason.name}
+              {absentReasonWithAddedMessage}
             </Option>
           )}
           <Option data-qa="pay-option" className="row-gutters">
@@ -187,10 +190,10 @@ function AttendanceOptions({
         )}
         {absentReason && !locked && (
           <UpdateLink role="link" onClick={renderForm}>
-            <OtherMessage data-qa="other-message">{absentReason.name}</OtherMessage>
+            <OtherMessage data-qa="other-message">{absentReasonWithAddedMessage}</OtherMessage>
           </UpdateLink>
         )}
-        {absentReason && locked && <OtherMessage data-qa="other-message">{absentReason.name}</OtherMessage>}
+        {absentReason && locked && <OtherMessage data-qa="other-message">{absentReasonWithAddedMessage}</OtherMessage>}
         {noPay && notRecorded && <OtherMessage data-qa="other-message">Not Recorded</OtherMessage>}
       </Option>
     </>

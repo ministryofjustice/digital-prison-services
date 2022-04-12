@@ -26,6 +26,7 @@ const attendances = [
   {
     id: 2,
     absentReason: 'UnacceptableAbsence',
+    absentReasonDescription: 'Unacceptable absence - incentive level warning',
     absentSubReason: 'Courses',
     attended: true,
     bookingId: 3,
