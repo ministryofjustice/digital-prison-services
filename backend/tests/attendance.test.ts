@@ -67,12 +67,19 @@ describe('Attendence and Pay controller', () => {
 
   describe('getAbsenceReasons', () => {
     beforeEach(() => {
-      whereaboutsApi.getAbsenceReasons.mockReturnValue({
-        paidReasons: ['AcceptableAbsence', 'RestInCell', 'ApprovedCourse'],
-        unpaidReasons: ['Refused', 'UnacceptableAbsence'],
-        triggersIEPWarning: ['UnacceptableAbsence', 'Refused'],
-      })
       whereaboutsApi.getAbsenceReasonsV2.mockReturnValue({
+        paidReasons: [
+          { code: 'ApprovedCourse', name: 'Approved course' },
+          { code: 'AcceptableAbsence', name: 'Acceptable absence' },
+          { code: 'NotRequired', name: 'Not required to attend' },
+        ],
+        unpaidReasons: [
+          { code: 'RefusedIncentiveLevelWarning', name: 'Refused to attend' },
+          { code: 'RestInCellOrSick', name: 'Rest in cell or sick' },
+          { code: 'SessionCancelled', name: 'Session cancelled' },
+          { code: 'UnacceptableAbsence', name: 'Unacceptable absence' },
+        ],
+        triggersIEPWarning: ['UnacceptableAbsence', 'RefusedIncentiveLevelWarning'],
         triggersAbsentSubReason: [
           'AcceptableAbsence',
           'Refused',
@@ -97,14 +104,16 @@ describe('Attendence and Pay controller', () => {
       expect(response).toEqual({
         paidReasons: [
           { name: 'Approved course', value: 'ApprovedCourse' },
-          { name: 'Acceptable', value: 'AcceptableAbsence' },
-          { name: 'Rest in cell', value: 'RestInCell' },
+          { name: 'Acceptable absence', value: 'AcceptableAbsence' },
+          { name: 'Not required to attend', value: 'NotRequired' },
         ],
         unpaidReasons: [
-          { name: 'Refused - Incentive Level warning', value: 'Refused' },
-          { name: 'Unacceptable - Incentive Level warning', value: 'UnacceptableAbsence' },
+          { name: 'Refused to attend - incentive level warning', value: 'RefusedIncentiveLevelWarning' },
+          { name: 'Rest in cell or sick', value: 'RestInCellOrSick' },
+          { name: 'Session cancelled', value: 'SessionCancelled' },
+          { name: 'Unacceptable absence - incentive level warning', value: 'UnacceptableAbsence' },
         ],
-        triggersIEPWarning: ['UnacceptableAbsence', 'Refused'],
+        triggersIEPWarning: ['UnacceptableAbsence', 'RefusedIncentiveLevelWarning'],
         triggersAbsentSubReason: [
           'AcceptableAbsence',
           'Refused',

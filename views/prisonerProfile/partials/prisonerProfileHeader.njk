@@ -12,6 +12,15 @@
     </li>
 {% endmacro %}
 
+{% set neurodivergenceHtml %}
+    <span>Has neurodiversity needs</span>
+    <br>
+    <a data-test="view-neurodivergence-link" class="govuk-link"
+       href="javascript:expandLink('{{ '/prisoner/' + prisonerProfileData.offenderNo + '/personal' }}')">
+        Check how you can help
+    </a>
+{% endset %}
+
 {% set alertNumbersHtml %}
 <span>{{ prisonerProfileData.activeAlertCount }} active, {{ prisonerProfileData.inactiveAlertCount }} inactive</span>
 <br>
@@ -100,6 +109,10 @@
             {{ headerItem('CSRA', csraHtml, classes="govuk-!-margin-bottom-4") }}
             {{ headerItem('Alerts', alertNumbersHtml) }}
 
+            {% if prisonerProfileData.hasDivergenceSupport %}
+                {{ headerItem('Support needed', neurodivergenceHtml) }}
+            {% endif %}
+
             {% if prisonerProfileData.isHighComplexity %}
                 {{ headerItem('Key worker', 'None - high complexity of need', '', 'govuk-!-margin-bottom-0', 'keyworker-name') }}
                 <li></li>
@@ -173,3 +186,22 @@
         </div>
     </div>
 </div>
+
+{% block pageScripts %}
+    <script>
+      function expandLink(href) {
+        window.location.href = href
+
+        const $neuroAccordion = document.querySelector('#prisoner-accordion-heading-5')
+        $neuroAccordion.click( () => {
+          const expanded = $(this).attr('aria-expanded')
+          const heading = this.innerText
+          const action = expanded === 'false' ? 'accordion_expanded' : 'accordion_contracted'
+          gtag('event', action, {
+            event_category: 'Education',
+            event_label: heading,
+          })
+        })
+      }
+    </script>
+{% endblock %}

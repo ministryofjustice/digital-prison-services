@@ -1,12 +1,9 @@
 const page = require('../page')
 
-const tableRow = i => cy.get('tbody tr').eq(i)
-const tableCol = (i, j) =>
-  tableRow(i)
-    .find('td')
-    .eq(j)
+const tableRow = (i) => cy.get('tbody tr').eq(i)
+const tableCol = (i, j) => tableRow(i).find('td').eq(j)
 
-const prisonerAlertsPage = offenderName =>
+const prisonerAlertsPage = (offenderName) =>
   page(offenderName, {
     getFilterForm: () => ({
       getTitle: () => cy.get('h2').first(),
@@ -19,7 +16,7 @@ const prisonerAlertsPage = offenderName =>
     }),
     createAlertButton: () => cy.get('[data-qa="create-alert"]'),
     tableTitle: () => cy.get('[data-qa="alerts-table-title"]'),
-    getActiveAlertsRows: i => ({
+    getActiveAlertsRows: (i) => ({
       typeOfAlert: () => tableCol(i, 0),
       alert: () => tableCol(i, 1),
       comments: () => tableCol(i, 2),
@@ -27,7 +24,7 @@ const prisonerAlertsPage = offenderName =>
       createdBy: () => tableCol(i, 4),
       editCreateButton: () => tableCol(i, 5),
     }),
-    getInactiveAlertsRows: i => ({
+    getInactiveAlertsRows: (i) => ({
       typeOfAlert: () => tableCol(i, 0),
       details: () => tableCol(i, 1),
       comments: () => tableCol(i, 2),
@@ -42,7 +39,7 @@ const prisonerAlertsPage = offenderName =>
 
 export default {
   verifyOnPage: prisonerAlertsPage,
-  goTo: offenderNo => {
+  goTo: (offenderNo) => {
     cy.visit(`/prisoner/${offenderNo}/alerts`)
     return prisonerAlertsPage()
   },

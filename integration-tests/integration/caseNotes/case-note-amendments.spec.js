@@ -49,6 +49,7 @@ const setupAmendmentPage = () => {
     caseNoteSummary: {},
     offenderNo: 'A12345',
   })
+  cy.task('stubLearnerNeurodiversity', [])
 }
 
 context('Case note amendments', () => {
