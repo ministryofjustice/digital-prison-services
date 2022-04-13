@@ -199,6 +199,9 @@ export const notifications = {
     PBI: {
       omu: process.env.PETERBOROUGH_OMU_EMAIL,
     },
+    BMI: {
+      omu: process.env.BIRMINGHAM_OMU_EMAIL,
+    },
   },
 }
 
