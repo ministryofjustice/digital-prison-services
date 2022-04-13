@@ -255,7 +255,7 @@ context('Activity list page', () => {
           prisonId: 'LEI',
           attended: false,
           paid: false,
-          absentReason: 'UnacceptableAbsence',
+          absentReason: 'UnacceptableAbsenceIncentiveLevelWarning',
           absentReasonDescription: 'Unacceptable absence - incentive level warning',
           absentSubReason: 'Courses',
           absentSubReasonDescription: 'Courses, programmes and interventions',

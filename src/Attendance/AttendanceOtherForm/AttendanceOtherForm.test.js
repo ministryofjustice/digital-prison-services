@@ -25,17 +25,17 @@ describe('<AttendanceOtherForm />', () => {
         { value: 'ApprovedCourse', name: 'Approved course' },
       ],
       unpaidReasons: [
-        { value: 'UnacceptableAbsence', name: 'Unacceptable' },
+        { value: 'UnacceptableAbsenceIncentiveLevelWarning', name: 'Unacceptable' },
         { value: 'Refused', name: 'Refused' },
         { value: 'RestDay', name: 'Rest day' },
       ],
-      triggersIEPWarning: ['UnacceptableAbsence', 'Refused'],
+      triggersIEPWarning: ['UnacceptableAbsenceIncentiveLevelWarning', 'Refused'],
       triggersAbsentSubReason: [
         'AcceptableAbsence',
         'Refused',
         'RefusedIncentiveLevelWarning',
         'SessionCancelled',
-        'UnacceptableAbsence',
+        'UnacceptableAbsenceIncentiveLevelWarning',
       ],
       paidSubReasons: [
         { value: 'Activities', name: 'Activities and education' },
@@ -129,7 +129,7 @@ describe('<AttendanceOtherForm />', () => {
         .props.children[skipDefaultEntry].map((reason) => reason.props)
 
       expect(reasons).toEqual([
-        { value: 'UnacceptableAbsence', children: 'Unacceptable' },
+        { value: 'UnacceptableAbsenceIncentiveLevelWarning', children: 'Unacceptable' },
         { value: 'Refused', children: 'Refused' },
         { value: 'RestDay', children: 'Rest day' },
       ])
@@ -211,7 +211,7 @@ describe('<AttendanceOtherForm />', () => {
       simulateSubReason('Behaviour')
 
       // changing reason should then clear the sub reason
-      simulateReason('UnacceptableAbsence')
+      simulateReason('UnacceptableAbsenceIncentiveLevelWarning')
       expect(subReasonSelector().props().value).toBe('')
 
       commentInput.instance().value = 'A comment'
@@ -283,7 +283,7 @@ describe('<AttendanceOtherForm />', () => {
 
       it('should display correct errors for missing sub reason value', async () => {
         simulatePay(false)
-        simulateReason('UnacceptableAbsence')
+        simulateReason('UnacceptableAbsenceIncentiveLevelWarning')
         await submitForm(wrapper)
 
         const errors = wrapper.find('ErrorSummary').find('li')
@@ -294,7 +294,7 @@ describe('<AttendanceOtherForm />', () => {
 
       it('should change error message if a case note is required', async () => {
         simulatePay(false)
-        simulateReason('UnacceptableAbsence')
+        simulateReason('UnacceptableAbsenceIncentiveLevelWarning')
         simulateSubReason('Behaviour')
 
         await submitForm(wrapper)
@@ -383,7 +383,7 @@ describe('<AttendanceOtherForm />', () => {
       it('should submit with the correct, unpaid information and trigger the Incentive Level created modal', async () => {
         const expectedPayload = {
           absentReason: {
-            value: 'UnacceptableAbsence',
+            value: 'UnacceptableAbsenceIncentiveLevelWarning',
             name: 'Unacceptable',
           },
           absentSubReason: 'Behaviour',
@@ -395,7 +395,7 @@ describe('<AttendanceOtherForm />', () => {
         }
 
         simulatePay(false)
-        simulateReason('UnacceptableAbsence')
+        simulateReason('UnacceptableAbsenceIncentiveLevelWarning')
         simulateSubReason('Behaviour')
 
         await submitForm(wrapper)
@@ -442,7 +442,7 @@ describe('<AttendanceOtherForm />', () => {
 
     it('should not trigger the Incentive Level created modal', async () => {
       simulatePay(false)
-      simulateReason('UnacceptableAbsence')
+      simulateReason('UnacceptableAbsenceIncentiveLevelWarning')
 
       await submitForm(wrapper)
 
@@ -477,7 +477,7 @@ describe('<AttendanceOtherForm />', () => {
         id: 2,
         paid: false,
         absentReason: {
-          value: 'UnacceptableAbsence',
+          value: 'UnacceptableAbsenceIncentiveLevelWarning',
           name: 'Unacceptable',
         },
         absentSubReason: 'Courses',
@@ -486,7 +486,7 @@ describe('<AttendanceOtherForm />', () => {
       buildWrapper(mount(<AttendanceOtherForm {...props} />))
       expect(yesRadio.props().checked).toBe(false)
       expect(noRadio.props().checked).toBe(true)
-      expect(reasonSelector().props().value).toBe('UnacceptableAbsence')
+      expect(reasonSelector().props().value).toBe('UnacceptableAbsenceIncentiveLevelWarning')
       expect(subReasonSelector().props().value).toBe('Courses')
       expect(commentInput.props().value).toBe('Uncceptable reason comment')
     })

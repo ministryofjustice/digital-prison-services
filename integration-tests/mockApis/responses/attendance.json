@@ -31,7 +31,7 @@
       "prisonId": "LEI",
       "attended": false,
       "paid": false,
-      "absenceReasons": "UnacceptableAbsence",
+      "absenceReasons": "UnacceptableAbsenceIncentiveLevelWarning",
       "eventDate": "2019-05-15"
     }
   ]

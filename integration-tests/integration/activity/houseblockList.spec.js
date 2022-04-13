@@ -25,7 +25,7 @@ const attendances = [
   },
   {
     id: 2,
-    absentReason: 'UnacceptableAbsence',
+    absentReason: 'UnacceptableAbsenceIncentiveLevelWarning',
     absentReasonDescription: 'Unacceptable absence - incentive level warning',
     absentSubReason: 'Courses',
     absentSubReasonDescription: 'Courses, programmes and interventions',

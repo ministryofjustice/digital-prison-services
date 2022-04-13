@@ -137,7 +137,7 @@ describe('<AttendanceOptions />', () => {
     it('should display added next to incentive warnings', () => {
       props.offenderDetails.attendanceInfo.other = true
       props.offenderDetails.attendanceInfo.absentReason = {
-        value: 'UnacceptableAbsence',
+        value: 'UnacceptableAbsenceIncentiveLevelWarning',
         name: 'Unacceptable absence - incentive warning',
       }
       act(() => testRenderer.update(<AttendanceOptions {...props} />))
