@@ -19,7 +19,6 @@ const prisonApi = {
 }
 const whereaboutsApi = {
   getAttendance: jest.fn(),
-  getAbsenceReasons: jest.fn(),
 }
 
 const activityList = getActivityListFactory(prisonApi, whereaboutsApi).getActivityList
@@ -127,11 +126,6 @@ beforeEach(() => {
   prisonApi.getDetailsLight = jest.fn()
   prisonApi.getActivitiesAtLocation = jest.fn()
   whereaboutsApi.getAttendance = jest.fn()
-  whereaboutsApi.getAbsenceReasons = jest.fn()
-
-  whereaboutsApi.getAbsenceReasons.mockResolvedValue({
-    triggersIEPWarning: ['UnacceptableAbsence', 'RefusedIncentiveLevelWarning'],
-  })
   prisonApi.getVisits.mockResolvedValue([])
   prisonApi.getAppointments.mockResolvedValue([])
   prisonApi.getActivities.mockResolvedValue([])
@@ -508,7 +502,9 @@ describe('Activity list controller', () => {
           {
             id: 1,
             absentReason: 'AcceptableAbsence',
+            absentReasonDescription: 'Acceptable absence',
             absentSubReason: 'Courses',
+            absentSubReasonDescription: 'Courses, programmes and interventions',
             attended: false,
             paid: true,
             bookingId: 1,
@@ -523,7 +519,9 @@ describe('Activity list controller', () => {
           {
             id: 2,
             absentReason: 'Refused',
+            absentReasonDescription: 'Refused to attend',
             absentSubReason: 'Behaviour',
+            absentSubReasonDescription: 'Behaviour',
             attended: true,
             paid: false,
             bookingId: 2,
@@ -574,7 +572,7 @@ describe('Activity list controller', () => {
           attendanceInfo: {
             absentReason: {
               value: 'AcceptableAbsence',
-              name: 'Acceptable',
+              name: 'Acceptable absence',
             },
             absentSubReason: 'Courses',
             comments: 'Some comments or case note text.',
@@ -599,7 +597,7 @@ describe('Activity list controller', () => {
           attendanceInfo: {
             absentReason: {
               value: 'Refused',
-              name: 'Refused',
+              name: 'Refused to attend',
             },
             absentSubReason: 'Behaviour',
             comments: undefined,
@@ -638,26 +636,28 @@ describe('Activity list controller', () => {
           {
             id: 1,
             absentReason: 'UnacceptableAbsence',
+            absentReasonDescription: 'Unacceptable absence - incentive level warning',
             bookingId: 1,
             absentSubReason: 'Behaviour',
+            absentSubReasonDescription: 'Behaviour',
           },
           {
             id: 2,
             absentReason: 'RefusedIncentiveLevelWarning',
+            absentReasonDescription: 'Refused to attend - incentive level warning',
             bookingId: 2,
             absentSubReason: 'ExternalMoves',
+            absentSubReasonDescription: 'External moves',
           },
           {
             id: 3,
             absentReason: 'AcceptableAbsence',
+            absentReasonDescription: 'Acceptable absence',
             bookingId: 3,
             absentSubReason: 'Courses',
+            absentSubReasonDescription: 'Courses, programmes and interventions',
           },
         ],
-      })
-
-      whereaboutsApi.getAbsenceReasons.mockResolvedValue({
-        triggersIEPWarning: ['UnacceptableAbsence', 'RefusedIncentiveLevelWarning'],
       })
 
       prisonApi.getActivitiesAtLocation.mockResolvedValue([
@@ -670,15 +670,15 @@ describe('Activity list controller', () => {
       const response = await activityList({}, 'LEI', 1, '23/11/2018', 'PM')
 
       expect(response[0].attendanceInfo.absentReason.value).toBe('UnacceptableAbsence')
-      expect(response[0].attendanceInfo.absentReason.name).toBe('Unacceptable - Incentive Level warning')
+      expect(response[0].attendanceInfo.absentReason.name).toBe('Unacceptable absence - incentive level warning')
       expect(response[0].attendanceInfo.absentSubReason).toBe('Behaviour')
 
       expect(response[1].attendanceInfo.absentReason.value).toBe('RefusedIncentiveLevelWarning')
-      expect(response[1].attendanceInfo.absentReason.name).toBe('Refused - Incentive Level warning')
+      expect(response[1].attendanceInfo.absentReason.name).toBe('Refused to attend - incentive level warning')
       expect(response[1].attendanceInfo.absentSubReason).toBe('ExternalMoves')
 
       expect(response[2].attendanceInfo.absentReason.value).toBe('AcceptableAbsence')
-      expect(response[2].attendanceInfo.absentReason.name).toBe('Acceptable')
+      expect(response[2].attendanceInfo.absentReason.name).toBe('Acceptable absence')
       expect(response[2].attendanceInfo.absentSubReason).toBe('Courses')
     })
   })
@@ -694,16 +694,14 @@ describe('Activity list controller', () => {
         {
           id: 1,
           absentReason: 'UnacceptableAbsence',
+          absentReasonDescription: 'Unacceptable absence - incentive level warning',
           absentSubReason: 'Behaviour',
+          absentSubReasonDescription: 'Behaviour',
           bookingId: 1,
           eventId: 2,
           eventLocationId: 2,
         },
       ],
-    })
-
-    whereaboutsApi.getAbsenceReasons.mockResolvedValue({
-      triggersIEPWarning: ['UnacceptableAbsence', 'Refused'],
     })
 
     const response = await activityList({}, 'LEI', 1, '23/11/2018', 'PM')
@@ -715,7 +713,7 @@ describe('Activity list controller', () => {
     expect(response[1].attendanceInfo).toEqual({
       id: 1,
       absentReason: {
-        name: 'Unacceptable - Incentive Level warning',
+        name: 'Unacceptable absence - incentive level warning',
         value: 'UnacceptableAbsence',
       },
       absentSubReason: 'Behaviour',
@@ -732,14 +730,12 @@ describe('Activity list controller', () => {
       { offenderNo: 'A1', comment: 'Test comment', lastName: 'A', bookingId: 1, eventLocationId: 2, eventId: 1 },
     ])
     whereaboutsApi.getAttendance.mockResolvedValue({ attendances: [] })
-    whereaboutsApi.getAbsenceReasons.mockResolvedValue([])
 
     const { getActivityList: service } = factory(prisonApi, whereaboutsApi)
 
     await service({}, 'LEI', 1, '23/11/2018', 'PM')
     await service({}, 'MDI', 1, '23/11/2018', 'PM')
 
-    expect(whereaboutsApi.getAbsenceReasons.mock.calls.length).toBe(2)
     expect(whereaboutsApi.getAttendance.mock.calls.length).toBe(2)
   })
 })
