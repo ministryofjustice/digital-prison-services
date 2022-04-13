@@ -67,7 +67,10 @@ export const attendanceFactory = (whereaboutsApi) => {
         value: r.code,
         name: triggersIEPWarning.includes(r.code) ? `${r.name} - incentive level warning` : r.name,
       })),
-      triggersIEPWarning,
+      unpaidReasonsWithoutIep: unpaidReasons
+        .map((r) => ({ value: r.code, name: r.name }))
+        .filter((r) => !triggersIEPWarning.includes(r.value)),
+      triggersIEP: triggersIEPWarning.map((r) => r.replace('IncentiveLevelWarning', '')),
       triggersAbsentSubReason,
       paidSubReasons: paidSubReasons.map((r) => ({ value: r.code, name: r.name })),
       unpaidSubReasons: unpaidSubReasons.map((r) => ({ value: r.code, name: r.name })),

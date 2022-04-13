@@ -306,8 +306,9 @@ context('Activity list page', () => {
     })
     cy.get('[data-qa="other-message"').contains('Unacceptable absence - incentive level warning added')
     cy.get('[data-qa="other-message"').parent().click({ multiple: true })
-    cy.get('[name="absentReason"]').find(':selected').contains('Unacceptable absence - incentive level warning')
+    cy.get('[name="absentReason"]:checked').next().should('have.text', 'Unacceptable absence')
     cy.get('[name="absentSubReason"]').find(':selected').contains('Courses, programmes and interventions')
+    cy.get('[name="iep"]:checked').next().should('have.text', 'Yes')
     cy.get('[name="comments"]').contains('Never turned up')
   })
 
