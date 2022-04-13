@@ -35,17 +35,20 @@
       "name": "Session cancelled"
     },
     {
-      "code": "UnacceptableAbsence",
+      "code": "UnacceptableAbsenceIncentiveLevelWarning",
       "name": "Unacceptable absence"
     }
   ],
-  "triggersIEPWarning": ["RefusedIncentiveLevelWarning", "UnacceptableAbsence"],
+  "triggersIEPWarning": [
+    "RefusedIncentiveLevelWarning",
+    "UnacceptableAbsenceIncentiveLevelWarning"
+  ],
   "triggersAbsentSubReason": [
     "AcceptableAbsence",
     "Refused",
     "RefusedIncentiveLevelWarning",
     "SessionCancelled",
-    "UnacceptableAbsence"
+    "UnacceptableAbsenceIncentiveLevelWarning"
   ],
   "paidSubReasons": [
     {

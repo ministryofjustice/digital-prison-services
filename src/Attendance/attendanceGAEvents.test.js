@@ -34,7 +34,7 @@ describe('Pay and attendance GA events', () => {
     const offenderAttendanceData = {
       paid: false,
       absentReason: {
-        value: 'UnacceptableAbsence',
+        value: 'UnacceptableAbsenceIncentiveLevelWarning',
         name: 'Unacceptable',
       },
       other: true,
@@ -43,7 +43,7 @@ describe('Pay and attendance GA events', () => {
     expect(attendanceUpdated(offenderAttendanceData, 'MDI')).toEqual({
       category: 'Pay and attendance',
       action: `Offender not paid at MDI`,
-      label: 'Other - UnacceptableAbsence',
+      label: 'Other - UnacceptableAbsenceIncentiveLevelWarning',
     })
   })
 
