@@ -7,6 +7,8 @@ import {
   isWithinLastWeek,
   getCurrentPeriod,
   isAfterToday,
+  properCaseName,
+  formatName,
   forenameToInitial,
   isWithinNextTwoWorkingDays,
 } from './utils'
@@ -194,5 +196,44 @@ describe('isWithinNextTwoWorkingDays()', () => {
 describe('forenameToInitial()', () => {
   it('should return a correctly formatted name', () => {
     expect(forenameToInitial('Test User')).toEqual('T. User')
+  })
+})
+
+describe('properCaseName', () => {
+  it('null string', () => {
+    expect(properCaseName(null)).toEqual('')
+  })
+  it('empty string', () => {
+    expect(properCaseName('')).toEqual('')
+  })
+  it('Lower Case', () => {
+    expect(properCaseName('bob')).toEqual('Bob')
+  })
+  it('Mixed Case', () => {
+    expect(properCaseName('GDgeHHdGr')).toEqual('Gdgehhdgr')
+  })
+  it('Multiple words', () => {
+    expect(properCaseName('BOB SMITH')).toEqual('Bob smith')
+  })
+  it('Hyphenated', () => {
+    expect(properCaseName('MONTGOMERY-FOSTER-SMYTH-WALLACE-BOB')).toEqual('Montgomery-Foster-Smyth-Wallace-Bob')
+  })
+})
+
+describe('formatName', () => {
+  it('Can format name', () => {
+    expect(formatName('bob', 'smith')).toEqual('Bob Smith')
+  })
+  it('can format first name only', () => {
+    expect(formatName('BOB', '')).toEqual('Bob')
+  })
+  it('can format last name only', () => {
+    expect(formatName(undefined, 'Smith')).toEqual('Smith')
+  })
+  it('can format empty name', () => {
+    expect(formatName('', '')).toEqual('')
+  })
+  it('can format no name', () => {
+    expect(formatName(undefined, undefined)).toEqual('')
   })
 })

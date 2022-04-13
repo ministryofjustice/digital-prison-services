@@ -206,7 +206,7 @@ context('Prisoners unaccounted for', () => {
   it('should make require sub reason for some absence reasons', () => {
     setupAttendanceDialog(verifyOnPage)
 
-    attendanceDialogDriver(cy).markAbsence({ pay: 'no', absentReason: 'Refused' })
+    attendanceDialogDriver(cy).markAbsence({ pay: 'no', absentReason: 'Refused', iep: 'no' })
 
     verifyOnPage()
 
@@ -217,7 +217,12 @@ context('Prisoners unaccounted for', () => {
         expect($errors.get(0).innerText).to.contain('Select an absence reason')
       })
 
-    attendanceDialogDriver(cy).markAbsence({ pay: 'no', absentReason: 'Refused', absentSubReason: 'Healthcare' })
+    attendanceDialogDriver(cy).markAbsence({
+      pay: 'no',
+      absentReason: 'Refused',
+      iep: 'no',
+      absentSubReason: 'Healthcare',
+    })
 
     cy.wait('@request').then((xhr) => {
       const requestBody = xhr.request.body

@@ -16,6 +16,9 @@ const removeBlanks = (array) => array.filter((item) => !!item)
  */
 const properCaseName = (name) => (isBlank(name) ? '' : name.split('-').map(properCase).join('-'))
 
+const formatName = (firstName, lastName) =>
+  [properCaseName(firstName), properCaseName(lastName)].filter(Boolean).join(' ')
+
 const forenameToInitial = (name) => {
   if (!name) return null
   return `${name.charAt()}. ${name.split(' ').pop()}`
@@ -150,6 +153,7 @@ const stripAgencyPrefix = (location, agency) => {
 module.exports = {
   properCase,
   properCaseName,
+  formatName,
   forenameToInitial,
   getHoursMinutes,
   isTodayOrAfter,

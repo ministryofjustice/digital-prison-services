@@ -5,6 +5,7 @@
     "RefusedIncentiveLevelWarning",
     "RestDay",
     "RestInCell",
+    "UnacceptableAbsence",
     "UnacceptableAbsenceIncentiveLevelWarning",
     "SessionCancelled",
     "Sick"

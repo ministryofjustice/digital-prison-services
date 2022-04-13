@@ -113,7 +113,11 @@ describe('Attendence and Pay controller', () => {
           { name: 'Session cancelled', value: 'SessionCancelled' },
           { name: 'Unacceptable absence - incentive level warning', value: 'UnacceptableAbsenceIncentiveLevelWarning' },
         ],
-        triggersIEPWarning: ['UnacceptableAbsenceIncentiveLevelWarning', 'RefusedIncentiveLevelWarning'],
+        unpaidReasonsWithoutIep: [
+          { name: 'Rest in cell or sick', value: 'RestInCellOrSick' },
+          { name: 'Session cancelled', value: 'SessionCancelled' },
+        ],
+        triggersIEP: ['UnacceptableAbsence', 'Refused'],
         triggersAbsentSubReason: [
           'AcceptableAbsence',
           'Refused',
