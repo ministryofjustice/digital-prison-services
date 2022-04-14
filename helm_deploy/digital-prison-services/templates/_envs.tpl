@@ -118,6 +118,12 @@ env:
         name: {{ template "app.name" . }}
         key: PETERBOROUGH_OMU_EMAIL
 
+  - name: BIRMINGHAM_OMU_EMAIL
+    valueFrom:
+      secretKeyRef:
+        name: {{ template "app.name" . }}
+        key: BIRMINGHAM_OMU_EMAIL
+
   - name: REDIS_HOST
     valueFrom:
       secretKeyRef:
