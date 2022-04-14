@@ -23,7 +23,6 @@ context('Prisoner sentence and release', () => {
     cy.task('stubOffenderBasicDetails', { bookingId: 1 })
     cy.task('stubPrisonerSearch')
     cy.task('stubClientCredentialsRequest')
-    cy.task('stubLearnerNeurodiversity', [])
   })
 
   it('Should show correct release dates with overrides', () => {
@@ -181,7 +180,7 @@ context('Prisoner sentence and release', () => {
       .otherReleaseDates()
       .find('dt')
       .then(($summaryKeys) => {
-        expect($summaryKeys.get(0).innerText).to.contain('\n          Tariff\n        ')
+        expect($summaryKeys.get(0).innerText).to.eq('\n          Tariff\n        ')
         expect($summaryKeys.get(1).innerText).to.eq('\n          Late transfer\n        ')
       })
 

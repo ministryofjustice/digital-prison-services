@@ -21,7 +21,6 @@ export default ({
   allocationManagerApi,
   complexityApi,
   incentivesApi,
-  curiousApi,
 }) => {
   const {
     apis: {
@@ -44,9 +43,6 @@ export default ({
       displayRetentionLink && (await dataComplianceApi.getOffenderRetentionRecord(context, offenderNo))
 
     const systemContext = await systemOauthClient.getClientCredentialsTokens(username)
-
-    const neurodivergenceData = await curiousApi.getLearnerNeurodivergence(systemContext, offenderNo)
-    const hasDivergenceSupport = Boolean(neurodivergenceData[0]?.neurodivergenceSupport?.length > 0)
 
     const {
       activeAlertCount,
@@ -220,7 +216,6 @@ export default ({
       staffName: currentUser.name,
       pomStaff,
       esweEnabled,
-      hasDivergenceSupport,
     }
   }
 
