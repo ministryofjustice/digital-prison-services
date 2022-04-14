@@ -8,6 +8,12 @@ import config from '../config'
 import logErrorAndContinue from '../shared/logErrorAndContinue'
 import canAccessProbationDocuments from '../shared/probationDocumentsAccess'
 
+const map404ToEmptyArray = (error) => {
+  if (!error.response) throw error
+  if (!error.response.status) throw error
+  if (error.response.status !== 404) throw error
+  return []
+}
 export const isComplexityEnabledFor = (agencyId) => config.apis.complexity.enabled_prisons?.includes(agencyId)
 
 export default ({
@@ -45,8 +51,10 @@ export default ({
 
     const systemContext = await systemOauthClient.getClientCredentialsTokens(username)
 
-    const neurodivergenceData = await curiousApi.getLearnerNeurodivergence(systemContext, offenderNo)
-    const hasDivergenceSupport = Boolean(neurodivergenceData[0]?.neurodivergenceSupport?.length > 0)
+    const getNeurodivergenceData = await curiousApi
+      .getLearnerNeurodivergence(systemContext, offenderNo)
+      .catch(map404ToEmptyArray)
+    const hasDivergenceSupport = Boolean(getNeurodivergenceData[0]?.neurodivergenceSupport?.length > 0)
 
     const {
       activeAlertCount,
