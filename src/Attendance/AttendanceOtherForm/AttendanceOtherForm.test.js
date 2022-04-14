@@ -14,8 +14,8 @@ describe('<AttendanceOtherForm />', () => {
       offenderNo: 'ABC123',
       firstName: 'Test',
       lastName: 'Offender',
-      eventId: 123,
-      eventLocationId: 456,
+      eventId: '123',
+      eventLocationId: '456',
       offenderIndex: 1,
     },
     updateOffenderAttendance: jest.fn(),
@@ -26,16 +26,23 @@ describe('<AttendanceOtherForm />', () => {
       ],
       unpaidReasons: [
         { value: 'UnacceptableAbsence', name: 'Unacceptable' },
+        { value: 'UnacceptableAbsenceIncentiveLevelWarning', name: 'Unacceptable' },
         { value: 'Refused', name: 'Refused' },
         { value: 'RestDay', name: 'Rest day' },
       ],
-      triggersIEPWarning: ['UnacceptableAbsence', 'Refused'],
+      unpaidReasonsWithoutIep: [
+        { value: 'UnacceptableAbsence', name: 'Unacceptable' },
+        { value: 'Refused', name: 'Refused' },
+        { value: 'RestDay', name: 'Rest day' },
+      ],
+      triggersIEP: ['UnacceptableAbsence', 'Refused'],
       triggersAbsentSubReason: [
         'AcceptableAbsence',
         'Refused',
         'RefusedIncentiveLevelWarning',
         'SessionCancelled',
         'UnacceptableAbsence',
+        'UnacceptableAbsenceIncentiveLevelWarning',
       ],
       paidSubReasons: [
         { value: 'Activities', name: 'Activities and education' },
@@ -64,35 +71,52 @@ describe('<AttendanceOtherForm />', () => {
   }
 
   let wrapper = {}
-  let yesRadio = {}
-  let noRadio = {}
+  let payYesRadio = {}
+  let payNoRadio = {}
+  let iepYesRadio = () => ({})
+  let iepNoRadio = () => ({})
   let reasonSelector = () => ({})
+  let reasonsRadio = () => ({})
   let subReasonSelector = () => ({})
   let commentInput = {}
 
   const buildWrapper = (wrappedComponent) => {
     wrapper = wrappedComponent
-    yesRadio = wrappedComponent.find('input[value="yes"]')
-    noRadio = wrappedComponent.find('input[value="no"]')
-    reasonSelector = () => wrappedComponent.find('select[name="absentReason"]')
+    payYesRadio = wrappedComponent.find('input[name="pay"][value="yes"]')
+    payNoRadio = wrappedComponent.find('input[name="pay"][value="no"]')
+    reasonsRadio = (reason) => wrappedComponent.find(`input[name="absentReason"][value="${reason}"]`)
+    reasonSelector = () => wrappedComponent.find('input[name="absentReason"]')
     subReasonSelector = () => wrappedComponent.find('select[name="absentSubReason"]')
     commentInput = wrappedComponent.find('textarea[name="comments"]')
+    iepYesRadio = () => wrappedComponent.find('input[name="iep"][value="yes"]')
+    iepNoRadio = () => wrappedComponent.find('input[name="iep"][value="no"]')
   }
 
-  function simulatePay(pay) {
+  const simulatePay = (pay) => {
     if (pay) {
-      yesRadio.instance().checked = true
-      yesRadio.simulate('change', yesRadio)
+      payYesRadio.instance().checked = true
+      payYesRadio.simulate('change', payYesRadio)
     } else {
-      noRadio.instance().checked = true
-      noRadio.simulate('change', noRadio)
+      payNoRadio.instance().checked = true
+      payNoRadio.simulate('change', payNoRadio)
+    }
+    wrapper.update()
+  }
+
+  const simulateIep = (iep) => {
+    if (iep) {
+      iepYesRadio().instance().checked = true
+      iepYesRadio().simulate('change', iepYesRadio())
+    } else {
+      iepNoRadio().instance().checked = true
+      iepNoRadio().simulate('change', iepNoRadio())
     }
     wrapper.update()
   }
 
   const simulateReason = (reason) => {
-    reasonSelector().instance().value = reason
-    reasonSelector().simulate('change', reasonSelector())
+    reasonsRadio(reason).instance().checked = true
+    reasonsRadio(reason).simulate('change', reasonsRadio(reason))
     wrapper.update()
   }
 
@@ -123,20 +147,13 @@ describe('<AttendanceOtherForm />', () => {
     it('should display paid reasons when "pay" is selected', () => {
       simulatePay(false)
 
-      const skipDefaultEntry = 1
-      const reasons = reasonSelector()
-        .getElement()
-        .props.children[skipDefaultEntry].map((reason) => reason.props)
+      const reasons = reasonSelector().map((reason) => reason.props().value)
 
-      expect(reasons).toEqual([
-        { value: 'UnacceptableAbsence', children: 'Unacceptable' },
-        { value: 'Refused', children: 'Refused' },
-        { value: 'RestDay', children: 'Rest day' },
-      ])
+      expect(reasons).toEqual(['UnacceptableAbsence', 'Refused', 'RestDay'])
     })
 
     it('should not display absent reasons by default', () => {
-      expect(reasonSelector().getElements().length).toEqual(0)
+      expect(reasonSelector().length).toEqual(0)
     })
 
     it('should not display any absent sub reasons by default', () => {
@@ -147,14 +164,9 @@ describe('<AttendanceOtherForm />', () => {
       simulatePay(true)
 
       const skipDefaultEntry = 1
-      const reasons = reasonSelector()
-        .getElement()
-        .props.children[skipDefaultEntry].map((reason) => reason.props)
+      const reasons = reasonSelector().map((reason) => reason.props().value)
 
-      expect(reasons).toEqual([
-        { value: 'AcceptableAbsence', children: 'Acceptable' },
-        { value: 'ApprovedCourse', children: 'Approved course' },
-      ])
+      expect(reasons).toEqual(['AcceptableAbsence', 'ApprovedCourse'])
     })
 
     it('should display paid sub reasons when reason is selected', () => {
@@ -232,8 +244,8 @@ describe('<AttendanceOtherForm />', () => {
         absentSubReason: undefined,
         attended: false,
         comments: 'A comment',
-        eventId: 123,
-        eventLocationId: 456,
+        eventId: '123',
+        eventLocationId: '456',
         offenderNo: 'ABC123',
       }
 
@@ -243,10 +255,14 @@ describe('<AttendanceOtherForm />', () => {
 
       // changing reason should then clear the sub reason
       simulatePay(false)
-      expect(reasonSelector().getElements().length).toEqual(1)
+      reasonSelector().forEach((n) => {
+        expect(n.props().checked).toEqual(false)
+      })
       simulateReason('RestDay')
       expect(subReasonSelector().getElements().length).toEqual(0)
       simulateReason('Refused')
+      simulateSubReason('Courses')
+      simulateIep(true)
 
       commentInput.instance().value = 'A comment'
       commentInput.simulate('change', commentInput)
@@ -276,9 +292,28 @@ describe('<AttendanceOtherForm />', () => {
 
         const errors = wrapper.find('ErrorSummary').find('li')
 
-        expect(errors.at(0).text()).toEqual('Select a pay option')
-        expect(errors.at(1).text()).toEqual('Select a reason')
-        expect(errors.at(2).text()).toEqual('Enter comment')
+        expect(errors.at(0).text()).toEqual('Select if you want to pay Test Offender')
+        expect(errors.at(1).text()).toEqual('Enter more details')
+      })
+
+      it('should display correct errors for missing pay reason value', async () => {
+        simulatePay(true)
+        await submitForm(wrapper)
+
+        const errors = wrapper.find('ErrorSummary').find('li')
+
+        expect(errors.at(0).text()).toEqual('Select why you want to pay Test Offender')
+        expect(errors.at(1).text()).toEqual('Enter more details')
+      })
+
+      it('should display correct errors for missing not pay reason value', async () => {
+        simulatePay(false)
+        await submitForm(wrapper)
+
+        const errors = wrapper.find('ErrorSummary').find('li')
+
+        expect(errors.at(0).text()).toEqual('Select why Test Offender did not attend')
+        expect(errors.at(1).text()).toEqual('Enter more details')
       })
 
       it('should display correct errors for missing sub reason value', async () => {
@@ -289,18 +324,31 @@ describe('<AttendanceOtherForm />', () => {
         const errors = wrapper.find('ErrorSummary').find('li')
 
         expect(errors.at(0).text()).toEqual('Select an absence reason')
-        expect(errors.at(1).text()).toEqual('Enter case note')
+        expect(errors.at(1).text()).toEqual('Select if you want to add an incentive level warning')
+        expect(errors.at(2).text()).toEqual('Enter more details')
       })
 
-      it('should change error message if a case note is required', async () => {
+      it('should display correct errors for missing iep value', async () => {
         simulatePay(false)
         simulateReason('UnacceptableAbsence')
         simulateSubReason('Behaviour')
+        await submitForm(wrapper)
+
+        const errors = wrapper.find('ErrorSummary').find('li')
+
+        expect(errors.at(0).text()).toEqual('Select if you want to add an incentive level warning')
+      })
+
+      it('should display error message if more details are required', async () => {
+        simulatePay(false)
+        simulateReason('UnacceptableAbsence')
+        simulateSubReason('Behaviour')
+        simulateIep(true)
 
         await submitForm(wrapper)
 
         const errors = wrapper.find('ErrorSummary').find('li')
-        expect(errors.at(0).text()).toEqual('Enter case note')
+        expect(errors.at(0).text()).toEqual('Enter more details')
       })
 
       it('should show validation message if the minimum amount of characters have not been entered', async () => {
@@ -316,7 +364,7 @@ describe('<AttendanceOtherForm />', () => {
         await submitForm(wrapper)
 
         const errors = wrapper.find('ErrorSummary').find('li')
-        expect(errors.at(0).text()).toEqual('Enter a valid comment')
+        expect(errors.at(0).text()).toEqual('Enter more details using 3 or more characters')
       })
 
       it('should show correct maximum length validation message for the comments text', async () => {
@@ -352,8 +400,8 @@ describe('<AttendanceOtherForm />', () => {
           absentSubReason: 'Courses',
           attended: false,
           comments: 'A supporting comment.',
-          eventId: 123,
-          eventLocationId: 456,
+          eventId: '123',
+          eventLocationId: '456',
           offenderNo: 'ABC123',
         }
 
@@ -383,20 +431,21 @@ describe('<AttendanceOtherForm />', () => {
       it('should submit with the correct, unpaid information and trigger the Incentive Level created modal', async () => {
         const expectedPayload = {
           absentReason: {
-            value: 'UnacceptableAbsence',
+            value: 'UnacceptableAbsenceIncentiveLevelWarning',
             name: 'Unacceptable',
           },
           absentSubReason: 'Behaviour',
           attended: false,
           comments: 'A supporting comment.',
-          eventId: 123,
-          eventLocationId: 456,
+          eventId: '123',
+          eventLocationId: '456',
           offenderNo: 'ABC123',
         }
 
         simulatePay(false)
         simulateReason('UnacceptableAbsence')
         simulateSubReason('Behaviour')
+        simulateIep(true)
 
         await submitForm(wrapper)
 
@@ -420,7 +469,7 @@ describe('<AttendanceOtherForm />', () => {
           <IncentiveLevelCreated
             activityName={props.activityName}
             iepValues={{
-              caseNote: 'Unacceptable - Behaviour. A supporting comment.',
+              caseNote: 'Unacceptable - incentive level warning - Behaviour. A supporting comment.',
               pay: 'no',
             }}
             offender={props.offender}
@@ -465,9 +514,9 @@ describe('<AttendanceOtherForm />', () => {
         comments: 'Acceptable reason comment',
       }
       buildWrapper(mount(<AttendanceOtherForm {...props} />))
-      expect(yesRadio.props().checked).toBe(true)
-      expect(noRadio.props().checked).toBe(false)
-      expect(reasonSelector().props().value).toBe('AcceptableAbsence')
+      expect(payYesRadio.props().checked).toBe(true)
+      expect(payNoRadio.props().checked).toBe(false)
+      expect(reasonsRadio('AcceptableAbsence').props().checked).toEqual(true)
       expect(subReasonSelector().props().value).toBe('Courses')
       expect(commentInput.props().value).toBe('Acceptable reason comment')
     })
@@ -477,17 +526,19 @@ describe('<AttendanceOtherForm />', () => {
         id: 2,
         paid: false,
         absentReason: {
-          value: 'UnacceptableAbsence',
+          value: 'UnacceptableAbsenceIncentiveLevelWarning',
           name: 'Unacceptable',
         },
         absentSubReason: 'Courses',
         comments: 'Uncceptable reason comment',
       }
       buildWrapper(mount(<AttendanceOtherForm {...props} />))
-      expect(yesRadio.props().checked).toBe(false)
-      expect(noRadio.props().checked).toBe(true)
-      expect(reasonSelector().props().value).toBe('UnacceptableAbsence')
+      expect(payYesRadio.props().checked).toBe(false)
+      expect(payNoRadio.props().checked).toBe(true)
+      expect(reasonsRadio('UnacceptableAbsence').props().checked).toEqual(true)
       expect(subReasonSelector().props().value).toBe('Courses')
+      expect(iepYesRadio().props().checked).toBe(true)
+      expect(iepNoRadio().props().checked).toBe(false)
       expect(commentInput.props().value).toBe('Uncceptable reason comment')
     })
   })

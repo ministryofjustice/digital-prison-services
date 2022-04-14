@@ -521,7 +521,7 @@ describe('Houseblock list controller', () => {
             prisonId: 'string',
           },
           {
-            absentReason: 'UnacceptableAbsence',
+            absentReason: 'UnacceptableAbsenceIncentiveLevelWarning',
             absentReasonDescription: 'Unacceptable absence - incentive level warning',
             absentSubReason: 'Behaviour',
             absentSubReasonDescription: 'Behaviour',
@@ -622,7 +622,7 @@ describe('Houseblock list controller', () => {
             {
               attendanceInfo: {
                 absentReason: {
-                  value: 'UnacceptableAbsence',
+                  value: 'UnacceptableAbsenceIncentiveLevelWarning',
                   name: 'Unacceptable absence - incentive level warning',
                 },
                 absentSubReason: 'Behaviour',

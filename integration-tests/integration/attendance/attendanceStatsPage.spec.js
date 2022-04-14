@@ -58,7 +58,7 @@ context('A user can view attendance changes', () => {
           restDay: 10,
           restInCellOrSick: 11,
           sessionCancelled: 12,
-          unacceptableAbsence: 13,
+          unacceptableAbsenceIncentiveLevelWarning: 13,
         },
       },
     })
@@ -124,7 +124,7 @@ context('A user can view attendance changes', () => {
           restDay: 0,
           restInCellOrSick: 0,
           sessionCancelled: 0,
-          unacceptableAbsence: 0,
+          unacceptableAbsenceIncentiveLevelWarning: 0,
         },
       },
     })

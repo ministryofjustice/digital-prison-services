@@ -12,7 +12,7 @@ import ErrorSummary from '@govuk-react/error-summary'
 
 import { ButtonContainer, ButtonCancel } from '../../Components/Buttons'
 import RadioGroup from '../../Components/RadioGroup'
-import { properCaseName } from '../../utils'
+import { formatName } from '../../utils'
 import { FieldWithError, WhenFieldChanges, onHandleErrorClick } from '../../final-form-govuk-helpers'
 import IncentiveLevelCreated from '../../IncentiveLevelCreated'
 import { userType } from '../../types'
@@ -23,7 +23,7 @@ export function AttendanceOtherForm({
   offender,
   updateOffenderAttendance,
   absentReasons,
-  absentReasons: { triggersIEPWarning, triggersAbsentSubReason },
+  absentReasons: { triggersIEP, triggersAbsentSubReason },
   showModal,
   activityName,
   resetErrorDispatch,
@@ -39,33 +39,48 @@ export function AttendanceOtherForm({
 }) {
   const { offenderNo, bookingId, eventId, eventLocationId, attendanceInfo } = offender
   const { id, absentReason, absentSubReason, comments } = attendanceInfo || {}
-  const shouldTriggerIEP = (selectedReason) => triggersIEPWarning && triggersIEPWarning.includes(selectedReason)
-  const shouldTriggerSubReason = (selectedReason) =>
-    triggersAbsentSubReason && triggersAbsentSubReason.includes(selectedReason)
-  const commentOrCaseNote = (selectedReason) => (shouldTriggerIEP(selectedReason) ? 'case note' : 'comment')
+  const shouldTriggerIEP = (r) => triggersIEP && triggersIEP.includes(r)
+  const shouldTriggerSubReason = (r) => triggersAbsentSubReason && triggersAbsentSubReason.includes(r)
 
   const validateThenSubmit = (submitHandler) => async (values) => {
     const formErrors = []
     const commentText = values.comments && values.comments.trim()
 
     if (!values.pay) {
-      formErrors.push({ targetName: 'pay', text: 'Select a pay option' })
+      formErrors.push({
+        targetName: 'pay',
+        text: `Select if you want to pay ${formatName(offender.firstName, offender.lastName)}`,
+      })
     }
 
-    if (!values.absentReason) {
-      formErrors.push({ targetName: 'absentReason', text: 'Select a reason' })
+    if (!values.absentReason && values.pay === 'yes') {
+      formErrors.push({
+        targetName: 'absentReason',
+        text: `Select why you want to pay ${formatName(offender.firstName, offender.lastName)}`,
+      })
+    }
+
+    if (!values.absentReason && values.pay === 'no') {
+      formErrors.push({
+        targetName: 'absentReason',
+        text: `Select why ${formatName(offender.firstName, offender.lastName)} did not attend`,
+      })
     }
 
     if (!values.absentSubReason && shouldTriggerSubReason(values.absentReason)) {
       formErrors.push({ targetName: 'absentSubReason', text: 'Select an absence reason' })
     }
 
+    if (!values.iep && shouldTriggerIEP(values.absentReason)) {
+      formErrors.push({ targetName: 'iep', text: 'Select if you want to add an incentive level warning' })
+    }
+
     if (!commentText) {
-      formErrors.push({ targetName: 'comments', text: `Enter ${commentOrCaseNote(values.absentReason)}` })
+      formErrors.push({ targetName: 'comments', text: 'Enter more details' })
     }
 
     if (commentText && commentText.length < 2) {
-      formErrors.push({ targetName: 'comments', text: `Enter a valid ${commentOrCaseNote(values.absentReason)}` })
+      formErrors.push({ targetName: 'comments', text: 'Enter more details using 3 or more characters' })
     }
 
     if (commentText && commentText.length > 240) {
@@ -76,19 +91,18 @@ export function AttendanceOtherForm({
 
     const attendanceUpdated = await submitHandler(values)
 
-    if (attendanceUpdated && shouldTriggerIEP(values.absentReason)) {
-      const { reasons, subReasons } =
-        values.pay === 'yes'
-          ? { reasons: absentReasons.paidReasons, subReasons: absentReasons.paidSubReasons }
-          : { reasons: absentReasons.unpaidReasons, subReasons: absentReasons.unpaidSubReasons }
+    if (attendanceUpdated && values.iep === 'yes') {
       // need to find selected options so can put into the case note
-      const absentReasonOption = reasons.find((ar) => ar.value === values.absentReason)
-      const absentSubReasonOption = subReasons.find((ar) => ar.value === values.absentSubReason)
+      const absentReasonOption = absentReasons.unpaidReasons.find((ar) => ar.value === values.absentReason)
+      const absentSubReasonOption = absentReasons.unpaidSubReasons.find((ar) => ar.value === values.absentSubReason)
 
       const caseNoteSuffix = absentSubReasonOption
         ? `${absentSubReasonOption.name}. ${values.comments}`
         : values.comments
-      const iepValues = { pay: values.pay, caseNote: `${absentReasonOption.name} - ${caseNoteSuffix}` }
+      const iepValues = {
+        pay: values.pay,
+        caseNote: `${absentReasonOption.name} - incentive level warning - ${caseNoteSuffix}`,
+      }
       showModal(
         true,
         <IncentiveLevelCreated
@@ -108,6 +122,9 @@ export function AttendanceOtherForm({
     const paid = values.pay === 'yes'
     const reasons = [...absentReasons.paidReasons, ...absentReasons.unpaidReasons]
 
+    const absentReasonValueWithIep =
+      values.absentReason && `${values.absentReason}${values.iep === 'yes' ? 'IncentiveLevelWarning' : ''}`
+
     const attendanceDetails = {
       id,
       offenderNo,
@@ -115,7 +132,7 @@ export function AttendanceOtherForm({
       paid,
       eventId,
       eventLocationId,
-      absentReason: reasons.find((ar) => ar.value === values.absentReason),
+      absentReason: reasons.find((ar) => ar.value === absentReasonValueWithIep),
       absentSubReason: values.absentSubReason,
       comments: values.comments,
       attended: false,
@@ -140,7 +157,7 @@ export function AttendanceOtherForm({
 
   const getAbsentReasons = (pay) => {
     if (!pay) return []
-    return pay === 'yes' ? absentReasons.paidReasons : absentReasons.unpaidReasons
+    return pay === 'yes' ? absentReasons.paidReasons : absentReasons.unpaidReasonsWithoutIep
   }
   const getAbsentSubReasons = (pay, reason) => {
     if (!pay || !shouldTriggerSubReason(reason)) return []
@@ -154,8 +171,9 @@ export function AttendanceOtherForm({
 
   const initialValues = {
     pay: getPreviousPayStatus(),
-    absentReason: absentReason && absentReason.value,
+    absentReason: absentReason?.value?.replace('IncentiveLevelWarning', ''),
     absentSubReason,
+    iep: absentReason?.value?.includes('IncentiveLevelWarning') ? 'yes' : 'no',
     comments,
   }
 
@@ -177,9 +195,10 @@ export function AttendanceOtherForm({
           )}
           <WhenFieldChanges field="pay" becomes={values.pay || ''} set="absentReason" to="" />
           <WhenFieldChanges field="absentReason" becomes={values.absentReason || ''} set="absentSubReason" to="" />
+          <WhenFieldChanges field="absentReason" becomes={values.absentReason || ''} set="iep" to="" />
           <Fieldset>
             <Fieldset.Legend size="MEDIUM" isPageHeading>
-              Do you want to pay {properCaseName(offender.firstName)} {properCaseName(offender.lastName)}?
+              Do you want to pay {formatName(offender.firstName, offender.lastName)}?
             </Fieldset.Legend>
             <FieldWithError
               name="pay"
@@ -192,16 +211,13 @@ export function AttendanceOtherForm({
               inline
             />
             {values.pay && (
-              <FieldWithError errors={errors} name="absentReason" component={Select} label="Select a reason">
-                <option value="" disabled>
-                  Select
-                </option>
-                {getAbsentReasons(values.pay).map((reason) => (
-                  <option key={reason.value} value={reason.value}>
-                    {reason.name}
-                  </option>
-                ))}
-              </FieldWithError>
+              <FieldWithError
+                errors={errors}
+                name="absentReason"
+                component={RadioGroup}
+                label="Select a reason"
+                options={getAbsentReasons(values.pay).map((r) => ({ title: r.name, value: r.value }))}
+              />
             )}
             {values.pay && shouldTriggerSubReason(values.absentReason) && (
               <ConditionalRadio>
@@ -220,10 +236,23 @@ export function AttendanceOtherForm({
                     </option>
                   ))}
                 </FieldWithError>
+                {shouldTriggerIEP(values.absentReason) && (
+                  <FieldWithError
+                    name="iep"
+                    errors={errors}
+                    component={RadioGroup}
+                    label="Do you want to add an incentive level warning"
+                    options={[
+                      { title: 'Yes', value: 'yes' },
+                      { title: 'No', value: 'no' },
+                    ]}
+                    inline
+                  />
+                )}
               </ConditionalRadio>
             )}
             <FieldWithError errors={errors} name="comments" component={TextArea}>
-              Enter {commentOrCaseNote(values.absentReason)}
+              Enter more details
             </FieldWithError>
           </Fieldset>
           <ButtonContainer>
@@ -246,7 +275,9 @@ AttendanceOtherForm.propTypes = {
   absentReasons: PropTypes.shape({
     paidReasons: PropTypes.arrayOf(PropTypes.shape({ value: PropTypes.string, name: PropTypes.string })).isRequired,
     unpaidReasons: PropTypes.arrayOf(PropTypes.shape({ value: PropTypes.string, name: PropTypes.string })).isRequired,
-    triggersIEPWarning: PropTypes.arrayOf(PropTypes.string).isRequired,
+    unpaidReasonsWithoutIep: PropTypes.arrayOf(PropTypes.shape({ value: PropTypes.string, name: PropTypes.string }))
+      .isRequired,
+    triggersIEP: PropTypes.arrayOf(PropTypes.string).isRequired,
     triggersAbsentSubReason: PropTypes.arrayOf(PropTypes.string).isRequired,
     paidSubReasons: PropTypes.arrayOf(PropTypes.shape({ value: PropTypes.string, name: PropTypes.string })).isRequired,
     unpaidSubReasons: PropTypes.arrayOf(PropTypes.shape({ value: PropTypes.string, name: PropTypes.string }))

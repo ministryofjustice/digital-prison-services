@@ -40,7 +40,7 @@ describe('Attendance reason statistics', () => {
       restInCell: 0,
       sessionCancelled: 0,
       sick: 0,
-      unacceptableAbsence: 0,
+      unacceptableAbsenceIncentiveLevelWarning: 0,
       refusedIncentiveLevelWarning: 0,
     },
     suspended: 0,
@@ -69,7 +69,7 @@ describe('Attendance reason statistics', () => {
     })
 
     whereaboutsApi.getAbsenceReasons.mockReturnValue({
-      triggersIEPWarning: ['UnacceptableAbsence', 'RefusedIncentiveLevelWaring'],
+      triggersIEPWarning: ['UnacceptableAbsenceIncentiveLevelWarning', 'RefusedIncentiveLevelWaring'],
     })
 
     whereaboutsApi.getAttendanceForBookingsOverDateRange.mockReturnValue({ attendances: [] })
@@ -376,7 +376,7 @@ describe('Attendance reason statistics', () => {
               { id: 'RestInCell', name: 'Rest in cell', value: 0 },
               { id: 'SessionCancelled', name: 'Session cancelled', value: 0 },
               { id: 'Sick', name: 'Sick', value: 0 },
-              { id: 'UnacceptableAbsence', name: 'Unacceptable absence with warning', value: 0 },
+              { id: 'UnacceptableAbsenceIncentiveLevelWarning', name: 'Unacceptable absence with warning', value: 0 },
               { id: 'RefusedIncentiveLevelWarning', name: 'Refused incentive level warning', value: 0 },
             ],
             suspended: 0,
@@ -465,7 +465,10 @@ describe('Attendance reason statistics', () => {
 
       const { attendanceStatisticsOffendersList } = attendanceStatisticsFactory(oauthApi, prisonApi, whereaboutsApi)
 
-      const req = { query: { agencyId, fromDate, toDate, period }, params: { reason: 'UnacceptableAbsence' } }
+      const req = {
+        query: { agencyId, fromDate, toDate, period },
+        params: { reason: 'UnacceptableAbsenceIncentiveLevelWarning' },
+      }
       const res = { render: jest.fn() }
 
       await attendanceStatisticsOffendersList(req, res)
