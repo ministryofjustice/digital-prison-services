@@ -1,8 +1,8 @@
 const { stubFor } = require('./wiremock')
 
 module.exports = {
-  stubGetOffenderRetentionReasons: () =>
-    stubFor({
+  stubGetOffenderRetentionReasons: () => {
+    return stubFor({
       request: {
         method: 'GET',
         url: '/datacompliance/retention/offenders/retention-reasons',
@@ -28,10 +28,11 @@ module.exports = {
           },
         ],
       },
-    }),
+    })
+  },
 
-  stubNoExistingOffenderRecord: (offenderNo) =>
-    stubFor({
+  stubNoExistingOffenderRecord: offenderNo => {
+    return stubFor({
       request: {
         method: 'GET',
         url: `/datacompliance/retention/offenders/${offenderNo}`,
@@ -43,10 +44,11 @@ module.exports = {
         },
         jsonBody: {},
       },
-    }),
+    })
+  },
 
-  stubRetentionRecord: (offenderNo, retentionRecord, status = 200) =>
-    stubFor({
+  stubRetentionRecord: (offenderNo, retentionRecord, status = 200) => {
+    return stubFor({
       request: {
         method: 'GET',
         url: `/datacompliance/retention/offenders/${offenderNo}`,
@@ -59,10 +61,11 @@ module.exports = {
         },
         jsonBody: retentionRecord || {},
       },
-    }),
+    })
+  },
 
-  stubCreateRecord: (offenderNo) =>
-    stubFor({
+  stubCreateRecord: offenderNo => {
+    return stubFor({
       request: {
         method: 'PUT',
         url: `/datacompliance/retention/offenders/${offenderNo}`,
@@ -75,21 +78,6 @@ module.exports = {
         },
         jsonBody: {},
       },
-    }),
-
-  stubLearnerNeurodiversity: (offenderNo, learnerNeurodiversity) =>
-    stubFor({
-      request: {
-        method: 'GET',
-        url: `/sequation-virtual-campus2-api/learnerNeurodivergence/${offenderNo}`,
-      },
-      response: {
-        status: 200,
-        headers: {
-          'Content-Type': 'application/json;charset=UTF-8',
-          ETag: '0',
-        },
-        jsonBody: learnerNeurodiversity || [],
-      },
-    }),
+    })
+  },
 }
