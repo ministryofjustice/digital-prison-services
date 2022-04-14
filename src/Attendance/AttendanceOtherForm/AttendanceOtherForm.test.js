@@ -356,7 +356,7 @@ describe('<AttendanceOtherForm />', () => {
         simulateReason('AcceptableAbsence')
         simulateSubReason('Courses')
 
-        commentInput.instance().value = 'A '
+        commentInput.instance().value = 'AB '
 
         commentInput.simulate('change', commentInput)
         wrapper.update()

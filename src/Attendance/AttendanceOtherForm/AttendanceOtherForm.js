@@ -79,7 +79,7 @@ export function AttendanceOtherForm({
       formErrors.push({ targetName: 'comments', text: 'Enter more details' })
     }
 
-    if (commentText && commentText.length < 2) {
+    if (commentText && commentText.length < 3) {
       formErrors.push({ targetName: 'comments', text: 'Enter more details using 3 or more characters' })
     }
 
