@@ -1,4 +1,4 @@
-FROM node:14.17-buster as builder
+FROM node:14.19-buster as builder
 
 ARG BUILD_NUMBER
 ARG GIT_REF
@@ -18,7 +18,7 @@ RUN CYPRESS_INSTALL_BINARY=0 npm ci --no-audit && \
 
 RUN npm prune --production
 
-FROM node:14.17-buster-slim
+FROM node:14.19-buster-slim
 LABEL maintainer="HMPPS Digital Studio <info@digital.justice.gov.uk>"
 
 RUN apt-get update && \
