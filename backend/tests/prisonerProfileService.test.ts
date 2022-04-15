@@ -25,7 +25,6 @@ const enum NeurodivergenceType {
   MemorySupport = 'Memory Support',
   AcquiredBrainInjury = 'Acquired Brain Injury',
   NoidentifiedNeurodiversityNeed = 'No identified Neurodiversity Need',
-  NoidentifiedSupportRequired = 'No identified Support Required',
 }
 
 describe('prisoner profile service', () => {

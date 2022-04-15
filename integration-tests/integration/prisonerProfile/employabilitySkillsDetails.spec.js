@@ -63,7 +63,6 @@ context('Employability skills details page', () => {
       cy.signIn()
       cy.task('stubOffenderBasicDetails', { bookingId: 1, firstName: 'John', lastName: 'Smith', agencyId: 'MDI' })
       cy.task('stubKeyworkerMigrated')
-      cy.task('stubLearnerNeurodiversity', [])
     })
 
     beforeEach(() => {
@@ -100,6 +99,7 @@ context('Employability skills details page', () => {
         })
 
       cy.get('th[data-test="date-header"]').contains('Assessment date').click() // reverse order
+
       cy.get('tbody')
         .find('tr')
         .then(($tRows) => {
