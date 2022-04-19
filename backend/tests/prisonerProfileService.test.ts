@@ -29,14 +29,13 @@ describe('prisoner profile service', () => {
   const allocationManagerApi = {}
   const socApi = {}
   const complexityApi = {}
-  const incentivesApi = {}
 
   let service
   beforeEach(() => {
     // @ts-expect-error ts-migrate(2339) FIXME: Property 'getDetails' does not exist on type '{}'.
     prisonApi.getDetails = jest.fn()
     // @ts-expect-error ts-migrate(2339) FIXME: Property 'getIepSummary' does not exist on type '{... Remove this comment to see the full error message
-    incentivesApi.getIepSummaryForBookingIds = jest.fn()
+    prisonApi.getIepSummary = jest.fn()
     // @ts-expect-error ts-migrate(2339) FIXME: Property 'getCaseNoteSummaryByTypes' does not exis... Remove this comment to see the full error message
     prisonApi.getCaseNoteSummaryByTypes = jest.fn()
     // @ts-expect-error ts-migrate(2339) FIXME: Property 'userCaseLoads' does not exist on type '{... Remove this comment to see the full error message
@@ -73,7 +72,6 @@ describe('prisoner profile service', () => {
       socApi,
       allocationManagerApi,
       complexityApi,
-      incentivesApi,
     })
   })
   describe('prisoner profile data', () => {
@@ -161,7 +159,7 @@ describe('prisoner profile service', () => {
       // @ts-expect-error ts-migrate(2339) FIXME: Property 'getDetails' does not exist on type '{}'.
       prisonApi.getDetails.mockReturnValue(prisonerDetails)
       // @ts-expect-error ts-migrate(2339) FIXME: Property 'getIepSummary' does not exist on type '{... Remove this comment to see the full error message
-      incentivesApi.getIepSummaryForBookingIds.mockResolvedValue([{ iepLevel: 'Standard' }])
+      prisonApi.getIepSummary.mockResolvedValue([{ iepLevel: 'Standard' }])
       // @ts-expect-error ts-migrate(2339) FIXME: Property 'getCaseNoteSummaryByTypes' does not exis... Remove this comment to see the full error message
       prisonApi.getCaseNoteSummaryByTypes.mockResolvedValue([{ latestCaseNote: '2020-04-07T14:04:25' }])
       // @ts-expect-error ts-migrate(2339) FIXME: Property 'getStaffRoles' does not exist on type '{... Remove this comment to see the full error message
@@ -195,7 +193,7 @@ describe('prisoner profile service', () => {
       await service.getPrisonerProfileData(context, offenderNo)
 
       // @ts-expect-error ts-migrate(2339) FIXME: Property 'getIepSummary' does not exist on type '{... Remove this comment to see the full error message
-      expect(incentivesApi.getIepSummaryForBookingIds).toHaveBeenCalledWith(context, [bookingId])
+      expect(prisonApi.getIepSummary).toHaveBeenCalledWith(context, [bookingId])
       // @ts-expect-error ts-migrate(2339) FIXME: Property 'getCaseNoteSummaryByTypes' does not exis... Remove this comment to see the full error message
       expect(prisonApi.getCaseNoteSummaryByTypes).toHaveBeenCalledWith(context, {
         type: 'KA',
@@ -294,7 +292,7 @@ describe('prisoner profile service', () => {
         assessments: [],
       })
       // @ts-expect-error ts-migrate(2339) FIXME: Property 'getIepSummary' does not exist on type '{... Remove this comment to see the full error message
-      incentivesApi.getIepSummaryForBookingIds.mockResolvedValue([])
+      prisonApi.getIepSummary.mockResolvedValue([])
       // @ts-expect-error ts-migrate(2339) FIXME: Property 'getCaseNoteSummaryByTypes' does not exis... Remove this comment to see the full error message
       prisonApi.getCaseNoteSummaryByTypes.mockResolvedValue([])
       // @ts-expect-error ts-migrate(2339) FIXME: Property 'getKeyworkerByCaseloadAndOffenderNo' doe... Remove this comment to see the full error message
@@ -608,7 +606,7 @@ describe('prisoner profile service', () => {
     describe('when there are errors with retrieving information', () => {
       beforeEach(() => {
         // @ts-expect-error ts-migrate(2339) FIXME: Property 'getIepSummary' does not exist on type '{... Remove this comment to see the full error message
-        incentivesApi.getIepSummaryForBookingIds.mockRejectedValue(new Error('Network error'))
+        prisonApi.getIepSummary.mockRejectedValue(new Error('Network error'))
         // @ts-expect-error ts-migrate(2339) FIXME: Property 'getCaseNoteSummaryByTypes' does not exis... Remove this comment to see the full error message
         prisonApi.getCaseNoteSummaryByTypes.mockRejectedValue(new Error('Network error'))
         // @ts-expect-error ts-migrate(2339) FIXME: Property 'userCaseLoads' does not exist on type '{... Remove this comment to see the full error message

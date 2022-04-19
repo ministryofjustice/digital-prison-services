@@ -29,20 +29,6 @@ module.exports = {
         jsonBody: iepSummary || {},
       },
     }),
-  stubGetIepSummaryForBookingIds: (body) =>
-    stubFor({
-      request: {
-        method: 'POST',
-        urlPattern: '/incentives/iep/reviews/bookings',
-      },
-      response: {
-        status: 200,
-        headers: {
-          'Content-Type': 'application/json;charset=UTF-8',
-        },
-        jsonBody: body || [],
-      },
-    }),
   stubChangeIepLevel: (body) =>
     stubFor({
       request: {

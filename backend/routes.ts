@@ -197,7 +197,6 @@ const setup = ({
       prisonApi,
       systemOauthClient,
       logError,
-      incentivesApi,
     })
   )
 
