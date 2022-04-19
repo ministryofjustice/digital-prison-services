@@ -21,18 +21,18 @@ const formatReason = ({ name, triggersIEPWarning }) =>
 
 const buildStatsViewModel = (dashboardStats, triggersIEPWarning, changes) => {
   const mapReasons = (reasons) =>
-    Object.keys(reasons || []).map((name) => ({
-      id: capitalizeStart(name),
-      name: formatReason({ name, triggersIEPWarning }),
-      value: Number(reasons[name]),
-    }))
+    Object.keys(reasons || [])
+      .filter((name) => !name.endsWith('Description')) // filter out descriptions
+      .map((name) => ({
+        id: capitalizeStart(name),
+        name: reasons[`${name}Description`],
+        value: Number(reasons[name]),
+      }))
 
   return {
     ...dashboardStats,
-    attended: dashboardStats?.paidReasons?.attended,
-    paidReasons: mapReasons(dashboardStats?.paidReasons).filter(
-      (nvp) => nvp.name && nvp.name.toLowerCase() !== 'attended'
-    ),
+    attended: dashboardStats?.attended,
+    paidReasons: mapReasons(dashboardStats?.paidReasons),
     unpaidReasons: mapReasons(dashboardStats?.unpaidReasons),
     changes,
   }
