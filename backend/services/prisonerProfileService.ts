@@ -20,7 +20,6 @@ export default ({
   systemOauthClient,
   allocationManagerApi,
   complexityApi,
-  incentivesApi,
 }) => {
   const {
     apis: {
@@ -79,7 +78,7 @@ export default ({
       allocationManager,
     ] = await Promise.all(
       [
-        incentivesApi.getIepSummaryForBookingIds(context, [bookingId]),
+        prisonApi.getIepSummary(context, [bookingId]),
         prisonApi.getCaseNoteSummaryByTypes(context, { type: 'KA', subType: 'KS', numMonths: 1, bookingId }),
         prisonApi.userCaseLoads(context),
         prisonApi.getStaffRoles(context, currentUser.staffId, currentUser.activeCaseLoadId),
