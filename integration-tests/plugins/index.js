@@ -141,7 +141,7 @@ module.exports = (on) => {
         auth.stubUserMeRoles([...userRoles, { roleCode: 'UPDATE_ALERT' }]),
         prisonApi.stubOffenderBasicDetails(offenderBasicDetails),
         prisonApi.stubOffenderFullDetails(offenderFullDetails),
-        prisonApi.stubIepSummaryForBookingIds(iepSummary),
+        incentivesApi.stubGetIepSummaryForBookingIds(iepSummary),
         prisonApi.stubOffenderCaseNoteSummary(caseNoteSummary),
         prisonApi.stubUserCaseloads(),
         prisonApi.stubStaffRoles(),
@@ -471,7 +471,7 @@ module.exports = (on) => {
       prisonApi.stubMovementsIn({ agencyId, fromDate, movements }),
     stubMovementsOut: ({ agencyId, fromDate, movements }) =>
       prisonApi.stubMovementsOut({ agencyId, fromDate, movements }),
-    stubIepSummaryForBookingIds: prisonApi.stubIepSummaryForBookingIds,
+    stubGetIepSummaryForBookingIds: (body) => incentivesApi.stubGetIepSummaryForBookingIds(body),
     stubSystemAlerts: prisonApi.stubSystemAlerts,
     stubInReception: ({ agencyId, results }) => prisonApi.stubRollcountByType(agencyId, 'in-reception', results),
     stubEnRoute: ({ agencyId, results }) => prisonApi.stubEnRoute(agencyId, results),
