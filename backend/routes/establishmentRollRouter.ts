@@ -11,8 +11,8 @@ import { movementsServiceFactory } from '../services/movementsService'
 
 const router = express.Router({ mergeParams: true })
 
-const controller = ({ oauthApi, prisonApi, systemOauthClient, logError, incentivesApi }) => {
-  const movementsService = movementsServiceFactory(prisonApi, systemOauthClient, incentivesApi)
+const controller = ({ oauthApi, prisonApi, systemOauthClient, logError }) => {
+  const movementsService = movementsServiceFactory(prisonApi, systemOauthClient)
 
   // @ts-expect-error ts-migrate(2345) FIXME: Argument of type '{ prisonApi: any; logError: any;... Remove this comment to see the full error message
   router.get('/', establishmentRollDashboardController({ prisonApi, logError }))

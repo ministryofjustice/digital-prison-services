@@ -13,12 +13,9 @@ context('Prisoner search', () => {
     agencyId: 'MDI',
     assignedLivingUnitId: 1,
     assignedLivingUnitDesc: 'UNIT-1',
+    iepLevel: 'Standard',
     categoryCode: 'A',
     alertsDetails: ['XA', 'XVL'],
-  }
-  const inmate1Iep = {
-    bookingId: 1,
-    iepLevel: 'Standard',
   }
   const inmate2 = {
     bookingId: 2,
@@ -30,12 +27,9 @@ context('Prisoner search', () => {
     agencyId: 'MDI',
     assignedLivingUnitId: 2,
     assignedLivingUnitDesc: 'UNIT-2',
+    iepLevel: 'Standard',
     categoryCode: 'C',
     alertsDetails: ['RSS', 'XC'],
-  }
-  const inmate2Iep = {
-    bookingId: 2,
-    iepLevel: 'Standard',
   }
 
   before(() => {
@@ -60,7 +54,6 @@ context('Prisoner search', () => {
         count: 2,
         data: [inmate1, inmate2],
       })
-      cy.task('stubGetIepSummaryForBookingIds', [inmate1Iep, inmate2Iep])
       cy.visit(`/prisoner-search`)
 
       cy.get('[data-test="prisoner-search-results-table"]').then(($table) => {
@@ -88,7 +81,6 @@ context('Prisoner search', () => {
         count: 1,
         data: [inmate1],
       })
-      cy.task('stubGetIepSummaryForBookingIds', [inmate1Iep])
       cy.visit(`/prisoner-search?keywords=Saunders&location=MDI&alerts%5B%5D=XA`)
 
       cy.get('[data-test="prisoner-search-keywords"]').should('have.value', 'Saunders')
@@ -109,7 +101,6 @@ context('Prisoner search', () => {
         count: 1,
         data: [inmate1],
       })
-      cy.task('stubGetIepSummaryForBookingIds', [inmate1Iep])
       cy.visit(`/prisoner-search?keywords=Saunders&location=MDI&alerts%5B%5D=XA`)
 
       cy.get('[data-test="prisoner-search-alerts"]').then(($alerts) => {
@@ -138,7 +129,6 @@ context('Prisoner search', () => {
         count: 2,
         data: [inmate1, inmate2],
       })
-      cy.task('stubGetIepSummaryForBookingIds', [inmate1Iep, inmate2Iep])
       cy.visit(`/prisoner-search`)
 
       cy.get('[data-test="prisoner-search-order"]').then(($select) => {
@@ -162,7 +152,6 @@ context('Prisoner search', () => {
         count: 2,
         data: [inmate1, inmate2],
       })
-      cy.task('stubGetIepSummaryForBookingIds', [inmate1Iep, inmate2Iep])
       cy.visit(`/prisoner-search?pageLimitOption=1`)
 
       cy.get('[data-test="prisoner-search-view-all-link"]').then(($link) => {
@@ -177,7 +166,6 @@ context('Prisoner search', () => {
         count: 2,
         data: [inmate1, inmate2],
       })
-      cy.task('stubGetIepSummaryForBookingIds', [inmate1Iep, inmate2Iep])
       cy.visit(`/prisoner-search?view=grid`)
 
       cy.get('[data-test="prisoner-search-order"]').then(($select) => {
@@ -199,7 +187,6 @@ context('Prisoner search', () => {
         count: 2,
         data: [inmate1, inmate2],
       })
-      cy.task('stubGetIepSummaryForBookingIds', [inmate1Iep, inmate2Iep])
       cy.visit(`/prisoner-search?view=grid`)
 
       cy.get('[data-test="prisoner-profile-link"]').then(($prisonerProfileLinks) => {
@@ -215,7 +202,6 @@ context('Prisoner search', () => {
         count: 2,
         data: [inmate1, inmate2],
       })
-      cy.task('stubGetIepSummaryForBookingIds', [inmate1Iep, inmate2Iep])
       cy.visit(`/prisoner-search?keywords=Saunders&location=MDI&alerts%5B%5D=XA`)
 
       cy.get('[data-test="prisoner-search-order"]').select('assignedLivingUnitDesc:ASC')
@@ -245,14 +231,13 @@ context('Prisoner search', () => {
 
       cy.task('stubInmates', {
         locationId: 'MDI',
-        count: 1,
+        count: 2,
         data: [inmate1],
       })
-      cy.task('stubGetIepSummaryForBookingIds', [inmate1Iep])
       cy.task('stubPrisonerProfileHeaderData', {
         offenderBasicDetails,
         offenderFullDetails,
-        iepSummary: [inmate1Iep],
+        iepSummary: {},
         caseNoteSummary: {},
         offenderNo: 'A12345',
       })

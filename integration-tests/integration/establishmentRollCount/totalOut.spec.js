@@ -8,16 +8,7 @@ context('A user can see the list of total out today', () => {
   beforeEach(() => {
     Cypress.Cookies.preserveOnce('hmpps-session-dev')
     cy.task('stubClientCredentialsRequest')
-    cy.task('stubGetIepSummaryForBookingIds', [
-      {
-        bookingId: -1,
-        iepLevel: 'Basic',
-      },
-      {
-        bookingId: -2,
-        iepLevel: 'Standard',
-      },
-    ])
+    cy.task('stubIepSummaryForBookingIds')
     cy.task('stubSystemAlerts')
     cy.task('stubAssessments', ['A1234AA', 'G0000AA'])
     cy.task('stubUserMeRoles', [])
@@ -29,7 +20,6 @@ context('A user can see the list of total out today', () => {
       movements: [
         {
           offenderNo: 'A1234AA',
-          bookingId: -1,
           dateOfBirth: '1980-01-01',
           firstName: 'AAAAB',
           lastName: 'AAAAB',
@@ -38,7 +28,6 @@ context('A user can see the list of total out today', () => {
         },
         {
           offenderNo: 'G0000AA',
-          bookingId: -2,
           dateOfBirth: '1980-12-31',
           firstName: 'AAAAA',
           lastName: 'AAAAA',
@@ -60,12 +49,10 @@ context('A user can see the list of total out today', () => {
         expect($cells.get(1)).to.contain('Aaaaa, Aaaaa')
         expect($cells.get(2)).to.contain('G0000AA')
         expect($cells.get(3)).to.contain('31/12/1980')
-        expect($cells.get(5).innerText).to.contain('Standard')
 
         expect($cells.get(10)).to.contain('Aaaab, Aaaab')
         expect($cells.get(11)).to.contain('A1234AA')
         expect($cells.get(12)).to.contain('01/01/1980')
-        expect($cells.get(14).innerText).to.contain('Basic')
       })
   })
 })
