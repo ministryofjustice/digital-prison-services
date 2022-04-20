@@ -14,7 +14,7 @@ exports[`<IncentiveLevelSlip /> renders correctly 1`] = `
         className="heading__StyledHeading-sc-1sovo83-0 jdjFtq"
         size="MEDIUM"
       >
-        Incentive level warning
+        Incentive Warning
       </h2>
     </div>
     <div
@@ -139,7 +139,7 @@ exports[`<IncentiveLevelSlip /> renders with amendments 1`] = `
         className="heading__StyledHeading-sc-1sovo83-0 jdjFtq"
         size="MEDIUM"
       >
-        Incentive level warning
+        Incentive Warning
       </h2>
     </div>
     <div
@@ -296,7 +296,7 @@ exports[`<IncentiveLevelSlip /> renders with an activity or area 1`] = `
         className="heading__StyledHeading-sc-1sovo83-0 jdjFtq"
         size="MEDIUM"
       >
-        Incentive level warning
+        Incentive Warning
       </h2>
     </div>
     <div
@@ -431,7 +431,7 @@ exports[`<IncentiveLevelSlip /> renders with an issued by name 1`] = `
         className="heading__StyledHeading-sc-1sovo83-0 jdjFtq"
         size="MEDIUM"
       >
-        Incentive level warning
+        Incentive Warning
       </h2>
     </div>
     <div
