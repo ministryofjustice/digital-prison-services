@@ -117,7 +117,7 @@ context('A user can view prisoner case notes', () => {
 
     rows
       .caseNotePrintIncentiveLevelSlipLink()
-      .contains('Print Incentive Level slip')
+      .contains('Print a copy of the incentive level warning')
       .should(
         'have.attr',
         'href',
