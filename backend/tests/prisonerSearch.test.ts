@@ -4,6 +4,7 @@ import { makeResetError, makeResetErrorWithStack } from './helpers'
 
 describe('Prisoner search', () => {
   const prisonApi = {}
+  const incentivesApi = {}
   const paginationService = {}
   const telemetry = {}
 
@@ -69,13 +70,16 @@ describe('Prisoner search', () => {
     // @ts-expect-error ts-migrate(2339) FIXME: Property 'getInmates' does not exist on type '{}'.
     prisonApi.getInmates = jest.fn().mockReturnValue([])
 
+    // @ts-expect-error ts-migrate(2339) FIXME: Property 'getIepSummaryForBookingIds' does not exist on type '{}'.
+    incentivesApi.getIepSummaryForBookingIds = jest.fn().mockReturnValue([])
+
     // @ts-expect-error ts-migrate(2339) FIXME: Property 'getPagination' does not exist on type '{... Remove this comment to see the full error message
     paginationService.getPagination = jest.fn()
 
     // @ts-expect-error ts-migrate(2339) FIXME: Property 'trackEvent' does not exist on type '{}'.
     telemetry.trackEvent = jest.fn().mockResolvedValue([])
 
-    controller = prisonerSearchController({ paginationService, prisonApi, telemetry, logError })
+    controller = prisonerSearchController({ paginationService, prisonApi, incentivesApi, telemetry, logError })
   })
 
   describe('index', () => {
@@ -101,7 +105,7 @@ describe('Prisoner search', () => {
           },
         },
         'MDI',
-        { alerts: undefined, keywords: undefined, returnAlerts: 'true', returnCategory: 'true', returnIep: 'true' }
+        { alerts: undefined, keywords: undefined, returnAlerts: 'true', returnCategory: 'true' }
       )
     })
 
@@ -235,7 +239,6 @@ describe('Prisoner search', () => {
             agencyId: 'MDI',
             assignedLivingUnitId: 1,
             assignedLivingUnitDesc: 'UNIT-1',
-            iepLevel: 'Standard',
             categoryCode: 'C',
             alertsDetails: ['XA', 'XVL'],
           },
@@ -249,7 +252,6 @@ describe('Prisoner search', () => {
             agencyId: 'MDI',
             assignedLivingUnitId: 2,
             assignedLivingUnitDesc: 'CSWAP',
-            iepLevel: 'Standard',
             categoryCode: 'C',
             alertsDetails: ['RSS', 'XC'],
           },
@@ -257,6 +259,12 @@ describe('Prisoner search', () => {
         res.locals.responseHeaders['total-records'] = inmates.length
         // @ts-expect-error ts-migrate(2339) FIXME: Property 'getInmates' does not exist on type '{}'.
         prisonApi.getInmates = jest.fn().mockReturnValue(inmates)
+
+        // @ts-expect-error ts-migrate(2339) FIXME: Property 'getIepSummaryForBookingIds' does not exist on type '{}'.
+        incentivesApi.getIepSummaryForBookingIds = jest.fn().mockReturnValue([
+          { bookingId: 1, iepLevel: 'Standard' },
+          { bookingId: 2, iepLevel: 'Standard' },
+        ])
       })
 
       it('should call pagination service and return the correctly formatted results', async () => {
@@ -399,7 +407,6 @@ describe('Prisoner search', () => {
           keywords: 'Smith',
           returnAlerts: 'true',
           returnCategory: 'true',
-          returnIep: 'true',
         }
       )
     })
@@ -460,7 +467,7 @@ describe('Prisoner search', () => {
           }),
         }),
         'MDI',
-        { alerts: undefined, keywords: undefined, returnAlerts: 'true', returnCategory: 'true', returnIep: 'true' }
+        { alerts: undefined, keywords: undefined, returnAlerts: 'true', returnCategory: 'true' }
       )
     })
   })
