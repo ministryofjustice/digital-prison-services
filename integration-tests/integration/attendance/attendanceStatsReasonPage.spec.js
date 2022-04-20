@@ -5,6 +5,7 @@ const toDate = '11/10/2010'
 const period = 'AM'
 const agencyId = 'WWI'
 const reason = 'RefusedIncentiveLevelWarning'
+const reasonDescription = 'Refused with warning'
 
 const toReason = ($cell) => ({
   name: $cell[0]?.textContent,
@@ -38,7 +39,6 @@ context('A user can view attendance reasons', () => {
     cy.task('stubUserMeRoles')
     cy.task('stubUserMe', {})
     cy.task('stubUserCaseLoads')
-    cy.task('stubGetAbsenceReasons')
     cy.task('stubGetAbsences', {
       agencyId,
       reason,
@@ -83,6 +83,7 @@ context('A user can view attendance reasons', () => {
           suspended: true,
         },
       ],
+      reasonDescription,
     })
   })
 
@@ -148,7 +149,7 @@ context('A user can view attendance reasons', () => {
   })
 
   it('Shows the correct data when when no absence reasons are found', () => {
-    cy.task('stubGetAbsences', { agencyId, reason, absences: [] })
+    cy.task('stubGetAbsences', { agencyId, reason, absences: [], reasonDescription })
 
     cy.visit(
       `/manage-prisoner-whereabouts/attendance-reason-statistics/reason/${reason}?agencyId=${agencyId}&period=${period}&fromDate=${fromDate}&toDate=${toDate}`

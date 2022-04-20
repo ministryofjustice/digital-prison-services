@@ -1,5 +1,4 @@
 const { stubFor, getMatchingRequests } = require('./wiremock')
-const absenceReasons = require('./responses/absenceReasons.json')
 const absenceReasonsV2 = require('./responses/absenceReasonsV2.json')
 const attendance = require('./responses/attendance.json')
 
@@ -47,7 +46,7 @@ module.exports = {
         jsonBody: stats,
       },
     }),
-  stubGetAbsences: (agencyId, reason, absences) =>
+  stubGetAbsences: (agencyId, reason, absences, reasonDescription) =>
     stubFor({
       request: {
         method: 'GET',
@@ -60,21 +59,8 @@ module.exports = {
         },
         jsonBody: {
           absences,
+          description: reasonDescription,
         },
-      },
-    }),
-  stubGetAbsenceReasons: () =>
-    stubFor({
-      request: {
-        method: 'GET',
-        urlPattern: '/whereabouts/absence-reasons',
-      },
-      response: {
-        status: 200,
-        headers: {
-          'Content-Type': 'application/json;charset=UTF-8',
-        },
-        jsonBody: absenceReasons,
       },
     }),
   stubGetAbsenceReasonsV2: () =>

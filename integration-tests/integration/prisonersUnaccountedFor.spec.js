@@ -94,7 +94,6 @@ context('Prisoners unaccounted for', () => {
         eventDescription: 'Dentist',
       },
     ])
-    cy.task('stubGetAbsenceReasons')
     cy.task('stubGetAbsenceReasonsV2')
   })
 
