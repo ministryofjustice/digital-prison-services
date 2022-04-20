@@ -16,6 +16,7 @@ const buildStatsViewModel = (dashboardStats, changes) => {
   const mapReasons = (reasons) =>
     Object.keys(reasons || [])
       .filter((name) => !name.endsWith('Description')) // filter out descriptions
+      .filter((name) => name !== 'attended') // filter out attended
       .map((name) => ({
         id: capitalizeStart(name),
         name: reasons[`${name}Description`],

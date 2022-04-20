@@ -27,6 +27,7 @@ describe('Attendance reason statistics', () => {
   const stats = {
     notRecorded: 0,
     paidReasons: {
+      attended: 2,
       acceptableAbsence: 0,
       approvedCourse: 0,
       notRequired: 0,
