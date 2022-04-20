@@ -305,7 +305,7 @@ export const attendanceStatisticsFactory = (oauthApi, prisonApi, whereaboutsApi)
         offenderNo: absence.offenderNo,
         location: stripAgencyPrefix(absence.cellLocation, agencyId),
         activity: absence.eventDescription,
-        comments: absence.comments,
+        comments: `${absence.subReasonDescription ? `${absence.subReasonDescription}: ` : ''}${absence.comments}`,
         eventDate: readableDateFormat(absence.eventDate, 'YYYY-MM-DD'),
         suspended: absence.suspended,
       }))
