@@ -1,38 +1,32 @@
 import moment from 'moment'
-import { stripWarning } from '../../mappers'
 
 import {
-  capitalize,
   capitalizeStart,
   switchDateFormat,
   getCurrentPeriod,
   pascalToString,
   readableDateFormat,
   stripAgencyPrefix,
-  properCaseName,
+  putLastNameFirst,
 } from '../../utils'
 
 const attendanceReasonStatsUrl = '/manage-prisoner-whereabouts/attendance-reason-statistics'
 
-const formatReason = ({ name, triggersIEPWarning }) =>
-  triggersIEPWarning.includes(capitalizeStart(name))
-    ? `${stripWarning(capitalize(pascalToString(name)))} with warning`
-    : capitalize(pascalToString(name))
-
-const buildStatsViewModel = (dashboardStats, triggersIEPWarning, changes) => {
+const buildStatsViewModel = (dashboardStats, changes) => {
   const mapReasons = (reasons) =>
-    Object.keys(reasons || []).map((name) => ({
-      id: capitalizeStart(name),
-      name: formatReason({ name, triggersIEPWarning }),
-      value: Number(reasons[name]),
-    }))
+    Object.keys(reasons || [])
+      .filter((name) => !name.endsWith('Description')) // filter out descriptions
+      .filter((name) => name !== 'attended') // filter out attended
+      .map((name) => ({
+        id: capitalizeStart(name),
+        name: reasons[`${name}Description`],
+        value: Number(reasons[name]),
+      }))
 
   return {
     ...dashboardStats,
-    attended: dashboardStats?.paidReasons?.attended,
-    paidReasons: mapReasons(dashboardStats?.paidReasons).filter(
-      (nvp) => nvp.name && nvp.name.toLowerCase() !== 'attended'
-    ),
+    attended: dashboardStats?.attended,
+    paidReasons: mapReasons(dashboardStats?.paidReasons),
     unpaidReasons: mapReasons(dashboardStats?.unpaidReasons),
     changes,
   }
@@ -268,11 +262,9 @@ export const attendanceStatisticsFactory = (oauthApi, prisonApi, whereaboutsApi)
       period: period === 'AM_PM' ? '' : period,
     })
 
-    const { triggersIEPWarning } = await whereaboutsApi.getAbsenceReasons(res.locals)
-
     return res.render('attendanceStatistics.njk', {
       ...mainViewModel,
-      dashboardStats: buildStatsViewModel(dashboardStats, triggersIEPWarning, changesForAgency),
+      dashboardStats: buildStatsViewModel(dashboardStats, changesForAgency),
     })
   }
 
@@ -300,7 +292,7 @@ export const attendanceStatisticsFactory = (oauthApi, prisonApi, whereaboutsApi)
         )
       }
 
-      const { absences } = await whereaboutsApi.getAbsences(res.locals, {
+      const { absences, description: displayReason } = await whereaboutsApi.getAbsences(res.locals, {
         agencyId,
         reason,
         period: period === 'AM_PM' ? '' : period,
@@ -309,7 +301,7 @@ export const attendanceStatisticsFactory = (oauthApi, prisonApi, whereaboutsApi)
       })
 
       const offenderData = absences.map((absence) => ({
-        offenderName: `${capitalize(absence.lastName)}, ${capitalize(absence.firstName)}`,
+        offenderName: putLastNameFirst(absence.firstName, absence.lastName),
         offenderNo: absence.offenderNo,
         location: stripAgencyPrefix(absence.cellLocation, agencyId),
         activity: absence.eventDescription,
@@ -319,11 +311,9 @@ export const attendanceStatisticsFactory = (oauthApi, prisonApi, whereaboutsApi)
       }))
 
       const { offenders, sortOptions } = absentReasonTableViewModel(offenderData)
-      const { triggersIEPWarning } = await whereaboutsApi.getAbsenceReasons(res.locals)
-      const displayReason = formatReason({ name: reason, triggersIEPWarning })
 
       return res.render('attendanceStatisticsOffendersList.njk', {
-        title: `${displayReason}`,
+        title: displayReason,
         user: {
           displayName: user.name,
           activeCaseLoad: {
@@ -405,7 +395,7 @@ export const attendanceStatisticsFactory = (oauthApi, prisonApi, whereaboutsApi)
       )
 
       const { offenderNo, firstName, lastName, comment, cellLocation } = activity
-      const offenderName = `${properCaseName(lastName)}, ${properCaseName(firstName)}`
+      const offenderName = putLastNameFirst(firstName, lastName)
 
       const offenderUrl = `/prisoner/${offenderNo}`
 

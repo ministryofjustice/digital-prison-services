@@ -16,7 +16,6 @@ describe('Attendance reason statistics', () => {
   const whereaboutsApi = {
     getAttendanceStats: jest.fn(),
     getAbsences: jest.fn(),
-    getAbsenceReasons: jest.fn(),
     getAttendanceForBookingsOverDateRange: jest.fn(),
     getAttendanceChanges: jest.fn(),
   }
@@ -28,22 +27,32 @@ describe('Attendance reason statistics', () => {
   const stats = {
     notRecorded: 0,
     paidReasons: {
+      attended: 2,
       acceptableAbsence: 0,
       approvedCourse: 0,
-      attended: 0,
       notRequired: 0,
+      acceptableAbsenceDescription: 'Acceptable absence',
+      approvedCourseDescription: 'Approved course',
+      notRequiredDescription: 'Not required to attend',
     },
     scheduleActivities: 0,
     unpaidReasons: {
       refused: 0,
       restDay: 0,
-      restInCell: 0,
+      restInCellOrSick: 0,
       sessionCancelled: 0,
-      sick: 0,
       unacceptableAbsenceIncentiveLevelWarning: 0,
       refusedIncentiveLevelWarning: 0,
+      refusedDescription: 'Refused to attend',
+      refusedIncentiveLevelWarningDescription: 'Refused to attend with warning',
+      sessionCancelledDescription: 'Session cancelled',
+      unacceptableAbsenceDescription: 'Unacceptable absence',
+      unacceptableAbsenceIncentiveLevelWarningDescription: 'Unacceptable absence with warning',
+      restDayDescription: 'Rest day',
+      restInCellOrSickDescription: 'Rest in cell or sick',
     },
     suspended: 0,
+    attended: 1,
   }
 
   beforeEach(() => {
@@ -53,7 +62,6 @@ describe('Attendance reason statistics', () => {
     oauthApi.userRoles = jest.fn()
     whereaboutsApi.getAttendanceStats = jest.fn()
     whereaboutsApi.getAbsences = jest.fn()
-    whereaboutsApi.getAbsenceReasons = jest.fn()
     whereaboutsApi.getAttendanceForBookingsOverDateRange = jest.fn()
     whereaboutsApi.getAttendanceChanges = jest.fn()
 
@@ -66,10 +74,6 @@ describe('Attendance reason statistics', () => {
       active: true,
       name: 'User Name',
       activeCaseLoadId: 'LEI',
-    })
-
-    whereaboutsApi.getAbsenceReasons.mockReturnValue({
-      triggersIEPWarning: ['UnacceptableAbsenceIncentiveLevelWarning', 'RefusedIncentiveLevelWaring'],
     })
 
     whereaboutsApi.getAttendanceForBookingsOverDateRange.mockReturnValue({ attendances: [] })
@@ -363,21 +367,20 @@ describe('Attendance reason statistics', () => {
           },
           dashboardStats: {
             notRecorded: 0,
-            attended: 0,
+            attended: 1,
             paidReasons: [
               { id: 'AcceptableAbsence', name: 'Acceptable absence', value: 0 },
               { id: 'ApprovedCourse', name: 'Approved course', value: 0 },
-              { id: 'NotRequired', name: 'Not required', value: 0 },
+              { id: 'NotRequired', name: 'Not required to attend', value: 0 },
             ],
             scheduleActivities: 0,
             unpaidReasons: [
-              { id: 'Refused', name: 'Refused', value: 0 },
+              { id: 'Refused', name: 'Refused to attend', value: 0 },
               { id: 'RestDay', name: 'Rest day', value: 0 },
-              { id: 'RestInCell', name: 'Rest in cell', value: 0 },
+              { id: 'RestInCellOrSick', name: 'Rest in cell or sick', value: 0 },
               { id: 'SessionCancelled', name: 'Session cancelled', value: 0 },
-              { id: 'Sick', name: 'Sick', value: 0 },
               { id: 'UnacceptableAbsenceIncentiveLevelWarning', name: 'Unacceptable absence with warning', value: 0 },
-              { id: 'RefusedIncentiveLevelWarning', name: 'Refused incentive level warning', value: 0 },
+              { id: 'RefusedIncentiveLevelWarning', name: 'Refused to attend with warning', value: 0 },
             ],
             suspended: 0,
             changes: 1,
@@ -461,6 +464,7 @@ describe('Attendance reason statistics', () => {
             suspended: true,
           },
         ],
+        description: 'Unacceptable absence with warning',
       })
 
       const { attendanceStatisticsOffendersList } = attendanceStatisticsFactory(oauthApi, prisonApi, whereaboutsApi)
@@ -543,6 +547,7 @@ describe('Attendance reason statistics', () => {
             eventOutcome: 'ACC',
           },
         ],
+        description: 'Acceptable absence',
       })
 
       const { attendanceStatisticsOffendersList } = attendanceStatisticsFactory(oauthApi, prisonApi, whereaboutsApi)

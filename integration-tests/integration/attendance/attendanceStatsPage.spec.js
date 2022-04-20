@@ -27,7 +27,6 @@ context('A user can view attendance changes', () => {
     cy.task('stubUserMeRoles')
     cy.task('stubUserMe', {})
     cy.task('stubUserCaseLoads')
-    cy.task('stubGetAbsenceReasons')
     cy.task('stubAttendanceChanges', [
       {
         eventId: 1,
@@ -44,11 +43,14 @@ context('A user can view attendance changes', () => {
       period,
       stats: {
         notRecorded: 1,
+        attended: 4,
         paidReasons: {
           acceptableAbsence: 2,
           approvedCourse: 3,
-          attended: 4,
           notRequired: 5,
+          acceptableAbsenceDescription: 'Acceptable absence',
+          approvedCourseDescription: 'Approved course',
+          notRequiredDescription: 'Not required to attend',
         },
         scheduleActivities: 6,
         suspended: 7,
@@ -59,6 +61,13 @@ context('A user can view attendance changes', () => {
           restInCellOrSick: 11,
           sessionCancelled: 12,
           unacceptableAbsenceIncentiveLevelWarning: 13,
+          refusedDescription: 'Refused to attend',
+          refusedIncentiveLevelWarningDescription: 'Refused to attend with warning',
+          sessionCancelledDescription: 'Session cancelled',
+          unacceptableAbsenceDescription: 'Unacceptable absence',
+          unacceptableAbsenceIncentiveLevelWarningDescription: 'Unacceptable absence with warning',
+          restDayDescription: 'Rest day',
+          restInCellOrSickDescription: 'Rest in cell or sick',
         },
       },
     })
@@ -110,11 +119,14 @@ context('A user can view attendance changes', () => {
       period,
       stats: {
         notRecorded: 0,
+        attended: 0,
         paidReasons: {
           acceptableAbsence: 0,
           approvedCourse: 0,
-          attended: 0,
           notRequired: 0,
+          acceptableAbsenceDescription: 'Acceptable absence',
+          approvedCourseDescription: 'Approved course',
+          notRequiredDescription: 'Not required to attend',
         },
         scheduleActivities: 0,
         suspended: 0,
@@ -125,6 +137,13 @@ context('A user can view attendance changes', () => {
           restInCellOrSick: 0,
           sessionCancelled: 0,
           unacceptableAbsenceIncentiveLevelWarning: 0,
+          refusedDescription: 'Refused to attend',
+          refusedIncentiveLevelWarningDescription: 'Refused to attend with warning',
+          sessionCancelledDescription: 'Session cancelled',
+          unacceptableAbsenceDescription: 'Unacceptable absence',
+          unacceptableAbsenceIncentiveLevelWarningDescription: 'Unacceptable absence with warning',
+          restDayDescription: 'Rest day',
+          restInCellOrSickDescription: 'Rest in cell or sick',
         },
       },
     })

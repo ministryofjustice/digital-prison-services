@@ -45,7 +45,7 @@
     "applicationinsights": "^2.2.0",
     "axios": "0.21.4",
     "body-parser": "^1.19.0",
-    "bunyan": "^2.0.5",
+    "bunyan": "^1.8.15",
     "bunyan-middleware": "^1.0.1",
     "classnames": "^2.3.1",
     "connect-flash": "^0.1.1",

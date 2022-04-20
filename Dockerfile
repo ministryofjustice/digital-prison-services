@@ -21,6 +21,7 @@ RUN npm prune --production
 FROM node:14-buster-slim
 LABEL maintainer="HMPPS Digital Studio <info@digital.justice.gov.uk>"
 
+ENV CACHE_BREAKER ${GIT_REF}
 RUN apt-get update && \
     apt-get upgrade -y && \
     apt-get autoremove -y && \

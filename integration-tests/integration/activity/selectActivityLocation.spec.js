@@ -35,7 +35,6 @@ context('Select activity location', () => {
     offenders.forEach((offender) => {
       cy.task('stubOffenderBasicDetails', offender)
     })
-    cy.task('stubGetAbsenceReasons')
     cy.task('stubGetAbsenceReasonsV2')
   })
 

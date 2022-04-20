@@ -1,7 +1,8 @@
+/* eslint-disable react/prop-types */
 import React from 'react'
 import { connect } from 'react-redux'
 import PropTypes from 'prop-types'
-import { Form } from 'react-final-form'
+import { Field, Form } from 'react-final-form'
 import { FORM_ERROR } from 'final-form'
 
 import Select from '@govuk-react/select'
@@ -9,6 +10,8 @@ import TextArea from '@govuk-react/text-area'
 import Button from '@govuk-react/button'
 import Fieldset from '@govuk-react/fieldset'
 import ErrorSummary from '@govuk-react/error-summary'
+import MultiChoice from '@govuk-react/multi-choice'
+import Radio from '@govuk-react/radio'
 
 import { ButtonContainer, ButtonCancel } from '../../Components/Buttons'
 import RadioGroup from '../../Components/RadioGroup'
@@ -211,45 +214,58 @@ export function AttendanceOtherForm({
               inline
             />
             {values.pay && (
-              <FieldWithError
-                errors={errors}
-                name="absentReason"
-                component={RadioGroup}
-                label="Select a reason"
-                options={getAbsentReasons(values.pay).map((r) => ({ title: r.name, value: r.value }))}
-              />
-            )}
-            {values.pay && shouldTriggerSubReason(values.absentReason) && (
-              <ConditionalRadio>
-                <FieldWithError
-                  errors={errors}
-                  name="absentSubReason"
-                  component={Select}
-                  label="Select an absence reason"
-                >
-                  <option value="" disabled>
-                    Select
-                  </option>
-                  {getAbsentSubReasons(values.pay, values.absentReason).map((reason) => (
-                    <option key={reason.value} value={reason.value}>
-                      {reason.name}
-                    </option>
-                  ))}
-                </FieldWithError>
-                {shouldTriggerIEP(values.absentReason) && (
-                  <FieldWithError
-                    name="iep"
-                    errors={errors}
-                    component={RadioGroup}
-                    label="Do you want to add an incentive level warning"
-                    options={[
-                      { title: 'Yes', value: 'yes' },
-                      { title: 'No', value: 'no' },
-                    ]}
-                    inline
-                  />
-                )}
-              </ConditionalRadio>
+              <FieldWithError errors={errors} name="absentReason" component={MultiChoice} label="Select a reason">
+                {getAbsentReasons(values.pay).map((r) => (
+                  <div key={r.value}>
+                    <Field name="absentReason">
+                      {(props) => (
+                        <div>
+                          <Radio
+                            name={props.input.name}
+                            value={r.value}
+                            onChange={props.input.onChange}
+                            checked={props.input.value === r.value}
+                          >
+                            {r.name}
+                          </Radio>
+                        </div>
+                      )}
+                    </Field>
+                    {r.value === values.absentReason && shouldTriggerSubReason(values.absentReason) && (
+                      <ConditionalRadio>
+                        <FieldWithError
+                          errors={errors}
+                          name="absentSubReason"
+                          component={Select}
+                          label="Select an absence reason"
+                        >
+                          <option value="" disabled>
+                            Select
+                          </option>
+                          {getAbsentSubReasons(values.pay, values.absentReason).map((reason) => (
+                            <option key={reason.value} value={reason.value}>
+                              {reason.name}
+                            </option>
+                          ))}
+                        </FieldWithError>
+                        {shouldTriggerIEP(values.absentReason) && (
+                          <FieldWithError
+                            name="iep"
+                            errors={errors}
+                            component={RadioGroup}
+                            label="Do you want to add an incentive level warning"
+                            options={[
+                              { title: 'Yes', value: 'yes' },
+                              { title: 'No', value: 'no' },
+                            ]}
+                            inline
+                          />
+                        )}
+                      </ConditionalRadio>
+                    )}
+                  </div>
+                ))}
+              </FieldWithError>
             )}
             <FieldWithError errors={errors} name="comments" component={TextArea}>
               Enter more details
