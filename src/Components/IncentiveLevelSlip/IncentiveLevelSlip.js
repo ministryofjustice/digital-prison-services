@@ -51,7 +51,7 @@ function IncentiveLevelSlip({
       <Row>
         <Column>
           <H2 size="MEDIUM" mb={0}>
-            {type || 'Incentive level warning'}
+            {type || 'Incentive Warning'}
           </H2>
         </Column>
         <Column>
