@@ -281,9 +281,8 @@ module.exports = (on) => {
     stubReleaseDatesOffenderNo: (releaseDates) => Promise.all([prisonApi.stubPrisonerSentenceDetails(releaseDates)]),
     stubVerifyToken: (active = true) => tokenverification.stubVerifyToken(active),
     stubSignInPage: auth.redirect,
-    stubGetAbsences: ({ agencyId, reason, absences }) =>
-      Promise.all([whereabouts.stubGetAbsences(agencyId, reason, absences)]),
-    stubGetAbsenceReasons: whereabouts.stubGetAbsenceReasons,
+    stubGetAbsences: ({ agencyId, reason, absences, reasonDescription }) =>
+      whereabouts.stubGetAbsences(agencyId, reason, absences, reasonDescription),
     stubGetAbsenceReasonsV2: whereabouts.stubGetAbsenceReasonsV2,
     stubGetAttendance: ({ caseload, locationId, timeSlot, date, data }) =>
       Promise.all([whereabouts.stubGetAttendance(caseload, locationId, timeSlot, date, data)]),

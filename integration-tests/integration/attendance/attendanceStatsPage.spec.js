@@ -27,7 +27,6 @@ context('A user can view attendance changes', () => {
     cy.task('stubUserMeRoles')
     cy.task('stubUserMe', {})
     cy.task('stubUserCaseLoads')
-    cy.task('stubGetAbsenceReasons')
     cy.task('stubAttendanceChanges', [
       {
         eventId: 1,
