@@ -16,7 +16,6 @@ describe('Attendance reason statistics', () => {
   const whereaboutsApi = {
     getAttendanceStats: jest.fn(),
     getAbsences: jest.fn(),
-    getAbsenceReasons: jest.fn(),
     getAttendanceForBookingsOverDateRange: jest.fn(),
     getAttendanceChanges: jest.fn(),
   }
@@ -28,6 +27,7 @@ describe('Attendance reason statistics', () => {
   const stats = {
     notRecorded: 0,
     paidReasons: {
+      attended: 2,
       acceptableAbsence: 0,
       approvedCourse: 0,
       notRequired: 0,
@@ -62,7 +62,6 @@ describe('Attendance reason statistics', () => {
     oauthApi.userRoles = jest.fn()
     whereaboutsApi.getAttendanceStats = jest.fn()
     whereaboutsApi.getAbsences = jest.fn()
-    whereaboutsApi.getAbsenceReasons = jest.fn()
     whereaboutsApi.getAttendanceForBookingsOverDateRange = jest.fn()
     whereaboutsApi.getAttendanceChanges = jest.fn()
 
@@ -75,10 +74,6 @@ describe('Attendance reason statistics', () => {
       active: true,
       name: 'User Name',
       activeCaseLoadId: 'LEI',
-    })
-
-    whereaboutsApi.getAbsenceReasons.mockReturnValue({
-      triggersIEPWarning: ['UnacceptableAbsenceIncentiveLevelWarning', 'RefusedIncentiveLevelWaring'],
     })
 
     whereaboutsApi.getAttendanceForBookingsOverDateRange.mockReturnValue({ attendances: [] })
@@ -469,6 +464,7 @@ describe('Attendance reason statistics', () => {
             suspended: true,
           },
         ],
+        description: 'Unacceptable absence with warning',
       })
 
       const { attendanceStatisticsOffendersList } = attendanceStatisticsFactory(oauthApi, prisonApi, whereaboutsApi)
@@ -551,6 +547,7 @@ describe('Attendance reason statistics', () => {
             eventOutcome: 'ACC',
           },
         ],
+        description: 'Acceptable absence',
       })
 
       const { attendanceStatisticsOffendersList } = attendanceStatisticsFactory(oauthApi, prisonApi, whereaboutsApi)
