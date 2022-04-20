@@ -8,7 +8,7 @@ context('A user can see the list of offenders in reception', () => {
   beforeEach(() => {
     Cypress.Cookies.preserveOnce('hmpps-session-dev')
     cy.task('stubClientCredentialsRequest')
-    cy.task('stubIepSummaryForBookingIds')
+    cy.task('stubGetIepSummaryForBookingIds', [])
     cy.task('stubSystemAlerts')
     cy.task('stubAssessments', ['A1234AA', 'G0000AA'])
     cy.task('stubOffenderMovements')
