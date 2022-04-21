@@ -142,7 +142,7 @@
       <span class="govuk-body govuk-!-font-size-36 govuk-!-font-weight-bold" data-qa="attended">{{dashboardStats.attended}}</span>
     </div>
 
-     {% for paidReasons in dashboardStats.paidReasons | sort(attribute = "name") %}
+     {% for paidReasons in dashboardStats.paidReasons %}
         <div class="govuk-grid-column-one-quarter govuk-!-padding-bottom-3">
           <p class="govuk-body">{{paidReasons.name}}</p>
           <span class="govuk-body govuk-!-font-size-36 govuk-!-font-weight-bold" data-qa="{{ paidReasons.id }}">
@@ -162,7 +162,7 @@
     <h2 class="govuk-heading-m">Not paid reasons</h2>
 
     <div class="govuk-grid-row">
-      {% for unpaidReasons in dashboardStats.unpaidReasons | sort(attribute = "name") %}
+      {% for unpaidReasons in dashboardStats.unpaidReasons %}
         <div class="govuk-grid-column-one-quarter govuk-!-padding-bottom-3">
           <p class="govuk-body">{{unpaidReasons.name}}</p>
           <span class="govuk-body govuk-!-font-size-36 govuk-!-font-weight-bold" data-qa="{{ unpaidReasons.id}}">
