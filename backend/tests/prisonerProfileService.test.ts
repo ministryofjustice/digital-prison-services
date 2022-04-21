@@ -1031,6 +1031,7 @@ describe('prisoner profile service', () => {
       establishmentName: 'HMP Moorland',
       neurodivergenceSupport: [],
     }
+    const neurodivergenceNotFound = { response: { status: 404 } }
     const neurodivergenceDataNoSupportIdentified = {
       prn: offenderNo,
       establishmentId: 'MDI',
@@ -1097,7 +1098,7 @@ describe('prisoner profile service', () => {
       curiousApi.getLearnerNeurodivergence.mockResolvedValue([neurodivergenceDataNoSupport])
     })
 
-    it('should return false when user has no neurodiversity support needs', async () => {
+    it('should return false when user has no neurodiversity data', async () => {
       await service.getPrisonerProfileData(context, offenderNo)
       // eslint-disable-next-line @typescript-eslint/ban-ts-comment
       // @ts-ignore
@@ -1117,11 +1118,26 @@ describe('prisoner profile service', () => {
       // @ts-ignore
       const neurodivergence = await curiousApi.getLearnerNeurodivergence(context, offenderNo)
       const hasDivergenceSupport = neurodivergence.some((element) => {
-        return !(element.neurodivergenceSupport === NeurodivergenceType.NoidentifiedNeurodiversityNeed)
+        // eslint-disable-next-line eqeqeq
+        return !(element.neurodivergenceSupport == NeurodivergenceType.NoidentifiedNeurodiversityNeed)
       })
       // @ts-expect-error ts-migrate(2339) FIXME: Property 'currentUser' does not exist on type '{}'... Remove this comment to see the full error message
       expect(oauthApi.currentUser).toHaveBeenCalledWith(context)
-      expect(hasDivergenceSupport).not.toEqual(false)
+      expect(hasDivergenceSupport).toEqual(false)
+    })
+    it('should handle the not found error', async () => {
+      // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+      // @ts-ignore
+      curiousApi.getLearnerNeurodivergence.mockResolvedValue([neurodivergenceNotFound])
+      // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+      // @ts-ignore
+      const errorResponse = await curiousApi.getLearnerNeurodivergence(context, offenderNo)
+      expect(errorResponse.neurodivergenceSupport).toEqual(undefined)
+      expect(errorResponse).toEqual([
+        {
+          response: { status: 404 },
+        },
+      ])
     })
   })
 })

@@ -8,11 +8,9 @@ import config from '../config'
 import logErrorAndContinue from '../shared/logErrorAndContinue'
 import canAccessProbationDocuments from '../shared/probationDocumentsAccess'
 
-const map404ToEmptyArray = (error) => {
-  if (!error.response) throw error
-  if (!error.response.status) throw error
-  if (error.response.status !== 404) throw error
-  return []
+const enum NeurodivergenceType {
+  NoidentifiedNeurodiversityNeed = 'No identified Neurodiversity Need',
+  NoidentifiedSupportRequired = 'No identified Support Required',
 }
 export const isComplexityEnabledFor = (agencyId) => config.apis.complexity.enabled_prisons?.includes(agencyId)
 
@@ -51,11 +49,6 @@ export default ({
 
     const systemContext = await systemOauthClient.getClientCredentialsTokens(username)
 
-    const getNeurodivergenceData = await curiousApi
-      .getLearnerNeurodivergence(systemContext, offenderNo)
-      .catch(map404ToEmptyArray)
-    const hasDivergenceSupport = Boolean(getNeurodivergenceData[0]?.neurodivergenceSupport?.length > 0)
-
     const {
       activeAlertCount,
       agencyId,
@@ -89,6 +82,7 @@ export default ({
       pathfinderDetails,
       socDetails,
       allocationManager,
+      neurodivergenceData,
     ] = await Promise.all(
       [
         incentivesApi.getIepSummaryForBookingIds(context, [bookingId]),
@@ -100,9 +94,30 @@ export default ({
         pathfinderApi.getPathfinderDetails(systemContext, offenderNo),
         socApi.getSocDetails(systemContext, offenderNo, socEnabled),
         allocationManagerApi.getPomByOffenderNo(context, offenderNo),
+        curiousApi.getLearnerNeurodivergence(systemContext, offenderNo),
       ].map((apiCall) => logErrorAndContinue(apiCall))
     )
 
+    let hasDivergenceSupport = false
+    const hasSupportNeed = !(
+      neurodivergenceData === null ||
+      (neurodivergenceData[0]?.neurodivergenceSupport === undefined &&
+        neurodivergenceData[0]?.neurodivergenceSupport.length === undefined)
+    )
+    if (hasSupportNeed) {
+      // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+      // @ts-ignore
+      const hasIdentifiedDivergenceSupportNeed = neurodivergenceData.some((element) => {
+        return element.neurodivergenceSupport === NeurodivergenceType.NoidentifiedNeurodiversityNeed
+      })
+      // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+      // @ts-ignore
+      // eslint-disable-next-line @typescript-eslint/no-shadow
+      const hasRequiredSupport = neurodivergenceData.some((ele) => {
+        return ele.neurodivergenceSupport === NeurodivergenceType.NoidentifiedSupportRequired
+      })
+      hasDivergenceSupport = !(hasIdentifiedDivergenceSupportNeed || hasRequiredSupport)
+    }
     const prisonersActiveAlertCodes = alerts.filter((alert) => !alert.expired).map((alert) => alert.alertCode)
     const alertsToShow = alertFlagLabels.filter((alertFlag) =>
       alertFlag.alertCodes.some(
