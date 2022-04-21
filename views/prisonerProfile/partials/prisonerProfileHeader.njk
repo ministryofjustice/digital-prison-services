@@ -16,7 +16,8 @@
     <span>Has neurodiversity needs</span>
     <br>
     <a data-test="view-neurodivergence-link" class="govuk-link"
-       href="javascript:expandLink('{{ '/prisoner/' + prisonerProfileData.offenderNo + '/personal' }}')">
+{#       href="javascript:expandLink('{{ '/prisoner/' + prisonerProfileData.offenderNo + '/personal' }}')">#}
+       href="{{ '/prisoner/' + prisonerProfileData.offenderNo + '/personal' }}">
         Check how you can help
     </a>
 {% endset %}
@@ -188,20 +189,5 @@
 </div>
 
 {% block pageScripts %}
-    <script>
-      function expandLink(href) {
-        window.location.href = href
-
-        const $neuroAccordion = document.querySelector('#prisoner-accordion-heading-5')
-        $neuroAccordion.click( () => {
-          const expanded = $(this).attr('aria-expanded')
-          const heading = this.innerText
-          const action = expanded === 'false' ? 'accordion_expanded' : 'accordion_contracted'
-          gtag('event', action, {
-            event_category: 'Education',
-            event_label: heading,
-          })
-        })
-      }
-    </script>
+    <script src="/static/js/education-actions.js"></script>
 {% endblock %}

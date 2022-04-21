@@ -290,6 +290,7 @@ describe('prisoner profile service', () => {
         profileInformation: undefined,
         esweEnabled: false,
         hasDivergenceSupport: false,
+        neurodivergenceData: [],
       })
 
       expect(getPrisonerProfileData).toEqual(
@@ -1006,19 +1007,17 @@ describe('prisoner profile service', () => {
     })
 
     it('should return true when a user has neurodiversity support needs', async () => {
-      await service.getPrisonerProfileData(context, offenderNo)
-      // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-      // @ts-ignore
-      const neurodivergence = await curiousApi.getLearnerNeurodivergence(context, offenderNo)
-      const hasDivergenceSupport = Boolean(neurodivergence[0]?.neurodivergenceSupport?.length > 0)
+      const response = await service.getPrisonerProfileData(context, offenderNo)
+
+      const hasDivergenceSupport = Boolean(response.neurodivergenceData[0]?.neurodivergenceSupport?.length > 0)
 
       // @ts-expect-error ts-migrate(2339) FIXME: Property 'currentUser' does not exist on type '{}'... Remove this comment to see the full error message
       expect(oauthApi.currentUser).toHaveBeenCalledWith(context)
       // eslint-disable-next-line @typescript-eslint/ban-ts-comment
       // @ts-ignore
-      expect(curiousApi.getLearnerNeurodivergence).toHaveBeenCalledTimes(2)
+      expect(curiousApi.getLearnerNeurodivergence).toHaveBeenCalledTimes(1)
       expect(hasDivergenceSupport).toEqual(true)
-      expect(neurodivergence[0]).toEqual(neurodivergenceData)
+      expect(response.neurodivergenceData[0]).toEqual(neurodivergenceData)
     })
   })
   describe('prisoner with no neurodiversity support', () => {
@@ -1099,11 +1098,8 @@ describe('prisoner profile service', () => {
     })
 
     it('should return false when user has no neurodiversity data', async () => {
-      await service.getPrisonerProfileData(context, offenderNo)
-      // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-      // @ts-ignore
-      const neurodivergence = await curiousApi.getLearnerNeurodivergence(context, offenderNo)
-      const hasDivergenceSupport = Boolean(neurodivergence[0]?.neurodivergenceSupport?.length > 0)
+      const response = await service.getPrisonerProfileData(context, offenderNo)
+      const hasDivergenceSupport = Boolean(response.neurodivergenceData[0]?.neurodivergenceSupport?.length > 0)
 
       // @ts-expect-error ts-migrate(2339) FIXME: Property 'currentUser' does not exist on type '{}'... Remove this comment to see the full error message
       expect(oauthApi.currentUser).toHaveBeenCalledWith(context)
@@ -1113,27 +1109,23 @@ describe('prisoner profile service', () => {
       // eslint-disable-next-line @typescript-eslint/ban-ts-comment
       // @ts-ignore
       curiousApi.getLearnerNeurodivergence.mockResolvedValue([neurodivergenceDataNoSupportIdentified])
-      await service.getPrisonerProfileData(context, offenderNo)
-      // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-      // @ts-ignore
-      const neurodivergence = await curiousApi.getLearnerNeurodivergence(context, offenderNo)
-      const hasDivergenceSupport = neurodivergence.some((element) => {
-        // eslint-disable-next-line eqeqeq
-        return !(element.neurodivergenceSupport == NeurodivergenceType.NoidentifiedNeurodiversityNeed)
-      })
+      const response = await service.getPrisonerProfileData(context, offenderNo)
+      const hasIdentifiedDivergenceSupportNeed = response.neurodivergenceData[0].neurodivergenceSupport.some(
+        (element) => {
+          return element.neurodivergenceSupport === NeurodivergenceType.NoidentifiedNeurodiversityNeed
+        }
+      )
       // @ts-expect-error ts-migrate(2339) FIXME: Property 'currentUser' does not exist on type '{}'... Remove this comment to see the full error message
       expect(oauthApi.currentUser).toHaveBeenCalledWith(context)
-      expect(hasDivergenceSupport).toEqual(false)
+      expect(hasIdentifiedDivergenceSupportNeed).toEqual(false)
     })
     it('should handle the not found error', async () => {
       // eslint-disable-next-line @typescript-eslint/ban-ts-comment
       // @ts-ignore
       curiousApi.getLearnerNeurodivergence.mockResolvedValue([neurodivergenceNotFound])
-      // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-      // @ts-ignore
-      const errorResponse = await curiousApi.getLearnerNeurodivergence(context, offenderNo)
-      expect(errorResponse.neurodivergenceSupport).toEqual(undefined)
-      expect(errorResponse).toEqual([
+
+      const errorResponse = await service.getPrisonerProfileData(context, offenderNo)
+      expect(errorResponse.neurodivergenceData).toEqual([
         {
           response: { status: 404 },
         },

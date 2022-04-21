@@ -98,26 +98,27 @@ export default ({
       ].map((apiCall) => logErrorAndContinue(apiCall))
     )
 
-    let hasDivergenceSupport = false
-    const hasSupportNeed = !(
-      neurodivergenceData === null ||
-      (neurodivergenceData[0]?.neurodivergenceSupport === undefined &&
-        neurodivergenceData[0]?.neurodivergenceSupport.length === undefined)
-    )
-    if (hasSupportNeed) {
-      // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-      // @ts-ignore
-      const hasIdentifiedDivergenceSupportNeed = neurodivergenceData.some((element) => {
-        return element.neurodivergenceSupport === NeurodivergenceType.NoidentifiedNeurodiversityNeed
-      })
-      // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-      // @ts-ignore
-      // eslint-disable-next-line @typescript-eslint/no-shadow
-      const hasRequiredSupport = neurodivergenceData.some((ele) => {
-        return ele.neurodivergenceSupport === NeurodivergenceType.NoidentifiedSupportRequired
-      })
-      hasDivergenceSupport = !(hasIdentifiedDivergenceSupportNeed || hasRequiredSupport)
+    const NeedNeurodivergenceSupport = (divergenceData) => {
+      const hasSupportNeed = !(
+        divergenceData === null ||
+        (divergenceData[0]?.neurodivergenceSupport === undefined &&
+          divergenceData[0]?.neurodivergenceSupport?.length === undefined)
+      )
+      if (hasSupportNeed) {
+        const hasIdentifiedDivergenceSupportNeed = divergenceData.some((element) => {
+          return element.neurodivergenceSupport.includes(NeurodivergenceType.NoidentifiedNeurodiversityNeed)
+        })
+
+        const hasRequiredSupport = divergenceData.some((ele) => {
+          return ele.neurodivergenceSupport.includes(NeurodivergenceType.NoidentifiedSupportRequired)
+        })
+        return !(hasIdentifiedDivergenceSupportNeed || hasRequiredSupport)
+      }
+      return false
     }
+
+    const hasDivergenceSupport = NeedNeurodivergenceSupport(neurodivergenceData)
+
     const prisonersActiveAlertCodes = alerts.filter((alert) => !alert.expired).map((alert) => alert.alertCode)
     const alertsToShow = alertFlagLabels.filter((alertFlag) =>
       alertFlag.alertCodes.some(
@@ -244,6 +245,7 @@ export default ({
       pomStaff,
       esweEnabled,
       hasDivergenceSupport,
+      neurodivergenceData,
     }
   }
 
