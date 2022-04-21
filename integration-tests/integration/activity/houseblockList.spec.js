@@ -163,7 +163,7 @@ context('Houseblock list page list page', () => {
     cy.task('stubAlerts', { locationId: 'MDI', alerts: [] })
     cy.task('stubAssessments', ['A1234AA', 'A1234AB', 'A1234AC'])
 
-    cy.task('stubGetAbsenceReasonsV2')
+    cy.task('stubGetAbsenceReasons')
   })
 
   it('Displays the houseblock list', () => {
@@ -213,7 +213,7 @@ context('Houseblock list page list page', () => {
         expect($cells.get(2)).to.contain('Received')
       })
 
-    cy.task('stubGetAbsenceReasonsV2')
+    cy.task('stubGetAbsenceReasons')
 
     cy.get('td[data-qa="other-option"]').then(($inputs) => {
       expect($inputs.get(0).innerText).to.eq('Other')
