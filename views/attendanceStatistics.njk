@@ -161,10 +161,17 @@
     <hr class="govuk-section-break govuk-section-break--m govuk-section-break--visible">
     <h2 class="govuk-heading-m">Not paid reasons</h2>
 
+  {% for unpaidReasonChuncks in dashboardStats.unpaidReasons %}
     <div class="govuk-grid-row">
-      {% for unpaidReasons in dashboardStats.unpaidReasons %}
-        <div class="govuk-grid-column-one-quarter govuk-!-padding-bottom-3">
+      {% for unpaidReasons in unpaidReasonChuncks %}
+        <div class="govuk-grid-column-one-quarter">
           <p class="govuk-body">{{unpaidReasons.name}}</p>
+        </div>
+      {% endfor %}
+    </div>
+    <div class="govuk-grid-row">
+      {% for unpaidReasons in unpaidReasonChuncks %}
+        <div class="govuk-grid-column-one-quarter govuk-!-padding-bottom-3">
           <span class="govuk-body govuk-!-font-size-36 govuk-!-font-weight-bold" data-qa="{{ unpaidReasons.id}}">
             {% if unpaidReasons.value > 0 %}
               <a href="/manage-prisoner-whereabouts/attendance-reason-statistics/reason/{{unpaidReasons.id}}?agencyId={{caseLoadId}}&fromDate={{clickThrough.fromDate}}&toDate={{clickThrough.toDate}}&period={{clickThrough.period}}" class="govuk-link--no-visited-state">
@@ -177,5 +184,6 @@
         </div>
       {% endfor %}
     </div>
+  {% endfor %}
 
 {% endblock %}

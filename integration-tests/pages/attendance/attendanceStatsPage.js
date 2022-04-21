@@ -21,6 +21,7 @@ const attendanceStatsPage = () =>
     restInCellOrSick: () => cy.get('[data-qa="RestInCellOrSick"]'),
 
     sessionCancelled: () => cy.get('[data-qa="SessionCancelled"]'),
+    unacceptableAbsence: () => cy.get('[data-qa="UnacceptableAbsence"]'),
     unacceptableAbsenceWithWarning: () => cy.get('[data-qa="UnacceptableAbsenceIncentiveLevelWarning"]'),
   })
 

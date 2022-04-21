@@ -12,6 +12,15 @@ import {
 
 const attendanceReasonStatsUrl = '/manage-prisoner-whereabouts/attendance-reason-statistics'
 
+const sliceIntoChunks = (arr, chunkSize) => {
+  const res = []
+  for (let i = 0; i < arr.length; i += chunkSize) {
+    const chunk = arr.slice(i, i + chunkSize)
+    res.push(chunk)
+  }
+  return res
+}
+
 const buildStatsViewModel = (dashboardStats, changes) => {
   const mapReasons = (reasons) =>
     Object.keys(reasons || [])
@@ -27,7 +36,7 @@ const buildStatsViewModel = (dashboardStats, changes) => {
     ...dashboardStats,
     attended: dashboardStats?.attended,
     paidReasons: mapReasons(dashboardStats?.paidReasons),
-    unpaidReasons: mapReasons(dashboardStats?.unpaidReasons),
+    unpaidReasons: sliceIntoChunks(mapReasons(dashboardStats?.unpaidReasons), 4),
     changes,
   }
 }

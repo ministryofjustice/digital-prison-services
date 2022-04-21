@@ -60,7 +60,8 @@ context('A user can view attendance changes', () => {
           refused: 8,
           refusedIncentiveLevelWarning: 9,
           sessionCancelled: 12,
-          unacceptableAbsenceIncentiveLevelWarning: 13,
+          unacceptableAbsence: 13,
+          unacceptableAbsenceIncentiveLevelWarning: 14,
           refusedDescription: 'Refused to attend',
           refusedIncentiveLevelWarningDescription: 'Refused to attend with warning',
           sessionCancelledDescription: 'Session cancelled',
@@ -90,7 +91,8 @@ context('A user can view attendance changes', () => {
     attendanceStatsPage.restDay().contains('10')
     attendanceStatsPage.restInCellOrSick().contains('11')
     attendanceStatsPage.sessionCancelled().contains('12')
-    attendanceStatsPage.unacceptableAbsenceWithWarning().contains('13')
+    attendanceStatsPage.unacceptableAbsence().contains('13')
+    attendanceStatsPage.unacceptableAbsenceWithWarning().contains('14')
   })
 
   it('Navigates to the changes screen correctly', () => {
@@ -136,6 +138,7 @@ context('A user can view attendance changes', () => {
           refused: 0,
           refusedIncentiveLevelWarning: 0,
           sessionCancelled: 0,
+          unacceptableAbsence: 0,
           unacceptableAbsenceIncentiveLevelWarning: 0,
           refusedDescription: 'Refused to attend',
           refusedIncentiveLevelWarningDescription: 'Refused to attend with warning',
