@@ -37,7 +37,7 @@ context('Activity list page', () => {
     offenders.forEach((offender) => {
       cy.task('stubOffenderBasicDetails', offender)
     })
-    cy.task('stubGetAbsenceReasonsV2')
+    cy.task('stubGetAbsenceReasons')
   })
 
   it.skip('Displays the activity list', () => {

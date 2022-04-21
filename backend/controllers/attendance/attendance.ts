@@ -51,7 +51,7 @@ export const attendanceFactory = (whereaboutsApi) => {
   }
 
   const getAbsenceReasons = async (context) => {
-    const absenceReasons = await whereaboutsApi.getAbsenceReasonsV2(context)
+    const absenceReasons = await whereaboutsApi.getAbsenceReasons(context)
     const {
       paidReasons,
       unpaidReasons,
