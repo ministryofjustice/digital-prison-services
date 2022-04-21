@@ -136,6 +136,7 @@ export const confirmAppointmentFactory = ({ prisonApi, appointmentsService, logE
             court: {
               courtLocation: details.court,
             },
+            homeUrl: '/',
           })
         } else {
           res.render('videolinkBookingConfirmHearingCourt.njk', {
