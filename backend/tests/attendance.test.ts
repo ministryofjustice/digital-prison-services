@@ -8,7 +8,6 @@ describe('Attendence and Pay controller', () => {
     postAttendance: jest.fn(),
     putAttendance: jest.fn(),
     getAbsenceReasons: jest.fn(),
-    getAbsenceReasonsV2: jest.fn(),
     postAttendances: jest.fn(),
   }
   const { updateAttendance, getAbsenceReasons, batchUpdateAttendance } =
@@ -67,7 +66,7 @@ describe('Attendence and Pay controller', () => {
 
   describe('getAbsenceReasons', () => {
     beforeEach(() => {
-      whereaboutsApi.getAbsenceReasonsV2.mockReturnValue({
+      whereaboutsApi.getAbsenceReasons.mockReturnValue({
         paidReasons: [
           { code: 'ApprovedCourse', name: 'Approved course' },
           { code: 'AcceptableAbsence', name: 'Acceptable absence' },
