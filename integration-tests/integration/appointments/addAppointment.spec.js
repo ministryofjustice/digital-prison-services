@@ -179,6 +179,8 @@ context('A user can add an appointment', () => {
 
     const confirmVideoLinkPrisonPage = ConfirmVideoLinkPrisonPage.verifyOnPage()
     confirmVideoLinkPrisonPage.courtLocation().contains('Leeds')
+    confirmVideoLinkPrisonPage.searchForAnotherPrisoner().exists()
+    confirmVideoLinkPrisonPage.backToPrisonerProfile().exists('A12345')
 
     cy.task('getBookingRequest').then((request) => {
       expect(request).to.deep.equal({
