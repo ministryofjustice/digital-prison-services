@@ -35,7 +35,7 @@ export const whereaboutsApiFactory = (client) => {
 
   const putAttendance = (context, body, id) => put(context, `/attendance/${id}`, body)
 
-  const getAbsenceReasonsV2 = (context) => get(context, '/absence-reasons/v2')
+  const getAbsenceReasons = (context) => get(context, '/absence-reasons')
 
   const getPrisonAttendance = (context, { agencyId, date, period }) =>
     get(context, `/attendances/${agencyId}/attendance-for-scheduled-activities?date=${date}&period=${period}`)
@@ -127,7 +127,7 @@ export const whereaboutsApiFactory = (client) => {
     getAttendanceForBookingsOverDateRange,
     postAttendance,
     putAttendance,
-    getAbsenceReasonsV2,
+    getAbsenceReasons,
     getPrisonAttendance,
     postAttendances,
     getAttendanceStats,

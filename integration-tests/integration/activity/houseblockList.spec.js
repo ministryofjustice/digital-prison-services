@@ -163,7 +163,7 @@ context('Houseblock list page list page', () => {
     cy.task('stubAlerts', { locationId: 'MDI', alerts: [] })
     cy.task('stubAssessments', ['A1234AA', 'A1234AB', 'A1234AC'])
 
-    cy.task('stubGetAbsenceReasonsV2')
+    cy.task('stubGetAbsenceReasons')
   })
 
   it('Displays the houseblock list', () => {
@@ -213,7 +213,7 @@ context('Houseblock list page list page', () => {
         expect($cells.get(2)).to.contain('Received')
       })
 
-    cy.task('stubGetAbsenceReasonsV2')
+    cy.task('stubGetAbsenceReasons')
 
     cy.get('td[data-qa="other-option"]').then(($inputs) => {
       expect($inputs.get(0).innerText).to.eq('Other')
@@ -222,7 +222,7 @@ context('Houseblock list page list page', () => {
 
     cy.get('[data-qa="other-message"').contains('Unacceptable absence - incentive level warning added')
     cy.get('[data-qa="other-message"').parent().click({ multiple: true })
-    cy.get('[name="absentReason"]:checked').next().should('have.text', 'Unacceptable absence')
+    cy.get('[name="absentReason"]').find(':selected').should('have.text', 'Unacceptable absence')
     cy.get('[name="absentSubReason"]').find(':selected').contains('Courses, programmes and interventions')
     cy.get('[name="iep"]:checked').next().should('have.text', 'Yes')
     cy.get('[name="comments"]').contains('Never turned up')
