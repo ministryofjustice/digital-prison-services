@@ -76,7 +76,6 @@ describe('<AttendanceOtherForm />', () => {
   let iepYesRadio = () => ({})
   let iepNoRadio = () => ({})
   let reasonSelector = () => ({})
-  let reasonsRadio = () => ({})
   let subReasonSelector = () => ({})
   let commentInput = {}
 
@@ -84,8 +83,7 @@ describe('<AttendanceOtherForm />', () => {
     wrapper = wrappedComponent
     payYesRadio = wrappedComponent.find('input[name="pay"][value="yes"]')
     payNoRadio = wrappedComponent.find('input[name="pay"][value="no"]')
-    reasonsRadio = (reason) => wrappedComponent.find(`input[name="absentReason"][value="${reason}"]`)
-    reasonSelector = () => wrappedComponent.find('input[name="absentReason"]')
+    reasonSelector = () => wrappedComponent.find('select[name="absentReason"]')
     subReasonSelector = () => wrappedComponent.find('select[name="absentSubReason"]')
     commentInput = wrappedComponent.find('textarea[name="comments"]')
     iepYesRadio = () => wrappedComponent.find('input[name="iep"][value="yes"]')
@@ -115,8 +113,8 @@ describe('<AttendanceOtherForm />', () => {
   }
 
   const simulateReason = (reason) => {
-    reasonsRadio(reason).instance().checked = true
-    reasonsRadio(reason).simulate('change', reasonsRadio(reason))
+    reasonSelector().instance().value = reason
+    reasonSelector().simulate('change', reasonSelector())
     wrapper.update()
   }
 
@@ -147,13 +145,20 @@ describe('<AttendanceOtherForm />', () => {
     it('should display paid reasons when "pay" is selected', () => {
       simulatePay(false)
 
-      const reasons = reasonSelector().map((reason) => reason.props().value)
+      const skipDefaultEntry = 1
+      const reasons = reasonSelector()
+        .getElement()
+        .props.children[skipDefaultEntry].map((reason) => reason.props)
 
-      expect(reasons).toEqual(['UnacceptableAbsence', 'Refused', 'RestDay'])
+      expect(reasons).toEqual([
+        { value: 'UnacceptableAbsence', children: 'Unacceptable' },
+        { value: 'Refused', children: 'Refused' },
+        { value: 'RestDay', children: 'Rest day' },
+      ])
     })
 
     it('should not display absent reasons by default', () => {
-      expect(reasonSelector().length).toEqual(0)
+      expect(reasonSelector().getElements().length).toEqual(0)
     })
 
     it('should not display any absent sub reasons by default', () => {
@@ -164,9 +169,14 @@ describe('<AttendanceOtherForm />', () => {
       simulatePay(true)
 
       const skipDefaultEntry = 1
-      const reasons = reasonSelector().map((reason) => reason.props().value)
+      const reasons = reasonSelector()
+        .getElement()
+        .props.children[skipDefaultEntry].map((reason) => reason.props)
 
-      expect(reasons).toEqual(['AcceptableAbsence', 'ApprovedCourse'])
+      expect(reasons).toEqual([
+        { value: 'AcceptableAbsence', children: 'Acceptable' },
+        { value: 'ApprovedCourse', children: 'Approved course' },
+      ])
     })
 
     it('should display paid sub reasons when reason is selected', () => {
@@ -255,9 +265,7 @@ describe('<AttendanceOtherForm />', () => {
 
       // changing reason should then clear the sub reason
       simulatePay(false)
-      reasonSelector().forEach((n) => {
-        expect(n.props().checked).toEqual(false)
-      })
+      expect(reasonSelector().getElements().length).toEqual(1)
       simulateReason('RestDay')
       expect(subReasonSelector().getElements().length).toEqual(0)
       simulateReason('Refused')
@@ -516,7 +524,7 @@ describe('<AttendanceOtherForm />', () => {
       buildWrapper(mount(<AttendanceOtherForm {...props} />))
       expect(payYesRadio.props().checked).toBe(true)
       expect(payNoRadio.props().checked).toBe(false)
-      expect(reasonsRadio('AcceptableAbsence').props().checked).toEqual(true)
+      expect(reasonSelector().props().value).toBe('AcceptableAbsence')
       expect(subReasonSelector().props().value).toBe('Courses')
       expect(commentInput.props().value).toBe('Acceptable reason comment')
     })
@@ -535,7 +543,7 @@ describe('<AttendanceOtherForm />', () => {
       buildWrapper(mount(<AttendanceOtherForm {...props} />))
       expect(payYesRadio.props().checked).toBe(false)
       expect(payNoRadio.props().checked).toBe(true)
-      expect(reasonsRadio('UnacceptableAbsence').props().checked).toEqual(true)
+      expect(reasonSelector().props().value).toBe('UnacceptableAbsence')
       expect(subReasonSelector().props().value).toBe('Courses')
       expect(iepYesRadio().props().checked).toBe(true)
       expect(iepNoRadio().props().checked).toBe(false)
