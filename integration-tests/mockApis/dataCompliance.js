@@ -76,20 +76,4 @@ module.exports = {
         jsonBody: {},
       },
     }),
-
-  stubLearnerNeurodiversity: (offenderNo, learnerNeurodiversity) =>
-    stubFor({
-      request: {
-        method: 'GET',
-        url: `/sequation-virtual-campus2-api/learnerNeurodivergence/${offenderNo}`,
-      },
-      response: {
-        status: 200,
-        headers: {
-          'Content-Type': 'application/json;charset=UTF-8',
-          ETag: '0',
-        },
-        jsonBody: learnerNeurodiversity || [],
-      },
-    }),
 }
