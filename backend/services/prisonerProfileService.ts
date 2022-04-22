@@ -99,11 +99,10 @@ export default ({
     )
 
     const NeedNeurodivergenceSupport = (divergenceData) => {
-      const hasSupportNeed = !(
-        divergenceData === null ||
-        (divergenceData[0]?.neurodivergenceSupport === undefined &&
-          divergenceData[0]?.neurodivergenceSupport?.length === undefined)
-      )
+      const hasSupportNeed =
+        divergenceData &&
+        divergenceData[0]?.neurodivergenceSupport &&
+        divergenceData[0]?.neurodivergenceSupport?.length > 0
       if (hasSupportNeed) {
         const hasIdentifiedDivergenceSupportNeed = divergenceData.some((element) => {
           return element.neurodivergenceSupport.includes(NeurodivergenceType.NoidentifiedNeurodiversityNeed)
@@ -245,7 +244,6 @@ export default ({
       pomStaff,
       esweEnabled,
       hasDivergenceSupport,
-      neurodivergenceData,
     }
   }
 
