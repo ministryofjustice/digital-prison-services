@@ -9,8 +9,7 @@ import { toAppointmentDetailsSummary, isVideoLinkBooking } from '../../services/
 export const confirmAppointmentFactory = ({ prisonApi, appointmentsService, logError }) => {
   const index = async (req, res) => {
     const { offenderNo } = req.params
-    const { activeCaseLoadId, authSource } = req.session.userDetails
-    const prisonUser = authSource === 'nomis'
+    const { activeCaseLoadId } = req.session.userDetails
 
     try {
       const { appointmentTypes, locationTypes } = await appointmentsService.getAppointmentOptions(
@@ -20,7 +19,7 @@ export const confirmAppointmentFactory = ({ prisonApi, appointmentsService, logE
 
       const appointmentDetails = req.flash('appointmentDetails')
       if (!appointmentDetails?.length) {
-        res.redirect(prisonUser ? `/prisoner/${offenderNo}` : '/videolink/prisoner-search')
+        res.redirect(`/prisoner/${offenderNo}`)
         return
       }
 
@@ -117,48 +116,26 @@ export const confirmAppointmentFactory = ({ prisonApi, appointmentsService, logE
       }
 
       if (isVideoLinkBooking(appointmentType)) {
-        if (prisonUser) {
-          res.render('videolinkBookingConfirmHearingPrison.njk', {
-            title: 'The video link has been booked',
-            prisonerProfileLink: `/prisoner/${offenderNo}`,
-            offender: {
-              name: `${properCaseName(lastName)}, ${properCaseName(firstName)}`,
-              prison: agencyDescription,
-              prisonRoom: details.location,
-            },
-            details: {
-              date: details.date,
-              courtHearingStartTime: details.startTime,
-              courtHearingEndTime: details.endTime,
-              comments: details.comment,
-            },
-            prepostData,
-            court: {
-              courtLocation: details.court,
-            },
-          })
-        } else {
-          res.render('videolinkBookingConfirmHearingCourt.njk', {
-            title: 'The video link has been booked',
-            videolinkPrisonerSearchLink: '/videolink/prisoner-search',
-            offender: {
-              name: details.prisonerName,
-              prison: agencyDescription,
-              prisonRoom: details.location,
-            },
-            details: {
-              date: details.date,
-              courtHearingStartTime: details.startTime,
-              courtHearingEndTime: details.endTime,
-              comments: details.comment,
-            },
-            prepostData,
-            court: {
-              courtLocation: details.court,
-            },
-            homeUrl: '/videolink',
-          })
-        }
+        res.render('videolinkBookingConfirmHearingPrison.njk', {
+          title: 'The video link has been booked',
+          prisonerProfileLink: `/prisoner/${offenderNo}`,
+          offender: {
+            name: `${properCaseName(lastName)}, ${properCaseName(firstName)}`,
+            prison: agencyDescription,
+            prisonRoom: details.location,
+          },
+          details: {
+            date: details.date,
+            courtHearingStartTime: details.startTime,
+            courtHearingEndTime: details.endTime,
+            comments: details.comment,
+          },
+          prepostData,
+          court: {
+            courtLocation: details.court,
+          },
+          homeUrl: '/',
+        })
 
         raiseAnalyticsEvent(
           'VLB Appointments',
@@ -192,17 +169,12 @@ export const confirmAppointmentFactory = ({ prisonApi, appointmentsService, logE
       logError(req.originalUrl, error, serviceUnavailableMessage)
 
       const pageData = {
-        url: prisonUser ? `/prisoner/${offenderNo}` : '/videolink/prisoner-search',
-        homeUrl: prisonUser ? '/' : '/videolink',
+        url: `/prisoner/${offenderNo}`,
+        homeUrl: '/',
       }
 
       res.status(500)
-
-      if (prisonUser) {
-        res.render('error.njk', pageData)
-      } else {
-        res.render('courtServiceError.njk', pageData)
-      }
+      res.render('error.njk', pageData)
     }
   }
   return { index }

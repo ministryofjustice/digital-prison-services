@@ -152,64 +152,6 @@ describe('Confirm appointments', () => {
     )
   })
 
-  it('should load court confirmation page when user is not prison staff', async () => {
-    const { index } = confirmAppointments.confirmAppointmentFactory({
-      prisonApi,
-      appointmentsService,
-      logError: () => {},
-    })
-
-    // @ts-expect-error ts-migrate(2339) FIXME: Property 'session' does not exist on type '{}'.
-    req.session = { userDetails: { authSource: '' } }
-
-    // @ts-expect-error ts-migrate(2339) FIXME: Property 'flash' does not exist on type '{}'.
-    req.flash.mockImplementation(() => [
-      {
-        ...appointmentDetails,
-        preAppointment: {
-          endTime: '2017-10-10T11:00:00',
-          locationId: 2,
-          startTime: '2017-10-10T10:45:00',
-          duration: 30,
-        },
-        appointmentType: 'VLB',
-      },
-    ])
-
-    await index(req, res)
-
-    expect(raiseAnalyticsEvent).toHaveBeenCalledWith(
-      'VLB Appointments',
-      'Video link booked for London',
-      'Pre: Yes | Post: No'
-    )
-
-    // @ts-expect-error ts-migrate(2339) FIXME: Property 'render' does not exist on type '{}'.
-    expect(res.render).toHaveBeenCalledWith(
-      'videolinkBookingConfirmHearingCourt.njk',
-      expect.objectContaining({
-        videolinkPrisonerSearchLink: '/videolink/prisoner-search',
-        homeUrl: '/videolink',
-        title: 'The video link has been booked',
-        offender: {
-          name: 'John Doe',
-          prisonRoom: 'Room 3',
-          prison: undefined,
-        },
-        details: {
-          date: '10 October 2017',
-          courtHearingStartTime: '11:00',
-          courtHearingEndTime: '14:00',
-          comments: 'Test',
-        },
-        prepostData: {
-          'pre-court hearing briefing': 'Room 1 - 10:45 to 11:00',
-        },
-        court: { courtLocation: 'London' },
-      })
-    )
-  })
-
   it('should display recurring information', async () => {
     const { index } = confirmAppointments.confirmAppointmentFactory({
       prisonApi,
@@ -374,52 +316,6 @@ describe('Confirm appointments', () => {
     expect(res.render).toHaveBeenCalledWith('error.njk', {
       url: '/prisoner/A12345',
       homeUrl: '/',
-    })
-  })
-
-  it('should redirect to video link search page for a court user when appointment details are missing from flash', async () => {
-    const logError = jest.fn()
-    const { index } = confirmAppointments.confirmAppointmentFactory({
-      prisonApi,
-      appointmentsService,
-      logError,
-    })
-    // @ts-expect-error ts-migrate(2339) FIXME: Property 'flash' does not exist on type '{}'.
-    req.flash.mockImplementation(() => [])
-    // @ts-expect-error ts-migrate(2339) FIXME: Property 'session' does not exist on type '{}'.
-    req.session.userDetails.authSource = 'auth'
-
-    await index(req, res)
-
-    // @ts-expect-error ts-migrate(2339) FIXME: Property 'redirect' does not exist on type '{}'.
-    expect(res.redirect).toHaveBeenCalledWith('/videolink/prisoner-search')
-  })
-
-  it('should throw and log a court service error for a court user when an unexpected error occurs', async () => {
-    const logError = jest.fn()
-    // @ts-expect-error ts-migrate(2339) FIXME: Property 'getAppointmentOptions' does not exist on... Remove this comment to see the full error message
-    appointmentsService.getAppointmentOptions.mockRejectedValue(new Error('Unexpected error'))
-    const { index } = confirmAppointments.confirmAppointmentFactory({
-      prisonApi,
-      appointmentsService,
-      logError,
-    })
-    // @ts-expect-error ts-migrate(2339) FIXME: Property 'flash' does not exist on type '{}'.
-    req.flash.mockImplementation(() => [])
-    // @ts-expect-error ts-migrate(2339) FIXME: Property 'session' does not exist on type '{}'.
-    req.session.userDetails.authSource = 'auth'
-
-    await index(req, res)
-
-    expect(logError).toHaveBeenCalledWith(
-      'http://localhost',
-      new Error('Unexpected error'),
-      'Sorry, the service is unavailable'
-    )
-    // @ts-expect-error ts-migrate(2339) FIXME: Property 'render' does not exist on type '{}'.
-    expect(res.render).toHaveBeenCalledWith('courtServiceError.njk', {
-      url: '/videolink/prisoner-search',
-      homeUrl: '/videolink',
     })
   })
 })
