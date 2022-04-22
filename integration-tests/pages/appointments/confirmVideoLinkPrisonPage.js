@@ -13,11 +13,31 @@ const confirmVideoLinkPrisonPage = () =>
     legalBriefingBefore: () => cy.get('.qa-preCourtHearingBriefing-value'),
     legalBriefingAfter: () => cy.get('.qa-postCourtHearingBriefing-value'),
     courtLocation: () => cy.get('.qa-courtLocation-value'),
+    searchForAnotherPrisoner: () => ({
+      exists: () =>
+        cy
+          .get("[data-qa='search-for-another-prisoner']")
+          .should('contain', 'Search for another prisoner')
+          .should('have.attr', 'href')
+          .then((href) => {
+            expect(href).to.equal('/')
+          }),
+    }),
+    backToPrisonerProfile: () => ({
+      exists: (offenderNo) =>
+        cy
+          .get("[data-qa='back-to-profile']")
+          .should('contain', 'Back to prisoner profile')
+          .should('have.attr', 'href')
+          .then((href) => {
+            expect(href).to.equal(`/prisoner/${offenderNo}`)
+          }),
+    }),
   })
 
 export default {
   verifyOnPage: confirmVideoLinkPrisonPage,
-  goTo: offenderNo => {
+  goTo: (offenderNo) => {
     cy.visit(`/offenders/${offenderNo}/confirm-appointment`)
     return confirmVideoLinkPrisonPage()
   },

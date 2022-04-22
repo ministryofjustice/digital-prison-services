@@ -44,14 +44,24 @@
             Print movement slip
         </a>
     </p>
-        
-    {{ govukButton({
-        text: "Back to prisoner profile",
-        element: 'a',
-        href: prisonerProfileLink,
-        classes: "govuk-button--secondary",
-        attributes: {
-            'data-qa': 'back-to-profile'
-        }
-    }) }}
+    
+    <div class="govuk-button-group">
+        {{ govukButton({
+            text: "Search for another prisoner",
+            href: homeUrl,
+            attributes: {
+                'data-qa': 'search-for-another-prisoner'
+            }
+        }) }}
+
+        {{ govukButton({
+            text: "Back to prisoner profile",
+            element: 'a',
+            href: prisonerProfileLink,
+            classes: "govuk-button--secondary",
+            attributes: {
+                'data-qa': 'back-to-profile'
+            }
+        }) }}
+    </div>
 {% endblock %}
