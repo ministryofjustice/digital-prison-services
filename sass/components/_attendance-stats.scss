@@ -1,0 +1,5 @@
+.attendance-stats-label {
+  @include govuk-media-query($from: tablet) {
+    min-height: 50px;
+  }
+}
