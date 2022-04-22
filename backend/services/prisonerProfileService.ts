@@ -14,6 +14,22 @@ const enum NeurodivergenceType {
 }
 export const isComplexityEnabledFor = (agencyId) => config.apis.complexity.enabled_prisons?.includes(agencyId)
 
+const needNeurodivergenceSupport = (divergenceData) => {
+  const hasSupportNeed =
+    divergenceData && divergenceData[0]?.neurodivergenceSupport && divergenceData[0]?.neurodivergenceSupport?.length > 0
+  if (hasSupportNeed) {
+    const hasIdentifiedDivergenceSupportNeed = divergenceData.some((element) => {
+      return element.neurodivergenceSupport.includes(NeurodivergenceType.NoidentifiedNeurodiversityNeed)
+    })
+
+    const hasRequiredSupport = divergenceData.some((ele) => {
+      return ele.neurodivergenceSupport.includes(NeurodivergenceType.NoidentifiedSupportRequired)
+    })
+    return !(hasIdentifiedDivergenceSupportNeed || hasRequiredSupport)
+  }
+  return false
+}
+
 export default ({
   prisonApi,
   keyworkerApi,
@@ -98,25 +114,7 @@ export default ({
       ].map((apiCall) => logErrorAndContinue(apiCall))
     )
 
-    const NeedNeurodivergenceSupport = (divergenceData) => {
-      const hasSupportNeed =
-        divergenceData &&
-        divergenceData[0]?.neurodivergenceSupport &&
-        divergenceData[0]?.neurodivergenceSupport?.length > 0
-      if (hasSupportNeed) {
-        const hasIdentifiedDivergenceSupportNeed = divergenceData.some((element) => {
-          return element.neurodivergenceSupport.includes(NeurodivergenceType.NoidentifiedNeurodiversityNeed)
-        })
-
-        const hasRequiredSupport = divergenceData.some((ele) => {
-          return ele.neurodivergenceSupport.includes(NeurodivergenceType.NoidentifiedSupportRequired)
-        })
-        return !(hasIdentifiedDivergenceSupportNeed || hasRequiredSupport)
-      }
-      return false
-    }
-
-    const hasDivergenceSupport = NeedNeurodivergenceSupport(neurodivergenceData)
+    const hasDivergenceSupport = needNeurodivergenceSupport(neurodivergenceData)
 
     const prisonersActiveAlertCodes = alerts.filter((alert) => !alert.expired).map((alert) => alert.alertCode)
     const alertsToShow = alertFlagLabels.filter((alertFlag) =>
