@@ -12,6 +12,15 @@
     </li>
 {% endmacro %}
 
+{% set neurodivergenceHtml %}
+    <span>Has neurodiversity needs</span>
+    <br>
+    <a data-test="view-neurodivergence-link" class="govuk-link"
+       href="{{ '/prisoner/' + prisonerProfileData.offenderNo + '/personal' }}">
+        Check how you can help
+    </a>
+{% endset %}
+
 {% set alertNumbersHtml %}
 <span>{{ prisonerProfileData.activeAlertCount }} active, {{ prisonerProfileData.inactiveAlertCount }} inactive</span>
 <br>
@@ -100,6 +109,10 @@
             {{ headerItem('CSRA', csraHtml, classes="govuk-!-margin-bottom-4") }}
             {{ headerItem('Alerts', alertNumbersHtml) }}
 
+            {% if prisonerProfileData.hasDivergenceSupport %}
+                {{ headerItem('Support needed', neurodivergenceHtml) }}
+            {% endif %}
+
             {% if prisonerProfileData.isHighComplexity %}
                 {{ headerItem('Key worker', 'None - high complexity of need', '', 'govuk-!-margin-bottom-0', 'keyworker-name') }}
                 <li></li>
@@ -173,3 +186,7 @@
         </div>
     </div>
 </div>
+
+{% block pageScripts %}
+    <script src="/static/js/education-actions.js"></script>
+{% endblock %}

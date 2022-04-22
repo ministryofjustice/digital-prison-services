@@ -3,6 +3,22 @@ $(function () {
   const $openAll = $('.govuk-accordion__open-all')
   const $printLink = $('.print-link')
 
+  const $neurodivergenceAccordion = $('#prisoner-accordion-heading-5')
+  const $linkToNeurodiversityTab = $('#view-neurodivergence-link')
+
+  $linkToNeurodiversityTab.on('click', () => {
+    $neurodivergenceAccordion.trigger('click')
+  })
+
+  $neurodivergenceAccordion.on('click', () => {
+    const expanded = $(this).attr('aria-expanded')
+    const heading = this.innerText
+    const action = expanded === 'false' ? 'accordion_expanded' : 'accordion_contracted'
+    gtag('event', action, {
+      event_category: 'Education',
+      event_label: heading,
+    })
+  })
   $accordionButton.on('click', function () {
     const expanded = $(this).attr('aria-expanded')
     const heading = this.innerText

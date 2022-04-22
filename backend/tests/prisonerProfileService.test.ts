@@ -1,5 +1,6 @@
 import config from '../config'
 import prisonerProfileService from '../services/prisonerProfileService'
+import { makeNotFoundError } from './helpers'
 
 config.app.displayRetentionLink = true
 // @ts-expect-error ts-migrate(2741) FIXME: Property 'timeoutSeconds' is missing in type '{ ui... Remove this comment to see the full error message
@@ -18,6 +19,15 @@ config.apis.calculateReleaseDates = {
   ui_url: 'http://crd-ui/',
 }
 
+const enum NeurodivergenceType {
+  ADHD = 'ADHD',
+  Autism = 'Autism',
+  Reading = 'Reading Support',
+  MemorySupport = 'Memory Support',
+  AcquiredBrainInjury = 'Acquired Brain Injury',
+  NoidentifiedNeurodiversityNeed = 'No identified Neurodiversity Need',
+}
+
 describe('prisoner profile service', () => {
   const context = {}
   const prisonApi = {}
@@ -30,6 +40,7 @@ describe('prisoner profile service', () => {
   const socApi = {}
   const complexityApi = {}
   const incentivesApi = {}
+  const curiousApi = {}
 
   let service
   beforeEach(() => {
@@ -58,6 +69,8 @@ describe('prisoner profile service', () => {
     // @ts-expect-error ts-migrate(2339) FIXME: Property 'getSocDetails' does not exist on type '{... Remove this comment to see the full error message
     socApi.getSocDetails = jest.fn().mockRejectedValue(new Error('not found'))
 
+    // @ts-expect-error ts-migrate(2339) FIXME: Property 'getLearnerNeurodivergence' does not exist on t... Remove this comment to see the full error message
+    curiousApi.getLearnerNeurodivergence = jest.fn()
     // @ts-expect-error ts-migrate(2339) FIXME: Property 'getComplexOffenders' does not exist on t... Remove this comment to see the full error message
     complexityApi.getComplexOffenders = jest.fn().mockResolvedValue([])
 
@@ -74,6 +87,7 @@ describe('prisoner profile service', () => {
       allocationManagerApi,
       complexityApi,
       incentivesApi,
+      curiousApi,
     })
   })
   describe('prisoner profile data', () => {
@@ -180,6 +194,8 @@ describe('prisoner profile service', () => {
       allocationManagerApi.getPomByOffenderNo.mockResolvedValue({ primary_pom: { name: 'SMITH, JANE' } })
       // @ts-expect-error ts-migrate(2322) FIXME: Type 'undefined[]' is not assignable to type 'stri... Remove this comment to see the full error message
       config.apis.complexity.enabled_prisons = []
+      // @ts-expect-error ts-migrate(2339) FIXME: Property 'getLearnerNeurodivergence' does not exist on ty... Remove this comment to see the full error message
+      curiousApi.getLearnerNeurodivergence.mockResolvedValue([])
     })
 
     it('should make a call for the full details including csra class for a prisoner and the current user', async () => {
@@ -274,6 +290,7 @@ describe('prisoner profile service', () => {
         physicalMarks: undefined,
         profileInformation: undefined,
         esweEnabled: false,
+        hasDivergenceSupport: false,
       })
 
       expect(getPrisonerProfileData).toEqual(
@@ -866,6 +883,235 @@ describe('prisoner profile service', () => {
           )
         })
       })
+    })
+  })
+
+  describe('prisoner with neurodiversity support', () => {
+    const offenderNo = 'ABC123'
+    const bookingId = '123'
+
+    const neurodivergenceData = {
+      prn: offenderNo,
+      establishmentId: 'MDI',
+      establishmentName: 'HMP Moorland',
+      neurodivergenceSelfDeclared: [NeurodivergenceType.ADHD, NeurodivergenceType.Autism],
+      selfDeclaredDate: '2022-02-10',
+      neurodivergenceAssessed: [NeurodivergenceType.AcquiredBrainInjury],
+      assessmentDate: '2022-02-15',
+      neurodivergenceSupport: [NeurodivergenceType.MemorySupport, NeurodivergenceType.Reading],
+      supportDate: '2022-02-20',
+    }
+    const prisonerDetails = {
+      activeAlertCount: 1,
+      agencyId: 'MDI',
+      alerts: [
+        {
+          alertId: 1,
+          alertType: 'X',
+          alertTypeDescription: 'Security',
+          alertCode: 'XA',
+          alertCodeDescription: 'Arsonist',
+          comment: 'Testing alerts',
+          dateCreated: '2019-09-11',
+          expired: false,
+          active: true,
+          addedByFirstName: 'OFFICER',
+          addedByLastName: 'ONE',
+        },
+        {
+          alertId: 2,
+          alertType: 'P',
+          alertTypeDescription: 'MAPPP Case',
+          alertCode: 'PC3',
+          alertCodeDescription: 'MAPPA Cat 3',
+          comment: 'Testing alerts',
+          dateCreated: '2019-09-11',
+          expired: false,
+          active: true,
+          addedByFirstName: 'OFFICER',
+          addedByLastName: 'TWO',
+        },
+        {
+          alertId: 3,
+          alertType: 'V',
+          alertTypeDescription: 'Vulnerability',
+          alertCode: 'VIP',
+          alertCodeDescription: 'Isolated Prisoner',
+          comment: 'test',
+          dateCreated: '2020-08-20',
+          expired: false,
+          active: true,
+          addedByFirstName: 'John',
+          addedByLastName: 'Smith',
+        },
+      ],
+      assignedLivingUnit: {
+        description: 'CELL-123',
+        agencyName: 'Moorland Closed',
+      },
+      bookingId,
+      category: 'Cat C',
+      csra: 'High',
+      csraClassificationCode: 'HI',
+      csraClassificationDate: '2016-11-23',
+      firstName: 'TEST',
+      inactiveAlertCount: 2,
+      lastName: 'PRISONER',
+      assessments: [
+        {
+          classification: 'High',
+          assessmentCode: 'CSRREV',
+          assessmentDescription: 'CSR Review',
+          assessmentDate: '2016-11-23',
+        },
+        {
+          classification: 'Standard',
+          assessmentCode: 'CSR',
+          assessmentDescription: 'CSR Rating',
+          assessmentDate: '2020-08-18',
+        },
+        {
+          classification: 'Cat C',
+          assessmentCode: 'CATEGORY',
+          assessmentDescription: 'Categorisation',
+          assessmentDate: '2020-08-20',
+        },
+      ],
+    }
+
+    beforeEach(() => {
+      // @ts-expect-error ts-migrate(2339) FIXME: Property 'getDetails' does not exist on type '{}'.
+      prisonApi.getDetails.mockReturnValue(prisonerDetails)
+      // @ts-expect-error ts-migrate(2339) FIXME: Property 'getIepSummary' does not exist on type '{... Remove this comment to see the full error message
+      incentivesApi.getIepSummaryForBookingIds.mockResolvedValue([{ iepLevel: 'Standard' }])
+      // @ts-expect-error ts-migrate(2339) FIXME: Property 'getCaseNoteSummaryByTypes' does not exis... Remove this comment to see the full error message
+      prisonApi.getCaseNoteSummaryByTypes.mockResolvedValue([{ latestCaseNote: '2020-04-07T14:04:25' }])
+      // @ts-expect-error ts-migrate(2339) FIXME: Property 'getStaffRoles' does not exist on type '{... Remove this comment to see the full error message
+      prisonApi.getStaffRoles.mockResolvedValue([])
+      // @ts-expect-error ts-migrate(2339) FIXME: Property 'userCaseLoads' does not exist on type '{... Remove this comment to see the full error message
+      prisonApi.userCaseLoads.mockResolvedValue([])
+      // @ts-expect-error ts-migrate(2339) FIXME: Property 'getKeyworkerByCaseloadAndOffenderNo' doe... Remove this comment to see the full error message
+      keyworkerApi.getKeyworkerByCaseloadAndOffenderNo.mockResolvedValue({ firstName: 'STAFF', lastName: 'MEMBER' })
+      // @ts-expect-error ts-migrate(2339) FIXME: Property 'userRoles' does not exist on type '{}'.
+      oauthApi.userRoles.mockResolvedValue([])
+      // @ts-expect-error ts-migrate(2339) FIXME: Property 'currentUser' does not exist on type '{}'... Remove this comment to see the full error message
+      oauthApi.currentUser.mockReturnValue({ staffId: 111, activeCaseLoadId: 'MDI' })
+      // @ts-expect-error ts-migrate(2339) FIXME: Property 'getOffenderRetentionRecord' does not exi... Remove this comment to see the full error message
+      dataComplianceApi.getOffenderRetentionRecord.mockReturnValue({})
+      // @ts-expect-error ts-migrate(2339) FIXME: Property 'getPomByOffenderNo' does not exist on ty... Remove this comment to see the full error message
+      allocationManagerApi.getPomByOffenderNo.mockResolvedValue({ primary_pom: { name: 'SMITH, JANE' } })
+      // @ts-expect-error ts-migrate(2322) FIXME: Type 'undefined[]' is not assignable to type 'stri... Remove this comment to see the full error message
+      config.apis.complexity.enabled_prisons = []
+      // @ts-expect-error ts-migrate(2339) FIXME: Property 'getLearnerNeurodivergence' does not exist on ty... Remove this comment to see the full error message
+      curiousApi.getLearnerNeurodivergence.mockResolvedValue([neurodivergenceData])
+    })
+
+    it('should return true when a user has neurodiversity support needs', async () => {
+      const response = await service.getPrisonerProfileData(context, offenderNo)
+
+      // @ts-expect-error ts-migrate(2339) FIXME: Property 'currentUser' does not exist on type '{}'... Remove this comment to see the full error message
+      expect(oauthApi.currentUser).toHaveBeenCalledWith(context)
+      // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+      // @ts-ignore
+      expect(curiousApi.getLearnerNeurodivergence).toHaveBeenCalledTimes(1)
+      expect(response.hasDivergenceSupport).toEqual(true)
+    })
+  })
+  describe('prisoner with no neurodiversity support', () => {
+    const offenderNo = 'ABC123'
+    const bookingId = '123'
+
+    const neurodivergenceDataNoSupport = {
+      prn: offenderNo,
+      establishmentId: 'MDI',
+      establishmentName: 'HMP Moorland',
+      neurodivergenceSupport: [],
+    }
+    const neurodivergenceDataNoSupportIdentified = {
+      prn: offenderNo,
+      establishmentId: 'MDI',
+      establishmentName: 'HMP Moorland',
+      neurodivergenceSupport: [NeurodivergenceType.NoidentifiedNeurodiversityNeed],
+    }
+    const prisonerDetails = {
+      activeAlertCount: 1,
+      agencyId: 'MDI',
+      alerts: [
+        {
+          alertId: 1,
+          alertType: 'X',
+          alertTypeDescription: 'Security',
+          alertCode: 'XA',
+          alertCodeDescription: 'Arsonist',
+          comment: 'Testing alerts',
+          dateCreated: '2019-09-11',
+          expired: false,
+          active: true,
+          addedByFirstName: 'OFFICER',
+          addedByLastName: 'ONE',
+        },
+      ],
+      assignedLivingUnit: {
+        description: 'CELL-123',
+        agencyName: 'Moorland Closed',
+      },
+      bookingId,
+      category: 'Cat C',
+      csra: 'High',
+      csraClassificationCode: 'HI',
+      csraClassificationDate: '2016-11-23',
+      firstName: 'TEST',
+      inactiveAlertCount: 2,
+      lastName: 'PRISONER',
+      assessments: [],
+    }
+
+    beforeEach(() => {
+      // @ts-expect-error ts-migrate(2339) FIXME: Property 'getDetails' does not exist on type '{}'.
+      prisonApi.getDetails.mockReturnValue(prisonerDetails)
+      // @ts-expect-error ts-migrate(2339) FIXME: Property 'getIepSummary' does not exist on type '{... Remove this comment to see the full error message
+      incentivesApi.getIepSummaryForBookingIds.mockResolvedValue([{ iepLevel: 'Standard' }])
+      // @ts-expect-error ts-migrate(2339) FIXME: Property 'getCaseNoteSummaryByTypes' does not exis... Remove this comment to see the full error message
+      prisonApi.getCaseNoteSummaryByTypes.mockResolvedValue([{ latestCaseNote: '2020-04-07T14:04:25' }])
+      // @ts-expect-error ts-migrate(2339) FIXME: Property 'getStaffRoles' does not exist on type '{... Remove this comment to see the full error message
+      prisonApi.getStaffRoles.mockResolvedValue([])
+      // @ts-expect-error ts-migrate(2339) FIXME: Property 'userCaseLoads' does not exist on type '{... Remove this comment to see the full error message
+      prisonApi.userCaseLoads.mockResolvedValue([])
+      // @ts-expect-error ts-migrate(2339) FIXME: Property 'getKeyworkerByCaseloadAndOffenderNo' doe... Remove this comment to see the full error message
+      keyworkerApi.getKeyworkerByCaseloadAndOffenderNo.mockResolvedValue({ firstName: 'STAFF', lastName: 'MEMBER' })
+      // @ts-expect-error ts-migrate(2339) FIXME: Property 'userRoles' does not exist on type '{}'.
+      oauthApi.userRoles.mockResolvedValue([])
+      // @ts-expect-error ts-migrate(2339) FIXME: Property 'currentUser' does not exist on type '{}'... Remove this comment to see the full error message
+      oauthApi.currentUser.mockReturnValue({ staffId: 111, activeCaseLoadId: 'MDI' })
+      // @ts-expect-error ts-migrate(2339) FIXME: Property 'getOffenderRetentionRecord' does not exi... Remove this comment to see the full error message
+      dataComplianceApi.getOffenderRetentionRecord.mockReturnValue({})
+      // @ts-expect-error ts-migrate(2339) FIXME: Property 'getPomByOffenderNo' does not exist on ty... Remove this comment to see the full error message
+      allocationManagerApi.getPomByOffenderNo.mockResolvedValue({ primary_pom: { name: 'SMITH, JANE' } })
+      // @ts-expect-error ts-migrate(2322) FIXME: Type 'undefined[]' is not assignable to type 'stri... Remove this comment to see the full error message
+      config.apis.complexity.enabled_prisons = []
+      // @ts-expect-error ts-migrate(2339) FIXME: Property 'getLearnerNeurodivergence' does not exist on ty... Remove this comment to see the full error message
+      curiousApi.getLearnerNeurodivergence.mockResolvedValue([neurodivergenceDataNoSupport])
+    })
+
+    it('should return false when user has no neurodiversity data', async () => {
+      const response = await service.getPrisonerProfileData(context, offenderNo)
+      expect(response.hasDivergenceSupport).toEqual(false)
+    })
+    it('should return false when no neurodiversity support needs are identified', async () => {
+      // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+      // @ts-ignore
+      curiousApi.getLearnerNeurodivergence.mockResolvedValue([neurodivergenceDataNoSupportIdentified])
+
+      const response = await service.getPrisonerProfileData(context, offenderNo)
+      expect(response.hasDivergenceSupport).toEqual(false)
+    })
+    it('should handle the not found error', async () => {
+      // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+      // @ts-ignore
+      curiousApi.getLearnerNeurodivergence.mockRejectedValue(makeNotFoundError())
+
+      const response = await service.getPrisonerProfileData(context, offenderNo)
+      expect(response.hasDivergenceSupport).toEqual(false)
     })
   })
 })

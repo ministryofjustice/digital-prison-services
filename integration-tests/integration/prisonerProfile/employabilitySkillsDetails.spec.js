@@ -98,7 +98,7 @@ context('Employability skills details page', () => {
           cy.get($tRows).its('length').should('eq', 20)
         })
 
-      cy.get('th[data-test="date-header"]').click() // reverse order
+      cy.get('th[data-test="date-header"]').contains('Assessment date').click() // reverse order
 
       cy.get('tbody')
         .find('tr')

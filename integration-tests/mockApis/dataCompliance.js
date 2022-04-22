@@ -1,8 +1,8 @@
 const { stubFor } = require('./wiremock')
 
 module.exports = {
-  stubGetOffenderRetentionReasons: () => {
-    return stubFor({
+  stubGetOffenderRetentionReasons: () =>
+    stubFor({
       request: {
         method: 'GET',
         url: '/datacompliance/retention/offenders/retention-reasons',
@@ -28,11 +28,10 @@ module.exports = {
           },
         ],
       },
-    })
-  },
+    }),
 
-  stubNoExistingOffenderRecord: offenderNo => {
-    return stubFor({
+  stubNoExistingOffenderRecord: (offenderNo) =>
+    stubFor({
       request: {
         method: 'GET',
         url: `/datacompliance/retention/offenders/${offenderNo}`,
@@ -44,11 +43,10 @@ module.exports = {
         },
         jsonBody: {},
       },
-    })
-  },
+    }),
 
-  stubRetentionRecord: (offenderNo, retentionRecord, status = 200) => {
-    return stubFor({
+  stubRetentionRecord: (offenderNo, retentionRecord, status = 200) =>
+    stubFor({
       request: {
         method: 'GET',
         url: `/datacompliance/retention/offenders/${offenderNo}`,
@@ -61,11 +59,10 @@ module.exports = {
         },
         jsonBody: retentionRecord || {},
       },
-    })
-  },
+    }),
 
-  stubCreateRecord: offenderNo => {
-    return stubFor({
+  stubCreateRecord: (offenderNo) =>
+    stubFor({
       request: {
         method: 'PUT',
         url: `/datacompliance/retention/offenders/${offenderNo}`,
@@ -78,6 +75,5 @@ module.exports = {
         },
         jsonBody: {},
       },
-    })
-  },
+    }),
 }

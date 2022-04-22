@@ -8,7 +8,27 @@ import config from '../config'
 import logErrorAndContinue from '../shared/logErrorAndContinue'
 import canAccessProbationDocuments from '../shared/probationDocumentsAccess'
 
+const enum NeurodivergenceType {
+  NoidentifiedNeurodiversityNeed = 'No identified Neurodiversity Need',
+  NoidentifiedSupportRequired = 'No identified Support Required',
+}
 export const isComplexityEnabledFor = (agencyId) => config.apis.complexity.enabled_prisons?.includes(agencyId)
+
+const needNeurodivergenceSupport = (divergenceData) => {
+  const hasSupportNeed =
+    divergenceData && divergenceData[0]?.neurodivergenceSupport && divergenceData[0]?.neurodivergenceSupport?.length > 0
+  if (hasSupportNeed) {
+    const hasIdentifiedDivergenceSupportNeed = divergenceData.some((element) => {
+      return element.neurodivergenceSupport.includes(NeurodivergenceType.NoidentifiedNeurodiversityNeed)
+    })
+
+    const hasRequiredSupport = divergenceData.some((ele) => {
+      return ele.neurodivergenceSupport.includes(NeurodivergenceType.NoidentifiedSupportRequired)
+    })
+    return !(hasIdentifiedDivergenceSupportNeed || hasRequiredSupport)
+  }
+  return false
+}
 
 export default ({
   prisonApi,
@@ -21,6 +41,7 @@ export default ({
   allocationManagerApi,
   complexityApi,
   incentivesApi,
+  curiousApi,
 }) => {
   const {
     apis: {
@@ -77,6 +98,7 @@ export default ({
       pathfinderDetails,
       socDetails,
       allocationManager,
+      neurodivergenceData,
     ] = await Promise.all(
       [
         incentivesApi.getIepSummaryForBookingIds(context, [bookingId]),
@@ -88,8 +110,11 @@ export default ({
         pathfinderApi.getPathfinderDetails(systemContext, offenderNo),
         socApi.getSocDetails(systemContext, offenderNo, socEnabled),
         allocationManagerApi.getPomByOffenderNo(context, offenderNo),
+        curiousApi.getLearnerNeurodivergence(systemContext, offenderNo),
       ].map((apiCall) => logErrorAndContinue(apiCall))
     )
+
+    const hasDivergenceSupport = needNeurodivergenceSupport(neurodivergenceData)
 
     const prisonersActiveAlertCodes = alerts.filter((alert) => !alert.expired).map((alert) => alert.alertCode)
     const alertsToShow = alertFlagLabels.filter((alertFlag) =>
@@ -216,6 +241,7 @@ export default ({
       staffName: currentUser.name,
       pomStaff,
       esweEnabled,
+      hasDivergenceSupport,
     }
   }
 
