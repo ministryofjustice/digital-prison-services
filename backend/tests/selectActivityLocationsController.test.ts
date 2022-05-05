@@ -86,13 +86,12 @@ describe('Select activity locations controller', () => {
       })
     })
 
-    it.skip('should set redirect and throw error', async () => {
-      res.locals = {}
+    it('should set redirect and throw error', async () => {
+      res.locals.redirectUrl = ''
       const error = new Error('Network error')
       prisonApi.searchActivityLocations.mockRejectedValue(error)
 
-      await expect(controller.index(req, res)).rejects.toThrowError
-
+      await expect(controller.index(req, res)).rejects.toThrow(error)
       expect(res.locals.redirectUrl).toBe(`/manage-prisoner-whereabouts`)
     })
 
