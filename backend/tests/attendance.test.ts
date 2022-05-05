@@ -24,12 +24,8 @@ describe('Attendence and Pay controller', () => {
   }
 
   describe('updateAttendance', () => {
-    it.skip('should throw an error when offenderNo is null', () => {
-      try {
-        updateAttendance(context, {})
-      } catch (e) {
-        expect(e).toEqual(new Error('Booking ID is missing'))
-      }
+    it('should throw an error when offenderNo is null', () => {
+      expect(updateAttendance(context, {})).rejects.toThrow(new Error('Booking ID is missing'))
     })
     it('should postAttendance when there is no attendance ID', async () => {
       await updateAttendance(context, {
