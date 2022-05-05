@@ -1,6 +1,7 @@
 import express from 'express'
-import redis from 'redis'
+import { createClient } from 'redis'
 import session from 'express-session'
+import logger from './log'
 
 import config from './config'
 
@@ -13,12 +14,22 @@ export default () => {
     const { enabled, host, port, password } = config.redis
     if (!enabled || !host) return null
 
-    const client = redis.createClient({
+    const client = createClient({
       host,
       port,
       password,
       tls: config.app.production ? {} : false,
+      socket: {
+        reconnectStrategy: (attempts: number) => {
+          // Exponential back off: 20ms, 40ms, 80ms..., capped to retry every 30 seconds
+          const nextDelay = Math.min(2 ** attempts * 20, 30000)
+          logger.info(`Retry Redis connection attempt: ${attempts}, next attempt in: ${nextDelay}ms`)
+          return nextDelay
+        },
+      },
     })
+
+    client.on('error', (e: Error) => logger.error('Redis client error', e))
 
     return new RedisStore({ client })
   }
