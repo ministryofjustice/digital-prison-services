@@ -2,6 +2,7 @@ import RateLimit from 'express-rate-limit'
 import RedisStore from 'rate-limit-redis'
 import redis from 'redis'
 
+import logger from '../log'
 import config from '../config'
 
 // If more than 10 requests are made to the same url and ip address within 30 seconds
@@ -22,15 +23,14 @@ export default (maxConnections?) =>
     delayMs: 0, // disable delaying - full speed until the max limit is reached
   })
 
-const initRedisStoreIfEnabled = ({ host, port, password, production }) =>
-  (redis.enabled && {
-    store: new RedisStore({
-      client: redis.createClient({
-        host,
-        port,
-        password,
-        tls: production ? {} : false,
-      }),
-    }),
-  }) ||
-  null
+const initRedisStoreIfEnabled = ({ host, port, password, production }) => {
+  if (!redis.enabled || !host) return null
+  const client = redis.createClient({
+    host,
+    port,
+    password,
+    tls: production ? {} : false,
+  })
+  client.on('error', (e: Error) => logger.error('Redis client error', e))
+  return { store: new RedisStore({ client }) }
+}
