@@ -1,13 +1,19 @@
 import dashboard from '../../controllers/establishmentRoll/dashboard'
 
-const prisonApi = {}
+const prisonApi = {
+  getEstablishmentRollBlocksCount: jest.fn(),
+  getEstablishmentRollMovementsCount: jest.fn(),
+  getEstablishmentRollEnrouteCount: jest.fn(),
+  getLocationsForAgency: jest.fn(),
+  getAttributesForLocation: jest.fn(),
+}
 
 describe('Establishment Roll', () => {
   const logError = jest.fn()
   let controller
   const agencyId = 'LEI'
   const req = { originalUrl: 'http://localhost' }
-  const res = { locals: { user: { activeCaseLoad: { caseLoadId: 'LEI', description: 'Leeds' } } } }
+  const res = { locals: { user: { activeCaseLoad: { caseLoadId: 'LEI', description: 'Leeds' } } }, render: jest.fn() }
   const unassignedBlockData = [
     {
       livingUnitId: 0,
@@ -67,61 +73,42 @@ describe('Establishment Roll', () => {
   }
 
   beforeEach(() => {
-    // @ts-expect-error ts-migrate(2339) FIXME: Property 'getEstablishmentRollBlocksCount' does no... Remove this comment to see the full error message
     prisonApi.getEstablishmentRollBlocksCount = jest.fn()
-    // @ts-expect-error ts-migrate(2339) FIXME: Property 'getEstablishmentRollMovementsCount' does... Remove this comment to see the full error message
     prisonApi.getEstablishmentRollMovementsCount = jest.fn()
-    // @ts-expect-error ts-migrate(2339) FIXME: Property 'getEstablishmentRollEnrouteCount' does n... Remove this comment to see the full error message
     prisonApi.getEstablishmentRollEnrouteCount = jest.fn()
-    // @ts-expect-error ts-migrate(2339) FIXME: Property 'getLocationsForAgency' does not exist on... Remove this comment to see the full error message
     prisonApi.getLocationsForAgency = jest.fn()
-    // @ts-expect-error ts-migrate(2339) FIXME: Property 'getAttributesForLocation' does not exist... Remove this comment to see the full error message
     prisonApi.getAttributesForLocation = jest.fn()
 
-    // @ts-expect-error ts-migrate(2339) FIXME: Property 'getEstablishmentRollBlocksCount' does no... Remove this comment to see the full error message
     prisonApi.getEstablishmentRollBlocksCount.mockImplementation((_context, _agencyId, _unassigned) =>
       _unassigned ? unassignedBlockData : assignedBlockData
     )
-    // @ts-expect-error ts-migrate(2339) FIXME: Property 'getEstablishmentRollMovementsCount' does... Remove this comment to see the full error message
     prisonApi.getEstablishmentRollMovementsCount.mockImplementation(() => movements)
-    // @ts-expect-error ts-migrate(2339) FIXME: Property 'getEstablishmentRollEnrouteCount' does n... Remove this comment to see the full error message
     prisonApi.getEstablishmentRollEnrouteCount.mockImplementation(() => 8)
-    // @ts-expect-error ts-migrate(2339) FIXME: Property 'getLocationsForAgency' does not exist on... Remove this comment to see the full error message
     prisonApi.getLocationsForAgency.mockImplementation(() => [
       { description: '1-1', locationId: 1 },
       { description: 'CSWAP', locationId: 2 },
     ])
 
-    // @ts-expect-error ts-migrate(2345) FIXME: Argument of type '{ prisonApi: {}; logError: jest.... Remove this comment to see the full error message
     controller = dashboard({ prisonApi, logError })
-    // @ts-expect-error ts-migrate(2339) FIXME: Property 'render' does not exist on type '{ locals... Remove this comment to see the full error message
     res.render = jest.fn()
   })
 
   it('should call the correct endpoints', async () => {
     await controller(req, res)
 
-    // @ts-expect-error ts-migrate(2339) FIXME: Property 'getEstablishmentRollBlocksCount' does no... Remove this comment to see the full error message
     expect(prisonApi.getEstablishmentRollBlocksCount).toHaveBeenCalledWith(res.locals, agencyId, false)
-    // @ts-expect-error ts-migrate(2339) FIXME: Property 'getEstablishmentRollBlocksCount' does no... Remove this comment to see the full error message
     expect(prisonApi.getEstablishmentRollBlocksCount).toHaveBeenCalledWith(res.locals, agencyId, true)
-    // @ts-expect-error ts-migrate(2339) FIXME: Property 'getEstablishmentRollMovementsCount' does... Remove this comment to see the full error message
     expect(prisonApi.getEstablishmentRollMovementsCount).toHaveBeenCalledWith(res.locals, agencyId)
-    // @ts-expect-error ts-migrate(2339) FIXME: Property 'getEstablishmentRollEnrouteCount' does n... Remove this comment to see the full error message
     expect(prisonApi.getEstablishmentRollEnrouteCount).toHaveBeenCalledWith(res.locals, agencyId)
-    // @ts-expect-error ts-migrate(2339) FIXME: Property 'getLocationsForAgency' does not exist on... Remove this comment to see the full error message
     expect(prisonApi.getLocationsForAgency).toHaveBeenCalledWith(res.locals, agencyId)
-    // @ts-expect-error ts-migrate(2339) FIXME: Property 'getAttributesForLocation' does not exist... Remove this comment to see the full error message
     expect(prisonApi.getAttributesForLocation).toHaveBeenCalledWith(res.locals, 2)
   })
 
   it('should render the template with the correct data', async () => {
-    // @ts-expect-error ts-migrate(2339) FIXME: Property 'getAttributesForLocation' does not exist... Remove this comment to see the full error message
     prisonApi.getAttributesForLocation.mockImplementation(() => ({ noOfOccupants: 3 }))
 
     await controller(req, res)
 
-    // @ts-expect-error ts-migrate(2339) FIXME: Property 'render' does not exist on type '{ locals... Remove this comment to see the full error message
     expect(res.render).toHaveBeenCalledWith(
       'establishmentRoll/dashboard.njk',
       expect.objectContaining({
@@ -171,12 +158,10 @@ describe('Establishment Roll', () => {
   })
 
   it('should default to zero when data is undefined for blocks and totals', async () => {
-    // @ts-expect-error ts-migrate(2339) FIXME: Property 'getEstablishmentRollBlocksCount' does no... Remove this comment to see the full error message
     prisonApi.getEstablishmentRollBlocksCount.mockReturnValue([{ livingUnitDesc: 'livingUnitDesc1', bedsInUse: 100 }])
 
     await controller(req, res)
 
-    // @ts-expect-error ts-migrate(2339) FIXME: Property 'render' does not exist on type '{ locals... Remove this comment to see the full error message
     expect(res.render).toHaveBeenCalledWith(
       'establishmentRoll/dashboard.njk',
       expect.objectContaining({
@@ -218,13 +203,12 @@ describe('Establishment Roll', () => {
 
     await controller(req, res)
 
-    // @ts-expect-error ts-migrate(2339) FIXME: Property 'render' does not exist on type '{ locals... Remove this comment to see the full error message
     expect(res.render).toHaveBeenCalledWith(
       'establishmentRoll/dashboard.njk',
       expect.objectContaining({ date: 'Friday 29 March 2019' })
     )
 
-    // @ts-expect-error ts-migrate(2339) FIXME: Property 'mockRestore' does not exist on type '() ... Remove this comment to see the full error message
-    Date.now.mockRestore()
+    const spy = jest.spyOn(Date, 'now')
+    spy.mockRestore()
   })
 })

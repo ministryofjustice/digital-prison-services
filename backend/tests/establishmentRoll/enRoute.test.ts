@@ -1,13 +1,19 @@
 import enRoute from '../../controllers/establishmentRoll/enRoute'
 
-const movementsService = {}
+const movementsService = {
+  getOffendersEnRoute: jest.fn(),
+}
 
 describe('En route test', () => {
   let logError
   let controller
   const agencyId = 'LEI'
   const req = { originalUrl: 'http://localhost' }
-  const res = { locals: { user: { activeCaseLoad: { caseLoadId: 'LEI', description: 'Leeds' } } }, status: jest.fn() }
+  const res = {
+    locals: { user: { activeCaseLoad: { caseLoadId: 'LEI', description: 'Leeds' } } },
+    status: jest.fn(),
+    render: jest.fn(),
+  }
   const offenders = [
     {
       offenderNo: 'A1234AA',
@@ -38,36 +44,29 @@ describe('En route test', () => {
     },
   ]
   beforeEach(() => {
-    // @ts-expect-error ts-migrate(2339) FIXME: Property 'getOffendersEnRoute' does not exist on t... Remove this comment to see the full error message
     movementsService.getOffendersEnRoute = jest.fn()
     logError = jest.fn()
-    // @ts-expect-error ts-migrate(2345) FIXME: Argument of type '{ movementsService: {}; logError... Remove this comment to see the full error message
     controller = enRoute({ movementsService, logError })
-    // @ts-expect-error ts-migrate(2339) FIXME: Property 'render' does not exist on type '{ locals... Remove this comment to see the full error message
     res.render = jest.fn()
   })
 
   it('should call the en route endpoint', async () => {
     await controller(req, res)
 
-    // @ts-expect-error ts-migrate(2339) FIXME: Property 'getOffendersEnRoute' does not exist on t... Remove this comment to see the full error message
     expect(movementsService.getOffendersEnRoute).toHaveBeenCalledWith(res.locals, agencyId)
   })
 
   it('should return right error message', async () => {
     const error = new Error('error')
-    // @ts-expect-error ts-migrate(2339) FIXME: Property 'getOffendersEnRoute' does not exist on t... Remove this comment to see the full error message
     movementsService.getOffendersEnRoute.mockRejectedValue(error)
 
     await expect(controller(req, res)).rejects.toThrowError(error)
   })
 
   it('should return response with data', async () => {
-    // @ts-expect-error ts-migrate(2339) FIXME: Property 'getOffendersEnRoute' does not exist on t... Remove this comment to see the full error message
     movementsService.getOffendersEnRoute.mockReturnValue(offenders)
     await controller(req, res)
 
-    // @ts-expect-error ts-migrate(2339) FIXME: Property 'render' does not exist on type '{ locals... Remove this comment to see the full error message
     expect(res.render).toHaveBeenCalledWith(
       'establishmentRoll/enRoute.njk',
       expect.objectContaining({

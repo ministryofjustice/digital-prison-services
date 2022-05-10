@@ -1,13 +1,19 @@
 import outToday from '../../controllers/establishmentRoll/outToday'
 
-const movementsService = {}
+const movementsService = {
+  getMovementsOut: jest.fn(),
+}
 
 describe('In today', () => {
   let logError
   let controller
   const agencyId = 'LEI'
   const req = { originalUrl: 'http://localhost' }
-  const res = { locals: { user: { activeCaseLoad: { caseLoadId: 'LEI', description: 'Leeds' } } }, status: jest.fn() }
+  const res = {
+    locals: { user: { activeCaseLoad: { caseLoadId: 'LEI', description: 'Leeds' } } },
+    status: jest.fn(),
+    render: jest.fn(),
+  }
   const offenders = [
     {
       offenderNo: 'A1234AA',
@@ -31,36 +37,29 @@ describe('In today', () => {
     },
   ]
   beforeEach(() => {
-    // @ts-expect-error ts-migrate(2339) FIXME: Property 'getMovementsOut' does not exist on type ... Remove this comment to see the full error message
     movementsService.getMovementsOut = jest.fn()
     logError = jest.fn()
-    // @ts-expect-error ts-migrate(2345) FIXME: Argument of type '{ movementsService: {}; logError... Remove this comment to see the full error message
     controller = outToday({ movementsService, logError })
-    // @ts-expect-error ts-migrate(2339) FIXME: Property 'render' does not exist on type '{ locals... Remove this comment to see the full error message
     res.render = jest.fn()
   })
 
   it('should call the currently out endpoint', async () => {
     await controller(req, res)
 
-    // @ts-expect-error ts-migrate(2339) FIXME: Property 'getMovementsOut' does not exist on type ... Remove this comment to see the full error message
     expect(movementsService.getMovementsOut).toHaveBeenCalledWith(res.locals, agencyId)
   })
 
   it('should return right error message', async () => {
     const error = new Error('error')
-    // @ts-expect-error ts-migrate(2339) FIXME: Property 'getMovementsOut' does not exist on type ... Remove this comment to see the full error message
     movementsService.getMovementsOut.mockRejectedValue(error)
 
     await expect(controller(req, res)).rejects.toThrowError(error)
   })
 
   it('should return response with data', async () => {
-    // @ts-expect-error ts-migrate(2339) FIXME: Property 'getMovementsOut' does not exist on type ... Remove this comment to see the full error message
     movementsService.getMovementsOut.mockReturnValue(offenders)
     await controller(req, res)
 
-    // @ts-expect-error ts-migrate(2339) FIXME: Property 'render' does not exist on type '{ locals... Remove this comment to see the full error message
     expect(res.render).toHaveBeenCalledWith(
       'establishmentRoll/outToday.njk',
       expect.objectContaining({

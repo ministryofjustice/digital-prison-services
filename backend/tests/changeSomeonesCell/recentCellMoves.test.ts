@@ -45,7 +45,9 @@ const dataSets = {
 }
 
 describe('Recent cell moves', () => {
-  const prisonApi = {}
+  const prisonApi = {
+    getHistoryByDate: jest.fn(),
+  }
   let controller
   let req
   let res
@@ -53,7 +55,6 @@ describe('Recent cell moves', () => {
   beforeEach(() => {
     jest.useFakeTimers('modern')
     jest.setSystemTime(new Date('2020-02-07').getTime())
-    // @ts-expect-error ts-migrate(2339) FIXME: Property 'getHistoryByDate' does not exist on type... Remove this comment to see the full error message
     prisonApi.getHistoryByDate = jest.fn().mockResolvedValue([])
 
     res = {
@@ -80,37 +81,30 @@ describe('Recent cell moves', () => {
 
     await controller(req, res)
 
-    // @ts-expect-error ts-migrate(2339) FIXME: Property 'getHistoryByDate' does not exist on type... Remove this comment to see the full error message
     expect(prisonApi.getHistoryByDate).toHaveBeenCalledWith(expect.anything(), {
       assignmentDate: '2020-02-07',
       agencyId: 'LEI',
     })
-    // @ts-expect-error ts-migrate(2339) FIXME: Property 'getHistoryByDate' does not exist on type... Remove this comment to see the full error message
     expect(prisonApi.getHistoryByDate).toHaveBeenCalledWith(expect.anything(), {
       assignmentDate: '2020-02-06',
       agencyId: 'LEI',
     })
-    // @ts-expect-error ts-migrate(2339) FIXME: Property 'getHistoryByDate' does not exist on type... Remove this comment to see the full error message
     expect(prisonApi.getHistoryByDate).toHaveBeenCalledWith(expect.anything(), {
       assignmentDate: '2020-02-05',
       agencyId: 'LEI',
     })
-    // @ts-expect-error ts-migrate(2339) FIXME: Property 'getHistoryByDate' does not exist on type... Remove this comment to see the full error message
     expect(prisonApi.getHistoryByDate).toHaveBeenCalledWith(expect.anything(), {
       assignmentDate: '2020-02-04',
       agencyId: 'LEI',
     })
-    // @ts-expect-error ts-migrate(2339) FIXME: Property 'getHistoryByDate' does not exist on type... Remove this comment to see the full error message
     expect(prisonApi.getHistoryByDate).toHaveBeenCalledWith(expect.anything(), {
       assignmentDate: '2020-02-03',
       agencyId: 'LEI',
     })
-    // @ts-expect-error ts-migrate(2339) FIXME: Property 'getHistoryByDate' does not exist on type... Remove this comment to see the full error message
     expect(prisonApi.getHistoryByDate).toHaveBeenCalledWith(expect.anything(), {
       assignmentDate: '2020-02-02',
       agencyId: 'LEI',
     })
-    // @ts-expect-error ts-migrate(2339) FIXME: Property 'getHistoryByDate' does not exist on type... Remove this comment to see the full error message
     expect(prisonApi.getHistoryByDate).toHaveBeenCalledWith(expect.anything(), {
       assignmentDate: '2020-02-01',
       agencyId: 'LEI',
@@ -118,7 +112,6 @@ describe('Recent cell moves', () => {
   })
 
   it('should count all cell moves over the last 7 days, grouping by day', async () => {
-    // @ts-expect-error ts-migrate(2339) FIXME: Property 'getHistoryByDate' does not exist on type... Remove this comment to see the full error message
     prisonApi.getHistoryByDate = jest
       .fn()
       .mockImplementation((context, { assignmentDate }) => dataSets[assignmentDate] || [])

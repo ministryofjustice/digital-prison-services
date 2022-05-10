@@ -1,13 +1,19 @@
 import totalCurrentlyOut from '../../controllers/establishmentRoll/totalCurrentlyOut'
 
-const movementsService = {}
+const movementsService = {
+  getOffendersCurrentlyOutOfAgency: jest.fn(),
+}
 
 describe('Currently out', () => {
   let logError
   let controller
   const agencyId = 'LEI'
   const req = { originalUrl: 'http://localhost' }
-  const res = { locals: { user: { activeCaseLoad: { caseLoadId: 'LEI', description: 'Leeds' } } }, status: jest.fn() }
+  const res = {
+    locals: { user: { activeCaseLoad: { caseLoadId: 'LEI', description: 'Leeds' } } },
+    status: jest.fn(),
+    render: jest.fn(),
+  }
   const offenders = [
     {
       offenderNo: 'A1234AA',
@@ -35,36 +41,29 @@ describe('Currently out', () => {
     },
   ]
   beforeEach(() => {
-    // @ts-expect-error ts-migrate(2339) FIXME: Property 'getOffendersCurrentlyOutOfAgency' does n... Remove this comment to see the full error message
     movementsService.getOffendersCurrentlyOutOfAgency = jest.fn()
     logError = jest.fn()
-    // @ts-expect-error ts-migrate(2345) FIXME: Argument of type '{ movementsService: {}; logError... Remove this comment to see the full error message
     controller = totalCurrentlyOut({ movementsService, logError })
-    // @ts-expect-error ts-migrate(2339) FIXME: Property 'render' does not exist on type '{ locals... Remove this comment to see the full error message
     res.render = jest.fn()
   })
 
   it('should call the currently out for agency endpoint', async () => {
     await controller(req, res)
 
-    // @ts-expect-error ts-migrate(2339) FIXME: Property 'getOffendersCurrentlyOutOfAgency' does n... Remove this comment to see the full error message
     expect(movementsService.getOffendersCurrentlyOutOfAgency).toHaveBeenCalledWith(res.locals, agencyId)
   })
 
   it('should return right error message', async () => {
     const error = new Error('error')
-    // @ts-expect-error ts-migrate(2339) FIXME: Property 'getOffendersCurrentlyOutOfAgency' does n... Remove this comment to see the full error message
     movementsService.getOffendersCurrentlyOutOfAgency.mockRejectedValue(error)
 
     await expect(controller(req, res)).rejects.toThrowError(error)
   })
 
   it('should return response with data', async () => {
-    // @ts-expect-error ts-migrate(2339) FIXME: Property 'getOffendersCurrentlyOutOfAgency' does n... Remove this comment to see the full error message
     movementsService.getOffendersCurrentlyOutOfAgency.mockReturnValue(offenders)
     await controller(req, res)
 
-    // @ts-expect-error ts-migrate(2339) FIXME: Property 'render' does not exist on type '{ locals... Remove this comment to see the full error message
     expect(res.render).toHaveBeenCalledWith(
       'establishmentRoll/totalCurrentlyOut.njk',
       expect.objectContaining({
