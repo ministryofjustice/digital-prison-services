@@ -62,7 +62,7 @@ export const apis = {
   oauth2: {
     url: process.env.OAUTH_ENDPOINT_URL || 'http://localhost:9090/auth/',
     ui_url: process.env.OAUTH_ENDPOINT_UI_URL || process.env.OAUTH_ENDPOINT_URL || 'http://localhost:9090/auth/',
-    timeoutSeconds: toNumber(process.env.API_ENDPOINT_TIMEOUT_SECONDS) || 10,
+    timeoutSeconds: toNumber(process.env.API_ENDPOINT_TIMEOUT_SECONDS) || 30,
     clientId: process.env.API_CLIENT_ID || 'prisonapiclient',
     clientSecret: process.env.API_CLIENT_SECRET || 'clientsecret',
     systemClientId: process.env.API_SYSTEM_CLIENT_ID || 'prisonstaffhubclient',
