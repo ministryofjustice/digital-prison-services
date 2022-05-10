@@ -1,4 +1,5 @@
 import { getActivityListFactory, getActivityListFactory as factory } from '../controllers/attendance/activityList'
+import config from '../config'
 
 Reflect.deleteProperty(process.env, 'APPINSIGHTS_INSTRUMENTATIONKEY')
 
@@ -21,7 +22,7 @@ const whereaboutsApi = {
   getAttendance: jest.fn(),
 }
 
-const activityList = getActivityListFactory(prisonApi, whereaboutsApi).getActivityList
+const activityList = getActivityListFactory(prisonApi, whereaboutsApi, config).getActivityList
 
 function createActivitiesResponse() {
   return [
