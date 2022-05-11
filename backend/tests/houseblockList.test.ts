@@ -693,7 +693,6 @@ describe('Houseblock list controller', () => {
       ])
       // @ts-expect-error ts-migrate(2339) FIXME: Property 'getAttendanceForBookings' does not exist... Remove this comment to see the full error message
       whereaboutsApi.getAttendanceForBookings.mockReturnValue([])
-      // @ts-expect-error ts-migrate(2554) FIXME: Expected 2 arguments, but got 3.
       const { getHouseblockList: service } = factory(prisonApi, whereaboutsApi, {
         app: {
           production: true,
@@ -729,7 +728,6 @@ describe('Houseblock list controller', () => {
       ])
       // @ts-expect-error ts-migrate(2339) FIXME: Property 'getAttendanceForBookings' does not exist... Remove this comment to see the full error message
       whereaboutsApi.getAttendanceForBookings.mockReturnValue([])
-      // @ts-expect-error ts-migrate(2554) FIXME: Expected 2 arguments, but got 3.
       const { getHouseblockList: service } = factory(prisonApi, whereaboutsApi, {
         app: {
           production: false,

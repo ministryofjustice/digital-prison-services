@@ -82,8 +82,7 @@ export default (app) => {
 
   njkEnv.addFilter('addDefaultSelectedVale', (items, text, show) => {
     if (!items) return null
-    const attributes = {}
-    // @ts-expect-error ts-migrate(2339) FIXME: Property 'hidden' does not exist on type '{}'.
+    const attributes: { hidden?: string } = {}
     if (!show) attributes.hidden = ''
 
     return [
