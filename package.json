@@ -5,8 +5,8 @@
   "repository": "git@github.com:ministryofjustice/digital-prison-sevices.git",
   "license": "MIT",
   "engines": {
-    "npm": "^8",
-    "node": "^16"
+    "npm": ">=7",
+    "node": ">=14.*"
   },
   "dependencies": {
     "@babel/polyfill": "^7.12.1",

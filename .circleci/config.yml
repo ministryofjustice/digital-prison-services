@@ -7,7 +7,7 @@ jobs:
   build:
     executor:
       name: hmpps/node
-      tag: 16.13-browsers
+      tag: 14.17-browsers
     steps:
       - checkout
       - restore_cache:
@@ -37,7 +37,7 @@ jobs:
   cypress_integration_tests:
     working_directory: ~/app
     docker:
-      - image: cimg/node:16.13-browsers
+      - image: cimg/node:14.15.3-browsers
       - image: bitnami/redis:5.0
         environment:
           ALLOW_EMPTY_PASSWORD=yes
