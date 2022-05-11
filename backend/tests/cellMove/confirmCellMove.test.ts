@@ -7,53 +7,66 @@ jest.mock('../../raiseAnalyticsEvent', () => ({
 }))
 
 describe('Change cell play back details', () => {
-  const prisonApi = {}
-  const whereaboutsApi = {}
+  const prisonApi = {
+    getDetails: jest.fn(),
+    moveToCellSwap: jest.fn(),
+    getLocation: jest.fn(),
+    getAttributesForLocation: jest.fn(),
+    getCellMoveReasonTypes: jest.fn(),
+  }
+  const whereaboutsApi = {
+    moveToCell: jest.fn(),
+  }
   const caseNotesApi = {}
 
   let logError
   let controller
-  const req = { originalUrl: 'http://localhost', params: { offenderNo: 'A12345' }, query: {}, headers: {} }
-  const res = { locals: {}, status: jest.fn() }
+  const req = {
+    originalUrl: 'http://localhost',
+    params: { offenderNo: 'A12345' },
+    query: {},
+    headers: {},
+    flash: jest.fn(),
+    body: {},
+  }
+  const res = {
+    locals: {
+      redirectUrl: '',
+      homeUrl: '',
+    },
+    status: jest.fn(),
+    render: jest.fn(),
+    redirect: jest.fn(),
+  }
 
   beforeEach(() => {
     jest.clearAllMocks()
     logError = jest.fn()
 
-    // @ts-expect-error ts-migrate(2339) FIXME: Property 'getDetails' does not exist on type '{}'.
     prisonApi.getDetails = jest.fn().mockResolvedValue({
       bookingId: 1,
       firstName: 'Bob',
       lastName: 'Doe',
       agencyId: 'MDI',
     })
-    // @ts-expect-error ts-migrate(2339) FIXME: Property 'moveToCell' does not exist on type '{}'.
     whereaboutsApi.moveToCell = jest.fn()
-    // @ts-expect-error ts-migrate(2339) FIXME: Property 'moveToCellSwap' does not exist on type '... Remove this comment to see the full error message
     prisonApi.moveToCellSwap = jest.fn()
-    // @ts-expect-error ts-migrate(2339) FIXME: Property 'getLocation' does not exist on type '{}'... Remove this comment to see the full error message
     prisonApi.getLocation = jest.fn().mockResolvedValue({
       locationPrefix: 'MDI-10-19',
       description: 'MDI-10',
     })
 
-    // @ts-expect-error ts-migrate(2339) FIXME: Property 'getAttributesForLocation' does not exist... Remove this comment to see the full error message
     prisonApi.getAttributesForLocation = jest.fn().mockResolvedValue({ capacity: 1 })
-    // @ts-expect-error ts-migrate(2339) FIXME: Property 'getCellMoveReasonTypes' does not exist o... Remove this comment to see the full error message
     prisonApi.getCellMoveReasonTypes = jest.fn().mockResolvedValue([])
 
-    // @ts-expect-error ts-migrate(2345) FIXME: Argument of type '{ prisonApi: {}; whereaboutsApi:... Remove this comment to see the full error message
-    controller = confirmCellMove({ prisonApi, whereaboutsApi, logError, caseNotesApi })
+    controller = confirmCellMove({ prisonApi, whereaboutsApi, caseNotesApi, logError })
 
     req.params = {
       offenderNo: 'A12345',
     }
 
-    // @ts-expect-error ts-migrate(2339) FIXME: Property 'render' does not exist on type '{ locals... Remove this comment to see the full error message
     res.render = jest.fn()
-    // @ts-expect-error ts-migrate(2339) FIXME: Property 'redirect' does not exist on type '{ loca... Remove this comment to see the full error message
     res.redirect = jest.fn()
-    // @ts-expect-error ts-migrate(2339) FIXME: Property 'flash' does not exist on type '{ origina... Remove this comment to see the full error message
     req.flash = jest.fn()
   })
 
@@ -61,7 +74,6 @@ describe('Change cell play back details', () => {
     it('should redirect back to select cell page when location description is missing', async () => {
       await controller.index(req, res)
 
-      // @ts-expect-error ts-migrate(2339) FIXME: Property 'redirect' does not exist on type '{ loca... Remove this comment to see the full error message
       expect(res.redirect).toHaveBeenCalledWith('/prisoner/A12345/cell-move/select-cell')
     })
 
@@ -72,10 +84,8 @@ describe('Change cell play back details', () => {
 
       await controller.index(req, res)
 
-      // @ts-expect-error ts-migrate(2339) FIXME: Property 'getLocation' does not exist on type '{}'... Remove this comment to see the full error message
-      expect(prisonApi.getLocation).toHaveBeenCalledWith({}, 233)
-      // @ts-expect-error ts-migrate(2339) FIXME: Property 'getDetails' does not exist on type '{}'.
-      expect(prisonApi.getDetails).toHaveBeenCalledWith({}, 'A12345')
+      expect(prisonApi.getLocation).toHaveBeenCalledWith(res.locals, 233)
+      expect(prisonApi.getDetails).toHaveBeenCalledWith(res.locals, 'A12345')
     })
 
     it('should render play back details page', async () => {
@@ -83,7 +93,6 @@ describe('Change cell play back details', () => {
 
       await controller.index(req, res)
 
-      // @ts-expect-error ts-migrate(2339) FIXME: Property 'render' does not exist on type '{ locals... Remove this comment to see the full error message
       expect(res.render).toHaveBeenCalledWith('cellMove/confirmCellMove.njk', {
         backLink: '/prisoner/A12345/cell-move/search-for-cell',
         backLinkText: 'Cancel',
@@ -109,7 +118,6 @@ describe('Change cell play back details', () => {
 
       await controller.index(req, res)
 
-      // @ts-expect-error ts-migrate(2339) FIXME: Property 'getLocation' does not exist on type '{}'... Remove this comment to see the full error message
       expect(prisonApi.getLocation.mock.calls.length).toBe(0)
     })
 
@@ -118,7 +126,6 @@ describe('Change cell play back details', () => {
 
       await controller.index(req, res)
 
-      // @ts-expect-error ts-migrate(2339) FIXME: Property 'render' does not exist on type '{ locals... Remove this comment to see the full error message
       expect(res.render).toHaveBeenCalledWith('cellMove/confirmCellMove.njk', {
         backLink: '/prisoner/A12345/cell-move/search-for-cell',
         backLinkText: 'Cancel',
@@ -143,14 +150,12 @@ describe('Change cell play back details', () => {
 
       await controller.index(req, res)
 
-      // @ts-expect-error ts-migrate(2339) FIXME: Property 'getCellMoveReasonTypes' does not exist o... Remove this comment to see the full error message
       expect(prisonApi.getCellMoveReasonTypes.mock.calls.length).toBe(0)
     })
 
     it('should make a request to retrieve all cell move case note types for none c-swap moves', async () => {
       req.query = { cellId: 'A-1-3' }
 
-      // @ts-expect-error ts-migrate(2339) FIXME: Property 'getCellMoveReasonTypes' does not exist o... Remove this comment to see the full error message
       prisonApi.getCellMoveReasonTypes.mockResolvedValue([
         {
           code: 'ADM',
@@ -171,9 +176,7 @@ describe('Change cell play back details', () => {
 
       await controller.index(req, res)
 
-      // @ts-expect-error ts-migrate(2339) FIXME: Property 'getCellMoveReasonTypes' does not exist o... Remove this comment to see the full error message
-      expect(prisonApi.getCellMoveReasonTypes).toHaveBeenCalledWith({})
-      // @ts-expect-error ts-migrate(2339) FIXME: Property 'render' does not exist on type '{ locals... Remove this comment to see the full error message
+      expect(prisonApi.getCellMoveReasonTypes).toHaveBeenCalledWith(res.locals)
       expect(res.render).toHaveBeenCalledWith(
         'cellMove/confirmCellMove.njk',
         expect.objectContaining({
@@ -186,7 +189,6 @@ describe('Change cell play back details', () => {
     })
 
     it('should unpack errors out of req.flash', async () => {
-      // @ts-expect-error ts-migrate(2339) FIXME: Property 'flash' does not exist on type '{ origina... Remove this comment to see the full error message
       req.flash.mockImplementation(() => [
         {
           href: '#reason',
@@ -196,7 +198,6 @@ describe('Change cell play back details', () => {
       req.query = { cellId: 'A-1-3' }
 
       await controller.index(req, res)
-      // @ts-expect-error ts-migrate(2339) FIXME: Property 'render' does not exist on type '{ locals... Remove this comment to see the full error message
       expect(res.render).toHaveBeenCalledWith(
         'cellMove/confirmCellMove.njk',
         expect.objectContaining({
@@ -206,7 +207,6 @@ describe('Change cell play back details', () => {
     })
 
     it('should unpack form values out of req.flash', async () => {
-      // @ts-expect-error ts-migrate(2339) FIXME: Property 'getCellMoveReasonTypes' does not exist o... Remove this comment to see the full error message
       prisonApi.getCellMoveReasonTypes.mockResolvedValue([
         {
           code: 'ADM',
@@ -219,7 +219,6 @@ describe('Change cell play back details', () => {
           activeFlag: 'Y',
         },
       ])
-      // @ts-expect-error ts-migrate(2339) FIXME: Property 'flash' does not exist on type '{ origina... Remove this comment to see the full error message
       req.flash.mockImplementation(() => [
         {
           reason: 'ADM',
@@ -230,7 +229,6 @@ describe('Change cell play back details', () => {
 
       await controller.index(req, res)
 
-      // @ts-expect-error ts-migrate(2339) FIXME: Property 'render' does not exist on type '{ locals... Remove this comment to see the full error message
       expect(res.render).toHaveBeenCalledWith(
         'cellMove/confirmCellMove.njk',
         expect.objectContaining({
@@ -246,7 +244,6 @@ describe('Change cell play back details', () => {
     })
 
     it('should show cell move reasons in Db order', async () => {
-      // @ts-expect-error ts-migrate(2339) FIXME: Property 'getCellMoveReasonTypes' does not exist o... Remove this comment to see the full error message
       prisonApi.getCellMoveReasonTypes.mockResolvedValue([
         {
           code: 'ADM',
@@ -261,7 +258,6 @@ describe('Change cell play back details', () => {
           activeFlag: 'Y',
         },
       ])
-      // @ts-expect-error ts-migrate(2339) FIXME: Property 'flash' does not exist on type '{ origina... Remove this comment to see the full error message
       req.flash.mockImplementation(() => [
         {
           reason: 'ADM',
@@ -272,7 +268,6 @@ describe('Change cell play back details', () => {
 
       await controller.index(req, res)
 
-      // @ts-expect-error ts-migrate(2339) FIXME: Property 'render' does not exist on type '{ locals... Remove this comment to see the full error message
       expect(res.render).toHaveBeenCalledWith(
         'cellMove/confirmCellMove.njk',
         expect.objectContaining({
@@ -300,7 +295,6 @@ describe('Change cell play back details', () => {
 
         await controller.index(req, res)
 
-        // @ts-expect-error ts-migrate(2339) FIXME: Property 'render' does not exist on type '{ locals... Remove this comment to see the full error message
         expect(res.render).toHaveBeenCalledWith(
           'cellMove/confirmCellMove.njk',
           expect.objectContaining({
@@ -317,17 +311,14 @@ describe('Change cell play back details', () => {
 
   describe('Post handle normal cell move', () => {
     beforeEach(() => {
-      // @ts-expect-error ts-migrate(2339) FIXME: Property 'body' does not exist on type '{ original... Remove this comment to see the full error message
       req.body = { reason: 'ADM', comment: 'Hello world' }
     })
 
     it('should trigger missing reason validation', async () => {
-      // @ts-expect-error ts-migrate(2339) FIXME: Property 'body' does not exist on type '{ original... Remove this comment to see the full error message
       req.body = { cellId: 233, comment: 'hello world' }
 
       await controller.post(req, res)
 
-      // @ts-expect-error ts-migrate(2339) FIXME: Property 'flash' does not exist on type '{ origina... Remove this comment to see the full error message
       expect(req.flash).toHaveBeenCalledWith('errors', [
         {
           href: '#reason',
@@ -335,23 +326,18 @@ describe('Change cell play back details', () => {
         },
       ])
 
-      // @ts-expect-error ts-migrate(2339) FIXME: Property 'flash' does not exist on type '{ origina... Remove this comment to see the full error message
       expect(req.flash).toHaveBeenCalledWith('formValues', {
         comment: 'hello world',
       })
-      // @ts-expect-error ts-migrate(2339) FIXME: Property 'redirect' does not exist on type '{ loca... Remove this comment to see the full error message
       expect(res.redirect).toHaveBeenCalledWith('/prisoner/A12345/cell-move/confirm-cell-move?cellId=233')
     })
 
     it('should trigger missing comment validation', async () => {
-      // @ts-expect-error ts-migrate(2339) FIXME: Property 'body' does not exist on type '{ original... Remove this comment to see the full error message
       req.body = { cellId: 233, reason: 'ADM' }
 
       await controller.post(req, res)
 
-      // @ts-expect-error ts-migrate(2339) FIXME: Property 'flash' does not exist on type '{ origina... Remove this comment to see the full error message
       expect(req.flash).toHaveBeenCalledWith('formValues', { comment: undefined, reason: 'ADM' })
-      // @ts-expect-error ts-migrate(2339) FIXME: Property 'flash' does not exist on type '{ origina... Remove this comment to see the full error message
       expect(req.flash).toHaveBeenCalledWith('errors', [
         {
           href: '#comment',
@@ -359,17 +345,14 @@ describe('Change cell play back details', () => {
         },
       ])
 
-      // @ts-expect-error ts-migrate(2339) FIXME: Property 'redirect' does not exist on type '{ loca... Remove this comment to see the full error message
       expect(res.redirect).toHaveBeenCalledWith('/prisoner/A12345/cell-move/confirm-cell-move?cellId=233')
     })
 
     it('should trigger minimum comment length validation', async () => {
-      // @ts-expect-error ts-migrate(2339) FIXME: Property 'body' does not exist on type '{ original... Remove this comment to see the full error message
       req.body = { cellId: 233, comment: 'hello', reason: 'ADM' }
 
       await controller.post(req, res)
 
-      // @ts-expect-error ts-migrate(2339) FIXME: Property 'flash' does not exist on type '{ origina... Remove this comment to see the full error message
       expect(req.flash).toHaveBeenCalledWith('errors', [
         {
           href: '#comment',
@@ -377,24 +360,20 @@ describe('Change cell play back details', () => {
         },
       ])
 
-      // @ts-expect-error ts-migrate(2339) FIXME: Property 'flash' does not exist on type '{ origina... Remove this comment to see the full error message
       expect(req.flash).toHaveBeenCalledWith('formValues', {
         reason: 'ADM',
         comment: 'hello',
       })
-      // @ts-expect-error ts-migrate(2339) FIXME: Property 'redirect' does not exist on type '{ loca... Remove this comment to see the full error message
       expect(res.redirect).toHaveBeenCalledWith('/prisoner/A12345/cell-move/confirm-cell-move?cellId=233')
     })
 
     it('should trigger the maximum comment length validation', async () => {
       const bigComment = [...Array(40001).keys()].map(() => 'A').join('')
 
-      // @ts-expect-error ts-migrate(2339) FIXME: Property 'body' does not exist on type '{ original... Remove this comment to see the full error message
       req.body = { cellId: 233, comment: bigComment, reason: 'ADM' }
 
       await controller.post(req, res)
 
-      // @ts-expect-error ts-migrate(2339) FIXME: Property 'flash' does not exist on type '{ origina... Remove this comment to see the full error message
       expect(req.flash).toHaveBeenCalledWith('errors', [
         {
           href: '#comment',
@@ -402,117 +381,94 @@ describe('Change cell play back details', () => {
         },
       ])
 
-      // @ts-expect-error ts-migrate(2339) FIXME: Property 'redirect' does not exist on type '{ loca... Remove this comment to see the full error message
       expect(res.redirect).toHaveBeenCalledWith('/prisoner/A12345/cell-move/confirm-cell-move?cellId=233')
     })
 
     it('should redirect back to select cell page when location description is missing', async () => {
       await controller.post(req, res)
 
-      // @ts-expect-error ts-migrate(2339) FIXME: Property 'redirect' does not exist on type '{ loca... Remove this comment to see the full error message
       expect(res.redirect).toHaveBeenCalledWith('/prisoner/A12345/cell-move/select-cell')
     })
 
     it('should call whereabouts api to make the cell move', async () => {
-      // @ts-expect-error ts-migrate(2339) FIXME: Property 'getDetails' does not exist on type '{}'.
       prisonApi.getDetails = jest.fn().mockResolvedValue({ bookingId: 1 })
-      // @ts-expect-error ts-migrate(2339) FIXME: Property 'body' does not exist on type '{ original... Remove this comment to see the full error message
       req.body = { reason: 'BEH', cellId: 223, comment: 'Hello world' }
 
       await controller.post(req, res)
 
-      // @ts-expect-error ts-migrate(2339) FIXME: Property 'getDetails' does not exist on type '{}'.
-      expect(prisonApi.getDetails).toHaveBeenCalledWith({}, 'A12345')
-      // @ts-expect-error ts-migrate(2339) FIXME: Property 'moveToCell' does not exist on type '{}'.
-      expect(whereaboutsApi.moveToCell).toHaveBeenCalledWith(
-        {},
-        {
-          bookingId: 1,
-          offenderNo: 'A12345',
-          cellMoveReasonCode: 'BEH',
-          commentText: 'Hello world',
-          internalLocationDescriptionDestination: 'MDI-10-19',
-        }
-      )
-      // @ts-expect-error ts-migrate(2339) FIXME: Property 'redirect' does not exist on type '{ loca... Remove this comment to see the full error message
+      expect(prisonApi.getDetails).toHaveBeenCalledWith(res.locals, 'A12345')
+      expect(whereaboutsApi.moveToCell).toHaveBeenCalledWith(res.locals, {
+        bookingId: 1,
+        offenderNo: 'A12345',
+        cellMoveReasonCode: 'BEH',
+        commentText: 'Hello world',
+        internalLocationDescriptionDestination: 'MDI-10-19',
+      })
       expect(res.redirect).toHaveBeenCalledWith('/prisoner/A12345/cell-move/confirmation?cellId=223')
     })
 
     it('should store correct redirect and home url then re-throw the error', async () => {
-      // @ts-expect-error ts-migrate(2339) FIXME: Property 'body' does not exist on type '{ original... Remove this comment to see the full error message
       req.body = { ...req.body, cellId: 223 }
       const offenderNo = 'A12345'
       const error = new Error('network error')
 
-      // @ts-expect-error ts-migrate(2339) FIXME: Property 'getDetails' does not exist on type '{}'.
       prisonApi.getDetails = jest.fn().mockRejectedValue(error)
 
       await expect(controller.post(req, res)).rejects.toThrowError(error)
 
-      // @ts-expect-error ts-migrate(2339) FIXME: Property 'redirectUrl' does not exist on type '{}'... Remove this comment to see the full error message
       expect(res.locals.redirectUrl).toBe(`/prisoner/${offenderNo}/cell-move/select-cell`)
-      // @ts-expect-error ts-migrate(2339) FIXME: Property 'homeUrl' does not exist on type '{}'.
       expect(res.locals.homeUrl).toBe(`/prisoner/${offenderNo}`)
     })
 
     it('should raise an analytics event', async () => {
-      // @ts-expect-error ts-migrate(2339) FIXME: Property 'body' does not exist on type '{ original... Remove this comment to see the full error message
       req.body = { ...req.body, cellId: 223 }
 
       await controller.post(req, res)
-
       expect(raiseAnalyticsEvent).toBeCalledWith('Cell move', 'Cell move for MDI', 'Cell type - Single occupancy')
     })
 
     it('should not raise an analytics event on api failures', async () => {
+      const raiseAnalyticsEventMock = raiseAnalyticsEvent as jest.MockedFunction<typeof raiseAnalyticsEvent>
       const error = new Error('Internal server error')
-      // @ts-expect-error ts-migrate(2339) FIXME: Property 'moveToCell' does not exist on type '{}'.
       whereaboutsApi.moveToCell.mockRejectedValue(error)
 
-      // @ts-expect-error ts-migrate(2339) FIXME: Property 'body' does not exist on type '{ original... Remove this comment to see the full error message
       req.body = { ...req.body, cellId: 123 }
 
       await expect(controller.post(req, res)).rejects.toThrowError(error)
 
-      // @ts-expect-error ts-migrate(2339) FIXME: Property 'mock' does not exist on type '(category:... Remove this comment to see the full error message
-      expect(raiseAnalyticsEvent.mock.calls.length).toBe(0)
+      expect(raiseAnalyticsEventMock.mock.calls.length).toBe(0)
     })
 
     it('should redirect to cell not available on a http 400 bad request when attempting a cell move', async () => {
-      // @ts-expect-error ts-migrate(2339) FIXME: Property 'body' does not exist on type '{ original... Remove this comment to see the full error message
+      const raiseAnalyticsEventMock = raiseAnalyticsEvent as jest.MockedFunction<typeof raiseAnalyticsEvent>
       req.body = { ...req.body, cellId: 223 }
 
-      // @ts-expect-error ts-migrate(2339) FIXME: Property 'moveToCell' does not exist on type '{}'.
       whereaboutsApi.moveToCell.mockRejectedValue(makeError('status', 400))
 
       await controller.post(req, res)
 
-      // @ts-expect-error ts-migrate(2339) FIXME: Property 'redirect' does not exist on type '{ loca... Remove this comment to see the full error message
       expect(res.redirect).toHaveBeenCalledWith('/prisoner/A12345/cell-move/cell-not-available?cellDescription=MDI-10')
-      // @ts-expect-error ts-migrate(2339) FIXME: Property 'mock' does not exist on type '(category:... Remove this comment to see the full error message
-      expect(raiseAnalyticsEvent.mock.calls.length).toBe(0)
+      expect(raiseAnalyticsEventMock.mock.calls.length).toBe(0)
       expect(logError.mock.calls.length).toBe(0)
     })
   })
 
   describe('Post handle C-SWAP cell move', () => {
     it('should call elite api to make the C-SWAP cell move', async () => {
-      // @ts-expect-error ts-migrate(2339) FIXME: Property 'body' does not exist on type '{ original... Remove this comment to see the full error message
       req.body = { cellId: 'C-SWAP' }
-      res.locals = {}
+      res.locals = {
+        redirectUrl: '',
+        homeUrl: '',
+      }
 
       await controller.post(req, res)
 
-      // @ts-expect-error ts-migrate(2339) FIXME: Property 'getDetails' does not exist on type '{}'.
-      expect(prisonApi.getDetails).toHaveBeenCalledWith({}, 'A12345')
-      // @ts-expect-error ts-migrate(2339) FIXME: Property 'moveToCellSwap' does not exist on type '... Remove this comment to see the full error message
-      expect(prisonApi.moveToCellSwap).toHaveBeenCalledWith({}, { bookingId: 1 })
-      // @ts-expect-error ts-migrate(2339) FIXME: Property 'redirect' does not exist on type '{ loca... Remove this comment to see the full error message
+      expect(prisonApi.getDetails).toHaveBeenCalledWith(res.locals, 'A12345')
+      expect(prisonApi.moveToCellSwap).toHaveBeenCalledWith(res.locals, { bookingId: 1 })
       expect(res.redirect).toHaveBeenCalledWith('/prisoner/A12345/cell-move/space-created')
     })
 
     it('should raise an analytics event', async () => {
-      // @ts-expect-error ts-migrate(2339) FIXME: Property 'body' does not exist on type '{ original... Remove this comment to see the full error message
       req.body = { cellId: 'C-SWAP' }
 
       await controller.post(req, res)
@@ -521,17 +477,15 @@ describe('Change cell play back details', () => {
     })
 
     it('should not raise an analytics event on api failures', async () => {
+      const raiseAnalyticsEventMock = raiseAnalyticsEvent as jest.MockedFunction<typeof raiseAnalyticsEvent>
       const error = new Error('Internal server error')
 
-      // @ts-expect-error ts-migrate(2339) FIXME: Property 'moveToCellSwap' does not exist on type '... Remove this comment to see the full error message
       prisonApi.moveToCellSwap.mockRejectedValue(error)
-      // @ts-expect-error ts-migrate(2339) FIXME: Property 'body' does not exist on type '{ original... Remove this comment to see the full error message
       req.body = { cellId: 'C-SWAP' }
 
       await expect(controller.post(req, res)).rejects.toThrowError(error)
 
-      // @ts-expect-error ts-migrate(2339) FIXME: Property 'mock' does not exist on type '(category:... Remove this comment to see the full error message
-      expect(raiseAnalyticsEvent.mock.calls.length).toBe(0)
+      expect(raiseAnalyticsEventMock.mock.calls.length).toBe(0)
     })
   })
 })

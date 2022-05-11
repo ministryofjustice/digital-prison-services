@@ -18,7 +18,7 @@ const cellMoveReasons = async (res, prisonApi, selectedReason) => {
     }))
 }
 
-export default ({ prisonApi, whereaboutsApi }) => {
+export default ({ prisonApi, whereaboutsApi, caseNotesApi, logError }) => {
   const index = async (req, res) => {
     const { offenderNo } = req.params
     const { cellId } = req.query
