@@ -30,7 +30,6 @@ const controller = ({ oauthApi, prisonApi, whereaboutsApi, caseNotesApi, logErro
   router.get('/non-associations', nonAssociationsController({ prisonApi, logError }))
   router.get('/offender-details', offenderDetailsController({ prisonApi, logError }))
   router.get('/cell-sharing-risk-assessment-details', cellSharingRiskAssessmentController({ prisonApi, logError }))
-  // @ts-expect-error ts-migrate(2345) FIXME: Argument of type '{ oauthApi: any; prisonApi: any;... Remove this comment to see the full error message
   router.get('/select-cell', selectCellController({ oauthApi, prisonApi, whereaboutsApi, logError }))
   router.get('/confirm-cell-move', confirmCellMoveIndex)
   router.post('/confirm-cell-move', confirmCellMovePost)
