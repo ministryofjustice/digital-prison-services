@@ -1,6 +1,7 @@
 import express from 'express'
-import redis from 'redis'
+import { createClient } from 'redis'
 import session from 'express-session'
+import logger from './log'
 
 import config from './config'
 
@@ -13,12 +14,14 @@ export default () => {
     const { enabled, host, port, password } = config.redis
     if (!enabled || !host) return null
 
-    const client = redis.createClient({
+    const client = createClient({
       host,
       port,
       password,
       tls: config.app.production ? {} : false,
     })
+
+    client.on('error', (e: Error) => logger.error('Redis client error', e))
 
     return new RedisStore({ client })
   }

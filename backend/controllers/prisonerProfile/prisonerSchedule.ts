@@ -2,7 +2,7 @@ import moment from 'moment'
 import filterActivitiesByPeriod from '../../shared/filterActivitiesByPeriod'
 import { formatName, putLastNameFirst, groupBy, times } from '../../utils'
 
-export default ({ prisonApi }) =>
+export default ({ prisonApi, logError }) =>
   async (req, res) => {
     let schedule
     const { when } = req.query

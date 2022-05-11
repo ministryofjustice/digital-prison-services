@@ -6,7 +6,7 @@ const zeroIfNotDefined = (number) => number || 0
 const getTotals = (array, figure) =>
   array.reduce((accumulator, block) => accumulator + zeroIfNotDefined(block[figure]), 0)
 
-export default ({ prisonApi }) =>
+export default ({ prisonApi, logError }) =>
   async (req, res) => {
     const { caseLoadId, description: caseLoadDescription } = res.locals.user.activeCaseLoad
     const [assignedResponse, unassignedResponse, movementsResponse, enroute, caseLoadLocations] = await Promise.all([

@@ -58,17 +58,18 @@
 
     button {
       margin-right: govuk-spacing(3);
+      margin-bottom: $govuk-border-width-form-element;
     }
 
     a {
-      margin-top: govuk-spacing(3);
+      margin-bottom: 10px;
     }
 
     button,
     a {
       align-self: flex-end;
-      margin-bottom: $govuk-border-width-form-element;
     }
+  
   }
 }
 
@@ -89,4 +90,9 @@
       margin-right: govuk-spacing(3);
     }
   }
+}
+
+.no-label-form-clear-link {
+  margin-bottom: 10px;
+  margin-top: 0 !important;
 }

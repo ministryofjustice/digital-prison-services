@@ -1,9 +1,20 @@
 import cellMoveHistoryFactory from '../../controllers/cellMove/cellMoveHistory'
 
 describe('Cell move history', () => {
-  const systemOauthClient = {}
-  const prisonApi = {}
-  const whereaboutsApi = {}
+  const systemOauthClient = {
+    getClientCredentialsTokens: jest.fn(),
+  }
+  const prisonApi = {
+    getHistoryByDate: jest.fn(),
+    getStaffDetails: jest.fn(),
+    getPrisoners: jest.fn(),
+    getOffenderCellHistory: jest.fn(),
+    getCellMoveReasonTypes: jest.fn(),
+  }
+  const whereaboutsApi = {
+    searchGroups: jest.fn(),
+    getAgencyGroupLocationPrefix: jest.fn(),
+  }
 
   const credentialsRef = { token: 'example' }
 
@@ -11,21 +22,13 @@ describe('Cell move history', () => {
   let res
   let controller
   beforeEach(() => {
-    // @ts-expect-error ts-migrate(2339) FIXME: Property 'getClientCredentialsTokens' does not exi... Remove this comment to see the full error message
     systemOauthClient.getClientCredentialsTokens = jest.fn().mockResolvedValue(credentialsRef)
-    // @ts-expect-error ts-migrate(2339) FIXME: Property 'getHistoryByDate' does not exist on type... Remove this comment to see the full error message
     prisonApi.getHistoryByDate = jest.fn().mockResolvedValue([])
-    // @ts-expect-error ts-migrate(2339) FIXME: Property 'getStaffDetails' does not exist on type ... Remove this comment to see the full error message
     prisonApi.getStaffDetails = jest.fn()
-    // @ts-expect-error ts-migrate(2339) FIXME: Property 'getPrisoners' does not exist on type '{}... Remove this comment to see the full error message
     prisonApi.getPrisoners = jest.fn()
-    // @ts-expect-error ts-migrate(2339) FIXME: Property 'getOffenderCellHistory' does not exist o... Remove this comment to see the full error message
     prisonApi.getOffenderCellHistory = jest.fn().mockResolvedValue({ content: [] })
-    // @ts-expect-error ts-migrate(2339) FIXME: Property 'searchGroups' does not exist on type '{}... Remove this comment to see the full error message
     whereaboutsApi.searchGroups = jest.fn().mockResolvedValue([])
-    // @ts-expect-error ts-migrate(2339) FIXME: Property 'getAgencyGroupLocationPrefix' does not e... Remove this comment to see the full error message
     whereaboutsApi.getAgencyGroupLocationPrefix = jest.fn()
-    // @ts-expect-error ts-migrate(2339) FIXME: Property 'getCellMoveReasonTypes' does not exist o... Remove this comment to see the full error message
     prisonApi.getCellMoveReasonTypes = jest.fn().mockResolvedValue([
       { code: 'ADM', description: 'Administrative' },
       { code: 'SA', description: 'Safety' },
@@ -56,7 +59,6 @@ describe('Cell move history', () => {
   it('should make a request for cell move for the date passed in', async () => {
     await controller(req, res)
 
-    // @ts-expect-error ts-migrate(2339) FIXME: Property 'getHistoryByDate' does not exist on type... Remove this comment to see the full error message
     expect(prisonApi.getHistoryByDate).toHaveBeenCalledWith(expect.anything(), {
       assignmentDate: '2020-10-12',
       agencyId: 'MDI',
@@ -81,7 +83,6 @@ describe('Cell move history', () => {
 
   describe('should return cell move history for the given date', () => {
     beforeEach(() => {
-      // @ts-expect-error ts-migrate(2339) FIXME: Property 'getHistoryByDate' does not exist on type... Remove this comment to see the full error message
       prisonApi.getHistoryByDate = jest.fn().mockResolvedValue([
         {
           bookingId: -34,
@@ -96,17 +97,14 @@ describe('Cell move history', () => {
           offenderNo: 'A12345',
         },
       ])
-      // @ts-expect-error ts-migrate(2339) FIXME: Property 'getPrisoners' does not exist on type '{}... Remove this comment to see the full error message
       prisonApi.getPrisoners = jest
         .fn()
         .mockResolvedValue([{ bookingId: -34, offenderNo: 'A12345', firstName: 'BOB', lastName: 'LAST' }])
 
-      // @ts-expect-error ts-migrate(2339) FIXME: Property 'getStaffDetails' does not exist on type ... Remove this comment to see the full error message
       prisonApi.getStaffDetails = jest.fn().mockResolvedValue({ username: 'SA', firstName: 'LOU', lastName: 'Becker' })
     })
 
     it('should return defaults', async () => {
-      // @ts-expect-error ts-migrate(2339) FIXME: Property 'getHistoryByDate' does not exist on type... Remove this comment to see the full error message
       prisonApi.getHistoryByDate = jest.fn().mockResolvedValue([
         {
           bookingId: -34,
@@ -134,7 +132,6 @@ describe('Cell move history', () => {
     })
 
     it('should return the offenders name properly formatted, and the offender number', async () => {
-      // @ts-expect-error ts-migrate(2339) FIXME: Property 'getPrisoners' does not exist on type '{}... Remove this comment to see the full error message
       prisonApi.getPrisoners = jest
         .fn()
         .mockResolvedValue([{ bookingId: -34, offenderNo: 'A12345', firstName: 'BOB', lastName: 'LAST' }])
@@ -215,7 +212,6 @@ describe('Cell move history', () => {
     })
 
     it('should format locations correctly', async () => {
-      // @ts-expect-error ts-migrate(2339) FIXME: Property 'getHistoryByDate' does not exist on type... Remove this comment to see the full error message
       prisonApi.getHistoryByDate = jest.fn().mockResolvedValue([
         {
           assignmentDate: '2016-11-01',
@@ -268,7 +264,6 @@ describe('Cell move history', () => {
     it('should make a call for offender cell history limiting paged results by 20', async () => {
       await controller(req, res)
 
-      // @ts-expect-error ts-migrate(2339) FIXME: Property 'getOffenderCellHistory' does not exist o... Remove this comment to see the full error message
       expect(prisonApi.getOffenderCellHistory).toHaveBeenCalledWith(
         {
           user: {
@@ -285,9 +280,7 @@ describe('Cell move history', () => {
     it('should make a call to get prisoner data using client credentials and limiting paged results by 20', async () => {
       await controller(req, res)
 
-      // @ts-expect-error ts-migrate(2339) FIXME: Property 'getClientCredentialsTokens' does not exi... Remove this comment to see the full error message
       expect(systemOauthClient.getClientCredentialsTokens).toHaveBeenCalledTimes(1)
-      // @ts-expect-error ts-migrate(2339) FIXME: Property 'getPrisoners' does not exist on type '{}... Remove this comment to see the full error message
       expect(prisonApi.getPrisoners).toHaveBeenCalledWith(
         {
           requestHeaders: {
@@ -302,7 +295,6 @@ describe('Cell move history', () => {
 
     describe('Filtering', () => {
       beforeEach(() => {
-        // @ts-expect-error ts-migrate(2339) FIXME: Property 'getHistoryByDate' does not exist on type... Remove this comment to see the full error message
         prisonApi.getHistoryByDate = jest.fn().mockResolvedValue([
           {
             assignmentDate: '2016-11-01',
@@ -352,7 +344,6 @@ describe('Cell move history', () => {
             },
           },
         }
-        // @ts-expect-error ts-migrate(2339) FIXME: Property 'getAgencyGroupLocationPrefix' does not e... Remove this comment to see the full error message
         whereaboutsApi.getAgencyGroupLocationPrefix = jest.fn().mockResolvedValue({ locationPrefix: 'LEI-' })
 
         req.query.locationId = 'House block 1'
@@ -393,7 +384,6 @@ describe('Cell move history', () => {
 
     describe('Previous location', () => {
       beforeEach(() => {
-        // @ts-expect-error ts-migrate(2339) FIXME: Property 'getHistoryByDate' does not exist on type... Remove this comment to see the full error message
         prisonApi.getHistoryByDate = jest.fn().mockResolvedValue([
           {
             livingUnitId: 1,
@@ -405,7 +395,6 @@ describe('Cell move history', () => {
         ])
       })
       it('should return the moved from location', async () => {
-        // @ts-expect-error ts-migrate(2339) FIXME: Property 'getOffenderCellHistory' does not exist o... Remove this comment to see the full error message
         prisonApi.getOffenderCellHistory = jest.fn().mockResolvedValue({
           content: [
             {
@@ -445,7 +434,6 @@ describe('Cell move history', () => {
       })
 
       it('should use latest move when there are multiple for the same day', async () => {
-        // @ts-expect-error ts-migrate(2339) FIXME: Property 'getOffenderCellHistory' does not exist o... Remove this comment to see the full error message
         prisonApi.getOffenderCellHistory = jest.fn().mockResolvedValue({
           content: [
             {
@@ -494,7 +482,6 @@ describe('Cell move history', () => {
       })
 
       it('should sort by latest assignment date time', async () => {
-        // @ts-expect-error ts-migrate(2339) FIXME: Property 'getHistoryByDate' does not exist on type... Remove this comment to see the full error message
         prisonApi.getHistoryByDate = jest.fn().mockResolvedValue([
           {
             assignmentDate: '2020-02-03',
