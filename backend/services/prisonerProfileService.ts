@@ -7,28 +7,9 @@ import { csraTranslations } from '../shared/csraHelpers'
 import config from '../config'
 import logErrorAndContinue from '../shared/logErrorAndContinue'
 import canAccessProbationDocuments from '../shared/probationDocumentsAccess'
+import { NeurodivergenceSupport } from '../api/curious/types/Enums'
 
-const enum NeurodivergenceType {
-  NoidentifiedNeurodiversityNeed = 'No identified Neurodiversity Need',
-  NoidentifiedSupportRequired = 'No identified Support Required',
-}
 export const isComplexityEnabledFor = (agencyId) => config.apis.complexity.enabled_prisons?.includes(agencyId)
-
-const needNeurodivergenceSupport = (divergenceData) => {
-  const hasSupportNeed =
-    divergenceData && divergenceData[0]?.neurodivergenceSupport && divergenceData[0]?.neurodivergenceSupport?.length > 0
-  if (hasSupportNeed) {
-    const hasIdentifiedDivergenceSupportNeed = divergenceData.some((element) => {
-      return element.neurodivergenceSupport.includes(NeurodivergenceType.NoidentifiedNeurodiversityNeed)
-    })
-
-    const hasRequiredSupport = divergenceData.some((ele) => {
-      return ele.neurodivergenceSupport.includes(NeurodivergenceType.NoidentifiedSupportRequired)
-    })
-    return !(hasIdentifiedDivergenceSupportNeed || hasRequiredSupport)
-  }
-  return false
-}
 
 export default ({
   prisonApi,
@@ -51,8 +32,45 @@ export default ({
       soc: { ui_url: socUrl, enabled: socEnabled },
       useOfForce: { prisons: useOfForcePrisons, ui_url: useOfForceUrl },
     },
-    app: { displayRetentionLink, esweEnabled },
+    app: { displayRetentionLink, esweEnabled, neurodiversityEnabledPrisons },
   } = config
+
+  // TODO: Part of temporary measure to only allow restricted prisons access to neurodivergence data. If no prisons specified then assume all are allowed access.
+  const canViewNeurodivergenceSupportData = (caseLoads) => {
+    let canViewNeurodivergenceData = true
+    if (neurodiversityEnabledPrisons.length) {
+      const enabledPrisons = (neurodiversityEnabledPrisons as any).split(',')
+
+      canViewNeurodivergenceData = Boolean(
+        (caseLoads as [{ caseLoadId: string }]).some((caseLoad) => {
+          return enabledPrisons?.some((prison) => caseLoad.caseLoadId === prison)
+        })
+      )
+    }
+    return canViewNeurodivergenceData
+  }
+
+  const needNeurodivergenceSupport = (divergenceData) => {
+    const hasSupportNeed = divergenceData && divergenceData[0] !== null
+    if (hasSupportNeed && divergenceData[0][0]?.neurodivergenceSupport) {
+      const divergenceSupport = divergenceData[0][0]?.neurodivergenceSupport?.length
+        ? divergenceData[0][0].neurodivergenceSupport
+        : []
+
+      if (divergenceSupport.length) {
+        const hasIdentifiedDivergenceSupportNeed = divergenceSupport.some((element) => {
+          return element.includes(NeurodivergenceSupport.NoIdentifiedNeurodiversityNeed)
+        })
+
+        const hasRequiredSupport = divergenceSupport.some((ele) => {
+          return ele.includes(NeurodivergenceSupport.NoIdentifiedSupportRequired)
+        })
+        return !(hasIdentifiedDivergenceSupportNeed || hasRequiredSupport)
+      }
+      return false
+    }
+    return false
+  }
 
   const getPrisonerProfileData = async (context, offenderNo, username) => {
     const [currentUser, prisonerDetails] = await Promise.all([
@@ -64,6 +82,19 @@ export default ({
       displayRetentionLink && (await dataComplianceApi.getOffenderRetentionRecord(context, offenderNo))
 
     const systemContext = await systemOauthClient.getClientCredentialsTokens(username)
+
+    // TODO: Temporary measure to allow 3rd party MegaNexus time to implement caching and other techniques to their API so it can handle high volume of calls. To be refactored!
+    const getNeurodivergenceSupportNeed = async () => {
+      if (canViewNeurodivergenceSupportData(userCaseloads)) {
+        const divergenceData = await Promise.all(
+          [curiousApi.getLearnerNeurodivergence(systemContext, offenderNo)].map((apiCall) =>
+            logErrorAndContinue(apiCall)
+          )
+        )
+        return divergenceData[0] ? needNeurodivergenceSupport(divergenceData) : false
+      }
+      return false
+    }
 
     const {
       activeAlertCount,
@@ -98,7 +129,6 @@ export default ({
       pathfinderDetails,
       socDetails,
       allocationManager,
-      neurodivergenceData,
     ] = await Promise.all(
       [
         incentivesApi.getIepSummaryForBookingIds(context, [bookingId]),
@@ -110,11 +140,10 @@ export default ({
         pathfinderApi.getPathfinderDetails(systemContext, offenderNo),
         socApi.getSocDetails(systemContext, offenderNo, socEnabled),
         allocationManagerApi.getPomByOffenderNo(context, offenderNo),
-        curiousApi.getLearnerNeurodivergence(systemContext, offenderNo),
       ].map((apiCall) => logErrorAndContinue(apiCall))
     )
 
-    const hasDivergenceSupport = needNeurodivergenceSupport(neurodivergenceData)
+    const hasDivergenceSupport = await getNeurodivergenceSupportNeed()
 
     const prisonersActiveAlertCodes = alerts.filter((alert) => !alert.expired).map((alert) => alert.alertCode)
     const alertsToShow = alertFlagLabels.filter((alertFlag) =>

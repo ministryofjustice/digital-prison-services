@@ -1,6 +1,10 @@
 import prisonerPersonal from '../controllers/prisonerProfile/prisonerPersonal'
 import config from '../config'
-import { curiousApi } from '../apis'
+import {
+  NeurodivergenceSelfDeclared,
+  NeurodivergenceAssessed,
+  NeurodivergenceSupport,
+} from '../api/curious/types/Enums'
 
 describe('prisoner personal', () => {
   const offenderNo = 'ABC123'
@@ -27,6 +31,7 @@ describe('prisoner personal', () => {
   const prisonerProfileService = {}
   const personService = {}
   const esweService = {}
+  const curiousApi = {}
 
   let req
   let res
@@ -48,7 +53,10 @@ describe('prisoner personal', () => {
     // @ts-expect-error ts-migrate(2339) FIXME: Property 'getNeurodiversities' does not ex... Remove this comment to see the full error message
     esweService.getNeurodiversities = jest.fn().mockResolvedValue('')
     // @ts-expect-error ts-migrate(2339) FIXME: Property 'getNeurodiversities' does not ex... Remove this comment to see the full error message
-    esweService.getNeurodivergence = jest.fn().mockResolvedValue('')
+    esweService.getNeurodivergence = jest.fn().mockResolvedValue([])
+    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+    // @ts-ignore
+    curiousApi.getLearnerNeurodivergence = jest.fn()
 
     // @ts-expect-error ts-migrate(2339) FIXME: Property 'getDetails' does not exist on type '{}'.
     prisonApi.getDetails = jest.fn().mockResolvedValue({})
@@ -87,6 +95,7 @@ describe('prisoner personal', () => {
       // @ts-expect-error ts-migrate(2345) FIXME: Argument of type '{ prisonerProfileService: {}; pe... Remove this comment to see the full error message
       logError,
       esweService,
+      curiousApi,
     })
   })
 
@@ -1836,6 +1845,13 @@ describe('prisoner personal', () => {
   })
 
   describe('personal care needs', () => {
+    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+    // @ts-ignore
+    prisonApi.userCaseLoads = jest.fn()
+    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+    // @ts-ignore
+    prisonApi.userCaseLoads.mockResolvedValue([{ caseLoadId: 'MDI' }, { caseLoadId: 'BLI' }])
+
     it('should make a call for treatment and health types', async () => {
       await controller(req, res)
 
@@ -1965,6 +1981,12 @@ describe('prisoner personal', () => {
             formattedDescription: 'Moorland (HMP & YOI)',
           },
         ])
+        // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+        // @ts-ignore
+        prisonApi.userCaseLoads = jest.fn()
+        // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+        // @ts-ignore
+        prisonApi.userCaseLoads.mockResolvedValue([{ caseLoadId: 'MDI' }, { caseLoadId: 'BLI' }])
       })
 
       it('should make a call for care needs and adjustments with the available treatment and health types', async () => {
@@ -2066,6 +2088,12 @@ describe('prisoner personal', () => {
       prisonApi.getPersonalCareNeeds.mockRejectedValue(new Error('Network error'))
       // @ts-expect-error ts-migrate(2339) FIXME: Property 'getReasonableAdjustments' does not exist... Remove this comment to see the full error message
       prisonApi.getReasonableAdjustments.mockRejectedValue(new Error('Network error'))
+      // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+      // @ts-ignore
+      prisonApi.userCaseLoads = jest.fn()
+      // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+      // @ts-ignore
+      prisonApi.userCaseLoads.mockResolvedValue([{ caseLoadId: 'MDI' }, { caseLoadId: 'BLI' }])
     })
 
     it('should still render the personal template with missing data', async () => {
@@ -2099,6 +2127,12 @@ describe('prisoner personal', () => {
     beforeEach(() => {
       // @ts-expect-error ts-migrate(2339) FIXME: Property 'getNeurodiversities' does not ex... Remove this comment to see the full error message
       esweService.getNeurodiversities = jest.fn()
+      // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+      // @ts-ignore
+      prisonApi.userCaseLoads = jest.fn()
+      // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+      // @ts-ignore
+      prisonApi.userCaseLoads.mockResolvedValue([{ caseLoadId: 'MDI' }, { caseLoadId: 'BLI' }])
     })
 
     it('should return null for a failed request', async () => {
@@ -2186,22 +2220,32 @@ describe('prisoner personal', () => {
         prn: 'ABC123',
         establishmentId: 'MDI',
         establishmentName: 'Moorland (HMP & YOI)',
-        neurodivergenceSelfDeclared: 'Autism',
+        neurodivergenceSelfDeclared: NeurodivergenceSelfDeclared.Autism,
         selfDeclaredDate: '10 February 2022',
-        neurodivergenceAssessed: 'Alzheimers',
+        neurodivergenceAssessed: NeurodivergenceAssessed.Alzheimers,
         assessmentDate: '12 February 2022',
-        neurodivergenceSupport: 'Reading support, Auditory support',
+        neurodivergenceSupport: [NeurodivergenceSupport.Reading, NeurodivergenceSupport.AuditorySupport],
         supportDate: '14 February 2022',
       })
+      // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+      // @ts-ignore
+      prisonApi.userCaseLoads = jest.fn()
+      // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+      // @ts-ignore
+      prisonApi.userCaseLoads.mockResolvedValue([{ caseLoadId: 'MDI' }, { caseLoadId: 'BLI' }])
     })
 
-    it('should return null for a failed request', async () => {
-      // @ts-expect-error ts-migrate(2339) FIXME: Property 'getNeurodiversities' does not ex... Remove this comment to see the full error message
-      esweService.getNeurodivergence.mockRejectedValue(new Error())
+    it('should return empty object for a failed request', async () => {
+      // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+      // @ts-ignore
+      esweService.getNeurodivergence = jest.fn()
+      // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+      // @ts-ignore
+      curiousApi.getLearnerNeurodivergence.mockRejectedValue(new Error())
       await controller(req, res)
       expect(res.render).toHaveBeenCalledWith(
         'prisonerProfile/prisonerPersonal/prisonerPersonal.njk',
-        expect.objectContaining({ neurodivergence: null })
+        expect.objectContaining({ neurodivergence: undefined })
       )
     })
 
@@ -2215,11 +2259,11 @@ describe('prisoner personal', () => {
             prn: 'ABC123',
             establishmentId: 'MDI',
             establishmentName: 'Moorland (HMP & YOI)',
-            neurodivergenceAssessed: 'Alzheimers',
+            neurodivergenceAssessed: NeurodivergenceAssessed.Alzheimers,
             assessmentDate: '12 February 2022',
-            neurodivergenceSelfDeclared: 'Autism',
+            neurodivergenceSelfDeclared: NeurodivergenceSelfDeclared.Autism,
             selfDeclaredDate: '10 February 2022',
-            neurodivergenceSupport: 'Reading support, Auditory support',
+            neurodivergenceSupport: [NeurodivergenceSupport.Reading, NeurodivergenceSupport.AuditorySupport],
             supportDate: '14 February 2022',
           },
         })

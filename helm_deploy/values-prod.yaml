@@ -60,6 +60,7 @@ env:
   MANAGE_RESTRICTED_PATIENTS_URL: https://manage-restricted-patients.hmpps.service.justice.gov.uk/
   ESWE_ENABLED: true
   NEURODIVERSITY_ENABLED_USERNAMES: "CN004364,DBULL_GEN,J_DRAPER"
+  NEURODIVERSITY_ENABLED_PRISONS: "BLI,NHI,LII,SLI"
   CURIOUS_URL: https://liveservices.sequation.com/sequation-virtual-campus2-api/
   DISABLE_REQUEST_LIMITER: true
   PVB_URL: https://manage-a-prison-visit.hmpps.service.justice.gov.uk/

@@ -10,7 +10,8 @@ $(function () {
     $neurodivergenceAccordion.trigger('click')
   })
 
-  $neurodivergenceAccordion.on('click', () => {
+  $neurodivergenceAccordion.on('click', (event) => {
+    event.preventDefault()
     const expanded = $(this).attr('aria-expanded')
     const heading = this.innerText
     const action = expanded === 'false' ? 'accordion_expanded' : 'accordion_contracted'

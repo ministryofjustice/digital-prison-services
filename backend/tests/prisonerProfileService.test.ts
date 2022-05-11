@@ -1,6 +1,11 @@
 import config from '../config'
 import prisonerProfileService from '../services/prisonerProfileService'
 import { makeNotFoundError } from './helpers'
+import {
+  NeurodivergenceSelfDeclared,
+  NeurodivergenceAssessed,
+  NeurodivergenceSupport,
+} from '../api/curious/types/Enums'
 
 config.app.displayRetentionLink = true
 // @ts-expect-error ts-migrate(2741) FIXME: Property 'timeoutSeconds' is missing in type '{ ui... Remove this comment to see the full error message
@@ -17,15 +22,6 @@ config.apis.soc = {
 
 config.apis.calculateReleaseDates = {
   ui_url: 'http://crd-ui/',
-}
-
-const enum NeurodivergenceType {
-  ADHD = 'ADHD',
-  Autism = 'Autism',
-  Reading = 'Reading Support',
-  MemorySupport = 'Memory Support',
-  AcquiredBrainInjury = 'Acquired Brain Injury',
-  NoidentifiedNeurodiversityNeed = 'No identified Neurodiversity Need',
 }
 
 describe('prisoner profile service', () => {
@@ -894,11 +890,11 @@ describe('prisoner profile service', () => {
       prn: offenderNo,
       establishmentId: 'MDI',
       establishmentName: 'HMP Moorland',
-      neurodivergenceSelfDeclared: [NeurodivergenceType.ADHD, NeurodivergenceType.Autism],
+      neurodivergenceSelfDeclared: [NeurodivergenceSelfDeclared.ADHD, NeurodivergenceSelfDeclared.Autism],
       selfDeclaredDate: '2022-02-10',
-      neurodivergenceAssessed: [NeurodivergenceType.AcquiredBrainInjury],
+      neurodivergenceAssessed: [NeurodivergenceAssessed.AcquiredBrainInjury],
       assessmentDate: '2022-02-15',
-      neurodivergenceSupport: [NeurodivergenceType.MemorySupport, NeurodivergenceType.Reading],
+      neurodivergenceSupport: [NeurodivergenceSupport.MemorySupport, NeurodivergenceSupport.Reading],
       supportDate: '2022-02-20',
     }
     const prisonerDetails = {
@@ -1031,7 +1027,7 @@ describe('prisoner profile service', () => {
       prn: offenderNo,
       establishmentId: 'MDI',
       establishmentName: 'HMP Moorland',
-      neurodivergenceSupport: [NeurodivergenceType.NoidentifiedNeurodiversityNeed],
+      neurodivergenceSupport: [NeurodivergenceSupport.NoIdentifiedNeurodiversityNeed],
     }
     const prisonerDetails = {
       activeAlertCount: 1,
@@ -1091,6 +1087,9 @@ describe('prisoner profile service', () => {
       config.apis.complexity.enabled_prisons = []
       // @ts-expect-error ts-migrate(2339) FIXME: Property 'getLearnerNeurodivergence' does not exist on ty... Remove this comment to see the full error message
       curiousApi.getLearnerNeurodivergence.mockResolvedValue([neurodivergenceDataNoSupport])
+      // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+      // @ts-ignore
+      prisonApi.userCaseLoads.mockResolvedValue([{ caseLoadId: 'MDI' }, { caseLoadId: 'BLI' }])
     })
 
     it('should return false when user has no neurodiversity data', async () => {
@@ -1109,6 +1108,15 @@ describe('prisoner profile service', () => {
       // eslint-disable-next-line @typescript-eslint/ban-ts-comment
       // @ts-ignore
       curiousApi.getLearnerNeurodivergence.mockRejectedValue(makeNotFoundError())
+
+      const response = await service.getPrisonerProfileData(context, offenderNo)
+      expect(response.hasDivergenceSupport).toEqual(false)
+    })
+    it('should return false when caseload not an accelerated prison', async () => {
+      config.app.neurodiversityEnabledPrisons = ['NOT-ACCELERATED']
+      // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+      // @ts-ignore
+      curiousApi.getLearnerNeurodivergence.mockResolvedValue([NeurodivergenceSupport.OrganisationSupport])
 
       const response = await service.getPrisonerProfileData(context, offenderNo)
       expect(response.hasDivergenceSupport).toEqual(false)
