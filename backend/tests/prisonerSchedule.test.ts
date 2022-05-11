@@ -3,7 +3,11 @@ import prisonerSchedule from '../controllers/prisonerProfile/prisonerSchedule'
 describe('Prisoner schedule', () => {
   const offenderNo = 'ABC123'
   const bookingId = '123'
-  const prisonApi = {}
+  const prisonApi = {
+    getDetails: jest.fn(),
+    getScheduledEventsForThisWeek: jest.fn(),
+    getScheduledEventsForNextWeek: jest.fn(),
+  }
 
   let req
   let res
@@ -22,28 +26,23 @@ describe('Prisoner schedule', () => {
 
     logError = jest.fn()
 
-    // @ts-expect-error ts-migrate(2339) FIXME: Property 'getDetails' does not exist on type '{}'.
     prisonApi.getDetails = jest.fn().mockResolvedValue({ bookingId, firstName: 'John', lastName: 'Smith ' })
-    // @ts-expect-error ts-migrate(2339) FIXME: Property 'getScheduledEventsForThisWeek' does not ... Remove this comment to see the full error message
     prisonApi.getScheduledEventsForThisWeek = jest.fn().mockResolvedValue([])
-    // @ts-expect-error ts-migrate(2339) FIXME: Property 'getScheduledEventsForNextWeek' does not ... Remove this comment to see the full error message
     prisonApi.getScheduledEventsForNextWeek = jest.fn().mockResolvedValue([])
 
-    // @ts-expect-error ts-migrate(2345) FIXME: Argument of type '{ prisonApi: {}; logError: any; ... Remove this comment to see the full error message
     controller = prisonerSchedule({ prisonApi, logError })
 
     jest.spyOn(Date, 'now').mockImplementation(() => 1595548800000) // Friday, 24 July 2020 00:00:00
   })
 
   afterEach(() => {
-    // @ts-expect-error ts-migrate(2339) FIXME: Property 'mockRestore' does not exist on type '() ... Remove this comment to see the full error message
-    Date.now.mockRestore()
+    const spy = jest.spyOn(Date, 'now')
+    spy.mockRestore()
   })
 
   it('should get the prisoner details', async () => {
     await controller(req, res)
 
-    // @ts-expect-error ts-migrate(2339) FIXME: Property 'getDetails' does not exist on type '{}'.
     expect(prisonApi.getDetails).toHaveBeenCalledWith(res.locals, offenderNo)
   })
 
@@ -51,7 +50,6 @@ describe('Prisoner schedule', () => {
     it('should get the schedule for this week', async () => {
       await controller(req, res)
 
-      // @ts-expect-error ts-migrate(2339) FIXME: Property 'getScheduledEventsForThisWeek' does not ... Remove this comment to see the full error message
       expect(prisonApi.getScheduledEventsForThisWeek).toHaveBeenCalledWith(res.locals, bookingId)
     })
 
@@ -101,7 +99,6 @@ describe('Prisoner schedule', () => {
 
     describe('with data', () => {
       beforeEach(() => {
-        // @ts-expect-error ts-migrate(2339) FIXME: Property 'getScheduledEventsForThisWeek' does not ... Remove this comment to see the full error message
         prisonApi.getScheduledEventsForThisWeek.mockResolvedValue([
           {
             bookingId: 1200961,
@@ -267,7 +264,6 @@ describe('Prisoner schedule', () => {
     it('should get the schedule for next week', async () => {
       await controller(req, res)
 
-      // @ts-expect-error ts-migrate(2339) FIXME: Property 'getScheduledEventsForNextWeek' does not ... Remove this comment to see the full error message
       expect(prisonApi.getScheduledEventsForNextWeek).toHaveBeenCalledWith(res.locals, bookingId)
     })
 

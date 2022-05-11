@@ -8,7 +8,10 @@ describe('view offender details', () => {
   let logError
   let controller
 
-  const prisonApi = {}
+  const prisonApi = {
+    getMainOffence: jest.fn(),
+    getDetails: jest.fn(),
+  }
 
   const offenderNo = 'ABC123'
 
@@ -44,31 +47,25 @@ describe('view offender details', () => {
     }
     res = { locals: {}, render: jest.fn(), status: jest.fn() }
 
-    // @ts-expect-error ts-migrate(2339) FIXME: Property 'getDetails' does not exist on type '{}'.
     prisonApi.getDetails = jest.fn().mockResolvedValue(getDetailsResponse)
-    // @ts-expect-error ts-migrate(2339) FIXME: Property 'getMainOffence' does not exist on type '... Remove this comment to see the full error message
     prisonApi.getMainOffence = jest.fn().mockResolvedValue([
       {
         offenceDescription: '13 hours over work',
       },
     ])
 
-    // @ts-expect-error ts-migrate(2345) FIXME: Argument of type '{ prisonApi: {}; logError: any; ... Remove this comment to see the full error message
     controller = viewOffenderDetails({ prisonApi, logError })
   })
 
   it('Makes the expected API calls', async () => {
     await controller(req, res)
 
-    // @ts-expect-error ts-migrate(2339) FIXME: Property 'getDetails' does not exist on type '{}'.
     expect(prisonApi.getDetails).toHaveBeenCalledWith(res.locals, offenderNo, true)
-    // @ts-expect-error ts-migrate(2339) FIXME: Property 'getMainOffence' does not exist on type '... Remove this comment to see the full error message
     expect(prisonApi.getMainOffence).toHaveBeenCalledWith(res.locals, 1234)
   })
 
   it('Should render error template when there is an API error', async () => {
     const error = new Error('Network error')
-    // @ts-expect-error ts-migrate(2339) FIXME: Property 'getDetails' does not exist on type '{}'.
     prisonApi.getDetails.mockImplementation(() => Promise.reject(error))
 
     await expect(controller(req, res)).rejects.toThrowError(error)
@@ -100,7 +97,6 @@ describe('view offender details', () => {
   })
 
   it('populates the data correctly when optional missing', async () => {
-    // @ts-expect-error ts-migrate(2339) FIXME: Property 'getDetails' does not exist on type '{}'.
     prisonApi.getDetails = jest.fn().mockResolvedValue({
       ...getDetailsResponse,
       profileInformation: [],
@@ -108,7 +104,6 @@ describe('view offender details', () => {
       physicalAttributes: {},
       religion: undefined,
     })
-    // @ts-expect-error ts-migrate(2339) FIXME: Property 'getMainOffence' does not exist on type '... Remove this comment to see the full error message
     prisonApi.getMainOffence = jest.fn().mockResolvedValue([])
     await controller(req, res)
 
@@ -132,7 +127,6 @@ describe('view offender details', () => {
   })
 
   it('shows a full descriotion of the location when in a temporary location', async () => {
-    // @ts-expect-error ts-migrate(2339) FIXME: Property 'getDetails' does not exist on type '{}'.
     prisonApi.getDetails = jest.fn().mockResolvedValue({
       ...getDetailsResponse,
       assignedLivingUnit: {

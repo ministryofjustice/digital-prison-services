@@ -55,7 +55,7 @@ const addToActivities = (offender, activity) => ({
   stayingOnWing: isStayingOnWing([...offender.activities, activity]),
 })
 
-export const getHouseblockListFactory = (prisonApi, whereaboutsApi) => {
+export const getHouseblockListFactory = (prisonApi, whereaboutsApi, config) => {
   const getHouseblockList = async (context, agencyId, groupName, date, timeSlot, wingStatus) => {
     const locations = await whereaboutsApi.getAgencyGroupLocations(context, agencyId, groupName)
     if (locations.length === 0) {

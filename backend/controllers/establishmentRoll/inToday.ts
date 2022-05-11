@@ -2,7 +2,7 @@ import moment from 'moment'
 import { alertFlagLabels } from '../../shared/alertFlagValues'
 import { putLastNameFirst, stripAgencyPrefix } from '../../utils'
 
-export default ({ movementsService }) =>
+export default ({ movementsService, logError }) =>
   async (req, res) => {
     const agencyId = res.locals.user.activeCaseLoad.caseLoadId
     const response = await movementsService.getMovementsIn(res.locals, agencyId)

@@ -31,7 +31,6 @@ const controller = ({ oauthApi, prisonApi, whereaboutsApi, caseNotesApi, logErro
   router.get('/search-for-cell', searchForCellController({ oauthApi, prisonApi, whereaboutsApi, logError }))
   // @ts-expect-error ts-migrate(2345) FIXME: Argument of type '{ prisonApi: any; logError: any;... Remove this comment to see the full error message
   router.get('/non-associations', nonAssociationsController({ prisonApi, logError }))
-  // @ts-expect-error ts-migrate(2345) FIXME: Argument of type '{ prisonApi: any; logError: any;... Remove this comment to see the full error message
   router.get('/offender-details', offenderDetailsController({ prisonApi, logError }))
   // @ts-expect-error ts-migrate(2345) FIXME: Argument of type '{ prisonApi: any; logError: any;... Remove this comment to see the full error message
   router.get('/cell-sharing-risk-assessment-details', cellSharingRiskAssessmentController({ prisonApi, logError }))
