@@ -173,6 +173,33 @@ describe('Pagination service 2', () => {
     })
   })
 
+  it('should not show the next link when on the last page', async () => {
+    const response = service.getPagination(70, 60, 10, new URL('http://localhost/'))
+
+    expect(response).toEqual({
+      classes: 'govuk-!-font-size-19',
+      items: [
+        { href: 'http://localhost/?pageOffsetOption=0', selected: false, text: 1 },
+        { href: 'http://localhost/?pageOffsetOption=10', selected: false, text: 2 },
+        { href: 'http://localhost/?pageOffsetOption=20', selected: false, text: 3 },
+        { href: 'http://localhost/?pageOffsetOption=30', selected: false, text: 4 },
+        { href: 'http://localhost/?pageOffsetOption=40', selected: false, text: 5 },
+        { href: 'http://localhost/?pageOffsetOption=50', selected: false, text: 6 },
+        { href: 'http://localhost/?pageOffsetOption=60', selected: true, text: 7 },
+      ],
+      next: undefined,
+      previous: {
+        href: 'http://localhost/?pageOffsetOption=50',
+        text: 'Previous',
+      },
+      results: {
+        count: 70,
+        from: 61,
+        to: 70,
+      },
+    })
+  })
+
   it('should not throw error when totalResults is undefined', () => {
     service.getPagination(undefined, 10, 0, new URL('http://localhost/'))
   })
