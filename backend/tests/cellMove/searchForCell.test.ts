@@ -6,13 +6,20 @@ Reflect.deleteProperty(process.env, 'APPINSIGHTS_INSTRUMENTATIONKEY')
 describe('select location', () => {
   let req
   let res
-  let logError
   let controller
 
-  const prisonApi = {}
+  const prisonApi = {
+    getDetails: jest.fn(),
+    getNonAssociations: jest.fn(),
+    userCaseLoads: jest.fn(),
+  }
 
-  const whereaboutsApi = {}
-  const oauthApi = {}
+  const whereaboutsApi = {
+    searchGroups: jest.fn(),
+  }
+  const oauthApi = {
+    userRoles: jest.fn(),
+  }
 
   const offenderNo = 'ABC123'
 
@@ -104,8 +111,6 @@ describe('select location', () => {
   }
 
   beforeEach(() => {
-    logError = jest.fn()
-
     req = {
       originalUrl: 'http://localhost',
       params: { offenderNo },
@@ -115,12 +120,9 @@ describe('select location', () => {
     }
     res = { locals: {}, render: jest.fn(), status: jest.fn() }
 
-    // @ts-expect-error ts-migrate(2339) FIXME: Property 'getDetails' does not exist on type '{}'.
     prisonApi.getDetails = jest.fn().mockResolvedValue(getDetailsResponse)
-    // @ts-expect-error ts-migrate(2339) FIXME: Property 'getNonAssociations' does not exist on ty... Remove this comment to see the full error message
     prisonApi.getNonAssociations = jest.fn().mockResolvedValue({ nonAssociations: [] })
 
-    // @ts-expect-error ts-migrate(2339) FIXME: Property 'searchGroups' does not exist on type '{}... Remove this comment to see the full error message
     whereaboutsApi.searchGroups = jest.fn().mockResolvedValue([
       { name: 'Casu', key: 'Casu', children: [] },
       {
@@ -139,28 +141,21 @@ describe('select location', () => {
       },
     ])
 
-    // @ts-expect-error ts-migrate(2339) FIXME: Property 'userRoles' does not exist on type '{}'.
     oauthApi.userRoles = jest.fn().mockResolvedValue([{ roleCode: 'CELL_MOVE' }])
-    // @ts-expect-error ts-migrate(2339) FIXME: Property 'userCaseLoads' does not exist on type '{... Remove this comment to see the full error message
     prisonApi.userCaseLoads = jest.fn().mockResolvedValue([{ caseLoadId: 'MDI' }])
 
-    // @ts-expect-error ts-migrate(2345) FIXME: Argument of type '{ oauthApi: {}; prisonApi: {}; w... Remove this comment to see the full error message
-    controller = searchForCell({ oauthApi, prisonApi, whereaboutsApi, logError })
+    controller = searchForCell({ oauthApi, prisonApi, whereaboutsApi })
   })
 
   it('Makes the expected API calls', async () => {
     await controller(req, res)
 
-    // @ts-expect-error ts-migrate(2339) FIXME: Property 'getDetails' does not exist on type '{}'.
     expect(prisonApi.getDetails).toHaveBeenCalledWith(res.locals, offenderNo, true)
-    // @ts-expect-error ts-migrate(2339) FIXME: Property 'getNonAssociations' does not exist on ty... Remove this comment to see the full error message
     expect(prisonApi.getNonAssociations).toHaveBeenCalledWith(res.locals, 1234)
-    // @ts-expect-error ts-migrate(2339) FIXME: Property 'searchGroups' does not exist on type '{}... Remove this comment to see the full error message
     expect(whereaboutsApi.searchGroups).toHaveBeenCalledWith(res.locals, 'MDI')
   })
 
   it('Redirects when offender not in user caseloads', async () => {
-    // @ts-expect-error ts-migrate(2339) FIXME: Property 'userCaseLoads' does not exist on type '{... Remove this comment to see the full error message
     prisonApi.userCaseLoads = jest.fn().mockResolvedValue([{ caseLoadId: 'BWY' }])
     await controller(req, res)
 
@@ -169,7 +164,6 @@ describe('select location', () => {
 
   it('Should render error template when there is an API error', async () => {
     const error = new Error('Network error')
-    // @ts-expect-error ts-migrate(2339) FIXME: Property 'getDetails' does not exist on type '{}'.
     prisonApi.getDetails.mockImplementation(() => Promise.reject(error))
 
     await expect(controller(req, res)).rejects.toThrowError(error)
@@ -205,7 +199,6 @@ describe('select location', () => {
     })
 
     it('shows the CSWAP description as the location', async () => {
-      // @ts-expect-error ts-migrate(2339) FIXME: Property 'getDetails' does not exist on type '{}'.
       prisonApi.getDetails = jest.fn().mockResolvedValue({
         ...getDetailsResponse,
         assignedLivingUnit: {
@@ -231,7 +224,6 @@ describe('select location', () => {
     })
 
     it('populates the data correctly when some non-associations, but not in the same establishment', async () => {
-      // @ts-expect-error ts-migrate(2339) FIXME: Property 'getNonAssociations' does not exist on ty... Remove this comment to see the full error message
       prisonApi.getNonAssociations = jest.fn().mockResolvedValue({
         agencyDescription: 'MOORLAND',
         nonAssociations: [
@@ -254,7 +246,6 @@ describe('select location', () => {
     })
 
     it('populates the data correctly when some non-associations, but not effective yet', async () => {
-      // @ts-expect-error ts-migrate(2339) FIXME: Property 'getNonAssociations' does not exist on ty... Remove this comment to see the full error message
       prisonApi.getNonAssociations = jest.fn().mockResolvedValue({
         agencyDescription: 'MOORLAND',
         nonAssociations: [
@@ -278,7 +269,6 @@ describe('select location', () => {
     })
 
     it('populates the data correctly when some non-associations, but expired', async () => {
-      // @ts-expect-error ts-migrate(2339) FIXME: Property 'getNonAssociations' does not exist on ty... Remove this comment to see the full error message
       prisonApi.getNonAssociations = jest.fn().mockResolvedValue({
         agencyDescription: 'MOORLAND',
         nonAssociations: [
@@ -303,7 +293,6 @@ describe('select location', () => {
     })
 
     it('populates the data correctly when some non-associations in the same establishment', async () => {
-      // @ts-expect-error ts-migrate(2339) FIXME: Property 'getNonAssociations' does not exist on ty... Remove this comment to see the full error message
       prisonApi.getNonAssociations = jest.fn().mockResolvedValue({
         agencyDescription: 'MOORLAND',
         nonAssociations: [
