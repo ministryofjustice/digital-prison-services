@@ -2,12 +2,21 @@ import moment from 'moment'
 import querystring from 'querystring'
 import { DATE_TIME_FORMAT_SPEC, MOMENT_DAY_OF_THE_WEEK, MOMENT_TIME } from '../../../common/dateHelpers'
 import { getNamesFromString } from '../../utils'
+import getContext from './prisonerProfileContext'
 
 const templatePath = 'prisonerProfile/prisonerCaseNotes'
 const perPage = 20
 const SECURE_CASE_NOTE_SOURCE = 'OCNS'
 
-export default ({ caseNotesApi, prisonerProfileService, paginationService, nunjucks, oauthApi }) => {
+export default ({
+  caseNotesApi,
+  prisonerProfileService,
+  paginationService,
+  nunjucks,
+  oauthApi,
+  systemOauthClient,
+  restrictedPatientApi,
+}) => {
   const getTotalResults = async (locals, offenderNo, { type, subType, fromDate, toDate }) => {
     const { totalElements } = await caseNotesApi.getCaseNotes(locals, offenderNo, {
       pageNumber: 0,
@@ -23,6 +32,15 @@ export default ({ caseNotesApi, prisonerProfileService, paginationService, nunju
 
   return async (req, res) => {
     const { offenderNo } = req.params
+
+    const context = await getContext({
+      offenderNo,
+      res,
+      req,
+      oauthApi,
+      systemOauthClient,
+      restrictedPatientApi,
+    })
 
     const fullUrl = new URL(`${req.protocol}://${req.get('host')}${req.originalUrl}`)
 
