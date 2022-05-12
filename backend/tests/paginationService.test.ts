@@ -19,7 +19,7 @@ describe('Pagination service 2', () => {
         { text: 10, href: 'http://localhost/?pageOffsetOption=90', selected: false },
       ],
       next: { text: 'Next', href: 'http://localhost/?pageOffsetOption=10' },
-      previous: { text: 'Previous', href: 'http://localhost/?pageOffsetOption=0' },
+      previous: undefined,
       results: { count: 110, from: 1, to: 10 },
     })
   })
@@ -164,10 +164,7 @@ describe('Pagination service 2', () => {
         href: 'http://localhost/?pageOffsetOption=10',
         text: 'Next',
       },
-      previous: {
-        href: 'http://localhost/?pageOffsetOption=0',
-        text: 'Previous',
-      },
+      previous: undefined,
       results: {
         count: 70,
         from: 1,

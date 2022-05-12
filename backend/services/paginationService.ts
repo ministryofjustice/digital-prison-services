@@ -85,14 +85,14 @@ export const getPagination = (totalResults, offset, limit, url) => {
   const pageList = (numberOfPages > 1 && allPages.slice(from, to)) || []
 
   const previousPage =
-    numberOfPages > 1
+    numberOfPages > 1 && currentPage !== from
       ? {
           text: 'Previous',
           href: calculatePreviousUrl(offset, limit, url),
         }
       : undefined
   const nextPage =
-    numberOfPages > 1
+    numberOfPages > 1 && currentPage !== to - 1
       ? {
           text: 'Next',
           href: calculateNextUrl(offset, limit, totalResults, url),
