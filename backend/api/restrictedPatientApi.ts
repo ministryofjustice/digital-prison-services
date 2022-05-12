@@ -6,15 +6,15 @@ export const processError = (error) => {
 }
 
 export const restrictedPatientApiFactory = (client) => {
-  const processResponse = (activeCaseLoad) => (response) => {
-    return activeCaseLoad === response.body.supportingPrison.agencyId
+  const processResponse = (agencyIds) => (response) => {
+    const { agencyId, active } = response.body.supportingPrison
+    return agencyIds.includes(agencyId) && active
   }
 
-  const get = (context, url, activeCaseLoad) =>
-    client.get(context, url).then(processResponse(activeCaseLoad)).catch(processError)
+  const get = (context, url, agencyIds) => client.get(context, url).then(processResponse(agencyIds)).catch(processError)
 
-  const isCaseLoadRestrictedPatient = (context, prisonerNo, activeCaseLoad) =>
-    get(context, `/restricted-patient/prison-number/${prisonerNo}`, activeCaseLoad)
+  const isCaseLoadRestrictedPatient = (context, prisonerNo, agencyIds) =>
+    get(context, `/restricted-patient/prison-number/${prisonerNo}`, agencyIds)
 
   return {
     isCaseLoadRestrictedPatient,
