@@ -36,14 +36,14 @@ export default ({
   } = config
 
   // TODO: Part of temporary measure to only allow restricted prisons access to neurodivergence data. If no prisons specified then assume all are allowed access.
-  const canViewNeurodivergenceSupportData = (caseLoads) => {
+  const canViewNeurodivergenceSupportData = (agencyId) => {
     let canViewNeurodivergenceData = true
     if (neurodiversityEnabledPrisons.length) {
       const enabledPrisons = (neurodiversityEnabledPrisons as any).split(',')
 
       canViewNeurodivergenceData = Boolean(
-        (caseLoads as [{ caseLoadId: string }]).some((caseLoad) => {
-          return enabledPrisons?.some((prison) => caseLoad.caseLoadId === prison)
+        enabledPrisons.some((prison) => {
+          return prison === agencyId
         })
       )
     }
@@ -84,8 +84,8 @@ export default ({
     const systemContext = await systemOauthClient.getClientCredentialsTokens(username)
 
     // TODO: Temporary measure to allow 3rd party MegaNexus time to implement caching and other techniques to their API so it can handle high volume of calls. To be refactored!
-    const getNeurodivergenceSupportNeed = async () => {
-      if (canViewNeurodivergenceSupportData(userCaseloads)) {
+    const getNeurodivergenceSupportNeed = async (agencyId) => {
+      if (canViewNeurodivergenceSupportData(agencyId)) {
         const divergenceData = await Promise.all(
           [curiousApi.getLearnerNeurodivergence(systemContext, offenderNo)].map((apiCall) =>
             logErrorAndContinue(apiCall)
@@ -129,6 +129,7 @@ export default ({
       pathfinderDetails,
       socDetails,
       allocationManager,
+      hasDivergenceSupport,
     ] = await Promise.all(
       [
         incentivesApi.getIepSummaryForBookingIds(context, [bookingId]),
@@ -140,10 +141,9 @@ export default ({
         pathfinderApi.getPathfinderDetails(systemContext, offenderNo),
         socApi.getSocDetails(systemContext, offenderNo, socEnabled),
         allocationManagerApi.getPomByOffenderNo(context, offenderNo),
+        getNeurodivergenceSupportNeed(agencyId),
       ].map((apiCall) => logErrorAndContinue(apiCall))
     )
-
-    const hasDivergenceSupport = await getNeurodivergenceSupportNeed()
 
     const prisonersActiveAlertCodes = alerts.filter((alert) => !alert.expired).map((alert) => alert.alertCode)
     const alertsToShow = alertFlagLabels.filter((alertFlag) =>

@@ -15,14 +15,14 @@ import {
 } from './personalViewModels'
 
 // TODO: Part of temporary measure to only allow restricted prisons access to neurodivergence data. If no prisons specified then assume all are allowed access.
-const canViewNeurodivergenceSupportData = (caseLoads, acceleratedPrisons) => {
+const canViewNeurodivergenceSupportData = (agencyId, acceleratedPrisons) => {
   let canViewNeurodivergenceData = true
   if (acceleratedPrisons.length) {
     const enabledPrisons = (acceleratedPrisons as any).split(',')
 
     canViewNeurodivergenceData = Boolean(
-      (caseLoads as [{ caseLoadId: string }]).some((caseLoad) => {
-        return enabledPrisons?.some((prison) => caseLoad.caseLoadId === prison)
+      enabledPrisons.some((prison) => {
+        return prison === agencyId
       })
     )
   }
@@ -42,6 +42,19 @@ export default ({ prisonerProfileService, personService, prisonApi, allocationMa
     const treatmentCodes = treatmentTypes && treatmentTypes.map((type) => type.code).join()
     const healthCodes = healthTypes && healthTypes.map((type) => type.code).join()
 
+    const {
+      app: { neurodiversityEnabledUsernames, neurodiversityEnabledPrisons },
+    } = config
+
+    // TODO: Part of temporary measure to only allow restricted prisons access to neurodivergence data. If no prisons specified then assume all are allowed access.
+    const getNeurodivergenceSupportNeed = async () => {
+      if (canViewNeurodivergenceSupportData(basicPrisonerDetails.agencyId, neurodiversityEnabledPrisons)) {
+        const divergence = await esweService.getNeurodivergence(offenderNo, establishmentId)
+        return divergence
+      }
+      return createFlaggedContent([])
+    }
+
     const [
       prisonerProfileData,
       identifiers,
@@ -55,6 +68,7 @@ export default ({ prisonerProfileService, personService, prisonApi, allocationMa
       agencies,
       allocationManager,
       neurodiversities,
+      neurodivergence,
     ] = await Promise.all(
       [
         prisonerProfileService.getPrisonerProfileData(res.locals, offenderNo),
@@ -69,6 +83,7 @@ export default ({ prisonerProfileService, personService, prisonApi, allocationMa
         prisonApi.getAgencies(res.locals),
         allocationManagerApi.getPomByOffenderNo(res.locals, offenderNo),
         esweService.getNeurodiversities(offenderNo),
+        getNeurodivergenceSupportNeed(),
       ].map((apiCall) => logErrorAndContinue(apiCall))
     )
 
@@ -76,9 +91,6 @@ export default ({ prisonerProfileService, personService, prisonApi, allocationMa
     const { nextOfKin, otherContacts } = contacts || {}
     const activeNextOfKins = nextOfKin && nextOfKin.filter((kin) => kin.activeFlag)
 
-    const {
-      app: { neurodiversityEnabledUsernames, neurodiversityEnabledPrisons },
-    } = config
     const { username } = req.session.userDetails
 
     const displayNeurodiversity = !neurodiversityEnabledUsernames
@@ -89,17 +101,6 @@ export default ({ prisonerProfileService, personService, prisonApi, allocationMa
       enabled: app.esweEnabled,
       content,
     })
-
-    // TODO: Part of temporary measure to only allow restricted prisons access to neurodivergence data. If no prisons specified then assume all are allowed access.
-    const getNeurodivergenceSupportNeed = async () => {
-      const caseLoads = await prisonApi.userCaseLoads(res.locals)
-      if (canViewNeurodivergenceSupportData(caseLoads, neurodiversityEnabledPrisons)) {
-        const divergence = await esweService.getNeurodivergence(offenderNo, establishmentId)
-        return divergence
-      }
-      return createFlaggedContent([])
-    }
-    const neurodivergence = await getNeurodivergenceSupportNeed()
 
     const nextOfKinsWithContact =
       activeNextOfKins &&
