@@ -62,37 +62,39 @@ export const getPagination = (totalResults, offset, limit, url) => {
 
   const useLowestNumber = (left, right) => (left >= right ? right : left)
 
-  const calculateFrom = ({ currentPage, numberOfPages }) => {
+  const calculateFrom = ({ currentPageIndex, numberOfPages }) => {
     if (numberOfPages <= maxNumberOfPageLinks) return 0
 
-    const towardsTheEnd = numberOfPages - currentPage <= pageBreakPoint
+    const towardsTheEnd = numberOfPages - currentPageIndex <= pageBreakPoint
 
     if (towardsTheEnd) return numberOfPages - maxNumberOfPageLinks
 
-    return currentPage <= pageBreakPoint ? 0 : currentPage - pageBreakPoint
+    return currentPageIndex <= pageBreakPoint ? 0 : currentPageIndex - pageBreakPoint
   }
 
-  const currentPage = offset === 0 ? 0 : Math.ceil(offset / limit)
+  const currentPageIndex = offset === 0 ? 0 : Math.ceil(offset / limit)
   const numberOfPages = Math.ceil(totalResults / limit)
 
   const allPages = numberOfPages > 0 && [...Array(numberOfPages).keys()]
-  const from = calculateFrom({ currentPage, numberOfPages })
-  const to =
+  const firstPageVisibleIndex = calculateFrom({ currentPageIndex, numberOfPages })
+  const lastPageVisibleNumber =
     numberOfPages <= maxNumberOfPageLinks
       ? numberOfPages
-      : useLowestNumber(from + maxNumberOfPageLinks, allPages.length)
+      : useLowestNumber(firstPageVisibleIndex + maxNumberOfPageLinks, allPages.length)
 
-  const pageList = (numberOfPages > 1 && allPages.slice(from, to)) || []
+  const pageList = (numberOfPages > 1 && allPages.slice(firstPageVisibleIndex, lastPageVisibleNumber)) || []
+  const onFirstPage = currentPageIndex === 0
+  const onLastPage = currentPageIndex + 1 === numberOfPages
 
   const previousPage =
-    numberOfPages > 1 && currentPage !== from
+    numberOfPages > 1 && !onFirstPage
       ? {
           text: 'Previous',
           href: calculatePreviousUrl(offset, limit, url),
         }
       : undefined
   const nextPage =
-    numberOfPages > 1 && currentPage !== to - 1
+    numberOfPages > 1 && !onLastPage
       ? {
           text: 'Next',
           href: calculateNextUrl(offset, limit, totalResults, url),
