@@ -5,8 +5,8 @@
   "repository": "git@github.com:ministryofjustice/digital-prison-sevices.git",
   "license": "MIT",
   "engines": {
-    "npm": ">=7",
-    "node": ">=14.*"
+    "npm": "^8",
+    "node": "^16"
   },
   "dependencies": {
     "@babel/polyfill": "^7.12.1",
@@ -181,7 +181,7 @@
     "whatwg-fetch": "2.0.4"
   },
   "scripts": {
-    "start": "DISABLE_WEBPACK=true node dist/backend/index.js",
+    "start": "DISABLE_WEBPACK=true node dist/backend/index.js --unhandled-rejection=warn",
     "start:dev": "nodemon",
     "start-feature": "npm run compile-sass && export $(cat cypress.env) && npm run start:dev",
     "start-feature-no-webpack": "export $(cat cypress.env) && npm run build && npm run start",
