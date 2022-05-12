@@ -7,7 +7,6 @@ export const processError = (error) => {
 
 export const restrictedPatientApiFactory = (client) => {
   const processResponse = (activeCaseLoad) => (response) => {
-    console.log(response.body)
     return activeCaseLoad === response.body.supportingPrison.agencyId
   }
 
