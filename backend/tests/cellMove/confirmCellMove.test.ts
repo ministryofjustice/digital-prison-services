@@ -17,9 +17,7 @@ describe('Change cell play back details', () => {
   const whereaboutsApi = {
     moveToCell: jest.fn(),
   }
-  const caseNotesApi = {}
 
-  let logError
   let controller
   const req = {
     originalUrl: 'http://localhost',
@@ -41,7 +39,6 @@ describe('Change cell play back details', () => {
 
   beforeEach(() => {
     jest.clearAllMocks()
-    logError = jest.fn()
 
     prisonApi.getDetails = jest.fn().mockResolvedValue({
       bookingId: 1,
@@ -59,7 +56,7 @@ describe('Change cell play back details', () => {
     prisonApi.getAttributesForLocation = jest.fn().mockResolvedValue({ capacity: 1 })
     prisonApi.getCellMoveReasonTypes = jest.fn().mockResolvedValue([])
 
-    controller = confirmCellMove({ prisonApi, whereaboutsApi, caseNotesApi, logError })
+    controller = confirmCellMove({ prisonApi, whereaboutsApi })
 
     req.params = {
       offenderNo: 'A12345',
@@ -449,7 +446,6 @@ describe('Change cell play back details', () => {
 
       expect(res.redirect).toHaveBeenCalledWith('/prisoner/A12345/cell-move/cell-not-available?cellDescription=MDI-10')
       expect(raiseAnalyticsEventMock.mock.calls.length).toBe(0)
-      expect(logError.mock.calls.length).toBe(0)
     })
   })
 

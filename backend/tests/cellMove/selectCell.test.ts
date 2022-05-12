@@ -25,7 +25,6 @@ describe('Select a cell', () => {
   }
 
   const res = { locals: {}, render: jest.fn() }
-  let logError
   let controller
   let req
 
@@ -84,8 +83,7 @@ describe('Select a cell', () => {
     ])
 
     res.render = jest.fn()
-    logError = jest.fn()
-    controller = selectCellFactory({ oauthApi, prisonApi, whereaboutsApi, logError })
+    controller = selectCellFactory({ oauthApi, prisonApi, whereaboutsApi })
 
     req = {
       params: {

@@ -104,7 +104,7 @@ const getResidentialLevelNonAssociations = async (res, { prisonApi, nonAssociati
   )
 }
 
-export default ({ oauthApi, prisonApi, whereaboutsApi, logError }) =>
+export default ({ oauthApi, prisonApi, whereaboutsApi }) =>
   async (req, res) => {
     const { offenderNo } = req.params
     const { location = 'ALL', subLocation, cellType, locationId } = req.query

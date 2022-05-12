@@ -3,7 +3,7 @@ import { putLastNameFirst, formatName, formatLocation } from '../../utils'
 
 import { userHasAccess, getNonAssocationsInEstablishment, renderLocationOptions, cellAttributes } from './cellMoveUtils'
 
-export default ({ oauthApi, prisonApi, whereaboutsApi, logError }) =>
+export default ({ oauthApi, prisonApi, whereaboutsApi }) =>
   async (req, res) => {
     const { offenderNo } = req.params
 

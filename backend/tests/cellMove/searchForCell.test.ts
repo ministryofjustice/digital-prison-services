@@ -6,7 +6,6 @@ Reflect.deleteProperty(process.env, 'APPINSIGHTS_INSTRUMENTATIONKEY')
 describe('select location', () => {
   let req
   let res
-  let logError
   let controller
 
   const prisonApi = {
@@ -112,8 +111,6 @@ describe('select location', () => {
   }
 
   beforeEach(() => {
-    logError = jest.fn()
-
     req = {
       originalUrl: 'http://localhost',
       params: { offenderNo },
@@ -147,7 +144,7 @@ describe('select location', () => {
     oauthApi.userRoles = jest.fn().mockResolvedValue([{ roleCode: 'CELL_MOVE' }])
     prisonApi.userCaseLoads = jest.fn().mockResolvedValue([{ caseLoadId: 'MDI' }])
 
-    controller = searchForCell({ oauthApi, prisonApi, whereaboutsApi, logError })
+    controller = searchForCell({ oauthApi, prisonApi, whereaboutsApi })
   })
 
   it('Makes the expected API calls', async () => {
