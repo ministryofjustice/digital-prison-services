@@ -2,6 +2,7 @@ const getContext = async ({ offenderNo, res, req, oauthApi, systemOauthClient, r
   const {
     user: { allCaseloads },
   } = res.locals
+
   const { username } = req.session.userDetails
   const userRoles = await oauthApi.userRoles(res.locals)
 

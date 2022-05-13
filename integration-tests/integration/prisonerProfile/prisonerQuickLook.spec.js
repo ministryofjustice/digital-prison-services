@@ -554,7 +554,7 @@ context('Prisoner quick look', () => {
   })
 
   context('When a user has POM role', () => {
-    context('when offender not in caseload', () => {
+    context('when offender in caseload', () => {
       beforeEach(() => {
         Cypress.Cookies.preserveOnce('hmpps-session-dev')
         cy.task('stubIsCaseLoadRestrictedPatient', {
