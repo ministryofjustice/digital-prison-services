@@ -5,12 +5,26 @@ const someBookingId = -10
 const someAgency = 'LEI'
 
 describe('Select a cell', () => {
-  const prisonApi = {}
-  const whereaboutsApi = {}
-  const oauthApi = {}
+  const prisonApi = {
+    userCaseLoads: jest.fn(),
+    getDetails: jest.fn(),
+    getCsraAssessments: jest.fn(),
+    getAlerts: jest.fn(),
+    getNonAssociations: jest.fn(),
+    getLocation: jest.fn(),
+    getCellsWithCapacity: jest.fn(),
+    getInmatesAtLocation: jest.fn(),
+  }
 
-  const res = { locals: {} }
-  let logError
+  const whereaboutsApi = {
+    getCellsWithCapacity: jest.fn(),
+    searchGroups: jest.fn(),
+  }
+  const oauthApi = {
+    userRoles: jest.fn(),
+  }
+
+  const res = { locals: {}, render: jest.fn() }
   let controller
   let req
 
@@ -31,16 +45,13 @@ describe('Select a cell', () => {
   })
 
   afterAll(() => {
-    // @ts-expect-error ts-migrate(2339) FIXME: Property 'mockRestore' does not exist on type '() ... Remove this comment to see the full error message
-    Date.now.mockRestore()
+    const spy = jest.spyOn(Date, 'now')
+    spy.mockRestore()
   })
 
   beforeEach(() => {
-    // @ts-expect-error ts-migrate(2339) FIXME: Property 'userRoles' does not exist on type '{}'.
     oauthApi.userRoles = jest.fn().mockResolvedValue([{ roleCode: 'CELL_MOVE' }])
-    // @ts-expect-error ts-migrate(2339) FIXME: Property 'userCaseLoads' does not exist on type '{... Remove this comment to see the full error message
     prisonApi.userCaseLoads = jest.fn().mockResolvedValue([{ caseLoadId: 'LEI' }])
-    // @ts-expect-error ts-migrate(2339) FIXME: Property 'getDetails' does not exist on type '{}'.
     prisonApi.getDetails = jest.fn().mockResolvedValue({
       firstName: 'John',
       lastName: 'Doe',
@@ -55,22 +66,14 @@ describe('Select a cell', () => {
       ],
     })
 
-    // @ts-expect-error ts-migrate(2339) FIXME: Property 'getCsraAssessments' does not exist on ty... Remove this comment to see the full error message
     prisonApi.getCsraAssessments = jest.fn()
-    // @ts-expect-error ts-migrate(2339) FIXME: Property 'getAlerts' does not exist on type '{}'.
     prisonApi.getAlerts = jest.fn()
-    // @ts-expect-error ts-migrate(2339) FIXME: Property 'getNonAssociations' does not exist on ty... Remove this comment to see the full error message
     prisonApi.getNonAssociations = jest.fn()
-    // @ts-expect-error ts-migrate(2339) FIXME: Property 'getLocation' does not exist on type '{}'... Remove this comment to see the full error message
     prisonApi.getLocation = jest.fn().mockResolvedValue({})
-    // @ts-expect-error ts-migrate(2339) FIXME: Property 'getCellsWithCapacity' does not exist on ... Remove this comment to see the full error message
     prisonApi.getCellsWithCapacity = jest.fn().mockResolvedValue([])
-    // @ts-expect-error ts-migrate(2339) FIXME: Property 'getInmatesAtLocation' does not exist on ... Remove this comment to see the full error message
     prisonApi.getInmatesAtLocation = jest.fn().mockResolvedValue([])
 
-    // @ts-expect-error ts-migrate(2339) FIXME: Property 'getCellsWithCapacity' does not exist on ... Remove this comment to see the full error message
     whereaboutsApi.getCellsWithCapacity = jest.fn().mockResolvedValue([])
-    // @ts-expect-error ts-migrate(2339) FIXME: Property 'searchGroups' does not exist on type '{}... Remove this comment to see the full error message
     whereaboutsApi.searchGroups = jest.fn().mockResolvedValue([
       {
         name: 'Houseblock 1',
@@ -79,11 +82,8 @@ describe('Select a cell', () => {
       },
     ])
 
-    // @ts-expect-error ts-migrate(2339) FIXME: Property 'render' does not exist on type '{ locals... Remove this comment to see the full error message
     res.render = jest.fn()
-    logError = jest.fn()
-    // @ts-expect-error ts-migrate(2345) FIXME: Argument of type '{ oauthApi: {}; prisonApi: {}; w... Remove this comment to see the full error message
-    controller = selectCellFactory({ oauthApi, prisonApi, whereaboutsApi, logError })
+    controller = selectCellFactory({ oauthApi, prisonApi, whereaboutsApi })
 
     req = {
       params: {
@@ -102,27 +102,21 @@ describe('Select a cell', () => {
     it('should make the correct api calls to display default data', async () => {
       await controller(req, res)
 
-      // @ts-expect-error ts-migrate(2339) FIXME: Property 'getDetails' does not exist on type '{}'.
       expect(prisonApi.getDetails).toHaveBeenCalledWith({}, someOffenderNumber, true)
-      // @ts-expect-error ts-migrate(2339) FIXME: Property 'getNonAssociations' does not exist on ty... Remove this comment to see the full error message
       expect(prisonApi.getNonAssociations).toHaveBeenCalledWith({}, someBookingId)
-      // @ts-expect-error ts-migrate(2339) FIXME: Property 'searchGroups' does not exist on type '{}... Remove this comment to see the full error message
       expect(whereaboutsApi.searchGroups).toHaveBeenCalledWith({}, someAgency)
     })
 
     it('Redirects when offender not in user caseloads', async () => {
-      // @ts-expect-error ts-migrate(2339) FIXME: Property 'userCaseLoads' does not exist on type '{... Remove this comment to see the full error message
       prisonApi.userCaseLoads = jest.fn().mockResolvedValue([{ caseLoadId: 'BWY' }])
       await controller(req, res)
 
-      // @ts-expect-error ts-migrate(2339) FIXME: Property 'render' does not exist on type '{ locals... Remove this comment to see the full error message
       expect(res.render).toHaveBeenCalledWith('notFound.njk', { url: '/prisoner-search' })
     })
 
     it('should call get cells with capacity for leeds', async () => {
       await controller(req, res)
 
-      // @ts-expect-error ts-migrate(2339) FIXME: Property 'getCellsWithCapacity' does not exist on ... Remove this comment to see the full error message
       expect(prisonApi.getCellsWithCapacity).toHaveBeenCalledWith({}, someAgency)
     })
 
@@ -131,7 +125,6 @@ describe('Select a cell', () => {
 
       await controller(req, res)
 
-      // @ts-expect-error ts-migrate(2339) FIXME: Property 'getCellsWithCapacity' does not exist on ... Remove this comment to see the full error message
       expect(whereaboutsApi.getCellsWithCapacity).toHaveBeenCalledWith(
         {},
         {
@@ -144,7 +137,6 @@ describe('Select a cell', () => {
     it('should populate view model with active cell move specific alerts', async () => {
       await controller(req, res)
 
-      // @ts-expect-error ts-migrate(2339) FIXME: Property 'render' does not exist on type '{ locals... Remove this comment to see the full error message
       expect(res.render).toHaveBeenCalledWith(
         'cellMove/selectCell.njk',
         expect.objectContaining({
@@ -170,7 +162,6 @@ describe('Select a cell', () => {
       req.query = { cellType: 'SO' }
       await controller(req, res)
 
-      // @ts-expect-error ts-migrate(2339) FIXME: Property 'render' does not exist on type '{ locals... Remove this comment to see the full error message
       expect(res.render).toHaveBeenCalledWith(
         'cellMove/selectCell.njk',
         expect.objectContaining({
@@ -182,7 +173,6 @@ describe('Select a cell', () => {
     it('should populate view model with urls', async () => {
       await controller(req, res)
 
-      // @ts-expect-error ts-migrate(2339) FIXME: Property 'render' does not exist on type '{ locals... Remove this comment to see the full error message
       expect(res.render).toHaveBeenCalledWith(
         'cellMove/selectCell.njk',
         expect.objectContaining({
@@ -200,7 +190,6 @@ describe('Select a cell', () => {
     it('should populate view model with breadcrumbs offender details', async () => {
       await controller(req, res)
 
-      // @ts-expect-error ts-migrate(2339) FIXME: Property 'render' does not exist on type '{ locals... Remove this comment to see the full error message
       expect(res.render).toHaveBeenCalledWith(
         'cellMove/selectCell.njk',
         expect.objectContaining({
@@ -228,7 +217,6 @@ describe('Select a cell', () => {
     it('should populate view model with locations', async () => {
       await controller(req, res)
 
-      // @ts-expect-error ts-migrate(2339) FIXME: Property 'render' does not exist on type '{ locals... Remove this comment to see the full error message
       expect(res.render).toHaveBeenCalledWith(
         'cellMove/selectCell.njk',
         expect.objectContaining({
@@ -244,7 +232,6 @@ describe('Select a cell', () => {
       req.query = { location: 'hb1' }
       await controller(req, res)
 
-      // @ts-expect-error ts-migrate(2339) FIXME: Property 'render' does not exist on type '{ locals... Remove this comment to see the full error message
       expect(res.render).toHaveBeenCalledWith(
         'cellMove/selectCell.njk',
         expect.objectContaining({
@@ -262,7 +249,6 @@ describe('Select a cell', () => {
 
       await controller(req, res)
 
-      // @ts-expect-error ts-migrate(2339) FIXME: Property 'render' does not exist on type '{ locals... Remove this comment to see the full error message
       expect(res.render).toHaveBeenCalledWith(
         'cellMove/partials/subLocationsSelect.njk',
         expect.objectContaining({
@@ -280,7 +266,6 @@ describe('Select a cell', () => {
 
       await controller(req, res)
 
-      // @ts-expect-error ts-migrate(2339) FIXME: Property 'render' does not exist on type '{ locals... Remove this comment to see the full error message
       expect(res.render).toHaveBeenCalledWith(
         'cellMove/partials/subLocationsSelect.njk',
         expect.objectContaining({
@@ -297,7 +282,6 @@ describe('Select a cell', () => {
       }
       await controller(req, res)
 
-      // @ts-expect-error ts-migrate(2339) FIXME: Property 'getCellsWithCapacity' does not exist on ... Remove this comment to see the full error message
       expect(whereaboutsApi.getCellsWithCapacity).toHaveBeenCalledWith(
         {},
         {
@@ -310,7 +294,6 @@ describe('Select a cell', () => {
 
   describe('Cell types', () => {
     beforeEach(() => {
-      // @ts-expect-error ts-migrate(2339) FIXME: Property 'getCellsWithCapacity' does not exist on ... Remove this comment to see the full error message
       prisonApi.getCellsWithCapacity.mockResolvedValue([
         {
           id: 1,
@@ -341,7 +324,6 @@ describe('Select a cell', () => {
 
         await controller(req, res)
 
-        // @ts-expect-error ts-migrate(2339) FIXME: Property 'render' does not exist on type '{ locals... Remove this comment to see the full error message
         expect(res.render).toHaveBeenCalledWith(
           'cellMove/selectCell.njk',
           expect.objectContaining({
@@ -374,7 +356,6 @@ describe('Select a cell', () => {
 
         await controller(req, res)
 
-        // @ts-expect-error ts-migrate(2339) FIXME: Property 'render' does not exist on type '{ locals... Remove this comment to see the full error message
         expect(res.render).toHaveBeenCalledWith(
           'cellMove/selectCell.njk',
           expect.objectContaining({
@@ -404,18 +385,15 @@ describe('Select a cell', () => {
 
   describe('Cell view model data', () => {
     beforeEach(() => {
-      // @ts-expect-error ts-migrate(2339) FIXME: Property 'getLocation' does not exist on type '{}'... Remove this comment to see the full error message
       prisonApi.getLocation
         .mockResolvedValueOnce(cellLocationData)
         .mockResolvedValueOnce(parentLocationData)
         .mockResolvedValueOnce(superParentLocationData)
-      // @ts-expect-error ts-migrate(2339) FIXME: Property 'getInmatesAtLocation' does not exist on ... Remove this comment to see the full error message
       prisonApi.getInmatesAtLocation = jest.fn().mockResolvedValue([
         { firstName: 'bob', lastName: 'doe', offenderNo: 'A11111' },
         { firstName: 'dave', lastName: 'doe1', offenderNo: 'A22222' },
       ])
 
-      // @ts-expect-error ts-migrate(2339) FIXME: Property 'getCellsWithCapacity' does not exist on ... Remove this comment to see the full error message
       prisonApi.getCellsWithCapacity.mockResolvedValue([
         {
           id: 1,
@@ -449,13 +427,9 @@ describe('Select a cell', () => {
     it('should make the relevant calls to gather cell occupant data', async () => {
       await controller(req, res)
 
-      // @ts-expect-error ts-migrate(2339) FIXME: Property 'getInmatesAtLocation' does not exist on ... Remove this comment to see the full error message
       expect(prisonApi.getInmatesAtLocation).toHaveBeenCalledWith({}, 1, {})
-      // @ts-expect-error ts-migrate(2339) FIXME: Property 'getInmatesAtLocation' does not exist on ... Remove this comment to see the full error message
       expect(prisonApi.getInmatesAtLocation).toHaveBeenCalledWith({}, 2, {})
-      // @ts-expect-error ts-migrate(2339) FIXME: Property 'getInmatesAtLocation' does not exist on ... Remove this comment to see the full error message
       expect(prisonApi.getInmatesAtLocation).toHaveBeenCalledWith({}, 3, {})
-      // @ts-expect-error ts-migrate(2339) FIXME: Property 'getAlerts' does not exist on type '{}'.
       expect(prisonApi.getAlerts).toHaveBeenCalledWith(
         {},
         {
@@ -466,7 +440,6 @@ describe('Select a cell', () => {
     })
 
     it('should return the correctly formatted cell details', async () => {
-      // @ts-expect-error ts-migrate(2339) FIXME: Property 'getInmatesAtLocation' does not exist on ... Remove this comment to see the full error message
       prisonApi.getInmatesAtLocation.mockImplementation((context, cellId) => {
         if (cellId === 1)
           return Promise.resolve([
@@ -497,14 +470,12 @@ describe('Select a cell', () => {
         ])
       })
 
-      // @ts-expect-error ts-migrate(2339) FIXME: Property 'getAlerts' does not exist on type '{}'.
       prisonApi.getAlerts.mockResolvedValue([
         { offenderNo: 'A111111', alertCode: 'PEEP' },
         { offenderNo: 'A222222', alertCode: 'XEL' },
         { offenderNo: 'A333333', alertCode: 'URS' },
       ])
 
-      // @ts-expect-error ts-migrate(2339) FIXME: Property 'getCsraAssessments' does not exist on ty... Remove this comment to see the full error message
       prisonApi.getCsraAssessments.mockResolvedValue([
         { offenderNo: 'A111111', assessmentDescription: 'TEST', assessmentCode: 'TEST', assessmentComment: 'test' },
         {
@@ -525,7 +496,6 @@ describe('Select a cell', () => {
 
       await controller(req, res)
 
-      // @ts-expect-error ts-migrate(2339) FIXME: Property 'render' does not exist on type '{ locals... Remove this comment to see the full error message
       expect(res.render).toHaveBeenCalledWith(
         'cellMove/selectCell.njk',
         expect.objectContaining({
@@ -636,7 +606,6 @@ describe('Select a cell', () => {
     })
 
     it('should select the latest csra rating for each occupant', async () => {
-      // @ts-expect-error ts-migrate(2339) FIXME: Property 'getCellsWithCapacity' does not exist on ... Remove this comment to see the full error message
       prisonApi.getCellsWithCapacity.mockResolvedValue([
         {
           id: 1,
@@ -646,7 +615,6 @@ describe('Select a cell', () => {
           attributes: [],
         },
       ])
-      // @ts-expect-error ts-migrate(2339) FIXME: Property 'getInmatesAtLocation' does not exist on ... Remove this comment to see the full error message
       prisonApi.getInmatesAtLocation.mockResolvedValue([
         {
           firstName: 'bob1',
@@ -656,10 +624,8 @@ describe('Select a cell', () => {
         },
       ])
 
-      // @ts-expect-error ts-migrate(2339) FIXME: Property 'getAlerts' does not exist on type '{}'.
       prisonApi.getAlerts.mockResolvedValue([])
 
-      // @ts-expect-error ts-migrate(2339) FIXME: Property 'getCsraAssessments' does not exist on ty... Remove this comment to see the full error message
       prisonApi.getCsraAssessments.mockResolvedValue([
         {
           offenderNo: 'A111111',
@@ -681,7 +647,6 @@ describe('Select a cell', () => {
 
       await controller(req, res)
 
-      // @ts-expect-error ts-migrate(2339) FIXME: Property 'render' does not exist on type '{ locals... Remove this comment to see the full error message
       expect(res.render).toHaveBeenCalledWith(
         'cellMove/selectCell.njk',
         expect.objectContaining({
@@ -712,7 +677,6 @@ describe('Select a cell', () => {
     })
 
     it('should not make a call for assessments or alerts when there are no cell occupants', async () => {
-      // @ts-expect-error ts-migrate(2339) FIXME: Property 'getCellsWithCapacity' does not exist on ... Remove this comment to see the full error message
       prisonApi.getCellsWithCapacity.mockResolvedValue([
         {
           id: 1,
@@ -722,21 +686,17 @@ describe('Select a cell', () => {
           attributes: [],
         },
       ])
-      // @ts-expect-error ts-migrate(2339) FIXME: Property 'getInmatesAtLocation' does not exist on ... Remove this comment to see the full error message
       prisonApi.getInmatesAtLocation.mockResolvedValue([])
 
       await controller(req, res)
 
-      // @ts-expect-error ts-migrate(2339) FIXME: Property 'getCsraAssessments' does not exist on ty... Remove this comment to see the full error message
       expect(prisonApi.getCsraAssessments.mock.calls.length).toBe(0)
-      // @ts-expect-error ts-migrate(2339) FIXME: Property 'getAlerts' does not exist on type '{}'.
       expect(prisonApi.getAlerts.mock.calls.length).toBe(0)
     })
   })
 
   describe('Non associations', () => {
     beforeEach(() => {
-      // @ts-expect-error ts-migrate(2339) FIXME: Property 'getNonAssociations' does not exist on ty... Remove this comment to see the full error message
       prisonApi.getNonAssociations = jest.fn().mockResolvedValue({
         offenderNo: 'G6123VU',
         firstName: 'JOHN',
@@ -765,7 +725,6 @@ describe('Select a cell', () => {
         ],
       })
 
-      // @ts-expect-error ts-migrate(2339) FIXME: Property 'getCellsWithCapacity' does not exist on ... Remove this comment to see the full error message
       prisonApi.getCellsWithCapacity.mockResolvedValue([
         {
           id: 1,
@@ -775,7 +734,6 @@ describe('Select a cell', () => {
           attributes: [],
         },
       ])
-      // @ts-expect-error ts-migrate(2339) FIXME: Property 'getInmatesAtLocation' does not exist on ... Remove this comment to see the full error message
       prisonApi.getInmatesAtLocation.mockResolvedValue([
         {
           firstName: 'bob1',
@@ -784,9 +742,7 @@ describe('Select a cell', () => {
           assignedLivingUnitId: 1,
         },
       ])
-      // @ts-expect-error ts-migrate(2339) FIXME: Property 'getAlerts' does not exist on type '{}'.
       prisonApi.getAlerts.mockResolvedValue([])
-      // @ts-expect-error ts-migrate(2339) FIXME: Property 'getCsraAssessments' does not exist on ty... Remove this comment to see the full error message
       prisonApi.getCsraAssessments.mockResolvedValue([])
 
       req.query = {
@@ -799,7 +755,6 @@ describe('Select a cell', () => {
 
       await controller(req, res)
 
-      // @ts-expect-error ts-migrate(2339) FIXME: Property 'render' does not exist on type '{ locals... Remove this comment to see the full error message
       expect(res.render).toHaveBeenCalledWith(
         'cellMove/selectCell.njk',
         expect.objectContaining({
@@ -814,7 +769,6 @@ describe('Select a cell', () => {
 
       await controller(req, res)
 
-      // @ts-expect-error ts-migrate(2339) FIXME: Property 'render' does not exist on type '{ locals... Remove this comment to see the full error message
       expect(res.render).toHaveBeenCalledWith(
         'cellMove/selectCell.njk',
         expect.objectContaining({
@@ -845,16 +799,13 @@ describe('Select a cell', () => {
     })
 
     it('should not request the location prefix when there are no non-associations', async () => {
-      // @ts-expect-error ts-migrate(2339) FIXME: Property 'getNonAssociations' does not exist on ty... Remove this comment to see the full error message
       prisonApi.getNonAssociations = jest.fn().mockResolvedValue(null)
       await controller(req, res)
 
-      // @ts-expect-error ts-migrate(2339) FIXME: Property 'getLocation' does not exist on type '{}'... Remove this comment to see the full error message
       expect(prisonApi.getLocation.mock.calls.length).toBe(0)
     })
 
     it('should set show non association value to true when there are res unit level non-associations', async () => {
-      // @ts-expect-error ts-migrate(2339) FIXME: Property 'getDetails' does not exist on type '{}'.
       prisonApi.getDetails = jest.fn().mockResolvedValue({
         firstName: 'John',
         lastName: 'Doe',
@@ -863,12 +814,10 @@ describe('Select a cell', () => {
         agencyId: someAgency,
         alerts: [],
       })
-      // @ts-expect-error ts-migrate(2339) FIXME: Property 'getLocation' does not exist on type '{}'... Remove this comment to see the full error message
       prisonApi.getLocation
         .mockResolvedValueOnce(cellLocationData)
         .mockResolvedValueOnce(parentLocationData)
         .mockResolvedValueOnce(superParentLocationData)
-      // @ts-expect-error ts-migrate(2339) FIXME: Property 'getCellsWithCapacity' does not exist on ... Remove this comment to see the full error message
       whereaboutsApi.getCellsWithCapacity.mockResolvedValue([
         {
           id: 1,
@@ -885,7 +834,6 @@ describe('Select a cell', () => {
       req.query = { location: 'Houseblock 1' }
       await controller(req, res)
 
-      // @ts-expect-error ts-migrate(2339) FIXME: Property 'render' does not exist on type '{ locals... Remove this comment to see the full error message
       expect(res.render).toHaveBeenCalledWith(
         'cellMove/selectCell.njk',
         expect.objectContaining({
@@ -895,9 +843,7 @@ describe('Select a cell', () => {
     })
 
     it('should set show non association value to true when there are non-associations within the establishment', async () => {
-      // @ts-expect-error ts-migrate(2339) FIXME: Property 'userCaseLoads' does not exist on type '{... Remove this comment to see the full error message
       prisonApi.userCaseLoads = jest.fn().mockResolvedValue([{ caseLoadId: 'MDI' }])
-      // @ts-expect-error ts-migrate(2339) FIXME: Property 'getDetails' does not exist on type '{}'.
       prisonApi.getDetails = jest.fn().mockResolvedValue({
         firstName: 'John',
         lastName: 'Doe',
@@ -911,7 +857,6 @@ describe('Select a cell', () => {
 
       await controller(req, res)
 
-      // @ts-expect-error ts-migrate(2339) FIXME: Property 'render' does not exist on type '{ locals... Remove this comment to see the full error message
       expect(res.render).toHaveBeenCalledWith(
         'cellMove/selectCell.njk',
         expect.objectContaining({
@@ -923,7 +868,6 @@ describe('Select a cell', () => {
     it('should set show non association value to false', async () => {
       await controller(req, res)
 
-      // @ts-expect-error ts-migrate(2339) FIXME: Property 'render' does not exist on type '{ locals... Remove this comment to see the full error message
       expect(res.render).toHaveBeenCalledWith(
         'cellMove/selectCell.njk',
         expect.objectContaining({
@@ -933,7 +877,6 @@ describe('Select a cell', () => {
     })
 
     it('should set show non association value to false when non association offender does not have assigned living unit', async () => {
-      // @ts-expect-error ts-migrate(2339) FIXME: Property 'getNonAssociations' does not exist on ty... Remove this comment to see the full error message
       prisonApi.getNonAssociations = jest.fn().mockResolvedValue({
         offenderNo: 'G6123VU',
         firstName: 'JOHN',
@@ -962,7 +905,6 @@ describe('Select a cell', () => {
       })
       await controller(req, res)
 
-      // @ts-expect-error ts-migrate(2339) FIXME: Property 'render' does not exist on type '{ locals... Remove this comment to see the full error message
       expect(res.render).toHaveBeenCalledWith(
         'cellMove/selectCell.njk',
         expect.objectContaining({
@@ -974,9 +916,7 @@ describe('Select a cell', () => {
 
   describe('Current location is not a cell', () => {
     it('shows the CSWAP description as the location', async () => {
-      // @ts-expect-error ts-migrate(2339) FIXME: Property 'userCaseLoads' does not exist on type '{... Remove this comment to see the full error message
       prisonApi.userCaseLoads = jest.fn().mockResolvedValue([{ caseLoadId: 'MDI' }])
-      // @ts-expect-error ts-migrate(2339) FIXME: Property 'getDetails' does not exist on type '{}'.
       prisonApi.getDetails = jest.fn().mockResolvedValue({
         firstName: 'John',
         lastName: 'Doe',
@@ -991,7 +931,6 @@ describe('Select a cell', () => {
 
       await controller(req, res)
 
-      // @ts-expect-error ts-migrate(2339) FIXME: Property 'render' does not exist on type '{ locals... Remove this comment to see the full error message
       expect(res.render).toHaveBeenCalledWith(
         'cellMove/selectCell.njk',
         expect.objectContaining({

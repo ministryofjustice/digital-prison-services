@@ -48,7 +48,7 @@ const extractAttendanceInfo = (attendanceInformation, event) => {
   return null
 }
 
-export const getActivityListFactory = (prisonApi, whereaboutsApi) => {
+export const getActivityListFactory = (prisonApi, whereaboutsApi, config) => {
   const getEventsForOffenderNumbers = async (context, { agencyId, date, timeSlot, offenderNumbers }) => {
     const searchCriteria = { agencyId, date, timeSlot, offenderNumbers }
     const eventsByKind = await Promise.all([

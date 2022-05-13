@@ -31,9 +31,7 @@ const router = express.Router()
 
 export const setup = ({ prisonApi, whereaboutsApi, oauthApi, caseNotesApi }) => {
   const controller = controllerFactory({
-    // @ts-expect-error ts-migrate(2554) FIXME: Expected 2 arguments, but got 3.
     activityListService: activityListFactory(prisonApi, whereaboutsApi, config),
-    // @ts-expect-error ts-migrate(2554) FIXME: Expected 2 arguments, but got 3.
     houseblockListService: houseblockListFactory(prisonApi, whereaboutsApi, config),
     attendanceService: attendanceFactory(whereaboutsApi),
     offenderLoader: offenderLoaderFactory(prisonApi),

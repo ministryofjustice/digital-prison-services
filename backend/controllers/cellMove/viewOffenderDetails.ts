@@ -2,7 +2,7 @@ import { putLastNameFirst, formatLocation } from '../../utils'
 import { getBackLinkData } from './cellMoveUtils'
 import getValueByType from '../../shared/getValueByType'
 
-export default ({ prisonApi }) =>
+export default ({ prisonApi, logError }) =>
   async (req, res) => {
     const { offenderNo } = req.params
 
