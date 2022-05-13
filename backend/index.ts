@@ -103,6 +103,7 @@ app.use(
     complexityApi: apis.complexityApi,
     curiousApi: apis.curiousApi,
     incentivesApi: apis.incentivesApi,
+    restrictedPatientApi: apis.restrictedPatientApi,
   })
 )
 
