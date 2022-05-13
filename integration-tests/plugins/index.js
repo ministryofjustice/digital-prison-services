@@ -16,6 +16,7 @@ const allocationManager = require('../mockApis/allocationManager')
 const community = require('../mockApis/community')
 const pathfinder = require('../mockApis/pathfinder')
 const socApi = require('../mockApis/soc')
+const restrictedPatientApi = require('../mockApis/restrictedPatient')
 const offenderSearch = require('../mockApis/offenderSearch')
 const complexity = require('../mockApis/complexity')
 const curiousApi = require('../mockApis/curiousApi')
@@ -340,6 +341,7 @@ module.exports = (on) => {
     stubUserMe: ({ username, staffId, name }) => auth.stubUserMe(username, staffId, name),
     stubPathFinderOffenderDetails: (details) => pathfinder.getOffenderDetails(details),
     stubSocOffenderDetails: (details) => socApi.stubGetOffenderDetails(details),
+    stubIsCaseLoadRestrictedPatient: (details) => restrictedPatientApi.stubIsCaseLoadRestrictedPatient(details),
     stubVisitsWithVisitors: ({ visitsWithVisitors, offenderBasicDetails }) =>
       Promise.all([
         prisonApi.stubVisitsWithVisitors(visitsWithVisitors),
