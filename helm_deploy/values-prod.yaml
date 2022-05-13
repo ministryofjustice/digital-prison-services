@@ -69,6 +69,7 @@ env:
   WELCOME_PEOPLE_INTO_PRISON_ENABLED_PRISONS: "NMI,LII"
   CREATE_AND_VARY_A_LICENCE_URL: https://create-and-vary-a-licence.hmpps.service.justice.gov.uk/
   CREATE_AND_VARY_A_LICENCE_ENABLED_PRISONS: "CFI,CWI,UKI,UPI,PRI"
+  RESTRICTED_PATIENT_API_URL: https://restricted-patients-api.hmpps.service.justice.gov.uk/
 
 allowlist:
   office: "217.33.148.210/32"
