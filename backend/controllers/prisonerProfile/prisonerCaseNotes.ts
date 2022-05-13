@@ -48,16 +48,16 @@ export default ({
 
     const pageNumber = Math.floor((pageOffsetOption || 0) / perPage) || 0
 
-    const caseNotes = await caseNotesApi.getCaseNotes(res.locals, offenderNo, {
+    const caseNotes = await caseNotesApi.getCaseNotes(context, offenderNo, {
       pageNumber: showAll ? 0 : pageNumber,
-      perPage: showAll ? await getTotalResults(res.locals, offenderNo, { type, subType, fromDate, toDate }) : perPage,
+      perPage: showAll ? await getTotalResults(context, offenderNo, { type, subType, fromDate, toDate }) : perPage,
       type,
       subType,
       startDate: fromDate,
       endDate: toDate,
     })
 
-    const caseNoteTypes = await caseNotesApi.getCaseNoteTypes(res.locals)
+    const caseNoteTypes = await caseNotesApi.getCaseNoteTypes(context)
 
     const types = caseNoteTypes.map((caseNoteType) => ({
       value: caseNoteType.code,
@@ -80,7 +80,7 @@ export default ({
       return res.send(nunjucks.render(`${templatePath}/partials/subTypesSelect.njk`, { subTypes: filteredSubTypes }))
     }
 
-    const prisonerProfileData = await prisonerProfileService.getPrisonerProfileData(res.locals, offenderNo)
+    const prisonerProfileData = await prisonerProfileService.getPrisonerProfileData(context, offenderNo)
 
     const userRoles = await oauthApi.userRoles(res.locals).then((roles) => roles.map((role) => role.roleCode))
     const hasDeleteRole = userRoles.includes('DELETE_SENSITIVE_CASE_NOTES')
