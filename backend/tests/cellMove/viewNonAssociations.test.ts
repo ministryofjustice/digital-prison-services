@@ -9,7 +9,10 @@ describe('view non associations', () => {
   let logError
   let controller
 
-  const prisonApi = {}
+  const prisonApi = {
+    getDetails: jest.fn(),
+    getNonAssociations: jest.fn(),
+  }
 
   const tomorrow = moment().add(1, 'days')
 
@@ -34,9 +37,7 @@ describe('view non associations', () => {
     }
     res = { locals: {}, render: jest.fn(), status: jest.fn() }
 
-    // @ts-expect-error ts-migrate(2339) FIXME: Property 'getDetails' does not exist on type '{}'.
     prisonApi.getDetails = jest.fn().mockResolvedValue(getDetailsResponse)
-    // @ts-expect-error ts-migrate(2339) FIXME: Property 'getNonAssociations' does not exist on ty... Remove this comment to see the full error message
     prisonApi.getNonAssociations = jest.fn().mockResolvedValue({
       offenderNo: 'ABC123',
       firstName: 'Fred',
@@ -121,22 +122,18 @@ describe('view non associations', () => {
       ],
     })
 
-    // @ts-expect-error ts-migrate(2345) FIXME: Argument of type '{ prisonApi: {}; logError: any; ... Remove this comment to see the full error message
     controller = viewNonAssociations({ prisonApi, logError })
   })
 
   it('Makes the expected API calls', async () => {
     await controller(req, res)
 
-    // @ts-expect-error ts-migrate(2339) FIXME: Property 'getDetails' does not exist on type '{}'.
     expect(prisonApi.getDetails).toHaveBeenCalledWith(res.locals, offenderNo)
-    // @ts-expect-error ts-migrate(2339) FIXME: Property 'getNonAssociations' does not exist on ty... Remove this comment to see the full error message
     expect(prisonApi.getNonAssociations).toHaveBeenCalledWith(res.locals, 1234)
   })
 
   it('Should render error template when there is an API error', async () => {
     const error = new Error('Network error')
-    // @ts-expect-error ts-migrate(2339) FIXME: Property 'getDetails' does not exist on type '{}'.
     prisonApi.getDetails.mockImplementation(() => Promise.reject(error))
 
     await expect(controller(req, res)).rejects.toThrowError(error)

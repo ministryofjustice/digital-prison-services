@@ -5,7 +5,9 @@ describe('Space created', () => {
   let res
   let controller
 
-  const prisonApi = {}
+  const prisonApi = {
+    getDetails: jest.fn(),
+  }
 
   const offenderNo = 'ABC123'
 
@@ -16,15 +18,11 @@ describe('Space created', () => {
     }
     res = { locals: {}, render: jest.fn() }
 
-    // @ts-expect-error ts-migrate(2339) FIXME: Property 'getDetails' does not exist on type '{}'.
-    prisonApi.getDetails = jest.fn()
-
     controller = spaceCreatedController({ prisonApi })
   })
 
   describe('with data', () => {
     beforeEach(() => {
-      // @ts-expect-error ts-migrate(2339) FIXME: Property 'getDetails' does not exist on type '{}'.
       prisonApi.getDetails.mockResolvedValue({ firstName: 'Barry', lastName: 'Jones' })
     })
 
@@ -45,7 +43,6 @@ describe('Space created', () => {
   describe('when there are errors', () => {
     it('set the redirect and home urls and throw the error', async () => {
       const error = new Error('Network error')
-      // @ts-expect-error ts-migrate(2339) FIXME: Property 'getDetails' does not exist on type '{}'.
       prisonApi.getDetails.mockRejectedValue(error)
 
       await expect(controller(req, res)).rejects.toThrowError(error)

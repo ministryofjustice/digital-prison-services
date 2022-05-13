@@ -8,7 +8,11 @@ describe('view CSRA details', () => {
   let logError
   let controller
 
-  const prisonApi = {}
+  const prisonApi = {
+    getDetails: jest.fn(),
+    getCsraAssessments: jest.fn(),
+    getAgencyDetails: jest.fn(),
+  }
 
   const offenderNo = 'ABC123'
 
@@ -34,9 +38,7 @@ describe('view CSRA details', () => {
     }
     res = { locals: {}, render: jest.fn(), status: jest.fn() }
 
-    // @ts-expect-error ts-migrate(2339) FIXME: Property 'getDetails' does not exist on type '{}'.
     prisonApi.getDetails = jest.fn().mockResolvedValue(getDetailsResponse)
-    // @ts-expect-error ts-migrate(2339) FIXME: Property 'getCsraAssessments' does not exist on ty... Remove this comment to see the full error message
     prisonApi.getCsraAssessments = jest.fn().mockResolvedValue([
       {
         bookingId: 1234,
@@ -75,29 +77,23 @@ describe('view CSRA details', () => {
         assessorUser: 'TEST_USER',
       },
     ])
-    // @ts-expect-error ts-migrate(2339) FIXME: Property 'getAgencyDetails' does not exist on type... Remove this comment to see the full error message
     prisonApi.getAgencyDetails = jest.fn().mockResolvedValue({
       description: 'HMP Moorland',
     })
 
-    // @ts-expect-error ts-migrate(2345) FIXME: Argument of type '{ prisonApi: {}; logError: any; ... Remove this comment to see the full error message
     controller = viewCellSharingRiskAssessmentDetails({ prisonApi, logError })
   })
 
   it('Makes the expected API calls', async () => {
     await controller(req, res)
 
-    // @ts-expect-error ts-migrate(2339) FIXME: Property 'getDetails' does not exist on type '{}'.
     expect(prisonApi.getDetails).toHaveBeenCalledWith(res.locals, offenderNo, true)
-    // @ts-expect-error ts-migrate(2339) FIXME: Property 'getCsraAssessments' does not exist on ty... Remove this comment to see the full error message
     expect(prisonApi.getCsraAssessments).toHaveBeenCalledWith(res.locals, [offenderNo])
-    // @ts-expect-error ts-migrate(2339) FIXME: Property 'getAgencyDetails' does not exist on type... Remove this comment to see the full error message
     expect(prisonApi.getAgencyDetails).toHaveBeenCalledWith(res.locals, 'MDI')
   })
 
   it('Should render error template when there is an API error', async () => {
     const error = new Error('Network error')
-    // @ts-expect-error ts-migrate(2339) FIXME: Property 'getDetails' does not exist on type '{}'.
     prisonApi.getDetails.mockImplementation(() => Promise.reject(error))
 
     await expect(controller(req, res)).rejects.toThrowError(error)

@@ -31,6 +31,12 @@ import homepageController from './controllers/homepage/homepage'
 import deprecatedUrlPage from './controllers/deprecatedUrlPage'
 import requestLimiter from './middleware/requestLimiter'
 
+process.on('uncaughtExceptionMonitor', (err, origin) => {
+  logError('UncuaghtExcMon', err, origin)
+})
+process.on('uncaughtException', (err, origin) => {
+  logError('UncuaghtExc', err, origin)
+})
 process.on('unhandledRejection', (reason, promise) => {
   console.log('Unhandled Rejection at: ', promise, 'reason:', reason)
 })
