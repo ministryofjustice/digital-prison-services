@@ -1,4 +1,7 @@
 const getContext = async ({ offenderNo, res, req, oauthApi, systemOauthClient, restrictedPatientApi }) => {
+  if (res.locals.user === undefined) {
+    return res.locals
+  }
   const {
     user: { allCaseloads },
   } = res.locals
