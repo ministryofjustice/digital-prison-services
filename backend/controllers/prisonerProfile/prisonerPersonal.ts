@@ -48,11 +48,11 @@ export default ({ prisonerProfileService, personService, prisonApi, allocationMa
 
     // TODO: Part of temporary measure to only allow restricted prisons access to neurodivergence data. If no prisons specified then assume all are allowed access.
     const getNeurodivergenceSupportNeed = async () => {
+      let divergence = []
       if (canViewNeurodivergenceSupportData(basicPrisonerDetails.agencyId, neurodiversityEnabledPrisons)) {
-        const divergence = await esweService.getNeurodivergence(offenderNo, establishmentId)
-        return divergence
+        divergence = await esweService.getNeurodivergence(offenderNo, establishmentId)
       }
-      return createFlaggedContent([])
+      return divergence
     }
 
     const [
