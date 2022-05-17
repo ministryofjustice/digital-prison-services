@@ -49,6 +49,7 @@ import appointmentConfirmDeletion from './controllers/appointmentConfirmDeletion
 import appointmentDeleteRecurringBookings from './controllers/appointmentDeleteRecurringBookings'
 import appointmentDeleted from './controllers/appointmentDeleted'
 import { cacheFactory } from './utils/singleValueInMemoryCache'
+import asyncMiddleware from './middleware/asyncHandler'
 
 import whereaboutsRouter from './routes/whereabouts/whereaboutsRouter'
 
@@ -69,6 +70,7 @@ const setup = ({
   complexityApi,
   curiousApi,
   incentivesApi,
+  restrictedPatientApi,
 }) => {
   router.use(async (req, res, next) => {
     res.locals = {
@@ -133,7 +135,9 @@ const setup = ({
 
   router.get(
     '/offenders/:offenderNo/probation-documents',
-    probationDocumentsFactory(oauthApi, prisonApi, communityApi, systemOauthClient).displayProbationDocumentsPage
+    asyncMiddleware(
+      probationDocumentsFactory(oauthApi, prisonApi, communityApi, systemOauthClient).displayProbationDocumentsPage
+    )
   )
   router.get(
     '/offenders/:offenderNo/probation-documents/:documentId/download',
@@ -219,6 +223,7 @@ const setup = ({
       offenderSearchApi,
       curiousApi,
       incentivesApi,
+      restrictedPatientApi,
     })
   )
 

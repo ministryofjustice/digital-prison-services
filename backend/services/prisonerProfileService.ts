@@ -72,7 +72,8 @@ export default ({
     return false
   }
 
-  const getPrisonerProfileData = async (context, offenderNo, username) => {
+  const getPrisonerProfileData = async (context, offenderNo, username, overrideAccess) => {
+
     const [currentUser, prisonerDetails] = await Promise.all([
       oauthApi.currentUser(context),
       prisonApi.getDetails(context, offenderNo, true),
@@ -258,7 +259,8 @@ export default ({
       showCalculateReleaseDates: offenderInCaseload && canCalculateReleaseDate,
       showReportUseOfForce: useOfForceEnabledPrisons.includes(currentUser.activeCaseLoadId),
       useOfForceUrl: `${useOfForceUrl}/report/${bookingId}/report-use-of-force`,
-      userCanEdit: (canViewInactivePrisoner && ['OUT', 'TRN'].includes(agencyId)) || offenderInCaseload,
+      userCanEdit:
+        (canViewInactivePrisoner && ['OUT', 'TRN'].includes(agencyId)) || offenderInCaseload || overrideAccess,
       language,
       interpreterRequired,
       writtenLanguage,
