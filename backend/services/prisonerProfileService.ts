@@ -73,7 +73,6 @@ export default ({
   }
 
   const getPrisonerProfileData = async (context, offenderNo, username, overrideAccess) => {
-
     const [currentUser, prisonerDetails] = await Promise.all([
       oauthApi.currentUser(context),
       prisonApi.getDetails(context, offenderNo, true),
