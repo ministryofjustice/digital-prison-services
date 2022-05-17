@@ -1,7 +1,6 @@
 import logErrorAndContinue from '../../shared/logErrorAndContinue'
 import { getNamesFromString } from '../../utils'
-import config from '../../config'
-import getContext from './prisonerProfileContext'
+import config, { app } from '../../config'
 
 import {
   aliasesViewModel,
@@ -15,38 +14,33 @@ import {
   careNeedsViewModel,
 } from './personalViewModels'
 
-export default ({
-    prisonerProfileService,
-    personService,
-    prisonApi,
-    allocationManagerApi,
-    esweService,
-    systemOauthClient,
-    restrictedPatientApi,
-    oauthApi,
-  }) =>
+import { canViewNeurodivergenceSupportData, createFlaggedContent } from '../../shared/neurodivergenceHelper'
+
+export default ({ prisonerProfileService, personService, prisonApi, allocationManagerApi, esweService }) =>
   async (req, res) => {
     const { offenderNo, establishmentId } = req.params
-    const { username } = req.session.userDetails
-
-    const { context, overrideAccess } = await getContext({
-      offenderNo,
-      res,
-      req,
-      oauthApi,
-      systemOauthClient,
-      restrictedPatientApi,
-    })
-
     const [basicPrisonerDetails, treatmentTypes, healthTypes] = await Promise.all([
-      prisonApi.getDetails(context, offenderNo),
-      prisonApi.getTreatmentTypes(context),
-      prisonApi.getHealthTypes(context),
+      prisonApi.getDetails(res.locals, offenderNo),
+      prisonApi.getTreatmentTypes(res.locals),
+      prisonApi.getHealthTypes(res.locals),
     ]).then((data) => data)
 
     const { bookingId } = basicPrisonerDetails || {}
     const treatmentCodes = treatmentTypes && treatmentTypes.map((type) => type.code).join()
     const healthCodes = healthTypes && healthTypes.map((type) => type.code).join()
+
+    const {
+      app: { neurodiversityEnabledUsernames, neurodiversityEnabledPrisons },
+    } = config
+
+    // TODO: Part of temporary measure to only allow restricted prisons access to neurodivergence data. If no prisons specified then assume all are allowed access.
+    const getNeurodivergenceSupportNeed = async () => {
+      let divergence = createFlaggedContent([])
+      if (canViewNeurodivergenceSupportData(basicPrisonerDetails.agencyId, neurodiversityEnabledPrisons as string)) {
+        divergence = await esweService.getNeurodivergence(offenderNo, establishmentId)
+      }
+      return divergence
+    }
 
     const [
       prisonerProfileData,
@@ -64,19 +58,19 @@ export default ({
       neurodivergence,
     ] = await Promise.all(
       [
-        prisonerProfileService.getPrisonerProfileData(context, offenderNo, username, overrideAccess),
-        prisonApi.getIdentifiers(context, bookingId),
-        prisonApi.getOffenderAliases(context, bookingId),
-        prisonApi.getPrisonerProperty(context, bookingId),
-        prisonApi.getPrisonerContacts(context, bookingId),
-        prisonApi.getPrisonerAddresses(context, offenderNo),
-        prisonApi.getSecondaryLanguages(context, bookingId),
-        prisonApi.getPersonalCareNeeds(context, bookingId, healthCodes),
-        prisonApi.getReasonableAdjustments(context, bookingId, treatmentCodes),
-        prisonApi.getAgencies(context),
-        allocationManagerApi.getPomByOffenderNo(context, offenderNo),
+        prisonerProfileService.getPrisonerProfileData(res.locals, offenderNo),
+        prisonApi.getIdentifiers(res.locals, bookingId),
+        prisonApi.getOffenderAliases(res.locals, bookingId),
+        prisonApi.getPrisonerProperty(res.locals, bookingId),
+        prisonApi.getPrisonerContacts(res.locals, bookingId),
+        prisonApi.getPrisonerAddresses(res.locals, offenderNo),
+        prisonApi.getSecondaryLanguages(res.locals, bookingId),
+        prisonApi.getPersonalCareNeeds(res.locals, bookingId, healthCodes),
+        prisonApi.getReasonableAdjustments(res.locals, bookingId, treatmentCodes),
+        prisonApi.getAgencies(res.locals),
+        allocationManagerApi.getPomByOffenderNo(res.locals, offenderNo),
         esweService.getNeurodiversities(offenderNo),
-        esweService.getNeurodivergence(offenderNo, establishmentId),
+        getNeurodivergenceSupportNeed(),
       ].map((apiCall) => logErrorAndContinue(apiCall))
     )
 
@@ -84,9 +78,7 @@ export default ({
     const { nextOfKin, otherContacts } = contacts || {}
     const activeNextOfKins = nextOfKin && nextOfKin.filter((kin) => kin.activeFlag)
 
-    const {
-      app: { neurodiversityEnabledUsernames },
-    } = config
+    const { username } = req.session.userDetails
 
     const displayNeurodiversity = !neurodiversityEnabledUsernames
       ? true
@@ -97,7 +89,7 @@ export default ({
       (await Promise.all(
         activeNextOfKins.map(async (kin) => ({
           ...kin,
-          ...(await personService.getPersonContactDetails(context, kin.personId)),
+          ...(await personService.getPersonContactDetails(res.locals, kin.personId)),
         }))
       ))
 
