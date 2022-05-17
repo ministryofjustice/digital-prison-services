@@ -95,7 +95,7 @@ describe('system oauth client tests', () => {
       const expiryTime = await getTtl('CC_USER1')
 
       const tokenExpiry = 600
-      expect(expiryTime).toBeLessThan(tokenExpiry - 60)
+      expect(expiryTime).toBeLessThan(tokenExpiry - 59)
       expect(expiryTime).toBeGreaterThan(tokenExpiry - 120) // Allow 1 minute
     })
   })
