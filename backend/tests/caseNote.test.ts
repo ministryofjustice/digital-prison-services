@@ -6,8 +6,17 @@ Reflect.deleteProperty(process.env, 'APPINSIGHTS_INSTRUMENTATIONKEY')
 
 const prisonApi = { getDetails: {} }
 const caseNotesApi = { addCaseNote: {}, myCaseNoteTypes: {} }
+const restrictedPatientApi = {}
+const systemOauthClient = {}
+const oauthApi = {}
 
-const { index, post, areYouSure, confirm } = caseNoteCtrl.caseNoteFactory({ prisonApi, caseNotesApi })
+const { index, post, areYouSure, confirm } = caseNoteCtrl.caseNoteFactory({
+  prisonApi,
+  caseNotesApi,
+  oauthApi,
+  systemOauthClient,
+  restrictedPatientApi,
+})
 
 jest.mock('../logError', () => ({
   logError: jest.fn(),
@@ -64,6 +73,8 @@ describe('case note management', () => {
     prisonApi.getDetails = jest.fn().mockReturnValue(getDetailsResponse)
     caseNotesApi.myCaseNoteTypes = jest.fn().mockReturnValue(caseNoteTypes)
     caseNotesApi.addCaseNote = jest.fn()
+    // @ts-expect-error ts-migrate(2339) FIXME: Property 'getNeurodiversities' does not exist on type '{}'... Remove this comment to see the full error message
+    oauthApi.userRoles = jest.fn().mockResolvedValue([])
   })
 
   afterEach(() => {
