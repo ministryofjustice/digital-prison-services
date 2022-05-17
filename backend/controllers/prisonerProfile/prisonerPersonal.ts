@@ -112,8 +112,6 @@ export default ({
     const { nextOfKin, otherContacts } = contacts || {}
     const activeNextOfKins = nextOfKin && nextOfKin.filter((kin) => kin.activeFlag)
 
-    const { username } = req.session.userDetails
-
     const displayNeurodiversity = !neurodiversityEnabledUsernames
       ? true
       : neurodiversityEnabledUsernames?.includes(username)
