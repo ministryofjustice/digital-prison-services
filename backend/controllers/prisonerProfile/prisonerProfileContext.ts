@@ -1,6 +1,6 @@
 const getContext = async ({ offenderNo, res, req, oauthApi, systemOauthClient, restrictedPatientApi }) => {
   if (res.locals.user === undefined) {
-    return res.locals
+    return { context: res.locals, overrideAccess: false }
   }
   const {
     user: { allCaseloads },
@@ -17,10 +17,10 @@ const getContext = async ({ offenderNo, res, req, oauthApi, systemOauthClient, r
     )
     if (isRestrictedPatient) {
       const context = await systemOauthClient.getClientCredentialsTokens(username)
-      return context
+      return { context, overrideAccess: true }
     }
   }
-  return res.locals
+  return { context: res.locals, overrideAccess: false }
 }
 
 export default getContext
