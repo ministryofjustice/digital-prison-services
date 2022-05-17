@@ -109,7 +109,12 @@ describe('prisoner personal', () => {
     // @ts-expect-error ts-migrate(2339) FIXME: Property 'getDetails' does not exist on type '{}'.
     expect(prisonApi.getDetails).toHaveBeenCalledWith(res.locals, offenderNo)
     // @ts-expect-error ts-migrate(2339) FIXME: Property 'getPrisonerProfileData' does not exist o... Remove this comment to see the full error message
-    expect(prisonerProfileService.getPrisonerProfileData).toHaveBeenCalledWith(res.locals, offenderNo)
+    expect(prisonerProfileService.getPrisonerProfileData).toHaveBeenCalledWith(
+      res.locals,
+      offenderNo,
+      'ITAG_USER',
+      false
+    )
     expect(res.render).toHaveBeenCalledWith(
       'prisonerProfile/prisonerPersonal/prisonerPersonal.njk',
       expect.objectContaining({
