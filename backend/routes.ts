@@ -108,7 +108,10 @@ const setup = ({
     '/offenders/:offenderNo/create-alert',
     alertFactory(oauthApi, prisonApi, referenceCodesService(prisonApi)).handleCreateAlertForm
   )
-  router.use('/prisoner/:offenderNo/add-case-note', createCaseNoteRouter({ prisonApi, caseNotesApi }))
+  router.use(
+    '/prisoner/:offenderNo/add-case-note',
+    createCaseNoteRouter({ prisonApi, caseNotesApi, oauthApi, systemOauthClient, restrictedPatientApi })
+  )
   router.get(
     '/manage-prisoner-whereabouts/attendance-reason-statistics',
     attendanceStatisticsFactory(oauthApi, prisonApi, whereaboutsApi).attendanceStatistics
