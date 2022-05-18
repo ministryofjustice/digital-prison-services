@@ -1,5 +1,4 @@
 import moment, { Moment } from 'moment'
-import { app } from '../config'
 import { readableDateFormat, stringWithAbbreviationsProcessor } from '../utils'
 import type CuriousApi from '../api/curious/curiousApi'
 import log from '../log'
@@ -10,7 +9,6 @@ import {
   LearnerLatestAssessment,
   LearnerProfile,
   LearnerEducation,
-  LearnerNeurodivergence,
 } from '../api/curious/types/Types'
 import { createFlaggedContent } from '../shared/neurodivergenceHelper'
 
