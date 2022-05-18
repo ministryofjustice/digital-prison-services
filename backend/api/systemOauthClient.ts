@@ -2,21 +2,22 @@ import querystring from 'querystring'
 
 import { createClient } from 'redis'
 import { promisify } from 'util'
+import config from '../config'
 import logger from '../log'
 
 let getRedisAsync
 let setRedisAsync
 let oauthClient
 
-export const getTokenStore = (config) => {
-  const { enabled, host, port, password } = config.redis
+export const getTokenStore = (configData) => {
+  const { enabled, host, port, password } = configData.redis
   if (!enabled || !host) return null
 
   const client = createClient({
     host,
     port,
     password,
-    tls: config.app.production ? {} : false,
+    tls: configData.app.production ? {} : false,
   })
 
   client.on('error', (e: Error) => logger.error(e, 'Redis client error'))
@@ -47,7 +48,7 @@ const requestClientCredentials = async (username) => {
 }
 
 const debug = (operation: string, username: string) => {
-  logger.debug(`OAUTH CLIENT CREDS ${operation} FOR ${username}`)
+  if (!config.app.production) logger.info(`OAUTH CLIENT CREDS ${operation} FOR ${username}`)
 }
 
 const getKey = (username: string) => {
