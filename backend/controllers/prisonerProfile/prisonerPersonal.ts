@@ -1,6 +1,7 @@
 import logErrorAndContinue from '../../shared/logErrorAndContinue'
 import { getNamesFromString } from '../../utils'
 import config from '../../config'
+import getContext from './prisonerProfileContext'
 
 import {
   aliasesViewModel,
@@ -14,13 +15,33 @@ import {
   careNeedsViewModel,
 } from './personalViewModels'
 
-export default ({ prisonerProfileService, personService, prisonApi, allocationManagerApi, esweService }) =>
+export default ({
+    prisonerProfileService,
+    personService,
+    prisonApi,
+    allocationManagerApi,
+    esweService,
+    systemOauthClient,
+    restrictedPatientApi,
+    oauthApi,
+  }) =>
   async (req, res) => {
     const { offenderNo, establishmentId } = req.params
+    const { username } = req.session.userDetails
+
+    const { context, overrideAccess } = await getContext({
+      offenderNo,
+      res,
+      req,
+      oauthApi,
+      systemOauthClient,
+      restrictedPatientApi,
+    })
+
     const [basicPrisonerDetails, treatmentTypes, healthTypes] = await Promise.all([
-      prisonApi.getDetails(res.locals, offenderNo),
-      prisonApi.getTreatmentTypes(res.locals),
-      prisonApi.getHealthTypes(res.locals),
+      prisonApi.getDetails(context, offenderNo),
+      prisonApi.getTreatmentTypes(context),
+      prisonApi.getHealthTypes(context),
     ]).then((data) => data)
 
     const { bookingId } = basicPrisonerDetails || {}
@@ -43,17 +64,17 @@ export default ({ prisonerProfileService, personService, prisonApi, allocationMa
       neurodivergence,
     ] = await Promise.all(
       [
-        prisonerProfileService.getPrisonerProfileData(res.locals, offenderNo),
-        prisonApi.getIdentifiers(res.locals, bookingId),
-        prisonApi.getOffenderAliases(res.locals, bookingId),
-        prisonApi.getPrisonerProperty(res.locals, bookingId),
-        prisonApi.getPrisonerContacts(res.locals, bookingId),
-        prisonApi.getPrisonerAddresses(res.locals, offenderNo),
-        prisonApi.getSecondaryLanguages(res.locals, bookingId),
-        prisonApi.getPersonalCareNeeds(res.locals, bookingId, healthCodes),
-        prisonApi.getReasonableAdjustments(res.locals, bookingId, treatmentCodes),
-        prisonApi.getAgencies(res.locals),
-        allocationManagerApi.getPomByOffenderNo(res.locals, offenderNo),
+        prisonerProfileService.getPrisonerProfileData(context, offenderNo, username, overrideAccess),
+        prisonApi.getIdentifiers(context, bookingId),
+        prisonApi.getOffenderAliases(context, bookingId),
+        prisonApi.getPrisonerProperty(context, bookingId),
+        prisonApi.getPrisonerContacts(context, bookingId),
+        prisonApi.getPrisonerAddresses(context, offenderNo),
+        prisonApi.getSecondaryLanguages(context, bookingId),
+        prisonApi.getPersonalCareNeeds(context, bookingId, healthCodes),
+        prisonApi.getReasonableAdjustments(context, bookingId, treatmentCodes),
+        prisonApi.getAgencies(context),
+        allocationManagerApi.getPomByOffenderNo(context, offenderNo),
         esweService.getNeurodiversities(offenderNo),
         esweService.getNeurodivergence(offenderNo, establishmentId),
       ].map((apiCall) => logErrorAndContinue(apiCall))
@@ -66,7 +87,6 @@ export default ({ prisonerProfileService, personService, prisonApi, allocationMa
     const {
       app: { neurodiversityEnabledUsernames },
     } = config
-    const { username } = req.session.userDetails
 
     const displayNeurodiversity = !neurodiversityEnabledUsernames
       ? true
@@ -77,7 +97,7 @@ export default ({ prisonerProfileService, personService, prisonApi, allocationMa
       (await Promise.all(
         activeNextOfKins.map(async (kin) => ({
           ...kin,
-          ...(await personService.getPersonContactDetails(res.locals, kin.personId)),
+          ...(await personService.getPersonContactDetails(context, kin.personId)),
         }))
       ))
 
