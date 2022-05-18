@@ -1,12 +1,28 @@
 import moment from 'moment'
 import nunjucks from 'nunjucks'
 import { properCaseName } from '../utils'
+import getContext from './prisonerProfile/prisonerProfileContext'
 
 const getOffenderUrl = (offenderNo) => `/prisoner/${offenderNo}`
 
-export const caseNoteFactory = ({ prisonApi, caseNotesApi }) => {
-  const getOffenderDetails = async (res, offenderNo) => {
-    const { firstName, lastName } = await prisonApi.getDetails(res.locals, offenderNo)
+const getContextWithRoles = async (offenderNo, res, req, oauthApi, systemOauthClient, restrictedPatientApi) => {
+  const userRoles = await oauthApi.userRoles(res.locals)
+  res.locals = { ...res.locals, userRoles }
+  const { context } = await getContext({
+    offenderNo,
+    res,
+    req,
+    oauthApi,
+    systemOauthClient,
+    restrictedPatientApi,
+  })
+
+  return context
+}
+
+export const caseNoteFactory = ({ prisonApi, caseNotesApi, oauthApi, systemOauthClient, restrictedPatientApi }) => {
+  const getOffenderDetails = async (context, offenderNo) => {
+    const { firstName, lastName } = await prisonApi.getDetails(context, offenderNo)
 
     return {
       offenderNo,
@@ -15,8 +31,8 @@ export const caseNoteFactory = ({ prisonApi, caseNotesApi }) => {
     }
   }
 
-  const getCaseNoteTypes = async (res, type) => {
-    const caseNoteTypes = (await caseNotesApi.myCaseNoteTypes(res.locals)).filter(
+  const getCaseNoteTypes = async (context, type) => {
+    const caseNoteTypes = (await caseNotesApi.myCaseNoteTypes(context)).filter(
       (caseNoteType) => caseNoteType.activeFlag === 'Y'
     )
 
@@ -72,15 +88,17 @@ export const caseNoteFactory = ({ prisonApi, caseNotesApi }) => {
 
   const index = async (req, res) => {
     const { offenderNo } = req.params
+    const context = await getContextWithRoles(offenderNo, res, req, oauthApi, systemOauthClient, restrictedPatientApi)
+
     try {
       if (req.xhr) {
         const { typeCode } = req.query
-        const { subTypes } = await getCaseNoteTypes(res, typeCode)
+        const { subTypes } = await getCaseNoteTypes(context, typeCode)
         return res.send(nunjucks.render('caseNotes/partials/subTypesOptions.njk', { subTypes }))
       }
       const formValues = getOrConstructFormValues(req)
-      const { types, subTypes } = await getCaseNoteTypes(res, formValues.type)
-      const offenderDetails = await getOffenderDetails(res, offenderNo)
+      const { types, subTypes } = await getCaseNoteTypes(context, formValues.type)
+      const offenderDetails = await getOffenderDetails(context, offenderNo)
 
       return res.render('caseNotes/addCaseNoteForm.njk', {
         errors: req.flash('caseNoteErrors'),
@@ -213,6 +231,8 @@ export const caseNoteFactory = ({ prisonApi, caseNotesApi }) => {
     const { type, subType, text, date, hours, minutes } = req.body
     const errors = validate(type, subType, text, date, hours, minutes)
 
+    const context = await getContextWithRoles(offenderNo, res, req, oauthApi, systemOauthClient, restrictedPatientApi)
+
     const caseNote = {
       offenderNo,
       type,
@@ -229,7 +249,7 @@ export const caseNoteFactory = ({ prisonApi, caseNotesApi }) => {
       }
 
       try {
-        await caseNotesApi.addCaseNote(res.locals, offenderNo, {
+        await caseNotesApi.addCaseNote(context, offenderNo, {
           offenderNo,
           type,
           subType,
@@ -254,7 +274,9 @@ export const caseNoteFactory = ({ prisonApi, caseNotesApi }) => {
 
   const areYouSure = async (req, res) => {
     const { offenderNo } = req.params
-    const offenderDetails = await getOffenderDetails(res, offenderNo)
+    const context = await getContextWithRoles(offenderNo, res, req, oauthApi, systemOauthClient, restrictedPatientApi)
+
+    const offenderDetails = await getOffenderDetails(context, offenderNo)
 
     return res.render('caseNotes/addCaseNoteConfirm.njk', {
       errors: req.flash('confirmErrors'),
@@ -267,6 +289,8 @@ export const caseNoteFactory = ({ prisonApi, caseNotesApi }) => {
 
   const confirm = async (req, res) => {
     const { offenderNo } = req.params
+    const context = await getContextWithRoles(offenderNo, res, req, oauthApi, systemOauthClient, restrictedPatientApi)
+
     const { confirmed } = req.body
     if (!confirmed) {
       const errors = [{ href: '#confirmed', text: 'Select yes if this information is appropriate to share' }]
@@ -279,7 +303,7 @@ export const caseNoteFactory = ({ prisonApi, caseNotesApi }) => {
 
     if (confirmed === 'Yes') {
       try {
-        await caseNotesApi.addCaseNote(res.locals, offenderNo, {
+        await caseNotesApi.addCaseNote(context, offenderNo, {
           ...caseNote,
           occurrenceDateTime: moment(caseNote.date, 'DD/MM/YYYY')
             .hours(caseNote.hours)
