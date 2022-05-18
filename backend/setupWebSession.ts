@@ -21,7 +21,7 @@ export default () => {
       tls: config.app.production ? {} : false,
     })
 
-    client.on('error', (e: Error) => logger.error('Redis client error', e))
+    client.on('error', (e: Error) => logger.error(e, 'Redis client error'))
 
     return new RedisStore({ client })
   }
