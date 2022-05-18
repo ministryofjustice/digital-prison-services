@@ -35,10 +35,9 @@ export const oauthApiFactory = (client, { clientId, clientSecret, url }) => {
   })
 
   // eslint-disable-next-line camelcase
-  const parseOauthTokens = ({ access_token, refresh_token, expires_in }) => ({
+  const parseOauthTokens = ({ access_token, refresh_token }) => ({
     access_token,
     refresh_token,
-    expires_in,
   })
 
   const translateAuthClientError = (error) => {

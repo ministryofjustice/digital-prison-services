@@ -16,7 +16,6 @@ import setupHealthChecks from './setupHealthChecks'
 import setupBodyParsers from './setupBodyParsers'
 import setupWebSecurity from './setupWebSecurity'
 import setupAuth from './setupAuth'
-import { clientCredsSetup, getTokenStore } from './api/systemOauthClient'
 import setupStaticContent from './setupStaticContent'
 import nunjucksSetup from './utils/nunjucksSetup'
 import setupRedirects from './setupRedirects'
@@ -48,7 +47,6 @@ app.set('view engine', 'njk')
 
 nunjucksSetup(app)
 phaseNameSetup(app, config)
-clientCredsSetup(getTokenStore(config), apis.oauthApi)
 
 app.use(cookieParser())
 app.use(setupBodyParsers())
