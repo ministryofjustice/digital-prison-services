@@ -2208,6 +2208,24 @@ describe('prisoner personal', () => {
   })
 
   describe('learner neurodivergence information', () => {
+    const prisonerNotAllowedData = {
+      activeAlertCount: 1,
+      agencyId: 'MDI',
+      alerts: [],
+      assignedLivingUnit: {
+        description: 'CELL-123',
+        agencyName: 'Moorland Closed',
+      },
+      bookingId,
+      category: 'Cat C',
+      csra: 'High',
+      csraClassificationCode: 'HI',
+      csraClassificationDate: '2016-11-23',
+      firstName: 'TEST',
+      inactiveAlertCount: 2,
+      lastName: 'PRISONER',
+      assessments: [],
+    }
     beforeEach(() => {
       // @ts-expect-error ts-migrate(2339) FIXME: Property 'getNeurodiversities' does not ex... Remove this comment to see the full error message
       esweService.getNeurodivergence = jest.fn().mockResolvedValue({
@@ -2301,25 +2319,16 @@ describe('prisoner personal', () => {
     })
 
     it('should return undefined if prisoner not in users caseload', async () => {
-      const neurodivergence = {
-        prn: 'ABC123',
-        establishmentId: 'MDI',
-        establishmentName: 'Moorland (HMP & YOI)',
-        neurodivergenceSelfDeclared: NeurodivergenceSelfDeclared.Autism,
-        selfDeclaredDate: '10 February 2022',
-        neurodivergenceSupport: [NeurodivergenceSupport.Reading, NeurodivergenceSupport.AuditorySupport],
-        supportDate: '14 February 2022',
-      }
-      // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-      // @ts-ignore
-      esweService.getNeurodivergence = jest.fn()
-      // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-      // @ts-ignore
-      curiousApi.getLearnerNeurodivergence.mockResolvedValue(neurodivergence)
+      // @ts-expect-error ts-migrate(2339) FIXME: Property 'getDetails' does not exist on type '{}'.
+      prisonApi.getDetails.mockReturnValue({ ...prisonerProfileData, agencyId: 'MDI' })
+
+      // @ts-expect-error ts-migrate(2339) FIXME: Property 'getPrisonerProfileData' does not exist o... Remove this comment to see the full error message
+      prisonerProfileService.getPrisonerProfileData(res.locals, offenderNo)
+
       await controller(req, res)
       expect(res.render).toHaveBeenCalledWith(
         'prisonerProfile/prisonerPersonal/prisonerPersonal.njk',
-        expect.objectContaining({ neurodivergence: undefined })
+        expect.objectContaining({ neurodivergence: { content: [], enabled: false } })
       )
     })
   })
