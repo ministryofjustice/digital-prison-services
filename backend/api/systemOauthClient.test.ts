@@ -1,7 +1,11 @@
 import { doesNotMatch } from 'assert'
 import redisMock from 'redis-mock'
 import { promisify } from 'util'
-import systemOauthClient, { clientCredsSetup, getClientCredentialsTokens } from './systemOauthClient'
+import systemOauthClient, {
+  clientCredsSetup,
+  enableLogDebugStatements,
+  getClientCredentialsTokens,
+} from './systemOauthClient'
 
 describe('system oauth client tests', () => {
   const oauthApi = { makeTokenRequest: {} }
@@ -13,11 +17,11 @@ describe('system oauth client tests', () => {
         refresh_token: '456',
         expires_in: 600,
       })
-      clientCredsSetup(null, oauthApi)
+      clientCredsSetup(null, oauthApi, true)
     })
 
     it('Gets and returns token', async () => {
-      const clientCreds = await getClientCredentialsTokens({})
+      const clientCreds = await getClientCredentialsTokens(null)
       expect(clientCreds).toEqual({
         access_token: '123',
         refresh_token: '456',
@@ -26,8 +30,8 @@ describe('system oauth client tests', () => {
     })
 
     it('Makes oauth requests each time', async () => {
-      await getClientCredentialsTokens({})
-      await getClientCredentialsTokens({})
+      await getClientCredentialsTokens(null)
+      await getClientCredentialsTokens(null)
       expect(oauthApi.makeTokenRequest).toHaveBeenCalledTimes(2)
     })
   })
@@ -42,7 +46,7 @@ describe('system oauth client tests', () => {
         expires_in: 600,
       })
       mockRedis = redisMock.createClient()
-      clientCredsSetup(mockRedis, oauthApi)
+      clientCredsSetup(mockRedis, oauthApi, true)
     })
 
     it('Gets and returns token on the first call with correct expiry', async () => {
@@ -97,6 +101,23 @@ describe('system oauth client tests', () => {
       const tokenExpiry = 600
       expect(expiryTime).toBeLessThan(tokenExpiry - 59)
       expect(expiryTime).toBeGreaterThan(tokenExpiry - 120) // Allow 1 minute
+    })
+  })
+
+  describe('Logging debug statements', () => {
+    it('Will happen in t3', async () => {
+      const logDebug = enableLogDebugStatements({ app: { production: true }, phaseName: 'DEV' })
+      expect(logDebug).toEqual(true)
+    })
+
+    it('Will not happen in production', async () => {
+      const logDebug = enableLogDebugStatements({ app: { production: true } })
+      expect(logDebug).toEqual(false)
+    })
+
+    it('Will happen if no config', async () => {
+      const logDebug = enableLogDebugStatements({})
+      expect(logDebug).toEqual(true)
     })
   })
 })

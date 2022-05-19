@@ -2,12 +2,28 @@ import querystring from 'querystring'
 
 import { createClient } from 'redis'
 import { promisify } from 'util'
-import config from '../config'
+import clientFactory from './oauthEnabledClient'
 import logger from '../log'
+import { oauthApiFactory } from './oauthApi'
 
 let getRedisAsync
 let setRedisAsync
 let oauthClient
+let logDebug
+
+export const getSystemOauthApiClient = (configData) => {
+  return oauthApiFactory(
+    clientFactory({
+      baseUrl: configData.apis.oauth2.url,
+      timeout: configData.apis.oauth2.timeoutSeconds * 1000,
+    }),
+    {
+      clientId: configData.apis.oauth2.systemClientId,
+      clientSecret: configData.apis.oauth2.systemClientSecret,
+      url: configData.apis.oauth2.url,
+    }
+  )
+}
 
 export const getTokenStore = (configData) => {
   const { enabled, host, port, password } = configData.redis
@@ -26,7 +42,11 @@ export const getTokenStore = (configData) => {
   return client
 }
 
-export const clientCredsSetup = (tokenStore, oauthApi) => {
+export const enableLogDebugStatements = (configData) => {
+  return !configData.app?.production || configData.phaseName === 'DEV'
+}
+
+export const clientCredsSetup = (tokenStore, oauthApi, logDebugStatements) => {
   const redisTokenStore = tokenStore
   getRedisAsync = redisTokenStore ? promisify(redisTokenStore?.get).bind(redisTokenStore) : (key) => {}
   setRedisAsync = redisTokenStore
@@ -34,6 +54,8 @@ export const clientCredsSetup = (tokenStore, oauthApi) => {
     : (key, value, command, expiry) => {}
 
   oauthClient = oauthApi
+
+  logDebug = logDebugStatements
 }
 
 const requestClientCredentials = async (username) => {
@@ -47,11 +69,12 @@ const requestClientCredentials = async (username) => {
   return oauthResult
 }
 
+// Remove this when we are confident caching is working
 const debug = (operation: string, username: string) => {
-  if (!config.app.production) logger.info(`OAUTH CLIENT CREDS ${operation} FOR ${username}`)
+  if (logDebug) logger.info(`OAUTH CLIENT CREDS ${operation} FOR ${username}`)
 }
 
-const getKey = (username: string) => {
+const getKey = (username: string): string => {
   const baseKey = username || '%ANONYMOUS%'
   return `CC_${baseKey}`
 }
