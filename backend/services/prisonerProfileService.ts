@@ -8,7 +8,7 @@ import config from '../config'
 import logErrorAndContinue from '../shared/logErrorAndContinue'
 import canAccessProbationDocuments from '../shared/probationDocumentsAccess'
 import { NeurodivergenceSupport } from '../api/curious/types/Enums'
-import { canViewNeurodivergenceSupportData } from '../shared/neurodivergenceHelper'
+import { canViewNeurodivergenceSupportData } from '../shared/neuroDivergenceHelper'
 
 export const isComplexityEnabledFor = (agencyId) => config.apis.complexity.enabled_prisons?.includes(agencyId)
 

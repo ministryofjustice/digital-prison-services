@@ -15,7 +15,7 @@ import {
   careNeedsViewModel,
 } from './personalViewModels'
 
-import { canViewNeurodivergenceSupportData, createFlaggedContent } from '../../shared/neurodivergenceHelper'
+import { canViewNeurodivergenceSupportData, createFlaggedContent } from '../../shared/neuroDivergenceHelper'
 
 export default ({
     prisonerProfileService,
