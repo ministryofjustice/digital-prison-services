@@ -15,7 +15,7 @@ import {
   careNeedsViewModel,
 } from './personalViewModels'
 
-import { canViewNeurodivergenceSupportData } from '../../shared/neurodivergenceHelper'
+import { canViewNeurodivergenceSupportData, createFlaggedContent } from '../../shared/neurodivergenceHelper'
 
 export default ({
     prisonerProfileService,
@@ -56,7 +56,7 @@ export default ({
 
     // TODO: Part of temporary measure to only allow restricted prisons access to neurodivergence data. If no prisons specified then assume all are allowed access.
     const getNeurodivergenceSupportNeed = async () => {
-      let divergence = []
+      let divergence = createFlaggedContent([])
       if (canViewNeurodivergenceSupportData(basicPrisonerDetails.agencyId, neurodiversityEnabledPrisons as string)) {
         divergence = await esweService.getNeurodivergence(offenderNo, establishmentId)
       }
