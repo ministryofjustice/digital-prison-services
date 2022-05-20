@@ -65,7 +65,7 @@ env:
   NEURODIVERSITY_ENABLED_PRISONS: "BLI,NHI,LII,SLI"
   CURIOUS_URL: https://preprodservices.sequation.net/sequation-virtual-campus2-api/
   DISABLE_REQUEST_LIMITER: true
-  PVB_URL: https://manage-a-prison-visit-preprod.hmpps.service.justice.gov.uk/
+  PVB_URL: https://manage-prison-visits-preprod.prison.service.justice.gov.uk/
   CALCULATE_RELEASE_DATES_URL: https://calculate-release-dates-preprod.hmpps.service.justice.gov.uk
   SEND_LEGAL_MAIL_URL: https://check-rule39-mail-preprod.prison.service.justice.gov.uk
   WELCOME_PEOPLE_INTO_PRISON_URL: https://welcome-preprod.prison.service.justice.gov.uk/
