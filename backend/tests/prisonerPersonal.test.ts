@@ -2318,7 +2318,7 @@ describe('prisoner personal', () => {
       )
     })
 
-    it('should return undefined if prisoner not in users caseload', async () => {
+    it('should return an empty object if prisoner not in users caseload', async () => {
       // @ts-expect-error ts-migrate(2339) FIXME: Property 'getDetails' does not exist on type '{}'.
       prisonApi.getDetails.mockReturnValue({ ...prisonerProfileData, agencyId: 'MDI' })
 
