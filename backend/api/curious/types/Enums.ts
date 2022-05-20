@@ -70,13 +70,13 @@ export enum NeurodivergenceAssessed {
 export enum NeurodivergenceSupport {
   Reading = 'Reading Support',
   WritingSupport = 'Writing Support',
-  SocialandinteractionSupport = 'Social and interaction Support',
+  SocialAndInteractionSupport = 'Social and interaction Support',
   Communications = 'Communications',
   VisualSupport = 'Visual Support',
   AuditorySupport = 'Auditory Support',
   OrganisationSupport = 'Organisation Support',
   MemorySupport = 'Memory Support',
-  NoidentifiedNeurodoversityNeed = 'No identified Neurodoversity Need',
-  TimemanagementSupport = 'Time management Support',
-  NoidentifiedSupportRequired = 'No identified Support Required',
+  NoIdentifiedNeurodiversityNeed = 'No identified Neurodiversity Need',
+  TimeManagementSupport = 'Time Management Support',
+  NoIdentifiedSupportRequired = 'No identified Support Required',
 }
