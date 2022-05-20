@@ -40,7 +40,7 @@ export default ({ prisonApi, raiseAnalyticsEvent }) => {
       // Get the residential unit level prefix for the selected cell by traversing up the
       // parent location tree
       const locationDetail = await prisonApi.getLocation(res.locals, cellId)
-      const parentLocationDetail = await prisonApi.getLocation(res.locals, locationDetail.parentLocationId)
+      const parentLocationDetail = await prisonApi.getLocation(res.locals, locationDetail.parentLocationId) // cellId 25718 does not have a parentLocationId
       const { locationPrefix } = await prisonApi.getLocation(res.locals, parentLocationDetail.parentLocationId)
 
       // Get non-associations for the offener and filter them down to ones
