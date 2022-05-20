@@ -10,8 +10,8 @@ import {
   LearnerLatestAssessment,
   LearnerProfile,
   LearnerEducation,
-  LearnerNeurodivergence,
 } from '../api/curious/types/Types'
+import { createFlaggedContent } from '../shared/neuroDivergenceHelper'
 
 type FeatureFlagged<T> = {
   enabled: boolean
@@ -30,11 +30,6 @@ type CurrentWork = FeatureFlagged<eswe.OffenderCurrentWork>
 type activitiesHistory = FeatureFlagged<eswe.activitiesHistory>
 type attendanceDetails = FeatureFlagged<eswe.attendanceDetails>
 type NeuroDivergence = FeatureFlagged<eswe.NeuroDivergence[]>
-
-const createFlaggedContent = <T>(content: T) => ({
-  enabled: app.esweEnabled,
-  content,
-})
 
 const DATE_FORMAT = 'YYYY-MM-DD'
 
