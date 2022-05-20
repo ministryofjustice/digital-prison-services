@@ -1343,7 +1343,7 @@ context('Prisoner personal', () => {
         establishmentName: 'HMP Moorland',
         neurodivergenceSelfDeclared: [NeurodivergenceSelfDeclared.Dyscalculia],
         selfDeclaredDate: '2022-02-15',
-        neurodivergenceSupport: [NeurodivergenceSupport.SocialandinteractionSupport],
+        neurodivergenceSupport: [NeurodivergenceSupport.SocialAndInteractionSupport],
         supportDate: '2022-02-20',
       }
       before(() => {
