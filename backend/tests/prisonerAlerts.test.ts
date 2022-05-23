@@ -22,8 +22,6 @@ describe('prisoner alerts', () => {
   const prisonerProfileService = {}
   const referenceCodesService = {}
   const paginationService = {}
-  const restrictedPatientApi = {}
-  const systemOauthClient = {}
 
   let req
   let res
@@ -31,34 +29,14 @@ describe('prisoner alerts', () => {
   let controller
 
   beforeEach(() => {
-    req = {
-      params: { offenderNo },
-      query: {},
-      protocol: 'http',
-      session: {
-        userDetails: {
-          username: 'user1',
-        },
-      },
-    }
-    res = {
-      locals: {
-        responseHeaders: { 'total-records': 0 },
-
-        user: { activeCaseLoad: { caseLoadId: 'MDI' } },
-      },
-      render: jest.fn(),
-      status: jest.fn(),
-    }
+    req = { params: { offenderNo }, query: {}, protocol: 'http' }
+    res = { locals: { responseHeaders: { 'total-records': 0 } }, render: jest.fn(), status: jest.fn() }
 
     logError = jest.fn()
 
     req.originalUrl = '/alerts'
     req.get = jest.fn()
     req.get.mockReturnValue('localhost')
-
-    // @ts-expect-error ts-migrate(2339) FIXME: Property 'getNeurodiversities' does not exist on type '{}'... Remove this comment to see the full error message
-    oauthApi.userRoles = jest.fn().mockResolvedValue([])
 
     // @ts-expect-error ts-migrate(2339) FIXME: Property 'getPrisonerProfileData' does not exist o... Remove this comment to see the full error message
     prisonerProfileService.getPrisonerProfileData = jest.fn().mockResolvedValue(prisonerProfileData)
@@ -111,8 +89,6 @@ describe('prisoner alerts', () => {
       paginationService,
       prisonApi,
       oauthApi,
-      restrictedPatientApi,
-      systemOauthClient,
       // @ts-expect-error ts-migrate(2345) FIXME: Argument of type '{ prisonerProfileService: {}; re... Remove this comment to see the full error message
       logError,
     })
@@ -137,7 +113,7 @@ describe('prisoner alerts', () => {
       size: 20,
     })
     // @ts-expect-error ts-migrate(2339) FIXME: Property 'getPrisonerProfileData' does not exist o... Remove this comment to see the full error message
-    expect(prisonerProfileService.getPrisonerProfileData).toHaveBeenCalledWith(res.locals, offenderNo, 'user1', false)
+    expect(prisonerProfileService.getPrisonerProfileData).toHaveBeenCalledWith(res.locals, offenderNo)
     // @ts-expect-error ts-migrate(2339) FIXME: Property 'getAlertTypes' does not exist on type '{... Remove this comment to see the full error message
     expect(referenceCodesService.getAlertTypes).toHaveBeenCalledWith(res.locals)
     expect(res.render).toHaveBeenCalledWith(
@@ -187,7 +163,7 @@ describe('prisoner alerts', () => {
     })
 
     // @ts-expect-error ts-migrate(2339) FIXME: Property 'getPrisonerProfileData' does not exist o... Remove this comment to see the full error message
-    expect(prisonerProfileService.getPrisonerProfileData).toHaveBeenCalledWith(res.locals, offenderNo, 'user1', false)
+    expect(prisonerProfileService.getPrisonerProfileData).toHaveBeenCalledWith(res.locals, offenderNo)
     expect(res.render).toHaveBeenCalledWith(
       'prisonerProfile/prisonerAlerts.njk',
       expect.objectContaining({

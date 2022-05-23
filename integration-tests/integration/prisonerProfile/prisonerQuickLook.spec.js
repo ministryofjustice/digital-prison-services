@@ -138,7 +138,7 @@ context('Prisoner quick look data retrieval errors', () => {
   before(() => {
     cy.clearCookies()
     cy.task('reset')
-    cy.task('stubSignIn', { username: 'ITAG_USER', caseload: 'MDI', caseloads: [] })
+    cy.task('stubSignIn', { username: 'ITAG_USER', caseload: 'MDI' })
     cy.signIn()
 
     cy.task('stubPrisonerProfileHeaderData', {
@@ -554,13 +554,9 @@ context('Prisoner quick look', () => {
   })
 
   context('When a user has POM role', () => {
-    context('when offender in caseload', () => {
+    context('when offender not in caseload', () => {
       beforeEach(() => {
         Cypress.Cookies.preserveOnce('hmpps-session-dev')
-        cy.task('stubIsCaseLoadRestrictedPatient', {
-          status: 404,
-          body: { message: 'Offender not found' },
-        })
         cy.task('stubPrisonerProfileHeaderData', {
           offenderBasicDetails,
           offenderFullDetails,
@@ -581,10 +577,6 @@ context('Prisoner quick look', () => {
     context('when offender not in caseload', () => {
       beforeEach(() => {
         Cypress.Cookies.preserveOnce('hmpps-session-dev')
-        cy.task('stubIsCaseLoadRestrictedPatient', {
-          status: 404,
-          body: { message: 'Offender not found' },
-        })
         cy.task('stubPrisonerProfileHeaderData', {
           offenderBasicDetails: { ...offenderBasicDetails, agencyId: 'LEI' },
           offenderFullDetails: { ...offenderFullDetails, agencyId: 'LEI' },

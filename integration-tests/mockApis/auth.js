@@ -203,11 +203,6 @@ const stubClientCredentialsRequest = () =>
     },
     response: {
       status: 200,
-      jsonBody: {
-        access_token: 'EXAMPLE_ACCESS_TOKEN',
-        refresh_token: 'EXAMPLE_REFRESH_TOKEN',
-        expires_in: 43200,
-      },
     },
   })
 
