@@ -1,9 +1,28 @@
 import moment from 'moment'
 import { formatName } from '../../utils'
+import getContext from './prisonerProfileContext'
 
-export default ({ prisonerProfileService, referenceCodesService, paginationService, prisonApi, oauthApi }) =>
+export default ({
+    prisonerProfileService,
+    referenceCodesService,
+    paginationService,
+    prisonApi,
+    oauthApi,
+    systemOauthClient,
+    restrictedPatientApi,
+  }) =>
   async (req, res) => {
     const { offenderNo } = req.params
+
+    const { context, overrideAccess } = await getContext({
+      offenderNo,
+      res,
+      req,
+      oauthApi,
+      systemOauthClient,
+      restrictedPatientApi,
+    })
+
     const { fromDate, toDate, alertType, active, pageOffsetOption } = req.query
     const from = (fromDate && moment(fromDate, 'DD/MM/YYYY').format('YYYY-MM-DD')) || ''
     const to = (toDate && moment(toDate, 'DD/MM/YYYY').format('YYYY-MM-DD')) || ''
@@ -11,17 +30,18 @@ export default ({ prisonerProfileService, referenceCodesService, paginationServi
     const pageOffset = parseInt(pageOffsetOption, 10) || 0
     const page = pageOffset / size
     const fullUrl = new URL(`${req.protocol}://${req.get('host')}${req.originalUrl}`)
+    const { username } = req.session.userDetails
 
-    const { bookingId } = await prisonApi.getDetails(res.locals, offenderNo)
+    const { bookingId } = await prisonApi.getDetails(context, offenderNo)
 
     const [prisonerProfileData, alertTypes, roles] = await Promise.all([
-      prisonerProfileService.getPrisonerProfileData(res.locals, offenderNo),
-      referenceCodesService.getAlertTypes(res.locals),
-      oauthApi.userRoles(res.locals),
+      prisonerProfileService.getPrisonerProfileData(context, offenderNo, username, overrideAccess),
+      referenceCodesService.getAlertTypes(context),
+      oauthApi.userRoles(context),
     ])
     const { userCanEdit } = prisonerProfileData
     const canUpdateAlerts = roles && roles.some((role) => role.roleCode === 'UPDATE_ALERT') && userCanEdit
-    const alerts = await prisonApi.getAlertsForBookingV2(res.locals, {
+    const alerts = await prisonApi.getAlertsForBookingV2(context, {
       bookingId,
       alertType: alertType || '',
       from,

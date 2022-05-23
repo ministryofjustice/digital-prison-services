@@ -53,6 +53,7 @@ const controller = ({
   offenderSearchApi,
   curiousApi,
   incentivesApi,
+  restrictedPatientApi,
 }) => {
   const prisonerProfileService = prisonerProfileServiceFactory({
     prisonApi,
@@ -78,10 +79,12 @@ const controller = ({
     prisonerQuickLook({
       prisonerProfileService,
       prisonApi,
+      oauthApi,
       telemetry,
       offenderSearchApi,
       systemOauthClient,
       incentivesApi,
+      restrictedPatientApi,
       // @ts-expect-error ts-migrate(2345) FIXME: Argument of type '{ prisonerProfileService: { getP... Remove this comment to see the full error message
       logError,
     })
@@ -90,13 +93,32 @@ const controller = ({
   router.get('/image', prisonerFullImage({ prisonApi, logError }))
   router.get(
     '/personal',
-    // @ts-expect-error ts-migrate(2345) FIXME: Argument of type '{ prisonerProfileService: { getP... Remove this comment to see the full error message
-    prisonerPersonal({ prisonerProfileService, personService, prisonApi, allocationManagerApi, logError, esweService })
+    prisonerPersonal({
+      prisonerProfileService,
+      personService,
+      prisonApi,
+      allocationManagerApi,
+      esweService,
+      systemOauthClient,
+      oauthApi,
+      restrictedPatientApi,
+      // @ts-expect-error ts-migrate(2345) FIXME: Argument of type '{ prisonerProfileService: { getP... Remove this comment to see the full error message
+      logError,
+    })
   )
   router.get(
     '/alerts',
-    // @ts-expect-error ts-migrate(2345) FIXME: Argument of type '{ prisonerProfileService: { getP... Remove this comment to see the full error message
-    prisonerAlerts({ prisonerProfileService, referenceCodesService, paginationService, prisonApi, oauthApi, logError })
+    prisonerAlerts({
+      prisonerProfileService,
+      referenceCodesService,
+      paginationService,
+      prisonApi,
+      oauthApi,
+      systemOauthClient,
+      restrictedPatientApi,
+      // @ts-expect-error ts-migrate(2345) FIXME: Argument of type '{ prisonerProfileService: { getP... Remove this comment to see the full error message
+      logError,
+    })
   )
   router.get(
     '/case-notes',
@@ -109,6 +131,8 @@ const controller = ({
       nunjucks,
       logError,
       oauthApi,
+      systemOauthClient,
+      restrictedPatientApi,
     })
   )
   router.get(

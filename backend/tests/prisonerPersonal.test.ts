@@ -1,6 +1,12 @@
 import prisonerPersonal from '../controllers/prisonerProfile/prisonerPersonal'
 import config from '../config'
-import { curiousApi } from '../apis'
+import {
+  NeurodivergenceSelfDeclared,
+  NeurodivergenceAssessed,
+  NeurodivergenceSupport,
+} from '../api/curious/types/Enums'
+
+config.app.neurodiversityEnabledPrisons = ['NOT-ACCELERATED']
 
 describe('prisoner personal', () => {
   const offenderNo = 'ABC123'
@@ -27,6 +33,10 @@ describe('prisoner personal', () => {
   const prisonerProfileService = {}
   const personService = {}
   const esweService = {}
+  const systemOauthClient = {}
+  const restrictedPatientApi = {}
+  const oauthApi = {}
+  const curiousApi = {}
 
   let req
   let res
@@ -35,7 +45,12 @@ describe('prisoner personal', () => {
 
   beforeEach(() => {
     req = { params: { offenderNo }, session: { userDetails: { username: 'ITAG_USER' } } }
-    res = { locals: {}, render: jest.fn() }
+    res = {
+      locals: {
+        user: { activeCaseLoad: { caseLoadId: 'MDI' } },
+      },
+      render: jest.fn(),
+    }
     config.app.neurodiversityEnabledUsernames = 'ITAG_USER'
 
     logError = jest.fn()
@@ -48,7 +63,9 @@ describe('prisoner personal', () => {
     // @ts-expect-error ts-migrate(2339) FIXME: Property 'getNeurodiversities' does not ex... Remove this comment to see the full error message
     esweService.getNeurodiversities = jest.fn().mockResolvedValue('')
     // @ts-expect-error ts-migrate(2339) FIXME: Property 'getNeurodiversities' does not ex... Remove this comment to see the full error message
-    esweService.getNeurodivergence = jest.fn().mockResolvedValue('')
+    esweService.getNeurodivergence = jest.fn().mockResolvedValue([])
+    // @ts-expect-error ts-migrate(2339) FIXME: Property 'getLearnerNeurodivergence' does not ex... Remove this comment to see the full error message
+    curiousApi.getLearnerNeurodivergence = jest.fn()
 
     // @ts-expect-error ts-migrate(2339) FIXME: Property 'getDetails' does not exist on type '{}'.
     prisonApi.getDetails = jest.fn().mockResolvedValue({})
@@ -78,6 +95,8 @@ describe('prisoner personal', () => {
     allocationManagerApi.getPomByOffenderNo = jest.fn().mockResolvedValue({})
     // @ts-expect-error ts-migrate(2339) FIXME: Property 'getNeurodiversities' does not exist on type '{}'... Remove this comment to see the full error message
     esweService.getNeurodiversities = jest.fn().mockResolvedValue([])
+    // @ts-expect-error ts-migrate(2339) FIXME: Property 'getNeurodiversities' does not exist on type '{}'... Remove this comment to see the full error message
+    oauthApi.userRoles = jest.fn().mockResolvedValue([])
 
     controller = prisonerPersonal({
       prisonerProfileService,
@@ -87,6 +106,10 @@ describe('prisoner personal', () => {
       // @ts-expect-error ts-migrate(2345) FIXME: Argument of type '{ prisonerProfileService: {}; pe... Remove this comment to see the full error message
       logError,
       esweService,
+      restrictedPatientApi,
+      systemOauthClient,
+      oauthApi,
+      curiousApi,
     })
   })
 
@@ -96,7 +119,12 @@ describe('prisoner personal', () => {
     // @ts-expect-error ts-migrate(2339) FIXME: Property 'getDetails' does not exist on type '{}'.
     expect(prisonApi.getDetails).toHaveBeenCalledWith(res.locals, offenderNo)
     // @ts-expect-error ts-migrate(2339) FIXME: Property 'getPrisonerProfileData' does not exist o... Remove this comment to see the full error message
-    expect(prisonerProfileService.getPrisonerProfileData).toHaveBeenCalledWith(res.locals, offenderNo)
+    expect(prisonerProfileService.getPrisonerProfileData).toHaveBeenCalledWith(
+      res.locals,
+      offenderNo,
+      'ITAG_USER',
+      false
+    )
     expect(res.render).toHaveBeenCalledWith(
       'prisonerProfile/prisonerPersonal/prisonerPersonal.njk',
       expect.objectContaining({
@@ -122,7 +150,7 @@ describe('prisoner personal', () => {
     await controller(req, res)
 
     // @ts-expect-error ts-migrate(2339) FIXME: Property 'getSecondaryLanguages' does not exist on... Remove this comment to see the full error message
-    expect(prisonApi.getSecondaryLanguages).toHaveBeenCalledWith({}, 123)
+    expect(prisonApi.getSecondaryLanguages).toHaveBeenCalledWith(res.locals, 123)
     expect(res.render).toHaveBeenCalledWith(
       'prisonerProfile/prisonerPersonal/prisonerPersonal.njk',
       expect.objectContaining({
@@ -2180,17 +2208,35 @@ describe('prisoner personal', () => {
   })
 
   describe('learner neurodivergence information', () => {
+    const prisonerNotAllowedData = {
+      activeAlertCount: 1,
+      agencyId: 'MDI',
+      alerts: [],
+      assignedLivingUnit: {
+        description: 'CELL-123',
+        agencyName: 'Moorland Closed',
+      },
+      bookingId,
+      category: 'Cat C',
+      csra: 'High',
+      csraClassificationCode: 'HI',
+      csraClassificationDate: '2016-11-23',
+      firstName: 'TEST',
+      inactiveAlertCount: 2,
+      lastName: 'PRISONER',
+      assessments: [],
+    }
     beforeEach(() => {
       // @ts-expect-error ts-migrate(2339) FIXME: Property 'getNeurodiversities' does not ex... Remove this comment to see the full error message
       esweService.getNeurodivergence = jest.fn().mockResolvedValue({
         prn: 'ABC123',
         establishmentId: 'MDI',
         establishmentName: 'Moorland (HMP & YOI)',
-        neurodivergenceSelfDeclared: 'Autism',
+        neurodivergenceSelfDeclared: NeurodivergenceSelfDeclared.Autism,
         selfDeclaredDate: '10 February 2022',
-        neurodivergenceAssessed: 'Alzheimers',
+        neurodivergenceAssessed: NeurodivergenceAssessed.Alzheimers,
         assessmentDate: '12 February 2022',
-        neurodivergenceSupport: 'Reading support, Auditory support',
+        neurodivergenceSupport: [NeurodivergenceSupport.Reading, NeurodivergenceSupport.AuditorySupport],
         supportDate: '14 February 2022',
       })
     })
@@ -2215,11 +2261,11 @@ describe('prisoner personal', () => {
             prn: 'ABC123',
             establishmentId: 'MDI',
             establishmentName: 'Moorland (HMP & YOI)',
-            neurodivergenceAssessed: 'Alzheimers',
+            neurodivergenceAssessed: NeurodivergenceAssessed.Alzheimers,
             assessmentDate: '12 February 2022',
-            neurodivergenceSelfDeclared: 'Autism',
+            neurodivergenceSelfDeclared: NeurodivergenceSelfDeclared.Autism,
             selfDeclaredDate: '10 February 2022',
-            neurodivergenceSupport: 'Reading support, Auditory support',
+            neurodivergenceSupport: [NeurodivergenceSupport.Reading, NeurodivergenceSupport.AuditorySupport],
             supportDate: '14 February 2022',
           },
         })
@@ -2269,6 +2315,20 @@ describe('prisoner personal', () => {
       expect(res.render).toHaveBeenCalledWith(
         'prisonerProfile/prisonerPersonal/prisonerPersonal.njk',
         expect.objectContaining({ displayNeurodiversity: false })
+      )
+    })
+
+    it('should return an empty object if prisoner not in users caseload', async () => {
+      // @ts-expect-error ts-migrate(2339) FIXME: Property 'getDetails' does not exist on type '{}'.
+      prisonApi.getDetails.mockReturnValue({ ...prisonerProfileData, agencyId: 'MDI' })
+
+      // @ts-expect-error ts-migrate(2339) FIXME: Property 'getPrisonerProfileData' does not exist o... Remove this comment to see the full error message
+      prisonerProfileService.getPrisonerProfileData(res.locals, offenderNo)
+
+      await controller(req, res)
+      expect(res.render).toHaveBeenCalledWith(
+        'prisonerProfile/prisonerPersonal/prisonerPersonal.njk',
+        expect.objectContaining({ neurodivergence: { content: [], enabled: false } })
       )
     })
   })

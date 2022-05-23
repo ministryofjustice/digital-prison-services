@@ -16,6 +16,12 @@ import setupHealthChecks from './setupHealthChecks'
 import setupBodyParsers from './setupBodyParsers'
 import setupWebSecurity from './setupWebSecurity'
 import setupAuth from './setupAuth'
+import {
+  clientCredsSetup,
+  getTokenStore,
+  getSystemOauthApiClient,
+  enableLogDebugStatements,
+} from './api/systemOauthClient'
 import setupStaticContent from './setupStaticContent'
 import nunjucksSetup from './utils/nunjucksSetup'
 import setupRedirects from './setupRedirects'
@@ -48,6 +54,7 @@ app.set('view engine', 'njk')
 
 nunjucksSetup(app)
 phaseNameSetup(app, config)
+clientCredsSetup(getTokenStore(config), getSystemOauthApiClient(config), enableLogDebugStatements(config))
 
 app.use(cookieParser())
 app.use(setupBodyParsers())
@@ -103,6 +110,7 @@ app.use(
     complexityApi: apis.complexityApi,
     curiousApi: apis.curiousApi,
     incentivesApi: apis.incentivesApi,
+    restrictedPatientApi: apis.restrictedPatientApi,
   })
 )
 

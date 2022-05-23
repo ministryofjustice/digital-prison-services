@@ -52,6 +52,7 @@ env:
   SUPPORT_URL: https://support-dev.hmpps.service.justice.gov.uk/
   ESWE_ENABLED: false
   NEURODIVERSITY_ENABLED_USERNAMES: ""
+  NEURODIVERSITY_ENABLED_PRISONS: "BLI,NHI,LII,SLI"
   CURIOUS_URL: https://testservices.sequation.net/sequation-virtual-campus2-api/
   SYSTEM_PHASE: DEV
   BVL_URL: https://book-video-link-dev.prison.service.justice.gov.uk
@@ -64,10 +65,12 @@ env:
   PRISONS_WITH_MANAGE_ADJUDICATIONS_ENABLED: "MDI"
   MANAGE_ADJUDICATIONS_URL: https://manage-adjudications-dev.hmpps.service.justice.gov.uk/
   MANAGE_RESTRICTED_PATIENTS_URL: https://manage-restricted-patients-dev.hmpps.service.justice.gov.uk/
-  PVB_URL: https://manage-a-prison-visit-dev.hmpps.service.justice.gov.uk/
+  PVB_URL: https://manage-prison-visits-dev.prison.service.justice.gov.uk/
   CALCULATE_RELEASE_DATES_URL: https://calculate-release-dates-dev.hmpps.service.justice.gov.uk
   SEND_LEGAL_MAIL_URL: https://check-rule39-mail-dev.prison.service.justice.gov.uk
   WELCOME_PEOPLE_INTO_PRISON_URL: https://welcome-dev.prison.service.justice.gov.uk/
   WELCOME_PEOPLE_INTO_PRISON_ENABLED_PRISONS: "NMI,MDI,LII,DMI"
   CREATE_AND_VARY_A_LICENCE_URL: https://create-and-vary-a-licence-dev.hmpps.service.justice.gov.uk/
   CREATE_AND_VARY_A_LICENCE_ENABLED_PRISONS: "MDI,LEI,LPI,BMI,PVI,BXI,WAI"
+  RESTRICTED_PATIENT_API_URL: https://restricted-patients-api-dev.hmpps.service.justice.gov.uk/
+  

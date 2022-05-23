@@ -24,6 +24,8 @@ describe('prisoner profile quick look', () => {
   const telemetry = {}
   const systemOauthClient = {}
   const incentivesApi = {}
+  const restrictedPatientApi = {}
+  const oauthApi = {}
 
   let req
   let res
@@ -86,6 +88,8 @@ describe('prisoner profile quick look', () => {
 
     // @ts-expect-error ts-migrate(2339) FIXME: Property 'getClientCredentialsTokens' does not exi... Remove this comment to see the full error message
     systemOauthClient.getClientCredentialsTokens = jest.fn().mockReturnValue({})
+    // @ts-expect-error ts-migrate(2339) FIXME: Property 'getNeurodiversities' does not exist on type '{}'... Remove this comment to see the full error message
+    oauthApi.userRoles = jest.fn().mockResolvedValue([])
 
     controller = prisonerQuickLook({
       prisonerProfileService,
@@ -94,6 +98,8 @@ describe('prisoner profile quick look', () => {
       offenderSearchApi,
       systemOauthClient,
       incentivesApi,
+      restrictedPatientApi,
+      oauthApi,
       // @ts-expect-error ts-migrate(2345) FIXME: Argument of type '{ prisonerProfileService: {}; pr... Remove this comment to see the full error message
       logError,
     })
@@ -105,7 +111,7 @@ describe('prisoner profile quick look', () => {
     // @ts-expect-error ts-migrate(2339) FIXME: Property 'getDetails' does not exist on type '{}'.
     expect(prisonApi.getDetails).toHaveBeenCalledWith(res.locals, offenderNo)
     // @ts-expect-error ts-migrate(2339) FIXME: Property 'getPrisonerProfileData' does not exist o... Remove this comment to see the full error message
-    expect(prisonerProfileService.getPrisonerProfileData).toHaveBeenCalledWith(res.locals, offenderNo, 'user1')
+    expect(prisonerProfileService.getPrisonerProfileData).toHaveBeenCalledWith(res.locals, offenderNo, 'user1', false)
     expect(res.render).toHaveBeenCalledWith(
       'prisonerProfile/prisonerQuickLook/prisonerQuickLook.njk',
       expect.objectContaining({
