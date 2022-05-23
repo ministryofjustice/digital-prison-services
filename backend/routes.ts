@@ -69,7 +69,6 @@ const setup = ({
   complexityApi,
   curiousApi,
   incentivesApi,
-  restrictedPatientApi,
 }) => {
   router.use(async (req, res, next) => {
     res.locals = {
@@ -108,10 +107,7 @@ const setup = ({
     '/offenders/:offenderNo/create-alert',
     alertFactory(oauthApi, prisonApi, referenceCodesService(prisonApi)).handleCreateAlertForm
   )
-  router.use(
-    '/prisoner/:offenderNo/add-case-note',
-    createCaseNoteRouter({ prisonApi, caseNotesApi, oauthApi, systemOauthClient, restrictedPatientApi })
-  )
+  router.use('/prisoner/:offenderNo/add-case-note', createCaseNoteRouter({ prisonApi, caseNotesApi }))
   router.get(
     '/manage-prisoner-whereabouts/attendance-reason-statistics',
     attendanceStatisticsFactory(oauthApi, prisonApi, whereaboutsApi).attendanceStatistics
@@ -223,7 +219,6 @@ const setup = ({
       offenderSearchApi,
       curiousApi,
       incentivesApi,
-      restrictedPatientApi,
     })
   )
 

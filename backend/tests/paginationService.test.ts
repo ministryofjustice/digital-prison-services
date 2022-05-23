@@ -19,7 +19,7 @@ describe('Pagination service 2', () => {
         { text: 10, href: 'http://localhost/?pageOffsetOption=90', selected: false },
       ],
       next: { text: 'Next', href: 'http://localhost/?pageOffsetOption=10' },
-      previous: undefined,
+      previous: { text: 'Previous', href: 'http://localhost/?pageOffsetOption=0' },
       results: { count: 110, from: 1, to: 10 },
     })
   })
@@ -164,38 +164,14 @@ describe('Pagination service 2', () => {
         href: 'http://localhost/?pageOffsetOption=10',
         text: 'Next',
       },
-      previous: undefined,
-      results: {
-        count: 70,
-        from: 1,
-        to: 10,
-      },
-    })
-  })
-
-  it('should not show the next link when on the last page', async () => {
-    const response = service.getPagination(70, 60, 10, new URL('http://localhost/'))
-
-    expect(response).toEqual({
-      classes: 'govuk-!-font-size-19',
-      items: [
-        { href: 'http://localhost/?pageOffsetOption=0', selected: false, text: 1 },
-        { href: 'http://localhost/?pageOffsetOption=10', selected: false, text: 2 },
-        { href: 'http://localhost/?pageOffsetOption=20', selected: false, text: 3 },
-        { href: 'http://localhost/?pageOffsetOption=30', selected: false, text: 4 },
-        { href: 'http://localhost/?pageOffsetOption=40', selected: false, text: 5 },
-        { href: 'http://localhost/?pageOffsetOption=50', selected: false, text: 6 },
-        { href: 'http://localhost/?pageOffsetOption=60', selected: true, text: 7 },
-      ],
-      next: undefined,
       previous: {
-        href: 'http://localhost/?pageOffsetOption=50',
+        href: 'http://localhost/?pageOffsetOption=0',
         text: 'Previous',
       },
       results: {
         count: 70,
-        from: 61,
-        to: 70,
+        from: 1,
+        to: 10,
       },
     })
   })

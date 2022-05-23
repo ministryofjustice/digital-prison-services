@@ -62,39 +62,37 @@ export const getPagination = (totalResults, offset, limit, url) => {
 
   const useLowestNumber = (left, right) => (left >= right ? right : left)
 
-  const calculateFrom = ({ currentPageIndex, numberOfPages }) => {
+  const calculateFrom = ({ currentPage, numberOfPages }) => {
     if (numberOfPages <= maxNumberOfPageLinks) return 0
 
-    const towardsTheEnd = numberOfPages - currentPageIndex <= pageBreakPoint
+    const towardsTheEnd = numberOfPages - currentPage <= pageBreakPoint
 
     if (towardsTheEnd) return numberOfPages - maxNumberOfPageLinks
 
-    return currentPageIndex <= pageBreakPoint ? 0 : currentPageIndex - pageBreakPoint
+    return currentPage <= pageBreakPoint ? 0 : currentPage - pageBreakPoint
   }
 
-  const currentPageIndex = offset === 0 ? 0 : Math.ceil(offset / limit)
+  const currentPage = offset === 0 ? 0 : Math.ceil(offset / limit)
   const numberOfPages = Math.ceil(totalResults / limit)
 
   const allPages = numberOfPages > 0 && [...Array(numberOfPages).keys()]
-  const firstPageVisibleIndex = calculateFrom({ currentPageIndex, numberOfPages })
-  const lastPageVisibleNumber =
+  const from = calculateFrom({ currentPage, numberOfPages })
+  const to =
     numberOfPages <= maxNumberOfPageLinks
       ? numberOfPages
-      : useLowestNumber(firstPageVisibleIndex + maxNumberOfPageLinks, allPages.length)
+      : useLowestNumber(from + maxNumberOfPageLinks, allPages.length)
 
-  const pageList = (numberOfPages > 1 && allPages.slice(firstPageVisibleIndex, lastPageVisibleNumber)) || []
-  const onFirstPage = currentPageIndex === 0
-  const onLastPage = currentPageIndex + 1 === numberOfPages
+  const pageList = (numberOfPages > 1 && allPages.slice(from, to)) || []
 
   const previousPage =
-    numberOfPages > 1 && !onFirstPage
+    numberOfPages > 1
       ? {
           text: 'Previous',
           href: calculatePreviousUrl(offset, limit, url),
         }
       : undefined
   const nextPage =
-    numberOfPages > 1 && !onLastPage
+    numberOfPages > 1
       ? {
           text: 'Next',
           href: calculateNextUrl(offset, limit, totalResults, url),

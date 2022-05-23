@@ -18,7 +18,6 @@ export const app = {
   contentfulAccessToken: process.env.CONTENTFUL_ACCESS_TOKEN || '1',
   esweEnabled: process.env.ESWE_ENABLED === 'true',
   neurodiversityEnabledUsernames: process.env.NEURODIVERSITY_ENABLED_USERNAMES,
-  neurodiversityEnabledPrisons: process.env.NEURODIVERSITY_ENABLED_PRISONS || [],
   disableRequestLimiter: process.env.DISABLE_REQUEST_LIMITER ? process.env.DISABLE_REQUEST_LIMITER === 'true' : false,
 }
 
@@ -93,10 +92,6 @@ export const apis = {
   keyworker: {
     url: process.env.KEYWORKER_API_URL || 'http://localhost:8081/',
     timeoutSeconds: toNumber(process.env.KEYWORKER_API_TIMEOUT_SECONDS) || 30,
-  },
-  restrictedPatient: {
-    url: process.env.RESTRICTED_PATIENT_API_URL || 'http://localhost:8089/',
-    timeoutSeconds: toNumber(process.env.RESTRICTED_PATIENT_API_TIMEOUT_SECONDS) || 30,
   },
   tokenverification: {
     url: process.env.TOKENVERIFICATION_API_URL || 'http://localhost:8100',
