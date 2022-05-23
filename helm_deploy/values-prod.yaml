@@ -60,17 +60,15 @@ env:
   MANAGE_RESTRICTED_PATIENTS_URL: https://manage-restricted-patients.hmpps.service.justice.gov.uk/
   ESWE_ENABLED: true
   NEURODIVERSITY_ENABLED_USERNAMES: "CN004364,DBULL_GEN,J_DRAPER"
-  NEURODIVERSITY_ENABLED_PRISONS: "BLI,NHI,LII,SLI"
   CURIOUS_URL: https://liveservices.sequation.com/sequation-virtual-campus2-api/
   DISABLE_REQUEST_LIMITER: true
-  PVB_URL: https://manage-prison-visits.prison.service.justice.gov.uk/
+  PVB_URL: https://manage-a-prison-visit.hmpps.service.justice.gov.uk/
   CALCULATE_RELEASE_DATES_URL: https://calculate-release-dates.hmpps.service.justice.gov.uk
   SEND_LEGAL_MAIL_URL: https://check-rule39-mail.prison.service.justice.gov.uk
   WELCOME_PEOPLE_INTO_PRISON_URL: https://welcome.prison.service.justice.gov.uk/
   WELCOME_PEOPLE_INTO_PRISON_ENABLED_PRISONS: "NMI,LII,DMI"
   CREATE_AND_VARY_A_LICENCE_URL: https://create-and-vary-a-licence.hmpps.service.justice.gov.uk/
   CREATE_AND_VARY_A_LICENCE_ENABLED_PRISONS: "CFI,CWI,UKI,UPI,PRI"
-  RESTRICTED_PATIENT_API_URL: https://restricted-patients-api.hmpps.service.justice.gov.uk/
 
 allowlist:
   office: "217.33.148.210/32"

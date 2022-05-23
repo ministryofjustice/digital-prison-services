@@ -306,8 +306,4 @@ env:
 
   - name: CREATE_AND_VARY_A_LICENCE_ENABLED_PRISONS
     value: {{ .Values.env.CREATE_AND_VARY_A_LICENCE_ENABLED_PRISONS | quote }}
-
-  - name: RESTRICTED_PATIENT_API_URL
-    value: {{ .Values.env.RESTRICTED_PATIENT_API_URL | quote }}
-
 {{- end -}}
