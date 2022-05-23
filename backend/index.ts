@@ -37,13 +37,14 @@ import homepageController from './controllers/homepage/homepage'
 import deprecatedUrlPage from './controllers/deprecatedUrlPage'
 import requestLimiter from './middleware/requestLimiter'
 
-// We do not want the server to exit, partly because any log information will be lost.
-// Instead, log the error so we can trace, diagnose and fix the problem.
+process.on('uncaughtExceptionMonitor', (err, origin) => {
+  logError('UncuaghtExcMon', err, origin)
+})
 process.on('uncaughtException', (err, origin) => {
-  logError('uncaughtException', err, origin)
+  logError('UncuaghtExc', err, origin)
 })
 process.on('unhandledRejection', (reason, promise) => {
-  logError(`unhandledRejection`, {}, `Unhandled Rejection at: ${promise} reason: ${reason}`)
+  console.log('Unhandled Rejection at: ', promise, 'reason:', reason)
 })
 
 const app = express()
