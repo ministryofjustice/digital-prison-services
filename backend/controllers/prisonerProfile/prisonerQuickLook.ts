@@ -4,6 +4,7 @@ import formatAward from '../../shared/formatAward'
 import filterActivitiesByPeriod from '../../shared/filterActivitiesByPeriod'
 import getValueByType from '../../shared/getValueByType'
 import log from '../../log'
+import getContext from './prisonerProfileContext'
 
 export const trackEvent = (telemetry, username, activeCaseLoad) => {
   if (telemetry) {
@@ -30,9 +31,9 @@ const extractResponse = (complexData, key) => {
   return key ? complexData.response[key] : complexData.response
 }
 
-const getDetails = async ({ res, offenderNo, prisonApi }) => {
+const getDetails = async ({ context, res, offenderNo, prisonApi }) => {
   try {
-    return await prisonApi.getDetails(res.locals, offenderNo)
+    return await prisonApi.getDetails(context, offenderNo)
   } catch (error) {
     res.locals.redirectUrl = `/prisoner/${offenderNo}`
     throw error
@@ -52,6 +53,8 @@ export default ({
     offenderSearchApi,
     systemOauthClient,
     incentivesApi,
+    oauthApi,
+    restrictedPatientApi,
   }) =>
   async (req, res) => {
     const {
@@ -60,7 +63,15 @@ export default ({
     const { offenderNo } = req.params
     const { username } = req.session.userDetails
 
-    const details = await getDetails({ prisonApi, res, offenderNo })
+    const { context, overrideAccess } = await getContext({
+      offenderNo,
+      res,
+      req,
+      oauthApi,
+      systemOauthClient,
+      restrictedPatientApi,
+    })
+    const details = await getDetails({ context, prisonApi, res, offenderNo })
     const { bookingId } = details || {}
 
     const dateThreeMonthsAgo = moment().subtract(3, 'months').format('YYYY-MM-DD')
@@ -81,18 +92,18 @@ export default ({
       todaysEventsResponse,
     ] = await Promise.all(
       [
-        prisonerProfileService.getPrisonerProfileData(res.locals, offenderNo, username),
-        prisonApi.getMainOffence(res.locals, bookingId),
-        prisonApi.getPrisonerBalances(res.locals, bookingId),
-        prisonApi.getPrisonerDetails(res.locals, offenderNo),
-        prisonApi.getPrisonerSentenceDetails(res.locals, offenderNo),
-        incentivesApi.getIepSummaryForBooking(res.locals, bookingId, false),
-        prisonApi.getPositiveCaseNotes(res.locals, bookingId, dateThreeMonthsAgo, today),
-        prisonApi.getNegativeCaseNotes(res.locals, bookingId, dateThreeMonthsAgo, today),
-        prisonApi.getAdjudicationsForBooking(res.locals, bookingId),
-        prisonApi.getVisitsSummary(res.locals, bookingId),
-        prisonApi.getPrisonerVisitBalances(res.locals, offenderNo),
-        prisonApi.getEventsForToday(res.locals, bookingId),
+        prisonerProfileService.getPrisonerProfileData(context, offenderNo, username, overrideAccess),
+        prisonApi.getMainOffence(context, bookingId),
+        prisonApi.getPrisonerBalances(context, bookingId),
+        prisonApi.getPrisonerDetails(context, offenderNo),
+        prisonApi.getPrisonerSentenceDetails(context, offenderNo),
+        incentivesApi.getIepSummaryForBooking(context, bookingId, false),
+        prisonApi.getPositiveCaseNotes(context, bookingId, dateThreeMonthsAgo, today),
+        prisonApi.getNegativeCaseNotes(context, bookingId, dateThreeMonthsAgo, today),
+        prisonApi.getAdjudicationsForBooking(context, bookingId),
+        prisonApi.getVisitsSummary(context, bookingId),
+        prisonApi.getPrisonerVisitBalances(context, offenderNo),
+        prisonApi.getEventsForToday(context, bookingId),
       ].map((apiCall) => captureErrorAndContinue(apiCall))
     )
 
