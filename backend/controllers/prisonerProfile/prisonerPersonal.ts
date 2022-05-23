@@ -15,8 +15,6 @@ import {
   careNeedsViewModel,
 } from './personalViewModels'
 
-import { canViewNeurodivergenceSupportData, createFlaggedContent } from '../../shared/neuroDivergenceHelper'
-
 export default ({
     prisonerProfileService,
     personService,
@@ -50,19 +48,6 @@ export default ({
     const treatmentCodes = treatmentTypes && treatmentTypes.map((type) => type.code).join()
     const healthCodes = healthTypes && healthTypes.map((type) => type.code).join()
 
-    const {
-      app: { neurodiversityEnabledUsernames, neurodiversityEnabledPrisons },
-    } = config
-
-    // TODO: Part of temporary measure to only allow restricted prisons access to neurodivergence data. If no prisons specified then assume all are allowed access.
-    const getNeurodivergenceSupportNeed = async () => {
-      let divergence = createFlaggedContent([])
-      if (canViewNeurodivergenceSupportData(basicPrisonerDetails.agencyId, neurodiversityEnabledPrisons as string)) {
-        divergence = await esweService.getNeurodivergence(offenderNo, establishmentId)
-      }
-      return divergence
-    }
-
     const [
       prisonerProfileData,
       identifiers,
@@ -91,13 +76,17 @@ export default ({
         prisonApi.getAgencies(context),
         allocationManagerApi.getPomByOffenderNo(context, offenderNo),
         esweService.getNeurodiversities(offenderNo),
-        getNeurodivergenceSupportNeed(),
+        esweService.getNeurodivergence(offenderNo, establishmentId),
       ].map((apiCall) => logErrorAndContinue(apiCall))
     )
 
     // @ts-expect-error ts-migrate(2339) FIXME: Property 'nextOfKin' does not exist on type '{}'.
     const { nextOfKin, otherContacts } = contacts || {}
     const activeNextOfKins = nextOfKin && nextOfKin.filter((kin) => kin.activeFlag)
+
+    const {
+      app: { neurodiversityEnabledUsernames },
+    } = config
 
     const displayNeurodiversity = !neurodiversityEnabledUsernames
       ? true

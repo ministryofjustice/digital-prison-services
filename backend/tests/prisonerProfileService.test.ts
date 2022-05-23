@@ -1,11 +1,6 @@
 import config from '../config'
 import prisonerProfileService from '../services/prisonerProfileService'
 import { makeNotFoundError } from './helpers'
-import {
-  NeurodivergenceAssessed,
-  NeurodivergenceSelfDeclared,
-  NeurodivergenceSupport,
-} from '../api/curious/types/Enums'
 
 config.app.displayRetentionLink = true
 // @ts-expect-error ts-migrate(2741) FIXME: Property 'timeoutSeconds' is missing in type '{ ui... Remove this comment to see the full error message
@@ -24,7 +19,14 @@ config.apis.calculateReleaseDates = {
   ui_url: 'http://crd-ui/',
 }
 
-config.app.neurodiversityEnabledPrisons = ['NOT-ACCELERATED', 'LEI']
+const enum NeurodivergenceType {
+  ADHD = 'ADHD',
+  Autism = 'Autism',
+  Reading = 'Reading Support',
+  MemorySupport = 'Memory Support',
+  AcquiredBrainInjury = 'Acquired Brain Injury',
+  NoidentifiedNeurodiversityNeed = 'No identified Neurodiversity Need',
+}
 
 describe('prisoner profile service', () => {
   const context = {}
@@ -892,16 +894,16 @@ describe('prisoner profile service', () => {
       prn: offenderNo,
       establishmentId: 'MDI',
       establishmentName: 'HMP Moorland',
-      neurodivergenceSelfDeclared: [NeurodivergenceSelfDeclared.ADHD, NeurodivergenceSelfDeclared.Autism],
+      neurodivergenceSelfDeclared: [NeurodivergenceType.ADHD, NeurodivergenceType.Autism],
       selfDeclaredDate: '2022-02-10',
-      neurodivergenceAssessed: [NeurodivergenceAssessed.AcquiredBrainInjury],
+      neurodivergenceAssessed: [NeurodivergenceType.AcquiredBrainInjury],
       assessmentDate: '2022-02-15',
-      neurodivergenceSupport: [NeurodivergenceSupport.MemorySupport, NeurodivergenceSupport.Reading],
+      neurodivergenceSupport: [NeurodivergenceType.MemorySupport, NeurodivergenceType.Reading],
       supportDate: '2022-02-20',
     }
     const prisonerDetails = {
       activeAlertCount: 1,
-      agencyId: 'LEI',
+      agencyId: 'MDI',
       alerts: [
         {
           alertId: 1,
@@ -1029,7 +1031,7 @@ describe('prisoner profile service', () => {
       prn: offenderNo,
       establishmentId: 'MDI',
       establishmentName: 'HMP Moorland',
-      neurodivergenceSupport: [NeurodivergenceSupport.NoIdentifiedNeurodiversityNeed],
+      neurodivergenceSupport: [NeurodivergenceType.NoidentifiedNeurodiversityNeed],
     }
     const prisonerDetails = {
       activeAlertCount: 1,
@@ -1107,25 +1109,6 @@ describe('prisoner profile service', () => {
       // eslint-disable-next-line @typescript-eslint/ban-ts-comment
       // @ts-ignore
       curiousApi.getLearnerNeurodivergence.mockRejectedValue(makeNotFoundError())
-
-      const response = await service.getPrisonerProfileData(context, offenderNo)
-      expect(response.hasDivergenceSupport).toEqual(false)
-    })
-    it('should return false when caseload not an accelerated prison', async () => {
-      const neurodivergenceData = {
-        prn: offenderNo,
-        establishmentId: 'MDI',
-        establishmentName: 'HMP Moorland',
-        neurodivergenceSelfDeclared: [],
-        selfDeclaredDate: null,
-        neurodivergenceAssessed: [],
-        assessmentDate: null,
-        neurodivergenceSupport: [NeurodivergenceSupport.MemorySupport, NeurodivergenceSupport.Reading],
-        supportDate: '2022-02-20',
-      }
-      // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-      // @ts-ignore
-      curiousApi.getLearnerNeurodivergence.mockResolvedValue([neurodivergenceData])
 
       const response = await service.getPrisonerProfileData(context, offenderNo)
       expect(response.hasDivergenceSupport).toEqual(false)
