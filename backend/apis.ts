@@ -8,7 +8,6 @@ import { whereaboutsApiFactory } from './api/whereaboutsApi'
 import { communityApiFactory } from './api/communityApi'
 import { dataComplianceApiFactory } from './api/dataComplianceApi'
 import { keyworkerApiFactory } from './api/keyworkerApi'
-import { restrictedPatientApiFactory } from './api/restrictedPatientApi'
 import { caseNotesApiFactory } from './api/caseNotesApi'
 import { allocationManagerApiFactory } from './api/allocationManagerApi'
 import { tokenVerificationApiFactory } from './api/tokenVerificationApi'
@@ -59,13 +58,6 @@ export const keyworkerApi = keyworkerApiFactory(
   clientFactory({
     baseUrl: config.apis.keyworker.url,
     timeout: config.apis.keyworker.timeoutSeconds * 1000,
-  })
-)
-
-export const restrictedPatientApi = restrictedPatientApiFactory(
-  clientFactory({
-    baseUrl: config.apis.restrictedPatient.url,
-    timeout: config.apis.restrictedPatient.timeoutSeconds * 1000,
   })
 )
 
@@ -143,5 +135,4 @@ export default {
   complexityApi,
   curiousApi,
   incentivesApi,
-  restrictedPatientApi,
 }

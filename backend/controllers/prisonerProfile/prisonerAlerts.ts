@@ -1,28 +1,9 @@
 import moment from 'moment'
 import { formatName } from '../../utils'
-import getContext from './prisonerProfileContext'
 
-export default ({
-    prisonerProfileService,
-    referenceCodesService,
-    paginationService,
-    prisonApi,
-    oauthApi,
-    systemOauthClient,
-    restrictedPatientApi,
-  }) =>
+export default ({ prisonerProfileService, referenceCodesService, paginationService, prisonApi, oauthApi }) =>
   async (req, res) => {
     const { offenderNo } = req.params
-
-    const context = await getContext({
-      offenderNo,
-      res,
-      req,
-      oauthApi,
-      systemOauthClient,
-      restrictedPatientApi,
-    })
-
     const { fromDate, toDate, alertType, active, pageOffsetOption } = req.query
     const from = (fromDate && moment(fromDate, 'DD/MM/YYYY').format('YYYY-MM-DD')) || ''
     const to = (toDate && moment(toDate, 'DD/MM/YYYY').format('YYYY-MM-DD')) || ''
@@ -31,16 +12,16 @@ export default ({
     const page = pageOffset / size
     const fullUrl = new URL(`${req.protocol}://${req.get('host')}${req.originalUrl}`)
 
-    const { bookingId } = await prisonApi.getDetails(context, offenderNo)
+    const { bookingId } = await prisonApi.getDetails(res.locals, offenderNo)
 
     const [prisonerProfileData, alertTypes, roles] = await Promise.all([
-      prisonerProfileService.getPrisonerProfileData(context, offenderNo),
-      referenceCodesService.getAlertTypes(context),
-      oauthApi.userRoles(context),
+      prisonerProfileService.getPrisonerProfileData(res.locals, offenderNo),
+      referenceCodesService.getAlertTypes(res.locals),
+      oauthApi.userRoles(res.locals),
     ])
     const { userCanEdit } = prisonerProfileData
     const canUpdateAlerts = roles && roles.some((role) => role.roleCode === 'UPDATE_ALERT') && userCanEdit
-    const alerts = await prisonApi.getAlertsForBookingV2(context, {
+    const alerts = await prisonApi.getAlertsForBookingV2(res.locals, {
       bookingId,
       alertType: alertType || '',
       from,

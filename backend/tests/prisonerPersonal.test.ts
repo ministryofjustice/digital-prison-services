@@ -27,9 +27,6 @@ describe('prisoner personal', () => {
   const prisonerProfileService = {}
   const personService = {}
   const esweService = {}
-  const systemOauthClient = {}
-  const restrictedPatientApi = {}
-  const oauthApi = {}
 
   let req
   let res
@@ -38,12 +35,7 @@ describe('prisoner personal', () => {
 
   beforeEach(() => {
     req = { params: { offenderNo }, session: { userDetails: { username: 'ITAG_USER' } } }
-    res = {
-      locals: {
-        user: { activeCaseLoad: { caseLoadId: 'MDI' } },
-      },
-      render: jest.fn(),
-    }
+    res = { locals: {}, render: jest.fn() }
     config.app.neurodiversityEnabledUsernames = 'ITAG_USER'
 
     logError = jest.fn()
@@ -86,8 +78,6 @@ describe('prisoner personal', () => {
     allocationManagerApi.getPomByOffenderNo = jest.fn().mockResolvedValue({})
     // @ts-expect-error ts-migrate(2339) FIXME: Property 'getNeurodiversities' does not exist on type '{}'... Remove this comment to see the full error message
     esweService.getNeurodiversities = jest.fn().mockResolvedValue([])
-    // @ts-expect-error ts-migrate(2339) FIXME: Property 'getNeurodiversities' does not exist on type '{}'... Remove this comment to see the full error message
-    oauthApi.userRoles = jest.fn().mockResolvedValue([])
 
     controller = prisonerPersonal({
       prisonerProfileService,
@@ -97,9 +87,6 @@ describe('prisoner personal', () => {
       // @ts-expect-error ts-migrate(2345) FIXME: Argument of type '{ prisonerProfileService: {}; pe... Remove this comment to see the full error message
       logError,
       esweService,
-      restrictedPatientApi,
-      systemOauthClient,
-      oauthApi,
     })
   })
 
@@ -135,7 +122,7 @@ describe('prisoner personal', () => {
     await controller(req, res)
 
     // @ts-expect-error ts-migrate(2339) FIXME: Property 'getSecondaryLanguages' does not exist on... Remove this comment to see the full error message
-    expect(prisonApi.getSecondaryLanguages).toHaveBeenCalledWith(res.locals, 123)
+    expect(prisonApi.getSecondaryLanguages).toHaveBeenCalledWith({}, 123)
     expect(res.render).toHaveBeenCalledWith(
       'prisonerProfile/prisonerPersonal/prisonerPersonal.njk',
       expect.objectContaining({

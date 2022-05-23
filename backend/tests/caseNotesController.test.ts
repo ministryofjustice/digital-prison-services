@@ -36,32 +36,19 @@ describe('Case notes controller', () => {
   const paginationService = {}
   const nunjucks = {}
   const oauthApi = {}
-  const systemOauthClient = {}
-  const restrictedPatientApi = {}
 
   let controller
   let logError
-  const res = {
-    locals: {
-      user: { activeCaseLoad: { caseLoadId: 'MDI' } },
-    },
-  }
+  const res = { locals: {} }
 
   const reqDefault = {
     originalUrl: 'http://localhost',
     params: { offenderNo: 'A12345' },
-    session: {
-      userDetails: {
-        username: 'user1',
-      },
-    },
     get: () => {},
     query: { pageOffsetOption: '0' },
   }
 
   beforeEach(() => {
-    // @ts-expect-error ts-migrate(2339) FIXME: Property 'getNeurodiversities' does not exist on type '{}'... Remove this comment to see the full error message
-    oauthApi.userRoles = jest.fn().mockResolvedValue([])
     // @ts-expect-error ts-migrate(2339) FIXME: Property 'getCaseNotes' does not exist on type '{}... Remove this comment to see the full error message
     caseNotesApi.getCaseNotes = jest.fn()
     // @ts-expect-error ts-migrate(2339) FIXME: Property 'getCaseNoteTypes' does not exist on type... Remove this comment to see the full error message
@@ -112,8 +99,6 @@ describe('Case notes controller', () => {
       // @ts-expect-error ts-migrate(2345) FIXME: Argument of type '{ caseNotesApi: {}; prisonerProf... Remove this comment to see the full error message
       logError,
       oauthApi,
-      systemOauthClient,
-      restrictedPatientApi,
     })
   })
 
@@ -121,7 +106,7 @@ describe('Case notes controller', () => {
     await controller(reqDefault, res)
 
     // @ts-expect-error ts-migrate(2339) FIXME: Property 'getCaseNotes' does not exist on type '{}... Remove this comment to see the full error message
-    expect(caseNotesApi.getCaseNotes).toHaveBeenCalledWith(res.locals, 'A12345', {
+    expect(caseNotesApi.getCaseNotes).toHaveBeenCalledWith({}, 'A12345', {
       endDate: undefined,
       pageNumber: 0,
       perPage: 20,
@@ -146,7 +131,7 @@ describe('Case notes controller', () => {
 
     // @ts-expect-error ts-migrate(2339) FIXME: Property 'getCaseNotes' does not exist on type '{}... Remove this comment to see the full error message
     expect(caseNotesApi.getCaseNotes).toHaveBeenCalledWith(
-      res.locals,
+      {},
       'A12345',
       expect.objectContaining({
         endDate: '11/10/2020',

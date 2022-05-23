@@ -2,21 +2,12 @@ import moment from 'moment'
 import querystring from 'querystring'
 import { DATE_TIME_FORMAT_SPEC, MOMENT_DAY_OF_THE_WEEK, MOMENT_TIME } from '../../../common/dateHelpers'
 import { getNamesFromString } from '../../utils'
-import getContext from './prisonerProfileContext'
 
 const templatePath = 'prisonerProfile/prisonerCaseNotes'
 const perPage = 20
 const SECURE_CASE_NOTE_SOURCE = 'OCNS'
 
-export default ({
-  caseNotesApi,
-  prisonerProfileService,
-  paginationService,
-  nunjucks,
-  oauthApi,
-  systemOauthClient,
-  restrictedPatientApi,
-}) => {
+export default ({ caseNotesApi, prisonerProfileService, paginationService, nunjucks, oauthApi }) => {
   const getTotalResults = async (locals, offenderNo, { type, subType, fromDate, toDate }) => {
     const { totalElements } = await caseNotesApi.getCaseNotes(locals, offenderNo, {
       pageNumber: 0,
@@ -33,31 +24,22 @@ export default ({
   return async (req, res) => {
     const { offenderNo } = req.params
 
-    const context = await getContext({
-      offenderNo,
-      res,
-      req,
-      oauthApi,
-      systemOauthClient,
-      restrictedPatientApi,
-    })
-
     const fullUrl = new URL(`${req.protocol}://${req.get('host')}${req.originalUrl}`)
 
     const { pageOffsetOption, showAll, type, subType, fromDate, toDate } = req.query
 
     const pageNumber = Math.floor((pageOffsetOption || 0) / perPage) || 0
 
-    const caseNotes = await caseNotesApi.getCaseNotes(context, offenderNo, {
+    const caseNotes = await caseNotesApi.getCaseNotes(res.locals, offenderNo, {
       pageNumber: showAll ? 0 : pageNumber,
-      perPage: showAll ? await getTotalResults(context, offenderNo, { type, subType, fromDate, toDate }) : perPage,
+      perPage: showAll ? await getTotalResults(res.locals, offenderNo, { type, subType, fromDate, toDate }) : perPage,
       type,
       subType,
       startDate: fromDate,
       endDate: toDate,
     })
 
-    const caseNoteTypes = await caseNotesApi.getCaseNoteTypes(context)
+    const caseNoteTypes = await caseNotesApi.getCaseNoteTypes(res.locals)
 
     const types = caseNoteTypes.map((caseNoteType) => ({
       value: caseNoteType.code,
@@ -80,7 +62,7 @@ export default ({
       return res.send(nunjucks.render(`${templatePath}/partials/subTypesSelect.njk`, { subTypes: filteredSubTypes }))
     }
 
-    const prisonerProfileData = await prisonerProfileService.getPrisonerProfileData(context, offenderNo)
+    const prisonerProfileData = await prisonerProfileService.getPrisonerProfileData(res.locals, offenderNo)
 
     const userRoles = await oauthApi.userRoles(res.locals).then((roles) => roles.map((role) => role.roleCode))
     const hasDeleteRole = userRoles.includes('DELETE_SENSITIVE_CASE_NOTES')
