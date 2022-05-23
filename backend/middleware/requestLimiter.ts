@@ -31,6 +31,6 @@ const initRedisStoreIfEnabled = ({ host, port, password, production }) => {
     password,
     tls: production ? {} : false,
   })
-  client.on('error', (e: Error) => logger.error(e, 'Redis client error'))
+  client.on('error', (e: Error) => logger.error('Redis client error', e))
   return { store: new RedisStore({ client }) }
 }
