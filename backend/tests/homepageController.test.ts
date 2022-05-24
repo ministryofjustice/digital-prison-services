@@ -533,7 +533,7 @@ describe('Homepage', () => {
   it('should render home page with the send legal mail task', () => {
     config.applications.sendLegalMail.url = 'http://check-rule39-mail'
 
-    Array.of('SLM_SCAN_BARCODE', 'SLM_SECURITY_ANALYST').forEach(async (roleCode) => {
+    Array.of('SLM_SCAN_BARCODE', 'SLM_ADMIN').forEach(async (roleCode) => {
       oauthApi.userRoles.mockResolvedValue([{ roleCode }])
 
       await controller(req, res)
