@@ -196,7 +196,7 @@ const getTasks = ({ activeCaseLoadId, locations, staffId, whereaboutsConfig, key
       heading: 'Check Rule 39 mail',
       description: 'Scan barcodes on mail from law firms and other approved senders.',
       href: sendLegalMail.url,
-      enabled: () => sendLegalMail.url && userHasRoles(['SLM_SCAN_BARCODE', 'SLM_SECURITY_ANALYST']),
+      enabled: () => sendLegalMail.url && userHasRoles(['SLM_SCAN_BARCODE', 'SLM_ADMIN']),
     },
     {
       id: 'welcome-people-into-prison',

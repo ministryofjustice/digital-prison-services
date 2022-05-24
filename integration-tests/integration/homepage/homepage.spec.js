@@ -196,7 +196,7 @@ context('Homepage', () => {
     })
 
     it('should show send legal mail task task given user with supported role', () => {
-      Array.of('SLM_SCAN_BARCODE', 'SLM_SECURITY_ANALYST').forEach((roleCode) => {
+      Array.of('SLM_SCAN_BARCODE', 'SLM_ADMIN').forEach((roleCode) => {
         cy.task('stubUserMeRoles', [{ roleCode }])
 
         const page = homepagePage.goTo()
