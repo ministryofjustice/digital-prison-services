@@ -277,8 +277,8 @@ env:
   - name: NEURODIVERSITY_ENABLED_USERNAMES
     value: {{ .Values.env.NEURODIVERSITY_ENABLED_USERNAMES | quote }}
 
-  - name: PVB_URL
-    value: {{ .Values.env.PVB_URL | quote }}
+  - name: MANAGE_PRISON_VISITS_URL
+    value: {{ .Values.env.MANAGE_PRISON_VISITS_URL | quote }}
 
   - name: CALCULATE_RELEASE_DATES_URL
     value: {{ .Values.env.CALCULATE_RELEASE_DATES_URL | quote }}

@@ -167,8 +167,8 @@ export const apis = {
   manageRestrictedPatients: {
     ui_url: process.env.MANAGE_RESTRICTED_PATIENTS_URL || '',
   },
-  bookAPrisonVisit: {
-    ui_url: process.env.PVB_URL || '',
+  managePrisonVisits: {
+    ui_url: process.env.MANAGE_PRISON_VISITS_URL || '',
   },
   createAndVaryALicence: {
     url: process.env.CREATE_AND_VARY_A_LICENCE_URL,
