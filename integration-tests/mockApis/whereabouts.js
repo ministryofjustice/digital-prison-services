@@ -36,7 +36,7 @@ module.exports = {
     stubFor({
       request: {
         method: 'GET',
-        url: `/whereabouts/attendance-statistics/${agencyId}/over-date-range?fromDate=${fromDate}&toDate=${fromDate}&period=${period}`,
+        url: `/whereabouts/attendance-statistics/${agencyId}/over-date-range-2?fromDate=${fromDate}&toDate=${fromDate}&period=${period}`,
       },
       response: {
         status,
