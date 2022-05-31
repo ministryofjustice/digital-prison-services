@@ -398,15 +398,15 @@ module.exports = {
         jsonBody: cellMoveReasonResponse,
       },
     }),
-  stubAttendanceForScheduledActivities: (attendances) =>
+  stubPrisonersUnaccountedFor: (scheduledActivities) =>
     stubFor({
       request: {
         method: 'GET',
-        urlPattern: '/whereabouts/attendances/[A-Z].+?/attendance-for-scheduled-activities.+?',
+        urlPattern: '/whereabouts/attendances/[A-Z].+?/unaccounted-for.+?',
       },
       response: {
         status: 200,
-        jsonBody: attendances || {},
+        jsonBody: scheduledActivities || {},
       },
     }),
   stubAttendanceForBookings: (agencyId, fromDate, toDate, period, attendances, status = 200) =>

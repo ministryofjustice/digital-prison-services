@@ -55,7 +55,7 @@ context('Prisoners unaccounted for', () => {
 
     const yesterday = moment().subtract(1, 'day').format('YYYY-MM-DD')
 
-    cy.task('stubOffenderActivities', [
+    cy.task('stubPrisonersUnaccountedFor', [
       {
         eventId: 1,
         bookingId: -1,
@@ -79,7 +79,6 @@ context('Prisoners unaccounted for', () => {
         comment: 'Wing cleaner 2',
       },
     ])
-    cy.task('stubAttendanceForScheduledActivities', { attendances: [] })
     cy.task('stubVisits', [
       {
         offenderNo: offenderNo1,
