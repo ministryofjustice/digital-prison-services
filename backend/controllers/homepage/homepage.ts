@@ -13,6 +13,7 @@ const {
     pinPhones,
     manageAdjudications,
     managePrisonVisits,
+    legacyPrisonVisits,
     welcomePeopleIntoPrison,
     manageRestrictedPatients,
     incentives,
@@ -190,6 +191,13 @@ const getTasks = ({ activeCaseLoadId, locations, staffId, whereaboutsConfig, key
       description: 'Book, view and cancel a prisoner’s social visits.',
       href: managePrisonVisits.ui_url,
       enabled: () => managePrisonVisits.ui_url && userHasRoles(['MANAGE_PRISON_VISITS']),
+    },
+    {
+      id: 'legacy-prison-visit',
+      heading: 'Manage prison visits',
+      description: 'Book, view and cancel a prisoner’s social visits.',
+      href: legacyPrisonVisits.ui_url,
+      enabled: () => legacyPrisonVisits.ui_url && userHasRoles(['PVB_REQUESTS']),
     },
     {
       id: 'check-rule39-mail',

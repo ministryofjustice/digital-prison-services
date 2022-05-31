@@ -280,6 +280,9 @@ env:
   - name: MANAGE_PRISON_VISITS_URL
     value: {{ .Values.env.MANAGE_PRISON_VISITS_URL | quote }}
 
+  - name:  LEGACY_PRISON_VISITS_URL
+    value: {{ .Values.env.LEGACY_PRISON_VISITS_URL | quote }}
+
   - name: CALCULATE_RELEASE_DATES_URL
     value: {{ .Values.env.CALCULATE_RELEASE_DATES_URL | quote }}
 
