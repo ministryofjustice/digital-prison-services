@@ -8,7 +8,8 @@ export const offenderActivitesFactory = (prisonApi, whereaboutsApi) => {
       date,
       period: timeSlot,
     }
-    const prisonersUnaccountedFor = await whereaboutsApi.prisonersUnaccountedFor(context, params)
+
+    const { scheduled: prisonersUnaccountedFor } = await whereaboutsApi.prisonersUnaccountedFor(context, params)
     const offenderNumbers = prisonersUnaccountedFor.map((prisoner) => prisoner.offenderNo)
 
     const searchCriteria = { agencyId, date, timeSlot, offenderNumbers }

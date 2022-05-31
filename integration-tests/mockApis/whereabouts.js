@@ -402,10 +402,13 @@ module.exports = {
     stubFor({
       request: {
         method: 'GET',
-        urlPattern: '/whereabouts/attendances/[A-Z].+?/unaccounted-for.+?',
+        urlPattern: '/whereabouts/attendances/[A-Z].+?/unaccounted-for.*',
       },
       response: {
         status: 200,
+        headers: {
+          'Content-Type': 'application/json;charset=UTF-8',
+        },
         jsonBody: scheduledActivities || {},
       },
     }),

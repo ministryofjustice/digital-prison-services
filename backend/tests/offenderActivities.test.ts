@@ -79,7 +79,7 @@ describe('offender activities', () => {
       // @ts-expect-error ts-migrate(2339) FIXME: Property 'getAppointments' does not exist on type ... Remove this comment to see the full error message
       prisonApi.getAppointments = jest.fn().mockReturnValue([])
       // @ts-expect-error ts-migrate(2339) FIXME: Property 'prisonersUnaccountedFor' does not exist on t... Remove this comment to see the full error message
-      whereaboutsApi.prisonersUnaccountedFor = jest.fn().mockReturnValue(scheduledActivitiesResponse)
+      whereaboutsApi.prisonersUnaccountedFor = jest.fn().mockReturnValue({ scheduled: scheduledActivitiesResponse })
     })
 
     it('should return the correct number of separate offender activities when there are is no matching attendance record', async () => {
@@ -122,7 +122,7 @@ describe('offender activities', () => {
       // @ts-expect-error ts-migrate(2339) FIXME: Property 'prisonersUnaccountedFor' does not exist on t... Remove this comment to see the full error message
       whereaboutsApi.prisonersUnaccountedFor = jest
         .fn()
-        .mockReturnValue(scheduledActivitiesResponse.filter((r) => r.eventId !== 378088468))
+        .mockReturnValue({ scheduled: scheduledActivitiesResponse.filter((r) => r.eventId !== 378088468) })
 
       const response = await getPrisonersUnaccountedFor(context, 'LEI', '2019-08-07', 'PM')
 
