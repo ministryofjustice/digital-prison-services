@@ -9,20 +9,7 @@ export const offenderActivitesFactory = (prisonApi, whereaboutsApi) => {
       period: timeSlot,
     }
 
-    const [offenderActivities, prisonAttendance] = await Promise.all([
-      prisonApi.getOffenderActivities(context, params),
-      whereaboutsApi.getPrisonAttendance(context, params),
-    ])
-
-    const prisonersUnaccountedFor = offenderActivities.filter(
-      (offenderActivity) =>
-        !prisonAttendance.attendances ||
-        !prisonAttendance.attendances.find(
-          (attendance) =>
-            offenderActivity.bookingId === attendance.bookingId && offenderActivity.eventId === attendance.eventId
-        )
-    )
-
+    const { scheduled: prisonersUnaccountedFor } = await whereaboutsApi.prisonersUnaccountedFor(context, params)
     const offenderNumbers = prisonersUnaccountedFor.map((prisoner) => prisoner.offenderNo)
 
     const searchCriteria = { agencyId, date, timeSlot, offenderNumbers }
@@ -32,12 +19,10 @@ export const offenderActivitesFactory = (prisonApi, whereaboutsApi) => {
       prisonApi.getAppointments(context, searchCriteria),
     ])
 
-    const prisonersWithOtherEvents = prisonersUnaccountedFor.map((prisoner) => ({
+    return prisonersUnaccountedFor.map((prisoner) => ({
       ...prisoner,
       eventsElsewhere: [...visits, ...appointments].filter((event) => prisoner.offenderNo === event.offenderNo),
     }))
-
-    return prisonersWithOtherEvents
   }
 
   return { getPrisonersUnaccountedFor }

@@ -315,9 +315,7 @@ module.exports = (on) => {
       ]),
     stubOffenderActivitiesOverDateRange: ({ agencyId, fromDate, toDate, period, suspensions }) =>
       Promise.all([prisonApi.stubOffenderActivitiesOverDateRange(agencyId, fromDate, toDate, period, suspensions)]),
-    stubOffenderActivities: (activities) => prisonApi.stubOffenderActivities(activities),
-    stubAttendanceForScheduledActivities: (attendances) =>
-      whereabouts.stubAttendanceForScheduledActivities(attendances),
+    stubPrisonersUnaccountedFor: whereabouts.stubPrisonersUnaccountedFor,
     stubAttendanceForBookings: ({ agencyId, fromDate, toDate, period, attendances }) =>
       whereabouts.stubAttendanceForBookings(agencyId, fromDate, toDate, period, attendances),
     stubAppointments: (appointments) => prisonApi.stubAppointments(appointments),

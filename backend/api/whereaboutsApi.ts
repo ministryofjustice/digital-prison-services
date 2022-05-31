@@ -37,8 +37,10 @@ export const whereaboutsApiFactory = (client) => {
 
   const getAbsenceReasons = (context) => get(context, '/absence-reasons')
 
-  const getPrisonAttendance = (context, { agencyId, date, period }) =>
-    get(context, `/attendances/${agencyId}/attendance-for-scheduled-activities?date=${date}&period=${period}`)
+  const prisonersUnaccountedFor = (context, { agencyId, date, period }) =>
+    getWithCustomTimeout(context, `/attendances/${agencyId}/unaccounted-for?date=${date}&period=${period}`, {
+      customTimeout: 30000,
+    })
 
   const postAttendances = (context, body) => post(context, '/attendances', body)
 
@@ -128,7 +130,7 @@ export const whereaboutsApiFactory = (client) => {
     postAttendance,
     putAttendance,
     getAbsenceReasons,
-    getPrisonAttendance,
+    prisonersUnaccountedFor,
     postAttendances,
     getAttendanceStats,
     getAbsences,

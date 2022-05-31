@@ -274,9 +274,6 @@ export const prisonApiFactory = (client) => {
   const addSingleAppointment = (context, bookingId, body) =>
     post(context, `/api/bookings/${bookingId}/appointments`, body)
 
-  const getOffenderActivities = (context, { agencyId, date, period }) =>
-    get(context, `/api/schedules/${agencyId}/activities?date=${date}&timeSlot=${period}`)
-
   const getOffenderActivitiesOverDateRange = (context, { agencyId, fromDate, toDate, period }) =>
     get(
       context,
@@ -496,7 +493,6 @@ export const prisonApiFactory = (client) => {
     getAdjudicationDetails,
     getAdjudicationsForBooking,
     addAppointments,
-    getOffenderActivities,
     getAlertTypes,
     createAlert,
     getAlert,

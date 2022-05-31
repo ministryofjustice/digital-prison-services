@@ -55,31 +55,32 @@ context('Prisoners unaccounted for', () => {
 
     const yesterday = moment().subtract(1, 'day').format('YYYY-MM-DD')
 
-    cy.task('stubOffenderActivities', [
-      {
-        eventId: 1,
-        bookingId: -1,
-        offenderNo: offenderNo1,
-        firstName: 'Bob',
-        lastName: 'Doe',
-        cellLocation: 'MDI-1-1',
-        startTime: `${yesterday}T10:00:00`,
-        eventType: 'PA',
-        comment: 'Wing cleaner 1',
-      },
-      {
-        eventId: 2,
-        bookingId: -2,
-        offenderNo: offenderNo2,
-        firstName: 'Dave',
-        lastName: 'Doe',
-        cellLocation: 'MDI-1-2',
-        startTime: `${yesterday}T10:10:00`,
-        eventType: 'PA',
-        comment: 'Wing cleaner 2',
-      },
-    ])
-    cy.task('stubAttendanceForScheduledActivities', { attendances: [] })
+    cy.task('stubPrisonersUnaccountedFor', {
+      scheduled: [
+        {
+          eventId: 1,
+          bookingId: -1,
+          offenderNo: offenderNo1,
+          firstName: 'Bob',
+          lastName: 'Doe',
+          cellLocation: 'MDI-1-1',
+          startTime: `${yesterday}T10:00:00`,
+          eventType: 'PA',
+          comment: 'Wing cleaner 1',
+        },
+        {
+          eventId: 2,
+          bookingId: -2,
+          offenderNo: offenderNo2,
+          firstName: 'Dave',
+          lastName: 'Doe',
+          cellLocation: 'MDI-1-2',
+          startTime: `${yesterday}T10:10:00`,
+          eventType: 'PA',
+          comment: 'Wing cleaner 2',
+        },
+      ],
+    })
     cy.task('stubVisits', [
       {
         offenderNo: offenderNo1,
