@@ -21,6 +21,7 @@ describe('Homepage', () => {
     config.apis.manageAdjudications.ui_url = undefined
     config.apis.manageRestrictedPatients.ui_url = undefined
     config.apis.managePrisonVisits.ui_url = undefined
+    config.apis.legacyPrisonVisits.ui_url = undefined
     config.applications.sendLegalMail.url = undefined
     config.apis.welcomePeopleIntoPrison.enabled_prisons = undefined
     config.apis.welcomePeopleIntoPrison.url = undefined
@@ -225,6 +226,27 @@ describe('Homepage', () => {
             expect.objectContaining({
               id: 'book-a-prison-visit',
               href: 'http://book-a-prison-visit-url',
+              heading: 'Manage prison visits',
+              description: 'Book, view and cancel a prisoner’s social visits.',
+            }),
+          ],
+        })
+      )
+    })
+
+    it('should render home page with the legacy book a prison visit task', async () => {
+      oauthApi.userRoles.mockResolvedValue([{ roleCode: 'PVB_REQUESTS' }])
+      config.apis.legacyPrisonVisits.ui_url = 'http://legacy-prison-visit-url'
+
+      await controller(req, res)
+
+      expect(res.render).toHaveBeenCalledWith(
+        'homepage/homepage.njk',
+        expect.objectContaining({
+          tasks: [
+            expect.objectContaining({
+              id: 'legacy-prison-visit',
+              href: 'http://legacy-prison-visit-url',
               heading: 'Manage prison visits',
               description: 'Book, view and cancel a prisoner’s social visits.',
             }),

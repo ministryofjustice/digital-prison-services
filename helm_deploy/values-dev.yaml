@@ -40,7 +40,7 @@ env:
   TOKENVERIFICATION_API_URL: https://token-verification-api-dev.prison.service.justice.gov.uk
   TOKENVERIFICATION_API_ENABLED: true
   CASENOTES_API_URL: https://dev.offender-case-notes.service.justice.gov.uk/
-  ALLOCATION_MANAGER_ENDPOINT_URL: https://dev.moic.service.justice.gov.uk/ 
+  ALLOCATION_MANAGER_ENDPOINT_URL: https://dev.moic.service.justice.gov.uk/
   PATHFINDER_UI_URL: https://dev.pathfinder.service.justice.gov.uk/
   PATHFINDER_ENDPOINT_API_URL: https://dev-api.pathfinder.service.justice.gov.uk/
   PIN_PHONES_URL: https://pcms-dev.prison.service.justice.gov.uk/
@@ -56,7 +56,7 @@ env:
   CURIOUS_URL: https://testservices.sequation.net/sequation-virtual-campus2-api/
   SYSTEM_PHASE: DEV
   BVL_URL: https://book-video-link-dev.prison.service.justice.gov.uk
-  MOIC_URL: https://dev.moic.service.justice.gov.uk 
+  MOIC_URL: https://dev.moic.service.justice.gov.uk
   OMIC_URL: https://dev.manage-key-workers.service.justice.gov.uk
   MANAGE_AUTH_ACCOUNTS_URL: https://manage-users-dev.hmpps.service.justice.gov.uk
   PECS_URL: https://hmpps-book-secure-move-frontend-staging.apps.live-1.cloud-platform.service.justice.gov.uk
@@ -66,6 +66,7 @@ env:
   MANAGE_ADJUDICATIONS_URL: https://manage-adjudications-dev.hmpps.service.justice.gov.uk/
   MANAGE_RESTRICTED_PATIENTS_URL: https://manage-restricted-patients-dev.hmpps.service.justice.gov.uk/
   MANAGE_PRISON_VISITS_URL: https://manage-prison-visits-dev.prison.service.justice.gov.uk/
+  LEGACY_PRISON_VISITS_URL: https://prison-visits-booking-staff-dev.apps.live.cloud-platform.service.justice.gov.uk/
   CALCULATE_RELEASE_DATES_URL: https://calculate-release-dates-dev.hmpps.service.justice.gov.uk
   SEND_LEGAL_MAIL_URL: https://check-rule39-mail-dev.prison.service.justice.gov.uk
   WELCOME_PEOPLE_INTO_PRISON_URL: https://welcome-dev.prison.service.justice.gov.uk/
@@ -73,4 +74,3 @@ env:
   CREATE_AND_VARY_A_LICENCE_URL: https://create-and-vary-a-licence-dev.hmpps.service.justice.gov.uk/
   CREATE_AND_VARY_A_LICENCE_ENABLED_PRISONS: "MDI,LEI,LPI,BMI,PVI,BXI,WAI"
   RESTRICTED_PATIENT_API_URL: https://restricted-patients-api-dev.hmpps.service.justice.gov.uk/
-  

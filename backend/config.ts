@@ -170,6 +170,9 @@ export const apis = {
   managePrisonVisits: {
     ui_url: process.env.MANAGE_PRISON_VISITS_URL || '',
   },
+  legacyPrisonVisits: {
+    ui_url: process.env.LEGACY_PRISON_VISITS_URL || '',
+  },
   createAndVaryALicence: {
     url: process.env.CREATE_AND_VARY_A_LICENCE_URL,
     enabled_prisons: process.env.CREATE_AND_VARY_A_LICENCE_ENABLED_PRISONS || '',
