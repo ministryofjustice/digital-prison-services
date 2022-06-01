@@ -217,9 +217,9 @@ const getTasks = ({ activeCaseLoadId, locations, staffId, whereaboutsConfig, key
     },
     {
       id: 'manage-restricted-patients',
-      heading: 'Manage Restricted Patients',
+      heading: 'Manage restricted patients',
       description:
-        'View all restricted patients in a secure hospital, move someone to a secure hospital, and remove someone from restricted patients.',
+        'View your restricted patients, move someone to a secure hospital, or remove someone from the restricted patients service.',
       href: manageRestrictedPatients.ui_url,
       enabled: () =>
         manageRestrictedPatients.ui_url &&

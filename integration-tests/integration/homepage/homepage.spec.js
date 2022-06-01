@@ -214,13 +214,13 @@ context('Homepage', () => {
       const page = homepagePage.goTo()
 
       page.manageRestrictedPatients().tile().should('exist')
-      page.manageRestrictedPatients().title().contains('Manage Restricted Patients')
+      page.manageRestrictedPatients().title().contains('Manage restricted patients')
       page.manageRestrictedPatients().link().should('exist')
       page
         .manageRestrictedPatients()
         .description()
         .contains(
-          'View all restricted patients in a secure hospital, move someone to a secure hospital, and remove someone from restricted patients.'
+          'View your restricted patients, move someone to a secure hospital, or remove someone from the restricted patients service.'
         )
     })
   })
