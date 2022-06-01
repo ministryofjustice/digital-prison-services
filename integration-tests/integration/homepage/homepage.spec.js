@@ -220,7 +220,7 @@ context('Homepage', () => {
         .manageRestrictedPatients()
         .description()
         .contains(
-          'View all restricted patients in a secure hospital, move someone to a secure hospital, and remove someone from restricted patients.'
+          'View your restricted patients, move someone to a secure hospital, or remove someone from the Restricted Patients service.'
         )
     })
   })
