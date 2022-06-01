@@ -123,6 +123,12 @@ env:
       secretKeyRef:
         name: {{ template "app.name" . }}
         key: BIRMINGHAM_OMU_EMAIL
+  
+  - name: NORWICH_OMU_EMAIL
+    valueFrom:
+      secretKeyRef:
+        name: {{ template "app.name" . }}
+        key: NORWICH_OMU_EMAIL
 
   - name: REDIS_HOST
     valueFrom:

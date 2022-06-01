@@ -210,6 +210,9 @@ export const notifications = {
     BMI: {
       omu: process.env.BIRMINGHAM_OMU_EMAIL,
     },
+    NWI: {
+      omu: process.env.NORWICH_OMU_EMAIL,
+    },
   },
 }
 
