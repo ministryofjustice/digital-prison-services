@@ -283,6 +283,9 @@ env:
   - name: NEURODIVERSITY_ENABLED_USERNAMES
     value: {{ .Values.env.NEURODIVERSITY_ENABLED_USERNAMES | quote }}
 
+  - name: NEURODIVERSITY_ENABLED_PRISONS
+    value: {{ .Values.env.NEURODIVERSITY_ENABLED_PRISONS | quote }}
+
   - name: MANAGE_PRISON_VISITS_URL
     value: {{ .Values.env.MANAGE_PRISON_VISITS_URL | quote }}
 
