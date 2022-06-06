@@ -54,7 +54,7 @@ export const whereaboutsApiFactory = (client) => {
   const getAbsences = (context, { agencyId, fromDate, toDate, period, reason }) =>
     getWithCustomTimeout(
       context,
-      `/attendances/${agencyId}/absences-for-scheduled-activities/${reason}?period=${period}&fromDate=${fromDate}&toDate=${toDate}`,
+      `/attendances/${agencyId}/absences-for-scheduled-activities2/${reason}?period=${period}&fromDate=${fromDate}&toDate=${toDate}`,
       { customTimeout: 30000 }
     )
 
