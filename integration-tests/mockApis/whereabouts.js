@@ -50,7 +50,7 @@ module.exports = {
     stubFor({
       request: {
         method: 'GET',
-        urlPattern: `/whereabouts/attendances/${agencyId}/absences-for-scheduled-activities2/${reason}?.*`,
+        urlPattern: `/whereabouts/attendances/${agencyId}/absences-for-scheduled-activities/${reason}?.*`,
       },
       response: {
         status: 200,
