@@ -1,4 +1,3 @@
-import querystring from 'querystring'
 import contextProperties from '../contextProperties'
 import { arrayToQueryString, mapToQueryString } from '../utils'
 
@@ -48,6 +47,9 @@ export const prisonApiFactory = (client) => {
 
   const get = (context, url, resultsLimit?, retryOverride?) =>
     client.get(context, url, { resultsLimit, retryOverride }).then(processResponse(context))
+
+  const getWithCustomTimeout = (context, path, overrides) =>
+    client.getWithCustomTimeout(context, path, overrides).then(processResponse(context))
 
   const getStream = (context, url) => client.getStream(context, url)
 
@@ -440,7 +442,9 @@ export const prisonApiFactory = (client) => {
     )
 
   const getTransfers = (context, parameters: GetTransferParameters) =>
-    get(context, `/api/movements/transfers?${querystring.stringify(parameters)}`, { retryOverride: 5 })
+    getWithCustomTimeout(context, `/api/movements/transfers?${new URLSearchParams(parameters as never).toString()}`, {
+      customTimeout: 30000,
+    })
 
   return {
     userLocations,
