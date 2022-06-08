@@ -57,8 +57,9 @@ export const configureRoutes = ({ app, tokenRefresher, tokenVerifier, homeLink }
       next()
     } catch (error) {
       // need to sign out here otherwise user will still be considered authenticated when we take them to /sign-in
-      req.logout(err => {
+      req.logout((err) => {
         if (err) return next(err)
+        return null
       })
 
       if (isXHRRequest(req)) {
@@ -86,8 +87,9 @@ export const configureRoutes = ({ app, tokenRefresher, tokenVerifier, homeLink }
       next()
       return
     }
-    req.logout(err => {
+    req.logout((err) => {
       if (err) return next(err)
+      return null
     })
     // need logout as want session recreated from latest auth credentials
     if (isXHRRequest(req)) {
