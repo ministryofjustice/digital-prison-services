@@ -58,21 +58,23 @@ export const configureRoutes = ({ app, tokenRefresher, tokenVerifier, homeLink }
     } catch (error) {
       // need to sign out here otherwise user will still be considered authenticated when we take them to /sign-in
       req.logout((err) => {
-        if (err) return next(err)
-        return null
-      })
+        if (err) {
+          next(err)
+          return
+        }
 
-      if (isXHRRequest(req)) {
-        req.session.destroy()
-        res.status(401)
-        res.json({ reason: 'session-expired' })
-        next(error)
-        return
-      }
+        if (isXHRRequest(req)) {
+          req.session.destroy()
+          res.status(401)
+          res.json({ reason: 'session-expired' })
+          next(error)
+          return
+        }
 
-      req.session.destroy(() => {
-        const query = querystring.stringify({ returnTo: req.originalUrl })
-        res.redirect(`/sign-in?${query}`)
+        req.session.destroy(() => {
+          const query = querystring.stringify({ returnTo: req.originalUrl })
+          res.redirect(`/sign-in?${query}`)
+        })
       })
     }
   }
@@ -88,20 +90,22 @@ export const configureRoutes = ({ app, tokenRefresher, tokenVerifier, homeLink }
       return
     }
     req.logout((err) => {
-      if (err) return next(err)
-      return null
-    })
-    // need logout as want session recreated from latest auth credentials
-    if (isXHRRequest(req)) {
-      req.session.destroy()
-      res.status(401)
-      res.json({ reason: 'session-expired' })
-      return
-    }
+      if (err) {
+        next(err)
+        return
+      }
+      // need logout as want session recreated from latest auth credentials
+      if (isXHRRequest(req)) {
+        req.session.destroy()
+        res.status(401)
+        res.json({ reason: 'session-expired' })
+        return
+      }
 
-    req.session.destroy(() => {
-      const query = querystring.stringify({ returnTo: req.originalUrl })
-      res.redirect(`/sign-in?${query}`)
+      req.session.destroy(() => {
+        const query = querystring.stringify({ returnTo: req.originalUrl })
+        res.redirect(`/sign-in?${query}`)
+      })
     })
   }
 
