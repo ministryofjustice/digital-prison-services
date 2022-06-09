@@ -57,19 +57,24 @@ export const configureRoutes = ({ app, tokenRefresher, tokenVerifier, homeLink }
       next()
     } catch (error) {
       // need to sign out here otherwise user will still be considered authenticated when we take them to /sign-in
-      req.logout()
+      req.logout((err) => {
+        if (err) {
+          next(err)
+          return
+        }
 
-      if (isXHRRequest(req)) {
-        req.session.destroy()
-        res.status(401)
-        res.json({ reason: 'session-expired' })
-        next(error)
-        return
-      }
+        if (isXHRRequest(req)) {
+          req.session.destroy()
+          res.status(401)
+          res.json({ reason: 'session-expired' })
+          next(error)
+          return
+        }
 
-      req.session.destroy(() => {
-        const query = querystring.stringify({ returnTo: req.originalUrl })
-        res.redirect(`/sign-in?${query}`)
+        req.session.destroy(() => {
+          const query = querystring.stringify({ returnTo: req.originalUrl })
+          res.redirect(`/sign-in?${query}`)
+        })
       })
     }
   }
@@ -84,17 +89,23 @@ export const configureRoutes = ({ app, tokenRefresher, tokenVerifier, homeLink }
       next()
       return
     }
-    req.logout() // need logout as want session recreated from latest auth credentials
-    if (isXHRRequest(req)) {
-      req.session.destroy()
-      res.status(401)
-      res.json({ reason: 'session-expired' })
-      return
-    }
+    req.logout((err) => {
+      if (err) {
+        next(err)
+        return
+      }
+      // need logout as want session recreated from latest auth credentials
+      if (isXHRRequest(req)) {
+        req.session.destroy()
+        res.status(401)
+        res.json({ reason: 'session-expired' })
+        return
+      }
 
-    req.session.destroy(() => {
-      const query = querystring.stringify({ returnTo: req.originalUrl })
-      res.redirect(`/sign-in?${query}`)
+      req.session.destroy(() => {
+        const query = querystring.stringify({ returnTo: req.originalUrl })
+        res.redirect(`/sign-in?${query}`)
+      })
     })
   }
 
@@ -122,11 +133,11 @@ export const configureRoutes = ({ app, tokenRefresher, tokenVerifier, homeLink }
         logger.info(`Auth failure due to ${JSON.stringify(info)}`)
         return res.redirect('/autherror')
       }
+      const { returnTo } = req.session
       req.logIn(user, (err2) => {
         if (err2) {
           return next(err2)
         }
-        const { returnTo } = req.session
         if (typeof returnTo === 'string' && returnTo.startsWith('/')) {
           return res.redirect(returnTo)
         }
