@@ -25,7 +25,7 @@ const AdjudciationHistoryServiceFactory = (prisonApi) => {
 
     const ordercharges = adjudications.results.map((result) => {
       const { adjudicationCharges, ...fields } = result
-      const charge = adjudicationCharges.filter((item) => item.findingCode).pop()
+      const charge = adjudicationCharges.filter((item) => item.findingCode).shift()
       const finding = findingTypes.find((type) => charge && type.code === charge.findingCode)
 
       return {
