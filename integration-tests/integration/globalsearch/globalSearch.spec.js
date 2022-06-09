@@ -5,8 +5,8 @@ context('Global search', () => {
     cy.clearCookies()
     cy.task('reset')
     cy.task('stubSignIn', { username: 'ITAG_USER', caseload: 'MDI' })
+    cy.task('stubKeyworkerMigrated')
     cy.signIn('/global-search')
-    cy.visit('/global-search')
   })
 
   beforeEach(() => {

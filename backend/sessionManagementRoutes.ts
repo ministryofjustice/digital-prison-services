@@ -133,11 +133,11 @@ export const configureRoutes = ({ app, tokenRefresher, tokenVerifier, homeLink }
         logger.info(`Auth failure due to ${JSON.stringify(info)}`)
         return res.redirect('/autherror')
       }
+      const { returnTo } = req.session
       req.logIn(user, (err2) => {
         if (err2) {
           return next(err2)
         }
-        const { returnTo } = req.session
         if (typeof returnTo === 'string' && returnTo.startsWith('/')) {
           return res.redirect(returnTo)
         }
