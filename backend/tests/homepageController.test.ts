@@ -20,6 +20,7 @@ describe('Homepage', () => {
     config.apis.manageAdjudications.enabled_prisons = undefined
     config.apis.manageAdjudications.ui_url = undefined
     config.apis.manageRestrictedPatients.ui_url = undefined
+    config.apis.managePrisonVisits.enabled_prisons = undefined
     config.apis.managePrisonVisits.ui_url = undefined
     config.apis.legacyPrisonVisits.ui_url = undefined
     config.applications.sendLegalMail.url = undefined
@@ -213,9 +214,10 @@ describe('Homepage', () => {
       )
     })
 
-    it.skip('should render home page with the book a prison visit task', async () => {
-      oauthApi.userRoles.mockResolvedValue([{ roleCode: 'PVB_ADMIN' }])
+    it('should render home page with the manage prison visits task', async () => {
+      oauthApi.userRoles.mockResolvedValue([{ roleCode: 'MANAGE_PRISON_VISITS' }])
       config.apis.managePrisonVisits.ui_url = 'http://book-a-prison-visit-url'
+      config.apis.managePrisonVisits.enabled_prisons = 'MDI'
 
       await controller(req, res)
 
