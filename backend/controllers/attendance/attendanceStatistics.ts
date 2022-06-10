@@ -360,20 +360,19 @@ export const attendanceStatisticsFactory = (oauthApi, prisonApi, whereaboutsApi)
       )
     }
 
-    const scheduledActivities = await prisonApi.getOffenderActivitiesOverDateRange(res.locals, {
+    const suspendedActivities = await prisonApi.getOffenderSuspendedActivitiesOverDateRange(res.locals, {
       agencyId,
       fromDate: formattedFromDate,
       toDate: formattedToDate,
       period: period === 'AM_PM' ? '' : period,
     })
 
-    const suspendedActivites = scheduledActivities.filter((activity) => activity.suspended)
-    const totalOffenders = new Set(suspendedActivites.map((activity) => activity.bookingId)).size
+    const totalOffenders = new Set(suspendedActivities.map((activity) => activity.bookingId)).size
 
     const suspendedAttendances = await whereaboutsApi.getAttendanceForBookingsOverDateRange(res.locals, {
       agencyId,
       period: period === 'AM_PM' ? '' : period,
-      bookings: suspendedActivites.map((activity) => activity.bookingId),
+      bookings: suspendedActivities.map((activity) => activity.bookingId),
       fromDate: formattedFromDate,
       toDate: formattedToDate,
     })
@@ -386,12 +385,9 @@ export const attendanceStatisticsFactory = (oauthApi, prisonApi, whereaboutsApi)
       return `${data.paid ? 'Yes' : 'No'} - ${pascalToString(data.absentReason).toLowerCase()}`
     }
 
-    const offendersData = suspendedActivites.map((activity) => {
+    const offendersData = suspendedActivities.map((activity) => {
       const attendanceDetails = suspendedAttendances.attendances.find(
-        (attendance) =>
-          activity.bookingId === attendance.bookingId &&
-          moment(activity.startTime).format('YYYY-MM-DD') === attendance.eventDate &&
-          activity.eventId === attendance.eventId
+        (attendance) => activity.eventId === attendance.eventId
       )
 
       const { offenderNo, firstName, lastName, comment, cellLocation } = activity
@@ -431,7 +427,7 @@ export const attendanceStatisticsFactory = (oauthApi, prisonApi, whereaboutsApi)
       caseLoadId: activeCaseLoad.caseLoadId,
       allCaseloads: caseloads,
       userRoles: roles,
-      totalRecords: suspendedActivites.length,
+      totalRecords: suspendedActivities.length,
       totalOffenders,
     })
   }
