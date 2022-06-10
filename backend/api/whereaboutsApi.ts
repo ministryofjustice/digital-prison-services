@@ -47,7 +47,7 @@ export const whereaboutsApiFactory = (client) => {
   const getAttendanceStats = (context, { agencyId, fromDate, toDate, period }) =>
     getWithCustomTimeout(
       context,
-      `/attendance-statistics/${agencyId}/over-date-range-2?fromDate=${fromDate}&toDate=${toDate}&period=${period}`,
+      `/attendance-statistics/${agencyId}/over-date-range?fromDate=${fromDate}&toDate=${toDate}&period=${period}`,
       { customTimeout: 30000 }
     )
 
