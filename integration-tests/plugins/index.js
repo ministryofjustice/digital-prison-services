@@ -65,6 +65,7 @@ module.exports = (on) => {
         auth.stubUserMe(username, 12345, 'James Stuart', caseload),
         prisonApi.stubUserCaseloads(caseloads),
         tokenverification.stubVerifyToken(true),
+        keyworker.stubKeyworkerMigrated(),
       ]),
     stubSignInCourt: () =>
       Promise.all([auth.stubSignInCourt(), prisonApi.stubUserCaseloads(), tokenverification.stubVerifyToken(true)]),
@@ -313,8 +314,10 @@ module.exports = (on) => {
         prisonApi.stubAppointments(appointments),
         prisonApi.stubActivities(activities),
       ]),
-    stubOffenderActivitiesOverDateRange: ({ agencyId, fromDate, toDate, period, suspensions }) =>
-      Promise.all([prisonApi.stubOffenderActivitiesOverDateRange(agencyId, fromDate, toDate, period, suspensions)]),
+    stubOffenderSuspendedActivitiesOverDateRange: ({ agencyId, fromDate, toDate, period, suspensions }) =>
+      Promise.all([
+        prisonApi.stubOffenderSuspendedActivitiesOverDateRange(agencyId, fromDate, toDate, period, suspensions),
+      ]),
     stubPrisonersUnaccountedFor: whereabouts.stubPrisonersUnaccountedFor,
     stubAttendanceForBookings: ({ agencyId, fromDate, toDate, period, attendances }) =>
       whereabouts.stubAttendanceForBookings(agencyId, fromDate, toDate, period, attendances),

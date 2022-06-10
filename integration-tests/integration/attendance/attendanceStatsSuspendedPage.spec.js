@@ -38,7 +38,7 @@ context('A user can view suspensions', () => {
     cy.task('stubUserMeRoles')
     cy.task('stubUserMe', {})
     cy.task('stubUserCaseLoads')
-    cy.task('stubOffenderActivitiesOverDateRange', {
+    cy.task('stubOffenderSuspendedActivitiesOverDateRange', {
       agencyId,
       fromDate: fromDateApi,
       toDate: toDateApi,
@@ -71,7 +71,7 @@ context('A user can view suspensions', () => {
         {
           bookingId: 1133343,
           offenderNo: 'G8976UK',
-          eventId: 4,
+          eventId: 5,
           cellLocation: `${agencyId}-3`,
           startTime: '2010-10-10T15:00:00',
           timeSlot: 'PM',
@@ -108,7 +108,7 @@ context('A user can view suspensions', () => {
             comments: 'Did not ask nicely',
           },
           {
-            eventId: 4,
+            eventId: 5,
             bookingId: 1133343,
             eventDate: '2010-10-10',
             attended: true,
@@ -160,7 +160,7 @@ context('A user can view suspensions', () => {
   })
 
   it('Shows no data when no suspensions are found', () => {
-    cy.task('stubOffenderActivitiesOverDateRange', {
+    cy.task('stubOffenderSuspendedActivitiesOverDateRange', {
       agencyId,
       fromDate: fromDateApi,
       toDate: toDateApi,

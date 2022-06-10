@@ -276,10 +276,10 @@ export const prisonApiFactory = (client) => {
   const addSingleAppointment = (context, bookingId, body) =>
     post(context, `/api/bookings/${bookingId}/appointments`, body)
 
-  const getOffenderActivitiesOverDateRange = (context, { agencyId, fromDate, toDate, period }) =>
+  const getOffenderSuspendedActivitiesOverDateRange = (context, { agencyId, fromDate, toDate, period }) =>
     get(
       context,
-      `/api/schedules/${agencyId}/activities-by-date-range?fromDate=${fromDate}&toDate=${toDate}&timeSlot=${period}&includeSuspended=true`
+      `/api/schedules/${agencyId}/suspended-activities-by-date-range?fromDate=${fromDate}&toDate=${toDate}&timeSlot=${period}&includeSuspended=true`
     )
 
   const getAlertTypes = (context) => get(context, '/api/reference-domains/alertTypes', 1000)
@@ -502,7 +502,7 @@ export const prisonApiFactory = (client) => {
     getAlert,
     updateAlert,
     getOffenderSummaries,
-    getOffenderActivitiesOverDateRange,
+    getOffenderSuspendedActivitiesOverDateRange,
     getActivitiesAtLocation,
     addSingleAppointment,
     getCaseNoteSummaryByTypes,

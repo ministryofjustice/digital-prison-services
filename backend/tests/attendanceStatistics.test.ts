@@ -11,7 +11,7 @@ describe('Attendance reason statistics', () => {
   }
   const prisonApi = {
     userCaseLoads: jest.fn(),
-    getOffenderActivitiesOverDateRange: jest.fn(),
+    getOffenderSuspendedActivitiesOverDateRange: jest.fn(),
   }
   const whereaboutsApi = {
     getAttendanceStats: jest.fn(),
@@ -59,7 +59,7 @@ describe('Attendance reason statistics', () => {
   beforeEach(() => {
     oauthApi.currentUser = jest.fn()
     prisonApi.userCaseLoads = jest.fn()
-    prisonApi.getOffenderActivitiesOverDateRange = jest.fn()
+    prisonApi.getOffenderSuspendedActivitiesOverDateRange = jest.fn()
     oauthApi.userRoles = jest.fn()
     whereaboutsApi.getAttendanceStats = jest.fn()
     whereaboutsApi.getAbsences = jest.fn()
@@ -69,7 +69,7 @@ describe('Attendance reason statistics', () => {
     whereaboutsApi.getAttendanceChanges.mockReturnValue({ changes: [] })
 
     prisonApi.userCaseLoads.mockReturnValue([{ caseLoadId: 'LEI', description: 'Leeds (HMP)', currentlyActive: true }])
-    prisonApi.getOffenderActivitiesOverDateRange.mockReturnValue([])
+    prisonApi.getOffenderSuspendedActivitiesOverDateRange.mockReturnValue([])
     oauthApi.currentUser.mockReturnValue({
       username: 'USER_ADM',
       active: true,
@@ -625,7 +625,7 @@ describe('Attendance reason statistics', () => {
 
   describe('Suspended Controller', () => {
     beforeEach(() => {
-      prisonApi.getOffenderActivitiesOverDateRange.mockReturnValue([
+      prisonApi.getOffenderSuspendedActivitiesOverDateRange.mockReturnValue([
         {
           bookingId: 1133341,
           offenderNo: 'G8974UK',
@@ -653,7 +653,7 @@ describe('Attendance reason statistics', () => {
         {
           bookingId: 1133343,
           offenderNo: 'G8976UK',
-          eventId: 4,
+          eventId: 5,
           cellLocation: 'LEI-3',
           startTime: '2019-10-10T14:00:00',
           timeSlot: 'AM',
@@ -661,18 +661,6 @@ describe('Attendance reason statistics', () => {
           lastName: 'Three',
           comment: 'Cleaner',
           suspended: true,
-        },
-        {
-          bookingId: 1133344,
-          offenderNo: 'G8977UK',
-          eventId: 5,
-          cellLocation: 'LEI-4',
-          startTime: '2019-10-10T14:00:00',
-          timeSlot: 'AM',
-          firstName: 'Offender',
-          lastName: 'Four',
-          comment: 'Cleaner',
-          suspended: false,
         },
       ])
       whereaboutsApi.getAttendanceForBookingsOverDateRange.mockReturnValue({
@@ -696,7 +684,7 @@ describe('Attendance reason statistics', () => {
             comments: 'Did not ask nicely',
           },
           {
-            eventId: 4,
+            eventId: 5,
             bookingId: 1133343,
             eventDate: '2019-10-10',
             attended: true,
@@ -716,7 +704,7 @@ describe('Attendance reason statistics', () => {
 
       await attendanceStatisticsSuspendedList(req, res)
 
-      expect(prisonApi.getOffenderActivitiesOverDateRange).toHaveBeenCalledWith(res.locals, {
+      expect(prisonApi.getOffenderSuspendedActivitiesOverDateRange).toHaveBeenCalledWith(res.locals, {
         agencyId,
         fromDate: '2019-10-10',
         toDate: '2019-10-11',

@@ -134,11 +134,11 @@ module.exports = {
         jsonBody: activities,
       },
     }),
-  stubOffenderActivitiesOverDateRange: (agencyId, fromDate, toDate, period, suspensions) =>
+  stubOffenderSuspendedActivitiesOverDateRange: (agencyId, fromDate, toDate, period, suspensions) =>
     stubFor({
       request: {
         method: 'GET',
-        url: `/api/schedules/${agencyId}/activities-by-date-range?fromDate=${fromDate}&toDate=${toDate}&timeSlot=${period}&includeSuspended=true`,
+        url: `/api/schedules/${agencyId}/suspended-activities-by-date-range?fromDate=${fromDate}&toDate=${toDate}&timeSlot=${period}&includeSuspended=true`,
       },
       response: {
         status: 200,
