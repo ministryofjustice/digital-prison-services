@@ -70,7 +70,7 @@
     <form action="{{ postAmendment }}" method="post">
         <input type="hidden" name="_csrf" value="{{ csrfToken }}" />
 
-        {{ govukButton({ text: "Confirm delete", type: "submit" }) }}
+        {{ govukButton({ text: "Confirm delete", type: "submit", preventDoubleClick: true }) }}
 
         {{ govukButton({
             text: "Cancel",
