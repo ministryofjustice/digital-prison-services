@@ -90,7 +90,7 @@
               attributes: {'data-disable-past-date':'false', 'data-disable-future-date':'true', 'data-min-date': '-7D', 'data-effective-date': 'true'}
           }) }}
 
-    {{ govukButton({ text: "Save and continue", type: "submit" }) }}
+    {{ govukButton({ text: "Save and continue", type: "submit", preventDoubleClick: true }) }}
 
       {{ govukButton({
           text: "Cancel",
