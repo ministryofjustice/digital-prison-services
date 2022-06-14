@@ -37,10 +37,10 @@ export default ({
   } = config
 
   const needNeurodivergenceSupport = (divergenceData) => {
-    const hasSupportNeed = divergenceData && divergenceData[0] !== null
-    if (hasSupportNeed && divergenceData[0]?.neurodivergenceSupport) {
-      const divergenceSupport = divergenceData[0]?.neurodivergenceSupport?.length
-        ? divergenceData[0].neurodivergenceSupport
+    const hasSupportNeed = divergenceData
+    if (hasSupportNeed && divergenceData?.neurodivergenceSupport) {
+      const divergenceSupport = divergenceData?.neurodivergenceSupport?.length
+        ? divergenceData.neurodivergenceSupport
         : []
 
       if (divergenceSupport.length) {
@@ -72,12 +72,15 @@ export default ({
     // TODO: Temporary measure to allow 3rd party MegaNexus time to implement caching and other techniques to their API so it can handle high volume of calls. To be refactored!
     const getNeurodivergenceSupportNeed = async (agencyId) => {
       if (canViewNeurodivergenceSupportData(agencyId, neurodiversityEnabledPrisons as string)) {
-        const [divergenceData] = await Promise.all(
-          [curiousApi.getLearnerNeurodivergence(systemContext, offenderNo)].map((apiCall) =>
-            logErrorAndContinue(apiCall)
-          )
-        )
-        return divergenceData[0] ? needNeurodivergenceSupport(divergenceData) : false
+        const [divergenceData] = await new Promise((resolve) => {
+          curiousApi
+            .getLearnerNeurodivergence(systemContext, offenderNo)
+            .then((apiDivergence) => {
+              resolve(apiDivergence)
+            })
+            .catch((apiCall) => logErrorAndContinue(apiCall))
+        })
+        return divergenceData ? needNeurodivergenceSupport(divergenceData) : false
       }
       return false
     }
