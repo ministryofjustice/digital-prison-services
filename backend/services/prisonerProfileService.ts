@@ -36,24 +36,18 @@ export default ({
     app: { displayRetentionLink, esweEnabled, neurodiversityEnabledPrisons },
   } = config
 
-  const needNeurodivergenceSupport = (divergenceData) => {
-    const hasSupportNeed = divergenceData && divergenceData[0] !== null
-    if (hasSupportNeed && divergenceData[0]?.neurodivergenceSupport) {
-      const divergenceSupport = divergenceData[0]?.neurodivergenceSupport?.length
-        ? divergenceData[0].neurodivergenceSupport
-        : []
+  const needNeuroDivergenceSupport = (divergenceData) => {
+    const divergenceSupport = divergenceData?.neurodivergenceSupport || []
 
-      if (divergenceSupport.length) {
-        const hasIdentifiedDivergenceSupportNeed = divergenceSupport.some((element) => {
-          return element.includes(NeurodivergenceSupport.NoIdentifiedNeurodiversityNeed)
-        })
+    if (divergenceSupport.length) {
+      const hasIdentifiedDivergenceSupportNeed = divergenceSupport.some((element) => {
+        return element.includes(NeurodivergenceSupport.NoIdentifiedNeurodiversityNeed)
+      })
 
-        const hasRequiredSupport = divergenceSupport.some((ele) => {
-          return ele.includes(NeurodivergenceSupport.NoIdentifiedSupportRequired)
-        })
-        return !(hasIdentifiedDivergenceSupportNeed || hasRequiredSupport)
-      }
-      return false
+      const hasRequiredSupport = divergenceSupport.some((ele) => {
+        return ele.includes(NeurodivergenceSupport.NoIdentifiedSupportRequired)
+      })
+      return !(hasIdentifiedDivergenceSupportNeed || hasRequiredSupport)
     }
     return false
   }
@@ -72,12 +66,10 @@ export default ({
     // TODO: Temporary measure to allow 3rd party MegaNexus time to implement caching and other techniques to their API so it can handle high volume of calls. To be refactored!
     const getNeurodivergenceSupportNeed = async (agencyId) => {
       if (canViewNeurodivergenceSupportData(agencyId, neurodiversityEnabledPrisons as string)) {
-        const [divergenceData] = await Promise.all(
-          [curiousApi.getLearnerNeurodivergence(systemContext, offenderNo)].map((apiCall) =>
-            logErrorAndContinue(apiCall)
-          )
+        const divergenceData = await logErrorAndContinue(
+          curiousApi.getLearnerNeurodivergence(systemContext, offenderNo)
         )
-        return divergenceData[0] ? needNeurodivergenceSupport(divergenceData) : false
+        return divergenceData[0] ? needNeuroDivergenceSupport(divergenceData[0]) : false
       }
       return false
     }
