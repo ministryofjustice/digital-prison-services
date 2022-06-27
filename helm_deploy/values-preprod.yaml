@@ -71,7 +71,7 @@ env:
   CALCULATE_RELEASE_DATES_URL: https://calculate-release-dates-preprod.hmpps.service.justice.gov.uk
   SEND_LEGAL_MAIL_URL: https://check-rule39-mail-preprod.prison.service.justice.gov.uk
   WELCOME_PEOPLE_INTO_PRISON_URL: https://welcome-preprod.prison.service.justice.gov.uk/
-  WELCOME_PEOPLE_INTO_PRISON_ENABLED_PRISONS: "NMI,LII,DMI,MHI"
+  WELCOME_PEOPLE_INTO_PRISON_ENABLED_PRISONS: "NMI,LII,DMI,MHI,EXI"
   CREATE_AND_VARY_A_LICENCE_URL: https://create-and-vary-a-licence-preprod.hmpps.service.justice.gov.uk/
   CREATE_AND_VARY_A_LICENCE_ENABLED_PRISONS: "CFI,CWI,UKI,UPI,PRI"
   RESTRICTED_PATIENT_API_URL: https://restricted-patients-api-preprod.hmpps.service.justice.gov.uk/
