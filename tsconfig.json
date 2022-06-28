@@ -20,5 +20,5 @@
   },
   "baseUrl": ".",
   "include": ["./backend/**/*.js", "./backend/**/*.ts", "./backend/**/*.d.ts"],
-  "exclude": ["node_modules", "src", "dist/build", "dist"]
+  "exclude": ["node_modules", "src", "dist/build", "dist", "cypress.config.js"]
 }
