@@ -1,6 +1,6 @@
 const offenderBasicDetails = require('../../mockApis/responses/offenderBasicDetails.json')
 const offenderFullDetails = require('../../mockApis/responses/offenderFullDetails.json')
-const { quickLookFullDetails } = require('../prisonerProfile/prisonerQuickLook.spec')
+const { quickLookFullDetails } = require('../prisonerProfile/prisonerQuickLook.cy')
 
 context('Prisoner search', () => {
   const inmate1 = {
