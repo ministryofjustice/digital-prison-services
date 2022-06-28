@@ -67,7 +67,7 @@ const getCellOccupants = async (res, { prisonApi, activeCaseLoadId, cells, nonAs
       return {
         cellId: cell.id,
         name: `${properCaseName(occupant.lastName)}, ${properCaseName(occupant.firstName)}`,
-        viewOffenderDetails: `/prisoner/${occupant.offenderNo}/cell-move/offender-details`,
+        viewOffenderDetails: `/prisoner/${occupant.offenderNo}/cell-move/prisoner-details`,
         alerts: alertFlagLabels.filter((label) => label.alertCodes.some((code) => alertCodes.includes(code))),
         nonAssociation: Boolean(
           nonAssociations &&
@@ -225,7 +225,7 @@ export default ({ oauthApi, prisonApi, whereaboutsApi }) =>
         prisonerDetails: prisonerDetailsWithFormattedLocation,
         offenderNo,
         nonAssociationLink: `/prisoner/${offenderNo}/cell-move/non-associations`,
-        offenderDetailsUrl: `/prisoner/${offenderNo}/cell-move/offender-details`,
+        offenderDetailsUrl: `/prisoner/${offenderNo}/cell-move/prisoner-details`,
         csraDetailsUrl: `/prisoner/${offenderNo}/cell-move/cell-sharing-risk-assessment-details`,
         searchForCellRootUrl: `/prisoner/${offenderNo}/cell-move/search-for-cell`,
         selectCellRootUrl: `/prisoner/${offenderNo}/cell-move/select-cell`,
