@@ -3,7 +3,13 @@ import { alertFlagLabels, cellMoveAlertCodes } from '../../shared/alertFlagValue
 
 import { putLastNameFirst, hasLength, groupBy, properCaseName, formatName, formatLocation } from '../../utils'
 
-import { userHasAccess, getNonAssocationsInEstablishment, renderLocationOptions, cellAttributes } from './cellMoveUtils'
+import {
+  userHasAccess,
+  getNonAssocationsInEstablishment,
+  renderLocationOptions,
+  cellAttributes,
+  translateCsra,
+} from './cellMoveUtils'
 
 const defaultSubLocationsValue = { text: 'Select area in residential unit', value: '' }
 const noAreasSelectedDropDownValue = { text: 'No areas to select', value: '' }
@@ -56,6 +62,7 @@ const getCellOccupants = async (res, { prisonApi, activeCaseLoadId, cells, nonAs
     const occupants = currentCellOccupants.filter((o) => o.assignedLivingUnitId === cell.id)
     return occupants.map((occupant) => {
       const csraInfo = cellSharingAssessments.find((rating) => rating.offenderNo === occupant.offenderNo)
+      console.log(csraInfo)
 
       const alertCodes = occupantAlerts
         .filter(
@@ -76,6 +83,7 @@ const getCellOccupants = async (res, { prisonApi, activeCaseLoadId, cells, nonAs
         ),
         csra: csraInfo && csraInfo.classification,
         csraDetailsUrl: `/prisoner/${occupant.offenderNo}/cell-move/cell-sharing-risk-assessment-details`,
+        // convertedCsra: translateCsra(prisonerDetails.csraClassificationCode),
       }
     })
   })
@@ -230,6 +238,7 @@ export default ({ oauthApi, prisonApi, whereaboutsApi }) =>
         searchForCellRootUrl: `/prisoner/${offenderNo}/cell-move/search-for-cell`,
         selectCellRootUrl: `/prisoner/${offenderNo}/cell-move/select-cell`,
         formAction: `/prisoner/${offenderNo}/cell-move/select-cell`,
+        convertedCsra: translateCsra(prisonerDetails.csraClassificationCode),
       })
     } catch (error) {
       res.locals.redirectUrl = `/prisoner/${offenderNo}/cell-move/search-for-cell`

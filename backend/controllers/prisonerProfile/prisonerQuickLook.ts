@@ -177,6 +177,7 @@ export default ({
           ]
         : []
 
+    console.log(prisonerProfileData)
     return res.render('prisonerProfile/prisonerQuickLook/prisonerQuickLook.njk', {
       prisonerProfileData,
       offenceDetailsSectionError: Boolean(

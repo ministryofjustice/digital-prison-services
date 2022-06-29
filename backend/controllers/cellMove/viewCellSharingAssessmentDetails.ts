@@ -17,6 +17,8 @@ export default ({ prisonApi, logError }) =>
       const mostRecentAssessment =
         hasLength(assessments) && assessments.sort((a, b) => b.assessmentDate.localeCompare(a.assessmentDate))[0]
 
+      console.log(mostRecentAssessment)
+
       const location =
         mostRecentAssessment &&
         mostRecentAssessment.assessmentAgencyId &&

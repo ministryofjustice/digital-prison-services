@@ -1,4 +1,5 @@
 import moment from 'moment'
+import { csraTranslations } from '../../shared/csraHelpers'
 
 export const getNonAssocationsInEstablishment = (nonAssociations) =>
   nonAssociations?.nonAssociations?.filter(
@@ -50,6 +51,10 @@ export const cellAttributes = [
   { text: 'Multiple occupancy', value: 'MO' },
 ]
 
+export const translateCsra = (csraClassificationCode: string): string => {
+  return csraTranslations[csraClassificationCode]
+}
+
 export default {
   getNonAssocationsInEstablishment,
   getBackLinkData,
@@ -57,4 +62,5 @@ export default {
   renderLocationOptions,
   getConfirmBackLinkData,
   cellAttributes,
+  translateCsra,
 }
