@@ -51,7 +51,7 @@ export default ({ oauthApi, prisonApi, whereaboutsApi }) =>
         offenderNo,
         nonAssociationLink: `/prisoner/${offenderNo}/cell-move/non-associations`,
         searchForCellRootUrl: `/prisoner/${offenderNo}/cell-move/search-for-cell`,
-        offenderDetailsUrl: `/prisoner/${offenderNo}/cell-move/offender-details`,
+        offenderDetailsUrl: `/prisoner/${offenderNo}/cell-move/prisoner-details`,
         csraDetailsUrl: `/prisoner/${offenderNo}/cell-move/cell-sharing-risk-assessment-details`,
         formAction: `/prisoner/${offenderNo}/cell-move/select-cell`,
         profileUrl: `/prisoner/${offenderNo}`,
