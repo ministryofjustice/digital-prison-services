@@ -29,7 +29,7 @@ context('A user can view non associations', () => {
   })
 
   it('Shows the correct data for non-associations', () => {
-    cy.visit(`/prisoner/${offenderNo}/cell-move/offender-details`)
+    cy.visit(`/prisoner/${offenderNo}/cell-move/prisoner-details`)
     const offenderDetailsPage = OffenderDetailsPage.verifyOnPage()
     cy.get('.govuk-summary-list--no-border').then(($section) => {
       cy.get($section)

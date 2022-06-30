@@ -8,8 +8,8 @@ const offenderDetailsPage = () =>
 
 export default {
   verifyOnPage: offenderDetailsPage,
-  goTo: offenderNo => {
-    cy.visit(`/prisoner/${offenderNo}/cell-move/offender-details`)
+  goTo: (offenderNo) => {
+    cy.visit(`/prisoner/${offenderNo}/cell-move/prisoner-details`)
     return offenderDetailsPage()
   },
 }

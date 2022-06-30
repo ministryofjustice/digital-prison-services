@@ -26,7 +26,7 @@ const controller = ({ oauthApi, prisonApi, whereaboutsApi, logError }) => {
 
   router.get('/search-for-cell', searchForCellController({ oauthApi, prisonApi, whereaboutsApi }))
   router.get('/non-associations', nonAssociationsController({ prisonApi, logError }))
-  router.get('/offender-details', offenderDetailsController({ prisonApi, logError }))
+  router.get('/prisoner-details', offenderDetailsController({ prisonApi, logError }))
   router.get('/cell-sharing-risk-assessment-details', cellSharingRiskAssessmentController({ prisonApi, logError }))
   router.get('/select-cell', selectCellController({ oauthApi, prisonApi, whereaboutsApi }))
   router.get('/confirm-cell-move', confirmCellMoveIndex)
