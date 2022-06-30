@@ -110,14 +110,14 @@
     <div class="govuk-grid-row">
       <div class="govuk-grid-column-one-half">
         {% for section in leftSections %}
-          {{ accordionSection(section.heading, section.html, loop.index, section.education) }}
+          {{ accordionSection(section.heading, section.html, loop.index, false, true) }}
         {% endfor %}
       </div>
 
       <div class="govuk-grid-column-one-half">
         {% for section in rightSections %}
           {% set overallIndex = leftSections.length + loop.index %}
-          {{ accordionSection(section.heading, section.html, overallIndex, section.education) }}
+          {{ accordionSection(section.heading, section.html, overallIndex) }}
         {% endfor %}
       </div>
     </div>

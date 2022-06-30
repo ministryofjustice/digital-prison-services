@@ -1,8 +1,9 @@
 $(function () {
-  const $accordionButton = $('.govuk-accordion__section-button.education')
+  const $workAndSkillsAccordionButton = $('.govuk-accordion__section-button.education')
   const $openAll = $('.govuk-accordion__open-all')
   const $printLink = $('.print-link')
 
+  const $neurodivergenceAccordionButton = $('.govuk-accordion__section-button.neurodivergence')
   const $neurodivergenceAccordion = $('#prisoner-accordion-heading-5')
   const $linkToNeurodiversityTab = $('#view-neurodivergence-link')
 
@@ -10,16 +11,16 @@ $(function () {
     $neurodivergenceAccordion.trigger('click')
   })
 
-  $neurodivergenceAccordion.on('click', () => {
+  $neurodivergenceAccordionButton.on('click', () => {
     const expanded = $(this).attr('aria-expanded')
     const heading = this.innerText
     const action = expanded === 'false' ? 'accordion_expanded' : 'accordion_contracted'
     gtag('event', action, {
-      event_category: 'Education',
+      event_category: 'Neurodivergence',
       event_label: heading,
     })
   })
-  $accordionButton.on('click', function () {
+  $workAndSkillsAccordionButton.on('click', function () {
     const expanded = $(this).attr('aria-expanded')
     const heading = this.innerText
     const action = expanded === 'false' ? 'accordion_expanded' : 'accordion_contracted'

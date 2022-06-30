@@ -1,9 +1,9 @@
-{% macro accordionSection(title, html, number, isEducation) %}
+{% macro accordionSection(title, html, number, isEducation, isNeurodivergence) %}
   {% set controllerId = "prisoner-accordion-heading-" + number %}
   <div class="govuk-accordion__section ">
     <div class="govuk-accordion__section-header">
       <h2 class="govuk-accordion__section-heading">
-        <span class="govuk-accordion__section-button{% if isEducation %} education{% endif %}" id="{{ controllerId }}">
+        <span class="govuk-accordion__section-button{% if isEducation %} education{% elseif isNeurodivergence %} neurodivergence {% endif %}" id="{{ controllerId }}">
           {{ title }}
         </span>
       </h2>
