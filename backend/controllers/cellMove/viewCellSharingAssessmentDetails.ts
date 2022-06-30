@@ -1,6 +1,6 @@
 import moment from 'moment'
 import { putLastNameFirst, hasLength } from '../../utils'
-import { getBackLinkData } from './cellMoveUtils'
+import { getBackLinkData, translateCsra } from './cellMoveUtils'
 
 export default ({ prisonApi, logError }) =>
   async (req, res) => {
@@ -17,8 +17,6 @@ export default ({ prisonApi, logError }) =>
       const mostRecentAssessment =
         hasLength(assessments) && assessments.sort((a, b) => b.assessmentDate.localeCompare(a.assessmentDate))[0]
 
-      console.log(mostRecentAssessment)
-
       const location =
         mostRecentAssessment &&
         mostRecentAssessment.assessmentAgencyId &&
@@ -28,7 +26,7 @@ export default ({ prisonApi, logError }) =>
         prisonerName: putLastNameFirst(firstName, lastName),
         cellLocation: (assignedLivingUnit && assignedLivingUnit.description) || 'Not entered',
         location: (location && location.description) || 'Not entered',
-        level: mostRecentAssessment && mostRecentAssessment.classification,
+        level: mostRecentAssessment && translateCsra(mostRecentAssessment.classificationCode),
         date:
           (mostRecentAssessment &&
             mostRecentAssessment.assessmentDate &&

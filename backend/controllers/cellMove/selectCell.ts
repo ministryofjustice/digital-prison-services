@@ -42,7 +42,6 @@ const getCellOccupants = async (res, { prisonApi, activeCaseLoadId, cells, nonAs
     agencyId: activeCaseLoadId,
     offenderNumbers: occupantOffenderNos,
   })
-
   const occupantAssessments = await prisonApi.getCsraAssessments(res.locals, occupantOffenderNos)
   const assessmentsGroupedByOffenderNo = occupantAssessments ? groupBy(occupantAssessments, 'offenderNo') : []
 
@@ -62,7 +61,6 @@ const getCellOccupants = async (res, { prisonApi, activeCaseLoadId, cells, nonAs
     const occupants = currentCellOccupants.filter((o) => o.assignedLivingUnitId === cell.id)
     return occupants.map((occupant) => {
       const csraInfo = cellSharingAssessments.find((rating) => rating.offenderNo === occupant.offenderNo)
-      console.log(csraInfo)
 
       const alertCodes = occupantAlerts
         .filter(
@@ -81,9 +79,8 @@ const getCellOccupants = async (res, { prisonApi, activeCaseLoadId, cells, nonAs
             nonAssociations.nonAssociations &&
             nonAssociations.nonAssociations.find((na) => na.offenderNonAssociation.offenderNo === occupant.offenderNo)
         ),
-        csra: csraInfo && csraInfo.classification,
+        csra: (csraInfo && translateCsra(csraInfo.classificationCode)) || 'Not entered',
         csraDetailsUrl: `/prisoner/${occupant.offenderNo}/cell-move/cell-sharing-risk-assessment-details`,
-        // convertedCsra: translateCsra(prisonerDetails.csraClassificationCode),
       }
     })
   })

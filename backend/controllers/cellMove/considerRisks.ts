@@ -4,6 +4,7 @@ import { cellMoveAlertCodes } from '../../shared/alertFlagValues'
 import { putLastNameFirst, formatName, indefiniteArticle, hasLength, createStringFromList } from '../../utils'
 
 import getValueByType from '../../shared/getValueByType'
+import { translateCsra } from './cellMoveUtils'
 
 const activeCellMoveAlertsExcludingDisabled = (alert) =>
   !alert.expired && cellMoveAlertCodes.includes(alert.alertCode) && alert.alertCode !== 'PEEP'
@@ -56,8 +57,8 @@ export default ({ prisonApi, raiseAnalyticsEvent }) => {
       const currentOffenderWithOccupants = [currentOffenderDetails, ...currentOccupantsDetails]
 
       const offendersCsraValues = currentOffenderWithOccupants
-        .filter((currentOccupant) => currentOccupant.csra)
-        .map((currentOccupant) => currentOccupant.csra)
+        .filter((currentOccupant) => translateCsra(currentOccupant.csraClassificationCode))
+        .map((currentOccupant) => translateCsra(currentOccupant.csraClassificationCode))
 
       const showOffendersNamesWithCsra = hasOccupants && offendersCsraValues.includes('High')
 
@@ -66,8 +67,11 @@ export default ({ prisonApi, raiseAnalyticsEvent }) => {
       )
 
       const offendersFormattedNamesWithCsra = currentOffenderWithOccupants.map(
-        ({ firstName, lastName, csra = missingDataString }) => `${formatName(firstName, lastName)} is CSRA ${csra}.`
+        ({ firstName, lastName, csraClassificationCode = missingDataString }) =>
+          `${formatName(firstName, lastName)} is CSRA ${translateCsra(csraClassificationCode)}.`
       )
+
+      console.log(offendersFormattedNamesWithCsra)
 
       const currentOffenderName = formatName(currentOffenderDetails.firstName, currentOffenderDetails.lastName)
 
