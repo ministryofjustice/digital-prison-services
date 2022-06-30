@@ -71,8 +71,6 @@ export default ({ prisonApi, raiseAnalyticsEvent }) => {
           `${formatName(firstName, lastName)} is CSRA ${translateCsra(csraClassificationCode)}.`
       )
 
-      console.log(offendersFormattedNamesWithCsra)
-
       const currentOffenderName = formatName(currentOffenderDetails.firstName, currentOffenderDetails.lastName)
 
       // Get a list of sexualities involved
