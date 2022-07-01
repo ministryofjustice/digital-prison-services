@@ -484,6 +484,7 @@ describe('Select a cell', () => {
           assessmentCode: 'CSR',
           assessmentComment: 'test',
           classification: 'High',
+          classificationCode: 'HI',
         },
         {
           offenderNo: 'A333333',
@@ -491,6 +492,7 @@ describe('Select a cell', () => {
           assessmentCode: 'CSR',
           assessmentComment: 'test',
           classification: 'Standard',
+          classificationCode: 'STANDARD',
         },
       ])
 
@@ -585,7 +587,7 @@ describe('Select a cell', () => {
                   ],
                   nonAssociation: false,
                   cellId: 1,
-                  csra: undefined,
+                  csra: 'Not entered',
                   csraDetailsUrl: '/prisoner/A111111/cell-move/cell-sharing-risk-assessment-details',
                   name: 'Doe1, Bob1',
                   viewOffenderDetails: '/prisoner/A111111/cell-move/prisoner-details',
@@ -633,6 +635,7 @@ describe('Select a cell', () => {
           assessmentDescription: 'CSR',
           assessmentComment: 'test',
           classification: 'High',
+          classificationCode: 'HI',
           assessmentDate: '1980-01-01',
         },
         {
@@ -641,6 +644,7 @@ describe('Select a cell', () => {
           assessmentDescription: 'CSR',
           assessmentComment: 'test',
           classification: 'Standard',
+          classificationCode: 'STANDARD',
           assessmentDate: '2020-01-01',
         },
       ])
@@ -784,7 +788,7 @@ describe('Select a cell', () => {
                   alerts: [],
                   nonAssociation: true,
                   cellId: 1,
-                  csra: undefined,
+                  csra: 'Not entered',
                   csraDetailsUrl: '/prisoner/A111111/cell-move/cell-sharing-risk-assessment-details',
                   name: 'Doe1, Bob1',
                   viewOffenderDetails: '/prisoner/A111111/cell-move/prisoner-details',
