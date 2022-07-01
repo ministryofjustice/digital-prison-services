@@ -52,7 +52,7 @@ export const cellAttributes = [
 ]
 
 export const translateCsra = (csraClassificationCode: string): string => {
-  if (csraClassificationCode === 'not entered') return 'not entered'
+  if (!csraClassificationCode) return 'not entered'
   return csraTranslations[csraClassificationCode]
 }
 

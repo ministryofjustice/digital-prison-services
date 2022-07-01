@@ -57,7 +57,7 @@ export default ({ prisonApi, raiseAnalyticsEvent }) => {
       const currentOffenderWithOccupants = [currentOffenderDetails, ...currentOccupantsDetails]
 
       const offendersCsraValues = currentOffenderWithOccupants
-        .filter((currentOccupant) => translateCsra(currentOccupant.csraClassificationCode))
+        .filter((currentOccupant) => currentOccupant.csraClassificationCode)
         .map((currentOccupant) => translateCsra(currentOccupant.csraClassificationCode))
 
       const showOffendersNamesWithCsra = hasOccupants && offendersCsraValues.includes('High')
@@ -67,7 +67,7 @@ export default ({ prisonApi, raiseAnalyticsEvent }) => {
       )
 
       const offendersFormattedNamesWithCsra = currentOffenderWithOccupants.map(
-        ({ firstName, lastName, csraClassificationCode = missingDataString }) =>
+        ({ firstName, lastName, csraClassificationCode }) =>
           `${formatName(firstName, lastName)} is CSRA ${translateCsra(csraClassificationCode)}.`
       )
 
