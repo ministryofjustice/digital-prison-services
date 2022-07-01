@@ -43,7 +43,7 @@ describe('view CSRA details', () => {
       {
         bookingId: 1234,
         offenderNo,
-        classificationCode: 'HIGH',
+        classificationCode: 'HI',
         classification: 'High',
         assessmentCode: 'CSRF',
         assessmentDescription: 'CSR Full',

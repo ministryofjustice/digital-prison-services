@@ -1,7 +1,13 @@
 import { alertFlagLabels, cellMoveAlertCodes } from '../../shared/alertFlagValues'
 import { putLastNameFirst, formatName, formatLocation } from '../../utils'
 
-import { userHasAccess, getNonAssocationsInEstablishment, renderLocationOptions, cellAttributes } from './cellMoveUtils'
+import {
+  userHasAccess,
+  getNonAssocationsInEstablishment,
+  renderLocationOptions,
+  cellAttributes,
+  translateCsra,
+} from './cellMoveUtils'
 
 export default ({ oauthApi, prisonApi, whereaboutsApi }) =>
   async (req, res) => {
@@ -55,6 +61,7 @@ export default ({ oauthApi, prisonApi, whereaboutsApi }) =>
         csraDetailsUrl: `/prisoner/${offenderNo}/cell-move/cell-sharing-risk-assessment-details`,
         formAction: `/prisoner/${offenderNo}/cell-move/select-cell`,
         profileUrl: `/prisoner/${offenderNo}`,
+        convertedCsra: translateCsra(prisonerDetails.csraClassificationCode),
       })
     } catch (error) {
       res.locals.homeUrl = `/prisoner/${offenderNo}`

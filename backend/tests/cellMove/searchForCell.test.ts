@@ -28,6 +28,7 @@ describe('select location', () => {
     firstName: 'Test',
     lastName: 'User',
     csra: 'High',
+    csraClassificationCode: 'HI',
     agencyId: 'MDI',
     assessments: [],
     assignedLivingUnit: {},
@@ -219,6 +220,17 @@ describe('select location', () => {
               description: 'No cell allocated',
             },
           },
+        })
+      )
+    })
+
+    it('shows the correct CSRA rating', async () => {
+      await controller(req, res)
+
+      expect(res.render).toHaveBeenCalledWith(
+        'cellMove/searchForCell.njk',
+        expect.objectContaining({
+          convertedCsra: 'High',
         })
       )
     })

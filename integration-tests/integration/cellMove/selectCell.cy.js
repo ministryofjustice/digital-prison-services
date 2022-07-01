@@ -46,6 +46,7 @@ context('A user can select a cell', () => {
           assessmentComment: 'test',
           assessmentDate: '2020-01-10',
           classification: 'Standard',
+          classificationCode: 'STANDARD',
         },
       ],
     })

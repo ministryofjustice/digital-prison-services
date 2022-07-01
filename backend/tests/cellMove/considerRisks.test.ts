@@ -37,6 +37,7 @@ describe('move validation', () => {
     firstName: 'Test',
     lastName: 'User',
     csra: 'High',
+    csraClassificationCode: 'HI',
     agencyId: 'MDI',
     categoryCode: 'A',
     assessments: [],
@@ -193,6 +194,7 @@ describe('move validation', () => {
     firstName: 'Occupant',
     lastName: 'One',
     csra: 'High',
+    csraClassificationCode: 'HI',
     agencyId: 'MDI',
     offenderNo: 'A12346',
     assessments: [],
@@ -293,6 +295,7 @@ describe('move validation', () => {
     categoryCode: 'B',
     lastName: 'Two',
     csra: 'Standard',
+    csraClassificationCode: 'STANDARD',
     agencyId: 'MDI',
     offenderNo: 'A12347',
     assessments: [],
@@ -574,8 +577,16 @@ describe('move validation', () => {
 
     it('Should not show CSRA messages when both prisoner and occupants are standard', async () => {
       prisonApi.getDetails
-        .mockResolvedValueOnce({ ...getCurrentOffenderDetailsResponse, csra: 'Standard' })
-        .mockResolvedValueOnce({ ...getCurrentOccupierDetailsResponse, csra: 'Standard' })
+        .mockResolvedValueOnce({
+          ...getCurrentOffenderDetailsResponse,
+          csra: 'Standard',
+          csraClassificationCode: 'STANDARD',
+        })
+        .mockResolvedValueOnce({
+          ...getCurrentOccupierDetailsResponse,
+          csra: 'Standard',
+          csraClassificationCode: 'STANDARD',
+        })
       prisonApi.getInmatesAtLocation.mockResolvedValue([{ offenderNo: 'A12346' }])
       await controller.index(req, res)
 
@@ -584,6 +595,31 @@ describe('move validation', () => {
         expect.objectContaining({
           showOffendersNamesWithCsra: false,
           showRisks: true,
+        })
+      )
+    })
+
+    it('Should not show CSRA message when a pisoner or occupant has no csra rating', async () => {
+      prisonApi.getDetails
+        .mockResolvedValueOnce({
+          ...getCurrentOffenderDetailsResponse,
+          csra: undefined,
+          csraClassificationCode: undefined,
+        })
+        .mockResolvedValueOnce({
+          ...getCurrentOccupierDetailsResponse,
+          csra: 'Standard',
+          csraClassificationCode: 'STANDARD',
+        })
+      prisonApi.getInmatesAtLocation.mockResolvedValue([{ offenderNo: 'A12346' }])
+      await controller.index(req, res)
+
+      expect(res.render).toHaveBeenCalledWith(
+        'cellMove/considerRisks.njk',
+        expect.objectContaining({
+          showOffendersNamesWithCsra: false,
+          showRisks: true,
+          offendersFormattedNamesWithCsra: ['Test User is CSRA not entered.', 'Occupant One is CSRA Standard.'],
         })
       )
     })
