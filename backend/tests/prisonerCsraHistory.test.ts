@@ -136,6 +136,14 @@ describe('Prisoner CSRA History', () => {
         breadcrumbPrisonerName: 'Smith, John',
         csraOptions: [
           {
+            text: 'Low',
+            value: 'LOW',
+          },
+          {
+            text: 'Medium',
+            value: 'MED',
+          },
+          {
             text: 'Standard',
             value: 'STANDARD',
           },
