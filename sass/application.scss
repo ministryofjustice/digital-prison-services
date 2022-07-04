@@ -150,3 +150,10 @@ pre {
 .app-\!-font-family-tabular-bold {
   @include govuk-font($size: false, $tabular: true, $weight: bold);
 }
+
+.csra-history-table {
+  table {
+    table-layout: fixed;
+    word-break: break-word;
+  }
+}
