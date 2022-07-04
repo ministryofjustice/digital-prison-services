@@ -1,6 +1,8 @@
 import { putLastNameFirst, formatName, formatTimestampToDate, sortByDateTime } from '../../utils'
 
 const csraOptions = [
+  { value: 'LOW', text: 'Low' },
+  { value: 'MED', text: 'Medium' },
   { value: 'STANDARD', text: 'Standard' },
   { value: 'HI', text: 'High' },
 ]
