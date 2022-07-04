@@ -62,17 +62,19 @@
   </form>
 
   {% if rows.length %}
-    {{ govukTable({
-      head: [
-        { text: "Date" },
-        { text: "CSRA" },
-        { text: "Location" },
-        { text: "Comments" },
-        { html: '<span class="govuk-visually-hidden">Review link</span>' }
-      ],
-      rows: rows,
-      attributes: { "data-test": "csra-table" }
-    }) }}
+    <div class="csra-history-table">
+      {{ govukTable({
+        head: [
+          { text: "Date", classes: 'govuk-!-width-one-quarter' },
+          { text: "CSRA" },
+          { text: "Location", classes: 'govuk-!-width-one-quarter' },
+          { text: "Comments", classes: 'govuk-!-width-one-half' },
+          { html: '<span class="govuk-visually-hidden">Review link</span>' }
+        ],
+        rows: rows,
+        attributes: { "data-test": "csra-table" }
+      }) }}
+    </div>
   {% else %}
     <p class="govuk-body" data-test="no-results-message">There are no CSRAs to display.</p>
   {% endif %}
