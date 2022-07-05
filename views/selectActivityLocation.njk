@@ -43,6 +43,7 @@
                         {{ datePicker({
                             id: 'date',
                             label: 'Date',
+                            labelClasses: "govuk-!-font-weight-bold",
                             name: 'date',
                             date: date
                         }) }}
@@ -54,7 +55,8 @@
                             name: 'period',
                             id: 'period',
                             label: {
-                                text: "Period"
+                                text: "Period",
+                                classes: "govuk-!-font-weight-bold"
                             },
                             items: [
                                 {
@@ -73,12 +75,20 @@
                         }) }}
                     </div>
                 </div>
+            </div>
+        </div>
 
+        <div class="govuk-grid-row">
+            <div class="govuk-grid-column-two-thirds">
                 {{ govukSelect({
                     name: 'currentLocation',
                     id: 'current-location',
                     label: {
-                        text: "Select a location"
+                        text: "Select a location",
+                        classes: "govuk-!-font-weight-bold"
+                    },
+                    hint: {
+                        text: 'Not all locations will show in this list. You’ll only see the locations where there are activities or appointments happening at this time.'
                     },
                     items: locationDropdownValues | addDefaultSelectedVale('--Select--', true),
                     errorMessage: errors | findError('current-location')
