@@ -360,12 +360,22 @@ export const attendanceStatisticsFactory = (oauthApi, prisonApi, whereaboutsApi)
       )
     }
 
-    const suspendedActivities = await prisonApi.getOffenderSuspendedActivitiesOverDateRange(res.locals, {
-      agencyId,
-      fromDate: formattedFromDate,
-      toDate: formattedToDate,
-      period: period === 'AM_PM' ? '' : period,
-    })
+    const getSuspendedActivities = async (filteredPeriod) => {
+      return prisonApi.getOffenderSuspendedActivitiesOverDateRange(res.locals, {
+        agencyId,
+        fromDate: formattedFromDate,
+        toDate: formattedToDate,
+        period: filteredPeriod,
+      })
+    }
+
+    const suspendedActivities = await (async () => {
+      if (period === 'AM_PM') {
+        const [AM, PM] = await Promise.all([getSuspendedActivities('AM'), getSuspendedActivities('PM')])
+        return [...AM, ...PM]
+      }
+      return getSuspendedActivities(period)
+    })()
 
     const totalOffenders = new Set(suspendedActivities.map((activity) => activity.bookingId)).size
 
