@@ -625,13 +625,13 @@ describe('Attendance reason statistics', () => {
 
   describe('Suspended Controller', () => {
     beforeEach(() => {
-      prisonApi.getOffenderSuspendedActivitiesOverDateRange.mockReturnValue([
+      prisonApi.getOffenderSuspendedActivitiesOverDateRange.mockReturnValueOnce([
         {
           bookingId: 1133341,
           offenderNo: 'G8974UK',
           eventId: 3,
           cellLocation: 'LEI-1',
-          startTime: '2019-10-10T14:00:00',
+          startTime: '2019-10-10T10:00:00',
           timeSlot: 'AM',
           firstName: 'Adam',
           lastName: 'Smith',
@@ -643,7 +643,7 @@ describe('Attendance reason statistics', () => {
           offenderNo: 'G8975UK',
           eventId: 4,
           cellLocation: 'LEI-2',
-          startTime: '2019-10-10T14:00:00',
+          startTime: '2019-10-10T11:00:00',
           timeSlot: 'AM',
           firstName: 'Offender',
           lastName: 'Two',
@@ -655,10 +655,36 @@ describe('Attendance reason statistics', () => {
           offenderNo: 'G8976UK',
           eventId: 5,
           cellLocation: 'LEI-3',
-          startTime: '2019-10-10T14:00:00',
+          startTime: '2019-10-10T09:00:00',
           timeSlot: 'AM',
           firstName: 'Offender',
           lastName: 'Three',
+          comment: 'Cleaner',
+          suspended: true,
+        },
+      ])
+      prisonApi.getOffenderSuspendedActivitiesOverDateRange.mockReturnValueOnce([
+        {
+          bookingId: 1133344,
+          offenderNo: 'G8976UK',
+          eventId: 6,
+          cellLocation: 'LEI-3',
+          startTime: '2019-10-10T14:00:00',
+          timeSlot: 'PM',
+          firstName: 'Offender',
+          lastName: 'Four',
+          comment: 'Cleaner',
+          suspended: true,
+        },
+        {
+          bookingId: 1133345,
+          offenderNo: 'G8976UK',
+          eventId: 7,
+          cellLocation: 'LEI-3',
+          startTime: '2019-10-10T16:00:00',
+          timeSlot: 'PM',
+          firstName: 'Offender',
+          lastName: 'Five',
           comment: 'Cleaner',
           suspended: true,
         },
@@ -686,6 +712,33 @@ describe('Attendance reason statistics', () => {
           {
             eventId: 5,
             bookingId: 1133343,
+            eventDate: '2019-10-10',
+            attended: true,
+            paid: true,
+            absentReason: undefined,
+            comments: '',
+          },
+          {
+            eventId: 6,
+            bookingId: 1133344,
+            eventDate: '2019-10-10',
+            attended: false,
+            paid: true,
+            absentReason: 'AcceptableAbsence',
+            comments: 'Asked nicely.',
+          },
+          {
+            eventId: 7,
+            bookingId: 1133345,
+            eventDate: '2019-10-10',
+            attended: false,
+            paid: false,
+            absentReason: 'Refused',
+            comments: 'Did not ask nicely',
+          },
+          {
+            eventId: 8,
+            bookingId: 1133346,
             eventDate: '2019-10-10',
             attended: true,
             paid: true,
@@ -786,8 +839,119 @@ describe('Attendance reason statistics', () => {
             { text: 'Yes' },
           ],
         ],
+
         totalRecords: 3,
         totalOffenders: 3,
+        userRoles: undefined,
+      })
+    })
+    it('should recieve the correct number of suspended activites for the chosen AM_PM period, not including ED', async () => {
+      const req = { query: { agencyId, fromDate, toDate, period: 'AM_PM' } }
+      const res = { locals: {}, render: jest.fn() }
+
+      const { attendanceStatisticsSuspendedList } = attendanceStatisticsFactory(oauthApi, prisonApi, whereaboutsApi)
+
+      await attendanceStatisticsSuspendedList(req, res)
+
+      expect(prisonApi.getOffenderSuspendedActivitiesOverDateRange).toHaveBeenCalledWith(res.locals, {
+        agencyId,
+        fromDate: '2019-10-10',
+        toDate: '2019-10-11',
+        period: 'AM',
+      })
+      expect(prisonApi.getOffenderSuspendedActivitiesOverDateRange).toHaveBeenCalledWith(res.locals, {
+        agencyId,
+        fromDate: '2019-10-10',
+        toDate: '2019-10-11',
+        period: 'PM',
+      })
+      expect(prisonApi.getOffenderSuspendedActivitiesOverDateRange).toHaveBeenCalledTimes(2)
+      expect(res.render).toHaveBeenCalledWith('attendanceStatisticsSuspendedList.njk', {
+        user: {
+          activeCaseLoad: {
+            description: 'Leeds (HMP)',
+            id: 'LEI',
+          },
+          displayName: 'User Name',
+        },
+        allCaseloads: [
+          {
+            caseLoadId: 'LEI',
+            currentlyActive: true,
+            description: 'Leeds (HMP)',
+          },
+        ],
+        dashboardUrl:
+          '/manage-prisoner-whereabouts/attendance-reason-statistics?agencyId=LEI&period=AM_PM&fromDate=10/10/2019&toDate=11/10/2019',
+        caseLoadId: 'LEI',
+        title: 'Suspended',
+        displayDate: '10 October 2019 to 11 October 2019',
+        displayPeriod: 'AM and PM',
+        offendersData: [
+          [
+            {
+              html: '<a href="/prisoner/G8974UK" class="govuk-link">Smith, Adam</a>',
+              attributes: {
+                'data-sort-value': 'Smith',
+              },
+            },
+            { text: 'G8974UK' },
+            { text: 'LEI-1' },
+            { text: 'Cleaner' },
+            { text: 'Yes - acceptable absence' },
+          ],
+          [
+            {
+              html: '<a href="/prisoner/G8975UK" class="govuk-link">Two, Offender</a>',
+              attributes: {
+                'data-sort-value': 'Two',
+              },
+            },
+            { text: 'G8975UK' },
+            { text: 'LEI-2' },
+            { text: 'Cleaner' },
+            { text: 'No - refused' },
+          ],
+          [
+            {
+              html: '<a href="/prisoner/G8976UK" class="govuk-link">Three, Offender</a>',
+              attributes: {
+                'data-sort-value': 'Three',
+              },
+            },
+            { text: 'G8976UK' },
+            { text: 'LEI-3' },
+            { text: 'Cleaner' },
+            { text: 'Yes' },
+          ],
+          [
+            {
+              attributes: {
+                'data-sort-value': 'Four',
+              },
+              html: '<a href="/prisoner/G8976UK" class="govuk-link">Four, Offender</a>',
+            },
+            { text: 'G8976UK' },
+            { text: 'LEI-3' },
+            { text: 'Cleaner' },
+            { text: 'Yes - acceptable absence' },
+          ],
+          [
+            {
+              attributes: {
+                'data-sort-value': 'Five',
+              },
+              html: '<a href="/prisoner/G8976UK" class="govuk-link">Five, Offender</a>',
+            },
+            { text: 'G8976UK' },
+            { text: 'LEI-3' },
+            { text: 'Cleaner' },
+            { text: 'No - refused' },
+          ],
+        ],
+
+        totalRecords: 5,
+        totalOffenders: 5,
         userRoles: undefined,
       })
     })
