@@ -52,6 +52,7 @@ import { cacheFactory } from './utils/singleValueInMemoryCache'
 import asyncMiddleware from './middleware/asyncHandler'
 
 import whereaboutsRouter from './routes/whereabouts/whereaboutsRouter'
+import { registeredBackLinkServices, saveBackLink } from './controllers/backLink'
 
 const router = express.Router()
 
@@ -310,34 +311,7 @@ const setup = ({
     })
   )
 
-  router.get('/save-referrer', (req, res) => {
-    const serviceDetailsMap = [
-      {
-        name: 'welcome-people-into-prison',
-        hostname: 'https://welcome-dev.prison.service.justice.gov.uk',
-        defaultBackLinkText: 'Back to Welcome people into prison',
-      },
-    ]
-    interface RefererQueryParams {
-      service: string
-      returnResource: string
-      toResource: string
-      backLinkText: string
-    }
-    const { service, returnResource, toResource, backLinkText }: RefererQueryParams =
-      req.query as unknown as RefererQueryParams
-
-    if (!service || !returnResource || !toResource) throw new Error('Required query parameters missing')
-
-    const userBackLink = serviceDetailsMap.find((e) => e.name === service)
-    if (!userBackLink) throw new Error(`Could not find service: [${service}]`)
-
-    req.session.userBackLink = {
-      url: userBackLink.hostname + returnResource,
-      text: backLinkText || userBackLink.defaultBackLinkText,
-    }
-    res.redirect(toResource)
-  })
+  router.get('/save-backlink', saveBackLink(registeredBackLinkServices))
 
   return router
 }

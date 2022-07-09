@@ -134,6 +134,46 @@ const quickLookFullDetails = {
   profileInformation: [{ type: 'NAT', resultValue: 'British' }],
 }
 
+context('Backlink in Prisoner Profile', () => {
+  before(() => {
+    cy.task('reset')
+    cy.task('stubSignIn', { username: 'ITAG_USER', caseload: 'MDI', caseloads: [] })
+    cy.signIn()
+
+    cy.task('stubPrisonerProfileHeaderData', {
+      offenderBasicDetails,
+      offenderFullDetails,
+      iepSummary: {},
+      caseNoteSummary: {},
+      offenderNo,
+    })
+  })
+
+  it('Should display default backlink text for WPIP on prisoner profile when redirected from /save-backlink', () => {
+    cy.visit(
+      `/save-backlink?service=welcome-people-into-prison&returnResource=/return&toResource=/prisoner/${offenderNo}`
+    )
+
+    prisonerQuickLookPage.verifyOnPage('Smith, John')
+
+    cy.get('[data-test="back-link"]')
+      .contains('Back to Welcome people into prison')
+      .should('have.attr', 'href', 'https://welcome-people-into-prison/return')
+  })
+
+  it('Should display custom backlink text for WPIP on prisoner profile when redirected from /save-backlink', () => {
+    cy.visit(
+      `/save-backlink?service=welcome-people-into-prison&returnResource=/return-with-custom-text&toResource=/prisoner/${offenderNo}&backLinkText=Custom backlink text`
+    )
+
+    prisonerQuickLookPage.verifyOnPage('Smith, John')
+
+    cy.get('[data-test="back-link"]')
+      .contains('Custom backlink text')
+      .should('have.attr', 'href', 'https://welcome-people-into-prison/return-with-custom-text')
+  })
+})
+
 context('Prisoner quick look data retrieval errors', () => {
   before(() => {
     cy.clearCookies()
