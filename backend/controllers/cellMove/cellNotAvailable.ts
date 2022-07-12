@@ -1,6 +1,6 @@
 import { putLastNameFirst } from '../../utils'
 
-export default ({ prisonApi }) =>
+export default ({ prisonApi, logError }) =>
   async (req, res) => {
     const { offenderNo } = req.params
     const { cellDescription } = req.query

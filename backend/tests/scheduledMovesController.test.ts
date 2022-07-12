@@ -474,8 +474,8 @@ describe('Scheduled moves controller', () => {
   })
 
   afterEach(() => {
-    // @ts-expect-error ts-migrate(2339)
-    if (Date.now.mockRestore) Date.now.mockRestore()
+    const spy = jest.spyOn(Date, 'now')
+    spy.mockRestore()
   })
 
   it('renders the correct template', async () => {

@@ -1,7 +1,9 @@
 import temporaryMoveController from '../../controllers/cellMove/cellMoveTemporaryMove'
 
 describe('Move someone temporarily out of a cell', () => {
-  const prisonApi = {}
+  const prisonApi = {
+    getInmates: jest.fn(),
+  }
 
   let req
   let res
@@ -28,7 +30,6 @@ describe('Move someone temporarily out of a cell', () => {
       status: jest.fn(),
     }
 
-    // @ts-expect-error ts-migrate(2339) FIXME: Property 'getInmates' does not exist on type '{}'.
     prisonApi.getInmates = jest.fn().mockReturnValue([])
 
     controller = temporaryMoveController({ prisonApi })
@@ -42,7 +43,6 @@ describe('Move someone temporarily out of a cell', () => {
 
       await controller(req, res)
 
-      // @ts-expect-error ts-migrate(2339) FIXME: Property 'getInmates' does not exist on type '{}'.
       expect(prisonApi.getInmates).toHaveBeenCalledWith(
         {
           ...res.locals,
@@ -90,7 +90,6 @@ describe('Move someone temporarily out of a cell', () => {
           alertsDetails: ['RSS', 'XC'],
         },
       ]
-      // @ts-expect-error ts-migrate(2339) FIXME: Property 'getInmates' does not exist on type '{}'.
       prisonApi.getInmates = jest.fn().mockReturnValue(inmates)
 
       req.query = {
