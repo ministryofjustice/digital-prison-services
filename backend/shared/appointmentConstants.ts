@@ -1,4 +1,4 @@
-import moment from 'moment'
+import moment, { Moment } from 'moment'
 import { DAY_MONTH_YEAR } from '../../common/dateHelpers'
 import { calculateEndDate } from '../../common/BulkAppointments/RecurringAppointments'
 
@@ -17,7 +17,17 @@ export const prepostDurations = {
   60: '1 hour',
 }
 
-export const endRecurringEndingDate = ({ date, startTime, times, repeats }) => {
+export const endRecurringEndingDate = ({
+  date,
+  startTime,
+  times,
+  repeats,
+}: {
+  date: string
+  startTime?: string | Moment
+  times: string
+  repeats: string
+}): Record<any, any> => {
   const recurringStartTime = (startTime && moment(startTime)) || moment(date, DAY_MONTH_YEAR).hours(0).minutes(0)
 
   const endOfPeriod = calculateEndDate({

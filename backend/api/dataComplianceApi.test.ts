@@ -1,6 +1,6 @@
 import { dataComplianceApiFactory } from './dataComplianceApi'
 
-const client = {}
+const client = {} as any
 const dataComplianceApi = dataComplianceApiFactory(client)
 const context = { some: 'context' }
 
@@ -10,13 +10,11 @@ describe('data compliance api', () => {
     let actual
 
     beforeEach(async () => {
-      // @ts-expect-error ts-migrate(2339) FIXME: Property 'get' does not exist on type '{}'.
       client.get = jest.fn().mockResolvedValue({ body: responseBody })
       actual = await dataComplianceApi.getOffenderRetentionReasons(context)
     })
 
     it('should call the correct endpoint', () => {
-      // @ts-expect-error ts-migrate(2339) FIXME: Property 'get' does not exist on type '{}'.
       expect(client.get).toBeCalledWith(context, '/retention/offenders/retention-reasons')
     })
 
@@ -30,39 +28,33 @@ describe('data compliance api', () => {
     let actual
 
     beforeEach(async () => {
-      // @ts-expect-error ts-migrate(2339) FIXME: Property 'get' does not exist on type '{}'.
       client.get = jest.fn().mockResolvedValue({ headers: { etag: '"0"' }, body: { some: 'response' } })
       actual = await dataComplianceApi.getOffenderRetentionRecord(context, 'A1234BC')
     })
 
     it('should call the correct endpoint', () => {
-      // @ts-expect-error ts-migrate(2339) FIXME: Property 'get' does not exist on type '{}'.
       expect(client.get).toBeCalledWith(context, '/retention/offenders/A1234BC')
     })
 
     it('handles jetty bug where gzip encoding causes etag suffix', async () => {
-      // @ts-expect-error ts-migrate(2339) FIXME: Property 'get' does not exist on type '{}'.
       client.get = jest.fn().mockResolvedValue({ headers: { etag: '"0--gzip"' }, body: { some: 'response' } })
       actual = await dataComplianceApi.getOffenderRetentionRecord(context, 'A1234BC')
       expect(actual).toEqual(responseBody)
     })
 
     it('handles weak etag prefix', async () => {
-      // @ts-expect-error ts-migrate(2339) FIXME: Property 'get' does not exist on type '{}'.
       client.get = jest.fn().mockResolvedValue({ headers: { etag: 'W/"0"' }, body: { some: 'response' } })
       actual = await dataComplianceApi.getOffenderRetentionRecord(context, 'A1234BC')
       expect(actual).toEqual(responseBody)
     })
 
     it('should return null if 404 received', async () => {
-      // @ts-expect-error ts-migrate(2339) FIXME: Property 'get' does not exist on type '{}'.
       client.get = jest.fn().mockRejectedValue({ response: { status: 404 } })
       const errorResponse = await dataComplianceApi.getOffenderRetentionRecord(context, 'A1234BC')
       expect(errorResponse).toEqual(null)
     })
 
     it('should propagate error if other status code received', async () => {
-      // @ts-expect-error ts-migrate(2339) FIXME: Property 'get' does not exist on type '{}'.
       client.get = jest.fn().mockRejectedValue({ response: { status: 418 } })
       expect.assertions(1)
       try {
@@ -75,7 +67,6 @@ describe('data compliance api', () => {
 
   describe('put offender retention record', () => {
     it('should call the correct endpoint', async () => {
-      // @ts-expect-error ts-migrate(2339) FIXME: Property 'put' does not exist on type '{}'.
       client.put = jest.fn()
 
       const version = '"0"'
@@ -89,7 +80,6 @@ describe('data compliance api', () => {
 
       await dataComplianceApi.putOffenderRetentionRecord(context, 'A1234BC', body, version)
 
-      // @ts-expect-error ts-migrate(2339) FIXME: Property 'put' does not exist on type '{}'.
       expect(client.put).toBeCalledWith(expectedContext, '/retention/offenders/A1234BC', body)
     })
   })

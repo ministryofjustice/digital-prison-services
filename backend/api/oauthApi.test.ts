@@ -5,7 +5,7 @@ const clientId = 'clientId'
 const url = 'http://localhost/'
 const clientSecret = 'clientSecret'
 
-const client = {}
+const client = {} as any
 const oauthApi = oauthApiFactory(client, { url, clientId, clientSecret })
 const mock = nock(url, { reqheaders: { 'Content-Type': 'application/x-www-form-urlencoded' } })
 const context = { some: 'context' }
@@ -40,7 +40,6 @@ describe('oauthApi tests', () => {
     let actual
 
     beforeEach(() => {
-      // @ts-expect-error ts-migrate(2339) FIXME: Property 'get' does not exist on type '{}'.
       client.get = jest.fn().mockReturnValue({
         then: () => userDetails,
       })
@@ -51,7 +50,6 @@ describe('oauthApi tests', () => {
       expect(actual).toEqual(userDetails)
     })
     it('should call user endpoint', () => {
-      // @ts-expect-error ts-migrate(2339) FIXME: Property 'get' does not exist on type '{}'.
       expect(client.get).toBeCalledWith(context, '/api/user/me')
     })
   })
@@ -62,7 +60,6 @@ describe('oauthApi tests', () => {
     let actual
 
     beforeEach(() => {
-      // @ts-expect-error ts-migrate(2339) FIXME: Property 'get' does not exist on type '{}'.
       client.get = jest.fn().mockReturnValue({
         then: () => userDetails,
       })
@@ -73,7 +70,6 @@ describe('oauthApi tests', () => {
       expect(actual).toEqual(userDetails)
     })
     it('should call user endpoint', () => {
-      // @ts-expect-error ts-migrate(2339) FIXME: Property 'get' does not exist on type '{}'.
       expect(client.get).toBeCalledWith(context, `/api/user/${username}`)
     })
   })
@@ -84,7 +80,6 @@ describe('oauthApi tests', () => {
     let actual
 
     beforeEach(() => {
-      // @ts-expect-error ts-migrate(2339) FIXME: Property 'get' does not exist on type '{}'.
       client.get = jest.fn().mockReturnValue({
         then: () => userEmail,
       })
@@ -95,7 +90,6 @@ describe('oauthApi tests', () => {
       expect(actual).toEqual(userEmail)
     })
     it('should call user endpoint', () => {
-      // @ts-expect-error ts-migrate(2339) FIXME: Property 'get' does not exist on type '{}'.
       expect(client.get).toBeCalledWith(context, `/api/user/${username}/email`)
     })
   })
@@ -105,7 +99,6 @@ describe('oauthApi tests', () => {
     let actual
 
     beforeEach(() => {
-      // @ts-expect-error ts-migrate(2339) FIXME: Property 'get' does not exist on type '{}'.
       client.get = jest.fn().mockReturnValue({
         then: () => roles,
       })
@@ -116,7 +109,6 @@ describe('oauthApi tests', () => {
       expect(actual).toEqual(roles)
     })
     it('should call user endpoint', () => {
-      // @ts-expect-error ts-migrate(2339) FIXME: Property 'get' does not exist on type '{}'.
       expect(client.get).toBeCalledWith(context, '/api/user/me/roles')
     })
   })

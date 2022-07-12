@@ -25,8 +25,7 @@ describe('offender search api tests', () => {
         }
         const results = [{ prisonerNumber: 'A1234BC' }]
         mock.post('/global-search?size=2&page=5').reply(200, { content: results, pageable: {} })
-        // @ts-expect-error ts-migrate(2554) FIXME: Expected 3 arguments, but got 2.
-        const data = await offenderSearchApi.globalSearch(context, { search: 'params' })
+        const data = await offenderSearchApi.globalSearch(context, { search: 'params' }, null)
         expect(data.length).toEqual(1)
       })
 
@@ -44,22 +43,19 @@ describe('offender search api tests', () => {
       })
 
       it('Sets pagination in context from response', async () => {
-        const context = {}
+        const context = {} as any
         const results = [{ prisonerNumber: 'A1234BC' }]
         mock
           .post('/global-search?size=20')
           .reply(200, { content: results, pageable: { pageSize: 10, offset: 3 }, totalElements: 55 })
-        // @ts-expect-error ts-migrate(2554) FIXME: Expected 3 arguments, but got 2.
-        await offenderSearchApi.globalSearch(context, { search: 'params' })
-        // @ts-expect-error ts-migrate(2339) FIXME: Property 'responseHeaders' does not exist on type ... Remove this comment to see the full error message
+        await offenderSearchApi.globalSearch(context, { search: 'params' }, null)
         expect(context.responseHeaders).toEqual({ 'page-offset': 3, 'page-limit': 10, 'total-records': 55 })
       })
 
       it('Calls global search with minimal request / response', async () => {
         const results = [{ prisonerNumber: 'A1234BC' }]
         mock.post('/global-search?size=20').reply(200, { content: results, pageable: {} })
-        // @ts-expect-error ts-migrate(2554) FIXME: Expected 3 arguments, but got 2.
-        const data = await offenderSearchApi.globalSearch({}, { search: 'params' })
+        const data = await offenderSearchApi.globalSearch({}, { search: 'params' }, null)
         expect(data).toEqual([
           {
             offenderNo: 'A1234BC',
@@ -102,8 +98,7 @@ describe('offender search api tests', () => {
           },
         ]
         mock.post('/global-search?size=20').reply(200, { content: results, pageable: {} })
-        // @ts-expect-error ts-migrate(2554) FIXME: Expected 3 arguments, but got 2.
-        const data = await offenderSearchApi.globalSearch({}, { search: 'params' })
+        const data = await offenderSearchApi.globalSearch({}, { search: 'params' }, null)
         expect(data).toEqual([
           {
             offenderNo: 'Z0025ZZ',

@@ -45,7 +45,6 @@ export default ({ whereaboutsApi }) => {
 
       const appointmentDetails = await whereaboutsApi.getAppointment(res.locals, id)
 
-      // @ts-expect-error ts-migrate(2345) FIXME: Argument of type '{ date: string; repeats: any; ti... Remove this comment to see the full error message
       const lastAppointmentDate = endRecurringEndingDate({
         date: moment(appointmentDetails.recurring.startTime).format('DD/MM/YYYY'),
         repeats: appointmentDetails.recurring.repeatPeriod,

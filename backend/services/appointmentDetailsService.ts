@@ -22,7 +22,6 @@ export default ({ prisonApi }) => {
 
     const lastAppointmentDate =
       recurring &&
-      // @ts-expect-error ts-migrate(2345) FIXME: Argument of type '{ date: string; repeats: any; ti... Remove this comment to see the full error message
       endRecurringEndingDate({
         date: moment(recurring.startTime).format('DD/MM/YYYY'),
         repeats: recurring.repeatPeriod,

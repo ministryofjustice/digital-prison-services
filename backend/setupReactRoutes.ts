@@ -3,7 +3,7 @@ import path from 'path'
 
 const router = express.Router()
 
-const setup = () => {
+const setup = (_dependencies) => {
   // These are routes defined in the react router
   // They are listed here so the express app also knows about
   // them and knows to pass them onto the react router
@@ -19,5 +19,4 @@ const setup = () => {
   return router
 }
 
-// @ts-expect-error ts-migrate(2554) FIXME: Expected 0 arguments, but got 1.
-export default (dependencies?) => setup(dependencies)
+export default (dependencies?: unknown): any => setup(dependencies)
