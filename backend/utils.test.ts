@@ -219,8 +219,8 @@ describe('isToday()', () => {
   })
 
   afterAll(() => {
-    // @ts-expect-error ts-migrate(2339) FIXME: Property 'mockRestore' does not exist on type '() ... Remove this comment to see the full error message
-    Date.now.mockRestore()
+    const spy = jest.spyOn(Date, 'now')
+    spy.mockRestore()
   })
 
   it('returns true if date is "Today"', () => {
@@ -242,8 +242,8 @@ describe('isTodayOrAfter()', () => {
   })
 
   afterAll(() => {
-    // @ts-expect-error ts-migrate(2339) FIXME: Property 'mockRestore' does not exist on type '() ... Remove this comment to see the full error message
-    Date.now.mockRestore()
+    const spy = jest.spyOn(Date, 'now')
+    spy.mockRestore()
   })
 
   it('returns true if date is "Today"', () => {
@@ -319,7 +319,7 @@ describe('getDate()', () => {
   })
 
   it('should return Invalid message if no date time string is used', () => {
-    // @ts-expect-error ts-migrate(2554) FIXME: Expected 1-2 arguments, but got 0.
+    // @ts-expect-error: Test requires different types passed in
     expect(getDate()).toEqual('Invalid date or time')
   })
 })
@@ -334,7 +334,7 @@ describe('getTime()', () => {
   })
 
   it('should return Invalid message if no date time string is used', () => {
-    // @ts-expect-error ts-migrate(2554) FIXME: Expected 1 arguments, but got 0.
+    // @ts-expect-error: Test requires different types passed in
     expect(getTime()).toEqual('Invalid date or time')
   })
 })
@@ -361,7 +361,7 @@ describe('putLastNameFirst()', () => {
   })
 
   it('should return correctly formatted first name if no last name specified', () => {
-    // @ts-expect-error ts-migrate(2554) FIXME: Expected 2 arguments, but got 1.
+    // @ts-expect-error: Test requires different types passed in
     expect(putLastNameFirst('FIRSTNAME')).toEqual('Firstname')
   })
 
@@ -380,7 +380,7 @@ describe('getNamesFromString()', () => {
   })
 
   it('should return undefined if nothing passed', () => {
-    // @ts-expect-error ts-migrate(2554) FIXME: Expected 1 arguments, but got 0.
+    // @ts-expect-error: Test requires different types passed in
     expect(getNamesFromString()).toEqual(undefined)
   })
 })
