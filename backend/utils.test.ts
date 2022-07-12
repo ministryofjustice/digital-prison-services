@@ -36,10 +36,13 @@ class TestError extends Error {
 describe('capitalize()', () => {
   describe('when a string IS NOT provided', () => {
     it('should return an empty string', () => {
-      // @ts-expect-error ts-migrate(2554) FIXME: Expected 1 arguments, but got 0.
+      // @ts-expect-error: Test requires different types passed in
       expect(capitalize()).toEqual('')
+      // @ts-expect-error: Test requires different types passed in
       expect(capitalize(['array item 1, array item 2'])).toEqual('')
+      // @ts-expect-error: Test requires different types passed in
       expect(capitalize({ key: 'value' })).toEqual('')
+      // @ts-expect-error: Test requires different types passed in
       expect(capitalize(1)).toEqual('')
     })
   })
