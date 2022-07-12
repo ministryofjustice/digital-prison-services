@@ -25,7 +25,7 @@ export const formatTimestampToDateTime = (
   format = 'DD/MM/YYYY - HH:mm'
 ): moment.MomentInput => timestamp && moment(timestamp).format(format)
 
-export const distinct = (data: never[]): unknown =>
+export const distinct = (data: any[]): unknown =>
   data.reduce(
     (accumulator: unknown[], current: unknown) =>
       accumulator.includes(current) ? accumulator : [...accumulator, current],
@@ -85,7 +85,7 @@ export const mapToQueryString = (params: Record<never, never>): string =>
     })
     .join('&')
 
-export const toMap = (key: string, array: never[]): Map<unknown, unknown> =>
+export const toMap = (key: string, array: never[]): Map<any, any> =>
   array.reduce((map, current) => {
     if (map.has(current[key]) === false) {
       map.set(current[key], current)
@@ -241,7 +241,7 @@ export const getNamesFromString = (string: string): string[] =>
     .split(' ')
     .map((name) => properCaseName(name))
 
-export const groupBy = (array: never[], key: string): Record<string, unknown> =>
+export const groupBy = (array: any[], key: string): Record<string, unknown> =>
   array &&
   array.reduce((acc, current) => {
     const group = current[key]
