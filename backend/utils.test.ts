@@ -36,13 +36,13 @@ class TestError extends Error {
 describe('capitalize()', () => {
   describe('when a string IS NOT provided', () => {
     it('should return an empty string', () => {
-      // @ts-expect-error: Test requires different types passed in
+      // @ts-expect-error: Test requires invalid types passed in
       expect(capitalize()).toEqual('')
-      // @ts-expect-error: Test requires different types passed in
+      // @ts-expect-error: Test requires invalid types passed in
       expect(capitalize(['array item 1, array item 2'])).toEqual('')
-      // @ts-expect-error: Test requires different types passed in
+      // @ts-expect-error: Test requires invalid types passed in
       expect(capitalize({ key: 'value' })).toEqual('')
-      // @ts-expect-error: Test requires different types passed in
+      // @ts-expect-error: Test requires invalid types passed in
       expect(capitalize(1)).toEqual('')
     })
   })
@@ -319,7 +319,7 @@ describe('getDate()', () => {
   })
 
   it('should return Invalid message if no date time string is used', () => {
-    // @ts-expect-error: Test requires different types passed in
+    // @ts-expect-error: Test requires invalid types passed in
     expect(getDate()).toEqual('Invalid date or time')
   })
 })
@@ -334,7 +334,7 @@ describe('getTime()', () => {
   })
 
   it('should return Invalid message if no date time string is used', () => {
-    // @ts-expect-error: Test requires different types passed in
+    // @ts-expect-error: Test requires invalid types passed in
     expect(getTime()).toEqual('Invalid date or time')
   })
 })
@@ -352,7 +352,7 @@ describe('chunkArray()', () => {
 
 describe('putLastNameFirst()', () => {
   it('should return null if no names specified', () => {
-    // @ts-expect-error: Test requires different types passed in
+    // @ts-expect-error: Test requires invalid types passed in
     expect(putLastNameFirst()).toEqual(null)
   })
 
@@ -361,7 +361,7 @@ describe('putLastNameFirst()', () => {
   })
 
   it('should return correctly formatted first name if no last name specified', () => {
-    // @ts-expect-error: Test requires different types passed in
+    // @ts-expect-error: Test requires invalid types passed in
     expect(putLastNameFirst('FIRSTNAME')).toEqual('Firstname')
   })
 
@@ -380,7 +380,7 @@ describe('getNamesFromString()', () => {
   })
 
   it('should return undefined if nothing passed', () => {
-    // @ts-expect-error: Test requires different types passed in
+    // @ts-expect-error: Test requires invalid types passed in
     expect(getNamesFromString()).toEqual(undefined)
   })
 })
