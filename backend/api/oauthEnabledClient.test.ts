@@ -201,7 +201,7 @@ describe('Test clients built by oauthEnabledClient', () => {
         }
       })
       it('Should retry twice if request fails', async () => {
-        const pipe = new Promise((resolve) => {
+        const pipe = new Promise<void>((resolve) => {
           mock
             .get('/api/users/me')
             .reply(500, { failure: 'one' })
@@ -213,7 +213,6 @@ describe('Test clients built by oauthEnabledClient', () => {
           client.pipe({}, '/api/users/me', {
             ...res,
             end: () => {
-              // @ts-expect-error ts-migrate(2794) FIXME: Expected 1 arguments, but got 0. Did you forget to... Remove this comment to see the full error message
               resolve()
             },
           })
@@ -223,7 +222,7 @@ describe('Test clients built by oauthEnabledClient', () => {
         expect(res.write).toHaveBeenCalled()
       })
       it('Should retry many time if configure with more retires if request fails', async () => {
-        const pipe = new Promise((resolve) => {
+        const pipe = new Promise<void>((resolve) => {
           mock
             .get('/api/users/me')
             .reply(500, { failure: 'one' })
@@ -244,7 +243,6 @@ describe('Test clients built by oauthEnabledClient', () => {
             {
               ...res,
               end: () => {
-                // @ts-expect-error ts-migrate(2794) FIXME: Expected 1 arguments, but got 0. Did you forget to... Remove this comment to see the full error message
                 resolve()
               },
             },
@@ -256,7 +254,7 @@ describe('Test clients built by oauthEnabledClient', () => {
         expect(res.write).toHaveBeenCalled()
       })
       it('Should set headers on response to pipe to', async () => {
-        const pipe = new Promise((resolve) => {
+        const pipe = new Promise<void>((resolve) => {
           mock.get('/api/users/me').reply(200, Buffer.from('some binary data'), {
             'Content-Type': 'image/png',
             'Content-Length': '123',
@@ -265,7 +263,6 @@ describe('Test clients built by oauthEnabledClient', () => {
           client.pipe({}, '/api/users/me', {
             ...res,
             end: () => {
-              // @ts-expect-error ts-migrate(2794) FIXME: Expected 1 arguments, but got 0. Did you forget to... Remove this comment to see the full error message
               resolve()
             },
           })

@@ -352,7 +352,7 @@ describe('chunkArray()', () => {
 
 describe('putLastNameFirst()', () => {
   it('should return null if no names specified', () => {
-    // @ts-expect-error ts-migrate(2554) FIXME: Expected 2 arguments, but got 0.
+    // @ts-expect-error: Test requires different types passed in
     expect(putLastNameFirst()).toEqual(null)
   })
 
