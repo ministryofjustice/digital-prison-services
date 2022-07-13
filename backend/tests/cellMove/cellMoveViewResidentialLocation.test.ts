@@ -1,8 +1,13 @@
 import viewResidentialLocationController from '../../controllers/cellMove/cellMoveViewResidentialLocation'
 
 describe('View Residential Location', () => {
-  const prisonApi = {}
-  const whereaboutsApi = {}
+  const prisonApi = {
+    getInmates: jest.fn(),
+  }
+  const whereaboutsApi = {
+    searchGroups: jest.fn(),
+    getAgencyGroupLocationPrefix: jest.fn(),
+  }
 
   let req
   let res
@@ -29,7 +34,6 @@ describe('View Residential Location', () => {
       status: jest.fn(),
     }
 
-    // @ts-expect-error ts-migrate(2339) FIXME: Property 'searchGroups' does not exist on type '{}... Remove this comment to see the full error message
     whereaboutsApi.searchGroups = jest.fn().mockReturnValue([
       {
         name: 'Houseblock 1',
@@ -41,12 +45,10 @@ describe('View Residential Location', () => {
       },
     ])
 
-    // @ts-expect-error ts-migrate(2339) FIXME: Property 'getAgencyGroupLocationPrefix' does not e... Remove this comment to see the full error message
     whereaboutsApi.getAgencyGroupLocationPrefix = jest.fn().mockReturnValue({
       locationPrefix: '1',
     })
 
-    // @ts-expect-error ts-migrate(2339) FIXME: Property 'getInmates' does not exist on type '{}'.
     prisonApi.getInmates = jest.fn().mockReturnValue([])
 
     controller = viewResidentialLocationController({ prisonApi, whereaboutsApi })
@@ -58,7 +60,6 @@ describe('View Residential Location', () => {
 
       await controller(req, res)
 
-      // @ts-expect-error ts-migrate(2339) FIXME: Property 'searchGroups' does not exist on type '{}... Remove this comment to see the full error message
       expect(whereaboutsApi.searchGroups).toHaveBeenCalledWith(
         {
           ...res.locals,
@@ -75,7 +76,6 @@ describe('View Residential Location', () => {
 
       await controller(req, res)
 
-      // @ts-expect-error ts-migrate(2339) FIXME: Property 'getAgencyGroupLocationPrefix' does not e... Remove this comment to see the full error message
       expect(whereaboutsApi.getAgencyGroupLocationPrefix).toHaveBeenCalledWith(
         {
           ...res.locals,
@@ -86,7 +86,6 @@ describe('View Residential Location', () => {
     })
 
     it('should make a call to get inmates using shortened location prefix from whereabouts if present', async () => {
-      // @ts-expect-error ts-migrate(2339) FIXME: Property 'getAgencyGroupLocationPrefix' does not e... Remove this comment to see the full error message
       whereaboutsApi.getAgencyGroupLocationPrefix = jest.fn().mockReturnValue({
         locationPrefix: 'MDI-1-',
       })
@@ -97,7 +96,6 @@ describe('View Residential Location', () => {
 
       await controller(req, res)
 
-      // @ts-expect-error ts-migrate(2339) FIXME: Property 'getInmates' does not exist on type '{}'.
       expect(prisonApi.getInmates).toHaveBeenCalledWith(
         {
           ...res.locals,
@@ -115,7 +113,6 @@ describe('View Residential Location', () => {
     })
 
     it('should make a call to get inmates using location id built from case load and location key if whereabouts prefix not present', async () => {
-      // @ts-expect-error ts-migrate(2339) FIXME: Property 'getAgencyGroupLocationPrefix' does not e... Remove this comment to see the full error message
       whereaboutsApi.getAgencyGroupLocationPrefix = jest.fn().mockReturnValue(null)
 
       req.query = {
@@ -124,7 +121,6 @@ describe('View Residential Location', () => {
 
       await controller(req, res)
 
-      // @ts-expect-error ts-migrate(2339) FIXME: Property 'getInmates' does not exist on type '{}'.
       expect(prisonApi.getInmates).toHaveBeenCalledWith(
         {
           ...res.locals,
@@ -172,7 +168,6 @@ describe('View Residential Location', () => {
           alertsDetails: ['RSS', 'XC'],
         },
       ]
-      // @ts-expect-error ts-migrate(2339) FIXME: Property 'getInmates' does not exist on type '{}'.
       prisonApi.getInmates = jest.fn().mockReturnValue(inmates)
 
       req.query = {

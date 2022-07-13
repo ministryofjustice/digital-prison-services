@@ -451,8 +451,8 @@ describe('appointment clashes', () => {
 
         expect(res.redirect).toBeCalledWith('/bulk-appointments/appointments-added')
 
-        // @ts-expect-error ts-migrate(2339) FIXME: Property 'mockRestore' does not exist on type '() ... Remove this comment to see the full error message
-        Date.now.mockRestore()
+        const spy = jest.spyOn(Date, 'now')
+        spy.mockRestore()
       })
     })
   })

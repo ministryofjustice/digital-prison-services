@@ -37,7 +37,6 @@ const controller = ({ oauthApi, prisonApi, whereaboutsApi, logError }) => {
   router.get('/confirmation', cellMoveConfirmationController({ prisonApi, logError }))
   // @ts-expect-error ts-migrate(2345) FIXME: Argument of type '{ prisonApi: any; logError: any;... Remove this comment to see the full error message
   router.get('/space-created', spaceCreatedController({ prisonApi, logError }))
-  // @ts-expect-error ts-migrate(2345) FIXME: Argument of type '{ prisonApi: any; logError: any;... Remove this comment to see the full error message
   router.get('/cell-not-available', cellNotAvailable({ prisonApi, logError }))
   return router
 }

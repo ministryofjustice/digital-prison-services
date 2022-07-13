@@ -34,8 +34,8 @@ describe('date of birth validation', () => {
       { href: '#dobError' },
     ])
 
-    // @ts-expect-error ts-migrate(2339) FIXME: Property 'mockRestore' does not exist on type '() ... Remove this comment to see the full error message
-    Date.now.mockRestore()
+    const spy = jest.spyOn(Date, 'now')
+    spy.mockRestore()
   })
 
   it('should error when the date too far in the past', async () => {

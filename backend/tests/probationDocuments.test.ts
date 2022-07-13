@@ -112,51 +112,49 @@ function documentsWithMultipleConvictionMatching(convictions) {
 }
 
 function error(message, status) {
-  const theError = new Error(message)
-  // @ts-expect-error ts-migrate(2339) FIXME: Property 'status' does not exist on type 'Error'.
+  const theError = new Error(message) as any
   theError.status = status
   return theError
 }
 
 describe('Probation documents', () => {
-  const oauthApi = {}
-  const prisonApi = {}
-  const communityApi = {}
-  const systemOauthClient = {}
+  const oauthApi = {
+    currentUser: jest.fn(),
+    userRoles: jest.fn(),
+  }
+  const prisonApi = {
+    getDetails: jest.fn(),
+    userCaseLoads: jest.fn(),
+  }
+  const communityApi = {
+    getOffenderConvictions: jest.fn(),
+    getOffenderDetails: jest.fn(),
+    getOffenderDocuments: jest.fn(),
+  }
+  const systemOauthClient = {
+    getClientCredentialsTokens: jest.fn(),
+  }
   const getDetailsResponse = { agencyId: 'LEI', bookingId: 1234, firstName: 'Test', lastName: 'User' }
 
   describe('Controller', () => {
     const mockReq = { flash: jest.fn().mockReturnValue([]), originalUrl: '/offenders/G9542VP/probation-documents' }
     beforeEach(() => {
-      // @ts-expect-error ts-migrate(2339) FIXME: Property 'getDetails' does not exist on type '{}'.
       prisonApi.getDetails = jest.fn().mockReturnValue(getDetailsResponse)
-      // @ts-expect-error ts-migrate(2339) FIXME: Property 'userCaseLoads' does not exist on type '{... Remove this comment to see the full error message
       prisonApi.userCaseLoads = jest.fn()
-      // @ts-expect-error ts-migrate(2339) FIXME: Property 'currentUser' does not exist on type '{}'... Remove this comment to see the full error message
       oauthApi.currentUser = jest.fn()
-      // @ts-expect-error ts-migrate(2339) FIXME: Property 'userRoles' does not exist on type '{}'.
       oauthApi.userRoles = jest.fn()
-      // @ts-expect-error ts-migrate(2339) FIXME: Property 'getOffenderConvictions' does not exist o... Remove this comment to see the full error message
       communityApi.getOffenderConvictions = jest.fn()
-      // @ts-expect-error ts-migrate(2339) FIXME: Property 'getOffenderDetails' does not exist on ty... Remove this comment to see the full error message
       communityApi.getOffenderDetails = jest.fn()
-      // @ts-expect-error ts-migrate(2339) FIXME: Property 'getOffenderDocuments' does not exist on ... Remove this comment to see the full error message
       communityApi.getOffenderDocuments = jest.fn()
-      // @ts-expect-error ts-migrate(2339) FIXME: Property 'getClientCredentialsTokens' does not exi... Remove this comment to see the full error message
       systemOauthClient.getClientCredentialsTokens = jest.fn()
-
-      // @ts-expect-error ts-migrate(2339) FIXME: Property 'getClientCredentialsTokens' does not exi... Remove this comment to see the full error message
       systemOauthClient.getClientCredentialsTokens.mockReturnValue({})
-      // @ts-expect-error ts-migrate(2339) FIXME: Property 'currentUser' does not exist on type '{}'... Remove this comment to see the full error message
       oauthApi.currentUser.mockReturnValue({
         username: 'USER_ADM',
         active: true,
         name: 'User Name',
         activeCaseLoadId: 'LEI',
       })
-      // @ts-expect-error ts-migrate(2339) FIXME: Property 'userRoles' does not exist on type '{}'.
       oauthApi.userRoles.mockReturnValue([{ roleCode: 'VIEW_PROBATION_DOCUMENTS' }])
-      // @ts-expect-error ts-migrate(2339) FIXME: Property 'userCaseLoads' does not exist on type '{... Remove this comment to see the full error message
       prisonApi.userCaseLoads.mockReturnValue([
         {
           currentlyActive: true,
@@ -167,14 +165,14 @@ describe('Probation documents', () => {
     })
 
     describe('when rendering page', () => {
-      const res = {}
+      const res = {
+        render: jest.fn(),
+      }
       let req
       let page
 
       beforeEach(() => {
-        // @ts-expect-error ts-migrate(2339) FIXME: Property 'getOffenderConvictions' does not exist o... Remove this comment to see the full error message
         communityApi.getOffenderConvictions.mockReturnValue([])
-        // @ts-expect-error ts-migrate(2339) FIXME: Property 'getOffenderDetails' does not exist on ty... Remove this comment to see the full error message
         communityApi.getOffenderDetails.mockReturnValue({
           firstName: 'John',
           surname: 'Smith',
@@ -182,7 +180,6 @@ describe('Probation documents', () => {
             crn: 'X123456',
           },
         })
-        // @ts-expect-error ts-migrate(2339) FIXME: Property 'getOffenderDocuments' does not exist on ... Remove this comment to see the full error message
         communityApi.getOffenderDocuments.mockReturnValue({
           documents: [],
           convictions: [],
@@ -193,7 +190,6 @@ describe('Probation documents', () => {
           communityApi,
           systemOauthClient
         ).displayProbationDocumentsPage
-        // @ts-expect-error ts-migrate(2339) FIXME: Property 'render' does not exist on type '{}'.
         res.render = jest.fn()
 
         req = { ...mockReq, params: { offenderNo: 'G9542VP' } }
@@ -202,7 +198,6 @@ describe('Probation documents', () => {
       it('should render the probation documents page with title', async () => {
         await page(req, res)
 
-        // @ts-expect-error ts-migrate(2339) FIXME: Property 'render' does not exist on type '{}'.
         expect(res.render).toHaveBeenCalledWith(
           'probationDocuments.njk',
           expect.objectContaining({
@@ -214,7 +209,6 @@ describe('Probation documents', () => {
       it('should render the probation documents page with no errors', async () => {
         await page(req, res)
 
-        // @ts-expect-error ts-migrate(2339) FIXME: Property 'render' does not exist on type '{}'.
         expect(res.render).toHaveBeenCalledWith(
           'probationDocuments.njk',
           expect.objectContaining({
@@ -226,7 +220,6 @@ describe('Probation documents', () => {
       it('should supply page with user and caseload', async () => {
         await page(req, res)
 
-        // @ts-expect-error ts-migrate(2339) FIXME: Property 'render' does not exist on type '{}'.
         expect(res.render).toHaveBeenCalledWith(
           'probationDocuments.njk',
           expect.objectContaining({
@@ -248,7 +241,6 @@ describe('Probation documents', () => {
       })
 
       it('should supply page with offender related document', async () => {
-        // @ts-expect-error ts-migrate(2339) FIXME: Property 'getOffenderDocuments' does not exist on ... Remove this comment to see the full error message
         communityApi.getOffenderDocuments.mockReturnValue({
           documents: [aDocument({ id: '1' }), aDocument({ id: '2' })],
           convictions: [],
@@ -256,7 +248,6 @@ describe('Probation documents', () => {
 
         await page(req, res)
 
-        // @ts-expect-error ts-migrate(2339) FIXME: Property 'render' does not exist on type '{}'.
         expect(res.render).toHaveBeenCalledWith(
           'probationDocuments.njk',
           expect.objectContaining({
@@ -269,7 +260,6 @@ describe('Probation documents', () => {
       })
 
       it('should sort offender related documents by createdAt', async () => {
-        // @ts-expect-error ts-migrate(2339) FIXME: Property 'getOffenderDocuments' does not exist on ... Remove this comment to see the full error message
         communityApi.getOffenderDocuments.mockReturnValue({
           documents: [
             aDocument({ id: '1', createdAt: '2019-09-09T00:00:00' }),
@@ -281,7 +271,6 @@ describe('Probation documents', () => {
 
         await page(req, res)
 
-        // @ts-expect-error ts-migrate(2339) FIXME: Property 'render' does not exist on type '{}'.
         expect(res.render).toHaveBeenCalledWith(
           'probationDocuments.njk',
           expect.objectContaining({
@@ -298,7 +287,6 @@ describe('Probation documents', () => {
       })
 
       it('should supply page with mapped offender related document', async () => {
-        // @ts-expect-error ts-migrate(2339) FIXME: Property 'getOffenderDocuments' does not exist on ... Remove this comment to see the full error message
         communityApi.getOffenderDocuments.mockReturnValue({
           documents: [
             aDocument({
@@ -317,7 +305,6 @@ describe('Probation documents', () => {
 
         await page(req, res)
 
-        // @ts-expect-error ts-migrate(2339) FIXME: Property 'render' does not exist on type '{}'.
         expect(res.render).toHaveBeenCalledWith(
           'probationDocuments.njk',
           expect.objectContaining({
@@ -338,12 +325,10 @@ describe('Probation documents', () => {
         )
       })
       it('should allow page to be displayed when no documents at all', async () => {
-        // @ts-expect-error ts-migrate(2339) FIXME: Property 'getOffenderDocuments' does not exist on ... Remove this comment to see the full error message
         communityApi.getOffenderDocuments.mockReturnValue({})
 
         await page(req, res)
 
-        // @ts-expect-error ts-migrate(2339) FIXME: Property 'render' does not exist on type '{}'.
         expect(res.render).toHaveBeenCalledWith(
           'probationDocuments.njk',
           expect.objectContaining({
@@ -356,14 +341,11 @@ describe('Probation documents', () => {
       })
 
       it('should allow page to be displayed when no documents but with convictions', async () => {
-        // @ts-expect-error ts-migrate(2339) FIXME: Property 'getOffenderConvictions' does not exist o... Remove this comment to see the full error message
         communityApi.getOffenderConvictions.mockReturnValue([aConviction({ convictionId: 1 })])
-        // @ts-expect-error ts-migrate(2339) FIXME: Property 'getOffenderDocuments' does not exist on ... Remove this comment to see the full error message
         communityApi.getOffenderDocuments.mockReturnValue({})
 
         await page(req, res)
 
-        // @ts-expect-error ts-migrate(2339) FIXME: Property 'render' does not exist on type '{}'.
         expect(res.render).toHaveBeenCalledWith(
           'probationDocuments.njk',
           expect.objectContaining({
@@ -380,13 +362,11 @@ describe('Probation documents', () => {
       })
 
       it('should supply page with conviction related document', async () => {
-        // @ts-expect-error ts-migrate(2339) FIXME: Property 'getOffenderConvictions' does not exist o... Remove this comment to see the full error message
         communityApi.getOffenderConvictions.mockReturnValue([
           aConviction({ convictionId: 1 }),
           aConviction({ convictionId: 2 }),
         ])
 
-        // @ts-expect-error ts-migrate(2339) FIXME: Property 'getOffenderDocuments' does not exist on ... Remove this comment to see the full error message
         communityApi.getOffenderDocuments.mockReturnValue({
           documents: [],
           convictions: [
@@ -403,7 +383,6 @@ describe('Probation documents', () => {
 
         await page(req, res)
 
-        // @ts-expect-error ts-migrate(2339) FIXME: Property 'render' does not exist on type '{}'.
         expect(res.render).toHaveBeenCalledWith(
           'probationDocuments.njk',
           expect.objectContaining({
@@ -422,10 +401,8 @@ describe('Probation documents', () => {
         )
       })
       it('should supply page with conviction related documents sorted by createdAt', async () => {
-        // @ts-expect-error ts-migrate(2339) FIXME: Property 'getOffenderConvictions' does not exist o... Remove this comment to see the full error message
         communityApi.getOffenderConvictions.mockReturnValue([aConviction({ convictionId: 1 })])
 
-        // @ts-expect-error ts-migrate(2339) FIXME: Property 'getOffenderDocuments' does not exist on ... Remove this comment to see the full error message
         communityApi.getOffenderDocuments.mockReturnValue({
           documents: [],
           convictions: [
@@ -442,7 +419,6 @@ describe('Probation documents', () => {
 
         await page(req, res)
 
-        // @ts-expect-error ts-migrate(2339) FIXME: Property 'render' does not exist on type '{}'.
         expect(res.render).toHaveBeenCalledWith(
           'probationDocuments.njk',
           expect.objectContaining({
@@ -463,10 +439,8 @@ describe('Probation documents', () => {
       })
 
       it('should supply page with mapped document for conviction', async () => {
-        // @ts-expect-error ts-migrate(2339) FIXME: Property 'getOffenderConvictions' does not exist o... Remove this comment to see the full error message
         communityApi.getOffenderConvictions.mockReturnValue([aConviction({ convictionId: 1 })])
 
-        // @ts-expect-error ts-migrate(2339) FIXME: Property 'getOffenderDocuments' does not exist on ... Remove this comment to see the full error message
         communityApi.getOffenderDocuments.mockReturnValue({
           documents: [],
           convictions: [
@@ -490,7 +464,6 @@ describe('Probation documents', () => {
 
         await page(req, res)
 
-        // @ts-expect-error ts-migrate(2339) FIXME: Property 'render' does not exist on type '{}'.
         expect(res.render).toHaveBeenCalledWith(
           'probationDocuments.njk',
           expect.objectContaining({
@@ -516,7 +489,6 @@ describe('Probation documents', () => {
       })
 
       it('should supply page with each conviction', async () => {
-        // @ts-expect-error ts-migrate(2339) FIXME: Property 'getOffenderConvictions' does not exist o... Remove this comment to see the full error message
         communityApi.getOffenderConvictions.mockReturnValue([
           aConviction({ active: true }),
           aConviction({ active: false }),
@@ -524,7 +496,6 @@ describe('Probation documents', () => {
 
         await page(req, res)
 
-        // @ts-expect-error ts-migrate(2339) FIXME: Property 'render' does not exist on type '{}'.
         expect(res.render).toHaveBeenCalledWith(
           'probationDocuments.njk',
           documentsWithMultipleConvictionMatching([{ active: true }, { active: false }])
@@ -532,7 +503,6 @@ describe('Probation documents', () => {
       })
 
       it('should use main offence for conviction', async () => {
-        // @ts-expect-error ts-migrate(2339) FIXME: Property 'getOffenderConvictions' does not exist o... Remove this comment to see the full error message
         communityApi.getOffenderConvictions.mockReturnValue([
           aConviction({
             offences: [
@@ -575,7 +545,6 @@ describe('Probation documents', () => {
 
         await page(req, res)
 
-        // @ts-expect-error ts-migrate(2339) FIXME: Property 'render' does not exist on type '{}'.
         expect(res.render).toHaveBeenCalledWith(
           'probationDocuments.njk',
           documentsWithSingleConvictionMatching({ offence: 'Treason' })
@@ -583,7 +552,6 @@ describe('Probation documents', () => {
       })
 
       it('should use sentence with length when present', async () => {
-        // @ts-expect-error ts-migrate(2339) FIXME: Property 'getOffenderConvictions' does not exist o... Remove this comment to see the full error message
         communityApi.getOffenderConvictions.mockReturnValue([
           aConviction({
             sentence: {
@@ -600,7 +568,6 @@ describe('Probation documents', () => {
 
         await page(req, res)
 
-        // @ts-expect-error ts-migrate(2339) FIXME: Property 'render' does not exist on type '{}'.
         expect(res.render).toHaveBeenCalledWith(
           'probationDocuments.njk',
           documentsWithSingleConvictionMatching({ title: 'CJA - Indeterminate Public Prot. (99 Years)' })
@@ -608,7 +575,6 @@ describe('Probation documents', () => {
       })
 
       it('should just use sentence when length not present', async () => {
-        // @ts-expect-error ts-migrate(2339) FIXME: Property 'getOffenderConvictions' does not exist o... Remove this comment to see the full error message
         communityApi.getOffenderConvictions.mockReturnValue([
           aConviction({
             sentence: {
@@ -619,7 +585,6 @@ describe('Probation documents', () => {
 
         await page(req, res)
 
-        // @ts-expect-error ts-migrate(2339) FIXME: Property 'render' does not exist on type '{}'.
         expect(res.render).toHaveBeenCalledWith(
           'probationDocuments.njk',
           documentsWithSingleConvictionMatching({ title: 'CJA - Indeterminate Public Prot.' })
@@ -634,12 +599,10 @@ describe('Probation documents', () => {
         })
         delete conviction.sentence
 
-        // @ts-expect-error ts-migrate(2339) FIXME: Property 'getOffenderConvictions' does not exist o... Remove this comment to see the full error message
         communityApi.getOffenderConvictions.mockReturnValue([conviction])
 
         await page(req, res)
 
-        // @ts-expect-error ts-migrate(2339) FIXME: Property 'render' does not exist on type '{}'.
         expect(res.render).toHaveBeenCalledWith(
           'probationDocuments.njk',
           documentsWithSingleConvictionMatching({ title: 'Pre Sentence Report' })
@@ -647,7 +610,6 @@ describe('Probation documents', () => {
       })
 
       it('should format referral date', async () => {
-        // @ts-expect-error ts-migrate(2339) FIXME: Property 'getOffenderConvictions' does not exist o... Remove this comment to see the full error message
         communityApi.getOffenderConvictions.mockReturnValue([
           aConviction({
             referralDate: '2018-09-04',
@@ -656,7 +618,6 @@ describe('Probation documents', () => {
 
         await page(req, res)
 
-        // @ts-expect-error ts-migrate(2339) FIXME: Property 'render' does not exist on type '{}'.
         expect(res.render).toHaveBeenCalledWith(
           'probationDocuments.njk',
           documentsWithSingleConvictionMatching({ date: '04/09/2018' })
@@ -664,7 +625,6 @@ describe('Probation documents', () => {
       })
 
       it('should supply institution name when in custody', async () => {
-        // @ts-expect-error ts-migrate(2339) FIXME: Property 'getOffenderConvictions' does not exist o... Remove this comment to see the full error message
         communityApi.getOffenderConvictions.mockReturnValue([
           aConviction({
             custody: {
@@ -677,7 +637,6 @@ describe('Probation documents', () => {
 
         await page(req, res)
 
-        // @ts-expect-error ts-migrate(2339) FIXME: Property 'render' does not exist on type '{}'.
         expect(res.render).toHaveBeenCalledWith(
           'probationDocuments.njk',
           documentsWithSingleConvictionMatching({ institutionName: 'Berwyn (HMP)' })
@@ -685,7 +644,6 @@ describe('Probation documents', () => {
       })
 
       it('should supply offender details from probation', async () => {
-        // @ts-expect-error ts-migrate(2339) FIXME: Property 'getOffenderDetails' does not exist on ty... Remove this comment to see the full error message
         communityApi.getOffenderDetails.mockReturnValue({
           firstName: 'John',
           surname: 'Smith',
@@ -696,7 +654,6 @@ describe('Probation documents', () => {
 
         await page(req, res)
 
-        // @ts-expect-error ts-migrate(2339) FIXME: Property 'render' does not exist on type '{}'.
         expect(res.render).toHaveBeenCalledWith(
           'probationDocuments.njk',
           expect.objectContaining({
@@ -709,20 +666,16 @@ describe('Probation documents', () => {
       })
 
       it('should pass system credentials from auth call to convictions API ', async () => {
-        // @ts-expect-error ts-migrate(2339) FIXME: Property 'getClientCredentialsTokens' does not exi... Remove this comment to see the full error message
         systemOauthClient.getClientCredentialsTokens.mockReturnValue({ token: 'ABC' })
         await page(req, res)
 
-        // @ts-expect-error ts-migrate(2339) FIXME: Property 'getOffenderConvictions' does not exist o... Remove this comment to see the full error message
         expect(communityApi.getOffenderConvictions).toHaveBeenCalledWith({ token: 'ABC' }, { offenderNo: 'G9542VP' })
       })
       describe('access to the page based on role and caseload', () => {
         it('should not allow access to page if user does not have role', async () => {
-          // @ts-expect-error ts-migrate(2339) FIXME: Property 'userRoles' does not exist on type '{}'.
           oauthApi.userRoles.mockReturnValue([{ roleCode: 'SOME_OTHER_ROLE' }])
           await page(req, res)
 
-          // @ts-expect-error ts-migrate(2339) FIXME: Property 'render' does not exist on type '{}'.
           expect(res.render).toHaveBeenCalledWith(
             'probationDocuments.njk',
             expect.objectContaining({
@@ -736,19 +689,15 @@ describe('Probation documents', () => {
         })
 
         it('should not allow access to page if user does not have the correct caseload', async () => {
-          // @ts-expect-error ts-migrate(2339) FIXME: Property 'getDetails' does not exist on type '{}'.
           prisonApi.getDetails = jest.fn().mockReturnValue({ ...getDetailsResponse, agencyId: 'MDI' })
-          // @ts-expect-error ts-migrate(2339)
           prisonApi.userCaseLoads.mockResolvedValue([
             { caseLoadId: 'BXI', currentlyActive: true },
             { caseLoadId: 'WWI' },
           ])
-          // @ts-expect-error ts-migrate(2339)
           oauthApi.currentUser.mockReturnValue({ staffId: 111, activeCaseLoadId: 'BXI' })
 
           await page(req, res)
 
-          // @ts-expect-error ts-migrate(2339) FIXME: Property 'render' does not exist on type '{}'.
           expect(res.render).toHaveBeenCalledWith(
             'probationDocuments.njk',
             expect.objectContaining({
@@ -761,19 +710,15 @@ describe('Probation documents', () => {
           )
         })
         it('should not allow access to page if prisoner is no longer in prison', async () => {
-          // @ts-expect-error ts-migrate(2339) FIXME: Property 'getDetails' does not exist on type '{}'.
           prisonApi.getDetails = jest.fn().mockReturnValue({ ...getDetailsResponse, agencyId: 'OUT' })
-          // @ts-expect-error ts-migrate(2339)
           prisonApi.userCaseLoads.mockResolvedValue([
             { caseLoadId: 'BXI', currentlyActive: true },
             { caseLoadId: 'WWI' },
           ])
-          // @ts-expect-error ts-migrate(2339)
           oauthApi.currentUser.mockReturnValue({ staffId: 111, activeCaseLoadId: 'BXI' })
 
           await page(req, res)
 
-          // @ts-expect-error ts-migrate(2339) FIXME: Property 'render' does not exist on type '{}'.
           expect(res.render).toHaveBeenCalledWith(
             'probationDocuments.njk',
             expect.objectContaining({
@@ -787,18 +732,14 @@ describe('Probation documents', () => {
         })
 
         it('should allow access to page if user has the correct role and in your active caseload', async () => {
-          // @ts-expect-error ts-migrate(2339) FIXME: Property 'getDetails' does not exist on type '{}'.
           prisonApi.getDetails = jest.fn().mockReturnValue({ ...getDetailsResponse, agencyId: 'BXI' })
-          // @ts-expect-error ts-migrate(2339)
           prisonApi.userCaseLoads.mockResolvedValue([
             { caseLoadId: 'BXI', currentlyActive: true },
             { caseLoadId: 'WWI' },
           ])
-          // @ts-expect-error ts-migrate(2339)
           oauthApi.currentUser.mockReturnValue({ staffId: 111, activeCaseLoadId: 'BXI' })
 
           await page(req, res)
-          // @ts-expect-error ts-migrate(2339) FIXME: Property 'render' does not exist on type '{}'.
           expect(res.render).toHaveBeenCalledWith(
             'probationDocuments.njk',
             expect.objectContaining({
@@ -808,20 +749,15 @@ describe('Probation documents', () => {
         })
 
         it('should allow access to page if user has the correct role and is in one of your other caseloads', async () => {
-          // @ts-expect-error ts-migrate(2339) FIXME: Property 'userRoles' does not exist on type '{}'.
           oauthApi.userRoles.mockReturnValue([{ roleCode: 'VIEW_PROBATION_DOCUMENTS' }])
-          // @ts-expect-error ts-migrate(2339) FIXME: Property 'getDetails' does not exist on type '{}'.
           prisonApi.getDetails = jest.fn().mockReturnValue({ ...getDetailsResponse, agencyId: 'WWI' })
-          // @ts-expect-error ts-migrate(2339)
           prisonApi.userCaseLoads.mockResolvedValue([
             { caseLoadId: 'BXI', currentlyActive: true },
             { caseLoadId: 'WWI' },
           ])
-          // @ts-expect-error ts-migrate(2339)
           oauthApi.currentUser.mockReturnValue({ staffId: 111, activeCaseLoadId: 'BXI' })
 
           await page(req, res)
-          // @ts-expect-error ts-migrate(2339) FIXME: Property 'render' does not exist on type '{}'.
           expect(res.render).toHaveBeenCalledWith(
             'probationDocuments.njk',
             expect.objectContaining({
@@ -832,16 +768,15 @@ describe('Probation documents', () => {
       })
     })
     describe('when rendering page with errors', () => {
-      const res = {}
+      const res = {
+        render: jest.fn(),
+      }
       let req
       let page
 
       beforeEach(() => {
-        // @ts-expect-error ts-migrate(2339) FIXME: Property 'userRoles' does not exist on type '{}'.
         oauthApi.userRoles.mockReturnValue([{ roleCode: 'VIEW_PROBATION_DOCUMENTS' }])
-        // @ts-expect-error ts-migrate(2339) FIXME: Property 'getOffenderConvictions' does not exist o... Remove this comment to see the full error message
         communityApi.getOffenderConvictions.mockReturnValue([])
-        // @ts-expect-error ts-migrate(2339) FIXME: Property 'getOffenderDetails' does not exist on ty... Remove this comment to see the full error message
         communityApi.getOffenderDetails.mockReturnValue({})
         page = probationDocumentsFactory(
           oauthApi,
@@ -849,7 +784,6 @@ describe('Probation documents', () => {
           communityApi,
           systemOauthClient
         ).displayProbationDocumentsPage
-        // @ts-expect-error ts-migrate(2339) FIXME: Property 'render' does not exist on type '{}'.
         res.render = jest.fn()
 
         req = { ...mockReq, params: { offenderNo: 'G9542VP' } }
@@ -857,15 +791,12 @@ describe('Probation documents', () => {
 
       describe('when offender not found in probation', () => {
         beforeEach(() => {
-          // @ts-expect-error ts-migrate(2339) FIXME: Property 'getOffenderConvictions' does not exist o... Remove this comment to see the full error message
           communityApi.getOffenderConvictions.mockReturnValue([])
-          // @ts-expect-error ts-migrate(2339) FIXME: Property 'getOffenderDetails' does not exist on ty... Remove this comment to see the full error message
           communityApi.getOffenderDetails.mockRejectedValue(error('Not found', 404))
         })
         it('should render page with offender not found message', async () => {
           await page(req, res)
 
-          // @ts-expect-error ts-migrate(2339) FIXME: Property 'render' does not exist on type '{}'.
           expect(res.render).toHaveBeenCalledWith(
             'probationDocuments.njk',
             expect.objectContaining({
@@ -880,17 +811,13 @@ describe('Probation documents', () => {
       })
       describe('when offender find results in error', () => {
         beforeEach(() => {
-          // @ts-expect-error ts-migrate(2339) FIXME: Property 'getOffenderConvictions' does not exist o... Remove this comment to see the full error message
           communityApi.getOffenderConvictions.mockReturnValue([])
-          // @ts-expect-error ts-migrate(2339) FIXME: Property 'getOffenderDetails' does not exist on ty... Remove this comment to see the full error message
           communityApi.getOffenderDetails.mockRejectedValue(error('Server error', 503))
-          // @ts-expect-error ts-migrate(2339) FIXME: Property 'getOffenderDocuments' does not exist on ... Remove this comment to see the full error message
           communityApi.getOffenderDocuments.mockReturnValue([])
         })
         it('should render page with system error message', async () => {
           await page(req, res)
 
-          // @ts-expect-error ts-migrate(2339) FIXME: Property 'render' does not exist on type '{}'.
           expect(res.render).toHaveBeenCalledWith(
             'probationDocuments.njk',
             expect.objectContaining({

@@ -3,10 +3,19 @@ import { serviceUnavailableMessage } from '../common-messages'
 import { makeResetError, makeResetErrorWithStack } from './helpers'
 
 describe('Prisoner search', () => {
-  const prisonApi = {}
-  const incentivesApi = {}
-  const paginationService = {}
-  const telemetry = {}
+  const prisonApi = {
+    userLocations: jest.fn(),
+    getInmates: jest.fn(),
+  }
+  const incentivesApi = {
+    getIepSummaryForBookingIds: jest.fn(),
+  }
+  const paginationService = {
+    getPagination: jest.fn(),
+  }
+  const telemetry = {
+    trackEvent: jest.fn(),
+  }
 
   let req
   let res
@@ -41,7 +50,6 @@ describe('Prisoner search', () => {
 
     logError = jest.fn()
 
-    // @ts-expect-error ts-migrate(2339) FIXME: Property 'userLocations' does not exist on type '{... Remove this comment to see the full error message
     prisonApi.userLocations = jest.fn().mockReturnValue([
       {
         locationId: 1,
@@ -67,16 +75,12 @@ describe('Prisoner search', () => {
         userDescription: 'Houseblock 2',
       },
     ])
-    // @ts-expect-error ts-migrate(2339) FIXME: Property 'getInmates' does not exist on type '{}'.
     prisonApi.getInmates = jest.fn().mockReturnValue([])
 
-    // @ts-expect-error ts-migrate(2339) FIXME: Property 'getIepSummaryForBookingIds' does not exist on type '{}'.
     incentivesApi.getIepSummaryForBookingIds = jest.fn().mockReturnValue([])
 
-    // @ts-expect-error ts-migrate(2339) FIXME: Property 'getPagination' does not exist on type '{... Remove this comment to see the full error message
     paginationService.getPagination = jest.fn()
 
-    // @ts-expect-error ts-migrate(2339) FIXME: Property 'trackEvent' does not exist on type '{}'.
     telemetry.trackEvent = jest.fn().mockResolvedValue([])
 
     controller = prisonerSearchController({ paginationService, prisonApi, incentivesApi, telemetry, logError })
@@ -86,14 +90,12 @@ describe('Prisoner search', () => {
     it('should make a call for the users current caseload locations', async () => {
       await controller.index(req, res)
 
-      // @ts-expect-error ts-migrate(2339) FIXME: Property 'userLocations' does not exist on type '{... Remove this comment to see the full error message
       expect(prisonApi.userLocations).toHaveBeenCalledWith(res.locals)
     })
 
     it('should request the current users active case load prisoners if no location specified in the query', async () => {
       await controller.index(req, res)
 
-      // @ts-expect-error ts-migrate(2339) FIXME: Property 'getInmates' does not exist on type '{}'.
       expect(prisonApi.getInmates).toHaveBeenCalledWith(
         {
           ...res.locals,
@@ -222,7 +224,6 @@ describe('Prisoner search', () => {
 
       await controller.index(req, res)
 
-      // @ts-expect-error ts-migrate(2339) FIXME: Property 'trackEvent' does not exist on type '{}'.
       expect(telemetry.trackEvent).not.toHaveBeenCalled()
     })
 
@@ -257,10 +258,8 @@ describe('Prisoner search', () => {
           },
         ]
         res.locals.responseHeaders['total-records'] = inmates.length
-        // @ts-expect-error ts-migrate(2339) FIXME: Property 'getInmates' does not exist on type '{}'.
         prisonApi.getInmates = jest.fn().mockReturnValue(inmates)
 
-        // @ts-expect-error ts-migrate(2339) FIXME: Property 'getIepSummaryForBookingIds' does not exist on type '{}'.
         incentivesApi.getIepSummaryForBookingIds = jest.fn().mockReturnValue([
           { bookingId: 1, iepLevel: 'Standard' },
           { bookingId: 2, iepLevel: 'Standard' },
@@ -270,7 +269,6 @@ describe('Prisoner search', () => {
       it('should call pagination service and return the correctly formatted results', async () => {
         await controller.index(req, res)
 
-        // @ts-expect-error ts-migrate(2339) FIXME: Property 'getPagination' does not exist on type '{... Remove this comment to see the full error message
         expect(paginationService.getPagination).toHaveBeenCalledWith(
           2,
           0,
@@ -335,7 +333,6 @@ describe('Prisoner search', () => {
 
         await controller.index(req, res)
 
-        // @ts-expect-error ts-migrate(2339) FIXME: Property 'trackEvent' does not exist on type '{}'.
         expect(telemetry.trackEvent).toHaveBeenCalledWith({
           name: 'PrisonerSearch',
           properties: {
@@ -392,7 +389,6 @@ describe('Prisoner search', () => {
 
       await controller.index(req, res)
 
-      // @ts-expect-error ts-migrate(2339) FIXME: Property 'getInmates' does not exist on type '{}'.
       expect(prisonApi.getInmates).toHaveBeenCalledWith(
         {
           ...res.locals,
@@ -412,7 +408,6 @@ describe('Prisoner search', () => {
     })
 
     it('should render the error template if there is a problem', async () => {
-      // @ts-expect-error ts-migrate(2339) FIXME: Property 'getInmates' does not exist on type '{}'.
       prisonApi.getInmates.mockImplementation(() => Promise.reject(new Error('Network error')))
 
       await controller.index(req, res)
@@ -423,7 +418,6 @@ describe('Prisoner search', () => {
     })
 
     it('should not log connection reset API errors', async () => {
-      // @ts-expect-error ts-migrate(2339) FIXME: Property 'getInmates' does not exist on type '{}'.
       prisonApi.getInmates.mockImplementation(() => Promise.reject(makeResetError()))
 
       await controller.index(req, res)
@@ -432,7 +426,6 @@ describe('Prisoner search', () => {
     })
 
     it('should not log connection reset API errors with timeout in stack', async () => {
-      // @ts-expect-error ts-migrate(2339) FIXME: Property 'getInmates' does not exist on type '{}'.
       prisonApi.getInmates.mockImplementation(() => Promise.reject(makeResetErrorWithStack()))
 
       await controller.index(req, res)
@@ -459,7 +452,6 @@ describe('Prisoner search', () => {
 
       await controller.index(req, res)
 
-      // @ts-expect-error ts-migrate(2339) FIXME: Property 'getInmates' does not exist on type '{}'.
       expect(prisonApi.getInmates).toHaveBeenCalledWith(
         expect.objectContaining({
           requestHeaders: expect.objectContaining({
