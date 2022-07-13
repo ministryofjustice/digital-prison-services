@@ -36,6 +36,12 @@ const homepagePage = () =>
       link: () => cy.get('[data-test="manage-restricted-patients"] a'),
       description: () => cy.get('[data-test="manage-restricted-patients"] p'),
     }),
+    incentives: () => ({
+      tile: () => cy.get('[data-test="incentives"]'),
+      title: () => cy.get('[data-test="incentives"] h2'),
+      link: () => cy.get('[data-test="incentives"] a'),
+      description: () => cy.get('[data-test="incentives"] p'),
+    }),
   })
 
 export default {

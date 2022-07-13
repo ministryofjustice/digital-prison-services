@@ -123,7 +123,7 @@ env:
       secretKeyRef:
         name: {{ template "app.name" . }}
         key: BIRMINGHAM_OMU_EMAIL
-  
+
   - name: NORWICH_OMU_EMAIL
     valueFrom:
       secretKeyRef:
@@ -213,6 +213,9 @@ env:
 
   - name: INCENTIVES_API_ENDPOINT_URL
     value: {{ .Values.env.INCENTIVES_API_ENDPOINT_URL | quote }}
+
+  - name: INCENTIVES_EXCLUDED_CASELOADS
+    value: {{ .Values.env.INCENTIVES_EXCLUDED_CASELOADS | quote }}
 
   - name: TOKENVERIFICATION_API_URL
     value: {{ .Values.env.TOKENVERIFICATION_API_URL | quote }}

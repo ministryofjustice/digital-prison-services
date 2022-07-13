@@ -223,6 +223,18 @@ context('Homepage', () => {
           'View your restricted patients, move someone to a secure hospital, or remove someone from the restricted patients service.'
         )
     })
+
+    it('should show incentives', () => {
+      const page = homepagePage.goTo()
+
+      page.incentives().tile().should('exist')
+      page.incentives().title().contains('Manage incentives')
+      page.incentives().link().should('exist')
+      page
+        .incentives()
+        .description()
+        .contains('See prisoner incentive information by residential location and view incentive data visualisations.')
+    })
   })
 
   describe('Footer', () => {

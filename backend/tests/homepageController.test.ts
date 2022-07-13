@@ -26,6 +26,7 @@ describe('Homepage', () => {
     config.applications.sendLegalMail.url = undefined
     config.apis.welcomePeopleIntoPrison.enabled_prisons = undefined
     config.apis.welcomePeopleIntoPrison.url = undefined
+    config.apis.incentives.ui_url = undefined
 
     req = {
       session: {
@@ -551,6 +552,93 @@ describe('Homepage', () => {
       await controller(req, res)
 
       expect(res.redirect).toHaveBeenCalledWith('/videolink')
+    })
+
+    describe('Manage incentives tile', () => {
+      beforeEach(() => {
+        config.apis.incentives.ui_url = 'http://incentives'
+      })
+
+      it('should not render home page with the Incentives tile if user has excluded caseload selected', async () => {
+        config.apis.incentives.excludedCaseloads = 'CADM_I'
+        req = {
+          session: {
+            userDetails: {
+              staffId: 1,
+              activeCaseLoadId: 'CADM_I',
+            },
+          },
+        }
+
+        await controller(req, res)
+
+        expect(res.render).toHaveBeenCalledWith(
+          'homepage/homepage.njk',
+          expect.objectContaining({
+            tasks: [],
+          })
+        )
+      })
+
+      it('should not render home page with the Incentives tile if user is an LSA', async () => {
+        // set LSA roles
+        oauthApi.userRoles.mockResolvedValue([
+          { roleCode: 'MAINTAIN_ACCESS_ROLES' },
+          { roleCode: 'MAINTAIN_ACCESS_ROLES_ADMIN' },
+          { roleCode: 'MAINTAIN_OAUTH_USERS' },
+          { roleCode: 'AUTH_GROUP_MANAGER' },
+        ])
+
+        await controller(req, res)
+
+        // only the Manage user accounts tile
+        expect(res.render).toHaveBeenCalledWith(
+          'homepage/homepage.njk',
+          expect.objectContaining({
+            tasks: [
+              {
+                id: 'manage-users',
+                heading: 'Manage user accounts',
+                description:
+                  'As a Local System Administrator (LSA) or administrator, manage accounts and groups for service users.',
+                href: 'http://manage-auth-accounts-url',
+              },
+            ],
+          })
+        )
+      })
+
+      it('should not render home page with the Incentives tile if incentives URL not provided', async () => {
+        config.apis.incentives.ui_url = null
+
+        await controller(req, res)
+
+        expect(res.render).toHaveBeenCalledWith(
+          'homepage/homepage.njk',
+          expect.objectContaining({
+            tasks: [],
+          })
+        )
+      })
+
+      it('should render home page with the Incentives tile if user has valid caseload and not an LSA', async () => {
+        await controller(req, res)
+
+        expect(res.render).toHaveBeenCalledWith(
+          'homepage/homepage.njk',
+          expect.objectContaining({
+            tasks: [
+              {
+                id: 'incentives',
+                heading: 'Manage incentives',
+                href: 'http://incentives',
+                description:
+                  'See prisoner incentive information by residential location and view incentive data visualisations.',
+              },
+            ],
+          })
+        )
+      })
     })
   })
 
