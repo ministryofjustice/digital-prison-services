@@ -2,7 +2,7 @@ import { switchDateFormat } from '../../utils'
 import { DATE_TIME_FORMAT_SPEC, buildDateTime } from '../../../common/dateHelpers'
 import { raiseAnalyticsEvent } from '../../raiseAnalyticsEvent'
 
-export const bulkAppointmentsClashesFactory = (prisonApi) => {
+export const bulkAppointmentsClashesFactory = (prisonApi, _logError) => {
   const renderTemplate = (req, res, pageData) => {
     const { appointmentDetails, prisonersWithClashes } = pageData
 

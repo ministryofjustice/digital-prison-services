@@ -5,8 +5,8 @@ describe('View Residential Location', () => {
     getInmates: jest.fn(),
   }
   const whereaboutsApi = {
-    searchGroups: jest.fn(),
     getAgencyGroupLocationPrefix: jest.fn(),
+    searchGroups: jest.fn(),
   }
 
   let req

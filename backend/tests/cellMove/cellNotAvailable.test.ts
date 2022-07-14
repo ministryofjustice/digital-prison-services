@@ -1,7 +1,7 @@
 import cellNotAvailable from '../../controllers/cellMove/cellNotAvailable'
 
 describe('Cell not available', () => {
-  const res = { locals: {} as any, redirect: {}, render: {}, status: {} }
+  const res = { locals: {} as any, redirect: {} as any, render: {} as any, status: {} as any }
   let req
 
   const prisonApi = {
