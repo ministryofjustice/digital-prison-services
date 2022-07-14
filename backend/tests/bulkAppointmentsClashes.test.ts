@@ -89,7 +89,6 @@ beforeEach(() => {
   }
   res = { locals: {}, render: jest.fn(), redirect: jest.fn() }
   logError = jest.fn()
-  // @ts-expect-error ts-migrate(2554) FIXME: Expected 1 arguments, but got 2.
   controller = bulkAppointmentsClashesFactory(prisonApi, logError)
 })
 

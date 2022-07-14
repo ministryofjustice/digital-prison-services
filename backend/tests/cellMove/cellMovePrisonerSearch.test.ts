@@ -1,7 +1,9 @@
 import prisonerSearchController from '../../controllers/cellMove/cellMovePrisonerSearch'
 
 describe('Prisoner search', () => {
-  const prisonApi = {}
+  const prisonApi = {
+    getInmates: jest.fn(),
+  }
 
   let req
   let res
@@ -28,7 +30,6 @@ describe('Prisoner search', () => {
       status: jest.fn(),
     }
 
-    // @ts-expect-error ts-migrate(2339) FIXME: Property 'getInmates' does not exist on type '{}'.
     prisonApi.getInmates = jest.fn().mockReturnValue([])
 
     controller = prisonerSearchController({ prisonApi })
@@ -42,7 +43,6 @@ describe('Prisoner search', () => {
 
       await controller(req, res)
 
-      // @ts-expect-error ts-migrate(2339) FIXME: Property 'getInmates' does not exist on type '{}'.
       expect(prisonApi.getInmates).toHaveBeenCalledWith(
         {
           ...res.locals,
@@ -91,7 +91,6 @@ describe('Prisoner search', () => {
           alertsDetails: ['RSS', 'XC'],
         },
       ]
-      // @ts-expect-error ts-migrate(2339) FIXME: Property 'getInmates' does not exist on type '{}'.
       prisonApi.getInmates = jest.fn().mockReturnValue(inmates)
 
       req.query = {

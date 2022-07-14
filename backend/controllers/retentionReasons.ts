@@ -38,7 +38,17 @@ export const retentionReasonsFactory = (prisonApi, dataComplianceApi) => {
       })
       .map((option) => ({ text: 'Enter more detail', href: `#more-detail-${option.reasonCode}` }))
 
-  const renderTemplate = async ({ req, res, selectedReasons, pageErrors }) => {
+  const renderTemplate = async ({
+    req,
+    res,
+    selectedReasons,
+    pageErrors,
+  }: {
+    req: any
+    res: any
+    selectedReasons?: unknown
+    pageErrors?: unknown
+  }) => {
     const { offenderNo } = req.params
     const [offenderDetails, allRetentionReasons, existingRecord] = await Promise.all([
       prisonApi.getDetails(res.locals, offenderNo),
@@ -64,7 +74,6 @@ export const retentionReasonsFactory = (prisonApi, dataComplianceApi) => {
     })
   }
 
-  // @ts-expect-error ts-migrate(2345) FIXME: Argument of type '{ req: any; res: any; }' is not ... Remove this comment to see the full error message
   const index = async (req, res) => renderTemplate({ req, res })
 
   const post = async (req, res) => {

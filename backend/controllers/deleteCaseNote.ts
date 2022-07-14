@@ -1,6 +1,20 @@
 import { capitalize, formatName, putLastNameFirst } from '../utils'
 
 export default ({ prisonApi, caseNotesApi, oauthApi }) => {
+  type CaseNoteData = {
+    prisonNumber: string
+    prisonerNameForBreadcrumb: string
+    prisonerName: string
+    typeSubType: string
+    backToCaseNotes: string
+    caseNoteId: string
+    caseNoteAmendmentId?: number
+    text?: string
+    date?: string
+    authorName?: string
+    amendments?: Record<string, unknown>[]
+  }
+
   const index = async (req, res) => {
     const { offenderNo, caseNoteId, caseNoteAmendmentId } = req.params
 
@@ -16,7 +30,7 @@ export default ({ prisonApi, caseNotesApi, oauthApi }) => {
         return res.render('notFound.njk', { url: req.headers.referer || `/prisoner/${offenderNo}/case-notes` })
       }
 
-      let caseNoteData = {
+      let caseNoteData: CaseNoteData = {
         prisonNumber: offenderNo,
         prisonerNameForBreadcrumb: putLastNameFirst(prisonerDetails.firstName, prisonerDetails.lastName),
         prisonerName: formatName(prisonerDetails.firstName, prisonerDetails.lastName),
@@ -36,7 +50,6 @@ export default ({ prisonApi, caseNotesApi, oauthApi }) => {
 
         caseNoteData = {
           ...caseNoteData,
-          // @ts-expect-error ts-migrate(2322) FIXME: Type '{ caseNoteAmendmentId: any; text: any; date:... Remove this comment to see the full error message
           caseNoteAmendmentId: amendmentToDelete.caseNoteAmendmentId,
           text: amendmentToDelete.additionalNoteText,
           date: amendmentToDelete.creationDateTime,
@@ -45,7 +58,6 @@ export default ({ prisonApi, caseNotesApi, oauthApi }) => {
       } else {
         caseNoteData = {
           ...caseNoteData,
-          // @ts-expect-error ts-migrate(2322) FIXME: Type '{ text: any; date: any; authorName: any; ame... Remove this comment to see the full error message
           text: caseNote.text,
           date: caseNote.creationDateTime,
           authorName: caseNote.authorName,
