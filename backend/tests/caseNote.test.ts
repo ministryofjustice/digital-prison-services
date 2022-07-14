@@ -109,8 +109,8 @@ describe('case note management', () => {
         })
       )
 
-      // @ts-expect-error ts-migrate(2339) FIXME: Property 'mockRestore' does not exist on type '() ... Remove this comment to see the full error message
-      Date.now.mockRestore()
+      const spy = jest.spyOn(Date, 'now')
+      spy.mockRestore()
     })
     it('should return an error when there is a problem loading the form', async () => {
       const error = new Error('There has been an error')
@@ -156,8 +156,8 @@ describe('case note management', () => {
         })
       )
 
-      // @ts-expect-error ts-migrate(2339) FIXME: Property 'mockRestore' does not exist on type '() ... Remove this comment to see the full error message
-      Date.now.mockRestore()
+      const spy = jest.spyOn(Date, 'now')
+      spy.mockRestore()
     })
 
     it('should filter the sub types if a type is selected', async () => {
@@ -189,8 +189,8 @@ describe('case note management', () => {
         })
       )
 
-      // @ts-expect-error ts-migrate(2339) FIXME: Property 'mockRestore' does not exist on type '() ... Remove this comment to see the full error message
-      Date.now.mockRestore()
+      const spy = jest.spyOn(Date, 'now')
+      spy.mockRestore()
     })
 
     it('should default type and subType to the values supplied via query parameters', async () => {
@@ -211,8 +211,8 @@ describe('case note management', () => {
           },
         })
       )
-      // @ts-expect-error ts-migrate(2339) FIXME: Property 'mockRestore' does not exist on type '() ... Remove this comment to see the full error message
-      Date.now.mockRestore()
+      const spy = jest.spyOn(Date, 'now')
+      spy.mockRestore()
     })
 
     it('should copy information from flash scope', async () => {
@@ -239,8 +239,8 @@ describe('case note management', () => {
           },
         })
       )
-      // @ts-expect-error ts-migrate(2339) FIXME: Property 'mockRestore' does not exist on type '() ... Remove this comment to see the full error message
-      Date.now.mockRestore()
+      const spy = jest.spyOn(Date, 'now')
+      spy.mockRestore()
     })
 
     it('should chose some positive/negative behaviour entry prompts', async () => {

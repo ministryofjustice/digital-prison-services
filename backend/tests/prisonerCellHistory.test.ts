@@ -104,8 +104,8 @@ describe('Prisoner cell history', () => {
   })
 
   afterEach(() => {
-    // @ts-expect-error ts-migrate(2339) FIXME: Property 'mockRestore' does not exist on type '() ... Remove this comment to see the full error message
-    Date.now.mockRestore()
+    const spy = jest.spyOn(Date, 'now')
+    spy.mockRestore()
   })
 
   describe('cell history for offender', () => {

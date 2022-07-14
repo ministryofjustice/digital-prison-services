@@ -85,7 +85,6 @@ const controller = ({
       systemOauthClient,
       incentivesApi,
       restrictedPatientApi,
-      // @ts-expect-error ts-migrate(2345) FIXME: Argument of type '{ prisonerProfileService: { getP... Remove this comment to see the full error message
       logError,
     })
   )

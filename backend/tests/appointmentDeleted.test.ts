@@ -1,13 +1,12 @@
 import appointmentDeleted from '../controllers/appointmentDeleted'
 
-const res = { locals: {}, send: jest.fn(), redirect: jest.fn() }
+const res = { locals: {}, send: jest.fn(), redirect: jest.fn(), render: jest.fn() }
 
 let controller
 
 beforeEach(() => {
   controller = appointmentDeleted()
 
-  // @ts-expect-error ts-migrate(2339) FIXME: Property 'render' does not exist on type '{ locals... Remove this comment to see the full error message
   res.render = jest.fn()
 })
 
@@ -20,7 +19,6 @@ describe('appointment deleted', () => {
     it('should show the correct page', async () => {
       await controller.index(req, res)
 
-      // @ts-expect-error ts-migrate(2339) FIXME: Property 'render' does not exist on type '{ locals... Remove this comment to see the full error message
       expect(res.render).toBeCalledWith('appointmentDeleted.njk', {
         multipleDeleted: false,
       })
@@ -35,7 +33,6 @@ describe('appointment deleted', () => {
     it('should show the correct page', async () => {
       await controller.index(req, res)
 
-      // @ts-expect-error ts-migrate(2339) FIXME: Property 'render' does not exist on type '{ locals... Remove this comment to see the full error message
       expect(res.render).toBeCalledWith('appointmentDeleted.njk', {
         multipleDeleted: true,
       })
