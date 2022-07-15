@@ -149,7 +149,6 @@ export const bulkAppointmentsConfirmFactory = (prisonApi, logError) => {
     }
 
     try {
-      // @ts-expect-error ts-migrate(2554) FIXME: Expected 1 arguments, but got 2.
       const { getOtherEvents } = bulkAppointmentsClashesFactory(prisonApi, logError)
       const eventsForAllOffenders = await getOtherEvents(req, res, {
         offenderNumbers: prisonersListed.map((prisoner) => prisoner.offenderNo),
