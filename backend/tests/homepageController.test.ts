@@ -578,6 +578,9 @@ describe('Homepage', () => {
             tasks: [],
           })
         )
+
+        // set this back to empty list
+        config.apis.incentives.excludedCaseloads = ''
       })
 
       it('should not render home page with the Incentives tile if user is an LSA', async () => {
