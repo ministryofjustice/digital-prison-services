@@ -55,6 +55,7 @@ export default ({
     incentivesApi,
     oauthApi,
     restrictedPatientApi,
+    logError,
   }) =>
   async (req, res) => {
     const {

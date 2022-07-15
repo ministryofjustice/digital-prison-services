@@ -1729,8 +1729,8 @@ describe('prisoner personal', () => {
       })
 
       afterEach(() => {
-        // @ts-expect-error ts-migrate(2339) FIXME: Property 'mockRestore' does not exist on type '() ... Remove this comment to see the full error message
-        Date.now.mockRestore()
+        const spy = jest.spyOn(Date, 'now')
+        spy.mockRestore()
       })
 
       it('should render the template with the correct primary address data', async () => {
