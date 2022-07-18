@@ -62,15 +62,8 @@ const getTasks = ({ activeCaseLoadId, locations, staffId, whereaboutsConfig, key
       roles: null,
       enabled: () =>
         incentives.ui_url &&
-        !(
-          incentives.excludedCaseloads.split(',').includes(activeCaseLoadId) ||
-          userHasRoles([
-            'MAINTAIN_ACCESS_ROLES',
-            'MAINTAIN_ACCESS_ROLES_ADMIN',
-            'MAINTAIN_OAUTH_USERS',
-            'AUTH_GROUP_MANAGER',
-          ])
-        ),
+        Boolean(locations?.length > 0) &&
+        !incentives.excludedCaseloads.split(',').includes(activeCaseLoadId),
     },
     {
       id: 'use-of-force',

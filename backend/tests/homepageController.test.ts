@@ -557,6 +557,10 @@ describe('Homepage', () => {
     describe('Manage incentives tile', () => {
       beforeEach(() => {
         config.apis.incentives.ui_url = 'http://incentives'
+        prisonApi.userLocations.mockResolvedValue([
+          { description: 'Moorland (HMP & YOI)', locationPrefix: 'MDI' },
+          { description: 'Houseblock 1', locationPrefix: 'MDI-1' },
+        ])
       })
 
       it('should not render home page with the Incentives tile if user has excluded caseload selected', async () => {
@@ -572,10 +576,18 @@ describe('Homepage', () => {
 
         await controller(req, res)
 
+        // we get Establishment roll check as we have > 0 locations
         expect(res.render).toHaveBeenCalledWith(
           'homepage/homepage.njk',
           expect.objectContaining({
-            tasks: [],
+            tasks: [
+              {
+                id: 'establishment-roll',
+                heading: 'Establishment roll check',
+                description: 'View the roll broken down by residential unit and see who is arriving and leaving.',
+                href: '/establishment-roll',
+              },
+            ],
           })
         )
 
@@ -583,30 +595,16 @@ describe('Homepage', () => {
         config.apis.incentives.excludedCaseloads = ''
       })
 
-      it('should not render home page with the Incentives tile if user is an LSA', async () => {
-        // set LSA roles
-        oauthApi.userRoles.mockResolvedValue([
-          { roleCode: 'MAINTAIN_ACCESS_ROLES' },
-          { roleCode: 'MAINTAIN_ACCESS_ROLES_ADMIN' },
-          { roleCode: 'MAINTAIN_OAUTH_USERS' },
-          { roleCode: 'AUTH_GROUP_MANAGER' },
-        ])
+      it('should not render home page with the Incentives tile if user has no locations', async () => {
+        // user has no locations
+        prisonApi.userLocations.mockResolvedValue([])
 
         await controller(req, res)
 
-        // only the Manage user accounts tile
         expect(res.render).toHaveBeenCalledWith(
           'homepage/homepage.njk',
           expect.objectContaining({
-            tasks: [
-              {
-                id: 'manage-users',
-                heading: 'Manage user accounts',
-                description:
-                  'As a Local System Administrator (LSA) or administrator, manage accounts and groups for service users.',
-                href: 'http://manage-auth-accounts-url',
-              },
-            ],
+            tasks: [],
           })
         )
       })
@@ -616,15 +614,23 @@ describe('Homepage', () => {
 
         await controller(req, res)
 
+        // we get Establishment roll check as we have > 0 locations
         expect(res.render).toHaveBeenCalledWith(
           'homepage/homepage.njk',
           expect.objectContaining({
-            tasks: [],
+            tasks: [
+              {
+                id: 'establishment-roll',
+                heading: 'Establishment roll check',
+                description: 'View the roll broken down by residential unit and see who is arriving and leaving.',
+                href: '/establishment-roll',
+              },
+            ],
           })
         )
       })
 
-      it('should render home page with the Incentives tile if user has valid caseload and not an LSA', async () => {
+      it('should render home page with the Incentives tile if user has valid caseload and at least one location', async () => {
         await controller(req, res)
 
         expect(res.render).toHaveBeenCalledWith(
@@ -637,6 +643,12 @@ describe('Homepage', () => {
                 href: 'http://incentives',
                 description:
                   'See prisoner incentive information by residential location and view incentive data visualisations.',
+              },
+              {
+                id: 'establishment-roll',
+                heading: 'Establishment roll check',
+                description: 'View the roll broken down by residential unit and see who is arriving and leaving.',
+                href: '/establishment-roll',
               },
             ],
           })
