@@ -1,10 +1,23 @@
 import axios from 'axios'
 import querystring from 'querystring'
+import jwtDecode, { JwtPayload } from 'jwt-decode'
 import logger from '../log'
 import errorStatusCode from '../error-status-code'
 
 const AuthClientErrorName = 'AuthClientError'
 const AuthClientError = (message) => ({ name: AuthClientErrorName, message, stack: new Error().stack })
+
+interface DpsJwtPayload extends JwtPayload {
+  authorities?: string[]
+}
+
+class UserRole {
+  role: string
+
+  constructor(role: string) {
+    this.role = role
+  }
+}
 
 export const apiClientCredentials = (clientId, clientSecret) =>
   Buffer.from(`${clientId}:${clientSecret}`).toString('base64')
@@ -20,7 +33,8 @@ export const apiClientCredentials = (clientId, clientSecret) =>
 export const oauthApiFactory = (client, { clientId, clientSecret, url }) => {
   const get = (context, path) => client.get(context, path).then((response) => response.body)
   const currentUser = (context) => get(context, '/api/user/me')
-  const userRoles = (context) => get(context, '/api/user/me/roles')
+  const userRoles = (context) =>
+    jwtDecode<DpsJwtPayload>(context).authorities.map((authority) => new UserRole(authority.replace('ROLE_', '')))
   const userEmail = (context, username) => get(context, `/api/user/${username}/email`)
   const userDetails = (context, username) => get(context, `/api/user/${username}`)
 
