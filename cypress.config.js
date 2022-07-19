@@ -159,7 +159,7 @@ module.exports = defineConfig({
           complexOffenders = [],
         }) =>
           Promise.all([
-            auth.stubUserMeRoles([...userRoles, { roleCode: 'UPDATE_ALERT' }]),
+            auth.stubUserMeRoles([...userRoles, 'UPDATE_ALERT']),
             prisonApi.stubOffenderBasicDetails(offenderBasicDetails),
             prisonApi.stubOffenderFullDetails(offenderFullDetails),
             incentivesApi.stubGetIepSummaryForBookingIds(iepSummary),

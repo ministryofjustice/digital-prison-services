@@ -132,21 +132,6 @@ const stubUserMe = (username = 'ITAG_USER', staffId = 12345, name = 'James Stuar
     },
   })
 
-/* const stubUserMeRoles = (roles = ['ROLE']) =>
-  stubFor({
-    request: {
-      method: 'GET',
-      url: '/auth/api/user/me/roles',
-    },
-    response: {
-      status: 200,
-      headers: {
-        'Content-Type': 'application/json;charset=UTF-8',
-      },
-      jsonBody: roles,
-    },
-  })
-*/
 const stubEmail = (username) =>
   stubFor({
     request: {
@@ -219,7 +204,7 @@ module.exports = {
       favicon(),
       redirect(),
       signOut(),
-      token([{ roleCode: 'UPDATE_ALERT' }, ...roles]),
+      token(['UPDATE_ALERT', ...roles]),
       stubUserMe(username, 12345, 'James Stuart', caseloadId),
       stubUser(username, caseloadId),
       stubUserLocations(),
@@ -227,13 +212,7 @@ module.exports = {
       stubLocationConfig({ agencyId: caseloadId, response: { enabled: false } }),
     ]),
   stubSignInCourt: () =>
-    Promise.all([
-      favicon(),
-      redirect(),
-      signOut(),
-      token([{ roleCode: 'GLOBAL_SEARCH' }, { roleCode: 'VIDEO_LINK_COURT_USER' }]),
-      stubUserMe(),
-    ]),
+    Promise.all([favicon(), redirect(), signOut(), token(['GLOBAL_SEARCH', 'VIDEO_LINK_COURT_USER']), stubUserMe()]),
   stubUserDetailsRetrieval: (username) => Promise.all([stubUser(username), stubEmail(username)]),
   stubUnverifiedUserDetailsRetrieval: (username) => Promise.all([stubUser(username), stubUnverifiedEmail(username)]),
   stubUserMe,

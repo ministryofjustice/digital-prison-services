@@ -37,6 +37,7 @@ export const oauthApiFactory = (client, { clientId, clientSecret, url }) => {
     jwtDecode<DpsJwtPayload>(context.access_token).authorities.map(
       (authority) => new UserRole(authority.replace('ROLE_', ''))
     )
+
   const userEmail = (context, username) => get(context, `/api/user/${username}/email`)
   const userDetails = (context, username) => get(context, `/api/user/${username}`)
 
