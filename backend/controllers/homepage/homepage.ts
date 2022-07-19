@@ -16,6 +16,7 @@ const {
     legacyPrisonVisits,
     welcomePeopleIntoPrison,
     manageRestrictedPatients,
+    historicalPrisonerApplication,
     incentives,
     createAndVaryALicence,
   },
@@ -227,6 +228,13 @@ const getTasks = ({ activeCaseLoadId, locations, staffId, whereaboutsConfig, key
       enabled: () =>
         manageRestrictedPatients.ui_url &&
         userHasRoles(['SEARCH_RESTRICTED_PATIENT', 'TRANSFER_RESTRICTED_PATIENT', 'REMOVE_RESTRICTED_PATIENT']),
+    },
+    {
+      id: 'historical-prisoner-application',
+      heading: 'Historical Prisoner Application',
+      description: 'This service allows users to view historical prisoner information.',
+      href: historicalPrisonerApplication.ui_url,
+      enabled: () => historicalPrisonerApplication.ui_url && userHasRoles(['HPA_USER']),
     },
     {
       id: 'create-and-vary-a-licence',

@@ -325,4 +325,6 @@ env:
   - name: PRISONS_FOR_MANAGE_PRISON_BOOKINGS
     value: {{ .Values.env.PRISONS_FOR_MANAGE_PRISON_BOOKINGS | quote }}
 
+  - name: HPA_ENDPOINT_URL
+    value: {{ .Values.env.HPA_ENDPOINT_URL | quote }}
 {{- end -}}

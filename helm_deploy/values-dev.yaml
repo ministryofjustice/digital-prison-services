@@ -75,3 +75,4 @@ env:
   CREATE_AND_VARY_A_LICENCE_URL: https://create-and-vary-a-licence-dev.hmpps.service.justice.gov.uk/
   CREATE_AND_VARY_A_LICENCE_ENABLED_PRISONS: "MDI,LEI,LPI,BMI,PVI,BXI,WAI"
   RESTRICTED_PATIENT_API_URL: https://restricted-patients-api-dev.hmpps.service.justice.gov.uk/
+  HPA_ENDPOINT_URL: https://hpa-stage.hmpps.dsd.io
