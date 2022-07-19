@@ -244,8 +244,7 @@ const getTasks = ({ activeCaseLoadId, locations, staffId, whereaboutsConfig, key
       heading: 'Historical Prisoner Application',
       description: 'This service allows users to view historical prisoner information.',
       href: historicalPrisonerApplication.ui_url,
-      enabled: () =>
-          historicalPrisonerApplication.ui_url && userHasRoles(['HPA_USER']),
+      enabled: () => historicalPrisonerApplication.ui_url && userHasRoles(['HPA_USER']),
     },
   ]
 }
