@@ -75,6 +75,8 @@ env:
   CREATE_AND_VARY_A_LICENCE_URL: https://create-and-vary-a-licence-preprod.hmpps.service.justice.gov.uk/
   CREATE_AND_VARY_A_LICENCE_ENABLED_PRISONS: "CFI,CWI,UKI,UPI,PRI,FHI,LCI,LII,LGI,MHI,NSI,NMI,RNI,SKI,SUI,WTI"
   RESTRICTED_PATIENT_API_URL: https://restricted-patients-api-preprod.hmpps.service.justice.gov.uk/
+  HISTORICAL_PRISONER_APPLICATION_URL: https://hpa-preprod.hmpps.dsd.io
+
 
 allowlist:
   office: "217.33.148.210/32"

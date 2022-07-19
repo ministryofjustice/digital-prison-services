@@ -18,6 +18,7 @@ const {
     manageRestrictedPatients,
     incentives,
     createAndVaryALicence,
+    historicalPrisonerApplication,
   },
 } = config
 
@@ -237,6 +238,15 @@ const getTasks = ({ activeCaseLoadId, locations, staffId, whereaboutsConfig, key
         createAndVaryALicence.url &&
         createAndVaryALicence.enabled_prisons.split(',').includes(activeCaseLoadId) &&
         userHasRoles(['LICENCE_CA', 'LICENCE_DM', 'LICENCE_RO', 'LICENCE_ACO', 'LICENCE_ADMIN']),
+    },
+    {
+      id: 'historical-prisoner-application',
+      heading: 'Historical Prisoner Application',
+      description: 'This service allows users to view historical prisoner information.',
+      href: historicalPrisonerApplication.ui_url,
+      enabled: () =>
+          historicalPrisonerApplication.ui_url &&
+          userHasRoles(['HPA_USER']),
     },
   ]
 }
