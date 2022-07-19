@@ -46,7 +46,7 @@ context('Prisoners unaccounted for', () => {
   before(() => {
     cy.clearCookies()
     cy.task('resetAndStubTokenVerification')
-    cy.task('stubSignIn', { username: 'ITAG_USER', caseload: 'MDI', roles: [{ roleCode: 'ACTIVITY_HUB' }] })
+    cy.task('stubSignIn', { username: 'ITAG_USER', caseload: 'MDI', roles: ['ACTIVITY_HUB'] })
     cy.signIn()
   })
 

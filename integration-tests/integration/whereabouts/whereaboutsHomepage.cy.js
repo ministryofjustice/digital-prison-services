@@ -11,7 +11,6 @@ context('Whereabouts homepage', () => {
     })
 
     it('should non role specific tasks', () => {
-      cy.task('stubUserMeRoles')
       cy.visit('/manage-prisoner-whereabouts')
 
       cy.get('[data-test="view-residential-location"]').should('exist')
