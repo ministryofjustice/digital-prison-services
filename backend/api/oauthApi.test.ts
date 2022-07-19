@@ -8,8 +8,10 @@ const clientSecret = 'clientSecret'
 const client = {} as any
 const oauthApi = oauthApiFactory(client, { url, clientId, clientSecret })
 const mock = nock(url, { reqheaders: { 'Content-Type': 'application/x-www-form-urlencoded' } })
-const context =
-  'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxMjM0NTY3ODkwIiwibmFtZSI6IkpvaG4gRG9lIiwiaWF0IjoxNTE2MjM5MDIyLCJhdXRob3JpdGllcyI6WyJST0xFX1RFU1QiXX0.brDYlcg4pVOcz5hp1ejVWLNYKZsYYWT4vz_N52m0JzA'
+const context = {
+  access_token:
+    'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxMjM0NTY3ODkwIiwibmFtZSI6IkpvaG4gRG9lIiwiaWF0IjoxNTE2MjM5MDIyLCJhdXRob3JpdGllcyI6WyJST0xFX1RFU1QiXX0.brDYlcg4pVOcz5hp1ejVWLNYKZsYYWT4vz_N52m0JzA',
+}
 describe('oauthApi tests', () => {
   beforeEach(() => {
     nock.cleanAll()
