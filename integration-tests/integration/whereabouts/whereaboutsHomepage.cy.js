@@ -4,9 +4,13 @@ context('Whereabouts homepage', () => {
     cy.task('reset')
   })
 
-  describe('Tasks', () => {
+  describe('Permission Tasks', () => {
     beforeEach(() => {
-      cy.task('stubSignIn', { username: 'ITAG_USER', caseload: 'MDI' }, ['PRISON', 'BULK_APPOINTMENTS'])
+      cy.task('stubSignIn', {
+        username: 'ITAG_USER',
+        caseload: 'MDI',
+        roles: ['ROLE_PRISON'],
+      })
       cy.signIn()
     })
 
@@ -22,7 +26,17 @@ context('Whereabouts homepage', () => {
       cy.get('[data-test="view-bulk-appointments"]').should('not.exist')
       cy.get('[data-test="view-covid-units"]').should('not.exist')
     })
+  })
 
+  describe('Tasks', () => {
+    beforeEach(() => {
+      cy.task('stubSignIn', {
+        username: 'ITAG_USER',
+        caseload: 'MDI',
+        roles: ['ROLE_PRISON', 'ROLE_BULK_APPOINTMENTS'],
+      })
+      cy.signIn()
+    })
     it('should show covid unit task', () => {
       cy.visit('/manage-prisoner-whereabouts')
       cy.get('[data-test="view-covid-units"]').should('exist')

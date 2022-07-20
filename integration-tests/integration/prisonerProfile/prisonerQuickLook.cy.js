@@ -453,15 +453,33 @@ context('Prisoner quick look', () => {
 
   context('When a user can view inactive bookings', () => {
     beforeEach(() => {
+      cy.clearCookies()
+      cy.task('reset')
+      cy.task('stubSignIn', { username: 'ITAG_USER', caseload: 'MDI', caseloads: [] })
+      cy.signIn()
+
+      cy.task('stubPrisonerProfileHeaderData', {
+        offenderBasicDetails,
+        offenderFullDetails,
+        iepSummary: {},
+        caseNoteSummary: {},
+        offenderNo,
+      })
+
+      cy.task('stubQuickLookApiErrors')
+      cy.visit(`/prisoner/${offenderNo}`)
+    })
+
+    beforeEach(() => {
       Cypress.Cookies.preserveOnce('hmpps-session-dev')
       cy.task('stubPrisonerProfileHeaderData', {
         offenderBasicDetails,
         offenderFullDetails: { ...offenderFullDetails, agencyId: 'OUT' },
         iepSummary: {},
         caseNoteSummary: {},
-        userRoles: ['ROLE_INACTIVE_BOOKINGS'],
         offenderNo,
       })
+      //   cy.task('stubSignIn', { username: 'ITAG_USER', caseload: 'MDI', roles: ['ROLE_INACTIVE_BOOKINGS'] })
     })
 
     it('Should display conditionally displayed links to other pages', () => {

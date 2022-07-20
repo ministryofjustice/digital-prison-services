@@ -6,7 +6,7 @@ context('Prisoner probation documents', () => {
   before(() => {
     cy.clearCookies()
     cy.task('reset')
-    cy.task('stubSignIn', { username: 'ITAG_USER', caseload: 'MDI' }, ['VIEW_PROBATION_DOCUMENTS'])
+    cy.task('stubSignIn', { username: 'ITAG_USER', caseload: 'MDI', roles: ['VIEW_PROBATION_DOCUMENTS'] })
     cy.signIn()
   })
 
