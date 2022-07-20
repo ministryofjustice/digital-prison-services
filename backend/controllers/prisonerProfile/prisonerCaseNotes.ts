@@ -88,7 +88,7 @@ export default ({
       overrideAccess
     )
 
-    const userRoles = await oauthApi.userRoles(res.locals).then((roles) => roles.map((role) => role.roleCode))
+    const userRoles = oauthApi.userRoles(res.locals).map((role) => role.roleCode)
     const hasDeleteRole = userRoles.includes('DELETE_SENSITIVE_CASE_NOTES')
 
     const caseNoteViewData = caseNotes.content.map((caseNote) => {

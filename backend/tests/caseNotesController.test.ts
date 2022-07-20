@@ -61,7 +61,7 @@ describe('Case notes controller', () => {
 
   beforeEach(() => {
     // @ts-expect-error ts-migrate(2339) FIXME: Property 'getNeurodiversities' does not exist on type '{}'... Remove this comment to see the full error message
-    oauthApi.userRoles = jest.fn().mockResolvedValue([])
+    oauthApi.userRoles = jest.fn().mockReturnValue([])
     // @ts-expect-error ts-migrate(2339) FIXME: Property 'getCaseNotes' does not exist on type '{}... Remove this comment to see the full error message
     caseNotesApi.getCaseNotes = jest.fn()
     // @ts-expect-error ts-migrate(2339) FIXME: Property 'getCaseNoteTypes' does not exist on type... Remove this comment to see the full error message
@@ -102,7 +102,7 @@ describe('Case notes controller', () => {
     logError = jest.fn()
 
     // @ts-expect-error ts-migrate(2339) FIXME: Property 'userRoles' does not exist on type '{}'.
-    oauthApi.userRoles = jest.fn().mockResolvedValue([{ roleCode: 'INACTIVE_BOOKINGS' }])
+    oauthApi.userRoles = jest.fn().mockReturnValue([{ roleCode: 'INACTIVE_BOOKINGS' }])
 
     controller = controllerFactory({
       caseNotesApi,

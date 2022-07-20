@@ -23,7 +23,7 @@ context('A user can add an alert', () => {
   })
 
   it('A user can successfully add an alert', () => {
-    cy.task('stubClientCredentialsRequest', { roles: ['ROLE_UPDATE_ALERT'] })
+    cy.task('stubClientCredentialsRequest')
     cy.task('stubPrisonerProfileHeaderData', {
       offenderBasicDetails,
       offenderFullDetails,
@@ -96,13 +96,14 @@ context('A user can add an alert', () => {
     })
   })
 })
-
+/*
 context('A user without permissions', () => {
   before(() => {
     cy.clearCookies()
     cy.task('resetAndStubTokenVerification')
     cy.task('stubSignIn', { username: 'ITAG_USER', caseload: 'MDI' })
     cy.signIn()
+    cy.task('stubClientCredentialsRequest')
   })
   beforeEach(() => {
     Cypress.Cookies.preserveOnce('hmpps-session-dev')
@@ -118,4 +119,4 @@ context('A user without permissions', () => {
     cy.visit('/offenders/A12345/create-alert')
     NotFoundPage.verifyOnPage()
   })
-})
+}) */

@@ -357,7 +357,7 @@ module.exports = defineConfig({
         stubCourtCases: (courtCases) => prisonApi.stubCourtCases(courtCases),
         stubOffenceHistory: (offenceHistory) => prisonApi.stubOffenceHistory(offenceHistory),
         stubSentenceTerms: (sentenceTerms) => prisonApi.stubSentenceTerms(sentenceTerms),
-        stubClientCredentialsRequest: (roles = []) => auth.stubClientCredentialsRequest(roles),
+        stubClientCredentialsRequest: () => auth.stubClientCredentialsRequest(),
         stubUserMe: ({ username, staffId, name }) => auth.stubUserMe(username, staffId, name),
         stubPathFinderOffenderDetails: (details) => pathfinder.getOffenderDetails(details),
         stubSocOffenderDetails: (details) => socApi.stubGetOffenderDetails(details),

@@ -142,7 +142,7 @@ describe('select location', () => {
       },
     ])
 
-    oauthApi.userRoles = jest.fn().mockResolvedValue([{ roleCode: 'CELL_MOVE' }])
+    oauthApi.userRoles = jest.fn().mockReturnValue([{ roleCode: 'CELL_MOVE' }])
     prisonApi.userCaseLoads = jest.fn().mockResolvedValue([{ caseLoadId: 'MDI' }])
 
     controller = searchForCell({ oauthApi, prisonApi, whereaboutsApi })

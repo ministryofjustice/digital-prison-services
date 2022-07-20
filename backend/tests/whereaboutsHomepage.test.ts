@@ -26,7 +26,7 @@ describe('Homepage', () => {
     }
     res = { locals: {}, render: jest.fn(), redirect: jest.fn() }
     prisonApi.getStaffRoles = jest.fn().mockResolvedValue([])
-    oauthApi.userRoles = jest.fn().mockResolvedValue([])
+    oauthApi.userRoles = jest.fn().mockReturnValue([])
   })
 
   const app = express()

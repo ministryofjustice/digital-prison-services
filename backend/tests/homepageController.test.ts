@@ -41,7 +41,7 @@ describe('Homepage', () => {
 
     prisonApi.userLocations = jest.fn().mockResolvedValue([])
     prisonApi.getStaffRoles = jest.fn().mockResolvedValue([])
-    oauthApi.userRoles = jest.fn().mockResolvedValue([])
+    oauthApi.userRoles = jest.fn().mockReturnValue([])
     whereaboutsApi.getWhereaboutsConfig = jest.fn().mockResolvedValue({})
     keyworkerApi.getPrisonMigrationStatus = jest.fn().mockResolvedValue({ migrated: true })
 

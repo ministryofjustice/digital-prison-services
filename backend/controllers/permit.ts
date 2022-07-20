@@ -1,6 +1,6 @@
 export default (oauthApi, permittedRoles = []) =>
   async (req, res, next) => {
-    const userRoles = await oauthApi.userRoles(res.locals)
+    const userRoles = oauthApi.userRoles(res.locals)
     const roleCodes = userRoles.map((userRole) => userRole.roleCode)
 
     if (permittedRoles.some((role) => roleCodes.includes(role))) {

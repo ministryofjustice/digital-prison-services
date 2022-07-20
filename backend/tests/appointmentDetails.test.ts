@@ -37,7 +37,7 @@ describe('appointment details', () => {
     res = { render: jest.fn() }
 
     // @ts-expect-error ts-migrate(2339) FIXME: Property 'userRoles' does not exist on type '{}'.
-    oauthApi.userRoles = jest.fn().mockResolvedValue([{ roleCode: 'INACTIVE_BOOKINGS' }])
+    oauthApi.userRoles = jest.fn().mockReturnValue([{ roleCode: 'INACTIVE_BOOKINGS' }])
 
     // @ts-expect-error ts-migrate(2339) FIXME: Property 'getDetails' does not exist on type '{}'.
     prisonApi.getDetails = jest.fn().mockResolvedValue({
@@ -136,7 +136,7 @@ describe('appointment details', () => {
     describe('with activity hub role', () => {
       beforeEach(() => {
         // @ts-expect-error ts-migrate(2339) FIXME: Property 'userRoles' does not exist on type '{}'.
-        oauthApi.userRoles = jest.fn().mockResolvedValue([{ roleCode: 'ACTIVITY_HUB' }])
+        oauthApi.userRoles = jest.fn().mockReturnValue([{ roleCode: 'ACTIVITY_HUB' }])
       })
 
       it('should supply delete button link', async () => {
@@ -154,7 +154,7 @@ describe('appointment details', () => {
     describe('with delete-a-prisoners-appointment role', () => {
       beforeEach(() => {
         // @ts-expect-error ts-migrate(2339) FIXME: Property 'userRoles' does not exist on type '{}'.
-        oauthApi.userRoles = jest.fn().mockResolvedValue([{ roleCode: 'DELETE_A_PRISONERS_APPOINTMENT' }])
+        oauthApi.userRoles = jest.fn().mockReturnValue([{ roleCode: 'DELETE_A_PRISONERS_APPOINTMENT' }])
       })
 
       it('should supply delete button link', async () => {

@@ -36,7 +36,7 @@ describe('Delete case note', () => {
       lastName: 'SMITH',
     })
     // @ts-expect-error ts-migrate(2339) FIXME: Property 'userRoles' does not exist on type '{}'.
-    oauthApi.userRoles = jest.fn().mockResolvedValue([{ roleCode: 'DELETE_SENSITIVE_CASE_NOTES' }])
+    oauthApi.userRoles = jest.fn().mockReturnValue([{ roleCode: 'DELETE_SENSITIVE_CASE_NOTES' }])
 
     // @ts-expect-error ts-migrate(2345) FIXME: Argument of type '{ caseNotesApi: {}; prisonApi: {... Remove this comment to see the full error message
     controller = deleteCaseNoteController({ caseNotesApi, prisonApi, logError: jest.fn(), oauthApi })
@@ -63,7 +63,7 @@ describe('Delete case note', () => {
   describe('index', () => {
     it('should redirect user to the page not found page if the user does not have the delete casenotes role', async () => {
       // @ts-expect-error ts-migrate(2339) FIXME: Property 'userRoles' does not exist on type '{}'.
-      oauthApi.userRoles = jest.fn().mockResolvedValue([{ roleCode: 'ANOTHER_ROLE' }])
+      oauthApi.userRoles = jest.fn().mockReturnValue([{ roleCode: 'ANOTHER_ROLE' }])
 
       // @ts-expect-error ts-migrate(2339) FIXME: Property 'getCaseNote' does not exist on type '{}'... Remove this comment to see the full error message
       caseNotesApi.getCaseNote = jest.fn().mockResolvedValue({

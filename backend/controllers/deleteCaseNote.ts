@@ -24,7 +24,7 @@ export default ({ prisonApi, caseNotesApi, oauthApi }) => {
         prisonApi.getDetails(res.locals, offenderNo),
       ])
 
-      const userRoles = await oauthApi.userRoles(res.locals).then((roles) => roles.map((role) => role.roleCode))
+      const userRoles = oauthApi.userRoles(res.locals).map((role) => role.roleCode)
 
       if (!userRoles.includes('DELETE_SENSITIVE_CASE_NOTES' || !caseNote.caseNoteId)) {
         return res.render('notFound.njk', { url: req.headers.referer || `/prisoner/${offenderNo}/case-notes` })

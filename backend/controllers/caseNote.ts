@@ -6,7 +6,7 @@ import getContext from './prisonerProfile/prisonerProfileContext'
 const getOffenderUrl = (offenderNo) => `/prisoner/${offenderNo}`
 
 const getContextWithRoles = async (offenderNo, res, req, oauthApi, systemOauthClient, restrictedPatientApi) => {
-  const userRoles = await oauthApi.userRoles(res.locals)
+  const userRoles = oauthApi.userRoles(res.locals)
   res.locals = { ...res.locals, userRoles }
   const { context } = await getContext({
     offenderNo,

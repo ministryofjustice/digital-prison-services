@@ -24,7 +24,7 @@ describe('Prisoner cell history', () => {
     logError = jest.fn()
 
     // @ts-expect-error ts-migrate(2339) FIXME: Property 'userRoles' does not exist on type '{}'.
-    oauthApi.userRoles = jest.fn().mockResolvedValue([])
+    oauthApi.userRoles = jest.fn().mockReturnValue([])
     // @ts-expect-error ts-migrate(2339) FIXME: Property 'getDetails' does not exist on type '{}'.
     prisonApi.getDetails = jest.fn().mockResolvedValue({ bookingId, firstName: 'John', lastName: 'Smith' })
     // @ts-expect-error ts-migrate(2339) FIXME: Property 'getOffenderCellHistory' does not exist o... Remove this comment to see the full error message

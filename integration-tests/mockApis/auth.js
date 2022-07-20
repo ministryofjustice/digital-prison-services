@@ -180,7 +180,7 @@ const stubHealth = (status = 200) =>
     },
   })
 
-const stubClientCredentialsRequest = (roles) =>
+const stubClientCredentialsRequest = () =>
   stubFor({
     request: {
       method: 'POST',
@@ -189,7 +189,7 @@ const stubClientCredentialsRequest = (roles) =>
     response: {
       status: 200,
       jsonBody: {
-        access_token: createToken(roles),
+        access_token: 'EXAMPLE_ACCESS_TOKEN',
         refresh_token: 'EXAMPLE_REFRESH_TOKEN',
         expires_in: 43200,
       },
