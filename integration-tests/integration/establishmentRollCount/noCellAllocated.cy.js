@@ -2,12 +2,11 @@ context('No cell allocated page', () => {
   before(() => {
     cy.clearCookies()
     cy.task('resetAndStubTokenVerification')
-    cy.task('stubSignIn', { username: 'ITAG_USER', caseload: 'MDI', roles: ['ROLE_CELL_MOVE'] })
+    cy.task('stubSignIn', { username: 'ITAG_USER', caseload: 'MDI' })
     cy.signIn()
   })
 
   beforeEach(() => {
-    Cypress.Cookies.preserveOnce('hmpps-session-dev')
     cy.task('stubUserMe', {})
     cy.task('stubUserCaseLoads')
     cy.task('stubInmates', {
@@ -121,17 +120,6 @@ context('No cell allocated page', () => {
     cy.get('[data-test="allocate-cell-link"]').should('not.exist')
   })
 
-  it('should show the allocate cell links if user has correct roles', () => {
-    cy.visit('/establishment-roll/no-cell-allocated')
-
-    cy.get('[data-test="allocate-cell-link"]').then(($allocateCellLink) => {
-      cy.get($allocateCellLink).its('length').should('eq', 1)
-      cy.get($allocateCellLink.get(0))
-        .should('have.attr', 'href')
-        .should('include', '/prisoner/A7777DY/cell-move/search-for-cell')
-    })
-  })
-
   describe('when there are no inmates to be shown', () => {
     beforeEach(() => {
       cy.task('stubInmates', {
@@ -151,6 +139,23 @@ context('No cell allocated page', () => {
       cy.get('[data-test="no-cell-allocated-table"]').should('not.exist')
       cy.get('[data-test="prisoner-profile-link"]').should('not.exist')
       cy.get('[data-test="allocate-cell-link"]').should('not.exist')
+    })
+  })
+
+  describe('with permission check', () => {
+    beforeEach(() => {
+      cy.task('stubSignIn', { username: 'ITAG_USER', caseload: 'MDI', roles: ['ROLE_CELL_MOVE'] })
+      cy.signIn()
+    })
+    it('should show the allocate cell links if user has correct roles', () => {
+      cy.visit('/establishment-roll/no-cell-allocated')
+
+      cy.get('[data-test="allocate-cell-link"]').then(($allocateCellLink) => {
+        cy.get($allocateCellLink).its('length').should('eq', 1)
+        cy.get($allocateCellLink.get(0))
+          .should('have.attr', 'href')
+          .should('include', '/prisoner/A7777DY/cell-move/search-for-cell')
+      })
     })
   })
 })

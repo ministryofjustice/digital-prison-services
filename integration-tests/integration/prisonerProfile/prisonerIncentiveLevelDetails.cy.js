@@ -52,7 +52,7 @@ context('Prisoner incentive level details', () => {
 
   context('Basic page functionality', () => {
     beforeEach(() => {
-      Cypress.Cookies.preserveOnce('hmpps-session-dev')
+      // Cypress.Cookies.preserveOnce('hmpps-session-dev')
       cy.task('stubOffenderBasicDetails', offenderBasicDetails)
       cy.task('stubStaff', {
         staffId: 'ITAG_USER',
@@ -97,14 +97,6 @@ context('Prisoner incentive level details', () => {
         .then((href) => {
           expect(href).to.equal('/prisoner/A1234A/incentive-level-details/change-incentive-level')
         })
-    })
-
-    it('should not show change incentive level link if user does not have correct role', () => {
-      cy.task('stubGetIepSummaryForBooking', iepSummaryResponse)
-
-      cy.visit(`/prisoner/${offenderNo}/incentive-level-details`)
-
-      cy.get('[data-test="change-incentive-level-link"]').should('not.exist')
     })
 
     it('should show correct history', () => {
@@ -204,6 +196,25 @@ context('Prisoner incentive level details', () => {
         'contain',
         'There is no incentive level history for the selections you have made'
       )
+    })
+  })
+
+  context('without permissions', () => {
+    beforeEach(() => {
+      cy.task('stubSignIn', {
+        username: 'ITAG_USER',
+        caseload: 'MDI',
+        roles: ['ROLE_GLOBAL_SEARCH'],
+      })
+      cy.signIn()
+    })
+
+    it('should not show change incentive level link if user does not have correct role', () => {
+      cy.task('stubGetIepSummaryForBooking', iepSummaryResponse)
+
+      cy.visit(`/prisoner/${offenderNo}/incentive-level-details`)
+
+      cy.get('[data-test="change-incentive-level-link"]').should('not.exist')
     })
   })
 })

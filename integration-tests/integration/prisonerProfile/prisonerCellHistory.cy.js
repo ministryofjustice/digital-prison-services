@@ -14,7 +14,7 @@ context('Prisoner cell history', () => {
 
   context('Basic page functionality', () => {
     beforeEach(() => {
-      Cypress.Cookies.preserveOnce('hmpps-session-dev')
+      // Cypress.Cookies.preserveOnce('hmpps-session-dev')
       cy.task('stubOffenderBasicDetails', offenderBasicDetails)
       cy.task('stubAgencyDetails', { agencyId: 'MDI', details: { agencyId: 'MDI', description: 'Moorland' } })
       cy.task('stubInmatesAtLocation', {
@@ -143,8 +143,8 @@ context('Prisoner cell history', () => {
     })
 
     it('should show the cell move button when correct role is present', () => {
-      cy.clearCookies()
-      cy.task('reset')
+      //  cy.clearCookies()
+      //  cy.task('reset')
       cy.task('stubSignIn', { username: 'ITAG_USER', caseload: 'MDI', roles: ['ROLE_CELL_MOVE'] })
       cy.signIn()
 

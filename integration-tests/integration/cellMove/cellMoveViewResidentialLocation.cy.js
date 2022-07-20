@@ -41,7 +41,7 @@ context('Cell move view residential location', () => {
   })
 
   beforeEach(() => {
-    Cypress.Cookies.preserveOnce('hmpps-session-dev')
+    //  Cypress.Cookies.preserveOnce('hmpps-session-dev')
   })
 
   context('When there are no search values', () => {

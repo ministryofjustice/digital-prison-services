@@ -249,6 +249,7 @@ context('Global search', () => {
         caseload: 'MDI',
         roles: ['ROLE_INACTIVE_BOOKINGS'],
       })
+      cy.signIn()
     })
 
     it('should link to both active and inactive prisoner profiles', () => {
@@ -283,6 +284,7 @@ context('Global search', () => {
         caseload: 'MDI',
         roles: ['ROLE_LICENCE_RO'],
       })
+      cy.signIn()
     })
 
     it('should have an update licence link for the active prisoner', () => {
@@ -310,6 +312,7 @@ context('Global search', () => {
         caseload: 'MDI',
         roles: ['ROLE_LICENCE_RO', 'ROLE_LICENCE_VARY'],
       })
+      cy.signIn()
     })
 
     it('should have an update licence link for both active and inactive prisoners', () => {
