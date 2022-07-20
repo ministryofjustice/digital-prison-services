@@ -133,11 +133,11 @@ export const probationDocumentsFactory = (oauthApi, prisonApi, communityApi, sys
 
     try {
       const { bookingId, firstName, lastName, agencyId } = await prisonApi.getDetails(res.locals, offenderNo)
+      const userRoles = oauthApi.userRoles(res.locals)
 
-      const [caseloads, user, userRoles, communityDocuments] = await Promise.all([
+      const [caseloads, user, communityDocuments] = await Promise.all([
         prisonApi.userCaseLoads(res.locals),
         oauthApi.currentUser(res.locals),
-        oauthApi.userRoles(res.locals),
         getCommunityDocuments(offenderNo),
       ])
 

@@ -396,7 +396,7 @@ describe('alert management', () => {
     it('should return an error when there is a problem loading the form', async () => {
       const error = new Error('There has been an error')
 
-      oauthApi.userRoles = jest.fn().mockRejectedValueOnce(error)
+      prisonApi.userCaseLoads = jest.fn().mockRejectedValueOnce(error)
 
       const req = { ...mockCreateReq, params: { offenderNo }, headers: {} }
       res.status = jest.fn()

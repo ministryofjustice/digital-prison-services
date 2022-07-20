@@ -533,13 +533,22 @@ context('Prisoner quick look', () => {
   context('When a user has VIEW_PROBATION_DOCUMENTS role', () => {
     context('when offender in caseload', () => {
       beforeEach(() => {
-        Cypress.Cookies.preserveOnce('hmpps-session-dev')
+        cy.clearCookies()
+        cy.task('reset')
+        cy.task('stubSignIn', {
+          username: 'ITAG_USER',
+          caseload: 'MDI',
+          caseloads: [],
+          roles: ['ROLE_VIEW_PROBATION_DOCUMENTS'],
+        })
+        cy.signIn()
+
+        // Cypress.Cookies.preserveOnce('hmpps-session-dev')
         cy.task('stubPrisonerProfileHeaderData', {
           offenderBasicDetails,
           offenderFullDetails,
           iepSummary: {},
           caseNoteSummary: {},
-          userRoles: ['ROLE_VIEW_PROBATION_DOCUMENTS'],
           offenderNo,
         })
       })
@@ -574,7 +583,12 @@ context('Prisoner quick look', () => {
   context('When a user has POM role', () => {
     context('when offender in caseload', () => {
       beforeEach(() => {
-        Cypress.Cookies.preserveOnce('hmpps-session-dev')
+        //  Cypress.Cookies.preserveOnce('hmpps-session-dev')
+        cy.clearCookies()
+        cy.task('reset')
+        cy.task('stubSignIn', { username: 'ITAG_USER', caseload: 'MDI', caseloads: [], roles: ['ROLE_POM'] })
+        cy.signIn()
+
         cy.task('stubIsCaseLoadRestrictedPatient', {
           status: 404,
           body: { message: 'Offender not found' },
@@ -584,7 +598,7 @@ context('Prisoner quick look', () => {
           offenderFullDetails,
           iepSummary: {},
           caseNoteSummary: {},
-          userRoles: ['ROLE_POM'],
+          // userRoles: ['ROLE_POM'],
           offenderNo,
         })
       })
@@ -598,7 +612,12 @@ context('Prisoner quick look', () => {
 
     context('when offender not in caseload', () => {
       beforeEach(() => {
-        Cypress.Cookies.preserveOnce('hmpps-session-dev')
+        // Cypress.Cookies.preserveOnce('hmpps-session-dev')
+        cy.clearCookies()
+        cy.task('reset')
+        cy.task('stubSignIn', { username: 'ITAG_USER', caseload: 'MDI', caseloads: [], roles: ['ROLE_POM'] })
+        cy.signIn()
+
         cy.task('stubIsCaseLoadRestrictedPatient', {
           status: 404,
           body: { message: 'Offender not found' },
@@ -608,7 +627,6 @@ context('Prisoner quick look', () => {
           offenderFullDetails: { ...offenderFullDetails, agencyId: 'LEI' },
           iepSummary: {},
           caseNoteSummary: {},
-          userRoles: ['ROLE_POM'],
           offenderNo,
         })
       })

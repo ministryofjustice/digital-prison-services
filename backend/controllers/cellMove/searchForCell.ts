@@ -14,10 +14,9 @@ export default ({ oauthApi, prisonApi, whereaboutsApi }) =>
     const { offenderNo } = req.params
 
     try {
-      const [userCaseLoads, userRoles] = await Promise.all([
-        prisonApi.userCaseLoads(res.locals),
-        oauthApi.userRoles(res.locals),
-      ])
+      const userRoles = oauthApi.userRoles(res.locals)
+      const userCaseLoads = await prisonApi.userCaseLoads(res.locals)
+
       const prisonerDetails = await prisonApi.getDetails(res.locals, offenderNo, true)
 
       if (!userHasAccess({ userRoles, userCaseLoads, offenderCaseload: prisonerDetails.agencyId })) {

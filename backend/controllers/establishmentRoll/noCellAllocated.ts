@@ -7,10 +7,8 @@ export default ({ oauthApi, systemOauthClient, prisonApi }) =>
     } = res.locals
 
     try {
-      const [userRoles, offenders] = await Promise.all([
-        oauthApi.userRoles(res.locals),
-        prisonApi.getInmatesAtLocationPrefix(res.locals, activeCaseLoad.caseLoadId),
-      ])
+      const userRoles = oauthApi.userRoles(res.locals)
+      const offenders = await prisonApi.getInmatesAtLocationPrefix(res.locals, activeCaseLoad.caseLoadId)
 
       const offendersInCellSwap = offenders.filter((offender) => offender.assignedLivingUnitDesc === 'CSWAP')
 

@@ -40,7 +40,7 @@ describe('No cell allocated', () => {
 
   describe('with no data', () => {
     beforeEach(() => {
-      oauthApi.userRoles.mockResolvedValue([])
+      oauthApi.userRoles.mockReturnValue([])
       prisonApi.getInmatesAtLocationPrefix.mockResolvedValue([])
     })
 
@@ -66,7 +66,7 @@ describe('No cell allocated', () => {
 
   describe('with data', () => {
     beforeEach(() => {
-      oauthApi.userRoles.mockResolvedValue([{ roleCode: 'CELL_MOVE' }])
+      oauthApi.userRoles.mockReturnValue([{ roleCode: 'CELL_MOVE' }])
       prisonApi.getInmatesAtLocationPrefix.mockResolvedValue([
         {
           bookingId: 1201093,

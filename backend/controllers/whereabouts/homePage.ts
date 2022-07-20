@@ -72,10 +72,9 @@ export const whereaboutsTasks: TaskType[] = [
 export default ({ oauthApi, prisonApi }: any) => {
   const index = async (req, res) => {
     const { activeCaseLoadId, staffId } = req.session.userDetails
-    const [staffRoles, userRoles] = await Promise.all([
-      prisonApi.getStaffRoles(res.locals, staffId, activeCaseLoadId),
-      oauthApi.userRoles(res.locals),
-    ])
+    const userRoles = oauthApi.userRoles(res.locals)
+    const staffRoles = await prisonApi.getStaffRoles(res.locals, staffId, activeCaseLoadId)
+
     const oauthRoles = userRoles.map((userRole) => userRole.roleCode)
     const prisonStaffRoles = staffRoles.map((staffRole) => staffRole.role)
     const roles = [...oauthRoles, ...prisonStaffRoles]

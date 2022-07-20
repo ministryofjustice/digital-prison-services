@@ -61,7 +61,7 @@ describe('Homepage', () => {
     })
 
     it('should render template with bulk appointments task', () => {
-      oauthApi.userRoles.mockResolvedValue([{ roleCode: 'BULK_APPOINTMENTS' }])
+      oauthApi.userRoles.mockReturnValue([{ roleCode: 'BULK_APPOINTMENTS' }])
       return supertest(app)
         .get('/')
         .expect(200)
@@ -76,7 +76,7 @@ describe('Homepage', () => {
     })
 
     it('should render template with covid units task', () => {
-      oauthApi.userRoles.mockResolvedValue([{ roleCode: 'PRISON' }])
+      oauthApi.userRoles.mockReturnValue([{ roleCode: 'PRISON' }])
       return supertest(app)
         .get('/')
         .expect(200)
@@ -91,7 +91,7 @@ describe('Homepage', () => {
     })
 
     it('should render template with all tasks', () => {
-      oauthApi.userRoles.mockResolvedValue([{ roleCode: 'PRISON' }, { roleCode: 'BULK_APPOINTMENTS' }])
+      oauthApi.userRoles.mockReturnValue([{ roleCode: 'PRISON' }, { roleCode: 'BULK_APPOINTMENTS' }])
       return supertest(app)
         .get('/')
         .expect(200)

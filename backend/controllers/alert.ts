@@ -92,12 +92,11 @@ export const alertFactory = (oauthApi, prisonApi, referenceCodesService) => {
     try {
       const { offenderNo, alertId } = req.query
       const { bookingId, firstName, lastName, agencyId } = await prisonApi.getDetails(res.locals, offenderNo)
-
-      const [alert, user, caseLoads, userRoles] = await Promise.all([
+      const userRoles = oauthApi.userRoles(res.locals)
+      const [alert, user, caseLoads] = await Promise.all([
         prisonApi.getAlert(res.locals, bookingId, alertId),
         oauthApi.currentUser(res.locals),
         prisonApi.userCaseLoads(res.locals),
-        oauthApi.userRoles(res.locals),
       ])
 
       if (alert && alert.expired) {
@@ -200,10 +199,8 @@ export const alertFactory = (oauthApi, prisonApi, referenceCodesService) => {
         offenderNo,
         true
       )
-      const [userRoles, caseLoads] = await Promise.all([
-        oauthApi.userRoles(res.locals),
-        prisonApi.userCaseLoads(res.locals),
-      ])
+      const userRoles = oauthApi.userRoles(res.locals)
+      const caseLoads = await prisonApi.userCaseLoads(res.locals)
 
       const canViewInactivePrisoner = userRoles && userRoles.some((role) => role.roleCode === 'INACTIVE_BOOKINGS')
       const offenderInCaseload = caseLoads && caseLoads.some((caseload) => caseload.caseLoadId === agencyId)

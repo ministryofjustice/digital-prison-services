@@ -20,9 +20,9 @@ export const downloadProbationDocumentFactory = (oauthApi, communityApi, systemO
   const downloadDocument = async (req, res) => {
     const { offenderNo, documentId } = req.params
     try {
-      const [user, userRoles, caseloads, { agencyId }] = await Promise.all([
+      const userRoles = oauthApi.userRoles(res.locals)
+      const [user, caseloads, { agencyId }] = await Promise.all([
         oauthApi.currentUser(res.locals),
-        oauthApi.userRoles(res.locals),
         prisonApi.userCaseLoads(res.locals),
         prisonApi.getDetails(res.locals, offenderNo),
       ])
