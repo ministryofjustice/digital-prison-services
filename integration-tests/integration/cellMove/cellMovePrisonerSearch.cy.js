@@ -36,7 +36,7 @@ context('Cell move prisoner search', () => {
   before(() => {
     cy.clearCookies()
     cy.task('resetAndStubTokenVerification')
-    cy.task('stubSignIn', { username: 'ITAG_USER', caseload: 'MDI', roles: [{ roleCode: 'ROLE_CELL_MOVE' }] })
+    cy.task('stubSignIn', { username: 'ITAG_USER', caseload: 'MDI', roles: ['ROLE_CELL_MOVE'] })
     cy.signIn()
   })
 

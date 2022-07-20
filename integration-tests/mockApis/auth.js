@@ -204,7 +204,7 @@ module.exports = {
       favicon(),
       redirect(),
       signOut(),
-      token(['ROLE_UPDATE_ALERT', ...roles]),
+      token(roles),
       stubUserMe(username, 12345, 'James Stuart', caseloadId),
       stubUser(username, caseloadId),
       stubUserLocations(),

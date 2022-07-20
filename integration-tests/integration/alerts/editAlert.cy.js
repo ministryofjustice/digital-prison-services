@@ -77,6 +77,7 @@ context('A user doesnt have permission', () => {
     cy.task('stubSignIn', { username: 'ITAG_USER', caseload: 'MDI' })
     cy.signIn()
   })
+
   beforeEach(() => {
     Cypress.Cookies.preserveOnce('hmpps-session-dev')
     cy.task('stubOffenderBasicDetails', offenderBasicDetails)
