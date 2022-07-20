@@ -8,7 +8,7 @@ const createToken = (roles) => {
     user_name: 'ITAG_USER',
     scope: ['read', 'write'],
     auth_source: 'nomis',
-    authorities: ['ROLE_GLOBAL_SEARCH'].concat(roles),
+    authorities: ['ROLE_GLOBAL_SEARCH', ...roles],
     jti: '83b50a10-cca6-41db-985f-e87efb303ddb',
     client_id: 'dev',
   }
@@ -180,7 +180,7 @@ const stubHealth = (status = 200) =>
     },
   })
 
-const stubClientCredentialsRequest = () =>
+const stubClientCredentialsRequest = (roles) =>
   stubFor({
     request: {
       method: 'POST',
@@ -189,7 +189,7 @@ const stubClientCredentialsRequest = () =>
     response: {
       status: 200,
       jsonBody: {
-        access_token: 'EXAMPLE_ACCESS_TOKEN',
+        access_token: createToken(roles),
         refresh_token: 'EXAMPLE_REFRESH_TOKEN',
         expires_in: 43200,
       },
@@ -204,7 +204,7 @@ module.exports = {
       favicon(),
       redirect(),
       signOut(),
-      token(['UPDATE_ALERT', ...roles]),
+      token(['ROLE_UPDATE_ALERT', ...roles]),
       stubUserMe(username, 12345, 'James Stuart', caseloadId),
       stubUser(username, caseloadId),
       stubUserLocations(),
@@ -212,7 +212,13 @@ module.exports = {
       stubLocationConfig({ agencyId: caseloadId, response: { enabled: false } }),
     ]),
   stubSignInCourt: () =>
-    Promise.all([favicon(), redirect(), signOut(), token(['GLOBAL_SEARCH', 'VIDEO_LINK_COURT_USER']), stubUserMe()]),
+    Promise.all([
+      favicon(),
+      redirect(),
+      signOut(),
+      token(['ROLE_GLOBAL_SEARCH', 'ROLE_VIDEO_LINK_COURT_USER']),
+      stubUserMe(),
+    ]),
   stubUserDetailsRetrieval: (username) => Promise.all([stubUser(username), stubEmail(username)]),
   stubUnverifiedUserDetailsRetrieval: (username) => Promise.all([stubUser(username), stubUnverifiedEmail(username)]),
   stubUserMe,

@@ -459,7 +459,7 @@ context('Prisoner quick look', () => {
         offenderFullDetails: { ...offenderFullDetails, agencyId: 'OUT' },
         iepSummary: {},
         caseNoteSummary: {},
-        userRoles: [{ roleCode: 'INACTIVE_BOOKINGS' }],
+        userRoles: ['ROLE_INACTIVE_BOOKINGS'],
         offenderNo,
       })
     })
@@ -521,7 +521,7 @@ context('Prisoner quick look', () => {
           offenderFullDetails,
           iepSummary: {},
           caseNoteSummary: {},
-          userRoles: [{ roleCode: 'VIEW_PROBATION_DOCUMENTS' }],
+          userRoles: ['ROLE_VIEW_PROBATION_DOCUMENTS'],
           offenderNo,
         })
       })
@@ -540,7 +540,7 @@ context('Prisoner quick look', () => {
           offenderFullDetails: { ...offenderFullDetails, agencyId: 'LEI' },
           iepSummary: {},
           caseNoteSummary: {},
-          userRoles: [{ roleCode: 'VIEW_PROBATION_DOCUMENTS' }],
+          userRoles: ['ROLE_VIEW_PROBATION_DOCUMENTS'],
           offenderNo,
         })
       })
@@ -566,7 +566,7 @@ context('Prisoner quick look', () => {
           offenderFullDetails,
           iepSummary: {},
           caseNoteSummary: {},
-          userRoles: [{ roleCode: 'POM' }],
+          userRoles: ['ROLE_POM'],
           offenderNo,
         })
       })
@@ -590,7 +590,7 @@ context('Prisoner quick look', () => {
           offenderFullDetails: { ...offenderFullDetails, agencyId: 'LEI' },
           iepSummary: {},
           caseNoteSummary: {},
-          userRoles: [{ roleCode: 'POM' }],
+          userRoles: ['ROLE_POM'],
           offenderNo,
         })
       })
@@ -669,7 +669,7 @@ context('Prisoner quick look', () => {
         offenderFullDetails,
         iepSummary: {},
         caseNoteSummary: {},
-        userRoles: [{ roleCode: 'SOC_CUSTODY' }],
+        userRoles: ['ROLE_SOC_CUSTODY'],
         offenderNo,
       })
     })

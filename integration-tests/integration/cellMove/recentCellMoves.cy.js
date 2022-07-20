@@ -47,7 +47,7 @@ context('7 day cell move history page', () => {
   before(() => {
     cy.clearCookies()
     cy.task('reset')
-    cy.task('stubSignIn', { username: 'ITAG_USER', caseload: 'MDI', roles: [{ roleCode: 'CELL_MOVE' }] })
+    cy.task('stubSignIn', { username: 'ITAG_USER', caseload: 'MDI', roles: [{ roleCode: 'ROLE_CELL_MOVE' }] })
     cy.signIn()
   })
   beforeEach(() => {

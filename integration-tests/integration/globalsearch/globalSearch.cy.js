@@ -247,7 +247,7 @@ context('Global search', () => {
       cy.task('stubSignIn', {
         username: 'ITAG_USER',
         caseload: 'MDI',
-        roles: [{ roleCode: 'INACTIVE_BOOKINGS' }],
+        roles: ['ROLE_INACTIVE_BOOKINGS'],
       })
     })
 
@@ -281,7 +281,7 @@ context('Global search', () => {
       cy.task('stubSignIn', {
         username: 'ITAG_USER',
         caseload: 'MDI',
-        roles: [{ roleCode: 'LICENCE_RO' }],
+        roles: ['ROLE_LICENCE_RO'],
       })
     })
 
@@ -308,7 +308,7 @@ context('Global search', () => {
       cy.task('stubSignIn', {
         username: 'ITAG_USER',
         caseload: 'MDI',
-        roles: [{ roleCode: 'LICENCE_RO' }, { roleCode: 'LICENCE_VARY' }],
+        roles: ['ROLE_LICENCE_RO', 'ROLE_LICENCE_VARY'],
       })
     })
 

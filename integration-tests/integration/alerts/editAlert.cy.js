@@ -11,7 +11,7 @@ context('A user can add an appointment', () => {
   before(() => {
     cy.clearCookies()
     cy.task('resetAndStubTokenVerification')
-    cy.task('stubSignIn', { username: 'ITAG_USER', caseload: 'MDI' })
+    cy.task('stubSignIn', { username: 'ITAG_USER', caseload: 'MDI', roles: ['ROLE_UPDATE_ALERT'] })
     cy.signIn()
   })
   beforeEach(() => {
@@ -20,7 +20,6 @@ context('A user can add an appointment', () => {
     cy.task('stubOffenderFullDetails', offenderFullDetails)
     cy.task('stubAlertTypes')
     cy.task('stubCreateAlert')
-    cy.task('stubUserMeRoles', [{ roleCode: 'UPDATE_ALERT' }])
     cy.task('stubUserMe', {})
     cy.task('stubUserCaseLoads')
     cy.task('stubGetAlert', { bookingId: 14, alertId, alert: { alertId: 1, comment: 'Test comment' } })
@@ -52,12 +51,6 @@ context('A user can add an appointment', () => {
       })
   })
 
-  it('A user is presented with not found when they no role', () => {
-    cy.task('stubUserMeRoles', [])
-    cy.visit(`/edit-alert?offenderNo=${offenderNo}&alertId=${alertId}`)
-    NotFoundPage.verifyOnPage()
-  })
-
   it('A user is presented with alert already created when 400 error', () => {
     cy.task('stubPutAlertErrors', {
       bookingId: 14,
@@ -74,5 +67,30 @@ context('A user can add an appointment', () => {
     form.submitButton().click()
 
     AlertAlreadyClosedPage.verifyOnPage()
+  })
+})
+
+context('A user doesnt have permission', () => {
+  before(() => {
+    cy.clearCookies()
+    cy.task('resetAndStubTokenVerification')
+    cy.task('stubSignIn', { username: 'ITAG_USER', caseload: 'MDI' })
+    cy.signIn()
+  })
+  beforeEach(() => {
+    Cypress.Cookies.preserveOnce('hmpps-session-dev')
+    cy.task('stubOffenderBasicDetails', offenderBasicDetails)
+    cy.task('stubOffenderFullDetails', offenderFullDetails)
+    cy.task('stubAlertTypes')
+    cy.task('stubCreateAlert')
+    cy.task('stubUserMe', {})
+    cy.task('stubUserCaseLoads')
+    cy.task('stubGetAlert', { bookingId: 14, alertId, alert: { alertId: 1, comment: 'Test comment' } })
+    cy.task('stubPutAlert', { bookingId: 14, alertId, alert: { alertId: 1, comment: 'Test comment' } })
+  })
+
+  it('A user is presented with not found when they no role', () => {
+    cy.visit(`/edit-alert?offenderNo=${offenderNo}&alertId=${alertId}`)
+    NotFoundPage.verifyOnPage()
   })
 })

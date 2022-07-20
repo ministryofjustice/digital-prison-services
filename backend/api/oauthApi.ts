@@ -12,10 +12,10 @@ interface DpsJwtPayload extends JwtPayload {
 }
 
 class UserRole {
-  role: string
+  roleCode: string
 
   constructor(role: string) {
-    this.role = role
+    this.roleCode = role
   }
 }
 

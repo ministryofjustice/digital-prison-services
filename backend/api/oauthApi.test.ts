@@ -97,7 +97,7 @@ describe('oauthApi tests', () => {
   })
 
   describe('currentRoles', () => {
-    const roles = [{ role: 'TEST' }]
+    const roles = [{ roleCode: 'TEST' }]
     let actual
 
     beforeEach(() => {
