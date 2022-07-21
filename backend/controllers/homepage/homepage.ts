@@ -61,7 +61,10 @@ const getTasks = ({ activeCaseLoadId, locations, staffId, whereaboutsConfig, key
       description: 'See prisoner incentive information by residential location and view incentive data visualisations.',
       href: incentives.ui_url,
       roles: null,
-      enabled: () => incentives.ui_url,
+      enabled: () =>
+        incentives.ui_url &&
+        Boolean(locations?.length > 0) &&
+        !incentives.excludedCaseloads.split(',').includes(activeCaseLoadId),
     },
     {
       id: 'use-of-force',

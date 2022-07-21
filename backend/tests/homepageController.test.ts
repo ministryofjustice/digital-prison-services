@@ -26,6 +26,7 @@ describe('Homepage', () => {
     config.applications.sendLegalMail.url = undefined
     config.apis.welcomePeopleIntoPrison.enabled_prisons = undefined
     config.apis.welcomePeopleIntoPrison.url = undefined
+    config.apis.incentives.ui_url = undefined
 
     req = {
       session: {
@@ -551,6 +552,108 @@ describe('Homepage', () => {
       await controller(req, res)
 
       expect(res.redirect).toHaveBeenCalledWith('/videolink')
+    })
+
+    describe('Manage incentives tile', () => {
+      beforeEach(() => {
+        config.apis.incentives.ui_url = 'http://incentives'
+        prisonApi.userLocations.mockResolvedValue([
+          { description: 'Moorland (HMP & YOI)', locationPrefix: 'MDI' },
+          { description: 'Houseblock 1', locationPrefix: 'MDI-1' },
+        ])
+      })
+
+      it('should not render home page with the Incentives tile if user has excluded caseload selected', async () => {
+        config.apis.incentives.excludedCaseloads = 'CADM_I'
+        req = {
+          session: {
+            userDetails: {
+              staffId: 1,
+              activeCaseLoadId: 'CADM_I',
+            },
+          },
+        }
+
+        await controller(req, res)
+
+        // we get Establishment roll check as we have > 0 locations
+        expect(res.render).toHaveBeenCalledWith(
+          'homepage/homepage.njk',
+          expect.objectContaining({
+            tasks: [
+              {
+                id: 'establishment-roll',
+                heading: 'Establishment roll check',
+                description: 'View the roll broken down by residential unit and see who is arriving and leaving.',
+                href: '/establishment-roll',
+              },
+            ],
+          })
+        )
+
+        // set this back to empty list
+        config.apis.incentives.excludedCaseloads = ''
+      })
+
+      it('should not render home page with the Incentives tile if user has no locations', async () => {
+        // user has no locations
+        prisonApi.userLocations.mockResolvedValue([])
+
+        await controller(req, res)
+
+        expect(res.render).toHaveBeenCalledWith(
+          'homepage/homepage.njk',
+          expect.objectContaining({
+            tasks: [],
+          })
+        )
+      })
+
+      it('should not render home page with the Incentives tile if incentives URL not provided', async () => {
+        config.apis.incentives.ui_url = null
+
+        await controller(req, res)
+
+        // we get Establishment roll check as we have > 0 locations
+        expect(res.render).toHaveBeenCalledWith(
+          'homepage/homepage.njk',
+          expect.objectContaining({
+            tasks: [
+              {
+                id: 'establishment-roll',
+                heading: 'Establishment roll check',
+                description: 'View the roll broken down by residential unit and see who is arriving and leaving.',
+                href: '/establishment-roll',
+              },
+            ],
+          })
+        )
+      })
+
+      it('should render home page with the Incentives tile if user has valid caseload and at least one location', async () => {
+        await controller(req, res)
+
+        expect(res.render).toHaveBeenCalledWith(
+          'homepage/homepage.njk',
+          expect.objectContaining({
+            tasks: [
+              {
+                id: 'incentives',
+                heading: 'Manage incentives',
+                href: 'http://incentives',
+                description:
+                  'See prisoner incentive information by residential location and view incentive data visualisations.',
+              },
+              {
+                id: 'establishment-roll',
+                heading: 'Establishment roll check',
+                description: 'View the roll broken down by residential unit and see who is arriving and leaving.',
+                href: '/establishment-roll',
+              },
+            ],
+          })
+        )
+      })
     })
   })
 
