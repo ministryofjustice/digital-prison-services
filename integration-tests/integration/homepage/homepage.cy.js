@@ -4,7 +4,7 @@ context('Homepage', () => {
   beforeEach(() => {
     cy.clearCookies()
     cy.task('reset')
-    cy.task('stubUserMeRoles')
+    //   cy.task('stubUserMeRoles')
     cy.task('stubUserLocations')
     cy.task('stubStaffRoles', [])
     cy.task('stubLocationConfig', { agencyId: 'MDI', response: { enabled: false } })
@@ -79,7 +79,27 @@ context('Homepage', () => {
 
   describe('Tasks', () => {
     beforeEach(() => {
-      cy.task('stubSignIn', { username: 'ITAG_USER', caseload: 'MDI' })
+      cy.task('stubSignIn', {
+        username: 'ITAG_USER',
+        caseload: 'MDI',
+        roles: [
+          'ROLE_CELL_MOVE',
+          'ROLE_PF_STD_PRISON',
+          'ROLE_LICENCE_RO',
+          'ROLE_KW_MIGRATION',
+          'ROLE_OMIC_ADMIN',
+          'ROLE_MAINTAIN_ACCESS_ROLES',
+          'ROLE_CREATE_CATEGORISATION',
+          'ROLE_PECS_OCA',
+          'ROLE_ALLOC_MGR',
+          'ROLE_SOC_CUSTODY',
+          'ROLE_SLM_SCAN_BARCODE',
+          'ROLE_SLM_ADMIN',
+          'ROLE_SEARCH_RESTRICTED_PATIENT',
+          'ROLE_TRANSFER_RESTRICTED_PATIENT',
+          'ROLE_REMOVE_RESTRICTED_PATIENT',
+        ],
+      })
       cy.signIn()
     })
 
@@ -107,14 +127,6 @@ context('Homepage', () => {
       page.establishmentRoll().should('exist')
     })
 
-    it('should show global search task', () => {
-      cy.task('stubUserMeRoles', [{ roleCode: 'GLOBAL_SEARCH' }])
-
-      const page = homepagePage.goTo()
-
-      page.globalSearch().should('exist')
-    })
-
     it('should show manage prisoner whereabouts', () => {
       cy.task('stubLocationConfig', { agencyId: 'MDI', response: { enabled: true } })
 
@@ -124,7 +136,7 @@ context('Homepage', () => {
     })
 
     it('should show change someones cell task', () => {
-      cy.task('stubUserMeRoles', [{ roleCode: 'CELL_MOVE' }])
+      // cy.task('stubUserMeRoles', [{ roleCode: 'CELL_MOVE' }])
 
       const page = homepagePage.goTo()
 
@@ -132,7 +144,7 @@ context('Homepage', () => {
     })
 
     it('should show pathfinder', () => {
-      cy.task('stubUserMeRoles', [{ roleCode: 'PF_STD_PRISON' }])
+      // cy.task('stubUserMeRoles', [{ roleCode: 'PF_STD_PRISON' }])
 
       const page = homepagePage.goTo()
 
@@ -140,7 +152,7 @@ context('Homepage', () => {
     })
 
     it('should show hdc licences', () => {
-      cy.task('stubUserMeRoles', [{ roleCode: 'LICENCE_RO' }])
+      // cy.task('stubUserMeRoles', [{ roleCode: 'LICENCE_RO' }])
 
       const page = homepagePage.goTo()
 
@@ -148,7 +160,7 @@ context('Homepage', () => {
     })
 
     it('should show manage key workers', () => {
-      cy.task('stubUserMeRoles', [{ roleCode: 'OMIC_ADMIN' }, { roleCode: 'KW_MIGRATION' }])
+      // cy.task('stubUserMeRoles', [{ roleCode: 'OMIC_ADMIN' }, { roleCode: 'KW_MIGRATION' }])
 
       const page = homepagePage.goTo()
 
@@ -156,7 +168,7 @@ context('Homepage', () => {
     })
 
     it('should show manage users', () => {
-      cy.task('stubUserMeRoles', [{ roleCode: 'MAINTAIN_ACCESS_ROLES' }])
+      // cy.task('stubUserMeRoles', [{ roleCode: 'MAINTAIN_ACCESS_ROLES' }])
 
       const page = homepagePage.goTo()
 
@@ -164,7 +176,7 @@ context('Homepage', () => {
     })
 
     it('should show categorisation', () => {
-      cy.task('stubUserMeRoles', [{ roleCode: 'CREATE_CATEGORISATION' }])
+      // cy.task('stubUserMeRoles', [{ roleCode: 'CREATE_CATEGORISATION' }])
 
       const page = homepagePage.goTo()
 
@@ -172,7 +184,7 @@ context('Homepage', () => {
     })
 
     it('should show book a secure move', () => {
-      cy.task('stubUserMeRoles', [{ roleCode: 'PECS_OCA' }])
+      //  cy.task('stubUserMeRoles', [{ roleCode: 'PECS_OCA' }])
 
       const page = homepagePage.goTo()
 
@@ -180,7 +192,7 @@ context('Homepage', () => {
     })
 
     it('should show prison offender managers', () => {
-      cy.task('stubUserMeRoles', [{ roleCode: 'ALLOC_MGR' }])
+      //  cy.task('stubUserMeRoles', [{ roleCode: 'ALLOC_MGR' }])
 
       const page = homepagePage.goTo()
 
@@ -188,7 +200,7 @@ context('Homepage', () => {
     })
 
     it('should show serious organised crime', () => {
-      cy.task('stubUserMeRoles', [{ roleCode: 'SOC_CUSTODY' }])
+      //  cy.task('stubUserMeRoles', [{ roleCode: 'SOC_CUSTODY' }])
 
       const page = homepagePage.goTo()
 
@@ -196,21 +208,21 @@ context('Homepage', () => {
     })
 
     it('should show send legal mail task task given user with supported role', () => {
-      Array.of('SLM_SCAN_BARCODE', 'SLM_ADMIN').forEach((roleCode) => {
-        cy.task('stubUserMeRoles', [{ roleCode }])
+      // Array.of('SLM_SCAN_BARCODE', 'SLM_ADMIN').forEach((roleCode) => {
+      //  cy.task('stubUserMeRoles', [{ roleCode }])
 
-        const page = homepagePage.goTo()
+      const page = homepagePage.goTo()
 
-        page.sendLegalMail().should('exist')
-      })
+      page.sendLegalMail().should('exist')
+      // })
     })
 
     it('should show manage restricted patients', () => {
-      cy.task('stubUserMeRoles', [
-        { roleCode: 'SEARCH_RESTRICTED_PATIENT' },
-        { roleCode: 'TRANSFER_RESTRICTED_PATIENT' },
-        { roleCode: 'REMOVE_RESTRICTED_PATIENT' },
-      ])
+      // cy.task('stubUserMeRoles', [
+      //   { roleCode: 'SEARCH_RESTRICTED_PATIENT' },
+      //   { roleCode: 'TRANSFER_RESTRICTED_PATIENT' },
+      //   { roleCode: 'REMOVE_RESTRICTED_PATIENT' },
+      //  ])
       const page = homepagePage.goTo()
 
       page.manageRestrictedPatients().tile().should('exist')
