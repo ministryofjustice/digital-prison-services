@@ -37,6 +37,7 @@ env:
   USE_OF_FORCE_PRISONS: "FWI,MDI,WRI"
   INCENTIVES_URL: https://incentives-ui-dev.hmpps.service.justice.gov.uk
   INCENTIVES_API_ENDPOINT_URL: https://incentives-api-dev.hmpps.service.justice.gov.uk
+  INCENTIVES_EXCLUDED_CASELOADS: "CADM_I"
   TOKENVERIFICATION_API_URL: https://token-verification-api-dev.prison.service.justice.gov.uk
   TOKENVERIFICATION_API_ENABLED: true
   CASENOTES_API_URL: https://dev.offender-case-notes.service.justice.gov.uk/
@@ -75,3 +76,4 @@ env:
   CREATE_AND_VARY_A_LICENCE_URL: https://create-and-vary-a-licence-dev.hmpps.service.justice.gov.uk/
   CREATE_AND_VARY_A_LICENCE_ENABLED_PRISONS: "MDI,LEI,LPI,BMI,PVI,BXI,WAI"
   RESTRICTED_PATIENT_API_URL: https://restricted-patients-api-dev.hmpps.service.justice.gov.uk/
+  HISTORICAL_PRISONER_APPLICATION_URL: 	https://hpa-stage.hmpps.dsd.io

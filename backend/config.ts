@@ -112,6 +112,7 @@ export const apis = {
   },
   incentives: {
     ui_url: process.env.INCENTIVES_URL,
+    excludedCaseloads: process.env.INCENTIVES_EXCLUDED_CASELOADS || '',
   },
   calculateReleaseDates: {
     ui_url: process.env.CALCULATE_RELEASE_DATES_URL,
@@ -177,6 +178,9 @@ export const apis = {
   createAndVaryALicence: {
     url: process.env.CREATE_AND_VARY_A_LICENCE_URL,
     enabled_prisons: process.env.CREATE_AND_VARY_A_LICENCE_ENABLED_PRISONS || '',
+  },
+  historicalPrisonerApplication: {
+    ui_url: process.env.HISTORICAL_PRISONER_APPLICATION_URL || '',
   },
 }
 export const notifications = {
