@@ -1,20 +1,20 @@
 const offenderBasicDetails = require('../../mockApis/responses/offenderBasicDetails.json')
 
-context('Appointment details page', () => {
-  const testAppointment = {
-    appointment: {
-      offenderNo: 'ABC123',
-      id: 1,
-      agencyId: 'MDI',
-      locationId: 2,
-      appointmentTypeCode: 'GYM',
-      startTime: '2021-05-20T13:00:00',
-      createUserId: 'TEST_USER',
-    },
-    recurring: null,
-    videoLinkBooking: null,
-  }
+const testAppointment = {
+  appointment: {
+    offenderNo: 'ABC123',
+    id: 1,
+    agencyId: 'MDI',
+    locationId: 2,
+    appointmentTypeCode: 'GYM',
+    startTime: '2021-05-20T13:00:00',
+    createUserId: 'TEST_USER',
+  },
+  recurring: null,
+  videoLinkBooking: null,
+}
 
+context('Appointment details page', () => {
   before(() => {
     cy.clearCookies()
     cy.task('resetAndStubTokenVerification')
@@ -76,18 +76,6 @@ context('Appointment details page', () => {
     cy.get('[role="button"]').click()
 
     cy.url().should('include', '/appointment-details/1/confirm-deletion')
-  })
-
-  context('when the user does not have the roles', () => {
-    beforeEach(() => {
-      cy.task('stubUserMeRoles', [])
-    })
-
-    it('Should not show delete button', () => {
-      cy.visit('/appointment-details/1')
-
-      cy.get('#confirmDeletion').should('not.exist')
-    })
   })
 
   context('when it is a recurring appointment', () => {
@@ -188,5 +176,45 @@ context('Appointment details page', () => {
       cy.get('.qa-addedBy-value').should('contain', 'Test User')
       cy.get('[data-test="return-link"]').should('have.attr', 'href').should('include', '/view-all-appointments')
     })
+  })
+})
+
+context('when the user does not have the roles', () => {
+  before(() => {
+    cy.clearCookies()
+    cy.task('resetAndStubTokenVerification')
+    cy.task('stubSignIn', { username: 'ITAG_USER', caseload: 'MDI' })
+    cy.signIn()
+  })
+
+  beforeEach(() => {
+    cy.task('stubOffenderBasicDetails', offenderBasicDetails)
+
+    cy.task('stubAppointmentLocations', {
+      agency: 'MDI',
+      locations: [
+        { userDescription: 'VCC Room 1', locationId: 1 },
+        { userDescription: 'Gymnasium', locationId: 2 },
+        { userDescription: 'VCC Room 2', locationId: 3 },
+      ],
+    })
+    cy.task('stubAppointmentTypes', [
+      { code: 'GYM', description: 'Gym' },
+      { description: 'Video link booking', code: 'VLB' },
+    ])
+    cy.task('stubGetStaffDetails', {
+      staffId: 'TEST_USER',
+      response: { firstName: 'Test', lastName: 'User' },
+    })
+
+    cy.task('stubGetAppointment', {
+      id: 1,
+      appointment: testAppointment,
+    })
+  })
+
+  it('Should not show delete button', () => {
+    cy.visit('/appointment-details/1')
+    cy.get('[role="button"]').should('not.exist')
   })
 })
