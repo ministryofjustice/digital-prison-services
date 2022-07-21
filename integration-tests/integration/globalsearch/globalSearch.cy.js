@@ -247,9 +247,8 @@ context('Global search', () => {
       cy.task('stubSignIn', {
         username: 'ITAG_USER',
         caseload: 'MDI',
-        roles: ['ROLE_INACTIVE_BOOKINGS'],
+        roles: [{ roleCode: 'INACTIVE_BOOKINGS' }],
       })
-      cy.signIn()
     })
 
     it('should link to both active and inactive prisoner profiles', () => {
@@ -282,9 +281,8 @@ context('Global search', () => {
       cy.task('stubSignIn', {
         username: 'ITAG_USER',
         caseload: 'MDI',
-        roles: ['ROLE_LICENCE_RO'],
+        roles: [{ roleCode: 'LICENCE_RO' }],
       })
-      cy.signIn()
     })
 
     it('should have an update licence link for the active prisoner', () => {
@@ -310,9 +308,8 @@ context('Global search', () => {
       cy.task('stubSignIn', {
         username: 'ITAG_USER',
         caseload: 'MDI',
-        roles: ['ROLE_LICENCE_RO', 'ROLE_LICENCE_VARY'],
+        roles: [{ roleCode: 'LICENCE_RO' }, { roleCode: 'LICENCE_VARY' }],
       })
-      cy.signIn()
     })
 
     it('should have an update licence link for both active and inactive prisoners', () => {

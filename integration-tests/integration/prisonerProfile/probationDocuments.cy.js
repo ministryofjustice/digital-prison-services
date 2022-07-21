@@ -6,13 +6,14 @@ context('Prisoner probation documents', () => {
   before(() => {
     cy.clearCookies()
     cy.task('reset')
-    cy.task('stubSignIn', { username: 'ITAG_USER', caseload: 'MDI', roles: ['ROLE_VIEW_PROBATION_DOCUMENTS'] })
+    cy.task('stubSignIn', { username: 'ITAG_USER', caseload: 'MDI' })
     cy.signIn()
   })
 
   context('Basic page functionality', () => {
     beforeEach(() => {
       Cypress.Cookies.preserveOnce('hmpps-session-dev')
+      cy.task('stubUserMeRoles', [{ roleCode: 'VIEW_PROBATION_DOCUMENTS' }])
       cy.task('stubClientCredentialsRequest')
       cy.task('stubOffenderBasicDetails', offenderBasicDetails)
       cy.task('stubStaff', {

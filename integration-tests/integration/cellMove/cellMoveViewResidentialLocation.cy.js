@@ -36,12 +36,12 @@ context('Cell move view residential location', () => {
   before(() => {
     cy.clearCookies()
     cy.task('resetAndStubTokenVerification')
-    cy.task('stubSignIn', { username: 'ITAG_USER', caseload: 'MDI', roles: ['ROLE_CELL_MOVE'] })
+    cy.task('stubSignIn', { username: 'ITAG_USER', caseload: 'MDI', roles: [{ roleCode: 'CELL_MOVE' }] })
     cy.signIn()
   })
 
   beforeEach(() => {
-    //  Cypress.Cookies.preserveOnce('hmpps-session-dev')
+    Cypress.Cookies.preserveOnce('hmpps-session-dev')
   })
 
   context('When there are no search values', () => {

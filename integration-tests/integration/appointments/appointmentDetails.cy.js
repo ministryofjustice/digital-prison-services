@@ -18,11 +18,13 @@ context('Appointment details page', () => {
   before(() => {
     cy.clearCookies()
     cy.task('resetAndStubTokenVerification')
-    cy.task('stubSignIn', { username: 'ITAG_USER', caseload: 'MDI', roles: ['ROLE_DELETE_A_PRISONERS_APPOINTMENT'] })
+    cy.task('stubSignIn', { username: 'ITAG_USER', caseload: 'MDI' })
     cy.signIn()
   })
 
   beforeEach(() => {
+    Cypress.Cookies.preserveOnce('hmpps-session-dev')
+    cy.task('stubUserMeRoles', [{ roleCode: 'DELETE_A_PRISONERS_APPOINTMENT' }])
     cy.task('stubOffenderBasicDetails', offenderBasicDetails)
     cy.task('stubAppointmentLocations', {
       agency: 'MDI',
@@ -78,8 +80,7 @@ context('Appointment details page', () => {
 
   context('when the user does not have the roles', () => {
     beforeEach(() => {
-      cy.task('stubSignIn', { username: 'ITAG_USER', caseload: 'MDI' })
-      cy.signIn()
+      cy.task('stubUserMeRoles', [])
     })
 
     it('Should not show delete button', () => {

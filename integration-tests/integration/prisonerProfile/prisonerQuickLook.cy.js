@@ -453,33 +453,15 @@ context('Prisoner quick look', () => {
 
   context('When a user can view inactive bookings', () => {
     beforeEach(() => {
-      cy.clearCookies()
-      cy.task('reset')
-      cy.task('stubSignIn', { username: 'ITAG_USER', caseload: 'MDI', caseloads: [] })
-      cy.signIn()
-
-      cy.task('stubPrisonerProfileHeaderData', {
-        offenderBasicDetails,
-        offenderFullDetails,
-        iepSummary: {},
-        caseNoteSummary: {},
-        offenderNo,
-      })
-
-      cy.task('stubQuickLookApiErrors')
-      cy.visit(`/prisoner/${offenderNo}`)
-    })
-
-    beforeEach(() => {
       Cypress.Cookies.preserveOnce('hmpps-session-dev')
       cy.task('stubPrisonerProfileHeaderData', {
         offenderBasicDetails,
         offenderFullDetails: { ...offenderFullDetails, agencyId: 'OUT' },
         iepSummary: {},
         caseNoteSummary: {},
+        userRoles: [{ roleCode: 'INACTIVE_BOOKINGS' }],
         offenderNo,
       })
-      //   cy.task('stubSignIn', { username: 'ITAG_USER', caseload: 'MDI', roles: ['ROLE_INACTIVE_BOOKINGS'] })
     })
 
     it('Should display conditionally displayed links to other pages', () => {
@@ -533,22 +515,13 @@ context('Prisoner quick look', () => {
   context('When a user has VIEW_PROBATION_DOCUMENTS role', () => {
     context('when offender in caseload', () => {
       beforeEach(() => {
-        cy.clearCookies()
-        cy.task('reset')
-        cy.task('stubSignIn', {
-          username: 'ITAG_USER',
-          caseload: 'MDI',
-          caseloads: [],
-          roles: ['ROLE_VIEW_PROBATION_DOCUMENTS'],
-        })
-        cy.signIn()
-
-        // Cypress.Cookies.preserveOnce('hmpps-session-dev')
+        Cypress.Cookies.preserveOnce('hmpps-session-dev')
         cy.task('stubPrisonerProfileHeaderData', {
           offenderBasicDetails,
           offenderFullDetails,
           iepSummary: {},
           caseNoteSummary: {},
+          userRoles: [{ roleCode: 'VIEW_PROBATION_DOCUMENTS' }],
           offenderNo,
         })
       })
@@ -567,7 +540,7 @@ context('Prisoner quick look', () => {
           offenderFullDetails: { ...offenderFullDetails, agencyId: 'LEI' },
           iepSummary: {},
           caseNoteSummary: {},
-          userRoles: ['ROLE_VIEW_PROBATION_DOCUMENTS'],
+          userRoles: [{ roleCode: 'VIEW_PROBATION_DOCUMENTS' }],
           offenderNo,
         })
       })
@@ -583,12 +556,7 @@ context('Prisoner quick look', () => {
   context('When a user has POM role', () => {
     context('when offender in caseload', () => {
       beforeEach(() => {
-        //  Cypress.Cookies.preserveOnce('hmpps-session-dev')
-        cy.clearCookies()
-        cy.task('reset')
-        cy.task('stubSignIn', { username: 'ITAG_USER', caseload: 'MDI', caseloads: [], roles: ['ROLE_POM'] })
-        cy.signIn()
-
+        Cypress.Cookies.preserveOnce('hmpps-session-dev')
         cy.task('stubIsCaseLoadRestrictedPatient', {
           status: 404,
           body: { message: 'Offender not found' },
@@ -598,7 +566,7 @@ context('Prisoner quick look', () => {
           offenderFullDetails,
           iepSummary: {},
           caseNoteSummary: {},
-          // userRoles: ['ROLE_POM'],
+          userRoles: [{ roleCode: 'POM' }],
           offenderNo,
         })
       })
@@ -612,12 +580,7 @@ context('Prisoner quick look', () => {
 
     context('when offender not in caseload', () => {
       beforeEach(() => {
-        // Cypress.Cookies.preserveOnce('hmpps-session-dev')
-        cy.clearCookies()
-        cy.task('reset')
-        cy.task('stubSignIn', { username: 'ITAG_USER', caseload: 'MDI', caseloads: [], roles: ['ROLE_POM'] })
-        cy.signIn()
-
+        Cypress.Cookies.preserveOnce('hmpps-session-dev')
         cy.task('stubIsCaseLoadRestrictedPatient', {
           status: 404,
           body: { message: 'Offender not found' },
@@ -627,6 +590,7 @@ context('Prisoner quick look', () => {
           offenderFullDetails: { ...offenderFullDetails, agencyId: 'LEI' },
           iepSummary: {},
           caseNoteSummary: {},
+          userRoles: [{ roleCode: 'POM' }],
           offenderNo,
         })
       })
@@ -705,7 +669,7 @@ context('Prisoner quick look', () => {
         offenderFullDetails,
         iepSummary: {},
         caseNoteSummary: {},
-        userRoles: ['ROLE_SOC_CUSTODY'],
+        userRoles: [{ roleCode: 'SOC_CUSTODY' }],
         offenderNo,
       })
     })
