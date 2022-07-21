@@ -20,7 +20,6 @@ context('A user can add a case note', () => {
     cy.task('stubCaseNoteTypesForUser')
     cy.task('stubCreateCaseNote')
     cy.task('stubVerifyToken')
-    //   cy.task('stubUserMeRoles', [])
 
     cy.visit(`/prisoner/${offenderNo}/add-case-note`)
   })

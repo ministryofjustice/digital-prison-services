@@ -17,7 +17,6 @@ context('A user can add an alert', () => {
     cy.task('stubOffenderFullDetails', offenderFullDetails)
     cy.task('stubAlertTypes')
     cy.task('stubCreateAlert')
-    //  cy.task('stubUserMeRoles', [{ roleCode: 'UPDATE_ALERT' }])
     cy.task('stubUserCaseLoads')
 
     cy.visit(`/offenders/${offenderNo}/create-alert`)
@@ -110,13 +109,11 @@ context('when a user has no permissions ', () => {
     cy.task('stubOffenderFullDetails', offenderFullDetails)
     cy.task('stubAlertTypes')
     cy.task('stubCreateAlert')
-    //  cy.task('stubUserMeRoles', [{ roleCode: 'UPDATE_ALERT' }])
     cy.task('stubUserCaseLoads')
 
     cy.visit(`/offenders/${offenderNo}/create-alert`)
   })
   it('A user is presented with not found when they no role', () => {
-    // cy.task('stubUserMeRoles', [])
     cy.visit('/offenders/A12345/create-alert')
     NotFoundPage.verifyOnPage()
   })

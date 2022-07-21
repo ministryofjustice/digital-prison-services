@@ -17,7 +17,6 @@ context('A user can search for a cell', () => {
     cy.task('stubOffenderFullDetails', offenderFullDetails)
     cy.task('stubBookingNonAssociations', {})
     cy.task('stubGroups', { id: 'MDI' })
-    //  cy.task('stubUserMeRoles', [{ roleCode: 'CELL_MOVE' }])
     cy.task('stubUserCaseLoads')
   })
 

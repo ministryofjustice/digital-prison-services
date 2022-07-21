@@ -35,7 +35,6 @@ context('A user can view suspensions', () => {
 
   beforeEach(() => {
     Cypress.Cookies.preserveOnce('hmpps-session-dev')
-    //  cy.task('stubUserMeRoles')
     cy.task('stubUserMe', {})
     cy.task('stubUserCaseLoads')
     cy.task('stubOffenderSuspendedActivitiesOverDateRange', {

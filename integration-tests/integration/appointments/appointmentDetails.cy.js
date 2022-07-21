@@ -24,7 +24,6 @@ context('Appointment details page', () => {
 
   beforeEach(() => {
     Cypress.Cookies.preserveOnce('hmpps-session-dev')
-    // cy.task('stubUserMeRoles', [{ roleCode: 'DELETE_A_PRISONERS_APPOINTMENT' }])
     cy.task('stubOffenderBasicDetails', offenderBasicDetails)
     cy.task('stubAppointmentLocations', {
       agency: 'MDI',
