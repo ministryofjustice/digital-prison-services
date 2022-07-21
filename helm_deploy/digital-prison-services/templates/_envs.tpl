@@ -325,6 +325,9 @@ env:
   - name: RESTRICTED_PATIENT_API_URL
     value: {{ .Values.env.RESTRICTED_PATIENT_API_URL | quote }}
 
+  - name: HISTORICAL_PRISONER_APPLICATION_URL
+    value: {{ .Values.env.HISTORICAL_PRISONER_APPLICATION_URL | quote }}
+
   - name: PRISONS_FOR_MANAGE_PRISON_BOOKINGS
     value: {{ .Values.env.PRISONS_FOR_MANAGE_PRISON_BOOKINGS | quote }}
 
