@@ -42,7 +42,11 @@ context('Prisoner incentive level details', () => {
   before(() => {
     cy.clearCookies()
     cy.task('reset')
-    cy.task('stubSignIn', { username: 'ITAG_USER', caseload: 'MDI' })
+    cy.task('stubSignIn', {
+      username: 'ITAG_USER',
+      caseload: 'MDI',
+      roles: ['ROLE_GLOBAL_SEARCH', 'ROLE_MAINTAIN_IEP'],
+    })
     cy.signIn()
   })
 
@@ -50,7 +54,7 @@ context('Prisoner incentive level details', () => {
     beforeEach(() => {
       Cypress.Cookies.preserveOnce('hmpps-session-dev')
       cy.task('stubOffenderBasicDetails', offenderBasicDetails)
-      cy.task('stubUserMeRoles', [{ roleCode: 'GLOBAL_SEARCH' }, { roleCode: 'MAINTAIN_IEP' }])
+      //  cy.task('stubUserMeRoles', [{ roleCode: 'GLOBAL_SEARCH' }, { roleCode: 'MAINTAIN_IEP' }])
       cy.task('stubStaff', {
         staffId: 'ITAG_USER',
         details: {
@@ -99,7 +103,7 @@ context('Prisoner incentive level details', () => {
     it('should not show change incentive level link if user does not have correct role', () => {
       cy.task('stubGetIepSummaryForBooking', iepSummaryResponse)
 
-      cy.task('stubUserMeRoles', [{ roleCode: 'GLOBAL_SEARCH' }])
+      //      cy.task('stubUserMeRoles', [{ roleCode: 'GLOBAL_SEARCH' }])
 
       cy.visit(`/prisoner/${offenderNo}/incentive-level-details`)
 

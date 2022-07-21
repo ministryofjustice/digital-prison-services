@@ -2,13 +2,13 @@ context('No cell allocated page', () => {
   before(() => {
     cy.clearCookies()
     cy.task('resetAndStubTokenVerification')
-    cy.task('stubSignIn', { username: 'ITAG_USER', caseload: 'MDI' })
+    cy.task('stubSignIn', { username: 'ITAG_USER', caseload: 'MDI', roles: ['ROLE_CELL_MOVE'] })
     cy.signIn()
   })
 
   beforeEach(() => {
     Cypress.Cookies.preserveOnce('hmpps-session-dev')
-    cy.task('stubUserMeRoles', [])
+    //  cy.task('stubUserMeRoles', [])
     cy.task('stubUserMe', {})
     cy.task('stubUserCaseLoads')
     cy.task('stubInmates', {
@@ -123,7 +123,7 @@ context('No cell allocated page', () => {
   })
 
   it('should show the allocate cell links if user has correct roles', () => {
-    cy.task('stubUserMeRoles', [{ roleCode: 'CELL_MOVE' }])
+    //    cy.task('stubUserMeRoles', [{ roleCode: 'CELL_MOVE' }])
     cy.visit('/establishment-roll/no-cell-allocated')
 
     cy.get('[data-test="allocate-cell-link"]').then(($allocateCellLink) => {

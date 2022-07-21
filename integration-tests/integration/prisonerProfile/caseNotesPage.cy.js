@@ -50,6 +50,7 @@ context('A user can view prisoner case notes', () => {
           currentlyActive: true,
         },
       ],
+      roles: ['ROLE_DELETE_SENSITIVE_CASE_NOTES'],
     })
     cy.signIn()
     cy.task('stubCaseNoteTypes')
@@ -180,7 +181,7 @@ context('A user can view prisoner case notes', () => {
   })
 
   it('should show a delete case note link if the case note is sensitive and the user has the correct role', () => {
-    cy.task('stubUserMeRoles', [{ roleCode: 'DELETE_SENSITIVE_CASE_NOTES' }])
+    //  cy.task('stubUserMeRoles', [{ roleCode: 'DELETE_SENSITIVE_CASE_NOTES' }])
 
     cy.task('stubCaseNotes', {
       totalElements: 1,

@@ -18,13 +18,13 @@ context('Appointment details page', () => {
   before(() => {
     cy.clearCookies()
     cy.task('resetAndStubTokenVerification')
-    cy.task('stubSignIn', { username: 'ITAG_USER', caseload: 'MDI' })
+    cy.task('stubSignIn', { username: 'ITAG_USER', caseload: 'MDI', roles: ['ROLE_DELETE_A_PRISONERS_APPOINTMENT'] })
     cy.signIn()
   })
 
   beforeEach(() => {
     Cypress.Cookies.preserveOnce('hmpps-session-dev')
-    cy.task('stubUserMeRoles', [{ roleCode: 'DELETE_A_PRISONERS_APPOINTMENT' }])
+    // cy.task('stubUserMeRoles', [{ roleCode: 'DELETE_A_PRISONERS_APPOINTMENT' }])
     cy.task('stubOffenderBasicDetails', offenderBasicDetails)
     cy.task('stubAppointmentLocations', {
       agency: 'MDI',

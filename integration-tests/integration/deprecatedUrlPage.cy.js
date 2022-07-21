@@ -10,7 +10,7 @@ context('Redirect from old bookmark', () => {
     })
     cy.signIn()
 
-    cy.task('stubUserMeRoles')
+    //  cy.task('stubUserMeRoles')
     cy.task('stubUserLocations')
     cy.task('stubStaffRoles', [])
     cy.task('stubLocationConfig', { agencyId: 'MDI', response: { enabled: false } })

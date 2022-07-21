@@ -6,12 +6,16 @@ context('Whereabouts homepage', () => {
 
   describe('Tasks', () => {
     beforeEach(() => {
-      cy.task('stubSignIn', { username: 'ITAG_USER', caseload: 'MDI' })
+      cy.task('stubSignIn', {
+        username: 'ITAG_USER',
+        caseload: 'MDI',
+        roles: ['ROLE_BULK_APPOINTMENTS', 'ROLE_PRISON'],
+      })
       cy.signIn()
     })
 
     it('should non role specific tasks', () => {
-      cy.task('stubUserMeRoles')
+      // cy.task('stubUserMeRoles')
       cy.visit('/manage-prisoner-whereabouts')
 
       cy.get('[data-test="view-residential-location"]').should('exist')
@@ -25,19 +29,19 @@ context('Whereabouts homepage', () => {
     })
 
     it('should show covid unit task', () => {
-      cy.task('stubUserMeRoles', [{ roleCode: 'PRISON' }])
+      // cy.task('stubUserMeRoles', [{ roleCode: 'PRISON' }])
       cy.visit('/manage-prisoner-whereabouts')
       cy.get('[data-test="view-covid-units"]').should('exist')
     })
 
     it('should show bulk appointments task', () => {
-      cy.task('stubUserMeRoles', [{ roleCode: 'BULK_APPOINTMENTS' }])
+      // cy.task('stubUserMeRoles', [{ roleCode: 'BULK_APPOINTMENTS' }])
       cy.visit('/manage-prisoner-whereabouts')
       cy.get('[data-test="view-bulk-appointments"]').should('exist')
     })
 
     it('should show all tasks in correct order', () => {
-      cy.task('stubUserMeRoles', [{ roleCode: 'BULK_APPOINTMENTS' }, { roleCode: 'PRISON' }])
+      // cy.task('stubUserMeRoles', [{ roleCode: 'BULK_APPOINTMENTS' }, { roleCode: 'PRISON' }])
       cy.visit('/manage-prisoner-whereabouts')
       cy.get('.card')
         .find('h2')

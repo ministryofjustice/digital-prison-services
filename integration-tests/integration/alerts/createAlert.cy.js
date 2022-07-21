@@ -8,7 +8,7 @@ context('A user can add an alert', () => {
   before(() => {
     cy.clearCookies()
     cy.task('resetAndStubTokenVerification')
-    cy.task('stubSignIn', { username: 'ITAG_USER', caseload: 'MDI' })
+    cy.task('stubSignIn', { username: 'ITAG_USER', caseload: 'MDI', roles: ['ROLE_UPDATE_ALERT'] })
     cy.signIn()
   })
   beforeEach(() => {
@@ -17,7 +17,7 @@ context('A user can add an alert', () => {
     cy.task('stubOffenderFullDetails', offenderFullDetails)
     cy.task('stubAlertTypes')
     cy.task('stubCreateAlert')
-    cy.task('stubUserMeRoles', [{ roleCode: 'UPDATE_ALERT' }])
+    //  cy.task('stubUserMeRoles', [{ roleCode: 'UPDATE_ALERT' }])
     cy.task('stubUserCaseLoads')
 
     cy.visit(`/offenders/${offenderNo}/create-alert`)
@@ -98,7 +98,7 @@ context('A user can add an alert', () => {
   })
 
   it('A user is presented with not found when they no role', () => {
-    cy.task('stubUserMeRoles', [])
+    // cy.task('stubUserMeRoles', [])
     cy.visit('/offenders/A12345/create-alert')
     NotFoundPage.verifyOnPage()
   })

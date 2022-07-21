@@ -7,7 +7,7 @@ context('Sign in functionality', () => {
 
   beforeEach(() => {
     cy.task('reset')
-    cy.task('stubUserMeRoles')
+    // cy.task('stubUserMeRoles')
     cy.task('stubUserLocations')
     cy.task('stubStaffRoles', [])
     cy.task('stubLocationConfig', { agencyId: 'MDI', response: { enabled: false } })

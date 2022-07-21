@@ -9,7 +9,7 @@ context('A user can search for a cell', () => {
   before(() => {
     cy.clearCookies()
     cy.task('resetAndStubTokenVerification')
-    cy.task('stubSignIn', { username: 'ITAG_USER', caseload: 'MDI' })
+    cy.task('stubSignIn', { username: 'ITAG_USER', caseload: 'MDI', roles: ['ROLE_CELL_MOVE'] })
     cy.signIn()
   })
   beforeEach(() => {
@@ -17,7 +17,7 @@ context('A user can search for a cell', () => {
     cy.task('stubOffenderFullDetails', offenderFullDetails)
     cy.task('stubBookingNonAssociations', {})
     cy.task('stubGroups', { id: 'MDI' })
-    cy.task('stubUserMeRoles', [{ roleCode: 'CELL_MOVE' }])
+    //  cy.task('stubUserMeRoles', [{ roleCode: 'CELL_MOVE' }])
     cy.task('stubUserCaseLoads')
   })
 
