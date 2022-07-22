@@ -50,7 +50,7 @@ describe('Select a cell', () => {
   })
 
   beforeEach(() => {
-    oauthApi.userRoles = jest.fn().mockResolvedValue([{ roleCode: 'CELL_MOVE' }])
+    oauthApi.userRoles = jest.fn().mockReturnValue([{ roleCode: 'CELL_MOVE' }])
     prisonApi.userCaseLoads = jest.fn().mockResolvedValue([{ caseLoadId: 'LEI' }])
     prisonApi.getDetails = jest.fn().mockResolvedValue({
       firstName: 'John',

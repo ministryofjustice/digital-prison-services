@@ -74,7 +74,7 @@ describe('case note management', () => {
     caseNotesApi.myCaseNoteTypes = jest.fn().mockReturnValue(caseNoteTypes)
     caseNotesApi.addCaseNote = jest.fn()
     // @ts-expect-error ts-migrate(2339) FIXME: Property 'getNeurodiversities' does not exist on type '{}'... Remove this comment to see the full error message
-    oauthApi.userRoles = jest.fn().mockResolvedValue([])
+    oauthApi.userRoles = jest.fn().mockReturnValue([])
   })
 
   afterEach(() => {

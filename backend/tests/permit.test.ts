@@ -14,7 +14,7 @@ describe('Permit', () => {
     next = jest.fn()
 
     // @ts-expect-error ts-migrate(2339) FIXME: Property 'userRoles' does not exist on type '{}'.
-    oauthApi.userRoles = jest.fn().mockResolvedValue([])
+    oauthApi.userRoles = jest.fn().mockReturnValue([])
 
     controller = permitController(oauthApi, ['CELL_MOVE'])
   })
@@ -34,7 +34,7 @@ describe('Permit', () => {
   describe('with role', () => {
     beforeEach(() => {
       // @ts-expect-error ts-migrate(2339) FIXME: Property 'userRoles' does not exist on type '{}'.
-      oauthApi.userRoles.mockResolvedValue([{ roleCode: 'CELL_MOVE' }])
+      oauthApi.userRoles.mockReturnValue([{ roleCode: 'CELL_MOVE' }])
     })
 
     it('should call next to continue to the next controller', async () => {

@@ -7,7 +7,7 @@ export const userMeFactory = (oauthApi) => {
   })
 
   const userRoles = asyncMiddleware(async (req, res) => {
-    const data = await oauthApi.userRoles(res.locals)
+    const data = oauthApi.userRoles(res.locals)
     res.json(data.map((role) => role.roleCode))
   })
 

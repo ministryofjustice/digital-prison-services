@@ -70,7 +70,8 @@ export default ({ oauthApi, prisonApi, page = 0 }) =>
         page,
         size: 10000,
       })
-      const [userRoles, agencyData] = await Promise.all([oauthApi.userRoles(res.locals), getAgencyDetails(cells)])
+      const userRoles = oauthApi.userRoles(res.locals)
+      const agencyData = await getAgencyDetails(cells)
       const staff = await Promise.all(cells.map((cell) => prisonApi.getStaffDetails(res.locals, cell.movementMadeBy)))
 
       const cellData = cells.map((cell) => {

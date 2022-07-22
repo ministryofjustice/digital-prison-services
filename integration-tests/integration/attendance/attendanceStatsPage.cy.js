@@ -26,7 +26,6 @@ context('A user can view attendance changes', () => {
 
   beforeEach(() => {
     Cypress.Cookies.preserveOnce('hmpps-session-dev')
-    cy.task('stubUserMeRoles')
     cy.task('stubUserMe', {})
     cy.task('stubUserCaseLoads')
     cy.task('stubAttendanceChanges', [
@@ -190,7 +189,6 @@ context('Attendance - suspended stats', () => {
 
   beforeEach(() => {
     Cypress.Cookies.preserveOnce('hmpps-session-dev')
-    cy.task('stubUserMeRoles')
     cy.task('stubUserMe', {})
     cy.task('stubUserCaseLoads')
     cy.task('stubAttendanceChanges', [

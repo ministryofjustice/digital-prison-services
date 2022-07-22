@@ -42,7 +42,7 @@ describe('Global search', () => {
     offenderSearchApi.globalSearch = jest.fn().mockResolvedValue([])
 
     // @ts-expect-error ts-migrate(2339) FIXME: Property 'userRoles' does not exist on type '{}'.
-    oauthApi.userRoles = jest.fn().mockResolvedValue([])
+    oauthApi.userRoles = jest.fn().mockReturnValue([])
 
     // @ts-expect-error ts-migrate(2339) FIXME: Property 'getPagination' does not exist on type '{... Remove this comment to see the full error message
     paginationService.getPagination = jest.fn()
@@ -476,7 +476,7 @@ describe('Global search', () => {
           }
 
           // @ts-expect-error ts-migrate(2339) FIXME: Property 'userRoles' does not exist on type '{}'.
-          oauthApi.userRoles.mockResolvedValue([{ roleCode: 'LICENCE_RO' }])
+          oauthApi.userRoles.mockReturnValue([{ roleCode: 'LICENCE_RO' }])
         })
 
         it('should have let the template know which licence related content to show', async () => {
@@ -521,7 +521,7 @@ describe('Global search', () => {
         describe('and a licences vary user', () => {
           beforeEach(() => {
             // @ts-expect-error ts-migrate(2339) FIXME: Property 'userRoles' does not exist on type '{}'.
-            oauthApi.userRoles.mockResolvedValue([{ roleCode: 'LICENCE_RO' }, { roleCode: 'LICENCE_VARY' }])
+            oauthApi.userRoles.mockReturnValue([{ roleCode: 'LICENCE_RO' }, { roleCode: 'LICENCE_VARY' }])
           })
 
           it('should have let the template know which licence related content to show', async () => {
@@ -573,7 +573,7 @@ describe('Global search', () => {
             genderFilter: 'ALL',
           }
           // @ts-expect-error ts-migrate(2339) FIXME: Property 'userRoles' does not exist on type '{}'.
-          oauthApi.userRoles.mockResolvedValue([{ roleCode: 'INACTIVE_BOOKINGS' }])
+          oauthApi.userRoles.mockReturnValue([{ roleCode: 'INACTIVE_BOOKINGS' }])
         })
 
         it('should have let the template know to still link to former prisoner profiles', async () => {

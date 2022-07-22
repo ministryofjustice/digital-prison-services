@@ -451,28 +451,6 @@ context('Prisoner quick look', () => {
     })
   })
 
-  context('When a user can view inactive bookings', () => {
-    beforeEach(() => {
-      Cypress.Cookies.preserveOnce('hmpps-session-dev')
-      cy.task('stubPrisonerProfileHeaderData', {
-        offenderBasicDetails,
-        offenderFullDetails: { ...offenderFullDetails, agencyId: 'OUT' },
-        iepSummary: {},
-        caseNoteSummary: {},
-        userRoles: [{ roleCode: 'INACTIVE_BOOKINGS' }],
-        offenderNo,
-      })
-    })
-
-    it('Should display conditionally displayed links to other pages', () => {
-      cy.visit(`/prisoner/${offenderNo}`)
-
-      cy.get('[data-test="tabs-case-notes"]').should('contain.text', 'Case notes')
-      cy.get('[data-test="adjudication-history-link"]').should('contain.text', 'View adjudication history')
-      cy.get('[data-test="incentive-details-link"]').should('contain.text', 'View incentive level details')
-    })
-  })
-
   context('When a user CANNOT view inactive bookings', () => {
     beforeEach(() => {
       Cypress.Cookies.preserveOnce('hmpps-session-dev')
@@ -509,97 +487,6 @@ context('Prisoner quick look', () => {
       cy.visit(`/prisoner/${offenderNo}`)
 
       cy.get('[data-test="probation-documents-link"]').should('not.exist')
-    })
-  })
-
-  context('When a user has VIEW_PROBATION_DOCUMENTS role', () => {
-    context('when offender in caseload', () => {
-      beforeEach(() => {
-        Cypress.Cookies.preserveOnce('hmpps-session-dev')
-        cy.task('stubPrisonerProfileHeaderData', {
-          offenderBasicDetails,
-          offenderFullDetails,
-          iepSummary: {},
-          caseNoteSummary: {},
-          userRoles: [{ roleCode: 'VIEW_PROBATION_DOCUMENTS' }],
-          offenderNo,
-        })
-      })
-
-      it('Should show the View documents held by probation link', () => {
-        cy.visit(`/prisoner/${offenderNo}`)
-
-        cy.get('[data-test="probation-documents-link"]').should('contain.text', 'View documents held by probation')
-      })
-    })
-    context('when offender not in caseload', () => {
-      beforeEach(() => {
-        Cypress.Cookies.preserveOnce('hmpps-session-dev')
-        cy.task('stubPrisonerProfileHeaderData', {
-          offenderBasicDetails: { ...offenderBasicDetails, agencyId: 'LEI' },
-          offenderFullDetails: { ...offenderFullDetails, agencyId: 'LEI' },
-          iepSummary: {},
-          caseNoteSummary: {},
-          userRoles: [{ roleCode: 'VIEW_PROBATION_DOCUMENTS' }],
-          offenderNo,
-        })
-      })
-
-      it('Should not show the View documents held by probation link', () => {
-        cy.visit(`/prisoner/${offenderNo}`)
-
-        cy.get('[data-test="probation-documents-link"]').should('not.exist')
-      })
-    })
-  })
-
-  context('When a user has POM role', () => {
-    context('when offender in caseload', () => {
-      beforeEach(() => {
-        Cypress.Cookies.preserveOnce('hmpps-session-dev')
-        cy.task('stubIsCaseLoadRestrictedPatient', {
-          status: 404,
-          body: { message: 'Offender not found' },
-        })
-        cy.task('stubPrisonerProfileHeaderData', {
-          offenderBasicDetails,
-          offenderFullDetails,
-          iepSummary: {},
-          caseNoteSummary: {},
-          userRoles: [{ roleCode: 'POM' }],
-          offenderNo,
-        })
-      })
-
-      it('Should show the View documents held by probation link', () => {
-        cy.visit(`/prisoner/${offenderNo}`)
-
-        cy.get('[data-test="probation-documents-link"]').should('contain.text', 'View documents held by probation')
-      })
-    })
-
-    context('when offender not in caseload', () => {
-      beforeEach(() => {
-        Cypress.Cookies.preserveOnce('hmpps-session-dev')
-        cy.task('stubIsCaseLoadRestrictedPatient', {
-          status: 404,
-          body: { message: 'Offender not found' },
-        })
-        cy.task('stubPrisonerProfileHeaderData', {
-          offenderBasicDetails: { ...offenderBasicDetails, agencyId: 'LEI' },
-          offenderFullDetails: { ...offenderFullDetails, agencyId: 'LEI' },
-          iepSummary: {},
-          caseNoteSummary: {},
-          userRoles: [{ roleCode: 'POM' }],
-          offenderNo,
-        })
-      })
-
-      it('Should not show the View documents held by probation link', () => {
-        cy.visit(`/prisoner/${offenderNo}`)
-
-        cy.get('[data-test="probation-documents-link"]').should('not.exist')
-      })
     })
   })
 
@@ -658,54 +545,6 @@ context('Prisoner quick look', () => {
         'href',
         `/offenders/${offenderNo}/retention-reasons`
       )
-    })
-  })
-
-  context('When a user has a SOC role', () => {
-    beforeEach(() => {
-      Cypress.Cookies.preserveOnce('hmpps-session-dev')
-      cy.task('stubPrisonerProfileHeaderData', {
-        offenderBasicDetails,
-        offenderFullDetails,
-        iepSummary: {},
-        caseNoteSummary: {},
-        userRoles: [{ roleCode: 'SOC_CUSTODY' }],
-        offenderNo,
-      })
-    })
-
-    context('And prisoner is not in SOC', () => {
-      beforeEach(() => {
-        cy.task('stubSocOffenderDetails', {
-          status: 404,
-          body: { message: 'Offender not found' },
-          offenderNumber: offenderNo,
-        })
-      })
-      it('Should show Add to SOC button', () => {
-        cy.visit(`/prisoner/${offenderNo}`)
-        cy.get('[data-test="soc-referral-button"]')
-          .should('contain.text', 'Add to SOC')
-          .and('have.attr', 'href')
-          .and('match', RegExp(`.*?/offender/${offenderNo}$`))
-      })
-    })
-
-    context('And prisoner is in SOC', () => {
-      beforeEach(() => {
-        cy.task('stubSocOffenderDetails', {
-          status: 200,
-          body: { id: 1, status: 'ACTIVE', nomsId: offenderNo, history: [], band: '2' },
-          offenderNumber: offenderNo,
-        })
-      })
-      it('Should show View SOC profile link', () => {
-        cy.visit(`/prisoner/${offenderNo}`)
-        cy.get('[data-test="soc-profile-link"]')
-          .should('contain.text', 'View SOC profile')
-          .and('have.attr', 'href')
-          .and('match', RegExp('.*?/nominal/1$'))
-      })
     })
   })
 })
@@ -798,6 +637,202 @@ context('Finances section', () => {
           })
       })
     })
+  })
+})
+
+context('When a user has a SOC role', () => {
+  before(() => {
+    cy.clearCookies()
+    cy.task('reset')
+    cy.task('stubSignIn', { username: 'ITAG_USER', caseload: 'MDI', caseloads: [], roles: ['ROLE_SOC_CUSTODY'] })
+    cy.signIn()
+  })
+  beforeEach(() => {
+    Cypress.Cookies.preserveOnce('hmpps-session-dev')
+    cy.task('stubPrisonerProfileHeaderData', {
+      offenderBasicDetails,
+      offenderFullDetails,
+      iepSummary: {},
+      caseNoteSummary: {},
+      //   userRoles: [{ roleCode: 'SOC_CUSTODY' }],
+      offenderNo,
+    })
+  })
+
+  context('And prisoner is not in SOC', () => {
+    beforeEach(() => {
+      cy.task('stubSocOffenderDetails', {
+        status: 404,
+        body: { message: 'Offender not found' },
+        offenderNumber: offenderNo,
+      })
+    })
+    it('Should show Add to SOC button', () => {
+      cy.visit(`/prisoner/${offenderNo}`)
+      cy.get('[data-test="soc-referral-button"]')
+        .should('contain.text', 'Add to SOC')
+        .and('have.attr', 'href')
+        .and('match', RegExp(`.*?/offender/${offenderNo}$`))
+    })
+  })
+
+  context('And prisoner is in SOC', () => {
+    beforeEach(() => {
+      cy.task('stubSocOffenderDetails', {
+        status: 200,
+        body: { id: 1, status: 'ACTIVE', nomsId: offenderNo, history: [], band: '2' },
+        offenderNumber: offenderNo,
+      })
+    })
+    it('Should show View SOC profile link', () => {
+      cy.visit(`/prisoner/${offenderNo}`)
+      cy.get('[data-test="soc-profile-link"]')
+        .should('contain.text', 'View SOC profile')
+        .and('have.attr', 'href')
+        .and('match', RegExp('.*?/nominal/1$'))
+    })
+  })
+})
+
+context('When a user has POM role', () => {
+  before(() => {
+    cy.clearCookies()
+    cy.task('reset')
+    cy.task('stubSignIn', { username: 'ITAG_USER', caseload: 'MDI', caseloads: [], roles: ['ROLE_POM'] })
+    cy.signIn()
+  })
+  context('when offender in caseload', () => {
+    beforeEach(() => {
+      Cypress.Cookies.preserveOnce('hmpps-session-dev')
+      cy.task('stubIsCaseLoadRestrictedPatient', {
+        status: 404,
+        body: { message: 'Offender not found' },
+      })
+      cy.task('stubPrisonerProfileHeaderData', {
+        offenderBasicDetails,
+        offenderFullDetails,
+        iepSummary: {},
+        caseNoteSummary: {},
+        //   userRoles: [{ roleCode: 'POM' }],
+        offenderNo,
+      })
+    })
+
+    it('Should show the View documents held by probation link', () => {
+      cy.visit(`/prisoner/${offenderNo}`)
+
+      cy.get('[data-test="probation-documents-link"]').should('contain.text', 'View documents held by probation')
+    })
+  })
+
+  context('when offender not in caseload', () => {
+    beforeEach(() => {
+      Cypress.Cookies.preserveOnce('hmpps-session-dev')
+      cy.task('stubIsCaseLoadRestrictedPatient', {
+        status: 404,
+        body: { message: 'Offender not found' },
+      })
+      cy.task('stubPrisonerProfileHeaderData', {
+        offenderBasicDetails: { ...offenderBasicDetails, agencyId: 'LEI' },
+        offenderFullDetails: { ...offenderFullDetails, agencyId: 'LEI' },
+        iepSummary: {},
+        caseNoteSummary: {},
+        userRoles: [{ roleCode: 'POM' }],
+        offenderNo,
+      })
+    })
+
+    it('Should not show the View documents held by probation link', () => {
+      cy.visit(`/prisoner/${offenderNo}`)
+
+      cy.get('[data-test="probation-documents-link"]').should('not.exist')
+    })
+  })
+})
+
+context('When a user has VIEW_PROBATION_DOCUMENTS role', () => {
+  before(() => {
+    cy.clearCookies()
+    cy.task('reset')
+    cy.task('stubSignIn', {
+      username: 'ITAG_USER',
+      caseload: 'MDI',
+      caseloads: [],
+      roles: ['ROLE_VIEW_PROBATION_DOCUMENTS'],
+    })
+    cy.signIn()
+  })
+  context('when offender in caseload', () => {
+    beforeEach(() => {
+      Cypress.Cookies.preserveOnce('hmpps-session-dev')
+      cy.task('stubPrisonerProfileHeaderData', {
+        offenderBasicDetails,
+        offenderFullDetails,
+        iepSummary: {},
+        caseNoteSummary: {},
+        //   userRoles: [{ roleCode: 'VIEW_PROBATION_DOCUMENTS' }],
+        offenderNo,
+      })
+    })
+
+    it('Should show the View documents held by probation link', () => {
+      cy.visit(`/prisoner/${offenderNo}`)
+
+      cy.get('[data-test="probation-documents-link"]').should('contain.text', 'View documents held by probation')
+    })
+  })
+  context('when offender not in caseload', () => {
+    beforeEach(() => {
+      Cypress.Cookies.preserveOnce('hmpps-session-dev')
+      cy.task('stubPrisonerProfileHeaderData', {
+        offenderBasicDetails: { ...offenderBasicDetails, agencyId: 'LEI' },
+        offenderFullDetails: { ...offenderFullDetails, agencyId: 'LEI' },
+        iepSummary: {},
+        caseNoteSummary: {},
+        userRoles: [{ roleCode: 'VIEW_PROBATION_DOCUMENTS' }],
+        offenderNo,
+      })
+    })
+
+    it('Should not show the View documents held by probation link', () => {
+      cy.visit(`/prisoner/${offenderNo}`)
+
+      cy.get('[data-test="probation-documents-link"]').should('not.exist')
+    })
+  })
+})
+
+context('When a user can view inactive bookings', () => {
+  before(() => {
+    cy.clearCookies()
+    cy.task('reset')
+    cy.task('stubSignIn', {
+      username: 'ITAG_USER',
+      caseload: 'MDI',
+      caseloads: [],
+      roles: ['ROLE_INACTIVE_BOOKINGS'],
+    })
+    cy.signIn()
+  })
+  beforeEach(() => {
+    cy.task('stubQuickLook', quickLookFullDetails)
+    Cypress.Cookies.preserveOnce('hmpps-session-dev')
+    cy.task('stubPrisonerProfileHeaderData', {
+      offenderBasicDetails,
+      offenderFullDetails: { ...offenderFullDetails, agencyId: 'OUT' },
+      iepSummary: {},
+      caseNoteSummary: {},
+      // userRoles: [{ roleCode: 'INACTIVE_BOOKINGS' }],
+      offenderNo,
+    })
+  })
+
+  it('Should display conditionally displayed links to other pages', () => {
+    cy.visit(`/prisoner/${offenderNo}`)
+
+    cy.get('[data-test="tabs-case-notes"]').should('contain.text', 'Case notes')
+    cy.get('[data-test="adjudication-history-link"]').should('contain.text', 'View adjudication history')
+    cy.get('[data-test="incentive-details-link"]').should('contain.text', 'View incentive level details')
   })
 })
 

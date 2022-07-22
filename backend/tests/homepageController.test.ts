@@ -42,7 +42,7 @@ describe('Homepage', () => {
 
     prisonApi.userLocations = jest.fn().mockResolvedValue([])
     prisonApi.getStaffRoles = jest.fn().mockResolvedValue([])
-    oauthApi.userRoles = jest.fn().mockResolvedValue([])
+    oauthApi.userRoles = jest.fn().mockReturnValue([])
     whereaboutsApi.getWhereaboutsConfig = jest.fn().mockResolvedValue({})
     keyworkerApi.getPrisonMigrationStatus = jest.fn().mockResolvedValue({ migrated: true })
 
@@ -92,7 +92,7 @@ describe('Homepage', () => {
     })
 
     it('should render home page with the the global search task', async () => {
-      oauthApi.userRoles.mockResolvedValue([{ roleCode: 'GLOBAL_SEARCH' }])
+      oauthApi.userRoles.mockReturnValue([{ roleCode: 'GLOBAL_SEARCH' }])
 
       await controller(req, res)
 
@@ -155,7 +155,7 @@ describe('Homepage', () => {
     })
 
     it('should render page with the view change someones cell task', async () => {
-      oauthApi.userRoles.mockResolvedValue([{ roleCode: 'CELL_MOVE' }])
+      oauthApi.userRoles.mockReturnValue([{ roleCode: 'CELL_MOVE' }])
 
       await controller(req, res)
 
@@ -216,7 +216,7 @@ describe('Homepage', () => {
     })
 
     it('should render home page with the manage prison visits task', async () => {
-      oauthApi.userRoles.mockResolvedValue([{ roleCode: 'MANAGE_PRISON_VISITS' }])
+      oauthApi.userRoles.mockReturnValue([{ roleCode: 'MANAGE_PRISON_VISITS' }])
       config.apis.managePrisonVisits.ui_url = 'http://book-a-prison-visit-url'
       config.apis.managePrisonVisits.enabled_prisons = 'MDI'
 
@@ -238,7 +238,7 @@ describe('Homepage', () => {
     })
 
     it('should render home page with the legacy book a prison visit task', async () => {
-      oauthApi.userRoles.mockResolvedValue([{ roleCode: 'PVB_REQUESTS' }])
+      oauthApi.userRoles.mockReturnValue([{ roleCode: 'PVB_REQUESTS' }])
       config.apis.legacyPrisonVisits.ui_url = 'http://legacy-prison-visit-url'
 
       await controller(req, res)
@@ -261,7 +261,7 @@ describe('Homepage', () => {
     it('should render home page with the pathfinder task', async () => {
       config.apis.pathfinder.ui_url = 'http://pathfinder-url'
 
-      oauthApi.userRoles.mockResolvedValue([
+      oauthApi.userRoles.mockReturnValue([
         { roleCode: 'PF_STD_PRISON' },
         { roleCode: 'PF_STD_PROBATION' },
         { roleCode: 'PF_APPROVAL' },
@@ -294,7 +294,7 @@ describe('Homepage', () => {
     it('should render home page with the hdc licences task', async () => {
       config.applications.licences.url = 'http://licences-url'
 
-      oauthApi.userRoles.mockResolvedValue([
+      oauthApi.userRoles.mockReturnValue([
         { roleCode: 'NOMIS_BATCHLOAD' },
         { roleCode: 'LICENCE_CA' },
         { roleCode: 'LICENCE_DM' },
@@ -346,7 +346,7 @@ describe('Homepage', () => {
     it('should render home page with the manage key workers task', async () => {
       config.apis.omic.url = 'http://omic-url'
 
-      oauthApi.userRoles.mockResolvedValue([{ roleCode: 'OMIC_ADMIN' }, { roleCode: 'KEYWORKER_MONITOR' }])
+      oauthApi.userRoles.mockReturnValue([{ roleCode: 'OMIC_ADMIN' }, { roleCode: 'KEYWORKER_MONITOR' }])
 
       await controller(req, res)
 
@@ -370,7 +370,7 @@ describe('Homepage', () => {
         keyworkerApi.getPrisonMigrationStatus = jest.fn().mockResolvedValue({ migrated: false })
       })
       it('should not show the manage key workers link', async () => {
-        oauthApi.userRoles.mockResolvedValue([{ roleCode: 'OMIC_ADMIN' }])
+        oauthApi.userRoles.mockReturnValue([{ roleCode: 'OMIC_ADMIN' }])
         await controller(req, res)
 
         expect(res.render).toHaveBeenCalledWith(
@@ -382,7 +382,7 @@ describe('Homepage', () => {
       })
 
       it('should show the manage key worker link if the user has the migrate role', async () => {
-        oauthApi.userRoles.mockResolvedValue([{ roleCode: 'KW_MIGRATION' }])
+        oauthApi.userRoles.mockReturnValue([{ roleCode: 'KW_MIGRATION' }])
         await controller(req, res)
 
         expect(res.render).toHaveBeenCalledWith(
@@ -404,7 +404,7 @@ describe('Homepage', () => {
     it('should render home page with the manage users task', async () => {
       config.applications.manageaccounts.url = 'http://manage-auth-accounts-url'
 
-      oauthApi.userRoles.mockResolvedValue([
+      oauthApi.userRoles.mockReturnValue([
         { roleCode: 'MAINTAIN_ACCESS_ROLES' },
         { roleCode: 'MAINTAIN_ACCESS_ROLES_ADMIN' },
         { roleCode: 'MAINTAIN_OAUTH_USERS' },
@@ -432,7 +432,7 @@ describe('Homepage', () => {
     it('should render home page with the categorisation task', async () => {
       config.apis.categorisation.ui_url = 'http://categorisation-url'
 
-      oauthApi.userRoles.mockResolvedValue([
+      oauthApi.userRoles.mockReturnValue([
         { roleCode: 'CREATE_CATEGORISATION' },
         { roleCode: 'CREATE_RECATEGORISATION' },
         { roleCode: 'APPROVE_CATEGORISATION' },
@@ -460,7 +460,7 @@ describe('Homepage', () => {
     it('should render home page with the book a secure move task', async () => {
       config.applications.pecs.url = 'http://pecs-url'
 
-      oauthApi.userRoles.mockResolvedValue([{ roleCode: 'PECS_OCA' }, { roleCode: 'PECS_PRISON' }])
+      oauthApi.userRoles.mockReturnValue([{ roleCode: 'PECS_OCA' }, { roleCode: 'PECS_PRISON' }])
 
       await controller(req, res)
 
@@ -483,7 +483,7 @@ describe('Homepage', () => {
     it('should render home page with the prison offender managers task', async () => {
       config.applications.moic.url = 'http://moic-url'
 
-      oauthApi.userRoles.mockResolvedValue([{ roleCode: 'ALLOC_MGR' }, { roleCode: 'ALLOC_CASE_MGR' }])
+      oauthApi.userRoles.mockReturnValue([{ roleCode: 'ALLOC_MGR' }, { roleCode: 'ALLOC_CASE_MGR' }])
 
       await controller(req, res)
 
@@ -505,7 +505,7 @@ describe('Homepage', () => {
     it('should render home page with the serious organised crime task', async () => {
       config.apis.soc.ui_url = 'http://soc-url'
 
-      oauthApi.userRoles.mockResolvedValue([{ roleCode: 'SOC_CUSTODY' }, { roleCode: 'SOC_COMMUNITY' }])
+      oauthApi.userRoles.mockReturnValue([{ roleCode: 'SOC_CUSTODY' }, { roleCode: 'SOC_COMMUNITY' }])
 
       await controller(req, res)
 
@@ -527,7 +527,7 @@ describe('Homepage', () => {
     it('should render home page with the serious organised crime task when the user has the SOC_HQ role', async () => {
       config.apis.soc.ui_url = 'http://soc-url'
 
-      oauthApi.userRoles.mockResolvedValue([{ roleCode: 'SOC_HQ' }])
+      oauthApi.userRoles.mockReturnValue([{ roleCode: 'SOC_HQ' }])
 
       await controller(req, res)
 
@@ -547,7 +547,7 @@ describe('Homepage', () => {
     })
 
     it('should redirect to video link booking for court users', async () => {
-      oauthApi.userRoles.mockResolvedValue([{ roleCode: 'VIDEO_LINK_COURT_USER' }])
+      oauthApi.userRoles.mockReturnValue([{ roleCode: 'VIDEO_LINK_COURT_USER' }])
 
       await controller(req, res)
 
@@ -661,7 +661,7 @@ describe('Homepage', () => {
     config.applications.sendLegalMail.url = 'http://check-rule39-mail'
 
     Array.of('SLM_SCAN_BARCODE', 'SLM_ADMIN').forEach(async (roleCode) => {
-      oauthApi.userRoles.mockResolvedValue([{ roleCode }])
+      oauthApi.userRoles.mockReturnValue([{ roleCode }])
 
       await controller(req, res)
 
@@ -717,7 +717,7 @@ describe('Homepage', () => {
 
   it('should not display the Manage Restricted Patients task on the homepage if none of the correct roles are present', async () => {
     config.apis.manageRestrictedPatients.ui_url = 'http://manage-restricted-patients-url'
-    oauthApi.userRoles.mockResolvedValue([])
+    oauthApi.userRoles.mockReturnValue([])
     await controller(req, res)
 
     expect(res.render).toHaveBeenCalledWith(
@@ -729,7 +729,7 @@ describe('Homepage', () => {
   })
   it('should display the Manage Restricted Patients task on the homepage if any of the correct roles are present', async () => {
     config.apis.manageRestrictedPatients.ui_url = 'http://manage-restricted-patients-url'
-    oauthApi.userRoles.mockResolvedValue([
+    oauthApi.userRoles.mockReturnValue([
       { roleCode: 'SEARCH_RESTRICTED_PATIENT' },
       { roleCode: 'TRANSFER_RESTRICTED_PATIENT' },
     ])

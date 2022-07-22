@@ -97,13 +97,14 @@ export default ({
       dateOfBirth,
     } = prisonerDetails
 
+    const userRoles = oauthApi.userRoles(context)
+
     const [
       iepDetails,
       keyworkerSessions,
       userCaseloads,
       staffRoles,
       keyworkerDetails,
-      userRoles,
       pathfinderDetails,
       socDetails,
       allocationManager,
@@ -115,7 +116,6 @@ export default ({
         prisonApi.userCaseLoads(context),
         prisonApi.getStaffRoles(context, currentUser.staffId, currentUser.activeCaseLoadId),
         keyworkerApi.getKeyworkerByCaseloadAndOffenderNo(context, agencyId, offenderNo),
-        oauthApi.userRoles(context),
         pathfinderApi.getPathfinderDetails(systemContext, offenderNo),
         socApi.getSocDetails(systemContext, offenderNo, socEnabled),
         allocationManagerApi.getPomByOffenderNo(context, offenderNo),

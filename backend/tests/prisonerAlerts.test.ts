@@ -58,7 +58,7 @@ describe('prisoner alerts', () => {
     req.get.mockReturnValue('localhost')
 
     // @ts-expect-error ts-migrate(2339) FIXME: Property 'getNeurodiversities' does not exist on type '{}'... Remove this comment to see the full error message
-    oauthApi.userRoles = jest.fn().mockResolvedValue([])
+    oauthApi.userRoles = jest.fn().mockReturnValue([])
 
     // @ts-expect-error ts-migrate(2339) FIXME: Property 'getPrisonerProfileData' does not exist o... Remove this comment to see the full error message
     prisonerProfileService.getPrisonerProfileData = jest.fn().mockResolvedValue(prisonerProfileData)
@@ -104,7 +104,7 @@ describe('prisoner alerts', () => {
       empty: false,
     })
     // @ts-expect-error ts-migrate(2339) FIXME: Property 'userRoles' does not exist on type '{}'.
-    oauthApi.userRoles = jest.fn().mockResolvedValue([{ roleCode: 'UPDATE_ALERT' }])
+    oauthApi.userRoles = jest.fn().mockReturnValue([{ roleCode: 'UPDATE_ALERT' }])
     controller = prisonerAlerts({
       prisonerProfileService,
       referenceCodesService,

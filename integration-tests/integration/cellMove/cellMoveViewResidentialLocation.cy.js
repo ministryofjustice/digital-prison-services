@@ -36,7 +36,7 @@ context('Cell move view residential location', () => {
   before(() => {
     cy.clearCookies()
     cy.task('resetAndStubTokenVerification')
-    cy.task('stubSignIn', { username: 'ITAG_USER', caseload: 'MDI', roles: [{ roleCode: 'CELL_MOVE' }] })
+    cy.task('stubSignIn', { username: 'ITAG_USER', caseload: 'MDI', roles: ['ROLE_CELL_MOVE'] })
     cy.signIn()
   })
 
@@ -128,17 +128,19 @@ context('Cell move view residential location', () => {
       })
     })
   })
+})
 
-  context('When the user does not have the correct cell move roles', () => {
-    beforeEach(() => {
-      cy.task('stubSignIn', { username: 'ITAG_USER', caseload: 'MDI', roles: [] })
-      cy.signIn()
-    })
+context('When the user does not have the correct cell move roles', () => {
+  before(() => {
+    cy.clearCookies()
+    cy.task('resetAndStubTokenVerification')
+    cy.task('stubSignIn', { username: 'ITAG_USER', caseload: 'MDI' })
+    cy.signIn()
+  })
 
-    it('should display page not found', () => {
-      cy.visit('/change-someones-cell', { failOnStatusCode: false })
+  it('should display page not found', () => {
+    cy.visit('/change-someones-cell', { failOnStatusCode: false })
 
-      cy.get('h1').contains('Page not found')
-    })
+    cy.get('h1').contains('Page not found')
   })
 })

@@ -3,12 +3,12 @@ const { stubFor, getMatchingRequests, getFor } = require('./wiremock')
 const { stubStaffRoles, stubUserLocations } = require('./prisonApi')
 const { stubLocationConfig } = require('./whereabouts')
 
-const createToken = () => {
+const createToken = (roles) => {
   const payload = {
     user_name: 'ITAG_USER',
     scope: ['read', 'write'],
     auth_source: 'nomis',
-    authorities: ['ROLE_GLOBAL_SEARCH'],
+    authorities: ['ROLE_GLOBAL_SEARCH', ...roles],
     jti: '83b50a10-cca6-41db-985f-e87efb303ddb',
     client_id: 'dev',
   }
@@ -69,7 +69,7 @@ const signOut = () =>
     },
   })
 
-const token = () =>
+const token = (roles) =>
   stubFor({
     request: {
       method: 'POST',
@@ -82,7 +82,7 @@ const token = () =>
         Location: 'http://localhost:3008/sign-in/callback?code=codexxxx&state=stateyyyy',
       },
       jsonBody: {
-        access_token: createToken(),
+        access_token: createToken(roles),
         token_type: 'bearer',
         refresh_token: 'refresh',
         user_name: 'TEST_USER',
@@ -129,21 +129,6 @@ const stubUserMe = (username = 'ITAG_USER', staffId = 12345, name = 'James Stuar
       username,
       activeCaseLoadId: caseload,
       staffId,
-    },
-  })
-
-const stubUserMeRoles = (roles = ['ROLE']) =>
-  stubFor({
-    request: {
-      method: 'GET',
-      url: '/auth/api/user/me/roles',
-    },
-    response: {
-      status: 200,
-      headers: {
-        'Content-Type': 'application/json;charset=UTF-8',
-      },
-      jsonBody: roles,
     },
   })
 
@@ -219,9 +204,8 @@ module.exports = {
       favicon(),
       redirect(),
       signOut(),
-      token(),
+      token(roles),
       stubUserMe(username, 12345, 'James Stuart', caseloadId),
-      stubUserMeRoles([{ roleCode: 'UPDATE_ALERT' }, ...roles]),
       stubUser(username, caseloadId),
       stubUserLocations(),
       stubStaffRoles(),
@@ -232,14 +216,12 @@ module.exports = {
       favicon(),
       redirect(),
       signOut(),
-      token(),
+      token(['ROLE_GLOBAL_SEARCH', 'ROLE_VIDEO_LINK_COURT_USER']),
       stubUserMe(),
-      stubUserMeRoles([{ roleCode: 'GLOBAL_SEARCH' }, { roleCode: 'VIDEO_LINK_COURT_USER' }]),
     ]),
   stubUserDetailsRetrieval: (username) => Promise.all([stubUser(username), stubEmail(username)]),
   stubUnverifiedUserDetailsRetrieval: (username) => Promise.all([stubUser(username), stubUnverifiedEmail(username)]),
   stubUserMe,
-  stubUserMeRoles,
   stubUser,
   stubEmail,
   redirect,

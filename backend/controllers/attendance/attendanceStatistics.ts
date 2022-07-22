@@ -193,12 +193,8 @@ export const attendanceStatisticsFactory = (oauthApi, prisonApi, whereaboutsApi)
 
     const { agencyId, fromDate, toDate } = req.query || {}
     const period = (req.query && req.query.period) || currentPeriod
-
-    const [user, caseloads, roles] = await Promise.all([
-      oauthApi.currentUser(res.locals),
-      prisonApi.userCaseLoads(res.locals),
-      oauthApi.userRoles(res.locals),
-    ])
+    const roles = oauthApi.userRoles(res.locals)
+    const [user, caseloads] = await Promise.all([oauthApi.currentUser(res.locals), prisonApi.userCaseLoads(res.locals)])
 
     const { activeCaseLoad, inactiveCaseLoads, activeCaseLoadId } = extractCaseLoadInfo(caseloads)
 
@@ -278,10 +274,10 @@ export const attendanceStatisticsFactory = (oauthApi, prisonApi, whereaboutsApi)
     const today = moment().format('DD/MM/YYYY')
 
     try {
-      const [user, caseloads, roles] = await Promise.all([
+      const roles = oauthApi.userRoles(res.locals)
+      const [user, caseloads] = await Promise.all([
         oauthApi.currentUser(res.locals),
         prisonApi.userCaseLoads(res.locals),
-        oauthApi.userRoles(res.locals),
       ])
 
       const { activeCaseLoad, activeCaseLoadId } = extractCaseLoadInfo(caseloads)
@@ -345,12 +341,8 @@ export const attendanceStatisticsFactory = (oauthApi, prisonApi, whereaboutsApi)
     const formattedToDate = toDate ? switchDateFormat(toDate, 'DD/MM/YYYY') : switchDateFormat(fromDate, 'DD/MM/YYYY')
     const currentPeriod = getCurrentPeriod(moment().format())
     const today = moment().format('DD/MM/YYYY')
-
-    const [user, caseloads, roles] = await Promise.all([
-      oauthApi.currentUser(res.locals),
-      prisonApi.userCaseLoads(res.locals),
-      oauthApi.userRoles(res.locals),
-    ])
+    const roles = oauthApi.userRoles(res.locals)
+    const [user, caseloads] = await Promise.all([oauthApi.currentUser(res.locals), prisonApi.userCaseLoads(res.locals)])
 
     const { activeCaseLoad, activeCaseLoadId } = extractCaseLoadInfo(caseloads)
 

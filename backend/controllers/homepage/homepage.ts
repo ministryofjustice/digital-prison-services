@@ -256,10 +256,10 @@ export default ({ oauthApi, prisonApi, whereaboutsApi, keyworkerApi, logError })
   async (req, res) => {
     try {
       const { activeCaseLoadId, staffId } = req.session.userDetails
-      const [locations, staffRoles, userRoles, whereaboutsConfig, keyworkerPrisonStatus] = await Promise.all([
+      const userRoles = oauthApi.userRoles(res.locals)
+      const [locations, staffRoles, whereaboutsConfig, keyworkerPrisonStatus] = await Promise.all([
         prisonApi.userLocations(res.locals),
         prisonApi.getStaffRoles(res.locals, staffId, activeCaseLoadId),
-        oauthApi.userRoles(res.locals),
         whereaboutsApi.getWhereaboutsConfig(res.locals, activeCaseLoadId).catch(() => null),
         keyworkerApi.getPrisonMigrationStatus(res.locals, activeCaseLoadId),
       ])

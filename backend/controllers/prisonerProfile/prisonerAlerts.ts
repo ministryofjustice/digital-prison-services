@@ -33,11 +33,10 @@ export default ({
     const { username } = req.session.userDetails
 
     const { bookingId } = await prisonApi.getDetails(context, offenderNo)
-
-    const [prisonerProfileData, alertTypes, roles] = await Promise.all([
+    const roles = oauthApi.userRoles(context)
+    const [prisonerProfileData, alertTypes] = await Promise.all([
       prisonerProfileService.getPrisonerProfileData(context, offenderNo, username, overrideAccess),
       referenceCodesService.getAlertTypes(context),
-      oauthApi.userRoles(context),
     ])
     const { userCanEdit } = prisonerProfileData
     const canUpdateAlerts = roles && roles.some((role) => role.roleCode === 'UPDATE_ALERT') && userCanEdit

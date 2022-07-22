@@ -35,14 +35,17 @@ const iepSummaryResponse = {
     },
   ],
 }
+const offenderNo = 'A1234A'
 
 context('Prisoner incentive level details', () => {
-  const offenderNo = 'A1234A'
-
   before(() => {
     cy.clearCookies()
     cy.task('reset')
-    cy.task('stubSignIn', { username: 'ITAG_USER', caseload: 'MDI' })
+    cy.task('stubSignIn', {
+      username: 'ITAG_USER',
+      caseload: 'MDI',
+      roles: ['ROLE_GLOBAL_SEARCH', 'ROLE_MAINTAIN_IEP'],
+    })
     cy.signIn()
   })
 
@@ -50,7 +53,6 @@ context('Prisoner incentive level details', () => {
     beforeEach(() => {
       Cypress.Cookies.preserveOnce('hmpps-session-dev')
       cy.task('stubOffenderBasicDetails', offenderBasicDetails)
-      cy.task('stubUserMeRoles', [{ roleCode: 'GLOBAL_SEARCH' }, { roleCode: 'MAINTAIN_IEP' }])
       cy.task('stubStaff', {
         staffId: 'ITAG_USER',
         details: {
@@ -94,16 +96,6 @@ context('Prisoner incentive level details', () => {
         .then((href) => {
           expect(href).to.equal('/prisoner/A1234A/incentive-level-details/change-incentive-level')
         })
-    })
-
-    it('should not show change incentive level link if user does not have correct role', () => {
-      cy.task('stubGetIepSummaryForBooking', iepSummaryResponse)
-
-      cy.task('stubUserMeRoles', [{ roleCode: 'GLOBAL_SEARCH' }])
-
-      cy.visit(`/prisoner/${offenderNo}/incentive-level-details`)
-
-      cy.get('[data-test="change-incentive-level-link"]').should('not.exist')
     })
 
     it('should show correct history', () => {
@@ -204,5 +196,60 @@ context('Prisoner incentive level details', () => {
         'There is no incentive level history for the selections you have made'
       )
     })
+  })
+})
+
+context('without permissions', () => {
+  before(() => {
+    cy.clearCookies()
+    cy.task('reset')
+    cy.task('stubSignIn', {
+      username: 'ITAG_USER',
+      caseload: 'MDI',
+      roles: ['ROLE_GLOBAL_SEARCH'],
+    })
+    cy.signIn()
+  })
+
+  beforeEach(() => {
+    cy.task('stubOffenderBasicDetails', offenderBasicDetails)
+    cy.task('stubStaff', {
+      staffId: 'ITAG_USER',
+      details: {
+        username: 'ITAG_USER',
+        firstName: 'Staff',
+        lastName: 'Member',
+      },
+    })
+    cy.task('stubStaff', {
+      staffId: 'ITAG_USER_2',
+      details: {
+        username: 'ITAG_USER_2',
+        firstName: 'Another Staff',
+        lastName: 'Member',
+      },
+    })
+    cy.task('stubAgencyDetails', {
+      agencyId: 'LEI',
+      details: {
+        agencyId: 'LEI',
+        description: 'Leeds',
+      },
+    })
+    cy.task('stubAgencyDetails', {
+      agencyId: 'MDI',
+      details: {
+        agencyId: 'MDI',
+        description: 'Moorland',
+      },
+    })
+  })
+
+  it('should not show change incentive level link if user does not have correct role', () => {
+    cy.task('stubGetIepSummaryForBooking', iepSummaryResponse)
+
+    cy.visit(`/prisoner/${offenderNo}/incentive-level-details`)
+
+    cy.get('[data-test="change-incentive-level-link"]').should('not.exist')
   })
 })

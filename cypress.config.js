@@ -152,14 +152,12 @@ module.exports = defineConfig({
           offenderFullDetails,
           iepSummary,
           caseNoteSummary,
-          userRoles = [],
           retentionRecord,
           offenderNo,
           keyworkerDetails,
           complexOffenders = [],
         }) =>
           Promise.all([
-            auth.stubUserMeRoles([...userRoles, { roleCode: 'UPDATE_ALERT' }]),
             prisonApi.stubOffenderBasicDetails(offenderBasicDetails),
             prisonApi.stubOffenderFullDetails(offenderFullDetails),
             incentivesApi.stubGetIepSummaryForBookingIds(iepSummary),
@@ -360,7 +358,6 @@ module.exports = defineConfig({
         stubOffenceHistory: (offenceHistory) => prisonApi.stubOffenceHistory(offenceHistory),
         stubSentenceTerms: (sentenceTerms) => prisonApi.stubSentenceTerms(sentenceTerms),
         stubClientCredentialsRequest: () => auth.stubClientCredentialsRequest(),
-        stubUserMeRoles: (roles) => auth.stubUserMeRoles(roles),
         stubUserMe: ({ username, staffId, name }) => auth.stubUserMe(username, staffId, name),
         stubPathFinderOffenderDetails: (details) => pathfinder.getOffenderDetails(details),
         stubSocOffenderDetails: (details) => socApi.stubGetOffenderDetails(details),

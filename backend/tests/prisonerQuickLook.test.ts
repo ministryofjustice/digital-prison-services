@@ -97,7 +97,7 @@ describe('prisoner profile quick look', () => {
     offenderSearchApi.getPrisonersDetails = jest.fn().mockResolvedValue([])
 
     systemOauthClient.getClientCredentialsTokens = jest.fn().mockReturnValue({})
-    oauthApi.userRoles = jest.fn().mockResolvedValue([])
+    oauthApi.userRoles = jest.fn().mockReturnValue([])
 
     controller = prisonerQuickLook({
       prisonerProfileService,

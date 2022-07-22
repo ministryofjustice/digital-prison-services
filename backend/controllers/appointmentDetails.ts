@@ -14,7 +14,7 @@ export default ({ oauthApi, prisonApi, whereaboutsApi, appointmentDetailsService
 
     const { additionalDetails, basicDetails, prepostData, recurringDetails, timeDetails } = appointmentViewModel
 
-    const userRoles = await oauthApi.userRoles(res.locals)
+    const userRoles = oauthApi.userRoles(res.locals)
 
     const canDeleteAppointment =
       userRoles &&

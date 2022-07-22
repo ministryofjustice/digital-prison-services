@@ -111,7 +111,7 @@ export default ({ paginationService, offenderSearchApi, oauthApi, telemetry }) =
       })
     }
 
-    const userRoles = await oauthApi.userRoles(res.locals).then((roles) => roles.map((role) => role.roleCode))
+    const userRoles = oauthApi.userRoles(res.locals).map((role) => role.roleCode)
     const isLicencesUser = userRoles.includes('LICENCE_RO')
     const isLicencesVaryUser = userRoles.includes('LICENCE_VARY')
     const userCanViewInactive = userRoles.includes('INACTIVE_BOOKINGS')

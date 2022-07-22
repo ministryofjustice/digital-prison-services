@@ -21,7 +21,7 @@ context('Caseloads witched page behaves correctly', () => {
     cy.signIn()
   })
   it('should successfully change caseload', () => {
-    cy.task('stubUserMe', {})
+    // cy.task('stubUserMe', {})
     cy.visit('/change-caseload')
     cy.get('#changeCaseloadSelect').select('Leeds (HMP)')
     cy.get('button').click()

@@ -2,9 +2,50 @@ const moment = require('moment')
 const offenderBasicDetails = require('../../mockApis/responses/offenderBasicDetails.json')
 const PrisonerCellHistoryPage = require('../../pages/prisonerProfile/prisonerCellHistoryPage')
 
-context('Prisoner cell history', () => {
-  const offenderNo = 'A1234A'
+const offenderNo = 'A1234A'
 
+const history = {
+  history: {
+    content: [
+      {
+        agencyId: 'MDI',
+        assignmentDate: '2020-05-01',
+        assignmentDateTime: '2020-05-01T12:48:33.375',
+        assignmentReason: 'ADM',
+        bookingId: 123,
+        description: 'MDI-1-02',
+        livingUnitId: 1,
+        movementMadeBy: 'STAFF_1',
+      },
+      {
+        agencyId: 'MDI',
+        assignmentDate: '2020-03-01',
+        assignmentDateTime: '2020-03-01T12:48:33.375',
+        assignmentEndDate: '2020-04-01',
+        assignmentEndDateTime: '2020-04-01T12:48:33.375',
+        assignmentReason: 'ADM',
+        bookingId: 123,
+        description: 'MDI-RECP',
+        livingUnitId: 2,
+        movementMadeBy: 'STAFF_2',
+      },
+      {
+        agencyId: 'MDI',
+        assignmentDate: '2020-04-01',
+        assignmentDateTime: '2020-04-01T12:48:33.375',
+        assignmentEndDate: '2020-05-01',
+        assignmentEndDateTime: '2020-05-01T12:48:33.375',
+        assignmentReason: 'ADM',
+        bookingId: 123,
+        description: 'MDI-1-03',
+        livingUnitId: 3,
+        movementMadeBy: 'STAFF_1',
+      },
+    ],
+  },
+}
+
+context('Prisoner cell history', () => {
   before(() => {
     cy.clearCookies()
     cy.task('reset')
@@ -15,52 +56,12 @@ context('Prisoner cell history', () => {
   context('Basic page functionality', () => {
     beforeEach(() => {
       Cypress.Cookies.preserveOnce('hmpps-session-dev')
-      cy.task('stubUserMeRoles', [])
       cy.task('stubOffenderBasicDetails', offenderBasicDetails)
       cy.task('stubAgencyDetails', { agencyId: 'MDI', details: { agencyId: 'MDI', description: 'Moorland' } })
       cy.task('stubInmatesAtLocation', {
         inmates: [{ offenderNo: 'A1235A', firstName: 'Test', lastName: 'Offender' }],
       })
-      cy.task('stubOffenderCellHistory', {
-        history: {
-          content: [
-            {
-              agencyId: 'MDI',
-              assignmentDate: '2020-05-01',
-              assignmentDateTime: '2020-05-01T12:48:33.375',
-              assignmentReason: 'ADM',
-              bookingId: 123,
-              description: 'MDI-1-02',
-              livingUnitId: 1,
-              movementMadeBy: 'STAFF_1',
-            },
-            {
-              agencyId: 'MDI',
-              assignmentDate: '2020-03-01',
-              assignmentDateTime: '2020-03-01T12:48:33.375',
-              assignmentEndDate: '2020-04-01',
-              assignmentEndDateTime: '2020-04-01T12:48:33.375',
-              assignmentReason: 'ADM',
-              bookingId: 123,
-              description: 'MDI-RECP',
-              livingUnitId: 2,
-              movementMadeBy: 'STAFF_2',
-            },
-            {
-              agencyId: 'MDI',
-              assignmentDate: '2020-04-01',
-              assignmentDateTime: '2020-04-01T12:48:33.375',
-              assignmentEndDate: '2020-05-01',
-              assignmentEndDateTime: '2020-05-01T12:48:33.375',
-              assignmentReason: 'ADM',
-              bookingId: 123,
-              description: 'MDI-1-03',
-              livingUnitId: 3,
-              movementMadeBy: 'STAFF_1',
-            },
-          ],
-        },
-      })
+      cy.task('stubOffenderCellHistory', history)
       cy.task('stubStaff', {
         staffId: 'STAFF_1',
         details: { firstName: 'Staff', lastName: 'One', username: 'STAFF_1' },
@@ -142,12 +143,35 @@ context('Prisoner cell history', () => {
       prisonerCellHistoryPage.occupants().contains('Offender, Test')
       prisonerCellHistoryPage.occupants().contains('Offender2, Test2')
     })
+  })
+})
 
-    it('should show the cell move button when correct role is present', () => {
-      cy.task('stubUserMeRoles', [{ roleCode: 'CELL_MOVE' }])
-      cy.visit(`/prisoner/${offenderNo}/cell-history`)
-      const prisonerCellHistoryPage = PrisonerCellHistoryPage.verifyOnPage()
-      prisonerCellHistoryPage.cellMoveButton().should('be.visible')
+context('with permissions', () => {
+  before(() => {
+    cy.clearCookies()
+    cy.task('reset')
+    cy.task('stubSignIn', { username: 'ITAG_USER', caseload: 'MDI', roles: ['ROLE_CELL_MOVE'] })
+    cy.signIn()
+  })
+  beforeEach(() => {
+    cy.task('stubOffenderBasicDetails', offenderBasicDetails)
+    cy.task('stubAgencyDetails', { agencyId: 'MDI', details: { agencyId: 'MDI', description: 'Moorland' } })
+    cy.task('stubInmatesAtLocation', {
+      inmates: [{ offenderNo: 'A1235A', firstName: 'Test', lastName: 'Offender' }],
     })
+    cy.task('stubOffenderCellHistory', history)
+    cy.task('stubStaff', {
+      staffId: 'STAFF_1',
+      details: { firstName: 'Staff', lastName: 'One', username: 'STAFF_1' },
+    })
+    cy.task('stubStaff', {
+      staffId: 'STAFF_2',
+      details: { firstName: 'Staff', lastName: 'Two', username: 'STAFF_2' },
+    })
+  })
+  it('should show the cell move button when correct role is present', () => {
+    cy.visit(`/prisoner/${offenderNo}/cell-history`)
+    const prisonerCellHistoryPage = PrisonerCellHistoryPage.verifyOnPage()
+    prisonerCellHistoryPage.cellMoveButton().should('be.visible')
   })
 })

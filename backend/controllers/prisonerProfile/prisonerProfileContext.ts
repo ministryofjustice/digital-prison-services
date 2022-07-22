@@ -7,7 +7,7 @@ const getContext = async ({ offenderNo, res, req, oauthApi, systemOauthClient, r
   } = res.locals
 
   const { username } = req.session.userDetails
-  const userRoles = await oauthApi.userRoles(res.locals)
+  const userRoles = oauthApi.userRoles(res.locals)
 
   if (userRoles.map((userRole) => userRole.roleCode).includes('POM')) {
     const isRestrictedPatient = await restrictedPatientApi.isCaseLoadRestrictedPatient(
