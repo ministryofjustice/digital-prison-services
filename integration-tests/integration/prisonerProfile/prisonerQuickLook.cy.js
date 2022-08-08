@@ -149,28 +149,56 @@ context('Backlink in Prisoner Profile', () => {
     })
   })
 
-  it('Should display default backlink text for WPIP on prisoner profile when redirected from /save-backlink', () => {
-    cy.visit(
-      `/save-backlink?service=welcome-people-into-prison&returnResource=/return&toResource=/prisoner/${offenderNo}`
-    )
+  context('digital-prison-services', () => {
+    it('Should display default text when redirected from /save-backlink', () => {
+      cy.visit(
+        `/save-backlink?service=digital-prison-services&returnResource=/return&toResource=/prisoner/${offenderNo}`
+      )
 
-    prisonerQuickLookPage.verifyOnPage('Smith, John')
+      prisonerQuickLookPage.verifyOnPage('Smith, John')
 
-    cy.get('[data-test="back-link"]')
-      .contains('Back to Welcome people into prison')
-      .should('have.attr', 'href', 'https://welcome-people-into-prison/return')
+      cy.get('[data-test="back-link"]')
+        .contains('View most recent search')
+        .should('have.attr', 'href', 'http://localhost:3008/return')
+    })
+
+    it('Should display custom text when redirected from /save-backlink', () => {
+      cy.visit(
+        `/save-backlink?service=digital-prison-services&returnResource=/return-with-custom-text&toResource=/prisoner/${offenderNo}&backLinkText=Custom backlink text`
+      )
+
+      prisonerQuickLookPage.verifyOnPage('Smith, John')
+
+      cy.get('[data-test="back-link"]')
+        .contains('Custom backlink text')
+        .should('have.attr', 'href', 'http://localhost:3008/return-with-custom-text')
+    })
   })
 
-  it('Should display custom backlink text for WPIP on prisoner profile when redirected from /save-backlink', () => {
-    cy.visit(
-      `/save-backlink?service=welcome-people-into-prison&returnResource=/return-with-custom-text&toResource=/prisoner/${offenderNo}&backLinkText=Custom backlink text`
-    )
+  context('welcome-people-into-prison', () => {
+    it('Should display default text when redirected from /save-backlink', () => {
+      cy.visit(
+        `/save-backlink?service=welcome-people-into-prison&returnResource=/return&toResource=/prisoner/${offenderNo}`
+      )
 
-    prisonerQuickLookPage.verifyOnPage('Smith, John')
+      prisonerQuickLookPage.verifyOnPage('Smith, John')
 
-    cy.get('[data-test="back-link"]')
-      .contains('Custom backlink text')
-      .should('have.attr', 'href', 'https://welcome-people-into-prison/return-with-custom-text')
+      cy.get('[data-test="back-link"]')
+        .contains('Back to Welcome people into prison')
+        .should('have.attr', 'href', 'https://welcome-people-into-prison/return')
+    })
+
+    it('Should display custom text when redirected from /save-backlink', () => {
+      cy.visit(
+        `/save-backlink?service=welcome-people-into-prison&returnResource=/return-with-custom-text&toResource=/prisoner/${offenderNo}&backLinkText=Custom backlink text`
+      )
+
+      prisonerQuickLookPage.verifyOnPage('Smith, John')
+
+      cy.get('[data-test="back-link"]')
+        .contains('Custom backlink text')
+        .should('have.attr', 'href', 'https://welcome-people-into-prison/return-with-custom-text')
+    })
   })
 })
 

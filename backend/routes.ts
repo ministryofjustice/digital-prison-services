@@ -77,7 +77,6 @@ const setup = ({
     res.locals = {
       ...res.locals,
       currentUrlPath: req.baseUrl + req.path,
-      prisonerSearchUrl: req.session.prisonerSearchUrl,
     }
     next()
   })

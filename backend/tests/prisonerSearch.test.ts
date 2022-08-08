@@ -460,14 +460,6 @@ describe('Prisoner search', () => {
       expect(req.session).toEqual({ userDetails: { username: 'user1' } })
     })
 
-    it('should set prisonerSearchUrl to the originalUrl if there has been a search', async () => {
-      req.query.alerts = ['HA']
-
-      await controller.index(req, res)
-
-      expect(req.session).toEqual({ prisonerSearchUrl: req.originalUrl, userDetails: { username: 'user1' } })
-    })
-
     it('should set the Page-Limit in the request header if pageLimitOption is specified in the url', async () => {
       req.query.pageLimitOption = '500'
 

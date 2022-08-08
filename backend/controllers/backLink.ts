@@ -1,5 +1,7 @@
 import config from '../config'
 
+const sanitizeUrl = (url: string) => (url?.endsWith('/') ? url.substring(0, url.length - 1) : url)
+
 export interface RegisteredService {
   name: string
   hostname: string
@@ -8,8 +10,13 @@ export interface RegisteredService {
 
 export const registeredBackLinkServices = [
   {
+    name: 'digital-prison-services',
+    hostname: sanitizeUrl(config.app.url),
+    defaultBackLinkText: 'View most recent search',
+  },
+  {
     name: 'welcome-people-into-prison',
-    hostname: config.apis.welcomePeopleIntoPrison.url,
+    hostname: sanitizeUrl(config.apis.welcomePeopleIntoPrison.url),
     defaultBackLinkText: 'Back to Welcome people into prison',
   },
 ] as Array<RegisteredService>

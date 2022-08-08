@@ -1,13 +1,22 @@
 import { RegisteredService, saveBackLink } from '../controllers/backLink'
 
 const wpipUrl = 'https://wpip'
-jest.mock('../config', () => ({ apis: { welcomePeopleIntoPrison: { url: wpipUrl } } }))
+const dpsUrl = 'https://dps'
+jest.mock('../config', () => ({
+  app: { url: dpsUrl },
+  apis: { welcomePeopleIntoPrison: { url: wpipUrl } },
+}))
 
 const registeredServices = [
   {
     name: 'welcome-people-into-prison',
     hostname: wpipUrl,
     defaultBackLinkText: 'Back to Welcome people into prison',
+  },
+  {
+    name: 'digital-prison-services',
+    hostname: dpsUrl,
+    defaultBackLinkText: 'View most recent search',
   },
 ] as Array<RegisteredService>
 
@@ -69,19 +78,16 @@ describe('saveBackLink', () => {
     })
   })
 
-  it.each([['welcome-people-into-prison', 'Back to Welcome people into prison', `${wpipUrl}/returnResource`]])(
-    'should save text as default when not provided',
-    async (service, defaultBackLinkText, returnUrl) => {
-      req.query = {
-        service,
-        returnResource: '/returnResource',
-        toResource: '/toResource',
-      }
-      await controller(req, res)
-      expect(req.session.userBackLink).toEqual({
-        text: defaultBackLinkText,
-        url: returnUrl,
-      })
+  it.each([[...registeredServices]])('should save text as default when not provided', async (registeredService) => {
+    req.query = {
+      service: registeredService.name,
+      returnResource: '/returnResource',
+      toResource: '/toResource',
     }
-  )
+    await controller(req, res)
+    expect(req.session.userBackLink).toEqual({
+      text: registeredService.defaultBackLinkText,
+      url: `${registeredService.hostname}/returnResource`,
+    })
+  })
 })
