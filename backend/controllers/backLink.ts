@@ -11,7 +11,7 @@ export interface RegisteredService {
 export const registeredBackLinkServices = [
   {
     name: 'digital-prison-services',
-    hostname: sanitizeUrl(config.app.url),
+    hostname: '',
     defaultBackLinkText: 'View most recent search',
   },
   {
