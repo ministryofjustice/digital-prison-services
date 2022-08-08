@@ -136,6 +136,7 @@ const quickLookFullDetails = {
 
 context('Backlink in Prisoner Profile', () => {
   before(() => {
+    cy.clearCookies()
     cy.task('reset')
     cy.task('stubSignIn', { username: 'ITAG_USER', caseload: 'MDI', caseloads: [] })
     cy.signIn()
@@ -157,9 +158,7 @@ context('Backlink in Prisoner Profile', () => {
 
       prisonerQuickLookPage.verifyOnPage('Smith, John')
 
-      cy.get('[data-test="back-link"]')
-        .contains('View most recent search')
-        .should('have.attr', 'href', 'http://localhost:3008/return')
+      cy.get('[data-test="back-link"]').contains('View most recent search').should('have.attr', 'href', '/return')
     })
 
     it('Should display custom text when redirected from /save-backlink', () => {
@@ -171,7 +170,7 @@ context('Backlink in Prisoner Profile', () => {
 
       cy.get('[data-test="back-link"]')
         .contains('Custom backlink text')
-        .should('have.attr', 'href', 'http://localhost:3008/return-with-custom-text')
+        .should('have.attr', 'href', '/return-with-custom-text')
     })
   })
 
