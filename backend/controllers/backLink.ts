@@ -33,5 +33,5 @@ export const saveBackLink = (registeredServices: Array<RegisteredService>) => as
     url: userBackLink.hostname + returnResource,
     text: backLinkText || userBackLink.defaultBackLinkText,
   }
-  res.redirect(toResource)
+  res.redirect(sanitizeUrl(config.app.url) + toResource)
 }
