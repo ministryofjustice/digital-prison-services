@@ -244,7 +244,10 @@ const setup = ({
 
   router.use('/attendance-changes', attendanceChangeRouter({ prisonApi, whereaboutsApi }))
 
-  router.use('/prisoner-search', prisonerSearchRouter({ prisonApi, incentivesApi, logError }))
+  router.use(
+    '/prisoner-search',
+    prisonerSearchRouter({ prisonApi, offenderSearchApi, incentivesApi, logError, systemOauthClient })
+  )
 
   router.use(
     '/prisoner/:offenderNo/case-notes/amend-case-note/:caseNoteId',

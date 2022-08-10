@@ -108,4 +108,19 @@ module.exports = {
         jsonBody: response,
       },
     }),
+  stubInmates: ({ locationId, params, count, data = [] }) =>
+    stubFor({
+      request: {
+        method: 'GET',
+        urlPathPattern: `/offenderSearch/prison/${locationId}/prisoners`,
+        queryParameters: params,
+      },
+      response: {
+        status: 200,
+        headers: {
+          'Content-Type': 'application/json;charset=UTF-8',
+        },
+        jsonBody: { content: data, totalElements: count, pageable: { pageSize: 50, offset: 0 } },
+      },
+    }),
 }

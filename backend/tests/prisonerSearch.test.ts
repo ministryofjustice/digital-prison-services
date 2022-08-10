@@ -7,6 +7,9 @@ describe('Prisoner search', () => {
     userLocations: jest.fn(),
     getInmates: jest.fn(),
   }
+  const offenderSearchApi = {
+    establishmentSearch: jest.fn(),
+  }
   const incentivesApi = {
     getIepSummaryForBookingIds: jest.fn(),
   }
@@ -16,11 +19,17 @@ describe('Prisoner search', () => {
   const telemetry = {
     trackEvent: jest.fn(),
   }
+  const systemOauthClient = {
+    getClientCredentialsTokens: jest.fn(),
+  }
 
   let req
   let res
   let logError
   let controller
+  const systemContext = {
+    token: 'system token',
+  }
 
   beforeEach(() => {
     req = {
@@ -38,7 +47,7 @@ describe('Prisoner search', () => {
     }
     res = {
       locals: {
-        user: { activeCaseLoad: { caseLoadId: 'MDI' } },
+        user: { activeCaseLoad: { caseLoadId: 'MDI' }, allCaseloads: [{ caseLoadId: 'MDI' }, { caseLoadId: 'BXI' }] },
         responseHeaders: {
           'total-records': 0,
         },
@@ -83,10 +92,22 @@ describe('Prisoner search', () => {
 
     telemetry.trackEvent = jest.fn().mockResolvedValue([])
 
-    controller = prisonerSearchController({ paginationService, prisonApi, incentivesApi, telemetry, logError })
+    systemOauthClient.getClientCredentialsTokens = jest.fn().mockResolvedValue(systemContext)
+
+    offenderSearchApi.establishmentSearch = jest.fn().mockReturnValue([])
+
+    controller = prisonerSearchController({
+      paginationService,
+      prisonApi,
+      incentivesApi,
+      telemetry,
+      logError,
+      offenderSearchApi,
+      systemOauthClient,
+    })
   })
 
-  describe('index', () => {
+  describe('index (prison-api)', () => {
     it('should make a call for the users current caseload locations', async () => {
       await controller.index(req, res)
 
@@ -100,10 +121,10 @@ describe('Prisoner search', () => {
         {
           ...res.locals,
           requestHeaders: {
-            'Page-Limit': 50,
-            'Page-Offset': 0,
-            'Sort-Fields': 'lastName,firstName',
-            'Sort-Order': 'ASC',
+            'page-limit': 50,
+            'page-offset': 0,
+            'sort-fields': 'lastName,firstName',
+            'sort-order': 'ASC',
           },
         },
         'MDI',
@@ -393,8 +414,8 @@ describe('Prisoner search', () => {
         {
           ...res.locals,
           requestHeaders: expect.objectContaining({
-            'Sort-Fields': 'assignedLivingUnitDesc',
-            'Sort-Order': 'DESC',
+            'sort-fields': 'assignedLivingUnitDesc',
+            'sort-order': 'DESC',
           }),
         },
         'MDI',
@@ -455,11 +476,429 @@ describe('Prisoner search', () => {
       expect(prisonApi.getInmates).toHaveBeenCalledWith(
         expect.objectContaining({
           requestHeaders: expect.objectContaining({
-            'Page-Limit': 500,
+            'page-limit': 500,
           }),
         }),
         'MDI',
         { alerts: undefined, keywords: undefined, returnAlerts: 'true', returnCategory: 'true' }
+      )
+    })
+  })
+  describe('index (search-api)', () => {
+    beforeEach(() => {
+      req = {
+        ...req,
+        query: { feature: 'new' },
+      }
+    })
+    it('should make a call for the users current caseload locations', async () => {
+      await controller.index(req, res)
+
+      expect(prisonApi.userLocations).toHaveBeenCalledWith(res.locals)
+    })
+
+    it('should request the current users active case load prisoners if no location specified in the query', async () => {
+      await controller.index(req, res)
+
+      expect(offenderSearchApi.establishmentSearch).toHaveBeenCalledWith(expect.anything(), 'MDI', expect.anything())
+    })
+
+    it('should request with location when supplied in query', async () => {
+      req.query.location = 'BXI'
+
+      await controller.index(req, res)
+
+      expect(offenderSearchApi.establishmentSearch).toHaveBeenCalledWith(expect.anything(), 'BXI', {})
+    })
+
+    it('should request with parsed location when supplied in query', async () => {
+      req.query.location = 'BXI-B-1-0'
+
+      await controller.index(req, res)
+
+      expect(offenderSearchApi.establishmentSearch).toHaveBeenCalledWith(expect.anything(), 'BXI', {
+        cellLocationPrefix: 'BXI-B-1-0',
+      })
+    })
+
+    it('should request with full location as cell prefix when supplied in query', async () => {
+      req.query.location = 'BXI-B-1-0'
+
+      await controller.index(req, res)
+
+      expect(offenderSearchApi.establishmentSearch).toHaveBeenCalledWith(expect.anything(), 'BXI', expect.anything())
+    })
+
+    it('should not even make a request when location is not in any of the users caseload', async () => {
+      req.query.location = 'FXI'
+
+      await controller.index(req, res)
+
+      expect(offenderSearchApi.establishmentSearch).toHaveBeenCalledTimes(0)
+    })
+
+    it('should not even make a request location is not in any of the users caseload', async () => {
+      req.query.location = 'FXI'
+
+      await controller.index(req, res)
+
+      expect(offenderSearchApi.establishmentSearch).toHaveBeenCalledTimes(0)
+    })
+
+    it('should render the prisoner search template with the correct alert and location options', async () => {
+      await controller.index(req, res)
+
+      expect(res.render).toHaveBeenCalledWith(
+        'prisonerSearch/prisonerSearch.njk',
+        expect.objectContaining({
+          alertOptions: [
+            { checked: false, text: 'ACCT open', value: ['HA'] },
+            { checked: false, text: 'ACCT post closure', value: ['HA1'] },
+            { checked: false, text: 'Arsonist', value: ['XA'] },
+            { checked: false, text: 'Care experienced', value: ['LCE'] },
+            { checked: false, text: 'Chemical attacker', value: ['XCA'] },
+            { checked: false, text: 'Concerted indiscipline', value: ['XCI'] },
+            { checked: false, text: 'Conflict', value: ['RCON'] },
+            { checked: false, text: 'Controlled unlock', value: ['XCU'] },
+            { checked: false, text: 'Corruptor', value: ['XCO'] },
+            { checked: false, text: 'CSIP', value: ['CSIP'] },
+            { checked: false, text: 'E-list', value: ['XEL'] },
+            { checked: false, text: 'Gang member', value: ['XGANG'] },
+            { checked: false, text: 'Hostage taker', value: ['XHT'] },
+            { checked: false, text: 'No one-to-one', value: ['RNO121'] },
+            { checked: false, text: 'PEEP', value: ['PEEP'] },
+            { checked: false, text: 'Protective Isolation Unit', value: ['UPIU'] },
+            { checked: false, text: 'Quarantined', value: ['RCDR'] },
+            { checked: false, text: 'Racist', value: ['XR'] },
+            { checked: false, text: 'Refusing to shield', value: ['URS'] },
+            { checked: false, text: 'Reverse Cohorting Unit', value: ['URCU'] },
+            { checked: false, text: 'Risk to females', value: ['XRF'] },
+            { checked: false, text: 'Risk to LGBT', value: ['RTP', 'RLG'] },
+            { checked: false, text: 'Shielding Unit', value: ['USU'] },
+            { checked: false, text: 'Staff assaulter', value: ['XSA'] },
+            { checked: false, text: 'TACT', value: ['XTACT'] },
+            { checked: false, text: 'Veteran', value: ['F1'] },
+          ],
+          locationOptions: [
+            { text: 'Moorland (HMP & YOI)', value: 'MDI' },
+            { text: 'Houseblock 1', value: 'MDI-1' },
+            { text: 'Houseblock 2', value: 'MDI-2' },
+          ],
+        })
+      )
+
+      expect(res.render).toHaveBeenCalledWith(
+        'prisonerSearch/prisonerSearch.njk',
+        expect.objectContaining({
+          alertOptions: expect.not.arrayContaining([
+            { checked: false, text: 'Isolated', value: ['VIP'] },
+            { checked: false, text: 'Risk to known adults', value: ['RKS'] },
+          ]),
+        })
+      )
+    })
+
+    it('should return correctly checked alert options when there is only one alert in the query', async () => {
+      req.query.alerts = ['HA']
+
+      await controller.index(req, res)
+
+      expect(res.render).toHaveBeenCalledWith(
+        'prisonerSearch/prisonerSearch.njk',
+        expect.objectContaining({
+          formValues: req.query,
+          alertOptions: expect.arrayContaining([
+            { checked: true, text: 'ACCT open', value: ['HA'] },
+            { checked: false, text: 'ACCT post closure', value: ['HA1'] },
+          ]),
+          printedValues: { alerts: ['ACCT open'] },
+        })
+      )
+    })
+
+    it('should return correctly checked alert options when there are multiple alerts in the query', async () => {
+      req.query.alerts = ['HA1', 'RTP,RLG']
+
+      await controller.index(req, res)
+
+      expect(res.render).toHaveBeenCalledWith(
+        'prisonerSearch/prisonerSearch.njk',
+        expect.objectContaining({
+          formValues: req.query,
+          alertOptions: expect.arrayContaining([
+            { checked: true, text: 'ACCT post closure', value: ['HA1'] },
+            { checked: true, text: 'Risk to LGBT', value: ['RTP', 'RLG'] },
+          ]),
+          printedValues: { alerts: ['ACCT post closure', 'Risk to LGBT'] },
+        })
+      )
+    })
+
+    it('should return correctly checked alert option when one checkbox has multiple associated alert codes', async () => {
+      req.query.alerts = ['RTP,RLG']
+
+      await controller.index(req, res)
+
+      expect(res.render).toHaveBeenCalledWith(
+        'prisonerSearch/prisonerSearch.njk',
+        expect.objectContaining({
+          formValues: req.query,
+          alertOptions: expect.arrayContaining([{ checked: true, text: 'Risk to LGBT', value: ['RTP', 'RLG'] }]),
+          printedValues: { alerts: ['Risk to LGBT'] },
+        })
+      )
+    })
+
+    it('should not send custom event as there arent any results', async () => {
+      req.query = {
+        alerts: ['HA', 'HA1'],
+        keywords: 'Smith',
+        location: 'MDI',
+      }
+
+      await controller.index(req, res)
+
+      expect(telemetry.trackEvent).not.toHaveBeenCalled()
+    })
+
+    describe('with inmates returned', () => {
+      beforeEach(() => {
+        const inmates = [
+          {
+            bookingId: 1,
+            offenderNo: 'A1234BC',
+            firstName: 'JOHN',
+            lastName: 'SAUNDERS',
+            dateOfBirth: '1990-10-12',
+            age: 29,
+            agencyId: 'MDI',
+            assignedLivingUnitId: 1,
+            assignedLivingUnitDesc: 'UNIT-1',
+            categoryCode: 'C',
+            alertsDetails: ['XA', 'XVL'],
+          },
+          {
+            bookingId: 2,
+            offenderNo: 'B4567CD',
+            firstName: 'STEVE',
+            lastName: 'SMITH',
+            dateOfBirth: '1989-11-12',
+            age: 30,
+            agencyId: 'MDI',
+            assignedLivingUnitId: 2,
+            assignedLivingUnitDesc: 'CSWAP',
+            categoryCode: 'C',
+            alertsDetails: ['RSS', 'XC'],
+          },
+        ]
+        offenderSearchApi.establishmentSearch = jest.fn().mockImplementation((context) => {
+          // also mutate the context to emulate real service call
+          context.responseHeaders = { 'total-records': inmates.length }
+          return inmates
+        })
+
+        incentivesApi.getIepSummaryForBookingIds = jest.fn().mockReturnValue([
+          { bookingId: 1, iepLevel: 'Standard' },
+          { bookingId: 2, iepLevel: 'Standard' },
+        ])
+      })
+
+      it('should call pagination service and return the correctly formatted results', async () => {
+        await controller.index(req, res)
+
+        expect(paginationService.getPagination).toHaveBeenCalledWith(
+          2,
+          0,
+          50,
+          new URL('http://localhost/prisoner-search')
+        )
+        expect(res.render).toHaveBeenCalledWith(
+          'prisonerSearch/prisonerSearch.njk',
+          expect.objectContaining({
+            results: [
+              {
+                age: 29,
+                agencyId: 'MDI',
+                alerts: [
+                  {
+                    alertCodes: ['XA'],
+                    classes: 'alert-status alert-status--arsonist',
+                    img: '/images/Arsonist_icon.png',
+                    label: 'Arsonist',
+                  },
+                ],
+                alertsDetails: ['XA', 'XVL'],
+                assignedLivingUnitDesc: 'UNIT-1',
+                assignedLivingUnitId: 1,
+                bookingId: 1,
+                categoryCode: 'C',
+                dateOfBirth: '1990-10-12',
+                firstName: 'JOHN',
+                iepLevel: 'Standard',
+                lastName: 'SAUNDERS',
+                name: 'Saunders, John',
+                offenderNo: 'A1234BC',
+              },
+              {
+                age: 30,
+                agencyId: 'MDI',
+                alerts: [],
+                alertsDetails: ['RSS', 'XC'],
+                assignedLivingUnitDesc: 'No cell allocated',
+                assignedLivingUnitId: 2,
+                bookingId: 2,
+                categoryCode: 'C',
+                dateOfBirth: '1989-11-12',
+                firstName: 'STEVE',
+                iepLevel: 'Standard',
+                lastName: 'SMITH',
+                name: 'Smith, Steve',
+                offenderNo: 'B4567CD',
+              },
+            ],
+            totalRecords: 2,
+          })
+        )
+      })
+
+      it('should send custom event with visible offender numbers, search terms, username and active caseload', async () => {
+        req.query = {
+          alerts: ['HA', 'HA1'],
+          keywords: 'Smith',
+          location: 'MDI',
+          feature: 'new',
+        }
+
+        await controller.index(req, res)
+
+        expect(telemetry.trackEvent).toHaveBeenCalledWith({
+          name: 'PrisonerSearch',
+          properties: {
+            offenderNos: ['A1234BC', 'B4567CD'],
+            filters: {
+              alerts: ['HA', 'HA1'],
+              keywords: 'Smith',
+              location: 'MDI',
+              feature: 'new',
+            },
+            username: 'user1',
+            caseLoadId: 'MDI',
+          },
+        })
+      })
+    })
+
+    it('should render template with correct urls containing view type and printed values', async () => {
+      req.baseUrl = '/prisoner-search'
+      req.query = {
+        alerts: ['HA', 'HA1'],
+        keywords: 'Smith',
+        location: 'MDI',
+        view: 'grid',
+        feature: 'new',
+      }
+
+      await controller.index(req, res)
+
+      expect(res.render).toHaveBeenCalledWith(
+        'prisonerSearch/prisonerSearch.njk',
+        expect.objectContaining({
+          links: {
+            allResults:
+              '/prisoner-search?alerts=HA&alerts=HA1&keywords=Smith&location=MDI&view=grid&feature=new&alerts%5B%5D=HA&alerts%5B%5D=HA1&viewAll=true&pageLimitOption=0',
+            gridView:
+              '/prisoner-search?alerts=HA&alerts=HA1&keywords=Smith&location=MDI&view=grid&feature=new&alerts%5B%5D=HA&alerts%5B%5D=HA1',
+            listView:
+              '/prisoner-search?alerts=HA&alerts=HA1&keywords=Smith&location=MDI&view=list&feature=new&alerts%5B%5D=HA&alerts%5B%5D=HA1',
+          },
+          view: 'grid',
+          printedValues: {
+            alerts: ['ACCT open', 'ACCT post closure'],
+            location: { text: 'Moorland (HMP & YOI)', value: 'MDI' },
+          },
+        })
+      )
+    })
+
+    it('should make make a call to get inmates using the specified search and sorting options', async () => {
+      req.query = {
+        alerts: ['HA1', 'RTP,RLG'],
+        keywords: 'Smith',
+        sortFieldsWithOrder: 'assignedLivingUnitDesc:DESC',
+        feature: 'new',
+      }
+
+      await controller.index(req, res)
+
+      expect(offenderSearchApi.establishmentSearch).toHaveBeenCalledWith(
+        {
+          ...systemContext,
+          requestHeaders: expect.objectContaining({
+            'sort-fields': 'assignedLivingUnitDesc',
+            'sort-order': 'DESC',
+          }),
+        },
+        'MDI',
+        {
+          alerts: ['HA1', 'RTP', 'RLG'],
+          term: 'Smith',
+        }
+      )
+    })
+
+    it('should render the error template if there is a problem', async () => {
+      offenderSearchApi.establishmentSearch.mockImplementation(() => Promise.reject(new Error('Network error')))
+
+      await controller.index(req, res)
+
+      expect(res.status).toHaveBeenCalledWith(500)
+      expect(logError).toHaveBeenCalledWith(req.originalUrl, new Error('Network error'), serviceUnavailableMessage)
+      expect(res.render).toHaveBeenCalledWith('error.njk', { url: '/' })
+    })
+
+    it('should not log connection reset API errors', async () => {
+      offenderSearchApi.establishmentSearch.mockImplementation(() => Promise.reject(makeResetError()))
+
+      await controller.index(req, res)
+
+      expect(logError.mock.calls.length).toBe(0)
+    })
+
+    it('should not log connection reset API errors with timeout in stack', async () => {
+      offenderSearchApi.establishmentSearch.mockImplementation(() => Promise.reject(makeResetErrorWithStack()))
+
+      await controller.index(req, res)
+
+      expect(logError.mock.calls.length).toBe(0)
+    })
+
+    it('should NOT set prisonerSearchUrl to the originalUrl if there has NOT been a search', async () => {
+      await controller.index(req, res)
+
+      expect(req.session).toEqual({ userDetails: { username: 'user1' } })
+    })
+
+    it('should set prisonerSearchUrl to the originalUrl if there has been a search', async () => {
+      req.query.alerts = ['HA']
+
+      await controller.index(req, res)
+
+      expect(req.session).toEqual({ prisonerSearchUrl: req.originalUrl, userDetails: { username: 'user1' } })
+    })
+
+    it('should set the Page-Limit in the request header if pageLimitOption is specified in the url', async () => {
+      req.query.pageLimitOption = '500'
+
+      await controller.index(req, res)
+
+      expect(offenderSearchApi.establishmentSearch).toHaveBeenCalledWith(
+        expect.objectContaining({
+          requestHeaders: expect.objectContaining({
+            'page-limit': 500,
+          }),
+        }),
+        'MDI',
+        { alerts: undefined, keywords: undefined }
       )
     })
   })

@@ -56,14 +56,32 @@ export const setResponsePagination = (context, headers) => {
   context.responseHeaders = copyNamedHeaders(headerNames, (headers && normalizeHeaderNames(headers)) || {})
 }
 
-export const getPaginationForPageRequest = ({ requestHeaders }) => {
+interface PaginationHeaders {
+  'page-offset'?: number
+  'page-limit'?: number
+  'sort-fields'?: string
+  'sort-order'?: string
+}
+
+export const getPaginationForPageRequest = (
+  {
+    requestHeaders,
+  }: {
+    requestHeaders: PaginationHeaders
+  },
+  fieldMapper: (fieldName: string) => string = (fieldName) => fieldName
+): { page: number; size: number; sort?: string } => {
   if (!requestHeaders) return { page: 0, size: 20 }
 
   const pageOffset = requestHeaders['page-offset']
-  const size = requestHeaders['page-limit'] || 20
+  const size: number = requestHeaders['page-limit'] || 20
   const page = Math.floor(pageOffset / size) || 0
+  const sortFields = requestHeaders['sort-fields']
+  const sortOrder = requestHeaders['sort-order'] ?? 'ASC'
+  const sortFieldsMapped = sortFields && sortFields.split(',').map(fieldMapper).join(',')
+  const sort = sortFieldsMapped && `${sortFieldsMapped},${sortOrder}`
 
-  return { page, size }
+  return { page, size, sort }
 }
 
 export const setPaginationFromPageRequest = (context, { totalElements, pageable: { pageSize, offset } }) => {

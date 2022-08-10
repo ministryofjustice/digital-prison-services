@@ -1,7 +1,10 @@
 import qs from 'querystring'
+import { PrisonerInPrisonSearchResult } from '../../api/offenderSearchApi'
 import { serviceUnavailableMessage } from '../../common-messages'
+import { User } from '../../middleware/currentUser'
 import { alertFlagLabels, profileAlertCodes } from '../../shared/alertFlagValues'
 import { putLastNameFirst, hasLength, formatLocation, toMap } from '../../utils'
+import { Location } from '../../api/prisonApi'
 
 export const trackEvent = (telemetry, results, searchQueries, username, activeCaseLoad) => {
   if (telemetry) {
@@ -23,7 +26,41 @@ export const trackEvent = (telemetry, results, searchQueries, username, activeCa
   }
 }
 
-export default ({ paginationService, prisonApi, incentivesApi, telemetry, logError }) => {
+type InmateSearchResult = Promise<[Location[], PrisonerInPrisonSearchResult[], number]>
+
+interface LocalContext {
+  user: User
+}
+
+export interface PagingContext {
+  requestHeaders: {
+    'page-offset'?: number
+    'page-limit'?: number
+    'sort-fields'?: string
+    'sort-order'?: string
+  }
+  responseHeaders?: {
+    'total-records'?: number
+  }
+}
+interface InmateSearchParameters {
+  localContext: LocalContext
+  pagingContext: PagingContext
+  keywords: string
+  selectedAlerts: string[]
+  location: string
+  username: string
+}
+
+export default ({
+  paginationService,
+  prisonApi,
+  offenderSearchApi,
+  incentivesApi,
+  telemetry,
+  logError,
+  systemOauthClient,
+}) => {
   const index = async (req, res) => {
     const {
       user: { activeCaseLoad },
@@ -39,6 +76,7 @@ export default ({ paginationService, prisonApi, incentivesApi, telemetry, logErr
       view,
       sortFieldsWithOrder = 'lastName,firstName:ASC',
       viewAll,
+      feature = 'legacy',
     } = req.query
 
     const selectedAlerts = alerts && alerts.map((alert) => alert.split(',')).flat()
@@ -48,35 +86,36 @@ export default ({ paginationService, prisonApi, incentivesApi, telemetry, logErr
 
     const currentUserCaseLoad = activeCaseLoad && activeCaseLoad.caseLoadId
 
-    const hasSearched = Boolean(Object.keys(req.query).length)
+    // ignore special "feature" flag
+    const hasSearched = Boolean(Object.keys(req.query).filter((key) => key !== 'feature').length)
 
     if (hasSearched) req.session.prisonerSearchUrl = req.originalUrl
 
     try {
-      const context = {
+      const localContext = {
         ...res.locals,
+      }
+      const pagingContext: PagingContext = {
         requestHeaders: {
-          'Page-Offset': pageOffset,
-          'Page-Limit': pageLimit,
-          'Sort-Fields': sortFields,
-          'Sort-Order': sortOrder,
+          'page-offset': pageOffset,
+          'page-limit': pageLimit,
+          'sort-fields': sortFields,
+          'sort-order': sortOrder,
         },
       }
 
-      const [locations, prisoners] = await Promise.all([
-        prisonApi.userLocations(res.locals),
-        prisonApi.getInmates(context, location || currentUserCaseLoad, {
-          keywords,
-          alerts: selectedAlerts,
-          returnAlerts: 'true',
-          returnCategory: 'true',
-        }),
-      ])
-
-      const totalRecords = context.responseHeaders['total-records']
+      const [locations, prisoners, totalRecords] = await getInmatesWithLocations({
+        localContext,
+        pagingContext,
+        keywords,
+        selectedAlerts,
+        location: location || currentUserCaseLoad,
+        feature,
+        username,
+      })
 
       const bookingIds = prisoners.map((prisoner) => prisoner.bookingId)
-      const [iepData] = await Promise.all([incentivesApi.getIepSummaryForBookingIds(context, bookingIds)])
+      const [iepData] = await Promise.all([incentivesApi.getIepSummaryForBookingIds(localContext, bookingIds)])
       const iepBookingIdMap = toMap('bookingId', iepData)
 
       const locationOptions =
@@ -159,6 +198,93 @@ export default ({ paginationService, prisonApi, incentivesApi, telemetry, logErr
         sortFieldsWithOrder: req.body.sortFieldsWithOrder,
       })}`
     )
+  }
+
+  const getInmatesWithLocations = async ({
+    feature,
+    ...params
+  }: InmateSearchParameters & { feature: 'legacy' | 'new' }): InmateSearchResult => {
+    return feature === 'legacy'
+      ? getInmatesWithLocationsWithPrisonApi(params)
+      : getInmatesWithLocationsWithSearchApi(params)
+  }
+
+  const getInmatesWithLocationsWithPrisonApi = async ({
+    pagingContext,
+    localContext,
+    keywords,
+    selectedAlerts,
+    location,
+  }: InmateSearchParameters): InmateSearchResult => {
+    const searchContext = {
+      ...localContext,
+      ...pagingContext,
+    }
+
+    const [locations, prisoners] = await Promise.all([
+      prisonApi.userLocations(localContext),
+      prisonApi.getInmates(searchContext, location, {
+        keywords,
+        alerts: selectedAlerts,
+        returnAlerts: 'true',
+        returnCategory: 'true',
+      }),
+    ])
+
+    const totalRecords = searchContext.responseHeaders['total-records']
+
+    return [locations, prisoners, totalRecords]
+  }
+
+  const getInmatesWithLocationsWithSearchApi = async ({
+    pagingContext,
+    localContext,
+    keywords,
+    selectedAlerts,
+    location,
+    username,
+  }: InmateSearchParameters): InmateSearchResult => {
+    const systemContext = await systemOauthClient.getClientCredentialsTokens(username)
+    const searchContext: PagingContext = {
+      ...systemContext,
+      ...pagingContext,
+    }
+    const { prisonId, internalLocation } = extractPrisonAndInternalLocation(location)
+
+    // when the prison-api was used, searching for prisoners not in your caseload returned no results
+    // rightly or wrongly this replicates that behaviour (maybe a 403 error eould have been better)
+    const establishmentSearchForValidCaseload: () => Promise<PrisonerInPrisonSearchResult[]> = () =>
+      isPrisonSearchAllowedForCaseloads(localContext, prisonId)
+        ? offenderSearchApi.establishmentSearch(searchContext, prisonId, {
+            term: keywords,
+            alerts: selectedAlerts,
+            cellLocationPrefix: internalLocation,
+          })
+        : Promise.resolve([])
+
+    const [locations, prisoners] = await Promise.all([
+      prisonApi.userLocations(localContext),
+      establishmentSearchForValidCaseload(),
+    ])
+
+    const totalRecords = searchContext.responseHeaders?.['total-records'] ?? 0
+
+    return [locations, prisoners, totalRecords]
+  }
+
+  const extractPrisonAndInternalLocation = (
+    location: string
+  ): { prisonId: string; internalLocation: string | undefined } => {
+    // this might be an internal location so prisonId is always first 3 characters
+    const prisonId = location.slice(0, 3)
+    return { prisonId, internalLocation: prisonId === location ? undefined : location }
+  }
+
+  const isPrisonSearchAllowedForCaseloads = (localContext: LocalContext, prisonId: string): boolean => {
+    const userCaseLoads = localContext.user.allCaseloads.map((caseload) => caseload.caseLoadId) ?? []
+
+    // technically a caseload id and prison id are not the same, but there are no current caseload ids where this will not work
+    return userCaseLoads.includes(prisonId)
   }
 
   return {
