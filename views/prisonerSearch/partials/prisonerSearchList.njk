@@ -1,7 +1,7 @@
 {% set rows = [] %}
 {% for prisoner in results %}
   {% set prisonerImage = '<img src="/app/images/' + prisoner.offenderNo + '/data" alt="Image of ' + prisoner.name + '" class="prisoner-search__results-list__image" />' %}
-  {% set prisonerLink = '<a href="/save-backlink?service=digital-prison-services&returnResource=/prisoner-search%3Fkeywords%3D' + formValues.keywords + '%26location%3D' + formValues.location +  '%26alerts[]%3D' + formValues.alerts + '&toResource=/prisoner/' + prisoner.offenderNo + '" class="govuk-link">' + prisoner.name + '</a>'%}
+  {% set prisonerLink = '<a href="/save-backlink?service=digital-prison-services&returnPath=/prisoner-search%3Fkeywords%3D' + formValues.keywords + '%26location%3D' + formValues.location +  '%26alerts[]%3D' + formValues.alerts + '&redirectPath=/prisoner/' + prisoner.offenderNo + '" class="govuk-link">' + prisoner.name + '</a>'%}
   {% set rows = (rows.push([
     { html: prisonerImage },
     {

@@ -8,10 +8,10 @@ export interface RegisteredService {
   defaultBackLinkText: string
 }
 
-export const registeredBackLinkServices = [
+export const registeredBackLinkServices: RegisteredService[] = [
   {
     name: 'digital-prison-services',
-    hostname: '',
+    hostname: sanitizeUrl(config.app.url),
     defaultBackLinkText: 'View most recent search',
   },
   {
@@ -19,19 +19,21 @@ export const registeredBackLinkServices = [
     hostname: sanitizeUrl(config.apis.welcomePeopleIntoPrison.url),
     defaultBackLinkText: 'Back to Welcome people into prison',
   },
-] as Array<RegisteredService>
+]
 
-export const saveBackLink = (registeredServices: Array<RegisteredService>) => async (req, res) => {
-  const { service, returnResource, toResource, backLinkText } = req.query
+export const saveBackLink =
+  (registeredServices: Array<RegisteredService> = registeredBackLinkServices) =>
+  async (req, res) => {
+    const { service, returnPath, redirectPath, backLinkText } = req.query
 
-  if (!service || !returnResource || !toResource) throw new Error('Required query parameters missing')
+    if (!service || !returnPath || !redirectPath) throw new Error('Required query parameters missing')
 
-  const userBackLink = registeredServices.find((e) => e.name === service)
-  if (!userBackLink) throw new Error(`Could not find service: [${service}]`)
+    const userBackLink = registeredServices.find((e) => e.name === service)
+    if (!userBackLink) throw new Error(`Could not find service: [${service}]`)
 
-  req.session.userBackLink = {
-    url: userBackLink.hostname + returnResource,
-    text: backLinkText || userBackLink.defaultBackLinkText,
+    req.session.userBackLink = {
+      url: userBackLink.hostname + returnPath,
+      text: backLinkText || userBackLink.defaultBackLinkText,
+    }
+    res.redirect(sanitizeUrl(config.app.url) + redirectPath)
   }
-  res.redirect(sanitizeUrl(config.app.url) + toResource)
-}

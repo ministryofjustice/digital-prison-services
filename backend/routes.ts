@@ -52,7 +52,7 @@ import { cacheFactory } from './utils/singleValueInMemoryCache'
 import asyncMiddleware from './middleware/asyncHandler'
 
 import whereaboutsRouter from './routes/whereabouts/whereaboutsRouter'
-import { registeredBackLinkServices, saveBackLink } from './controllers/backLink'
+import { saveBackLink } from './controllers/backLink'
 
 const router = express.Router()
 
@@ -310,7 +310,7 @@ const setup = ({
     })
   )
 
-  router.get('/save-backlink', saveBackLink(registeredBackLinkServices))
+  router.get('/save-backlink', saveBackLink())
 
   return router
 }

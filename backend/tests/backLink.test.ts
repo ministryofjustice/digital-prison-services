@@ -2,10 +2,6 @@ import { RegisteredService, saveBackLink } from '../controllers/backLink'
 
 const wpipUrl = 'https://wpip'
 const dpsUrl = 'https://dps'
-jest.mock('../config', () => ({
-  app: { url: dpsUrl },
-  apis: { welcomePeopleIntoPrison: { url: wpipUrl } },
-}))
 
 const registeredServices = [
   {
@@ -38,18 +34,18 @@ describe('saveBackLink', () => {
   })
 
   it.each([
-    [undefined, '/returnResource', '/toResource'],
-    ['service', undefined, '/toResource'],
-    ['service', '/returnResource', undefined],
-    [undefined, undefined, '/toResource'],
-    [undefined, '/returnResource', undefined],
+    [undefined, '/returnPath', '/redirectPath'],
+    ['service', undefined, '/redirectPath'],
+    ['service', '/returnPath', undefined],
+    [undefined, undefined, '/redirectPath'],
+    [undefined, '/returnPath', undefined],
     ['service', undefined, undefined],
     [undefined, undefined, undefined],
-  ])('should throw error if required parameters are missing', async (service, returnResource, toResource) => {
+  ])('should throw error if required parameters are missing', async (service, returnPath, redirectPath) => {
     req.query = {
       service,
-      returnResource,
-      toResource,
+      returnPath,
+      redirectPath,
     }
     await expect(controller(req, res)).rejects.toThrow('Required query parameters missing')
   })
@@ -57,8 +53,8 @@ describe('saveBackLink', () => {
   it('should throw error if service is not registered', async () => {
     req.query = {
       service: 'service',
-      returnResource: '/returnResource',
-      toResource: '/toResource',
+      returnPath: '/returnPath',
+      redirectPath: '/redirectPath',
       backLinkText: 'backLinkText',
     }
     await expect(controller(req, res)).rejects.toThrow('Could not find service: [service]')
@@ -67,27 +63,29 @@ describe('saveBackLink', () => {
   it('should save text as as provided backlink text', async () => {
     req.query = {
       service: 'welcome-people-into-prison',
-      returnResource: '/returnResource',
-      toResource: '/toResource',
+      returnPath: '/returnPath',
+      redirectPath: '/redirectPath',
       backLinkText: 'backLinkText',
     }
     await controller(req, res)
     expect(req.session.userBackLink).toEqual({
       text: 'backLinkText',
-      url: `${wpipUrl}/returnResource`,
+      url: `${wpipUrl}/returnPath`,
     })
   })
 
-  it.each([[...registeredServices]])('should save text as default when not provided', async (registeredService) => {
+  it('should save text as default when not provided', async () => {
+    const registeredService = registeredServices[0]
+
     req.query = {
       service: registeredService.name,
-      returnResource: '/returnResource',
-      toResource: '/toResource',
+      returnPath: '/returnPath',
+      redirectPath: '/redirectPath',
     }
     await controller(req, res)
     expect(req.session.userBackLink).toEqual({
       text: registeredService.defaultBackLinkText,
-      url: `${registeredService.hostname}/returnResource`,
+      url: `${registeredService.hostname}/returnPath`,
     })
   })
 })
