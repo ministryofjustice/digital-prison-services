@@ -120,7 +120,7 @@ describe('offender search api tests', () => {
   })
   describe('GET requests', () => {
     describe('establishment search', () => {
-      it('Passes context properties to request', async () => {
+      it('passes context properties to request', async () => {
         const context = {
           requestHeaders: {
             'page-offset': 10,
@@ -136,7 +136,7 @@ describe('offender search api tests', () => {
         const data = await offenderSearchApi.establishmentSearch(context, 'MDI', {})
         expect(data.length).toEqual(1)
       })
-      it('Passes context properties for some sort fields are mapped', async () => {
+      it('passes mapped context properties for some sort fields', async () => {
         const context = {
           requestHeaders: {
             'page-offset': 10,
@@ -153,7 +153,7 @@ describe('offender search api tests', () => {
         expect(data.length).toEqual(1)
       })
 
-      it('Sets pagination in context from response', async () => {
+      it('sets pagination into context from response', async () => {
         const context: PagingContext = {
           requestHeaders: {
             'page-offset': 10,
@@ -170,7 +170,7 @@ describe('offender search api tests', () => {
         expect(context.responseHeaders).toEqual({ 'page-offset': 3, 'page-limit': 10, 'total-records': 55 })
       })
 
-      it('will modify response content', async () => {
+      it('will modify response content to maintain compatibity with legacy prison-api', async () => {
         const context: PagingContext = {
           requestHeaders: {
             'page-offset': 10,

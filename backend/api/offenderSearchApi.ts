@@ -14,7 +14,7 @@ export type PrisonerSearchResult = {
   cellLocation: string
   status: string
   alerts: Array<Alert>
-  categoryCode: string
+  category: string
 }
 
 // other fields are present but only these are used
@@ -22,6 +22,8 @@ export type PrisonerInPrisonSearchResult = PrisonerSearchResult & {
   assignedLivingUnitDesc: string
   alertsDetails: string[]
   age: number
+  categoryCode: string
+  offenderNo: string
 }
 
 export const offenderSearchApiFactory = (client) => {
@@ -73,7 +75,7 @@ export const offenderSearchApiFactory = (client) => {
     return results.map((prisoner) => ({
       ...prisoner,
       // for backward compatibility - treat bookingId as a number
-      bookingId: parseInt(prisoner.bookingId, 10),
+      bookingId: Number(prisoner.bookingId),
       offenderNo: prisoner.prisonerNumber,
       alertsDetails: prisoner.alerts.map((alert: { alertCode: string }) => alert.alertCode),
       assignedLivingUnitDesc: prisoner.cellLocation,

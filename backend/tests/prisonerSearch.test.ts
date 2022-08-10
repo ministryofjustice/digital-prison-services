@@ -537,7 +537,7 @@ describe('Prisoner search', () => {
       expect(offenderSearchApi.establishmentSearch).toHaveBeenCalledTimes(0)
     })
 
-    it('should not even make a request location is not in any of the users caseload', async () => {
+    it('should not even make a request when location is not in any of the users caseloads', async () => {
       req.query.location = 'FXI'
 
       await controller.index(req, res)
