@@ -177,6 +177,7 @@ module.exports = defineConfig({
         stubAlerts: prisonApi.stubAlerts,
 
         stubInmates: prisonApi.stubInmates,
+        stubPSInmates: offenderSearch.stubInmates,
         stubUserLocations: prisonApi.stubUserLocations,
 
         stubQuickLook: ({

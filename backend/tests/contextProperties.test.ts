@@ -145,6 +145,50 @@ describe('Should read/write properties', () => {
       expect(contextProperties.getPaginationForPageRequest(context)).toStrictEqual({
         page: 2,
         size: 10,
+        sort: undefined,
+      })
+    })
+    it('Should get the request header pagination sort properties', () => {
+      // @ts-expect-error ts-migrate(2339) FIXME: Property 'requestHeaders' does not exist on type '... Remove this comment to see the full error message
+      context.requestHeaders = {
+        'page-offset': 20,
+        'page-limit': 10,
+        'sort-fields': 'firstName,lastName',
+        'sort-order': 'ASC',
+      }
+      // @ts-expect-error ts-migrate(2345) FIXME: Argument of type '{}' is not assignable to paramet... Remove this comment to see the full error message
+      expect(contextProperties.getPaginationForPageRequest(context)).toStrictEqual({
+        page: 2,
+        size: 10,
+        sort: 'firstName,lastName,ASC',
+      })
+    })
+    it('Should map sort propertt field names', () => {
+      expect(
+        contextProperties.getPaginationForPageRequest(
+          {
+            requestHeaders: {
+              'page-offset': 20,
+              'page-limit': 10,
+              'sort-fields': 'firstName,lastName',
+              'sort-order': 'DESC',
+            },
+          },
+          (fieldName) => {
+            switch (fieldName) {
+              case 'firstName':
+                return 'forename'
+              case 'lastName':
+                return 'surname'
+              default:
+                return fieldName
+            }
+          }
+        )
+      ).toStrictEqual({
+        page: 2,
+        size: 10,
+        sort: 'forename,surname,DESC',
       })
     })
   })

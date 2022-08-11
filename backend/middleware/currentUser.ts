@@ -1,6 +1,12 @@
+import { CaseLoad } from '../api/prisonApi'
 import logger from '../log'
 import { forenameToInitial } from '../utils'
 
+export type User = {
+  allCaseloads: CaseLoad[]
+  displayName: string
+  activeCaseLoad?: CaseLoad
+}
 export default ({ prisonApi, oauthApi }) => {
   const getActiveCaseload = async (req, res) => {
     const { activeCaseLoadId, username } = req.session.userDetails
@@ -38,12 +44,14 @@ export default ({ prisonApi, oauthApi }) => {
 
       const activeCaseLoad = await getActiveCaseload(req, res)
 
-      res.locals.user = {
+      const user: User = {
         ...res.locals.user,
         allCaseloads: req.session.allCaseloads,
         displayName: forenameToInitial(req.session.userDetails.name),
         activeCaseLoad,
       }
+
+      res.locals.user = user
     }
 
     next()

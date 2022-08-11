@@ -39,6 +39,26 @@ export type AlertDetails = {
   addedByLastName: string
 }
 
+export type CaseLoad = {
+  caseLoadId: string
+  description: string
+  currentlyActive: boolean
+}
+
+export type Location = {
+  locationPrefix: string
+  description: string
+  locationId: number
+  locationType: string
+  locationUsage: string
+  agencyId: string
+  parentLocationId: number
+  currentOccupancy: number
+  operationalCapacity: number
+  userDescription: string
+  internalLocationCode: string
+}
+
 export const prisonApiFactory = (client) => {
   const processResponse = (context) => (response) => {
     contextProperties.setResponsePagination(context, response.headers)
@@ -57,8 +77,10 @@ export const prisonApiFactory = (client) => {
 
   const put = (context, url, data) => client.put(context, url, data).then(processResponse(context))
 
-  const userLocations = (context) => (context.authSource !== 'auth' ? get(context, '/api/users/me/locations') : [])
-  const userCaseLoads = (context) => (context.authSource !== 'auth' ? get(context, '/api/users/me/caseLoads') : [])
+  const userLocations = (context): [Location] =>
+    context.authSource !== 'auth' ? get(context, '/api/users/me/locations') : []
+  const userCaseLoads = (context): [CaseLoad] =>
+    context.authSource !== 'auth' ? get(context, '/api/users/me/caseLoads') : []
 
   // NB. This function expects a caseload object.
   // The object *must* have non-blank caseLoadId,  description and type properties.

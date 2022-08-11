@@ -1,3 +1,4 @@
+import moment from 'moment'
 import contextProperties from '../contextProperties'
 import { mapToQueryString } from '../utils'
 
@@ -13,6 +14,16 @@ export type PrisonerSearchResult = {
   cellLocation: string
   status: string
   alerts: Array<Alert>
+  category: string
+}
+
+// other fields are present but only these are used
+export type PrisonerInPrisonSearchResult = PrisonerSearchResult & {
+  assignedLivingUnitDesc: string
+  alertsDetails: string[]
+  age: number
+  categoryCode: string
+  offenderNo: string
 }
 
 export const offenderSearchApiFactory = (client) => {
@@ -38,6 +49,7 @@ export const offenderSearchApiFactory = (client) => {
     )
 
   const post = (context, url, data) => client.post(context, url, data).then(processResponse(context))
+  const get = (context, url) => client.get(context, url).then(processResponse(context))
 
   const globalSearch = (context, params, pageSizeOverride) => {
     const { page, size } = contextProperties.getPaginationForPageRequest(context)
@@ -47,6 +59,31 @@ export const offenderSearchApiFactory = (client) => {
     )
   }
 
+  const establishmentSearch = async (context, locationId, params): Promise<Array<PrisonerInPrisonSearchResult>> => {
+    const { page, size, sort } = contextProperties.getPaginationForPageRequest(context, (fieldName: string) => {
+      switch (fieldName) {
+        case 'assignedLivingUnitDesc':
+          return 'cellLocation'
+        default:
+          return fieldName
+      }
+    })
+    const results = await get(
+      context,
+      `/prison/${locationId}/prisoners?${mapToQueryString({ ...params, page, size, sort })}`
+    )
+    return results.map((prisoner) => ({
+      ...prisoner,
+      // for backward compatibility - treat bookingId as a number
+      bookingId: Number(prisoner.bookingId),
+      offenderNo: prisoner.prisonerNumber,
+      alertsDetails: prisoner.alerts.map((alert: { alertCode: string }) => alert.alertCode),
+      assignedLivingUnitDesc: prisoner.cellLocation,
+      age: moment().diff(prisoner.dateOfBirth, 'years'),
+      categoryCode: prisoner.category,
+    }))
+  }
+
   const getPrisonersDetails = async (context, prisonerNumbers: Array<string>): Promise<Array<PrisonerSearchResult>> => {
     const res = await client.post(context, '/prisoner-search/prisoner-numbers', { prisonerNumbers })
     return res.body
@@ -54,6 +91,7 @@ export const offenderSearchApiFactory = (client) => {
 
   return {
     globalSearch,
+    establishmentSearch,
     getPrisonersDetails,
   }
 }

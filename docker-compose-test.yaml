@@ -1,7 +1,7 @@
 version: '3.8'
 services:
   digital-prison-services-wiremock:
-    image: rodolpheche/wiremock
+    image: wiremock/wiremock
     container_name: digital-prison-services-test-wiremock
     restart: unless-stopped
     ports:
