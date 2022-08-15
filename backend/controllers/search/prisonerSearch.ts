@@ -5,6 +5,7 @@ import { User } from '../../middleware/currentUser'
 import { alertFlagLabels, profileAlertCodes } from '../../shared/alertFlagValues'
 import { putLastNameFirst, hasLength, formatLocation, toMap } from '../../utils'
 import { Location } from '../../api/prisonApi'
+import { app } from '../../config'
 
 export const trackEvent = (telemetry, results, searchQueries, username, activeCaseLoad) => {
   if (telemetry) {
@@ -76,7 +77,7 @@ export default ({
       view,
       sortFieldsWithOrder = 'lastName,firstName:ASC',
       viewAll,
-      feature = 'legacy',
+      feature = app.establishmentSearchUsePrisonerSearch ? 'new' : 'legacy',
     } = req.query
 
     const selectedAlerts = alerts && alerts.map((alert) => alert.split(',')).flat()
