@@ -80,7 +80,7 @@ context('Prisoner search', () => {
           data: [inmate1, inmate2],
         })
         cy.task('stubGetIepSummaryForBookingIds', [inmate1Iep, inmate2Iep])
-        cy.visit(`/prisoner-search`)
+        cy.visit(`/prisoner-search?feature=legacy`)
 
         cy.get('[data-test="prisoner-search-results-table"]').then(($table) => {
           cy.get($table)
@@ -108,7 +108,7 @@ context('Prisoner search', () => {
           data: [inmate1],
         })
         cy.task('stubGetIepSummaryForBookingIds', [inmate1Iep])
-        cy.visit(`/prisoner-search?keywords=Saunders&location=MDI&alerts%5B%5D=XA`)
+        cy.visit(`/prisoner-search?keywords=Saunders&location=MDI&alerts%5B%5D=XA&feature=legacy`)
 
         cy.get('[data-test="prisoner-search-keywords"]').should('have.value', 'Saunders')
         cy.get('[data-test="prisoner-search-location"]').should('have.value', 'MDI')
@@ -129,7 +129,7 @@ context('Prisoner search', () => {
           data: [inmate1],
         })
         cy.task('stubGetIepSummaryForBookingIds', [inmate1Iep])
-        cy.visit(`/prisoner-search?keywords=Saunders&location=MDI&alerts%5B%5D=XA`)
+        cy.visit(`/prisoner-search?keywords=Saunders&location=MDI&alerts%5B%5D=XA&feature=legacy`)
 
         cy.get('[data-test="prisoner-search-alerts"]').then(($alerts) => {
           cy.get($alerts)
@@ -158,7 +158,7 @@ context('Prisoner search', () => {
           data: [inmate1, inmate2],
         })
         cy.task('stubGetIepSummaryForBookingIds', [inmate1Iep, inmate2Iep])
-        cy.visit(`/prisoner-search`)
+        cy.visit(`/prisoner-search?feature=legacy`)
 
         cy.get('[data-test="prisoner-search-order"]').then(($select) => {
           cy.get($select)
@@ -182,7 +182,7 @@ context('Prisoner search', () => {
           data: [inmate1, inmate2],
         })
         cy.task('stubGetIepSummaryForBookingIds', [inmate1Iep, inmate2Iep])
-        cy.visit(`/prisoner-search?pageLimitOption=1`)
+        cy.visit(`/prisoner-search?pageLimitOption=1&feature=legacy`)
 
         cy.get('[data-test="prisoner-search-view-all-link"]').then(($link) => {
           cy.get($link).should('contain.text', 'View all results').click()
@@ -197,7 +197,7 @@ context('Prisoner search', () => {
           data: [inmate1, inmate2],
         })
         cy.task('stubGetIepSummaryForBookingIds', [inmate1Iep, inmate2Iep])
-        cy.visit(`/prisoner-search?view=grid`)
+        cy.visit(`/prisoner-search?view=grid&feature=legacy`)
 
         cy.get('[data-test="prisoner-search-order"]').then(($select) => {
           cy.get($select)
@@ -219,7 +219,7 @@ context('Prisoner search', () => {
           data: [inmate1, inmate2],
         })
         cy.task('stubGetIepSummaryForBookingIds', [inmate1Iep, inmate2Iep])
-        cy.visit(`/prisoner-search?view=grid`)
+        cy.visit(`/prisoner-search?view=grid&feature=legacy`)
 
         cy.get('[data-test="prisoner-profile-link"]').then(($prisonerProfileLinks) => {
           cy.get($prisonerProfileLinks).its('length').should('eq', 2)
@@ -235,7 +235,7 @@ context('Prisoner search', () => {
           data: [inmate1, inmate2],
         })
         cy.task('stubGetIepSummaryForBookingIds', [inmate1Iep, inmate2Iep])
-        cy.visit(`/prisoner-search?keywords=Saunders&location=MDI&alerts%5B%5D=XA`)
+        cy.visit(`/prisoner-search?keywords=Saunders&location=MDI&alerts%5B%5D=XA&feature=legacy`)
 
         cy.get('[data-test="prisoner-search-order"]').select('assignedLivingUnitDesc:ASC')
         cy.get('[data-test="prisoner-search-order-form-submit"]').should('contain.text', 'Reorder')
@@ -254,13 +254,13 @@ context('Prisoner search', () => {
 
         cy.location().should((loc) => {
           expect(loc.search).to.eq(
-            '?keywords=Saunders&location=MDI&alerts%5B%5D=XA&sortFieldsWithOrder=assignedLivingUnitDesc%3AASC'
+            '?keywords=Saunders&location=MDI&feature=legacy&alerts%5B%5D=XA&sortFieldsWithOrder=assignedLivingUnitDesc%3AASC'
           )
         })
       })
 
       it('should show the correct most recent search link when visiting a profile page from search', () => {
-        const searchUrl = '/prisoner-search?keywords=Saunders&location=MDI&alerts%5B%5D=XA'
+        const searchUrl = '/prisoner-search?keywords=Saunders&location=MDI&alerts%5B%5D=XA&feature=legacy'
 
         cy.task('stubInmates', {
           locationId: 'MDI',
