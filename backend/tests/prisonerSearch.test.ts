@@ -870,14 +870,6 @@ describe('Prisoner search', () => {
       expect(req.session).toEqual({ userDetails: { username: 'user1' } })
     })
 
-    it('should set prisonerSearchUrl to the originalUrl if there has been a search', async () => {
-      req.query.alerts = ['HA']
-
-      await controller.index(req, res)
-
-      expect(req.session).toEqual({ prisonerSearchUrl: req.originalUrl, userDetails: { username: 'user1' } })
-    })
-
     it('should set the Page-Limit in the request header if pageLimitOption is specified in the url', async () => {
       req.query.pageLimitOption = '500'
 
@@ -891,6 +883,22 @@ describe('Prisoner search', () => {
         }),
         'MDI',
         { alerts: undefined, keywords: undefined }
+      )
+    })
+  })
+  describe('index (generic)', () => {
+    it('should render template with an encoded version of the OriginalUrl', async () => {
+      req.originalUrl =
+        '/prisoner-search?alerts=HA&alerts=HA1&keywords=Smith&location=MDI&view=grid&feature=new&alerts%5B%5D=HA&alerts%5B%5D=HA1'
+
+      await controller.index(req, res)
+
+      expect(res.render).toHaveBeenCalledWith(
+        'prisonerSearch/prisonerSearch.njk',
+        expect.objectContaining({
+          encodedOriginalUrl:
+            '%2Fprisoner-search%3Falerts%3DHA%26alerts%3DHA1%26keywords%3DSmith%26location%3DMDI%26view%3Dgrid%26feature%3Dnew%26alerts%255B%255D%3DHA%26alerts%255B%255D%3DHA1',
+        })
       )
     })
   })
