@@ -28,12 +28,12 @@ export const saveBackLink =
 
     if (!service || !returnPath || !redirectPath) throw new Error('Required query parameters missing')
 
-    const userBackLink = registeredServices.find((e) => e.name === service)
-    if (!userBackLink) throw new Error(`Could not find service: [${service}]`)
+    const registeredService = registeredServices.find((e) => e.name === service)
+    if (!registeredService) throw new Error(`Could not find service: [${service}]`)
 
     req.session.userBackLink = {
-      url: userBackLink.hostname + returnPath,
-      text: backLinkText || userBackLink.defaultBackLinkText,
+      url: registeredService.hostname + returnPath,
+      text: backLinkText || registeredService.defaultBackLinkText,
     }
     res.redirect(sanitizeUrl(config.app.url) + redirectPath)
   }
