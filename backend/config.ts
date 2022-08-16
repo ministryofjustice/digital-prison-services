@@ -20,6 +20,7 @@ export const app = {
   neurodiversityEnabledUsernames: process.env.NEURODIVERSITY_ENABLED_USERNAMES,
   neurodiversityEnabledPrisons: process.env.NEURODIVERSITY_ENABLED_PRISONS || [],
   disableRequestLimiter: process.env.DISABLE_REQUEST_LIMITER ? process.env.DISABLE_REQUEST_LIMITER === 'true' : false,
+  establishmentSearchUsePrisonerSearch: process.env.ESTABLISHMENT_SEARCH_USES_PRISONER_SEARCH === 'true',
 }
 
 export const analytics = {
