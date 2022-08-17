@@ -288,7 +288,7 @@ context('Prisoner search', () => {
             })
         })
 
-        cy.get('[data-test="recent-search-link"]').should('have.attr', 'href', searchUrl)
+        cy.get('[data-test="back-link"]').should('have.attr', 'href', `http://localhost:3008${searchUrl}`)
       })
     })
   })
@@ -567,7 +567,7 @@ context('Prisoner search', () => {
             })
         })
 
-        cy.get('[data-test="recent-search-link"]').should('have.attr', 'href', searchUrl)
+        cy.get('[data-test="back-link"]').should('have.attr', 'href', `http://localhost:3008${searchUrl}`)
       })
     })
   })

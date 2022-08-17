@@ -3,7 +3,7 @@
 <div class="prisoner-search__results-grid">
   {% for prisoner in results -%}  
     <div class="prisoner-search__results-grid__prisoner">
-      {{ prisonerPanel(prisoner.offenderNo, prisoner.name, prisoner.assignedLivingUnitDesc) }}
+      {{ prisonerPanel(prisoner.offenderNo, prisoner.name, prisoner.assignedLivingUnitDesc, encodedOriginalUrl) }}
     </div>
   {%- endfor %}
 </div>

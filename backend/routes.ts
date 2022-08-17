@@ -52,6 +52,7 @@ import { cacheFactory } from './utils/singleValueInMemoryCache'
 import asyncMiddleware from './middleware/asyncHandler'
 
 import whereaboutsRouter from './routes/whereabouts/whereaboutsRouter'
+import { saveBackLink } from './controllers/backLink'
 
 const router = express.Router()
 
@@ -76,7 +77,6 @@ const setup = ({
     res.locals = {
       ...res.locals,
       currentUrlPath: req.baseUrl + req.path,
-      prisonerSearchUrl: req.session.prisonerSearchUrl,
     }
     next()
   })
@@ -309,6 +309,8 @@ const setup = ({
       appointmentDetailsService: appointmentDetailsServiceFactory({ prisonApi }),
     })
   )
+
+  router.get('/save-backlink', saveBackLink())
 
   return router
 }

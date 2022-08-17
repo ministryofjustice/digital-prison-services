@@ -47,7 +47,6 @@ export const setup = ({ prisonApi, whereaboutsApi, oauthApi, caseNotesApi }) => 
       authUrl: config.apis.oauth2.url,
       currentUrlPath: req.originalUrl,
       hostname: req.hostname,
-      prisonerSearchUrl: req.session.prisonerSearchUrl,
     }
     next()
   })

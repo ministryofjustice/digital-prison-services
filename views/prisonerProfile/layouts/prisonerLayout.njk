@@ -2,10 +2,10 @@
 
 {% block beforeContent %}
   <div class="prisoner-profile-breadcrumbs">
-    {% if prisonerSearchUrl %}
+    {% if user.backLink %}
       <div class="prisoner-profile-breadcrumbs__search">
-        <a href="{{ prisonerSearchUrl }}" class="govuk-link govuk-link--no-visited-state" data-test="recent-search-link">
-          View most recent search
+        <a href="{{ user.backLink.url }}" class="govuk-link govuk-link--no-visited-state" data-test="back-link">
+          {{ user.backLink.text }}
         </a>
       </div>
     {% endif %}
@@ -34,4 +34,3 @@
 
   {% include "../partials/prisonerProfileFooter.njk" %}  
 {% endblock %}
-

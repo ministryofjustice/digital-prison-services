@@ -87,11 +87,6 @@ export default ({
 
     const currentUserCaseLoad = activeCaseLoad && activeCaseLoad.caseLoadId
 
-    // ignore special "feature" flag
-    const hasSearched = Boolean(Object.keys(req.query).filter((key) => key !== 'feature').length)
-
-    if (hasSearched) req.session.prisonerSearchUrl = req.originalUrl
-
     try {
       const localContext = {
         ...res.locals,
@@ -178,6 +173,7 @@ export default ({
         results,
         totalRecords,
         view,
+        encodedOriginalUrl: encodeURIComponent(req.originalUrl),
       })
     } catch (error) {
       if (error && error.code !== 'ECONNRESET' && !(error.stack && error.stack.toLowerCase().includes('timeout')))
