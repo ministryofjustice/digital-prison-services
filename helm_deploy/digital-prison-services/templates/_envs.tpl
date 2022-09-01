@@ -211,6 +211,9 @@ env:
   - name: INCENTIVES_URL
     value: {{ .Values.env.INCENTIVES_URL | quote }}
 
+  - name: CHECK_MY_DIARY_URL
+    value: {{ .Values.env.CHECK_MY_DIARY_URL | quote }}
+
   - name: INCENTIVES_API_ENDPOINT_URL
     value: {{ .Values.env.INCENTIVES_API_ENDPOINT_URL | quote }}
 

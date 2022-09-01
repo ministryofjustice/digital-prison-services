@@ -176,6 +176,12 @@ context('Homepage', () => {
       page.secureMove().should('exist')
     })
 
+    it('should show check-my-diary', () => {
+      const page = homepagePage.goTo()
+
+      page.checkMyDiary().should('exist')
+    })
+
     it('should show prison offender managers', () => {
       const page = homepagePage.goTo()
 

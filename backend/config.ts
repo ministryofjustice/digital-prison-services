@@ -111,6 +111,9 @@ export const apis = {
     ui_url: process.env.USE_OF_FORCE_URL,
     prisons: process.env.USE_OF_FORCE_PRISONS || '',
   },
+  checkMyDiary: {
+    ui_url: process.env.CHECK_MY_DIARY_URL,
+  },
   incentives: {
     ui_url: process.env.INCENTIVES_URL,
     excludedCaseloads: process.env.INCENTIVES_EXCLUDED_CASELOADS || '',
