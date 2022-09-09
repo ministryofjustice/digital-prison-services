@@ -98,6 +98,8 @@ allowlist:
   ark-nps-hmcts-ttp3: "194.33.193.0/25"
   ark-nps-hmcts-ttp4: "194.33.196.0/25"
   ark-nps-hmcts-ttp5: "194.33.197.0/25"
+  oakwood-01: "217.161.76.184/29"
+  oakwood-02: "217.161.76.192/29"
   oakwood-1: "217.161.76.187/32"
   oakwood-2: "217.161.76.195/32"
   oakwood-3: "217.161.76.186/32"
