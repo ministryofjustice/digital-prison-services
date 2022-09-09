@@ -97,6 +97,7 @@ context('Homepage', () => {
           'ROLE_SEARCH_RESTRICTED_PATIENT',
           'ROLE_TRANSFER_RESTRICTED_PATIENT',
           'ROLE_REMOVE_RESTRICTED_PATIENT',
+          'ROLE_RESTRICTED_PATIENT_MIGRATION',
         ],
       })
       cy.signIn()
