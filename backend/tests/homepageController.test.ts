@@ -748,4 +748,22 @@ describe('Homepage', () => {
       })
     )
   })
+  it('should display the Manage Restricted Patients task on the homepage if the migration role is present', async () => {
+    config.apis.manageRestrictedPatients.ui_url = 'http://manage-restricted-patients-url'
+    oauthApi.userRoles.mockReturnValue([{ roleCode: 'RESTRICTED_PATIENT_MIGRATION' }])
+
+    await controller(req, res)
+
+    expect(res.render).toHaveBeenCalledWith(
+      'homepage/homepage.njk',
+      expect.objectContaining({
+        tasks: [
+          expect.objectContaining({
+            id: 'manage-restricted-patients',
+            href: 'http://manage-restricted-patients-url',
+          }),
+        ],
+      })
+    )
+  })
 })
