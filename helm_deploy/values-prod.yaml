@@ -71,7 +71,7 @@ env:
   CALCULATE_RELEASE_DATES_URL: https://calculate-release-dates.hmpps.service.justice.gov.uk
   SEND_LEGAL_MAIL_URL: https://check-rule39-mail.prison.service.justice.gov.uk
   WELCOME_PEOPLE_INTO_PRISON_URL: https://welcome.prison.service.justice.gov.uk/
-  WELCOME_PEOPLE_INTO_PRISON_ENABLED_PRISONS: "NMI,LII,DMI,MHI,EXI,LEI"
+  WELCOME_PEOPLE_INTO_PRISON_ENABLED_PRISONS: "NMI,LII,DMI,MHI,EXI,LEI,WWI"
   CREATE_AND_VARY_A_LICENCE_URL: https://create-and-vary-a-licence.hmpps.service.justice.gov.uk/
   CREATE_AND_VARY_A_LICENCE_ENABLED_PRISONS: "CFI,CWI,UKI,UPI,PRI,FHI,LCI,LII,LGI,MHI,NSI,NMI,RNI,SKI,SUI,WTI"
   RESTRICTED_PATIENT_API_URL: https://restricted-patients-api.hmpps.service.justice.gov.uk/
@@ -99,6 +99,8 @@ allowlist:
   ark-nps-hmcts-ttp3: "194.33.193.0/25"
   ark-nps-hmcts-ttp4: "194.33.196.0/25"
   ark-nps-hmcts-ttp5: "194.33.197.0/25"
+  oakwood-01: "217.161.76.184/29"
+  oakwood-02: "217.161.76.192/29"
   oakwood-1: "217.161.76.187/32"
   oakwood-2: "217.161.76.195/32"
   oakwood-3: "217.161.76.186/32"
