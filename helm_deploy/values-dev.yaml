@@ -35,6 +35,7 @@ env:
   CATEGORISATION_UI_URL: https://dev.offender-categorisation.service.justice.gov.uk/
   USE_OF_FORCE_URL: https://dev.use-of-force.service.justice.gov.uk
   USE_OF_FORCE_PRISONS: "FWI,MDI,WRI"
+  CHECK_MY_DIARY_URL: https://check-my-diary-dev.prison.service.justice.gov.uk?fromDPS=true
   INCENTIVES_URL: https://incentives-ui-dev.hmpps.service.justice.gov.uk
   INCENTIVES_API_ENDPOINT_URL: https://incentives-api-dev.hmpps.service.justice.gov.uk
   INCENTIVES_EXCLUDED_CASELOADS: "CADM_I"

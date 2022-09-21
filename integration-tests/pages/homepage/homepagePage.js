@@ -19,6 +19,7 @@ const homepagePage = () =>
     manageUsers: () => cy.get('[data-test="manage-users"]'),
     categorisation: () => cy.get('[data-test="categorisation"]'),
     secureMove: () => cy.get('[data-test="secure-move"]'),
+    checkMyDiary: () => cy.get('[data-test="check-my-diary"]'),
     changeSomeonesCell: () => cy.get('[data-test="change-someones-cell"]'),
     pom: () => cy.get('[data-test="pom"]'),
     soc: () => cy.get('[data-test="soc"]'),

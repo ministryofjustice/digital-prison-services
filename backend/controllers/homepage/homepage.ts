@@ -16,6 +16,7 @@ const {
     legacyPrisonVisits,
     welcomePeopleIntoPrison,
     manageRestrictedPatients,
+    checkMyDiary,
     incentives,
     createAndVaryALicence,
     historicalPrisonerApplication,
@@ -54,6 +55,14 @@ const getTasks = ({ activeCaseLoadId, locations, staffId, whereaboutsConfig, key
       description: 'Complete a cell move and view the 7 day history of all cell moves completed in your establishment.',
       href: '/change-someones-cell',
       enabled: () => userHasRoles(['CELL_MOVE']),
+    },
+    {
+      id: 'check-my-diary',
+      heading: 'Check My Diary',
+      description: 'View your prison staff detail (staff rota) from home.',
+      href: checkMyDiary.ui_url,
+      roles: null,
+      enabled: () => checkMyDiary.ui_url,
     },
     {
       id: 'incentives',
