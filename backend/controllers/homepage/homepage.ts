@@ -210,8 +210,8 @@ const getTasks = ({ activeCaseLoadId, locations, staffId, whereaboutsConfig, key
     },
     {
       id: 'legacy-prison-visit',
-      heading: 'Manage prison visits',
-      description: 'Book, view and cancel a prisoner’s social visits.',
+      heading: 'Online visit requests',
+      description: 'Respond to online social visit requests.',
       href: legacyPrisonVisits.ui_url,
       enabled: () => legacyPrisonVisits.ui_url && userHasRoles(['PVB_REQUESTS']),
     },
