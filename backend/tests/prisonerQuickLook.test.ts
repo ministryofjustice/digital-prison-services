@@ -1,3 +1,4 @@
+import type apis from '../apis'
 import prisonerQuickLook from '../controllers/prisonerProfile/prisonerQuickLook'
 
 describe('prisoner profile quick look', () => {
@@ -44,9 +45,7 @@ describe('prisoner profile quick look', () => {
   const systemOauthClient = {
     getClientCredentialsTokens: jest.fn(),
   }
-  const incentivesApi = {
-    getIepSummaryForBooking: jest.fn(),
-  }
+  const incentivesApi = {} as jest.Mocked<typeof apis.incentivesApi>
   const restrictedPatientApi = {}
   const oauthApi = {
     userRoles: jest.fn(),

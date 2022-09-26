@@ -1,3 +1,4 @@
+import type apis from '../apis'
 import prisonerSearchController from '../controllers/search/prisonerSearch'
 import { serviceUnavailableMessage } from '../common-messages'
 import { makeResetError, makeResetErrorWithStack } from './helpers'
@@ -10,9 +11,7 @@ describe('Prisoner search', () => {
   const offenderSearchApi = {
     establishmentSearch: jest.fn(),
   }
-  const incentivesApi = {
-    getIepSummaryForBookingIds: jest.fn(),
-  }
+  const incentivesApi = {} as jest.Mocked<typeof apis.incentivesApi>
   const paginationService = {
     getPagination: jest.fn(),
   }
