@@ -59,7 +59,7 @@ context('Prisoner change incentive level details', () => {
     it('should display the change incentive level link', () => {
       cy.visit(`/prisoner/${offenderNo}/incentive-level-details/change-incentive-level`)
 
-      cy.get('h1').should('contain', 'Select John Smith’s incentive level')
+      cy.get('h1').should('contain', 'Record John Smith’s incentive level')
       cy.get('[data-test="current-incentive-level"]').should('contain', 'Standard')
     })
 
