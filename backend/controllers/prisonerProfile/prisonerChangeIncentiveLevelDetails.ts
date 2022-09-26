@@ -17,7 +17,7 @@ export default ({ prisonApi, incentivesApi }) => {
 
       const { iepLevel } = iepSummary
       const selectableLevels = iepLevels.map((level) => ({
-        text: level.iepDescription,
+        text: iepLevel === level.iepDescription ? `${level.iepDescription} (current level)` : level.iepDescription,
         value: level.iepLevel,
         checked: level.iepLevel === formValues.newIepLevel,
       }))

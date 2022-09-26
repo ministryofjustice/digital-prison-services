@@ -11,6 +11,46 @@ describe('Prisoner change incentive level details', () => {
   const prisonApi = {}
   const incentivesApi = {}
 
+  const iepSummaryForBooking = {
+    bookingId: -1,
+    iepDate: '2017-08-15',
+    iepTime: '2017-08-15T16:04:35',
+    iepLevel: 'Standard',
+    daysSinceReview: 625,
+    iepDetails: [
+      {
+        bookingId: -1,
+        iepDate: '2017-08-15',
+        iepTime: '2017-08-15T16:04:35',
+        agencyId: 'LEI',
+        iepLevel: 'Standard',
+        userId: 'ITAG_USER',
+      },
+      {
+        bookingId: -1,
+        iepDate: '2017-08-10',
+        iepTime: '2017-08-10T16:04:35',
+        agencyId: 'HEI',
+        iepLevel: 'Basic',
+        userId: 'ITAG_USER',
+      },
+      {
+        bookingId: -1,
+        iepDate: '2017-08-07',
+        iepTime: '2017-08-07T16:04:35',
+        agencyId: 'HEI',
+        iepLevel: 'Enhanced',
+        userId: 'ITAG_USER',
+      },
+    ],
+  }
+  const iepLevels = [
+    { iepLevel: 'ENT', iepDescription: 'Entry' },
+    { iepLevel: 'BAS', iepDescription: 'Basic' },
+    { iepLevel: 'STD', iepDescription: 'Standard' },
+    { iepLevel: 'ENH', iepDescription: 'Enhanced' },
+  ]
+
   let req
   let res
   let logError
@@ -31,46 +71,9 @@ describe('Prisoner change incentive level details', () => {
       .fn()
       .mockResolvedValue({ agencyId: 'MDI', bookingId, firstName: 'John', lastName: 'Smith' })
     // @ts-expect-error ts-migrate(2339) FIXME: Property 'getIepSummaryForBooking' does not exist ... Remove this comment to see the full error message
-    incentivesApi.getIepSummaryForBooking = jest.fn().mockReturnValue({
-      bookingId: -1,
-      iepDate: '2017-08-15',
-      iepTime: '2017-08-15T16:04:35',
-      iepLevel: 'Standard',
-      daysSinceReview: 625,
-      iepDetails: [
-        {
-          bookingId: -1,
-          iepDate: '2017-08-15',
-          iepTime: '2017-08-15T16:04:35',
-          agencyId: 'LEI',
-          iepLevel: 'Standard',
-          userId: 'ITAG_USER',
-        },
-        {
-          bookingId: -1,
-          iepDate: '2017-08-10',
-          iepTime: '2017-08-10T16:04:35',
-          agencyId: 'HEI',
-          iepLevel: 'Basic',
-          userId: 'ITAG_USER',
-        },
-        {
-          bookingId: -1,
-          iepDate: '2017-08-07',
-          iepTime: '2017-08-07T16:04:35',
-          agencyId: 'HEI',
-          iepLevel: 'Enhanced',
-          userId: 'ITAG_USER',
-        },
-      ],
-    })
+    incentivesApi.getIepSummaryForBooking = jest.fn().mockReturnValue(iepSummaryForBooking)
     // @ts-expect-error ts-migrate(2339) FIXME: Property 'getAgencyIepLevels' does not exist on ty... Remove this comment to see the full error message
-    incentivesApi.getAgencyIepLevels = jest.fn().mockReturnValue([
-      { iepLevel: 'ENT', iepDescription: 'Entry' },
-      { iepLevel: 'BAS', iepDescription: 'Basic' },
-      { iepLevel: 'STD', iepDescription: 'Standard' },
-      { iepLevel: 'ENH', iepDescription: 'Enhanced' },
-    ])
+    incentivesApi.getAgencyIepLevels = jest.fn().mockReturnValue(iepLevels)
     // @ts-expect-error ts-migrate(2339) FIXME: Property 'changeIepLevel' does not exist on type '... Remove this comment to see the full error message
     incentivesApi.changeIepLevel = jest.fn()
 
@@ -111,7 +114,7 @@ describe('Prisoner change incentive level details', () => {
             },
             {
               checked: false,
-              text: 'Standard',
+              text: 'Standard (current level)',
               value: 'STD',
             },
             {
@@ -121,6 +124,39 @@ describe('Prisoner change incentive level details', () => {
             },
           ],
         })
+      })
+
+      it('should indicate current incentive level ', async () => {
+        // @ts-expect-error ts-migrate(2339) FIXME: Property 'getIepSummaryForBooking' does not exist ... Remove this comment to see the full error message
+        incentivesApi.getIepSummaryForBooking = jest.fn().mockReturnValue({
+          ...iepSummaryForBooking,
+          iepLevel: 'Enhanced',
+        })
+
+        await controller.index(req, res)
+        const context = res.render.mock.calls.at(-1)[1]
+        expect(context).toHaveProperty('selectableLevels', [
+          {
+            checked: false,
+            text: 'Entry',
+            value: 'ENT',
+          },
+          {
+            checked: false,
+            text: 'Basic',
+            value: 'BAS',
+          },
+          {
+            checked: false,
+            text: 'Standard',
+            value: 'STD',
+          },
+          {
+            checked: false,
+            text: 'Enhanced (current level)',
+            value: 'ENH',
+          },
+        ])
       })
     })
 
@@ -210,7 +246,7 @@ describe('Prisoner change incentive level details', () => {
             },
             {
               checked: false,
-              text: 'Standard',
+              text: 'Standard (current level)',
               value: 'STD',
             },
             {
