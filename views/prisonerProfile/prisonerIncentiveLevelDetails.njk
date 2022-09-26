@@ -42,15 +42,15 @@
     <div class="horizontal-information govuk-!-margin-bottom-3">
         <div class="horizontal-information__item">
             <h3 class="govuk-heading-s govuk-!-margin-bottom-1">Current incentive level</h3>
-            <p class="govuk-body" data-test="incident-time">{{ currentIepLevel }}</p>
+            <p class="govuk-body" data-test="current-iep">{{ currentIepLevel }}</p>
         </div>
         <div class="horizontal-information__item">
             <h3 class="govuk-heading-s govuk-!-margin-bottom-1">Time since review</h3>
-            <p class="govuk-body" data-test="incident-location">{{ daysOnIepLevel }}</p>
+            <p class="govuk-body" data-test="days-since-review">{{ daysOnIepLevel }}</p>
         </div>
         <div class="horizontal-information__item">
             <h3 class="govuk-heading-s govuk-!-margin-bottom-1">Date of next review</h3>
-            <p class="govuk-body" data-test="incident-reported-by">{{ nextReviewDate }}</p>
+            <p class="govuk-body" data-test="next-review-date">{{ nextReviewDate }}</p>
         </div>
         {% if userCanUpdateIEP %}
             <div class="horizontal-information__item">
