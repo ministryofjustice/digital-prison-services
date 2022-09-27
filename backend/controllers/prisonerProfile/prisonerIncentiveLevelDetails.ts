@@ -1,5 +1,5 @@
 import moment from 'moment'
-import { putLastNameFirst, properCaseName, formatDaysInYears, formatName } from '../../utils'
+import { putLastNameFirst, properCaseName, formatName } from '../../utils'
 
 const filterData = (data, fields) => {
   let filteredResults = data
@@ -100,9 +100,8 @@ export default ({ prisonApi, incentivesApi, oauthApi }) =>
 
       return res.render('prisonerProfile/prisonerIncentiveLevelDetails.njk', {
         breadcrumbPrisonerName: putLastNameFirst(firstName, lastName),
-        currentIepDateTime: iepSummary.iepTime,
+        currentIepDate: moment(iepSummary.iepDate).format('D MMMM YYYY'),
         currentIepLevel: iepSummary.iepLevel,
-        daysOnIepLevel: `${formatDaysInYears(iepSummary.daysSinceReview) || 'Changed today'}`,
         errors,
         formValues: req.query,
         noResultsFoundMessage,

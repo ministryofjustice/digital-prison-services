@@ -8,6 +8,15 @@ describe('Prisoner incentive level details', () => {
   const incentivesApi = {} as jest.Mocked<typeof apis.incentivesApi>
   const oauthApi = {}
 
+  const iepSummaryForBooking = {
+    bookingId: -1,
+    iepDate: '2017-08-15',
+    iepTime: '2017-08-15T16:04:35',
+    iepLevel: 'Standard',
+    daysSinceReview: 1868,
+    iepDetails: [],
+  }
+
   let req
   let res
   let logError
@@ -29,11 +38,7 @@ describe('Prisoner incentive level details', () => {
       .mockResolvedValue({ agencyId: 'MDI', bookingId, firstName: 'John', lastName: 'Smith' })
 
     incentivesApi.getIepSummaryForBooking = jest.fn().mockReturnValue({
-      bookingId: -1,
-      iepDate: '2017-08-15',
-      iepTime: '2017-08-15T16:04:35',
-      iepLevel: 'Standard',
-      daysSinceReview: 625,
+      ...iepSummaryForBooking,
       iepDetails: [
         {
           bookingId: -1,
@@ -102,9 +107,8 @@ describe('Prisoner incentive level details', () => {
     expect(res.render).toHaveBeenCalledWith('prisonerProfile/prisonerIncentiveLevelDetails.njk', {
       breadcrumbPrisonerName: 'Smith, John',
       currentIepLevel: 'Standard',
-      daysOnIepLevel: '1 year, 260 days',
       errors: [],
-      currentIepDateTime: '2017-08-15T16:04:35',
+      currentIepDate: '15 August 2017',
       nextReviewDate: '15 August 2018',
       establishments: [
         { value: 'HEI', text: 'Hewell' },
@@ -374,14 +378,7 @@ describe('Prisoner incentive level details', () => {
   it('should return default message for no incentive level history', async () => {
     req.query = {}
 
-    incentivesApi.getIepSummaryForBooking = jest.fn().mockReturnValue({
-      bookingId: -1,
-      iepDate: '2017-08-15',
-      iepTime: '2017-08-15T16:04:35',
-      iepLevel: 'Standard',
-      daysSinceReview: 625,
-      iepDetails: [],
-    })
+    incentivesApi.getIepSummaryForBooking = jest.fn().mockReturnValue(iepSummaryForBooking)
 
     await controller(req, res)
 
@@ -397,14 +394,7 @@ describe('Prisoner incentive level details', () => {
   it('should return default message when no incentive level history is returned for the supplied filters', async () => {
     req.query = { fromDate: '10/08/2017', toDate: '10/08/2017' }
 
-    incentivesApi.getIepSummaryForBooking = jest.fn().mockReturnValue({
-      bookingId: -1,
-      iepDate: '2017-08-15',
-      iepTime: '2017-08-15T16:04:35',
-      iepLevel: 'Standard',
-      daysSinceReview: 625,
-      iepDetails: [],
-    })
+    incentivesApi.getIepSummaryForBooking = jest.fn().mockReturnValue(iepSummaryForBooking)
 
     await controller(req, res)
 
