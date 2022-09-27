@@ -1,5 +1,5 @@
 import moment from 'moment'
-import { putLastNameFirst, properCaseName, formatName } from '../../utils'
+import { putLastNameFirst, properCaseName, formatName, daysSince } from '../../utils'
 
 const filterData = (data, fields) => {
   let filteredResults = data
@@ -74,7 +74,9 @@ export default ({ prisonApi, incentivesApi, oauthApi }) =>
         }
       })
 
-      const nextReviewDate = moment(iepSummary.iepTime, 'YYYY-MM-DD HH:mm').add(1, 'years').format('D MMMM YYYY')
+      // TODO: nextReviewDate will come from incentivesApi in future
+      const nextReviewDate = moment(iepSummary.iepTime, 'YYYY-MM-DD HH:mm').add(1, 'years')
+      const reviewDaysOverdue = daysSince(nextReviewDate)
 
       const filteredResults = filterData(iepHistoryDetails, {
         agencyId,
@@ -115,7 +117,8 @@ export default ({ prisonApi, incentivesApi, oauthApi }) =>
           text: level,
           value: level,
         })),
-        nextReviewDate,
+        nextReviewDate: nextReviewDate.format('D MMMM YYYY'),
+        reviewDaysOverdue,
         offenderNo,
         prisonerName: formatName(firstName, lastName),
         profileUrl: `/prisoner/${offenderNo}`,

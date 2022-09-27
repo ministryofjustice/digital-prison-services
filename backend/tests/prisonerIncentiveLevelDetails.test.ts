@@ -23,6 +23,8 @@ describe('Prisoner incentive level details', () => {
   let controller
 
   beforeEach(() => {
+    jest.spyOn(Date, 'now').mockImplementation(() => 1664192096000) // 2022-09-26T12:34:56.000+01:00
+
     req = {
       originalUrl: 'http://localhost',
       params: { offenderNo },
@@ -110,6 +112,7 @@ describe('Prisoner incentive level details', () => {
       errors: [],
       currentIepDate: '15 August 2017',
       nextReviewDate: '15 August 2018',
+      reviewDaysOverdue: 1503,
       establishments: [
         { value: 'HEI', text: 'Hewell' },
         { value: 'LEI', text: 'Leeds' },

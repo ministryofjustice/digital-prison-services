@@ -50,7 +50,19 @@
         </div>
         <div class="horizontal-information__item">
             <h3 class="govuk-heading-s govuk-!-margin-bottom-1">Date of next review</h3>
-            <p class="govuk-body" data-test="next-review-date">{{ nextReviewDate }}</p>
+            <p class="govuk-body" data-test="next-review-date">
+                {{ nextReviewDate }}
+                {% if reviewDaysOverdue > 0 %}
+                    <br/>
+                    <span class="highlight highlight--alert" data-test="next-review-overdue">
+                        {{ reviewDaysOverdue }} {% if reviewDaysOverdue == 1 -%}
+                            day
+                        {%- else -%}
+                            days
+                        {%- endif %} overdue
+                    </span>
+                {% endif %}
+            </p>
         </div>
         {% if userCanUpdateIEP %}
             <div class="horizontal-information__item">
