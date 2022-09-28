@@ -17,7 +17,9 @@
                         text: detail.label
                     },
                     value: {
-                      text: detail.value | showDefault
+                        html: detail.html
+                    } if detail.html else {
+                        text: detail.value | showDefault
                     }
                 }
                 ), incentivesRows) %}

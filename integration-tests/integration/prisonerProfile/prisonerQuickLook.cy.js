@@ -17,7 +17,14 @@ const quickLookFullDetails = {
   ],
   sentenceDetails: { sentenceDetail: { releaseDate: '2020-12-13' } },
   balances: { spends: 100, cash: 75.5, savings: 50, damageObligations: 65, currency: 'GBP' },
-  iepSummary: { daysSinceReview: 40 },
+  iepSummary: {
+    bookingId: bookingId,
+    iepDate: '2017-08-15',
+    iepTime: '2017-08-15T16:04:35',
+    iepLevel: 'Standard',
+    daysSinceReview: 881,
+    iepDetails: [],
+  },
   positiveCaseNotes: { count: 2 },
   negativeCaseNotes: { count: 1 },
   adjudications: {
@@ -405,7 +412,8 @@ context('Prisoner quick look', () => {
         .then(($summaryValues) => {
           expect($summaryValues.get(0).innerText).to.eq('1')
           expect($summaryValues.get(1).innerText).to.eq('2')
-          expect($summaryValues.get(2).innerText).to.eq('40 days ago')
+          expect($summaryValues.get(2).innerText).to.contain('15 August 2018')
+          expect($summaryValues.get(2).innerText).to.match(/\d+ days overdue/)
         })
 
       cy.get('[data-test="adjudications-summary"]')

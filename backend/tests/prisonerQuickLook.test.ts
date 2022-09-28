@@ -19,6 +19,14 @@ describe('prisoner profile quick look', () => {
     profileInformation: [{ type: 'NAT', resultValue: 'British' }],
   }
   const bookingId = '123'
+  const iepSummaryForBooking = {
+    bookingId,
+    iepDate: '2017-08-15',
+    iepTime: '2017-08-15T16:04:35',
+    iepLevel: 'Standard',
+    daysSinceReview: 881,
+    iepDetails: [],
+  }
   const prisonApi = {
     getDetails: jest.fn(),
     getMainOffence: jest.fn(),
@@ -450,7 +458,7 @@ describe('prisoner profile quick look', () => {
               details: [
                 { label: 'Incentive level warnings', value: 0 },
                 { label: 'Incentive encouragements', value: 0 },
-                { label: 'Last incentive level review', value: '0 days ago' },
+                { label: 'Date of next review', html: 'Unable to show this detail' },
               ],
             },
           })
@@ -460,7 +468,7 @@ describe('prisoner profile quick look', () => {
 
     describe('when there is case note and adjudications data', () => {
       beforeEach(() => {
-        incentivesApi.getIepSummaryForBooking.mockResolvedValue({ daysSinceReview: 40 })
+        incentivesApi.getIepSummaryForBooking.mockResolvedValue(iepSummaryForBooking)
         prisonApi.getPositiveCaseNotes.mockResolvedValue({ count: 2 })
         prisonApi.getNegativeCaseNotes.mockResolvedValue({ count: 1 })
         prisonApi.getAdjudicationsForBooking.mockResolvedValue({
@@ -547,11 +555,52 @@ describe('prisoner profile quick look', () => {
               details: [
                 { label: 'Incentive level warnings', value: 1 },
                 { label: 'Incentive encouragements', value: 2 },
-                { label: 'Last incentive level review', value: '40 days ago' },
+                { label: 'Date of next review', html: expect.stringContaining('15 August 2018') },
               ],
             },
           })
         )
+      })
+
+      it('should show when next incentive review is overdue when in the past', async () => {
+        await controller(req, res)
+
+        const context = res.render.mock.calls.at(-1)?.[1]
+        const nextReviewDate = context?.incentives?.details?.at(-1)?.html
+        expect(nextReviewDate).toContain('15 August 2018')
+        expect(nextReviewDate).toContain('516 days overdue')
+      })
+
+      it('should show when next incentive review was overdue yesterday', async () => {
+        incentivesApi.getIepSummaryForBooking.mockResolvedValue({
+          ...iepSummaryForBooking,
+          iepDate: '2019-01-12',
+          iepTime: '2019-01-12T15:22:00',
+          daysSinceReview: 1,
+        })
+
+        await controller(req, res)
+
+        const context = res.render.mock.calls.at(-1)?.[1]
+        const nextReviewDate = context?.incentives?.details?.at(-1)?.html
+        expect(nextReviewDate).toContain('12 January 2020')
+        expect(nextReviewDate).toContain('1 day overdue')
+      })
+
+      it('should not show that next incentive review is overdue when in future', async () => {
+        incentivesApi.getIepSummaryForBooking.mockResolvedValue({
+          ...iepSummaryForBooking,
+          iepDate: '2019-12-16',
+          iepTime: '2019-12-16T15:22:00',
+          daysSinceReview: 28,
+        })
+
+        await controller(req, res)
+
+        const context = res.render.mock.calls.at(-1)?.[1]
+        const nextReviewDate = context?.incentives?.details?.at(-1)?.html
+        expect(nextReviewDate).toContain('16 December 2020')
+        expect(nextReviewDate).not.toContain('overdue')
       })
     })
 
@@ -899,7 +948,7 @@ describe('prisoner profile quick look', () => {
 
     it('should handle api errors when requesting incentive level warnings', async () => {
       prisonApi.getPositiveCaseNotes.mockResolvedValue({ count: 10 })
-      incentivesApi.getIepSummaryForBooking.mockResolvedValue({ daysSinceReview: 10 })
+      incentivesApi.getIepSummaryForBooking.mockResolvedValue(iepSummaryForBooking)
       prisonApi.getAdjudicationsForBooking.mockResolvedValue({
         adjudicationCount: 2,
         awards: [
@@ -944,7 +993,7 @@ describe('prisoner profile quick look', () => {
             details: [
               { label: 'Incentive level warnings', value: 'Unable to show this detail' },
               { label: 'Incentive encouragements', value: 10 },
-              { label: 'Last incentive level review', value: '10 days ago' },
+              { label: 'Date of next review', html: expect.stringContaining('15 August 2018') },
             ],
           },
         })
@@ -953,7 +1002,7 @@ describe('prisoner profile quick look', () => {
 
     it('should handle api errors when requesting incentive encouragements', async () => {
       prisonApi.getNegativeCaseNotes.mockResolvedValue({ count: 10 })
-      incentivesApi.getIepSummaryForBooking.mockResolvedValue({ daysSinceReview: 10 })
+      incentivesApi.getIepSummaryForBooking.mockResolvedValue(iepSummaryForBooking)
       prisonApi.getAdjudicationsForBooking.mockResolvedValue({
         adjudicationCount: 2,
         awards: [
@@ -998,7 +1047,7 @@ describe('prisoner profile quick look', () => {
             details: [
               { label: 'Incentive level warnings', value: 10 },
               { label: 'Incentive encouragements', value: 'Unable to show this detail' },
-              { label: 'Last incentive level review', value: '10 days ago' },
+              { label: 'Date of next review', html: expect.stringContaining('15 August 2018') },
             ],
           },
         })
@@ -1052,7 +1101,7 @@ describe('prisoner profile quick look', () => {
             details: [
               { label: 'Incentive level warnings', value: 10 },
               { label: 'Incentive encouragements', value: 10 },
-              { label: 'Last incentive level review', value: 'Unable to show this detail' },
+              { label: 'Date of next review', html: 'Unable to show this detail' },
             ],
           },
         })
@@ -1062,7 +1111,7 @@ describe('prisoner profile quick look', () => {
     it('should handle api errors when requesting adjudications', async () => {
       prisonApi.getPositiveCaseNotes.mockResolvedValue({ count: 10 })
       prisonApi.getNegativeCaseNotes.mockResolvedValue({ count: 10 })
-      incentivesApi.getIepSummaryForBooking.mockResolvedValue({ daysSinceReview: 10 })
+      incentivesApi.getIepSummaryForBooking.mockResolvedValue(iepSummaryForBooking)
 
       await controller(req, res)
 
@@ -1079,7 +1128,7 @@ describe('prisoner profile quick look', () => {
             details: [
               { label: 'Incentive level warnings', value: 10 },
               { label: 'Incentive encouragements', value: 10 },
-              { label: 'Last incentive level review', value: '10 days ago' },
+              { label: 'Date of next review', html: expect.stringContaining('15 August 2018') },
             ],
           },
         })
@@ -1111,8 +1160,8 @@ describe('prisoner profile quick look', () => {
                 value: 'Unable to show this detail',
               },
               {
-                label: 'Last incentive level review',
-                value: 'Unable to show this detail',
+                label: 'Date of next review',
+                html: 'Unable to show this detail',
               },
             ],
           },
@@ -1374,7 +1423,7 @@ describe('prisoner profile quick look', () => {
             details: [
               { label: 'Incentive level warnings', value: 1 },
               { label: 'Incentive encouragements', value: 0 },
-              { label: 'Last incentive level review', value: '0 days ago' },
+              { label: 'Date of next review', html: 'Unable to show this detail' },
             ],
           },
         })
