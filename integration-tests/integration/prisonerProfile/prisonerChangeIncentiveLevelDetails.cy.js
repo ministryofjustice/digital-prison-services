@@ -84,8 +84,8 @@ context('Prisoner change incentive level details', () => {
       cy.get('[data-test="form-errors"]')
         .find('li')
         .then(($errors) => {
-          expect($errors.get(0)).to.contain('Select an incentive level')
-          expect($errors.get(1)).to.contain('Enter a reason for your selected incentive label')
+          expect($errors.get(0)).to.contain('Select an incentive level, even if it is the same as before')
+          expect($errors.get(1)).to.contain('Enter a reason for recording')
         })
     })
 
@@ -98,7 +98,7 @@ context('Prisoner change incentive level details', () => {
       cy.get('[data-test="form-errors"]')
         .find('li')
         .then(($errors) => {
-          expect($errors.get(1)).to.contain('The reason must be 240 characters or less')
+          expect($errors.get(1)).to.contain('Comments must be 240 characters or less')
         })
     })
   })

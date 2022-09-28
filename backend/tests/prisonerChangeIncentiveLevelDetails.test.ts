@@ -213,11 +213,11 @@ describe('Prisoner change incentive level details', () => {
           errors: [
             {
               href: '#newIepLevel',
-              text: 'Select an incentive level',
+              text: 'Select an incentive level, even if it is the same as before',
             },
             {
               href: '#reason',
-              text: 'Enter a reason for your selected incentive label',
+              text: 'Enter a reason for recording',
             },
           ],
           formValues: {},
@@ -261,7 +261,7 @@ describe('Prisoner change incentive level details', () => {
             errors: [
               {
                 href: '#newIepLevel',
-                text: 'Select an incentive level',
+                text: 'Select an incentive level, even if it is the same as before',
               },
             ],
             formValues: { reason: 'A reason why it has changed' },
