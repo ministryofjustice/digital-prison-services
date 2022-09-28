@@ -250,8 +250,8 @@ describe('Homepage', () => {
             expect.objectContaining({
               id: 'legacy-prison-visit',
               href: 'http://legacy-prison-visit-url',
-              heading: 'Manage prison visits',
-              description: 'Book, view and cancel a prisoner’s social visits.',
+              heading: 'Online visit requests',
+              description: 'Respond to online social visit requests.',
             }),
           ],
         })
