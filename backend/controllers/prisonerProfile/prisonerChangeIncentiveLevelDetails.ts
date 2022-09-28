@@ -1,3 +1,5 @@
+import moment from 'moment'
+import config from '../../config'
 import { putLastNameFirst, formatName } from '../../utils'
 import { raiseAnalyticsEvent } from '../../raiseAnalyticsEvent'
 
@@ -40,6 +42,38 @@ export default ({ prisonApi, incentivesApi }) => {
     }
   }
 
+  const renderConfirmation = async (req, res) => {
+    const { offenderNo } = req.params
+
+    try {
+      const prisonerDetails = await prisonApi.getDetails(res.locals, offenderNo, true)
+      const { agencyId, bookingId, firstName, lastName, assignedLivingUnit } = prisonerDetails
+      const locationId: string | undefined = assignedLivingUnit?.description
+
+      const iepSummary = await incentivesApi.getIepSummaryForBooking(res.locals, bookingId, false)
+      // TODO: nextReviewDate will come from incentivesApi in future
+      const nextReviewDate = iepSummary?.iepTime && moment(iepSummary.iepTime, 'YYYY-MM-DD HH:mm').add(1, 'years')
+
+      return res.render('prisonerProfile/prisonerChangeIncentiveLevelConfirmation.njk', {
+        agencyId,
+        bookingId,
+        breadcrumbPrisonerName: putLastNameFirst(firstName, lastName),
+        offenderNo,
+        prisonerName: formatName(firstName, lastName),
+        profileUrl: `/prisoner/${offenderNo}`,
+        manageIncentivesUrl:
+          agencyId && locationId && locationId.includes('-')
+            ? `${config.apis.incentives.ui_url}/incentive-summary/${agencyId}-${locationId.split('-')[0]}`
+            : config.apis.incentives.ui_url,
+        iepSummary,
+        nextReviewDate: nextReviewDate.format('D MMMM YYYY'),
+      })
+    } catch (error) {
+      res.locals.redirectUrl = `/prisoner/${offenderNo}/incentive-level-details`
+      throw error
+    }
+  }
+
   const index = async (req, res) => renderTemplate(req, res, undefined)
 
   const post = async (req, res) => {
@@ -76,7 +110,7 @@ export default ({ prisonApi, incentivesApi }) => {
         'Incentive level change'
       )
 
-      return res.redirect(`/prisoner/${offenderNo}/incentive-level-details`)
+      return renderConfirmation(req, res)
     } catch (error) {
       res.locals.redirectUrl = `/prisoner/${offenderNo}`
       throw error

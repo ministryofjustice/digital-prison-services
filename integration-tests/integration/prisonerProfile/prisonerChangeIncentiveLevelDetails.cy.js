@@ -48,7 +48,6 @@ context('Prisoner change incentive level details', () => {
         ],
       })
       cy.task('stubGetAgencyIepLevels', [
-        { iepLevel: 'ENT', iepDescription: 'Entry' },
         { iepLevel: 'BAS', iepDescription: 'Basic' },
         { iepLevel: 'STD', iepDescription: 'Standard' },
         { iepLevel: 'ENH', iepDescription: 'Enhanced' },
@@ -63,7 +62,7 @@ context('Prisoner change incentive level details', () => {
       cy.get('[data-test="current-incentive-level"]').should('contain', 'Standard')
     })
 
-    it('should submit the form and redirect', () => {
+    it('should submit the form and show confirmation', () => {
       cy.visit(`/prisoner/${offenderNo}/incentive-level-details/change-incentive-level`)
 
       cy.get('[data-test="new-level"]')
@@ -73,7 +72,9 @@ context('Prisoner change incentive level details', () => {
         })
       cy.get('[data-test="change-reason"]').type('Test comment')
       cy.get('[data-test="submit-change').click()
-      cy.location('pathname').should('eq', '/prisoner/A1234A/incentive-level-details')
+
+      cy.get('[data-test="current-incentive-level"]').should('contain', 'Standard')
+      cy.get('[data-test="next-review-date"]').should('contain', '15 August 2018')
     })
 
     it('should display missing input form errors', () => {
