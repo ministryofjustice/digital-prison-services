@@ -3,6 +3,7 @@ import {
   chunkArray,
   compareNumbers,
   compareStrings,
+  daysSince,
   formatDaysInYears,
   formatLocation,
   formatMonthsAndDays,
@@ -261,6 +262,35 @@ describe('isTodayOrAfter()', () => {
   it('returns true if date is within the next week', () => {
     expect(isTodayOrAfter('19/01/2019')).toBe(true)
   })
+})
+
+describe('daysSince()', () => {
+  beforeAll(() => {
+    jest.spyOn(Date, 'now').mockImplementation(() => 1664192096000) // 2022-09-26T12:34:56.000+01:00
+  })
+
+  afterAll(() => {
+    const spy = jest.spyOn(Date, 'now')
+    spy.mockRestore()
+  })
+
+  it.each(['2022-09-25', '2022-09-25T17:00:00Z', '2022-09-25T23:59:59+01:00'])(
+    'returns 1 when date is yesterday',
+    (date) => expect(daysSince(date)).toEqual<number>(1)
+  )
+
+  it.each([
+    ['2022-09-24', 2],
+    ['2021-09-26', 365],
+  ])('returns days elapsed since date', (date, expected) => expect(daysSince(date)).toEqual<number>(expected))
+
+  it.each(['2022-09-26', '2022-09-26T00:00:00Z', '2022-09-26T23:59:59+01:00'])('returns 0 when date is today', (date) =>
+    expect(daysSince(date)).toEqual<number>(0)
+  )
+
+  it.each(['2022-09-27', '2023-09-26', '2022-09-27T00:00:00Z'])('returns 0 for dates in future', (date) =>
+    expect(daysSince(date)).toEqual<number>(0)
+  )
 })
 
 describe('isViewableFlag', () => {
