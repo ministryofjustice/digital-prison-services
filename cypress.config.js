@@ -25,7 +25,7 @@ const offenderSearch = require('./integration-tests/mockApis/offenderSearch')
 const complexity = require('./integration-tests/mockApis/complexity')
 const curiousApi = require('./integration-tests/mockApis/curiousApi')
 
-const { resetStubs } = require('./integration-tests/mockApis/wiremock')
+const { stubScenario, resetStubs } = require('./integration-tests/mockApis/wiremock')
 
 const extractOffenderNumbers = (activityList) => {
   const result = Object.keys(activityList).reduce((r, k) => r.concat(activityList[k]), [])
@@ -50,6 +50,7 @@ module.exports = defineConfig({
     setupNodeEvents(on) {
       on('task', {
         ...prisonApi,
+        stubScenario,
         reset: resetStubs,
         resetAndStubTokenVerification: async () => {
           await resetStubs()

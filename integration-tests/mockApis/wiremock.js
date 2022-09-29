@@ -4,6 +4,23 @@ const url = 'http://localhost:9191/__admin'
 
 const stubFor = (mapping) => superagent.post(`${url}/mappings`).send(mapping)
 
+/** Makes stateful stubs */
+const stubScenario = ({ scenarioName, mappings }) => {
+  let previousState = 'Started'
+  const promises = Object.entries(mappings)
+    .map(([state, mapping]) => {
+      const promise = superagent.post(`${url}/mappings`).send({
+        ...mapping,
+        scenarioName,
+        requiredScenarioState: previousState,
+        newScenarioState: state
+      })
+      previousState = state
+      return promise
+    })
+  return Promise.all(promises)
+}
+
 const getRequests = () => superagent.get(`${url}/requests`)
 
 const getMatchingRequests = (body) => superagent.post(`${url}/requests/find`).send(body)
@@ -77,6 +94,7 @@ const postFor = ({ body, urlPattern, urlPath }) =>
 
 module.exports = {
   stubFor,
+  stubScenario,
   getRequests,
   getMatchingRequests,
   resetStubs,
