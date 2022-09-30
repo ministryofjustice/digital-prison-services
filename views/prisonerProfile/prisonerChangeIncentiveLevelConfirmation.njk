@@ -1,0 +1,77 @@
+{% extends "../partials/layout.njk" %}
+
+{% from "govuk/components/button/macro.njk" import govukButton %}
+{% from "govuk/components/panel/macro.njk" import govukPanel %}
+
+{% set title = 'Incentive level recorded' %}
+
+{% block beforeContent %}
+  {{ govukBreadcrumbs({
+    items: [
+      {
+        text: 'Digital Prison Services',
+        href: '/'
+      },
+      {
+        text: breadcrumbPrisonerName,
+        href: profileUrl
+      },
+      {
+        text: 'Incentive details',
+         href: profileUrl + '/incentive-level-details'
+      }
+    ],
+    classes: 'govuk-!-display-none-print'
+  }) }}
+{% endblock %}
+
+{% block content %}
+  <div class="govuk-grid-row">
+    <div class="govuk-grid-column-two-thirds">
+
+      {% set panelTitle %}
+        {{ prisonerName | possessive }} incentive level is set to
+        <br/>
+        <strong data-test="current-incentive-level">{{ iepSummary.iepLevel }}</strong>
+      {% endset %}
+
+      {% set panelBody %}
+        The next review should be no later than
+        <br/>
+        <strong data-test="next-review-date">{{ nextReviewDate }}</strong>
+      {% endset %}
+
+      {{ govukPanel({
+        titleHtml: panelTitle,
+        html: panelBody,
+        classes: 'change-incentive-level-confirmation'
+      }) }}
+
+      <h2 class="govuk-heading-m govuk-!-margin-top-6">
+        What happens next
+      </h2>
+      <p class="govuk-body">
+        The prisoner’s details and their next review date – according to incentives policy – have been updated.
+      </p>
+
+      <div class="govuk-!-margin-top-8">
+        {{ govukButton({
+          text: 'Return to manage incentive reviews',
+          element: 'a',
+          href: manageIncentivesUrl,
+          classes: 'govuk-!-margin-right-2',
+          attributes: { 'data-test': 'goto-manage-incentives' }
+        }) }}
+
+        {{ govukButton({
+          text: 'Return to prisoner profile page',
+          element: 'a',
+          href: profileUrl,
+          classes: 'govuk-button--secondary',
+          attributes: { 'data-test': 'goto-prisoner-quicklook' }
+        }) }}
+      </div>
+
+    </div>
+  </div>
+{% endblock %}

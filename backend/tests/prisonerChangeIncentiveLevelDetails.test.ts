@@ -1,4 +1,5 @@
 import type apis from '../apis'
+import config from '../config'
 import prisonerChangeIncentiveLevelDetails from '../controllers/prisonerProfile/prisonerChangeIncentiveLevelDetails'
 import { raiseAnalyticsEvent } from '../raiseAnalyticsEvent'
 
@@ -68,9 +69,13 @@ describe('Prisoner change incentive level details', () => {
     logError = jest.fn()
 
     // @ts-expect-error ts-migrate(2339) FIXME: Property 'getDetails' does not exist on type '{}'.
-    prisonApi.getDetails = jest
-      .fn()
-      .mockResolvedValue({ agencyId: 'MDI', bookingId, firstName: 'John', lastName: 'Smith' })
+    prisonApi.getDetails = jest.fn().mockResolvedValue({
+      agencyId: 'MDI',
+      bookingId,
+      firstName: 'John',
+      lastName: 'Smith',
+      assignedLivingUnit: { description: '1-2-003' },
+    })
     incentivesApi.getIepSummaryForBooking = jest.fn().mockReturnValue(iepSummaryForBooking)
     incentivesApi.getAgencyIepLevels = jest.fn().mockReturnValue(iepLevels)
     incentivesApi.changeIepLevel = jest.fn()
@@ -123,7 +128,7 @@ describe('Prisoner change incentive level details', () => {
       })
 
       it('should indicate current incentive level ', async () => {
-        incentivesApi.getIepSummaryForBooking = jest.fn().mockReturnValue({
+        incentivesApi.getIepSummaryForBooking.mockReturnValue({
           ...iepSummaryForBooking,
           iepLevel: 'Enhanced',
         })
@@ -172,10 +177,20 @@ describe('Prisoner change incentive level details', () => {
   describe('post', () => {
     describe('when there are no errors', () => {
       beforeEach(() => {
-        incentivesApi.changeIepLevel = jest.fn().mockReturnValue('All good')
+        config.apis.incentives.ui_url = 'http://incentives-url'
+        jest.spyOn(Date, 'now').mockImplementation(() => 1664192096000) // 2022-09-26T12:34:56.000+01:00
+        incentivesApi.changeIepLevel.mockReturnValue('All good')
       })
 
-      it('should submit the appointment with the correct details and redirect', async () => {
+      it('should submit the appointment with the correct details and show confirmation', async () => {
+        incentivesApi.getIepSummaryForBooking.mockReturnValue({
+          ...iepSummaryForBooking,
+          iepDate: '2022-09-26',
+          iepTime: '2022-09-26T12:34:56',
+          iepLevel: 'Enhanced',
+          daysSinceReview: 0,
+        })
+
         req.body = {
           agencyId: 'MDI',
           bookingId,
@@ -195,8 +210,54 @@ describe('Prisoner change incentive level details', () => {
           'Level changed from Standard to Enhanced at MDI',
           'Incentive level change'
         )
-        expect(res.redirect).toHaveBeenCalledWith(`/prisoner/${offenderNo}/incentive-level-details`)
+        expect(res.render).toHaveBeenCalledWith(
+          'prisonerProfile/prisonerChangeIncentiveLevelConfirmation.njk',
+          expect.objectContaining({
+            agencyId: 'MDI',
+            bookingId: '123',
+            breadcrumbPrisonerName: 'Smith, John',
+            iepSummary: expect.objectContaining({
+              iepLevel: 'Enhanced',
+            }),
+            nextReviewDate: '26 September 2023',
+            offenderNo: 'ABC123',
+            prisonerName: 'John Smith',
+            profileUrl: '/prisoner/ABC123',
+            manageIncentivesUrl: 'http://incentives-url/incentive-summary/MDI-1',
+          })
+        )
       })
+
+      it.each([undefined, 'MDI'])(
+        'should use a simpler link to manage incentives on confirmation when the location is not known',
+        async (locationId) => {
+          // @ts-expect-error ts-migrate(2339) FIXME: Property 'getDetails' does not exist on type '{}'.
+          prisonApi.getDetails = jest.fn().mockResolvedValue({
+            agencyId: 'MDI',
+            bookingId,
+            firstName: 'John',
+            lastName: 'Smith',
+            assignedLivingUnit: { description: locationId },
+          })
+
+          req.body = {
+            agencyId: 'MDI',
+            bookingId,
+            iepLevel: 'Standard',
+            newIepLevel: 'Enhanced',
+            reason: 'A reason why it has changed',
+          }
+
+          await controller.post(req, res)
+
+          expect(res.render).toHaveBeenCalledWith(
+            'prisonerProfile/prisonerChangeIncentiveLevelConfirmation.njk',
+            expect.objectContaining({
+              manageIncentivesUrl: 'http://incentives-url',
+            })
+          )
+        }
+      )
     })
 
     describe('when there are form errors', () => {

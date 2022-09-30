@@ -2,11 +2,28 @@ const superagent = require('superagent')
 
 const url = 'http://localhost:9191/__admin'
 
-const stubFor = mapping => superagent.post(`${url}/mappings`).send(mapping)
+const stubFor = (mapping) => superagent.post(`${url}/mappings`).send(mapping)
+
+/** Makes stateful stubs */
+const stubScenario = ({ scenarioName, mappings }) => {
+  let previousState = 'Started'
+  const promises = Object.entries(mappings)
+    .map(([state, mapping]) => {
+      const promise = superagent.post(`${url}/mappings`).send({
+        ...mapping,
+        scenarioName,
+        requiredScenarioState: previousState,
+        newScenarioState: state
+      })
+      previousState = state
+      return promise
+    })
+  return Promise.all(promises)
+}
 
 const getRequests = () => superagent.get(`${url}/requests`)
 
-const getMatchingRequests = body => superagent.post(`${url}/requests/find`).send(body)
+const getMatchingRequests = (body) => superagent.post(`${url}/requests/find`).send(body)
 
 const resetStubs = () => Promise.all([superagent.delete(`${url}/mappings`), superagent.delete(`${url}/requests`)])
 
@@ -31,13 +48,13 @@ const verifyPosts = (requestUrl, body) => {
   })
 }
 
-const verifyPut = requestUrl =>
+const verifyPut = (requestUrl) =>
   superagent.post(`${url}/requests/count`).send({
     method: 'PUT',
     url: requestUrl,
   })
 
-const verifyGet = requestUrl =>
+const verifyGet = (requestUrl) =>
   superagent.post(`${url}/requests/count`).send({
     method: 'GET',
     url: requestUrl,
@@ -77,6 +94,7 @@ const postFor = ({ body, urlPattern, urlPath }) =>
 
 module.exports = {
   stubFor,
+  stubScenario,
   getRequests,
   getMatchingRequests,
   resetStubs,
