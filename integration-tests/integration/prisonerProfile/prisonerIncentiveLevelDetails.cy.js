@@ -1,3 +1,4 @@
+import moment from 'moment'
 const offenderBasicDetails = require('../../mockApis/responses/offenderBasicDetails.json')
 
 const title = 'Incentive level details for John Smith'
@@ -96,6 +97,45 @@ context('Prisoner incentive level details', () => {
         .then((href) => {
           expect(href).to.equal('/prisoner/A1234A/incentive-level-details/change-incentive-level')
         })
+    })
+
+    context('Next review date', () => {
+      // TODO: nextReviewDate will come from incentives api:
+      //  currently it's calculated to be a year after the last review
+
+      it('should show when next review date is', () => {
+        // pretend the last review was 10 days ago
+        const lastReviewDate = moment().subtract(10, 'days')
+        const nextReviewDate = lastReviewDate.clone().add(1, 'year')
+
+        cy.task('stubGetIepSummaryForBooking', {
+          ...iepSummaryResponse,
+          iepDate: lastReviewDate.format('YYYY-MM-DD'),
+          iepTime: lastReviewDate.format('YYYY-MM-DDTHH:mm:ss'),
+        })
+
+        cy.visit(`/prisoner/${offenderNo}/incentive-level-details`)
+
+        cy.get('[data-test="next-review-date"]').should('contain', nextReviewDate.format('D MMMM YYYY'))
+        cy.get('[data-test="next-review-overdue"]').should('not.exist')
+      })
+
+      it('should also show if next review is overdue', () => {
+        // pretend the last review was 400 days ago
+        const lastReviewDate = moment().subtract(400, 'days')
+        const nextReviewDate = lastReviewDate.clone().add(1, 'year')
+
+        cy.task('stubGetIepSummaryForBooking', {
+          ...iepSummaryResponse,
+          iepDate: lastReviewDate.format('YYYY-MM-DD'),
+          iepTime: lastReviewDate.format('YYYY-MM-DDTHH:mm:ss'),
+        })
+
+        cy.visit(`/prisoner/${offenderNo}/incentive-level-details`)
+
+        cy.get('[data-test="next-review-date"]').should('contain', nextReviewDate.format('D MMMM YYYY'))
+        cy.get('[data-test="next-review-overdue"]').should('contain', '35 days overdue')
+      })
     })
 
     it('should show correct history', () => {

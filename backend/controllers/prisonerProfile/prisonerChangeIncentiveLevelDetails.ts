@@ -17,7 +17,7 @@ export default ({ prisonApi, incentivesApi }) => {
 
       const { iepLevel } = iepSummary
       const selectableLevels = iepLevels.map((level) => ({
-        text: level.iepDescription,
+        text: iepLevel === level.iepDescription ? `${level.iepDescription} (current level)` : level.iepDescription,
         value: level.iepLevel,
         checked: level.iepLevel === formValues.newIepLevel,
       }))
@@ -40,8 +40,7 @@ export default ({ prisonApi, incentivesApi }) => {
     }
   }
 
-  // @ts-expect-error ts-migrate(2554) FIXME: Expected 3 arguments, but got 2.
-  const index = async (req, res) => renderTemplate(req, res)
+  const index = async (req, res) => renderTemplate(req, res, undefined)
 
   const post = async (req, res) => {
     const { offenderNo } = req.params
@@ -50,15 +49,15 @@ export default ({ prisonApi, incentivesApi }) => {
     const { agencyId, bookingId, iepLevel, newIepLevel, reason } = req.body || {}
 
     if (!newIepLevel) {
-      errors.push({ text: 'Select an incentive level', href: '#newIepLevel' })
+      errors.push({ text: 'Select an incentive level, even if it is the same as before', href: '#newIepLevel' })
     }
 
     if (!reason) {
-      errors.push({ text: 'Enter a reason for your selected incentive label', href: '#reason' })
+      errors.push({ text: 'Enter a reason for recording', href: '#reason' })
     }
 
     if (reason && reason.length > 240) {
-      errors.push({ text: 'The reason must be 240 characters or less', href: '#reason' })
+      errors.push({ text: 'Comments must be 240 characters or less', href: '#reason' })
     }
 
     if (errors.length > 0) {
@@ -74,7 +73,7 @@ export default ({ prisonApi, incentivesApi }) => {
       raiseAnalyticsEvent(
         'Update Incentive level',
         `Level changed from ${iepLevel} to ${newIepLevel} at ${agencyId}`,
-        `Incentive level change`
+        'Incentive level change'
       )
 
       return res.redirect(`/prisoner/${offenderNo}/incentive-level-details`)

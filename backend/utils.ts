@@ -150,6 +150,10 @@ export const isTodayOrAfter = (date: moment.MomentInput): boolean => {
   return searchDate.isSameOrAfter(moment(), 'day')
 }
 
+/** Number of days elapsed, ignoring time of day, since `date`; 0 for today or any time in future */
+export const daysSince = (date: moment.MomentInput): number =>
+  Math.max(Math.floor(moment.duration(moment().startOf('day').diff(moment(date).startOf('day'))).asDays()), 0)
+
 export const getCurrentPeriod = (date: moment.MomentInput): string => {
   const afternoonSplit = 12
   const eveningSplit = 17
@@ -342,6 +346,7 @@ export default {
   isBeforeToday,
   isToday,
   isTodayOrAfter,
+  daysSince,
   switchDateFormat,
   formatTimestampToDate,
   formatTimestampToDateTime,

@@ -1,9 +1,10 @@
+import type apis from '../apis'
 import { movementsServiceFactory } from '../services/movementsService'
 
 describe('Movement service', () => {
   const prisonApi = {}
   const oauthClient = {}
-  const incentivesApi = {}
+  const incentivesApi = {} as jest.Mocked<typeof apis.incentivesApi>
   const context = {}
   const agency = 'LEI'
   const offenders = [
@@ -121,7 +122,6 @@ describe('Movement service', () => {
       prisonApi.getAlertsSystem = jest.fn()
       // @ts-expect-error ts-migrate(2339) FIXME: Property 'getAssessments' does not exist on type '... Remove this comment to see the full error message
       prisonApi.getAssessments = jest.fn()
-      // @ts-expect-error ts-migrate(2339) FIXME: Property 'getIepSummary' does not exist on type '{... Remove this comment to see the full error message
       incentivesApi.getIepSummaryForBookingIds = jest.fn()
 
       // @ts-expect-error ts-migrate(2339) FIXME: Property 'getClientCredentialsTokens' does not exi... Remove this comment to see the full error message
@@ -195,7 +195,6 @@ describe('Movement service', () => {
         { offenderNo: 'G0000GG', bookingId: 1 },
         { offenderNo: 'G0001GG', bookingId: 2 },
       ])
-      // @ts-expect-error ts-migrate(2339) FIXME: Property 'getIepSummary' does not exist on type '{... Remove this comment to see the full error message
       incentivesApi.getIepSummaryForBookingIds.mockReturnValue([
         { bookingId: 1, iepLevel: 'basic' },
         { bookingId: 2, iepLevel: 'standard' },
@@ -233,12 +232,10 @@ describe('Movement service', () => {
       prisonApi.getOffendersInReception = jest.fn()
       // @ts-expect-error ts-migrate(2339) FIXME: Property 'getClientCredentialsTokens' does not exi... Remove this comment to see the full error message
       oauthClient.getClientCredentialsTokens = jest.fn()
-      // @ts-expect-error ts-migrate(2339) FIXME: Property 'getIepSummary' does not exist on type '{... Remove this comment to see the full error message
       incentivesApi.getIepSummaryForBookingIds = jest.fn()
 
       // @ts-expect-error ts-migrate(2339) FIXME: Property 'getRecentMovements' does not exist on ty... Remove this comment to see the full error message
       prisonApi.getRecentMovements.mockReturnValue([])
-      // @ts-expect-error ts-migrate(2339) FIXME: Property 'getIepSummary' does not exist on type '{... Remove this comment to see the full error message
       incentivesApi.getIepSummaryForBookingIds.mockReturnValue([])
     })
 
@@ -338,7 +335,6 @@ describe('Movement service', () => {
     it('should request iep summary information for offenders in reception', async () => {
       // @ts-expect-error ts-migrate(2339) FIXME: Property 'getOffendersInReception' does not exist ... Remove this comment to see the full error message
       prisonApi.getOffendersInReception.mockReturnValue(offenders)
-      // @ts-expect-error ts-migrate(2339) FIXME: Property 'getIepSummary' does not exist on type '{... Remove this comment to see the full error message
       incentivesApi.getIepSummaryForBookingIds.mockReturnValue([
         { ...offenders[0], iepLevel: 'basic' },
         { ...offenders[1], iepLevel: 'standard' },
@@ -362,7 +358,6 @@ describe('Movement service', () => {
       expect(prisonApi.getAlertsSystem.mock.calls.length).toBe(0)
       // @ts-expect-error ts-migrate(2339) FIXME: Property 'getRecentMovements' does not exist on ty... Remove this comment to see the full error message
       expect(prisonApi.getRecentMovements.mock.calls.length).toBe(0)
-      // @ts-expect-error ts-migrate(2339) FIXME: Property 'getIepSummary' does not exist on type '{... Remove this comment to see the full error message
       expect(incentivesApi.getIepSummaryForBookingIds.mock.calls.length).toBe(0)
       // @ts-expect-error ts-migrate(2339) FIXME: Property 'getAssessments' does not exist on type '... Remove this comment to see the full error message
       expect(prisonApi.getAssessments.mock.calls.length).toBe(0)
@@ -560,7 +555,6 @@ describe('Movement service', () => {
           { offenderNo: 'G0000GG', bookingId: 1 },
           { offenderNo: 'G0001GG', bookingId: 2 },
         ])
-        // @ts-expect-error ts-migrate(2339) FIXME: Property 'getIepSummary' does not exist on type '{... Remove this comment to see the full error message
         incentivesApi.getIepSummaryForBookingIds.mockReturnValue([
           { bookingId: 1, iepLevel: 'basic' },
           { bookingId: 2, iepLevel: 'standard' },
@@ -760,7 +754,6 @@ describe('Movement service', () => {
           { offenderNo: 'G0000GG', bookingId: 1 },
           { offenderNo: 'G0001GG', bookingId: 2 },
         ])
-        // @ts-expect-error ts-migrate(2339) FIXME: Property 'getIepSummary' does not exist on type '{... Remove this comment to see the full error message
         incentivesApi.getIepSummaryForBookingIds.mockReturnValue([
           { bookingId: 1, iepLevel: 'basic' },
           { bookingId: 2, iepLevel: 'standard' },

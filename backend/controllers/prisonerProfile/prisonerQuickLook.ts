@@ -1,5 +1,5 @@
 import moment from 'moment'
-import { capitalizeUppercaseString, formatCurrency } from '../../utils'
+import { daysSince, formatCurrency } from '../../utils'
 import formatAward from '../../shared/formatAward'
 import filterActivitiesByPeriod from '../../shared/filterActivitiesByPeriod'
 import getValueByType from '../../shared/getValueByType'
@@ -45,6 +45,21 @@ const createFinanceLink = (offenderNo, path, value) =>
     // @ts-expect-error ts-migrate(2554) FIXME: Expected 2 arguments, but got 1.
     formatCurrency(value || 0)
   }</a>`
+
+const getNextIepReviewDate = (iepSummary: { iepTime?: string }): string | undefined => {
+  const lastReviewDate = iepSummary?.iepTime
+  if (!lastReviewDate) return undefined
+  // TODO: nextReviewDate will come from incentivesApi in future
+  const nextReviewDate = moment(lastReviewDate, 'YYYY-MM-DD HH:mm').add(1, 'years')
+  const reviewDaysOverdue = daysSince(nextReviewDate)
+  let nextIepReviewDate = nextReviewDate.format('D MMMM YYYY')
+  if (reviewDaysOverdue > 0) {
+    nextIepReviewDate += `<br/><span class="highlight highlight--alert">${reviewDaysOverdue} ${
+      reviewDaysOverdue === 1 ? 'day' : 'days'
+    } overdue</span>`
+  }
+  return nextIepReviewDate
+}
 
 export default ({
     prisonerProfileService,
@@ -141,8 +156,6 @@ export default ({
     const { profileInformation } = prisonerProfileData || {}
     const { morningActivities, afternoonActivities, eveningActivities } = filterActivitiesByPeriod(todaysEvents)
     const unableToShowDetailMessage = 'Unable to show this detail'
-
-    const daysSinceReview = (iepSummary && iepSummary.daysSinceReview) || 0
 
     trackEvent(telemetry, username, activeCaseLoad)
 
@@ -256,11 +269,11 @@ export default ({
               : (positiveCaseNotes && positiveCaseNotes.count) || 0,
           },
           {
-            label: 'Last incentive level review',
+            label: 'Date of next review',
             // @ts-expect-error ts-migrate(2339) FIXME: Property 'error' does not exist on type 'unknown'.
-            value: iepSummaryResponse.error
+            html: iepSummaryResponse.error
               ? unableToShowDetailMessage
-              : `${daysSinceReview} ${daysSinceReview === 1 ? 'day' : 'days'} ago`,
+              : getNextIepReviewDate(iepSummary) ?? unableToShowDetailMessage,
           },
         ],
       },

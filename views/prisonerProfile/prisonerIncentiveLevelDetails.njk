@@ -42,20 +42,32 @@
     <div class="horizontal-information govuk-!-margin-bottom-3">
         <div class="horizontal-information__item">
             <h3 class="govuk-heading-s govuk-!-margin-bottom-1">Current incentive level</h3>
-            <p class="govuk-body" data-test="incident-time">{{ currentIepLevel }}</p>
+            <p class="govuk-body" data-test="current-iep">{{ currentIepLevel }}</p>
         </div>
         <div class="horizontal-information__item">
-            <h3 class="govuk-heading-s govuk-!-margin-bottom-1">Time since review</h3>
-            <p class="govuk-body" data-test="incident-location">{{ daysOnIepLevel }}</p>
+            <h3 class="govuk-heading-s govuk-!-margin-bottom-1">Date of last review</h3>
+            <p class="govuk-body" data-test="last-review-date">{{ currentIepDate }}</p>
         </div>
         <div class="horizontal-information__item">
             <h3 class="govuk-heading-s govuk-!-margin-bottom-1">Date of next review</h3>
-            <p class="govuk-body" data-test="incident-reported-by">{{ nextReviewDate }}</p>
+            <p class="govuk-body" data-test="next-review-date">
+                {{ nextReviewDate }}
+                {% if reviewDaysOverdue > 0 %}
+                    <br/>
+                    <span class="highlight highlight--alert" data-test="next-review-overdue">
+                        {{ reviewDaysOverdue }} {% if reviewDaysOverdue == 1 -%}
+                            day
+                        {%- else -%}
+                            days
+                        {%- endif %} overdue
+                    </span>
+                {% endif %}
+            </p>
         </div>
         {% if userCanUpdateIEP %}
             <div class="horizontal-information__item">
                 {{ govukButton({
-                    text: "Select incentive level",
+                    text: "Record incentive level",
                     element: "a",
                     classes: "govuk-button--link",
                     href: "/prisoner/" + offenderNo + "/incentive-level-details/change-incentive-level",
@@ -149,7 +161,7 @@
                     text: "Incentive level"
                 },
                 {
-                    text: "Reason for change"
+                    text: "Reason for recording"
                 },
                 {
                     text: "Establishment"

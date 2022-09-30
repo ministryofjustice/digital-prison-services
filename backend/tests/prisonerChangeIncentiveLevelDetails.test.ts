@@ -1,3 +1,4 @@
+import type apis from '../apis'
 import prisonerChangeIncentiveLevelDetails from '../controllers/prisonerProfile/prisonerChangeIncentiveLevelDetails'
 import { raiseAnalyticsEvent } from '../raiseAnalyticsEvent'
 
@@ -9,7 +10,47 @@ describe('Prisoner change incentive level details', () => {
   const offenderNo = 'ABC123'
   const bookingId = '123'
   const prisonApi = {}
-  const incentivesApi = {}
+  const incentivesApi = {} as jest.Mocked<typeof apis.incentivesApi>
+
+  const iepSummaryForBooking = {
+    bookingId: -1,
+    iepDate: '2017-08-15',
+    iepTime: '2017-08-15T16:04:35',
+    iepLevel: 'Standard',
+    daysSinceReview: 625,
+    iepDetails: [
+      {
+        bookingId: -1,
+        iepDate: '2017-08-15',
+        iepTime: '2017-08-15T16:04:35',
+        agencyId: 'LEI',
+        iepLevel: 'Standard',
+        userId: 'ITAG_USER',
+      },
+      {
+        bookingId: -1,
+        iepDate: '2017-08-10',
+        iepTime: '2017-08-10T16:04:35',
+        agencyId: 'HEI',
+        iepLevel: 'Basic',
+        userId: 'ITAG_USER',
+      },
+      {
+        bookingId: -1,
+        iepDate: '2017-08-07',
+        iepTime: '2017-08-07T16:04:35',
+        agencyId: 'HEI',
+        iepLevel: 'Enhanced',
+        userId: 'ITAG_USER',
+      },
+    ],
+  }
+  const iepLevels = [
+    { iepLevel: 'ENT', iepDescription: 'Entry' },
+    { iepLevel: 'BAS', iepDescription: 'Basic' },
+    { iepLevel: 'STD', iepDescription: 'Standard' },
+    { iepLevel: 'ENH', iepDescription: 'Enhanced' },
+  ]
 
   let req
   let res
@@ -30,48 +71,8 @@ describe('Prisoner change incentive level details', () => {
     prisonApi.getDetails = jest
       .fn()
       .mockResolvedValue({ agencyId: 'MDI', bookingId, firstName: 'John', lastName: 'Smith' })
-    // @ts-expect-error ts-migrate(2339) FIXME: Property 'getIepSummaryForBooking' does not exist ... Remove this comment to see the full error message
-    incentivesApi.getIepSummaryForBooking = jest.fn().mockReturnValue({
-      bookingId: -1,
-      iepDate: '2017-08-15',
-      iepTime: '2017-08-15T16:04:35',
-      iepLevel: 'Standard',
-      daysSinceReview: 625,
-      iepDetails: [
-        {
-          bookingId: -1,
-          iepDate: '2017-08-15',
-          iepTime: '2017-08-15T16:04:35',
-          agencyId: 'LEI',
-          iepLevel: 'Standard',
-          userId: 'ITAG_USER',
-        },
-        {
-          bookingId: -1,
-          iepDate: '2017-08-10',
-          iepTime: '2017-08-10T16:04:35',
-          agencyId: 'HEI',
-          iepLevel: 'Basic',
-          userId: 'ITAG_USER',
-        },
-        {
-          bookingId: -1,
-          iepDate: '2017-08-07',
-          iepTime: '2017-08-07T16:04:35',
-          agencyId: 'HEI',
-          iepLevel: 'Enhanced',
-          userId: 'ITAG_USER',
-        },
-      ],
-    })
-    // @ts-expect-error ts-migrate(2339) FIXME: Property 'getAgencyIepLevels' does not exist on ty... Remove this comment to see the full error message
-    incentivesApi.getAgencyIepLevels = jest.fn().mockReturnValue([
-      { iepLevel: 'ENT', iepDescription: 'Entry' },
-      { iepLevel: 'BAS', iepDescription: 'Basic' },
-      { iepLevel: 'STD', iepDescription: 'Standard' },
-      { iepLevel: 'ENH', iepDescription: 'Enhanced' },
-    ])
-    // @ts-expect-error ts-migrate(2339) FIXME: Property 'changeIepLevel' does not exist on type '... Remove this comment to see the full error message
+    incentivesApi.getIepSummaryForBooking = jest.fn().mockReturnValue(iepSummaryForBooking)
+    incentivesApi.getAgencyIepLevels = jest.fn().mockReturnValue(iepLevels)
     incentivesApi.changeIepLevel = jest.fn()
 
     // @ts-expect-error ts-migrate(2345) FIXME: Argument of type '{ prisonApi: {}; logError: any; ... Remove this comment to see the full error message
@@ -85,9 +86,7 @@ describe('Prisoner change incentive level details', () => {
 
         // @ts-expect-error ts-migrate(2339) FIXME: Property 'getDetails' does not exist on type '{}'.
         expect(prisonApi.getDetails).toHaveBeenCalledWith(res.locals, offenderNo)
-        // @ts-expect-error ts-migrate(2339) FIXME: Property 'getIepSummaryForBooking' does not exist ... Remove this comment to see the full error message
         expect(incentivesApi.getIepSummaryForBooking).toHaveBeenCalledWith(res.locals, bookingId, true)
-        // @ts-expect-error ts-migrate(2339) FIXME: Property 'getAgencyIepLevels' does not exist on ty... Remove this comment to see the full error message
         expect(incentivesApi.getAgencyIepLevels).toHaveBeenCalledWith(res.locals, 'MDI')
         expect(res.render).toHaveBeenCalledWith('prisonerProfile/prisonerChangeIncentiveLevelDetails.njk', {
           agencyId: 'MDI',
@@ -111,7 +110,7 @@ describe('Prisoner change incentive level details', () => {
             },
             {
               checked: false,
-              text: 'Standard',
+              text: 'Standard (current level)',
               value: 'STD',
             },
             {
@@ -121,6 +120,38 @@ describe('Prisoner change incentive level details', () => {
             },
           ],
         })
+      })
+
+      it('should indicate current incentive level ', async () => {
+        incentivesApi.getIepSummaryForBooking = jest.fn().mockReturnValue({
+          ...iepSummaryForBooking,
+          iepLevel: 'Enhanced',
+        })
+
+        await controller.index(req, res)
+        const context = res.render.mock.calls.at(-1)[1]
+        expect(context).toHaveProperty('selectableLevels', [
+          {
+            checked: false,
+            text: 'Entry',
+            value: 'ENT',
+          },
+          {
+            checked: false,
+            text: 'Basic',
+            value: 'BAS',
+          },
+          {
+            checked: false,
+            text: 'Standard',
+            value: 'STD',
+          },
+          {
+            checked: false,
+            text: 'Enhanced (current level)',
+            value: 'ENH',
+          },
+        ])
       })
     })
 
@@ -141,7 +172,6 @@ describe('Prisoner change incentive level details', () => {
   describe('post', () => {
     describe('when there are no errors', () => {
       beforeEach(() => {
-        // @ts-expect-error ts-migrate(2339) FIXME: Property 'changeIepLevel' does not exist on type '... Remove this comment to see the full error message
         incentivesApi.changeIepLevel = jest.fn().mockReturnValue('All good')
       })
 
@@ -156,7 +186,6 @@ describe('Prisoner change incentive level details', () => {
 
         await controller.post(req, res)
 
-        // @ts-expect-error ts-migrate(2339) FIXME: Property 'changeIepLevel' does not exist on type '... Remove this comment to see the full error message
         expect(incentivesApi.changeIepLevel).toHaveBeenCalledWith(res.locals, bookingId, {
           iepLevel: 'Enhanced',
           comment: 'A reason why it has changed',
@@ -176,7 +205,6 @@ describe('Prisoner change incentive level details', () => {
 
         await controller.post(req, res)
 
-        // @ts-expect-error ts-migrate(2339) FIXME: Property 'changeIepLevel' does not exist on type '... Remove this comment to see the full error message
         expect(incentivesApi.changeIepLevel).not.toHaveBeenCalled()
         expect(res.render).toHaveBeenCalledWith('prisonerProfile/prisonerChangeIncentiveLevelDetails.njk', {
           agencyId: 'MDI',
@@ -185,11 +213,11 @@ describe('Prisoner change incentive level details', () => {
           errors: [
             {
               href: '#newIepLevel',
-              text: 'Select an incentive level',
+              text: 'Select an incentive level, even if it is the same as before',
             },
             {
               href: '#reason',
-              text: 'Enter a reason for your selected incentive label',
+              text: 'Enter a reason for recording',
             },
           ],
           formValues: {},
@@ -210,7 +238,7 @@ describe('Prisoner change incentive level details', () => {
             },
             {
               checked: false,
-              text: 'Standard',
+              text: 'Standard (current level)',
               value: 'STD',
             },
             {
@@ -233,7 +261,7 @@ describe('Prisoner change incentive level details', () => {
             errors: [
               {
                 href: '#newIepLevel',
-                text: 'Select an incentive level',
+                text: 'Select an incentive level, even if it is the same as before',
               },
             ],
             formValues: { reason: 'A reason why it has changed' },
@@ -247,7 +275,6 @@ describe('Prisoner change incentive level details', () => {
         req.body = { newIepLevel: 'Enhanced', reason: 'A reason why it has changed', bookingId }
         const error = new Error('Network error')
 
-        // @ts-expect-error ts-migrate(2339) FIXME: Property 'changeIepLevel' does not exist on type '... Remove this comment to see the full error message
         incentivesApi.changeIepLevel.mockRejectedValue(error)
 
         await expect(controller.post(req, res)).rejects.toThrowError(error)

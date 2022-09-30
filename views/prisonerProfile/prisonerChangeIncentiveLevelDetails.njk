@@ -5,7 +5,7 @@
 {% from "govuk/components/button/macro.njk" import govukButton %}
 {% from "govuk/components/error-summary/macro.njk" import govukErrorSummary %}
 
-{% set title = "Select incentive level" %}
+{% set title = "Record incentive level" %}
 
 {% block beforeContent %}
   {{ govukBreadcrumbs({
@@ -36,11 +36,11 @@
     }) }}
   {% endif %}
 
-  <h1 class="govuk-heading-l">Select {{ prisonerName | possessive }} incentive level</h1>
+  <h1 class="govuk-heading-l">Record {{ prisonerName | possessive }} incentive level</h1>
 
   <p class="govuk-body" data-test="current-incentive-level">
-    <span class="govuk-!-font-weight-bold govuk-!-display-block">Current incentive level</span>
-    {{iepLevel}}
+    <span class="govuk-heading-m govuk-!-margin-bottom-3">Current incentive level</span>
+    {{ iepLevel }}
   </p>
 
   <form method="POST" novalidate="novalidate">
@@ -55,9 +55,12 @@
       errorMessage: errors | findError('newIepLevel'),
       fieldset: {
         legend: {
-          text: "Select an incentive level",
-          classes: "govuk-fieldset__legend--s"
+          text: "Record an incentive level",
+          classes: "govuk-fieldset__legend--m"
         }
+      },
+      hint: {
+        text: "This could be a change in level, or keeping the prisoner at the same level"
       },
       items: selectableLevels,
       attributes: { "data-test": "new-level" }
@@ -70,7 +73,13 @@
       errorMessage: errors | findError('reason'),
       classes: 'govuk-!-width-one-half',
       maxlength: 240,
-      label: { text: "Reason" },
+      label: {
+        text: "Reason for recording",
+        classes: "govuk-label--m"
+      },
+      hint: {
+        text: "Add any details you’d like to support your decision"
+      },
       attributes: { "data-test": "change-reason" }
     }) }}
 
