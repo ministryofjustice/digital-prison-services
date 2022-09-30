@@ -1,4 +1,5 @@
 import type apis from '../apis'
+import config from '../config'
 import prisonerChangeIncentiveLevelDetails from '../controllers/prisonerProfile/prisonerChangeIncentiveLevelDetails'
 import { raiseAnalyticsEvent } from '../raiseAnalyticsEvent'
 
@@ -176,6 +177,7 @@ describe('Prisoner change incentive level details', () => {
   describe('post', () => {
     describe('when there are no errors', () => {
       beforeEach(() => {
+        config.apis.incentives.ui_url = 'http://incentives-url'
         jest.spyOn(Date, 'now').mockImplementation(() => 1664192096000) // 2022-09-26T12:34:56.000+01:00
         incentivesApi.changeIepLevel.mockReturnValue('All good')
       })
@@ -221,10 +223,41 @@ describe('Prisoner change incentive level details', () => {
             offenderNo: 'ABC123',
             prisonerName: 'John Smith',
             profileUrl: '/prisoner/ABC123',
-            manageIncentivesUrl: expect.stringMatching(/\/incentive-summary\/MDI-1$/),
+            manageIncentivesUrl: 'http://incentives-url/incentive-summary/MDI-1',
           })
         )
       })
+
+      it.each([undefined, 'MDI'])(
+        'should use a simpler link to manage incentives on confirmation when the location is not known',
+        async (locationId) => {
+          // @ts-expect-error ts-migrate(2339) FIXME: Property 'getDetails' does not exist on type '{}'.
+          prisonApi.getDetails = jest.fn().mockResolvedValue({
+            agencyId: 'MDI',
+            bookingId,
+            firstName: 'John',
+            lastName: 'Smith',
+            assignedLivingUnit: { description: locationId },
+          })
+
+          req.body = {
+            agencyId: 'MDI',
+            bookingId,
+            iepLevel: 'Standard',
+            newIepLevel: 'Enhanced',
+            reason: 'A reason why it has changed',
+          }
+
+          await controller.post(req, res)
+
+          expect(res.render).toHaveBeenCalledWith(
+            'prisonerProfile/prisonerChangeIncentiveLevelConfirmation.njk',
+            expect.objectContaining({
+              manageIncentivesUrl: 'http://incentives-url',
+            })
+          )
+        }
+      )
     })
 
     describe('when there are form errors', () => {
