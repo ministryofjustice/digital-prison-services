@@ -4,7 +4,9 @@ generic-service:
   replicaCount: 2
 
   ingress:
-   host: digital-dev.prison.service.justice.gov.uk
+   host: digital-dev.prison.service.justice.gov.uk 
+
+  allowlist: false 
 
   env:
    PRISON_STAFF_HUB_UI_URL: digital-dev.prison.service.justice.gov.uk
