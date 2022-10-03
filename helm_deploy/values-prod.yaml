@@ -7,8 +7,8 @@ generic-service:
     host: digital.prison.service.justice.gov.uk
 
   env:
-   PRISON_STAFF_HUB_UI_URL: digital.prison.service.justice.gov.uk
-   HMPPS_COOKIE_DOMAIN: digital.prison.service.justice.gov.uk
+   PRISON_STAFF_HUB_UI_URL: https://digital.prison.service.justice.gov.uk
+   HMPPS_COOKIE_DOMAIN: https://digital.prison.service.justice.gov.uk
    API_ENDPOINT_URL: https://api.prison.service.justice.gov.uk/
    OAUTH_ENDPOINT_URL: https://sign-in.hmpps.service.justice.gov.uk/auth/
    API_WHEREABOUTS_ENDPOINT_URL: https://whereabouts-api.service.justice.gov.uk/

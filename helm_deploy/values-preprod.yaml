@@ -7,8 +7,8 @@ generic-service:
     host: digital-preprod.prison.service.justice.gov.uk
 
   env:
-   PRISON_STAFF_HUB_UI_URL: digital-preprod.prison.service.justice.gov.uk
-   HMPPS_COOKIE_DOMAIN: digital-preprod.prison.service.justice.gov.uk
+   PRISON_STAFF_HUB_UI_URL: https://digital-preprod.prison.service.justice.gov.uk
+   HMPPS_COOKIE_DOMAIN: https://digital-preprod.prison.service.justice.gov.uk
    API_ENDPOINT_URL: https://api-preprod.prison.service.justice.gov.uk/
    OAUTH_ENDPOINT_URL: https://sign-in-preprod.hmpps.service.justice.gov.uk/auth/
    API_WHEREABOUTS_ENDPOINT_URL: https://whereabouts-api-preprod.service.justice.gov.uk/
