@@ -9,8 +9,8 @@ generic-service:
   allowlist: false 
 
   env:
-   PRISON_STAFF_HUB_UI_URL: https://digital-dev.prison.service.justice.gov.uk
-   HMPPS_COOKIE_DOMAIN: https://digital-dev.prison.service.justice.gov.uk
+   PRISON_STAFF_HUB_UI_URL: https://digital-dev.prison.service.justice.gov.uk/
+   HMPPS_COOKIE_DOMAIN: digital-dev.prison.service.justice.gov.uk
    API_ENDPOINT_URL: https://api-dev.prison.service.justice.gov.uk/
    OAUTH_ENDPOINT_URL: https://sign-in-dev.hmpps.service.justice.gov.uk/auth/
    API_WHEREABOUTS_ENDPOINT_URL: https://whereabouts-api-dev.service.justice.gov.uk/
@@ -58,7 +58,6 @@ generic-service:
    CALCULATE_RELEASE_DATES_URL: https://calculate-release-dates-dev.hmpps.service.justice.gov.uk
    SEND_LEGAL_MAIL_URL: https://check-rule39-mail-dev.prison.service.justice.gov.uk
    WELCOME_PEOPLE_INTO_PRISON_URL: https://welcome-dev.prison.service.justice.gov.uk/
-   WELCOME_PEOPLE_INTO_PRISON_ENABLED_PRISONS: "NMI,MDI,LII,DMI,MHI,EXI,WWI"
    CREATE_AND_VARY_A_LICENCE_URL: https://create-and-vary-a-licence-dev.hmpps.service.justice.gov.uk/
    CREATE_AND_VARY_A_LICENCE_ENABLED_PRISONS: "MDI,LEI,LPI,BMI,PVI,BXI,WAI"
    RESTRICTED_PATIENT_API_URL: https://restricted-patients-api-dev.hmpps.service.justice.gov.uk/

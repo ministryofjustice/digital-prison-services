@@ -18,7 +18,7 @@ generic-service:
     contextColour: green
 
   env:
-   PRISON_STAFF_HUB_UI_URL: app-hostname.local
+   PRISON_STAFF_HUB_UI_URL: https://app-hostname.local/
    HMPPS_COOKIE_DOMAIN: app-hostname.local
    NODE_ENV: production
    WEB_SESSION_TIMEOUT_IN_MINUTES: "60"
@@ -27,6 +27,7 @@ generic-service:
    REDIS_ENABLED: true
    SOC_API_ENABLED: true
    TOKENVERIFICATION_API_ENABLED: true
+   WELCOME_PEOPLE_INTO_PRISON_ENABLED_PRISONS: "BFI,BNI,CDI,DMI,EXI,EYI,HEI,HLI,LCI,LEI,LII,LPI,LWI,MHI,NMI,NWI,PNI,PVI,WCI,WSI,WWI"
    
   namespace_secrets:
     digital-prison-services:

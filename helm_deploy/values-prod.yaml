@@ -7,8 +7,8 @@ generic-service:
     host: digital.prison.service.justice.gov.uk
 
   env:
-   PRISON_STAFF_HUB_UI_URL: https://digital.prison.service.justice.gov.uk
-   HMPPS_COOKIE_DOMAIN: https://digital.prison.service.justice.gov.uk
+   PRISON_STAFF_HUB_UI_URL: https://digital.prison.service.justice.gov.uk/
+   HMPPS_COOKIE_DOMAIN: digital.prison.service.justice.gov.uk
    API_ENDPOINT_URL: https://api.prison.service.justice.gov.uk/
    OAUTH_ENDPOINT_URL: https://sign-in.hmpps.service.justice.gov.uk/auth/
    API_WHEREABOUTS_ENDPOINT_URL: https://whereabouts-api.service.justice.gov.uk/
@@ -54,7 +54,6 @@ generic-service:
    CALCULATE_RELEASE_DATES_URL: https://calculate-release-dates.hmpps.service.justice.gov.uk
    SEND_LEGAL_MAIL_URL: https://check-rule39-mail.prison.service.justice.gov.uk
    WELCOME_PEOPLE_INTO_PRISON_URL: https://welcome.prison.service.justice.gov.uk/
-   WELCOME_PEOPLE_INTO_PRISON_ENABLED_PRISONS: "NMI,LII,DMI,MHI,EXI,LEI,WWI"
    CREATE_AND_VARY_A_LICENCE_URL: https://create-and-vary-a-licence.hmpps.service.justice.gov.uk/
    CREATE_AND_VARY_A_LICENCE_ENABLED_PRISONS: "CFI,CWI,UKI,UPI,PRI,FHI,LCI,LII,LGI,MHI,NSI,NMI,RNI,SKI,SUI,WTI"
    RESTRICTED_PATIENT_API_URL: https://restricted-patients-api.hmpps.service.justice.gov.uk/
@@ -165,6 +164,7 @@ ingress:
   host: digital.prison.service.justice.gov.uk
   cert_secret: digital-prison-services-cert
   path: /
+
 
 # determine which slack channel alerts are sent to, via the correct Alert Manager receiver
 generic-prometheus-alerts:
