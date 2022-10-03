@@ -132,8 +132,8 @@ const getTasks = ({ activeCaseLoadId, locations, staffId, whereaboutsConfig, key
     },
     {
       id: 'pom',
-      heading: 'Manage Prison Offender Managers’ cases',
-      description: 'Allocate a Prison Offender Manager (POM) to a prisoner and manage their cases.',
+      heading: 'View POM cases',
+      description: 'Keep track of your allocations. If you allocate cases, you also can do that here.',
       href: moic.url,
       enabled: () => moic.url && userHasRoles(['ALLOC_MGR', 'ALLOC_CASE_MGR']),
     },
