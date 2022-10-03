@@ -17,6 +17,7 @@ const iepSummaryResponse = {
       agencyId: 'LEI',
       iepLevel: 'Standard',
       userId: 'ITAG_USER',
+      comments: 'Comment 3',
     },
     {
       bookingId: -1,
@@ -25,6 +26,7 @@ const iepSummaryResponse = {
       agencyId: 'MDI',
       iepLevel: 'Basic',
       userId: 'ITAG_USER',
+      comments: 'Comment 2',
     },
     {
       bookingId: -1,
@@ -33,6 +35,7 @@ const iepSummaryResponse = {
       agencyId: 'MDI',
       iepLevel: 'Enhanced',
       userId: 'ITAG_USER_2',
+      comments: 'Comment 1',
     },
   ],
 }
@@ -149,19 +152,19 @@ context('Prisoner incentive level details', () => {
 
             expect($tableCells.get(0)).to.contain('15 August 2017 - 16:04')
             expect($tableCells.get(1)).to.contain('Standard')
-            expect($tableCells.get(2)).to.contain('Not entered')
+            expect($tableCells.get(2)).to.contain('Comment 3')
             expect($tableCells.get(3)).to.contain('Leeds')
             expect($tableCells.get(4)).to.contain('Staff Member')
 
             expect($tableCells.get(5)).to.contain('10 August 2017 - 16:04')
             expect($tableCells.get(6)).to.contain('Basic')
-            expect($tableCells.get(7)).to.contain('Not entered')
+            expect($tableCells.get(7)).to.contain('Comment 2')
             expect($tableCells.get(8)).to.contain('Moorland')
             expect($tableCells.get(9)).to.contain('Staff Member')
 
             expect($tableCells.get(10)).to.contain('7 August 2017 - 16:04')
             expect($tableCells.get(11)).to.contain('Enhanced')
-            expect($tableCells.get(12)).to.contain('Not entered')
+            expect($tableCells.get(12)).to.contain('Comment 1')
             expect($tableCells.get(13)).to.contain('Moorland')
             expect($tableCells.get(14)).to.contain('Another staff Member')
           })
@@ -185,7 +188,7 @@ context('Prisoner incentive level details', () => {
 
             expect($tableCells.get(0)).to.contain('10 August 2017 - 16:04')
             expect($tableCells.get(1)).to.contain('Basic')
-            expect($tableCells.get(2)).to.contain('Not entered')
+            expect($tableCells.get(2)).to.contain('Comment 2')
             expect($tableCells.get(3)).to.contain('Moorland')
             expect($tableCells.get(4)).to.contain('Staff Member')
           })

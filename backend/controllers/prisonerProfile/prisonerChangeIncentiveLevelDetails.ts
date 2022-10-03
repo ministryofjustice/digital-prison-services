@@ -57,7 +57,7 @@ export default ({
       const { agencyId, bookingId, firstName, lastName, assignedLivingUnit } = prisonerDetails
       const locationId: string | undefined = assignedLivingUnit?.description
 
-      const iepSummary = await incentivesApi.getIepSummaryForBooking(res.locals, bookingId, false)
+      const iepSummary = await incentivesApi.getIepSummaryForBooking(res.locals, bookingId)
       // TODO: nextReviewDate will come from incentivesApi in future
       const nextReviewDate = iepSummary?.iepTime && moment(iepSummary.iepTime, 'YYYY-MM-DD HH:mm').add(1, 'years')
 

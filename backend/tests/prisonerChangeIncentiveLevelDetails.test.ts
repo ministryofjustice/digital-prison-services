@@ -1,4 +1,5 @@
 import type apis from '../apis'
+import type { IepSummaryForBooking, IepLevelChanged } from '../api/incentivesApi'
 import config from '../config'
 import prisonerChangeIncentiveLevelDetails from '../controllers/prisonerProfile/prisonerChangeIncentiveLevelDetails'
 import { raiseAnalyticsEvent } from '../raiseAnalyticsEvent'
@@ -9,40 +10,43 @@ jest.mock('../raiseAnalyticsEvent', () => ({
 
 describe('Prisoner change incentive level details', () => {
   const offenderNo = 'ABC123'
-  const bookingId = '123'
+  const bookingId = 123
   const prisonApi = {}
   const incentivesApi = {} as jest.Mocked<typeof apis.incentivesApi>
 
-  const iepSummaryForBooking = {
-    bookingId: -1,
+  const iepSummaryForBooking: IepSummaryForBooking = {
+    bookingId,
     iepDate: '2017-08-15',
     iepTime: '2017-08-15T16:04:35',
     iepLevel: 'Standard',
     daysSinceReview: 625,
     iepDetails: [
       {
-        bookingId: -1,
+        bookingId,
         iepDate: '2017-08-15',
         iepTime: '2017-08-15T16:04:35',
         agencyId: 'LEI',
         iepLevel: 'Standard',
         userId: 'ITAG_USER',
+        comments: '3',
       },
       {
-        bookingId: -1,
+        bookingId,
         iepDate: '2017-08-10',
         iepTime: '2017-08-10T16:04:35',
         agencyId: 'HEI',
         iepLevel: 'Basic',
         userId: 'ITAG_USER',
+        comments: '2',
       },
       {
-        bookingId: -1,
+        bookingId,
         iepDate: '2017-08-07',
         iepTime: '2017-08-07T16:04:35',
         agencyId: 'HEI',
         iepLevel: 'Enhanced',
         userId: 'ITAG_USER',
+        comments: '1',
       },
     ],
   }
@@ -76,8 +80,8 @@ describe('Prisoner change incentive level details', () => {
       lastName: 'Smith',
       assignedLivingUnit: { description: '1-2-003' },
     })
-    incentivesApi.getIepSummaryForBooking = jest.fn().mockReturnValue(iepSummaryForBooking)
-    incentivesApi.getAgencyIepLevels = jest.fn().mockReturnValue(iepLevels)
+    incentivesApi.getIepSummaryForBooking = jest.fn().mockResolvedValue(iepSummaryForBooking)
+    incentivesApi.getAgencyIepLevels = jest.fn().mockResolvedValue(iepLevels)
     incentivesApi.changeIepLevel = jest.fn()
 
     // @ts-expect-error ts-migrate(2345) FIXME: Argument of type '{ prisonApi: {}; logError: any; ... Remove this comment to see the full error message
@@ -95,7 +99,7 @@ describe('Prisoner change incentive level details', () => {
         expect(incentivesApi.getAgencyIepLevels).toHaveBeenCalledWith(res.locals, 'MDI')
         expect(res.render).toHaveBeenCalledWith('prisonerProfile/prisonerChangeIncentiveLevelDetails.njk', {
           agencyId: 'MDI',
-          bookingId: '123',
+          bookingId,
           breadcrumbPrisonerName: 'Smith, John',
           formValues: {},
           iepLevel: 'Standard',
@@ -179,7 +183,7 @@ describe('Prisoner change incentive level details', () => {
       beforeEach(() => {
         config.apis.incentives.ui_url = 'http://incentives-url'
         jest.spyOn(Date, 'now').mockImplementation(() => 1664192096000) // 2022-09-26T12:34:56.000+01:00
-        incentivesApi.changeIepLevel.mockResolvedValue('All good')
+        incentivesApi.changeIepLevel.mockResolvedValue({} as unknown as IepLevelChanged) // response is ignored
       })
 
       it('should submit the appointment with the correct details and show confirmation', async () => {
@@ -214,7 +218,7 @@ describe('Prisoner change incentive level details', () => {
           'prisonerProfile/prisonerChangeIncentiveLevelConfirmation.njk',
           expect.objectContaining({
             agencyId: 'MDI',
-            bookingId: '123',
+            bookingId,
             breadcrumbPrisonerName: 'Smith, John',
             iepSummary: expect.objectContaining({
               iepLevel: 'Enhanced',
@@ -269,7 +273,7 @@ describe('Prisoner change incentive level details', () => {
         expect(incentivesApi.changeIepLevel).not.toHaveBeenCalled()
         expect(res.render).toHaveBeenCalledWith('prisonerProfile/prisonerChangeIncentiveLevelDetails.njk', {
           agencyId: 'MDI',
-          bookingId: '123',
+          bookingId,
           breadcrumbPrisonerName: 'Smith, John',
           errors: [
             {
