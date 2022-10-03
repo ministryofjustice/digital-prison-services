@@ -10,3 +10,6 @@ ingress:
   annotations:
     external-dns.alpha.kubernetes.io/aws-weight: "100"
     nginx.ingress.kubernetes.io/custom-http-errors: "418"
+
+env:
+  WELCOME_PEOPLE_INTO_PRISON_ENABLED_PRISONS: "BFI,BNI,CDI,DMI,EXI,EYI,HEI,HLI,LCI,LEI,LII,LPI,LWI,MHI,NMI,NWI,PNI,PVI,WCI,WSI,WWI"
