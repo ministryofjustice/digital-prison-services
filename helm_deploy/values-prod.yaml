@@ -165,10 +165,6 @@ ingress:
   host: digital.prison.service.justice.gov.uk
   cert_secret: digital-prison-services-cert
   path: /
-  host2: whereabouts.prison.service.justice.gov.uk
-  cert_secret2: prison-staff-hub-cert
-  redirect_host2: https://digital.prison.service.justice.gov.uk/redirect
-
 
 # determine which slack channel alerts are sent to, via the correct Alert Manager receiver
 generic-prometheus-alerts:

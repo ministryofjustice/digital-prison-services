@@ -25,7 +25,6 @@ generic-service:
    INCENTIVES_API_ENDPOINT_URL: https://incentives-api-preprod.hmpps.service.justice.gov.uk
    INCENTIVES_EXCLUDED_CASELOADS: "CADM_I"
    TOKENVERIFICATION_API_URL: https://token-verification-api-preprod.prison.service.justice.gov.uk
-   TOKENVERIFICATION_API_ENABLED: true
    CASENOTES_API_URL: https://preprod.offender-case-notes.service.justice.gov.uk/
    ALLOCATION_MANAGER_ENDPOINT_URL: https://preprod.moic.service.justice.gov.uk
    PATHFINDER_UI_URL: https://preprod.pathfinder.service.justice.gov.uk/
@@ -120,7 +119,3 @@ ingress:
   host: digital-preprod.prison.service.justice.gov.uk
   cert_secret: digital-prison-services-cert
   path: /
-  host2: whereabouts-preprod.prison.service.justice.gov.uk
-  cert_secret2: prison-staff-hub-cert
-  redirect_host2: https://digital-preprod.prison.service.justice.gov.uk/redirect
-
