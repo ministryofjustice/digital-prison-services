@@ -1,7 +1,8 @@
+import type { ClientContext, OauthApiClient } from './oauthEnabledClient'
 import contextProperties from '../contextProperties'
 
-export const incentivesApiFactory = (client) => {
-  const processResponse = (context) => (response) => {
+export const incentivesApiFactory = (client: OauthApiClient) => {
+  const processResponse = (context: ClientContext) => (response) => {
     contextProperties.setResponsePagination(context, response.headers)
     return response.body
   }

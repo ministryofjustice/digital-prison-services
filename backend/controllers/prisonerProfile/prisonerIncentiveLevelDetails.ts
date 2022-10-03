@@ -1,4 +1,5 @@
 import moment from 'moment'
+import type apis from '../../apis'
 import { putLastNameFirst, properCaseName, formatName, daysSince } from '../../utils'
 
 const filterData = (data, fields) => {
@@ -24,7 +25,15 @@ const filterData = (data, fields) => {
   return filteredResults
 }
 
-export default ({ prisonApi, incentivesApi, oauthApi }) =>
+export default ({
+    prisonApi,
+    incentivesApi,
+    oauthApi,
+  }: {
+    prisonApi: typeof apis.prisonApi
+    incentivesApi: typeof apis.incentivesApi
+    oauthApi: typeof apis.oauthApi
+  }) =>
   async (req, res) => {
     const { offenderNo } = req.params
     const { agencyId, incentiveLevel, fromDate, toDate } = req.query

@@ -1,9 +1,16 @@
 import moment from 'moment'
 import config from '../../config'
+import type apis from '../../apis'
 import { putLastNameFirst, formatName } from '../../utils'
 import { raiseAnalyticsEvent } from '../../raiseAnalyticsEvent'
 
-export default ({ prisonApi, incentivesApi }) => {
+export default ({
+  prisonApi,
+  incentivesApi,
+}: {
+  prisonApi: typeof apis.prisonApi
+  incentivesApi: typeof apis.incentivesApi
+}) => {
   const renderTemplate = async (req, res, pageData) => {
     const { offenderNo } = req.params
     const { errors, formValues = {} } = pageData || {}

@@ -128,7 +128,7 @@ describe('Prisoner change incentive level details', () => {
       })
 
       it('should indicate current incentive level ', async () => {
-        incentivesApi.getIepSummaryForBooking.mockReturnValue({
+        incentivesApi.getIepSummaryForBooking.mockResolvedValue({
           ...iepSummaryForBooking,
           iepLevel: 'Enhanced',
         })
@@ -179,11 +179,11 @@ describe('Prisoner change incentive level details', () => {
       beforeEach(() => {
         config.apis.incentives.ui_url = 'http://incentives-url'
         jest.spyOn(Date, 'now').mockImplementation(() => 1664192096000) // 2022-09-26T12:34:56.000+01:00
-        incentivesApi.changeIepLevel.mockReturnValue('All good')
+        incentivesApi.changeIepLevel.mockResolvedValue('All good')
       })
 
       it('should submit the appointment with the correct details and show confirmation', async () => {
-        incentivesApi.getIepSummaryForBooking.mockReturnValue({
+        incentivesApi.getIepSummaryForBooking.mockResolvedValue({
           ...iepSummaryForBooking,
           iepDate: '2022-09-26',
           iepTime: '2022-09-26T12:34:56',
