@@ -2,9 +2,12 @@ apiVersion: v2
 appVersion: "1.0"
 description: A Helm chart for Kubernetes
 name: digital-prison-services
-version: 0.1.1
+version: 0.2.0
 
 dependencies:
+  - name: generic-service
+    version: 1.5.0
+    repository: https://ministryofjustice.github.io/hmpps-helm-charts
   - name: generic-prometheus-alerts
-    version: 0.1.2
+    version: 1.1.0
     repository: https://ministryofjustice.github.io/hmpps-helm-charts
