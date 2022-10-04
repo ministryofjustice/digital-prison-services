@@ -15,17 +15,22 @@ export type IepSummaryForBooking = {
   iepDate: string
   iepTime: string
   daysSinceReview: number
-  iepDetails: {
-    bookingId: number
-    iepLevel: string
-    iepDate: string
-    iepTime: string
-    comments: string
-    agencyId: string
-    userId: string | null
-    // also available
-    // auditModuleName: string
-  }[]
+}
+
+export type IepSummaryDetail = {
+  bookingId: number
+  iepLevel: string
+  iepDate: string
+  iepTime: string
+  comments: string
+  agencyId: string
+  userId: string | null
+  // also available
+  // auditModuleName: string
+}
+
+export type IepSummaryForBookingWithDetails = IepSummaryForBooking & {
+  iepDetails: IepSummaryDetail[]
 }
 
 export type IepSummaryForBookingId = {
@@ -71,12 +76,15 @@ export const incentivesApiFactory = (client: OauthApiClient) => {
   const getAgencyIepLevels = (context: ClientContext, agencyId: string): Promise<AgencyIepLevel[]> =>
     get<AgencyIepLevel[]>(context, `/iep/levels/${agencyId}`)
 
-  const getIepSummaryForBooking = (
+  type GetIepSummaryForBooking = {
+    (context: ClientContext, bookingId: number, withDetails?: false): Promise<IepSummaryForBooking>
+    (context: ClientContext, bookingId: number, withDetails: true): Promise<IepSummaryForBookingWithDetails>
+  }
+  const getIepSummaryForBooking: GetIepSummaryForBooking = (
     context: ClientContext,
     bookingId: number,
     withDetails = false
-  ): Promise<IepSummaryForBooking> =>
-    get<IepSummaryForBooking>(context, `/iep/reviews/booking/${bookingId}?with-details=${withDetails}`)
+  ): Promise<any> => get(context, `/iep/reviews/booking/${bookingId}?with-details=${withDetails}`)
 
   const getIepSummaryForBookingIds = (
     context: ClientContext,

@@ -1,8 +1,22 @@
 import moment from 'moment'
 import type apis from '../../apis'
+import type { IepSummaryDetail } from '../../api/incentivesApi'
 import { putLastNameFirst, properCaseName, formatName, daysSince } from '../../utils'
 
-const filterData = (data, fields) => {
+type HistoryDetail = IepSummaryDetail & {
+  iepEstablishment: string
+  iepStaffMember: string | undefined
+  formattedTime: string
+}
+
+type HistoryFilters = {
+  agencyId?: string
+  incentiveLevel?: string
+  fromDate?: string
+  toDate?: string
+}
+
+const filterData = (data: HistoryDetail[], fields: HistoryFilters): HistoryDetail[] => {
   let filteredResults = data
   if (fields.agencyId) {
     filteredResults = filteredResults.filter((result) => result.agencyId === fields.agencyId)
@@ -59,9 +73,9 @@ export default ({
       // Offenders are likely to have multiple IEPs at the same agency.
       // By getting a unique list of users and agencies, we reduce the duplicate
       // calls to the database.
-      const uniqueUserIds = [...new Set(iepSummary.iepDetails.map((details) => details.userId))]
-      const uniqueAgencyIds = [...new Set(iepSummary.iepDetails.map((details) => details.agencyId))]
-      const levels = [...new Set(iepSummary.iepDetails.map((details) => details.iepLevel))].sort()
+      const uniqueUserIds = Array.from(new Set(iepSummary.iepDetails.map((details) => details.userId)))
+      const uniqueAgencyIds = Array.from(new Set(iepSummary.iepDetails.map((details) => details.agencyId)))
+      const levels = Array.from(new Set(iepSummary.iepDetails.map((details) => details.iepLevel))).sort()
 
       const users = await Promise.all(
         uniqueUserIds.filter((userId) => Boolean(userId)).map((userId) => prisonApi.getStaffDetails(res.locals, userId))
@@ -71,7 +85,7 @@ export default ({
         uniqueAgencyIds.filter((id) => Boolean(id)).map((id) => prisonApi.getAgencyDetails(res.locals, id))
       )
 
-      const iepHistoryDetails = iepSummary.iepDetails.map((details) => {
+      const iepHistoryDetails: HistoryDetail[] = iepSummary.iepDetails.map((details) => {
         const { description } = establishments.find((estb) => estb.agencyId === details.agencyId)
         const user = details.userId && users.find((u) => u.username === details.userId)
 

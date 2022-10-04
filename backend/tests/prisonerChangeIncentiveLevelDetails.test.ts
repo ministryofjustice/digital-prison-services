@@ -1,5 +1,5 @@
 import type apis from '../apis'
-import type { IepSummaryForBooking, IepLevelChanged } from '../api/incentivesApi'
+import type { IepSummaryForBookingWithDetails, IepLevelChanged } from '../api/incentivesApi'
 import config from '../config'
 import prisonerChangeIncentiveLevelDetails from '../controllers/prisonerProfile/prisonerChangeIncentiveLevelDetails'
 import { raiseAnalyticsEvent } from '../raiseAnalyticsEvent'
@@ -14,7 +14,7 @@ describe('Prisoner change incentive level details', () => {
   const prisonApi = {}
   const incentivesApi = {} as jest.Mocked<typeof apis.incentivesApi>
 
-  const iepSummaryForBooking: IepSummaryForBooking = {
+  const iepSummaryForBooking: IepSummaryForBookingWithDetails = {
     bookingId,
     iepDate: '2017-08-15',
     iepTime: '2017-08-15T16:04:35',
