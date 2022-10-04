@@ -34,7 +34,6 @@ import pageNotFound from './setUpPageNotFound'
 import errorHandler from './middleware/errorHandler'
 import { logError } from './logError'
 import homepageController from './controllers/homepage/homepage'
-import deprecatedUrlPage from './controllers/deprecatedUrlPage'
 import requestLimiter from './middleware/requestLimiter'
 
 // We do not want the server to exit, partly because any log information will be lost.
@@ -63,9 +62,6 @@ app.use(setupRedirects())
 app.use(setupStaticContent())
 app.use(setupWebSession())
 app.use(setupAuth({ oauthApi: apis.oauthApi, tokenVerificationApi: apis.tokenVerificationApi }))
-
-// The redirect base URL is defined in the values*.yaml
-app.use('/redirect*', deprecatedUrlPage(`/redirect`))
 
 app.use(currentUser({ prisonApi: apis.prisonApi, oauthApi: apis.oauthApi }))
 app.use(returnUrl())
