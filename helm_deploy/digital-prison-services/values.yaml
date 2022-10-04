@@ -17,6 +17,14 @@ generic-service:
     tlsSecretName: digital-prison-services-cert
     contextColour: green
 
+  livenessProbe:
+    httpGet:
+      path: /ping
+
+  readinessProbe:
+    httpGet:
+      path: /ping   
+
   env:
    PRISON_STAFF_HUB_UI_URL: https://app-hostname.local/
    HMPPS_COOKIE_DOMAIN: app-hostname.local
@@ -28,7 +36,8 @@ generic-service:
    SOC_API_ENABLED: true
    TOKENVERIFICATION_API_ENABLED: true
    WELCOME_PEOPLE_INTO_PRISON_ENABLED_PRISONS: "BFI,BNI,CDI,DMI,EXI,EYI,HEI,HLI,LCI,LEI,LII,LPI,LWI,MHI,NMI,NWI,PNI,PVI,WCI,WSI,WWI"
-   
+   APPLICATIONINSIGHTS_CONNECTION_STRING: "InstrumentationKey=$(APPINSIGHTS_INSTRUMENTATIONKEY)"
+  
   namespace_secrets:
     digital-prison-services:
       API_CLIENT_ID: "API_CLIENT_ID"
