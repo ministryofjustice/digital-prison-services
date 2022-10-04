@@ -17,6 +17,14 @@ generic-service:
     tlsSecretName: digital-prison-services-cert
     contextColour: green
 
+  livenessProbe:
+    httpGet:
+      path: /ping
+
+  readinessProbe:
+    httpGet:
+      path: /ping   
+
   env:
    PRISON_STAFF_HUB_UI_URL: https://app-hostname.local/
    HMPPS_COOKIE_DOMAIN: app-hostname.local
