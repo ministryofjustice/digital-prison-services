@@ -20,7 +20,7 @@ export default ({
       const { agencyId, bookingId, firstName, lastName } = prisonerDetails
 
       const [iepSummary, iepLevels] = await Promise.all([
-        incentivesApi.getIepSummaryForBooking(res.locals, bookingId, true),
+        incentivesApi.getIepSummaryForBooking(res.locals, bookingId),
         incentivesApi.getAgencyIepLevels(res.locals, agencyId),
       ])
 

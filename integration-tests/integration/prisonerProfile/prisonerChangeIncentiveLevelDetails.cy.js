@@ -7,32 +7,6 @@ const iepSummaryForBooking = {
   iepTime: '2017-08-15T16:04:35',
   iepLevel: 'Standard',
   daysSinceReview: 625,
-  iepDetails: [
-    {
-      bookingId: -1,
-      iepDate: '2017-08-15',
-      iepTime: '2017-08-15T16:04:35',
-      agencyId: 'LEI',
-      iepLevel: 'Standard',
-      userId: 'ITAG_USER',
-    },
-    {
-      bookingId: -1,
-      iepDate: '2017-08-10',
-      iepTime: '2017-08-10T16:04:35',
-      agencyId: 'MDI',
-      iepLevel: 'Basic',
-      userId: 'ITAG_USER',
-    },
-    {
-      bookingId: -1,
-      iepDate: '2017-08-07',
-      iepTime: '2017-08-07T16:04:35',
-      agencyId: 'MDI',
-      iepLevel: 'Enhanced',
-      userId: 'ITAG_USER_2',
-    },
-  ],
 }
 
 const iepLevels = [
