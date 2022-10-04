@@ -1,6 +1,64 @@
 ---
 # Values here are the same across all environments
+generic-service:
+  nameOverride: digital-prison-services
 
+  image:
+    repository: quay.io/hmpps/digital-prison-services
+    tag: latest
+    pullPolicy: IfNotPresent
+    port: 3000
+
+  ingress:
+    enabled: true
+    v1_2_enabled: true
+    v0_47_enabled: false
+    host: app-hostname.local    # override per environment
+    tlsSecretName: digital-prison-services-cert
+    contextColour: green
+
+  env:
+   PRISON_STAFF_HUB_UI_URL: https://app-hostname.local/
+   HMPPS_COOKIE_DOMAIN: app-hostname.local
+   NODE_ENV: production
+   WEB_SESSION_TIMEOUT_IN_MINUTES: "60"
+   REMOTE_AUTH_STRATEGY: "true"
+   API_COMMUNITY_API_PREFIX: "/secure"
+   REDIS_ENABLED: true
+   SOC_API_ENABLED: true
+   TOKENVERIFICATION_API_ENABLED: true
+   WELCOME_PEOPLE_INTO_PRISON_ENABLED_PRISONS: "BFI,BNI,CDI,DMI,EXI,EYI,HEI,HLI,LCI,LEI,LII,LPI,LWI,MHI,NMI,NWI,PNI,PVI,WCI,WSI,WWI"
+   
+  namespace_secrets:
+    digital-prison-services:
+      API_CLIENT_ID: "API_CLIENT_ID"
+      API_CLIENT_SECRET: "API_CLIENT_SECRET"
+      API_SYSTEM_CLIENT_ID: "API_SYSTEM_CLIENT_ID"
+      API_SYSTEM_CLIENT_SECRET: "API_SYSTEM_CLIENT_SECRET"
+      APPINSIGHTS_INSTRUMENTATIONKEY: "APPINSIGHTS_INSTRUMENTATIONKEY"
+      CONTENTFUL_SPACE_ID: "CONTENTFUL_SPACE_ID"
+      CONTENTFUL_ACCESS_TOKEN: "CONTENTFUL_ACCESS_TOKEN"
+      GOOGLE_ANALYTICS_ID: "GOOGLE_ANALYTICS_ID"
+      GOOGLE_TAG_MANAGER_ID: "GOOGLE_TAG_MANAGER_ID"
+      SESSION_COOKIE_SECRET: "SESSION_COOKIE_SECRET"
+      NOTIFY_API_KEY: "NOTIFY_API_KEY"
+      WANDSWORTH_OMU_EMAIL: "WANDSWORTH_OMU_EMAIL"
+      THAMESIDE_OMU_EMAIL: "THAMESIDE_OMU_EMAIL"
+      HEWELL_OMU_EMAIL: "HEWELL_OMU_EMAIL"
+      BERWYN_OMU_EMAIL: "BERWYN_OMU_EMAIL"
+      ELMLEY_OMU_EMAIL: "ELMLEY_OMU_EMAIL"
+      NOTTINGHAM_OMU_EMAIL: "NOTTINGHAM_OMU_EMAIL"
+      BULLINGDON_OMU_EMAIL: "BULLINGDON_OMU_EMAIL"
+      PETERBOROUGH_OMU_EMAIL: "PETERBOROUGH_OMU_EMAIL"
+      BIRMINGHAM_OMU_EMAIL: "BIRMINGHAM_OMU_EMAIL"
+      NORWICH_OMU_EMAIL: "NORWICH_OMU_EMAIL"
+
+    dps-redis:
+      REDIS_HOST: "REDIS_HOST"
+      REDIS_PASSWORD: "REDIS_PASSWORD"
+
+  
+  
 generic-prometheus-alerts:
   targetApplication: digital-prison-services
 
@@ -8,8 +66,5 @@ ingress:
   # live-1 is blue, live is green
   contextColour: green
   annotations:
-    external-dns.alpha.kubernetes.io/aws-weight: "100"
+    external-dns.alpha.kubernetes.io/aws-weight: "0"
     nginx.ingress.kubernetes.io/custom-http-errors: "418"
-
-env:
-  WELCOME_PEOPLE_INTO_PRISON_ENABLED_PRISONS: "BFI,BNI,CDI,DMI,EXI,EYI,HEI,HLI,LCI,LEI,LII,LPI,LWI,MHI,NMI,NWI,PNI,PVI,WCI,WSI,WWI"

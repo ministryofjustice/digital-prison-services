@@ -1,129 +1,120 @@
 # This is a YAML-formatted file.
 # Declare variables to be passed into your templates.
+generic-service:
+  replicaCount: 4
 
-replicaCount: 4
+  ingress:
+    host: digital-preprod.prison.service.justice.gov.uk
 
-image:
-  repository: quay.io/hmpps/digital-prison-services
-  tag: latest
-  pullPolicy: IfNotPresent
-  port: 3000
+  env:
+   PRISON_STAFF_HUB_UI_URL: https://digital-preprod.prison.service.justice.gov.uk/
+   HMPPS_COOKIE_DOMAIN: digital-preprod.prison.service.justice.gov.uk
+   API_ENDPOINT_URL: https://api-preprod.prison.service.justice.gov.uk/
+   OAUTH_ENDPOINT_URL: https://sign-in-preprod.hmpps.service.justice.gov.uk/auth/
+   API_WHEREABOUTS_ENDPOINT_URL: https://whereabouts-api-preprod.service.justice.gov.uk/
+   LICENCES_URL: https://licences-preprod.prison.service.justice.gov.uk/
+   HMPPS_COOKIE_NAME: hmpps-session-preprod
+   API_COMMUNITY_ENDPOINT_URL: https://community-api-secure.pre-prod.delius.probation.hmpps.dsd.io
+   API_DATA_COMPLIANCE_ENDPOINT_URL: https://prison-data-compliance-preprod.prison.service.justice.gov.uk
+   KEYWORKER_API_URL: https://keyworker-api-preprod.prison.service.justice.gov.uk/
+   CATEGORISATION_UI_URL: https://preprod.offender-categorisation.service.justice.gov.uk/
+   USE_OF_FORCE_URL: https://preprod.use-of-force.service.justice.gov.uk
+   USE_OF_FORCE_PRISONS: "ACI,AGI,ASI,AYI,BAI,BCI,BFI,BHI,BLI,BMI,BNI,BRI,BSI,BWI,BXI,BZI,CDI,CFI,CLI,CWI,DAI,DGI,DHI,DMI,DNI,DTI,DWI,EEI,EHI,ESI,EWI,EXI,EYI,FBI,FDI,FHI,FKI,FMI,FNI,FSI,FWI,GHI,GMI,GNI,GTI,HBI,HCI,HDI,HEI,HHI,HII,HLI,HMI,HOI,HPI,HVI,ISI,IWI,KMI,KVI,LCI,LEI,LFI,LGI,LHI,LII,LLI,LNI,LPI,LTI,LWI,LYI,MDI,MHI,MRI,MSI,MTI,NHI,NLI,NMI,NSI,NWI,ONI,OWI,PBI,PDI,PFI,PNI,PRI,PVI,RCI,RHI,RNI,RSI,SDI,SFI,SHI,SKI,SLI,SNI,SPI,STI,SUI,SWI,TCI,TSI,UKI,UPI,VEI,WCI,WDI,WEI,WHI,WII,WLI,WMI,WRI,WSI,WTI,WWI"
+   CHECK_MY_DIARY_URL: https://check-my-diary-preprod.prison.service.justice.gov.uk?fromDPS=true
+   INCENTIVES_URL: https://incentives-ui-preprod.hmpps.service.justice.gov.uk
+   INCENTIVES_API_ENDPOINT_URL: https://incentives-api-preprod.hmpps.service.justice.gov.uk
+   INCENTIVES_EXCLUDED_CASELOADS: "CADM_I"
+   TOKENVERIFICATION_API_URL: https://token-verification-api-preprod.prison.service.justice.gov.uk
+   CASENOTES_API_URL: https://preprod.offender-case-notes.service.justice.gov.uk/
+   ALLOCATION_MANAGER_ENDPOINT_URL: https://preprod.moic.service.justice.gov.uk
+   PATHFINDER_UI_URL: https://preprod.pathfinder.service.justice.gov.uk/
+   PATHFINDER_ENDPOINT_API_URL: https://preprod-api.pathfinder.service.justice.gov.uk/
+   PIN_PHONES_URL: https://pcms-qa.prison.service.justice.gov.uk/
+   SOC_UI_URL: https://manage-soc-cases-preprod.hmpps.service.justice.gov.uk/
+   SOC_API_URL: https://manage-soc-cases-api-preprod.hmpps.service.justice.gov.uk/
+   OFFENDER_SEARCH_API_URL: https://prisoner-offender-search-preprod.prison.service.justice.gov.uk
+   SUPPORT_URL: https://support-preprod.hmpps.service.justice.gov.uk/
+   SYSTEM_PHASE: PRE-PRODUCTION
+   BVL_URL: https://book-video-link-preprod.prison.service.justice.gov.uk
+   MOIC_URL: https://preprod.moic.service.justice.gov.uk
+   OMIC_URL: https://preprod.manage-key-workers.service.justice.gov.uk
+   MANAGE_AUTH_ACCOUNTS_URL: https://manage-users-preprod.hmpps.service.justice.gov.uk
+   PECS_URL: http://hmpps-book-secure-move-frontend-preprod.apps.live-1.cloud-platform.service.justice.gov.uk
+   COMPLEXITY_OF_NEED_URI: https://complexity-of-need-preprod.hmpps.service.justice.gov.uk
+   PRISONS_WITH_OFFENDERS_THAT_HAVE_COMPLEX_NEEDS: "AGI,BZI,DHI,DWI,ESI,EWI,FHI,LNI,NHI,PFI,SDI,STI"
+   PRISONS_WITH_MANAGE_ADJUDICATIONS_ENABLED: "RNI,WLI,MDI,EXI,PVI"
+   PRISONS_FOR_MANAGE_PRISON_BOOKINGS: "HEI"
+   MANAGE_ADJUDICATIONS_URL: https://manage-adjudications-preprod.hmpps.service.justice.gov.uk/
+   MANAGE_RESTRICTED_PATIENTS_URL: https://manage-restricted-patients-preprod.hmpps.service.justice.gov.uk/
+   ESWE_ENABLED: true
+   NEURODIVERSITY_ENABLED_USERNAMES: 'NCLAMP_GEN,CN004364,DBULL_GEN'
+   NEURODIVERSITY_ENABLED_PRISONS: "BLI,NHI,LII,SLI"
+   CURIOUS_URL: https://preprodservices.sequation.net/sequation-virtual-campus2-api/
+   DISABLE_REQUEST_LIMITER: true
+   MANAGE_PRISON_VISITS_URL: https://manage-prison-visits-preprod.prison.service.justice.gov.uk/
+   LEGACY_PRISON_VISITS_URL: https://prison-visits-booking-staff-staging.apps.live.cloud-platform.service.justice.gov.uk/
+   CALCULATE_RELEASE_DATES_URL: https://calculate-release-dates-preprod.hmpps.service.justice.gov.uk
+   SEND_LEGAL_MAIL_URL: https://check-rule39-mail-preprod.prison.service.justice.gov.uk
+   WELCOME_PEOPLE_INTO_PRISON_URL: https://welcome-preprod.prison.service.justice.gov.uk/
+   CREATE_AND_VARY_A_LICENCE_URL: https://create-and-vary-a-licence-preprod.hmpps.service.justice.gov.uk/
+   CREATE_AND_VARY_A_LICENCE_ENABLED_PRISONS: "CFI,CWI,UKI,UPI,PRI,FHI,LCI,LII,LGI,MHI,NSI,NMI,RNI,SKI,SUI,WTI"
+   RESTRICTED_PATIENT_API_URL: https://restricted-patients-api-preprod.hmpps.service.justice.gov.uk/
+   HISTORICAL_PRISONER_APPLICATION_URL: https://hpa-preprod.service.hmpps.dsd.io
 
+
+  allowlist:
+   office: "217.33.148.210/32"
+   quantum: "62.25.109.197/32"
+   petty-france-wifi: "213.121.161.112/28"
+   global-protect: "35.176.93.186/32"
+   quantum_alt: "212.137.36.230/32"
+   health-kick: "35.177.252.195/32"
+   digitalprisons1: "52.56.112.98/32"
+   digitalprisons2: "52.56.118.154/32"
+   mojvpn: "81.134.202.29/32"
+   j5-phones-1: "35.177.125.252/32"
+   j5-phones-2: "35.177.137.160/32"
+   sodexo-northumberland: "88.98.48.10/32"
+   sodexo-northumberland2: "51.148.47.137/32"
+   sodoxeo-forest-bank: "51.155.85.249/32"
+   sodexo-peterborough: "51.155.55.241/32"
+   serco: "217.22.14.0/24"
+   ark-nps-hmcts-ttp1: "195.59.75.0/24"
+   ark-nps-hmcts-ttp2: "194.33.192.0/25"
+   ark-nps-hmcts-ttp3: "194.33.193.0/25"
+   ark-nps-hmcts-ttp4: "194.33.196.0/25"
+   ark-nps-hmcts-ttp5: "194.33.197.0/25"
+   oakwood-01: "217.161.76.184/29"
+   oakwood-02: "217.161.76.192/29"
+   oakwood-1: "217.161.76.187/32"
+   oakwood-2: "217.161.76.195/32"
+   oakwood-3: "217.161.76.186/32"
+   oakwood-4: "217.161.76.194/32"
+   durham-tees-valley: "51.179.197.1/32"
+   interservfls: "51.179.196.131/32"
+   sodexo1: "80.86.46.16/32"
+   sodexo2: "80.86.46.17/32"
+   sodexo3: "80.86.46.18/32"
+   cloudplatform-live1-1: "35.178.209.113/32"
+   cloudplatform-live1-2: "3.8.51.207/32"
+   cloudplatform-live1-3: "35.177.252.54/32"
+   dxc_webproxy1: "195.92.38.20/32"
+   dxc_webproxy2: "195.92.38.21/32"
+   dxc_webproxy3: "195.92.38.22/32"
+   dxc_webproxy4: "195.92.38.23/32"
+   moj-official-tgw-prod: "51.149.250.0/24"
+   moj-official-tgw-preprod: "51.149.251.0/24"
+   crc-rrp: "62.253.83.37/32"
+   crc-pp-wwm: "5.153.255.210/32"
+   moj-official-ark-c-expo-e: "51.149.249.0/29"
+   moj-official-ark-c-vodafone: "194.33.248.0/29"
+   moj-official-ark-f-vodafone: "194.33.249.0/29"
+   moj-official-ark-f-expo-e: "51.149.249.32/29"
+  
+  
 ingress:
   enabled: true
   enable_allowlist: true
   host: digital-preprod.prison.service.justice.gov.uk
   cert_secret: digital-prison-services-cert
   path: /
-  host2: whereabouts-preprod.prison.service.justice.gov.uk
-  cert_secret2: prison-staff-hub-cert
-  redirect_host2: https://digital-preprod.prison.service.justice.gov.uk/redirect
-
-env:
-  API_ENDPOINT_URL: https://api-preprod.prison.service.justice.gov.uk/
-  OAUTH_ENDPOINT_URL: https://sign-in-preprod.hmpps.service.justice.gov.uk/auth/
-  API_WHEREABOUTS_ENDPOINT_URL: https://whereabouts-api-preprod.service.justice.gov.uk/
-  LICENCES_URL: https://licences-preprod.prison.service.justice.gov.uk/
-  HMPPS_COOKIE_NAME: hmpps-session-preprod
-  REMOTE_AUTH_STRATEGY: "true"
-  WEB_SESSION_TIMEOUT_IN_MINUTES: "60"
-  API_COMMUNITY_ENDPOINT_URL: https://community-api-secure.pre-prod.delius.probation.hmpps.dsd.io
-  API_COMMUNITY_API_PREFIX: "/secure"
-  API_DATA_COMPLIANCE_ENDPOINT_URL: https://prison-data-compliance-preprod.prison.service.justice.gov.uk
-  KEYWORKER_API_URL: https://keyworker-api-preprod.prison.service.justice.gov.uk/
-  CATEGORISATION_UI_URL: https://preprod.offender-categorisation.service.justice.gov.uk/
-  USE_OF_FORCE_URL: https://preprod.use-of-force.service.justice.gov.uk
-  USE_OF_FORCE_PRISONS: "ACI,AGI,ASI,AYI,BAI,BCI,BFI,BHI,BLI,BMI,BNI,BRI,BSI,BWI,BXI,BZI,CDI,CFI,CLI,CWI,DAI,DGI,DHI,DMI,DNI,DTI,DWI,EEI,EHI,ESI,EWI,EXI,EYI,FBI,FDI,FHI,FKI,FMI,FNI,FSI,FWI,GHI,GMI,GNI,GTI,HBI,HCI,HDI,HEI,HHI,HII,HLI,HMI,HOI,HPI,HVI,ISI,IWI,KMI,KVI,LCI,LEI,LFI,LGI,LHI,LII,LLI,LNI,LPI,LTI,LWI,LYI,MDI,MHI,MRI,MSI,MTI,NHI,NLI,NMI,NSI,NWI,ONI,OWI,PBI,PDI,PFI,PNI,PRI,PVI,RCI,RHI,RNI,RSI,SDI,SFI,SHI,SKI,SLI,SNI,SPI,STI,SUI,SWI,TCI,TSI,UKI,UPI,VEI,WCI,WDI,WEI,WHI,WII,WLI,WMI,WRI,WSI,WTI,WWI"
-  CHECK_MY_DIARY_URL: https://check-my-diary-preprod.prison.service.justice.gov.uk?fromDPS=true
-  INCENTIVES_URL: https://incentives-ui-preprod.hmpps.service.justice.gov.uk
-  INCENTIVES_API_ENDPOINT_URL: https://incentives-api-preprod.hmpps.service.justice.gov.uk
-  INCENTIVES_EXCLUDED_CASELOADS: "CADM_I"
-  TOKENVERIFICATION_API_URL: https://token-verification-api-preprod.prison.service.justice.gov.uk
-  TOKENVERIFICATION_API_ENABLED: true
-  CASENOTES_API_URL: https://preprod.offender-case-notes.service.justice.gov.uk/
-  ALLOCATION_MANAGER_ENDPOINT_URL: https://preprod.moic.service.justice.gov.uk
-  PATHFINDER_UI_URL: https://preprod.pathfinder.service.justice.gov.uk/
-  PATHFINDER_ENDPOINT_API_URL: https://preprod-api.pathfinder.service.justice.gov.uk/
-  PIN_PHONES_URL: https://pcms-qa.prison.service.justice.gov.uk/
-  REDIS_ENABLED: true
-  SOC_UI_URL: https://manage-soc-cases-preprod.hmpps.service.justice.gov.uk/
-  SOC_API_URL: https://manage-soc-cases-api-preprod.hmpps.service.justice.gov.uk/
-  SOC_API_ENABLED: true
-  OFFENDER_SEARCH_API_URL: https://prisoner-offender-search-preprod.prison.service.justice.gov.uk
-  SUPPORT_URL: https://support-preprod.hmpps.service.justice.gov.uk/
-  SYSTEM_PHASE: PRE-PRODUCTION
-  BVL_URL: https://book-video-link-preprod.prison.service.justice.gov.uk
-  MOIC_URL: https://preprod.moic.service.justice.gov.uk
-  OMIC_URL: https://preprod.manage-key-workers.service.justice.gov.uk
-  MANAGE_AUTH_ACCOUNTS_URL: https://manage-users-preprod.hmpps.service.justice.gov.uk
-  PECS_URL: http://hmpps-book-secure-move-frontend-preprod.apps.live-1.cloud-platform.service.justice.gov.uk
-  COMPLEXITY_OF_NEED_URI: https://complexity-of-need-preprod.hmpps.service.justice.gov.uk
-  PRISONS_WITH_OFFENDERS_THAT_HAVE_COMPLEX_NEEDS: "AGI,BZI,DHI,DWI,ESI,EWI,FHI,LNI,NHI,PFI,SDI,STI"
-  PRISONS_WITH_MANAGE_ADJUDICATIONS_ENABLED: "RNI,WLI,MDI,EXI,PVI"
-  PRISONS_FOR_MANAGE_PRISON_BOOKINGS: "HEI"
-  MANAGE_ADJUDICATIONS_URL: https://manage-adjudications-preprod.hmpps.service.justice.gov.uk/
-  MANAGE_RESTRICTED_PATIENTS_URL: https://manage-restricted-patients-preprod.hmpps.service.justice.gov.uk/
-  ESWE_ENABLED: true
-  NEURODIVERSITY_ENABLED_USERNAMES: 'NCLAMP_GEN,CN004364,DBULL_GEN'
-  NEURODIVERSITY_ENABLED_PRISONS: "BLI,NHI,LII,SLI"
-  CURIOUS_URL: https://preprodservices.sequation.net/sequation-virtual-campus2-api/
-  DISABLE_REQUEST_LIMITER: true
-  MANAGE_PRISON_VISITS_URL: https://manage-prison-visits-preprod.prison.service.justice.gov.uk/
-  LEGACY_PRISON_VISITS_URL: https://prison-visits-booking-staff-staging.apps.live.cloud-platform.service.justice.gov.uk/
-  CALCULATE_RELEASE_DATES_URL: https://calculate-release-dates-preprod.hmpps.service.justice.gov.uk
-  SEND_LEGAL_MAIL_URL: https://check-rule39-mail-preprod.prison.service.justice.gov.uk
-  WELCOME_PEOPLE_INTO_PRISON_URL: https://welcome-preprod.prison.service.justice.gov.uk/
-  CREATE_AND_VARY_A_LICENCE_URL: https://create-and-vary-a-licence-preprod.hmpps.service.justice.gov.uk/
-  CREATE_AND_VARY_A_LICENCE_ENABLED_PRISONS: "CFI,CWI,UKI,UPI,PRI,FHI,LCI,LII,LGI,MHI,NSI,NMI,RNI,SKI,SUI,WTI"
-  RESTRICTED_PATIENT_API_URL: https://restricted-patients-api-preprod.hmpps.service.justice.gov.uk/
-  HISTORICAL_PRISONER_APPLICATION_URL: https://hpa-preprod.service.hmpps.dsd.io
-
-
-allowlist:
-  office: "217.33.148.210/32"
-  quantum: "62.25.109.197/32"
-  petty-france-wifi: "213.121.161.112/28"
-  global-protect: "35.176.93.186/32"
-  quantum_alt: "212.137.36.230/32"
-  health-kick: "35.177.252.195/32"
-  digitalprisons1: "52.56.112.98/32"
-  digitalprisons2: "52.56.118.154/32"
-  mojvpn: "81.134.202.29/32"
-  j5-phones-1: "35.177.125.252/32"
-  j5-phones-2: "35.177.137.160/32"
-  sodexo-northumberland: "88.98.48.10/32"
-  sodexo-northumberland2: "51.148.47.137/32"
-  sodoxeo-forest-bank: "51.155.85.249/32"
-  sodexo-peterborough: "51.155.55.241/32"
-  serco: "217.22.14.0/24"
-  ark-nps-hmcts-ttp1: "195.59.75.0/24"
-  ark-nps-hmcts-ttp2: "194.33.192.0/25"
-  ark-nps-hmcts-ttp3: "194.33.193.0/25"
-  ark-nps-hmcts-ttp4: "194.33.196.0/25"
-  ark-nps-hmcts-ttp5: "194.33.197.0/25"
-  oakwood-01: "217.161.76.184/29"
-  oakwood-02: "217.161.76.192/29"
-  oakwood-1: "217.161.76.187/32"
-  oakwood-2: "217.161.76.195/32"
-  oakwood-3: "217.161.76.186/32"
-  oakwood-4: "217.161.76.194/32"
-  durham-tees-valley: "51.179.197.1/32"
-  interservfls: "51.179.196.131/32"
-  sodexo1: "80.86.46.16/32"
-  sodexo2: "80.86.46.17/32"
-  sodexo3: "80.86.46.18/32"
-  cloudplatform-live1-1: "35.178.209.113/32"
-  cloudplatform-live1-2: "3.8.51.207/32"
-  cloudplatform-live1-3: "35.177.252.54/32"
-  dxc_webproxy1: "195.92.38.20/32"
-  dxc_webproxy2: "195.92.38.21/32"
-  dxc_webproxy3: "195.92.38.22/32"
-  dxc_webproxy4: "195.92.38.23/32"
-  moj-official-tgw-prod: "51.149.250.0/24"
-  moj-official-tgw-preprod: "51.149.251.0/24"
-  crc-rrp: "62.253.83.37/32"
-  crc-pp-wwm: "5.153.255.210/32"
-  moj-official-ark-c-expo-e: "51.149.249.0/29"
-  moj-official-ark-c-vodafone: "194.33.248.0/29"
-  moj-official-ark-f-vodafone: "194.33.249.0/29"
-  moj-official-ark-f-expo-e: "51.149.249.32/29"
