@@ -1,9 +1,16 @@
 import moment from 'moment'
 import config from '../../config'
+import type apis from '../../apis'
 import { putLastNameFirst, formatName } from '../../utils'
 import { raiseAnalyticsEvent } from '../../raiseAnalyticsEvent'
 
-export default ({ prisonApi, incentivesApi }) => {
+export default ({
+  prisonApi,
+  incentivesApi,
+}: {
+  prisonApi: typeof apis.prisonApi
+  incentivesApi: typeof apis.incentivesApi
+}) => {
   const renderTemplate = async (req, res, pageData) => {
     const { offenderNo } = req.params
     const { errors, formValues = {} } = pageData || {}
@@ -13,7 +20,7 @@ export default ({ prisonApi, incentivesApi }) => {
       const { agencyId, bookingId, firstName, lastName } = prisonerDetails
 
       const [iepSummary, iepLevels] = await Promise.all([
-        incentivesApi.getIepSummaryForBooking(res.locals, bookingId, true),
+        incentivesApi.getIepSummaryForBooking(res.locals, bookingId),
         incentivesApi.getAgencyIepLevels(res.locals, agencyId),
       ])
 
@@ -50,7 +57,7 @@ export default ({ prisonApi, incentivesApi }) => {
       const { agencyId, bookingId, firstName, lastName, assignedLivingUnit } = prisonerDetails
       const locationId: string | undefined = assignedLivingUnit?.description
 
-      const iepSummary = await incentivesApi.getIepSummaryForBooking(res.locals, bookingId, false)
+      const iepSummary = await incentivesApi.getIepSummaryForBooking(res.locals, bookingId)
       // TODO: nextReviewDate will come from incentivesApi in future
       const nextReviewDate = iepSummary?.iepTime && moment(iepSummary.iepTime, 'YYYY-MM-DD HH:mm').add(1, 'years')
 

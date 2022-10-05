@@ -1,10 +1,11 @@
 import moment from 'moment'
+import log from '../../log'
 import { daysSince, formatCurrency } from '../../utils'
 import formatAward from '../../shared/formatAward'
 import filterActivitiesByPeriod from '../../shared/filterActivitiesByPeriod'
 import getValueByType from '../../shared/getValueByType'
-import log from '../../log'
 import getContext from './prisonerProfileContext'
+import type apis from '../../apis'
 
 export const trackEvent = (telemetry, username, activeCaseLoad) => {
   if (telemetry) {
@@ -71,6 +72,16 @@ export default ({
     oauthApi,
     restrictedPatientApi,
     logError,
+  }: {
+    prisonerProfileService
+    prisonApi
+    telemetry
+    offenderSearchApi
+    systemOauthClient
+    incentivesApi: typeof apis.incentivesApi
+    oauthApi
+    restrictedPatientApi
+    logError
   }) =>
   async (req, res) => {
     const {
@@ -113,7 +124,7 @@ export default ({
         prisonApi.getPrisonerBalances(context, bookingId),
         prisonApi.getPrisonerDetails(context, offenderNo),
         prisonApi.getPrisonerSentenceDetails(context, offenderNo),
-        incentivesApi.getIepSummaryForBooking(context, bookingId, false),
+        incentivesApi.getIepSummaryForBooking(context, bookingId),
         prisonApi.getPositiveCaseNotes(context, bookingId, dateThreeMonthsAgo, today),
         prisonApi.getNegativeCaseNotes(context, bookingId, dateThreeMonthsAgo, today),
         prisonApi.getAdjudicationsForBooking(context, bookingId),

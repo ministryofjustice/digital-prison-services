@@ -23,7 +23,7 @@ type OauthApiClientOptions = {
   timeout?: number
 }
 
-type ClientResponse<T = never> = {
+type ClientResponse<T = any> = {
   body: T
   req: ClientRequest
 } & superagent.Response
@@ -118,7 +118,7 @@ export class OauthApiClient {
    * @param body
    * @returns A Promise which resolves to the superagent result object, or the superagent error object if it is rejected
    */
-  post = <T>(context: ClientContext, path: string, body: never): Promise<ClientResponse<T>> => {
+  post = <T>(context: ClientContext, path: string, body: any): Promise<ClientResponse<T>> => {
     return superagent
       .post(this.createUrl(path))
       .send(body)
@@ -136,7 +136,7 @@ export class OauthApiClient {
    * @param body
    * @returns A Promise which resolves to the superagent result object, or the superagent error object if it is rejected
    */
-  put = <T>(context: ClientContext, path: string, body: never): Promise<ClientResponse<T>> => {
+  put = <T>(context: ClientContext, path: string, body: any): Promise<ClientResponse<T>> => {
     return superagent
       .put(this.createUrl(path))
       .send(body)

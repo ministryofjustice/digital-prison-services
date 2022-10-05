@@ -4,6 +4,7 @@ import { serviceUnavailableMessage } from '../../common-messages'
 import { User } from '../../middleware/currentUser'
 import { alertFlagLabels, profileAlertCodes } from '../../shared/alertFlagValues'
 import { putLastNameFirst, hasLength, formatLocation, toMap } from '../../utils'
+import type apis from '../../apis'
 import { Location } from '../../api/prisonApi'
 import { app } from '../../config'
 
@@ -61,6 +62,14 @@ export default ({
   telemetry,
   logError,
   systemOauthClient,
+}: {
+  paginationService
+  prisonApi
+  offenderSearchApi
+  incentivesApi: typeof apis.incentivesApi
+  telemetry
+  logError
+  systemOauthClient
 }) => {
   const index = async (req, res) => {
     const {
@@ -111,7 +120,7 @@ export default ({
       })
 
       const bookingIds = prisoners.map((prisoner) => prisoner.bookingId)
-      const [iepData] = await Promise.all([incentivesApi.getIepSummaryForBookingIds(localContext, bookingIds)])
+      const iepData = await incentivesApi.getIepSummaryForBookingIds(localContext, bookingIds)
       const iepBookingIdMap = toMap('bookingId', iepData)
 
       const locationOptions =

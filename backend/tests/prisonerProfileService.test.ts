@@ -90,7 +90,7 @@ describe('prisoner profile service', () => {
   })
   describe('prisoner profile data', () => {
     const offenderNo = 'ABC123'
-    const bookingId = '123'
+    const bookingId = 123
 
     const prisonerDetails = {
       activeAlertCount: 1,
@@ -172,7 +172,7 @@ describe('prisoner profile service', () => {
     beforeEach(() => {
       // @ts-expect-error ts-migrate(2339) FIXME: Property 'getDetails' does not exist on type '{}'.
       prisonApi.getDetails.mockReturnValue(prisonerDetails)
-      incentivesApi.getIepSummaryForBookingIds.mockResolvedValue([{ iepLevel: 'Standard' }])
+      incentivesApi.getIepSummaryForBookingIds.mockResolvedValue([{ bookingId, iepLevel: 'Standard' }])
       // @ts-expect-error ts-migrate(2339) FIXME: Property 'getCaseNoteSummaryByTypes' does not exis... Remove this comment to see the full error message
       prisonApi.getCaseNoteSummaryByTypes.mockResolvedValue([{ latestCaseNote: '2020-04-07T14:04:25' }])
       // @ts-expect-error ts-migrate(2339) FIXME: Property 'getStaffRoles' does not exist on type '{... Remove this comment to see the full error message
@@ -880,7 +880,7 @@ describe('prisoner profile service', () => {
 
   describe('prisoner with neurodiversity support', () => {
     const offenderNo = 'ABC123'
-    const bookingId = '123'
+    const bookingId = 123
 
     const neurodivergenceData = {
       prn: offenderNo,
@@ -974,7 +974,7 @@ describe('prisoner profile service', () => {
     beforeEach(() => {
       // @ts-expect-error ts-migrate(2339) FIXME: Property 'getDetails' does not exist on type '{}'.
       prisonApi.getDetails.mockReturnValue(prisonerDetails)
-      incentivesApi.getIepSummaryForBookingIds.mockResolvedValue([{ iepLevel: 'Standard' }])
+      incentivesApi.getIepSummaryForBookingIds.mockResolvedValue([{ bookingId, iepLevel: 'Standard' }])
       // @ts-expect-error ts-migrate(2339) FIXME: Property 'getCaseNoteSummaryByTypes' does not exis... Remove this comment to see the full error message
       prisonApi.getCaseNoteSummaryByTypes.mockResolvedValue([{ latestCaseNote: '2020-04-07T14:04:25' }])
       // @ts-expect-error ts-migrate(2339) FIXME: Property 'getStaffRoles' does not exist on type '{... Remove this comment to see the full error message
@@ -1010,7 +1010,7 @@ describe('prisoner profile service', () => {
   })
   describe('prisoner with no neurodiversity support', () => {
     const offenderNo = 'ABC123'
-    const bookingId = '123'
+    const bookingId = 123
 
     const neurodivergenceDataNoSupport = {
       prn: offenderNo,
@@ -1060,7 +1060,7 @@ describe('prisoner profile service', () => {
     beforeEach(() => {
       // @ts-expect-error ts-migrate(2339) FIXME: Property 'getDetails' does not exist on type '{}'.
       prisonApi.getDetails.mockReturnValue(prisonerDetails)
-      incentivesApi.getIepSummaryForBookingIds.mockResolvedValue([{ iepLevel: 'Standard' }])
+      incentivesApi.getIepSummaryForBookingIds.mockResolvedValue([{ bookingId, iepLevel: 'Standard' }])
       // @ts-expect-error ts-migrate(2339) FIXME: Property 'getCaseNoteSummaryByTypes' does not exis... Remove this comment to see the full error message
       prisonApi.getCaseNoteSummaryByTypes.mockResolvedValue([{ latestCaseNote: '2020-04-07T14:04:25' }])
       // @ts-expect-error ts-migrate(2339) FIXME: Property 'getStaffRoles' does not exist on type '{... Remove this comment to see the full error message
