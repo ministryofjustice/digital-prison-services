@@ -18,7 +18,7 @@ describe('prisoner profile quick look', () => {
     offenderNo,
     profileInformation: [{ type: 'NAT', resultValue: 'British' }],
   }
-  const bookingId = '123'
+  const bookingId = 123
   const iepSummaryForBooking = {
     bookingId,
     iepDate: '2017-08-15',
@@ -428,8 +428,7 @@ describe('prisoner profile quick look', () => {
         {
           user: { activeCaseLoad: { caseLoadId: 'MDI' } },
         },
-        bookingId,
-        false
+        bookingId
       )
       expect(prisonApi.getPositiveCaseNotes).toHaveBeenCalledWith(
         {

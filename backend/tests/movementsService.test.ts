@@ -195,7 +195,7 @@ describe('Movement service', () => {
         { offenderNo: 'G0000GG', bookingId: 1 },
         { offenderNo: 'G0001GG', bookingId: 2 },
       ])
-      incentivesApi.getIepSummaryForBookingIds.mockReturnValue([
+      incentivesApi.getIepSummaryForBookingIds.mockResolvedValue([
         { bookingId: 1, iepLevel: 'basic' },
         { bookingId: 2, iepLevel: 'standard' },
       ])
@@ -236,7 +236,7 @@ describe('Movement service', () => {
 
       // @ts-expect-error ts-migrate(2339) FIXME: Property 'getRecentMovements' does not exist on ty... Remove this comment to see the full error message
       prisonApi.getRecentMovements.mockReturnValue([])
-      incentivesApi.getIepSummaryForBookingIds.mockReturnValue([])
+      incentivesApi.getIepSummaryForBookingIds.mockResolvedValue([])
     })
 
     it('returns a empty array when there are no offenders in reception ', async () => {
@@ -335,7 +335,7 @@ describe('Movement service', () => {
     it('should request iep summary information for offenders in reception', async () => {
       // @ts-expect-error ts-migrate(2339) FIXME: Property 'getOffendersInReception' does not exist ... Remove this comment to see the full error message
       prisonApi.getOffendersInReception.mockReturnValue(offenders)
-      incentivesApi.getIepSummaryForBookingIds.mockReturnValue([
+      incentivesApi.getIepSummaryForBookingIds.mockResolvedValue([
         { ...offenders[0], iepLevel: 'basic' },
         { ...offenders[1], iepLevel: 'standard' },
       ])
@@ -555,7 +555,7 @@ describe('Movement service', () => {
           { offenderNo: 'G0000GG', bookingId: 1 },
           { offenderNo: 'G0001GG', bookingId: 2 },
         ])
-        incentivesApi.getIepSummaryForBookingIds.mockReturnValue([
+        incentivesApi.getIepSummaryForBookingIds.mockResolvedValue([
           { bookingId: 1, iepLevel: 'basic' },
           { bookingId: 2, iepLevel: 'standard' },
         ])
@@ -754,7 +754,7 @@ describe('Movement service', () => {
           { offenderNo: 'G0000GG', bookingId: 1 },
           { offenderNo: 'G0001GG', bookingId: 2 },
         ])
-        incentivesApi.getIepSummaryForBookingIds.mockReturnValue([
+        incentivesApi.getIepSummaryForBookingIds.mockResolvedValue([
           { bookingId: 1, iepLevel: 'basic' },
           { bookingId: 2, iepLevel: 'standard' },
         ])

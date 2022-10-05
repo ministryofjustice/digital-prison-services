@@ -1,15 +1,16 @@
 import type apis from '../apis'
+import type { IepSummaryForBookingWithDetails } from '../api/incentivesApi'
 import prisonerIncentiveLevelDetails from '../controllers/prisonerProfile/prisonerIncentiveLevelDetails'
 
 describe('Prisoner incentive level details', () => {
   const offenderNo = 'ABC123'
-  const bookingId = '123'
+  const bookingId = 123
   const prisonApi = {}
   const incentivesApi = {} as jest.Mocked<typeof apis.incentivesApi>
   const oauthApi = {}
 
-  const iepSummaryForBooking = {
-    bookingId: -1,
+  const iepSummaryForBooking: IepSummaryForBookingWithDetails = {
+    bookingId,
     iepDate: '2017-08-15',
     iepTime: '2017-08-15T16:04:35',
     iepLevel: 'Standard',
@@ -39,32 +40,35 @@ describe('Prisoner incentive level details', () => {
       .fn()
       .mockResolvedValue({ agencyId: 'MDI', bookingId, firstName: 'John', lastName: 'Smith' })
 
-    incentivesApi.getIepSummaryForBooking = jest.fn().mockReturnValue({
+    incentivesApi.getIepSummaryForBooking = jest.fn().mockResolvedValue({
       ...iepSummaryForBooking,
       iepDetails: [
         {
-          bookingId: -1,
+          bookingId,
           iepDate: '2017-08-15',
           iepTime: '2017-08-15T16:04:35',
           agencyId: 'LEI',
           iepLevel: 'Standard',
           userId: 'ITAG_USER',
+          comments: '3',
         },
         {
-          bookingId: -1,
+          bookingId,
           iepDate: '2017-08-10',
           iepTime: '2017-08-10T16:04:35',
           agencyId: 'HEI',
           iepLevel: 'Basic',
           userId: 'ITAG_USER',
+          comments: '2',
         },
         {
-          bookingId: -1,
+          bookingId,
           iepDate: '2017-08-07',
           iepTime: '2017-08-07T16:04:35',
           agencyId: 'HEI',
           iepLevel: 'Enhanced',
           userId: 'ITAG_USER',
+          comments: '1',
         },
       ],
     })
@@ -139,7 +143,7 @@ describe('Prisoner incentive level details', () => {
       results: [
         {
           agencyId: 'LEI',
-          bookingId: -1,
+          bookingId,
           formattedTime: '15 August 2017 - 16:04',
           iepDate: '2017-08-15',
           iepEstablishment: 'Leeds',
@@ -147,9 +151,10 @@ describe('Prisoner incentive level details', () => {
           iepStaffMember: 'Staff Member',
           iepTime: '2017-08-15T16:04:35',
           userId: 'ITAG_USER',
+          comments: '3',
         },
         {
-          bookingId: -1,
+          bookingId,
           iepDate: '2017-08-10',
           iepTime: '2017-08-10T16:04:35',
           formattedTime: '10 August 2017 - 16:04',
@@ -158,10 +163,11 @@ describe('Prisoner incentive level details', () => {
           agencyId: 'HEI',
           iepLevel: 'Basic',
           userId: 'ITAG_USER',
+          comments: '2',
         },
         {
           agencyId: 'HEI',
-          bookingId: -1,
+          bookingId,
           formattedTime: '7 August 2017 - 16:04',
           iepDate: '2017-08-07',
           iepEstablishment: 'Hewell',
@@ -169,6 +175,7 @@ describe('Prisoner incentive level details', () => {
           iepStaffMember: 'Staff Member',
           iepTime: '2017-08-07T16:04:35',
           userId: 'ITAG_USER',
+          comments: '1',
         },
       ],
       userCanUpdateIEP: false,
@@ -230,7 +237,7 @@ describe('Prisoner incentive level details', () => {
         },
         results: [
           {
-            bookingId: -1,
+            bookingId,
             iepDate: '2017-08-10',
             iepTime: '2017-08-10T16:04:35',
             formattedTime: '10 August 2017 - 16:04',
@@ -239,6 +246,7 @@ describe('Prisoner incentive level details', () => {
             agencyId: 'HEI',
             iepLevel: 'Basic',
             userId: 'ITAG_USER',
+            comments: '2',
           },
         ],
       })
@@ -259,7 +267,7 @@ describe('Prisoner incentive level details', () => {
         },
         results: [
           {
-            bookingId: -1,
+            bookingId,
             iepDate: '2017-08-10',
             iepTime: '2017-08-10T16:04:35',
             formattedTime: '10 August 2017 - 16:04',
@@ -268,6 +276,7 @@ describe('Prisoner incentive level details', () => {
             agencyId: 'HEI',
             iepLevel: 'Basic',
             userId: 'ITAG_USER',
+            comments: '2',
           },
         ],
       })
@@ -287,7 +296,7 @@ describe('Prisoner incentive level details', () => {
         },
         results: [
           {
-            bookingId: -1,
+            bookingId,
             iepDate: '2017-08-10',
             iepTime: '2017-08-10T16:04:35',
             formattedTime: '10 August 2017 - 16:04',
@@ -296,9 +305,10 @@ describe('Prisoner incentive level details', () => {
             agencyId: 'HEI',
             iepLevel: 'Basic',
             userId: 'ITAG_USER',
+            comments: '2',
           },
           {
-            bookingId: -1,
+            bookingId,
             iepDate: '2017-08-07',
             iepTime: '2017-08-07T16:04:35',
             formattedTime: '7 August 2017 - 16:04',
@@ -307,6 +317,7 @@ describe('Prisoner incentive level details', () => {
             agencyId: 'HEI',
             iepLevel: 'Enhanced',
             userId: 'ITAG_USER',
+            comments: '1',
           },
         ],
       })
@@ -334,7 +345,7 @@ describe('Prisoner incentive level details', () => {
         },
         results: [
           {
-            bookingId: -1,
+            bookingId,
             iepDate: '2017-08-10',
             iepTime: '2017-08-10T16:04:35',
             formattedTime: '10 August 2017 - 16:04',
@@ -343,6 +354,7 @@ describe('Prisoner incentive level details', () => {
             agencyId: 'HEI',
             iepLevel: 'Basic',
             userId: 'ITAG_USER',
+            comments: '2',
           },
         ],
       })
@@ -363,7 +375,7 @@ describe('Prisoner incentive level details', () => {
         },
         results: [
           {
-            bookingId: -1,
+            bookingId,
             iepDate: '2017-08-10',
             iepTime: '2017-08-10T16:04:35',
             formattedTime: '10 August 2017 - 16:04',
@@ -372,6 +384,7 @@ describe('Prisoner incentive level details', () => {
             agencyId: 'HEI',
             iepLevel: 'Basic',
             userId: 'ITAG_USER',
+            comments: '2',
           },
         ],
       })
@@ -381,7 +394,7 @@ describe('Prisoner incentive level details', () => {
   it('should return default message for no incentive level history', async () => {
     req.query = {}
 
-    incentivesApi.getIepSummaryForBooking = jest.fn().mockReturnValue(iepSummaryForBooking)
+    incentivesApi.getIepSummaryForBooking = jest.fn().mockResolvedValue(iepSummaryForBooking)
 
     await controller(req, res)
 
@@ -397,7 +410,7 @@ describe('Prisoner incentive level details', () => {
   it('should return default message when no incentive level history is returned for the supplied filters', async () => {
     req.query = { fromDate: '10/08/2017', toDate: '10/08/2017' }
 
-    incentivesApi.getIepSummaryForBooking = jest.fn().mockReturnValue(iepSummaryForBooking)
+    incentivesApi.getIepSummaryForBooking = jest.fn().mockResolvedValue(iepSummaryForBooking)
 
     await controller(req, res)
 
