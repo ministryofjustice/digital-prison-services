@@ -14,28 +14,38 @@ jobs:
           name: Update npm
           command: 'sudo npm install -g npm@latest'
       - restore_cache:
-          key: node_modules-{{ checksum "package-lock.json" }}-{{ checksum "package.json" }}
+          key: dependency-cache-{{ checksum "package-lock.json" }}
       - run:
           name: Install Dependencies
           command: CYPRESS_INSTALL_BINARY=0 npm ci --no-audit
       - save_cache:
-          key: node_modules-{{ checksum "package-lock.json" }}-{{ checksum "package.json" }}
+          key: dependency-cache-{{ checksum "package-lock.json" }}
           paths:
-            - ./node_modules
+            - node_modules
+            - ~/.cache
+      - run: NODE_ENV=production npm run build
       - run:
           name: Run eslint
           command: npm run lint
-      - run:
-          name: Run Tests
-          command: |
-             set -e
-             npm test -- --maxWorkers=2
-      - run: NODE_ENV=production npm run build
       - persist_to_workspace:
           root: .
           paths:
             - node_modules
             - build
+
+  unit_test:
+    executor:
+      name: hmpps/node
+      tag: 16.13-browsers
+    steps:
+      - checkout
+      - restore_cache:
+          key: dependency-cache-{{ checksum "package-lock.json" }}
+      - run:
+          name: unit tests
+          command: |
+             set -e
+             npm test -- --maxWorkers=2
 
   cypress_integration_tests:
     working_directory: ~/app
