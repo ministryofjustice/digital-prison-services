@@ -2,7 +2,7 @@
 
 exports[`<ResultsTotals /> should match the default snapshot 1`] = `
 <div
-  className="sc-bdVaJa glKenP"
+  className="sc-bcXHqe heAfAn"
 >
   0
    - 
@@ -16,7 +16,7 @@ exports[`<ResultsTotals /> should match the default snapshot 1`] = `
 
 exports[`<ResultsTotals /> should match the first page snapshot 1`] = `
 <div
-  className="sc-bdVaJa glKenP"
+  className="sc-bcXHqe heAfAn"
 >
   1
    - 
@@ -30,7 +30,7 @@ exports[`<ResultsTotals /> should match the first page snapshot 1`] = `
 
 exports[`<ResultsTotals /> should match the with page number snapshot 1`] = `
 <div
-  className="sc-bdVaJa glKenP"
+  className="sc-bcXHqe heAfAn"
 >
   61
    - 
