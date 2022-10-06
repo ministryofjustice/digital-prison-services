@@ -85,7 +85,7 @@ export const mapToQueryString = (params: Record<never, never>): string =>
     })
     .join('&')
 
-export const toMap = (key: string, array: never[]): Map<any, any> =>
+export const toMap = <T = any, K extends keyof T = any>(key: K, array: T[]): Map<T[K], T> =>
   array.reduce((map, current) => {
     if (map.has(current[key]) === false) {
       map.set(current[key], current)
