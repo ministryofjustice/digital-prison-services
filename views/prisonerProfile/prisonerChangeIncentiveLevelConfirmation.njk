@@ -35,11 +35,13 @@
         <strong data-test="current-incentive-level">{{ iepSummary.iepLevel }}</strong>
       {% endset %}
 
-      {% set panelBody %}
-        The next review should be no later than
-        <br/>
-        <strong data-test="next-review-date">{{ nextReviewDate }}</strong>
-      {% endset %}
+      {% set panelBody -%}
+        {% if nextReviewDate %}
+          The next review should be no later than
+          <br/>
+          <strong data-test="next-review-date">{{ nextReviewDate }}</strong>
+        {% endif %}
+      {%- endset %}
 
       {{ govukPanel({
         titleHtml: panelTitle,

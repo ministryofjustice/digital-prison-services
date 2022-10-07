@@ -7,6 +7,7 @@ const iepSummaryForBooking = {
   iepTime: '2017-08-15T16:04:35',
   iepLevel: 'Standard',
   daysSinceReview: 625,
+  nextReviewDate: '2018-08-15',
 }
 
 const iepLevels = [
@@ -75,6 +76,7 @@ context('Prisoner change incentive level details', () => {
                 iepTime: '2021-09-26T12:34:56',
                 iepLevel: iepLevels[0].iepDescription,
                 daysSinceReview: 0,
+                nextReviewDate: '2022-09-26',
               },
             },
           },

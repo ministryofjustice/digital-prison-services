@@ -25,6 +25,7 @@ describe('prisoner profile quick look', () => {
     iepTime: '2017-08-15T16:04:35',
     iepLevel: 'Standard',
     daysSinceReview: 881,
+    nextReviewDate: '2018-08-15',
     iepDetails: [],
   }
   const prisonApi = {
@@ -576,6 +577,7 @@ describe('prisoner profile quick look', () => {
           iepDate: '2019-01-12',
           iepTime: '2019-01-12T15:22:00',
           daysSinceReview: 1,
+          nextReviewDate: '2020-01-12',
         })
 
         await controller(req, res)
@@ -592,6 +594,7 @@ describe('prisoner profile quick look', () => {
           iepDate: '2019-12-16',
           iepTime: '2019-12-16T15:22:00',
           daysSinceReview: 28,
+          nextReviewDate: '2020-12-16',
         })
 
         await controller(req, res)

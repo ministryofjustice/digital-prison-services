@@ -9,6 +9,7 @@ const iepSummaryResponse = {
   iepTime: '2017-08-15T16:04:35',
   iepLevel: 'Standard',
   daysSinceReview: 625,
+  nextReviewDate: '2018-08-15',
   iepDetails: [
     {
       bookingId: -1,
@@ -103,9 +104,6 @@ context('Prisoner incentive level details', () => {
     })
 
     context('Next review date', () => {
-      // TODO: nextReviewDate will come from incentives api:
-      //  currently it's calculated to be a year after the last review
-
       it('should show when next review date is', () => {
         // pretend the last review was 10 days ago
         const lastReviewDate = moment().subtract(10, 'days')
@@ -115,6 +113,7 @@ context('Prisoner incentive level details', () => {
           ...iepSummaryResponse,
           iepDate: lastReviewDate.format('YYYY-MM-DD'),
           iepTime: lastReviewDate.format('YYYY-MM-DDTHH:mm:ss'),
+          nextReviewDate: nextReviewDate.format('YYYY-MM-DD'),
         })
 
         cy.visit(`/prisoner/${offenderNo}/incentive-level-details`)
@@ -132,6 +131,7 @@ context('Prisoner incentive level details', () => {
           ...iepSummaryResponse,
           iepDate: lastReviewDate.format('YYYY-MM-DD'),
           iepTime: lastReviewDate.format('YYYY-MM-DDTHH:mm:ss'),
+          nextReviewDate: nextReviewDate.format('YYYY-MM-DD'),
         })
 
         cy.visit(`/prisoner/${offenderNo}/incentive-level-details`)
@@ -202,6 +202,7 @@ context('Prisoner incentive level details', () => {
         iepTime: '2017-08-15T16:04:35',
         iepLevel: 'Standard',
         daysSinceReview: 625,
+        nextReviewDate: '2018-08-15',
         iepDetails: [],
       })
 
@@ -224,6 +225,7 @@ context('Prisoner incentive level details', () => {
         iepTime: '2017-08-15T16:04:35',
         iepLevel: 'Standard',
         daysSinceReview: 625,
+        nextReviewDate: '2018-08-15',
         iepDetails: [],
       })
 

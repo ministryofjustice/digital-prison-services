@@ -15,6 +15,7 @@ describe('Prisoner incentive level details', () => {
     iepTime: '2017-08-15T16:04:35',
     iepLevel: 'Standard',
     daysSinceReview: 1868,
+    nextReviewDate: '2018-08-15',
     iepDetails: [],
   }
 
