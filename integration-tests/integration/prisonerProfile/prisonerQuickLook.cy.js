@@ -23,6 +23,7 @@ const quickLookFullDetails = {
     iepTime: '2017-08-15T16:04:35',
     iepLevel: 'Standard',
     daysSinceReview: 881,
+    nextReviewDate: '2018-08-15',
     iepDetails: [],
   },
   positiveCaseNotes: { count: 2 },

@@ -58,8 +58,7 @@ export default ({
       const locationId: string | undefined = assignedLivingUnit?.description
 
       const iepSummary = await incentivesApi.getIepSummaryForBooking(res.locals, bookingId)
-      // TODO: nextReviewDate will come from incentivesApi in future
-      const nextReviewDate = iepSummary?.iepTime && moment(iepSummary.iepTime, 'YYYY-MM-DD HH:mm').add(1, 'years')
+      const nextReviewDate = iepSummary?.nextReviewDate && moment(iepSummary.nextReviewDate, 'YYYY-MM-DD HH:mm')
 
       return res.render('prisonerProfile/prisonerChangeIncentiveLevelConfirmation.njk', {
         agencyId,
@@ -73,7 +72,7 @@ export default ({
             ? `${config.apis.incentives.ui_url}/incentive-summary/${agencyId}-${locationId.split('-')[0]}`
             : config.apis.incentives.ui_url,
         iepSummary,
-        nextReviewDate: nextReviewDate.format('D MMMM YYYY'),
+        nextReviewDate: nextReviewDate?.format('D MMMM YYYY'),
       })
     } catch (error) {
       res.locals.redirectUrl = `/prisoner/${offenderNo}/incentive-level-details`

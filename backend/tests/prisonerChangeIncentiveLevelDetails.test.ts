@@ -20,6 +20,7 @@ describe('Prisoner change incentive level details', () => {
     iepTime: '2017-08-15T16:04:35',
     iepLevel: 'Standard',
     daysSinceReview: 625,
+    nextReviewDate: '2017-08-15',
     iepDetails: [
       {
         bookingId,
@@ -193,6 +194,7 @@ describe('Prisoner change incentive level details', () => {
           iepTime: '2022-09-26T12:34:56',
           iepLevel: 'Enhanced',
           daysSinceReview: 0,
+          nextReviewDate: '2023-09-26',
         })
 
         req.body = {

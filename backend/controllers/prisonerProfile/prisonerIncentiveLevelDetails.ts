@@ -97,8 +97,7 @@ export default ({
         }
       })
 
-      // TODO: nextReviewDate will come from incentivesApi in future
-      const nextReviewDate = moment(iepSummary.iepTime, 'YYYY-MM-DD HH:mm').add(1, 'years')
+      const nextReviewDate = moment(iepSummary.nextReviewDate, 'YYYY-MM-DD HH:mm')
       const reviewDaysOverdue = daysSince(nextReviewDate)
 
       const filteredResults = filterData(iepHistoryDetails, {

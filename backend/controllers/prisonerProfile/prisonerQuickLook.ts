@@ -47,13 +47,11 @@ const createFinanceLink = (offenderNo, path, value) =>
     formatCurrency(value || 0)
   }</a>`
 
-const getNextIepReviewDate = (iepSummary: { iepTime?: string }): string | undefined => {
-  const lastReviewDate = iepSummary?.iepTime
-  if (!lastReviewDate) return undefined
-  // TODO: nextReviewDate will come from incentivesApi in future
-  const nextReviewDate = moment(lastReviewDate, 'YYYY-MM-DD HH:mm').add(1, 'years')
+const getNextIepReviewDate = ({ nextReviewDate }: { nextReviewDate?: string }): string | undefined => {
+  if (!nextReviewDate) return undefined
+  const nextReviewDateMoment = moment(nextReviewDate, 'YYYY-MM-DD HH:mm')
   const reviewDaysOverdue = daysSince(nextReviewDate)
-  let nextIepReviewDate = nextReviewDate.format('D MMMM YYYY')
+  let nextIepReviewDate = nextReviewDateMoment.format('D MMMM YYYY')
   if (reviewDaysOverdue > 0) {
     nextIepReviewDate += `<br/><span class="highlight highlight--alert">${reviewDaysOverdue} ${
       reviewDaysOverdue === 1 ? 'day' : 'days'

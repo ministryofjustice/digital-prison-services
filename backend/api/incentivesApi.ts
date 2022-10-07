@@ -15,6 +15,7 @@ export type IepSummaryForBooking = {
   iepDate: string
   iepTime: string
   daysSinceReview: number
+  nextReviewDate: string
 }
 
 export type IepSummaryDetail = {
