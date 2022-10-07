@@ -96,6 +96,9 @@ workflows:
           filters:
             tags:
               ignore: /.*/
+      - unit_test:
+          requires:
+            - build
       - cypress_integration_tests:
           requires:
             - build
@@ -116,6 +119,7 @@ workflows:
             - hmpps-common-vars
           requires:
             - build_docker
+            - unit_test
             - cypress_integration_tests
           filters:
             branches:
@@ -146,7 +150,7 @@ workflows:
           slack_notification: true
           context:
             - digital-prison-services-prod
-            - hmpps-common-vars 
+            - hmpps-common-vars
           requires:
             - request-prod-approval
   security:
@@ -181,4 +185,3 @@ workflows:
           context:
             - veracode-credentials
             - hmpps-common-vars
-
