@@ -50,7 +50,7 @@ describe('Prisoner incentive level details', () => {
           iepTime: '2017-08-15T16:04:35',
           agencyId: 'LEI',
           iepLevel: 'Standard',
-          userId: 'ITAG_USER',
+          userId: 'INCENTIVES-API',
           comments: '3',
         },
         {
@@ -149,9 +149,9 @@ describe('Prisoner incentive level details', () => {
           iepDate: '2017-08-15',
           iepEstablishment: 'Leeds',
           iepLevel: 'Standard',
-          iepStaffMember: 'Staff Member',
+          iepStaffMember: undefined,
           iepTime: '2017-08-15T16:04:35',
-          userId: 'ITAG_USER',
+          userId: 'INCENTIVES-API',
           comments: '3',
         },
         {

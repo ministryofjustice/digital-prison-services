@@ -39,6 +39,10 @@ const filterData = (data: HistoryDetail[], fields: HistoryFilters): HistoryDetai
   return filteredResults
 }
 
+function notEmpty<TValue>(value: TValue | null | undefined): value is TValue {
+  return value !== null && value !== undefined
+}
+
 export default ({
     prisonApi,
     incentivesApi,
@@ -77,9 +81,14 @@ export default ({
       const uniqueAgencyIds = Array.from(new Set(iepSummary.iepDetails.map((details) => details.agencyId)))
       const levels = Array.from(new Set(iepSummary.iepDetails.map((details) => details.iepLevel))).sort()
 
-      const users = await Promise.all(
-        uniqueUserIds.filter((userId) => Boolean(userId)).map((userId) => prisonApi.getStaffDetails(res.locals, userId))
-      )
+      // Only get users that map to a user in the prison staff table
+      const users = (
+        await Promise.all(
+          uniqueUserIds
+            .filter((userId) => Boolean(userId))
+            .map((userId) => prisonApi.getStaffDetails(res.locals, userId))
+        )
+      ).filter(notEmpty)
 
       const establishments = await Promise.all(
         uniqueAgencyIds.filter((id) => Boolean(id)).map((id) => prisonApi.getAgencyDetails(res.locals, id))
