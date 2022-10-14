@@ -68,6 +68,15 @@ export const prisonApiFactory = (client) => {
   const get = (context, url, resultsLimit?, retryOverride?) =>
     client.get(context, url, { resultsLimit, retryOverride }).then(processResponse(context))
 
+  const map404ToNull = (error) => {
+    if (!error.response) throw error
+    if (!error.response.status) throw error
+    if (error.response.status !== 404) throw error
+    return null
+  }
+  const getWithHandle404 = (context, url, resultsLimit?, retryOverride?) =>
+    client.get(context, url, { resultsLimit, retryOverride }).then(processResponse(context)).catch(map404ToNull)
+
   const getWithCustomTimeout = (context, path, overrides) =>
     client.getWithCustomTimeout(context, path, overrides).then(processResponse(context))
 
@@ -148,7 +157,7 @@ export const prisonApiFactory = (client) => {
 
   const getAgencyDetails = (context, agencyId) => get(context, `/api/agencies/${agencyId}?activeOnly=false`)
 
-  const getStaffDetails = (context, staffId) => get(context, `/api/users/${staffId}`)
+  const getStaffDetails = (context, staffId) => getWithHandle404(context, `/api/users/${staffId}`)
 
   const getCourtEvents = (context, { agencyId, date, offenderNumbers }) =>
     post(context, `/api/schedules/${agencyId}/courtEvents?date=${date}`, offenderNumbers)
