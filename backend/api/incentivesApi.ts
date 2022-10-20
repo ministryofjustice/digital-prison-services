@@ -1,5 +1,6 @@
 import type { Response } from 'superagent'
 import type { ClientContext, OauthApiClient } from './oauthEnabledClient'
+import config from '../config'
 import contextProperties from '../contextProperties'
 
 export type AgencyIepLevel = {
@@ -85,13 +86,22 @@ export const incentivesApiFactory = (client: OauthApiClient) => {
     context: ClientContext,
     bookingId: number,
     withDetails = false
-  ): Promise<any> => get(context, `/iep/reviews/booking/${bookingId}?with-details=${withDetails}`)
+  ): Promise<any> =>
+    get(
+      context,
+      `/iep/reviews/booking/${bookingId}?with-details=${withDetails}&use-nomis-data=${!config.apis.incentives
+        .useIncentivesData}`
+    )
 
   const getIepSummaryForBookingIds = (
     context: ClientContext,
     bookingIds: number[]
   ): Promise<IepSummaryForBookingId[]> =>
-    post<IepSummaryForBookingId[], number[]>(context, '/iep/reviews/bookings', bookingIds)
+    post<IepSummaryForBookingId[], number[]>(
+      context,
+      `/iep/reviews/bookings?use-nomis-data=${!config.apis.incentives.useIncentivesData}`,
+      bookingIds
+    )
 
   const changeIepLevel = (context: ClientContext, bookingId: number, body: IepLevelChangeRequest) =>
     post<IepLevelChanged, IepLevelChangeRequest>(context, `/iep/reviews/booking/${bookingId}`, body)
