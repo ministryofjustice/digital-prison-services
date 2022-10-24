@@ -130,7 +130,9 @@ export default ({
         prisoners &&
         prisoners.map((prisoner) => ({
           ...prisoner,
-          iepLevel: iepBookingIdMap.get(prisoner.bookingId).iepLevel,
+          iepLevel:
+            (iepBookingIdMap.has(prisoner.bookingId) && iepBookingIdMap.get(prisoner.bookingId).iepLevel) ||
+            'Not entered',
           assignedLivingUnitDesc: formatLocation(prisoner.assignedLivingUnitDesc),
           name: putLastNameFirst(prisoner.firstName, prisoner.lastName),
           alerts: alertFlagLabels.filter((alertFlag) =>
