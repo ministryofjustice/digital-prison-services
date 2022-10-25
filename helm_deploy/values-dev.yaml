@@ -62,4 +62,3 @@ generic-service:
    CREATE_AND_VARY_A_LICENCE_ENABLED_PRISONS: "MDI,LEI,LPI,BMI,PVI,BXI,WAI"
    RESTRICTED_PATIENT_API_URL: https://restricted-patients-api-dev.hmpps.service.justice.gov.uk/
    HISTORICAL_PRISONER_APPLICATION_URL: 	https://hpa-stage.hmpps.dsd.io
-   ESTABLISHMENT_SEARCH_USES_PRISONER_SEARCH: "true"
