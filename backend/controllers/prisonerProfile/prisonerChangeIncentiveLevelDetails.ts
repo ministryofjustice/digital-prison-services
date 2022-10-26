@@ -20,7 +20,7 @@ export default ({
       const { agencyId, bookingId, firstName, lastName } = prisonerDetails
 
       const [iepSummary, iepLevels] = await Promise.all([
-        incentivesApi.getIepSummaryForBooking(res.locals, bookingId),
+        getCurrentIepLevel(res.locals, bookingId),
         incentivesApi.getAgencyIepLevels(res.locals, agencyId),
       ])
 
@@ -47,6 +47,18 @@ export default ({
       res.locals.redirectUrl = `/prisoner/${offenderNo}`
       throw error
     }
+  }
+
+  const getCurrentIepLevel = async (context, bookingId) => {
+    let currentLevel
+    try {
+      currentLevel = await incentivesApi.getIepSummaryForBooking(context, bookingId)
+    } catch (error) {
+      if (error.response.status === 404) {
+        currentLevel = { iepLevel: 'Not entered' }
+      }
+    }
+    return currentLevel
   }
 
   const renderConfirmation = async (req, res) => {

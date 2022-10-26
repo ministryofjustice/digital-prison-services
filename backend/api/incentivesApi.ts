@@ -68,15 +68,6 @@ export const incentivesApiFactory = (client: OauthApiClient) => {
       return response.body
     }
 
-  const map404ToNull = (error) => {
-    if (!error.response) throw error
-    if (!error.response.status) throw error
-    if (error.response.status !== 404) throw error
-    return null
-  }
-  const getHandle404 = <T>(context: ClientContext, url: string): Promise<T> =>
-    client.get<T>(context, url).then(processResponse(context)).catch(map404ToNull)
-
   const get = <T>(context: ClientContext, url: string): Promise<T> =>
     client.get<T>(context, url).then(processResponse(context))
 
@@ -94,7 +85,7 @@ export const incentivesApiFactory = (client: OauthApiClient) => {
     context: ClientContext,
     bookingId: number,
     withDetails = false
-  ): Promise<any> => getHandle404(context, `/iep/reviews/booking/${bookingId}?with-details=${withDetails}`)
+  ): Promise<any> => get(context, `/iep/reviews/booking/${bookingId}?with-details=${withDetails}`)
 
   const getIepSummaryForBookingIds = (
     context: ClientContext,
