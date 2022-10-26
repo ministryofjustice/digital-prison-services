@@ -91,7 +91,7 @@ export const incentivesApiFactory = (client: OauthApiClient) => {
     context: ClientContext,
     bookingIds: number[]
   ): Promise<IepSummaryForBookingId[]> =>
-    post<IepSummaryForBookingId[], number[]>(context, `/iep/reviews/bookings`, bookingIds)
+    post<IepSummaryForBookingId[], number[]>(context, '/iep/reviews/bookings', bookingIds)
 
   const changeIepLevel = (context: ClientContext, bookingId: number, body: IepLevelChangeRequest) =>
     post<IepLevelChanged, IepLevelChangeRequest>(context, `/iep/reviews/booking/${bookingId}`, body)
