@@ -164,6 +164,7 @@ describe('Prisoner search', () => {
             { checked: false, text: 'Staff assaulter', value: ['XSA'] },
             { checked: false, text: 'TACT', value: ['XTACT'] },
             { checked: false, text: 'Veteran', value: ['F1'] },
+            { checked: false, text: 'ViSOR', value: ['PVN'] },
           ],
           locationOptions: [
             { text: 'Moorland (HMP & YOI)', value: 'MDI' },
@@ -569,6 +570,7 @@ describe('Prisoner search', () => {
             { checked: false, text: 'Staff assaulter', value: ['XSA'] },
             { checked: false, text: 'TACT', value: ['XTACT'] },
             { checked: false, text: 'Veteran', value: ['F1'] },
+            { checked: false, text: 'ViSOR', value: ['PVN'] },
           ],
           locationOptions: [
             { text: 'Moorland (HMP & YOI)', value: 'MDI' },

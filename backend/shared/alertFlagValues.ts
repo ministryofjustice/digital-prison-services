@@ -98,6 +98,7 @@ export const alertFlagLabels = [
   { alertCodes: ['URS'], classes: 'alert-status alert-status--refusing-to-shield', label: 'Refusing to shield' },
   { alertCodes: ['RKS'], classes: 'alert-status alert-status--risk-to-known-adults', label: 'Risk to known adults' },
   { alertCodes: ['VIP'], classes: 'alert-status alert-status--isolated-prisoner', label: 'Isolated' },
+  { alertCodes: ['PVN'], classes: 'alert-status alert-status--multicase alert-status--visor', label: 'ViSOR' },
 ].sort((a, b) => a.label.localeCompare(b.label))
 
 export const cellMoveAlertCodes = [
@@ -120,6 +121,7 @@ export const cellMoveAlertCodes = [
   'HA',
   'HA1',
   'RTP',
+  'PVN',
 ]
 
 export const profileAlertCodes = [
@@ -150,6 +152,7 @@ export const profileAlertCodes = [
   'UPIU',
   'USU',
   'URS',
+  'PVN',
 ]
 
 export type AlertLabelFlag = {
