@@ -77,65 +77,66 @@
         {% endif %}
     </div>
 
-    <div class="govuk-!-padding-3 govuk-!-margin-bottom-5 form-background">
-        <h2 class="govuk-heading-m">View by</h2>
-        <form class="horizontal-form govuk-body govuk-!-margin-bottom-3" method="GET">
-            {{ govukSelect({
-                name: 'agencyId',
-                id: 'agencyId',
-                label: {
-                    text: 'Establishment'
-                },
-                items: establishments | addDefaultSelectedVale('All', true) | setSelected(formValues.agencyId),
-                attributes: {
-                    "data-test": 'establishment-select'
-                }
-            }) }}
+    {% if results != null %}
+        <div class="govuk-!-padding-3 govuk-!-margin-bottom-5 form-background">
+            <h2 class="govuk-heading-m">View by</h2>
+            <form class="horizontal-form govuk-body govuk-!-margin-bottom-3" method="GET">
+                {{ govukSelect({
+                    name: 'agencyId',
+                    id: 'agencyId',
+                    label: {
+                        text: 'Establishment'
+                    },
+                    items: establishments | addDefaultSelectedVale('All', true) | setSelected(formValues.agencyId),
+                    attributes: {
+                        "data-test": 'establishment-select'
+                    }
+                }) }}
 
-            {{ govukSelect({
-                name: 'incentiveLevel',
-                id: 'incentiveLevel',
-                label: {
-                    text: 'Incentive level'
-                },
-                items: levels  | addDefaultSelectedVale('All', true) | setSelected(formValues.incentiveLevel),
-                attributes: {
-                    "data-test": 'incentive-level-select'
-                }
-            }) }}
-
-
-            {{ datePicker({
-                id: 'fromDate',
-                label: 'Date from',
-                name: 'fromDate',
-                date: formValues.fromDate,
-                errorMessage: errors | findError('fromDate')
-            }) }}
-
-            {{ datePicker({
-                id: 'toDate',
-                label: 'Date to',
-                name: 'toDate',
-                date: formValues.toDate,
-                errorMessage: errors | findError('toDate')
-            }) }}
-
-            {{ govukButton({
-                text: "View",
-                preventDoubleClick: true,
-                type: "submit",
-                attributes: {
-                    "data-test": 'filter-submit'
-                }
-            }) }}
-
-            <a href="./incentive-level-details" class="govuk-link govuk-link--no-visited-state">Clear</a>
-        </form>
-    </div>
+                {{ govukSelect({
+                    name: 'incentiveLevel',
+                    id: 'incentiveLevel',
+                    label: {
+                        text: 'Incentive level'
+                    },
+                    items: levels  | addDefaultSelectedVale('All', true) | setSelected(formValues.incentiveLevel),
+                    attributes: {
+                        "data-test": 'incentive-level-select'
+                    }
+                }) }}
 
 
-    {% if results.length == 0 %}
+                {{ datePicker({
+                    id: 'fromDate',
+                    label: 'Date from',
+                    name: 'fromDate',
+                    date: formValues.fromDate,
+                    errorMessage: errors | findError('fromDate')
+                }) }}
+
+                {{ datePicker({
+                    id: 'toDate',
+                    label: 'Date to',
+                    name: 'toDate',
+                    date: formValues.toDate,
+                    errorMessage: errors | findError('toDate')
+                }) }}
+
+                {{ govukButton({
+                    text: "View",
+                    preventDoubleClick: true,
+                    type: "submit",
+                    attributes: {
+                        "data-test": 'filter-submit'
+                    }
+                }) }}
+
+                <a href="./incentive-level-details" class="govuk-link govuk-link--no-visited-state">Clear</a>
+            </form>
+        </div>
+    {% endif %}
+
+    {% if results == null or results.length == 0 %}
         <p class="govuk-body" data-test="no-incentive-level-history-message">{{ noResultsFoundMessage }}</p>
     {% else %}
         {% set resultsRows = [] %}
