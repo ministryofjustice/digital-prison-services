@@ -76,6 +76,10 @@ describe('In reception controller', () => {
               label: 'Care experienced',
             },
             {
+              classes: 'alert-status alert-status--multicase alert-status--visor',
+              label: 'ViSOR',
+            },
+            {
               classes: 'alert-status alert-status--acct',
               label: 'ACCT open',
             },
