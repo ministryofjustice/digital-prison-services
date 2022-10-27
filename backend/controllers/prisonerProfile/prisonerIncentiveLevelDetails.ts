@@ -67,7 +67,35 @@ export default ({
       ])
       const { bookingId, firstName, lastName } = prisonerDetails
 
-      const iepSummary = await incentivesApi.getIepSummaryForBooking(res.locals, bookingId, true)
+      const prisonerWithinCaseloads = res.locals.user.allCaseloads.find(
+        (cl) => cl.caseLoadId === prisonerDetails.agencyId
+      )
+
+      const userCanMaintainIEP = userRoles.find((role) => role.roleCode === 'MAINTAIN_IEP')
+
+      let iepSummary
+      try {
+        iepSummary = await incentivesApi.getIepSummaryForBooking(res.locals, bookingId, true)
+      } catch (error) {
+        if (error.response.status === 404) {
+          const noResultsFoundMessage = `${formatName(firstName, lastName)} has no incentive level history`
+
+          return res.render('prisonerProfile/prisonerIncentiveLevelDetails.njk', {
+            breadcrumbPrisonerName: putLastNameFirst(firstName, lastName),
+            results: null,
+            currentIepDate: 'Not entered',
+            currentIepLevel: 'Not entered',
+            errors,
+            formValues: req.query,
+            noResultsFoundMessage,
+            nextReviewDate: 'Not entered',
+            offenderNo,
+            prisonerName: formatName(firstName, lastName),
+            profileUrl: `/prisoner/${offenderNo}`,
+            userCanUpdateIEP: Boolean(prisonerWithinCaseloads && userCanMaintainIEP),
+          })
+        }
+      }
 
       if (fromDate && toDate && fromDateFormatted.isAfter(toDateFormatted, 'day')) {
         errors.push({ href: '#fromDate', text: 'Enter a from date which is not after the to date' })
@@ -79,7 +107,6 @@ export default ({
       // calls to the database.
       const uniqueUserIds = Array.from(new Set(iepSummary.iepDetails.map((details) => details.userId)))
       const uniqueAgencyIds = Array.from(new Set(iepSummary.iepDetails.map((details) => details.agencyId)))
-      const levels = Array.from(new Set(iepSummary.iepDetails.map((details) => details.iepLevel))).sort()
 
       // Only get users that map to a user in the prison staff table
       const users = (
@@ -116,12 +143,6 @@ export default ({
         toDate: toDate && toDateFormatted.format('YYYY-MM-DD'),
       })
 
-      const prisonerWithinCaseloads = res.locals.user.allCaseloads.find(
-        (cl) => cl.caseLoadId === prisonerDetails.agencyId
-      )
-
-      const userCanMaintainIEP = userRoles.find((role) => role.roleCode === 'MAINTAIN_IEP')
-
       const noFiltersSupplied = Boolean(!agencyId && !incentiveLevel && !fromDate && !toDate)
 
       const noResultsFoundMessage =
@@ -130,6 +151,8 @@ export default ({
             ? `${formatName(firstName, lastName)} has no incentive level history`
             : 'There is no incentive level history for the selections you have made')) ||
         ''
+
+      const levels = Array.from(new Set(iepSummary.iepDetails.map((details) => details.iepLevel))).sort()
 
       return res.render('prisonerProfile/prisonerIncentiveLevelDetails.njk', {
         breadcrumbPrisonerName: putLastNameFirst(firstName, lastName),
