@@ -1,4 +1,5 @@
 import qs from 'querystring'
+import type { IepSummaryForBookingId } from '../../api/incentivesApi'
 import { PrisonerInPrisonSearchResult } from '../../api/offenderSearchApi'
 import { serviceUnavailableMessage } from '../../common-messages'
 import { User } from '../../middleware/currentUser'
@@ -119,9 +120,12 @@ export default ({
         username,
       })
 
-      const bookingIds = prisoners.map((prisoner) => prisoner.bookingId)
-      const iepData = await incentivesApi.getIepSummaryForBookingIds(localContext, bookingIds)
-      const iepBookingIdMap = toMap('bookingId', iepData)
+      let iepBookingIdMap = new Map<number, IepSummaryForBookingId>()
+      if (prisoners.length) {
+        const bookingIds = prisoners.map((prisoner) => prisoner.bookingId)
+        const iepData = await incentivesApi.getIepSummaryForBookingIds(localContext, bookingIds)
+        iepBookingIdMap = toMap('bookingId', iepData)
+      }
 
       const locationOptions =
         locations && locations.map((option) => ({ value: option.locationPrefix, text: option.description }))
