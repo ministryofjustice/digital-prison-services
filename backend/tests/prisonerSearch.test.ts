@@ -370,6 +370,18 @@ describe('Prisoner search', () => {
       })
     })
 
+    describe('when no inmates returned', () => {
+      beforeEach(() => {
+        res.locals.responseHeaders['total-records'] = 0
+        prisonApi.getInmates = jest.fn().mockReturnValue([])
+      })
+
+      it('should should not call incentives api', async () => {
+        await controller.index(req, res)
+        expect(incentivesApi.getIepSummaryForBookingIds).not.toHaveBeenCalled()
+      })
+    })
+
     it('should render template with correct urls containing view type and printed values', async () => {
       req.baseUrl = '/prisoner-search'
       req.query = {
@@ -778,6 +790,18 @@ describe('Prisoner search', () => {
             caseLoadId: 'MDI',
           },
         })
+      })
+    })
+
+    describe('when no inmates returned', () => {
+      beforeEach(() => {
+        res.locals.responseHeaders['total-records'] = 0
+        prisonApi.getInmates = jest.fn().mockReturnValue([])
+      })
+
+      it('should should not call incentives api', async () => {
+        await controller.index(req, res)
+        expect(incentivesApi.getIepSummaryForBookingIds).not.toHaveBeenCalled()
       })
     })
 
