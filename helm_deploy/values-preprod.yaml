@@ -57,7 +57,7 @@ generic-service:
    SEND_LEGAL_MAIL_URL: https://check-rule39-mail-preprod.prison.service.justice.gov.uk
    WELCOME_PEOPLE_INTO_PRISON_URL: https://welcome-preprod.prison.service.justice.gov.uk/
    CREATE_AND_VARY_A_LICENCE_URL: https://create-and-vary-a-licence-preprod.hmpps.service.justice.gov.uk/
-   CREATE_AND_VARY_A_LICENCE_ENABLED_PRISONS: "CFI,CWI,UKI,UPI,PRI,FHI,LCI,LII,LGI,MHI,NSI,NMI,RNI,SKI,SUI,WTI"
+   CREATE_AND_VARY_A_LICENCE_ENABLED_PRISONS: "ACI,BMI,BSI,BWI,CFI,DGI,DHI,DMI,DTI,FHI,FKI,FSI,GHI,HEI,HHI,HVI,KMI,KVI,LCI,LFI,LGI,LII,LLI,LNI,LPI,MHI,NLI,NMI,NSI,ONI,OWI,PNI,PRI,RHI,RNI,RSI,SFI,SHI,SKI,SNI,STI,SUI,SWI,TCI,UKI,UPI,WMI,WTI"
    RESTRICTED_PATIENT_API_URL: https://restricted-patients-api-preprod.hmpps.service.justice.gov.uk/
    HISTORICAL_PRISONER_APPLICATION_URL: https://hpa-preprod.service.hmpps.dsd.io
 
