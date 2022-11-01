@@ -21,7 +21,6 @@ export const app = {
   neurodiversityEnabledPrisons: process.env.NEURODIVERSITY_ENABLED_PRISONS || [],
   disableRequestLimiter: process.env.DISABLE_REQUEST_LIMITER ? process.env.DISABLE_REQUEST_LIMITER === 'true' : false,
   establishmentSearchUsePrisonerSearch: process.env.ESTABLISHMENT_SEARCH_USES_PRISONER_SEARCH === 'true',
-  pomRestrictedPatientsEnabled: process.env.POM_RESTRICTED_PATIENTS_ENABLED === 'true',
 }
 
 export const analytics = {

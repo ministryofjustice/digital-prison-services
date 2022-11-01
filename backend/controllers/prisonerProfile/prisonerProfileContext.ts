@@ -1,5 +1,3 @@
-import config from '../../config'
-
 const getContext = async ({ offenderNo, res, req, oauthApi, systemOauthClient, restrictedPatientApi }) => {
   if (res.locals.user === undefined) {
     return { context: res.locals, overrideAccess: false }
@@ -9,9 +7,9 @@ const getContext = async ({ offenderNo, res, req, oauthApi, systemOauthClient, r
   } = res.locals
 
   const { username } = req.session.userDetails
-  const userRoles = await oauthApi.userRoles(res.locals)
+  const userRoles = oauthApi.userRoles(res.locals)
 
-  if (config.app.pomRestrictedPatientsEnabled && userRoles.map((userRole) => userRole.roleCode).includes('POM')) {
+  if (userRoles.map((userRole) => userRole.roleCode).includes('POM')) {
     const isRestrictedPatient = await restrictedPatientApi.isCaseLoadRestrictedPatient(
       res.locals,
       offenderNo,
