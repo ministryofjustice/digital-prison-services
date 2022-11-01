@@ -16,6 +16,10 @@ const oauthApi = {}
 const systemOauthClient = {}
 const restrictedPatientApi = {}
 
+jest.mock('../config', () => ({
+  app: { pomRestrictedPatientsEnabled: true },
+}))
+
 describe('Prisoner Profile Contexts', () => {
   it('returns user context', async () => {
     // @ts-expect-error ts-migrate(2339) FIXME: Property 'getNeurodiversities' does not exist on type '{}'... Remove this comment to see the full error message
