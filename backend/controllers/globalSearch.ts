@@ -64,6 +64,7 @@ export default ({ paginationService, offenderSearchApi, oauthApi, telemetry }) =
   }
   const prisonerBooked = (prisoner) => prisoner.latestBookingId > 0
   const resultsPage = async (req, res) => {
+    delete req.session.userBackLink
     let prisonerResults = []
     const {
       user: { activeCaseLoad },
