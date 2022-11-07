@@ -371,7 +371,6 @@ export const attendanceStatisticsFactory = (oauthApi, prisonApi, whereaboutsApi)
       return getSuspendedActivities(period)
     })()
 
-    // TODO replicate number of unique elements in set
     const totalOffenders = new Set(suspendedActivities.map((activity) => activity.bookingId)).size
 
     const suspendedAttendances = await whereaboutsApi.getAttendanceForBookingsOverDateRange(res.locals, {
