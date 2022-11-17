@@ -308,6 +308,8 @@ export const attendanceStatisticsFactory = (oauthApi, prisonApi, whereaboutsApi)
 
       const { offenders, sortOptions } = absentReasonTableViewModel(offenderData)
 
+      const totalOffenders = new Set(absences.map((activity) => activity.bookingId)).size
+
       return res.render('attendanceStatisticsOffendersList.njk', {
         title: displayReason,
         user: {
@@ -326,7 +328,7 @@ export const attendanceStatisticsFactory = (oauthApi, prisonApi, whereaboutsApi)
         caseLoadId: activeCaseLoad.caseLoadId,
         allCaseloads: caseloads,
         userRoles: roles,
-        totalOffenders: offenders.length,
+        totalOffenders,
       })
     } catch (error) {
       res.locals.redirectUrl = `${attendanceReasonStatsUrl}/reason/${reason}`
