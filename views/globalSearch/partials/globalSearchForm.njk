@@ -89,7 +89,7 @@
     ]
   }) }}
 
-  {% set clearUrl = './results?searchText=' + formValues.searchText if formValues.searchText else './global-search' %}
+  {% set clearUrl = './results?searchText=' + formValues.searchText if formValues.searchText else '/global-search' %}
 
   <a href="{{ clearUrl }}" data-test="clear-link" class="govuk-body govuk-link govuk-link--no-visited-state">Clear</a>
 {% endset %}
