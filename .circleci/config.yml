@@ -1,7 +1,8 @@
 version: 2.1
 
 orbs:
-  hmpps: ministryofjustice/hmpps@3.14
+  hmpps: ministryofjustice/hmpps@6.2
+  slack: circleci/slack@4.4.2
 
 parameters:
   alerts-slack-channel:
@@ -155,7 +156,7 @@ workflows:
           filters:
             branches:
               only: main
-          helm_timeout: 7m
+          helm_timeout: 5m
       - request-preprod-approval:
           type: approval
           requires:
@@ -170,7 +171,7 @@ workflows:
             - hmpps-common-vars
           requires:
             - request-preprod-approval
-          helm_timeout: 7m
+          helm_timeout: 5m
       - request-prod-approval:
           type: approval
           requires:
@@ -186,7 +187,7 @@ workflows:
             - hmpps-common-vars
           requires:
             - request-prod-approval
-          helm_timeout: 7m
+          helm_timeout: 5m
   security:
     triggers:
       - schedule:
