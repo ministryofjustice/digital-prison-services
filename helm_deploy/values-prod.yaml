@@ -137,7 +137,6 @@ generic-service:
    police-south-york-atlas: "51.231.157.222"
    police-humberside-public: "80.100.176.162"
    police-humberside-priory: "51.231.157.226"
-   sscl-dr: "18.132.131.80"
    sscl-blackpool: "31.121.5.27"
    sscl-azure: "51.142.106.199"
    sscl-york: "62.6.61.29"
