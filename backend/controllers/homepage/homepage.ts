@@ -101,6 +101,7 @@ const getTasks = ({ activeCaseLoadId, locations, staffId, whereaboutsConfig, key
           'PF_PSYCHOLOGIST',
           'PF_NATIONAL_READER',
           'PF_LOCAL_READER',
+          'PF_ADMIN',
         ]),
     },
     {
