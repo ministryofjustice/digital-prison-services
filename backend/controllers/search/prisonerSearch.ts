@@ -1,13 +1,11 @@
 import qs from 'querystring'
-import type { IepSummaryForBookingId } from '../../api/incentivesApi'
 import { PrisonerInPrisonSearchResult } from '../../api/offenderSearchApi'
 import { serviceUnavailableMessage } from '../../common-messages'
 import { User } from '../../middleware/currentUser'
 import { alertFlagLabels, profileAlertCodes } from '../../shared/alertFlagValues'
-import { putLastNameFirst, hasLength, formatLocation, toMap } from '../../utils'
+import { putLastNameFirst, hasLength, formatLocation } from '../../utils'
 import type apis from '../../apis'
 import { Location } from '../../api/prisonApi'
-import { app } from '../../config'
 
 export const trackEvent = (telemetry, results, searchQueries, username, activeCaseLoad) => {
   if (telemetry) {
@@ -59,7 +57,6 @@ export default ({
   paginationService,
   prisonApi,
   offenderSearchApi,
-  incentivesApi,
   telemetry,
   logError,
   systemOauthClient,
@@ -87,7 +84,6 @@ export default ({
       view,
       sortFieldsWithOrder = 'lastName,firstName:ASC',
       viewAll,
-      feature = app.establishmentSearchUsePrisonerSearch ? 'new' : 'legacy',
     } = req.query
 
     const selectedAlerts = alerts && alerts.map((alert) => alert.split(',')).flat()
@@ -116,16 +112,8 @@ export default ({
         keywords,
         selectedAlerts,
         location: location || currentUserCaseLoad,
-        feature,
         username,
       })
-
-      let iepBookingIdMap = new Map<number, IepSummaryForBookingId>()
-      if (prisoners.length) {
-        const bookingIds = prisoners.map((prisoner) => prisoner.bookingId)
-        const iepData = await incentivesApi.getIepSummaryForBookingIds(localContext, bookingIds)
-        iepBookingIdMap = toMap('bookingId', iepData)
-      }
 
       const locationOptions =
         locations && locations.map((option) => ({ value: option.locationPrefix, text: option.description }))
@@ -134,9 +122,7 @@ export default ({
         prisoners &&
         prisoners.map((prisoner) => ({
           ...prisoner,
-          iepLevel:
-            (iepBookingIdMap.has(prisoner.bookingId) && iepBookingIdMap.get(prisoner.bookingId).iepLevel) ||
-            'Not entered',
+          iepLevel: prisoner.currentIncentive?.level.description ?? 'Not entered',
           assignedLivingUnitDesc: formatLocation(prisoner.assignedLivingUnitDesc),
           name: putLastNameFirst(prisoner.firstName, prisoner.lastName),
           alerts: alertFlagLabels.filter((alertFlag) =>
@@ -213,42 +199,6 @@ export default ({
   }
 
   const getInmatesWithLocations = async ({
-    feature,
-    ...params
-  }: InmateSearchParameters & { feature: 'legacy' | 'new' }): InmateSearchResult => {
-    return feature === 'legacy'
-      ? getInmatesWithLocationsWithPrisonApi(params)
-      : getInmatesWithLocationsWithSearchApi(params)
-  }
-
-  const getInmatesWithLocationsWithPrisonApi = async ({
-    pagingContext,
-    localContext,
-    keywords,
-    selectedAlerts,
-    location,
-  }: InmateSearchParameters): InmateSearchResult => {
-    const searchContext = {
-      ...localContext,
-      ...pagingContext,
-    }
-
-    const [locations, prisoners] = await Promise.all([
-      prisonApi.userLocations(localContext),
-      prisonApi.getInmates(searchContext, location, {
-        keywords,
-        alerts: selectedAlerts,
-        returnAlerts: 'true',
-        returnCategory: 'true',
-      }),
-    ])
-
-    const totalRecords = searchContext.responseHeaders['total-records']
-
-    return [locations, prisoners, totalRecords]
-  }
-
-  const getInmatesWithLocationsWithSearchApi = async ({
     pagingContext,
     localContext,
     keywords,
