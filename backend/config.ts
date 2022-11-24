@@ -174,7 +174,6 @@ export const apis = {
   },
   managePrisonVisits: {
     ui_url: process.env.MANAGE_PRISON_VISITS_URL || '',
-    enabled_prisons: process.env.PRISONS_FOR_MANAGE_PRISON_BOOKINGS || '',
   },
   legacyPrisonVisits: {
     ui_url: process.env.LEGACY_PRISON_VISITS_URL || '',
