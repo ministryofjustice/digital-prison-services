@@ -17,7 +17,7 @@ const iepSummaryResponse = {
       iepTime: '2017-08-15T16:04:35',
       agencyId: 'LEI',
       iepLevel: 'Standard',
-      userId: 'INCENTIVES-API',
+      userId: 'INCENTIVES_API',
       comments: 'Comment 3',
     },
     {
@@ -154,7 +154,7 @@ context('Prisoner incentive level details', () => {
             expect($tableCells.get(1)).to.contain('Standard')
             expect($tableCells.get(2)).to.contain('Comment 3')
             expect($tableCells.get(3)).to.contain('Leeds')
-            expect($tableCells.get(4)).to.contain('Not entered')
+            expect($tableCells.get(4)).to.contain('System')
 
             expect($tableCells.get(5)).to.contain('10 August 2017 - 16:04')
             expect($tableCells.get(6)).to.contain('Basic')

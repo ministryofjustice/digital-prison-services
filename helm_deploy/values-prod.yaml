@@ -55,7 +55,7 @@ generic-service:
    SEND_LEGAL_MAIL_URL: https://check-rule39-mail.prison.service.justice.gov.uk
    WELCOME_PEOPLE_INTO_PRISON_URL: https://welcome.prison.service.justice.gov.uk/
    CREATE_AND_VARY_A_LICENCE_URL: https://create-and-vary-a-licence.hmpps.service.justice.gov.uk/
-   CREATE_AND_VARY_A_LICENCE_ENABLED_PRISONS: "ACI,AGI,ASI,BCI,BLI,BMI,BSI,BWI,CFI,CWI,DAI,DGI,DHI,DMI,DNI,DTI,EEI,EWI,EXI,FBI,FHI,FKI,FNI,FSI,GHI,GMI,HDI,HEI,HHI,HII,HLI,HMI,HVI,KMI,KVI,LCI,LEI,LFI,LGI,LHI,LII,LLI,LNI,LPI,LYI,MDI,MHI,MRI,NHI,NLI,NMI,NSI,ONI,OWI,PDI,PNI,PRI,RHI,RNI,RSI,SFI,SHI,SKI,SNI,STI,SUI,SWI,TCI,UKI,UPI,VEI,WDI,WEI,WMI,WTI"
+   CREATE_AND_VARY_A_LICENCE_ENABLED_PRISONS: "ACI,AGI,ASI,AYI,BAI,BCI,BFI,BLI,BMI,BNI,BRI,BSI,BWI,BXI,BZI,CDI,CFI,CKI,CLI,CWI,DAI,DGI,DHI,DMI,DNI,DTI,DWI,EEI,EHI,ESI,EWI,EXI,EYI,FBI,FDI,FHI,FKI,FMI,FNI,FSI,FWI,GHI,GMI,GNI,HBI,HCI,HDI,HEI,HHI,HII,HLI,HMI,HOI,HPI,HVI,ISI,IWI,KMI,KVI,LCI,LEI,LFI,LGI,LHI,LII,LLI,LNI,LPI,LTI,LWI,LYI,MDI,MHI,MRI,MSI,MTI,NHI,NLI,NMI,NSI,NWI,ONI,OWI,PBI,PDI,PFI,PNI,PRI,PVI,RCI,RHI,RNI,RSI,SDI,SFI,SHI,SKI,SLI,SNI,SPI,STI,SUI,SWI,TCI,TSI,UKI,UPI,VEI,WCI,WDI,WEI,WHI,WII,WLI,WMI,WRI,WSI,WTI,WWI"
    RESTRICTED_PATIENT_API_URL: https://restricted-patients-api.hmpps.service.justice.gov.uk/
    HISTORICAL_PRISONER_APPLICATION_URL: https://hpa.service.hmpps.dsd.io
 
@@ -117,7 +117,9 @@ generic-service:
    police-1: "81.144.174.115/32"
    police-2: "81.144.241.238/32"
    police-3: "62.252.202.50/32"
-   police-4: "80.194.71.110/32"
+   police-4-old: "80.194.71.110/32"
+   police-4-new-1: "80.194.71.100/32"
+   police-4-new-2: "82.33.248.165/32"
    police-5: "52.56.62.0/24"
    police-6: "80.193.134.32/32"
    police-7: "195.92.38.21/32"
@@ -137,7 +139,6 @@ generic-service:
    police-south-york-atlas: "51.231.157.222"
    police-humberside-public: "80.100.176.162"
    police-humberside-priory: "51.231.157.226"
-   sscl-dr: "18.132.131.80"
    sscl-blackpool: "31.121.5.27"
    sscl-azure: "51.142.106.199"
    sscl-york: "62.6.61.29"
