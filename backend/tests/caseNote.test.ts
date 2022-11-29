@@ -466,7 +466,7 @@ describe('case note management', () => {
     })
 
     describe('when the form is filled correctly', () => {
-      it('should submit and redirect', async () => {
+      it('should submit and redirect to case notes', async () => {
         const req = {
           ...mockCreateReq,
           params: { offenderNo },
@@ -482,8 +482,42 @@ describe('case note management', () => {
 
         await post(req, res)
 
+        expect(caseNotesApi.addCaseNote).toBeCalledWith(res.locals, offenderNo, {
+          offenderNo,
+          type: 'OBSERVE',
+          subType: 'OBS1',
+          text: 'test',
+          occurrenceDateTime: expect.any(String),
+        })
         expect(res.redirect).toBeCalledWith('/prisoner/ABC123/case-notes')
       })
+
+      it('should submit and interrupt journey if incentive level review posted', async () => {
+        const req = {
+          ...mockCreateReq,
+          params: { offenderNo },
+          body: {
+            type: 'REPORTS',
+            subType: 'REP_IEP',
+            date: moment().format('DD/MM/YYYY'),
+            hours: moment().format('H'),
+            minutes: moment().format('mm'),
+            text: 'test',
+          },
+        }
+
+        await post(req, res)
+
+        expect(caseNotesApi.addCaseNote).toBeCalledWith(res.locals, offenderNo, {
+          offenderNo,
+          type: 'REPORTS',
+          subType: 'REP_IEP',
+          text: 'test',
+          occurrenceDateTime: expect.any(String),
+        })
+        expect(res.redirect).toBeCalledWith('/prisoner/ABC123/add-case-note/record-incentive-level')
+      })
+
       it('should take the user to confirm page if omic open case note', async () => {
         const caseNote = {
           type: 'OMIC',
@@ -502,6 +536,7 @@ describe('case note management', () => {
 
         await post(req, res)
 
+        expect(caseNotesApi.addCaseNote).not.toHaveBeenCalled()
         expect(res.redirect).toBeCalledWith('/prisoner/ABC123/add-case-note/confirm')
         expect(req.session).toEqual({ draftCaseNote: { ...caseNote, offenderNo } })
       })

@@ -269,6 +269,10 @@ export const caseNoteFactory = ({ prisonApi, caseNotesApi, oauthApi, systemOauth
 
     if (errors.length > 0) return stashStateAndRedirectToAddCaseNote(req, res, caseNote, offenderNo, errors)
 
+    if (type === 'REPORTS' && subType === 'REP_IEP') {
+      return res.redirect(`${getOffenderUrl(offenderNo)}/add-case-note/record-incentive-level`)
+    }
+
     return res.redirect(`${getOffenderUrl(offenderNo)}/case-notes`)
   }
 
