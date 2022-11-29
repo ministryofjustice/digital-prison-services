@@ -10,7 +10,7 @@ const restrictedPatientApi = {}
 const systemOauthClient = {}
 const oauthApi = {}
 
-const { index, post, areYouSure, confirm } = caseNoteCtrl.caseNoteFactory({
+const { index, post, areYouSure, confirm, recordIncentiveLevelInterruption } = caseNoteCtrl.caseNoteFactory({
   prisonApi,
   caseNotesApi,
   oauthApi,
@@ -615,6 +615,27 @@ describe('case note management', () => {
         { href: '#confirmed', text: 'Select yes if this information is appropriate to share' },
       ])
       expect(res.redirect).toBeCalledWith('/prisoner/ABC123/add-case-note/confirm')
+    })
+  })
+
+  describe('recordIncentiveLevelInterruption()', () => {
+    it('should render the interruption page', async () => {
+      const req = { ...mockCreateReq, params: { offenderNo } }
+
+      await recordIncentiveLevelInterruption(req, res)
+
+      expect(res.render).toBeCalledWith(
+        'caseNotes/recordIncentiveLevelInterruption.njk',
+        expect.objectContaining({
+          offenderDetails: {
+            name: 'Test User',
+            offenderNo: 'ABC123',
+            profileUrl: '/prisoner/ABC123',
+          },
+          caseNotesUrl: '/prisoner/ABC123/case-notes',
+          recordIncentiveLevelUrl: '/prisoner/ABC123/incentive-level-details/change-incentive-level',
+        })
+      )
     })
   })
 })

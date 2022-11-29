@@ -324,7 +324,21 @@ export const caseNoteFactory = ({ prisonApi, caseNotesApi, oauthApi, systemOauth
     return res.redirect(`${getOffenderUrl(offenderNo)}/case-notes`)
   }
 
-  return { index, post, areYouSure, confirm }
+  const recordIncentiveLevelInterruption = async (req, res) => {
+    const { offenderNo } = req.params
+    const context = await getContextWithRoles(offenderNo, res, req, oauthApi, systemOauthClient, restrictedPatientApi)
+    const offenderDetails = await getOffenderDetails(context, offenderNo)
+
+    return res.render('caseNotes/recordIncentiveLevelInterruption.njk', {
+      title: 'Record incentive level',
+      breadcrumbText: 'Record incentive level',
+      offenderDetails,
+      caseNotesUrl: `${offenderDetails.profileUrl}/case-notes`,
+      recordIncentiveLevelUrl: `${offenderDetails.profileUrl}/incentive-level-details/change-incentive-level`,
+    })
+  }
+
+  return { index, post, areYouSure, confirm, recordIncentiveLevelInterruption }
 }
 
 export const behaviourPrompts = {
