@@ -25,11 +25,13 @@ jest.mock('../logError', () => ({
 describe('case note management', () => {
   let res
 
+  const mockSession = { userDetails: { activeCaseLoadId: 'LEI', authSource: 'nomis' } }
   const mockCreateReq = {
     flash: jest.fn().mockReturnValue([]),
     originalUrl: '/add-case-note/',
     get: jest.fn(),
     body: {},
+    session: { ...mockSession },
   }
   const getDetailsResponse = {
     bookingId: 1234,
@@ -531,14 +533,14 @@ describe('case note management', () => {
           ...mockCreateReq,
           params: { offenderNo },
           body: caseNote,
-          session: {},
+          session: { ...mockSession },
         }
 
         await post(req, res)
 
         expect(caseNotesApi.addCaseNote).not.toHaveBeenCalled()
         expect(res.redirect).toBeCalledWith('/prisoner/ABC123/add-case-note/confirm')
-        expect(req.session).toEqual({ draftCaseNote: { ...caseNote, offenderNo } })
+        expect(req.session).toEqual(expect.objectContaining({ draftCaseNote: { ...caseNote, offenderNo } }))
       })
     })
   })
@@ -567,7 +569,7 @@ describe('case note management', () => {
       const req = {
         ...mockCreateReq,
         params: { offenderNo },
-        session: { draftCaseNote: { text: 'hello', date: '20/01/2020', hours: '23', minutes: '10' } },
+        session: { ...mockSession, draftCaseNote: { text: 'hello', date: '20/01/2020', hours: '23', minutes: '10' } },
         body: { confirmed: 'Yes' },
       }
 
@@ -587,7 +589,7 @@ describe('case note management', () => {
       const req = {
         ...mockCreateReq,
         params: { offenderNo },
-        session: { draftCaseNote: { text: 'hello', date: '20/01/2020', hours: '23', minutes: '10' } },
+        session: { ...mockSession, draftCaseNote: { text: 'hello', date: '20/01/2020', hours: '23', minutes: '10' } },
         body: { confirmed: 'Yes' },
       }
       const error400 = makeError('response', {
@@ -623,7 +625,7 @@ describe('case note management', () => {
       const req = {
         ...mockCreateReq,
         params: { offenderNo },
-        session: { draftCaseNote: { text: 'hello' } },
+        session: { ...mockSession, draftCaseNote: { text: 'hello' } },
         body: { confirmed: 'No' },
       }
 
@@ -640,7 +642,7 @@ describe('case note management', () => {
       const req = {
         ...mockCreateReq,
         params: { offenderNo },
-        session: { draftCaseNote: { text: 'hello' } },
+        session: { ...mockSession, draftCaseNote: { text: 'hello' } },
       }
 
       await confirm(req, res)
