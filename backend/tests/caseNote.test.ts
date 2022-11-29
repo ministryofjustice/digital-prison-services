@@ -1,4 +1,5 @@
 import moment from 'moment'
+import config from '../config'
 import { makeError } from './helpers'
 import caseNoteCtrl, { behaviourPrompts } from '../controllers/caseNote'
 
@@ -494,7 +495,15 @@ describe('case note management', () => {
         expect(res.redirect).toBeCalledWith('/prisoner/ABC123/case-notes')
       })
 
-      it('should submit and interrupt journey if incentive level review posted', async () => {
+      describe('if incentive level review posted', () => {
+        let privateBetaEnabledPrisons
+        beforeAll(() => {
+          privateBetaEnabledPrisons = config.apis.incentives.privateBetaEnabledPrisons
+        })
+        afterAll(() => {
+          config.apis.incentives.privateBetaEnabledPrisons = privateBetaEnabledPrisons
+        })
+
         const req = {
           ...mockCreateReq,
           params: { offenderNo },
@@ -508,16 +517,32 @@ describe('case note management', () => {
           },
         }
 
-        await post(req, res)
+        const expectCaseNoteAdded = () =>
+          expect(caseNotesApi.addCaseNote).toBeCalledWith(res.locals, offenderNo, {
+            offenderNo,
+            type: 'REPORTS',
+            subType: 'REP_IEP',
+            text: 'test',
+            occurrenceDateTime: expect.any(String),
+          })
 
-        expect(caseNotesApi.addCaseNote).toBeCalledWith(res.locals, offenderNo, {
-          offenderNo,
-          type: 'REPORTS',
-          subType: 'REP_IEP',
-          text: 'test',
-          occurrenceDateTime: expect.any(String),
+        it('should submit and interrupt journey for private beta prisons', async () => {
+          config.apis.incentives.privateBetaEnabledPrisons = 'BXI,LEI'
+
+          await post(req, res)
+
+          expectCaseNoteAdded()
+          expect(res.redirect).toBeCalledWith('/prisoner/ABC123/add-case-note/record-incentive-level')
         })
-        expect(res.redirect).toBeCalledWith('/prisoner/ABC123/add-case-note/record-incentive-level')
+
+        it('should submit and not interrupt journey for other prisons', async () => {
+          config.apis.incentives.privateBetaEnabledPrisons = 'MDI,WRI'
+
+          await post(req, res)
+
+          expectCaseNoteAdded()
+          expect(res.redirect).toBeCalledWith('/prisoner/ABC123/case-notes')
+        })
       })
 
       it('should take the user to confirm page if omic open case note', async () => {

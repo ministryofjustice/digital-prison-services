@@ -1,5 +1,6 @@
 import moment from 'moment'
 import nunjucks from 'nunjucks'
+import config from '../config'
 import { properCaseName } from '../utils'
 import getContext from './prisonerProfile/prisonerProfileContext'
 
@@ -229,6 +230,7 @@ export const caseNoteFactory = ({ prisonApi, caseNotesApi, oauthApi, systemOauth
   const post = async (req, res) => {
     const { offenderNo } = req.params
     const { type, subType, text, date, hours, minutes } = req.body
+    const { activeCaseLoadId } = req.session.userDetails
     const errors = validate(type, subType, text, date, hours, minutes)
 
     const context = await getContextWithRoles(offenderNo, res, req, oauthApi, systemOauthClient, restrictedPatientApi)
@@ -269,7 +271,11 @@ export const caseNoteFactory = ({ prisonApi, caseNotesApi, oauthApi, systemOauth
 
     if (errors.length > 0) return stashStateAndRedirectToAddCaseNote(req, res, caseNote, offenderNo, errors)
 
-    if (type === 'REPORTS' && subType === 'REP_IEP') {
+    if (
+      type === 'REPORTS' &&
+      subType === 'REP_IEP' &&
+      config.apis.incentives.privateBetaEnabledPrisons.split(',').includes(activeCaseLoadId)
+    ) {
       return res.redirect(`${getOffenderUrl(offenderNo)}/add-case-note/record-incentive-level`)
     }
 
