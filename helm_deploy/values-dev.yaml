@@ -4,9 +4,9 @@ generic-service:
   replicaCount: 2
 
   ingress:
-   host: digital-dev.prison.service.justice.gov.uk 
+   host: digital-dev.prison.service.justice.gov.uk
 
-  allowlist: false 
+  allowlist: false
 
   env:
    PRISON_STAFF_HUB_UI_URL: https://digital-dev.prison.service.justice.gov.uk/
@@ -27,6 +27,7 @@ generic-service:
    INCENTIVES_URL: https://incentives-ui-dev.hmpps.service.justice.gov.uk
    INCENTIVES_API_ENDPOINT_URL: https://incentives-api-dev.hmpps.service.justice.gov.uk
    INCENTIVES_EXCLUDED_CASELOADS: "CADM_I"
+   INCENTIVES_PRIVATE_BETA_ENABLED_PRISONS: "LEI,MDI"
    TOKENVERIFICATION_API_URL: https://token-verification-api-dev.prison.service.justice.gov.uk
    CASENOTES_API_URL: https://dev.offender-case-notes.service.justice.gov.uk/
    ALLOCATION_MANAGER_ENDPOINT_URL: https://dev.moic.service.justice.gov.uk/

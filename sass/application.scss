@@ -75,6 +75,18 @@ $govuk-font-family-print: 'GDS Transport';
   }
 }
 
+.interruption-panel {
+  @extend .govuk-panel;
+
+  text-align: left;
+  background-color: govuk-colour('blue');
+  color: govuk-colour('white');
+
+  .govuk-heading-l, .govuk-body {
+    color: govuk-colour('white');
+  }
+}
+
 .suspended {
   color: #df3034;
   font-weight: 700;
