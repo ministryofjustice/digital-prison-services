@@ -4,7 +4,7 @@ import { caseNoteFactory } from '../controllers/caseNote'
 const router = express.Router({ mergeParams: true })
 
 const controller = ({ prisonApi, caseNotesApi, oauthApi, systemOauthClient, restrictedPatientApi }) => {
-  const { index, post, areYouSure, confirm } = caseNoteFactory({
+  const { index, post, areYouSure, confirm, recordIncentiveLevelInterruption } = caseNoteFactory({
     prisonApi,
     caseNotesApi,
     oauthApi,
@@ -16,6 +16,7 @@ const controller = ({ prisonApi, caseNotesApi, oauthApi, systemOauthClient, rest
   router.post('/', post)
   router.get('/confirm', areYouSure)
   router.post('/confirm', confirm)
+  router.get('/record-incentive-level', recordIncentiveLevelInterruption)
 
   return router
 }

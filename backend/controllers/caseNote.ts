@@ -1,5 +1,6 @@
 import moment from 'moment'
 import nunjucks from 'nunjucks'
+import config from '../config'
 import { properCaseName } from '../utils'
 import getContext from './prisonerProfile/prisonerProfileContext'
 
@@ -229,6 +230,7 @@ export const caseNoteFactory = ({ prisonApi, caseNotesApi, oauthApi, systemOauth
   const post = async (req, res) => {
     const { offenderNo } = req.params
     const { type, subType, text, date, hours, minutes } = req.body
+    const { activeCaseLoadId } = req.session.userDetails
     const errors = validate(type, subType, text, date, hours, minutes)
 
     const context = await getContextWithRoles(offenderNo, res, req, oauthApi, systemOauthClient, restrictedPatientApi)
@@ -268,6 +270,14 @@ export const caseNoteFactory = ({ prisonApi, caseNotesApi, oauthApi, systemOauth
     }
 
     if (errors.length > 0) return stashStateAndRedirectToAddCaseNote(req, res, caseNote, offenderNo, errors)
+
+    if (
+      type === 'REPORTS' &&
+      subType === 'REP_IEP' &&
+      config.apis.incentives.privateBetaEnabledPrisons.split(',').includes(activeCaseLoadId)
+    ) {
+      return res.redirect(`${getOffenderUrl(offenderNo)}/add-case-note/record-incentive-level`)
+    }
 
     return res.redirect(`${getOffenderUrl(offenderNo)}/case-notes`)
   }
@@ -324,7 +334,21 @@ export const caseNoteFactory = ({ prisonApi, caseNotesApi, oauthApi, systemOauth
     return res.redirect(`${getOffenderUrl(offenderNo)}/case-notes`)
   }
 
-  return { index, post, areYouSure, confirm }
+  const recordIncentiveLevelInterruption = async (req, res) => {
+    const { offenderNo } = req.params
+    const context = await getContextWithRoles(offenderNo, res, req, oauthApi, systemOauthClient, restrictedPatientApi)
+    const offenderDetails = await getOffenderDetails(context, offenderNo)
+
+    return res.render('caseNotes/recordIncentiveLevelInterruption.njk', {
+      title: 'Record incentive level',
+      breadcrumbText: 'Record incentive level',
+      offenderDetails,
+      caseNotesUrl: `${offenderDetails.profileUrl}/case-notes`,
+      recordIncentiveLevelUrl: `${offenderDetails.profileUrl}/incentive-level-details/change-incentive-level`,
+    })
+  }
+
+  return { index, post, areYouSure, confirm, recordIncentiveLevelInterruption }
 }
 
 export const behaviourPrompts = {

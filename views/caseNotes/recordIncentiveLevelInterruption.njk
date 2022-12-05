@@ -1,0 +1,39 @@
+{% from "govuk/components/button/macro.njk" import govukButton %}
+{% extends "../partials/layout.njk" %}
+
+{% block beforeContent %}
+  {{ govukBreadcrumbs({
+    items: [
+      {
+        text: "Home",
+        href: "/"
+      },
+      {
+        text: offenderDetails.name,
+        href: offenderDetails.profileUrl
+      },
+      {
+        text: breadcrumbText
+      }
+    ]
+  }) }}
+{% endblock %}
+
+{% block content %}
+  <div class="govuk-grid-row">
+    <div class="govuk-grid-column-two-thirds">
+
+      <div class="interruption-panel govuk-!-margin-bottom-9">
+        <h1 class="govuk-heading-l">
+          If you are recording incentive level details, you need to use the ‘record an incentive level’ page.
+        </h1>
+        <p class="govuk-body">
+          {{ govukButton({ text: "Record incentive level", href: recordIncentiveLevelUrl, classes: "govuk-button--secondary" }) }}
+          <br />
+          <a href="{{ caseNotesUrl }}" class="govuk-link govuk-link--inverse">Return to prisoner profile</a>
+        </p>
+      </div>
+
+    </div>
+  </div>
+{% endblock content %}
