@@ -204,10 +204,7 @@ const getTasks = ({ activeCaseLoadId, locations, staffId, whereaboutsConfig, key
       heading: 'Manage prison visits',
       description: 'Book, view and cancel a prisoner’s social visits.',
       href: managePrisonVisits.ui_url,
-      enabled: () =>
-        managePrisonVisits.ui_url &&
-        userHasRoles(['MANAGE_PRISON_VISITS']) &&
-        managePrisonVisits.enabled_prisons.split(',').includes(activeCaseLoadId),
+      enabled: () => managePrisonVisits.ui_url && userHasRoles(['MANAGE_PRISON_VISITS']),
     },
     {
       id: 'legacy-prison-visit',
