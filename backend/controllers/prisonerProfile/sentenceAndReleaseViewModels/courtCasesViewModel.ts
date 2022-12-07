@@ -73,7 +73,9 @@ export default ({ courtCaseData, sentenceTermsData, offenceHistory }) => {
     // Only show charge codes of Imprisonment (1002 & 1510), Recall (1501) and YOI (1024)
     ...new Set(
       offenceHistory
-        .filter((offence) => ['1002', '1501', '1510', '1024'].includes(offence.primaryResultCode))
+        .filter((offence) =>
+          ['1002', '1501', '1510', '1024', '3045', '1046', '1081', '1003', '2003'].includes(offence.primaryResultCode)
+        )
         .map((offence) => offence.caseId)
     ),
   ]

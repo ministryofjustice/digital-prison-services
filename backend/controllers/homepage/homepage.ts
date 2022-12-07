@@ -101,6 +101,7 @@ const getTasks = ({ activeCaseLoadId, locations, staffId, whereaboutsConfig, key
           'PF_PSYCHOLOGIST',
           'PF_NATIONAL_READER',
           'PF_LOCAL_READER',
+          'PF_ADMIN',
         ]),
     },
     {
@@ -192,8 +193,8 @@ const getTasks = ({ activeCaseLoadId, locations, staffId, whereaboutsConfig, key
     },
     {
       id: 'manage-adjudications',
-      heading: 'Place a prisoner on report',
-      description: 'Place a prisoner on report after an incident and view all of your completed reports.',
+      heading: 'Adjudications',
+      description: 'Place a prisoner on report after an incident, view reports and manage adjudications.',
       href: manageAdjudications.ui_url,
       enabled: () =>
         manageAdjudications.ui_url && manageAdjudications.enabled_prisons.split(',').includes(activeCaseLoadId),

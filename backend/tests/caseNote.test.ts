@@ -1,4 +1,5 @@
 import moment from 'moment'
+import config from '../config'
 import { makeError } from './helpers'
 import caseNoteCtrl, { behaviourPrompts } from '../controllers/caseNote'
 
@@ -10,7 +11,7 @@ const restrictedPatientApi = {}
 const systemOauthClient = {}
 const oauthApi = {}
 
-const { index, post, areYouSure, confirm } = caseNoteCtrl.caseNoteFactory({
+const { index, post, areYouSure, confirm, recordIncentiveLevelInterruption } = caseNoteCtrl.caseNoteFactory({
   prisonApi,
   caseNotesApi,
   oauthApi,
@@ -25,11 +26,13 @@ jest.mock('../logError', () => ({
 describe('case note management', () => {
   let res
 
+  const mockSession = { userDetails: { activeCaseLoadId: 'LEI', authSource: 'nomis' } }
   const mockCreateReq = {
     flash: jest.fn().mockReturnValue([]),
     originalUrl: '/add-case-note/',
     get: jest.fn(),
     body: {},
+    session: { ...mockSession },
   }
   const getDetailsResponse = {
     bookingId: 1234,
@@ -466,7 +469,7 @@ describe('case note management', () => {
     })
 
     describe('when the form is filled correctly', () => {
-      it('should submit and redirect', async () => {
+      it('should submit and redirect to case notes', async () => {
         const req = {
           ...mockCreateReq,
           params: { offenderNo },
@@ -482,8 +485,66 @@ describe('case note management', () => {
 
         await post(req, res)
 
+        expect(caseNotesApi.addCaseNote).toBeCalledWith(res.locals, offenderNo, {
+          offenderNo,
+          type: 'OBSERVE',
+          subType: 'OBS1',
+          text: 'test',
+          occurrenceDateTime: expect.any(String),
+        })
         expect(res.redirect).toBeCalledWith('/prisoner/ABC123/case-notes')
       })
+
+      describe('if incentive level review posted', () => {
+        let privateBetaEnabledPrisons
+        beforeAll(() => {
+          privateBetaEnabledPrisons = config.apis.incentives.privateBetaEnabledPrisons
+        })
+        afterAll(() => {
+          config.apis.incentives.privateBetaEnabledPrisons = privateBetaEnabledPrisons
+        })
+
+        const req = {
+          ...mockCreateReq,
+          params: { offenderNo },
+          body: {
+            type: 'REPORTS',
+            subType: 'REP_IEP',
+            date: moment().format('DD/MM/YYYY'),
+            hours: moment().format('H'),
+            minutes: moment().format('mm'),
+            text: 'test',
+          },
+        }
+
+        const expectCaseNoteAdded = () =>
+          expect(caseNotesApi.addCaseNote).toBeCalledWith(res.locals, offenderNo, {
+            offenderNo,
+            type: 'REPORTS',
+            subType: 'REP_IEP',
+            text: 'test',
+            occurrenceDateTime: expect.any(String),
+          })
+
+        it('should submit and interrupt journey for private beta prisons', async () => {
+          config.apis.incentives.privateBetaEnabledPrisons = 'BXI,LEI'
+
+          await post(req, res)
+
+          expectCaseNoteAdded()
+          expect(res.redirect).toBeCalledWith('/prisoner/ABC123/add-case-note/record-incentive-level')
+        })
+
+        it('should submit and not interrupt journey for other prisons', async () => {
+          config.apis.incentives.privateBetaEnabledPrisons = 'MDI,WRI'
+
+          await post(req, res)
+
+          expectCaseNoteAdded()
+          expect(res.redirect).toBeCalledWith('/prisoner/ABC123/case-notes')
+        })
+      })
+
       it('should take the user to confirm page if omic open case note', async () => {
         const caseNote = {
           type: 'OMIC',
@@ -497,13 +558,14 @@ describe('case note management', () => {
           ...mockCreateReq,
           params: { offenderNo },
           body: caseNote,
-          session: {},
+          session: { ...mockSession },
         }
 
         await post(req, res)
 
+        expect(caseNotesApi.addCaseNote).not.toHaveBeenCalled()
         expect(res.redirect).toBeCalledWith('/prisoner/ABC123/add-case-note/confirm')
-        expect(req.session).toEqual({ draftCaseNote: { ...caseNote, offenderNo } })
+        expect(req.session).toEqual(expect.objectContaining({ draftCaseNote: { ...caseNote, offenderNo } }))
       })
     })
   })
@@ -532,7 +594,7 @@ describe('case note management', () => {
       const req = {
         ...mockCreateReq,
         params: { offenderNo },
-        session: { draftCaseNote: { text: 'hello', date: '20/01/2020', hours: '23', minutes: '10' } },
+        session: { ...mockSession, draftCaseNote: { text: 'hello', date: '20/01/2020', hours: '23', minutes: '10' } },
         body: { confirmed: 'Yes' },
       }
 
@@ -552,7 +614,7 @@ describe('case note management', () => {
       const req = {
         ...mockCreateReq,
         params: { offenderNo },
-        session: { draftCaseNote: { text: 'hello', date: '20/01/2020', hours: '23', minutes: '10' } },
+        session: { ...mockSession, draftCaseNote: { text: 'hello', date: '20/01/2020', hours: '23', minutes: '10' } },
         body: { confirmed: 'Yes' },
       }
       const error400 = makeError('response', {
@@ -588,7 +650,7 @@ describe('case note management', () => {
       const req = {
         ...mockCreateReq,
         params: { offenderNo },
-        session: { draftCaseNote: { text: 'hello' } },
+        session: { ...mockSession, draftCaseNote: { text: 'hello' } },
         body: { confirmed: 'No' },
       }
 
@@ -605,7 +667,7 @@ describe('case note management', () => {
       const req = {
         ...mockCreateReq,
         params: { offenderNo },
-        session: { draftCaseNote: { text: 'hello' } },
+        session: { ...mockSession, draftCaseNote: { text: 'hello' } },
       }
 
       await confirm(req, res)
@@ -615,6 +677,27 @@ describe('case note management', () => {
         { href: '#confirmed', text: 'Select yes if this information is appropriate to share' },
       ])
       expect(res.redirect).toBeCalledWith('/prisoner/ABC123/add-case-note/confirm')
+    })
+  })
+
+  describe('recordIncentiveLevelInterruption()', () => {
+    it('should render the interruption page', async () => {
+      const req = { ...mockCreateReq, params: { offenderNo } }
+
+      await recordIncentiveLevelInterruption(req, res)
+
+      expect(res.render).toBeCalledWith(
+        'caseNotes/recordIncentiveLevelInterruption.njk',
+        expect.objectContaining({
+          offenderDetails: {
+            name: 'Test User',
+            offenderNo: 'ABC123',
+            profileUrl: '/prisoner/ABC123',
+          },
+          caseNotesUrl: '/prisoner/ABC123/case-notes',
+          recordIncentiveLevelUrl: '/prisoner/ABC123/incentive-level-details/change-incentive-level',
+        })
+      )
     })
   })
 })

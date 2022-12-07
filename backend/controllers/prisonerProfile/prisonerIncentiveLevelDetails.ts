@@ -43,6 +43,11 @@ function notEmpty<TValue>(value: TValue | null | undefined): value is TValue {
   return value !== null && value !== undefined
 }
 
+/**
+ * Usernames that will be displayed as "System" in the "Recorded by" column
+ */
+const SYSTEM_USERS = ['INCENTIVES_API']
+
 export default ({
     prisonApi,
     incentivesApi,
@@ -113,7 +118,16 @@ export default ({
         await Promise.all(
           uniqueUserIds
             .filter((userId) => Boolean(userId))
-            .map((userId) => prisonApi.getStaffDetails(res.locals, userId))
+            .map((userId: string) => {
+              if (SYSTEM_USERS.includes(userId)) {
+                return {
+                  username: userId,
+                  firstName: 'System',
+                  lastName: '',
+                }
+              }
+              return prisonApi.getStaffDetails(res.locals, userId)
+            })
         )
       ).filter(notEmpty)
 
@@ -127,7 +141,7 @@ export default ({
 
         return {
           iepEstablishment: description,
-          iepStaffMember: user && `${properCaseName(user.firstName)} ${properCaseName(user.lastName)}`,
+          iepStaffMember: user && `${properCaseName(user.firstName)} ${properCaseName(user.lastName)}`.trim(),
           formattedTime: moment(details.iepTime, 'YYYY-MM-DD HH:mm').format('D MMMM YYYY - HH:mm'),
           ...details,
         }
