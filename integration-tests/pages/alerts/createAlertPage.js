@@ -11,13 +11,13 @@ const createAlertPage = () =>
       submitButton: () => cy.get('button[type="submit"]'),
     }),
     activeDate: () => cy.get('.ui-state-active'),
-    errorSummaryTitle: () => cy.get('#error-summary-title'),
+    errorSummaryTitle: () => cy.get('.govuk-error-summary'),
     errorSummaryList: () => cy.get('.govuk-error-summary__list'),
   })
 
 export default {
   verifyOnPage: createAlertPage,
-  goTo: offenderNo => {
+  goTo: (offenderNo) => {
     cy.visit(`/offenders/${offenderNo}/create-alert`)
     return createAlertPage()
   },
