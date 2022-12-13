@@ -7,7 +7,7 @@ const caseNoteConfirmPage = () =>
       confirmRadio: () => cy.get('[type="radio"]'),
       submitButton: () => cy.get('button[type="submit"]'),
     }),
-    errorSummaryTitle: () => cy.get('#error-summary-title'),
+    errorSummaryTitle: () => cy.get('.govuk-error-summary'),
     errorSummaryList: () => cy.get('.govuk-error-summary__list'),
   })
 

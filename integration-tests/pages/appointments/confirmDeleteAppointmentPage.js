@@ -12,7 +12,7 @@ const confirmDeleteAppointmentPage = () =>
 
 export default {
   verifyOnPage: confirmDeleteAppointmentPage,
-  goTo: appointmentId => {
+  goTo: (appointmentId) => {
     cy.visit(`/appointment-details/${appointmentId}/confirm-deletion`)
     return confirmDeleteAppointmentPage()
   },
