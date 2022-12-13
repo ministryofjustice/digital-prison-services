@@ -3,7 +3,7 @@
     {% set activeContactsPersonalRows = [] %}
 
     {% for contactDetail in contact.details %}
-
+    
       {% if contactDetail.html %}
         {% set value = {html: contactDetail.html | showDefault(missingEntry)} %}
       {% else %}
@@ -16,7 +16,7 @@
             text: contactDetail.label,
             classes: 'govuk-summary-list__key--indent'
           },
-          value: value
+          value: value  
         }
       ), activeContactsPersonalRows) %}
     {% endfor %}

@@ -1124,7 +1124,7 @@ context('Prisoner personal', () => {
               .then(($summaryValues) => {
                 cy.get($summaryValues).its('length').should('eq', 10)
                 expect($summaryValues.get(0).innerText).to.contain('Cousin')
-                expect($summaryValues.get(1).innerText).to.contain('02222222222,\n033333333333 extension number 123')
+                expect($summaryValues.get(1).innerText).to.contain('02222222222,033333333333 extension number 123')
                 expect($summaryValues.get(2).innerText).to.contain('test1@email.com, test2@email.com')
                 expect($summaryValues.get(3).innerText).to.contain('Flat A, 13, High Street')
                 expect($summaryValues.get(4).innerText).to.contain('Ulverston')
