@@ -15,6 +15,11 @@ export type PrisonerSearchResult = {
   status: string
   alerts: Array<Alert>
   category: string
+  currentIncentive?: {
+    level: {
+      description: string
+    }
+  }
 }
 
 // other fields are present but only these are used

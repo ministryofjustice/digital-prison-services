@@ -11,7 +11,7 @@ const adjudicationHistoryPage = (offenderName) =>
     }),
     noRecordsFoundMessage: () => cy.get('[data-qa="no-records-found-message"]'),
     tableRows: () => cy.get('[data-qa="adjudications-history-table"]'),
-    errorSummaryTitle: () => cy.get('#error-summary-title'),
+    errorSummaryTitle: () => cy.get('govuk-error-summary'),
     errorSummaryList: () => cy.get('.govuk-error-summary__list'),
     feedbackBannerTitle: () => cy.get('[data-qa="feedback-survey-header"]'),
     feedbackBannerLink: () => cy.get('[data-qa="feedback-survey-link"]'),

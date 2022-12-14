@@ -9,7 +9,7 @@ const amendmentPage = (name) =>
     save: () => cy.get('[type="submit"]'),
     omicOpenWarning: () => cy.get('[data-test="omic-open-warning"]'),
     omicOpenHint: () => cy.get('[data-test="omic-open-hint"]'),
-    errorSummaryTitle: () => cy.get('#error-summary-title'),
+    errorSummaryTitle: () => cy.get('.govuk-error-summary'),
     errorSummaryList: () => cy.get('.govuk-error-summary__list'),
   })
 

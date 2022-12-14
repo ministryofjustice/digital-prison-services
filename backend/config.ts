@@ -20,7 +20,6 @@ export const app = {
   neurodiversityEnabledUsernames: process.env.NEURODIVERSITY_ENABLED_USERNAMES,
   neurodiversityEnabledPrisons: process.env.NEURODIVERSITY_ENABLED_PRISONS || [],
   disableRequestLimiter: process.env.DISABLE_REQUEST_LIMITER ? process.env.DISABLE_REQUEST_LIMITER === 'true' : false,
-  establishmentSearchUsePrisonerSearch: process.env.ESTABLISHMENT_SEARCH_USES_PRISONER_SEARCH === 'true',
 }
 
 export const analytics = {
@@ -175,7 +174,6 @@ export const apis = {
   },
   managePrisonVisits: {
     ui_url: process.env.MANAGE_PRISON_VISITS_URL || '',
-    enabled_prisons: process.env.PRISONS_FOR_MANAGE_PRISON_BOOKINGS || '',
   },
   legacyPrisonVisits: {
     ui_url: process.env.LEGACY_PRISON_VISITS_URL || '',
