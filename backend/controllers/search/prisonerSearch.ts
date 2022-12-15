@@ -220,7 +220,7 @@ export default ({
         ? offenderSearchApi.establishmentSearch(searchContext, prisonId, {
             term: keywords,
             alerts: selectedAlerts,
-            cellLocationPrefix: internalLocation,
+            cellLocationPrefix: internalLocation && `${internalLocation}-`,
           })
         : Promise.resolve([])
 
