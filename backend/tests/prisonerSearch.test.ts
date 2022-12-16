@@ -131,18 +131,18 @@ describe('Prisoner search', () => {
       expect(offenderSearchApi.establishmentSearch).toHaveBeenCalledWith(expect.anything(), 'BXI', {})
     })
 
-    it('should request with parsed location when supplied in query', async () => {
-      req.query.location = 'BXI-B-1-0'
+    it('should request with parsed location when supplied in query with dash to indicate partial match', async () => {
+      req.query.location = 'BXI-B'
 
       await controller.index(req, res)
 
       expect(offenderSearchApi.establishmentSearch).toHaveBeenCalledWith(expect.anything(), 'BXI', {
-        cellLocationPrefix: 'BXI-B-1-0',
+        cellLocationPrefix: 'BXI-B-',
       })
     })
 
     it('should request with full location as cell prefix when supplied in query', async () => {
-      req.query.location = 'BXI-B-1-0'
+      req.query.location = 'BXI-B'
 
       await controller.index(req, res)
 
