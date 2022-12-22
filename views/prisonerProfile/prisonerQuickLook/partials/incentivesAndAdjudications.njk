@@ -31,7 +31,7 @@
             attributes: { "data-test": "incentives-summary" }
         }) }}
         {% if prisonerProfileData.userCanEdit %}
-            <a href="{{ '/offenders/' + prisonerProfileData.offenderNo + '/incentive-level-details' }}" class="govuk-link govuk-body govuk-!-margin-bottom-2 govuk-!-display-inline-block" data-test="incentive-details-link">View incentive level details</a>
+            <a href="{{ '/prisoner/' + prisonerProfileData.offenderNo + '/incentive-level-details' }}" class="govuk-link govuk-body govuk-!-margin-bottom-2 govuk-!-display-inline-block" data-test="incentive-details-link">View incentive level details</a>
         {% endif %}
     {% endif %}
 
@@ -80,7 +80,7 @@
         }) }}
 
         {% if prisonerProfileData.userCanEdit %}
-            <a href="{{ '/offenders/' + prisonerProfileData.offenderNo + '/adjudications' }}" class="govuk-link govuk-body" data-test="adjudication-history-link">View adjudication history</a>
+            <a href="{{ '/prisoner/' + prisonerProfileData.offenderNo + '/adjudications' }}" class="govuk-link govuk-body" data-test="adjudication-history-link">View adjudication history</a>
         {% endif%}
     {% endif %}
 </div>
