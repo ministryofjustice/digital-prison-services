@@ -62,7 +62,11 @@
           element: 'a',
           href: manageIncentivesUrl,
           classes: 'govuk-!-margin-right-2',
-          attributes: { 'data-test': 'goto-manage-incentives' }
+          attributes: {
+            'data-test': 'goto-manage-incentives',
+            'data-ga-id': 'Record incentive level confirmation: manage reviews',
+            'data-case-load': user.activeCaseLoad.caseLoadId | default('')
+          }
         }) }}
 
         {{ govukButton({
@@ -70,10 +74,17 @@
           element: 'a',
           href: profileUrl,
           classes: 'govuk-button--secondary',
-          attributes: { 'data-test': 'goto-prisoner-quicklook' }
+          attributes: {
+            'data-test': 'goto-prisoner-quicklook',
+            'data-ga-id': 'Record incentive level confirmation: case notes',
+            'data-case-load': user.activeCaseLoad.caseLoadId | default('') }
         }) }}
       </div>
 
     </div>
   </div>
+{% endblock %}
+
+{% block pageScripts %}
+  <script src="/static/js/incentiveLevel.js"></script>
 {% endblock %}
