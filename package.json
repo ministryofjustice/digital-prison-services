@@ -71,7 +71,7 @@
     "govuk-frontend": "^4.4.1",
     "helmet": "^4.6.0",
     "isbinaryfile": "^4.0.10",
-    "jsonwebtoken": "^8.5.1",
+    "jsonwebtoken": "^9.0.0",
     "jwt-decode": "^3.1.2",
     "moment": "^2.29.4",
     "moment-business-days": "^1.2.0",
