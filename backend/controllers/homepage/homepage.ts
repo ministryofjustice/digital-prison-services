@@ -20,6 +20,7 @@ const {
     incentives,
     createAndVaryALicence,
     historicalPrisonerApplication,
+    getSomeoneReadyForWork,
   },
 } = config
 
@@ -265,8 +266,8 @@ const getTasks = ({ activeCaseLoadId, locations, staffId, whereaboutsConfig, key
       id: 'get-someone-ready-to-work',
       heading: 'Get someone ready to work',
       description: 'Record what support a prisoner needs to get work. View who has been assessed as ready to work.',
-      href: '/work-profile/cohort-list?sort=releaseDate,order=descending',
-      enabled: () => userHasRoles(['WORK_READINESS_VIEW', 'WORK_READINESS_EDIT']),
+      href: `${getSomeoneReadyForWork.ui_url}?sort=releaseDate&order=descending`,
+      enabled: () => getSomeoneReadyForWork.ui_url && userHasRoles(['WORK_READINESS_VIEW', 'WORK_READINESS_EDIT']),
     },
   ]
 }

@@ -668,9 +668,9 @@ describe('Homepage', () => {
       })
 
       it('Should render home page with the Get someone ready to work tile when required roles are present', async () => {
-        Array.of('WORK_READINESS_VIEW', 'WORK_READINESS_EDIT').forEach(async (roleCode) => {
-          oauthApi.userRoles.mockReturnValue([{ roleCode }])
-        })
+        config.apis.getSomeoneReadyForWork.ui_url = '/work-profile/cohort-list'
+
+        oauthApi.userRoles.mockReturnValue([{ roleCode: 'WORK_READINESS_VIEW' }])
 
         await controller(req, res)
         expect(res.render).toHaveBeenCalledWith(
@@ -682,7 +682,7 @@ describe('Homepage', () => {
                 heading: 'Get someone ready to work',
                 description:
                   'Record what support a prisoner needs to get work. View who has been assessed as ready to work.',
-                href: '/work-profile/cohort-list?sort=releaseDate,order=descending',
+                href: '/work-profile/cohort-list?sort=releaseDate&order=descending',
               },
             ],
           })
