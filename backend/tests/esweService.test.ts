@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import moment from 'moment'
 import EsweService, {
   DEFAULT_SKILL_LEVELS,
