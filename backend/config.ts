@@ -224,6 +224,9 @@ export const notifications = {
     NWI: {
       omu: process.env.NORWICH_OMU_EMAIL,
     },
+    PNI: {
+      omu: process.env.PRESTON_OMU_EMAIL,
+    },
   },
 }
 
