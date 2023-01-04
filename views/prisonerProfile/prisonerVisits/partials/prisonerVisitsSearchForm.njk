@@ -38,7 +38,8 @@
         items: visitTypes | addDefaultSelectedVale('All', true) | setSelected(formValues.visitType),
         attributes: { 'data-test': 'prisoner-visits-type' }
       }) }}
-
+      </div>
+    <div class="horizontal-form govuk-!-margin-bottom-3">
       {{ govukSelect({
         id: "status",
         name: "status",
@@ -54,13 +55,19 @@
         items: prisons | addDefaultSelectedVale('All', true) | setSelected(formValues.establishment),
         attributes: { 'data-test': 'establishment-type' }
       }) }}
-
-      {{ govukButton({
-        text: "View",
-        type: "submit"
-      }) }}
-
-      <a href="./visits-details" data-test="clear-link" class="govuk-link govuk-link--no-visited-state govuk-!-padding-bottom-1 govuk-body govuk-!-margin-left-3">Clear</a>
-    </div>
   {% endcall %}
+  
+    <div class="horizontal-form govuk-!-margin-bottom-3">
+                  {{ govukButton({
+          text: "View",
+          type: "submit"
+        }) }}
+          <p><a href="./visits-details" 
+            style="line-height: 2.1"
+            data-test="clear-link" 
+            class="govuk-link govuk-link--no-visited-state govuk-!-padding-bottom-1 govuk-body govuk-!-margin-left-3">
+              Clear
+            </a></p>
+        </div>
+    </div>
 </form>
