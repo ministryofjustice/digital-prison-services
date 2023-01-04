@@ -24,7 +24,7 @@ generic-service:
    INCENTIVES_URL: https://incentives-ui-preprod.hmpps.service.justice.gov.uk
    INCENTIVES_API_ENDPOINT_URL: https://incentives-api-preprod.hmpps.service.justice.gov.uk
    INCENTIVES_EXCLUDED_CASELOADS: "CADM_I"
-   INCENTIVES_PRIVATE_BETA_ENABLED_PRISONS: "LEI,MDI"
+   INCENTIVES_PRIVATE_BETA_ENABLED_PRISONS: "MDI,WII"
    TOKENVERIFICATION_API_URL: https://token-verification-api-preprod.prison.service.justice.gov.uk
    CASENOTES_API_URL: https://preprod.offender-case-notes.service.justice.gov.uk/
    ALLOCATION_MANAGER_ENDPOINT_URL: https://preprod.moic.service.justice.gov.uk
