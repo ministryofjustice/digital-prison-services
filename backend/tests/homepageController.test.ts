@@ -668,7 +668,7 @@ describe('Homepage', () => {
       })
 
       it('Should render home page with the Get someone ready to work tile when required roles are present', async () => {
-        config.apis.getSomeoneReadyForWork.ui_url = '/work-profile/cohort-list'
+        config.apis.getSomeoneReadyForWork.ui_url = '/'
 
         oauthApi.userRoles.mockReturnValue([{ roleCode: 'WORK_READINESS_VIEW' }])
 
