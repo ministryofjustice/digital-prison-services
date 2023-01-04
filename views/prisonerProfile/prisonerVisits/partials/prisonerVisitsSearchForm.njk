@@ -15,7 +15,7 @@
     <div class="horizontal-form govuk-!-margin-bottom-3">
       {{ datePicker({
         id: 'fromDate',
-        label: 'From',
+        label: 'Date from',
         name: 'fromDate',
         date: formValues.fromDate,
         errorMessage: errors | findError('fromDate'),
@@ -24,7 +24,7 @@
 
       {{ datePicker({
         id: 'toDate',
-        label: 'To',
+        label: 'Date to',
         name: 'toDate',
         date: formValues.toDate,
         errorMessage: errors | findError('toDate'),
