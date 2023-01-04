@@ -97,6 +97,92 @@ context('Prisoner change incentive level details', () => {
       cy.get('[data-test="next-review-date"]').should('contain', '26 September 2022')
     })
 
+    context('should track clicks', () => {
+      // add gtag (global function variable for Google Tag Manager) spy to page
+      let gtagCalls = []
+      const injectGtagSpy = () => {
+        gtagCalls = []
+        cy.window().then((win) => {
+          // eslint-disable-next-line no-param-reassign
+          win.gtag = (...args) => {
+            gtagCalls.push(args)
+          }
+        })
+      }
+      const expectGtagEvent = (event_category) => {
+        expect(gtagCalls).to.deep.equal([['event', 'click', { event_category, event_label: 'MDI' }]])
+      }
+
+      beforeEach(() => {
+        cy.task('stubOffenderFullDetails', offenderFullDetails)
+        cy.task('stubScenario', {
+          scenarioName: 'changeIep',
+          mappings: {
+            // initial page load
+            beforeSubmission: {
+              request: {
+                method: 'GET',
+                urlPattern: '/incentives/iep/reviews/booking/[0-9]+?\\?.+?',
+              },
+              response: {
+                headers: {
+                  'Content-Type': 'application/json;charset=UTF-8',
+                },
+                jsonBody: iepSummaryForBooking,
+              },
+            },
+            // showing confirmation after `incentivesApi.changeIepLevel` is called
+            afterSubmission: {
+              request: {
+                method: 'GET',
+                urlPattern: '/incentives/iep/reviews/booking/[0-9]+?\\?.+?',
+              },
+              response: {
+                headers: {
+                  'Content-Type': 'application/json;charset=UTF-8',
+                },
+                jsonBody: {
+                  ...iepSummaryForBooking,
+                  iepDate: '2021-09-26',
+                  iepTime: '2021-09-26T12:34:56',
+                  iepLevel: iepLevels[0].iepDescription,
+                  daysSinceReview: 0,
+                  nextReviewDate: '2022-09-26',
+                },
+              },
+            },
+          },
+        })
+
+        cy.visit(`/prisoner/${offenderNo}/incentive-level-details/change-incentive-level`)
+
+        cy.get('[data-test="new-level"]')
+          .find('[type="radio"]')
+          .then(($radios) => {
+            cy.get($radios).first().check()
+          })
+        cy.get('[data-test="change-reason"]').type('Test comment')
+        cy.get('[data-test="submit-change').click()
+        injectGtagSpy()
+      })
+
+      it('on manage incentive reviews button', () => {
+        cy.get('[data-test="goto-manage-incentives"]')
+          .click()
+          .then(() => {
+            expectGtagEvent('Record incentive level confirmation: manage reviews')
+          })
+      })
+
+      it('on prisoner profile button', () => {
+        cy.get('[data-test="goto-prisoner-quicklook"]')
+          .click()
+          .then(() => {
+            expectGtagEvent('Record incentive level confirmation: case notes')
+          })
+      })
+    })
+
     it('should display missing input form errors', () => {
       cy.visit(`/prisoner/${offenderNo}/incentive-level-details/change-incentive-level`)
 

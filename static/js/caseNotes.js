@@ -7,7 +7,7 @@ $(function () {
 
   if (omicOpenWarnings.length) {
     var selectedSubTypeOption = subTypeSelect.children('option:selected').val()
-    var style = selectedSubTypeOption == 'OPEN_COMM' ? 'block' : 'none'
+    var style = selectedSubTypeOption === 'OPEN_COMM' ? 'block' : 'none'
     if (omicOpenWarnings.length) omicOpenWarnings.prop('style', 'display: ' + style)
   }
 
@@ -41,7 +41,7 @@ $(function () {
     var selectedSubTypeOption = e.target && e.target.options && e.target.options[e.target.options.selectedIndex]
     if (!selectedSubTypeOption) return
 
-    var style = selectedSubTypeOption.value == 'OPEN_COMM' ? 'block' : 'none'
+    var style = selectedSubTypeOption.value === 'OPEN_COMM' ? 'block' : 'none'
     if (omicOpenWarnings.length) omicOpenWarnings.prop('style', 'display: ' + style)
   })
 
