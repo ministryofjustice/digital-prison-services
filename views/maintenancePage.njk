@@ -1,8 +1,7 @@
-{% extends "../partials/layout.njk" %}
-{% from "../components/card/card.njk" import card %}
+{% extends "./partials/layout.njk" %}
+{% from "./components/card/card.njk" import card %}
 {% from "govuk/components/back-link/macro.njk" import govukBackLink %}
 
-{% set title = 'Manage prisoner whereabouts' %}
 {% set feedbackBannerBackground = '#f0f4f5 '%}
 
 {% block main %}
@@ -23,7 +22,7 @@
         <div class="govuk-grid-column-two-thirds">
           <h1 class="govuk-heading-l">This service is currently unavailable</h1>
           <p class="govuk-body">
-            You'll be able to use the Manage Prisoner Whereabouts service on DPS again from [6pm on Thursday, 1 December 2022].
+            You'll be able to use the service on DPS again from [6pm on Thursday, 1 December 2022].
           </p>
         </div>
       </div>

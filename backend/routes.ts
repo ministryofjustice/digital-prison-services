@@ -54,7 +54,7 @@ import asyncMiddleware from './middleware/asyncHandler'
 
 import whereaboutsRouter from './routes/whereabouts/whereaboutsRouter'
 import { saveBackLink } from './controllers/backLink'
-import maintenancePage from './controllers/whereabouts/maintenancePage'
+import maintenancePage from './controllers/maintenancePage'
 
 const router = express.Router()
 
@@ -112,7 +112,7 @@ const setup = ({
   )
 
   if (config.app.whereaboutsMaintenanceNode) {
-    router.use('/manage-prisoner-whereabouts*', maintenancePage())
+    router.use('/manage-prisoner-whereabouts*', maintenancePage('Manage prisoner whereabouts'))
   } else {
     router.use(
       '/manage-prisoner-whereabouts',
@@ -180,8 +180,8 @@ const setup = ({
   router.use('/change-caseload', changeCaseloadRouter({ prisonApi, logError }))
 
   if (config.app.whereaboutsMaintenanceNode) {
-    router.use('/offenders/:offenderNo/add-appointment', maintenancePage())
-    router.use('/offenders/:offenderNo/prepost-appointments', maintenancePage())
+    router.use('/offenders/:offenderNo/add-appointment', maintenancePage('Appointment details'))
+    router.use('/offenders/:offenderNo/prepost-appointments', maintenancePage('Appointment details'))
   } else {
     router.use('/offenders/:offenderNo/add-appointment', addAppointmentRouter({ prisonApi, whereaboutsApi, logError }))
 
@@ -285,7 +285,7 @@ const setup = ({
   router.get('/back-to-start', backToStart())
 
   if (config.app.whereaboutsMaintenanceNode) {
-    router.use('/appointment-details*', maintenancePage())
+    router.use('/appointment-details*', maintenancePage('Appointment details'))
   } else {
     router.get(
       '/appointment-details/:id/confirm-deletion',
