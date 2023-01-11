@@ -1,5 +1,4 @@
 import express from 'express'
-import config from './config'
 
 import { logError } from './logError'
 import { alertFactory } from './controllers/alert'
@@ -74,6 +73,7 @@ const setup = ({
   curiousApi,
   incentivesApi,
   restrictedPatientApi,
+  whereaboutsMaintenanceMode,
 }) => {
   router.use(async (req, res, next) => {
     res.locals = {
@@ -111,7 +111,7 @@ const setup = ({
     createCaseNoteRouter({ prisonApi, caseNotesApi, oauthApi, systemOauthClient, restrictedPatientApi })
   )
 
-  if (config.app.whereaboutsMaintenanceNode) {
+  if (whereaboutsMaintenanceMode) {
     router.use('/manage-prisoner-whereabouts*', maintenancePage('Manage prisoner whereabouts'))
   } else {
     router.use(
@@ -179,7 +179,7 @@ const setup = ({
 
   router.use('/change-caseload', changeCaseloadRouter({ prisonApi, logError }))
 
-  if (config.app.whereaboutsMaintenanceNode) {
+  if (whereaboutsMaintenanceMode) {
     router.use('/offenders/:offenderNo/add-appointment', maintenancePage('Appointment details'))
     router.use('/offenders/:offenderNo/prepost-appointments', maintenancePage('Appointment details'))
   } else {
@@ -284,7 +284,7 @@ const setup = ({
 
   router.get('/back-to-start', backToStart())
 
-  if (config.app.whereaboutsMaintenanceNode) {
+  if (whereaboutsMaintenanceMode) {
     router.use('/appointment-details*', maintenancePage('Appointment details'))
   } else {
     router.get(
