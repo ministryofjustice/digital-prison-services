@@ -1,4 +1,5 @@
 import express from 'express'
+import config from './config'
 
 import { logError } from './logError'
 import { alertFactory } from './controllers/alert'
@@ -53,6 +54,7 @@ import asyncMiddleware from './middleware/asyncHandler'
 
 import whereaboutsRouter from './routes/whereabouts/whereaboutsRouter'
 import { saveBackLink } from './controllers/backLink'
+import maintenancePage from './controllers/whereabouts/maintenancePage'
 
 const router = express.Router()
 
@@ -83,11 +85,6 @@ const setup = ({
 
   const contentfulCache = cacheFactory(30) // 30 second TTL
 
-  router.use(
-    '/manage-prisoner-whereabouts',
-    whereaboutsRouter({ oauthApi, prisonApi, offenderSearchApi, systemOauthClient })
-  )
-
   router.post('/notification/dismiss', notificationDismiss({ notificationCookie }))
   router.use(
     notificationBar({
@@ -113,28 +110,79 @@ const setup = ({
     '/prisoner/:offenderNo/add-case-note',
     createCaseNoteRouter({ prisonApi, caseNotesApi, oauthApi, systemOauthClient, restrictedPatientApi })
   )
-  router.get(
-    '/manage-prisoner-whereabouts/attendance-reason-statistics',
-    attendanceStatisticsFactory(oauthApi, prisonApi, whereaboutsApi).attendanceStatistics
-  )
-  router.get(
-    '/manage-prisoner-whereabouts/attendance-reason-statistics/reason/:reason',
-    attendanceStatisticsFactory(oauthApi, prisonApi, whereaboutsApi).attendanceStatisticsOffendersList
-  )
 
-  router.get(
-    '/manage-prisoner-whereabouts/attendance-reason-statistics/suspended',
-    attendanceStatisticsFactory(oauthApi, prisonApi, whereaboutsApi).attendanceStatisticsSuspendedList
-  )
+  if (config.app.whereaboutsMaintenanceNode) {
+    router.use('/manage-prisoner-whereabouts*', maintenancePage())
+    router.use('/appointment-details*', maintenancePage())
+  } else {
+    router.use(
+      '/manage-prisoner-whereabouts',
+      whereaboutsRouter({ oauthApi, prisonApi, offenderSearchApi, systemOauthClient })
+    )
+    router.get(
+      '/manage-prisoner-whereabouts/attendance-reason-statistics',
+      attendanceStatisticsFactory(oauthApi, prisonApi, whereaboutsApi).attendanceStatistics
+    )
+    router.get(
+      '/manage-prisoner-whereabouts/attendance-reason-statistics/reason/:reason',
+      attendanceStatisticsFactory(oauthApi, prisonApi, whereaboutsApi).attendanceStatisticsOffendersList
+    )
 
-  router.get(
-    '/manage-prisoner-whereabouts/select-residential-location',
-    selectResidentialLocationController(whereaboutsApi).index
-  )
-  router.post(
-    '/manage-prisoner-whereabouts/select-residential-location',
-    selectResidentialLocationController(whereaboutsApi).post
-  )
+    router.get(
+      '/manage-prisoner-whereabouts/attendance-reason-statistics/suspended',
+      attendanceStatisticsFactory(oauthApi, prisonApi, whereaboutsApi).attendanceStatisticsSuspendedList
+    )
+
+    router.get(
+      '/manage-prisoner-whereabouts/select-residential-location',
+      selectResidentialLocationController(whereaboutsApi).index
+    )
+    router.post(
+      '/manage-prisoner-whereabouts/select-residential-location',
+      selectResidentialLocationController(whereaboutsApi).post
+    )
+
+    router.get('/manage-prisoner-whereabouts/select-location', selectActivityLocation({ prisonApi }).index)
+    router.post('/manage-prisoner-whereabouts/select-location', selectActivityLocation({ prisonApi }).post)
+
+    router.get(
+      '/appointment-details/:id/confirm-deletion',
+      appointmentConfirmDeletion({
+        whereaboutsApi,
+        appointmentDetailsService: appointmentDetailsServiceFactory({ prisonApi }),
+      }).index
+    )
+
+    router.post(
+      '/appointment-details/:id/confirm-deletion',
+      appointmentConfirmDeletion({
+        whereaboutsApi,
+        appointmentDetailsService: appointmentDetailsServiceFactory({ prisonApi }),
+      }).post
+    )
+    router.get(
+      '/appointment-details/:id/delete-recurring-bookings',
+      appointmentDeleteRecurringBookings({
+        whereaboutsApi,
+      }).index
+    )
+    router.post(
+      '/appointment-details/:id/delete-recurring-bookings',
+      appointmentDeleteRecurringBookings({
+        whereaboutsApi,
+      }).post
+    )
+    router.get('/appointment-details/deleted', appointmentDeleted().index)
+    router.use(
+      '/appointment-details/:id',
+      appointmentDetails({
+        oauthApi,
+        prisonApi,
+        whereaboutsApi,
+        appointmentDetailsService: appointmentDetailsServiceFactory({ prisonApi }),
+      })
+    )
+  }
 
   router.get(
     '/offenders/:offenderNo/probation-documents',
@@ -170,12 +218,17 @@ const setup = ({
 
   router.use('/change-caseload', changeCaseloadRouter({ prisonApi, logError }))
 
-  router.use('/offenders/:offenderNo/add-appointment', addAppointmentRouter({ prisonApi, whereaboutsApi, logError }))
+  if (config.app.whereaboutsMaintenanceNode) {
+    router.use('/offenders/:offenderNo/add-appointment', maintenancePage())
+    router.use('/offenders/:offenderNo/prepost-appointments', maintenancePage())
+  } else {
+    router.use('/offenders/:offenderNo/add-appointment', addAppointmentRouter({ prisonApi, whereaboutsApi, logError }))
 
-  router.use(
-    '/offenders/:offenderNo/prepost-appointments',
-    prepostAppointmentRouter({ prisonApi, logError, oauthApi, whereaboutsApi, notifyClient, raiseAnalyticsEvent })
-  )
+    router.use(
+      '/offenders/:offenderNo/prepost-appointments',
+      prepostAppointmentRouter({ prisonApi, logError, oauthApi, whereaboutsApi, notifyClient, raiseAnalyticsEvent })
+    )
+  }
 
   router.use('/view-all-appointments', viewAppointments({ prisonApi, whereaboutsApi, logError }))
 
@@ -268,47 +321,7 @@ const setup = ({
 
   router.use('/global-search', globalSearchRouter({ offenderSearchApi, oauthApi, logError }))
 
-  router.get('/manage-prisoner-whereabouts/select-location', selectActivityLocation({ prisonApi }).index)
-  router.post('/manage-prisoner-whereabouts/select-location', selectActivityLocation({ prisonApi }).post)
-
   router.get('/back-to-start', backToStart())
-
-  router.get(
-    '/appointment-details/:id/confirm-deletion',
-    appointmentConfirmDeletion({
-      whereaboutsApi,
-      appointmentDetailsService: appointmentDetailsServiceFactory({ prisonApi }),
-    }).index
-  )
-  router.post(
-    '/appointment-details/:id/confirm-deletion',
-    appointmentConfirmDeletion({
-      whereaboutsApi,
-      appointmentDetailsService: appointmentDetailsServiceFactory({ prisonApi }),
-    }).post
-  )
-  router.get(
-    '/appointment-details/:id/delete-recurring-bookings',
-    appointmentDeleteRecurringBookings({
-      whereaboutsApi,
-    }).index
-  )
-  router.post(
-    '/appointment-details/:id/delete-recurring-bookings',
-    appointmentDeleteRecurringBookings({
-      whereaboutsApi,
-    }).post
-  )
-  router.get('/appointment-details/deleted', appointmentDeleted().index)
-  router.use(
-    '/appointment-details/:id',
-    appointmentDetails({
-      oauthApi,
-      prisonApi,
-      whereaboutsApi,
-      appointmentDetailsService: appointmentDetailsServiceFactory({ prisonApi }),
-    })
-  )
 
   router.get('/save-backlink', saveBackLink())
 
