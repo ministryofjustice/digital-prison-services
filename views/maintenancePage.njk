@@ -1,0 +1,35 @@
+{% extends "./partials/layout.njk" %}
+{% from "./components/card/card.njk" import card %}
+{% from "govuk/components/back-link/macro.njk" import govukBackLink %}
+
+{% set feedbackBannerBackground = '#f0f4f5 '%}
+
+{% block main %}
+  <div class="govuk-width-container">
+    {{ govukBackLink({
+      text: "Digital Prison Services",
+      href: "/"
+    }) }}
+
+    <h1 class="govuk-heading-l govuk-!-margin-top-7">{{ title }}</h1>
+  </div>
+
+  <div class="homepage-content">
+    <div class="govuk-width-container">
+
+      {% set mainClasses = "govuk-main-wrapper--l" %}
+      <div class="govuk-grid-row govuk-!-margin-top-7 govuk-!-margin-bottom-7">
+        <div class="govuk-grid-column-two-thirds">
+          <h1 class="govuk-heading-l">This service is currently unavailable</h1>
+          <p class="govuk-body">
+            You'll be able to use the service on DPS again from [6pm on Thursday, 1 December 2022].
+          </p>
+        </div>
+      </div>
+    </div>
+  </div>
+{% endblock %}
+
+{% block pageScripts %}
+  <script src="/static/js/card.js"></script>
+{% endblock %}
