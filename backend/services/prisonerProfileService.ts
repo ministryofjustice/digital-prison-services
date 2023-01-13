@@ -52,7 +52,7 @@ export default ({
     return false
   }
 
-  const getPrisonerProfileData = async (context, offenderNo, username, overrideAccess) => {
+  const getPrisonerProfileData = async (context, offenderNo, username, restrictPatientDetails) => {
     const [currentUser, prisonerDetails] = await Promise.all([
       oauthApi.currentUser(context),
       prisonApi.getDetails(context, offenderNo, true),
@@ -196,6 +196,12 @@ export default ({
     const canCalculateReleaseDate =
       userRoles && (userRoles as any).some((role) => role.roleCode === 'RELEASE_DATES_CALCULATOR')
 
+    const { isRestrictedPatient, isPomCaseLoadRestrictedPatient, hospital } = restrictPatientDetails || {
+      isRestrictedPatient: false,
+      isPomCaseLoadRestrictedPatient: false,
+      hospital: undefined,
+    }
+
     return {
       activeAlertCount,
       agencyName: assignedLivingUnit.agencyName,
@@ -228,16 +234,25 @@ export default ({
         keyworkerDetails && formatName((keyworkerDetails as any).firstName, (keyworkerDetails as any).lastName),
       isHighComplexity,
       inactiveAlertCount,
-      location: formatLocation(assignedLivingUnit.description),
+      location: hospital || formatLocation(assignedLivingUnit.description),
       offenderName: putLastNameFirst(prisonerDetails.firstName, prisonerDetails.lastName),
       offenderNo,
       offenderRecordRetained: offenderRetentionRecord && hasLength(offenderRetentionRecord.retentionReasons),
       showAddKeyworkerSession: staffRoles && (staffRoles as any).some((role) => role.role === 'KW'),
       showCalculateReleaseDates: offenderInCaseload && canCalculateReleaseDate,
-      showReportUseOfForce: useOfForceEnabledPrisons.includes(currentUser.activeCaseLoadId),
+      showReportUseOfForce: useOfForceEnabledPrisons.includes(currentUser.activeCaseLoadId) && !isRestrictedPatient,
+      showAddAppointment: !isRestrictedPatient,
+      showCsraHistory: !isRestrictedPatient,
+      showIncentiveLevelDetails: !isRestrictedPatient,
+      showFinanceDetailLinks: !isRestrictedPatient,
+      showScheduleDetailLink: !isRestrictedPatient,
+      showIncentiveDetailLink: !isRestrictedPatient,
+      showCellHistoryLink: !isRestrictedPatient,
       useOfForceUrl: `${useOfForceUrl}/report/${bookingId}/report-use-of-force`,
       userCanEdit:
-        (canViewInactivePrisoner && ['OUT', 'TRN'].includes(agencyId)) || offenderInCaseload || overrideAccess,
+        (canViewInactivePrisoner && ['OUT', 'TRN'].includes(agencyId)) ||
+        offenderInCaseload ||
+        isPomCaseLoadRestrictedPatient,
       language,
       interpreterRequired,
       writtenLanguage,

@@ -14,7 +14,7 @@ export default ({
   async (req, res) => {
     const { offenderNo } = req.params
 
-    const { context, overrideAccess } = await getContext({
+    const { context, restrictedPatientDetails } = await getContext({
       offenderNo,
       res,
       req,
@@ -35,7 +35,7 @@ export default ({
     const { bookingId } = await prisonApi.getDetails(context, offenderNo)
     const roles = oauthApi.userRoles(context)
     const [prisonerProfileData, alertTypes] = await Promise.all([
-      prisonerProfileService.getPrisonerProfileData(context, offenderNo, username, overrideAccess),
+      prisonerProfileService.getPrisonerProfileData(context, offenderNo, username, restrictedPatientDetails),
       referenceCodesService.getAlertTypes(context),
     ])
     const { userCanEdit } = prisonerProfileData

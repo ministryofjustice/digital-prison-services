@@ -41,11 +41,18 @@ const getDetails = async ({ context, res, offenderNo, prisonApi }) => {
   }
 }
 
-const createFinanceLink = (offenderNo, path, value) =>
-  `<a href="/prisoner/${offenderNo}/prisoner-finance-details/${path}" class="govuk-link">${
+const createFinanceLink = (offenderNo, path, value, showDetailLink) => {
+  if (showDetailLink) {
+    return `<a href="/prisoner/${offenderNo}/prisoner-finance-details/${path}" class="govuk-link">${
+      // @ts-expect-error ts-migrate(2554) FIXME: Expected 2 arguments, but got 1.
+      formatCurrency(value || 0)
+    }</a>`
+  }
+  return `<p>${
     // @ts-expect-error ts-migrate(2554) FIXME: Expected 2 arguments, but got 1.
     formatCurrency(value || 0)
-  }</a>`
+  }</p>`
+}
 
 const getNextIepReviewDate = ({ nextReviewDate }: { nextReviewDate?: string }): string | undefined => {
   if (!nextReviewDate) return undefined
@@ -88,7 +95,7 @@ export default ({
     const { offenderNo } = req.params
     const { username } = req.session.userDetails
 
-    const { context, overrideAccess } = await getContext({
+    const { context, restrictedPatientDetails } = await getContext({
       offenderNo,
       res,
       req,
@@ -117,7 +124,7 @@ export default ({
       todaysEventsResponse,
     ] = await Promise.all(
       [
-        prisonerProfileService.getPrisonerProfileData(context, offenderNo, username, overrideAccess),
+        prisonerProfileService.getPrisonerProfileData(context, offenderNo, username, restrictedPatientDetails),
         prisonApi.getMainOffence(context, bookingId),
         prisonApi.getPrisonerBalances(context, bookingId),
         prisonApi.getPrisonerDetails(context, offenderNo),
@@ -239,22 +246,42 @@ export default ({
         {
           label: 'Spends',
           visible: true,
-          html: createFinanceLink(offenderNo, 'spends', balanceData?.spends),
+          html: createFinanceLink(
+            offenderNo,
+            'spends',
+            balanceData?.spends,
+            prisonerProfileData?.showFinanceDetailLinks
+          ),
         },
         {
           label: 'Private cash',
           visible: true,
-          html: createFinanceLink(offenderNo, 'private-cash', balanceData?.cash),
+          html: createFinanceLink(
+            offenderNo,
+            'private-cash',
+            balanceData?.cash,
+            prisonerProfileData?.showFinanceDetailLinks
+          ),
         },
         {
           label: 'Savings',
           visible: true,
-          html: createFinanceLink(offenderNo, 'savings', balanceData?.savings),
+          html: createFinanceLink(
+            offenderNo,
+            'savings',
+            balanceData?.savings,
+            prisonerProfileData?.showFinanceDetailLinks
+          ),
         },
         {
           label: 'Damage obligations',
           visible: balanceData?.damageObligations > 0,
-          html: createFinanceLink(offenderNo, 'damage-obligations', balanceData?.damageObligations),
+          html: createFinanceLink(
+            offenderNo,
+            'damage-obligations',
+            balanceData?.damageObligations,
+            prisonerProfileData?.showFinanceDetailLinks
+          ),
         },
       ],
       incentives: {

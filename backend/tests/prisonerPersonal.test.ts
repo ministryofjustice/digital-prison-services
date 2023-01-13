@@ -123,7 +123,7 @@ describe('prisoner personal', () => {
       res.locals,
       offenderNo,
       'ITAG_USER',
-      false
+      undefined
     )
     expect(res.render).toHaveBeenCalledWith(
       'prisonerProfile/prisonerPersonal/prisonerPersonal.njk',

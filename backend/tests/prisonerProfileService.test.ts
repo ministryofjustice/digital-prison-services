@@ -228,7 +228,7 @@ describe('prisoner profile service', () => {
     })
 
     it('should return the correct prisoner information', async () => {
-      const getPrisonerProfileData = await service.getPrisonerProfileData(context, offenderNo, '', false)
+      const getPrisonerProfileData = await service.getPrisonerProfileData(context, offenderNo, '', undefined)
 
       expect(getPrisonerProfileData).toEqual({
         canViewPathfinderLink: false,
@@ -268,9 +268,16 @@ describe('prisoner profile service', () => {
         offenderName: 'Prisoner, Test',
         offenderNo: 'ABC123',
         offenderRecordRetained: undefined,
+        showAddAppointment: true,
         showAddKeyworkerSession: false,
         showCalculateReleaseDates: false,
+        showCellHistoryLink: true,
+        showCsraHistory: true,
+        showFinanceDetailLinks: true,
+        showIncentiveDetailLink: true,
+        showIncentiveLevelDetails: true,
         showReportUseOfForce: false,
+        showScheduleDetailLink: true,
         useOfForceUrl: '//useOfForceUrl/report/123/report-use-of-force',
         userCanEdit: false,
         staffId: 111,
@@ -699,7 +706,7 @@ describe('prisoner profile service', () => {
         // @ts-expect-error ts-migrate(2339) FIXME: Property 'userRoles' does not exist on type '{}'.
         oauthApi.userRoles.mockReturnValue([{ roleCode: 'PF_STD_PROBATION_RO' }])
 
-        const profileData = await service.getPrisonerProfileData(context, offenderNo, '', false)
+        const profileData = await service.getPrisonerProfileData(context, offenderNo, '', undefined)
 
         expect(profileData.canViewPathfinderLink).toBe(false)
       })
@@ -728,7 +735,7 @@ describe('prisoner profile service', () => {
         // @ts-expect-error ts-migrate(2339) FIXME: Property 'userRoles' does not exist on type '{}'.
         oauthApi.userRoles.mockReturnValue([{ roleCode: role }])
 
-        const profileData = await service.getPrisonerProfileData(context, offenderNo, '', false)
+        const profileData = await service.getPrisonerProfileData(context, offenderNo, '', undefined)
 
         expect(profileData[flag]).toBe(hasAccess)
       })
@@ -739,7 +746,7 @@ describe('prisoner profile service', () => {
         // @ts-expect-error ts-migrate(2339) FIXME: Property 'userRoles' does not exist on type '{}'.
         oauthApi.userRoles.mockReturnValue([{ roleCode: 'PF_STD_PROBATION' }])
 
-        const profileData = await service.getPrisonerProfileData(context, offenderNo, '', false)
+        const profileData = await service.getPrisonerProfileData(context, offenderNo, '', undefined)
 
         expect(profileData.showPathfinderReferButton).toBe(false)
       })
@@ -752,7 +759,7 @@ describe('prisoner profile service', () => {
       })
 
       it('should make client credentials call passing the username', async () => {
-        await service.getPrisonerProfileData(context, offenderNo, 'user1')
+        await service.getPrisonerProfileData(context, offenderNo, 'user1', undefined)
         // @ts-expect-error ts-migrate(2339) FIXME: Property 'getClientCredentialsTokens' does not exi... Remove this comment to see the full error message
         expect(systemOauthClient.getClientCredentialsTokens).toHaveBeenCalledWith('user1')
       })
@@ -761,7 +768,7 @@ describe('prisoner profile service', () => {
         // @ts-expect-error ts-migrate(2339) FIXME: Property 'getClientCredentialsTokens' does not exi... Remove this comment to see the full error message
         systemOauthClient.getClientCredentialsTokens = jest.fn().mockResolvedValue({ system: true })
 
-        const profileData = await service.getPrisonerProfileData(context, offenderNo, '', false)
+        const profileData = await service.getPrisonerProfileData(context, offenderNo, '', undefined)
 
         // @ts-expect-error ts-migrate(2339) FIXME: Property 'getSocDetails' does not exist on type '{... Remove this comment to see the full error message
         expect(socApi.getSocDetails).toHaveBeenCalledWith({ system: true }, offenderNo, true)
@@ -772,7 +779,7 @@ describe('prisoner profile service', () => {
         // @ts-expect-error ts-migrate(2339) FIXME: Property 'userRoles' does not exist on type '{}'.
         oauthApi.userRoles.mockReturnValue([{ roleCode: 'SOC_CUSTODY' }])
 
-        const profileData = await service.getPrisonerProfileData(context, offenderNo, '', false)
+        const profileData = await service.getPrisonerProfileData(context, offenderNo, '', undefined)
 
         expect(profileData.canViewSocLink).toBe(true)
         expect(profileData.socProfileUrl).toBe('http://soc-ui/nominal/1')
@@ -782,7 +789,7 @@ describe('prisoner profile service', () => {
         // @ts-expect-error ts-migrate(2339) FIXME: Property 'userRoles' does not exist on type '{}'.
         oauthApi.userRoles.mockReturnValue([{ roleCode: 'SOC_COMMUNITY' }])
 
-        const profileData = await service.getPrisonerProfileData(context, offenderNo, '', false)
+        const profileData = await service.getPrisonerProfileData(context, offenderNo, '', undefined)
 
         expect(profileData.canViewSocLink).toBe(true)
       })
@@ -793,7 +800,7 @@ describe('prisoner profile service', () => {
         // @ts-expect-error ts-migrate(2339) FIXME: Property 'userRoles' does not exist on type '{}'.
         oauthApi.userRoles.mockReturnValue([{ roleCode: 'SOC_CUSTODY' }])
 
-        const profileData = await service.getPrisonerProfileData(context, offenderNo, '', false)
+        const profileData = await service.getPrisonerProfileData(context, offenderNo, '', undefined)
 
         expect(profileData.canViewSocLink).toBe(false)
       })
@@ -810,7 +817,7 @@ describe('prisoner profile service', () => {
           },
         })
 
-        const profileData = await service.getPrisonerProfileData(context, offenderNo, '', false)
+        const profileData = await service.getPrisonerProfileData(context, offenderNo, '', undefined)
 
         expect(profileData.location).toBe('No cell allocated')
       })
@@ -847,7 +854,7 @@ describe('prisoner profile service', () => {
           oauthApi.currentUser.mockReturnValue({ staffId: 111, activeCaseLoadId: 'MDI' })
         })
         it('should not show the user the calculate release dates button', async () => {
-          const getPrisonerProfileData = await service.getPrisonerProfileData(context, offenderNo, '', false)
+          const getPrisonerProfileData = await service.getPrisonerProfileData(context, offenderNo, '', undefined)
 
           expect(getPrisonerProfileData).toEqual(
             expect.objectContaining({
@@ -866,11 +873,78 @@ describe('prisoner profile service', () => {
           oauthApi.currentUser.mockReturnValue({ staffId: 111, activeCaseLoadId: 'MDI' })
         })
         it('should not show the user the calculate release dates button', async () => {
-          const getPrisonerProfileData = await service.getPrisonerProfileData(context, offenderNo, '', false)
+          const getPrisonerProfileData = await service.getPrisonerProfileData(context, offenderNo, '', undefined)
 
           expect(getPrisonerProfileData).toEqual(
             expect.objectContaining({
               showCalculateReleaseDates: false,
+            })
+          )
+        })
+      })
+    })
+    describe('when the user is viewing a Restricted Patient', () => {
+      describe(`when the user is a POM with a caseload including the patients previous prison`, () => {
+        const restrictedPatientDetails = {
+          isRestrictedPatient: true,
+          isPomCaseLoadRestrictedPatient: true,
+          hospital: 'some hospital',
+        }
+        let getPrisonerProfileData
+        beforeEach(async () => {
+          getPrisonerProfileData = await service.getPrisonerProfileData(
+            context,
+            offenderNo,
+            '',
+            restrictedPatientDetails
+          )
+        })
+        it('should allow editing', async () => {
+          expect(getPrisonerProfileData).toEqual(
+            expect.objectContaining({
+              userCanEdit: true,
+            })
+          )
+        })
+        it('should restrict the links available', async () => {
+          expect(getPrisonerProfileData).toEqual(
+            expect.objectContaining({
+              showReportUseOfForce: false,
+              showAddAppointment: false,
+              showCsraHistory: false,
+              showIncentiveLevelDetails: false,
+              showFinanceDetailLinks: false,
+              showScheduleDetailLink: false,
+              showIncentiveDetailLink: false,
+              showCellHistoryLink: false,
+            })
+          )
+        })
+        it('should show the hospital location', async () => {
+          expect(getPrisonerProfileData).toEqual(
+            expect.objectContaining({
+              location: 'some hospital',
+            })
+          )
+        })
+      })
+      describe(`when the user is NOT a POM with a caseload including the patients previous prison`, () => {
+        const restrictedPatientDetails = {
+          isRestrictedPatient: true,
+          isPomCaseLoadRestrictedPatient: false,
+          hospital: 'some hospital',
+        }
+        it('should not allow editing', async () => {
+          const getPrisonerProfileData = await service.getPrisonerProfileData(
+            context,
+            offenderNo,
+            '',
+            restrictedPatientDetails
+          )
+
+          expect(getPrisonerProfileData).toEqual(
+            expect.objectContaining({
+              userCanEdit: false,
             })
           )
         })

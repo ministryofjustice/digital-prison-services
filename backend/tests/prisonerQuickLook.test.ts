@@ -17,6 +17,7 @@ describe('prisoner profile quick look', () => {
     offenderName: 'Prisoner, Test',
     offenderNo,
     profileInformation: [{ type: 'NAT', resultValue: 'British' }],
+    showFinanceDetailLinks: true,
   }
   const bookingId = 123
   const iepSummaryForBooking = {
@@ -124,7 +125,12 @@ describe('prisoner profile quick look', () => {
     await controller(req, res)
 
     expect(prisonApi.getDetails).toHaveBeenCalledWith(res.locals, offenderNo)
-    expect(prisonerProfileService.getPrisonerProfileData).toHaveBeenCalledWith(res.locals, offenderNo, 'user1', false)
+    expect(prisonerProfileService.getPrisonerProfileData).toHaveBeenCalledWith(
+      res.locals,
+      offenderNo,
+      'user1',
+      undefined
+    )
     expect(res.render).toHaveBeenCalledWith(
       'prisonerProfile/prisonerQuickLook/prisonerQuickLook.njk',
       expect.objectContaining({
@@ -361,6 +367,40 @@ describe('prisoner profile quick look', () => {
               {
                 label: 'Damage obligations',
                 html: '<a href="/prisoner/ABC123/prisoner-finance-details/damage-obligations" class="govuk-link">£65.00</a>',
+                visible: true,
+              },
+            ],
+          })
+        )
+      })
+      it('should not show links if requested', async () => {
+        const prisonerProfileDataNoLinks = { ...prisonerProfileService, showFinanceDetailLinks: false }
+        prisonerProfileService.getPrisonerProfileData = jest.fn().mockResolvedValue(prisonerProfileDataNoLinks)
+
+        await controller(req, res)
+
+        expect(res.render).toHaveBeenCalledWith(
+          'prisonerProfile/prisonerQuickLook/prisonerQuickLook.njk',
+          expect.objectContaining({
+            balanceDetails: [
+              {
+                label: 'Spends',
+                html: '<p>£100.00</p>',
+                visible: true,
+              },
+              {
+                label: 'Private cash',
+                html: '<p>£75.50</p>',
+                visible: true,
+              },
+              {
+                label: 'Savings',
+                html: '<p>£50.00</p>',
+                visible: true,
+              },
+              {
+                label: 'Damage obligations',
+                html: '<p>£65.00</p>',
                 visible: true,
               },
             ],
@@ -1480,6 +1520,7 @@ describe('prisoner profile quick look', () => {
             offenderName: 'Prisoner, Test',
             offenderNo: 'ABC123',
             profileInformation: [],
+            showFinanceDetailLinks: true,
           },
         })
       )

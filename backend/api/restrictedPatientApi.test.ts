@@ -46,24 +46,25 @@ describe('Restricted Patient Api', () => {
   it('filters restricted patient correctly', async () => {
     mock.get('/restricted-patient/prison-number/A8374DY').reply(200, restrictedPatientResponse(true))
 
-    const response = await restrictedPatientApi.isCaseLoadRestrictedPatient({}, 'A8374DY', ['MDI'])
+    const response = await restrictedPatientApi.getRestrictedPatientDetails({}, 'A8374DY', ['MDI'])
 
-    expect(response).toEqual(true)
+    expect(response).toEqual({
+      isCaseLoadRestrictedPatient: true,
+      hospital: {
+        agencyId: 'QABETH',
+        description: 'Queen Elizabeth Hospital',
+        longDescription: 'Queen Elizabeth Hospital',
+        agencyType: 'HSHOSP',
+        active: true,
+      },
+    })
   })
 
-  it('filters restricted patient as false as supporting prison is not active', async () => {
-    mock.get('/restricted-patient/prison-number/A8374DY').reply(200, restrictedPatientResponse(false))
-
-    const response = await restrictedPatientApi.isCaseLoadRestrictedPatient({}, 'A8374DY', ['MDI'])
-
-    expect(response).toEqual(false)
-  })
-
-  it('it returns false if 404', async () => {
+  it('it returns undefined if 404', async () => {
     mock.get('/restricted-patient/prison-number/A8374DZ').reply(404, {})
 
-    const response = await restrictedPatientApi.isCaseLoadRestrictedPatient({}, 'A8374DZ', ['MDI'])
+    const response = await restrictedPatientApi.getRestrictedPatientDetails({}, 'A8374DZ', ['MDI'])
 
-    expect(response).toEqual(false)
+    expect(response).toEqual(undefined)
   })
 })

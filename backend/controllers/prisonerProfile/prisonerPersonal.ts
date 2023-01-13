@@ -31,7 +31,7 @@ export default ({
     const { offenderNo, establishmentId } = req.params
     const { username } = req.session.userDetails
 
-    const { context, overrideAccess } = await getContext({
+    const { context, restrictedPatientDetails } = await getContext({
       offenderNo,
       res,
       req,
@@ -79,7 +79,7 @@ export default ({
       neurodivergence,
     ] = await Promise.all(
       [
-        prisonerProfileService.getPrisonerProfileData(context, offenderNo, username, overrideAccess),
+        prisonerProfileService.getPrisonerProfileData(context, offenderNo, username, restrictedPatientDetails),
         prisonApi.getIdentifiers(context, bookingId),
         prisonApi.getOffenderAliases(context, bookingId),
         prisonApi.getPrisonerProperty(context, bookingId),

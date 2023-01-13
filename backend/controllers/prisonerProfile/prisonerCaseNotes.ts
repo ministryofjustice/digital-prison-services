@@ -33,7 +33,7 @@ export default ({
   return async (req, res) => {
     const { offenderNo } = req.params
 
-    const { context, overrideAccess } = await getContext({
+    const { context, restrictedPatientDetails } = await getContext({
       offenderNo,
       res,
       req,
@@ -85,7 +85,7 @@ export default ({
       context,
       offenderNo,
       username,
-      overrideAccess
+      restrictedPatientDetails
     )
 
     const userRoles = oauthApi.userRoles(res.locals).map((role) => role.roleCode)

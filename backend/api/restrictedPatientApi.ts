@@ -2,22 +2,25 @@ export const processError = (error) => {
   if (!error.response) throw error
   if (!error.response.status) throw error
   if (error.response.status !== 404) throw error // Not Found
-  return false
+  return undefined
 }
 
 export const restrictedPatientApiFactory = (client) => {
   const processResponse = (agencyIds) => (response) => {
     const { agencyId, active } = response.body.supportingPrison
-    return agencyIds.includes(agencyId) && active
+    return {
+      isCaseLoadRestrictedPatient: agencyIds.includes(agencyId) && active,
+      hospital: response.body.hospitalLocation,
+    }
   }
 
   const get = (context, url, agencyIds) => client.get(context, url).then(processResponse(agencyIds)).catch(processError)
 
-  const isCaseLoadRestrictedPatient = (context, prisonerNo, agencyIds) =>
+  const getRestrictedPatientDetails = (context, prisonerNo, agencyIds) =>
     get(context, `/restricted-patient/prison-number/${prisonerNo}`, agencyIds)
 
   return {
-    isCaseLoadRestrictedPatient,
+    getRestrictedPatientDetails,
   }
 }
 
