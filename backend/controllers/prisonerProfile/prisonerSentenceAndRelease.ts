@@ -29,12 +29,11 @@ export default ({ prisonerProfileService, prisonApi, systemOauthClient }) =>
     const sentenceAdjustments = sentenceAdjustmentsViewModel(sentenceAdjustmentsData)
     const courtCases = courtCasesViewModel({ courtCaseData, sentenceTermsData, offenceHistory })
 
-    const getEffectiveSentenceEndDate = async () => {
-      if (sentenceData?.sentenceDetail?.effectiveSentenceEndDate) {
-        return readableDateFormat(sentenceData?.sentenceDetail?.effectiveSentenceEndDate, 'YYYY-MM-DD')
-      }
-      return prisonerProfileData.indeterminateSentence ? 'Life sentence' : undefined
-    }
+    const getEffectiveSentenceEndDate = (sentenceDetails) =>
+      readableDateFormat(sentenceDetails?.sentenceDetail?.effectiveSentenceEndDate, 'YYYY-MM-DD') ||
+      prisonerProfileData.indeterminateSentence
+        ? 'Life sentence'
+        : undefined
 
     return res.render('prisonerProfile/prisonerSentenceAndRelease/prisonerSentenceAndRelease.njk', {
       prisonerProfileData,
@@ -42,7 +41,6 @@ export default ({ prisonerProfileService, prisonApi, systemOauthClient }) =>
       sentenceAdjustments,
       courtCases,
       showSentences: Boolean(courtCases.find((courtCase) => courtCase.sentenceTerms.length)),
-      // @ts-expect-error ts-migrate(2554) FIXME: Expected 0 arguments, but got 1.
-      effectiveSentenceEndDate: await getEffectiveSentenceEndDate(sentenceData),
+      effectiveSentenceEndDate: getEffectiveSentenceEndDate(sentenceData),
     })
   }
