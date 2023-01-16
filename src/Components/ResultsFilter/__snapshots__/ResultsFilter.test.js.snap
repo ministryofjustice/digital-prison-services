@@ -40,13 +40,13 @@ exports[`<ResultsFilter /> should match the with children snapshot 1`] = `
       htmlFor="perPage"
     >
       <span
-        className="src__StyledLabelText-sc-12l0n4z-0 kqemnn"
+        className="src__StyledLabelText-sc-1lbxenh-0 hMoPlE"
       >
         Results per page
       </span>
     </label>
     <select
-      className="src__StyledSelect-vnwid3-0 eAWpAW"
+      className="src__StyledSelect-sgud4a-0 isJJpT"
       id="perPage"
       onChange={[Function]}
       value={20}
