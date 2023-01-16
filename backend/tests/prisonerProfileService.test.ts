@@ -278,6 +278,7 @@ describe('prisoner profile service', () => {
         showIncentiveLevelDetails: true,
         showReportUseOfForce: false,
         showScheduleDetailLink: true,
+        showWorkAndSkillsTab: true,
         useOfForceUrl: '//useOfForceUrl/report/123/report-use-of-force',
         userCanEdit: false,
         staffId: 111,
@@ -917,6 +918,7 @@ describe('prisoner profile service', () => {
               showScheduleDetailLink: false,
               showIncentiveDetailLink: false,
               showCellHistoryLink: false,
+              showWorkAndSkillsTab: false,
             })
           )
         })

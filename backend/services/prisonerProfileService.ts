@@ -248,6 +248,7 @@ export default ({
       showScheduleDetailLink: !isRestrictedPatient,
       showIncentiveDetailLink: !isRestrictedPatient,
       showCellHistoryLink: !isRestrictedPatient,
+      showWorkAndSkillsTab: !isRestrictedPatient,
       useOfForceUrl: `${useOfForceUrl}/report/${bookingId}/report-use-of-force`,
       userCanEdit:
         (canViewInactivePrisoner && ['OUT', 'TRN'].includes(agencyId)) ||
