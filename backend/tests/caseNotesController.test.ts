@@ -104,6 +104,9 @@ describe('Case notes controller', () => {
     // @ts-expect-error ts-migrate(2339) FIXME: Property 'userRoles' does not exist on type '{}'.
     oauthApi.userRoles = jest.fn().mockReturnValue([{ roleCode: 'INACTIVE_BOOKINGS' }])
 
+    // @ts-expect-error ts-migrate(2339) FIXME: Property 'getRestrictedPatientDetails' does not exist on type '{}'... Remove this comment to see the full error message
+    restrictedPatientApi.getRestrictedPatientDetails = jest.fn().mockReturnValue(undefined)
+
     controller = controllerFactory({
       caseNotesApi,
       prisonerProfileService,

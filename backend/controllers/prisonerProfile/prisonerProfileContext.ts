@@ -8,24 +8,23 @@ const getContext = async ({ offenderNo, res, req, oauthApi, systemOauthClient, r
 
   const { username } = req.session.userDetails
   const userRoles = oauthApi.userRoles(res.locals)
+  const isPom = userRoles.map((role) => role.roleCode).includes('POM')
 
-  if (userRoles.map((userRole) => userRole.roleCode).includes('POM')) {
-    const restrictedPatient = await restrictedPatientApi.getRestrictedPatientDetails(
-      res.locals,
-      offenderNo,
-      allCaseloads.map((caseload) => caseload.caseLoadId)
-    )
-    if (restrictedPatient) {
-      const { isCaseLoadRestrictedPatient, hospital } = restrictedPatient
-      const context = await systemOauthClient.getClientCredentialsTokens(username)
-      return {
-        context,
-        restrictedPatientDetails: {
-          isRestrictedPatient: true,
-          isPomCaseLoadRestrictedPatient: isCaseLoadRestrictedPatient,
-          hospital: hospital.description,
-        },
-      }
+  const restrictedPatient = await restrictedPatientApi.getRestrictedPatientDetails(
+    res.locals,
+    offenderNo,
+    allCaseloads?.map((caseload) => caseload.caseLoadId)
+  )
+  if (restrictedPatient) {
+    const { isCaseLoadRestrictedPatient, hospital } = restrictedPatient
+    const context = await systemOauthClient.getClientCredentialsTokens(username)
+    return {
+      context,
+      restrictedPatientDetails: {
+        isRestrictedPatient: true,
+        isPomCaseLoadRestrictedPatient: isCaseLoadRestrictedPatient && isPom,
+        hospital: hospital.description,
+      },
     }
   }
   return { context: res.locals, restrictedPatientDetails: undefined }

@@ -56,7 +56,9 @@ describe('prisoner profile quick look', () => {
     getClientCredentialsTokens: jest.fn(),
   }
   const incentivesApi = {} as jest.Mocked<typeof apis.incentivesApi>
-  const restrictedPatientApi = {}
+  const restrictedPatientApi = {
+    getRestrictedPatientDetails: jest.fn(),
+  }
   const oauthApi = {
     userRoles: jest.fn(),
   }
@@ -107,6 +109,7 @@ describe('prisoner profile quick look', () => {
 
     systemOauthClient.getClientCredentialsTokens = jest.fn().mockReturnValue({})
     oauthApi.userRoles = jest.fn().mockReturnValue([])
+    restrictedPatientApi.getRestrictedPatientDetails = jest.fn().mockReturnValue(undefined)
 
     controller = prisonerQuickLook({
       prisonerProfileService,

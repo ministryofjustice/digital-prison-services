@@ -97,6 +97,8 @@ describe('prisoner personal', () => {
     esweService.getNeurodiversities = jest.fn().mockResolvedValue([])
     // @ts-expect-error ts-migrate(2339) FIXME: Property 'getNeurodiversities' does not exist on type '{}'... Remove this comment to see the full error message
     oauthApi.userRoles = jest.fn().mockReturnValue([])
+    // @ts-expect-error ts-migrate(2339) FIXME: Property 'getRestrictedPatientDetails' does not exist on type '{}'... Remove this comment to see the full error message
+    restrictedPatientApi.getRestrictedPatientDetails = jest.fn().mockReturnValue(undefined)
 
     controller = prisonerPersonal({
       prisonerProfileService,

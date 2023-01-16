@@ -116,6 +116,8 @@ describe('prisoner alerts', () => {
       // @ts-expect-error ts-migrate(2345) FIXME: Argument of type '{ prisonerProfileService: {}; re... Remove this comment to see the full error message
       logError,
     })
+    // @ts-expect-error ts-migrate(2339) FIXME: Property 'getRestrictedPatientDetails' does not exist on type '{}'... Remove this comment to see the full error message
+    restrictedPatientApi.getRestrictedPatientDetails = jest.fn().mockReturnValue(undefined)
   })
 
   it('should make a call for the prisoner alerts and the prisoner header details and render them', async () => {

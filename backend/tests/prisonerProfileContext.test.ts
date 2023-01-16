@@ -20,6 +20,8 @@ describe('Prisoner Profile Contexts', () => {
   it('returns user context', async () => {
     // @ts-expect-error ts-migrate(2339) FIXME: Property 'getNeurodiversities' does not exist on type '{}'... Remove this comment to see the full error message
     oauthApi.userRoles = jest.fn().mockReturnValue([])
+    // @ts-expect-error ts-migrate(2339) FIXME: Property 'isCaseLoadRestrictedPatient' does not exist on type '{}'... Remove this comment to see the full error message
+    restrictedPatientApi.getRestrictedPatientDetails = jest.fn().mockResolvedValue(undefined)
 
     const context = await getContext({ offenderNo, res, req, oauthApi, systemOauthClient, restrictedPatientApi })
 
@@ -30,7 +32,7 @@ describe('Prisoner Profile Contexts', () => {
     // @ts-expect-error ts-migrate(2339) FIXME: Property 'userRoles' does not exist on type '{}'... Remove this comment to see the full error message
     oauthApi.userRoles = jest.fn().mockReturnValue([userRole])
     // @ts-expect-error ts-migrate(2339) FIXME: Property 'isCaseLoadRestrictedPatient' does not exist on type '{}'... Remove this comment to see the full error message
-    restrictedPatientApi.getRestrictedPatientDetails = jest.fn().mockResolvedValue(false)
+    restrictedPatientApi.getRestrictedPatientDetails = jest.fn().mockResolvedValue(undefined)
     // @ts-expect-error ts-migrate(2339) FIXME: Property 'getClientCredentialsTokens' does not exist on type '{}'... Remove this comment to see the full error message
     systemOauthClient.getClientCredentialsTokens = jest.fn().mockResolvedValue({})
 
@@ -56,6 +58,28 @@ describe('Prisoner Profile Contexts', () => {
       restrictedPatientDetails: {
         isRestrictedPatient: true,
         isPomCaseLoadRestrictedPatient: true,
+        hospital: 'some hospital',
+      },
+    })
+  })
+
+  it('normal user and restricted patient returns system context', async () => {
+    // @ts-expect-error ts-migrate(2339) FIXME: Property 'userRoles' does not exist on type '{}'... Remove this comment to see the full error message
+    oauthApi.userRoles = jest.fn().mockReturnValue([])
+    // @ts-expect-error ts-migrate(2339) FIXME: Property 'isCaseLoadRestrictedPatient' does not exist on type '{}'... Remove this comment to see the full error message
+    restrictedPatientApi.getRestrictedPatientDetails = jest
+      .fn()
+      .mockResolvedValue({ isCaseLoadRestrictedPatient: true, hospital: { description: 'some hospital' } })
+    // @ts-expect-error ts-migrate(2339) FIXME: Property 'getClientCredentialsTokens' does not exist on type '{}'... Remove this comment to see the full error message
+    systemOauthClient.getClientCredentialsTokens = jest.fn().mockResolvedValue({})
+
+    const context = await getContext({ offenderNo, res, req, oauthApi, systemOauthClient, restrictedPatientApi })
+
+    expect(context).toEqual({
+      context: {},
+      restrictedPatientDetails: {
+        isRestrictedPatient: true,
+        isPomCaseLoadRestrictedPatient: false,
         hospital: 'some hospital',
       },
     })
