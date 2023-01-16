@@ -40,6 +40,7 @@ describe('prisoner profile service', () => {
   const complexityApi = {}
   const incentivesApi = {} as jest.Mocked<typeof apis.incentivesApi>
   const curiousApi = {}
+  const offenderSearchApi = {}
 
   let service
   beforeEach(() => {
@@ -71,6 +72,8 @@ describe('prisoner profile service', () => {
     curiousApi.getLearnerNeurodivergence = jest.fn()
     // @ts-expect-error ts-migrate(2339) FIXME: Property 'getComplexOffenders' does not exist on t... Remove this comment to see the full error message
     complexityApi.getComplexOffenders = jest.fn().mockResolvedValue([])
+    // @ts-expect-error ts-migrate(2339) FIXME: Property 'getPrisonersDetails' does not exist on t... Remove this comment to see the full error message
+    offenderSearchApi.getPrisonersDetails = jest.fn().mockResolvedValue([])
 
     // @ts-expect-error ts-migrate(2339) FIXME: Property 'getClientCredentialsTokens' does not exi... Remove this comment to see the full error message
     systemOauthClient.getClientCredentialsTokens = jest.fn().mockResolvedValue({})
@@ -86,6 +89,7 @@ describe('prisoner profile service', () => {
       complexityApi,
       incentivesApi,
       curiousApi,
+      offenderSearchApi,
     })
   })
   describe('prisoner profile data', () => {
@@ -193,6 +197,10 @@ describe('prisoner profile service', () => {
       config.apis.complexity.enabled_prisons = []
       // @ts-expect-error ts-migrate(2339) FIXME: Property 'getLearnerNeurodivergence' does not exist on ty... Remove this comment to see the full error message
       curiousApi.getLearnerNeurodivergence.mockResolvedValue([])
+      // @ts-expect-error ts-migrate(2339) FIXME: Property 'getPrisonersDetails' does not exist on ty... Remove this comment to see the full error message
+      offenderSearchApi.getPrisonersDetails.mockResolvedValue([
+        { indeterminateSentence: false, restrictedPatient: false },
+      ])
     })
 
     it('should make a call for the full details including csra class for a prisoner and the current user', async () => {
@@ -268,9 +276,17 @@ describe('prisoner profile service', () => {
         offenderName: 'Prisoner, Test',
         offenderNo: 'ABC123',
         offenderRecordRetained: undefined,
+        showAddAppointment: true,
         showAddKeyworkerSession: false,
         showCalculateReleaseDates: false,
+        showCellHistoryLink: true,
+        showCsraHistory: true,
+        showFinanceDetailLinks: true,
+        showIncentiveDetailLink: true,
+        showIncentiveLevelDetails: true,
         showReportUseOfForce: false,
+        showScheduleDetailLink: true,
+        showWorkAndSkillsTab: true,
         useOfForceUrl: '//useOfForceUrl/report/123/report-use-of-force',
         userCanEdit: false,
         staffId: 111,
@@ -287,6 +303,7 @@ describe('prisoner profile service', () => {
         profileInformation: undefined,
         esweEnabled: false,
         hasDivergenceSupport: false,
+        indeterminateSentence: false,
       })
 
       expect(getPrisonerProfileData).toEqual(
@@ -871,6 +888,63 @@ describe('prisoner profile service', () => {
           expect(getPrisonerProfileData).toEqual(
             expect.objectContaining({
               showCalculateReleaseDates: false,
+            })
+          )
+        })
+      })
+    })
+    describe('when the user is viewing a Restricted Patient', () => {
+      describe(`when the user is a POM with a caseload including the patients previous prison`, () => {
+        let getPrisonerProfileData
+
+        beforeEach(async () => {
+          // @ts-expect-error ts-migrate(2339) FIXME: Property 'getPrisonersDetails' does not exist on t... Remove this comment to see the full error message
+          offenderSearchApi.getPrisonersDetails.mockResolvedValue([
+            { restrictedPatient: true, dischargedHospitalDescription: 'some hospital' },
+          ])
+          getPrisonerProfileData = await service.getPrisonerProfileData(context, offenderNo, '', true)
+        })
+        it('should allow editing', async () => {
+          expect(getPrisonerProfileData).toEqual(
+            expect.objectContaining({
+              userCanEdit: true,
+            })
+          )
+        })
+        it('should restrict the links available', async () => {
+          expect(getPrisonerProfileData).toEqual(
+            expect.objectContaining({
+              showReportUseOfForce: false,
+              showAddAppointment: false,
+              showCsraHistory: false,
+              showIncentiveLevelDetails: false,
+              showFinanceDetailLinks: false,
+              showScheduleDetailLink: false,
+              showIncentiveDetailLink: false,
+              showCellHistoryLink: false,
+              showWorkAndSkillsTab: false,
+            })
+          )
+        })
+        it('should show the hospital location', async () => {
+          expect(getPrisonerProfileData).toEqual(
+            expect.objectContaining({
+              location: 'some hospital',
+            })
+          )
+        })
+      })
+      describe(`when the user is NOT a POM with a caseload including the patients previous prison`, () => {
+        beforeEach(async () => {
+          // @ts-expect-error ts-migrate(2339) FIXME: Property 'getPrisonersDetails' does not exist on t... Remove this comment to see the full error message
+          offenderSearchApi.getPrisonersDetails.mockResolvedValue([{ restrictedPatient: false }])
+        })
+        it('should not allow editing', async () => {
+          const getPrisonerProfileData = await service.getPrisonerProfileData(context, offenderNo, '', false)
+
+          expect(getPrisonerProfileData).toEqual(
+            expect.objectContaining({
+              userCanEdit: false,
             })
           )
         })

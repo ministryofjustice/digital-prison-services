@@ -28,9 +28,11 @@
             attributes: { "data-test": "schedule-summary" }
         }) }}
 
-        <a href="{{ '/prisoner/' + prisonerProfileData.offenderNo + '/schedule' }}"
-           class="govuk-link govuk-!-font-size-19">
-           View 7 day schedule
-        </a>
+        {%if prisonerProfileData.showScheduleDetailLink %}
+            <a href="{{ '/prisoner/' + prisonerProfileData.offenderNo + '/schedule' }}"
+               class="govuk-link govuk-!-font-size-19">
+               View 7 day schedule
+            </a>
+        {% endif %}
     {% endif %}
 </div>

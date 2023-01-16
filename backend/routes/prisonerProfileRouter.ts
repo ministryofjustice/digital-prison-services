@@ -67,6 +67,7 @@ const controller = ({
     complexityApi,
     incentivesApi,
     curiousApi,
+    offenderSearchApi,
   })
   const personService = personServiceFactory(prisonApi)
   const prisonerFinanceService = prisonerFinanceServiceFactory(prisonApi)
@@ -81,7 +82,6 @@ const controller = ({
       prisonApi,
       oauthApi,
       telemetry,
-      offenderSearchApi,
       systemOauthClient,
       incentivesApi,
       restrictedPatientApi,
@@ -137,7 +137,7 @@ const controller = ({
   router.get(
     '/sentence-and-release',
     // @ts-expect-error ts-migrate(2345) FIXME: Argument of type '{ prisonerProfileService: { getP... Remove this comment to see the full error message
-    prisonerSentenceAndRelease({ prisonerProfileService, prisonApi, systemOauthClient, offenderSearchApi, logError })
+    prisonerSentenceAndRelease({ prisonerProfileService, prisonApi, systemOauthClient, logError })
   )
   router.get('/work-and-skills', prisonerWorkAndSkills({ prisonerProfileService, esweService }))
   router.get('/unacceptable-absences', unacceptableAbsencesDetails({ paginationService, prisonApi, esweService }))

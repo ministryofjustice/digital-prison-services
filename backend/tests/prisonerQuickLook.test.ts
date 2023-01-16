@@ -17,6 +17,8 @@ describe('prisoner profile quick look', () => {
     offenderName: 'Prisoner, Test',
     offenderNo,
     profileInformation: [{ type: 'NAT', resultValue: 'British' }],
+    showFinanceDetailLinks: true,
+    indeterminateSentence: false,
   }
   const bookingId = 123
   const iepSummaryForBooking = {
@@ -111,7 +113,6 @@ describe('prisoner profile quick look', () => {
       prisonerProfileService,
       prisonApi,
       telemetry,
-      offenderSearchApi,
       systemOauthClient,
       incentivesApi,
       restrictedPatientApi,
@@ -231,11 +232,13 @@ describe('prisoner profile quick look', () => {
           { imprisonmentStatus: 'LIFE', imprisonmentStatusDesc: 'Serving Life Imprisonment' },
         ])
         prisonApi.getPrisonerSentenceDetails.mockResolvedValue({ sentenceDetail: { releaseDate: '' } })
-        offenderSearchApi.getPrisonersDetails.mockResolvedValue([{ indeterminateSentence: true }])
+        prisonerProfileService.getPrisonerProfileData.mockResolvedValue({
+          ...prisonerProfileData,
+          indeterminateSentence: true,
+        })
 
         await controller(req, res)
 
-        expect(systemOauthClient.getClientCredentialsTokens).toHaveBeenCalledTimes(1)
         expect(res.render).toHaveBeenCalledWith(
           'prisonerProfile/prisonerQuickLook/prisonerQuickLook.njk',
           expect.objectContaining({
@@ -262,11 +265,9 @@ describe('prisoner profile quick look', () => {
           { imprisonmentStatus: 'LIFE', imprisonmentStatusDesc: 'Serving Life Imprisonment' },
         ])
         prisonApi.getPrisonerSentenceDetails.mockResolvedValue({ sentenceDetail: { releaseDate: '' } })
-        offenderSearchApi.getPrisonersDetails.mockResolvedValue([{ indeterminateSentence: false }])
 
         await controller(req, res)
 
-        expect(systemOauthClient.getClientCredentialsTokens).toHaveBeenCalledTimes(1)
         expect(res.render).toHaveBeenCalledWith(
           'prisonerProfile/prisonerQuickLook/prisonerQuickLook.njk',
           expect.objectContaining({
@@ -361,6 +362,40 @@ describe('prisoner profile quick look', () => {
               {
                 label: 'Damage obligations',
                 html: '<a href="/prisoner/ABC123/prisoner-finance-details/damage-obligations" class="govuk-link">£65.00</a>',
+                visible: true,
+              },
+            ],
+          })
+        )
+      })
+      it('should not show links if requested', async () => {
+        const prisonerProfileDataNoLinks = { ...prisonerProfileService, showFinanceDetailLinks: false }
+        prisonerProfileService.getPrisonerProfileData = jest.fn().mockResolvedValue(prisonerProfileDataNoLinks)
+
+        await controller(req, res)
+
+        expect(res.render).toHaveBeenCalledWith(
+          'prisonerProfile/prisonerQuickLook/prisonerQuickLook.njk',
+          expect.objectContaining({
+            balanceDetails: [
+              {
+                label: 'Spends',
+                html: '<p>£100.00</p>',
+                visible: true,
+              },
+              {
+                label: 'Private cash',
+                html: '<p>£75.50</p>',
+                visible: true,
+              },
+              {
+                label: 'Savings',
+                html: '<p>£50.00</p>',
+                visible: true,
+              },
+              {
+                label: 'Damage obligations',
+                html: '<p>£65.00</p>',
                 visible: true,
               },
             ],
@@ -873,28 +908,6 @@ describe('prisoner profile quick look', () => {
             { label: 'Main offence', value: 'Have blade/article which was sharply pointed in public place' },
             { label: 'Imprisonment status', value: 'Unable to show this detail' },
             { label: 'Release date', value: '13 December 2020' },
-          ],
-          offenceDetailsSectionError: false,
-        })
-      )
-    })
-    it('should handle api errors when requesting imprisonment status and release date is not set', async () => {
-      const error = new Error('Network error')
-      prisonApi.getPrisonerSentenceDetails.mockResolvedValue({ sentenceDetail: { releaseDate: '' } })
-      prisonApi.getMainOffence.mockResolvedValue([
-        { offenceDescription: 'Have blade/article which was sharply pointed in public place' },
-      ])
-      offenderSearchApi.getPrisonersDetails.mockRejectedValue(error)
-
-      await controller(req, res)
-
-      expect(res.render).toHaveBeenCalledWith(
-        'prisonerProfile/prisonerQuickLook/prisonerQuickLook.njk',
-        expect.objectContaining({
-          offenceDetails: [
-            { label: 'Main offence', value: 'Have blade/article which was sharply pointed in public place' },
-            { label: 'Imprisonment status', value: 'Unable to show this detail' },
-            { label: 'Release date', value: 'Unable to show this detail' },
           ],
           offenceDetailsSectionError: false,
         })
@@ -1480,6 +1493,8 @@ describe('prisoner profile quick look', () => {
             offenderName: 'Prisoner, Test',
             offenderNo: 'ABC123',
             profileInformation: [],
+            showFinanceDetailLinks: true,
+            indeterminateSentence: false,
           },
         })
       )

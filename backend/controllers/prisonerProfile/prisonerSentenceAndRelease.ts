@@ -3,7 +3,7 @@ import sentenceAdjustmentsViewModel from './sentenceAndReleaseViewModels/sentenc
 import courtCasesViewModel from './sentenceAndReleaseViewModels/courtCasesViewModel'
 import { readableDateFormat } from '../../utils'
 
-export default ({ prisonerProfileService, prisonApi, systemOauthClient, offenderSearchApi }) =>
+export default ({ prisonerProfileService, prisonApi, systemOauthClient }) =>
   async (req, res) => {
     const { offenderNo } = req.params
 
@@ -29,14 +29,11 @@ export default ({ prisonerProfileService, prisonApi, systemOauthClient, offender
     const sentenceAdjustments = sentenceAdjustmentsViewModel(sentenceAdjustmentsData)
     const courtCases = courtCasesViewModel({ courtCaseData, sentenceTermsData, offenceHistory })
 
-    const determineLifeSentence = async () => {
-      const prisonerDetails = await offenderSearchApi.getPrisonersDetails(systemContext, [offenderNo])
-      return prisonerDetails && prisonerDetails[0]?.indeterminateSentence ? 'Life sentence' : undefined
-    }
-
     const getEffectiveSentenceEndDate = async () =>
       readableDateFormat(sentenceData?.sentenceDetail?.effectiveSentenceEndDate, 'YYYY-MM-DD') ||
-      determineLifeSentence()
+      prisonerProfileData.indeterminateSentence
+        ? 'Life sentence'
+        : undefined
 
     return res.render('prisonerProfile/prisonerSentenceAndRelease/prisonerSentenceAndRelease.njk', {
       prisonerProfileData,
