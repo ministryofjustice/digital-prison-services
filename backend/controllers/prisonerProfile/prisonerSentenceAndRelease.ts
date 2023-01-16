@@ -29,11 +29,12 @@ export default ({ prisonerProfileService, prisonApi, systemOauthClient }) =>
     const sentenceAdjustments = sentenceAdjustmentsViewModel(sentenceAdjustmentsData)
     const courtCases = courtCasesViewModel({ courtCaseData, sentenceTermsData, offenceHistory })
 
-    const getEffectiveSentenceEndDate = async () =>
-      readableDateFormat(sentenceData?.sentenceDetail?.effectiveSentenceEndDate, 'YYYY-MM-DD') ||
-      prisonerProfileData.indeterminateSentence
-        ? 'Life sentence'
-        : undefined
+    const getEffectiveSentenceEndDate = async () => {
+      if (sentenceData?.sentenceDetail?.effectiveSentenceEndDate) {
+        return readableDateFormat(sentenceData?.sentenceDetail?.effectiveSentenceEndDate, 'YYYY-MM-DD')
+      }
+      return prisonerProfileData.indeterminateSentence ? 'Life sentence' : undefined
+    }
 
     return res.render('prisonerProfile/prisonerSentenceAndRelease/prisonerSentenceAndRelease.njk', {
       prisonerProfileData,

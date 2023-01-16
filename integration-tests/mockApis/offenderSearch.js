@@ -123,4 +123,18 @@ module.exports = {
         jsonBody: { content: data, totalElements: count, pageable: { pageSize: 50, offset: 0 } },
       },
     }),
+  stubPrisonerDetails: (response) =>
+    stubFor({
+      request: {
+        method: 'POST',
+        urlPath: '/offenderSearch/prisoner-search/prisoner-numbers',
+      },
+      response: {
+        status: 200,
+        headers: {
+          'Content-Type': 'application/json;charset=UTF-8',
+        },
+        jsonBody: response,
+      },
+    }),
 }
