@@ -22,7 +22,7 @@ jobs:
       - checkout
       - run:
           name: Update npm
-          command: 'sudo npm install -g npm@latest'
+          command: 'sudo npm install -g npm@9.2.0'
       - restore_cache:
           key: dependency-cache-{{ checksum "package-lock.json" }}
       - run:
@@ -97,7 +97,7 @@ jobs:
           path: integration-tests/videos
       - store_artifacts:
           path: integration-tests/screenshots
-  
+
   check_outdated:
     executor:
       name: hmpps/node
@@ -146,7 +146,7 @@ workflows:
       - hmpps/deploy_env:
           name: deploy_dev
           env: "dev"
-          jira_update: true
+          jira_update: false
           context:
             - hmpps-common-vars
           requires:
@@ -164,7 +164,7 @@ workflows:
       - hmpps/deploy_env:
           name: deploy_preprod
           env: "preprod"
-          jira_update: true
+          jira_update: false
           jira_env_type: staging
           context:
             - digital-prison-services-preprod
@@ -179,7 +179,7 @@ workflows:
       - hmpps/deploy_env:
           name: deploy_prod
           env: "prod"
-          jira_update: true
+          jira_update: false
           jira_env_type: production
           slack_notification: true
           context:

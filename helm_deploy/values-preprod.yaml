@@ -24,7 +24,7 @@ generic-service:
    INCENTIVES_URL: https://incentives-ui-preprod.hmpps.service.justice.gov.uk
    INCENTIVES_API_ENDPOINT_URL: https://incentives-api-preprod.hmpps.service.justice.gov.uk
    INCENTIVES_EXCLUDED_CASELOADS: "CADM_I"
-   INCENTIVES_PRIVATE_BETA_ENABLED_PRISONS: "MDI,WII"
+   INCENTIVES_PRIVATE_BETA_ENABLED_PRISONS: "MDI,BAI,CFI,CWI,DAI,EXI,GHI,GMI,HOI,SWI,UKI,WCI,WDI,WHI,WII,WNI"
    TOKENVERIFICATION_API_URL: https://token-verification-api-preprod.prison.service.justice.gov.uk
    CASENOTES_API_URL: https://preprod.offender-case-notes.service.justice.gov.uk/
    ALLOCATION_MANAGER_ENDPOINT_URL: https://preprod.moic.service.justice.gov.uk
@@ -43,7 +43,7 @@ generic-service:
    PECS_URL: http://hmpps-book-secure-move-frontend-preprod.apps.live-1.cloud-platform.service.justice.gov.uk
    COMPLEXITY_OF_NEED_URI: https://complexity-of-need-preprod.hmpps.service.justice.gov.uk
    PRISONS_WITH_OFFENDERS_THAT_HAVE_COMPLEX_NEEDS: "AGI,BZI,DHI,DWI,ESI,EWI,FHI,LNI,NHI,PFI,SDI,STI"
-   PRISONS_WITH_MANAGE_ADJUDICATIONS_ENABLED: "RNI,WLI,MDI,EXI,BXI,PVI"
+   PRISONS_WITH_MANAGE_ADJUDICATIONS_ENABLED: "RNI,WLI,MDI,EXI,BXI,PVI,NHI"
    MANAGE_ADJUDICATIONS_URL: https://manage-adjudications-preprod.hmpps.service.justice.gov.uk/
    MANAGE_RESTRICTED_PATIENTS_URL: https://manage-restricted-patients-preprod.hmpps.service.justice.gov.uk/
    ESWE_ENABLED: true
