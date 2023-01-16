@@ -1,3 +1,4 @@
+/* eslint-disable react/no-this-in-sfc */
 import React, { Component } from 'react'
 import '../index.scss'
 import '../lists.scss'
