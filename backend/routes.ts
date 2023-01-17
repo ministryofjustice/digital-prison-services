@@ -265,7 +265,7 @@ const setup = ({
 
   router.use(
     '/prisoner/:offenderNo/case-notes/amend-case-note/:caseNoteId',
-    amendCaseNoteRouter({ prisonApi, caseNotesApi, logError })
+    amendCaseNoteRouter({ prisonApi, caseNotesApi, oauthApi, systemOauthClient, restrictedPatientApi, logError })
   )
 
   router.use(

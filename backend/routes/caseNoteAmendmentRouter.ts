@@ -3,8 +3,15 @@ import amendCaseNoteController from '../controllers/amendmentCaseNote'
 
 const router = express.Router({ mergeParams: true })
 
-const controller = ({ prisonApi, caseNotesApi, logError }) => {
-  const { index, post, areYouSure, confirm } = amendCaseNoteController({ prisonApi, caseNotesApi, logError })
+const controller = ({ prisonApi, caseNotesApi, oauthApi, systemOauthClient, restrictedPatientApi, logError }) => {
+  const { index, post, areYouSure, confirm } = amendCaseNoteController({
+    prisonApi,
+    caseNotesApi,
+    oauthApi,
+    systemOauthClient,
+    restrictedPatientApi,
+    logError,
+  })
 
   router.get('/', index)
   router.post('/', post)
