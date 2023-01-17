@@ -30,7 +30,7 @@
             classes: "govuk-!-margin-bottom-2",
             attributes: { "data-test": "incentives-summary" }
         }) }}
-        {% if prisonerProfileData.userCanEdit %}
+        {% if prisonerProfileData.userCanEdit and prisonerProfileData.showIncentiveDetailLink %}
             <a href="{{ '/prisoner/' + prisonerProfileData.offenderNo + '/incentive-level-details' }}" class="govuk-link govuk-body govuk-!-margin-bottom-2 govuk-!-display-inline-block" data-test="incentive-details-link">View incentive level details</a>
         {% endif %}
     {% endif %}
