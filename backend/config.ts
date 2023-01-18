@@ -25,6 +25,7 @@ export const app = {
 
 export const analytics = {
   googleAnalyticsId: process.env.GOOGLE_ANALYTICS_ID,
+  googleAnalyticsGa4Id: process.env.GOOGLE_ANALYTICS_GA4_ID,
   googleTagManagerId: process.env.GOOGLE_TAG_MANAGER_ID,
 }
 
