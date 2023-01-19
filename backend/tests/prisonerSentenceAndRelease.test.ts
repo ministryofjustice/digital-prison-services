@@ -31,6 +31,8 @@ describe('prisoner sentence and release', () => {
   const systemOauthClient = {
     getClientCredentialsTokens: jest.fn(),
   }
+  const oauthApi = {}
+  const restrictedPatientApi = {}
 
   let req
   let res
@@ -96,6 +98,8 @@ describe('prisoner sentence and release', () => {
       prisonerProfileService,
       prisonApi,
       systemOauthClient,
+      oauthApi,
+      restrictedPatientApi,
     })
   })
 

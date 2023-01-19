@@ -137,7 +137,14 @@ const controller = ({
   router.get(
     '/sentence-and-release',
     // @ts-expect-error ts-migrate(2345) FIXME: Argument of type '{ prisonerProfileService: { getP... Remove this comment to see the full error message
-    prisonerSentenceAndRelease({ prisonerProfileService, prisonApi, systemOauthClient, logError })
+    prisonerSentenceAndRelease({
+      prisonerProfileService,
+      prisonApi,
+      systemOauthClient,
+      oauthApi,
+      restrictedPatientApi,
+      logError,
+    })
   )
   router.get('/work-and-skills', prisonerWorkAndSkills({ prisonerProfileService, esweService }))
   router.get('/unacceptable-absences', unacceptableAbsencesDetails({ paginationService, prisonApi, esweService }))
@@ -159,7 +166,10 @@ const controller = ({
   router.get('/location-history', prisonerLocationHistory({ prisonApi, whereaboutsApi, caseNotesApi, logError }))
 
   // @ts-expect-error ts-migrate(2345) FIXME: Argument of type '{ prisonApi: any; logError: any;... Remove this comment to see the full error message
-  router.get('/adjudications/:adjudicationNumber', prisonerAdjudicationDetails({ prisonApi, logError }))
+  router.get(
+    '/adjudications/:adjudicationNumber',
+    prisonerAdjudicationDetails({ prisonApi, oauthApi, systemOauthClient, restrictedPatientApi, logError })
+  )
 
   router.use(
     '/adjudications',
@@ -167,6 +177,9 @@ const controller = ({
       adjudicationHistoryService,
       paginationService,
       prisonApi,
+      oauthApi,
+      systemOauthClient,
+      restrictedPatientApi,
       // @ts-expect-error ts-migrate(2345) FIXME: Argument of type '{ adjudicationHistoryService: { ... Remove this comment to see the full error message
       logError,
     })
