@@ -55,6 +55,9 @@ describe('Adjudications history controller', () => {
   const paginationService = {
     getPagination: jest.fn(),
   }
+  const oauthApi = {}
+  const systemOauthClient = {}
+  const restrictedPatientApi = {}
   let req
   const res = { locals: {}, render: jest.fn() }
   let controller
@@ -66,7 +69,14 @@ describe('Adjudications history controller', () => {
 
     res.render = jest.fn()
 
-    controller = adjudicationsHistoryController({ adjudicationHistoryService, paginationService, prisonApi })
+    controller = adjudicationsHistoryController({
+      adjudicationHistoryService,
+      paginationService,
+      prisonApi,
+      oauthApi,
+      systemOauthClient,
+      restrictedPatientApi,
+    })
 
     req = { originalUrl: 'http://localhost', params: { offenderNo }, get: () => {} }
   })

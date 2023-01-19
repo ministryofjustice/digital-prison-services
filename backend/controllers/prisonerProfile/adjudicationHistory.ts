@@ -1,5 +1,6 @@
 import moment from 'moment'
 import { formatName, putLastNameFirst } from '../../utils'
+import getContext from './prisonerProfileContext'
 
 const perPage = 10
 
@@ -12,7 +13,14 @@ const sortByDateTimeDesc = (left, right) => {
 
 const sortByTextAlphabetically = (left, right) => left.text.localeCompare(right.text)
 
-export default ({ adjudicationHistoryService, prisonApi, paginationService }) =>
+export default ({
+    adjudicationHistoryService,
+    prisonApi,
+    paginationService,
+    oauthApi,
+    systemOauthClient,
+    restrictedPatientApi,
+  }) =>
   async (req, res) => {
     const { offenderNo } = req.params
     const fullUrl = new URL(`${req.protocol}://${req.get('host')}${req.originalUrl}`)
@@ -38,15 +46,24 @@ export default ({ adjudicationHistoryService, prisonApi, paginationService }) =>
             ...{ toDate: toDateMoment && toDateMoment.format('YYYY-MM-DD') },
           }
 
+    const { context } = await getContext({
+      offenderNo,
+      res,
+      req,
+      oauthApi,
+      systemOauthClient,
+      restrictedPatientApi,
+    })
+
     const adjudicationsData = await adjudicationHistoryService.getAdjudications(
-      res.locals,
+      context,
       offenderNo,
       filterParameters,
       pageOffsetOption,
       perPage
     )
 
-    const { firstName, lastName } = await prisonApi.getDetails(res.locals, offenderNo)
+    const { firstName, lastName } = await prisonApi.getDetails(context, offenderNo)
 
     const prisonerName = formatName(firstName, lastName)
 
