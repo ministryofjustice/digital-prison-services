@@ -4,7 +4,8 @@ import { BrowserRouter as Router, Route, Switch } from 'react-router-dom'
 import PropTypes from 'prop-types'
 import { connect } from 'react-redux'
 import Notifications from 'react-notify-toast'
-import ReactGA from 'react-ga'
+import ReactGA from 'react-ga4'
+import { ReactGA as ReactGaUa } from 'react-ga'
 import ErrorComponent from './Error/index'
 import Terms from './Footer/terms-and-conditions'
 import './App.scss'
@@ -62,8 +63,11 @@ class App extends React.Component {
     try {
       const [config] = await Promise.all([axios.get('/api/config'), this.loadUserAndCaseload()])
 
+      if (config.data.googleAnalyticsGa4Id) {
+        ReactGA.initialize(config.data.googleAnalyticsGa4Id)
+      }
       if (config.data.googleAnalyticsId) {
-        ReactGA.initialize(config.data.googleAnalyticsId)
+        ReactGaUa.initialize(config.data.googleAnalyticsId)
       }
 
       configDispatch(config.data)
@@ -137,8 +141,11 @@ class App extends React.Component {
 
   raiseAnalyticsEvent = (event) => {
     const { config } = this.props
-    if (event && config.googleAnalyticsId) {
+    if (event && config.googleAnalyticsGa4Id) {
       ReactGA.event(event)
+    }
+    if (event && config.googleAnalyticsId) {
+      ReactGaUa.event(event)
     }
   }
 
@@ -311,8 +318,11 @@ class App extends React.Component {
             exact
             path="/iep-slip"
             render={({ location }) => {
+              if (config && config.googleAnalyticsGa4Id) {
+                ReactGA.send({ hitType: 'pageview', page: location.pathname })
+              }
               if (config && config.googleAnalyticsId) {
-                ReactGA.pageview(location.pathname)
+                ReactGaUa.pageview(location.pathname)
               }
               return <IncentiveLevelSlipContainer />
             }}
@@ -327,8 +337,11 @@ class App extends React.Component {
                       if (location.pathname === '/manage-prisoner-whereabouts') {
                         window.location = '/manage-prisoner-whereabouts'
                       }
+                      if (config && config.googleAnalyticsGa4Id) {
+                        ReactGA.send({ hitType: 'pageview', page: location.pathname })
+                      }
                       if (config && config.googleAnalyticsId) {
-                        ReactGA.pageview(location.pathname)
+                        ReactGaUa.pageview(location.pathname)
                       }
                       return <Header authUrl={config.authUrl} user={user} />
                     }}
@@ -355,6 +368,7 @@ App.propTypes = {
   agencyId: PropTypes.string,
   config: PropTypes.shape({
     mailTo: PropTypes.string,
+    googleAnalyticsGa4Id: PropTypes.string,
     googleAnalyticsId: PropTypes.string,
     licencesUrl: PropTypes.string,
     flags: PropTypes.objectOf(PropTypes.string),

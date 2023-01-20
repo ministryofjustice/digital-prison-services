@@ -35,7 +35,7 @@
       window.dataLayer = window.dataLayer || [];
       function gtag(){dataLayer.push(arguments);}
       gtag('js', new Date());
-      gtag('config', '{{ googleAnalyticsGa4Id }}', {});
+      gtag('config', '{{ googleAnalyticsGa4Id }}', { 'send_page_view': false }); // disable automatic page view tracking to avoid duplicates
     </script>
   {% endif %}
 
