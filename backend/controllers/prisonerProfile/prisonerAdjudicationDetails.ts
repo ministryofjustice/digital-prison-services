@@ -1,13 +1,23 @@
 import { formatTimestampToDate, formatTimestampToDateTime, putLastNameFirst, sortByDateTime } from '../../utils'
+import getContext from './prisonerProfileContext'
 
-export default ({ prisonApi }) =>
+export default ({ prisonApi, oauthApi, systemOauthClient, restrictedPatientApi }) =>
   async (req, res) => {
     const { offenderNo, adjudicationNumber } = req.params
 
+    const { context } = await getContext({
+      offenderNo,
+      res,
+      req,
+      oauthApi,
+      systemOauthClient,
+      restrictedPatientApi,
+    })
+
     try {
       const [prisonerDetails, adjudicationDetails] = await Promise.all([
-        prisonApi.getDetails(res.locals, offenderNo),
-        prisonApi.getAdjudicationDetails(res.locals, offenderNo, adjudicationNumber),
+        prisonApi.getDetails(context, offenderNo),
+        prisonApi.getAdjudicationDetails(context, offenderNo, adjudicationNumber),
       ])
 
       const { firstName, lastName } = prisonerDetails

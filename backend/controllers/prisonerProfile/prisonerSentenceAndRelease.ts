@@ -2,18 +2,27 @@ import releaseDatesViewModel from './sentenceAndReleaseViewModels/releaseDatesVi
 import sentenceAdjustmentsViewModel from './sentenceAndReleaseViewModels/sentenceAdjustmentsViewModel'
 import courtCasesViewModel from './sentenceAndReleaseViewModels/courtCasesViewModel'
 import { readableDateFormat } from '../../utils'
+import getContext from './prisonerProfileContext'
 
-export default ({ prisonerProfileService, prisonApi, systemOauthClient }) =>
+export default ({ prisonerProfileService, prisonApi, systemOauthClient, oauthApi, restrictedPatientApi }) =>
   async (req, res) => {
     const { offenderNo } = req.params
 
     const { username } = req.session.userDetails
     const systemContext = await systemOauthClient.getClientCredentialsTokens(username)
+    const { context } = await getContext({
+      offenderNo,
+      res,
+      req,
+      oauthApi,
+      systemOauthClient,
+      restrictedPatientApi,
+    })
 
     const [prisonerProfileData, sentenceData, bookingDetails, offenceHistory] = await Promise.all([
-      prisonerProfileService.getPrisonerProfileData(res.locals, offenderNo),
-      prisonApi.getPrisonerSentenceDetails(res.locals, offenderNo),
-      prisonApi.getDetails(res.locals, offenderNo),
+      prisonerProfileService.getPrisonerProfileData(context, offenderNo),
+      prisonApi.getPrisonerSentenceDetails(context, offenderNo),
+      prisonApi.getDetails(context, offenderNo),
       prisonApi.getOffenceHistory(systemContext, offenderNo),
     ])
     const releaseDates = releaseDatesViewModel(sentenceData.sentenceDetail)
@@ -21,9 +30,9 @@ export default ({ prisonerProfileService, prisonApi, systemOauthClient }) =>
     const { bookingId } = bookingDetails
 
     const [sentenceAdjustmentsData, courtCaseData, sentenceTermsData] = await Promise.all([
-      prisonApi.getSentenceAdjustments(res.locals, bookingId),
-      prisonApi.getCourtCases(res.locals, bookingId),
-      prisonApi.getSentenceTerms(res.locals, bookingId),
+      prisonApi.getSentenceAdjustments(context, bookingId),
+      prisonApi.getCourtCases(context, bookingId),
+      prisonApi.getSentenceTerms(context, bookingId),
     ])
 
     const sentenceAdjustments = sentenceAdjustmentsViewModel(sentenceAdjustmentsData)
