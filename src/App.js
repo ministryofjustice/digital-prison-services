@@ -5,7 +5,6 @@ import PropTypes from 'prop-types'
 import { connect } from 'react-redux'
 import Notifications from 'react-notify-toast'
 import ReactGA from 'react-ga4'
-import { ReactGA as ReactGaUa } from 'react-ga'
 import ErrorComponent from './Error/index'
 import Terms from './Footer/terms-and-conditions'
 import './App.scss'
@@ -65,9 +64,6 @@ class App extends React.Component {
 
       if (config.data.googleAnalyticsGa4Id) {
         ReactGA.initialize(config.data.googleAnalyticsGa4Id)
-      }
-      if (config.data.googleAnalyticsId) {
-        ReactGaUa.initialize(config.data.googleAnalyticsId)
       }
 
       configDispatch(config.data)
@@ -143,9 +139,6 @@ class App extends React.Component {
     const { config } = this.props
     if (event && config.googleAnalyticsGa4Id) {
       ReactGA.event(event)
-    }
-    if (event && config.googleAnalyticsId) {
-      ReactGaUa.event(event)
     }
   }
 
@@ -321,9 +314,6 @@ class App extends React.Component {
               if (config && config.googleAnalyticsGa4Id) {
                 ReactGA.send({ hitType: 'pageview', page: location.pathname })
               }
-              if (config && config.googleAnalyticsId) {
-                ReactGaUa.pageview(location.pathname)
-              }
               return <IncentiveLevelSlipContainer />
             }}
           />
@@ -339,9 +329,6 @@ class App extends React.Component {
                       }
                       if (config && config.googleAnalyticsGa4Id) {
                         ReactGA.send({ hitType: 'pageview', page: location.pathname })
-                      }
-                      if (config && config.googleAnalyticsId) {
-                        ReactGaUa.pageview(location.pathname)
                       }
                       return <Header authUrl={config.authUrl} user={user} />
                     }}
@@ -369,7 +356,6 @@ App.propTypes = {
   config: PropTypes.shape({
     mailTo: PropTypes.string,
     googleAnalyticsGa4Id: PropTypes.string,
-    googleAnalyticsId: PropTypes.string,
     licencesUrl: PropTypes.string,
     flags: PropTypes.objectOf(PropTypes.string),
     supportUrl: PropTypes.string,
