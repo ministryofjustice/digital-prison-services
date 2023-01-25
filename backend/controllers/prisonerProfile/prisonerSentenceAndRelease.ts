@@ -2,18 +2,27 @@ import releaseDatesViewModel from './sentenceAndReleaseViewModels/releaseDatesVi
 import sentenceAdjustmentsViewModel from './sentenceAndReleaseViewModels/sentenceAdjustmentsViewModel'
 import courtCasesViewModel from './sentenceAndReleaseViewModels/courtCasesViewModel'
 import { readableDateFormat } from '../../utils'
+import getContext from './prisonerProfileContext'
 
-export default ({ prisonerProfileService, prisonApi, systemOauthClient, offenderSearchApi }) =>
+export default ({ prisonerProfileService, prisonApi, systemOauthClient, oauthApi, restrictedPatientApi }) =>
   async (req, res) => {
     const { offenderNo } = req.params
 
     const { username } = req.session.userDetails
     const systemContext = await systemOauthClient.getClientCredentialsTokens(username)
+    const { context } = await getContext({
+      offenderNo,
+      res,
+      req,
+      oauthApi,
+      systemOauthClient,
+      restrictedPatientApi,
+    })
 
     const [prisonerProfileData, sentenceData, bookingDetails, offenceHistory] = await Promise.all([
-      prisonerProfileService.getPrisonerProfileData(res.locals, offenderNo),
-      prisonApi.getPrisonerSentenceDetails(res.locals, offenderNo),
-      prisonApi.getDetails(res.locals, offenderNo),
+      prisonerProfileService.getPrisonerProfileData(context, offenderNo),
+      prisonApi.getPrisonerSentenceDetails(context, offenderNo),
+      prisonApi.getDetails(context, offenderNo),
       prisonApi.getOffenceHistory(systemContext, offenderNo),
     ])
     const releaseDates = releaseDatesViewModel(sentenceData.sentenceDetail)
@@ -21,22 +30,17 @@ export default ({ prisonerProfileService, prisonApi, systemOauthClient, offender
     const { bookingId } = bookingDetails
 
     const [sentenceAdjustmentsData, courtCaseData, sentenceTermsData] = await Promise.all([
-      prisonApi.getSentenceAdjustments(res.locals, bookingId),
-      prisonApi.getCourtCases(res.locals, bookingId),
-      prisonApi.getSentenceTerms(res.locals, bookingId),
+      prisonApi.getSentenceAdjustments(context, bookingId),
+      prisonApi.getCourtCases(context, bookingId),
+      prisonApi.getSentenceTerms(context, bookingId),
     ])
 
     const sentenceAdjustments = sentenceAdjustmentsViewModel(sentenceAdjustmentsData)
     const courtCases = courtCasesViewModel({ courtCaseData, sentenceTermsData, offenceHistory })
 
-    const determineLifeSentence = async () => {
-      const prisonerDetails = await offenderSearchApi.getPrisonersDetails(systemContext, [offenderNo])
-      return prisonerDetails && prisonerDetails[0]?.indeterminateSentence ? 'Life sentence' : undefined
-    }
-
-    const getEffectiveSentenceEndDate = async () =>
+    const effectiveSentenceEndDate =
       readableDateFormat(sentenceData?.sentenceDetail?.effectiveSentenceEndDate, 'YYYY-MM-DD') ||
-      determineLifeSentence()
+      (prisonerProfileData.indeterminateSentence ? 'Life sentence' : undefined)
 
     return res.render('prisonerProfile/prisonerSentenceAndRelease/prisonerSentenceAndRelease.njk', {
       prisonerProfileData,
@@ -44,7 +48,6 @@ export default ({ prisonerProfileService, prisonApi, systemOauthClient, offender
       sentenceAdjustments,
       courtCases,
       showSentences: Boolean(courtCases.find((courtCase) => courtCase.sentenceTerms.length)),
-      // @ts-expect-error ts-migrate(2554) FIXME: Expected 0 arguments, but got 1.
-      effectiveSentenceEndDate: await getEffectiveSentenceEndDate(sentenceData),
+      effectiveSentenceEndDate,
     })
   }

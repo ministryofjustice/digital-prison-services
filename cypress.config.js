@@ -157,6 +157,7 @@ module.exports = defineConfig({
           offenderNo,
           keyworkerDetails,
           complexOffenders = [],
+          offenderSearchDetails = [{ restrictedPatient: false, indeterminateSentence: false }],
         }) =>
           Promise.all([
             prisonApi.stubOffenderBasicDetails(offenderBasicDetails),
@@ -170,6 +171,7 @@ module.exports = defineConfig({
             dataComplianceApi.stubRetentionRecord(offenderNo, retentionRecord),
             allocationManager.stubGetPomForOffender({ primary_pom: { name: 'SMITH, JANE' } }),
             complexity.stubGetComplexOffenders(complexOffenders),
+            offenderSearch.stubPrisonerDetails(offenderSearchDetails),
           ]),
 
         stubAlertTypes: () => Promise.all([prisonApi.stubAlertTypes()]),

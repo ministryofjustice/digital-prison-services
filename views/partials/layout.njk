@@ -14,6 +14,8 @@
     })(window,document,'script','dataLayer','{{ googleTagManagerId }}');</script>
     <!-- End Google Tag Manager -->
   {% endif %}
+
+  {# Google Analytics: Universal Analytics (UA) - will be discontinued in July 2023 #}
   {% if googleAnalyticsId %}
     <!-- Global site tag (gtag.js) - Google Analytics -->
     <script async src="https://www.googletagmanager.com/gtag/js?id={{ googleAnalyticsId }}"></script>
@@ -24,6 +26,19 @@
       gtag('config', '{{ googleAnalyticsId }}', { 'send_page_view': false }); // Avoid duplicate page view
     </script>
   {% endif %}
+
+  {# Google Analytics: Google Analytics 4 (GA4) #}
+  {% if googleAnalyticsGa4Id %}
+    <!-- Global site tag (gtag.js) - Google Analytics -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id={{ googleAnalyticsGa4Id }}"></script>
+    <script nonce="{{ cspNonce }}">
+      window.dataLayer = window.dataLayer || [];
+      function gtag(){dataLayer.push(arguments);}
+      gtag('js', new Date());
+      gtag('config', '{{ googleAnalyticsGa4Id }}', {});
+    </script>
+  {% endif %}
+
 
   <!--[if !IE 8]><!-->
   <script src="https://code.jquery.com/jquery-1.12.4.min.js"
