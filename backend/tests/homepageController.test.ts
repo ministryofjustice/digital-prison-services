@@ -682,7 +682,7 @@ describe('Homepage', () => {
                 heading: 'Get someone ready to work',
                 description:
                   'Record what support a prisoner needs to get work. View who has been assessed as ready to work.',
-                href: '/work-profile/cohort-list?sort=releaseDate&order=descending',
+                href: '/?sort=releaseDate&order=descending',
               },
             ],
           })

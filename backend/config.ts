@@ -188,7 +188,7 @@ export const apis = {
     ui_url: process.env.HISTORICAL_PRISONER_APPLICATION_URL || '',
   },
   getSomeoneReadyForWork: {
-    ui_url: process.env.GET_SOMEONE_READY_FOR_WORK_URL || 'http://localhost:3002/',
+    ui_url: process.env.GET_SOMEONE_READY_FOR_WORK_URL || 'http://localhost:3002',
   },
 }
 export const notifications = {
