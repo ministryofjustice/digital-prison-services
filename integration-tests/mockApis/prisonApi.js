@@ -315,7 +315,7 @@ module.exports = {
         headers: {
           'Content-Type': 'application/json;charset=UTF-8',
         },
-        jsonBody: roles || [{ role: 'KW' }],
+        jsonBody: roles || [{ role: 'KW' }, { role: 'WORK_READINESS_VIEW' }],
       },
     }),
   stubAlertTypes: () =>

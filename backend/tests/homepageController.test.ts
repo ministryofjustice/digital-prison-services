@@ -653,6 +653,42 @@ describe('Homepage', () => {
         )
       })
     })
+
+    describe('Manage education profile service tile', () => {
+      it('Should not display the Get someone ready to work tile when required roles are missing', async () => {
+        oauthApi.userRoles.mockReturnValue([{ roleCode: 'NO_ROLE' }])
+
+        await controller(req, res)
+        expect(res.render).toHaveBeenCalledWith(
+          'homepage/homepage.njk',
+          expect.objectContaining({
+            tasks: [],
+          })
+        )
+      })
+
+      it('Should render home page with the Get someone ready to work tile when required roles are present', async () => {
+        config.apis.getSomeoneReadyForWork.ui_url = '/'
+
+        oauthApi.userRoles.mockReturnValue([{ roleCode: 'WORK_READINESS_VIEW' }])
+
+        await controller(req, res)
+        expect(res.render).toHaveBeenCalledWith(
+          'homepage/homepage.njk',
+          expect.objectContaining({
+            tasks: [
+              {
+                id: 'get-someone-ready-to-work',
+                heading: 'Get someone ready to work',
+                description:
+                  'Record what support a prisoner needs to get work. View who has been assessed as ready to work.',
+                href: '/?sort=releaseDate&order=descending',
+              },
+            ],
+          })
+        )
+      })
+    })
   })
 
   it('should render home page with the send legal mail task', () => {
