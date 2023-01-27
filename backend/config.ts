@@ -187,6 +187,9 @@ export const apis = {
   historicalPrisonerApplication: {
     ui_url: process.env.HISTORICAL_PRISONER_APPLICATION_URL || '',
   },
+  getSomeoneReadyForWork: {
+    ui_url: process.env.GET_SOMEONE_READY_FOR_WORK_URL || 'http://localhost:3002',
+  },
 }
 export const notifications = {
   enabled: process.env.NOTIFY_ENABLED ? process.env.NOTIFY_ENABLED === 'true' : true,
