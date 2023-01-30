@@ -43,6 +43,12 @@ const homepagePage = () =>
       link: () => cy.get('[data-test="incentives"] a'),
       description: () => cy.get('[data-test="incentives"] p'),
     }),
+    getSomeoneReadyToWork: () => ({
+      tile: () => cy.get('[data-test="get-someone-ready-to-work"]'),
+      title: () => cy.get('[data-test="get-someone-ready-to-work"] h2'),
+      link: () => cy.get('[data-test="get-someone-ready-to-work"] a'),
+      description: () => cy.get('[data-test="get-someone-ready-to-work"] p'),
+    }),
   })
 
 export default {

@@ -226,6 +226,18 @@ context('Homepage', () => {
         .description()
         .contains('See prisoner incentive information by residential location and view incentive data visualisations.')
     })
+
+    it('should show get someone ready to work', () => {
+      const page = homepagePage.goTo()
+
+      page.getSomeoneReadyToWork().tile().should('exist')
+      page.getSomeoneReadyToWork().title().contains('Get someone ready to work')
+      page.getSomeoneReadyToWork().link().should('exist')
+      page
+        .getSomeoneReadyToWork()
+        .description()
+        .contains('Record what support a prisoner needs to get work. View who has been assessed as ready to work.')
+    })
   })
 
   describe('Footer', () => {
