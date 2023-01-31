@@ -25,7 +25,7 @@ exports[`<RadioGroup /> should display image if one is provided 1`] = `
         value="yes"
       />
       <span
-        className="src__LabelText-sc-9fy7us-2 kDLiYx"
+        className="src__LabelText-sc-9fy7us-2 bACvJJ"
       >
         Yes
       </span>
@@ -42,7 +42,7 @@ exports[`<RadioGroup /> should display image if one is provided 1`] = `
         value="no"
       />
       <span
-        className="src__LabelText-sc-9fy7us-2 kDLiYx"
+        className="src__LabelText-sc-9fy7us-2 bACvJJ"
       >
         No
       </span>
@@ -71,7 +71,7 @@ exports[`<RadioGroup /> should match the default snapshot 1`] = `
         value="yes"
       />
       <span
-        className="src__LabelText-sc-9fy7us-2 kDLiYx"
+        className="src__LabelText-sc-9fy7us-2 bACvJJ"
       >
         Yes
       </span>
@@ -88,7 +88,7 @@ exports[`<RadioGroup /> should match the default snapshot 1`] = `
         value="no"
       />
       <span
-        className="src__LabelText-sc-9fy7us-2 kDLiYx"
+        className="src__LabelText-sc-9fy7us-2 bACvJJ"
       >
         No
       </span>
@@ -122,7 +122,7 @@ exports[`<RadioGroup /> should match the with hint text snapshot 1`] = `
         value="yes"
       />
       <span
-        className="src__LabelText-sc-9fy7us-2 kDLiYx"
+        className="src__LabelText-sc-9fy7us-2 bACvJJ"
       >
         Yes
       </span>
@@ -139,7 +139,7 @@ exports[`<RadioGroup /> should match the with hint text snapshot 1`] = `
         value="no"
       />
       <span
-        className="src__LabelText-sc-9fy7us-2 kDLiYx"
+        className="src__LabelText-sc-9fy7us-2 bACvJJ"
       >
         No
       </span>
@@ -173,7 +173,7 @@ exports[`<RadioGroup /> should match the with meta and error snapshot 1`] = `
         value="yes"
       />
       <span
-        className="src__LabelText-sc-9fy7us-2 kDLiYx"
+        className="src__LabelText-sc-9fy7us-2 bACvJJ"
       >
         Yes
       </span>
@@ -190,7 +190,7 @@ exports[`<RadioGroup /> should match the with meta and error snapshot 1`] = `
         value="no"
       />
       <span
-        className="src__LabelText-sc-9fy7us-2 kDLiYx"
+        className="src__LabelText-sc-9fy7us-2 bACvJJ"
       >
         No
       </span>
