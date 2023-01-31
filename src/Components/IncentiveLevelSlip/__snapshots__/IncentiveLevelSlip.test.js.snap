@@ -11,7 +11,7 @@ exports[`<IncentiveLevelSlip /> renders correctly 1`] = `
       className="sc-dkrFOg dFGLzW"
     >
       <h2
-        className="heading__StyledHeading-sc-1dsobun-0 hGKkcr"
+        className="heading__StyledHeading-sc-1sovo83-0 itiMyw"
         size="MEDIUM"
       >
         Incentive Warning
@@ -136,7 +136,7 @@ exports[`<IncentiveLevelSlip /> renders with amendments 1`] = `
       className="sc-dkrFOg dFGLzW"
     >
       <h2
-        className="heading__StyledHeading-sc-1dsobun-0 hGKkcr"
+        className="heading__StyledHeading-sc-1sovo83-0 itiMyw"
         size="MEDIUM"
       >
         Incentive Warning
@@ -293,7 +293,7 @@ exports[`<IncentiveLevelSlip /> renders with an activity or area 1`] = `
       className="sc-dkrFOg dFGLzW"
     >
       <h2
-        className="heading__StyledHeading-sc-1dsobun-0 hGKkcr"
+        className="heading__StyledHeading-sc-1sovo83-0 itiMyw"
         size="MEDIUM"
       >
         Incentive Warning
@@ -428,7 +428,7 @@ exports[`<IncentiveLevelSlip /> renders with an issued by name 1`] = `
       className="sc-dkrFOg dFGLzW"
     >
       <h2
-        className="heading__StyledHeading-sc-1dsobun-0 hGKkcr"
+        className="heading__StyledHeading-sc-1sovo83-0 itiMyw"
         size="MEDIUM"
       >
         Incentive Warning
