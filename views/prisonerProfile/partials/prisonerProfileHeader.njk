@@ -32,7 +32,7 @@
 
 {% set incentiveLevelHtml %}
 <span>{{ prisonerProfileData.incentiveLevel | showDefault('Not entered') }}</span>
-{% if prisonerProfileData.userCanEdit %}
+{% if prisonerProfileData.userCanEdit and prisonerProfileData.showIncentiveLevelDetails %}
     <br>
     <a data-test="iep-details-link" class="govuk-link"
            href="{{ '/prisoner/' + prisonerProfileData.offenderNo + '/incentive-level-details' }}">
@@ -58,19 +58,23 @@
 <br>
 {{ prisonerProfileData.agencyName }}
 <br>
-<a data-qa="cell-history-link" class="govuk-link"
+{%if prisonerProfileData.showCellHistoryLink %}
+    <a data-qa="cell-history-link" class="govuk-link"
        href="{{ '/prisoner/' + prisonerProfileData.offenderNo + '/cell-history' }}">
         View details
     </a>
+{% endif %}
 {% endset %}
 
 {% set csraHtml %}
 <span data-test="csra-details">{{ prisonerProfileData.csra }} - {{ prisonerProfileData.csraReviewDate or 'No previous review' }}</span>
 <br>
-<a data-test="csra-link" class="govuk-link"
-       href="{{ '/prisoner/' + prisonerProfileData.offenderNo + '/csra-history' }}">
-        View details <span class="govuk-visually-hidden">of CSRA</span>
-</a>
+{% if prisonerProfileData.showCsraHistory %}
+    <a data-test="csra-link" class="govuk-link"
+           href="{{ '/prisoner/' + prisonerProfileData.offenderNo + '/csra-history' }}">
+            View details <span class="govuk-visually-hidden">of CSRA</span>
+    </a>
+{% endif %}
 {% endset %}
 
 <div class="header-with-link">
@@ -167,12 +171,14 @@
                     }) }}
                 {% endif %}
 
-                {{ govukButton({
-                    text: "Add an appointment",
-                    element: "a",
-                    classes: "govuk-button--link govuk-!-margin-bottom-3",
-                    href: "/offenders/" + prisonerProfileData.offenderNo + "/add-appointment"
-                }) }}
+                {% if prisonerProfileData.showAddAppointment %}
+                    {{ govukButton({
+                        text: "Add an appointment",
+                        element: "a",
+                        classes: "govuk-button--link govuk-!-margin-bottom-3",
+                        href: "/offenders/" + prisonerProfileData.offenderNo + "/add-appointment"
+                    }) }}
+                {% endif %}
 
                 {% if prisonerProfileData.showReportUseOfForce %}
                     {{ govukButton({

@@ -20,6 +20,7 @@ const {
     incentives,
     createAndVaryALicence,
     historicalPrisonerApplication,
+    getSomeoneReadyForWork,
   },
 } = config
 
@@ -260,6 +261,13 @@ const getTasks = ({ activeCaseLoadId, locations, staffId, whereaboutsConfig, key
       description: 'This service allows users to view historical prisoner information.',
       href: historicalPrisonerApplication.ui_url,
       enabled: () => historicalPrisonerApplication.ui_url && userHasRoles(['HPA_USER']),
+    },
+    {
+      id: 'get-someone-ready-to-work',
+      heading: 'Get someone ready to work',
+      description: 'Record what support a prisoner needs to get work. View who has been assessed as ready to work.',
+      href: `${getSomeoneReadyForWork.ui_url}?sort=releaseDate&order=descending`,
+      enabled: () => getSomeoneReadyForWork.ui_url && userHasRoles(['WORK_READINESS_VIEW', 'WORK_READINESS_EDIT']),
     },
   ]
 }

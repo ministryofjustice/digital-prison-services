@@ -25,6 +25,7 @@ export const app = {
 
 export const analytics = {
   googleAnalyticsId: process.env.GOOGLE_ANALYTICS_ID,
+  googleAnalyticsGa4Id: process.env.GOOGLE_ANALYTICS_GA4_ID,
   googleTagManagerId: process.env.GOOGLE_TAG_MANAGER_ID,
 }
 
@@ -185,6 +186,9 @@ export const apis = {
   },
   historicalPrisonerApplication: {
     ui_url: process.env.HISTORICAL_PRISONER_APPLICATION_URL || '',
+  },
+  getSomeoneReadyForWork: {
+    ui_url: process.env.GET_SOMEONE_READY_FOR_WORK_URL || 'http://localhost:3002',
   },
 }
 export const notifications = {
