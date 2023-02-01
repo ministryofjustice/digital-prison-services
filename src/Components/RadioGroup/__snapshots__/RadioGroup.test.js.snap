@@ -2,15 +2,15 @@
 
 exports[`<RadioGroup /> should display image if one is provided 1`] = `
 <div
-  className="src__StyledFieldset-g1up10-0 GCAUt"
+  className="src__StyledFieldset-sc-g1up10-0 dPBNcE"
 >
   <span
-    className="src__StyledLabelText-sc-1lbxenh-0 hMoPlE"
+    className="src__LabelText-sc-1lbxenh-0 fbxnwX"
   >
     Does this test pass?
   </span>
   <span
-    className="src__StyledError-kkeaok-0 hCyeUQ"
+    className="src__ErrorText-sc-kkeaok-0 juPsoz"
   >
     Select an option
   </span>
@@ -53,10 +53,10 @@ exports[`<RadioGroup /> should display image if one is provided 1`] = `
 
 exports[`<RadioGroup /> should match the default snapshot 1`] = `
 <div
-  className="src__StyledFieldset-g1up10-0 lazxDt"
+  className="src__StyledFieldset-sc-g1up10-0 cJSRBo"
 >
   <span
-    className="src__StyledLabelText-sc-1lbxenh-0 hMoPlE"
+    className="src__LabelText-sc-1lbxenh-0 fbxnwX"
   >
     Does this test pass?
   </span>
@@ -99,15 +99,15 @@ exports[`<RadioGroup /> should match the default snapshot 1`] = `
 
 exports[`<RadioGroup /> should match the with hint text snapshot 1`] = `
 <div
-  className="src__StyledFieldset-g1up10-0 lazxDt"
+  className="src__StyledFieldset-sc-g1up10-0 cJSRBo"
 >
   <span
-    className="src__StyledLabelText-sc-1lbxenh-0 hMoPlE"
+    className="src__LabelText-sc-1lbxenh-0 fbxnwX"
   >
     Does this test pass?
   </span>
   <span
-    className="src__StyledHint-tq1z5r-0 csotVo"
+    className="src__HintText-sc-tq1z5r-0 yOKdD"
   >
     Supporting text to help
   </span>
@@ -150,15 +150,15 @@ exports[`<RadioGroup /> should match the with hint text snapshot 1`] = `
 
 exports[`<RadioGroup /> should match the with meta and error snapshot 1`] = `
 <div
-  className="src__StyledFieldset-g1up10-0 GCAUt"
+  className="src__StyledFieldset-sc-g1up10-0 dPBNcE"
 >
   <span
-    className="src__StyledLabelText-sc-1lbxenh-0 hMoPlE"
+    className="src__LabelText-sc-1lbxenh-0 fbxnwX"
   >
     Does this test pass?
   </span>
   <span
-    className="src__StyledError-kkeaok-0 hCyeUQ"
+    className="src__ErrorText-sc-kkeaok-0 juPsoz"
   >
     Select an option
   </span>
