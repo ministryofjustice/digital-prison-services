@@ -184,7 +184,7 @@ describe('<AttendanceOptions />', () => {
       expect(PayConfirm.length).toBe(1)
     })
 
-    it.skip('should not display radio button for non attendance when one has previously been recorded', () => {
+    it('should not display radio button for non attendance when one has previously been recorded', () => {
       props.offenderDetails.attendanceInfo.paid = false
       props.offenderDetails.attendanceInfo.locked = false
       props.offenderDetails.attendanceInfo.other = true

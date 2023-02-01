@@ -8,13 +8,13 @@ exports[`<PerPageDropdown /> should match 10 or less results snapshot 1`] = `
     htmlFor="perPage"
   >
     <span
-      className="src__StyledLabelText-sc-12l0n4z-0 kqemnn"
+      className="src__LabelText-sc-1lbxenh-0 fbxnwX"
     >
       Results per page
     </span>
   </label>
   <select
-    className="src__StyledSelect-vnwid3-0 eAWpAW"
+    className="src__StyledSelect-sc-sgud4a-0 bWppMm"
     id="perPage"
     onChange={[Function]}
     value={10}
@@ -36,13 +36,13 @@ exports[`<PerPageDropdown /> should match 20 or less results snapshot 1`] = `
     htmlFor="perPage"
   >
     <span
-      className="src__StyledLabelText-sc-12l0n4z-0 kqemnn"
+      className="src__LabelText-sc-1lbxenh-0 fbxnwX"
     >
       Results per page
     </span>
   </label>
   <select
-    className="src__StyledSelect-vnwid3-0 eAWpAW"
+    className="src__StyledSelect-sc-sgud4a-0 bWppMm"
     id="perPage"
     onChange={[Function]}
     value={20}
@@ -69,13 +69,13 @@ exports[`<PerPageDropdown /> should match 50 or less results snapshot 1`] = `
     htmlFor="perPage"
   >
     <span
-      className="src__StyledLabelText-sc-12l0n4z-0 kqemnn"
+      className="src__LabelText-sc-1lbxenh-0 fbxnwX"
     >
       Results per page
     </span>
   </label>
   <select
-    className="src__StyledSelect-vnwid3-0 eAWpAW"
+    className="src__StyledSelect-sc-sgud4a-0 bWppMm"
     id="perPage"
     onChange={[Function]}
     value={20}
@@ -107,13 +107,13 @@ exports[`<PerPageDropdown /> should match 100 or less results snapshot 1`] = `
     htmlFor="perPage"
   >
     <span
-      className="src__StyledLabelText-sc-12l0n4z-0 kqemnn"
+      className="src__LabelText-sc-1lbxenh-0 fbxnwX"
     >
       Results per page
     </span>
   </label>
   <select
-    className="src__StyledSelect-vnwid3-0 eAWpAW"
+    className="src__StyledSelect-sc-sgud4a-0 bWppMm"
     id="perPage"
     onChange={[Function]}
     value={20}
@@ -150,13 +150,13 @@ exports[`<PerPageDropdown /> should match the default snapshot 1`] = `
     htmlFor="perPage"
   >
     <span
-      className="src__StyledLabelText-sc-12l0n4z-0 kqemnn"
+      className="src__LabelText-sc-1lbxenh-0 fbxnwX"
     >
       Results per page
     </span>
   </label>
   <select
-    className="src__StyledSelect-vnwid3-0 eAWpAW"
+    className="src__StyledSelect-sc-sgud4a-0 bWppMm"
     id="perPage"
     onChange={[Function]}
     value={20}
