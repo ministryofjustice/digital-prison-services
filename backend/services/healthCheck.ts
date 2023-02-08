@@ -1,6 +1,7 @@
 import path from 'path'
 import fs from 'fs'
 import { serviceCheckFactory } from '../controllers/healthCheck'
+import config from '../config'
 
 const service = (name, url) => {
   const check = serviceCheckFactory(name, url)
@@ -48,9 +49,7 @@ export default function healthcheckFactory(
   const checks = [
     service('auth', authUrl),
     service('prisonApi', prisonApiUrl),
-    service('whereabouts', whereaboutsUrl),
     service('community', communityUrl),
-    service('keyworker', keyworkerUrl),
     service('allocationManager', allocationManagerUrl),
     service('casenotes', caseNotesUrl),
     service('tokenverification', tokenverificationUrl),
@@ -58,6 +57,14 @@ export default function healthcheckFactory(
     service('complexity', complexityUrl),
     service('incentivesApi', incentivesApiUrl),
   ]
+
+  if (!config.app.whereaboutsMaintenanceMode) {
+    checks.push(service('whereabouts', whereaboutsUrl))
+  }
+
+  if (!config.app.keyworkerMaintenanceMode) {
+    checks.push(service('keyworker', keyworkerUrl))
+  }
 
   return (callback) =>
     Promise.all(checks.map((fn) => fn())).then((checkResults) => {
