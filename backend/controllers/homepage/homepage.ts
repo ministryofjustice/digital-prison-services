@@ -22,6 +22,7 @@ const {
     historicalPrisonerApplication,
     getSomeoneReadyForWork,
   },
+  app: { whereaboutsMaintenanceMode, keyworkerMaintenanceMode },
 } = config
 
 const getTasks = ({ activeCaseLoadId, locations, staffId, whereaboutsConfig, keyworkerPrisonStatus, roleCodes }) => {
@@ -128,6 +129,9 @@ const getTasks = ({ activeCaseLoadId, locations, staffId, whereaboutsConfig, key
       description: 'Add and remove key workers from prisoners and manage individuals.',
       href: omic.url,
       enabled: () => {
+        if (keyworkerMaintenanceMode) {
+          return false
+        }
         if (!keyworkerPrisonStatus?.migrated) return userHasRoles(['KW_MIGRATION'])
         return userHasRoles(['OMIC_ADMIN', 'KEYWORKER_MONITOR'])
       },
@@ -277,12 +281,24 @@ export default ({ oauthApi, prisonApi, whereaboutsApi, keyworkerApi, logError })
     try {
       const { activeCaseLoadId, staffId } = req.session.userDetails
       const userRoles = oauthApi.userRoles(res.locals)
-      const [locations, staffRoles, whereaboutsConfig, keyworkerPrisonStatus] = await Promise.all([
+      const [locations, staffRoles] = await Promise.all([
         prisonApi.userLocations(res.locals),
         prisonApi.getStaffRoles(res.locals, staffId, activeCaseLoadId),
-        whereaboutsApi.getWhereaboutsConfig(res.locals, activeCaseLoadId).catch(() => null),
-        keyworkerApi.getPrisonMigrationStatus(res.locals, activeCaseLoadId),
       ])
+
+      let whereaboutsConfig
+      if (whereaboutsMaintenanceMode) {
+        whereaboutsConfig = { enabled: false }
+      } else {
+        whereaboutsConfig = await whereaboutsApi.getWhereaboutsConfig(res.locals, activeCaseLoadId).catch(() => null)
+      }
+
+      let keyworkerPrisonStatus
+      if (keyworkerMaintenanceMode) {
+        keyworkerPrisonStatus = {} // this can be empty because we're using the feature flag in getTasks
+      } else {
+        keyworkerPrisonStatus = await keyworkerApi.getPrisonMigrationStatus(res.locals, activeCaseLoadId)
+      }
 
       const roleCodes = [
         ...userRoles.map((userRole) => userRole.roleCode),
