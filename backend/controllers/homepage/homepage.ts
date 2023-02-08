@@ -280,8 +280,8 @@ export default ({ oauthApi, prisonApi, whereaboutsApi, keyworkerApi, logError })
       const [locations, staffRoles, whereaboutsConfig, keyworkerPrisonStatus] = await Promise.all([
         prisonApi.userLocations(res.locals),
         prisonApi.getStaffRoles(res.locals, staffId, activeCaseLoadId),
-        whereaboutsApi.getWhereaboutsConfig(res.locals, activeCaseLoadId).catch(() => null),
-        keyworkerApi.getPrisonMigrationStatus(res.locals, activeCaseLoadId),
+        {}, // whereaboutsApi.getWhereaboutsConfig(res.locals, activeCaseLoadId).catch(() => null),
+        {}, // keyworkerApi.getPrisonMigrationStatus(res.locals, activeCaseLoadId).catch(() => null),
       ])
 
       const roleCodes = [

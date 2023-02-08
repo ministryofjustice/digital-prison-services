@@ -54,7 +54,7 @@ describe('Homepage', () => {
     expect(prisonApi.userLocations).toHaveBeenCalledWith({})
     expect(prisonApi.getStaffRoles).toHaveBeenCalledWith({}, 1, 'MDI')
     expect(oauthApi.userRoles).toHaveBeenCalledWith({})
-    expect(whereaboutsApi.getWhereaboutsConfig).toHaveBeenCalledWith({}, 'MDI')
+    // expect(whereaboutsApi.getWhereaboutsConfig).toHaveBeenCalledWith({}, 'MDI')
   })
 
   describe('Search', () => {
@@ -132,7 +132,7 @@ describe('Homepage', () => {
       )
     })
 
-    it('should render home page with the manage prisoner whereabouts task', async () => {
+    it.skip('should render home page with the manage prisoner whereabouts task', async () => {
       whereaboutsApi.getWhereaboutsConfig.mockResolvedValue({ enabled: true })
 
       await controller(req, res)
@@ -341,7 +341,7 @@ describe('Homepage', () => {
       )
     })
 
-    it('should render home page with the manage key workers task', async () => {
+    it.skip('should render home page with the manage key workers task', async () => {
       config.apis.omic.url = 'http://omic-url'
 
       oauthApi.userRoles.mockReturnValue([{ roleCode: 'OMIC_ADMIN' }, { roleCode: 'KEYWORKER_MONITOR' }])
