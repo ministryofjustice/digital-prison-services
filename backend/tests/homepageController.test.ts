@@ -26,6 +26,8 @@ describe('Homepage', () => {
     config.apis.welcomePeopleIntoPrison.enabled_prisons = undefined
     config.apis.welcomePeopleIntoPrison.url = undefined
     config.apis.incentives.ui_url = undefined
+    config.app.whereaboutsMaintenanceMode = false
+    config.app.keyworkerMaintenanceMode = false
 
     req = {
       session: {
@@ -799,5 +801,34 @@ describe('Homepage', () => {
         ],
       })
     )
+  })
+
+  describe('Tasks behind feature flags', () => {
+    beforeEach(() => {
+      config.app.whereaboutsMaintenanceMode = true
+      config.app.keyworkerMaintenanceMode = true
+    })
+
+    it('should not display manage prisoner whereabouts task if flag is true', async () => {
+      await controller(req, res)
+
+      expect(res.render).toHaveBeenCalledWith(
+        'homepage/homepage.njk',
+        expect.objectContaining({
+          tasks: [],
+        })
+      )
+    })
+
+    it('should not display manage key workers task if flag is true', async () => {
+      await controller(req, res)
+
+      expect(res.render).toHaveBeenCalledWith(
+        'homepage/homepage.njk',
+        expect.objectContaining({
+          tasks: [],
+        })
+      )
+    })
   })
 })
