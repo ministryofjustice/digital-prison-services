@@ -281,7 +281,7 @@ export default ({ oauthApi, prisonApi, whereaboutsApi, keyworkerApi, logError })
         prisonApi.userLocations(res.locals),
         prisonApi.getStaffRoles(res.locals, staffId, activeCaseLoadId),
         {}, // whereaboutsApi.getWhereaboutsConfig(res.locals, activeCaseLoadId).catch(() => null),
-        {}, // keyworkerApi.getPrisonMigrationStatus(res.locals, activeCaseLoadId).catch(() => null),
+        {}, // keyworkerApi.getPrisonMigrationStatus(res.locals, activeCaseLoadId),
       ])
 
       const roleCodes = [
