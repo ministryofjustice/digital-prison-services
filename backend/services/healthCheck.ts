@@ -48,9 +48,9 @@ export default function healthcheckFactory(
   const checks = [
     service('auth', authUrl),
     service('prisonApi', prisonApiUrl),
-    // service('whereabouts', whereaboutsUrl),
+    service('whereabouts', whereaboutsUrl),
     service('community', communityUrl),
-    // service('keyworker', keyworkerUrl),
+    service('keyworker', keyworkerUrl),
     service('allocationManager', allocationManagerUrl),
     service('casenotes', caseNotesUrl),
     service('tokenverification', tokenverificationUrl),
