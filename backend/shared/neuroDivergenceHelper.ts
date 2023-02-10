@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/explicit-module-boundary-types */
 import { app } from '../config'
 
 export const canViewNeurodivergenceSupportData = (agencyId: string, enabledPrisons): boolean => {

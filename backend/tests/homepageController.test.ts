@@ -26,6 +26,8 @@ describe('Homepage', () => {
     config.apis.welcomePeopleIntoPrison.enabled_prisons = undefined
     config.apis.welcomePeopleIntoPrison.url = undefined
     config.apis.incentives.ui_url = undefined
+    config.app.whereaboutsMaintenanceMode = false
+    config.app.keyworkerMaintenanceMode = false
 
     req = {
       session: {
@@ -653,6 +655,42 @@ describe('Homepage', () => {
         )
       })
     })
+
+    describe('Manage education profile service tile', () => {
+      it('Should not display the Get someone ready to work tile when required roles are missing', async () => {
+        oauthApi.userRoles.mockReturnValue([{ roleCode: 'NO_ROLE' }])
+
+        await controller(req, res)
+        expect(res.render).toHaveBeenCalledWith(
+          'homepage/homepage.njk',
+          expect.objectContaining({
+            tasks: [],
+          })
+        )
+      })
+
+      it('Should render home page with the Get someone ready to work tile when required roles are present', async () => {
+        config.apis.getSomeoneReadyForWork.ui_url = '/'
+
+        oauthApi.userRoles.mockReturnValue([{ roleCode: 'WORK_READINESS_VIEW' }])
+
+        await controller(req, res)
+        expect(res.render).toHaveBeenCalledWith(
+          'homepage/homepage.njk',
+          expect.objectContaining({
+            tasks: [
+              {
+                id: 'get-someone-ready-to-work',
+                heading: 'Get someone ready to work',
+                description:
+                  'Record what support a prisoner needs to get work. View who has been assessed as ready to work.',
+                href: '/?sort=releaseDate&order=descending',
+              },
+            ],
+          })
+        )
+      })
+    })
   })
 
   it('should render home page with the send legal mail task', () => {
@@ -763,5 +801,34 @@ describe('Homepage', () => {
         ],
       })
     )
+  })
+
+  describe('Tasks behind feature flags', () => {
+    beforeEach(() => {
+      config.app.whereaboutsMaintenanceMode = true
+      config.app.keyworkerMaintenanceMode = true
+    })
+
+    it('should not display manage prisoner whereabouts task if flag is true', async () => {
+      await controller(req, res)
+
+      expect(res.render).toHaveBeenCalledWith(
+        'homepage/homepage.njk',
+        expect.objectContaining({
+          tasks: [],
+        })
+      )
+    })
+
+    it('should not display manage key workers task if flag is true', async () => {
+      await controller(req, res)
+
+      expect(res.render).toHaveBeenCalledWith(
+        'homepage/homepage.njk',
+        expect.objectContaining({
+          tasks: [],
+        })
+      )
+    })
   })
 })

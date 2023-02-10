@@ -63,3 +63,5 @@ generic-service:
    RESTRICTED_PATIENT_API_URL: https://restricted-patients-api-dev.hmpps.service.justice.gov.uk/
    HISTORICAL_PRISONER_APPLICATION_URL: 	https://hpa-stage.hmpps.dsd.io
    WHEREABOUTS_MAINTENANCE_MODE: false
+   KEYWORKER_MAINTENANCE_MODE: false
+   GET_SOMEONE_READY_FOR_WORK_URL: https://get-ready-for-work-dev.hmpps.service.justice.gov.uk
