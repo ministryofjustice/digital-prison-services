@@ -40,7 +40,7 @@ generic-service:
    SUPPORT_URL: https://support-dev.hmpps.service.justice.gov.uk/
    ESWE_ENABLED: false
    NEURODIVERSITY_ENABLED_USERNAMES: ""
-   NEURODIVERSITY_ENABLED_PRISONS: "BLI,NHI,LII,SLI"
+   NEURODIVERSITY_ENABLED_PRISONS: "BLI,NHI,LII,SLI,MDI"
    CURIOUS_URL: https://testservices.sequation.net/sequation-virtual-campus2-api/
    SYSTEM_PHASE: DEV
    BVL_URL: https://book-video-link-dev.prison.service.justice.gov.uk
