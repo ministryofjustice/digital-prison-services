@@ -12,7 +12,8 @@
     {% endfor %}
 
     {% if not neurodiversityInfo.length %}
-    <p class="govuk-body">{{ offenderName }} has no recorded neurodiversity needs.</p>
+        <p class="govuk-body">DPS currently includes neurodiversity information recorded for prisoners in HMPs Bristol, Lincoln, New Hall and Swaleside.</p>
+        <p class="govuk-body">To check for neurodiversity information for someone in another establishment, contact the education team in that establishment.</p>
     {% endif %}
 {% else %}
     <p class="govuk-body" data-test="neurodiversity-errorMessage">{{ errorMessage }}</p>
