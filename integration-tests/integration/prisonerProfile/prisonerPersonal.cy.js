@@ -268,7 +268,9 @@ context('Prisoner personal', () => {
     context('Disabilities and adjustments section', () => {
       it('Should show correct missing content text', () => {
         cy.get('[data-test="neurodiversity-summary"]').then(($section) => {
-          expect($section).to.contain.text('John Smith has no recorded neurodiversity needs.')
+          expect($section).to.contain.text(
+            'DPS currently includes neurodiversity information recorded for prisoners in HMPs Bristol, Lincoln, New Hall and Swaleside.'
+          )
         })
         cy.get('[data-test="care-needs-summary"]').then(($section) => {
           expect($section).to.contain.text('None')
@@ -1390,7 +1392,9 @@ context('Prisoner personal', () => {
 
       it('Should list no neurodivergence info for learner', () => {
         cy.get('[data-test="neurodiversity-summary"]').then(($section) => {
-          expect($section).to.contain.text('John Smith has no recorded neurodiversity needs.')
+          expect($section).to.contain.text(
+            'DPS currently includes neurodiversity information recorded for prisoners in HMPs Bristol, Lincoln, New Hall and Swaleside.'
+          )
         })
       })
     })
