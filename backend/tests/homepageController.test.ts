@@ -258,27 +258,57 @@ describe('Homepage', () => {
       )
     })
 
-    it('should render home page with the pathfinder task', async () => {
+    test.each`
+      role
+      ${'PF_USER'}
+      ${'PF_ADMIN'}
+      ${'PF_STD_PRISON'}
+      ${'PF_STD_PROBATION'}
+      ${'PF_APPROVAL'}
+      ${'PF_STD_PRISON_RO'}
+      ${'PF_STD_PROBATION_RO'}
+      ${'PF_POLICE'}
+      ${'PF_HQ'}
+      ${'PF_PSYCHOLOGIST'}
+      ${'PF_NATIONAL_READER'}
+      ${'PF_LOCAL_READER'}
+    `('Should render homepage with the Pathfinder task for role: $role', async ({ role }) => {
       config.apis.pathfinder.ui_url = 'http://pathfinder-url'
 
-      oauthApi.userRoles.mockReturnValue([
-        { roleCode: 'PF_STD_PRISON' },
-        { roleCode: 'PF_STD_PROBATION' },
-        { roleCode: 'PF_APPROVAL' },
-        { roleCode: 'PF_STD_PRISON_RO' },
-        { roleCode: 'PF_STD_PROBATION_RO' },
-        { roleCode: 'PF_POLICE' },
-        { roleCode: 'PF_HQ' },
-        { roleCode: 'PF_PSYCHOLOGIST' },
-        { roleCode: 'PF_NATIONAL_READER' },
-        { roleCode: 'PF_LOCAL_READER' },
-      ])
+      oauthApi.userRoles.mockReturnValue([{ roleCode: role }])
 
       await controller(req, res)
 
       expect(res.render).toHaveBeenCalledWith(
         'homepage/homepage.njk',
         expect.objectContaining({
+          tasks: [
+            {
+              id: 'pathfinder',
+              heading: 'Pathfinder',
+              description: 'Manage your Pathfinder caseloads.',
+              href: 'http://pathfinder-url',
+            },
+          ],
+        })
+      )
+    })
+
+    test.each`
+      role
+      ${'PVB_REQUESTS'}
+      ${'NOT_A_PF_ROLE'}
+      ${'SOC_CUSTODY'}
+    `('Should not render homepage with the Pathfinder task for role: $role', async ({ role }) => {
+      config.apis.pathfinder.ui_url = 'http://pathfinder-url'
+
+      oauthApi.userRoles.mockReturnValue([{ roleCode: role }])
+
+      await controller(req, res)
+
+      expect(res.render).toHaveBeenCalledWith(
+        'homepage/homepage.njk',
+        expect.not.objectContaining({
           tasks: [
             {
               id: 'pathfinder',
