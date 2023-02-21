@@ -689,6 +689,8 @@ describe('prisoner profile service', () => {
 
       it.each`
         role                    | flag                       | hasAccess
+        ${'PF_ADMIN'}           | ${'canViewPathfinderLink'} | ${true}
+        ${'PF_USER'}            | ${'canViewPathfinderLink'} | ${true}
         ${'PF_STD_PRISON'}      | ${'canViewPathfinderLink'} | ${true}
         ${'PF_STD_PROBATION'}   | ${'canViewPathfinderLink'} | ${true}
         ${'PF_APPROVAL'}        | ${'canViewPathfinderLink'} | ${true}
@@ -697,8 +699,6 @@ describe('prisoner profile service', () => {
         ${'PF_HQ'}              | ${'canViewPathfinderLink'} | ${true}
         ${'PF_PSYCHOLOGIST'}    | ${'canViewPathfinderLink'} | ${true}
         ${'PF_POLICE'}          | ${'canViewPathfinderLink'} | ${true}
-        ${'PF_NATIONAL_READER'} | ${'canViewPathfinderLink'} | ${true}
-        ${'PF_LOCAL_READER'}    | ${'canViewPathfinderLink'} | ${true}
         ${'OTHER'}              | ${'canViewPathfinderLink'} | ${false}
       `('$flag should be $hasAccess when the user has the $role role', async ({ role, flag, hasAccess }) => {
         // @ts-expect-error ts-migrate(2339) FIXME: Property 'userRoles' does not exist on type '{}'.
@@ -730,6 +730,7 @@ describe('prisoner profile service', () => {
 
       it.each`
         role                    | flag                           | hasAccess
+        ${'PF_USER'}            | ${'showPathfinderReferButton'} | ${true}
         ${'PF_STD_PRISON'}      | ${'showPathfinderReferButton'} | ${true}
         ${'PF_STD_PROBATION'}   | ${'showPathfinderReferButton'} | ${true}
         ${'PF_APPROVAL'}        | ${'showPathfinderReferButton'} | ${true}
@@ -738,8 +739,6 @@ describe('prisoner profile service', () => {
         ${'PF_HQ'}              | ${'showPathfinderReferButton'} | ${true}
         ${'PF_PSYCHOLOGIST'}    | ${'showPathfinderReferButton'} | ${false}
         ${'PF_POLICE'}          | ${'showPathfinderReferButton'} | ${false}
-        ${'PF_NATIONAL_READER'} | ${'showPathfinderReferButton'} | ${false}
-        ${'PF_LOCAL_READER'}    | ${'showPathfinderReferButton'} | ${false}
         ${'OTHER'}              | ${'showPathfinderReferButton'} | ${false}
       `('$flag should be $hasAccess when the user has the $role role', async ({ role, flag, hasAccess }) => {
         // @ts-expect-error ts-migrate(2339) FIXME: Property 'userRoles' does not exist on type '{}'.
