@@ -93,6 +93,8 @@ const getTasks = ({ activeCaseLoadId, locations, staffId, whereaboutsConfig, key
       enabled: () =>
         pathfinder.ui_url &&
         userHasRoles([
+          'PF_ADMIN',
+          'PF_USER',
           'PF_STD_PRISON',
           'PF_STD_PROBATION',
           'PF_APPROVAL',
@@ -103,7 +105,6 @@ const getTasks = ({ activeCaseLoadId, locations, staffId, whereaboutsConfig, key
           'PF_PSYCHOLOGIST',
           'PF_NATIONAL_READER',
           'PF_LOCAL_READER',
-          'PF_ADMIN',
         ]),
     },
     {
