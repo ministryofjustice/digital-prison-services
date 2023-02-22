@@ -158,6 +158,8 @@ export default ({
       userRoles &&
         (userRoles as any).some((role) =>
           [
+            'PF_ADMIN',
+            'PF_USER',
             'PF_STD_PRISON',
             'PF_STD_PROBATION',
             'PF_APPROVAL',
@@ -173,7 +175,7 @@ export default ({
     const isPathfinderReadWriteUser = Boolean(
       userRoles &&
         (userRoles as any).some((role) =>
-          ['PF_STD_PRISON', 'PF_STD_PROBATION', 'PF_APPROVAL', 'PF_HQ'].includes(role.roleCode)
+          ['PF_USER', 'PF_STD_PRISON', 'PF_STD_PROBATION', 'PF_APPROVAL', 'PF_HQ'].includes(role.roleCode)
         )
     )
 
