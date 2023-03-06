@@ -493,7 +493,7 @@ describe('prisoner profile quick look', () => {
               details: [
                 { label: 'Incentive level warnings', value: 0 },
                 { label: 'Incentive encouragements', value: 0 },
-                { label: 'Date of next review', html: 'Unable to show this detail' },
+                { label: 'Next review due by', html: 'Unable to show this detail' },
               ],
             },
           })
@@ -590,7 +590,7 @@ describe('prisoner profile quick look', () => {
               details: [
                 { label: 'Incentive level warnings', value: 1 },
                 { label: 'Incentive encouragements', value: 2 },
-                { label: 'Date of next review', html: expect.stringContaining('15 August 2018') },
+                { label: 'Next review due by', html: expect.stringContaining('15 August 2018') },
               ],
             },
           })
@@ -1008,7 +1008,7 @@ describe('prisoner profile quick look', () => {
             details: [
               { label: 'Incentive level warnings', value: 'Unable to show this detail' },
               { label: 'Incentive encouragements', value: 10 },
-              { label: 'Date of next review', html: expect.stringContaining('15 August 2018') },
+              { label: 'Next review due by', html: expect.stringContaining('15 August 2018') },
             ],
           },
         })
@@ -1062,7 +1062,7 @@ describe('prisoner profile quick look', () => {
             details: [
               { label: 'Incentive level warnings', value: 10 },
               { label: 'Incentive encouragements', value: 'Unable to show this detail' },
-              { label: 'Date of next review', html: expect.stringContaining('15 August 2018') },
+              { label: 'Next review due by', html: expect.stringContaining('15 August 2018') },
             ],
           },
         })
@@ -1116,7 +1116,7 @@ describe('prisoner profile quick look', () => {
             details: [
               { label: 'Incentive level warnings', value: 10 },
               { label: 'Incentive encouragements', value: 10 },
-              { label: 'Date of next review', html: 'Unable to show this detail' },
+              { label: 'Next review due by', html: 'Unable to show this detail' },
             ],
           },
         })
@@ -1143,7 +1143,7 @@ describe('prisoner profile quick look', () => {
             details: [
               { label: 'Incentive level warnings', value: 10 },
               { label: 'Incentive encouragements', value: 10 },
-              { label: 'Date of next review', html: expect.stringContaining('15 August 2018') },
+              { label: 'Next review due by', html: expect.stringContaining('15 August 2018') },
             ],
           },
         })
@@ -1175,7 +1175,7 @@ describe('prisoner profile quick look', () => {
                 value: 'Unable to show this detail',
               },
               {
-                label: 'Date of next review',
+                label: 'Next review due by',
                 html: 'Unable to show this detail',
               },
             ],
@@ -1438,7 +1438,7 @@ describe('prisoner profile quick look', () => {
             details: [
               { label: 'Incentive level warnings', value: 1 },
               { label: 'Incentive encouragements', value: 0 },
-              { label: 'Date of next review', html: 'Unable to show this detail' },
+              { label: 'Next review due by', html: 'Unable to show this detail' },
             ],
           },
         })

@@ -292,7 +292,7 @@ export default ({
               : (positiveCaseNotes && positiveCaseNotes.count) || 0,
           },
           {
-            label: 'Date of next review',
+            label: 'Next review due by',
             // @ts-expect-error ts-migrate(2339) FIXME: Property 'error' does not exist on type 'unknown'.
             html: iepSummaryResponse.error
               ? unableToShowDetailMessage
