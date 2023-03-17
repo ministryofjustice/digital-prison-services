@@ -129,6 +129,14 @@
         </ul>
 
         <div class="prisoner-header__details__actions">
+            {% if prisonerProfileData.showWarrantFolder %}
+                {{ govukButton({
+                    text: "Remand details",
+                    element: "a",
+                    classes: "govuk-button--link govuk-!-margin-bottom-3",
+                    href: prisonerProfileData.manageWarrantFolderUrl
+                }) }}
+            {% endif %}
             {% if prisonerProfileData.showCalculateReleaseDates %}
                 {{ govukButton({
                     text: "Calculate release dates",

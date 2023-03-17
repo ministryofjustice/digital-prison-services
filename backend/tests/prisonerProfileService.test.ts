@@ -25,6 +25,10 @@ config.apis.calculateReleaseDates = {
   ui_url: 'http://crd-ui/',
 }
 
+config.apis.manageWarrantFolder = {
+  ui_url: 'http://mwf-ui/',
+}
+
 config.app.neurodiversityEnabledPrisons = ['NOT-ACCELERATED', 'LEI']
 
 describe('prisoner profile service', () => {
@@ -279,6 +283,7 @@ describe('prisoner profile service', () => {
         showAddAppointment: true,
         showAddKeyworkerSession: false,
         showCalculateReleaseDates: false,
+        showWarrantFolder: false,
         showCellHistoryLink: true,
         showCsraHistory: true,
         showFinanceDetailLinks: true,
@@ -301,6 +306,7 @@ describe('prisoner profile service', () => {
         physicalCharacteristics: undefined,
         physicalMarks: undefined,
         profileInformation: undefined,
+        manageWarrantFolderUrl: 'http://mwf-ui/?prisonId=ABC123',
         esweEnabled: false,
         hasDivergenceSupport: false,
         indeterminateSentence: false,
