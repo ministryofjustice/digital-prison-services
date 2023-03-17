@@ -898,6 +898,67 @@ describe('prisoner profile service', () => {
         })
       })
     })
+    describe('when the user has the MANAGE_DIGITAL_WARRANT role', () => {
+      beforeEach(() => {
+        // @ts-expect-error ts-migrate(2339) FIXME: Property 'userRoles' does not exist on type '{}'.
+        oauthApi.userRoles.mockReturnValue([{ roleCode: 'MANAGE_DIGITAL_WARRANT' }])
+      })
+
+      describe('when prisoner is in active caseload', () => {
+        beforeEach(() => {
+          // @ts-expect-error ts-migrate(2339)
+          prisonApi.userCaseLoads.mockResolvedValue([{ caseLoadId: 'MDI' }, { caseLoadId: 'LEI' }])
+          // @ts-expect-error ts-migrate(2339)
+          oauthApi.currentUser.mockReturnValue({ staffId: 111, activeCaseLoadId: 'MDI' })
+        })
+        it('should show the user the warrant folder button', async () => {
+          const getPrisonerProfileData = await service.getPrisonerProfileData(context, offenderNo)
+
+          expect(getPrisonerProfileData).toEqual(
+            expect.objectContaining({
+              showWarrantFolder: true,
+              manageWarrantFolderUrl: 'http://mwf-ui/?prisonId=ABC123',
+            })
+          )
+        })
+      })
+      describe('when prisoner is not in active caseload', () => {
+        beforeEach(() => {
+          // @ts-expect-error ts-migrate(2339)
+          prisonApi.userCaseLoads.mockResolvedValue([{ caseLoadId: 'LEI' }])
+          // @ts-expect-error ts-migrate(2339)
+          oauthApi.currentUser.mockReturnValue({ staffId: 111, activeCaseLoadId: 'MDI' })
+        })
+        it('should not show the user the warrant folder button', async () => {
+          const getPrisonerProfileData = await service.getPrisonerProfileData(context, offenderNo, '', false)
+
+          expect(getPrisonerProfileData).toEqual(
+            expect.objectContaining({
+              showWarrantFolder: false,
+            })
+          )
+        })
+      })
+    })
+    describe('when the user does not have the MANAGE_DIGITAL_WARRANT role', () => {
+      describe('when prisoner is in active caseload', () => {
+        beforeEach(() => {
+          // @ts-expect-error ts-migrate(2339)
+          prisonApi.userCaseLoads.mockResolvedValue([{ caseLoadId: 'MDI' }, { caseLoadId: 'LEI' }])
+          // @ts-expect-error ts-migrate(2339)
+          oauthApi.currentUser.mockReturnValue({ staffId: 111, activeCaseLoadId: 'MDI' })
+        })
+        it('should not show the user the warrant folder button', async () => {
+          const getPrisonerProfileData = await service.getPrisonerProfileData(context, offenderNo, '', false)
+
+          expect(getPrisonerProfileData).toEqual(
+            expect.objectContaining({
+              showWarrantFolder: false,
+            })
+          )
+        })
+      })
+    })
     describe('when the user is viewing a Restricted Patient', () => {
       describe(`when the user is a POM with a caseload including the patients previous prison`, () => {
         let getPrisonerProfileData

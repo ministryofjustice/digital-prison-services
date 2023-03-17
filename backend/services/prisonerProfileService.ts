@@ -245,6 +245,7 @@ export default ({
       isHighComplexity,
       inactiveAlertCount,
       location: hospital || formatLocation(assignedLivingUnit.description),
+      manageWarrantFolderUrl: `${manageWarrantFolderUrl}?prisonId=${offenderNo}`,
       offenderName: putLastNameFirst(prisonerDetails.firstName, prisonerDetails.lastName),
       offenderNo,
       offenderRecordRetained: offenderRetentionRecord && hasLength(offenderRetentionRecord.retentionReasons),
