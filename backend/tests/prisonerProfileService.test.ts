@@ -33,9 +33,9 @@ config.app.neurodiversityEnabledPrisons = ['NOT-ACCELERATED', 'LEI']
 
 describe('prisoner profile service', () => {
   const context = {}
-  const prisonApi = {}
+  const prisonApi = {} as jest.Mocked<typeof apis.prisonApi>
   const keyworkerApi = {}
-  const oauthApi = {}
+  const oauthApi = {} as jest.Mocked<typeof apis.oauthApi>
   const pathfinderApi = {}
   const dataComplianceApi = {}
   const systemOauthClient = {}
@@ -48,20 +48,14 @@ describe('prisoner profile service', () => {
 
   let service
   beforeEach(() => {
-    // @ts-expect-error ts-migrate(2339) FIXME: Property 'getDetails' does not exist on type '{}'.
     prisonApi.getDetails = jest.fn()
     incentivesApi.getIepSummaryForBookingIds = jest.fn()
-    // @ts-expect-error ts-migrate(2339) FIXME: Property 'getCaseNoteSummaryByTypes' does not exis... Remove this comment to see the full error message
     prisonApi.getCaseNoteSummaryByTypes = jest.fn()
-    // @ts-expect-error ts-migrate(2339) FIXME: Property 'userCaseLoads' does not exist on type '{... Remove this comment to see the full error message
     prisonApi.userCaseLoads = jest.fn()
-    // @ts-expect-error ts-migrate(2339) FIXME: Property 'getStaffRoles' does not exist on type '{... Remove this comment to see the full error message
     prisonApi.getStaffRoles = jest.fn()
     // @ts-expect-error ts-migrate(2339) FIXME: Property 'getKeyworkerByCaseloadAndOffenderNo' doe... Remove this comment to see the full error message
     keyworkerApi.getKeyworkerByCaseloadAndOffenderNo = jest.fn()
-    // @ts-expect-error ts-migrate(2339) FIXME: Property 'userRoles' does not exist on type '{}'.
     oauthApi.userRoles = jest.fn()
-    // @ts-expect-error ts-migrate(2339) FIXME: Property 'currentUser' does not exist on type '{}'... Remove this comment to see the full error message
     oauthApi.currentUser = jest.fn()
     // @ts-expect-error ts-migrate(2339) FIXME: Property 'getOffenderRetentionRecord' does not exi... Remove this comment to see the full error message
     dataComplianceApi.getOffenderRetentionRecord = jest.fn()
@@ -178,20 +172,15 @@ describe('prisoner profile service', () => {
       ],
     }
     beforeEach(() => {
-      // @ts-expect-error ts-migrate(2339) FIXME: Property 'getDetails' does not exist on type '{}'.
       prisonApi.getDetails.mockReturnValue(prisonerDetails)
       incentivesApi.getIepSummaryForBookingIds.mockResolvedValue([{ bookingId, iepLevel: 'Standard' }])
-      // @ts-expect-error ts-migrate(2339) FIXME: Property 'getCaseNoteSummaryByTypes' does not exis... Remove this comment to see the full error message
       prisonApi.getCaseNoteSummaryByTypes.mockResolvedValue([{ latestCaseNote: '2020-04-07T14:04:25' }])
-      // @ts-expect-error ts-migrate(2339) FIXME: Property 'getStaffRoles' does not exist on type '{... Remove this comment to see the full error message
       prisonApi.getStaffRoles.mockResolvedValue([])
       // @ts-expect-error ts-migrate(2339) FIXME: Property 'userCaseLoads' does not exist on type '{... Remove this comment to see the full error message
       prisonApi.userCaseLoads.mockResolvedValue([])
       // @ts-expect-error ts-migrate(2339) FIXME: Property 'getKeyworkerByCaseloadAndOffenderNo' doe... Remove this comment to see the full error message
       keyworkerApi.getKeyworkerByCaseloadAndOffenderNo.mockResolvedValue({ firstName: 'STAFF', lastName: 'MEMBER' })
-      // @ts-expect-error ts-migrate(2339) FIXME: Property 'userRoles' does not exist on type '{}'.
       oauthApi.userRoles.mockReturnValue([])
-      // @ts-expect-error ts-migrate(2339) FIXME: Property 'currentUser' does not exist on type '{}'... Remove this comment to see the full error message
       oauthApi.currentUser.mockReturnValue({ staffId: 111, activeCaseLoadId: 'MDI' })
       // @ts-expect-error ts-migrate(2339) FIXME: Property 'getOffenderRetentionRecord' does not exi... Remove this comment to see the full error message
       dataComplianceApi.getOffenderRetentionRecord.mockReturnValue({})
@@ -210,9 +199,7 @@ describe('prisoner profile service', () => {
     it('should make a call for the full details including csra class for a prisoner and the current user', async () => {
       await service.getPrisonerProfileData(context, offenderNo)
 
-      // @ts-expect-error ts-migrate(2339) FIXME: Property 'currentUser' does not exist on type '{}'... Remove this comment to see the full error message
       expect(oauthApi.currentUser).toHaveBeenCalledWith(context)
-      // @ts-expect-error ts-migrate(2339) FIXME: Property 'getDetails' does not exist on type '{}'.
       expect(prisonApi.getDetails).toHaveBeenCalledWith(context, offenderNo, true)
     })
 
@@ -220,7 +207,6 @@ describe('prisoner profile service', () => {
       await service.getPrisonerProfileData(context, offenderNo)
 
       expect(incentivesApi.getIepSummaryForBookingIds).toHaveBeenCalledWith(context, [bookingId])
-      // @ts-expect-error ts-migrate(2339) FIXME: Property 'getCaseNoteSummaryByTypes' does not exis... Remove this comment to see the full error message
       expect(prisonApi.getCaseNoteSummaryByTypes).toHaveBeenCalledWith(context, {
         type: 'KA',
         subType: 'KS',
@@ -229,11 +215,8 @@ describe('prisoner profile service', () => {
       })
       // @ts-expect-error ts-migrate(2339) FIXME: Property 'getKeyworkerByCaseloadAndOffenderNo' doe... Remove this comment to see the full error message
       expect(keyworkerApi.getKeyworkerByCaseloadAndOffenderNo).toHaveBeenCalledWith(context, 'MDI', offenderNo)
-      // @ts-expect-error ts-migrate(2339) FIXME: Property 'userRoles' does not exist on type '{}'.
       expect(oauthApi.userRoles).toHaveBeenCalledWith(context)
-      // @ts-expect-error ts-migrate(2339) FIXME: Property 'userCaseLoads' does not exist on type '{... Remove this comment to see the full error message
       expect(prisonApi.userCaseLoads).toHaveBeenCalledWith(context)
-      // @ts-expect-error ts-migrate(2339) FIXME: Property 'getStaffRoles' does not exist on type '{... Remove this comment to see the full error message
       expect(prisonApi.getStaffRoles).toHaveBeenCalledWith(context, 111, 'MDI')
       // @ts-expect-error ts-migrate(2339) FIXME: Property 'getPomByOffenderNo' does not exist on ty... Remove this comment to see the full error message
       expect(allocationManagerApi.getPomByOffenderNo).toHaveBeenCalledWith(context, offenderNo)
@@ -322,7 +305,6 @@ describe('prisoner profile service', () => {
     })
 
     it('should return the correct prisoner information when some data is missing', async () => {
-      // @ts-expect-error ts-migrate(2339) FIXME: Property 'getDetails' does not exist on type '{}'.
       prisonApi.getDetails.mockReturnValue({
         ...prisonerDetails,
         csraClassificationCode: undefined,
@@ -330,7 +312,6 @@ describe('prisoner profile service', () => {
         assessments: [],
       })
       incentivesApi.getIepSummaryForBookingIds.mockResolvedValue([])
-      // @ts-expect-error ts-migrate(2339) FIXME: Property 'getCaseNoteSummaryByTypes' does not exis... Remove this comment to see the full error message
       prisonApi.getCaseNoteSummaryByTypes.mockResolvedValue([])
       // @ts-expect-error ts-migrate(2339) FIXME: Property 'getKeyworkerByCaseloadAndOffenderNo' doe... Remove this comment to see the full error message
       keyworkerApi.getKeyworkerByCaseloadAndOffenderNo.mockResolvedValue(null)
@@ -350,9 +331,7 @@ describe('prisoner profile service', () => {
     describe('prisoner profile links', () => {
       describe('when the the prisoner is out and user can view inactive bookings', () => {
         beforeEach(() => {
-          // @ts-expect-error ts-migrate(2339) FIXME: Property 'userRoles' does not exist on type '{}'.
           oauthApi.userRoles.mockReturnValue([{ roleCode: 'INACTIVE_BOOKINGS' }])
-          // @ts-expect-error ts-migrate(2339) FIXME: Property 'getDetails' does not exist on type '{}'.
           prisonApi.getDetails.mockReturnValue({ ...prisonerDetails, agencyId: 'OUT' })
         })
 
@@ -387,7 +366,6 @@ describe('prisoner profile service', () => {
 
       describe('when the user has categorisation roles', () => {
         beforeEach(() => {
-          // @ts-expect-error ts-migrate(2339) FIXME: Property 'userRoles' does not exist on type '{}'.
           oauthApi.userRoles.mockReturnValue([{ roleCode: 'CREATE_CATEGORISATION' }])
         })
 
@@ -404,7 +382,6 @@ describe('prisoner profile service', () => {
 
       describe('when the user is a keyworker', () => {
         beforeEach(() => {
-          // @ts-expect-error ts-migrate(2339) FIXME: Property 'getStaffRoles' does not exist on type '{... Remove this comment to see the full error message
           prisonApi.getStaffRoles.mockResolvedValue([{ role: 'KW' }])
         })
 
@@ -505,7 +482,6 @@ describe('prisoner profile service', () => {
 
       describe('when the user is in a use of force prison', () => {
         beforeEach(() => {
-          // @ts-expect-error ts-migrate(2339) FIXME: Property 'currentUser' does not exist on type '{}'... Remove this comment to see the full error message
           oauthApi.currentUser.mockReturnValue({ staffId: 111, activeCaseLoadId: 'LEI' })
         })
 
@@ -522,7 +498,6 @@ describe('prisoner profile service', () => {
 
       describe('when the user has the VIEW_PROBATION_DOCUMENTS role', () => {
         beforeEach(() => {
-          // @ts-expect-error ts-migrate(2339) FIXME: Property 'userRoles' does not exist on type '{}'.
           oauthApi.userRoles.mockReturnValue([{ roleCode: 'VIEW_PROBATION_DOCUMENTS' }])
         })
 
@@ -530,7 +505,6 @@ describe('prisoner profile service', () => {
           beforeEach(() => {
             // @ts-expect-error ts-migrate(2339)
             prisonApi.userCaseLoads.mockResolvedValue([{ caseLoadId: 'MDI' }, { caseLoadId: 'LEI' }])
-            // @ts-expect-error ts-migrate(2339)
             oauthApi.currentUser.mockReturnValue({ staffId: 111, activeCaseLoadId: 'MDI' })
           })
           it('should let the user view probation documents', async () => {
@@ -547,7 +521,6 @@ describe('prisoner profile service', () => {
           beforeEach(() => {
             // @ts-expect-error ts-migrate(2339)
             prisonApi.userCaseLoads.mockResolvedValue([{ caseLoadId: 'MDI' }])
-            // @ts-expect-error ts-migrate(2339)
             oauthApi.currentUser.mockReturnValue({ staffId: 111, activeCaseLoadId: 'LEI' })
           })
           it('should let the user view probation documents', async () => {
@@ -564,7 +537,6 @@ describe('prisoner profile service', () => {
           beforeEach(() => {
             // @ts-expect-error ts-migrate(2339)
             prisonApi.userCaseLoads.mockResolvedValue([{ caseLoadId: 'BXI' }, { caseLoadId: 'WWI' }])
-            // @ts-expect-error ts-migrate(2339)
             oauthApi.currentUser.mockReturnValue({ staffId: 111, activeCaseLoadId: 'BXI' })
           })
           it('should let the user view probation documents', async () => {
@@ -581,9 +553,7 @@ describe('prisoner profile service', () => {
           beforeEach(() => {
             // @ts-expect-error ts-migrate(2339)
             prisonApi.userCaseLoads.mockResolvedValue([{ caseLoadId: 'MDI' }, { caseLoadId: 'LEI' }])
-            // @ts-expect-error ts-migrate(2339)
             oauthApi.currentUser.mockReturnValue({ staffId: 111, activeCaseLoadId: 'MDI' })
-            // @ts-expect-error ts-migrate(2339)
             prisonApi.getDetails.mockReturnValue({
               ...prisonerDetails,
               agencyId: 'OUT',
@@ -603,11 +573,9 @@ describe('prisoner profile service', () => {
 
       describe('when the user has the POM role', () => {
         beforeEach(() => {
-          // @ts-expect-error ts-migrate(2339) FIXME: Property 'userRoles' does not exist on type '{}'.
           oauthApi.userRoles.mockReturnValue([{ roleCode: 'POM' }])
           // @ts-expect-error ts-migrate(2339)
           prisonApi.userCaseLoads.mockResolvedValue([{ caseLoadId: 'MDI' }, { caseLoadId: 'LEI' }])
-          // @ts-expect-error ts-migrate(2339)
           oauthApi.currentUser.mockReturnValue({ staffId: 111, activeCaseLoadId: 'MDI' })
         })
 
@@ -643,11 +611,9 @@ describe('prisoner profile service', () => {
     describe('when there are errors with retrieving information', () => {
       beforeEach(() => {
         incentivesApi.getIepSummaryForBookingIds.mockRejectedValue(new Error('Network error'))
-        // @ts-expect-error ts-migrate(2339) FIXME: Property 'getCaseNoteSummaryByTypes' does not exis... Remove this comment to see the full error message
         prisonApi.getCaseNoteSummaryByTypes.mockRejectedValue(new Error('Network error'))
         // @ts-expect-error ts-migrate(2339) FIXME: Property 'userCaseLoads' does not exist on type '{... Remove this comment to see the full error message
         prisonApi.userCaseLoads.mockRejectedValue(new Error('Network error'))
-        // @ts-expect-error ts-migrate(2339) FIXME: Property 'getStaffRoles' does not exist on type '{... Remove this comment to see the full error message
         prisonApi.getStaffRoles.mockRejectedValue(new Error('Network error'))
         // @ts-expect-error ts-migrate(2339) FIXME: Property 'getKeyworkerByCaseloadAndOffenderNo' doe... Remove this comment to see the full error message
         keyworkerApi.getKeyworkerByCaseloadAndOffenderNo.mockRejectedValue(new Error('Network error'))
@@ -707,7 +673,6 @@ describe('prisoner profile service', () => {
         ${'PF_POLICE'}          | ${'canViewPathfinderLink'} | ${true}
         ${'OTHER'}              | ${'canViewPathfinderLink'} | ${false}
       `('$flag should be $hasAccess when the user has the $role role', async ({ role, flag, hasAccess }) => {
-        // @ts-expect-error ts-migrate(2339) FIXME: Property 'userRoles' does not exist on type '{}'.
         oauthApi.userRoles.mockReturnValue([{ roleCode: role }])
 
         const profileData = await service.getPrisonerProfileData(context, offenderNo, '', false)
@@ -719,7 +684,6 @@ describe('prisoner profile service', () => {
       it('should not enable pathfinder link when the offender does not exists on pathfinder', async () => {
         // @ts-expect-error ts-migrate(2339) FIXME: Property 'getPathfinderDetails' does not exist on ... Remove this comment to see the full error message
         pathfinderApi.getPathfinderDetails = jest.fn().mockRejectedValue(new Error('not found'))
-        // @ts-expect-error ts-migrate(2339) FIXME: Property 'userRoles' does not exist on type '{}'.
         oauthApi.userRoles.mockReturnValue([{ roleCode: 'PF_STD_PROBATION_RO' }])
 
         const profileData = await service.getPrisonerProfileData(context, offenderNo, '', false)
@@ -747,7 +711,6 @@ describe('prisoner profile service', () => {
         ${'PF_POLICE'}          | ${'showPathfinderReferButton'} | ${false}
         ${'OTHER'}              | ${'showPathfinderReferButton'} | ${false}
       `('$flag should be $hasAccess when the user has the $role role', async ({ role, flag, hasAccess }) => {
-        // @ts-expect-error ts-migrate(2339) FIXME: Property 'userRoles' does not exist on type '{}'.
         oauthApi.userRoles.mockReturnValue([{ roleCode: role }])
 
         const profileData = await service.getPrisonerProfileData(context, offenderNo, '', false)
@@ -758,7 +721,6 @@ describe('prisoner profile service', () => {
       it('should not display pathfinder referral when the offender exists on pathfinder', async () => {
         // @ts-expect-error ts-migrate(2339) FIXME: Property 'getPathfinderDetails' does not exist on ... Remove this comment to see the full error message
         pathfinderApi.getPathfinderDetails = jest.fn().mockResolvedValue({ id: 1 })
-        // @ts-expect-error ts-migrate(2339) FIXME: Property 'userRoles' does not exist on type '{}'.
         oauthApi.userRoles.mockReturnValue([{ roleCode: 'PF_STD_PROBATION' }])
 
         const profileData = await service.getPrisonerProfileData(context, offenderNo, '', false)
@@ -791,7 +753,6 @@ describe('prisoner profile service', () => {
       })
 
       it('should enable SOC when the user has the SOC_CUSTODY role', async () => {
-        // @ts-expect-error ts-migrate(2339) FIXME: Property 'userRoles' does not exist on type '{}'.
         oauthApi.userRoles.mockReturnValue([{ roleCode: 'SOC_CUSTODY' }])
 
         const profileData = await service.getPrisonerProfileData(context, offenderNo, '', false)
@@ -801,7 +762,6 @@ describe('prisoner profile service', () => {
       })
 
       it('should enable SOC when the user has the SOC_COMMUNITY role', async () => {
-        // @ts-expect-error ts-migrate(2339) FIXME: Property 'userRoles' does not exist on type '{}'.
         oauthApi.userRoles.mockReturnValue([{ roleCode: 'SOC_COMMUNITY' }])
 
         const profileData = await service.getPrisonerProfileData(context, offenderNo, '', false)
@@ -812,7 +772,6 @@ describe('prisoner profile service', () => {
       it('should not enable SOC link when the offender does not exists on SOC', async () => {
         // @ts-expect-error ts-migrate(2339) FIXME: Property 'getSocDetails' does not exist on type '{... Remove this comment to see the full error message
         socApi.getSocDetails = jest.fn().mockRejectedValue(new Error('not found'))
-        // @ts-expect-error ts-migrate(2339) FIXME: Property 'userRoles' does not exist on type '{}'.
         oauthApi.userRoles.mockReturnValue([{ roleCode: 'SOC_CUSTODY' }])
 
         const profileData = await service.getPrisonerProfileData(context, offenderNo, '', false)
@@ -823,7 +782,6 @@ describe('prisoner profile service', () => {
 
     describe('when a prisoner is in CSWAP', () => {
       it('should show the CSWAP location description', async () => {
-        // @ts-expect-error ts-migrate(2339) FIXME: Property 'getDetails' does not exist on type '{}'.
         prisonApi.getDetails.mockReturnValue({
           ...prisonerDetails,
           assignedLivingUnit: {
@@ -839,15 +797,12 @@ describe('prisoner profile service', () => {
     })
     describe('when the user has the RELEASE_DATES_CALCULATOR role', () => {
       beforeEach(() => {
-        // @ts-expect-error ts-migrate(2339) FIXME: Property 'userRoles' does not exist on type '{}'.
         oauthApi.userRoles.mockReturnValue([{ roleCode: 'RELEASE_DATES_CALCULATOR' }])
       })
 
       describe('when prisoner is in active caseload', () => {
         beforeEach(() => {
-          // @ts-expect-error ts-migrate(2339)
-          prisonApi.userCaseLoads.mockResolvedValue([{ caseLoadId: 'MDI' }, { caseLoadId: 'LEI' }])
-          // @ts-expect-error ts-migrate(2339)
+          prisonApi.userCaseLoads.mockResolvedValue([{ caseLoadId: 'MDI' }, { caseLoadId: 'LEI' }] as never)
           oauthApi.currentUser.mockReturnValue({ staffId: 111, activeCaseLoadId: 'MDI' })
         })
         it('should show the user the calculate release dates button', async () => {
@@ -865,7 +820,6 @@ describe('prisoner profile service', () => {
         beforeEach(() => {
           // @ts-expect-error ts-migrate(2339)
           prisonApi.userCaseLoads.mockResolvedValue([{ caseLoadId: 'LEI' }])
-          // @ts-expect-error ts-migrate(2339)
           oauthApi.currentUser.mockReturnValue({ staffId: 111, activeCaseLoadId: 'MDI' })
         })
         it('should not show the user the calculate release dates button', async () => {
@@ -882,9 +836,7 @@ describe('prisoner profile service', () => {
     describe('when the user does not have the RELEASE_DATES_CALCULATOR role', () => {
       describe('when prisoner is in active caseload', () => {
         beforeEach(() => {
-          // @ts-expect-error ts-migrate(2339)
-          prisonApi.userCaseLoads.mockResolvedValue([{ caseLoadId: 'MDI' }, { caseLoadId: 'LEI' }])
-          // @ts-expect-error ts-migrate(2339)
+          prisonApi.userCaseLoads.mockResolvedValue([{ caseLoadId: 'MDI' }, { caseLoadId: 'LEI' }] as never)
           oauthApi.currentUser.mockReturnValue({ staffId: 111, activeCaseLoadId: 'MDI' })
         })
         it('should not show the user the calculate release dates button', async () => {
@@ -900,15 +852,12 @@ describe('prisoner profile service', () => {
     })
     describe('when the user has the MANAGE_DIGITAL_WARRANT role', () => {
       beforeEach(() => {
-        // @ts-expect-error ts-migrate(2339) FIXME: Property 'userRoles' does not exist on type '{}'.
         oauthApi.userRoles.mockReturnValue([{ roleCode: 'MANAGE_DIGITAL_WARRANT' }])
       })
 
       describe('when prisoner is in active caseload', () => {
         beforeEach(() => {
-          // @ts-expect-error ts-migrate(2339)
-          prisonApi.userCaseLoads.mockResolvedValue([{ caseLoadId: 'MDI' }, { caseLoadId: 'LEI' }])
-          // @ts-expect-error ts-migrate(2339)
+          prisonApi.userCaseLoads.mockResolvedValue([{ caseLoadId: 'MDI' }, { caseLoadId: 'LEI' }] as never)
           oauthApi.currentUser.mockReturnValue({ staffId: 111, activeCaseLoadId: 'MDI' })
         })
         it('should show the user the warrant folder button', async () => {
@@ -924,9 +873,7 @@ describe('prisoner profile service', () => {
       })
       describe('when prisoner is not in active caseload', () => {
         beforeEach(() => {
-          // @ts-expect-error ts-migrate(2339)
-          prisonApi.userCaseLoads.mockResolvedValue([{ caseLoadId: 'LEI' }])
-          // @ts-expect-error ts-migrate(2339)
+          prisonApi.userCaseLoads.mockResolvedValue([{ caseLoadId: 'LEI' }] as never)
           oauthApi.currentUser.mockReturnValue({ staffId: 111, activeCaseLoadId: 'MDI' })
         })
         it('should not show the user the warrant folder button', async () => {
@@ -943,9 +890,7 @@ describe('prisoner profile service', () => {
     describe('when the user does not have the MANAGE_DIGITAL_WARRANT role', () => {
       describe('when prisoner is in active caseload', () => {
         beforeEach(() => {
-          // @ts-expect-error ts-migrate(2339)
-          prisonApi.userCaseLoads.mockResolvedValue([{ caseLoadId: 'MDI' }, { caseLoadId: 'LEI' }])
-          // @ts-expect-error ts-migrate(2339)
+          prisonApi.userCaseLoads.mockResolvedValue([{ caseLoadId: 'MDI' }, { caseLoadId: 'LEI' }] as never)
           oauthApi.currentUser.mockReturnValue({ staffId: 111, activeCaseLoadId: 'MDI' })
         })
         it('should not show the user the warrant folder button', async () => {
@@ -1112,20 +1057,15 @@ describe('prisoner profile service', () => {
     }
 
     beforeEach(() => {
-      // @ts-expect-error ts-migrate(2339) FIXME: Property 'getDetails' does not exist on type '{}'.
       prisonApi.getDetails.mockReturnValue(prisonerDetails)
       incentivesApi.getIepSummaryForBookingIds.mockResolvedValue([{ bookingId, iepLevel: 'Standard' }])
-      // @ts-expect-error ts-migrate(2339) FIXME: Property 'getCaseNoteSummaryByTypes' does not exis... Remove this comment to see the full error message
       prisonApi.getCaseNoteSummaryByTypes.mockResolvedValue([{ latestCaseNote: '2020-04-07T14:04:25' }])
-      // @ts-expect-error ts-migrate(2339) FIXME: Property 'getStaffRoles' does not exist on type '{... Remove this comment to see the full error message
       prisonApi.getStaffRoles.mockResolvedValue([])
       // @ts-expect-error ts-migrate(2339) FIXME: Property 'userCaseLoads' does not exist on type '{... Remove this comment to see the full error message
       prisonApi.userCaseLoads.mockResolvedValue([])
       // @ts-expect-error ts-migrate(2339) FIXME: Property 'getKeyworkerByCaseloadAndOffenderNo' doe... Remove this comment to see the full error message
       keyworkerApi.getKeyworkerByCaseloadAndOffenderNo.mockResolvedValue({ firstName: 'STAFF', lastName: 'MEMBER' })
-      // @ts-expect-error ts-migrate(2339) FIXME: Property 'userRoles' does not exist on type '{}'.
       oauthApi.userRoles.mockReturnValue([])
-      // @ts-expect-error ts-migrate(2339) FIXME: Property 'currentUser' does not exist on type '{}'... Remove this comment to see the full error message
       oauthApi.currentUser.mockReturnValue({ staffId: 111, activeCaseLoadId: 'MDI' })
       // @ts-expect-error ts-migrate(2339) FIXME: Property 'getOffenderRetentionRecord' does not exi... Remove this comment to see the full error message
       dataComplianceApi.getOffenderRetentionRecord.mockReturnValue({})
@@ -1140,7 +1080,6 @@ describe('prisoner profile service', () => {
     it('should return true when a user has neurodiversity support needs', async () => {
       const response = await service.getPrisonerProfileData(context, offenderNo)
 
-      // @ts-expect-error ts-migrate(2339) FIXME: Property 'currentUser' does not exist on type '{}'... Remove this comment to see the full error message
       expect(oauthApi.currentUser).toHaveBeenCalledWith(context)
       // eslint-disable-next-line @typescript-eslint/ban-ts-comment
       // @ts-ignore
@@ -1198,20 +1137,15 @@ describe('prisoner profile service', () => {
     }
 
     beforeEach(() => {
-      // @ts-expect-error ts-migrate(2339) FIXME: Property 'getDetails' does not exist on type '{}'.
       prisonApi.getDetails.mockReturnValue(prisonerDetails)
       incentivesApi.getIepSummaryForBookingIds.mockResolvedValue([{ bookingId, iepLevel: 'Standard' }])
-      // @ts-expect-error ts-migrate(2339) FIXME: Property 'getCaseNoteSummaryByTypes' does not exis... Remove this comment to see the full error message
       prisonApi.getCaseNoteSummaryByTypes.mockResolvedValue([{ latestCaseNote: '2020-04-07T14:04:25' }])
-      // @ts-expect-error ts-migrate(2339) FIXME: Property 'getStaffRoles' does not exist on type '{... Remove this comment to see the full error message
       prisonApi.getStaffRoles.mockResolvedValue([])
       // @ts-expect-error ts-migrate(2339) FIXME: Property 'userCaseLoads' does not exist on type '{... Remove this comment to see the full error message
       prisonApi.userCaseLoads.mockResolvedValue([])
       // @ts-expect-error ts-migrate(2339) FIXME: Property 'getKeyworkerByCaseloadAndOffenderNo' doe... Remove this comment to see the full error message
       keyworkerApi.getKeyworkerByCaseloadAndOffenderNo.mockResolvedValue({ firstName: 'STAFF', lastName: 'MEMBER' })
-      // @ts-expect-error ts-migrate(2339) FIXME: Property 'userRoles' does not exist on type '{}'.
       oauthApi.userRoles.mockReturnValue([])
-      // @ts-expect-error ts-migrate(2339) FIXME: Property 'currentUser' does not exist on type '{}'... Remove this comment to see the full error message
       oauthApi.currentUser.mockReturnValue({ staffId: 111, activeCaseLoadId: 'MDI' })
       // @ts-expect-error ts-migrate(2339) FIXME: Property 'getOffenderRetentionRecord' does not exi... Remove this comment to see the full error message
       dataComplianceApi.getOffenderRetentionRecord.mockReturnValue({})
