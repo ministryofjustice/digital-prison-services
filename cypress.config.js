@@ -278,7 +278,7 @@ module.exports = defineConfig({
           healthTypes,
           careNeeds,
           reasonableAdjustments,
-          agencies,
+          prisons,
           prisonOffenderManagers,
           neurodiversities,
           neurodivergence,
@@ -297,7 +297,7 @@ module.exports = defineConfig({
             prisonApi.stubHealthTypes(healthTypes),
             prisonApi.stubPersonalCareNeeds(careNeeds),
             prisonApi.stubReasonableAdjustments(reasonableAdjustments),
-            prisonApi.stubAgencies(agencies),
+            prisonApi.stubPrisons(prisons),
             allocationManager.stubGetPomForOffender(prisonOffenderManagers),
             curiousApi.stubLearnerProfiles(neurodiversities),
             curiousApi.stubLearnerNeurodiversity(neurodivergence),
@@ -355,7 +355,7 @@ module.exports = defineConfig({
         stubAppointmentLocations: ({ agency, locations }) =>
           Promise.all([prisonApi.stubAppointmentLocations(agency, locations)]),
         stubBookingOffenders: (offenders) => Promise.all([prisonApi.stubBookingOffenders(offenders)]),
-        stubAgencies: (agencies) => Promise.all([prisonApi.stubAgencies(agencies)]),
+        stubAgencies: prisonApi.stubAgencies,
         stubAppointmentsAtAgencyLocation: ({ agency, location, date, appointments }) =>
           Promise.all([prisonApi.stubSchedulesAtAgency(agency, location, 'APP', date, appointments)]),
         stubCourtCases: (courtCases) => prisonApi.stubCourtCases(courtCases),
