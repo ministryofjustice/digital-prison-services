@@ -61,7 +61,7 @@ generic-service:
    WHEREABOUTS_MAINTENANCE_MODE: false
    KEYWORKER_MAINTENANCE_MODE: false
    GET_SOMEONE_READY_FOR_WORK_URL: https://get-ready-for-work.hmpps.service.justice.gov.uk
-   WARRANT_FOLDER_URL: https://manage-a-warrant-folder.hmpps.service.justice.gov.uk
+   WARRANT_FOLDER_URL: https://manage-a-warrant-folder.hmpps.service.justice.gov.uk/
 
 
   allowlist:

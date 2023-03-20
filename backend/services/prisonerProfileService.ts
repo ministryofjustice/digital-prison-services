@@ -199,7 +199,8 @@ export default ({
 
     const canCalculateReleaseDate =
       userRoles && (userRoles as any).some((role) => role.roleCode === 'RELEASE_DATES_CALCULATOR')
-    const canWarrantFolder = userRoles && (userRoles as any).some((role) => role.roleCode === 'MANAGE_DIGITAL_WARRANT')
+    const canManageWarrantFolder =
+      userRoles && (userRoles as any).some((role) => role.roleCode === 'MANAGE_DIGITAL_WARRANT')
 
     const getPrisonerSearchDetails = async () => {
       const response = await offenderSearchApi.getPrisonersDetails(systemContext, [offenderNo])
@@ -219,6 +220,7 @@ export default ({
       birthPlace,
       dateOfBirth,
       alerts: alertsToShow,
+      adjustmentsUrl: `${manageWarrantFolderUrl}adjustments?prisonId=${offenderNo}`,
       canViewProbationDocuments,
       canViewPathfinderLink,
       pathfinderProfileUrl:
@@ -245,13 +247,12 @@ export default ({
       isHighComplexity,
       inactiveAlertCount,
       location: hospital || formatLocation(assignedLivingUnit.description),
-      manageWarrantFolderUrl: `${manageWarrantFolderUrl}?prisonId=${offenderNo}`,
       offenderName: putLastNameFirst(prisonerDetails.firstName, prisonerDetails.lastName),
       offenderNo,
       offenderRecordRetained: offenderRetentionRecord && hasLength(offenderRetentionRecord.retentionReasons),
       showAddKeyworkerSession: staffRoles && (staffRoles as any).some((role) => role.role === 'KW'),
       showCalculateReleaseDates: offenderInCaseload && canCalculateReleaseDate,
-      showWarrantFolder: offenderInCaseload && canWarrantFolder,
+      showAdjustmentsButton: offenderInCaseload && canManageWarrantFolder,
       showReportUseOfForce: useOfForceEnabledPrisons.includes(currentUser.activeCaseLoadId) && !isRestrictedPatient,
       showAddAppointment: !isRestrictedPatient,
       showCsraHistory: !isRestrictedPatient,

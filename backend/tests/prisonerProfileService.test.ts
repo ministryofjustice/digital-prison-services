@@ -283,7 +283,7 @@ describe('prisoner profile service', () => {
         showAddAppointment: true,
         showAddKeyworkerSession: false,
         showCalculateReleaseDates: false,
-        showWarrantFolder: false,
+        showAdjustmentsButton: false,
         showCellHistoryLink: true,
         showCsraHistory: true,
         showFinanceDetailLinks: true,
@@ -306,7 +306,7 @@ describe('prisoner profile service', () => {
         physicalCharacteristics: undefined,
         physicalMarks: undefined,
         profileInformation: undefined,
-        manageWarrantFolderUrl: 'http://mwf-ui/?prisonId=ABC123',
+        adjustmentsUrl: 'http://mwf-ui/adjustments?prisonId=ABC123',
         esweEnabled: false,
         hasDivergenceSupport: false,
         indeterminateSentence: false,
@@ -916,8 +916,8 @@ describe('prisoner profile service', () => {
 
           expect(getPrisonerProfileData).toEqual(
             expect.objectContaining({
-              showWarrantFolder: true,
-              manageWarrantFolderUrl: 'http://mwf-ui/?prisonId=ABC123',
+              showAdjustmentsButton: true,
+              adjustmentsUrl: 'http://mwf-ui/adjustments?prisonId=ABC123',
             })
           )
         })
@@ -934,7 +934,7 @@ describe('prisoner profile service', () => {
 
           expect(getPrisonerProfileData).toEqual(
             expect.objectContaining({
-              showWarrantFolder: false,
+              showAdjustmentsButton: false,
             })
           )
         })
@@ -953,7 +953,7 @@ describe('prisoner profile service', () => {
 
           expect(getPrisonerProfileData).toEqual(
             expect.objectContaining({
-              showWarrantFolder: false,
+              showAdjustmentsButton: false,
             })
           )
         })
