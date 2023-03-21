@@ -356,7 +356,7 @@ context('A user cannot view prisoner case notes', () => {
     })
   })
 
-  it('A user can cannot view a prisoners case notes if does not have access to prisoners caseload', () => {
+  it('A user can cannot view a prisoners case notes if user does not have access to prisoners caseload', () => {
     // offender agencyId = MDI, while users caseloads = WWI
     cy.visit(`/prisoner/${offenderNo}/case-notes`)
 

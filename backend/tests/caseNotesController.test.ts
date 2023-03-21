@@ -87,7 +87,7 @@ describe('Case notes controller', () => {
     caseNotesApi.getCaseNotes.mockReturnValue({ content: caseNotesApiResponse })
 
     // @ts-expect-error ts-migrate(2339) FIXME: Property 'getPrisonerProfileData' does not exist o... Remove this comment to see the full error message
-    prisonerProfileService.getPrisonerProfileData.mockReturnValue({})
+    prisonerProfileService.getPrisonerProfileData.mockReturnValue({ userCanEdit: true })
 
     // @ts-expect-error ts-migrate(2339) FIXME: Property 'render' does not exist on type '{ locals... Remove this comment to see the full error message
     res.render = jest.fn()
@@ -244,7 +244,9 @@ describe('Case notes controller', () => {
         type: 'type1',
       },
       pagination: {},
-      prisonerProfileData: {},
+      prisonerProfileData: {
+        userCanEdit: true,
+      },
       showAll: undefined,
       subTypes: [
         {
@@ -260,5 +262,38 @@ describe('Case notes controller', () => {
         },
       ],
     })
+  })
+
+  it('should display not found page if user does not have access to prisoners caseload', async () => {
+    // Given
+    // @ts-expect-error ts-migrate(2339) FIXME: Property 'getPrisonerProfileData' does not exist o... Remove this comment to see the full error message
+    prisonerProfileService.getPrisonerProfileData.mockReturnValue({ userCanEdit: false })
+
+    const req = {
+      ...reqDefault,
+      headers: {},
+      query: {
+        pageOffsetOption: '0',
+        type: 'type1',
+        subType: 'subType2',
+        fromDate: '10/10/2010',
+        toDate: '11/10/2020',
+      },
+    }
+    const resWithRedirect = {
+      render: jest.fn(),
+      status: jest.fn(),
+      end: jest.fn(),
+      locals: {
+        redirectUrl: 'http://redirect',
+        homeUrl: 'http://home',
+      },
+    }
+
+    // When
+    await controller(req, resWithRedirect)
+
+    // Then
+    expect(resWithRedirect.render).toHaveBeenCalledWith('notFound.njk', { url: '/' })
   })
 })
