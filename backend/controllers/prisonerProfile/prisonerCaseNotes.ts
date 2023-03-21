@@ -88,6 +88,10 @@ export default ({
       overrideAccess
     )
 
+    if (!prisonerProfileData.userCanEdit) {
+      return res.render('notFound.njk', { url: req.headers.referer || '/' })
+    }
+
     const userRoles = oauthApi.userRoles(res.locals).map((role) => role.roleCode)
     const hasDeleteRole = userRoles.includes('DELETE_SENSITIVE_CASE_NOTES')
 

@@ -158,13 +158,14 @@ module.exports = defineConfig({
           keyworkerDetails,
           complexOffenders = [],
           offenderSearchDetails = [{ restrictedPatient: false, indeterminateSentence: false }],
+          caseloads = null,
         }) =>
           Promise.all([
             prisonApi.stubOffenderBasicDetails(offenderBasicDetails),
             prisonApi.stubOffenderFullDetails(offenderFullDetails),
             incentivesApi.stubGetIepSummaryForBookingIds(iepSummary),
             prisonApi.stubOffenderCaseNoteSummary(caseNoteSummary),
-            prisonApi.stubUserCaseloads(),
+            prisonApi.stubUserCaseloads(caseloads),
             prisonApi.stubStaffRoles(),
             prisonApi.stubOffenderImage(),
             keyworker.stubKeyworkerByCaseloadAndOffenderNo(keyworkerDetails),
