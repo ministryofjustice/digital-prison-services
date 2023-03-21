@@ -1,6 +1,7 @@
 const CaseNotesPage = require('../../pages/prisonerProfile/caseNotePage')
 const offenderBasicDetails = require('../../mockApis/responses/offenderBasicDetails.json')
 const offenderFullDetails = require('../../mockApis/responses/offenderFullDetails.json')
+const NotFoundPage = require('../../pages/notFound')
 
 const offenderNo = 'A12345'
 const caseNote = {
@@ -312,5 +313,53 @@ context('A user can view prisoner case notes', () => {
 
     page.viewAllCaseNotesTopLink().should('not.exist')
     page.viewAllCaseNotesBottomLink().should('not.exist')
+  })
+})
+
+context('A user cannot view prisoner case notes', () => {
+  before(() => {
+    cy.clearCookies()
+    cy.task('reset')
+    cy.task('stubSignIn', {
+      username: 'ITAG_USER',
+      caseload: 'WWI',
+      caseloads: [
+        {
+          caseLoadId: 'WWI',
+          description: 'Wandsworth',
+          currentlyActive: true,
+        },
+      ],
+      roles: ['GLOBAL_SEARCH'],
+    })
+    cy.signIn()
+    cy.task('stubCaseNoteTypes')
+
+    cy.task('stubPrisonerProfileHeaderData', {
+      offenderBasicDetails,
+      offenderFullDetails,
+      iepSummary: {},
+      caseNoteSummary: {},
+      offenderNo,
+      keyworkerDetails: {},
+      complexOffenders: {},
+      offenderSearchDetails: {},
+      caseloads: [
+        {
+          caseLoadId: 'WWI',
+          description: 'Wandsworth',
+          type: 'INST',
+          caseloadFunction: 'GENERAL',
+          currentlyActive: true,
+        },
+      ]
+    })
+  })
+
+  it('A user can cannot view a prisoners case notes if user does not have access to prisoners caseload', () => {
+    // offender agencyId = MDI, while users caseloads = WWI
+    cy.visit(`/prisoner/${offenderNo}/case-notes`)
+
+    NotFoundPage.verifyOnPage()
   })
 })
