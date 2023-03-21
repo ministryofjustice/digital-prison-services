@@ -15,7 +15,7 @@ describe('Unacceptable absences details controller', () => {
   const offenderNo = 'G3878UK'
   const prisonApi = {
     getDetails: jest.fn(),
-    getAgencies: jest.fn(),
+    getPrisons: jest.fn(),
   }
   const esweService = {
     getAttendanceDetails: jest.fn(),
@@ -53,7 +53,14 @@ describe('Unacceptable absences details controller', () => {
       content: { fullDetails: list, pagination: PAGINATION_IN },
     })
     prisonApi.getDetails = jest.fn().mockResolvedValue({ firstName: 'Apoustius', lastName: 'Ignian' })
-    prisonApi.getAgencies = jest.fn().mockResolvedValue([])
+    prisonApi.getPrisons = jest.fn().mockResolvedValue([
+      {
+        agencyId: 'MDI',
+        description: 'Moorland (HMP & YOI)',
+        agencyType: 'INST',
+        active: true,
+      },
+    ])
     paginationService.getPagination = jest.fn().mockReturnValue(PAGINATION_OUT)
 
     controller = unacceptableAbsencesDetails({
@@ -76,7 +83,7 @@ describe('Unacceptable absences details controller', () => {
         profileUrl,
         fullDetails: list,
         pagination: PAGINATION_OUT,
-        prisons: new Map(),
+        prisons: new Map([['MDI', 'Moorland (HMP & YOI)']]),
       })
     )
   })

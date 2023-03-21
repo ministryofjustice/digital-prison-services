@@ -1,8 +1,8 @@
 import moment from 'moment'
 
-const agencies = [
-  { agencyId: 'RNI', formattedDescription: 'Ranby (HMP)' },
-  { agencyId: 'WWI', formattedDescription: 'Wandsworth (HMP)' },
+const prisons = [
+  { agencyId: 'RNI', description: 'Ranby (HMP)' },
+  { agencyId: 'WWI', description: 'Wandsworth (HMP)' },
 ]
 
 context('Unacceptable absences details page', () => {
@@ -58,7 +58,7 @@ context('Unacceptable absences details page', () => {
       cy.task('stubSignIn', { username: 'ITAG_USER', caseload: 'MDI' })
       cy.signIn()
       cy.task('stubOffenderBasicDetails', { bookingId: 1, firstName: 'John', lastName: 'Smith', agencyId: 'MDI' })
-      cy.task('stubAgencies', agencies)
+      cy.task('stubPrisons', prisons)
     })
 
     beforeEach(() => {
@@ -106,7 +106,7 @@ context('Unacceptable absences details page', () => {
       cy.task('stubSignIn', { username: 'ITAG_USER', caseload: 'MDI' })
       cy.signIn()
       cy.task('stubOffenderBasicDetails', { bookingId: 1, firstName: 'John', lastName: 'Smith', agencyId: 'MDI' })
-      cy.task('stubAgencies', agencies)
+      cy.task('stubPrisons', prisons)
       cy.task('stubGetUnacceptableAbsenceDetail', { offenderNo, unacceptableAbsence: dummyWorkHistory })
     })
 
@@ -177,7 +177,7 @@ context('Unacceptable absences details page', () => {
       cy.task('stubSignIn', { username: 'ITAG_USER', caseload: 'MDI' })
       cy.signIn()
       cy.task('stubOffenderBasicDetails', { bookingId: 1, firstName: 'John', lastName: 'Smith', agencyId: 'MDI' })
-      cy.task('stubAgencies', agencies)
+      cy.task('stubPrisons', prisons)
       cy.task('stubKeyworkerMigrated')
     })
 

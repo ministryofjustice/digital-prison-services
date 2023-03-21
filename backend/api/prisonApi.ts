@@ -155,6 +155,8 @@ export const prisonApiFactory = (client) => {
 
   const getAgencies = (context) => get(context, '/api/agencies/prison')
 
+  const getPrisons = (context) => get(context, '/api/agencies/type/INST')
+
   const getAgencyDetails = (context, agencyId) => get(context, `/api/agencies/${agencyId}?activeOnly=false`)
 
   const getStaffDetails = (context, staffId) => getWithHandle404(context, `/api/users/${staffId}`)
@@ -492,6 +494,7 @@ export const prisonApiFactory = (client) => {
     getAppointmentsForAgency,
     getActivities,
     getAgencies,
+    getPrisons,
     getAgencyDetails,
     getStaffDetails,
     getCourtEvents,
