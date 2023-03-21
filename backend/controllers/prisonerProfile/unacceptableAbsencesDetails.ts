@@ -32,7 +32,7 @@ export default ({ paginationService, prisonApi, esweService }) =>
         await Promise.all([
           prisonApi.getDetails(res.locals, offenderNo),
           esweService.getAttendanceDetails(offenderNo, page),
-          prisonApi.getAgencies(res.locals),
+          prisonApi.getPrisons(res.locals),
         ])
 
       const { firstName, lastName } = prisonerDetails
@@ -50,7 +50,7 @@ export default ({ paginationService, prisonApi, esweService }) =>
           pagination.limit,
           fullUrl
         ),
-        prisons: new Map(prisonArray.map((p) => [p.agencyId, p.formattedDescription])),
+        prisons: new Map(prisonArray.map((p) => [p.agencyId, p.description])),
       })
     } catch (error) {
       res.locals.redirectUrl = `/prisoner/${offenderNo}`
