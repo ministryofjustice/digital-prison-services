@@ -89,8 +89,8 @@ describe('prisoner personal', () => {
     prisonApi.getTreatmentTypes = jest.fn().mockResolvedValue([])
     // @ts-expect-error ts-migrate(2339) FIXME: Property 'getHealthTypes' does not exist on type '... Remove this comment to see the full error message
     prisonApi.getHealthTypes = jest.fn().mockResolvedValue([])
-    // @ts-expect-error ts-migrate(2339) FIXME: Property 'getPrisons' does not exist on type '{}'... Remove this comment to see the full error message
-    prisonApi.getPrisons = jest.fn().mockResolvedValue([])
+    // @ts-expect-error ts-migrate(2339) FIXME: Property 'getAgencies' does not exist on type '{}'... Remove this comment to see the full error message
+    prisonApi.getAgencies = jest.fn().mockResolvedValue([])
     // @ts-expect-error ts-migrate(2339) FIXME: Property 'getPomByOffenderNo' does not exist on ty... Remove this comment to see the full error message
     allocationManagerApi.getPomByOffenderNo = jest.fn().mockResolvedValue({})
     // @ts-expect-error ts-migrate(2339) FIXME: Property 'getNeurodiversities' does not exist on type '{}'... Remove this comment to see the full error message
@@ -1885,8 +1885,8 @@ describe('prisoner personal', () => {
       expect(prisonApi.getPersonalCareNeeds).toHaveBeenCalledWith(res.locals, bookingId, '')
       // @ts-expect-error ts-migrate(2339) FIXME: Property 'getReasonableAdjustments' does not exist... Remove this comment to see the full error message
       expect(prisonApi.getReasonableAdjustments).toHaveBeenCalledWith(res.locals, bookingId, '')
-      // @ts-expect-error ts-migrate(2339) FIXME: Property 'getPrisons' does not exist on type '{}'... Remove this comment to see the full error message
-      expect(prisonApi.getPrisons).toHaveBeenCalledWith(res.locals)
+      // @ts-expect-error ts-migrate(2339) FIXME: Property 'getAgencies' does not exist on type '{}'... Remove this comment to see the full error message
+      expect(prisonApi.getAgencies).toHaveBeenCalledWith(res.locals)
     })
 
     describe('when there is no care needs and adjustments data', () => {
@@ -1985,11 +1985,12 @@ describe('prisoner personal', () => {
           },
         ])
 
-        // @ts-expect-error ts-migrate(2339) FIXME: Property 'getPrisons' does not exist on type '{}'... Remove this comment to see the full error message
-        prisonApi.getPrisons = jest.fn().mockResolvedValue([
+        // @ts-expect-error ts-migrate(2339) FIXME: Property 'getAgencies' does not exist on type '{}'... Remove this comment to see the full error message
+        prisonApi.getAgencies = jest.fn().mockResolvedValue([
           {
             agencyId: 'MDI',
-            description: 'Moorland (HMP & YOI)',
+            description: 'MOORLAND (HMP & YOI)',
+            formattedDescription: 'Moorland (HMP & YOI)',
           },
         ])
       })

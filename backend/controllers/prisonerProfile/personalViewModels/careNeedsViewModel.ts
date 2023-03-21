@@ -36,7 +36,7 @@ export default ({ personalCareNeeds, reasonableAdjustments, treatmentTypes, heal
             details: [
               {
                 label: 'Establishment',
-                value: agencyDetails && agencyDetails.description,
+                value: agencyDetails && (agencyDetails.formattedDescription || agencyDetails.description),
               },
               {
                 label: 'Date provided',

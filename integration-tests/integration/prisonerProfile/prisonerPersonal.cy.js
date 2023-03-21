@@ -755,7 +755,7 @@ context('Prisoner personal', () => {
               },
             ],
           },
-          prisons: [
+          agencies: [
             {
               agencyId: 'MDI',
               description: 'MOORLAND (HMP & YOI)',
