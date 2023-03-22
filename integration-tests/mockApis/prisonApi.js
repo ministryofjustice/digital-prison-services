@@ -938,20 +938,6 @@ module.exports = {
         jsonBody: reasonableAdjustments || {},
       },
     }),
-  stubAgencies: (agencies) =>
-    stubFor({
-      request: {
-        method: 'GET',
-        urlPattern: '/api/agencies/prison',
-      },
-      response: {
-        status: 200,
-        headers: {
-          'Content-Type': 'application/json;charset=UTF-8',
-        },
-        jsonBody: agencies || [],
-      },
-    }),
   stubPrisons: (prisons) =>
     stubFor({
       request: {

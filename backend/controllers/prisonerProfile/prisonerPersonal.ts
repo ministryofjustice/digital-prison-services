@@ -73,7 +73,6 @@ export default ({
       secondaryLanguages,
       careNeeds,
       adjustments,
-      agencies,
       allocationManager,
       neurodiversities,
       neurodivergence,
@@ -88,7 +87,6 @@ export default ({
         prisonApi.getSecondaryLanguages(context, bookingId),
         prisonApi.getPersonalCareNeeds(context, bookingId, healthCodes),
         prisonApi.getReasonableAdjustments(context, bookingId, treatmentCodes),
-        prisonApi.getAgencies(context),
         allocationManagerApi.getPomByOffenderNo(context, offenderNo),
         esweService.getNeurodiversities(offenderNo),
         getNeurodivergenceSupportNeed(),
@@ -184,7 +182,6 @@ export default ({
         reasonableAdjustments: adjustments && (adjustments as any).reasonableAdjustments,
         treatmentTypes,
         healthTypes,
-        agencies,
       }),
     })
   }

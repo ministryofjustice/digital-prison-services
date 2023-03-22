@@ -745,6 +745,7 @@ context('Prisoner personal', () => {
                 startDate: '2020-05-19',
                 endDate: null,
                 agencyId: 'MDI',
+                agencyDescription: 'Moorland (HMP & YOI)',
               },
               {
                 treatmentCode: 'FLEX_REFRESH',
@@ -752,15 +753,10 @@ context('Prisoner personal', () => {
                 startDate: '2020-05-01',
                 endDate: null,
                 agencyId: 'MDI',
+                agencyDescription: 'Moorland (HMP & YOI)',
               },
             ],
           },
-          agencies: [
-            {
-              agencyId: 'MDI',
-              description: 'MOORLAND (HMP & YOI)',
-            },
-          ],
           prisonOffenderManagers: {
             primary_pom: { staffId: 1, name: 'SMITH, JANE' },
             secondary_pom: { staffId: 2, name: 'John doe' },
@@ -951,10 +947,10 @@ context('Prisoner personal', () => {
                 expect($summaryValues.get(0).innerText).to.contain('Bi polar comment text')
                 expect($summaryValues.get(1).innerText).to.contain('19 May 2020')
                 expect($summaryValues.get(2).innerText).to.contain('Ongoing')
-                expect($summaryValues.get(3).innerText).to.contain('MOORLAND (HMP & YOI)')
+                expect($summaryValues.get(3).innerText).to.contain('Moorland (HMP & YOI)')
                 expect($summaryValues.get(4).innerText).to.contain('01 May 2020')
                 expect($summaryValues.get(5).innerText).to.contain('Flexible drinks comments')
-                expect($summaryValues.get(6).innerText).to.contain('MOORLAND (HMP & YOI)')
+                expect($summaryValues.get(6).innerText).to.contain('Moorland (HMP & YOI)')
                 expect($summaryValues.get(7).innerText).to.contain('19 May 2020')
                 expect($summaryValues.get(8).innerText).to.contain('Amped telephone comment')
               })

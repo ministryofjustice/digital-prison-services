@@ -89,8 +89,6 @@ describe('prisoner personal', () => {
     prisonApi.getTreatmentTypes = jest.fn().mockResolvedValue([])
     // @ts-expect-error ts-migrate(2339) FIXME: Property 'getHealthTypes' does not exist on type '... Remove this comment to see the full error message
     prisonApi.getHealthTypes = jest.fn().mockResolvedValue([])
-    // @ts-expect-error ts-migrate(2339) FIXME: Property 'getAgencies' does not exist on type '{}'... Remove this comment to see the full error message
-    prisonApi.getAgencies = jest.fn().mockResolvedValue([])
     // @ts-expect-error ts-migrate(2339) FIXME: Property 'getPomByOffenderNo' does not exist on ty... Remove this comment to see the full error message
     allocationManagerApi.getPomByOffenderNo = jest.fn().mockResolvedValue({})
     // @ts-expect-error ts-migrate(2339) FIXME: Property 'getNeurodiversities' does not exist on type '{}'... Remove this comment to see the full error message
@@ -1878,15 +1876,13 @@ describe('prisoner personal', () => {
       prisonApi.getDetails.mockResolvedValue({ bookingId })
     })
 
-    it('should make a call for care needs, adjustments and agencies data', async () => {
+    it('should make a call for care needs, adjustments data', async () => {
       await controller(req, res)
 
       // @ts-expect-error ts-migrate(2339) FIXME: Property 'getPersonalCareNeeds' does not exist on ... Remove this comment to see the full error message
       expect(prisonApi.getPersonalCareNeeds).toHaveBeenCalledWith(res.locals, bookingId, '')
       // @ts-expect-error ts-migrate(2339) FIXME: Property 'getReasonableAdjustments' does not exist... Remove this comment to see the full error message
       expect(prisonApi.getReasonableAdjustments).toHaveBeenCalledWith(res.locals, bookingId, '')
-      // @ts-expect-error ts-migrate(2339) FIXME: Property 'getAgencies' does not exist on type '{}'... Remove this comment to see the full error message
-      expect(prisonApi.getAgencies).toHaveBeenCalledWith(res.locals)
     })
 
     describe('when there is no care needs and adjustments data', () => {
@@ -1961,6 +1957,7 @@ describe('prisoner personal', () => {
               startDate: '2020-05-19',
               endDate: null,
               agencyId: 'MDI',
+              agencyDescription: 'Moorland (HMP & YOI)',
             },
             {
               treatmentCode: 'FLEX_REFRESH',
@@ -1968,6 +1965,7 @@ describe('prisoner personal', () => {
               startDate: '2020-05-01',
               endDate: null,
               agencyId: 'MDI',
+              agencyDescription: 'Moorland (HMP & YOI)',
             },
           ],
         })
@@ -1982,15 +1980,6 @@ describe('prisoner personal', () => {
             domain: 'HEALTH_TREAT',
             code: 'FLEX_REFRESH',
             description: 'Flexible refreshment breaks',
-          },
-        ])
-
-        // @ts-expect-error ts-migrate(2339) FIXME: Property 'getAgencies' does not exist on type '{}'... Remove this comment to see the full error message
-        prisonApi.getAgencies = jest.fn().mockResolvedValue([
-          {
-            agencyId: 'MDI',
-            description: 'MOORLAND (HMP & YOI)',
-            formattedDescription: 'Moorland (HMP & YOI)',
           },
         ])
       })
@@ -2208,24 +2197,6 @@ describe('prisoner personal', () => {
   })
 
   describe('learner neurodivergence information', () => {
-    const prisonerNotAllowedData = {
-      activeAlertCount: 1,
-      agencyId: 'MDI',
-      alerts: [],
-      assignedLivingUnit: {
-        description: 'CELL-123',
-        agencyName: 'Moorland Closed',
-      },
-      bookingId,
-      category: 'Cat C',
-      csra: 'High',
-      csraClassificationCode: 'HI',
-      csraClassificationDate: '2016-11-23',
-      firstName: 'TEST',
-      inactiveAlertCount: 2,
-      lastName: 'PRISONER',
-      assessments: [],
-    }
     beforeEach(() => {
       // @ts-expect-error ts-migrate(2339) FIXME: Property 'getNeurodiversities' does not ex... Remove this comment to see the full error message
       esweService.getNeurodivergence = jest.fn().mockResolvedValue({

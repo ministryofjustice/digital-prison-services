@@ -153,8 +153,6 @@ export const prisonApiFactory = (client) => {
       offenderNumbers
     )
 
-  const getAgencies = (context) => get(context, '/api/agencies/prison')
-
   const getPrisons = (context) => get(context, '/api/agencies/type/INST')
 
   const getAgencyDetails = (context, agencyId) => get(context, `/api/agencies/${agencyId}?activeOnly=false`)
@@ -493,7 +491,6 @@ export const prisonApiFactory = (client) => {
     getAppointments,
     getAppointmentsForAgency,
     getActivities,
-    getAgencies,
     getPrisons,
     getAgencyDetails,
     getStaffDetails,

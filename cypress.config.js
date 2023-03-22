@@ -298,7 +298,6 @@ module.exports = defineConfig({
             prisonApi.stubHealthTypes(healthTypes),
             prisonApi.stubPersonalCareNeeds(careNeeds),
             prisonApi.stubReasonableAdjustments(reasonableAdjustments),
-            prisonApi.stubAgencies(agencies),
             allocationManager.stubGetPomForOffender(prisonOffenderManagers),
             curiousApi.stubLearnerProfiles(neurodiversities),
             curiousApi.stubLearnerNeurodiversity(neurodivergence),
