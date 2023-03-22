@@ -1,7 +1,7 @@
 import moment from 'moment'
 import { sortByDateTime } from '../../../utils'
 
-export default ({ personalCareNeeds, reasonableAdjustments, treatmentTypes, healthTypes, agencies }) => {
+export default ({ personalCareNeeds, reasonableAdjustments, treatmentTypes, healthTypes }) => {
   const healthTypeCodes = healthTypes.map((healthType) => healthType.code)
 
   return {
@@ -28,23 +28,19 @@ export default ({ personalCareNeeds, reasonableAdjustments, treatmentTypes, heal
       reasonableAdjustments &&
       reasonableAdjustments
         .sort((left, right) => sortByDateTime(left.startDate, right.startDate))
-        .map((adjustment) => {
-          const agencyDetails = agencies.find((agency) => agency.agencyId === adjustment.agencyId)
-
-          return {
-            type: treatmentTypes.find((treatment) => treatment.code === adjustment.treatmentCode).description,
-            details: [
-              {
-                label: 'Establishment',
-                value: agencyDetails && (agencyDetails.formattedDescription || agencyDetails.description),
-              },
-              {
-                label: 'Date provided',
-                value: adjustment.startDate && moment(adjustment.startDate).format('DD MMMM YYYY'),
-              },
-              ...(adjustment.commentText ? [{ label: 'Comment', value: adjustment.commentText }] : []),
-            ],
-          }
-        }),
+        .map((adjustment) => ({
+          type: treatmentTypes.find((treatment) => treatment.code === adjustment.treatmentCode).description,
+          details: [
+            {
+              label: 'Establishment',
+              value: adjustment.agencyDescription,
+            },
+            {
+              label: 'Date provided',
+              value: adjustment.startDate && moment(adjustment.startDate).format('DD MMMM YYYY'),
+            },
+            ...(adjustment.commentText ? [{ label: 'Comment', value: adjustment.commentText }] : []),
+          ],
+        })),
   }
 }
