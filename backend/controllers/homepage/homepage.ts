@@ -14,6 +14,7 @@ const {
     manageAdjudications,
     managePrisonVisits,
     legacyPrisonVisits,
+    secureSocialVideoCalls,
     welcomePeopleIntoPrison,
     manageRestrictedPatients,
     checkMyDiary,
@@ -218,6 +219,14 @@ const getTasks = ({ activeCaseLoadId, locations, staffId, whereaboutsConfig, key
       description: 'Respond to online social visit requests.',
       href: legacyPrisonVisits.ui_url,
       enabled: () => legacyPrisonVisits.ui_url && userHasRoles(['PVB_REQUESTS']),
+    },
+    {
+      id: 'secure-social-video-calls',
+      heading: 'Secure social video calls',
+      description:
+        'Manage and monitor secure social video calls with prisoners. Opens the Prison Video Calls application.',
+      href: secureSocialVideoCalls.ui_url,
+      enabled: () => secureSocialVideoCalls.ui_url && userHasRoles(['SOCIAL_VIDEO_CALLS']),
     },
     {
       id: 'check-rule39-mail',

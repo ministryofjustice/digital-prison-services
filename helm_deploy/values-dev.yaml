@@ -55,6 +55,7 @@ generic-service:
    MANAGE_RESTRICTED_PATIENTS_URL: https://manage-restricted-patients-dev.hmpps.service.justice.gov.uk/
    MANAGE_PRISON_VISITS_URL: https://manage-prison-visits-dev.prison.service.justice.gov.uk/
    LEGACY_PRISON_VISITS_URL: https://prison-visits-booking-staff-dev.apps.live.cloud-platform.service.justice.gov.uk/
+   SECURE_SOCIAL_VIDEO_CALLS_URL: https://auth.dev.prisonvideo.com/accounts/login/oauth/redirect/
    CALCULATE_RELEASE_DATES_URL: https://calculate-release-dates-dev.hmpps.service.justice.gov.uk
    SEND_LEGAL_MAIL_URL: https://check-rule39-mail-dev.prison.service.justice.gov.uk
    WELCOME_PEOPLE_INTO_PRISON_URL: https://welcome-dev.prison.service.justice.gov.uk/
