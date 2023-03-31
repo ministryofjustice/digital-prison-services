@@ -22,6 +22,7 @@ describe('Homepage', () => {
     config.apis.manageRestrictedPatients.ui_url = undefined
     config.apis.managePrisonVisits.ui_url = undefined
     config.apis.legacyPrisonVisits.ui_url = undefined
+    config.apis.secureSocialVideoCalls.ui_url = undefined
     config.applications.sendLegalMail.url = undefined
     config.apis.welcomePeopleIntoPrison.enabled_prisons = undefined
     config.apis.welcomePeopleIntoPrison.url = undefined
@@ -252,6 +253,28 @@ describe('Homepage', () => {
               href: 'http://legacy-prison-visit-url',
               heading: 'Online visit requests',
               description: 'Respond to online social visit requests.',
+            }),
+          ],
+        })
+      )
+    })
+
+    it('should render home page with the secure social prison visits tile', async () => {
+      oauthApi.userRoles.mockReturnValue([{ roleCode: 'SOCIAL_VIDEO_CALLS' }])
+      config.apis.secureSocialVideoCalls.ui_url = 'http://secure-social-video-calls-url'
+
+      await controller(req, res)
+
+      expect(res.render).toHaveBeenCalledWith(
+        'homepage/homepage.njk',
+        expect.objectContaining({
+          tasks: [
+            expect.objectContaining({
+              id: 'secure-social-video-calls',
+              href: 'http://secure-social-video-calls-url',
+              heading: 'Secure social video calls',
+              description:
+                'Manage and monitor secure social video calls with prisoners. Opens the Prison Video Calls application.',
             }),
           ],
         })

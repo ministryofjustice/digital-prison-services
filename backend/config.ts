@@ -181,6 +181,9 @@ export const apis = {
   legacyPrisonVisits: {
     ui_url: process.env.LEGACY_PRISON_VISITS_URL || '',
   },
+  secureSocialVideoCalls: {
+    ui_url: process.env.SECURE_SOCIAL_VIDEO_CALLS_URL || '',
+  },
   createAndVaryALicence: {
     url: process.env.CREATE_AND_VARY_A_LICENCE_URL,
     enabled_prisons: process.env.CREATE_AND_VARY_A_LICENCE_ENABLED_PRISONS || '',
