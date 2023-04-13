@@ -1,7 +1,6 @@
 import express from 'express'
 import bunyanMiddleware from 'bunyan-middleware'
 import helmet from 'helmet'
-import noCache from 'nocache'
 import config from './config'
 import log from './log'
 import ensureHttps from './middleware/ensureHttps'
@@ -33,9 +32,6 @@ export default () => {
   if (config.app.production) {
     router.use(ensureHttps)
   }
-
-  // Don't cache dynamic resources
-  router.use(noCache())
 
   return router
 }
