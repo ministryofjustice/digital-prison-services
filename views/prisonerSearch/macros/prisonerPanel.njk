@@ -1,6 +1,6 @@
 {% macro prisonerPanel(offenderNo, name, cell, encodedOriginalUrl) %}
   <div class="prisoner-panel">
-    <img src="{{ '/app/images/' + offenderNo + '/data' }}" alt="{{ 'Image of ' + name }}" class="prisoner-panel__image" />
+    <img src="{{ '/app/images/' + offenderNo + '/data' }}" alt="{{ 'Image of ' + name }}" class="prisoner-panel__image" loading="lazy" />
     <div class="prisoner-panel__details">
       <a href="{{ '/save-backlink?service=digital-prison-services&returnPath=' + encodedOriginalUrl + '&redirectPath=/prisoner/' + offenderNo }}" class="govuk-link  govuk-!-font-size-19" data-test="prisoner-profile-link">{{ name }}</a>
       <p class="govuk-body govuk-!-margin-bottom-0">{{ offenderNo }}</p>
