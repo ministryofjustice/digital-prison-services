@@ -38,6 +38,7 @@ export const imageFactory = (prisonApi) => {
       prisonApi
         .getPrisonerImage(res.locals, offenderNo, fullSizeImage)
         .then((data) => {
+          res.set('Cache-control', 'private, max-age=86400')
           res.type('image/jpeg')
           data.pipe(res)
         })
