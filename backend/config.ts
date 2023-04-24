@@ -235,6 +235,9 @@ export const notifications = {
     PNI: {
       omu: process.env.PRESTON_OMU_EMAIL,
     },
+    BZI: {
+      omu: process.env.BRONZEFIELD_OMU_EMAIL,
+    },
   },
 }
 
