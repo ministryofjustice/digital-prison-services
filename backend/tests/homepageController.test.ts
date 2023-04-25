@@ -422,6 +422,7 @@ describe('Homepage', () => {
       beforeEach(() => {
         keyworkerApi.getPrisonMigrationStatus = jest.fn().mockResolvedValue({ migrated: false })
       })
+
       it('should not show the manage key workers link', async () => {
         oauthApi.userRoles.mockReturnValue([{ roleCode: 'OMIC_ADMIN' }])
         await controller(req, res)
@@ -744,13 +745,48 @@ describe('Homepage', () => {
         )
       })
     })
-  })
 
-  it('should render home page with the send legal mail task', () => {
-    config.applications.sendLegalMail.url = 'http://check-rule39-mail'
+    it('should render home page with the send legal mail task', () => {
+      config.applications.sendLegalMail.url = 'http://check-rule39-mail'
 
-    Array.of('SLM_SCAN_BARCODE', 'SLM_ADMIN').forEach(async (roleCode) => {
-      oauthApi.userRoles.mockReturnValue([{ roleCode }])
+      Array.of('SLM_SCAN_BARCODE', 'SLM_ADMIN').forEach(async (roleCode) => {
+        oauthApi.userRoles.mockReturnValue([{ roleCode }])
+
+        await controller(req, res)
+
+        expect(res.render).toHaveBeenCalledWith(
+          'homepage/homepage.njk',
+          expect.objectContaining({
+            tasks: [
+              {
+                id: 'check-rule39-mail',
+                heading: 'Check Rule 39 mail',
+                description: 'Scan barcodes on mail from law firms and other approved senders.',
+                href: 'http://check-rule39-mail',
+              },
+            ],
+          })
+        )
+      })
+    })
+
+    it('should not display the Welcome people into prison task on the home page', async () => {
+      config.apis.welcomePeopleIntoPrison.url = 'https://welcome.prison.service.justice.gov.uk'
+      config.apis.welcomePeopleIntoPrison.enabled_prisons = 'LEI, NMI'
+
+      await controller(req, res)
+
+      expect(res.render).toHaveBeenCalledWith(
+        'homepage/homepage.njk',
+        expect.objectContaining({
+          tasks: [],
+        })
+      )
+    })
+
+    it('should display the Welcome people into prison task on the home page', async () => {
+      config.apis.welcomePeopleIntoPrison.url = 'https://wpipUrl.prison.service.justice.gov.uk'
+      config.apis.welcomePeopleIntoPrison.enabled_prisons = 'LEI,NMI,MDI'
 
       await controller(req, res)
 
@@ -759,101 +795,69 @@ describe('Homepage', () => {
         expect.objectContaining({
           tasks: [
             {
-              id: 'check-rule39-mail',
-              heading: 'Check Rule 39 mail',
-              description: 'Scan barcodes on mail from law firms and other approved senders.',
-              href: 'http://check-rule39-mail',
+              description: 'View prisoners booked to arrive today and add them to the establishment roll.',
+              heading: 'Welcome people into prison',
+              href: 'https://wpipUrl.prison.service.justice.gov.uk',
+              id: 'welcome-people-into-prison',
             },
           ],
         })
       )
     })
-  })
-  it('should not display the Welcome people into prison task on the home page', async () => {
-    config.apis.welcomePeopleIntoPrison.url = 'https://welcome.prison.service.justice.gov.uk'
-    config.apis.welcomePeopleIntoPrison.enabled_prisons = 'LEI, NMI'
 
-    await controller(req, res)
+    it('should not display the Manage Restricted Patients task on the homepage if none of the correct roles are present', async () => {
+      config.apis.manageRestrictedPatients.ui_url = 'http://manage-restricted-patients-url'
+      oauthApi.userRoles.mockReturnValue([])
+      await controller(req, res)
 
-    expect(res.render).toHaveBeenCalledWith(
-      'homepage/homepage.njk',
-      expect.objectContaining({
-        tasks: [],
-      })
-    )
-  })
+      expect(res.render).toHaveBeenCalledWith(
+        'homepage/homepage.njk',
+        expect.objectContaining({
+          tasks: [],
+        })
+      )
+    })
 
-  it('should display the Welcome people into prison task on the home page', async () => {
-    config.apis.welcomePeopleIntoPrison.url = 'https://wpipUrl.prison.service.justice.gov.uk'
-    config.apis.welcomePeopleIntoPrison.enabled_prisons = 'LEI,NMI,MDI'
+    it('should display the Manage Restricted Patients task on the homepage if any of the correct roles are present', async () => {
+      config.apis.manageRestrictedPatients.ui_url = 'http://manage-restricted-patients-url'
+      oauthApi.userRoles.mockReturnValue([
+        { roleCode: 'SEARCH_RESTRICTED_PATIENT' },
+        { roleCode: 'TRANSFER_RESTRICTED_PATIENT' },
+      ])
 
-    await controller(req, res)
+      await controller(req, res)
 
-    expect(res.render).toHaveBeenCalledWith(
-      'homepage/homepage.njk',
-      expect.objectContaining({
-        tasks: [
-          {
-            description: 'View prisoners booked to arrive today and add them to the establishment roll.',
-            heading: 'Welcome people into prison',
-            href: 'https://wpipUrl.prison.service.justice.gov.uk',
-            id: 'welcome-people-into-prison',
-          },
-        ],
-      })
-    )
-  })
+      expect(res.render).toHaveBeenCalledWith(
+        'homepage/homepage.njk',
+        expect.objectContaining({
+          tasks: [
+            expect.objectContaining({
+              id: 'manage-restricted-patients',
+              href: 'http://manage-restricted-patients-url',
+            }),
+          ],
+        })
+      )
+    })
 
-  it('should not display the Manage Restricted Patients task on the homepage if none of the correct roles are present', async () => {
-    config.apis.manageRestrictedPatients.ui_url = 'http://manage-restricted-patients-url'
-    oauthApi.userRoles.mockReturnValue([])
-    await controller(req, res)
+    it('should display the Manage Restricted Patients task on the homepage if the migration role is present', async () => {
+      config.apis.manageRestrictedPatients.ui_url = 'http://manage-restricted-patients-url'
+      oauthApi.userRoles.mockReturnValue([{ roleCode: 'RESTRICTED_PATIENT_MIGRATION' }])
 
-    expect(res.render).toHaveBeenCalledWith(
-      'homepage/homepage.njk',
-      expect.objectContaining({
-        tasks: [],
-      })
-    )
-  })
-  it('should display the Manage Restricted Patients task on the homepage if any of the correct roles are present', async () => {
-    config.apis.manageRestrictedPatients.ui_url = 'http://manage-restricted-patients-url'
-    oauthApi.userRoles.mockReturnValue([
-      { roleCode: 'SEARCH_RESTRICTED_PATIENT' },
-      { roleCode: 'TRANSFER_RESTRICTED_PATIENT' },
-    ])
+      await controller(req, res)
 
-    await controller(req, res)
-
-    expect(res.render).toHaveBeenCalledWith(
-      'homepage/homepage.njk',
-      expect.objectContaining({
-        tasks: [
-          expect.objectContaining({
-            id: 'manage-restricted-patients',
-            href: 'http://manage-restricted-patients-url',
-          }),
-        ],
-      })
-    )
-  })
-  it('should display the Manage Restricted Patients task on the homepage if the migration role is present', async () => {
-    config.apis.manageRestrictedPatients.ui_url = 'http://manage-restricted-patients-url'
-    oauthApi.userRoles.mockReturnValue([{ roleCode: 'RESTRICTED_PATIENT_MIGRATION' }])
-
-    await controller(req, res)
-
-    expect(res.render).toHaveBeenCalledWith(
-      'homepage/homepage.njk',
-      expect.objectContaining({
-        tasks: [
-          expect.objectContaining({
-            id: 'manage-restricted-patients',
-            href: 'http://manage-restricted-patients-url',
-          }),
-        ],
-      })
-    )
+      expect(res.render).toHaveBeenCalledWith(
+        'homepage/homepage.njk',
+        expect.objectContaining({
+          tasks: [
+            expect.objectContaining({
+              id: 'manage-restricted-patients',
+              href: 'http://manage-restricted-patients-url',
+            }),
+          ],
+        })
+      )
+    })
   })
 
   describe('Tasks behind feature flags', () => {
