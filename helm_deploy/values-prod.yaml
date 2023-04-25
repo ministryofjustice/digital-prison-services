@@ -22,7 +22,6 @@ generic-service:
    CHECK_MY_DIARY_URL: https://checkmydiary.service.justice.gov.uk?fromDPS=true
    INCENTIVES_URL: https://incentives-ui.hmpps.service.justice.gov.uk
    INCENTIVES_API_ENDPOINT_URL: https://incentives-api.hmpps.service.justice.gov.uk
-   INCENTIVES_EXCLUDED_CASELOADS: "CADM_I"
    TOKENVERIFICATION_API_URL: https://token-verification-api.prison.service.justice.gov.uk
    CASENOTES_API_URL: https://offender-case-notes.service.justice.gov.uk/
    ALLOCATION_MANAGER_ENDPOINT_URL: https://moic.service.justice.gov.uk/

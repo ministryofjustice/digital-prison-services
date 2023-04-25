@@ -608,7 +608,7 @@ describe('Homepage', () => {
       expect(res.redirect).toHaveBeenCalledWith('/videolink')
     })
 
-    describe('Manage incentives tile', () => {
+    describe('Manage incentives', () => {
       beforeEach(() => {
         config.apis.incentives.ui_url = 'http://incentives'
         prisonApi.userLocations.mockResolvedValue([
@@ -617,96 +617,61 @@ describe('Homepage', () => {
         ])
       })
 
-      it('should not render home page with the Incentives tile if user has excluded caseload selected', async () => {
-        config.apis.incentives.excludedCaseloads = 'CADM_I'
-        req = {
-          session: {
-            userDetails: {
-              staffId: 1,
-              activeCaseLoadId: 'CADM_I',
-            },
-          },
-        }
-
+      const expectManageIncentivesTaskToNotBeVisible = async () => {
         await controller(req, res)
-
-        // we get Establishment roll check as we have > 0 locations
         expect(res.render).toHaveBeenCalledWith(
           'homepage/homepage.njk',
           expect.objectContaining({
-            tasks: [
-              {
-                id: 'establishment-roll',
-                heading: 'Establishment roll check',
-                description: 'View the roll broken down by residential unit and see who is arriving and leaving.',
-                href: '/establishment-roll',
-              },
-            ],
-          })
-        )
-
-        // set this back to empty list
-        config.apis.incentives.excludedCaseloads = ''
-      })
-
-      it('should not render home page with the Incentives tile if user has no locations', async () => {
-        // user has no locations
-        prisonApi.userLocations.mockResolvedValue([])
-
-        await controller(req, res)
-
-        expect(res.render).toHaveBeenCalledWith(
-          'homepage/homepage.njk',
-          expect.objectContaining({
-            tasks: [],
-          })
-        )
-      })
-
-      it('should not render home page with the Incentives tile if incentives URL not provided', async () => {
-        config.apis.incentives.ui_url = null
-
-        await controller(req, res)
-
-        // we get Establishment roll check as we have > 0 locations
-        expect(res.render).toHaveBeenCalledWith(
-          'homepage/homepage.njk',
-          expect.objectContaining({
-            tasks: [
-              {
-                id: 'establishment-roll',
-                heading: 'Establishment roll check',
-                description: 'View the roll broken down by residential unit and see who is arriving and leaving.',
-                href: '/establishment-roll',
-              },
-            ],
-          })
-        )
-      })
-
-      it('should render home page with the Incentives tile if user has valid caseload and at least one location', async () => {
-        await controller(req, res)
-
-        expect(res.render).toHaveBeenCalledWith(
-          'homepage/homepage.njk',
-          expect.objectContaining({
-            tasks: [
+            tasks: expect.not.arrayContaining([
               {
                 id: 'incentives',
                 heading: 'Manage incentives',
                 href: 'http://incentives',
-                description:
-                  'See prisoner incentive information by residential location and view incentive data visualisations.',
+                description: expect.any(String),
               },
-              {
-                id: 'establishment-roll',
-                heading: 'Establishment roll check',
-                description: 'View the roll broken down by residential unit and see who is arriving and leaving.',
-                href: '/establishment-roll',
-              },
-            ],
+            ]),
           })
         )
+      }
+
+      const expectManageIncentivesTaskToBeVisible = async () => {
+        await controller(req, res)
+        expect(res.render).toHaveBeenCalledWith(
+          'homepage/homepage.njk',
+          expect.objectContaining({
+            tasks: expect.arrayContaining([
+              {
+                id: 'incentives',
+                heading: 'Manage incentives',
+                href: 'http://incentives',
+                description: expect.any(String),
+              },
+            ]),
+          })
+        )
+      }
+
+      it('should not render home page with the Incentives tile if user has no locations nor central admin role', async () => {
+        prisonApi.userLocations.mockResolvedValue([])
+
+        return expectManageIncentivesTaskToNotBeVisible()
+      })
+
+      it('should not render home page with the Incentives tile if incentives URL not provided', async () => {
+        config.apis.incentives.ui_url = undefined
+
+        return expectManageIncentivesTaskToNotBeVisible()
+      })
+
+      it('should render home page with the Incentives tile if user has at least one location', async () => {
+        return expectManageIncentivesTaskToBeVisible()
+      })
+
+      it('should render home page with the Incentives tile if user has no locations but does have central admin role', async () => {
+        prisonApi.userLocations.mockResolvedValue([])
+        oauthApi.userRoles.mockReturnValue([{ roleCode: 'MAINTAIN_INCENTIVE_LEVELS' }])
+
+        return expectManageIncentivesTaskToBeVisible()
       })
     })
 

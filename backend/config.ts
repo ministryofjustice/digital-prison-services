@@ -118,7 +118,6 @@ export const apis = {
   },
   incentives: {
     ui_url: process.env.INCENTIVES_URL,
-    excludedCaseloads: process.env.INCENTIVES_EXCLUDED_CASELOADS || '',
   },
   calculateReleaseDates: {
     ui_url: process.env.CALCULATE_RELEASE_DATES_URL,

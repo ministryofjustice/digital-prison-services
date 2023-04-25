@@ -26,7 +26,6 @@ generic-service:
    CHECK_MY_DIARY_URL: https://check-my-diary-dev.prison.service.justice.gov.uk?fromDPS=true
    INCENTIVES_URL: https://incentives-ui-dev.hmpps.service.justice.gov.uk
    INCENTIVES_API_ENDPOINT_URL: https://incentives-api-dev.hmpps.service.justice.gov.uk
-   INCENTIVES_EXCLUDED_CASELOADS: "CADM_I"
    TOKENVERIFICATION_API_URL: https://token-verification-api-dev.prison.service.justice.gov.uk
    CASENOTES_API_URL: https://dev.offender-case-notes.service.justice.gov.uk/
    ALLOCATION_MANAGER_ENDPOINT_URL: https://dev.moic.service.justice.gov.uk/
@@ -66,4 +65,3 @@ generic-service:
    KEYWORKER_MAINTENANCE_MODE: false
    GET_SOMEONE_READY_FOR_WORK_URL: https://get-ready-for-work-dev.hmpps.service.justice.gov.uk
    WARRANT_FOLDER_URL: https://manage-a-warrant-folder-dev.hmpps.service.justice.gov.uk/
-

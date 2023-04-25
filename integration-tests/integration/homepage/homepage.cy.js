@@ -221,10 +221,7 @@ context('Homepage', () => {
       page.incentives().tile().should('exist')
       page.incentives().title().contains('Manage incentives')
       page.incentives().link().should('exist')
-      page
-        .incentives()
-        .description()
-        .contains('See prisoner incentive information by residential location and view incentive data visualisations.')
+      page.incentives().description().should('exist')
     })
 
     it('should show get someone ready to work', () => {
