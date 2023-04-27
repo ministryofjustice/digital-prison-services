@@ -1,8 +1,15 @@
 import * as appInsights from 'applicationinsights'
+import { EnvelopeTelemetry } from 'applicationinsights/out/Declarations/Contracts'
+import { Contracts } from 'applicationinsights'
 import applicationVersion from './application-version'
 import ignoreNotFoundErrors from './telemetryProcessors/ignoreNotFound'
 
 const { packageData, buildNumber } = applicationVersion
+
+export type ContextObject = {
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  [name: string]: any
+}
 
 export default (() => {
   if (process.env.APPINSIGHTS_INSTRUMENTATIONKEY) {
@@ -16,3 +23,20 @@ export default (() => {
   }
   return null
 })()
+
+export function addUserDataToRequests(envelope: EnvelopeTelemetry, contextObjects: ContextObject) {
+  const isRequest = envelope.data.baseType === Contracts.TelemetryTypeString.Request
+  if (isRequest) {
+    const { username, activeCaseLoadId } = contextObjects?.['http.ServerRequest']?.res?.locals?.user || {}
+    if (username) {
+      const { properties } = envelope.data.baseData
+      // eslint-disable-next-line no-param-reassign
+      envelope.data.baseData.properties = {
+        username,
+        activeCaseLoadId,
+        ...properties,
+      }
+    }
+  }
+  return true
+}
