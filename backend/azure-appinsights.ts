@@ -19,6 +19,7 @@ export default (() => {
     appInsights.defaultClient.context.tags['ai.cloud.role'] = packageData.name
     appInsights.defaultClient.context.tags['ai.application.ver'] = buildNumber
     appInsights.defaultClient.addTelemetryProcessor(ignoreNotFoundErrors)
+    appInsights.defaultClient.addTelemetryProcessor(addUserDataToRequests)
     return appInsights.defaultClient
   }
   return null
