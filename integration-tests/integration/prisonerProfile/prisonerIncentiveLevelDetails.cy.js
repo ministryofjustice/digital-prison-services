@@ -1,4 +1,5 @@
 import moment from 'moment'
+
 const offenderBasicDetails = require('../../mockApis/responses/offenderBasicDetails.json')
 
 const title = 'Incentive level details for John Smith'
