@@ -16,6 +16,7 @@ describe('Current user', () => {
 
     // @ts-expect-error ts-migrate(2339) FIXME: Property 'currentUser' does not exist on type '{}'... Remove this comment to see the full error message
     oauthApi.currentUser.mockReturnValue({
+      username: 'BSMITH',
       name: 'Bob Smith',
       activeCaseLoadId: 'MDI',
     })
@@ -35,6 +36,7 @@ describe('Current user', () => {
     // @ts-expect-error ts-migrate(2339) FIXME: Property 'currentUser' does not exist on type '{}'... Remove this comment to see the full error message
     expect(oauthApi.currentUser).toHaveBeenCalled()
     expect(req.session.userDetails).toEqual({
+      username: 'BSMITH',
       name: 'Bob Smith',
       activeCaseLoadId: 'MDI',
     })
@@ -56,6 +58,7 @@ describe('Current user', () => {
     await controller(req, res, () => {})
 
     expect(res.locals.user).toEqual({
+      username: 'BSMITH',
       allCaseloads: [
         {
           caseLoadId: 'MDI',
@@ -88,6 +91,7 @@ describe('Current user', () => {
   it('should default active caseload when not set', async () => {
     // @ts-expect-error ts-migrate(2339) FIXME: Property 'currentUser' does not exist on type '{}'... Remove this comment to see the full error message
     oauthApi.currentUser.mockReturnValue({
+      username: 'BSMITH',
       name: 'Bob Smith',
       activeCaseLoadId: null,
     })
@@ -101,6 +105,7 @@ describe('Current user', () => {
     // @ts-expect-error ts-migrate(2339) FIXME: Property 'setActiveCaseload' does not exist on typ... Remove this comment to see the full error message
     expect(prisonApi.setActiveCaseload).toHaveBeenCalledWith(res.locals, { caseLoadId: 'MDI', description: 'Moorland' })
     expect(req.session.userDetails).toEqual({
+      username: 'BSMITH',
       name: 'Bob Smith',
       activeCaseLoadId: 'MDI',
     })
@@ -109,6 +114,7 @@ describe('Current user', () => {
   it('should not set caseload when already set', async () => {
     // @ts-expect-error ts-migrate(2339) FIXME: Property 'currentUser' does not exist on type '{}'... Remove this comment to see the full error message
     oauthApi.currentUser.mockReturnValue({
+      username: 'BSMITH',
       name: 'Bob Smith',
       activeCaseLoadId: 'MDI',
     })
@@ -117,7 +123,7 @@ describe('Current user', () => {
 
     req = {
       session: {
-        userDetails: { activeCaseLoadId: 'MDI', name: 'Bob Smith' },
+        userDetails: { username: 'BSMITH', activeCaseLoadId: 'MDI', name: 'Bob Smith' },
         allCaseloads: [{ caseLoadId: 'MDI', description: 'Moorland' }],
       },
     }
@@ -129,6 +135,7 @@ describe('Current user', () => {
     // @ts-expect-error ts-migrate(2339) FIXME: Property 'setActiveCaseload' does not exist on typ... Remove this comment to see the full error message
     expect(prisonApi.setActiveCaseload).not.toHaveBeenCalled()
     expect(req.session.userDetails).toEqual({
+      username: 'BSMITH',
       name: 'Bob Smith',
       activeCaseLoadId: 'MDI',
     })
