@@ -760,7 +760,8 @@ describe('Homepage', () => {
         expect.objectContaining({
           tasks: [
             {
-              description: 'View prisoners booked to arrive today and add them to the establishment roll.',
+              description:
+                'View prisoners booked to arrive today, add them to the establishment roll, and manage reception tasks for recent arrivals.',
               heading: 'Welcome people into prison',
               href: 'https://wpipUrl.prison.service.justice.gov.uk',
               id: 'welcome-people-into-prison',

@@ -235,7 +235,8 @@ const getTasks = ({ activeCaseLoadId, locations, staffId, whereaboutsConfig, key
     {
       id: 'welcome-people-into-prison',
       heading: 'Welcome people into prison',
-      description: 'View prisoners booked to arrive today and add them to the establishment roll.',
+      description:
+        'View prisoners booked to arrive today, add them to the establishment roll, and manage reception tasks for recent arrivals.',
       href: welcomePeopleIntoPrison.url,
       roles: null,
       enabled: () =>

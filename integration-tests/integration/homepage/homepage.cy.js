@@ -118,7 +118,9 @@ context('Homepage', () => {
       page
         .welcomePeopleIntoPrison()
         .description()
-        .contains('View prisoners booked to arrive today and add them to the establishment roll')
+        .contains(
+          'View prisoners booked to arrive today, add them to the establishment roll, and manage reception tasks for recent arrivals.'
+        )
     })
 
     it('should show establishment roll', () => {
