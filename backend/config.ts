@@ -22,6 +22,11 @@ export const app = {
   disableRequestLimiter: process.env.DISABLE_REQUEST_LIMITER ? process.env.DISABLE_REQUEST_LIMITER === 'true' : false,
   whereaboutsMaintenanceMode: process.env.WHEREABOUTS_MAINTENANCE_MODE === 'true' || false,
   keyworkerMaintenanceMode: process.env.KEYWORKER_MAINTENANCE_MODE === 'true' || false,
+  prisonerProfileRedirect: {
+    url: process.env.PRISONER_PROFILE_REDIRECT_URL,
+    enabled: process.env.PRISONER_PROFILE_REDIRECT_ENABLED === 'true' || false,
+    enabled_prisons: process.env.PRISONER_PROFILE_REDIRECT_ENABLED_PRISONS || '',
+  },
 }
 
 export const analytics = {

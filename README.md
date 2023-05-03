@@ -3,6 +3,7 @@
 Application can be built with for dev mode
 
 ```bash
+npm install
 npm run compile-sass
 npm run start:dev
 ```

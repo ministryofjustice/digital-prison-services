@@ -34,6 +34,7 @@ import coursesQualifications from '../controllers/prisonerProfile/prisonerCourse
 import learnerEmployabilitySkills from '../controllers/prisonerProfile/learnerEmployabilitySkillsDetails'
 import workInsidePrison from '../controllers/prisonerProfile/prisonerWorkInsidePrisonDetails'
 import unacceptableAbsencesDetails from '../controllers/prisonerProfile/unacceptableAbsencesDetails'
+import prisonerProfileRedirect from '../controllers/prisonerProfile/prisonerProfileRedirect'
 
 const router = express.Router({ mergeParams: true })
 
@@ -77,32 +78,41 @@ const controller = ({
 
   router.get(
     '/',
-    prisonerQuickLook({
-      prisonerProfileService,
-      prisonApi,
+    prisonerProfileRedirect({
+      path: '/',
       oauthApi,
-      telemetry,
-      systemOauthClient,
-      incentivesApi,
-      restrictedPatientApi,
-      logError,
+      handler: prisonerQuickLook({
+        prisonerProfileService,
+        prisonApi,
+        oauthApi,
+        telemetry,
+        systemOauthClient,
+        incentivesApi,
+        restrictedPatientApi,
+        logError,
+      }),
     })
   )
-  // @ts-expect-error ts-migrate(2345) FIXME: Argument of type '{ prisonApi: any; logError: any;... Remove this comment to see the full error message
-  router.get('/image', prisonerFullImage({ prisonApi, logError }))
+
+  router.get('/image', prisonerProfileRedirect({ path: '/image', oauthApi, handler: prisonerFullImage({ prisonApi }) }))
+
   router.get(
     '/personal',
-    prisonerPersonal({
-      prisonerProfileService,
-      personService,
-      prisonApi,
-      allocationManagerApi,
-      esweService,
-      systemOauthClient,
+    prisonerProfileRedirect({
+      path: '/personal',
       oauthApi,
-      restrictedPatientApi,
-      // @ts-expect-error ts-migrate(2345) FIXME: Argument of type '{ prisonerProfileService: { getP... Remove this comment to see the full error message
-      logError,
+      handler: prisonerPersonal({
+        prisonerProfileService,
+        personService,
+        prisonApi,
+        allocationManagerApi,
+        esweService,
+        systemOauthClient,
+        oauthApi,
+        restrictedPatientApi,
+        // @ts-expect-error ts-migrate(2345) FIXME: Argument of type '{ prisonerProfileService: { getP... Remove this comment to see the full error message
+        logError,
+      }),
     })
   )
   router.get(
