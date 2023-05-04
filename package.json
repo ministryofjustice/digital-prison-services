@@ -80,7 +80,7 @@
     "nocache": "^2.1.0",
     "nock": "^13.2.8",
     "notifications-node-client": "^7.0.0",
-    "nunjucks": "^3.2.3",
+    "nunjucks": "^3.2.4",
     "passport": "^0.6.0",
     "passport-oauth2": "^1.6.1",
     "path-to-regexp": "^6.2.1",
