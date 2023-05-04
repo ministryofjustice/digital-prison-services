@@ -117,46 +117,65 @@ const controller = ({
   )
   router.get(
     '/alerts',
-    prisonerAlerts({
-      prisonerProfileService,
-      referenceCodesService,
-      paginationService,
-      prisonApi,
+    prisonerProfileRedirect({
+      path: '/alerts',
       oauthApi,
-      systemOauthClient,
-      restrictedPatientApi,
-      // @ts-expect-error ts-migrate(2345) FIXME: Argument of type '{ prisonerProfileService: { getP... Remove this comment to see the full error message
-      logError,
+      handler: prisonerAlerts({
+        prisonerProfileService,
+        referenceCodesService,
+        paginationService,
+        prisonApi,
+        oauthApi,
+        systemOauthClient,
+        restrictedPatientApi,
+        // @ts-expect-error ts-migrate(2345) FIXME: Argument of type '{ prisonerProfileService: { getP... Remove this comment to see the full error message
+        logError,
+      }),
     })
   )
   router.get(
     '/case-notes',
-    prisonerCaseNotes({
-      caseNotesApi,
-      prisonerProfileService,
-      // @ts-expect-error ts-migrate(2345) FIXME: Argument of type '{ caseNotesApi: any; prisonerPro... Remove this comment to see the full error message
-      prisonApi,
-      paginationService,
-      nunjucks,
-      logError,
+    prisonerProfileRedirect({
+      path: '/case-notes',
       oauthApi,
-      systemOauthClient,
-      restrictedPatientApi,
+      handler: prisonerCaseNotes({
+        caseNotesApi,
+        prisonerProfileService,
+        // @ts-expect-error ts-migrate(2345) FIXME: Argument of type '{ caseNotesApi: any; prisonerPro... Remove this comment to see the full error message
+        prisonApi,
+        paginationService,
+        nunjucks,
+        logError,
+        oauthApi,
+        systemOauthClient,
+        restrictedPatientApi,
+      }),
     })
   )
   router.get(
     '/sentence-and-release',
-    prisonerSentenceAndRelease({
-      prisonerProfileService,
-      prisonApi,
-      systemOauthClient,
+    prisonerProfileRedirect({
+      path: '/offences',
       oauthApi,
-      restrictedPatientApi,
-      // @ts-expect-error ts-migrate(2345) FIXME: Argument of type '{ prisonerProfileService: { getP... Remove this comment to see the full error message
-      logError,
+      handler: prisonerSentenceAndRelease({
+        prisonerProfileService,
+        prisonApi,
+        systemOauthClient,
+        oauthApi,
+        restrictedPatientApi,
+        // @ts-expect-error ts-migrate(2345) FIXME: Argument of type '{ prisonerProfileService: { getP... Remove this comment to see the full error message
+        logError,
+      }),
     })
   )
-  router.get('/work-and-skills', prisonerWorkAndSkills({ prisonerProfileService, esweService }))
+  router.get(
+    '/work-and-skills',
+    prisonerProfileRedirect({
+      path: '/work-and-skills',
+      oauthApi,
+      handler: prisonerWorkAndSkills({ prisonerProfileService, esweService }),
+    })
+  )
   router.get('/unacceptable-absences', unacceptableAbsencesDetails({ paginationService, prisonApi, esweService }))
   router.get('/courses-qualifications', coursesQualifications({ paginationService, prisonApi, esweService }))
   router.get('/skills', learnerEmployabilitySkills({ paginationService, prisonApi, esweService }))
