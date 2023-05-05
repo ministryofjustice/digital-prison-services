@@ -912,4 +912,35 @@ context('When a user can view inactive bookings', () => {
   })
 })
 
+context('Test redirects', () => {
+  before(() => {
+    cy.clearCookies()
+    cy.task('reset')
+    cy.task('stubSignIn', {
+      username: 'ITAG_USER',
+      caseload: 'LEI',
+      caseloads: [],
+      roles: ['DPS_APPLICATION_DEVELOPER','ROLE_INACTIVE_BOOKINGS'],
+    })
+    cy.signIn()
+  })
+  beforeEach(() => {
+    cy.task('stubQuickLook', quickLookFullDetails)
+    Cypress.Cookies.preserveOnce('hmpps-session-dev')
+    cy.task('stubPrisonerProfileHeaderData', {
+      offenderBasicDetails,
+      offenderFullDetails: { ...offenderFullDetails, agencyId: 'OUT' },
+      iepSummary: {},
+      caseNoteSummary: {},
+      // userRoles: [{ roleCode: 'INACTIVE_BOOKINGS' }],
+      offenderNo,
+    })
+  })
+
+  it('Should redirect to new profile', () => {
+
+    cy.visit(`/prisoner/${offenderNo}`)
+  })
+})
+
 module.exports = { quickLookFullDetails }

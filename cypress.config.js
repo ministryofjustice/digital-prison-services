@@ -46,7 +46,12 @@ module.exports = defineConfig({
   pageLoadTimeout: 200000,
   viewportWidth: 1024,
   viewportHeight: 768,
+  blockHosts: [
+    "*google-analytics.com",
+    "*googletagmanager.com"
+  ],
   e2e: {
+    experimentalSessionAndOrigin: true,
     setupNodeEvents(on) {
       on('task', {
         ...prisonApi,
