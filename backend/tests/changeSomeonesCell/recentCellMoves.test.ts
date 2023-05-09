@@ -53,7 +53,7 @@ describe('Recent cell moves', () => {
   let res
 
   beforeEach(() => {
-    jest.useFakeTimers('modern')
+    jest.useFakeTimers()
     jest.setSystemTime(new Date('2020-02-07').getTime())
     prisonApi.getHistoryByDate = jest.fn().mockResolvedValue([])
 
