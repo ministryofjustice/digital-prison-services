@@ -6,6 +6,7 @@ const auth = require('./integration-tests/mockApis/auth')
 const prisonApi = require('./integration-tests/mockApis/prisonApi')
 const incentivesApi = require('./integration-tests/mockApis/incentivesApi')
 const dataComplianceApi = require('./integration-tests/mockApis/dataCompliance')
+const prisonerProfile = require('./integration-tests/mockApis/prisonerProfile')
 const whereabouts = require('./integration-tests/mockApis/whereabouts')
 const tokenverification = require('./integration-tests/mockApis/tokenverification')
 const keyworker = require('./integration-tests/mockApis/keyworker')
@@ -46,10 +47,6 @@ module.exports = defineConfig({
   pageLoadTimeout: 200000,
   viewportWidth: 1024,
   viewportHeight: 768,
-  blockHosts: [
-    "*google-analytics.com",
-    "*googletagmanager.com"
-  ],
   e2e: {
     experimentalSessionAndOrigin: true,
     setupNodeEvents(on) {
@@ -536,6 +533,7 @@ module.exports = defineConfig({
         stubGetUnacceptableAbsenceDetail: (args) => whereabouts.stubGetUnacceptableAbsenceDetail(args),
         stubPrisonerSearch: (response) => offenderSearch.stubPrisonerSearch(response),
         stubPrisonerSearchDetails: (response) => offenderSearch.stubPrisonerSearchDetails(response),
+        stubPrisonerProfile: prisonerProfile.stubPrisonerProfile,
       })
     },
 

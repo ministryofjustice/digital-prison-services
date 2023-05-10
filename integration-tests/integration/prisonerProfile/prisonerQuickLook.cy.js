@@ -225,6 +225,10 @@ context('Prisoner quick look data retrieval errors', () => {
     })
 
     cy.task('stubQuickLookApiErrors')
+
+  })
+
+  beforeEach(() => {
     cy.visit(`/prisoner/${offenderNo}`)
   })
 
@@ -916,30 +920,25 @@ context('Test redirects', () => {
   before(() => {
     cy.clearCookies()
     cy.task('reset')
+    cy.task('stubPrisonerProfile')
     cy.task('stubSignIn', {
       username: 'ITAG_USER',
       caseload: 'LEI',
       caseloads: [],
-      roles: ['DPS_APPLICATION_DEVELOPER','ROLE_INACTIVE_BOOKINGS'],
+      roles: [],
     })
     cy.signIn()
   })
   beforeEach(() => {
-    cy.task('stubQuickLook', quickLookFullDetails)
     Cypress.Cookies.preserveOnce('hmpps-session-dev')
-    cy.task('stubPrisonerProfileHeaderData', {
-      offenderBasicDetails,
-      offenderFullDetails: { ...offenderFullDetails, agencyId: 'OUT' },
-      iepSummary: {},
-      caseNoteSummary: {},
-      // userRoles: [{ roleCode: 'INACTIVE_BOOKINGS' }],
-      offenderNo,
-    })
   })
 
   it('Should redirect to new profile', () => {
+    cy.origin('http://localhost:9191', () => {
+      cy.visit('http://localhost:3008/prisoner/${offenderNo}')
 
-    cy.visit(`/prisoner/${offenderNo}`)
+      cy.get('h1').should('contain.text', 'New Prisoner Profile!')
+    })
   })
 })
 

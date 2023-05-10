@@ -170,8 +170,12 @@ context('Prisoner personal', () => {
         offenderNo,
       })
       cy.task('stubPersonal', {})
+    })
+
+    beforeEach(() => {
       visitPersonalAndExpandAccordions()
     })
+
 
     context('Personal section', () => {
       it('Should show correct labels and values', () => {
