@@ -9,7 +9,7 @@ const stubPrisonerProfile = () =>
     response: {
       status: 200,
       headers: { 'Content-Type': 'text/html' },
-      body: '<html><body><h1>New Prisoner Profile!</h1></body></html>',
+      body: '<html><body><h1>New Prisoner Profile!</h1><h3>Overview Page</h3></body></html>',
     },
   })
 

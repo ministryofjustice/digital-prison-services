@@ -369,6 +369,7 @@ context('Prisoner quick look', () => {
         caseNoteSummary: {},
         offenderNo,
       })
+      cy.visit(`/prisoner/${offenderNo}`)
     })
 
     it('Should show correct tabs', () => {
@@ -916,7 +917,7 @@ context('When a user can view inactive bookings', () => {
   })
 })
 
-context('Test redirects', () => {
+context('Current prisoner profile should redirect to the new prisoner profile', () => {
   before(() => {
     cy.clearCookies()
     cy.task('reset')
@@ -931,9 +932,18 @@ context('Test redirects', () => {
   })
   beforeEach(() => {
     Cypress.Cookies.preserveOnce('hmpps-session-dev')
+    cy.task('stubPrisonerProfileHeaderData', {
+      offenderBasicDetails,
+      offenderFullDetails: { ...offenderFullDetails, agencyId: 'OUT' },
+      iepSummary: {},
+      caseNoteSummary: {},
+      // userRoles: [{ roleCode: 'INACTIVE_BOOKINGS' }],
+      offenderNo,
+    })
+    
   })
 
-  it('Should redirect to new profile', () => {
+  it.only('Should redirect to new prisoner profile', () => {
     cy.origin('http://localhost:9191', () => {
       cy.visit('http://localhost:3008/prisoner/${offenderNo}')
 
