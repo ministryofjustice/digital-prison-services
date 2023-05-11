@@ -225,6 +225,10 @@ context('Prisoner quick look data retrieval errors', () => {
     })
 
     cy.task('stubQuickLookApiErrors')
+
+  })
+
+  beforeEach(() => {
     cy.visit(`/prisoner/${offenderNo}`)
   })
 
@@ -365,6 +369,7 @@ context('Prisoner quick look', () => {
         caseNoteSummary: {},
         offenderNo,
       })
+      cy.visit(`/prisoner/${offenderNo}`)
     })
 
     it('Should show correct tabs', () => {
@@ -912,20 +917,20 @@ context('When a user can view inactive bookings', () => {
   })
 })
 
-context('Test redirects', () => {
+context('Current prisoner profile should redirect to the new prisoner profile', () => {
   before(() => {
     cy.clearCookies()
     cy.task('reset')
+    cy.task('stubPrisonerProfile')
     cy.task('stubSignIn', {
       username: 'ITAG_USER',
       caseload: 'LEI',
       caseloads: [],
-      roles: ['DPS_APPLICATION_DEVELOPER','ROLE_INACTIVE_BOOKINGS'],
+      roles: [],
     })
     cy.signIn()
   })
   beforeEach(() => {
-    cy.task('stubQuickLook', quickLookFullDetails)
     Cypress.Cookies.preserveOnce('hmpps-session-dev')
     cy.task('stubPrisonerProfileHeaderData', {
       offenderBasicDetails,
@@ -935,10 +940,15 @@ context('Test redirects', () => {
       // userRoles: [{ roleCode: 'INACTIVE_BOOKINGS' }],
       offenderNo,
     })
+    
   })
 
-  it('Should display conditionally displayed links to other pages', () => {
-    cy.visit(`/prisoner/${offenderNo}`)
+  it.only('Should redirect to new prisoner profile', () => {
+    cy.origin('http://localhost:9191', () => {
+      cy.visit('http://localhost:3008/prisoner/${offenderNo}')
+
+      cy.get('h1').should('contain.text', 'New Prisoner Profile!')
+    })
   })
 })
 
