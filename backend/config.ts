@@ -4,13 +4,13 @@ const toNumber = (value: string | undefined): number | undefined => {
 }
 
 export const app = {
-  port: process.env.PORT || 3002,
+  port: process.env.PORT || 3000,
   production: process.env.NODE_ENV === 'production',
   disableWebpack: process.env.DISABLE_WEBPACK === 'true',
   licencesUrl: process.env.LICENCES_URL || 'http://localhost:3003/',
   mailTo: process.env.MAIL_TO || 'feedback@digital.justice.gov.uk',
   tokenRefreshThresholdSeconds: toNumber(process.env.TOKEN_REFRESH_THRESHOLD_SECONDS) || 60,
-  url: process.env.PRISON_STAFF_HUB_UI_URL || `http://localhost:${process.env.PORT || 3002}/`,
+  url: process.env.PRISON_STAFF_HUB_UI_URL || `http://localhost:${process.env.PORT || 3000}/`,
   maximumFileUploadSizeInMb: toNumber(process.env.MAXIMUM_FILE_UPLOAD_SIZE_IN_MB) || 200,
   displayRetentionLink: process.env.DISPLAY_RETENTION_LINK === 'true' || false,
   supportUrl: process.env.SUPPORT_URL || 'http://localhost:3000/',

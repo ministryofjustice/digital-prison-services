@@ -937,8 +937,7 @@ context('Test redirects', () => {
     })
   })
 
-  it('Should redirect to new profile', () => {
-
+  it('Should display conditionally displayed links to other pages', () => {
     cy.visit(`/prisoner/${offenderNo}`)
   })
 })
