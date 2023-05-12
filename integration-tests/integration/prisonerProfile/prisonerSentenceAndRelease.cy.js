@@ -181,15 +181,15 @@ context('Prisoner sentence and release', () => {
       .find('dt')
       .then(($summaryKeys) => {
         expect($summaryKeys.get(0).textContent).to.contain('Tariff')
-        expect($summaryKeys.get(1).innerText).to.contain('Late transfer')
+        expect($summaryKeys.get(1).textContent).to.contain('Late transfer')
       })
 
     prisonerSentenceAndReleasePage
       .otherReleaseDates()
       .find('dd')
       .then(($summaryValues) => {
-        expect($summaryValues.get(0).innerText).to.contain('7 May 2021')
-        expect($summaryValues.get(1).innerText).to.contain('11 August 2021')
+        expect($summaryValues.get(0).textContent).to.contain('7 May 2021')
+        expect($summaryValues.get(1).textContent).to.contain('11 August 2021')
       })
   })
 
@@ -249,11 +249,11 @@ context('Prisoner sentence and release', () => {
       .find('dd')
       .then(($summaryValues) => {
         expect($summaryValues.get(0).textContent.trim()).to.eq('1')
-        expect($summaryValues.get(1).innerText.trim()).to.eq('3')
-        expect($summaryValues.get(2).innerText.trim()).to.eq('4')
-        expect($summaryValues.get(3).innerText.trim()).to.eq('5')
-        expect($summaryValues.get(4).innerText.trim()).to.eq('6')
-        expect($summaryValues.get(5).innerText.trim()).to.eq('2')
+        expect($summaryValues.get(1).textContent.trim()).to.eq('3')
+        expect($summaryValues.get(2).textContent.trim()).to.eq('4')
+        expect($summaryValues.get(3).textContent.trim()).to.eq('5')
+        expect($summaryValues.get(4).textContent.trim()).to.eq('6')
+        expect($summaryValues.get(5).textContent.trim()).to.eq('2')
       })
   })
 
@@ -286,8 +286,8 @@ context('Prisoner sentence and release', () => {
       .sentenceAdjustmentsDaysAddedSection()
       .find('dd')
       .then(($summaryValues) => {
-        expect($summaryValues.get(0).innerText.trim()).to.eq('1')
-        expect($summaryValues.get(1).innerText.trim()).to.eq('2')
+        expect($summaryValues.get(0).textContent.trim()).to.eq('1')
+        expect($summaryValues.get(1).textContent.trim()).to.eq('2')
       })
   })
 
