@@ -180,16 +180,16 @@ context('Prisoner sentence and release', () => {
       .otherReleaseDates()
       .find('dt')
       .then(($summaryKeys) => {
-        expect($summaryKeys.get(0).innerText).to.eq('\n          Tariff\n        ')
-        expect($summaryKeys.get(1).innerText).to.eq('\n          Late transfer\n        ')
+        expect($summaryKeys.get(0).textContent).to.contain('Tariff')
+        expect($summaryKeys.get(1).textContent).to.contain('Late transfer')
       })
 
     prisonerSentenceAndReleasePage
       .otherReleaseDates()
       .find('dd')
       .then(($summaryValues) => {
-        expect($summaryValues.get(0).innerText).to.eq('\n          7 May 2021\n        ')
-        expect($summaryValues.get(1).innerText).to.eq('\n          11 August 2021\n        ')
+        expect($summaryValues.get(0).textContent).to.contain('7 May 2021')
+        expect($summaryValues.get(1).textContent).to.contain('11 August 2021')
       })
   })
 
@@ -248,12 +248,12 @@ context('Prisoner sentence and release', () => {
       .sentenceAdjustmentsDaysRemovedSection()
       .find('dd')
       .then(($summaryValues) => {
-        expect($summaryValues.get(0).innerText.trim()).to.eq('1')
-        expect($summaryValues.get(1).innerText.trim()).to.eq('3')
-        expect($summaryValues.get(2).innerText.trim()).to.eq('4')
-        expect($summaryValues.get(3).innerText.trim()).to.eq('5')
-        expect($summaryValues.get(4).innerText.trim()).to.eq('6')
-        expect($summaryValues.get(5).innerText.trim()).to.eq('2')
+        expect($summaryValues.get(0).textContent.trim()).to.eq('1')
+        expect($summaryValues.get(1).textContent.trim()).to.eq('3')
+        expect($summaryValues.get(2).textContent.trim()).to.eq('4')
+        expect($summaryValues.get(3).textContent.trim()).to.eq('5')
+        expect($summaryValues.get(4).textContent.trim()).to.eq('6')
+        expect($summaryValues.get(5).textContent.trim()).to.eq('2')
       })
   })
 
@@ -286,8 +286,8 @@ context('Prisoner sentence and release', () => {
       .sentenceAdjustmentsDaysAddedSection()
       .find('dd')
       .then(($summaryValues) => {
-        expect($summaryValues.get(0).innerText.trim()).to.eq('1')
-        expect($summaryValues.get(1).innerText.trim()).to.eq('2')
+        expect($summaryValues.get(0).textContent.trim()).to.eq('1')
+        expect($summaryValues.get(1).textContent.trim()).to.eq('2')
       })
   })
 
@@ -320,7 +320,7 @@ context('Prisoner sentence and release', () => {
       .sentenceAdjustmentsDaysRemainingSection()
       .find('dd')
       .then(($summaryValues) => {
-        expect($summaryValues.get(0).innerText.trim()).to.eq('1')
+        expect($summaryValues.get(0).textContent.trim()).to.eq('1')
       })
   })
 
@@ -375,6 +375,8 @@ context('Prisoner sentence and release', () => {
 
     const page = PrisonerSentenceAndReleasePage.verifyOnPage('Smith, John')
 
+    cy.get('*[class^="govuk-accordion__section-toggle"]').click({ multiple: true })
+
     page.caseNumber().contains('T12345')
     page.sentenceDate().contains('1 January 2017')
     page.courtName().contains('Sheffield Crown Court')
@@ -391,18 +393,18 @@ context('Prisoner sentence and release', () => {
       .sentenceTerms()
       .find('dd')
       .then(($termValues) => {
-        expect($termValues.get(0).innerText.trim()).to.eq('1 January 2017')
-        expect($termValues.get(1).innerText.trim()).to.eq('12 years, 2 months, 1 day')
+        expect($termValues.get(0).textContent.trim()).to.eq('1 January 2017')
+        expect($termValues.get(1).textContent.trim()).to.eq('12 years, 2 months, 1 day')
 
-        expect($termValues.get(2).innerText.trim()).to.eq('1 January 2018')
-        expect($termValues.get(3).innerText.trim()).to.eq('12 years')
+        expect($termValues.get(2).textContent.trim()).to.eq('1 January 2018')
+        expect($termValues.get(3).textContent.trim()).to.eq('12 years')
       })
 
     page
       .effectiveSentenceEndDate()
       .find('dd')
       .then(($value) => {
-        expect($value.get(0).innerText.trim()).to.eq('19 March 2022')
+        expect($value.get(0).textContent.trim()).to.eq('19 March 2022')
       })
   })
 

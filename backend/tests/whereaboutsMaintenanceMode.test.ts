@@ -3,6 +3,8 @@ import express from 'express'
 import nunjucksSetup from '../utils/nunjucksSetup'
 import routes from '../routes'
 
+jest.mock('../raiseAnalyticsEvent', () => jest.fn())
+
 describe('Whereabouts maintenance mode flag is true', () => {
   let req
   let res
