@@ -23,9 +23,6 @@ context('A user can add a case note', () => {
 
     cy.visit(`/prisoner/${offenderNo}/add-case-note`)
   })
-  afterEach(() => {
-    // cy.task('reset')
-  })
 
   it('A user can successfully add a case note', () => {
     cy.task('stubClientCredentialsRequest')
@@ -63,7 +60,7 @@ context('A user can add a case note', () => {
 
   it('A user can successfully add an OMiC open case note', () => {
     cy.task('stubClientCredentialsRequest')
-    // cy.task('stubUserMe', {})
+
     cy.task('stubPrisonerProfileHeaderData', {
       offenderBasicDetails,
       offenderFullDetails,
@@ -115,49 +112,49 @@ context('A user can add a case note', () => {
     })
   })
 
-  // it('A user can add an OMiC open case note and opt to change it', () => {
-  //   cy.task('stubClientCredentialsRequest')
-  //   cy.task('stubPrisonerProfileHeaderData', {
-  //     offenderBasicDetails,
-  //     offenderFullDetails,
-  //     iepSummary: {},
-  //     caseNoteSummary: {},
-  //     offenderNo: 'A12345',
-  //   })
-  //   cy.task('stubCaseNoteTypes')
-  //   cy.task('stubCaseNotes', { totalElements: 1, content: [] })
+  it('A user can add an OMiC open case note and opt to change it', () => {
+    cy.task('stubClientCredentialsRequest')
+    cy.task('stubPrisonerProfileHeaderData', {
+      offenderBasicDetails,
+      offenderFullDetails,
+      iepSummary: {},
+      caseNoteSummary: {},
+      offenderNo: 'A12345',
+    })
+    cy.task('stubCaseNoteTypes')
+    cy.task('stubCaseNotes', { totalElements: 1, content: [] })
 
-  //   cy.server()
-  //   cy.route({ method: 'GET', url: '/prisoner/A12345/add-case-note?typeCode=OMIC' }).as('getTypes')
+    cy.server()
+    cy.route({ method: 'GET', url: '/prisoner/A12345/add-case-note?typeCode=OMIC' }).as('getTypes')
 
-  //   const createCaseNotePage = CreateCaseNotePage.verifyOnPage()
-  //   const form = createCaseNotePage.form()
-  //   form.type().select('OMIC')
+    const createCaseNotePage = CreateCaseNotePage.verifyOnPage()
+    const form = createCaseNotePage.form()
+    form.type().select('OMIC')
 
-  //   cy.wait('@getTypes')
+    cy.wait('@getTypes')
 
-  //   form.subType().select('OPEN_COMM')
-  //   form.text().type('Test comment')
-  //   form.submitButton().click()
+    form.subType().select('OPEN_COMM')
+    form.text().type('Test comment')
+    form.submitButton().click()
 
-  //   const caseNoteConfirmPage = CaseNoteConfirmPage.verifyOnPage()
-  //   caseNoteConfirmPage.form().submitButton().click()
-  //   CaseNoteConfirmPage.verifyOnPage()
-  //   caseNoteConfirmPage.errorSummaryTitle().contains('There is a problem')
-  //   caseNoteConfirmPage.errorSummaryList().contains('Select yes if this information is appropriate to share')
+    const caseNoteConfirmPage = CaseNoteConfirmPage.verifyOnPage()
+    caseNoteConfirmPage.form().submitButton().click()
+    CaseNoteConfirmPage.verifyOnPage()
+    caseNoteConfirmPage.errorSummaryTitle().contains('There is a problem')
+    caseNoteConfirmPage.errorSummaryList().contains('Select yes if this information is appropriate to share')
 
-  //   caseNoteConfirmPage.form().confirmRadio().check('No')
-  //   caseNoteConfirmPage.form().submitButton().click()
+    caseNoteConfirmPage.form().confirmRadio().check('No')
+    caseNoteConfirmPage.form().submitButton().click()
 
-  //   const createCaseNotePage2 = CreateCaseNotePage.verifyOnPage()
-  //   createCaseNotePage2.omicOpenWarning().should('be.visible')
-  //   createCaseNotePage2.omicOpenHint().should('be.visible')
-  //   const form2 = createCaseNotePage2.form()
-  //   form2.type().should('have.value', 'OMIC')
-  //   form2.subType().should('have.value', 'OPEN_COMM')
-  //   form2.text().should('have.value', 'Test comment')
-  //   form2.date().should('have.value', moment().format('DD/MM/YYYY'))
-  // })
+    const createCaseNotePage2 = CreateCaseNotePage.verifyOnPage()
+    createCaseNotePage2.omicOpenWarning().should('be.visible')
+    createCaseNotePage2.omicOpenHint().should('be.visible')
+    const form2 = createCaseNotePage2.form()
+    form2.type().should('have.value', 'OMIC')
+    form2.subType().should('have.value', 'OPEN_COMM')
+    form2.text().should('have.value', 'Test comment')
+    form2.date().should('have.value', moment().format('DD/MM/YYYY'))
+  })
 
   it('OMiC open case note warnings only valid for OMiC Open case note', () => {
     cy.task('stubClientCredentialsRequest')
