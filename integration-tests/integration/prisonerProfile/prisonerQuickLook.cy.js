@@ -18,7 +18,7 @@ const quickLookFullDetails = {
   sentenceDetails: { sentenceDetail: { releaseDate: '2020-12-13' } },
   balances: { spends: 100, cash: 75.5, savings: 50, damageObligations: 65, currency: 'GBP' },
   iepSummary: {
-    bookingId: bookingId,
+    bookingId,
     iepDate: '2017-08-15',
     iepTime: '2017-08-15T16:04:35',
     iepLevel: 'Standard',
@@ -225,7 +225,6 @@ context('Prisoner quick look data retrieval errors', () => {
     })
 
     cy.task('stubQuickLookApiErrors')
-
   })
 
   beforeEach(() => {
@@ -903,7 +902,6 @@ context('When a user can view inactive bookings', () => {
       offenderFullDetails: { ...offenderFullDetails, agencyId: 'OUT' },
       iepSummary: {},
       caseNoteSummary: {},
-      // userRoles: [{ roleCode: 'INACTIVE_BOOKINGS' }],
       offenderNo,
     })
   })
@@ -914,41 +912,6 @@ context('When a user can view inactive bookings', () => {
     cy.get('[data-test="tabs-case-notes"]').should('contain.text', 'Case notes')
     cy.get('[data-test="adjudication-history-link"]').should('contain.text', 'View adjudication history')
     cy.get('[data-test="incentive-details-link"]').should('contain.text', 'View incentive level details')
-  })
-})
-
-context('Current prisoner profile should redirect to the new prisoner profile', () => {
-  before(() => {
-    cy.clearCookies()
-    cy.task('reset')
-    cy.task('stubPrisonerProfile')
-    cy.task('stubSignIn', {
-      username: 'ITAG_USER',
-      caseload: 'LEI',
-      caseloads: [],
-      roles: [],
-    })
-    cy.signIn()
-  })
-  beforeEach(() => {
-    Cypress.Cookies.preserveOnce('hmpps-session-dev')
-    cy.task('stubPrisonerProfileHeaderData', {
-      offenderBasicDetails,
-      offenderFullDetails: { ...offenderFullDetails, agencyId: 'OUT' },
-      iepSummary: {},
-      caseNoteSummary: {},
-      // userRoles: [{ roleCode: 'INACTIVE_BOOKINGS' }],
-      offenderNo,
-    })
-    
-  })
-
-  it.only('Should redirect to new prisoner profile', () => {
-    cy.origin('http://localhost:9191', () => {
-      cy.visit('http://localhost:3008/prisoner/${offenderNo}')
-
-      cy.get('h1').should('contain.text', 'New Prisoner Profile!')
-    })
   })
 })
 

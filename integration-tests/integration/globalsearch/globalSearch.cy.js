@@ -35,41 +35,45 @@ context('Global search', () => {
     })
   })
 
-  it('should call global search with offender number search', () => {
-    cy.task('stubGlobalSearch')
-    const globalSearchPage = GlobalSearchPage.verifyOnPage()
-    const form = globalSearchPage.form()
-    form.search().clear().type('A1234BC')
-    form.submitButton().click()
+  context('should call global search', () => {
+    beforeEach(() => {
+      cy.visit('/global-search')
+      cy.task('stubGlobalSearch')
+    })
+    it('should call global search with offender number search', () => {
+      const globalSearchPage = GlobalSearchPage.verifyOnPage()
+      const form = globalSearchPage.form()
+      form.search().clear().type('A1234BC')
+      form.submitButton().click()
 
-    GlobalSearchPage.verifyOnResultsPage()
+      GlobalSearchPage.verifyOnResultsPage()
 
-    cy.task('verifyGlobalSearch').should((requests) => {
-      expect(requests).to.have.lengthOf(1)
-      expect(JSON.parse(requests[0].body)).to.deep.equal({
-        prisonerIdentifier: 'A1234BC',
-        gender: 'ALL',
-        location: 'ALL',
-        includeAliases: true,
+      cy.task('verifyGlobalSearch').should((requests) => {
+        expect(requests).to.have.lengthOf(1)
+        expect(JSON.parse(requests[0].body)).to.deep.equal({
+          prisonerIdentifier: 'A1234BC',
+          gender: 'ALL',
+          location: 'ALL',
+          includeAliases: true,
+        })
       })
     })
-  })
+    it('should not pass query string parameters to the feedback survey', () => {
+      cy.task('stubGlobalSearch')
+      const globalSearchPage = GlobalSearchPage.verifyOnPage()
+      const form = globalSearchPage.form()
+      form.search().clear().type('A1234BC')
+      form.submitButton().click()
 
-  it('should not pass query string parameters to the feedback survey', () => {
-    cy.task('stubGlobalSearch')
-    const globalSearchPage = GlobalSearchPage.verifyOnPage()
-    const form = globalSearchPage.form()
-    form.search().clear().type('A1234BC')
-    form.submitButton().click()
+      GlobalSearchPage.verifyOnResultsPage()
 
-    GlobalSearchPage.verifyOnResultsPage()
-
-    cy.get('[data-test="feedback-banner"]')
-      .find('a')
-      .should('have.attr', 'href')
-      .then((href) => {
-        expect(href).to.equal('https://eu.surveymonkey.com/r/GYB8Y9Q?source=localhost/global-search/results')
-      })
+      cy.get('[data-test="feedback-banner"]')
+        .find('a')
+        .should('have.attr', 'href')
+        .then((href) => {
+          expect(href).to.equal('https://eu.surveymonkey.com/r/GYB8Y9Q?source=localhost/global-search/results')
+        })
+    })
   })
 
   it('should populate search box with query', () => {

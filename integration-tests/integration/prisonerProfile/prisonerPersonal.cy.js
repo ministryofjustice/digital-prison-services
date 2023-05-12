@@ -176,7 +176,6 @@ context('Prisoner personal', () => {
       visitPersonalAndExpandAccordions()
     })
 
-
     context('Personal section', () => {
       it('Should show correct labels and values', () => {
         cy.get('[data-test="personal-summary"]').then(($summary) => {
@@ -602,7 +601,7 @@ context('Prisoner personal', () => {
     context('When each section is correctly populated', () => {
       const addresses = [primaryAddress, nonPrimaryAddress]
 
-      before(() => {
+      beforeEach(() => {
         cy.task('stubPrisonerProfileHeaderData', headerDetails)
         cy.task('stubPersonal', {
           property: [
@@ -1305,7 +1304,9 @@ context('Prisoner personal', () => {
         neurodivergenceSupport: [NeurodivergenceSupport.MemorySupport],
         supportDate: '2022-02-20',
       }
+
       before(() => {
+        cy.task('stubPrisonerProfileHeaderData', headerDetails)
         cy.task('stubPersonal', {
           neurodivergence: [neurodivergenceAssessed],
         })
@@ -1348,7 +1349,9 @@ context('Prisoner personal', () => {
         neurodivergenceSupport: [NeurodivergenceSupport.SocialAndInteractionSupport],
         supportDate: '2022-02-20',
       }
+
       before(() => {
+        cy.task('stubPrisonerProfileHeaderData', headerDetails)
         cy.task('stubPersonal', {
           neurodivergence: [neurodivergenceSelfAssessed],
         })
@@ -1384,6 +1387,7 @@ context('Prisoner personal', () => {
     })
     context('Neurodivergence - none entered', () => {
       before(() => {
+        cy.task('stubPrisonerProfileHeaderData', headerDetails)
         cy.task('stubPersonal', {
           neurodivergence: [],
         })

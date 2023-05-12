@@ -534,6 +534,11 @@ module.exports = defineConfig({
         stubPrisonerSearch: (response) => offenderSearch.stubPrisonerSearch(response),
         stubPrisonerSearchDetails: (response) => offenderSearch.stubPrisonerSearchDetails(response),
         stubPrisonerProfile: prisonerProfile.stubPrisonerProfile,
+        stubPrisonerProfilePersonal: prisonerProfile.stubPrisonerProfilePersonal,
+        stubPrisonerProfileCaseNotes: prisonerProfile.stubPrisonerProfileCaseNotes,
+        stubPrisonerProfileAlerts: prisonerProfile.stubPrisonerProfileAlerts,
+        stubPrisonerProfileOffences: prisonerProfile.stubPrisonerProfileOffences,
+        stubPrisonerProfileWorkAndSkills: prisonerProfile.stubPrisonerProfileWorkAndSkills,
       })
     },
 
