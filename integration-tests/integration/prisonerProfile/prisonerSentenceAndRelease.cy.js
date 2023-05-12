@@ -320,7 +320,7 @@ context('Prisoner sentence and release', () => {
       .sentenceAdjustmentsDaysRemainingSection()
       .find('dd')
       .then(($summaryValues) => {
-        expect($summaryValues.get(0).innerText.trim()).to.eq('1')
+        expect($summaryValues.get(0).textContent.trim()).to.eq('1')
       })
   })
 
