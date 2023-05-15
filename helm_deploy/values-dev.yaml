@@ -66,5 +66,5 @@ generic-service:
    GET_SOMEONE_READY_FOR_WORK_URL: https://get-ready-for-work-dev.hmpps.service.justice.gov.uk
    WARRANT_FOLDER_URL: https://manage-a-warrant-folder-dev.hmpps.service.justice.gov.uk/
    PRISONER_PROFILE_REDIRECT_URL: http://prisoner-dev.digital.prison.service.justice.gov.uk
-   PRISONER_PROFILE_REDIRECT_ENABLED: true
+   PRISONER_PROFILE_REDIRECT_ENABLED: false
    PRISONER_PROFILE_REDIRECT_ENABLED_PRISONS: LEI
