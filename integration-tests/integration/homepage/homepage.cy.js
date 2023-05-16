@@ -123,6 +123,18 @@ context('Homepage', () => {
         )
     })
 
+    it('should show Mercury Submit private Beta task with correct content', () => {
+      const page = homepagePage.goTo()
+
+      page.mercurySubmitPrivateBeta().tile().should('exist')
+      page.mercurySubmitPrivateBeta().title().contains('Submit an Intelligence Report (Private Beta)')
+      page.mercurySubmitPrivateBeta().link().should('have.attr', 'href', 'https://mercury-submit-private-beta')
+      page
+        .mercurySubmitPrivateBeta()
+        .description()
+        .contains('Access to the new Mercury submission form for those establishments enrolled in the private beta')
+    })
+
     it('should show establishment roll', () => {
       const page = homepagePage.goTo()
 
