@@ -128,7 +128,7 @@ context('Homepage', () => {
 
       page.mercurySubmitPrivateBeta().tile().should('exist')
       page.mercurySubmitPrivateBeta().title().contains('Submit an Intelligence Report (Private Beta)')
-      page.mercurySubmitPrivateBeta().link().should('have.attr', 'href', 'https://welcome-people-into-prison')
+      page.mercurySubmitPrivateBeta().link().should('have.attr', 'href', 'https://mercury-submit-private-beta')
       page
         .mercurySubmitPrivateBeta()
         .description()
