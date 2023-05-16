@@ -32,10 +32,10 @@ const homepagePage = () =>
       description: () => cy.get('[data-test="welcome-people-into-prison"] p'),
     }),
     mercurySubmitPrivateBeta: () => ({
-      tile: () => cy.get('[data-test="mercury-submit-private-beta"]'),
-      title: () => cy.get('[data-test="mercury-submit-private-beta"] h2'),
-      link: () => cy.get('[data-test="mercury-submit-private-beta"] a'),
-      description: () => cy.get('[data-test="mercury-submit-private-beta"] p'),
+      tile: () => cy.get('[data-test="submit-an-intelligence-report-private-beta"]'),
+      title: () => cy.get('[data-test="submit-an-intelligence-report-private-beta"] h2'),
+      link: () => cy.get('[data-test="submit-an-intelligence-report-private-beta"] a'),
+      description: () => cy.get('[data-test="submit-an-intelligence-report-private-beta"] p'),
     }),
     manageRestrictedPatients: () => ({
       tile: () => cy.get('[data-test="manage-restricted-patients"]'),
