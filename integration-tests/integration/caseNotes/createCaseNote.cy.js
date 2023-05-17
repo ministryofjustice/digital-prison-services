@@ -23,9 +23,6 @@ context('A user can add a case note', () => {
 
     cy.visit(`/prisoner/${offenderNo}/add-case-note`)
   })
-  afterEach(() => {
-    cy.task('reset')
-  })
 
   it('A user can successfully add a case note', () => {
     cy.task('stubClientCredentialsRequest')
@@ -63,7 +60,7 @@ context('A user can add a case note', () => {
 
   it('A user can successfully add an OMiC open case note', () => {
     cy.task('stubClientCredentialsRequest')
-    cy.task('stubUserMe', {})
+
     cy.task('stubPrisonerProfileHeaderData', {
       offenderBasicDetails,
       offenderFullDetails,
@@ -71,17 +68,19 @@ context('A user can add a case note', () => {
       caseNoteSummary: {},
       offenderNo: 'A12345',
     })
+
     cy.task('stubCaseNoteTypes')
-    cy.task('stubCaseNotes', { totalElements: 1, content: [] })
+    cy.task('stubCaseNotes', {
+      totalElements: 1,
+      content: [],
+    })
 
     cy.server()
-    cy.route({ method: 'GET', url: '/prisoner/A12345/add-case-note?typeCode=OMIC' }).as('getTypes')
-
+    cy.route({ method: 'GET', url: '/prisoner/A12345/add-case-note?typeCode=OMIC' }).as('getOmicTypes')
+    cy.server()
     const createCaseNotePage = CreateCaseNotePage.verifyOnPage()
     const form = createCaseNotePage.form()
     form.type().select('OMIC')
-
-    cy.wait('@getTypes')
 
     form.subType().select('OPEN_COMM')
     createCaseNotePage.omicOpenWarning().should('be.visible')

@@ -44,72 +44,77 @@ context('A user can search for a cell', () => {
     page.nonAssociationsMessage().contains('0 in NOMIS. Check local processes.')
   })
 
-  it('Shows the correct data when there is a relevant non-association and a CSR rating comment', () => {
-    cy.task('stubOffenderFullDetails', {
-      ...offenderFullDetails,
-      alerts: [
-        {
-          active: true,
-          addedByFirstName: 'John',
-          addedByLastName: 'Smith',
-          alertCode: 'XGANG',
-          alertCodeDescription: 'Gang member',
-          alertId: 1,
-          alertType: 'X',
-          alertTypeDescription: 'Security',
-          bookingId: 14,
-          comment: 'silly',
-          dateCreated: '2019-08-25',
-          dateExpires: '2019-09-20',
-          expired: false,
-          expiredByFirstName: 'Jane',
-          expiredByLastName: 'Smith',
-          offenderNo: 'G3878UK',
-        },
-      ],
-      assessments: [
-        {
-          assessmentCode: 'CSR',
-          assessmentComment: 'Test comment',
-          assessmentDescription: 'CSR',
-        },
-      ],
+  context('Non-association and a CSR rating comment', () => {
+    beforeEach(() => {
+      cy.visit(`/prisoner/${offenderNo}/cell-move/search-for-cell`)
     })
-    cy.task('stubBookingNonAssociations', {
-      agencyDescription: 'HMP Moorland',
-      nonAssociations: [
-        {
-          effectiveDate: moment(),
-          expiryDate: moment().add(2, 'days'),
-          offenderNonAssociation: {
-            agencyDescription: 'HMP Moorland',
+    it('Shows the correct data when there is a relevant non-association and a CSR rating comment', () => {
+      cy.task('stubOffenderFullDetails', {
+        ...offenderFullDetails,
+        alerts: [
+          {
+            active: true,
+            addedByFirstName: 'John',
+            addedByLastName: 'Smith',
+            alertCode: 'XGANG',
+            alertCodeDescription: 'Gang member',
+            alertId: 1,
+            alertType: 'X',
+            alertTypeDescription: 'Security',
+            bookingId: 14,
+            comment: 'silly',
+            dateCreated: '2019-08-25',
+            dateExpires: '2019-09-20',
+            expired: false,
+            expiredByFirstName: 'Jane',
+            expiredByLastName: 'Smith',
+            offenderNo: 'G3878UK',
           },
-        },
-      ],
+        ],
+        assessments: [
+          {
+            assessmentCode: 'CSR',
+            assessmentComment: 'Test comment',
+            assessmentDescription: 'CSR',
+          },
+        ],
+      })
+      cy.task('stubBookingNonAssociations', {
+        agencyDescription: 'HMP Moorland',
+        nonAssociations: [
+          {
+            effectiveDate: moment(),
+            expiryDate: moment().add(2, 'days'),
+            offenderNonAssociation: {
+              agencyDescription: 'HMP Moorland',
+            },
+          },
+        ],
+      })
+      const page = SearchForCellPage.verifyOnPage()
+      cy.visit(`/prisoner/${offenderNo}/cell-move/search-for-cell`)
+      cy.get('[data-test="cell-move-header-information"]').then(($header) => {
+        cy.get($header)
+          .find('h3')
+          .then(($headings) => {
+            cy.get($headings).its('length').should('eq', 5)
+            expect($headings.get(0).innerText).to.contain('Name')
+            expect($headings.get(1).innerText).to.contain('Current location')
+            expect($headings.get(2).innerText).to.contain('CSRA rating')
+            expect($headings.get(3).innerText).to.contain('Relevant alerts')
+            expect($headings.get(4).innerText).to.contain('Non-associations')
+          })
+      })
+      page.name().contains('Smith, John')
+      page.detailsLink().contains('View details')
+      page.livingUnit().contains('HMP Moorland')
+      page.csra().contains('High')
+      page.csraLink().contains('View details')
+      page.alerts().contains('Gang member')
+      page.numberOfNonAssociations().contains('1')
+      page.nonAssociationsLink().contains('View non-associations')
+      page.nonAssociationsMessage().should('not.exist')
     })
-    const page = SearchForCellPage.verifyOnPage()
-    cy.visit(`/prisoner/${offenderNo}/cell-move/search-for-cell`)
-    cy.get('[data-test="cell-move-header-information"]').then(($header) => {
-      cy.get($header)
-        .find('h3')
-        .then(($headings) => {
-          cy.get($headings).its('length').should('eq', 5)
-          expect($headings.get(0).innerText).to.contain('Name')
-          expect($headings.get(1).innerText).to.contain('Current location')
-          expect($headings.get(2).innerText).to.contain('CSRA rating')
-          expect($headings.get(3).innerText).to.contain('Relevant alerts')
-          expect($headings.get(4).innerText).to.contain('Non-associations')
-        })
-    })
-    page.name().contains('Smith, John')
-    page.detailsLink().contains('View details')
-    page.livingUnit().contains('HMP Moorland')
-    page.csra().contains('High')
-    page.csraLink().contains('View details')
-    page.alerts().contains('Gang member')
-    page.numberOfNonAssociations().contains('1')
-    page.nonAssociationsLink().contains('View non-associations')
-    page.nonAssociationsMessage().should('not.exist')
   })
 
   it('Passes the correct data to the select a cell page', () => {

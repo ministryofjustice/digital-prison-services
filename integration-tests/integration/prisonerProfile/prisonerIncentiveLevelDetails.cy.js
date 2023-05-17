@@ -143,7 +143,17 @@ context('Prisoner incentive level details', () => {
     })
 
     it('should show correct history', () => {
-      cy.task('stubGetIepSummaryForBooking', iepSummaryResponse)
+      // pretend the last review was 400 days ago
+      const lastReviewDate = moment().subtract(400, 'days')
+      const nextReviewDate = lastReviewDate.clone().add(1, 'year')
+      cy.task('stubGetIepSummaryForBooking', {
+        ...iepSummaryResponse,
+        iepDate: lastReviewDate.format('YYYY-MM-DD'),
+        iepTime: lastReviewDate.format('YYYY-MM-DDTHH:mm:ss'),
+        nextReviewDate: nextReviewDate.format('YYYY-MM-DD'),
+      })
+
+      cy.visit(`/prisoner/${offenderNo}/incentive-level-details`)
 
       cy.get('[data-test="incentive-level-history"]').then(($table) => {
         cy.get($table)

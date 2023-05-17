@@ -147,7 +147,7 @@ context('Prisoner professional contacts', () => {
       addressUsages: [],
     }
 
-    before(() => {
+    beforeEach(() => {
       cy.task('stubProfessionalContacts', {
         offenderBasicDetails,
         contacts: { otherContacts },
