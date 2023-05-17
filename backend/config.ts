@@ -4,7 +4,7 @@ const toNumber = (value: string | undefined): number | undefined => {
 }
 
 export const app = {
-  port: process.env.PORT || 3000,
+  port: process.env.PORT || 3002,
   production: process.env.NODE_ENV === 'production',
   disableWebpack: process.env.DISABLE_WEBPACK === 'true',
   licencesUrl: process.env.LICENCES_URL || 'http://localhost:3003/',
