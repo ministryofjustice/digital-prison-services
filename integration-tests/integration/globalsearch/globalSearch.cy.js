@@ -37,8 +37,8 @@ context('Global search', () => {
 
   context('should call global search', () => {
     beforeEach(() => {
-      cy.visit('/global-search')
       cy.task('stubGlobalSearch')
+      cy.visit('/global-search')
     })
     it('should call global search with offender number search', () => {
       const globalSearchPage = GlobalSearchPage.verifyOnPage()
