@@ -157,6 +157,10 @@ export const apis = {
     url: process.env.WELCOME_PEOPLE_INTO_PRISON_URL,
     enabled_prisons: process.env.WELCOME_PEOPLE_INTO_PRISON_ENABLED_PRISONS || '',
   },
+  mercurySubmitPrivateBeta: {
+    url: process.env.MERCURY_SUBMIT_PRIVATE_BETA_URL,
+    enabled_prisons: process.env.MERCURY_SUBMIT_PRIVATE_BETA_ENABLED_PRISONS || '',
+  },
   omic: {
     url: process.env.OMIC_URL || 'http://localhost:3001',
   },

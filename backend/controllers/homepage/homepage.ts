@@ -16,6 +16,7 @@ const {
     legacyPrisonVisits,
     secureSocialVideoCalls,
     welcomePeopleIntoPrison,
+    mercurySubmitPrivateBeta,
     manageRestrictedPatients,
     checkMyDiary,
     incentives,
@@ -241,6 +242,15 @@ const getTasks = ({ activeCaseLoadId, locations, staffId, whereaboutsConfig, key
       roles: null,
       enabled: () =>
         welcomePeopleIntoPrison.url && welcomePeopleIntoPrison.enabled_prisons.split(',').includes(activeCaseLoadId),
+    },
+    {
+      id: 'submit-an-intelligence-report-private-beta',
+      heading: 'Submit an Intelligence Report (Private Beta)',
+      description: 'Access to the new Mercury submission form for those establishments enrolled in the private beta',
+      href: mercurySubmitPrivateBeta.url,
+      roles: null,
+      enabled: () =>
+        mercurySubmitPrivateBeta.url && mercurySubmitPrivateBeta.enabled_prisons.split(',').includes(activeCaseLoadId),
     },
     {
       id: 'manage-restricted-patients',
