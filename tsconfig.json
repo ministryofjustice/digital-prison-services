@@ -16,7 +16,8 @@
     "resolveJsonModule": true,
     "esModuleInterop": true,
     "allowSyntheticDefaultImports": true,
-    "experimentalDecorators": true
+    "experimentalDecorators": true,
+    "ignoreDeprecations": "5.0"
   },
   "baseUrl": ".",
   "include": ["./backend/**/*.js", "./backend/**/*.ts", "./backend/**/*.d.ts"],

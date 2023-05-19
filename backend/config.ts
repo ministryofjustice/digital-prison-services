@@ -22,6 +22,11 @@ export const app = {
   disableRequestLimiter: process.env.DISABLE_REQUEST_LIMITER ? process.env.DISABLE_REQUEST_LIMITER === 'true' : false,
   whereaboutsMaintenanceMode: process.env.WHEREABOUTS_MAINTENANCE_MODE === 'true' || false,
   keyworkerMaintenanceMode: process.env.KEYWORKER_MAINTENANCE_MODE === 'true' || false,
+  prisonerProfileRedirect: {
+    url: process.env.PRISONER_PROFILE_REDIRECT_URL,
+    enabled: process.env.PRISONER_PROFILE_REDIRECT_ENABLED === 'true' || false,
+    enabled_prisons: process.env.PRISONER_PROFILE_REDIRECT_ENABLED_PRISONS || '',
+  },
 }
 
 export const analytics = {
@@ -151,6 +156,10 @@ export const apis = {
   welcomePeopleIntoPrison: {
     url: process.env.WELCOME_PEOPLE_INTO_PRISON_URL,
     enabled_prisons: process.env.WELCOME_PEOPLE_INTO_PRISON_ENABLED_PRISONS || '',
+  },
+  mercurySubmitPrivateBeta: {
+    url: process.env.MERCURY_SUBMIT_PRIVATE_BETA_URL,
+    enabled_prisons: process.env.MERCURY_SUBMIT_PRIVATE_BETA_ENABLED_PRISONS || '',
   },
   omic: {
     url: process.env.OMIC_URL || 'http://localhost:3001',

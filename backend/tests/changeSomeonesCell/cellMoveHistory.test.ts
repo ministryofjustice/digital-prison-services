@@ -66,7 +66,7 @@ describe('Cell move history', () => {
   })
 
   it('should return the page header correctly formatted', async () => {
-    jest.useFakeTimers('modern')
+    jest.useFakeTimers()
     jest.setSystemTime(new Date('2020-02-07').getTime())
 
     await controller(req, res)

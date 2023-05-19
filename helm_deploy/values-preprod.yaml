@@ -54,6 +54,8 @@ generic-service:
    CALCULATE_RELEASE_DATES_URL: https://calculate-release-dates-preprod.hmpps.service.justice.gov.uk
    SEND_LEGAL_MAIL_URL: https://check-rule39-mail-preprod.prison.service.justice.gov.uk
    WELCOME_PEOPLE_INTO_PRISON_URL: https://welcome-preprod.prison.service.justice.gov.uk/
+   MERCURY_SUBMIT_PRIVATE_BETA_URL: https://submit-information-report-test.hmpps.service.justice.gov.uk/
+   MERCURY_SUBMIT_PRIVATE_BETA_ENABLED_PRISONS: "LNI,FHI,BZI,SDI,GTI,BAI,MRI,NMI,RNI,SUI,SKI"
    CREATE_AND_VARY_A_LICENCE_URL: https://create-and-vary-a-licence-preprod.hmpps.service.justice.gov.uk/
    CREATE_AND_VARY_A_LICENCE_ENABLED_PRISONS: "ACI,AGI,ASI,AYI,BAI,BCI,BFI,BLI,BMI,BNI,BRI,BSI,BWI,BXI,BZI,CDI,CFI,CKI,CLI,CWI,DAI,DGI,DHI,DMI,DNI,DTI,DWI,EEI,EHI,ESI,EWI,EXI,EYI,FBI,FDI,FHI,FKI,FMI,FNI,FSI,FWI,GHI,GMI,GNI,HBI,HCI,HDI,HEI,HHI,HII,HLI,HMI,HOI,HPI,HVI,ISI,IWI,KMI,KVI,LCI,LEI,LFI,LGI,LHI,LII,LLI,LNI,LPI,LTI,LWI,LYI,MDI,MHI,MRI,MSI,MTI,NHI,NLI,NMI,NSI,NWI,ONI,OWI,PBI,PDI,PFI,PNI,PRI,PVI,RCI,RHI,RNI,RSI,SDI,SFI,SHI,SKI,SLI,SNI,SPI,STI,SUI,SWI,TCI,TSI,UKI,UPI,VEI,WCI,WDI,WEI,WHI,WII,WLI,WMI,WRI,WSI,WTI,WWI"
    RESTRICTED_PATIENT_API_URL: https://restricted-patients-api-preprod.hmpps.service.justice.gov.uk/
@@ -62,6 +64,9 @@ generic-service:
    KEYWORKER_MAINTENANCE_MODE: false
    GET_SOMEONE_READY_FOR_WORK_URL: https://get-ready-for-work-preprod.hmpps.service.justice.gov.uk
    WARRANT_FOLDER_URL: https://manage-a-warrant-folder-preprod.hmpps.service.justice.gov.uk/
+   PRISONER_PROFILE_REDIRECT_URL: https://prisoner-preprod.digital.prison.service.justice.gov.uk
+   PRISONER_PROFILE_REDIRECT_ENABLED: false
+   PRISONER_PROFILE_REDIRECT_ENABLED_PRISONS: LEI
 
   allowlist:
    office: "217.33.148.210/32"

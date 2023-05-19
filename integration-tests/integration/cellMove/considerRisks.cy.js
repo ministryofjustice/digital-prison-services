@@ -364,17 +364,19 @@ context('A user can see conflicts in cell', () => {
     ConfirmCellMovePage.verifyOnPage('Bob Doe', 'MDI-1-1')
   })
 
-  describe('when there are no inmates at the location', () => {
-    beforeEach(() => {
-      cy.task('stubInmatesAtLocation', {
-        inmates: [],
-      })
+  it('should not show CSRA messages and have the correct confirmation label', () => {
+    cy.task('stubInmatesAtLocation', {
+      inmates: [],
+    })
+    cy.task('stubBookingDetails', {
+      firstName: 'Bob',
+      lastName: 'Doe',
+      offenderNo,
+      bookingId: 1234,
     })
 
-    it('should not show CSRA messages and have the correct confirmation label', () => {
-      const page = ConsiderRisksPage.goTo(offenderNo, 1)
-      page.csraMessages().should('not.exist')
-      page.form().confirmationInput().contains('Are you sure you want to select this cell?')
-    })
+    const page = ConsiderRisksPage.goTo(offenderNo, 1)
+    page.csraMessages().should('not.exist')
+    page.form().confirmationInput().contains('Are you sure you want to select this cell?')
   })
 })

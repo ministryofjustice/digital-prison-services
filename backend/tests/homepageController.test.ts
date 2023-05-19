@@ -26,6 +26,8 @@ describe('Homepage', () => {
     config.applications.sendLegalMail.url = undefined
     config.apis.welcomePeopleIntoPrison.enabled_prisons = undefined
     config.apis.welcomePeopleIntoPrison.url = undefined
+    config.apis.mercurySubmitPrivateBeta.url = undefined
+    config.apis.mercurySubmitPrivateBeta.enabled_prisons = undefined
     config.apis.incentives.ui_url = undefined
     config.app.whereaboutsMaintenanceMode = false
     config.app.keyworkerMaintenanceMode = false
@@ -737,7 +739,7 @@ describe('Homepage', () => {
 
     it('should not display the Welcome people into prison task on the home page', async () => {
       config.apis.welcomePeopleIntoPrison.url = 'https://welcome.prison.service.justice.gov.uk'
-      config.apis.welcomePeopleIntoPrison.enabled_prisons = 'LEI, NMI'
+      config.apis.welcomePeopleIntoPrison.enabled_prisons = 'LEI,NMI'
 
       await controller(req, res)
 
@@ -760,10 +762,47 @@ describe('Homepage', () => {
         expect.objectContaining({
           tasks: [
             {
-              description: 'View prisoners booked to arrive today and add them to the establishment roll.',
+              description:
+                'View prisoners booked to arrive today, add them to the establishment roll, and manage reception tasks for recent arrivals.',
               heading: 'Welcome people into prison',
               href: 'https://wpipUrl.prison.service.justice.gov.uk',
               id: 'welcome-people-into-prison',
+            },
+          ],
+        })
+      )
+    })
+
+    it('should not display the Mercury Submit Private Beta task on the home page', async () => {
+      config.apis.mercurySubmitPrivateBeta.url = 'https://welcome.prison.service.justice.gov.uk'
+      config.apis.mercurySubmitPrivateBeta.enabled_prisons = 'LEI,NMI'
+
+      await controller(req, res)
+
+      expect(res.render).toHaveBeenCalledWith(
+        'homepage/homepage.njk',
+        expect.objectContaining({
+          tasks: [],
+        })
+      )
+    })
+
+    it('should display the Mercury Submit Private Beta task on the home page', async () => {
+      config.apis.mercurySubmitPrivateBeta.url = 'https://welcome.prison.service.justice.gov.uk'
+      config.apis.mercurySubmitPrivateBeta.enabled_prisons = 'LEI,NMI,MDI'
+
+      await controller(req, res)
+
+      expect(res.render).toHaveBeenCalledWith(
+        'homepage/homepage.njk',
+        expect.objectContaining({
+          tasks: [
+            {
+              description:
+                'Access to the new Mercury submission form for those establishments enrolled in the private beta',
+              heading: 'Submit an Intelligence Report (Private Beta)',
+              href: 'https://welcome.prison.service.justice.gov.uk',
+              id: 'submit-an-intelligence-report-private-beta',
             },
           ],
         })

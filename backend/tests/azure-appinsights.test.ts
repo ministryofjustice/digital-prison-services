@@ -21,7 +21,9 @@ const createContext = (username: string, activeCaseLoadId: string) =>
         locals: {
           user: {
             username,
-            activeCaseLoadId,
+            activeCaseLoad: {
+              caseLoadId: activeCaseLoadId,
+            },
           },
         },
       },

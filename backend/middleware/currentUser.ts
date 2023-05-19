@@ -46,6 +46,7 @@ export default ({ prisonApi, oauthApi }) => {
 
       const user: User = {
         ...res.locals.user,
+        username: req.session.userDetails.username,
         allCaseloads: req.session.allCaseloads,
         displayName: forenameToInitial(req.session.userDetails.name),
         activeCaseLoad,
