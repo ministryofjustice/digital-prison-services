@@ -4,7 +4,7 @@ const toNumber = (value: string | undefined): number | undefined => {
 }
 
 export const app = {
-  port: process.env.PORT || 3002,
+  port: process.env.PORT || 3000,
   production: process.env.NODE_ENV === 'production',
   disableWebpack: process.env.DISABLE_WEBPACK === 'true',
   licencesUrl: process.env.LICENCES_URL || 'http://localhost:3003/',
@@ -17,7 +17,7 @@ export const app = {
   contentfulSpaceId: process.env.CONTENTFUL_SPACE_ID || '1',
   contentfulAccessToken: process.env.CONTENTFUL_ACCESS_TOKEN || '1',
   esweEnabled: process.env.ESWE_ENABLED === 'true',
-  neurodiversityEnabledUsernames: process.env.NEURODIVERSITY_ENABLED_USERNAMES,
+  neurodiversityEnabledUsernames: process.env.NEURODIVERSITY_ENABLED_USERNAMES || [],
   neurodiversityEnabledPrisons: process.env.NEURODIVERSITY_ENABLED_PRISONS || [],
   disableRequestLimiter: process.env.DISABLE_REQUEST_LIMITER ? process.env.DISABLE_REQUEST_LIMITER === 'true' : false,
   whereaboutsMaintenanceMode: process.env.WHEREABOUTS_MAINTENANCE_MODE === 'true' || false,
