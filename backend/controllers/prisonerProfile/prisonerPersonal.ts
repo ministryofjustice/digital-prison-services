@@ -51,7 +51,7 @@ export default ({
     const healthCodes = healthTypes && healthTypes.map((type) => type.code).join()
 
     const {
-      app: { neurodiversityEnabledUsernames, neurodiversityEnabledPrisons },
+      app: { neurodiversityEnabledPrisons },
     } = config
 
     // TODO: Part of temporary measure to only allow restricted prisons access to neurodivergence data. If no prisons specified then assume all are allowed access.
@@ -97,9 +97,7 @@ export default ({
     const { nextOfKin, otherContacts } = contacts || {}
     const activeNextOfKins = nextOfKin && nextOfKin.filter((kin) => kin.activeFlag)
 
-    const displayNeurodiversity = !neurodiversityEnabledUsernames
-      ? true
-      : neurodiversityEnabledUsernames?.includes(username)
+    const displayNeurodiversity = neurodiversityEnabledPrisons?.includes(basicPrisonerDetails.agencyId)
 
     const nextOfKinsWithContact =
       activeNextOfKins &&
