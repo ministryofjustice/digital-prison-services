@@ -141,7 +141,7 @@
             {% set resultsRows = (resultsRows.push([
                 { text: result.formattedTime },
                 { text: result.iepLevel },
-                { html: result.comments | showDefault('Not entered'), classes: 'govuk-input--width-4' },
+                { html: result.comments | showDefault('Not entered'), classes: 'govuk-input--width-4 incentive-details-reason-text' },
                 { text: result.iepEstablishment },
                 { text: result.iepStaffMember | showDefault('Not entered') }
             ]), resultsRows) %}
