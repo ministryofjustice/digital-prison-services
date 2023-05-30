@@ -76,20 +76,25 @@
     </div>
 {% endset %}
 
-{% set neurodiversitiesContent %}
-    <div data-test="neurodiversity-summary">
-        {% include "./partials/neurodiversities.njk" %}
-    </div>
-{% endset %}
+{% if displayNeurodiversity == true%}
+  {% set neurodiversitiesContent %}
+      <div data-test="neurodiversity-summary">
+          {% include "./partials/neurodiversities.njk" %}
+      </div>
+  {% endset %}
+{% endif %}
 
 {% set leftSections = [
     { heading: 'Personal details', html: personalContent },
     { heading: 'Physical characteristics', html: physicalCharacteristicsContent },
     { heading: 'Distinguishing marks', html: distinguishingMarksContent },
-    { heading: 'Personal care needs', html: careNeedsContent },
-    { heading: 'Neurodiversity', html: neurodiversitiesContent }
+    { heading: 'Personal care needs', html: careNeedsContent }
   ]
 %}
+
+{% if displayNeurodiversity == true%}
+  {% set leftSections = (leftSections.push({ heading: 'Neurodiversity', html: neurodiversitiesContent }), leftSections) %}
+{% endif %}
 
 {% set leftSections = (
     leftSections.push({ heading: 'Languages', html: languages }),
