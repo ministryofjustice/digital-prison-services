@@ -3,6 +3,10 @@ const toNumber = (value: string | undefined): number | undefined => {
   return Number.isSafeInteger(result) && result
 }
 
+const parseDate = (value: string | undefined): number => {
+  return value ? Date.parse(value) : null
+}
+
 export const app = {
   port: process.env.PORT || 3002,
   production: process.env.NODE_ENV === 'production',
@@ -24,8 +28,8 @@ export const app = {
   keyworkerMaintenanceMode: process.env.KEYWORKER_MAINTENANCE_MODE === 'true' || false,
   prisonerProfileRedirect: {
     url: process.env.PRISONER_PROFILE_REDIRECT_URL,
-    enabled: process.env.PRISONER_PROFILE_REDIRECT_ENABLED === 'true' || false,
-    enabled_prisons: process.env.PRISONER_PROFILE_REDIRECT_ENABLED_PRISONS || '',
+    enabledDate: parseDate(process.env.PRISONER_PROFILE_REDIRECT_ENABLED_DATE),
+    enabledPrisons: process.env.PRISONER_PROFILE_REDIRECT_ENABLED_PRISONS || '',
   },
 }
 
