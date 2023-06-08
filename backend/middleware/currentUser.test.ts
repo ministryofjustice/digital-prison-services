@@ -1,3 +1,4 @@
+import * as jwt from 'jsonwebtoken'
 import currentUser from './currentUser'
 
 describe('Current user', () => {
@@ -53,12 +54,16 @@ describe('Current user', () => {
   })
 
   it('should stash data into res.locals', async () => {
+    res.locals.access_token = jwt.sign({ authorities: ['ROLE_PRISON'] }, 'secret')
+    req.session.userBackLink = 'http://backlink'
+
     const controller = currentUser({ prisonApi, oauthApi })
 
     await controller(req, res, () => {})
 
     expect(res.locals.user).toEqual({
       username: 'BSMITH',
+      userRoles: ['ROLE_PRISON'],
       allCaseloads: [
         {
           caseLoadId: 'MDI',
@@ -69,6 +74,7 @@ describe('Current user', () => {
         caseLoadId: 'MDI',
         description: 'Moorland',
       },
+      backLink: 'http://backlink',
       displayName: 'B. Smith',
     })
   })

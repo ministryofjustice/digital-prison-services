@@ -80,7 +80,6 @@ const controller = ({
     '/',
     prisonerProfileRedirect({
       path: '/',
-      oauthApi,
       handler: prisonerQuickLook({
         prisonerProfileService,
         prisonApi,
@@ -94,13 +93,12 @@ const controller = ({
     })
   )
 
-  router.get('/image', prisonerProfileRedirect({ path: '/image', oauthApi, handler: prisonerFullImage({ prisonApi }) }))
+  router.get('/image', prisonerProfileRedirect({ path: '/image', handler: prisonerFullImage({ prisonApi }) }))
 
   router.get(
     '/personal',
     prisonerProfileRedirect({
       path: '/personal',
-      oauthApi,
       handler: prisonerPersonal({
         prisonerProfileService,
         personService,
@@ -119,7 +117,6 @@ const controller = ({
     '/alerts',
     prisonerProfileRedirect({
       path: '/alerts',
-      oauthApi,
       handler: prisonerAlerts({
         prisonerProfileService,
         referenceCodesService,
@@ -137,7 +134,6 @@ const controller = ({
     '/case-notes',
     prisonerProfileRedirect({
       path: '/case-notes',
-      oauthApi,
       handler: prisonerCaseNotes({
         caseNotesApi,
         prisonerProfileService,
@@ -156,7 +152,6 @@ const controller = ({
     '/sentence-and-release',
     prisonerProfileRedirect({
       path: '/offences',
-      oauthApi,
       handler: prisonerSentenceAndRelease({
         prisonerProfileService,
         prisonApi,
@@ -172,7 +167,6 @@ const controller = ({
     '/work-and-skills',
     prisonerProfileRedirect({
       path: '/work-and-skills',
-      oauthApi,
       handler: prisonerWorkAndSkills({ prisonerProfileService, esweService }),
     })
   )
