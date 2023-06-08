@@ -54,6 +54,7 @@ import asyncMiddleware from './middleware/asyncHandler'
 import whereaboutsRouter from './routes/whereabouts/whereaboutsRouter'
 import { saveBackLink } from './controllers/backLink'
 import maintenancePage from './controllers/maintenancePage'
+import prisonerProfileBackLinkRedirect from './controllers/prisonerProfile/prisonerProfileBackLinkRedirect'
 
 const router = express.Router()
 
@@ -325,7 +326,7 @@ const setup = ({
     )
   }
 
-  router.get('/save-backlink', saveBackLink())
+  router.get('/save-backlink', prisonerProfileBackLinkRedirect(saveBackLink()))
 
   return router
 }
