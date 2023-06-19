@@ -52,7 +52,6 @@ describe('Prisoner change incentive level details', () => {
     ],
   }
   const prisonIncentiveLevels: PrisonIncentiveLevel[] = [
-    { levelCode: 'ENT', levelName: 'Entry', active: true, defaultOnAdmission: false },
     { levelCode: 'BAS', levelName: 'Basic', active: true, defaultOnAdmission: false },
     { levelCode: 'STD', levelName: 'Standard', active: true, defaultOnAdmission: true },
     { levelCode: 'ENH', levelName: 'Enhanced', active: true, defaultOnAdmission: false },
@@ -110,11 +109,6 @@ describe('Prisoner change incentive level details', () => {
           selectableLevels: [
             {
               checked: false,
-              text: 'Entry',
-              value: 'ENT',
-            },
-            {
-              checked: false,
               text: 'Basic',
               value: 'BAS',
             },
@@ -141,11 +135,6 @@ describe('Prisoner change incentive level details', () => {
         await controller.index(req, res)
         const context = res.render.mock.calls.at(-1)[1]
         expect(context).toHaveProperty('selectableLevels', [
-          {
-            checked: false,
-            text: 'Entry',
-            value: 'ENT',
-          },
           {
             checked: false,
             text: 'Basic',
@@ -293,11 +282,6 @@ describe('Prisoner change incentive level details', () => {
           prisonerName: 'John Smith',
           profileUrl: '/prisoner/ABC123',
           selectableLevels: [
-            {
-              checked: false,
-              text: 'Entry',
-              value: 'ENT',
-            },
             {
               checked: false,
               text: 'Basic',
