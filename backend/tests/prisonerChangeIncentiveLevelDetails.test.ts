@@ -1,5 +1,5 @@
 import type apis from '../apis'
-import type { IepSummaryForBookingWithDetails, IepLevelChanged } from '../api/incentivesApi'
+import type { PrisonIncentiveLevel, IepSummaryForBookingWithDetails, IepLevelChanged } from '../api/incentivesApi'
 import config from '../config'
 import prisonerChangeIncentiveLevelDetails from '../controllers/prisonerProfile/prisonerChangeIncentiveLevelDetails'
 import { raiseAnalyticsEvent } from '../raiseAnalyticsEvent'
@@ -51,11 +51,11 @@ describe('Prisoner change incentive level details', () => {
       },
     ],
   }
-  const iepLevels = [
-    { iepLevel: 'ENT', iepDescription: 'Entry' },
-    { iepLevel: 'BAS', iepDescription: 'Basic' },
-    { iepLevel: 'STD', iepDescription: 'Standard' },
-    { iepLevel: 'ENH', iepDescription: 'Enhanced' },
+  const prisonIncentiveLevels: PrisonIncentiveLevel[] = [
+    { levelCode: 'ENT', levelName: 'Entry', active: true, defaultOnAdmission: false },
+    { levelCode: 'BAS', levelName: 'Basic', active: true, defaultOnAdmission: false },
+    { levelCode: 'STD', levelName: 'Standard', active: true, defaultOnAdmission: true },
+    { levelCode: 'ENH', levelName: 'Enhanced', active: true, defaultOnAdmission: false },
   ]
 
   let req
@@ -82,7 +82,7 @@ describe('Prisoner change incentive level details', () => {
       assignedLivingUnit: { description: '1-2-003' },
     })
     incentivesApi.getIepSummaryForBooking = jest.fn().mockResolvedValue(iepSummaryForBooking)
-    incentivesApi.getAgencyIepLevels = jest.fn().mockResolvedValue(iepLevels)
+    incentivesApi.getPrisonIncentiveLevels = jest.fn().mockResolvedValue(prisonIncentiveLevels)
     incentivesApi.changeIepLevel = jest.fn()
 
     // @ts-expect-error ts-migrate(2345) FIXME: Argument of type '{ prisonApi: {}; logError: any; ... Remove this comment to see the full error message
@@ -97,7 +97,7 @@ describe('Prisoner change incentive level details', () => {
         // @ts-expect-error ts-migrate(2339) FIXME: Property 'getDetails' does not exist on type '{}'.
         expect(prisonApi.getDetails).toHaveBeenCalledWith(res.locals, offenderNo)
         expect(incentivesApi.getIepSummaryForBooking).toHaveBeenCalledWith(res.locals, bookingId)
-        expect(incentivesApi.getAgencyIepLevels).toHaveBeenCalledWith(res.locals, 'MDI')
+        expect(incentivesApi.getPrisonIncentiveLevels).toHaveBeenCalledWith(res.locals, 'MDI')
         expect(res.render).toHaveBeenCalledWith('prisonerProfile/prisonerChangeIncentiveLevelDetails.njk', {
           agencyId: 'MDI',
           bookingId,
