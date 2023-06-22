@@ -1,6 +1,7 @@
 import moment from 'moment'
 import config from '../../config'
 import type apis from '../../apis'
+import type { IepSummaryForBooking } from '../../api/incentivesApi'
 import { putLastNameFirst, formatName } from '../../utils'
 import { raiseAnalyticsEvent } from '../../raiseAnalyticsEvent'
 
@@ -19,16 +20,16 @@ export default ({
       const prisonerDetails = await prisonApi.getDetails(res.locals, offenderNo)
       const { agencyId, bookingId, firstName, lastName } = prisonerDetails
 
-      const [iepSummary, iepLevels] = await Promise.all([
+      const [iepSummary, prisonIncentiveLevels] = await Promise.all([
         getCurrentIepLevel(res.locals, bookingId),
-        incentivesApi.getAgencyIepLevels(res.locals, agencyId),
+        incentivesApi.getPrisonIncentiveLevels(res.locals, agencyId),
       ])
 
       const { iepLevel } = iepSummary
-      const selectableLevels = iepLevels.map((level) => ({
-        text: iepLevel === level.iepDescription ? `${level.iepDescription} (current level)` : level.iepDescription,
-        value: level.iepLevel,
-        checked: level.iepLevel === formValues.newIepLevel,
+      const selectableLevels = prisonIncentiveLevels.map((level) => ({
+        text: iepLevel === level.levelName ? `${level.levelName} (current level)` : level.levelName,
+        value: level.levelCode,
+        checked: level.levelCode === formValues.newIepLevel,
       }))
 
       return res.render('prisonerProfile/prisonerChangeIncentiveLevelDetails.njk', {
@@ -49,7 +50,7 @@ export default ({
     }
   }
 
-  const getCurrentIepLevel = async (context, bookingId) => {
+  const getCurrentIepLevel = async (context, bookingId): Promise<IepSummaryForBooking> => {
     let currentLevel
     try {
       currentLevel = await incentivesApi.getIepSummaryForBooking(context, bookingId)
