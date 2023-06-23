@@ -199,6 +199,14 @@ export const apis = {
     url: process.env.CREATE_AND_VARY_A_LICENCE_URL,
     enabled_prisons: process.env.CREATE_AND_VARY_A_LICENCE_ENABLED_PRISONS || '',
   },
+  activities: {
+    url: process.env.ACTIVITIES_URL,
+    enabled_prisons: process.env.ACTIVITIES_ENABLED_PRISONS || '',
+  },
+  appointments: {
+    url: process.env.APPOINTMENTS_URL,
+    enabled_prisons: process.env.APPOINTMENTS_ENABLED_PRISONS || '',
+  },
   historicalPrisonerApplication: {
     ui_url: process.env.HISTORICAL_PRISONER_APPLICATION_URL || '',
   },

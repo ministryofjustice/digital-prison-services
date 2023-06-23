@@ -1,4 +1,9 @@
 import { hasAnyRole } from '../../shared/permissions'
+import config from '../../config'
+
+const {
+  apis: { activities, appointments },
+} = config
 
 type TaskType = {
   id: string
@@ -74,6 +79,13 @@ export default ({ oauthApi, prisonApi }: any) => {
     const { activeCaseLoadId, staffId } = req.session.userDetails
     const userRoles = oauthApi.userRoles(res.locals)
     const staffRoles = await prisonApi.getStaffRoles(res.locals, staffId, activeCaseLoadId)
+
+    if (
+      activities.enabled_prisons.split(',').includes(activeCaseLoadId) &&
+      appointments.enabled_prisons.split(',').includes(activeCaseLoadId)
+    ) {
+      res.redirect('/')
+    }
 
     const oauthRoles = userRoles.map((userRole) => userRole.roleCode)
     const prisonStaffRoles = staffRoles.map((staffRole) => staffRole.role)
