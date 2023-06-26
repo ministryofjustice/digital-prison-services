@@ -76,5 +76,9 @@
     {% endif %}
   {% endfor %}
 
-  <a href="{{ '/prisoner/' + offenderNo }}" class="govuk-link govuk-!-font-size-19">Return to prisoner profile</a>
+  {% if redirectIsActive %}
+    <a href="{{ '/prisoner/' + offenderNo }}" class="govuk-link govuk-!-font-size-19" data-test="return-to-profile-overview">Return to prisoner profile</a>
+  {% else %}
+    <a href="{{ '/prisoner/' + offenderNo + '/personal#professional-contacts' }}" class="govuk-link govuk-!-font-size-19" data-test="return-to-profile-personal">Return to prisoner profile</a>
+  {% endif %}
 {% endblock %}

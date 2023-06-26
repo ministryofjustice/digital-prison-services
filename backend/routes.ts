@@ -223,6 +223,11 @@ const setup = ({
     })
   )
 
+  // router.use(
+  //   '/prisoner/:offenderNo/personal',
+  //   test
+  // )
+
   router.use(
     '/prisoner/:offenderNo',
     prisonerProfileRouter({
