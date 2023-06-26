@@ -10,7 +10,7 @@ import { Location } from '../../api/prisonApi'
 export const trackEvent = (telemetry, results, searchQueries, username, activeCaseLoad) => {
   if (telemetry) {
     const offenderNos = results?.map((result) => result.offenderNo)
-    // Remove empty terms and the alerts[] property (which is a duplicate of the alerts property)
+    // Remove empty terms and the alerts[] property (which is a duplicate of the alert's property)
     const searchTerms = Object.fromEntries(
       Object.entries(searchQueries).filter((entry) => entry[1] && entry[0] !== 'alerts[]')
     )
@@ -211,10 +211,11 @@ export default ({
       ...systemContext,
       ...pagingContext,
     }
-    const { prisonId, internalLocation } = extractPrisonAndInternalLocation(location)
+    const locations: Location[] = await Promise.all([prisonApi.userLocations(localContext)])
+    const { prisonId, internalLocation } = extractPrisonAndInternalLocation(location, locations)
 
     // when the prison-api was used, searching for prisoners not in your caseload returned no results
-    // rightly or wrongly this replicates that behaviour (maybe a 403 error eould have been better)
+    // rightly or wrongly this replicates that behaviour (maybe a 403 error could have been better)
     const establishmentSearchForValidCaseload: () => Promise<PrisonerInPrisonSearchResult[]> = () =>
       isPrisonSearchAllowedForCaseloads(localContext, prisonId)
         ? offenderSearchApi.establishmentSearch(searchContext, prisonId, {
@@ -224,10 +225,7 @@ export default ({
           })
         : Promise.resolve([])
 
-    const [locations, prisoners] = await Promise.all([
-      prisonApi.userLocations(localContext),
-      establishmentSearchForValidCaseload(),
-    ])
+    const [prisoners] = await Promise.all([establishmentSearchForValidCaseload()])
 
     const totalRecords = searchContext.responseHeaders?.['total-records'] ?? 0
 
@@ -235,11 +233,12 @@ export default ({
   }
 
   const extractPrisonAndInternalLocation = (
-    location: string
+    location: string, locations: Location[]
   ): { prisonId: string; internalLocation: string | undefined } => {
     // this might be an internal location so prisonId is always first 3 characters
     const prisonId = location.slice(0, 3)
-    return { prisonId, internalLocation: prisonId === location ? undefined : location }
+    const subLocationMap = new Map(locations.map((l) => [l.internalLocationCode, l.subLocations]))
+    return { prisonId, internalLocation: prisonId === location ? undefined : subLocationMap[location].subLocations ? `${location}-` : location }
   }
 
   const isPrisonSearchAllowedForCaseloads = (localContext: LocalContext, prisonId: string): boolean => {

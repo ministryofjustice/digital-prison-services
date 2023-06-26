@@ -57,6 +57,7 @@ export type Location = {
   operationalCapacity: number
   userDescription: string
   internalLocationCode: string
+  subLocations: boolean
 }
 
 export const prisonApiFactory = (client) => {

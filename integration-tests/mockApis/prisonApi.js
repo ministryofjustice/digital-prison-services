@@ -997,7 +997,7 @@ module.exports = {
           description: 'HB1',
           agencyId: 'RNI',
           currentOccupancy: 243,
-          locaitionPrefix: 'RNI-HB1',
+          locationPrefix: 'RNI-HB1',
           internalLocationCode: 'HB1',
         },
       },
