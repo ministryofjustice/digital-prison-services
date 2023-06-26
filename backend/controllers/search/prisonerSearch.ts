@@ -233,15 +233,16 @@ export default ({
   }
 
   const extractPrisonAndInternalLocation = (
-    location: string, locations: Location[]
+    location: string,
+    locations: Location[]
   ): { prisonId: string; internalLocation: string | undefined } => {
     // this might be an internal location so prisonId is always first 3 characters
     const prisonId = location.slice(0, 3)
 
-    const internalLocationMap = new Map;
-    locations.forEach(({locationPrefix, subLocations})=>{
+    const internalLocationMap = new Map()
+    locations.forEach(({ locationPrefix, subLocations }) => {
       if (prisonId !== locationPrefix) {
-        internalLocationMap[locationPrefix] = subLocations ? `${locationPrefix}-` : locationPrefix;
+        internalLocationMap[locationPrefix] = subLocations ? `${locationPrefix}-` : locationPrefix
       } else {
         internalLocationMap[locationPrefix] = undefined
       }
