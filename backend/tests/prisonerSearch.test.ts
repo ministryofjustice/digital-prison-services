@@ -73,6 +73,7 @@ describe('Prisoner search', () => {
         agencyId: 'MDI',
         locationPrefix: 'MDI-1',
         userDescription: 'Houseblock 1',
+        subLocations: true,
       },
       {
         locationId: 3,
@@ -81,6 +82,7 @@ describe('Prisoner search', () => {
         agencyId: 'MDI',
         locationPrefix: 'MDI-2',
         userDescription: 'Houseblock 2',
+        subLocations: true,
       },
     ])
     prisonApi.getInmates = jest.fn().mockReturnValue([])
@@ -132,12 +134,12 @@ describe('Prisoner search', () => {
     })
 
     it('should request with parsed location when supplied in query with dash to indicate partial match', async () => {
-      req.query.location = 'BXI-B'
+      req.query.location = 'MDI-2'
 
       await controller.index(req, res)
 
-      expect(offenderSearchApi.establishmentSearch).toHaveBeenCalledWith(expect.anything(), 'BXI', {
-        cellLocationPrefix: 'BXI-B-',
+      expect(offenderSearchApi.establishmentSearch).toHaveBeenCalledWith(expect.anything(), 'MDI', {
+        cellLocationPrefix: 'MDI-2-',
       })
     })
 

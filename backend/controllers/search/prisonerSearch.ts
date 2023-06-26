@@ -211,7 +211,7 @@ export default ({
       ...systemContext,
       ...pagingContext,
     }
-    const locations: Location[] = await Promise.all([prisonApi.userLocations(localContext)])
+    const locations: Location[] = await Promise.all(prisonApi.userLocations(localContext))
     const { prisonId, internalLocation } = extractPrisonAndInternalLocation(location, locations)
 
     // when the prison-api was used, searching for prisoners not in your caseload returned no results
@@ -221,7 +221,7 @@ export default ({
         ? offenderSearchApi.establishmentSearch(searchContext, prisonId, {
             term: keywords,
             alerts: selectedAlerts,
-            cellLocationPrefix: internalLocation && `${internalLocation}-`,
+            cellLocationPrefix: internalLocation && `${internalLocation}`,
           })
         : Promise.resolve([])
 
@@ -237,8 +237,17 @@ export default ({
   ): { prisonId: string; internalLocation: string | undefined } => {
     // this might be an internal location so prisonId is always first 3 characters
     const prisonId = location.slice(0, 3)
-    const subLocationMap = new Map(locations.map((l) => [l.internalLocationCode, l.subLocations]))
-    return { prisonId, internalLocation: prisonId === location ? undefined : subLocationMap[location].subLocations ? `${location}-` : location }
+
+    const internalLocationMap = new Map;
+    locations.forEach(({locationPrefix, subLocations})=>{
+      if (prisonId !== locationPrefix) {
+        internalLocationMap[locationPrefix] = subLocations ? `${locationPrefix}-` : locationPrefix;
+      } else {
+        internalLocationMap[locationPrefix] = undefined
+      }
+    })
+
+    return { prisonId, internalLocation: internalLocationMap[location] }
   }
 
   const isPrisonSearchAllowedForCaseloads = (localContext: LocalContext, prisonId: string): boolean => {

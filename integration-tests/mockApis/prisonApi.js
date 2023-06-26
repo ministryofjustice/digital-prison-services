@@ -108,6 +108,7 @@ module.exports = {
             agencyId: 'MDI',
             locationPrefix: 'MDI-1',
             userDescription: 'Houseblock 1',
+            subLocations: true,
           },
           {
             locationId: 3,
@@ -116,6 +117,7 @@ module.exports = {
             agencyId: 'MDI',
             locationPrefix: 'MDI-2',
             userDescription: 'Houseblock 2',
+            subLocations: true,
           },
         ],
       },
