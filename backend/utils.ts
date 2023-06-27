@@ -3,7 +3,6 @@ import { DATE_TIME_FORMAT_SPEC } from '../common/dateHelpers'
 import abbreviations from '../common/abbreviations'
 import config from './config'
 
-
 export const switchDateFormat = (displayDate: moment.MomentInput, fromFormat = 'DD/MM/YYYY'): moment.MomentInput => {
   if (displayDate) {
     return moment(displayDate, fromFormat).format('YYYY-MM-DD')
@@ -349,9 +348,9 @@ export const getRedirectEnabled = (res): boolean => {
   const redirectUrl = config.app.prisonerProfileRedirect.url
   const redirectDate = config.app.prisonerProfileRedirect.enabledDate
   const redirectEnabled =
-  redirectUrl &&
-  ((redirectDate && redirectDate < Date.now()) ||
-    res.locals.user?.userRoles?.some((role) => role === 'ROLE_DPS_APPLICATION_DEVELOPER'))
+    redirectUrl &&
+    ((redirectDate && redirectDate < Date.now()) ||
+      res.locals.user?.userRoles?.some((role) => role === 'ROLE_DPS_APPLICATION_DEVELOPER'))
 
   return redirectEnabled
 }
@@ -412,5 +411,5 @@ export default {
   getWith404AsNull,
   stringWithAbbreviationsProcessor,
   getRedirectEnabled,
-  getRedirectCaseLoad
+  getRedirectCaseLoad,
 }

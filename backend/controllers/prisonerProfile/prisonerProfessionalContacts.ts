@@ -1,7 +1,16 @@
 import moment from 'moment'
 import logErrorAndContinue from '../../shared/logErrorAndContinue'
 
-import { formatName, putLastNameFirst, hasLength, groupBy, sortByDateTime, getNamesFromString, getRedirectEnabled, getRedirectCaseLoad } from '../../utils'
+import {
+  formatName,
+  putLastNameFirst,
+  hasLength,
+  groupBy,
+  sortByDateTime,
+  getNamesFromString,
+  getRedirectEnabled,
+  getRedirectCaseLoad,
+} from '../../utils'
 
 import { getPhone, getFormattedAddress } from '../../shared/addressHelpers'
 
@@ -107,6 +116,6 @@ export default ({ prisonApi, personService, allocationManagerApi }) =>
       ),
       offenderNo,
       prisonerName: formatName(firstName, lastName),
-      redirectIsActive: redirectEnabled && redirectCaseload ? true : false
+      redirectIsActive: !!(redirectEnabled && redirectCaseload),
     })
   }
