@@ -211,7 +211,7 @@ export default ({
       ...systemContext,
       ...pagingContext,
     }
-    const locations: Location[] = await Promise.all(prisonApi.userLocations(localContext))
+    const locations: Location[] = await prisonApi.userLocations(localContext)
     const { prisonId, internalLocation } = extractPrisonAndInternalLocation(location, locations)
 
     // when the prison-api was used, searching for prisoners not in your caseload returned no results
@@ -239,16 +239,18 @@ export default ({
     // this might be an internal location so prisonId is always first 3 characters
     const prisonId = location.slice(0, 3)
 
-    const internalLocationMap = new Map()
-    locations.forEach(({ locationPrefix, subLocations }) => {
-      if (prisonId !== locationPrefix) {
-        internalLocationMap[locationPrefix] = subLocations ? `${locationPrefix}-` : locationPrefix
-      } else {
-        internalLocationMap[locationPrefix] = undefined
-      }
-    })
+    const internalLocationMap = new Map(
+      locations.map((obj) => [obj.locationPrefix, mapInternalLocation(prisonId, obj.locationPrefix, obj.subLocations)])
+    )
 
-    return { prisonId, internalLocation: internalLocationMap[location] }
+    return { prisonId, internalLocation: internalLocationMap.get(location) }
+  }
+
+  const mapInternalLocation = (prisonId, locationPrefix, subLocations): string => {
+    if (prisonId !== locationPrefix) {
+      return subLocations ? `${locationPrefix}-` : locationPrefix
+    }
+    return undefined
   }
 
   const isPrisonSearchAllowedForCaseloads = (localContext: LocalContext, prisonId: string): boolean => {
