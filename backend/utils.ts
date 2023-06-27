@@ -2,7 +2,7 @@ import moment from 'moment'
 import { DATE_TIME_FORMAT_SPEC } from '../common/dateHelpers'
 import abbreviations from '../common/abbreviations'
 import config from './config'
-import { CaseLoad } from './api/prisonApi'
+
 
 export const switchDateFormat = (displayDate: moment.MomentInput, fromFormat = 'DD/MM/YYYY'): moment.MomentInput => {
   if (displayDate) {
