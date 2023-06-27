@@ -104,6 +104,5 @@ export default ({ prisonApi, personService, allocationManagerApi }) =>
       ),
       offenderNo,
       prisonerName: formatName(firstName, lastName),
-      isRedirectActive: req?.session?.isRedirectActive,
     })
   }

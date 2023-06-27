@@ -64,7 +64,6 @@ describe('Prisoner professional contacts', () => {
           contactsGroupedByRelationship: [],
           offenderNo: 'ABC123',
           prisonerName: 'John Smith',
-          isRedirectActive: false,
         }
       )
     })
@@ -470,7 +469,6 @@ describe('Prisoner professional contacts', () => {
             ],
             offenderNo: 'ABC123',
             prisonerName: 'John Smith',
-            isRedirectActive: false,
           }
         )
       })
