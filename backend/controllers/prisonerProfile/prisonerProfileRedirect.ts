@@ -1,13 +1,13 @@
 import config from '../../config'
-import { getRedirectCaseLoad, getRedirectEnabled } from '../../utils'
+import { isRedirectCaseLoad, isRedirectEnabled } from '../../utils'
 
 export default ({ path, handler }) =>
   async (req, res, next) => {
     const { offenderNo } = req.params
     const { activeCaseLoadId } = req.session.userDetails
 
-    const redirectEnabled = getRedirectEnabled(res)
-    const redirectCaseload = getRedirectCaseLoad(activeCaseLoadId)
+    const redirectEnabled = isRedirectEnabled(res)
+    const redirectCaseload = isRedirectCaseLoad(activeCaseLoadId)
 
     if (redirectEnabled && redirectCaseload) {
       return res.redirect(`${config.app.prisonerProfileRedirect.url}/prisoner/${offenderNo}${path}`)

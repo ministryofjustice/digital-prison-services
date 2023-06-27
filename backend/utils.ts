@@ -344,20 +344,22 @@ export const stringWithAbbreviationsProcessor = (string: string): string => {
 }
 
 // Either explicitly enable redirect for enabled prisons or check for the developer role
-export const getRedirectEnabled = (res): boolean => {
+export const isRedirectEnabled = (res): boolean => {
   const redirectUrl = config.app.prisonerProfileRedirect.url
   const redirectDate = config.app.prisonerProfileRedirect.enabledDate
-  const redirectEnabled =
+  return (
     redirectUrl &&
     ((redirectDate && redirectDate < Date.now()) ||
       res.locals.user?.userRoles?.some((role) => role === 'ROLE_DPS_APPLICATION_DEVELOPER'))
-
-  return redirectEnabled
+  )
 }
 
-export const getRedirectCaseLoad = (activeCaseLoadId: string): boolean => {
-  const redirectCaseload = config.app.prisonerProfileRedirect.enabledPrisons?.split(',')?.includes(activeCaseLoadId)
-  return redirectCaseload
+export const isRedirectCaseLoad = (activeCaseLoadId: string): boolean => {
+  return config.app.prisonerProfileRedirect.enabledPrisons?.split(',')?.includes(activeCaseLoadId)
+}
+
+export const isRedirectActive = (redirectCaseLoadEnabled: boolean, redirectEnabled: boolean): boolean => {
+  return !!(redirectCaseLoadEnabled && redirectEnabled)
 }
 
 export default {
@@ -410,6 +412,6 @@ export default {
   joinUrlPath,
   getWith404AsNull,
   stringWithAbbreviationsProcessor,
-  getRedirectEnabled,
-  getRedirectCaseLoad,
+  isRedirectEnabled,
+  isRedirectCaseLoad,
 }

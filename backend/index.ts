@@ -35,6 +35,7 @@ import errorHandler from './middleware/errorHandler'
 import { logError } from './logError'
 import homepageController from './controllers/homepage/homepage'
 import requestLimiter from './middleware/requestLimiter'
+import isRedirectActive from './middleware/isRedirectActive'
 
 // We do not want the server to exit, partly because any log information will be lost.
 // Instead, log the error so we can trace, diagnose and fix the problem.
@@ -65,6 +66,7 @@ app.use(setupAuth({ oauthApi: apis.oauthApi, tokenVerificationApi: apis.tokenVer
 
 app.use(currentUser({ prisonApi: apis.prisonApi, oauthApi: apis.oauthApi }))
 app.use(returnUrl())
+app.use(isRedirectActive())
 
 if (!config.app.disableWebpack) {
   // eslint-disable-next-line global-require

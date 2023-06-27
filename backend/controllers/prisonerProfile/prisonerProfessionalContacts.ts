@@ -1,16 +1,7 @@
 import moment from 'moment'
 import logErrorAndContinue from '../../shared/logErrorAndContinue'
 
-import {
-  formatName,
-  putLastNameFirst,
-  hasLength,
-  groupBy,
-  sortByDateTime,
-  getNamesFromString,
-  getRedirectEnabled,
-  getRedirectCaseLoad,
-} from '../../utils'
+import { formatName, putLastNameFirst, hasLength, groupBy, sortByDateTime, getNamesFromString } from '../../utils'
 
 import { getPhone, getFormattedAddress } from '../../shared/addressHelpers'
 
@@ -106,9 +97,6 @@ export default ({ prisonApi, personService, allocationManagerApi }) =>
       })
     }
 
-    const redirectEnabled = getRedirectEnabled(res)
-    const redirectCaseload = getRedirectCaseLoad(req?.session?.userDetails.activeCaseLoadId)
-
     return res.render('prisonerProfile/prisonerProfessionalContacts/prisonerProfessionalContacts.njk', {
       breadcrumbPrisonerName: putLastNameFirst(firstName, lastName),
       contactsGroupedByRelationship: contactsGroupedByRelationship.sort((left, right) =>
@@ -116,6 +104,6 @@ export default ({ prisonApi, personService, allocationManagerApi }) =>
       ),
       offenderNo,
       prisonerName: formatName(firstName, lastName),
-      redirectIsActive: !!(redirectEnabled && redirectCaseload),
+      isRedirectActive: req?.session?.isRedirectActive,
     })
   }

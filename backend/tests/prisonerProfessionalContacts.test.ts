@@ -16,6 +16,7 @@ describe('Prisoner professional contacts', () => {
     req = {
       originalUrl: 'http://localhost',
       params: { offenderNo },
+      session: { isRedirectActive: false },
     }
     res = { locals: {}, render: jest.fn(), status: jest.fn() }
 
@@ -63,7 +64,7 @@ describe('Prisoner professional contacts', () => {
           contactsGroupedByRelationship: [],
           offenderNo: 'ABC123',
           prisonerName: 'John Smith',
-          redirectIsActive: false,
+          isRedirectActive: false,
         }
       )
     })
@@ -469,7 +470,7 @@ describe('Prisoner professional contacts', () => {
             ],
             offenderNo: 'ABC123',
             prisonerName: 'John Smith',
-            redirectIsActive: false,
+            isRedirectActive: false,
           }
         )
       })
