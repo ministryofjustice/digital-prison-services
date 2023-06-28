@@ -26,8 +26,10 @@ describe('Homepage', () => {
     config.applications.sendLegalMail.url = undefined
     config.apis.welcomePeopleIntoPrison.enabled_prisons = undefined
     config.apis.welcomePeopleIntoPrison.url = undefined
-    config.apis.mercurySubmitPrivateBeta.url = undefined
-    config.apis.mercurySubmitPrivateBeta.enabled_prisons = undefined
+    config.apis.mercurySubmit.url = undefined
+    config.apis.mercurySubmit.enabled_prisons = undefined
+    config.apis.mercurySubmit.privateBetaDate = undefined
+    config.apis.mercurySubmit.liveDate = undefined
     config.apis.incentives.ui_url = undefined
     config.app.whereaboutsMaintenanceMode = false
     config.app.keyworkerMaintenanceMode = false
@@ -774,9 +776,12 @@ describe('Homepage', () => {
     })
 
     it('should not display the Mercury Submit Private Beta task on the home page', async () => {
-      config.apis.mercurySubmitPrivateBeta.url = 'https://welcome.prison.service.justice.gov.uk'
-      config.apis.mercurySubmitPrivateBeta.enabled_prisons = 'LEI,NMI'
+      jest.useFakeTimers()
+      jest.setSystemTime(new Date('2023-07-03').getTime())
 
+      config.apis.mercurySubmit.url = 'https://welcome.prison.service.justice.gov.uk'
+      config.apis.mercurySubmit.enabled_prisons = 'LEI,NMI'
+      config.apis.mercurySubmit.privateBetaDate = new Date('2023-07-04').getTime()
       await controller(req, res)
 
       expect(res.render).toHaveBeenCalledWith(
@@ -785,11 +790,15 @@ describe('Homepage', () => {
           tasks: [],
         })
       )
+      jest.useRealTimers()
     })
 
     it('should display the Mercury Submit Private Beta task on the home page', async () => {
-      config.apis.mercurySubmitPrivateBeta.url = 'https://welcome.prison.service.justice.gov.uk'
-      config.apis.mercurySubmitPrivateBeta.enabled_prisons = 'LEI,NMI,MDI'
+      jest.useFakeTimers()
+      jest.setSystemTime(new Date('2023-07-03').getTime())
+      config.apis.mercurySubmit.url = 'https://welcome.prison.service.justice.gov.uk'
+      config.apis.mercurySubmit.enabled_prisons = 'LEI,NMI,MDI'
+      config.apis.mercurySubmit.privateBetaDate = new Date('2023-07-01').getTime()
 
       await controller(req, res)
 
@@ -807,6 +816,31 @@ describe('Homepage', () => {
           ],
         })
       )
+      jest.useRealTimers()
+    })
+
+    it('should display the Mercury Submit task on the home page', async () => {
+      jest.useFakeTimers()
+      jest.setSystemTime(new Date('2023-07-03').getTime())
+      config.apis.mercurySubmit.url = 'https://welcome.prison.service.justice.gov.uk'
+      config.apis.mercurySubmit.liveDate = new Date('2023-07-01').getTime()
+
+      await controller(req, res)
+
+      expect(res.render).toHaveBeenCalledWith(
+        'homepage/homepage.njk',
+        expect.objectContaining({
+          tasks: [
+            {
+              description: 'Access to the new Mercury submission form',
+              heading: 'Submit an Intelligence Report',
+              href: 'https://welcome.prison.service.justice.gov.uk',
+              id: 'submit-an-intelligence-report',
+            },
+          ],
+        })
+      )
+      jest.useRealTimers()
     })
 
     it('should not display the Manage Restricted Patients task on the homepage if none of the correct roles are present', async () => {
