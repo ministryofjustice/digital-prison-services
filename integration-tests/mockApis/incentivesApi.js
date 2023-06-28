@@ -1,11 +1,11 @@
 const { stubFor } = require('./wiremock')
 
 module.exports = {
-  stubGetAgencyIepLevels: (response) =>
+  stubGetPrisonIncentiveLevels: (response) =>
     stubFor({
       request: {
         method: 'GET',
-        urlPattern: '/incentives/iep/levels/.+?',
+        urlPattern: '/incentives/incentive/prison-levels/.+?',
       },
       response: {
         status: 200,

@@ -57,6 +57,7 @@ export type Location = {
   operationalCapacity: number
   userDescription: string
   internalLocationCode: string
+  subLocations: boolean
 }
 
 export const prisonApiFactory = (client) => {
@@ -434,11 +435,14 @@ export const prisonApiFactory = (client) => {
   const getNonAssociations = (context, bookingId) => get(context, `/api/bookings/${bookingId}/non-association-details`)
 
   const getCellsWithCapacity = (context, agencyId, attribute) =>
-    get(
+    getWithCustomTimeout(
       context,
       attribute
         ? `/api/agencies/${agencyId}/cellsWithCapacity?attribute=${attribute}`
-        : `/api/agencies/${agencyId}/cellsWithCapacity`
+        : `/api/agencies/${agencyId}/cellsWithCapacity`,
+      {
+        customTimeout: 30000,
+      }
     )
 
   const getOffenderCellHistory = (context, bookingId, params) =>

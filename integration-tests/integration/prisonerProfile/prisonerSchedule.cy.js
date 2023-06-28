@@ -90,9 +90,11 @@ context('Prisoner schedule', () => {
     })
 
     context('when viewing current weeks schedule', () => {
-      it('should show the correct dates in the title and link', () => {
+      beforeEach(() => {
         cy.visit(`/prisoner/${offenderNo}/schedule`)
+      })
 
+      it('should show the correct dates in the title and link', () => {
         cy.get('h1').should('have.text', 'John Smith’s schedule')
         cy.get('[data-test="schedule-dates"]').should(
           'contain.text',
@@ -138,10 +140,11 @@ context('Prisoner schedule', () => {
     })
 
     context('when viewing next weeks schedule', () => {
-      it('should show the correct dates in the title and link', () => {
+      beforeEach(() => {
         cy.visit(`/prisoner/${offenderNo}/schedule`)
         cy.get('[data-test="schedule-select-week"]').click()
-
+      })
+      it('should show the correct dates in the title and link', () => {
         cy.get('h1').should('have.text', 'John Smith’s schedule')
         cy.get('[data-test="schedule-dates"]').should(
           'contain.text',

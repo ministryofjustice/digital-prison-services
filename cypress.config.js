@@ -6,6 +6,7 @@ const auth = require('./integration-tests/mockApis/auth')
 const prisonApi = require('./integration-tests/mockApis/prisonApi')
 const incentivesApi = require('./integration-tests/mockApis/incentivesApi')
 const dataComplianceApi = require('./integration-tests/mockApis/dataCompliance')
+const prisonerProfile = require('./integration-tests/mockApis/prisonerProfile')
 const whereabouts = require('./integration-tests/mockApis/whereabouts')
 const tokenverification = require('./integration-tests/mockApis/tokenverification')
 const keyworker = require('./integration-tests/mockApis/keyworker')
@@ -47,6 +48,7 @@ module.exports = defineConfig({
   viewportWidth: 1024,
   viewportHeight: 768,
   e2e: {
+    experimentalSessionAndOrigin: true,
     setupNodeEvents(on) {
       on('task', {
         ...prisonApi,
@@ -502,7 +504,7 @@ module.exports = defineConfig({
         stubEnRoute: ({ agencyId, results }) => prisonApi.stubEnRoute(agencyId, results),
         stubCurrentlyOut: ({ livingUnitId, movements }) => prisonApi.stubCurrentlyOut(livingUnitId, movements),
         stubTotalCurrentlyOut: ({ agencyId, movements }) => prisonApi.stubTotalCurrentlyOut(agencyId, movements),
-        stubGetAgencyIepLevels: (response) => incentivesApi.stubGetAgencyIepLevels(response),
+        stubGetPrisonIncentiveLevels: (response) => incentivesApi.stubGetPrisonIncentiveLevels(response),
         stubChangeIepLevel: (body) => incentivesApi.stubChangeIepLevel(body),
         stubGetPrisonerDamageObligations: (response) => prisonApi.stubGetPrisonerDamageObligations(response),
         stubGetTransactionHistory: ({ response, accountCode, transactionType, fromDate, toDate }) =>
@@ -531,6 +533,12 @@ module.exports = defineConfig({
         stubGetUnacceptableAbsenceDetail: (args) => whereabouts.stubGetUnacceptableAbsenceDetail(args),
         stubPrisonerSearch: (response) => offenderSearch.stubPrisonerSearch(response),
         stubPrisonerSearchDetails: (response) => offenderSearch.stubPrisonerSearchDetails(response),
+        stubPrisonerProfile: prisonerProfile.stubPrisonerProfile,
+        stubPrisonerProfilePersonal: prisonerProfile.stubPrisonerProfilePersonal,
+        stubPrisonerProfileCaseNotes: prisonerProfile.stubPrisonerProfileCaseNotes,
+        stubPrisonerProfileAlerts: prisonerProfile.stubPrisonerProfileAlerts,
+        stubPrisonerProfileOffences: prisonerProfile.stubPrisonerProfileOffences,
+        stubPrisonerProfileWorkAndSkills: prisonerProfile.stubPrisonerProfileWorkAndSkills,
       })
     },
 

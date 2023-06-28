@@ -24,7 +24,7 @@ const considerRisksPage = () =>
 export default {
   verifyOnPage: considerRisksPage,
   goTo: (offenderNo, cellId) => {
-    cy.visit(`/prisoner/${offenderNo}/cell-move/consider-risks?cellId=${cellId}`)
+    cy.visit(`/prisoner/${offenderNo}/cell-move/consider-risks?cellId=${cellId}`, { failOnStatusCode: false })
     return considerRisksPage()
   },
 }

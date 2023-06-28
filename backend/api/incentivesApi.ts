@@ -2,11 +2,12 @@ import type { Response } from 'superagent'
 import type { ClientContext, OauthApiClient } from './oauthEnabledClient'
 import contextProperties from '../contextProperties'
 
-export type AgencyIepLevel = {
-  iepLevel: string
-  iepDescription: string
-  sequence: number
-  default: boolean
+export type PrisonIncentiveLevel = {
+  levelCode: string
+  levelName: string
+  active: boolean
+  defaultOnAdmission: boolean
+  // NB: there are other properties, but they’re not relevant to DPS
 }
 
 export type IepSummaryForBooking = {
@@ -74,8 +75,8 @@ export const incentivesApiFactory = (client: OauthApiClient) => {
   const post = <T, Body>(context: ClientContext, url: string, data: Body): Promise<T> =>
     client.post<T>(context, url, data).then(processResponse(context))
 
-  const getAgencyIepLevels = (context: ClientContext, agencyId: string): Promise<AgencyIepLevel[]> =>
-    get<AgencyIepLevel[]>(context, `/iep/levels/${agencyId}`)
+  const getPrisonIncentiveLevels = (context: ClientContext, agencyId: string): Promise<PrisonIncentiveLevel[]> =>
+    get<PrisonIncentiveLevel[]>(context, `/incentive/prison-levels/${agencyId}`)
 
   type GetIepSummaryForBooking = {
     (context: ClientContext, bookingId: number, withDetails?: false): Promise<IepSummaryForBooking>
@@ -97,7 +98,7 @@ export const incentivesApiFactory = (client: OauthApiClient) => {
     post<IepLevelChanged, IepLevelChangeRequest>(context, `/iep/reviews/booking/${bookingId}`, body)
 
   return {
-    getAgencyIepLevels,
+    getPrisonIncentiveLevels,
     getIepSummaryForBooking,
     getIepSummaryForBookingIds,
     changeIepLevel,

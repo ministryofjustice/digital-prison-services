@@ -1,3 +1,4 @@
+import jwtDecode from 'jwt-decode'
 import { CaseLoad } from '../api/prisonApi'
 import logger from '../log'
 import { forenameToInitial } from '../utils'
@@ -32,6 +33,19 @@ export default ({ prisonApi, oauthApi }) => {
     return null
   }
 
+  const getUserRoles = async (req, res) => {
+    try {
+      const { authorities: roles = [] } = jwtDecode(res.locals.access_token) as { authorities?: string[] }
+      if (!roles) {
+        logger.info('No user roles available')
+      }
+      return roles
+    } catch (error) {
+      logger.warn(error, 'Failed to retrieve roles')
+    }
+    return null
+  }
+
   return async (req, res, next) => {
     if (!req.xhr) {
       if (!req.session.userDetails) {
@@ -42,11 +56,13 @@ export default ({ prisonApi, oauthApi }) => {
         req.session.allCaseloads = allCaseloads
       }
 
+      const userRoles = await getUserRoles(req, res)
       const activeCaseLoad = await getActiveCaseload(req, res)
 
       const user: User = {
         ...res.locals.user,
         username: req.session.userDetails.username,
+        userRoles,
         allCaseloads: req.session.allCaseloads,
         displayName: forenameToInitial(req.session.userDetails.name),
         activeCaseLoad,

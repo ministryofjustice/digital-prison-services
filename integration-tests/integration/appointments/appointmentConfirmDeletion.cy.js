@@ -212,7 +212,7 @@ context('Confirm appointment deletion page', () => {
       form.confirmYes().click()
       form.submitButton().click()
 
-      cy.url().should('include', '/appointment-details/1')
+      cy.url().should('include', 'deleted?multipleDeleted=false')
     })
 
     it('Should return to the appointment details page when deletion rejected', () => {

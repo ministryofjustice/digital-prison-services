@@ -3,6 +3,10 @@ const toNumber = (value: string | undefined): number | undefined => {
   return Number.isSafeInteger(result) && result
 }
 
+const parseDate = (value: string | undefined): number => {
+  return value ? Date.parse(value) : null
+}
+
 export const app = {
   port: process.env.PORT || 3002,
   production: process.env.NODE_ENV === 'production',
@@ -17,11 +21,16 @@ export const app = {
   contentfulSpaceId: process.env.CONTENTFUL_SPACE_ID || '1',
   contentfulAccessToken: process.env.CONTENTFUL_ACCESS_TOKEN || '1',
   esweEnabled: process.env.ESWE_ENABLED === 'true',
-  neurodiversityEnabledUsernames: process.env.NEURODIVERSITY_ENABLED_USERNAMES,
+  neurodiversityEnabledUsernames: process.env.NEURODIVERSITY_ENABLED_USERNAMES || [],
   neurodiversityEnabledPrisons: process.env.NEURODIVERSITY_ENABLED_PRISONS || [],
   disableRequestLimiter: process.env.DISABLE_REQUEST_LIMITER ? process.env.DISABLE_REQUEST_LIMITER === 'true' : false,
   whereaboutsMaintenanceMode: process.env.WHEREABOUTS_MAINTENANCE_MODE === 'true' || false,
   keyworkerMaintenanceMode: process.env.KEYWORKER_MAINTENANCE_MODE === 'true' || false,
+  prisonerProfileRedirect: {
+    url: process.env.PRISONER_PROFILE_REDIRECT_URL,
+    enabledDate: parseDate(process.env.PRISONER_PROFILE_REDIRECT_ENABLED_DATE),
+    enabledPrisons: process.env.PRISONER_PROFILE_REDIRECT_ENABLED_PRISONS || '',
+  },
 }
 
 export const analytics = {

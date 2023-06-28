@@ -18,7 +18,7 @@ const quickLookFullDetails = {
   sentenceDetails: { sentenceDetail: { releaseDate: '2020-12-13' } },
   balances: { spends: 100, cash: 75.5, savings: 50, damageObligations: 65, currency: 'GBP' },
   iepSummary: {
-    bookingId: bookingId,
+    bookingId,
     iepDate: '2017-08-15',
     iepTime: '2017-08-15T16:04:35',
     iepLevel: 'Standard',
@@ -225,6 +225,9 @@ context('Prisoner quick look data retrieval errors', () => {
     })
 
     cy.task('stubQuickLookApiErrors')
+  })
+
+  beforeEach(() => {
     cy.visit(`/prisoner/${offenderNo}`)
   })
 
@@ -365,6 +368,7 @@ context('Prisoner quick look', () => {
         caseNoteSummary: {},
         offenderNo,
       })
+      cy.visit(`/prisoner/${offenderNo}`)
     })
 
     it('Should show correct tabs', () => {
@@ -898,7 +902,6 @@ context('When a user can view inactive bookings', () => {
       offenderFullDetails: { ...offenderFullDetails, agencyId: 'OUT' },
       iepSummary: {},
       caseNoteSummary: {},
-      // userRoles: [{ roleCode: 'INACTIVE_BOOKINGS' }],
       offenderNo,
     })
   })
