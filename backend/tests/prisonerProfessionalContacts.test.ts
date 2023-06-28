@@ -16,7 +16,7 @@ describe('Prisoner professional contacts', () => {
     req = {
       originalUrl: 'http://localhost',
       params: { offenderNo },
-      session: { isRedirectActive: false },
+      session: { useNewProfile: false },
     }
     res = { locals: {}, render: jest.fn(), status: jest.fn() }
 

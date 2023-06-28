@@ -1,4 +1,4 @@
-import isRedirectActive from './isRedirectActive'
+import useNewProfile from './useNewProfile'
 import config, { parseDate } from '../config'
 
 describe('Check if redirect is active', () => {
@@ -9,7 +9,7 @@ describe('Check if redirect is active', () => {
       next = jest.fn()
       config.app.prisonerProfileRedirect.enabledDate = parseDate('2023-06-06T13:15:00')
       config.app.prisonerProfileRedirect.enabledPrisons = 'LEI'
-      controller = isRedirectActive()
+      controller = useNewProfile()
     })
 
     it('Then isRedirectActive should return true', async () => {
@@ -26,7 +26,7 @@ describe('Check if redirect is active', () => {
     const req = { session: { userDetails: { activeCaseloadId: '' } }, query: {} }
     beforeEach(() => {
       next = jest.fn()
-      controller = isRedirectActive()
+      controller = useNewProfile()
     })
 
     it('Then isRedirectActive should return false', async () => {

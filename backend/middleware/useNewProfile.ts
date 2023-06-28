@@ -1,7 +1,7 @@
-import { isRedirectActive, isRedirectCaseLoad, isRedirectEnabled } from '../utils'
+import { useNewProfile, isRedirectCaseLoad, isRedirectEnabled } from '../utils'
 
 export default () => async (req, res, next) => {
-  res.locals.isRedirectActive = isRedirectActive(
+  res.locals.useNewProfile = useNewProfile(
     isRedirectEnabled(res),
     isRedirectCaseLoad(req?.session?.userDetails?.activeCaseLoadId)
   )
