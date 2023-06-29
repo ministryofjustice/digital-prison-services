@@ -3,7 +3,7 @@ const toNumber = (value: string | undefined): number | undefined => {
   return Number.isSafeInteger(result) && result
 }
 
-const parseDate = (value: string | undefined): number => {
+export const parseDate = (value: string | undefined): number => {
   return value ? Date.parse(value) : null
 }
 
