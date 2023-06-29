@@ -161,9 +161,11 @@ export const apis = {
     url: process.env.WELCOME_PEOPLE_INTO_PRISON_URL,
     enabled_prisons: process.env.WELCOME_PEOPLE_INTO_PRISON_ENABLED_PRISONS || '',
   },
-  mercurySubmitPrivateBeta: {
-    url: process.env.MERCURY_SUBMIT_PRIVATE_BETA_URL,
+  mercurySubmit: {
+    url: process.env.MERCURY_SUBMIT_URL,
+    privateBetaDate: parseDate(process.env.MERCURY_SUBMIT_PRIVATE_BETA_ENABLED_DATE),
     enabled_prisons: process.env.MERCURY_SUBMIT_PRIVATE_BETA_ENABLED_PRISONS || '',
+    liveDate: parseDate(process.env.MERCURY_SUBMIT_LIVE_ENABLED_DATE),
   },
   omic: {
     url: process.env.OMIC_URL || 'http://localhost:3001',
@@ -198,6 +200,14 @@ export const apis = {
   createAndVaryALicence: {
     url: process.env.CREATE_AND_VARY_A_LICENCE_URL,
     enabled_prisons: process.env.CREATE_AND_VARY_A_LICENCE_ENABLED_PRISONS || '',
+  },
+  activities: {
+    url: process.env.ACTIVITIES_URL,
+    enabled_prisons: process.env.ACTIVITIES_ENABLED_PRISONS || '',
+  },
+  appointments: {
+    url: process.env.APPOINTMENTS_URL,
+    enabled_prisons: process.env.APPOINTMENTS_ENABLED_PRISONS || '',
   },
   historicalPrisonerApplication: {
     ui_url: process.env.HISTORICAL_PRISONER_APPLICATION_URL || '',
