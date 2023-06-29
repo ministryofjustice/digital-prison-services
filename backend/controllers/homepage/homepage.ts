@@ -307,12 +307,11 @@ const getTasks = ({ activeCaseLoadId, locations, staffId, whereaboutsConfig, key
       enabled: () => appointments.url && appointments.enabled_prisons.split(',').includes(activeCaseLoadId),
     },
     {
-      id: 'view-covid-units',
-      heading: 'View COVID units',
-      description: 'View who is in each COVID unit in your establishment.',
-      href: '/current-covid-units',
+      id: 'view-unaccounted-for',
+      heading: 'View prisoners unaccounted for',
+      description: 'View all prisoners not marked as attended or not attended.',
+      href: '/manage-prisoner-whereabouts/prisoners-unaccounted-for',
       enabled: () =>
-        userHasRoles(['PRISON']) &&
         activities.enabled_prisons.split(',').includes(activeCaseLoadId) &&
         appointments.enabled_prisons.split(',').includes(activeCaseLoadId),
     },
@@ -322,6 +321,16 @@ const getTasks = ({ activeCaseLoadId, locations, staffId, whereaboutsConfig, key
       description: 'View people due to leave this establishment for court appearances, transfers or being released.',
       href: '/manage-prisoner-whereabouts/scheduled-moves',
       enabled: () =>
+        activities.enabled_prisons.split(',').includes(activeCaseLoadId) &&
+        appointments.enabled_prisons.split(',').includes(activeCaseLoadId),
+    },
+    {
+      id: 'view-covid-units',
+      heading: 'View COVID units',
+      description: 'View who is in each COVID unit in your establishment.',
+      href: '/current-covid-units',
+      enabled: () =>
+        userHasRoles(['PRISON']) &&
         activities.enabled_prisons.split(',').includes(activeCaseLoadId) &&
         appointments.enabled_prisons.split(',').includes(activeCaseLoadId),
     },
