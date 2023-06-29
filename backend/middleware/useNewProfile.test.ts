@@ -1,6 +1,13 @@
 import useNewProfile from './useNewProfile'
 import config, { parseDate } from '../config'
 
+interface Res {
+  locals: {
+    useNewProfile?: boolean
+  }
+  userRoles: string[]
+}
+
 describe('Check if redirect is active', () => {
   let next
   let controller
@@ -14,11 +21,10 @@ describe('Check if redirect is active', () => {
     })
 
     it('Then isRedirectActive should return true', async () => {
-      const res = { locals: { isRedirectActive: true }, userRoles: ['ROLE_DPS_APPLICATION_DEVELOPER'] }
-      const req = { session: { userDetails: { activeCaseloadId: 'LEI' } }, query: {} }
-      res.locals.isRedirectActive = true
+      const res: Res = { locals: {}, userRoles: ['ROLE_DPS_APPLICATION_DEVELOPER'] }
+      const req = { session: { userDetails: { activeCaseLoadId: 'LEI' } }, query: {} }
       await controller(req, res, next)
-      expect(res.locals.isRedirectActive).toEqual(true)
+      expect(res.locals.useNewProfile).toEqual(true)
       expect(next).toHaveBeenCalled()
     })
   })
@@ -31,10 +37,9 @@ describe('Check if redirect is active', () => {
     })
 
     it('Then isRedirectActive should return false', async () => {
-      const res = { locals: { isRedirectActive: false } }
-      res.locals.isRedirectActive = false
+      const res: Res = { locals: {}, userRoles: [] }
       await controller(req, res, next)
-      expect(res.locals.isRedirectActive).toEqual(false)
+      expect(res.locals.useNewProfile).toEqual(false)
       expect(next).toHaveBeenCalled()
     })
   })
