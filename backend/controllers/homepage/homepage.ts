@@ -21,6 +21,8 @@ const {
     checkMyDiary,
     incentives,
     createAndVaryALicence,
+    activities,
+    appointments,
     historicalPrisonerApplication,
     getSomeoneReadyForWork,
   },
@@ -55,7 +57,10 @@ const getTasks = ({ activeCaseLoadId, locations, staffId, whereaboutsConfig, key
       description: 'View unlock lists, all appointments and COVID units, manage attendance and add bulk appointments.',
       href: '/manage-prisoner-whereabouts',
       roles: null,
-      enabled: () => whereaboutsConfig?.enabled,
+      enabled: () =>
+        whereaboutsConfig?.enabled &&
+        !activities.enabled_prisons.split(',').includes(activeCaseLoadId) &&
+        !appointments.enabled_prisons.split(',').includes(activeCaseLoadId),
     },
     {
       id: 'change-someones-cell',
@@ -286,6 +291,39 @@ const getTasks = ({ activeCaseLoadId, locations, staffId, whereaboutsConfig, key
         createAndVaryALicence.url &&
         createAndVaryALicence.enabled_prisons.split(',').includes(activeCaseLoadId) &&
         userHasRoles(['LICENCE_CA', 'LICENCE_DM', 'LICENCE_RO', 'LICENCE_ACO', 'LICENCE_ADMIN']),
+    },
+    {
+      id: 'activities',
+      heading: 'Allocate people to activities',
+      description: 'Set up and edit activities. Allocate people, remove them, and edit allocations.',
+      href: activities.url,
+      enabled: () => activities.url && activities.enabled_prisons.split(',').includes(activeCaseLoadId),
+    },
+    {
+      id: 'appointments',
+      heading: 'Schedule and edit appointments',
+      description: 'Create one-to-one and group appointments. Edit existing appointments and print movement slips.',
+      href: appointments.url,
+      enabled: () => appointments.url && appointments.enabled_prisons.split(',').includes(activeCaseLoadId),
+    },
+    {
+      id: 'view-covid-units',
+      heading: 'View COVID units',
+      description: 'View who is in each COVID unit in your establishment.',
+      href: '/current-covid-units',
+      enabled: () =>
+        userHasRoles(['PRISON']) &&
+        activities.enabled_prisons.split(',').includes(activeCaseLoadId) &&
+        appointments.enabled_prisons.split(',').includes(activeCaseLoadId),
+    },
+    {
+      id: 'view-people-due-to-leave',
+      heading: 'People due to leave',
+      description: 'View people due to leave this establishment for court appearances, transfers or being released.',
+      href: '/manage-prisoner-whereabouts/scheduled-moves',
+      enabled: () =>
+        activities.enabled_prisons.split(',').includes(activeCaseLoadId) &&
+        appointments.enabled_prisons.split(',').includes(activeCaseLoadId),
     },
     {
       id: 'historical-prisoner-application',

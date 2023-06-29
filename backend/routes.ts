@@ -55,6 +55,11 @@ import whereaboutsRouter from './routes/whereabouts/whereaboutsRouter'
 import { saveBackLink } from './controllers/backLink'
 import maintenancePage from './controllers/maintenancePage'
 import prisonerProfileBackLinkRedirect from './controllers/prisonerProfile/prisonerProfileBackLinkRedirect'
+import config from './config'
+
+const {
+  apis: { activities, appointments },
+} = config
 
 const router = express.Router()
 
@@ -115,35 +120,60 @@ const setup = ({
   if (whereaboutsMaintenanceMode) {
     router.use('/manage-prisoner-whereabouts*', maintenancePage('Manage prisoner whereabouts'))
   } else {
+    const isActivitiesRolledOut = (req, res, next) => {
+      const { activeCaseLoadId } = req.session.userDetails
+      if (
+        activities.enabled_prisons.split(',').includes(activeCaseLoadId) &&
+        appointments.enabled_prisons.split(',').includes(activeCaseLoadId)
+      ) {
+        res.redirect('/')
+      } else {
+        next()
+      }
+    }
+
     router.use(
       '/manage-prisoner-whereabouts',
       whereaboutsRouter({ oauthApi, prisonApi, offenderSearchApi, systemOauthClient })
     )
     router.get(
       '/manage-prisoner-whereabouts/attendance-reason-statistics',
+      isActivitiesRolledOut,
       attendanceStatisticsFactory(oauthApi, prisonApi, whereaboutsApi).attendanceStatistics
     )
     router.get(
       '/manage-prisoner-whereabouts/attendance-reason-statistics/reason/:reason',
+      isActivitiesRolledOut,
       attendanceStatisticsFactory(oauthApi, prisonApi, whereaboutsApi).attendanceStatisticsOffendersList
     )
 
     router.get(
       '/manage-prisoner-whereabouts/attendance-reason-statistics/suspended',
+      isActivitiesRolledOut,
       attendanceStatisticsFactory(oauthApi, prisonApi, whereaboutsApi).attendanceStatisticsSuspendedList
     )
 
     router.get(
       '/manage-prisoner-whereabouts/select-residential-location',
+      isActivitiesRolledOut,
       selectResidentialLocationController(whereaboutsApi).index
     )
     router.post(
       '/manage-prisoner-whereabouts/select-residential-location',
+      isActivitiesRolledOut,
       selectResidentialLocationController(whereaboutsApi).post
     )
 
-    router.get('/manage-prisoner-whereabouts/select-location', selectActivityLocation({ prisonApi }).index)
-    router.post('/manage-prisoner-whereabouts/select-location', selectActivityLocation({ prisonApi }).post)
+    router.get(
+      '/manage-prisoner-whereabouts/select-location',
+      isActivitiesRolledOut,
+      selectActivityLocation({ prisonApi }).index
+    )
+    router.post(
+      '/manage-prisoner-whereabouts/select-location',
+      isActivitiesRolledOut,
+      selectActivityLocation({ prisonApi }).post
+    )
   }
 
   router.get(

@@ -6,6 +6,11 @@ import { formatName, properCaseName } from '../../utils'
 import { SelectValue } from '../../shared/commonTypes'
 import { Alert, PrisonerSearchResult } from '../../api/offenderSearchApi'
 import { PrisonerPersonalProperty } from '../../api/prisonApi'
+import config from '../../config'
+
+const {
+  apis: { activities, appointments },
+} = config
 
 const scheduledTypes: Array<SelectValue> = [
   { text: 'Court appearances', value: 'Court' },
@@ -55,8 +60,12 @@ const countResultsOncePerPrisonerNumber = (events: Event[]): number =>
 const onlyActiveIn = (result: PrisonerSearchResult): boolean => result?.status === 'ACTIVE IN'
 
 export default ({ prisonApi, offenderSearchApi }) => {
-  const renderTemplate = (res, { date, agencyDetails, courtEvents, releaseEvents, transferEvents, scheduledType }) =>
+  const renderTemplate = (
+    res,
+    { date, agencyDetails, courtEvents, releaseEvents, transferEvents, scheduledType, isActivitiesEnabled }
+  ) =>
     res.render('whereabouts/scheduledMoves.njk', {
+      isActivitiesEnabled,
       dateForTitle: moment(date, 'DD/MM/YYYY').format('D MMMM YYYY'),
       agencyDescription: agencyDetails.description,
       formValues: {
@@ -217,6 +226,10 @@ export default ({ prisonApi, offenderSearchApi }) => {
       ]),
     ]
 
+    const isActivitiesEnabled = () =>
+      activities.enabled_prisons.split(',').includes(activeCaseLoadId) &&
+      appointments.enabled_prisons.split(',').includes(activeCaseLoadId)
+
     if (uniqueOffenderNumbers.length === 0) {
       return renderTemplate(res, {
         date,
@@ -225,6 +238,7 @@ export default ({ prisonApi, offenderSearchApi }) => {
         courtEvents: [],
         releaseEvents: [],
         transferEvents: [],
+        isActivitiesEnabled: isActivitiesEnabled(),
       })
     }
 
@@ -278,6 +292,7 @@ export default ({ prisonApi, offenderSearchApi }) => {
       releaseEvents,
       transferEvents,
       scheduledType,
+      isActivitiesEnabled: isActivitiesEnabled(),
     })
   }
 
