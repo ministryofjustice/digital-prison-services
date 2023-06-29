@@ -414,4 +414,5 @@ export default {
   stringWithAbbreviationsProcessor,
   isRedirectEnabled,
   isRedirectCaseLoad,
+  useNewProfile,
 }

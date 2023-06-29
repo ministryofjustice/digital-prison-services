@@ -66,7 +66,7 @@ app.use(setupAuth({ oauthApi: apis.oauthApi, tokenVerificationApi: apis.tokenVer
 
 app.use(currentUser({ prisonApi: apis.prisonApi, oauthApi: apis.oauthApi }))
 app.use(returnUrl())
-app.use(useNewProfile())
+// app.use(useNewProfile())
 
 if (!config.app.disableWebpack) {
   // eslint-disable-next-line global-require
