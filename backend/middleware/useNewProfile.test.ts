@@ -4,20 +4,21 @@ import config, { parseDate } from '../config'
 describe('Check if redirect is active', () => {
   let next
   let controller
-  describe.skip('when the redirect is active', () => {
+  describe('when the redirect is active', () => {
     beforeEach(() => {
       next = jest.fn()
+      config.app.prisonerProfileRedirect.url = 'http://dummy.com'
       config.app.prisonerProfileRedirect.enabledDate = parseDate('2023-06-06T13:15:00')
       config.app.prisonerProfileRedirect.enabledPrisons = 'LEI'
       controller = useNewProfile()
     })
 
     it('Then isRedirectActive should return true', async () => {
-      const res = { locals: { isRedirectActive: true }, userRoles: ['ROLE_DPS_APPLICATION_DEVELOPERx'] }
+      const res = { locals: { isRedirectActive: true }, userRoles: ['ROLE_DPS_APPLICATION_DEVELOPER'] }
       const req = { session: { userDetails: { activeCaseloadId: 'LEI' } }, query: {} }
       res.locals.isRedirectActive = true
       await controller(req, res, next)
-      expect(res.locals.isRedirectActive).toEqual({})
+      expect(res.locals.isRedirectActive).toEqual(true)
       expect(next).toHaveBeenCalled()
     })
   })

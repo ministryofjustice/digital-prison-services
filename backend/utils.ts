@@ -358,7 +358,7 @@ export const isRedirectCaseLoad = (activeCaseLoadId: string): boolean => {
   return config.app.prisonerProfileRedirect.enabledPrisons?.split(',')?.includes(activeCaseLoadId)
 }
 
-export const useNewProfile = (redirectCaseLoadEnabled: boolean, redirectEnabled: boolean): boolean => {
+export const useNewProfile = (redirectEnabled: boolean, redirectCaseLoadEnabled: boolean): boolean => {
   return !!(redirectCaseLoadEnabled && redirectEnabled)
 }
 
