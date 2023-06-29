@@ -1,6 +1,7 @@
 import moment from 'moment'
 import { DATE_TIME_FORMAT_SPEC } from '../common/dateHelpers'
 import abbreviations from '../common/abbreviations'
+import config from './config'
 
 export const switchDateFormat = (displayDate: moment.MomentInput, fromFormat = 'DD/MM/YYYY'): moment.MomentInput => {
   if (displayDate) {
@@ -342,6 +343,25 @@ export const stringWithAbbreviationsProcessor = (string: string): string => {
   return establishmentName
 }
 
+// Either explicitly enable redirect for enabled prisons or check for the developer role
+export const isRedirectEnabled = (res): boolean => {
+  const redirectUrl = config.app.prisonerProfileRedirect.url
+  const redirectDate = config.app.prisonerProfileRedirect.enabledDate
+  return (
+    redirectUrl &&
+    ((redirectDate && redirectDate < Date.now()) ||
+      res.locals.user?.userRoles?.some((role) => role === 'ROLE_DPS_APPLICATION_DEVELOPER'))
+  )
+}
+
+export const isRedirectCaseLoad = (activeCaseLoadId: string): boolean => {
+  return config.app.prisonerProfileRedirect.enabledPrisons?.split(',')?.includes(activeCaseLoadId)
+}
+
+export const useNewProfile = (redirectEnabled: boolean, redirectCaseLoadEnabled: boolean): boolean => {
+  return !!(redirectCaseLoadEnabled && redirectEnabled)
+}
+
 export default {
   isBeforeToday,
   isToday,
@@ -392,4 +412,7 @@ export default {
   joinUrlPath,
   getWith404AsNull,
   stringWithAbbreviationsProcessor,
+  isRedirectEnabled,
+  isRedirectCaseLoad,
+  useNewProfile,
 }

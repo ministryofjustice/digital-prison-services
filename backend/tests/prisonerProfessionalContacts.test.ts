@@ -16,6 +16,7 @@ describe('Prisoner professional contacts', () => {
     req = {
       originalUrl: 'http://localhost',
       params: { offenderNo },
+      session: { useNewProfile: false },
     }
     res = { locals: {}, render: jest.fn(), status: jest.fn() }
 
@@ -266,6 +267,7 @@ describe('Prisoner professional contacts', () => {
                         value: 'Business',
                       },
                     ],
+                    jobTitle: undefined,
                     name: 'Trevor Smith',
                     noFixedAddress: false,
                   },
@@ -300,6 +302,7 @@ describe('Prisoner professional contacts', () => {
                         value: 'Business',
                       },
                     ],
+                    jobTitle: undefined,
                     name: 'Trevor Smith',
                     noFixedAddress: false,
                   },
@@ -334,6 +337,7 @@ describe('Prisoner professional contacts', () => {
                         value: 'Business',
                       },
                     ],
+                    jobTitle: undefined,
                     name: 'Uriualche Lydyle',
                     noFixedAddress: false,
                   },
@@ -368,6 +372,7 @@ describe('Prisoner professional contacts', () => {
                         value: 'Business',
                       },
                     ],
+                    jobTitle: undefined,
                     name: 'Uriualche Lydyle',
                     noFixedAddress: false,
                   },
@@ -420,7 +425,7 @@ describe('Prisoner professional contacts', () => {
                         value: 'Business',
                       },
                     ],
-
+                    jobTitle: undefined,
                     name: 'Areneng Kimbur',
                     noFixedAddress: false,
                   },
@@ -455,7 +460,7 @@ describe('Prisoner professional contacts', () => {
                         value: 'Business',
                       },
                     ],
-
+                    jobTitle: undefined,
                     name: 'Areneng Kimbur',
                     noFixedAddress: false,
                   },
