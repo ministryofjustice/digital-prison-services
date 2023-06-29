@@ -16,7 +16,7 @@ const {
     legacyPrisonVisits,
     secureSocialVideoCalls,
     welcomePeopleIntoPrison,
-    mercurySubmitPrivateBeta,
+    mercurySubmit,
     manageRestrictedPatients,
     checkMyDiary,
     incentives,
@@ -31,6 +31,10 @@ const {
 
 const getTasks = ({ activeCaseLoadId, locations, staffId, whereaboutsConfig, keyworkerPrisonStatus, roleCodes }) => {
   const userHasRoles = (roles) => hasAnyRole(roleCodes, roles)
+
+  const isMercurySubmitLive = () => {
+    return mercurySubmit.liveDate && mercurySubmit.liveDate < Date.now()
+  }
 
   return [
     {
@@ -249,13 +253,19 @@ const getTasks = ({ activeCaseLoadId, locations, staffId, whereaboutsConfig, key
         welcomePeopleIntoPrison.url && welcomePeopleIntoPrison.enabled_prisons.split(',').includes(activeCaseLoadId),
     },
     {
-      id: 'submit-an-intelligence-report-private-beta',
-      heading: 'Submit an Intelligence Report (Private Beta)',
-      description: 'Access to the new Mercury submission form for those establishments enrolled in the private beta',
-      href: mercurySubmitPrivateBeta.url,
+      id: isMercurySubmitLive() ? 'submit-an-intelligence-report' : 'submit-an-intelligence-report-private-beta',
+      heading: isMercurySubmitLive() ? 'Submit an Intelligence Report' : 'Submit an Intelligence Report (Private Beta)',
+      description: isMercurySubmitLive()
+        ? 'Access to the new Mercury submission form'
+        : 'Access to the new Mercury submission form for those establishments enrolled in the private beta',
+      href: mercurySubmit.url,
       roles: null,
       enabled: () =>
-        mercurySubmitPrivateBeta.url && mercurySubmitPrivateBeta.enabled_prisons.split(',').includes(activeCaseLoadId),
+        mercurySubmit.url &&
+        (isMercurySubmitLive() ||
+          (mercurySubmit.privateBetaDate &&
+            mercurySubmit.privateBetaDate < Date.now() &&
+            mercurySubmit.enabled_prisons.split(',').includes(activeCaseLoadId))),
     },
     {
       id: 'manage-restricted-patients',
