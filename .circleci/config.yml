@@ -90,7 +90,9 @@ jobs:
           background: true
       - run:
           name: Run Cypress Integration tests
-          command: npm run int-test-no-artefacts
+          command: |
+            TESTFILES=$(circleci tests glob "integration-tests/integration/**/*.cy.js" | circleci tests split | paste -sd ',')
+            npm run int-test-no-artefacts -- --spec ${TESTFILES}
       - store_test_results:
           path: test-results
       - store_artifacts:

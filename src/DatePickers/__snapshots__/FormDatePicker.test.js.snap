@@ -29,7 +29,7 @@ exports[`Form date picker should render correctly 1`] = `
         placeholder="Select"
         readOnly={true}
         style={
-          {
+          Object {
             "height": "38px",
           }
         }
