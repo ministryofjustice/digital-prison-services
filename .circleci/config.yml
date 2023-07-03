@@ -65,6 +65,7 @@ jobs:
         environment:
           ALLOW_EMPTY_PASSWORD=yes
     resource_class: xlarge
+    parallelism: 4
     steps:
       - checkout
       - attach_workspace:
