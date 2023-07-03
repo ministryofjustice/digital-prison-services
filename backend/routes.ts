@@ -61,6 +61,37 @@ const {
   apis: { activities, appointments },
 } = config
 
+const isActivitiesRolledOut = (req, res, next) => {
+  const { activeCaseLoadId } = req.session.userDetails
+  if (
+    activities.enabled_prisons.split(',').includes(activeCaseLoadId) &&
+    appointments.enabled_prisons.split(',').includes(activeCaseLoadId)
+  ) {
+    res.redirect('/')
+  } else {
+    next()
+  }
+}
+
+const isAppointmentsRolledOut = (req, res, next) => {
+  const { activeCaseLoadId } = req.session.userDetails
+  if (appointments.enabled_prisons.split(',').includes(activeCaseLoadId)) {
+    res.redirect(appointments.url)
+  } else {
+    next()
+  }
+}
+
+const isCreateIndividualAppointmentRolledOut = (req, res, next) => {
+  const { activeCaseLoadId } = req.session.userDetails
+  if (appointments.enabled_prisons.split(',').includes(activeCaseLoadId)) {
+    const { offenderNo } = req.params
+    res.redirect(`${appointments.url}/create/start-individual?prisonNumber=${offenderNo}`)
+  } else {
+    next()
+  }
+}
+
 const router = express.Router()
 
 const setup = ({
@@ -120,18 +151,6 @@ const setup = ({
   if (whereaboutsMaintenanceMode) {
     router.use('/manage-prisoner-whereabouts*', maintenancePage('Manage prisoner whereabouts'))
   } else {
-    const isActivitiesRolledOut = (req, res, next) => {
-      const { activeCaseLoadId } = req.session.userDetails
-      if (
-        activities.enabled_prisons.split(',').includes(activeCaseLoadId) &&
-        appointments.enabled_prisons.split(',').includes(activeCaseLoadId)
-      ) {
-        res.redirect('/')
-      } else {
-        next()
-      }
-    }
-
     router.use(
       '/manage-prisoner-whereabouts',
       whereaboutsRouter({ oauthApi, prisonApi, offenderSearchApi, systemOauthClient })
@@ -187,44 +206,90 @@ const setup = ({
     downloadProbationDocumentFactory(oauthApi, communityApi, systemOauthClient, prisonApi).downloadDocument
   )
 
-  router.get('/bulk-appointments/need-to-upload-file', async (req, res) => {
+  router.get('/bulk-appointments/need-to-upload-file', isAppointmentsRolledOut, async (req, res) => {
     res.render('bulkAppointmentsAdd.njk', { title: 'You need to upload a CSV file' })
   })
 
-  router.get('/bulk-appointments/no-appointments-added', async (req, res) => {
+  router.get('/bulk-appointments/no-appointments-added', isAppointmentsRolledOut, async (req, res) => {
     const { reason } = req.query
     req.session.data = null
     res.render('bulkAppointmentsNotAdded.njk', { reason })
   })
 
-  router.use('/bulk-appointments/upload-file', bulkAppointmentsUploadRouter({ prisonApi, logError }))
+  router.use(
+    '/bulk-appointments/upload-file',
+    isAppointmentsRolledOut,
+    bulkAppointmentsUploadRouter({ prisonApi, logError })
+  )
   router.use(
     '/bulk-appointments/add-appointment-details',
+    isAppointmentsRolledOut,
     bulkAppointmentsAddDetailsRouter({ prisonApi, oauthApi, logError })
   )
-  router.use('/bulk-appointments/appointments-added', bulkAppointmentsAddedRouter({ logError }))
-  router.get('/bulk-appointments/appointments-movement-slips', bulkAppointmentsSlipsRouter({ prisonApi, logError }))
-  router.use('/bulk-appointments/confirm-appointments', bulkAppointmentsConfirmRouter({ prisonApi, logError }))
-  router.use('/bulk-appointments/appointment-clashes', bulkAppointmentsClashesRouter({ prisonApi, logError }))
-  router.use('/bulk-appointments/invalid-numbers', bulkAppointmentsInvalidNumbersRouter({ prisonApi, logError }))
+  router.use(
+    '/bulk-appointments/appointments-added',
+    isAppointmentsRolledOut,
+    bulkAppointmentsAddedRouter({ logError })
+  )
+  router.get(
+    '/bulk-appointments/appointments-movement-slips',
+    isAppointmentsRolledOut,
+    bulkAppointmentsSlipsRouter({ prisonApi, logError })
+  )
+  router.use(
+    '/bulk-appointments/confirm-appointments',
+    isAppointmentsRolledOut,
+    bulkAppointmentsConfirmRouter({ prisonApi, logError })
+  )
+  router.use(
+    '/bulk-appointments/appointment-clashes',
+    isAppointmentsRolledOut,
+    bulkAppointmentsClashesRouter({ prisonApi, logError })
+  )
+  router.use(
+    '/bulk-appointments/invalid-numbers',
+    isAppointmentsRolledOut,
+    bulkAppointmentsInvalidNumbersRouter({ prisonApi, logError })
+  )
 
   router.use('/change-caseload', changeCaseloadRouter({ prisonApi, logError }))
 
   if (whereaboutsMaintenanceMode) {
-    router.use('/offenders/:offenderNo/add-appointment', maintenancePage('Appointment details'))
-    router.use('/offenders/:offenderNo/prepost-appointments', maintenancePage('Appointment details'))
+    router.use(
+      '/offenders/:offenderNo/add-appointment',
+      isAppointmentsRolledOut,
+      maintenancePage('Appointment details')
+    )
+    router.use(
+      '/offenders/:offenderNo/prepost-appointments',
+      isAppointmentsRolledOut,
+      maintenancePage('Appointment details')
+    )
   } else {
-    router.use('/offenders/:offenderNo/add-appointment', addAppointmentRouter({ prisonApi, whereaboutsApi, logError }))
+    router.use(
+      '/offenders/:offenderNo/add-appointment',
+      isCreateIndividualAppointmentRolledOut,
+      addAppointmentRouter({ prisonApi, whereaboutsApi, logError })
+    )
 
     router.use(
       '/offenders/:offenderNo/prepost-appointments',
+      isAppointmentsRolledOut,
       prepostAppointmentRouter({ prisonApi, logError, oauthApi, whereaboutsApi, notifyClient, raiseAnalyticsEvent })
     )
   }
 
-  router.use('/view-all-appointments', viewAppointments({ prisonApi, whereaboutsApi, logError }))
+  router.use(
+    '/view-all-appointments',
+    isAppointmentsRolledOut,
+    viewAppointments({ prisonApi, whereaboutsApi, logError })
+  )
 
-  router.use('/offenders/:offenderNo/confirm-appointment', confirmAppointmentRouter({ prisonApi, logError }))
+  router.use(
+    '/offenders/:offenderNo/confirm-appointment',
+    isAppointmentsRolledOut,
+    confirmAppointmentRouter({ prisonApi, logError })
+  )
 
   router.use(
     '/offenders/:offenderNo/retention-reasons',
@@ -316,10 +381,11 @@ const setup = ({
   router.get('/back-to-start', backToStart())
 
   if (whereaboutsMaintenanceMode) {
-    router.use('/appointment-details*', maintenancePage('Appointment details'))
+    router.use('/appointment-details*', isAppointmentsRolledOut, maintenancePage('Appointment details'))
   } else {
     router.get(
       '/appointment-details/:id/confirm-deletion',
+      isAppointmentsRolledOut,
       appointmentConfirmDeletion({
         whereaboutsApi,
         appointmentDetailsService: appointmentDetailsServiceFactory({ prisonApi }),
@@ -327,6 +393,7 @@ const setup = ({
     )
     router.post(
       '/appointment-details/:id/confirm-deletion',
+      isAppointmentsRolledOut,
       appointmentConfirmDeletion({
         whereaboutsApi,
         appointmentDetailsService: appointmentDetailsServiceFactory({ prisonApi }),
@@ -334,19 +401,22 @@ const setup = ({
     )
     router.get(
       '/appointment-details/:id/delete-recurring-bookings',
+      isAppointmentsRolledOut,
       appointmentDeleteRecurringBookings({
         whereaboutsApi,
       }).index
     )
     router.post(
       '/appointment-details/:id/delete-recurring-bookings',
+      isAppointmentsRolledOut,
       appointmentDeleteRecurringBookings({
         whereaboutsApi,
       }).post
     )
-    router.get('/appointment-details/deleted', appointmentDeleted().index)
+    router.get('/appointment-details/deleted', isAppointmentsRolledOut, appointmentDeleted().index)
     router.use(
       '/appointment-details/:id',
+      isAppointmentsRolledOut,
       appointmentDetails({
         oauthApi,
         prisonApi,
