@@ -1433,7 +1433,7 @@ module.exports = {
     stubFor({
       request: {
         method: 'GET',
-        urlPattern: '/api/bookings/[0-9].+?/non-association-details',
+        urlPattern: '/api/offenders/[0-9A-Z].+?/non-association-details',
       },
       response: {
         status: 200,

@@ -25,6 +25,7 @@ describe('select location', () => {
 
   const getDetailsResponse = {
     bookingId: 1234,
+    offenderNo,
     firstName: 'Test',
     lastName: 'User',
     csra: 'High',
@@ -152,7 +153,10 @@ describe('select location', () => {
     await controller(req, res)
 
     expect(prisonApi.getDetails).toHaveBeenCalledWith(res.locals, offenderNo, true)
-    expect(prisonApi.getNonAssociations).toHaveBeenCalledWith(res.locals, 1234)
+    expect(prisonApi.getNonAssociations).toHaveBeenCalledWith(
+      res.locals,
+      expect.objectContaining({ bookingId: 1234, offenderNo })
+    )
     expect(whereaboutsApi.searchGroups).toHaveBeenCalledWith(res.locals, 'MDI')
   })
 

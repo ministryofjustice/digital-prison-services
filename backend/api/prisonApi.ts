@@ -1,3 +1,4 @@
+import config from '../config'
 import contextProperties from '../contextProperties'
 import { arrayToQueryString, mapToQueryString } from '../utils'
 
@@ -432,7 +433,13 @@ export const prisonApiFactory = (client) => {
   const getScheduledEventsForNextWeek = (context, bookingId) =>
     get(context, `/api/bookings/${bookingId}/events/nextWeek`)
 
-  const getNonAssociations = (context, bookingId) => get(context, `/api/bookings/${bookingId}/non-association-details`)
+  const getNonAssociations = (context, { bookingId, offenderNo }) => {
+    if (config.app.nonAssociationsLegacyMode) {
+      return get(context, `/api/bookings/${bookingId}/non-association-details`)
+    }
+
+    return get(context, `/api/offenders/${offenderNo}/non-association-details`)
+  }
 
   const getCellsWithCapacity = (context, agencyId, attribute) =>
     getWithCustomTimeout(

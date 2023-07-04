@@ -23,7 +23,7 @@ export default ({ oauthApi, prisonApi, whereaboutsApi }) =>
         return res.render('notFound.njk', { url: '/prisoner-search' })
       }
 
-      const nonAssociations = await prisonApi.getNonAssociations(res.locals, prisonerDetails.bookingId)
+      const nonAssociations = await prisonApi.getNonAssociations(res.locals, prisonerDetails)
       const locationsData = await whereaboutsApi.searchGroups(res.locals, prisonerDetails.agencyId)
 
       const prisonersActiveAlertCodes = prisonerDetails.alerts

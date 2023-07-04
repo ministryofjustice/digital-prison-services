@@ -34,6 +34,7 @@ describe('move validation', () => {
 
   const getCurrentOffenderDetailsResponse = {
     bookingId: 1234,
+    offenderNo: 'A12345',
     firstName: 'Test',
     lastName: 'User',
     csra: 'High',
@@ -419,7 +420,10 @@ describe('move validation', () => {
 
     expect(prisonApi.getDetails).toHaveBeenCalledWith(res.locals, offenderNo, true)
     expect(prisonApi.getDetails).toHaveBeenCalledWith(res.locals, 'A12346', true)
-    expect(prisonApi.getNonAssociations).toHaveBeenCalledWith(res.locals, 1234)
+    expect(prisonApi.getNonAssociations).toHaveBeenCalledWith(
+      res.locals,
+      expect.objectContaining({ bookingId: 1234, offenderNo: 'A12345' })
+    )
     expect(prisonApi.getLocation).toHaveBeenCalledWith(res.locals, 1)
     expect(prisonApi.getLocation).toHaveBeenCalledWith(res.locals, 2)
     expect(prisonApi.getLocation).toHaveBeenCalledWith(res.locals, 3)
