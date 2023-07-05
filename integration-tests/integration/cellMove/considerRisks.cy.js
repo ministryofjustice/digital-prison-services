@@ -22,6 +22,7 @@ context('A user can see conflicts in cell', () => {
     cy.task('stubPrisonerFullDetail', {
       prisonerDetail: {
         bookingId: 1234,
+        offenderNo,
         firstName: 'Test',
         lastName: 'User',
         csra: 'High',

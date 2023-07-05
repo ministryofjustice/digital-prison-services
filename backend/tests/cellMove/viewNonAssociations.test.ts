@@ -20,6 +20,7 @@ describe('view non associations', () => {
 
   const getDetailsResponse = {
     bookingId: 1234,
+    offenderNo,
     firstName: 'Test',
     lastName: 'User',
   }
@@ -129,7 +130,10 @@ describe('view non associations', () => {
     await controller(req, res)
 
     expect(prisonApi.getDetails).toHaveBeenCalledWith(res.locals, offenderNo)
-    expect(prisonApi.getNonAssociations).toHaveBeenCalledWith(res.locals, 1234)
+    expect(prisonApi.getNonAssociations).toHaveBeenCalledWith(
+      res.locals,
+      expect.objectContaining({ bookingId: 1234, offenderNo })
+    )
   })
 
   it('Should render error template when there is an API error', async () => {
