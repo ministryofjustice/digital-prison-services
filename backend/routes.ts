@@ -86,7 +86,7 @@ const isCreateIndividualAppointmentRolledOut = (req, res, next) => {
   const { activeCaseLoadId } = req.session.userDetails
   if (appointments.enabled_prisons.split(',').includes(activeCaseLoadId)) {
     const { offenderNo } = req.params
-    res.redirect(`${appointments.url}/create/start-individual?prisonNumber=${offenderNo}`)
+    res.redirect(`${appointments.url}/create/start-prisoner/${offenderNo}`)
   } else {
     next()
   }
