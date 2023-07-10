@@ -103,10 +103,7 @@ describe('Select a cell', () => {
       await controller(req, res)
 
       expect(prisonApi.getDetails).toHaveBeenCalledWith({}, someOffenderNumber, true)
-      expect(prisonApi.getNonAssociations).toHaveBeenCalledWith(
-        {},
-        expect.objectContaining({ bookingId: someBookingId, offenderNo: someOffenderNumber })
-      )
+      expect(prisonApi.getNonAssociations).toHaveBeenCalledWith({}, someOffenderNumber)
       expect(whereaboutsApi.searchGroups).toHaveBeenCalledWith({}, someAgency)
     })
 
