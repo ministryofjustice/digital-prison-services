@@ -55,6 +55,12 @@ const homepagePage = () =>
       link: () => cy.get('[data-test="get-someone-ready-to-work"] a'),
       description: () => cy.get('[data-test="get-someone-ready-to-work"] p'),
     }),
+    manageOffences: () => ({
+      tile: () => cy.get('[data-test="manage-offences"]'),
+      title: () => cy.get('[data-test="manage-offences"] h2'),
+      link: () => cy.get('[data-test="manage-offences"] a'),
+      description: () => cy.get('[data-test="manage-offences"] p'),
+    }),
   })
 
 export default {

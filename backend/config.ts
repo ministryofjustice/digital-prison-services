@@ -219,6 +219,9 @@ export const apis = {
   manageWarrantFolder: {
     ui_url: process.env.WARRANT_FOLDER_URL,
   },
+  manageOffences: {
+    ui_url: process.env.MANAGE_OFFENCES_URL,
+  },
 }
 export const notifications = {
   enabled: process.env.NOTIFY_ENABLED ? process.env.NOTIFY_ENABLED === 'true' : true,

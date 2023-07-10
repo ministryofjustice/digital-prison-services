@@ -98,6 +98,7 @@ context('Homepage', () => {
           'ROLE_TRANSFER_RESTRICTED_PATIENT',
           'ROLE_REMOVE_RESTRICTED_PATIENT',
           'ROLE_RESTRICTED_PATIENT_MIGRATION',
+          'ROLE_MANAGE_OFFENCES_ADMIN',
         ],
       })
       cy.signIn()
@@ -248,6 +249,15 @@ context('Homepage', () => {
         .getSomeoneReadyToWork()
         .description()
         .contains('Record what support a prisoner needs to get work. View who has been assessed as ready to work.')
+    })
+
+    it('should show manage-offences', () => {
+      const page = homepagePage.goTo()
+
+      page.manageOffences().tile().should('exist')
+      page.manageOffences().title().contains('Manage offences')
+      page.manageOffences().link().should('exist')
+      page.manageOffences().description().contains('This service allows you to maintain offence reference data.')
     })
   })
 

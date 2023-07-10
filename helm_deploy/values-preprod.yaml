@@ -74,6 +74,7 @@ generic-service:
    PRISONER_PROFILE_REDIRECT_ENABLED_DATE: ""
    PRISONER_PROFILE_REDIRECT_ENABLED_PRISONS: LEI
    NON_ASSOCIATIONS_LEGACY_MODE: 'true'
+   MANAGE_OFFENCES_URL: https://manage-offences-preprod.hmpps.service.justice.gov.uk
 
   allowlist:
    office: "217.33.148.210/32"
