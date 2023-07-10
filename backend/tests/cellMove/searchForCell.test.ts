@@ -153,10 +153,7 @@ describe('select location', () => {
     await controller(req, res)
 
     expect(prisonApi.getDetails).toHaveBeenCalledWith(res.locals, offenderNo, true)
-    expect(prisonApi.getNonAssociations).toHaveBeenCalledWith(
-      res.locals,
-      expect.objectContaining({ bookingId: 1234, offenderNo })
-    )
+    expect(prisonApi.getNonAssociations).toHaveBeenCalledWith(res.locals, offenderNo)
     expect(whereaboutsApi.searchGroups).toHaveBeenCalledWith(res.locals, 'MDI')
   })
 

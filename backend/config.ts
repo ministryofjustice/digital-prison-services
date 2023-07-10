@@ -31,7 +31,6 @@ export const app = {
     enabledDate: parseDate(process.env.PRISONER_PROFILE_REDIRECT_ENABLED_DATE),
     enabledPrisons: process.env.PRISONER_PROFILE_REDIRECT_ENABLED_PRISONS || '',
   },
-  nonAssociationsLegacyMode: process.env.NON_ASSOCIATIONS_LEGACY_MODE === 'true' || false,
 }
 
 export const analytics = {
