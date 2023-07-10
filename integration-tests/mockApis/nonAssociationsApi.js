@@ -21,7 +21,7 @@ module.exports = {
     stubFor({
       request: {
         method: 'GET',
-        urlPattern: '/legacy/api/offenders/[0-9A-Z].+?/non-association-details',
+        urlPattern: '/non-associations/legacy/api/offenders/[0-9A-Z].+?/non-association-details',
       },
       response: {
         status: 200,
