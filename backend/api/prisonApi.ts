@@ -178,7 +178,10 @@ export const prisonApiFactory = (client) => {
     )
   }
 
-  const getAlertsForLatestBooking = (context, { offenderNo, alertCodes, sortBy, sortDirection }): Array<AlertDetails> =>
+  const getAlertsForLatestBooking = (
+    context,
+    { offenderNo, alertCodes, sortBy, sortDirection }
+  ): Promise<AlertDetails[]> =>
     get(
       context,
       `/api/offenders/${offenderNo}/bookings/latest/alerts?alertCodes=${alertCodes.toString()}&sort=${sortBy}&direction=${sortDirection}`

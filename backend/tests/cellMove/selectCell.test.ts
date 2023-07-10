@@ -10,10 +10,13 @@ describe('Select a cell', () => {
     getDetails: jest.fn(),
     getCsraAssessments: jest.fn(),
     getAlerts: jest.fn(),
-    getNonAssociations: jest.fn(),
     getLocation: jest.fn(),
     getCellsWithCapacity: jest.fn(),
     getInmatesAtLocation: jest.fn(),
+  }
+
+  const nonAssociationsApi = {
+    getNonAssociations: jest.fn(),
   }
 
   const whereaboutsApi = {
@@ -68,7 +71,7 @@ describe('Select a cell', () => {
 
     prisonApi.getCsraAssessments = jest.fn()
     prisonApi.getAlerts = jest.fn()
-    prisonApi.getNonAssociations = jest.fn()
+    nonAssociationsApi.getNonAssociations = jest.fn()
     prisonApi.getLocation = jest.fn().mockResolvedValue({})
     prisonApi.getCellsWithCapacity = jest.fn().mockResolvedValue([])
     prisonApi.getInmatesAtLocation = jest.fn().mockResolvedValue([])
@@ -83,7 +86,7 @@ describe('Select a cell', () => {
     ])
 
     res.render = jest.fn()
-    controller = selectCellFactory({ oauthApi, prisonApi, whereaboutsApi })
+    controller = selectCellFactory({ oauthApi, prisonApi, whereaboutsApi, nonAssociationsApi })
 
     req = {
       params: {
@@ -103,10 +106,7 @@ describe('Select a cell', () => {
       await controller(req, res)
 
       expect(prisonApi.getDetails).toHaveBeenCalledWith({}, someOffenderNumber, true)
-      expect(prisonApi.getNonAssociations).toHaveBeenCalledWith(
-        {},
-        expect.objectContaining({ bookingId: someBookingId, offenderNo: someOffenderNumber })
-      )
+      expect(nonAssociationsApi.getNonAssociations).toHaveBeenCalledWith({}, someOffenderNumber)
       expect(whereaboutsApi.searchGroups).toHaveBeenCalledWith({}, someAgency)
     })
 
@@ -704,7 +704,7 @@ describe('Select a cell', () => {
 
   describe('Non associations', () => {
     beforeEach(() => {
-      prisonApi.getNonAssociations = jest.fn().mockResolvedValue({
+      nonAssociationsApi.getNonAssociations = jest.fn().mockResolvedValue({
         offenderNo: 'G6123VU',
         firstName: 'JOHN',
         lastName: 'SAUNDERS',
@@ -806,7 +806,7 @@ describe('Select a cell', () => {
     })
 
     it('should not request the location prefix when there are no non-associations', async () => {
-      prisonApi.getNonAssociations = jest.fn().mockResolvedValue(null)
+      nonAssociationsApi.getNonAssociations = jest.fn().mockResolvedValue(null)
       await controller(req, res)
 
       expect(prisonApi.getLocation.mock.calls.length).toBe(0)
@@ -884,7 +884,7 @@ describe('Select a cell', () => {
     })
 
     it('should set show non association value to false when non association offender does not have assigned living unit', async () => {
-      prisonApi.getNonAssociations = jest.fn().mockResolvedValue({
+      nonAssociationsApi.getNonAssociations = jest.fn().mockResolvedValue({
         offenderNo: 'G6123VU',
         firstName: 'JOHN',
         lastName: 'SAUNDERS',
