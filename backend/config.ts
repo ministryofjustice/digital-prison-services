@@ -103,6 +103,10 @@ export const apis = {
     url: process.env.INCENTIVES_API_ENDPOINT_URL || 'http://localhost:8087',
     timeoutSeconds: toNumber(process.env.INCENTIVES_API_ENDPOINT_TIMEOUT_SECONDS) || 30,
   },
+  nonAssociationsApi: {
+    url: process.env.NON_ASSOCIATIONS_API_ENDPOINT_URL || 'http://localhost:8088',
+    timeoutSeconds: toNumber(process.env.NON_ASSOCIATIONS_API_ENDPOINT_TIMEOUT_SECONDS) || 30,
+  },
   keyworker: {
     url: process.env.KEYWORKER_API_URL || 'http://localhost:8081/',
     timeoutSeconds: toNumber(process.env.KEYWORKER_API_TIMEOUT_SECONDS) || 30,

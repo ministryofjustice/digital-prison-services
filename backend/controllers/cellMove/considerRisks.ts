@@ -11,7 +11,7 @@ const activeCellMoveAlertsExcludingDisabled = (alert) =>
 
 const missingDataString = 'not entered'
 
-export default ({ prisonApi, raiseAnalyticsEvent }) => {
+export default ({ prisonApi, raiseAnalyticsEvent, nonAssociationsApi }) => {
   const getOccupantsDetails = async (context, offenders) =>
     Promise.all(offenders.map((offender) => prisonApi.getDetails(context, offender, true)))
 
@@ -44,9 +44,9 @@ export default ({ prisonApi, raiseAnalyticsEvent }) => {
       const parentLocationDetail = await prisonApi.getLocation(res.locals, locationDetail.parentLocationId)
       const { locationPrefix } = await prisonApi.getLocation(res.locals, parentLocationDetail.parentLocationId)
 
-      // Get non-associations for the offener and filter them down to ones
+      // Get non-associations for the offender and filter them down to ones
       // that are currently in the same residential unit as the selected cell
-      const currentOffenderNonAssociations = await prisonApi.getNonAssociations(res.locals, currentOffenderDetails)
+      const currentOffenderNonAssociations = await nonAssociationsApi.getNonAssociations(res.locals, offenderNo)
       const nonAssociationsWithinLocation = currentOffenderNonAssociations?.nonAssociations?.filter((nonAssociation) =>
         nonAssociation.offenderNonAssociation.assignedLivingUnitDescription?.includes(locationPrefix)
       )

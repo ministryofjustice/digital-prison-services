@@ -109,6 +109,7 @@ const setup = ({
   complexityApi,
   curiousApi,
   incentivesApi,
+  nonAssociationsApi,
   restrictedPatientApi,
   whereaboutsMaintenanceMode,
 }) => {
@@ -303,6 +304,7 @@ const setup = ({
       prisonApi,
       whereaboutsApi,
       caseNotesApi,
+      nonAssociationsApi,
       logError,
     })
   )

@@ -433,14 +433,6 @@ export const prisonApiFactory = (client) => {
   const getScheduledEventsForNextWeek = (context, bookingId) =>
     get(context, `/api/bookings/${bookingId}/events/nextWeek`)
 
-  const getNonAssociations = (context, { bookingId, offenderNo }) => {
-    if (config.app.nonAssociationsLegacyMode) {
-      return get(context, `/api/bookings/${bookingId}/non-association-details`)
-    }
-
-    return get(context, `/api/offenders/${offenderNo}/non-association-details`)
-  }
-
   const getCellsWithCapacity = (context, agencyId, attribute) =>
     getWithCustomTimeout(
       context,
@@ -583,7 +575,6 @@ export const prisonApiFactory = (client) => {
     getSentenceTerms,
     getScheduledEventsForThisWeek,
     getScheduledEventsForNextWeek,
-    getNonAssociations,
     getCellAttributes,
     getCellMoveReasonTypes,
     getCellsWithCapacity,
