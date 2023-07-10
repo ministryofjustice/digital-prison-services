@@ -15,7 +15,7 @@ context('A user can search for a cell', () => {
   beforeEach(() => {
     Cypress.Cookies.preserveOnce('hmpps-session-dev')
     cy.task('stubOffenderFullDetails', offenderFullDetails)
-    cy.task('stubBookingNonAssociations', {})
+    cy.task('stubOffenderNonAssociations', {})
     cy.task('stubGroups', { id: 'MDI' })
     cy.task('stubUserCaseLoads')
   })
@@ -79,7 +79,7 @@ context('A user can search for a cell', () => {
           },
         ],
       })
-      cy.task('stubBookingNonAssociations', {
+      cy.task('stubOffenderNonAssociations', {
         agencyDescription: 'HMP Moorland',
         nonAssociations: [
           {

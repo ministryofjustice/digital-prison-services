@@ -208,7 +208,7 @@ context('A user can see conflicts in cell', () => {
     cy.task('stubInmatesAtLocation', {
       inmates: [{ offenderNo: 'A12345', firstName: 'Bob', lastName: 'Doe', assignedLivingUnitId: 1 }],
     })
-    cy.task('stubBookingNonAssociations', {
+    cy.task('stubOffenderNonAssociations', {
       offenderNo,
       firstName: 'JOHN',
       lastName: 'SAUNDERS',
@@ -351,7 +351,7 @@ context('A user can see conflicts in cell', () => {
     cy.task('stubInmatesAtLocation', {
       inmates: [],
     })
-    cy.task('stubBookingNonAssociations', {})
+    cy.task('stubOffenderNonAssociations', {})
 
     cy.task('stubBookingDetails', {
       firstName: 'Bob',
