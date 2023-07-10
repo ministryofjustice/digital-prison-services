@@ -73,7 +73,7 @@ generic-service:
    PRISONER_PROFILE_REDIRECT_URL: https://prisoner-preprod.digital.prison.service.justice.gov.uk
    PRISONER_PROFILE_REDIRECT_ENABLED_DATE: ""
    PRISONER_PROFILE_REDIRECT_ENABLED_PRISONS: LEI
-   NON_ASSOCIATIONS_LEGACY_MODE: 'true'
+   NON_ASSOCIATIONS_LEGACY_MODE: 'false'
 
   allowlist:
    office: "217.33.148.210/32"
