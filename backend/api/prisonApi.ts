@@ -433,11 +433,7 @@ export const prisonApiFactory = (client) => {
   const getScheduledEventsForNextWeek = (context, bookingId) =>
     get(context, `/api/bookings/${bookingId}/events/nextWeek`)
 
-  const getNonAssociations = (context, { bookingId, offenderNo }) => {
-    if (config.app.nonAssociationsLegacyMode) {
-      return get(context, `/api/bookings/${bookingId}/non-association-details`)
-    }
-
+  const getNonAssociations = (context, offenderNo) => {
     return get(context, `/api/offenders/${offenderNo}/non-association-details`)
   }
 
