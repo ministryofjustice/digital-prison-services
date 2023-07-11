@@ -8,6 +8,7 @@ export type OffenderNonAssociation = {
   lastName: string
   agencyDescription: string
   assignedLivingUnitDescription: string
+  assignedLivingUnitId: number
   nonAssociations: [
     {
       reasonCode: string
@@ -15,6 +16,7 @@ export type OffenderNonAssociation = {
       typeCode: string
       typeDescription: string
       effectiveDate: string
+      expiryDate: string
       authorisedBy: string
       comments: string
       offenderNonAssociation: {
@@ -25,6 +27,7 @@ export type OffenderNonAssociation = {
         reasonDescription: string
         agencyDescription: string
         assignedLivingUnitDescription: string
+        assignedLivingUnitId: number
       }
     }
   ]
