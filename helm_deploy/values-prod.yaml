@@ -73,6 +73,7 @@ generic-service:
    PRISONER_PROFILE_REDIRECT_URL: https://prisoner.digital.prison.service.justice.gov.uk
    PRISONER_PROFILE_REDIRECT_ENABLED_DATE: 2023-06-12T02:00:00
    PRISONER_PROFILE_REDIRECT_ENABLED_PRISONS: LEI
+   MANAGE_OFFENCES_URL: https://manage-offences.hmpps.service.justice.gov.uk
 
   allowlist:
    office: "217.33.148.210/32"
