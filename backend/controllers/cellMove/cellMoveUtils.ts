@@ -1,7 +1,8 @@
 import moment from 'moment'
 import { csraTranslations } from '../../shared/csraHelpers'
+import { OffenderNonAssociation } from '../../api/nonAssociationsApi'
 
-export const getNonAssocationsInEstablishment = (nonAssociations) =>
+export const getNonAssociationsInEstablishment = (nonAssociations: OffenderNonAssociation) =>
   nonAssociations?.nonAssociations?.filter(
     (nonAssociation) =>
       nonAssociation.offenderNonAssociation &&
@@ -57,7 +58,7 @@ export const translateCsra = (csraClassificationCode: string): string => {
 }
 
 export default {
-  getNonAssocationsInEstablishment,
+  getNonAssociationsInEstablishment,
   getBackLinkData,
   userHasAccess,
   renderLocationOptions,

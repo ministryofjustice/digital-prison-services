@@ -3,7 +3,7 @@ import { putLastNameFirst, formatName, formatLocation } from '../../utils'
 
 import {
   userHasAccess,
-  getNonAssocationsInEstablishment,
+  getNonAssociationsInEstablishment,
   renderLocationOptions,
   cellAttributes,
   translateCsra,
@@ -34,7 +34,7 @@ export default ({ oauthApi, prisonApi, whereaboutsApi, nonAssociationsApi }) =>
           (alert) => prisonersActiveAlertCodes.includes(alert) && cellMoveAlertCodes.includes(alert)
         )
       )
-      const numberOfNonAssociations = getNonAssocationsInEstablishment(nonAssociations).length
+      const numberOfNonAssociations = getNonAssociationsInEstablishment(nonAssociations).length
 
       const prisonerDetailsWithFormattedLocation = {
         ...prisonerDetails,
