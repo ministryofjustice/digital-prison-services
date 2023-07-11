@@ -17,6 +17,7 @@ import { socApiFactory } from './api/socApi'
 import { offenderSearchApiFactory } from './api/offenderSearchApi'
 import { complexityApiFactory } from './api/complexityApi'
 import { incentivesApiFactory } from './api/incentivesApi'
+import { nonAssociationsApiFactory } from './api/nonAssociationsApi'
 
 export const prisonApi = prisonApiFactory(
   clientFactory({
@@ -125,6 +126,13 @@ export const incentivesApi = incentivesApiFactory(
   })
 )
 
+export const nonAssociationsApi = nonAssociationsApiFactory(
+  clientFactory({
+    baseUrl: config.apis.nonAssociationsApi.url,
+    timeout: config.apis.nonAssociationsApi.timeoutSeconds * 1000,
+  })
+)
+
 export const curiousApi = CuriousApi.create(clientFactory({ baseUrl: config.apis.curious.url }))
 
 export default {
@@ -143,5 +151,6 @@ export default {
   complexityApi,
   curiousApi,
   incentivesApi,
+  nonAssociationsApi,
   restrictedPatientApi,
 }

@@ -1429,20 +1429,6 @@ module.exports = {
         jsonBody: details || {},
       },
     }),
-  stubBookingNonAssociations: (response) =>
-    stubFor({
-      request: {
-        method: 'GET',
-        urlPattern: '/api/offenders/[0-9A-Z].+?/non-association-details',
-      },
-      response: {
-        status: 200,
-        headers: {
-          'Content-Type': 'application/json;charset=UTF-8',
-        },
-        jsonBody: response,
-      },
-    }),
   stubCellAttributes: () =>
     stubFor({
       request: {

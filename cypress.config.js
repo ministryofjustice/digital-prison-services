@@ -5,6 +5,7 @@ const { defineConfig } = require('cypress')
 const auth = require('./integration-tests/mockApis/auth')
 const prisonApi = require('./integration-tests/mockApis/prisonApi')
 const incentivesApi = require('./integration-tests/mockApis/incentivesApi')
+const nonAssociationsApi = require('./integration-tests/mockApis/nonAssociationsApi')
 const dataComplianceApi = require('./integration-tests/mockApis/dataCompliance')
 const prisonerProfile = require('./integration-tests/mockApis/prisonerProfile')
 const whereabouts = require('./integration-tests/mockApis/whereabouts')
@@ -403,7 +404,7 @@ module.exports = defineConfig({
         verifySaveAmendment: caseNotes.verifySaveAmendment,
         stubGetCaseNoteTypes: caseNotes.stubGetCaseNoteTypes,
         stubSaveAmendment: caseNotes.stubSaveAmendment,
-        stubBookingNonAssociations: (response) => prisonApi.stubBookingNonAssociations(response),
+        stubOffenderNonAssociations: (response) => nonAssociationsApi.stubOffenderNonAssociations(response),
         stubProfessionalContacts: ({
           offenderBasicDetails,
           contacts,

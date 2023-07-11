@@ -1,5 +1,4 @@
 import nock from 'nock'
-import config from '../config'
 import clientFactory from './oauthEnabledClient'
 import { prisonApiFactory } from './prisonApi'
 
@@ -7,7 +6,7 @@ const url = 'http://localhost:8080'
 
 describe('Prison Api', () => {
   const client = clientFactory({ baseUrl: url, timeout: 2000 })
-  const prisonAPi = prisonApiFactory(client)
+  const prisonApi = prisonApiFactory(client)
   const mock = nock(url)
 
   beforeEach(() => {
@@ -31,7 +30,7 @@ describe('Prison Api', () => {
         releaseEvents: [],
       })
 
-    const response = await prisonAPi.getTransfers(
+    const response = await prisonApi.getTransfers(
       {},
       {
         agencyId: 'MDI',
@@ -67,7 +66,7 @@ describe('Prison Api', () => {
         },
       ])
 
-    const response = await prisonAPi.getAlertsForLatestBooking(
+    const response = await prisonApi.getAlertsForLatestBooking(
       {},
       {
         offenderNo: 'AA1234A',
@@ -85,65 +84,5 @@ describe('Prison Api', () => {
         alertId: 2,
       },
     ])
-  })
-
-  describe('when non-associations legacy mode is enabled', () => {
-    beforeEach(() => {
-      config.app.nonAssociationsLegacyMode = true
-    })
-
-    it('calls /api/bookings/{bookingId}/non-association-details correctly', async () => {
-      const mockResponse = {
-        offenderNo: 'A1234AB',
-        firstName: 'Alan',
-        lastName: 'Adams',
-        agencyDescription: 'ALCATRAZ (HMP)',
-        assignedLivingUnitDescription: 'ABC-D-1-001',
-        nonAssociations: [],
-        assignedLivingUnitId: 123456,
-      }
-
-      mock.get('/api/bookings/12345/non-association-details').reply(200, mockResponse)
-
-      const response = await prisonAPi.getNonAssociations(
-        {},
-        {
-          bookingId: 12345,
-          offenderNo: 'A1234AB',
-        }
-      )
-
-      expect(response).toEqual(mockResponse)
-    })
-  })
-
-  describe('when non-associations legacy mode is not enabled', () => {
-    beforeEach(() => {
-      config.app.nonAssociationsLegacyMode = false
-    })
-
-    it('calls /api/offenders/{offenderNo}/non-association-details correctly', async () => {
-      const mockResponse = {
-        offenderNo: 'A4564AB',
-        firstName: 'Alan',
-        lastName: 'Adams',
-        agencyDescription: 'ALCATRAZ (HMP)',
-        assignedLivingUnitDescription: 'ABC-D-1-001',
-        nonAssociations: [],
-        assignedLivingUnitId: 123456,
-      }
-
-      mock.get('/api/offenders/A4564AB/non-association-details').reply(200, mockResponse)
-
-      const response = await prisonAPi.getNonAssociations(
-        {},
-        {
-          bookingId: 654321,
-          offenderNo: 'A4564AB',
-        }
-      )
-
-      expect(response).toEqual(mockResponse)
-    })
   })
 })

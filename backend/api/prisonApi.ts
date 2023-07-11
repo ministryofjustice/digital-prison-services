@@ -178,7 +178,10 @@ export const prisonApiFactory = (client) => {
     )
   }
 
-  const getAlertsForLatestBooking = (context, { offenderNo, alertCodes, sortBy, sortDirection }): Array<AlertDetails> =>
+  const getAlertsForLatestBooking = (
+    context,
+    { offenderNo, alertCodes, sortBy, sortDirection }
+  ): Promise<AlertDetails[]> =>
     get(
       context,
       `/api/offenders/${offenderNo}/bookings/latest/alerts?alertCodes=${alertCodes.toString()}&sort=${sortBy}&direction=${sortDirection}`
@@ -433,14 +436,6 @@ export const prisonApiFactory = (client) => {
   const getScheduledEventsForNextWeek = (context, bookingId) =>
     get(context, `/api/bookings/${bookingId}/events/nextWeek`)
 
-  const getNonAssociations = (context, { bookingId, offenderNo }) => {
-    if (config.app.nonAssociationsLegacyMode) {
-      return get(context, `/api/bookings/${bookingId}/non-association-details`)
-    }
-
-    return get(context, `/api/offenders/${offenderNo}/non-association-details`)
-  }
-
   const getCellsWithCapacity = (context, agencyId, attribute) =>
     getWithCustomTimeout(
       context,
@@ -583,7 +578,6 @@ export const prisonApiFactory = (client) => {
     getSentenceTerms,
     getScheduledEventsForThisWeek,
     getScheduledEventsForNextWeek,
-    getNonAssociations,
     getCellAttributes,
     getCellMoveReasonTypes,
     getCellsWithCapacity,

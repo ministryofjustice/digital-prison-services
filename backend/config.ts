@@ -31,7 +31,6 @@ export const app = {
     enabledDate: parseDate(process.env.PRISONER_PROFILE_REDIRECT_ENABLED_DATE),
     enabledPrisons: process.env.PRISONER_PROFILE_REDIRECT_ENABLED_PRISONS || '',
   },
-  nonAssociationsLegacyMode: process.env.NON_ASSOCIATIONS_LEGACY_MODE === 'true' || false,
 }
 
 export const analytics = {
@@ -102,6 +101,10 @@ export const apis = {
   incentivesApi: {
     url: process.env.INCENTIVES_API_ENDPOINT_URL || 'http://localhost:8087',
     timeoutSeconds: toNumber(process.env.INCENTIVES_API_ENDPOINT_TIMEOUT_SECONDS) || 30,
+  },
+  nonAssociationsApi: {
+    url: process.env.NON_ASSOCIATIONS_API_ENDPOINT_URL || 'http://localhost:8088',
+    timeoutSeconds: toNumber(process.env.NON_ASSOCIATIONS_API_ENDPOINT_TIMEOUT_SECONDS) || 30,
   },
   keyworker: {
     url: process.env.KEYWORKER_API_URL || 'http://localhost:8081/',
@@ -218,6 +221,9 @@ export const apis = {
   },
   manageWarrantFolder: {
     ui_url: process.env.WARRANT_FOLDER_URL,
+  },
+  manageOffences: {
+    ui_url: process.env.MANAGE_OFFENCES_URL,
   },
 }
 export const notifications = {

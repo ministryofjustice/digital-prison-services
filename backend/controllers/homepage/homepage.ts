@@ -25,6 +25,7 @@ const {
     appointments,
     historicalPrisonerApplication,
     getSomeoneReadyForWork,
+    manageOffences,
   },
   app: { whereaboutsMaintenanceMode, keyworkerMaintenanceMode },
 } = config
@@ -347,6 +348,13 @@ const getTasks = ({ activeCaseLoadId, locations, staffId, whereaboutsConfig, key
       description: 'Record what support a prisoner needs to get work. View who has been assessed as ready to work.',
       href: `${getSomeoneReadyForWork.ui_url}?sort=releaseDate&order=descending`,
       enabled: () => getSomeoneReadyForWork.ui_url && userHasRoles(['WORK_READINESS_VIEW', 'WORK_READINESS_EDIT']),
+    },
+    {
+      id: 'manage-offences',
+      heading: 'Manage offences',
+      description: 'This service allows you to maintain offence reference data.',
+      href: manageOffences.ui_url,
+      enabled: () => userHasRoles(['MANAGE_OFFENCES_ADMIN', 'UPDATE_OFFENCE_SCHEDULES', 'NOMIS_OFFENCE_ACTIVATOR']),
     },
   ]
 }

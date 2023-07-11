@@ -50,7 +50,7 @@ context('A user can select a cell', () => {
         },
       ],
     })
-    cy.task('stubBookingNonAssociations', {
+    cy.task('stubOffenderNonAssociations', {
       offenderNo: 'G6123VU',
       firstName: 'JOHN',
       lastName: 'SAUNDERS',
@@ -230,7 +230,7 @@ context('A user can select a cell', () => {
     })
 
     it('should NOT show the non association warning', () => {
-      cy.task('stubBookingNonAssociations', null)
+      cy.task('stubOffenderNonAssociations', null)
       const page = SelectCellPage.goTo(offenderNo)
       page.nonAssociationWarning().should('not.exist')
     })

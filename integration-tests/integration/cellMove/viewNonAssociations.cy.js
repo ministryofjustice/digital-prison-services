@@ -16,7 +16,7 @@ context('A user can view non associations', () => {
   beforeEach(() => {
     Cypress.Cookies.preserveOnce('hmpps-session-dev')
     cy.task('stubOffenderBasicDetails', offenderBasicDetails)
-    cy.task('stubBookingNonAssociations', {
+    cy.task('stubOffenderNonAssociations', {
       offenderNo: 'A12345',
       firstName: 'John',
       lastName: 'Smith',
