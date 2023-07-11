@@ -109,7 +109,7 @@ const getResidentialLevelNonAssociations = async (res, { prisonApi, nonAssociati
   )
 }
 
-export default ({ oauthApi, prisonApi, whereaboutsApi }) =>
+export default ({ oauthApi, prisonApi, whereaboutsApi, nonAssociationsApi }) =>
   async (req, res) => {
     const { offenderNo } = req.params
     const { location = 'ALL', subLocation, cellType, locationId } = req.query
@@ -124,7 +124,7 @@ export default ({ oauthApi, prisonApi, whereaboutsApi }) =>
         return res.render('notFound.njk', { url: '/prisoner-search' })
       }
 
-      const nonAssociations = await prisonApi.getNonAssociations(res.locals, prisonerDetails.offenderNo)
+      const nonAssociations = await nonAssociationsApi.getNonAssociations(res.locals, offenderNo)
       const locationsData = await whereaboutsApi.searchGroups(res.locals, prisonerDetails.agencyId)
 
       if (req.xhr) {

@@ -106,6 +106,7 @@ app.use(
     complexityApi: apis.complexityApi,
     curiousApi: apis.curiousApi,
     incentivesApi: apis.incentivesApi,
+    nonAssociationsApi: apis.nonAssociationsApi,
     restrictedPatientApi: apis.restrictedPatientApi,
     whereaboutsMaintenanceMode: config.app.whereaboutsMaintenanceMode,
   })
