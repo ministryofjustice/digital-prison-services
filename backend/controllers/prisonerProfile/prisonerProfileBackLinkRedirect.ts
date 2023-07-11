@@ -10,7 +10,6 @@ export default (handler) => async (req, res, next) => {
 
   const redirectEnabled =
     redirectUrl &&
-    !redirectPath.includes('add-case-note') && // DPS currently still provides this page so just pass through for now
     ((redirectDate && redirectDate < Date.now()) ||
       res.locals.user?.userRoles?.some((role) => role === 'ROLE_DPS_APPLICATION_DEVELOPER'))
 
