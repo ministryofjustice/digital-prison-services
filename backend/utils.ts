@@ -1,7 +1,7 @@
 import moment from 'moment'
 import { DATE_TIME_FORMAT_SPEC } from '../common/dateHelpers'
 import abbreviations from '../common/abbreviations'
-import config, { parseDate } from './config'
+import config from './config'
 
 export const switchDateFormat = (displayDate: moment.MomentInput, fromFormat = 'DD/MM/YYYY'): moment.MomentInput => {
   if (displayDate) {
