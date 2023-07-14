@@ -30,6 +30,7 @@ export const app = {
     url: process.env.PRISONER_PROFILE_REDIRECT_URL,
     enabledDate: parseDate(process.env.PRISONER_PROFILE_REDIRECT_ENABLED_DATE),
     enabledPrisons: process.env.PRISONER_PROFILE_REDIRECT_ENABLED_PRISONS || '',
+    scheduleRedirectForPrisons: process.env.PRISONER_PROFILE_SCHEDULE_REDIRECT_FOR_PRISONS || '',
   },
 }
 
