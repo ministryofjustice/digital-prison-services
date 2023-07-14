@@ -1,4 +1,5 @@
 const moment = require('moment')
+const offenderBasicDetails = require('../../mockApis/responses/offenderBasicDetails.json')
 const offenderFullDetails = require('../../mockApis/responses/offenderFullDetails.json')
 const SearchForCellPage = require('../../pages/cellMove/searchForCellPage')
 const OffenderDetailsPage = require('../../pages/cellMove/offenderDetailsPage')
@@ -14,6 +15,7 @@ context('A user can search for a cell', () => {
   })
   beforeEach(() => {
     Cypress.Cookies.preserveOnce('hmpps-session-dev')
+    cy.task('stubOffenderBasicDetails', offenderBasicDetails)
     cy.task('stubOffenderFullDetails', offenderFullDetails)
     cy.task('stubOffenderNonAssociations', {})
     cy.task('stubGroups', { id: 'MDI' })

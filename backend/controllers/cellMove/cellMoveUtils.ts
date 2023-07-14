@@ -2,16 +2,39 @@ import moment from 'moment'
 import { csraTranslations } from '../../shared/csraHelpers'
 import { OffenderNonAssociation } from '../../api/nonAssociationsApi'
 
-export const getNonAssociationsInEstablishment = (nonAssociations: OffenderNonAssociation) =>
-  nonAssociations?.nonAssociations?.filter(
+export const getNonAssociationsInEstablishment = async (
+  nonAssociations: OffenderNonAssociation,
+  context,
+  prisonApi
+) => {
+  const validNonAssociations = nonAssociations?.nonAssociations?.filter(
     (nonAssociation) =>
       nonAssociation.offenderNonAssociation &&
-      nonAssociation.offenderNonAssociation.agencyDescription.toLowerCase() ===
-        nonAssociations.agencyDescription.toLowerCase() &&
       (!nonAssociation.expiryDate || moment(nonAssociation.expiryDate, 'YYYY-MM-DDTHH:mm:ss') > moment()) &&
       nonAssociation.effectiveDate &&
       moment(nonAssociation.effectiveDate, 'YYYY-MM-DDTHH:mm:ss') <= moment()
-  ) || []
+  )
+
+  if (!validNonAssociations) return []
+
+  const offenderNos = validNonAssociations.map((nonAssociation) => nonAssociation.offenderNonAssociation.offenderNo)
+  offenderNos.push(nonAssociations.offenderNo)
+
+  const offenders = await Promise.all(
+    offenderNos.map(async (offenderNo) => prisonApi.getDetails(context, offenderNo, false))
+  )
+
+  const offenderLocations = offenders.reduce(
+    (memo, offender) => ({ ...memo, [offender.offenderNo]: offender.agencyId }),
+    {}
+  )
+
+  return validNonAssociations.filter(
+    (nonAssociation) =>
+      offenderLocations[nonAssociations.offenderNo] ===
+      offenderLocations[nonAssociation.offenderNonAssociation.offenderNo]
+  )
+}
 
 export const getBackLinkData = (referer, offenderNo) => {
   const backLink = referer || `/prisoner/${offenderNo}/cell-move/search-for-cell`

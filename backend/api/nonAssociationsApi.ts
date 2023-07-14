@@ -9,28 +9,26 @@ export type OffenderNonAssociation = {
   agencyDescription: string
   assignedLivingUnitDescription: string
   assignedLivingUnitId: number
-  nonAssociations: [
-    {
+  nonAssociations: {
+    reasonCode: string
+    reasonDescription: string
+    typeCode: string
+    typeDescription: string
+    effectiveDate: string
+    expiryDate: string | null
+    authorisedBy: string
+    comments: string
+    offenderNonAssociation: {
+      offenderNo: string
+      firstName: string
+      lastName: string
       reasonCode: string
       reasonDescription: string
-      typeCode: string
-      typeDescription: string
-      effectiveDate: string
-      expiryDate: string
-      authorisedBy: string
-      comments: string
-      offenderNonAssociation: {
-        offenderNo: string
-        firstName: string
-        lastName: string
-        reasonCode: string
-        reasonDescription: string
-        agencyDescription: string
-        assignedLivingUnitDescription: string
-        assignedLivingUnitId: number
-      }
+      agencyDescription: string
+      assignedLivingUnitDescription: string
+      assignedLivingUnitId: number
     }
-  ]
+  }[]
 }
 
 export const nonAssociationsApiFactory = (client: OauthApiClient) => {

@@ -192,7 +192,8 @@ export default ({ oauthApi, prisonApi, whereaboutsApi, nonAssociationsApi }) =>
         nonAssociations,
       })
 
-      const numberOfNonAssociations = getNonAssociationsInEstablishment(nonAssociations).length
+      const numberOfNonAssociations = (await getNonAssociationsInEstablishment(nonAssociations, res.locals, prisonApi))
+        .length
 
       const prisonerDetailsWithFormattedLocation = {
         ...prisonerDetails,
