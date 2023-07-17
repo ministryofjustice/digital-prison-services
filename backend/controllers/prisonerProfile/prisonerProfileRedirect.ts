@@ -6,7 +6,7 @@ export default ({ path, handler }) =>
     const { offenderNo } = req.params
     const { activeCaseLoadId } = req.session.userDetails
 
-    const redirectEnabled = isRedirectEnabled(res)
+    const redirectEnabled = isRedirectEnabled(res, activeCaseLoadId)
     const redirectCaseload = isRedirectCaseLoad(activeCaseLoadId)
 
     if (redirectEnabled && redirectCaseload) {
