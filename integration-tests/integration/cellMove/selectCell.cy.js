@@ -1,5 +1,4 @@
 const moment = require('moment')
-const offenderBasicDetails = require('../../mockApis/responses/offenderBasicDetails.json')
 const offenderFullDetails = require('../../mockApis/responses/offenderFullDetails.json')
 const SelectCellPage = require('../../pages/cellMove/selectCellPage')
 
@@ -30,8 +29,12 @@ context('A user can select a cell', () => {
   })
   beforeEach(() => {
     Cypress.Cookies.preserveOnce('hmpps-session-dev')
-    cy.task('stubOffenderBasicDetails', offenderBasicDetails)
-    cy.task('stubOffenderFullDetails', offenderFullDetails)
+    ;['A12345', 'G6123VU'].forEach((anotherOffenderNo) => {
+      cy.task('stubSpecificOffenderFullDetails', {
+        ...offenderFullDetails,
+        offenderNo: anotherOffenderNo,
+      })
+    })
     cy.task('stubGroups', { id: 'MDI' })
     cy.task('stubCellAttributes')
     cy.task('stubInmatesAtLocation', {

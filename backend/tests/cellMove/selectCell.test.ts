@@ -55,10 +55,10 @@ describe('Select a cell', () => {
   beforeEach(() => {
     oauthApi.userRoles = jest.fn().mockReturnValue([{ roleCode: 'CELL_MOVE' }])
     prisonApi.userCaseLoads = jest.fn().mockResolvedValue([{ caseLoadId: 'LEI' }])
-    prisonApi.getDetails = jest.fn().mockResolvedValue({
+    prisonApi.getDetails = jest.fn().mockImplementation((_, offenderNo) => ({
       firstName: 'John',
       lastName: 'Doe',
-      offenderNo: someOffenderNumber,
+      offenderNo,
       bookingId: someBookingId,
       agencyId: someAgency,
       alerts: [
@@ -67,7 +67,13 @@ describe('Select a cell', () => {
         { expired: false, alertCode: 'HA' },
         { expired: false, alertCode: 'HA1' },
       ],
-    })
+      assignedLivingUnit: {
+        agencyId: someAgency,
+        locationId: 12345,
+        description: '1-2-012',
+        agencyName: 'ye olde prisone',
+      },
+    }))
 
     prisonApi.getCsraAssessments = jest.fn()
     prisonApi.getAlerts = jest.fn()
@@ -211,7 +217,12 @@ describe('Select a cell', () => {
             firstName: 'John',
             lastName: 'Doe',
             offenderNo: 'A12345',
-            assignedLivingUnit: {},
+            assignedLivingUnit: {
+              agencyId: someAgency,
+              locationId: 12345,
+              description: '1-2-012',
+              agencyName: 'ye olde prisone',
+            },
           },
         })
       )
@@ -813,14 +824,6 @@ describe('Select a cell', () => {
     })
 
     it('should set show non association value to true when there are res unit level non-associations', async () => {
-      prisonApi.getDetails = jest.fn().mockResolvedValue({
-        firstName: 'John',
-        lastName: 'Doe',
-        offenderNo: someOffenderNumber,
-        bookingId: someBookingId,
-        agencyId: someAgency,
-        alerts: [],
-      })
       prisonApi.getLocation
         .mockResolvedValueOnce(cellLocationData)
         .mockResolvedValueOnce(parentLocationData)
@@ -851,14 +854,25 @@ describe('Select a cell', () => {
 
     it('should set show non association value to true when there are non-associations within the establishment', async () => {
       prisonApi.userCaseLoads = jest.fn().mockResolvedValue([{ caseLoadId: 'MDI' }])
-      prisonApi.getDetails = jest.fn().mockResolvedValue({
+      prisonApi.getDetails = jest.fn().mockImplementation((_, offenderNo) => ({
         firstName: 'John',
         lastName: 'Doe',
-        offenderNo: someOffenderNumber,
+        offenderNo,
         bookingId: someBookingId,
         agencyId: 'MDI',
-        alerts: [],
-      })
+        alerts: [
+          { expired: false, alertCode: 'PEEP' },
+          { expired: true, alertCode: 'DCC' },
+          { expired: false, alertCode: 'HA' },
+          { expired: false, alertCode: 'HA1' },
+        ],
+        assignedLivingUnit: {
+          agencyId: 'MDI',
+          locationId: 12345,
+          description: '1-2-012',
+          agencyName: 'ye olde prisone',
+        },
+      }))
 
       req.query = {}
 

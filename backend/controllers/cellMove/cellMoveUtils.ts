@@ -21,18 +21,24 @@ export const getNonAssociationsInEstablishment = async (
   offenderNos.push(nonAssociations.offenderNo)
 
   const offenders = await Promise.all(
-    offenderNos.map(async (offenderNo) => prisonApi.getDetails(context, offenderNo, false))
+    offenderNos.map(async (offenderNo) => prisonApi.getDetails(context, offenderNo, true))
   )
 
-  const offenderLocations = offenders.reduce(
-    (memo, offender) => ({ ...memo, [offender.offenderNo]: offender.agencyId }),
-    {}
-  )
+  const offenderMap = offenders.reduce((memo, offender) => ({ ...memo, [offender.offenderNo]: offender }), {})
+
+  validNonAssociations.forEach((nonAssociation) => {
+    const livingUnit = offenderMap[nonAssociation.offenderNonAssociation.offenderNo]?.assignedLivingUnit
+
+    /* eslint-disable no-param-reassign */
+    nonAssociation.offenderNonAssociation.agencyDescription = livingUnit?.agencyName
+    nonAssociation.offenderNonAssociation.assignedLivingUnitDescription = livingUnit?.description
+    /* eslint-enable no-param-reassign */
+  })
 
   return validNonAssociations.filter(
     (nonAssociation) =>
-      offenderLocations[nonAssociations.offenderNo] ===
-      offenderLocations[nonAssociation.offenderNonAssociation.offenderNo]
+      offenderMap[nonAssociations.offenderNo].agencyId ===
+      offenderMap[nonAssociation.offenderNonAssociation.offenderNo].agencyId
   )
 }
 

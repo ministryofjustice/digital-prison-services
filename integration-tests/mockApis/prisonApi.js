@@ -278,6 +278,20 @@ module.exports = {
         jsonBody: details || {},
       },
     }),
+  stubSpecificOffenderFullDetails: (details) =>
+    stubFor({
+      request: {
+        method: 'GET',
+        urlPattern: `/api/bookings/offenderNo/${details.offenderNo}\\?fullInfo=true&csraSummary=true`,
+      },
+      response: {
+        status: 200,
+        headers: {
+          'Content-Type': 'application/json;charset=UTF-8',
+        },
+        jsonBody: details || {},
+      },
+    }),
   stubOffenderBasicDetails: (offender) =>
     stubFor({
       request: {
