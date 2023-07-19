@@ -1,0 +1,161 @@
+{% extends "../partials/layout.njk" %}
+{% from "govuk/components/select/macro.njk" import govukSelect %}
+{% from "govuk/components/button/macro.njk" import govukButton %}
+{% from "govuk/components/table/macro.njk" import govukTable %}
+{% from "../macros/alertFlags.njk" import alertFlags %}
+{% from "govuk/components/warning-text/macro.njk" import govukWarningText %}
+
+{% set title = "Select an available reception" %}
+
+{% macro makeRow(cell, index, last, occupier) %}
+
+  {% set cellClass = 'govuk-table__cell govuk-table__cell--last' if last else 'govuk-table__cell' %}
+
+  {% if index === 1 %}
+    <td class="{{ cellClass }}">{{ cell.description }}</th>
+    <td class="{{ cellClass }}">{{ cell.type | join(',<br>', 'description') | safe if cell.type.length else 'Nothing entered' }}</td>
+    <td class="{{ cellClass }}">{{ cell.capacity }}</td>
+    <td class="{{ cellClass }}">{{ cell.spaces }}</td>
+  {% else %}
+    <td class="{{ cellClass }}">
+    </td>
+    <td class="{{ cellClass }}">
+    </td>
+    <td class="{{ cellClass }}">
+    </td>
+    <td class="{{ cellClass }}">
+    </td>
+  {% endif %}
+
+  {% if occupier != null %}
+  <td class="{{ cellClass }}">
+    {{ occupier.name }}
+    <div>
+      <a href="{{ occupier.viewOffenderDetails }}" class="govuk-link" data-test="csra-link">View details <span class="govuk-visually-hidden">for {{ occupier.name }}</span></a>
+    </div>
+    <div>
+      {% if occupier.nonAssociation %}
+        <div class="non-association govuk-!-margin-top-1">
+          NON-ASSOCIATION
+        </div>
+      {% endif %}
+    </div>
+  </td>
+  <td class="{{ cellClass }}">
+    <p class="govuk-body govuk-!-margin-bottom-1">
+      {{ occupier.csra }}
+    </p>
+
+    <div>
+      <a href="{{ occupier.csraDetailsUrl }}" class="govuk-link" data-test="csra-link">View details <span class="govuk-visually-hidden">for {{ occupier.name }} CSRA</span></a>
+    </div>
+  </td>
+  <td class="{{ cellClass }}">
+    {% if occupier.alerts.length %}
+      {{ alertFlags(occupier.alerts) }}
+    {% else %}
+      <p class="govuk-body govuk-!-margin-bottom-1">None</p>
+    {% endif %}
+  </td>
+  {% else %}
+    <td class="{{ cellClass }}">
+    </td>
+    <td class="{{ cellClass }}">
+    </td>
+    <td class="{{ cellClass }}">
+    </td>
+  {% endif %}
+
+  {% if index === 1 %}
+     <td class="{{ cellClass }}"><a href="{{ '/prisoner/' + offenderNo + '/cell-move/consider-risks?cellId=' + cell.id }}" class="govuk-link">Select reception</a></td>
+  {% else %}
+      <td class="{{ cellClass }}">
+      </td>
+  {% endif %}
+
+{% endmacro %}
+
+{% block beforeContent %}
+  {{ govukBreadcrumbs({
+    items: [
+      {
+        text: "Home",
+        href: '/'
+      },
+      {
+        text: breadcrumbPrisonerName,
+        href: '/prisoner/' + offenderNo
+      },
+      {
+        text: 'Select Reception'
+      }
+    ]
+}) }}
+{% endblock %}
+
+{% block content %}
+  <h1 class="govuk-heading-l">{{title}}</h1>
+
+  {% include "./partials/prisonerInformation.njk" %}
+
+
+  {% if showNonAssociationWarning %}
+    {{ govukWarningText({
+      attributes: {
+        id: 'non-association-warning'
+      },
+      text: breadcrumbPrisonerName + " has a non-association with a prisoner in this location.",
+      iconFallbackText: "Warning"
+    }) }}
+  {% endif %}
+
+  {% if cells.length %}
+    <table class="govuk-table govuk-table--with-child-rows" data-test="cell-results-table">
+      <thead class="govuk-table__head">
+        <tr class="govuk-table__row">
+          <th scope="col" class="govuk-table__header" data-test="location-table-header">Location</th>
+          <th scope="col" class="govuk-table__header">Cell type</th>
+          <th scope="col" class="govuk-table__header">Capacity</th>
+          <th scope="col" class="govuk-table__header">Spaces</th>
+          <th scope="col" class="govuk-table__header">Occupier</th>
+
+          <th scope="col" class="govuk-table__header">CSRA</th>
+          <th scope="col" class="govuk-table__header">Relevant alerts</th>
+          <th scope="col" class="govuk-table__header"><span class="govuk-visually-hidden">Select cell</span></th>
+        </tr>
+      </thead>
+      <tbody class="govuk-table__body">
+        {% for cell in cells %}
+          {% if cell.occupants.length > 0 %}
+              {% for occupier in cell.occupants %}
+                <tr class="govuk-table__row">
+                  {{ makeRow(cell, loop.index, cell.occupants.length === loop.index, occupier) }}
+                </tr>
+                {% endfor %}
+          {% else %}
+          <tr class="govuk-table__row">
+            {{ makeRow(cell, 1, true, null) }}
+          </tr>
+          {% endif%}
+        {% endfor %}
+      </tbody>
+    </table>
+  {% else %}
+    <p class="govuk-body" data-test="no-results-message">There are no results for what you have chosen.</p>
+  {% endif %}
+
+{% endblock %}
+
+{% block pageScripts %}
+  <script src="/static/js/selectCell.js"></script>
+{% endblock %}
+
+{% block bodyEnd %}
+  {{ super() }}
+  <script src="/assets/moj/components/sortable-table/sortable-table.js"></script>
+  <script>
+  new MOJFrontend.SortableTable({
+    table: $('table')[0],
+  })
+  </script>
+{% endblock %}

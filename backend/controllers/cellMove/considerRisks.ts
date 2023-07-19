@@ -41,6 +41,7 @@ export default ({ prisonApi, raiseAnalyticsEvent, nonAssociationsApi }) => {
       // Get the residential unit level prefix for the selected cell by traversing up the
       // parent location tree
       const locationDetail = await prisonApi.getLocation(res.locals, cellId)
+      console.log(locationDetail)
       const parentLocationDetail = await prisonApi.getLocation(res.locals, locationDetail.parentLocationId)
       const { locationPrefix } = await prisonApi.getLocation(res.locals, parentLocationDetail.parentLocationId)
 

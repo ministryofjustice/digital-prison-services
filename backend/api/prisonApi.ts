@@ -446,6 +446,16 @@ export const prisonApiFactory = (client) => {
         customTimeout: 30000,
       }
     )
+  const getReceptionsWithCapacity = (context, agencyId, attribute) =>
+    getWithCustomTimeout(
+      context,
+      attribute
+        ? `/api/agencies/${agencyId}/receptionsWithCapacity?attribute=${attribute}`
+        : `/api/agencies/${agencyId}/receptionsWithCapacity`,
+      {
+        customTimeout: 30000,
+      }
+    )
 
   const getOffenderCellHistory = (context, bookingId, params) =>
     get(context, `/api/bookings/${bookingId}/cell-history?${mapToQueryString(params)}`)
@@ -581,6 +591,7 @@ export const prisonApiFactory = (client) => {
     getCellAttributes,
     getCellMoveReasonTypes,
     getCellsWithCapacity,
+    getReceptionsWithCapacity,
     getCsraAssessments,
     getCsraAssessmentsForPrisoner,
     getCsraReviewForBooking,
