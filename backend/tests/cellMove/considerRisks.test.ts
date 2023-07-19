@@ -675,6 +675,31 @@ describe('move validation', () => {
 
       expect(res.redirect).toHaveBeenCalledWith('/prisoner/ABC123/cell-move/confirm-cell-move?cellId=1')
     })
+
+    it('reception as a location has zero non-associations', async () => {
+      prisonApi.getLocation = jest.fn().mockResolvedValue({})
+      prisonApi.getInmatesAtLocation = jest.fn().mockResolvedValue([])
+      prisonApi.getDetails
+        .mockResolvedValueOnce({
+          ...getCurrentOffenderDetailsResponse,
+          csra: 'Standard',
+          csraClassificationCode: 'STANDARD',
+        })
+        .mockResolvedValueOnce({
+          ...getCurrentOccupierDetailsResponse,
+          csra: 'Standard',
+          csraClassificationCode: 'STANDARD',
+        })
+      prisonApi.getInmatesAtLocation.mockResolvedValue([{ offenderNo: 'A12346' }])
+      await controller.index(req, res)
+
+      expect(res.render).toHaveBeenCalledWith(
+        'cellMove/considerRisks.njk',
+        expect.objectContaining({
+          nonAssociations: [],
+        })
+      )
+    })
   })
 
   describe('Post', () => {})
