@@ -49,7 +49,7 @@ const getCellOccupants = async (res, { prisonApi, activeCaseLoadId, cells, nonAs
     .map(
       (offenderNumber) =>
         assessmentsGroupedByOffenderNo[offenderNumber]
-          .filter((assessment) => assessment?.assessmentDescription.includes('CSR'))
+          .filter((assessment) => assessment?.assessmentDescription?.includes('CSR'))
           .sort(sortByLatestAssessmentDateDesc)[0]
     )
     .filter(Boolean)
@@ -72,9 +72,7 @@ const getCellOccupants = async (res, { prisonApi, activeCaseLoadId, cells, nonAs
         viewOffenderDetails: `/prisoner/${occupant.offenderNo}/cell-move/prisoner-details`,
         alerts: alertFlagLabels.filter((label) => label.alertCodes.some((code) => alertCodes.includes(code))),
         nonAssociation: Boolean(
-          nonAssociations &&
-            nonAssociations.nonAssociations &&
-            nonAssociations.nonAssociations.find((na) => na.offenderNonAssociation.offenderNo === occupant.offenderNo)
+          nonAssociations?.nonAssociations?.find((na) => na.offenderNonAssociation.offenderNo === occupant.offenderNo)
         ),
         csra: (csraInfo && translateCsra(csraInfo.classificationCode)) || 'Not entered',
         csraDetailsUrl: `/prisoner/${occupant.offenderNo}/cell-move/cell-sharing-risk-assessment-details`,
@@ -87,10 +85,8 @@ const getResidentialLevelNonAssociations = async (res, { prisonApi, nonAssociati
   if (!nonAssociations || !cellId) return []
 
   if (!location || location === 'ALL') {
-    return nonAssociations.nonAssociations.filter(
-      (nonAssociation) =>
-        nonAssociation.offenderNonAssociation.assignedLivingUnitDescription &&
-        nonAssociation.offenderNonAssociation.assignedLivingUnitDescription.includes(agencyId)
+    return nonAssociations.nonAssociations.filter((nonAssociation) =>
+      nonAssociation.offenderNonAssociation?.assignedLivingUnitDescription?.includes(agencyId)
     )
   }
   // Get the residential unit level prefix for the selected cell by traversing up the
@@ -99,10 +95,8 @@ const getResidentialLevelNonAssociations = async (res, { prisonApi, nonAssociati
   const parentLocationDetail = await prisonApi.getLocation(res.locals, locationDetail.parentLocationId)
   const { locationPrefix } = await prisonApi.getLocation(res.locals, parentLocationDetail.parentLocationId)
 
-  return nonAssociations.nonAssociations.filter(
-    (nonAssociation) =>
-      nonAssociation.offenderNonAssociation.assignedLivingUnitDescription &&
-      nonAssociation.offenderNonAssociation.assignedLivingUnitDescription.includes(locationPrefix)
+  return nonAssociations.nonAssociations.filter((nonAssociation) =>
+    nonAssociation.offenderNonAssociation?.assignedLivingUnitDescription?.includes(locationPrefix)
   )
 }
 
