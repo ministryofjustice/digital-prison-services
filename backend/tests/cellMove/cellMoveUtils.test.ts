@@ -135,9 +135,17 @@ describe('Cell move utils', () => {
 
   const prisonApi = {
     getDetails: jest.fn((_, offenderNo) => {
+      const agencyId = offenderNo === 'ABC129' ? 'BXI' : 'MDI'
+
       return {
-        agencyId: offenderNo === 'ABC129' ? 'BXI' : 'MDI',
+        agencyId,
         offenderNo,
+        assignedLivingUnit: {
+          agencyId,
+          locationId: 12345,
+          description: '1-2-012',
+          agencyName: 'Ye olde prisone',
+        },
       }
     }),
   }

@@ -25,6 +25,12 @@ describe('view non associations', () => {
     offenderNo,
     firstName: 'Test',
     lastName: 'User',
+    assignedLivingUnit: {
+      agencyId: 'MDI',
+      locationId: 12345,
+      description: '1-2-012',
+      agencyName: 'Moorland (HMP & YOI)',
+    },
   }
 
   beforeEach(() => {
@@ -38,7 +44,11 @@ describe('view non associations', () => {
     }
     res = { locals: {}, render: jest.fn(), status: jest.fn() }
 
-    prisonApi.getDetails = jest.fn().mockResolvedValue(getDetailsResponse)
+    prisonApi.getDetails = jest.fn().mockImplementation((_, requestedOffenderNo) => ({
+      ...getDetailsResponse,
+      offenderNo: requestedOffenderNo,
+    }))
+
     nonAssociationsApi.getNonAssociations = jest.fn().mockResolvedValue({
       offenderNo: 'ABC123',
       firstName: 'Fred',
@@ -152,7 +162,7 @@ describe('view non associations', () => {
           {
             comment: 'Test comment 1',
             effectiveDate: moment().format('D MMMM YYYY'),
-            location: 'MDI-2-1-3',
+            location: '1-2-012',
             name: 'Bloggs, Joseph',
             otherOffenderKey: 'Joseph Bloggs is',
             otherOffenderRole: 'Perpetrator',
@@ -164,7 +174,7 @@ describe('view non associations', () => {
           {
             comment: 'Test comment 2',
             effectiveDate: moment().subtract(1, 'years').format('D MMMM YYYY'),
-            location: 'MDI-2-1-3',
+            location: '1-2-012',
             name: 'Bloggs, Jim',
             otherOffenderKey: 'Jim Bloggs is',
             otherOffenderRole: 'Rival gang',

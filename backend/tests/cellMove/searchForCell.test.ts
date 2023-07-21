@@ -125,7 +125,11 @@ describe('select location', () => {
     }
     res = { locals: {}, render: jest.fn(), status: jest.fn() }
 
-    prisonApi.getDetails = jest.fn().mockResolvedValue(getDetailsResponse)
+    prisonApi.getDetails = jest.fn().mockImplementation((_, requestedOffenderNo) => ({
+      ...getDetailsResponse,
+      offenderNo: requestedOffenderNo,
+    }))
+
     nonAssociationsApi.getNonAssociations = jest.fn().mockResolvedValue({ nonAssociations: [] })
 
     whereaboutsApi.searchGroups = jest.fn().mockResolvedValue([
