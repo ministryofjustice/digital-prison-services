@@ -129,7 +129,7 @@
           {% if cell.occupants.length > 0 %}
               {% for occupier in cell.occupants %}
                 <tr class="govuk-table__row">
-                  {{ makeRow(cell, loop.index, cell.occupants.length === loop.index, occupier) }}
+                  {{ makeRow(cell, loop.index, loop.last, occupier) }}
                 </tr>
                 {% endfor %}
           {% else %}
