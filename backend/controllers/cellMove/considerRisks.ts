@@ -41,16 +41,18 @@ export default ({ prisonApi, raiseAnalyticsEvent, nonAssociationsApi }) => {
       // Get the residential unit level prefix for the selected cell by traversing up the
       // parent location tree
       const locationDetail = await prisonApi.getLocation(res.locals, cellId)
-      const parentLocationDetail = await prisonApi.getLocation(res.locals, locationDetail.parentLocationId)
-      const { locationPrefix } = await prisonApi.getLocation(res.locals, parentLocationDetail.parentLocationId)
-
-      // Get non-associations for the offender and filter them down to ones
-      // that are currently in the same residential unit as the selected cell
-      const currentOffenderNonAssociations = await nonAssociationsApi.getNonAssociations(res.locals, offenderNo)
-      const nonAssociationsWithinLocation = currentOffenderNonAssociations?.nonAssociations?.filter((nonAssociation) =>
-        nonAssociation.offenderNonAssociation.assignedLivingUnitDescription?.includes(locationPrefix)
-      )
-
+      let nonAssociationsWithinLocation = []
+      // reception does not have a parentLocationId
+      if (locationDetail.parentLocationId) {
+        const parentLocationDetail = await prisonApi.getLocation(res.locals, locationDetail.parentLocationId)
+        const { locationPrefix } = await prisonApi.getLocation(res.locals, parentLocationDetail.parentLocationId)
+        // Get non-associations for the offender and filter them down to ones
+        // that are currently in the same residential unit as the selected cell
+        const currentOffenderNonAssociations = await nonAssociationsApi.getNonAssociations(res.locals, offenderNo)
+        nonAssociationsWithinLocation = currentOffenderNonAssociations?.nonAssociations?.filter((nonAssociation) =>
+          nonAssociation.offenderNonAssociation.assignedLivingUnitDescription?.includes(locationPrefix)
+        )
+      }
       const currentOffenderWithOccupants = [currentOffenderDetails, ...currentOccupantsDetails]
 
       const offendersCsraValues = currentOffenderWithOccupants

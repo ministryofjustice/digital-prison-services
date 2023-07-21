@@ -1,6 +1,7 @@
 import express from 'express'
 import searchForCellController from '../controllers/cellMove/searchForCell'
 import selectCellController from '../controllers/cellMove/selectCell'
+import selectReceptionController from '../controllers/cellMove/selectReception'
 import nonAssociationsController from '../controllers/cellMove/viewNonAssociations'
 import offenderDetailsController from '../controllers/cellMove/viewOffenderDetails'
 import cellSharingRiskAssessmentController from '../controllers/cellMove/viewCellSharingAssessmentDetails'
@@ -30,6 +31,11 @@ const controller = ({ oauthApi, prisonApi, whereaboutsApi, nonAssociationsApi, l
   router.get('/prisoner-details', offenderDetailsController({ prisonApi, logError }))
   router.get('/cell-sharing-risk-assessment-details', cellSharingRiskAssessmentController({ prisonApi, logError }))
   router.get('/select-cell', selectCellController({ oauthApi, prisonApi, whereaboutsApi, nonAssociationsApi }))
+  router.get(
+    '/select-reception',
+    selectReceptionController({ oauthApi, prisonApi, whereaboutsApi, nonAssociationsApi })
+  )
+
   router.get('/confirm-cell-move', confirmCellMoveIndex)
   router.post('/confirm-cell-move', confirmCellMovePost)
   router.get('/consider-risks', considerRisksIndex)
