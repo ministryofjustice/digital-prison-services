@@ -49,10 +49,7 @@ const getCellOccupants = async (res, { prisonApi, activeCaseLoadId, cells, nonAs
     .map(
       (offenderNumber) =>
         assessmentsGroupedByOffenderNo[offenderNumber]
-          .filter(
-            (assessment) =>
-              assessment && assessment.assessmentDescription && assessment.assessmentDescription.includes('CSR')
-          )
+          .filter((assessment) => assessment?.assessmentDescription.includes('CSR'))
           .sort(sortByLatestAssessmentDateDesc)[0]
     )
     .filter(Boolean)
