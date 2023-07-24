@@ -270,6 +270,16 @@ class App extends React.Component {
           <Route
             exact
             path={routePaths.prisonersUnaccountedFor}
+            location={() => {
+              if (
+                config &&
+                config.activities &&
+                config.activities.enabled_prisons &&
+                config.activities.enabled_prisons.split(',').includes(user.activeCaseLoadId)
+              ) {
+                window.location = '/'
+              }
+            }}
             render={({ history }) => (
               <PrisonersUnaccountedForContainer
                 handleDateChange={(event) => this.handleDateChange(event)}
@@ -360,6 +370,14 @@ App.propTypes = {
     flags: PropTypes.objectOf(PropTypes.string),
     supportUrl: PropTypes.string,
     authUrl: PropTypes.string,
+    activities: {
+      url: PropTypes.string,
+      enabled_prisons: PropTypes.string,
+    },
+    appointments: {
+      url: PropTypes.string,
+      enabled_prisons: PropTypes.string,
+    },
   }).isRequired,
   date: PropTypes.string.isRequired,
   error: PropTypes.oneOfType([PropTypes.string, PropTypes.shape({ message: PropTypes.string })]),
