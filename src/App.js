@@ -211,6 +211,19 @@ class App extends React.Component {
     userDetailsDispatch({ ...user.data, activeCaseLoadId, caseLoadOptions: caseloads.data, roles: roles.data })
   }
 
+  redirectIfActivitiesRolledOut = () => {
+    const { config, user } = this.props
+
+    if (
+      config &&
+      config.activities &&
+      config.activities.enabled_prisons &&
+      config.activities.enabled_prisons.split(',').includes(user.activeCaseLoadId)
+    ) {
+      window.location = '/'
+    }
+  }
+
   render() {
     const {
       config,
@@ -271,14 +284,7 @@ class App extends React.Component {
             exact
             path={routePaths.prisonersUnaccountedFor}
             location={() => {
-              if (
-                config &&
-                config.activities &&
-                config.activities.enabled_prisons &&
-                config.activities.enabled_prisons.split(',').includes(user.activeCaseLoadId)
-              ) {
-                window.location = '/'
-              }
+              this.redirectIfActivitiesRolledOut()
             }}
             render={({ history }) => (
               <PrisonersUnaccountedForContainer
