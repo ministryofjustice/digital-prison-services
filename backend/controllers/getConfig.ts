@@ -10,6 +10,8 @@ export const getConfiguration = asyncMiddleware(async (req, res) =>
     flags: (config.app as any).featureFlags,
     supportUrl: config.app.supportUrl,
     authUrl: config.apis.oauth2.url,
+    activities: config.apis.activities,
+    appointments: config.apis.appointments,
   })
 )
 
