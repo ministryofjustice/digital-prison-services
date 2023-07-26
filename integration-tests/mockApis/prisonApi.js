@@ -423,7 +423,7 @@ module.exports = {
     stubFor({
       request: {
         method: 'PUT',
-        url: `/api/bookings/${bookingId}/alert/${alertId}`,
+        url: `/api/bookings/${bookingId}/alert/${alertId}?lockTimeout=true`,
       },
       response: {
         status,

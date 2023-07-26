@@ -1,4 +1,3 @@
-import config from '../config'
 import contextProperties from '../contextProperties'
 import { arrayToQueryString, mapToQueryString } from '../utils'
 
@@ -325,7 +324,7 @@ export const prisonApiFactory = (client) => {
   const getAlert = (context, bookingId, alertId) => get(context, `/api/bookings/${bookingId}/alerts/${alertId}`)
 
   const updateAlert = (context, bookingId, alertId, body) =>
-    put(context, `/api/bookings/${bookingId}/alert/${alertId}`, body)
+    put(context, `/api/bookings/${bookingId}/alert/${alertId}?lockTimeout=true`, body)
 
   const getOffenderSummaries = (context, offenderNo) => {
     return get(context, `/api/bookings/v2?${arrayToQueryString(offenderNo, 'offenderNo')}&size=100`)
