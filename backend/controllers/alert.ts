@@ -183,6 +183,12 @@ export const alertFactory = (oauthApi, prisonApi, referenceCodesService) => {
             name: `${properCaseName(firstName)} ${properCaseName(lastName)}`,
           })
         }
+        if (error?.response?.status === 423) {
+          req.flash('errors', [
+            { text: 'This alert cannot be changed because a user currently has it open in P-Nomis, please try later' },
+          ])
+          return res.redirect(`/edit-alert?offenderNo=${offenderNo}&alertId=${alertId}`)
+        }
         res.locals.redirectUrl = `/edit-alert?offenderNo=${offenderNo}&alertId=${alertId}`
         throw error
       }
