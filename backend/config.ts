@@ -268,6 +268,9 @@ export const notifications = {
     BZI: {
       omu: process.env.BRONZEFIELD_OMU_EMAIL,
     },
+    PVI: {
+      omu: process.env.PENTONVILLE_OMU_EMAIL,
+    },
   },
 }
 
