@@ -295,15 +295,16 @@ const getTasks = ({ activeCaseLoadId, locations, staffId, whereaboutsConfig, key
     },
     {
       id: 'activities',
-      heading: 'Allocate people to activities',
-      description: 'Set up and edit activities. Allocate people, remove them, and edit allocations.',
+      heading: 'Allocate people, unlock and attend',
+      description:
+        'Create and edit activities. Log applications and manage waitlists. Allocate people and edit allocations. Print unlock lists and record attendance.',
       href: activities.url,
       enabled: () => activities.url && activities.enabled_prisons.split(',').includes(activeCaseLoadId),
     },
     {
       id: 'appointments',
       heading: 'Schedule and edit appointments',
-      description: 'Create one-to-one and group appointments. Edit existing appointments and print movement slips.',
+      description: 'Create and manage appointments. Print movement slips.',
       href: appointments.url,
       enabled: () => appointments.url && appointments.enabled_prisons.split(',').includes(activeCaseLoadId),
     },
