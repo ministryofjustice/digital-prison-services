@@ -130,11 +130,35 @@ describe('Cell move utils', () => {
           assignedLivingUnitId: 123,
         },
       },
+      {
+        reasonCode: 'VIC',
+        reasonDescription: 'Victim',
+        typeCode: 'WING',
+        typeDescription: 'Do Not Locate on Same Wing',
+        effectiveDate: '2018-12-01T13:34:00',
+        expiryDate: null,
+        authorisedBy: 'string',
+        comments: 'Is in an establisment which the user does not have as a caseload',
+        offenderNonAssociation: {
+          offenderNo: 'ABC130',
+          firstName: 'George',
+          lastName: 'Gauss',
+          reasonCode: 'PER',
+          reasonDescription: 'Perpetrator',
+          agencyDescription: 'Brixton (HMP)',
+          assignedLivingUnitDescription: 'BXI-1-1-1',
+          assignedLivingUnitId: 123,
+        },
+      },
     ],
   }
 
   const prisonApi = {
     getDetails: jest.fn((_, offenderNo) => {
+      if (offenderNo === 'ABC130') {
+        throw new Error('Not found')
+      }
+
       const agencyId = offenderNo === 'ABC129' ? 'BXI' : 'MDI'
 
       return {
