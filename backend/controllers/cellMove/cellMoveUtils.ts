@@ -20,10 +20,14 @@ export const getNonAssociationsInEstablishment = async (
   const offenderNos = validNonAssociations.map((nonAssociation) => nonAssociation.offenderNonAssociation.offenderNo)
   offenderNos.push(nonAssociations.offenderNo)
 
-  const offenders = await Promise.all(
+  const offenderResults = await Promise.allSettled(
     offenderNos.map(async (offenderNo) => prisonApi.getDetails(context, offenderNo, true))
   )
 
+  const offendersFound = offenderResults.filter(
+    (result) => result.status === 'fulfilled'
+  ) as PromiseFulfilledResult<any>[]
+  const offenders = offendersFound.map((result) => result.value)
   const offenderMap = offenders.reduce((memo, offender) => ({ ...memo, [offender.offenderNo]: offender }), {})
 
   validNonAssociations.forEach((nonAssociation) => {
@@ -38,7 +42,7 @@ export const getNonAssociationsInEstablishment = async (
   return validNonAssociations.filter(
     (nonAssociation) =>
       offenderMap[nonAssociations.offenderNo].agencyId ===
-      offenderMap[nonAssociation.offenderNonAssociation.offenderNo].agencyId
+      offenderMap[nonAssociation.offenderNonAssociation.offenderNo]?.agencyId
   )
 }
 
