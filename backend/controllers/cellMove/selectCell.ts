@@ -5,7 +5,6 @@ import { putLastNameFirst, hasLength, groupBy, properCaseName, formatName, forma
 
 import {
   userHasAccess,
-  getNonAssociationsInEstablishment,
   renderLocationOptions,
   cellAttributes,
   translateCsra,
@@ -192,8 +191,7 @@ export default ({ oauthApi, prisonApi, whereaboutsApi, nonAssociationsApi }) =>
         nonAssociations,
       })
 
-      const numberOfNonAssociations = (await getNonAssociationsInEstablishment(nonAssociations, res.locals, prisonApi))
-        .length
+      const numberOfNonAssociations = nonAssociations.length
 
       const prisonerDetailsWithFormattedLocation = {
         ...prisonerDetails,

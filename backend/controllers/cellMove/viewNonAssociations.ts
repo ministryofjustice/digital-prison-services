@@ -1,6 +1,6 @@
 import moment from 'moment'
 import { putLastNameFirst, formatName } from '../../utils'
-import { getBackLinkData, getNonAssociationsInEstablishment } from './cellMoveUtils'
+import { getBackLinkData } from './cellMoveUtils'
 
 export default ({ prisonApi, nonAssociationsApi }) =>
   async (req, res) => {
@@ -12,9 +12,7 @@ export default ({ prisonApi, nonAssociationsApi }) =>
 
       // Only show active non-associations in the same establishment
       // Active means the effective date is not in the future and the expiry date is not in the past
-      const sortedNonAssociationsInEstablishment = (
-        await getNonAssociationsInEstablishment(nonAssociations, res.locals, prisonApi)
-      ).sort((left, right) => {
+      const sortedNonAssociationsInEstablishment = nonAssociations.sort((left, right) => {
         if (left.effectiveDate < right.effectiveDate) return 1
         if (right.effectiveDate < left.effectiveDate) return -1
         if (left.offenderNonAssociation.lastName > right.offenderNonAssociation.lastName) return 1
