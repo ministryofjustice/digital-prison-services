@@ -4,7 +4,7 @@ const stubHealth = (status = 200) =>
     stubFor({
         request: {
             method: 'GET',
-            urlPath: '/health/ping',
+            urlPath: '/users/health/ping',
         },
         response: {
             status,
@@ -21,7 +21,7 @@ const stubUser = (username, caseload) => {
     return stubFor({
         request: {
             method: 'GET',
-            url: `/auth/api/user/${encodeURI(user)}`,
+            url: `/users/users/${encodeURI(user)}`,
         },
         response: {
             status: 200,
@@ -43,7 +43,7 @@ const stubUser = (username, caseload) => {
 
 const stubUserMe = (username = 'ITAG_USER', staffId = 12345, name = 'James Stuart', caseload = 'MDI') =>
     getFor({
-        urlPath: '/auth/api/user/me',
+        urlPath: '/users/users/me',
         body: {
             firstName: 'JAMES',
             lastName: 'STUART',
@@ -58,7 +58,7 @@ const stubEmail = (username) =>
     stubFor({
         request: {
             method: 'GET',
-            url: `/auth/api/user/${encodeURI(username)}/email`,
+            url: `/users/users/${encodeURI(username)}/email`,
         },
         response: {
             status: 200,

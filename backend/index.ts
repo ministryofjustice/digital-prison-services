@@ -77,6 +77,7 @@ app.use(
   setupApiRoutes({
     prisonApi: apis.prisonApi,
     whereaboutsApi: apis.whereaboutsApi,
+    oauthApi: apis.oauthApi,
     hmppsManageUsersApi: apis.hmppsManageUsersApi,
     caseNotesApi: apis.caseNotesApi,
   })

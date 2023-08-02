@@ -72,6 +72,7 @@ module.exports = defineConfig({
         stubHealthAllHealthy: () =>
           Promise.all([
             auth.stubHealth(),
+            users.stubHealth(),
             prisonApi.stubHealth(),
             whereabouts.stubHealth(),
             keyworker.stubHealth(),
