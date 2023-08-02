@@ -25,7 +25,9 @@ describe('Non Associations Api', () => {
         nonAssociations: [],
       }
 
-      mock.get('/legacy/api/offenders/A4564AB/non-association-details?currentPrisonOnly=true&excludeInactive=true').reply(200, mockResponse)
+      mock
+        .get('/legacy/api/offenders/A4564AB/non-association-details?currentPrisonOnly=true&excludeInactive=true')
+        .reply(200, mockResponse)
 
       const response = await nonAssociationsApi.getNonAssociations({}, 'A4564AB')
 

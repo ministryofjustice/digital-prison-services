@@ -1,12 +1,7 @@
 import { alertFlagLabels, cellMoveAlertCodes } from '../../shared/alertFlagValues'
 import { putLastNameFirst, formatName, formatLocation } from '../../utils'
 
-import {
-  userHasAccess,
-  renderLocationOptions,
-  cellAttributes,
-  translateCsra,
-} from './cellMoveUtils'
+import { userHasAccess, renderLocationOptions, cellAttributes, translateCsra } from './cellMoveUtils'
 
 export default ({ oauthApi, prisonApi, whereaboutsApi, nonAssociationsApi }) =>
   async (req, res) => {

@@ -3,12 +3,7 @@ import { alertFlagLabels, cellMoveAlertCodes } from '../../shared/alertFlagValue
 
 import { putLastNameFirst, hasLength, groupBy, properCaseName, formatName, formatLocation } from '../../utils'
 
-import {
-  userHasAccess,
-  renderLocationOptions,
-  cellAttributes,
-  translateCsra,
-} from './cellMoveUtils'
+import { userHasAccess, renderLocationOptions, cellAttributes, translateCsra } from './cellMoveUtils'
 
 const defaultSubLocationsValue = { text: 'Select area in residential unit', value: '' }
 const noAreasSelectedDropDownValue = { text: 'No areas to select', value: '' }

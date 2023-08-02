@@ -43,7 +43,10 @@ export const nonAssociationsApiFactory = (client: OauthApiClient) => {
     client.get<T>(context, url).then(processResponse(context))
 
   const getNonAssociations = (context: ClientContext, offenderNo: string): Promise<OffenderNonAssociation> =>
-    get(context, `/legacy/api/offenders/${offenderNo}/non-association-details?currentPrisonOnly=true&excludeInactive=true`)
+    get(
+      context,
+      `/legacy/api/offenders/${offenderNo}/non-association-details?currentPrisonOnly=true&excludeInactive=true`
+    )
 
   return {
     getNonAssociations,
