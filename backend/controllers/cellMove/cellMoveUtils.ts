@@ -1,16 +1,4 @@
-import moment from 'moment'
 import { csraTranslations } from '../../shared/csraHelpers'
-
-export const getNonAssocationsInEstablishment = (nonAssociations) =>
-  nonAssociations?.nonAssociations?.filter(
-    (nonAssociation) =>
-      nonAssociation.offenderNonAssociation &&
-      nonAssociation.offenderNonAssociation.agencyDescription.toLowerCase() ===
-        nonAssociations.agencyDescription.toLowerCase() &&
-      (!nonAssociation.expiryDate || moment(nonAssociation.expiryDate, 'YYYY-MM-DDTHH:mm:ss') > moment()) &&
-      nonAssociation.effectiveDate &&
-      moment(nonAssociation.effectiveDate, 'YYYY-MM-DDTHH:mm:ss') <= moment()
-  ) || []
 
 export const getBackLinkData = (referer, offenderNo) => {
   const backLink = referer || `/prisoner/${offenderNo}/cell-move/search-for-cell`
@@ -57,7 +45,6 @@ export const translateCsra = (csraClassificationCode: string): string => {
 }
 
 export default {
-  getNonAssocationsInEstablishment,
   getBackLinkData,
   userHasAccess,
   renderLocationOptions,
