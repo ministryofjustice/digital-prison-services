@@ -6,7 +6,7 @@ import config from '../config'
 describe('Pre post appointments', () => {
   let body
   const prisonApi = {}
-  const oauthApi = {}
+  const hmppsManageUsersApi = {}
   const whereaboutsApi = {}
   const appointmentsService = {}
   const existingEventsService = {}
@@ -51,7 +51,7 @@ describe('Pre post appointments', () => {
     // @ts-expect-error ts-migrate(2339) FIXME: Property 'getAgencyDetails' does not exist on type... Remove this comment to see the full error message
     prisonApi.getAgencyDetails = jest.fn()
     // @ts-expect-error ts-migrate(2339) FIXME: Property 'userEmail' does not exist on type '{}'.
-    oauthApi.userEmail = jest.fn()
+    hmppsManageUsersApi.userEmail = jest.fn()
     // @ts-expect-error ts-migrate(2339) FIXME: Property 'getAppointmentOptions' does not exist on... Remove this comment to see the full error message
     appointmentsService.getAppointmentOptions = jest.fn()
     // @ts-expect-error ts-migrate(2339) FIXME: Property 'getExistingEventsForLocation' does not e... Remove this comment to see the full error message
@@ -572,12 +572,12 @@ describe('Pre post appointments', () => {
 
       const { post } = prepostAppointmentsFactory({
         prisonApi,
-        oauthApi,
+        hmppsManageUsersApi,
         appointmentsService,
         whereaboutsApi,
         existingEventsService,
         raiseAnalyticsEvent,
-        // @ts-expect-error ts-migrate(2345) FIXME: Argument of type '{ prisonApi: {}; oauthApi: {}; a... Remove this comment to see the full error message
+        // @ts-expect-error ts-migrate(2345) FIXME: Argument of type '{ prisonApi: {}; hmppsManageUsersApi: {}; a... Remove this comment to see the full error message
         logError: () => {},
       })
 
@@ -699,7 +699,7 @@ describe('Pre post appointments', () => {
       it('should create booking', async () => {
         const { post } = prepostAppointmentsFactory({
           prisonApi,
-          oauthApi,
+          hmppsManageUsersApi,
           notifyClient,
           appointmentsService,
           existingEventsService,
@@ -740,7 +740,7 @@ describe('Pre post appointments', () => {
       it('when other court selected it should create booking', async () => {
         const { post } = prepostAppointmentsFactory({
           prisonApi,
-          oauthApi,
+          hmppsManageUsersApi,
           notifyClient,
           appointmentsService,
           existingEventsService,
@@ -782,7 +782,7 @@ describe('Pre post appointments', () => {
       it('should not request pre or post appointments when no has been selected', async () => {
         const { post } = prepostAppointmentsFactory({
           prisonApi,
-          oauthApi,
+          hmppsManageUsersApi,
           notifyClient,
           appointmentsService,
           existingEventsService,
@@ -822,7 +822,7 @@ describe('Pre post appointments', () => {
       it('should place pre and post appointment details into flash', async () => {
         const { post } = prepostAppointmentsFactory({
           prisonApi,
-          oauthApi,
+          hmppsManageUsersApi,
           notifyClient,
           appointmentsService,
           existingEventsService,
@@ -866,10 +866,10 @@ describe('Pre post appointments', () => {
 
         const { post } = prepostAppointmentsFactory({
           prisonApi,
-          oauthApi,
+          hmppsManageUsersApi,
           appointmentsService,
           whereaboutsApi,
-          // @ts-expect-error ts-migrate(2345) FIXME: Argument of type '{ prisonApi: {}; oauthApi: {}; a... Remove this comment to see the full error message
+          // @ts-expect-error ts-migrate(2345) FIXME: Argument of type '{ prisonApi: {}; hmppsManageUsersApi: {}; a... Remove this comment to see the full error message
           logError: () => {},
           raiseAnalyticsEvent: () => {},
         })
@@ -891,7 +891,7 @@ describe('Pre post appointments', () => {
         notifyClient.sendEmail = jest.fn()
 
         // @ts-expect-error ts-migrate(2339) FIXME: Property 'userEmail' does not exist on type '{}'.
-        oauthApi.userEmail.mockReturnValue({
+        hmppsManageUsersApi.userEmail.mockReturnValue({
           email: 'test@example.com',
         })
 
@@ -899,12 +899,12 @@ describe('Pre post appointments', () => {
 
         const { post } = prepostAppointmentsFactory({
           prisonApi,
-          oauthApi,
+          hmppsManageUsersApi,
           notifyClient,
           appointmentsService,
           existingEventsService,
           whereaboutsApi,
-          // @ts-expect-error ts-migrate(2345) FIXME: Argument of type '{ prisonApi: {}; oauthApi: {}; n... Remove this comment to see the full error message
+          // @ts-expect-error ts-migrate(2345) FIXME: Argument of type '{ prisonApi: {}; hmppsManageUsersApi: {}; n... Remove this comment to see the full error message
           logError: () => {},
           raiseAnalyticsEvent: () => {},
         })

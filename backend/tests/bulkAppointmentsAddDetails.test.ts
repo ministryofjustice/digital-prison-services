@@ -24,12 +24,10 @@ const buildBodyForDate = (date) => {
 
 describe('Add appointment details controller', () => {
   const appointmentsService = {}
-  const oauthApi = {}
   const context = {}
 
   let req
   let res
-  let logError
   let controller
 
   beforeEach(() => {
@@ -49,9 +47,6 @@ describe('Add appointment details controller', () => {
 
     // @ts-expect-error ts-migrate(2339) FIXME: Property 'getAppointmentOptions' does not exist on... Remove this comment to see the full error message
     appointmentsService.getAppointmentOptions = jest.fn()
-    // @ts-expect-error ts-migrate(2339) FIXME: Property 'currentUser' does not exist on type '{}'... Remove this comment to see the full error message
-    oauthApi.currentUser = jest.fn()
-    logError = jest.fn()
 
     // @ts-expect-error ts-migrate(2339) FIXME: Property 'getAppointmentOptions' does not exist on... Remove this comment to see the full error message
     appointmentsService.getAppointmentOptions.mockReturnValue({
@@ -59,8 +54,7 @@ describe('Add appointment details controller', () => {
       locationTypes: [],
     })
 
-    // @ts-expect-error ts-migrate(2554) FIXME: Expected 1 arguments, but got 3.
-    controller = bulkAppointmentsAddDetailsFactory(appointmentsService, oauthApi, logError)
+    controller = bulkAppointmentsAddDetailsFactory(appointmentsService)
   })
 
   describe('Index', () => {

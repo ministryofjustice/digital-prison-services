@@ -82,6 +82,10 @@ export const apis = {
     systemClientId: process.env.API_SYSTEM_CLIENT_ID || 'prisonstaffhubclient',
     systemClientSecret: process.env.API_SYSTEM_CLIENT_SECRET || 'clientsecret',
   },
+  hmppsManageUsers: {
+    url: process.env.HMPPS_MANAGE_USERS_API_URL || 'http://localhost:8080/',
+    timeoutSeconds: toNumber(process.env.API_ENDPOINT_TIMEOUT_SECONDS) || 30,
+  },
   prisonApi: {
     url: process.env.API_ENDPOINT_URL || 'http://localhost:8080/',
     timeoutSeconds: toNumber(process.env.API_ENDPOINT_TIMEOUT_SECONDS) || 30,

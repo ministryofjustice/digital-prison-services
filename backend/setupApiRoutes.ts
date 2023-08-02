@@ -29,7 +29,7 @@ import handleErrors from './middleware/asyncHandler'
 
 const router = express.Router()
 
-export const setup = ({ prisonApi, whereaboutsApi, oauthApi, caseNotesApi }) => {
+export const setup = ({ prisonApi, whereaboutsApi, hmppsManageUsersApi, caseNotesApi }) => {
   const controller = controllerFactory({
     activityListService: activityListFactory(prisonApi, whereaboutsApi, config),
     houseblockListService: houseblockListFactory(prisonApi, whereaboutsApi, config),
@@ -58,8 +58,8 @@ export const setup = ({ prisonApi, whereaboutsApi, oauthApi, caseNotesApi }) => 
   })
 
   router.use('/api/config', getConfiguration)
-  router.use('/api/userroles', userMeFactory(oauthApi).userRoles)
-  router.use('/api/me', userMeFactory(oauthApi).userMe)
+  router.use('/api/userroles', userMeFactory(hmppsManageUsersApi).userRoles)
+  router.use('/api/me', userMeFactory(hmppsManageUsersApi).userMe)
   router.use('/api/usercaseloads', userCaseLoadsFactory(prisonApi).userCaseloads)
   router.use('/api/userLocations', userLocationsFactory(prisonApi).userLocations)
   router.use(

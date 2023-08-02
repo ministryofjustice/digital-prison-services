@@ -3,6 +3,7 @@
 const { defineConfig } = require('cypress')
 
 const auth = require('./integration-tests/mockApis/auth')
+const users = require('./integration-tests/mockApis/users')
 const prisonApi = require('./integration-tests/mockApis/prisonApi')
 const incentivesApi = require('./integration-tests/mockApis/incentivesApi')
 const nonAssociationsApi = require('./integration-tests/mockApis/nonAssociationsApi')
@@ -85,15 +86,15 @@ module.exports = defineConfig({
         stubSignIn: ({ username = 'ITAG_USER', caseload = 'MDI', roles = [], caseloads }) =>
           Promise.all([
             auth.stubSignIn(username, caseload, roles),
-            auth.stubUserMe(username, 12345, 'James Stuart', caseload),
+            users.stubUserMe(username, 12345, 'James Stuart', caseload),
             prisonApi.stubUserCaseloads(caseloads),
             tokenverification.stubVerifyToken(true),
             keyworker.stubKeyworkerMigrated(),
           ]),
         stubSignInCourt: () =>
           Promise.all([auth.stubSignInCourt(), prisonApi.stubUserCaseloads(), tokenverification.stubVerifyToken(true)]),
-        stubUserEmail: (username) => Promise.all([auth.stubEmail(username)]),
-        stubUser: (username, caseload) => Promise.all([auth.stubUser(username, caseload)]),
+        stubUserEmail: (username) => Promise.all([users.stubEmail(username)]),
+        stubUser: (username, caseload) => Promise.all([users.stubUser(username, caseload)]),
         stubStaff: ({ staffId, details }) => Promise.all([prisonApi.stubStaff(staffId, details)]),
         stubScheduledActivities: (response) => Promise.all([prisonApi.stubUserScheduledActivities(response)]),
         stubProgEventsAtLocation: ({ caseload, locationId, timeSlot, date, activities }) =>
@@ -365,7 +366,7 @@ module.exports = defineConfig({
         stubOffenceHistory: (offenceHistory) => prisonApi.stubOffenceHistory(offenceHistory),
         stubSentenceTerms: (sentenceTerms) => prisonApi.stubSentenceTerms(sentenceTerms),
         stubClientCredentialsRequest: () => auth.stubClientCredentialsRequest(),
-        stubUserMe: ({ username, staffId, name }) => auth.stubUserMe(username, staffId, name),
+        stubUserMe: ({ username, staffId, name }) => users.stubUserMe(username, staffId, name),
         stubPathFinderOffenderDetails: (details) => pathfinder.getOffenderDetails(details),
         stubSocOffenderDetails: (details) => socApi.stubGetOffenderDetails(details),
         stubIsCaseLoadRestrictedPatient: (details) => restrictedPatientApi.stubIsCaseLoadRestrictedPatient(details),

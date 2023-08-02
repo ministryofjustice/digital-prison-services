@@ -2,6 +2,7 @@ import { downloadProbationDocumentFactory } from '../controllers/downloadProbati
 
 describe('Download probation documents', () => {
   const oauthApi = {}
+  const hmppsManageUsersApi = {}
   const prisonApi = {}
   const communityApi = {}
   const systemOauthClient = {}
@@ -15,7 +16,7 @@ describe('Download probation documents', () => {
       // @ts-expect-error ts-migrate(2339) FIXME: Property 'userRoles' does not exist on type '{}'.
       oauthApi.userRoles = jest.fn()
       // @ts-expect-error ts-migrate(2339) FIXME: Property 'currentUser' does not exist on type '{}'... Remove this comment to see the full error message
-      oauthApi.currentUser = jest.fn()
+      hmppsManageUsersApi.currentUser = jest.fn()
       // @ts-expect-error ts-migrate(2339) FIXME: Property 'userCaseLoads' does not exist on type '{}'... Remove this comment to see the full error message
       prisonApi.userCaseLoads = jest.fn()
       // @ts-expect-error ts-migrate(2339) FIXME: Property 'getDetails' does not exist on type '{}'... Remove this comment to see the full error message
@@ -30,7 +31,7 @@ describe('Download probation documents', () => {
       // @ts-expect-error ts-migrate(2339) FIXME: Property 'userRoles' does not exist on type '{}'.
       oauthApi.userRoles.mockReturnValue([{ roleCode: 'POM' }])
       // @ts-expect-error ts-migrate(2339) FIXME: Property 'currentUser' does not exist on type '{}'... Remove this comment to see the full error message
-      oauthApi.currentUser.mockReturnValue({ username: 'USER_ADM', activeCaseLoadId: 'MDI' })
+      hmppsManageUsersApi.currentUser.mockReturnValue({ username: 'USER_ADM', activeCaseLoadId: 'MDI' })
       // @ts-expect-error ts-migrate(2339) FIXME: Property 'userCaseLoads' does not exist on type '{}'... Remove this comment to see the full error message
       prisonApi.userCaseLoads.mockResolvedValue([{ caseLoadId: 'MDI' }, { caseLoadId: 'LEI' }])
       // @ts-expect-error ts-migrate(2339)
@@ -45,7 +46,13 @@ describe('Download probation documents', () => {
       let page
 
       beforeEach(() => {
-        page = downloadProbationDocumentFactory(oauthApi, communityApi, systemOauthClient, prisonApi).downloadDocument
+        page = downloadProbationDocumentFactory(
+          oauthApi,
+          hmppsManageUsersApi,
+          communityApi,
+          systemOauthClient,
+          prisonApi
+        ).downloadDocument
         // @ts-expect-error ts-migrate(2339) FIXME: Property 'render' does not exist on type '{}'.
         res.render = jest.fn()
         // @ts-expect-error ts-migrate(2339) FIXME: Property 'locals' does not exist on type '{}'.
@@ -76,7 +83,7 @@ describe('Download probation documents', () => {
           // @ts-expect-error ts-migrate(2339)
           prisonApi.userCaseLoads.mockResolvedValue([{ caseLoadId: 'MDI' }, { caseLoadId: 'LEI' }])
           // @ts-expect-error ts-migrate(2339)
-          oauthApi.currentUser.mockReturnValue({ staffId: 111, activeCaseLoadId: 'MDI' })
+          hmppsManageUsersApi.currentUser.mockReturnValue({ staffId: 111, activeCaseLoadId: 'MDI' })
           // @ts-expect-error ts-migrate(2339)
           prisonApi.getDetails.mockReturnValue({
             agencyId: 'LEI',
@@ -102,7 +109,7 @@ describe('Download probation documents', () => {
           // @ts-expect-error ts-migrate(2339)
           prisonApi.userCaseLoads.mockResolvedValue([{ caseLoadId: 'MDI' }, { caseLoadId: 'LEI' }])
           // @ts-expect-error ts-migrate(2339)
-          oauthApi.currentUser.mockReturnValue({ staffId: 111, activeCaseLoadId: 'MDI' })
+          hmppsManageUsersApi.currentUser.mockReturnValue({ staffId: 111, activeCaseLoadId: 'MDI' })
           // @ts-expect-error ts-migrate(2339)
           prisonApi.getDetails.mockReturnValue({
             agencyId: 'BXI',
@@ -119,7 +126,7 @@ describe('Download probation documents', () => {
           // @ts-expect-error ts-migrate(2339)
           prisonApi.userCaseLoads.mockResolvedValue([{ caseLoadId: 'MDI' }, { caseLoadId: 'LEI' }])
           // @ts-expect-error ts-migrate(2339)
-          oauthApi.currentUser.mockReturnValue({ staffId: 111, activeCaseLoadId: 'MDI' })
+          hmppsManageUsersApi.currentUser.mockReturnValue({ staffId: 111, activeCaseLoadId: 'MDI' })
           // @ts-expect-error ts-migrate(2339)
           prisonApi.getDetails.mockReturnValue({
             agencyId: 'OUT',
