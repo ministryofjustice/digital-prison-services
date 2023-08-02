@@ -123,7 +123,6 @@ describe('Probation documents', () => {
   }
   const hmppsManageUsersApi = {
     currentUser: jest.fn(),
-    userRoles: jest.fn(),
   }
   const prisonApi = {
     getDetails: jest.fn(),
