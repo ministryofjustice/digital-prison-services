@@ -284,7 +284,14 @@ const setup = ({
     router.use(
       '/offenders/:offenderNo/prepost-appointments',
       isAppointmentsRolledOut,
-      prepostAppointmentRouter({ prisonApi, logError, hmppsManageUsersApi, whereaboutsApi, notifyClient, raiseAnalyticsEvent })
+      prepostAppointmentRouter({
+        prisonApi,
+        logError,
+        hmppsManageUsersApi,
+        whereaboutsApi,
+        notifyClient,
+        raiseAnalyticsEvent,
+      })
     )
   }
 
