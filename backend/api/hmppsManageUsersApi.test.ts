@@ -73,5 +73,4 @@ describe('hmppsManageUsersApi tests', () => {
       expect(client.get).toBeCalledWith(context, `/users/${username}/email`)
     })
   })
-
 })
