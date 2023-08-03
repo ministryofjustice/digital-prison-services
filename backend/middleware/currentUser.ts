@@ -8,7 +8,7 @@ export type User = {
   displayName: string
   activeCaseLoad?: CaseLoad
 }
-export default ({ prisonApi, oauthApi }) => {
+export default ({ prisonApi, hmppsManageUsersApi }) => {
   const getActiveCaseload = async (req, res) => {
     const { activeCaseLoadId, username } = req.session.userDetails
     const { allCaseloads: caseloads } = req.session
@@ -49,7 +49,7 @@ export default ({ prisonApi, oauthApi }) => {
   return async (req, res, next) => {
     if (!req.xhr) {
       if (!req.session.userDetails) {
-        const userDetails = await oauthApi.currentUser(res.locals)
+        const userDetails = await hmppsManageUsersApi.currentUser(res.locals)
         const allCaseloads = await prisonApi.userCaseLoads(res.locals)
 
         req.session.userDetails = userDetails

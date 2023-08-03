@@ -55,7 +55,7 @@ const getLinks = (offenderNo) => ({
 
 export const prepostAppointmentsFactory = ({
   prisonApi,
-  oauthApi,
+  hmppsManageUsersApi,
   whereaboutsApi,
   notifyClient,
   appointmentsService,
@@ -368,7 +368,7 @@ export const prepostAppointmentsFactory = ({
       )
 
       const agencyDetails = await prisonApi.getAgencyDetails(res.locals, activeCaseLoadId)
-      const userEmailData = await oauthApi.userEmail(res.locals, username)
+      const userEmailData = await hmppsManageUsersApi.userEmail(res.locals, username)
 
       raiseAnalyticsEvent('VLB Appointments', 'Video link booked', `${agencyDetails.description} -  ${courtName}`)
 

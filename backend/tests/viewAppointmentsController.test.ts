@@ -38,7 +38,6 @@ describe('View appointments', () => {
 
     logError = jest.fn()
 
-    oauthApi.userDetails = jest.fn()
     prisonApi.getAppointmentTypes = jest.fn()
     prisonApi.getLocationsForAppointments = jest.fn()
     prisonApi.getStaffDetails = jest.fn()
@@ -68,10 +67,6 @@ describe('View appointments', () => {
     ])
     whereaboutsApi.getAgencyGroupLocationPrefix = jest.fn().mockReturnValue({
       locationPrefix: 'MDI-1-',
-    })
-
-    oauthApi.userDetails.mockResolvedValue({
-      name: 'Bob Doe',
     })
 
     controller = viewAppointments({ prisonApi, whereaboutsApi, logError })

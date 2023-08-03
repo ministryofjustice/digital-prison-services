@@ -35,6 +35,7 @@ const addAppInfo = (result) => {
 
 export default function healthcheckFactory(
   authUrl,
+  manageUsersApiUrl,
   prisonApiUrl,
   whereaboutsUrl,
   communityUrl,
@@ -48,6 +49,7 @@ export default function healthcheckFactory(
 ) {
   const checks = [
     service('auth', authUrl),
+    service('hmppsManageUsers', manageUsersApiUrl),
     service('prisonApi', prisonApiUrl),
     service('community', communityUrl),
     service('allocationManager', allocationManagerUrl),

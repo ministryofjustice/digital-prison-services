@@ -1,8 +1,8 @@
 import asyncMiddleware from '../middleware/asyncHandler'
 
-export const userMeFactory = (oauthApi) => {
+export const userMeFactory = (oauthApi, hmppsManageUsersApi) => {
   const userMe = asyncMiddleware(async (req, res) => {
-    const data = await oauthApi.currentUser(res.locals)
+    const data = await hmppsManageUsersApi.currentUser(res.locals)
     res.json(data)
   })
 
