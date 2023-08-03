@@ -1,4 +1,5 @@
 const jwt = require('jsonwebtoken')
+const { stubUserMe, stubUser } = require('./users')
 const { stubFor, getMatchingRequests, getFor } = require('./wiremock')
 const { stubStaffRoles, stubUserLocations } = require('./prisonApi')
 const { stubLocationConfig } = require('./whereabouts')
@@ -93,78 +94,6 @@ const token = (roles) =>
     },
   })
 
-const stubUser = (username, caseload) => {
-  const user = username || 'ITAG_USER'
-  const activeCaseLoadId = caseload || 'MDI'
-  return stubFor({
-    request: {
-      method: 'GET',
-      url: `/auth/api/user/${encodeURI(user)}`,
-    },
-    response: {
-      status: 200,
-      headers: {
-        'Content-Type': 'application/json;charset=UTF-8',
-      },
-      jsonBody: {
-        user_name: user,
-        staffId: 231232,
-        username: user,
-        active: true,
-        name: `${user} name`,
-        authSource: 'nomis',
-        activeCaseLoadId,
-      },
-    },
-  })
-}
-
-const stubUserMe = (username = 'ITAG_USER', staffId = 12345, name = 'James Stuart', caseload = 'MDI') =>
-  getFor({
-    urlPath: '/auth/api/user/me',
-    body: {
-      firstName: 'JAMES',
-      lastName: 'STUART',
-      name,
-      username,
-      activeCaseLoadId: caseload,
-      staffId,
-    },
-  })
-
-const stubEmail = (username) =>
-  stubFor({
-    request: {
-      method: 'GET',
-      url: `/auth/api/user/${encodeURI(username)}/email`,
-    },
-    response: {
-      status: 200,
-      headers: {
-        'Content-Type': 'application/json;charset=UTF-8',
-      },
-      jsonBody: {
-        username,
-        email: `${username}@gov.uk`,
-      },
-    },
-  })
-
-const stubUnverifiedEmail = (username) =>
-  stubFor({
-    request: {
-      method: 'GET',
-      url: `/auth/api/user/${encodeURI(username)}/email`,
-    },
-    response: {
-      status: 204,
-      headers: {
-        'Content-Type': 'application/json;charset=UTF-8',
-      },
-      jsonBody: {},
-    },
-  })
-
 const stubHealth = (status = 200) =>
   stubFor({
     request: {
@@ -219,11 +148,6 @@ module.exports = {
       token(['ROLE_GLOBAL_SEARCH', 'ROLE_VIDEO_LINK_COURT_USER']),
       stubUserMe(),
     ]),
-  stubUserDetailsRetrieval: (username) => Promise.all([stubUser(username), stubEmail(username)]),
-  stubUnverifiedUserDetailsRetrieval: (username) => Promise.all([stubUser(username), stubUnverifiedEmail(username)]),
-  stubUserMe,
-  stubUser,
-  stubEmail,
   redirect,
   stubClientCredentialsRequest,
 }

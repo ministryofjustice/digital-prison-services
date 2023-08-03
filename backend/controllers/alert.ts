@@ -47,7 +47,7 @@ const getValidationErrors = ({ alertStatus, comment }) => {
   return errors
 }
 
-export const alertFactory = (oauthApi, prisonApi, referenceCodesService) => {
+export const alertFactory = (oauthApi, hmppsManageUsersApi, prisonApi, referenceCodesService) => {
   const renderTemplate = (req, res, pageData) => {
     const { alert, pageErrors, offenderDetails, ...rest } = pageData
     const formAction = offenderDetails && alert && `/edit-alert/${offenderDetails.bookingId}/${alert.alertId}`
@@ -95,7 +95,7 @@ export const alertFactory = (oauthApi, prisonApi, referenceCodesService) => {
       const userRoles = oauthApi.userRoles(res.locals)
       const [alert, user, caseLoads] = await Promise.all([
         prisonApi.getAlert(res.locals, bookingId, alertId),
-        oauthApi.currentUser(res.locals),
+        hmppsManageUsersApi.currentUser(res.locals),
         prisonApi.userCaseLoads(res.locals),
       ])
 

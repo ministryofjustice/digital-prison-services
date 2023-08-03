@@ -36,6 +36,7 @@ describe('prisoner profile service', () => {
   const prisonApi = {} as jest.Mocked<typeof apis.prisonApi>
   const keyworkerApi = {}
   const oauthApi = {} as jest.Mocked<typeof apis.oauthApi>
+  const hmppsManageUsersApi = {} as jest.Mocked<typeof apis.hmppsManageUsersApi>
   const pathfinderApi = {}
   const dataComplianceApi = {}
   const systemOauthClient = {}
@@ -56,7 +57,7 @@ describe('prisoner profile service', () => {
     // @ts-expect-error ts-migrate(2339) FIXME: Property 'getKeyworkerByCaseloadAndOffenderNo' doe... Remove this comment to see the full error message
     keyworkerApi.getKeyworkerByCaseloadAndOffenderNo = jest.fn()
     oauthApi.userRoles = jest.fn()
-    oauthApi.currentUser = jest.fn()
+    hmppsManageUsersApi.currentUser = jest.fn()
     // @ts-expect-error ts-migrate(2339) FIXME: Property 'getOffenderRetentionRecord' does not exi... Remove this comment to see the full error message
     dataComplianceApi.getOffenderRetentionRecord = jest.fn()
     // @ts-expect-error ts-migrate(2339) FIXME: Property 'getPomByOffenderNo' does not exist on ty... Remove this comment to see the full error message
@@ -79,6 +80,7 @@ describe('prisoner profile service', () => {
       prisonApi,
       keyworkerApi,
       oauthApi,
+      hmppsManageUsersApi,
       dataComplianceApi,
       pathfinderApi,
       systemOauthClient,
@@ -181,7 +183,7 @@ describe('prisoner profile service', () => {
       // @ts-expect-error ts-migrate(2339) FIXME: Property 'getKeyworkerByCaseloadAndOffenderNo' doe... Remove this comment to see the full error message
       keyworkerApi.getKeyworkerByCaseloadAndOffenderNo.mockResolvedValue({ firstName: 'STAFF', lastName: 'MEMBER' })
       oauthApi.userRoles.mockReturnValue([])
-      oauthApi.currentUser.mockReturnValue({ staffId: 111, activeCaseLoadId: 'MDI' })
+      hmppsManageUsersApi.currentUser.mockReturnValue({ staffId: 111, activeCaseLoadId: 'MDI' })
       // @ts-expect-error ts-migrate(2339) FIXME: Property 'getOffenderRetentionRecord' does not exi... Remove this comment to see the full error message
       dataComplianceApi.getOffenderRetentionRecord.mockReturnValue({})
       // @ts-expect-error ts-migrate(2339) FIXME: Property 'getPomByOffenderNo' does not exist on ty... Remove this comment to see the full error message
@@ -199,7 +201,7 @@ describe('prisoner profile service', () => {
     it('should make a call for the full details including csra class for a prisoner and the current user', async () => {
       await service.getPrisonerProfileData(context, offenderNo)
 
-      expect(oauthApi.currentUser).toHaveBeenCalledWith(context)
+      expect(hmppsManageUsersApi.currentUser).toHaveBeenCalledWith(context)
       expect(prisonApi.getDetails).toHaveBeenCalledWith(context, offenderNo, true)
     })
 
@@ -482,7 +484,7 @@ describe('prisoner profile service', () => {
 
       describe('when the user is in a use of force prison', () => {
         beforeEach(() => {
-          oauthApi.currentUser.mockReturnValue({ staffId: 111, activeCaseLoadId: 'LEI' })
+          hmppsManageUsersApi.currentUser.mockReturnValue({ staffId: 111, activeCaseLoadId: 'LEI' })
         })
 
         it('should enable the user to report use of force', async () => {
@@ -505,7 +507,7 @@ describe('prisoner profile service', () => {
           beforeEach(() => {
             // @ts-expect-error ts-migrate(2339)
             prisonApi.userCaseLoads.mockResolvedValue([{ caseLoadId: 'MDI' }, { caseLoadId: 'LEI' }])
-            oauthApi.currentUser.mockReturnValue({ staffId: 111, activeCaseLoadId: 'MDI' })
+            hmppsManageUsersApi.currentUser.mockReturnValue({ staffId: 111, activeCaseLoadId: 'MDI' })
           })
           it('should let the user view probation documents', async () => {
             const getPrisonerProfileData = await service.getPrisonerProfileData(context, offenderNo, '', false)
@@ -521,7 +523,7 @@ describe('prisoner profile service', () => {
           beforeEach(() => {
             // @ts-expect-error ts-migrate(2339)
             prisonApi.userCaseLoads.mockResolvedValue([{ caseLoadId: 'MDI' }])
-            oauthApi.currentUser.mockReturnValue({ staffId: 111, activeCaseLoadId: 'LEI' })
+            hmppsManageUsersApi.currentUser.mockReturnValue({ staffId: 111, activeCaseLoadId: 'LEI' })
           })
           it('should let the user view probation documents', async () => {
             const getPrisonerProfileData = await service.getPrisonerProfileData(context, offenderNo, '', false)
@@ -537,7 +539,7 @@ describe('prisoner profile service', () => {
           beforeEach(() => {
             // @ts-expect-error ts-migrate(2339)
             prisonApi.userCaseLoads.mockResolvedValue([{ caseLoadId: 'BXI' }, { caseLoadId: 'WWI' }])
-            oauthApi.currentUser.mockReturnValue({ staffId: 111, activeCaseLoadId: 'BXI' })
+            hmppsManageUsersApi.currentUser.mockReturnValue({ staffId: 111, activeCaseLoadId: 'BXI' })
           })
           it('should let the user view probation documents', async () => {
             const getPrisonerProfileData = await service.getPrisonerProfileData(context, offenderNo, '', false)
@@ -553,7 +555,7 @@ describe('prisoner profile service', () => {
           beforeEach(() => {
             // @ts-expect-error ts-migrate(2339)
             prisonApi.userCaseLoads.mockResolvedValue([{ caseLoadId: 'MDI' }, { caseLoadId: 'LEI' }])
-            oauthApi.currentUser.mockReturnValue({ staffId: 111, activeCaseLoadId: 'MDI' })
+            hmppsManageUsersApi.currentUser.mockReturnValue({ staffId: 111, activeCaseLoadId: 'MDI' })
             prisonApi.getDetails.mockReturnValue({
               ...prisonerDetails,
               agencyId: 'OUT',
@@ -576,7 +578,7 @@ describe('prisoner profile service', () => {
           oauthApi.userRoles.mockReturnValue([{ roleCode: 'POM' }])
           // @ts-expect-error ts-migrate(2339)
           prisonApi.userCaseLoads.mockResolvedValue([{ caseLoadId: 'MDI' }, { caseLoadId: 'LEI' }])
-          oauthApi.currentUser.mockReturnValue({ staffId: 111, activeCaseLoadId: 'MDI' })
+          hmppsManageUsersApi.currentUser.mockReturnValue({ staffId: 111, activeCaseLoadId: 'MDI' })
         })
 
         it('should let the user view probation documents', async () => {
@@ -803,7 +805,7 @@ describe('prisoner profile service', () => {
       describe('when prisoner is in active caseload', () => {
         beforeEach(() => {
           prisonApi.userCaseLoads.mockResolvedValue([{ caseLoadId: 'MDI' }, { caseLoadId: 'LEI' }] as never)
-          oauthApi.currentUser.mockReturnValue({ staffId: 111, activeCaseLoadId: 'MDI' })
+          hmppsManageUsersApi.currentUser.mockReturnValue({ staffId: 111, activeCaseLoadId: 'MDI' })
         })
         it('should show the user the calculate release dates button', async () => {
           const getPrisonerProfileData = await service.getPrisonerProfileData(context, offenderNo)
@@ -820,7 +822,7 @@ describe('prisoner profile service', () => {
         beforeEach(() => {
           // @ts-expect-error ts-migrate(2339)
           prisonApi.userCaseLoads.mockResolvedValue([{ caseLoadId: 'LEI' }])
-          oauthApi.currentUser.mockReturnValue({ staffId: 111, activeCaseLoadId: 'MDI' })
+          hmppsManageUsersApi.currentUser.mockReturnValue({ staffId: 111, activeCaseLoadId: 'MDI' })
         })
         it('should not show the user the calculate release dates button', async () => {
           const getPrisonerProfileData = await service.getPrisonerProfileData(context, offenderNo, '', false)
@@ -837,7 +839,7 @@ describe('prisoner profile service', () => {
       describe('when prisoner is in active caseload', () => {
         beforeEach(() => {
           prisonApi.userCaseLoads.mockResolvedValue([{ caseLoadId: 'MDI' }, { caseLoadId: 'LEI' }] as never)
-          oauthApi.currentUser.mockReturnValue({ staffId: 111, activeCaseLoadId: 'MDI' })
+          hmppsManageUsersApi.currentUser.mockReturnValue({ staffId: 111, activeCaseLoadId: 'MDI' })
         })
         it('should not show the user the calculate release dates button', async () => {
           const getPrisonerProfileData = await service.getPrisonerProfileData(context, offenderNo, '', false)
@@ -858,7 +860,7 @@ describe('prisoner profile service', () => {
       describe('when prisoner is in active caseload', () => {
         beforeEach(() => {
           prisonApi.userCaseLoads.mockResolvedValue([{ caseLoadId: 'MDI' }, { caseLoadId: 'LEI' }] as never)
-          oauthApi.currentUser.mockReturnValue({ staffId: 111, activeCaseLoadId: 'MDI' })
+          hmppsManageUsersApi.currentUser.mockReturnValue({ staffId: 111, activeCaseLoadId: 'MDI' })
         })
         it('should show the user the warrant folder button', async () => {
           const getPrisonerProfileData = await service.getPrisonerProfileData(context, offenderNo)
@@ -874,7 +876,7 @@ describe('prisoner profile service', () => {
       describe('when prisoner is not in active caseload', () => {
         beforeEach(() => {
           prisonApi.userCaseLoads.mockResolvedValue([{ caseLoadId: 'LEI' }] as never)
-          oauthApi.currentUser.mockReturnValue({ staffId: 111, activeCaseLoadId: 'MDI' })
+          hmppsManageUsersApi.currentUser.mockReturnValue({ staffId: 111, activeCaseLoadId: 'MDI' })
         })
         it('should not show the user the warrant folder button', async () => {
           const getPrisonerProfileData = await service.getPrisonerProfileData(context, offenderNo, '', false)
@@ -891,7 +893,7 @@ describe('prisoner profile service', () => {
       describe('when prisoner is in active caseload', () => {
         beforeEach(() => {
           prisonApi.userCaseLoads.mockResolvedValue([{ caseLoadId: 'MDI' }, { caseLoadId: 'LEI' }] as never)
-          oauthApi.currentUser.mockReturnValue({ staffId: 111, activeCaseLoadId: 'MDI' })
+          hmppsManageUsersApi.currentUser.mockReturnValue({ staffId: 111, activeCaseLoadId: 'MDI' })
         })
         it('should not show the user the warrant folder button', async () => {
           const getPrisonerProfileData = await service.getPrisonerProfileData(context, offenderNo, '', false)
@@ -1066,7 +1068,7 @@ describe('prisoner profile service', () => {
       // @ts-expect-error ts-migrate(2339) FIXME: Property 'getKeyworkerByCaseloadAndOffenderNo' doe... Remove this comment to see the full error message
       keyworkerApi.getKeyworkerByCaseloadAndOffenderNo.mockResolvedValue({ firstName: 'STAFF', lastName: 'MEMBER' })
       oauthApi.userRoles.mockReturnValue([])
-      oauthApi.currentUser.mockReturnValue({ staffId: 111, activeCaseLoadId: 'MDI' })
+      hmppsManageUsersApi.currentUser.mockReturnValue({ staffId: 111, activeCaseLoadId: 'MDI' })
       // @ts-expect-error ts-migrate(2339) FIXME: Property 'getOffenderRetentionRecord' does not exi... Remove this comment to see the full error message
       dataComplianceApi.getOffenderRetentionRecord.mockReturnValue({})
       // @ts-expect-error ts-migrate(2339) FIXME: Property 'getPomByOffenderNo' does not exist on ty... Remove this comment to see the full error message
@@ -1080,7 +1082,7 @@ describe('prisoner profile service', () => {
     it('should return true when a user has neurodiversity support needs', async () => {
       const response = await service.getPrisonerProfileData(context, offenderNo)
 
-      expect(oauthApi.currentUser).toHaveBeenCalledWith(context)
+      expect(hmppsManageUsersApi.currentUser).toHaveBeenCalledWith(context)
       // eslint-disable-next-line @typescript-eslint/ban-ts-comment
       // @ts-ignore
       expect(curiousApi.getLearnerNeurodivergence).toHaveBeenCalledTimes(1)
@@ -1146,7 +1148,7 @@ describe('prisoner profile service', () => {
       // @ts-expect-error ts-migrate(2339) FIXME: Property 'getKeyworkerByCaseloadAndOffenderNo' doe... Remove this comment to see the full error message
       keyworkerApi.getKeyworkerByCaseloadAndOffenderNo.mockResolvedValue({ firstName: 'STAFF', lastName: 'MEMBER' })
       oauthApi.userRoles.mockReturnValue([])
-      oauthApi.currentUser.mockReturnValue({ staffId: 111, activeCaseLoadId: 'MDI' })
+      hmppsManageUsersApi.currentUser.mockReturnValue({ staffId: 111, activeCaseLoadId: 'MDI' })
       // @ts-expect-error ts-migrate(2339) FIXME: Property 'getOffenderRetentionRecord' does not exi... Remove this comment to see the full error message
       dataComplianceApi.getOffenderRetentionRecord.mockReturnValue({})
       // @ts-expect-error ts-migrate(2339) FIXME: Property 'getPomByOffenderNo' does not exist on ty... Remove this comment to see the full error message
