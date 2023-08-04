@@ -18,6 +18,7 @@ import { offenderSearchApiFactory } from './api/offenderSearchApi'
 import { complexityApiFactory } from './api/complexityApi'
 import { incentivesApiFactory } from './api/incentivesApi'
 import { nonAssociationsApiFactory } from './api/nonAssociationsApi'
+import { hmppsManageUsersApiFactory } from './api/hmppsManageUsersApi'
 
 export const prisonApi = prisonApiFactory(
   clientFactory({
@@ -47,6 +48,13 @@ export const oauthApi = oauthApiFactory(
     timeout: config.apis.oauth2.timeoutSeconds * 1000,
   }),
   { ...config.apis.oauth2 }
+)
+
+export const hmppsManageUsersApi = hmppsManageUsersApiFactory(
+  clientFactory({
+    baseUrl: config.apis.hmppsManageUsers.url,
+    timeout: config.apis.hmppsManageUsers.timeoutSeconds * 1000,
+  })
 )
 
 export const dataComplianceApi = dataComplianceApiFactory(
@@ -139,6 +147,7 @@ export default {
   prisonApi,
   whereaboutsApi,
   oauthApi,
+  hmppsManageUsersApi,
   communityApi,
   dataComplianceApi,
   keyworkerApi,

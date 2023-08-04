@@ -3,7 +3,7 @@ import currentUser from './currentUser'
 
 describe('Current user', () => {
   const prisonApi = {}
-  const oauthApi = {}
+  const hmppsManageUsersApi = {}
   let req
   let res
 
@@ -13,10 +13,10 @@ describe('Current user', () => {
     // @ts-expect-error ts-migrate(2339) FIXME: Property 'setActiveCaseload' does not exist on typ... Remove this comment to see the full error message
     prisonApi.setActiveCaseload = jest.fn()
     // @ts-expect-error ts-migrate(2339) FIXME: Property 'currentUser' does not exist on type '{}'... Remove this comment to see the full error message
-    oauthApi.currentUser = jest.fn()
+    hmppsManageUsersApi.currentUser = jest.fn()
 
     // @ts-expect-error ts-migrate(2339) FIXME: Property 'currentUser' does not exist on type '{}'... Remove this comment to see the full error message
-    oauthApi.currentUser.mockReturnValue({
+    hmppsManageUsersApi.currentUser.mockReturnValue({
       username: 'BSMITH',
       name: 'Bob Smith',
       activeCaseLoadId: 'MDI',
@@ -30,12 +30,12 @@ describe('Current user', () => {
   })
 
   it('should request and store user details', async () => {
-    const controller = currentUser({ prisonApi, oauthApi })
+    const controller = currentUser({ prisonApi, hmppsManageUsersApi })
 
     await controller(req, res, () => {})
 
     // @ts-expect-error ts-migrate(2339) FIXME: Property 'currentUser' does not exist on type '{}'... Remove this comment to see the full error message
-    expect(oauthApi.currentUser).toHaveBeenCalled()
+    expect(hmppsManageUsersApi.currentUser).toHaveBeenCalled()
     expect(req.session.userDetails).toEqual({
       username: 'BSMITH',
       name: 'Bob Smith',
@@ -44,7 +44,7 @@ describe('Current user', () => {
   })
 
   it('should request and store user case loads', async () => {
-    const controller = currentUser({ prisonApi, oauthApi })
+    const controller = currentUser({ prisonApi, hmppsManageUsersApi })
 
     await controller(req, res, () => {})
 
@@ -57,7 +57,7 @@ describe('Current user', () => {
     res.locals.access_token = jwt.sign({ authorities: ['ROLE_PRISON'] }, 'secret')
     req.session.userBackLink = 'http://backlink'
 
-    const controller = currentUser({ prisonApi, oauthApi })
+    const controller = currentUser({ prisonApi, hmppsManageUsersApi })
 
     await controller(req, res, () => {})
 
@@ -80,7 +80,7 @@ describe('Current user', () => {
   })
 
   it('ignore xhr requests', async () => {
-    const controller = currentUser({ prisonApi, oauthApi })
+    const controller = currentUser({ prisonApi, hmppsManageUsersApi })
     req.xhr = true
 
     const next = jest.fn()
@@ -88,7 +88,7 @@ describe('Current user', () => {
     await controller(req, res, next)
 
     // @ts-expect-error ts-migrate(2339) FIXME: Property 'currentUser' does not exist on type '{}'... Remove this comment to see the full error message
-    expect(oauthApi.currentUser.mock.calls.length).toEqual(0)
+    expect(hmppsManageUsersApi.currentUser.mock.calls.length).toEqual(0)
     // @ts-expect-error ts-migrate(2339) FIXME: Property 'userCaseLoads' does not exist on type '{... Remove this comment to see the full error message
     expect(prisonApi.userCaseLoads.mock.calls.length).toEqual(0)
     expect(next).toHaveBeenCalled()
@@ -96,18 +96,18 @@ describe('Current user', () => {
 
   it('should default active caseload when not set', async () => {
     // @ts-expect-error ts-migrate(2339) FIXME: Property 'currentUser' does not exist on type '{}'... Remove this comment to see the full error message
-    oauthApi.currentUser.mockReturnValue({
+    hmppsManageUsersApi.currentUser.mockReturnValue({
       username: 'BSMITH',
       name: 'Bob Smith',
       activeCaseLoadId: null,
     })
 
-    const controller = currentUser({ prisonApi, oauthApi })
+    const controller = currentUser({ prisonApi, hmppsManageUsersApi })
 
     await controller(req, res, () => {})
 
     // @ts-expect-error ts-migrate(2339) FIXME: Property 'currentUser' does not exist on type '{}'... Remove this comment to see the full error message
-    expect(oauthApi.currentUser).toHaveBeenCalled()
+    expect(hmppsManageUsersApi.currentUser).toHaveBeenCalled()
     // @ts-expect-error ts-migrate(2339) FIXME: Property 'setActiveCaseload' does not exist on typ... Remove this comment to see the full error message
     expect(prisonApi.setActiveCaseload).toHaveBeenCalledWith(res.locals, { caseLoadId: 'MDI', description: 'Moorland' })
     expect(req.session.userDetails).toEqual({
@@ -119,13 +119,13 @@ describe('Current user', () => {
 
   it('should not set caseload when already set', async () => {
     // @ts-expect-error ts-migrate(2339) FIXME: Property 'currentUser' does not exist on type '{}'... Remove this comment to see the full error message
-    oauthApi.currentUser.mockReturnValue({
+    hmppsManageUsersApi.currentUser.mockReturnValue({
       username: 'BSMITH',
       name: 'Bob Smith',
       activeCaseLoadId: 'MDI',
     })
 
-    const controller = currentUser({ prisonApi, oauthApi })
+    const controller = currentUser({ prisonApi, hmppsManageUsersApi })
 
     req = {
       session: {
@@ -137,7 +137,7 @@ describe('Current user', () => {
     await controller(req, res, () => {})
 
     // @ts-expect-error ts-migrate(2339) FIXME: Property 'currentUser' does not exist on type '{}'... Remove this comment to see the full error message
-    expect(oauthApi.currentUser).not.toHaveBeenCalled()
+    expect(hmppsManageUsersApi.currentUser).not.toHaveBeenCalled()
     // @ts-expect-error ts-migrate(2339) FIXME: Property 'setActiveCaseload' does not exist on typ... Remove this comment to see the full error message
     expect(prisonApi.setActiveCaseload).not.toHaveBeenCalled()
     expect(req.session.userDetails).toEqual({

@@ -37,65 +37,6 @@ describe('oauthApi tests', () => {
     })
   })
 
-  describe('currentUser', () => {
-    const userDetails = { bob: 'hello there' }
-    let actual
-
-    beforeEach(() => {
-      client.get = jest.fn().mockReturnValue({
-        then: () => userDetails,
-      })
-      actual = oauthApi.currentUser(context)
-    })
-
-    it('should return user details from endpoint', () => {
-      expect(actual).toEqual(userDetails)
-    })
-    it('should call user endpoint', () => {
-      expect(client.get).toBeCalledWith(context, '/api/user/me')
-    })
-  })
-
-  describe('userDetails', () => {
-    const userDetails = { bob: 'hello there' }
-    const username = 'bob'
-    let actual
-
-    beforeEach(() => {
-      client.get = jest.fn().mockReturnValue({
-        then: () => userDetails,
-      })
-      actual = oauthApi.userDetails(context, username)
-    })
-
-    it('should return user details from endpoint', () => {
-      expect(actual).toEqual(userDetails)
-    })
-    it('should call user endpoint', () => {
-      expect(client.get).toBeCalledWith(context, `/api/user/${username}`)
-    })
-  })
-
-  describe('userEmail', () => {
-    const userEmail = { email: 'bob@local' }
-    const username = 'bob'
-    let actual
-
-    beforeEach(() => {
-      client.get = jest.fn().mockReturnValue({
-        then: () => userEmail,
-      })
-      actual = oauthApi.userEmail(context, username)
-    })
-
-    it('should return user details from endpoint', () => {
-      expect(actual).toEqual(userEmail)
-    })
-    it('should call user endpoint', () => {
-      expect(client.get).toBeCalledWith(context, `/api/user/${username}/email`)
-    })
-  })
-
   describe('currentRoles', () => {
     const roles = [{ roleCode: 'TEST' }]
     let actual
