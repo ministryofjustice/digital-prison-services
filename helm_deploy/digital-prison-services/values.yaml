@@ -2,6 +2,7 @@
 # Values here are the same across all environments
 generic-service:
   nameOverride: digital-prison-services
+  productId: DPS025
 
   image:
     repository: quay.io/hmpps/digital-prison-services
@@ -23,7 +24,7 @@ generic-service:
 
   readinessProbe:
     httpGet:
-      path: /ping   
+      path: /ping
 
   env:
    PRISON_STAFF_HUB_UI_URL: https://app-hostname.local/
@@ -37,7 +38,7 @@ generic-service:
    TOKENVERIFICATION_API_ENABLED: true
    WELCOME_PEOPLE_INTO_PRISON_ENABLED_PRISONS: "BFI,BNI,BWI,CDI,DMI,EXI,EYI,HEI,HLI,LCI,LEI,LII,LPI,LWI,MHI,NMI,NWI,PNI,PVI,WCI,WSI,WWI,STI"
    APPLICATIONINSIGHTS_CONNECTION_STRING: "InstrumentationKey=$(APPINSIGHTS_INSTRUMENTATIONKEY)"
-  
+
   namespace_secrets:
     digital-prison-services:
       API_CLIENT_ID: "API_CLIENT_ID"
@@ -69,7 +70,7 @@ generic-service:
       REDIS_HOST: "REDIS_HOST"
       REDIS_PASSWORD: "REDIS_PASSWORD"
 
-  
-  
+
+
 generic-prometheus-alerts:
   targetApplication: digital-prison-services
