@@ -76,7 +76,7 @@ generic-service:
    GET_SOMEONE_READY_FOR_WORK_URL: https://get-ready-for-work-dev.hmpps.service.justice.gov.uk
    WARRANT_FOLDER_URL: https://manage-a-warrant-folder-dev.hmpps.service.justice.gov.uk/
    PRISONER_PROFILE_REDIRECT_URL: http://prisoner-dev.digital.prison.service.justice.gov.uk
-   PRISONER_PROFILE_REDIRECT_ENABLED_DATE: 2023-08-08T02:00:00
+   PRISONER_PROFILE_REDIRECT_ENABLED_DATE: 2023-08-14T02:00:00
    PRISONER_PROFILE_REDIRECT_ENABLED_PRISONS: "LEI,FNI,HMI,NHI"
    PRISONER_PROFILE_SCHEDULE_REDIRECT_FOR_PRISONS: "HMI,NHI"
    MANAGE_OFFENCES_URL: https://manage-offences-dev.hmpps.service.justice.gov.uk
