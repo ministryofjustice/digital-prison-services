@@ -74,7 +74,7 @@ generic-service:
    WARRANT_FOLDER_URL: https://manage-a-warrant-folder-preprod.hmpps.service.justice.gov.uk/
    PRISONER_PROFILE_REDIRECT_URL: https://prisoner-preprod.digital.prison.service.justice.gov.uk
    PRISONER_PROFILE_REDIRECT_ENABLED_DATE: ""
-   PRISONER_PROFILE_REDIRECT_ENABLED_PRISONS: "LEI,FNI"
+   PRISONER_PROFILE_REDIRECT_ENABLED_PRISONS: "LEI,FNI,HMI,NHI"
    PRISONER_PROFILE_SCHEDULE_REDIRECT_FOR_PRISONS: ""
    HOMEPAGE_REDIRECT_URL: http://dps-preprod.prison.service.justice.gov.uk
    HOMEPAGE_REDIRECT_ENABLED_DATE: 2023-07-24T02:00:00
