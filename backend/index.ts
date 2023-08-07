@@ -18,9 +18,9 @@ import setupWebSecurity from './setupWebSecurity'
 import setupAuth from './setupAuth'
 import {
   clientCredsSetup,
-  getTokenStore,
-  getSystemOauthApiClient,
   enableLogDebugStatements,
+  getSystemOauthApiClient,
+  getTokenStore,
 } from './api/systemOauthClient'
 import setupStaticContent from './setupStaticContent'
 import nunjucksSetup from './utils/nunjucksSetup'
@@ -35,6 +35,7 @@ import errorHandler from './middleware/errorHandler'
 import { logError } from './logError'
 import homepageController from './controllers/homepage/homepage'
 import requestLimiter from './middleware/requestLimiter'
+import homepageRedirect from './controllers/homepage/homepageRedirect'
 
 // We do not want the server to exit, partly because any log information will be lost.
 // Instead, log the error so we can trace, diagnose and fix the problem.
@@ -112,9 +113,8 @@ app.use(
     whereaboutsMaintenanceMode: config.app.whereaboutsMaintenanceMode,
   })
 )
-
 app.use(setupReactRoutes())
-app.use('/$', homepageController({ ...apis, logError }))
+app.use('/$', homepageRedirect(homepageController({ ...apis, logError })))
 app.use(pageNotFound)
 app.use(errorHandler({ logError }))
 
