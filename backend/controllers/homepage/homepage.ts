@@ -80,8 +80,8 @@ const getTasks = ({ activeCaseLoadId, locations, staffId, whereaboutsConfig, key
     },
     {
       id: 'incentives',
-      heading: 'Manage incentives',
-      description: 'See prisoner incentive information by residential location and view incentive data visualisations.',
+      heading: 'Incentives',
+      description: 'Manage incentive level reviews by residential location and view incentives data charts.',
       href: incentives.ui_url,
       roles: null,
       enabled: () => incentives.ui_url && (userHasRoles(['MAINTAIN_INCENTIVE_LEVELS']) || locations?.length > 0),
