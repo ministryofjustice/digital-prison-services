@@ -234,7 +234,7 @@ context('Homepage', () => {
       const page = homepagePage.goTo()
 
       page.incentives().tile().should('exist')
-      page.incentives().title().contains('Manage incentives')
+      page.incentives().title().contains('Incentives')
       page.incentives().link().should('exist')
       page.incentives().description().should('exist')
     })
