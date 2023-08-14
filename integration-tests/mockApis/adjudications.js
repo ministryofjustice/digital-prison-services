@@ -38,7 +38,7 @@ module.exports = {
         stubFor({
             request: {
                 method: 'GET',
-                urlPattern: '/adjudications/by-booking-id/[0-9]+?',
+                urlPattern: '/adjudications/adjudications/by-booking-id/[0-9]+?',
             },
             response: {
                 status,
