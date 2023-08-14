@@ -35,7 +35,7 @@ export const adjudicationsApiFactory = (client: OauthApiClient) => {
   const getAdjudicationDetails = (context, offenderNumber, adjudicationNumber) =>
     get(context, `/adjudications/${offenderNumber}/charge/${adjudicationNumber}`)
 
-  const getAdjudicationsForBooking = (context, bookingId) => get(context, `/adjudications/${bookingId}/adjudications`)
+  const getAdjudicationsForBooking = (context, bookingId) => get(context, `/adjudications/by-booking-id/${bookingId}`)
 
   return {
     getAdjudications,
