@@ -236,6 +236,10 @@ export const apis = {
   manageOffences: {
     ui_url: process.env.MANAGE_OFFENCES_URL,
   },
+  adjudicationsApi: {
+    url: process.env.MANAGE_ADJUDICATIONS_API_URL || 'http://localhost:8087',
+    timeoutSeconds: toNumber(process.env.MANAGE_ADJUDICATIONS_API_ENDPOINT_TIMEOUT_SECONDS) || 30,
+  },
 }
 export const notifications = {
   enabled: process.env.NOTIFY_ENABLED ? process.env.NOTIFY_ENABLED === 'true' : true,
