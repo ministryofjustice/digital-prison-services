@@ -84,3 +84,4 @@ generic-service:
    HOMEPAGE_REDIRECT_ENABLED_PRISONS: ""
    HOMEPAGE_SCHEDULE_REDIRECT_FOR_PRISONS: ""
    MANAGE_OFFENCES_URL: https://manage-offences-dev.hmpps.service.justice.gov.uk
+   MANAGE_ADJUDICATIONS_API_URL: https://manage-adjudications-api-dev.hmpps.service.justice.gov.uk

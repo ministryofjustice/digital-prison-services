@@ -4,6 +4,7 @@ describe('Prisoner adjudication details', () => {
   const offenderNo = 'ABC123'
   const adjudicationNumber = '123'
   const prisonApi = {}
+  const adjudicationsApi = {}
 
   let req
   let res
@@ -22,10 +23,10 @@ describe('Prisoner adjudication details', () => {
     // @ts-expect-error ts-migrate(2339) FIXME: Property 'getDetails' does not exist on type '{}'.
     prisonApi.getDetails = jest.fn().mockResolvedValue({ firstName: 'John', lastName: 'Smith ' })
     // @ts-expect-error ts-migrate(2339) FIXME: Property 'getAdjudicationDetails' does not exist o... Remove this comment to see the full error message
-    prisonApi.getAdjudicationDetails = jest.fn().mockResolvedValue({})
+    adjudicationsApi.getAdjudicationDetails = jest.fn().mockResolvedValue({})
 
     // @ts-expect-error ts-migrate(2345) FIXME: Argument of type '{ prisonApi: {}; logError: any; ... Remove this comment to see the full error message
-    controller = prisonerAdjudicationDetails({ prisonApi, logError })
+    controller = prisonerAdjudicationDetails({ prisonApi, adjudicationsApi, logError })
   })
 
   it('should make the expected API calls', async () => {
@@ -34,12 +35,12 @@ describe('Prisoner adjudication details', () => {
     // @ts-expect-error ts-migrate(2339) FIXME: Property 'getDetails' does not exist on type '{}'.
     expect(prisonApi.getDetails).toHaveBeenCalledWith(res.locals, offenderNo)
     // @ts-expect-error ts-migrate(2339) FIXME: Property 'getAdjudicationDetails' does not exist o... Remove this comment to see the full error message
-    expect(prisonApi.getAdjudicationDetails).toHaveBeenCalledWith(res.locals, offenderNo, adjudicationNumber)
+    expect(adjudicationsApi.getAdjudicationDetails).toHaveBeenCalledWith(res.locals, offenderNo, adjudicationNumber)
   })
 
   it('should render the template with the correctly formatted data', async () => {
     // @ts-expect-error ts-migrate(2339) FIXME: Property 'getAdjudicationDetails' does not exist o... Remove this comment to see the full error message
-    prisonApi.getAdjudicationDetails.mockResolvedValue({
+    adjudicationsApi.getAdjudicationDetails.mockResolvedValue({
       adjudicationNumber: 123,
       incidentTime: '2016-10-19T10:00:00',
       establishment: 'Moorland (HMP & YOI)',
