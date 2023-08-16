@@ -226,7 +226,7 @@ describe('prisoner profile quick look', () => {
 
         await controller(req, res)
 
-        expect(systemOauthClient.getClientCredentialsTokens).not.toHaveBeenCalled()
+        expect(systemOauthClient.getClientCredentialsTokens).toHaveBeenCalled()
         expect(offenderSearchApi.getPrisonersDetails).not.toHaveBeenCalled()
       })
 

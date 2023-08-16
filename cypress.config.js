@@ -488,8 +488,8 @@ module.exports = defineConfig({
         stubGetAdjudicationDetails: (adjudicationDetails) => adjudicationsApi.stubGetAdjudicationDetails(adjudicationDetails),
         stubAdjudicationFindingTypes: (types) => prisonApi.stubAdjudicationFindingTypes(types),
         stubAdjudications: ({ response, headers }) => adjudicationsApi.stubAdjudications(response, headers),
-        verifyAdjudicationsHistory: ({ offenderNo, agencyId, finding, fromDate, toDate }) =>
-            adjudicationsApi.verifyAdjudicationsHistory({ offenderNo, agencyId, finding, fromDate, toDate }),
+        verifyAdjudicationsHistory: ({ offenderNo, agencyId, finding, fromDate, toDate, size}) =>
+            adjudicationsApi.verifyAdjudicationsHistory({ offenderNo, agencyId, finding, fromDate, toDate, size }),
         verifyAlertsBooking: ({ bookingId, alertType, from, to, alertStatus, page, sort, size }) =>
           prisonApi.verifyAlertsBookingGet({ bookingId, alertType, from, to, alertStatus, page, sort, size }),
         resetAdjudicationsStub: () => adjudicationsApi.resetAdjudicationsStub(),

@@ -12,22 +12,23 @@ export const adjudicationsApiFactory = (client: OauthApiClient) => {
     client.get(context, url, { resultsLimit, retryOverride }).then(processResponse(context))
 
   const getAdjudications = async (context, offenderNumber, params, pageOffset, pageLimit) => {
-    contextProperties.setCustomRequestHeaders(context, {
-      'page-offset': pageOffset || 0,
-      'page-limit': pageLimit || 10,
-    })
+    const paramsWithPageAndSize = {
+      ...params,
+      page: pageOffset / pageLimit,
+      size: pageLimit,
+    }
 
     const response = await get(
       context,
-      `/adjudications/${offenderNumber}/adjudications${params && `?${mapToQueryString(params)}`}`
+      `/adjudications/${offenderNumber}/adjudications${params && `?${mapToQueryString(paramsWithPageAndSize)}`}`
     )
 
     return {
       ...response,
       pagination: {
-        pageOffset: context.responseHeaders['page-offset'],
-        pageLimit: context.responseHeaders['page-limit'],
-        totalRecords: context.responseHeaders['total-records'],
+        pageOffset: response.results.pageable.offset,
+        pageLimit: response.results.pageable.pageSize,
+        totalRecords: response.results.totalElements,
       },
     }
   }

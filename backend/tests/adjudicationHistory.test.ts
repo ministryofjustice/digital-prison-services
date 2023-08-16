@@ -21,84 +21,88 @@ beforeEach(() => {
 
 const noAdjudications = {
   agencies: [],
-  results: [],
+  results: {
+    content: [],
+  },
   offences: [],
 }
 
 const adjudications = {
-  results: [
-    {
-      adjudicationNumber: 1492249,
-      reportTime: '2017-02-23T10:29:00',
-      agencyIncidentId: 1470044,
-      agencyId: 'MDI',
-      adjudicationCharges: [
-        {
-          oicChargeId: '1492249/1',
-          offenceCode: '51:18A',
-          offenceDescription:
-            'Absents himself from any place he is required to be or is present at any place where he is not authorised to be - absence without permission',
-          findingCode: 'GUILTY',
-        },
-      ],
-    },
-    {
-      adjudicationNumber: 1492250,
-      reportTime: '2017-02-23T10:49:00',
-      agencyIncidentId: 1470044,
-      agencyId: 'MDI',
-      adjudicationCharges: [
-        {
-          oicChargeId: '1492249/1',
-          offenceCode: '51:18A',
-          offenceDescription:
-            'Absents himself from any place he is required to be or is present at any place where he is not authorised to be - absence without permission',
-        },
-      ],
-    },
-    {
-      adjudicationNumber: 554213,
-      reportTime: '2012-01-05T15:42:00',
-      agencyIncidentId: 548434,
-      agencyId: 'ONI',
-      adjudicationCharges: [
-        {
-          oicChargeId: '554213/2',
-          offenceCode: '51:1J',
-          offenceDescription: 'Commits any assault - assault on prison officer',
-          findingCode: 'NOT_GUILTY',
-        },
-        {
-          oicChargeId: '554213/1',
-          offenceCode: '51:25A',
-          offenceDescription:
-            '(a) Attempts to commit, (b) incites another inmate to commit, or (c) assists another inmate to commit or to attempt to commit, any of the foregoing offences - attempt, incite or assist 8b',
-        },
-      ],
-    },
-    {
-      adjudicationNumber: 529404,
-      reportTime: '2011-11-03T15:22:00',
-      agencyIncidentId: 524130,
-      agencyId: 'ONI',
-      adjudicationCharges: [
-        {
-          oicChargeId: '529404/1',
-          offenceCode: '51:23AS',
-          offenceDescription:
-            'Disobeys or fails to comply with any rule or regulation applying to him - offence against good order and discipline',
-          findingCode: 'GUILTY',
-        },
-        {
-          oicChargeId: '529404/1',
-          offenceCode: '51:23AS',
-          offenceDescription:
-            'Disobeys or fails to comply with any rule or regulation applying to him - offence against good order and discipline',
-          findingCode: 'NOT_GUILTY',
-        },
-      ],
-    },
-  ],
+  results: {
+    content: [
+      {
+        adjudicationNumber: 1492249,
+        reportTime: '2017-02-23T10:29:00',
+        agencyIncidentId: 1470044,
+        agencyId: 'MDI',
+        adjudicationCharges: [
+          {
+            oicChargeId: '1492249/1',
+            offenceCode: '51:18A',
+            offenceDescription:
+              'Absents himself from any place he is required to be or is present at any place where he is not authorised to be - absence without permission',
+            findingCode: 'GUILTY',
+          },
+        ],
+      },
+      {
+        adjudicationNumber: 1492250,
+        reportTime: '2017-02-23T10:49:00',
+        agencyIncidentId: 1470044,
+        agencyId: 'MDI',
+        adjudicationCharges: [
+          {
+            oicChargeId: '1492249/1',
+            offenceCode: '51:18A',
+            offenceDescription:
+              'Absents himself from any place he is required to be or is present at any place where he is not authorised to be - absence without permission',
+          },
+        ],
+      },
+      {
+        adjudicationNumber: 554213,
+        reportTime: '2012-01-05T15:42:00',
+        agencyIncidentId: 548434,
+        agencyId: 'ONI',
+        adjudicationCharges: [
+          {
+            oicChargeId: '554213/2',
+            offenceCode: '51:1J',
+            offenceDescription: 'Commits any assault - assault on prison officer',
+            findingCode: 'NOT_GUILTY',
+          },
+          {
+            oicChargeId: '554213/1',
+            offenceCode: '51:25A',
+            offenceDescription:
+              '(a) Attempts to commit, (b) incites another inmate to commit, or (c) assists another inmate to commit or to attempt to commit, any of the foregoing offences - attempt, incite or assist 8b',
+          },
+        ],
+      },
+      {
+        adjudicationNumber: 529404,
+        reportTime: '2011-11-03T15:22:00',
+        agencyIncidentId: 524130,
+        agencyId: 'ONI',
+        adjudicationCharges: [
+          {
+            oicChargeId: '529404/1',
+            offenceCode: '51:23AS',
+            offenceDescription:
+              'Disobeys or fails to comply with any rule or regulation applying to him - offence against good order and discipline',
+            findingCode: 'GUILTY',
+          },
+          {
+            oicChargeId: '529404/1',
+            offenceCode: '51:23AS',
+            offenceDescription:
+              'Disobeys or fails to comply with any rule or regulation applying to him - offence against good order and discipline',
+            findingCode: 'NOT_GUILTY',
+          },
+        ],
+      },
+    ],
+  },
   offences: [
     {
       id: '142',
@@ -247,7 +251,7 @@ describe('Adjudication History Service', () => {
     adjudicationsApi.getAdjudications.mockReturnValue(noAdjudications)
     prisonApi.getAdjudicationFindingTypes.mockReturnValue(findings)
 
-    const response = await adjudicationHistory.getAdjudications({}, 'OFF-1', {}, {}, {})
+    const response = await adjudicationHistory.getAdjudications({}, {}, 'OFF-1', {}, {}, {})
     expect(response).toEqual({
       agencies: [],
       findingTypes: [
@@ -277,7 +281,7 @@ describe('Adjudication History Service', () => {
     adjudicationsApi.getAdjudications.mockReturnValue(adjudications)
     prisonApi.getAdjudicationFindingTypes.mockReturnValue(findings)
 
-    const response = await adjudicationHistory.getAdjudications({}, 'OFF-1', {}, {}, {})
+    const response = await adjudicationHistory.getAdjudications({}, {}, 'OFF-1', {}, {}, {})
     expect(response).toEqual(expectedResult)
   })
 
@@ -353,15 +357,14 @@ describe('Adjudication History Service', () => {
       return findings
     })
 
-    const context = { anotherAttribute: 1, requestHeaders: { pageOffset: 1, pageLimit: 20 } }
+    const context = { requestHeaders: { pageOffset: 1, pageLimit: 20 } }
 
-    const response = await adjudicationHistory.getAdjudications(context, 'OFF-1', {}, {}, {})
+    const response = await adjudicationHistory.getAdjudications({}, context, 'OFF-1', {}, {}, {})
 
     expect(response).toEqual(expectedResult)
 
     expect(adjudicationsApi.getAdjudications.mock.calls[0]).toEqual([
       {
-        anotherAttribute: 1,
         requestHeaders: { pageOffset: 1, pageLimit: 20 },
         adjudicationResponseHeaders: true,
       },
@@ -374,14 +377,12 @@ describe('Adjudication History Service', () => {
     // Pagination Headers from request are not passed through to the get findings call
     expect(prisonApi.getAdjudicationFindingTypes.mock.calls[0]).toEqual([
       {
-        anotherAttribute: 1,
         findingResponseHeaders: true,
       },
     ])
 
     // Pagination Headers from get adjudications response would be set on the context for setting on the response to the frontend.
     expect(context).toEqual({
-      anotherAttribute: 1,
       adjudicationResponseHeaders: true,
       requestHeaders: { pageOffset: 1, pageLimit: 20 },
     })

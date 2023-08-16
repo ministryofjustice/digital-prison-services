@@ -1,8 +1,8 @@
 const {stubFor, resetStub, verifyGet} = require("./wiremock");
 module.exports = {
-    verifyAdjudicationsHistory: ({ offenderNo, agencyId, finding, fromDate, toDate }) =>
+    verifyAdjudicationsHistory: ({ offenderNo, agencyId, finding, fromDate, toDate, size }) =>
         verifyGet(
-            `/adjudications/adjudications/${offenderNo}/adjudications?agencyId=${agencyId}&finding=${finding}&fromDate=${fromDate}&toDate=${toDate}`
+            `/adjudications/adjudications/${offenderNo}/adjudications?agencyId=${agencyId}&finding=${finding}&fromDate=${fromDate}&toDate=${toDate}&size=${size}`
         ),
     stubAdjudications: (response, headers = {}) =>
         stubFor({
