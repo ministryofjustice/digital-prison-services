@@ -2,20 +2,18 @@ import adjudicationHistoryService from '../services/adjudicationHistory'
 
 Reflect.deleteProperty(process.env, 'APPINSIGHTS_INSTRUMENTATIONKEY')
 const prisonApi = {
-  getAdjudicationFindingTypes: jest.fn(),
-}
-const adjudicationsApi = {
   getAdjudicationDetails: jest.fn(),
   getAdjudications: jest.fn(),
+  getAdjudicationFindingTypes: jest.fn(),
 }
 
 jest.mock('nanoid', () => ({ nanoid: () => '123' }))
 
-const adjudicationHistory = adjudicationHistoryService(prisonApi, adjudicationsApi)
+const adjudicationHistory = adjudicationHistoryService(prisonApi)
 
 beforeEach(() => {
-  adjudicationsApi.getAdjudicationDetails = jest.fn()
-  adjudicationsApi.getAdjudications = jest.fn()
+  prisonApi.getAdjudicationDetails = jest.fn()
+  prisonApi.getAdjudications = jest.fn()
   prisonApi.getAdjudicationFindingTypes = jest.fn()
 })
 
@@ -244,7 +242,7 @@ const expectedResult = {
 }
 describe('Adjudication History Service', () => {
   it('handles no results', async () => {
-    adjudicationsApi.getAdjudications.mockReturnValue(noAdjudications)
+    prisonApi.getAdjudications.mockReturnValue(noAdjudications)
     prisonApi.getAdjudicationFindingTypes.mockReturnValue(findings)
 
     const response = await adjudicationHistory.getAdjudications({}, 'OFF-1', {}, {}, {})
@@ -266,15 +264,15 @@ describe('Adjudication History Service', () => {
       results: [],
     })
 
-    expect(adjudicationsApi.getAdjudications).toHaveBeenCalled()
+    expect(prisonApi.getAdjudications).toHaveBeenCalled()
     expect(prisonApi.getAdjudicationFindingTypes).toHaveBeenCalled()
 
-    expect(adjudicationsApi.getAdjudications.mock.calls[0]).toEqual([{}, 'OFF-1', {}, {}, {}])
+    expect(prisonApi.getAdjudications.mock.calls[0]).toEqual([{}, 'OFF-1', {}, {}, {}])
     expect(prisonApi.getAdjudicationFindingTypes.mock.calls[0]).toEqual([{}])
   })
 
   it('return adjudication history', async () => {
-    adjudicationsApi.getAdjudications.mockReturnValue(adjudications)
+    prisonApi.getAdjudications.mockReturnValue(adjudications)
     prisonApi.getAdjudicationFindingTypes.mockReturnValue(findings)
 
     const response = await adjudicationHistory.getAdjudications({}, 'OFF-1', {}, {}, {})
@@ -282,7 +280,7 @@ describe('Adjudication History Service', () => {
   })
 
   it('return adjudication detail with hearings and sanctions', async () => {
-    adjudicationsApi.getAdjudicationDetails.mockReturnValue({
+    prisonApi.getAdjudicationDetails.mockReturnValue({
       reporterFirstName: 'Laurie',
       reporterLastName: 'Jones',
       incidentTime: '2012-11-29T14:45',
@@ -326,11 +324,11 @@ describe('Adjudication History Service', () => {
       ],
     })
 
-    expect(adjudicationsApi.getAdjudicationDetails.mock.calls[0]).toEqual([{}, 'OFF-1', 'ADJ-1'])
+    expect(prisonApi.getAdjudicationDetails.mock.calls[0]).toEqual([{}, 'OFF-1', 'ADJ-1'])
   })
 
   it('return adjudication detail when no hearings', async () => {
-    adjudicationsApi.getAdjudicationDetails.mockReturnValue({})
+    prisonApi.getAdjudicationDetails.mockReturnValue({})
 
     const response = await adjudicationHistory.getAdjudicationDetails({}, 'OFF-1', 'ADJ-1')
 
@@ -340,11 +338,11 @@ describe('Adjudication History Service', () => {
       sanctions: [],
     })
 
-    expect(adjudicationsApi.getAdjudicationDetails.mock.calls[0]).toEqual([{}, 'OFF-1', 'ADJ-1'])
+    expect(prisonApi.getAdjudicationDetails.mock.calls[0]).toEqual([{}, 'OFF-1', 'ADJ-1'])
   })
 
   it('pagination is only applied to adjudication retrieval requests', async () => {
-    adjudicationsApi.getAdjudications.mockImplementationOnce((ctx) => {
+    prisonApi.getAdjudications.mockImplementationOnce((ctx) => {
       ctx.adjudicationResponseHeaders = true
       return adjudications
     })
@@ -359,7 +357,7 @@ describe('Adjudication History Service', () => {
 
     expect(response).toEqual(expectedResult)
 
-    expect(adjudicationsApi.getAdjudications.mock.calls[0]).toEqual([
+    expect(prisonApi.getAdjudications.mock.calls[0]).toEqual([
       {
         anotherAttribute: 1,
         requestHeaders: { pageOffset: 1, pageLimit: 20 },

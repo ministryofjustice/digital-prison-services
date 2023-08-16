@@ -280,6 +280,32 @@ export const prisonApiFactory = (client) => {
 
   const getMovementReasons = (context) => get(context, '/api/reference-domains/domains/MOVE_RSN', 1000)
 
+  const getAdjudications = async (context, offenderNumber, params, pageOffset, pageLimit) => {
+    contextProperties.setCustomRequestHeaders(context, {
+      'page-offset': pageOffset || 0,
+      'page-limit': pageLimit || 10,
+    })
+
+    const response = await get(
+      context,
+      `/api/offenders/${offenderNumber}/adjudications${params && `?${mapToQueryString(params)}`}`
+    )
+
+    return {
+      ...response,
+      pagination: {
+        pageOffset: context.responseHeaders['page-offset'],
+        pageLimit: context.responseHeaders['page-limit'],
+        totalRecords: context.responseHeaders['total-records'],
+      },
+    }
+  }
+
+  const getAdjudicationDetails = (context, offenderNumber, adjudicationNumber) =>
+    get(context, `/api/offenders/${offenderNumber}/adjudications/${adjudicationNumber}`)
+
+  const getAdjudicationsForBooking = (context, bookingId) => get(context, `/api/bookings/${bookingId}/adjudications`)
+
   const addAppointments = (context, body) => post(context, '/api/appointments', body)
 
   const addSingleAppointment = (context, bookingId, body) =>
@@ -513,6 +539,9 @@ export const prisonApiFactory = (client) => {
     getLocationsForAppointments,
     getAppointmentTypes,
     getAdjudicationFindingTypes,
+    getAdjudications,
+    getAdjudicationDetails,
+    getAdjudicationsForBooking,
     addAppointments,
     getAlertTypes,
     createAlert,

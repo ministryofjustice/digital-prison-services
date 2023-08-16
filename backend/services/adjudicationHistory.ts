@@ -9,12 +9,12 @@ import {
   sortByDateTime,
 } from '../utils'
 
-const AdjudciationHistoryServiceFactory = (prisonApi, adjudicationsApi) => {
+const AdjudciationHistoryServiceFactory = (prisonApi) => {
   const getAdjudications = async (context, offenderNumber, params, pageOffsetOption, perPage) => {
     const { requestHeaders, ...withoutPagination } = context
 
     const [adjudications, findingTypes] = await Promise.all([
-      adjudicationsApi.getAdjudications(context, offenderNumber, params, pageOffsetOption, perPage),
+      prisonApi.getAdjudications(context, offenderNumber, params, pageOffsetOption, perPage),
       prisonApi.getAdjudicationFindingTypes(withoutPagination),
     ])
 
@@ -75,7 +75,7 @@ const AdjudciationHistoryServiceFactory = (prisonApi, adjudicationsApi) => {
   }
 
   const getAdjudicationDetails = async (context, offenderNumber, adjudicationNumber) => {
-    const details = await adjudicationsApi.getAdjudicationDetails(context, offenderNumber, adjudicationNumber)
+    const details = await prisonApi.getAdjudicationDetails(context, offenderNumber, adjudicationNumber)
     const { hearings = [], ...otherDetails } = details
 
     const [hearing, results] = extractHearingAndResults(hearings)
