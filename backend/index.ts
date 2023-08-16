@@ -110,7 +110,6 @@ app.use(
     incentivesApi: apis.incentivesApi,
     nonAssociationsApi: apis.nonAssociationsApi,
     restrictedPatientApi: apis.restrictedPatientApi,
-    adjudicationsApi: apis.adjudicationsApi,
     whereaboutsMaintenanceMode: config.app.whereaboutsMaintenanceMode,
   })
 )
