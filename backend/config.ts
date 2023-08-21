@@ -285,6 +285,9 @@ export const notifications = {
     PVI: {
       omu: process.env.PENTONVILLE_OMU_EMAIL,
     },
+    EXI: {
+      omu: process.env.EXETER_OMU_EMAIL,
+    },
   },
 }
 
