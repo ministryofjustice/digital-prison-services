@@ -1,35 +1,37 @@
+import { Response } from 'express'
 import { changeCaseloadFactory } from '../controllers/changeCaseload'
 
 describe('index', () => {
   const prisonApi = {}
-  const mockRes = {
-    render: jest.fn(),
-    redirect: jest.fn(),
-    locals: {
-      user: {
-        allCaseloads: [
-          {
-            caseLoadId: 'LEI',
-            description: 'Leeds (HMP)',
-            type: 'INST',
-            currentlyActive: true,
-          },
-          {
-            caseLoadId: 'HEI',
-            description: 'Hewell (HMP)',
-            type: 'INST',
-            currentlyActive: false,
-          },
-        ],
-      },
-    },
-    status: jest.fn(),
-  }
+  let mockRes: Partial<Response>
   const logError = jest.fn()
 
   let service
 
   beforeEach(() => {
+    mockRes = {
+      render: jest.fn(),
+      redirect: jest.fn(),
+      locals: {
+        user: {
+          allCaseloads: [
+            {
+              caseLoadId: 'LEI',
+              description: 'Leeds (HMP)',
+              type: 'INST',
+              currentlyActive: true,
+            },
+            {
+              caseLoadId: 'HEI',
+              description: 'Hewell (HMP)',
+              type: 'INST',
+              currentlyActive: false,
+            },
+          ],
+        },
+      },
+      status: jest.fn(),
+    }
     // @ts-expect-error ts-migrate(2339) FIXME: Property 'userCaseLoads' does not exist on type '{... Remove this comment to see the full error message
     prisonApi.userCaseLoads = jest.fn()
     service = changeCaseloadFactory(prisonApi, logError)
@@ -37,7 +39,7 @@ describe('index', () => {
 
   it('should render the change caseload page with correct data', async () => {
     const req = {
-      headers: { referer: '//pshUrl/' },
+      headers: { referer: 'http://localhost:3000/pshUrl/' },
       session: { userDetails: { name: 'Test User', activeCaseLoadId: 'LEI' } },
     }
     const res = { ...mockRes }
@@ -45,18 +47,39 @@ describe('index', () => {
     await service.index(req, res)
 
     expect(res.render).toBeCalledWith('changeCaseload.njk', {
-      title: 'Change caseload',
+      title: 'Change your location',
       options: [
         { value: 'LEI', text: 'Leeds (HMP)' },
         { value: 'HEI', text: 'Hewell (HMP)' },
       ],
-      backUrl: '//pshUrl/',
+      backUrl: 'http://localhost:3000/pshUrl/',
     })
   })
 
+  it.each(['http://localhost/change-caseload', 'http://localhost/change-caseload/'])(
+    'shouldnt provide a back link if the referrer is the change-caseload page itself',
+    async (referer) => {
+      const req = {
+        headers: { referer },
+        session: { userDetails: { name: 'Test User', activeCaseLoadId: 'LEI' } },
+      }
+      const res = { ...mockRes }
+
+      await service.index(req, res)
+
+      expect(res.render).toBeCalledWith('changeCaseload.njk', {
+        title: 'Change your location',
+        options: [
+          { value: 'LEI', text: 'Leeds (HMP)' },
+          { value: 'HEI', text: 'Hewell (HMP)' },
+        ],
+      })
+    }
+  )
+
   it('should redirect back to homepage if user has less than 2 caseloads', async () => {
     const req = {
-      headers: { referer: '//newNomisEndPointUrl/' },
+      headers: { referer: 'http://localhost:3000/newNomisEndpoint' },
       session: { userDetails: { name: 'Test User', activeCaseLoadId: 'LEI' } },
     }
     const res = {

@@ -4,10 +4,12 @@
 {% extends "./partials/layout.njk" %}
 
 {% block beforeContent %}
-  {{ govukBackLink({
+  {% if backUrl %}
+    {{ govukBackLink({
         text: "Back",
         href: backUrl
-    }) }}
+      }) }}
+  {% endif %}
 {% endblock %}
 {% block content %}
 <h1 class="govuk-heading-l">{{title}}</h1>
@@ -17,7 +19,7 @@
           id: "changeCaseloadSelect",
           name: "caseLoadId",
           label: {
-              text: "Select active case load"
+              text: "Select an establishment"
           },
           items: options | setSelected(user.activeCaseLoad.caseLoadId)
       }) }}
