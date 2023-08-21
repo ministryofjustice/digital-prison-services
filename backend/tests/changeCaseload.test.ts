@@ -56,8 +56,8 @@ describe('index', () => {
     })
   })
 
-  it.each(['http://localhost/change-caseload', 'http://localhost/change-caseload/'])(
-    'shouldnt provide a back link if the referrer is the change-caseload page itself',
+  it.each([undefined, 'http://localhost/change-caseload', 'http://localhost/change-caseload/'])(
+    'shouldnt provide a back link if the referrer is undefined or the change-caseload page itself',
     async (referer) => {
       const req = {
         headers: { referer },

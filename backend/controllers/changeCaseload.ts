@@ -10,10 +10,12 @@ export const changeCaseloadFactory = (prisonApi, logError) => {
 
     const options = allCaseloads.map((caseload) => ({ value: caseload.caseLoadId, text: caseload.description }))
     let backUrl: string
-    const referer = new URL(req.headers.referer)
 
-    if (!referer.pathname.match(/\/change-caseload\/?/)) {
-      backUrl = req.headers.referer
+    if (req.headers.referer) {
+      const referer = new URL(req.headers.referer)
+      if (!referer.pathname.match(/\/change-caseload\/?/)) {
+        backUrl = req.headers.referer
+      }
     }
 
     return res.render('changeCaseload.njk', {
