@@ -54,7 +54,7 @@ const getTasks = ({ activeCaseLoadId, locations, staffId, whereaboutsConfig, key
     },
     {
       id: 'manage-prisoner-whereabouts',
-      heading: 'Manage prisoner whereabouts',
+      heading: 'Prisoner whereabouts',
       description: 'View unlock lists, all appointments and COVID units, manage attendance and add bulk appointments.',
       href: '/manage-prisoner-whereabouts',
       roles: null,
@@ -135,7 +135,7 @@ const getTasks = ({ activeCaseLoadId, locations, staffId, whereaboutsConfig, key
     },
     {
       id: 'manage-key-workers',
-      heading: 'Manage key workers',
+      heading: 'Key workers',
       description: 'Add and remove key workers from prisoners and manage individuals.',
       href: omic.url,
       enabled: () => {
