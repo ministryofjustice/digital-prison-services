@@ -121,7 +121,7 @@ export default ({
         keyworkerApi.getKeyworkerByCaseloadAndOffenderNo(context, agencyId, offenderNo),
         pathfinderApi.getPathfinderDetails(systemContext, offenderNo),
         socApi.getSocDetails(systemContext, offenderNo, socEnabled),
-        allocationManagerApi.getPomByOffenderNo(context, offenderNo),
+        allocationManagerApi.getPomByOffenderNo(systemContext, offenderNo),
         getNeurodivergenceSupportNeed(agencyId),
       ].map((apiCall) => logErrorAndContinue(apiCall))
     )
