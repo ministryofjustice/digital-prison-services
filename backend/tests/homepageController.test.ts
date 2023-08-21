@@ -139,7 +139,7 @@ describe('Homepage', () => {
       )
     })
 
-    it('should render home page with the manage prisoner whereabouts task', async () => {
+    it('should render home page with the prisoner whereabouts task', async () => {
       whereaboutsApi.getWhereaboutsConfig.mockResolvedValue({ enabled: true })
 
       await controller(req, res)
@@ -150,7 +150,7 @@ describe('Homepage', () => {
           tasks: [
             {
               id: 'manage-prisoner-whereabouts',
-              heading: 'Manage prisoner whereabouts',
+              heading: 'Prisoner whereabouts',
               description:
                 'View unlock lists, all appointments and COVID units, manage attendance and add bulk appointments.',
               href: '/manage-prisoner-whereabouts',
@@ -413,7 +413,7 @@ describe('Homepage', () => {
           tasks: [
             {
               id: 'manage-key-workers',
-              heading: 'Manage key workers',
+              heading: 'Key workers',
               description: 'Add and remove key workers from prisoners and manage individuals.',
               href: 'http://omic-url',
             },
@@ -449,7 +449,7 @@ describe('Homepage', () => {
             tasks: [
               {
                 description: 'Add and remove key workers from prisoners and manage individuals.',
-                heading: 'Manage key workers',
+                heading: 'Key workers',
                 href: undefined,
                 id: 'manage-key-workers',
               },
@@ -904,7 +904,7 @@ describe('Homepage', () => {
       config.app.keyworkerMaintenanceMode = true
     })
 
-    it('should not display manage prisoner whereabouts task if flag is true', async () => {
+    it('should not display prisoner whereabouts task if flag is true', async () => {
       await controller(req, res)
 
       expect(res.render).toHaveBeenCalledWith(
@@ -915,7 +915,7 @@ describe('Homepage', () => {
       )
     })
 
-    it('should not display manage key workers task if flag is true', async () => {
+    it('should not display key workers task if flag is true', async () => {
       await controller(req, res)
 
       expect(res.render).toHaveBeenCalledWith(
