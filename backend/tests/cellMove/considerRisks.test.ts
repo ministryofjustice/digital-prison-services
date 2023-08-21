@@ -12,6 +12,9 @@ describe('move validation', () => {
     getDetails: jest.fn(),
     getInmatesAtLocation: jest.fn(),
     getLocation: jest.fn(),
+  }
+
+  const nonAssociationsApi = {
     getNonAssociations: jest.fn(),
   }
 
@@ -34,6 +37,7 @@ describe('move validation', () => {
 
   const getCurrentOffenderDetailsResponse = {
     bookingId: 1234,
+    offenderNo: 'A12345',
     firstName: 'Test',
     lastName: 'User',
     csra: 'High',
@@ -321,7 +325,7 @@ describe('move validation', () => {
       .mockResolvedValueOnce(cellLocationData)
       .mockResolvedValueOnce(parentLocationData)
       .mockResolvedValueOnce(superParentLocationData)
-    prisonApi.getNonAssociations = jest.fn().mockResolvedValue({
+    nonAssociationsApi.getNonAssociations = jest.fn().mockResolvedValue({
       offenderNo: 'ABC123',
       firstName: 'Fred',
       lastName: 'Bloggs',
@@ -406,7 +410,7 @@ describe('move validation', () => {
 
     raiseAnalyticsEvent = jest.fn()
 
-    controller = considerRisksController({ prisonApi, raiseAnalyticsEvent })
+    controller = considerRisksController({ prisonApi, raiseAnalyticsEvent, nonAssociationsApi })
   })
 
   it('Makes the expected API calls on get', async () => {
@@ -419,7 +423,7 @@ describe('move validation', () => {
 
     expect(prisonApi.getDetails).toHaveBeenCalledWith(res.locals, offenderNo, true)
     expect(prisonApi.getDetails).toHaveBeenCalledWith(res.locals, 'A12346', true)
-    expect(prisonApi.getNonAssociations).toHaveBeenCalledWith(res.locals, 1234)
+    expect(nonAssociationsApi.getNonAssociations).toHaveBeenCalledWith(res.locals, offenderNo)
     expect(prisonApi.getLocation).toHaveBeenCalledWith(res.locals, 1)
     expect(prisonApi.getLocation).toHaveBeenCalledWith(res.locals, 2)
     expect(prisonApi.getLocation).toHaveBeenCalledWith(res.locals, 3)
@@ -663,13 +667,38 @@ describe('move validation', () => {
     })
 
     it('Redirects to confirm cell move when there are no warnings', async () => {
-      prisonApi.getNonAssociations = jest.fn().mockResolvedValue({})
+      nonAssociationsApi.getNonAssociations = jest.fn().mockResolvedValue({})
       prisonApi.getDetails = jest.fn().mockResolvedValue({ firstName: 'Bob', lastName: 'Doe', alerts: [] })
       prisonApi.getInmatesAtLocation.mockResolvedValue([])
 
       await controller.index(req, res)
 
       expect(res.redirect).toHaveBeenCalledWith('/prisoner/ABC123/cell-move/confirm-cell-move?cellId=1')
+    })
+
+    it('reception as a location has zero non-associations', async () => {
+      prisonApi.getLocation = jest.fn().mockResolvedValue({})
+      prisonApi.getInmatesAtLocation = jest.fn().mockResolvedValue([])
+      prisonApi.getDetails
+        .mockResolvedValueOnce({
+          ...getCurrentOffenderDetailsResponse,
+          csra: 'Standard',
+          csraClassificationCode: 'STANDARD',
+        })
+        .mockResolvedValueOnce({
+          ...getCurrentOccupierDetailsResponse,
+          csra: 'Standard',
+          csraClassificationCode: 'STANDARD',
+        })
+      prisonApi.getInmatesAtLocation.mockResolvedValue([{ offenderNo: 'A12346' }])
+      await controller.index(req, res)
+
+      expect(res.render).toHaveBeenCalledWith(
+        'cellMove/considerRisks.njk',
+        expect.objectContaining({
+          nonAssociations: [],
+        })
+      )
     })
   })
 

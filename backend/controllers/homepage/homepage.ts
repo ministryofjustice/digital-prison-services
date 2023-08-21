@@ -25,6 +25,7 @@ const {
     appointments,
     historicalPrisonerApplication,
     getSomeoneReadyForWork,
+    manageOffences,
   },
   app: { whereaboutsMaintenanceMode, keyworkerMaintenanceMode },
 } = config
@@ -79,8 +80,8 @@ const getTasks = ({ activeCaseLoadId, locations, staffId, whereaboutsConfig, key
     },
     {
       id: 'incentives',
-      heading: 'Manage incentives',
-      description: 'See prisoner incentive information by residential location and view incentive data visualisations.',
+      heading: 'Incentives',
+      description: 'Manage incentive level reviews by residential location and view incentives data charts.',
       href: incentives.ui_url,
       roles: null,
       enabled: () => incentives.ui_url && (userHasRoles(['MAINTAIN_INCENTIVE_LEVELS']) || locations?.length > 0),
@@ -294,26 +295,18 @@ const getTasks = ({ activeCaseLoadId, locations, staffId, whereaboutsConfig, key
     },
     {
       id: 'activities',
-      heading: 'Allocate people to activities',
-      description: 'Set up and edit activities. Allocate people, remove them, and edit allocations.',
+      heading: 'Allocate people, unlock and attend',
+      description:
+        'Create and edit activities. Log applications and manage waitlists. Allocate people and edit allocations. Print unlock lists and record attendance.',
       href: activities.url,
       enabled: () => activities.url && activities.enabled_prisons.split(',').includes(activeCaseLoadId),
     },
     {
       id: 'appointments',
       heading: 'Schedule and edit appointments',
-      description: 'Create one-to-one and group appointments. Edit existing appointments and print movement slips.',
+      description: 'Create and manage appointments. Print movement slips.',
       href: appointments.url,
       enabled: () => appointments.url && appointments.enabled_prisons.split(',').includes(activeCaseLoadId),
-    },
-    {
-      id: 'view-unaccounted-for',
-      heading: 'View prisoners unaccounted for',
-      description: 'View all prisoners not marked as attended or not attended.',
-      href: '/manage-prisoner-whereabouts/prisoners-unaccounted-for',
-      enabled: () =>
-        activities.enabled_prisons.split(',').includes(activeCaseLoadId) &&
-        appointments.enabled_prisons.split(',').includes(activeCaseLoadId),
     },
     {
       id: 'view-people-due-to-leave',
@@ -347,6 +340,13 @@ const getTasks = ({ activeCaseLoadId, locations, staffId, whereaboutsConfig, key
       description: 'Record what support a prisoner needs to get work. View who has been assessed as ready to work.',
       href: `${getSomeoneReadyForWork.ui_url}?sort=releaseDate&order=descending`,
       enabled: () => getSomeoneReadyForWork.ui_url && userHasRoles(['WORK_READINESS_VIEW', 'WORK_READINESS_EDIT']),
+    },
+    {
+      id: 'manage-offences',
+      heading: 'Manage offences',
+      description: 'This service allows you to maintain offence reference data.',
+      href: manageOffences.ui_url,
+      enabled: () => userHasRoles(['MANAGE_OFFENCES_ADMIN', 'UPDATE_OFFENCE_SCHEDULES', 'NOMIS_OFFENCE_ACTIVATOR']),
     },
   ]
 }

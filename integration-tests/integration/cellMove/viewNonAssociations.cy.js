@@ -1,6 +1,7 @@
 const moment = require('moment')
 
 const offenderBasicDetails = require('../../mockApis/responses/offenderBasicDetails.json')
+const offenderFullDetails = require('../../mockApis/responses/offenderFullDetails.json')
 const NonAssociationsPage = require('../../pages/cellMove/nonAssociationsPage')
 
 const offenderNo = 'A12345'
@@ -16,7 +17,37 @@ context('A user can view non associations', () => {
   beforeEach(() => {
     Cypress.Cookies.preserveOnce('hmpps-session-dev')
     cy.task('stubOffenderBasicDetails', offenderBasicDetails)
-    cy.task('stubBookingNonAssociations', {
+    cy.task('stubSpecificOffenderFullDetails', {
+      ...offenderFullDetails,
+      offenderNo,
+      assignedLivingUnit: {
+        agencyId: 'MDI',
+        locationId: 12345,
+        description: 'MDI-1-1-3',
+        agencyName: 'Moorland (HMP & YOI)',
+      },
+    })
+    cy.task('stubSpecificOffenderFullDetails', {
+      ...offenderFullDetails,
+      offenderNo: 'ABC124',
+      assignedLivingUnit: {
+        agencyId: 'MDI',
+        locationId: 12345,
+        description: 'MDI-2-1-2',
+        agencyName: 'Moorland (HMP & YOI)',
+      },
+    })
+    cy.task('stubSpecificOffenderFullDetails', {
+      ...offenderFullDetails,
+      offenderNo: 'ABC125',
+      assignedLivingUnit: {
+        agencyId: 'MDI',
+        locationId: 12345,
+        description: 'MDI-2-1-3',
+        agencyName: 'Moorland (HMP & YOI)',
+      },
+    })
+    cy.task('stubOffenderNonAssociations', {
       offenderNo: 'A12345',
       firstName: 'John',
       lastName: 'Smith',

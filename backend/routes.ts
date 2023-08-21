@@ -86,7 +86,7 @@ const isCreateIndividualAppointmentRolledOut = (req, res, next) => {
   const { activeCaseLoadId } = req.session.userDetails
   if (appointments.enabled_prisons.split(',').includes(activeCaseLoadId)) {
     const { offenderNo } = req.params
-    res.redirect(`${appointments.url}/create/start-individual?prisonNumber=${offenderNo}`)
+    res.redirect(`${appointments.url}/create/start-prisoner/${offenderNo}`)
   } else {
     next()
   }
@@ -98,6 +98,7 @@ const setup = ({
   prisonApi,
   whereaboutsApi,
   oauthApi,
+  hmppsManageUsersApi,
   communityApi,
   dataComplianceApi,
   keyworkerApi,
@@ -109,7 +110,9 @@ const setup = ({
   complexityApi,
   curiousApi,
   incentivesApi,
+  nonAssociationsApi,
   restrictedPatientApi,
+  adjudicationsApi,
   whereaboutsMaintenanceMode,
 }) => {
   router.use(async (req, res, next) => {
@@ -130,18 +133,21 @@ const setup = ({
     })
   )
 
-  router.get('/edit-alert', alertFactory(oauthApi, prisonApi, referenceCodesService(prisonApi)).displayEditAlertPage)
+  router.get(
+    '/edit-alert',
+    alertFactory(oauthApi, hmppsManageUsersApi, prisonApi, referenceCodesService(prisonApi)).displayEditAlertPage
+  )
   router.post(
     '/edit-alert/:bookingId/:alertId',
-    alertFactory(oauthApi, prisonApi, referenceCodesService(prisonApi)).handleEditAlertForm
+    alertFactory(oauthApi, hmppsManageUsersApi, prisonApi, referenceCodesService(prisonApi)).handleEditAlertForm
   )
   router.get(
     '/offenders/:offenderNo/create-alert',
-    alertFactory(oauthApi, prisonApi, referenceCodesService(prisonApi)).displayCreateAlertPage
+    alertFactory(oauthApi, hmppsManageUsersApi, prisonApi, referenceCodesService(prisonApi)).displayCreateAlertPage
   )
   router.post(
     '/offenders/:offenderNo/create-alert',
-    alertFactory(oauthApi, prisonApi, referenceCodesService(prisonApi)).handleCreateAlertForm
+    alertFactory(oauthApi, hmppsManageUsersApi, prisonApi, referenceCodesService(prisonApi)).handleCreateAlertForm
   )
   router.use(
     '/prisoner/:offenderNo/add-case-note',
@@ -158,18 +164,20 @@ const setup = ({
     router.get(
       '/manage-prisoner-whereabouts/attendance-reason-statistics',
       isActivitiesRolledOut,
-      attendanceStatisticsFactory(oauthApi, prisonApi, whereaboutsApi).attendanceStatistics
+      attendanceStatisticsFactory(oauthApi, hmppsManageUsersApi, prisonApi, whereaboutsApi).attendanceStatistics
     )
     router.get(
       '/manage-prisoner-whereabouts/attendance-reason-statistics/reason/:reason',
       isActivitiesRolledOut,
-      attendanceStatisticsFactory(oauthApi, prisonApi, whereaboutsApi).attendanceStatisticsOffendersList
+      attendanceStatisticsFactory(oauthApi, hmppsManageUsersApi, prisonApi, whereaboutsApi)
+        .attendanceStatisticsOffendersList
     )
 
     router.get(
       '/manage-prisoner-whereabouts/attendance-reason-statistics/suspended',
       isActivitiesRolledOut,
-      attendanceStatisticsFactory(oauthApi, prisonApi, whereaboutsApi).attendanceStatisticsSuspendedList
+      attendanceStatisticsFactory(oauthApi, hmppsManageUsersApi, prisonApi, whereaboutsApi)
+        .attendanceStatisticsSuspendedList
     )
 
     router.get(
@@ -198,12 +206,14 @@ const setup = ({
   router.get(
     '/offenders/:offenderNo/probation-documents',
     asyncMiddleware(
-      probationDocumentsFactory(oauthApi, prisonApi, communityApi, systemOauthClient).displayProbationDocumentsPage
+      probationDocumentsFactory(oauthApi, hmppsManageUsersApi, prisonApi, communityApi, systemOauthClient)
+        .displayProbationDocumentsPage
     )
   )
   router.get(
     '/offenders/:offenderNo/probation-documents/:documentId/download',
-    downloadProbationDocumentFactory(oauthApi, communityApi, systemOauthClient, prisonApi).downloadDocument
+    downloadProbationDocumentFactory(oauthApi, hmppsManageUsersApi, communityApi, systemOauthClient, prisonApi)
+      .downloadDocument
   )
 
   router.get('/bulk-appointments/need-to-upload-file', isAppointmentsRolledOut, async (req, res) => {
@@ -275,7 +285,14 @@ const setup = ({
     router.use(
       '/offenders/:offenderNo/prepost-appointments',
       isAppointmentsRolledOut,
-      prepostAppointmentRouter({ prisonApi, logError, oauthApi, whereaboutsApi, notifyClient, raiseAnalyticsEvent })
+      prepostAppointmentRouter({
+        prisonApi,
+        logError,
+        hmppsManageUsersApi,
+        whereaboutsApi,
+        notifyClient,
+        raiseAnalyticsEvent,
+      })
     )
   }
 
@@ -303,6 +320,7 @@ const setup = ({
       prisonApi,
       whereaboutsApi,
       caseNotesApi,
+      nonAssociationsApi,
       logError,
     })
   )
@@ -324,6 +342,7 @@ const setup = ({
       prisonApi,
       keyworkerApi,
       oauthApi,
+      hmppsManageUsersApi,
       caseNotesApi,
       allocationManagerApi,
       systemOauthClient,
@@ -337,6 +356,7 @@ const setup = ({
       curiousApi,
       incentivesApi,
       restrictedPatientApi,
+      adjudicationsApi,
     })
   )
 

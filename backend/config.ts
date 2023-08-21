@@ -30,6 +30,13 @@ export const app = {
     url: process.env.PRISONER_PROFILE_REDIRECT_URL,
     enabledDate: parseDate(process.env.PRISONER_PROFILE_REDIRECT_ENABLED_DATE),
     enabledPrisons: process.env.PRISONER_PROFILE_REDIRECT_ENABLED_PRISONS || '',
+    scheduleRedirectForPrisons: process.env.PRISONER_PROFILE_SCHEDULE_REDIRECT_FOR_PRISONS || '',
+  },
+  homepageRedirect: {
+    url: process.env.HOMEPAGE_REDIRECT_URL,
+    enabledDate: parseDate(process.env.HOMEPAGE_REDIRECT_ENABLED_DATE),
+    enabledPrisons: process.env.HOMEPAGE_REDIRECT_ENABLED_PRISONS || '',
+    scheduleRedirectForPrisons: process.env.HOMEPAGE_SCHEDULE_REDIRECT_FOR_PRISONS || '',
   },
 }
 
@@ -81,6 +88,10 @@ export const apis = {
     systemClientId: process.env.API_SYSTEM_CLIENT_ID || 'prisonstaffhubclient',
     systemClientSecret: process.env.API_SYSTEM_CLIENT_SECRET || 'clientsecret',
   },
+  hmppsManageUsers: {
+    url: process.env.HMPPS_MANAGE_USERS_API_URL || 'http://localhost:8080/',
+    timeoutSeconds: toNumber(process.env.API_ENDPOINT_TIMEOUT_SECONDS) || 30,
+  },
   prisonApi: {
     url: process.env.API_ENDPOINT_URL || 'http://localhost:8080/',
     timeoutSeconds: toNumber(process.env.API_ENDPOINT_TIMEOUT_SECONDS) || 30,
@@ -101,6 +112,10 @@ export const apis = {
   incentivesApi: {
     url: process.env.INCENTIVES_API_ENDPOINT_URL || 'http://localhost:8087',
     timeoutSeconds: toNumber(process.env.INCENTIVES_API_ENDPOINT_TIMEOUT_SECONDS) || 30,
+  },
+  nonAssociationsApi: {
+    url: process.env.NON_ASSOCIATIONS_API_ENDPOINT_URL || 'http://localhost:8088',
+    timeoutSeconds: toNumber(process.env.NON_ASSOCIATIONS_API_ENDPOINT_TIMEOUT_SECONDS) || 30,
   },
   keyworker: {
     url: process.env.KEYWORKER_API_URL || 'http://localhost:8081/',
@@ -218,6 +233,13 @@ export const apis = {
   manageWarrantFolder: {
     ui_url: process.env.WARRANT_FOLDER_URL,
   },
+  manageOffences: {
+    ui_url: process.env.MANAGE_OFFENCES_URL,
+  },
+  adjudicationsApi: {
+    url: process.env.MANAGE_ADJUDICATIONS_API_URL || 'http://localhost:8087',
+    timeoutSeconds: toNumber(process.env.MANAGE_ADJUDICATIONS_API_ENDPOINT_TIMEOUT_SECONDS) || 30,
+  },
 }
 export const notifications = {
   enabled: process.env.NOTIFY_ENABLED ? process.env.NOTIFY_ENABLED === 'true' : true,
@@ -259,6 +281,12 @@ export const notifications = {
     },
     BZI: {
       omu: process.env.BRONZEFIELD_OMU_EMAIL,
+    },
+    PVI: {
+      omu: process.env.PENTONVILLE_OMU_EMAIL,
+    },
+    EXI: {
+      omu: process.env.EXETER_OMU_EMAIL,
     },
   },
 }

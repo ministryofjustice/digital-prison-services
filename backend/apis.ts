@@ -17,6 +17,9 @@ import { socApiFactory } from './api/socApi'
 import { offenderSearchApiFactory } from './api/offenderSearchApi'
 import { complexityApiFactory } from './api/complexityApi'
 import { incentivesApiFactory } from './api/incentivesApi'
+import { nonAssociationsApiFactory } from './api/nonAssociationsApi'
+import { hmppsManageUsersApiFactory } from './api/hmppsManageUsersApi'
+import { adjudicationsApiFactory } from './api/adjudicationsApi'
 
 export const prisonApi = prisonApiFactory(
   clientFactory({
@@ -46,6 +49,13 @@ export const oauthApi = oauthApiFactory(
     timeout: config.apis.oauth2.timeoutSeconds * 1000,
   }),
   { ...config.apis.oauth2 }
+)
+
+export const hmppsManageUsersApi = hmppsManageUsersApiFactory(
+  clientFactory({
+    baseUrl: config.apis.hmppsManageUsers.url,
+    timeout: config.apis.hmppsManageUsers.timeoutSeconds * 1000,
+  })
 )
 
 export const dataComplianceApi = dataComplianceApiFactory(
@@ -125,12 +135,27 @@ export const incentivesApi = incentivesApiFactory(
   })
 )
 
+export const nonAssociationsApi = nonAssociationsApiFactory(
+  clientFactory({
+    baseUrl: config.apis.nonAssociationsApi.url,
+    timeout: config.apis.nonAssociationsApi.timeoutSeconds * 1000,
+  })
+)
+
+export const adjudicationsApi = adjudicationsApiFactory(
+  clientFactory({
+    baseUrl: config.apis.adjudicationsApi.url,
+    timeout: config.apis.adjudicationsApi.timeoutSeconds * 1000,
+  })
+)
+
 export const curiousApi = CuriousApi.create(clientFactory({ baseUrl: config.apis.curious.url }))
 
 export default {
   prisonApi,
   whereaboutsApi,
   oauthApi,
+  hmppsManageUsersApi,
   communityApi,
   dataComplianceApi,
   keyworkerApi,
@@ -143,5 +168,7 @@ export default {
   complexityApi,
   curiousApi,
   incentivesApi,
+  nonAssociationsApi,
   restrictedPatientApi,
+  adjudicationsApi,
 }

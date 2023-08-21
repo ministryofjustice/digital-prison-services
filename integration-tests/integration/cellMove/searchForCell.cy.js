@@ -15,7 +15,7 @@ context('A user can search for a cell', () => {
   beforeEach(() => {
     Cypress.Cookies.preserveOnce('hmpps-session-dev')
     cy.task('stubOffenderFullDetails', offenderFullDetails)
-    cy.task('stubBookingNonAssociations', {})
+    cy.task('stubOffenderNonAssociations', {})
     cy.task('stubGroups', { id: 'MDI' })
     cy.task('stubUserCaseLoads')
   })
@@ -78,15 +78,24 @@ context('A user can search for a cell', () => {
             assessmentDescription: 'CSR',
           },
         ],
+        assignedLivingUnit: {
+          agencyId: 'MDI',
+          locationId: 12345,
+          description: 'HMP Moorland',
+          agencyName: 'Moorland (HMP & YOI)',
+        },
       })
-      cy.task('stubBookingNonAssociations', {
+      cy.task('stubOffenderNonAssociations', {
         agencyDescription: 'HMP Moorland',
+        offenderNo: 'G3878UK',
         nonAssociations: [
           {
             effectiveDate: moment(),
             expiryDate: moment().add(2, 'days'),
             offenderNonAssociation: {
               agencyDescription: 'HMP Moorland',
+              assignedLivingUnitDescription: 'HMP Moorland',
+              offenderNo: 'G3878UK',
             },
           },
         ],

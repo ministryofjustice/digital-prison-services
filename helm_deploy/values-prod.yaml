@@ -11,6 +11,7 @@ generic-service:
    HMPPS_COOKIE_DOMAIN: digital.prison.service.justice.gov.uk
    API_ENDPOINT_URL: https://api.prison.service.justice.gov.uk/
    OAUTH_ENDPOINT_URL: https://sign-in.hmpps.service.justice.gov.uk/auth/
+   HMPPS_MANAGE_USERS_API_URL: https://manage-users-api.hmpps.service.justice.gov.uk
    API_WHEREABOUTS_ENDPOINT_URL: https://whereabouts-api.service.justice.gov.uk/
    LICENCES_URL: https://licences.prison.service.justice.gov.uk/
    HMPPS_COOKIE_NAME: hmpps-session-preprod
@@ -22,6 +23,7 @@ generic-service:
    CHECK_MY_DIARY_URL: https://checkmydiary.service.justice.gov.uk?fromDPS=true
    INCENTIVES_URL: https://incentives-ui.hmpps.service.justice.gov.uk
    INCENTIVES_API_ENDPOINT_URL: https://incentives-api.hmpps.service.justice.gov.uk
+   NON_ASSOCIATIONS_API_ENDPOINT_URL: https://non-associations-api.hmpps.service.justice.gov.uk
    TOKENVERIFICATION_API_URL: https://token-verification-api.prison.service.justice.gov.uk
    CASENOTES_API_URL: https://offender-case-notes.service.justice.gov.uk/
    ALLOCATION_MANAGER_ENDPOINT_URL: https://moic.service.justice.gov.uk/
@@ -39,7 +41,7 @@ generic-service:
    PECS_URL: https://bookasecuremove.service.justice.gov.uk
    COMPLEXITY_OF_NEED_URI: https://complexity-of-need.hmpps.service.justice.gov.uk
    PRISONS_WITH_OFFENDERS_THAT_HAVE_COMPLEX_NEEDS: "AGI,BZI,DHI,DWI,ESI,EWI,FHI,LNI,NHI,PFI,SDI,STI"
-   PRISONS_WITH_MANAGE_ADJUDICATIONS_ENABLED: "RNI,WLI,MDI,EXI,BXI,PVI,NHI,DMI,BLI,LFI,NSI,SWI,BNI,STI,SPI,SUI,BSI"
+   PRISONS_WITH_MANAGE_ADJUDICATIONS_ENABLED: "RNI,WLI,MDI,EXI,BXI,PVI,NHI,DMI,BLI,LFI,NSI,SWI,BNI,STI,SPI,SUI,BSI,LWI"
    MANAGE_ADJUDICATIONS_URL: https://manage-adjudications.hmpps.service.justice.gov.uk/
    MANAGE_RESTRICTED_PATIENTS_URL: https://manage-restricted-patients.hmpps.service.justice.gov.uk/
    ESWE_ENABLED: true
@@ -57,9 +59,9 @@ generic-service:
    MERCURY_SUBMIT_PRIVATE_BETA_URL: https://submit-a-mercury-report.hmpps.service.justice.gov.uk/
    MERCURY_SUBMIT_PRIVATE_BETA_ENABLED_DATE: 2023-07-04T02:00:00
    MERCURY_SUBMIT_PRIVATE_BETA_ENABLED_PRISONS: "LNI,FHI,BZI,SDI,GTI,BAI,MRI,NMI,RNI,SUI,SKI"
-   MERCURY_SUBMIT_LIVE_ENABLED_DATE: 2023-07-19T02:00:00
+   MERCURY_SUBMIT_LIVE_ENABLED_DATE: 2023-07-26T02:00:00
    CREATE_AND_VARY_A_LICENCE_URL: https://create-and-vary-a-licence.hmpps.service.justice.gov.uk/
-   CREATE_AND_VARY_A_LICENCE_ENABLED_PRISONS: "ACI,AGI,ASI,AYI,BAI,BCI,BFI,BLI,BMI,BNI,BRI,BSI,BWI,BXI,BZI,CDI,CFI,CKI,CLI,CWI,DAI,DGI,DHI,DMI,DNI,DTI,DWI,EEI,EHI,ESI,EWI,EXI,EYI,FBI,FDI,FHI,FKI,FMI,FNI,FSI,FWI,GHI,GMI,GNI,HBI,HCI,HDI,HEI,HHI,HII,HLI,HMI,HOI,HPI,HVI,ISI,IWI,KMI,KVI,LCI,LEI,LFI,LGI,LHI,LII,LLI,LNI,LPI,LTI,LWI,LYI,MDI,MHI,MRI,MSI,MTI,NHI,NLI,NMI,NSI,NWI,ONI,OWI,PBI,PDI,PFI,PNI,PRI,PVI,RCI,RHI,RNI,RSI,SDI,SFI,SHI,SKI,SLI,SNI,SPI,STI,SUI,SWI,TCI,TSI,UKI,UPI,VEI,WCI,WDI,WEI,WHI,WII,WLI,WMI,WRI,WSI,WTI,WWI"
+   CREATE_AND_VARY_A_LICENCE_ENABLED_PRISONS: "ACI,AGI,ASI,AYI,BAI,BCI,BFI,BLI,BMI,BNI,BRI,BSI,BWI,BXI,BZI,CDI,CFI,CKI,CLI,CWI,DAI,DGI,DHI,DMI,DNI,DTI,DWI,EEI,EHI,ESI,EWI,EXI,EYI,FBI,FDI,FEI,FHI,FKI,FMI,FNI,FSI,FWI,GHI,GMI,GNI,HBI,HCI,HDI,HEI,HHI,HII,HLI,HMI,HOI,HPI,HVI,ISI,IWI,KMI,KVI,LCI,LEI,LFI,LGI,LHI,LII,LLI,LNI,LPI,LTI,LWI,LYI,MDI,MHI,MRI,MSI,MTI,NHI,NLI,NMI,NSI,NWI,ONI,OWI,PBI,PDI,PFI,PNI,PRI,PVI,RCI,RHI,RNI,RSI,SDI,SFI,SHI,SKI,SLI,SNI,SPI,STI,SUI,SWI,TCI,TSI,UKI,UPI,VEI,WCI,WDI,WEI,WHI,WII,WLI,WMI,WRI,WSI,WTI,WWI"
    ACTIVITIES_URL: https://activities.prison.service.justice.gov.uk/activities
    ACTIVITIES_ENABLED_PRISONS: ""
    APPOINTMENTS_URL: https://activities.prison.service.justice.gov.uk/appointments
@@ -71,8 +73,15 @@ generic-service:
    GET_SOMEONE_READY_FOR_WORK_URL: https://get-ready-for-work.hmpps.service.justice.gov.uk
    WARRANT_FOLDER_URL: https://manage-a-warrant-folder.hmpps.service.justice.gov.uk/
    PRISONER_PROFILE_REDIRECT_URL: https://prisoner.digital.prison.service.justice.gov.uk
-   PRISONER_PROFILE_REDIRECT_ENABLED_DATE: 2023-06-12T02:00:00
-   PRISONER_PROFILE_REDIRECT_ENABLED_PRISONS: LEI
+   PRISONER_PROFILE_REDIRECT_ENABLED_DATE: 2023-08-14T02:00:00
+   PRISONER_PROFILE_REDIRECT_ENABLED_PRISONS: "LEI,FNI,HMI,NHI"
+   PRISONER_PROFILE_SCHEDULE_REDIRECT_FOR_PRISONS: "HMI,NHI"
+   HOMEPAGE_REDIRECT_URL: http://dps.prison.service.justice.gov.uk
+   HOMEPAGE_REDIRECT_ENABLED_DATE: 2023-07-24T02:00:00
+   HOMEPAGE_REDIRECT_ENABLED_PRISONS: ""
+   HOMEPAGE_SCHEDULE_REDIRECT_FOR_PRISONS: ""
+   MANAGE_OFFENCES_URL: https://manage-offences.hmpps.service.justice.gov.uk
+   MANAGE_ADJUDICATIONS_API_URL: https://manage-adjudications-api.hmpps.service.justice.gov.uk
 
   allowlist:
    office: "217.33.148.210/32"

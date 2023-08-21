@@ -6,7 +6,7 @@ const url = 'http://localhost:8080'
 
 describe('Prison Api', () => {
   const client = clientFactory({ baseUrl: url, timeout: 2000 })
-  const prisonAPi = prisonApiFactory(client)
+  const prisonApi = prisonApiFactory(client)
   const mock = nock(url)
 
   beforeEach(() => {
@@ -30,7 +30,7 @@ describe('Prison Api', () => {
         releaseEvents: [],
       })
 
-    const response = await prisonAPi.getTransfers(
+    const response = await prisonApi.getTransfers(
       {},
       {
         agencyId: 'MDI',
@@ -66,7 +66,7 @@ describe('Prison Api', () => {
         },
       ])
 
-    const response = await prisonAPi.getAlertsForLatestBooking(
+    const response = await prisonApi.getAlertsForLatestBooking(
       {},
       {
         offenderNo: 'AA1234A',

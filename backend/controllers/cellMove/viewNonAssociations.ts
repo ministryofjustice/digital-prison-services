@@ -1,28 +1,28 @@
 import moment from 'moment'
 import { putLastNameFirst, formatName } from '../../utils'
-import { getBackLinkData, getNonAssocationsInEstablishment } from './cellMoveUtils'
+import { getBackLinkData, getNonAssociationsInEstablishment } from './cellMoveUtils'
 
-export default ({ prisonApi, logError }) =>
+export default ({ prisonApi, nonAssociationsApi }) =>
   async (req, res) => {
     const { offenderNo } = req.params
 
     try {
-      const { bookingId, firstName, lastName } = await prisonApi.getDetails(res.locals, offenderNo)
-      const nonAssociations = await prisonApi.getNonAssociations(res.locals, bookingId)
+      const { firstName, lastName } = await prisonApi.getDetails(res.locals, offenderNo)
+      const nonAssociations = await nonAssociationsApi.getNonAssociations(res.locals, offenderNo)
 
       // Only show active non-associations in the same establishment
       // Active means the effective date is not in the future and the expiry date is not in the past
-      const sortedNonAssocationsInEstablishment = getNonAssocationsInEstablishment(nonAssociations).sort(
-        (left, right) => {
-          if (left.effectiveDate < right.effectiveDate) return 1
-          if (right.effectiveDate < left.effectiveDate) return -1
-          if (left.offenderNonAssociation.lastName > right.offenderNonAssociation.lastName) return 1
-          if (right.offenderNonAssociation.lastName > left.offenderNonAssociation.lastName) return -1
-          return 0
-        }
-      )
+      const sortedNonAssociationsInEstablishment = (
+        await getNonAssociationsInEstablishment(nonAssociations, res.locals, prisonApi)
+      ).sort((left, right) => {
+        if (left.effectiveDate < right.effectiveDate) return 1
+        if (right.effectiveDate < left.effectiveDate) return -1
+        if (left.offenderNonAssociation.lastName > right.offenderNonAssociation.lastName) return 1
+        if (right.offenderNonAssociation.lastName > left.offenderNonAssociation.lastName) return -1
+        return 0
+      })
 
-      const nonAssociationsRows = sortedNonAssocationsInEstablishment?.map((nonAssociation) => ({
+      const nonAssociationsRows = sortedNonAssociationsInEstablishment?.map((nonAssociation) => ({
         name: putLastNameFirst(
           nonAssociation.offenderNonAssociation.firstName,
           nonAssociation.offenderNonAssociation.lastName

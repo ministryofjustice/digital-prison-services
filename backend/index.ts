@@ -18,9 +18,9 @@ import setupWebSecurity from './setupWebSecurity'
 import setupAuth from './setupAuth'
 import {
   clientCredsSetup,
-  getTokenStore,
-  getSystemOauthApiClient,
   enableLogDebugStatements,
+  getSystemOauthApiClient,
+  getTokenStore,
 } from './api/systemOauthClient'
 import setupStaticContent from './setupStaticContent'
 import nunjucksSetup from './utils/nunjucksSetup'
@@ -35,7 +35,7 @@ import errorHandler from './middleware/errorHandler'
 import { logError } from './logError'
 import homepageController from './controllers/homepage/homepage'
 import requestLimiter from './middleware/requestLimiter'
-import useNewProfile from './middleware/useNewProfile'
+import homepageRedirect from './controllers/homepage/homepageRedirect'
 
 // We do not want the server to exit, partly because any log information will be lost.
 // Instead, log the error so we can trace, diagnose and fix the problem.
@@ -64,7 +64,7 @@ app.use(setupStaticContent())
 app.use(setupWebSession())
 app.use(setupAuth({ oauthApi: apis.oauthApi, tokenVerificationApi: apis.tokenVerificationApi }))
 
-app.use(currentUser({ prisonApi: apis.prisonApi, oauthApi: apis.oauthApi }))
+app.use(currentUser({ prisonApi: apis.prisonApi, hmppsManageUsersApi: apis.hmppsManageUsersApi }))
 app.use(returnUrl())
 
 if (!config.app.disableWebpack) {
@@ -79,6 +79,7 @@ app.use(
     prisonApi: apis.prisonApi,
     whereaboutsApi: apis.whereaboutsApi,
     oauthApi: apis.oauthApi,
+    hmppsManageUsersApi: apis.hmppsManageUsersApi,
     caseNotesApi: apis.caseNotesApi,
   })
 )
@@ -95,6 +96,7 @@ app.use(
     prisonApi: apis.prisonApi,
     whereaboutsApi: apis.whereaboutsApi,
     oauthApi: apis.oauthApi,
+    hmppsManageUsersApi: apis.hmppsManageUsersApi,
     communityApi: apis.communityApi,
     dataComplianceApi: apis.dataComplianceApi,
     keyworkerApi: apis.keyworkerApi,
@@ -106,13 +108,14 @@ app.use(
     complexityApi: apis.complexityApi,
     curiousApi: apis.curiousApi,
     incentivesApi: apis.incentivesApi,
+    nonAssociationsApi: apis.nonAssociationsApi,
     restrictedPatientApi: apis.restrictedPatientApi,
+    adjudicationsApi: apis.adjudicationsApi,
     whereaboutsMaintenanceMode: config.app.whereaboutsMaintenanceMode,
   })
 )
-
 app.use(setupReactRoutes())
-app.use('/$', homepageController({ ...apis, logError }))
+app.use('/$', homepageRedirect(homepageController({ ...apis, logError })))
 app.use(pageNotFound)
 app.use(errorHandler({ logError }))
 

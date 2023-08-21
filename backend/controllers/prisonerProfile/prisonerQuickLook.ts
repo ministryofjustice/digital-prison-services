@@ -75,7 +75,7 @@ export default ({
     incentivesApi,
     oauthApi,
     restrictedPatientApi,
-    logError,
+    adjudicationsApi,
   }: {
     prisonerProfileService
     prisonApi
@@ -84,7 +84,7 @@ export default ({
     incentivesApi: typeof apis.incentivesApi
     oauthApi
     restrictedPatientApi
-    logError
+    adjudicationsApi
   }) =>
   async (req, res) => {
     const {
@@ -101,6 +101,7 @@ export default ({
       systemOauthClient,
       restrictedPatientApi,
     })
+    const systemContext = await systemOauthClient.getClientCredentialsTokens(username)
     const details = await getDetails({ context, prisonApi, res, offenderNo })
     const { bookingId } = details || {}
 
@@ -130,7 +131,7 @@ export default ({
         incentivesApi.getIepSummaryForBooking(context, bookingId),
         prisonApi.getPositiveCaseNotes(context, bookingId, dateThreeMonthsAgo, today),
         prisonApi.getNegativeCaseNotes(context, bookingId, dateThreeMonthsAgo, today),
-        prisonApi.getAdjudicationsForBooking(context, bookingId),
+        adjudicationsApi.getAdjudicationsForBooking(systemContext, bookingId),
         prisonApi.getVisitsSummary(context, bookingId),
         prisonApi.getPrisonerVisitBalances(context, offenderNo),
         prisonApi.getEventsForToday(context, bookingId),

@@ -15,14 +15,16 @@ const prisonApi = {
   createAlert: jest.fn(),
 }
 const oauthApi = {
-  currentUser: jest.fn(),
   userRoles: jest.fn(),
+}
+const hmppsManageUsersApi = {
+  currentUser: jest.fn(),
 }
 const referenceCodesService = {
   getAlertTypes: jest.fn(),
 }
 const { handleCreateAlertForm, displayCreateAlertPage, displayEditAlertPage, handleEditAlertForm } =
-  alertController.alertFactory(oauthApi, prisonApi, referenceCodesService)
+  alertController.alertFactory(oauthApi, hmppsManageUsersApi, prisonApi, referenceCodesService)
 
 jest.mock('../raiseAnalyticsEvent', () => ({
   raiseAnalyticsEvent: jest.fn(),
@@ -92,7 +94,7 @@ describe('alert management', () => {
       headers: {},
     }
     prisonApi.getDetails = jest.fn().mockReturnValue(getDetailsResponse)
-    oauthApi.currentUser = jest.fn().mockReturnValue({ name: 'Test User' })
+    hmppsManageUsersApi.currentUser = jest.fn().mockReturnValue({ name: 'Test User' })
     prisonApi.userCaseLoads = jest.fn().mockReturnValue([
       {
         caseLoadId: 'AKI',

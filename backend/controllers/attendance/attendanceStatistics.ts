@@ -187,14 +187,17 @@ const getSubheading = ({ fromDate, toDate, displayPeriod }) => {
   )}  - ${displayPeriod}`
 }
 
-export const attendanceStatisticsFactory = (oauthApi, prisonApi, whereaboutsApi) => {
+export const attendanceStatisticsFactory = (oauthApi, hmppsManageUsersApi, prisonApi, whereaboutsApi) => {
   const attendanceStatistics = async (req, res) => {
     const currentPeriod = getCurrentPeriod(moment().format())
 
     const { agencyId, fromDate, toDate } = req.query || {}
     const period = (req.query && req.query.period) || currentPeriod
     const roles = oauthApi.userRoles(res.locals)
-    const [user, caseloads] = await Promise.all([oauthApi.currentUser(res.locals), prisonApi.userCaseLoads(res.locals)])
+    const [user, caseloads] = await Promise.all([
+      hmppsManageUsersApi.currentUser(res.locals),
+      prisonApi.userCaseLoads(res.locals),
+    ])
 
     const { activeCaseLoad, inactiveCaseLoads, activeCaseLoadId } = extractCaseLoadInfo(caseloads)
 
@@ -276,7 +279,7 @@ export const attendanceStatisticsFactory = (oauthApi, prisonApi, whereaboutsApi)
     try {
       const roles = oauthApi.userRoles(res.locals)
       const [user, caseloads] = await Promise.all([
-        oauthApi.currentUser(res.locals),
+        hmppsManageUsersApi.currentUser(res.locals),
         prisonApi.userCaseLoads(res.locals),
       ])
 
@@ -344,7 +347,10 @@ export const attendanceStatisticsFactory = (oauthApi, prisonApi, whereaboutsApi)
     const currentPeriod = getCurrentPeriod(moment().format())
     const today = moment().format('DD/MM/YYYY')
     const roles = oauthApi.userRoles(res.locals)
-    const [user, caseloads] = await Promise.all([oauthApi.currentUser(res.locals), prisonApi.userCaseLoads(res.locals)])
+    const [user, caseloads] = await Promise.all([
+      hmppsManageUsersApi.currentUser(res.locals),
+      prisonApi.userCaseLoads(res.locals),
+    ])
 
     const { activeCaseLoad, activeCaseLoadId } = extractCaseLoadInfo(caseloads)
 

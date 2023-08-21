@@ -29,7 +29,12 @@ context('A user can select a cell', () => {
   })
   beforeEach(() => {
     Cypress.Cookies.preserveOnce('hmpps-session-dev')
-    cy.task('stubOffenderFullDetails', offenderFullDetails)
+    ;['A12345', 'G6123VU'].forEach((anotherOffenderNo) => {
+      cy.task('stubSpecificOffenderFullDetails', {
+        ...offenderFullDetails,
+        offenderNo: anotherOffenderNo,
+      })
+    })
     cy.task('stubGroups', { id: 'MDI' })
     cy.task('stubCellAttributes')
     cy.task('stubInmatesAtLocation', {
@@ -50,7 +55,7 @@ context('A user can select a cell', () => {
         },
       ],
     })
-    cy.task('stubBookingNonAssociations', {
+    cy.task('stubOffenderNonAssociations', {
       offenderNo: 'G6123VU',
       firstName: 'JOHN',
       lastName: 'SAUNDERS',
@@ -230,7 +235,7 @@ context('A user can select a cell', () => {
     })
 
     it('should NOT show the non association warning', () => {
-      cy.task('stubBookingNonAssociations', null)
+      cy.task('stubOffenderNonAssociations', null)
       const page = SelectCellPage.goTo(offenderNo)
       page.nonAssociationWarning().should('not.exist')
     })

@@ -177,7 +177,10 @@ export const prisonApiFactory = (client) => {
     )
   }
 
-  const getAlertsForLatestBooking = (context, { offenderNo, alertCodes, sortBy, sortDirection }): Array<AlertDetails> =>
+  const getAlertsForLatestBooking = (
+    context,
+    { offenderNo, alertCodes, sortBy, sortDirection }
+  ): Promise<AlertDetails[]> =>
     get(
       context,
       `/api/offenders/${offenderNo}/bookings/latest/alerts?alertCodes=${alertCodes.toString()}&sort=${sortBy}&direction=${sortDirection}`
@@ -277,32 +280,6 @@ export const prisonApiFactory = (client) => {
 
   const getMovementReasons = (context) => get(context, '/api/reference-domains/domains/MOVE_RSN', 1000)
 
-  const getAdjudications = async (context, offenderNumber, params, pageOffset, pageLimit) => {
-    contextProperties.setCustomRequestHeaders(context, {
-      'page-offset': pageOffset || 0,
-      'page-limit': pageLimit || 10,
-    })
-
-    const response = await get(
-      context,
-      `/api/offenders/${offenderNumber}/adjudications${params && `?${mapToQueryString(params)}`}`
-    )
-
-    return {
-      ...response,
-      pagination: {
-        pageOffset: context.responseHeaders['page-offset'],
-        pageLimit: context.responseHeaders['page-limit'],
-        totalRecords: context.responseHeaders['total-records'],
-      },
-    }
-  }
-
-  const getAdjudicationDetails = (context, offenderNumber, adjudicationNumber) =>
-    get(context, `/api/offenders/${offenderNumber}/adjudications/${adjudicationNumber}`)
-
-  const getAdjudicationsForBooking = (context, bookingId) => get(context, `/api/bookings/${bookingId}/adjudications`)
-
   const addAppointments = (context, body) => post(context, '/api/appointments', body)
 
   const addSingleAppointment = (context, bookingId, body) =>
@@ -321,7 +298,7 @@ export const prisonApiFactory = (client) => {
   const getAlert = (context, bookingId, alertId) => get(context, `/api/bookings/${bookingId}/alerts/${alertId}`)
 
   const updateAlert = (context, bookingId, alertId, body) =>
-    put(context, `/api/bookings/${bookingId}/alert/${alertId}`, body)
+    put(context, `/api/bookings/${bookingId}/alert/${alertId}?lockTimeout=true`, body)
 
   const getOffenderSummaries = (context, offenderNo) => {
     return get(context, `/api/bookings/v2?${arrayToQueryString(offenderNo, 'offenderNo')}&size=100`)
@@ -432,14 +409,22 @@ export const prisonApiFactory = (client) => {
   const getScheduledEventsForNextWeek = (context, bookingId) =>
     get(context, `/api/bookings/${bookingId}/events/nextWeek`)
 
-  const getNonAssociations = (context, bookingId) => get(context, `/api/bookings/${bookingId}/non-association-details`)
-
   const getCellsWithCapacity = (context, agencyId, attribute) =>
     getWithCustomTimeout(
       context,
       attribute
         ? `/api/agencies/${agencyId}/cellsWithCapacity?attribute=${attribute}`
         : `/api/agencies/${agencyId}/cellsWithCapacity`,
+      {
+        customTimeout: 30000,
+      }
+    )
+  const getReceptionsWithCapacity = (context, agencyId, attribute) =>
+    getWithCustomTimeout(
+      context,
+      attribute
+        ? `/api/agencies/${agencyId}/receptionsWithCapacity?attribute=${attribute}`
+        : `/api/agencies/${agencyId}/receptionsWithCapacity`,
       {
         customTimeout: 30000,
       }
@@ -528,9 +513,6 @@ export const prisonApiFactory = (client) => {
     getLocationsForAppointments,
     getAppointmentTypes,
     getAdjudicationFindingTypes,
-    getAdjudications,
-    getAdjudicationDetails,
-    getAdjudicationsForBooking,
     addAppointments,
     getAlertTypes,
     createAlert,
@@ -576,10 +558,10 @@ export const prisonApiFactory = (client) => {
     getSentenceTerms,
     getScheduledEventsForThisWeek,
     getScheduledEventsForNextWeek,
-    getNonAssociations,
     getCellAttributes,
     getCellMoveReasonTypes,
     getCellsWithCapacity,
+    getReceptionsWithCapacity,
     getCsraAssessments,
     getCsraAssessmentsForPrisoner,
     getCsraReviewForBooking,

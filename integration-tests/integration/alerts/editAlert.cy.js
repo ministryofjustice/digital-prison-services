@@ -68,6 +68,29 @@ context('A user can add an appointment', () => {
 
     AlertAlreadyClosedPage.verifyOnPage()
   })
+
+  it('A user is presented with locked message when 423 error', () => {
+    cy.task('stubPutAlertErrors', {
+      bookingId: 14,
+      alertId,
+      alert: { alertId, comment: 'Test comment' },
+      status: 423,
+    })
+    cy.visit(`/edit-alert?offenderNo=${offenderNo}&alertId=${alertId}`)
+
+    const editAlertPage = EditAlertPage.verifyOnPage()
+    const form = editAlertPage.form()
+    form.comments().type('Test')
+    form.alertStatusYes().click()
+    form.submitButton().click()
+
+    editAlertPage
+      .errorSummaryList()
+      .find('li')
+      .then(($errors) => {
+        expect($errors.get(0).innerText).to.contain('a user currently has it open in P-Nomis')
+      })
+  })
 })
 
 context('when a user has no permissions', () => {
