@@ -3,13 +3,18 @@
 {% from "govuk/components/inset-text/macro.njk" import govukInsetText %}
 
 {% block beforeContent %}
-  {{ govukBreadcrumbs({
-    items: [
-      {
-        text: "Digital Prison Services",
-        href: "/"
-      }
-    ]
+{{ govukBreadcrumbs({
+      items: [
+          {
+              text: "Digital Prison Services",
+              href: "/"
+          },
+          {
+              text: "Prisoner whereabouts",
+              href: "/manage-prisoner-whereabouts"
+          }
+      ],
+      classes: 'govuk-!-display-none-print'
   }) }}
 {% endblock %}
 

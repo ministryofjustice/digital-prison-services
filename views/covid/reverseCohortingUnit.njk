@@ -4,16 +4,17 @@
 
 {% block beforeContent %}
   {{ govukBreadcrumbs({
-    items: [
-      {
-        text: "Digital Prison Services",
-        href: "/"
-      },
-      {
-        text: "Current breakdown of COVID units",
-        href: "/current-covid-units"
-      }
-    ]
+      items: [
+          {
+              text: "Digital Prison Services",
+              href: "/"
+          },
+          {
+              text: "Prisoner whereabouts",
+              href: "/manage-prisoner-whereabouts"
+          }
+      ],
+      classes: 'govuk-!-display-none-print'
   }) }}
 {% endblock %}
 

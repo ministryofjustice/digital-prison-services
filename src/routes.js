@@ -3,7 +3,7 @@
 export default [
   { path: '/', breadcrumb: null },
   // Below are temporary as latest version of react-router-breadcrumbs-hoc leaves hyphens in the breadcrumb text
-  { path: '/manage-prisoner-whereabouts', breadcrumb: 'Manage prisoner whereabouts' },
+  { path: '/manage-prisoner-whereabouts', breadcrumb: 'Prisoner whereabouts' },
   { path: '/manage-prisoner-whereabouts/housing-block-results', breadcrumb: 'Housing block results' },
   { path: '/manage-prisoner-whereabouts/activity-results', breadcrumb: 'Activity results' },
   { path: '/manage-prisoner-whereabouts/prisoners-unaccounted-for', breadcrumb: 'Prisoners unaccounted for' },
