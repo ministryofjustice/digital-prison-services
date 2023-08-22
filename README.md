@@ -24,7 +24,7 @@ Run remotely as docker
 ```bash
 docker run -p 3000:3000 -d \
      --name digital-prison-services \
-     -e API_ENDPOINT_URL=https://api-dev.prison.service.justice.gov.uk/ \
+     -e API_ENDPOINT_URL=https://prison-api-dev.prison.service.justice.gov.uk/ \
      -e OAUTH_ENDPOINT_URL=https://sign-in-dev.hmpps.service.justice.gov.uk/auth/ \
      -e API_GATEWAY_TOKEN=<add here> \
      -e API_CLIENT_SECRET=<add here> \
