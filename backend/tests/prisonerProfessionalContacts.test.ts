@@ -6,21 +6,19 @@ describe('Prisoner professional contacts', () => {
   const prisonApi = {}
   const allocationManagerApi = {}
   const personService = {}
+  const systemOauthClient = {}
 
   let req
   let res
-  let logError
   let controller
 
   beforeEach(() => {
     req = {
       originalUrl: 'http://localhost',
       params: { offenderNo },
-      session: { useNewProfile: false },
+      session: { useNewProfile: false, userDetails: { username: 'user-1' } },
     }
     res = { locals: {}, render: jest.fn(), status: jest.fn() }
-
-    logError = jest.fn()
 
     // @ts-expect-error ts-migrate(2339) FIXME: Property 'getPersonContactDetails' does not exist ... Remove this comment to see the full error message
     personService.getPersonContactDetails = jest.fn().mockResolvedValue({})
@@ -33,8 +31,15 @@ describe('Prisoner professional contacts', () => {
     // @ts-expect-error ts-migrate(2339) FIXME: Property 'getPomByOffenderNo' does not exist on ty... Remove this comment to see the full error message
     allocationManagerApi.getPomByOffenderNo = jest.fn().mockResolvedValue({})
 
-    // @ts-expect-error ts-migrate(2345) FIXME: Argument of type '{ prisonApi: {}; personService: ... Remove this comment to see the full error message
-    controller = prisonerProfessionalContacts({ prisonApi, personService, allocationManagerApi, logError })
+    // @ts-expect-error ts-migrate(2339)
+    systemOauthClient.getClientCredentialsTokens = jest.fn().mockResolvedValue({})
+
+    controller = prisonerProfessionalContacts({
+      prisonApi,
+      personService,
+      allocationManagerApi,
+      systemOauthClient,
+    })
   })
 
   it('should get the prisoner details', async () => {
