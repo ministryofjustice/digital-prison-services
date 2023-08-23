@@ -95,6 +95,8 @@ describe('prisoner personal', () => {
     esweService.getNeurodiversities = jest.fn().mockResolvedValue([])
     // @ts-expect-error ts-migrate(2339) FIXME: Property 'getNeurodiversities' does not exist on type '{}'... Remove this comment to see the full error message
     oauthApi.userRoles = jest.fn().mockReturnValue([])
+    // @ts-expect-error ts-migrate(2339)
+    systemOauthClient.getClientCredentialsTokens = jest.fn().mockResolvedValue({ token: 'token-1' })
 
     controller = prisonerPersonal({
       prisonerProfileService,
@@ -1131,7 +1133,7 @@ describe('prisoner personal', () => {
       await controller(req, res)
 
       // @ts-expect-error ts-migrate(2339) FIXME: Property 'getPomByOffenderNo' does not exist on ty... Remove this comment to see the full error message
-      expect(allocationManagerApi.getPomByOffenderNo).toHaveBeenCalledWith(res.locals, offenderNo)
+      expect(allocationManagerApi.getPomByOffenderNo).toHaveBeenCalledWith({ token: 'token-1' }, offenderNo)
     })
 
     describe('when there is missing prisoner contacts data', () => {

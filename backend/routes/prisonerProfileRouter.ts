@@ -185,7 +185,7 @@ const controller = ({
     '/professional-contacts',
     useNewProfile(),
     // @ts-expect-error ts-migrate(2345) FIXME: Argument of type '{ prisonApi: any; personService:... Remove this comment to see the full error message
-    prisonerProfessionalContacts({ prisonApi, personService, allocationManagerApi, logError })
+    prisonerProfessionalContacts({ prisonApi, personService, allocationManagerApi, systemOauthClient, logError })
   )
 
   // @ts-expect-error ts-migrate(2345) FIXME: Argument of type '{ oauthApi: any; prisonApi: any;... Remove this comment to see the full error message
