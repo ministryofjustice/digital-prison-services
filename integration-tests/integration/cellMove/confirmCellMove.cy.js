@@ -76,6 +76,14 @@ context('A user can confirm the cell move', () => {
     cy.location('pathname').should('eq', '/prisoner/A12345/cell-move/search-for-cell')
   })
 
+  it('should have a back button leading to search for cell', () => {
+    ConfirmCellMovePage.goTo('A12345', 1, 'Bob Doe', 'MDI-1-1')
+
+    cy.contains('Back').click()
+
+    cy.location('pathname').should('eq', '/prisoner/A12345/cell-move/search-for-cell')
+  })
+
   it('should not mention c-swap or show form inputs', () => {
     const page = ConfirmCellMovePage.goTo('A12345', 'C-SWAP', 'Bob Doe', 'swap')
 

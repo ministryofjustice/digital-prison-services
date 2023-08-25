@@ -45,6 +45,13 @@ export default ({ oauthApi, prisonApi, whereaboutsApi, nonAssociationsApi }) =>
         },
       }
 
+      let backUrl = req.headers.referer
+      // If the referrer is a later page in the journey (i.e. the user already clicked back to get here), make the back
+      // link point to the prisoner search page instead
+      if (!backUrl || backUrl.endsWith('/cell-move/select-cell') || backUrl.endsWith('/cell-move/confirm-cell-move')) {
+        backUrl = '/change-someones-cell/prisoner-search'
+      }
+
       return res.render('cellMove/searchForCell.njk', {
         breadcrumbPrisonerName: putLastNameFirst(prisonerDetails.firstName, prisonerDetails.lastName),
         prisonerName: formatName(prisonerDetails.firstName, prisonerDetails.lastName),
@@ -62,6 +69,7 @@ export default ({ oauthApi, prisonApi, whereaboutsApi, nonAssociationsApi }) =>
         formAction: `/prisoner/${offenderNo}/cell-move/select-cell`,
         profileUrl: `/prisoner/${offenderNo}`,
         convertedCsra: translateCsra(prisonerDetails.csraClassificationCode),
+        backUrl,
       })
     } catch (error) {
       res.locals.homeUrl = `/prisoner/${offenderNo}`
