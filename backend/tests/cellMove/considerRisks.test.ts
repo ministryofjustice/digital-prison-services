@@ -521,6 +521,7 @@ describe('move validation', () => {
       selectCellUrl: '/prisoner/ABC123/cell-move/select-cell',
       showOffendersNamesWithCsra: true,
       showRisks: true,
+      backUrl: '/prisoner/ABC123/cell-move/select-cell',
     })
   })
 
