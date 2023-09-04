@@ -54,7 +54,7 @@ const getTasks = ({ activeCaseLoadId, locations, staffId, whereaboutsConfig, key
     },
     {
       id: 'manage-prisoner-whereabouts',
-      heading: 'Manage prisoner whereabouts',
+      heading: 'Prisoner whereabouts',
       description: 'View unlock lists, all appointments and COVID units, manage attendance and add bulk appointments.',
       href: '/manage-prisoner-whereabouts',
       roles: null,
@@ -80,8 +80,8 @@ const getTasks = ({ activeCaseLoadId, locations, staffId, whereaboutsConfig, key
     },
     {
       id: 'incentives',
-      heading: 'Manage incentives',
-      description: 'See prisoner incentive information by residential location and view incentive data visualisations.',
+      heading: 'Incentives',
+      description: 'Manage incentive level reviews by residential location and view incentives data charts.',
       href: incentives.ui_url,
       roles: null,
       enabled: () => incentives.ui_url && (userHasRoles(['MAINTAIN_INCENTIVE_LEVELS']) || locations?.length > 0),
@@ -135,7 +135,7 @@ const getTasks = ({ activeCaseLoadId, locations, staffId, whereaboutsConfig, key
     },
     {
       id: 'manage-key-workers',
-      heading: 'Manage key workers',
+      heading: 'Key workers',
       description: 'Add and remove key workers from prisoners and manage individuals.',
       href: omic.url,
       enabled: () => {

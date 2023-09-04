@@ -1,7 +1,7 @@
 import { formatTimestampToDate, formatTimestampToDateTime, putLastNameFirst, sortByDateTime } from '../../utils'
 import getContext from './prisonerProfileContext'
 
-export default ({ prisonApi, oauthApi, systemOauthClient, restrictedPatientApi }) =>
+export default ({ prisonApi, oauthApi, systemOauthClient, restrictedPatientApi, adjudicationsApi }) =>
   async (req, res) => {
     const { offenderNo, adjudicationNumber } = req.params
 
@@ -13,11 +13,12 @@ export default ({ prisonApi, oauthApi, systemOauthClient, restrictedPatientApi }
       systemOauthClient,
       restrictedPatientApi,
     })
+    const systemContext = await systemOauthClient.getClientCredentialsTokens(req.session.userDetails)
 
     try {
       const [prisonerDetails, adjudicationDetails] = await Promise.all([
         prisonApi.getDetails(context, offenderNo),
-        prisonApi.getAdjudicationDetails(context, offenderNo, adjudicationNumber),
+        adjudicationsApi.getAdjudicationDetails(systemContext, offenderNo, adjudicationNumber),
       ])
 
       const { firstName, lastName } = prisonerDetails

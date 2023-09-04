@@ -166,7 +166,7 @@ context('Prisoner change incentive level details', () => {
         injectGtagSpy()
       })
 
-      it('on manage incentive reviews button', () => {
+      it('on Incentive reviews button', () => {
         cy.get('[data-test="goto-manage-incentives"]')
           .click()
           .then(() => {

@@ -185,12 +185,13 @@ describe('Select a cell', () => {
       expect(res.render).toHaveBeenCalledWith(
         'cellMove/selectCell.njk',
         expect.objectContaining({
+          backUrl: '/prisoner/A12345/cell-move/search-for-cell',
           csraDetailsUrl: '/prisoner/A12345/cell-move/cell-sharing-risk-assessment-details',
           formAction: '/prisoner/A12345/cell-move/select-cell',
           nonAssociationLink: '/prisoner/A12345/cell-move/non-associations',
           offenderDetailsUrl: '/prisoner/A12345/cell-move/prisoner-details',
-          selectCellRootUrl: '/prisoner/A12345/cell-move/select-cell',
           searchForCellRootUrl: '/prisoner/A12345/cell-move/search-for-cell',
+          selectCellRootUrl: '/prisoner/A12345/cell-move/select-cell',
           showNonAssociationsLink: false,
         })
       )
