@@ -41,7 +41,7 @@ generic-service:
    PECS_URL: https://bookasecuremove.service.justice.gov.uk
    COMPLEXITY_OF_NEED_URI: https://complexity-of-need.hmpps.service.justice.gov.uk
    PRISONS_WITH_OFFENDERS_THAT_HAVE_COMPLEX_NEEDS: "AGI,BZI,DHI,DWI,ESI,EWI,FHI,LNI,NHI,PFI,SDI,STI"
-   PRISONS_WITH_MANAGE_ADJUDICATIONS_ENABLED: "RNI,WLI,MDI,EXI,BXI,PVI,NHI,DMI,BLI,LFI,NSI,SWI,BNI,STI,SPI,SUI,BSI"
+   PRISONS_WITH_MANAGE_ADJUDICATIONS_ENABLED: "RNI,WLI,MDI,EXI,BXI,PVI,NHI,DMI,BLI,LFI,NSI,SWI,BNI,STI,SPI,SUI,BSI,LWI"
    MANAGE_ADJUDICATIONS_URL: https://manage-adjudications.hmpps.service.justice.gov.uk/
    MANAGE_RESTRICTED_PATIENTS_URL: https://manage-restricted-patients.hmpps.service.justice.gov.uk/
    ESWE_ENABLED: true
@@ -81,6 +81,7 @@ generic-service:
    HOMEPAGE_REDIRECT_ENABLED_PRISONS: ""
    HOMEPAGE_SCHEDULE_REDIRECT_FOR_PRISONS: ""
    MANAGE_OFFENCES_URL: https://manage-offences.hmpps.service.justice.gov.uk
+   MANAGE_ADJUDICATIONS_API_URL: https://manage-adjudications-api.hmpps.service.justice.gov.uk
 
   allowlist:
    office: "217.33.148.210/32"
@@ -165,15 +166,17 @@ generic-service:
    sscl-york: "62.6.61.29"
    sscl-newcastle: "62.172.79.105"
    sscl-newport: "217.38.237.212"
-   fivewells-1: "20.49.214.199/32"
-   fivewells-2: "20.49.214.228/32"
-   fivewells-3: "195.89.157.56/29"
-   fivewells-4: "195.59.215.184/29"
-   fivewells-5: "51.149.250.0/24"
-   fivewells-6: "51.149.249.0/29"
-   fivewells-7: "194.33.249.0/29"
-   fivewells-8: "51.149.249.32/29"
-   fivewells-9: "194.33.248.0/29"
+   fivewells-1: "195.89.157.56/29"
+   fivewells-2: "195.59.215.184/29"
+   fivewells-3: "51.149.250.0/24"
+   fivewells-4: "51.149.249.0/29"
+   fivewells-5: "194.33.249.0/29"
+   fivewells-6: "51.149.249.32/29"
+   fivewells-7: "194.33.248.0/29"
+   mojo-azure-landing-zone-public-egress-1: "20.49.214.199/32"
+   mojo-azure-landing-zone-public-egress-2: "20.49.214.228/32"
+   mojo-azure-landing-zone-public-egress-3: "20.26.11.71/32"
+   mojo-azure-landing-zone-public-egress-4: "20.26.11.108/32"
 
 # determine which slack channel alerts are sent to, via the correct Alert Manager receiver
 generic-prometheus-alerts:

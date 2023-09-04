@@ -7,6 +7,7 @@
 {% from "govuk/components/radios/macro.njk" import govukRadios %}
 {% from "govuk/components/button/macro.njk" import govukButton %}
 {% from "govuk/components/warning-text/macro.njk" import govukWarningText %}
+{% from "govuk/components/back-link/macro.njk" import govukBackLink %}
 {%- from "moj/components/banner/macro.njk" import mojBanner -%}
 
 {% set title = "You must consider the risks of the prisoners involved" %}
@@ -17,25 +18,14 @@
 {% endmacro %}
 
 {% block beforeContent %}
-  {{ govukBreadcrumbs({
-      items: [
-          {
-              text: "Home",
-              href: '/'
-          },
-          {
-              text: prisonerNameForBreadcrumb,
-              href: profileUrl
-          },
-          {
-              text: 'Select cell',
-              href: selectCellUrl
-          },
-          {
-              text: "Consider risks"
-          }
-      ]
-  }) }}
+
+  {% if backUrl %}
+    {{ govukBackLink({
+      text: "Back",
+      href: backUrl
+    }) }}
+  {% endif %}
+
 {% endblock %}
 
 {% block content %}

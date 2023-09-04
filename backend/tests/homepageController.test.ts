@@ -139,7 +139,7 @@ describe('Homepage', () => {
       )
     })
 
-    it('should render home page with the manage prisoner whereabouts task', async () => {
+    it('should render home page with the prisoner whereabouts task', async () => {
       whereaboutsApi.getWhereaboutsConfig.mockResolvedValue({ enabled: true })
 
       await controller(req, res)
@@ -150,7 +150,7 @@ describe('Homepage', () => {
           tasks: [
             {
               id: 'manage-prisoner-whereabouts',
-              heading: 'Manage prisoner whereabouts',
+              heading: 'Prisoner whereabouts',
               description:
                 'View unlock lists, all appointments and COVID units, manage attendance and add bulk appointments.',
               href: '/manage-prisoner-whereabouts',
@@ -413,7 +413,7 @@ describe('Homepage', () => {
           tasks: [
             {
               id: 'manage-key-workers',
-              heading: 'Manage key workers',
+              heading: 'Key workers',
               description: 'Add and remove key workers from prisoners and manage individuals.',
               href: 'http://omic-url',
             },
@@ -449,7 +449,7 @@ describe('Homepage', () => {
             tasks: [
               {
                 description: 'Add and remove key workers from prisoners and manage individuals.',
-                heading: 'Manage key workers',
+                heading: 'Key workers',
                 href: undefined,
                 id: 'manage-key-workers',
               },
@@ -612,7 +612,7 @@ describe('Homepage', () => {
       expect(res.redirect).toHaveBeenCalledWith('/videolink')
     })
 
-    describe('Manage incentives', () => {
+    describe('Incentives', () => {
       beforeEach(() => {
         config.apis.incentives.ui_url = 'http://incentives'
         prisonApi.userLocations.mockResolvedValue([
@@ -621,7 +621,7 @@ describe('Homepage', () => {
         ])
       })
 
-      const expectManageIncentivesTaskToNotBeVisible = async () => {
+      const expectIncentivesTaskToNotBeVisible = async () => {
         await controller(req, res)
         expect(res.render).toHaveBeenCalledWith(
           'homepage/homepage.njk',
@@ -629,7 +629,7 @@ describe('Homepage', () => {
             tasks: expect.not.arrayContaining([
               {
                 id: 'incentives',
-                heading: 'Manage incentives',
+                heading: 'Incentives',
                 href: 'http://incentives',
                 description: expect.any(String),
               },
@@ -638,7 +638,7 @@ describe('Homepage', () => {
         )
       }
 
-      const expectManageIncentivesTaskToBeVisible = async () => {
+      const expectIncentivesTaskToBeVisible = async () => {
         await controller(req, res)
         expect(res.render).toHaveBeenCalledWith(
           'homepage/homepage.njk',
@@ -646,7 +646,7 @@ describe('Homepage', () => {
             tasks: expect.arrayContaining([
               {
                 id: 'incentives',
-                heading: 'Manage incentives',
+                heading: 'Incentives',
                 href: 'http://incentives',
                 description: expect.any(String),
               },
@@ -658,24 +658,24 @@ describe('Homepage', () => {
       it('should not render home page with the Incentives tile if user has no locations nor central admin role', async () => {
         prisonApi.userLocations.mockResolvedValue([])
 
-        return expectManageIncentivesTaskToNotBeVisible()
+        return expectIncentivesTaskToNotBeVisible()
       })
 
       it('should not render home page with the Incentives tile if incentives URL not provided', async () => {
         config.apis.incentives.ui_url = undefined
 
-        return expectManageIncentivesTaskToNotBeVisible()
+        return expectIncentivesTaskToNotBeVisible()
       })
 
       it('should render home page with the Incentives tile if user has at least one location', async () => {
-        return expectManageIncentivesTaskToBeVisible()
+        return expectIncentivesTaskToBeVisible()
       })
 
       it('should render home page with the Incentives tile if user has no locations but does have central admin role', async () => {
         prisonApi.userLocations.mockResolvedValue([])
         oauthApi.userRoles.mockReturnValue([{ roleCode: 'MAINTAIN_INCENTIVE_LEVELS' }])
 
-        return expectManageIncentivesTaskToBeVisible()
+        return expectIncentivesTaskToBeVisible()
       })
     })
 
@@ -904,7 +904,7 @@ describe('Homepage', () => {
       config.app.keyworkerMaintenanceMode = true
     })
 
-    it('should not display manage prisoner whereabouts task if flag is true', async () => {
+    it('should not display prisoner whereabouts task if flag is true', async () => {
       await controller(req, res)
 
       expect(res.render).toHaveBeenCalledWith(
@@ -915,7 +915,7 @@ describe('Homepage', () => {
       )
     })
 
-    it('should not display manage key workers task if flag is true', async () => {
+    it('should not display key workers task if flag is true', async () => {
       await controller(req, res)
 
       expect(res.render).toHaveBeenCalledWith(

@@ -5,12 +5,6 @@ const { assertHasRequestCount } = require('../assertions')
 const offenderNo = 'A12345'
 const offenderName = `Bob Doe’s`
 
-const responseHeaders = {
-  'page-offset': '0',
-  'page-limit': '10',
-  'total-records': '10',
-}
-
 const adjudicationResponse = {
   agencies: [
     {
@@ -27,23 +21,30 @@ const adjudicationResponse = {
       id: 8,
     },
   ],
-  results: [
-    {
-      adjudicationCharges: [
-        {
-          findingCode: 'PROVED',
-          offenceCode: '51:22',
-          offenceDescription: 'Disobeys any lawful order',
-          oicChargeId: '1506763/1',
-        },
-      ],
-      adjudicationNumber: 1234567,
-      agencyId: 'MDI',
-      agencyIncidentId: 1484302,
-      partySeq: 1,
-      reportTime: '2017-03-17T08:02:00',
+  results: {
+    content: [
+      {
+        adjudicationCharges: [
+          {
+            findingCode: 'PROVED',
+            offenceCode: '51:22',
+            offenceDescription: 'Disobeys any lawful order',
+            oicChargeId: '1506763/1',
+          },
+        ],
+        adjudicationNumber: 1234567,
+        agencyId: 'MDI',
+        agencyIncidentId: 1484302,
+        partySeq: 1,
+        reportTime: '2017-03-17T08:02:00',
+      },
+    ],
+    pageable: {
+      offset: 0,
+      pageSize: 10,
     },
-  ],
+    totalElements: 1,
+  },
 }
 context('A user can confirm the cell move', () => {
   before(() => {
@@ -61,7 +62,7 @@ context('A user can confirm the cell move', () => {
       bookingId: 1234,
     })
     cy.task('stubAdjudicationFindingTypes', [{ code: 'T1', description: 'type 1' }])
-    cy.task('stubAdjudications', { response: adjudicationResponse, headers: responseHeaders })
+    cy.task('stubAdjudications', { response: adjudicationResponse })
   })
 
   it('should render the page', () => {
@@ -108,6 +109,7 @@ context('A user can confirm the cell move', () => {
       finding: 'T1',
       fromDate: '2020-08-01',
       toDate: '2020-08-05',
+      size: 10,
     }).then(assertHasRequestCount(1))
   })
 
@@ -116,12 +118,12 @@ context('A user can confirm the cell move', () => {
     cy.task('stubAdjudications', {
       response: {
         ...adjudicationResponse,
-        results: [],
-      },
-      headers: {
-        'page-offset': '0',
-        'page-limit': '10',
-        'total-records': '0',
+        results: { content: [],
+          pageable: {
+            offset: 0,
+            pageSize: 10,
+          },
+          totalElements: 0, },
       },
     })
 
@@ -135,12 +137,12 @@ context('A user can confirm the cell move', () => {
     cy.task('stubAdjudications', {
       response: {
         ...adjudicationResponse,
-        results: [],
-      },
-      headers: {
-        'page-offset': '0',
-        'page-limit': '10',
-        'total-records': '0',
+        results: { content: [],
+          pageable: {
+            offset: 0,
+            pageSize: 10,
+          },
+          totalElements: 0, },
       },
     })
 

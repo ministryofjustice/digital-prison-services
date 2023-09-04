@@ -38,7 +38,6 @@ describe('prisoner profile quick look', () => {
     getPrisonerSentenceDetails: jest.fn(),
     getPositiveCaseNotes: jest.fn(),
     getNegativeCaseNotes: jest.fn(),
-    getAdjudicationsForBooking: jest.fn(),
     getPrisonerVisitBalances: jest.fn(),
     getVisitsSummary: jest.fn(),
     getEventsForToday: jest.fn(),
@@ -58,6 +57,10 @@ describe('prisoner profile quick look', () => {
   }
   const incentivesApi = {} as jest.Mocked<typeof apis.incentivesApi>
   const restrictedPatientApi = {}
+  const adjudicationsApi = {
+    getAdjudicationsForBooking: jest.fn(),
+  }
+
   const oauthApi = {
     userRoles: jest.fn(),
   }
@@ -97,7 +100,7 @@ describe('prisoner profile quick look', () => {
     incentivesApi.getIepSummaryForBooking = jest.fn().mockResolvedValue({})
     prisonApi.getPositiveCaseNotes = jest.fn().mockResolvedValue({})
     prisonApi.getNegativeCaseNotes = jest.fn().mockResolvedValue({})
-    prisonApi.getAdjudicationsForBooking = jest.fn().mockResolvedValue({})
+    adjudicationsApi.getAdjudicationsForBooking = jest.fn().mockResolvedValue({})
     prisonApi.getVisitsSummary = jest.fn().mockResolvedValue({})
     prisonApi.getPrisonerVisitBalances = jest.fn().mockResolvedValue({})
     prisonApi.getEventsForToday = jest.fn().mockResolvedValue([])
@@ -117,7 +120,7 @@ describe('prisoner profile quick look', () => {
       incentivesApi,
       restrictedPatientApi,
       oauthApi,
-      logError,
+      adjudicationsApi,
     })
   })
 
@@ -223,7 +226,7 @@ describe('prisoner profile quick look', () => {
 
         await controller(req, res)
 
-        expect(systemOauthClient.getClientCredentialsTokens).not.toHaveBeenCalled()
+        expect(systemOauthClient.getClientCredentialsTokens).toHaveBeenCalled()
         expect(offenderSearchApi.getPrisonersDetails).not.toHaveBeenCalled()
       })
 
@@ -506,7 +509,7 @@ describe('prisoner profile quick look', () => {
         incentivesApi.getIepSummaryForBooking.mockResolvedValue(iepSummaryForBooking)
         prisonApi.getPositiveCaseNotes.mockResolvedValue({ count: 2 })
         prisonApi.getNegativeCaseNotes.mockResolvedValue({ count: 1 })
-        prisonApi.getAdjudicationsForBooking.mockResolvedValue({
+        adjudicationsApi.getAdjudicationsForBooking.mockResolvedValue({
           adjudicationCount: 3,
           awards: [
             {
@@ -867,7 +870,7 @@ describe('prisoner profile quick look', () => {
       incentivesApi.getIepSummaryForBooking.mockRejectedValue(new Error('Network error'))
       prisonApi.getPositiveCaseNotes.mockRejectedValue(new Error('Network error'))
       prisonApi.getNegativeCaseNotes.mockRejectedValue(new Error('Network error'))
-      prisonApi.getAdjudicationsForBooking.mockRejectedValue(new Error('Network error'))
+      adjudicationsApi.getAdjudicationsForBooking.mockRejectedValue(new Error('Network error'))
       prisonApi.getVisitsSummary.mockRejectedValue(new Error('Network error'))
       prisonApi.getPrisonerVisitBalances.mockRejectedValue(new Error('Network error'))
       prisonApi.getEventsForToday.mockRejectedValue(new Error('Network error'))
@@ -964,7 +967,7 @@ describe('prisoner profile quick look', () => {
     it('should handle api errors when requesting incentive level warnings', async () => {
       prisonApi.getPositiveCaseNotes.mockResolvedValue({ count: 10 })
       incentivesApi.getIepSummaryForBooking.mockResolvedValue(iepSummaryForBooking)
-      prisonApi.getAdjudicationsForBooking.mockResolvedValue({
+      adjudicationsApi.getAdjudicationsForBooking.mockResolvedValue({
         adjudicationCount: 2,
         awards: [
           {
@@ -1018,7 +1021,7 @@ describe('prisoner profile quick look', () => {
     it('should handle api errors when requesting incentive encouragements', async () => {
       prisonApi.getNegativeCaseNotes.mockResolvedValue({ count: 10 })
       incentivesApi.getIepSummaryForBooking.mockResolvedValue(iepSummaryForBooking)
-      prisonApi.getAdjudicationsForBooking.mockResolvedValue({
+      adjudicationsApi.getAdjudicationsForBooking.mockResolvedValue({
         adjudicationCount: 2,
         awards: [
           {
@@ -1072,7 +1075,7 @@ describe('prisoner profile quick look', () => {
     it('should handle api errors when requesting last incentive level review', async () => {
       prisonApi.getPositiveCaseNotes.mockResolvedValue({ count: 10 })
       prisonApi.getNegativeCaseNotes.mockResolvedValue({ count: 10 })
-      prisonApi.getAdjudicationsForBooking.mockResolvedValue({
+      adjudicationsApi.getAdjudicationsForBooking.mockResolvedValue({
         adjudicationCount: 2,
         awards: [
           {
@@ -1398,7 +1401,7 @@ describe('prisoner profile quick look', () => {
       incentivesApi.getIepSummaryForBooking = jest.fn().mockResolvedValue({})
       prisonApi.getPositiveCaseNotes = jest.fn().mockResolvedValue({})
       prisonApi.getNegativeCaseNotes = jest.fn().mockResolvedValue({})
-      prisonApi.getAdjudicationsForBooking = jest.fn().mockResolvedValue({})
+      adjudicationsApi.getAdjudicationsForBooking = jest.fn().mockResolvedValue({})
       prisonApi.getVisitsSummary = jest.fn().mockResolvedValue({})
       prisonApi.getPrisonerVisitBalances = jest.fn().mockResolvedValue({})
       prisonApi.getEventsForToday = jest.fn().mockResolvedValue([])

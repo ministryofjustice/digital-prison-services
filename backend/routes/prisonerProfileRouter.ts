@@ -57,6 +57,7 @@ const controller = ({
   curiousApi,
   incentivesApi,
   restrictedPatientApi,
+  adjudicationsApi,
 }) => {
   const prisonerProfileService = prisonerProfileServiceFactory({
     prisonApi,
@@ -76,7 +77,7 @@ const controller = ({
   const personService = personServiceFactory(prisonApi)
   const prisonerFinanceService = prisonerFinanceServiceFactory(prisonApi)
   const referenceCodesService = referenceCodesServiceFactory(prisonApi)
-  const adjudicationHistoryService = adjudicationsHistoryService(prisonApi)
+  const adjudicationHistoryService = adjudicationsHistoryService(prisonApi, adjudicationsApi)
   const esweService = EsweService.create(curiousApi, systemOauthClient, prisonApi, whereaboutsApi)
 
   router.get(
@@ -91,7 +92,7 @@ const controller = ({
         systemOauthClient,
         incentivesApi,
         restrictedPatientApi,
-        logError,
+        adjudicationsApi,
       }),
     })
   )
@@ -184,7 +185,7 @@ const controller = ({
     '/professional-contacts',
     useNewProfile(),
     // @ts-expect-error ts-migrate(2345) FIXME: Argument of type '{ prisonApi: any; personService:... Remove this comment to see the full error message
-    prisonerProfessionalContacts({ prisonApi, personService, allocationManagerApi, logError })
+    prisonerProfessionalContacts({ prisonApi, personService, allocationManagerApi, systemOauthClient, logError })
   )
 
   // @ts-expect-error ts-migrate(2345) FIXME: Argument of type '{ oauthApi: any; prisonApi: any;... Remove this comment to see the full error message
@@ -194,8 +195,7 @@ const controller = ({
 
   router.get(
     '/adjudications/:adjudicationNumber',
-    // @ts-expect-error ts-migrate(2345) FIXME: Argument of type '{ prisonApi: any; logError: any;... Remove this comment to see the full error message
-    prisonerAdjudicationDetails({ prisonApi, oauthApi, systemOauthClient, restrictedPatientApi, logError })
+    prisonerAdjudicationDetails({ prisonApi, oauthApi, systemOauthClient, restrictedPatientApi, adjudicationsApi })
   )
 
   router.use(

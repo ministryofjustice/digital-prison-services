@@ -4,29 +4,19 @@
 {% from "govuk/components/radios/macro.njk" import govukRadios %}
 {% from "govuk/components/error-summary/macro.njk" import govukErrorSummary %}
 {% from "govuk/components/textarea/macro.njk" import govukTextarea %}
+{% from "govuk/components/back-link/macro.njk" import govukBackLink %}
 
 {% set title = "Confirm cell move" %}
 
 {% block beforeContent %}
-    {{ govukBreadcrumbs({
-        items: [
-            {
-                text: "Home",
-                href: '/'
-            },
-            {
-                text: breadcrumbPrisonerName,
-                href: '/prisoner/' + offenderNo
-            },
-            {
-                text: 'Select cell',
-                href:  '/prisoner/' + offenderNo + '/cell-move/select-cell'
-            },
-            {
-                text: 'Confirm cell move'
-            }
-        ]
+
+  {% if backLink %}
+    {{ govukBackLink({
+      text: "Back",
+      href: backLink
     }) }}
+  {% endif %}
+
 {% endblock %}
 
 {% block content %}

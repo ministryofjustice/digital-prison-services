@@ -224,7 +224,7 @@ describe('Prisoner change incentive level details', () => {
       })
 
       it.each([undefined, 'MDI'])(
-        'should use a simpler link to manage incentives on confirmation when the location is not known',
+        'should use a simpler link to incentives on confirmation when the location is not known',
         async (locationId) => {
           // @ts-expect-error ts-migrate(2339) FIXME: Property 'getDetails' does not exist on type '{}'.
           prisonApi.getDetails = jest.fn().mockResolvedValue({

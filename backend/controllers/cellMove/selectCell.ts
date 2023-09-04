@@ -235,6 +235,7 @@ export default ({ oauthApi, prisonApi, whereaboutsApi, nonAssociationsApi }) =>
         selectCellRootUrl: `/prisoner/${offenderNo}/cell-move/select-cell`,
         formAction: `/prisoner/${offenderNo}/cell-move/select-cell`,
         convertedCsra: translateCsra(prisonerDetails.csraClassificationCode),
+        backUrl: `/prisoner/${offenderNo}/cell-move/search-for-cell`,
       })
     } catch (error) {
       res.locals.redirectUrl = `/prisoner/${offenderNo}/cell-move/search-for-cell`
