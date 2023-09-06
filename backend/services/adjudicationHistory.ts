@@ -9,12 +9,12 @@ import {
   sortByDateTime,
 } from '../utils'
 
-const AdjudciationHistoryServiceFactory = (prisonApi) => {
-  const getAdjudications = async (context, offenderNumber, params, pageOffsetOption, perPage) => {
+const AdjudicationsHistoryServiceFactory = (prisonApi, adjudicationsApi) => {
+  const getAdjudications = async (context, systemContext, offenderNumber, params, pageOffsetOption, perPage) => {
     const { requestHeaders, ...withoutPagination } = context
 
     const [adjudications, findingTypes] = await Promise.all([
-      prisonApi.getAdjudications(context, offenderNumber, params, pageOffsetOption, perPage),
+      adjudicationsApi.getAdjudications(systemContext, offenderNumber, params, pageOffsetOption, perPage),
       prisonApi.getAdjudicationFindingTypes(withoutPagination),
     ])
 
@@ -23,7 +23,7 @@ const AdjudciationHistoryServiceFactory = (prisonApi) => {
       {}
     )
 
-    const ordercharges = adjudications.results.map((result) => {
+    const ordercharges = adjudications.results.content.map((result) => {
       const { adjudicationCharges, ...fields } = result
       const charge = adjudicationCharges.filter((item) => item.findingCode).shift()
       const finding = findingTypes.find((type) => charge && type.code === charge.findingCode)
@@ -74,8 +74,8 @@ const AdjudciationHistoryServiceFactory = (prisonApi) => {
       }))
   }
 
-  const getAdjudicationDetails = async (context, offenderNumber, adjudicationNumber) => {
-    const details = await prisonApi.getAdjudicationDetails(context, offenderNumber, adjudicationNumber)
+  const getAdjudicationDetails = async (systemContext, offenderNumber, adjudicationNumber) => {
+    const details = await adjudicationsApi.getAdjudicationDetails(systemContext, offenderNumber, adjudicationNumber)
     const { hearings = [], ...otherDetails } = details
 
     const [hearing, results] = extractHearingAndResults(hearings)
@@ -98,4 +98,4 @@ const AdjudciationHistoryServiceFactory = (prisonApi) => {
   }
 }
 
-export default AdjudciationHistoryServiceFactory
+export default AdjudicationsHistoryServiceFactory

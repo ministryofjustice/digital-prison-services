@@ -54,9 +54,11 @@ export default ({
       systemOauthClient,
       restrictedPatientApi,
     })
+    const systemContext = await systemOauthClient.getClientCredentialsTokens(req.session.userDetails)
 
     const adjudicationsData = await adjudicationHistoryService.getAdjudications(
       context,
+      systemContext,
       offenderNo,
       filterParameters,
       pageOffsetOption,

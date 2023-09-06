@@ -29,17 +29,20 @@ const sortByPrimaryAndStartDate = (left, right) => {
   return sortByDateTime(right.startDate, left.startDate) // Most recently added first
 }
 
-export default ({ prisonApi, personService, allocationManagerApi }) =>
+export default ({ prisonApi, personService, allocationManagerApi, systemOauthClient }) =>
   async (req, res) => {
     const { offenderNo } = req.params
+    const { username } = req.session.userDetails
 
     const details = await prisonApi.getDetails(res.locals, offenderNo)
+    const systemContext = await systemOauthClient.getClientCredentialsTokens(username)
+
     const { bookingId, firstName, lastName } = details || {}
 
     const [contacts, allocationManager] = await Promise.all(
       [
         prisonApi.getPrisonerContacts(res.locals, bookingId),
-        allocationManagerApi.getPomByOffenderNo(res.locals, offenderNo),
+        allocationManagerApi.getPomByOffenderNo(systemContext, offenderNo),
       ].map((apiCall) => logErrorAndContinue(apiCall))
     )
 

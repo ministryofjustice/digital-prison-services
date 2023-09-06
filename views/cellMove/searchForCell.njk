@@ -2,30 +2,20 @@
 {% from "govuk/components/select/macro.njk" import govukSelect %}
 {% from "govuk/components/radios/macro.njk" import govukRadios %}
 {% from "govuk/components/button/macro.njk" import govukButton %}
+{% from "govuk/components/back-link/macro.njk" import govukBackLink %}
 {% from "../macros/alertFlags.njk" import alertFlags %}
 
 {% set title = "Search for a cell" %}
 
 {% block beforeContent %}
-  {{ govukBreadcrumbs({
-    items: [
-      {
-        text: "Home",
-        href: '/'
-      },
-      {
-        text: breadcrumbPrisonerName,
-        href: profileUrl
-      },
-      {
-        text: 'Location details',
-        href: profileUrl + '/cell-history'
-      },
-      {
-        text: title
-      }
-    ]
-}) }}
+
+  {% if backUrl %}
+    {{ govukBackLink({
+      text: "Back",
+      href: backUrl
+    }) }}
+  {% endif %}
+
 {% endblock %}
 
 {% block content %}

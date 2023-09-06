@@ -142,7 +142,7 @@ context('Homepage', () => {
       page.establishmentRoll().should('exist')
     })
 
-    it('should show manage prisoner whereabouts', () => {
+    it('should show prisoner whereabouts', () => {
       cy.task('stubLocationConfig', { agencyId: 'MDI', response: { enabled: true } })
 
       const page = homepagePage.goTo()

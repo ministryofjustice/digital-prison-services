@@ -60,7 +60,7 @@ describe('Whereabouts maintenance mode flag is true', () => {
         expect(res.render).toHaveBeenCalledWith(
           'maintenancePage.njk',
           expect.objectContaining({
-            title: 'Manage prisoner whereabouts',
+            title: 'Prisoner whereabouts',
           })
         )
       })
@@ -74,7 +74,7 @@ describe('Whereabouts maintenance mode flag is true', () => {
         expect(res.render).toHaveBeenCalledWith(
           'maintenancePage.njk',
           expect.objectContaining({
-            title: 'Manage prisoner whereabouts',
+            title: 'Prisoner whereabouts',
           })
         )
       })
