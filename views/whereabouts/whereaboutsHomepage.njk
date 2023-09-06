@@ -2,14 +2,19 @@
 {% from "../components/card/card.njk" import card %}
 {% from "govuk/components/back-link/macro.njk" import govukBackLink %}
 
-{% set title = 'Manage prisoner whereabouts' %}
+{% set title = 'Prisoner whereabouts' %}
 {% set feedbackBannerBackground = '#f0f4f5 '%}
 
 {% block main %}
   <div class="govuk-width-container">
-    {{ govukBackLink({
-      text: "Digital Prison Services",
-      href: "/"
+    {{ govukBreadcrumbs({
+      items: [
+        {
+          text: "Digital Prison Services",
+          href: '/'
+        }
+      ],
+      classes: 'govuk-!-display-none-print'
     }) }}
 
     <h1 class="govuk-heading-l govuk-!-margin-top-7">{{ title }}</h1>

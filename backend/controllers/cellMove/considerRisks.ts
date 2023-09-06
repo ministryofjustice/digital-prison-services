@@ -183,6 +183,7 @@ export default ({ prisonApi, raiseAnalyticsEvent, nonAssociationsApi }) => {
           currentOccupantsWithFormattedActiveAlerts.length > 0 ||
           categoryWarning,
         errors,
+        backUrl: `${profileUrl}/cell-move/select-cell`,
       })
     } catch (error) {
       res.locals.redirectUrl = `/prisoner/${offenderNo}/cell-history`

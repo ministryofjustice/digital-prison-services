@@ -11,7 +11,7 @@ generic-service:
   env:
    PRISON_STAFF_HUB_UI_URL: https://digital-dev.prison.service.justice.gov.uk/
    HMPPS_COOKIE_DOMAIN: digital-dev.prison.service.justice.gov.uk
-   API_ENDPOINT_URL: https://api-dev.prison.service.justice.gov.uk/
+   API_ENDPOINT_URL: https://prison-api-dev.prison.service.justice.gov.uk/
    OAUTH_ENDPOINT_URL: https://sign-in-dev.hmpps.service.justice.gov.uk/auth/
    HMPPS_MANAGE_USERS_API_URL: https://manage-users-api-dev.hmpps.service.justice.gov.uk
    API_WHEREABOUTS_ENDPOINT_URL: https://whereabouts-api-dev.service.justice.gov.uk/
@@ -76,11 +76,12 @@ generic-service:
    GET_SOMEONE_READY_FOR_WORK_URL: https://get-ready-for-work-dev.hmpps.service.justice.gov.uk
    WARRANT_FOLDER_URL: https://manage-a-warrant-folder-dev.hmpps.service.justice.gov.uk/
    PRISONER_PROFILE_REDIRECT_URL: http://prisoner-dev.digital.prison.service.justice.gov.uk
-   PRISONER_PROFILE_REDIRECT_ENABLED_DATE: 2023-08-14T02:00:00
-   PRISONER_PROFILE_REDIRECT_ENABLED_PRISONS: "LEI,FNI,HMI,NHI"
-   PRISONER_PROFILE_SCHEDULE_REDIRECT_FOR_PRISONS: "HMI,NHI"
+   PRISONER_PROFILE_REDIRECT_ENABLED_DATE: 2023-09-5T02:00:00
+   PRISONER_PROFILE_REDIRECT_ENABLED_PRISONS: "LEI,FNI,HMI,NHI,WDI,WEI,HLI,MDI,LHI,HDI,WYI,AGI,DNI"
+   PRISONER_PROFILE_SCHEDULE_REDIRECT_FOR_PRISONS: "WDI,WEI,HLI,MDI,LHI,HDI,WYI,AGI,DNI"
    HOMEPAGE_REDIRECT_URL: http://dps-dev.prison.service.justice.gov.uk
    HOMEPAGE_REDIRECT_ENABLED_DATE: 2023-07-24T02:00:00
    HOMEPAGE_REDIRECT_ENABLED_PRISONS: ""
    HOMEPAGE_SCHEDULE_REDIRECT_FOR_PRISONS: ""
    MANAGE_OFFENCES_URL: https://manage-offences-dev.hmpps.service.justice.gov.uk
+   MANAGE_ADJUDICATIONS_API_URL: https://manage-adjudications-api-dev.hmpps.service.justice.gov.uk

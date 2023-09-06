@@ -112,6 +112,7 @@ const setup = ({
   incentivesApi,
   nonAssociationsApi,
   restrictedPatientApi,
+  adjudicationsApi,
   whereaboutsMaintenanceMode,
 }) => {
   router.use(async (req, res, next) => {
@@ -154,7 +155,7 @@ const setup = ({
   )
 
   if (whereaboutsMaintenanceMode) {
-    router.use('/manage-prisoner-whereabouts*', maintenancePage('Manage prisoner whereabouts'))
+    router.use('/manage-prisoner-whereabouts*', maintenancePage('Prisoner whereabouts'))
   } else {
     router.use(
       '/manage-prisoner-whereabouts',
@@ -355,6 +356,7 @@ const setup = ({
       curiousApi,
       incentivesApi,
       restrictedPatientApi,
+      adjudicationsApi,
     })
   )
 

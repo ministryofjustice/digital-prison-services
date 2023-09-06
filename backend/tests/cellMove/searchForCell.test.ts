@@ -122,6 +122,7 @@ describe('select location', () => {
       query: {},
       protocol: 'http',
       get: jest.fn().mockReturnValue('localhost'),
+      headers: {},
     }
     res = { locals: {}, render: jest.fn(), status: jest.fn() }
 
@@ -354,6 +355,76 @@ describe('select location', () => {
           ],
         })
       )
+    })
+
+    describe('back link', () => {
+      it('links back to the prisoner search page when there is no referrer', async () => {
+        await controller(req, res)
+
+        expect(res.render).toHaveBeenCalledWith(
+          'cellMove/searchForCell.njk',
+          expect.objectContaining({
+            backUrl: '/change-someones-cell/prisoner-search',
+          })
+        )
+      })
+
+      it('links back to the prisoner search page when referred back from select-cell', async () => {
+        await controller(
+          {
+            ...req,
+            headers: {
+              referer: 'http://dps/prisoner/G0637UO/cell-move/select-cell',
+            },
+          },
+          res
+        )
+
+        expect(res.render).toHaveBeenCalledWith(
+          'cellMove/searchForCell.njk',
+          expect.objectContaining({
+            backUrl: '/change-someones-cell/prisoner-search',
+          })
+        )
+      })
+
+      it('links back to the prisoner search page when referred back from confirm-cell-move', async () => {
+        await controller(
+          {
+            ...req,
+            headers: {
+              referer: 'http://dps/prisoner/G0637UO/cell-move/confirm-cell-move',
+            },
+          },
+          res
+        )
+
+        expect(res.render).toHaveBeenCalledWith(
+          'cellMove/searchForCell.njk',
+          expect.objectContaining({
+            backUrl: '/change-someones-cell/prisoner-search',
+          })
+        )
+      })
+
+      it('links back to the page the user came from in any other case', async () => {
+        await controller(
+          {
+            ...req,
+            headers: {
+              referer: '/dps/some/other/page',
+            },
+          },
+          res
+        )
+
+        expect(res.render).toHaveBeenCalledWith(
+          'cellMove/searchForCell.njk',
+          expect.objectContaining({
+            backUrl: '/dps/some/other/page',
+          })
+        )
+      })
     })
   })
 })
