@@ -27,7 +27,7 @@ describe('Non Associations Api', () => {
 
       mock.get('/legacy/api/offenders/A4564AB/non-association-details').reply(200, mockResponse)
 
-      const response = await nonAssociationsApi.getNonAssociations({}, 'A4564AB')
+      const response = await nonAssociationsApi.getNonAssociationsLegacy({}, 'A4564AB')
 
       expect(response).toEqual(mockResponse)
     })

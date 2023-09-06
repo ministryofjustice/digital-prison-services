@@ -56,7 +56,7 @@ context('A user can select a cell', () => {
         },
       ],
     })
-    cy.task('stubOffenderNonAssociations', {
+    cy.task('stubOffenderNonAssociationsLegacy', {
       offenderNo: 'G6123VU',
       firstName: 'JOHN',
       lastName: 'SAUNDERS',
@@ -236,7 +236,7 @@ context('A user can select a cell', () => {
     })
 
     it('should NOT show the non association warning', () => {
-      cy.task('stubOffenderNonAssociations', null)
+      cy.task('stubOffenderNonAssociationsLegacy', null)
       const page = SelectCellPage.goTo(offenderNo)
       page.nonAssociationWarning().should('not.exist')
     })
@@ -278,7 +278,7 @@ context('A user can select a cell', () => {
       context('When referred from the search for a cell page', () => {
         beforeEach(() => {
           cy.task('stubOffenderFullDetails', offenderFullDetails)
-          cy.task('stubOffenderNonAssociations', {})
+          cy.task('stubOffenderNonAssociationsLegacy', {})
           cy.task('stubGroups', { id: 'MDI' })
           cy.task('stubUserCaseLoads')
           cy.visit('/prisoner/A12345/cell-move/search-for-cell')
@@ -295,7 +295,7 @@ context('A user can select a cell', () => {
       context('When the user clicked back from the consider risks page', () => {
         beforeEach(() => {
           cy.task('stubOffenderFullDetails', offenderFullDetails)
-          cy.task('stubOffenderNonAssociations', {})
+          cy.task('stubOffenderNonAssociationsLegacy', {})
           cy.task('stubGroups', { id: 'MDI' })
           cy.task('stubUserCaseLoads')
           cy.task('stubLocation', { locationId: 1, locationData: { parentLocationId: 2, description: 'MDI-1-1' } })
@@ -304,7 +304,7 @@ context('A user can select a cell', () => {
           cy.task('stubInmatesAtLocation', {
             inmates: [{ offenderNo: 'A12345', firstName: 'Bob', lastName: 'Doe', assignedLivingUnitId: 1 }],
           })
-          cy.task('stubOffenderNonAssociations', {
+          cy.task('stubOffenderNonAssociationsLegacy', {
             offenderNo,
             firstName: 'JOHN',
             lastName: 'SAUNDERS',

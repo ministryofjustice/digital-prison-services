@@ -2,7 +2,7 @@ import type { Response } from 'superagent'
 import type { ClientContext, OauthApiClient } from './oauthEnabledClient'
 import contextProperties from '../contextProperties'
 
-export type OffenderNonAssociation = {
+export type OffenderNonAssociationLegacy = {
   offenderNo: string
   firstName: string
   lastName: string
@@ -42,11 +42,14 @@ export const nonAssociationsApiFactory = (client: OauthApiClient) => {
   const get = <T>(context: ClientContext, url: string): Promise<T> =>
     client.get<T>(context, url).then(processResponse(context))
 
-  const getNonAssociations = (context: ClientContext, offenderNo: string): Promise<OffenderNonAssociation> =>
+  const getNonAssociationsLegacy = (
+    context: ClientContext,
+    offenderNo: string
+  ): Promise<OffenderNonAssociationLegacy> =>
     get(context, `/legacy/api/offenders/${offenderNo}/non-association-details`)
 
   return {
-    getNonAssociations,
+    getNonAssociationsLegacy,
   }
 }
 

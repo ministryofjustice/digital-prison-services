@@ -1,6 +1,5 @@
 const { stubFor } = require('./wiremock')
 
-
 module.exports = {
   stubHealth: (status = 200) =>
     stubFor({
@@ -17,7 +16,7 @@ module.exports = {
       },
     }),
 
-  stubOffenderNonAssociations: (response) =>
+  stubOffenderNonAssociationsLegacy: (response) =>
     stubFor({
       request: {
         method: 'GET',
@@ -31,5 +30,4 @@ module.exports = {
         jsonBody: response,
       },
     }),
-
 }

@@ -16,7 +16,7 @@ describe('Select a cell', () => {
   }
 
   const nonAssociationsApi = {
-    getNonAssociations: jest.fn(),
+    getNonAssociationsLegacy: jest.fn(),
   }
 
   const whereaboutsApi = {
@@ -77,7 +77,7 @@ describe('Select a cell', () => {
 
     prisonApi.getCsraAssessments = jest.fn()
     prisonApi.getAlerts = jest.fn()
-    nonAssociationsApi.getNonAssociations = jest.fn()
+    nonAssociationsApi.getNonAssociationsLegacy = jest.fn()
     prisonApi.getLocation = jest.fn().mockResolvedValue({})
     prisonApi.getCellsWithCapacity = jest.fn().mockResolvedValue([])
     prisonApi.getInmatesAtLocation = jest.fn().mockResolvedValue([])
@@ -112,7 +112,7 @@ describe('Select a cell', () => {
       await controller(req, res)
 
       expect(prisonApi.getDetails).toHaveBeenCalledWith({}, someOffenderNumber, true)
-      expect(nonAssociationsApi.getNonAssociations).toHaveBeenCalledWith({}, someOffenderNumber)
+      expect(nonAssociationsApi.getNonAssociationsLegacy).toHaveBeenCalledWith({}, someOffenderNumber)
       expect(whereaboutsApi.searchGroups).toHaveBeenCalledWith({}, someAgency)
     })
 
@@ -716,7 +716,7 @@ describe('Select a cell', () => {
 
   describe('Non associations', () => {
     beforeEach(() => {
-      nonAssociationsApi.getNonAssociations = jest.fn().mockResolvedValue({
+      nonAssociationsApi.getNonAssociationsLegacy = jest.fn().mockResolvedValue({
         offenderNo: 'G6123VU',
         firstName: 'JOHN',
         lastName: 'SAUNDERS',
@@ -818,7 +818,7 @@ describe('Select a cell', () => {
     })
 
     it('should not request the location prefix when there are no non-associations', async () => {
-      nonAssociationsApi.getNonAssociations = jest.fn().mockResolvedValue(null)
+      nonAssociationsApi.getNonAssociationsLegacy = jest.fn().mockResolvedValue(null)
       await controller(req, res)
 
       expect(prisonApi.getLocation.mock.calls.length).toBe(0)
@@ -899,7 +899,7 @@ describe('Select a cell', () => {
     })
 
     it('should set show non association value to false when non association offender does not have assigned living unit', async () => {
-      nonAssociationsApi.getNonAssociations = jest.fn().mockResolvedValue({
+      nonAssociationsApi.getNonAssociationsLegacy = jest.fn().mockResolvedValue({
         offenderNo: 'G6123VU',
         firstName: 'JOHN',
         lastName: 'SAUNDERS',
