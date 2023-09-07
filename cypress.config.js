@@ -408,6 +408,7 @@ module.exports = defineConfig({
         stubGetCaseNoteTypes: caseNotes.stubGetCaseNoteTypes,
         stubSaveAmendment: caseNotes.stubSaveAmendment,
         stubOffenderNonAssociationsLegacy: (response) => nonAssociationsApi.stubOffenderNonAssociationsLegacy(response),
+        stubGetPrisonerNonAssociations: (response) => nonAssociationsApi.stubGetPrisonerNonAssociations(response),
         stubProfessionalContacts: ({
           offenderBasicDetails,
           contacts,
