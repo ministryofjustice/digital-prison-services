@@ -1,0 +1,37 @@
+{# TODO: Add/check feature flag with list of private beta prisons #}
+<h3 class="govuk-heading-m">Non-associations</h3>
+<div data-test="personal-details">
+    {% set nonAssociationsRows = [] %}
+
+    {% if nonAssociationsSectionError %}
+        <p class="govuk-body">
+            Unable to show any of these details. You can try reloading the page.
+        </p>
+    {% endif %}
+
+    {% if nonAssociationsSectionError == false %}
+        {% if prisonerNonAssociations.prisonId != 'OUT' and prisonerNonAssociations.prisonId != 'TRN' %}
+            {% set nonAssociationsRows = (nonAssociationsRows.push(
+                {
+                    key: {
+                    text: 'In ' + prisonerNonAssociations.prisonName
+                },
+                    value: {
+                    text: prisonerNonAssociations.openCount | showDefault(0)
+                }
+                }
+                ), nonAssociationsRows) %}
+        {% endif %}
+
+        {{ govukSummaryList({
+            rows: nonAssociationsRows,
+            classes: "govuk-!-margin-bottom-2",
+            attributes: { "data-test": "non-associations-info-summary" }
+        }) }}
+
+        <a href="{{ nonAssociationsUrl }}/prisoner/{{ prisonerNonAssociations.prisonerNumber }}/non-associations"
+           class="govuk-link govuk-!-font-size-19">
+            Manage non-associations
+        </a>
+    {% endif %}
+</div>
