@@ -117,6 +117,9 @@ export const apis = {
     url: process.env.NON_ASSOCIATIONS_API_ENDPOINT_URL || 'http://localhost:8088',
     timeoutSeconds: toNumber(process.env.NON_ASSOCIATIONS_API_ENDPOINT_TIMEOUT_SECONDS) || 30,
   },
+  nonAssociations: {
+    ui_url: process.env.NON_ASSOCIATIONS_UI_URL,
+  },
   keyworker: {
     url: process.env.KEYWORKER_API_URL || 'http://localhost:8081/',
     timeoutSeconds: toNumber(process.env.KEYWORKER_API_TIMEOUT_SECONDS) || 30,
