@@ -174,8 +174,6 @@ export default ({
       // @ts-expect-error ts-migrate(2554) FIXME: Expected 2 arguments, but got 1.
     ].map((response) => extractResponse(response))
 
-    const nonAssociationsUrl = config.apis.nonAssociations.ui_url
-
     const prisoner = prisonerData && prisonerData[0]
     const { profileInformation } = prisonerProfileData || {}
     const { morningActivities, afternoonActivities, eveningActivities } = filterActivitiesByPeriod(todaysEvents)
@@ -331,10 +329,13 @@ export default ({
             : (adjudications && adjudications.adjudicationCount) || 0,
         },
       },
-      // @ts-expect-error ts-migrate(2339) FIXME: Property 'error' does not exist on type 'unknown'.
-      nonAssociationsSectionError: Boolean(nonAssociationsResponse.error),
-      prisonerNonAssociations,
-      nonAssociationsUrl,
+      nonAssociations: {
+        // @ts-expect-error ts-migrate(2339) FIXME: Property 'error' does not exist on type 'unknown'.
+        sectionError: Boolean(nonAssociationsResponse.error),
+        enabled: config.apis.nonAssociations.prisons.split(',').includes(activeCaseLoad.caseLoadId),
+        prisonerNonAssociations,
+        uiUrl: config.apis.nonAssociations.ui_url,
+      },
       // @ts-expect-error ts-migrate(2339) FIXME: Property 'error' does not exist on type 'unknown'.
       personalDetailsSectionError: Boolean(prisonerDataResponse.error && prisonerProfileDataResponse.error),
       personalDetails: [

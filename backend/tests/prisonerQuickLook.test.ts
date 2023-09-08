@@ -897,7 +897,33 @@ describe('prisoner profile quick look', () => {
 
   describe('non-associations data', () => {
     beforeEach(() => {
+      config.apis.nonAssociations.prisons = 'MDI,LEI'
+
       systemOauthClient.getClientCredentialsTokens = jest.fn().mockResolvedValue({ system: true })
+    })
+
+    describe('when the user is in a prison not part of the private beta', () => {
+      beforeEach(() => {
+        config.apis.nonAssociations.prisons = 'LEI,FEI'
+
+        nonAssociationsApi.getNonAssociations.mockResolvedValue(prisonerNonAssociations)
+      })
+
+      it('should render the quick look template with the non-associations section disabled', async () => {
+        await controller(req, res)
+
+        expect(res.render).toHaveBeenCalledWith(
+          'prisonerProfile/prisonerQuickLook/prisonerQuickLook.njk',
+          expect.objectContaining({
+            nonAssociations: {
+              sectionError: false,
+              enabled: false,
+              uiUrl: nonAssociationsUrl,
+              prisonerNonAssociations,
+            },
+          })
+        )
+      })
     })
 
     it('should make a request for the correct data', async () => {
@@ -920,9 +946,12 @@ describe('prisoner profile quick look', () => {
         expect(res.render).toHaveBeenCalledWith(
           'prisonerProfile/prisonerQuickLook/prisonerQuickLook.njk',
           expect.objectContaining({
-            nonAssociationsSectionError: true,
-            prisonerNonAssociations: null,
-            nonAssociationsUrl,
+            nonAssociations: {
+              sectionError: true,
+              enabled: true,
+              uiUrl: nonAssociationsUrl,
+              prisonerNonAssociations: null,
+            },
           })
         )
       })
@@ -939,9 +968,12 @@ describe('prisoner profile quick look', () => {
         expect(res.render).toHaveBeenCalledWith(
           'prisonerProfile/prisonerQuickLook/prisonerQuickLook.njk',
           expect.objectContaining({
-            nonAssociationsSectionError: false,
-            prisonerNonAssociations,
-            nonAssociationsUrl,
+            nonAssociations: {
+              sectionError: false,
+              enabled: true,
+              uiUrl: nonAssociationsUrl,
+              prisonerNonAssociations,
+            },
           })
         )
       })
