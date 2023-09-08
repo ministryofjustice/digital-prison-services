@@ -119,6 +119,7 @@ export const apis = {
   },
   nonAssociations: {
     ui_url: process.env.NON_ASSOCIATIONS_UI_URL,
+    prisons: process.env.NON_ASSOCIATIONS_PRISONS || '',
   },
   keyworker: {
     url: process.env.KEYWORKER_API_URL || 'http://localhost:8081/',
