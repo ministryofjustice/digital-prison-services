@@ -1,14 +1,13 @@
 {% if nonAssociations.enabled %}
     <h3 class="govuk-heading-m">Non-associations</h3>
-    <div data-test="personal-details">
-        {% set nonAssociationsRows = [] %}
-
+    <div data-test="non-associations">
         {% if nonAssociations.sectionError %}
             <p class="govuk-body">
                 Unable to show any of these details. You can try reloading the page.
             </p>
         {% else %}
             {% if nonAssociations.prisonerNonAssociations.prisonId != 'OUT' and nonAssociations.prisonerNonAssociations.prisonId != 'TRN' %}
+                {% set nonAssociationsRows = [] %}
                 {% set nonAssociationsRows = (nonAssociationsRows.push(
                     {
                         key: {
@@ -19,16 +18,16 @@
                     }
                     }
                     ), nonAssociationsRows) %}
+                {{ govukSummaryList({
+                    rows: nonAssociationsRows,
+                    classes: "govuk-!-margin-bottom-2",
+                    attributes: { "data-test": "non-associations-summary" }
+                }) }}
             {% endif %}
 
-            {{ govukSummaryList({
-                rows: nonAssociationsRows,
-                classes: "govuk-!-margin-bottom-2",
-                attributes: { "data-test": "non-associations-info-summary" }
-            }) }}
-
             <a href="{{ nonAssociations.uiUrl }}/prisoner/{{ nonAssociations.prisonerNonAssociations.prisonerNumber }}/non-associations"
-               class="govuk-link govuk-!-font-size-19">
+               class="govuk-link govuk-!-font-size-19"
+               data-test="non-associations-link">
                 Manage non-associations
             </a>
         {% endif %}
