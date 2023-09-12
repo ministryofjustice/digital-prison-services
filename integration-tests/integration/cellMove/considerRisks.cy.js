@@ -211,7 +211,7 @@ context('A user can see conflicts in cell', () => {
     cy.task('stubInmatesAtLocation', {
       inmates: [{ offenderNo: 'A12345', firstName: 'Bob', lastName: 'Doe', assignedLivingUnitId: 1 }],
     })
-    cy.task('stubOffenderNonAssociations', {
+    cy.task('stubOffenderNonAssociationsLegacy', {
       offenderNo,
       firstName: 'JOHN',
       lastName: 'SAUNDERS',
@@ -354,7 +354,7 @@ context('A user can see conflicts in cell', () => {
     cy.task('stubInmatesAtLocation', {
       inmates: [],
     })
-    cy.task('stubOffenderNonAssociations', {})
+    cy.task('stubOffenderNonAssociationsLegacy', {})
 
     cy.task('stubBookingDetails', {
       firstName: 'Bob',
@@ -421,7 +421,7 @@ context('A user can see conflicts in cell', () => {
       Cypress.Cookies.preserveOnce('hmpps-session-dev')
       cy.task('stubOffenderBasicDetails', offenderBasicDetails)
       cy.task('stubOffenderFullDetails', offenderFullDetails)
-      cy.task('stubOffenderNonAssociations', {})
+      cy.task('stubOffenderNonAssociationsLegacy', {})
       cy.task('stubGroups', { id: 'MDI' })
       cy.task('stubUserCaseLoads')
       cy.task('stubGroups', { id: 'MDI' })
@@ -444,7 +444,7 @@ context('A user can see conflicts in cell', () => {
           },
         ],
       })
-      cy.task('stubOffenderNonAssociations', {
+      cy.task('stubOffenderNonAssociationsLegacy', {
         offenderNo: 'A12345',
         firstName: 'JOHN',
         lastName: 'SAUNDERS',

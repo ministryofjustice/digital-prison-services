@@ -1,9 +1,9 @@
 import moment from 'moment'
 import { csraTranslations } from '../../shared/csraHelpers'
-import { OffenderNonAssociation } from '../../api/nonAssociationsApi'
+import { OffenderNonAssociationLegacy } from '../../api/nonAssociationsApi'
 
 export const getNonAssociationsInEstablishment = async (
-  nonAssociations: OffenderNonAssociation,
+  nonAssociations: OffenderNonAssociationLegacy,
   context,
   prisonApi
 ) => {

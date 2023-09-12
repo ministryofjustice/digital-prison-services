@@ -58,6 +58,7 @@ const controller = ({
   incentivesApi,
   restrictedPatientApi,
   adjudicationsApi,
+  nonAssociationsApi,
 }) => {
   const prisonerProfileService = prisonerProfileServiceFactory({
     prisonApi,
@@ -93,6 +94,7 @@ const controller = ({
         incentivesApi,
         restrictedPatientApi,
         adjudicationsApi,
+        nonAssociationsApi,
       }),
     })
   )

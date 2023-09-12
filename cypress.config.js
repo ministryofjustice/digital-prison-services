@@ -199,6 +199,7 @@ module.exports = defineConfig({
           positiveCaseNotes,
           negativeCaseNotes,
           adjudications,
+          prisonerNonAssociations,
           visitsSummary,
           visitBalances,
           todaysEvents,
@@ -213,6 +214,7 @@ module.exports = defineConfig({
             prisonApi.stubPositiveCaseNotes(positiveCaseNotes),
             prisonApi.stubNegativeCaseNotes(negativeCaseNotes),
             adjudicationsApi.stubAdjudicationsForBooking(adjudications),
+            nonAssociationsApi.stubGetPrisonerNonAssociations(prisonerNonAssociations),
             prisonApi.stubVisitsSummary(visitsSummary),
             prisonApi.stubPrisonerVisitBalances(visitBalances),
             prisonApi.stubEventsForToday(todaysEvents),
@@ -232,6 +234,7 @@ module.exports = defineConfig({
             prisonApi.stubPrisonerVisitBalances(null, 500),
             prisonApi.stubEventsForToday([], 500),
             prisonApi.stubProfileInformation(null, 500),
+            nonAssociationsApi.stubGetPrisonerNonAssociations(null, 500),
           ]),
 
         stubPrisonerDetails: (prisonerDetails) => prisonApi.stubPrisonerDetails(prisonerDetails),
@@ -407,7 +410,8 @@ module.exports = defineConfig({
         verifySaveAmendment: caseNotes.verifySaveAmendment,
         stubGetCaseNoteTypes: caseNotes.stubGetCaseNoteTypes,
         stubSaveAmendment: caseNotes.stubSaveAmendment,
-        stubOffenderNonAssociations: (response) => nonAssociationsApi.stubOffenderNonAssociations(response),
+        stubOffenderNonAssociationsLegacy: (response) => nonAssociationsApi.stubOffenderNonAssociationsLegacy(response),
+        stubGetPrisonerNonAssociations: (response) => nonAssociationsApi.stubGetPrisonerNonAssociations(response),
         stubProfessionalContacts: ({
           offenderBasicDetails,
           contacts,
@@ -485,11 +489,12 @@ module.exports = defineConfig({
         stubActivityLocationsConnectionResetFault: () => prisonApi.stubActivityLocationsConnectionResetFault(),
         stubGetAttendancesForBookings: ({ agencyId, timeSlot, date, data }) =>
           whereabouts.stubGetAttendancesForBookings(agencyId, timeSlot, date, data),
-        stubGetAdjudicationDetails: (adjudicationDetails) => adjudicationsApi.stubGetAdjudicationDetails(adjudicationDetails),
+        stubGetAdjudicationDetails: (adjudicationDetails) =>
+          adjudicationsApi.stubGetAdjudicationDetails(adjudicationDetails),
         stubAdjudicationFindingTypes: (types) => prisonApi.stubAdjudicationFindingTypes(types),
         stubAdjudications: ({ response, headers }) => adjudicationsApi.stubAdjudications(response, headers),
-        verifyAdjudicationsHistory: ({ offenderNo, agencyId, finding, fromDate, toDate, size}) =>
-            adjudicationsApi.verifyAdjudicationsHistory({ offenderNo, agencyId, finding, fromDate, toDate, size }),
+        verifyAdjudicationsHistory: ({ offenderNo, agencyId, finding, fromDate, toDate, size }) =>
+          adjudicationsApi.verifyAdjudicationsHistory({ offenderNo, agencyId, finding, fromDate, toDate, size }),
         verifyAlertsBooking: ({ bookingId, alertType, from, to, alertStatus, page, sort, size }) =>
           prisonApi.verifyAlertsBookingGet({ bookingId, alertType, from, to, alertStatus, page, sort, size }),
         resetAdjudicationsStub: () => adjudicationsApi.resetAdjudicationsStub(),

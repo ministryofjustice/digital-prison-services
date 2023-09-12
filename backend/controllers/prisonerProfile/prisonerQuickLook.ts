@@ -6,6 +6,7 @@ import filterActivitiesByPeriod from '../../shared/filterActivitiesByPeriod'
 import getValueByType from '../../shared/getValueByType'
 import getContext from './prisonerProfileContext'
 import type apis from '../../apis'
+import config from '../../config'
 
 export const trackEvent = (telemetry, username, activeCaseLoad) => {
   if (telemetry) {
@@ -76,6 +77,7 @@ export default ({
     oauthApi,
     restrictedPatientApi,
     adjudicationsApi,
+    nonAssociationsApi,
   }: {
     prisonerProfileService
     prisonApi
@@ -85,6 +87,7 @@ export default ({
     oauthApi
     restrictedPatientApi
     adjudicationsApi
+    nonAssociationsApi: typeof apis.nonAssociationsApi
   }) =>
   async (req, res) => {
     const {
@@ -118,6 +121,7 @@ export default ({
       positiveCaseNotesResponse,
       negativeCaseNotesResponse,
       adjudicationsResponse,
+      nonAssociationsResponse,
       visitsSummaryResponse,
       visitBalancesResponse,
       todaysEventsResponse,
@@ -132,6 +136,7 @@ export default ({
         prisonApi.getPositiveCaseNotes(context, bookingId, dateThreeMonthsAgo, today),
         prisonApi.getNegativeCaseNotes(context, bookingId, dateThreeMonthsAgo, today),
         adjudicationsApi.getAdjudicationsForBooking(systemContext, bookingId),
+        nonAssociationsApi.getNonAssociations(systemContext, offenderNo),
         prisonApi.getVisitsSummary(context, bookingId),
         prisonApi.getPrisonerVisitBalances(context, offenderNo),
         prisonApi.getEventsForToday(context, bookingId),
@@ -148,6 +153,7 @@ export default ({
       positiveCaseNotes,
       negativeCaseNotes,
       adjudications,
+      prisonerNonAssociations,
       visitsSummary,
       visitBalances,
       todaysEvents,
@@ -161,6 +167,7 @@ export default ({
       positiveCaseNotesResponse,
       negativeCaseNotesResponse,
       adjudicationsResponse,
+      nonAssociationsResponse,
       visitsSummaryResponse,
       visitBalancesResponse,
       todaysEventsResponse,
@@ -321,6 +328,13 @@ export default ({
             ? unableToShowDetailMessage
             : (adjudications && adjudications.adjudicationCount) || 0,
         },
+      },
+      nonAssociations: {
+        // @ts-expect-error ts-migrate(2339) FIXME: Property 'error' does not exist on type 'unknown'.
+        sectionError: Boolean(nonAssociationsResponse.error),
+        enabled: config.apis.nonAssociations.prisons.split(',').includes(activeCaseLoad?.caseLoadId),
+        prisonerNonAssociations,
+        uiUrl: config.apis.nonAssociations.ui_url,
       },
       // @ts-expect-error ts-migrate(2339) FIXME: Property 'error' does not exist on type 'unknown'.
       personalDetailsSectionError: Boolean(prisonerDataResponse.error && prisonerProfileDataResponse.error),

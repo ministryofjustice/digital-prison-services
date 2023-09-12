@@ -14,7 +14,7 @@ describe('select location', () => {
   }
 
   const nonAssociationsApi = {
-    getNonAssociations: jest.fn(),
+    getNonAssociationsLegacy: jest.fn(),
   }
 
   const whereaboutsApi = {
@@ -131,7 +131,7 @@ describe('select location', () => {
       offenderNo: requestedOffenderNo,
     }))
 
-    nonAssociationsApi.getNonAssociations = jest.fn().mockResolvedValue({ nonAssociations: [] })
+    nonAssociationsApi.getNonAssociationsLegacy = jest.fn().mockResolvedValue({ nonAssociations: [] })
 
     whereaboutsApi.searchGroups = jest.fn().mockResolvedValue([
       { name: 'Casu', key: 'Casu', children: [] },
@@ -161,7 +161,7 @@ describe('select location', () => {
     await controller(req, res)
 
     expect(prisonApi.getDetails).toHaveBeenCalledWith(res.locals, offenderNo, true)
-    expect(nonAssociationsApi.getNonAssociations).toHaveBeenCalledWith(res.locals, offenderNo)
+    expect(nonAssociationsApi.getNonAssociationsLegacy).toHaveBeenCalledWith(res.locals, offenderNo)
     expect(whereaboutsApi.searchGroups).toHaveBeenCalledWith(res.locals, 'MDI')
   })
 
@@ -245,7 +245,7 @@ describe('select location', () => {
     })
 
     it('populates the data correctly when some non-associations, but not in the same establishment', async () => {
-      nonAssociationsApi.getNonAssociations = jest.fn().mockResolvedValue({
+      nonAssociationsApi.getNonAssociationsLegacy = jest.fn().mockResolvedValue({
         agencyDescription: 'MOORLAND',
         nonAssociations: [
           {
@@ -267,7 +267,7 @@ describe('select location', () => {
     })
 
     it('populates the data correctly when some non-associations, but not effective yet', async () => {
-      nonAssociationsApi.getNonAssociations = jest.fn().mockResolvedValue({
+      nonAssociationsApi.getNonAssociationsLegacy = jest.fn().mockResolvedValue({
         agencyDescription: 'MOORLAND',
         nonAssociations: [
           {
@@ -290,7 +290,7 @@ describe('select location', () => {
     })
 
     it('populates the data correctly when some non-associations, but expired', async () => {
-      nonAssociationsApi.getNonAssociations = jest.fn().mockResolvedValue({
+      nonAssociationsApi.getNonAssociationsLegacy = jest.fn().mockResolvedValue({
         agencyDescription: 'MOORLAND',
         nonAssociations: [
           {
@@ -314,7 +314,7 @@ describe('select location', () => {
     })
 
     it('populates the data correctly when some non-associations in the same establishment', async () => {
-      nonAssociationsApi.getNonAssociations = jest.fn().mockResolvedValue({
+      nonAssociationsApi.getNonAssociationsLegacy = jest.fn().mockResolvedValue({
         agencyDescription: 'MOORLAND',
         nonAssociations: [
           {

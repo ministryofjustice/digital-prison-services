@@ -13,7 +13,7 @@ describe('view non associations', () => {
   }
 
   const nonAssociationsApi = {
-    getNonAssociations: jest.fn(),
+    getNonAssociationsLegacy: jest.fn(),
   }
 
   const tomorrow = moment().add(1, 'days')
@@ -49,7 +49,7 @@ describe('view non associations', () => {
       offenderNo: requestedOffenderNo,
     }))
 
-    nonAssociationsApi.getNonAssociations = jest.fn().mockResolvedValue({
+    nonAssociationsApi.getNonAssociationsLegacy = jest.fn().mockResolvedValue({
       offenderNo: 'ABC123',
       firstName: 'Fred',
       lastName: 'Bloggs',
@@ -140,7 +140,7 @@ describe('view non associations', () => {
     await controller(req, res)
 
     expect(prisonApi.getDetails).toHaveBeenCalledWith(res.locals, offenderNo)
-    expect(nonAssociationsApi.getNonAssociations).toHaveBeenCalledWith(res.locals, offenderNo)
+    expect(nonAssociationsApi.getNonAssociationsLegacy).toHaveBeenCalledWith(res.locals, offenderNo)
   })
 
   it('Should render error template when there is an API error', async () => {
