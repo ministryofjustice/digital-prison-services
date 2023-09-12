@@ -12,6 +12,7 @@ generic-service:
    PRISON_STAFF_HUB_UI_URL: https://digital-dev.prison.service.justice.gov.uk/
    HMPPS_COOKIE_DOMAIN: digital-dev.prison.service.justice.gov.uk
    API_ENDPOINT_URL: https://prison-api-dev.prison.service.justice.gov.uk/
+   API_CELL_ALLOCATION_ENDPOINT_URL: https://cell-allocation-api-dev.prison.service.justice.gov.uk/
    OAUTH_ENDPOINT_URL: https://sign-in-dev.hmpps.service.justice.gov.uk/auth/
    HMPPS_MANAGE_USERS_API_URL: https://manage-users-api-dev.hmpps.service.justice.gov.uk
    API_WHEREABOUTS_ENDPOINT_URL: https://whereabouts-api-dev.service.justice.gov.uk/

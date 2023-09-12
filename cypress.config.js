@@ -5,6 +5,7 @@ const { defineConfig } = require('cypress')
 const auth = require('./integration-tests/mockApis/auth')
 const users = require('./integration-tests/mockApis/users')
 const prisonApi = require('./integration-tests/mockApis/prisonApi')
+const cellAllocationApi = require('./integration-tests/mockApis/cellAllocationApi')
 const incentivesApi = require('./integration-tests/mockApis/incentivesApi')
 const nonAssociationsApi = require('./integration-tests/mockApis/nonAssociationsApi')
 const dataComplianceApi = require('./integration-tests/mockApis/dataCompliance')
@@ -458,7 +459,7 @@ module.exports = defineConfig({
         stubPrisonerFullDetail: ({ prisonerDetail, offenderNo, fullInfo }) =>
           prisonApi.stubPrisonerFullDetail(prisonerDetail, offenderNo, fullInfo),
         stubMoveToCell: () => whereabouts.stubMoveToCell(),
-        stubMoveToCellSwap: () => prisonApi.stubMoveToCellSwap(),
+        stubMoveToCellSwap: () => cellAllocationApi.stubMoveToCellSwap(),
         verifyMoveToCell: (body) => prisonApi.verifyMoveToCell(body),
         stubGetLocationPrefix: ({ agencyId, groupName, response }) =>
           whereabouts.stubGetLocationPrefix({ agencyId, groupName, response }),
@@ -485,11 +486,12 @@ module.exports = defineConfig({
         stubActivityLocationsConnectionResetFault: () => prisonApi.stubActivityLocationsConnectionResetFault(),
         stubGetAttendancesForBookings: ({ agencyId, timeSlot, date, data }) =>
           whereabouts.stubGetAttendancesForBookings(agencyId, timeSlot, date, data),
-        stubGetAdjudicationDetails: (adjudicationDetails) => adjudicationsApi.stubGetAdjudicationDetails(adjudicationDetails),
+        stubGetAdjudicationDetails: (adjudicationDetails) =>
+          adjudicationsApi.stubGetAdjudicationDetails(adjudicationDetails),
         stubAdjudicationFindingTypes: (types) => prisonApi.stubAdjudicationFindingTypes(types),
         stubAdjudications: ({ response, headers }) => adjudicationsApi.stubAdjudications(response, headers),
-        verifyAdjudicationsHistory: ({ offenderNo, agencyId, finding, fromDate, toDate, size}) =>
-            adjudicationsApi.verifyAdjudicationsHistory({ offenderNo, agencyId, finding, fromDate, toDate, size }),
+        verifyAdjudicationsHistory: ({ offenderNo, agencyId, finding, fromDate, toDate, size }) =>
+          adjudicationsApi.verifyAdjudicationsHistory({ offenderNo, agencyId, finding, fromDate, toDate, size }),
         verifyAlertsBooking: ({ bookingId, alertType, from, to, alertStatus, page, sort, size }) =>
           prisonApi.verifyAlertsBookingGet({ bookingId, alertType, from, to, alertStatus, page, sort, size }),
         resetAdjudicationsStub: () => adjudicationsApi.resetAdjudicationsStub(),

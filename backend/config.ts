@@ -96,6 +96,10 @@ export const apis = {
     url: process.env.API_ENDPOINT_URL || 'http://localhost:8080/',
     timeoutSeconds: toNumber(process.env.API_ENDPOINT_TIMEOUT_SECONDS) || 30,
   },
+  cellAllocationApi: {
+    url: process.env.API_CELL_ALLOCATION_ENDPOINT_URL || 'http://localhost:8080/',
+    timeoutSeconds: toNumber(process.env.API_CELL_ALLOCATION_ENDPOINT_TIMEOUT_SECONDS) || 30,
+  },
   whereabouts: {
     url: process.env.API_WHEREABOUTS_ENDPOINT_URL || 'http://localhost:8082/',
     timeoutSeconds: toNumber(process.env.API_WHEREABOUTS_ENDPOINT_TIMEOUT_SECONDS) || 30,

@@ -94,6 +94,7 @@ app.use((req, res, next) => {
 app.use(
   routes({
     prisonApi: apis.prisonApi,
+    cellAllocationApi: apis.cellAllocationApi,
     whereaboutsApi: apis.whereaboutsApi,
     oauthApi: apis.oauthApi,
     hmppsManageUsersApi: apis.hmppsManageUsersApi,

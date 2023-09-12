@@ -18,7 +18,7 @@ const cellMoveReasons = async (res, prisonApi, selectedReason) => {
     }))
 }
 
-export default ({ prisonApi, whereaboutsApi }) => {
+export default ({ systemOauthClient, cellAllocationApi, prisonApi, whereaboutsApi }) => {
   const index = async (req, res) => {
     const { offenderNo } = req.params
     const { cellId } = req.query
@@ -85,8 +85,12 @@ export default ({ prisonApi, whereaboutsApi }) => {
     return res.redirect(`/prisoner/${offenderNo}/cell-move/confirmation?cellId=${cellId}`)
   }
 
-  const makeCSwap = async (res, { bookingId, agencyId, offenderNo }) => {
-    await prisonApi.moveToCellSwap(res.locals, { bookingId })
+  const makeCSwap = async (req, res, { bookingId, agencyId, offenderNo }) => {
+    const { username } = req.session.userDetails
+
+    const systemContext = await systemOauthClient.getClientCredentialsTokens(username)
+
+    await cellAllocationApi.moveToCellSwap(systemContext, { bookingId })
 
     raiseAnalyticsEvent('Cell move', `Cell move for ${agencyId}`, `Cell type - C-SWAP`)
 
@@ -133,7 +137,7 @@ export default ({ prisonApi, whereaboutsApi }) => {
     try {
       const { bookingId, agencyId } = await prisonApi.getDetails(res.locals, offenderNo)
 
-      if (cellId === CSWAP) return await makeCSwap(res, { agencyId, bookingId, offenderNo })
+      if (cellId === CSWAP) return await makeCSwap(req, res, { agencyId, bookingId, offenderNo })
 
       return await makeCellMove(res, {
         cellId,

@@ -14,7 +14,15 @@ import { raiseAnalyticsEvent } from '../raiseAnalyticsEvent'
 
 const router = express.Router({ mergeParams: true })
 
-const controller = ({ oauthApi, prisonApi, whereaboutsApi, nonAssociationsApi, logError }) => {
+const controller = ({
+  systemOauthClient,
+  cellAllocationApi,
+  oauthApi,
+  prisonApi,
+  whereaboutsApi,
+  nonAssociationsApi,
+  logError,
+}) => {
   const { index: considerRisksIndex, post: considerRisksPost } = considerRisksController({
     prisonApi,
     raiseAnalyticsEvent,
@@ -22,6 +30,8 @@ const controller = ({ oauthApi, prisonApi, whereaboutsApi, nonAssociationsApi, l
   })
 
   const { index: confirmCellMoveIndex, post: confirmCellMovePost } = confirmCellMoveController({
+    systemOauthClient,
+    cellAllocationApi,
     prisonApi,
     whereaboutsApi,
   })

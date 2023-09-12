@@ -1,3 +1,4 @@
+import type { Request } from 'express'
 import confirmCellMove from '../../controllers/cellMove/confirmCellMove'
 import { makeError } from '../helpers'
 import { raiseAnalyticsEvent } from '../../raiseAnalyticsEvent'
@@ -18,6 +19,14 @@ describe('Change cell play back details', () => {
     moveToCell: jest.fn(),
   }
 
+  const systemOauthClient = {
+    getClientCredentialsTokens: jest.fn(),
+  }
+
+  const cellAllocationApi = {
+    moveToCellSwap: jest.fn(),
+  }
+
   let controller
   const req = {
     originalUrl: 'http://localhost',
@@ -26,6 +35,7 @@ describe('Change cell play back details', () => {
     headers: {},
     flash: jest.fn(),
     body: {},
+    session: {},
   }
   const res = {
     locals: {
@@ -55,8 +65,9 @@ describe('Change cell play back details', () => {
 
     prisonApi.getAttributesForLocation = jest.fn().mockResolvedValue({ capacity: 1 })
     prisonApi.getCellMoveReasonTypes = jest.fn().mockResolvedValue([])
+    systemOauthClient.getClientCredentialsTokens = jest.fn().mockResolvedValue({})
 
-    controller = confirmCellMove({ prisonApi, whereaboutsApi })
+    controller = confirmCellMove({ systemOauthClient, cellAllocationApi, prisonApi, whereaboutsApi })
 
     req.params = {
       offenderNo: 'A12345',
@@ -450,8 +461,10 @@ describe('Change cell play back details', () => {
   })
 
   describe('Post handle C-SWAP cell move', () => {
-    it('should call elite api to make the C-SWAP cell move', async () => {
+    it('should call apis to make the C-SWAP cell move correctly', async () => {
       req.body = { cellId: 'C-SWAP' }
+      req.session = { userDetails: { username: 'some_user' } } as unknown as Request
+
       res.locals = {
         redirectUrl: '',
         homeUrl: '',
@@ -460,7 +473,8 @@ describe('Change cell play back details', () => {
       await controller.post(req, res)
 
       expect(prisonApi.getDetails).toHaveBeenCalledWith(res.locals, 'A12345')
-      expect(prisonApi.moveToCellSwap).toHaveBeenCalledWith(res.locals, { bookingId: 1 })
+      expect(cellAllocationApi.moveToCellSwap).toHaveBeenCalledWith({}, { bookingId: 1 })
+      expect(systemOauthClient.getClientCredentialsTokens).toHaveBeenCalledWith('some_user')
       expect(res.redirect).toHaveBeenCalledWith('/prisoner/A12345/cell-move/space-created')
     })
 
@@ -472,11 +486,11 @@ describe('Change cell play back details', () => {
       expect(raiseAnalyticsEvent).toBeCalledWith('Cell move', 'Cell move for MDI', 'Cell type - C-SWAP')
     })
 
-    it('should not raise an analytics event on api failures', async () => {
+    it('should not raise an analytics event on cellAllocationApi api failures', async () => {
       const raiseAnalyticsEventMock = raiseAnalyticsEvent as jest.MockedFunction<typeof raiseAnalyticsEvent>
       const error = new Error('Internal server error')
-
-      prisonApi.moveToCellSwap.mockRejectedValue(error)
+      req.session = { userDetails: { username: 'some_user' } } as unknown as Request
+      cellAllocationApi.moveToCellSwap.mockRejectedValue(error)
       req.body = { cellId: 'C-SWAP' }
 
       await expect(controller.post(req, res)).rejects.toThrowError(error)

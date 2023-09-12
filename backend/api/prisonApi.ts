@@ -1,5 +1,6 @@
 import contextProperties from '../contextProperties'
 import { arrayToQueryString, mapToQueryString } from '../utils'
+import { OauthApiClient } from './oauthEnabledClient'
 
 export type GetTransferParameters = {
   courtEvents: boolean
@@ -441,8 +442,6 @@ export const prisonApiFactory = (client) => {
   const getHistoryByDate = (context, { assignmentDate, agencyId }) =>
     get(context, `/api/cell/${agencyId}/history/${assignmentDate}`)
 
-  const moveToCellSwap = (context, { bookingId }) => put(context, `/api/bookings/${bookingId}/move-to-cell-swap`, {})
-
   const getOffenderDamageObligations = (context, offenderNo) =>
     get(context, `/api/offenders/${offenderNo}/damage-obligations`)
 
@@ -571,7 +570,6 @@ export const prisonApiFactory = (client) => {
     getLocationDetails,
     getInmatesAtLocation,
     getInmatesAtLocationPrefix,
-    moveToCellSwap,
     getOffenderDamageObligations,
     getTransactionHistory,
     getPrisoners,
