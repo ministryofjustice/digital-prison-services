@@ -14,11 +14,11 @@ describe('Select reception', () => {
     getCellsWithCapacity: jest.fn(),
     getInmatesAtLocation: jest.fn(),
     getReceptionsWithCapacity: jest.fn(),
-    getNonAssociations: jest.fn(),
+    getNonAssociationsLegacy: jest.fn(),
   }
 
   const nonAssociationsApi = {
-    getNonAssociations: jest.fn(),
+    getNonAssociationsLegacy: jest.fn(),
   }
 
   const whereaboutsApi = {

@@ -48,7 +48,7 @@ export default ({ prisonApi, raiseAnalyticsEvent, nonAssociationsApi }) => {
         const { locationPrefix } = await prisonApi.getLocation(res.locals, parentLocationDetail.parentLocationId)
         // Get non-associations for the offender and filter them down to ones
         // that are currently in the same residential unit as the selected cell
-        const currentOffenderNonAssociations = await nonAssociationsApi.getNonAssociations(res.locals, offenderNo)
+        const currentOffenderNonAssociations = await nonAssociationsApi.getNonAssociationsLegacy(res.locals, offenderNo)
         nonAssociationsWithinLocation = currentOffenderNonAssociations?.nonAssociations?.filter((nonAssociation) =>
           nonAssociation.offenderNonAssociation.assignedLivingUnitDescription?.includes(locationPrefix)
         )

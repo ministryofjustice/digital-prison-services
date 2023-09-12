@@ -15,7 +15,7 @@ describe('move validation', () => {
   }
 
   const nonAssociationsApi = {
-    getNonAssociations: jest.fn(),
+    getNonAssociationsLegacy: jest.fn(),
   }
 
   let raiseAnalyticsEvent
@@ -325,7 +325,7 @@ describe('move validation', () => {
       .mockResolvedValueOnce(cellLocationData)
       .mockResolvedValueOnce(parentLocationData)
       .mockResolvedValueOnce(superParentLocationData)
-    nonAssociationsApi.getNonAssociations = jest.fn().mockResolvedValue({
+    nonAssociationsApi.getNonAssociationsLegacy = jest.fn().mockResolvedValue({
       offenderNo: 'ABC123',
       firstName: 'Fred',
       lastName: 'Bloggs',
@@ -423,7 +423,7 @@ describe('move validation', () => {
 
     expect(prisonApi.getDetails).toHaveBeenCalledWith(res.locals, offenderNo, true)
     expect(prisonApi.getDetails).toHaveBeenCalledWith(res.locals, 'A12346', true)
-    expect(nonAssociationsApi.getNonAssociations).toHaveBeenCalledWith(res.locals, offenderNo)
+    expect(nonAssociationsApi.getNonAssociationsLegacy).toHaveBeenCalledWith(res.locals, offenderNo)
     expect(prisonApi.getLocation).toHaveBeenCalledWith(res.locals, 1)
     expect(prisonApi.getLocation).toHaveBeenCalledWith(res.locals, 2)
     expect(prisonApi.getLocation).toHaveBeenCalledWith(res.locals, 3)
@@ -668,7 +668,7 @@ describe('move validation', () => {
     })
 
     it('Redirects to confirm cell move when there are no warnings', async () => {
-      nonAssociationsApi.getNonAssociations = jest.fn().mockResolvedValue({})
+      nonAssociationsApi.getNonAssociationsLegacy = jest.fn().mockResolvedValue({})
       prisonApi.getDetails = jest.fn().mockResolvedValue({ firstName: 'Bob', lastName: 'Doe', alerts: [] })
       prisonApi.getInmatesAtLocation.mockResolvedValue([])
 

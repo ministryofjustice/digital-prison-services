@@ -360,6 +360,7 @@ const setup = ({
       incentivesApi,
       restrictedPatientApi,
       adjudicationsApi,
+      nonAssociationsApi,
     })
   )
 

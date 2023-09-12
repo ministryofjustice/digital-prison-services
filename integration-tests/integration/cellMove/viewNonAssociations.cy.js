@@ -47,7 +47,7 @@ context('A user can view non associations', () => {
         agencyName: 'Moorland (HMP & YOI)',
       },
     })
-    cy.task('stubOffenderNonAssociations', {
+    cy.task('stubOffenderNonAssociationsLegacy', {
       offenderNo: 'A12345',
       firstName: 'John',
       lastName: 'Smith',

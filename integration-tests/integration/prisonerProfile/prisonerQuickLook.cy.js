@@ -69,6 +69,46 @@ const quickLookFullDetails = {
       },
     ],
   },
+  prisonerNonAssociations: {
+    prisonerNumber: offenderNo,
+    firstName: 'Test',
+    lastName: 'Prisoner',
+    prisonId: 'MDI',
+    prisonName: 'HMP Moorland',
+    cellLocation: 'C-023',
+    openCount: 1,
+    closedCount: 0,
+    nonAssociations: [
+      {
+        id: 42,
+        role: 'VICTIM',
+        roleDescription: 'Victim',
+        reason: 'BULLYING',
+        reasonDescription: 'Bullying',
+        restrictionType: 'LANDING',
+        restrictionTypeDescription: 'Cell and landing',
+        comment: 'John was bullying Test',
+        authorisedBy: 'USER_1',
+        whenCreated: '2021-07-05T10:35:17',
+        whenUpdated: '2021-07-05T10:35:17',
+        updatedBy: 'USER_1',
+        isClosed: false,
+        closedBy: null,
+        closedAt: null,
+        closedReason: null,
+        otherPrisonerDetails: {
+          prisonerNumber: 'A0000AA',
+          role: 'PERPETRATOR',
+          roleDescription: 'Perpetrator',
+          firstName: 'John',
+          lastName: 'Doe',
+          prisonId: 'MDI',
+          prisonName: 'HMP Moorland',
+          cellLocation: 'Z-122',
+        },
+      },
+    ],
+  },
   visitsSummary: {
     startDateTime: '2020-04-17T13:30:00',
     hasVisits: true,
@@ -470,6 +510,23 @@ context('Prisoner quick look', () => {
         })
     })
 
+    it('Should show correct Non-associations details', () => {
+      cy.get('[data-test="non-associations-summary"]')
+        .find('dt')
+        .then(($summaryValues) => {
+          expect($summaryValues.get(0).innerText).to.eq('In HMP Moorland')
+        })
+      cy.get('[data-test="non-associations-summary"]')
+        .find('dd')
+        .then(($summaryValues) => {
+          expect($summaryValues.get(0).innerText).to.eq('1')
+        })
+      cy.get('[data-test="non-associations-link"]')
+        .should('contain.text', 'Manage non-associations')
+        .should('have.attr', 'href')
+        .should('include', 'non-associations/prisoner/A1234A/non-associations')
+    })
+
     it('Should show the correct tabs and links', () => {
       cy.get('[data-test="tabs-quick-look"]').should('contain.text', 'Quick look')
       cy.get('[data-test="tabs-personal"]').should('contain.text', 'Personal')
@@ -484,6 +541,33 @@ context('Prisoner quick look', () => {
       cy.get('[data-test="view-alerts-link"]').should('contain.text', 'View alerts')
       cy.get('[data-test="iep-details-link"]').should('contain.text', 'View details for Incentive Level')
       cy.get('[data-test="incentive-details-link"]').should('contain.text', 'View incentive level details')
+    })
+  })
+
+  context('When someone is currently not in prison', () => {
+    beforeEach(() => {
+      Cypress.Cookies.preserveOnce('hmpps-session-dev')
+      cy.task('stubPrisonerProfileHeaderData', {
+        offenderBasicDetails,
+        offenderFullDetails,
+        iepSummary: {},
+        caseNoteSummary: {},
+        offenderNo,
+      })
+      cy.task('stubQuickLook', {
+        ...quickLookFullDetails,
+        prisonerNonAssociations: { ...quickLookFullDetails.prisonerNonAssociations, prisonId: 'OUT' },
+      })
+      cy.visit(`/prisoner/${offenderNo}`)
+    })
+
+    it('Should show link to non-associations but not the number of open non-associations', () => {
+      cy.get('[data-test="non-associations-summary"]').should('not.exist')
+
+      cy.get('[data-test="non-associations-link"]')
+        .should('contain.text', 'Manage non-associations')
+        .should('have.attr', 'href')
+        .should('include', 'non-associations/prisoner/A1234A/non-associations')
     })
   })
 
