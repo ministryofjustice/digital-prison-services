@@ -8,7 +8,7 @@ export default ({ prisonApi, nonAssociationsApi }) =>
 
     try {
       const { firstName, lastName } = await prisonApi.getDetails(res.locals, offenderNo)
-      const nonAssociations = await nonAssociationsApi.getNonAssociations(res.locals, offenderNo)
+      const nonAssociations = await nonAssociationsApi.getNonAssociationsLegacy(res.locals, offenderNo)
 
       // Only show active non-associations in the same establishment
       // Active means the effective date is not in the future and the expiry date is not in the past
