@@ -234,6 +234,9 @@ export const apis = {
   getSomeoneReadyForWork: {
     ui_url: process.env.GET_SOMEONE_READY_FOR_WORK_URL || 'http://localhost:3002',
   },
+  learningAndWorkProgress: {
+    ui_url: process.env.LEARNING_AND_WORK_PROGRESS_URL || 'http://localhost:3002',
+  },
   manageWarrantFolder: {
     ui_url: process.env.WARRANT_FOLDER_URL,
   },

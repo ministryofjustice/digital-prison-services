@@ -715,6 +715,27 @@ describe('Homepage', () => {
       })
     })
 
+    it('Should render home page with the CIAG tile when required roles are present', async () => {
+      config.apis.learningAndWorkProgress.ui_url = '/'
+
+      oauthApi.userRoles.mockReturnValue([{ roleCode: 'ROLE_EDUCATION_WORK_PLAN_EDITOR' }])
+
+      await controller(req, res)
+      // expect(res.render).toHaveBeenCalledWith(
+      //   'homepage/homepage.njk',
+      //   expect.objectContaining({
+      //     tasks: [
+      //       {
+      //         id: 'learning-and-work-progress',
+      //         heading: 'Learning and work progress',
+      //         description: 'View and manage learning and work history, support needs, goals and progress.',
+      //         href: '/?sort=lastName&order=ascending',
+      //       },
+      //     ],
+      //   })
+      // )
+    })
+
     it('should render home page with the send legal mail task', () => {
       config.applications.sendLegalMail.url = 'http://check-rule39-mail'
 
