@@ -346,10 +346,9 @@ const getTasks = ({ activeCaseLoadId, locations, staffId, whereaboutsConfig, key
       id: 'learning-and-work-progress',
       heading: 'Learning and work progress',
       description: 'View and manage learning and work history, support needs, goals and progress.',
-      href: `${learningAndWorkProgress.ui_url}?sort=lastName&order=descending`,
+      href: learningAndWorkProgress.ui_url,
       enabled: () =>
-        learningAndWorkProgress.ui_url &&
-        userHasRoles(['ROLE_EDUCATION_WORK_PLAN_EDITOR', 'ROLE_EDUCATION_WORK_PLAN_VIEWER']),
+        learningAndWorkProgress.ui_url && userHasRoles(['EDUCATION_WORK_PLAN_EDITOR', 'EDUCATION_WORK_PLAN_VIEWER']),
     },
     {
       id: 'manage-offences',
