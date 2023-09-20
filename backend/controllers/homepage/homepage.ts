@@ -25,6 +25,7 @@ const {
     appointments,
     historicalPrisonerApplication,
     getSomeoneReadyForWork,
+    learningAndWorkProgress,
     manageOffences,
   },
   app: { whereaboutsMaintenanceMode, keyworkerMaintenanceMode },
@@ -340,6 +341,14 @@ const getTasks = ({ activeCaseLoadId, locations, staffId, whereaboutsConfig, key
       description: 'Record what support a prisoner needs to get work. View who has been assessed as ready to work.',
       href: `${getSomeoneReadyForWork.ui_url}?sort=releaseDate&order=descending`,
       enabled: () => getSomeoneReadyForWork.ui_url && userHasRoles(['WORK_READINESS_VIEW', 'WORK_READINESS_EDIT']),
+    },
+    {
+      id: 'learning-and-work-progress',
+      heading: 'Learning and work progress',
+      description: 'View and manage learning and work history, support needs, goals and progress.',
+      href: learningAndWorkProgress.ui_url,
+      enabled: () =>
+        learningAndWorkProgress.ui_url && userHasRoles(['EDUCATION_WORK_PLAN_EDITOR', 'EDUCATION_WORK_PLAN_VIEWER']),
     },
     {
       id: 'manage-offences',
