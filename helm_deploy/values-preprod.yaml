@@ -24,7 +24,7 @@ generic-service:
    CHECK_MY_DIARY_URL: https://check-my-diary-preprod.prison.service.justice.gov.uk?fromDPS=true
    INCENTIVES_URL: https://incentives-ui-preprod.hmpps.service.justice.gov.uk
    INCENTIVES_API_ENDPOINT_URL: https://incentives-api-preprod.hmpps.service.justice.gov.uk
-   NON_ASSOCIATIONS_PRISONS: ""
+   NON_ASSOCIATIONS_PRISONS: "LGI,FNI,ISI,RSI"
    NON_ASSOCIATIONS_API_ENDPOINT_URL: https://non-associations-api-preprod.hmpps.service.justice.gov.uk
    NON_ASSOCIATIONS_UI_URL: https://non-associations-preprod.hmpps.service.justice.gov.uk
    TOKENVERIFICATION_API_URL: https://token-verification-api-preprod.prison.service.justice.gov.uk
@@ -73,10 +73,11 @@ generic-service:
    WHEREABOUTS_MAINTENANCE_MODE: false
    KEYWORKER_MAINTENANCE_MODE: false
    GET_SOMEONE_READY_FOR_WORK_URL: https://get-ready-for-work-preprod.hmpps.service.justice.gov.uk
+   LEARNING_AND_WORK_PROGRESS_URL: https://ciag-induction-preprod.hmpps.service.justice.gov.uk
    WARRANT_FOLDER_URL: https://manage-a-warrant-folder-preprod.hmpps.service.justice.gov.uk/
    PRISONER_PROFILE_REDIRECT_URL: https://prisoner-preprod.digital.prison.service.justice.gov.uk
    PRISONER_PROFILE_REDIRECT_ENABLED_DATE: ""
-   PRISONER_PROFILE_REDIRECT_ENABLED_PRISONS: "LEI,FNI,HMI,NHI,WDI,WEI,HLI,MDI,LHI,HDI,WYI,AGI,DNI"
+   PRISONER_PROFILE_REDIRECT_ENABLED_PRISONS: "LEI,FNI,HMI,NHI,WDI,WEI,HLI,MDI,LHI,HDI,WYI,AGI,DNI,RSI"
    PRISONER_PROFILE_SCHEDULE_REDIRECT_FOR_PRISONS: ""
    HOMEPAGE_REDIRECT_URL: http://dps-preprod.prison.service.justice.gov.uk
    HOMEPAGE_REDIRECT_ENABLED_DATE: 2023-07-24T02:00:00
