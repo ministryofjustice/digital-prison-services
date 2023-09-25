@@ -85,6 +85,7 @@ generic-service:
    HOMEPAGE_SCHEDULE_REDIRECT_FOR_PRISONS: ""
    MANAGE_OFFENCES_URL: https://manage-offences.hmpps.service.justice.gov.uk
    MANAGE_ADJUDICATIONS_API_URL: https://manage-adjudications-api.hmpps.service.justice.gov.uk
+   COMPONENT_API_URL: https://frontend-components.hmpps.service.justice.gov.uk
 
   allowlist:
    office: "217.33.148.210/32"
