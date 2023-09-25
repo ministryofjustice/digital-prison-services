@@ -2,7 +2,7 @@ const page = require('../page')
 
 const homepagePage = () =>
   page('Digital Prison Services', {
-    loggedInName: () => cy.get('[data-test="logged-in-name"]'),
+    fallbackHeaderUserName: () => cy.get('[data-qa=header-user-name]'),
     activeLocation: () => cy.get('[data-test="active-location"]'),
     manageAccountLink: () => cy.get('[data-test="manage-account-link"]'),
     changeLocationLink: () => cy.get('[data-test="change-location-link"]'),
@@ -61,6 +61,9 @@ const homepagePage = () =>
       link: () => cy.get('[data-test="manage-offences"] a'),
       description: () => cy.get('[data-test="manage-offences"] p'),
     }),
+
+    commonComponentsHeader: () => cy.get('h1').contains('Common Components Header'),
+    commonComponentsFooter: () => cy.get('h1').contains('Common Components Footer'),
   })
 
 export default {
