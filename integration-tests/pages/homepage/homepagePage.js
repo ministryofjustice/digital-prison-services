@@ -5,7 +5,6 @@ const homepagePage = () =>
     fallbackHeaderUserName: () => cy.get('[data-qa=header-user-name]'),
     activeLocation: () => cy.get('[data-test="active-location"]'),
     manageAccountLink: () => cy.get('[data-test="manage-account-link"]'),
-    changeLocationLink: () => cy.get('[data-test="change-location-link"]'),
     searchForm: () => cy.get('[data-test="homepage-search-form"]'),
     searchKeywords: () => cy.get('[data-test="homepage-search-keywords"]'),
     searchLocation: () => cy.get('[data-test="homepage-search-location"]'),
