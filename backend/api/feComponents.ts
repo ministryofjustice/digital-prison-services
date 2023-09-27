@@ -15,14 +15,17 @@ export const feComponentsApiFactory = (client: OauthApiClient) => {
 
   const getComponents = <T extends AvailableComponent[]>(
     context,
-    components: T
-  ): Promise<Record<T[number], Component>> =>
-    get(
-      { ...context, customRequestHeaders: { 'x-user-token': context.access_token } },
+    components: T,
+    useLatest = false
+  ): Promise<Record<T[number], Component>> => {
+    const latestFeaturesHeader = useLatest ? { 'x-use-latest-features': 'true' } : {}
+    return get(
+      { ...context, customRequestHeaders: { 'x-user-token': context.access_token, ...latestFeaturesHeader } },
       `/components`,
       {},
       `component=${components.join('&component=')}`
     )
+  }
 
   return {
     getComponents,
