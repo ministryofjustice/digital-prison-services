@@ -5,7 +5,7 @@ const feComponentsApi = feComponentsApiFactory(client)
 const context = { access_token: 'token' }
 const expectedContext = { access_token: 'token', customRequestHeaders: { 'x-user-token': context.access_token } }
 
-describe('data compliance api', () => {
+describe('fe components api', () => {
   describe('get offender retention reasons', () => {
     const responseBody = { header: { html: '<html></html>', css: [], javascript: [] } }
 
