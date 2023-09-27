@@ -3,6 +3,8 @@ import type { RequestHandler } from 'express'
 import logger from '../log'
 import { type feComponentsApiFactory } from '../api/feComponents'
 
+export const feComponentsRoutes = /^(?!\/(api|app\/image|bulk-appointments|save-backlink)).*/
+
 export default function getFrontendComponents({
   feComponentsApi,
 }: {
