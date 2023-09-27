@@ -7,12 +7,14 @@ export const feComponentsRoutes = /^(?!\/(api|app\/image|bulk-appointments|save-
 
 export default function getFrontendComponents({
   feComponentsApi,
+  latestFeatures,
 }: {
   feComponentsApi: ReturnType<typeof feComponentsApiFactory>
+  latestFeatures: boolean
 }): RequestHandler {
   return async (req, res, next) => {
     try {
-      const { header, footer } = await feComponentsApi.getComponents(res.locals, ['header', 'footer'])
+      const { header, footer } = await feComponentsApi.getComponents(res.locals, ['header', 'footer'], latestFeatures)
 
       res.locals.feComponents = {
         header: header.html,

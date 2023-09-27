@@ -66,7 +66,13 @@ app.use(setupWebSession())
 app.use(setupAuth({ oauthApi: apis.oauthApi, tokenVerificationApi: apis.tokenVerificationApi }))
 
 app.use(currentUser({ prisonApi: apis.prisonApi, hmppsManageUsersApi: apis.hmppsManageUsersApi }))
-app.get(feComponentsRoutes, getFrontendComponents({ feComponentsApi: apis.feComponentsApi }))
+app.get(
+  feComponentsRoutes,
+  getFrontendComponents({
+    feComponentsApi: apis.feComponentsApi,
+    latestFeatures: config.apis.frontendComponents.latestFeatures,
+  })
+)
 app.use(returnUrl())
 
 if (!config.app.disableWebpack) {

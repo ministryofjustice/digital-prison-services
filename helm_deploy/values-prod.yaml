@@ -86,6 +86,7 @@ generic-service:
    MANAGE_OFFENCES_URL: https://manage-offences.hmpps.service.justice.gov.uk
    MANAGE_ADJUDICATIONS_API_URL: https://manage-adjudications-api.hmpps.service.justice.gov.uk
    COMPONENT_API_URL: https://frontend-components.hmpps.service.justice.gov.uk
+   COMPONENT_API_LATEST: false
 
   allowlist:
    office: "217.33.148.210/32"
