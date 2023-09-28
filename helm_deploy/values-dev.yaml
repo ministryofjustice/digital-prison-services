@@ -79,7 +79,7 @@ generic-service:
    LEARNING_AND_WORK_PROGRESS_URL: https://ciag-induction-dev.hmpps.service.justice.gov.uk
    WARRANT_FOLDER_URL: https://manage-a-warrant-folder-dev.hmpps.service.justice.gov.uk/
    PRISONER_PROFILE_REDIRECT_URL: http://prisoner-dev.digital.prison.service.justice.gov.uk
-   PRISONER_PROFILE_REDIRECT_ENABLED_DATE: 2023-09-18T02:00:00
+   PRISONER_PROFILE_REDIRECT_ENABLED_DATE: 2023-09-27T18:00:00
    PRISONER_PROFILE_REDIRECT_ENABLED_PRISONS: "LEI,FNI,HMI,NHI,WDI,WEI,HLI,MDI,LHI,HDI,WYI,AGI,DNI,RSI"
    PRISONER_PROFILE_SCHEDULE_REDIRECT_FOR_PRISONS: "RSI"
    HOMEPAGE_REDIRECT_URL: http://dps-dev.prison.service.justice.gov.uk
@@ -88,3 +88,5 @@ generic-service:
    HOMEPAGE_SCHEDULE_REDIRECT_FOR_PRISONS: ""
    MANAGE_OFFENCES_URL: https://manage-offences-dev.hmpps.service.justice.gov.uk
    MANAGE_ADJUDICATIONS_API_URL: https://manage-adjudications-api-dev.hmpps.service.justice.gov.uk
+   COMPONENT_API_URL: https://frontend-components-dev.hmpps.service.justice.gov.uk
+   COMPONENT_API_LATEST: true

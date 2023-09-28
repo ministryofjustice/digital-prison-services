@@ -73,11 +73,17 @@ export class OauthApiClient {
    *        The header isn't set if resultsLimit is falsy.
    * @returns A Promise which settles to the superagent result object if the promise is resolved, otherwise to the 'error' object.
    */
-  get = <T = any>(context: ClientContext, path: string, options: RequestOptions = {}): Promise<ClientResponse<T>> => {
+  get = <T = any>(
+    context: ClientContext,
+    path: string,
+    options: RequestOptions = {},
+    query = ''
+  ): Promise<ClientResponse<T>> => {
     return superagent
       .get(this.createUrl(path))
       .agent(this.keepaliveAgent)
       .set(getHeaders(context, options.resultsLimit))
+      .query(query)
       .retry(options.retryOverride || 2, this.retryHandler)
       .timeout({ deadline: options.customTimeout ?? this.timeout / 3 })
       .catch(errorLogger)
