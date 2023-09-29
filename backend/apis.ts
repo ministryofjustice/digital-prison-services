@@ -20,7 +20,6 @@ import { incentivesApiFactory } from './api/incentivesApi'
 import { nonAssociationsApiFactory } from './api/nonAssociationsApi'
 import { hmppsManageUsersApiFactory } from './api/hmppsManageUsersApi'
 import { adjudicationsApiFactory } from './api/adjudicationsApi'
-import { feComponentsApiFactory } from './api/feComponents'
 
 export const prisonApi = prisonApiFactory(
   clientFactory({
@@ -152,13 +151,6 @@ export const adjudicationsApi = adjudicationsApiFactory(
 
 export const curiousApi = CuriousApi.create(clientFactory({ baseUrl: config.apis.curious.url }))
 
-export const feComponentsApi = feComponentsApiFactory(
-  clientFactory({
-    baseUrl: config.apis.frontendComponents.url,
-    timeout: config.apis.frontendComponents.timeoutSeconds * 1000,
-  })
-)
-
 export default {
   prisonApi,
   whereaboutsApi,
@@ -179,5 +171,4 @@ export default {
   nonAssociationsApi,
   restrictedPatientApi,
   adjudicationsApi,
-  feComponentsApi,
 }
