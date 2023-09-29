@@ -38,7 +38,7 @@ generic-service:
    PIN_PHONES_URL: https://pcms-dev.prison.service.justice.gov.uk/
    SOC_UI_URL: https://manage-soc-cases-dev.hmpps.service.justice.gov.uk/
    SOC_API_URL: https://manage-soc-cases-api-dev.hmpps.service.justice.gov.uk/
-   OFFENDER_SEARCH_API_URL: https://prisoner-offender-search-dev.prison.service.justice.gov.uk
+   OFFENDER_SEARCH_API_URL: https://prisoner-search-dev.prison.service.justice.gov.uk
    SUPPORT_URL: https://support-dev.hmpps.service.justice.gov.uk/
    ESWE_ENABLED: false
    NEURODIVERSITY_ENABLED_USERNAMES: ""
