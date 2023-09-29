@@ -38,6 +38,7 @@ export const app = {
     enabledPrisons: process.env.HOMEPAGE_REDIRECT_ENABLED_PRISONS || '',
     scheduleRedirectForPrisons: process.env.HOMEPAGE_SCHEDULE_REDIRECT_FOR_PRISONS || '',
   },
+  gitRef: process.env.GIT_REF || '',
 }
 
 export const analytics = {

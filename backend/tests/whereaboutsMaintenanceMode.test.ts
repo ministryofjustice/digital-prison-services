@@ -2,6 +2,7 @@ import supertest from 'supertest'
 import express from 'express'
 import nunjucksSetup from '../utils/nunjucksSetup'
 import routes from '../routes'
+import config from '../config'
 
 jest.mock('../raiseAnalyticsEvent', () => jest.fn())
 
@@ -21,7 +22,7 @@ describe('Whereabouts maintenance mode flag is true', () => {
   })
 
   const app = express()
-  nunjucksSetup(app)
+  nunjucksSetup(app, config)
   app.use((request, response, next) => {
     res.render = jest.spyOn(response, 'render')
     // eslint-disable-next-line guard-for-in,no-restricted-syntax
