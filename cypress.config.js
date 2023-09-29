@@ -30,7 +30,6 @@ const curiousApi = require('./integration-tests/mockApis/curiousApi')
 const adjudicationsApi = require('./integration-tests/mockApis/adjudications')
 
 const { stubScenario, resetStubs } = require('./integration-tests/mockApis/wiremock')
-const components = require('./integration-tests/mockApis/components')
 
 const extractOffenderNumbers = (activityList) => {
   const result = Object.keys(activityList).reduce((r, k) => r.concat(activityList[k]), [])
@@ -549,8 +548,6 @@ module.exports = defineConfig({
         stubPrisonerProfileAlerts: prisonerProfile.stubPrisonerProfileAlerts,
         stubPrisonerProfileOffences: prisonerProfile.stubPrisonerProfileOffences,
         stubPrisonerProfileWorkAndSkills: prisonerProfile.stubPrisonerProfileWorkAndSkills,
-        stubComponents: components.stubComponents,
-        stubComponentsFail: components.stubComponentsFail,
       })
     },
 

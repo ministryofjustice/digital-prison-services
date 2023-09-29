@@ -64,17 +64,6 @@ describe('Test clients built by oauthEnabledClient', () => {
 
       expect(response.req.getHeaders()).toEqual(expect.objectContaining({ 'custom-header': 'custom-value' }))
     })
-
-    it('Should include query params when included', async () => {
-      getRequest.get('/components?component=header').reply(200, 'COMPONENT')
-      const context = {}
-      contextProperties.setTokens({ access_token: 'a', refresh_token: 'b' }, context)
-
-      const response = await client.get(context, '/components', {}, 'component=header')
-
-      expect(response.status).toEqual(200)
-      expect(response.text).toEqual('COMPONENT')
-    })
   })
 
   describe('retry and timeout behaviour', () => {

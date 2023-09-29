@@ -11,7 +11,6 @@ context('Sign in functionality', () => {
     cy.task('stubStaffRoles', [])
     cy.task('stubLocationConfig', { agencyId: 'MDI', response: { enabled: false } })
     cy.task('stubKeyworkerMigrated')
-    cy.task('stubComponentsFail')
   })
 
   it('Root (/) redirects to the auth sign in page if not signed in', () => {
@@ -65,7 +64,7 @@ context('Sign in functionality', () => {
     cy.task('stubSignIn', {})
     cy.signIn()
     const homePage = HomePage.verifyOnPage()
-    homePage.fallbackHeaderUserName().contains('J. Stuart')
+    homePage.loggedInName().contains('J. Stuart')
     cy.task('stubVerifyToken', false)
 
     // can't do a visit here as cypress requires only one domain
@@ -75,7 +74,7 @@ context('Sign in functionality', () => {
     cy.task('stubUserMe', { name: 'Bobby Brown' })
     cy.signIn()
 
-    homePage.fallbackHeaderUserName().contains('B. Brown')
+    homePage.loggedInName().contains('B. Brown')
   })
 
   it('Sign in as ordinary user', () => {

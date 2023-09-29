@@ -58,6 +58,22 @@ context('Global search', () => {
         })
       })
     })
+    it('should not pass query string parameters to the feedback survey', () => {
+      cy.task('stubGlobalSearch')
+      const globalSearchPage = GlobalSearchPage.verifyOnPage()
+      const form = globalSearchPage.form()
+      form.search().clear().type('A1234BC')
+      form.submitButton().click()
+
+      GlobalSearchPage.verifyOnResultsPage()
+
+      cy.get('[data-test="feedback-banner"]')
+        .find('a')
+        .should('have.attr', 'href')
+        .then((href) => {
+          expect(href).to.equal('https://eu.surveymonkey.com/r/GYB8Y9Q?source=localhost/global-search/results')
+        })
+    })
   })
 
   it('should populate search box with query', () => {
