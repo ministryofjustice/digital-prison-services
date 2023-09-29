@@ -250,7 +250,6 @@ export const apis = {
   frontendComponents: {
     url: process.env.COMPONENT_API_URL || 'http://localhost:8082',
     timeoutSeconds: toNumber(process.env.COMPONENT_API_TIMEOUT_SECONDS) || 5,
-    latestFeatures: process.env.COMPONENT_API_LATEST === 'true',
   },
 }
 export const notifications = {
