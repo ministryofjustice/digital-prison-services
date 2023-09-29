@@ -36,7 +36,6 @@ import { logError } from './logError'
 import homepageController from './controllers/homepage/homepage'
 import requestLimiter from './middleware/requestLimiter'
 import homepageRedirect from './controllers/homepage/homepageRedirect'
-import getFrontendComponents, { feComponentsRoutes } from './middleware/getFeComponents'
 
 // We do not want the server to exit, partly because any log information will be lost.
 // Instead, log the error so we can trace, diagnose and fix the problem.
@@ -66,7 +65,6 @@ app.use(setupWebSession())
 app.use(setupAuth({ oauthApi: apis.oauthApi, tokenVerificationApi: apis.tokenVerificationApi }))
 
 app.use(currentUser({ prisonApi: apis.prisonApi, hmppsManageUsersApi: apis.hmppsManageUsersApi }))
-app.get(feComponentsRoutes, getFrontendComponents({ feComponentsApi: apis.feComponentsApi }))
 app.use(returnUrl())
 
 if (!config.app.disableWebpack) {
