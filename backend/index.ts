@@ -49,9 +49,8 @@ process.on('unhandledRejection', (reason, promise) => {
 const app = express()
 
 app.set('trust proxy', 1) // trust first proxy
-app.set('view engine', 'njk')
 
-nunjucksSetup(app)
+nunjucksSetup(app, config)
 phaseNameSetup(app, config)
 clientCredsSetup(getTokenStore(config), getSystemOauthApiClient(config), enableLogDebugStatements(config))
 
