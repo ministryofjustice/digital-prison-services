@@ -3,6 +3,7 @@ import express from 'express'
 import { whereaboutsTasks } from '../controllers/whereabouts/homePage'
 import whereaboutsHomepage from '../routes/whereabouts/whereaboutsRouter'
 import nunjucksSetup from '../utils/nunjucksSetup'
+import config from '../config'
 
 describe('Homepage', () => {
   const oauthApi = {
@@ -30,7 +31,7 @@ describe('Homepage', () => {
   })
 
   const app = express()
-  nunjucksSetup(app)
+  nunjucksSetup(app, config)
   app.use((request, response, next) => {
     res.render = jest.spyOn(response, 'render')
     // eslint-disable-next-line guard-for-in,no-restricted-syntax
