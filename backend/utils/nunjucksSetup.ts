@@ -180,5 +180,13 @@ export default (app: express.Express, conf: typeof config) => {
   njkEnv.addGlobal('googleTagManagerId', config.analytics.googleTagManagerId)
   njkEnv.addGlobal('supportUrl', config.app.supportUrl)
 
+  njkEnv.addFilter('initialiseName', (fullName?: string) => {
+    // this check is for the authError page
+    if (!fullName) return null
+
+    const array = fullName.split(' ')
+    return `${array[0][0]}. ${array.reverse()[0]}`
+  })
+
   return njkEnv
 }
