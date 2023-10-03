@@ -1,7 +1,9 @@
 const moment = require('moment')
+const offenderBasicDetails = require('../../mockApis/responses/offenderBasicDetails.json')
 const offenderFullDetails = require('../../mockApis/responses/offenderFullDetails.json')
 const SearchForCellPage = require('../../pages/cellMove/searchForCellPage')
 const OffenderDetailsPage = require('../../pages/cellMove/offenderDetailsPage')
+const SelectCellPage = require('../../pages/cellMove/selectCellPage')
 
 const offenderNo = 'A12345'
 
@@ -15,7 +17,7 @@ context('A user can search for a cell', () => {
   beforeEach(() => {
     Cypress.Cookies.preserveOnce('hmpps-session-dev')
     cy.task('stubOffenderFullDetails', offenderFullDetails)
-    cy.task('stubBookingNonAssociations', {})
+    cy.task('stubOffenderNonAssociationsLegacy', {})
     cy.task('stubGroups', { id: 'MDI' })
     cy.task('stubUserCaseLoads')
   })
@@ -78,15 +80,24 @@ context('A user can search for a cell', () => {
             assessmentDescription: 'CSR',
           },
         ],
+        assignedLivingUnit: {
+          agencyId: 'MDI',
+          locationId: 12345,
+          description: 'HMP Moorland',
+          agencyName: 'Moorland (HMP & YOI)',
+        },
       })
-      cy.task('stubBookingNonAssociations', {
+      cy.task('stubOffenderNonAssociationsLegacy', {
         agencyDescription: 'HMP Moorland',
+        offenderNo: 'G3878UK',
         nonAssociations: [
           {
             effectiveDate: moment(),
             expiryDate: moment().add(2, 'days'),
             offenderNonAssociation: {
               agencyDescription: 'HMP Moorland',
+              assignedLivingUnitDescription: 'HMP Moorland',
+              offenderNo: 'G3878UK',
             },
           },
         ],
@@ -167,5 +178,215 @@ context('A user can search for a cell', () => {
       .then((href) => {
         expect(href).to.equal('/prisoner/A12345/cell-move/confirm-cell-move?cellId=C-SWAP')
       })
+  })
+
+  describe('back button', () => {
+    const inmate1 = {
+      bookingId: 1,
+      offenderNo: 'A1234BC',
+      firstName: 'JOHN',
+      lastName: 'SMITH',
+      dateOfBirth: '1990-10-12',
+      age: 29,
+      agencyId: 'MDI',
+      assignedLivingUnitId: 1,
+      assignedLivingUnitDesc: 'UNIT-1',
+      alertsDetails: ['XA', 'XVL'],
+    }
+    const inmate2 = {
+      bookingId: 2,
+      offenderNo: 'B4567CD',
+      firstName: 'STEVE',
+      lastName: 'SMITH',
+      dateOfBirth: '1989-11-12',
+      age: 30,
+      agencyId: 'MDI',
+      assignedLivingUnitId: 2,
+      assignedLivingUnitDesc: 'UNIT-2',
+      alertsDetails: ['RSS', 'XC'],
+    }
+
+    context('When referred from the prisoner search page', () => {
+      beforeEach(() => {
+        cy.task('stubInmates', {
+          locationId: 'MDI',
+          count: 2,
+          data: [inmate1, inmate2],
+        })
+        cy.visit(`/change-someones-cell/prisoner-search?keywords=SMITH`)
+      })
+
+      it('should have a back button linking to the previous page', () => {
+        cy.contains('Change cell').click()
+        cy.contains('Search for a cell')
+        cy.contains('Back').click()
+        cy.contains('Search for a prisoner')
+      })
+    })
+
+    context('When referred from the view residential location page', () => {
+      beforeEach(() => {
+        cy.task('stubInmates', {
+          locationId: 'MDI-1',
+          count: 2,
+          data: [inmate1, inmate2],
+        })
+        cy.visit(`/change-someones-cell/view-residential-location?location=1`)
+      })
+
+      it('should have a back button linking to the previous page', () => {
+        cy.contains('Change cell').click()
+        cy.contains('Search for a cell')
+        cy.contains('Back').click()
+        cy.contains('All prisoners in a residential location')
+      })
+    })
+
+    context('When referred from the cell history page', () => {
+      const history = {
+        history: {
+          content: [
+            {
+              agencyId: 'MDI',
+              assignmentDate: '2020-05-01',
+              assignmentDateTime: '2020-05-01T12:48:33.375',
+              assignmentReason: 'ADM',
+              bookingId: 123,
+              description: 'MDI-1-02',
+              livingUnitId: 1,
+              movementMadeBy: 'STAFF_1',
+            },
+            {
+              agencyId: 'MDI',
+              assignmentDate: '2020-03-01',
+              assignmentDateTime: '2020-03-01T12:48:33.375',
+              assignmentEndDate: '2020-04-01',
+              assignmentEndDateTime: '2020-04-01T12:48:33.375',
+              assignmentReason: 'ADM',
+              bookingId: 123,
+              description: 'MDI-RECP',
+              livingUnitId: 2,
+              movementMadeBy: 'STAFF_2',
+            },
+            {
+              agencyId: 'MDI',
+              assignmentDate: '2020-04-01',
+              assignmentDateTime: '2020-04-01T12:48:33.375',
+              assignmentEndDate: '2020-05-01',
+              assignmentEndDateTime: '2020-05-01T12:48:33.375',
+              assignmentReason: 'ADM',
+              bookingId: 123,
+              description: 'MDI-1-03',
+              livingUnitId: 3,
+              movementMadeBy: 'STAFF_1',
+            },
+          ],
+        },
+      }
+
+      beforeEach(() => {
+        cy.task('stubOffenderBasicDetails', offenderBasicDetails)
+        cy.task('stubAgencyDetails', { agencyId: 'MDI', details: { agencyId: 'MDI', description: 'Moorland' } })
+        cy.task('stubInmatesAtLocation', {
+          inmates: [{ offenderNo: 'A1235A', firstName: 'Test', lastName: 'Offender' }],
+        })
+        cy.task('stubOffenderCellHistory', history)
+        cy.task('stubStaff', {
+          staffId: 'STAFF_1',
+          details: { firstName: 'Staff', lastName: 'One', username: 'STAFF_1' },
+        })
+        cy.task('stubStaff', {
+          staffId: 'STAFF_2',
+          details: { firstName: 'Staff', lastName: 'Two', username: 'STAFF_2' },
+        })
+        cy.visit(`/prisoner/${inmate1.offenderNo}/cell-history`)
+      })
+
+      it('should have a back button linking to the previous page', () => {
+        cy.contains('Change cell').click()
+        cy.contains('Search for a cell')
+        cy.contains('Back').click()
+        cy.contains('John Smith\u2019s location details')
+      })
+    })
+
+    context('When the user clicked back from the select cell page', () => {
+      const response = [
+        {
+          attributes: [
+            { description: 'Special Cell', code: 'SPC' },
+            { description: 'Gated Cell', code: 'GC' },
+          ],
+          capacity: 2,
+          description: 'LEI-1-2',
+          id: 1,
+          noOfOccupants: 2,
+          userDescription: 'LEI-1-1',
+        },
+        {
+          attributes: [
+            { code: 'LC', description: 'Listener Cell' },
+            { description: 'Gated Cell', code: 'GC' },
+          ],
+          capacity: 3,
+          description: 'LEI-1-1',
+          id: 1,
+          noOfOccupants: 2,
+          userDescription: 'LEI-1-1',
+        },
+      ]
+
+      beforeEach(() => {
+        cy.task('stubInmates', {
+          locationId: 'MDI',
+          count: 2,
+          data: [inmate1, inmate2],
+        })
+        cy.task('stubGroups', { id: 'MDI' })
+        cy.task('stubCellAttributes')
+        cy.task('stubInmatesAtLocation', {
+          inmates: [{ offenderNo: 'A12345', firstName: 'Bob', lastName: 'Doe', assignedLivingUnitId: 1 }],
+        })
+        cy.task('stubGetAlerts', { agencyId: 'MDI', alerts: [{ offenderNo: 'A12345', alertCode: 'PEEP' }] })
+        cy.task('stubCsraAssessments', {
+          offenderNumbers: ['A12345'],
+          assessments: [
+            {
+              offenderNo: 'A12345',
+              assessmentCode: 'CSRA',
+              assessmentDescription: 'CSRA',
+              assessmentComment: 'test',
+              assessmentDate: '2020-01-10',
+              classification: 'Standard',
+              classificationCode: 'STANDARD',
+            },
+          ],
+        })
+        cy.task('stubOffenderNonAssociationsLegacy', {
+          offenderNo: 'G6123VU',
+          firstName: 'JOHN',
+          lastName: 'SAUNDERS',
+          agencyDescription: 'MOORLAND (HMP & YOI)',
+          assignedLivingUnitDescription: 'MDI-1-1-015',
+          nonAssociations: [],
+        })
+        cy.task('stubLocation', { locationId: 1, locationData: { parentLocationId: 2, description: 'MDI-1-1' } })
+        cy.task('stubLocation', { locationId: 2, locationData: { parentLocationId: 3 } })
+        cy.task('stubLocation', { locationId: 3, locationData: { locationPrefix: 'MDI-1' } })
+        cy.task('stubUserCaseLoads')
+        cy.task('stubCellsWithCapacity', { cells: response })
+        cy.task('stubCellsWithCapacityByGroupName', { agencyId: 'MDI', groupName: 1, response })
+
+        SelectCellPage.goTo(inmate1.offenderNo)
+        cy.contains('Select an available cell')
+        cy.contains('Back').click()
+        cy.contains('Search for a cell')
+      })
+
+      it('should have a back button linking to the prisoner search page', () => {
+        cy.contains('Back').click()
+        cy.contains('Search for a prisoner')
+      })
+    })
   })
 })

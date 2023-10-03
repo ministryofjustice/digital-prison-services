@@ -119,8 +119,10 @@ function error(message, status) {
 
 describe('Probation documents', () => {
   const oauthApi = {
-    currentUser: jest.fn(),
     userRoles: jest.fn(),
+  }
+  const hmppsManageUsersApi = {
+    currentUser: jest.fn(),
   }
   const prisonApi = {
     getDetails: jest.fn(),
@@ -141,14 +143,14 @@ describe('Probation documents', () => {
     beforeEach(() => {
       prisonApi.getDetails = jest.fn().mockReturnValue(getDetailsResponse)
       prisonApi.userCaseLoads = jest.fn()
-      oauthApi.currentUser = jest.fn()
+      hmppsManageUsersApi.currentUser = jest.fn()
       oauthApi.userRoles = jest.fn()
       communityApi.getOffenderConvictions = jest.fn()
       communityApi.getOffenderDetails = jest.fn()
       communityApi.getOffenderDocuments = jest.fn()
       systemOauthClient.getClientCredentialsTokens = jest.fn()
       systemOauthClient.getClientCredentialsTokens.mockReturnValue({})
-      oauthApi.currentUser.mockReturnValue({
+      hmppsManageUsersApi.currentUser.mockReturnValue({
         username: 'USER_ADM',
         active: true,
         name: 'User Name',
@@ -186,6 +188,7 @@ describe('Probation documents', () => {
         })
         page = probationDocumentsFactory(
           oauthApi,
+          hmppsManageUsersApi,
           prisonApi,
           communityApi,
           systemOauthClient
@@ -694,7 +697,7 @@ describe('Probation documents', () => {
             { caseLoadId: 'BXI', currentlyActive: true },
             { caseLoadId: 'WWI' },
           ])
-          oauthApi.currentUser.mockReturnValue({ staffId: 111, activeCaseLoadId: 'BXI' })
+          hmppsManageUsersApi.currentUser.mockReturnValue({ staffId: 111, activeCaseLoadId: 'BXI' })
 
           await page(req, res)
 
@@ -715,7 +718,7 @@ describe('Probation documents', () => {
             { caseLoadId: 'BXI', currentlyActive: true },
             { caseLoadId: 'WWI' },
           ])
-          oauthApi.currentUser.mockReturnValue({ staffId: 111, activeCaseLoadId: 'BXI' })
+          hmppsManageUsersApi.currentUser.mockReturnValue({ staffId: 111, activeCaseLoadId: 'BXI' })
 
           await page(req, res)
 
@@ -737,7 +740,7 @@ describe('Probation documents', () => {
             { caseLoadId: 'BXI', currentlyActive: true },
             { caseLoadId: 'WWI' },
           ])
-          oauthApi.currentUser.mockReturnValue({ staffId: 111, activeCaseLoadId: 'BXI' })
+          hmppsManageUsersApi.currentUser.mockReturnValue({ staffId: 111, activeCaseLoadId: 'BXI' })
 
           await page(req, res)
           expect(res.render).toHaveBeenCalledWith(
@@ -755,7 +758,7 @@ describe('Probation documents', () => {
             { caseLoadId: 'BXI', currentlyActive: true },
             { caseLoadId: 'WWI' },
           ])
-          oauthApi.currentUser.mockReturnValue({ staffId: 111, activeCaseLoadId: 'BXI' })
+          hmppsManageUsersApi.currentUser.mockReturnValue({ staffId: 111, activeCaseLoadId: 'BXI' })
 
           await page(req, res)
           expect(res.render).toHaveBeenCalledWith(
@@ -780,6 +783,7 @@ describe('Probation documents', () => {
         communityApi.getOffenderDetails.mockReturnValue({})
         page = probationDocumentsFactory(
           oauthApi,
+          hmppsManageUsersApi,
           prisonApi,
           communityApi,
           systemOauthClient

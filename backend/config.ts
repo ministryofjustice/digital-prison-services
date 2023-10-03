@@ -3,7 +3,7 @@ const toNumber = (value: string | undefined): number | undefined => {
   return Number.isSafeInteger(result) && result
 }
 
-const parseDate = (value: string | undefined): number => {
+export const parseDate = (value: string | undefined): number => {
   return value ? Date.parse(value) : null
 }
 
@@ -30,7 +30,15 @@ export const app = {
     url: process.env.PRISONER_PROFILE_REDIRECT_URL,
     enabledDate: parseDate(process.env.PRISONER_PROFILE_REDIRECT_ENABLED_DATE),
     enabledPrisons: process.env.PRISONER_PROFILE_REDIRECT_ENABLED_PRISONS || '',
+    scheduleRedirectForPrisons: process.env.PRISONER_PROFILE_SCHEDULE_REDIRECT_FOR_PRISONS || '',
   },
+  homepageRedirect: {
+    url: process.env.HOMEPAGE_REDIRECT_URL,
+    enabledDate: parseDate(process.env.HOMEPAGE_REDIRECT_ENABLED_DATE),
+    enabledPrisons: process.env.HOMEPAGE_REDIRECT_ENABLED_PRISONS || '',
+    scheduleRedirectForPrisons: process.env.HOMEPAGE_SCHEDULE_REDIRECT_FOR_PRISONS || '',
+  },
+  gitRef: process.env.GIT_REF || '',
 }
 
 export const analytics = {
@@ -81,6 +89,10 @@ export const apis = {
     systemClientId: process.env.API_SYSTEM_CLIENT_ID || 'prisonstaffhubclient',
     systemClientSecret: process.env.API_SYSTEM_CLIENT_SECRET || 'clientsecret',
   },
+  hmppsManageUsers: {
+    url: process.env.HMPPS_MANAGE_USERS_API_URL || 'http://localhost:8080/',
+    timeoutSeconds: toNumber(process.env.API_ENDPOINT_TIMEOUT_SECONDS) || 30,
+  },
   prisonApi: {
     url: process.env.API_ENDPOINT_URL || 'http://localhost:8080/',
     timeoutSeconds: toNumber(process.env.API_ENDPOINT_TIMEOUT_SECONDS) || 30,
@@ -101,6 +113,14 @@ export const apis = {
   incentivesApi: {
     url: process.env.INCENTIVES_API_ENDPOINT_URL || 'http://localhost:8087',
     timeoutSeconds: toNumber(process.env.INCENTIVES_API_ENDPOINT_TIMEOUT_SECONDS) || 30,
+  },
+  nonAssociationsApi: {
+    url: process.env.NON_ASSOCIATIONS_API_ENDPOINT_URL || 'http://localhost:8088',
+    timeoutSeconds: toNumber(process.env.NON_ASSOCIATIONS_API_ENDPOINT_TIMEOUT_SECONDS) || 30,
+  },
+  nonAssociations: {
+    ui_url: process.env.NON_ASSOCIATIONS_UI_URL,
+    prisons: process.env.NON_ASSOCIATIONS_PRISONS || '',
   },
   keyworker: {
     url: process.env.KEYWORKER_API_URL || 'http://localhost:8081/',
@@ -161,9 +181,11 @@ export const apis = {
     url: process.env.WELCOME_PEOPLE_INTO_PRISON_URL,
     enabled_prisons: process.env.WELCOME_PEOPLE_INTO_PRISON_ENABLED_PRISONS || '',
   },
-  mercurySubmitPrivateBeta: {
-    url: process.env.MERCURY_SUBMIT_PRIVATE_BETA_URL,
+  mercurySubmit: {
+    url: process.env.MERCURY_SUBMIT_URL,
+    privateBetaDate: parseDate(process.env.MERCURY_SUBMIT_PRIVATE_BETA_ENABLED_DATE),
     enabled_prisons: process.env.MERCURY_SUBMIT_PRIVATE_BETA_ENABLED_PRISONS || '',
+    liveDate: parseDate(process.env.MERCURY_SUBMIT_LIVE_ENABLED_DATE),
   },
   omic: {
     url: process.env.OMIC_URL || 'http://localhost:3001',
@@ -199,14 +221,37 @@ export const apis = {
     url: process.env.CREATE_AND_VARY_A_LICENCE_URL,
     enabled_prisons: process.env.CREATE_AND_VARY_A_LICENCE_ENABLED_PRISONS || '',
   },
+  activities: {
+    url: process.env.ACTIVITIES_URL,
+    enabled_prisons: process.env.ACTIVITIES_ENABLED_PRISONS || '',
+  },
+  appointments: {
+    url: process.env.APPOINTMENTS_URL,
+    enabled_prisons: process.env.APPOINTMENTS_ENABLED_PRISONS || '',
+  },
   historicalPrisonerApplication: {
     ui_url: process.env.HISTORICAL_PRISONER_APPLICATION_URL || '',
   },
   getSomeoneReadyForWork: {
     ui_url: process.env.GET_SOMEONE_READY_FOR_WORK_URL || 'http://localhost:3002',
   },
+  learningAndWorkProgress: {
+    ui_url: process.env.LEARNING_AND_WORK_PROGRESS_URL || 'http://localhost:3002',
+  },
   manageWarrantFolder: {
     ui_url: process.env.WARRANT_FOLDER_URL,
+  },
+  manageOffences: {
+    ui_url: process.env.MANAGE_OFFENCES_URL,
+  },
+  adjudicationsApi: {
+    url: process.env.MANAGE_ADJUDICATIONS_API_URL || 'http://localhost:8087',
+    timeoutSeconds: toNumber(process.env.MANAGE_ADJUDICATIONS_API_ENDPOINT_TIMEOUT_SECONDS) || 30,
+  },
+  frontendComponents: {
+    url: process.env.COMPONENT_API_URL || 'http://localhost:8082',
+    timeoutSeconds: toNumber(process.env.COMPONENT_API_TIMEOUT_SECONDS) || 5,
+    latestFeatures: process.env.COMPONENT_API_LATEST === 'true',
   },
 }
 export const notifications = {
@@ -249,6 +294,12 @@ export const notifications = {
     },
     BZI: {
       omu: process.env.BRONZEFIELD_OMU_EMAIL,
+    },
+    PVI: {
+      omu: process.env.PENTONVILLE_OMU_EMAIL,
+    },
+    EXI: {
+      omu: process.env.EXETER_OMU_EMAIL,
     },
   },
 }

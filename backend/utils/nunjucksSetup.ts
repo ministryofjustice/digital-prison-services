@@ -1,7 +1,7 @@
 import moment from 'moment'
 import path from 'path'
 import nunjucks from 'nunjucks'
-import config from '../config'
+import express from 'express'
 
 import {
   getDate,
@@ -12,8 +12,25 @@ import {
   possessive,
   formatTimestampToDate,
 } from '../utils'
+import config from '../config'
 
-export default (app) => {
+const production = process.env.NODE_ENV === 'production'
+
+export default (app: express.Express, conf: typeof config) => {
+  app.set('view engine', 'njk')
+  // Cachebusting version string
+  if (production) {
+    // Version only changes with new commits
+    // eslint-disable-next-line no-param-reassign
+    app.locals.version = conf.app.gitRef.substring(0, 7)
+  } else {
+    // Version changes every request
+    app.use((req, res, next) => {
+      res.locals.version = Date.now().toString()
+      return next()
+    })
+  }
+
   const njkEnv = nunjucks.configure(
     [path.join(__dirname, '../../views'), 'node_modules/govuk-frontend/', 'node_modules/@ministryofjustice/frontend/'],
     {
@@ -162,6 +179,14 @@ export default (app) => {
   njkEnv.addGlobal('googleAnalyticsGa4Id', config.analytics.googleAnalyticsGa4Id)
   njkEnv.addGlobal('googleTagManagerId', config.analytics.googleTagManagerId)
   njkEnv.addGlobal('supportUrl', config.app.supportUrl)
+
+  njkEnv.addFilter('initialiseName', (fullName?: string) => {
+    // this check is for the authError page
+    if (!fullName) return null
+
+    const array = fullName.split(' ')
+    return `${array[0][0]}. ${array.reverse()[0]}`
+  })
 
   return njkEnv
 }

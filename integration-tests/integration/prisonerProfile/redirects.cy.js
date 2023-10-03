@@ -1,6 +1,7 @@
 const prisonerQuickLookPage = require('../../pages/prisonerProfile/prisonerQuickLookPage')
 const offenderBasicDetails = require('../../mockApis/responses/offenderBasicDetails.json')
 const offenderFullDetails = require('../../mockApis/responses/offenderFullDetails.json')
+const { businessPrimary, businessNonPrimary, otherContacts } = require('./prisonerProfessionalContacts.cy')
 
 context('Current prisoner profile should redirect to the new prisoner profile', () => {
   context('When the case load IS Leeds', () => {
@@ -49,6 +50,25 @@ context('Current prisoner profile should redirect to the new prisoner profile', 
           iepSummary: {},
           caseNoteSummary: {},
         })
+
+
+
+        cy.task('stubProfessionalContacts', {
+          offenderBasicDetails,
+          contacts:  otherContacts ,
+          personAddresses: [businessPrimary, businessNonPrimary],
+          personEmails: [{ email: 'test1@email.com' }, { email: 'test2@email.com' }],
+          personPhones: [
+            { number: '02222222222', type: 'MOB' },
+            { number: '033333333333', type: 'BUS', ext: '123' },
+          ],
+          prisonOffenderManagers: {
+            primary_pom: { staffId: 1, name: 'SMITH, JANE' },
+            secondary_pom: { staffId: 2, name: 'DOE, JOHN' },
+          },
+        })
+
+        
       })
       it('Should redirect to the new prisoner profile - personal page', () => {
         cy.origin('http://localhost:9191', () => {
@@ -61,6 +81,19 @@ context('Current prisoner profile should redirect to the new prisoner profile', 
 
           cy.get('h1').should('contain.text', 'New Prisoner Profile!')
           cy.get('h2').should('contain.text', 'Personal')
+        })
+      })
+      context('Redirect to overview page', () => {
+        before(()=>{
+          cy.task('stubPrisonerProfile', {})
+        })
+        it('Link should redirect to the new prisoner profile - overview page', () => {
+          const offenderNo = 'A1234A'
+          cy.visit(`http://localhost:3008/prisoner/${offenderNo}/professional-contacts`)
+          cy.get('[data-test="return-to-profile-overview"]').should('be.visible')
+          cy.get('[data-test="return-to-profile-overview"]').click()
+          cy.get('h1').should('contain.text', 'New Prisoner Profile!')
+          cy.get('h2').should('contain.text', 'Overview')
         })
       })
     })
@@ -128,7 +161,6 @@ context('Current prisoner profile should redirect to the new prisoner profile', 
           })
 
           cy.get('h1').should('contain.text', 'New Prisoner Profile!')
-          cy.get('h2').should('contain.text', 'Alerts')
         })
       })
     })
@@ -258,6 +290,24 @@ context('Current prisoner profile should NOT redirect to the new prisoner profil
           offenderNo: 'A1234A',
         })
         cy.task('stubPersonal', {})
+
+        cy.task('stubProfessionalContacts', {
+          offenderBasicDetails,
+          contacts:  otherContacts ,
+          personAddresses: [businessPrimary, businessNonPrimary],
+          personEmails: [{ email: 'test1@email.com' }, { email: 'test2@email.com' }],
+          personPhones: [
+            { number: '02222222222', type: 'MOB' },
+            { number: '033333333333', type: 'BUS', ext: '123' },
+          ],
+          prisonOffenderManagers: {
+            primary_pom: { staffId: 1, name: 'SMITH, JANE' },
+            secondary_pom: { staffId: 2, name: 'DOE, JOHN' },
+          },
+        })
+
+        cy.task('stubPrisonerProfile', {})
+
       })
       it('Should not redirect to the new prisoner profile - personal page', () => {
         const offenderNo = 'A1234A'
@@ -268,6 +318,16 @@ context('Current prisoner profile should NOT redirect to the new prisoner profil
         })
 
         prisonerQuickLookPage.verifyOnPage('Smith, John')
+      })
+      it('Link should not redirect and land on the personal page', () => {
+        const offenderNo = 'A1234A'
+        cy.visit(`http://localhost:3008/prisoner/${offenderNo}/professional-contacts`)
+        cy.get('[data-test="return-to-profile-personal"]').should('be.visible')
+
+        cy.get('[data-test="return-to-profile-personal"]').click()
+        cy.location().should((location) => {
+          expect(location.pathname).to.eq(`/prisoner/${offenderNo}/personal`)
+        })
       })
     })
     context('Alerts page', () => {

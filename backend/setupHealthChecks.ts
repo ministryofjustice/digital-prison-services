@@ -7,6 +7,7 @@ const router = express.Router()
 
 const health = healthFactory(
   joinUrlPath(config.apis.oauth2.url, '/health/ping'),
+  joinUrlPath(config.apis.hmppsManageUsers.url, '/health/ping'),
   joinUrlPath(config.apis.prisonApi.url, '/health/ping'),
   joinUrlPath(config.apis.whereabouts.url, '/health/ping'),
   joinUrlPath(config.apis.community.url, '/health/ping'),

@@ -16,13 +16,19 @@ export const trackEvent = (offenderNo, documentId, suffix, { username }) => {
   }
 }
 
-export const downloadProbationDocumentFactory = (oauthApi, communityApi, systemOauthClient, prisonApi) => {
+export const downloadProbationDocumentFactory = (
+  oauthApi,
+  hmppsManageUsersApi,
+  communityApi,
+  systemOauthClient,
+  prisonApi
+) => {
   const downloadDocument = async (req, res) => {
     const { offenderNo, documentId } = req.params
     try {
       const userRoles = oauthApi.userRoles(res.locals)
       const [user, caseloads, { agencyId }] = await Promise.all([
-        oauthApi.currentUser(res.locals),
+        hmppsManageUsersApi.currentUser(res.locals),
         prisonApi.userCaseLoads(res.locals),
         prisonApi.getDetails(res.locals, offenderNo),
       ])

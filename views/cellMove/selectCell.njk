@@ -4,6 +4,7 @@
 {% from "govuk/components/table/macro.njk" import govukTable %}
 {% from "../macros/alertFlags.njk" import alertFlags %}
 {% from "govuk/components/warning-text/macro.njk" import govukWarningText %}
+{% from "govuk/components/back-link/macro.njk" import govukBackLink %}
 
 {% set title = "Select an available cell" %}
 
@@ -76,21 +77,14 @@
 {% endmacro %}
 
 {% block beforeContent %}
-  {{ govukBreadcrumbs({
-    items: [
-      {
-        text: "Home",
-        href: '/'
-      },
-      {
-        text: breadcrumbPrisonerName,
-        href: '/prisoner/' + offenderNo
-      },
-      {
-        text: 'Select cell'
-      }
-    ]
-}) }}
+
+  {% if backUrl %}
+    {{ govukBackLink({
+      text: "Back",
+      href: backUrl
+    }) }}
+  {% endif %}
+
 {% endblock %}
 
 {% block content %}

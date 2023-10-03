@@ -21,7 +21,7 @@ RUN npm prune --production
 FROM node:16-bullseye-slim
 LABEL maintainer="HMPPS Digital Studio <info@digital.justice.gov.uk>"
 
-ENV CACHE_BREAKER ${GIT_REF}
+ENV GIT_REF ${GIT_REF:-xxxxxxxxxxxxxxxxxxx}
 RUN apt-get update && \
     apt-get upgrade -y && \
     apt-get autoremove -y && \

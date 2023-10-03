@@ -24,7 +24,13 @@ const trackEvent = (offenderNo, suffix, { username }) => {
   }
 }
 
-export const probationDocumentsFactory = (oauthApi, prisonApi, communityApi, systemOauthClient) => {
+export const probationDocumentsFactory = (
+  oauthApi,
+  hmppsManageUsersApi,
+  prisonApi,
+  communityApi,
+  systemOauthClient
+) => {
   const renderTemplate = (req, res, pageData) => {
     const { pageErrors, offenderDetails, ...rest } = pageData
 
@@ -137,7 +143,7 @@ export const probationDocumentsFactory = (oauthApi, prisonApi, communityApi, sys
 
       const [caseloads, user, communityDocuments] = await Promise.all([
         prisonApi.userCaseLoads(res.locals),
-        oauthApi.currentUser(res.locals),
+        hmppsManageUsersApi.currentUser(res.locals),
         getCommunityDocuments(offenderNo),
       ])
 

@@ -9,10 +9,6 @@ const completionReasonsResponse = require('./responses/completionReasons.json')
 module.exports = {
   verifyMoveToCell: (body) => verifyPosts('/whereabouts/cell/make-cell-move', body),
   verifyMoveToCellSwap: ({ bookingId }) => verifyPut(`/api/bookings/${bookingId}/move-to-cell-swap`),
-  verifyAdjudicationsHistory: ({ offenderNo, agencyId, finding, fromDate, toDate }) =>
-    verifyGet(
-      `/api/offenders/${offenderNo}/adjudications?agencyId=${agencyId}&finding=${finding}&fromDate=${fromDate}&toDate=${toDate}`
-    ),
   verifyAlertsBookingGet: ({ bookingId, alertType, from, to, alertStatus, page, sort, size }) =>
     verifyGet(
       `/api/bookings/${bookingId}/alerts/v2?alertType=${alertType}&from=${from}&to=${to}&alertStatus=${alertStatus}&page=${page}&sort=${sort}&size=${size}`
@@ -108,6 +104,7 @@ module.exports = {
             agencyId: 'MDI',
             locationPrefix: 'MDI-1',
             userDescription: 'Houseblock 1',
+            subLocations: true,
           },
           {
             locationId: 3,
@@ -116,6 +113,7 @@ module.exports = {
             agencyId: 'MDI',
             locationPrefix: 'MDI-2',
             userDescription: 'Houseblock 2',
+            subLocations: true,
           },
         ],
       },
@@ -276,6 +274,20 @@ module.exports = {
         jsonBody: details || {},
       },
     }),
+  stubSpecificOffenderFullDetails: (details) =>
+    stubFor({
+      request: {
+        method: 'GET',
+        urlPattern: `/api/bookings/offenderNo/${details.offenderNo}\\?fullInfo=true&csraSummary=true`,
+      },
+      response: {
+        status: 200,
+        headers: {
+          'Content-Type': 'application/json;charset=UTF-8',
+        },
+        jsonBody: details || {},
+      },
+    }),
   stubOffenderBasicDetails: (offender) =>
     stubFor({
       request: {
@@ -407,7 +419,7 @@ module.exports = {
     stubFor({
       request: {
         method: 'PUT',
-        url: `/api/bookings/${bookingId}/alert/${alertId}`,
+        url: `/api/bookings/${bookingId}/alert/${alertId}?lockTimeout=true`,
       },
       response: {
         status,
@@ -626,20 +638,6 @@ module.exports = {
           'Content-Type': 'application/json;charset=UTF-8',
         },
         jsonBody: negativeCaseNotes || {},
-      },
-    }),
-  stubAdjudicationsForBooking: (adjudications, status = 200) =>
-    stubFor({
-      request: {
-        method: 'GET',
-        urlPattern: '/api/bookings/[0-9]+?/adjudications',
-      },
-      response: {
-        status,
-        headers: {
-          'Content-Type': 'application/json;charset=UTF-8',
-        },
-        jsonBody: adjudications || {},
       },
     }),
   stubVisitsWithVisitors: (visitsWithVisitors, status) =>
@@ -997,7 +995,7 @@ module.exports = {
           description: 'HB1',
           agencyId: 'RNI',
           currentOccupancy: 243,
-          locaitionPrefix: 'RNI-HB1',
+          locationPrefix: 'RNI-HB1',
           internalLocationCode: 'HB1',
         },
       },
@@ -1427,20 +1425,6 @@ module.exports = {
         jsonBody: details || {},
       },
     }),
-  stubBookingNonAssociations: (response) =>
-    stubFor({
-      request: {
-        method: 'GET',
-        urlPattern: '/api/bookings/[0-9].+?/non-association-details',
-      },
-      response: {
-        status: 200,
-        headers: {
-          'Content-Type': 'application/json;charset=UTF-8',
-        },
-        jsonBody: response,
-      },
-    }),
   stubCellAttributes: () =>
     stubFor({
       request: {
@@ -1555,20 +1539,6 @@ module.exports = {
         jsonBody: movements || {},
       },
     }),
-  stubGetAdjudicationDetails: (adjudicationDetails) =>
-    stubFor({
-      request: {
-        method: 'GET',
-        urlPathPattern: `/api/offenders/.+?/adjudications/[0-9]+?`,
-      },
-      response: {
-        status: 200,
-        headers: {
-          'Content-Type': 'application/json;charset=UTF-8',
-        },
-        jsonBody: adjudicationDetails || {},
-      },
-    }),
   stubRollcountByType: (agencyId, type, movements) =>
     stubFor({
       request: {
@@ -1639,21 +1609,6 @@ module.exports = {
         jsonBody: types,
       },
     }),
-  stubAdjudications: (response, headers = {}) =>
-    stubFor({
-      request: {
-        method: 'GET',
-        urlPathPattern: '/api/offenders/A12345/adjudications',
-      },
-      response: {
-        status: 200,
-        headers: {
-          ...headers,
-          'Content-Type': 'application/json;charset=UTF-8',
-        },
-        jsonBody: response,
-      },
-    }),
   stubPrisonApiGlobalSearch: (response) =>
     stubFor({
       request: {
@@ -1668,7 +1623,6 @@ module.exports = {
         jsonBody: response,
       },
     }),
-  resetAdjudicationsStub: () => resetStub({ requestUrl: '/api/offenders/A12345/adjudications', method: 'GET' }),
   stubSystemAlerts: (alerts) =>
     stubFor({
       request: {

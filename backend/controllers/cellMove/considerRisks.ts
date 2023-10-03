@@ -11,7 +11,7 @@ const activeCellMoveAlertsExcludingDisabled = (alert) =>
 
 const missingDataString = 'not entered'
 
-export default ({ prisonApi, raiseAnalyticsEvent }) => {
+export default ({ prisonApi, raiseAnalyticsEvent, nonAssociationsApi }) => {
   const getOccupantsDetails = async (context, offenders) =>
     Promise.all(offenders.map((offender) => prisonApi.getDetails(context, offender, true)))
 
@@ -41,19 +41,18 @@ export default ({ prisonApi, raiseAnalyticsEvent }) => {
       // Get the residential unit level prefix for the selected cell by traversing up the
       // parent location tree
       const locationDetail = await prisonApi.getLocation(res.locals, cellId)
-      const parentLocationDetail = await prisonApi.getLocation(res.locals, locationDetail.parentLocationId)
-      const { locationPrefix } = await prisonApi.getLocation(res.locals, parentLocationDetail.parentLocationId)
-
-      // Get non-associations for the offener and filter them down to ones
-      // that are currently in the same residential unit as the selected cell
-      const currentOffenderNonAssociations = await prisonApi.getNonAssociations(
-        res.locals,
-        currentOffenderDetails.bookingId
-      )
-      const nonAssociationsWithinLocation = currentOffenderNonAssociations?.nonAssociations?.filter((nonAssociation) =>
-        nonAssociation.offenderNonAssociation.assignedLivingUnitDescription?.includes(locationPrefix)
-      )
-
+      let nonAssociationsWithinLocation = []
+      // reception does not have a parentLocationId
+      if (locationDetail.parentLocationId) {
+        const parentLocationDetail = await prisonApi.getLocation(res.locals, locationDetail.parentLocationId)
+        const { locationPrefix } = await prisonApi.getLocation(res.locals, parentLocationDetail.parentLocationId)
+        // Get non-associations for the offender and filter them down to ones
+        // that are currently in the same residential unit as the selected cell
+        const currentOffenderNonAssociations = await nonAssociationsApi.getNonAssociationsLegacy(res.locals, offenderNo)
+        nonAssociationsWithinLocation = currentOffenderNonAssociations?.nonAssociations?.filter((nonAssociation) =>
+          nonAssociation.offenderNonAssociation.assignedLivingUnitDescription?.includes(locationPrefix)
+        )
+      }
       const currentOffenderWithOccupants = [currentOffenderDetails, ...currentOccupantsDetails]
 
       const offendersCsraValues = currentOffenderWithOccupants
@@ -184,6 +183,7 @@ export default ({ prisonApi, raiseAnalyticsEvent }) => {
           currentOccupantsWithFormattedActiveAlerts.length > 0 ||
           categoryWarning,
         errors,
+        backUrl: `${profileUrl}/cell-move/select-cell`,
       })
     } catch (error) {
       res.locals.redirectUrl = `/prisoner/${offenderNo}/cell-history`

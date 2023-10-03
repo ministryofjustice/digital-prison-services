@@ -10,19 +10,31 @@
 {% set title = "Scheduled movements" %}
 
 {% block beforeContent %}
-    {{ govukBreadcrumbs({
-        items: [
-            {
-                text: "Digital Prison Services",
-                href: "/"
-            },
-            {
-                text: "Manage prisoner whereabouts",
-                href: "/manage-prisoner-whereabouts"
-            }
-        ],
-        classes: 'govuk-!-display-none-print'
-    }) }}
+    {% if isActivitiesEnabled %}
+        {{ govukBreadcrumbs({
+            items: [
+                {
+                    text: "Digital Prison Services",
+                    href: "/"
+                }
+            ],
+            classes: 'govuk-!-display-none-print'
+        }) }}
+    {% else %}
+        {{ govukBreadcrumbs({
+            items: [
+                {
+                    text: "Digital Prison Services",
+                    href: "/"
+                },
+                {
+                    text: "Prisoner whereabouts",
+                    href: "/manage-prisoner-whereabouts"
+                }
+            ],
+            classes: 'govuk-!-display-none-print'
+        }) }}
+    {% endif %}
 {% endblock %}
 
 

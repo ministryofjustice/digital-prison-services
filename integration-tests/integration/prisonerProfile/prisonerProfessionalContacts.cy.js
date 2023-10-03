@@ -1,7 +1,7 @@
 const offenderBasicDetails = require('../../mockApis/responses/offenderBasicDetails.json')
 
 const offenderNo = 'A12345'
-const otherContacts = [
+export const otherContacts = [
   {
     lastName: 'KIMBUR',
     firstName: 'ARENENG',
@@ -94,6 +94,44 @@ const otherContacts = [
   },
 ]
 
+export const businessPrimary = {
+  addressType: 'Business',
+  flat: '222',
+  locality: 'Test locality',
+  premise: '999',
+  street: 'Business street',
+  town: 'London',
+  postalCode: 'W1 ABC',
+  county: 'London',
+  country: 'England',
+  comment: null,
+  primary: true,
+  noFixedAddress: false,
+  startDate: '2020-05-01',
+  endDate: null,
+  phones: [],
+  addressUsages: [],
+}
+
+export const businessNonPrimary = {
+  addressType: 'Business',
+  flat: '222',
+  locality: 'New locality',
+  premise: '000',
+  street: 'Business street',
+  town: 'Manchester',
+  postalCode: 'W2 DEF',
+  county: 'Greater Manchester',
+  country: 'England',
+  comment: null,
+  primary: false,
+  noFixedAddress: false,
+  startDate: '2020-05-01',
+  endDate: null,
+  phones: [],
+  addressUsages: [],
+}
+
 context('Prisoner professional contacts', () => {
   before(() => {
     cy.clearCookies()
@@ -109,43 +147,6 @@ context('Prisoner professional contacts', () => {
   })
 
   context('When there is data', () => {
-    const businessPrimary = {
-      addressType: 'Business',
-      flat: '222',
-      locality: 'Test locality',
-      premise: '999',
-      street: 'Business street',
-      town: 'London',
-      postalCode: 'W1 ABC',
-      county: 'London',
-      country: 'England',
-      comment: null,
-      primary: true,
-      noFixedAddress: false,
-      startDate: '2020-05-01',
-      endDate: null,
-      phones: [],
-      addressUsages: [],
-    }
-
-    const businessNonPrimary = {
-      addressType: 'Business',
-      flat: '222',
-      locality: 'New locality',
-      premise: '000',
-      street: 'Business street',
-      town: 'Manchester',
-      postalCode: 'W2 DEF',
-      county: 'Greater Manchester',
-      country: 'England',
-      comment: null,
-      primary: false,
-      noFixedAddress: false,
-      startDate: '2020-05-01',
-      endDate: null,
-      phones: [],
-      addressUsages: [],
-    }
 
     beforeEach(() => {
       cy.task('stubProfessionalContacts', {

@@ -16,19 +16,27 @@ const {
     legacyPrisonVisits,
     secureSocialVideoCalls,
     welcomePeopleIntoPrison,
-    mercurySubmitPrivateBeta,
+    mercurySubmit,
     manageRestrictedPatients,
     checkMyDiary,
     incentives,
     createAndVaryALicence,
+    activities,
+    appointments,
     historicalPrisonerApplication,
     getSomeoneReadyForWork,
+    learningAndWorkProgress,
+    manageOffences,
   },
   app: { whereaboutsMaintenanceMode, keyworkerMaintenanceMode },
 } = config
 
 const getTasks = ({ activeCaseLoadId, locations, staffId, whereaboutsConfig, keyworkerPrisonStatus, roleCodes }) => {
   const userHasRoles = (roles) => hasAnyRole(roleCodes, roles)
+
+  const isMercurySubmitLive = () => {
+    return mercurySubmit.liveDate && mercurySubmit.liveDate < Date.now()
+  }
 
   return [
     {
@@ -47,11 +55,14 @@ const getTasks = ({ activeCaseLoadId, locations, staffId, whereaboutsConfig, key
     },
     {
       id: 'manage-prisoner-whereabouts',
-      heading: 'Manage prisoner whereabouts',
+      heading: 'Prisoner whereabouts',
       description: 'View unlock lists, all appointments and COVID units, manage attendance and add bulk appointments.',
       href: '/manage-prisoner-whereabouts',
       roles: null,
-      enabled: () => whereaboutsConfig?.enabled,
+      enabled: () =>
+        whereaboutsConfig?.enabled &&
+        !activities.enabled_prisons.split(',').includes(activeCaseLoadId) &&
+        !appointments.enabled_prisons.split(',').includes(activeCaseLoadId),
     },
     {
       id: 'change-someones-cell',
@@ -70,8 +81,8 @@ const getTasks = ({ activeCaseLoadId, locations, staffId, whereaboutsConfig, key
     },
     {
       id: 'incentives',
-      heading: 'Manage incentives',
-      description: 'See prisoner incentive information by residential location and view incentive data visualisations.',
+      heading: 'Incentives',
+      description: 'Manage incentive level reviews by residential location and view incentives data charts.',
       href: incentives.ui_url,
       roles: null,
       enabled: () => incentives.ui_url && (userHasRoles(['MAINTAIN_INCENTIVE_LEVELS']) || locations?.length > 0),
@@ -125,7 +136,7 @@ const getTasks = ({ activeCaseLoadId, locations, staffId, whereaboutsConfig, key
     },
     {
       id: 'manage-key-workers',
-      heading: 'Manage key workers',
+      heading: 'Key workers',
       description: 'Add and remove key workers from prisoners and manage individuals.',
       href: omic.url,
       enabled: () => {
@@ -244,13 +255,19 @@ const getTasks = ({ activeCaseLoadId, locations, staffId, whereaboutsConfig, key
         welcomePeopleIntoPrison.url && welcomePeopleIntoPrison.enabled_prisons.split(',').includes(activeCaseLoadId),
     },
     {
-      id: 'submit-an-intelligence-report-private-beta',
-      heading: 'Submit an Intelligence Report (Private Beta)',
-      description: 'Access to the new Mercury submission form for those establishments enrolled in the private beta',
-      href: mercurySubmitPrivateBeta.url,
+      id: isMercurySubmitLive() ? 'submit-an-intelligence-report' : 'submit-an-intelligence-report-private-beta',
+      heading: isMercurySubmitLive() ? 'Submit an Intelligence Report' : 'Submit an Intelligence Report (Private Beta)',
+      description: isMercurySubmitLive()
+        ? 'Access to the new Mercury submission form'
+        : 'Access to the new Mercury submission form for those establishments enrolled in the private beta',
+      href: mercurySubmit.url,
       roles: null,
       enabled: () =>
-        mercurySubmitPrivateBeta.url && mercurySubmitPrivateBeta.enabled_prisons.split(',').includes(activeCaseLoadId),
+        mercurySubmit.url &&
+        (isMercurySubmitLive() ||
+          (mercurySubmit.privateBetaDate &&
+            mercurySubmit.privateBetaDate < Date.now() &&
+            mercurySubmit.enabled_prisons.split(',').includes(activeCaseLoadId))),
     },
     {
       id: 'manage-restricted-patients',
@@ -278,6 +295,40 @@ const getTasks = ({ activeCaseLoadId, locations, staffId, whereaboutsConfig, key
         userHasRoles(['LICENCE_CA', 'LICENCE_DM', 'LICENCE_RO', 'LICENCE_ACO', 'LICENCE_ADMIN']),
     },
     {
+      id: 'activities',
+      heading: 'Allocate people, unlock and attend',
+      description:
+        'Create and edit activities. Log applications and manage waitlists. Allocate people and edit allocations. Print unlock lists and record attendance.',
+      href: activities.url,
+      enabled: () => activities.url && activities.enabled_prisons.split(',').includes(activeCaseLoadId),
+    },
+    {
+      id: 'appointments',
+      heading: 'Schedule and edit appointments',
+      description: 'Create and manage appointments. Print movement slips.',
+      href: appointments.url,
+      enabled: () => appointments.url && appointments.enabled_prisons.split(',').includes(activeCaseLoadId),
+    },
+    {
+      id: 'view-people-due-to-leave',
+      heading: 'People due to leave',
+      description: 'View people due to leave this establishment for court appearances, transfers or being released.',
+      href: '/manage-prisoner-whereabouts/scheduled-moves',
+      enabled: () =>
+        activities.enabled_prisons.split(',').includes(activeCaseLoadId) &&
+        appointments.enabled_prisons.split(',').includes(activeCaseLoadId),
+    },
+    {
+      id: 'view-covid-units',
+      heading: 'View COVID units',
+      description: 'View who is in each COVID unit in your establishment.',
+      href: '/current-covid-units',
+      enabled: () =>
+        userHasRoles(['PRISON']) &&
+        activities.enabled_prisons.split(',').includes(activeCaseLoadId) &&
+        appointments.enabled_prisons.split(',').includes(activeCaseLoadId),
+    },
+    {
       id: 'historical-prisoner-application',
       heading: 'Historical Prisoner Application',
       description: 'This service allows users to view historical prisoner information.',
@@ -290,6 +341,21 @@ const getTasks = ({ activeCaseLoadId, locations, staffId, whereaboutsConfig, key
       description: 'Record what support a prisoner needs to get work. View who has been assessed as ready to work.',
       href: `${getSomeoneReadyForWork.ui_url}?sort=releaseDate&order=descending`,
       enabled: () => getSomeoneReadyForWork.ui_url && userHasRoles(['WORK_READINESS_VIEW', 'WORK_READINESS_EDIT']),
+    },
+    {
+      id: 'learning-and-work-progress',
+      heading: 'Learning and work progress',
+      description: 'View and manage learning and work history, support needs, goals and progress.',
+      href: learningAndWorkProgress.ui_url,
+      enabled: () =>
+        learningAndWorkProgress.ui_url && userHasRoles(['EDUCATION_WORK_PLAN_EDITOR', 'EDUCATION_WORK_PLAN_VIEWER']),
+    },
+    {
+      id: 'manage-offences',
+      heading: 'Manage offences',
+      description: 'This service allows you to maintain offence reference data.',
+      href: manageOffences.ui_url,
+      enabled: () => userHasRoles(['MANAGE_OFFENCES_ADMIN', 'UPDATE_OFFENCE_SCHEDULES', 'NOMIS_OFFENCE_ACTIVATOR']),
     },
   ]
 }

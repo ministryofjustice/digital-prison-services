@@ -10,10 +10,10 @@ const iepSummaryForBooking = {
   nextReviewDate: '2018-08-15',
 }
 
-const iepLevels = [
-  { iepLevel: 'BAS', iepDescription: 'Basic' },
-  { iepLevel: 'STD', iepDescription: 'Standard' },
-  { iepLevel: 'ENH', iepDescription: 'Enhanced' },
+const prisonIncentiveLevels = [
+  { levelCode: 'BAS', levelName: 'Basic', active: true, defaultOnAdmission: false },
+  { levelCode: 'STD', levelName: 'Standard', active: true, defaultOnAdmission: true },
+  { levelCode: 'ENH', levelName: 'Enhanced', active: true, defaultOnAdmission: false },
 ]
 
 context('Prisoner change incentive level details', () => {
@@ -31,7 +31,7 @@ context('Prisoner change incentive level details', () => {
       Cypress.Cookies.preserveOnce('hmpps-session-dev')
       cy.task('stubOffenderBasicDetails', offenderBasicDetails)
       cy.task('stubGetIepSummaryForBooking', iepSummaryForBooking)
-      cy.task('stubGetAgencyIepLevels', iepLevels)
+      cy.task('stubGetPrisonIncentiveLevels', prisonIncentiveLevels)
       cy.task('stubChangeIepLevel', {})
     })
 
@@ -74,7 +74,7 @@ context('Prisoner change incentive level details', () => {
                 ...iepSummaryForBooking,
                 iepDate: '2021-09-26',
                 iepTime: '2021-09-26T12:34:56',
-                iepLevel: iepLevels[0].iepDescription,
+                iepLevel: prisonIncentiveLevels[0].levelName,
                 daysSinceReview: 0,
                 nextReviewDate: '2022-09-26',
               },
@@ -145,7 +145,7 @@ context('Prisoner change incentive level details', () => {
                   ...iepSummaryForBooking,
                   iepDate: '2021-09-26',
                   iepTime: '2021-09-26T12:34:56',
-                  iepLevel: iepLevels[0].iepDescription,
+                  iepLevel: prisonIncentiveLevels[0].levelName,
                   daysSinceReview: 0,
                   nextReviewDate: '2022-09-26',
                 },
@@ -166,7 +166,7 @@ context('Prisoner change incentive level details', () => {
         injectGtagSpy()
       })
 
-      it('on manage incentive reviews button', () => {
+      it('on Incentive reviews button', () => {
         cy.get('[data-test="goto-manage-incentives"]')
           .click()
           .then(() => {

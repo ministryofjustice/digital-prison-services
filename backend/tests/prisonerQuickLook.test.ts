@@ -1,4 +1,6 @@
+import { PrisonerNonAssociations } from '../api/nonAssociationsApi'
 import type apis from '../apis'
+import config from '../config'
 import prisonerQuickLook from '../controllers/prisonerProfile/prisonerQuickLook'
 
 describe('prisoner profile quick look', () => {
@@ -38,7 +40,6 @@ describe('prisoner profile quick look', () => {
     getPrisonerSentenceDetails: jest.fn(),
     getPositiveCaseNotes: jest.fn(),
     getNegativeCaseNotes: jest.fn(),
-    getAdjudicationsForBooking: jest.fn(),
     getPrisonerVisitBalances: jest.fn(),
     getVisitsSummary: jest.fn(),
     getEventsForToday: jest.fn(),
@@ -58,6 +59,52 @@ describe('prisoner profile quick look', () => {
   }
   const incentivesApi = {} as jest.Mocked<typeof apis.incentivesApi>
   const restrictedPatientApi = {}
+  const adjudicationsApi = {
+    getAdjudicationsForBooking: jest.fn(),
+  }
+  const nonAssociationsApi = {} as jest.Mocked<typeof apis.nonAssociationsApi>
+
+  const prisonerNonAssociations: PrisonerNonAssociations = {
+    prisonerNumber: offenderNo,
+    firstName: 'Test',
+    lastName: 'Prisoner',
+    prisonId: 'MDI',
+    prisonName: 'HMP Moorland',
+    cellLocation: prisonerProfileData.location,
+    openCount: 1,
+    closedCount: 0,
+    nonAssociations: [
+      {
+        id: 42,
+        role: 'VICTIM',
+        roleDescription: 'Victim',
+        reason: 'BULLYING',
+        reasonDescription: 'Bullying',
+        restrictionType: 'LANDING',
+        restrictionTypeDescription: 'Cell and landing',
+        comment: 'John was bullying Test',
+        authorisedBy: 'USER_1',
+        whenCreated: '2021-07-05T10:35:17',
+        whenUpdated: '2021-07-05T10:35:17',
+        updatedBy: 'USER_1',
+        isClosed: false,
+        closedBy: null,
+        closedAt: null,
+        closedReason: null,
+        otherPrisonerDetails: {
+          prisonerNumber: 'A0000AA',
+          role: 'PERPETRATOR',
+          roleDescription: 'Perpetrator',
+          firstName: 'John',
+          lastName: 'Doe',
+          prisonId: 'MDI',
+          prisonName: 'HMP Moorland',
+          cellLocation: 'Z-122',
+        },
+      },
+    ],
+  }
+
   const oauthApi = {
     userRoles: jest.fn(),
   }
@@ -66,6 +113,8 @@ describe('prisoner profile quick look', () => {
   let res
   let logError
   let controller
+
+  const nonAssociationsUrl = 'https://localhost/non-associations-ui'
 
   beforeEach(() => {
     req = {
@@ -87,6 +136,8 @@ describe('prisoner profile quick look', () => {
 
     logError = jest.fn()
 
+    config.apis.nonAssociations.ui_url = nonAssociationsUrl
+
     prisonerProfileService.getPrisonerProfileData = jest.fn().mockResolvedValue(prisonerProfileData)
 
     prisonApi.getDetails = jest.fn().mockResolvedValue({})
@@ -97,7 +148,8 @@ describe('prisoner profile quick look', () => {
     incentivesApi.getIepSummaryForBooking = jest.fn().mockResolvedValue({})
     prisonApi.getPositiveCaseNotes = jest.fn().mockResolvedValue({})
     prisonApi.getNegativeCaseNotes = jest.fn().mockResolvedValue({})
-    prisonApi.getAdjudicationsForBooking = jest.fn().mockResolvedValue({})
+    adjudicationsApi.getAdjudicationsForBooking = jest.fn().mockResolvedValue({})
+    nonAssociationsApi.getNonAssociations = jest.fn().mockResolvedValue({})
     prisonApi.getVisitsSummary = jest.fn().mockResolvedValue({})
     prisonApi.getPrisonerVisitBalances = jest.fn().mockResolvedValue({})
     prisonApi.getEventsForToday = jest.fn().mockResolvedValue([])
@@ -117,7 +169,8 @@ describe('prisoner profile quick look', () => {
       incentivesApi,
       restrictedPatientApi,
       oauthApi,
-      logError,
+      adjudicationsApi,
+      nonAssociationsApi,
     })
   })
 
@@ -223,7 +276,7 @@ describe('prisoner profile quick look', () => {
 
         await controller(req, res)
 
-        expect(systemOauthClient.getClientCredentialsTokens).not.toHaveBeenCalled()
+        expect(systemOauthClient.getClientCredentialsTokens).toHaveBeenCalled()
         expect(offenderSearchApi.getPrisonersDetails).not.toHaveBeenCalled()
       })
 
@@ -506,7 +559,7 @@ describe('prisoner profile quick look', () => {
         incentivesApi.getIepSummaryForBooking.mockResolvedValue(iepSummaryForBooking)
         prisonApi.getPositiveCaseNotes.mockResolvedValue({ count: 2 })
         prisonApi.getNegativeCaseNotes.mockResolvedValue({ count: 1 })
-        prisonApi.getAdjudicationsForBooking.mockResolvedValue({
+        adjudicationsApi.getAdjudicationsForBooking.mockResolvedValue({
           adjudicationCount: 3,
           awards: [
             {
@@ -842,6 +895,91 @@ describe('prisoner profile quick look', () => {
     })
   })
 
+  describe('non-associations data', () => {
+    beforeEach(() => {
+      config.apis.nonAssociations.prisons = 'MDI,LEI'
+
+      systemOauthClient.getClientCredentialsTokens = jest.fn().mockResolvedValue({ system: true })
+    })
+
+    describe('when the user is in a prison not part of the private beta', () => {
+      beforeEach(() => {
+        config.apis.nonAssociations.prisons = 'LEI,FEI'
+
+        nonAssociationsApi.getNonAssociations.mockResolvedValue(prisonerNonAssociations)
+      })
+
+      it('should render the quick look template with the non-associations section disabled', async () => {
+        await controller(req, res)
+
+        expect(res.render).toHaveBeenCalledWith(
+          'prisonerProfile/prisonerQuickLook/prisonerQuickLook.njk',
+          expect.objectContaining({
+            nonAssociations: {
+              sectionError: false,
+              enabled: false,
+              uiUrl: nonAssociationsUrl,
+              prisonerNonAssociations,
+            },
+          })
+        )
+      })
+    })
+
+    it('should make a request for the correct data', async () => {
+      nonAssociationsApi.getNonAssociations.mockResolvedValue(prisonerNonAssociations)
+
+      await controller(req, res)
+
+      expect(nonAssociationsApi.getNonAssociations).toHaveBeenCalledWith({ system: true }, offenderNo)
+    })
+
+    describe('when the request to Non-associations API fails', () => {
+      beforeEach(() => {
+        const error = new Error('Some error occurred')
+        nonAssociationsApi.getNonAssociations.mockRejectedValue(error)
+      })
+
+      it('should still render the quick look template', async () => {
+        await controller(req, res)
+
+        expect(res.render).toHaveBeenCalledWith(
+          'prisonerProfile/prisonerQuickLook/prisonerQuickLook.njk',
+          expect.objectContaining({
+            nonAssociations: {
+              sectionError: true,
+              enabled: true,
+              uiUrl: nonAssociationsUrl,
+              prisonerNonAssociations: null,
+            },
+          })
+        )
+      })
+    })
+
+    describe('when there is non-associations data', () => {
+      beforeEach(() => {
+        nonAssociationsApi.getNonAssociations.mockResolvedValue(prisonerNonAssociations)
+      })
+
+      it('should render the quick look template with the correctly formatted non-associations details', async () => {
+        await controller(req, res)
+
+        expect(res.render).toHaveBeenCalledWith(
+          'prisonerProfile/prisonerQuickLook/prisonerQuickLook.njk',
+          expect.objectContaining({
+            nonAssociations: {
+              sectionError: false,
+              enabled: true,
+              uiUrl: nonAssociationsUrl,
+              prisonerNonAssociations,
+            },
+          })
+        )
+      })
+    })
+  })
+
   describe('when there are errors with getDetails', () => {
     const error = new Error('Network error')
 
@@ -867,7 +1005,7 @@ describe('prisoner profile quick look', () => {
       incentivesApi.getIepSummaryForBooking.mockRejectedValue(new Error('Network error'))
       prisonApi.getPositiveCaseNotes.mockRejectedValue(new Error('Network error'))
       prisonApi.getNegativeCaseNotes.mockRejectedValue(new Error('Network error'))
-      prisonApi.getAdjudicationsForBooking.mockRejectedValue(new Error('Network error'))
+      adjudicationsApi.getAdjudicationsForBooking.mockRejectedValue(new Error('Network error'))
       prisonApi.getVisitsSummary.mockRejectedValue(new Error('Network error'))
       prisonApi.getPrisonerVisitBalances.mockRejectedValue(new Error('Network error'))
       prisonApi.getEventsForToday.mockRejectedValue(new Error('Network error'))
@@ -964,7 +1102,7 @@ describe('prisoner profile quick look', () => {
     it('should handle api errors when requesting incentive level warnings', async () => {
       prisonApi.getPositiveCaseNotes.mockResolvedValue({ count: 10 })
       incentivesApi.getIepSummaryForBooking.mockResolvedValue(iepSummaryForBooking)
-      prisonApi.getAdjudicationsForBooking.mockResolvedValue({
+      adjudicationsApi.getAdjudicationsForBooking.mockResolvedValue({
         adjudicationCount: 2,
         awards: [
           {
@@ -1018,7 +1156,7 @@ describe('prisoner profile quick look', () => {
     it('should handle api errors when requesting incentive encouragements', async () => {
       prisonApi.getNegativeCaseNotes.mockResolvedValue({ count: 10 })
       incentivesApi.getIepSummaryForBooking.mockResolvedValue(iepSummaryForBooking)
-      prisonApi.getAdjudicationsForBooking.mockResolvedValue({
+      adjudicationsApi.getAdjudicationsForBooking.mockResolvedValue({
         adjudicationCount: 2,
         awards: [
           {
@@ -1072,7 +1210,7 @@ describe('prisoner profile quick look', () => {
     it('should handle api errors when requesting last incentive level review', async () => {
       prisonApi.getPositiveCaseNotes.mockResolvedValue({ count: 10 })
       prisonApi.getNegativeCaseNotes.mockResolvedValue({ count: 10 })
-      prisonApi.getAdjudicationsForBooking.mockResolvedValue({
+      adjudicationsApi.getAdjudicationsForBooking.mockResolvedValue({
         adjudicationCount: 2,
         awards: [
           {
@@ -1398,7 +1536,7 @@ describe('prisoner profile quick look', () => {
       incentivesApi.getIepSummaryForBooking = jest.fn().mockResolvedValue({})
       prisonApi.getPositiveCaseNotes = jest.fn().mockResolvedValue({})
       prisonApi.getNegativeCaseNotes = jest.fn().mockResolvedValue({})
-      prisonApi.getAdjudicationsForBooking = jest.fn().mockResolvedValue({})
+      adjudicationsApi.getAdjudicationsForBooking = jest.fn().mockResolvedValue({})
       prisonApi.getVisitsSummary = jest.fn().mockResolvedValue({})
       prisonApi.getPrisonerVisitBalances = jest.fn().mockResolvedValue({})
       prisonApi.getEventsForToday = jest.fn().mockResolvedValue([])

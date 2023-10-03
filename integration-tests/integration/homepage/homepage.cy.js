@@ -17,47 +17,7 @@ context('Homepage', () => {
 
       const page = homepagePage.goTo()
 
-      page.loggedInName().contains('J. Stuart')
-      page.activeLocation().contains('Moorland')
-
-      page
-        .manageAccountLink()
-        .should('have.attr', 'href')
-        .then((href) => {
-          expect(href).to.equal('http://localhost:9191/auth/account-details')
-        })
-
-      page.changeLocationLink().should('not.exist')
-    })
-
-    it('should show change location link when user has more than 1 caseload', () => {
-      cy.task('stubSignIn', {
-        username: 'ITAG_USER',
-        caseload: 'MDI',
-        caseloads: [
-          {
-            caseLoadId: 'MDI',
-            description: 'Moorland',
-            currentlyActive: true,
-          },
-          {
-            caseLoadId: 'LEI',
-            description: 'Leeds',
-            currentlyActive: false,
-          },
-        ],
-      })
-      cy.signIn()
-
-      const page = homepagePage.goTo()
-
-      page
-        .changeLocationLink()
-        .should('be.visible')
-        .should('have.attr', 'href')
-        .then((href) => {
-          expect(href).to.equal('/change-caseload')
-        })
+      page.fallbackHeaderUserName().contains('J. Stuart')
     })
   })
 
@@ -98,6 +58,7 @@ context('Homepage', () => {
           'ROLE_TRANSFER_RESTRICTED_PATIENT',
           'ROLE_REMOVE_RESTRICTED_PATIENT',
           'ROLE_RESTRICTED_PATIENT_MIGRATION',
+          'ROLE_MANAGE_OFFENCES_ADMIN',
         ],
       })
       cy.signIn()
@@ -141,7 +102,7 @@ context('Homepage', () => {
       page.establishmentRoll().should('exist')
     })
 
-    it('should show manage prisoner whereabouts', () => {
+    it('should show prisoner whereabouts', () => {
       cy.task('stubLocationConfig', { agencyId: 'MDI', response: { enabled: true } })
 
       const page = homepagePage.goTo()
@@ -233,7 +194,7 @@ context('Homepage', () => {
       const page = homepagePage.goTo()
 
       page.incentives().tile().should('exist')
-      page.incentives().title().contains('Manage incentives')
+      page.incentives().title().contains('Incentives')
       page.incentives().link().should('exist')
       page.incentives().description().should('exist')
     })
@@ -249,23 +210,14 @@ context('Homepage', () => {
         .description()
         .contains('Record what support a prisoner needs to get work. View who has been assessed as ready to work.')
     })
-  })
 
-  describe('Footer', () => {
-    it('should display the feedback banner with the correct href', () => {
-      cy.task('stubSignIn', { username: 'ITAG_USER', caseload: 'MDI' })
-      cy.signIn()
-
+    it('should show manage-offences', () => {
       const page = homepagePage.goTo()
 
-      page
-        .feedbackBanner()
-        .find('a')
-        .should('contain', 'Give feedback on Digital Prison Services (opens in a new tab)')
-        .should('have.attr', 'href')
-        .then((href) => {
-          expect(href).to.equal('https://eu.surveymonkey.com/r/GYB8Y9Q?source=localhost/')
-        })
+      page.manageOffences().tile().should('exist')
+      page.manageOffences().title().contains('Manage offences')
+      page.manageOffences().link().should('exist')
+      page.manageOffences().description().contains('This service allows you to maintain offence reference data.')
     })
   })
 })

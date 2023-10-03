@@ -1,6 +1,7 @@
 const moment = require('moment')
 const offenderFullDetails = require('../../mockApis/responses/offenderFullDetails.json')
 const SelectCellPage = require('../../pages/cellMove/selectCellPage')
+const ConsiderRisksPage = require('../../pages/cellMove/considerRisksPage')
 
 const offenderNo = 'A12345'
 
@@ -29,7 +30,12 @@ context('A user can select a cell', () => {
   })
   beforeEach(() => {
     Cypress.Cookies.preserveOnce('hmpps-session-dev')
-    cy.task('stubOffenderFullDetails', offenderFullDetails)
+    ;['A12345', 'G6123VU'].forEach((anotherOffenderNo) => {
+      cy.task('stubSpecificOffenderFullDetails', {
+        ...offenderFullDetails,
+        offenderNo: anotherOffenderNo,
+      })
+    })
     cy.task('stubGroups', { id: 'MDI' })
     cy.task('stubCellAttributes')
     cy.task('stubInmatesAtLocation', {
@@ -50,7 +56,7 @@ context('A user can select a cell', () => {
         },
       ],
     })
-    cy.task('stubBookingNonAssociations', {
+    cy.task('stubOffenderNonAssociationsLegacy', {
       offenderNo: 'G6123VU',
       firstName: 'JOHN',
       lastName: 'SAUNDERS',
@@ -230,7 +236,7 @@ context('A user can select a cell', () => {
     })
 
     it('should NOT show the non association warning', () => {
-      cy.task('stubBookingNonAssociations', null)
+      cy.task('stubOffenderNonAssociationsLegacy', null)
       const page = SelectCellPage.goTo(offenderNo)
       page.nonAssociationWarning().should('not.exist')
     })
@@ -266,6 +272,57 @@ context('A user can select a cell', () => {
 
       page.checkStillOnPage()
       page.noResultsMessage().contains('There are no results for what you have chosen.')
+    })
+
+    describe('back button', () => {
+      context('When referred from the search for a cell page', () => {
+        beforeEach(() => {
+          cy.task('stubOffenderFullDetails', offenderFullDetails)
+          cy.task('stubOffenderNonAssociationsLegacy', {})
+          cy.task('stubGroups', { id: 'MDI' })
+          cy.task('stubUserCaseLoads')
+          cy.visit('/prisoner/A12345/cell-move/search-for-cell')
+        })
+
+        it('should have a back button linking to the search for a cell page', () => {
+          cy.contains('button', 'Search for a cell').click()
+          cy.contains('Select an available cell')
+          cy.contains('Back').click()
+          cy.contains('Search for a cell')
+        })
+      })
+
+      context('When the user clicked back from the consider risks page', () => {
+        beforeEach(() => {
+          cy.task('stubOffenderFullDetails', offenderFullDetails)
+          cy.task('stubOffenderNonAssociationsLegacy', {})
+          cy.task('stubGroups', { id: 'MDI' })
+          cy.task('stubUserCaseLoads')
+          cy.task('stubLocation', { locationId: 1, locationData: { parentLocationId: 2, description: 'MDI-1-1' } })
+          cy.task('stubLocation', { locationId: 2, locationData: { parentLocationId: 3 } })
+          cy.task('stubLocation', { locationId: 3, locationData: { locationPrefix: 'MDI-1' } })
+          cy.task('stubInmatesAtLocation', {
+            inmates: [{ offenderNo: 'A12345', firstName: 'Bob', lastName: 'Doe', assignedLivingUnitId: 1 }],
+          })
+          cy.task('stubOffenderNonAssociationsLegacy', {
+            offenderNo,
+            firstName: 'JOHN',
+            lastName: 'SAUNDERS',
+            agencyDescription: 'MOORLAND (HMP & YOI)',
+            assignedLivingUnitDescription: 'MDI-1-1-015',
+            nonAssociations: [],
+          })
+
+          ConsiderRisksPage.goTo(offenderNo, 1)
+          cy.contains('Back').click()
+          cy.contains('Select an available cell')
+        })
+
+        it('should have a back button linking to the search for a cell page', () => {
+          cy.contains('Back').click()
+          cy.contains('Search for a cell')
+        })
+      })
     })
   })
 })

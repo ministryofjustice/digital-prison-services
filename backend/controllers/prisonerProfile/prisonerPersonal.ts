@@ -39,6 +39,8 @@ export default ({
       systemOauthClient,
       restrictedPatientApi,
     })
+    // Separate call to retrieve a system token specifically to retrieve POM - we know this is safe to do as other calls failing would prevent the page loading if the user is not allowed to view the prisoner.
+    const systemContext = await systemOauthClient.getClientCredentialsTokens(username)
 
     const [basicPrisonerDetails, treatmentTypes, healthTypes] = await Promise.all([
       prisonApi.getDetails(context, offenderNo),
@@ -87,7 +89,7 @@ export default ({
         prisonApi.getSecondaryLanguages(context, bookingId),
         prisonApi.getPersonalCareNeeds(context, bookingId, healthCodes),
         prisonApi.getReasonableAdjustments(context, bookingId, treatmentCodes),
-        allocationManagerApi.getPomByOffenderNo(context, offenderNo),
+        allocationManagerApi.getPomByOffenderNo(systemContext, offenderNo),
         esweService.getNeurodiversities(offenderNo),
         getNeurodivergenceSupportNeed(),
       ].map((apiCall) => logErrorAndContinue(apiCall))

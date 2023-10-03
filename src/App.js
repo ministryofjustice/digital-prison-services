@@ -211,6 +211,21 @@ class App extends React.Component {
     userDetailsDispatch({ ...user.data, activeCaseLoadId, caseLoadOptions: caseloads.data, roles: roles.data })
   }
 
+  redirectIfActivitiesRolledOut = () => {
+    const { config, user } = this.props
+
+    if (
+      config &&
+      config.activities &&
+      config.activities.enabled_prisons &&
+      config.activities.enabled_prisons.split(',').includes(user.activeCaseLoadId)
+    ) {
+      window.location = '/'
+      return true
+    }
+    return false
+  }
+
   render() {
     const {
       config,
@@ -270,21 +285,24 @@ class App extends React.Component {
           <Route
             exact
             path={routePaths.prisonersUnaccountedFor}
-            render={({ history }) => (
-              <PrisonersUnaccountedForContainer
-                handleDateChange={(event) => this.handleDateChange(event)}
-                handlePeriodChange={(event) => this.handlePeriodChange(event)}
-                handleError={this.handleError}
-                setLoadedDispatch={setLoadedDispatch}
-                setErrorDispatch={setErrorDispatch}
-                resetErrorDispatch={resetErrorDispatch}
-                raiseAnalyticsEvent={this.raiseAnalyticsEvent}
-                showModal={setShowModalDispatch}
-                setOffenderPaymentDataDispatch={setOffenderPaymentDataDispatch}
-                getAbsentReasonsDispatch={getAbsentReasonsDispatch}
-                history={history}
-              />
-            )}
+            render={({ history }) => {
+              if (this.redirectIfActivitiesRolledOut()) return null
+              return (
+                <PrisonersUnaccountedForContainer
+                  handleDateChange={(event) => this.handleDateChange(event)}
+                  handlePeriodChange={(event) => this.handlePeriodChange(event)}
+                  handleError={this.handleError}
+                  setLoadedDispatch={setLoadedDispatch}
+                  setErrorDispatch={setErrorDispatch}
+                  resetErrorDispatch={resetErrorDispatch}
+                  raiseAnalyticsEvent={this.raiseAnalyticsEvent}
+                  showModal={setShowModalDispatch}
+                  setOffenderPaymentDataDispatch={setOffenderPaymentDataDispatch}
+                  getAbsentReasonsDispatch={getAbsentReasonsDispatch}
+                  history={history}
+                />
+              )
+            }}
           />
         </div>
       </div>
@@ -360,6 +378,14 @@ App.propTypes = {
     flags: PropTypes.objectOf(PropTypes.string),
     supportUrl: PropTypes.string,
     authUrl: PropTypes.string,
+    activities: PropTypes.shape({
+      url: PropTypes.string,
+      enabled_prisons: PropTypes.string,
+    }),
+    appointments: PropTypes.shape({
+      url: PropTypes.string,
+      enabled_prisons: PropTypes.string,
+    }),
   }).isRequired,
   date: PropTypes.string.isRequired,
   error: PropTypes.oneOfType([PropTypes.string, PropTypes.shape({ message: PropTypes.string })]),

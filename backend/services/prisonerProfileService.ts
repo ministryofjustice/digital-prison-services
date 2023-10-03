@@ -16,6 +16,7 @@ export default ({
   prisonApi,
   keyworkerApi,
   oauthApi,
+  hmppsManageUsersApi,
   dataComplianceApi,
   pathfinderApi,
   socApi,
@@ -56,7 +57,7 @@ export default ({
 
   const getPrisonerProfileData = async (context, offenderNo, username, overrideAccess) => {
     const [currentUser, prisonerDetails] = await Promise.all([
-      oauthApi.currentUser(context),
+      hmppsManageUsersApi.currentUser(context),
       prisonApi.getDetails(context, offenderNo, true),
     ])
 
@@ -120,7 +121,7 @@ export default ({
         keyworkerApi.getKeyworkerByCaseloadAndOffenderNo(context, agencyId, offenderNo),
         pathfinderApi.getPathfinderDetails(systemContext, offenderNo),
         socApi.getSocDetails(systemContext, offenderNo, socEnabled),
-        allocationManagerApi.getPomByOffenderNo(context, offenderNo),
+        allocationManagerApi.getPomByOffenderNo(systemContext, offenderNo),
         getNeurodivergenceSupportNeed(agencyId),
       ].map((apiCall) => logErrorAndContinue(apiCall))
     )

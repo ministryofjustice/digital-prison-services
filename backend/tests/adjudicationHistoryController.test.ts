@@ -56,7 +56,9 @@ describe('Adjudications history controller', () => {
     getPagination: jest.fn(),
   }
   const oauthApi = {}
-  const systemOauthClient = {}
+  const systemOauthClient = {
+    getClientCredentialsTokens: jest.fn(),
+  }
   const restrictedPatientApi = {}
   let req
   const res = { locals: {}, render: jest.fn() }
@@ -66,6 +68,7 @@ describe('Adjudications history controller', () => {
     paginationService.getPagination = jest.fn()
     prisonApi.getDetails = jest.fn().mockResolvedValue({ firstName: 'bob', lastName: 'doe' })
     adjudicationHistoryService.getAdjudications = jest.fn().mockResolvedValue(adjudicationHistoryResponse)
+    systemOauthClient.getClientCredentialsTokens = jest.fn().mockResolvedValue({})
 
     res.render = jest.fn()
 
@@ -78,7 +81,14 @@ describe('Adjudications history controller', () => {
       restrictedPatientApi,
     })
 
-    req = { originalUrl: 'http://localhost', params: { offenderNo }, get: () => {} }
+    req = {
+      originalUrl: 'http://localhost',
+      params: { offenderNo },
+      session: {
+        userDetails: { username: 'BSMITH', activeCaseLoadId: 'MDI', name: 'Bob Smith' },
+      },
+      get: () => {},
+    }
   })
 
   it('should make a call to get adjudications with the correct parameters', async () => {
@@ -92,6 +102,7 @@ describe('Adjudications history controller', () => {
     await controller(req, res)
 
     expect(adjudicationHistoryService.getAdjudications).toHaveBeenCalledWith(
+      {},
       {},
       offenderNo,
       {
@@ -213,6 +224,7 @@ describe('Adjudications history controller', () => {
 
     expect(adjudicationHistoryService.getAdjudications).toHaveBeenCalledWith(
       {},
+      {},
       offenderNo,
       {
         fromDate: '2020-12-10',
@@ -233,6 +245,7 @@ describe('Adjudications history controller', () => {
     await controller(req, res)
 
     expect(adjudicationHistoryService.getAdjudications).toHaveBeenCalledWith(
+      {},
       {},
       offenderNo,
       {
@@ -386,6 +399,7 @@ describe('Adjudications history controller', () => {
 
     expect(adjudicationHistoryService.getAdjudications).toHaveBeenCalledWith(
       {},
+      {},
       offenderNo,
       {
         agencyId: 'MDI',
@@ -404,6 +418,7 @@ describe('Adjudications history controller', () => {
     await controller(req, res)
 
     expect(adjudicationHistoryService.getAdjudications).toHaveBeenCalledWith(
+      {},
       {},
       offenderNo,
       {

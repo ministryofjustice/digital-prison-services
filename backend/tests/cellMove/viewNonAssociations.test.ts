@@ -6,12 +6,14 @@ Reflect.deleteProperty(process.env, 'APPINSIGHTS_INSTRUMENTATIONKEY')
 describe('view non associations', () => {
   let req
   let res
-  let logError
   let controller
 
   const prisonApi = {
     getDetails: jest.fn(),
-    getNonAssociations: jest.fn(),
+  }
+
+  const nonAssociationsApi = {
+    getNonAssociationsLegacy: jest.fn(),
   }
 
   const tomorrow = moment().add(1, 'days')
@@ -20,13 +22,18 @@ describe('view non associations', () => {
 
   const getDetailsResponse = {
     bookingId: 1234,
+    offenderNo,
     firstName: 'Test',
     lastName: 'User',
+    assignedLivingUnit: {
+      agencyId: 'MDI',
+      locationId: 12345,
+      description: '1-2-012',
+      agencyName: 'Moorland (HMP & YOI)',
+    },
   }
 
   beforeEach(() => {
-    logError = jest.fn()
-
     req = {
       originalUrl: 'http://localhost',
       params: { offenderNo },
@@ -37,8 +44,12 @@ describe('view non associations', () => {
     }
     res = { locals: {}, render: jest.fn(), status: jest.fn() }
 
-    prisonApi.getDetails = jest.fn().mockResolvedValue(getDetailsResponse)
-    prisonApi.getNonAssociations = jest.fn().mockResolvedValue({
+    prisonApi.getDetails = jest.fn().mockImplementation((_, requestedOffenderNo) => ({
+      ...getDetailsResponse,
+      offenderNo: requestedOffenderNo,
+    }))
+
+    nonAssociationsApi.getNonAssociationsLegacy = jest.fn().mockResolvedValue({
       offenderNo: 'ABC123',
       firstName: 'Fred',
       lastName: 'Bloggs',
@@ -122,14 +133,14 @@ describe('view non associations', () => {
       ],
     })
 
-    controller = viewNonAssociations({ prisonApi, logError })
+    controller = viewNonAssociations({ prisonApi, nonAssociationsApi })
   })
 
   it('Makes the expected API calls', async () => {
     await controller(req, res)
 
     expect(prisonApi.getDetails).toHaveBeenCalledWith(res.locals, offenderNo)
-    expect(prisonApi.getNonAssociations).toHaveBeenCalledWith(res.locals, 1234)
+    expect(nonAssociationsApi.getNonAssociationsLegacy).toHaveBeenCalledWith(res.locals, offenderNo)
   })
 
   it('Should render error template when there is an API error', async () => {
@@ -151,7 +162,7 @@ describe('view non associations', () => {
           {
             comment: 'Test comment 1',
             effectiveDate: moment().format('D MMMM YYYY'),
-            location: 'MDI-2-1-3',
+            location: '1-2-012',
             name: 'Bloggs, Joseph',
             otherOffenderKey: 'Joseph Bloggs is',
             otherOffenderRole: 'Perpetrator',
@@ -163,7 +174,7 @@ describe('view non associations', () => {
           {
             comment: 'Test comment 2',
             effectiveDate: moment().subtract(1, 'years').format('D MMMM YYYY'),
-            location: 'MDI-2-1-3',
+            location: '1-2-012',
             name: 'Bloggs, Jim',
             otherOffenderKey: 'Jim Bloggs is',
             otherOffenderRole: 'Rival gang',

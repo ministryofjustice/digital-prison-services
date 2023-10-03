@@ -11,6 +11,7 @@ context('Health page reports health correctly', () => {
       expect(response.body.api).to.deep.equal({
         allocationManager: 'UP',
         auth: { timeout: 1000, code: 'ECONNABORTED', errno: 'ETIMEDOUT', retries: 2 },
+        hmppsManageUsers: 'UP',
         casenotes: 'UP',
         community: 'UP',
         prisonApi: { timeout: 1000, code: 'ECONNABORTED', errno: 'ETIMEDOUT', retries: 2 },
@@ -35,6 +36,7 @@ context('Health page reports health correctly', () => {
       expect(response.body.api).to.deep.equal({
         allocationManager: 'UP',
         auth: 'UP',
+        hmppsManageUsers: 'UP',
         casenotes: 'UP',
         community: 'UP',
         prisonApi: 'UP',

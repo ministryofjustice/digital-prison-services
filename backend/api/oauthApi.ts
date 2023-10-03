@@ -31,15 +31,10 @@ export const apiClientCredentials = (clientId, clientSecret) =>
  * @returns a configured oauthApi instance
  */
 export const oauthApiFactory = (client, { clientId, clientSecret, url }) => {
-  const get = (context, path) => client.get(context, path).then((response) => response.body)
-  const currentUser = (context) => get(context, '/api/user/me')
   const userRoles = (context) =>
     jwtDecode<DpsJwtPayload>(context.access_token).authorities.map(
       (authority) => new UserRole(authority.substring(authority.indexOf('_') + 1))
     )
-
-  const userEmail = (context, username) => get(context, `/api/user/${username}/email`)
-  const userDetails = (context, username) => get(context, `/api/user/${username}`)
 
   const oauthAxios = axios.create({
     baseURL: `${url}oauth/token`,
@@ -100,10 +95,7 @@ export const oauthApiFactory = (client, { clientId, clientSecret, url }) => {
     makeTokenRequest(querystring.stringify({ refresh_token: refreshToken, grant_type: 'refresh_token' }), 'refresh:')
 
   return {
-    currentUser,
     userRoles,
-    userEmail,
-    userDetails,
     refresh,
     makeTokenRequest,
     // Expose the internals so they can be Monkey Patched for testing. Oo oo oo.

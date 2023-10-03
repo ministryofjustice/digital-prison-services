@@ -1,5 +1,8 @@
 const ConsiderRisksPage = require('../../pages/cellMove/considerRisksPage')
 const ConfirmCellMovePage = require('../../pages/cellMove/confirmCellMovePage')
+const SelectCellPage = require('../../pages/cellMove/selectCellPage')
+const offenderFullDetails = require('../../mockApis/responses/offenderFullDetails.json')
+const offenderBasicDetails = require('../../mockApis/responses/offenderBasicDetails.json')
 
 const offenderNo = 'A1234A'
 
@@ -22,6 +25,7 @@ context('A user can see conflicts in cell', () => {
     cy.task('stubPrisonerFullDetail', {
       prisonerDetail: {
         bookingId: 1234,
+        offenderNo,
         firstName: 'Test',
         lastName: 'User',
         csra: 'High',
@@ -207,7 +211,7 @@ context('A user can see conflicts in cell', () => {
     cy.task('stubInmatesAtLocation', {
       inmates: [{ offenderNo: 'A12345', firstName: 'Bob', lastName: 'Doe', assignedLivingUnitId: 1 }],
     })
-    cy.task('stubBookingNonAssociations', {
+    cy.task('stubOffenderNonAssociationsLegacy', {
       offenderNo,
       firstName: 'JOHN',
       lastName: 'SAUNDERS',
@@ -350,7 +354,7 @@ context('A user can see conflicts in cell', () => {
     cy.task('stubInmatesAtLocation', {
       inmates: [],
     })
-    cy.task('stubBookingNonAssociations', {})
+    cy.task('stubOffenderNonAssociationsLegacy', {})
 
     cy.task('stubBookingDetails', {
       firstName: 'Bob',
@@ -378,5 +382,96 @@ context('A user can see conflicts in cell', () => {
     const page = ConsiderRisksPage.goTo(offenderNo, 1)
     page.csraMessages().should('not.exist')
     page.form().confirmationInput().contains('Are you sure you want to select this cell?')
+  })
+
+  describe('back button', () => {
+    const response = [
+      {
+        attributes: [
+          { description: 'Special Cell', code: 'SPC' },
+          { description: 'Gated Cell', code: 'GC' },
+        ],
+        capacity: 2,
+        description: 'MDI-1-2',
+        id: 1,
+        noOfOccupants: 2,
+        userDescription: 'MDI-1-1',
+      },
+      {
+        attributes: [
+          { code: 'LC', description: 'Listener Cell' },
+          { description: 'Gated Cell', code: 'GC' },
+        ],
+        capacity: 3,
+        description: 'MDI-1-1',
+        id: 1,
+        noOfOccupants: 2,
+        userDescription: 'MDI-1-1',
+      },
+    ]
+
+    before(() => {
+      cy.clearCookies()
+      cy.task('resetAndStubTokenVerification')
+      cy.task('stubSignIn', { username: 'ITAG_USER', caseload: 'MDI', roles: ['ROLE_CELL_MOVE'] })
+      cy.signIn()
+    })
+
+    beforeEach(() => {
+      Cypress.Cookies.preserveOnce('hmpps-session-dev')
+      cy.task('stubOffenderBasicDetails', offenderBasicDetails)
+      cy.task('stubOffenderFullDetails', offenderFullDetails)
+      cy.task('stubOffenderNonAssociationsLegacy', {})
+      cy.task('stubGroups', { id: 'MDI' })
+      cy.task('stubUserCaseLoads')
+      cy.task('stubGroups', { id: 'MDI' })
+      cy.task('stubCellAttributes')
+      cy.task('stubInmatesAtLocation', {
+        inmates: [{ offenderNo: 'A12345', firstName: 'Bob', lastName: 'Doe', assignedLivingUnitId: 1 }],
+      })
+      cy.task('stubGetAlerts', { agencyId: 'MDI', alerts: [{ offenderNo: 'A12345', alertCode: 'PEEP' }] })
+      cy.task('stubCsraAssessments', {
+        offenderNumbers: ['A12345'],
+        assessments: [
+          {
+            offenderNo: 'A12345',
+            assessmentCode: 'CSRA',
+            assessmentDescription: 'CSRA',
+            assessmentComment: 'test',
+            assessmentDate: '2020-01-10',
+            classification: 'Standard',
+            classificationCode: 'STANDARD',
+          },
+        ],
+      })
+      cy.task('stubOffenderNonAssociationsLegacy', {
+        offenderNo: 'A12345',
+        firstName: 'JOHN',
+        lastName: 'SAUNDERS',
+        agencyDescription: 'MOORLAND (HMP & YOI)',
+        assignedLivingUnitDescription: 'MDI-1-1-015',
+        nonAssociations: [],
+      })
+      cy.task('stubLocation', { locationId: 1, locationData: { parentLocationId: 2, description: 'MDI-1-1' } })
+      cy.task('stubLocation', { locationId: 2, locationData: { parentLocationId: 3 } })
+      cy.task('stubLocation', { locationId: 3, locationData: { locationPrefix: 'MDI-1' } })
+      cy.task('stubUserCaseLoads')
+      cy.task('stubCellsWithCapacity', { cells: response })
+      cy.task('stubCellsWithCapacityByGroupName', { agencyId: 'MDI', groupName: 1, response })
+    })
+
+    context('When referred from the select cell page', () => {
+      beforeEach(() => {
+        SelectCellPage.goTo('A12345', 'ALL')
+        cy.contains('Select an available cell')
+        cy.contains('.govuk-link', 'Select cell').click()
+        cy.contains('You must consider the risks of the prisoners involved')
+      })
+
+      it('should have a back button linking to the prisoner search page', () => {
+        cy.contains('Back').click()
+        cy.contains('Select an available cell')
+      })
+    })
   })
 })
