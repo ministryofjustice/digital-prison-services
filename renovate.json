@@ -2,5 +2,5 @@
   "$schema": "https://docs.renovatebot.com/renovate-schema.json",
   "extends": ["github>ministryofjustice/hmpps-renovate-config:base"],
   "enabledManagers": ["helmv3", "helm-values", "circleci", "github-actions"],
-  "reviewers": ["neilmendum", "timoj58", "natclamp-moj"]
+  "reviewers": ["timoj58", "natclamp-moj", "nagendramoj"]
 }
