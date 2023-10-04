@@ -90,3 +90,4 @@ generic-service:
    MANAGE_ADJUDICATIONS_API_URL: https://manage-adjudications-api-dev.hmpps.service.justice.gov.uk
    COMPONENT_API_URL: https://frontend-components-dev.hmpps.service.justice.gov.uk
    COMPONENT_API_LATEST: true
+   PREPARE_SOMEONE_FOR_RELEASE_URL: https://resettlement-passport-ui-dev.hmpps.service.justice.gov.uk

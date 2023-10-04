@@ -87,6 +87,7 @@ generic-service:
    MANAGE_ADJUDICATIONS_API_URL: https://manage-adjudications-api-preprod.hmpps.service.justice.gov.uk
    COMPONENT_API_URL: https://frontend-components-preprod.hmpps.service.justice.gov.uk
    COMPONENT_API_LATEST: true
+   PREPARE_SOMEONE_FOR_RELEASE_URL: https://resettlement-passport-ui-preprod.hmpps.service.justice.gov.uk
 
   allowlist:
    office: "217.33.148.210/32"

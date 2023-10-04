@@ -946,5 +946,26 @@ describe('Homepage', () => {
         })
       )
     })
+
+    it('Should render home page with the Prepare someone for release tile when required roles are present', async () => {
+      config.apis.prepareSomeoneForRelease.ui_url = '/'
+
+      oauthApi.userRoles.mockReturnValue([{ roleCode: 'RESETTLEMENT_PASSPORT_EDIT' }])
+
+      await controller(req, res)
+      expect(res.render).toHaveBeenCalledWith(
+        'homepage/homepage.njk',
+        expect.objectContaining({
+          tasks: [
+            {
+              id: 'prepare-someone-for-release',
+              heading: 'Prepare someone for release',
+              description: 'Search for people with resettlement needs. View and manage their information and support.',
+              href: '/',
+            },
+          ],
+        })
+      )
+    })
   })
 })
