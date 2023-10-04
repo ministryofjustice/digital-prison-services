@@ -27,6 +27,7 @@ const {
     getSomeoneReadyForWork,
     learningAndWorkProgress,
     manageOffences,
+    prepareSomeoneForRelease,
   },
   app: { whereaboutsMaintenanceMode, keyworkerMaintenanceMode },
 } = config
@@ -356,6 +357,13 @@ const getTasks = ({ activeCaseLoadId, locations, staffId, whereaboutsConfig, key
       description: 'This service allows you to maintain offence reference data.',
       href: manageOffences.ui_url,
       enabled: () => userHasRoles(['MANAGE_OFFENCES_ADMIN', 'UPDATE_OFFENCE_SCHEDULES', 'NOMIS_OFFENCE_ACTIVATOR']),
+    },
+    {
+      id: 'prepare-someone-for-release',
+      heading: 'Prepare someone for release',
+      description: 'Search for people with resettlement needs. View and manage their information and support.',
+      href: prepareSomeoneForRelease.ui_url,
+      enabled: () => prepareSomeoneForRelease.ui_url && userHasRoles(['RESETTLEMENT_PASSPORT_EDIT']),
     },
   ]
 }
