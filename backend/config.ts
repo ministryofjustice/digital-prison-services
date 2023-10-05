@@ -244,6 +244,9 @@ export const apis = {
   manageOffences: {
     ui_url: process.env.MANAGE_OFFENCES_URL,
   },
+  prepareSomeoneForRelease: {
+    ui_url: process.env.PREPARE_SOMEONE_FOR_RELEASE_URL,
+  },
   adjudicationsApi: {
     url: process.env.MANAGE_ADJUDICATIONS_API_URL || 'http://localhost:8087',
     timeoutSeconds: toNumber(process.env.MANAGE_ADJUDICATIONS_API_ENDPOINT_TIMEOUT_SECONDS) || 30,
