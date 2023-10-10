@@ -23,7 +23,7 @@ generic-service:
    CHECK_MY_DIARY_URL: https://checkmydiary.service.justice.gov.uk?fromDPS=true
    INCENTIVES_URL: https://incentives-ui.hmpps.service.justice.gov.uk
    INCENTIVES_API_ENDPOINT_URL: https://incentives-api.hmpps.service.justice.gov.uk
-   NON_ASSOCIATIONS_PRISONS: "ISI"
+   NON_ASSOCIATIONS_PRISONS: "FNI,ISI,LGI,RSI"
    NON_ASSOCIATIONS_API_ENDPOINT_URL: https://non-associations-api.hmpps.service.justice.gov.uk
    NON_ASSOCIATIONS_UI_URL: https://non-associations.hmpps.service.justice.gov.uk
    TOKENVERIFICATION_API_URL: https://token-verification-api.prison.service.justice.gov.uk
