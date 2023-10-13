@@ -34,7 +34,7 @@ generic-service:
    PIN_PHONES_URL: https://pcms.prison.service.justice.gov.uk/
    SOC_UI_URL: https://manage-soc-cases.hmpps.service.justice.gov.uk/
    SOC_API_URL: https://manage-soc-cases-api.hmpps.service.justice.gov.uk/
-   OFFENDER_SEARCH_API_URL: https://prisoner-offender-search.prison.service.justice.gov.uk
+   OFFENDER_SEARCH_API_URL: https://prisoner-search.prison.service.justice.gov.uk
    SUPPORT_URL: https://support.hmpps.service.justice.gov.uk/
    BVL_URL: https://book-video-link.prison.service.justice.gov.uk
    MOIC_URL: https://moic.service.justice.gov.uk
