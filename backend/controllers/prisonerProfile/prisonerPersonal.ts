@@ -24,23 +24,24 @@ export default ({
     allocationManagerApi,
     esweService,
     systemOauthClient,
-    restrictedPatientApi,
+    offenderSearchApi,
     oauthApi,
   }) =>
   async (req, res) => {
     const { offenderNo, establishmentId } = req.params
     const { username } = req.session.userDetails
 
-    const { context, overrideAccess } = await getContext({
-      offenderNo,
-      res,
-      req,
-      oauthApi,
-      systemOauthClient,
-      restrictedPatientApi,
-    })
-    // Separate call to retrieve a system token specifically to retrieve POM - we know this is safe to do as other calls failing would prevent the page loading if the user is not allowed to view the prisoner.
+    // Separate call to retrieve a system token - we know this is safe to do as other calls
+    // failing would prevent the page loading if the user is not allowed to view the prisoner.
     const systemContext = await systemOauthClient.getClientCredentialsTokens(username)
+    const prisonerSearchDetails = await offenderSearchApi.getPrisonerDpsDetails(systemContext, offenderNo)
+
+    const { context, overrideAccess } = getContext({
+      res,
+      oauthApi,
+      systemContext,
+      prisonerSearchDetails,
+    })
 
     const [basicPrisonerDetails, treatmentTypes, healthTypes] = await Promise.all([
       prisonApi.getDetails(context, offenderNo),
@@ -80,7 +81,13 @@ export default ({
       neurodivergence,
     ] = await Promise.all(
       [
-        prisonerProfileService.getPrisonerProfileData(context, offenderNo, username, overrideAccess),
+        prisonerProfileService.getPrisonerProfileData(
+          context,
+          systemContext,
+          offenderNo,
+          overrideAccess,
+          prisonerSearchDetails
+        ),
         prisonApi.getIdentifiers(context, bookingId),
         prisonApi.getOffenderAliases(context, bookingId),
         prisonApi.getPrisonerProperty(context, bookingId),

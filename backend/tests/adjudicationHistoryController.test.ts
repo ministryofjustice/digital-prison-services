@@ -59,7 +59,11 @@ describe('Adjudications history controller', () => {
   const systemOauthClient = {
     getClientCredentialsTokens: jest.fn(),
   }
-  const restrictedPatientApi = {}
+  const offenderSearchApi = {
+    getPrisonerSearchDetails: jest
+      .fn()
+      .mockResolvedValue({ hospital: null, isRestrictedPatient: false, indeterminateSentence: false }),
+  }
   let req
   const res = { locals: {}, render: jest.fn() }
   let controller
@@ -78,7 +82,7 @@ describe('Adjudications history controller', () => {
       prisonApi,
       oauthApi,
       systemOauthClient,
-      restrictedPatientApi,
+      offenderSearchApi,
     })
 
     req = {

@@ -48,7 +48,6 @@ describe('Whereabouts maintenance mode flag is true', () => {
       complexityApi: '',
       curiousApi: '',
       incentivesApi: '',
-      restrictedPatientApi: '',
       whereaboutsMaintenanceMode: true,
     })
   )

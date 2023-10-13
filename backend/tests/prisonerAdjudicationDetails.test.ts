@@ -8,10 +8,14 @@ describe('Prisoner adjudication details', () => {
   const systemOauthClient = {
     getClientCredentialsTokens: () => {},
   }
-
+  const offenderSearchApi = {
+    getPrisonerSearchDetails: jest
+      .fn()
+      .mockResolvedValue({ hospital: 'MDI', isRestrictedPatient: false, indeterminateSentence: false }),
+  }
   let req
   let res
-  let logError
+  const oauthApi = jest.fn()
   let controller
 
   beforeEach(() => {
@@ -24,16 +28,19 @@ describe('Prisoner adjudication details', () => {
     }
     res = { locals: {}, render: jest.fn(), status: jest.fn() }
 
-    logError = jest.fn()
-
     // @ts-expect-error ts-migrate(2339) FIXME: Property 'getDetails' does not exist on type '{}'.
     prisonApi.getDetails = jest.fn().mockResolvedValue({ firstName: 'John', lastName: 'Smith ' })
     // @ts-expect-error ts-migrate(2339) FIXME: Property 'getAdjudicationDetails' does not exist o... Remove this comment to see the full error message
     adjudicationsApi.getAdjudicationDetails = jest.fn().mockResolvedValue({})
     systemOauthClient.getClientCredentialsTokens = jest.fn().mockResolvedValue({})
 
-    // @ts-expect-error ts-migrate(2345) FIXME: Argument of type '{ prisonApi: {}; logError: any; ... Remove this comment to see the full error message
-    controller = prisonerAdjudicationDetails({ prisonApi, systemOauthClient, adjudicationsApi, logError })
+    controller = prisonerAdjudicationDetails({
+      prisonApi,
+      systemOauthClient,
+      adjudicationsApi,
+      offenderSearchApi,
+      oauthApi,
+    })
   })
 
   it('should make the expected API calls', async () => {
