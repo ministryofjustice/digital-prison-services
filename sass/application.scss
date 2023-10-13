@@ -45,7 +45,7 @@ $govuk-font-family-print: 'GDS Transport';
 @import 'horizontal-content';
 @import 'print';
 
-* {
+#main-content * {
   box-sizing: border-box;
 }
 
