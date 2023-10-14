@@ -109,7 +109,7 @@
     "redux-thunk": "^2.4.1",
     "sass": "^1.53.0",
     "spin.js": "^3.1.0",
-    "styled-components": "^5.3.6",
+    "styled-components": "^6.0.8",
     "superagent": "^6.0.0",
     "universal-analytics": "^0.5.3",
     "uuid": "^9.0.0",
