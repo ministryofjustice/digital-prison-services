@@ -1,0 +1,50 @@
+<hr class="govuk-section-break govuk-section-break--m govuk-section-break--visible">
+<div class="horizontal-information govuk-!-margin-bottom-0" data-test="cell-move-header-information">
+  <div class="horizontal-information__item">
+    <h3 class="govuk-heading-s govuk-!-margin-bottom-1">Name</h3>
+    <p class="govuk-body govuk-!-margin-bottom-1" data-test="name">{{ reverseOrderPrisonerName }}</p>
+    <p class="govuk-body">
+      <a href="{{ offenderDetailsUrl }}" class="govuk-link" data-test="name-link">View details
+        <span class="govuk-visually-hidden">for {{ reverseOrderPrisonerName }}</span>
+      </a>
+    </p>
+  </div>
+  <div class="horizontal-information__item">
+    <h3 class="govuk-heading-s govuk-!-margin-bottom-1">Current location</h3>
+    <p class="govuk-body" data-test="living-unit">{{ prisonerDetails.assignedLivingUnit.description }}</p>
+  </div>
+  <div class="horizontal-information__item">
+    <h3 class="govuk-heading-s govuk-!-margin-bottom-1">CSRA rating</h3>
+    <p class="govuk-body govuk-!-margin-bottom-1" data-test="csra">{{ convertedCsra }}</p>
+
+    {% if displayLinkToPrisonersMostRecentCsra %}
+    <p class="govuk-body">
+      <a href="{{ csraDetailsUrl }}" class="govuk-link" data-test="csra-link">View details
+        <span class="govuk-visually-hidden">for {{ reverseOrderPrisonerName }}'s CSRA</span>
+      </a>
+    </p>
+    {% endif %}
+  </div>
+  <div class="horizontal-information__item horizontal-information__item--tenth">
+    <h3 class="govuk-heading-s govuk-!-margin-bottom-1">Relevant alerts</h3>
+    {% if prisonerAlerts.length %}
+      <div class="govuk-!-margin-bottom-3" data-test="relevant-alerts">
+        {{ alertFlags(prisonerAlerts) }}
+      </div>
+    {% else %}
+      <p class="govuk-body" data-test="relevant-alerts">None</p>
+    {% endif %}
+  </div>
+  <div class="horizontal-information__item">
+    <h3 class="govuk-heading-s govuk-!-margin-bottom-1">Non-associations</h3>
+    {% if nonAssociationsCount > 0 %}
+      <a href="{{ nonAssociationLink }}" class="govuk-link govuk-body" data-test="non-associations-link">View non-associations
+        <span class="govuk-visually-hidden">for {{ reverseOrderPrisonerName }}</span>  
+      </a>
+    {% else %}
+      <p class="govuk-body" data-test="non-associations-message">0 in NOMIS. Check local processes.</p>
+    {% endif %}
+  </div>
+</div>
+
+<hr class="govuk-section-break govuk-section-break--m govuk-section-break--visible govuk-!-margin-top-0  govuk-!-margin-bottom-6">

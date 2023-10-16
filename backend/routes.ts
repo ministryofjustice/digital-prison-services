@@ -26,6 +26,7 @@ import attendanceChangeRouter from './routes/attendanceChangesRouter'
 import covidRouter from './routes/covidRouter'
 import prisonerSearchRouter from './routes/prisonerSearchRouter'
 import cellMoveRouter from './routes/cellMoveRouter'
+import receptionMoveRouter from './routes/receptionMoveRouter'
 import establishmentRollRouter from './routes/establishmentRollRouter'
 import changeSomeonesCellRouter from './routes/changeSomeonesCellRouter'
 import globalSearchRouter from './routes/globalSearchRouter'
@@ -320,6 +321,18 @@ const setup = ({
       prisonApi,
       whereaboutsApi,
       caseNotesApi,
+      nonAssociationsApi,
+      logError,
+    })
+  )
+
+  router.use(
+    '/prisoner/:offenderNo/reception-move',
+    receptionMoveRouter({
+      oauthApi,
+      prisonApi,
+      systemOauthClient,
+      incentivesApi,
       nonAssociationsApi,
       logError,
     })
