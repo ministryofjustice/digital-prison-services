@@ -4,7 +4,7 @@
 <div class="govuk-grid-row">
   <div class="govuk-grid-column-full">
     <p class= "govuk-!-margin-bottom-0 govuk-!-margin-top-0"> {{name}} </p>
-    <p class = "govuk-!-margin-bottom-0 govuk-!-margin-top-0"><a href="/prisoner/{{offenderNo}}/cell-move/prisoner-details" class="govuk-link" data-test="prisoner-name-link"><span class="govuk-visually-hidden"> for {{ prisoner.name }} </span>View details</a></p>
+    <p class = "govuk-!-margin-bottom-0 govuk-!-margin-top-0"><a href="/prisoner/{{offenderNo}}/cell-move/prisoner-details" class="govuk-link" data-test="prisoner-name-link"><span class="govuk-visually-hidden"> for {{ name }} </span>View details</a></p>
     {% if nonAssocation %}
         <div class="non-association govuk-!-margin-top-1">
           NON-ASSOCIATION
@@ -21,7 +21,7 @@
     {% if displayCsraLink %}
       <p class = "govuk-!-margin-bottom-0 govuk-!-margin-top-0">
         <a href="/prisoner/{{offenderNo}}/cell-move/cell-sharing-risk-assessment-details" class="govuk-link" data-test="csra-link">
-        <span class="govuk-visually-hidden"> for {{ name }} </span>
+        <span class="govuk-visually-hidden"> for {{ name }}'s CSRA </span>
           View details
         </a>
       </p>
