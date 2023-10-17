@@ -4,9 +4,15 @@ import { movementsServiceFactory } from '../services/movementsService'
 
 const router = express.Router({ mergeParams: true })
 
-const controller = ({ oauthApi, prisonApi, systemOauthClient, incentivesApi, nonAssociationsApi }) => {
+const controller = ({ oauthApi, prisonApi, systemOauthClient, incentivesApi, nonAssociationsApi, logError }) => {
   const movementsService = movementsServiceFactory(prisonApi, systemOauthClient, incentivesApi)
-  const { view, submit } = considerRisksController({ oauthApi, prisonApi, movementsService, nonAssociationsApi })
+  const { view, submit } = considerRisksController({
+    oauthApi,
+    prisonApi,
+    movementsService,
+    nonAssociationsApi,
+    logError,
+  })
   router.get('/consider-risks-reception', view)
   router.post('/consider-risks-reception', submit)
 

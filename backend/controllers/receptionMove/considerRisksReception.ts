@@ -1,8 +1,9 @@
 import { alertFlagLabels, cellMoveAlertCodes } from '../../shared/alertFlagValues'
 import { putLastNameFirst, formatName, formatLocation, hasLength } from '../../utils'
 import { getNonAssociationsInEstablishment, translateCsra, userHasAccess } from '../cellMove/cellMoveUtils'
+import logger from '../../log'
 
-export default ({ oauthApi, prisonApi, movementsService, nonAssociationsApi }) => {
+export default ({ oauthApi, prisonApi, movementsService, nonAssociationsApi, logError }) => {
   const view = async (req, res) => {
     const { offenderNo } = req.params
 
@@ -18,6 +19,7 @@ export default ({ oauthApi, prisonApi, movementsService, nonAssociationsApi }) =
       ])
 
       if (!userHasAccess({ userRoles, userCaseLoads, offenderCaseload: prisonerDetails.agencyId })) {
+        logger.info('User does not have correct roles')
         return res.render('notFound.njk', { url: '/prisoner-search' })
       }
 
@@ -121,13 +123,14 @@ export default ({ oauthApi, prisonApi, movementsService, nonAssociationsApi }) =
         displayLinkToPrisonersMostRecentCsra,
         convertedCsra: translateCsra(prisonerDetails.csraClassificationCode),
         backUrl: `/prisoners/${offenderNo}/location-details`,
-        nonAssociationsCount: nonAssociationsInEstablishment?.length,
+        hasNonAssociations: nonAssociationsInEstablishment?.length > 0,
         nonAssociationsRows,
         offendersInReception: otherOffenders,
         inReceptionCount: `${otherOffenders.length} people in reception`,
         errors: req.flash('errors'),
       })
     } catch (error) {
+      logError(req.originalUrl, error, 'error getting consider-risks-reception')
       res.locals.homeUrl = `/prisoner/${offenderNo}`
       throw error
     }

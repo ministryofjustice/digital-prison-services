@@ -37,7 +37,7 @@
   </div>
   <div class="horizontal-information__item">
     <h3 class="govuk-heading-s govuk-!-margin-bottom-1">Non-associations</h3>
-    {% if nonAssociationsCount > 0 %}
+    {% if hasNonAssociations %}
       <a href="{{ nonAssociationLink }}" class="govuk-link govuk-body" data-test="non-associations-link">View non-associations
         <span class="govuk-visually-hidden">for {{ reverseOrderPrisonerName }}</span>  
       </a>

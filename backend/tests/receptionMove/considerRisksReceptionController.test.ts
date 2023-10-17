@@ -1,4 +1,7 @@
 import considerRisksReception from '../../controllers/receptionMove/considerRisksReception'
+import logger from '../../log'
+
+jest.mock('../../log')
 
 const someOffenderNumber = 'A12345'
 const someBookingId = -10
@@ -23,15 +26,14 @@ const nonAssociationsApi = {
   getNonAssociationsLegacy: jest.fn(),
 }
 
+const logError = jest.fn()
+logger.info = jest.fn()
+
+const res = { locals: { homeUrl: `prisoner/${someOffenderNumber}` }, redirect: jest.fn(), render: jest.fn() }
+let controller
+let req
+
 describe('Consider risks reception', () => {
-  const res = { locals: { homeUrl: `prisoner/${someOffenderNumber}` }, redirect: jest.fn(), render: jest.fn() }
-  let controller
-  let req
-
-  afterEach(() => {
-    jest.clearAllMocks()
-  })
-
   beforeEach(() => {
     oauthApi.userRoles.mockReturnValue([{ roleCode: 'CELL_MOVE' }])
 
@@ -58,6 +60,7 @@ describe('Consider risks reception', () => {
     res.render = jest.fn()
 
     req = {
+      originalUrl: 'original-url',
       params: {
         offenderNo: someOffenderNumber,
       },
@@ -70,7 +73,11 @@ describe('Consider risks reception', () => {
       },
     }
 
-    controller = considerRisksReception({ oauthApi, prisonApi, movementsService, nonAssociationsApi })
+    controller = considerRisksReception({ oauthApi, prisonApi, movementsService, nonAssociationsApi, logError })
+  })
+
+  afterEach(() => {
+    jest.clearAllMocks()
   })
 
   describe('page', () => {
@@ -80,12 +87,6 @@ describe('Consider risks reception', () => {
         1,
         { homeUrl: `prisoner/${someOffenderNumber}` },
         someOffenderNumber,
-        true
-      )
-      expect(prisonApi.getDetails).toHaveBeenNthCalledWith(
-        2,
-        { homeUrl: `prisoner/${someOffenderNumber}` },
-        undefined,
         true
       )
       expect(prisonApi.getCsraAssessments).toHaveBeenCalledWith({ homeUrl: `prisoner/${someOffenderNumber}` }, [
@@ -99,6 +100,13 @@ describe('Consider risks reception', () => {
         { homeUrl: `prisoner/${someOffenderNumber}` },
         someOffenderNumber
       )
+    })
+
+    it('should check user has correct roles', async () => {
+      oauthApi.userRoles.mockReturnValue([{ roleCode: 'SOME_OTHER_ROLE' }])
+      await controller.view(req, res)
+      expect(res.render).toHaveBeenCalledWith('notFound.njk', { url: '/prisoner-search' })
+      expect(logger.info).toBeCalled()
     })
 
     it('should populate view model with prisoner details', async () => {
@@ -215,6 +223,7 @@ describe('Consider risks reception', () => {
       movementsService.getCsraForMultipleOffenders.mockRejectedValue(error)
       await expect(controller.view(req, res)).rejects.toThrowError(error)
       expect(res.locals.homeUrl).toBe(`/prisoner/${someOffenderNumber}`)
+      expect(logError).toHaveBeenCalledWith('original-url', error, 'error getting consider-risks-reception')
     })
   })
 })

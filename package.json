@@ -137,7 +137,6 @@
     "axios-mock-adapter": "^1.21.1",
     "babel-jest": "^29.5.0",
     "babel-loader": "^8.2.5",
-    "cheerio": "^1.0.0-rc.12",
     "copy-webpack-plugin": "^7.0.0",
     "css-loader": "^6.7.1",
     "cypress": "^10.3.0",
