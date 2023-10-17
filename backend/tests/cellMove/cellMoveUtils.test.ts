@@ -1,5 +1,5 @@
 import moment from 'moment'
-import { getNonAssociationsInEstablishment } from '../../controllers/cellMove/cellMoveUtils'
+import { getNonAssociationsInEstablishment, getBackLinkData } from '../../controllers/cellMove/cellMoveUtils'
 
 describe('Cell move utils', () => {
   const nonAssociations = {
@@ -242,6 +242,23 @@ describe('Cell move utils', () => {
           }),
         })
       )
+    })
+  })
+
+  describe('getBackLinkData', () => {
+    it('returns correct back link text for cell search journey', () => {
+      const text = getBackLinkData('search-for-cell', 'A12345BC')
+      expect(text.backLinkText).toBe('Return to search for a cell')
+    })
+
+    it('returns correct back link text for reception move journey', () => {
+      const text = getBackLinkData('consider-risks-reception', 'A12345BC')
+      expect(text.backLinkText).toBe('Return to consider risks of reception move')
+    })
+
+    it('returns correct back link text when neither cell search or reception move journeys', () => {
+      const text = getBackLinkData('something else', 'A12345BC')
+      expect(text.backLinkText).toBe('Return to select an available cell')
     })
   })
 })

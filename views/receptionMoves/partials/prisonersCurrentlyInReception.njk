@@ -1,0 +1,80 @@
+{% from "../../macros/alertFlags.njk" import alertFlags %}
+
+{% macro name(name, offenderNo, nonAssocation) %}
+<div class="govuk-grid-row">
+  <div class="govuk-grid-column-full">
+    <p class= "govuk-!-margin-bottom-0 govuk-!-margin-top-0"> {{name}} </p>
+    <p class = "govuk-!-margin-bottom-0 govuk-!-margin-top-0"><a href="/prisoner/{{offenderNo}}/cell-move/prisoner-details" class="govuk-link" data-test="prisoner-name-link"><span class="govuk-visually-hidden"> for {{ prisoner.name }} </span>View details</a></p>
+    {% if nonAssocation %}
+        <div class="non-association govuk-!-margin-top-1">
+          NON-ASSOCIATION
+        </div>
+    {% endif %}
+  </div>
+</div>
+{% endmacro %}
+
+{% macro csra(csraClassification, offenderNo, name, displayCsraLink) %}
+<div class="govuk-grid-row">
+  <div class="govuk-grid-column-full">
+    <p class = "govuk-!-margin-bottom-0 govuk-!-margin-top-0">{{csraClassification}}</p>
+    {% if displayCsraLink %}
+      <p class = "govuk-!-margin-bottom-0 govuk-!-margin-top-0">
+        <a href="/prisoner/{{offenderNo}}/cell-move/cell-sharing-risk-assessment-details" class="govuk-link" data-test="csra-link">
+        <span class="govuk-visually-hidden"> for {{ name }} </span>
+          View details
+        </a>
+      </p>
+    {% endif %}
+  </div>
+</div>
+{% endmacro %}
+
+{% macro relavantAlerts(alert) %}
+<div class="govuk-grid-row">
+  <div class="govuk-grid-column-full">
+    <p class = "govuk-!-margin-bottom-0 govuk-!-margin-top-0"> {{alertFlags(alert) if  alert | length else "None"}} </p>
+  </div>
+</div>
+{% endmacro %}
+
+{% set  rows = [] %}
+{% for offender in offendersInReception %}
+    {% set rows = (rows.push([
+        {
+          html: name(offender.name, offender.offenderNo, offender.nonAssociation ),
+          classes:"govuk-!-width-one-quarter"
+        },
+        {
+          html: csra(offender.csraClassification, offender.offenderNo, offender.name, offender.displayCsraLink),
+          classes:"govuk-!-width-one-quarter"
+        },
+        {
+          html: relavantAlerts(offender.alerts)
+        }
+      ]), rows) %}
+{% endfor %}
+
+<h2 class="govuk-heading-m"> People currently in reception </h2>
+
+{{ govukInsetText({
+  text: inReceptionCount
+}) }}
+
+{{ govukTable({
+  caption: "",
+  captionClasses: "govuk-table__caption--m",
+  firstCellIsHeader: false,
+  head: [
+    {
+      text: "Name"
+    },
+    {
+      text: "CSRA"
+    },
+    {
+      text: "Relevant alerts"
+    }
+  ],
+  rows: rows
+}) }}

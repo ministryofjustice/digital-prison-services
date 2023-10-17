@@ -48,11 +48,17 @@ export const getNonAssociationsInEstablishment = async (
 
 export const getBackLinkData = (referer, offenderNo) => {
   const backLink = referer || `/prisoner/${offenderNo}/cell-move/search-for-cell`
+  let backLinkText = 'Return to select an available cell'
+
+  if (backLink.includes('search-for-cell')) {
+    backLinkText = 'Return to search for a cell'
+  } else if (backLink.includes('consider-risks-reception')) {
+    backLinkText = 'Return to consider risks of reception move'
+  }
+
   return {
     backLink,
-    backLinkText: backLink.includes('search-for-cell')
-      ? 'Return to search for a cell'
-      : 'Return to select an available cell',
+    backLinkText,
   }
 }
 
