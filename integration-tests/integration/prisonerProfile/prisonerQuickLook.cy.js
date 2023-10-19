@@ -868,10 +868,7 @@ context('When a user has POM role', () => {
   context('when offender in caseload', () => {
     beforeEach(() => {
       Cypress.Cookies.preserveOnce('hmpps-session-dev')
-      cy.task('stubIsCaseLoadRestrictedPatient', {
-        status: 404,
-        body: { message: 'Offender not found' },
-      })
+      cy.task('stubPrisonerSearch')
       cy.task('stubPrisonerProfileHeaderData', {
         offenderBasicDetails,
         offenderFullDetails,
@@ -892,10 +889,7 @@ context('When a user has POM role', () => {
   context('when offender not in caseload', () => {
     beforeEach(() => {
       Cypress.Cookies.preserveOnce('hmpps-session-dev')
-      cy.task('stubIsCaseLoadRestrictedPatient', {
-        status: 404,
-        body: { message: 'Offender not found' },
-      })
+      cy.task('stubPrisonerSearch')
       cy.task('stubPrisonerProfileHeaderData', {
         offenderBasicDetails: { ...offenderBasicDetails, agencyId: 'LEI' },
         offenderFullDetails: { ...offenderFullDetails, agencyId: 'LEI' },

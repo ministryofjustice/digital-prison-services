@@ -14,6 +14,7 @@ context('Prisoner adjudication details', () => {
     beforeEach(() => {
       Cypress.Cookies.preserveOnce('hmpps-session-dev')
       cy.task('stubOffenderBasicDetails', offenderBasicDetails)
+      cy.task('stubPrisonerSearch')
       cy.task('stubGetAdjudicationDetails', {
         adjudicationNumber: 123,
         incidentTime: '2016-10-19T10:00:00',
