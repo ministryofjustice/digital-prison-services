@@ -7,7 +7,7 @@ Reflect.deleteProperty(process.env, 'APPINSIGHTS_INSTRUMENTATIONKEY')
 const prisonApi = { getDetails: {} }
 const caseNotesApi = { addCaseNote: {}, myCaseNoteTypes: {} }
 const offenderSearchApi = {
-  getPrisonerSearchDetails: jest
+  getPrisonerDpsDetails: jest
     .fn()
     .mockResolvedValue({ hospital: null, isRestrictedPatient: false, indeterminateSentence: false }),
 }

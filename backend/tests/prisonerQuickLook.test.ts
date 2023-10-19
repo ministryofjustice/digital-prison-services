@@ -49,7 +49,7 @@ describe('prisoner profile quick look', () => {
   const prisonerSearchDetails = { hospital: 'MDI', isRestrictedPatient: false, indeterminateSentence: false }
   const offenderSearchApi = {
     getPrisonersDetails: jest.fn().mockResolvedValue([]),
-    getPrisonerSearchDetails: jest.fn().mockResolvedValue(prisonerSearchDetails),
+    getPrisonerDpsDetails: jest.fn().mockResolvedValue(prisonerSearchDetails),
   }
   const prisonerProfileService = {
     getPrisonerProfileData: jest.fn(),

@@ -68,7 +68,7 @@ describe('Prisoner work and skills controller', () => {
     getClientCredentialsTokens: jest.fn(),
   }
   const offenderSearchApi = {
-    getPrisonerSearchDetails: jest
+    getPrisonerDpsDetails: jest
       .fn()
       .mockResolvedValue({ hospital: null, isRestrictedPatient: false, indeterminateSentence: false }),
   }

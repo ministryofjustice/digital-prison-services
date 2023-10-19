@@ -9,7 +9,7 @@ describe('Prisoner adjudication details', () => {
     getClientCredentialsTokens: () => {},
   }
   const offenderSearchApi = {
-    getPrisonerSearchDetails: jest
+    getPrisonerDpsDetails: jest
       .fn()
       .mockResolvedValue({ hospital: 'MDI', isRestrictedPatient: false, indeterminateSentence: false }),
   }

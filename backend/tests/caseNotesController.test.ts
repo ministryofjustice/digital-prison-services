@@ -38,7 +38,7 @@ describe('Case notes controller', () => {
   const oauthApi = {}
   const systemOauthClient = { getClientCredentialsTokens: jest.fn() }
   const offenderSearchApi = {
-    getPrisonerSearchDetails: jest
+    getPrisonerDpsDetails: jest
       .fn()
       .mockResolvedValue({ hospital: 'MDI', isRestrictedPatient: false, indeterminateSentence: false }),
   }

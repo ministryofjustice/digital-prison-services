@@ -25,7 +25,7 @@ describe('prisoner alerts', () => {
   const paginationService = {}
   const prisonerSearchDetails = { hospital: null, isRestrictedPatient: false, indeterminateSentence: false }
   const offenderSearchApi = {
-    getPrisonerSearchDetails: jest.fn().mockResolvedValue(prisonerSearchDetails),
+    getPrisonerDpsDetails: jest.fn().mockResolvedValue(prisonerSearchDetails),
   }
   const systemOauthClient = { getClientCredentialsTokens: jest.fn().mockResolvedValue(systemContext) }
 
@@ -293,7 +293,6 @@ describe('prisoner alerts', () => {
     })
 
     it('should render the alerts template with the correctly formatted data', async () => {
-      // @ts-expect-error ts-migrate(2339) FIXME: Property 'getPrisonerProfileData' does not exist o... Remove this comment to see the full error message
       prisonerProfileService.getPrisonerProfileData = jest
         .fn()
         .mockResolvedValue({ prisonerProfileData, userCanEdit: true })

@@ -35,7 +35,7 @@ describe('prisoner sentence and release', () => {
   const oauthApi = {}
   const prisonerSearchDetails = { hospital: 'MDI', isRestrictedPatient: false, indeterminateSentence: false }
   const offenderSearchApi = {
-    getPrisonerSearchDetails: jest.fn().mockResolvedValue(prisonerSearchDetails),
+    getPrisonerDpsDetails: jest.fn().mockResolvedValue(prisonerSearchDetails),
   }
 
   let req

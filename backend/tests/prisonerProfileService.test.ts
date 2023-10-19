@@ -50,7 +50,7 @@ describe('prisoner profile service', () => {
   const prisonerSearchDetails = { hospital: null, isRestrictedPatient: false, indeterminateSentence: false }
   const offenderSearchApi = {
     getPrisonersDetails: jest.fn(),
-    getPrisonerSearchDetails: jest.fn().mockResolvedValue(prisonerSearchDetails),
+    getPrisonerDpsDetails: jest.fn().mockResolvedValue(prisonerSearchDetails),
   }
 
   let service

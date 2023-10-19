@@ -38,7 +38,7 @@ describe('prisoner personal', () => {
   const esweService = {}
   const systemOauthClient = { getClientCredentialsTokens: jest.fn().mockResolvedValue(systemContext) }
   const offenderSearchApi = {
-    getPrisonerSearchDetails: jest.fn().mockResolvedValue(prisonerSearchDetails),
+    getPrisonerDpsDetails: jest.fn().mockResolvedValue(prisonerSearchDetails),
   }
   const oauthApi = {}
 

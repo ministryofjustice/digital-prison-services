@@ -60,7 +60,7 @@ describe('Adjudications history controller', () => {
     getClientCredentialsTokens: jest.fn(),
   }
   const offenderSearchApi = {
-    getPrisonerSearchDetails: jest
+    getPrisonerDpsDetails: jest
       .fn()
       .mockResolvedValue({ hospital: null, isRestrictedPatient: false, indeterminateSentence: false }),
   }
