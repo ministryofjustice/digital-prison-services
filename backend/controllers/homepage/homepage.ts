@@ -305,8 +305,8 @@ const getTasks = ({ activeCaseLoadId, locations, staffId, whereaboutsConfig, key
     },
     {
       id: 'appointments',
-      heading: 'Schedule and edit appointments',
-      description: 'Create and manage appointments. Print movement slips.',
+      heading: 'Schedule and edit appointments, and record attendance',
+      description: 'Create and manage appointments. Print movement slips. Record attendance.',
       href: appointments.url,
       enabled: () => appointments.url && appointments.enabled_prisons.split(',').includes(activeCaseLoadId),
     },
