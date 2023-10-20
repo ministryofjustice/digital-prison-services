@@ -1,27 +1,28 @@
 import moment from 'moment'
 import nunjucks from 'nunjucks'
-import config from '../config'
 import { properCaseName } from '../utils'
 import getContext from './prisonerProfile/prisonerProfileContext'
 
 const getOffenderUrl = (offenderNo) => `/prisoner/${offenderNo}`
 
-const getContextWithRoles = async (offenderNo, res, req, oauthApi, systemOauthClient, restrictedPatientApi) => {
-  const userRoles = oauthApi.userRoles(res.locals)
-  res.locals = { ...res.locals, userRoles }
-  const { context } = await getContext({
-    offenderNo,
-    res,
-    req,
-    oauthApi,
-    systemOauthClient,
-    restrictedPatientApi,
-  })
+export const caseNoteFactory = ({ prisonApi, caseNotesApi, oauthApi, systemOauthClient, offenderSearchApi }) => {
+  const getContextWithRoles = async (offenderNo, res, req) => {
+    const userRoles = oauthApi.userRoles(res.locals)
+    res.locals = { ...res.locals, userRoles }
+    const { username } = req.session.userDetails
 
-  return context
-}
+    const systemContext = await systemOauthClient.getClientCredentialsTokens(username)
+    const prisonerSearchDetails = await offenderSearchApi.getPrisonerDpsDetails(systemContext, offenderNo)
 
-export const caseNoteFactory = ({ prisonApi, caseNotesApi, oauthApi, systemOauthClient, restrictedPatientApi }) => {
+    const { context } = getContext({
+      res,
+      oauthApi,
+      systemContext,
+      prisonerSearchDetails,
+    })
+    return context
+  }
+
   const getOffenderDetails = async (context, offenderNo) => {
     const { firstName, lastName } = await prisonApi.getDetails(context, offenderNo)
 
@@ -89,7 +90,7 @@ export const caseNoteFactory = ({ prisonApi, caseNotesApi, oauthApi, systemOauth
 
   const index = async (req, res) => {
     const { offenderNo } = req.params
-    const context = await getContextWithRoles(offenderNo, res, req, oauthApi, systemOauthClient, restrictedPatientApi)
+    const context = await getContextWithRoles(offenderNo, res, req)
 
     try {
       if (req.xhr) {
@@ -230,10 +231,9 @@ export const caseNoteFactory = ({ prisonApi, caseNotesApi, oauthApi, systemOauth
   const post = async (req, res) => {
     const { offenderNo } = req.params
     const { type, subType, text, date, hours, minutes } = req.body
-    const { activeCaseLoadId } = req.session.userDetails
     const errors = validate(type, subType, text, date, hours, minutes)
 
-    const context = await getContextWithRoles(offenderNo, res, req, oauthApi, systemOauthClient, restrictedPatientApi)
+    const context = await getContextWithRoles(offenderNo, res, req)
 
     const caseNote = {
       offenderNo,
@@ -280,7 +280,7 @@ export const caseNoteFactory = ({ prisonApi, caseNotesApi, oauthApi, systemOauth
 
   const areYouSure = async (req, res) => {
     const { offenderNo } = req.params
-    const context = await getContextWithRoles(offenderNo, res, req, oauthApi, systemOauthClient, restrictedPatientApi)
+    const context = await getContextWithRoles(offenderNo, res, req)
 
     const offenderDetails = await getOffenderDetails(context, offenderNo)
 
@@ -295,7 +295,7 @@ export const caseNoteFactory = ({ prisonApi, caseNotesApi, oauthApi, systemOauth
 
   const confirm = async (req, res) => {
     const { offenderNo } = req.params
-    const context = await getContextWithRoles(offenderNo, res, req, oauthApi, systemOauthClient, restrictedPatientApi)
+    const context = await getContextWithRoles(offenderNo, res, req)
 
     const { confirmed } = req.body
     if (!confirmed) {
@@ -332,7 +332,7 @@ export const caseNoteFactory = ({ prisonApi, caseNotesApi, oauthApi, systemOauth
 
   const recordIncentiveLevelInterruption = async (req, res) => {
     const { offenderNo } = req.params
-    const context = await getContextWithRoles(offenderNo, res, req, oauthApi, systemOauthClient, restrictedPatientApi)
+    const context = await getContextWithRoles(offenderNo, res, req)
     const offenderDetails = await getOffenderDetails(context, offenderNo)
 
     return res.render('caseNotes/recordIncentiveLevelInterruption.njk', {

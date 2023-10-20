@@ -57,10 +57,12 @@ module.exports = {
           {
             prisonerNumber: 'A1234AC',
             indeterminiteSentence: false,
+            restrictedPatient: false,
           },
           {
             prisonerNumber: 'A1234AA',
             indeterminiteSentence: false,
+            restrictedPatient: false,
           },
         ],
       },

@@ -2,6 +2,11 @@ import moment from 'moment'
 import { toMap } from '../utils'
 
 export const movementsServiceFactory = (prisonApi, systemOauthClient, incentivesApi) => {
+  const getCsraForMultipleOffenders = async (systemContext, offenderNumbers) => {
+    const results = await prisonApi.getCsraAssessments(systemContext, offenderNumbers)
+    return results
+  }
+
   const getAssessmentMap = async (context, offenderNumbers) => {
     const assessments = (await prisonApi.getAssessments(context, { code: 'CATEGORY', offenderNumbers })) || []
     return toMap('offenderNo', assessments)
@@ -183,6 +188,7 @@ export const movementsServiceFactory = (prisonApi, systemOauthClient, incentives
     getOffendersCurrentlyOutOfLivingUnit,
     getOffendersCurrentlyOutOfAgency,
     getOffendersEnRoute,
+    getCsraForMultipleOffenders,
   }
 }
 

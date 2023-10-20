@@ -34,7 +34,7 @@ generic-service:
    PIN_PHONES_URL: https://pcms.prison.service.justice.gov.uk/
    SOC_UI_URL: https://manage-soc-cases.hmpps.service.justice.gov.uk/
    SOC_API_URL: https://manage-soc-cases-api.hmpps.service.justice.gov.uk/
-   OFFENDER_SEARCH_API_URL: https://prisoner-offender-search.prison.service.justice.gov.uk
+   OFFENDER_SEARCH_API_URL: https://prisoner-search.prison.service.justice.gov.uk
    SUPPORT_URL: https://support.hmpps.service.justice.gov.uk/
    BVL_URL: https://book-video-link.prison.service.justice.gov.uk
    MOIC_URL: https://moic.service.justice.gov.uk
@@ -68,7 +68,6 @@ generic-service:
    ACTIVITIES_ENABLED_PRISONS: "RSI"
    APPOINTMENTS_URL: https://activities.prison.service.justice.gov.uk/appointments
    APPOINTMENTS_ENABLED_PRISONS: "RSI"
-   RESTRICTED_PATIENT_API_URL: https://restricted-patients-api.hmpps.service.justice.gov.uk/
    HISTORICAL_PRISONER_APPLICATION_URL: https://hpa.service.hmpps.dsd.io
    WHEREABOUTS_MAINTENANCE_MODE: false
    KEYWORKER_MAINTENANCE_MODE: false
@@ -80,9 +79,9 @@ generic-service:
    PRISONER_PROFILE_REDIRECT_ENABLED_PRISONS: "LEI,FNI,HMI,NHI,WDI,WEI,HLI,MDI,LHI,HDI,WYI,AGI,DNI,RSI"
    PRISONER_PROFILE_SCHEDULE_REDIRECT_FOR_PRISONS: "RSI"
    HOMEPAGE_REDIRECT_URL: http://dps.prison.service.justice.gov.uk
-   HOMEPAGE_REDIRECT_ENABLED_DATE: 2023-07-24T02:00:00
-   HOMEPAGE_REDIRECT_ENABLED_PRISONS: ""
-   HOMEPAGE_SCHEDULE_REDIRECT_FOR_PRISONS: ""
+   HOMEPAGE_REDIRECT_ENABLED_DATE: 2023-10-16T02:00:00
+   HOMEPAGE_REDIRECT_ENABLED_PRISONS: "FNI"
+   HOMEPAGE_SCHEDULE_REDIRECT_FOR_PRISONS: "FNI"
    MANAGE_OFFENCES_URL: https://manage-offences.hmpps.service.justice.gov.uk
    MANAGE_ADJUDICATIONS_API_URL: https://manage-adjudications-api.hmpps.service.justice.gov.uk
    COMPONENT_API_URL: https://frontend-components.hmpps.service.justice.gov.uk

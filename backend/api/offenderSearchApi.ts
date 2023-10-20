@@ -20,6 +20,10 @@ export type PrisonerSearchResult = {
       description: string
     }
   }
+  dischargedHospitalDescription: string
+  restrictedPatient: boolean
+  supportingPrisonId: string
+  indeterminateSentence: boolean
 }
 
 // other fields are present but only these are used
@@ -94,10 +98,22 @@ export const offenderSearchApiFactory = (client) => {
     return res.body
   }
 
+  const getPrisonerDpsDetails = async (context, offenderNo: string) => {
+    const response = await getPrisonersDetails(context, [offenderNo])
+    const prisonerSearchDetails = response && response[0]
+    return {
+      hospital: prisonerSearchDetails?.dischargedHospitalDescription,
+      isRestrictedPatient: prisonerSearchDetails?.restrictedPatient,
+      supportingPrisonId: prisonerSearchDetails?.supportingPrisonId,
+      indeterminateSentence: prisonerSearchDetails?.indeterminateSentence,
+    }
+  }
+
   return {
     globalSearch,
     establishmentSearch,
     getPrisonersDetails,
+    getPrisonerDpsDetails,
   }
 }
 

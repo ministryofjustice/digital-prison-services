@@ -26,6 +26,7 @@ import attendanceChangeRouter from './routes/attendanceChangesRouter'
 import covidRouter from './routes/covidRouter'
 import prisonerSearchRouter from './routes/prisonerSearchRouter'
 import cellMoveRouter from './routes/cellMoveRouter'
+import receptionMoveRouter from './routes/receptionMoveRouter'
 import establishmentRollRouter from './routes/establishmentRollRouter'
 import changeSomeonesCellRouter from './routes/changeSomeonesCellRouter'
 import globalSearchRouter from './routes/globalSearchRouter'
@@ -111,7 +112,6 @@ const setup = ({
   curiousApi,
   incentivesApi,
   nonAssociationsApi,
-  restrictedPatientApi,
   adjudicationsApi,
   whereaboutsMaintenanceMode,
 }) => {
@@ -151,7 +151,7 @@ const setup = ({
   )
   router.use(
     '/prisoner/:offenderNo/add-case-note',
-    createCaseNoteRouter({ prisonApi, caseNotesApi, oauthApi, systemOauthClient, restrictedPatientApi })
+    createCaseNoteRouter({ prisonApi, caseNotesApi, oauthApi, systemOauthClient, offenderSearchApi })
   )
 
   if (whereaboutsMaintenanceMode) {
@@ -326,6 +326,18 @@ const setup = ({
   )
 
   router.use(
+    '/prisoner/:offenderNo/reception-move',
+    receptionMoveRouter({
+      oauthApi,
+      prisonApi,
+      systemOauthClient,
+      incentivesApi,
+      nonAssociationsApi,
+      logError,
+    })
+  )
+
+  router.use(
     '/establishment-roll',
     establishmentRollRouter({
       oauthApi,
@@ -355,7 +367,6 @@ const setup = ({
       offenderSearchApi,
       curiousApi,
       incentivesApi,
-      restrictedPatientApi,
       adjudicationsApi,
       nonAssociationsApi,
     })

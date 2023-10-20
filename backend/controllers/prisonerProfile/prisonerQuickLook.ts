@@ -75,7 +75,7 @@ export default ({
     systemOauthClient,
     incentivesApi,
     oauthApi,
-    restrictedPatientApi,
+    offenderSearchApi,
     adjudicationsApi,
     nonAssociationsApi,
   }: {
@@ -85,7 +85,7 @@ export default ({
     systemOauthClient
     incentivesApi: typeof apis.incentivesApi
     oauthApi
-    restrictedPatientApi
+    offenderSearchApi
     adjudicationsApi
     nonAssociationsApi: typeof apis.nonAssociationsApi
   }) =>
@@ -96,15 +96,15 @@ export default ({
     const { offenderNo } = req.params
     const { username } = req.session.userDetails
 
-    const { context, overrideAccess } = await getContext({
-      offenderNo,
-      res,
-      req,
-      oauthApi,
-      systemOauthClient,
-      restrictedPatientApi,
-    })
     const systemContext = await systemOauthClient.getClientCredentialsTokens(username)
+    const prisonerSearchDetails = await offenderSearchApi.getPrisonerDpsDetails(systemContext, offenderNo)
+
+    const { context, overrideAccess } = getContext({
+      res,
+      oauthApi,
+      systemContext,
+      prisonerSearchDetails,
+    })
     const details = await getDetails({ context, prisonApi, res, offenderNo })
     const { bookingId } = details || {}
 
@@ -127,7 +127,13 @@ export default ({
       todaysEventsResponse,
     ] = await Promise.all(
       [
-        prisonerProfileService.getPrisonerProfileData(context, offenderNo, username, overrideAccess),
+        prisonerProfileService.getPrisonerProfileData(
+          context,
+          systemContext,
+          offenderNo,
+          overrideAccess,
+          prisonerSearchDetails
+        ),
         prisonApi.getMainOffence(context, bookingId),
         prisonApi.getPrisonerBalances(context, bookingId),
         prisonApi.getPrisonerDetails(context, offenderNo),

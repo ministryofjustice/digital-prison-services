@@ -33,19 +33,25 @@ config.app.neurodiversityEnabledPrisons = ['NOT-ACCELERATED', 'LEI']
 
 describe('prisoner profile service', () => {
   const context = {}
+  const systemContext = {}
   const prisonApi = {} as jest.Mocked<typeof apis.prisonApi>
   const keyworkerApi = {}
   const oauthApi = {} as jest.Mocked<typeof apis.oauthApi>
   const hmppsManageUsersApi = {} as jest.Mocked<typeof apis.hmppsManageUsersApi>
-  const pathfinderApi = {}
+  const pathfinderApi = { getPathfinderDetails: jest.fn().mockRejectedValue(new Error('not found')) }
   const dataComplianceApi = {}
   const systemOauthClient = {}
   const allocationManagerApi = {}
-  const socApi = {}
+  const socApi = { getSocDetails: jest.fn().mockRejectedValue(new Error('not found')) }
   const complexityApi = {}
   const incentivesApi = {} as jest.Mocked<typeof apis.incentivesApi>
   const curiousApi = {}
-  const offenderSearchApi = {}
+
+  const prisonerSearchDetails = { hospital: null, isRestrictedPatient: false, indeterminateSentence: false }
+  const offenderSearchApi = {
+    getPrisonersDetails: jest.fn(),
+    getPrisonerDpsDetails: jest.fn().mockResolvedValue(prisonerSearchDetails),
+  }
 
   let service
   beforeEach(() => {
@@ -62,17 +68,10 @@ describe('prisoner profile service', () => {
     dataComplianceApi.getOffenderRetentionRecord = jest.fn()
     // @ts-expect-error ts-migrate(2339) FIXME: Property 'getPomByOffenderNo' does not exist on ty... Remove this comment to see the full error message
     allocationManagerApi.getPomByOffenderNo = jest.fn()
-    // @ts-expect-error ts-migrate(2339) FIXME: Property 'getPathfinderDetails' does not exist on ... Remove this comment to see the full error message
-    pathfinderApi.getPathfinderDetails = jest.fn().mockRejectedValue(new Error('not found'))
-    // @ts-expect-error ts-migrate(2339) FIXME: Property 'getSocDetails' does not exist on type '{... Remove this comment to see the full error message
-    socApi.getSocDetails = jest.fn().mockRejectedValue(new Error('not found'))
-
     // @ts-expect-error ts-migrate(2339) FIXME: Property 'getLearnerNeurodivergence' does not exist on t... Remove this comment to see the full error message
     curiousApi.getLearnerNeurodivergence = jest.fn()
     // @ts-expect-error ts-migrate(2339) FIXME: Property 'getComplexOffenders' does not exist on t... Remove this comment to see the full error message
     complexityApi.getComplexOffenders = jest.fn().mockResolvedValue([])
-    // @ts-expect-error ts-migrate(2339) FIXME: Property 'getPrisonersDetails' does not exist on t... Remove this comment to see the full error message
-    offenderSearchApi.getPrisonersDetails = jest.fn().mockResolvedValue([])
 
     // @ts-expect-error ts-migrate(2339) FIXME: Property 'getClientCredentialsTokens' does not exi... Remove this comment to see the full error message
     systemOauthClient.getClientCredentialsTokens = jest.fn().mockResolvedValue({})
@@ -83,13 +82,11 @@ describe('prisoner profile service', () => {
       hmppsManageUsersApi,
       dataComplianceApi,
       pathfinderApi,
-      systemOauthClient,
       socApi,
       allocationManagerApi,
       complexityApi,
       incentivesApi,
       curiousApi,
-      offenderSearchApi,
     })
   })
   describe('prisoner profile data', () => {
@@ -192,21 +189,17 @@ describe('prisoner profile service', () => {
       config.apis.complexity.enabled_prisons = []
       // @ts-expect-error ts-migrate(2339) FIXME: Property 'getLearnerNeurodivergence' does not exist on ty... Remove this comment to see the full error message
       curiousApi.getLearnerNeurodivergence.mockResolvedValue([])
-      // @ts-expect-error ts-migrate(2339) FIXME: Property 'getPrisonersDetails' does not exist on ty... Remove this comment to see the full error message
-      offenderSearchApi.getPrisonersDetails.mockResolvedValue([
-        { indeterminateSentence: false, restrictedPatient: false },
-      ])
     })
 
     it('should make a call for the full details including csra class for a prisoner and the current user', async () => {
-      await service.getPrisonerProfileData(context, offenderNo)
+      await service.getPrisonerProfileData(context, systemContext, offenderNo, false, prisonerSearchDetails)
 
       expect(hmppsManageUsersApi.currentUser).toHaveBeenCalledWith(context)
       expect(prisonApi.getDetails).toHaveBeenCalledWith(context, offenderNo, true)
     })
 
     it('should make calls for the additional details required for the prisoner profile', async () => {
-      await service.getPrisonerProfileData(context, offenderNo)
+      await service.getPrisonerProfileData(context, systemContext, offenderNo, false, prisonerSearchDetails)
 
       expect(incentivesApi.getIepSummaryForBookingIds).toHaveBeenCalledWith(context, [bookingId])
       expect(prisonApi.getCaseNoteSummaryByTypes).toHaveBeenCalledWith(context, {
@@ -225,7 +218,13 @@ describe('prisoner profile service', () => {
     })
 
     it('should return the correct prisoner information', async () => {
-      const getPrisonerProfileData = await service.getPrisonerProfileData(context, offenderNo, '', false)
+      const getPrisonerProfileData = await service.getPrisonerProfileData(
+        context,
+        systemContext,
+        offenderNo,
+        false,
+        prisonerSearchDetails
+      )
 
       expect(getPrisonerProfileData).toEqual({
         canViewPathfinderLink: false,
@@ -318,7 +317,13 @@ describe('prisoner profile service', () => {
       // @ts-expect-error ts-migrate(2339) FIXME: Property 'getKeyworkerByCaseloadAndOffenderNo' doe... Remove this comment to see the full error message
       keyworkerApi.getKeyworkerByCaseloadAndOffenderNo.mockResolvedValue(null)
 
-      const getPrisonerProfileData = await service.getPrisonerProfileData(context, offenderNo, '', false)
+      const getPrisonerProfileData = await service.getPrisonerProfileData(
+        context,
+        systemContext,
+        offenderNo,
+        false,
+        prisonerSearchDetails
+      )
 
       expect(getPrisonerProfileData).toEqual(
         expect.objectContaining({
@@ -338,7 +343,13 @@ describe('prisoner profile service', () => {
         })
 
         it('should allow the user to edit', async () => {
-          const getPrisonerProfileData = await service.getPrisonerProfileData(context, offenderNo, '', false)
+          const getPrisonerProfileData = await service.getPrisonerProfileData(
+            context,
+            systemContext,
+            offenderNo,
+            false,
+            prisonerSearchDetails
+          )
 
           expect(getPrisonerProfileData).toEqual(
             expect.objectContaining({
@@ -355,7 +366,13 @@ describe('prisoner profile service', () => {
         })
 
         it('should allow the user to edit and show correct category link text', async () => {
-          const getPrisonerProfileData = await service.getPrisonerProfileData(context, offenderNo, '', false)
+          const getPrisonerProfileData = await service.getPrisonerProfileData(
+            context,
+            systemContext,
+            offenderNo,
+            false,
+            prisonerSearchDetails
+          )
 
           expect(getPrisonerProfileData).toEqual(
             expect.objectContaining({
@@ -372,7 +389,13 @@ describe('prisoner profile service', () => {
         })
 
         it('should show correct category link text', async () => {
-          const getPrisonerProfileData = await service.getPrisonerProfileData(context, offenderNo, '', false)
+          const getPrisonerProfileData = await service.getPrisonerProfileData(
+            context,
+            systemContext,
+            offenderNo,
+            false,
+            prisonerSearchDetails
+          )
 
           expect(getPrisonerProfileData).toEqual(
             expect.objectContaining({
@@ -388,7 +411,13 @@ describe('prisoner profile service', () => {
         })
 
         it('should enable the user to add a keyworker session', async () => {
-          const getPrisonerProfileData = await service.getPrisonerProfileData(context, offenderNo, '', false)
+          const getPrisonerProfileData = await service.getPrisonerProfileData(
+            context,
+            systemContext,
+            offenderNo,
+            false,
+            prisonerSearchDetails
+          )
 
           expect(getPrisonerProfileData).toEqual(
             expect.objectContaining({
@@ -407,7 +436,13 @@ describe('prisoner profile service', () => {
         it('should return false for offenders with no complexity of need data', async () => {
           // @ts-expect-error ts-migrate(2339) FIXME: Property 'getComplexOffenders' does not exist on t... Remove this comment to see the full error message
           complexityApi.getComplexOffenders = jest.fn().mockResolvedValue([])
-          const getPrisonerProfileData = await service.getPrisonerProfileData(context, offenderNo, '', false)
+          const getPrisonerProfileData = await service.getPrisonerProfileData(
+            context,
+            systemContext,
+            offenderNo,
+            false,
+            prisonerSearchDetails
+          )
 
           expect(getPrisonerProfileData).toEqual(
             expect.objectContaining({
@@ -419,7 +454,13 @@ describe('prisoner profile service', () => {
           // @ts-expect-error ts-migrate(2339) FIXME: Property 'getComplexOffenders' does not exist on t... Remove this comment to see the full error message
           complexityApi.getComplexOffenders = jest.fn().mockResolvedValue([{ offenderNo, level: 'low' }])
 
-          const getPrisonerProfileData = await service.getPrisonerProfileData(context, offenderNo, '', false)
+          const getPrisonerProfileData = await service.getPrisonerProfileData(
+            context,
+            systemContext,
+            offenderNo,
+            false,
+            prisonerSearchDetails
+          )
           expect(getPrisonerProfileData).toEqual(
             expect.objectContaining({
               isHighComplexity: false,
@@ -431,7 +472,13 @@ describe('prisoner profile service', () => {
           // @ts-expect-error ts-migrate(2339) FIXME: Property 'getComplexOffenders' does not exist on t... Remove this comment to see the full error message
           complexityApi.getComplexOffenders = jest.fn().mockResolvedValue([{ offenderNo, level: 'medium' }])
 
-          const getPrisonerProfileData = await service.getPrisonerProfileData(context, offenderNo, '', false)
+          const getPrisonerProfileData = await service.getPrisonerProfileData(
+            context,
+            systemContext,
+            offenderNo,
+            false,
+            prisonerSearchDetails
+          )
 
           expect(getPrisonerProfileData).toEqual(
             expect.objectContaining({
@@ -444,7 +491,13 @@ describe('prisoner profile service', () => {
           // @ts-expect-error ts-migrate(2339) FIXME: Property 'getComplexOffenders' does not exist on t... Remove this comment to see the full error message
           complexityApi.getComplexOffenders = jest.fn().mockResolvedValue([{ offenderNo, level: 'high' }])
 
-          const getPrisonerProfileData = await service.getPrisonerProfileData(context, offenderNo, '', false)
+          const getPrisonerProfileData = await service.getPrisonerProfileData(
+            context,
+            systemContext,
+            offenderNo,
+            false,
+            prisonerSearchDetails
+          )
 
           expect(getPrisonerProfileData).toEqual(
             expect.objectContaining({
@@ -457,7 +510,13 @@ describe('prisoner profile service', () => {
           // @ts-expect-error ts-migrate(2322) FIXME: Type 'string[]' is not assignable to type 'string'... Remove this comment to see the full error message
           config.apis.complexity.enabled_prisons = ['LEI']
 
-          const getPrisonerProfileData = await service.getPrisonerProfileData(context, offenderNo, '', false)
+          const getPrisonerProfileData = await service.getPrisonerProfileData(
+            context,
+            systemContext,
+            offenderNo,
+            false,
+            prisonerSearchDetails
+          )
 
           expect(getPrisonerProfileData).toEqual(
             expect.objectContaining({
@@ -470,13 +529,12 @@ describe('prisoner profile service', () => {
         })
 
         it('should use client credentials when making request to the complexity api', async () => {
-          const systemContext = { client_creds: true }
           // @ts-expect-error ts-migrate(2339) FIXME: Property 'getComplexOffenders' does not exist on t... Remove this comment to see the full error message
           complexityApi.getComplexOffenders = jest.fn().mockResolvedValue([{ offenderNo, level: 'high' }])
           // @ts-expect-error ts-migrate(2339) FIXME: Property 'getClientCredentialsTokens' does not exi... Remove this comment to see the full error message
           systemOauthClient.getClientCredentialsTokens = jest.fn().mockResolvedValue(systemContext)
 
-          await service.getPrisonerProfileData(context, offenderNo)
+          await service.getPrisonerProfileData(context, systemContext, offenderNo, false, prisonerSearchDetails)
           // @ts-expect-error ts-migrate(2339) FIXME: Property 'getComplexOffenders' does not exist on t... Remove this comment to see the full error message
           expect(complexityApi.getComplexOffenders).toHaveBeenCalledWith(systemContext, ['ABC123'])
         })
@@ -488,7 +546,13 @@ describe('prisoner profile service', () => {
         })
 
         it('should enable the user to report use of force', async () => {
-          const getPrisonerProfileData = await service.getPrisonerProfileData(context, offenderNo, '', false)
+          const getPrisonerProfileData = await service.getPrisonerProfileData(
+            context,
+            systemContext,
+            offenderNo,
+            false,
+            prisonerSearchDetails
+          )
 
           expect(getPrisonerProfileData).toEqual(
             expect.objectContaining({
@@ -510,7 +574,13 @@ describe('prisoner profile service', () => {
             hmppsManageUsersApi.currentUser.mockReturnValue({ staffId: 111, activeCaseLoadId: 'MDI' })
           })
           it('should let the user view probation documents', async () => {
-            const getPrisonerProfileData = await service.getPrisonerProfileData(context, offenderNo, '', false)
+            const getPrisonerProfileData = await service.getPrisonerProfileData(
+              context,
+              systemContext,
+              offenderNo,
+              false,
+              prisonerSearchDetails
+            )
 
             expect(getPrisonerProfileData).toEqual(
               expect.objectContaining({
@@ -526,7 +596,13 @@ describe('prisoner profile service', () => {
             hmppsManageUsersApi.currentUser.mockReturnValue({ staffId: 111, activeCaseLoadId: 'LEI' })
           })
           it('should let the user view probation documents', async () => {
-            const getPrisonerProfileData = await service.getPrisonerProfileData(context, offenderNo, '', false)
+            const getPrisonerProfileData = await service.getPrisonerProfileData(
+              context,
+              systemContext,
+              offenderNo,
+              false,
+              prisonerSearchDetails
+            )
 
             expect(getPrisonerProfileData).toEqual(
               expect.objectContaining({
@@ -542,7 +618,13 @@ describe('prisoner profile service', () => {
             hmppsManageUsersApi.currentUser.mockReturnValue({ staffId: 111, activeCaseLoadId: 'BXI' })
           })
           it('should let the user view probation documents', async () => {
-            const getPrisonerProfileData = await service.getPrisonerProfileData(context, offenderNo, '', false)
+            const getPrisonerProfileData = await service.getPrisonerProfileData(
+              context,
+              systemContext,
+              offenderNo,
+              false,
+              prisonerSearchDetails
+            )
 
             expect(getPrisonerProfileData).toEqual(
               expect.objectContaining({
@@ -562,7 +644,13 @@ describe('prisoner profile service', () => {
             })
           })
           it('should let the user view probation documents', async () => {
-            const getPrisonerProfileData = await service.getPrisonerProfileData(context, offenderNo, '', false)
+            const getPrisonerProfileData = await service.getPrisonerProfileData(
+              context,
+              systemContext,
+              offenderNo,
+              false,
+              prisonerSearchDetails
+            )
 
             expect(getPrisonerProfileData).toEqual(
               expect.objectContaining({
@@ -582,7 +670,13 @@ describe('prisoner profile service', () => {
         })
 
         it('should let the user view probation documents', async () => {
-          const getPrisonerProfileData = await service.getPrisonerProfileData(context, offenderNo, '', false)
+          const getPrisonerProfileData = await service.getPrisonerProfileData(
+            context,
+            systemContext,
+            offenderNo,
+            false,
+            prisonerSearchDetails
+          )
 
           expect(getPrisonerProfileData).toEqual(
             expect.objectContaining({
@@ -600,7 +694,13 @@ describe('prisoner profile service', () => {
       })
 
       it('should let the template know there is a record retained', async () => {
-        const getPrisonerProfileData = await service.getPrisonerProfileData(context, offenderNo, '', false)
+        const getPrisonerProfileData = await service.getPrisonerProfileData(
+          context,
+          systemContext,
+          offenderNo,
+          false,
+          prisonerSearchDetails
+        )
 
         expect(getPrisonerProfileData).toEqual(
           expect.objectContaining({
@@ -624,7 +724,13 @@ describe('prisoner profile service', () => {
       })
 
       it('should still pass those values as null', async () => {
-        const getPrisonerProfileData = await service.getPrisonerProfileData(context, offenderNo, '', false)
+        const getPrisonerProfileData = await service.getPrisonerProfileData(
+          context,
+          systemContext,
+          offenderNo,
+          false,
+          prisonerSearchDetails
+        )
 
         expect(getPrisonerProfileData).toEqual(
           expect.objectContaining({
@@ -640,24 +746,19 @@ describe('prisoner profile service', () => {
 
     describe('when a pathfinder prisoner exists and the current user has the correct role', () => {
       beforeEach(() => {
-        // @ts-expect-error ts-migrate(2339) FIXME: Property 'getPathfinderDetails' does not exist on ... Remove this comment to see the full error message
-        pathfinderApi.getPathfinderDetails = jest.fn().mockResolvedValue({ id: 1 })
+        pathfinderApi.getPathfinderDetails.mockResolvedValue({ id: 1 })
       })
 
-      it('should make client credentials call passing the username', async () => {
-        await service.getPrisonerProfileData(context, offenderNo, 'user1')
-        // @ts-expect-error ts-migrate(2339) FIXME: Property 'getClientCredentialsTokens' does not exi... Remove this comment to see the full error message
-        expect(systemOauthClient.getClientCredentialsTokens).toHaveBeenCalledWith('user1')
-      })
+      it('should make a call to the pathfinder api', async () => {
+        const profileData = await service.getPrisonerProfileData(
+          context,
+          systemContext,
+          offenderNo,
+          false,
+          prisonerSearchDetails
+        )
 
-      it('should make a call to the path finder api', async () => {
-        // @ts-expect-error ts-migrate(2339) FIXME: Property 'getClientCredentialsTokens' does not exi... Remove this comment to see the full error message
-        systemOauthClient.getClientCredentialsTokens = jest.fn().mockResolvedValue({ system: true })
-
-        const profileData = await service.getPrisonerProfileData(context, offenderNo, '', false)
-
-        // @ts-expect-error ts-migrate(2339) FIXME: Property 'getPathfinderDetails' does not exist on ... Remove this comment to see the full error message
-        expect(pathfinderApi.getPathfinderDetails).toHaveBeenCalledWith({ system: true }, offenderNo)
+        expect(pathfinderApi.getPathfinderDetails).toHaveBeenCalledWith(systemContext, offenderNo)
         expect(profileData.canViewPathfinderLink).toBe(false)
       })
 
@@ -677,18 +778,29 @@ describe('prisoner profile service', () => {
       `('$flag should be $hasAccess when the user has the $role role', async ({ role, flag, hasAccess }) => {
         oauthApi.userRoles.mockReturnValue([{ roleCode: role }])
 
-        const profileData = await service.getPrisonerProfileData(context, offenderNo, '', false)
+        const profileData = await service.getPrisonerProfileData(
+          context,
+          systemContext,
+          offenderNo,
+          false,
+          prisonerSearchDetails
+        )
 
         expect(profileData[flag]).toBe(hasAccess)
         expect(profileData.pathfinderProfileUrl).toBe('http://pathfinder-ui/nominal/1')
       })
 
       it('should not enable pathfinder link when the offender does not exists on pathfinder', async () => {
-        // @ts-expect-error ts-migrate(2339) FIXME: Property 'getPathfinderDetails' does not exist on ... Remove this comment to see the full error message
         pathfinderApi.getPathfinderDetails = jest.fn().mockRejectedValue(new Error('not found'))
         oauthApi.userRoles.mockReturnValue([{ roleCode: 'PF_STD_PROBATION_RO' }])
 
-        const profileData = await service.getPrisonerProfileData(context, offenderNo, '', false)
+        const profileData = await service.getPrisonerProfileData(
+          context,
+          systemContext,
+          offenderNo,
+          false,
+          prisonerSearchDetails
+        )
 
         expect(profileData.canViewPathfinderLink).toBe(false)
       })
@@ -696,7 +808,6 @@ describe('prisoner profile service', () => {
 
     describe('allowing pathfinder referrals based on roles and current offender status', () => {
       beforeEach(() => {
-        // @ts-expect-error ts-migrate(2339) FIXME: Property 'getPathfinderDetails' does not exist on ... Remove this comment to see the full error message
         pathfinderApi.getPathfinderDetails = jest.fn().mockResolvedValue(undefined)
       })
 
@@ -715,17 +826,28 @@ describe('prisoner profile service', () => {
       `('$flag should be $hasAccess when the user has the $role role', async ({ role, flag, hasAccess }) => {
         oauthApi.userRoles.mockReturnValue([{ roleCode: role }])
 
-        const profileData = await service.getPrisonerProfileData(context, offenderNo, '', false)
+        const profileData = await service.getPrisonerProfileData(
+          context,
+          systemContext,
+          offenderNo,
+          false,
+          prisonerSearchDetails
+        )
 
         expect(profileData[flag]).toBe(hasAccess)
       })
 
       it('should not display pathfinder referral when the offender exists on pathfinder', async () => {
-        // @ts-expect-error ts-migrate(2339) FIXME: Property 'getPathfinderDetails' does not exist on ... Remove this comment to see the full error message
         pathfinderApi.getPathfinderDetails = jest.fn().mockResolvedValue({ id: 1 })
         oauthApi.userRoles.mockReturnValue([{ roleCode: 'PF_STD_PROBATION' }])
 
-        const profileData = await service.getPrisonerProfileData(context, offenderNo, '', false)
+        const profileData = await service.getPrisonerProfileData(
+          context,
+          systemContext,
+          offenderNo,
+          false,
+          prisonerSearchDetails
+        )
 
         expect(profileData.showPathfinderReferButton).toBe(false)
       })
@@ -733,31 +855,32 @@ describe('prisoner profile service', () => {
 
     describe('when a SOC prisoner exists and the current user has the correct role', () => {
       beforeEach(() => {
-        // @ts-expect-error ts-migrate(2339) FIXME: Property 'getSocDetails' does not exist on type '{... Remove this comment to see the full error message
-        socApi.getSocDetails = jest.fn().mockResolvedValue({ id: 1 })
-      })
-
-      it('should make client credentials call passing the username', async () => {
-        await service.getPrisonerProfileData(context, offenderNo, 'user1')
-        // @ts-expect-error ts-migrate(2339) FIXME: Property 'getClientCredentialsTokens' does not exi... Remove this comment to see the full error message
-        expect(systemOauthClient.getClientCredentialsTokens).toHaveBeenCalledWith('user1')
+        socApi.getSocDetails.mockResolvedValue({ id: 1 })
       })
 
       it('should make a call to the SOC API', async () => {
-        // @ts-expect-error ts-migrate(2339) FIXME: Property 'getClientCredentialsTokens' does not exi... Remove this comment to see the full error message
-        systemOauthClient.getClientCredentialsTokens = jest.fn().mockResolvedValue({ system: true })
+        const profileData = await service.getPrisonerProfileData(
+          context,
+          systemContext,
+          offenderNo,
+          false,
+          prisonerSearchDetails
+        )
 
-        const profileData = await service.getPrisonerProfileData(context, offenderNo, '', false)
-
-        // @ts-expect-error ts-migrate(2339) FIXME: Property 'getSocDetails' does not exist on type '{... Remove this comment to see the full error message
-        expect(socApi.getSocDetails).toHaveBeenCalledWith({ system: true }, offenderNo, true)
+        expect(socApi.getSocDetails).toHaveBeenCalledWith(systemContext, offenderNo, true)
         expect(profileData.canViewSocLink).toBe(false)
       })
 
       it('should enable SOC when the user has the SOC_CUSTODY role', async () => {
         oauthApi.userRoles.mockReturnValue([{ roleCode: 'SOC_CUSTODY' }])
 
-        const profileData = await service.getPrisonerProfileData(context, offenderNo, '', false)
+        const profileData = await service.getPrisonerProfileData(
+          context,
+          systemContext,
+          offenderNo,
+          false,
+          prisonerSearchDetails
+        )
 
         expect(profileData.canViewSocLink).toBe(true)
         expect(profileData.socProfileUrl).toBe('http://soc-ui/nominal/1')
@@ -766,24 +889,35 @@ describe('prisoner profile service', () => {
       it('should enable SOC when the user has the SOC_COMMUNITY role', async () => {
         oauthApi.userRoles.mockReturnValue([{ roleCode: 'SOC_COMMUNITY' }])
 
-        const profileData = await service.getPrisonerProfileData(context, offenderNo, '', false)
+        const profileData = await service.getPrisonerProfileData(
+          context,
+          systemContext,
+          offenderNo,
+          false,
+          prisonerSearchDetails
+        )
 
         expect(profileData.canViewSocLink).toBe(true)
       })
 
       it('should not enable SOC link when the offender does not exists on SOC', async () => {
-        // @ts-expect-error ts-migrate(2339) FIXME: Property 'getSocDetails' does not exist on type '{... Remove this comment to see the full error message
         socApi.getSocDetails = jest.fn().mockRejectedValue(new Error('not found'))
         oauthApi.userRoles.mockReturnValue([{ roleCode: 'SOC_CUSTODY' }])
 
-        const profileData = await service.getPrisonerProfileData(context, offenderNo, '', false)
+        const profileData = await service.getPrisonerProfileData(
+          context,
+          systemContext,
+          offenderNo,
+          false,
+          prisonerSearchDetails
+        )
 
         expect(profileData.canViewSocLink).toBe(false)
       })
     })
 
     describe('when a prisoner is in CSWAP', () => {
-      it('should show the CSWAP location description', async () => {
+      it('should show the CSWAP location description', async () => {
         prisonApi.getDetails.mockReturnValue({
           ...prisonerDetails,
           assignedLivingUnit: {
@@ -792,7 +926,13 @@ describe('prisoner profile service', () => {
           },
         })
 
-        const profileData = await service.getPrisonerProfileData(context, offenderNo, '', false)
+        const profileData = await service.getPrisonerProfileData(
+          context,
+          systemContext,
+          offenderNo,
+          false,
+          prisonerSearchDetails
+        )
 
         expect(profileData.location).toBe('No cell allocated')
       })
@@ -808,7 +948,13 @@ describe('prisoner profile service', () => {
           hmppsManageUsersApi.currentUser.mockReturnValue({ staffId: 111, activeCaseLoadId: 'MDI' })
         })
         it('should show the user the calculate release dates button', async () => {
-          const getPrisonerProfileData = await service.getPrisonerProfileData(context, offenderNo)
+          const getPrisonerProfileData = await service.getPrisonerProfileData(
+            context,
+            systemContext,
+            offenderNo,
+            false,
+            prisonerSearchDetails
+          )
 
           expect(getPrisonerProfileData).toEqual(
             expect.objectContaining({
@@ -825,7 +971,13 @@ describe('prisoner profile service', () => {
           hmppsManageUsersApi.currentUser.mockReturnValue({ staffId: 111, activeCaseLoadId: 'MDI' })
         })
         it('should not show the user the calculate release dates button', async () => {
-          const getPrisonerProfileData = await service.getPrisonerProfileData(context, offenderNo, '', false)
+          const getPrisonerProfileData = await service.getPrisonerProfileData(
+            context,
+            systemContext,
+            offenderNo,
+            false,
+            prisonerSearchDetails
+          )
 
           expect(getPrisonerProfileData).toEqual(
             expect.objectContaining({
@@ -842,7 +994,13 @@ describe('prisoner profile service', () => {
           hmppsManageUsersApi.currentUser.mockReturnValue({ staffId: 111, activeCaseLoadId: 'MDI' })
         })
         it('should not show the user the calculate release dates button', async () => {
-          const getPrisonerProfileData = await service.getPrisonerProfileData(context, offenderNo, '', false)
+          const getPrisonerProfileData = await service.getPrisonerProfileData(
+            context,
+            systemContext,
+            offenderNo,
+            false,
+            prisonerSearchDetails
+          )
 
           expect(getPrisonerProfileData).toEqual(
             expect.objectContaining({
@@ -863,7 +1021,13 @@ describe('prisoner profile service', () => {
           hmppsManageUsersApi.currentUser.mockReturnValue({ staffId: 111, activeCaseLoadId: 'MDI' })
         })
         it('should show the user the warrant folder button', async () => {
-          const getPrisonerProfileData = await service.getPrisonerProfileData(context, offenderNo)
+          const getPrisonerProfileData = await service.getPrisonerProfileData(
+            context,
+            systemContext,
+            offenderNo,
+            false,
+            prisonerSearchDetails
+          )
 
           expect(getPrisonerProfileData).toEqual(
             expect.objectContaining({
@@ -879,7 +1043,13 @@ describe('prisoner profile service', () => {
           hmppsManageUsersApi.currentUser.mockReturnValue({ staffId: 111, activeCaseLoadId: 'MDI' })
         })
         it('should not show the user the warrant folder button', async () => {
-          const getPrisonerProfileData = await service.getPrisonerProfileData(context, offenderNo, '', false)
+          const getPrisonerProfileData = await service.getPrisonerProfileData(
+            context,
+            systemContext,
+            offenderNo,
+            false,
+            prisonerSearchDetails
+          )
 
           expect(getPrisonerProfileData).toEqual(
             expect.objectContaining({
@@ -896,7 +1066,13 @@ describe('prisoner profile service', () => {
           hmppsManageUsersApi.currentUser.mockReturnValue({ staffId: 111, activeCaseLoadId: 'MDI' })
         })
         it('should not show the user the warrant folder button', async () => {
-          const getPrisonerProfileData = await service.getPrisonerProfileData(context, offenderNo, '', false)
+          const getPrisonerProfileData = await service.getPrisonerProfileData(
+            context,
+            systemContext,
+            offenderNo,
+            false,
+            prisonerSearchDetails
+          )
 
           expect(getPrisonerProfileData).toEqual(
             expect.objectContaining({
@@ -911,11 +1087,14 @@ describe('prisoner profile service', () => {
         let getPrisonerProfileData
 
         beforeEach(async () => {
-          // @ts-expect-error ts-migrate(2339) FIXME: Property 'getPrisonersDetails' does not exist on t... Remove this comment to see the full error message
-          offenderSearchApi.getPrisonersDetails.mockResolvedValue([
-            { restrictedPatient: true, dischargedHospitalDescription: 'some hospital' },
-          ])
-          getPrisonerProfileData = await service.getPrisonerProfileData(context, offenderNo, '', true)
+          const restricted = { hospital: 'some hospital', isRestrictedPatient: true }
+          getPrisonerProfileData = await service.getPrisonerProfileData(
+            context,
+            systemContext,
+            offenderNo,
+            true,
+            restricted
+          )
         })
         it('should allow editing', async () => {
           expect(getPrisonerProfileData).toEqual(
@@ -949,11 +1128,16 @@ describe('prisoner profile service', () => {
       })
       describe(`when the user is NOT a POM with a caseload including the patients previous prison`, () => {
         beforeEach(async () => {
-          // @ts-expect-error ts-migrate(2339) FIXME: Property 'getPrisonersDetails' does not exist on t... Remove this comment to see the full error message
           offenderSearchApi.getPrisonersDetails.mockResolvedValue([{ restrictedPatient: false }])
         })
         it('should not allow editing', async () => {
-          const getPrisonerProfileData = await service.getPrisonerProfileData(context, offenderNo, '', false)
+          const getPrisonerProfileData = await service.getPrisonerProfileData(
+            context,
+            systemContext,
+            offenderNo,
+            false,
+            prisonerSearchDetails
+          )
 
           expect(getPrisonerProfileData).toEqual(
             expect.objectContaining({
@@ -1080,7 +1264,13 @@ describe('prisoner profile service', () => {
     })
 
     it('should return true when a user has neurodiversity support needs', async () => {
-      const response = await service.getPrisonerProfileData(context, offenderNo)
+      const response = await service.getPrisonerProfileData(
+        context,
+        systemContext,
+        offenderNo,
+        false,
+        prisonerSearchDetails
+      )
 
       expect(hmppsManageUsersApi.currentUser).toHaveBeenCalledWith(context)
       // eslint-disable-next-line @typescript-eslint/ban-ts-comment
@@ -1160,7 +1350,13 @@ describe('prisoner profile service', () => {
     })
 
     it('should return false when user has no neurodiversity data', async () => {
-      const response = await service.getPrisonerProfileData(context, offenderNo)
+      const response = await service.getPrisonerProfileData(
+        context,
+        systemContext,
+        offenderNo,
+        false,
+        prisonerSearchDetails
+      )
       expect(response.hasDivergenceSupport).toEqual(false)
     })
     it('should return false when no neurodiversity support needs are identified', async () => {
@@ -1168,7 +1364,13 @@ describe('prisoner profile service', () => {
       // @ts-ignore
       curiousApi.getLearnerNeurodivergence.mockResolvedValue([neurodivergenceDataNoSupportIdentified])
 
-      const response = await service.getPrisonerProfileData(context, offenderNo)
+      const response = await service.getPrisonerProfileData(
+        context,
+        systemContext,
+        offenderNo,
+        false,
+        prisonerSearchDetails
+      )
       expect(response.hasDivergenceSupport).toEqual(false)
     })
     it('should handle the not found error', async () => {
@@ -1176,7 +1378,13 @@ describe('prisoner profile service', () => {
       // @ts-ignore
       curiousApi.getLearnerNeurodivergence.mockRejectedValue(makeNotFoundError())
 
-      const response = await service.getPrisonerProfileData(context, offenderNo)
+      const response = await service.getPrisonerProfileData(
+        context,
+        systemContext,
+        offenderNo,
+        false,
+        prisonerSearchDetails
+      )
       expect(response.hasDivergenceSupport).toEqual(false)
     })
     it('should return false when caseload not an accelerated prison', async () => {
@@ -1195,7 +1403,13 @@ describe('prisoner profile service', () => {
       // @ts-ignore
       curiousApi.getLearnerNeurodivergence.mockResolvedValue([neurodivergenceData])
 
-      const response = await service.getPrisonerProfileData(context, offenderNo)
+      const response = await service.getPrisonerProfileData(
+        context,
+        systemContext,
+        offenderNo,
+        false,
+        prisonerSearchDetails
+      )
       expect(response.hasDivergenceSupport).toEqual(false)
     })
   })

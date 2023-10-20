@@ -2,6 +2,7 @@ import prisonerSentenceAndRelease from '../controllers/prisonerProfile/prisonerS
 
 describe('prisoner sentence and release', () => {
   const offenderNo = 'G3878UK'
+  const systemContext = {}
   const prisonerProfileData = {
     activeAlertCount: 1,
     agencyName: 'Moorland Closed',
@@ -32,18 +33,18 @@ describe('prisoner sentence and release', () => {
     getClientCredentialsTokens: jest.fn(),
   }
   const oauthApi = {}
-  const restrictedPatientApi = {}
+  const prisonerSearchDetails = { hospital: 'MDI', isRestrictedPatient: false, indeterminateSentence: false }
+  const offenderSearchApi = {
+    getPrisonerDpsDetails: jest.fn().mockResolvedValue(prisonerSearchDetails),
+  }
 
   let req
   let res
-  let logError
   let controller
 
   beforeEach(() => {
     req = { params: { offenderNo }, session: { userDetails: { username: 'ITAG_USER' } } }
     res = { locals: {}, render: jest.fn() }
-
-    logError = jest.fn()
 
     req.originalUrl = '/sentence-and-release'
     req.get = jest.fn()
@@ -99,14 +100,20 @@ describe('prisoner sentence and release', () => {
       prisonApi,
       systemOauthClient,
       oauthApi,
-      restrictedPatientApi,
+      offenderSearchApi,
     })
   })
 
   it('should make a call for the prisoner details and the sentence details and render the right template', async () => {
     await controller(req, res)
 
-    expect(prisonerProfileService.getPrisonerProfileData).toHaveBeenCalledWith(res.locals, offenderNo)
+    expect(prisonerProfileService.getPrisonerProfileData).toHaveBeenCalledWith(
+      res.locals,
+      systemContext,
+      offenderNo,
+      false,
+      prisonerSearchDetails
+    )
     expect(prisonApi.getPrisonerSentenceDetails).toHaveBeenCalledWith(res.locals, offenderNo)
     expect(res.render).toHaveBeenCalledWith(
       'prisonerProfile/prisonerSentenceAndRelease/prisonerSentenceAndRelease.njk',
@@ -944,7 +951,13 @@ describe('prisoner sentence and release', () => {
     })
     await controller(req, res)
 
-    expect(prisonerProfileService.getPrisonerProfileData).toHaveBeenCalledWith(res.locals, offenderNo)
+    expect(prisonerProfileService.getPrisonerProfileData).toHaveBeenCalledWith(
+      res.locals,
+      systemContext,
+      offenderNo,
+      false,
+      prisonerSearchDetails
+    )
     expect(prisonApi.getPrisonerSentenceDetails).toHaveBeenCalledWith(res.locals, offenderNo)
     expect(res.render).toHaveBeenCalledWith(
       'prisonerProfile/prisonerSentenceAndRelease/prisonerSentenceAndRelease.njk',
@@ -995,7 +1008,13 @@ describe('prisoner sentence and release', () => {
     })
     await controller(req, res)
 
-    expect(prisonerProfileService.getPrisonerProfileData).toHaveBeenCalledWith(res.locals, offenderNo)
+    expect(prisonerProfileService.getPrisonerProfileData).toHaveBeenCalledWith(
+      res.locals,
+      systemContext,
+      offenderNo,
+      false,
+      prisonerSearchDetails
+    )
     expect(prisonApi.getPrisonerSentenceDetails).toHaveBeenCalledWith(res.locals, offenderNo)
     expect(res.render).toHaveBeenCalledWith(
       'prisonerProfile/prisonerSentenceAndRelease/prisonerSentenceAndRelease.njk',

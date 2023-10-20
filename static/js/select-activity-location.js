@@ -1,4 +1,4 @@
-$(function() {
+$(function () {
   const $date = $('#date')
   const $period = $('#period')
   const $location = $('#current-location')
@@ -15,7 +15,7 @@ $(function() {
     window.location = '/manage-prisoner-whereabouts/select-location?date=' + dateValue + '&period=' + periodValue
   }
 
-  $date.on('change', function() {
+  $date.on('change', function () {
     const dateValue = $(this).val()
     const periodValue = $period.val()
     disableInputs()
@@ -23,7 +23,7 @@ $(function() {
     reloadPage(dateValue, periodValue)
   })
 
-  $period.on('change', function() {
+  $period.on('change', function () {
     const periodValue = $(this).val()
     const dateValue = $date.val()
     disableInputs()
