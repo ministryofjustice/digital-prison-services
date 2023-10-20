@@ -23,8 +23,10 @@ export default ({ prisonApi, logError }) =>
       ? await prisonApi.getAttributesForLocation(res.locals, cellSwapLocation.locationId)
       : {}
 
-    const unassignedIn = getTotals(unassignedResponse, 'currentlyInCell')
-    const currentRoll = getTotals(assignedResponse, 'currentlyInCell') + unassignedIn
+    const unassignedIn =
+      getTotals(unassignedResponse, 'currentlyInCell') + getTotals(unassignedResponse, 'outOfLivingUnits')
+    const currentRoll =
+      getTotals(assignedResponse, 'currentlyInCell') + getTotals(assignedResponse, 'outOfLivingUnits') + unassignedIn
 
     const todayStats = {
       unlockRoll: currentRoll - movementsResponse.in + movementsResponse.out,
