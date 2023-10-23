@@ -104,7 +104,7 @@ app.use(
     whereaboutsApi: apis.whereaboutsApi,
     oauthApi: apis.oauthApi,
     hmppsManageUsersApi: apis.hmppsManageUsersApi,
-    communityApi: apis.communityApi,
+    deliusIntegrationApi: apis.deliusIntegrationApi,
     dataComplianceApi: apis.dataComplianceApi,
     keyworkerApi: apis.keyworkerApi,
     caseNotesApi: apis.caseNotesApi,

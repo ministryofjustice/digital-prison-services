@@ -15,7 +15,7 @@ generic-service:
    API_WHEREABOUTS_ENDPOINT_URL: https://whereabouts-api.service.justice.gov.uk/
    LICENCES_URL: https://licences.prison.service.justice.gov.uk/
    HMPPS_COOKIE_NAME: hmpps-session-preprod
-   API_COMMUNITY_ENDPOINT_URL: https://community-api-secure.probation.service.justice.gov.uk
+   API_DELIUS_ENDPOINT_URL: https://dps-and-delius.hmpps.service.justice.gov.uk
    KEYWORKER_API_URL: https://keyworker-api.prison.service.justice.gov.uk/
    CATEGORISATION_UI_URL: https://offender-categorisation.service.justice.gov.uk/
    USE_OF_FORCE_URL: https://use-of-force.service.justice.gov.uk

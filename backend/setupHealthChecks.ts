@@ -10,7 +10,7 @@ const health = healthFactory(
   joinUrlPath(config.apis.hmppsManageUsers.url, '/health/ping'),
   joinUrlPath(config.apis.prisonApi.url, '/health/ping'),
   joinUrlPath(config.apis.whereabouts.url, '/health/ping'),
-  joinUrlPath(config.apis.community.url, '/health/ping'),
+  joinUrlPath(config.apis.deliusIntegration.url, '/health'),
   joinUrlPath(config.apis.keyworker.url, '/health/ping'),
   joinUrlPath(config.apis.caseNotes.url, '/health/ping'),
   joinUrlPath(config.apis.allocationManager.url, '/health'),

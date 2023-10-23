@@ -19,7 +19,7 @@ export const trackEvent = (offenderNo, documentId, suffix, { username }) => {
 export const downloadProbationDocumentFactory = (
   oauthApi,
   hmppsManageUsersApi,
-  communityApi,
+  deliusIntegrationApi,
   systemOauthClient,
   prisonApi
 ) => {
@@ -35,7 +35,7 @@ export const downloadProbationDocumentFactory = (
       try {
         ensureAllowedPageAccess(userRoles, caseloads, agencyId)
         const systemContext = await systemOauthClient.getClientCredentialsTokens()
-        communityApi.pipeOffenderDocument(systemContext, { offenderNo, documentId, res })
+        deliusIntegrationApi.downloadDocument(systemContext, { offenderNo, documentId, res })
 
         trackEvent(offenderNo, documentId, 'Success', user)
       } catch (error) {

@@ -28,7 +28,7 @@ export const probationDocumentsFactory = (
   oauthApi,
   hmppsManageUsersApi,
   prisonApi,
-  communityApi,
+  deliusIntegrationApi,
   systemOauthClient
 ) => {
   const renderTemplate = (req, res, pageData) => {
@@ -46,84 +46,15 @@ export const probationDocumentsFactory = (
     const pageErrors = []
 
     const getCommunityDocuments = async (offenderNo) => {
-      const sentenceLength = (sentence) => {
-        if (!sentence.originalLength || !sentence.originalLengthUnits) {
-          return ''
-        }
-        return ` (${sentence.originalLength} ${sentence.originalLengthUnits})`
-      }
-
-      const convictionDescription = (conviction) =>
-        (conviction.sentence && `${conviction.sentence.description}${sentenceLength(conviction.sentence)}`) ||
-        conviction.latestCourtAppearanceOutcome.description
-
-      const mainOffenceDescription = (conviction) =>
-        conviction.offences.find((offence) => offence.mainOffence).detail.subCategoryDescription
-
-      const convictionSorter = (first, second) =>
-        moment(second.referralDate, 'YYYY-MM-DD').diff(moment(first.referralDate, 'YYYY-MM-DD'))
-
-      const documentSorter = (first, second) =>
-        moment(second.createdAt, 'YYYY-MM-DD').diff(moment(first.createdAt, 'YYYY-MM-DD'))
-
-      const documentMapper = (document) => ({
-        id: document.id,
-        documentName: document.documentName,
-        author: document.author,
-        type: document.type.description,
-        description: document.extendedDescription || '',
-        date: formatTimestampToDate(document.createdAt),
-      })
-
-      const convictionMapper = (conviction) => {
-        const convictionSummary = {
-          title: convictionDescription(conviction),
-          offence: mainOffenceDescription(conviction),
-          date: formatTimestampToDate(conviction.referralDate),
-          active: conviction.active,
-          documents: conviction.documents.sort(documentSorter).map(documentMapper),
-          institutionName: undefined,
-        }
-
-        if (conviction.custody) {
-          convictionSummary.institutionName =
-            conviction.custody.institution && conviction.custody.institution.institutionName
-        }
-        return convictionSummary
-      }
-
       try {
         const systemContext = await systemOauthClient.getClientCredentialsTokens()
-        const [convictions, probationOffenderDetails, allDocuments] = await Promise.all([
-          communityApi.getOffenderConvictions(systemContext, { offenderNo }),
-          communityApi.getOffenderDetails(systemContext, { offenderNo }),
-          communityApi.getOffenderDocuments(systemContext, { offenderNo }),
-        ])
-
-        const convictionsWithDocuments = convictions.map((conviction) => {
-          const convictionDocuments = allDocuments.convictions || []
-          const relatedConviction = convictionDocuments.find(
-            // community api mixes types for convictionId so use string
-            (documentConviction) => documentConviction.convictionId.toString() === conviction.convictionId.toString()
-          )
-          return {
-            ...conviction,
-            documents: (relatedConviction && relatedConviction.documents) || [],
-          }
+        const { name, crn, documents, convictions } = await deliusIntegrationApi.getProbationDocuments(systemContext, {
+          offenderNo,
         })
-        const convictionSummaries = convictionsWithDocuments.sort(convictionSorter).map(convictionMapper)
-        const offenderDocuments =
-          (allDocuments.documents && allDocuments.documents.sort(documentSorter).map(documentMapper)) || []
 
         return {
-          documents: {
-            offenderDocuments,
-            convictions: convictionSummaries,
-          },
-          probationDetails: {
-            name: `${probationOffenderDetails.firstName} ${probationOffenderDetails.surname}`,
-            crn: probationOffenderDetails.otherIds.crn,
-          },
+          documents: { offenderDocuments: documents ?? [], convictions },
+          probationDetails: { name: `${name?.forename} ${name?.surname}`, crn },
         }
       } catch (error) {
         if (error.status && error.status === 404) {

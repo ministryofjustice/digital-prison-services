@@ -20,7 +20,7 @@ const {
 } = require('./integration-tests/mockApis/responses/houseBlockResponse')
 const alertsResponse = require('./integration-tests/mockApis/responses/alertsResponse.json')
 const allocationManager = require('./integration-tests/mockApis/allocationManager')
-const community = require('./integration-tests/mockApis/community')
+const delius = require('./integration-tests/mockApis/delius')
 const pathfinder = require('./integration-tests/mockApis/pathfinder')
 const socApi = require('./integration-tests/mockApis/soc')
 const offenderSearch = require('./integration-tests/mockApis/offenderSearch')
@@ -67,7 +67,7 @@ module.exports = defineConfig({
         stubAllocationManagerHealth: (status) => allocationManager.stubHealth(status),
         stubKeyworkerHealth: (status) => keyworker.stubHealth(status),
         stubCaseNotesHealth: (status) => caseNotes.stubHealth(status),
-        stubCommunityHealth: (status) => community.stubHealth(status),
+        stubCommunityHealth: (status) => delius.stubHealth(status),
         stubTokenverificationHealth: (status) => tokenverification.stubHealth(status),
         stubOffenderSearchHealth: (status) => offenderSearch.stubHealth(status),
         stubHealthAllHealthy: () =>
@@ -80,7 +80,7 @@ module.exports = defineConfig({
             allocationManager.stubHealth(),
             caseNotes.stubHealth(),
             tokenverification.stubHealth(),
-            community.stubHealth(),
+            delius.stubHealth(),
             offenderSearch.stubHealth(),
             complexity.stubHealth(),
           ]),
@@ -496,10 +496,8 @@ module.exports = defineConfig({
         verifyAlertsBooking: ({ bookingId, alertType, from, to, alertStatus, page, sort, size }) =>
           prisonApi.verifyAlertsBookingGet({ bookingId, alertType, from, to, alertStatus, page, sort, size }),
         resetAdjudicationsStub: () => adjudicationsApi.resetAdjudicationsStub(),
-        stubConvictions: ({ offenderNo, convictions }) => community.stubConvictions(offenderNo, convictions),
-        stubOffenderDetails: ({ offenderNo, details }) => community.stubOffenderDetails(offenderNo, details),
-        stubDocuments: ({ offenderNo, documents }) => community.stubDocuments(offenderNo, documents),
-        stubDocument: ({ offenderNo, documentId, content }) => community.stubDocument(offenderNo, documentId, content),
+        stubDocuments: ({ offenderNo, response }) => delius.stubDocuments(offenderNo, response),
+        stubDocument: ({ documentId, content }) => delius.stubDocument(documentId, content),
         stubGetIepSummaryForBooking: (iepSummary) => incentivesApi.stubGetIepSummaryForBooking(iepSummary),
         stubMovementsIn: ({ agencyId, fromDate, movements }) =>
           prisonApi.stubMovementsIn({ agencyId, fromDate, movements }),

@@ -100,7 +100,7 @@ const setup = ({
   whereaboutsApi,
   oauthApi,
   hmppsManageUsersApi,
-  communityApi,
+  deliusIntegrationApi,
   dataComplianceApi,
   keyworkerApi,
   caseNotesApi,
@@ -206,13 +206,13 @@ const setup = ({
   router.get(
     '/offenders/:offenderNo/probation-documents',
     asyncMiddleware(
-      probationDocumentsFactory(oauthApi, hmppsManageUsersApi, prisonApi, communityApi, systemOauthClient)
+      probationDocumentsFactory(oauthApi, hmppsManageUsersApi, prisonApi, deliusIntegrationApi, systemOauthClient)
         .displayProbationDocumentsPage
     )
   )
   router.get(
     '/offenders/:offenderNo/probation-documents/:documentId/download',
-    downloadProbationDocumentFactory(oauthApi, hmppsManageUsersApi, communityApi, systemOauthClient, prisonApi)
+    downloadProbationDocumentFactory(oauthApi, hmppsManageUsersApi, deliusIntegrationApi, systemOauthClient, prisonApi)
       .downloadDocument
   )
 
