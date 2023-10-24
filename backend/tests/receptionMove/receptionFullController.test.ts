@@ -6,7 +6,7 @@ const prisonApi = {
   getDetails: jest.fn(),
 }
 
-const res = { locals: { homeUrl: `prisoner/${someOffenderNumber}` }, redirect: jest.fn(), render: jest.fn() }
+const res = { locals: {}, redirect: jest.fn(), render: jest.fn() }
 let req
 let controller
 
@@ -35,11 +35,7 @@ describe('Reception full', () => {
   describe('page', () => {
     it('should make the correct api calls', async () => {
       await controller.view(req, res)
-      expect(prisonApi.getDetails).toHaveBeenCalledWith(
-        { homeUrl: `prisoner/${someOffenderNumber}` },
-        someOffenderNumber,
-        false
-      )
+      expect(prisonApi.getDetails).toHaveBeenCalledWith({}, someOffenderNumber, false)
     })
 
     it('should render with correct data', async () => {
