@@ -26,6 +26,7 @@ describe('Establishment Roll', () => {
       maximumCapacity: 0,
       availablePhysical: 0,
       outOfOrder: 0,
+      outOfLivingUnits: 0,
     },
     {
       livingUnitId: 0,
@@ -38,6 +39,7 @@ describe('Establishment Roll', () => {
       maximumCapacity: 0,
       availablePhysical: 0,
       outOfOrder: 0,
+      outOfLivingUnits: 1,
     },
   ]
   const assignedBlockData = [
@@ -52,6 +54,7 @@ describe('Establishment Roll', () => {
       maximumCapacity: 0,
       availablePhysical: 0,
       outOfOrder: 0,
+      outOfLivingUnits: 0,
     },
     {
       livingUnitId: 1,
@@ -64,6 +67,7 @@ describe('Establishment Roll', () => {
       maximumCapacity: 0,
       availablePhysical: 0,
       outOfOrder: 0,
+      outOfLivingUnits: 1,
     },
   ]
 
@@ -145,12 +149,12 @@ describe('Establishment Roll', () => {
           ],
         ],
         todayStats: {
-          currentRoll: 28,
+          currentRoll: 30,
           enroute: 8,
           inToday: 1,
           outToday: 3,
-          unassignedIn: 8,
-          unlockRoll: 30,
+          unassignedIn: 9,
+          unlockRoll: 32,
           noCellAllocated: 3,
         },
       })
