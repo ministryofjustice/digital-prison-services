@@ -10,8 +10,7 @@ import canAccessProbationDocuments from '../shared/probationDocumentsAccess'
 import { NeurodivergenceSupport } from '../api/curious/types/Enums'
 import { canViewNeurodivergenceSupportData } from '../shared/neuroDivergenceHelper'
 
-export const isComplexityEnabledFor = (agencyId: string): boolean =>
-  config.apis.complexity.enabled_prisons?.includes(agencyId)
+export const isComplexityEnabledFor = (agencyId) => config.apis.complexity.enabled_prisons?.includes(agencyId)
 
 export default ({
   prisonApi,
@@ -21,10 +20,12 @@ export default ({
   dataComplianceApi,
   pathfinderApi,
   socApi,
+  systemOauthClient,
   allocationManagerApi,
   complexityApi,
   incentivesApi,
   curiousApi,
+  offenderSearchApi,
 }) => {
   const {
     apis: {
@@ -53,13 +54,7 @@ export default ({
     return false
   }
 
-  const getPrisonerProfileData = async (
-    context,
-    systemContext,
-    offenderNo: string,
-    overrideAccess: boolean,
-    prisonerSearchDetails
-  ) => {
+  const getPrisonerProfileData = async (context, offenderNo, username, overrideAccess) => {
     const [currentUser, prisonerDetails] = await Promise.all([
       hmppsManageUsersApi.currentUser(context),
       prisonApi.getDetails(context, offenderNo, true),
@@ -67,6 +62,8 @@ export default ({
 
     const offenderRetentionRecord =
       displayRetentionLink && (await dataComplianceApi.getOffenderRetentionRecord(context, offenderNo))
+
+    const systemContext = await systemOauthClient.getClientCredentialsTokens(username)
 
     // TODO: Temporary measure to allow 3rd party MegaNexus time to implement caching and other techniques to their API so it can handle high volume of calls. To be refactored!
     const getNeurodivergenceSupportNeed = async (agencyId) => {
@@ -203,7 +200,16 @@ export default ({
     const canCalculateReleaseDate =
       userRoles && (userRoles as any).some((role) => role.roleCode === 'RELEASE_DATES_CALCULATOR')
 
-    const { hospital, isRestrictedPatient, indeterminateSentence } = prisonerSearchDetails
+    const getPrisonerSearchDetails = async () => {
+      const response = await offenderSearchApi.getPrisonersDetails(systemContext, [offenderNo])
+      const prisonerSearchDetails = response && response[0]
+      return {
+        hospital: prisonerSearchDetails?.dischargedHospitalDescription,
+        isRestrictedPatient: prisonerSearchDetails?.restrictedPatient,
+        indeterminateSentence: prisonerSearchDetails?.indeterminateSentence,
+      }
+    }
+    const { hospital, isRestrictedPatient, indeterminateSentence } = await getPrisonerSearchDetails()
 
     return {
       activeAlertCount,

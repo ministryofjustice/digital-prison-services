@@ -7,7 +7,6 @@ context('Global errors', () => {
     cy.task('stubSignIn', { username: 'ITAG_USER', caseload: 'MDI' })
     cy.signIn()
     cy.task('stubKeyworkerMigrated')
-    cy.task('stubPrisonerSearch')
   })
   it('should render 404 page', () => {
     cy.visit('/hello', { failOnStatusCode: false })

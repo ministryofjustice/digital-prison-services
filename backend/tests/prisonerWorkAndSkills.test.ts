@@ -64,14 +64,6 @@ describe('Prisoner work and skills controller', () => {
     getLearnerEmployabilitySkills?: Mock
     getCurrentActivities?: Mock
   } = {}
-  const systemOauthClient = {
-    getClientCredentialsTokens: jest.fn(),
-  }
-  const offenderSearchApi = {
-    getPrisonerDpsDetails: jest
-      .fn()
-      .mockResolvedValue({ hospital: null, isRestrictedPatient: false, indeterminateSentence: false }),
-  }
 
   let req
   let res
@@ -93,8 +85,6 @@ describe('Prisoner work and skills controller', () => {
     controller = prisonerWorkAndSkills({
       prisonerProfileService,
       esweService,
-      systemOauthClient,
-      offenderSearchApi,
     })
   })
 
