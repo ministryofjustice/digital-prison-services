@@ -25,10 +25,6 @@ config.apis.calculateReleaseDates = {
   ui_url: 'http://crd-ui/',
 }
 
-config.apis.manageWarrantFolder = {
-  ui_url: 'http://mwf-ui/',
-}
-
 config.app.neurodiversityEnabledPrisons = ['NOT-ACCELERATED', 'LEI']
 
 describe('prisoner profile service', () => {
@@ -267,7 +263,6 @@ describe('prisoner profile service', () => {
         showAddAppointment: true,
         showAddKeyworkerSession: false,
         showCalculateReleaseDates: false,
-        showAdjustmentsButton: false,
         showCellHistoryLink: true,
         showCsraHistory: true,
         showFinanceDetailLinks: true,
@@ -290,7 +285,6 @@ describe('prisoner profile service', () => {
         physicalCharacteristics: undefined,
         physicalMarks: undefined,
         profileInformation: undefined,
-        adjustmentsUrl: 'http://mwf-ui/adjustments?prisonId=ABC123',
         esweEnabled: false,
         hasDivergenceSupport: false,
         indeterminateSentence: false,
@@ -1005,78 +999,6 @@ describe('prisoner profile service', () => {
           expect(getPrisonerProfileData).toEqual(
             expect.objectContaining({
               showCalculateReleaseDates: false,
-            })
-          )
-        })
-      })
-    })
-    describe('when the user has the MANAGE_DIGITAL_WARRANT role', () => {
-      beforeEach(() => {
-        oauthApi.userRoles.mockReturnValue([{ roleCode: 'MANAGE_DIGITAL_WARRANT' }])
-      })
-
-      describe('when prisoner is in active caseload', () => {
-        beforeEach(() => {
-          prisonApi.userCaseLoads.mockResolvedValue([{ caseLoadId: 'MDI' }, { caseLoadId: 'LEI' }] as never)
-          hmppsManageUsersApi.currentUser.mockReturnValue({ staffId: 111, activeCaseLoadId: 'MDI' })
-        })
-        it('should show the user the warrant folder button', async () => {
-          const getPrisonerProfileData = await service.getPrisonerProfileData(
-            context,
-            systemContext,
-            offenderNo,
-            false,
-            prisonerSearchDetails
-          )
-
-          expect(getPrisonerProfileData).toEqual(
-            expect.objectContaining({
-              showAdjustmentsButton: true,
-              adjustmentsUrl: 'http://mwf-ui/adjustments?prisonId=ABC123',
-            })
-          )
-        })
-      })
-      describe('when prisoner is not in active caseload', () => {
-        beforeEach(() => {
-          prisonApi.userCaseLoads.mockResolvedValue([{ caseLoadId: 'LEI' }] as never)
-          hmppsManageUsersApi.currentUser.mockReturnValue({ staffId: 111, activeCaseLoadId: 'MDI' })
-        })
-        it('should not show the user the warrant folder button', async () => {
-          const getPrisonerProfileData = await service.getPrisonerProfileData(
-            context,
-            systemContext,
-            offenderNo,
-            false,
-            prisonerSearchDetails
-          )
-
-          expect(getPrisonerProfileData).toEqual(
-            expect.objectContaining({
-              showAdjustmentsButton: false,
-            })
-          )
-        })
-      })
-    })
-    describe('when the user does not have the MANAGE_DIGITAL_WARRANT role', () => {
-      describe('when prisoner is in active caseload', () => {
-        beforeEach(() => {
-          prisonApi.userCaseLoads.mockResolvedValue([{ caseLoadId: 'MDI' }, { caseLoadId: 'LEI' }] as never)
-          hmppsManageUsersApi.currentUser.mockReturnValue({ staffId: 111, activeCaseLoadId: 'MDI' })
-        })
-        it('should not show the user the warrant folder button', async () => {
-          const getPrisonerProfileData = await service.getPrisonerProfileData(
-            context,
-            systemContext,
-            offenderNo,
-            false,
-            prisonerSearchDetails
-          )
-
-          expect(getPrisonerProfileData).toEqual(
-            expect.objectContaining({
-              showAdjustmentsButton: false,
             })
           )
         })

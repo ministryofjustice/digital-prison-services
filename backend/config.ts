@@ -234,9 +234,6 @@ export const apis = {
   learningAndWorkProgress: {
     ui_url: process.env.LEARNING_AND_WORK_PROGRESS_URL || 'http://localhost:3002',
   },
-  manageWarrantFolder: {
-    ui_url: process.env.WARRANT_FOLDER_URL,
-  },
   manageOffences: {
     ui_url: process.env.MANAGE_OFFENCES_URL,
   },

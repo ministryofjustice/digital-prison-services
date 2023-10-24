@@ -33,7 +33,6 @@ export default ({
       pathfinder: { ui_url: pathfinderUrl },
       soc: { ui_url: socUrl, enabled: socEnabled },
       useOfForce: { prisons: useOfForcePrisons, ui_url: useOfForceUrl },
-      manageWarrantFolder: { ui_url: manageWarrantFolderUrl },
     },
     app: { displayRetentionLink, esweEnabled, neurodiversityEnabledPrisons },
   } = config
@@ -203,8 +202,6 @@ export default ({
 
     const canCalculateReleaseDate =
       userRoles && (userRoles as any).some((role) => role.roleCode === 'RELEASE_DATES_CALCULATOR')
-    const canManageWarrantFolder =
-      userRoles && (userRoles as any).some((role) => role.roleCode === 'MANAGE_DIGITAL_WARRANT')
 
     const { hospital, isRestrictedPatient, indeterminateSentence } = prisonerSearchDetails
 
@@ -215,7 +212,6 @@ export default ({
       birthPlace,
       dateOfBirth,
       alerts: alertsToShow,
-      adjustmentsUrl: `${manageWarrantFolderUrl}adjustments?prisonId=${offenderNo}`,
       canViewProbationDocuments,
       canViewPathfinderLink,
       pathfinderProfileUrl:
@@ -247,7 +243,6 @@ export default ({
       offenderRecordRetained: offenderRetentionRecord && hasLength(offenderRetentionRecord.retentionReasons),
       showAddKeyworkerSession: staffRoles && (staffRoles as any).some((role) => role.role === 'KW'),
       showCalculateReleaseDates: offenderInCaseload && canCalculateReleaseDate,
-      showAdjustmentsButton: offenderInCaseload && canManageWarrantFolder,
       showReportUseOfForce: useOfForceEnabledPrisons.includes(currentUser.activeCaseLoadId) && !isRestrictedPatient,
       showAddAppointment: !isRestrictedPatient,
       showCsraHistory: !isRestrictedPatient,
