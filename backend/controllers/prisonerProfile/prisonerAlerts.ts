@@ -9,20 +9,18 @@ export default ({
     prisonApi,
     oauthApi,
     systemOauthClient,
-    offenderSearchApi,
+    restrictedPatientApi,
   }) =>
   async (req, res) => {
     const { offenderNo } = req.params
 
-    const { username } = req.session.userDetails
-    const systemContext = await systemOauthClient.getClientCredentialsTokens(username)
-    const prisonerSearchDetails = await offenderSearchApi.getPrisonerDpsDetails(systemContext, offenderNo)
-
-    const { context, overrideAccess } = getContext({
+    const { context, overrideAccess } = await getContext({
+      offenderNo,
       res,
+      req,
       oauthApi,
-      systemContext,
-      prisonerSearchDetails,
+      systemOauthClient,
+      restrictedPatientApi,
     })
 
     const { fromDate, toDate, alertType, active, pageOffsetOption } = req.query
@@ -32,17 +30,12 @@ export default ({
     const pageOffset = parseInt(pageOffsetOption, 10) || 0
     const page = pageOffset / size
     const fullUrl = new URL(`${req.protocol}://${req.get('host')}${req.originalUrl}`)
+    const { username } = req.session.userDetails
 
     const { bookingId } = await prisonApi.getDetails(context, offenderNo)
     const roles = oauthApi.userRoles(context)
     const [prisonerProfileData, alertTypes] = await Promise.all([
-      prisonerProfileService.getPrisonerProfileData(
-        context,
-        systemContext,
-        offenderNo,
-        overrideAccess,
-        prisonerSearchDetails
-      ),
+      prisonerProfileService.getPrisonerProfileData(context, offenderNo, username, overrideAccess),
       referenceCodesService.getAlertTypes(context),
     ])
     const { userCanEdit } = prisonerProfileData

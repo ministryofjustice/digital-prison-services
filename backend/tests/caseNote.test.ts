@@ -1,4 +1,5 @@
 import moment from 'moment'
+import config from '../config'
 import { makeError } from './helpers'
 import caseNoteCtrl, { behaviourPrompts } from '../controllers/caseNote'
 
@@ -6,12 +7,8 @@ Reflect.deleteProperty(process.env, 'APPINSIGHTS_INSTRUMENTATIONKEY')
 
 const prisonApi = { getDetails: {} }
 const caseNotesApi = { addCaseNote: {}, myCaseNoteTypes: {} }
-const offenderSearchApi = {
-  getPrisonerDpsDetails: jest
-    .fn()
-    .mockResolvedValue({ hospital: null, isRestrictedPatient: false, indeterminateSentence: false }),
-}
-const systemOauthClient = { getClientCredentialsTokens: jest.fn() }
+const restrictedPatientApi = {}
+const systemOauthClient = {}
 const oauthApi = {}
 
 const { index, post, areYouSure, confirm, recordIncentiveLevelInterruption } = caseNoteCtrl.caseNoteFactory({
@@ -19,7 +16,7 @@ const { index, post, areYouSure, confirm, recordIncentiveLevelInterruption } = c
   caseNotesApi,
   oauthApi,
   systemOauthClient,
-  offenderSearchApi,
+  restrictedPatientApi,
 })
 
 jest.mock('../logError', () => ({

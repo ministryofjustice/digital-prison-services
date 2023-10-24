@@ -5,7 +5,6 @@ import prisonerQuickLook from '../controllers/prisonerProfile/prisonerQuickLook'
 
 describe('prisoner profile quick look', () => {
   const offenderNo = 'ABC123'
-  const systemContext = {}
   const prisonerProfileData = {
     activeAlertCount: 1,
     agencyName: 'Moorland Closed',
@@ -46,10 +45,8 @@ describe('prisoner profile quick look', () => {
     getEventsForToday: jest.fn(),
     getProfileInformation: jest.fn(),
   }
-  const prisonerSearchDetails = { hospital: 'MDI', isRestrictedPatient: false, indeterminateSentence: false }
   const offenderSearchApi = {
-    getPrisonersDetails: jest.fn().mockResolvedValue([]),
-    getPrisonerDpsDetails: jest.fn().mockResolvedValue(prisonerSearchDetails),
+    getPrisonersDetails: jest.fn(),
   }
   const prisonerProfileService = {
     getPrisonerProfileData: jest.fn(),
@@ -61,6 +58,7 @@ describe('prisoner profile quick look', () => {
     getClientCredentialsTokens: jest.fn(),
   }
   const incentivesApi = {} as jest.Mocked<typeof apis.incentivesApi>
+  const restrictedPatientApi = {}
   const adjudicationsApi = {
     getAdjudicationsForBooking: jest.fn(),
   }
@@ -113,6 +111,7 @@ describe('prisoner profile quick look', () => {
 
   let req
   let res
+  let logError
   let controller
 
   const nonAssociationsUrl = 'https://localhost/non-associations-ui'
@@ -135,6 +134,8 @@ describe('prisoner profile quick look', () => {
       status: jest.fn(),
     }
 
+    logError = jest.fn()
+
     config.apis.nonAssociations.ui_url = nonAssociationsUrl
 
     prisonerProfileService.getPrisonerProfileData = jest.fn().mockResolvedValue(prisonerProfileData)
@@ -155,6 +156,8 @@ describe('prisoner profile quick look', () => {
 
     telemetry.trackEvent = jest.fn().mockResolvedValue([])
 
+    offenderSearchApi.getPrisonersDetails = jest.fn().mockResolvedValue([])
+
     systemOauthClient.getClientCredentialsTokens = jest.fn().mockReturnValue({})
     oauthApi.userRoles = jest.fn().mockReturnValue([])
 
@@ -164,7 +167,7 @@ describe('prisoner profile quick look', () => {
       telemetry,
       systemOauthClient,
       incentivesApi,
-      offenderSearchApi,
+      restrictedPatientApi,
       oauthApi,
       adjudicationsApi,
       nonAssociationsApi,
@@ -175,13 +178,7 @@ describe('prisoner profile quick look', () => {
     await controller(req, res)
 
     expect(prisonApi.getDetails).toHaveBeenCalledWith(res.locals, offenderNo)
-    expect(prisonerProfileService.getPrisonerProfileData).toHaveBeenCalledWith(
-      res.locals,
-      systemContext,
-      offenderNo,
-      false,
-      prisonerSearchDetails
-    )
+    expect(prisonerProfileService.getPrisonerProfileData).toHaveBeenCalledWith(res.locals, offenderNo, 'user1', false)
     expect(res.render).toHaveBeenCalledWith(
       'prisonerProfile/prisonerQuickLook/prisonerQuickLook.njk',
       expect.objectContaining({

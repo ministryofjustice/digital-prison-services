@@ -63,7 +63,6 @@ context('A user can confirm the cell move', () => {
     })
     cy.task('stubAdjudicationFindingTypes', [{ code: 'T1', description: 'type 1' }])
     cy.task('stubAdjudications', { response: adjudicationResponse })
-    cy.task('stubPrisonerSearch')
   })
 
   it('should render the page', () => {
@@ -119,14 +118,12 @@ context('A user can confirm the cell move', () => {
     cy.task('stubAdjudications', {
       response: {
         ...adjudicationResponse,
-        results: {
-          content: [],
+        results: { content: [],
           pageable: {
             offset: 0,
             pageSize: 10,
           },
-          totalElements: 0,
-        },
+          totalElements: 0, },
       },
     })
 
@@ -140,14 +137,12 @@ context('A user can confirm the cell move', () => {
     cy.task('stubAdjudications', {
       response: {
         ...adjudicationResponse,
-        results: {
-          content: [],
+        results: { content: [],
           pageable: {
             offset: 0,
             pageSize: 10,
           },
-          totalElements: 0,
-        },
+          totalElements: 0, },
       },
     })
 

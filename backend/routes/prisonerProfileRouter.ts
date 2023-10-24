@@ -56,6 +56,7 @@ const controller = ({
   offenderSearchApi,
   curiousApi,
   incentivesApi,
+  restrictedPatientApi,
   adjudicationsApi,
   nonAssociationsApi,
 }) => {
@@ -66,11 +67,13 @@ const controller = ({
     hmppsManageUsersApi,
     dataComplianceApi,
     pathfinderApi,
+    systemOauthClient,
     socApi,
     allocationManagerApi,
     complexityApi,
     incentivesApi,
     curiousApi,
+    offenderSearchApi,
   })
   const personService = personServiceFactory(prisonApi)
   const prisonerFinanceService = prisonerFinanceServiceFactory(prisonApi)
@@ -89,7 +92,7 @@ const controller = ({
         telemetry,
         systemOauthClient,
         incentivesApi,
-        offenderSearchApi,
+        restrictedPatientApi,
         adjudicationsApi,
         nonAssociationsApi,
       }),
@@ -110,7 +113,9 @@ const controller = ({
         esweService,
         systemOauthClient,
         oauthApi,
-        offenderSearchApi,
+        restrictedPatientApi,
+        // @ts-expect-error ts-migrate(2345) FIXME: Argument of type '{ prisonerProfileService: { getP... Remove this comment to see the full error message
+        logError,
       }),
     })
   )
@@ -125,7 +130,9 @@ const controller = ({
         prisonApi,
         oauthApi,
         systemOauthClient,
-        offenderSearchApi,
+        restrictedPatientApi,
+        // @ts-expect-error ts-migrate(2345) FIXME: Argument of type '{ prisonerProfileService: { getP... Remove this comment to see the full error message
+        logError,
       }),
     })
   )
@@ -143,7 +150,7 @@ const controller = ({
         logError,
         oauthApi,
         systemOauthClient,
-        offenderSearchApi,
+        restrictedPatientApi,
       }),
     })
   )
@@ -156,7 +163,9 @@ const controller = ({
         prisonApi,
         systemOauthClient,
         oauthApi,
-        offenderSearchApi,
+        restrictedPatientApi,
+        // @ts-expect-error ts-migrate(2345) FIXME: Argument of type '{ prisonerProfileService: { getP... Remove this comment to see the full error message
+        logError,
       }),
     })
   )
@@ -164,7 +173,7 @@ const controller = ({
     '/work-and-skills',
     prisonerProfileRedirect({
       path: '/work-and-skills',
-      handler: prisonerWorkAndSkills({ prisonerProfileService, esweService, systemOauthClient, offenderSearchApi }),
+      handler: prisonerWorkAndSkills({ prisonerProfileService, esweService }),
     })
   )
   router.get('/unacceptable-absences', unacceptableAbsencesDetails({ paginationService, prisonApi, esweService }))
@@ -195,7 +204,7 @@ const controller = ({
 
   router.get(
     '/adjudications/:adjudicationNumber',
-    prisonerAdjudicationDetails({ prisonApi, oauthApi, systemOauthClient, offenderSearchApi, adjudicationsApi })
+    prisonerAdjudicationDetails({ prisonApi, oauthApi, systemOauthClient, restrictedPatientApi, adjudicationsApi })
   )
 
   router.use(
@@ -206,7 +215,9 @@ const controller = ({
       prisonApi,
       oauthApi,
       systemOauthClient,
-      offenderSearchApi,
+      restrictedPatientApi,
+      // @ts-expect-error ts-migrate(2345) FIXME: Argument of type '{ adjudicationHistoryService: { ... Remove this comment to see the full error message
+      logError,
     })
   )
 
