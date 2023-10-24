@@ -15,6 +15,7 @@ const prisonApi = {
   getDetails: jest.fn(),
   getCsraAssessments: jest.fn(),
   userCaseLoads: jest.fn(),
+  getReceptionsWithCapacity: jest.fn(),
 }
 
 const movementsService = {
@@ -50,6 +51,12 @@ describe('Consider risks reception', () => {
     })
     prisonApi.userCaseLoads.mockResolvedValue([{ caseLoadId: 'LEI' }])
     prisonApi.getCsraAssessments.mockResolvedValue([{}])
+    prisonApi.getReceptionsWithCapacity.mockResolvedValue([
+      {
+        capacity: 10,
+        noOfOccupants: 9,
+      },
+    ])
 
     movementsService.getOffendersInReception.mockResolvedValue([])
     movementsService.getCsraForMultipleOffenders.mockResolvedValue([{}])
@@ -102,11 +109,24 @@ describe('Consider risks reception', () => {
       )
     })
 
+    it('should redirect if reception already full', async () => {
+      req.body = { considerRisksReception: 'yes' }
+      prisonApi.getReceptionsWithCapacity.mockResolvedValue([
+        {
+          capacity: 10,
+          noOfOccupants: 10,
+        },
+      ])
+      await controller.view(req, res)
+      expect(res.redirect).toHaveBeenCalledWith(`/prisoner/${someOffenderNumber}/reception-move/reception-full`)
+      expect(logger.info).toBeCalledWith('Can not move to reception as already full to capacity')
+    })
+
     it('should check user has correct roles', async () => {
       oauthApi.userRoles.mockReturnValue([{ roleCode: 'SOME_OTHER_ROLE' }])
       await controller.view(req, res)
       expect(res.render).toHaveBeenCalledWith('notFound.njk', { url: '/prisoner-search' })
-      expect(logger.info).toBeCalled()
+      expect(logger.info).toBeCalledWith('User does not have correct roles')
     })
 
     it('should populate view model with prisoner details', async () => {
