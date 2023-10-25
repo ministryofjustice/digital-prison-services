@@ -111,12 +111,7 @@ describe('Consider risks reception', () => {
 
     it('should redirect if reception already full', async () => {
       req.body = { considerRisksReception: 'yes' }
-      prisonApi.getReceptionsWithCapacity.mockResolvedValue([
-        {
-          capacity: 10,
-          noOfOccupants: 10,
-        },
-      ])
+      prisonApi.getReceptionsWithCapacity.mockResolvedValue([])
       await controller.view(req, res)
       expect(res.redirect).toHaveBeenCalledWith(`/prisoner/${someOffenderNumber}/reception-move/reception-full`)
       expect(logger.info).toBeCalledWith('Can not move to reception as already full to capacity')
