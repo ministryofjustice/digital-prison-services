@@ -19,9 +19,8 @@ export default ({ oauthApi, prisonApi, movementsService, nonAssociationsApi, log
       ])
 
       const receptionOccupancy = await prisonApi.getReceptionsWithCapacity(res.locals, prisonerDetails.agencyId)
-      const { capacity, noOfOccupants } = receptionOccupancy[0]
 
-      if (noOfOccupants >= capacity) {
+      if (!receptionOccupancy.length) {
         logger.info('Can not move to reception as already full to capacity')
         return res.redirect(`/prisoner/${offenderNo}/reception-move/reception-full`)
       }
