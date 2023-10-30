@@ -45,7 +45,7 @@ generic-service:
    PECS_URL: http://hmpps-book-secure-move-frontend-preprod.apps.live-1.cloud-platform.service.justice.gov.uk
    COMPLEXITY_OF_NEED_URI: https://complexity-of-need-preprod.hmpps.service.justice.gov.uk
    PRISONS_WITH_OFFENDERS_THAT_HAVE_COMPLEX_NEEDS: "AGI,BZI,DHI,DWI,ESI,EWI,FHI,LNI,NHI,PFI,SDI,STI"
-   PRISONS_WITH_MANAGE_ADJUDICATIONS_ENABLED: "RNI,WLI,MDI,EXI,BXI,PVI,NHI,LFI,STI,BNI,BLI,SWI,HEI,DMI,NSI,LWI,WNI,SPI,SUI,BSI,LWI,RCI,LHI"
+   PRISONS_WITH_MANAGE_ADJUDICATIONS_ENABLED: "RNI,WLI,MDI,EXI,BXI,PVI,NHI,LFI,STI,BNI,BLI,SWI,HEI,DMI,NSI,LWI,WNI,SPI,SUI,BSI,LWI,RCI,LHI,CFI,DTI,EEI,FSI,FNI,HMI,LHI,LLI,NMI,ONI,RCI,SKI,WNI,WCI"
    MANAGE_ADJUDICATIONS_URL: https://manage-adjudications-preprod.hmpps.service.justice.gov.uk/
    MANAGE_RESTRICTED_PATIENTS_URL: https://manage-restricted-patients-preprod.hmpps.service.justice.gov.uk/
    ESWE_ENABLED: true
