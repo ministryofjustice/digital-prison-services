@@ -97,6 +97,7 @@ const router = express.Router()
 
 const setup = ({
   prisonApi,
+  cellAllocationApi,
   whereaboutsApi,
   oauthApi,
   hmppsManageUsersApi,
@@ -317,6 +318,8 @@ const setup = ({
   router.use(
     '/prisoner/:offenderNo/cell-move',
     cellMoveRouter({
+      systemOauthClient,
+      cellAllocationApi,
       oauthApi,
       prisonApi,
       whereaboutsApi,

@@ -3,6 +3,7 @@ import clientFactory from './api/oauthEnabledClient'
 
 import config from './config'
 import { prisonApiFactory } from './api/prisonApi'
+import { cellAllocationApiFactory } from './api/cellAllocationApi'
 import { oauthApiFactory } from './api/oauthApi'
 import { whereaboutsApiFactory } from './api/whereaboutsApi'
 import { communityApiFactory } from './api/communityApi'
@@ -26,6 +27,13 @@ export const prisonApi = prisonApiFactory(
   clientFactory({
     baseUrl: config.apis.prisonApi.url,
     timeout: config.apis.prisonApi.timeoutSeconds * 1000,
+  })
+)
+
+export const cellAllocationApi = cellAllocationApiFactory(
+  clientFactory({
+    baseUrl: config.apis.cellAllocationApi.url,
+    timeout: config.apis.cellAllocationApi.timeoutSeconds * 1000,
   })
 )
 
@@ -161,6 +169,7 @@ export const feComponentsApi = feComponentsApiFactory(
 
 export default {
   prisonApi,
+  cellAllocationApi,
   whereaboutsApi,
   oauthApi,
   hmppsManageUsersApi,
