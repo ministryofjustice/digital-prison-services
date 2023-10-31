@@ -18,7 +18,7 @@ RUN CYPRESS_INSTALL_BINARY=0 npm ci --no-audit && \
 
 RUN npm prune --production
 
-FROM node:16-bullseye-slim
+FROM node:20.9-bullseye-slim
 LABEL maintainer="HMPPS Digital Studio <info@digital.justice.gov.uk>"
 
 ENV GIT_REF ${GIT_REF:-xxxxxxxxxxxxxxxxxxx}
