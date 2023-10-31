@@ -2,19 +2,19 @@
 
 exports[`<PerPageDropdown /> should match 10 or less results snapshot 1`] = `
 <div
-  className="sc-bcXHqe hZbRzB"
+  className="sc-aXZVg ghSHhI"
 >
   <label
     htmlFor="perPage"
   >
     <span
-      className="src__StyledLabelText-sc-12l0n4z-0 kqemnn"
+      className="src__StyledLabelText-sc-12l0n4z-0 bhgkMV"
     >
       Results per page
     </span>
   </label>
   <select
-    className="src__StyledSelect-vnwid3-0 eAWpAW"
+    className="src__StyledSelect-vnwid3-0 cXoLHA"
     id="perPage"
     onChange={[Function]}
     value={10}
@@ -30,19 +30,19 @@ exports[`<PerPageDropdown /> should match 10 or less results snapshot 1`] = `
 
 exports[`<PerPageDropdown /> should match 20 or less results snapshot 1`] = `
 <div
-  className="sc-bcXHqe hZbRzB"
+  className="sc-aXZVg ghSHhI"
 >
   <label
     htmlFor="perPage"
   >
     <span
-      className="src__StyledLabelText-sc-12l0n4z-0 kqemnn"
+      className="src__StyledLabelText-sc-12l0n4z-0 bhgkMV"
     >
       Results per page
     </span>
   </label>
   <select
-    className="src__StyledSelect-vnwid3-0 eAWpAW"
+    className="src__StyledSelect-vnwid3-0 cXoLHA"
     id="perPage"
     onChange={[Function]}
     value={20}
@@ -63,19 +63,19 @@ exports[`<PerPageDropdown /> should match 20 or less results snapshot 1`] = `
 
 exports[`<PerPageDropdown /> should match 50 or less results snapshot 1`] = `
 <div
-  className="sc-bcXHqe hZbRzB"
+  className="sc-aXZVg ghSHhI"
 >
   <label
     htmlFor="perPage"
   >
     <span
-      className="src__StyledLabelText-sc-12l0n4z-0 kqemnn"
+      className="src__StyledLabelText-sc-12l0n4z-0 bhgkMV"
     >
       Results per page
     </span>
   </label>
   <select
-    className="src__StyledSelect-vnwid3-0 eAWpAW"
+    className="src__StyledSelect-vnwid3-0 cXoLHA"
     id="perPage"
     onChange={[Function]}
     value={20}
@@ -101,19 +101,19 @@ exports[`<PerPageDropdown /> should match 50 or less results snapshot 1`] = `
 
 exports[`<PerPageDropdown /> should match 100 or less results snapshot 1`] = `
 <div
-  className="sc-bcXHqe hZbRzB"
+  className="sc-aXZVg ghSHhI"
 >
   <label
     htmlFor="perPage"
   >
     <span
-      className="src__StyledLabelText-sc-12l0n4z-0 kqemnn"
+      className="src__StyledLabelText-sc-12l0n4z-0 bhgkMV"
     >
       Results per page
     </span>
   </label>
   <select
-    className="src__StyledSelect-vnwid3-0 eAWpAW"
+    className="src__StyledSelect-vnwid3-0 cXoLHA"
     id="perPage"
     onChange={[Function]}
     value={20}
@@ -144,19 +144,19 @@ exports[`<PerPageDropdown /> should match 100 or less results snapshot 1`] = `
 
 exports[`<PerPageDropdown /> should match the default snapshot 1`] = `
 <div
-  className="sc-bcXHqe hZbRzB"
+  className="sc-aXZVg ghSHhI"
 >
   <label
     htmlFor="perPage"
   >
     <span
-      className="src__StyledLabelText-sc-12l0n4z-0 kqemnn"
+      className="src__StyledLabelText-sc-12l0n4z-0 bhgkMV"
     >
       Results per page
     </span>
   </label>
   <select
-    className="src__StyledSelect-vnwid3-0 eAWpAW"
+    className="src__StyledSelect-vnwid3-0 cXoLHA"
     id="perPage"
     onChange={[Function]}
     value={20}
