@@ -2,121 +2,121 @@
 
 exports[`<IncentiveLevelSlip /> renders correctly 1`] = `
 <div
-  className="sc-bcXHqe cEyHpP"
+  className="sc-aXZVg hwQPcm"
 >
   <div
-    className="sc-gswNZR bkuEXh"
+    className="sc-gEvEer HhquE"
   >
     <div
-      className="sc-dkrFOg dFGLzW"
+      className="sc-eqUAAy bZGZej"
     >
       <h2
-        className="heading__StyledHeading-sc-1sovo83-0 itiMyw"
+        className="heading__StyledHeading-sc-1sovo83-0 kheylK"
         size="MEDIUM"
       >
         Incentive Warning
       </h2>
     </div>
     <div
-      className="sc-dkrFOg dFGLzW"
+      className="sc-eqUAAy bZGZej"
     >
       Date and time: 
       <span
-        className="sc-hLBbgP fXxVQs"
+        className="sc-fqkvVR oHKyH"
       >
         1 January 2019, 12:00 am
       </span>
     </div>
   </div>
   <div
-    className="sc-gswNZR bkuEXh"
+    className="sc-gEvEer HhquE"
   >
     <div
-      className="sc-dkrFOg dFGLzW"
+      className="sc-eqUAAy bZGZej"
     >
       Name: 
       <span
-        className="sc-hLBbgP czhjEI"
+        className="sc-fqkvVR kjOclf"
       >
         An Offender
       </span>
     </div>
     <div
-      className="sc-dkrFOg dFGLzW"
+      className="sc-eqUAAy bZGZej"
     >
       Number: 
       <span
-        className="sc-hLBbgP czhjEI"
+        className="sc-fqkvVR kjOclf"
       >
         ABC123
       </span>
     </div>
     <div
-      className="sc-dkrFOg dFGLzW"
+      className="sc-eqUAAy bZGZej"
     >
       Location: 
       <span
-        className="sc-hLBbgP czhjEI"
+        className="sc-fqkvVR kjOclf"
       >
         LEI-123
       </span>
     </div>
   </div>
   <div
-    className="sc-gswNZR bkuEXh"
+    className="sc-gEvEer HhquE"
   >
     <div
-      className="sc-dkrFOg dFGLzW"
+      className="sc-eqUAAy bZGZej"
     >
       Reason:
       <span
-        className="sc-hLBbgP czhjEI"
+        className="sc-fqkvVR kjOclf"
       >
         Refused: Did not want to work
       </span>
     </div>
   </div>
   <div
-    className="sc-gswNZR fPAUAi"
+    className="sc-gEvEer cNryjr"
   >
     <div
-      className="sc-dkrFOg dFGLzW"
+      className="sc-eqUAAy bZGZej"
     >
       Raised by: 
       <span
-        className="sc-hLBbgP fXxVQs"
+        className="sc-fqkvVR oHKyH"
       >
         A. Officer
       </span>
     </div>
     <div
-      className="sc-dkrFOg dFGLzW"
+      className="sc-eqUAAy bZGZej"
     >
       Date: 
       <span
-        className="sc-hLBbgP fXxVQs"
+        className="sc-fqkvVR oHKyH"
       >
         1 January 2019
       </span>
     </div>
   </div>
   <div
-    className="sc-gswNZR fPAUAi"
+    className="sc-gEvEer cNryjr"
   >
     <div
-      className="sc-dkrFOg dFGLzW"
+      className="sc-eqUAAy bZGZej"
     >
       Issued by: 
       <span
-        className="sc-hLBbgP fXxVQs"
+        className="sc-fqkvVR oHKyH"
       />
     </div>
     <div
-      className="sc-dkrFOg dFGLzW"
+      className="sc-eqUAAy bZGZej"
     >
       Date: 
       <span
-        className="sc-hLBbgP fXxVQs"
+        className="sc-fqkvVR oHKyH"
       >
         1 January 2019
       </span>
@@ -127,84 +127,84 @@ exports[`<IncentiveLevelSlip /> renders correctly 1`] = `
 
 exports[`<IncentiveLevelSlip /> renders with amendments 1`] = `
 <div
-  className="sc-bcXHqe cEyHpP"
+  className="sc-aXZVg hwQPcm"
 >
   <div
-    className="sc-gswNZR bkuEXh"
+    className="sc-gEvEer HhquE"
   >
     <div
-      className="sc-dkrFOg dFGLzW"
+      className="sc-eqUAAy bZGZej"
     >
       <h2
-        className="heading__StyledHeading-sc-1sovo83-0 itiMyw"
+        className="heading__StyledHeading-sc-1sovo83-0 kheylK"
         size="MEDIUM"
       >
         Incentive Warning
       </h2>
     </div>
     <div
-      className="sc-dkrFOg dFGLzW"
+      className="sc-eqUAAy bZGZej"
     >
       Date and time: 
       <span
-        className="sc-hLBbgP fXxVQs"
+        className="sc-fqkvVR oHKyH"
       >
         1 January 2019, 12:00 am
       </span>
     </div>
   </div>
   <div
-    className="sc-gswNZR bkuEXh"
+    className="sc-gEvEer HhquE"
   >
     <div
-      className="sc-dkrFOg dFGLzW"
+      className="sc-eqUAAy bZGZej"
     >
       Name: 
       <span
-        className="sc-hLBbgP czhjEI"
+        className="sc-fqkvVR kjOclf"
       >
         An Offender
       </span>
     </div>
     <div
-      className="sc-dkrFOg dFGLzW"
+      className="sc-eqUAAy bZGZej"
     >
       Number: 
       <span
-        className="sc-hLBbgP czhjEI"
+        className="sc-fqkvVR kjOclf"
       >
         ABC123
       </span>
     </div>
     <div
-      className="sc-dkrFOg dFGLzW"
+      className="sc-eqUAAy bZGZej"
     >
       Location: 
       <span
-        className="sc-hLBbgP czhjEI"
+        className="sc-fqkvVR kjOclf"
       >
         LEI-123
       </span>
     </div>
   </div>
   <div
-    className="sc-gswNZR bkuEXh"
+    className="sc-gEvEer HhquE"
   >
     <div
-      className="sc-dkrFOg dFGLzW"
+      className="sc-eqUAAy bZGZej"
     >
       Reason:
       <span
-        className="sc-hLBbgP czhjEI"
+        className="sc-fqkvVR kjOclf"
       >
         Refused: Did not want to work
       </span>
       <div
-        className="sc-eDvSVe kgbZYH"
+        className="sc-dcJsrY dGFGcL"
       >
         Amendment: 
         <span
-          className="sc-hLBbgP czhjEI"
+          className="sc-fqkvVR kjOclf"
         >
           Rescinded
         </span>
@@ -216,11 +216,11 @@ exports[`<IncentiveLevelSlip /> renders with amendments 1`] = `
         </div>
       </div>
       <div
-        className="sc-eDvSVe kgbZYH"
+        className="sc-dcJsrY dGFGcL"
       >
         Amendment: 
         <span
-          className="sc-hLBbgP czhjEI"
+          className="sc-fqkvVR kjOclf"
         >
           Updated
         </span>
@@ -234,46 +234,46 @@ exports[`<IncentiveLevelSlip /> renders with amendments 1`] = `
     </div>
   </div>
   <div
-    className="sc-gswNZR fPAUAi"
+    className="sc-gEvEer cNryjr"
   >
     <div
-      className="sc-dkrFOg dFGLzW"
+      className="sc-eqUAAy bZGZej"
     >
       Raised by: 
       <span
-        className="sc-hLBbgP fXxVQs"
+        className="sc-fqkvVR oHKyH"
       >
         A. Officer
       </span>
     </div>
     <div
-      className="sc-dkrFOg dFGLzW"
+      className="sc-eqUAAy bZGZej"
     >
       Date: 
       <span
-        className="sc-hLBbgP fXxVQs"
+        className="sc-fqkvVR oHKyH"
       >
         1 January 2019
       </span>
     </div>
   </div>
   <div
-    className="sc-gswNZR fPAUAi"
+    className="sc-gEvEer cNryjr"
   >
     <div
-      className="sc-dkrFOg dFGLzW"
+      className="sc-eqUAAy bZGZej"
     >
       Issued by: 
       <span
-        className="sc-hLBbgP fXxVQs"
+        className="sc-fqkvVR oHKyH"
       />
     </div>
     <div
-      className="sc-dkrFOg dFGLzW"
+      className="sc-eqUAAy bZGZej"
     >
       Date: 
       <span
-        className="sc-hLBbgP fXxVQs"
+        className="sc-fqkvVR oHKyH"
       >
         1 January 2019
       </span>
@@ -284,131 +284,131 @@ exports[`<IncentiveLevelSlip /> renders with amendments 1`] = `
 
 exports[`<IncentiveLevelSlip /> renders with an activity or area 1`] = `
 <div
-  className="sc-bcXHqe cEyHpP"
+  className="sc-aXZVg hwQPcm"
 >
   <div
-    className="sc-gswNZR bkuEXh"
+    className="sc-gEvEer HhquE"
   >
     <div
-      className="sc-dkrFOg dFGLzW"
+      className="sc-eqUAAy bZGZej"
     >
       <h2
-        className="heading__StyledHeading-sc-1sovo83-0 itiMyw"
+        className="heading__StyledHeading-sc-1sovo83-0 kheylK"
         size="MEDIUM"
       >
         Incentive Warning
       </h2>
     </div>
     <div
-      className="sc-dkrFOg dFGLzW"
+      className="sc-eqUAAy bZGZej"
     >
       Date and time: 
       <span
-        className="sc-hLBbgP fXxVQs"
+        className="sc-fqkvVR oHKyH"
       >
         1 January 2019, 12:00 am
       </span>
     </div>
   </div>
   <div
-    className="sc-gswNZR bkuEXh"
+    className="sc-gEvEer HhquE"
   >
     <div
-      className="sc-dkrFOg dFGLzW"
+      className="sc-eqUAAy bZGZej"
     >
       Name: 
       <span
-        className="sc-hLBbgP czhjEI"
+        className="sc-fqkvVR kjOclf"
       >
         An Offender
       </span>
     </div>
     <div
-      className="sc-dkrFOg dFGLzW"
+      className="sc-eqUAAy bZGZej"
     >
       Number: 
       <span
-        className="sc-hLBbgP czhjEI"
+        className="sc-fqkvVR kjOclf"
       >
         ABC123
       </span>
     </div>
     <div
-      className="sc-dkrFOg dFGLzW"
+      className="sc-eqUAAy bZGZej"
     >
       Location: 
       <span
-        className="sc-hLBbgP czhjEI"
+        className="sc-fqkvVR kjOclf"
       >
         LEI-123
       </span>
     </div>
     <div
-      className="sc-dkrFOg dFGLzW"
+      className="sc-eqUAAy bZGZej"
     >
       Activity or area: 
       <span
-        className="sc-hLBbgP czhjEI"
+        className="sc-fqkvVR kjOclf"
       >
         Gym
       </span>
     </div>
   </div>
   <div
-    className="sc-gswNZR bkuEXh"
+    className="sc-gEvEer HhquE"
   >
     <div
-      className="sc-dkrFOg dFGLzW"
+      className="sc-eqUAAy bZGZej"
     >
       Reason:
       <span
-        className="sc-hLBbgP czhjEI"
+        className="sc-fqkvVR kjOclf"
       >
         Refused: Did not want to work
       </span>
     </div>
   </div>
   <div
-    className="sc-gswNZR fPAUAi"
+    className="sc-gEvEer cNryjr"
   >
     <div
-      className="sc-dkrFOg dFGLzW"
+      className="sc-eqUAAy bZGZej"
     >
       Raised by: 
       <span
-        className="sc-hLBbgP fXxVQs"
+        className="sc-fqkvVR oHKyH"
       >
         A. Officer
       </span>
     </div>
     <div
-      className="sc-dkrFOg dFGLzW"
+      className="sc-eqUAAy bZGZej"
     >
       Date: 
       <span
-        className="sc-hLBbgP fXxVQs"
+        className="sc-fqkvVR oHKyH"
       >
         1 January 2019
       </span>
     </div>
   </div>
   <div
-    className="sc-gswNZR fPAUAi"
+    className="sc-gEvEer cNryjr"
   >
     <div
-      className="sc-dkrFOg dFGLzW"
+      className="sc-eqUAAy bZGZej"
     >
       Issued by: 
       <span
-        className="sc-hLBbgP fXxVQs"
+        className="sc-fqkvVR oHKyH"
       />
     </div>
     <div
-      className="sc-dkrFOg dFGLzW"
+      className="sc-eqUAAy bZGZej"
     >
       Date: 
       <span
-        className="sc-hLBbgP fXxVQs"
+        className="sc-fqkvVR oHKyH"
       >
         1 January 2019
       </span>
@@ -419,133 +419,133 @@ exports[`<IncentiveLevelSlip /> renders with an activity or area 1`] = `
 
 exports[`<IncentiveLevelSlip /> renders with an issued by name 1`] = `
 <div
-  className="sc-bcXHqe cEyHpP"
+  className="sc-aXZVg hwQPcm"
 >
   <div
-    className="sc-gswNZR bkuEXh"
+    className="sc-gEvEer HhquE"
   >
     <div
-      className="sc-dkrFOg dFGLzW"
+      className="sc-eqUAAy bZGZej"
     >
       <h2
-        className="heading__StyledHeading-sc-1sovo83-0 itiMyw"
+        className="heading__StyledHeading-sc-1sovo83-0 kheylK"
         size="MEDIUM"
       >
         Incentive Warning
       </h2>
     </div>
     <div
-      className="sc-dkrFOg dFGLzW"
+      className="sc-eqUAAy bZGZej"
     >
       Date and time: 
       <span
-        className="sc-hLBbgP fXxVQs"
+        className="sc-fqkvVR oHKyH"
       >
         1 January 2019, 12:00 am
       </span>
     </div>
   </div>
   <div
-    className="sc-gswNZR bkuEXh"
+    className="sc-gEvEer HhquE"
   >
     <div
-      className="sc-dkrFOg dFGLzW"
+      className="sc-eqUAAy bZGZej"
     >
       Name: 
       <span
-        className="sc-hLBbgP czhjEI"
+        className="sc-fqkvVR kjOclf"
       >
         An Offender
       </span>
     </div>
     <div
-      className="sc-dkrFOg dFGLzW"
+      className="sc-eqUAAy bZGZej"
     >
       Number: 
       <span
-        className="sc-hLBbgP czhjEI"
+        className="sc-fqkvVR kjOclf"
       >
         ABC123
       </span>
     </div>
     <div
-      className="sc-dkrFOg dFGLzW"
+      className="sc-eqUAAy bZGZej"
     >
       Location: 
       <span
-        className="sc-hLBbgP czhjEI"
+        className="sc-fqkvVR kjOclf"
       >
         LEI-123
       </span>
     </div>
     <div
-      className="sc-dkrFOg dFGLzW"
+      className="sc-eqUAAy bZGZej"
     >
       Activity or area: 
       <span
-        className="sc-hLBbgP czhjEI"
+        className="sc-fqkvVR kjOclf"
       >
         Gym
       </span>
     </div>
   </div>
   <div
-    className="sc-gswNZR bkuEXh"
+    className="sc-gEvEer HhquE"
   >
     <div
-      className="sc-dkrFOg dFGLzW"
+      className="sc-eqUAAy bZGZej"
     >
       Reason:
       <span
-        className="sc-hLBbgP czhjEI"
+        className="sc-fqkvVR kjOclf"
       >
         Refused: Did not want to work
       </span>
     </div>
   </div>
   <div
-    className="sc-gswNZR fPAUAi"
+    className="sc-gEvEer cNryjr"
   >
     <div
-      className="sc-dkrFOg dFGLzW"
+      className="sc-eqUAAy bZGZej"
     >
       Raised by: 
       <span
-        className="sc-hLBbgP fXxVQs"
+        className="sc-fqkvVR oHKyH"
       >
         A. Officer
       </span>
     </div>
     <div
-      className="sc-dkrFOg dFGLzW"
+      className="sc-eqUAAy bZGZej"
     >
       Date: 
       <span
-        className="sc-hLBbgP fXxVQs"
+        className="sc-fqkvVR oHKyH"
       >
         1 January 2019
       </span>
     </div>
   </div>
   <div
-    className="sc-gswNZR fPAUAi"
+    className="sc-gEvEer cNryjr"
   >
     <div
-      className="sc-dkrFOg dFGLzW"
+      className="sc-eqUAAy bZGZej"
     >
       Issued by: 
       <span
-        className="sc-hLBbgP fXxVQs"
+        className="sc-fqkvVR oHKyH"
       >
         A. Officer
       </span>
     </div>
     <div
-      className="sc-dkrFOg dFGLzW"
+      className="sc-eqUAAy bZGZej"
     >
       Date: 
       <span
-        className="sc-hLBbgP fXxVQs"
+        className="sc-fqkvVR oHKyH"
       >
         1 January 2019
       </span>
