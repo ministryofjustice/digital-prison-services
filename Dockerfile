@@ -1,4 +1,4 @@
-FROM node:20.9-bullseye-slim as base
+FROM node:20.9-bullseye-slim as builder
 
 ARG BUILD_NUMBER
 ARG GIT_REF
