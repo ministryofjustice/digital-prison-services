@@ -18,6 +18,13 @@ export default ({ oauthApi, prisonApi, movementsService, nonAssociationsApi, log
         prisonApi.getCsraAssessments(res.locals, [offenderNo]),
       ])
 
+      const receptionOccupancy = await prisonApi.getReceptionsWithCapacity(res.locals, prisonerDetails.agencyId)
+
+      if (!receptionOccupancy.length) {
+        logger.info('Can not move to reception as already full to capacity')
+        return res.redirect(`/prisoner/${offenderNo}/reception-move/reception-full`)
+      }
+
       if (!userHasAccess({ userRoles, userCaseLoads, offenderCaseload: prisonerDetails.agencyId })) {
         logger.info('User does not have correct roles')
         return res.render('notFound.njk', { url: '/prisoner-search' })

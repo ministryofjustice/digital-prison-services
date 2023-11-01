@@ -112,6 +112,7 @@ const setup = ({
   curiousApi,
   incentivesApi,
   nonAssociationsApi,
+  restrictedPatientApi,
   adjudicationsApi,
   whereaboutsMaintenanceMode,
 }) => {
@@ -151,7 +152,7 @@ const setup = ({
   )
   router.use(
     '/prisoner/:offenderNo/add-case-note',
-    createCaseNoteRouter({ prisonApi, caseNotesApi, oauthApi, systemOauthClient, offenderSearchApi })
+    createCaseNoteRouter({ prisonApi, caseNotesApi, oauthApi, systemOauthClient, restrictedPatientApi })
   )
 
   if (whereaboutsMaintenanceMode) {
@@ -367,6 +368,7 @@ const setup = ({
       offenderSearchApi,
       curiousApi,
       incentivesApi,
+      restrictedPatientApi,
       adjudicationsApi,
       nonAssociationsApi,
     })

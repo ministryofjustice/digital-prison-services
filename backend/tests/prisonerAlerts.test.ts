@@ -2,7 +2,6 @@ import prisonerAlerts from '../controllers/prisonerProfile/prisonerAlerts'
 
 describe('prisoner alerts', () => {
   const offenderNo = 'G3878UK'
-  const systemContext = {}
   const prisonerProfileData = {
     activeAlertCount: 1,
     agencyName: 'Moorland Closed',
@@ -20,17 +19,15 @@ describe('prisoner alerts', () => {
   const bookingId = '14'
   const prisonApi = {}
   const oauthApi = {}
-  const prisonerProfileService = { getPrisonerProfileData: jest.fn().mockResolvedValue(prisonerProfileData) }
+  const prisonerProfileService = {}
   const referenceCodesService = {}
   const paginationService = {}
-  const prisonerSearchDetails = { hospital: null, isRestrictedPatient: false, indeterminateSentence: false }
-  const offenderSearchApi = {
-    getPrisonerDpsDetails: jest.fn().mockResolvedValue(prisonerSearchDetails),
-  }
-  const systemOauthClient = { getClientCredentialsTokens: jest.fn().mockResolvedValue(systemContext) }
+  const restrictedPatientApi = {}
+  const systemOauthClient = {}
 
   let req
   let res
+  let logError
   let controller
 
   beforeEach(() => {
@@ -54,12 +51,17 @@ describe('prisoner alerts', () => {
       status: jest.fn(),
     }
 
+    logError = jest.fn()
+
     req.originalUrl = '/alerts'
     req.get = jest.fn()
     req.get.mockReturnValue('localhost')
 
     // @ts-expect-error ts-migrate(2339) FIXME: Property 'getNeurodiversities' does not exist on type '{}'... Remove this comment to see the full error message
     oauthApi.userRoles = jest.fn().mockReturnValue([])
+
+    // @ts-expect-error ts-migrate(2339) FIXME: Property 'getPrisonerProfileData' does not exist o... Remove this comment to see the full error message
+    prisonerProfileService.getPrisonerProfileData = jest.fn().mockResolvedValue(prisonerProfileData)
 
     // @ts-expect-error ts-migrate(2339) FIXME: Property 'getDetails' does not exist on type '{}'.
     prisonApi.getDetails = jest.fn().mockResolvedValue({})
@@ -109,8 +111,10 @@ describe('prisoner alerts', () => {
       paginationService,
       prisonApi,
       oauthApi,
-      offenderSearchApi,
+      restrictedPatientApi,
       systemOauthClient,
+      // @ts-expect-error ts-migrate(2345) FIXME: Argument of type '{ prisonerProfileService: {}; re... Remove this comment to see the full error message
+      logError,
     })
   })
 
@@ -132,13 +136,8 @@ describe('prisoner alerts', () => {
       sort: 'dateCreated,desc',
       size: 20,
     })
-    expect(prisonerProfileService.getPrisonerProfileData).toHaveBeenCalledWith(
-      res.locals,
-      systemContext,
-      offenderNo,
-      false,
-      prisonerSearchDetails
-    )
+    // @ts-expect-error ts-migrate(2339) FIXME: Property 'getPrisonerProfileData' does not exist o... Remove this comment to see the full error message
+    expect(prisonerProfileService.getPrisonerProfileData).toHaveBeenCalledWith(res.locals, offenderNo, 'user1', false)
     // @ts-expect-error ts-migrate(2339) FIXME: Property 'getAlertTypes' does not exist on type '{... Remove this comment to see the full error message
     expect(referenceCodesService.getAlertTypes).toHaveBeenCalledWith(res.locals)
     expect(res.render).toHaveBeenCalledWith(
@@ -187,13 +186,8 @@ describe('prisoner alerts', () => {
       size: 20,
     })
 
-    expect(prisonerProfileService.getPrisonerProfileData).toHaveBeenCalledWith(
-      res.locals,
-      systemContext,
-      offenderNo,
-      false,
-      prisonerSearchDetails
-    )
+    // @ts-expect-error ts-migrate(2339) FIXME: Property 'getPrisonerProfileData' does not exist o... Remove this comment to see the full error message
+    expect(prisonerProfileService.getPrisonerProfileData).toHaveBeenCalledWith(res.locals, offenderNo, 'user1', false)
     expect(res.render).toHaveBeenCalledWith(
       'prisonerProfile/prisonerAlerts.njk',
       expect.objectContaining({
@@ -293,6 +287,7 @@ describe('prisoner alerts', () => {
     })
 
     it('should render the alerts template with the correctly formatted data', async () => {
+      // @ts-expect-error ts-migrate(2339) FIXME: Property 'getPrisonerProfileData' does not exist o... Remove this comment to see the full error message
       prisonerProfileService.getPrisonerProfileData = jest
         .fn()
         .mockResolvedValue({ prisonerProfileData, userCanEdit: true })

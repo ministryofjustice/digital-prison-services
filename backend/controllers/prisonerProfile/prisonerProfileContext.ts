@@ -1,19 +1,22 @@
-const getContext = ({ res, oauthApi, systemContext, prisonerSearchDetails }) => {
+const getContext = async ({ offenderNo, res, req, oauthApi, systemOauthClient, restrictedPatientApi }) => {
   if (res.locals.user === undefined) {
     return { context: res.locals, overrideAccess: false }
   }
   const {
     user: { allCaseloads },
   } = res.locals
+
+  const { username } = req.session.userDetails
   const userRoles = oauthApi.userRoles(res.locals)
 
   if (userRoles.map((userRole) => userRole.roleCode).includes('POM')) {
-    const agencyIds = allCaseloads.map((caseload) => caseload.caseLoadId)
-    const isRestrictedPatient =
-      prisonerSearchDetails.restrictedPatient && agencyIds.includes(prisonerSearchDetails.supportingPrisonId)
-
+    const isRestrictedPatient = await restrictedPatientApi.isCaseLoadRestrictedPatient(
+      res.locals,
+      offenderNo,
+      allCaseloads.map((caseload) => caseload.caseLoadId)
+    )
     if (isRestrictedPatient) {
-      const context = systemContext
+      const context = await systemOauthClient.getClientCredentialsTokens(username)
       return { context, overrideAccess: true }
     }
   }

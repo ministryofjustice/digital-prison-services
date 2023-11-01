@@ -2,10 +2,10 @@
 
 exports[`<ResultsFilter /> should match the default snapshot 1`] = `
 <div
-  className="sc-gswNZR iWxnRk"
+  className="sc-gEvEer hyraSt"
 >
   <div
-    className="sc-bcXHqe heAfAn"
+    className="sc-aXZVg jrUXEC"
   >
     0
      - 
@@ -20,10 +20,10 @@ exports[`<ResultsFilter /> should match the default snapshot 1`] = `
 
 exports[`<ResultsFilter /> should match the with children snapshot 1`] = `
 <div
-  className="sc-gswNZR iWxnRk"
+  className="sc-gEvEer hyraSt"
 >
   <div
-    className="sc-bcXHqe heAfAn"
+    className="sc-aXZVg jrUXEC"
   >
     21
      - 
@@ -34,19 +34,19 @@ exports[`<ResultsFilter /> should match the with children snapshot 1`] = `
      results
   </div>
   <div
-    className="sc-dkrFOg hmKNLv"
+    className="sc-eqUAAy gYpONi"
   >
     <label
       htmlFor="perPage"
     >
       <span
-        className="src__StyledLabelText-sc-12l0n4z-0 kqemnn"
+        className="src__StyledLabelText-sc-12l0n4z-0 bhgkMV"
       >
         Results per page
       </span>
     </label>
     <select
-      className="src__StyledSelect-vnwid3-0 eAWpAW"
+      className="src__StyledSelect-vnwid3-0 cXoLHA"
       id="perPage"
       onChange={[Function]}
       value={20}

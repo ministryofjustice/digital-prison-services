@@ -36,12 +36,8 @@ describe('Case notes controller', () => {
   const paginationService = {}
   const nunjucks = {}
   const oauthApi = {}
-  const systemOauthClient = { getClientCredentialsTokens: jest.fn() }
-  const offenderSearchApi = {
-    getPrisonerDpsDetails: jest
-      .fn()
-      .mockResolvedValue({ hospital: 'MDI', isRestrictedPatient: false, indeterminateSentence: false }),
-  }
+  const systemOauthClient = {}
+  const restrictedPatientApi = {}
 
   let controller
   let logError
@@ -117,7 +113,7 @@ describe('Case notes controller', () => {
       logError,
       oauthApi,
       systemOauthClient,
-      offenderSearchApi,
+      restrictedPatientApi,
     })
   })
 

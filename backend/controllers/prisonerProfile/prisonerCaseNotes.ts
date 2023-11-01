@@ -15,7 +15,7 @@ export default ({
   nunjucks,
   oauthApi,
   systemOauthClient,
-  offenderSearchApi,
+  restrictedPatientApi,
 }) => {
   const getTotalResults = async (locals, offenderNo, { type, subType, fromDate, toDate }) => {
     const { totalElements } = await caseNotesApi.getCaseNotes(locals, offenderNo, {
@@ -32,16 +32,14 @@ export default ({
 
   return async (req, res) => {
     const { offenderNo } = req.params
-    const { username } = req.session.userDetails
 
-    const systemContext = await systemOauthClient.getClientCredentialsTokens(username)
-    const prisonerSearchDetails = await offenderSearchApi.getPrisonerDpsDetails(systemContext, offenderNo)
-
-    const { context, overrideAccess } = getContext({
+    const { context, overrideAccess } = await getContext({
+      offenderNo,
       res,
+      req,
       oauthApi,
-      systemContext,
-      prisonerSearchDetails,
+      systemOauthClient,
+      restrictedPatientApi,
     })
 
     const fullUrl = new URL(`${req.protocol}://${req.get('host')}${req.originalUrl}`)
@@ -49,6 +47,7 @@ export default ({
     const { pageOffsetOption, showAll, type, subType, fromDate, toDate } = req.query
 
     const pageNumber = Math.floor((pageOffsetOption || 0) / perPage) || 0
+    const { username } = req.session.userDetails
 
     const caseNotes = await caseNotesApi.getCaseNotes(context, offenderNo, {
       pageNumber: showAll ? 0 : pageNumber,
@@ -84,10 +83,9 @@ export default ({
 
     const prisonerProfileData = await prisonerProfileService.getPrisonerProfileData(
       context,
-      systemContext,
       offenderNo,
-      overrideAccess,
-      prisonerSearchDetails
+      username,
+      overrideAccess
     )
 
     if (!prisonerProfileData.userCanEdit) {

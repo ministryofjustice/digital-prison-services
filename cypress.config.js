@@ -23,6 +23,7 @@ const allocationManager = require('./integration-tests/mockApis/allocationManage
 const delius = require('./integration-tests/mockApis/delius')
 const pathfinder = require('./integration-tests/mockApis/pathfinder')
 const socApi = require('./integration-tests/mockApis/soc')
+const restrictedPatientApi = require('./integration-tests/mockApis/restrictedPatient')
 const offenderSearch = require('./integration-tests/mockApis/offenderSearch')
 const complexity = require('./integration-tests/mockApis/complexity')
 const curiousApi = require('./integration-tests/mockApis/curiousApi')
@@ -288,6 +289,7 @@ module.exports = defineConfig({
           healthTypes,
           careNeeds,
           reasonableAdjustments,
+          agencies,
           prisonOffenderManagers,
           neurodiversities,
           neurodivergence,
@@ -373,6 +375,7 @@ module.exports = defineConfig({
         stubUserMe: ({ username, staffId, name }) => users.stubUserMe(username, staffId, name),
         stubPathFinderOffenderDetails: (details) => pathfinder.getOffenderDetails(details),
         stubSocOffenderDetails: (details) => socApi.stubGetOffenderDetails(details),
+        stubIsCaseLoadRestrictedPatient: (details) => restrictedPatientApi.stubIsCaseLoadRestrictedPatient(details),
         stubVisitsWithVisitors: ({ visitsWithVisitors, offenderBasicDetails }) =>
           Promise.all([
             prisonApi.stubVisitsWithVisitors(visitsWithVisitors),

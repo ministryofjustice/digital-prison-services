@@ -4,13 +4,13 @@ import prisonerProfileRedirect from '../controllers/prisonerProfile/prisonerProf
 
 const router = express.Router({ mergeParams: true })
 
-const controller = ({ prisonApi, caseNotesApi, oauthApi, systemOauthClient, offenderSearchApi }) => {
+const controller = ({ prisonApi, caseNotesApi, oauthApi, systemOauthClient, restrictedPatientApi }) => {
   const { index, post, areYouSure, confirm, recordIncentiveLevelInterruption } = caseNoteFactory({
     prisonApi,
     caseNotesApi,
     oauthApi,
     systemOauthClient,
-    offenderSearchApi,
+    restrictedPatientApi,
   })
 
   router.get('/', prisonerProfileRedirect({ path: '/add-case-note', handler: index }))

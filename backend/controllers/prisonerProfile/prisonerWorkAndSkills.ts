@@ -9,13 +9,9 @@ const eswePrisons = [
   'SLI', // Swaleside
 ]
 
-export default ({ prisonerProfileService, esweService, systemOauthClient, offenderSearchApi }) =>
+export default ({ prisonerProfileService, esweService }) =>
   async (req: e.Request, res: e.Response): Promise<void> => {
     const { offenderNo } = req.params
-    const { username } = req.session.userDetails
-
-    const systemContext = await systemOauthClient.getClientCredentialsTokens(username)
-    const prisonerSearchDetails = await offenderSearchApi.getPrisonerDpsDetails(systemContext, offenderNo)
 
     const [
       prisonerProfileData,
@@ -26,13 +22,7 @@ export default ({ prisonerProfileService, esweService, systemOauthClient, offend
       employabilitySkills,
     ] = await Promise.all<any>(
       [
-        prisonerProfileService.getPrisonerProfileData(
-          res.locals,
-          systemContext,
-          offenderNo,
-          false,
-          prisonerSearchDetails
-        ),
+        prisonerProfileService.getPrisonerProfileData(res.locals, offenderNo),
         esweService.getLearnerLatestAssessments(offenderNo),
         esweService.getLearnerGoals(offenderNo),
         esweService.getLearnerEducation(offenderNo),

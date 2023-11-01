@@ -19,11 +19,10 @@ export default ({
     paginationService,
     oauthApi,
     systemOauthClient,
-    offenderSearchApi,
+    restrictedPatientApi,
   }) =>
   async (req, res) => {
     const { offenderNo } = req.params
-    const { username } = req.session.userDetails
     const fullUrl = new URL(`${req.protocol}://${req.get('host')}${req.originalUrl}`)
 
     const errors = []
@@ -47,15 +46,15 @@ export default ({
             ...{ toDate: toDateMoment && toDateMoment.format('YYYY-MM-DD') },
           }
 
-    const systemContext = await systemOauthClient.getClientCredentialsTokens(username)
-    const prisonerSearchDetails = await offenderSearchApi.getPrisonerDpsDetails(systemContext, offenderNo)
-
-    const { context } = getContext({
+    const { context } = await getContext({
+      offenderNo,
       res,
+      req,
       oauthApi,
-      systemContext,
-      prisonerSearchDetails,
+      systemOauthClient,
+      restrictedPatientApi,
     })
+    const systemContext = await systemOauthClient.getClientCredentialsTokens(req.session.userDetails)
 
     const adjudicationsData = await adjudicationHistoryService.getAdjudications(
       context,

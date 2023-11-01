@@ -4,23 +4,23 @@ import courtCasesViewModel from './sentenceAndReleaseViewModels/courtCasesViewMo
 import { readableDateFormat } from '../../utils'
 import getContext from './prisonerProfileContext'
 
-export default ({ prisonerProfileService, prisonApi, systemOauthClient, oauthApi, offenderSearchApi }) =>
+export default ({ prisonerProfileService, prisonApi, systemOauthClient, oauthApi, restrictedPatientApi }) =>
   async (req, res) => {
     const { offenderNo } = req.params
 
     const { username } = req.session.userDetails
     const systemContext = await systemOauthClient.getClientCredentialsTokens(username)
-
-    const prisonerSearchDetails = await offenderSearchApi.getPrisonerDpsDetails(systemContext, offenderNo)
-    const { context } = getContext({
+    const { context } = await getContext({
+      offenderNo,
       res,
+      req,
       oauthApi,
-      systemContext,
-      prisonerSearchDetails,
+      systemOauthClient,
+      restrictedPatientApi,
     })
 
     const [prisonerProfileData, sentenceData, bookingDetails, offenceHistory] = await Promise.all([
-      prisonerProfileService.getPrisonerProfileData(context, systemContext, offenderNo, false, prisonerSearchDetails),
+      prisonerProfileService.getPrisonerProfileData(context, offenderNo),
       prisonApi.getPrisonerSentenceDetails(context, offenderNo),
       prisonApi.getDetails(context, offenderNo),
       prisonApi.getOffenceHistory(systemContext, offenderNo),
