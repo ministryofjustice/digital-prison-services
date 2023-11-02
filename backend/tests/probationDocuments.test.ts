@@ -1,94 +1,26 @@
 import { probationDocumentsFactory } from '../controllers/probationDocuments'
+import { Conviction } from '../api/deliusIntegrationApi'
 
 function aDocument(overrides = {}) {
   return {
     id: '1e593ff6-d5d6-4048-a671-cdeb8f65608b',
-    documentName: 'PRE-CONS.pdf',
+    name: 'PRE-CONS.pdf',
     author: 'Andy Marke',
-    type: {
-      code: 'PRECONS_DOCUMENT',
-      description: 'PNC previous convictions',
-    },
-    extendedDescription: 'Previous convictions as of 01/09/2019',
+    type: 'PNC previous convictions',
+    description: 'Previous convictions as of 01/09/2019',
     createdAt: '2019-09-10T00:00:00',
     ...overrides,
   }
 }
 
-function aConviction(overrides = {}) {
+function aConviction(overrides: Partial<Conviction> = {}): Conviction {
   return {
-    convictionId: 2500295345,
-    index: '1',
     active: true,
-    inBreach: false,
-    convictionDate: '2019-09-03',
-    referralDate: '2018-09-04',
-    offences: [
-      {
-        offenceId: 'M2500295343',
-        mainOffence: true,
-        detail: {
-          code: '00102',
-          description: 'Murder (incl abroad) of infants under 1 year of age - 00102',
-          mainCategoryCode: '001',
-          mainCategoryDescription: 'Murder',
-          mainCategoryAbbreviation: 'Murder',
-          ogrsOffenceCategory: 'Violence',
-          subCategoryCode: '02',
-          subCategoryDescription: 'Murder of infants under 1 year of age',
-          form20Code: '20',
-        },
-        offenceDate: '2018-08-04T00:00:00',
-        offenceCount: 1,
-        offenderId: 2500343964,
-        createdDatetime: '2019-09-04T12:13:48',
-        lastUpdatedDatetime: '2019-09-04T12:13:48',
-      },
-      {
-        offenceId: 'A2500108084',
-        mainOffence: false,
-        detail: {
-          code: '02801',
-          description:
-            'Burglary (dwelling) with intent to commit, or the commission of an offence triable only on indictment - 02801',
-          mainCategoryCode: '028',
-          mainCategoryDescription: 'Burglary in a dwelling',
-          mainCategoryAbbreviation: 'Burglary in a dwelling',
-          ogrsOffenceCategory: 'Burglary (Domestic)',
-          subCategoryCode: '01',
-          subCategoryDescription:
-            'Burglary (dwelling) with intent to commit, or the commission of, an offence triable only on indictment',
-          form20Code: '40',
-        },
-        offenceDate: '2019-09-02T00:00:00',
-        offenceCount: 3,
-        createdDatetime: '2019-09-04T12:23:01',
-        lastUpdatedDatetime: '2019-09-04T12:23:01',
-      },
-    ],
-    sentence: {
-      description: 'CJA - Indeterminate Public Prot.',
-      originalLength: 5,
-      originalLengthUnits: 'Years',
-      secondLength: 5,
-      secondLengthUnits: 'Years',
-      defaultLength: 60,
-      lengthInDays: 1826,
-    },
-    latestCourtAppearanceOutcome: {
-      code: '303',
-      description: 'CJA - Indeterminate Public Prot.',
-    },
-    custody: {
-      bookingNumber: 'V74111',
-      institution: {
-        institutionId: 2500004521,
-        isEstablishment: true,
-        code: 'BWIHMP',
-        description: 'Berwyn (HMP)',
-        institutionName: 'Berwyn (HMP)',
-      },
-    },
+    date: new Date(Date.parse('2018-09-04')),
+    offence: 'Murder of infants under 1 year of age',
+    title: 'CJA - Indeterminate Public Prot. (5 Years)',
+    institutionName: 'Berwyn (HMP)',
+    documents: [],
     ...overrides,
   }
 }
@@ -128,10 +60,8 @@ describe('Probation documents', () => {
     getDetails: jest.fn(),
     userCaseLoads: jest.fn(),
   }
-  const communityApi = {
-    getOffenderConvictions: jest.fn(),
-    getOffenderDetails: jest.fn(),
-    getOffenderDocuments: jest.fn(),
+  const deliusIntegrationApi = {
+    getProbationDocuments: jest.fn(),
   }
   const systemOauthClient = {
     getClientCredentialsTokens: jest.fn(),
@@ -145,9 +75,7 @@ describe('Probation documents', () => {
       prisonApi.userCaseLoads = jest.fn()
       hmppsManageUsersApi.currentUser = jest.fn()
       oauthApi.userRoles = jest.fn()
-      communityApi.getOffenderConvictions = jest.fn()
-      communityApi.getOffenderDetails = jest.fn()
-      communityApi.getOffenderDocuments = jest.fn()
+      deliusIntegrationApi.getProbationDocuments = jest.fn()
       systemOauthClient.getClientCredentialsTokens = jest.fn()
       systemOauthClient.getClientCredentialsTokens.mockReturnValue({})
       hmppsManageUsersApi.currentUser.mockReturnValue({
@@ -174,15 +102,12 @@ describe('Probation documents', () => {
       let page
 
       beforeEach(() => {
-        communityApi.getOffenderConvictions.mockReturnValue([])
-        communityApi.getOffenderDetails.mockReturnValue({
-          firstName: 'John',
-          surname: 'Smith',
-          otherIds: {
+        deliusIntegrationApi.getProbationDocuments.mockReturnValue({
+          name: {
             crn: 'X123456',
+            firstName: 'John',
+            surname: 'Smith',
           },
-        })
-        communityApi.getOffenderDocuments.mockReturnValue({
           documents: [],
           convictions: [],
         })
@@ -190,7 +115,7 @@ describe('Probation documents', () => {
           oauthApi,
           hmppsManageUsersApi,
           prisonApi,
-          communityApi,
+          deliusIntegrationApi,
           systemOauthClient
         ).displayProbationDocumentsPage
         res.render = jest.fn()
@@ -244,7 +169,7 @@ describe('Probation documents', () => {
       })
 
       it('should supply page with offender related document', async () => {
-        communityApi.getOffenderDocuments.mockReturnValue({
+        deliusIntegrationApi.getProbationDocuments.mockReturnValue({
           documents: [aDocument({ id: '1' }), aDocument({ id: '2' })],
           convictions: [],
         })
@@ -262,44 +187,14 @@ describe('Probation documents', () => {
         )
       })
 
-      it('should sort offender related documents by createdAt', async () => {
-        communityApi.getOffenderDocuments.mockReturnValue({
-          documents: [
-            aDocument({ id: '1', createdAt: '2019-09-09T00:00:00' }),
-            aDocument({ id: '2', createdAt: '2019-09-10T00:00:00' }),
-            aDocument({ id: '3', createdAt: '2019-09-08T00:00:00' }),
-          ],
-          convictions: [],
-        })
-
-        await page(req, res)
-
-        expect(res.render).toHaveBeenCalledWith(
-          'probationDocuments.njk',
-          expect.objectContaining({
-            documents: {
-              offenderDocuments: [
-                expect.objectContaining({ id: '2' }),
-                expect.objectContaining({ id: '1' }),
-                expect.objectContaining({ id: '3' }),
-              ],
-              convictions: [],
-            },
-          })
-        )
-      })
-
       it('should supply page with mapped offender related document', async () => {
-        communityApi.getOffenderDocuments.mockReturnValue({
+        deliusIntegrationApi.getProbationDocuments.mockReturnValue({
           documents: [
             aDocument({
-              documentName: 'PRE-CONS.pdf',
+              name: 'PRE-CONS.pdf',
               author: 'Kate Bracket',
-              type: {
-                code: 'PRECONS_DOCUMENT',
-                description: 'PNC previous convictions',
-              },
-              extendedDescription: 'Previous convictions as of 01/09/2019',
+              type: 'PNC previous convictions',
+              description: 'Previous convictions as of 01/09/2019',
               createdAt: '2019-09-10T00:00:00',
             }),
           ],
@@ -315,9 +210,9 @@ describe('Probation documents', () => {
               offenderDocuments: [
                 {
                   author: 'Kate Bracket',
-                  date: '10/09/2019',
+                  createdAt: '2019-09-10T00:00:00',
                   description: 'Previous convictions as of 01/09/2019',
-                  documentName: 'PRE-CONS.pdf',
+                  name: 'PRE-CONS.pdf',
                   id: '1e593ff6-d5d6-4048-a671-cdeb8f65608b',
                   type: 'PNC previous convictions',
                 },
@@ -328,7 +223,10 @@ describe('Probation documents', () => {
         )
       })
       it('should allow page to be displayed when no documents at all', async () => {
-        communityApi.getOffenderDocuments.mockReturnValue({})
+        deliusIntegrationApi.getProbationDocuments.mockReturnValue({
+          documents: [],
+          convictions: [],
+        })
 
         await page(req, res)
 
@@ -344,8 +242,7 @@ describe('Probation documents', () => {
       })
 
       it('should allow page to be displayed when no documents but with convictions', async () => {
-        communityApi.getOffenderConvictions.mockReturnValue([aConviction({ convictionId: 1 })])
-        communityApi.getOffenderDocuments.mockReturnValue({})
+        deliusIntegrationApi.getProbationDocuments.mockReturnValue({ documents: [], convictions: [aConviction()] })
 
         await page(req, res)
 
@@ -365,22 +262,11 @@ describe('Probation documents', () => {
       })
 
       it('should supply page with conviction related document', async () => {
-        communityApi.getOffenderConvictions.mockReturnValue([
-          aConviction({ convictionId: 1 }),
-          aConviction({ convictionId: 2 }),
-        ])
-
-        communityApi.getOffenderDocuments.mockReturnValue({
+        deliusIntegrationApi.getProbationDocuments.mockReturnValue({
           documents: [],
           convictions: [
-            {
-              convictionId: '1',
-              documents: [aDocument({ id: '1' }), aDocument({ id: '2' })],
-            },
-            {
-              convictionId: '2',
-              documents: [aDocument({ id: '3' }), aDocument({ id: '4' })],
-            },
+            { documents: [aDocument({ id: '1' }), aDocument({ id: '2' })] },
+            { documents: [aDocument({ id: '3' }), aDocument({ id: '4' })] },
           ],
         })
 
@@ -403,61 +289,18 @@ describe('Probation documents', () => {
           })
         )
       })
-      it('should supply page with conviction related documents sorted by createdAt', async () => {
-        communityApi.getOffenderConvictions.mockReturnValue([aConviction({ convictionId: 1 })])
-
-        communityApi.getOffenderDocuments.mockReturnValue({
-          documents: [],
-          convictions: [
-            {
-              convictionId: '1',
-              documents: [
-                aDocument({ id: '1', createdAt: '2019-09-09T00:00:00' }),
-                aDocument({ id: '2', createdAt: '2019-09-10T00:00:00' }),
-                aDocument({ id: '3', createdAt: '2019-09-08T00:00:00' }),
-              ],
-            },
-          ],
-        })
-
-        await page(req, res)
-
-        expect(res.render).toHaveBeenCalledWith(
-          'probationDocuments.njk',
-          expect.objectContaining({
-            documents: {
-              offenderDocuments: [],
-              convictions: expect.objectContaining([
-                expect.objectContaining({
-                  documents: [
-                    expect.objectContaining({ id: '2' }),
-                    expect.objectContaining({ id: '1' }),
-                    expect.objectContaining({ id: '3' }),
-                  ],
-                }),
-              ]),
-            },
-          })
-        )
-      })
 
       it('should supply page with mapped document for conviction', async () => {
-        communityApi.getOffenderConvictions.mockReturnValue([aConviction({ convictionId: 1 })])
-
-        communityApi.getOffenderDocuments.mockReturnValue({
+        deliusIntegrationApi.getProbationDocuments.mockReturnValue({
           documents: [],
           convictions: [
             {
-              convictionId: '1',
               documents: [
                 aDocument({
-                  documentName: 'PRE-CONS.pdf',
+                  name: 'PRE-CONS.pdf',
                   author: 'Kate Bracket',
-                  type: {
-                    code: 'PRECONS_DOCUMENT',
-                    description: 'PNC previous convictions',
-                  },
-                  extendedDescription: 'Previous convictions as of 01/09/2019',
+                  type: 'PNC previous convictions',
+                  description: 'Previous convictions as of 01/09/2019',
                   createdAt: '2019-09-10T00:00:00',
                 }),
               ],
@@ -477,9 +320,9 @@ describe('Probation documents', () => {
                   documents: [
                     {
                       author: 'Kate Bracket',
-                      date: '10/09/2019',
+                      createdAt: '2019-09-10T00:00:00',
                       description: 'Previous convictions as of 01/09/2019',
-                      documentName: 'PRE-CONS.pdf',
+                      name: 'PRE-CONS.pdf',
                       id: '1e593ff6-d5d6-4048-a671-cdeb8f65608b',
                       type: 'PNC previous convictions',
                     },
@@ -492,10 +335,9 @@ describe('Probation documents', () => {
       })
 
       it('should supply page with each conviction', async () => {
-        communityApi.getOffenderConvictions.mockReturnValue([
-          aConviction({ active: true }),
-          aConviction({ active: false }),
-        ])
+        deliusIntegrationApi.getProbationDocuments.mockReturnValue({
+          convictions: [aConviction({ active: true }), aConviction({ active: false })],
+        })
 
         await page(req, res)
 
@@ -506,45 +348,9 @@ describe('Probation documents', () => {
       })
 
       it('should use main offence for conviction', async () => {
-        communityApi.getOffenderConvictions.mockReturnValue([
-          aConviction({
-            offences: [
-              {
-                mainOffence: false,
-                detail: {
-                  code: '00102',
-                  description: 'Murder (incl abroad) of infants under 1 year of age - 00102',
-                  subCategoryDescription: 'Murder of infants under 1 year of age',
-                  form20Code: '20',
-                },
-                offenceDate: '2018-08-04T00:00:00',
-                offenceCount: 1,
-              },
-              {
-                mainOffence: true,
-                detail: {
-                  code: '00102',
-                  description: 'Treason- 00102',
-                  subCategoryDescription: 'Treason',
-                  form20Code: '20',
-                },
-                offenceDate: '2018-08-04T00:00:00',
-                offenceCount: 1,
-              },
-              {
-                mainOffence: false,
-                detail: {
-                  code: '00102',
-                  description: 'Murder (incl abroad) of infants under 1 year of age - 00102',
-                  subCategoryDescription: 'Murder of infants under 1 year of age',
-                  form20Code: '20',
-                },
-                offenceDate: '2018-08-04T00:00:00',
-                offenceCount: 1,
-              },
-            ],
-          }),
-        ])
+        deliusIntegrationApi.getProbationDocuments.mockReturnValue({
+          convictions: [aConviction({ offence: 'Treason' })],
+        })
 
         await page(req, res)
 
@@ -554,89 +360,10 @@ describe('Probation documents', () => {
         )
       })
 
-      it('should use sentence with length when present', async () => {
-        communityApi.getOffenderConvictions.mockReturnValue([
-          aConviction({
-            sentence: {
-              description: 'CJA - Indeterminate Public Prot.',
-              originalLength: 99,
-              originalLengthUnits: 'Years',
-              secondLength: 5,
-              secondLengthUnits: 'Years',
-              defaultLength: 60,
-              lengthInDays: 1826,
-            },
-          }),
-        ])
-
-        await page(req, res)
-
-        expect(res.render).toHaveBeenCalledWith(
-          'probationDocuments.njk',
-          documentsWithSingleConvictionMatching({ title: 'CJA - Indeterminate Public Prot. (99 Years)' })
-        )
-      })
-
-      it('should just use sentence when length not present', async () => {
-        communityApi.getOffenderConvictions.mockReturnValue([
-          aConviction({
-            sentence: {
-              description: 'CJA - Indeterminate Public Prot.',
-            },
-          }),
-        ])
-
-        await page(req, res)
-
-        expect(res.render).toHaveBeenCalledWith(
-          'probationDocuments.njk',
-          documentsWithSingleConvictionMatching({ title: 'CJA - Indeterminate Public Prot.' })
-        )
-      })
-
-      it('should just use latest court outcome when no sentence passed', async () => {
-        const conviction = aConviction({
-          latestCourtAppearanceOutcome: {
-            description: 'Pre Sentence Report',
-          },
-        })
-        delete conviction.sentence
-
-        communityApi.getOffenderConvictions.mockReturnValue([conviction])
-
-        await page(req, res)
-
-        expect(res.render).toHaveBeenCalledWith(
-          'probationDocuments.njk',
-          documentsWithSingleConvictionMatching({ title: 'Pre Sentence Report' })
-        )
-      })
-
-      it('should format referral date', async () => {
-        communityApi.getOffenderConvictions.mockReturnValue([
-          aConviction({
-            referralDate: '2018-09-04',
-          }),
-        ])
-
-        await page(req, res)
-
-        expect(res.render).toHaveBeenCalledWith(
-          'probationDocuments.njk',
-          documentsWithSingleConvictionMatching({ date: '04/09/2018' })
-        )
-      })
-
       it('should supply institution name when in custody', async () => {
-        communityApi.getOffenderConvictions.mockReturnValue([
-          aConviction({
-            custody: {
-              institution: {
-                institutionName: 'Berwyn (HMP)',
-              },
-            },
-          }),
-        ])
+        deliusIntegrationApi.getProbationDocuments.mockReturnValue({
+          convictions: [aConviction({ institutionName: 'Berwyn (HMP)' })],
+        })
 
         await page(req, res)
 
@@ -647,11 +374,11 @@ describe('Probation documents', () => {
       })
 
       it('should supply offender details from probation', async () => {
-        communityApi.getOffenderDetails.mockReturnValue({
-          firstName: 'John',
-          surname: 'Smith',
-          otherIds: {
-            crn: 'X123456',
+        deliusIntegrationApi.getProbationDocuments.mockReturnValue({
+          crn: 'X123456',
+          name: {
+            forename: 'John',
+            surname: 'Smith',
           },
         })
 
@@ -672,7 +399,10 @@ describe('Probation documents', () => {
         systemOauthClient.getClientCredentialsTokens.mockReturnValue({ token: 'ABC' })
         await page(req, res)
 
-        expect(communityApi.getOffenderConvictions).toHaveBeenCalledWith({ token: 'ABC' }, { offenderNo: 'G9542VP' })
+        expect(deliusIntegrationApi.getProbationDocuments).toHaveBeenCalledWith(
+          { token: 'ABC' },
+          { offenderNo: 'G9542VP' }
+        )
       })
       describe('access to the page based on role and caseload', () => {
         it('should not allow access to page if user does not have role', async () => {
@@ -779,13 +509,12 @@ describe('Probation documents', () => {
 
       beforeEach(() => {
         oauthApi.userRoles.mockReturnValue([{ roleCode: 'VIEW_PROBATION_DOCUMENTS' }])
-        communityApi.getOffenderConvictions.mockReturnValue([])
-        communityApi.getOffenderDetails.mockReturnValue({})
+        deliusIntegrationApi.getProbationDocuments.mockReturnValue({})
         page = probationDocumentsFactory(
           oauthApi,
           hmppsManageUsersApi,
           prisonApi,
-          communityApi,
+          deliusIntegrationApi,
           systemOauthClient
         ).displayProbationDocumentsPage
         res.render = jest.fn()
@@ -795,8 +524,7 @@ describe('Probation documents', () => {
 
       describe('when offender not found in probation', () => {
         beforeEach(() => {
-          communityApi.getOffenderConvictions.mockReturnValue([])
-          communityApi.getOffenderDetails.mockRejectedValue(error('Not found', 404))
+          deliusIntegrationApi.getProbationDocuments.mockRejectedValue(error('Not found', 404))
         })
         it('should render page with offender not found message', async () => {
           await page(req, res)
@@ -815,9 +543,7 @@ describe('Probation documents', () => {
       })
       describe('when offender find results in error', () => {
         beforeEach(() => {
-          communityApi.getOffenderConvictions.mockReturnValue([])
-          communityApi.getOffenderDetails.mockRejectedValue(error('Server error', 503))
-          communityApi.getOffenderDocuments.mockReturnValue([])
+          deliusIntegrationApi.getProbationDocuments.mockRejectedValue(error('Server error', 503))
         })
         it('should render page with system error message', async () => {
           await page(req, res)

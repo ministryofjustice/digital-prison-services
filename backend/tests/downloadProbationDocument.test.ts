@@ -1,10 +1,11 @@
 import { downloadProbationDocumentFactory } from '../controllers/downloadProbationDocument'
+import { deliusIntegrationApiFactory } from '../api/deliusIntegrationApi'
 
 describe('Download probation documents', () => {
   const oauthApi = {}
   const hmppsManageUsersApi = {}
   const prisonApi = {}
-  const communityApi = {}
+  const deliusIntegrationApi = {}
   const systemOauthClient = {}
 
   describe('Controller', () => {
@@ -21,8 +22,8 @@ describe('Download probation documents', () => {
       prisonApi.userCaseLoads = jest.fn()
       // @ts-expect-error ts-migrate(2339) FIXME: Property 'getDetails' does not exist on type '{}'... Remove this comment to see the full error message
       prisonApi.getDetails = jest.fn()
-      // @ts-expect-error ts-migrate(2339) FIXME: Property 'pipeOffenderDocument' does not exist on ... Remove this comment to see the full error message
-      communityApi.pipeOffenderDocument = jest.fn()
+      // @ts-expect-error ts-migrate(2339) FIXME: Property 'downloadDocument' does not exist on type '{}'... Remove this comment to see the full error message
+      deliusIntegrationApi.downloadDocument = jest.fn()
       // @ts-expect-error ts-migrate(2339) FIXME: Property 'getClientCredentialsTokens' does not exi... Remove this comment to see the full error message
       systemOauthClient.getClientCredentialsTokens = jest.fn()
 
@@ -49,7 +50,7 @@ describe('Download probation documents', () => {
         page = downloadProbationDocumentFactory(
           oauthApi,
           hmppsManageUsersApi,
-          communityApi,
+          deliusIntegrationApi,
           systemOauthClient,
           prisonApi
         ).downloadDocument
@@ -67,8 +68,8 @@ describe('Download probation documents', () => {
 
         await page(req, res)
 
-        // @ts-expect-error ts-migrate(2339) FIXME: Property 'pipeOffenderDocument' does not exist on ... Remove this comment to see the full error message
-        expect(communityApi.pipeOffenderDocument).toHaveBeenCalledWith(
+        // @ts-expect-error ts-migrate(2339) FIXME: Property 'downloadDocument' does not exist on ... Remove this comment to see the full error message
+        expect(deliusIntegrationApi.downloadDocument).toHaveBeenCalledWith(
           { token: 'abc' },
           {
             documentId: '123',
@@ -91,8 +92,8 @@ describe('Download probation documents', () => {
 
           await page(req, res)
 
-          // @ts-expect-error ts-migrate(2339) FIXME: Property 'pipeOffenderDocument' does not exist on ... Remove this comment to see the full error message
-          expect(communityApi.pipeOffenderDocument).toHaveBeenCalled()
+          // @ts-expect-error ts-migrate(2339) FIXME: Property 'downloadDocument' does not exist on ... Remove this comment to see the full error message
+          expect(deliusIntegrationApi.downloadDocument).toHaveBeenCalled()
         })
         it('should render page with unavailable message with missing role', async () => {
           // @ts-expect-error ts-migrate(2339) FIXME: Property 'userRoles' does not exist on type '{}'.

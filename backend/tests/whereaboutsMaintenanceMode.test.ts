@@ -37,7 +37,7 @@ describe('Whereabouts maintenance mode flag is true', () => {
       prisonApi: '',
       whereaboutsApi: '',
       oauthApi: '',
-      communityApi: '',
+      deliusIntegrationApi: '',
       dataComplianceApi: '',
       keyworkerApi: '',
       caseNotesApi: '',

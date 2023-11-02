@@ -18,7 +18,7 @@
       <div class="govuk-grid-column-one-third">
         <div class="govuk-grid-row">
           <div class="govuk-grid-column-one-half">
-            {{ conviction.date }}
+            {{ conviction.date | formatTimestampToDate }}
           </div>
           <div class="govuk-grid-column-one-half">
             {% if conviction.active %}
@@ -45,7 +45,7 @@
 {% macro documentDetail(document, offenderDetails) %}
   <div class="govuk-grid-row">
     <div class="govuk-grid-column-full">
-      <a class="qa-document-link" href="/offenders/{{offenderDetails.offenderNo}}/probation-documents/{{document.id}}/download">{{ document.documentName }}</a>
+      <a class="qa-document-link" href="/offenders/{{offenderDetails.offenderNo}}/probation-documents/{{document.id}}/download">{{ document.name }}</a>
     </div>
     <div class="govuk-grid-column-full">
       {{ document.type}} created by {{ document.author }}
@@ -67,7 +67,7 @@
           html: documentDetail(document, offenderDetails)
         },
         {
-          text: document.date
+          text: document.createdAt | formatTimestampToDate
         }
       ]), rows) %}
     {% endfor %}

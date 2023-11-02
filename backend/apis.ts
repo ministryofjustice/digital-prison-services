@@ -5,7 +5,7 @@ import config from './config'
 import { prisonApiFactory } from './api/prisonApi'
 import { oauthApiFactory } from './api/oauthApi'
 import { whereaboutsApiFactory } from './api/whereaboutsApi'
-import { communityApiFactory } from './api/communityApi'
+import { deliusIntegrationApiFactory } from './api/deliusIntegrationApi'
 import { dataComplianceApiFactory } from './api/dataComplianceApi'
 import { keyworkerApiFactory } from './api/keyworkerApi'
 import { restrictedPatientApiFactory } from './api/restrictedPatientApi'
@@ -36,12 +36,11 @@ export const whereaboutsApi = whereaboutsApiFactory(
   })
 )
 
-export const communityApi = communityApiFactory(
+export const deliusIntegrationApi = deliusIntegrationApiFactory(
   clientFactory({
-    baseUrl: config.apis.community.url,
-    timeout: config.apis.community.timeoutSeconds * 1000,
-  }),
-  config.apis.community.apiPrefix
+    baseUrl: config.apis.deliusIntegration.url,
+    timeout: config.apis.deliusIntegration.timeoutSeconds * 1000,
+  })
 )
 
 export const oauthApi = oauthApiFactory(
@@ -164,7 +163,7 @@ export default {
   whereaboutsApi,
   oauthApi,
   hmppsManageUsersApi,
-  communityApi,
+  deliusIntegrationApi,
   dataComplianceApi,
   keyworkerApi,
   caseNotesApi,
