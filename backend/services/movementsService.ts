@@ -12,8 +12,8 @@ export const movementsServiceFactory = (prisonApi, systemOauthClient, incentives
     return toMap('offenderNo', assessments)
   }
 
-  const getIepMap = async (context, bookingIds) => {
-    const iepData = (await incentivesApi.getIepSummaryForBookingIds(context, bookingIds)) || []
+  const getIepMap = async (systemContext, bookingIds) => {
+    const iepData = (await incentivesApi.getIepSummaryForBookingIds(systemContext, bookingIds)) || []
     return toMap('bookingId', iepData)
   }
 

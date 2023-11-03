@@ -51,7 +51,7 @@ context('Prisoner change incentive level details', () => {
           beforeSubmission: {
             request: {
               method: 'GET',
-              urlPattern: '/incentives/iep/reviews/booking/[0-9]+?\\?.+?',
+              urlPattern: '/incentives/incentive-reviews/booking/[0-9]+?\\?.+?',
             },
             response: {
               headers: {
@@ -64,7 +64,7 @@ context('Prisoner change incentive level details', () => {
           afterSubmission: {
             request: {
               method: 'GET',
-              urlPattern: '/incentives/iep/reviews/booking/[0-9]+?\\?.+?',
+              urlPattern: '/incentives/incentive-reviews/booking/[0-9]+?\\?.+?',
             },
             response: {
               headers: {
@@ -122,7 +122,7 @@ context('Prisoner change incentive level details', () => {
             beforeSubmission: {
               request: {
                 method: 'GET',
-                urlPattern: '/incentives/iep/reviews/booking/[0-9]+?\\?.+?',
+                urlPattern: '/incentives/incentive-reviews/booking/[0-9]+?\\?.+?',
               },
               response: {
                 headers: {
@@ -135,7 +135,7 @@ context('Prisoner change incentive level details', () => {
             afterSubmission: {
               request: {
                 method: 'GET',
-                urlPattern: '/incentives/iep/reviews/booking/[0-9]+?\\?.+?',
+                urlPattern: '/incentives/incentive-reviews/booking/[0-9]+?\\?.+?',
               },
               response: {
                 headers: {

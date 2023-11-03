@@ -1,4 +1,4 @@
-# Prison Staff Hub UI App
+# Digital Prison Services UI
 
 Application can be built with for dev mode
 

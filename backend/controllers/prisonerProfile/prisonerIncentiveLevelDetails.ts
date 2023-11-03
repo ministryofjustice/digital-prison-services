@@ -2,6 +2,7 @@ import moment from 'moment'
 import type apis from '../../apis'
 import type { IepSummaryDetail } from '../../api/incentivesApi'
 import { putLastNameFirst, properCaseName, formatName, daysSince } from '../../utils'
+import systemOauthClients from '../../api/systemOauthClient'
 
 type HistoryDetail = IepSummaryDetail & {
   iepEstablishment: string
@@ -52,10 +53,12 @@ export default ({
     prisonApi,
     incentivesApi,
     oauthApi,
+    systemOauthClient,
   }: {
     prisonApi: typeof apis.prisonApi
     incentivesApi: typeof apis.incentivesApi
     oauthApi: typeof apis.oauthApi
+    systemOauthClient: typeof systemOauthClients
   }) =>
   async (req, res) => {
     const { offenderNo } = req.params
@@ -77,10 +80,10 @@ export default ({
       )
 
       const userCanMaintainIEP = userRoles.find((role) => role.roleCode === 'MAINTAIN_IEP')
-
+      const systemContext = await systemOauthClient.getClientCredentialsTokens(req.session.userDetails)
       let iepSummary
       try {
-        iepSummary = await incentivesApi.getIepSummaryForBooking(res.locals, bookingId, true)
+        iepSummary = await incentivesApi.getIepSummaryForBooking(systemContext, bookingId, true)
       } catch (error) {
         if (error.response.status === 404) {
           const noResultsFoundMessage = `${formatName(firstName, lastName)} has no incentive level history`
