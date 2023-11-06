@@ -104,7 +104,7 @@ export const movementsServiceFactory = (prisonApi, systemOauthClient, incentives
     const systemContext = await systemOauthClient.getClientCredentialsTokens()
     const [alerts, iepMap, assessmentMap] = await Promise.all([
       getActiveAlerts(systemContext, offenderNumbers),
-      getIepMap(context, bookingIds),
+      getIepMap(systemContext, bookingIds),
       getAssessmentMap(context, offenderNumbers),
     ])
     const movementsWithAlerts = addAlerts(movements, alerts)
@@ -129,7 +129,7 @@ export const movementsServiceFactory = (prisonApi, systemOauthClient, incentives
 
     const [alerts, iepMap, recentMovementsMap] = await Promise.all([
       getActiveAlerts(systemContext, offenderNumbers),
-      getIepMap(context, bookingIds),
+      getIepMap(systemContext, bookingIds),
       getRecentMovementsMap(systemContext, offenderNumbers),
     ])
 
@@ -148,7 +148,7 @@ export const movementsServiceFactory = (prisonApi, systemOauthClient, incentives
 
     const [alerts, iepMap, assessmentMap, recentMovementsMap] = await Promise.all([
       getActiveAlerts(systemContext, offenderNumbers),
-      getIepMap(context, bookingIds),
+      getIepMap(systemContext, bookingIds),
       getAssessmentMap(context, offenderNumbers),
       getRecentMovementsMap(systemContext, offenderNumbers),
     ])

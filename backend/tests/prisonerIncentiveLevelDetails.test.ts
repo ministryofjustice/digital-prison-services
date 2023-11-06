@@ -8,7 +8,10 @@ describe('Prisoner incentive level details', () => {
   const prisonApi = {}
   const incentivesApi = {} as jest.Mocked<typeof apis.incentivesApi>
   const oauthApi = {}
-
+  const systemOauthClient = {
+    getClientCredentialsTokens: jest.fn(),
+  }
+  const systemContext = { access_token: 'XXX' }
   const iepSummaryForBooking: IepSummaryForBookingWithDetails = {
     bookingId,
     iepDate: '2017-08-15',
@@ -31,10 +34,12 @@ describe('Prisoner incentive level details', () => {
       originalUrl: 'http://localhost',
       params: { offenderNo },
       query: {},
+      session: { userDetails: 'aTestUser' },
     }
     res = { locals: { user: { allCaseloads: [] } }, render: jest.fn() }
 
     logError = jest.fn()
+    systemOauthClient.getClientCredentialsTokens.mockReturnValue(systemContext)
 
     // @ts-expect-error ts-migrate(2339) FIXME: Property 'getDetails' does not exist on type '{}'.
     prisonApi.getDetails = jest
@@ -95,7 +100,7 @@ describe('Prisoner incentive level details', () => {
     oauthApi.userRoles = jest.fn().mockReturnValue([])
 
     // @ts-expect-error ts-migrate(2345) FIXME: Argument of type '{ prisonApi: {}; oauthApi: {}; l... Remove this comment to see the full error message
-    controller = prisonerIncentiveLevelDetails({ prisonApi, incentivesApi, oauthApi, logError })
+    controller = prisonerIncentiveLevelDetails({ prisonApi, incentivesApi, oauthApi, systemOauthClient, logError })
   })
 
   it('should make the expected API calls', async () => {
@@ -103,7 +108,7 @@ describe('Prisoner incentive level details', () => {
 
     // @ts-expect-error ts-migrate(2339) FIXME: Property 'getDetails' does not exist on type '{}'.
     expect(prisonApi.getDetails).toHaveBeenCalledWith(res.locals, offenderNo)
-    expect(incentivesApi.getIepSummaryForBooking).toHaveBeenCalledWith(res.locals, bookingId, true)
+    expect(incentivesApi.getIepSummaryForBooking).toHaveBeenCalledWith(systemContext, bookingId, true)
     // @ts-expect-error ts-migrate(2339) FIXME: Property 'userRoles' does not exist on type '{}'.
     expect(oauthApi.userRoles).toHaveBeenCalledWith(res.locals)
   })

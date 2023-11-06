@@ -80,7 +80,7 @@ export default ({
       )
 
       const userCanMaintainIEP = userRoles.find((role) => role.roleCode === 'MAINTAIN_IEP')
-      const systemContext = await systemOauthClient.getClientCredentialsTokens(req.session.userDetails)
+      const systemContext = await systemOauthClient.getClientCredentialsTokens(req.session.userDetails.username)
       let iepSummary
       try {
         iepSummary = await incentivesApi.getIepSummaryForBooking(systemContext, bookingId, true)

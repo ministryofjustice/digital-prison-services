@@ -18,7 +18,7 @@ export default ({
   const renderTemplate = async (req, res, pageData) => {
     const { offenderNo } = req.params
     const { errors, formValues = {} } = pageData || {}
-    const systemContext = await systemOauthClient.getClientCredentialsTokens(req.session.userDetails)
+    const systemContext = await systemOauthClient.getClientCredentialsTokens(req.session.userDetails.username)
     try {
       const prisonerDetails = await prisonApi.getDetails(res.locals, offenderNo)
       const { agencyId, bookingId, firstName, lastName } = prisonerDetails
@@ -72,7 +72,7 @@ export default ({
       const prisonerDetails = await prisonApi.getDetails(res.locals, offenderNo, true)
       const { agencyId, bookingId, firstName, lastName, assignedLivingUnit } = prisonerDetails
       const locationId: string | undefined = assignedLivingUnit?.description
-      const systemContext = await systemOauthClient.getClientCredentialsTokens(req.session.userDetails)
+      const systemContext = await systemOauthClient.getClientCredentialsTokens(req.session.userDetails.username)
       const iepSummary = await incentivesApi.getIepSummaryForBooking(systemContext, bookingId)
       const nextReviewDate = iepSummary?.nextReviewDate && moment(iepSummary.nextReviewDate, 'YYYY-MM-DD HH:mm')
 
@@ -119,7 +119,7 @@ export default ({
     if (errors.length > 0) {
       return renderTemplate(req, res, { errors, formValues: { newIepLevel, reason } })
     }
-    const systemContext = await systemOauthClient.getClientCredentialsTokens(req.session.userDetails)
+    const systemContext = await systemOauthClient.getClientCredentialsTokens(req.session.userDetails.username)
     try {
       await incentivesApi.changeIepLevel(systemContext, bookingId, {
         iepLevel: newIepLevel,
