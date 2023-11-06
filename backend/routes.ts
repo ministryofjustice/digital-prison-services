@@ -334,6 +334,7 @@ const setup = ({
       systemOauthClient,
       incentivesApi,
       nonAssociationsApi,
+      whereaboutsApi,
       logError,
     })
   )

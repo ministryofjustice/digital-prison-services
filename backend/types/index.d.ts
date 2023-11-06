@@ -13,5 +13,8 @@ declare namespace Express {
   interface Request {
     session: session.Session & Partial<session.SessionData> & digitalprisonservices.UserSession
     csrfToken?: () => string
+    flash(): { [key: string]: unknown[] }
+    flash(type: string, message: unknown): number
+    flash(message: string): unknown[]
   }
 }
