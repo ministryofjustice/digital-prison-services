@@ -332,7 +332,6 @@ export default ({
       nonAssociations: {
         // @ts-expect-error ts-migrate(2339) FIXME: Property 'error' does not exist on type 'unknown'.
         sectionError: Boolean(nonAssociationsResponse.error),
-        enabled: config.apis.nonAssociations.prisons.split(',').includes(activeCaseLoad?.caseLoadId),
         prisonerNonAssociations,
         uiUrl: config.apis.nonAssociations.ui_url,
       },
