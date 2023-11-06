@@ -1,12 +1,21 @@
 import express from 'express'
 import considerRisksController from '../controllers/receptionMove/considerRisksReception'
 import receptionFullController from '../controllers/receptionMove/receptionFull'
+import confirmReceptionMoveController from '../controllers/receptionMove/confirmReceptionMove'
 
 import { movementsServiceFactory } from '../services/movementsService'
 
 const router = express.Router({ mergeParams: true })
 
-const controller = ({ oauthApi, prisonApi, systemOauthClient, incentivesApi, nonAssociationsApi, logError }) => {
+const controller = ({
+  oauthApi,
+  prisonApi,
+  systemOauthClient,
+  incentivesApi,
+  nonAssociationsApi,
+  logError,
+  whereaboutsApi,
+}) => {
   const movementsService = movementsServiceFactory(prisonApi, systemOauthClient, incentivesApi)
 
   const { view: considerRiskView, submit: considerRiskSubmit } = considerRisksController({
@@ -21,6 +30,13 @@ const controller = ({ oauthApi, prisonApi, systemOauthClient, incentivesApi, non
 
   const { view: receptionFullView } = receptionFullController(prisonApi)
   router.get('/reception-full', receptionFullView)
+
+  const { view: confirmReceptionMoveView, post: confirmReceptionMovePost } = confirmReceptionMoveController({
+    prisonApi,
+    whereaboutsApi,
+  })
+  router.get('/confirm-reception-move', confirmReceptionMoveView)
+  router.post('/confirm-reception-move', confirmReceptionMovePost)
 
   return router
 }
