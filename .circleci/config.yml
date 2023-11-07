@@ -1,7 +1,7 @@
 version: 2.1
 
 orbs:
-  hmpps: ministryofjustice/hmpps@7.3.3
+  hmpps: ministryofjustice/hmpps@7
   slack: circleci/slack@4.12.5
 
 parameters:
@@ -54,16 +54,15 @@ jobs:
       - run:
           name: unit tests
           command: |
-             set -e
-             npm test -- --maxWorkers=2
+            set -e
+            npm test -- --maxWorkers=2
 
   cypress_integration_tests:
     working_directory: ~/app
     docker:
       - image: cimg/node:16.13-browsers
       - image: bitnami/redis:5.0
-        environment:
-          ALLOW_EMPTY_PASSWORD=yes
+        environment: ALLOW_EMPTY_PASSWORD=yes
     resource_class: xlarge
     steps:
       - checkout
@@ -74,13 +73,15 @@ jobs:
           command: sudo apt-get install libxss1
       - run:
           name: Get wiremock
-          command: curl -o wiremock.jar https://repo1.maven.org/maven2/com/github/tomakehurst/wiremock-standalone/2.27.1/wiremock-standalone-2.27.1.jar
+          command: curl -o wiremock.jar
+            https://repo1.maven.org/maven2/com/github/tomakehurst/wiremock-standalone/2.27.1/wiremock-standalone-2.27.1.jar
       - run:
           name: Run auth wiremock
           command: java -jar wiremock.jar --port 9191
           background: true
       - restore_cache:
-          key: node_modules-{{ checksum "package-lock.json" }}-{{ checksum "package.json" }}
+          key: node_modules-{{ checksum "package-lock.json" }}-{{ checksum "package.json"
+            }}
       - run:
           name: Install cypress.
           command: npx cypress install
