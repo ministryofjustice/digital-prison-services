@@ -132,7 +132,7 @@ export default ({
         prisonApi.getPrisonerBalances(context, bookingId),
         prisonApi.getPrisonerDetails(context, offenderNo),
         prisonApi.getPrisonerSentenceDetails(context, offenderNo),
-        incentivesApi.getIepSummaryForBooking(context, bookingId),
+        incentivesApi.getIepSummaryForBooking(systemContext, bookingId),
         prisonApi.getPositiveCaseNotes(context, bookingId, dateThreeMonthsAgo, today),
         prisonApi.getNegativeCaseNotes(context, bookingId, dateThreeMonthsAgo, today),
         adjudicationsApi.getAdjudicationsForBooking(systemContext, bookingId),

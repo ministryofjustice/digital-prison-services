@@ -510,15 +510,10 @@ describe('prisoner profile quick look', () => {
 
     it('should make a request for the correct data', async () => {
       prisonApi.getDetails.mockResolvedValue({ bookingId })
-
+      systemOauthClient.getClientCredentialsTokens = jest.fn().mockResolvedValue({ system: true })
       await controller(req, res)
 
-      expect(incentivesApi.getIepSummaryForBooking).toHaveBeenCalledWith(
-        {
-          user: { activeCaseLoad: { caseLoadId: 'MDI' } },
-        },
-        bookingId
-      )
+      expect(incentivesApi.getIepSummaryForBooking).toHaveBeenCalledWith({ system: true }, bookingId)
       expect(prisonApi.getPositiveCaseNotes).toHaveBeenCalledWith(
         {
           user: { activeCaseLoad: { caseLoadId: 'MDI' } },

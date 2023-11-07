@@ -113,7 +113,7 @@ export default ({
       hasDivergenceSupport,
     ] = await Promise.all(
       [
-        incentivesApi.getIepSummaryForBookingIds(context, [bookingId]),
+        incentivesApi.getIepSummaryForBookingIds(systemContext, [bookingId]),
         prisonApi.getCaseNoteSummaryByTypes(context, { type: 'KA', subType: 'KS', numMonths: 1, bookingId }),
         prisonApi.userCaseLoads(context),
         prisonApi.getStaffRoles(context, currentUser.staffId, currentUser.activeCaseLoadId),

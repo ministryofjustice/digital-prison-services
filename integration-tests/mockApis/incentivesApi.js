@@ -19,7 +19,7 @@ module.exports = {
     stubFor({
       request: {
         method: 'GET',
-        urlPattern: '/incentives/iep/reviews/booking/[0-9]+?\\?.+?',
+        urlPattern: '/incentives/incentive-reviews/booking/[0-9]+?\\?.+?',
       },
       response: {
         status,
@@ -33,7 +33,7 @@ module.exports = {
     stubFor({
       request: {
         method: 'POST',
-        urlPattern: '/incentives/iep/reviews/bookings',
+        urlPattern: '/incentives/incentive-reviews/bookings',
       },
       response: {
         status: 200,
@@ -47,7 +47,7 @@ module.exports = {
     stubFor({
       request: {
         method: 'POST',
-        urlPattern: '/incentives/iep/reviews/booking/[0-9]+?',
+        urlPattern: '/incentives/incentive-reviews/booking/[0-9]+?',
       },
       response: {
         status: 200,

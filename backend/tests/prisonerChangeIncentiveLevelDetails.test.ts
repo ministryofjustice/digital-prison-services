@@ -8,6 +8,12 @@ jest.mock('../raiseAnalyticsEvent', () => ({
   raiseAnalyticsEvent: jest.fn(),
 }))
 
+const systemOauthClient = {
+  getClientCredentialsTokens: jest.fn(),
+}
+
+const systemContext = { access_token: 'XXX' }
+
 describe('Prisoner change incentive level details', () => {
   const offenderNo = 'ABC123'
   const bookingId = 123
@@ -67,10 +73,18 @@ describe('Prisoner change incentive level details', () => {
       originalUrl: 'http://localhost',
       params: { offenderNo },
       query: {},
+      session: { userDetails: 'aTestUser' },
     }
-    res = { locals: { user: { allCaseloads: [] } }, render: jest.fn(), redirect: jest.fn(), status: jest.fn() }
+    res = {
+      locals: { user: { allCaseloads: [] } },
+      render: jest.fn(),
+      redirect: jest.fn(),
+      status: jest.fn(),
+    }
 
     logError = jest.fn()
+
+    systemOauthClient.getClientCredentialsTokens.mockReturnValue(systemContext)
 
     // @ts-expect-error ts-migrate(2339) FIXME: Property 'getDetails' does not exist on type '{}'.
     prisonApi.getDetails = jest.fn().mockResolvedValue({
@@ -85,7 +99,7 @@ describe('Prisoner change incentive level details', () => {
     incentivesApi.changeIepLevel = jest.fn()
 
     // @ts-expect-error ts-migrate(2345) FIXME: Argument of type '{ prisonApi: {}; logError: any; ... Remove this comment to see the full error message
-    controller = prisonerChangeIncentiveLevelDetails({ prisonApi, incentivesApi, logError })
+    controller = prisonerChangeIncentiveLevelDetails({ prisonApi, incentivesApi, systemOauthClient, logError })
   })
 
   describe('index', () => {
@@ -95,8 +109,8 @@ describe('Prisoner change incentive level details', () => {
 
         // @ts-expect-error ts-migrate(2339) FIXME: Property 'getDetails' does not exist on type '{}'.
         expect(prisonApi.getDetails).toHaveBeenCalledWith(res.locals, offenderNo)
-        expect(incentivesApi.getIepSummaryForBooking).toHaveBeenCalledWith(res.locals, bookingId)
-        expect(incentivesApi.getPrisonIncentiveLevels).toHaveBeenCalledWith(res.locals, 'MDI')
+        expect(incentivesApi.getIepSummaryForBooking).toHaveBeenCalledWith(systemContext, bookingId)
+        expect(incentivesApi.getPrisonIncentiveLevels).toHaveBeenCalledWith(systemContext, 'MDI')
         expect(res.render).toHaveBeenCalledWith('prisonerProfile/prisonerChangeIncentiveLevelDetails.njk', {
           agencyId: 'MDI',
           bookingId,
@@ -196,7 +210,7 @@ describe('Prisoner change incentive level details', () => {
 
         await controller.post(req, res)
 
-        expect(incentivesApi.changeIepLevel).toHaveBeenCalledWith(res.locals, bookingId, {
+        expect(incentivesApi.changeIepLevel).toHaveBeenCalledWith(systemContext, bookingId, {
           iepLevel: 'Enhanced',
           comment: 'A reason why it has changed',
         })

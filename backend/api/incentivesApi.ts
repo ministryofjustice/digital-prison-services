@@ -86,16 +86,16 @@ export const incentivesApiFactory = (client: OauthApiClient) => {
     context: ClientContext,
     bookingId: number,
     withDetails = false
-  ): Promise<any> => get(context, `/iep/reviews/booking/${bookingId}?with-details=${withDetails}`)
+  ): Promise<any> => get(context, `/incentive-reviews/booking/${bookingId}?with-details=${withDetails}`)
 
   const getIepSummaryForBookingIds = (
     context: ClientContext,
     bookingIds: number[]
   ): Promise<IepSummaryForBookingId[]> =>
-    post<IepSummaryForBookingId[], number[]>(context, '/iep/reviews/bookings', bookingIds)
+    post<IepSummaryForBookingId[], number[]>(context, '/incentive-reviews/bookings', bookingIds)
 
   const changeIepLevel = (context: ClientContext, bookingId: number, body: IepLevelChangeRequest) =>
-    post<IepLevelChanged, IepLevelChangeRequest>(context, `/iep/reviews/booking/${bookingId}`, body)
+    post<IepLevelChanged, IepLevelChangeRequest>(context, `/incentive-reviews/booking/${bookingId}`, body)
 
   return {
     getPrisonIncentiveLevels,
