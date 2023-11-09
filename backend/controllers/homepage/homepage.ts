@@ -39,6 +39,13 @@ const getTasks = ({ activeCaseLoadId, locations, staffId, whereaboutsConfig, key
     return mercurySubmit.liveDate && mercurySubmit.liveDate < Date.now()
   }
 
+  const getAdjudicationsEnabledPrisons = (adjudicationsEnabledPrisons) => {
+    // if the input is an empty array, then turn enable for all prisons
+    if (Array.isArray(adjudicationsEnabledPrisons) && adjudicationsEnabledPrisons.length < 1) return true
+    // else split the input string and see if the active caseload is included
+    return adjudicationsEnabledPrisons.split(',').includes(activeCaseLoadId)
+  }
+
   return [
     {
       id: 'global-search',
@@ -213,8 +220,7 @@ const getTasks = ({ activeCaseLoadId, locations, staffId, whereaboutsConfig, key
       heading: 'Adjudications',
       description: 'Place a prisoner on report after an incident, view reports and manage adjudications.',
       href: manageAdjudications.ui_url,
-      enabled: () =>
-        manageAdjudications.ui_url && manageAdjudications.enabled_prisons.split(',').includes(activeCaseLoadId),
+      enabled: () => manageAdjudications.ui_url && getAdjudicationsEnabledPrisons(manageAdjudications.enabled_prisons),
     },
     {
       id: 'book-a-prison-visit',

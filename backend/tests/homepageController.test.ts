@@ -917,6 +917,38 @@ describe('Homepage', () => {
         })
       )
     })
+    it('should display adjudications task if there is an empty array as the prison list', async () => {
+      config.apis.manageAdjudications.ui_url = 'http://adjudications-url'
+      config.apis.manageAdjudications.enabled_prisons = []
+      await controller(req, res)
+      expect(res.render).toHaveBeenCalledWith(
+        'homepage/homepage.njk',
+        expect.objectContaining({
+          tasks: [
+            expect.objectContaining({
+              id: 'manage-adjudications',
+              href: 'http://adjudications-url',
+            }),
+          ],
+        })
+      )
+    })
+    it('should display adjudications task if there is a string of ids as the prison list', async () => {
+      config.apis.manageAdjudications.ui_url = 'http://adjudications-url'
+      config.apis.manageAdjudications.enabled_prisons = 'RNI,WLI,MDI,EXI,BXI,PVI'
+      await controller(req, res)
+      expect(res.render).toHaveBeenCalledWith(
+        'homepage/homepage.njk',
+        expect.objectContaining({
+          tasks: [
+            expect.objectContaining({
+              id: 'manage-adjudications',
+              href: 'http://adjudications-url',
+            }),
+          ],
+        })
+      )
+    })
   })
 
   describe('Tasks behind feature flags', () => {
