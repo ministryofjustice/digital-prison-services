@@ -202,7 +202,7 @@ export const apis = {
   },
   manageAdjudications: {
     ui_url: process.env.MANAGE_ADJUDICATIONS_URL || '',
-    enabled_prisons: process.env.PRISONS_WITH_MANAGE_ADJUDICATIONS_ENABLED || '',
+    enabled_prisons: process.env.PRISONS_WITH_MANAGE_ADJUDICATIONS_ENABLED || [],
   },
   manageRestrictedPatients: {
     ui_url: process.env.MANAGE_RESTRICTED_PATIENTS_URL || '',
