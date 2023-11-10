@@ -194,13 +194,14 @@ const controller = ({
     '/cell-history',
     prisonerProfileRedirect({
       path: '/location-details',
-      // @ts-expect-error ts-migrate(2345) FIXME: Argument of type '{ oauthApi: any; prisonApi: any;... Remove this comment to see the full error message
-      handler: prisonerCellHistory({ oauthApi, prisonApi, logError }),
+      handler: prisonerCellHistory({ oauthApi, prisonApi }),
     })
   )
 
-  // @ts-expect-error ts-migrate(2345) FIXME: Argument of type '{ prisonApi: any; whereaboutsApi... Remove this comment to see the full error message
-  router.get('/location-history', prisonerLocationHistory({ prisonApi, whereaboutsApi, caseNotesApi, logError }))
+  router.get(
+    '/location-history',
+    prisonerLocationHistory({ prisonApi, whereaboutsApi, caseNotesApi, systemOauthClient })
+  )
 
   router.get(
     '/adjudications/:adjudicationNumber',
