@@ -5,10 +5,25 @@ import { makeNotFoundError } from './helpers'
 describe('Prisoner location sharing history', () => {
   const offenderNo = 'ABC123'
   const bookingId = 1
-  const prisonApi = {}
-  const whereaboutsApi = {}
-  const caseNotesApi = {}
-  const systemOauthClient = { getClientCredentialsTokens: jest.fn() }
+  const prisonApi = {
+    getDetails: jest.fn(),
+    getAttributesForLocation: jest.fn(),
+    getHistoryForLocation: jest.fn(),
+    getAgencyDetails: jest.fn(),
+    userCaseLoads: jest.fn(),
+    getPrisonerDetail: jest.fn(),
+    getStaffDetails: jest.fn(),
+    getCellMoveReasonTypes: jest.fn(),
+  }
+  const whereaboutsApi = {
+    getCellMoveReason: jest.fn(),
+  }
+  const caseNotesApi = {
+    getCaseNote: jest.fn(),
+  }
+  const systemOauthClient = {
+    getClientCredentialsTokens: jest.fn(),
+  }
   let req
   let res
   let controller
@@ -30,29 +45,17 @@ describe('Prisoner location sharing history', () => {
     }
     res = { locals: {}, render: jest.fn(), status: jest.fn() }
 
-    // @ts-expect-error ts-migrate(2339) FIXME: Property 'getDetails' does not exist on type '{}'.
-    prisonApi.getDetails = jest.fn().mockResolvedValue({ bookingId, firstName: 'John', lastName: 'Smith' })
-    // @ts-expect-error ts-migrate(2339) FIXME: Property 'getAttributesForLocation' does not exist... Remove this comment to see the full error message
-    prisonApi.getAttributesForLocation = jest.fn().mockResolvedValue({})
-    // @ts-expect-error ts-migrate(2339) FIXME: Property 'getHistoryForLocation' does not exist on... Remove this comment to see the full error message
-    prisonApi.getHistoryForLocation = jest.fn().mockResolvedValue([])
-    // @ts-expect-error ts-migrate(2339) FIXME: Property 'getAgencyDetails' does not exist on type... Remove this comment to see the full error message
-    prisonApi.getAgencyDetails = jest.fn().mockResolvedValue({})
-    // @ts-expect-error ts-migrate(2339) FIXME: Property 'userCaseLoads' does not exist on type '{... Remove this comment to see the full error message
-    prisonApi.userCaseLoads = jest.fn().mockResolvedValue([])
-    // @ts-expect-error ts-migrate(2339) FIXME: Property 'getPrisonerDetail' does not exist on typ... Remove this comment to see the full error message
-    prisonApi.getPrisonerDetail = jest.fn()
+    prisonApi.getDetails.mockResolvedValue({ bookingId, firstName: 'John', lastName: 'Smith' })
+    prisonApi.getAttributesForLocation.mockResolvedValue({})
+    prisonApi.getHistoryForLocation.mockResolvedValue([])
+    prisonApi.getAgencyDetails.mockResolvedValue({})
+    prisonApi.userCaseLoads.mockResolvedValue([])
+    prisonApi.getStaffDetails.mockResolvedValue({ firstName: 'Joe', lastName: 'Bloggs' })
+    prisonApi.getCellMoveReasonTypes.mockResolvedValue(cellMoveReasonTypes)
 
-    // @ts-expect-error ts-migrate(2339) FIXME: Property 'getStaffDetails' does not exist on type ... Remove this comment to see the full error message
-    prisonApi.getStaffDetails = jest.fn().mockResolvedValue({ firstName: 'Joe', lastName: 'Bloggs' })
-    // @ts-expect-error ts-migrate(2339) FIXME: Property 'getCellMoveReasonTypes' does not exist o... Remove this comment to see the full error message
-    prisonApi.getCellMoveReasonTypes = jest.fn().mockResolvedValue(cellMoveReasonTypes)
+    caseNotesApi.getCaseNote.mockResolvedValue({ text: 'Some details regarding what happened' })
 
-    // @ts-expect-error ts-migrate(2339) FIXME: Property 'getCaseNote' does not exist on type '{}'... Remove this comment to see the full error message
-    caseNotesApi.getCaseNote = jest.fn().mockResolvedValue({ text: 'Some details regarding what happened' })
-
-    // @ts-expect-error ts-migrate(2339) FIXME: Property 'getCellMoveReason' does not exist on typ... Remove this comment to see the full error message
-    whereaboutsApi.getCellMoveReason = jest.fn().mockResolvedValue({ cellMoveReason: { caseNoteId: 123 } })
+    whereaboutsApi.getCellMoveReason.mockResolvedValue({ cellMoveReason: { caseNoteId: 123 } })
 
     controller = prisonerLocationHistory({
       prisonApi,
@@ -73,21 +76,15 @@ describe('Prisoner location sharing history', () => {
   it('should make the expected API calls', async () => {
     await controller(req, res)
 
-    // @ts-expect-error ts-migrate(2339) FIXME: Property 'getDetails' does not exist on type '{}'.
     expect(prisonApi.getDetails).toHaveBeenCalledWith(res.locals, offenderNo)
-    // @ts-expect-error ts-migrate(2339) FIXME: Property 'getAttributesForLocation' does not exist... Remove this comment to see the full error message
     expect(prisonApi.getAttributesForLocation).toHaveBeenCalledWith(res.locals, 1)
-    // @ts-expect-error ts-migrate(2339) FIXME: Property 'getHistoryForLocation' does not exist on... Remove this comment to see the full error message
     expect(prisonApi.getHistoryForLocation).toHaveBeenCalledWith('SYSTEM_TOKEN', {
       locationId: 1,
       fromDate: '2019-12-31',
       toDate: '2020-01-12',
     })
-    // @ts-expect-error ts-migrate(2339) FIXME: Property 'getAgencyDetails' does not exist on type... Remove this comment to see the full error message
     expect(prisonApi.getAgencyDetails).toHaveBeenCalledWith(res.locals, 'MDI')
-    // @ts-expect-error ts-migrate(2339) FIXME: Property 'userCaseLoads' does not exist on type '{... Remove this comment to see the full error message
     expect(prisonApi.userCaseLoads).toHaveBeenCalledWith(res.locals)
-    // @ts-expect-error ts-migrate(2339) FIXME: Property 'getPrisonerDetail' does not exist on typ... Remove this comment to see the full error message
     expect(prisonApi.getPrisonerDetail.mock.calls.length).toBe(0)
   })
 
@@ -112,7 +109,6 @@ describe('Prisoner location sharing history', () => {
 
   describe('with data', () => {
     beforeEach(() => {
-      // @ts-expect-error ts-migrate(2339) FIXME: Property 'getAttributesForLocation' does not exist... Remove this comment to see the full error message
       prisonApi.getAttributesForLocation.mockResolvedValue({
         id: 1,
         description: 'MDI-1-1-015',
@@ -120,7 +116,6 @@ describe('Prisoner location sharing history', () => {
         noOfOccupants: 2,
         attributes: [{ description: 'Double occupancy' }],
       })
-      // @ts-expect-error ts-migrate(2339) FIXME: Property 'getHistoryForLocation' does not exist on... Remove this comment to see the full error message
       prisonApi.getHistoryForLocation.mockResolvedValue([
         {
           bookingId: 1,
@@ -158,14 +153,12 @@ describe('Prisoner location sharing history', () => {
           bedAssignmentHistorySequence: 1,
         },
       ])
-      // @ts-expect-error ts-migrate(2339) FIXME: Property 'getAgencyDetails' does not exist on type... Remove this comment to see the full error message
       prisonApi.getAgencyDetails.mockResolvedValue({
         agencyId: 'MDI',
         description: 'Moorland (HMP & YOI)',
         agencyType: 'INST',
         active: true,
       })
-      // @ts-expect-error ts-migrate(2339) FIXME: Property 'userCaseLoads' does not exist on type '{... Remove this comment to see the full error message
       prisonApi.userCaseLoads.mockResolvedValue([
         {
           caseLoadId: 'MDI',
@@ -175,22 +168,17 @@ describe('Prisoner location sharing history', () => {
           currentlyActive: true,
         },
       ])
-      // @ts-expect-error ts-migrate(2339) FIXME: Property 'getPrisonerDetail' does not exist on typ... Remove this comment to see the full error message
       prisonApi.getPrisonerDetail
         .mockResolvedValueOnce({ offenderNo, bookingId, firstName: 'John', lastName: 'Smith' })
         .mockResolvedValueOnce({ offenderNo: 'ABC456', bookingId: 2, firstName: 'Steve', lastName: 'Jones' })
         .mockResolvedValueOnce({ offenderNo: 'ABC789', bookingId: 3, firstName: 'Barry', lastName: 'Stevenson' })
 
-      // @ts-expect-error ts-migrate(2339) FIXME: Property 'getStaffDetails' does not exist on type ... Remove this comment to see the full error message
-      prisonApi.getStaffDetails = jest.fn().mockResolvedValue({ firstName: 'Joe', lastName: 'Bloggs' })
-      // @ts-expect-error ts-migrate(2339) FIXME: Property 'getCellMoveReasonTypes' does not exist o... Remove this comment to see the full error message
-      prisonApi.getCellMoveReasonTypes = jest.fn().mockResolvedValue(cellMoveReasonTypes)
-      // @ts-expect-error ts-migrate(2339) FIXME: Property 'getCellMoveReason' does not exist on typ... Remove this comment to see the full error message
-      whereaboutsApi.getCellMoveReason = jest.fn().mockResolvedValue({ cellMoveReason: { caseNoteId: 123 } })
-      // @ts-expect-error ts-migrate(2339) FIXME: Property 'getCaseNote' does not exist on type '{}'... Remove this comment to see the full error message
-      caseNotesApi.getCaseNote = jest
-        .fn()
-        .mockResolvedValue({ text: 'A long comment about what happened on the day to cause the move.' })
+      prisonApi.getStaffDetails.mockResolvedValue({ firstName: 'Joe', lastName: 'Bloggs' })
+      prisonApi.getCellMoveReasonTypes.mockResolvedValue(cellMoveReasonTypes)
+      whereaboutsApi.getCellMoveReason.mockResolvedValue({ cellMoveReason: { caseNoteId: 123 } })
+      caseNotesApi.getCaseNote.mockResolvedValue({
+        text: 'A long comment about what happened on the day to cause the move.',
+      })
     })
 
     it('render the template with the correct data', async () => {
@@ -230,8 +218,7 @@ describe('Prisoner location sharing history', () => {
     })
 
     it('when we get cell move reason throws 404 then no trigger outer try', async () => {
-      // @ts-expect-error ts-migrate(2339) FIXME: Property 'getCellMoveReason' does not exist on typ... Remove this comment to see the full error message
-      whereaboutsApi.getCellMoveReason = jest.fn().mockRejectedValue(makeNotFoundError())
+      whereaboutsApi.getCellMoveReason.mockRejectedValue(makeNotFoundError())
       await controller(req, res)
 
       expect(res.render).toHaveBeenCalledWith(
@@ -241,10 +228,8 @@ describe('Prisoner location sharing history', () => {
     })
 
     it('when we get cell move reason throws 404 then default what happened', async () => {
-      // @ts-expect-error ts-migrate(2339) FIXME: Property 'getCellMoveReason' does not exist on typ... Remove this comment to see the full error message
-      whereaboutsApi.getCellMoveReason = jest.fn().mockRejectedValue(makeNotFoundError())
-      // @ts-expect-error ts-migrate(2339) FIXME: Property 'getHistoryForLocation' does not exist on... Remove this comment to see the full error message
-      prisonApi.getHistoryForLocation = jest.fn().mockResolvedValue([
+      whereaboutsApi.getCellMoveReason.mockRejectedValue(makeNotFoundError())
+      prisonApi.getHistoryForLocation.mockResolvedValue([
         {
           bookingId: 1,
           livingUnitId: 1,
@@ -271,8 +256,7 @@ describe('Prisoner location sharing history', () => {
     })
 
     it('when assignmentReason is missing then default cell move reason', async () => {
-      // @ts-expect-error ts-migrate(2339) FIXME: Property 'getHistoryForLocation' does not exist on... Remove this comment to see the full error message
-      prisonApi.getHistoryForLocation = jest.fn().mockResolvedValue([
+      prisonApi.getHistoryForLocation.mockResolvedValue([
         {
           bookingId: 1,
           livingUnitId: 1,
@@ -302,7 +286,6 @@ describe('Prisoner location sharing history', () => {
   describe('Errors', () => {
     it('should render the error template with a link to the homepage if there is a problem retrieving prisoner details', async () => {
       const error = new Error('Network error')
-      // @ts-expect-error ts-migrate(2339) FIXME: Property 'getDetails' does not exist on type '{}'.
       prisonApi.getDetails.mockImplementation(() => Promise.reject(error))
 
       await expect(controller(req, res)).rejects.toThrowError(error)
@@ -313,9 +296,7 @@ describe('Prisoner location sharing history', () => {
 
   describe('Error in mapping', () => {
     beforeEach(() => {
-      // @ts-expect-error ts-migrate(2339) FIXME: Property 'getDetails' does not exist on type '{}'.
-      prisonApi.getDetails = jest.fn().mockResolvedValue({ bookingId, firstName: 'John', lastName: 'Smith' })
-      // @ts-expect-error ts-migrate(2339) FIXME: Property 'getAttributesForLocation' does not exist... Remove this comment to see the full error message
+      prisonApi.getDetails.mockResolvedValue({ bookingId, firstName: 'John', lastName: 'Smith' })
       prisonApi.getAttributesForLocation.mockResolvedValue({
         id: 1,
         description: 'MDI-1-1-015',
@@ -323,7 +304,6 @@ describe('Prisoner location sharing history', () => {
         noOfOccupants: 2,
         attributes: [{ description: 'Double occupancy' }],
       })
-      // @ts-expect-error ts-migrate(2339) FIXME: Property 'getHistoryForLocation' does not exist on... Remove this comment to see the full error message
       prisonApi.getHistoryForLocation.mockResolvedValue([
         {
           bookingId: 1,
@@ -361,14 +341,12 @@ describe('Prisoner location sharing history', () => {
           bedAssignmentHistorySequence: 1,
         },
       ])
-      // @ts-expect-error ts-migrate(2339) FIXME: Property 'getAgencyDetails' does not exist on type... Remove this comment to see the full error message
       prisonApi.getAgencyDetails.mockResolvedValue({
         agencyId: 'MDI',
         description: 'Moorland (HMP & YOI)',
         agencyType: 'INST',
         active: true,
       })
-      // @ts-expect-error ts-migrate(2339) FIXME: Property 'userCaseLoads' does not exist on type '{... Remove this comment to see the full error message
       prisonApi.userCaseLoads.mockResolvedValue([
         {
           caseLoadId: 'MDI',
@@ -378,26 +356,20 @@ describe('Prisoner location sharing history', () => {
           currentlyActive: true,
         },
       ])
-      // @ts-expect-error ts-migrate(2339) FIXME: Property 'getPrisonerDetail' does not exist on typ... Remove this comment to see the full error message
       prisonApi.getPrisonerDetail
         .mockResolvedValueOnce({ offenderNo, bookingId, firstName: 'John', lastName: 'Smith' })
         .mockResolvedValueOnce({ offenderNo: 'ABC456', bookingId: 2, firstName: 'Steve', lastName: 'Jones' })
         .mockResolvedValueOnce({ offenderNo: 'ABC789', bookingId: 3, firstName: 'Barry', lastName: 'Stevenson' })
 
-      // @ts-expect-error ts-migrate(2339) FIXME: Property 'getStaffDetails' does not exist on type ... Remove this comment to see the full error message
-      prisonApi.getStaffDetails = jest.fn().mockResolvedValue({ firstName: 'Joe', lastName: 'Bloggs' })
-      // @ts-expect-error ts-migrate(2339) FIXME: Property 'getCellMoveReasonTypes' does not exist o... Remove this comment to see the full error message
-      prisonApi.getCellMoveReasonTypes = jest.fn().mockResolvedValue(cellMoveReasonTypes)
-      // @ts-expect-error ts-migrate(2339) FIXME: Property 'getCellMoveReason' does not exist on typ... Remove this comment to see the full error message
-      whereaboutsApi.getCellMoveReason = jest.fn().mockResolvedValue({ cellMoveReason: { caseNoteId: 123 } })
-      // @ts-expect-error ts-migrate(2339) FIXME: Property 'getCaseNote' does not exist on type '{}'... Remove this comment to see the full error message
-      caseNotesApi.getCaseNote = jest.fn().mockResolvedValue({ text: 'Some comment' })
+      prisonApi.getStaffDetails.mockResolvedValue({ firstName: 'Joe', lastName: 'Bloggs' })
+      prisonApi.getCellMoveReasonTypes.mockResolvedValue(cellMoveReasonTypes)
+      whereaboutsApi.getCellMoveReason.mockResolvedValue({ cellMoveReason: { caseNoteId: 123 } })
+      caseNotesApi.getCaseNote.mockResolvedValue({ text: 'Some comment' })
     })
 
     it('should render the error when fetch staff details fails', async () => {
       const error = new Error('Not found')
 
-      // @ts-expect-error ts-migrate(2339) FIXME: Property 'getStaffDetails' does not exist on type ... Remove this comment to see the full error message
       prisonApi.getStaffDetails.mockImplementation(() => Promise.reject(error))
 
       await expect(controller(req, res)).rejects.toThrowError(error)
@@ -405,7 +377,6 @@ describe('Prisoner location sharing history', () => {
 
     it('should render the error when fetch reason description', async () => {
       const error = new Error('Not found')
-      // @ts-expect-error ts-migrate(2339) FIXME: Property 'getCellMoveReasonTypes' does not exist o... Remove this comment to see the full error message
       prisonApi.getCellMoveReasonTypes.mockImplementation(() => Promise.reject(error))
 
       await expect(controller(req, res)).rejects.toThrowError(error)
@@ -413,7 +384,6 @@ describe('Prisoner location sharing history', () => {
 
     it('should render the error for fetch what happened and get cell move reason fails', async () => {
       const error = new Error('Not found')
-      // @ts-expect-error ts-migrate(2339) FIXME: Property 'getCellMoveReason' does not exist on typ... Remove this comment to see the full error message
       whereaboutsApi.getCellMoveReason.mockImplementation(() => Promise.reject(error))
 
       await expect(controller(req, res)).rejects.toThrowError(error)
@@ -421,7 +391,6 @@ describe('Prisoner location sharing history', () => {
 
     it('should render the error for fetch what happened and get case note fails', async () => {
       const error = new Error('Not found')
-      // @ts-expect-error ts-migrate(2339) FIXME: Property 'getCaseNote' does not exist on type '{}'... Remove this comment to see the full error message
       caseNotesApi.getCaseNote.mockImplementation(() => Promise.reject(error))
 
       await expect(controller(req, res)).rejects.toThrowError(error)
