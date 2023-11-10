@@ -8,10 +8,9 @@ describe('Prisoner location sharing history', () => {
   const prisonApi = {}
   const whereaboutsApi = {}
   const caseNotesApi = {}
-
+  const systemOauthClient = { getClientCredentialsTokens: jest.fn() }
   let req
   let res
-  let logError
   let controller
 
   const cellMoveReasonTypes = [
@@ -30,8 +29,6 @@ describe('Prisoner location sharing history', () => {
       query: { agencyId: 'MDI', locationId: 1, fromDate: '2019-12-31' },
     }
     res = { locals: {}, render: jest.fn(), status: jest.fn() }
-
-    logError = jest.fn()
 
     // @ts-expect-error ts-migrate(2339) FIXME: Property 'getDetails' does not exist on type '{}'.
     prisonApi.getDetails = jest.fn().mockResolvedValue({ bookingId, firstName: 'John', lastName: 'Smith' })
@@ -57,8 +54,13 @@ describe('Prisoner location sharing history', () => {
     // @ts-expect-error ts-migrate(2339) FIXME: Property 'getCellMoveReason' does not exist on typ... Remove this comment to see the full error message
     whereaboutsApi.getCellMoveReason = jest.fn().mockResolvedValue({ cellMoveReason: { caseNoteId: 123 } })
 
-    // @ts-expect-error ts-migrate(2345) FIXME: Argument of type '{ prisonApi: {}; whereaboutsApi:... Remove this comment to see the full error message
-    controller = prisonerLocationHistory({ prisonApi, whereaboutsApi, caseNotesApi, logError })
+    controller = prisonerLocationHistory({
+      prisonApi,
+      whereaboutsApi,
+      caseNotesApi,
+      systemOauthClient,
+    })
+    systemOauthClient.getClientCredentialsTokens.mockResolvedValue('SYSTEM_TOKEN')
 
     jest.spyOn(Date, 'now').mockImplementation(() => 1578787200000) // Sun Jan 12 2020 00:00:00
   })
@@ -76,7 +78,7 @@ describe('Prisoner location sharing history', () => {
     // @ts-expect-error ts-migrate(2339) FIXME: Property 'getAttributesForLocation' does not exist... Remove this comment to see the full error message
     expect(prisonApi.getAttributesForLocation).toHaveBeenCalledWith(res.locals, 1)
     // @ts-expect-error ts-migrate(2339) FIXME: Property 'getHistoryForLocation' does not exist on... Remove this comment to see the full error message
-    expect(prisonApi.getHistoryForLocation).toHaveBeenCalledWith(res.locals, {
+    expect(prisonApi.getHistoryForLocation).toHaveBeenCalledWith('SYSTEM_TOKEN', {
       locationId: 1,
       fromDate: '2019-12-31',
       toDate: '2020-01-12',
