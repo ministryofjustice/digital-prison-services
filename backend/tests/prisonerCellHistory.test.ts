@@ -122,7 +122,7 @@ describe('Prisoner cell history', () => {
         .mockResolvedValueOnce({ firstName: 'Staff', lastName: 'Two', username: 'STAFF_2' })
         .mockResolvedValueOnce({ firstName: 'Staff', lastName: 'Three', username: 'STAFF_3' })
         .mockResolvedValue({ firstName: 'Staff', lastName: 'One', username: 'STAFF_1' })
-      systemOauthClient.getClientCredentialsTokens.mockResolvedValue('system-token')
+      systemOauthClient.getClientCredentialsTokens.mockResolvedValue({})
     })
 
     it('should make the expected API calls', async () => {
@@ -135,7 +135,7 @@ describe('Prisoner cell history', () => {
       expect(prisonApi.getStaffDetails).toHaveBeenCalledWith(res.locals, 'STAFF_1')
       expect(prisonApi.getStaffDetails).toHaveBeenCalledWith(res.locals, 'STAFF_2')
       expect(prisonApi.getStaffDetails).toHaveBeenCalledWith(res.locals, 'STAFF_3')
-      expect(prisonApi.getInmatesAtLocation).toHaveBeenCalledWith('system-token', 1, {})
+      expect(prisonApi.getInmatesAtLocation).toHaveBeenCalledWith({}, 1, {})
     })
 
     it('sends the right data to the template', async () => {

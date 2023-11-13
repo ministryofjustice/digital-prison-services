@@ -102,7 +102,6 @@ describe('View Residential Location', () => {
 
       expect(prisonApi.getInmates).toHaveBeenCalledWith(
         {
-          // context: 'system-token',
           requestHeaders: expect.objectContaining({
             'Page-Limit': '5000',
             'Sort-Fields': 'lastName,firstName',
@@ -127,7 +126,6 @@ describe('View Residential Location', () => {
 
       expect(prisonApi.getInmates).toHaveBeenCalledWith(
         {
-          // user: 'system-token',
           requestHeaders: expect.objectContaining({
             'Page-Limit': '5000',
             'Sort-Fields': 'lastName,firstName',
