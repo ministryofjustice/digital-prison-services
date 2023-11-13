@@ -8,10 +8,8 @@ describe('Cell move confirmation', () => {
     getDetails: jest.fn(),
     getLocation: jest.fn(),
   }
-  let logError
 
   beforeEach(() => {
-    logError = jest.fn()
     prisonApi.getDetails = jest.fn().mockResolvedValue({ firstName: 'Bob', lastName: 'Doe', agencyId: 'MDI' })
     prisonApi.getLocation = jest.fn().mockResolvedValue({ description: 'A-1-012' })
     controller = cellMoveConfirmation({ prisonApi })

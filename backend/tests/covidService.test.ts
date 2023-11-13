@@ -1,21 +1,16 @@
 import moment from 'moment'
 
 Reflect.deleteProperty(process.env, 'APPINSIGHTS_INSTRUMENTATIONKEY')
-const prisonApi = {}
+const prisonApi = {
+  getInmates: jest.fn(),
+  getAlerts: jest.fn(),
+  getMovementsInBetween: jest.fn(),
+}
 const systemOauthClient = {
   getClientCredentialsTokens: jest.fn(),
 }
 const now = moment('2020-01-10')
 const covidService = require('../services/covidService').covidServiceFactory(systemOauthClient, prisonApi, () => now)
-
-beforeEach(() => {
-  // @ts-expect-error ts-migrate(2339) FIXME: Property 'getInmates' does not exist on type '{}'.
-  prisonApi.getInmates = jest.fn()
-  // @ts-expect-error ts-migrate(2339) FIXME: Property 'getAlerts' does not exist on type '{}'.
-  prisonApi.getAlerts = jest.fn()
-  // @ts-expect-error ts-migrate(2339) FIXME: Property 'getMovementsInBetween' does not exist on... Remove this comment to see the full error message
-  prisonApi.getMovementsInBetween = jest.fn()
-})
 
 const returnSize = (count) => (context) => {
   // eslint-disable-next-line no-param-reassign,
@@ -32,14 +27,12 @@ describe('Covid Service', () => {
     it('Retrieve count with alert', async () => {
       const context = { locals: { user: { activeCaseLoad: { caseLoadId: 'MDI' } } }, render: jest.fn() }
 
-      // @ts-expect-error ts-migrate(2339) FIXME: Property 'getInmates' does not exist on type '{}'.
       prisonApi.getInmates.mockImplementationOnce(returnSize(21))
 
       const response = await covidService.getCount(context, 'UPIU')
 
       expect(response).toEqual(21)
 
-      // @ts-expect-error ts-migrate(2339) FIXME: Property 'getInmates' does not exist on type '{}'.
       expect(prisonApi.getInmates).toHaveBeenCalledWith(expect.objectContaining({ requestHeaders }), 'MDI', {
         alerts: 'UPIU',
       })
@@ -48,7 +41,6 @@ describe('Covid Service', () => {
     it('Retrieve count without alert', async () => {
       const context = { locals: { user: { activeCaseLoad: { caseLoadId: 'MDI' } } }, render: jest.fn() }
 
-      // @ts-expect-error ts-migrate(2339) FIXME: Property 'getInmates' does not exist on type '{}'.
       prisonApi.getInmates.mockImplementationOnce(returnSize(200))
       systemOauthClient.getClientCredentialsTokens.mockResolvedValue({})
 
@@ -56,7 +48,6 @@ describe('Covid Service', () => {
 
       expect(response).toEqual(200)
 
-      // @ts-expect-error ts-migrate(2339) FIXME: Property 'getInmates' does not exist on type '{}'.
       expect(prisonApi.getInmates).toHaveBeenCalledWith(expect.objectContaining({ requestHeaders }), 'MDI', {})
     })
   })
@@ -70,14 +61,12 @@ describe('Covid Service', () => {
     it('success', async () => {
       const context = { locals: { user: { activeCaseLoad: { caseLoadId: 'MDI' } } }, render: jest.fn() }
 
-      // @ts-expect-error ts-migrate(2339) FIXME: Property 'getAlerts' does not exist on type '{}'.
       prisonApi.getAlerts.mockResolvedValue([
         { offenderNo: 'AA1234A', alertCode: 'AA1', expired: false, dateCreated: '2020-01-02' },
         { offenderNo: 'AA1234A', alertCode: 'UPIU', expired: false, dateCreated: '2020-01-03' },
         { offenderNo: 'BB1234A', alertCode: 'UPIU', expired: false, dateCreated: '2020-01-04' },
       ])
 
-      // @ts-expect-error ts-migrate(2339) FIXME: Property 'getInmates' does not exist on type '{}'.
       prisonApi.getInmates.mockResolvedValue([
         {
           offenderNo: 'AA1234A',
@@ -114,12 +103,10 @@ describe('Covid Service', () => {
         },
       ])
 
-      // @ts-expect-error ts-migrate(2339) FIXME: Property 'getInmates' does not exist on type '{}'.
       expect(prisonApi.getInmates).toHaveBeenCalledWith(expect.objectContaining({ requestHeaders }), 'MDI', {
         alerts: 'UPIU',
       })
 
-      // @ts-expect-error ts-migrate(2339) FIXME: Property 'getAlerts' does not exist on type '{}'.
       expect(prisonApi.getAlerts).toHaveBeenCalledWith(expect.objectContaining({ requestHeaders }), {
         agencyId: 'MDI',
         offenderNumbers: ['AA1234A', 'BB1234A'],
@@ -129,14 +116,12 @@ describe('Covid Service', () => {
     it('expired alerts are not displayed', async () => {
       const context = { locals: { user: { activeCaseLoad: { caseLoadId: 'MDI' } } }, render: jest.fn() }
 
-      // @ts-expect-error ts-migrate(2339) FIXME: Property 'getAlerts' does not exist on type '{}'.
       prisonApi.getAlerts.mockResolvedValue([
         { offenderNo: 'AA1234A', alertCode: 'UPIU', expired: false, dateCreated: '2020-01-03' },
         { offenderNo: 'AA1234A', alertCode: 'UPIU', expired: true, dateCreated: '2020-01-05' },
         { offenderNo: 'BB1234A', alertCode: 'UPIU', expired: false, dateCreated: '2020-01-04' },
       ])
 
-      // @ts-expect-error ts-migrate(2339) FIXME: Property 'getInmates' does not exist on type '{}'.
       prisonApi.getInmates.mockResolvedValue([
         {
           offenderNo: 'AA1234A',
@@ -184,7 +169,6 @@ describe('Covid Service', () => {
     it('success', async () => {
       const context = { locals: { user: { activeCaseLoad: { caseLoadId: 'MDI' } } }, render: jest.fn() }
 
-      // @ts-expect-error ts-migrate(2339) FIXME: Property 'getAlerts' does not exist on type '{}'.
       prisonApi.getAlerts.mockResolvedValue([
         { offenderNo: 'AA1234A', alertCode: 'AA1', expired: false, dateCreated: '2020-01-02' },
         { offenderNo: 'AA1234A', alertCode: 'UPIU', expired: false, dateCreated: '2020-01-03' },
@@ -192,7 +176,6 @@ describe('Covid Service', () => {
         { offenderNo: 'DD1234A', alertCode: 'AA2', expired: false, dateCreated: '2020-01-05' },
       ])
 
-      // @ts-expect-error ts-migrate(2339) FIXME: Property 'getMovementsInBetween' does not exist on... Remove this comment to see the full error message
       prisonApi.getMovementsInBetween.mockResolvedValue([
         {
           offenderNo: 'AA1234A',
@@ -247,12 +230,10 @@ describe('Covid Service', () => {
         },
       ])
 
-      // @ts-expect-error ts-migrate(2339) FIXME: Property 'getMovementsInBetween' does not exist on... Remove this comment to see the full error message
       expect(prisonApi.getMovementsInBetween).toHaveBeenCalledWith(expect.objectContaining({ requestHeaders }), 'MDI', {
         fromDateTime: '2019-12-27T00:00:00',
       })
 
-      // @ts-expect-error ts-migrate(2339) FIXME: Property 'getAlerts' does not exist on type '{}'.
       expect(prisonApi.getAlerts).toHaveBeenCalledWith(expect.objectContaining({ requestHeaders }), {
         agencyId: 'MDI',
         offenderNumbers: ['AA1234A', 'BB1234A', 'CC1234A', 'DD1234A'],
