@@ -2,6 +2,7 @@ import express from 'express'
 import considerRisksController from '../controllers/receptionMove/considerRisksReception'
 import receptionFullController from '../controllers/receptionMove/receptionFull'
 import confirmReceptionMoveController from '../controllers/receptionMove/confirmReceptionMove'
+import confirmation from '../controllers/receptionMove/confirmation'
 
 import { movementsServiceFactory } from '../services/movementsService'
 
@@ -37,6 +38,9 @@ const controller = ({
   })
   router.get('/confirm-reception-move', confirmReceptionMoveView)
   router.post('/confirm-reception-move', confirmReceptionMovePost)
+
+  const { view: confirmedReceptionMoveView } = confirmation(prisonApi)
+  router.get('/confirmation', confirmedReceptionMoveView)
 
   return router
 }
