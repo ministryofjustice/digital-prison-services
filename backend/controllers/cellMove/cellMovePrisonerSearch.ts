@@ -1,7 +1,7 @@
 import { alertFlagLabels, cellMoveAlertCodes } from '../../shared/alertFlagValues'
 import { putLastNameFirst, formatLocation, formatName } from '../../utils'
 
-export default ({ prisonApi }) =>
+export default ({ systemOauthClient, prisonApi }) =>
   async (req, res) => {
     const {
       user: { activeCaseLoad },
@@ -22,8 +22,9 @@ export default ({ prisonApi }) =>
 
     const currentUserCaseLoad = activeCaseLoad && activeCaseLoad.caseLoadId
 
+    const systemContext = await systemOauthClient.getClientCredentialsTokens()
     const context = {
-      ...res.locals,
+      ...systemContext,
       requestHeaders: {
         'Page-Limit': '5000',
         'Sort-Fields': 'lastName,firstName',

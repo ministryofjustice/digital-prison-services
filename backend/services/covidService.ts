@@ -17,7 +17,7 @@ function hasCovidAlertByOffenderNo(alertsByOffenderNumber) {
   }
 }
 
-export const covidServiceFactory = (prisonApi, now = () => moment()) => {
+export const covidServiceFactory = (systemOauthClient, prisonApi, now = () => moment()) => {
   async function getRecentMovements(context, caseLoadId) {
     const fourteenDaysAgo = now().startOf('day').subtract(14, 'days').format('YYYY-MM-DDTHH:mm:ss')
 
@@ -41,7 +41,8 @@ export const covidServiceFactory = (prisonApi, now = () => moment()) => {
     async getCount(res, alert) {
       const { caseLoadId } = res.locals.user.activeCaseLoad
 
-      const context = { ...res.locals, requestHeaders: { 'page-offset': 0, 'page-limit': 1 } }
+      const systemContext = await systemOauthClient.getClientCredentialsTokens()
+      const context = { ...systemContext, requestHeaders: { 'page-offset': 0, 'page-limit': 1 } }
 
       await prisonApi.getInmates(context, caseLoadId, alert ? { alerts: alert } : {})
 
@@ -51,14 +52,21 @@ export const covidServiceFactory = (prisonApi, now = () => moment()) => {
     async getAlertList(res, code) {
       const { caseLoadId } = res.locals.user.activeCaseLoad
 
-      const context = { ...res.locals, requestHeaders: { 'page-offset': 0, 'page-limit': 3000 } }
+      const systemContext = await systemOauthClient.getClientCredentialsTokens()
+      const requestHeaders = { 'page-offset': 0, 'page-limit': 3000 }
+      const inmates = await prisonApi.getInmates(
+        { ...systemContext, requestHeaders },
+        caseLoadId,
+        code ? { alerts: code } : {}
+      )
 
-      const inmates = await prisonApi.getInmates(context, caseLoadId, code ? { alerts: code } : {})
-
-      const offenderAlerts = await prisonApi.getAlerts(context, {
-        agencyId: caseLoadId,
-        offenderNumbers: inmates.map((inmate) => inmate.offenderNo),
-      })
+      const offenderAlerts = await prisonApi.getAlerts(
+        { ...res.locals, requestHeaders },
+        {
+          agencyId: caseLoadId,
+          offenderNumbers: inmates.map((inmate) => inmate.offenderNo),
+        }
+      )
 
       const inmateFor = (offenderNo) => inmates.find((inmate) => inmate.offenderNo === offenderNo)
 

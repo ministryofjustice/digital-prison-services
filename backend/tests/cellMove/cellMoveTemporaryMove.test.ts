@@ -4,6 +4,9 @@ describe('Move someone temporarily out of a cell', () => {
   const prisonApi = {
     getInmates: jest.fn(),
   }
+  const systemOauthClient = {
+    getClientCredentialsTokens: jest.fn(),
+  }
 
   let req
   let res
@@ -31,8 +34,9 @@ describe('Move someone temporarily out of a cell', () => {
     }
 
     prisonApi.getInmates = jest.fn().mockReturnValue([])
+    systemOauthClient.getClientCredentialsTokens.mockResolvedValue({})
 
-    controller = temporaryMoveController({ prisonApi })
+    controller = temporaryMoveController({ systemOauthClient, prisonApi })
   })
 
   describe('index', () => {
@@ -45,7 +49,6 @@ describe('Move someone temporarily out of a cell', () => {
 
       expect(prisonApi.getInmates).toHaveBeenCalledWith(
         {
-          ...res.locals,
           requestHeaders: expect.objectContaining({
             'Page-Limit': '5000',
             'Sort-Fields': 'lastName,firstName',

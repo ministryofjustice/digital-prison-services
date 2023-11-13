@@ -10,9 +10,12 @@ const router = express.Router({ mergeParams: true })
 
 const controller = ({ systemOauthClient, prisonApi, whereaboutsApi }) => {
   router.get('/', cellMoveHomepage)
-  router.get('/prisoner-search', cellMovePrisonerSearch({ prisonApi }))
-  router.get('/view-residential-location', cellMoveViewResidentialLocation({ prisonApi, whereaboutsApi }))
-  router.get('/temporary-move', cellMoveTemporaryMove({ prisonApi }))
+  router.get('/prisoner-search', cellMovePrisonerSearch({ systemOauthClient, prisonApi }))
+  router.get(
+    '/view-residential-location',
+    cellMoveViewResidentialLocation({ systemOauthClient, prisonApi, whereaboutsApi })
+  )
+  router.get('/temporary-move', cellMoveTemporaryMove({ systemOauthClient, prisonApi }))
   router.get('/recent-cell-moves', recentCellMoves({ prisonApi }))
   router.get('/recent-cell-moves/history', cellMoveHistory({ systemOauthClient, prisonApi, whereaboutsApi }))
 

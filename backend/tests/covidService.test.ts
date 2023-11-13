@@ -2,8 +2,11 @@ import moment from 'moment'
 
 Reflect.deleteProperty(process.env, 'APPINSIGHTS_INSTRUMENTATIONKEY')
 const prisonApi = {}
+const systemOauthClient = {
+  getClientCredentialsTokens: jest.fn(),
+}
 const now = moment('2020-01-10')
-const covidService = require('../services/covidService').covidServiceFactory(prisonApi, () => now)
+const covidService = require('../services/covidService').covidServiceFactory(systemOauthClient, prisonApi, () => now)
 
 beforeEach(() => {
   // @ts-expect-error ts-migrate(2339) FIXME: Property 'getInmates' does not exist on type '{}'.
@@ -47,6 +50,7 @@ describe('Covid Service', () => {
 
       // @ts-expect-error ts-migrate(2339) FIXME: Property 'getInmates' does not exist on type '{}'.
       prisonApi.getInmates.mockImplementationOnce(returnSize(200))
+      systemOauthClient.getClientCredentialsTokens.mockResolvedValue({})
 
       const response = await covidService.getCount(context)
 

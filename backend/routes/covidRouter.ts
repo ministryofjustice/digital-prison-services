@@ -9,20 +9,14 @@ import notInUnitController from '../controllers/covid/notInUnitController'
 
 const router = express.Router({ mergeParams: true })
 
-export default (prisonApi, logError) => {
-  const covidService = covidServiceFactory(prisonApi)
+export default (systemOauthClient, prisonApi) => {
+  const covidService = covidServiceFactory(systemOauthClient, prisonApi)
 
-  // @ts-expect-error ts-migrate(2345) FIXME: Argument of type '{ covidService: { getCount(res: ... Remove this comment to see the full error message
-  router.get('/', covidDashboardController({ covidService, logError }))
-  // @ts-expect-error ts-migrate(2345) FIXME: Argument of type '{ covidService: { getCount(res: ... Remove this comment to see the full error message
-  router.get('/reverse-cohorting-unit', reverseCohortingUnitController({ covidService, logError }))
-  // @ts-expect-error ts-migrate(2345) FIXME: Argument of type '{ covidService: { getCount(res: ... Remove this comment to see the full error message
-  router.get('/protective-isolation-unit', protectiveIsolationUnitController({ covidService, logError }))
-  // @ts-expect-error ts-migrate(2345) FIXME: Argument of type '{ covidService: { getCount(res: ... Remove this comment to see the full error message
-  router.get('/shielding-unit', shieldingUnitController({ covidService, logError }))
-  // @ts-expect-error ts-migrate(2345) FIXME: Argument of type '{ covidService: { getCount(res: ... Remove this comment to see the full error message
-  router.get('/refusing-to-shield', refusingToShieldController({ covidService, logError }))
-  // @ts-expect-error ts-migrate(2345) FIXME: Argument of type '{ covidService: { getCount(res: ... Remove this comment to see the full error message
-  router.get('/not-in-unit', notInUnitController({ covidService, logError }))
+  router.get('/', covidDashboardController({ covidService }))
+  router.get('/reverse-cohorting-unit', reverseCohortingUnitController({ covidService }))
+  router.get('/protective-isolation-unit', protectiveIsolationUnitController({ covidService }))
+  router.get('/shielding-unit', shieldingUnitController({ covidService }))
+  router.get('/refusing-to-shield', refusingToShieldController({ covidService }))
+  router.get('/not-in-unit', notInUnitController({ covidService }))
   return router
 }

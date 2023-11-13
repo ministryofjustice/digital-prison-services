@@ -8,6 +8,9 @@ describe('move validation', () => {
   let res
   let controller
 
+  const systemOauthClient = {
+    getClientCredentialsTokens: jest.fn(),
+  }
   const prisonApi = {
     getDetails: jest.fn(),
     getInmatesAtLocation: jest.fn(),
@@ -408,9 +411,10 @@ describe('move validation', () => {
       ],
     })
 
+    systemOauthClient.getClientCredentialsTokens.mockResolvedValue('system-token')
     raiseAnalyticsEvent = jest.fn()
 
-    controller = considerRisksController({ prisonApi, raiseAnalyticsEvent, nonAssociationsApi })
+    controller = considerRisksController({ systemOauthClient, prisonApi, raiseAnalyticsEvent, nonAssociationsApi })
   })
 
   it('Makes the expected API calls on get', async () => {
@@ -427,7 +431,7 @@ describe('move validation', () => {
     expect(prisonApi.getLocation).toHaveBeenCalledWith(res.locals, 1)
     expect(prisonApi.getLocation).toHaveBeenCalledWith(res.locals, 2)
     expect(prisonApi.getLocation).toHaveBeenCalledWith(res.locals, 3)
-    expect(prisonApi.getInmatesAtLocation).toHaveBeenCalledWith(res.locals, 1, {})
+    expect(prisonApi.getInmatesAtLocation).toHaveBeenCalledWith('system-token', 1, {})
   })
 
   it('Passes the expected data to the template on get', async () => {

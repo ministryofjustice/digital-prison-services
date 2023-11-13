@@ -14,7 +14,7 @@ describe('Cell move confirmation', () => {
     logError = jest.fn()
     prisonApi.getDetails = jest.fn().mockResolvedValue({ firstName: 'Bob', lastName: 'Doe', agencyId: 'MDI' })
     prisonApi.getLocation = jest.fn().mockResolvedValue({ description: 'A-1-012' })
-    controller = cellMoveConfirmation({ prisonApi, logError })
+    controller = cellMoveConfirmation({ prisonApi })
 
     res = { locals: {}, status: jest.fn(), render: jest.fn() }
   })

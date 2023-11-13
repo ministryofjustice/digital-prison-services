@@ -5,6 +5,10 @@ describe('Prisoner search', () => {
     getInmates: jest.fn(),
   }
 
+  const systemOauthClient = {
+    getClientCredentialsTokens: jest.fn(),
+  }
+
   let req
   let res
   let controller
@@ -31,8 +35,9 @@ describe('Prisoner search', () => {
     }
 
     prisonApi.getInmates = jest.fn().mockReturnValue([])
+    systemOauthClient.getClientCredentialsTokens = jest.fn().mockResolvedValue({})
 
-    controller = prisonerSearchController({ prisonApi })
+    controller = prisonerSearchController({ systemOauthClient, prisonApi })
   })
 
   describe('index', () => {
@@ -45,7 +50,6 @@ describe('Prisoner search', () => {
 
       expect(prisonApi.getInmates).toHaveBeenCalledWith(
         {
-          ...res.locals,
           requestHeaders: expect.objectContaining({
             'Page-Limit': '5000',
             'Sort-Fields': 'lastName,firstName',

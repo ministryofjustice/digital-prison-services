@@ -27,10 +27,11 @@ const sortByLatestAssessmentDateDesc = (left, right) => {
   return 0
 }
 
-const getCellOccupants = async (res, { prisonApi, activeCaseLoadId, cells, nonAssociations }) => {
+const getCellOccupants = async (res, { systemOauthClient, prisonApi, activeCaseLoadId, cells, nonAssociations }) => {
+  const systemContext = await systemOauthClient.getClientCredentialsTokens()
   const currentCellOccupants = (
     await Promise.all(
-      cells.map((cell) => cell.id).map((cellId) => prisonApi.getInmatesAtLocation(res.locals, cellId, {}))
+      cells.map((cell) => cell.id).map((cellId) => prisonApi.getInmatesAtLocation(systemContext, cellId, {}))
     )
   ).flatMap((occupant) => occupant)
 
@@ -109,7 +110,7 @@ const getResidentialLevelNonAssociations = async (res, { prisonApi, nonAssociati
   )
 }
 
-export default ({ oauthApi, prisonApi, whereaboutsApi, nonAssociationsApi }) =>
+export default ({ oauthApi, systemOauthClient, prisonApi, whereaboutsApi, nonAssociationsApi }) =>
   async (req, res) => {
     const { offenderNo } = req.params
     const { location = 'ALL', subLocation, cellType, locationId } = req.query
@@ -187,6 +188,7 @@ export default ({ oauthApi, prisonApi, whereaboutsApi, nonAssociationsApi }) =>
 
       const cellOccupants = await getCellOccupants(res, {
         activeCaseLoadId,
+        systemOauthClient,
         prisonApi,
         cells: selectedCells,
         nonAssociations,

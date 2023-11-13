@@ -12,7 +12,7 @@ import {
   hasLength,
 } from '../../utils'
 
-export default ({ oauthApi, prisonApi, page = 0 }) =>
+export default ({ oauthApi, systemOauthClient, prisonApi, page = 0 }) =>
   async (req, res) => {
     const { offenderNo } = req.params
 
@@ -96,12 +96,14 @@ export default ({ oauthApi, prisonApi, page = 0 }) =>
         }
       })
 
+      const systemContext = await systemOauthClient.getClientCredentialsTokens()
       const cellDataLatestFirst = cellData.sort((left, right) =>
         sortByDateTime(right.assignmentDateTime, left.assignmentDateTime)
       )
       const currentLocation = cellDataLatestFirst.slice(0, 1)[0]
       const occupants =
-        (currentLocation && (await prisonApi.getInmatesAtLocation(res.locals, currentLocation.livingUnitId, {}))) || []
+        (currentLocation && (await prisonApi.getInmatesAtLocation(systemContext, currentLocation.livingUnitId, {}))) ||
+        []
 
       const previousLocations = cellDataLatestFirst.slice(1)
 

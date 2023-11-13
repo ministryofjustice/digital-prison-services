@@ -20,7 +20,7 @@ describe('Cell not available', () => {
     res.render = jest.fn()
     res.status = jest.fn()
 
-    controller = cellNotAvailable({ prisonApi, logError })
+    controller = cellNotAvailable({ prisonApi })
 
     req = {
       originalUrl: 'http://localhost',
