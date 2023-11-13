@@ -88,7 +88,5 @@ generic-service:
     PREPARE_SOMEONE_FOR_RELEASE_URL: https://resettlement-passport-ui-preprod.hmpps.service.justice.gov.uk
 
   allowlist:
-    groups:
-      - internal
-      - prisons
-      - private_prisons
+    undefined: internal,prisons,private_prisons/32
+    groups: []
