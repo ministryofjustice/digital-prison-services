@@ -94,11 +94,8 @@ generic-service:
     sscl-york: 62.6.61.29/32
     sscl-newcastle: 62.172.79.105/32
     sscl-newport: 217.38.237.212/32
-    groups:
-      - internal
-      - prisons
-      - private_prisons
-      - police
+    undefined: internal,prisons,private_prisons,police/32
+    groups: []
 
 # determine which slack channel alerts are sent to, via the correct Alert Manager receiver
 generic-prometheus-alerts:
