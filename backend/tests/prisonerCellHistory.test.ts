@@ -3,12 +3,19 @@ import prisonerCellHistory from '../controllers/prisonerProfile/prisonerCellHist
 describe('Prisoner cell history', () => {
   const offenderNo = 'ABC123'
   const bookingId = '123'
-  const prisonApi = {}
-  const oauthApi = {}
+  const prisonApi = {
+    getDetails: jest.fn(),
+    getOffenderCellHistory: jest.fn(),
+    getAgencyDetails: jest.fn(),
+    getInmatesAtLocation: jest.fn(),
+    getStaffDetails: jest.fn(),
+  }
+  const oauthApi = {
+    userRoles: jest.fn(),
+  }
 
   let req
   let res
-  let logError
   let controller
 
   beforeEach(() => {
@@ -21,14 +28,9 @@ describe('Prisoner cell history', () => {
     }
     res = { locals: {}, render: jest.fn() }
 
-    logError = jest.fn()
-
-    // @ts-expect-error ts-migrate(2339) FIXME: Property 'userRoles' does not exist on type '{}'.
-    oauthApi.userRoles = jest.fn().mockReturnValue([])
-    // @ts-expect-error ts-migrate(2339) FIXME: Property 'getDetails' does not exist on type '{}'.
-    prisonApi.getDetails = jest.fn().mockResolvedValue({ bookingId, firstName: 'John', lastName: 'Smith' })
-    // @ts-expect-error ts-migrate(2339) FIXME: Property 'getOffenderCellHistory' does not exist o... Remove this comment to see the full error message
-    prisonApi.getOffenderCellHistory = jest.fn().mockResolvedValue({
+    oauthApi.userRoles.mockReturnValue([])
+    prisonApi.getDetails.mockResolvedValue({ bookingId, firstName: 'John', lastName: 'Smith' })
+    prisonApi.getOffenderCellHistory.mockResolvedValue({
       content: [
         {
           agencyId: 'MDI',
@@ -90,17 +92,13 @@ describe('Prisoner cell history', () => {
         },
       ],
     })
-    // @ts-expect-error ts-migrate(2339) FIXME: Property 'getAgencyDetails' does not exist on type... Remove this comment to see the full error message
-    prisonApi.getAgencyDetails = jest.fn()
-    // @ts-expect-error ts-migrate(2339) FIXME: Property 'getInmatesAtLocation' does not exist on ... Remove this comment to see the full error message
-    prisonApi.getInmatesAtLocation = jest.fn()
-    // @ts-expect-error ts-migrate(2339) FIXME: Property 'getStaffDetails' does not exist on type ... Remove this comment to see the full error message
-    prisonApi.getStaffDetails = jest.fn()
 
-    // @ts-expect-error ts-migrate(2345) FIXME: Argument of type '{ oauthApi: {}; prisonApi: {}; l... Remove this comment to see the full error message
-    controller = prisonerCellHistory({ oauthApi, prisonApi, logError })
+    controller = prisonerCellHistory({
+      oauthApi,
+      prisonApi,
+    })
 
-    jest.spyOn(Date, 'now').mockImplementation(() => 1603988100000) // Friday, 29 Oct 2020 16:15 UTC (avoid BST)
+    jest.spyOn(Date, 'now').mockImplementation(() => 1603988100000) // Thursday, 29 Oct 2020 16:15 UTC (avoid BST)
   })
 
   afterEach(() => {
@@ -110,16 +108,12 @@ describe('Prisoner cell history', () => {
 
   describe('cell history for offender', () => {
     beforeEach(() => {
-      // @ts-expect-error ts-migrate(2339) FIXME: Property 'getAgencyDetails' does not exist on type... Remove this comment to see the full error message
-      prisonApi.getAgencyDetails = jest
-        .fn()
+      prisonApi.getAgencyDetails
         .mockResolvedValueOnce({ agencyId: 'MDI', description: 'Moorland' })
         .mockResolvedValueOnce({ agencyId: 'RNI', description: 'Ranby' })
-      // @ts-expect-error ts-migrate(2339) FIXME: Property 'getInmatesAtLocation' does not exist on ... Remove this comment to see the full error message
       prisonApi.getInmatesAtLocation.mockResolvedValue([
         { bookingId: '144', firstName: 'Another', lastName: 'Offender', offenderNo: 'B12345' },
       ])
-      // @ts-expect-error ts-migrate(2339) FIXME: Property 'getStaffDetails' does not exist on type ... Remove this comment to see the full error message
       prisonApi.getStaffDetails
         .mockResolvedValueOnce({ firstName: 'Staff', lastName: 'Two', username: 'STAFF_2' })
         .mockResolvedValueOnce({ firstName: 'Staff', lastName: 'Three', username: 'STAFF_3' })
@@ -129,21 +123,13 @@ describe('Prisoner cell history', () => {
     it('should make the expected API calls', async () => {
       await controller(req, res)
 
-      // @ts-expect-error ts-migrate(2339) FIXME: Property 'getDetails' does not exist on type '{}'.
       expect(prisonApi.getDetails).toHaveBeenCalledWith(res.locals, offenderNo)
-      // @ts-expect-error ts-migrate(2339) FIXME: Property 'getOffenderCellHistory' does not exist o... Remove this comment to see the full error message
       expect(prisonApi.getOffenderCellHistory).toHaveBeenCalledWith(res.locals, bookingId, { page: 0, size: 10000 })
-      // @ts-expect-error ts-migrate(2339) FIXME: Property 'getAgencyDetails' does not exist on type... Remove this comment to see the full error message
       expect(prisonApi.getAgencyDetails.mock.calls.length).toBe(2)
-      // @ts-expect-error ts-migrate(2339) FIXME: Property 'getStaffDetails' does not exist on type ... Remove this comment to see the full error message
       expect(prisonApi.getStaffDetails.mock.calls.length).toBe(5)
-      // @ts-expect-error ts-migrate(2339) FIXME: Property 'getStaffDetails' does not exist on type ... Remove this comment to see the full error message
       expect(prisonApi.getStaffDetails).toHaveBeenCalledWith(res.locals, 'STAFF_1')
-      // @ts-expect-error ts-migrate(2339) FIXME: Property 'getStaffDetails' does not exist on type ... Remove this comment to see the full error message
       expect(prisonApi.getStaffDetails).toHaveBeenCalledWith(res.locals, 'STAFF_2')
-      // @ts-expect-error ts-migrate(2339) FIXME: Property 'getStaffDetails' does not exist on type ... Remove this comment to see the full error message
       expect(prisonApi.getStaffDetails).toHaveBeenCalledWith(res.locals, 'STAFF_3')
-      // @ts-expect-error ts-migrate(2339) FIXME: Property 'getInmatesAtLocation' does not exist on ... Remove this comment to see the full error message
       expect(prisonApi.getInmatesAtLocation).toHaveBeenCalledWith(res.locals, 1, {})
     })
 
@@ -247,8 +233,7 @@ describe('Prisoner cell history', () => {
     })
 
     it('sets the cell move correctly if role exists', async () => {
-      // @ts-expect-error ts-migrate(2339) FIXME: Property 'userRoles' does not exist on type '{}'.
-      oauthApi.userRoles = jest.fn().mockReturnValue([{ roleCode: 'CELL_MOVE' }])
+      oauthApi.userRoles.mockReturnValue([{ roleCode: 'CELL_MOVE' }])
       await controller(req, res)
 
       expect(res.render).toHaveBeenCalledWith(
@@ -262,8 +247,7 @@ describe('Prisoner cell history', () => {
 
   describe('cell history for offender with missing agency ids', () => {
     beforeEach(() => {
-      // @ts-expect-error ts-migrate(2339) FIXME: Property 'getOffenderCellHistory' does not exist o... Remove this comment to see the full error message
-      prisonApi.getOffenderCellHistory = jest.fn().mockResolvedValue({
+      prisonApi.getOffenderCellHistory.mockResolvedValue({
         content: [
           // Original location with agencyId
           {
@@ -316,13 +300,10 @@ describe('Prisoner cell history', () => {
         ],
       })
 
-      // @ts-expect-error ts-migrate(2339) FIXME: Property 'getAgencyDetails' does not exist on type... Remove this comment to see the full error message
-      prisonApi.getAgencyDetails = jest.fn().mockResolvedValueOnce({ agencyId: 'MDI', description: 'Moorland' })
-      // @ts-expect-error ts-migrate(2339) FIXME: Property 'getInmatesAtLocation' does not exist on ... Remove this comment to see the full error message
+      prisonApi.getAgencyDetails.mockResolvedValueOnce({ agencyId: 'MDI', description: 'Moorland' })
       prisonApi.getInmatesAtLocation.mockResolvedValue([
         { bookingId: '144', firstName: 'Another', lastName: 'Offender', offenderNo: 'B12345' },
       ])
-      // @ts-expect-error ts-migrate(2339) FIXME: Property 'getStaffDetails' does not exist on type ... Remove this comment to see the full error message
       prisonApi.getStaffDetails
         .mockResolvedValueOnce({ firstName: 'Staff', lastName: 'Two', username: 'STAFF_2' })
         .mockResolvedValueOnce({ firstName: 'Staff', lastName: 'Three', username: 'STAFF_3' })

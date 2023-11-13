@@ -35,16 +35,17 @@ const fetchWhatHappened = async (
 const mapReasonToCellMoveReasonDescription = ({ cellMoveReasonTypes, assignmentReason }) =>
   cellMoveReasonTypes.find((type) => type.code === assignmentReason)?.description
 
-export default ({ prisonApi, whereaboutsApi, caseNotesApi }) =>
+export default ({ prisonApi, whereaboutsApi, caseNotesApi, systemOauthClient }) =>
   async (req, res) => {
     const { offenderNo } = req.params
     const { agencyId, locationId, fromDate, toDate = moment().format('YYYY-MM-DD') } = req.query
+    const systemContext = await systemOauthClient.getClientCredentialsTokens()
 
     try {
       const [prisonerDetails, locationAttributes, locationHistory, agencyDetails, userCaseLoads] = await Promise.all([
         prisonApi.getDetails(res.locals, offenderNo),
         prisonApi.getAttributesForLocation(res.locals, locationId),
-        prisonApi.getHistoryForLocation(res.locals, { locationId, fromDate, toDate }),
+        prisonApi.getHistoryForLocation(systemContext, { locationId, fromDate, toDate }),
         prisonApi.getAgencyDetails(res.locals, agencyId),
         prisonApi.userCaseLoads(res.locals),
       ])
