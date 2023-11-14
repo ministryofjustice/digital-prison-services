@@ -24,7 +24,7 @@ describe('View Residential Location', () => {
       baseUrl: '/change-someones-cell/view-residential-location',
       query: {},
       body: {},
-      session: {},
+      session: { userDetails: { username: 'me' } },
     }
     res = {
       locals: {

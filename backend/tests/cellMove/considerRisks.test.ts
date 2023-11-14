@@ -318,6 +318,7 @@ describe('move validation', () => {
       query: { cellId },
       protocol: 'http',
       get: jest.fn().mockReturnValue('localhost'),
+      session: { userDetails: { username: 'me' } },
     }
     res = { locals: {}, render: jest.fn(), redirect: jest.fn() }
 

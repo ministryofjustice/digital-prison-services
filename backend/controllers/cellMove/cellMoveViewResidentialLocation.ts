@@ -48,7 +48,7 @@ export default ({ systemOauthClient, prisonApi, whereaboutsApi }) =>
 
     const locationDesc = await prisonApiLocationDescription(res, whereaboutsApi, location, currentUserCaseLoad)
 
-    const systemContext = await systemOauthClient.getClientCredentialsTokens()
+    const systemContext = await systemOauthClient.getClientCredentialsTokens(req.session.userDetails.username)
     const context = {
       ...systemContext,
       requestHeaders: {

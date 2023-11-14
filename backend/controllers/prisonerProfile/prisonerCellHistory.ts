@@ -96,7 +96,7 @@ export default ({ oauthApi, systemOauthClient, prisonApi, page = 0 }) =>
         }
       })
 
-      const systemContext = await systemOauthClient.getClientCredentialsTokens()
+      const systemContext = await systemOauthClient.getClientCredentialsTokens(req.session.userDetails.username)
       const cellDataLatestFirst = cellData.sort((left, right) =>
         sortByDateTime(right.assignmentDateTime, left.assignmentDateTime)
       )

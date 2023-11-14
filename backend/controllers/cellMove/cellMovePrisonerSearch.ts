@@ -22,7 +22,7 @@ export default ({ systemOauthClient, prisonApi }) =>
 
     const currentUserCaseLoad = activeCaseLoad && activeCaseLoad.caseLoadId
 
-    const systemContext = await systemOauthClient.getClientCredentialsTokens()
+    const systemContext = await systemOauthClient.getClientCredentialsTokens(req.session.userDetails.username)
     const context = {
       ...systemContext,
       requestHeaders: {

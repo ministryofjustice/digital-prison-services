@@ -19,7 +19,7 @@ describe('Move someone temporarily out of a cell', () => {
       baseUrl: '/change-someones-cell/temporary-move',
       query: {},
       body: {},
-      session: {},
+      session: { userDetails: { username: 'me' } },
     }
     res = {
       locals: {

@@ -28,7 +28,7 @@ export default ({ systemOauthClient, prisonApi, raiseAnalyticsEvent, nonAssociat
     const { cellId } = req.query
     const { errors } = pageData || {}
 
-    const systemContext = await systemOauthClient.getClientCredentialsTokens()
+    const systemContext = await systemOauthClient.getClientCredentialsTokens(req.session.userDetails.username)
     try {
       const [currentOffenderDetails, occupants] = await Promise.all([
         prisonApi.getDetails(res.locals, offenderNo, true),
@@ -212,7 +212,7 @@ export default ({ systemOauthClient, prisonApi, raiseAnalyticsEvent, nonAssociat
       if (confirmation === 'yes')
         return res.redirect(`/prisoner/${offenderNo}/cell-move/confirm-cell-move?cellId=${cellId}`)
 
-      const systemContext = await systemOauthClient.getClientCredentialsTokens()
+      const systemContext = await systemOauthClient.getClientCredentialsTokens(req.session.userDetails.username)
       const [currentOffenderDetails, occupants] = await Promise.all([
         prisonApi.getDetails(res.locals, offenderNo, true),
         prisonApi.getInmatesAtLocation(systemContext, cellId, {}),

@@ -27,6 +27,7 @@ describe('Prisoner cell history', () => {
       params: { offenderNo },
       query: {},
       protocol: 'http',
+      session: { userDetails: { username: 'me' } },
       get: jest.fn().mockReturnValue('localhost'),
     }
     res = { locals: {}, render: jest.fn() }

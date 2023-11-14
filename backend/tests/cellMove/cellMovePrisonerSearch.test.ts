@@ -20,7 +20,7 @@ describe('Prisoner search', () => {
       baseUrl: '/change-someones-cell/prisoner-search',
       query: {},
       body: {},
-      session: {},
+      session: { userDetails: { username: 'me' } },
     }
     res = {
       locals: {
