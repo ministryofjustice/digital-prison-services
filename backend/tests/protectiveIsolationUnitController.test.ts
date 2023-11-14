@@ -42,7 +42,7 @@ describe('protective isolation unit', () => {
 
     expect(logError).not.toHaveBeenCalled()
 
-    expect(covidService.getAlertList).toHaveBeenCalledWith(res, 'UPIU')
+    expect(covidService.getAlertList).toHaveBeenCalledWith(req, res, 'UPIU')
 
     expect(res.render).toHaveBeenCalledWith('covid/protectiveIsolationUnit.njk', {
       title: 'Prisoners in the Protective Isolation Unit',

@@ -42,6 +42,7 @@ describe('Prisoner location sharing history', () => {
       originalUrl: 'http://localhost',
       params: { offenderNo },
       query: { agencyId: 'MDI', locationId: 1, fromDate: '2019-12-31' },
+      session: { userDetails: { username: 'me' } },
     }
     res = { locals: {}, render: jest.fn(), status: jest.fn() }
 

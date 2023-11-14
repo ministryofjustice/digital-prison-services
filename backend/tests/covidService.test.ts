@@ -25,11 +25,12 @@ describe('Covid Service', () => {
     }
 
     it('Retrieve count with alert', async () => {
-      const context = { locals: { user: { activeCaseLoad: { caseLoadId: 'MDI' } } }, render: jest.fn() }
+      const req = { session: { userDetails: { username: 'ITAG_USER' } } }
+      const res = { locals: { user: { activeCaseLoad: { caseLoadId: 'MDI' } } }, render: jest.fn() }
 
       prisonApi.getInmates.mockImplementationOnce(returnSize(21))
 
-      const response = await covidService.getCount(context, 'UPIU')
+      const response = await covidService.getCount(req, res, 'UPIU')
 
       expect(response).toEqual(21)
 
@@ -39,12 +40,13 @@ describe('Covid Service', () => {
     })
 
     it('Retrieve count without alert', async () => {
-      const context = { locals: { user: { activeCaseLoad: { caseLoadId: 'MDI' } } }, render: jest.fn() }
+      const req = { session: { userDetails: { username: 'ITAG_USER' } } }
+      const res = { locals: { user: { activeCaseLoad: { caseLoadId: 'MDI' } } }, render: jest.fn() }
 
       prisonApi.getInmates.mockImplementationOnce(returnSize(200))
       systemOauthClient.getClientCredentialsTokens.mockResolvedValue({})
 
-      const response = await covidService.getCount(context)
+      const response = await covidService.getCount(req, res)
 
       expect(response).toEqual(200)
 
@@ -59,7 +61,8 @@ describe('Covid Service', () => {
     }
 
     it('success', async () => {
-      const context = { locals: { user: { activeCaseLoad: { caseLoadId: 'MDI' } } }, render: jest.fn() }
+      const req = { session: { userDetails: { username: 'ITAG_USER' } } }
+      const res = { locals: { user: { activeCaseLoad: { caseLoadId: 'MDI' } } }, render: jest.fn() }
 
       prisonApi.getAlerts.mockResolvedValue([
         { offenderNo: 'AA1234A', alertCode: 'AA1', expired: false, dateCreated: '2020-01-02' },
@@ -84,7 +87,7 @@ describe('Covid Service', () => {
         },
       ])
 
-      const response = await covidService.getAlertList(context, 'UPIU')
+      const response = await covidService.getAlertList(req, res, 'UPIU')
 
       expect(response).toEqual([
         {
@@ -114,7 +117,8 @@ describe('Covid Service', () => {
     })
 
     it('expired alerts are not displayed', async () => {
-      const context = { locals: { user: { activeCaseLoad: { caseLoadId: 'MDI' } } }, render: jest.fn() }
+      const req = { session: { userDetails: { username: 'ITAG_USER' } } }
+      const res = { locals: { user: { activeCaseLoad: { caseLoadId: 'MDI' } } }, render: jest.fn() }
 
       prisonApi.getAlerts.mockResolvedValue([
         { offenderNo: 'AA1234A', alertCode: 'UPIU', expired: false, dateCreated: '2020-01-03' },
@@ -139,7 +143,7 @@ describe('Covid Service', () => {
         },
       ])
 
-      const response = await covidService.getAlertList(context, 'UPIU')
+      const response = await covidService.getAlertList(req, res, 'UPIU')
 
       expect(response).toEqual([
         {

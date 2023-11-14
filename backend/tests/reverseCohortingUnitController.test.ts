@@ -41,7 +41,7 @@ describe('reverse cohorting unit', () => {
 
     expect(logError).not.toHaveBeenCalled()
 
-    expect(covidService.getAlertList).toHaveBeenCalledWith(res, 'URCU')
+    expect(covidService.getAlertList).toHaveBeenCalledWith(req, res, 'URCU')
 
     expect(res.render).toHaveBeenCalledWith('covid/reverseCohortingUnit.njk', {
       title: 'Prisoners in the Reverse Cohorting Unit',

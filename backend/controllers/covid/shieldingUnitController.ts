@@ -11,7 +11,7 @@ export default ({ covidService }) => {
   })
 
   return async (req, res) => {
-    const results = await covidService.getAlertList(res, alerts.shieldingUnit)
+    const results = await covidService.getAlertList(req, res, alerts.shieldingUnit)
     const formattedResults = results.map(formatResult).sort((left, right) => left.name.localeCompare(right.name))
 
     return res.render('covid/shieldingUnit.njk', {

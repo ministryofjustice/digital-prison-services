@@ -38,7 +38,7 @@ describe('refusing to shield', () => {
 
     expect(logError).not.toHaveBeenCalled()
 
-    expect(covidService.getAlertList).toHaveBeenCalledWith(res, 'URS')
+    expect(covidService.getAlertList).toHaveBeenCalledWith(req, res, 'URS')
 
     expect(res.render).toHaveBeenCalledWith('covid/refusingToShield.njk', {
       title: 'Prisoners refusing to shield',

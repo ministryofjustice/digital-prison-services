@@ -19,7 +19,7 @@ export default ({ covidService }) => {
   }
 
   return async (req, res) => {
-    const results = await covidService.getAlertList(res, alerts.reverseCohortingUnit)
+    const results = await covidService.getAlertList(req, res, alerts.reverseCohortingUnit)
     const notInUnit = await covidService.getUnassignedNewEntrants(res)
 
     const formattedResults = results

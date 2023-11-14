@@ -27,8 +27,12 @@ const sortByLatestAssessmentDateDesc = (left, right) => {
   return 0
 }
 
-const getCellOccupants = async (res, { systemOauthClient, prisonApi, activeCaseLoadId, cells, nonAssociations }) => {
-  const systemContext = await systemOauthClient.getClientCredentialsTokens()
+const getCellOccupants = async (
+  req,
+  res,
+  { systemOauthClient, prisonApi, activeCaseLoadId, cells, nonAssociations }
+) => {
+  const systemContext = await systemOauthClient.getClientCredentialsTokens(req.session.userDetails.username)
   const currentCellOccupants = (
     await Promise.all(
       cells.map((cell) => cell.id).map((cellId) => prisonApi.getInmatesAtLocation(systemContext, cellId, {}))
@@ -186,7 +190,7 @@ export default ({ oauthApi, systemOauthClient, prisonApi, whereaboutsApi, nonAss
         return cell
       })
 
-      const cellOccupants = await getCellOccupants(res, {
+      const cellOccupants = await getCellOccupants(req, res, {
         activeCaseLoadId,
         systemOauthClient,
         prisonApi,

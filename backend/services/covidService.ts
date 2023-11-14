@@ -38,10 +38,10 @@ export const covidServiceFactory = (systemOauthClient, prisonApi, now = () => mo
   }
 
   return {
-    async getCount(res, alert) {
+    async getCount(req, res, alert) {
       const { caseLoadId } = res.locals.user.activeCaseLoad
 
-      const systemContext = await systemOauthClient.getClientCredentialsTokens()
+      const systemContext = await systemOauthClient.getClientCredentialsTokens(req.session.userDetails.username)
       const context = { ...systemContext, requestHeaders: { 'page-offset': 0, 'page-limit': 1 } }
 
       await prisonApi.getInmates(context, caseLoadId, alert ? { alerts: alert } : {})
@@ -49,10 +49,10 @@ export const covidServiceFactory = (systemOauthClient, prisonApi, now = () => mo
       return context.responseHeaders['total-records']
     },
 
-    async getAlertList(res, code) {
+    async getAlertList(req, res, code) {
       const { caseLoadId } = res.locals.user.activeCaseLoad
 
-      const systemContext = await systemOauthClient.getClientCredentialsTokens()
+      const systemContext = await systemOauthClient.getClientCredentialsTokens(req.session.userDetails.username)
       const requestHeaders = { 'page-offset': 0, 'page-limit': 3000 }
       const inmates = await prisonApi.getInmates(
         { ...systemContext, requestHeaders },

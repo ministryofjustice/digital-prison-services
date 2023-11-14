@@ -35,9 +35,8 @@ describe('Cell move history', () => {
     ])
 
     req = {
-      query: {
-        date: '2020-10-12',
-      },
+      query: { date: '2020-10-12' },
+      session: { userDetails: { username: 'me' } },
     }
     res = {
       render: jest.fn(),
