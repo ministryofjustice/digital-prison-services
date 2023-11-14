@@ -37,11 +37,11 @@ describe('covid dashboard', () => {
 
     expect(logError).not.toHaveBeenCalled()
 
-    expect(covidService.getCount).toHaveBeenCalledWith(res)
-    expect(covidService.getCount).toHaveBeenCalledWith(res, 'URCU')
-    expect(covidService.getCount).toHaveBeenCalledWith(res, 'UPIU')
-    expect(covidService.getCount).toHaveBeenCalledWith(res, 'USU')
-    expect(covidService.getCount).toHaveBeenCalledWith(res, 'URS')
+    expect(covidService.getCount).toHaveBeenCalledWith(req, res)
+    expect(covidService.getCount).toHaveBeenCalledWith(req, res, 'URCU')
+    expect(covidService.getCount).toHaveBeenCalledWith(req, res, 'UPIU')
+    expect(covidService.getCount).toHaveBeenCalledWith(req, res, 'USU')
+    expect(covidService.getCount).toHaveBeenCalledWith(req, res, 'URS')
     expect(covidService.getUnassignedNewEntrants).toHaveBeenCalled()
 
     expect(res.render).toHaveBeenCalledWith(

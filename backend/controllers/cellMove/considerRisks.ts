@@ -11,7 +11,7 @@ const activeCellMoveAlertsExcludingDisabled = (alert) =>
 
 const missingDataString = 'not entered'
 
-export default ({ prisonApi, raiseAnalyticsEvent, nonAssociationsApi }) => {
+export default ({ systemOauthClient, prisonApi, raiseAnalyticsEvent, nonAssociationsApi }) => {
   const getOccupantsDetails = async (context, offenders) =>
     Promise.all(offenders.map((offender) => prisonApi.getDetails(context, offender, true)))
 
@@ -28,10 +28,11 @@ export default ({ prisonApi, raiseAnalyticsEvent, nonAssociationsApi }) => {
     const { cellId } = req.query
     const { errors } = pageData || {}
 
+    const systemContext = await systemOauthClient.getClientCredentialsTokens(req.session.userDetails.username)
     try {
       const [currentOffenderDetails, occupants] = await Promise.all([
         prisonApi.getDetails(res.locals, offenderNo, true),
-        prisonApi.getInmatesAtLocation(res.locals, cellId, {}),
+        prisonApi.getInmatesAtLocation(systemContext, cellId, {}),
       ])
 
       const hasOccupants = occupants.length > 0
@@ -211,9 +212,10 @@ export default ({ prisonApi, raiseAnalyticsEvent, nonAssociationsApi }) => {
       if (confirmation === 'yes')
         return res.redirect(`/prisoner/${offenderNo}/cell-move/confirm-cell-move?cellId=${cellId}`)
 
+      const systemContext = await systemOauthClient.getClientCredentialsTokens(req.session.userDetails.username)
       const [currentOffenderDetails, occupants] = await Promise.all([
         prisonApi.getDetails(res.locals, offenderNo, true),
-        prisonApi.getInmatesAtLocation(res.locals, cellId, {}),
+        prisonApi.getInmatesAtLocation(systemContext, cellId, {}),
       ])
 
       const currentOccupantsOffenderNos = occupants.map((occupant) => occupant.offenderNo)

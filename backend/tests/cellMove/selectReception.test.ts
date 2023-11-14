@@ -28,6 +28,9 @@ describe('Select reception', () => {
   const oauthApi = {
     userRoles: jest.fn(),
   }
+  const systemOauthClient = {
+    getClientCredentialsTokens: jest.fn(),
+  }
 
   const res = { locals: {}, render: jest.fn() }
   let controller
@@ -68,7 +71,7 @@ describe('Select reception', () => {
       },
     ])
 
-    controller = selectReceptionFactory({ oauthApi, prisonApi, whereaboutsApi, nonAssociationsApi })
+    controller = selectReceptionFactory({ oauthApi, systemOauthClient, prisonApi, whereaboutsApi, nonAssociationsApi })
 
     req = {
       params: {

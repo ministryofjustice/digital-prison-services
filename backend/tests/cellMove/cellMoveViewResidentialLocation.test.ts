@@ -9,6 +9,10 @@ describe('View Residential Location', () => {
     searchGroups: jest.fn(),
   }
 
+  const systemOauthClient = {
+    getClientCredentialsTokens: jest.fn(),
+  }
+
   let req
   let res
   let controller
@@ -20,7 +24,7 @@ describe('View Residential Location', () => {
       baseUrl: '/change-someones-cell/view-residential-location',
       query: {},
       body: {},
-      session: {},
+      session: { userDetails: { username: 'me' } },
     }
     res = {
       locals: {
@@ -51,7 +55,7 @@ describe('View Residential Location', () => {
 
     prisonApi.getInmates = jest.fn().mockReturnValue([])
 
-    controller = viewResidentialLocationController({ prisonApi, whereaboutsApi })
+    controller = viewResidentialLocationController({ systemOauthClient, prisonApi, whereaboutsApi })
   })
 
   describe('index', () => {
@@ -98,7 +102,6 @@ describe('View Residential Location', () => {
 
       expect(prisonApi.getInmates).toHaveBeenCalledWith(
         {
-          ...res.locals,
           requestHeaders: expect.objectContaining({
             'Page-Limit': '5000',
             'Sort-Fields': 'lastName,firstName',
@@ -123,7 +126,6 @@ describe('View Residential Location', () => {
 
       expect(prisonApi.getInmates).toHaveBeenCalledWith(
         {
-          ...res.locals,
           requestHeaders: expect.objectContaining({
             'Page-Limit': '5000',
             'Sort-Fields': 'lastName,firstName',

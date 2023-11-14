@@ -26,6 +26,9 @@ describe('Select a cell', () => {
   const oauthApi = {
     userRoles: jest.fn(),
   }
+  const systemOauthClient = {
+    getClientCredentialsTokens: jest.fn(),
+  }
 
   const res = { locals: {}, render: jest.fn() }
   let controller
@@ -92,7 +95,7 @@ describe('Select a cell', () => {
     ])
 
     res.render = jest.fn()
-    controller = selectCellFactory({ oauthApi, prisonApi, whereaboutsApi, nonAssociationsApi })
+    controller = selectCellFactory({ oauthApi, systemOauthClient, prisonApi, whereaboutsApi, nonAssociationsApi })
 
     req = {
       params: {
@@ -438,6 +441,7 @@ describe('Select a cell', () => {
           attributes: [{ description: 'Wheelchair Access', code: 'WA' }],
         },
       ])
+      systemOauthClient.getClientCredentialsTokens.mockResolvedValue({})
     })
     it('should make the relevant calls to gather cell occupant data', async () => {
       await controller(req, res)

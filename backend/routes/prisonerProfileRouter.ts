@@ -194,7 +194,7 @@ const controller = ({
     '/cell-history',
     prisonerProfileRedirect({
       path: '/location-details',
-      handler: prisonerCellHistory({ oauthApi, prisonApi }),
+      handler: prisonerCellHistory({ oauthApi, systemOauthClient, prisonApi }),
     })
   )
 

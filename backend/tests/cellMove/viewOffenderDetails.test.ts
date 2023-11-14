@@ -54,7 +54,7 @@ describe('view offender details', () => {
       },
     ])
 
-    controller = viewOffenderDetails({ prisonApi, logError })
+    controller = viewOffenderDetails({ prisonApi })
   })
 
   it('Makes the expected API calls', async () => {

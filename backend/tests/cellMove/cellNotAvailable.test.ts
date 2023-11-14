@@ -7,7 +7,6 @@ describe('Cell not available', () => {
   const prisonApi = {
     getDetails: jest.fn(),
   }
-  let logError
   let controller
 
   beforeEach(() => {
@@ -15,12 +14,11 @@ describe('Cell not available', () => {
       firstName: 'John',
       lastName: 'Doe',
     })
-    logError = jest.fn()
     res.redirect = jest.fn()
     res.render = jest.fn()
     res.status = jest.fn()
 
-    controller = cellNotAvailable({ prisonApi, logError })
+    controller = cellNotAvailable({ prisonApi })
 
     req = {
       originalUrl: 'http://localhost',

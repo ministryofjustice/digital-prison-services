@@ -18,7 +18,7 @@ export default ({ covidService, nowGetter = moment }) => {
   }
 
   return async (req, res) => {
-    const results = await covidService.getAlertList(res, alerts.protectiveIsolationUnit)
+    const results = await covidService.getAlertList(req, res, alerts.protectiveIsolationUnit)
 
     const formattedResults = results
       .map(formatResult)

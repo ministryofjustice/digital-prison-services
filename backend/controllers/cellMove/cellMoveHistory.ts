@@ -71,7 +71,7 @@ export default ({ systemOauthClient, prisonApi, whereaboutsApi }) =>
       text: subType.description,
     }))
 
-    const systemContext = await systemOauthClient.getClientCredentialsTokens()
+    const systemContext = await systemOauthClient.getClientCredentialsTokens(req.session.userDetails.username)
     const offenders = await prisonApi.getPrisoners(
       { ...systemContext, requestHeaders: { 'page-offset': 0, 'page-limit': offenderNos.length } },
       { offenderNos }

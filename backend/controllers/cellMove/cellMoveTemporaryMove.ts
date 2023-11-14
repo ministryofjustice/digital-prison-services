@@ -1,7 +1,8 @@
+import { Request, Response } from 'express'
 import { putLastNameFirst, formatLocation, formatName } from '../../utils'
 
-export default ({ prisonApi }) =>
-  async (req, res) => {
+export default ({ systemOauthClient, prisonApi }) =>
+  async (req: Request, res: Response) => {
     const {
       user: { activeCaseLoad },
     } = res.locals
@@ -22,8 +23,9 @@ export default ({ prisonApi }) =>
 
     const currentUserCaseLoad = activeCaseLoad && activeCaseLoad.caseLoadId
 
+    const systemContext = await systemOauthClient.getClientCredentialsTokens(req.session.userDetails.username)
     const context = {
-      ...res.locals,
+      ...systemContext,
       requestHeaders: {
         'Page-Limit': '5000',
         'Sort-Fields': 'lastName,firstName',

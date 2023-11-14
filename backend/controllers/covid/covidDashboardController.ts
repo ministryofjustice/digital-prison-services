@@ -1,7 +1,7 @@
 import { alerts } from '../../services/covidService'
 
 export default ({ covidService }) => {
-  const loadStats = async (res) => {
+  const loadStats = async (req, res) => {
     const [
       prisonPopulation,
       reverseCohortingUnit,
@@ -10,11 +10,11 @@ export default ({ covidService }) => {
       refusingToShield,
       notInUnit,
     ] = await Promise.all([
-      covidService.getCount(res),
-      covidService.getCount(res, alerts.reverseCohortingUnit),
-      covidService.getCount(res, alerts.protectiveIsolationUnit),
-      covidService.getCount(res, alerts.shieldingUnit),
-      covidService.getCount(res, alerts.refusingToShield),
+      covidService.getCount(req, res),
+      covidService.getCount(req, res, alerts.reverseCohortingUnit),
+      covidService.getCount(req, res, alerts.protectiveIsolationUnit),
+      covidService.getCount(req, res, alerts.shieldingUnit),
+      covidService.getCount(req, res, alerts.refusingToShield),
       covidService.getUnassignedNewEntrants(res),
     ])
 
@@ -29,7 +29,7 @@ export default ({ covidService }) => {
   }
 
   return async (req, res) => {
-    const dashboardStats = await loadStats(res)
+    const dashboardStats = await loadStats(req, res)
     return res.render('covid/dashboard.njk', { title: 'Current breakdown of COVID units', dashboardStats })
   }
 }

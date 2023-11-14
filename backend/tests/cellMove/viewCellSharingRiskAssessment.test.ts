@@ -81,7 +81,7 @@ describe('view CSRA details', () => {
       description: 'HMP Moorland',
     })
 
-    controller = viewCellSharingRiskAssessmentDetails({ prisonApi, logError })
+    controller = viewCellSharingRiskAssessmentDetails({ prisonApi })
   })
 
   it('Makes the expected API calls', async () => {

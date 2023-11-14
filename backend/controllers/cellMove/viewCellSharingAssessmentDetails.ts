@@ -2,7 +2,7 @@ import moment from 'moment'
 import { putLastNameFirst, hasLength } from '../../utils'
 import { getBackLinkData, translateCsra } from './cellMoveUtils'
 
-export default ({ prisonApi, logError }) =>
+export default ({ prisonApi }) =>
   async (req, res) => {
     const { offenderNo } = req.params
 

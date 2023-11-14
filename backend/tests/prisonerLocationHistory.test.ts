@@ -42,6 +42,7 @@ describe('Prisoner location sharing history', () => {
       originalUrl: 'http://localhost',
       params: { offenderNo },
       query: { agencyId: 'MDI', locationId: 1, fromDate: '2019-12-31' },
+      session: { userDetails: { username: 'me' } },
     }
     res = { locals: {}, render: jest.fn(), status: jest.fn() }
 
@@ -63,7 +64,7 @@ describe('Prisoner location sharing history', () => {
       caseNotesApi,
       systemOauthClient,
     })
-    systemOauthClient.getClientCredentialsTokens.mockResolvedValue('SYSTEM_TOKEN')
+    systemOauthClient.getClientCredentialsTokens.mockResolvedValue({})
 
     jest.spyOn(Date, 'now').mockImplementation(() => 1578787200000) // Sun Jan 12 2020 00:00:00
   })
@@ -78,11 +79,14 @@ describe('Prisoner location sharing history', () => {
 
     expect(prisonApi.getDetails).toHaveBeenCalledWith(res.locals, offenderNo)
     expect(prisonApi.getAttributesForLocation).toHaveBeenCalledWith(res.locals, 1)
-    expect(prisonApi.getHistoryForLocation).toHaveBeenCalledWith('SYSTEM_TOKEN', {
-      locationId: 1,
-      fromDate: '2019-12-31',
-      toDate: '2020-01-12',
-    })
+    expect(prisonApi.getHistoryForLocation).toHaveBeenCalledWith(
+      {},
+      {
+        locationId: 1,
+        fromDate: '2019-12-31',
+        toDate: '2020-01-12',
+      }
+    )
     expect(prisonApi.getAgencyDetails).toHaveBeenCalledWith(res.locals, 'MDI')
     expect(prisonApi.userCaseLoads).toHaveBeenCalledWith(res.locals)
     expect(prisonApi.getPrisonerDetail.mock.calls.length).toBe(0)

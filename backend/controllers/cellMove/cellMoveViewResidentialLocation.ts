@@ -10,7 +10,7 @@ const prisonApiLocationDescription = async (res, whereaboutsApi, locationKey, us
   return `${userCaseLoad}-${locationKey}`
 }
 
-export default ({ prisonApi, whereaboutsApi }) =>
+export default ({ systemOauthClient, prisonApi, whereaboutsApi }) =>
   async (req, res) => {
     const {
       user: { activeCaseLoad },
@@ -48,8 +48,9 @@ export default ({ prisonApi, whereaboutsApi }) =>
 
     const locationDesc = await prisonApiLocationDescription(res, whereaboutsApi, location, currentUserCaseLoad)
 
+    const systemContext = await systemOauthClient.getClientCredentialsTokens(req.session.userDetails.username)
     const context = {
-      ...res.locals,
+      ...systemContext,
       requestHeaders: {
         'Page-Limit': '5000',
         'Sort-Fields': 'lastName,firstName',
@@ -60,21 +61,19 @@ export default ({ prisonApi, whereaboutsApi }) =>
       returnAlerts: 'true',
     })
 
-    const results =
-      prisoners &&
-      prisoners.map((prisoner) => ({
-        ...prisoner,
-        assignedLivingUnitDesc: formatLocation(prisoner.assignedLivingUnitDesc),
-        name: putLastNameFirst(prisoner.firstName, prisoner.lastName),
-        formattedName: formatName(prisoner.firstName, prisoner.lastName),
-        alerts: alertFlagLabels.filter((alertFlag) =>
-          alertFlag.alertCodes.some(
-            (alert) => prisoner.alertsDetails?.includes(alert) && cellMoveAlertCodes.includes(alert)
-          )
-        ),
-        cellHistoryUrl: `/prisoner/${prisoner.offenderNo}/cell-history`,
-        cellSearchUrl: `/prisoner/${prisoner.offenderNo}/cell-move/search-for-cell`,
-      }))
+    const results = prisoners?.map((prisoner) => ({
+      ...prisoner,
+      assignedLivingUnitDesc: formatLocation(prisoner.assignedLivingUnitDesc),
+      name: putLastNameFirst(prisoner.firstName, prisoner.lastName),
+      formattedName: formatName(prisoner.firstName, prisoner.lastName),
+      alerts: alertFlagLabels.filter((alertFlag) =>
+        alertFlag.alertCodes.some(
+          (alert) => prisoner.alertsDetails?.includes(alert) && cellMoveAlertCodes.includes(alert)
+        )
+      ),
+      cellHistoryUrl: `/prisoner/${prisoner.offenderNo}/cell-history`,
+      cellSearchUrl: `/prisoner/${prisoner.offenderNo}/cell-move/search-for-cell`,
+    }))
 
     return res.render('cellMove/cellMoveViewResidentialLocation.njk', {
       showResults: true,

@@ -318,11 +318,11 @@ const setup = ({
     '/prisoner/:offenderNo/cell-move',
     cellMoveRouter({
       oauthApi,
+      systemOauthClient,
       prisonApi,
       whereaboutsApi,
       caseNotesApi,
       nonAssociationsApi,
-      logError,
     })
   )
 
@@ -385,7 +385,7 @@ const setup = ({
     })
   )
 
-  router.use('/current-covid-units', covidRouter(prisonApi, logError))
+  router.use('/current-covid-units', covidRouter(systemOauthClient, prisonApi))
 
   router.use('/attendance-changes', attendanceChangeRouter({ prisonApi, whereaboutsApi }))
 

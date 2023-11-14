@@ -39,7 +39,7 @@ export default ({ prisonApi, whereaboutsApi, caseNotesApi, systemOauthClient }) 
   async (req, res) => {
     const { offenderNo } = req.params
     const { agencyId, locationId, fromDate, toDate = moment().format('YYYY-MM-DD') } = req.query
-    const systemContext = await systemOauthClient.getClientCredentialsTokens()
+    const systemContext = await systemOauthClient.getClientCredentialsTokens(req.session.userDetails.username)
 
     try {
       const [prisonerDetails, locationAttributes, locationHistory, agencyDetails, userCaseLoads] = await Promise.all([

@@ -13,6 +13,9 @@ describe('Prisoner cell history', () => {
   const oauthApi = {
     userRoles: jest.fn(),
   }
+  const systemOauthClient = {
+    getClientCredentialsTokens: jest.fn(),
+  }
 
   let req
   let res
@@ -24,6 +27,7 @@ describe('Prisoner cell history', () => {
       params: { offenderNo },
       query: {},
       protocol: 'http',
+      session: { userDetails: { username: 'me' } },
       get: jest.fn().mockReturnValue('localhost'),
     }
     res = { locals: {}, render: jest.fn() }
@@ -95,6 +99,7 @@ describe('Prisoner cell history', () => {
 
     controller = prisonerCellHistory({
       oauthApi,
+      systemOauthClient,
       prisonApi,
     })
 
@@ -118,6 +123,7 @@ describe('Prisoner cell history', () => {
         .mockResolvedValueOnce({ firstName: 'Staff', lastName: 'Two', username: 'STAFF_2' })
         .mockResolvedValueOnce({ firstName: 'Staff', lastName: 'Three', username: 'STAFF_3' })
         .mockResolvedValue({ firstName: 'Staff', lastName: 'One', username: 'STAFF_1' })
+      systemOauthClient.getClientCredentialsTokens.mockResolvedValue({})
     })
 
     it('should make the expected API calls', async () => {
@@ -130,7 +136,7 @@ describe('Prisoner cell history', () => {
       expect(prisonApi.getStaffDetails).toHaveBeenCalledWith(res.locals, 'STAFF_1')
       expect(prisonApi.getStaffDetails).toHaveBeenCalledWith(res.locals, 'STAFF_2')
       expect(prisonApi.getStaffDetails).toHaveBeenCalledWith(res.locals, 'STAFF_3')
-      expect(prisonApi.getInmatesAtLocation).toHaveBeenCalledWith(res.locals, 1, {})
+      expect(prisonApi.getInmatesAtLocation).toHaveBeenCalledWith({}, 1, {})
     })
 
     it('sends the right data to the template', async () => {

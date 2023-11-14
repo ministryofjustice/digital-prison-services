@@ -41,7 +41,7 @@ describe('shielding unit', () => {
 
     expect(logError).not.toHaveBeenCalled()
 
-    expect(covidService.getAlertList).toHaveBeenCalledWith(res, 'USU')
+    expect(covidService.getAlertList).toHaveBeenCalledWith(req, res, 'USU')
 
     expect(res.render).toHaveBeenCalledWith('covid/shieldingUnit.njk', {
       title: 'Prisoners in the Shielding Unit',
