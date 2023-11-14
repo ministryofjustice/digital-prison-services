@@ -1,0 +1,43 @@
+{% extends "../partials/layout.njk" %}
+
+{% set title = "This person has been moved to reception - Digital Prison Services" %}
+
+{% block beforeContent %}
+  {% if backUrl %}
+    {{ govukBackLink({
+      text: "Back",
+      href: backUrl
+    }) }}
+  {% endif %}
+{% endblock %}
+
+{% block content %}
+    {% if errors.length > 0 %}
+        {{ govukErrorSummary({
+            titleText: "There is a problem",
+            errorList: errors,
+            attributes: { 'data-qa-errors': true }
+        }) }}
+    {% endif %}
+
+    {{ govukPanel({
+        titleText: confirmationMessage,
+        classes: "govuk-!-margin-bottom-6"
+    }) }}
+
+    <p class="govuk-body govuk-!-margin-bottom-6">
+        <a class="govuk-link" href="https://eu.surveymonkey.com/r/3JHPDDD" target="_blank" rel="noopener noreferrer" data-test="exit-survey-link">
+            What did you think of this service? (Takes 60 seconds - opens in a new tab)
+        </a>
+    </p>
+
+    {{ govukButton({
+        text: 'Finish',
+        element: 'a',
+        href: profileUrl,
+        attributes: {
+            'data-test': 'profile'
+        }
+    }) }}
+{% endblock %}
+
