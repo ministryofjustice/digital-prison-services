@@ -23,6 +23,7 @@ describe('No cell allocated', () => {
   beforeEach(() => {
     req = {
       originalUrl: 'http://localhost',
+      session: { userDetails: { username: 'me' } },
     }
     res = { locals: { user: { activeCaseLoad: { caseLoadId: 'MDI' } } }, render: jest.fn() }
 

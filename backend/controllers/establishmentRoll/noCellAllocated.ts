@@ -7,14 +7,14 @@ export default ({ oauthApi, systemOauthClient, prisonApi }) =>
     } = res.locals
 
     try {
+      const systemContext = await systemOauthClient.getClientCredentialsTokens(req.session.userDetails.username)
       const userRoles = oauthApi.userRoles(res.locals)
-      const offenders = await prisonApi.getInmatesAtLocationPrefix(res.locals, activeCaseLoad.caseLoadId)
+      const offenders = await prisonApi.getInmatesAtLocationPrefix(systemContext, activeCaseLoad.caseLoadId)
 
       const offendersInCellSwap = offenders.filter((offender) => offender.assignedLivingUnitDesc === 'CSWAP')
 
       const offenderNumbers = offendersInCellSwap.map((offender) => offender.offenderNo)
 
-      const systemContext = await systemOauthClient.getClientCredentialsTokens()
       const allOffendersDetails = offenderNumbers.length
         ? await prisonApi.getPrisoners(
             { ...systemContext, requestHeaders: { 'page-offset': 0, 'page-limit': 2000 } },
