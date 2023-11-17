@@ -81,7 +81,7 @@ const getTasks = ({ activeCaseLoadId, locations, staffId, whereaboutsConfig, key
     },
     {
       id: 'check-my-diary',
-      heading: 'Check My Diary',
+      heading: 'Check my diary',
       description: 'View your prison staff detail (staff rota) from home.',
       href: checkMyDiary.ui_url,
       roles: null,
