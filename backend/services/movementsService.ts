@@ -3,8 +3,7 @@ import { toMap } from '../utils'
 
 export const movementsServiceFactory = (prisonApi, systemOauthClient, incentivesApi) => {
   const getCsraForMultipleOffenders = async (systemContext, offenderNumbers) => {
-    const results = await prisonApi.getCsraAssessments(systemContext, offenderNumbers)
-    return results
+    return prisonApi.getCsraAssessments(systemContext, offenderNumbers)
   }
 
   const getAssessmentMap = async (context, offenderNumbers) => {
@@ -24,7 +23,7 @@ export const movementsServiceFactory = (prisonApi, systemOauthClient, incentives
 
   const getActiveAlerts = async (systemContext, offenderNumbers) => {
     const alerts = await prisonApi.getAlertsSystem(systemContext, offenderNumbers)
-    return alerts && alerts.filter((alert) => !alert.expired)
+    return alerts?.filter((alert) => !alert.expired)
   }
 
   const extractOffenderNumbers = (obj) => obj.map((o) => o.offenderNo)
@@ -159,7 +158,9 @@ export const movementsServiceFactory = (prisonApi, systemOauthClient, incentives
   }
 
   const getOffendersCurrentlyOutOfLivingUnit = async (context, livingUnitId) => {
-    const offenders = await prisonApi.getOffendersCurrentlyOutOfLivingUnit(context, livingUnitId)
+    const systemContext = await systemOauthClient.getClientCredentialsTokens()
+
+    const offenders = await prisonApi.getOffendersCurrentlyOutOfLivingUnit(systemContext, livingUnitId)
     const [currentlyOut, location] = await Promise.all([
       addAlertsCategoryIepMovements(context, offenders),
       prisonApi.getLocation(context, livingUnitId),
@@ -172,7 +173,9 @@ export const movementsServiceFactory = (prisonApi, systemOauthClient, incentives
   }
 
   const getOffendersCurrentlyOutOfAgency = async (context, agencyId) => {
-    const offenders = await prisonApi.getOffendersCurrentlyOutOfAgency(context, agencyId)
+    const systemContext = await systemOauthClient.getClientCredentialsTokens()
+
+    const offenders = await prisonApi.getOffendersCurrentlyOutOfAgency(systemContext, agencyId)
     return addAlertsCategoryIepMovements(context, offenders)
   }
 

@@ -1,3 +1,4 @@
+import { Request, Response } from 'express'
 import moment from 'moment'
 import { capitalize } from '../../utils'
 
@@ -6,14 +7,16 @@ const zeroIfNotDefined = (number) => number || 0
 const getTotals = (array, figure) =>
   array.reduce((accumulator, block) => accumulator + zeroIfNotDefined(block[figure]), 0)
 
-export default ({ prisonApi, logError }) =>
-  async (req, res) => {
+export default ({ systemOauthClient, prisonApi }) =>
+  async (req: Request, res: Response) => {
     const { caseLoadId, description: caseLoadDescription } = res.locals.user.activeCaseLoad
+    const systemContext = await systemOauthClient.getClientCredentialsTokens(req.session.userDetails.username)
+
     const [assignedResponse, unassignedResponse, movementsResponse, enroute, caseLoadLocations] = await Promise.all([
       prisonApi.getEstablishmentRollBlocksCount(res.locals, caseLoadId, false),
       prisonApi.getEstablishmentRollBlocksCount(res.locals, caseLoadId, true),
       prisonApi.getEstablishmentRollMovementsCount(res.locals, caseLoadId),
-      prisonApi.getEstablishmentRollEnrouteCount(res.locals, caseLoadId),
+      prisonApi.getEstablishmentRollEnrouteCount(systemContext, caseLoadId),
       prisonApi.getLocationsForAgency(res.locals, caseLoadId),
     ])
 

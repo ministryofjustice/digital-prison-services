@@ -8,11 +8,12 @@ const prisonApi = {
   getAttributesForLocation: jest.fn(),
 }
 
+const systemOauthClient = { getClientCredentialsTokens: jest.fn() }
+
 describe('Establishment Roll', () => {
-  const logError = jest.fn()
   let controller
   const agencyId = 'LEI'
-  const req = { originalUrl: 'http://localhost' }
+  const req = { originalUrl: 'http://localhost', session: { userDetails: { username: 'user1' } } }
   const res = { locals: { user: { activeCaseLoad: { caseLoadId: 'LEI', description: 'Leeds' } } }, render: jest.fn() }
   const unassignedBlockData = [
     {
@@ -77,24 +78,20 @@ describe('Establishment Roll', () => {
   }
 
   beforeEach(() => {
-    prisonApi.getEstablishmentRollBlocksCount = jest.fn()
-    prisonApi.getEstablishmentRollMovementsCount = jest.fn()
-    prisonApi.getEstablishmentRollEnrouteCount = jest.fn()
-    prisonApi.getLocationsForAgency = jest.fn()
-    prisonApi.getAttributesForLocation = jest.fn()
+    jest.resetAllMocks()
+    systemOauthClient.getClientCredentialsTokens.mockResolvedValue({})
 
     prisonApi.getEstablishmentRollBlocksCount.mockImplementation((_context, _agencyId, _unassigned) =>
       _unassigned ? unassignedBlockData : assignedBlockData
     )
-    prisonApi.getEstablishmentRollMovementsCount.mockImplementation(() => movements)
-    prisonApi.getEstablishmentRollEnrouteCount.mockImplementation(() => 8)
-    prisonApi.getLocationsForAgency.mockImplementation(() => [
+    prisonApi.getEstablishmentRollMovementsCount.mockResolvedValue(movements)
+    prisonApi.getEstablishmentRollEnrouteCount.mockResolvedValue(8)
+    prisonApi.getLocationsForAgency.mockResolvedValue([
       { description: '1-1', locationId: 1 },
       { description: 'CSWAP', locationId: 2 },
     ])
 
-    controller = dashboard({ prisonApi, logError })
-    res.render = jest.fn()
+    controller = dashboard({ systemOauthClient, prisonApi })
   })
 
   it('should call the correct endpoints', async () => {
@@ -103,13 +100,13 @@ describe('Establishment Roll', () => {
     expect(prisonApi.getEstablishmentRollBlocksCount).toHaveBeenCalledWith(res.locals, agencyId, false)
     expect(prisonApi.getEstablishmentRollBlocksCount).toHaveBeenCalledWith(res.locals, agencyId, true)
     expect(prisonApi.getEstablishmentRollMovementsCount).toHaveBeenCalledWith(res.locals, agencyId)
-    expect(prisonApi.getEstablishmentRollEnrouteCount).toHaveBeenCalledWith(res.locals, agencyId)
+    expect(prisonApi.getEstablishmentRollEnrouteCount).toHaveBeenCalledWith({}, agencyId)
     expect(prisonApi.getLocationsForAgency).toHaveBeenCalledWith(res.locals, agencyId)
     expect(prisonApi.getAttributesForLocation).toHaveBeenCalledWith(res.locals, 2)
   })
 
   it('should render the template with the correct data', async () => {
-    prisonApi.getAttributesForLocation.mockImplementation(() => ({ noOfOccupants: 3 }))
+    prisonApi.getAttributesForLocation.mockResolvedValue({ noOfOccupants: 3 })
 
     await controller(req, res)
 
@@ -203,7 +200,7 @@ describe('Establishment Roll', () => {
   })
 
   it('should render the template with the correctly formatted date', async () => {
-    jest.spyOn(Date, 'now').mockImplementation(() => 1553860800000) // Friday 2019-03-29T12:00:00.000Z
+    jest.spyOn(Date, 'now').mockReturnValue(1553860800000) // Friday 2019-03-29T12:00:00.000Z
 
     await controller(req, res)
 

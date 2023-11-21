@@ -14,7 +14,7 @@ const router = express.Router({ mergeParams: true })
 const controller = ({ oauthApi, prisonApi, systemOauthClient, logError, incentivesApi }) => {
   const movementsService = movementsServiceFactory(prisonApi, systemOauthClient, incentivesApi)
 
-  router.get('/', establishmentRollDashboardController({ prisonApi, logError }))
+  router.get('/', establishmentRollDashboardController({ systemOauthClient, prisonApi }))
   router.get('/in-reception', inReceptionController({ movementsService, logError }))
   // @ts-expect-error ts-migrate(2345) FIXME: Argument of type '{ prisonApi: any; movementsServi... Remove this comment to see the full error message
   router.get('/en-route', enRouteController({ prisonApi, movementsService, logError }))
