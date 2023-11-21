@@ -31,6 +31,12 @@ export const app = {
     enabledDate: parseDate(process.env.PRISONER_PROFILE_REDIRECT_ENABLED_DATE),
     enabledPrisons: process.env.PRISONER_PROFILE_REDIRECT_ENABLED_PRISONS || '',
     scheduleRedirectForPrisons: process.env.PRISONER_PROFILE_SCHEDULE_REDIRECT_FOR_PRISONS || '',
+    bundleDates: [
+      parseDate(process.env.PRISONER_PROFILE_REDIRECT_BUNDLE_ONE),
+      parseDate(process.env.PRISONER_PROFILE_REDIRECT_BUNDLE_TWO),
+      parseDate(process.env.PRISONER_PROFILE_REDIRECT_BUNDLE_THREE),
+      parseDate(process.env.PRISONER_PROFILE_REDIRECT_BUNDLE_FOUR),
+    ],
   },
   homepageRedirect: {
     url: process.env.HOMEPAGE_REDIRECT_URL,
