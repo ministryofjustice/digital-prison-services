@@ -5,7 +5,6 @@ const movementsService = {
 }
 
 describe('En route test', () => {
-  let logError
   let controller
   const agencyId = 'LEI'
   const req = { originalUrl: 'http://localhost' }
@@ -44,10 +43,7 @@ describe('En route test', () => {
     },
   ]
   beforeEach(() => {
-    movementsService.getOffendersEnRoute = jest.fn()
-    logError = jest.fn()
-    controller = enRoute({ movementsService, logError })
-    res.render = jest.fn()
+    controller = enRoute({ movementsService })
   })
 
   it('should call the en route endpoint', async () => {
