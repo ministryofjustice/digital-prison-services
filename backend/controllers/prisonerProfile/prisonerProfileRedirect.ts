@@ -128,7 +128,7 @@ export default ({ path, handler }) => {
     const caseloadBundle = prisonRollouts[activeCaseLoadId]
     const bundleRedirectDate = config.app.prisonerProfileRedirect.bundleDates[caseloadBundle - 1]
 
-    if (config.app.prisonerProfileRedirect.url && bundleRedirectDate < Date.now()) {
+    if (bundleRedirectDate && config.app.prisonerProfileRedirect.url && bundleRedirectDate < Date.now()) {
       return res.redirect(`${config.app.prisonerProfileRedirect.url}/prisoner/${offenderNo}${path}`)
     }
 
