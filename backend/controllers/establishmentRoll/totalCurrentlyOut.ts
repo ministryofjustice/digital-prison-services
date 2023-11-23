@@ -1,11 +1,13 @@
 import moment from 'moment'
+import { Request, Response } from 'express'
 import { alertFlagLabels } from '../../shared/alertFlagValues'
 import { putLastNameFirst, stripAgencyPrefix } from '../../utils'
 
-export default ({ movementsService, logError }) =>
-  async (req, res) => {
+export default ({ systemOauthClient, movementsService }) =>
+  async (req: Request, res: Response) => {
     const agencyId = res.locals.user.activeCaseLoad.caseLoadId
-    const response = await movementsService.getOffendersCurrentlyOutOfAgency(res.locals, agencyId)
+    const systemContext = await systemOauthClient.getClientCredentialsTokens()
+    const response = await movementsService.getOffendersCurrentlyOutOfAgency(systemContext, agencyId)
 
     const results = response
       ?.sort((a, b) => a.lastName.localeCompare(b.lastName, 'en', { ignorePunctuation: true }))

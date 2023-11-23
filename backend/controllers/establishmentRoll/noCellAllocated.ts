@@ -1,7 +1,8 @@
+import { Request, Response } from 'express'
 import { formatName, putLastNameFirst, getTime, stripAgencyPrefix } from '../../utils'
 
 export default ({ oauthApi, systemOauthClient, prisonApi }) =>
-  async (req, res) => {
+  async (req: Request, res: Response) => {
     const {
       user: { activeCaseLoad },
     } = res.locals

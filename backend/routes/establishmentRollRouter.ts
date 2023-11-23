@@ -11,16 +11,16 @@ import { movementsServiceFactory } from '../services/movementsService'
 
 const router = express.Router({ mergeParams: true })
 
-const controller = ({ oauthApi, prisonApi, systemOauthClient, logError, incentivesApi }) => {
+const controller = ({ oauthApi, prisonApi, systemOauthClient, incentivesApi }) => {
   const movementsService = movementsServiceFactory(prisonApi, systemOauthClient, incentivesApi)
 
   router.get('/', establishmentRollDashboardController({ systemOauthClient, prisonApi }))
-  router.get('/in-reception', inReceptionController({ movementsService, logError }))
+  router.get('/in-reception', inReceptionController({ movementsService }))
   router.get('/en-route', enRouteController({ movementsService }))
-  router.get('/:livingUnitId/currently-out', currentlyOutController({ movementsService, logError }))
-  router.get('/total-currently-out', totalCurrentlyOutController({ movementsService, logError }))
-  router.get('/in-today', inTodayController({ movementsService, logError }))
-  router.get('/out-today', outTodayController({ movementsService, logError }))
+  router.get('/:livingUnitId/currently-out', currentlyOutController({ movementsService }))
+  router.get('/total-currently-out', totalCurrentlyOutController({ systemOauthClient, movementsService }))
+  router.get('/in-today', inTodayController({ movementsService }))
+  router.get('/out-today', outTodayController({ movementsService }))
   router.get('/no-cell-allocated', noCellAllocatedController({ oauthApi, systemOauthClient, prisonApi }))
   return router
 }
