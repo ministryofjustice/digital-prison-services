@@ -14,6 +14,11 @@ context('Whereabouts homepage', () => {
       cy.signIn()
     })
 
+    it('should show covid unit task', () => {
+      cy.visit('/manage-prisoner-whereabouts')
+      cy.get('[data-test="view-covid-units"]').should('exist')
+    })
+
     it('should show bulk appointments task', () => {
       cy.visit('/manage-prisoner-whereabouts')
       cy.get('[data-test="view-bulk-appointments"]').should('exist')
@@ -30,7 +35,8 @@ context('Whereabouts homepage', () => {
           expect(heading.get(3).innerText).to.contain('View prisoners unaccounted for')
           expect(heading.get(4).innerText).to.contain('View attendance reason statistics')
           expect(heading.get(5).innerText).to.contain('People due to leave')
-          expect(heading.get(6).innerText).to.contain('Add bulk appointments')
+          expect(heading.get(6).innerText).to.contain('View COVID units')
+          expect(heading.get(7).innerText).to.contain('Add bulk appointments')
         })
     })
   })
