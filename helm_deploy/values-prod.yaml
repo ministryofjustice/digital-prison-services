@@ -71,6 +71,7 @@ generic-service:
     HISTORICAL_PRISONER_APPLICATION_URL: https://hpa.service.hmpps.dsd.io
     WHEREABOUTS_MAINTENANCE_MODE: false
     KEYWORKER_MAINTENANCE_MODE: false
+    COVID_UNITS_ENABLED: false
     GET_SOMEONE_READY_FOR_WORK_URL: https://get-ready-for-work.hmpps.service.justice.gov.uk
     LEARNING_AND_WORK_PROGRESS_URL: https://ciag-induction.hmpps.service.justice.gov.uk
     PRISONER_PROFILE_REDIRECT_URL: https://prisoner.digital.prison.service.justice.gov.uk

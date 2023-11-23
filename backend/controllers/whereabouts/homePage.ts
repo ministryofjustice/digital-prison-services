@@ -2,6 +2,7 @@ import { hasAnyRole } from '../../shared/permissions'
 import config from '../../config'
 
 const {
+  app: { covidUnitsEnabled },
   apis: { activities, appointments },
 } = config
 
@@ -63,7 +64,7 @@ export const whereaboutsTasks: TaskType[] = [
     heading: 'View COVID units',
     description: 'View who is in each COVID unit in your establishment.',
     href: '/current-covid-units',
-    enabled: ({ roles }) => hasAnyRole(['PRISON'], roles),
+    enabled: ({ roles }) => covidUnitsEnabled && hasAnyRole(['PRISON'], roles),
   },
   {
     id: 'view-bulk-appointments',
