@@ -59,6 +59,7 @@ import prisonerProfileBackLinkRedirect from './controllers/prisonerProfile/priso
 import config from './config'
 
 const {
+  app: { covidUnitsEnabled },
   apis: { activities, appointments },
 } = config
 
@@ -88,6 +89,14 @@ const isCreateIndividualAppointmentRolledOut = (req, res, next) => {
   if (appointments.enabled_prisons.split(',').includes(activeCaseLoadId)) {
     const { offenderNo } = req.params
     res.redirect(`${appointments.url}/create/start-prisoner/${offenderNo}`)
+  } else {
+    next()
+  }
+}
+
+const isCovidUnitsEnabled = (req, res, next) => {
+  if (!covidUnitsEnabled) {
+    res.redirect('/')
   } else {
     next()
   }
@@ -385,7 +394,7 @@ const setup = ({
     })
   )
 
-  router.use('/current-covid-units', covidRouter(systemOauthClient, prisonApi))
+  router.use('/current-covid-units', isCovidUnitsEnabled, covidRouter(systemOauthClient, prisonApi))
 
   router.use('/attendance-changes', attendanceChangeRouter({ prisonApi, whereaboutsApi }))
 
