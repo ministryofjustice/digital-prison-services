@@ -30,7 +30,7 @@ context('Whereabouts homepage', () => {
           expect(heading.get(3).innerText).to.contain('View prisoners unaccounted for')
           expect(heading.get(4).innerText).to.contain('View attendance reason statistics')
           expect(heading.get(5).innerText).to.contain('People due to leave')
-          expect(heading.get(7).innerText).to.contain('Add bulk appointments')
+          expect(heading.get(6).innerText).to.contain('Add bulk appointments')
         })
     })
   })
