@@ -26,6 +26,7 @@ export const app = {
   disableRequestLimiter: process.env.DISABLE_REQUEST_LIMITER ? process.env.DISABLE_REQUEST_LIMITER === 'true' : false,
   whereaboutsMaintenanceMode: process.env.WHEREABOUTS_MAINTENANCE_MODE === 'true' || false,
   keyworkerMaintenanceMode: process.env.KEYWORKER_MAINTENANCE_MODE === 'true' || false,
+  covidUnitsEnabled: process.env.COVID_UNITS_ENABLED === 'true' || false,
   prisonerProfileRedirect: {
     url: process.env.PRISONER_PROFILE_REDIRECT_URL,
     enabledDate: parseDate(process.env.PRISONER_PROFILE_REDIRECT_ENABLED_DATE),

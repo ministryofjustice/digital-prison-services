@@ -151,8 +151,7 @@ describe('Homepage', () => {
             {
               id: 'manage-prisoner-whereabouts',
               heading: 'Prisoner whereabouts',
-              description:
-                'View unlock lists, all appointments and COVID units, manage attendance and add bulk appointments.',
+              description: 'View unlock lists, all appointments, manage attendance and add bulk appointments.',
               href: '/manage-prisoner-whereabouts',
             },
           ],

@@ -29,7 +29,7 @@ const {
     manageOffences,
     prepareSomeoneForRelease,
   },
-  app: { whereaboutsMaintenanceMode, keyworkerMaintenanceMode },
+  app: { whereaboutsMaintenanceMode, keyworkerMaintenanceMode, covidUnitsEnabled },
 } = config
 
 const getTasks = ({ activeCaseLoadId, locations, staffId, whereaboutsConfig, keyworkerPrisonStatus, roleCodes }) => {
@@ -64,7 +64,7 @@ const getTasks = ({ activeCaseLoadId, locations, staffId, whereaboutsConfig, key
     {
       id: 'manage-prisoner-whereabouts',
       heading: 'Prisoner whereabouts',
-      description: 'View unlock lists, all appointments and COVID units, manage attendance and add bulk appointments.',
+      description: 'View unlock lists, all appointments, manage attendance and add bulk appointments.',
       href: '/manage-prisoner-whereabouts',
       roles: null,
       enabled: () =>
@@ -331,6 +331,7 @@ const getTasks = ({ activeCaseLoadId, locations, staffId, whereaboutsConfig, key
       description: 'View who is in each COVID unit in your establishment.',
       href: '/current-covid-units',
       enabled: () =>
+        covidUnitsEnabled &&
         userHasRoles(['PRISON']) &&
         activities.enabled_prisons.split(',').includes(activeCaseLoadId) &&
         appointments.enabled_prisons.split(',').includes(activeCaseLoadId),

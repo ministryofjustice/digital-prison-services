@@ -85,7 +85,7 @@ describe('Homepage', () => {
           expect(res.render).toHaveBeenCalledWith(
             'whereabouts/whereaboutsHomepage.njk',
             expect.objectContaining({
-              tasks: getTasks(['view-bulk-appointments']),
+              tasks: getTasks(['view-bulk-appointments', 'view-covid-units']),
             })
           )
         })
@@ -100,7 +100,7 @@ describe('Homepage', () => {
           expect(res.render).toHaveBeenCalledWith(
             'whereabouts/whereaboutsHomepage.njk',
             expect.objectContaining({
-              tasks: getTasks(),
+              tasks: getTasks(['view-covid-units']),
             })
           )
         })
