@@ -3,8 +3,8 @@ import { bulkAppointmentsConfirmFactory } from '../../controllers/appointments/b
 
 const router = express.Router()
 
-const controller = ({ prisonApi, logError }) => {
-  const { index, post } = bulkAppointmentsConfirmFactory(prisonApi, logError)
+const controller = ({ systemOauthClient, prisonApi }) => {
+  const { index, post } = bulkAppointmentsConfirmFactory(systemOauthClient, prisonApi)
 
   router.get('/', index)
   router.post('/', post)

@@ -1,7 +1,8 @@
+import { Request, Response } from 'express'
 import { formatName, putLastNameFirst, getTime, stripAgencyPrefix } from '../../utils'
 
 export default ({ oauthApi, systemOauthClient, prisonApi }) =>
-  async (req, res) => {
+  async (req: Request, res: Response) => {
     const {
       user: { activeCaseLoad },
     } = res.locals
@@ -64,7 +65,7 @@ export default ({ oauthApi, systemOauthClient, prisonApi }) =>
           )
 
           return {
-            movedBy: formatName(movementMadeBy.firstName, movementMadeBy.lastName),
+            movedBy: movementMadeBy ? formatName(movementMadeBy.firstName, movementMadeBy.lastName) : '',
             offenderNo,
             previousCell: stripAgencyPrefix(previousLocation.description, activeCaseLoad.caseLoadId),
             name: putLastNameFirst(prisonerDetails.firstName, prisonerDetails.lastName),

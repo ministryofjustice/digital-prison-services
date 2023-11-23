@@ -20,19 +20,20 @@ const toEvent = (event) => ({
   eventDescription: getEventDescription(event),
 })
 
-export default (prisonApi) => {
+export default (getClientCredentialsTokens, prisonApi) => {
   const getExistingEventsForOffender = async (context, agencyId, date, offenderNo) => {
     const formattedDate = switchDateFormat(date)
     const searchCriteria = { agencyId, date: formattedDate, offenderNumbers: [offenderNo] }
+    const systemContext = await getClientCredentialsTokens()
 
     try {
       const [sentenceData, courtEvents, ...rest] = await Promise.all([
         prisonApi.getSentenceData(context, searchCriteria.offenderNumbers),
-        prisonApi.getCourtEvents(context, searchCriteria),
-        prisonApi.getVisits(context, searchCriteria),
-        prisonApi.getAppointments(context, searchCriteria),
-        prisonApi.getExternalTransfers(context, searchCriteria),
-        prisonApi.getActivities(context, searchCriteria),
+        prisonApi.getCourtEvents(systemContext, searchCriteria),
+        prisonApi.getVisits(systemContext, searchCriteria),
+        prisonApi.getAppointments(systemContext, searchCriteria),
+        prisonApi.getExternalTransfers(systemContext, searchCriteria),
+        prisonApi.getActivities(systemContext, searchCriteria),
       ])
 
       const hasCourtVisit = courtEvents.length && courtEvents.filter((event) => event.eventStatus === 'SCH')

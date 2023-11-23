@@ -21,6 +21,7 @@ import {
   enableLogDebugStatements,
   getSystemOauthApiClient,
   getTokenStore,
+  getClientCredentialsTokens,
 } from './api/systemOauthClient'
 import setupStaticContent from './setupStaticContent'
 import nunjucksSetup from './utils/nunjucksSetup'
@@ -86,6 +87,7 @@ app.use(
     prisonApi: apis.prisonApi,
     whereaboutsApi: apis.whereaboutsApi,
     oauthApi: apis.oauthApi,
+    getClientCredentialsTokens,
     hmppsManageUsersApi: apis.hmppsManageUsersApi,
     caseNotesApi: apis.caseNotesApi,
   })
