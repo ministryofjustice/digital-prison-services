@@ -1,5 +1,4 @@
 import { getActivityListFactory, getActivityListFactory as factory } from '../controllers/attendance/activityList'
-import config from '../config'
 
 Reflect.deleteProperty(process.env, 'APPINSIGHTS_INSTRUMENTATIONKEY')
 
@@ -21,8 +20,9 @@ const prisonApi = {
 const whereaboutsApi = {
   getAttendance: jest.fn(),
 }
+const getClientCredentialsTokens = jest.fn().mockResolvedValue({})
 
-const activityList = getActivityListFactory(prisonApi, whereaboutsApi, config).getActivityList
+const activityList = getActivityListFactory(getClientCredentialsTokens, prisonApi, whereaboutsApi).getActivityList
 
 function createActivitiesResponse() {
   return [
@@ -732,7 +732,7 @@ describe('Activity list controller', () => {
     ])
     whereaboutsApi.getAttendance.mockResolvedValue({ attendances: [] })
 
-    const { getActivityList: service } = factory(prisonApi, whereaboutsApi, config)
+    const { getActivityList: service } = factory(getClientCredentialsTokens, prisonApi, whereaboutsApi)
 
     await service({}, 'LEI', 1, '23/11/2018', 'PM')
     await service({}, 'MDI', 1, '23/11/2018', 'PM')

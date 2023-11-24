@@ -4,7 +4,7 @@ import { DAY_MONTH_YEAR, DATE_TIME_FORMAT_SPEC, buildDateTime } from '../../../c
 import { raiseAnalyticsEvent } from '../../raiseAnalyticsEvent'
 import { bulkAppointmentsClashesFactory } from './bulkAppointmentsClashes'
 
-export const bulkAppointmentsConfirmFactory = (prisonApi, logError) => {
+export const bulkAppointmentsConfirmFactory = (systemOauthClient, prisonApi) => {
   const renderTemplate = (req, res, pageData) => {
     const {
       appointmentDetails,
@@ -149,7 +149,7 @@ export const bulkAppointmentsConfirmFactory = (prisonApi, logError) => {
     }
 
     try {
-      const { getOtherEvents } = bulkAppointmentsClashesFactory(prisonApi, logError)
+      const { getOtherEvents } = bulkAppointmentsClashesFactory(systemOauthClient, prisonApi)
       const eventsForAllOffenders = await getOtherEvents(req, res, {
         offenderNumbers: prisonersListed.map((prisoner) => prisoner.offenderNo),
         date: switchDateFormat(date),

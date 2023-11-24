@@ -65,7 +65,7 @@ export default ({ oauthApi, systemOauthClient, prisonApi }) =>
           )
 
           return {
-            movedBy: formatName(movementMadeBy.firstName, movementMadeBy.lastName),
+            movedBy: movementMadeBy ? formatName(movementMadeBy.firstName, movementMadeBy.lastName) : '',
             offenderNo,
             previousCell: stripAgencyPrefix(previousLocation.description, activeCaseLoad.caseLoadId),
             name: putLastNameFirst(prisonerDetails.firstName, prisonerDetails.lastName),

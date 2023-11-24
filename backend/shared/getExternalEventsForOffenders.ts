@@ -1,13 +1,20 @@
 import { sortByDateTime, isViewableFlag, isAfterToday } from '../utils'
 
-const getExternalEvents = (prisonApi, context, { offenderNumbers, agencyId, formattedDate }) =>
-  Promise.all([
+const getExternalEvents = async (
+  getClientCredentialsTokens,
+  prisonApi,
+  context,
+  { offenderNumbers, agencyId, formattedDate }
+) => {
+  const systemContext = await getClientCredentialsTokens()
+  return Promise.all([
     prisonApi.getSentenceData(context, offenderNumbers),
-    prisonApi.getCourtEvents(context, { agencyId, date: formattedDate, offenderNumbers }),
-    prisonApi.getExternalTransfers(context, { agencyId, date: formattedDate, offenderNumbers }),
+    prisonApi.getCourtEvents(systemContext, { agencyId, date: formattedDate, offenderNumbers }),
+    prisonApi.getExternalTransfers(systemContext, { agencyId, date: formattedDate, offenderNumbers }),
     prisonApi.getAlerts(context, { agencyId, offenderNumbers }),
     prisonApi.getAssessments(context, { code: 'CATEGORY', offenderNumbers }),
   ])
+}
 
 const releaseScheduled = (releaseScheduledData, offenderNo, formattedDate) =>
   Boolean(
@@ -134,10 +141,11 @@ const reduceToMap = (
     return map.set(offenderNumber, offenderData)
   }, new Map())
 
-export default async (prisonApi, context, { offenderNumbers, formattedDate, agencyId }) => {
+export default async (getClientCredentialsTokens, prisonApi, context, { offenderNumbers, formattedDate, agencyId }) => {
   if (!offenderNumbers || offenderNumbers.length === 0) return []
 
   const [releaseScheduleData, courtEventData, transferData, alertData, assessmentData] = await getExternalEvents(
+    getClientCredentialsTokens,
     prisonApi,
     context,
     {

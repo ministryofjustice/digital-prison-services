@@ -3,8 +3,8 @@ import { bulkAppointmentsClashesFactory } from '../../controllers/appointments/b
 
 const router = express.Router()
 
-const controller = ({ prisonApi, logError }) => {
-  const { index, post } = bulkAppointmentsClashesFactory(prisonApi, logError)
+const controller = ({ systemOauthClient, prisonApi }) => {
+  const { index, post } = bulkAppointmentsClashesFactory(systemOauthClient, prisonApi)
 
   router.get('/', index)
   router.post('/', post)

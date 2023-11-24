@@ -2,28 +2,31 @@ import { raiseAnalyticsEvent } from '../raiseAnalyticsEvent'
 import { bulkAppointmentsConfirmFactory } from '../controllers/appointments/bulkAppointmentsConfirm'
 
 Reflect.deleteProperty(process.env, 'APPINSIGHTS_INSTRUMENTATIONKEY')
-const prisonApi = {}
-
+const prisonApi = {
+  addAppointments: jest.fn(),
+  getVisits: jest.fn(),
+  getAppointments: jest.fn(),
+  getExternalTransfers: jest.fn(),
+  getCourtEvents: jest.fn(),
+}
+const systemOauthClient = {
+  getClientCredentialsTokens: jest.fn(),
+}
 jest.mock('../raiseAnalyticsEvent', () => ({
   raiseAnalyticsEvent: jest.fn(),
 }))
 
 let req
 let res
-let logError
 let controller
 
 beforeEach(() => {
-  // @ts-expect-error ts-migrate(2339) FIXME: Property 'addAppointments' does not exist on type ... Remove this comment to see the full error message
-  prisonApi.addAppointments = jest.fn()
-  // @ts-expect-error ts-migrate(2339) FIXME: Property 'getVisits' does not exist on type '{}'.
-  prisonApi.getVisits = jest.fn().mockResolvedValue([])
-  // @ts-expect-error ts-migrate(2339) FIXME: Property 'getAppointments' does not exist on type ... Remove this comment to see the full error message
-  prisonApi.getAppointments = jest.fn().mockResolvedValue([])
-  // @ts-expect-error ts-migrate(2339) FIXME: Property 'getExternalTransfers' does not exist on ... Remove this comment to see the full error message
-  prisonApi.getExternalTransfers = jest.fn().mockResolvedValue([])
-  // @ts-expect-error ts-migrate(2339) FIXME: Property 'getCourtEvents' does not exist on type '... Remove this comment to see the full error message
-  prisonApi.getCourtEvents = jest.fn().mockResolvedValue([])
+  jest.resetAllMocks()
+  prisonApi.getVisits.mockResolvedValue([])
+  prisonApi.getAppointments.mockResolvedValue([])
+  prisonApi.getExternalTransfers.mockResolvedValue([])
+  prisonApi.getCourtEvents.mockResolvedValue([])
+  systemOauthClient.getClientCredentialsTokens.mockResolvedValue({})
 
   req = {
     originalUrl: '/bulk-appointments/confirm-appointment/',
@@ -35,8 +38,7 @@ beforeEach(() => {
     flash: jest.fn(),
   }
   res = { locals: {}, render: jest.fn(), redirect: jest.fn() }
-  logError = jest.fn()
-  controller = bulkAppointmentsConfirmFactory(prisonApi, logError)
+  controller = bulkAppointmentsConfirmFactory(systemOauthClient, prisonApi)
 })
 
 const appointmentDetails = {
@@ -98,7 +100,6 @@ describe('when confirming bulk appointment details', () => {
           prisonersListed: appointmentDetails.prisonersListed,
         })
 
-        // @ts-expect-error ts-migrate(2339) FIXME: Property 'addAppointments' does not exist on type ... Remove this comment to see the full error message
         expect(prisonApi.addAppointments).toBeCalledWith(res.locals, {
           appointmentDefaults: {
             appointmentType: 'TEST',
@@ -163,14 +164,12 @@ describe('when confirming bulk appointment details', () => {
       describe('and there are no errors', () => {
         beforeEach(() => {
           req.session.data = { ...appointmentDetails }
-          // @ts-expect-error ts-migrate(2339) FIXME: Property 'addAppointments' does not exist on type ... Remove this comment to see the full error message
-          prisonApi.addAppointments = jest.fn().mockReturnValue('All good')
+          prisonApi.addAppointments.mockReturnValue('All good')
         })
 
         it('should submit the data and redirect to the appointments added page', async () => {
           await controller.post(req, res)
 
-          // @ts-expect-error ts-migrate(2339) FIXME: Property 'addAppointments' does not exist on type ... Remove this comment to see the full error message
           expect(prisonApi.addAppointments).toBeCalledWith(res.locals, {
             appointmentDefaults: {
               appointmentType: 'TEST',
@@ -195,8 +194,7 @@ describe('when confirming bulk appointment details', () => {
 
     describe('and there are individual start and end times', () => {
       beforeEach(() => {
-        // @ts-expect-error ts-migrate(2339) FIXME: Property 'addAppointments' does not exist on type ... Remove this comment to see the full error message
-        prisonApi.addAppointments = jest.fn().mockReturnValue('All good')
+        prisonApi.addAppointments.mockReturnValue('All good')
         req.session.data = {
           appointmentType: 'TEST',
           location: 1,
@@ -238,7 +236,6 @@ describe('when confirming bulk appointment details', () => {
 
           await controller.post(req, res)
 
-          // @ts-expect-error ts-migrate(2339) FIXME: Property 'addAppointments' does not exist on type ... Remove this comment to see the full error message
           expect(prisonApi.addAppointments).toBeCalledWith(res.locals, {
             appointmentDefaults: {
               appointmentType: 'TEST',
@@ -277,7 +274,6 @@ describe('when confirming bulk appointment details', () => {
 
           await controller.post(req, res)
 
-          // @ts-expect-error ts-migrate(2339) FIXME: Property 'addAppointments' does not exist on type ... Remove this comment to see the full error message
           expect(prisonApi.addAppointments).not.toBeCalled()
           expect(res.render).toBeCalledWith('bulkAppointmentsConfirm.njk', {
             appointmentDetails: {
@@ -337,8 +333,7 @@ describe('when confirming bulk appointment details', () => {
 
     describe('and there are recurring appointments', () => {
       beforeEach(() => {
-        // @ts-expect-error ts-migrate(2339) FIXME: Property 'addAppointments' does not exist on type ... Remove this comment to see the full error message
-        prisonApi.addAppointments = jest.fn().mockReturnValue('All good')
+        prisonApi.addAppointments.mockReturnValue('All good')
         req.session.data = {
           ...appointmentDetails,
           recurring: 'yes',
@@ -361,7 +356,6 @@ describe('when confirming bulk appointment details', () => {
           prisonersListed: appointmentDetails.prisonersListed,
         })
 
-        // @ts-expect-error ts-migrate(2339) FIXME: Property 'addAppointments' does not exist on type ... Remove this comment to see the full error message
         expect(prisonApi.addAppointments).toBeCalledWith(res.locals, {
           appointmentDefaults: {
             appointmentType: 'TEST',
@@ -390,10 +384,8 @@ describe('when confirming bulk appointment details', () => {
 
     describe('and there are appointment clashes', () => {
       beforeEach(() => {
-        // @ts-expect-error ts-migrate(2339) FIXME: Property 'addAppointments' does not exist on type ... Remove this comment to see the full error message
-        prisonApi.addAppointments = jest.fn().mockReturnValue('All good')
-        // @ts-expect-error ts-migrate(2339) FIXME: Property 'getAppointments' does not exist on type ... Remove this comment to see the full error message
-        prisonApi.getAppointments = jest.fn().mockResolvedValue([
+        prisonApi.addAppointments.mockReturnValue('All good')
+        prisonApi.getAppointments.mockResolvedValue([
           {
             offenderNo: 'G1683VN',
             locationId: 123,
@@ -421,7 +413,6 @@ describe('when confirming bulk appointment details', () => {
     describe('and there is an issue with the api', () => {
       const error = new Error('There has been an error')
       beforeEach(() => {
-        // @ts-expect-error ts-migrate(2339) FIXME: Property 'addAppointments' does not exist on type ... Remove this comment to see the full error message
         prisonApi.addAppointments.mockRejectedValue(error)
         req.session.data = { ...appointmentDetails }
       })
@@ -444,13 +435,9 @@ describe('when confirming bulk appointment details', () => {
         offenderNumbers: ['G1683VN', 'G4803UT', 'G4346UT', 'G5402VR'],
       }
 
-      // @ts-expect-error ts-migrate(2339) FIXME: Property 'getVisits' does not exist on type '{}'.
       expect(prisonApi.getVisits).toHaveBeenCalledWith({}, searchCriteria)
-      // @ts-expect-error ts-migrate(2339) FIXME: Property 'getAppointments' does not exist on type ... Remove this comment to see the full error message
       expect(prisonApi.getAppointments).toHaveBeenCalledWith({}, searchCriteria)
-      // @ts-expect-error ts-migrate(2339) FIXME: Property 'getExternalTransfers' does not exist on ... Remove this comment to see the full error message
       expect(prisonApi.getExternalTransfers).toHaveBeenCalledWith({}, searchCriteria)
-      // @ts-expect-error ts-migrate(2339) FIXME: Property 'getCourtEvents' does not exist on type '... Remove this comment to see the full error message
       expect(prisonApi.getCourtEvents).toHaveBeenCalledWith({}, searchCriteria)
     })
   })

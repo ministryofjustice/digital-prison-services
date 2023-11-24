@@ -1,6 +1,6 @@
 import { switchDateFormat } from '../../utils'
 
-export const offenderActivitesFactory = (prisonApi, whereaboutsApi) => {
+export const offenderActivitiesFactory = (getClientCredentialsTokens, prisonApi, whereaboutsApi) => {
   const getPrisonersUnaccountedFor = async (context, agencyId, dateString, timeSlot) => {
     const date = switchDateFormat(dateString)
     const params = {
@@ -12,11 +12,12 @@ export const offenderActivitesFactory = (prisonApi, whereaboutsApi) => {
     const { scheduled: prisonersUnaccountedFor } = await whereaboutsApi.prisonersUnaccountedFor(context, params)
     const offenderNumbers = prisonersUnaccountedFor.map((prisoner) => prisoner.offenderNo)
 
+    const systemContext = await getClientCredentialsTokens()
     const searchCriteria = { agencyId, date, timeSlot, offenderNumbers }
 
     const [visits, appointments] = await Promise.all([
-      prisonApi.getVisits(context, searchCriteria),
-      prisonApi.getAppointments(context, searchCriteria),
+      prisonApi.getVisits(systemContext, searchCriteria),
+      prisonApi.getAppointments(systemContext, searchCriteria),
     ])
 
     return prisonersUnaccountedFor.map((prisoner) => ({
@@ -28,4 +29,4 @@ export const offenderActivitesFactory = (prisonApi, whereaboutsApi) => {
   return { getPrisonersUnaccountedFor }
 }
 
-export default { offenderActivitesFactory }
+export default { offenderActivitiesFactory }

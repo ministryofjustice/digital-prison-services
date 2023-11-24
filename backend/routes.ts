@@ -17,7 +17,7 @@ import bulkAppointmentsUploadRouter from './routes/appointments/bulkAppointments
 import bulkAppointmentsClashesRouter from './routes/appointments/bulkAppointmentsClashesRouter'
 import changeCaseloadRouter from './routes/changeCaseloadRouter'
 import addAppointmentRouter from './routes/appointments/addAppointmentRouter'
-import prepostAppointmentRouter from './routes/appointments/prepostAppointmentsRouter'
+import prepostAppointmentsRouter from './routes/appointments/prepostAppointmentsRouter'
 import viewAppointments from './controllers/appointments/viewAppointments'
 import confirmAppointmentRouter from './routes/appointments/confirmAppointmentRouter'
 import prisonerProfileRouter from './routes/prisonerProfileRouter'
@@ -259,12 +259,12 @@ const setup = ({
   router.use(
     '/bulk-appointments/confirm-appointments',
     isAppointmentsRolledOut,
-    bulkAppointmentsConfirmRouter({ prisonApi, logError })
+    bulkAppointmentsConfirmRouter({ systemOauthClient, prisonApi })
   )
   router.use(
     '/bulk-appointments/appointment-clashes',
     isAppointmentsRolledOut,
-    bulkAppointmentsClashesRouter({ prisonApi, logError })
+    bulkAppointmentsClashesRouter({ systemOauthClient, prisonApi })
   )
   router.use(
     '/bulk-appointments/invalid-numbers',
@@ -289,15 +289,15 @@ const setup = ({
     router.use(
       '/offenders/:offenderNo/add-appointment',
       isCreateIndividualAppointmentRolledOut,
-      addAppointmentRouter({ prisonApi, whereaboutsApi, logError })
+      addAppointmentRouter({ systemOauthClient, prisonApi, whereaboutsApi, logError })
     )
 
     router.use(
       '/offenders/:offenderNo/prepost-appointments',
       isAppointmentsRolledOut,
-      prepostAppointmentRouter({
+      prepostAppointmentsRouter({
+        systemOauthClient,
         prisonApi,
-        logError,
         hmppsManageUsersApi,
         whereaboutsApi,
         notifyClient,
@@ -309,7 +309,7 @@ const setup = ({
   router.use(
     '/view-all-appointments',
     isAppointmentsRolledOut,
-    viewAppointments({ prisonApi, whereaboutsApi, logError })
+    viewAppointments({ systemOauthClient, prisonApi, whereaboutsApi, logError })
   )
 
   router.use(

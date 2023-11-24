@@ -5,7 +5,7 @@ import { logError } from './logError'
 import config from './config'
 
 import { userCaseloadsFactory as userCaseLoadsFactory } from './controllers/usercaseloads'
-import { offenderActivitesFactory } from './controllers/attendance/offenderActivities'
+import { offenderActivitiesFactory } from './controllers/attendance/offenderActivities'
 import { userLocationsFactory } from './controllers/userLocations'
 import { userMeFactory } from './controllers/userMe'
 import { getConfiguration } from './controllers/getConfig'
@@ -29,14 +29,21 @@ import handleErrors from './middleware/asyncHandler'
 
 const router = express.Router()
 
-export const setup = ({ prisonApi, whereaboutsApi, oauthApi, hmppsManageUsersApi, caseNotesApi }) => {
+export const setup = ({
+  prisonApi,
+  whereaboutsApi,
+  oauthApi,
+  getClientCredentialsTokens,
+  hmppsManageUsersApi,
+  caseNotesApi,
+}) => {
   const controller = controllerFactory({
-    activityListService: activityListFactory(prisonApi, whereaboutsApi, config),
-    houseblockListService: houseblockListFactory(prisonApi, whereaboutsApi, config),
+    activityListService: activityListFactory(getClientCredentialsTokens, prisonApi, whereaboutsApi),
+    houseblockListService: houseblockListFactory(getClientCredentialsTokens, prisonApi, whereaboutsApi),
     attendanceService: attendanceFactory(whereaboutsApi),
     offenderLoader: offenderLoaderFactory(prisonApi),
     csvParserService: csvParserService({ fs, isBinaryFileSync }),
-    offenderActivitesService: offenderActivitesFactory(prisonApi, whereaboutsApi),
+    offenderActivitiesService: offenderActivitiesFactory(getClientCredentialsTokens, prisonApi, whereaboutsApi),
     caseNotesApi,
     logError,
   })
@@ -80,14 +87,18 @@ export const setup = ({ prisonApi, whereaboutsApi, oauthApi, hmppsManageUsersApi
   router.get('/api/get-case-note/:offenderNumber/:caseNoteId', handleErrors(controller.getCaseNote))
   router.get(
     '/api/get-offender-events',
-    getExistingEventsController({ prisonApi, existingEventsService: existingEventsService(prisonApi), logError })
+    getExistingEventsController({
+      prisonApi,
+      existingEventsService: existingEventsService(getClientCredentialsTokens, prisonApi),
+      logError,
+    })
   )
   router.get(
     '/api/get-location-events',
     getLocationExistingEventsController({
       prisonApi,
       logError,
-      existingEventsService: existingEventsService(prisonApi),
+      existingEventsService: existingEventsService(getClientCredentialsTokens, prisonApi),
     })
   )
   router.get('/api/get-recurring-end-date', endDateController)

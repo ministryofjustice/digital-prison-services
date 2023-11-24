@@ -13,8 +13,8 @@ describe('View appointments', () => {
     searchGroups: jest.fn(),
     getAgencyGroupLocationPrefix: jest.fn(),
   }
-  const oauthApi = {
-    userDetails: jest.fn(),
+  const systemOauthClient = {
+    getClientCredentialsTokens: jest.fn(),
   }
 
   let req
@@ -25,6 +25,8 @@ describe('View appointments', () => {
   const activeCaseLoadId = 'MDI'
 
   beforeEach(() => {
+    jest.resetAllMocks()
+    jest.spyOn(Date, 'now').mockImplementation(() => 1577869200000) // 2020-01-01 09:00:00
     req = {
       query: {},
       originalUrl: 'http://localhost',
@@ -35,7 +37,7 @@ describe('View appointments', () => {
       },
     }
     res = { locals: {}, render: jest.fn(), status: jest.fn() }
-
+    systemOauthClient.getClientCredentialsTokens.mockResolvedValue({})
     logError = jest.fn()
 
     prisonApi.getAppointmentTypes = jest.fn()
@@ -69,11 +71,7 @@ describe('View appointments', () => {
       locationPrefix: 'MDI-1-',
     })
 
-    controller = viewAppointments({ prisonApi, whereaboutsApi, logError })
-  })
-
-  beforeAll(() => {
-    jest.spyOn(Date, 'now').mockImplementation(() => 1577869200000) // 2020-01-01 09:00:00
+    controller = viewAppointments({ systemOauthClient, prisonApi, whereaboutsApi, logError })
   })
 
   afterAll(() => {

@@ -1,8 +1,9 @@
 import moment from 'moment'
+import { Response } from 'express'
 import { serviceUnavailableMessage } from '../../common-messages'
 import { getTime, properCaseName, getCurrentPeriod, formatName } from '../../utils'
 
-export const prisonApiLocationDescription = async (res, whereaboutsApi, locationKey, userCaseLoad) => {
+export const prisonApiLocationDescription = async (res: Response, whereaboutsApi, locationKey, userCaseLoad) => {
   const fullLocationPrefix = await whereaboutsApi.getAgencyGroupLocationPrefix(res.locals, userCaseLoad, locationKey)
 
   if (fullLocationPrefix) {
@@ -12,12 +13,13 @@ export const prisonApiLocationDescription = async (res, whereaboutsApi, location
   return `${userCaseLoad}-${locationKey}`
 }
 
-export default ({ prisonApi, whereaboutsApi, logError }) =>
-  async (req, res) => {
+export default ({ systemOauthClient, prisonApi, whereaboutsApi, logError }) =>
+  async (req, res: Response) => {
     // @ts-expect-error ts-migrate(2554) FIXME: Expected 1 arguments, but got 0.
     const { date, timeSlot = getCurrentPeriod(), type, locationId, residentialLocation } = req.query
     const searchDate = date ? moment(date, 'DD/MM/YYYY').format('YYYY-MM-DD') : moment().format('YYYY-MM-DD')
     const agencyId = req.session.userDetails.activeCaseLoadId
+    const systemContext = await systemOauthClient.getClientCredentialsTokens(req.session.userDetails.username)
 
     const locationDesc = residentialLocation
       ? await prisonApiLocationDescription(res, whereaboutsApi, residentialLocation, agencyId)
@@ -26,7 +28,7 @@ export default ({ prisonApi, whereaboutsApi, logError }) =>
     const [appointmentTypes, appointmentLocations, appointments, residentialLocations] = await Promise.all([
       prisonApi.getAppointmentTypes(res.locals),
       prisonApi.getLocationsForAppointments(res.locals, agencyId),
-      whereaboutsApi.getAppointments(res.locals, agencyId, {
+      whereaboutsApi.getAppointments(systemContext, agencyId, {
         date: searchDate,
         timeSlot: timeSlot !== 'All' ? timeSlot : undefined,
         locationId,
