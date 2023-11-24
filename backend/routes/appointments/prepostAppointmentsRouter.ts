@@ -6,22 +6,20 @@ import existingEventsServiceFactory from '../../services/existingEventsService'
 const router = express.Router({ mergeParams: true })
 
 const controller = ({
+  systemOauthClient,
   prisonApi,
-  logError,
   hmppsManageUsersApi,
   whereaboutsApi,
   notifyClient,
   raiseAnalyticsEvent,
 }) => {
   const appointmentsService = appointmentsServiceFactory(prisonApi)
-  const existingEventsService = existingEventsServiceFactory(prisonApi)
+  const existingEventsService = existingEventsServiceFactory(systemOauthClient.getClientCredentialsTokens, prisonApi)
   const { index, post, cancel } = prepostAppointments.prepostAppointmentsFactory({
     prisonApi,
     hmppsManageUsersApi,
     whereaboutsApi,
     notifyClient,
-    // @ts-expect-error ts-migrate(2345) FIXME: Argument of type '{ prisonApi: any; oauthApi: any;... Remove this comment to see the full error message
-    logError,
     appointmentsService,
     existingEventsService,
     raiseAnalyticsEvent,

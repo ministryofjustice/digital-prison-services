@@ -10,7 +10,7 @@ describe('Activity list controller', () => {
   const attendanceService = {}
   const offenderLoader = {}
   const csvParserService = {}
-  const offenderActivitesService = {}
+  const offenderActivitiesService = {}
   const caseNotesApi = {}
   let logError
   let getActivityListController
@@ -28,7 +28,7 @@ describe('Activity list controller', () => {
       attendanceService,
       offenderLoader,
       csvParserService,
-      offenderActivitesService,
+      offenderActivitiesService,
       caseNotesApi,
       logError,
     }).getActivityList

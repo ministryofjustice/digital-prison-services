@@ -2,20 +2,21 @@ import { switchDateFormat } from '../../utils'
 import { DATE_TIME_FORMAT_SPEC, buildDateTime } from '../../../common/dateHelpers'
 import { raiseAnalyticsEvent } from '../../raiseAnalyticsEvent'
 
-export const bulkAppointmentsClashesFactory = (prisonApi, _logError) => {
+export const bulkAppointmentsClashesFactory = (systemOauthClient, prisonApi) => {
   const renderTemplate = (req, res, pageData) => {
     const { appointmentDetails, prisonersWithClashes } = pageData
 
     res.render('bulkAppointmentsClashes.njk', { appointmentDetails, prisonersWithClashes })
   }
-  const getOtherEvents = (req, res, { offenderNumbers, agencyId, date }) => {
+  const getOtherEvents = async (req, res, { offenderNumbers, agencyId, date }) => {
+    const systemContext = await systemOauthClient.getClientCredentialsTokens(req.session.userDetails.username)
     const searchCriteria = { agencyId, date, offenderNumbers }
 
     return Promise.all([
-      prisonApi.getVisits(res.locals, searchCriteria),
-      prisonApi.getAppointments(res.locals, searchCriteria),
-      prisonApi.getExternalTransfers(res.locals, searchCriteria),
-      prisonApi.getCourtEvents(res.locals, searchCriteria),
+      prisonApi.getVisits(systemContext, searchCriteria),
+      prisonApi.getAppointments(systemContext, searchCriteria),
+      prisonApi.getExternalTransfers(systemContext, searchCriteria),
+      prisonApi.getCourtEvents(systemContext, searchCriteria),
     ]).then((events) => events.reduce((flattenedEvents, event) => flattenedEvents.concat(event), []))
   }
 

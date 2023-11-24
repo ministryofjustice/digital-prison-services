@@ -55,7 +55,7 @@ const addToActivities = (offender, activity) => ({
   stayingOnWing: isStayingOnWing([...offender.activities, activity]),
 })
 
-export const getHouseblockListFactory = (prisonApi, whereaboutsApi, config) => {
+export const getHouseblockListFactory = (getClientCredentialsTokens, prisonApi, whereaboutsApi) => {
   const getHouseblockList = async (context, agencyId, groupName, date, timeSlot, wingStatus) => {
     const locations = await whereaboutsApi.getAgencyGroupLocations(context, agencyId, groupName)
     if (locations.length === 0) {
@@ -69,11 +69,16 @@ export const getHouseblockListFactory = (prisonApi, whereaboutsApi, config) => {
 
     const offenderNumbers = distinct(data.map((offender) => offender.offenderNo))
 
-    const externalEventsForOffenders = await getExternalEventsForOffenders(prisonApi, context, {
-      offenderNumbers,
-      formattedDate,
-      agencyId,
-    })
+    const externalEventsForOffenders = await getExternalEventsForOffenders(
+      getClientCredentialsTokens,
+      prisonApi,
+      context,
+      {
+        offenderNumbers,
+        formattedDate,
+        agencyId,
+      }
+    )
 
     log.info(data.size, 'getHouseblockList data received')
 

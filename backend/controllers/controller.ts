@@ -7,7 +7,7 @@ export const factory = ({
   attendanceService,
   offenderLoader,
   csvParserService,
-  offenderActivitesService,
+  offenderActivitiesService,
   caseNotesApi,
   logError,
 }) => {
@@ -99,7 +99,7 @@ export const factory = ({
 
   const getPrisonersUnaccountedFor = asyncMiddleware(async (req, res) => {
     const { agencyId, date, timeSlot } = req.query
-    const viewModel = await offenderActivitesService.getPrisonersUnaccountedFor(res.locals, agencyId, date, timeSlot)
+    const viewModel = await offenderActivitiesService.getPrisonersUnaccountedFor(res.locals, agencyId, date, timeSlot)
     res.json(viewModel)
   })
 
