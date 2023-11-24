@@ -36,6 +36,12 @@ const homepagePage = () =>
       link: () => cy.get('[data-test="submit-an-intelligence-report-private-beta"] a'),
       description: () => cy.get('[data-test="submit-an-intelligence-report-private-beta"] p'),
     }),
+    imsServicePrivateBeta: () => ({
+      tile: () => cy.get('[data-test="manage-intelligence-private-beta"]'),
+      title: () => cy.get('[data-test="manage-intelligence-private-beta"] h2'),
+      link: () => cy.get('[data-test="manage-intelligence-private-beta"] a'),
+      description: () => cy.get('[data-test="manage-intelligence-private-beta"] p'),
+    }),
     manageRestrictedPatients: () => ({
       tile: () => cy.get('[data-test="manage-restricted-patients"]'),
       title: () => cy.get('[data-test="manage-restricted-patients"] h2'),
