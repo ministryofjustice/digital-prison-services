@@ -39,6 +39,10 @@ const getTasks = ({ activeCaseLoadId, locations, staffId, whereaboutsConfig, key
     return mercurySubmit.liveDate && mercurySubmit.liveDate < Date.now()
   }
 
+  const isImsServiceLive = () => {
+    return imsService.liveDate && imsService.liveDate < Date.now()
+  }
+
   const getAdjudicationsEnabledPrisons = (adjudicationsEnabledPrisons) => {
     // if the input is an empty array, then turn enable for all prisons
     if (Array.isArray(adjudicationsEnabledPrisons) && adjudicationsEnabledPrisons.length === 0) return true

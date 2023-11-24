@@ -192,6 +192,12 @@ export const apis = {
     enabled_prisons: process.env.MERCURY_SUBMIT_PRIVATE_BETA_ENABLED_PRISONS || '',
     liveDate: parseDate(process.env.MERCURY_SUBMIT_LIVE_ENABLED_DATE),
   },
+  imsService: {
+    url: process.env.IMS_SERVICE_URL,
+    privateBetaDate: parseDate(process.env.IMS_SERVICE_PRIVATE_BETA_ENABLED_DATE),
+    enabled_prisons: process.env.IMS_SERVICE_PRIVATE_BETA_ENABLED_PRISONS || '',
+    liveDate: parseDate(process.env.IMS_SERVICE_LIVE_ENABLED_DATE),
+  },
   omic: {
     url: process.env.OMIC_URL || 'http://localhost:3001',
   },
