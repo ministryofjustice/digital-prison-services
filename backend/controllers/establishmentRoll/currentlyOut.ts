@@ -1,9 +1,10 @@
+import { Request, Response } from 'express'
 import moment from 'moment'
 import { alertFlagLabels } from '../../shared/alertFlagValues'
 import { putLastNameFirst, stripAgencyPrefix } from '../../utils'
 
-export default ({ movementsService, logError }) =>
-  async (req, res) => {
+export default ({ movementsService }) =>
+  async (req: Request, res: Response) => {
     const { livingUnitId } = req.params
     const response = await movementsService.getOffendersCurrentlyOutOfLivingUnit(res.locals, livingUnitId)
 

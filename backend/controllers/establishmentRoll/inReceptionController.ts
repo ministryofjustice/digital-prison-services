@@ -1,9 +1,10 @@
+import { Request, Response } from 'express'
 import moment from 'moment'
 import { putLastNameFirst } from '../../utils'
 import { alertFlagLabels } from '../../shared/alertFlagValues'
 
-export default ({ movementsService, logError }) =>
-  async (req, res) => {
+export default ({ movementsService }) =>
+  async (req: Request, res: Response) => {
     const { activeCaseLoadId } = req.session.userDetails
     const offendersInReception = await movementsService.getOffendersInReception(res.locals, activeCaseLoadId)
 

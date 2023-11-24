@@ -5,7 +5,6 @@ const movementsService = {
 }
 
 describe('In today', () => {
-  let logError
   let controller
   const agencyId = 'MDI'
   const req = { originalUrl: 'http://localhost' }
@@ -45,8 +44,7 @@ describe('In today', () => {
   ]
   beforeEach(() => {
     movementsService.getMovementsIn = jest.fn()
-    logError = jest.fn()
-    controller = inToday({ movementsService, logError })
+    controller = inToday({ movementsService })
     res.render = jest.fn()
   })
 

@@ -26,13 +26,11 @@ describe('In reception controller', () => {
   }
   const res = { locals: {}, render: jest.fn(), status: jest.fn() }
   let req
-  let logError
   let controller
 
   beforeEach(() => {
     movementsService.getOffendersInReception = jest.fn().mockResolvedValue([])
-    logError = jest.fn()
-    controller = inReceptionController({ movementsService, logError })
+    controller = inReceptionController({ movementsService })
 
     res.render = jest.fn()
     res.status = jest.fn()

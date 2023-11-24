@@ -180,7 +180,8 @@ export const movementsServiceFactory = (prisonApi, systemOauthClient, incentives
   }
 
   const getOffendersEnRoute = async (context, agency) => {
-    const offenders = await prisonApi.getOffendersEnRoute(context, agency)
+    const systemContext = await systemOauthClient.getClientCredentialsTokens()
+    const offenders = await prisonApi.getOffendersEnRoute(systemContext, agency)
     return addAlertsAndCategory(context, offenders)
   }
 
