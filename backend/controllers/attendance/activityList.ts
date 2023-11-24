@@ -26,7 +26,9 @@ const extractAttendanceInfo = (attendanceInformation, event) => {
     const { id, absentReason, absentReasonDescription, absentSubReason, attended, paid, comments, locked } =
       offenderAttendanceInfo || {}
 
-    const attendanceInfo = absentReason
+    const pay = attended && paid
+    const payObject = pay ? { pay } : {}
+    return absentReason
       ? {
           id,
           absentReason: { value: absentReason, name: absentReasonDescription },
@@ -34,27 +36,23 @@ const extractAttendanceInfo = (attendanceInformation, event) => {
           comments,
           paid,
           locked,
+          other: true,
+          ...payObject,
         }
-      : { id, comments, paid, locked }
-
-    // @ts-expect-error ts-migrate(2339) FIXME: Property 'other' does not exist on type '{ id: any... Remove this comment to see the full error message
-    if (absentReason) attendanceInfo.other = true
-    // @ts-expect-error ts-migrate(2339) FIXME: Property 'pay' does not exist on type '{ id: any; ... Remove this comment to see the full error message
-    if (attended && paid) attendanceInfo.pay = true
-
-    return attendanceInfo
+      : { id, comments, paid, locked, ...payObject }
   }
 
   return null
 }
 
-export const getActivityListFactory = (prisonApi, whereaboutsApi, config) => {
-  const getEventsForOffenderNumbers = async (context, { agencyId, date, timeSlot, offenderNumbers }) => {
+export const getActivityListFactory = (getClientCredentialsTokens, prisonApi, whereaboutsApi) => {
+  const getEventsForOffenderNumbers = async ({ agencyId, date, timeSlot, offenderNumbers }) => {
+    const systemContext = await getClientCredentialsTokens()
     const searchCriteria = { agencyId, date, timeSlot, offenderNumbers }
     const eventsByKind = await Promise.all([
-      prisonApi.getVisits(context, searchCriteria),
-      prisonApi.getAppointments(context, searchCriteria),
-      prisonApi.getActivities(context, searchCriteria),
+      prisonApi.getVisits(systemContext, searchCriteria),
+      prisonApi.getAppointments(systemContext, searchCriteria),
+      prisonApi.getActivities(systemContext, searchCriteria),
     ])
     return [...eventsByKind[0], ...eventsByKind[1], ...eventsByKind[2]] // Meh. No flatMap or flat.
   }
@@ -66,11 +64,12 @@ export const getActivityListFactory = (prisonApi, whereaboutsApi, config) => {
       throw new Error('Location ID is missing')
     }
 
+    const systemContext = await getClientCredentialsTokens()
     const date = switchDateFormat(frontEndDate)
 
     const apiParams = { agencyId, locationId, date, timeSlot }
     const eventsAtLocationByUsage = await Promise.all([
-      prisonApi.getActivitiesAtLocation(context, { ...apiParams, includeSuspended: true }),
+      prisonApi.getActivitiesAtLocation(systemContext, { ...apiParams, includeSuspended: true }),
       prisonApi.getActivityList(context, { ...apiParams, usage: 'VISIT' }),
       prisonApi.getActivityList(context, { ...apiParams, usage: 'APP' }),
     ])
@@ -91,12 +90,17 @@ export const getActivityListFactory = (prisonApi, whereaboutsApi, config) => {
       period: timeSlot,
     })
 
-    const externalEventsForOffenders = await getExternalEventsForOffenders(prisonApi, context, {
-      offenderNumbers,
-      formattedDate: date,
-      agencyId,
-    })
-    const eventsForOffenderNumbers = await getEventsForOffenderNumbers(context, {
+    const externalEventsForOffenders = await getExternalEventsForOffenders(
+      getClientCredentialsTokens,
+      prisonApi,
+      context,
+      {
+        offenderNumbers,
+        formattedDate: date,
+        agencyId,
+      }
+    )
+    const eventsForOffenderNumbers = await getEventsForOffenderNumbers({
       agencyId,
       date,
       timeSlot,

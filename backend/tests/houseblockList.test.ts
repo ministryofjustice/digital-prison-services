@@ -1,22 +1,27 @@
 import moment from 'moment'
-import { prisonApiFactory } from '../api/prisonApi'
 import { getHouseblockListFactory as factory } from '../controllers/attendance/houseblockList'
-
 import { distinct, switchDateFormat } from '../utils'
 
 Reflect.deleteProperty(process.env, 'APPINSIGHTS_INSTRUMENTATIONKEY')
 
-const prisonApi = prisonApiFactory(null)
-const whereaboutsApi = {}
-const config = {
-  app: {
-    production: true,
-  },
+const prisonApi = {
+  getHouseblockList: jest.fn(),
+  getSentenceData: jest.fn(),
+  getExternalTransfers: jest.fn(),
+  getCourtEvents: jest.fn(),
+  getAlerts: jest.fn(),
+  getAssessments: jest.fn(),
 }
+const whereaboutsApi = {
+  getAgencyGroupLocations: jest.fn(),
+  getAttendanceForBookings: jest.fn(),
+}
+const getClientCredentialsTokens = jest.fn().mockResolvedValue({})
+
 const houseblockList = require('../controllers/attendance/houseblockList').getHouseblockListFactory(
+  getClientCredentialsTokens,
   prisonApi,
-  whereaboutsApi,
-  config
+  whereaboutsApi
 ).getHouseblockList
 
 // There can be more than one occupant of a cell, the results are ordered by cell,offenderNo or cell,surname from the api.
@@ -184,31 +189,17 @@ function createMultipleUnpaid() {
 
 describe('Houseblock list controller', () => {
   beforeEach(() => {
-    prisonApi.getHouseblockList = jest.fn()
-    prisonApi.getSentenceData = jest.fn()
-    prisonApi.getExternalTransfers = jest.fn()
-    prisonApi.getCourtEvents = jest.fn()
-    prisonApi.getAlerts = jest.fn()
-    prisonApi.getAssessments = jest.fn()
-    // @ts-expect-error ts-migrate(2339) FIXME: Property 'getAttendanceForBookings' does not exist... Remove this comment to see the full error message
-    whereaboutsApi.getAttendanceForBookings = jest.fn()
-    // @ts-expect-error ts-migrate(2339) FIXME: Property 'getAttendanceForBookings' does not exist... Remove this comment to see the full error message
+    jest.resetAllMocks()
     whereaboutsApi.getAttendanceForBookings.mockReturnValue([])
-    // @ts-expect-error ts-migrate(2339) FIXME: Property 'getAgencyGroupLocations' does not exist ... Remove this comment to see the full error message
-    whereaboutsApi.getAgencyGroupLocations = jest.fn()
-    // @ts-expect-error ts-migrate(2339) FIXME: Property 'getAgencyGroupLocations' does not exist ... Remove this comment to see the full error message
     whereaboutsApi.getAgencyGroupLocations.mockReturnValue([{ locationId: 1 }])
   })
 
   it('Should add visit and appointment details to array', async () => {
-    // @ts-expect-error ts-migrate(2339) FIXME: Property 'mockImplementationOnce' does not exist o... Remove this comment to see the full error message
     prisonApi.getHouseblockList.mockImplementationOnce(() => createResponse())
 
     const response = await houseblockList({})
 
-    // @ts-expect-error ts-migrate(2339) FIXME: Property 'getAgencyGroupLocations' does not exist ... Remove this comment to see the full error message
     expect(whereaboutsApi.getAgencyGroupLocations.mock.calls.length).toBe(1)
-    // @ts-expect-error ts-migrate(2339) FIXME: Property 'mock' does not exist on type '(context: ... Remove this comment to see the full error message
     expect(prisonApi.getHouseblockList.mock.calls.length).toBe(1)
 
     expect(response.length).toBe(4)
@@ -258,40 +249,29 @@ describe('Houseblock list controller', () => {
   })
 
   it('Should pass location Ids to getHouseblockList', async () => {
-    // @ts-expect-error ts-migrate(2339) FIXME: Property 'getAgencyGroupLocations' does not exist ... Remove this comment to see the full error message
     whereaboutsApi.getAgencyGroupLocations.mockReturnValue([{ locationId: 1 }, { locationId: 2 }])
-    // @ts-expect-error ts-migrate(2339) FIXME: Property 'mockImplementationOnce' does not exist o... Remove this comment to see the full error message
     prisonApi.getHouseblockList.mockImplementationOnce(() => createResponse())
 
     await houseblockList({})
 
-    // @ts-expect-error ts-migrate(2339) FIXME: Property 'getAgencyGroupLocations' does not exist ... Remove this comment to see the full error message
     expect(whereaboutsApi.getAgencyGroupLocations.mock.calls.length).toBe(1)
-    // @ts-expect-error ts-migrate(2339) FIXME: Property 'mock' does not exist on type '(context: ... Remove this comment to see the full error message
     expect(prisonApi.getHouseblockList.mock.calls.length).toBe(1)
-    // @ts-expect-error ts-migrate(2339) FIXME: Property 'mock' does not exist on type '(context: ... Remove this comment to see the full error message
     expect(prisonApi.getHouseblockList.mock.calls[0][2]).toStrictEqual([1, 2])
   })
 
   it('Should not retrieve houseblock list if no cell locations in wing', async () => {
-    // @ts-expect-error ts-migrate(2339) FIXME: Property 'getAgencyGroupLocations' does not exist ... Remove this comment to see the full error message
     whereaboutsApi.getAgencyGroupLocations = jest.fn()
-    // @ts-expect-error ts-migrate(2339) FIXME: Property 'getAgencyGroupLocations' does not exist ... Remove this comment to see the full error message
     whereaboutsApi.getAgencyGroupLocations.mockReturnValue([])
-    // @ts-expect-error ts-migrate(2339) FIXME: Property 'mockImplementationOnce' does not exist o... Remove this comment to see the full error message
     prisonApi.getHouseblockList.mockImplementationOnce(() => createResponse())
 
     const response = await houseblockList({})
 
-    // @ts-expect-error ts-migrate(2339) FIXME: Property 'getAgencyGroupLocations' does not exist ... Remove this comment to see the full error message
     expect(whereaboutsApi.getAgencyGroupLocations.mock.calls.length).toBe(1)
-    // @ts-expect-error ts-migrate(2339) FIXME: Property 'mock' does not exist on type '(context: ... Remove this comment to see the full error message
     expect(prisonApi.getHouseblockList.mock.calls.length).toBe(0)
     expect(response).toStrictEqual([])
   })
 
   it('Should correctly choose main activity', async () => {
-    // @ts-expect-error ts-migrate(2339) FIXME: Property 'mockImplementationOnce' does not exist o... Remove this comment to see the full error message
     prisonApi.getHouseblockList.mockImplementationOnce(() => createMultipleActivities())
 
     const response = await houseblockList({})
@@ -310,7 +290,6 @@ describe('Houseblock list controller', () => {
   })
 
   it('Should correctly choose between multiple unpaid', async () => {
-    // @ts-expect-error ts-migrate(2339) FIXME: Property 'mockImplementationOnce' does not exist o... Remove this comment to see the full error message
     prisonApi.getHouseblockList.mockImplementationOnce(() => createMultipleUnpaid())
 
     const response = await houseblockList({})
@@ -328,25 +307,19 @@ describe('Houseblock list controller', () => {
   })
 
   it('Should handle no response data', async () => {
-    // @ts-expect-error ts-migrate(2339) FIXME: Property 'mockImplementationOnce' does not exist o... Remove this comment to see the full error message
     prisonApi.getHouseblockList.mockImplementationOnce(() => [])
 
     const response = await houseblockList({})
 
-    // @ts-expect-error ts-migrate(2339) FIXME: Property 'mock' does not exist on type '(context: ... Remove this comment to see the full error message
     expect(prisonApi.getHouseblockList.mock.calls.length).toBe(1)
     expect(response.length).toBe(0)
 
-    // @ts-expect-error ts-migrate(2339) FIXME: Property 'mock' does not exist on type '(context: ... Remove this comment to see the full error message
     expect(prisonApi.getSentenceData.mock.calls.length).toBe(0)
-    // @ts-expect-error ts-migrate(2339) FIXME: Property 'mock' does not exist on type '(context: ... Remove this comment to see the full error message
     expect(prisonApi.getCourtEvents.mock.calls.length).toBe(0)
-    // @ts-expect-error ts-migrate(2339) FIXME: Property 'mock' does not exist on type '(context: ... Remove this comment to see the full error message
     expect(prisonApi.getExternalTransfers.mock.calls.length).toBe(0)
   })
 
   it('should fetch sentence data for all offenders in a house block', async () => {
-    // @ts-expect-error ts-migrate(2339) FIXME: Property 'mockImplementationOnce' does not exist o... Remove this comment to see the full error message
     prisonApi.getHouseblockList.mockImplementationOnce(() => createMultipleUnpaid())
 
     await houseblockList({})
@@ -359,10 +332,8 @@ describe('Houseblock list controller', () => {
   it('should return multiple scheduled transfers along with status descriptions', async () => {
     const today = moment()
 
-    // @ts-expect-error ts-migrate(2339) FIXME: Property 'mockImplementationOnce' does not exist o... Remove this comment to see the full error message
     prisonApi.getHouseblockList.mockImplementationOnce(() => createMultipleUnpaid())
 
-    // @ts-expect-error ts-migrate(2339) FIXME: Property 'mockImplementationOnce' does not exist o... Remove this comment to see the full error message
     prisonApi.getExternalTransfers.mockImplementationOnce(() => [
       {
         firstName: 'BYSJANHKUMAR',
@@ -418,12 +389,10 @@ describe('Houseblock list controller', () => {
 
   describe('Attendance information', () => {
     it('should call getAttendance with correct parameters', async () => {
-      // @ts-expect-error ts-migrate(2339) FIXME: Property 'mockImplementationOnce' does not exist o... Remove this comment to see the full error message
       prisonApi.getHouseblockList.mockImplementationOnce(() => createResponse())
 
       await houseblockList({}, 'LEI', 'Houseblock 1', '15/10/2017', 'PM')
 
-      // @ts-expect-error ts-migrate(2339) FIXME: Property 'getAttendanceForBookings' does not exist... Remove this comment to see the full error message
       expect(whereaboutsApi.getAttendanceForBookings).toHaveBeenCalledWith(
         {},
         { agencyId: 'LEI', period: 'PM', bookings: [1, 2, 3, 4, 5, 6, 7, 8], date: '2017-10-15' }
@@ -431,7 +400,6 @@ describe('Houseblock list controller', () => {
     })
 
     it('should load attendance details for a list of booking ids', async () => {
-      // @ts-expect-error ts-migrate(2339) FIXME: Property 'mockImplementationOnce' does not exist o... Remove this comment to see the full error message
       prisonApi.getHouseblockList.mockImplementationOnce(() => [
         {
           bookingId: 1,
@@ -478,7 +446,6 @@ describe('Houseblock list controller', () => {
           endTime: '2017-10-15T18:30:00',
         },
       ])
-      // @ts-expect-error ts-migrate(2339) FIXME: Property 'getAttendanceForBookings' does not exist... Remove this comment to see the full error message
       whereaboutsApi.getAttendanceForBookings.mockReturnValue({
         attendances: [
           {
@@ -665,16 +632,13 @@ describe('Houseblock list controller', () => {
     })
 
     it('should not call getAttendanceForBookings if there are no offenders', async () => {
-      // @ts-expect-error ts-migrate(2339) FIXME: Property 'mockImplementationOnce' does not exist o... Remove this comment to see the full error message
       prisonApi.getHouseblockList.mockImplementationOnce(() => [])
       await houseblockList({}, 'LEI', 'Houseblock 1', '15/10/2017', 'PM')
 
-      // @ts-expect-error ts-migrate(2339) FIXME: Property 'getAttendanceForBookings' does not exist... Remove this comment to see the full error message
       expect(whereaboutsApi.getAttendanceForBookings).not.toHaveBeenCalled()
     })
 
     it('should only request attendance for prison that have been enabled', async () => {
-      // @ts-expect-error ts-migrate(2339) FIXME: Property 'mockReturnValue' does not exist on type ... Remove this comment to see the full error message
       prisonApi.getHouseblockList.mockReturnValue([
         {
           bookingId: 1,
@@ -691,25 +655,16 @@ describe('Houseblock list controller', () => {
           endTime: '2017-10-15T18:30:00',
         },
       ])
-      // @ts-expect-error ts-migrate(2339) FIXME: Property 'getAttendanceForBookings' does not exist... Remove this comment to see the full error message
       whereaboutsApi.getAttendanceForBookings.mockReturnValue([])
-      const { getHouseblockList: service } = factory(prisonApi, whereaboutsApi, {
-        app: {
-          production: true,
-        },
-      })
+      const { getHouseblockList: service } = factory(getClientCredentialsTokens, prisonApi, whereaboutsApi)
 
-      // @ts-expect-error ts-migrate(2554) FIXME: Expected 6 arguments, but got 5.
-      await service({}, 'LEI', 'Houseblock 1', '15/10/2017', 'PM')
-      // @ts-expect-error ts-migrate(2554) FIXME: Expected 6 arguments, but got 5.
-      await service({}, 'MDI', 'Houseblock 1', '15/10/2017', 'PM')
+      await service({}, 'LEI', 'Houseblock 1', '15/10/2017', 'PM', null)
+      await service({}, 'MDI', 'Houseblock 1', '15/10/2017', 'PM', null)
 
-      // @ts-expect-error ts-migrate(2339) FIXME: Property 'getAttendanceForBookings' does not exist... Remove this comment to see the full error message
       expect(whereaboutsApi.getAttendanceForBookings.mock.calls.length).toBe(2)
     })
 
     it('should enable attendance for everyone in dev', async () => {
-      // @ts-expect-error ts-migrate(2339) FIXME: Property 'mockReturnValue' does not exist on type ... Remove this comment to see the full error message
       prisonApi.getHouseblockList.mockReturnValue([
         {
           bookingId: 1,
@@ -726,20 +681,12 @@ describe('Houseblock list controller', () => {
           endTime: '2017-10-15T18:30:00',
         },
       ])
-      // @ts-expect-error ts-migrate(2339) FIXME: Property 'getAttendanceForBookings' does not exist... Remove this comment to see the full error message
       whereaboutsApi.getAttendanceForBookings.mockReturnValue([])
-      const { getHouseblockList: service } = factory(prisonApi, whereaboutsApi, {
-        app: {
-          production: false,
-        },
-      })
+      const { getHouseblockList: service } = factory(getClientCredentialsTokens, prisonApi, whereaboutsApi)
 
-      // @ts-expect-error ts-migrate(2554) FIXME: Expected 6 arguments, but got 5.
-      await service({}, 'LEI', 'Houseblock 1', '15/10/2017', 'PM')
-      // @ts-expect-error ts-migrate(2554) FIXME: Expected 6 arguments, but got 5.
-      await service({}, 'MDI', 'Houseblock 1', '15/10/2017', 'PM')
+      await service({}, 'LEI', 'Houseblock 1', '15/10/2017', 'PM', null)
+      await service({}, 'MDI', 'Houseblock 1', '15/10/2017', 'PM', null)
 
-      // @ts-expect-error ts-migrate(2339) FIXME: Property 'getAttendanceForBookings' does not exist... Remove this comment to see the full error message
       expect(whereaboutsApi.getAttendanceForBookings.mock.calls.length).toBe(2)
     })
   })
@@ -853,7 +800,6 @@ describe('Houseblock list controller', () => {
     ]
 
     it('should return only offenders leaving the wing', async () => {
-      // @ts-expect-error ts-migrate(2339) FIXME: Property 'mockImplementationOnce' does not exist o... Remove this comment to see the full error message
       prisonApi.getHouseblockList.mockImplementationOnce(() => responseWithOneLeavingWing)
 
       const response = await houseblockList({}, 'LEI', 'Houseblock 1', '15/10/2017', 'ED', 'leaving')
@@ -891,9 +837,6 @@ describe('Houseblock list controller', () => {
               }),
             ]),
           }),
-        ]),
-        // @ts-expect-error ts-migrate(2554) FIXME: Expected 1 arguments, but got 2.
-        expect.arrayContaining([
           expect.objectContaining({
             bookingId: 2,
             firstName: 'MICHAEL',
@@ -918,7 +861,6 @@ describe('Houseblock list controller', () => {
     })
 
     it('should return only offenders staying on the wing', async () => {
-      // @ts-expect-error ts-migrate(2339) FIXME: Property 'mockImplementationOnce' does not exist o... Remove this comment to see the full error message
       prisonApi.getHouseblockList.mockImplementationOnce(() => responseWithOneLeavingWing)
 
       const response = await houseblockList({}, 'LEI', 'Houseblock 1', '15/10/2017', 'ED', 'staying')
@@ -946,9 +888,6 @@ describe('Houseblock list controller', () => {
               }),
             ]),
           }),
-        ]),
-        // @ts-expect-error ts-migrate(2554) FIXME: Expected 1 arguments, but got 3.
-        expect.arrayContaining([
           expect.objectContaining({
             bookingId: 4,
             firstName: 'STEVE',
@@ -969,8 +908,6 @@ describe('Houseblock list controller', () => {
               }),
             ]),
           }),
-        ]),
-        expect.arrayContaining([
           expect.objectContaining({
             bookingId: 5,
             firstName: 'JOHN',
@@ -991,8 +928,6 @@ describe('Houseblock list controller', () => {
               }),
             ]),
           }),
-        ]),
-        expect.arrayContaining([
           expect.objectContaining({
             bookingId: 6,
             firstName: 'JIM',

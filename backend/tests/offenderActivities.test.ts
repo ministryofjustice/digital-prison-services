@@ -1,12 +1,21 @@
 Reflect.deleteProperty(process.env, 'APPINSIGHTS_INSTRUMENTATIONKEY')
 
 const context = {}
-const prisonApi = {}
-const whereaboutsApi = {}
-const { getPrisonersUnaccountedFor } = require('../controllers/attendance/offenderActivities').offenderActivitesFactory(
-  prisonApi,
-  whereaboutsApi
-)
+const prisonApi = {
+  getVisits: jest.fn(),
+  getAppointments: jest.fn(),
+}
+const whereaboutsApi = {
+  prisonersUnaccountedFor: jest.fn(),
+}
+const getClientCredentialsTokens = jest.fn().mockResolvedValue({})
+
+const { getPrisonersUnaccountedFor } =
+  require('../controllers/attendance/offenderActivities').offenderActivitiesFactory(
+    getClientCredentialsTokens,
+    prisonApi,
+    whereaboutsApi
+  )
 
 const scheduledActivitiesResponse = [
   {
@@ -74,12 +83,9 @@ const scheduledActivitiesResponse = [
 describe('offender activities', () => {
   describe('getPrisonersUnaccountedFor()', () => {
     beforeEach(() => {
-      // @ts-expect-error ts-migrate(2339) FIXME: Property 'getVisits' does not exist on type '{}'.
-      prisonApi.getVisits = jest.fn().mockReturnValue([])
-      // @ts-expect-error ts-migrate(2339) FIXME: Property 'getAppointments' does not exist on type ... Remove this comment to see the full error message
-      prisonApi.getAppointments = jest.fn().mockReturnValue([])
-      // @ts-expect-error ts-migrate(2339) FIXME: Property 'prisonersUnaccountedFor' does not exist on t... Remove this comment to see the full error message
-      whereaboutsApi.prisonersUnaccountedFor = jest.fn().mockReturnValue({ scheduled: scheduledActivitiesResponse })
+      prisonApi.getVisits.mockReturnValue([])
+      prisonApi.getAppointments.mockReturnValue([])
+      whereaboutsApi.prisonersUnaccountedFor.mockReturnValue({ scheduled: scheduledActivitiesResponse })
     })
 
     it('should return the correct number of separate offender activities when there are is no matching attendance record', async () => {
@@ -90,8 +96,7 @@ describe('offender activities', () => {
     })
 
     it('should return activities populated with events and appointments', async () => {
-      // @ts-expect-error ts-migrate(2339) FIXME: Property 'getVisits' does not exist on type '{}'.
-      prisonApi.getVisits = jest.fn().mockReturnValueOnce([
+      prisonApi.getVisits.mockReturnValueOnce([
         {
           offenderNo: 'G7179GP',
           locationId: 26996,
@@ -106,8 +111,7 @@ describe('offender activities', () => {
           endTime: '2019-08-07T16:00:00',
         },
       ])
-      // @ts-expect-error ts-migrate(2339) FIXME: Property 'getAppointments' does not exist on type ... Remove this comment to see the full error message
-      prisonApi.getAppointments = jest.fn().mockReturnValueOnce([
+      prisonApi.getAppointments.mockReturnValueOnce([
         {
           offenderNo: 'G7179GP',
           locationId: 27218,
@@ -119,10 +123,9 @@ describe('offender activities', () => {
           startTime: '2019-08-07T16:00:00',
         },
       ])
-      // @ts-expect-error ts-migrate(2339) FIXME: Property 'prisonersUnaccountedFor' does not exist on t... Remove this comment to see the full error message
-      whereaboutsApi.prisonersUnaccountedFor = jest
-        .fn()
-        .mockReturnValue({ scheduled: scheduledActivitiesResponse.filter((r) => r.eventId !== 378088468) })
+      whereaboutsApi.prisonersUnaccountedFor.mockReturnValue({
+        scheduled: scheduledActivitiesResponse.filter((r) => r.eventId !== 378088468),
+      })
 
       const response = await getPrisonersUnaccountedFor(context, 'LEI', '2019-08-07', 'PM')
 
