@@ -20,7 +20,7 @@ describe('Movement service', () => {
   }
   const incentivesApi = {
     getIepSummaryForBookingIds: jest.fn(),
-  } // as jest.Mocked<typeof apis.incentivesApi>
+  }
   const context = {}
   const agency = 'LEI'
   const offenders = [
@@ -58,9 +58,12 @@ describe('Movement service', () => {
     toAgencyDescription: undefined,
     commentText: undefined,
   }
+  const systemContext = { system: 'context' }
+  // const securityContext = 'securityContextData'
 
   beforeEach(() => {
     jest.resetAllMocks()
+    oauthClient.getClientCredentialsTokens.mockReturnValue(systemContext)
   })
 
   describe('Out today', () => {
@@ -84,14 +87,11 @@ describe('Movement service', () => {
     })
 
     it('should make a request for alerts using the systemContext and offender numbers', async () => {
-      const securityContext = 'securityContextData'
-
       prisonApi.getMovementsOut.mockReturnValue(offenders)
-      oauthClient.getClientCredentialsTokens.mockReturnValue(securityContext)
 
       await movementsServiceFactory(prisonApi, oauthClient, incentivesApi).getMovementsOut(context, agency)
 
-      expect(prisonApi.getAlertsSystem).toHaveBeenCalledWith(securityContext, offenderNumbers)
+      expect(prisonApi.getAlertsSystem).toHaveBeenCalledWith(systemContext, offenderNumbers)
     })
 
     it('should make a request for assessments with the correct offender numbers and assessment code', async () => {
@@ -221,10 +221,7 @@ describe('Movement service', () => {
     })
 
     it('should call recent movements for offenders in reception', async () => {
-      const systemContext = { system: 'context' }
       prisonApi.getOffendersInReception.mockReturnValue(offenders)
-
-      oauthClient.getClientCredentialsTokens.mockReturnValue(systemContext)
 
       await movementsServiceFactory(prisonApi, oauthClient, incentivesApi).getOffendersInReception(context, agency)
 
@@ -261,11 +258,10 @@ describe('Movement service', () => {
 
     it('should request flags for the offenders in reception', async () => {
       prisonApi.getOffendersInReception.mockReturnValue(offenders)
-      oauthClient.getClientCredentialsTokens.mockReturnValue({})
 
       await movementsServiceFactory(prisonApi, oauthClient, incentivesApi).getOffendersInReception(context, agency)
 
-      expect(prisonApi.getAlertsSystem).toHaveBeenCalledWith(context, offenderNumbers)
+      expect(prisonApi.getAlertsSystem).toHaveBeenCalledWith(systemContext, offenderNumbers)
     })
 
     it('should populate offenders in reception with alert flags', async () => {
@@ -672,18 +668,15 @@ describe('Movement service', () => {
     it('should make a request for offenders en-route to an establishment', async () => {
       await movementsServiceFactory(prisonApi, oauthClient, incentivesApi).getOffendersEnRoute(context, agency)
 
-      expect(prisonApi.getOffendersEnRoute).toHaveBeenCalledWith(context, agency)
+      expect(prisonApi.getOffendersEnRoute).toHaveBeenCalledWith(systemContext, agency)
     })
 
     it('should make a request for alerts using the systemContext and offender numbers', async () => {
-      const securityContext = 'securityContextData'
-
       prisonApi.getOffendersEnRoute.mockReturnValue(offenders)
-      oauthClient.getClientCredentialsTokens.mockReturnValue(securityContext)
 
       await movementsServiceFactory(prisonApi, oauthClient, incentivesApi).getOffendersEnRoute(context, agency)
 
-      expect(prisonApi.getAlertsSystem).toHaveBeenCalledWith(securityContext, offenderNumbers)
+      expect(prisonApi.getAlertsSystem).toHaveBeenCalledWith(systemContext, offenderNumbers)
     })
 
     it('should make a request for assessments with the correct offender numbers and assessment code', async () => {

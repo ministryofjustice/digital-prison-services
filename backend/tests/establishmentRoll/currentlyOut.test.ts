@@ -5,7 +5,6 @@ const movementsService = {
 }
 
 describe('Currently out', () => {
-  let logError
   let controller
   const livingUnitId = 1234
   const req = { originalUrl: 'http://localhost', params: { livingUnitId } }
@@ -40,8 +39,7 @@ describe('Currently out', () => {
   ]
   beforeEach(() => {
     movementsService.getOffendersCurrentlyOutOfLivingUnit = jest.fn()
-    logError = jest.fn()
-    controller = currentlyOut({ movementsService, logError })
+    controller = currentlyOut({ movementsService })
     res.render = jest.fn()
   })
 

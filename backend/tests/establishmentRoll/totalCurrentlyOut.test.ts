@@ -3,9 +3,11 @@ import totalCurrentlyOut from '../../controllers/establishmentRoll/totalCurrentl
 const movementsService = {
   getOffendersCurrentlyOutOfAgency: jest.fn(),
 }
+const systemOauthClient = {
+  getClientCredentialsTokens: jest.fn(),
+}
 
 describe('Currently out', () => {
-  let logError
   let controller
   const agencyId = 'LEI'
   const req = { originalUrl: 'http://localhost' }
@@ -41,16 +43,16 @@ describe('Currently out', () => {
     },
   ]
   beforeEach(() => {
+    systemOauthClient.getClientCredentialsTokens = jest.fn().mockResolvedValue({})
     movementsService.getOffendersCurrentlyOutOfAgency = jest.fn()
-    logError = jest.fn()
-    controller = totalCurrentlyOut({ movementsService, logError })
+    controller = totalCurrentlyOut({ systemOauthClient, movementsService })
     res.render = jest.fn()
   })
 
   it('should call the currently out for agency endpoint', async () => {
     await controller(req, res)
 
-    expect(movementsService.getOffendersCurrentlyOutOfAgency).toHaveBeenCalledWith(res.locals, agencyId)
+    expect(movementsService.getOffendersCurrentlyOutOfAgency).toHaveBeenCalledWith({}, agencyId)
   })
 
   it('should return right error message', async () => {

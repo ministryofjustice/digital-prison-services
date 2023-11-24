@@ -1,4 +1,4 @@
-context('Caseloads witched page behaves correctly', () => {
+context('Caseload switch page behaves correctly', () => {
   before(() => {
     cy.clearCookies()
     cy.task('reset')
