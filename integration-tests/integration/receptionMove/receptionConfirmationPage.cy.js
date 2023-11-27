@@ -25,8 +25,8 @@ before(() => {
         dateCreated: '2023-10-10',
         expired: false,
         active: true,
-        addedByFirstName: 'GURNANK',
-        addedByLastName: 'CHEEMA',
+        addedByFirstName: 'DAVID',
+        addedByLastName: 'MICHAELSON',
       },
       {
         alertId: 5,
@@ -37,8 +37,8 @@ before(() => {
         dateCreated: '2023-10-10',
         expired: false,
         active: true,
-        addedByFirstName: 'GURNANK',
-        addedByLastName: 'CHEEMA',
+        addedByFirstName: 'DAVID',
+        addedByLastName: 'MICHAELSON',
       },
       {
         alertId: 7,
@@ -49,8 +49,8 @@ before(() => {
         dateCreated: '2023-10-10',
         expired: false,
         active: true,
-        addedByFirstName: 'GURNANK',
-        addedByLastName: 'CHEEMA',
+        addedByFirstName: 'DAVID',
+        addedByLastName: 'MICHAELSON',
       },
       {
         alertId: 2,

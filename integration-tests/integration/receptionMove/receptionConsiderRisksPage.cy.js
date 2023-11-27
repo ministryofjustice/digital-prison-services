@@ -51,8 +51,8 @@ before(() => {
         dateCreated: '2023-10-10',
         expired: false,
         active: true,
-        addedByFirstName: 'GURNANK',
-        addedByLastName: 'CHEEMA',
+        addedByFirstName: 'DAVID',
+        addedByLastName: 'MICHAELSON',
       },
       {
         alertId: 5,
@@ -63,8 +63,8 @@ before(() => {
         dateCreated: '2023-10-10',
         expired: false,
         active: true,
-        addedByFirstName: 'GURNANK',
-        addedByLastName: 'CHEEMA',
+        addedByFirstName: 'DAVID',
+        addedByLastName: 'MICHAELSON',
       },
       {
         alertId: 7,
@@ -75,8 +75,8 @@ before(() => {
         dateCreated: '2023-10-10',
         expired: false,
         active: true,
-        addedByFirstName: 'GURNANK',
-        addedByLastName: 'CHEEMA',
+        addedByFirstName: 'DAVID',
+        addedByLastName: 'MICHAELSON',
       },
       {
         alertId: 2,
@@ -248,15 +248,6 @@ before(() => {
         dateOfBirth: '1950-12-02',
         firstName: 'Daren',
         lastName: 'Wetch',
-        toAgency: 'MDI',
-        toAgencyDescription: 'Moorland (HMP & YOI)',
-        fromAgency: undefined,
-        fromAgencyDescription: '',
-        commentText: undefined,
-        fromCity: 'Doncaster',
-        toCity: '',
-        alerts: ['XA', 'RPC', 'RDV', 'HS', 'XVL'],
-        iepLevel: 'Standard',
       },
       {
         offenderNo: 'G6980GG',
@@ -264,15 +255,6 @@ before(() => {
         dateOfBirth: '1984-03-17',
         firstName: 'Onshinthomasin',
         lastName: 'Aisho',
-        toAgency: 'MDI',
-        toAgencyDescription: 'Moorland (HMP & YOI)',
-        fromAgency: 'LEI',
-        fromAgencyDescription: 'Leeds (HMP)',
-        commentText: undefined,
-        fromCity: '',
-        toCity: '',
-        alerts: ['P0', 'RPC', 'RDV', 'HS', 'XVL'],
-        iepLevel: 'Standard',
       },
       {
         offenderNo: 'G6795VD',
@@ -280,15 +262,6 @@ before(() => {
         dateOfBirth: '1991-01-10',
         firstName: 'Conrad',
         lastName: 'Nattrass',
-        toAgency: 'MDI',
-        toAgencyDescription: 'Moorland (HMP & YOI)',
-        fromAgency: 'LEI',
-        fromAgencyDescription: 'Leeds (HMP)',
-        commentText: undefined,
-        fromCity: '',
-        toCity: '',
-        alerts: ['SOR', 'PVN', 'CC1', 'TAH', 'HA'],
-        iepLevel: 'Standard',
       },
       {
         offenderNo: 'G2755UN',
@@ -296,15 +269,6 @@ before(() => {
         dateOfBirth: '1989-06-16',
         firstName: 'Okouston',
         lastName: 'Bradisha',
-        toAgency: 'MDI',
-        toAgencyDescription: 'Moorland (HMP & YOI)',
-        fromAgency: 'YSS010',
-        fromAgencyDescription: 'Sheffield Crown Court',
-        commentText: undefined,
-        fromCity: '',
-        toCity: '',
-        alerts: ['DOCGM', 'RSP', 'XA', 'XGANG', 'XR'],
-        iepLevel: 'Standard',
       },
     ],
   })
@@ -338,7 +302,7 @@ context('Successful reception move journey', () => {
   })
 })
 
-context.skip('Reception full journey', () => {
+context('Reception full journey', () => {
   it('should redirect to reception full page', () => {
     cy.task('stubReceptionWithCapacity', {
       agencyId: 'MDI',
