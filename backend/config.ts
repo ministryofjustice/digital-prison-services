@@ -38,12 +38,14 @@ export const app = {
       parseDate(process.env.PRISONER_PROFILE_REDIRECT_BUNDLE_THREE),
       parseDate(process.env.PRISONER_PROFILE_REDIRECT_BUNDLE_FOUR),
     ],
+    exemptions: process.env.PRISONER_PROFILE_REDIRECT_EXEMPTIONS || '',
   },
   homepageRedirect: {
     url: process.env.HOMEPAGE_REDIRECT_URL,
     enabledDate: parseDate(process.env.HOMEPAGE_REDIRECT_ENABLED_DATE),
     enabledPrisons: process.env.HOMEPAGE_REDIRECT_ENABLED_PRISONS || '',
     scheduleRedirectForPrisons: process.env.HOMEPAGE_SCHEDULE_REDIRECT_FOR_PRISONS || '',
+    exemptions: process.env.HOMEPAGE_REDIRECT_EXEMPTIONS || '',
   },
   gitRef: process.env.GIT_REF || '',
 }

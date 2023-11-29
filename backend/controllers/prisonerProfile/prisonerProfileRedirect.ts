@@ -117,6 +117,11 @@ export default ({ path, handler }) => {
   return async (req, res, next) => {
     const { offenderNo } = req.params
     const { activeCaseLoadId } = req.session.userDetails
+    const exemptions = config.app.prisonerProfileRedirect.exemptions.split(',')
+
+    if (exemptions.includes(activeCaseLoadId)) {
+      return handler(req, res, next)
+    }
 
     const redirectEnabled = isRedirectEnabled(res, activeCaseLoadId)
     const redirectCaseload = isRedirectCaseLoad(activeCaseLoadId)
