@@ -90,8 +90,8 @@ generic-service:
     COMPONENT_API_URL: https://frontend-components-preprod.hmpps.service.justice.gov.uk
     COMPONENT_API_LATEST: false
     PREPARE_SOMEONE_FOR_RELEASE_URL: https://resettlement-passport-ui-preprod.hmpps.service.justice.gov.uk
-    PRISONER_PROFILE_REDIRECT_EXEMPTIONS: "BZI,FBI,NLI,PBI,PFI"
-    HOMEPAGE_REDIRECT_EXEMPTIONS: "BZI,FBI,NLI,PBI,PFI"
+    PRISONER_PROFILE_REDIRECT_EXEMPTIONS: ""
+    HOMEPAGE_REDIRECT_EXEMPTIONS: ""
 
   allowlist:
     groups:
