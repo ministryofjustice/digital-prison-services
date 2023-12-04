@@ -43,11 +43,11 @@ context('A user can view prisoner case notes', () => {
     cy.task('reset')
     cy.task('stubSignIn', {
       username: 'ITAG_USER',
-      caseload: 'WWI',
+      caseload: 'MDI',
       caseloads: [
         {
-          caseLoadId: 'WWI',
-          description: 'Wandsworth',
+          caseLoadId: 'MDI',
+          description: 'Moorland',
           currentlyActive: true,
         },
       ],
@@ -322,11 +322,11 @@ context('A user cannot view prisoner case notes', () => {
     cy.task('reset')
     cy.task('stubSignIn', {
       username: 'ITAG_USER',
-      caseload: 'WWI',
+      caseload: 'BLI',
       caseloads: [
         {
-          caseLoadId: 'WWI',
-          description: 'Wandsworth',
+          caseLoadId: 'BLI',
+          description: 'Bristol',
           currentlyActive: true,
         },
       ],
@@ -346,13 +346,13 @@ context('A user cannot view prisoner case notes', () => {
       offenderSearchDetails: {},
       caseloads: [
         {
-          caseLoadId: 'WWI',
-          description: 'Wandsworth',
+          caseLoadId: 'BLI',
+          description: 'Brisol',
           type: 'INST',
           caseloadFunction: 'GENERAL',
           currentlyActive: true,
         },
-      ]
+      ],
     })
   })
 
