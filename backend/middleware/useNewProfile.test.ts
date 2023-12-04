@@ -11,12 +11,12 @@ interface Res {
 describe('Check if redirect is active', () => {
   let next
   let controller
-  describe('when the redirect is active', () => {
+  describe('when the caseload is not exempt', () => {
     beforeEach(() => {
       next = jest.fn()
       config.app.prisonerProfileRedirect.url = 'http://dummy.com'
       config.app.prisonerProfileRedirect.enabledDate = parseDate('2023-06-06T13:15:00')
-      config.app.prisonerProfileRedirect.enabledPrisons = 'LEI'
+      config.app.prisonerProfileRedirect.exemptions = 'ABC'
       controller = useNewProfile()
     })
 
@@ -29,8 +29,8 @@ describe('Check if redirect is active', () => {
     })
   })
 
-  describe('when the redirect is not active', () => {
-    const req = { session: { userDetails: { activeCaseloadId: '' } }, query: {} }
+  describe('when the caseload is exempt', () => {
+    const req = { session: { userDetails: { activeCaseLoadId: 'ABC' } }, query: {} }
     beforeEach(() => {
       next = jest.fn()
       controller = useNewProfile()
