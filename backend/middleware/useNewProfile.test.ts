@@ -1,5 +1,5 @@
 import useNewProfile from './useNewProfile'
-import config, { parseDate } from '../config'
+import config from '../config'
 
 interface Res {
   locals: {
@@ -15,7 +15,6 @@ describe('Check if redirect is active', () => {
     beforeEach(() => {
       next = jest.fn()
       config.app.prisonerProfileRedirect.url = 'http://dummy.com'
-      config.app.prisonerProfileRedirect.enabledDate = parseDate('2023-06-06T13:15:00')
       config.app.prisonerProfileRedirect.exemptions = 'ABC'
       controller = useNewProfile()
     })
