@@ -1,14 +1,13 @@
 import config from '../../config'
-import { isRedirectCaseLoad, isRedirectEnabled } from '../../utils'
+import { isRedirectCaseLoad } from '../../utils'
 
 export default (handler) => async (req, res, next) => {
   const { activeCaseLoadId } = req.session.userDetails
   const { service, returnPath, redirectPath, backLinkText } = req.query
 
-  const redirectEnabled = isRedirectEnabled(res, activeCaseLoadId)
   const redirectCaseload = isRedirectCaseLoad(activeCaseLoadId)
 
-  if (redirectEnabled && redirectCaseload) {
+  if (redirectCaseload) {
     let url = `${
       config.app.prisonerProfileRedirect.url
     }/save-backlink?service=${service}&returnPath=${encodeURIComponent(returnPath)}&redirectPath=${redirectPath}`
