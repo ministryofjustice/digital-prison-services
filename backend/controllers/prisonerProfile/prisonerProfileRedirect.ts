@@ -8,7 +8,7 @@ export default ({ path, handler }) => {
 
     const redirectEnabled = isRedirectCaseLoad(activeCaseLoadId)
 
-    if (redirectEnabled) {
+    if (activeCaseLoadId && redirectEnabled) {
       return res.redirect(`${config.app.prisonerProfileRedirect.url}/prisoner/${offenderNo}${path}`)
     }
 
