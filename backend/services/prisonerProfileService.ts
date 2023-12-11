@@ -10,7 +10,8 @@ import canAccessProbationDocuments from '../shared/probationDocumentsAccess'
 import { NeurodivergenceSupport } from '../api/curious/types/Enums'
 import { canViewNeurodivergenceSupportData } from '../shared/neuroDivergenceHelper'
 
-export const isComplexityEnabledFor = (agencyId) => config.apis.complexity.enabled_prisons?.includes(agencyId)
+export const isComplexityEnabledFor = (agencyId: string): boolean =>
+  config.apis.complexity.enabled_prisons?.includes(agencyId)
 
 export default ({
   prisonApi,
@@ -114,7 +115,7 @@ export default ({
     ] = await Promise.all(
       [
         incentivesApi.getIepSummaryForBookingIds(systemContext, [bookingId]),
-        prisonApi.getCaseNoteSummaryByTypes(context, { type: 'KA', subType: 'KS', numMonths: 1, bookingId }),
+        prisonApi.getCaseNoteSummaryByTypes(systemContext, { type: 'KA', subType: 'KS', numMonths: 1, bookingId }),
         prisonApi.userCaseLoads(context),
         prisonApi.getStaffRoles(context, currentUser.staffId, currentUser.activeCaseLoadId),
         keyworkerApi.getKeyworkerByCaseloadAndOffenderNo(context, agencyId, offenderNo),
