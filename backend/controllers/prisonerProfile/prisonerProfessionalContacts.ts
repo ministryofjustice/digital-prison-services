@@ -60,7 +60,7 @@ export default ({ prisonApi, personService, allocationManagerApi, systemOauthCli
           activeOfficialContacts
             .sort((left, right) => left.firstName.localeCompare(right.firstName))
             .map(async (contact) => {
-              const personContactDetails = await personService.getPersonContactDetails(res.locals, contact.personId)
+              const personContactDetails = await personService.getPersonContactDetails(systemContext, contact.personId)
               const { addresses, emails, phones } = personContactDetails
 
               return addresses

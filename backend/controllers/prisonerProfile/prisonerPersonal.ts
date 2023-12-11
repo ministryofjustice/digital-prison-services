@@ -84,8 +84,8 @@ export default ({
         prisonApi.getIdentifiers(context, bookingId),
         prisonApi.getOffenderAliases(context, bookingId),
         prisonApi.getPrisonerProperty(context, bookingId),
-        prisonApi.getPrisonerContacts(context, bookingId),
-        prisonApi.getPrisonerAddresses(context, offenderNo),
+        prisonApi.getPrisonerContacts(systemContext, bookingId),
+        prisonApi.getPrisonerAddresses(systemContext, offenderNo),
         prisonApi.getSecondaryLanguages(context, bookingId),
         prisonApi.getPersonalCareNeeds(context, bookingId, healthCodes),
         prisonApi.getReasonableAdjustments(context, bookingId, treatmentCodes),
@@ -106,7 +106,7 @@ export default ({
       (await Promise.all(
         activeNextOfKins.map(async (kin) => ({
           ...kin,
-          ...(await personService.getPersonContactDetails(context, kin.personId)),
+          ...(await personService.getPersonContactDetails(systemContext, kin.personId)),
         }))
       ))
 

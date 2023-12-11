@@ -28,12 +28,16 @@ describe('prisoner personal', () => {
     writtenLanguage: 'Russian',
   }
   const bookingId = '123'
+  const systemToken = { token: 'token-1' }
+
   const prisonApi = {}
   const allocationManagerApi = {}
   const prisonerProfileService = {}
   const personService = {}
   const esweService = {}
-  const systemOauthClient = {}
+  const systemOauthClient = {
+    getClientCredentialsTokens: jest.fn().mockResolvedValue(systemToken),
+  }
   const restrictedPatientApi = {}
   const oauthApi = {}
   const curiousApi = {}
@@ -95,8 +99,6 @@ describe('prisoner personal', () => {
     esweService.getNeurodiversities = jest.fn().mockResolvedValue([])
     // @ts-expect-error ts-migrate(2339) FIXME: Property 'getNeurodiversities' does not exist on type '{}'... Remove this comment to see the full error message
     oauthApi.userRoles = jest.fn().mockReturnValue([])
-    // @ts-expect-error ts-migrate(2339)
-    systemOauthClient.getClientCredentialsTokens = jest.fn().mockResolvedValue({ token: 'token-1' })
 
     controller = prisonerPersonal({
       prisonerProfileService,
@@ -1126,7 +1128,7 @@ describe('prisoner personal', () => {
       await controller(req, res)
 
       // @ts-expect-error ts-migrate(2339) FIXME: Property 'getPrisonerContacts' does not exist on t... Remove this comment to see the full error message
-      expect(prisonApi.getPrisonerContacts).toHaveBeenCalledWith(res.locals, bookingId)
+      expect(prisonApi.getPrisonerContacts).toHaveBeenCalledWith(systemToken, bookingId)
     })
 
     it('should make a call for prison offender managers', async () => {
@@ -1284,11 +1286,11 @@ describe('prisoner personal', () => {
           // @ts-expect-error ts-migrate(2339) FIXME: Property 'getPersonContactDetails' does not exist ... Remove this comment to see the full error message
           expect(personService.getPersonContactDetails.mock.calls.length).toBe(1)
           // @ts-expect-error ts-migrate(2339) FIXME: Property 'getPersonContactDetails' does not exist ... Remove this comment to see the full error message
-          expect(personService.getPersonContactDetails).toHaveBeenCalledWith(res.locals, 12345)
+          expect(personService.getPersonContactDetails).toHaveBeenCalledWith(systemToken, 12345)
           // @ts-expect-error ts-migrate(2339) FIXME: Property 'getPersonContactDetails' does not exist ... Remove this comment to see the full error message
-          expect(personService.getPersonContactDetails).not.toHaveBeenCalledWith(res.locals, 67890)
+          expect(personService.getPersonContactDetails).not.toHaveBeenCalledWith(systemToken, 67890)
           // @ts-expect-error ts-migrate(2339) FIXME: Property 'getPersonContactDetails' does not exist ... Remove this comment to see the full error message
-          expect(personService.getPersonContactDetails).not.toHaveBeenCalledWith(res.locals, 111)
+          expect(personService.getPersonContactDetails).not.toHaveBeenCalledWith(systemToken, 111)
         })
 
         it('should render the template with the correct primary address data', async () => {
@@ -1697,7 +1699,7 @@ describe('prisoner personal', () => {
       await controller(req, res)
 
       // @ts-expect-error ts-migrate(2339) FIXME: Property 'getPrisonerAddresses' does not exist on ... Remove this comment to see the full error message
-      expect(prisonApi.getPrisonerAddresses).toHaveBeenCalledWith(res.locals, offenderNo)
+      expect(prisonApi.getPrisonerAddresses).toHaveBeenCalledWith(systemToken, offenderNo)
     })
 
     describe('when there is missing prisoner address data', () => {
