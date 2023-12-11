@@ -1,3 +1,4 @@
+import { Request, Response } from 'express'
 import moment from 'moment'
 import logErrorAndContinue from '../../shared/logErrorAndContinue'
 
@@ -30,7 +31,7 @@ const sortByPrimaryAndStartDate = (left, right) => {
 }
 
 export default ({ prisonApi, personService, allocationManagerApi, systemOauthClient }) =>
-  async (req, res) => {
+  async (req: Request, res: Response): Promise<void> => {
     const { offenderNo } = req.params
     const { username } = req.session.userDetails
 

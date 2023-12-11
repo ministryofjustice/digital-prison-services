@@ -30,97 +30,99 @@ describe('prisoner personal', () => {
   const bookingId = '123'
   const systemToken = { token: 'token-1' }
 
-  const prisonApi = {}
-  const allocationManagerApi = {}
-  const prisonerProfileService = {}
-  const personService = {}
-  const esweService = {}
+  const prisonApi = {
+    getDetails: jest.fn(),
+    getIdentifiers: jest.fn(),
+    getOffenderAliases: jest.fn(),
+    getPrisonerProperty: jest.fn(),
+    getPrisonerContacts: jest.fn(),
+    getPrisonerAddresses: jest.fn(),
+    getSecondaryLanguages: jest.fn(),
+    getPersonalCareNeeds: jest.fn(),
+    getReasonableAdjustments: jest.fn(),
+    getTreatmentTypes: jest.fn(),
+    getHealthTypes: jest.fn(),
+    getPomByOffenderNo: jest.fn(),
+  }
+  const allocationManagerApi = {
+    getPomByOffenderNo: jest.fn(),
+  }
+  const prisonerProfileService = {
+    getPrisonerProfileData: jest.fn(),
+  }
+  const personService = {
+    getPersonContactDetails: jest.fn(),
+  }
+  const esweService = {
+    getNeurodiversities: jest.fn(),
+    getNeurodivergence: jest.fn(),
+  }
   const systemOauthClient = {
-    getClientCredentialsTokens: jest.fn().mockResolvedValue(systemToken),
+    getClientCredentialsTokens: jest.fn(),
   }
   const restrictedPatientApi = {}
-  const oauthApi = {}
-  const curiousApi = {}
+  const oauthApi = {
+    userRoles: jest.fn(),
+  }
+  const curiousApi = {
+    getLearnerNeurodivergence: jest.fn(),
+  }
 
-  let req
-  let res
-  let logError
+  const req = { params: { offenderNo }, session: { userDetails: { username: 'ITAG_USER' } } }
+  const res = {
+    locals: {
+      user: { activeCaseLoad: { caseLoadId: 'MDI' } },
+    },
+    render: jest.fn(),
+  }
   let controller
 
   beforeEach(() => {
-    req = { params: { offenderNo }, session: { userDetails: { username: 'ITAG_USER' } } }
-    res = {
-      locals: {
-        user: { activeCaseLoad: { caseLoadId: 'MDI' } },
-      },
-      render: jest.fn(),
-    }
+    jest.resetAllMocks()
+    systemOauthClient.getClientCredentialsTokens.mockResolvedValue(systemToken)
     config.app.neurodiversityEnabledUsernames = 'ITAG_USER'
 
-    logError = jest.fn()
+    prisonerProfileService.getPrisonerProfileData.mockResolvedValue(prisonerProfileData)
 
-    // @ts-expect-error ts-migrate(2339) FIXME: Property 'getPrisonerProfileData' does not exist o... Remove this comment to see the full error message
-    prisonerProfileService.getPrisonerProfileData = jest.fn().mockResolvedValue(prisonerProfileData)
+    personService.getPersonContactDetails.mockResolvedValue({})
 
-    // @ts-expect-error ts-migrate(2339) FIXME: Property 'getPersonContactDetails' does not exist ... Remove this comment to see the full error message
-    personService.getPersonContactDetails = jest.fn().mockResolvedValue({})
-    // @ts-expect-error ts-migrate(2339) FIXME: Property 'getNeurodiversities' does not ex... Remove this comment to see the full error message
-    esweService.getNeurodiversities = jest.fn().mockResolvedValue('')
-    // @ts-expect-error ts-migrate(2339) FIXME: Property 'getNeurodiversities' does not ex... Remove this comment to see the full error message
-    esweService.getNeurodivergence = jest.fn().mockResolvedValue([])
-    // @ts-expect-error ts-migrate(2339) FIXME: Property 'getLearnerNeurodivergence' does not ex... Remove this comment to see the full error message
+    esweService.getNeurodiversities.mockResolvedValue([])
+    esweService.getNeurodivergence.mockResolvedValue([])
+
     curiousApi.getLearnerNeurodivergence = jest.fn()
 
-    // @ts-expect-error ts-migrate(2339) FIXME: Property 'getDetails' does not exist on type '{}'.
-    prisonApi.getDetails = jest.fn().mockResolvedValue({})
-    // @ts-expect-error ts-migrate(2339) FIXME: Property 'getIdentifiers' does not exist on type '... Remove this comment to see the full error message
-    prisonApi.getIdentifiers = jest.fn().mockResolvedValue([])
-    // @ts-expect-error ts-migrate(2339) FIXME: Property 'getOffenderAliases' does not exist on ty... Remove this comment to see the full error message
-    prisonApi.getOffenderAliases = jest.fn().mockResolvedValue([])
-    // @ts-expect-error ts-migrate(2339) FIXME: Property 'getPrisonerProperty' does not exist on t... Remove this comment to see the full error message
-    prisonApi.getPrisonerProperty = jest.fn().mockResolvedValue([])
-    // @ts-expect-error ts-migrate(2339) FIXME: Property 'getPrisonerContacts' does not exist on t... Remove this comment to see the full error message
-    prisonApi.getPrisonerContacts = jest.fn().mockResolvedValue([])
-    // @ts-expect-error ts-migrate(2339) FIXME: Property 'getPrisonerAddresses' does not exist on ... Remove this comment to see the full error message
-    prisonApi.getPrisonerAddresses = jest.fn().mockResolvedValue([])
-    // @ts-expect-error ts-migrate(2339) FIXME: Property 'getSecondaryLanguages' does not exist on... Remove this comment to see the full error message
-    prisonApi.getSecondaryLanguages = jest.fn().mockResolvedValue([])
-    // @ts-expect-error ts-migrate(2339) FIXME: Property 'getPersonalCareNeeds' does not exist on ... Remove this comment to see the full error message
-    prisonApi.getPersonalCareNeeds = jest.fn().mockResolvedValue([])
-    // @ts-expect-error ts-migrate(2339) FIXME: Property 'getReasonableAdjustments' does not exist... Remove this comment to see the full error message
-    prisonApi.getReasonableAdjustments = jest.fn().mockResolvedValue([])
-    // @ts-expect-error ts-migrate(2339) FIXME: Property 'getTreatmentTypes' does not exist on typ... Remove this comment to see the full error message
-    prisonApi.getTreatmentTypes = jest.fn().mockResolvedValue([])
-    // @ts-expect-error ts-migrate(2339) FIXME: Property 'getHealthTypes' does not exist on type '... Remove this comment to see the full error message
-    prisonApi.getHealthTypes = jest.fn().mockResolvedValue([])
-    // @ts-expect-error ts-migrate(2339) FIXME: Property 'getPomByOffenderNo' does not exist on ty... Remove this comment to see the full error message
-    allocationManagerApi.getPomByOffenderNo = jest.fn().mockResolvedValue({})
-    // @ts-expect-error ts-migrate(2339) FIXME: Property 'getNeurodiversities' does not exist on type '{}'... Remove this comment to see the full error message
-    esweService.getNeurodiversities = jest.fn().mockResolvedValue([])
-    // @ts-expect-error ts-migrate(2339) FIXME: Property 'getNeurodiversities' does not exist on type '{}'... Remove this comment to see the full error message
-    oauthApi.userRoles = jest.fn().mockReturnValue([])
+    prisonApi.getDetails.mockResolvedValue({})
+    prisonApi.getIdentifiers.mockResolvedValue([])
+    prisonApi.getOffenderAliases.mockResolvedValue([])
+    prisonApi.getPrisonerProperty.mockResolvedValue([])
+    prisonApi.getPrisonerContacts.mockResolvedValue([])
+    prisonApi.getPrisonerAddresses.mockResolvedValue([])
+    prisonApi.getSecondaryLanguages.mockResolvedValue([])
+    prisonApi.getPersonalCareNeeds.mockResolvedValue([])
+    prisonApi.getReasonableAdjustments.mockResolvedValue([])
+    prisonApi.getTreatmentTypes.mockResolvedValue([])
+    prisonApi.getHealthTypes.mockResolvedValue([])
+
+    allocationManagerApi.getPomByOffenderNo.mockResolvedValue({})
+
+    oauthApi.userRoles.mockReturnValue([])
 
     controller = prisonerPersonal({
       prisonerProfileService,
       personService,
       prisonApi,
       allocationManagerApi,
-      // @ts-expect-error ts-migrate(2345) FIXME: Argument of type '{ prisonerProfileService: {}; pe... Remove this comment to see the full error message
-      logError,
       esweService,
       restrictedPatientApi,
       systemOauthClient,
       oauthApi,
-      curiousApi,
     })
   })
 
   it('should make a call for the basic details of a prisoner and the prisoner header details and render them', async () => {
     await controller(req, res)
 
-    // @ts-expect-error ts-migrate(2339) FIXME: Property 'getDetails' does not exist on type '{}'.
     expect(prisonApi.getDetails).toHaveBeenCalledWith(res.locals, offenderNo)
-    // @ts-expect-error ts-migrate(2339) FIXME: Property 'getPrisonerProfileData' does not exist o... Remove this comment to see the full error message
     expect(prisonerProfileService.getPrisonerProfileData).toHaveBeenCalledWith(
       res.locals,
       offenderNo,
@@ -136,9 +138,7 @@ describe('prisoner personal', () => {
   })
 
   it('should make a call to request the prisoners secondary languages', async () => {
-    // @ts-expect-error ts-migrate(2339) FIXME: Property 'getDetails' does not exist on type '{}'.
     prisonApi.getDetails.mockResolvedValue({ bookingId: 123 })
-    // @ts-expect-error ts-migrate(2339) FIXME: Property 'getSecondaryLanguages' does not exist on... Remove this comment to see the full error message
     prisonApi.getSecondaryLanguages.mockResolvedValue([
       {
         bookingId: 10000,
@@ -151,7 +151,6 @@ describe('prisoner personal', () => {
     ])
     await controller(req, res)
 
-    // @ts-expect-error ts-migrate(2339) FIXME: Property 'getSecondaryLanguages' does not exist on... Remove this comment to see the full error message
     expect(prisonApi.getSecondaryLanguages).toHaveBeenCalledWith(res.locals, 123)
     expect(res.render).toHaveBeenCalledWith(
       'prisonerProfile/prisonerPersonal/prisonerPersonal.njk',
@@ -175,14 +174,12 @@ describe('prisoner personal', () => {
 
   describe('identifiers', () => {
     beforeEach(() => {
-      // @ts-expect-error ts-migrate(2339) FIXME: Property 'getDetails' does not exist on type '{}'.
       prisonApi.getDetails.mockResolvedValue({ bookingId })
     })
 
     it('should make a call for identifiers data', async () => {
       await controller(req, res)
 
-      // @ts-expect-error ts-migrate(2339) FIXME: Property 'getIdentifiers' does not exist on type '... Remove this comment to see the full error message
       expect(prisonApi.getIdentifiers).toHaveBeenCalledWith(res.locals, bookingId)
     })
 
@@ -201,8 +198,7 @@ describe('prisoner personal', () => {
 
     describe('when there is identifier data', () => {
       beforeEach(() => {
-        // @ts-expect-error ts-migrate(2339) FIXME: Property 'getIdentifiers' does not exist on type '... Remove this comment to see the full error message
-        prisonApi.getIdentifiers = jest.fn().mockResolvedValue([
+        prisonApi.getIdentifiers.mockResolvedValue([
           { type: 'PNC', value: '1234' },
           { type: 'CRO', value: '2345' },
           { type: 'NINO', value: '3456' },
@@ -232,14 +228,12 @@ describe('prisoner personal', () => {
 
   describe('aliases', () => {
     beforeEach(() => {
-      // @ts-expect-error ts-migrate(2339) FIXME: Property 'getDetails' does not exist on type '{}'.
       prisonApi.getDetails.mockResolvedValue({ bookingId })
     })
 
     it('should make a call for aliases data', async () => {
       await controller(req, res)
 
-      // @ts-expect-error ts-migrate(2339) FIXME: Property 'getOffenderAliases' does not exist on ty... Remove this comment to see the full error message
       expect(prisonApi.getOffenderAliases).toHaveBeenCalledWith(res.locals, bookingId)
     })
 
@@ -258,8 +252,7 @@ describe('prisoner personal', () => {
 
     describe('when there is aliases data', () => {
       beforeEach(() => {
-        // @ts-expect-error ts-migrate(2339) FIXME: Property 'getOffenderAliases' does not exist on ty... Remove this comment to see the full error message
-        prisonApi.getOffenderAliases = jest.fn().mockResolvedValue([
+        prisonApi.getOffenderAliases.mockResolvedValue([
           { firstName: 'First', lastName: 'Alias', dob: '1985-08-31' },
           { firstName: 'Second', lastName: 'Alias', dob: '1986-05-20' },
         ])
@@ -283,7 +276,6 @@ describe('prisoner personal', () => {
 
   describe('physical characteristics', () => {
     beforeEach(() => {
-      // @ts-expect-error ts-migrate(2339) FIXME: Property 'getDetails' does not exist on type '{}'.
       prisonApi.getDetails.mockResolvedValue({ bookingId })
     })
 
@@ -312,8 +304,7 @@ describe('prisoner personal', () => {
 
     describe('when there is physical characteristic data', () => {
       beforeEach(() => {
-        // @ts-expect-error ts-migrate(2339) FIXME: Property 'getPrisonerProfileData' does not exist o... Remove this comment to see the full error message
-        prisonerProfileService.getPrisonerProfileData = jest.fn().mockResolvedValue({
+        prisonerProfileService.getPrisonerProfileData.mockResolvedValue({
           ...prisonerProfileData,
           physicalAttributes: {
             heightMetres: 1.91,
@@ -356,7 +347,6 @@ describe('prisoner personal', () => {
 
   describe('distinguishing physical marks', () => {
     beforeEach(() => {
-      // @ts-expect-error ts-migrate(2339) FIXME: Property 'getDetails' does not exist on type '{}'.
       prisonApi.getDetails.mockResolvedValue({ bookingId })
     })
 
@@ -375,8 +365,7 @@ describe('prisoner personal', () => {
 
     describe('when there is distinguishing physical marks data', () => {
       beforeEach(() => {
-        // @ts-expect-error ts-migrate(2339) FIXME: Property 'getPrisonerProfileData' does not exist o... Remove this comment to see the full error message
-        prisonerProfileService.getPrisonerProfileData = jest.fn().mockResolvedValue({
+        prisonerProfileService.getPrisonerProfileData.mockResolvedValue({
           ...prisonerProfileData,
           physicalMarks: [
             { type: 'Tattoo', side: 'Left', bodyPart: 'Arm', comment: 'Childs name', orentiation: 'Facing up' },
@@ -427,7 +416,6 @@ describe('prisoner personal', () => {
 
   describe('personal details section', () => {
     beforeEach(() => {
-      // @ts-expect-error ts-migrate(2339) FIXME: Property 'getDetails' does not exist on type '{}'.
       prisonApi.getDetails.mockResolvedValue({ bookingId })
     })
 
@@ -457,8 +445,7 @@ describe('prisoner personal', () => {
 
       describe('when there is primary data', () => {
         beforeEach(() => {
-          // @ts-expect-error ts-migrate(2339) FIXME: Property 'getPrisonerProfileData' does not exist o... Remove this comment to see the full error message
-          prisonerProfileService.getPrisonerProfileData = jest.fn().mockResolvedValue({
+          prisonerProfileService.getPrisonerProfileData.mockResolvedValue({
             ...prisonerProfileData,
             dateOfBirth: '1990-10-12',
             age: 29,
@@ -521,8 +508,7 @@ describe('prisoner personal', () => {
 
       describe('when there is secondary data', () => {
         beforeEach(() => {
-          // @ts-expect-error ts-migrate(2339) FIXME: Property 'getPrisonerProfileData' does not exist o... Remove this comment to see the full error message
-          prisonerProfileService.getPrisonerProfileData = jest.fn().mockResolvedValue({
+          prisonerProfileService.getPrisonerProfileData.mockResolvedValue({
             ...prisonerProfileData,
             profileInformation: [
               { type: 'SEXO', resultValue: 'Hetrosexual' },
@@ -574,8 +560,7 @@ describe('prisoner personal', () => {
       describe('when there is tertiary data', () => {
         describe('when travel restrictions does not have a value and other values are No', () => {
           beforeEach(() => {
-            // @ts-expect-error ts-migrate(2339) FIXME: Property 'getPrisonerProfileData' does not exist o... Remove this comment to see the full error message
-            prisonerProfileService.getPrisonerProfileData = jest.fn().mockResolvedValue({
+            prisonerProfileService.getPrisonerProfileData.mockResolvedValue({
               ...prisonerProfileData,
               profileInformation: [
                 { type: 'IMM', resultValue: 'No' },
@@ -603,8 +588,7 @@ describe('prisoner personal', () => {
 
         describe('when travel restrictions does have a value and other values are Yes', () => {
           beforeEach(() => {
-            // @ts-expect-error ts-migrate(2339) FIXME: Property 'getPrisonerProfileData' does not exist o... Remove this comment to see the full error message
-            prisonerProfileService.getPrisonerProfileData = jest.fn().mockResolvedValue({
+            prisonerProfileService.getPrisonerProfileData.mockResolvedValue({
               ...prisonerProfileData,
               profileInformation: [
                 { type: 'IMM', resultValue: 'Yes' },
@@ -659,8 +643,7 @@ describe('prisoner personal', () => {
 
       describe('when the prisoner has been warned about tattooing and their appearance', () => {
         beforeEach(() => {
-          // @ts-expect-error ts-migrate(2339) FIXME: Property 'getPrisonerProfileData' does not exist o... Remove this comment to see the full error message
-          prisonerProfileService.getPrisonerProfileData = jest.fn().mockResolvedValue({
+          prisonerProfileService.getPrisonerProfileData.mockResolvedValue({
             ...prisonerProfileData,
             profileInformation: [
               { type: 'TAT', resultValue: 'Yes' },
@@ -688,8 +671,7 @@ describe('prisoner personal', () => {
 
       describe('when the prisoner has not been warned about tattooing and their appearance', () => {
         beforeEach(() => {
-          // @ts-expect-error ts-migrate(2339) FIXME: Property 'getPrisonerProfileData' does not exist o... Remove this comment to see the full error message
-          prisonerProfileService.getPrisonerProfileData = jest.fn().mockResolvedValue({
+          prisonerProfileService.getPrisonerProfileData.mockResolvedValue({
             ...prisonerProfileData,
             profileInformation: [
               { type: 'TAT', resultValue: 'No' },
@@ -735,8 +717,7 @@ describe('prisoner personal', () => {
       describe('listener suitable and recognised', () => {
         describe('when suitable is No and recognised is No', () => {
           beforeEach(() => {
-            // @ts-expect-error ts-migrate(2339) FIXME: Property 'getPrisonerProfileData' does not exist o... Remove this comment to see the full error message
-            prisonerProfileService.getPrisonerProfileData = jest.fn().mockResolvedValue({
+            prisonerProfileService.getPrisonerProfileData.mockResolvedValue({
               ...prisonerProfileData,
               profileInformation: [
                 { type: 'LIST_SUIT', resultValue: 'No' },
@@ -761,8 +742,7 @@ describe('prisoner personal', () => {
 
         describe('when suitable is Yes and recognised is No', () => {
           beforeEach(() => {
-            // @ts-expect-error ts-migrate(2339) FIXME: Property 'getPrisonerProfileData' does not exist o... Remove this comment to see the full error message
-            prisonerProfileService.getPrisonerProfileData = jest.fn().mockResolvedValue({
+            prisonerProfileService.getPrisonerProfileData.mockResolvedValue({
               ...prisonerProfileData,
               profileInformation: [
                 { type: 'LIST_SUIT', resultValue: 'Yes' },
@@ -790,8 +770,7 @@ describe('prisoner personal', () => {
 
         describe('when suitable is Yes and recognised is Yes', () => {
           beforeEach(() => {
-            // @ts-expect-error ts-migrate(2339) FIXME: Property 'getPrisonerProfileData' does not exist o... Remove this comment to see the full error message
-            prisonerProfileService.getPrisonerProfileData = jest.fn().mockResolvedValue({
+            prisonerProfileService.getPrisonerProfileData.mockResolvedValue({
               ...prisonerProfileData,
               profileInformation: [
                 { type: 'LIST_SUIT', resultValue: 'Yes' },
@@ -816,8 +795,7 @@ describe('prisoner personal', () => {
 
         describe('when suitable is Yes and recognised is empty', () => {
           beforeEach(() => {
-            // @ts-expect-error ts-migrate(2339) FIXME: Property 'getPrisonerProfileData' does not exist o... Remove this comment to see the full error message
-            prisonerProfileService.getPrisonerProfileData = jest.fn().mockResolvedValue({
+            prisonerProfileService.getPrisonerProfileData.mockResolvedValue({
               ...prisonerProfileData,
               profileInformation: [{ type: 'LIST_SUIT', resultValue: 'Yes' }],
             })
@@ -842,8 +820,7 @@ describe('prisoner personal', () => {
 
         describe('when suitable is No and recognised is Yes', () => {
           beforeEach(() => {
-            // @ts-expect-error ts-migrate(2339) FIXME: Property 'getPrisonerProfileData' does not exist o... Remove this comment to see the full error message
-            prisonerProfileService.getPrisonerProfileData = jest.fn().mockResolvedValue({
+            prisonerProfileService.getPrisonerProfileData.mockResolvedValue({
               ...prisonerProfileData,
               profileInformation: [
                 { type: 'LIST_SUIT', resultValue: 'No' },
@@ -868,8 +845,7 @@ describe('prisoner personal', () => {
 
         describe('when suitable has no value and recognised is Yes', () => {
           beforeEach(() => {
-            // @ts-expect-error ts-migrate(2339) FIXME: Property 'getPrisonerProfileData' does not exist o... Remove this comment to see the full error message
-            prisonerProfileService.getPrisonerProfileData = jest.fn().mockResolvedValue({
+            prisonerProfileService.getPrisonerProfileData.mockResolvedValue({
               ...prisonerProfileData,
               profileInformation: [{ type: 'LIST_REC', resultValue: 'Yes' }],
             })
@@ -909,8 +885,7 @@ describe('prisoner personal', () => {
 
       describe('when the domestic abuse values are YES', () => {
         beforeEach(() => {
-          // @ts-expect-error ts-migrate(2339) FIXME: Property 'getPrisonerProfileData' does not exist o... Remove this comment to see the full error message
-          prisonerProfileService.getPrisonerProfileData = jest.fn().mockResolvedValue({
+          prisonerProfileService.getPrisonerProfileData.mockResolvedValue({
             ...prisonerProfileData,
             profileInformation: [
               { type: 'DOMESTIC', resultValue: 'YES' },
@@ -938,8 +913,7 @@ describe('prisoner personal', () => {
 
       describe('when the domestic abuse values are NO', () => {
         beforeEach(() => {
-          // @ts-expect-error ts-migrate(2339) FIXME: Property 'getPrisonerProfileData' does not exist o... Remove this comment to see the full error message
-          prisonerProfileService.getPrisonerProfileData = jest.fn().mockResolvedValue({
+          prisonerProfileService.getPrisonerProfileData.mockResolvedValue({
             ...prisonerProfileData,
             profileInformation: [
               { type: 'DOMESTIC', resultValue: 'NO' },
@@ -981,7 +955,6 @@ describe('prisoner personal', () => {
 
       describe('when there is property data', () => {
         beforeEach(() => {
-          // @ts-expect-error ts-migrate(2339) FIXME: Property 'getPrisonerProperty' does not exist on t... Remove this comment to see the full error message
           prisonApi.getPrisonerProperty.mockResolvedValue([
             {
               containerType: 'Valuables',
@@ -1120,21 +1093,18 @@ describe('prisoner personal', () => {
     }
 
     beforeEach(() => {
-      // @ts-expect-error ts-migrate(2339) FIXME: Property 'getDetails' does not exist on type '{}'.
       prisonApi.getDetails.mockResolvedValue({ bookingId })
     })
 
     it('should make a call for prisoners contacts data', async () => {
       await controller(req, res)
 
-      // @ts-expect-error ts-migrate(2339) FIXME: Property 'getPrisonerContacts' does not exist on t... Remove this comment to see the full error message
       expect(prisonApi.getPrisonerContacts).toHaveBeenCalledWith(systemToken, bookingId)
     })
 
     it('should make a call for prison offender managers', async () => {
       await controller(req, res)
 
-      // @ts-expect-error ts-migrate(2339) FIXME: Property 'getPomByOffenderNo' does not exist on ty... Remove this comment to see the full error message
       expect(allocationManagerApi.getPomByOffenderNo).toHaveBeenCalledWith({ token: 'token-1' }, offenderNo)
     })
 
@@ -1151,7 +1121,6 @@ describe('prisoner personal', () => {
 
     describe('when there is prisoner contacts data', () => {
       beforeEach(() => {
-        // @ts-expect-error ts-migrate(2339) FIXME: Property 'getPrisonerContacts' does not exist on t... Remove this comment to see the full error message
         prisonApi.getPrisonerContacts.mockResolvedValue({
           nextOfKin: [
             {
@@ -1254,7 +1223,6 @@ describe('prisoner personal', () => {
 
       describe('when all possible data is available', () => {
         beforeEach(() => {
-          // @ts-expect-error ts-migrate(2339) FIXME: Property 'getPersonContactDetails' does not exist ... Remove this comment to see the full error message
           personService.getPersonContactDetails
             .mockResolvedValueOnce({
               addresses: [primaryAddress, nonPrimaryAddress],
@@ -1273,7 +1241,6 @@ describe('prisoner personal', () => {
               ],
             })
 
-          // @ts-expect-error ts-migrate(2339) FIXME: Property 'getPomByOffenderNo' does not exist on ty... Remove this comment to see the full error message
           allocationManagerApi.getPomByOffenderNo.mockResolvedValue({
             primary_pom: { staffId: 1, name: 'SMITH, JANE' },
             secondary_pom: { staffId: 2, name: 'DOE, JOHN' },
@@ -1283,13 +1250,9 @@ describe('prisoner personal', () => {
         it('should make calls for contact details of active personal contacts and case administrators', async () => {
           await controller(req, res)
 
-          // @ts-expect-error ts-migrate(2339) FIXME: Property 'getPersonContactDetails' does not exist ... Remove this comment to see the full error message
           expect(personService.getPersonContactDetails.mock.calls.length).toBe(1)
-          // @ts-expect-error ts-migrate(2339) FIXME: Property 'getPersonContactDetails' does not exist ... Remove this comment to see the full error message
           expect(personService.getPersonContactDetails).toHaveBeenCalledWith(systemToken, 12345)
-          // @ts-expect-error ts-migrate(2339) FIXME: Property 'getPersonContactDetails' does not exist ... Remove this comment to see the full error message
           expect(personService.getPersonContactDetails).not.toHaveBeenCalledWith(systemToken, 67890)
-          // @ts-expect-error ts-migrate(2339) FIXME: Property 'getPersonContactDetails' does not exist ... Remove this comment to see the full error message
           expect(personService.getPersonContactDetails).not.toHaveBeenCalledWith(systemToken, 111)
         })
 
@@ -1354,7 +1317,6 @@ describe('prisoner personal', () => {
 
       describe('when there are multiple active addresses but no primary', () => {
         beforeEach(() => {
-          // @ts-expect-error ts-migrate(2339) FIXME: Property 'getPersonContactDetails' does not exist ... Remove this comment to see the full error message
           personService.getPersonContactDetails
             .mockResolvedValueOnce({
               addresses: [
@@ -1412,7 +1374,6 @@ describe('prisoner personal', () => {
 
       describe('when there are multiple active addresses home active is highest priority', () => {
         beforeEach(() => {
-          // @ts-expect-error ts-migrate(2339) FIXME: Property 'getPersonContactDetails' does not exist ... Remove this comment to see the full error message
           personService.getPersonContactDetails
             .mockResolvedValueOnce({
               addresses: [
@@ -1470,7 +1431,6 @@ describe('prisoner personal', () => {
 
       describe('when the address is missing county and/or country', () => {
         beforeEach(() => {
-          // @ts-expect-error ts-migrate(2339) FIXME: Property 'getPersonContactDetails' does not exist ... Remove this comment to see the full error message
           personService.getPersonContactDetails
             .mockResolvedValueOnce({
               addresses: [{ ...primaryAddress, county: undefined, country: undefined }, nonPrimaryAddress],
@@ -1488,7 +1448,6 @@ describe('prisoner personal', () => {
                 { number: '055555555555', type: 'BUS', ext: '123' },
               ],
             })
-          // @ts-expect-error ts-migrate(2339) FIXME: Property 'getPomByOffenderNo' does not exist on ty... Remove this comment to see the full error message
           allocationManagerApi.getPomByOffenderNo.mockResolvedValue({
             primary_pom: { staffId: 1, name: 'Jane smith' },
           })
@@ -1527,7 +1486,6 @@ describe('prisoner personal', () => {
 
       describe('when the contact does not have phone and email', () => {
         beforeEach(() => {
-          // @ts-expect-error ts-migrate(2339) FIXME: Property 'getPersonContactDetails' does not exist ... Remove this comment to see the full error message
           personService.getPersonContactDetails
             .mockResolvedValueOnce({
               addresses: [{ ...primaryAddress, county: undefined, country: undefined }, nonPrimaryAddress],
@@ -1565,7 +1523,6 @@ describe('prisoner personal', () => {
 
       describe('when the contact does not have a flat number', () => {
         beforeEach(() => {
-          // @ts-expect-error ts-migrate(2339) FIXME: Property 'getPersonContactDetails' does not exist ... Remove this comment to see the full error message
           personService.getPersonContactDetails
             .mockResolvedValueOnce({
               addresses: [{ ...primaryAddress, flat: undefined }, nonPrimaryAddress],
@@ -1600,7 +1557,6 @@ describe('prisoner personal', () => {
 
       describe('when the personal contacts have no fixed addresses', () => {
         beforeEach(() => {
-          // @ts-expect-error ts-migrate(2339) FIXME: Property 'getPersonContactDetails' does not exist ... Remove this comment to see the full error message
           personService.getPersonContactDetails
             .mockResolvedValueOnce({
               addresses: [{ ...primaryAddress, noFixedAddress: true }],
@@ -1691,14 +1647,12 @@ describe('prisoner personal', () => {
     }
 
     beforeEach(() => {
-      // @ts-expect-error ts-migrate(2339) FIXME: Property 'getDetails' does not exist on type '{}'.
       prisonApi.getDetails.mockResolvedValue({ bookingId })
     })
 
     it('should make a call for prisoners addresses', async () => {
       await controller(req, res)
 
-      // @ts-expect-error ts-migrate(2339) FIXME: Property 'getPrisonerAddresses' does not exist on ... Remove this comment to see the full error message
       expect(prisonApi.getPrisonerAddresses).toHaveBeenCalledWith(systemToken, offenderNo)
     })
 
@@ -1725,7 +1679,6 @@ describe('prisoner personal', () => {
 
     describe('when there is prisoner address data', () => {
       beforeEach(() => {
-        // @ts-expect-error ts-migrate(2339) FIXME: Property 'getPrisonerAddresses' does not exist on ... Remove this comment to see the full error message
         prisonApi.getPrisonerAddresses.mockResolvedValue([primaryAddress, nonPrimaryAddress])
         jest.spyOn(Date, 'now').mockImplementation(() => 1578787200000) // Sun Jan 12 2020 00:00:00
       })
@@ -1765,7 +1718,6 @@ describe('prisoner personal', () => {
 
       describe('when the address is missing county and/or country', () => {
         beforeEach(() => {
-          // @ts-expect-error ts-migrate(2339) FIXME: Property 'getPrisonerAddresses' does not exist on ... Remove this comment to see the full error message
           prisonApi.getPrisonerAddresses.mockResolvedValue([
             { ...primaryAddress, county: undefined, country: undefined },
             nonPrimaryAddress,
@@ -1801,7 +1753,6 @@ describe('prisoner personal', () => {
 
       describe('when the prisoners address does not have a flat number', () => {
         beforeEach(() => {
-          // @ts-expect-error ts-migrate(2339) FIXME: Property 'getPrisonerAddresses' does not exist on ... Remove this comment to see the full error message
           prisonApi.getPrisonerAddresses.mockResolvedValue([{ ...primaryAddress, flat: undefined }, nonPrimaryAddress])
         })
 
@@ -1836,7 +1787,6 @@ describe('prisoner personal', () => {
 
       describe('when the primary address has an end date in the past', () => {
         beforeEach(() => {
-          // @ts-expect-error ts-migrate(2339) FIXME: Property 'getPrisonerAddresses' does not exist on ... Remove this comment to see the full error message
           prisonApi.getPrisonerAddresses.mockResolvedValue([
             { ...primaryAddress, endDate: '2020-1-11' },
             nonPrimaryAddress,
@@ -1869,23 +1819,18 @@ describe('prisoner personal', () => {
     it('should make a call for treatment and health types', async () => {
       await controller(req, res)
 
-      // @ts-expect-error ts-migrate(2339) FIXME: Property 'getTreatmentTypes' does not exist on typ... Remove this comment to see the full error message
       expect(prisonApi.getTreatmentTypes).toHaveBeenCalledWith(res.locals)
-      // @ts-expect-error ts-migrate(2339) FIXME: Property 'getHealthTypes' does not exist on type '... Remove this comment to see the full error message
       expect(prisonApi.getHealthTypes).toHaveBeenCalledWith(res.locals)
     })
 
     beforeEach(() => {
-      // @ts-expect-error ts-migrate(2339) FIXME: Property 'getDetails' does not exist on type '{}'.
       prisonApi.getDetails.mockResolvedValue({ bookingId })
     })
 
     it('should make a call for care needs, adjustments data', async () => {
       await controller(req, res)
 
-      // @ts-expect-error ts-migrate(2339) FIXME: Property 'getPersonalCareNeeds' does not exist on ... Remove this comment to see the full error message
       expect(prisonApi.getPersonalCareNeeds).toHaveBeenCalledWith(res.locals, bookingId, '')
-      // @ts-expect-error ts-migrate(2339) FIXME: Property 'getReasonableAdjustments' does not exist... Remove this comment to see the full error message
       expect(prisonApi.getReasonableAdjustments).toHaveBeenCalledWith(res.locals, bookingId, '')
     })
 
@@ -1907,8 +1852,7 @@ describe('prisoner personal', () => {
 
     describe('when there is care needs and adjustments data', () => {
       beforeEach(() => {
-        // @ts-expect-error ts-migrate(2339) FIXME: Property 'getPersonalCareNeeds' does not exist on ... Remove this comment to see the full error message
-        prisonApi.getPersonalCareNeeds = jest.fn().mockResolvedValue({
+        prisonApi.getPersonalCareNeeds.mockResolvedValue({
           personalCareNeeds: [
             {
               problemType: 'DISAB',
@@ -1939,8 +1883,7 @@ describe('prisoner personal', () => {
             },
           ],
         })
-        // @ts-expect-error ts-migrate(2339) FIXME: Property 'getHealthTypes' does not exist on type '... Remove this comment to see the full error message
-        prisonApi.getHealthTypes = jest.fn().mockResolvedValue([
+        prisonApi.getHealthTypes.mockResolvedValue([
           {
             domain: 'HEALTH',
             code: 'DISAB',
@@ -1952,8 +1895,7 @@ describe('prisoner personal', () => {
             description: 'Psychological',
           },
         ])
-        // @ts-expect-error ts-migrate(2339) FIXME: Property 'getReasonableAdjustments' does not exist... Remove this comment to see the full error message
-        prisonApi.getReasonableAdjustments = jest.fn().mockResolvedValue({
+        prisonApi.getReasonableAdjustments.mockResolvedValue({
           reasonableAdjustments: [
             {
               treatmentCode: 'AMP TEL',
@@ -1973,8 +1915,7 @@ describe('prisoner personal', () => {
             },
           ],
         })
-        // @ts-expect-error ts-migrate(2339) FIXME: Property 'getTreatmentTypes' does not exist on typ... Remove this comment to see the full error message
-        prisonApi.getTreatmentTypes = jest.fn().mockResolvedValue([
+        prisonApi.getTreatmentTypes.mockResolvedValue([
           {
             domain: 'HEALTH_TREAT',
             code: 'AMP TEL',
@@ -1991,9 +1932,7 @@ describe('prisoner personal', () => {
       it('should make a call for care needs and adjustments with the available treatment and health types', async () => {
         await controller(req, res)
 
-        // @ts-expect-error ts-migrate(2339) FIXME: Property 'getReasonableAdjustments' does not exist... Remove this comment to see the full error message
         expect(prisonApi.getReasonableAdjustments).toHaveBeenCalledWith(res.locals, bookingId, 'AMP TEL,FLEX_REFRESH')
-        // @ts-expect-error ts-migrate(2339) FIXME: Property 'getPersonalCareNeeds' does not exist on ... Remove this comment to see the full error message
         expect(prisonApi.getPersonalCareNeeds).toHaveBeenCalledWith(res.locals, bookingId, 'DISAB,PSYCH')
       })
 
@@ -2039,8 +1978,7 @@ describe('prisoner personal', () => {
       })
 
       it('should not return NR records', async () => {
-        // @ts-expect-error ts-migrate(2339) FIXME: Property 'getPersonalCareNeeds' does not exist on ... Remove this comment to see the full error message
-        prisonApi.getPersonalCareNeeds = jest.fn().mockResolvedValue({
+        prisonApi.getPersonalCareNeeds.mockResolvedValue({
           personalCareNeeds: [
             {
               problemType: 'DISAB',
@@ -2071,21 +2009,13 @@ describe('prisoner personal', () => {
   describe('when there are errors with retrieving information', () => {
     beforeEach(() => {
       req.params.offenderNo = offenderNo
-      // @ts-expect-error ts-migrate(2339) FIXME: Property 'getIdentifiers' does not exist on type '... Remove this comment to see the full error message
       prisonApi.getIdentifiers.mockRejectedValue(new Error('Network error'))
-      // @ts-expect-error ts-migrate(2339) FIXME: Property 'getOffenderAliases' does not exist on ty... Remove this comment to see the full error message
       prisonApi.getOffenderAliases.mockRejectedValue(new Error('Network error'))
-      // @ts-expect-error ts-migrate(2339) FIXME: Property 'getPrisonerProperty' does not exist on t... Remove this comment to see the full error message
       prisonApi.getPrisonerProperty.mockRejectedValue(new Error('Network error'))
-      // @ts-expect-error ts-migrate(2339) FIXME: Property 'getPrisonerContacts' does not exist on t... Remove this comment to see the full error message
       prisonApi.getPrisonerContacts.mockRejectedValue(new Error('Network error'))
-      // @ts-expect-error ts-migrate(2339) FIXME: Property 'getPrisonerAddresses' does not exist on ... Remove this comment to see the full error message
       prisonApi.getPrisonerAddresses.mockRejectedValue(new Error('Network error'))
-      // @ts-expect-error ts-migrate(2339) FIXME: Property 'getSecondaryLanguages' does not exist on... Remove this comment to see the full error message
       prisonApi.getSecondaryLanguages.mockRejectedValue(new Error('Network error'))
-      // @ts-expect-error ts-migrate(2339) FIXME: Property 'getPersonalCareNeeds' does not exist on ... Remove this comment to see the full error message
       prisonApi.getPersonalCareNeeds.mockRejectedValue(new Error('Network error'))
-      // @ts-expect-error ts-migrate(2339) FIXME: Property 'getReasonableAdjustments' does not exist... Remove this comment to see the full error message
       prisonApi.getReasonableAdjustments.mockRejectedValue(new Error('Network error'))
     })
 
@@ -2117,13 +2047,11 @@ describe('prisoner personal', () => {
   })
 
   describe('learner profile data', () => {
-    beforeEach(() => {
-      // @ts-expect-error ts-migrate(2339) FIXME: Property 'getNeurodiversities' does not ex... Remove this comment to see the full error message
-      esweService.getNeurodiversities = jest.fn()
-    })
+    // beforeEach(() => {
+    //   esweService.getNeurodiversities = jest.fn()
+    // })
 
     it('should return null for a failed request', async () => {
-      // @ts-expect-error ts-migrate(2339) FIXME: Property 'getNeurodiversities' does not ex... Remove this comment to see the full error message
       esweService.getNeurodiversities.mockRejectedValue(new Error())
       await controller(req, res)
       expect(res.render).toHaveBeenCalledWith(
@@ -2145,7 +2073,6 @@ describe('prisoner personal', () => {
           ],
         },
       ]
-      // @ts-expect-error ts-migrate(2339) FIXME: Property 'getNeurodiversities' does not ex... Remove this comment to see the full error message
       esweService.getNeurodiversities.mockResolvedValue(neurodiversities)
       await controller(req, res)
       expect(res.render).toHaveBeenCalledWith(
@@ -2167,7 +2094,6 @@ describe('prisoner personal', () => {
           ],
         },
       ]
-      // @ts-expect-error ts-migrate(2339) FIXME: Property 'getNeurodiversities' does not ex... Remove this comment to see the full error message
       esweService.getNeurodiversities.mockResolvedValue(neurodiversities)
       await controller(req, res)
       expect(res.render).toHaveBeenCalledWith(
@@ -2179,8 +2105,7 @@ describe('prisoner personal', () => {
 
   describe('learner neurodivergence information', () => {
     beforeEach(() => {
-      // @ts-expect-error ts-migrate(2339) FIXME: Property 'getNeurodiversities' does not ex... Remove this comment to see the full error message
-      esweService.getNeurodivergence = jest.fn().mockResolvedValue({
+      esweService.getNeurodivergence.mockResolvedValue({
         prn: 'ABC123',
         establishmentId: 'MDI',
         establishmentName: 'Moorland (HMP & YOI)',
@@ -2194,7 +2119,6 @@ describe('prisoner personal', () => {
     })
 
     it('should return null for a failed request', async () => {
-      // @ts-expect-error ts-migrate(2339) FIXME: Property 'getNeurodiversities' does not ex... Remove this comment to see the full error message
       esweService.getNeurodivergence.mockRejectedValue(new Error())
       await controller(req, res)
       expect(res.render).toHaveBeenCalledWith(
@@ -2225,10 +2149,8 @@ describe('prisoner personal', () => {
     })
 
     it('should return an empty object if prisoner not in users caseload', async () => {
-      // @ts-expect-error ts-migrate(2339) FIXME: Property 'getDetails' does not exist on type '{}'.
       prisonApi.getDetails.mockReturnValue({ ...prisonerProfileData, agencyId: 'MDI' })
 
-      // @ts-expect-error ts-migrate(2339) FIXME: Property 'getPrisonerProfileData' does not exist o... Remove this comment to see the full error message
       prisonerProfileService.getPrisonerProfileData(res.locals, offenderNo)
 
       await controller(req, res)

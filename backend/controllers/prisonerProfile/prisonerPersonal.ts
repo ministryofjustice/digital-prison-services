@@ -1,3 +1,4 @@
+import { Request, Response } from 'express'
 import logErrorAndContinue from '../../shared/logErrorAndContinue'
 import { getNamesFromString } from '../../utils'
 import config from '../../config'
@@ -27,7 +28,7 @@ export default ({
     restrictedPatientApi,
     oauthApi,
   }) =>
-  async (req, res) => {
+  async (req: Request, res: Response): Promise<void> => {
     const { offenderNo, establishmentId } = req.params
     const { username } = req.session.userDetails
 
