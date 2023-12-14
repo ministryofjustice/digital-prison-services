@@ -13,7 +13,7 @@ export const prisonApiLocationDescription = async (res: Response, whereaboutsApi
   return `${userCaseLoad}-${locationKey}`
 }
 
-export default ({ systemOauthClient, prisonApi, whereaboutsApi, logError }) =>
+export default ({ systemOauthClient, prisonApi, whereaboutsApi, offenderSearchApi, logError }) =>
   async (req, res: Response) => {
     // @ts-expect-error ts-migrate(2554) FIXME: Expected 1 arguments, but got 0.
     const { date, timeSlot = getCurrentPeriod(), type, locationId, residentialLocation } = req.query
@@ -57,6 +57,15 @@ export default ({ systemOauthClient, prisonApi, whereaboutsApi, logError }) =>
         court: appointment.court,
       }))
 
+    const appointmentsMatchingType = appointments.filter((appointment) =>
+      type ? appointment.appointmentTypeCode === type : true
+    )
+
+    const offenders = offenderSearchApi.getPrisonersDetails(
+      res.locals,
+      appointmentsMatchingType.map((a) => a.offenderNo)
+    )
+
     const appointmentsEnhanced = appointments
       .filter((appointment) => (type ? appointment.appointmentTypeCode === type : true))
       .map(async (appointment) => {
@@ -70,10 +79,7 @@ export default ({ systemOauthClient, prisonApi, whereaboutsApi, logError }) =>
             (videoLinkAppointment) => videoLinkAppointment.appointmentId === appointment.id
           )
 
-        const prisonerDetails = await prisonApi.getDetails(res.locals, offenderNo, true).catch((error) => {
-          logError(req.originalUrl, error, serviceUnavailableMessage)
-          return null
-        })
+        const prisonerDetails = offenders.find((o) => o.prisonerNumber === offenderNo)
 
         const getCourtDescription = () => {
           if (videoLinkLocation) return `${appointment.locationDescription}</br>with: ${videoLinkLocation.court}`
@@ -101,7 +107,7 @@ export default ({ systemOauthClient, prisonApi, whereaboutsApi, logError }) =>
             },
           },
           {
-            text: prisonerDetails?.assignedLivingUnit?.description,
+            text: prisonerDetails.cellLocation,
           },
           {
             text: appointment.appointmentTypeDescription,

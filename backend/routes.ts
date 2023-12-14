@@ -309,7 +309,7 @@ const setup = ({
   router.use(
     '/view-all-appointments',
     isAppointmentsRolledOut,
-    viewAppointments({ systemOauthClient, prisonApi, whereaboutsApi, logError })
+    viewAppointments({ systemOauthClient, prisonApi, whereaboutsApi, offenderSearchApi, logError })
   )
 
   router.use(
