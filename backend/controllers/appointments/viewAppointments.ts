@@ -66,66 +66,64 @@ export default ({ systemOauthClient, prisonApi, whereaboutsApi, offenderSearchAp
       appointmentsMatchingType.map((a) => a.offenderNo)
     )
 
-    const appointmentsEnhanced = appointments
-      .filter((appointment) => (type ? appointment.appointmentTypeCode === type : true))
-      .map(async (appointment) => {
-        const { startTime, endTime, offenderNo } = appointment
-        const offenderName = `${properCaseName(appointment.lastName)}, ${properCaseName(appointment.firstName)}`
-        const offenderUrl = `/prisoner/${offenderNo}`
+    const appointmentsEnhanced = appointmentsMatchingType.map(async (appointment) => {
+      const { startTime, endTime, offenderNo } = appointment
+      const offenderName = `${properCaseName(appointment.lastName)}, ${properCaseName(appointment.firstName)}`
+      const offenderUrl = `/prisoner/${offenderNo}`
 
-        const videoLinkLocation =
-          appointment.appointmentTypeCode === 'VLB' &&
-          videoLinkAppointmentsMadeByTheCourt.find(
-            (videoLinkAppointment) => videoLinkAppointment.appointmentId === appointment.id
-          )
+      const videoLinkLocation =
+        appointment.appointmentTypeCode === 'VLB' &&
+        videoLinkAppointmentsMadeByTheCourt.find(
+          (videoLinkAppointment) => videoLinkAppointment.appointmentId === appointment.id
+        )
 
-        const prisonerDetails = offenders.find((o) => o.prisonerNumber === offenderNo)
+      const prisonerDetails = offenders.find((o) => o.prisonerNumber === offenderNo)
 
-        const getCourtDescription = () => {
-          if (videoLinkLocation) return `${appointment.locationDescription}</br>with: ${videoLinkLocation.court}`
+      const getCourtDescription = () => {
+        if (videoLinkLocation) return `${appointment.locationDescription}</br>with: ${videoLinkLocation.court}`
 
-          const courtMapping = videoLinkCourtMappings.find((mapping) => mapping.appointmentId === appointment.id)
+        const courtMapping = videoLinkCourtMappings.find((mapping) => mapping.appointmentId === appointment.id)
 
-          return (
-            (courtMapping && `${appointment.locationDescription}</br>with: ${courtMapping.court}`) ||
-            appointment.locationDescription
-          )
-        }
+        return (
+          (courtMapping && `${appointment.locationDescription}</br>with: ${courtMapping.court}`) ||
+          appointment.locationDescription
+        )
+      }
 
-        const videoLinkAppointment =
-          appointment.appointmentTypeCode === 'VLB' &&
-          videoLinkAppointments.find((videoLinkAppt) => videoLinkAppt.appointmentId === appointment.id)
+      const videoLinkAppointment =
+        appointment.appointmentTypeCode === 'VLB' &&
+        videoLinkAppointments.find((videoLinkAppt) => videoLinkAppt.appointmentId === appointment.id)
 
-        return [
-          {
-            text: endTime ? `${getTime(startTime)} to ${getTime(endTime)}` : getTime(startTime),
+      return [
+        {
+          text: endTime ? `${getTime(startTime)} to ${getTime(endTime)}` : getTime(startTime),
+        },
+        {
+          html: `<a href="${offenderUrl}" class="govuk-link">${offenderName} - ${offenderNo}</a>`,
+          attributes: {
+            'data-sort-value': appointment.lastName,
           },
-          {
-            html: `<a href="${offenderUrl}" class="govuk-link">${offenderName} - ${offenderNo}</a>`,
-            attributes: {
-              'data-sort-value': appointment.lastName,
-            },
-          },
-          {
-            text: prisonerDetails.cellLocation,
-          },
-          {
-            text: appointment.appointmentTypeDescription,
-          },
-          {
-            html: getCourtDescription(),
-          },
-          {
-            html: `<a href="/appointment-details/${
-              videoLinkAppointment?.mainAppointmentId || appointment.id
-            }" class="govuk-link" aria-label="View details of ${formatName(
-              appointment.firstName,
-              appointment.lastName
-            )}'s appointment">View details </a>`,
-            classes: 'govuk-!-display-none-print',
-          },
-        ]
-      })
+        },
+        {
+          text: prisonerDetails.cellLocation,
+        },
+        {
+          text: appointment.appointmentTypeDescription,
+        },
+        {
+          html: getCourtDescription(),
+        },
+        {
+          html: `<a href="/appointment-details/${
+            videoLinkAppointment?.mainAppointmentId || appointment.id
+          }" class="govuk-link" aria-label="View details of ${formatName(
+            appointment.firstName,
+            appointment.lastName
+          )}'s appointment">View details </a>`,
+          classes: 'govuk-!-display-none-print',
+        },
+      ]
+    })
 
     const appointmentRows = await Promise.all(appointmentsEnhanced)
 
