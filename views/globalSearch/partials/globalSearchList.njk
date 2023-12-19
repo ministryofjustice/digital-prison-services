@@ -1,6 +1,7 @@
 {% set rows = [] %}
 {% for prisoner in results %}
-  {% set prisonerImage = '<img src="/app/images/' + prisoner.offenderNo + '/data" alt="Image of ' + prisoner.name + '" class="prisoner-search__results-list__image" loading="lazy" />' %}
+  {% set prisonerImageUrl = ('/app/images/' + prisoner.offenderNo + '/data' if prisoner.showProfileLink else '/images/image-missing.jpg') %}
+  {% set prisonerImage = '<img src="' + prisonerImageUrl + '" alt="Image of ' + prisoner.name + '" class="prisoner-search__results-list__image" loading="lazy" data-test="prisoner-image" />' %}
   {% set prisonerLink = '<a href="/prisoner/' + prisoner.offenderNo + '" class="govuk-link" target="_blank" rel="noopener noreferrer" data-test="prisoner-profile-link">' + prisoner.name + '</a>' %}
   {% set updateLicenceLink = '<a href="' + prisoner.updateLicenceLink + '" class="govuk-link" target="_blank" rel="noopener noreferrer" data-test="update-licence-link">Update HDC licence</a>' %}
   {% set rows = (rows.push([

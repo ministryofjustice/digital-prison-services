@@ -17,6 +17,7 @@ const globalSearchPage = () => {
     dobYear: () => cy.get('[data-test="dob-year"]'),
     updateLicenceLinks: () => cy.get('[data-test="update-licence-link"]'),
     profileLinks: () => cy.get('[data-test="prisoner-profile-link"]'),
+    prisonerImages: () => cy.get('[data-test="prisoner-image"]'),
     resultsTable: () => cy.get('[data-test="global-search-results-table"]'),
   })
   return globalSearch

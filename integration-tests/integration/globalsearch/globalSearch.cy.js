@@ -129,6 +129,26 @@ context('Global search', () => {
     })
   })
 
+  it('should display the missing profile picture', () => {
+    cy.task('stubGlobalSearch')
+    cy.visit('/global-search/results?searchText=quimby')
+    const globalSearchPage = GlobalSearchPage.verifyOnResultsPage()
+
+    globalSearchPage.prisonerImages().then(($prisonerImages) => {
+      cy.get($prisonerImages).its('length').should('eq', 2)
+
+      cy.get($prisonerImages)
+        .first()
+        .invoke('attr', 'src')
+        .then((src) => expect(src).to.equal('/app/images/A1234AC/data'))
+
+      cy.get($prisonerImages)
+        .last()
+        .invoke('attr', 'src')
+        .then((src) => expect(src).to.equal('/images/image-missing.jpg'))
+    })
+  })
+
   it('should present global search results with outside descriptions', () => {
     cy.task('stubGlobalSearchMultiplePages')
     cy.task('stubOffenderMovements')
