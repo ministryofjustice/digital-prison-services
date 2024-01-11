@@ -2,7 +2,7 @@ import { Request, Response } from 'express'
 import { formatName, putLastNameFirst, getTime, stripAgencyPrefix } from '../../utils'
 
 export default ({ oauthApi, systemOauthClient, prisonApi }) =>
-  async (req: Request, res: Response) => {
+  async (req: Partial<Request>, res: Partial<Response>) => {
     const {
       user: { activeCaseLoad },
     } = res.locals
@@ -25,7 +25,7 @@ export default ({ oauthApi, systemOauthClient, prisonApi }) =>
       const allStaffUsernames = []
 
       const offendersWithCellHistory = await Promise.all(
-        offenderNumbers.map(async (offenderNo) => {
+        offenderNumbers.map(async (offenderNo: string) => {
           const { latestBookingId, ...prisonerDetails } = allOffendersDetails.find(
             (offender) => offender.offenderNo === offenderNo
           )
@@ -54,7 +54,7 @@ export default ({ oauthApi, systemOauthClient, prisonApi }) =>
       )
 
       const allStaffDetails = allStaffUsernames.length
-        ? await prisonApi.getUserDetailsList(res.locals, [...new Set(allStaffUsernames)])
+        ? await prisonApi.getUserDetailsList(systemContext, [...new Set(allStaffUsernames)])
         : []
 
       return res.render('establishmentRoll/noCellAllocated.njk', {
@@ -72,7 +72,7 @@ export default ({ oauthApi, systemOauthClient, prisonApi }) =>
             timeOut: getTime(previousLocation.assignmentEndDateTime),
           }
         }),
-        userCanAllocateCell: userRoles && userRoles.some((role) => role.roleCode === 'CELL_MOVE'),
+        userCanAllocateCell: userRoles?.some((role) => role.roleCode === 'CELL_MOVE'),
       })
     } catch (error) {
       res.locals.redirectUrl = `/establishment-roll`
