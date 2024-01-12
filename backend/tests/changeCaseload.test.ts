@@ -1,14 +1,23 @@
 import { Response } from 'express'
-import { changeCaseloadFactory } from '../controllers/changeCaseload'
+import changeCaseloadFactory from '../controllers/changeCaseload'
+
+const systemToken = { system: 'system' }
+const systemOauthClient = {
+  getClientCredentialsTokens: jest.fn(),
+}
+const prisonApi = {
+  userCaseLoads: jest.fn(),
+  setActiveCaseload: jest.fn(),
+}
 
 describe('index', () => {
-  const prisonApi = {}
   let mockRes: Partial<Response>
   const logError = jest.fn()
 
-  let service
+  const service = changeCaseloadFactory(prisonApi, logError, systemOauthClient)
 
   beforeEach(() => {
+    jest.resetAllMocks()
     mockRes = {
       render: jest.fn(),
       redirect: jest.fn(),
@@ -32,9 +41,7 @@ describe('index', () => {
       },
       status: jest.fn(),
     }
-    // @ts-expect-error ts-migrate(2339) FIXME: Property 'userCaseLoads' does not exist on type '{... Remove this comment to see the full error message
-    prisonApi.userCaseLoads = jest.fn()
-    service = changeCaseloadFactory(prisonApi, logError)
+    systemOauthClient.getClientCredentialsTokens.mockResolvedValue(systemToken)
   })
 
   it('should render the change caseload page with correct data', async () => {
@@ -42,11 +49,11 @@ describe('index', () => {
       headers: { referer: 'http://localhost:3000/pshUrl/' },
       session: { userDetails: { name: 'Test User', activeCaseLoadId: 'LEI' } },
     }
-    const res = { ...mockRes }
+    const res = { ...mockRes, status: jest.fn() }
 
     await service.index(req, res)
 
-    expect(res.render).toBeCalledWith('changeCaseload.njk', {
+    expect(res.render).toHaveBeenCalledWith('changeCaseload.njk', {
       title: 'Change your location',
       options: [
         { value: 'LEI', text: 'Leeds (HMP)' },
@@ -67,7 +74,7 @@ describe('index', () => {
 
       await service.index(req, res)
 
-      expect(res.render).toBeCalledWith('changeCaseload.njk', {
+      expect(res.render).toHaveBeenCalledWith('changeCaseload.njk', {
         title: 'Change your location',
         options: [
           { value: 'LEI', text: 'Leeds (HMP)' },
@@ -105,45 +112,39 @@ describe('index', () => {
 })
 
 describe('post', () => {
-  const prisonApi = {}
   const req = {
     session: {
-      userDetails: {},
+      userDetails: { activeCaseLoadId: 'LEI' },
       data: {
         activeCaseLoadId: 'LEI',
       },
     },
+    body: {},
   }
   const res = {
     redirect: jest.fn(),
     render: jest.fn(),
+    status: jest.fn(),
   }
 
   const logError = jest.fn()
 
-  let service
+  const service = changeCaseloadFactory(prisonApi, logError, systemOauthClient)
 
   beforeEach(() => {
-    // @ts-expect-error ts-migrate(2339) FIXME: Property 'setActiveCaseload' does not exist on typ... Remove this comment to see the full error message
-    prisonApi.setActiveCaseload = jest.fn()
+    jest.resetAllMocks()
+    systemOauthClient.getClientCredentialsTokens.mockResolvedValue(systemToken)
   })
 
   it('should call the API with the correct body', async () => {
-    service = changeCaseloadFactory(prisonApi, logError)
-
-    // @ts-expect-error ts-migrate(2339) FIXME: Property 'body' does not exist on type '{ session:... Remove this comment to see the full error message
     req.body = { caseLoadId: 'MDI' }
 
     await service.post(req, res)
 
-    // @ts-expect-error ts-migrate(2339) FIXME: Property 'setActiveCaseload' does not exist on typ... Remove this comment to see the full error message
-    expect(prisonApi.setActiveCaseload).toHaveBeenCalledWith(res.locals, { caseLoadId: 'MDI' })
+    expect(prisonApi.setActiveCaseload).toHaveBeenCalledWith(systemToken, { caseLoadId: 'MDI' })
   })
 
   it('should redirect on success', async () => {
-    service = changeCaseloadFactory(prisonApi, logError)
-
-    // @ts-expect-error ts-migrate(2339) FIXME: Property 'body' does not exist on type '{ session:... Remove this comment to see the full error message
     req.body = { caseLoadId: 'MDI' }
 
     await service.post(req, res)
@@ -152,31 +153,21 @@ describe('post', () => {
   })
 
   it('should update session with new caseload id and clear app session data', async () => {
-    service = changeCaseloadFactory(prisonApi, logError)
-
-    // @ts-expect-error ts-migrate(2339) FIXME: Property 'body' does not exist on type '{ session:... Remove this comment to see the full error message
     req.body = { caseLoadId: 'MDI' }
 
     await service.post(req, res)
 
     expect(req.session.data).toBe(null)
-    // @ts-expect-error ts-migrate(2339) FIXME: Property 'activeCaseLoadId' does not exist on type... Remove this comment to see the full error message
     expect(req.session.userDetails.activeCaseLoadId).toBe('MDI')
   })
 
   it('should error when caseload id is missing', async () => {
-    service = changeCaseloadFactory(prisonApi, logError)
-
-    // @ts-expect-error ts-migrate(2339) FIXME: Property 'body' does not exist on type '{ session:... Remove this comment to see the full error message
     req.body = {}
-    // @ts-expect-error ts-migrate(2339) FIXME: Property 'status' does not exist on type '{ redire... Remove this comment to see the full error message
-    res.status = jest.fn()
 
     await service.post(req, res)
 
-    // @ts-expect-error ts-migrate(2339) FIXME: Property 'status' does not exist on type '{ redire... Remove this comment to see the full error message
     expect(res.status).toHaveBeenCalledWith(500)
-    expect(res.render).toBeCalledWith('error.njk', {
+    expect(res.render).toHaveBeenCalledWith('error.njk', {
       url: '/change-caseload',
     })
   })

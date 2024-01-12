@@ -4,7 +4,7 @@ import React from 'react'
 import TestRenderer, { act } from 'react-test-renderer'
 import Radio from '@govuk-react/radio'
 import { Spinner } from '@govuk-react/icons'
-import { UpdateLink, PayMessage, OtherMessage } from './AttendanceOptions.styles'
+import { OtherMessage, PayMessage, UpdateLink } from './AttendanceOptions.styles'
 import AttendanceOptions, { updateOffenderAttendance } from './AttendanceOptions'
 
 describe('<AttendanceOptions />', () => {
@@ -65,7 +65,9 @@ describe('<AttendanceOptions />', () => {
   })
 
   it('should successfully call updateOffenderAttendance', () => {
-    act(() => getPayRadio().props.onChange())
+    act(() => {
+      getPayRadio().props.onChange()
+    })
     const paid = updateOffenderAttendance(
       { attended: true, eventId: 123, eventLocationId: 1, offenderNo: 'ABC123', paid: true },
       1,
@@ -84,7 +86,9 @@ describe('<AttendanceOptions />', () => {
   })
 
   it('should load the paying spinner when selecting pay', () => {
-    act(() => getPayRadio().props.onChange())
+    act(() => {
+      getPayRadio().props.onChange()
+    })
     expect(testInstance.findByType(Spinner).props.title).toEqual('Paying')
   })
 

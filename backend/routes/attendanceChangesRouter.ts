@@ -1,4 +1,5 @@
 import moment from 'moment'
+import { Request, Response } from 'express'
 import { properCaseName, capitalize, pascalToString } from '../utils'
 
 const toActivitiesMap = (activities) =>
@@ -40,12 +41,13 @@ const sortByLastNameThenByDate = (activitiesMap) => (left, right) => {
   return 0
 }
 
-export default ({ prisonApi, whereaboutsApi }) =>
-  async (req, res) => {
+export default ({ prisonApi, whereaboutsApi, systemOauthClient }) =>
+  async (req: Partial<Request>, res: Partial<Response>) => {
     const { agencyId, fromDateTime, toDateTime, subHeading } = req.query
 
-    if (!fromDateTime || !toDateTime || !subHeading)
+    if (!fromDateTime || !toDateTime || !subHeading) {
       return res.redirect('/manage-prisoner-whereabouts/attendance-reason-statistics')
+    }
 
     const { changes } = await whereaboutsApi.getAttendanceChanges(res.locals, { fromDateTime, toDateTime })
 
@@ -60,7 +62,8 @@ export default ({ prisonApi, whereaboutsApi }) =>
     const activities = await prisonApi.getScheduledActivities(res.locals, { agencyId, eventIds })
 
     const userNames = [...new Set(changes.map((change) => change.changedBy))]
-    const userDetails = await prisonApi.getUserDetailsList(res.locals, userNames)
+    const systemContext = await systemOauthClient.getClientCredentialsTokens(req.session.userDetails.username)
+    const userDetails = await prisonApi.getUserDetailsList(systemContext, userNames)
 
     const activitiesMap = toActivitiesMap(activities)
     const userMap = toUserMap(userDetails)

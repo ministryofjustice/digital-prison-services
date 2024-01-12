@@ -89,7 +89,8 @@ context('Prisoner spends', () => {
       cy.get('h1').contains('Spends account for John Smith')
       cy.get('[data-test="spends-current-balance"]').contains('£50.00')
       cy.get('[data-test="spends-month"]').should('have.value', '10')
-      cy.get('[data-test="spends-year"]').should('have.value', '2020')
+      const earliestYear = moment().year() - 3
+      cy.get('[data-test="spends-year"]').should('have.value', earliestYear)
       cy.get('[data-test="spends-table"]').then(($table) => {
         cy.get($table)
           .find('tbody')

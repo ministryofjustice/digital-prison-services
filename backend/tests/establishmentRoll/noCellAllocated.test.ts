@@ -16,17 +16,15 @@ describe('No cell allocated', () => {
 
   const credentialsRef = { token: 'example' }
 
-  let req
-  let res
-  let controller
+  const req = {
+    originalUrl: 'http://localhost',
+    session: { userDetails: { username: 'me' } },
+  }
+  const res = { locals: { redirectUrl: '', user: { activeCaseLoad: { caseLoadId: 'MDI' } } }, render: jest.fn() }
+  const controller = noCellAllocated({ oauthApi, systemOauthClient, prisonApi })
 
   beforeEach(() => {
-    req = {
-      originalUrl: 'http://localhost',
-      session: { userDetails: { username: 'me' } },
-    }
-    res = { locals: { user: { activeCaseLoad: { caseLoadId: 'MDI' } } }, render: jest.fn() }
-
+    jest.clearAllMocks()
     systemOauthClient.getClientCredentialsTokens = jest.fn().mockResolvedValue(credentialsRef)
 
     prisonApi.getInmatesAtLocationPrefix = jest.fn()
@@ -35,8 +33,6 @@ describe('No cell allocated', () => {
     prisonApi.getUserDetailsList = jest.fn()
 
     oauthApi.userRoles = jest.fn()
-
-    controller = noCellAllocated({ oauthApi, systemOauthClient, prisonApi })
   })
 
   describe('with no data', () => {
@@ -163,7 +159,7 @@ describe('No cell allocated', () => {
         { offenderNos: ['A7777DY'] }
       )
       expect(prisonApi.getUserDetailsList).toHaveBeenCalledTimes(1)
-      expect(prisonApi.getUserDetailsList).toHaveBeenCalledWith(res.locals, ['ZQH07Y'])
+      expect(prisonApi.getUserDetailsList).toHaveBeenCalledWith(credentialsRef, ['ZQH07Y'])
     })
 
     it('should render the template with the correct data', async () => {
@@ -189,7 +185,7 @@ describe('No cell allocated', () => {
       const error = new Error('Network error')
       prisonApi.getInmatesAtLocationPrefix.mockRejectedValue(error)
 
-      await expect(controller(req, res)).rejects.toThrowError(error)
+      await expect(controller(req, res)).rejects.toThrow(error)
       expect(res.locals.redirectUrl).toBe('/establishment-roll')
     })
   })

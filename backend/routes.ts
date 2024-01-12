@@ -22,7 +22,7 @@ import viewAppointments from './controllers/appointments/viewAppointments'
 import confirmAppointmentRouter from './routes/appointments/confirmAppointmentRouter'
 import prisonerProfileRouter from './routes/prisonerProfileRouter'
 import retentionReasonsRouter from './routes/retentionReasonsRouter'
-import attendanceChangeRouter from './routes/attendanceChangesRouter'
+import attendanceChangesRouter from './routes/attendanceChangesRouter'
 import covidRouter from './routes/covidRouter'
 import prisonerSearchRouter from './routes/prisonerSearchRouter'
 import cellMoveRouter from './routes/cellMoveRouter'
@@ -272,7 +272,7 @@ const setup = ({
     bulkAppointmentsInvalidNumbersRouter({ prisonApi, logError })
   )
 
-  router.use('/change-caseload', changeCaseloadRouter({ prisonApi, logError }))
+  router.use('/change-caseload', changeCaseloadRouter({ prisonApi, logError, systemOauthClient }))
 
   if (whereaboutsMaintenanceMode) {
     router.use(
@@ -395,7 +395,7 @@ const setup = ({
 
   router.use('/current-covid-units', isCovidUnitsEnabled, covidRouter(systemOauthClient, prisonApi))
 
-  router.use('/attendance-changes', attendanceChangeRouter({ prisonApi, whereaboutsApi }))
+  router.use('/attendance-changes', attendanceChangesRouter({ prisonApi, whereaboutsApi, systemOauthClient }))
 
   router.use(
     '/prisoner-search',
