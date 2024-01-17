@@ -316,14 +316,14 @@ module.exports = {
         jsonBody: summary || [],
       },
     }),
-  stubStaffRoles: (roles) =>
+  stubStaffRoles: (roles, status) =>
     stubFor({
       request: {
         method: 'GET',
         urlPattern: `/api/staff/.+?/.+?/roles`,
       },
       response: {
-        status: 200,
+        status: status || 200,
         headers: {
           'Content-Type': 'application/json;charset=UTF-8',
         },

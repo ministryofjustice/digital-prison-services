@@ -5,7 +5,7 @@ context('Homepage', () => {
     cy.clearCookies()
     cy.task('reset')
     cy.task('stubUserLocations')
-    cy.task('stubStaffRoles', [])
+    cy.task('stubStaffRoles', { roles: [] })
     cy.task('stubLocationConfig', { agencyId: 'MDI', response: { enabled: false } })
     cy.task('stubKeyworkerMigrated')
   })

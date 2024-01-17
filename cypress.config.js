@@ -289,7 +289,6 @@ module.exports = defineConfig({
           healthTypes,
           careNeeds,
           reasonableAdjustments,
-          agencies,
           prisonOffenderManagers,
           neurodiversities,
           neurodivergence,
@@ -525,7 +524,7 @@ module.exports = defineConfig({
         stubGetCellMoveReason: ({ bookingId, bedAssignmentHistorySequence, cellMoveReason, status }) =>
           whereabouts.stubGetCellMoveReason(bookingId, bedAssignmentHistorySequence, cellMoveReason, status),
         stubGetStaffDetails: ({ staffId, response }) => prisonApi.stubGetStaffDetails(staffId, response),
-        stubStaffRoles: (response) => prisonApi.stubStaffRoles(response),
+        stubStaffRoles: ({ response, status }) => prisonApi.stubStaffRoles(response, status),
         stubLocationConfig: ({ agencyId, response }) => whereabouts.stubLocationConfig({ agencyId, response }),
         stubGetDetailsFailure: ({ status }) => prisonApi.stubGetDetailsFailure(status),
         stubGetPrisoners: (response) => prisonApi.stubGetPrisoners(response),
