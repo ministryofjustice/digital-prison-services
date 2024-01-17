@@ -19,6 +19,12 @@ export default (handler: RequestHandler) =>
   async (req: Request, res: Response, next: NextFunction): Promise<void> => {
     const { activeCaseLoadId } = req.session.userDetails
 
+    const exemptions = config.app.homepageRedirect.exemptions.split(',')
+
+    if (exemptions.includes(activeCaseLoadId)) {
+      return handler(req, res, next)
+    }
+
     const redirectEnabled = isRedirectEnabled(activeCaseLoadId)
     const redirectCaseload = isRedirectCaseLoad(activeCaseLoadId)
 

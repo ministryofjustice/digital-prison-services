@@ -59,10 +59,11 @@ export default (getClientCredentialsTokens, prisonApi) => {
   const getExistingEventsForLocation = async (context, agencyId, locationId, date) => {
     const formattedDate = switchDateFormat(date)
     const searchCriteria = { agencyId, date: formattedDate, locationId }
+    const systemContext = await getClientCredentialsTokens()
 
     try {
       const eventsAtLocationByUsage = await Promise.all([
-        prisonApi.getActivitiesAtLocation(context, searchCriteria),
+        prisonApi.getActivitiesAtLocation(systemContext, searchCriteria),
         prisonApi.getActivityList(context, { ...searchCriteria, usage: 'VISIT' }),
         prisonApi.getActivityList(context, { ...searchCriteria, usage: 'APP' }),
       ]).then((events) => events.reduce((flattenedEvents, event) => flattenedEvents.concat(event), []))

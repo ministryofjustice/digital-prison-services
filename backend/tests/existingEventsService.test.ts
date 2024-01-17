@@ -16,7 +16,8 @@ describe('existing events', () => {
     getCourtEvents: jest.fn(),
     getActivities: jest.fn(),
   }
-  const getClientCredentialsTokens = jest.fn().mockResolvedValue({})
+  const systemToken = { system: 'system' }
+  const getClientCredentialsTokens = jest.fn().mockResolvedValue(systemToken)
 
   let service
 
@@ -257,11 +258,11 @@ describe('existing events', () => {
 
       await service.getExistingEventsForOffender({}, 'LEI', '11/12/2019', 'ABC123')
 
-      expect(prisonApi.getVisits).toHaveBeenCalledWith({}, expectedParameters)
-      expect(prisonApi.getAppointments).toHaveBeenCalledWith({}, expectedParameters)
-      expect(prisonApi.getExternalTransfers).toHaveBeenCalledWith({}, expectedParameters)
-      expect(prisonApi.getCourtEvents).toHaveBeenCalledWith({}, expectedParameters)
-      expect(prisonApi.getActivities).toHaveBeenCalledWith({}, expectedParameters)
+      expect(prisonApi.getVisits).toHaveBeenCalledWith(systemToken, expectedParameters)
+      expect(prisonApi.getAppointments).toHaveBeenCalledWith(systemToken, expectedParameters)
+      expect(prisonApi.getExternalTransfers).toHaveBeenCalledWith(systemToken, expectedParameters)
+      expect(prisonApi.getCourtEvents).toHaveBeenCalledWith(systemToken, expectedParameters)
+      expect(prisonApi.getActivities).toHaveBeenCalledWith(systemToken, expectedParameters)
     })
 
     describe('when there are no errors', () => {
@@ -403,7 +404,7 @@ describe('existing events', () => {
 
       await service.getExistingEventsForLocation({}, 'LEI', 123, '11/12/2019')
 
-      expect(prisonApi.getActivitiesAtLocation).toHaveBeenCalledWith({}, expectedParameters)
+      expect(prisonApi.getActivitiesAtLocation).toHaveBeenCalledWith(systemToken, expectedParameters)
       expect(prisonApi.getActivityList).toHaveBeenCalledWith({}, { ...expectedParameters, usage: 'VISIT' })
       expect(prisonApi.getActivityList).toHaveBeenCalledWith({}, { ...expectedParameters, usage: 'APP' })
     })

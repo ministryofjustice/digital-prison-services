@@ -29,21 +29,14 @@ export const app = {
   covidUnitsEnabled: process.env.COVID_UNITS_ENABLED === 'true' || false,
   prisonerProfileRedirect: {
     url: process.env.PRISONER_PROFILE_REDIRECT_URL,
-    enabledDate: parseDate(process.env.PRISONER_PROFILE_REDIRECT_ENABLED_DATE),
-    enabledPrisons: process.env.PRISONER_PROFILE_REDIRECT_ENABLED_PRISONS || '',
-    scheduleRedirectForPrisons: process.env.PRISONER_PROFILE_SCHEDULE_REDIRECT_FOR_PRISONS || '',
-    bundleDates: [
-      parseDate(process.env.PRISONER_PROFILE_REDIRECT_BUNDLE_ONE),
-      parseDate(process.env.PRISONER_PROFILE_REDIRECT_BUNDLE_TWO),
-      parseDate(process.env.PRISONER_PROFILE_REDIRECT_BUNDLE_THREE),
-      parseDate(process.env.PRISONER_PROFILE_REDIRECT_BUNDLE_FOUR),
-    ],
+    exemptions: process.env.PRISONER_PROFILE_REDIRECT_EXEMPTIONS || '',
   },
   homepageRedirect: {
     url: process.env.HOMEPAGE_REDIRECT_URL,
     enabledDate: parseDate(process.env.HOMEPAGE_REDIRECT_ENABLED_DATE),
     enabledPrisons: process.env.HOMEPAGE_REDIRECT_ENABLED_PRISONS || '',
     scheduleRedirectForPrisons: process.env.HOMEPAGE_SCHEDULE_REDIRECT_FOR_PRISONS || '',
+    exemptions: process.env.HOMEPAGE_REDIRECT_EXEMPTIONS || '',
   },
   gitRef: process.env.GIT_REF || '',
 }

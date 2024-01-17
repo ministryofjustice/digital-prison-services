@@ -65,7 +65,9 @@ app.use(setupStaticContent())
 app.use(setupWebSession())
 app.use(setupAuth({ oauthApi: apis.oauthApi, tokenVerificationApi: apis.tokenVerificationApi }))
 
-app.use(currentUser({ prisonApi: apis.prisonApi, hmppsManageUsersApi: apis.hmppsManageUsersApi }))
+app.use(
+  currentUser({ prisonApi: apis.prisonApi, hmppsManageUsersApi: apis.hmppsManageUsersApi, getClientCredentialsTokens })
+)
 app.get(
   feComponentsRoutes,
   getFrontendComponents({

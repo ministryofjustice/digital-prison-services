@@ -1,3 +1,4 @@
+import { Request, Response } from 'express'
 import logErrorAndContinue from '../../shared/logErrorAndContinue'
 import { getNamesFromString } from '../../utils'
 import config from '../../config'
@@ -27,7 +28,7 @@ export default ({
     restrictedPatientApi,
     oauthApi,
   }) =>
-  async (req, res) => {
+  async (req: Request, res: Response): Promise<void> => {
     const { offenderNo, establishmentId } = req.params
     const { username } = req.session.userDetails
 
@@ -84,8 +85,8 @@ export default ({
         prisonApi.getIdentifiers(context, bookingId),
         prisonApi.getOffenderAliases(context, bookingId),
         prisonApi.getPrisonerProperty(context, bookingId),
-        prisonApi.getPrisonerContacts(context, bookingId),
-        prisonApi.getPrisonerAddresses(context, offenderNo),
+        prisonApi.getPrisonerContacts(systemContext, bookingId),
+        prisonApi.getPrisonerAddresses(systemContext, offenderNo),
         prisonApi.getSecondaryLanguages(context, bookingId),
         prisonApi.getPersonalCareNeeds(context, bookingId, healthCodes),
         prisonApi.getReasonableAdjustments(context, bookingId, treatmentCodes),
@@ -106,7 +107,7 @@ export default ({
       (await Promise.all(
         activeNextOfKins.map(async (kin) => ({
           ...kin,
-          ...(await personService.getPersonContactDetails(context, kin.personId)),
+          ...(await personService.getPersonContactDetails(systemContext, kin.personId)),
         }))
       ))
 

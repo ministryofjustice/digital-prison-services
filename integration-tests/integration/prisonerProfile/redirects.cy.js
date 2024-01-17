@@ -51,11 +51,9 @@ context('Current prisoner profile should redirect to the new prisoner profile', 
           caseNoteSummary: {},
         })
 
-
-
         cy.task('stubProfessionalContacts', {
           offenderBasicDetails,
-          contacts:  otherContacts ,
+          contacts: otherContacts,
           personAddresses: [businessPrimary, businessNonPrimary],
           personEmails: [{ email: 'test1@email.com' }, { email: 'test2@email.com' }],
           personPhones: [
@@ -67,8 +65,6 @@ context('Current prisoner profile should redirect to the new prisoner profile', 
             secondary_pom: { staffId: 2, name: 'DOE, JOHN' },
           },
         })
-
-        
       })
       it('Should redirect to the new prisoner profile - personal page', () => {
         cy.origin('http://localhost:9191', () => {
@@ -84,7 +80,7 @@ context('Current prisoner profile should redirect to the new prisoner profile', 
         })
       })
       context('Redirect to overview page', () => {
-        before(()=>{
+        before(() => {
           cy.task('stubPrisonerProfile', {})
         })
         it('Link should redirect to the new prisoner profile - overview page', () => {
@@ -293,7 +289,7 @@ context('Current prisoner profile should NOT redirect to the new prisoner profil
 
         cy.task('stubProfessionalContacts', {
           offenderBasicDetails,
-          contacts:  otherContacts ,
+          contacts: otherContacts,
           personAddresses: [businessPrimary, businessNonPrimary],
           personEmails: [{ email: 'test1@email.com' }, { email: 'test2@email.com' }],
           personPhones: [
@@ -307,7 +303,6 @@ context('Current prisoner profile should NOT redirect to the new prisoner profil
         })
 
         cy.task('stubPrisonerProfile', {})
-
       })
       it('Should not redirect to the new prisoner profile - personal page', () => {
         const offenderNo = 'A1234A'
@@ -547,11 +542,11 @@ context('Current prisoner profile should NOT redirect to the new prisoner profil
         cy.task('reset')
         cy.task('stubSignIn', {
           username: 'ITAG_USER',
-          caseload: 'WWI',
+          caseload: 'MDI',
           caseloads: [
             {
-              caseLoadId: 'WWI',
-              description: 'Wandsworth',
+              caseLoadId: 'MDI',
+              description: 'MOORLAND (HMP & YOI)',
               currentlyActive: true,
             },
           ],

@@ -682,11 +682,11 @@ context('Prisoner Work and Skills', () => {
       cy.task('stubPrisonerProfileHeaderData', prisonerProfileHeaderData)
       cy.task('stubSignIn', {
         username: 'ITAG_USER',
-        caseload: 'LII',
+        caseload: 'BLI',
         caseloads: [
           {
-            caseLoadId: 'LII',
-            description: 'Lincoln',
+            caseLoadId: 'BLI',
+            description: 'Bristol',
             currentlyActive: true,
           },
         ],
