@@ -1,5 +1,7 @@
-export const changeCaseloadFactory = (prisonApi, logError) => {
-  const index = (req, res) => {
+import { Request, Response } from 'express'
+
+export default (prisonApi, logError, systemOauthClient) => {
+  const index = async (req: Partial<Request>, res: Partial<Response>) => {
     const {
       user: { allCaseloads },
     } = res.locals
@@ -25,12 +27,13 @@ export const changeCaseloadFactory = (prisonApi, logError) => {
     })
   }
 
-  const post = async (req, res) => {
+  const post = async (req: Partial<Request>, res: Partial<Response>) => {
     const { caseLoadId } = req.body
 
     // Don't call API if data is missing
     if (caseLoadId) {
-      await prisonApi.setActiveCaseload(res.locals, { caseLoadId })
+      const systemContext = await systemOauthClient.getClientCredentialsTokens(req.session.userDetails.username)
+      await prisonApi.setActiveCaseload(systemContext, { caseLoadId })
 
       if (req.session && req.session.userDetails) req.session.userDetails.activeCaseLoadId = caseLoadId
       if (req.session && req.session.data) req.session.data = null
@@ -46,8 +49,4 @@ export const changeCaseloadFactory = (prisonApi, logError) => {
   }
 
   return { index, post }
-}
-
-export default {
-  changeCaseloadFactory,
 }
