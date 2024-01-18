@@ -298,7 +298,17 @@ export const prisonApiFactory = (client) => {
 
   const getMainOffence = (context, bookingId) => get(context, `/api/bookings/${bookingId}/mainOffence`)
 
-  const getStaffRoles = (context, staffId, agencyId) => get(context, `/api/staff/${staffId}/${agencyId}/roles`)
+  const getStaffRoles = async (context, staffId, agencyId) => {
+    try {
+      return await get(context, `/api/staff/${staffId}/${agencyId}/roles`)
+    } catch (error) {
+      if (error.status === 403) {
+        // can happen for CADM (central admin) users
+        return []
+      }
+      throw error
+    }
+  }
 
   const getPrisonerBalances = (context, bookingId) => get(context, `/api/bookings/${bookingId}/balances`)
 

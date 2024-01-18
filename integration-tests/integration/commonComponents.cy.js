@@ -1,4 +1,3 @@
-const HomePage = require('../pages/homepage/homepagePage')
 const homepagePage = require('../pages/homepage/homepagePage')
 
 context('Common component functionality', () => {
@@ -9,7 +8,7 @@ context('Common component functionality', () => {
   beforeEach(() => {
     cy.task('reset')
     cy.task('stubUserLocations')
-    cy.task('stubStaffRoles', [])
+    cy.task('stubStaffRoles', { roles: [] })
     cy.task('stubLocationConfig', { agencyId: 'MDI', response: { enabled: false } })
     cy.task('stubKeyworkerMigrated')
     cy.task('stubComponents')
