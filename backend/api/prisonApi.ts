@@ -302,7 +302,7 @@ export const prisonApiFactory = (client) => {
     try {
       return await get(context, `/api/staff/${staffId}/${agencyId}/roles`)
     } catch (error) {
-      if (error.status === 403) {
+      if (error.status === 403 || error.status === 404) {
         // can happen for CADM (central admin) users
         return []
       }
