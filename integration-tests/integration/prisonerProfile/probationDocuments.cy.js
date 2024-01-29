@@ -89,9 +89,9 @@ context('Prisoner probation documents', () => {
     it('should allow the user to download the document', () => {
       cy.visit(`/offenders/${offenderNo}/probation-documents`)
       cy.get('.govuk-accordion__section-button').click({ multiple: true })
-      cy.get('.qa-document-link').contains('PRE-CONS.pdf')
-      cy.get('.qa-document-link').contains('CPSPack1.txt')
-      cy.get('.qa-document-link').contains('CPSPack2.txt')
+      cy.get('[data-test="document-link"]').contains('PRE-CONS.pdf')
+      cy.get('[data-test="document-link"]').contains('CPSPack1.txt')
+      cy.get('[data-test="document-link"]').contains('CPSPack2.txt')
       cy.get('.govuk-accordion__section-heading').contains('CJA - Indeterminate Public Prot. (5 Years) at Berwyn (HMP)')
       cy.get('.govuk-accordion__section-heading').contains('CJA - Community Order. (12 Months)')
     })
