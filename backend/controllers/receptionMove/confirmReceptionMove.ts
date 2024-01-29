@@ -1,6 +1,7 @@
 import { Request, Response, RequestHandler } from 'express'
-import { properCaseName } from '../../utils'
+import { isRedirectCaseLoad, properCaseName } from '../../utils'
 import logger from '../../log'
+import config from '../../config'
 
 const sortOnListSeq = (a, b) => a.listSeq - b.listSeq
 
@@ -39,8 +40,8 @@ const validate = ({ reason, comment }) => {
 export default ({ prisonApi, whereaboutsApi }) => {
   const view = async (req: Request, res: Response) => {
     const { offenderNo } = req.params
+    const { activeCaseLoadId } = req.session.userDetails
     const { firstName, lastName } = await prisonApi.getDetails(res.locals, offenderNo, false)
-
     let backUrl = `/prisoner/${offenderNo}/reception-move/consider-risks-reception`
 
     if (!req.headers.referer) {
@@ -50,7 +51,9 @@ export default ({ prisonApi, whereaboutsApi }) => {
     const formValues = req.flash('formValues') as Record<string, string>[]
     const { reason, comment } = (formValues && formValues[0]) || {}
     const receptionMoveReasonRadioValues = await receptionMoveReasons(res, prisonApi, reason)
-    const cancelLinkHref = `/prisoner/${offenderNo}/location-details`
+    const cancelLinkHref = isRedirectCaseLoad(activeCaseLoadId)
+      ? `${config.app.prisonerProfileRedirect.url}/prisoner/${offenderNo}/location-details`
+      : `/prisoners/${offenderNo}/cell-history`
 
     const data = {
       offenderName: `${properCaseName(firstName)} ${properCaseName(lastName)}`,

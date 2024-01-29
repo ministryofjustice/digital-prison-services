@@ -202,7 +202,7 @@ describe('Consider risks reception', () => {
       expect(res.render).toHaveBeenCalledWith(
         'receptionMoves/considerRisksReception.njk',
         expect.objectContaining({
-          backUrl: '/prisoners/A12345/location-details',
+          backUrl: 'http://localhost:3000/prisoner/A12345/location-details',
           csraDetailsUrl: '/prisoner/A12345/cell-move/cell-sharing-risk-assessment-details',
           displayLinkToPrisonersMostRecentCsra: 'comment 1',
           nonAssociationLink: '/prisoner/A12345/cell-move/non-associations',
@@ -230,7 +230,7 @@ describe('Consider risks reception', () => {
     it('should redirect to previous page', async () => {
       req.body = { considerRisksReception: 'no' }
       await controller.submit(req, res)
-      expect(res.redirect).toHaveBeenCalledWith(`/prisoner/${someOffenderNumber}/location-details`)
+      expect(res.redirect).toHaveBeenCalledWith(`http://localhost:3000/prisoner/${someOffenderNumber}/location-details`)
     })
 
     it('should throw error when call to upstream api rejects', async () => {
