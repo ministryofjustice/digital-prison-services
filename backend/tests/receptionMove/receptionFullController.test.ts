@@ -23,6 +23,7 @@ describe('Reception full', () => {
       params: {
         offenderNo: someOffenderNumber,
       },
+      session: { userDetails: { activeCaseLoadId: 'MDI' } },
     }
 
     controller = receptionFullController(prisonApi)
@@ -44,6 +45,7 @@ describe('Reception full', () => {
         offenderName: 'John  Doe',
         offenderNo: 'A12345',
         backUrl: 'refering-url',
+        locationDetailsUrl: 'http://localhost:3000/prisoner/A12345/location-details',
       })
     })
   })

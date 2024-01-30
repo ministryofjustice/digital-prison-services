@@ -28,7 +28,7 @@ export const app = {
   keyworkerMaintenanceMode: process.env.KEYWORKER_MAINTENANCE_MODE === 'true' || false,
   covidUnitsEnabled: process.env.COVID_UNITS_ENABLED === 'true' || false,
   prisonerProfileRedirect: {
-    url: process.env.PRISONER_PROFILE_REDIRECT_URL,
+    url: process.env.PRISONER_PROFILE_REDIRECT_URL || 'http://localhost:3000',
     exemptions: process.env.PRISONER_PROFILE_REDIRECT_EXEMPTIONS || '',
   },
   homepageRedirect: {

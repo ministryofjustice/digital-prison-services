@@ -320,7 +320,7 @@ context('Reception full journey', () => {
     cy.get('[data-test="location-details-link"]')
       .invoke('attr', 'href')
       .then((href) => {
-        expect(href).to.equal('/prisoner/G3878UK/location-details')
+        expect(href).to.equal('/prisoners/G3878UK/cell-history')
       })
   })
 })

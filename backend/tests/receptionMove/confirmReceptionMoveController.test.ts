@@ -21,6 +21,7 @@ describe('Confirm reception move', () => {
     headers: { referer: '' },
     flash: jest.fn(),
     body: {},
+    session: { userDetails: { activeCaseLoadId: 'MDI' } },
   }
   const res = {
     locals: {
@@ -158,7 +159,7 @@ describe('Confirm reception move', () => {
 
       expect(res.render).toHaveBeenCalledWith('receptionMoves/confirmReceptionMove.njk', {
         backUrl: '/prisoner/A12345/reception-move/consider-risks-reception',
-        cancelLinkHref: '/prisoner/A12345/location-details',
+        cancelLinkHref: 'http://localhost:3000/prisoner/A12345/location-details',
         errors: undefined,
         formValues: { comment: undefined },
         offenderName: 'Bob Doe',

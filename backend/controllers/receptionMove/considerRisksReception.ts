@@ -1,7 +1,8 @@
 import { alertFlagLabels, cellMoveAlertCodes } from '../../shared/alertFlagValues'
-import { putLastNameFirst, formatName, formatLocation, hasLength } from '../../utils'
+import { putLastNameFirst, formatName, formatLocation, hasLength, isRedirectCaseLoad } from '../../utils'
 import { getNonAssociationsInEstablishment, translateCsra, userHasAccess } from '../cellMove/cellMoveUtils'
 import logger from '../../log'
+import config from '../../config'
 
 export default ({ oauthApi, prisonApi, movementsService, nonAssociationsApi, logError }) => {
   const view = async (req, res) => {
@@ -129,7 +130,7 @@ export default ({ oauthApi, prisonApi, movementsService, nonAssociationsApi, log
         csraDetailsUrl: `/prisoner/${offenderNo}/cell-move/cell-sharing-risk-assessment-details`,
         displayLinkToPrisonersMostRecentCsra,
         convertedCsra: translateCsra(prisonerDetails.csraClassificationCode),
-        backUrl: `/prisoners/${offenderNo}/location-details`,
+        backUrl: backUrl(activeCaseLoadId, offenderNo),
         hasNonAssociations: nonAssociationsInEstablishment?.length > 0,
         nonAssociationsRows,
         offendersInReception: otherOffenders,
@@ -146,6 +147,7 @@ export default ({ oauthApi, prisonApi, movementsService, nonAssociationsApi, log
   const submit = async (req, res) => {
     const { offenderNo } = req.params
     const { considerRisksReception } = req.body
+    const { activeCaseLoadId } = req.session.userDetails
 
     if (!considerRisksReception) {
       const errors = []
@@ -157,8 +159,14 @@ export default ({ oauthApi, prisonApi, movementsService, nonAssociationsApi, log
     if (considerRisksReception === 'yes') {
       return res.redirect(`/prisoner/${offenderNo}/reception-move/confirm-reception-move`)
     }
-    return res.redirect(`/prisoner/${offenderNo}/location-details`)
+
+    return res.redirect(backUrl(activeCaseLoadId, offenderNo))
   }
+
+  const backUrl = (activeCaseLoadId: string, offenderNo: string) =>
+    isRedirectCaseLoad(activeCaseLoadId)
+      ? `${config.app.prisonerProfileRedirect.url}/prisoner/${offenderNo}/location-details`
+      : `/prisoners/${offenderNo}/cell-history`
 
   return { view, submit }
 }
