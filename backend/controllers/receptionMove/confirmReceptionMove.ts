@@ -98,6 +98,9 @@ export default ({ prisonApi, whereaboutsApi }) => {
         commentText: comment,
       })
 
+      // just to remove formValues out of flash to prevent being consumed in /cell-move/confirm-cell-move
+      req.flash('formValues')
+
       return res.redirect(`/prisoner/${offenderNo}/reception-move/confirmation`)
     } catch (error) {
       logger.error(`Error moving ${offenderNo} to reception`)
