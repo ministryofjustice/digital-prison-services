@@ -60,10 +60,14 @@ export default ({ oauthApi, prisonApi, movementsService, nonAssociationsApi, log
       )
       const offendersInReception = await movementsService.getOffendersInReception(res.locals, activeCaseLoadId)
       const offenderNumbersOfAllInReception = offendersInReception.map((offender) => offender.offenderNo)
-      const offenderCsraStatus = await movementsService.getCsraForMultipleOffenders(
-        res.locals,
-        offenderNumbersOfAllInReception
-      )
+      let offenderCsraStatus = []
+
+      if (offenderNumbersOfAllInReception.length > 0) {
+        offenderCsraStatus = await movementsService.getCsraForMultipleOffenders(
+          res.locals,
+          offenderNumbersOfAllInReception
+        )
+      }
 
       const otherOffenders = offendersInReception
         .sort((left, right) => left.lastName.localeCompare(right.lastName, 'en', { ignorePunctuation: true }))

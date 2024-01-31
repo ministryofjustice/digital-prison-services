@@ -305,6 +305,20 @@ describe('Movement service', () => {
     })
 
     it('should not request extra information if there are no offenders in reception', async () => {
+      prisonApi.getOffendersInReception.mockReturnValue([])
+
+      await movementsServiceFactory(prisonApi, oauthClient, incentivesApi).getOffendersInReception(context, agency)
+
+      expect(prisonApi.getAlertsSystem.mock.calls.length).toBe(0)
+      expect(prisonApi.getRecentMovements.mock.calls.length).toBe(0)
+      expect(incentivesApi.getIepSummaryForBookingIds.mock.calls.length).toBe(0)
+      expect(prisonApi.getAssessments.mock.calls.length).toBe(0)
+      expect(oauthClient.getClientCredentialsTokens.mock.calls.length).toBe(0)
+    })
+
+    it('should not request extra information if offenders in reception are undefined', async () => {
+      prisonApi.getOffendersInReception.mockReturnValue(undefined)
+
       await movementsServiceFactory(prisonApi, oauthClient, incentivesApi).getOffendersInReception(context, agency)
 
       expect(prisonApi.getAlertsSystem.mock.calls.length).toBe(0)

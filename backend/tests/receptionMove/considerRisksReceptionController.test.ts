@@ -16,6 +16,7 @@ const prisonApi = {
   getCsraAssessments: jest.fn(),
   userCaseLoads: jest.fn(),
   getReceptionsWithCapacity: jest.fn(),
+  getOffendersInReception: jest.fn(),
 }
 
 const movementsService = {
@@ -89,6 +90,14 @@ describe('Consider risks reception', () => {
 
   describe('page', () => {
     it('should make the correct api calls', async () => {
+      movementsService.getOffendersInReception.mockResolvedValue([
+        {
+          offenderNo: someOffenderNumber,
+          lastName: 'Smith',
+          alerts: ['RDV', 'RKS', 'OIOM'],
+        },
+      ])
+
       await controller.view(req, res)
       expect(prisonApi.getDetails).toHaveBeenNthCalledWith(
         1,
@@ -101,7 +110,7 @@ describe('Consider risks reception', () => {
       ])
       expect(movementsService.getCsraForMultipleOffenders).toHaveBeenCalledWith(
         { homeUrl: `prisoner/${someOffenderNumber}` },
-        []
+        ['A12345']
       )
       expect(nonAssociationsApi.getNonAssociationsLegacy).toHaveBeenCalledWith(
         { homeUrl: `prisoner/${someOffenderNumber}` },
@@ -115,6 +124,12 @@ describe('Consider risks reception', () => {
       await controller.view(req, res)
       expect(res.redirect).toHaveBeenCalledWith(`/prisoner/${someOffenderNumber}/reception-move/reception-full`)
       expect(logger.info).toBeCalledWith('Can not move to reception as already full to capacity')
+    })
+
+    it('should not request csras if no other offenders in reception', async () => {
+      movementsService.getOffendersInReception.mockResolvedValue([])
+      await controller.view(req, res)
+      expect(movementsService.getCsraForMultipleOffenders).not.toHaveBeenCalled()
     })
 
     it('should check user has correct roles', async () => {
@@ -235,7 +250,7 @@ describe('Consider risks reception', () => {
 
     it('should throw error when call to upstream api rejects', async () => {
       const error = new Error('Network error')
-      movementsService.getCsraForMultipleOffenders.mockRejectedValue(error)
+      movementsService.getOffendersInReception.mockRejectedValue(error)
       await expect(controller.view(req, res)).rejects.toThrowError(error)
       expect(res.locals.homeUrl).toBe(`/prisoner/${someOffenderNumber}`)
       expect(logError).toHaveBeenCalledWith('original-url', error, 'error getting consider-risks-reception')
