@@ -164,7 +164,36 @@ describe('Consider risks reception', () => {
         })
       )
     })
-    it('should populate view model with other prisoners in reception', async () => {
+    it('should populate view model with correct text for one prisoners in reception', async () => {
+      movementsService.getOffendersInReception.mockResolvedValue([
+        {
+          offenderNo: 'A123',
+          firstName: 'Max',
+          lastName: 'Mercedes',
+
+          alerts: [],
+        },
+      ])
+      await controller.view(req, res)
+
+      expect(res.render).toHaveBeenCalledWith(
+        'receptionMoves/considerRisksReception.njk',
+        expect.objectContaining({
+          inReceptionCount: '1 person in reception',
+          offendersInReception: [
+            {
+              alerts: [],
+              csraClassification: 'Not entered',
+              displayCsraLink: undefined,
+              name: 'Mercedes, Max',
+              nonAssociation: false,
+              offenderNo: 'A123',
+            },
+          ],
+        })
+      )
+    })
+    it('should populate view model with other prisoners correctly when more than 1 prisoner in reception', async () => {
       movementsService.getOffendersInReception.mockResolvedValue([
         {
           offenderNo: 'A123',

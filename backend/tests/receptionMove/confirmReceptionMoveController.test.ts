@@ -248,7 +248,7 @@ describe('Confirm reception move', () => {
 
       await controller.post(req, res)
 
-      expect(req.flash).toHaveBeenCalledTimes(1)
+      expect(req.flash).toHaveBeenCalledTimes(2)
       expect(res.redirect).toBeCalledWith('/prisoner/A12345/reception-move/confirmation')
     })
 

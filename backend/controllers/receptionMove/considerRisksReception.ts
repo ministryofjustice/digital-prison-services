@@ -123,6 +123,9 @@ export default ({ oauthApi, prisonApi, movementsService, nonAssociationsApi, log
         comment: nonAssociation.comments || 'Not entered',
       }))
 
+      const personOrPeople = otherOffenders.length === 1 ? 'person' : 'people'
+      const inReceptionCount = `${otherOffenders.length} ${personOrPeople} in reception`
+
       return res.render('receptionMoves/considerRisksReception.njk', {
         reverseOrderPrisonerName: putLastNameFirst(prisonerDetails.firstName, prisonerDetails.lastName).trim(),
         prisonerName: formatName(prisonerDetails.firstName, prisonerDetails.lastName),
@@ -138,7 +141,7 @@ export default ({ oauthApi, prisonApi, movementsService, nonAssociationsApi, log
         hasNonAssociations: nonAssociationsInEstablishment?.length > 0,
         nonAssociationsRows,
         offendersInReception: otherOffenders,
-        inReceptionCount: `${otherOffenders.length} people in reception`,
+        inReceptionCount,
         errors: req.flash('errors'),
       })
     } catch (error) {
