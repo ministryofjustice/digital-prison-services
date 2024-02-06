@@ -122,7 +122,6 @@ const setup = ({
   incentivesApi,
   nonAssociationsApi,
   restrictedPatientApi,
-  adjudicationsApi,
   whereaboutsMaintenanceMode,
 }) => {
   router.use(async (req, res, next) => {
@@ -378,7 +377,6 @@ const setup = ({
       curiousApi,
       incentivesApi,
       restrictedPatientApi,
-      adjudicationsApi,
       nonAssociationsApi,
     })
   )

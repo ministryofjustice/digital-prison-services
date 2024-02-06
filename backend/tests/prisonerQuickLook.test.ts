@@ -59,9 +59,6 @@ describe('prisoner profile quick look', () => {
   }
   const incentivesApi = {} as jest.Mocked<typeof apis.incentivesApi>
   const restrictedPatientApi = {}
-  const adjudicationsApi = {
-    getAdjudicationsForBooking: jest.fn(),
-  }
   const nonAssociationsApi = {} as jest.Mocked<typeof apis.nonAssociationsApi>
 
   const prisonerNonAssociations: PrisonerNonAssociations = {
@@ -148,7 +145,6 @@ describe('prisoner profile quick look', () => {
     incentivesApi.getIepSummaryForBooking = jest.fn().mockResolvedValue({})
     prisonApi.getPositiveCaseNotes = jest.fn().mockResolvedValue({})
     prisonApi.getNegativeCaseNotes = jest.fn().mockResolvedValue({})
-    adjudicationsApi.getAdjudicationsForBooking = jest.fn().mockResolvedValue({})
     nonAssociationsApi.getNonAssociations = jest.fn().mockResolvedValue({})
     prisonApi.getVisitsSummary = jest.fn().mockResolvedValue({})
     prisonApi.getPrisonerVisitBalances = jest.fn().mockResolvedValue({})
@@ -169,7 +165,6 @@ describe('prisoner profile quick look', () => {
       incentivesApi,
       restrictedPatientApi,
       oauthApi,
-      adjudicationsApi,
       nonAssociationsApi,
     })
   })
@@ -531,11 +526,6 @@ describe('prisoner profile quick look', () => {
         expect(res.render).toHaveBeenCalledWith(
           'prisonerProfile/prisonerQuickLook/prisonerQuickLook.njk',
           expect.objectContaining({
-            adjudications: {
-              adjudicationsSectionError: false,
-              active: { label: 'Active adjudications', value: undefined },
-              proven: { label: 'Proven adjudications', value: 0 },
-            },
             incentives: {
               incentivesSectionError: false,
               details: [
@@ -554,47 +544,6 @@ describe('prisoner profile quick look', () => {
         incentivesApi.getIepSummaryForBooking.mockResolvedValue(iepSummaryForBooking)
         prisonApi.getPositiveCaseNotes.mockResolvedValue({ count: 2 })
         prisonApi.getNegativeCaseNotes.mockResolvedValue({ count: 1 })
-        adjudicationsApi.getAdjudicationsForBooking.mockResolvedValue({
-          adjudicationCount: 3,
-          awards: [
-            {
-              sanctionCode: 'STOP_PCT',
-              sanctionCodeDescription: 'Stoppage of Earnings (%)',
-              days: 14,
-              limit: 50,
-              effectiveDate: '2020-04-16',
-              status: 'IMMEDIATE',
-              statusDescription: 'Immediate',
-            },
-            {
-              sanctionCode: 'STOP_EARN',
-              sanctionCodeDescription: 'Stoppage of Earnings (amount)',
-              days: 14,
-              limit: 50,
-              comment: '14x SOE 50%, 14x LOC, 14x LOA 14x LOGYM, 14x LOTV 14x CC',
-              effectiveDate: '2020-04-16',
-              status: 'IMMEDIATE',
-              statusDescription: 'Immediate',
-            },
-            {
-              sanctionCode: 'CC',
-              sanctionCodeDescription: 'Cellular Confinement',
-              days: 14,
-              effectiveDate: '2020-04-16',
-              status: 'SUSP',
-              statusDescription: 'Suspended',
-            },
-            {
-              sanctionCode: 'FORFEIT',
-              sanctionCodeDescription: 'Forfeiture of Privileges',
-              days: 7,
-              comment: '7x LOC, 7x LOA, 7x LOTV',
-              effectiveDate: '2020-04-16',
-              status: 'QUASHED',
-              statusDescription: 'Quashed',
-            },
-          ],
-        })
       })
 
       it('should render the quick look template with the correctly formatted case note and adjudication details', async () => {
@@ -603,36 +552,6 @@ describe('prisoner profile quick look', () => {
         expect(res.render).toHaveBeenCalledWith(
           'prisonerProfile/prisonerQuickLook/prisonerQuickLook.njk',
           expect.objectContaining({
-            adjudications: {
-              adjudicationsSectionError: false,
-              active: {
-                label: 'Active adjudications',
-                value: [
-                  {
-                    days: 14,
-                    durationText: '14 days',
-                    effectiveDate: '16/04/2020',
-                    limit: 50,
-                    sanctionCode: 'STOP_PCT',
-                    sanctionCodeDescription: 'Stoppage of Earnings (50%)',
-                    status: 'IMMEDIATE',
-                    statusDescription: 'Immediate',
-                  },
-                  {
-                    comment: '14x SOE 50%, 14x LOC, 14x LOA 14x LOGYM, 14x LOTV 14x CC',
-                    days: 14,
-                    durationText: '14 days',
-                    effectiveDate: '16/04/2020',
-                    limit: 50,
-                    sanctionCode: 'STOP_EARN',
-                    sanctionCodeDescription: 'Stoppage of Earnings (£50.00)',
-                    status: 'IMMEDIATE',
-                    statusDescription: 'Immediate',
-                  },
-                ],
-              },
-              proven: { label: 'Proven adjudications', value: 3 },
-            },
             incentives: {
               incentivesSectionError: false,
               details: [
@@ -972,7 +891,6 @@ describe('prisoner profile quick look', () => {
       incentivesApi.getIepSummaryForBooking.mockRejectedValue(new Error('Network error'))
       prisonApi.getPositiveCaseNotes.mockRejectedValue(new Error('Network error'))
       prisonApi.getNegativeCaseNotes.mockRejectedValue(new Error('Network error'))
-      adjudicationsApi.getAdjudicationsForBooking.mockRejectedValue(new Error('Network error'))
       prisonApi.getVisitsSummary.mockRejectedValue(new Error('Network error'))
       prisonApi.getPrisonerVisitBalances.mockRejectedValue(new Error('Network error'))
       prisonApi.getEventsForToday.mockRejectedValue(new Error('Network error'))
@@ -1069,45 +987,12 @@ describe('prisoner profile quick look', () => {
     it('should handle api errors when requesting incentive level warnings', async () => {
       prisonApi.getPositiveCaseNotes.mockResolvedValue({ count: 10 })
       incentivesApi.getIepSummaryForBooking.mockResolvedValue(iepSummaryForBooking)
-      adjudicationsApi.getAdjudicationsForBooking.mockResolvedValue({
-        adjudicationCount: 2,
-        awards: [
-          {
-            sanctionCode: 'STOP_PCT',
-            sanctionCodeDescription: 'Stoppage of Earnings (%)',
-            days: 14,
-            limit: 50,
-            effectiveDate: '2020-04-16',
-            status: 'IMMEDIATE',
-            statusDescription: 'Immediate',
-          },
-        ],
-      })
 
       await controller(req, res)
 
       expect(res.render).toHaveBeenCalledWith(
         'prisonerProfile/prisonerQuickLook/prisonerQuickLook.njk',
         expect.objectContaining({
-          adjudications: {
-            adjudicationsSectionError: false,
-            active: {
-              label: 'Active adjudications',
-              value: [
-                {
-                  days: 14,
-                  durationText: '14 days',
-                  effectiveDate: '16/04/2020',
-                  limit: 50,
-                  sanctionCode: 'STOP_PCT',
-                  sanctionCodeDescription: 'Stoppage of Earnings (50%)',
-                  status: 'IMMEDIATE',
-                  statusDescription: 'Immediate',
-                },
-              ],
-            },
-            proven: { label: 'Proven adjudications', value: 2 },
-          },
           incentives: {
             incentivesSectionError: false,
             details: [
@@ -1123,45 +1008,12 @@ describe('prisoner profile quick look', () => {
     it('should handle api errors when requesting incentive encouragements', async () => {
       prisonApi.getNegativeCaseNotes.mockResolvedValue({ count: 10 })
       incentivesApi.getIepSummaryForBooking.mockResolvedValue(iepSummaryForBooking)
-      adjudicationsApi.getAdjudicationsForBooking.mockResolvedValue({
-        adjudicationCount: 2,
-        awards: [
-          {
-            sanctionCode: 'STOP_PCT',
-            sanctionCodeDescription: 'Stoppage of Earnings (%)',
-            days: 14,
-            limit: 50,
-            effectiveDate: '2020-04-16',
-            status: 'IMMEDIATE',
-            statusDescription: 'Immediate',
-          },
-        ],
-      })
 
       await controller(req, res)
 
       expect(res.render).toHaveBeenCalledWith(
         'prisonerProfile/prisonerQuickLook/prisonerQuickLook.njk',
         expect.objectContaining({
-          adjudications: {
-            adjudicationsSectionError: false,
-            active: {
-              label: 'Active adjudications',
-              value: [
-                {
-                  days: 14,
-                  durationText: '14 days',
-                  effectiveDate: '16/04/2020',
-                  limit: 50,
-                  sanctionCode: 'STOP_PCT',
-                  sanctionCodeDescription: 'Stoppage of Earnings (50%)',
-                  status: 'IMMEDIATE',
-                  statusDescription: 'Immediate',
-                },
-              ],
-            },
-            proven: { label: 'Proven adjudications', value: 2 },
-          },
           incentives: {
             incentivesSectionError: false,
             details: [
@@ -1177,45 +1029,12 @@ describe('prisoner profile quick look', () => {
     it('should handle api errors when requesting last incentive level review', async () => {
       prisonApi.getPositiveCaseNotes.mockResolvedValue({ count: 10 })
       prisonApi.getNegativeCaseNotes.mockResolvedValue({ count: 10 })
-      adjudicationsApi.getAdjudicationsForBooking.mockResolvedValue({
-        adjudicationCount: 2,
-        awards: [
-          {
-            sanctionCode: 'STOP_PCT',
-            sanctionCodeDescription: 'Stoppage of Earnings (%)',
-            days: 14,
-            limit: 50,
-            effectiveDate: '2020-04-16',
-            status: 'IMMEDIATE',
-            statusDescription: 'Immediate',
-          },
-        ],
-      })
 
       await controller(req, res)
 
       expect(res.render).toHaveBeenCalledWith(
         'prisonerProfile/prisonerQuickLook/prisonerQuickLook.njk',
         expect.objectContaining({
-          adjudications: {
-            adjudicationsSectionError: false,
-            active: {
-              label: 'Active adjudications',
-              value: [
-                {
-                  days: 14,
-                  durationText: '14 days',
-                  effectiveDate: '16/04/2020',
-                  limit: 50,
-                  sanctionCode: 'STOP_PCT',
-                  sanctionCodeDescription: 'Stoppage of Earnings (50%)',
-                  status: 'IMMEDIATE',
-                  statusDescription: 'Immediate',
-                },
-              ],
-            },
-            proven: { label: 'Proven adjudications', value: 2 },
-          },
           incentives: {
             incentivesSectionError: false,
             details: [
@@ -1238,11 +1057,6 @@ describe('prisoner profile quick look', () => {
       expect(res.render).toHaveBeenCalledWith(
         'prisonerProfile/prisonerQuickLook/prisonerQuickLook.njk',
         expect.objectContaining({
-          adjudications: {
-            adjudicationsSectionError: true,
-            active: { label: 'Active adjudications' },
-            proven: { label: 'Proven adjudications', value: 'Unable to show this detail' },
-          },
           incentives: {
             incentivesSectionError: false,
             details: [
@@ -1261,13 +1075,6 @@ describe('prisoner profile quick look', () => {
       expect(res.render).toHaveBeenCalledWith(
         'prisonerProfile/prisonerQuickLook/prisonerQuickLook.njk',
         expect.objectContaining({
-          adjudications: {
-            adjudicationsSectionError: true,
-            active: {
-              label: 'Active adjudications',
-            },
-            proven: { label: 'Proven adjudications', value: 'Unable to show this detail' },
-          },
           incentives: {
             incentivesSectionError: true,
             details: [
@@ -1503,7 +1310,6 @@ describe('prisoner profile quick look', () => {
       incentivesApi.getIepSummaryForBooking = jest.fn().mockResolvedValue({})
       prisonApi.getPositiveCaseNotes = jest.fn().mockResolvedValue({})
       prisonApi.getNegativeCaseNotes = jest.fn().mockResolvedValue({})
-      adjudicationsApi.getAdjudicationsForBooking = jest.fn().mockResolvedValue({})
       prisonApi.getVisitsSummary = jest.fn().mockResolvedValue({})
       prisonApi.getPrisonerVisitBalances = jest.fn().mockResolvedValue({})
       prisonApi.getEventsForToday = jest.fn().mockResolvedValue([])
@@ -1533,11 +1339,6 @@ describe('prisoner profile quick look', () => {
       expect(res.render).toHaveBeenCalledWith(
         'prisonerProfile/prisonerQuickLook/prisonerQuickLook.njk',
         expect.objectContaining({
-          adjudications: {
-            adjudicationsSectionError: false,
-            active: { label: 'Active adjudications', value: undefined },
-            proven: { label: 'Proven adjudications', value: 0 },
-          },
           incentives: {
             incentivesSectionError: false,
             details: [

@@ -27,7 +27,6 @@ const restrictedPatientApi = require('./integration-tests/mockApis/restrictedPat
 const offenderSearch = require('./integration-tests/mockApis/offenderSearch')
 const complexity = require('./integration-tests/mockApis/complexity')
 const curiousApi = require('./integration-tests/mockApis/curiousApi')
-const adjudicationsApi = require('./integration-tests/mockApis/adjudications')
 
 const { stubScenario, resetStubs } = require('./integration-tests/mockApis/wiremock')
 const components = require('./integration-tests/mockApis/components')
@@ -199,7 +198,6 @@ module.exports = defineConfig({
           iepSummary,
           positiveCaseNotes,
           negativeCaseNotes,
-          adjudications,
           prisonerNonAssociations,
           visitsSummary,
           visitBalances,
@@ -214,7 +212,6 @@ module.exports = defineConfig({
             incentivesApi.stubGetIepSummaryForBooking(iepSummary),
             prisonApi.stubPositiveCaseNotes(positiveCaseNotes),
             prisonApi.stubNegativeCaseNotes(negativeCaseNotes),
-            adjudicationsApi.stubAdjudicationsForBooking(adjudications),
             nonAssociationsApi.stubGetPrisonerNonAssociations(prisonerNonAssociations),
             prisonApi.stubVisitsSummary(visitsSummary),
             prisonApi.stubPrisonerVisitBalances(visitBalances),
@@ -230,7 +227,6 @@ module.exports = defineConfig({
             incentivesApi.stubGetIepSummaryForBooking(null, 500),
             prisonApi.stubPositiveCaseNotes(null, 500),
             prisonApi.stubNegativeCaseNotes(null, 500),
-            adjudicationsApi.stubAdjudicationsForBooking(null, 500),
             prisonApi.stubVisitsSummary(null, 500),
             prisonApi.stubPrisonerVisitBalances(null, 500),
             prisonApi.stubEventsForToday([], 500),
@@ -493,15 +489,6 @@ module.exports = defineConfig({
         stubActivityLocationsConnectionResetFault: () => prisonApi.stubActivityLocationsConnectionResetFault(),
         stubGetAttendancesForBookings: ({ agencyId, timeSlot, date, data }) =>
           whereabouts.stubGetAttendancesForBookings(agencyId, timeSlot, date, data),
-        stubGetAdjudicationDetails: (adjudicationDetails) =>
-          adjudicationsApi.stubGetAdjudicationDetails(adjudicationDetails),
-        stubAdjudicationFindingTypes: (types) => prisonApi.stubAdjudicationFindingTypes(types),
-        stubAdjudications: ({ response, headers }) => adjudicationsApi.stubAdjudications(response, headers),
-        verifyAdjudicationsHistory: ({ offenderNo, agencyId, finding, fromDate, toDate, size }) =>
-          adjudicationsApi.verifyAdjudicationsHistory({ offenderNo, agencyId, finding, fromDate, toDate, size }),
-        verifyAlertsBooking: ({ bookingId, alertType, from, to, alertStatus, page, sort, size }) =>
-          prisonApi.verifyAlertsBookingGet({ bookingId, alertType, from, to, alertStatus, page, sort, size }),
-        resetAdjudicationsStub: () => adjudicationsApi.resetAdjudicationsStub(),
         stubDocuments: ({ offenderNo, response }) => delius.stubDocuments(offenderNo, response),
         stubDocument: ({ documentId, content }) => delius.stubDocument(documentId, content),
         stubGetIepSummaryForBooking: (iepSummary) => incentivesApi.stubGetIepSummaryForBooking(iepSummary),

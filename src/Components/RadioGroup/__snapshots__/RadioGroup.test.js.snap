@@ -2,15 +2,15 @@
 
 exports[`<RadioGroup /> should display image if one is provided 1`] = `
 <div
-  className="src__StyledFieldset-g1up10-0 ivoXAL"
+  className="src__StyledFieldset-dd88ty-0 hslrOs"
 >
   <span
-    className="src__StyledLabelText-sc-1lbxenh-0 blgtWS"
+    className="src__StyledLabelText-sc-12l0n4z-0 bhgkMV"
   >
     Does this test pass?
   </span>
   <span
-    className="src__StyledError-kkeaok-0 itduba"
+    className="src__StyledError-q8g4f0-0 bdKiGy"
   >
     Select an option
   </span>
@@ -53,10 +53,10 @@ exports[`<RadioGroup /> should display image if one is provided 1`] = `
 
 exports[`<RadioGroup /> should match the default snapshot 1`] = `
 <div
-  className="src__StyledFieldset-g1up10-0 hoWNzn"
+  className="src__StyledFieldset-dd88ty-0 jXpWQg"
 >
   <span
-    className="src__StyledLabelText-sc-1lbxenh-0 blgtWS"
+    className="src__StyledLabelText-sc-12l0n4z-0 bhgkMV"
   >
     Does this test pass?
   </span>
@@ -99,15 +99,15 @@ exports[`<RadioGroup /> should match the default snapshot 1`] = `
 
 exports[`<RadioGroup /> should match the with hint text snapshot 1`] = `
 <div
-  className="src__StyledFieldset-g1up10-0 hoWNzn"
+  className="src__StyledFieldset-dd88ty-0 jXpWQg"
 >
   <span
-    className="src__StyledLabelText-sc-1lbxenh-0 blgtWS"
+    className="src__StyledLabelText-sc-12l0n4z-0 bhgkMV"
   >
     Does this test pass?
   </span>
   <span
-    className="src__StyledHint-tq1z5r-0 iSwvjy"
+    className="src__StyledHint-sc-1qn4br2-0 iazGYO"
   >
     Supporting text to help
   </span>
@@ -150,15 +150,15 @@ exports[`<RadioGroup /> should match the with hint text snapshot 1`] = `
 
 exports[`<RadioGroup /> should match the with meta and error snapshot 1`] = `
 <div
-  className="src__StyledFieldset-g1up10-0 ivoXAL"
+  className="src__StyledFieldset-dd88ty-0 hslrOs"
 >
   <span
-    className="src__StyledLabelText-sc-1lbxenh-0 blgtWS"
+    className="src__StyledLabelText-sc-12l0n4z-0 bhgkMV"
   >
     Does this test pass?
   </span>
   <span
-    className="src__StyledError-kkeaok-0 itduba"
+    className="src__StyledError-q8g4f0-0 bdKiGy"
   >
     Select an option
   </span>

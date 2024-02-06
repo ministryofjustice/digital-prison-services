@@ -76,7 +76,6 @@ export default ({
     incentivesApi,
     oauthApi,
     restrictedPatientApi,
-    adjudicationsApi,
     nonAssociationsApi,
   }: {
     prisonerProfileService
@@ -86,7 +85,6 @@ export default ({
     incentivesApi: typeof apis.incentivesApi
     oauthApi
     restrictedPatientApi
-    adjudicationsApi
     nonAssociationsApi: typeof apis.nonAssociationsApi
   }) =>
   async (req, res) => {
@@ -120,7 +118,6 @@ export default ({
       iepSummaryResponse,
       positiveCaseNotesResponse,
       negativeCaseNotesResponse,
-      adjudicationsResponse,
       nonAssociationsResponse,
       visitsSummaryResponse,
       visitBalancesResponse,
@@ -135,7 +132,6 @@ export default ({
         incentivesApi.getIepSummaryForBooking(systemContext, bookingId),
         prisonApi.getPositiveCaseNotes(context, bookingId, dateThreeMonthsAgo, today),
         prisonApi.getNegativeCaseNotes(context, bookingId, dateThreeMonthsAgo, today),
-        adjudicationsApi.getAdjudicationsForBooking(systemContext, bookingId),
         nonAssociationsApi.getNonAssociations(systemContext, offenderNo),
         prisonApi.getVisitsSummary(context, bookingId),
         prisonApi.getPrisonerVisitBalances(context, offenderNo),
@@ -152,7 +148,6 @@ export default ({
       iepSummary,
       positiveCaseNotes,
       negativeCaseNotes,
-      adjudications,
       prisonerNonAssociations,
       visitsSummary,
       visitBalances,
@@ -166,7 +161,6 @@ export default ({
       iepSummaryResponse,
       positiveCaseNotesResponse,
       negativeCaseNotesResponse,
-      adjudicationsResponse,
       nonAssociationsResponse,
       visitsSummaryResponse,
       visitBalancesResponse,
@@ -309,25 +303,15 @@ export default ({
         ],
       },
       adjudications: {
-        // @ts-expect-error ts-migrate(2339) FIXME: Property 'error' does not exist on type 'unknown'.
-        adjudicationsSectionError: Boolean(adjudicationsResponse.error),
+        adjudicationsSectionError: true,
         active: {
           label: 'Active adjudications',
-          ...(adjudications && {
-            value:
-              adjudications.awards &&
-              adjudications.awards
-                .map((award) => formatAward(award))
-                .filter(({ status }) => status && !status.startsWith('SUSP') && status !== 'QUASHED'),
-          }),
+          value: unableToShowDetailMessage,
         },
-        proven: {
-          label: 'Proven adjudications',
-          // @ts-expect-error ts-migrate(2339) FIXME: Property 'error' does not exist on type 'unknown'.
-          value: adjudicationsResponse.error
-            ? unableToShowDetailMessage
-            : (adjudications && adjudications.adjudicationCount) || 0,
-        },
+      },
+      proven: {
+        label: 'Proven adjudications',
+        value: unableToShowDetailMessage,
       },
       nonAssociations: {
         // @ts-expect-error ts-migrate(2339) FIXME: Property 'error' does not exist on type 'unknown'.
