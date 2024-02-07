@@ -10,15 +10,7 @@ export default () => {
 
   router.get('/offenders/:offenderNo', (req, res) => res.redirect(301, `/prisoner/${req.params.offenderNo}`))
 
-  router.get('/offenders/:offenderNo/adjudications', (req, res) =>
-    res.redirect(301, `/prisoner/${req.params.offenderNo}/adjudications`)
-  )
-
   router.get('/offenders/:offenderNo/quick-look', (req, res) => res.redirect(301, `/prisoner/${req.params.offenderNo}`))
-
-  router.get('/api/offenders/:offenderNo/adjudications/:adjudicationNumber', (req, res) =>
-    res.redirect(301, `/prisoner/${req.params.offenderNo}/adjudications/${req.params.adjudicationNumber}`)
-  )
 
   router.get(['/offenders/:offenderNo/iep-details', '/offenders/:offenderNo/incentive-level-details'], (req, res) =>
     res.redirect(301, `/prisoner/${req.params.offenderNo}/incentive-level-details`)

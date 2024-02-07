@@ -13,8 +13,6 @@ import prisonerSchedule from '../controllers/prisonerProfile/prisonerSchedule'
 import prisonerProfessionalContacts from '../controllers/prisonerProfile/prisonerProfessionalContacts'
 import prisonerCellHistory from '../controllers/prisonerProfile/prisonerCellHistory'
 import prisonerLocationHistory from '../controllers/prisonerProfile/prisonerLocationHistory'
-import prisonerAdjudicationDetails from '../controllers/prisonerProfile/prisonerAdjudicationDetails'
-import adjudicationsController from '../controllers/prisonerProfile/adjudicationHistory'
 import prisonerIncentiveLevelDetails from '../controllers/prisonerProfile/prisonerIncentiveLevelDetails'
 import prisonerChangeIncentiveLevelDetails from '../controllers/prisonerProfile/prisonerChangeIncentiveLevelDetails'
 import prisonerCsraHistory from '../controllers/prisonerProfile/prisonerCsraHistory'
@@ -29,7 +27,6 @@ import prisonerFinanceServiceFactory from '../services/prisonerFinanceService'
 import personServiceFactory from '../services/personService'
 import paginationService from '../services/paginationService'
 import referenceCodesServiceFactory from '../controllers/reference-codes-service'
-import adjudicationsHistoryService from '../services/adjudicationHistory'
 import coursesQualifications from '../controllers/prisonerProfile/prisonerCoursesQualificationsDetails'
 import learnerEmployabilitySkills from '../controllers/prisonerProfile/learnerEmployabilitySkillsDetails'
 import workInsidePrison from '../controllers/prisonerProfile/prisonerWorkInsidePrisonDetails'
@@ -57,7 +54,6 @@ const controller = ({
   curiousApi,
   incentivesApi,
   restrictedPatientApi,
-  adjudicationsApi,
   nonAssociationsApi,
 }) => {
   const prisonerProfileService = prisonerProfileServiceFactory({
@@ -78,7 +74,6 @@ const controller = ({
   const personService = personServiceFactory(prisonApi)
   const prisonerFinanceService = prisonerFinanceServiceFactory(prisonApi)
   const referenceCodesService = referenceCodesServiceFactory(prisonApi)
-  const adjudicationHistoryService = adjudicationsHistoryService(prisonApi, adjudicationsApi)
   const esweService = EsweService.create(curiousApi, systemOauthClient, prisonApi, whereaboutsApi)
 
   router.get(
@@ -93,7 +88,6 @@ const controller = ({
         systemOauthClient,
         incentivesApi,
         restrictedPatientApi,
-        adjudicationsApi,
         nonAssociationsApi,
       }),
     })
@@ -201,25 +195,6 @@ const controller = ({
   router.get(
     '/location-history',
     prisonerLocationHistory({ prisonApi, whereaboutsApi, caseNotesApi, systemOauthClient })
-  )
-
-  router.get(
-    '/adjudications/:adjudicationNumber',
-    prisonerAdjudicationDetails({ prisonApi, oauthApi, systemOauthClient, restrictedPatientApi, adjudicationsApi })
-  )
-
-  router.use(
-    '/adjudications',
-    adjudicationsController({
-      adjudicationHistoryService,
-      paginationService,
-      prisonApi,
-      oauthApi,
-      systemOauthClient,
-      restrictedPatientApi,
-      // @ts-expect-error ts-migrate(2345) FIXME: Argument of type '{ adjudicationHistoryService: { ... Remove this comment to see the full error message
-      logError,
-    })
   )
 
   router.get(

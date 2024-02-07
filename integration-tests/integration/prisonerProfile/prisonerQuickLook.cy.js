@@ -460,15 +460,6 @@ context('Prisoner quick look', () => {
           expect($summaryValues.get(2).innerText).to.contain('15 August 2018')
           expect($summaryValues.get(2).innerText).to.match(/\d+ days overdue/)
         })
-
-      cy.get('[data-test="adjudications-summary"]')
-        .find('dd')
-        .then(($summaryValues) => {
-          expect($summaryValues.get(0).innerText).to.eq('3')
-          expect($summaryValues.get(1).innerText).to.eq(
-            '14 days Stoppage of Earnings (50%)\n16/04/2020\n14 days Stoppage of Earnings (£50.00)\n14x SOE 50%, 14x LOC, 14x LOA 14x LOGYM, 14x LOTV 14x CC\n16/04/2020'
-          )
-        })
     })
 
     it('Should show correct Visits details', () => {
@@ -533,7 +524,6 @@ context('Prisoner quick look', () => {
       cy.get('[data-test="tabs-alerts"]').should('contain.text', 'Alerts')
       cy.get('[data-test="tabs-case-notes"]').should('contain.text', 'Case notes')
       cy.get('[data-test="tabs-sentence-release"]').should('contain.text', 'Sentence and release')
-      cy.get('[data-test="adjudication-history-link"]').should('contain.text', 'View adjudication history')
       cy.get('[data-test="csra-link"]')
         .should('contain.text', 'View details of CSRA')
         .should('have.attr', 'href')
@@ -610,7 +600,6 @@ context('Prisoner quick look', () => {
       cy.visit(`/prisoner/${offenderNo}`)
 
       cy.get('[data-test="tabs-case-notes"]').should('not.exist')
-      cy.get('[data-test="adjudication-history-link"]').should('not.exist')
       cy.get('[data-test="incentive-details-link"]').should('not.exist')
     })
   })
@@ -631,7 +620,6 @@ context('Prisoner quick look', () => {
       cy.visit(`/prisoner/${offenderNo}`)
 
       cy.get('[data-test="tabs-case-notes"]').should('not.exist')
-      cy.get('[data-test="adjudication-history-link"]').should('not.exist')
     })
   })
 
@@ -994,7 +982,6 @@ context('When a user can view inactive bookings', () => {
     cy.visit(`/prisoner/${offenderNo}`)
 
     cy.get('[data-test="tabs-case-notes"]').should('contain.text', 'Case notes')
-    cy.get('[data-test="adjudication-history-link"]').should('contain.text', 'View adjudication history')
     cy.get('[data-test="incentive-details-link"]').should('contain.text', 'View incentive level details')
   })
 })

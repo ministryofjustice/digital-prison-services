@@ -74,7 +74,7 @@ context('A user can view alerts for a prisoner', () => {
     it('Users can view inactive alerts', () => {
       cy.task('stubAlertsForBooking', inactiveAlerts)
       cy.visit('/prisoner/G3878UK/alerts')
-      cy.task('verifyAlertsBooking', {
+      cy.task('verifyAlertsBookingGet', {
         bookingId: 14,
         alertType: '',
         from: '',
@@ -111,7 +111,7 @@ context('A user can view alerts for a prisoner', () => {
       filterForm.toFilter().type('30/11/2020', { force: true }).type('{esc}', { force: true })
       filterForm.applyButton().click()
 
-      cy.task('verifyAlertsBooking', {
+      cy.task('verifyAlertsBookingGet', {
         bookingId: 14,
         alertType: 'M',
         from: '2020-08-05',
