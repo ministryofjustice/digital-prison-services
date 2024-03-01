@@ -6,14 +6,15 @@
     border: 3px solid;
     padding: 5px 10px;
     margin-left: 0;
-    margin-right: 5px;
-    margin-bottom: 5px;
+    margin-right: 10px;
+    margin-bottom: 10px;
     font-size: 14px;
     font-weight: bold;
     text-align: center;
     line-height: 1;
     min-width: 100px;
     user-select: none;
+    border-radius: 5px;
   }
 
   @media print {
@@ -33,6 +34,10 @@
   @media screen {
     display: flex;
     flex-wrap: wrap;
+  }
+
+  li {
+    margin-bottom: 10px;
   }
 }
 

@@ -159,6 +159,8 @@ export const profileAlertCodes = [
   'USU',
   'URS',
   'PVN',
+  'RKS',
+  'VIP',
 ]
 
 export type AlertLabelFlag = {

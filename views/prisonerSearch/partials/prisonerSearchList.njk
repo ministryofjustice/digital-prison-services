@@ -14,7 +14,7 @@
     { text: prisoner.assignedLivingUnitDesc },
     { text: prisoner.iepLevel },
     { text: prisoner.age },
-    { html: alertFlags(prisoner.alerts, newLine=true) + categoryFlag('', prisoner.categoryCode, false) }
+    { html: alertFlags(prisoner.alerts, newLine=false) + categoryFlag('', prisoner.categoryCode, false) }
   ]), rows) %}
 {% endfor %}
 
@@ -48,7 +48,8 @@
         }
       },
       {
-        text: "Relevant alerts"
+        text: "Relevant alerts",
+        classes: "govuk-!-width-one-quarter"
       }
     ],
     rows: rows,
