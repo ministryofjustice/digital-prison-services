@@ -26,7 +26,6 @@ export const alertFlagLabels = [
     alertCodes: ['HID'],
     classes: 'alert-status alert-status--disability',
     label: 'Hidden disability',
-    img: '/images/Disability_icon.png',
   },
   { alertCodes: ['XEL'], classes: 'alert-status alert-status--elist', label: 'E-list' },
   {
