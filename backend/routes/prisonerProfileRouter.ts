@@ -13,7 +13,6 @@ import prisonerSchedule from '../controllers/prisonerProfile/prisonerSchedule'
 import prisonerProfessionalContacts from '../controllers/prisonerProfile/prisonerProfessionalContacts'
 import prisonerCellHistory from '../controllers/prisonerProfile/prisonerCellHistory'
 import prisonerLocationHistory from '../controllers/prisonerProfile/prisonerLocationHistory'
-import prisonerIncentivesRedirect from '../controllers/prisonerProfile/prisonerIncentivesRedirect'
 import prisonerCsraHistory from '../controllers/prisonerProfile/prisonerCsraHistory'
 import prisonerCsraReview from '../controllers/prisonerProfile/prisonerCsraReview'
 import prisonerWorkAndSkills from '../controllers/prisonerProfile/prisonerWorkAndSkills'
@@ -195,9 +194,6 @@ const controller = ({
     '/location-history',
     prisonerLocationHistory({ prisonApi, whereaboutsApi, caseNotesApi, systemOauthClient })
   )
-
-  router.get('/incentive-level-details', prisonerIncentivesRedirect())
-  router.get('/incentive-level-details/change-incentive-level', prisonerIncentivesRedirect())
   router.get('/prisoner-finance-details/damage-obligations', prisonerDamageObligations({ prisonApi }))
   router.get('/prisoner-finance-details/private-cash', prisonerPrivateCash({ prisonApi, prisonerFinanceService }))
   router.get('/prisoner-finance-details/spends', prisonerSpends({ prisonApi, prisonerFinanceService }))

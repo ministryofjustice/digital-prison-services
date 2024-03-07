@@ -16,6 +16,17 @@ export default () => {
     res.redirect(301, `${config.apis.incentives.ui_url}/incentive-reviews/prisoner/${req.params.offenderNo}/`)
   )
 
+  router.get('/prisoner/:offenderNo/incentive-level-details', (req, res) =>
+    res.redirect(301, `${config.apis.incentives.ui_url}/incentive-reviews/prisoner/${req.params.offenderNo}`)
+  )
+
+  router.get('/prisoner/:offenderNo/change-incentive-level', (req, res) =>
+    res.redirect(
+      301,
+      `${config.apis.incentives.ui_url}/incentive-reviews/prisoner/${req.params.offenderNo}/change-incentive-level`
+    )
+  )
+
   router.get('/videolink', (req, res) => {
     res.redirect(301, config.apis.bookVideoLink.url)
   })
