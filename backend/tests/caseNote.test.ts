@@ -676,7 +676,7 @@ describe('case note management', () => {
             profileUrl: '/prisoner/ABC123',
           },
           caseNotesUrl: '/prisoner/ABC123/case-notes',
-          recordIncentiveLevelUrl: '/prisoner/ABC123/incentive-level-details/change-incentive-level',
+          recordIncentiveLevelUrl: `${config.apis.incentives.ui_url}/incentive-reviews/prisoner/ABC123/change-incentive-level`,
         })
       )
     })
