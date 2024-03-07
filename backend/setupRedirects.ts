@@ -20,7 +20,7 @@ export default () => {
     res.redirect(301, `${config.apis.incentives.ui_url}/incentive-reviews/prisoner/${req.params.offenderNo}`)
   )
 
-  router.get('/prisoner/:offenderNo/change-incentive-level', (req, res) =>
+  router.get('/prisoner/:offenderNo/incentive-level-details/change-incentive-level', (req, res) =>
     res.redirect(
       301,
       `${config.apis.incentives.ui_url}/incentive-reviews/prisoner/${req.params.offenderNo}/change-incentive-level`
