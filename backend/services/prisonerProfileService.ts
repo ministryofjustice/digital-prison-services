@@ -32,6 +32,7 @@ export default ({
     apis: {
       calculateReleaseDates: { ui_url: calculateReleaseDatesUrl },
       categorisation: { ui_url: categorisationUrl },
+      incentives: { ui_url: incentivesUrl },
       pathfinder: { ui_url: pathfinderUrl },
       soc: { ui_url: socUrl, enabled: socEnabled },
       useOfForce: { prisons: useOfForcePrisons, ui_url: useOfForceUrl },
@@ -238,6 +239,7 @@ export default ({
       csraReviewDate: csraClassificationDate && moment(csraClassificationDate).format('DD/MM/YYYY'),
       displayRetentionLink,
       incentiveLevel: iepDetails && iepDetails[0] && iepDetails[0].iepLevel,
+      incentivesUrl,
       keyWorkerLastSession:
         keyworkerSessions && keyworkerSessions[0] && moment(keyworkerSessions[0].latestCaseNote).format('D MMMM YYYY'),
       keyWorkerName:

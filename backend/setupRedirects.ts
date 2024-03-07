@@ -13,7 +13,7 @@ export default () => {
   router.get('/offenders/:offenderNo/quick-look', (req, res) => res.redirect(301, `/prisoner/${req.params.offenderNo}`))
 
   router.get(['/offenders/:offenderNo/iep-details', '/offenders/:offenderNo/incentive-level-details'], (req, res) =>
-    res.redirect(301, `/prisoner/${req.params.offenderNo}/incentive-level-details`)
+    res.redirect(301, `${config.apis.incentives.ui_url}/incentive-reviews/prisoner/${req.params.offenderNo}/`)
   )
 
   router.get('/videolink', (req, res) => {

@@ -13,8 +13,7 @@ import prisonerSchedule from '../controllers/prisonerProfile/prisonerSchedule'
 import prisonerProfessionalContacts from '../controllers/prisonerProfile/prisonerProfessionalContacts'
 import prisonerCellHistory from '../controllers/prisonerProfile/prisonerCellHistory'
 import prisonerLocationHistory from '../controllers/prisonerProfile/prisonerLocationHistory'
-import prisonerIncentiveLevelDetails from '../controllers/prisonerProfile/prisonerIncentiveLevelDetails'
-import prisonerChangeIncentiveLevelDetails from '../controllers/prisonerProfile/prisonerChangeIncentiveLevelDetails'
+import prisonerIncentivesRedirect from '../controllers/prisonerProfile/prisonerIncentivesRedirect'
 import prisonerCsraHistory from '../controllers/prisonerProfile/prisonerCsraHistory'
 import prisonerCsraReview from '../controllers/prisonerProfile/prisonerCsraReview'
 import prisonerWorkAndSkills from '../controllers/prisonerProfile/prisonerWorkAndSkills'
@@ -197,22 +196,8 @@ const controller = ({
     prisonerLocationHistory({ prisonApi, whereaboutsApi, caseNotesApi, systemOauthClient })
   )
 
-  router.get(
-    '/incentive-level-details',
-    // @ts-expect-error ts-migrate(2345) FIXME: Argument of type '{ prisonApi: any; oauthApi: any;... Remove this comment to see the full error message
-    prisonerIncentiveLevelDetails({ prisonApi, incentivesApi, oauthApi, systemOauthClient, logError })
-  )
-  router.get(
-    '/incentive-level-details/change-incentive-level',
-    // @ts-expect-error ts-migrate(2345) FIXME: Argument of type '{ prisonApi: any; logError: any;... Remove this comment to see the full error message
-    prisonerChangeIncentiveLevelDetails({ prisonApi, incentivesApi, systemOauthClient, logError }).index
-  )
-  router.post(
-    '/incentive-level-details/change-incentive-level',
-    // @ts-expect-error ts-migrate(2345) FIXME: Argument of type '{ prisonApi: any; logError: any;... Remove this comment to see the full error message
-    prisonerChangeIncentiveLevelDetails({ prisonApi, incentivesApi, systemOauthClient, logError }).post
-  )
-
+  router.get('/incentive-level-details', prisonerIncentivesRedirect())
+  router.get('/incentive-level-details/change-incentive-level', prisonerIncentivesRedirect())
   router.get('/prisoner-finance-details/damage-obligations', prisonerDamageObligations({ prisonApi }))
   router.get('/prisoner-finance-details/private-cash', prisonerPrivateCash({ prisonApi, prisonerFinanceService }))
   router.get('/prisoner-finance-details/spends', prisonerSpends({ prisonApi, prisonerFinanceService }))
