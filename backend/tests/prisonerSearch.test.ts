@@ -207,6 +207,7 @@ describe('Prisoner search', () => {
             { checked: false, text: 'Gang member', value: ['XGANG'] },
             { checked: false, text: 'Hidden disability', value: ['HID'] },
             { checked: false, text: 'Hostage taker', value: ['XHT'] },
+            { checked: false, text: 'Isolated', value: ['VIP'] },
             { checked: false, text: 'No one-to-one', value: ['RNO121'] },
             { checked: false, text: 'PEEP', value: ['PEEP'] },
             { checked: false, text: 'Protective Isolation Unit', value: ['UPIU'] },
@@ -215,6 +216,7 @@ describe('Prisoner search', () => {
             { checked: false, text: 'Refusing to shield', value: ['URS'] },
             { checked: false, text: 'Reverse Cohorting Unit', value: ['URCU'] },
             { checked: false, text: 'Risk to females', value: ['XRF'] },
+            { checked: false, text: 'Risk to known adults', value: ['RKS'] },
             { checked: false, text: 'Risk to LGBT', value: ['RTP', 'RLG'] },
             { checked: false, text: 'Shielding Unit', value: ['USU'] },
             { checked: false, text: 'Staff assaulter', value: ['XSA'] },
@@ -228,16 +230,6 @@ describe('Prisoner search', () => {
             { text: 'Houseblock 2', value: 'MDI-2' },
             { text: 'Court', value: 'MDI-COURT' },
           ],
-        })
-      )
-
-      expect(res.render).toHaveBeenCalledWith(
-        'prisonerSearch/prisonerSearch.njk',
-        expect.objectContaining({
-          alertOptions: expect.not.arrayContaining([
-            { checked: false, text: 'Isolated', value: ['VIP'] },
-            { checked: false, text: 'Risk to known adults', value: ['RKS'] },
-          ]),
         })
       )
     })

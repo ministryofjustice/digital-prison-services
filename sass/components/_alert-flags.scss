@@ -6,14 +6,13 @@
     border: 3px solid;
     padding: 5px 10px;
     margin-left: 0;
-    margin-right: 5px;
-    margin-bottom: 5px;
-    font-size: 14px;
-    font-weight: bold;
+    margin-right: 10px;
+    margin-bottom: 10px;
+    font-size: 16px;
     text-align: center;
     line-height: 1;
-    min-width: 100px;
     user-select: none;
+    border-radius: 5px;
   }
 
   @media print {
@@ -34,6 +33,10 @@
     display: flex;
     flex-wrap: wrap;
   }
+
+  li {
+    margin-bottom: 10px;
+  }
 }
 
 .alerts-list-no-flex {
@@ -45,7 +48,6 @@
   @extend %status-style;
 
   @media screen {
-    text-transform: uppercase;
     min-height: 30px;
   }
 
@@ -59,152 +61,118 @@
   }
 
   &--acct {
-    color: #d34700;
     border-color: #d34700;
   }
 
   &--assault {
-    color: #4c2c92;
     border-color: #4c2c92;
   }
 
   &--disability {
-    color: #2b88c8;
     border-color: #2b88c8;
   }
 
   &--arsonist {
-    color: #df3034;
     border-color: #df3034;
   }
 
   &--elist {
-    color: #28a197;
     border-color: #28a197;
   }
 
   &--risk-females {
-    color: #6f71af;
     border-color: #6f71af;
   }
 
   &--tact {
-    color: #d53880;
     border-color: #d53880;
   }
 
   &--corruptor {
-    color: #b10e1e;
     border-color: #b10e1e;
   }
 
   &--chemical-attacker {
-    color: #69831e;
     border-color: #69831e;
   }
 
   &--concerted-indiscipline {
-    color: #444;
     border-color: #444;
   }
 
   &--racist {
-    color: #8f5f11;
     border-color: #8f5f11;
   }
 
   &--risk-lgbt {
-    color: #912b88;
     border-color: #912b88;
   }
 
   &--hostage-taker {
-    color: #c6545f;
     border-color: #c6545f;
   }
 
   &--controlled-unlock {
-    color: #2e358b;
     border-color: #2e358b;
   }
 
   &--gang-member {
-    color: #005f9e;
     border-color: #005f9e;
   }
 
   &--csip {
-    color: #4c2c92;
     border-color: #4c2c92;
   }
 
   &--veteran {
-    color: #006435;
     border-color: #006435;
   }
 
   &--care-experienced {
-    color: #3f90ae;
     border-color: #3f90ae;
   }
 
   &--acct-post-closure {
-    color: #f47738;
     border: 3px dashed #f47738;
   }
 
   &--conflict {
-    color: #800000;
     border-color: #800000;
   }
 
   &--no-one-to-one {
-    color: #903;
     border-color: #903;
   }
 
   &--quarantined {
-    color: #fff;
     border-color: #330;
-    background-color: #330;
   }
 
   &--reverse-cohorting-unit {
-    color: #fff;
     border-color: mix(white, #00703c, 20%);
-    background-color: mix(white, #00703c, 20%);
   }
 
   &--protective-isolation-unit {
-    color: #fff;
     border-color: #006637;
-    background-color: #006637;
   }
 
   &--shielding-unit {
-    color: #fff;
     border-color: #004424;
-    background-color: #004424;
   }
 
   &--refusing-to-shield {
-    color: #fff;
     border-color: #b58840;
-    background-color: #b58840;
   }
 
   &--risk-to-known-adults {
-    color: #003078;
     border-color: #003078;
   }
 
   &--isolated-prisoner {
-    color: #00753F;
     border-color: #00753F;
   }
 
   &--visor {
-    color: #003078;
     border-color: #003078;
   }
 }

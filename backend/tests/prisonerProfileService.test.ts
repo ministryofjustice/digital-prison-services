@@ -244,6 +244,11 @@ describe('prisoner profile service', () => {
             img: '/images/Arsonist_icon.png',
             label: 'Arsonist',
           },
+          {
+            alertCodes: ['VIP'],
+            classes: 'alert-status alert-status--isolated-prisoner',
+            label: 'Isolated',
+          },
         ],
         age: undefined,
         dateOfBirth: undefined,
@@ -290,14 +295,6 @@ describe('prisoner profile service', () => {
         hasDivergenceSupport: false,
         indeterminateSentence: false,
       })
-
-      expect(getPrisonerProfileData).toEqual(
-        expect.objectContaining({
-          alerts: expect.not.arrayContaining([
-            { alertCodes: ['VIP'], classes: 'alert-status alert-status--isolated-prisoner', label: 'Isolated' },
-          ]),
-        })
-      )
     })
 
     it('should return the correct prisoner information when some data is missing', async () => {

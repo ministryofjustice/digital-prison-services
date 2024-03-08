@@ -93,7 +93,7 @@ context('Prisoner search', () => {
             .then(($tableRows) => {
               cy.get($tableRows).its('length').should('eq', 3) // 2 results plus table header
               expect($tableRows.get(1).innerText).to.contain(
-                '\tSaunders, John\tA1234BC\tUNIT-1\tStandard\t29\t\nARSONIST\n\nCAT A'
+                '\tSaunders, John\tA1234BC\tUNIT-1\tStandard\t29\t\nArsonist\nCAT A'
               )
               expect($tableRows.get(2).innerText).to.contain('\tSmith, Steve\tB4567CD\tUNIT-2\tStandard\t30\t')
             })
@@ -115,7 +115,7 @@ context('Prisoner search', () => {
             })
         })
       })
-      it('will silently not find any prisoners when prison is not in any caseload assighned to user', () => {
+      it('will silently not find any prisoners when prison is not in any caseload assigned to user', () => {
         // stubbed - but actually it will never be clalled
         cy.task('stubPSInmates', {
           locationId: 'BXI',
