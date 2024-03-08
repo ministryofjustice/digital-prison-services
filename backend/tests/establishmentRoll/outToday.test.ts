@@ -72,7 +72,7 @@ describe('In today', () => {
             category: 'C',
           },
           {
-            alerts: [{ alertCodes: ['XR'], classes: 'alert-status alert-status--racist', label: 'Racist' }],
+            alerts: [{ alertCodes: ['XR'], classes: 'alert-status alert-status--security', label: 'Racist' }],
             dob: '31/12/1980',
             name: 'Aaaaa, Aaaaa',
             offenderNo: 'G0000AA',

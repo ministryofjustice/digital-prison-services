@@ -916,31 +916,26 @@ describe('Scheduled moves controller', () => {
         expectCourtEventsToContain(res, {
           relevantAlertFlagLabels: [
             {
-              classes: 'alert-status alert-status--acct',
-              img: null,
+              classes: 'alert-status alert-status--self-harm',
               label: 'ACCT open',
             },
             {
-              classes: 'alert-status alert-status--acct-post-closure',
-              img: null,
+              classes: 'alert-status alert-status--self-harm',
               label: 'ACCT post closure',
             },
             {
-              classes: 'alert-status alert-status--controlled-unlock',
-              img: null,
+              classes: 'alert-status alert-status--security',
               label: 'Controlled unlock',
             },
             {
-              classes: 'alert-status alert-status--hostage-taker',
-              img: null,
+              classes: 'alert-status alert-status--security',
               label: 'Hostage taker',
             },
             {
-              classes: 'alert-status alert-status--disability',
-              img: '/images/Disability_icon.png',
+              classes: 'alert-status alert-status--medical',
               label: 'PEEP',
             },
-            { classes: 'alert-status alert-status--risk-females', img: null, label: 'Risk to females' },
+            { classes: 'alert-status alert-status--security', label: 'Risk to females' },
           ],
         })
       })
@@ -1266,31 +1261,26 @@ describe('Scheduled moves controller', () => {
         expectReleaseEventsToContain(res, {
           relevantAlertFlagLabels: [
             {
-              classes: 'alert-status alert-status--acct',
-              img: null,
+              classes: 'alert-status alert-status--self-harm',
               label: 'ACCT open',
             },
             {
-              classes: 'alert-status alert-status--acct-post-closure',
-              img: null,
+              classes: 'alert-status alert-status--self-harm',
               label: 'ACCT post closure',
             },
             {
-              classes: 'alert-status alert-status--controlled-unlock',
-              img: null,
+              classes: 'alert-status alert-status--security',
               label: 'Controlled unlock',
             },
             {
-              classes: 'alert-status alert-status--hostage-taker',
-              img: null,
+              classes: 'alert-status alert-status--security',
               label: 'Hostage taker',
             },
             {
-              classes: 'alert-status alert-status--disability',
-              img: '/images/Disability_icon.png',
+              classes: 'alert-status alert-status--medical',
               label: 'PEEP',
             },
-            { classes: 'alert-status alert-status--risk-females', img: null, label: 'Risk to females' },
+            { classes: 'alert-status alert-status--security', label: 'Risk to females' },
           ],
         })
       })
@@ -1576,31 +1566,26 @@ describe('Scheduled moves controller', () => {
         expectTransferEventsToContain(res, {
           relevantAlertFlagLabels: [
             {
-              classes: 'alert-status alert-status--acct',
-              img: null,
+              classes: 'alert-status alert-status--self-harm',
               label: 'ACCT open',
             },
             {
-              classes: 'alert-status alert-status--acct-post-closure',
-              img: null,
+              classes: 'alert-status alert-status--self-harm',
               label: 'ACCT post closure',
             },
             {
-              classes: 'alert-status alert-status--controlled-unlock',
-              img: null,
+              classes: 'alert-status alert-status--security',
               label: 'Controlled unlock',
             },
             {
-              classes: 'alert-status alert-status--hostage-taker',
-              img: null,
+              classes: 'alert-status alert-status--security',
               label: 'Hostage taker',
             },
             {
-              classes: 'alert-status alert-status--disability',
-              img: '/images/Disability_icon.png',
+              classes: 'alert-status alert-status--medical',
               label: 'PEEP',
             },
-            { classes: 'alert-status alert-status--risk-females', img: null, label: 'Risk to females' },
+            { classes: 'alert-status alert-status--security', label: 'Risk to females' },
           ],
         })
       })
