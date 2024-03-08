@@ -75,7 +75,7 @@ describe('En route test', () => {
             departed: '<div>01:01</div>10/10/2010',
             from: 'Hull (HMP)',
             reason: 'Normal transfer',
-            alerts: [{ alertCodes: ['XR'], classes: 'alert-status alert-status--racist', label: 'Racist' }],
+            alerts: [{ alertCodes: ['XR'], classes: 'alert-status alert-status--security', label: 'Racist' }],
             category: 'A',
           },
           {
