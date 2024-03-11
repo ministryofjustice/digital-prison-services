@@ -30,14 +30,14 @@ describe('setup redirects', () => {
   it('should redirect to the server rendered incentive level page when offenders iep-details url is used', (done) => {
     agent
       .get('/offenders/ABC123/iep-details')
-      .expect('location', '/prisoner/ABC123/incentive-level-details')
+      .expect('location', `${config.apis.incentives.ui_url}/incentive-reviews/prisoner/ABC123/`)
       .expect(301, done)
   })
 
   it('should redirect to the server rendered incentive level page when offenders incentive-level-details url is used', (done) => {
     agent
       .get('/offenders/ABC123/incentive-level-details')
-      .expect('location', '/prisoner/ABC123/incentive-level-details')
+      .expect('location', `${config.apis.incentives.ui_url}/incentive-reviews/prisoner/ABC123/`)
       .expect(301, done)
   })
 })

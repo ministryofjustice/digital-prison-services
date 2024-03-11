@@ -340,7 +340,7 @@ export const caseNoteFactory = ({ prisonApi, caseNotesApi, oauthApi, systemOauth
       breadcrumbText: 'Record incentive level',
       offenderDetails,
       caseNotesUrl: `${offenderDetails.profileUrl}/case-notes`,
-      recordIncentiveLevelUrl: `${offenderDetails.profileUrl}/incentive-level-details/change-incentive-level`,
+      recordIncentiveLevelUrl: `${config.apis.incentives.ui_url}/incentive-reviews/prisoner/${offenderNo}/change-incentive-level`,
     })
   }
 
