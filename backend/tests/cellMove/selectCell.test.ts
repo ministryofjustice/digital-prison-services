@@ -153,16 +153,15 @@ describe('Select a cell', () => {
         'cellMove/selectCell.njk',
         expect.objectContaining({
           alerts: [
-            { alertCodes: ['HA'], classes: 'alert-status alert-status--acct', label: 'ACCT open' },
+            { alertCodes: ['HA'], classes: 'alert-status alert-status--self-harm', label: 'ACCT open' },
             {
               alertCodes: ['HA1'],
-              classes: 'alert-status alert-status--acct-post-closure',
+              classes: 'alert-status alert-status--self-harm',
               label: 'ACCT post closure',
             },
             {
               alertCodes: ['PEEP'],
-              classes: 'alert-status alert-status--disability',
-              img: '/images/Disability_icon.png',
+              classes: 'alert-status alert-status--medical',
               label: 'PEEP',
             },
           ],
@@ -599,8 +598,7 @@ describe('Select a cell', () => {
                   alerts: [
                     {
                       alertCodes: ['PEEP'],
-                      classes: 'alert-status alert-status--disability',
-                      img: '/images/Disability_icon.png',
+                      classes: 'alert-status alert-status--medical',
                       label: 'PEEP',
                     },
                   ],

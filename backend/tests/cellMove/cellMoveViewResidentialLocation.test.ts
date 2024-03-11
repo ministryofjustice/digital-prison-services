@@ -203,8 +203,7 @@ describe('View Residential Location', () => {
               alerts: [
                 {
                   alertCodes: ['XA'],
-                  classes: 'alert-status alert-status--arsonist',
-                  img: '/images/Arsonist_icon.png',
+                  classes: 'alert-status alert-status--security',
                   label: 'Arsonist',
                 },
               ],

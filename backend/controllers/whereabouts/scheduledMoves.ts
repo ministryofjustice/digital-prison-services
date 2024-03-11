@@ -92,7 +92,6 @@ export default ({ prisonApi, offenderSearchApi }) => {
     return alertFlagLabels
       .filter((flag) => flag.alertCodes.some((code) => relevantAlertCodesForScheduledMoves.includes(code)))
       .map((alert) => ({
-        img: alert.img || null,
         label: alert.label,
         classes: alert.classes,
       }))

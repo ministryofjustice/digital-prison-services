@@ -81,7 +81,7 @@ describe('Currently out', () => {
             offenderNo: 'A1234AA',
           },
           {
-            alerts: [{ alertCodes: ['XR'], classes: 'alert-status alert-status--racist', label: 'Racist' }],
+            alerts: [{ alertCodes: ['XR'], classes: 'alert-status alert-status--security', label: 'Racist' }],
             comment: 'Comments',
             currentLocation: 'Somewhere Else',
             dob: '31/12/1980',

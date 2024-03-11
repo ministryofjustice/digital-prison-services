@@ -60,88 +60,8 @@
     }
   }
 
-  &--acct {
-    border-color: #d34700;
-  }
-
-  &--assault {
-    border-color: #4c2c92;
-  }
-
-  &--disability {
-    border-color: #2b88c8;
-  }
-
-  &--arsonist {
-    border-color: #df3034;
-  }
-
   &--elist {
     border-color: #28a197;
-  }
-
-  &--risk-females {
-    border-color: #6f71af;
-  }
-
-  &--tact {
-    border-color: #d53880;
-  }
-
-  &--corruptor {
-    border-color: #b10e1e;
-  }
-
-  &--chemical-attacker {
-    border-color: #69831e;
-  }
-
-  &--concerted-indiscipline {
-    border-color: #444;
-  }
-
-  &--racist {
-    border-color: #8f5f11;
-  }
-
-  &--risk-lgbt {
-    border-color: #912b88;
-  }
-
-  &--hostage-taker {
-    border-color: #c6545f;
-  }
-
-  &--controlled-unlock {
-    border-color: #2e358b;
-  }
-
-  &--gang-member {
-    border-color: #005f9e;
-  }
-
-  &--csip {
-    border-color: #4c2c92;
-  }
-
-  &--veteran {
-    border-color: #006435;
-  }
-
-  &--care-experienced {
-    border-color: #3f90ae;
-  }
-
-  &--acct-post-closure {
-    border: 3px dashed #f47738;
-  }
-
-  &--conflict {
-    border-color: #800000;
-  }
-
-  &--no-one-to-one {
-    border-color: #903;
   }
 
   &--quarantined {
@@ -174,6 +94,34 @@
 
   &--visor {
     border-color: #003078;
+  }
+
+  &--security {
+    border-color: #003078;
+  }
+
+  &--risk {
+    border-color: #d4351c;
+  }
+
+  &--self-harm {
+    border-color: #f47738;
+  }
+
+  &--medical {
+    border-color: #5694ca;
+  }
+
+  &--other {
+    border-color: #d53880;
+  }
+
+  &--ex-armed-forces {
+    border-color: #85994b;
+  }
+
+  &--care-leaver {
+    border-color: #00703c;
   }
 }
 

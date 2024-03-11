@@ -70,7 +70,7 @@ describe('In reception controller', () => {
               label: 'Risk to known adults',
             },
             {
-              classes: 'alert-status alert-status--care-experienced',
+              classes: 'alert-status alert-status--care-leaver',
               label: 'Care experienced',
             },
             {
@@ -78,7 +78,7 @@ describe('In reception controller', () => {
               label: 'ViSOR',
             },
             {
-              classes: 'alert-status alert-status--acct',
+              classes: 'alert-status alert-status--self-harm',
               label: 'ACCT open',
             },
           ],
