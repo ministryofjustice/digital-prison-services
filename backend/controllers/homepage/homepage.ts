@@ -17,6 +17,7 @@ const {
     secureSocialVideoCalls,
     welcomePeopleIntoPrison,
     mercurySubmit,
+    imsService,
     manageRestrictedPatients,
     checkMyDiary,
     incentives,
@@ -37,6 +38,10 @@ const getTasks = ({ activeCaseLoadId, locations, staffId, whereaboutsConfig, key
 
   const isMercurySubmitLive = () => {
     return mercurySubmit.liveDate && mercurySubmit.liveDate < Date.now()
+  }
+
+  const isImsServiceLive = () => {
+    return imsService.liveDate && imsService.liveDate < Date.now()
   }
 
   const getAdjudicationsEnabledPrisons = (adjudicationsEnabledPrisons) => {
@@ -275,6 +280,21 @@ const getTasks = ({ activeCaseLoadId, locations, staffId, whereaboutsConfig, key
           (mercurySubmit.privateBetaDate &&
             mercurySubmit.privateBetaDate < Date.now() &&
             mercurySubmit.enabled_prisons.split(',').includes(activeCaseLoadId))),
+    },
+    {
+      id: isImsServiceLive() ? 'manage-intelligence' : 'manage-intelligence',
+      heading: isImsServiceLive() ? 'Manage Intelligence' : 'Manage Intelligence (Private Beta)',
+      description: isImsServiceLive()
+        ? 'Access to the new IMS Service form'
+        : 'Access to the new IMS Service form for those establishments enrolled in the private beta',
+      href: imsService.url,
+      roles: null,
+      enabled: () =>
+        imsService.url &&
+        (isImsServiceLive() ||
+          (imsService.privateBetaDate &&
+            imsService.privateBetaDate < Date.now() &&
+            imsService.enabled_prisons.split(',').includes(activeCaseLoadId))),
     },
     {
       id: 'manage-restricted-patients',
