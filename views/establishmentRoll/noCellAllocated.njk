@@ -33,7 +33,7 @@
     { text: prisoner.previousCell },
     { text: prisoner.timeOut },
     { text: prisoner.movedBy },
-    { html: '<a href="/prisoner/' + prisoner.offenderNo + '/cell-move/search-for-cell" class="govuk-link" data-test="allocate-cell-link">Allocate cell</a>' } if userCanAllocateCell
+    { html: '<a href="' + prisoner.allocateCellUrl + '" class="govuk-link" data-test="allocate-cell-link">Allocate cell</a>' } if userCanAllocateCell
   ]), rows) %}
 {% endfor %}
 

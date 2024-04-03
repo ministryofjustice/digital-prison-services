@@ -1,5 +1,6 @@
 import { Request, Response } from 'express'
 import { formatName, putLastNameFirst, getTime, stripAgencyPrefix } from '../../utils'
+import config from '../../config'
 
 export default ({ oauthApi, systemOauthClient, prisonApi }) =>
   async (req: Partial<Request>, res: Partial<Response>) => {
@@ -70,6 +71,7 @@ export default ({ oauthApi, systemOauthClient, prisonApi }) =>
             previousCell: stripAgencyPrefix(previousLocation.description, activeCaseLoad.caseLoadId),
             name: putLastNameFirst(prisonerDetails.firstName, prisonerDetails.lastName),
             timeOut: getTime(previousLocation.assignmentEndDateTime),
+            allocateCellUrl: `${config.apis.changeSomeonesCell.ui_url}/prisoner/${offenderNo}/cell-move/search-for-cell`,
           }
         }),
         userCanAllocateCell: userRoles?.some((role) => role.roleCode === 'CELL_MOVE'),

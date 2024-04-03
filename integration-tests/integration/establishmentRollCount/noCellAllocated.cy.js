@@ -185,7 +185,7 @@ context('with permissions', () => {
       cy.get($allocateCellLink).its('length').should('eq', 1)
       cy.get($allocateCellLink.get(0))
         .should('have.attr', 'href')
-        .should('include', '/prisoner/A7777DY/cell-move/search-for-cell')
+        .should('include', 'http://change-someones-cell/prisoner/A7777DY/cell-move/search-for-cell')
     })
   })
 })

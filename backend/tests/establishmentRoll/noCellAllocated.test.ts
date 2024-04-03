@@ -173,6 +173,7 @@ describe('No cell allocated', () => {
             offenderNo: 'A7777DY',
             previousCell: 'RECP',
             timeOut: '16:56',
+            allocateCellUrl: 'http://localhost:3002/prisoner/A7777DY/cell-move/search-for-cell',
           },
         ],
         userCanAllocateCell: true,
