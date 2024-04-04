@@ -247,6 +247,9 @@ export const apis = {
     timeoutSeconds: toNumber(process.env.COMPONENT_API_TIMEOUT_SECONDS) || 5,
     latestFeatures: process.env.COMPONENT_API_LATEST === 'true',
   },
+  changeSomeonesCell: {
+    ui_url: process.env.CHANGE_SOMEONES_CELL_URL || 'http://localhost:3002',
+  },
 }
 export const notifications = {
   enabled: process.env.NOTIFY_ENABLED ? process.env.NOTIFY_ENABLED === 'true' : true,

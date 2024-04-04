@@ -86,6 +86,7 @@ generic-service:
     PREPARE_SOMEONE_FOR_RELEASE_URL: https://resettlement-passport-ui.hmpps.service.justice.gov.uk
     PRISONER_PROFILE_REDIRECT_EXEMPTIONS: ""
     HOMEPAGE_REDIRECT_EXEMPTIONS: ""
+    CHANGE_SOMEONES_CELL_URL: https://change-someones-cell.prison.service.justice.gov.uk
 
   allowlist:
     sscl-blackpool: 31.121.5.27/32
