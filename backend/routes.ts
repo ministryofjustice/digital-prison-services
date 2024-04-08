@@ -57,6 +57,7 @@ import { saveBackLink } from './controllers/backLink'
 import maintenancePage from './controllers/maintenancePage'
 import prisonerProfileBackLinkRedirect from './controllers/prisonerProfile/prisonerProfileBackLinkRedirect'
 import config from './config'
+import changeSomeonesCellHasMovedRouter from './routes/changeSomeonesCellHasMovedRouter'
 
 const {
   app: { covidUnitsEnabled },
@@ -322,30 +323,15 @@ const setup = ({
     retentionReasonsRouter({ prisonApi, dataComplianceApi, logError })
   )
 
-  router.use(
-    '/prisoner/:offenderNo/cell-move',
-    cellMoveRouter({
-      oauthApi,
-      systemOauthClient,
-      prisonApi,
-      whereaboutsApi,
-      caseNotesApi,
-      nonAssociationsApi,
-    })
-  )
+  router.use('/change-someones-cell', (req, res) => res.redirect('/change-someones-cell-has-moved'))
 
-  router.use(
-    '/prisoner/:offenderNo/reception-move',
-    receptionMoveRouter({
-      oauthApi,
-      prisonApi,
-      systemOauthClient,
-      incentivesApi,
-      nonAssociationsApi,
-      whereaboutsApi,
-      logError,
-    })
-  )
+  router.use('/change-someones-cell/*', (req, res) => res.redirect('/change-someones-cell-has-moved'))
+
+  router.use('/prisoner/:offenderNo/cell-move*', (req, res) => res.redirect('/change-someones-cell-has-moved'))
+
+  router.use('/prisoner/:offenderNo/reception-move*', (req, res) => res.redirect('/change-someones-cell-has-moved'))
+
+  router.use('/change-someones-cell-has-moved', changeSomeonesCellHasMovedRouter())
 
   router.use(
     '/establishment-roll',
@@ -381,15 +367,7 @@ const setup = ({
     })
   )
 
-  router.use(
-    '/change-someones-cell',
-    permit(oauthApi, ['CELL_MOVE']),
-    changeSomeonesCellRouter({
-      systemOauthClient,
-      prisonApi,
-      whereaboutsApi,
-    })
-  )
+  router.use('/change-someones-cell*', permit(oauthApi, ['CELL_MOVE']), changeSomeonesCellHasMovedRouter())
 
   router.use('/current-covid-units', isCovidUnitsEnabled, covidRouter(systemOauthClient, prisonApi))
 
