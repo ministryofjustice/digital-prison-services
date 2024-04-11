@@ -84,6 +84,18 @@ context('Homepage', () => {
         )
     })
 
+    it('should show IMS Service private Beta task with correct content', () => {
+      const page = homepagePage.goTo()
+
+      page.imsServicePrivateBeta().tile().should('exist')
+      page.imsServicePrivateBeta().title().contains('Submit an Intelligence Report (Private Beta)')
+      page.imsServicePrivateBeta().link().should('have.attr', 'href', 'https://manage-intelligence.prison.service.justice.gov.uk/')
+      page
+        .imsServicePrivateBeta()
+        .description()
+        .contains('Access to the new IMS Service for those establishments enrolled in the private beta')
+    })
+
     it('should show Mercury Submit private Beta task with correct content', () => {
       const page = homepagePage.goTo()
 
