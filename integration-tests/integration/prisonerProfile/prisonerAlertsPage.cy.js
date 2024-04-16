@@ -46,17 +46,17 @@ context('A user can view alerts for a prisoner', () => {
     },
   ]
 
-  before(() => {
-    cy.clearCookies()
+  beforeEach(() => {
     cy.task('resetAndStubTokenVerification')
     cy.task('stubSignIn', { username: 'ITAG_USER', caseload: 'MDI', roles: ['ROLE_UPDATE_ALERT'] })
-    cy.signIn()
+    cy.session('hmpps-session-dev', () => {
+      cy.clearCookies()
+      cy.signIn()
+    })
   })
 
   context('When a prisoner is in a users caseload', () => {
     beforeEach(() => {
-      // Maintain session between the two tests.
-      Cypress.Cookies.preserveOnce('hmpps-session-dev')
       const iepSummary = {}
       const caseNoteSummary = {}
       cy.task('stubPrisonerProfileHeaderData', {
@@ -151,8 +151,6 @@ context('A user can view alerts for a prisoner', () => {
 
   context('When a prisoner is NOT in a users caseload', () => {
     beforeEach(() => {
-      // Maintain session between the two tests.
-      Cypress.Cookies.preserveOnce('hmpps-session-dev')
       const iepSummary = {}
       const caseNoteSummary = {}
       cy.task('stubPrisonerProfileHeaderData', {

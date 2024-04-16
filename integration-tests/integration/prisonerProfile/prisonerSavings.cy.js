@@ -39,16 +39,17 @@ context('Prisoner savings', () => {
     },
   ]
 
-  before(() => {
-    cy.clearCookies()
+  beforeEach(() => {
     cy.task('reset')
     cy.task('stubSignIn', { username: 'ITAG_USER', caseload: 'MDI' })
-    cy.signIn()
+    cy.session('hmpps-session-dev', () => {
+      cy.clearCookies()
+      cy.signIn()
+    })
   })
 
   context('With data', () => {
     beforeEach(() => {
-      Cypress.Cookies.preserveOnce('hmpps-session-dev')
       cy.task('stubOffenderBasicDetails', { bookingId: 1, firstName: 'John', lastName: 'Smith', agencyId: 'MDI' })
       cy.task('stubGetTransactionHistory', {
         accountCode: 'savings',
@@ -109,7 +110,6 @@ context('Prisoner savings', () => {
 
   context('Without data', () => {
     beforeEach(() => {
-      Cypress.Cookies.preserveOnce('hmpps-session-dev')
       cy.task('stubOffenderBasicDetails', { bookingId: 1, firstName: 'John', lastName: 'Smith', agencyId: 'MDI' })
       cy.task('stubGetTransactionHistory', {
         accountCode: 'savings',

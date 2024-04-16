@@ -51,19 +51,21 @@ context('Unacceptable absences details page', () => {
     }
   }
 
-  context('no data available', () => {
-    before(() => {
+  beforeEach(() => {
+    cy.task('reset')
+    cy.task('stubSignIn', { username: 'ITAG_USER', caseload: 'MDI' })
+    cy.session('hmpps-session-dev', () => {
       cy.clearCookies()
-      cy.task('reset')
-      cy.task('stubSignIn', { username: 'ITAG_USER', caseload: 'MDI' })
       cy.signIn()
+    })
+  })
+
+  context('no data available', () => {
+    beforeEach(() => {
       cy.task('stubOffenderBasicDetails', { bookingId: 1, firstName: 'John', lastName: 'Smith', agencyId: 'MDI' })
       cy.task('stubPrisons', prisons)
     })
 
-    beforeEach(() => {
-      Cypress.Cookies.preserveOnce('hmpps-session-dev')
-    })
     it('should show correct content and no table', () => {
       cy.visit(`/prisoner/${offenderNo}/unacceptable-absences`)
       cy.get('h1').contains('John Smith’s unacceptable absences for the last 6')
@@ -100,18 +102,11 @@ context('Unacceptable absences details page', () => {
       numberOfElements: 1,
       empty: false,
     }
-    before(() => {
-      cy.clearCookies()
-      cy.task('reset')
-      cy.task('stubSignIn', { username: 'ITAG_USER', caseload: 'MDI' })
-      cy.signIn()
+
+    beforeEach(() => {
       cy.task('stubOffenderBasicDetails', { bookingId: 1, firstName: 'John', lastName: 'Smith', agencyId: 'MDI' })
       cy.task('stubPrisons', prisons)
       cy.task('stubGetUnacceptableAbsenceDetail', { offenderNo, unacceptableAbsence: dummyWorkHistory })
-    })
-
-    beforeEach(() => {
-      Cypress.Cookies.preserveOnce('hmpps-session-dev')
     })
 
     it('should show the correct content and number of results', () => {
@@ -171,18 +166,10 @@ context('Unacceptable absences details page', () => {
       empty: false,
     }
 
-    before(() => {
-      cy.clearCookies()
-      cy.task('reset')
-      cy.task('stubSignIn', { username: 'ITAG_USER', caseload: 'MDI' })
-      cy.signIn()
+    beforeEach(() => {
       cy.task('stubOffenderBasicDetails', { bookingId: 1, firstName: 'John', lastName: 'Smith', agencyId: 'MDI' })
       cy.task('stubPrisons', prisons)
       cy.task('stubKeyworkerMigrated')
-    })
-
-    beforeEach(() => {
-      Cypress.Cookies.preserveOnce('hmpps-session-dev')
     })
 
     it('should render the page with correct data', () => {

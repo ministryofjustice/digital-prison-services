@@ -1,7 +1,7 @@
 const moment = require('moment')
 const offenderBasicDetails = require('../../mockApis/responses/offenderBasicDetails.json')
 const offenderFullDetails = require('../../mockApis/responses/offenderFullDetails.json')
-const { quickLookFullDetails } = require('../prisonerProfile/prisonerQuickLook.cy')
+const { quickLookFullDetails } = require('../../mockData/quickLookFullDetails')
 
 context('Prisoner search', () => {
   const inmate1Iep = {
@@ -9,30 +9,28 @@ context('Prisoner search', () => {
     iepLevel: 'Standard',
   }
 
-  before(() => {
-    cy.clearCookies()
-    cy.task('resetAndStubTokenVerification')
-    cy.task('stubSignIn', {
-      username: 'ITAG_USER',
-      caseload: 'MDI',
-      caseloads: [
-        {
-          caseLoadId: 'MDI',
-          description: 'Moorland',
-          currentlyActive: true,
-        },
-        {
-          caseLoadId: 'WWI',
-          description: 'Wandsworth',
-          currentlyActive: false,
-        },
-      ],
-    })
-    cy.signIn()
-  })
-
   beforeEach(() => {
-    Cypress.Cookies.preserveOnce('hmpps-session-dev')
+    cy.session('hmpps-prisoner-dev', () => {
+      cy.clearCookies()
+      cy.task('resetAndStubTokenVerification')
+      cy.task('stubSignIn', {
+        username: 'ITAG_USER',
+        caseload: 'MDI',
+        caseloads: [
+          {
+            caseLoadId: 'MDI',
+            description: 'Moorland',
+            currentlyActive: true,
+          },
+          {
+            caseLoadId: 'WWI',
+            description: 'Wandsworth',
+            currentlyActive: false,
+          },
+        ],
+      })
+      cy.signIn()
+    })
   })
 
   context('Search using search api', () => {

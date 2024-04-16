@@ -74,15 +74,13 @@ const history = {
 }
 
 context('No cell allocated page', () => {
-  before(() => {
-    cy.clearCookies()
+  beforeEach(() => {
     cy.task('resetAndStubTokenVerification')
     cy.task('stubSignIn', { username: 'ITAG_USER', caseload: 'MDI' })
-    cy.signIn()
-  })
-
-  beforeEach(() => {
-    Cypress.Cookies.preserveOnce('hmpps-session-dev')
+    cy.session('hmpps-session-dev', () => {
+      cy.clearCookies()
+      cy.signIn()
+    })
     cy.task('stubUserMe', {})
     cy.task('stubUserCaseLoads')
     cy.task('stubInmates', inmates)

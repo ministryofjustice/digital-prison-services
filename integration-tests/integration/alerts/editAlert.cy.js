@@ -8,14 +8,13 @@ const offenderNo = 'A12345'
 const alertId = 1
 
 context('A user can add an appointment', () => {
-  before(() => {
-    cy.clearCookies()
-    cy.task('resetAndStubTokenVerification')
-    cy.task('stubSignIn', { username: 'ITAG_USER', caseload: 'MDI', roles: ['ROLE_UPDATE_ALERT'] })
-    cy.signIn()
-  })
   beforeEach(() => {
-    Cypress.Cookies.preserveOnce('hmpps-session-dev')
+    cy.session('hmpps-session-dev', () => {
+      cy.clearCookies()
+      cy.task('resetAndStubTokenVerification')
+      cy.task('stubSignIn', { username: 'ITAG_USER', caseload: 'MDI', roles: ['ROLE_UPDATE_ALERT'] })
+      cy.signIn()
+    })
     cy.task('stubOffenderBasicDetails', offenderBasicDetails)
     cy.task('stubOffenderFullDetails', offenderFullDetails)
     cy.task('stubAlertTypes')

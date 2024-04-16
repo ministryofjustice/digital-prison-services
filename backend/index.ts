@@ -125,6 +125,7 @@ app.use(
   })
 )
 app.use(setupReactRoutes())
+// app.use('/$', homepageController({ ...apis, logError }))
 app.use('/$', homepageRedirect(homepageController({ ...apis, logError })))
 app.use(pageNotFound)
 app.use(errorHandler({ logError }))

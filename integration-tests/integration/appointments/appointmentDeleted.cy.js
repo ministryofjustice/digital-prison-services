@@ -2,25 +2,25 @@ const DeletedSingleAppointmentPage = require('../../pages/appointments/deletedSi
 const DeletedMultipleAppointmentsPage = require('../../pages/appointments/deletedMultipleAppointmentsPage')
 
 context('Deleted appointment page', () => {
-  before(() => {
-    cy.clearCookies()
-    cy.task('resetAndStubTokenVerification')
-    cy.task('stubSignIn', {
-      username: 'ITAG_USER',
-      caseload: 'WWI',
-      caseloads: [
-        {
-          caseLoadId: 'WWI',
-          description: 'Wandsworth',
-          currentlyActive: true,
-        },
-      ],
-    })
-    cy.signIn()
-  })
+  before(() => {})
 
   beforeEach(() => {
-    Cypress.Cookies.preserveOnce('hmpps-session-dev')
+    cy.session('hmpps-session-dev', () => {
+      cy.clearCookies()
+      cy.task('resetAndStubTokenVerification')
+      cy.task('stubSignIn', {
+        username: 'ITAG_USER',
+        caseload: 'WWI',
+        caseloads: [
+          {
+            caseLoadId: 'WWI',
+            description: 'Wandsworth',
+            currentlyActive: true,
+          },
+        ],
+      })
+      cy.signIn()
+    })
   })
 
   it('A user successfully deletes a single appointment then navigates to view all appointments page', () => {

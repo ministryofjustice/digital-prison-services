@@ -83,8 +83,15 @@ context('Sign in functionality', () => {
 
   it('Token verification failure clears user session', () => {
     cy.task('stubSignIn', {})
+    cy.task('stubPSInmates', {
+      locationId: 'MDI',
+      count: 0,
+      data: [],
+    })
+    cy.task('stubUserLocations')
     cy.signIn()
-    const homePage = HomePage.verifyOnPage()
+    cy.visit(`/prisoner-search?feature=new`)
+    const homePage = HomePage.verifyOnPage('Prisoner search results')
     homePage.fallbackHeaderUserName().contains('J. Stuart')
     cy.task('stubVerifyToken', false)
 
@@ -94,6 +101,7 @@ context('Sign in functionality', () => {
     cy.task('stubVerifyToken', true)
     cy.task('stubUserMe', { name: 'Bobby Brown' })
     cy.signIn()
+    cy.visit(`/prisoner-search?feature=new`)
 
     homePage.fallbackHeaderUserName().contains('B. Brown')
   })

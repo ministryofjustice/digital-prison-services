@@ -5,45 +5,36 @@ const { businessPrimary, businessNonPrimary, otherContacts } = require('./prison
 
 context('Current prisoner profile should redirect to the new prisoner profile', () => {
   context('When the case load IS Leeds', () => {
-    context('Overview page', () => {
-      before(() => {
-        cy.clearCookies()
-        cy.task('reset')
-        cy.task('stubPrisonerProfile', {})
-        cy.task('stubSignIn', {
-          username: 'ITAG_USER',
-          caseload: 'LEI',
-          caseloads: [],
-          roles: [],
-        })
-        cy.signIn()
-        Cypress.Cookies.preserveOnce('hmpps-session-dev')
+    beforeEach(() => {
+      cy.task('reset')
+      cy.task('stubPrisonerProfile', {})
+      cy.task('stubSignIn', {
+        username: 'ITAG_USER',
+        caseload: 'LEI',
+        caseloads: [],
+        roles: [],
       })
-      it('Should redirect to the new prisoner profile - overview page', () => {
-        cy.origin('http://localhost:9191', () => {
-          const offenderNo = 'A1234A'
-          cy.visit(`http://localhost:3008/prisoner/${offenderNo}`)
-          cy.location().should((location) => {
-            expect(location.pathname).to.eq(`/prisonerprofile/prisoner/${offenderNo}/`)
-          })
-          cy.get('h1').should('contain.text', 'New Prisoner Profile!')
-          cy.get('h2').should('contain.text', 'Overview')
-        })
+      cy.session('hmpps-session-dev-lei', () => {
+        cy.clearCookies()
+        cy.signIn()
       })
     })
-    context('Personal page', () => {
-      before(() => {
-        cy.clearCookies()
-        cy.task('reset')
-        cy.task('stubPrisonerProfilePersonal')
-        cy.task('stubSignIn', {
-          username: 'ITAG_USER',
-          caseload: 'LEI',
-          caseloads: [],
-          roles: [],
+
+    context('Overview page', () => {
+      it('Should redirect to the new prisoner profile - overview page', () => {
+        const offenderNo = 'A1234A'
+        cy.visit(`http://localhost:3008/prisoner/${offenderNo}`)
+        cy.location().should((location) => {
+          expect(location.pathname).to.eq(`/prisonerprofile/prisoner/${offenderNo}/`)
         })
-        cy.signIn()
-        Cypress.Cookies.preserveOnce('hmpps-session-dev')
+        cy.get('h1').should('contain.text', 'New Prisoner Profile!')
+        cy.get('h2').should('contain.text', 'Overview')
+      })
+    })
+
+    context('Personal page', () => {
+      beforeEach(() => {
+        cy.task('stubPrisonerProfilePersonal')
         cy.task('stubPrisonerProfileHeaderData', {
           offenderBasicDetails,
           offenderFullDetails: { ...offenderFullDetails, agencyId: 'OUT' },
@@ -66,19 +57,19 @@ context('Current prisoner profile should redirect to the new prisoner profile', 
           },
         })
       })
+
       it('Should redirect to the new prisoner profile - personal page', () => {
-        cy.origin('http://localhost:9191', () => {
-          const offenderNo = 'A1234A'
-          cy.visit(`http://localhost:3008/prisoner/${offenderNo}/personal`)
+        const offenderNo = 'A1234A'
+        cy.visit(`http://localhost:3008/prisoner/${offenderNo}/personal`)
 
-          cy.location().should((location) => {
-            expect(location.pathname).to.eq(`/prisonerprofile/prisoner/${offenderNo}/personal`)
-          })
-
-          cy.get('h1').should('contain.text', 'New Prisoner Profile!')
-          cy.get('h2').should('contain.text', 'Personal')
+        cy.location().should((location) => {
+          expect(location.pathname).to.eq(`/prisonerprofile/prisoner/${offenderNo}/personal`)
         })
+
+        cy.get('h1').should('contain.text', 'New Prisoner Profile!')
+        cy.get('h2').should('contain.text', 'Personal')
       })
+
       context('Redirect to overview page', () => {
         before(() => {
           cy.task('stubPrisonerProfile', {})
@@ -93,19 +84,10 @@ context('Current prisoner profile should redirect to the new prisoner profile', 
         })
       })
     })
+
     context('Case notes page', () => {
-      before(() => {
-        cy.clearCookies()
-        cy.task('reset')
+      beforeEach(() => {
         cy.task('stubPrisonerProfileCaseNotes')
-        cy.task('stubSignIn', {
-          username: 'ITAG_USER',
-          caseload: 'LEI',
-          caseloads: [],
-          roles: [],
-        })
-        cy.signIn()
-        Cypress.Cookies.preserveOnce('hmpps-session-dev')
         cy.task('stubPrisonerProfileHeaderData', {
           offenderBasicDetails,
           offenderFullDetails: { ...offenderFullDetails, agencyId: 'OUT' },
@@ -113,33 +95,23 @@ context('Current prisoner profile should redirect to the new prisoner profile', 
           caseNoteSummary: {},
         })
       })
+
       it('Should redirect to the new prisoner profile - case notes page', () => {
-        cy.origin('http://localhost:9191', () => {
-          const offenderNo = 'A1234A'
-          cy.visit(`http://localhost:3008/prisoner/${offenderNo}/case-notes`)
+        const offenderNo = 'A1234A'
+        cy.visit(`http://localhost:3008/prisoner/${offenderNo}/case-notes`)
 
-          cy.location().should((location) => {
-            expect(location.pathname).to.eq(`/prisonerprofile/prisoner/${offenderNo}/case-notes`)
-          })
-
-          cy.get('h1').should('contain.text', 'New Prisoner Profile!')
-          cy.get('h2').should('contain.text', 'Case notes')
+        cy.location().should((location) => {
+          expect(location.pathname).to.eq(`/prisonerprofile/prisoner/${offenderNo}/case-notes`)
         })
+
+        cy.get('h1').should('contain.text', 'New Prisoner Profile!')
+        cy.get('h2').should('contain.text', 'Case notes')
       })
     })
+
     context('Alerts page', () => {
-      before(() => {
-        cy.clearCookies()
-        cy.task('reset')
+      beforeEach(() => {
         cy.task('stubPrisonerProfileAlerts')
-        cy.task('stubSignIn', {
-          username: 'ITAG_USER',
-          caseload: 'LEI',
-          caseloads: [],
-          roles: [],
-        })
-        cy.signIn()
-        Cypress.Cookies.preserveOnce('hmpps-session-dev')
         cy.task('stubPrisonerProfileHeaderData', {
           offenderBasicDetails,
           offenderFullDetails: { ...offenderFullDetails, agencyId: 'OUT' },
@@ -147,33 +119,22 @@ context('Current prisoner profile should redirect to the new prisoner profile', 
           caseNoteSummary: {},
         })
       })
+
       it('Should redirect to the new prisoner profile - alerts page', () => {
-        cy.origin('http://localhost:9191', () => {
-          const offenderNo = 'A1234A'
-          cy.visit(`http://localhost:3008/prisoner/${offenderNo}/alerts`)
+        const offenderNo = 'A1234A'
+        cy.visit(`http://localhost:3008/prisoner/${offenderNo}/alerts`)
 
-          cy.location().should((location) => {
-            expect(location.pathname).to.eq(`/prisonerprofile/prisoner/${offenderNo}/alerts`)
-          })
-
-          cy.get('h1').should('contain.text', 'New Prisoner Profile!')
+        cy.location().should((location) => {
+          expect(location.pathname).to.eq(`/prisonerprofile/prisoner/${offenderNo}/alerts`)
         })
+
+        cy.get('h1').should('contain.text', 'New Prisoner Profile!')
       })
     })
 
     context('Offences page', () => {
-      before(() => {
-        cy.clearCookies()
-        cy.task('reset')
+      beforeEach(() => {
         cy.task('stubPrisonerProfileOffences')
-        cy.task('stubSignIn', {
-          username: 'ITAG_USER',
-          caseload: 'LEI',
-          caseloads: [],
-          roles: [],
-        })
-        cy.signIn()
-        Cypress.Cookies.preserveOnce('hmpps-session-dev')
         cy.task('stubPrisonerProfileHeaderData', {
           offenderBasicDetails,
           offenderFullDetails: { ...offenderFullDetails, agencyId: 'OUT' },
@@ -182,33 +143,21 @@ context('Current prisoner profile should redirect to the new prisoner profile', 
         })
       })
       it('Should redirect from sentence and release to the new prisoner profile - offences page', () => {
-        cy.origin('http://localhost:9191', () => {
-          const offenderNo = 'A1234A'
-          cy.visit(`http://localhost:3008/prisoner/${offenderNo}/sentence-and-release`)
+        const offenderNo = 'A1234A'
+        cy.visit(`http://localhost:3008/prisoner/${offenderNo}/sentence-and-release`)
 
-          cy.location().should((location) => {
-            expect(location.pathname).to.eq(`/prisonerprofile/prisoner/${offenderNo}/offences`)
-          })
-
-          cy.get('h1').should('contain.text', 'New Prisoner Profile!')
-          cy.get('h2').should('contain.text', 'Offences')
+        cy.location().should((location) => {
+          expect(location.pathname).to.eq(`/prisonerprofile/prisoner/${offenderNo}/offences`)
         })
+
+        cy.get('h1').should('contain.text', 'New Prisoner Profile!')
+        cy.get('h2').should('contain.text', 'Offences')
       })
     })
 
     context('Work and skills page', () => {
-      before(() => {
-        cy.clearCookies()
-        cy.task('reset')
+      beforeEach(() => {
         cy.task('stubPrisonerProfileWorkAndSkills')
-        cy.task('stubSignIn', {
-          username: 'ITAG_USER',
-          caseload: 'LEI',
-          caseloads: [],
-          roles: [],
-        })
-        cy.signIn()
-        Cypress.Cookies.preserveOnce('hmpps-session-dev')
         cy.task('stubPrisonerProfileHeaderData', {
           offenderBasicDetails,
           offenderFullDetails: { ...offenderFullDetails, agencyId: 'OUT' },
@@ -217,17 +166,15 @@ context('Current prisoner profile should redirect to the new prisoner profile', 
         })
       })
       it('Should redirect to the new prisoner profile - work and skills page', () => {
-        cy.origin('http://localhost:9191', () => {
-          const offenderNo = 'A1234A'
-          cy.visit(`http://localhost:3008/prisoner/${offenderNo}/work-and-skills`)
+        const offenderNo = 'A1234A'
+        cy.visit(`http://localhost:3008/prisoner/${offenderNo}/work-and-skills`)
 
-          cy.location().should((location) => {
-            expect(location.pathname).to.eq(`/prisonerprofile/prisoner/${offenderNo}/work-and-skills`)
-          })
-
-          cy.get('h1').should('contain.text', 'New Prisoner Profile!')
-          cy.get('h2').should('contain.text', 'Work and skills')
+        cy.location().should((location) => {
+          expect(location.pathname).to.eq(`/prisonerprofile/prisoner/${offenderNo}/work-and-skills`)
         })
+
+        cy.get('h1').should('contain.text', 'New Prisoner Profile!')
+        cy.get('h2').should('contain.text', 'Work and skills')
       })
     })
   })
@@ -235,18 +182,23 @@ context('Current prisoner profile should redirect to the new prisoner profile', 
 
 context('Current prisoner profile should NOT redirect to the new prisoner profile', () => {
   context('When the case load IS NOT Leeds', () => {
-    context('Overview page', () => {
-      before(() => {
+    beforeEach(() => {
+      cy.task('reset')
+      cy.task('stubPrisonerProfile', {})
+      cy.task('stubSignIn', {
+        username: 'ITAG_USER',
+        caseload: 'MDI',
+        caseloads: [],
+        roles: [],
+      })
+      cy.session('hmpps-session-dev-mdi', () => {
         cy.clearCookies()
-        cy.task('reset')
-        cy.task('stubSignIn', {
-          username: 'ITAG_USER',
-          caseload: 'MDI',
-          caseloads: [],
-          roles: [],
-        })
         cy.signIn()
-        Cypress.Cookies.preserveOnce('hmpps-session-dev')
+      })
+    })
+
+    context('Overview page', () => {
+      beforeEach(() => {
         cy.task('stubPrisonerProfileHeaderData', {
           offenderBasicDetails,
           offenderFullDetails: { ...offenderFullDetails, agencyId: 'OUT' },
@@ -255,6 +207,7 @@ context('Current prisoner profile should NOT redirect to the new prisoner profil
           offenderNo: 'A1234A',
         })
       })
+
       it('Should not redirect to the new prisoner profile - overview page', () => {
         const offenderNo = 'A1234A'
         cy.visit(`/prisoner/${offenderNo}`)
@@ -267,17 +220,7 @@ context('Current prisoner profile should NOT redirect to the new prisoner profil
       })
     })
     context('Personal page', () => {
-      before(() => {
-        cy.clearCookies()
-        cy.task('reset')
-        cy.task('stubSignIn', {
-          username: 'ITAG_USER',
-          caseload: 'MDI',
-          caseloads: [],
-          roles: [],
-        })
-        cy.signIn()
-        Cypress.Cookies.preserveOnce('hmpps-session-dev')
+      beforeEach(() => {
         cy.task('stubPrisonerProfileHeaderData', {
           offenderBasicDetails,
           offenderFullDetails: { ...offenderFullDetails, agencyId: 'OUT' },
@@ -326,17 +269,7 @@ context('Current prisoner profile should NOT redirect to the new prisoner profil
       })
     })
     context('Alerts page', () => {
-      before(() => {
-        cy.clearCookies()
-        cy.task('reset')
-        cy.task('stubSignIn', {
-          username: 'ITAG_USER',
-          caseload: 'MDI',
-          caseloads: [],
-          roles: [],
-        })
-        cy.signIn()
-        Cypress.Cookies.preserveOnce('hmpps-session-dev')
+      beforeEach(() => {
         cy.task('stubPrisonerProfileHeaderData', {
           offenderBasicDetails,
           offenderFullDetails: { ...offenderFullDetails, agencyId: 'OUT' },
@@ -378,17 +311,7 @@ context('Current prisoner profile should NOT redirect to the new prisoner profil
       })
     })
     context('Sentence and release page', () => {
-      before(() => {
-        cy.clearCookies()
-        cy.task('reset')
-        cy.task('stubSignIn', {
-          username: 'ITAG_USER',
-          caseload: 'MDI',
-          caseloads: [],
-          roles: [],
-        })
-        cy.signIn()
-        Cypress.Cookies.preserveOnce('hmpps-session-dev')
+      beforeEach(() => {
         cy.task('stubPrisonerProfileHeaderData', {
           offenderBasicDetails,
           offenderFullDetails,
@@ -477,9 +400,7 @@ context('Current prisoner profile should NOT redirect to the new prisoner profil
           ],
         },
       ]
-      before(() => {
-        cy.task('reset')
-        cy.clearCookies()
+      beforeEach(() => {
         cy.task('stubPrisonerProfileHeaderData', {
           offenderBasicDetails,
           offenderFullDetails,
@@ -487,9 +408,6 @@ context('Current prisoner profile should NOT redirect to the new prisoner profil
           caseNoteSummary: {},
           offenderNo: 'A1234A',
         })
-        cy.task('stubSignIn', { username: 'ITAG_USER', caseload: 'MDI' })
-        cy.signIn()
-        Cypress.Cookies.preserveOnce('hmpps-session-dev')
         cy.task('stubLatestLearnerAssessments', functionalSkillsAssessments)
       })
       it('Should not redirect to the new prisoner profile - work and skills page', () => {
@@ -537,22 +455,7 @@ context('Current prisoner profile should NOT redirect to the new prisoner profil
           .fill()
           .map(() => data)
 
-      before(() => {
-        cy.clearCookies()
-        cy.task('reset')
-        cy.task('stubSignIn', {
-          username: 'ITAG_USER',
-          caseload: 'MDI',
-          caseloads: [
-            {
-              caseLoadId: 'MDI',
-              description: 'MOORLAND (HMP & YOI)',
-              currentlyActive: true,
-            },
-          ],
-          roles: ['ROLE_DELETE_SENSITIVE_CASE_NOTES'],
-        })
-        cy.signIn()
+      beforeEach(() => {
         cy.task('stubCaseNoteTypes')
 
         cy.task('stubPrisonerProfileHeaderData', {
@@ -562,6 +465,7 @@ context('Current prisoner profile should NOT redirect to the new prisoner profil
           caseNoteSummary: {},
         })
       })
+
       it('Should not redirect to the new prisoner profile - case notes page', () => {
         cy.task('stubCaseNotes', {
           totalElements: 21,
