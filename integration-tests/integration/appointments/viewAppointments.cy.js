@@ -95,18 +95,20 @@ context('A user can view list of appointments', () => {
       ],
     })
 
-    cy.task('stubPrisonerFullDetail', {
-      prisonerDetail: { assignedLivingUnit: { description: '1-1-1' } },
-      offenderNo: 'ABC123',
-    })
-    cy.task('stubPrisonerFullDetail', {
-      prisonerDetail: { assignedLivingUnit: { description: '2-1-1' } },
-      offenderNo: 'ABC456',
-    })
-    cy.task('stubPrisonerFullDetail', {
-      prisonerDetail: { assignedLivingUnit: { description: '3-1-1' } },
-      offenderNo: 'ABC789',
-    })
+    cy.task('stubPrisonerSearchDetails', [
+      {
+        cellLocation: '1-1-1',
+        prisonerNumber: 'ABC123',
+      },
+      {
+        cellLocation: '2-1-1',
+        prisonerNumber: 'ABC456',
+      },
+      {
+        cellLocation: '3-1-1',
+        prisonerNumber: 'ABC789',
+      },
+    ])
   })
 
   it('A user can see appointments for the date and period', () => {
