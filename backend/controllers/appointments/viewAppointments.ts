@@ -1,6 +1,6 @@
 import moment from 'moment'
 import { Response } from 'express'
-import { getTime, properCaseName, getCurrentPeriod, formatName } from '../../utils'
+import { formatName, getCurrentPeriod, getTime, properCaseName } from '../../utils'
 import { PrisonerSearchResult } from '../../api/offenderSearchApi'
 
 export const prisonApiLocationDescription = async (res: Response, whereaboutsApi, locationKey, userCaseLoad) => {
@@ -11,6 +11,17 @@ export const prisonApiLocationDescription = async (res: Response, whereaboutsApi
     return locationIdWithSuffix?.length < 1 ? '' : locationIdWithSuffix.slice(0, -1)
   }
   return `${userCaseLoad}-${locationKey}`
+}
+
+async function getCellLocationsFromPrisonerSearch(offenderSearchApi, res: Response, appointmentsOfType) {
+  // don't need to call Prisoner Search if no appointments
+  if (appointmentsOfType.length === 0) return new Map()
+
+  const prisonerDetailsForOffenderNumbers: Array<PrisonerSearchResult> = await offenderSearchApi.getPrisonersDetails(
+    res.locals,
+    Array.from(new Set(appointmentsOfType.map((appointment) => appointment.offenderNo)))
+  )
+  return new Map(prisonerDetailsForOffenderNumbers.map((i) => [i.prisonerNumber, i.cellLocation]))
 }
 
 export default ({ systemOauthClient, prisonApi, offenderSearchApi, whereaboutsApi }) =>
@@ -60,12 +71,7 @@ export default ({ systemOauthClient, prisonApi, offenderSearchApi, whereaboutsAp
     const appointmentsOfType = appointments.filter((appointment) =>
       type ? appointment.appointmentTypeCode === type : true
     )
-
-    const prisonerDetailsForOffenderNumbers: Array<PrisonerSearchResult> = await offenderSearchApi.getPrisonersDetails(
-      res.locals,
-      Array.from(new Set(appointmentsOfType.map((appointment) => appointment.offenderNo)))
-    )
-    const cellLocationMap = new Map(prisonerDetailsForOffenderNumbers.map((i) => [i.prisonerNumber, i.cellLocation]))
+    const cellLocationMap = await getCellLocationsFromPrisonerSearch(offenderSearchApi, res, appointmentsOfType)
 
     const appointmentsEnhanced = appointmentsOfType.map(async (appointment) => {
       const { startTime, endTime, offenderNo } = appointment
