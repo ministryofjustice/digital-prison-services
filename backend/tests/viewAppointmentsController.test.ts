@@ -91,6 +91,7 @@ describe('View appointments', () => {
       })
       expect(whereaboutsApi.getVideoLinkAppointments).toHaveBeenCalledWith(res.locals, [])
       expect(prisonApi.getStaffDetails).not.toHaveBeenCalled()
+      expect(offenderSearchApi.getPrisonersDetails).not.toHaveBeenCalled()
     })
 
     it('should render the correct template information', async () => {
