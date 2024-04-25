@@ -34,7 +34,6 @@ import returnUrl from './middleware/returnUrl'
 import pageNotFound from './setUpPageNotFound'
 import errorHandler from './middleware/errorHandler'
 import { logError } from './logError'
-import homepageController from './controllers/homepage/homepage'
 import requestLimiter from './middleware/requestLimiter'
 import homepageRedirect from './controllers/homepage/homepageRedirect'
 import getFrontendComponents, { feComponentsRoutes } from './middleware/getFeComponents'
@@ -125,8 +124,7 @@ app.use(
   })
 )
 app.use(setupReactRoutes())
-// app.use('/$', homepageController({ ...apis, logError }))
-app.use('/$', homepageRedirect(homepageController({ ...apis, logError })))
+app.use('/$', homepageRedirect())
 app.use(pageNotFound)
 app.use(errorHandler({ logError }))
 
