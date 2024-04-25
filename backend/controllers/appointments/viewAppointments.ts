@@ -13,12 +13,12 @@ export const prisonApiLocationDescription = async (res: Response, whereaboutsApi
   return `${userCaseLoad}-${locationKey}`
 }
 
-async function getCellLocationsFromPrisonerSearch(offenderSearchApi, res: Response, appointmentsOfType) {
+async function getCellLocationsFromPrisonerSearch(offenderSearchApi, systemContext, appointmentsOfType) {
   // don't need to call Prisoner Search if no appointments
   if (appointmentsOfType.length === 0) return new Map()
 
   const prisonerDetailsForOffenderNumbers: Array<PrisonerSearchResult> = await offenderSearchApi.getPrisonersDetails(
-    res.locals,
+    systemContext,
     Array.from(new Set(appointmentsOfType.map((appointment) => appointment.offenderNo)))
   )
   return new Map(prisonerDetailsForOffenderNumbers.map((i) => [i.prisonerNumber, i.cellLocation]))
@@ -71,7 +71,11 @@ export default ({ systemOauthClient, prisonApi, offenderSearchApi, whereaboutsAp
     const appointmentsOfType = appointments.filter((appointment) =>
       type ? appointment.appointmentTypeCode === type : true
     )
-    const cellLocationMap = await getCellLocationsFromPrisonerSearch(offenderSearchApi, res, appointmentsOfType)
+    const cellLocationMap = await getCellLocationsFromPrisonerSearch(
+      offenderSearchApi,
+      systemContext,
+      appointmentsOfType
+    )
 
     const appointmentsEnhanced = appointmentsOfType.map(async (appointment) => {
       const { startTime, endTime, offenderNo } = appointment
