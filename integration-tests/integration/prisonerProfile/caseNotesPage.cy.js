@@ -38,24 +38,26 @@ const replicate = ({ data, times }) =>
     .map(() => data)
 
 context('A user can view prisoner case notes', () => {
-  before(() => {
-    cy.clearCookies()
-    cy.task('reset')
-    cy.task('stubSignIn', {
-      username: 'ITAG_USER',
-      caseload: 'MDI',
-      caseloads: [
-        {
-          caseLoadId: 'MDI',
-          description: 'Moorland',
-          currentlyActive: true,
-        },
-      ],
-      roles: ['ROLE_DELETE_SENSITIVE_CASE_NOTES'],
+  beforeEach(() => {
+    cy.session('hmpps-session-dev', () => {
+      cy.clearCookies()
+      cy.task('reset')
+      cy.task('stubSignIn', {
+        username: 'ITAG_USER',
+        caseload: 'MDI',
+        caseloads: [
+          {
+            caseLoadId: 'MDI',
+            description: 'Moorland',
+            currentlyActive: true,
+          },
+        ],
+        roles: ['ROLE_DELETE_SENSITIVE_CASE_NOTES'],
+      })
+      cy.signIn()
     })
-    cy.signIn()
-    cy.task('stubCaseNoteTypes')
 
+    cy.task('stubCaseNoteTypes')
     cy.task('stubPrisonerProfileHeaderData', {
       offenderBasicDetails,
       offenderFullDetails,
@@ -203,8 +205,7 @@ context('A user can view prisoner case notes', () => {
   })
 
   it('should repopulate input fields with selected filters once applied has been clicked', () => {
-    cy.server()
-    cy.route({
+    cy.intercept({
       method: 'GET',
       url: '/prisoner/A12345/case-notes?typeCode=OBSERVE',
     }).as('getSubTypes')
@@ -235,8 +236,7 @@ context('A user can view prisoner case notes', () => {
   })
 
   it('should remember filters when viewing all case notes', () => {
-    cy.server()
-    cy.route({
+    cy.intercept({
       method: 'GET',
       url: '/prisoner/A12345/case-notes?typeCode=OBSERVE',
     }).as('getSubTypes')

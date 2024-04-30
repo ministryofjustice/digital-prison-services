@@ -3,16 +3,14 @@ const offenderBasicDetails = require('../../mockApis/responses/offenderBasicDeta
 const offenderFullDetails = require('../../mockApis/responses/offenderFullDetails.json')
 
 context('Prisoner sentence and release', () => {
-  before(() => {
-    cy.clearCookies()
+  beforeEach(() => {
     cy.task('resetAndStubTokenVerification')
     cy.task('stubSignIn', { username: 'ITAG_USER', caseload: 'MDI' })
-    cy.signIn()
-  })
+    cy.session('hmpps-session-dev', () => {
+      cy.clearCookies()
+      cy.signIn()
+    })
 
-  beforeEach(() => {
-    // Maintain session between the two tests.
-    Cypress.Cookies.preserveOnce('hmpps-session-dev')
     cy.task('stubPrisonerProfileHeaderData', {
       offenderBasicDetails,
       offenderFullDetails,

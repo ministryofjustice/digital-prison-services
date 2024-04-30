@@ -516,8 +516,7 @@ context('Houseblock list page list page', () => {
   })
 
   it('Marks attendance', () => {
-    cy.server()
-    cy.route('POST', /.\/api\/attendance*/).as('request')
+    cy.intercept('POST', /.\/api\/attendance*/).as('request')
 
     cy.task('stubPostAttendance', {
       id: 1,
@@ -612,9 +611,8 @@ context('Houseblock list page list page', () => {
       response: eventsAtLocation,
     })
 
-    cy.server()
-    cy.route('POST', /.\/api\/attendance*/).as('request')
-    cy.route('GET', /.*houseblocklist.*/).as('getHouseBlockList')
+    cy.intercept('POST', /.\/api\/attendance*/).as('request')
+    cy.intercept('GET', /.*houseblocklist.*/).as('getHouseBlockList')
 
     cy.task('stubPostAttendance', {
       id: 1,

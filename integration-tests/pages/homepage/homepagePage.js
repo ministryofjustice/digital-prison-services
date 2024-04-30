@@ -1,7 +1,7 @@
 const page = require('../page')
 
-const homepagePage = () =>
-  page('Digital Prison Services', {
+const homepagePage = (title = 'DPS Home page') =>
+  page(title, {
     fallbackHeaderUserName: () => cy.get('[data-qa=header-user-name]'),
     activeLocation: () => cy.get('[data-test="active-location"]'),
     manageAccountLink: () => cy.get('[data-test="manage-account-link"]'),
@@ -71,4 +71,5 @@ export default {
     cy.visit(`/`)
     return homepagePage()
   },
+  homepagePage,
 }

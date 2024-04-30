@@ -101,11 +101,13 @@ context('Prisoner private cash', () => {
     },
   ]
 
-  before(() => {
-    cy.clearCookies()
+  beforeEach(() => {
     cy.task('reset')
     cy.task('stubSignIn', { username: 'ITAG_USER', caseload: 'MDI' })
-    cy.signIn()
+    cy.session('hmpps-session-dev', () => {
+      cy.clearCookies()
+      cy.signIn()
+    })
   })
 
   context('With data', () => {

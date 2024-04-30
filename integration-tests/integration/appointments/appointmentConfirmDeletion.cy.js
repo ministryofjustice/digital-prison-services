@@ -15,15 +15,15 @@ context('Confirm appointment deletion page', () => {
     videoLinkBooking: null,
   }
 
-  before(() => {
-    cy.clearCookies()
-    cy.task('resetAndStubTokenVerification')
-    cy.task('stubSignIn', { username: 'ITAG_USER', caseload: 'MDI' })
-    cy.signIn()
-  })
-
   beforeEach(() => {
-    Cypress.Cookies.preserveOnce('hmpps-session-dev')
+    cy.session('hmpps-session-dev', () => {
+      cy.clearCookies()
+      cy.task('stubSignIn', { username: 'ITAG_USER', caseload: 'MDI' })
+      cy.signIn()
+    })
+
+    cy.task('resetAndStubTokenVerification')
+
     cy.task('stubAppointmentLocations', {
       agency: 'MDI',
       locations: [

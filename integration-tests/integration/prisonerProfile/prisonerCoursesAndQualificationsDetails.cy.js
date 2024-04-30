@@ -56,18 +56,21 @@ context('Prisoner courses and qualifications details page', () => {
     }
   }
 
-  context('no course data available', () => {
-    before(() => {
+  beforeEach(() => {
+    cy.session('hmpps-session-dev', () => {
       cy.clearCookies()
       cy.task('reset')
       cy.task('stubSignIn', { username: 'ITAG_USER', caseload: 'MDI' })
       cy.signIn()
+    })
+  })
+
+  context('no course data available', () => {
+    beforeEach(() => {
       cy.task('stubOffenderBasicDetails', { bookingId: 1, firstName: 'John', lastName: 'Smith', agencyId: 'MDI' })
+      cy.task('stubLearnerEducation', { content: [] })
     })
 
-    beforeEach(() => {
-      Cypress.Cookies.preserveOnce('hmpps-session-dev')
-    })
     it('should show correct content and no table', () => {
       cy.visit(`/prisoner/${offenderNo}/courses-qualifications`)
       cy.get('h1').should('have.text', 'John Smith’s courses and qualifications')
@@ -126,16 +129,8 @@ context('Prisoner courses and qualifications details page', () => {
       numberOfElements: 1,
       empty: false,
     }
-    before(() => {
-      cy.clearCookies()
-      cy.task('reset')
-      cy.task('stubSignIn', { username: 'ITAG_USER', caseload: 'MDI' })
-      cy.signIn()
-      cy.task('stubOffenderBasicDetails', { bookingId: 1, firstName: 'John', lastName: 'Smith', agencyId: 'MDI' })
-    })
-
     beforeEach(() => {
-      Cypress.Cookies.preserveOnce('hmpps-session-dev')
+      cy.task('stubOffenderBasicDetails', { bookingId: 1, firstName: 'John', lastName: 'Smith', agencyId: 'MDI' })
     })
 
     it('should show the correct content and number of results', () => {
@@ -252,16 +247,8 @@ context('Prisoner courses and qualifications details page', () => {
       empty: false,
     }
 
-    before(() => {
-      cy.clearCookies()
-      cy.task('reset')
-      cy.task('stubSignIn', { username: 'ITAG_USER', caseload: 'MDI' })
-      cy.signIn()
-      cy.task('stubOffenderBasicDetails', { bookingId: 1, firstName: 'John', lastName: 'Smith', agencyId: 'MDI' })
-    })
-
     beforeEach(() => {
-      Cypress.Cookies.preserveOnce('hmpps-session-dev')
+      cy.task('stubOffenderBasicDetails', { bookingId: 1, firstName: 'John', lastName: 'Smith', agencyId: 'MDI' })
     })
 
     it('should render the page with correct data', () => {
@@ -385,16 +372,9 @@ context('Prisoner courses and qualifications details page', () => {
       numberOfElements: 1,
       empty: false,
     }
-    before(() => {
-      cy.clearCookies()
-      cy.task('reset')
-      cy.task('stubSignIn', { username: 'ITAG_USER', caseload: 'MDI' })
-      cy.signIn()
-      cy.task('stubOffenderBasicDetails', { bookingId: 1, firstName: 'John', lastName: 'Smith', agencyId: 'MDI' })
-    })
 
     beforeEach(() => {
-      Cypress.Cookies.preserveOnce('hmpps-session-dev')
+      cy.task('stubOffenderBasicDetails', { bookingId: 1, firstName: 'John', lastName: 'Smith', agencyId: 'MDI' })
     })
 
     it('should show outcome grade below outcome', () => {
