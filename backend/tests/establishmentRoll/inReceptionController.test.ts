@@ -70,6 +70,10 @@ describe('In reception controller', () => {
               label: 'Risk to known adults',
             },
             {
+              classes: 'alert-status alert-status--security',
+              label: 'Escape risk',
+            },
+            {
               classes: 'alert-status alert-status--care-leaver',
               label: 'Care experienced',
             },
