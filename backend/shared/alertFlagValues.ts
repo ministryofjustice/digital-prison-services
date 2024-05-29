@@ -27,6 +27,7 @@ export const alertFlagLabels = [
   },
   { alertCodes: ['XEL'], classes: 'alert-status alert-status--security', label: 'E-list' },
   { alertCodes: ['XELH'], classes: 'alert-status alert-status--security', label: 'E-list heightened' },
+  { alertCodes: ['XER'], classes: 'alert-status alert-status--security', label: 'Escape risk' },
   {
     alertCodes: ['XRF'],
     classes: 'alert-status alert-status--security',
@@ -115,6 +116,7 @@ export const cellMoveAlertCodes = [
   'XA',
   'XEL',
   'XELH',
+  'XER',
   'CSIP',
   'URCU',
   'UPIU',
@@ -137,6 +139,7 @@ export const profileAlertCodes = [
   'HID',
   'XEL',
   'XELH',
+  'XER',
   'XRF',
   'XTACT',
   'XCO',
