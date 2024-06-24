@@ -140,6 +140,7 @@ context('Houseblock list page list page', () => {
     cy.task('stubSignIn', { username: 'ITAG_USER', caseload })
     cy.signIn()
     cy.task('stubGroups', { id: caseload })
+    cy.task('stubLocationApiGroups', { id: caseload })
     cy.task('stubActivityLocations')
     cy.task('stubGetAgencyGroupLocations', { agencyId: caseload, groupName: 1, response: [1] })
     cy.task('stubGetAttendancesForBookings', {

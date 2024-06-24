@@ -10,6 +10,7 @@ const nonAssociationsApi = require('./integration-tests/mockApis/nonAssociations
 const dataComplianceApi = require('./integration-tests/mockApis/dataCompliance')
 const prisonerProfile = require('./integration-tests/mockApis/prisonerProfile')
 const whereabouts = require('./integration-tests/mockApis/whereabouts')
+const locationsApi = require('./integration-tests/mockApis/locationsApi')
 const tokenverification = require('./integration-tests/mockApis/tokenverification')
 const keyworker = require('./integration-tests/mockApis/keyworker')
 const caseNotes = require('./integration-tests/mockApis/caseNotes')
@@ -65,6 +66,7 @@ module.exports = defineConfig({
         stubAuthHealth: (status) => auth.stubHealth(status),
         stubPrisonApiHealth: (status) => prisonApi.stubHealth(status),
         stubWhereaboutsHealth: (status) => whereabouts.stubHealth(status),
+        stubLocationsHealth: (status) => locationsApi.stubHealth(status),
         stubAllocationManagerHealth: (status) => allocationManager.stubHealth(status),
         stubKeyworkerHealth: (status) => keyworker.stubHealth(status),
         stubCaseNotesHealth: (status) => caseNotes.stubHealth(status),
@@ -77,6 +79,7 @@ module.exports = defineConfig({
             users.stubHealth(),
             prisonApi.stubHealth(),
             whereabouts.stubHealth(),
+            locationsApi.stubHealth(),
             keyworker.stubHealth(),
             allocationManager.stubHealth(),
             caseNotes.stubHealth(),
@@ -106,6 +109,7 @@ module.exports = defineConfig({
         stubAttendanceChanges: (response) => Promise.all([whereabouts.stubAttendanceChanges(response)]),
         stubCourts: whereabouts.stubCourtLocations,
         stubGroups: (caseload) => whereabouts.stubGroups(caseload),
+        stubLocationApiGroups: (caseload) => locationsApi.stubGroups(caseload),
         stubAddVideoLinkBooking: () => whereabouts.stubAddVideoLinkBooking(),
         getBookingRequest: () => whereabouts.getBookingRequest(),
         stubCaseNotes: caseNotes.stubCaseNotes,
