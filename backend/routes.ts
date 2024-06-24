@@ -105,6 +105,7 @@ const router = express.Router()
 const setup = ({
   prisonApi,
   whereaboutsApi,
+  locationsInsidePrisonApi,
   oauthApi,
   hmppsManageUsersApi,
   deliusIntegrationApi,
@@ -190,12 +191,12 @@ const setup = ({
     router.get(
       '/manage-prisoner-whereabouts/select-residential-location',
       isActivitiesRolledOut,
-      selectResidentialLocationController(whereaboutsApi).index
+      selectResidentialLocationController(locationsInsidePrisonApi, systemOauthClient).index
     )
     router.post(
       '/manage-prisoner-whereabouts/select-residential-location',
       isActivitiesRolledOut,
-      selectResidentialLocationController(whereaboutsApi).post
+      selectResidentialLocationController(locationsInsidePrisonApi, systemOauthClient).post
     )
 
     router.get(

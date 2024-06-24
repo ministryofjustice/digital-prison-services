@@ -87,6 +87,8 @@ generic-service:
     PRISONER_PROFILE_REDIRECT_EXEMPTIONS: ""
     HOMEPAGE_REDIRECT_EXEMPTIONS: ""
     CHANGE_SOMEONES_CELL_URL: https://change-someones-cell.prison.service.justice.gov.uk
+    LOCATIONS_INSIDE_PRISON_API_URL: "https://locations-inside-prison-api.hmpps.service.justice.gov.uk"
+
 
   allowlist:
     sscl-blackpool: 31.121.5.27/32

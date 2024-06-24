@@ -105,6 +105,7 @@ app.use(
   routes({
     prisonApi: apis.prisonApi,
     whereaboutsApi: apis.whereaboutsApi,
+    locationsInsidePrisonApi: apis.locationsInsidePrisonApi,
     oauthApi: apis.oauthApi,
     hmppsManageUsersApi: apis.hmppsManageUsersApi,
     deliusIntegrationApi: apis.deliusIntegrationApi,
