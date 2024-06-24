@@ -5,6 +5,7 @@ import config from './config'
 import { prisonApiFactory } from './api/prisonApi'
 import { oauthApiFactory } from './api/oauthApi'
 import { whereaboutsApiFactory } from './api/whereaboutsApi'
+import { locationsInsidePrisonApiFactory } from './api/locationsInsidePrisonApi'
 import { deliusIntegrationApiFactory } from './api/deliusIntegrationApi'
 import { dataComplianceApiFactory } from './api/dataComplianceApi'
 import { keyworkerApiFactory } from './api/keyworkerApi'
@@ -32,6 +33,13 @@ export const whereaboutsApi = whereaboutsApiFactory(
   clientFactory({
     baseUrl: config.apis.whereabouts.url,
     timeout: config.apis.whereabouts.timeoutSeconds * 1000,
+  })
+)
+
+export const locationsInsidePrisonApi = locationsInsidePrisonApiFactory(
+  clientFactory({
+    baseUrl: config.apis.locationsInsidePrisonApi.url,
+    timeout: config.apis.locationsInsidePrisonApi.timeoutSeconds * 1000,
   })
 )
 
@@ -153,6 +161,7 @@ export const feComponentsApi = feComponentsApiFactory(
 export default {
   prisonApi,
   whereaboutsApi,
+  locationsInsidePrisonApi,
   oauthApi,
   hmppsManageUsersApi,
   deliusIntegrationApi,
