@@ -4,6 +4,7 @@ import { addUserDataToRequests, ContextObject } from '../azure-appinsights'
 const user = {
   activeCaseLoadId: 'LII',
   username: 'test-user',
+  referer: 'some-site.com',
 }
 
 const createEnvelope = (properties: Record<string, string | boolean>, baseType = 'RequestData') =>
@@ -14,10 +15,11 @@ const createEnvelope = (properties: Record<string, string | boolean>, baseType =
     } as DataTelemetry,
   } as EnvelopeTelemetry)
 
-const createContext = (username: string, activeCaseLoadId: string) =>
+const createContext = (username: string, activeCaseLoadId: string, referer: string) =>
   ({
     'http.ServerRequest': {
       res: {
+        headers: { referer },
         locals: {
           user: {
             username,
@@ -30,7 +32,7 @@ const createContext = (username: string, activeCaseLoadId: string) =>
     },
   } as ContextObject)
 
-const context = createContext(user.username, user.activeCaseLoadId)
+const context = createContext(user.username, user.activeCaseLoadId, user.referer)
 
 describe('azure-appinsights', () => {
   describe('addUserDataToRequests', () => {
@@ -48,9 +50,18 @@ describe('azure-appinsights', () => {
     it('handles absent user data', () => {
       const envelope = createEnvelope({ other: 'things' })
 
-      addUserDataToRequests(envelope, createContext(undefined, user.activeCaseLoadId))
+      addUserDataToRequests(envelope, createContext(undefined, user.activeCaseLoadId, user.referer))
 
       expect(envelope.data.baseData.properties).toStrictEqual({ other: 'things' })
+    })
+
+    it('handles absent referer header', () => {
+      const envelope = createEnvelope({ other: 'things' })
+
+      addUserDataToRequests(envelope, createContext(user.username, user.activeCaseLoadId, undefined))
+
+      const { referer, ...expectNoRefererData } = user
+      expect(envelope.data.baseData.properties).toStrictEqual({ ...expectNoRefererData, other: 'things' })
     })
 
     it('returns true when not RequestData type', () => {
