@@ -29,6 +29,11 @@ export function addUserDataToRequests(envelope: EnvelopeTelemetry, contextObject
   const isRequest = envelope.data.baseType === Contracts.TelemetryTypeString.Request
   if (isRequest) {
     const { username, activeCaseLoad } = contextObjects?.['http.ServerRequest']?.res?.locals?.user || {}
+<<<<<<< Updated upstream
+=======
+    const referer = contextObjects?.['http.ServerRequest']?.req?.headers?.referer
+
+>>>>>>> Stashed changes
     if (username) {
       const { properties } = envelope.data.baseData
       // eslint-disable-next-line no-param-reassign

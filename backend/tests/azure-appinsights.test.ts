@@ -17,6 +17,12 @@ const createEnvelope = (properties: Record<string, string | boolean>, baseType =
 const createContext = (username: string, activeCaseLoadId: string) =>
   ({
     'http.ServerRequest': {
+<<<<<<< Updated upstream
+=======
+      req: {
+        headers: { referer },
+      },
+>>>>>>> Stashed changes
       res: {
         locals: {
           user: {
