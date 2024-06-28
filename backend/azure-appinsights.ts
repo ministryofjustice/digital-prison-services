@@ -29,7 +29,7 @@ export function addUserDataToRequests(envelope: EnvelopeTelemetry, contextObject
   const isRequest = envelope.data.baseType === Contracts.TelemetryTypeString.Request
   if (isRequest) {
     const { username, activeCaseLoad } = contextObjects?.['http.ServerRequest']?.res?.locals?.user || {}
-    const referer = contextObjects?.['http.ServerRequest']?.res?.headers?.referer
+    const referer = contextObjects?.['http.ServerRequest']?.req?.headers?.referer
 
     if (username) {
       const { properties } = envelope.data.baseData

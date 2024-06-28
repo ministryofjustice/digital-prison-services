@@ -18,8 +18,10 @@ const createEnvelope = (properties: Record<string, string | boolean>, baseType =
 const createContext = (username: string, activeCaseLoadId: string, referer: string) =>
   ({
     'http.ServerRequest': {
-      res: {
+      req: {
         headers: { referer },
+      },
+      res: {
         locals: {
           user: {
             username,
