@@ -15,15 +15,16 @@ const testAppointment = {
 }
 
 context('Appointment details page', () => {
-  before(() => {
-    cy.clearCookies()
-    cy.task('resetAndStubTokenVerification')
-    cy.task('stubSignIn', { username: 'ITAG_USER', caseload: 'MDI', roles: ['ROLE_DELETE_A_PRISONERS_APPOINTMENT'] })
-    cy.signIn()
-  })
+  before(() => {})
 
   beforeEach(() => {
-    Cypress.Cookies.preserveOnce('hmpps-session-dev')
+    cy.session('hmpps-session-dev', () => {
+      cy.clearCookies()
+      cy.task('resetAndStubTokenVerification')
+      cy.task('stubSignIn', { username: 'ITAG_USER', caseload: 'MDI', roles: ['ROLE_DELETE_A_PRISONERS_APPOINTMENT'] })
+      cy.signIn()
+    })
+
     cy.task('stubOffenderBasicDetails', offenderBasicDetails)
     cy.task('stubAppointmentLocations', {
       agency: 'MDI',

@@ -5,8 +5,8 @@ describe('View appointments', () => {
     getAppointmentTypes: jest.fn(),
     getLocationsForAppointments: jest.fn(),
     getStaffDetails: jest.fn(),
-    getDetails: jest.fn(),
   }
+  const offenderSearchApi = { getPrisonersDetails: jest.fn() }
   const whereaboutsApi = {
     getAppointments: jest.fn(),
     getVideoLinkAppointments: jest.fn(),
@@ -19,7 +19,6 @@ describe('View appointments', () => {
 
   let req
   let res
-  let logError
   let controller
 
   const activeCaseLoadId = 'MDI'
@@ -38,17 +37,16 @@ describe('View appointments', () => {
     }
     res = { locals: {}, render: jest.fn(), status: jest.fn() }
     systemOauthClient.getClientCredentialsTokens.mockResolvedValue({})
-    logError = jest.fn()
 
     prisonApi.getAppointmentTypes = jest.fn()
     prisonApi.getLocationsForAppointments = jest.fn()
     prisonApi.getStaffDetails = jest.fn()
-    prisonApi.getDetails = jest.fn()
+    offenderSearchApi.getPrisonersDetails = jest.fn()
 
     prisonApi.getAppointmentTypes.mockReturnValue([{ description: 'Video link booking', code: 'VLB' }])
     prisonApi.getLocationsForAppointments.mockReturnValue([{ userDescription: 'VCC Room 1', locationId: '1' }])
     prisonApi.getStaffDetails.mockResolvedValue([])
-    prisonApi.getDetails.mockResolvedValue({})
+    offenderSearchApi.getPrisonersDetails.mockResolvedValue([])
 
     whereaboutsApi.getAppointments = jest.fn()
     whereaboutsApi.getVideoLinkAppointments = jest.fn()
@@ -71,7 +69,7 @@ describe('View appointments', () => {
       locationPrefix: 'MDI-1-',
     })
 
-    controller = viewAppointments({ systemOauthClient, prisonApi, whereaboutsApi, logError })
+    controller = viewAppointments({ systemOauthClient, prisonApi, offenderSearchApi, whereaboutsApi })
   })
 
   afterAll(() => {
@@ -93,6 +91,7 @@ describe('View appointments', () => {
       })
       expect(whereaboutsApi.getVideoLinkAppointments).toHaveBeenCalledWith(res.locals, [])
       expect(prisonApi.getStaffDetails).not.toHaveBeenCalled()
+      expect(offenderSearchApi.getPrisonersDetails).not.toHaveBeenCalled()
     })
 
     it('should render the correct template information', async () => {
@@ -268,10 +267,20 @@ describe('View appointments', () => {
           lastName: 'THREE',
         })
 
-      prisonApi.getDetails
-        .mockResolvedValueOnce({ assignedLivingUnit: { description: '1-1-1' } })
-        .mockResolvedValueOnce({ assignedLivingUnit: { description: '2-1-1' } })
-        .mockResolvedValueOnce({ assignedLivingUnit: { description: '3-1-1' } })
+      offenderSearchApi.getPrisonersDetails.mockResolvedValueOnce([
+        {
+          prisonerNumber: 'ABC123',
+          cellLocation: '1-1-1',
+        },
+        {
+          prisonerNumber: 'ABC456',
+          cellLocation: '2-1-1',
+        },
+        {
+          prisonerNumber: 'ABC789',
+          cellLocation: '3-1-1',
+        },
+      ])
 
       whereaboutsApi.getVideoLinkAppointments.mockReturnValue({
         appointments: [
@@ -325,7 +334,7 @@ describe('View appointments', () => {
       })
       expect(whereaboutsApi.getVideoLinkAppointments).toHaveBeenCalledWith(res.locals, [3, 4, 5, 6])
       expect(whereaboutsApi.getAgencyGroupLocationPrefix).toHaveBeenCalledWith(res.locals, 'MDI', 'H 1')
-      expect(prisonApi.getDetails).toHaveBeenCalledTimes(6)
+      expect(offenderSearchApi.getPrisonersDetails).toHaveBeenLastCalledWith(res.locals, ['ABC123', 'ABC456', 'ABC789'])
     })
 
     it('should render the correct template information', async () => {
@@ -383,7 +392,7 @@ describe('View appointments', () => {
                 attributes: { 'data-sort-value': 'FOUR' },
                 html: '<a href="/prisoner/ABC456" class="govuk-link">Four, Offender - ABC456</a>',
               },
-              { text: undefined },
+              { text: '2-1-1' },
               { text: 'Video Link booking' },
               { html: 'VCC ROOM' },
               {
@@ -397,7 +406,7 @@ describe('View appointments', () => {
                 attributes: { 'data-sort-value': 'THREE' },
                 html: '<a href="/prisoner/ABC789" class="govuk-link">Three, Offender - ABC789</a>',
               },
-              { text: undefined },
+              { text: '3-1-1' },
               { text: 'Video Link booking' },
               { html: 'VCC ROOM</br>with: Wimbledon' },
               {
@@ -411,7 +420,7 @@ describe('View appointments', () => {
                 attributes: { 'data-sort-value': 'THREE' },
                 html: '<a href="/prisoner/ABC789" class="govuk-link">Three, Offender - ABC789</a>',
               },
-              { text: undefined },
+              { text: '3-1-1' },
               { text: 'Video Link booking' },
               { html: 'VCC ROOM</br>with: Rotherham' },
               {
@@ -456,7 +465,7 @@ describe('View appointments', () => {
                   'data-sort-value': 'TWO',
                 },
               },
-              { text: '1-1-1' },
+              { text: '2-1-1' },
               { text: 'Gym - Exercise' },
               { html: 'GYM' },
               {

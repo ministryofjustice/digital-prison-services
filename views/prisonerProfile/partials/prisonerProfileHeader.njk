@@ -35,7 +35,7 @@
 {% if prisonerProfileData.userCanEdit and prisonerProfileData.showIncentiveLevelDetails %}
     <br>
     <a data-test="iep-details-link" class="govuk-link"
-           href="{{ '/prisoner/' + prisonerProfileData.offenderNo + '/incentive-level-details' }}">
+           href="{{ prisonerProfileData.incentivesUrl + '/incentive-reviews/prisoner/' + prisonerProfileData.offenderNo }}">
             View details <span class="govuk-visually-hidden">for Incentive Level</span>
     </a>
 {% endif %}

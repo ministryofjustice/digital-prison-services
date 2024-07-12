@@ -9,7 +9,7 @@ generic-service:
   env:
     PRISON_STAFF_HUB_UI_URL: https://digital.prison.service.justice.gov.uk/
     HMPPS_COOKIE_DOMAIN: digital.prison.service.justice.gov.uk
-    API_ENDPOINT_URL: https://api.prison.service.justice.gov.uk/
+    API_ENDPOINT_URL: https://prison-api.prison.service.justice.gov.uk/
     OAUTH_ENDPOINT_URL: https://sign-in.hmpps.service.justice.gov.uk/auth/
     HMPPS_MANAGE_USERS_API_URL: https://manage-users-api.hmpps.service.justice.gov.uk
     API_WHEREABOUTS_ENDPOINT_URL: https://whereabouts-api.service.justice.gov.uk/
@@ -86,6 +86,7 @@ generic-service:
     PREPARE_SOMEONE_FOR_RELEASE_URL: https://resettlement-passport-ui.hmpps.service.justice.gov.uk
     PRISONER_PROFILE_REDIRECT_EXEMPTIONS: ""
     HOMEPAGE_REDIRECT_EXEMPTIONS: ""
+    CHANGE_SOMEONES_CELL_URL: https://change-someones-cell.prison.service.justice.gov.uk
 
   allowlist:
     sscl-blackpool: 31.121.5.27/32

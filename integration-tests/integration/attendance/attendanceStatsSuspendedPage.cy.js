@@ -16,25 +16,23 @@ const toSuspension = ($cell) => ({
 })
 
 context('A user can view suspensions', () => {
-  before(() => {
-    cy.clearCookies()
-    cy.task('resetAndStubTokenVerification')
-    cy.task('stubSignIn', {
-      username: 'ITAG_USER',
-      caseload: 'WWI',
-      caseloads: [
-        {
-          caseLoadId: 'WWI',
-          description: 'Wandsworth',
-          currentlyActive: true,
-        },
-      ],
-    })
-    cy.signIn()
-  })
-
   beforeEach(() => {
-    Cypress.Cookies.preserveOnce('hmpps-session-dev')
+    cy.task('resetAndStubTokenVerification')
+    cy.session('hmpps-session-dev', () => {
+      cy.clearCookies()
+      cy.task('stubSignIn', {
+        username: 'ITAG_USER',
+        caseload: 'WWI',
+        caseloads: [
+          {
+            caseLoadId: 'WWI',
+            description: 'Wandsworth',
+            currentlyActive: true,
+          },
+        ],
+      })
+      cy.signIn()
+    })
     cy.task('stubUserMe', {})
     cy.task('stubUserCaseLoads')
     cy.task('stubOffenderSuspendedActivitiesOverDateRange', {

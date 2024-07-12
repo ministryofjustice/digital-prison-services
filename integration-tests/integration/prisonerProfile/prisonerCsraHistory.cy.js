@@ -1,15 +1,13 @@
 context('Prisoner CSRA history', () => {
   const offenderNo = 'A1234A'
 
-  before(() => {
-    cy.clearCookies()
+  beforeEach(() => {
     cy.task('reset')
     cy.task('stubSignIn', { username: 'ITAG_USER', caseload: 'MDI' })
-    cy.signIn()
-  })
-
-  beforeEach(() => {
-    Cypress.Cookies.preserveOnce('hmpps-session-dev')
+    cy.session('hmpps-session-dev', () => {
+      cy.clearCookies()
+      cy.signIn()
+    })
     cy.task('stubOffenderBasicDetails', { firstName: 'John', lastName: 'Smith', agencyId: 'MDI' })
     cy.task('stubCsraAssessmentsForPrisoner', {
       offenderNo,

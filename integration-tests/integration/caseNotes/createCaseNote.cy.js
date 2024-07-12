@@ -7,14 +7,15 @@ const CaseNoteConfirmPage = require('../../pages/caseNotes/caseNoteConfirmPage')
 const PrisonerCaseNotePage = require('../../pages/prisonerProfile/caseNotePage')
 
 context('A user can add a case note', () => {
-  before(() => {
-    cy.clearCookies()
+  beforeEach(() => {
     cy.task('resetAndStubTokenVerification')
     cy.task('stubSignIn', { username: 'ITAG_USER', caseload: 'MDI' })
-    cy.signIn()
-  })
-  beforeEach(() => {
-    Cypress.Cookies.preserveOnce('hmpps-session-dev')
+
+    cy.session('hmpps-session-dev', () => {
+      cy.clearCookies()
+      cy.signIn()
+    })
+
     cy.task('stubOffenderBasicDetails', offenderBasicDetails)
     const offenderNo = 'A12345'
     cy.task('stubCaseNoteTypesForUser')
@@ -39,9 +40,7 @@ context('A user can add a case note', () => {
       content: [],
     })
 
-    cy.server()
-
-    cy.route({
+    cy.intercept({
       method: 'GET',
       url: '/prisoner/A12345/add-case-note?typeCode=OBSERVE',
     }).as('getTypes')
@@ -75,9 +74,8 @@ context('A user can add a case note', () => {
       content: [],
     })
 
-    cy.server()
-    cy.route({ method: 'GET', url: '/prisoner/A12345/add-case-note?typeCode=OMIC' }).as('getOmicTypes')
-    cy.server()
+    cy.intercept({ method: 'GET', url: '/prisoner/A12345/add-case-note?typeCode=OMIC' }).as('getOmicTypes')
+
     const createCaseNotePage = CreateCaseNotePage.verifyOnPage()
     const form = createCaseNotePage.form()
     form.type().select('OMIC')
@@ -124,8 +122,7 @@ context('A user can add a case note', () => {
     cy.task('stubCaseNoteTypes')
     cy.task('stubCaseNotes', { totalElements: 1, content: [] })
 
-    cy.server()
-    cy.route({ method: 'GET', url: '/prisoner/A12345/add-case-note?typeCode=OMIC' }).as('getTypes')
+    cy.intercept({ method: 'GET', url: '/prisoner/A12345/add-case-note?typeCode=OMIC' }).as('getTypes')
 
     const createCaseNotePage = CreateCaseNotePage.verifyOnPage()
     const form = createCaseNotePage.form()
@@ -168,9 +165,8 @@ context('A user can add a case note', () => {
     cy.task('stubCaseNoteTypes')
     cy.task('stubCaseNotes', { totalElements: 1, content: [] })
 
-    cy.server()
-    cy.route({ method: 'GET', url: '/prisoner/A12345/add-case-note?typeCode=OMIC' }).as('getOmicTypes')
-    cy.route({ method: 'GET', url: '/prisoner/A12345/add-case-note?typeCode=OBSERVE' }).as('getObserveTypes')
+    cy.intercept({ method: 'GET', url: '/prisoner/A12345/add-case-note?typeCode=OMIC' }).as('getOmicTypes')
+    cy.intercept({ method: 'GET', url: '/prisoner/A12345/add-case-note?typeCode=OBSERVE' }).as('getObserveTypes')
 
     const page = CreateCaseNotePage.verifyOnPage()
     const form = page.form()
@@ -224,8 +220,7 @@ context('A user can add a case note', () => {
     form.hours().clear()
     form.minutes().clear()
 
-    cy.server()
-    cy.route({ method: 'GET', url: '/prisoner/A12345/add-case-note?typeCode=OMIC' }).as('getOmicTypes')
+    cy.intercept({ method: 'GET', url: '/prisoner/A12345/add-case-note?typeCode=OMIC' }).as('getOmicTypes')
     form.type().select('OMIC')
     cy.wait('@getOmicTypes')
 

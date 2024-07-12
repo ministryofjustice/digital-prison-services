@@ -4,11 +4,13 @@ const { notEnteredMessage } = require('../../../backend/common-messages')
 context('Prisoner location history', () => {
   const offenderNo = 'A1234A'
 
-  before(() => {
-    cy.clearCookies()
+  beforeEach(() => {
     cy.task('reset')
     cy.task('stubSignIn', { username: 'ITAG_USER', caseload: 'MDI' })
-    cy.signIn()
+    cy.session('hmpps-session-dev', () => {
+      cy.clearCookies()
+      cy.signIn()
+    })
   })
 
   context('Basic page functionality', () => {

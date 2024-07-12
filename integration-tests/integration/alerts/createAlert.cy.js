@@ -5,14 +5,15 @@ const PrisonerAlertsPage = require('../../pages/prisonerProfile/prisonerAlertsPa
 const NotFoundPage = require('../../pages/notFound')
 
 context('A user can add an alert', () => {
-  before(() => {
-    cy.clearCookies()
+  beforeEach(() => {
     cy.task('resetAndStubTokenVerification')
     cy.task('stubSignIn', { username: 'ITAG_USER', caseload: 'MDI', roles: ['ROLE_UPDATE_ALERT'] })
-    cy.signIn()
-  })
-  beforeEach(() => {
-    Cypress.Cookies.preserveOnce('hmpps-session-dev')
+
+    cy.session('hmpps-session-dev', () => {
+      cy.clearCookies()
+      cy.signIn()
+    })
+
     const offenderNo = 'A12345'
     cy.task('stubOffenderFullDetails', offenderFullDetails)
     cy.task('stubAlertTypes')
@@ -32,9 +33,8 @@ context('A user can add an alert', () => {
       offenderNo: 'A12345',
     })
     cy.task('stubAlertsForBooking', [])
-    cy.server()
 
-    cy.route({
+    cy.intercept({
       method: 'GET',
       url: '/offenders/A12345/create-alert?typeCode=F1',
     }).as('getTypes')
@@ -68,9 +68,7 @@ context('A user can add an alert', () => {
   })
 
   it('Should show correct message when offender already has this alert', () => {
-    cy.server()
-
-    cy.route({
+    cy.intercept({
       method: 'GET',
       url: '/offenders/A12345/create-alert?typeCode=X',
     }).as('getTypes')

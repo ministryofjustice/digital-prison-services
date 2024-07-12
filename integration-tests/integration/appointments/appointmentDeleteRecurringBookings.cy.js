@@ -21,25 +21,25 @@ context('Delete recurring appointment page', () => {
     videoLinkBooking: null,
   }
 
-  before(() => {
-    cy.clearCookies()
-    cy.task('resetAndStubTokenVerification')
-    cy.task('stubSignIn', {
-      username: 'ITAG_USER',
-      caseload: 'WWI',
-      caseloads: [
-        {
-          caseLoadId: 'WWI',
-          description: 'Wandsworth',
-          currentlyActive: true,
-        },
-      ],
-    })
-    cy.signIn()
-  })
+  before(() => {})
 
   beforeEach(() => {
-    Cypress.Cookies.preserveOnce('hmpps-session-dev')
+    cy.session('hmpps-session-dev', () => {
+      cy.clearCookies()
+      cy.task('resetAndStubTokenVerification')
+      cy.task('stubSignIn', {
+        username: 'ITAG_USER',
+        caseload: 'WWI',
+        caseloads: [
+          {
+            caseLoadId: 'WWI',
+            description: 'Wandsworth',
+            currentlyActive: true,
+          },
+        ],
+      })
+      cy.signIn()
+    })
     cy.task('stubGetAppointment', {
       id: 1,
       appointment: testAppointment,

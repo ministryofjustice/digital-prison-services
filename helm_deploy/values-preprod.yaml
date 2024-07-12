@@ -9,7 +9,7 @@ generic-service:
   env:
     PRISON_STAFF_HUB_UI_URL: https://digital-preprod.prison.service.justice.gov.uk/
     HMPPS_COOKIE_DOMAIN: digital-preprod.prison.service.justice.gov.uk
-    API_ENDPOINT_URL: https://api-preprod.prison.service.justice.gov.uk/
+    API_ENDPOINT_URL: https://prison-api-preprod.prison.service.justice.gov.uk/
     OAUTH_ENDPOINT_URL: https://sign-in-preprod.hmpps.service.justice.gov.uk/auth/
     HMPPS_MANAGE_USERS_API_URL: https://manage-users-api-preprod.hmpps.service.justice.gov.uk
     API_WHEREABOUTS_ENDPOINT_URL: https://whereabouts-api-preprod.service.justice.gov.uk/
@@ -85,6 +85,7 @@ generic-service:
     PREPARE_SOMEONE_FOR_RELEASE_URL: https://resettlement-passport-ui-preprod.hmpps.service.justice.gov.uk
     PRISONER_PROFILE_REDIRECT_EXEMPTIONS: ""
     HOMEPAGE_REDIRECT_EXEMPTIONS: ""
+    CHANGE_SOMEONES_CELL_URL: https://change-someones-cell-preprod.prison.service.justice.gov.uk
 
   allowlist:
     palo-alto-prisma-corporate: 128.77.75.64/26

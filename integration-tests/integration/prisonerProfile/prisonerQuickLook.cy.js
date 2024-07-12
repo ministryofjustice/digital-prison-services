@@ -1,194 +1,18 @@
-const moment = require('moment')
 const prisonerQuickLookPage = require('../../pages/prisonerProfile/prisonerQuickLookPage')
 const offenderBasicDetails = require('../../mockApis/responses/offenderBasicDetails.json')
 const offenderFullDetails = require('../../mockApis/responses/offenderFullDetails.json')
+const { quickLookFullDetails } = require('../../mockData/quickLookFullDetails')
 
-const bookingId = 14
 const offenderNo = 'A1234A'
-const quickLookFullDetails = {
-  offence: [{ offenceDescription: 'Have blade/article which was sharply pointed in public place' }],
-  prisonerDetails: [
-    {
-      imprisonmentStatusDesc: 'Adult Imprisonment Without Option CJA03',
-      dateOfBirth: moment().subtract(21, 'years').format('YYYY-MM-DD'),
-      pncNumber: '12/3456A',
-      croNumber: '12345/57B',
-    },
-  ],
-  sentenceDetails: { sentenceDetail: { releaseDate: '2020-12-13' } },
-  balances: { spends: 100, cash: 75.5, savings: 50, damageObligations: 65, currency: 'GBP' },
-  iepSummary: {
-    bookingId,
-    iepDate: '2017-08-15',
-    iepTime: '2017-08-15T16:04:35',
-    iepLevel: 'Standard',
-    daysSinceReview: 881,
-    nextReviewDate: '2018-08-15',
-    iepDetails: [],
-  },
-  positiveCaseNotes: { count: 2 },
-  negativeCaseNotes: { count: 1 },
-  adjudications: {
-    adjudicationCount: 3,
-    awards: [
-      {
-        sanctionCode: 'STOP_PCT',
-        sanctionCodeDescription: 'Stoppage of Earnings (%)',
-        days: 14,
-        limit: 50,
-        effectiveDate: '2020-04-16',
-        status: 'IMMEDIATE',
-        statusDescription: 'Immediate',
-      },
-      {
-        sanctionCode: 'STOP_EARN',
-        sanctionCodeDescription: 'Stoppage of Earnings (amount)',
-        days: 14,
-        limit: 50,
-        comment: '14x SOE 50%, 14x LOC, 14x LOA 14x LOGYM, 14x LOTV 14x CC',
-        effectiveDate: '2020-04-16',
-        status: 'IMMEDIATE',
-        statusDescription: 'Immediate',
-      },
-      {
-        sanctionCode: 'CC',
-        sanctionCodeDescription: 'Cellular Confinement',
-        days: 14,
-        effectiveDate: '2020-04-16',
-        status: 'SUSP',
-        statusDescription: 'Suspended',
-      },
-      {
-        sanctionCode: 'FORFEIT',
-        sanctionCodeDescription: 'Forfeiture of Privileges',
-        days: 7,
-        comment: '7x LOC, 7x LOA, 7x LOTV',
-        effectiveDate: '2020-04-16',
-        status: 'QUASHED',
-        statusDescription: 'Quashed',
-      },
-    ],
-  },
-  prisonerNonAssociations: {
-    prisonerNumber: offenderNo,
-    firstName: 'Test',
-    lastName: 'Prisoner',
-    prisonId: 'MDI',
-    prisonName: 'HMP Moorland',
-    cellLocation: 'C-023',
-    openCount: 1,
-    closedCount: 0,
-    nonAssociations: [
-      {
-        id: 42,
-        role: 'VICTIM',
-        roleDescription: 'Victim',
-        reason: 'BULLYING',
-        reasonDescription: 'Bullying',
-        restrictionType: 'LANDING',
-        restrictionTypeDescription: 'Cell and landing',
-        comment: 'John was bullying Test',
-        authorisedBy: 'USER_1',
-        whenCreated: '2021-07-05T10:35:17',
-        whenUpdated: '2021-07-05T10:35:17',
-        updatedBy: 'USER_1',
-        isClosed: false,
-        closedBy: null,
-        closedAt: null,
-        closedReason: null,
-        otherPrisonerDetails: {
-          prisonerNumber: 'A0000AA',
-          role: 'PERPETRATOR',
-          roleDescription: 'Perpetrator',
-          firstName: 'John',
-          lastName: 'Doe',
-          prisonId: 'MDI',
-          prisonName: 'HMP Moorland',
-          cellLocation: 'Z-122',
-        },
-      },
-    ],
-  },
-  visitsSummary: {
-    startDateTime: '2020-04-17T13:30:00',
-    hasVisits: true,
-  },
-  visitBalances: { remainingVo: 24, remainingPvo: 4 },
-  todaysEvents: [
-    {
-      bookingId,
-      eventClass: 'INT_MOV',
-      eventStatus: 'SCH',
-      eventType: 'APP',
-      eventTypeDesc: 'Appointment',
-      eventSubType: 'EDUC',
-      eventSubTypeDesc: 'Education',
-      eventDate: '2020-04-17',
-      startTime: '2020-04-17T09:00:00',
-      endTime: '2020-04-17T10:00:00',
-      eventLocation: 'BADMINTON',
-      eventSource: 'APP',
-      eventSourceCode: 'APP',
-    },
-    {
-      bookingId,
-      eventClass: 'INT_MOV',
-      eventStatus: 'SCH',
-      eventType: 'APP',
-      eventTypeDesc: 'Appointment',
-      eventSubType: 'CABE',
-      eventSubTypeDesc: 'Case - Benefits',
-      eventDate: '2020-04-17',
-      startTime: '2020-04-17T13:00:00',
-      endTime: '2020-04-17T14:00:00',
-      eventLocation: 'CIRCUIT',
-      eventSource: 'APP',
-      eventSourceCode: 'APP',
-      eventSourceDesc: 'Test Comment',
-    },
-    {
-      bookingId,
-      eventClass: 'INT_MOV',
-      eventStatus: 'CANC',
-      eventType: 'APP',
-      eventTypeDesc: 'Appointment',
-      eventSubType: 'GYMSH',
-      eventSubTypeDesc: 'Gym - Sports Halls Activity',
-      eventDate: '2020-04-17',
-      startTime: '2020-04-17T15:00:00',
-      endTime: '2020-04-17T15:30:00',
-      eventLocation: 'BASKETBALL',
-      eventSource: 'APP',
-      eventSourceCode: 'APP',
-      eventSourceDesc: 'Test comment',
-    },
-    {
-      bookingId,
-      eventClass: 'INT_MOV',
-      eventStatus: 'SCH',
-      eventType: 'APP',
-      eventTypeDesc: 'Appointment',
-      eventSubType: 'GYMF',
-      eventSubTypeDesc: 'Gym - Football',
-      eventDate: '2020-04-17',
-      startTime: '2020-04-17T20:20:00',
-      endTime: '2020-04-17T20:35:00',
-      eventLocation: 'BADMINTON',
-      eventSource: 'APP',
-      eventSourceCode: 'APP',
-      eventSourceDesc: 'Testing a really long comment which is over 40 characters',
-    },
-  ],
-  profileInformation: [{ type: 'NAT', resultValue: 'British' }],
-}
 
 context('Backlink in Prisoner Profile', () => {
-  before(() => {
-    cy.clearCookies()
-    cy.task('reset')
-    cy.task('stubSignIn', { username: 'ITAG_USER', caseload: 'MDI', caseloads: [] })
-    cy.signIn()
-
+  beforeEach(() => {
+    cy.session('hmpps-session-dev-no-caseloads', () => {
+      cy.clearCookies()
+      cy.task('reset')
+      cy.task('stubSignIn', { username: 'ITAG_USER', caseload: 'MDI', caseloads: [] })
+      cy.signIn()
+    })
     cy.task('stubPrisonerProfileHeaderData', {
       offenderBasicDetails,
       offenderFullDetails,
@@ -250,11 +74,13 @@ context('Backlink in Prisoner Profile', () => {
 })
 
 context('Prisoner quick look data retrieval errors', () => {
-  before(() => {
-    cy.clearCookies()
-    cy.task('reset')
-    cy.task('stubSignIn', { username: 'ITAG_USER', caseload: 'MDI', caseloads: [] })
-    cy.signIn()
+  beforeEach(() => {
+    cy.session('hmpps-session-dev-no-caseloads', () => {
+      cy.clearCookies()
+      cy.task('reset')
+      cy.task('stubSignIn', { username: 'ITAG_USER', caseload: 'MDI', caseloads: [] })
+      cy.signIn()
+    })
 
     cy.task('stubPrisonerProfileHeaderData', {
       offenderBasicDetails,
@@ -338,18 +164,15 @@ context('Prisoner profile header', () => {
     caseNoteSummary: {},
     offenderNo,
   }
-  before(() => {
-    cy.task('reset')
-    cy.clearCookies()
-    cy.task('reset')
-    cy.task('stubSignIn', { username: 'ITAG_USER', caseload: 'MDI' })
-    cy.signIn()
+  beforeEach(() => {
+    cy.session('hmpps-session-dev-caseloads', () => {
+      cy.clearCookies()
+      cy.task('reset')
+      cy.task('stubSignIn', { username: 'ITAG_USER', caseload: 'MDI' })
+      cy.signIn()
+    })
 
     cy.task('stubQuickLook', quickLookFullDetails)
-  })
-
-  beforeEach(() => {
-    Cypress.Cookies.preserveOnce('hmpps-session-dev')
   })
 
   it('Should show correct header information', () => {
@@ -388,19 +211,19 @@ context('Prisoner profile header', () => {
 })
 
 context('Prisoner quick look', () => {
-  before(() => {
-    cy.task('reset')
-    cy.clearCookies()
-    cy.task('reset')
-    cy.task('stubSignIn', { username: 'ITAG_USER', caseload: 'MDI' })
-    cy.signIn()
+  beforeEach(() => {
+    cy.session('hmpps-session-dev-quick-look', () => {
+      cy.clearCookies()
+      cy.task('reset')
+      cy.task('stubSignIn', { username: 'ITAG_USER', caseload: 'MDI' })
+      cy.signIn()
+    })
 
     cy.task('stubQuickLook', quickLookFullDetails)
   })
 
   context('When a prisoner is in users caseload', () => {
     beforeEach(() => {
-      Cypress.Cookies.preserveOnce('hmpps-session-dev')
       cy.task('stubPrisonerProfileHeaderData', {
         offenderBasicDetails,
         offenderFullDetails: { ...offenderFullDetails, profileInformation: [{ type: 'NAT', resultValue: 'British' }] },
@@ -536,7 +359,6 @@ context('Prisoner quick look', () => {
 
   context('When someone is currently not in prison', () => {
     beforeEach(() => {
-      Cypress.Cookies.preserveOnce('hmpps-session-dev')
       cy.task('stubPrisonerProfileHeaderData', {
         offenderBasicDetails,
         offenderFullDetails,
@@ -563,7 +385,6 @@ context('Prisoner quick look', () => {
 
   context('When a prisoner is in users caseload but does not have any visit details (unsentenced)', () => {
     beforeEach(() => {
-      Cypress.Cookies.preserveOnce('hmpps-session-dev')
       cy.task('stubPrisonerProfileHeaderData', {
         offenderBasicDetails,
         offenderFullDetails: { ...offenderFullDetails },
@@ -586,7 +407,6 @@ context('Prisoner quick look', () => {
 
   context('When a prisoner is NOT in users caseload', () => {
     beforeEach(() => {
-      Cypress.Cookies.preserveOnce('hmpps-session-dev')
       cy.task('stubPrisonerProfileHeaderData', {
         offenderBasicDetails,
         offenderFullDetails: { ...offenderFullDetails, agencyId: 'LEI' },
@@ -606,7 +426,6 @@ context('Prisoner quick look', () => {
 
   context('When a user CANNOT view inactive bookings', () => {
     beforeEach(() => {
-      Cypress.Cookies.preserveOnce('hmpps-session-dev')
       cy.task('stubPrisonerProfileHeaderData', {
         offenderBasicDetails,
         offenderFullDetails: { ...offenderFullDetails, agencyId: 'OUT' },
@@ -625,7 +444,6 @@ context('Prisoner quick look', () => {
 
   context('When a user has no roles relating to viewing probation documents', () => {
     beforeEach(() => {
-      Cypress.Cookies.preserveOnce('hmpps-session-dev')
       cy.task('stubPrisonerProfileHeaderData', {
         offenderBasicDetails,
         offenderFullDetails,
@@ -644,7 +462,6 @@ context('Prisoner quick look', () => {
 
   context('When a prisoner does NOT have a record retention record', () => {
     beforeEach(() => {
-      Cypress.Cookies.preserveOnce('hmpps-session-dev')
       cy.task('stubPrisonerProfileHeaderData', {
         offenderBasicDetails,
         offenderFullDetails: { ...offenderFullDetails, agencyId: 'LEI' },
@@ -671,7 +488,6 @@ context('Prisoner quick look', () => {
 
   context('When a prisoner does have a record retention record', () => {
     beforeEach(() => {
-      Cypress.Cookies.preserveOnce('hmpps-session-dev')
       cy.task('stubPrisonerProfileHeaderData', {
         offenderBasicDetails,
         offenderFullDetails: { ...offenderFullDetails, agencyId: 'LEI' },
@@ -703,12 +519,13 @@ context('Prisoner quick look', () => {
 
 context('Finances section', () => {
   context('where damage obligations is zero', () => {
-    before(() => {
-      cy.task('reset')
-      cy.clearCookies()
-      cy.task('reset')
-      cy.task('stubSignIn', { username: 'ITAG_USER', caseload: 'MDI' })
-      cy.signIn()
+    beforeEach(() => {
+      cy.session('hmpps-session-dev', () => {
+        cy.clearCookies()
+        cy.task('reset')
+        cy.task('stubSignIn', { username: 'ITAG_USER', caseload: 'MDI' })
+        cy.signIn()
+      })
 
       quickLookFullDetails.balances.damageObligations = 0
       cy.task('stubQuickLook', quickLookFullDetails)
@@ -716,7 +533,6 @@ context('Finances section', () => {
 
     context('When a prisoner is in users caseload', () => {
       beforeEach(() => {
-        Cypress.Cookies.preserveOnce('hmpps-session-dev')
         cy.task('stubPrisonerProfileHeaderData', {
           offenderBasicDetails,
           offenderFullDetails: {
@@ -760,7 +576,6 @@ context('Finances section', () => {
 
     context('When a prisoner is in users caseload', () => {
       beforeEach(() => {
-        Cypress.Cookies.preserveOnce('hmpps-session-dev')
         cy.task('stubPrisonerProfileHeaderData', {
           offenderBasicDetails,
           offenderFullDetails: {
@@ -793,14 +608,14 @@ context('Finances section', () => {
 })
 
 context('When a user has a SOC role', () => {
-  before(() => {
-    cy.clearCookies()
-    cy.task('reset')
-    cy.task('stubSignIn', { username: 'ITAG_USER', caseload: 'MDI', caseloads: [], roles: ['ROLE_SOC_CUSTODY'] })
-    cy.signIn()
-  })
   beforeEach(() => {
-    Cypress.Cookies.preserveOnce('hmpps-session-dev')
+    cy.session('hmpps-session-dev-soc', () => {
+      cy.clearCookies()
+      cy.task('reset')
+      cy.task('stubSignIn', { username: 'ITAG_USER', caseload: 'MDI', caseloads: [], roles: ['ROLE_SOC_CUSTODY'] })
+      cy.signIn()
+    })
+
     cy.task('stubPrisonerProfileHeaderData', {
       offenderBasicDetails,
       offenderFullDetails,
@@ -847,15 +662,17 @@ context('When a user has a SOC role', () => {
 })
 
 context('When a user has POM role', () => {
-  before(() => {
-    cy.clearCookies()
-    cy.task('reset')
-    cy.task('stubSignIn', { username: 'ITAG_USER', caseload: 'MDI', caseloads: [], roles: ['ROLE_POM'] })
-    cy.signIn()
+  beforeEach(() => {
+    cy.session('hmpps-session-dev-pom', () => {
+      cy.clearCookies()
+      cy.task('reset')
+      cy.task('stubSignIn', { username: 'ITAG_USER', caseload: 'MDI', caseloads: [], roles: ['ROLE_POM'] })
+      cy.signIn()
+    })
   })
+
   context('when offender in caseload', () => {
     beforeEach(() => {
-      Cypress.Cookies.preserveOnce('hmpps-session-dev')
       cy.task('stubIsCaseLoadRestrictedPatient', {
         status: 404,
         body: { message: 'Offender not found' },
@@ -879,7 +696,6 @@ context('When a user has POM role', () => {
 
   context('when offender not in caseload', () => {
     beforeEach(() => {
-      Cypress.Cookies.preserveOnce('hmpps-session-dev')
       cy.task('stubIsCaseLoadRestrictedPatient', {
         status: 404,
         body: { message: 'Offender not found' },
@@ -903,20 +719,21 @@ context('When a user has POM role', () => {
 })
 
 context('When a user has VIEW_PROBATION_DOCUMENTS role', () => {
-  before(() => {
-    cy.clearCookies()
-    cy.task('reset')
-    cy.task('stubSignIn', {
-      username: 'ITAG_USER',
-      caseload: 'MDI',
-      caseloads: [],
-      roles: ['ROLE_VIEW_PROBATION_DOCUMENTS'],
+  beforeEach(() => {
+    cy.session('hmpps-session-dev-probation-documents', () => {
+      cy.clearCookies()
+      cy.task('reset')
+      cy.task('stubSignIn', {
+        username: 'ITAG_USER',
+        caseload: 'MDI',
+        caseloads: [],
+        roles: ['ROLE_VIEW_PROBATION_DOCUMENTS'],
+      })
+      cy.signIn()
     })
-    cy.signIn()
   })
   context('when offender in caseload', () => {
     beforeEach(() => {
-      Cypress.Cookies.preserveOnce('hmpps-session-dev')
       cy.task('stubPrisonerProfileHeaderData', {
         offenderBasicDetails,
         offenderFullDetails,
@@ -935,7 +752,6 @@ context('When a user has VIEW_PROBATION_DOCUMENTS role', () => {
   })
   context('when offender not in caseload', () => {
     beforeEach(() => {
-      Cypress.Cookies.preserveOnce('hmpps-session-dev')
       cy.task('stubPrisonerProfileHeaderData', {
         offenderBasicDetails: { ...offenderBasicDetails, agencyId: 'LEI' },
         offenderFullDetails: { ...offenderFullDetails, agencyId: 'LEI' },
@@ -955,20 +771,18 @@ context('When a user has VIEW_PROBATION_DOCUMENTS role', () => {
 })
 
 context('When a user can view inactive bookings', () => {
-  before(() => {
-    cy.clearCookies()
-    cy.task('reset')
-    cy.task('stubSignIn', {
-      username: 'ITAG_USER',
-      caseload: 'MDI',
-      caseloads: [],
-      roles: ['ROLE_INACTIVE_BOOKINGS'],
-    })
-    cy.signIn()
-  })
   beforeEach(() => {
+    cy.session('hmpps-session-dev-inactive-bookings', () => {
+      cy.task('reset')
+      cy.task('stubSignIn', {
+        username: 'ITAG_USER',
+        caseload: 'MDI',
+        caseloads: [],
+        roles: ['ROLE_INACTIVE_BOOKINGS'],
+      })
+      cy.signIn()
+    })
     cy.task('stubQuickLook', quickLookFullDetails)
-    Cypress.Cookies.preserveOnce('hmpps-session-dev')
     cy.task('stubPrisonerProfileHeaderData', {
       offenderBasicDetails,
       offenderFullDetails: { ...offenderFullDetails, agencyId: 'OUT' },
@@ -985,5 +799,3 @@ context('When a user can view inactive bookings', () => {
     cy.get('[data-test="incentive-details-link"]').should('contain.text', 'View incentive level details')
   })
 })
-
-module.exports = { quickLookFullDetails }

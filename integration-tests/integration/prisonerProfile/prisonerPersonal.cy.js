@@ -145,15 +145,13 @@ context('Prisoner personal', () => {
     clickIfExist('.govuk-accordion__open-all[aria-expanded="false"]') // Not needed to check values but useful for viewing cypress snapshots
   }
 
-  before(() => {
-    cy.clearCookies()
+  beforeEach(() => {
     cy.task('resetAndStubTokenVerification')
     cy.task('stubSignIn', { username: 'ITAG_USER', caseload: 'MDI' })
-    cy.signIn()
-  })
-
-  beforeEach(() => {
-    Cypress.Cookies.preserveOnce('hmpps-session-dev')
+    cy.session('hmpps-session-dev', () => {
+      cy.clearCookies()
+      cy.signIn()
+    })
     cy.task('stubPathFinderOffenderDetails', null)
     cy.task('stubClientCredentialsRequest')
   })
@@ -161,7 +159,7 @@ context('Prisoner personal', () => {
   context('When there is no data', () => {
     const notEnteredText = 'Not entered'
 
-    before(() => {
+    beforeEach(() => {
       cy.task('stubPrisonerProfileHeaderData', {
         offenderBasicDetails,
         offenderFullDetails,
@@ -170,9 +168,6 @@ context('Prisoner personal', () => {
         offenderNo,
       })
       cy.task('stubPersonal', {})
-    })
-
-    beforeEach(() => {
       visitPersonalAndExpandAccordions()
     })
 
@@ -351,7 +346,7 @@ context('Prisoner personal', () => {
       })
 
       context('When there is some but not all data', () => {
-        before(() => {
+        beforeEach(() => {
           cy.task('stubPrisonerProfileHeaderData', {
             offenderBasicDetails,
             offenderFullDetails,
@@ -426,7 +421,7 @@ context('Prisoner personal', () => {
       })
 
       context('When there is some but not all data', () => {
-        before(() => {
+        beforeEach(() => {
           cy.task('stubPrisonerProfileHeaderData', {
             offenderBasicDetails,
             offenderFullDetails,
@@ -1188,7 +1183,7 @@ context('Prisoner personal', () => {
     })
 
     context('When there is no fixed abode for a prisoner', () => {
-      before(() => {
+      beforeEach(() => {
         cy.task('stubPrisonerProfileHeaderData', headerDetails)
         cy.task('stubPersonal', { addresses: [{ ...primaryAddress, noFixedAddress: true }] })
         visitPersonalAndExpandAccordions()
@@ -1209,7 +1204,7 @@ context('Prisoner personal', () => {
     })
 
     context('When there is no fixed abode for contacts', () => {
-      before(() => {
+      beforeEach(() => {
         cy.task('stubPrisonerProfileHeaderData', headerDetails)
         cy.task('stubPersonal', {
           personAddresses: [{ ...primaryAddress, noFixedAddress: true }],
@@ -1266,7 +1261,7 @@ context('Prisoner personal', () => {
         supportDate: '2022-02-20',
       }
 
-      before(() => {
+      beforeEach(() => {
         cy.task('stubPrisonerProfileHeaderData', headerDetails)
         cy.task('stubPersonal', {
           neurodivergence: [neurodivergenceAll],
@@ -1312,7 +1307,7 @@ context('Prisoner personal', () => {
         supportDate: '2022-02-20',
       }
 
-      before(() => {
+      beforeEach(() => {
         cy.task('stubPrisonerProfileHeaderData', headerDetails)
         cy.task('stubPersonal', {
           neurodivergence: [neurodivergenceAssessed],
@@ -1356,7 +1351,7 @@ context('Prisoner personal', () => {
         supportDate: '2022-02-20',
       }
 
-      before(() => {
+      beforeEach(() => {
         cy.task('stubPrisonerProfileHeaderData', headerDetails)
         cy.task('stubPersonal', {
           neurodivergence: [neurodivergenceSelfAssessed],
@@ -1391,7 +1386,7 @@ context('Prisoner personal', () => {
       })
     })
     context('Neurodivergence - none entered', () => {
-      before(() => {
+      beforeEach(() => {
         cy.task('stubPrisonerProfileHeaderData', headerDetails)
         cy.task('stubPersonal', {
           neurodivergence: [],

@@ -8,14 +8,13 @@ const OtherCourtPage = require('../../pages/appointments/otherCourtPage')
 const ConfirmVideoLinkPrisonPage = require('../../pages/appointments/confirmVideoLinkPrisonPage')
 
 context('A user can add an appointment', () => {
-  before(() => {
-    cy.clearCookies()
-    cy.task('resetAndStubTokenVerification')
-    cy.task('stubSignIn', { username: 'ITAG_USER', caseload: 'MDI' })
-    cy.signIn()
-  })
   beforeEach(() => {
-    Cypress.Cookies.preserveOnce('hmpps-session-dev')
+    cy.session('hmpps-session-dev', () => {
+      cy.clearCookies()
+      cy.task('resetAndStubTokenVerification')
+      cy.task('stubSignIn', { username: 'ITAG_USER', caseload: 'MDI' })
+      cy.signIn()
+    })
     const offenderNo = 'A12345'
     cy.task('stubOffenderBasicDetails', offenderBasicDetails)
     cy.task('stubAppointmentTypes', [

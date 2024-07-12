@@ -30,6 +30,7 @@ const curiousApi = require('./integration-tests/mockApis/curiousApi')
 
 const { stubScenario, resetStubs } = require('./integration-tests/mockApis/wiremock')
 const components = require('./integration-tests/mockApis/components')
+const { stubDpsHomepage } = require('./integration-tests/mockApis/dpsHomepage')
 
 const extractOffenderNumbers = (activityList) => {
   const result = Object.keys(activityList).reduce((r, k) => r.concat(activityList[k]), [])
@@ -469,13 +470,6 @@ module.exports = defineConfig({
         verifyMoveToCellSwap: ({ bookingId }) => prisonApi.verifyMoveToCellSwap({ bookingId }),
         stubAttendanceStats: ({ agencyId, fromDate, period, stats }) =>
           whereabouts.stubAttendanceStats(agencyId, fromDate, period, stats),
-        stubEstablishmentRollCount: ({ agencyId, assignedMovements, unassignedMovements, movements, enroute }) =>
-          Promise.all([
-            prisonApi.stubAssignedMovements(agencyId, assignedMovements),
-            prisonApi.stubUnassignedMovements(agencyId, unassignedMovements),
-            prisonApi.stubRollcountByType(agencyId, 'movements', movements),
-            prisonApi.stubRollcountByType(agencyId, 'enroute', enroute),
-          ]),
         stubCourtEvents: (courtEvents) => prisonApi.stubCourtEvents(courtEvents),
         stubGetEventsByLocationIds: ({ agencyId, date, timeSlot, response }) =>
           prisonApi.stubGetEventsByLocationIds(agencyId, date, timeSlot, response),
@@ -539,6 +533,7 @@ module.exports = defineConfig({
         stubPrisonerProfileWorkAndSkills: prisonerProfile.stubPrisonerProfileWorkAndSkills,
         stubComponents: components.stubComponents,
         stubComponentsFail: components.stubComponentsFail,
+        stubDpsHomepage: stubDpsHomepage,
       })
     },
 
