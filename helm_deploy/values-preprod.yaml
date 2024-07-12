@@ -87,6 +87,7 @@ generic-service:
     HOMEPAGE_REDIRECT_EXEMPTIONS: ""
 
   allowlist:
+    palo-alto-prisma-corporate: 128.77.75.64/26
     groups:
       - internal
       - prisons
