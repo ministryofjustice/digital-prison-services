@@ -330,15 +330,7 @@ const setup = ({
 
   router.use('/change-someones-cell-has-moved', changeSomeonesCellHasMovedRouter())
 
-  router.use(
-    '/establishment-roll',
-    establishmentRollRouter({
-      oauthApi,
-      prisonApi,
-      systemOauthClient,
-      incentivesApi,
-    })
-  )
+  router.use('/establishment-roll', establishmentRollRouter())
 
   router.use(
     '/prisoner/:offenderNo',

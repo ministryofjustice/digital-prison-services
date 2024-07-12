@@ -470,13 +470,6 @@ module.exports = defineConfig({
         verifyMoveToCellSwap: ({ bookingId }) => prisonApi.verifyMoveToCellSwap({ bookingId }),
         stubAttendanceStats: ({ agencyId, fromDate, period, stats }) =>
           whereabouts.stubAttendanceStats(agencyId, fromDate, period, stats),
-        stubEstablishmentRollCount: ({ agencyId, assignedMovements, unassignedMovements, movements, enroute }) =>
-          Promise.all([
-            prisonApi.stubAssignedMovements(agencyId, assignedMovements),
-            prisonApi.stubUnassignedMovements(agencyId, unassignedMovements),
-            prisonApi.stubRollcountByType(agencyId, 'movements', movements),
-            prisonApi.stubRollcountByType(agencyId, 'enroute', enroute),
-          ]),
         stubCourtEvents: (courtEvents) => prisonApi.stubCourtEvents(courtEvents),
         stubGetEventsByLocationIds: ({ agencyId, date, timeSlot, response }) =>
           prisonApi.stubGetEventsByLocationIds(agencyId, date, timeSlot, response),
