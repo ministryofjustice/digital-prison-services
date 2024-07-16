@@ -10,6 +10,7 @@ const nonAssociationsApi = require('./integration-tests/mockApis/nonAssociations
 const dataComplianceApi = require('./integration-tests/mockApis/dataCompliance')
 const prisonerProfile = require('./integration-tests/mockApis/prisonerProfile')
 const whereabouts = require('./integration-tests/mockApis/whereabouts')
+const locationsInsidePrisonApi = require('./integration-tests/mockApis/locationsInsidePrisonApi')
 const tokenverification = require('./integration-tests/mockApis/tokenverification')
 const keyworker = require('./integration-tests/mockApis/keyworker')
 const caseNotes = require('./integration-tests/mockApis/caseNotes')
@@ -466,7 +467,7 @@ module.exports = defineConfig({
         stubMoveToCellSwap: () => prisonApi.stubMoveToCellSwap(),
         verifyMoveToCell: (body) => prisonApi.verifyMoveToCell(body),
         stubGetLocationPrefix: ({ agencyId, groupName, response }) =>
-          whereabouts.stubGetLocationPrefix({ agencyId, groupName, response }),
+          locationsInsidePrisonApi.stubGetLocationPrefix({ agencyId, groupName, response }),
         verifyMoveToCellSwap: ({ bookingId }) => prisonApi.verifyMoveToCellSwap({ bookingId }),
         stubAttendanceStats: ({ agencyId, fromDate, period, stats }) =>
           whereabouts.stubAttendanceStats(agencyId, fromDate, period, stats),

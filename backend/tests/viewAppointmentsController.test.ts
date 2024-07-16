@@ -11,6 +11,9 @@ describe('View appointments', () => {
     getAppointments: jest.fn(),
     getVideoLinkAppointments: jest.fn(),
     searchGroups: jest.fn(),
+  }
+
+  const locationsInsidePrisonApi = {
     getAgencyGroupLocationPrefix: jest.fn(),
   }
   const systemOauthClient = {
@@ -51,7 +54,6 @@ describe('View appointments', () => {
     whereaboutsApi.getAppointments = jest.fn()
     whereaboutsApi.getVideoLinkAppointments = jest.fn()
     whereaboutsApi.searchGroups = jest.fn()
-    whereaboutsApi.getAgencyGroupLocationPrefix = jest.fn()
 
     whereaboutsApi.getVideoLinkAppointments.mockReturnValue({ appointments: [] })
     whereaboutsApi.getAppointments.mockReturnValue([])
@@ -65,11 +67,19 @@ describe('View appointments', () => {
         key: 'H 2',
       },
     ])
-    whereaboutsApi.getAgencyGroupLocationPrefix = jest.fn().mockReturnValue({
+
+    locationsInsidePrisonApi.getAgencyGroupLocationPrefix = jest.fn()
+    locationsInsidePrisonApi.getAgencyGroupLocationPrefix = jest.fn().mockReturnValue({
       locationPrefix: 'MDI-1-',
     })
 
-    controller = viewAppointments({ systemOauthClient, prisonApi, offenderSearchApi, whereaboutsApi })
+    controller = viewAppointments({
+      systemOauthClient,
+      prisonApi,
+      offenderSearchApi,
+      whereaboutsApi,
+      locationsInsidePrisonApi,
+    })
   })
 
   afterAll(() => {
@@ -333,7 +343,7 @@ describe('View appointments', () => {
         timeSlot: 'PM',
       })
       expect(whereaboutsApi.getVideoLinkAppointments).toHaveBeenCalledWith(res.locals, [3, 4, 5, 6])
-      expect(whereaboutsApi.getAgencyGroupLocationPrefix).toHaveBeenCalledWith(res.locals, 'MDI', 'H 1')
+      expect(locationsInsidePrisonApi.getAgencyGroupLocationPrefix).toHaveBeenCalledWith({}, 'MDI', 'H 1')
       expect(offenderSearchApi.getPrisonersDetails).toHaveBeenLastCalledWith(res.locals, ['ABC123', 'ABC456', 'ABC789'])
     })
 

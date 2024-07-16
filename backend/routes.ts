@@ -105,6 +105,7 @@ const router = express.Router()
 const setup = ({
   prisonApi,
   whereaboutsApi,
+  locationsInsidePrisonApi,
   oauthApi,
   hmppsManageUsersApi,
   deliusIntegrationApi,
@@ -306,7 +307,7 @@ const setup = ({
   router.use(
     '/view-all-appointments',
     isAppointmentsRolledOut,
-    viewAppointments({ systemOauthClient, prisonApi, offenderSearchApi, whereaboutsApi })
+    viewAppointments({ systemOauthClient, prisonApi, offenderSearchApi, whereaboutsApi, locationsInsidePrisonApi })
   )
 
   router.use(
