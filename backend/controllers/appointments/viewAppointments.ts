@@ -3,8 +3,17 @@ import { Response } from 'express'
 import { formatName, getCurrentPeriod, getTime, properCaseName } from '../../utils'
 import { PrisonerSearchResult } from '../../api/offenderSearchApi'
 
-export const prisonApiLocationDescription = async (res: Response, whereaboutsApi, locationKey, userCaseLoad) => {
-  const fullLocationPrefix = await whereaboutsApi.getAgencyGroupLocationPrefix(res.locals, userCaseLoad, locationKey)
+export const getAgencyGroupLocationPrefix = async (
+  systemContext,
+  locationsInsidePrisonApi,
+  locationKey: string,
+  userCaseLoad: string
+) => {
+  const fullLocationPrefix = await locationsInsidePrisonApi.getAgencyGroupLocationPrefix(
+    systemContext,
+    userCaseLoad,
+    locationKey
+  )
 
   if (fullLocationPrefix) {
     const locationIdWithSuffix = fullLocationPrefix.locationPrefix
@@ -24,7 +33,7 @@ async function getCellLocationsFromPrisonerSearch(offenderSearchApi, systemConte
   return new Map(prisonerDetailsForOffenderNumbers.map((i) => [i.prisonerNumber, i.cellLocation]))
 }
 
-export default ({ systemOauthClient, prisonApi, offenderSearchApi, whereaboutsApi }) =>
+export default ({ systemOauthClient, prisonApi, offenderSearchApi, whereaboutsApi, locationsInsidePrisonApi }) =>
   async (req, res: Response) => {
     // @ts-expect-error ts-migrate(2554) FIXME: Expected 1 arguments, but got 0.
     const { date, timeSlot = getCurrentPeriod(), type, locationId, residentialLocation } = req.query
@@ -32,8 +41,8 @@ export default ({ systemOauthClient, prisonApi, offenderSearchApi, whereaboutsAp
     const agencyId = req.session.userDetails.activeCaseLoadId
     const systemContext = await systemOauthClient.getClientCredentialsTokens(req.session.userDetails.username)
 
-    const locationDesc = residentialLocation
-      ? await prisonApiLocationDescription(res, whereaboutsApi, residentialLocation, agencyId)
+    const offenderLocationPrefix = residentialLocation
+      ? await getAgencyGroupLocationPrefix(systemContext, locationsInsidePrisonApi, residentialLocation, agencyId)
       : agencyId
 
     const [appointmentTypes, appointmentLocations, appointments, residentialLocations] = await Promise.all([
@@ -43,7 +52,7 @@ export default ({ systemOauthClient, prisonApi, offenderSearchApi, whereaboutsAp
         date: searchDate,
         timeSlot: timeSlot !== 'All' ? timeSlot : undefined,
         locationId,
-        offenderLocationPrefix: locationDesc,
+        offenderLocationPrefix,
       }),
       whereaboutsApi.searchGroups(res.locals, agencyId),
     ])

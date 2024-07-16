@@ -3,15 +3,7 @@ import { mapToQueryString } from '../utils'
 export const whereaboutsApiFactory = (client) => {
   const processResponse = () => (response) => response.body
 
-  const map404ToNull = (error) => {
-    if (!error.response) throw error
-    if (!error.response.status) throw error
-    if (error.response.status !== 404) throw error
-    return null
-  }
-
   const get = (context, url) => client.get(context, url).then(processResponse())
-  const getWith404AsNull = (context, url) => client.get(context, url).then(processResponse()).catch(map404ToNull)
   const getWithCustomTimeout = (context, path, overrides) =>
     client.getWithCustomTimeout(context, path, overrides).then(processResponse())
   const post = (context, url, data) => client.post(context, url, data).then(processResponse())
@@ -68,9 +60,6 @@ export const whereaboutsApiFactory = (client) => {
     )
 
   const searchGroups = (context, agencyId) => get(context, `/agencies/${agencyId}/locations/groups`)
-
-  const getAgencyGroupLocationPrefix = (context, agencyId, groupName) =>
-    getWith404AsNull(context, `/locations/${agencyId}/${groupName}/location-prefix`)
 
   const getAgencyGroupLocations = (context, agencyId, groupName) =>
     get(context, `/locations/groups/${agencyId}/${groupName}`)
@@ -137,7 +126,6 @@ export const whereaboutsApiFactory = (client) => {
     getUnacceptableAbsences,
     getUnacceptableAbsenceDetail,
     searchGroups,
-    getAgencyGroupLocationPrefix,
     getAgencyGroupLocations,
     getCourtLocations,
     addVideoLinkBooking,

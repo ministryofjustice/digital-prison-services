@@ -299,20 +299,6 @@ module.exports = {
       },
     })
   },
-  stubGetLocationPrefix: ({ agencyId, groupName, response }) =>
-    stubFor({
-      request: {
-        method: 'GET',
-        url: `/whereabouts/locations/${agencyId}/${groupName}/location-prefix`,
-      },
-      response: {
-        status: 200,
-        headers: {
-          'Content-Type': 'application/json;charset=UTF-8',
-        },
-        jsonBody: response,
-      },
-    }),
 
   stubGetAgencyGroupLocations: ({ agencyId, groupName, response }) =>
     stubFor({

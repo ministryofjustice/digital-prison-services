@@ -101,6 +101,10 @@ export const apis = {
     url: process.env.API_WHEREABOUTS_ENDPOINT_URL || 'http://localhost:8082/',
     timeoutSeconds: toNumber(process.env.API_WHEREABOUTS_ENDPOINT_TIMEOUT_SECONDS) || 30,
   },
+  locationsInsidePrisonApi: {
+    url: process.env.API_LOCATIONS_INSIDE_PRISON_ENDPOINT_URL || 'http://localhost:8082/',
+    timeoutSeconds: toNumber(process.env.API_LOCATIONS_INSIDE_PRISON_ENDPOINT_TIMEOUT_SECONDS) || 30,
+  },
   deliusIntegration: {
     url: process.env.API_DELIUS_ENDPOINT_URL || 'http://localhost:8083/delius',
     timeoutSeconds: toNumber(process.env.API_DELIUS_ENDPOINT_TIMEOUT_SECONDS) || 30,
