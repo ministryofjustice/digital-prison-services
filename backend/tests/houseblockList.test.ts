@@ -13,15 +13,19 @@ const prisonApi = {
   getAssessments: jest.fn(),
 }
 const whereaboutsApi = {
-  getAgencyGroupLocations: jest.fn(),
   getAttendanceForBookings: jest.fn(),
+}
+
+const locationsInsidePrisonApi = {
+  getAgencyGroupLocations: jest.fn(),
 }
 const getClientCredentialsTokens = jest.fn().mockResolvedValue({})
 
 const houseblockList = require('../controllers/attendance/houseblockList').getHouseblockListFactory(
   getClientCredentialsTokens,
   prisonApi,
-  whereaboutsApi
+  whereaboutsApi,
+  locationsInsidePrisonApi
 ).getHouseblockList
 
 // There can be more than one occupant of a cell, the results are ordered by cell,offenderNo or cell,surname from the api.
@@ -191,7 +195,7 @@ describe('Houseblock list controller', () => {
   beforeEach(() => {
     jest.resetAllMocks()
     whereaboutsApi.getAttendanceForBookings.mockReturnValue([])
-    whereaboutsApi.getAgencyGroupLocations.mockReturnValue([{ locationId: 1 }])
+    locationsInsidePrisonApi.getAgencyGroupLocations.mockReturnValue([{ pathHierarchy: 'A-1-1' }])
   })
 
   it('Should add visit and appointment details to array', async () => {
@@ -199,7 +203,7 @@ describe('Houseblock list controller', () => {
 
     const response = await houseblockList({})
 
-    expect(whereaboutsApi.getAgencyGroupLocations.mock.calls.length).toBe(1)
+    expect(locationsInsidePrisonApi.getAgencyGroupLocations.mock.calls.length).toBe(1)
     expect(prisonApi.getHouseblockList.mock.calls.length).toBe(1)
 
     expect(response.length).toBe(4)
@@ -249,24 +253,27 @@ describe('Houseblock list controller', () => {
   })
 
   it('Should pass location Ids to getHouseblockList', async () => {
-    whereaboutsApi.getAgencyGroupLocations.mockReturnValue([{ locationId: 1 }, { locationId: 2 }])
+    locationsInsidePrisonApi.getAgencyGroupLocations.mockReturnValue([
+      { pathHierarchy: 'A-1-1' },
+      { pathHierarchy: 'A-1-2' },
+    ])
+
     prisonApi.getHouseblockList.mockImplementationOnce(() => createResponse())
 
     await houseblockList({})
 
-    expect(whereaboutsApi.getAgencyGroupLocations.mock.calls.length).toBe(1)
+    expect(locationsInsidePrisonApi.getAgencyGroupLocations.mock.calls.length).toBe(1)
     expect(prisonApi.getHouseblockList.mock.calls.length).toBe(1)
-    expect(prisonApi.getHouseblockList.mock.calls[0][2]).toStrictEqual([1, 2])
+    expect(prisonApi.getHouseblockList.mock.calls[0][2]).toStrictEqual(['A-1-1', 'A-1-2'])
   })
 
   it('Should not retrieve houseblock list if no cell locations in wing', async () => {
-    whereaboutsApi.getAgencyGroupLocations = jest.fn()
-    whereaboutsApi.getAgencyGroupLocations.mockReturnValue([])
+    locationsInsidePrisonApi.getAgencyGroupLocations.mockReturnValue([])
     prisonApi.getHouseblockList.mockImplementationOnce(() => createResponse())
 
     const response = await houseblockList({})
 
-    expect(whereaboutsApi.getAgencyGroupLocations.mock.calls.length).toBe(1)
+    expect(locationsInsidePrisonApi.getAgencyGroupLocations.mock.calls.length).toBe(1)
     expect(prisonApi.getHouseblockList.mock.calls.length).toBe(0)
     expect(response).toStrictEqual([])
   })
@@ -656,7 +663,12 @@ describe('Houseblock list controller', () => {
         },
       ])
       whereaboutsApi.getAttendanceForBookings.mockReturnValue([])
-      const { getHouseblockList: service } = factory(getClientCredentialsTokens, prisonApi, whereaboutsApi)
+      const { getHouseblockList: service } = factory(
+        getClientCredentialsTokens,
+        prisonApi,
+        whereaboutsApi,
+        locationsInsidePrisonApi
+      )
 
       await service({}, 'LEI', 'Houseblock 1', '15/10/2017', 'PM', null)
       await service({}, 'MDI', 'Houseblock 1', '15/10/2017', 'PM', null)
@@ -682,7 +694,12 @@ describe('Houseblock list controller', () => {
         },
       ])
       whereaboutsApi.getAttendanceForBookings.mockReturnValue([])
-      const { getHouseblockList: service } = factory(getClientCredentialsTokens, prisonApi, whereaboutsApi)
+      const { getHouseblockList: service } = factory(
+        getClientCredentialsTokens,
+        prisonApi,
+        whereaboutsApi,
+        locationsInsidePrisonApi
+      )
 
       await service({}, 'LEI', 'Houseblock 1', '15/10/2017', 'PM', null)
       await service({}, 'MDI', 'Houseblock 1', '15/10/2017', 'PM', null)

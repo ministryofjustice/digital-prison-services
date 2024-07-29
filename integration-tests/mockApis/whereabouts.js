@@ -300,20 +300,6 @@ module.exports = {
     })
   },
 
-  stubGetAgencyGroupLocations: ({ agencyId, groupName, response }) =>
-    stubFor({
-      request: {
-        method: 'GET',
-        url: `/whereabouts/locations/groups/${agencyId}/${groupName}`,
-      },
-      response: {
-        status: 200,
-        headers: {
-          'Content-Type': 'application/json;charset=UTF-8',
-        },
-        jsonBody: response,
-      },
-    }),
   stubCellsWithCapacityByGroupName: ({ agencyId, groupName, response }) =>
     stubFor({
       request: {

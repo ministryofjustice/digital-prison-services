@@ -98,7 +98,7 @@ export const prisonApiFactory = (client) => {
   const setActiveCaseload = (context, caseload) => put(context, '/api/users/me/activeCaseLoad', caseload)
 
   const getHouseblockList = (context, agencyId, locationIds, date, timeSlot) =>
-    post(context, `/api/schedules/${agencyId}/events-by-location-ids?date=${date}&timeSlot=${timeSlot}`, locationIds)
+    post(context, `/api/schedules/${agencyId}/events-by-location-path?date=${date}&timeSlot=${timeSlot}`, locationIds)
 
   const getActivityList = (context, { agencyId, locationId, usage, date, timeSlot }) =>
     get(

@@ -477,7 +477,7 @@ module.exports = defineConfig({
         stubExternalTransfers: (response) => prisonApi.stubExternalTransfers(response),
         stubAssessments: (offenderNumbers) => prisonApi.stubAssessments(offenderNumbers),
         stubGetAgencyGroupLocations: ({ agencyId, groupName, response }) =>
-          whereabouts.stubGetAgencyGroupLocations({ agencyId, groupName, response }),
+          locationsInsidePrisonApi.stubGetAgencyGroupLocations({ agencyId, groupName, response }),
         stubLocationGroups: (locationGroups) => whereabouts.stubLocationGroups(locationGroups),
         stubActivityLocationsByDateAndPeriod: ({ locations, date, period, withFault }) =>
           prisonApi.stubActivityLocationsByDateAndPeriod(locations, date, period, withFault),

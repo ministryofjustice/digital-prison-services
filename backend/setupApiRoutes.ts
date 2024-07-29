@@ -32,6 +32,7 @@ const router = express.Router()
 export const setup = ({
   prisonApi,
   whereaboutsApi,
+  locationsInsidePrisonApi,
   oauthApi,
   getClientCredentialsTokens,
   hmppsManageUsersApi,
@@ -39,7 +40,12 @@ export const setup = ({
 }) => {
   const controller = controllerFactory({
     activityListService: activityListFactory(getClientCredentialsTokens, prisonApi, whereaboutsApi),
-    houseblockListService: houseblockListFactory(getClientCredentialsTokens, prisonApi, whereaboutsApi),
+    houseblockListService: houseblockListFactory(
+      getClientCredentialsTokens,
+      prisonApi,
+      whereaboutsApi,
+      locationsInsidePrisonApi
+    ),
     attendanceService: attendanceFactory(whereaboutsApi),
     offenderLoader: offenderLoaderFactory(prisonApi),
     csvParserService: csvParserService({ fs, isBinaryFileSync }),

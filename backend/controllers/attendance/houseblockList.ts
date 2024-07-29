@@ -55,14 +55,21 @@ const addToActivities = (offender, activity) => ({
   stayingOnWing: isStayingOnWing([...offender.activities, activity]),
 })
 
-export const getHouseblockListFactory = (getClientCredentialsTokens, prisonApi, whereaboutsApi) => {
+export const getHouseblockListFactory = (
+  getClientCredentialsTokens,
+  prisonApi,
+  whereaboutsApi,
+  locationsInsidePrisonApi
+) => {
   const getHouseblockList = async (context, agencyId, groupName, date, timeSlot, wingStatus) => {
-    const locations = await whereaboutsApi.getAgencyGroupLocations(context, agencyId, groupName)
+    const systemContext = await getClientCredentialsTokens()
+
+    const locations = await locationsInsidePrisonApi.getAgencyGroupLocations(systemContext, agencyId, groupName)
     if (locations.length === 0) {
       return []
     }
 
-    const locationIds = locations.map((location) => location.locationId)
+    const locationIds = locations.map((location) => location.pathHierarchy)
     const formattedDate = switchDateFormat(date)
     // Returns array ordered by inmate/cell or name, then start time
     const data = await prisonApi.getHouseblockList(context, agencyId, locationIds, formattedDate, timeSlot)

@@ -29,4 +29,19 @@ module.exports = {
         jsonBody: response,
       },
     }),
+
+  stubGetAgencyGroupLocations: ({ agencyId, groupName, response }) =>
+    stubFor({
+      request: {
+        method: 'GET',
+        url: `/locations/locations/groups/${agencyId}/${groupName}`,
+      },
+      response: {
+        status: 200,
+        headers: {
+          'Content-Type': 'application/json;charset=UTF-8',
+        },
+        jsonBody: response,
+      },
+    }),
 }
