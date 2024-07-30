@@ -141,7 +141,11 @@ context('Houseblock list page list page', () => {
     cy.signIn()
     cy.task('stubGroups', { id: caseload })
     cy.task('stubActivityLocations')
-    cy.task('stubGetAgencyGroupLocations', { agencyId: caseload, groupName: 1, response: [1] })
+    cy.task('stubGetAgencyGroupLocations', {
+      agencyId: caseload,
+      groupName: 1,
+      response: [{ pathHierarchy: 'A-1-1' }],
+    })
     cy.task('stubGetAttendancesForBookings', {
       agencyId: caseload,
       date,

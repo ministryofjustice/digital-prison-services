@@ -1601,7 +1601,7 @@ module.exports = {
     stubFor({
       request: {
         method: 'POST',
-        url: `/api/schedules/${agencyId}/events-by-location-ids?date=${date}&timeSlot=${timeSlot}`,
+        url: `/api/schedules/${agencyId}/events-by-location-path?date=${date}&timeSlot=${timeSlot}`,
       },
       response: {
         status: 200,
