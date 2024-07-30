@@ -97,8 +97,8 @@ export const prisonApiFactory = (client) => {
   // However, only 'caseLoadId' has meaning.  The other two properties can take *any* non-blank value and these will be ignored.
   const setActiveCaseload = (context, caseload) => put(context, '/api/users/me/activeCaseLoad', caseload)
 
-  const getHouseblockList = (context, agencyId, locationIds, date, timeSlot) =>
-    post(context, `/api/schedules/${agencyId}/events-by-location-path?date=${date}&timeSlot=${timeSlot}`, locationIds)
+  const getHouseblockList = (context, prisonId, locationPaths, date, timeSlot) =>
+    post(context, `/api/schedules/${prisonId}/events-by-location-path?date=${date}&timeSlot=${timeSlot}`, locationPaths)
 
   const getActivityList = (context, { agencyId, locationId, usage, date, timeSlot }) =>
     get(

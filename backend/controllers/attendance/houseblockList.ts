@@ -69,10 +69,10 @@ export const getHouseblockListFactory = (
       return []
     }
 
-    const locationIds = locations.map((location) => location.pathHierarchy)
+    const locationPaths = locations.map((location) => location.pathHierarchy)
     const formattedDate = switchDateFormat(date)
     // Returns array ordered by inmate/cell or name, then start time
-    const data = await prisonApi.getHouseblockList(context, agencyId, locationIds, formattedDate, timeSlot)
+    const data = await prisonApi.getHouseblockList(context, agencyId, locationPaths, formattedDate, timeSlot)
 
     const offenderNumbers = distinct(data.map((offender) => offender.offenderNo))
 
