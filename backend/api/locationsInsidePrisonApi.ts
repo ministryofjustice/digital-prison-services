@@ -8,6 +8,15 @@ export interface Location {
   key: string
 }
 
+export interface LocationGroup {
+  name: string
+  key: string
+  children: {
+    key: string
+    name: string
+  }
+}
+
 // eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
 export const locationsInsidePrisonApiFactory = (client: OauthApiClient) => {
   const processResponse = () => (response) => response.body
@@ -25,12 +34,17 @@ export const locationsInsidePrisonApiFactory = (client: OauthApiClient) => {
   const getAgencyGroupLocationPrefix = (systemContext, prisonId, group): Promise<LocationPrefix> =>
     getWith404AsNull(systemContext, `/locations/prison/${prisonId}/group/${group}/location-prefix`)
 
-  const getAgencyGroupLocations = (systemContext, prisonId, groupName): Promise<Location> =>
+  const getAgencyGroupLocations = (systemContext, prisonId, groupName): Promise<Location[]> =>
     getWith404AsNull(systemContext, `/locations/groups/${prisonId}/${groupName}`)
+
+  const getSearchGroups = (context, prisonId): Promise<LocationGroup[]> => {
+    return getWith404AsNull(context, `/locations/prison/${prisonId}/groups`)
+  }
 
   return {
     getAgencyGroupLocationPrefix,
     getAgencyGroupLocations,
+    getSearchGroups,
   }
 }
 

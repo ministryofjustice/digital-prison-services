@@ -66,6 +66,7 @@ module.exports = defineConfig({
         stubAuthHealth: (status) => auth.stubHealth(status),
         stubPrisonApiHealth: (status) => prisonApi.stubHealth(status),
         stubWhereaboutsHealth: (status) => whereabouts.stubHealth(status),
+        stubLocationsHealth: (status) => locationsInsidePrisonApi.stubHealth(status),
         stubAllocationManagerHealth: (status) => allocationManager.stubHealth(status),
         stubKeyworkerHealth: (status) => keyworker.stubHealth(status),
         stubCaseNotesHealth: (status) => caseNotes.stubHealth(status),
@@ -78,6 +79,7 @@ module.exports = defineConfig({
             users.stubHealth(),
             prisonApi.stubHealth(),
             whereabouts.stubHealth(),
+            locationsInsidePrisonApi.stubHealth(),
             keyworker.stubHealth(),
             allocationManager.stubHealth(),
             caseNotes.stubHealth(),
@@ -468,6 +470,9 @@ module.exports = defineConfig({
         verifyMoveToCell: (body) => prisonApi.verifyMoveToCell(body),
         stubGetLocationPrefix: ({ agencyId, groupName, response }) =>
           locationsInsidePrisonApi.stubGetLocationPrefix({ agencyId, groupName, response }),
+        stubGetAgencyGroupLocations: ({ agencyId, groupName, response }) =>
+          locationsInsidePrisonApi.stubGetAgencyGroupLocations({ agencyId, groupName, response }),
+        stubGetSearchGroups: (caseload) => locationsInsidePrisonApi.stubGetSearchGroups(caseload),
         verifyMoveToCellSwap: ({ bookingId }) => prisonApi.verifyMoveToCellSwap({ bookingId }),
         stubAttendanceStats: ({ agencyId, fromDate, period, stats }) =>
           whereabouts.stubAttendanceStats(agencyId, fromDate, period, stats),
@@ -476,8 +481,6 @@ module.exports = defineConfig({
           prisonApi.stubGetEventsByLocationIds(agencyId, date, timeSlot, response),
         stubExternalTransfers: (response) => prisonApi.stubExternalTransfers(response),
         stubAssessments: (offenderNumbers) => prisonApi.stubAssessments(offenderNumbers),
-        stubGetAgencyGroupLocations: ({ agencyId, groupName, response }) =>
-          locationsInsidePrisonApi.stubGetAgencyGroupLocations({ agencyId, groupName, response }),
         stubLocationGroups: (locationGroups) => whereabouts.stubLocationGroups(locationGroups),
         stubActivityLocationsByDateAndPeriod: ({ locations, date, period, withFault }) =>
           prisonApi.stubActivityLocationsByDateAndPeriod(locations, date, period, withFault),

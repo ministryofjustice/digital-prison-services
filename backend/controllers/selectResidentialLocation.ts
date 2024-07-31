@@ -1,7 +1,7 @@
 import moment from 'moment'
 import { getCurrentPeriod } from '../utils'
 
-export default (whereaboutsApi) => {
+export default (locationsInsidePrisonApi, systemOauthClient) => {
   const renderTemplate = async (req, res, pageData?) => {
     const today = moment()
     const { errors, formValues } = pageData || {}
@@ -9,7 +9,13 @@ export default (whereaboutsApi) => {
       const {
         user: { activeCaseLoad },
       } = res.locals
-      const residentialLocations = await whereaboutsApi.searchGroups(res.locals, activeCaseLoad.caseLoadId)
+
+      const systemContext = await systemOauthClient.getClientCredentialsTokens(req.session.userDetails.username)
+
+      const residentialLocations = await locationsInsidePrisonApi.getSearchGroups(
+        systemContext,
+        activeCaseLoad.caseLoadId
+      )
 
       return res.render('selectResidentialLocation.njk', {
         date: formValues?.date || today.format('DD/MM/YYYY'),
