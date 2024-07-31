@@ -5,20 +5,30 @@ describe('Select residential location controller', () => {
   let res
   let controller
 
-  const whereaboutsApi = {
-    searchGroups: jest.fn(),
+  const systemContext = {
+    access_token: 'someToken',
+    refresh_token: undefined,
+    expires_in: 100,
+  }
+
+  const systemOauthClient = {
+    getClientCredentialsTokens: () => systemContext,
+  }
+
+  const locationsInsidePrisonApi = {
+    getSearchGroups: jest.fn(),
   }
 
   beforeEach(() => {
-    req = {}
+    req = { session: { userDetails: { username: 'someUserName' } } }
     res = { locals: { user: { activeCaseLoad: { caseLoadId: 'MDI' } } }, render: jest.fn(), redirect: jest.fn() }
 
-    whereaboutsApi.searchGroups = jest.fn().mockResolvedValue([
+    locationsInsidePrisonApi.getSearchGroups = jest.fn().mockResolvedValue([
       { name: 'Houseblock 1', key: 'HB1', children: [] },
       { name: 'Houseblock 2', key: 'HB2', children: [] },
     ])
 
-    controller = selectResidentialLocationController(whereaboutsApi)
+    controller = selectResidentialLocationController(locationsInsidePrisonApi, systemOauthClient)
 
     jest.spyOn(Date, 'now').mockImplementation(() => 1606471200000) // Friday, 27 November 2020 10:00:00
   })
@@ -27,7 +37,7 @@ describe('Select residential location controller', () => {
     it('should makes the expected API calls', async () => {
       await controller.index(req, res)
 
-      expect(whereaboutsApi.searchGroups).toHaveBeenCalledWith(res.locals, 'MDI')
+      expect(locationsInsidePrisonApi.getSearchGroups).toHaveBeenCalledWith(systemContext, 'MDI')
     })
 
     it('should render the correct template with the correct data', async () => {
@@ -47,7 +57,7 @@ describe('Select residential location controller', () => {
     describe('when there is an error retrieving data', () => {
       it('should set correct redirect url and throw error', async () => {
         const error = new Error('Network error')
-        whereaboutsApi.searchGroups = jest.fn().mockRejectedValue(error)
+        locationsInsidePrisonApi.getSearchGroups = jest.fn().mockRejectedValue(error)
 
         await expect(controller.index(req, res)).rejects.toThrowError(error)
         expect(res.locals.redirectUrl).toBe('/manage-prisoner-whereabouts')
