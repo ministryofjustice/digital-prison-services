@@ -54,7 +54,7 @@ export default ({ systemOauthClient, prisonApi, offenderSearchApi, whereaboutsAp
         locationId,
         offenderLocationPrefix,
       }),
-      whereaboutsApi.searchGroups(res.locals, agencyId),
+      locationsInsidePrisonApi.getSearchGroups(systemContext, agencyId),
     ])
 
     const videoLinkAppointmentIds = appointments
