@@ -59,8 +59,6 @@ export const whereaboutsApiFactory = (client) => {
       `/attendances/offender/${offenderNo}/unacceptable-absences?fromDate=${fromDate}&toDate=${toDate}&page=${page}`
     )
 
-  const searchGroups = (context, agencyId) => get(context, `/agencies/${agencyId}/locations/groups`)
-
   const getCourtLocations = (context) => get(context, '/court/courts')
 
   const addVideoLinkBooking = (context, body) => post(context, '/court/video-link-bookings', body)
@@ -122,7 +120,6 @@ export const whereaboutsApiFactory = (client) => {
     getAbsences,
     getUnacceptableAbsences,
     getUnacceptableAbsenceDetail,
-    searchGroups,
     getCourtLocations,
     addVideoLinkBooking,
     getVideoLinkAppointments,

@@ -77,7 +77,7 @@ export const setup = ({
   router.use('/api/userLocations', userLocationsFactory(prisonApi).userLocations)
   router.use(
     '/api/houseblockLocations',
-    houseblockLocationsFactory({ whereaboutsApi, logError }).getHouseblockLocations
+    houseblockLocationsFactory(getClientCredentialsTokens, locationsInsidePrisonApi, logError).getHouseblockLocations
   )
   router.use('/api/activityLocations', activityLocationsFactory({ prisonApi, logError }).getActivityLocations)
   router.use('/api/houseblocklist', controller.getHouseblockList)
