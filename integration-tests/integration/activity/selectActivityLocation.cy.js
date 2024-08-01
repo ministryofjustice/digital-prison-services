@@ -5,7 +5,6 @@ context('Select activity location', () => {
 
   beforeEach(() => {
     cy.task('reset')
-    cy.task('stubGroups', { id: caseload })
     cy.task('stubSignIn', { username: 'ITAG_USER', caseload })
     cy.signIn()
     cy.task('stubActivityLocations')
