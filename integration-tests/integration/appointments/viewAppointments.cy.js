@@ -15,7 +15,7 @@ context('A user can view list of appointments', () => {
     ])
     cy.task('stubAgencyDetails', { agencyId: 'MDI', details: {} })
     cy.task('stubUserEmail', 'ITAG_USER')
-    cy.task('stubGroups', { id: 'MDI' })
+    cy.task('stubGetSearchGroups', { id: 'MDI' })
     cy.task('stubGetWhereaboutsAppointments', [
       {
         id: 1,

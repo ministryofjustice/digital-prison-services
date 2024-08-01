@@ -15,6 +15,7 @@ describe('View appointments', () => {
 
   const locationsInsidePrisonApi = {
     getAgencyGroupLocationPrefix: jest.fn(),
+    getSearchGroups: jest.fn(),
   }
   const systemOauthClient = {
     getClientCredentialsTokens: jest.fn(),
@@ -53,11 +54,15 @@ describe('View appointments', () => {
 
     whereaboutsApi.getAppointments = jest.fn()
     whereaboutsApi.getVideoLinkAppointments = jest.fn()
-    whereaboutsApi.searchGroups = jest.fn()
 
     whereaboutsApi.getVideoLinkAppointments.mockReturnValue({ appointments: [] })
     whereaboutsApi.getAppointments.mockReturnValue([])
-    whereaboutsApi.searchGroups.mockReturnValue([
+
+    locationsInsidePrisonApi.getAgencyGroupLocationPrefix = jest.fn().mockReturnValue({
+      locationPrefix: 'MDI-1-',
+    })
+
+    locationsInsidePrisonApi.getSearchGroups.mockReturnValue([
       {
         name: 'Houseblock 1',
         key: 'H 1',
@@ -67,11 +72,6 @@ describe('View appointments', () => {
         key: 'H 2',
       },
     ])
-
-    locationsInsidePrisonApi.getAgencyGroupLocationPrefix = jest.fn()
-    locationsInsidePrisonApi.getAgencyGroupLocationPrefix = jest.fn().mockReturnValue({
-      locationPrefix: 'MDI-1-',
-    })
 
     controller = viewAppointments({
       systemOauthClient,
