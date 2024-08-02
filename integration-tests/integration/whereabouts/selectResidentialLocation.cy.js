@@ -8,7 +8,6 @@ context('Select residential location', () => {
     cy.task('reset')
     cy.task('stubGetSearchGroups', { id: caseload })
     cy.task('stubSignIn', { username: 'ITAG_USER', caseload })
-    cy.task('stubGroups', { id: 'MDI' })
     cy.signIn()
   })
 

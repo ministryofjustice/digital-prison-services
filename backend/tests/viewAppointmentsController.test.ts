@@ -10,7 +10,6 @@ describe('View appointments', () => {
   const whereaboutsApi = {
     getAppointments: jest.fn(),
     getVideoLinkAppointments: jest.fn(),
-    searchGroups: jest.fn(),
   }
 
   const locationsInsidePrisonApi = {

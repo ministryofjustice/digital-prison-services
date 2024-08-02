@@ -108,7 +108,6 @@ module.exports = defineConfig({
 
         stubAttendanceChanges: (response) => Promise.all([whereabouts.stubAttendanceChanges(response)]),
         stubCourts: whereabouts.stubCourtLocations,
-        stubGroups: (caseload) => whereabouts.stubGroups(caseload),
         stubAddVideoLinkBooking: () => whereabouts.stubAddVideoLinkBooking(),
         getBookingRequest: () => whereabouts.getBookingRequest(),
         stubCaseNotes: caseNotes.stubCaseNotes,
@@ -481,7 +480,6 @@ module.exports = defineConfig({
           prisonApi.stubGetEventsByLocationIds(agencyId, date, timeSlot, response),
         stubExternalTransfers: (response) => prisonApi.stubExternalTransfers(response),
         stubAssessments: (offenderNumbers) => prisonApi.stubAssessments(offenderNumbers),
-        stubLocationGroups: (locationGroups) => whereabouts.stubLocationGroups(locationGroups),
         stubActivityLocationsByDateAndPeriod: ({ locations, date, period, withFault }) =>
           prisonApi.stubActivityLocationsByDateAndPeriod(locations, date, period, withFault),
         stubActivityLocationsConnectionResetFault: () => prisonApi.stubActivityLocationsConnectionResetFault(),
