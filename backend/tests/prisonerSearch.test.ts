@@ -209,6 +209,7 @@ describe('Prisoner search', () => {
             { checked: false, text: 'Gang member', value: ['XGANG'] },
             { checked: false, text: 'Hidden disability', value: ['HID'] },
             { checked: false, text: 'Hostage taker', value: ['XHT'] },
+            { checked: false, text: 'Involved in 2024 civil disorder', value: ['XCDO'] },
             { checked: false, text: 'Isolated', value: ['VIP'] },
             { checked: false, text: 'No one-to-one', value: ['RNO121'] },
             { checked: false, text: 'PEEP', value: ['PEEP'] },
