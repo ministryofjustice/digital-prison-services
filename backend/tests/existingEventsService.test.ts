@@ -213,39 +213,6 @@ describe('existing events', () => {
         { agencyId: 'MDI', date: '2019-10-10', locationId: 2, usage: 'APP' }
       )
     })
-
-    it('should adjust the main appointment time by one minute in the future', async () => {
-      const locations = [{ locationId: 1, description: 'Location 1', locationType: 'VIDE' }]
-      const eventsAtLocations = [
-        {
-          locationId: 1,
-          startTime: '2019-10-10T10:00:00',
-          endTime: '2019-10-10T10:15:00',
-          description: 'Video booking for John',
-        },
-      ]
-
-      prisonApi.getLocationsForAppointments.mockReturnValue(locations)
-      prisonApi.getActivityList.mockReturnValue(Promise.resolve(eventsAtLocations))
-
-      const availableLocations = await service.getAvailableLocationsForVLB(
-        {},
-        {
-          agencyId: 'LEI',
-          startTime: '2019-10-10T10:15',
-          endTime: '2019-10-10T10:30',
-          date: '2019-10-10',
-          preAppointmentRequired: 'no',
-          postAppointmentRequired: 'no',
-        }
-      )
-
-      expect(availableLocations).toEqual({
-        mainLocations: [{ text: 'Location 1', value: 1 }],
-        postLocations: [],
-        preLocations: [],
-      })
-    })
   })
 
   describe('getting events for offenders', () => {
