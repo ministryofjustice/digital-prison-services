@@ -65,13 +65,6 @@ const mapAppointmentType = (appointment) => ({
 })
 
 export const appointmentsServiceFactory = (prisonApi) => {
-  const getLocations = async (context, agency, filterByLocationType) =>
-    filterByLocationType
-      ? (await prisonApi.getLocationsForAppointments(context, agency))
-          .filter((loc) => loc.locationType === filterByLocationType)
-          .map(mapLocationType)
-      : (await prisonApi.getLocationsForAppointments(context, agency)).map(mapLocationType)
-
   const getAppointmentOptions = async (context, agency) => {
     const [locationTypes, appointmentTypes] = await Promise.all([
       prisonApi.getLocationsForAppointments(context, agency),
@@ -83,26 +76,9 @@ export const appointmentsServiceFactory = (prisonApi) => {
       appointmentTypes: appointmentTypes && appointmentTypes.map(mapAppointmentType),
     }
   }
-  const addAppointments = async (context, appointments) => {
-    await prisonApi.addAppointments(context, appointments)
-  }
-
-  const getLocationAndAppointmentDescription = async (context, { activeCaseLoadId, locationId, appointmentType }) => {
-    const { appointmentTypes, locationTypes } = await getAppointmentOptions(context, activeCaseLoadId)
-    const { text: locationDescription } = locationTypes.find((loc) => loc.value === Number(locationId))
-    const { text: appointmentTypeDescription } = appointmentTypes.find((app) => app.value === appointmentType)
-
-    return {
-      locationDescription,
-      appointmentTypeDescription,
-    }
-  }
 
   return {
-    getLocationAndAppointmentDescription,
     getAppointmentOptions,
-    addAppointments,
-    getLocations,
   }
 }
 

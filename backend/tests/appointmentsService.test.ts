@@ -71,31 +71,4 @@ describe('Appointments service', () => {
       ],
     })
   })
-
-  it('should make a bulk appointments request with the correct parameters', async () => {
-    const parameters = {
-      appointmentDefaults: {
-        appointmentType: 'ACTI',
-        locationId: 25,
-        startTime: '2018-12-31T14:00',
-        endTime: '2018-12-31T14:50:00',
-        comment:
-          'Please provide helpful supporting text when it applies to all the appointments specified by this request.',
-      },
-      appointments: [
-        {
-          bookingId: 123456,
-          startTime: '2018-12-31T23:50',
-          endTime: '2018-12-31T23:59',
-          comment:
-            'Please provide helpful supporting text relevant to this particular appointment when the default comment is not suitable.',
-        },
-      ],
-    }
-
-    await service.addAppointments(context, parameters)
-
-    // @ts-expect-error ts-migrate(2339) FIXME: Property 'addAppointments' does not exist on type ... Remove this comment to see the full error message
-    expect(prisonApi.addAppointments).toHaveBeenCalledWith(context, parameters)
-  })
 })
