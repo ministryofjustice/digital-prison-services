@@ -105,7 +105,7 @@ export const alertFlagLabels = [
   { alertCodes: ['PVN'], classes: 'alert-status alert-status--multicase alert-status--visor', label: 'ViSOR' },
   {
     alertCodes: ['XCDO'],
-    classes: 'alert-status dps-alert-status--security',
+    classes: 'alert-status alert-status--security',
     label: 'Involved in 2024 civil disorder',
   },
 ].sort((a, b) => a.label.localeCompare(b.label))
