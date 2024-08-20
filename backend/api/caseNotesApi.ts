@@ -57,8 +57,38 @@ export const caseNotesApiFactory = (client) => {
   const amendCaseNote = (context, offenderNo, caseNoteId, data?) =>
     client.put(context, `/case-notes/${offenderNo}/${caseNoteId}`, data).then(processResponse(context))
 
-  const getCaseNoteTypes = (context) => get(context, '/case-notes/types')
-  const myCaseNoteTypes = (context) => get(context, '/case-notes/types-for-user')
+  const getCaseNoteTypes = (context) => {
+    const params = ['selectableBy=ALL', 'include=INACTIVE']
+    if (
+      context.userRoles.find((role) =>
+        ['POM', 'VIEW_SENSITIVE_CASE_NOTES', 'ADD_SENSITIVE_CASE_NOTES'].includes(role.roleCode)
+      )
+    ) {
+      params.push('include=SENSITIVE')
+    }
+    if (context.userRoles.find((role) => ['POM', 'ADD_SENSITIVE_CASE_NOTES'].includes(role.roleCode))) {
+      params.push('include=RESTRICTED')
+    }
+    return get(context, `/case-notes/types?${params.join('&')}`)
+  }
+
+  const myCaseNoteTypes = (context) => {
+    const params = ['selectableBy=DPS_USER']
+    if (
+      context.userRoles.find((role) =>
+        ['POM', 'VIEW_SENSITIVE_CASE_NOTES', 'ADD_SENSITIVE_CASE_NOTES'].includes(role.roleCode)
+      )
+    ) {
+      params.push('include=SENSITIVE')
+    }
+    if (context.userRoles.find((role) => ['POM', 'ADD_SENSITIVE_CASE_NOTES'].includes(role.roleCode))) {
+      params.push('include=RESTRICTED')
+    }
+    if (params.length === 1) {
+      params.push('include=')
+    }
+    return get(context, `/case-notes/types?${params.join('&')}`)
+  }
 
   const getCaseNote = (context, offenderNo, caseNoteId) => get(context, `/case-notes/${offenderNo}/${caseNoteId}`)
 

@@ -16,8 +16,8 @@ describe('caseNoteApi tests', () => {
 
   describe('GET requests', () => {
     it('Extracts GET response data', async () => {
-      mock.get('/case-notes/types').reply(200, { test: 'test' })
-      const data = await caseNoteAPi.getCaseNoteTypes({})
+      mock.get('/case-notes/types?selectableBy=ALL&include=INACTIVE').reply(200, { test: 'test' })
+      const data = await caseNoteAPi.getCaseNoteTypes({ userRoles: [] })
       expect(data).toEqual({ test: 'test' })
     })
   })

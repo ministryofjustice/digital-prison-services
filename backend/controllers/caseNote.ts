@@ -33,9 +33,7 @@ export const caseNoteFactory = ({ prisonApi, caseNotesApi, oauthApi, systemOauth
   }
 
   const getCaseNoteTypes = async (context, type) => {
-    const caseNoteTypes = (await caseNotesApi.myCaseNoteTypes(context)).filter(
-      (caseNoteType) => caseNoteType.activeFlag === 'Y'
-    )
+    const caseNoteTypes = await caseNotesApi.myCaseNoteTypes(context)
 
     const types = caseNoteTypes.map((caseNoteType) => ({
       value: caseNoteType.code,
