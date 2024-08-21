@@ -225,6 +225,7 @@ describe('Prisoner search', () => {
             { checked: false, text: 'Staff assaulter', value: ['XSA', 'SA'] },
             { checked: false, text: 'TACT', value: ['XTACT'] },
             { checked: false, text: 'Veteran', value: ['F1'] },
+            { checked: false, text: 'Violent', value: ['XVL'] },
             { checked: false, text: 'ViSOR', value: ['PVN'] },
           ],
           locationOptions: [
@@ -372,6 +373,11 @@ describe('Prisoner search', () => {
                     alertCodes: ['XA'],
                     classes: 'alert-status alert-status--security',
                     label: 'Arsonist',
+                  },
+                  {
+                    alertCodes: ['XVL'],
+                    classes: 'alert-status alert-status--security',
+                    label: 'Violent',
                   },
                 ],
                 alertsDetails: ['XA', 'XVL'],
