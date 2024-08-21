@@ -104,7 +104,7 @@ module.exports = {
     }),
   stubCaseNoteTypes: (types) =>
     getFor({
-      urlPattern: '/casenotes/case-notes/types',
+      urlPattern: '/casenotes/case-notes/types*',
       body: types || caseNoteTypes,
     }),
   stubCaseNoteTypesForUser: (types) =>
