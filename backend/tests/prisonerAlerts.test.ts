@@ -123,10 +123,12 @@ describe('prisoner alerts', () => {
     prisonApi.getDetails.mockResolvedValue({ bookingId })
     await controller(req, res)
 
+    const context = { ...res.locals, userRoles: [{ roleCode: 'UPDATE_ALERT' }] }
+
     // @ts-expect-error ts-migrate(2339) FIXME: Property 'getDetails' does not exist on type '{}'.
-    expect(prisonApi.getDetails).toHaveBeenCalledWith(res.locals, offenderNo)
+    expect(prisonApi.getDetails).toHaveBeenCalledWith(context, offenderNo)
     // @ts-expect-error ts-migrate(2339) FIXME: Property 'getAlertsForBookingV2' does not exist on t... Remove this comment to see the full error message
-    expect(prisonApi.getAlertsForBookingV2).toHaveBeenCalledWith(res.locals, {
+    expect(prisonApi.getAlertsForBookingV2).toHaveBeenCalledWith(context, {
       bookingId: '14',
       alertType: '',
       from: '',
@@ -137,9 +139,9 @@ describe('prisoner alerts', () => {
       size: 20,
     })
     // @ts-expect-error ts-migrate(2339) FIXME: Property 'getPrisonerProfileData' does not exist o... Remove this comment to see the full error message
-    expect(prisonerProfileService.getPrisonerProfileData).toHaveBeenCalledWith(res.locals, offenderNo, 'user1', false)
+    expect(prisonerProfileService.getPrisonerProfileData).toHaveBeenCalledWith(context, offenderNo, 'user1', false)
     // @ts-expect-error ts-migrate(2339) FIXME: Property 'getAlertTypes' does not exist on type '{... Remove this comment to see the full error message
-    expect(referenceCodesService.getAlertTypes).toHaveBeenCalledWith(res.locals)
+    expect(referenceCodesService.getAlertTypes).toHaveBeenCalledWith(context)
     expect(res.render).toHaveBeenCalledWith(
       'prisonerProfile/prisonerAlerts.njk',
       expect.objectContaining({
@@ -174,8 +176,9 @@ describe('prisoner alerts', () => {
     })
     await controller(req, res)
 
+    const context = { ...res.locals, userRoles: [{ roleCode: 'UPDATE_ALERT' }] }
     // @ts-expect-error ts-migrate(2339) FIXME: Property 'getAlertsForBookingV2' does not exist on t... Remove this comment to see the full error message
-    expect(prisonApi.getAlertsForBookingV2).toHaveBeenCalledWith(res.locals, {
+    expect(prisonApi.getAlertsForBookingV2).toHaveBeenCalledWith(context, {
       bookingId: '14',
       alertType: 'X',
       from: '2019-10-10',
@@ -187,7 +190,7 @@ describe('prisoner alerts', () => {
     })
 
     // @ts-expect-error ts-migrate(2339) FIXME: Property 'getPrisonerProfileData' does not exist o... Remove this comment to see the full error message
-    expect(prisonerProfileService.getPrisonerProfileData).toHaveBeenCalledWith(res.locals, offenderNo, 'user1', false)
+    expect(prisonerProfileService.getPrisonerProfileData).toHaveBeenCalledWith(context, offenderNo, 'user1', false)
     expect(res.render).toHaveBeenCalledWith(
       'prisonerProfile/prisonerAlerts.njk',
       expect.objectContaining({

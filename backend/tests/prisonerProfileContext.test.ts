@@ -23,7 +23,7 @@ describe('Prisoner Profile Contexts', () => {
 
     const context = await getContext({ offenderNo, res, req, oauthApi, systemOauthClient, restrictedPatientApi })
 
-    expect(context).toEqual({ context: res.locals, overrideAccess: false })
+    expect(context).toEqual({ context: { ...res.locals, userRoles: [] }, overrideAccess: false })
   })
 
   it('POM user and non restricted patient returns user context', async () => {
@@ -34,7 +34,7 @@ describe('Prisoner Profile Contexts', () => {
 
     const context = await getContext({ offenderNo, res, req, oauthApi, systemOauthClient, restrictedPatientApi })
 
-    expect(context).toEqual({ context: res.locals, overrideAccess: false })
+    expect(context).toEqual({ context: { ...res.locals, userRoles: [{ roleCode: 'POM' }] }, overrideAccess: false })
   })
 
   it('POM user and restricted patient returns system context', async () => {

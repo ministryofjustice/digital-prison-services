@@ -122,9 +122,9 @@ describe('prisoner personal', () => {
   it('should make a call for the basic details of a prisoner and the prisoner header details and render them', async () => {
     await controller(req, res)
 
-    expect(prisonApi.getDetails).toHaveBeenCalledWith(res.locals, offenderNo)
+    expect(prisonApi.getDetails).toHaveBeenCalledWith({ ...res.locals, userRoles: [] }, offenderNo)
     expect(prisonerProfileService.getPrisonerProfileData).toHaveBeenCalledWith(
-      res.locals,
+      { ...res.locals, userRoles: [] },
       offenderNo,
       'ITAG_USER',
       false
@@ -151,7 +151,7 @@ describe('prisoner personal', () => {
     ])
     await controller(req, res)
 
-    expect(prisonApi.getSecondaryLanguages).toHaveBeenCalledWith(res.locals, 123)
+    expect(prisonApi.getSecondaryLanguages).toHaveBeenCalledWith({ ...res.locals, userRoles: [] }, 123)
     expect(res.render).toHaveBeenCalledWith(
       'prisonerProfile/prisonerPersonal/prisonerPersonal.njk',
       expect.objectContaining({
@@ -180,7 +180,7 @@ describe('prisoner personal', () => {
     it('should make a call for identifiers data', async () => {
       await controller(req, res)
 
-      expect(prisonApi.getIdentifiers).toHaveBeenCalledWith(res.locals, bookingId)
+      expect(prisonApi.getIdentifiers).toHaveBeenCalledWith({ ...res.locals, userRoles: [] }, bookingId)
     })
 
     describe('when there is missing identifier data', () => {
@@ -234,7 +234,7 @@ describe('prisoner personal', () => {
     it('should make a call for aliases data', async () => {
       await controller(req, res)
 
-      expect(prisonApi.getOffenderAliases).toHaveBeenCalledWith(res.locals, bookingId)
+      expect(prisonApi.getOffenderAliases).toHaveBeenCalledWith({ ...res.locals, userRoles: [] }, bookingId)
     })
 
     describe('when there is missing aliases data', () => {
@@ -1819,8 +1819,8 @@ describe('prisoner personal', () => {
     it('should make a call for treatment and health types', async () => {
       await controller(req, res)
 
-      expect(prisonApi.getTreatmentTypes).toHaveBeenCalledWith(res.locals)
-      expect(prisonApi.getHealthTypes).toHaveBeenCalledWith(res.locals)
+      expect(prisonApi.getTreatmentTypes).toHaveBeenCalledWith({ ...res.locals, userRoles: [] })
+      expect(prisonApi.getHealthTypes).toHaveBeenCalledWith({ ...res.locals, userRoles: [] })
     })
 
     beforeEach(() => {
@@ -1830,8 +1830,8 @@ describe('prisoner personal', () => {
     it('should make a call for care needs, adjustments data', async () => {
       await controller(req, res)
 
-      expect(prisonApi.getPersonalCareNeeds).toHaveBeenCalledWith(res.locals, bookingId, '')
-      expect(prisonApi.getReasonableAdjustments).toHaveBeenCalledWith(res.locals, bookingId, '')
+      expect(prisonApi.getPersonalCareNeeds).toHaveBeenCalledWith({ ...res.locals, userRoles: [] }, bookingId, '')
+      expect(prisonApi.getReasonableAdjustments).toHaveBeenCalledWith({ ...res.locals, userRoles: [] }, bookingId, '')
     })
 
     describe('when there is no care needs and adjustments data', () => {
@@ -1932,8 +1932,16 @@ describe('prisoner personal', () => {
       it('should make a call for care needs and adjustments with the available treatment and health types', async () => {
         await controller(req, res)
 
-        expect(prisonApi.getReasonableAdjustments).toHaveBeenCalledWith(res.locals, bookingId, 'AMP TEL,FLEX_REFRESH')
-        expect(prisonApi.getPersonalCareNeeds).toHaveBeenCalledWith(res.locals, bookingId, 'DISAB,PSYCH')
+        expect(prisonApi.getReasonableAdjustments).toHaveBeenCalledWith(
+          { ...res.locals, userRoles: [] },
+          bookingId,
+          'AMP TEL,FLEX_REFRESH'
+        )
+        expect(prisonApi.getPersonalCareNeeds).toHaveBeenCalledWith(
+          { ...res.locals, userRoles: [] },
+          bookingId,
+          'DISAB,PSYCH'
+        )
       })
 
       it('should render the personal template with the correct personal care need and reasonable adjustment data', async () => {

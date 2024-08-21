@@ -171,9 +171,9 @@ describe('prisoner profile quick look', () => {
 
   it('should make a call for the basic details of a prisoner and the prisoner header details and render them', async () => {
     await controller(req, res)
-
-    expect(prisonApi.getDetails).toHaveBeenCalledWith(res.locals, offenderNo)
-    expect(prisonerProfileService.getPrisonerProfileData).toHaveBeenCalledWith(res.locals, offenderNo, 'user1', false)
+    const context = { ...res.locals, userRoles: [] }
+    expect(prisonApi.getDetails).toHaveBeenCalledWith(context, offenderNo)
+    expect(prisonerProfileService.getPrisonerProfileData).toHaveBeenCalledWith(context, offenderNo, 'user1', false)
     expect(res.render).toHaveBeenCalledWith(
       'prisonerProfile/prisonerQuickLook/prisonerQuickLook.njk',
       expect.objectContaining({
@@ -199,7 +199,7 @@ describe('prisoner profile quick look', () => {
     it('should make a call for offence data', async () => {
       await controller(req, res)
 
-      expect(prisonApi.getMainOffence).toHaveBeenCalledWith(res.locals, bookingId)
+      expect(prisonApi.getMainOffence).toHaveBeenCalledWith({ ...res.locals, userRoles: [] }, bookingId)
     })
 
     describe('when there is missing offence data', () => {
@@ -512,6 +512,7 @@ describe('prisoner profile quick look', () => {
       expect(prisonApi.getPositiveCaseNotes).toHaveBeenCalledWith(
         {
           user: { activeCaseLoad: { caseLoadId: 'MDI' } },
+          userRoles: [],
         },
         bookingId,
         '2019-10-13',
