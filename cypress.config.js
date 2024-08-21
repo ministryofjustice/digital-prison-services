@@ -395,7 +395,6 @@ module.exports = defineConfig({
         verifySaveCaseNote: caseNotes.verifySaveCaseNote,
         stubDeleteCaseNote: caseNotes.stubDeleteCaseNote,
         stubDeleteCaseNoteAmendment: caseNotes.stubDeleteCaseNoteAmendment,
-        stubCaseNoteTypesForUser: caseNotes.stubCaseNoteTypesForUser,
         stubGlobalSearch: offenderSearch.stubGlobalSearch,
         stubPrisonApiGlobalSearch: prisonApi.stubPrisonApiGlobalSearch,
         stubGlobalSearchMultiplePages: offenderSearch.stubGlobalSearchMultiplePages,

@@ -20,7 +20,7 @@ const getContext = async ({ offenderNo, res, req, oauthApi, systemOauthClient, r
       return { context, overrideAccess: true }
     }
   }
-  return { context: res.locals, overrideAccess: false }
+  return { context: { ...res.locals, userRoles }, overrideAccess: false }
 }
 
 export default getContext

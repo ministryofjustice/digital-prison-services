@@ -34,7 +34,6 @@ const setupAmendmentPage = () => {
   const offenderBasicDetails = { bookingId: 14, firstName: 'Bob', lastName: 'Smith' }
 
   cy.task('stubOffenderBasicDetails', offenderBasicDetails)
-  cy.task('stubCaseNoteTypesForUser')
   cy.task('stubCaseNoteTypes')
 
   cy.task('stubCaseNotes', {

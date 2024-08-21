@@ -18,7 +18,7 @@ context('A user can add a case note', () => {
 
     cy.task('stubOffenderBasicDetails', offenderBasicDetails)
     const offenderNo = 'A12345'
-    cy.task('stubCaseNoteTypesForUser')
+    cy.task('stubCaseNoteTypes')
     cy.task('stubCreateCaseNote')
     cy.task('stubVerifyToken')
 
