@@ -91,7 +91,7 @@ context('Prisoner search', () => {
             .then(($tableRows) => {
               cy.get($tableRows).its('length').should('eq', 3) // 2 results plus table header
               expect($tableRows.get(1).innerText).to.contain(
-                '\tSaunders, John\tA1234BC\tUNIT-1\tStandard\t29\t\nArsonist\nCAT A'
+                '\tSaunders, John\tA1234BC\tUNIT-1\tStandard\t29\t\nArsonist\nViolent\nCAT A'
               )
               expect($tableRows.get(2).innerText).to.contain('\tSmith, Steve\tB4567CD\tUNIT-2\tStandard\t30\t')
             })
