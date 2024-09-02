@@ -2,7 +2,6 @@ import moment from 'moment'
 import { endRecurringEndingDate, repeatTypes } from '../shared/appointmentConstants'
 import { formatName, getDate, getTime, getWith404AsNull } from '../utils'
 import config from '../config'
-import { DATE_TIME_FORMAT_SPEC } from '../../common/dateHelpers'
 
 export default ({ prisonApi, videoLinkBookingService, getClientCredentialsTokens }) => {
   const getAddedByUser = async (res, userId) => {

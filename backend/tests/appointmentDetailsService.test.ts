@@ -18,6 +18,8 @@ describe('appointment details', () => {
   }
 
   const prisonApi = {}
+  const videoLinkBookingService = {}
+  const getClientCredentialsTokens = {}
 
   let res
   let service
@@ -47,7 +49,7 @@ describe('appointment details', () => {
       .fn()
       .mockResolvedValue({ username: 'TEST_USER', firstName: 'TEST', lastName: 'USER' })
 
-    service = appointmentDetailsServiceFactory({ prisonApi })
+    service = appointmentDetailsServiceFactory({ prisonApi, videoLinkBookingService, getClientCredentialsTokens })
   })
 
   describe('an appointment view model request', () => {
