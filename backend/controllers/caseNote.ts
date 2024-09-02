@@ -6,15 +6,7 @@ import getContext from './prisonerProfile/prisonerProfileContext'
 
 const getOffenderUrl = (offenderNo) => `/prisoner/${offenderNo}`
 
-const getContextWithRoles = async (
-  offenderNo,
-  res,
-  req,
-  oauthApi,
-  systemOauthClient,
-  restrictedPatientApi,
-  getClientToken = false
-) => {
+const getContextWithRoles = async (offenderNo, res, req, oauthApi, systemOauthClient, restrictedPatientApi) => {
   const userRoles = oauthApi.userRoles(res.locals)
   res.locals = { ...res.locals, userRoles }
   const { context } = await getContext({
@@ -25,15 +17,6 @@ const getContextWithRoles = async (
     systemOauthClient,
     restrictedPatientApi,
   })
-
-  if (getClientToken) {
-    const username = req.session?.userDetails?.username || 'SYSTEM'
-    const { access_token: clientToken } = await systemOauthClient.getClientCredentialsTokens(username)
-    return {
-      ...context,
-      clientToken,
-    }
-  }
 
   return context
 }
@@ -106,24 +89,19 @@ export const caseNoteFactory = ({ prisonApi, caseNotesApi, oauthApi, systemOauth
 
   const index = async (req, res) => {
     const { offenderNo } = req.params
-    const context = await getContextWithRoles(
-      offenderNo,
-      res,
-      req,
-      oauthApi,
-      systemOauthClient,
-      restrictedPatientApi,
-      true
-    )
+    const context = await getContextWithRoles(offenderNo, res, req, oauthApi, systemOauthClient, restrictedPatientApi)
+
+    const username = req.session?.userDetails?.username || 'SYSTEM'
+    const { access_token: clientToken } = await systemOauthClient.getClientCredentialsTokens(username)
 
     try {
       if (req.xhr) {
         const { typeCode } = req.query
-        const { subTypes } = await getCaseNoteTypes(context, typeCode)
+        const { subTypes } = await getCaseNoteTypes({ ...context, access_token: clientToken }, typeCode)
         return res.send(nunjucks.render('caseNotes/partials/subTypesOptions.njk', { subTypes }))
       }
       const formValues = getOrConstructFormValues(req)
-      const { types, subTypes } = await getCaseNoteTypes(context, formValues.type)
+      const { types, subTypes } = await getCaseNoteTypes({ ...context, access_token: clientToken }, formValues.type)
       const offenderDetails = await getOffenderDetails(context, offenderNo)
 
       return res.render('caseNotes/addCaseNoteForm.njk', {
