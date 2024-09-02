@@ -81,8 +81,7 @@ export default ({ prisonApi, videoLinkBookingService, getClientCredentialsTokens
       }
 
       addedBy = await (!vlb.createdByPrison ? 'Court' : getAddedByUser(res, vlb.createdBy))
-      courtLocation = vlb.courtDescription || vlb.probationTeamDescription
-      hearingType = vlb.courtHearingTypeDescription || vlb.probationMeetingTypeDescription
+      courtLocation = vlb.courtDescription
     } else {
       if (videoLinkBooking?.pre) {
         prepostData['pre-court hearing briefing'] = createLocationAndTimeString(videoLinkBooking.pre)
@@ -98,7 +97,9 @@ export default ({ prisonApi, videoLinkBookingService, getClientCredentialsTokens
 
     const additionalDetails = {
       courtLocation,
-      hearingType,
+      probationTeam: vlb?.probationTeamDescription,
+      meetingType: vlb?.probationMeetingTypeDescription,
+      hearingType: vlb?.courtHearingTypeDescription,
       comments: appointment.comment || 'Not entered',
       addedBy,
     }
