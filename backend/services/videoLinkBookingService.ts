@@ -1,3 +1,4 @@
+import moment from 'moment'
 import { getWith404AsNull } from '../utils'
 import config from '../config'
 
@@ -19,8 +20,14 @@ export default ({ whereaboutsApi, bookAVideoLinkApi, prisonApi }) => {
   const deleteVideoLinkBooking = async (context, videoLinkBookingId) =>
     bookAVideoLinkApi.deleteVideoLinkBooking(context, videoLinkBookingId)
 
+  const bookingIsAmendable = (timeOfBooking, bookingStatus) => {
+    const now = moment()
+    return bookingStatus !== 'CANCELLED' && moment(timeOfBooking).isAfter(now)
+  }
+
   return {
     getVideoLinkBookingFromAppointmentId,
     deleteVideoLinkBooking,
+    bookingIsAmendable,
   }
 }

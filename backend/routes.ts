@@ -126,6 +126,12 @@ const setup = ({
   whereaboutsMaintenanceMode,
   getClientCredentialsTokens,
 }) => {
+  const videoLinkBookingService = videoLinkBookingServiceFactory({
+    whereaboutsApi,
+    bookAVideoLinkApi,
+    prisonApi,
+  })
+
   router.use(async (req, res, next) => {
     res.locals = {
       ...res.locals,
@@ -400,8 +406,12 @@ const setup = ({
       isAppointmentsRolledOut,
       appointmentConfirmDeletion({
         whereaboutsApi,
-        appointmentDetailsService: appointmentDetailsServiceFactory({ prisonApi }),
-        videoLinkBookingService: videoLinkBookingServiceFactory({ whereaboutsApi, bookAVideoLinkApi, prisonApi }),
+        appointmentDetailsService: appointmentDetailsServiceFactory({
+          prisonApi,
+          videoLinkBookingService,
+          getClientCredentialsTokens,
+        }),
+        videoLinkBookingService,
         getClientCredentialsTokens,
       }).index
     )
@@ -410,8 +420,12 @@ const setup = ({
       isAppointmentsRolledOut,
       appointmentConfirmDeletion({
         whereaboutsApi,
-        appointmentDetailsService: appointmentDetailsServiceFactory({ prisonApi }),
-        videoLinkBookingService: videoLinkBookingServiceFactory({ whereaboutsApi, bookAVideoLinkApi, prisonApi }),
+        appointmentDetailsService: appointmentDetailsServiceFactory({
+          prisonApi,
+          videoLinkBookingService,
+          getClientCredentialsTokens,
+        }),
+        videoLinkBookingService,
         getClientCredentialsTokens,
       }).post
     )
@@ -437,7 +451,11 @@ const setup = ({
         oauthApi,
         prisonApi,
         whereaboutsApi,
-        appointmentDetailsService: appointmentDetailsServiceFactory({ prisonApi }),
+        appointmentDetailsService: appointmentDetailsServiceFactory({
+          prisonApi,
+          videoLinkBookingService,
+          getClientCredentialsTokens,
+        }),
       })
     )
   }

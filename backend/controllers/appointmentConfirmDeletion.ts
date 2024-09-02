@@ -1,5 +1,4 @@
 import config from '../config'
-import logger from '../log'
 
 export default ({ whereaboutsApi, appointmentDetailsService, videoLinkBookingService, getClientCredentialsTokens }) => {
   const renderTemplate = (req, res, id, appointmentViewModel, errors) => {
