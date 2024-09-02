@@ -2,11 +2,11 @@ import { makeNotFoundError } from './helpers'
 
 import appointmentConfirmDeletion from '../controllers/appointmentConfirmDeletion'
 
-const res = { locals: {}, send: jest.fn(), redirect: jest.fn() }
+const res = { locals: { user: { username: 'USER' } }, send: jest.fn(), redirect: jest.fn() }
 const whereaboutsApi = {}
 const appointmentDetailsService = {}
 const videoLinkBookingService = {}
-const getClientCredentialsTokens = {}
+const getClientCredentialsTokens = jest.fn()
 
 const testAppointment = {
   appointment: {

@@ -102,6 +102,7 @@ describe('appointment details', () => {
           startTime: '13:00',
           endTime: 'Not entered',
         },
+        canDeleteVlb: true,
       })
     })
   })
