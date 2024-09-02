@@ -18,7 +18,12 @@ const getContextWithRoles = async (offenderNo, res, req, oauthApi, systemOauthCl
     restrictedPatientApi,
   })
 
-  return context
+  const username = req.session?.userDetails?.username || 'SYSTEM'
+  const { access_token: clientToken } = await systemOauthClient.getClientCredentialsTokens(username)
+  return {
+    ...context,
+    clientToken,
+  }
 }
 
 export const caseNoteFactory = ({ prisonApi, caseNotesApi, oauthApi, systemOauthClient, restrictedPatientApi }) => {
