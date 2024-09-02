@@ -1,6 +1,7 @@
 import { makeNotFoundError } from './helpers'
 
 import appointmentDetailsServiceFactory from '../services/appointmentDetailsService'
+import config from '../config'
 
 describe('appointment details', () => {
   const testAppointment = {
@@ -18,14 +19,14 @@ describe('appointment details', () => {
   }
 
   const prisonApi = {}
-  const videoLinkBookingService = {}
-  const getClientCredentialsTokens = {}
+  const videoLinkBookingService = { getVideoLinkBookingFromAppointmentId: jest.fn(), bookingIsAmendable: jest.fn() }
+  const getClientCredentialsTokens = jest.fn()
 
   let res
   let service
 
   beforeEach(() => {
-    res = { render: jest.fn() }
+    res = { locals: { user: { username: 'USER' } }, render: jest.fn() }
 
     // @ts-expect-error ts-migrate(2339) FIXME: Property 'getDetails' does not exist on type '{}'.
     prisonApi.getDetails = jest.fn().mockResolvedValue({
@@ -35,9 +36,9 @@ describe('appointment details', () => {
     })
     // @ts-expect-error ts-migrate(2339) FIXME: Property 'getLocationsForAppointments' does not ex... Remove this comment to see the full error message
     prisonApi.getLocationsForAppointments = jest.fn().mockResolvedValue([
-      { userDescription: 'VCC Room 1', locationId: '1' },
-      { userDescription: 'Gymnasium', locationId: '2' },
-      { userDescription: 'VCC Room 2', locationId: '3' },
+      { locationPrefix: 'ROOM1', userDescription: 'VCC Room 1', locationId: '1' },
+      { locationPrefix: 'ROOM2', userDescription: 'Gymnasium', locationId: '2' },
+      { locationPrefix: 'ROOM3', userDescription: 'VCC Room 2', locationId: '3' },
     ])
     // @ts-expect-error ts-migrate(2339) FIXME: Property 'getAppointmentTypes' does not exist on t... Remove this comment to see the full error message
     prisonApi.getAppointmentTypes = jest.fn().mockResolvedValue([
@@ -254,6 +255,82 @@ describe('appointment details', () => {
             addedBy: 'Court',
           },
         })
+      })
+    })
+  })
+
+  describe('video link appointment view model request - toggle on', () => {
+    let videoLinkBookingAppointment
+
+    beforeEach(() => {
+      config.apis.bookAVideoLinkApi.enabled = true
+      videoLinkBookingService.getVideoLinkBookingFromAppointmentId.mockResolvedValue({
+        prisonAppointments: [
+          {
+            appointmentType: 'VLB_COURT_PRE',
+            prisonLocKey: 'ROOM2',
+            appointmentDate: '2024-09-06',
+            startTime: '09:45',
+            endTime: '10:00',
+          },
+          {
+            appointmentType: 'VLB_COURT_MAIN',
+            prisonLocKey: 'ROOM3',
+            appointmentDate: '2024-09-06',
+            startTime: '10:00',
+            endTime: '11:00',
+          },
+          {
+            appointmentType: 'VLB_COURT_POST',
+            prisonLocKey: 'ROOM2',
+            appointmentDate: '2024-09-06',
+            startTime: '11:00',
+            endTime: '11:15',
+          },
+        ],
+        courtCode: 'ABERFC',
+        courtDescription: 'Aberystwyth Family',
+        courtHearingType: 'APPLICATION',
+        courtHearingTypeDescription: 'Application',
+        createdByPrison: true,
+        createdBy: 'TEST_USER',
+      })
+
+      videoLinkBookingAppointment = {
+        appointment: {
+          ...testAppointment.appointment,
+          locationId: 1,
+          appointmentTypeCode: 'VLB',
+          startTime: '2021-05-20T13:00:00',
+          endTime: '2021-05-20T14:00:00',
+          comment: 'Test appointment comments',
+        },
+      }
+    })
+
+    it('should render with court location and correct vlb locations and types', async () => {
+      const appointmentDetails = await service.getAppointmentViewModel(res, videoLinkBookingAppointment, 'MDI')
+
+      expect(appointmentDetails).toMatchObject({
+        additionalDetails: {
+          hearingType: 'Application',
+          courtLocation: 'Aberystwyth Family',
+          comments: 'Test appointment comments',
+          addedBy: 'Test User',
+        },
+        basicDetails: {
+          date: '20 May 2021',
+          location: 'VCC Room 1',
+          type: 'Video link booking',
+        },
+        timeDetails: {
+          startTime: '10:00',
+          endTime: '11:00',
+        },
+        prepostData: {
+          'pre-court hearing briefing': 'Gymnasium - 09:45 to 10:00',
+          'post-court hearing briefing': 'Gymnasium - 11:00 to 11:15',
+        },
       })
     })
   })

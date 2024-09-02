@@ -47,7 +47,6 @@ export default ({ prisonApi, videoLinkBookingService, getClientCredentialsTokens
 
     let addedBy
     let courtLocation
-    let hearingType
 
     const createLocationAndTimeString = (appt) =>
       `${locationTypes.find((loc) => Number(loc.locationId) === Number(appt.locationId)).userDescription} - ${getTime(
