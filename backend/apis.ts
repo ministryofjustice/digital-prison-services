@@ -21,6 +21,7 @@ import { incentivesApiFactory } from './api/incentivesApi'
 import { nonAssociationsApiFactory } from './api/nonAssociationsApi'
 import { hmppsManageUsersApiFactory } from './api/hmppsManageUsersApi'
 import { feComponentsApiFactory } from './api/feComponents'
+import { bookAVideoLinkApiFactory } from './api/bookAVideoLinkApi'
 
 export const prisonApi = prisonApiFactory(
   clientFactory({
@@ -33,6 +34,13 @@ export const whereaboutsApi = whereaboutsApiFactory(
   clientFactory({
     baseUrl: config.apis.whereabouts.url,
     timeout: config.apis.whereabouts.timeoutSeconds * 1000,
+  })
+)
+
+export const bookAVideoLinkApi = bookAVideoLinkApiFactory(
+  clientFactory({
+    baseUrl: config.apis.bookAVideoLinkApi.url,
+    timeout: config.apis.bookAVideoLinkApi.timeoutSeconds * 1000,
   })
 )
 
@@ -161,6 +169,7 @@ export const feComponentsApi = feComponentsApiFactory(
 export default {
   prisonApi,
   whereaboutsApi,
+  bookAVideoLinkApi,
   locationsInsidePrisonApi,
   oauthApi,
   hmppsManageUsersApi,

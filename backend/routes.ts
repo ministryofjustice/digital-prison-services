@@ -48,6 +48,7 @@ import appointmentDeleteRecurringBookings from './controllers/appointmentDeleteR
 import appointmentDeleted from './controllers/appointmentDeleted'
 import { cacheFactory } from './utils/singleValueInMemoryCache'
 import asyncMiddleware from './middleware/asyncHandler'
+import videoLinkBookingServiceFactory from './services/videoLinkBookingService'
 
 import whereaboutsRouter from './routes/whereabouts/whereaboutsRouter'
 import { saveBackLink } from './controllers/backLink'
@@ -105,6 +106,7 @@ const router = express.Router()
 const setup = ({
   prisonApi,
   whereaboutsApi,
+  bookAVideoLinkApi,
   locationsInsidePrisonApi,
   oauthApi,
   hmppsManageUsersApi,
@@ -122,6 +124,7 @@ const setup = ({
   nonAssociationsApi,
   restrictedPatientApi,
   whereaboutsMaintenanceMode,
+  getClientCredentialsTokens,
 }) => {
   router.use(async (req, res, next) => {
     res.locals = {
@@ -398,6 +401,8 @@ const setup = ({
       appointmentConfirmDeletion({
         whereaboutsApi,
         appointmentDetailsService: appointmentDetailsServiceFactory({ prisonApi }),
+        videoLinkBookingService: videoLinkBookingServiceFactory({ whereaboutsApi, bookAVideoLinkApi, prisonApi }),
+        getClientCredentialsTokens,
       }).index
     )
     router.post(
@@ -406,6 +411,8 @@ const setup = ({
       appointmentConfirmDeletion({
         whereaboutsApi,
         appointmentDetailsService: appointmentDetailsServiceFactory({ prisonApi }),
+        videoLinkBookingService: videoLinkBookingServiceFactory({ whereaboutsApi, bookAVideoLinkApi, prisonApi }),
+        getClientCredentialsTokens,
       }).post
     )
     router.get(

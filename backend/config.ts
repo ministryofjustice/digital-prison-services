@@ -179,6 +179,11 @@ export const apis = {
   bookVideoLink: {
     url: process.env.BVL_URL || 'http://localhost:3000',
   },
+  bookAVideoLinkApi: {
+    enabled: process.env.BOOK_A_VIDEO_LINK_API_ENABLED === 'true',
+    url: process.env.BOOK_A_VIDEO_LINK_API_URL || 'http://localhost:8083/',
+    timeoutSeconds: toNumber(process.env.BOOK_A_VIDEO_LINK_API_TIMEOUT_SECONDS) || 30,
+  },
   welcomePeopleIntoPrison: {
     url: process.env.WELCOME_PEOPLE_INTO_PRISON_URL,
     enabled_prisons: process.env.WELCOME_PEOPLE_INTO_PRISON_ENABLED_PRISONS || '',
