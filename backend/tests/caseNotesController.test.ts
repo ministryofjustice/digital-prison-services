@@ -36,7 +36,7 @@ describe('Case notes controller', () => {
   const paginationService = {}
   const nunjucks = {}
   const oauthApi = {}
-  const systemOauthClient = {}
+  const systemOauthClient = { getClientCredentialsTokens: () => ({ access_token: 'CLIENT_TOKEN' }) }
   const restrictedPatientApi = {}
 
   let controller

@@ -6,7 +6,15 @@ import getContext from './prisonerProfile/prisonerProfileContext'
 
 const getOffenderUrl = (offenderNo) => `/prisoner/${offenderNo}`
 
-const getContextWithRoles = async (offenderNo, res, req, oauthApi, systemOauthClient, restrictedPatientApi) => {
+const getContextWithRoles = async (
+  offenderNo,
+  res,
+  req,
+  oauthApi,
+  systemOauthClient,
+  restrictedPatientApi,
+  getClientToken = false
+) => {
   const userRoles = oauthApi.userRoles(res.locals)
   res.locals = { ...res.locals, userRoles }
   const { context } = await getContext({
@@ -18,12 +26,16 @@ const getContextWithRoles = async (offenderNo, res, req, oauthApi, systemOauthCl
     restrictedPatientApi,
   })
 
-  const username = req.session?.userDetails?.username || 'SYSTEM'
-  const { access_token: clientToken } = await systemOauthClient.getClientCredentialsTokens(username)
-  return {
-    ...context,
-    clientToken,
+  if (getClientToken) {
+    const username = req.session?.userDetails?.username || 'SYSTEM'
+    const { access_token: clientToken } = await systemOauthClient.getClientCredentialsTokens(username)
+    return {
+      ...context,
+      clientToken,
+    }
   }
+
+  return context
 }
 
 export const caseNoteFactory = ({ prisonApi, caseNotesApi, oauthApi, systemOauthClient, restrictedPatientApi }) => {
@@ -94,7 +106,15 @@ export const caseNoteFactory = ({ prisonApi, caseNotesApi, oauthApi, systemOauth
 
   const index = async (req, res) => {
     const { offenderNo } = req.params
-    const context = await getContextWithRoles(offenderNo, res, req, oauthApi, systemOauthClient, restrictedPatientApi)
+    const context = await getContextWithRoles(
+      offenderNo,
+      res,
+      req,
+      oauthApi,
+      systemOauthClient,
+      restrictedPatientApi,
+      true
+    )
 
     try {
       if (req.xhr) {
