@@ -2,9 +2,11 @@ import { makeNotFoundError } from './helpers'
 
 import appointmentConfirmDeletion from '../controllers/appointmentConfirmDeletion'
 
-const res = { locals: {}, send: jest.fn(), redirect: jest.fn() }
+const res = { locals: { user: { username: 'USER' } }, send: jest.fn(), redirect: jest.fn() }
 const whereaboutsApi = {}
 const appointmentDetailsService = {}
+const videoLinkBookingService = {}
+const getClientCredentialsTokens = jest.fn()
 
 const testAppointment = {
   appointment: {
@@ -47,7 +49,12 @@ beforeEach(() => {
   // @ts-expect-error ts-migrate(2339) FIXME: Property 'getAppointmentViewModel' does not exist ... Remove this comment to see the full error message
   appointmentDetailsService.getAppointmentViewModel = jest.fn().mockResolvedValue(testAppointmentViewModel)
 
-  controller = appointmentConfirmDeletion({ whereaboutsApi, appointmentDetailsService })
+  controller = appointmentConfirmDeletion({
+    whereaboutsApi,
+    appointmentDetailsService,
+    videoLinkBookingService,
+    getClientCredentialsTokens,
+  })
 
   // @ts-expect-error ts-migrate(2339) FIXME: Property 'render' does not exist on type '{ locals... Remove this comment to see the full error message
   res.render = jest.fn()
