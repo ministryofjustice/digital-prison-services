@@ -1,5 +1,5 @@
 import moment from 'moment'
-import { DATE_TIME_FORMAT_SPEC } from '../common/dateHelpers'
+import { DATE_TIME_FORMAT_SPEC, MOMENT_TIME } from '../common/dateHelpers'
 import abbreviations from '../common/abbreviations'
 import config from './config'
 
@@ -175,9 +175,10 @@ export const getDate = (dateTimeString: string, format = 'dddd D MMMM YYYY'): st
 }
 
 export const getTime = (dateTimeString: string): string => {
+  if (moment(dateTimeString, MOMENT_TIME, true).isValid()) return dateTimeString
   if (!isValidDateTimeFormat(dateTimeString)) return 'Invalid date or time'
 
-  return moment(dateTimeString, DATE_TIME_FORMAT_SPEC).format('HH:mm')
+  return moment(dateTimeString, DATE_TIME_FORMAT_SPEC).format(MOMENT_TIME)
 }
 
 export const forenameToInitial = (name: { charAt: () => unknown; split: (arg0: string) => unknown[] }): string => {

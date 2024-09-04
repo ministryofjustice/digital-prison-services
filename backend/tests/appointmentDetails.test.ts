@@ -21,6 +21,8 @@ describe('appointment details', () => {
   const oauthApi = {}
   const prisonApi = {}
   const whereaboutsApi = {}
+  const videoLinkBookingService = {}
+  const getClientCredentialsTokens = {}
 
   let req
   let res
@@ -64,7 +66,11 @@ describe('appointment details', () => {
     // @ts-expect-error ts-migrate(2339) FIXME: Property 'getAppointment' does not exist on type '... Remove this comment to see the full error message
     whereaboutsApi.getAppointment = jest.fn().mockResolvedValue(testAppointment)
 
-    appointmentDetailsService = appointmentDetailsServiceFactory({ prisonApi })
+    appointmentDetailsService = appointmentDetailsServiceFactory({
+      prisonApi,
+      videoLinkBookingService,
+      getClientCredentialsTokens,
+    })
 
     controller = appointmentDetails({ oauthApi, prisonApi, whereaboutsApi, appointmentDetailsService })
   })

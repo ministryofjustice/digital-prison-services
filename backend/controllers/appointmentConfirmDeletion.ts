@@ -1,4 +1,6 @@
-export default ({ whereaboutsApi, appointmentDetailsService }) => {
+import config from '../config'
+
+export default ({ whereaboutsApi, appointmentDetailsService, videoLinkBookingService, getClientCredentialsTokens }) => {
   const renderTemplate = (req, res, id, appointmentViewModel, errors) => {
     const { isRecurring, additionalDetails, basicDetails, prepostData, recurringDetails, timeDetails } =
       appointmentViewModel
@@ -53,8 +55,23 @@ export default ({ whereaboutsApi, appointmentDetailsService }) => {
 
     if (isRecurring === 'true') return res.redirect(`/appointment-details/${id}/delete-recurring-bookings`)
 
+    const appointmentDetails = await whereaboutsApi.getAppointment(res.locals, id)
+
     try {
-      await whereaboutsApi.deleteAppointment(res.locals, id)
+      let videoLinkBooking
+
+      const systemContext = await getClientCredentialsTokens(res.locals.user.username)
+
+      if (config.apis.bookAVideoLinkApi.enabled && appointmentDetails.appointment.appointmentTypeCode === 'VLB') {
+        videoLinkBooking = await videoLinkBookingService.getVideoLinkBookingFromAppointmentId(systemContext, id)
+      }
+
+      if (videoLinkBooking) {
+        await videoLinkBookingService.deleteVideoLinkBooking(systemContext, videoLinkBooking.videoLinkBookingId)
+      } else {
+        await whereaboutsApi.deleteAppointment(res.locals, id)
+      }
+
       return res.redirect(`/appointment-details/deleted?multipleDeleted=false`)
     } catch (error) {
       if (error?.response?.status === 404) {

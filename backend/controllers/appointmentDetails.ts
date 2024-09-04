@@ -12,13 +12,17 @@ export default ({ oauthApi, prisonApi, whereaboutsApi, appointmentDetailsService
       appointmentDetailsService.getAppointmentViewModel(res, appointmentDetails, activeCaseLoadId),
     ])
 
-    const { additionalDetails, basicDetails, prepostData, recurringDetails, timeDetails } = appointmentViewModel
+    const { additionalDetails, basicDetails, prepostData, recurringDetails, timeDetails, canDeleteVlb } =
+      appointmentViewModel
 
     const userRoles = oauthApi.userRoles(res.locals)
 
     const canDeleteAppointment =
       userRoles &&
-      userRoles.some((role) => role.roleCode === 'ACTIVITY_HUB' || role.roleCode === 'DELETE_A_PRISONERS_APPOINTMENT')
+      userRoles.some(
+        (role) => role.roleCode === 'ACTIVITY_HUB' || role.roleCode === 'DELETE_A_PRISONERS_APPOINTMENT'
+      ) &&
+      canDeleteVlb
 
     return res.render('appointmentDetails', {
       appointmentConfirmDeletionLink: canDeleteAppointment && `/appointment-details/${id}/confirm-deletion`,

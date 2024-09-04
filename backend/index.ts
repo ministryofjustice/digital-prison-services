@@ -106,6 +106,7 @@ app.use(
   routes({
     prisonApi: apis.prisonApi,
     whereaboutsApi: apis.whereaboutsApi,
+    bookAVideoLinkApi: apis.bookAVideoLinkApi,
     locationsInsidePrisonApi: apis.locationsInsidePrisonApi,
     oauthApi: apis.oauthApi,
     hmppsManageUsersApi: apis.hmppsManageUsersApi,
@@ -123,6 +124,7 @@ app.use(
     nonAssociationsApi: apis.nonAssociationsApi,
     restrictedPatientApi: apis.restrictedPatientApi,
     whereaboutsMaintenanceMode: config.app.whereaboutsMaintenanceMode,
+    getClientCredentialsTokens,
   })
 )
 app.use(setupReactRoutes())
