@@ -8,7 +8,7 @@ Reflect.deleteProperty(process.env, 'APPINSIGHTS_INSTRUMENTATIONKEY')
 const prisonApi = { getDetails: {} }
 const caseNotesApi = { addCaseNote: {}, myCaseNoteTypes: {} }
 const restrictedPatientApi = {}
-const systemOauthClient = {}
+const systemOauthClient = { getClientCredentialsTokens: () => ({ access_token: 'CLIENT_TOKEN' }) }
 const oauthApi = {}
 
 const { index, post, areYouSure, confirm, recordIncentiveLevelInterruption } = caseNoteCtrl.caseNoteFactory({

@@ -58,7 +58,11 @@ export default ({
       endDate: toDate,
     })
 
-    const caseNoteTypes = await caseNotesApi.getCaseNoteTypes(context)
+    const { access_token: clientToken } = await systemOauthClient.getClientCredentialsTokens(username)
+    const caseNoteTypes = await caseNotesApi.getCaseNoteTypes({
+      ...context,
+      access_token: clientToken,
+    })
 
     const types = caseNoteTypes.map((caseNoteType) => ({
       value: caseNoteType.code,

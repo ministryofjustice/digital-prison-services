@@ -57,8 +57,15 @@ export const caseNotesApiFactory = (client) => {
   const amendCaseNote = (context, offenderNo, caseNoteId, data?) =>
     client.put(context, `/case-notes/${offenderNo}/${caseNoteId}`, data).then(processResponse(context))
 
-  const getCaseNoteTypes = (context) => get(context, '/case-notes/types')
-  const myCaseNoteTypes = (context) => get(context, '/case-notes/types-for-user')
+  const getCaseNoteTypes = (context) =>
+    get(context, '/case-notes/types?selectableBy=ALL&includeInactive=true&includeRestricted=true')
+
+  const myCaseNoteTypes = (context) => {
+    if (context?.userRoles?.find((role) => ['POM', 'ADD_SENSITIVE_CASE_NOTES'].includes(role.roleCode))) {
+      return get(context, '/case-notes/types?selectableBy=DPS_USER&includeInactive=false&includeRestricted=true')
+    }
+    return get(context, '/case-notes/types?selectableBy=DPS_USER&includeInactive=false&includeRestricted=false')
+  }
 
   const getCaseNote = (context, offenderNo, caseNoteId) => get(context, `/case-notes/${offenderNo}/${caseNoteId}`)
 
