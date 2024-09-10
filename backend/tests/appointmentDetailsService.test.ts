@@ -265,6 +265,7 @@ describe('appointment details', () => {
     beforeEach(() => {
       config.apis.bookAVideoLinkApi.enabled = true
       videoLinkBookingService.getVideoLinkBookingFromAppointmentId.mockResolvedValue({
+        bookingType: 'COURT',
         prisonAppointments: [
           {
             appointmentType: 'VLB_COURT_PRE',
@@ -315,6 +316,7 @@ describe('appointment details', () => {
         additionalDetails: {
           hearingType: 'Application',
           courtLocation: 'Aberystwyth Family',
+          courtHearingLink: 'Not entered',
           comments: 'Test appointment comments',
           addedBy: 'Test User',
         },
@@ -330,6 +332,65 @@ describe('appointment details', () => {
         prepostData: {
           'pre-court hearing briefing': 'Gymnasium - 09:45 to 10:00',
           'post-court hearing briefing': 'Gymnasium - 11:00 to 11:15',
+        },
+      })
+    })
+  })
+
+  describe('video link appointment view model request - probation meeting', () => {
+    let videoLinkBookingAppointment
+
+    beforeEach(() => {
+      config.apis.bookAVideoLinkApi.enabled = true
+      videoLinkBookingService.getVideoLinkBookingFromAppointmentId.mockResolvedValue({
+        bookingType: 'PROBATION',
+        prisonAppointments: [
+          {
+            appointmentType: 'VLB_PROBATION',
+            prisonLocKey: 'ROOM3',
+            appointmentDate: '2024-09-06',
+            startTime: '10:00',
+            endTime: '11:00',
+          },
+        ],
+        probationTeamCode: 'ABERFC',
+        probationTeamDescription: 'Aberystwyth Family',
+        probationMeetingType: 'PSR',
+        probationMeetingTypeDescription: 'Recall hearing',
+        createdByPrison: true,
+        createdBy: 'TEST_USER',
+      })
+
+      videoLinkBookingAppointment = {
+        appointment: {
+          ...testAppointment.appointment,
+          locationId: 1,
+          appointmentTypeCode: 'VLB',
+          startTime: '2021-05-20T13:00:00',
+          endTime: '2021-05-20T14:00:00',
+          comment: 'Test appointment comments',
+        },
+      }
+    })
+
+    it('should render with court location and correct vlb locations and types', async () => {
+      const appointmentDetails = await service.getAppointmentViewModel(res, videoLinkBookingAppointment, 'MDI')
+
+      expect(appointmentDetails).toMatchObject({
+        additionalDetails: {
+          meetingType: 'Recall hearing',
+          probationTeam: 'Aberystwyth Family',
+          comments: 'Test appointment comments',
+          addedBy: 'Test User',
+        },
+        basicDetails: {
+          date: '20 May 2021',
+          location: 'VCC Room 1',
+          type: 'Video link booking',
+        },
+        timeDetails: {
+          startTime: '10:00',
+          endTime: '11:00',
         },
       })
     })

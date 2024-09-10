@@ -98,6 +98,7 @@ export default ({ prisonApi, videoLinkBookingService, getClientCredentialsTokens
       probationTeam: vlb?.probationTeamDescription,
       meetingType: vlb?.probationMeetingTypeDescription,
       hearingType: vlb?.courtHearingTypeDescription,
+      courtHearingLink: vlb && vlb.bookingType === 'COURT' ? vlb.videoLinkUrl || 'Not entered' : undefined,
       comments: appointment.comment || 'Not entered',
       addedBy,
     }
