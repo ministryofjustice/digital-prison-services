@@ -56,9 +56,10 @@ import maintenancePage from './controllers/maintenancePage'
 import prisonerProfileBackLinkRedirect from './controllers/prisonerProfile/prisonerProfileBackLinkRedirect'
 import config from './config'
 import changeSomeonesCellHasMovedRouter from './routes/changeSomeonesCellHasMovedRouter'
+import { isRedirectCaseLoad } from './utils'
 
 const {
-  app: { covidUnitsEnabled },
+  app: { covidUnitsEnabled, prisonerProfileRedirect },
   apis: { activities, appointments },
 } = config
 
@@ -88,6 +89,16 @@ const isCreateIndividualAppointmentRolledOut = (req, res, next) => {
   if (appointments.enabled_prisons.split(',').includes(activeCaseLoadId)) {
     const { offenderNo } = req.params
     res.redirect(`${appointments.url}/create/start-prisoner/${offenderNo}`)
+  } else {
+    next()
+  }
+}
+
+const isPrisonerProfileAppointmentsRolledOut = (req, res, next) => {
+  const { activeCaseLoadId } = req.session.userDetails
+  if (isRedirectCaseLoad(activeCaseLoadId)) {
+    const { offenderNo } = req.params
+    res.redirect(`${prisonerProfileRedirect.url}/prisoner/${offenderNo}/add-appointment`)
   } else {
     next()
   }
@@ -296,6 +307,7 @@ const setup = ({
     router.use(
       '/offenders/:offenderNo/add-appointment',
       isCreateIndividualAppointmentRolledOut,
+      isPrisonerProfileAppointmentsRolledOut,
       addAppointmentRouter({ systemOauthClient, prisonApi, whereaboutsApi, logError })
     )
 
