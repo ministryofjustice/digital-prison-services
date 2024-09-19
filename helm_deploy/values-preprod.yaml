@@ -39,7 +39,7 @@ generic-service:
     SUPPORT_URL: https://support-preprod.hmpps.service.justice.gov.uk/
     SYSTEM_PHASE: PRE-PRODUCTION
     BVL_URL: https://book-video-link-preprod.prison.service.justice.gov.uk
-    BOOK_A_VIDEO_LINK_API_ENABLED: "false"
+    BOOK_A_VIDEO_LINK_API_ENABLED: "true"
     BOOK_A_VIDEO_LINK_API_URL: https://book-a-video-link-api-preprod.prison.service.justice.gov.uk
     MOIC_URL: https://preprod.moic.service.justice.gov.uk
     OMIC_URL: https://preprod.manage-key-workers.service.justice.gov.uk
