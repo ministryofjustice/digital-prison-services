@@ -4,47 +4,43 @@ const caseNoteTypes = [
   {
     code: 'OBSERVE',
     description: 'Observations',
-    activeFlag: 'Y',
     source: 'OCNS',
     subCodes: [
       {
         code: 'test',
         description: 'Test',
-        activeFlag: 'Y',
+        active: true,
       },
     ],
   },
   {
     code: 'OMIC',
     description: 'OMiC',
-    activeFlag: 'Y',
     source: 'OCNS',
     subCodes: [
       {
         code: 'OPEN_COMM',
         description: 'Open Case Note',
-        activeFlag: 'Y',
+        active: true,
       },
       {
         code: 'COMM',
         description: 'OMiC Communication',
-        activeFlag: 'Y',
+        active: true,
       },
     ],
   },
   {
     code: 'POS',
     description: 'Positive Behaviour',
-    activeFlag: 'Y',
-    subCodes: [{ code: 'IEP_ENC', description: 'Incentive Encouragement', activeFlag: 'Y' }],
+    subCodes: [{ code: 'IEP_ENC', description: 'Incentive Encouragement', active: true }],
   },
   {
     code: 'NEG',
     description: 'Negative Behaviour',
-    activeFlag: 'Y',
     subCodes: [
-      { code: 'BEHAVEWARN', description: 'Behaviour Warning', activeFlag: 'Y' },
-      { code: 'IEP_WARN', description: 'Incentive Warning', activeFlag: 'Y' },
+      { code: 'BEHAVEWARN', description: 'Behaviour Warning', active: true },
+      { code: 'IEP_WARN', description: 'Incentive Warning', active: true },
     ],
   },
 ]

@@ -44,27 +44,25 @@ describe('case note management', () => {
     {
       code: 'OBSERVE',
       description: 'Observations',
-      activeFlag: 'Y',
       source: 'OCNS',
       subCodes: [
         {
           type: 'OBSERVE',
           code: 'OBS1',
           description: 'Observation 1',
-          activeFlag: 'Y',
+          active: true,
         },
       ],
     },
     {
       code: 'ACHIEVEMENTS',
       description: 'Achievements',
-      activeFlag: 'Y',
       subCodes: [
         {
           type: 'ACHIEVEMENTS',
           code: 'ACH1',
           description: 'Achievement 1',
-          activeFlag: 'Y',
+          active: true,
         },
       ],
     },
