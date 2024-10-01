@@ -192,7 +192,7 @@ const controller = ({
 
   router.get(
     '/location-history',
-    prisonerLocationHistory({ prisonApi, whereaboutsApi, caseNotesApi, systemOauthClient })
+    prisonerLocationHistory({ prisonApi, whereaboutsApi, caseNotesApi, systemOauthClient, oauthApi })
   )
   router.get('/prisoner-finance-details/damage-obligations', prisonerDamageObligations({ prisonApi }))
   router.get('/prisoner-finance-details/private-cash', prisonerPrivateCash({ prisonApi, prisonerFinanceService }))

@@ -9,6 +9,7 @@ import {
   hasLength,
   extractLocation,
 } from '../../utils'
+import { getContextWithClientTokenAndRoles } from './prisonerProfileContext'
 
 const fetchStaffName = (context, staffId, prisonApi) =>
   prisonApi.getStaffDetails(context, staffId).then((staff) => formatName(staff.firstName, staff.lastName))
@@ -19,12 +20,15 @@ const fetchWhatHappened = async (
   bookingId,
   bedAssignmentHistorySequence,
   caseNotesApi,
-  whereaboutsApi
+  whereaboutsApi,
+  contextWithClientTokenAndRoles
 ) => {
   try {
     return await whereaboutsApi
       .getCellMoveReason(context, bookingId, bedAssignmentHistorySequence)
-      .then((cellMoveReason) => caseNotesApi.getCaseNote(context, offenderNo, cellMoveReason.cellMoveReason.caseNoteId))
+      .then((cellMoveReason) =>
+        caseNotesApi.getCaseNote(contextWithClientTokenAndRoles, offenderNo, cellMoveReason.cellMoveReason.caseNoteId)
+      )
       .then((caseNote) => caseNote.text)
   } catch (err) {
     if (err?.response?.status === 404) return null
@@ -35,11 +39,20 @@ const fetchWhatHappened = async (
 const mapReasonToCellMoveReasonDescription = ({ cellMoveReasonTypes, assignmentReason }) =>
   cellMoveReasonTypes.find((type) => type.code === assignmentReason)?.description
 
-export default ({ prisonApi, whereaboutsApi, caseNotesApi, systemOauthClient }) =>
+export default ({ prisonApi, whereaboutsApi, caseNotesApi, systemOauthClient, oauthApi }) =>
   async (req, res) => {
     const { offenderNo } = req.params
     const { agencyId, locationId, fromDate, toDate = moment().format('YYYY-MM-DD') } = req.query
     const systemContext = await systemOauthClient.getClientCredentialsTokens(req.session.userDetails.username)
+
+    const { context: contextWithClientTokenAndRoles } = await getContextWithClientTokenAndRoles({
+      offenderNo,
+      res,
+      req,
+      oauthApi,
+      systemOauthClient: null,
+      restrictedPatientApi: null,
+    })
 
     try {
       const [prisonerDetails, locationAttributes, locationHistory, agencyDetails, userCaseLoads] = await Promise.all([
@@ -62,7 +75,8 @@ export default ({ prisonApi, whereaboutsApi, caseNotesApi, systemOauthClient }) 
         bookingId,
         bedAssignmentHistorySequence,
         caseNotesApi,
-        whereaboutsApi
+        whereaboutsApi,
+        contextWithClientTokenAndRoles
       )
 
       const isDpsCellMove = Boolean(whatHappenedDetails)

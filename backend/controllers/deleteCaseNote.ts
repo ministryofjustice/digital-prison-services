@@ -1,4 +1,5 @@
 import { capitalize, formatName, putLastNameFirst } from '../utils'
+import { getContextWithClientTokenAndRoles } from './prisonerProfile/prisonerProfileContext'
 
 export default ({ prisonApi, caseNotesApi, oauthApi }) => {
   type CaseNoteData = {
@@ -19,8 +20,17 @@ export default ({ prisonApi, caseNotesApi, oauthApi }) => {
     const { offenderNo, caseNoteId, caseNoteAmendmentId } = req.params
 
     try {
+      const { context } = await getContextWithClientTokenAndRoles({
+        offenderNo,
+        res,
+        req,
+        oauthApi,
+        systemOauthClient: null,
+        restrictedPatientApi: null,
+      })
+
       const [caseNote, prisonerDetails] = await Promise.all([
-        caseNotesApi.getCaseNote(res.locals, offenderNo, caseNoteId),
+        caseNotesApi.getCaseNote(context, offenderNo, caseNoteId),
         prisonApi.getDetails(res.locals, offenderNo),
       ])
 
@@ -80,11 +90,21 @@ export default ({ prisonApi, caseNotesApi, oauthApi }) => {
 
   const post = async (req, res) => {
     const { offenderNo, caseNoteId, caseNoteAmendmentId } = req.params
+
+    const { context } = await getContextWithClientTokenAndRoles({
+      offenderNo,
+      res,
+      req,
+      oauthApi,
+      systemOauthClient: null,
+      restrictedPatientApi: null,
+    })
+
     try {
       if (caseNoteAmendmentId) {
-        await caseNotesApi.deleteCaseNoteAmendment(res.locals, offenderNo, caseNoteAmendmentId)
+        await caseNotesApi.deleteCaseNoteAmendment(context, offenderNo, caseNoteAmendmentId)
       } else {
-        await caseNotesApi.deleteCaseNote(res.locals, offenderNo, caseNoteId)
+        await caseNotesApi.deleteCaseNote(context, offenderNo, caseNoteId)
       }
       return res.redirect(`/prisoner/${offenderNo}/case-notes`)
     } catch (error) {

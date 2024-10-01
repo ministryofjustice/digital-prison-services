@@ -2,7 +2,7 @@ import moment from 'moment'
 import querystring from 'querystring'
 import { DATE_TIME_FORMAT_SPEC, MOMENT_DAY_OF_THE_WEEK, MOMENT_TIME } from '../../../common/dateHelpers'
 import { getNamesFromString } from '../../utils'
-import getContext from './prisonerProfileContext'
+import { getContextWithClientTokenAndRoles } from './prisonerProfileContext'
 
 const templatePath = 'prisonerProfile/prisonerCaseNotes'
 const perPage = 20
@@ -33,7 +33,7 @@ export default ({
   return async (req, res) => {
     const { offenderNo } = req.params
 
-    const { context, overrideAccess } = await getContext({
+    const { context, overrideAccess } = await getContextWithClientTokenAndRoles({
       offenderNo,
       res,
       req,

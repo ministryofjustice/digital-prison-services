@@ -1,7 +1,8 @@
 import { capitalize, formatName, putLastNameFirst } from '../utils'
 import { serviceUnavailableMessage } from '../common-messages'
+import { getContextWithClientTokenAndRoles } from './prisonerProfile/prisonerProfileContext'
 
-export default ({ prisonApi, caseNotesApi, logError }) => {
+export default ({ prisonApi, caseNotesApi, oauthApi, logError }) => {
   const getOffenderDetails = async (res, offenderNo) => {
     const { firstName, lastName } = await prisonApi.getDetails(res.locals, offenderNo)
 
@@ -13,9 +14,18 @@ export default ({ prisonApi, caseNotesApi, logError }) => {
   const index = async (req, res) => {
     const { offenderNo, caseNoteId } = req.params
 
+    const { context } = await getContextWithClientTokenAndRoles({
+      offenderNo,
+      res,
+      req,
+      oauthApi,
+      systemOauthClient: null,
+      restrictedPatientApi: null,
+    })
+
     try {
       const [caseNote, prisonerDetails] = await Promise.all([
-        caseNotesApi.getCaseNote(res.locals, offenderNo, caseNoteId),
+        caseNotesApi.getCaseNote(context, offenderNo, caseNoteId),
         prisonApi.getDetails(res.locals, offenderNo),
       ])
 
@@ -58,8 +68,17 @@ export default ({ prisonApi, caseNotesApi, logError }) => {
   }
 
   const makeAmendment = async (req, res, { offenderNo, caseNoteId, moreDetail }) => {
+    const { context } = await getContextWithClientTokenAndRoles({
+      offenderNo,
+      res,
+      req,
+      oauthApi,
+      systemOauthClient: null,
+      restrictedPatientApi: null,
+    })
+
     try {
-      await caseNotesApi.amendCaseNote(res.locals, offenderNo, caseNoteId, {
+      await caseNotesApi.amendCaseNote(context, offenderNo, caseNoteId, {
         text: moreDetail,
       })
 

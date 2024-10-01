@@ -2,7 +2,7 @@ import moment from 'moment'
 import nunjucks from 'nunjucks'
 import config from '../config'
 import { properCaseName } from '../utils'
-import getContext from './prisonerProfile/prisonerProfileContext'
+import getContext, { getContextWithClientTokenAndRoles } from './prisonerProfile/prisonerProfileContext'
 
 const getOffenderUrl = (offenderNo) => `/prisoner/${offenderNo}`
 
@@ -88,18 +88,23 @@ export const caseNoteFactory = ({ prisonApi, caseNotesApi, oauthApi, systemOauth
   const index = async (req, res) => {
     const { offenderNo } = req.params
     const context = await getContextWithRoles(offenderNo, res, req, oauthApi, systemOauthClient, restrictedPatientApi)
-
-    const username = req.session?.userDetails?.username || 'SYSTEM'
-    const { access_token: clientToken } = await systemOauthClient.getClientCredentialsTokens(username)
+    const { context: contextWithClientToken } = await getContextWithClientTokenAndRoles({
+      offenderNo,
+      res,
+      req,
+      oauthApi,
+      systemOauthClient,
+      restrictedPatientApi,
+    })
 
     try {
       if (req.xhr) {
         const { typeCode } = req.query
-        const { subTypes } = await getCaseNoteTypes({ ...context, access_token: clientToken }, typeCode)
+        const { subTypes } = await getCaseNoteTypes(contextWithClientToken, typeCode)
         return res.send(nunjucks.render('caseNotes/partials/subTypesOptions.njk', { subTypes }))
       }
       const formValues = getOrConstructFormValues(req)
-      const { types, subTypes } = await getCaseNoteTypes({ ...context, access_token: clientToken }, formValues.type)
+      const { types, subTypes } = await getCaseNoteTypes(contextWithClientToken, formValues.type)
       const offenderDetails = await getOffenderDetails(context, offenderNo)
 
       return res.render('caseNotes/addCaseNoteForm.njk', {
@@ -234,7 +239,14 @@ export const caseNoteFactory = ({ prisonApi, caseNotesApi, oauthApi, systemOauth
     const { activeCaseLoadId } = req.session.userDetails
     const errors = validate(type, subType, text, date, hours, minutes)
 
-    const context = await getContextWithRoles(offenderNo, res, req, oauthApi, systemOauthClient, restrictedPatientApi)
+    const { context } = await getContextWithClientTokenAndRoles({
+      offenderNo,
+      res,
+      req,
+      oauthApi,
+      systemOauthClient,
+      restrictedPatientApi,
+    })
 
     const caseNote = {
       offenderNo,
@@ -296,7 +308,14 @@ export const caseNoteFactory = ({ prisonApi, caseNotesApi, oauthApi, systemOauth
 
   const confirm = async (req, res) => {
     const { offenderNo } = req.params
-    const context = await getContextWithRoles(offenderNo, res, req, oauthApi, systemOauthClient, restrictedPatientApi)
+    const { context } = await getContextWithClientTokenAndRoles({
+      offenderNo,
+      res,
+      req,
+      oauthApi,
+      systemOauthClient,
+      restrictedPatientApi,
+    })
 
     const { confirmed } = req.body
     if (!confirmed) {
