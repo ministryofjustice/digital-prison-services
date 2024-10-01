@@ -12,6 +12,9 @@ describe('Activity list controller', () => {
   const csvParserService = {}
   const offenderActivitiesService = {}
   const caseNotesApi = {}
+  const oauthApi = {
+    userRoles: jest.fn(),
+  }
   let logError
   let getActivityListController
 
@@ -30,6 +33,7 @@ describe('Activity list controller', () => {
       csvParserService,
       offenderActivitiesService,
       caseNotesApi,
+      oauthApi,
       logError,
     }).getActivityList
 

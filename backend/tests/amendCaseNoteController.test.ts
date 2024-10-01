@@ -5,6 +5,9 @@ import amendCaseNoteController from '../controllers/amendmentCaseNote'
 describe('Amendment case note', () => {
   const caseNotesApi = { amendCaseNote: {}, getCaseNote: {} }
   const prisonApi = { getDetails: {} }
+  const oauthApi = {
+    userRoles: jest.fn(),
+  }
 
   let controller
   const req = {
@@ -34,7 +37,7 @@ describe('Amendment case note', () => {
       lastName: 'SMITH',
     })
 
-    controller = amendCaseNoteController({ caseNotesApi, prisonApi, logError: jest.fn() })
+    controller = amendCaseNoteController({ caseNotesApi, prisonApi, oauthApi, logError: jest.fn() })
 
     res.render = jest.fn()
     res.redirect = jest.fn()

@@ -24,6 +24,9 @@ describe('Prisoner location sharing history', () => {
   const systemOauthClient = {
     getClientCredentialsTokens: jest.fn(),
   }
+  const oauthApi = {
+    userRoles: jest.fn(),
+  }
   let req
   let res
   let controller
@@ -63,6 +66,7 @@ describe('Prisoner location sharing history', () => {
       whereaboutsApi,
       caseNotesApi,
       systemOauthClient,
+      oauthApi,
     })
     systemOauthClient.getClientCredentialsTokens.mockResolvedValue({})
 
