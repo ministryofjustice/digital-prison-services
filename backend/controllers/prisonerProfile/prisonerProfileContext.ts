@@ -33,9 +33,10 @@ export const getContextWithClientTokenAndRoles = async ({
   systemOauthClient,
   restrictedPatientApi,
 }) => {
-  const userRoles = oauthApi.userRoles(res.locals)
-  res.locals = { ...res.locals, userRoles }
-
+  if (oauthApi) {
+    const userRoles = oauthApi.userRoles(res.locals)
+    res.locals = { ...res.locals, userRoles }
+  }
   const username = req.session?.userDetails?.username || 'core-dps-user'
   const { access_token: clientToken } = await getClientCredentialsTokens(username)
 
@@ -60,7 +61,6 @@ export const getContextWithClientTokenAndRoles = async ({
   return {
     context: {
       ...res.locals,
-      userRoles,
       access_token: clientToken,
     },
     overrideAccess: false,

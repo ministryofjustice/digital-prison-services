@@ -10,7 +10,6 @@ export const factory = ({
   csvParserService,
   offenderActivitiesService,
   caseNotesApi,
-  oauthApi,
   logError,
 }) => {
   const getActivityList = async (req, res) => {
@@ -111,7 +110,7 @@ export const factory = ({
       offenderNo: offenderNumber,
       res,
       req,
-      oauthApi,
+      oauthApi: null,
       systemOauthClient: null,
       restrictedPatientApi: null,
     })

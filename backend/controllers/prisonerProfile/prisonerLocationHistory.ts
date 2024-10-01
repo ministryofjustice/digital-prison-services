@@ -39,7 +39,7 @@ const fetchWhatHappened = async (
 const mapReasonToCellMoveReasonDescription = ({ cellMoveReasonTypes, assignmentReason }) =>
   cellMoveReasonTypes.find((type) => type.code === assignmentReason)?.description
 
-export default ({ prisonApi, whereaboutsApi, caseNotesApi, systemOauthClient, oauthApi }) =>
+export default ({ prisonApi, whereaboutsApi, caseNotesApi, systemOauthClient }) =>
   async (req, res) => {
     const { offenderNo } = req.params
     const { agencyId, locationId, fromDate, toDate = moment().format('YYYY-MM-DD') } = req.query
@@ -49,7 +49,7 @@ export default ({ prisonApi, whereaboutsApi, caseNotesApi, systemOauthClient, oa
       offenderNo,
       res,
       req,
-      oauthApi,
+      oauthApi: null,
       systemOauthClient: null,
       restrictedPatientApi: null,
     })

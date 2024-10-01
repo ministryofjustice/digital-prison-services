@@ -51,7 +51,6 @@ export const setup = ({
     csvParserService: csvParserService({ fs, isBinaryFileSync }),
     offenderActivitiesService: offenderActivitiesFactory(getClientCredentialsTokens, prisonApi, whereaboutsApi),
     caseNotesApi,
-    oauthApi,
     logError,
   })
 
