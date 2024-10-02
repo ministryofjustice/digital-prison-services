@@ -26,13 +26,13 @@ describe('caseNoteApi tests', () => {
 
   describe('GET case notes request', () => {
     it('Maps a GET case-notes response status of 404 to a null response', async () => {
-      mock.get('/case-notes/1234?size=&page=&type=&subType=&startDate=&endDate=').reply(404)
+      mock.get('/case-notes/1234?size=&page=&type=&subType=&startDate=&endDate=&includeSensitive=false').reply(404)
       const result = await caseNoteAPi.getCaseNotes({}, 1234, {})
       expect(result).toEqual({})
     })
 
     it('throws an exception for a GET case-notes response status of 401 ', async () => {
-      mock.get('/case-notes/1234?size=&page=&type=&subType=&startDate=&endDate=').reply(401)
+      mock.get('/case-notes/1234?size=&page=&type=&subType=&startDate=&endDate=&includeSensitive=false').reply(401)
 
       await expect(caseNoteAPi.getCaseNotes({}, 1234, {})).rejects.toThrow('Unauthorized')
     })
@@ -47,6 +47,7 @@ describe('caseNoteApi tests', () => {
           subType: 'BOB',
           startDate: '2019-02-20T00:00:00',
           endDate: '2019-02-21T23:59:59',
+          includeSensitive: false,
         })
         .reply(200, {
           pageable: {
@@ -85,6 +86,7 @@ describe('caseNoteApi tests', () => {
             subType: null,
             startDate: '2019-02-20T00:00:00',
             endDate: '2019-02-21T23:59:59',
+            includeSensitive: false,
           })
           .reply(200, { test: 'test' })
 
@@ -109,6 +111,7 @@ describe('caseNoteApi tests', () => {
             subType: null,
             startDate: '2019-02-20T00:00:00',
             endDate: null,
+            includeSensitive: false,
           })
           .reply(200, { test: 'test' })
 
@@ -133,10 +136,11 @@ describe('caseNoteApi tests', () => {
             subType: 'BOB',
             startDate: '2019-02-20T00:00:00',
             endDate: '2019-02-21T23:59:59',
+            includeSensitive: true,
           })
           .reply(200, { test: 'test' })
 
-        const result = await caseNoteAPi.getCaseNotes({}, 1234, {
+        const result = await caseNoteAPi.getCaseNotes({ userRoles: [{ roleCode: 'POM' }] }, 1234, {
           perPage: 10,
           pageNumber: 1,
           type: 'GEN',

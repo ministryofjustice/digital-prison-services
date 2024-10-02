@@ -10,6 +10,7 @@ import {
   extractLocation,
 } from '../../utils'
 import { getContextWithClientTokenAndRoles } from './prisonerProfileContext'
+import contextProperties from '../../contextProperties'
 
 const fetchStaffName = (context, staffId, prisonApi) =>
   prisonApi.getStaffDetails(context, staffId).then((staff) => formatName(staff.firstName, staff.lastName))
@@ -67,6 +68,10 @@ export default ({ prisonApi, whereaboutsApi, caseNotesApi, systemOauthClient }) 
       const { bookingId, firstName, lastName } = prisonerDetails
       const currentPrisonerDetails = locationHistory.find((record) => record.bookingId === bookingId) || {}
       const { movementMadeBy, assignmentReason, bedAssignmentHistorySequence } = currentPrisonerDetails
+
+      contextProperties.setCustomRequestHeaders(contextWithClientTokenAndRoles, {
+        CaseloadId: prisonerDetails.agencyId,
+      })
 
       const movementMadeByName = await fetchStaffName(res.locals, movementMadeBy, prisonApi)
       const whatHappenedDetails = await fetchWhatHappened(

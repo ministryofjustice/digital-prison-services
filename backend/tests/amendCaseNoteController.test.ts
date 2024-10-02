@@ -33,6 +33,7 @@ describe('Amendment case note', () => {
     prisonApi.getDetails = jest.fn().mockResolvedValue({
       firstName: 'BOB',
       lastName: 'SMITH',
+      agencyId: 'LEI',
     })
 
     controller = amendCaseNoteController({ caseNotesApi, prisonApi, logError: jest.fn(), systemOauthClient })
@@ -89,7 +90,11 @@ describe('Amendment case note', () => {
     it('should make a request for an offenders case note', async () => {
       await controller.index(req, res)
 
-      expect(caseNotesApi.getCaseNote).toHaveBeenCalledWith({ access_token: 'CLIENT_TOKEN' }, 'A12345', 1)
+      expect(caseNotesApi.getCaseNote).toHaveBeenCalledWith(
+        { access_token: 'CLIENT_TOKEN', customRequestHeaders: { caseloadid: 'LEI' } },
+        'A12345',
+        1
+      )
     })
 
     it('should make a call to retrieve an prisoners name', async () => {

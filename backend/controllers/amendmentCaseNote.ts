@@ -1,6 +1,7 @@
 import { capitalize, formatName, putLastNameFirst } from '../utils'
 import { serviceUnavailableMessage } from '../common-messages'
 import { getContextWithClientTokenAndRoles } from './prisonerProfile/prisonerProfileContext'
+import contextProperties from '../contextProperties'
 
 export default ({ prisonApi, caseNotesApi, logError, systemOauthClient }) => {
   const getOffenderDetails = async (res, offenderNo) => {
@@ -24,10 +25,9 @@ export default ({ prisonApi, caseNotesApi, logError, systemOauthClient }) => {
     })
 
     try {
-      const [caseNote, prisonerDetails] = await Promise.all([
-        caseNotesApi.getCaseNote(context, offenderNo, caseNoteId),
-        prisonApi.getDetails(res.locals, offenderNo),
-      ])
+      const prisonerDetails = await prisonApi.getDetails(res.locals, offenderNo)
+      contextProperties.setCustomRequestHeaders(context, { CaseloadId: prisonerDetails.agencyId })
+      const caseNote = await caseNotesApi.getCaseNote(context, offenderNo, caseNoteId)
 
       const { staffId } = req.session.userDetails
 

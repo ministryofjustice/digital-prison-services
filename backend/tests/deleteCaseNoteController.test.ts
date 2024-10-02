@@ -35,6 +35,7 @@ describe('Delete case note', () => {
     prisonApi.getDetails = jest.fn().mockResolvedValue({
       firstName: 'BOB',
       lastName: 'SMITH',
+      agencyId: 'LEI',
     })
     // @ts-expect-error ts-migrate(2339) FIXME: Property 'userRoles' does not exist on type '{}'.
     oauthApi.userRoles = jest.fn().mockReturnValue([{ roleCode: 'DELETE_SENSITIVE_CASE_NOTES' }])
@@ -99,7 +100,11 @@ describe('Delete case note', () => {
 
       // @ts-expect-error ts-migrate(2339) FIXME: Property 'getCaseNote' does not exist on type '{}'... Remove this comment to see the full error message
       expect(caseNotesApi.getCaseNote).toHaveBeenCalledWith(
-        { access_token: 'CLIENT_TOKEN', userRoles: [{ roleCode: 'DELETE_SENSITIVE_CASE_NOTES' }] },
+        {
+          access_token: 'CLIENT_TOKEN',
+          customRequestHeaders: { caseloadid: 'LEI' },
+          userRoles: [{ roleCode: 'DELETE_SENSITIVE_CASE_NOTES' }],
+        },
         'A12345',
         1
       )

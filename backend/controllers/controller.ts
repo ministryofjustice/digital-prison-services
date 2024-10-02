@@ -1,6 +1,7 @@
 import asyncMiddleware from '../middleware/asyncHandler'
 import { serviceUnavailableMessage } from '../common-messages'
 import { getContextWithClientTokenAndRoles } from './prisonerProfile/prisonerProfileContext'
+import contextProperties from '../contextProperties'
 
 export const factory = ({
   activityListService,
@@ -10,6 +11,7 @@ export const factory = ({
   csvParserService,
   offenderActivitiesService,
   caseNotesApi,
+  prisonApi,
   logError,
 }) => {
   const getActivityList = async (req, res) => {
@@ -114,6 +116,13 @@ export const factory = ({
       systemOauthClient: null,
       restrictedPatientApi: null,
     })
+    try {
+      const prisonerDetails = await prisonApi.getDetails(res.locals, offenderNumber)
+      contextProperties.setCustomRequestHeaders(context, { CaseloadId: prisonerDetails.agencyId })
+    } catch (e) {
+      contextProperties.setCustomRequestHeaders(context, { CaseloadId: req.session.userDetails.activeCaseLoadId })
+    }
+
     const caseNote = await caseNotesApi.getCaseNote(context, offenderNumber, caseNoteId)
 
     const translateToFirstLast = (lastNameFirstName) => {

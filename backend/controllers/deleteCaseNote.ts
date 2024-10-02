@@ -1,5 +1,6 @@
 import { capitalize, formatName, putLastNameFirst } from '../utils'
 import { getContextWithClientTokenAndRoles } from './prisonerProfile/prisonerProfileContext'
+import contextProperties from '../contextProperties'
 
 export default ({ prisonApi, caseNotesApi, oauthApi, systemOauthClient }) => {
   type CaseNoteData = {
@@ -29,10 +30,9 @@ export default ({ prisonApi, caseNotesApi, oauthApi, systemOauthClient }) => {
         restrictedPatientApi: null,
       })
 
-      const [caseNote, prisonerDetails] = await Promise.all([
-        caseNotesApi.getCaseNote(context, offenderNo, caseNoteId),
-        prisonApi.getDetails(res.locals, offenderNo),
-      ])
+      const prisonerDetails = await prisonApi.getDetails(res.locals, offenderNo)
+      contextProperties.setCustomRequestHeaders(context, { CaseloadId: prisonerDetails.agencyId })
+      const caseNote = await caseNotesApi.getCaseNote(context, offenderNo, caseNoteId)
 
       const userRoles = oauthApi.userRoles(res.locals).map((role) => role.roleCode)
 
