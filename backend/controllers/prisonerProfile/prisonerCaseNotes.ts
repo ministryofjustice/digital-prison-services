@@ -64,10 +64,11 @@ export default ({
       access_token: clientToken,
     })
 
-    const types = caseNoteTypes.map((caseNoteType) => ({
-      value: caseNoteType.code,
-      text: caseNoteType.description,
-    }))
+    const types =
+      caseNoteTypes?.map((caseNoteType) => ({
+        value: caseNoteType.code,
+        text: caseNoteType.description,
+      })) || []
 
     const subTypes = caseNoteTypes
       .map((caseNoteType) =>
