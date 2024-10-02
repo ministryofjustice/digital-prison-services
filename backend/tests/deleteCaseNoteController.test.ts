@@ -12,6 +12,7 @@ describe('Delete case note', () => {
   const res = {
     locals: {},
   }
+  const systemOauthClient = { getClientCredentialsTokens: () => ({ access_token: 'CLIENT_TOKEN' }) }
 
   beforeEach(() => {
     // @ts-expect-error ts-migrate(2339) FIXME: Property 'getCaseNote' does not exist on type '{}'... Remove this comment to see the full error message
@@ -39,7 +40,7 @@ describe('Delete case note', () => {
     oauthApi.userRoles = jest.fn().mockReturnValue([{ roleCode: 'DELETE_SENSITIVE_CASE_NOTES' }])
 
     // @ts-expect-error ts-migrate(2345) FIXME: Argument of type '{ caseNotesApi: {}; prisonApi: {... Remove this comment to see the full error message
-    controller = deleteCaseNoteController({ caseNotesApi, prisonApi, logError: jest.fn(), oauthApi })
+    controller = deleteCaseNoteController({ caseNotesApi, prisonApi, logError: jest.fn(), oauthApi, systemOauthClient })
 
     // @ts-expect-error ts-migrate(2339) FIXME: Property 'render' does not exist on type '{ locals... Remove this comment to see the full error message
     res.render = jest.fn()
@@ -97,14 +98,21 @@ describe('Delete case note', () => {
       await controller.index(req, res)
 
       // @ts-expect-error ts-migrate(2339) FIXME: Property 'getCaseNote' does not exist on type '{}'... Remove this comment to see the full error message
-      expect(caseNotesApi.getCaseNote).toHaveBeenCalledWith({}, 'A12345', 1)
+      expect(caseNotesApi.getCaseNote).toHaveBeenCalledWith(
+        { access_token: 'CLIENT_TOKEN', userRoles: [{ roleCode: 'DELETE_SENSITIVE_CASE_NOTES' }] },
+        'A12345',
+        1
+      )
     })
 
     it('should make a call to retrieve an prisoners name', async () => {
       await controller.index(req, res)
 
       // @ts-expect-error ts-migrate(2339) FIXME: Property 'getDetails' does not exist on type '{}'.
-      expect(prisonApi.getDetails).toHaveBeenCalledWith({}, 'A12345')
+      expect(prisonApi.getDetails).toHaveBeenCalledWith(
+        { userRoles: [{ roleCode: 'DELETE_SENSITIVE_CASE_NOTES' }] },
+        'A12345'
+      )
     })
 
     it('should return case note details', async () => {
@@ -244,7 +252,11 @@ describe('Delete case note', () => {
         await controller.post(req, res)
 
         // @ts-expect-error ts-migrate(2339) FIXME: Property 'deleteCaseNote' does not exist on type '... Remove this comment to see the full error message
-        expect(caseNotesApi.deleteCaseNote).toHaveBeenCalledWith({}, 'A12345', 1)
+        expect(caseNotesApi.deleteCaseNote).toHaveBeenCalledWith(
+          { access_token: 'CLIENT_TOKEN', userRoles: [{ roleCode: 'DELETE_SENSITIVE_CASE_NOTES' }] },
+          'A12345',
+          1
+        )
       })
 
       it('should redirect back to case notes on deletion', async () => {
@@ -269,7 +281,11 @@ describe('Delete case note', () => {
         await controller.post(req, res)
 
         // @ts-expect-error ts-migrate(2339) FIXME: Property 'deleteCaseNoteAmendment' does not exist ... Remove this comment to see the full error message
-        expect(caseNotesApi.deleteCaseNoteAmendment).toHaveBeenCalledWith({}, 'A12345', 2345)
+        expect(caseNotesApi.deleteCaseNoteAmendment).toHaveBeenCalledWith(
+          { access_token: 'CLIENT_TOKEN', userRoles: [{ roleCode: 'DELETE_SENSITIVE_CASE_NOTES' }] },
+          'A12345',
+          2345
+        )
       })
     })
   })

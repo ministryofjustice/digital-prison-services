@@ -1,7 +1,7 @@
 import { capitalize, formatName, putLastNameFirst } from '../utils'
 import { getContextWithClientTokenAndRoles } from './prisonerProfile/prisonerProfileContext'
 
-export default ({ prisonApi, caseNotesApi, oauthApi }) => {
+export default ({ prisonApi, caseNotesApi, oauthApi, systemOauthClient }) => {
   type CaseNoteData = {
     prisonNumber: string
     prisonerNameForBreadcrumb: string
@@ -25,7 +25,7 @@ export default ({ prisonApi, caseNotesApi, oauthApi }) => {
         res,
         req,
         oauthApi,
-        systemOauthClient: null,
+        systemOauthClient,
         restrictedPatientApi: null,
       })
 
@@ -96,7 +96,7 @@ export default ({ prisonApi, caseNotesApi, oauthApi }) => {
       res,
       req,
       oauthApi,
-      systemOauthClient: null,
+      systemOauthClient,
       restrictedPatientApi: null,
     })
 

@@ -50,7 +50,7 @@ export default ({ prisonApi, whereaboutsApi, caseNotesApi, systemOauthClient }) 
       res,
       req,
       oauthApi: null,
-      systemOauthClient: null,
+      systemOauthClient,
       restrictedPatientApi: null,
     })
 

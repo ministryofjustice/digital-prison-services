@@ -15,6 +15,7 @@ describe('Amendment case note', () => {
     originalUrl: '/prisoner/A12345/case-notes/amend-case-note/1',
   }
   const res = { render: {}, redirect: {}, locals: {} }
+  const systemOauthClient = { getClientCredentialsTokens: () => ({ access_token: 'CLIENT_TOKEN' }) }
 
   beforeEach(() => {
     caseNotesApi.getCaseNote = jest.fn().mockResolvedValue({
@@ -34,7 +35,7 @@ describe('Amendment case note', () => {
       lastName: 'SMITH',
     })
 
-    controller = amendCaseNoteController({ caseNotesApi, prisonApi, logError: jest.fn() })
+    controller = amendCaseNoteController({ caseNotesApi, prisonApi, logError: jest.fn(), systemOauthClient })
 
     res.render = jest.fn()
     res.redirect = jest.fn()
@@ -88,7 +89,7 @@ describe('Amendment case note', () => {
     it('should make a request for an offenders case note', async () => {
       await controller.index(req, res)
 
-      expect(caseNotesApi.getCaseNote).toHaveBeenCalledWith({}, 'A12345', 1)
+      expect(caseNotesApi.getCaseNote).toHaveBeenCalledWith({ access_token: 'CLIENT_TOKEN' }, 'A12345', 1)
     })
 
     it('should make a call to retrieve an prisoners name', async () => {
@@ -200,7 +201,9 @@ describe('Amendment case note', () => {
     it('should make an amendment', async () => {
       await controller.post(req, res)
 
-      expect(caseNotesApi.amendCaseNote).toHaveBeenCalledWith({}, 'A12345', 1, { text: 'Hello, world' })
+      expect(caseNotesApi.amendCaseNote).toHaveBeenCalledWith({ access_token: 'CLIENT_TOKEN' }, 'A12345', 1, {
+        text: 'Hello, world',
+      })
     })
 
     it('should validate the presence of an amendment', async () => {
@@ -293,7 +296,7 @@ describe('Amendment case note', () => {
 
       await controller.confirm(req, res)
 
-      expect(caseNotesApi.amendCaseNote).toBeCalledWith(res.locals, 'A12345', 1, {
+      expect(caseNotesApi.amendCaseNote).toBeCalledWith({ ...res.locals, access_token: 'CLIENT_TOKEN' }, 'A12345', 1, {
         text: 'hello',
       })
       expect(res.redirect).toBeCalledWith('/prisoner/A12345/case-notes')
@@ -313,7 +316,7 @@ describe('Amendment case note', () => {
 
       await controller.confirm(req, res)
 
-      expect(caseNotesApi.amendCaseNote).toBeCalledWith(res.locals, 'A12345', 1, {
+      expect(caseNotesApi.amendCaseNote).toBeCalledWith({ ...res.locals, access_token: 'CLIENT_TOKEN' }, 'A12345', 1, {
         text: 'hello',
       })
       expect(req.flash).toHaveBeenNthCalledWith(1, 'amendmentErrors', [

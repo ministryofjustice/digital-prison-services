@@ -2,7 +2,7 @@ import { capitalize, formatName, putLastNameFirst } from '../utils'
 import { serviceUnavailableMessage } from '../common-messages'
 import { getContextWithClientTokenAndRoles } from './prisonerProfile/prisonerProfileContext'
 
-export default ({ prisonApi, caseNotesApi, logError }) => {
+export default ({ prisonApi, caseNotesApi, logError, systemOauthClient }) => {
   const getOffenderDetails = async (res, offenderNo) => {
     const { firstName, lastName } = await prisonApi.getDetails(res.locals, offenderNo)
 
@@ -19,7 +19,7 @@ export default ({ prisonApi, caseNotesApi, logError }) => {
       res,
       req,
       oauthApi: null,
-      systemOauthClient: null,
+      systemOauthClient,
       restrictedPatientApi: null,
     })
 
@@ -73,7 +73,7 @@ export default ({ prisonApi, caseNotesApi, logError }) => {
       res,
       req,
       oauthApi: null,
-      systemOauthClient: null,
+      systemOauthClient,
       restrictedPatientApi: null,
     })
 
