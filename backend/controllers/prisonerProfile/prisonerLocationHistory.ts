@@ -69,9 +69,11 @@ export default ({ prisonApi, whereaboutsApi, caseNotesApi, systemOauthClient }) 
       const currentPrisonerDetails = locationHistory.find((record) => record.bookingId === bookingId) || {}
       const { movementMadeBy, assignmentReason, bedAssignmentHistorySequence } = currentPrisonerDetails
 
-      contextProperties.setCustomRequestHeaders(contextWithClientTokenAndRoles, {
-        CaseloadId: prisonerDetails.agencyId,
-      })
+      if (prisonerDetails.agencyId) {
+        contextProperties.setCustomRequestHeaders(contextWithClientTokenAndRoles, {
+          CaseloadId: prisonerDetails.agencyId,
+        })
+      }
 
       const movementMadeByName = await fetchStaffName(res.locals, movementMadeBy, prisonApi)
       const whatHappenedDetails = await fetchWhatHappened(

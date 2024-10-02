@@ -26,7 +26,9 @@ export default ({ prisonApi, caseNotesApi, logError, systemOauthClient }) => {
 
     try {
       const prisonerDetails = await prisonApi.getDetails(res.locals, offenderNo)
-      contextProperties.setCustomRequestHeaders(context, { CaseloadId: prisonerDetails.agencyId })
+      if (prisonerDetails.agencyId) {
+        contextProperties.setCustomRequestHeaders(context, { CaseloadId: prisonerDetails.agencyId })
+      }
       const caseNote = await caseNotesApi.getCaseNote(context, offenderNo, caseNoteId)
 
       const { staffId } = req.session.userDetails
