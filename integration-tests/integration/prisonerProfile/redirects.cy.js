@@ -206,6 +206,7 @@ context('Current prisoner profile should NOT redirect to the new prisoner profil
           caseNoteSummary: {},
           offenderNo: 'A1234A',
         })
+        cy.task('stubBookingDetails', { firstName: 'Bob', lastName: 'Smith', agencyId: 'MDI' })
       })
 
       it('Should not redirect to the new prisoner profile - overview page', () => {
