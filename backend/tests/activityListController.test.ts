@@ -12,6 +12,7 @@ describe('Activity list controller', () => {
   const csvParserService = {}
   const offenderActivitiesService = {}
   const caseNotesApi = {}
+  const prisonApi = {}
   let logError
   let getActivityListController
 
@@ -31,6 +32,7 @@ describe('Activity list controller', () => {
       offenderActivitiesService,
       caseNotesApi,
       logError,
+      prisonApi,
     }).getActivityList
 
     req.query = {
