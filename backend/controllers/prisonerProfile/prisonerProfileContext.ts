@@ -37,7 +37,7 @@ export const getContextWithClientTokenAndRoles = async ({
     const userRoles = oauthApi.userRoles(res.locals)
     res.locals = { ...res.locals, userRoles }
   }
-  const username = req.session?.userDetails?.username || 'core-dps-user'
+  const { username } = req.session.userDetails
   const { access_token: clientToken } = await (
     systemOauthClient?.getClientCredentialsTokens || getClientCredentialsTokens
   )(username)

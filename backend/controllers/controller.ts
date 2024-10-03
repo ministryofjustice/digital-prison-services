@@ -116,13 +116,12 @@ export const factory = ({
       systemOauthClient: null,
       restrictedPatientApi: null,
     })
-    try {
-      const prisonerDetails = await prisonApi.getDetails(res.locals, offenderNumber)
+
+    const prisonerDetails = await prisonApi.getDetails(res.locals, offenderNumber)
+    if (prisonerDetails?.agencyId) {
       contextProperties.setCustomRequestHeaders(context, { CaseloadId: prisonerDetails.agencyId })
-    } catch (e) {
-      if (req.session?.userDetails?.activeCaseLoadId) {
-        contextProperties.setCustomRequestHeaders(context, { CaseloadId: req.session.userDetails.activeCaseLoadId })
-      }
+    } else if (req.session?.userDetails?.activeCaseLoadId) {
+      contextProperties.setCustomRequestHeaders(context, { CaseloadId: req.session.userDetails.activeCaseLoadId })
     }
 
     const caseNote = await caseNotesApi.getCaseNote(context, offenderNumber, caseNoteId)
