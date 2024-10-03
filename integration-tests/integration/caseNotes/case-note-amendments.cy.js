@@ -58,7 +58,7 @@ context('Case note amendments', () => {
     cy.task('stubSignIn', { username: 'ITAG_USER', caseload: 'MDI' })
     cy.signIn()
 
-    cy.task('stubBookingDetails', { firstName: 'Bob', lastName: 'Smith' })
+    cy.task('stubBookingDetails', { firstName: 'Bob', lastName: 'Smith', agencyId: 'MDI' })
   })
 
   it('should play back correct information on page load', () => {

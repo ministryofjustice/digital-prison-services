@@ -1,3 +1,5 @@
+import { getClientCredentialsTokens } from '../../api/systemOauthClient'
+
 const getContext = async ({ offenderNo, res, req, oauthApi, systemOauthClient, restrictedPatientApi }) => {
   if (res.locals.user === undefined) {
     return { context: res.locals, overrideAccess: false }
@@ -21,6 +23,50 @@ const getContext = async ({ offenderNo, res, req, oauthApi, systemOauthClient, r
     }
   }
   return { context: res.locals, overrideAccess: false }
+}
+
+export const getContextWithClientTokenAndRoles = async ({
+  offenderNo,
+  res,
+  req,
+  oauthApi,
+  systemOauthClient,
+  restrictedPatientApi,
+}) => {
+  if (oauthApi) {
+    const userRoles = oauthApi.userRoles(res.locals)
+    res.locals = { ...res.locals, userRoles }
+  }
+  const { username } = req.session.userDetails
+  const { access_token: clientToken } = await (
+    systemOauthClient?.getClientCredentialsTokens || getClientCredentialsTokens
+  )(username)
+
+  if (restrictedPatientApi && systemOauthClient) {
+    const { context, overrideAccess } = await getContext({
+      offenderNo,
+      res,
+      req,
+      oauthApi,
+      systemOauthClient,
+      restrictedPatientApi,
+    })
+    return {
+      context: {
+        ...context,
+        access_token: clientToken,
+      },
+      overrideAccess,
+    }
+  }
+
+  return {
+    context: {
+      ...res.locals,
+      access_token: clientToken,
+    },
+    overrideAccess: false,
+  }
 }
 
 export default getContext

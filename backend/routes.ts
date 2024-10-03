@@ -391,12 +391,12 @@ const setup = ({
 
   router.use(
     '/prisoner/:offenderNo/case-notes/amend-case-note/:caseNoteId',
-    amendCaseNoteRouter({ prisonApi, caseNotesApi, logError })
+    amendCaseNoteRouter({ prisonApi, caseNotesApi, logError, systemOauthClient })
   )
 
   router.use(
     '/prisoner/:offenderNo/case-notes/delete-case-note/:caseNoteId/:caseNoteAmendmentId?',
-    deleteCaseNoteRouter({ prisonApi, caseNotesApi, oauthApi, logError })
+    deleteCaseNoteRouter({ prisonApi, caseNotesApi, oauthApi, logError, systemOauthClient })
   )
 
   router.get(

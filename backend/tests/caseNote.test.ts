@@ -483,7 +483,7 @@ describe('case note management', () => {
 
         await post(req, res)
 
-        expect(caseNotesApi.addCaseNote).toBeCalledWith(res.locals, offenderNo, {
+        expect(caseNotesApi.addCaseNote).toBeCalledWith({ ...res.locals, access_token: 'CLIENT_TOKEN' }, offenderNo, {
           offenderNo,
           type: 'OBSERVE',
           subType: 'OBS1',
@@ -508,7 +508,7 @@ describe('case note management', () => {
         }
 
         const expectCaseNoteAdded = () =>
-          expect(caseNotesApi.addCaseNote).toBeCalledWith(res.locals, offenderNo, {
+          expect(caseNotesApi.addCaseNote).toBeCalledWith({ ...res.locals, access_token: 'CLIENT_TOKEN' }, offenderNo, {
             offenderNo,
             type: 'REPORTS',
             subType: 'REP_IEP',
@@ -579,7 +579,7 @@ describe('case note management', () => {
 
       await confirm(req, res)
 
-      expect(caseNotesApi.addCaseNote).toBeCalledWith(res.locals, offenderNo, {
+      expect(caseNotesApi.addCaseNote).toBeCalledWith({ ...res.locals, access_token: 'CLIENT_TOKEN' }, offenderNo, {
         text: 'hello',
         date: '20/01/2020',
         hours: '23',
@@ -607,7 +607,7 @@ describe('case note management', () => {
 
       await confirm(req, res)
 
-      expect(caseNotesApi.addCaseNote).toBeCalledWith(res.locals, offenderNo, {
+      expect(caseNotesApi.addCaseNote).toBeCalledWith({ ...res.locals, access_token: 'CLIENT_TOKEN' }, offenderNo, {
         text: 'hello',
         date: '20/01/2020',
         hours: '23',

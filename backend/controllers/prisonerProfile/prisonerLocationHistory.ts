@@ -9,6 +9,8 @@ import {
   hasLength,
   extractLocation,
 } from '../../utils'
+import { getContextWithClientTokenAndRoles } from './prisonerProfileContext'
+import contextProperties from '../../contextProperties'
 
 const fetchStaffName = (context, staffId, prisonApi) =>
   prisonApi.getStaffDetails(context, staffId).then((staff) => formatName(staff.firstName, staff.lastName))
@@ -19,12 +21,15 @@ const fetchWhatHappened = async (
   bookingId,
   bedAssignmentHistorySequence,
   caseNotesApi,
-  whereaboutsApi
+  whereaboutsApi,
+  contextWithClientTokenAndRoles
 ) => {
   try {
     return await whereaboutsApi
       .getCellMoveReason(context, bookingId, bedAssignmentHistorySequence)
-      .then((cellMoveReason) => caseNotesApi.getCaseNote(context, offenderNo, cellMoveReason.cellMoveReason.caseNoteId))
+      .then((cellMoveReason) =>
+        caseNotesApi.getCaseNote(contextWithClientTokenAndRoles, offenderNo, cellMoveReason.cellMoveReason.caseNoteId)
+      )
       .then((caseNote) => caseNote.text)
   } catch (err) {
     if (err?.response?.status === 404) return null
@@ -41,6 +46,15 @@ export default ({ prisonApi, whereaboutsApi, caseNotesApi, systemOauthClient }) 
     const { agencyId, locationId, fromDate, toDate = moment().format('YYYY-MM-DD') } = req.query
     const systemContext = await systemOauthClient.getClientCredentialsTokens(req.session.userDetails.username)
 
+    const { context: contextWithClientTokenAndRoles } = await getContextWithClientTokenAndRoles({
+      offenderNo,
+      res,
+      req,
+      oauthApi: null,
+      systemOauthClient,
+      restrictedPatientApi: null,
+    })
+
     try {
       const [prisonerDetails, locationAttributes, locationHistory, agencyDetails, userCaseLoads] = await Promise.all([
         prisonApi.getDetails(res.locals, offenderNo),
@@ -55,6 +69,12 @@ export default ({ prisonApi, whereaboutsApi, caseNotesApi, systemOauthClient }) 
       const currentPrisonerDetails = locationHistory.find((record) => record.bookingId === bookingId) || {}
       const { movementMadeBy, assignmentReason, bedAssignmentHistorySequence } = currentPrisonerDetails
 
+      if (prisonerDetails.agencyId) {
+        contextProperties.setCustomRequestHeaders(contextWithClientTokenAndRoles, {
+          CaseloadId: prisonerDetails.agencyId,
+        })
+      }
+
       const movementMadeByName = await fetchStaffName(res.locals, movementMadeBy, prisonApi)
       const whatHappenedDetails = await fetchWhatHappened(
         res.locals,
@@ -62,7 +82,8 @@ export default ({ prisonApi, whereaboutsApi, caseNotesApi, systemOauthClient }) 
         bookingId,
         bedAssignmentHistorySequence,
         caseNotesApi,
-        whereaboutsApi
+        whereaboutsApi,
+        contextWithClientTokenAndRoles
       )
 
       const isDpsCellMove = Boolean(whatHappenedDetails)

@@ -121,7 +121,7 @@ describe('Case notes controller', () => {
     await controller(reqDefault, res)
 
     // @ts-expect-error ts-migrate(2339) FIXME: Property 'getCaseNotes' does not exist on type '{}... Remove this comment to see the full error message
-    expect(caseNotesApi.getCaseNotes).toHaveBeenCalledWith(res.locals, 'A12345', {
+    expect(caseNotesApi.getCaseNotes).toHaveBeenCalledWith({ ...res.locals, access_token: 'CLIENT_TOKEN' }, 'A12345', {
       endDate: undefined,
       pageNumber: 0,
       perPage: 20,
@@ -146,7 +146,7 @@ describe('Case notes controller', () => {
 
     // @ts-expect-error ts-migrate(2339) FIXME: Property 'getCaseNotes' does not exist on type '{}... Remove this comment to see the full error message
     expect(caseNotesApi.getCaseNotes).toHaveBeenCalledWith(
-      res.locals,
+      { ...res.locals, access_token: 'CLIENT_TOKEN' },
       'A12345',
       expect.objectContaining({
         endDate: '11/10/2020',

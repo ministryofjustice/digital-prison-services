@@ -44,6 +44,9 @@ export const caseNotesApiFactory = (client) => {
       subType: data.subType,
       startDate: toFormatStartOfDay(data.startDate),
       endDate: toFormatEndOfDay(data.endDate),
+      includeSensitive: !!context?.userRoles?.find((role) =>
+        ['POM', 'VIEW_SENSITIVE_CASE_NOTES', 'ADD_SENSITIVE_CASE_NOTES'].includes(role.roleCode)
+      ),
     }
     return client
       .get(context, `/case-notes/${offenderNo}?${qs.stringify(query)}`)
