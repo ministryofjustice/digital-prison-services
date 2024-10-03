@@ -10,7 +10,7 @@ describe('Amendment case note', () => {
   const req = {
     flash: {},
     headers: {},
-    session: {},
+    session: { userDetails: { username: 'ITAG_USER' } },
     body: {},
     originalUrl: '/prisoner/A12345/case-notes/amend-case-note/1',
   }
@@ -296,7 +296,7 @@ describe('Amendment case note', () => {
 
   describe('confirm()', () => {
     it('should save the case note if confirmed', async () => {
-      req.session = { draftCaseNoteDetail: { moreDetail: 'hello' } }
+      req.session = { userDetails: { username: 'ITAG_USER' }, draftCaseNoteDetail: { moreDetail: 'hello' } }
       req.body = { confirmed: 'Yes' }
 
       await controller.confirm(req, res)
@@ -308,7 +308,7 @@ describe('Amendment case note', () => {
     })
 
     it('should redirect if case note save fails', async () => {
-      req.session = { draftCaseNoteDetail: { moreDetail: 'hello' } }
+      req.session = { userDetails: { username: 'ITAG_USER' }, draftCaseNoteDetail: { moreDetail: 'hello' } }
       req.body = { confirmed: 'Yes' }
       const error400 = makeError('response', {
         status: 400,

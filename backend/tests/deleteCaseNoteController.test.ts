@@ -8,6 +8,7 @@ describe('Delete case note', () => {
   let controller
   const req = {
     originalUrl: 'http://localhost:3002/prisoner/case-notes/delete-case-note/1',
+    session: { userDetails: { username: 'ITAG_USER' } },
   }
   const res = {
     locals: {},
