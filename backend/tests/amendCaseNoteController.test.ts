@@ -10,7 +10,7 @@ describe('Amendment case note', () => {
   const req = {
     flash: {},
     headers: {},
-    session: { userDetails: { username: 'ITAG_USER' } },
+    session: { userDetails: { username: 'ITAG_USER' } } as any,
     body: {},
     originalUrl: '/prisoner/A12345/case-notes/amend-case-note/1',
   }
