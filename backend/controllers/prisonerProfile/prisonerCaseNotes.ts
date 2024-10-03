@@ -2,7 +2,7 @@ import moment from 'moment'
 import querystring from 'querystring'
 import { DATE_TIME_FORMAT_SPEC, MOMENT_DAY_OF_THE_WEEK, MOMENT_TIME } from '../../../common/dateHelpers'
 import { getNamesFromString } from '../../utils'
-import getContext from './prisonerProfileContext'
+import getContext, { getContextWithClientTokenAndRoles } from './prisonerProfileContext'
 
 const templatePath = 'prisonerProfile/prisonerCaseNotes'
 const perPage = 20
@@ -42,6 +42,15 @@ export default ({
       restrictedPatientApi,
     })
 
+    const { context: contextWithClientToken } = await getContextWithClientTokenAndRoles({
+      offenderNo,
+      res,
+      req,
+      oauthApi,
+      systemOauthClient,
+      restrictedPatientApi,
+    })
+
     const fullUrl = new URL(`${req.protocol}://${req.get('host')}${req.originalUrl}`)
 
     const { pageOffsetOption, showAll, type, subType, fromDate, toDate } = req.query
@@ -49,25 +58,24 @@ export default ({
     const pageNumber = Math.floor((pageOffsetOption || 0) / perPage) || 0
     const { username } = req.session.userDetails
 
-    const caseNotes = await caseNotesApi.getCaseNotes(context, offenderNo, {
+    const caseNotes = await caseNotesApi.getCaseNotes(contextWithClientToken, offenderNo, {
       pageNumber: showAll ? 0 : pageNumber,
-      perPage: showAll ? await getTotalResults(context, offenderNo, { type, subType, fromDate, toDate }) : perPage,
+      perPage: showAll
+        ? await getTotalResults(contextWithClientToken, offenderNo, { type, subType, fromDate, toDate })
+        : perPage,
       type,
       subType,
       startDate: fromDate,
       endDate: toDate,
     })
 
-    const { access_token: clientToken } = await systemOauthClient.getClientCredentialsTokens(username)
-    const caseNoteTypes = await caseNotesApi.getCaseNoteTypes({
-      ...context,
-      access_token: clientToken,
-    })
+    const caseNoteTypes = await caseNotesApi.getCaseNoteTypes(contextWithClientToken)
 
-    const types = caseNoteTypes.map((caseNoteType) => ({
-      value: caseNoteType.code,
-      text: caseNoteType.description,
-    }))
+    const types =
+      caseNoteTypes?.map((caseNoteType) => ({
+        value: caseNoteType.code,
+        text: caseNoteType.description,
+      })) || []
 
     const subTypes = caseNoteTypes
       .map((caseNoteType) =>

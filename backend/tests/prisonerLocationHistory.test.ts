@@ -64,7 +64,7 @@ describe('Prisoner location sharing history', () => {
       caseNotesApi,
       systemOauthClient,
     })
-    systemOauthClient.getClientCredentialsTokens.mockResolvedValue({})
+    systemOauthClient.getClientCredentialsTokens.mockResolvedValue({ access_token: 'CLIENT_TOKEN' })
 
     jest.spyOn(Date, 'now').mockImplementation(() => 1578787200000) // Sun Jan 12 2020 00:00:00
   })
@@ -80,7 +80,7 @@ describe('Prisoner location sharing history', () => {
     expect(prisonApi.getDetails).toHaveBeenCalledWith(res.locals, offenderNo)
     expect(prisonApi.getAttributesForLocation).toHaveBeenCalledWith(res.locals, 1)
     expect(prisonApi.getHistoryForLocation).toHaveBeenCalledWith(
-      {},
+      { access_token: 'CLIENT_TOKEN' },
       {
         locationId: 1,
         fromDate: '2019-12-31',
