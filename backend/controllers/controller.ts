@@ -120,8 +120,6 @@ export const factory = ({
     const prisonerDetails = await prisonApi.getDetails(res.locals, offenderNumber)
     if (prisonerDetails?.agencyId) {
       contextProperties.setCustomRequestHeaders(context, { CaseloadId: prisonerDetails.agencyId })
-    } else if (req.session?.userDetails?.activeCaseLoadId) {
-      contextProperties.setCustomRequestHeaders(context, { CaseloadId: req.session.userDetails.activeCaseLoadId })
     }
 
     const caseNote = await caseNotesApi.getCaseNote(context, offenderNumber, caseNoteId)
