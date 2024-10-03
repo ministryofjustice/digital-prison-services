@@ -31,7 +31,9 @@ export default ({ prisonApi, caseNotesApi, oauthApi, systemOauthClient }) => {
       })
 
       const prisonerDetails = await prisonApi.getDetails(res.locals, offenderNo)
-      contextProperties.setCustomRequestHeaders(context, { CaseloadId: prisonerDetails.agencyId })
+      if (prisonerDetails?.agencyId) {
+        contextProperties.setCustomRequestHeaders(context, { CaseloadId: prisonerDetails.agencyId })
+      }
       const caseNote = await caseNotesApi.getCaseNote(context, offenderNo, caseNoteId)
 
       const userRoles = oauthApi.userRoles(res.locals).map((role) => role.roleCode)

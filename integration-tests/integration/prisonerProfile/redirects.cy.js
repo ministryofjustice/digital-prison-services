@@ -195,7 +195,6 @@ context('Current prisoner profile should NOT redirect to the new prisoner profil
         cy.clearCookies()
         cy.signIn()
       })
-      cy.task('stubBookingDetails', { firstName: 'Bob', lastName: 'Smith', agencyId: 'MDI' })
     })
 
     context('Overview page', () => {
@@ -456,33 +455,18 @@ context('Current prisoner profile should NOT redirect to the new prisoner profil
           .fill()
           .map(() => data)
 
-      it('Should not redirect to the new prisoner profile - case notes page', () => {
-        cy.session('hmpps-session-dev', () => {
-          cy.clearCookies()
-          cy.task('reset')
-          cy.task('stubSignIn', {
-            username: 'ITAG_USER',
-            caseload: 'MDI',
-            caseloads: [
-              {
-                caseLoadId: 'MDI',
-                description: 'Moorland',
-                currentlyActive: true,
-              },
-            ],
-            roles: ['ROLE_DELETE_SENSITIVE_CASE_NOTES'],
-          })
-          cy.signIn()
-        })
-
+      beforeEach(() => {
         cy.task('stubCaseNoteTypes')
+
         cy.task('stubPrisonerProfileHeaderData', {
           offenderBasicDetails,
           offenderFullDetails,
           iepSummary: {},
           caseNoteSummary: {},
-          offenderNo,
         })
+      })
+
+      it('Should not redirect to the new prisoner profile - case notes page', () => {
         cy.task('stubCaseNotes', {
           totalElements: 21,
           content: replicate({ data: caseNote, times: 21 }),
