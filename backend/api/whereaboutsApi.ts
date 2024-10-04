@@ -65,8 +65,12 @@ export const whereaboutsApiFactory = (client) => {
 
   const getVideoLinkAppointments = (context, body) => post(context, '/court/video-link-appointments', body)
 
-  const getAttendanceChanges = (context, { fromDateTime, toDateTime }) =>
-    get(context, `/attendances/changes?fromDateTime=${fromDateTime}&toDateTime=${toDateTime}`)
+  const getAttendanceChanges = (context, { fromDateTime, toDateTime }, agencyId) => {
+    const path =
+      `/attendances/changes?fromDateTime=${fromDateTime}&toDateTime=${toDateTime}` +
+      `${agencyId && `&agencyId=${agencyId}`}`
+    return get(context, path)
+  }
 
   const getCellsWithCapacity = (context, { agencyId, groupName, attribute }) => {
     const attributeQuery = attribute ? `?attribute=${attribute}` : ''

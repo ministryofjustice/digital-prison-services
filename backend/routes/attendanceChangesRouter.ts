@@ -49,7 +49,7 @@ export default ({ prisonApi, whereaboutsApi, systemOauthClient }) =>
       return res.redirect('/manage-prisoner-whereabouts/attendance-reason-statistics')
     }
 
-    const { changes } = await whereaboutsApi.getAttendanceChanges(res.locals, { fromDateTime, toDateTime })
+    const { changes } = await whereaboutsApi.getAttendanceChanges(res.locals, { fromDateTime, toDateTime }, agencyId)
 
     if (!changes.length) {
       return res.render('attendanceChanges.njk', {
@@ -70,33 +70,31 @@ export default ({ prisonApi, whereaboutsApi, systemOauthClient }) =>
 
     changes.sort(sortByLastNameThenByDate(activitiesMap))
 
-    const attendanceChanges = changes
-      .filter((change) => change.prisonId === agencyId)
-      .map((change) => {
-        const { firstName, lastName, offenderNo, activity } = activitiesMap[change.eventId] || {}
+    const attendanceChanges = changes.map((change) => {
+      const { firstName, lastName, offenderNo, activity } = activitiesMap[change.eventId] || {}
 
-        return [
-          {
-            html: `<a href="/prisoner/${offenderNo}" class="govuk-link">${properCaseName(lastName)}, ${properCaseName(
-              firstName
-            )}</a>`,
-            attributes: {
-              'data-sort-value': lastName,
-            },
+      return [
+        {
+          html: `<a href="/prisoner/${offenderNo}" class="govuk-link">${properCaseName(lastName)}, ${properCaseName(
+            firstName
+          )}</a>`,
+          attributes: {
+            'data-sort-value': lastName,
           },
-          { text: offenderNo },
-          { text: activity },
-          { text: capitalize(pascalToString(change.changedFrom)) },
-          { text: capitalize(pascalToString(change.changedTo)) },
-          {
-            text: moment(change.changedOn).format('D MMMM YYYY - HH:mm'),
-            attributes: {
-              'data-sort-value': moment(change.changedOn).unix(),
-            },
+        },
+        { text: offenderNo },
+        { text: activity },
+        { text: capitalize(pascalToString(change.changedFrom)) },
+        { text: capitalize(pascalToString(change.changedTo)) },
+        {
+          text: moment(change.changedOn).format('D MMMM YYYY - HH:mm'),
+          attributes: {
+            'data-sort-value': moment(change.changedOn).unix(),
           },
-          { text: userMap[change.changedBy] },
-        ]
-      })
+        },
+        { text: userMap[change.changedBy] },
+      ]
+    })
 
     return res.render('attendanceChanges.njk', {
       subHeading,
