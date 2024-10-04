@@ -251,8 +251,8 @@ export const attendanceStatisticsFactory = (oauthApi, hmppsManageUsersApi, priso
         })
     }
 
-    const { changes } = await whereaboutsApi.getAttendanceChanges(res.locals, dateRange)
-    const changesForAgency = (changes && changes.filter((change) => change.prisonId === agencyId).length) || 0
+    const { changes } = await whereaboutsApi.getAttendanceChanges(res.locals, dateRange, agencyId)
+    const numberOfChanges = changes.length || 0
 
     const dashboardStats = await whereaboutsApi.getAttendanceStats(res.locals, {
       agencyId,
@@ -263,7 +263,7 @@ export const attendanceStatisticsFactory = (oauthApi, hmppsManageUsersApi, priso
 
     return res.render('attendanceStatistics.njk', {
       ...mainViewModel,
-      dashboardStats: buildStatsViewModel(dashboardStats, changesForAgency),
+      dashboardStats: buildStatsViewModel(dashboardStats, numberOfChanges),
     })
   }
 
