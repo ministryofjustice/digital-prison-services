@@ -357,6 +357,14 @@ describe('View appointments', () => {
             endTime: '16:45',
             probationTeamDescription: 'Rotherham',
           },
+          {
+            videoBookingId: 3,
+            prisonAppointmentId: 4,
+            prisonerNumber: 'ABC789',
+            startTime: '18:00',
+            endTime: '19:00',
+            probationTeamDescription: 'Rotherham',
+          },
         ])
 
         req.query = {

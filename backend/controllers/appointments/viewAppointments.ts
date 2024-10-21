@@ -76,20 +76,24 @@ export default ({
           .then((r) => r.appointments || [])
 
     const vlbAppointmentMappings = config.apis.bookAVideoLinkApi.enabled
-      ? videoLinkAppointments.map((vlb) => {
-          const appointment = appointments.find(
-            (app) =>
-              vlb.startTime === moment(app.startTime).format('HH:mm') &&
-              vlb.endTime === moment(app.endTime).format('HH:mm') &&
-              vlb.prisonerNumber === app.offenderNo &&
-              app.appointmentTypeCode === 'VLB'
-          )
+      ? videoLinkAppointments
+          .map((vlb) => {
+            const appointment = appointments.find(
+              (app) =>
+                vlb.startTime === moment(app.startTime).format('HH:mm') &&
+                vlb.endTime === moment(app.endTime).format('HH:mm') &&
+                vlb.prisonerNumber === app.offenderNo &&
+                app.appointmentTypeCode === 'VLB'
+            )
 
-          return {
-            appointmentId: appointment.id,
-            videoLinkBooking: vlb,
-          }
-        })
+            return appointment
+              ? {
+                  appointmentId: appointment.id,
+                  videoLinkBooking: vlb,
+                }
+              : undefined
+          })
+          .filter(Boolean)
       : []
 
     const videoLinkAppointmentsMadeByTheCourt = videoLinkAppointments.filter((app) => app.madeByTheCourt)
