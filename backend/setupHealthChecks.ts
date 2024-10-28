@@ -17,7 +17,8 @@ const health = healthFactory(
   joinUrlPath(config.apis.tokenverification.url, '/health/ping'),
   joinUrlPath(config.apis.offenderSearch.url, '/health/ping'),
   joinUrlPath(config.apis.complexity.url, '/ping'),
-  joinUrlPath(config.apis.incentivesApi.url, '/health/ping')
+  joinUrlPath(config.apis.incentivesApi.url, '/health/ping'),
+  joinUrlPath(config.apis.bookAVideoLinkApi.url, '/health/ping')
 )
 
 export default () => {

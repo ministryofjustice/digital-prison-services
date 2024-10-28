@@ -45,7 +45,8 @@ export default function healthcheckFactory(
   tokenverificationUrl,
   offenderSearchUrl,
   complexityUrl,
-  incentivesApiUrl
+  incentivesApiUrl,
+  bookAVideoLinkUrl
 ) {
   const checks = [
     service('auth', authUrl),
@@ -59,6 +60,10 @@ export default function healthcheckFactory(
     service('complexity', complexityUrl),
     service('incentivesApi', incentivesApiUrl),
   ]
+
+  if (config.apis.bookAVideoLinkApi.enabled) {
+    checks.push(service('bookAVideoLinkApi', bookAVideoLinkUrl))
+  }
 
   if (!config.app.whereaboutsMaintenanceMode) {
     checks.push(service('whereabouts', whereaboutsUrl))
