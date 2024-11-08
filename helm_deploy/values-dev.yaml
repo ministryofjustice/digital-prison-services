@@ -72,7 +72,7 @@ generic-service:
    APPOINTMENTS_URL: https://activities-dev.prison.service.justice.gov.uk/appointments
    APPOINTMENTS_ENABLED_PRISONS: "LEI,RSI,LPI,WDI"
    RESTRICTED_PATIENT_API_URL: https://restricted-patients-api-dev.hmpps.service.justice.gov.uk/
-   HISTORICAL_PRISONER_APPLICATION_URL: 	https://hpa-stage.hmpps.dsd.io
+   HISTORICAL_PRISONER_APPLICATION_URL: 	https://hpa-dev.prison.service.justice.gov.uk
    WHEREABOUTS_MAINTENANCE_MODE: false
    KEYWORKER_MAINTENANCE_MODE: false
    COVID_UNITS_ENABLED: false
