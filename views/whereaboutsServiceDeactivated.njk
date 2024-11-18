@@ -1,0 +1,42 @@
+{% extends "./partials/layout.njk" %}
+{% from "./components/card/card.njk" import card %}
+{% from "govuk/components/back-link/macro.njk" import govukBackLink %}
+
+{% set feedbackBannerBackground = '#f0f4f5 '%}
+
+{% set title =  "Service no longer available" %}
+
+{% block main %}
+  <div class="govuk-width-container">
+    {{ govukBackLink({
+      text: "Digital Prison Services",
+      href: "/"
+    }) }}
+  </div>
+
+  <div class="govuk-width-container">
+
+    {% set mainClasses = "govuk-main-wrapper--l" %}
+    <div class="govuk-grid-row govuk-!-margin-top-7 govuk-!-margin-bottom-7">
+      <div class="govuk-grid-column-two-thirds">
+        <h1 class="govuk-heading-l">You can no longer use the prisoner whereabouts service in {{ activeCaseLoadId }} (HMP) </h1>
+        <p class="govuk-body">
+          It's been replaced by the new activities and appointments management service.
+
+          Select 'Activties, unlock and attendance' or 'appointments scheduling and attendance' from the DPS homepage.
+        </p>
+      </div>
+    </div>
+
+    <p class="govuk-body">
+        {{ govukButton({
+            text: "Go to DPS homepage",
+            href: '/'
+        }) }}
+    </p>
+  </div>
+{% endblock %}
+
+{% block pageScripts %}
+  <script src="/static/js/card.js"></script>
+{% endblock %}
