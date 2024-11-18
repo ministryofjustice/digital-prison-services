@@ -354,13 +354,13 @@ const setup = ({
   router.use('/manage-prisoner-whereabouts/activity-results*', (req, res, next) => {
     const { activeCaseLoadId } = req.session.userDetails
     if (
-      activities.enabled_prisons.split(',').includes(activeCaseLoadId) &&
+      activities.enabled_prisons.split(',').includes(activeCaseLoadId) ||
       appointments.enabled_prisons.split(',').includes(activeCaseLoadId)
-    )
+    ) {
       res.render('whereaboutsServiceDeactivated.njk', {
         activeCaseLoadId,
       })
-    else {
+    } else {
       next()
     }
   })
