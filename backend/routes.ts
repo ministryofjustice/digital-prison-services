@@ -69,7 +69,9 @@ const isActivitiesRolledOut = (req, res, next) => {
     activities.enabled_prisons.split(',').includes(activeCaseLoadId) &&
     appointments.enabled_prisons.split(',').includes(activeCaseLoadId)
   ) {
-    res.redirect('/')
+    res.render('whereaboutsServiceDeactivated.njk', {
+      activeCaseLoadId,
+    })
   } else {
     next()
   }
@@ -348,6 +350,20 @@ const setup = ({
     '/offenders/:offenderNo/retention-reasons',
     retentionReasonsRouter({ prisonApi, dataComplianceApi, logError })
   )
+
+  router.use('/manage-prisoner-whereabouts/activity-results*', (req, res, next) => {
+    const { activeCaseLoadId } = req.session.userDetails
+    if (
+      activities.enabled_prisons.split(',').includes(activeCaseLoadId) &&
+      appointments.enabled_prisons.split(',').includes(activeCaseLoadId)
+    )
+      res.render('whereaboutsServiceDeactivated.njk', {
+        activeCaseLoadId,
+      })
+    else {
+      next()
+    }
+  })
 
   router.use('/change-someones-cell', (req, res) => res.redirect('/change-someones-cell-has-moved'))
 
