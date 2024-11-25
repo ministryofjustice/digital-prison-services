@@ -39,6 +39,7 @@ export const app = {
     exemptions: process.env.HOMEPAGE_REDIRECT_EXEMPTIONS || '',
   },
   gitRef: process.env.GIT_REF || '',
+  sunsetBannerEnabled: process.env.SUNSET_BANNER_ENABLED === 'true',
 }
 
 export const analytics = {

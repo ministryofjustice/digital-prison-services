@@ -89,6 +89,7 @@ generic-service:
     PRISONER_PROFILE_REDIRECT_EXEMPTIONS: ""
     HOMEPAGE_REDIRECT_EXEMPTIONS: ""
     CHANGE_SOMEONES_CELL_URL: https://change-someones-cell.prison.service.justice.gov.uk
+    SUNSET_BANNER_ENABLED: true
 
   allowlist:
     sscl-blackpool: 31.121.5.27/32

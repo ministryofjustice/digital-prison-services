@@ -27,6 +27,8 @@ config.apis.calculateReleaseDates = {
 
 config.app.neurodiversityEnabledPrisons = ['NOT-ACCELERATED', 'LEI']
 
+config.app.sunsetBannerEnabled = true
+
 describe('prisoner profile service', () => {
   const context = {}
   const prisonApi = {} as jest.Mocked<typeof apis.prisonApi>
@@ -293,6 +295,7 @@ describe('prisoner profile service', () => {
         esweEnabled: false,
         hasDivergenceSupport: false,
         indeterminateSentence: false,
+        sunsetBannerEnabled: true,
       })
     })
 

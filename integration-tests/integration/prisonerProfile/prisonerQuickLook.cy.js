@@ -175,6 +175,15 @@ context('Prisoner profile header', () => {
     cy.task('stubQuickLook', quickLookFullDetails)
   })
 
+  it('Should show sunset banner', () => {
+    cy.task('stubPrisonerProfileHeaderData', headerProfileData)
+    cy.visit(`/prisoner/${offenderNo}`)
+
+    prisonerQuickLookPage.verifyOnPage('Smith, John')
+
+    cy.get('.govuk-notification-banner--warning').should('be.visible')
+  })
+
   it('Should show correct header information', () => {
     cy.task('stubPrisonerProfileHeaderData', headerProfileData)
     cy.visit(`/prisoner/${offenderNo}`)
