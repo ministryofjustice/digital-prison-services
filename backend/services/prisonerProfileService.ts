@@ -37,7 +37,7 @@ export default ({
       soc: { ui_url: socUrl, enabled: socEnabled },
       useOfForce: { prisons: useOfForcePrisons, ui_url: useOfForceUrl },
     },
-    app: { displayRetentionLink, esweEnabled, neurodiversityEnabledPrisons },
+    app: { displayRetentionLink, esweEnabled, neurodiversityEnabledPrisons, sunsetBannerEnabled },
   } = config
 
   const needNeuroDivergenceSupport = (divergenceData) => {
@@ -277,6 +277,7 @@ export default ({
       esweEnabled,
       hasDivergenceSupport,
       indeterminateSentence,
+      sunsetBannerEnabled,
     }
   }
 

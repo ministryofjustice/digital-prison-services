@@ -63,3 +63,14 @@
 .prisoner-image {
   width: 160px;
 }
+
+.govuk-notification-banner {
+  &.govuk-notification-banner--warning {
+    border-color: govuk-colour('red');
+    background-color: govuk-colour('red');
+
+    .govuk-notification-banner__content > * {
+      max-width: 870px;
+    }
+  }
+}

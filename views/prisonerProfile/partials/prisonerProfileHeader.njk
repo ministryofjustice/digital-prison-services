@@ -77,6 +77,27 @@
 {% endif %}
 {% endset %}
 
+{% if prisonerProfileData.sunsetBannerEnabled %}
+<div class="govuk-notification-banner govuk-notification-banner--warning" role="region" aria-labelledby="govuk-notification-banner-title" data-module="govuk-notification-banner">
+    <div class="govuk-notification-banner__header">
+        <h2 class="govuk-notification-banner__title" id="govuk-notification-banner-title">
+            Important
+        </h2>
+    </div>
+    <div class="govuk-notification-banner__content">
+        <p class="govuk-notification-banner__heading">
+            The DPS prisoner profile has been updated and you’ll soon lose access to it.
+        </p>
+        <p class="govuk-body">
+            If you work in probation, you will not be given access to the updated profile. If you need information about a person in prison, you should contact their Prison Offender Manager.
+        </p>
+        <p class="govuk-body">
+            If you do not work in probation, you’ll need to <a class="govuk-notification-banner__link" href="https://forms.office.com/e/Z4ax3Y8rGS" target="_blank">complete a form</a> to get access to the new prisoner profile. You’ll need to tell us where you work and what prisoner information you need to view.
+        </p>
+    </div>
+</div>
+{% endif %}
+
 <div class="header-with-link">
     <h1 class="govuk-heading-l">{{ prisonerProfileData.offenderName }}</h1>
     {% if prisonerProfileData.canViewPathfinderLink %}
