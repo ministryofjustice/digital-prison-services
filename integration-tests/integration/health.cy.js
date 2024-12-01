@@ -21,6 +21,8 @@ context('Health page reports health correctly', () => {
         offenderSearch: 'UP',
         complexity: 'UP',
         incentivesApi: 'UP',
+        locationsInsidePrisonApi: 'UP',
+        nomisMapping: 'UP',
       })
     })
   })
