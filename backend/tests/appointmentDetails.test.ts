@@ -22,6 +22,8 @@ describe('appointment details', () => {
   const prisonApi = {}
   const whereaboutsApi = {}
   const videoLinkBookingService = {}
+  const locationsInsidePrisonApi = {}
+  const nomisMapping = {}
   const getClientCredentialsTokens = {}
 
   let req
@@ -69,6 +71,8 @@ describe('appointment details', () => {
     appointmentDetailsService = appointmentDetailsServiceFactory({
       prisonApi,
       videoLinkBookingService,
+      locationsInsidePrisonApi,
+      nomisMapping,
       getClientCredentialsTokens,
     })
 

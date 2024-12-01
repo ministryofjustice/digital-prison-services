@@ -20,6 +20,8 @@ describe('appointment details', () => {
 
   const prisonApi = {}
   const videoLinkBookingService = { getVideoLinkBookingFromAppointmentId: jest.fn(), bookingIsAmendable: jest.fn() }
+  const locationsInsidePrisonApi = {}
+  const nomisMapping = {}
   const getClientCredentialsTokens = jest.fn()
 
   let res
@@ -50,7 +52,13 @@ describe('appointment details', () => {
       .fn()
       .mockResolvedValue({ username: 'TEST_USER', firstName: 'TEST', lastName: 'USER' })
 
-    service = appointmentDetailsServiceFactory({ prisonApi, videoLinkBookingService, getClientCredentialsTokens })
+    service = appointmentDetailsServiceFactory({
+      prisonApi,
+      videoLinkBookingService,
+      locationsInsidePrisonApi,
+      nomisMapping,
+      getClientCredentialsTokens,
+    })
   })
 
   describe('an appointment view model request', () => {
