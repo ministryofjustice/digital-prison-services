@@ -123,6 +123,7 @@ app.use(
     incentivesApi: apis.incentivesApi,
     nonAssociationsApi: apis.nonAssociationsApi,
     restrictedPatientApi: apis.restrictedPatientApi,
+    nomisMapping: apis.nomisMapping,
     whereaboutsMaintenanceMode: config.app.whereaboutsMaintenanceMode,
     getClientCredentialsTokens,
   })

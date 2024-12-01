@@ -138,11 +138,13 @@ const setup = ({
   restrictedPatientApi,
   whereaboutsMaintenanceMode,
   getClientCredentialsTokens,
+  nomisMapping,
 }) => {
   const videoLinkBookingService = videoLinkBookingServiceFactory({
     whereaboutsApi,
     bookAVideoLinkApi,
-    prisonApi,
+    locationsInsidePrisonApi,
+    nomisMapping,
   })
 
   router.use(async (req, res, next) => {
@@ -444,6 +446,8 @@ const setup = ({
         appointmentDetailsService: appointmentDetailsServiceFactory({
           prisonApi,
           videoLinkBookingService,
+          locationsInsidePrisonApi,
+          nomisMapping,
           getClientCredentialsTokens,
         }),
         videoLinkBookingService,
@@ -458,6 +462,8 @@ const setup = ({
         appointmentDetailsService: appointmentDetailsServiceFactory({
           prisonApi,
           videoLinkBookingService,
+          locationsInsidePrisonApi,
+          nomisMapping,
           getClientCredentialsTokens,
         }),
         videoLinkBookingService,
@@ -489,6 +495,8 @@ const setup = ({
         appointmentDetailsService: appointmentDetailsServiceFactory({
           prisonApi,
           videoLinkBookingService,
+          locationsInsidePrisonApi,
+          nomisMapping,
           getClientCredentialsTokens,
         }),
       })

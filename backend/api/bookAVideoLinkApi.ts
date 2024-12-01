@@ -7,10 +7,10 @@ export const bookAVideoLinkApiFactory = (client) => {
   const post = (systemContext, url, data) => client.post(systemContext, url, data).then(processResponse())
   const sendDelete = (systemContext, url) => client.sendDelete(systemContext, url).then(processResponse())
 
-  const matchAppointmentToVideoLinkBooking = (systemContext, { offenderNo, startTime, endTime }, { locationPrefix }) =>
+  const matchAppointmentToVideoLinkBooking = (systemContext, { offenderNo, startTime, endTime }, { key }) =>
     post(systemContext, `/video-link-booking/search`, {
       prisonerNumber: offenderNo,
-      locationKey: locationPrefix,
+      locationKey: key,
       date: moment(startTime).format('YYYY-MM-DD'),
       startTime: moment(startTime).format('HH:mm'),
       endTime: moment(endTime).format('HH:mm'),

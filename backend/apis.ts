@@ -22,6 +22,7 @@ import { nonAssociationsApiFactory } from './api/nonAssociationsApi'
 import { hmppsManageUsersApiFactory } from './api/hmppsManageUsersApi'
 import { feComponentsApiFactory } from './api/feComponents'
 import { bookAVideoLinkApiFactory } from './api/bookAVideoLinkApi'
+import { nomisMappingClientFactory } from './api/nomisMappingClient'
 
 export const prisonApi = prisonApiFactory(
   clientFactory({
@@ -48,6 +49,13 @@ export const locationsInsidePrisonApi = locationsInsidePrisonApiFactory(
   clientFactory({
     baseUrl: config.apis.locationsInsidePrisonApi.url,
     timeout: config.apis.locationsInsidePrisonApi.timeoutSeconds * 1000,
+  })
+)
+
+export const nomisMapping = nomisMappingClientFactory(
+  clientFactory({
+    baseUrl: config.apis.nomisMapping.url,
+    timeout: config.apis.nomisMapping.timeoutSeconds * 1000,
   })
 )
 
@@ -188,4 +196,5 @@ export default {
   nonAssociationsApi,
   restrictedPatientApi,
   feComponentsApi,
+  nomisMapping,
 }

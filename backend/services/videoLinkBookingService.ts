@@ -2,13 +2,15 @@ import moment from 'moment'
 import { getWith404AsNull } from '../utils'
 import config from '../config'
 
-export default ({ whereaboutsApi, bookAVideoLinkApi, prisonApi }) => {
+export default ({ whereaboutsApi, bookAVideoLinkApi, locationsInsidePrisonApi, nomisMapping }) => {
   const getVideoLinkBookingFromAppointmentId = async (
     context,
     appointmentId
   ): Promise<{ videoLinkBookingId: number }> => {
     const appointmentDetails = await whereaboutsApi.getAppointment(context, appointmentId)
-    const location = await prisonApi.getLocation(context, appointmentDetails.appointment.locationId)
+    const location = await nomisMapping
+      .getNomisLocationMappingByNomisLocationId(context, appointmentDetails.appointment.locationId)
+      .then((mapping) => locationsInsidePrisonApi.getLocationById(context, mapping.dpsLocationId))
 
     return appointmentDetails.appointment.appointmentTypeCode === 'VLB' && config.apis.bookAVideoLinkApi.enabled
       ? getWith404AsNull(
