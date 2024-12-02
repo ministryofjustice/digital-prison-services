@@ -72,7 +72,7 @@ export default ({
         const systemContext = await getClientCredentialsTokens(res.locals.user.username)
         const locationId = await locationsInsidePrisonApi
           .getLocationByKey(systemContext, preAppointment.prisonLocKey)
-          .then((l) => nomisMapping.getNomisLocationMappingByDpsLocationId(l.id))
+          .then((l) => nomisMapping.getNomisLocationMappingByDpsLocationId(systemContext, l.id))
           .then((mapping) => mapping.nomisLocationId)
 
         prepostData['pre-court hearing briefing'] = createLocationAndTimeString({
@@ -86,7 +86,7 @@ export default ({
         const systemContext = await getClientCredentialsTokens(res.locals.user.username)
         const locationId = await locationsInsidePrisonApi
           .getLocationByKey(systemContext, postAppointment.prisonLocKey)
-          .then((l) => nomisMapping.getNomisLocationMappingByDpsLocationId(l.id))
+          .then((l) => nomisMapping.getNomisLocationMappingByDpsLocationId(systemContext, l.id))
           .then((mapping) => mapping.nomisLocationId)
 
         prepostData['post-court hearing briefing'] = createLocationAndTimeString({
