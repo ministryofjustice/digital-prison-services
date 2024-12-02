@@ -3,7 +3,13 @@ import { endRecurringEndingDate, repeatTypes } from '../shared/appointmentConsta
 import { formatName, getDate, getTime, getWith404AsNull } from '../utils'
 import config from '../config'
 
-export default ({ prisonApi, videoLinkBookingService, getClientCredentialsTokens }) => {
+export default ({
+  prisonApi,
+  videoLinkBookingService,
+  locationsInsidePrisonApi,
+  nomisMapping,
+  getClientCredentialsTokens,
+}) => {
   const getAddedByUser = async (res, userId) => {
     const staffDetails = await getWith404AsNull(prisonApi.getStaffDetails(res.locals, userId))
     // @ts-expect-error ts-migrate(2339) FIXME: Property 'firstName' does not exist on type 'unkno... Remove this comment to see the full error message
@@ -63,16 +69,28 @@ export default ({ prisonApi, videoLinkBookingService, getClientCredentialsTokens
       const { preAppointment, postAppointment } = fetchVlbAppointments(vlb)
 
       if (preAppointment) {
+        const systemContext = await getClientCredentialsTokens(res.locals.user.username)
+        const locationId = await locationsInsidePrisonApi
+          .getLocationByKey(systemContext, preAppointment.prisonLocKey)
+          .then((l) => nomisMapping.getNomisLocationMappingByDpsLocationId(l.id))
+          .then((mapping) => mapping.nomisLocationId)
+
         prepostData['pre-court hearing briefing'] = createLocationAndTimeString({
-          locationId: locationTypes.find((loc) => loc.locationPrefix === preAppointment.prisonLocKey).locationId,
+          locationId,
           startTime: preAppointment.startTime,
           endTime: preAppointment.endTime,
         })
       }
 
       if (postAppointment) {
+        const systemContext = await getClientCredentialsTokens(res.locals.user.username)
+        const locationId = await locationsInsidePrisonApi
+          .getLocationByKey(systemContext, postAppointment.prisonLocKey)
+          .then((l) => nomisMapping.getNomisLocationMappingByDpsLocationId(l.id))
+          .then((mapping) => mapping.nomisLocationId)
+
         prepostData['post-court hearing briefing'] = createLocationAndTimeString({
-          locationId: locationTypes.find((loc) => loc.locationPrefix === postAppointment.prisonLocKey).locationId,
+          locationId,
           startTime: postAppointment.startTime,
           endTime: postAppointment.endTime,
         })

@@ -14,6 +14,7 @@ generic-service:
     HMPPS_MANAGE_USERS_API_URL: https://manage-users-api-preprod.hmpps.service.justice.gov.uk
     API_WHEREABOUTS_ENDPOINT_URL: https://whereabouts-api-preprod.service.justice.gov.uk/
     API_LOCATIONS_INSIDE_PRISON_ENDPOINT_URL: https://locations-inside-prison-api-preprod.hmpps.service.justice.gov.uk
+    API_NOMIS_MAPPING_ENDPOINT_URL: https://nomis-sync-prisoner-mapping-preprod.hmpps.service.justice.gov.uk
     LICENCES_URL: https://licences-preprod.prison.service.justice.gov.uk/
     HMPPS_COOKIE_NAME: hmpps-session-preprod
     API_DELIUS_ENDPOINT_URL: https://dps-and-delius-preprod.hmpps.service.justice.gov.uk

@@ -5,6 +5,7 @@ export interface LocationPrefix {
 }
 
 export interface Location {
+  id: string
   key: string
 }
 
@@ -37,6 +38,12 @@ export const locationsInsidePrisonApiFactory = (client: OauthApiClient) => {
   const getAgencyGroupLocations = (systemContext, prisonId, groupName): Promise<Location[]> =>
     getWith404AsNull(systemContext, `/locations/groups/${prisonId}/${groupName}`)
 
+  const getLocationById = (systemContext, locationId): Promise<Location> =>
+    getWith404AsNull(systemContext, `/locations/${locationId}`)
+
+  const getLocationByKey = (systemContext, locationKey): Promise<Location> =>
+    getWith404AsNull(systemContext, `/locations/key/${locationKey}`)
+
   const getSearchGroups = (context, prisonId): Promise<LocationGroup[]> => {
     return getWith404AsNull(context, `/locations/prison/${prisonId}/groups`)
   }
@@ -45,6 +52,8 @@ export const locationsInsidePrisonApiFactory = (client: OauthApiClient) => {
     getAgencyGroupLocationPrefix,
     getAgencyGroupLocations,
     getSearchGroups,
+    getLocationById,
+    getLocationByKey,
   }
 }
 

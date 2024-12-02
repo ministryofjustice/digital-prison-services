@@ -16,6 +16,7 @@ generic-service:
    HMPPS_MANAGE_USERS_API_URL: https://manage-users-api-dev.hmpps.service.justice.gov.uk
    API_WHEREABOUTS_ENDPOINT_URL: https://whereabouts-api-dev.service.justice.gov.uk/
    API_LOCATIONS_INSIDE_PRISON_ENDPOINT_URL: https://locations-inside-prison-api-dev.hmpps.service.justice.gov.uk
+   API_NOMIS_MAPPING_ENDPOINT_URL: https://nomis-sync-prisoner-mapping-dev.hmpps.service.justice.gov.uk
    LICENCES_URL: https://licences-dev.prison.service.justice.gov.uk/
    HMPPS_COOKIE_NAME: hmpps-session-dev
    API_DELIUS_ENDPOINT_URL: https://dps-and-delius-dev.hmpps.service.justice.gov.uk

@@ -46,7 +46,9 @@ export default function healthcheckFactory(
   offenderSearchUrl,
   complexityUrl,
   incentivesApiUrl,
-  bookAVideoLinkUrl
+  bookAVideoLinkUrl,
+  locationsInsidePrisonApiUrl,
+  nomisMappingUrl
 ) {
   const checks = [
     service('auth', authUrl),
@@ -59,6 +61,8 @@ export default function healthcheckFactory(
     service('offenderSearch', offenderSearchUrl),
     service('complexity', complexityUrl),
     service('incentivesApi', incentivesApiUrl),
+    service('locationsInsidePrisonApi', locationsInsidePrisonApiUrl),
+    service('nomisMapping', nomisMappingUrl),
   ]
 
   if (config.apis.bookAVideoLinkApi.enabled) {

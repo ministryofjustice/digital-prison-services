@@ -20,6 +20,8 @@ describe('appointment details', () => {
 
   const prisonApi = {}
   const videoLinkBookingService = { getVideoLinkBookingFromAppointmentId: jest.fn(), bookingIsAmendable: jest.fn() }
+  const locationsInsidePrisonApi = { getLocationByKey: jest.fn() }
+  const nomisMapping = { getNomisLocationMappingByDpsLocationId: jest.fn() }
   const getClientCredentialsTokens = jest.fn()
 
   let res
@@ -50,7 +52,13 @@ describe('appointment details', () => {
       .fn()
       .mockResolvedValue({ username: 'TEST_USER', firstName: 'TEST', lastName: 'USER' })
 
-    service = appointmentDetailsServiceFactory({ prisonApi, videoLinkBookingService, getClientCredentialsTokens })
+    service = appointmentDetailsServiceFactory({
+      prisonApi,
+      videoLinkBookingService,
+      locationsInsidePrisonApi,
+      nomisMapping,
+      getClientCredentialsTokens,
+    })
   })
 
   describe('an appointment view model request', () => {
@@ -310,6 +318,9 @@ describe('appointment details', () => {
     })
 
     it('should render with court location and correct vlb locations and types', async () => {
+      locationsInsidePrisonApi.getLocationByKey.mockResolvedValue({ id: 'abc-123' })
+      nomisMapping.getNomisLocationMappingByDpsLocationId.mockResolvedValue({ nomisLocationId: 2 })
+
       const appointmentDetails = await service.getAppointmentViewModel(res, videoLinkBookingAppointment, 'MDI')
 
       expect(appointmentDetails).toMatchObject({

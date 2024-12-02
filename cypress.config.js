@@ -11,6 +11,7 @@ const dataComplianceApi = require('./integration-tests/mockApis/dataCompliance')
 const prisonerProfile = require('./integration-tests/mockApis/prisonerProfile')
 const whereabouts = require('./integration-tests/mockApis/whereabouts')
 const locationsInsidePrisonApi = require('./integration-tests/mockApis/locationsInsidePrisonApi')
+const nomisMapping = require('./integration-tests/mockApis/nomisMapping')
 const tokenverification = require('./integration-tests/mockApis/tokenverification')
 const keyworker = require('./integration-tests/mockApis/keyworker')
 const caseNotes = require('./integration-tests/mockApis/caseNotes')
@@ -87,6 +88,7 @@ module.exports = defineConfig({
             delius.stubHealth(),
             offenderSearch.stubHealth(),
             complexity.stubHealth(),
+            nomisMapping.stubHealth(),
           ]),
         getSignInUrl: auth.getSignInUrl,
         stubSignIn: ({ username = 'ITAG_USER', caseload = 'MDI', roles = [], caseloads }) =>
