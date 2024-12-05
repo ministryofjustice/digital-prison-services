@@ -22,9 +22,15 @@ export default ({ whereaboutsApi, bookAVideoLinkApi, locationsInsidePrisonApi, n
   const deleteVideoLinkBooking = async (context, videoLinkBookingId) =>
     bookAVideoLinkApi.deleteVideoLinkBooking(context, videoLinkBookingId)
 
-  const bookingIsAmendable = (timeOfBooking, bookingStatus) => {
+  const bookingIsAmendable = ({ preAppointment, mainAppointment }, bookingStatus) => {
     const now = moment()
-    return bookingStatus !== 'CANCELLED' && moment(timeOfBooking).isAfter(now)
+    const earliestAppointment = preAppointment || mainAppointment
+    const timeOfBooking = moment(
+      `${earliestAppointment.appointmentDate} ${earliestAppointment.startTime}`,
+      'YYYY-MM-DD HH:mm'
+    )
+
+    return bookingStatus !== 'CANCELLED' && timeOfBooking.isAfter(now)
   }
 
   return {
