@@ -52,6 +52,24 @@ describe('appointment details', () => {
       .fn()
       .mockResolvedValue({ username: 'TEST_USER', firstName: 'TEST', lastName: 'USER' })
 
+    locationsInsidePrisonApi.getLocationByKey.mockResolvedValue({ id: 'abc-123' })
+    locationsInsidePrisonApi.getLocationByKey.mockImplementation((_, id) =>
+      Promise.resolve(
+        {
+          ROOM2: { id: 'abc-123' },
+          ROOM3: { id: 'zyx-321' },
+        }[id]
+      )
+    )
+    nomisMapping.getNomisLocationMappingByDpsLocationId.mockImplementation((_, id) =>
+      Promise.resolve(
+        {
+          'abc-123': { nomisLocationId: 2 },
+          'zyx-321': { nomisLocationId: 3 },
+        }[id]
+      )
+    )
+
     service = appointmentDetailsServiceFactory({
       prisonApi,
       videoLinkBookingService,
@@ -59,6 +77,10 @@ describe('appointment details', () => {
       nomisMapping,
       getClientCredentialsTokens,
     })
+  })
+
+  afterEach(() => {
+    jest.resetAllMocks()
   })
 
   describe('an appointment view model request', () => {
@@ -308,7 +330,6 @@ describe('appointment details', () => {
       videoLinkBookingAppointment = {
         appointment: {
           ...testAppointment.appointment,
-          locationId: 1,
           appointmentTypeCode: 'VLB',
           startTime: '2021-05-20T13:00:00',
           endTime: '2021-05-20T14:00:00',
@@ -318,9 +339,6 @@ describe('appointment details', () => {
     })
 
     it('should render with court location and correct vlb locations and types', async () => {
-      locationsInsidePrisonApi.getLocationByKey.mockResolvedValue({ id: 'abc-123' })
-      nomisMapping.getNomisLocationMappingByDpsLocationId.mockResolvedValue({ nomisLocationId: 2 })
-
       const appointmentDetails = await service.getAppointmentViewModel(res, videoLinkBookingAppointment, 'MDI')
 
       expect(appointmentDetails).toMatchObject({
@@ -333,7 +351,7 @@ describe('appointment details', () => {
         },
         basicDetails: {
           date: '20 May 2021',
-          location: 'VCC Room 1',
+          location: 'VCC Room 2',
           type: 'Video link booking',
         },
         timeDetails: {
@@ -375,7 +393,6 @@ describe('appointment details', () => {
       videoLinkBookingAppointment = {
         appointment: {
           ...testAppointment.appointment,
-          locationId: 1,
           appointmentTypeCode: 'VLB',
           startTime: '2021-05-20T13:00:00',
           endTime: '2021-05-20T14:00:00',
@@ -396,7 +413,7 @@ describe('appointment details', () => {
         },
         basicDetails: {
           date: '20 May 2021',
-          location: 'VCC Room 1',
+          location: 'VCC Room 2',
           type: 'Video link booking',
         },
         timeDetails: {

@@ -39,7 +39,6 @@ export default ({
     ])
 
     const appointmentType = appointmentTypes?.find((type) => type.code === appointment.appointmentTypeCode)
-    const locationType = locationTypes?.find((loc) => Number(loc.locationId) === Number(appointment.locationId))
 
     const lastAppointmentDate =
       recurring &&
@@ -65,11 +64,18 @@ export default ({
       vlb = await videoLinkBookingService.getVideoLinkBookingFromAppointmentId(systemContext, appointment.id)
     }
 
+    let locationType
     if (vlb) {
-      const { preAppointment, postAppointment } = fetchVlbAppointments(vlb)
+      const { preAppointment, mainAppointment, postAppointment } = fetchVlbAppointments(vlb)
+      const systemContext = await getClientCredentialsTokens(res.locals.user.username)
+
+      locationType = await locationsInsidePrisonApi
+        .getLocationByKey(systemContext, mainAppointment.prisonLocKey)
+        .then((l) => nomisMapping.getNomisLocationMappingByDpsLocationId(systemContext, l.id))
+        .then((mapping) => mapping.nomisLocationId)
+        .then((id) => locationTypes.find((loc) => Number(loc.locationId) === Number(id)))
 
       if (preAppointment) {
-        const systemContext = await getClientCredentialsTokens(res.locals.user.username)
         const locationId = await locationsInsidePrisonApi
           .getLocationByKey(systemContext, preAppointment.prisonLocKey)
           .then((l) => nomisMapping.getNomisLocationMappingByDpsLocationId(systemContext, l.id))
@@ -83,7 +89,6 @@ export default ({
       }
 
       if (postAppointment) {
-        const systemContext = await getClientCredentialsTokens(res.locals.user.username)
         const locationId = await locationsInsidePrisonApi
           .getLocationByKey(systemContext, postAppointment.prisonLocKey)
           .then((l) => nomisMapping.getNomisLocationMappingByDpsLocationId(systemContext, l.id))
@@ -99,6 +104,8 @@ export default ({
       addedBy = await (!vlb.createdByPrison ? 'Court' : getAddedByUser(res, vlb.createdBy))
       courtLocation = vlb.courtDescription
     } else {
+      locationType = locationTypes?.find((loc) => Number(loc.locationId) === Number(appointment.locationId))
+
       if (videoLinkBooking?.pre) {
         prepostData['pre-court hearing briefing'] = createLocationAndTimeString(videoLinkBooking.pre)
       }
