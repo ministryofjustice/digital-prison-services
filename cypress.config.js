@@ -4,6 +4,7 @@ const { defineConfig } = require('cypress')
 
 const auth = require('./integration-tests/mockApis/auth')
 const users = require('./integration-tests/mockApis/users')
+const bookAVideoLinkApi = require('./integration-tests/mockApis/bookAVideoLinkApi')
 const prisonApi = require('./integration-tests/mockApis/prisonApi')
 const incentivesApi = require('./integration-tests/mockApis/incentivesApi')
 const nonAssociationsApi = require('./integration-tests/mockApis/nonAssociationsApi')
@@ -89,6 +90,7 @@ module.exports = defineConfig({
             offenderSearch.stubHealth(),
             complexity.stubHealth(),
             nomisMapping.stubHealth(),
+            bookAVideoLinkApi.stubHealth(),
           ]),
         getSignInUrl: auth.getSignInUrl,
         stubSignIn: ({ username = 'ITAG_USER', caseload = 'MDI', roles = [], caseloads }) =>
