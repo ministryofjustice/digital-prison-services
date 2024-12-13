@@ -1,7 +1,6 @@
 import moment from 'moment'
 import { endRecurringEndingDate, repeatTypes } from '../shared/appointmentConstants'
 import { formatName, getDate, getTime, getWith404AsNull } from '../utils'
-import config from '../config'
 
 export default ({
   prisonApi,
@@ -59,7 +58,7 @@ export default ({
       )} to ${getTime(appt.endTime)}`
 
     let vlb
-    if (config.apis.bookAVideoLinkApi.enabled && appointmentDetails.appointment.appointmentTypeCode === 'VLB') {
+    if (appointmentDetails.appointment.appointmentTypeCode === 'VLB') {
       const systemContext = await getClientCredentialsTokens(res.locals.user.username)
       vlb = await videoLinkBookingService.getVideoLinkBookingFromAppointmentId(systemContext, appointment.id)
     }

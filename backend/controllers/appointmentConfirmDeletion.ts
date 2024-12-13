@@ -1,5 +1,3 @@
-import config from '../config'
-
 export default ({ whereaboutsApi, appointmentDetailsService, videoLinkBookingService, getClientCredentialsTokens }) => {
   const renderTemplate = (req, res, id, appointmentViewModel, errors) => {
     const { isRecurring, additionalDetails, basicDetails, prepostData, recurringDetails, timeDetails } =
@@ -62,7 +60,7 @@ export default ({ whereaboutsApi, appointmentDetailsService, videoLinkBookingSer
 
       const systemContext = await getClientCredentialsTokens(res.locals.user.username)
 
-      if (config.apis.bookAVideoLinkApi.enabled && appointmentDetails.appointment.appointmentTypeCode === 'VLB') {
+      if (appointmentDetails.appointment.appointmentTypeCode === 'VLB') {
         videoLinkBooking = await videoLinkBookingService.getVideoLinkBookingFromAppointmentId(systemContext, id)
       }
 

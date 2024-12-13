@@ -24,7 +24,7 @@ describe('appointment details', () => {
   const videoLinkBookingService = {}
   const locationsInsidePrisonApi = {}
   const nomisMapping = {}
-  const getClientCredentialsTokens = {}
+  const getClientCredentialsTokens = jest.fn()
 
   let req
   let res
@@ -38,7 +38,7 @@ describe('appointment details', () => {
       session: { userDetails: { activeCaseLoadId: 'MDI' } },
       flash: jest.fn(),
     }
-    res = { render: jest.fn() }
+    res = { render: jest.fn(), locals: { user: { username: 'jbloggs' } } }
 
     // @ts-expect-error ts-migrate(2339) FIXME: Property 'userRoles' does not exist on type '{}'.
     oauthApi.userRoles = jest.fn().mockReturnValue([{ roleCode: 'INACTIVE_BOOKINGS' }])
@@ -67,6 +67,18 @@ describe('appointment details', () => {
 
     // @ts-expect-error ts-migrate(2339) FIXME: Property 'getAppointment' does not exist on type '... Remove this comment to see the full error message
     whereaboutsApi.getAppointment = jest.fn().mockResolvedValue(testAppointment)
+
+    // @ts-expect-error ts-migrate(2339)
+    locationsInsidePrisonApi.getLocationByKey = jest.fn(
+      async (_, key) => ({ LOCATION_1: { id: 'abc-1' }, LOCATION_3: { id: 'abc-3' } }[key])
+    )
+    // @ts-expect-error ts-migrate(2339)
+    nomisMapping.getNomisLocationMappingByDpsLocationId = jest.fn(
+      async (_, id) => ({ 'abc-1': { nomisLocationId: 1 }, 'abc-3': { nomisLocationId: 3 } }[id])
+    )
+
+    // @ts-expect-error ts-migrate(2339)
+    videoLinkBookingService.bookingIsAmendable = jest.fn(() => true)
 
     appointmentDetailsService = appointmentDetailsServiceFactory({
       prisonApi,
@@ -211,6 +223,7 @@ describe('appointment details', () => {
 
     describe('video link appointments', () => {
       let videoLinkBookingAppointment
+      let videoLinkBooking
 
       beforeEach(() => {
         videoLinkBookingAppointment = {
@@ -222,19 +235,21 @@ describe('appointment details', () => {
             endTime: '2021-05-20T14:00:00',
             comment: 'Test appointment comments',
           },
-          videoLinkBooking: {
-            main: {
-              court: 'Nottingham Justice Centre',
-              hearingType: 'MAIN',
-              locationId: 1,
-              startTime: '2021-05-20T13:00:00',
-              endTime: '2021-05-20T14:00:00',
-            },
-          },
+        }
+
+        videoLinkBooking = {
+          courtDescription: 'Nottingham Justice Centre',
+          courtHearingTypeDescription: 'Appeal',
+          prisonAppointments: [
+            { appointmentType: 'VLB_COURT_MAIN', prisonLocKey: 'LOCATION_1', startTime: '13:00', endTime: '14:00' },
+          ],
         }
 
         // @ts-expect-error ts-migrate(2339) FIXME: Property 'getAppointment' does not exist on type '... Remove this comment to see the full error message
         whereaboutsApi.getAppointment = jest.fn().mockResolvedValue(videoLinkBookingAppointment)
+
+        // @ts-expect-error ts-migrate(2339)
+        videoLinkBookingService.getVideoLinkBookingFromAppointmentId = jest.fn().mockResolvedValue(videoLinkBooking)
       })
 
       it('should render with court location and correct vlb locations and types', async () => {
@@ -245,8 +260,9 @@ describe('appointment details', () => {
           expect.objectContaining({
             additionalDetails: {
               courtLocation: 'Nottingham Justice Centre',
+              hearingType: 'Appeal',
               comments: 'Test appointment comments',
-              addedBy: 'Test User',
+              addedBy: 'Court',
             },
             basicDetails: {
               date: '20 May 2021',
@@ -263,15 +279,15 @@ describe('appointment details', () => {
 
       describe('with pre appointment', () => {
         beforeEach(() => {
-          videoLinkBookingAppointment.videoLinkBooking.pre = {
-            court: 'Nottingham Justice Centre',
-            hearingType: 'PRE',
-            locationId: 3,
-            startTime: '2021-05-20T12:45:00',
-            endTime: '2021-05-20T13:00:00',
-          }
-          // @ts-expect-error ts-migrate(2339) FIXME: Property 'getAppointment' does not exist on type '... Remove this comment to see the full error message
-          whereaboutsApi.getAppointment = jest.fn().mockResolvedValue(videoLinkBookingAppointment)
+          videoLinkBooking.prisonAppointments.push({
+            appointmentType: 'VLB_COURT_PRE',
+            prisonLocKey: 'LOCATION_3',
+            startTime: '12:45',
+            endTime: '13:00',
+          })
+
+          // @ts-expect-error ts-migrate(2339)
+          videoLinkBookingService.getVideoLinkBookingFromAppointmentId = jest.fn().mockResolvedValue(videoLinkBooking)
         })
 
         it('should render with the correct pre appointment details', async () => {
@@ -290,15 +306,15 @@ describe('appointment details', () => {
 
       describe('with post appointment', () => {
         beforeEach(() => {
-          videoLinkBookingAppointment.videoLinkBooking.post = {
-            court: 'Nottingham Justice Centre',
-            hearingType: 'POST',
-            locationId: 3,
-            startTime: '2021-05-20T14:00:00',
-            endTime: '2021-05-20T14:15:00',
-          }
-          // @ts-expect-error ts-migrate(2339) FIXME: Property 'getAppointment' does not exist on type '... Remove this comment to see the full error message
-          whereaboutsApi.getAppointment = jest.fn().mockResolvedValue(videoLinkBookingAppointment)
+          videoLinkBooking.prisonAppointments.push({
+            appointmentType: 'VLB_COURT_POST',
+            prisonLocKey: 'LOCATION_3',
+            startTime: '14:00',
+            endTime: '14:15',
+          })
+
+          // @ts-expect-error ts-migrate(2339)
+          videoLinkBookingService.getVideoLinkBookingFromAppointmentId = jest.fn().mockResolvedValue(videoLinkBooking)
         })
 
         it('should render with the correct post appointment details', async () => {
