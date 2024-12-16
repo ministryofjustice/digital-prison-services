@@ -16,9 +16,9 @@ context('Confirm appointment deletion page', () => {
   }
 
   beforeEach(() => {
+    cy.task('resetAndStubTokenVerification')
     cy.session('hmpps-session-dev', () => {
       cy.clearCookies()
-      cy.task('resetAndStubTokenVerification')
       cy.task('stubSignIn', { username: 'ITAG_USER', caseload: 'MDI' })
       cy.signIn()
     })
