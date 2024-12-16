@@ -393,7 +393,6 @@ module.exports = defineConfig({
             prisonApi.stubScheduledEventsForNextWeek(nextWeeksSchedule),
           ]),
         stubAppointmentsGet: prisonApi.stubAppointmentsGet,
-        stubVideoLinkAppointments: whereabouts.stubVideoLinkAppointments,
         stubCreateAlert: prisonApi.stubCreateAlert,
         stubCreateCaseNote: caseNotes.stubCreateCaseNote,
         verifySaveCaseNote: caseNotes.verifySaveCaseNote,
@@ -544,6 +543,7 @@ module.exports = defineConfig({
         stubDpsHomepage: stubDpsHomepage,
         stubNomisLocationMapping: nomisMapping.stubNomisLocationMapping,
         matchAppointmentToVideoLinkBooking: bookAVideoLinkApi.matchAppointmentToVideoLinkBooking,
+        stubGetPrisonVideoLinkSchedule: bookAVideoLinkApi.stubGetPrisonVideoLinkSchedule,
       })
     },
 

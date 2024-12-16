@@ -62,16 +62,17 @@ context('A user can view list of appointments', () => {
         agencyId: 'MDI',
       },
     ])
-    cy.task('stubVideoLinkAppointments', [
+    cy.task('stubGetPrisonVideoLinkSchedule', [
       {
-        id: 1,
-        bookingId: 1,
-        appointmentId: 3,
-        court: 'Wimbledon',
-        hearingType: 'MAIN',
-        madeByTheCourt: false,
-        createdByUsername: 'STAFF_1',
-      },
+        videoBookingId: 1,
+        prisonAppointmentId: 1,
+        bookingType: "COURT",
+        statusCode: "ACTIVE",
+        courtDescription: "Wimbledon",
+        prisonerNumber: "ABC789",
+        startTime: "14:30",
+        endTime: "15:30",
+      }
     ])
 
     cy.task('stubAppointmentLocations', {
@@ -167,7 +168,7 @@ context('A user can view list of appointments', () => {
   it('A user is presented with the no data message when no data', () => {
     cy.task('stubAppointmentsAtAgency', 'MDI', [])
     cy.task('stubGetWhereaboutsAppointments')
-    cy.task('stubVideoLinkAppointments')
+    cy.task('stubGetPrisonVideoLinkSchedule')
 
     cy.visit('/view-all-appointments')
     const viewAppointmentsPage = ViewAppointmentsPage.verifyOnPage()

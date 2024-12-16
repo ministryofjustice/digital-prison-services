@@ -29,4 +29,19 @@ module.exports = {
         jsonBody: response
       },
     }),
+
+  stubGetPrisonVideoLinkSchedule: (response) =>
+    stubFor({
+      request: {
+        method: 'GET',
+        urlPattern: `/bookavideolink/schedule/prison/(.+?)\\?date=(.+?)`,
+      },
+      response: {
+        status: 200,
+        headers: {
+          'Content-Type': 'application/json;charset=UTF-8',
+        },
+        jsonBody: response || []
+      },
+    }),
 }
