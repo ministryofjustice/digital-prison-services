@@ -475,6 +475,8 @@ module.exports = defineConfig({
           locationsInsidePrisonApi.stubGetLocationPrefix({ agencyId, groupName, response }),
         stubGetAgencyGroupLocations: ({ agencyId, groupName, response }) =>
           locationsInsidePrisonApi.stubGetAgencyGroupLocations({ agencyId, groupName, response }),
+        stubGetLocationById: locationsInsidePrisonApi.stubGetLocationById,
+        stubGetLocationByKey: locationsInsidePrisonApi.stubGetLocationByKey,
         stubGetSearchGroups: (caseload) => locationsInsidePrisonApi.stubGetSearchGroups(caseload),
         verifyMoveToCellSwap: ({ bookingId }) => prisonApi.verifyMoveToCellSwap({ bookingId }),
         stubAttendanceStats: ({ agencyId, fromDate, period, stats }) =>
@@ -540,6 +542,8 @@ module.exports = defineConfig({
         stubComponents: components.stubComponents,
         stubComponentsFail: components.stubComponentsFail,
         stubDpsHomepage: stubDpsHomepage,
+        stubNomisLocationMapping: nomisMapping.stubNomisLocationMapping,
+        matchAppointmentToVideoLinkBooking: bookAVideoLinkApi.matchAppointmentToVideoLinkBooking,
       })
     },
 

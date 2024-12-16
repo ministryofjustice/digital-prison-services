@@ -152,4 +152,34 @@ module.exports = {
       },
     })
   },
+
+  stubGetLocationById: ({ id, response }) =>
+    stubFor({
+      request: {
+        method: 'GET',
+        urlPathPattern: `/locations/locations/${id}`,
+      },
+      response: {
+        status: 200,
+        headers: {
+          'Content-Type': 'application/json;charset=UTF-8',
+        },
+        jsonBody: response,
+      },
+    }),
+
+  stubGetLocationByKey: ({ key, response }) =>
+    stubFor({
+      request: {
+        method: 'GET',
+        url: `/locations/locations/key/${key}`,
+      },
+      response: {
+        status: 200,
+        headers: {
+          'Content-Type': 'application/json;charset=UTF-8',
+        },
+        jsonBody: response,
+      },
+    }),
 }
