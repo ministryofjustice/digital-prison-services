@@ -221,7 +221,7 @@ describe('appointment details', () => {
         additionalDetails: {
           hearingType: 'Application',
           courtLocation: 'Aberystwyth Family',
-          courtHearingLink: 'Not entered',
+          courtHearingLink: 'Not yet known',
           comments: 'Test appointment comments',
           addedBy: 'Test User',
         },
