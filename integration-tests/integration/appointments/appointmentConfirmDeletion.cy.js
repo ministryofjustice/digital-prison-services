@@ -16,13 +16,12 @@ context('Confirm appointment deletion page', () => {
   }
 
   beforeEach(() => {
+    cy.task('resetAndStubTokenVerification')
     cy.session('hmpps-session-dev', () => {
       cy.clearCookies()
       cy.task('stubSignIn', { username: 'ITAG_USER', caseload: 'MDI' })
       cy.signIn()
     })
-
-    cy.task('resetAndStubTokenVerification')
 
     cy.task('stubAppointmentLocations', {
       agency: 'MDI',
