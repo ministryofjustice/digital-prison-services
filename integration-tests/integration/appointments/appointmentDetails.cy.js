@@ -128,31 +128,22 @@ context('Appointment details page', () => {
             startTime: '2021-05-20T13:00:00',
             endTime: '2021-05-20T14:00:00',
             comment: 'Test appointment comments',
-          },
-          videoLinkBooking: {
-            pre: {
-              court: 'Nottingham Justice Centre',
-              hearingType: 'PRE',
-              locationId: 3,
-              startTime: '2021-05-20T12:45:00',
-              endTime: '2021-05-20T13:00:00',
-            },
-            main: {
-              court: 'Nottingham Justice Centre',
-              hearingType: 'MAIN',
-              locationId: 1,
-              startTime: '2021-05-20T13:00:00',
-              endTime: '2021-05-20T14:00:00',
-            },
-            post: {
-              court: 'Nottingham Justice Centre',
-              hearingType: 'POST',
-              locationId: 3,
-              startTime: '2021-05-20T14:00:00',
-              endTime: '2021-05-20T14:15:00',
-            },
-          },
+          }
         },
+      })
+      cy.task('stubNomisLocationMapping', { nomisLocationId: 1, dpsLocationId: 'abc-123' })
+      cy.task('stubGetLocationById', { id: 'abc-123', response: { key: 'location-key' } })
+      cy.task('stubGetLocationByKey', { key: 'location-key', response: { id: 'abc-123' } })
+      cy.task('matchAppointmentToVideoLinkBooking', {
+        videoLinkBookingId: 1,
+        bookingType: 'COURT',
+        prisonAppointments: [
+          { appointmentType: 'VLB_COURT_PRE', prisonLocKey: 'location-key', startTime: '12:45', endTime: '13:00' },
+          { appointmentType: 'VLB_COURT_MAIN', prisonLocKey: 'location-key', startTime: '13:00', endTime: '14:00'  },
+          { appointmentType: 'VLB_COURT_POST', prisonLocKey: 'location-key', startTime: '14:00', endTime: '14:15'  },
+        ],
+        courtDescription: 'Nottingham Justice Centre',
+        courtHearingTypeDescription: 'Appeal',
       })
     })
 
@@ -166,14 +157,14 @@ context('Appointment details page', () => {
       cy.get('.qa-date-value').should('contain', '20 May 2021')
       cy.get('.qa-startTime-value').should('contain', '13:00')
       cy.get('.qa-endTime-value').should('contain', '14:00')
-      cy.get('.qa-preCourtHearingBriefing-value').should('contain', 'VCC Room 2 - 12:45 to 13:00')
-      cy.get('.qa-postCourtHearingBriefing-value').should('contain', 'VCC Room 2 - 14:00 to 14:15')
+      cy.get('.qa-preCourtHearingBriefing-value').should('contain', 'VCC Room 1 - 12:45 to 13:00')
+      cy.get('.qa-postCourtHearingBriefing-value').should('contain', 'VCC Room 1 - 14:00 to 14:15')
       cy.get('.qa-courtLocation-value').should('contain', 'Nottingham Justice Centre')
       cy.get('.qa-recurring-value').should('not.exist')
       cy.get('.qa-repeats-value').should('not.exist')
       cy.get('.qa-lastAppointment-value').should('not.exist')
       cy.get('.qa-comments-value').should('contain', 'Test appointment comments')
-      cy.get('.qa-addedBy-value').should('contain', 'Test User')
+      cy.get('.qa-addedBy-value').should('contain', 'Court')
       cy.get('[data-test="return-link"]').should('have.attr', 'href').should('include', '/view-all-appointments')
     })
   })

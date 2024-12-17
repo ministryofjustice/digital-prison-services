@@ -63,11 +63,8 @@ export default function healthcheckFactory(
     service('incentivesApi', incentivesApiUrl),
     service('locationsInsidePrisonApi', locationsInsidePrisonApiUrl),
     service('nomisMapping', nomisMappingUrl),
+    service('bookAVideoLinkApi', bookAVideoLinkUrl),
   ]
-
-  if (config.apis.bookAVideoLinkApi.enabled) {
-    checks.push(service('bookAVideoLinkApi', bookAVideoLinkUrl))
-  }
 
   if (!config.app.whereaboutsMaintenanceMode) {
     checks.push(service('whereabouts', whereaboutsUrl))

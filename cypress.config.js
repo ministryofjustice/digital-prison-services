@@ -4,6 +4,7 @@ const { defineConfig } = require('cypress')
 
 const auth = require('./integration-tests/mockApis/auth')
 const users = require('./integration-tests/mockApis/users')
+const bookAVideoLinkApi = require('./integration-tests/mockApis/bookAVideoLinkApi')
 const prisonApi = require('./integration-tests/mockApis/prisonApi')
 const incentivesApi = require('./integration-tests/mockApis/incentivesApi')
 const nonAssociationsApi = require('./integration-tests/mockApis/nonAssociationsApi')
@@ -89,6 +90,7 @@ module.exports = defineConfig({
             offenderSearch.stubHealth(),
             complexity.stubHealth(),
             nomisMapping.stubHealth(),
+            bookAVideoLinkApi.stubHealth(),
           ]),
         getSignInUrl: auth.getSignInUrl,
         stubSignIn: ({ username = 'ITAG_USER', caseload = 'MDI', roles = [], caseloads }) =>
@@ -391,7 +393,6 @@ module.exports = defineConfig({
             prisonApi.stubScheduledEventsForNextWeek(nextWeeksSchedule),
           ]),
         stubAppointmentsGet: prisonApi.stubAppointmentsGet,
-        stubVideoLinkAppointments: whereabouts.stubVideoLinkAppointments,
         stubCreateAlert: prisonApi.stubCreateAlert,
         stubCreateCaseNote: caseNotes.stubCreateCaseNote,
         verifySaveCaseNote: caseNotes.verifySaveCaseNote,
@@ -473,6 +474,8 @@ module.exports = defineConfig({
           locationsInsidePrisonApi.stubGetLocationPrefix({ agencyId, groupName, response }),
         stubGetAgencyGroupLocations: ({ agencyId, groupName, response }) =>
           locationsInsidePrisonApi.stubGetAgencyGroupLocations({ agencyId, groupName, response }),
+        stubGetLocationById: locationsInsidePrisonApi.stubGetLocationById,
+        stubGetLocationByKey: locationsInsidePrisonApi.stubGetLocationByKey,
         stubGetSearchGroups: (caseload) => locationsInsidePrisonApi.stubGetSearchGroups(caseload),
         verifyMoveToCellSwap: ({ bookingId }) => prisonApi.verifyMoveToCellSwap({ bookingId }),
         stubAttendanceStats: ({ agencyId, fromDate, period, stats }) =>
@@ -538,6 +541,9 @@ module.exports = defineConfig({
         stubComponents: components.stubComponents,
         stubComponentsFail: components.stubComponentsFail,
         stubDpsHomepage: stubDpsHomepage,
+        stubNomisLocationMapping: nomisMapping.stubNomisLocationMapping,
+        matchAppointmentToVideoLinkBooking: bookAVideoLinkApi.matchAppointmentToVideoLinkBooking,
+        stubGetPrisonVideoLinkSchedule: bookAVideoLinkApi.stubGetPrisonVideoLinkSchedule,
       })
     },
 

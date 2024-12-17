@@ -176,20 +176,6 @@ module.exports = {
       const { requests } = data.body
       return JSON.parse(requests.slice(-1)[0].body)
     }),
-  stubVideoLinkAppointments: (appointments, status = 200) =>
-    stubFor({
-      request: {
-        method: 'POST',
-        url: '/whereabouts/court/video-link-appointments',
-      },
-      response: {
-        status,
-        headers: {
-          'Content-Type': 'application/json;charset=UTF-8',
-        },
-        jsonBody: appointments || [],
-      },
-    }),
   verifyPostAttendance: () =>
     getMatchingRequests({ method: 'POST', urlPath: '/whereabouts/attendance' }).then((data) => data.body.requests),
 

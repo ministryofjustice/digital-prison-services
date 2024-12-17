@@ -2,7 +2,6 @@ import moment from 'moment'
 import { Response } from 'express'
 import { formatName, getCurrentPeriod, getTime, properCaseName } from '../../utils'
 import { PrisonerSearchResult } from '../../api/offenderSearchApi'
-import config from '../../config'
 
 export const getAgencyGroupLocationPrefix = async (
   systemContext,
@@ -65,49 +64,32 @@ export default ({
       locationsInsidePrisonApi.getSearchGroups(systemContext, agencyId),
     ])
 
-    const videoLinkAppointmentIds = appointments
-      .filter((appointment) => appointment.appointmentTypeCode === 'VLB')
-      .map((videoLinkAppointment) => videoLinkAppointment.id)
+    const videoLinkAppointments = await bookAVideoLinkApi.getPrisonSchedule(systemContext, agencyId, searchDate)
 
-    const videoLinkAppointments = config.apis.bookAVideoLinkApi.enabled
-      ? await bookAVideoLinkApi.getPrisonSchedule(systemContext, agencyId, searchDate)
-      : await whereaboutsApi
-          .getVideoLinkAppointments(res.locals, videoLinkAppointmentIds)
-          .then((r) => r.appointments || [])
+    const vlbAppointmentMappings = videoLinkAppointments
+      .map((vlb) => {
+        const appointment = appointments.find(
+          (app) =>
+            vlb.startTime === moment(app.startTime).format('HH:mm') &&
+            vlb.endTime === moment(app.endTime).format('HH:mm') &&
+            vlb.prisonerNumber === app.offenderNo &&
+            app.appointmentTypeCode === 'VLB'
+        )
 
-    const vlbAppointmentMappings = config.apis.bookAVideoLinkApi.enabled
-      ? videoLinkAppointments
-          .map((vlb) => {
-            const appointment = appointments.find(
-              (app) =>
-                vlb.startTime === moment(app.startTime).format('HH:mm') &&
-                vlb.endTime === moment(app.endTime).format('HH:mm') &&
-                vlb.prisonerNumber === app.offenderNo &&
-                app.appointmentTypeCode === 'VLB'
-            )
-
-            return appointment
-              ? {
-                  appointmentId: appointment.id,
-                  videoLinkBooking: vlb,
-                }
-              : undefined
-          })
-          .filter(Boolean)
-      : []
+        return appointment
+          ? {
+              appointmentId: appointment.id,
+              videoLinkBooking: vlb,
+            }
+          : undefined
+      })
+      .filter(Boolean)
 
     const videoLinkAppointmentsMadeByTheCourt = videoLinkAppointments.filter((app) => app.madeByTheCourt)
-    const videoLinkCourtMappings = config.apis.bookAVideoLinkApi.enabled
-      ? vlbAppointmentMappings.map((map) => ({
-          appointmentId: map.appointmentId,
-          court: map.videoLinkBooking.courtDescription || map.videoLinkBooking.probationTeamDescription,
-        }))
-      : videoLinkAppointments
-          .filter((appointment) => appointment.madeByTheCourt === false)
-          .map((appointment) => ({
-            appointmentId: appointment.appointmentId,
-            court: appointment.court,
-          }))
+    const videoLinkCourtMappings = vlbAppointmentMappings.map((map) => ({
+      appointmentId: map.appointmentId,
+      court: map.videoLinkBooking.courtDescription || map.videoLinkBooking.probationTeamDescription,
+    }))
 
     const appointmentsOfType = appointments.filter((appointment) =>
       type ? appointment.appointmentTypeCode === type : true

@@ -1,7 +1,6 @@
 import { makeNotFoundError } from './helpers'
 
 import appointmentDetailsServiceFactory from '../services/appointmentDetailsService'
-import config from '../config'
 
 describe('appointment details', () => {
   const testAppointment = {
@@ -171,129 +170,6 @@ describe('appointment details', () => {
     let videoLinkBookingAppointment
 
     beforeEach(() => {
-      videoLinkBookingAppointment = {
-        appointment: {
-          ...testAppointment.appointment,
-          locationId: 1,
-          appointmentTypeCode: 'VLB',
-          startTime: '2021-05-20T13:00:00',
-          endTime: '2021-05-20T14:00:00',
-          comment: 'Test appointment comments',
-          addedBy: 'Test User',
-        },
-        videoLinkBooking: {
-          main: {
-            court: 'Nottingham Justice Centre',
-            hearingType: 'MAIN',
-            locationId: 1,
-            startTime: '2021-05-20T13:00:00',
-            endTime: '2021-05-20T14:00:00',
-            createdByUsername: 'AUSER',
-            madeByTheCourt: false,
-          },
-        },
-      }
-    })
-
-    it('should render with court location and correct vlb locations and types', async () => {
-      const appointmentDetails = await service.getAppointmentViewModel(res, videoLinkBookingAppointment, 'MDI')
-
-      expect(appointmentDetails).toMatchObject({
-        additionalDetails: {
-          courtLocation: 'Nottingham Justice Centre',
-          comments: 'Test appointment comments',
-        },
-        basicDetails: {
-          date: '20 May 2021',
-          location: 'VCC Room 1',
-          type: 'Video link booking',
-        },
-        timeDetails: {
-          startTime: '13:00',
-          endTime: '14:00',
-        },
-      })
-    })
-
-    describe('with pre appointment', () => {
-      beforeEach(() => {
-        videoLinkBookingAppointment.videoLinkBooking.pre = {
-          court: 'Nottingham Justice Centre',
-          hearingType: 'PRE',
-          locationId: 3,
-          startTime: '2021-05-20T12:45:00',
-          endTime: '2021-05-20T13:00:00',
-          createdByUsername: 'AUSER',
-          madeByTheCourt: false,
-        }
-      })
-
-      it('should render with the correct pre appointment details', async () => {
-        const appointmentDetails = await service.getAppointmentViewModel(res, videoLinkBookingAppointment, 'MDI')
-
-        expect(appointmentDetails).toMatchObject({
-          prepostData: {
-            'pre-court hearing briefing': 'VCC Room 2 - 12:45 to 13:00',
-          },
-        })
-      })
-    })
-
-    describe('with post appointment', () => {
-      beforeEach(() => {
-        videoLinkBookingAppointment.videoLinkBooking.post = {
-          court: 'Nottingham Justice Centre',
-          hearingType: 'POST',
-          locationId: 3,
-          startTime: '2021-05-20T14:00:00',
-          endTime: '2021-05-20T14:15:00',
-          createdByUsername: 'AUSER',
-          madeByTheCourt: false,
-        }
-      })
-
-      it('should render with the correct post appointment details', async () => {
-        const appointmentDetails = await service.getAppointmentViewModel(res, videoLinkBookingAppointment, 'MDI')
-
-        expect(appointmentDetails).toMatchObject({
-          prepostData: {
-            'post-court hearing briefing': 'VCC Room 2 - 14:00 to 14:15',
-          },
-        })
-      })
-    })
-
-    describe('with VLB appointment made by a court user', () => {
-      beforeEach(() => {
-        videoLinkBookingAppointment.videoLinkBooking.main = {
-          court: 'Nottingham Justice Centre',
-          hearingType: 'POST',
-          locationId: 3,
-          startTime: '2021-05-20T14:00:00',
-          endTime: '2021-05-20T14:15:00',
-          createdByUsername: 'VLB_COURT',
-          madeByTheCourt: true,
-        }
-      })
-
-      it('should render with the added by of Court', async () => {
-        const appointmentDetails = await service.getAppointmentViewModel(res, videoLinkBookingAppointment, 'MDI')
-
-        expect(appointmentDetails).toMatchObject({
-          additionalDetails: {
-            comments: 'Test appointment comments',
-            addedBy: 'Court',
-          },
-        })
-      })
-    })
-  })
-
-  describe('video link appointment view model request - toggle on', () => {
-    let videoLinkBookingAppointment
-
-    beforeEach(() => {
-      config.apis.bookAVideoLinkApi.enabled = true
       videoLinkBookingService.getVideoLinkBookingFromAppointmentId.mockResolvedValue({
         bookingType: 'COURT',
         prisonAppointments: [
@@ -345,7 +221,7 @@ describe('appointment details', () => {
         additionalDetails: {
           hearingType: 'Application',
           courtLocation: 'Aberystwyth Family',
-          courtHearingLink: 'Not entered',
+          courtHearingLink: 'Not yet known',
           comments: 'Test appointment comments',
           addedBy: 'Test User',
         },
@@ -370,7 +246,6 @@ describe('appointment details', () => {
     let videoLinkBookingAppointment
 
     beforeEach(() => {
-      config.apis.bookAVideoLinkApi.enabled = true
       videoLinkBookingService.getVideoLinkBookingFromAppointmentId.mockResolvedValue({
         bookingType: 'PROBATION',
         prisonAppointments: [
