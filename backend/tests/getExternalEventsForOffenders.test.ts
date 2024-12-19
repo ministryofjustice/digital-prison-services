@@ -6,10 +6,12 @@ const prisonApi = {
   getSentenceData: jest.fn(),
   getCourtEvents: jest.fn(),
   getExternalTransfers: jest.fn(),
-  getAlerts: jest.fn(),
   getAssessments: jest.fn(),
 }
 const getClientCredentialsTokens = jest.fn()
+const prisonerAlertsApi = {
+  getAlerts: jest.fn(),
+}
 
 function createSentenceDataResponse() {
   return [
@@ -86,41 +88,38 @@ function createAlertsResponse() {
     {
       alertId: 42,
       bookingId: 1234,
-      offenderNo: 'A1234AA',
+      prisonNumber: 'A1234AA',
       alertType: 'H',
       alertTypeDescription: 'Self Harm',
-      alertCode: 'HA',
-      alertCodeDescription: 'ACCT Open (HMPS)',
+      alertCode: { code: 'HA', description: 'ACCT Open (HMPS)' },
       comment: 'qePqeP',
-      dateCreated: '2016-07-27',
+      createdAt: '2016-07-27',
       expired: false,
-      active: true,
+      isActive: true,
     },
     {
       alertId: 8,
       bookingId: 1234,
-      offenderNo: 'A1234AA',
+      prisonNumber: 'A1234AA',
       alertType: 'X',
       alertTypeDescription: 'Security',
-      alertCode: 'XEL',
-      alertCodeDescription: 'Escape List',
-      dateCreated: '2015-02-16',
+      alertCode: { code: 'XEL', description: 'Escape List' },
+      createdAt: '2015-02-16',
       expired: false,
-      active: true,
+      isActive: true,
     },
     {
       alertId: 2,
       bookingId: 1234,
-      offenderNo: 'A1234AA',
+      prisonNumber: 'A1234AA',
       alertType: 'X',
       alertTypeDescription: 'Security',
-      alertCode: 'XEL',
-      alertCodeDescription: 'Escape List',
+      alertCode: { code: 'XEL', description: 'Escape List' },
       comment: 'THIS ALERT HAS EXPIRED SO IS IGNORED',
-      dateCreated: '2015-02-16',
+      createdAt: '2015-02-16',
       dateExpires: '2015-04-04',
       expired: true,
-      active: false,
+      isActive: false,
     },
   ]
 }
@@ -156,13 +155,14 @@ describe('External events', () => {
 
   beforeEach(() => {
     jest.resetAllMocks()
+    prisonerAlertsApi.getAlerts.mockResolvedValue({ content: [] })
     getClientCredentialsTokens.mockResolvedValue({})
   })
 
   it('should handle empty offender numbers', async () => {
     const context = {}
     // @ts-expect-error ts-migrate(2345) FIXME: Argument of type '{}' is not assignable to paramet... Remove this comment to see the full error message
-    const response = await externalEvents(getClientCredentialsTokens, prisonApi, context, {})
+    const response = await externalEvents(getClientCredentialsTokens, prisonApi, prisonerAlertsApi, context, {})
     expect(response).toEqual([])
   })
 
@@ -176,6 +176,7 @@ describe('External events', () => {
     const response = await externalEvents(
       getClientCredentialsTokens,
       prisonApi,
+      prisonerAlertsApi,
       {},
       {
         agencyId: 'LEI',
@@ -193,7 +194,7 @@ describe('External events', () => {
     expect(prisonApi.getCourtEvents.mock.calls.length).toBe(1)
     expect(prisonApi.getExternalTransfers.mock.calls.length).toBe(1)
     expect(prisonApi.getSentenceData.mock.calls.length).toBe(1)
-    expect(prisonApi.getAlerts.mock.calls.length).toBe(1)
+    expect(prisonerAlertsApi.getAlerts.mock.calls.length).toBe(1)
     expect(prisonApi.getAssessments.mock.calls.length).toBe(1)
   })
 
@@ -202,6 +203,7 @@ describe('External events', () => {
     await externalEvents(
       getClientCredentialsTokens,
       prisonApi,
+      prisonerAlertsApi,
       {},
       {
         agencyId: 'LEI',
@@ -217,6 +219,7 @@ describe('External events', () => {
     await externalEvents(
       getClientCredentialsTokens,
       prisonApi,
+      prisonerAlertsApi,
       {},
       {
         agencyId: 'LEI',
@@ -239,6 +242,7 @@ describe('External events', () => {
     await externalEvents(
       getClientCredentialsTokens,
       prisonApi,
+      prisonerAlertsApi,
       {},
       {
         agencyId: 'LEI',
@@ -260,6 +264,7 @@ describe('External events', () => {
     await externalEvents(
       getClientCredentialsTokens,
       prisonApi,
+      prisonerAlertsApi,
       {},
       // @ts-expect-error ts-migrate(2345) FIXME: Argument of type '{ agencyId: string; offenderNumb... Remove this comment to see the full error message
       {
@@ -267,7 +272,7 @@ describe('External events', () => {
         offenderNumbers: [offenderWithData, offenderWithNoData],
       }
     )
-    expect(prisonApi.getAlerts).toHaveBeenCalledWith(
+    expect(prisonerAlertsApi.getAlerts).toHaveBeenCalledWith(
       {},
       {
         agencyId: 'LEI',
@@ -280,6 +285,7 @@ describe('External events', () => {
     await externalEvents(
       getClientCredentialsTokens,
       prisonApi,
+      prisonerAlertsApi,
       {},
       // @ts-expect-error ts-migrate(2345) FIXME: Argument of type '{ offenderNumbers: string[]; }' ... Remove this comment to see the full error message
       {
@@ -301,12 +307,13 @@ describe('External events', () => {
     prisonApi.getSentenceData.mockImplementationOnce(createSentenceDataResponse)
     prisonApi.getCourtEvents.mockImplementationOnce(createCourtEventResponse)
     prisonApi.getExternalTransfers.mockImplementationOnce(createTransfersResponse)
-    prisonApi.getAlerts.mockImplementationOnce(createAlertsResponse)
+    prisonerAlertsApi.getAlerts.mockResolvedValue({ content: createAlertsResponse() })
     prisonApi.getAssessments.mockImplementationOnce(createAssessmentsResponse)
 
     const response = await externalEvents(
       getClientCredentialsTokens,
       prisonApi,
+      prisonerAlertsApi,
       {},
       {
         agencyId: 'LEI',
@@ -330,7 +337,7 @@ describe('External events', () => {
     expect(prisonApi.getCourtEvents.mock.calls.length).toBe(1)
     expect(prisonApi.getExternalTransfers.mock.calls.length).toBe(1)
     expect(prisonApi.getSentenceData.mock.calls.length).toBe(1)
-    expect(prisonApi.getAlerts.mock.calls.length).toBe(1)
+    expect(prisonerAlertsApi.getAlerts.mock.calls.length).toBe(1)
     expect(prisonApi.getAssessments.mock.calls.length).toBe(1)
   })
 
@@ -342,6 +349,7 @@ describe('External events', () => {
     const response = await externalEvents(
       getClientCredentialsTokens,
       prisonApi,
+      prisonerAlertsApi,
       {},
       {
         agencyId: 'LEI',
@@ -407,6 +415,7 @@ describe('External events', () => {
     const response = await externalEvents(
       getClientCredentialsTokens,
       prisonApi,
+      prisonerAlertsApi,
       {},
       { agencyId: 'LEI', offenderNumbers: [offenderWithData], formattedDate: switchDateFormat(today) }
     )
@@ -435,6 +444,7 @@ describe('External events', () => {
       const response = await externalEvents(
         getClientCredentialsTokens,
         prisonApi,
+        prisonerAlertsApi,
         {},
         {
           agencyId: 'LEI',
@@ -463,6 +473,7 @@ describe('External events', () => {
       const response = await externalEvents(
         getClientCredentialsTokens,
         prisonApi,
+        prisonerAlertsApi,
         {},
         {
           agencyId: 'LEI',
@@ -487,6 +498,7 @@ describe('External events', () => {
       const response = await externalEvents(
         getClientCredentialsTokens,
         prisonApi,
+        prisonerAlertsApi,
         {},
         {
           agencyId: 'LEI',

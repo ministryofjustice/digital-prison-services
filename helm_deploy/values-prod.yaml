@@ -91,6 +91,7 @@ generic-service:
     HOMEPAGE_REDIRECT_EXEMPTIONS: ""
     CHANGE_SOMEONES_CELL_URL: https://change-someones-cell.prison.service.justice.gov.uk
     SUNSET_BANNER_ENABLED: true
+    ALERTS_API_URL: "https://alerts-api.hmpps.service.justice.gov.uk"
 
   allowlist:
     sscl-blackpool: 31.121.5.27/32

@@ -37,14 +37,16 @@ export const setup = ({
   getClientCredentialsTokens,
   hmppsManageUsersApi,
   caseNotesApi,
+  prisonerAlertsApi,
 }) => {
   const controller = controllerFactory({
-    activityListService: activityListFactory(getClientCredentialsTokens, prisonApi, whereaboutsApi),
+    activityListService: activityListFactory(getClientCredentialsTokens, prisonApi, whereaboutsApi, prisonerAlertsApi),
     houseblockListService: houseblockListFactory(
       getClientCredentialsTokens,
       prisonApi,
       whereaboutsApi,
-      locationsInsidePrisonApi
+      locationsInsidePrisonApi,
+      prisonerAlertsApi
     ),
     attendanceService: attendanceFactory(whereaboutsApi),
     offenderLoader: offenderLoaderFactory(prisonApi),

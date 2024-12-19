@@ -1,20 +1,20 @@
-const referenceCodesServiceFactory = (prisonApi) => {
+const referenceCodesServiceFactory = (prisonerAlertsApi) => {
   const getAlertTypes = async (context) => {
-    const types = await prisonApi.getAlertTypes(context)
+    const types = await prisonerAlertsApi.getAlertTypes(context)
     const alertTypes = types.map((type) => ({
       value: type.code,
       description: type.description,
-      activeFlag: type.activeFlag,
+      activeFlag: type.isActive ? 'Y' : 'N',
     }))
 
     const alertSubTypes = types
-      .map((type) => type.subCodes)
+      .map((type) => type.alertCodes)
       .reduce((acc, current) => acc.concat(current))
       .map((type) => ({
         value: type.code,
-        parentValue: type.parentCode,
+        parentValue: type.alertTypeCode,
         description: type.description,
-        activeFlag: type.activeFlag,
+        activeFlag: type.isActive ? 'Y' : 'N',
       }))
 
     const alphaSortOnDescription = (a, b) => a.description.localeCompare(b.description)

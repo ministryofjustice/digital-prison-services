@@ -47,7 +47,7 @@ const getValidationErrors = ({ alertStatus, comment }) => {
   return errors
 }
 
-export const alertFactory = (oauthApi, hmppsManageUsersApi, prisonApi, referenceCodesService) => {
+export const alertFactory = (oauthApi, systemOauthClient, hmppsManageUsersApi, prisonApi, referenceCodesService) => {
   const renderTemplate = (req, res, pageData) => {
     const { alert, pageErrors, offenderDetails, ...rest } = pageData
     const formAction = offenderDetails && alert && `/edit-alert/${offenderDetails.bookingId}/${alert.alertId}`
@@ -216,7 +216,10 @@ export const alertFactory = (oauthApi, hmppsManageUsersApi, prisonApi, reference
         return res.render('notFound.njk', { url: req.headers.referer || `/prisoner/${offenderNo}/alerts` })
       }
 
-      const alertTypes = await referenceCodesService.getAlertTypes(res.locals)
+      const username = req.session?.userDetails?.username || 'legacy-dps-user'
+      const systemContext = await systemOauthClient.getClientCredentialsTokens(username)
+
+      const alertTypes = await referenceCodesService.getAlertTypes(systemContext)
 
       const prisonersActiveAlertCodes = alerts
         .filter((alert) => !alert.expired)
@@ -342,7 +345,9 @@ export const alertFactory = (oauthApi, hmppsManageUsersApi, prisonApi, reference
         .map((alert) => alert.alertCode)
         .join(',')
 
-      const alertTypes = await referenceCodesService.getAlertTypes(res.locals)
+      const username = req.session?.userDetails?.username || 'legacy-dps-user'
+      const systemContext = await systemOauthClient.getClientCredentialsTokens(username)
+      const alertTypes = await referenceCodesService.getAlertTypes(systemContext)
       const alertCodes = alertType
         ? alertTypes.alertSubTypes
             .filter((type) => type.parentValue === alertType)

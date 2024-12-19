@@ -3,32 +3,32 @@
     "domain": "ALERT",
     "code": "A",
     "description": "Social Care",
-    "activeFlag": "Y",
+    "isActive": true,
     "listSeq": 13,
-    "systemDataFlag": "N",
-    "subCodes": []
+    "systemDataFlag": false,
+    "alertCodes": []
   },
   {
     "domain": "ALERT",
     "code": "C",
     "description": "Child Communication Measures",
-    "activeFlag": "Y",
+    "isActive": true,
     "listSeq": 3,
-    "systemDataFlag": "N",
-    "subCodes": []
+    "systemDataFlag": false,
+    "alertCodes": []
   },
   {
     "domain": "ALERT",
     "code": "F1",
     "description": "Ex Armed Forces",
-    "activeFlag": "Y",
+    "isActive": true,
     "listSeq": 21,
-    "systemDataFlag": "N",
-    "subCodes": [
+    "systemDataFlag": false,
+    "alertCodes": [
       {
         "code": "F1",
-        "parentCode": "F1",
-        "activeFlag": "Y",
+        "alertTypeCode": "F1",
+        "isActive": true,
         "description": "Armed Forces Veteran"
       }
     ]
@@ -37,104 +37,104 @@
     "domain": "ALERT",
     "code": "H",
     "description": "Self Harm",
-    "activeFlag": "Y",
+    "isActive": true,
     "listSeq": 1,
-    "systemDataFlag": "N",
-    "subCodes": []
+    "systemDataFlag": false,
+    "alertCodes": []
   },
   {
     "domain": "ALERT",
     "code": "L",
     "description": "Care Leaver",
-    "activeFlag": "Y",
+    "isActive": true,
     "listSeq": 11,
-    "systemDataFlag": "N",
-    "subCodes": []
+    "systemDataFlag": false,
+    "alertCodes": []
   },
   {
     "domain": "ALERT",
     "code": "M",
     "description": "Medical",
-    "activeFlag": "Y",
+    "isActive": true,
     "listSeq": 5,
-    "systemDataFlag": "N",
-    "subCodes": []
+    "systemDataFlag": false,
+    "alertCodes": []
   },
   {
     "domain": "ALERT",
     "code": "O",
     "description": "Other",
-    "activeFlag": "Y",
+    "isActive": true,
     "listSeq": 10,
-    "systemDataFlag": "N",
-    "subCodes": []
+    "systemDataFlag": false,
+    "alertCodes": []
   },
   {
     "domain": "ALERT",
     "code": "P",
     "description": "MAPPP Case",
-    "activeFlag": "Y",
+    "isActive": true,
     "listSeq": 4,
-    "systemDataFlag": "N",
-    "subCodes": []
+    "systemDataFlag": false,
+    "alertCodes": []
   },
   {
     "domain": "ALERT",
     "code": "R",
     "description": "Risk",
-    "activeFlag": "Y",
+    "isActive": true,
     "listSeq": 3,
-    "systemDataFlag": "N",
-    "subCodes": []
+    "systemDataFlag": false,
+    "alertCodes": []
   },
   {
     "domain": "ALERT",
     "code": "S",
     "description": "Sexual Offence",
-    "activeFlag": "Y",
+    "isActive": true,
     "listSeq": 7,
-    "systemDataFlag": "N",
-    "subCodes": []
+    "systemDataFlag": false,
+    "alertCodes": []
   },
   {
     "domain": "ALERT",
     "code": "T",
     "description": "Hold Against Transfer",
-    "activeFlag": "Y",
+    "isActive": true,
     "listSeq": 8,
-    "systemDataFlag": "N",
-    "subCodes": []
+    "systemDataFlag": false,
+    "alertCodes": []
   },
   {
     "domain": "ALERT",
     "code": "V",
     "description": "Vulnerability",
-    "activeFlag": "Y",
+    "isActive": true,
     "listSeq": 6,
-    "systemDataFlag": "N",
-    "subCodes": []
+    "systemDataFlag": false,
+    "alertCodes": []
   },
   {
     "domain": "ALERT",
     "code": "W",
     "description": "Warrant",
-    "activeFlag": "Y",
+    "isActive": true,
     "listSeq": 9,
-    "systemDataFlag": "N",
-    "subCodes": []
+    "systemDataFlag": false,
+    "alertCodes": []
   },
   {
     "domain": "ALERT",
     "code": "X",
     "description": "Security",
-    "activeFlag": "Y",
+    "isActive": true,
     "listSeq": 2,
-    "systemDataFlag": "N",
-    "subCodes": [
+    "systemDataFlag": false,
+    "alertCodes": [
       {
         "code": "XC",
-        "parentCode": "X",
-        "activeFlag": "Y",
+        "alertTypeCode": "X",
+        "isActive": true,
         "description": "Risk to females"
       }
     ]

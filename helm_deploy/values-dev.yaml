@@ -93,3 +93,4 @@ generic-service:
    HOMEPAGE_REDIRECT_EXEMPTIONS: ""
    CHANGE_SOMEONES_CELL_URL: https://change-someones-cell-dev.prison.service.justice.gov.uk
    SUNSET_BANNER_ENABLED: true
+   ALERTS_API_URL: "https://alerts-api-dev.hmpps.service.justice.gov.uk"

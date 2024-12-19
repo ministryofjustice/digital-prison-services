@@ -20,9 +20,17 @@ const prisonApi = {
 const whereaboutsApi = {
   getAttendance: jest.fn(),
 }
+const prisonerAlertsApi = {
+  getAlerts: jest.fn(),
+}
 const getClientCredentialsTokens = jest.fn().mockResolvedValue({})
 
-const activityList = getActivityListFactory(getClientCredentialsTokens, prisonApi, whereaboutsApi).getActivityList
+const activityList = getActivityListFactory(
+  getClientCredentialsTokens,
+  prisonApi,
+  whereaboutsApi,
+  prisonerAlertsApi
+).getActivityList
 
 function createActivitiesResponse() {
   return [
@@ -130,6 +138,7 @@ beforeEach(() => {
   prisonApi.getVisits.mockResolvedValue([])
   prisonApi.getAppointments.mockResolvedValue([])
   prisonApi.getActivities.mockResolvedValue([])
+  prisonerAlertsApi.getAlerts.mockResolvedValue({ content: [] })
 })
 
 describe('Activity list controller', () => {
@@ -732,7 +741,12 @@ describe('Activity list controller', () => {
     ])
     whereaboutsApi.getAttendance.mockResolvedValue({ attendances: [] })
 
-    const { getActivityList: service } = factory(getClientCredentialsTokens, prisonApi, whereaboutsApi)
+    const { getActivityList: service } = factory(
+      getClientCredentialsTokens,
+      prisonApi,
+      whereaboutsApi,
+      prisonerAlertsApi
+    )
 
     await service({}, 'LEI', 1, '23/11/2018', 'PM')
     await service({}, 'MDI', 1, '23/11/2018', 'PM')

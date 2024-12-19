@@ -17,6 +17,9 @@ const prisonApi = {
 const oauthApi = {
   userRoles: jest.fn(),
 }
+const systemOauthClient = {
+  getClientCredentialsTokens: () => ({}),
+}
 const hmppsManageUsersApi = {
   currentUser: jest.fn(),
 }
@@ -24,7 +27,7 @@ const referenceCodesService = {
   getAlertTypes: jest.fn(),
 }
 const { handleCreateAlertForm, displayCreateAlertPage, displayEditAlertPage, handleEditAlertForm } =
-  alertController.alertFactory(oauthApi, hmppsManageUsersApi, prisonApi, referenceCodesService)
+  alertController.alertFactory(oauthApi, systemOauthClient, hmppsManageUsersApi, prisonApi, referenceCodesService)
 
 jest.mock('../raiseAnalyticsEvent', () => ({
   raiseAnalyticsEvent: jest.fn(),

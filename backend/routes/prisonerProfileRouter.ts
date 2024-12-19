@@ -36,6 +36,7 @@ const router = express.Router({ mergeParams: true })
 
 const controller = ({
   prisonApi,
+  prisonerAlertsApi,
   keyworkerApi,
   oauthApi,
   hmppsManageUsersApi,
@@ -71,7 +72,7 @@ const controller = ({
   })
   const personService = personServiceFactory(prisonApi)
   const prisonerFinanceService = prisonerFinanceServiceFactory(prisonApi)
-  const referenceCodesService = referenceCodesServiceFactory(prisonApi)
+  const referenceCodesService = referenceCodesServiceFactory(prisonerAlertsApi)
   const esweService = EsweService.create(curiousApi, systemOauthClient, prisonApi, whereaboutsApi)
 
   router.get(
@@ -119,7 +120,7 @@ const controller = ({
         prisonerProfileService,
         referenceCodesService,
         paginationService,
-        prisonApi,
+        prisonerAlertsApi,
         oauthApi,
         systemOauthClient,
         restrictedPatientApi,

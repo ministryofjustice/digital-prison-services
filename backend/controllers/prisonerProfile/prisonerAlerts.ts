@@ -1,12 +1,11 @@
 import moment from 'moment'
-import { formatName } from '../../utils'
 import getContext from './prisonerProfileContext'
 
 export default ({
     prisonerProfileService,
     referenceCodesService,
     paginationService,
-    prisonApi,
+    prisonerAlertsApi,
     oauthApi,
     systemOauthClient,
     restrictedPatientApi,
@@ -32,34 +31,35 @@ export default ({
     const fullUrl = new URL(`${req.protocol}://${req.get('host')}${req.originalUrl}`)
     const { username } = req.session.userDetails
 
-    const { bookingId } = await prisonApi.getDetails(context, offenderNo)
     const roles = oauthApi.userRoles(context)
+    const systemContext = await systemOauthClient.getClientCredentialsTokens(username)
     const [prisonerProfileData, alertTypes] = await Promise.all([
       prisonerProfileService.getPrisonerProfileData(context, offenderNo, username, overrideAccess),
-      referenceCodesService.getAlertTypes(context),
+      referenceCodesService.getAlertTypes(systemContext),
     ])
     const { userCanEdit } = prisonerProfileData
     const canUpdateAlerts = roles && roles.some((role) => role.roleCode === 'UPDATE_ALERT') && userCanEdit
-    const alerts = await prisonApi.getAlertsForBookingV2(context, {
-      bookingId,
+
+    const alerts = await prisonerAlertsApi.getAlertsForPrisonNumber(systemContext, {
+      prisonNumber: offenderNo,
       alertType: alertType || '',
       from,
       to,
-      alertStatus: active || 'ACTIVE',
+      isActive: (active || 'ACTIVE') === 'ACTIVE',
       page,
-      sort: 'dateCreated,desc',
+      sort: 'createdAt,desc',
       size,
     })
     const totalAlerts = alerts.totalElements
 
     const activeAlerts = alerts.content
-      .filter((alert) => alert.active && !alert.expired)
+      .filter((alert) => alert.isActive)
       .map((alert) => [
-        { text: `${alert.alertTypeDescription} (${alert.alertType})` },
-        { text: `${alert.alertCodeDescription} (${alert.alertCode})` },
-        { text: alert.comment || 'None', classes: 'clip-overflow' },
-        { text: moment(alert.dateCreated, 'YYYY-MM-DD').format('D MMMM YYYY') },
-        { text: `${formatName(alert.addedByFirstName, alert.addedByLastName)}` },
+        { text: `${alert.alertCode.alertTypeDescription} (${alert.alertCode.alertTypeCode})` },
+        { text: `${alert.alertCode.description} (${alert.alertCode.code})` },
+        { text: alert.description || 'None', classes: 'clip-overflow' },
+        { text: moment(alert.createdAt, 'YYYY-MM-DD').format('D MMMM YYYY') },
+        { text: alert.createdByDisplayName },
         {
           html: canUpdateAlerts
             ? `<a class="govuk-button govuk-button--secondary" href="/edit-alert?offenderNo=${offenderNo}&alertId=${alert.alertId}">Change or close</a>`
@@ -68,22 +68,19 @@ export default ({
         },
       ])
     const inactiveAlerts = alerts.content
-      .filter((alert) => !alert.active && alert.expired)
+      .filter((alert) => !alert.isActive)
       .map((alert) => [
-        { text: `${alert.alertTypeDescription} (${alert.alertType})` },
-        { text: `${alert.alertCodeDescription} (${alert.alertCode})` },
-        { text: alert.comment || 'None', classes: 'clip-overflow' },
+        { text: `${alert.alertCode.alertTypeDescription} (${alert.alertCode.alertTypeCode})` },
+        { text: `${alert.alertCode.description} (${alert.alertCode.code})` },
+        { text: alert.description || 'None', classes: 'clip-overflow' },
         {
-          html: `${moment(alert.dateCreated, 'YYYY-MM-DD').format('D MMMM YYYY')}<br>${moment(
-            alert.dateExpires,
+          html: `${moment(alert.createdAt, 'YYYY-MM-DD').format('D MMMM YYYY')}<br>${moment(
+            alert.activeTo,
             'YYYY-MM-DD'
           ).format('D MMMM YYYY')}`,
         },
         {
-          html: `${formatName(alert.addedByFirstName, alert.addedByLastName)}<br>${formatName(
-            alert.expiredByFirstName,
-            alert.expiredByLastName
-          )}`,
+          html: `${alert.createdByDisplayName}<br>${alert.activeToLastSetByDisplayName}`,
         },
       ])
 
