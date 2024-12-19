@@ -118,7 +118,7 @@ export default ({ prisonApi, prisonerAlertsApi, offenderSearchApi, systemOauthCl
       })
     ).content
 
-    const activeHoldAgainstTransferAlertDetails = holdAgainstTransferAlertDetails.filter((a) => a.active)
+    const activeHoldAgainstTransferAlertDetails = holdAgainstTransferAlertDetails.filter((a) => a.isActive)
 
     if (activeHoldAgainstTransferAlertDetails.length === 0) {
       return null
@@ -129,10 +129,10 @@ export default ({ prisonApi, prisonerAlertsApi, offenderSearchApi, systemOauthCl
       displayId: uuidv4(),
       fullName: formatName(prisonerDetails.firstName, prisonerDetails.lastName),
       alerts: activeHoldAgainstTransferAlertDetails.map((alertDetails) => ({
-        description: `${alertDetails.alertCodeDescription} (${alertDetails.alertCode})`,
-        comments: alertDetails.comment,
-        dateAdded: moment(alertDetails.dateCreated, 'YYYY-MM-DD').format('D MMMM YYYY'),
-        createdBy: formatName(alertDetails.addedByFirstName, alertDetails.addedByLastName),
+        description: `${alertDetails.alertCode.description} (${alertDetails.alertCode.code})`,
+        comments: alertDetails.description,
+        dateAdded: moment(alertDetails.createdAt, 'YYYY-MM-DD').format('D MMMM YYYY'),
+        createdBy: alertDetails.createdByDisplayName,
       })),
     }
   }

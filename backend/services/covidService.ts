@@ -12,8 +12,8 @@ function hasCovidAlertByOffenderNo(alertsByOffenderNumber) {
   return (offenderNo) => {
     const alertsForOffender = alertsByOffenderNumber[offenderNo] || []
     return alertsForOffender
-      .filter(({ expired }) => !expired)
-      .some(({ alertCode }) => Object.values(alerts).includes(alertCode))
+      .filter(({ isActive }) => isActive)
+      .some(({ alertCode }) => Object.values(alerts).includes(alertCode.code))
   }
 }
 
@@ -75,8 +75,8 @@ export const covidServiceFactory = (systemOauthClient, prisonApi, prisonerAlerts
       const inmateFor = (offenderNo) => inmates.find((inmate) => inmate.offenderNo === offenderNo)
 
       return offenderAlerts
-        .filter(({ alertCode }) => alertCode === code)
-        .filter(({ expired }) => !expired)
+        .filter(({ alertCode }) => alertCode.code === code)
+        .filter(({ isActive }) => isActive)
         .map((alert) => [alert, inmateFor(alert.prisonNumber)])
         .map(([alert, inmate]) => ({
           bookingId: inmate.bookingId,
@@ -91,7 +91,7 @@ export const covidServiceFactory = (systemOauthClient, prisonApi, prisonerAlerts
       const { caseLoadId } = res.locals.user.activeCaseLoad
 
       const context = { ...res.locals, requestHeaders: { 'page-offset': 0, 'page-limit': 3000 } }
-      const systemContext = await systemOauthClient.getClientCredentialsTokens(req.session.userDetails.username)
+      const systemContext = await systemOauthClient.getClientCredentialsTokens(`${req.session.userDetails.username}`)
       const recentMovements = await getRecentMovements(context, caseLoadId)
       const alertsByOffenderNumber = await getAlertsByOffenderNumber(
         systemContext,
