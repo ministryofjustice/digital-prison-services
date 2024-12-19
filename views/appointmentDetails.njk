@@ -10,6 +10,16 @@
     <strong class="govuk-!-margin-right-2">Prison number</strong> <span data-test="prisoner-number">{{ prisoner.number }}</span>
   </p>
 
+  {% if appointmentAmendLink %}
+    {{ govukButton({
+      text: "Change appointment details",
+      name: "editAppointment",
+      classes: "govuk-button--secondary govuk-!-margin-right-3",
+      preventDoubleClick: true,
+      href: appointmentAmendLink
+    }) }}
+  {% endif %}
+
   {% if appointmentConfirmDeletionLink %}
     {{ govukButton({
       text: "Delete appointment",
