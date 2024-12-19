@@ -59,7 +59,7 @@ const countResultsOncePerPrisonerNumber = (events: Event[]): number =>
 
 const onlyActiveIn = (result: PrisonerSearchResult): boolean => result?.status === 'ACTIVE IN'
 
-export default ({ prisonApi, offenderSearchApi }) => {
+export default ({ prisonApi, prisonerAlertsApi, offenderSearchApi, systemOauthClient }) => {
   const renderTemplate = (
     res,
     { date, agencyDetails, courtEvents, releaseEvents, transferEvents, scheduledType, isActivitiesEnabled }
@@ -98,7 +98,7 @@ export default ({ prisonApi, offenderSearchApi }) => {
   }
 
   const getHoldAgainstTransferAlertDetails = async (
-    context,
+    systemContext,
     prisonerDetails: PrisonerSearchResult
   ): Promise<HoldAgainstTransferAlerts | null> => {
     const activeHoldAgainstTransferAlerts = prisonerDetails.alerts.filter((alert) =>
@@ -109,12 +109,14 @@ export default ({ prisonApi, offenderSearchApi }) => {
       return null
     }
 
-    const holdAgainstTransferAlertDetails = await prisonApi.getAlertsForLatestBooking(context, {
-      offenderNo: prisonerDetails.prisonerNumber,
-      alertCodes: relevantAlertsForHoldAgainstTransfer,
-      sortBy: 'dateCreated',
-      sortDirection: 'DESC',
-    })
+    const holdAgainstTransferAlertDetails = (
+      await prisonerAlertsApi.getAlertsForLatestBooking(systemContext, {
+        prisonNumber: prisonerDetails.prisonerNumber,
+        alertCodes: relevantAlertsForHoldAgainstTransfer,
+        sortBy: 'createdAt',
+        sortDirection: 'desc',
+      })
+    ).content
 
     const activeHoldAgainstTransferAlertDetails = holdAgainstTransferAlertDetails.filter((a) => a.active)
 
@@ -137,6 +139,7 @@ export default ({ prisonApi, offenderSearchApi }) => {
 
   const getScheduledMovementDetails = async (
     context,
+    systemContext,
     prisonerDetailsForOffenderNumbers: Array<PrisonerSearchResult>
   ): Promise<Array<ScheduledMovementDetails>> => {
     const personalPropertyForPrisoners =
@@ -155,7 +158,7 @@ export default ({ prisonApi, offenderSearchApi }) => {
 
     const holdAgainstTransferAlertsForPrisoners =
       (await Promise.all(
-        prisonerDetailsForOffenderNumbers.flatMap((sr) => getHoldAgainstTransferAlertDetails(context, sr))
+        prisonerDetailsForOffenderNumbers.flatMap((sr) => getHoldAgainstTransferAlertDetails(systemContext, sr))
       )) || []
 
     return prisonerDetailsForOffenderNumbers.map((details) => {
@@ -249,8 +252,13 @@ export default ({ prisonApi, offenderSearchApi }) => {
     const prisonerDetailsForOffenderNumbersThatAreActivelyInside =
       prisonerDetailsForOffenderNumbers.filter(onlyActiveIn)
 
+    const systemContext = await systemOauthClient.getClientCredentialsTokens(
+      res.locals?.user?.username || 'legacy-dps-user'
+    )
+
     const scheduledMoveDetailsForPrisoners: Array<ScheduledMovementDetails> = await getScheduledMovementDetails(
       res.locals,
+      systemContext,
       prisonerDetailsForOffenderNumbersThatAreActivelyInside
     )
 

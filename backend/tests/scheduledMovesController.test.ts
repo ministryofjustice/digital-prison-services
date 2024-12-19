@@ -431,11 +431,16 @@ describe('Scheduled moves controller', () => {
     getMovementReasons: () => {},
     getAgencyDetails: () => {},
     getTransfers: () => {},
-    getAlertsForLatestBooking: () => {},
     getPrisonerProperty: () => {},
   }
   const offenderSearchApi = {
     getPrisonersDetails: () => {},
+  }
+  const systemOauthClient = {
+    getClientCredentialsTokens: () => ({}),
+  }
+  const prisonerAlertsApi = {
+    getAlertsForLatestBooking: jest.fn(),
   }
   let controller
   let req
@@ -466,11 +471,11 @@ describe('Scheduled moves controller', () => {
       releaseEvents: [],
     })
     prisonApi.getPrisonerProperty = jest.fn().mockResolvedValue(propertyResponse)
-    prisonApi.getAlertsForLatestBooking = jest.fn().mockResolvedValue(holdAgainstTransferAlertDetailsResponse)
+    prisonerAlertsApi.getAlertsForLatestBooking.mockResolvedValue({ content: holdAgainstTransferAlertDetailsResponse })
 
     offenderSearchApi.getPrisonersDetails = jest.fn().mockResolvedValue(prisonerSearchResult)
 
-    controller = scheduledMoves({ prisonApi, offenderSearchApi })
+    controller = scheduledMoves({ prisonApi, offenderSearchApi, systemOauthClient, prisonerAlertsApi })
   })
 
   afterEach(() => {
@@ -696,10 +701,10 @@ describe('Scheduled moves controller', () => {
     describe('Ignore prisoners that are outside', () => {
       const assertOnlyRequestAdditionalDataForPrisonersInPrison = () => {
         expect(prisonApi.getPrisonerProperty).toHaveBeenCalledTimes(1)
-        expect(prisonApi.getAlertsForLatestBooking).toHaveBeenCalledTimes(1)
+        expect(prisonerAlertsApi.getAlertsForLatestBooking).toHaveBeenCalledTimes(1)
         expect(prisonApi.getPrisonerProperty).toHaveBeenCalledWith(res.locals, 1)
-        expect(prisonApi.getAlertsForLatestBooking).toHaveBeenCalledWith(
-          res.locals,
+        expect(prisonerAlertsApi.getAlertsForLatestBooking).toHaveBeenCalledWith(
+          {},
           expect.objectContaining({
             offenderNo: 'A12345',
           })
@@ -943,7 +948,7 @@ describe('Scheduled moves controller', () => {
       it('should make a call to retrieve hold-on-transfer details for each prisoner with any such alert', async () => {
         await controller.index(req, res)
 
-        expect(prisonApi.getAlertsForLatestBooking).toHaveBeenCalledWith(
+        expect(prisonerAlertsApi.getAlertsForLatestBooking).toHaveBeenCalledWith(
           {},
           {
             alertCodes: ['TAP', 'TAH', 'TCPA', 'TG', 'TM', 'TPR', 'TSE'],
@@ -1288,7 +1293,7 @@ describe('Scheduled moves controller', () => {
       it('should make a call to retrieve hold-on-transfer details for each prisoner with any such alert', async () => {
         await controller.index(req, res)
 
-        expect(prisonApi.getAlertsForLatestBooking).toHaveBeenCalledWith(
+        expect(prisonerAlertsApi.getAlertsForLatestBooking).toHaveBeenCalledWith(
           {},
           {
             alertCodes: ['TAP', 'TAH', 'TCPA', 'TG', 'TM', 'TPR', 'TSE'],
@@ -1593,7 +1598,7 @@ describe('Scheduled moves controller', () => {
       it('should make a call to retrieve hold-on-transfer details for each prisoner with any such alert', async () => {
         await controller.index(req, res)
 
-        expect(prisonApi.getAlertsForLatestBooking).toHaveBeenCalledWith(
+        expect(prisonerAlertsApi.getAlertsForLatestBooking).toHaveBeenCalledWith(
           {},
           {
             alertCodes: ['TAP', 'TAH', 'TCPA', 'TG', 'TM', 'TPR', 'TSE'],
@@ -1826,7 +1831,7 @@ describe('Scheduled moves controller', () => {
       it('should not make a call to retrieve hold on transfer details', async () => {
         await controller.index(req, res)
 
-        expect(prisonApi.getAlertsForLatestBooking).not.toHaveBeenCalled()
+        expect(prisonerAlertsApi.getAlertsForLatestBooking).not.toHaveBeenCalled()
       })
 
       it('should not show hold-against-transfer details', async () => {
@@ -1849,15 +1854,15 @@ describe('Scheduled moves controller', () => {
       offenderSearchApi.getPrisonersDetails = jest
         .fn()
         .mockResolvedValue(prisonerSearchResultWithOnlyInactiveHoldOnTransfer)
-      prisonApi.getAlertsForLatestBooking = jest
-        .fn()
-        .mockResolvedValue(holdAgainstTransferWithOnlyInactiveAlertDetailsResponse)
+      prisonerAlertsApi.getAlertsForLatestBooking.mockResolvedValue({
+        content: holdAgainstTransferWithOnlyInactiveAlertDetailsResponse,
+      })
     })
 
     it('should make a call to retrieve hold on transfer details', async () => {
       await controller.index(req, res)
 
-      expect(prisonApi.getAlertsForLatestBooking).toHaveBeenCalled()
+      expect(prisonerAlertsApi.getAlertsForLatestBooking).toHaveBeenCalled()
     })
 
     it('should not show hold-against-transfer details', async () => {

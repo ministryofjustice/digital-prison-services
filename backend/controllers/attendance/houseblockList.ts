@@ -59,7 +59,8 @@ export const getHouseblockListFactory = (
   getClientCredentialsTokens,
   prisonApi,
   whereaboutsApi,
-  locationsInsidePrisonApi
+  locationsInsidePrisonApi,
+  prisonerAlertsApi
 ) => {
   const getHouseblockList = async (context, agencyId, groupName, date, timeSlot, wingStatus) => {
     const systemContext = await getClientCredentialsTokens()
@@ -79,6 +80,7 @@ export const getHouseblockListFactory = (
     const externalEventsForOffenders = await getExternalEventsForOffenders(
       getClientCredentialsTokens,
       prisonApi,
+      prisonerAlertsApi,
       context,
       {
         offenderNumbers,

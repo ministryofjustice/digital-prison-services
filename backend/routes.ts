@@ -118,6 +118,7 @@ const router = express.Router()
 
 const setup = ({
   prisonApi,
+  prisonerAlertsApi,
   whereaboutsApi,
   bookAVideoLinkApi,
   locationsInsidePrisonApi,
@@ -167,19 +168,22 @@ const setup = ({
 
   router.get(
     '/edit-alert',
-    alertFactory(oauthApi, hmppsManageUsersApi, prisonApi, referenceCodesService(prisonApi)).displayEditAlertPage
+    alertFactory(oauthApi, systemOauthClient, hmppsManageUsersApi, prisonApi, referenceCodesService(prisonerAlertsApi))
+      .displayEditAlertPage
   )
   router.post(
     '/edit-alert/:bookingId/:alertId',
-    alertFactory(oauthApi, hmppsManageUsersApi, prisonApi, referenceCodesService(prisonApi)).handleEditAlertForm
+    alertFactory(oauthApi, systemOauthClient, hmppsManageUsersApi, prisonApi, referenceCodesService(prisonerAlertsApi)).handleEditAlertForm
   )
   router.get(
     '/offenders/:offenderNo/create-alert',
-    alertFactory(oauthApi, hmppsManageUsersApi, prisonApi, referenceCodesService(prisonApi)).displayCreateAlertPage
+    alertFactory(oauthApi, systemOauthClient, hmppsManageUsersApi, prisonApi, referenceCodesService(prisonerAlertsApi))
+      .displayCreateAlertPage
   )
   router.post(
     '/offenders/:offenderNo/create-alert',
-    alertFactory(oauthApi, hmppsManageUsersApi, prisonApi, referenceCodesService(prisonApi)).handleCreateAlertForm
+    alertFactory(oauthApi, systemOauthClient, hmppsManageUsersApi, prisonApi, referenceCodesService(prisonerAlertsApi))
+      .handleCreateAlertForm
   )
   router.use(
     '/prisoner/:offenderNo/add-case-note',
@@ -191,7 +195,7 @@ const setup = ({
   } else {
     router.use(
       '/manage-prisoner-whereabouts',
-      whereaboutsRouter({ oauthApi, prisonApi, offenderSearchApi, systemOauthClient })
+      whereaboutsRouter({ oauthApi, prisonApi, prisonerAlertsApi, offenderSearchApi, systemOauthClient })
     )
     router.get(
       '/manage-prisoner-whereabouts/attendance-reason-statistics',
@@ -383,6 +387,7 @@ const setup = ({
     '/prisoner/:offenderNo',
     prisonerProfileRouter({
       prisonApi,
+      prisonerAlertsApi,
       keyworkerApi,
       oauthApi,
       hmppsManageUsersApi,
@@ -405,7 +410,7 @@ const setup = ({
 
   router.use('/change-someones-cell*', permit(oauthApi, ['CELL_MOVE']), changeSomeonesCellHasMovedRouter())
 
-  router.use('/current-covid-units', isCovidUnitsEnabled, covidRouter(systemOauthClient, prisonApi))
+  router.use('/current-covid-units', isCovidUnitsEnabled, covidRouter(systemOauthClient, prisonApi, prisonerAlertsApi))
 
   router.use('/attendance-changes', attendanceChangesRouter({ prisonApi, whereaboutsApi, systemOauthClient }))
 

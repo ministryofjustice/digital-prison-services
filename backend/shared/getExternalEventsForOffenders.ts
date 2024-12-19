@@ -3,6 +3,7 @@ import { sortByDateTime, isViewableFlag, isAfterToday } from '../utils'
 const getExternalEvents = async (
   getClientCredentialsTokens,
   prisonApi,
+  prisonerAlertsApi,
   context,
   { offenderNumbers, agencyId, formattedDate }
 ) => {
@@ -11,7 +12,7 @@ const getExternalEvents = async (
     prisonApi.getSentenceData(context, offenderNumbers),
     prisonApi.getCourtEvents(systemContext, { agencyId, date: formattedDate, offenderNumbers }),
     prisonApi.getExternalTransfers(systemContext, { agencyId, date: formattedDate, offenderNumbers }),
-    prisonApi.getAlerts(context, { agencyId, offenderNumbers }),
+    prisonerAlertsApi.getAlerts(systemContext, { agencyId, offenderNumbers }),
     prisonApi.getAssessments(context, { code: 'CATEGORY', offenderNumbers }),
   ])
 }
@@ -106,8 +107,10 @@ const scheduledTransfers = (transfers, offenderNo, formattedDate) =>
 const selectAlertFlags = (alertData, offenderNumber) =>
   (alertData &&
     alertData
-      .filter((alert) => !alert.expired && alert.offenderNo === offenderNumber && isViewableFlag(alert.alertCode))
-      .map((alert) => alert.alertCode)) ||
+      .filter(
+        (alert) => alert.isActive && alert.prisonNumber === offenderNumber && isViewableFlag(alert.alertCode.code)
+      )
+      .map((alert) => alert.alertCode.code)) ||
   []
 
 const selectCategory = (assessmentData, offenderNumber) => {
@@ -141,12 +144,19 @@ const reduceToMap = (
     return map.set(offenderNumber, offenderData)
   }, new Map())
 
-export default async (getClientCredentialsTokens, prisonApi, context, { offenderNumbers, formattedDate, agencyId }) => {
+export default async (
+  getClientCredentialsTokens,
+  prisonApi,
+  prisonerAlertsApi,
+  context,
+  { offenderNumbers, formattedDate, agencyId }
+) => {
   if (!offenderNumbers || offenderNumbers.length === 0) return []
 
   const [releaseScheduleData, courtEventData, transferData, alertData, assessmentData] = await getExternalEvents(
     getClientCredentialsTokens,
     prisonApi,
+    prisonerAlertsApi,
     context,
     {
       offenderNumbers,
@@ -161,7 +171,7 @@ export default async (getClientCredentialsTokens, prisonApi, context, { offender
     releaseScheduleData,
     courtEventData,
     transferData,
-    alertData,
+    alertData.content,
     assessmentData
   )
 }
