@@ -173,7 +173,8 @@ const setup = ({
   )
   router.post(
     '/edit-alert/:bookingId/:alertId',
-    alertFactory(oauthApi, systemOauthClient, hmppsManageUsersApi, prisonApi, referenceCodesService(prisonerAlertsApi)).handleEditAlertForm
+    alertFactory(oauthApi, systemOauthClient, hmppsManageUsersApi, prisonApi, referenceCodesService(prisonerAlertsApi))
+      .handleEditAlertForm
   )
   router.get(
     '/offenders/:offenderNo/create-alert',

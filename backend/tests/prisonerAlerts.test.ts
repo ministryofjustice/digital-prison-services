@@ -137,7 +137,7 @@ describe('prisoner alerts', () => {
     // @ts-expect-error ts-migrate(2339) FIXME: Property 'getPrisonerProfileData' does not exist o... Remove this comment to see the full error message
     expect(prisonerProfileService.getPrisonerProfileData).toHaveBeenCalledWith(res.locals, offenderNo, 'user1', false)
     // @ts-expect-error ts-migrate(2339) FIXME: Property 'getAlertTypes' does not exist on type '{... Remove this comment to see the full error message
-    expect(referenceCodesService.getAlertTypes).toHaveBeenCalledWith(res.locals)
+    expect(referenceCodesService.getAlertTypes).toHaveBeenCalledWith({})
     expect(res.render).toHaveBeenCalledWith(
       'prisonerProfile/prisonerAlerts.njk',
       expect.objectContaining({
