@@ -27,7 +27,7 @@
     "alertCodes": [
       {
         "code": "F1",
-        "parentCode": "F1",
+        "alertTypeCode": "F1",
         "isActive": true,
         "description": "Armed Forces Veteran"
       }
@@ -133,7 +133,7 @@
     "alertCodes": [
       {
         "code": "XC",
-        "parentCode": "X",
+        "alertTypeCode": "X",
         "isActive": true,
         "description": "Risk to females"
       }
