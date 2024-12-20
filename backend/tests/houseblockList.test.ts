@@ -9,7 +9,6 @@ const prisonApi = {
   getSentenceData: jest.fn(),
   getExternalTransfers: jest.fn(),
   getCourtEvents: jest.fn(),
-  getAlerts: jest.fn(),
   getAssessments: jest.fn(),
 }
 const whereaboutsApi = {
@@ -19,13 +18,19 @@ const whereaboutsApi = {
 const locationsInsidePrisonApi = {
   getAgencyGroupLocations: jest.fn(),
 }
+
+const prisonerAlertsApi = {
+  getAlerts: () => ({ content: [] }),
+}
+
 const getClientCredentialsTokens = jest.fn().mockResolvedValue({})
 
 const houseblockList = require('../controllers/attendance/houseblockList').getHouseblockListFactory(
   getClientCredentialsTokens,
   prisonApi,
   whereaboutsApi,
-  locationsInsidePrisonApi
+  locationsInsidePrisonApi,
+  prisonerAlertsApi
 ).getHouseblockList
 
 // There can be more than one occupant of a cell, the results are ordered by cell,offenderNo or cell,surname from the api.
@@ -667,7 +672,8 @@ describe('Houseblock list controller', () => {
         getClientCredentialsTokens,
         prisonApi,
         whereaboutsApi,
-        locationsInsidePrisonApi
+        locationsInsidePrisonApi,
+        prisonerAlertsApi
       )
 
       await service({}, 'LEI', 'Houseblock 1', '15/10/2017', 'PM', null)
@@ -698,7 +704,8 @@ describe('Houseblock list controller', () => {
         getClientCredentialsTokens,
         prisonApi,
         whereaboutsApi,
-        locationsInsidePrisonApi
+        locationsInsidePrisonApi,
+        prisonerAlertsApi
       )
 
       await service({}, 'LEI', 'Houseblock 1', '15/10/2017', 'PM', null)

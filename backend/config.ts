@@ -163,6 +163,10 @@ export const apis = {
     url: process.env.CASENOTES_API_URL || 'http://localhost:8083',
     timeoutSeconds: toNumber(process.env.API_ENDPOINT_TIMEOUT_SECONDS) || 30,
   },
+  prisonerAlerts: {
+    url: process.env.ALERTS_API_URL || 'http://localhost:8083',
+    timeoutSeconds: toNumber(process.env.API_ENDPOINT_TIMEOUT_SECONDS) || 30,
+  },
   allocationManager: {
     url: process.env.ALLOCATION_MANAGER_ENDPOINT_URL || '',
     timeoutSeconds: toNumber(process.env.API_ENDPOINT_TIMEOUT_SECONDS) || 30,

@@ -8,6 +8,7 @@ context('Activity list page', () => {
   beforeEach(() => {
     cy.task('reset')
     cy.task('stubSignIn', { username: 'ITAG_USER', caseload })
+    cy.task('stubGetAlerts', { locationId: 'MDI', alerts: [] })
     cy.signIn()
     cy.task('stubActivityLocations')
 

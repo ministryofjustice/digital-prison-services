@@ -92,6 +92,7 @@ app.use(
     getClientCredentialsTokens,
     hmppsManageUsersApi: apis.hmppsManageUsersApi,
     caseNotesApi: apis.caseNotesApi,
+    prisonerAlertsApi: apis.prisonerAlertsApi,
   })
 )
 app.use(csrf())
@@ -105,6 +106,7 @@ app.use((req, res, next) => {
 app.use(
   routes({
     prisonApi: apis.prisonApi,
+    prisonerAlertsApi: apis.prisonerAlertsApi,
     whereaboutsApi: apis.whereaboutsApi,
     bookAVideoLinkApi: apis.bookAVideoLinkApi,
     locationsInsidePrisonApi: apis.locationsInsidePrisonApi,

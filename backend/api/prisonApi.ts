@@ -157,25 +157,6 @@ export const prisonApiFactory = (client) => {
     post(context, `/api/schedules/${agencyId}/externalTransfers?date=${date}`, offenderNumbers)
   // TODO can refactor these alerts calls later to just use the system one once the client id is established in env
 
-  const getAlerts = (context, { agencyId, offenderNumbers }) =>
-    post(context, `/api/bookings/offenderNo/${agencyId}/alerts`, offenderNumbers)
-
-  const getAlertsForBookingV2 = (context, { bookingId, alertType, from, to, alertStatus, page, sort, size }) => {
-    return get(
-      context,
-      `/api/bookings/${bookingId}/alerts/v2?alertType=${alertType}&from=${from}&to=${to}&alertStatus=${alertStatus}&page=${page}&sort=${sort}&size=${size}`
-    )
-  }
-
-  const getAlertsForLatestBooking = (
-    context,
-    { offenderNo, alertCodes, sortBy, sortDirection }
-  ): Promise<AlertDetails[]> =>
-    get(
-      context,
-      `/api/offenders/${offenderNo}/bookings/latest/alerts?alertCodes=${alertCodes.toString()}&sort=${sortBy}&direction=${sortDirection}`
-    )
-
   const getAlertsSystem = (context, offenderNumbers) =>
     post(context, '/api/bookings/offenderNo/alerts', offenderNumbers)
 
@@ -280,8 +261,6 @@ export const prisonApiFactory = (client) => {
       context,
       `/api/schedules/${agencyId}/suspended-activities-by-date-range?fromDate=${fromDate}&toDate=${toDate}&timeSlot=${period}&includeSuspended=true`
     )
-
-  const getAlertTypes = (context) => get(context, '/api/reference-domains/alertTypes', 1000)
 
   const createAlert = (context, bookingId, body) => post(context, `/api/bookings/${bookingId}/alert`, body)
 
@@ -486,9 +465,6 @@ export const prisonApiFactory = (client) => {
     getSentenceData,
     globalSearch,
     getExternalTransfers,
-    getAlerts,
-    getAlertsForBookingV2,
-    getAlertsForLatestBooking,
     getAlertsSystem,
     getAssessments,
     getEstablishmentRollBlocksCount,
@@ -513,7 +489,6 @@ export const prisonApiFactory = (client) => {
     getAppointmentTypes,
     getAdjudicationFindingTypes,
     addAppointments,
-    getAlertTypes,
     createAlert,
     getAlert,
     updateAlert,

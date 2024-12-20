@@ -45,7 +45,7 @@ const extractAttendanceInfo = (attendanceInformation, event) => {
   return null
 }
 
-export const getActivityListFactory = (getClientCredentialsTokens, prisonApi, whereaboutsApi) => {
+export const getActivityListFactory = (getClientCredentialsTokens, prisonApi, whereaboutsApi, prisonerAlertsApi) => {
   const getEventsForOffenderNumbers = async ({ agencyId, date, timeSlot, offenderNumbers }) => {
     const systemContext = await getClientCredentialsTokens()
     const searchCriteria = { agencyId, date, timeSlot, offenderNumbers }
@@ -93,6 +93,7 @@ export const getActivityListFactory = (getClientCredentialsTokens, prisonApi, wh
     const externalEventsForOffenders = await getExternalEventsForOffenders(
       getClientCredentialsTokens,
       prisonApi,
+      prisonerAlertsApi,
       context,
       {
         offenderNumbers,

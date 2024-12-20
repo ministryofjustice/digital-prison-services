@@ -40,7 +40,7 @@ describe('not in unit', () => {
 
     expect(logError).not.toHaveBeenCalled()
 
-    expect(covidService.getUnassignedNewEntrants).toHaveBeenCalledWith(res)
+    expect(covidService.getUnassignedNewEntrants).toHaveBeenCalledWith(req, res)
 
     expect(res.render).toHaveBeenCalledWith('covid/notInUnit.njk', {
       title: 'Newly arrived prisoners not in Reverse Cohorting Unit',

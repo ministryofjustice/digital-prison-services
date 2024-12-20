@@ -15,7 +15,7 @@ export default ({ covidService }) => {
       covidService.getCount(req, res, alerts.protectiveIsolationUnit),
       covidService.getCount(req, res, alerts.shieldingUnit),
       covidService.getCount(req, res, alerts.refusingToShield),
-      covidService.getUnassignedNewEntrants(res),
+      covidService.getUnassignedNewEntrants(req, res),
     ])
 
     return {
