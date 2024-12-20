@@ -344,7 +344,7 @@ module.exports = {
     stubFor({
       request: {
         method: 'GET',
-        urlPattern: '/alerts-api//prisoners//[A-z0-9-]+?/alerts\\?.+?',
+        urlPattern: '/alerts-api/prisoners/[A-z0-9-]+?/alerts\\?.+?',
       },
       response: {
         status: 200,

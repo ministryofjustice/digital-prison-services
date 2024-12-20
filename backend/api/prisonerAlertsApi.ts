@@ -23,7 +23,7 @@ export const prisonerAlertsApiFactory = (client) => {
       context,
       `/prisoners/${prisonNumber}/alerts?${
         alertType ? `alertType=${alertType}&` : ''
-      }&activeFromStart=${from}&activeFromEnd=${to}&isActive=${isActive}&page=${page}&sort=${sort}&size=${size}`
+      }activeFromStart=${from}&activeFromEnd=${to}&isActive=${isActive}&page=${page}&sort=${sort}&size=${size}`
     )
   }
 
