@@ -1,4 +1,5 @@
 import { formatName } from '../utils'
+import config from '../config'
 
 export default ({ oauthApi, prisonApi, whereaboutsApi, appointmentDetailsService }) =>
   async (req, res) => {
@@ -12,20 +13,25 @@ export default ({ oauthApi, prisonApi, whereaboutsApi, appointmentDetailsService
       appointmentDetailsService.getAppointmentViewModel(res, appointmentDetails, activeCaseLoadId),
     ])
 
-    const { additionalDetails, basicDetails, prepostData, recurringDetails, timeDetails, canDeleteVlb } =
+    const { additionalDetails, basicDetails, prepostData, recurringDetails, timeDetails, canAmendVlb } =
       appointmentViewModel
 
     const userRoles = oauthApi.userRoles(res.locals)
 
-    const canDeleteAppointment =
+    const canAmendAppointment =
       userRoles &&
       userRoles.some(
         (role) => role.roleCode === 'ACTIVITY_HUB' || role.roleCode === 'DELETE_A_PRISONERS_APPOINTMENT'
       ) &&
-      canDeleteVlb
+      canAmendVlb
 
     return res.render('appointmentDetails', {
-      appointmentConfirmDeletionLink: canDeleteAppointment && `/appointment-details/${id}/confirm-deletion`,
+      appointmentConfirmDeletionLink: canAmendAppointment && `/appointment-details/${id}/confirm-deletion`,
+      appointmentAmendLink:
+        config.app.amendAppointmentToggleEnabled &&
+        canAmendAppointment &&
+        appointmentDetails.appointment.appointmentTypeCode === 'VLB' &&
+        `${config.app.prisonerProfileRedirect.url}/prisoner/${appointmentDetails.appointment.offenderNo}/edit-appointment/${id}`,
       additionalDetails,
       basicDetails,
       prepostData,

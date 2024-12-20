@@ -27,6 +27,7 @@ export const app = {
   whereaboutsMaintenanceMode: process.env.WHEREABOUTS_MAINTENANCE_MODE === 'true' || false,
   keyworkerMaintenanceMode: process.env.KEYWORKER_MAINTENANCE_MODE === 'true' || false,
   covidUnitsEnabled: process.env.COVID_UNITS_ENABLED === 'true' || false,
+  amendAppointmentToggleEnabled: process.env.FEATURE_AMEND_APPOINTMENT_TOGGLE_ENABLED === 'true',
   prisonerProfileRedirect: {
     url: process.env.PRISONER_PROFILE_REDIRECT_URL || 'http://localhost:3000',
     exemptions: process.env.PRISONER_PROFILE_REDIRECT_EXEMPTIONS || '',

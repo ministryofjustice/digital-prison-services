@@ -9,6 +9,7 @@ generic-service:
   allowlist: false
 
   env:
+   FEATURE_AMEND_APPOINTMENT_TOGGLE_ENABLED: true
    PRISON_STAFF_HUB_UI_URL: https://digital-dev.prison.service.justice.gov.uk/
    HMPPS_COOKIE_DOMAIN: digital-dev.prison.service.justice.gov.uk
    API_ENDPOINT_URL: https://prison-api-dev.prison.service.justice.gov.uk/

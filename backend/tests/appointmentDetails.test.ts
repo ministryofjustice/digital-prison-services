@@ -2,6 +2,7 @@ import { makeNotFoundError } from './helpers'
 
 import appointmentDetails from '../controllers/appointmentDetails'
 import appointmentDetailsServiceFactory from '../services/appointmentDetailsService'
+import config from '../config'
 
 describe('appointment details', () => {
   const testAppointment = {
@@ -41,7 +42,7 @@ describe('appointment details', () => {
     res = { render: jest.fn(), locals: { user: { username: 'jbloggs' } } }
 
     // @ts-expect-error ts-migrate(2339) FIXME: Property 'userRoles' does not exist on type '{}'.
-    oauthApi.userRoles = jest.fn().mockReturnValue([{ roleCode: 'INACTIVE_BOOKINGS' }])
+    oauthApi.userRoles = jest.fn().mockReturnValue([{ roleCode: 'INACTIVE_BOOKINGS' }, { roleCode: 'ACTIVITY_HUB' }])
 
     // @ts-expect-error ts-migrate(2339) FIXME: Property 'getDetails' does not exist on type '{}'.
     prisonApi.getDetails = jest.fn().mockResolvedValue({
@@ -130,7 +131,8 @@ describe('appointment details', () => {
       await controller(req, res)
 
       expect(res.render).toHaveBeenCalledWith('appointmentDetails', {
-        appointmentConfirmDeletionLink: false,
+        appointmentConfirmDeletionLink: '/appointment-details/1/confirm-deletion',
+        appointmentAmendLink: false, // Not allowed to edit non-vlb appointments
         additionalDetails: {
           comments: 'Not entered',
           addedBy: 'Test User',
@@ -253,11 +255,13 @@ describe('appointment details', () => {
       })
 
       it('should render with court location and correct vlb locations and types', async () => {
+        config.app.amendAppointmentToggleEnabled = true
         await controller(req, res)
 
         expect(res.render).toHaveBeenCalledWith(
           'appointmentDetails',
           expect.objectContaining({
+            appointmentAmendLink: 'http://localhost:3000/prisoner/ABC123/edit-appointment/1', // Allowed to edit VLB appointments
             additionalDetails: {
               courtLocation: 'Nottingham Justice Centre',
               hearingType: 'Appeal',
