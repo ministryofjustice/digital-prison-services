@@ -80,7 +80,9 @@ export default ({
           ).format('D MMMM YYYY')}`,
         },
         {
-          html: `${alert.createdByDisplayName}<br>${alert.activeToLastSetByDisplayName}`,
+          html: `${alert.createdByDisplayName}<br>${
+            alert.activeToLastSetByDisplayName || alert.lastModifiedByDisplayName
+          }`,
         },
       ])
 

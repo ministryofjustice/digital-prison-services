@@ -14,17 +14,18 @@ context('A user can view the protective isolation list', () => {
 
     cy.signIn()
 
-    cy.task('stubAlerts', {
+    cy.task('stubGetAlerts', {
       locationId: 'MDI',
       alerts: [
         {
-          offenderNo: 'AA1234A',
-          alertCode: 'URCU',
-          dateCreated: dayBeforeYesterday.format('YYYY-MM-DD'),
+          prisonNumber: 'AA1234A',
+          alertCode: { code: 'URCU' },
+          createdAt: dayBeforeYesterday.format('YYYY-MM-DD'),
+          isActive: true,
         },
-        { offenderNo: 'BB1234A', alertCode: 'AA1', dateCreated: '2020-01-02' },
-        { offenderNo: 'BB1234A', alertCode: 'URCU', dateCreated: '2020-01-03' },
-        { offenderNo: 'CC1234A', alertCode: 'AA2', dateCreated: '2020-01-03' },
+        { prisonNumber: 'BB1234A', alertCode: { code: 'AA1' }, createdAt: '2020-01-02', isActive: true },
+        { prisonNumber: 'BB1234A', alertCode: { code: 'URCU' }, createdAt: '2020-01-03', isActive: true },
+        { prisonNumber: 'CC1234A', alertCode: { code: 'AA2' }, createdAt: '2020-01-03', isActive: true },
       ],
     })
 
@@ -50,13 +51,14 @@ context('A user can view the protective isolation list', () => {
       ],
     })
 
-    cy.task('stubAlerts', {
+    cy.task('stubGetAlerts', {
       locationId: 'MDI',
       alerts: [
         {
-          offenderNo: 'BB1234A',
-          alertCode: 'BBB',
-          dateCreated: dayBeforeYesterday.format('YYYY-MM-DD'),
+          prisonNumber: 'BB1234A',
+          alertCode: { code: 'BBB' },
+          createdAt: dayBeforeYesterday.format('YYYY-MM-DD'),
+          isActive: true,
         },
       ],
     })

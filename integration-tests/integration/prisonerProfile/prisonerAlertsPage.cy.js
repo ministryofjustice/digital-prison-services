@@ -8,14 +8,12 @@ context('A user can view alerts for a prisoner', () => {
     {
       isActive: false,
       createdByDisplayName: 'John Smith',
-      alertCode: { code: 'XC', description: 'Risk to females' },
+      alertCode: { code: 'XC', description: 'Risk to females', alertTypeCode: 'X', alertTypeDescription: 'Security' },
       alertId: 1,
-      alertType: 'X',
-      alertTypeDescription: 'Security',
       bookingId: 14,
       description: 'has a large poster on cell wall',
       createdAt: '2019-08-20',
-      activeTo: null,
+      activeTo: '2019-08-21',
       expired: true,
       activeToLastSetByDisplayName: 'John Smith',
       prisonNumber: 'G3878UK',
@@ -24,12 +22,10 @@ context('A user can view alerts for a prisoner', () => {
 
   const activeAlerts = [
     {
-      active: true,
+      isActive: true,
       createdByDisplayName: 'John Smith',
-      alertCode: { code: 'XC', description: 'Risk to females' },
+      alertCode: { code: 'XC', description: 'Risk to females', alertTypeCode: 'X', alertTypeDescription: 'Security' },
       alertId: 1,
-      alertType: 'X',
-      alertTypeDescription: 'Security',
       bookingId: 14,
       description: 'has a large poster on cell wall',
       createdAt: '2019-08-20',

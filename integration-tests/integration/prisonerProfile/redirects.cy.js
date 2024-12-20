@@ -281,10 +281,8 @@ context('Current prisoner profile should NOT redirect to the new prisoner profil
           {
             isActive: true,
             createdByDisplayName: 'John Smith',
-            alertCode: { code: 'XC', description: 'Risk to females' },
+            alertCode: { code: 'XC', description: 'Risk to females', alertTypeCode: 'X', alertTypeDescription: 'Security' },
             alertId: 1,
-            alertType: 'X',
-            alertTypeDescription: 'Security',
             bookingId: 14,
             description: 'has a large poster on cell wall',
             createdAt: '2019-08-20',
