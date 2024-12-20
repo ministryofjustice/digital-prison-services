@@ -28,6 +28,7 @@ export default ({ oauthApi, prisonApi, whereaboutsApi, appointmentDetailsService
     return res.render('appointmentDetails', {
       appointmentConfirmDeletionLink: canAmendAppointment && `/appointment-details/${id}/confirm-deletion`,
       appointmentAmendLink:
+        config.app.amendAppointmentToggleEnabled &&
         canAmendAppointment &&
         appointmentDetails.appointment.appointmentTypeCode === 'VLB' &&
         `${config.app.prisonerProfileRedirect.url}/prisoner/${appointmentDetails.appointment.offenderNo}/edit-appointment/${id}`,

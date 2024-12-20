@@ -2,6 +2,7 @@ import { makeNotFoundError } from './helpers'
 
 import appointmentDetails from '../controllers/appointmentDetails'
 import appointmentDetailsServiceFactory from '../services/appointmentDetailsService'
+import config from '../config'
 
 describe('appointment details', () => {
   const testAppointment = {
@@ -254,6 +255,7 @@ describe('appointment details', () => {
       })
 
       it('should render with court location and correct vlb locations and types', async () => {
+        config.app.amendAppointmentToggleEnabled = true
         await controller(req, res)
 
         expect(res.render).toHaveBeenCalledWith(
