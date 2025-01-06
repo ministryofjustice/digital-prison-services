@@ -245,6 +245,7 @@ describe('appointment details', () => {
           prisonAppointments: [
             { appointmentType: 'VLB_COURT_MAIN', prisonLocKey: 'LOCATION_1', startTime: '13:00', endTime: '14:00' },
           ],
+          comments: 'VLB comments',
         }
 
         // @ts-expect-error ts-migrate(2339) FIXME: Property 'getAppointment' does not exist on type '... Remove this comment to see the full error message
@@ -265,7 +266,7 @@ describe('appointment details', () => {
             additionalDetails: {
               courtLocation: 'Nottingham Justice Centre',
               hearingType: 'Appeal',
-              comments: 'Test appointment comments',
+              comments: 'VLB comments',
               addedBy: 'Court',
             },
             basicDetails: {

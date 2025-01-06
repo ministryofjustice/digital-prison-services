@@ -113,7 +113,7 @@ export default ({
       meetingType: vlb?.probationMeetingTypeDescription,
       hearingType: vlb?.courtHearingTypeDescription,
       courtHearingLink: vlb && vlb.bookingType === 'COURT' ? vlb.videoLinkUrl || 'Not yet known' : undefined,
-      comments: appointment.comment || 'Not entered',
+      comments: vlb?.comments || appointment.comment || 'Not entered',
       addedBy: addedBy || (await getAddedByUser(res, appointment.createUserId)),
     }
 
