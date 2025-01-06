@@ -260,49 +260,43 @@ const holdAgainstTransferAlertDetailsResponse = [
   {
     alertId: 3,
     bookingId: 42739,
-    offenderNo: 'G0204GW',
+    prisonNumber: 'G0204GW',
     alertType: 'T',
     alertTypeDescription: 'Hold Against Transfer',
-    alertCode: 'TAH',
-    alertCodeDescription: 'Allocation Hold',
-    comment: 'Comment text here',
-    dateCreated: '2009-11-24',
+    alertCode: { code: 'TAH', description: 'Allocation Hold' },
+    description: 'Comment text here',
+    createdAt: '2009-11-24',
     expired: false,
-    active: true,
-    addedByFirstName: 'ODRAHOON',
-    addedByLastName: 'MARSHALD',
+    isActive: true,
+    createdByDisplayName: 'Odrahoon Marshald',
     expiredByFirstName: 'ADMIN&ONB',
     expiredByLastName: 'CNOMIS',
   },
   {
     alertId: 2,
     bookingId: 42739,
-    offenderNo: 'G0204GW',
+    prisonNumber: 'G0204GW',
     alertType: 'T',
     alertTypeDescription: 'Hold Against Transfer',
-    alertCode: 'TCPA',
-    alertCodeDescription: 'Security Hold',
-    dateCreated: '2009-08-27',
+    alertCode: { code: 'TCPA', description: 'Security Hold' },
+    createdAt: '2009-08-27',
     expired: true,
-    active: false,
-    addedByFirstName: 'XTAG',
-    addedByLastName: 'XTAG',
+    isActive: false,
+    createdByDisplayName: 'Xtag Xtag',
     expiredByFirstName: 'ADMIN&ONB',
     expiredByLastName: 'CNOMIS',
   },
   {
     alertId: 1,
     bookingId: 42739,
-    offenderNo: 'G0204GW',
+    prisonNumber: 'G0204GW',
     alertType: 'T',
     alertTypeDescription: 'Hold Against Transfer',
-    alertCode: 'TSE',
-    alertCodeDescription: 'Security Hold',
-    dateCreated: '2009-09-27',
+    alertCode: { code: 'TSE', description: 'Security Hold' },
+    createdAt: '2009-09-27',
     expired: false,
-    active: true,
-    addedByFirstName: 'XTAG',
-    addedByLastName: 'XTAG',
+    isActive: true,
+    createdByDisplayName: 'Xtag Xtag',
     expiredByFirstName: 'ADMIN&ONB',
     expiredByLastName: 'CNOMIS',
   },
@@ -431,11 +425,16 @@ describe('Scheduled moves controller', () => {
     getMovementReasons: () => {},
     getAgencyDetails: () => {},
     getTransfers: () => {},
-    getAlertsForLatestBooking: () => {},
     getPrisonerProperty: () => {},
   }
   const offenderSearchApi = {
     getPrisonersDetails: () => {},
+  }
+  const systemOauthClient = {
+    getClientCredentialsTokens: () => ({}),
+  }
+  const prisonerAlertsApi = {
+    getAlertsForLatestBooking: jest.fn(),
   }
   let controller
   let req
@@ -466,11 +465,13 @@ describe('Scheduled moves controller', () => {
       releaseEvents: [],
     })
     prisonApi.getPrisonerProperty = jest.fn().mockResolvedValue(propertyResponse)
-    prisonApi.getAlertsForLatestBooking = jest.fn().mockResolvedValue(holdAgainstTransferAlertDetailsResponse)
+    prisonerAlertsApi.getAlertsForLatestBooking = jest
+      .fn()
+      .mockResolvedValue({ content: holdAgainstTransferAlertDetailsResponse })
 
     offenderSearchApi.getPrisonersDetails = jest.fn().mockResolvedValue(prisonerSearchResult)
 
-    controller = scheduledMoves({ prisonApi, offenderSearchApi })
+    controller = scheduledMoves({ prisonApi, offenderSearchApi, systemOauthClient, prisonerAlertsApi })
   })
 
   afterEach(() => {
@@ -696,12 +697,12 @@ describe('Scheduled moves controller', () => {
     describe('Ignore prisoners that are outside', () => {
       const assertOnlyRequestAdditionalDataForPrisonersInPrison = () => {
         expect(prisonApi.getPrisonerProperty).toHaveBeenCalledTimes(1)
-        expect(prisonApi.getAlertsForLatestBooking).toHaveBeenCalledTimes(1)
+        expect(prisonerAlertsApi.getAlertsForLatestBooking).toHaveBeenCalledTimes(1)
         expect(prisonApi.getPrisonerProperty).toHaveBeenCalledWith(res.locals, 1)
-        expect(prisonApi.getAlertsForLatestBooking).toHaveBeenCalledWith(
-          res.locals,
+        expect(prisonerAlertsApi.getAlertsForLatestBooking).toHaveBeenCalledWith(
+          {},
           expect.objectContaining({
-            offenderNo: 'A12345',
+            prisonNumber: 'A12345',
           })
         )
       }
@@ -943,13 +944,13 @@ describe('Scheduled moves controller', () => {
       it('should make a call to retrieve hold-on-transfer details for each prisoner with any such alert', async () => {
         await controller.index(req, res)
 
-        expect(prisonApi.getAlertsForLatestBooking).toHaveBeenCalledWith(
+        expect(prisonerAlertsApi.getAlertsForLatestBooking).toHaveBeenCalledWith(
           {},
           {
             alertCodes: ['TAP', 'TAH', 'TCPA', 'TG', 'TM', 'TPR', 'TSE'],
-            offenderNo: 'G4797UD',
-            sortBy: 'dateCreated',
-            sortDirection: 'DESC',
+            prisonNumber: 'G4797UD',
+            sortBy: 'createdAt',
+            sortDirection: 'desc',
           }
         )
       })
@@ -1288,13 +1289,13 @@ describe('Scheduled moves controller', () => {
       it('should make a call to retrieve hold-on-transfer details for each prisoner with any such alert', async () => {
         await controller.index(req, res)
 
-        expect(prisonApi.getAlertsForLatestBooking).toHaveBeenCalledWith(
+        expect(prisonerAlertsApi.getAlertsForLatestBooking).toHaveBeenCalledWith(
           {},
           {
             alertCodes: ['TAP', 'TAH', 'TCPA', 'TG', 'TM', 'TPR', 'TSE'],
-            offenderNo: 'G4797UD',
-            sortBy: 'dateCreated',
-            sortDirection: 'DESC',
+            prisonNumber: 'G4797UD',
+            sortBy: 'createdAt',
+            sortDirection: 'desc',
           }
         )
       })
@@ -1593,13 +1594,13 @@ describe('Scheduled moves controller', () => {
       it('should make a call to retrieve hold-on-transfer details for each prisoner with any such alert', async () => {
         await controller.index(req, res)
 
-        expect(prisonApi.getAlertsForLatestBooking).toHaveBeenCalledWith(
+        expect(prisonerAlertsApi.getAlertsForLatestBooking).toHaveBeenCalledWith(
           {},
           {
             alertCodes: ['TAP', 'TAH', 'TCPA', 'TG', 'TM', 'TPR', 'TSE'],
-            offenderNo: 'G5966UI',
-            sortBy: 'dateCreated',
-            sortDirection: 'DESC',
+            prisonNumber: 'G5966UI',
+            sortBy: 'createdAt',
+            sortDirection: 'desc',
           }
         )
       })
@@ -1826,7 +1827,7 @@ describe('Scheduled moves controller', () => {
       it('should not make a call to retrieve hold on transfer details', async () => {
         await controller.index(req, res)
 
-        expect(prisonApi.getAlertsForLatestBooking).not.toHaveBeenCalled()
+        expect(prisonerAlertsApi.getAlertsForLatestBooking).not.toHaveBeenCalled()
       })
 
       it('should not show hold-against-transfer details', async () => {
@@ -1849,15 +1850,15 @@ describe('Scheduled moves controller', () => {
       offenderSearchApi.getPrisonersDetails = jest
         .fn()
         .mockResolvedValue(prisonerSearchResultWithOnlyInactiveHoldOnTransfer)
-      prisonApi.getAlertsForLatestBooking = jest
-        .fn()
-        .mockResolvedValue(holdAgainstTransferWithOnlyInactiveAlertDetailsResponse)
+      prisonerAlertsApi.getAlertsForLatestBooking.mockResolvedValue({
+        content: holdAgainstTransferWithOnlyInactiveAlertDetailsResponse,
+      })
     })
 
     it('should make a call to retrieve hold on transfer details', async () => {
       await controller.index(req, res)
 
-      expect(prisonApi.getAlertsForLatestBooking).toHaveBeenCalled()
+      expect(prisonerAlertsApi.getAlertsForLatestBooking).toHaveBeenCalled()
     })
 
     it('should not show hold-against-transfer details', async () => {

@@ -9,10 +9,6 @@ const completionReasonsResponse = require('./responses/completionReasons.json')
 module.exports = {
   verifyMoveToCell: (body) => verifyPosts('/whereabouts/cell/make-cell-move', body),
   verifyMoveToCellSwap: ({ bookingId }) => verifyPut(`/api/bookings/${bookingId}/move-to-cell-swap`),
-  verifyAlertsBookingGet: ({ bookingId, alertType, from, to, alertStatus, page, sort, size }) =>
-    verifyGet(
-      `/api/bookings/${bookingId}/alerts/v2?alertType=${alertType}&from=${from}&to=${to}&alertStatus=${alertStatus}&page=${page}&sort=${sort}&size=${size}`
-    ),
   stubHealth: (status = 200) =>
     stubFor({
       request: {
@@ -334,7 +330,7 @@ module.exports = {
     stubFor({
       request: {
         method: 'GET',
-        urlPattern: '/api/reference-domains/alertTypes',
+        urlPattern: '/alerts-api/alert-types',
       },
       response: {
         status: 200,
@@ -348,7 +344,7 @@ module.exports = {
     stubFor({
       request: {
         method: 'GET',
-        urlPattern: '/api/bookings/[0-9]+?/alerts/v2\\?.+?',
+        urlPattern: '/alerts-api/prisoners/[A-z0-9-]+?/alerts\\?.+?',
       },
       response: {
         status: 200,
@@ -362,14 +358,14 @@ module.exports = {
     stubFor({
       request: {
         method: 'GET',
-        urlPattern: '/api/offenders/.+?/bookings/latest/alerts\\?.+?',
+        urlPattern: '/alerts-api/prisoners/.+?/alerts\\?.+?',
       },
       response: {
         status: 200,
         headers: {
           'Content-Type': 'application/json;charset=UTF-8',
         },
-        jsonBody: alerts,
+        jsonBody: { content: alerts || [] },
       },
     }),
 
@@ -391,14 +387,14 @@ module.exports = {
     stubFor({
       request: {
         method: 'POST',
-        urlPathPattern: `/api/bookings/offenderNo/${agencyId}/alerts`,
+        urlPathPattern: `/alerts-api/search/alerts/prison-numbers`,
       },
       response: {
         status: 200,
         headers: {
           'Content-Type': 'application/json;charset=UTF-8',
         },
-        jsonBody: alerts || [],
+        jsonBody: { content: alerts || [] },
       },
     }),
   stubGetAlert: ({ bookingId, alertId, alert }) =>

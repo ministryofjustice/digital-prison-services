@@ -164,7 +164,7 @@ context('Houseblock list page list page', () => {
     cy.task('stubSentenceData')
     cy.task('stubCourtEvents')
     cy.task('stubExternalTransfers')
-    cy.task('stubAlerts', { locationId: 'MDI', alerts: [] })
+    cy.task('stubGetAlerts', { locationId: 'MDI', alerts: [] })
     cy.task('stubAssessments', ['A1234AA', 'A1234AB', 'A1234AC'])
 
     cy.task('stubGetAbsenceReasons')

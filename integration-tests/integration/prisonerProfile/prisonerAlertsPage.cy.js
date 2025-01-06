@@ -6,43 +6,33 @@ const { assertHasRequestCount } = require('../assertions')
 context('A user can view alerts for a prisoner', () => {
   const inactiveAlerts = [
     {
-      active: false,
-      addedByFirstName: 'John',
-      addedByLastName: 'Smith',
-      alertCode: 'XC',
-      alertCodeDescription: 'Risk to females',
+      isActive: false,
+      createdByDisplayName: 'John Smith',
+      alertCode: { code: 'XC', description: 'Risk to females', alertTypeCode: 'X', alertTypeDescription: 'Security' },
       alertId: 1,
-      alertType: 'X',
-      alertTypeDescription: 'Security',
       bookingId: 14,
-      comment: 'has a large poster on cell wall',
-      dateCreated: '2019-08-20',
-      dateExpires: null,
+      description: 'has a large poster on cell wall',
+      createdAt: '2019-08-20',
+      activeTo: '2019-08-21',
       expired: true,
-      expiredByFirstName: 'John',
-      expiredByLastName: 'Smith',
-      offenderNo: 'G3878UK',
+      activeToLastSetByDisplayName: 'John Smith',
+      prisonNumber: 'G3878UK',
     },
   ]
 
   const activeAlerts = [
     {
-      active: true,
-      addedByFirstName: 'John',
-      addedByLastName: 'Smith',
-      alertCode: 'XC',
-      alertCodeDescription: 'Risk to females',
+      isActive: true,
+      createdByDisplayName: 'John Smith',
+      alertCode: { code: 'XC', description: 'Risk to females', alertTypeCode: 'X', alertTypeDescription: 'Security' },
       alertId: 1,
-      alertType: 'X',
-      alertTypeDescription: 'Security',
       bookingId: 14,
-      comment: 'has a large poster on cell wall',
-      dateCreated: '2019-08-20',
-      dateExpires: null,
+      description: 'has a large poster on cell wall',
+      createdAt: '2019-08-20',
+      activeTo: null,
       expired: false,
-      expiredByFirstName: 'John',
-      expiredByLastName: 'Smith',
-      offenderNo: 'G3878UK',
+      activeToLastSetByDisplayName: 'John Smith',
+      prisonNumber: 'G3878UK',
     },
   ]
 
@@ -74,16 +64,6 @@ context('A user can view alerts for a prisoner', () => {
     it('Users can view inactive alerts', () => {
       cy.task('stubAlertsForBooking', inactiveAlerts)
       cy.visit('/prisoner/G3878UK/alerts')
-      cy.task('verifyAlertsBookingGet', {
-        bookingId: 14,
-        alertType: '',
-        from: '',
-        to: '',
-        alertStatus: 'ACTIVE',
-        page: 0,
-        sort: 'dateCreated,desc',
-        size: 20,
-      }).then(assertHasRequestCount(1))
 
       const prisonerAlertsPage = PrisonerAlertsPage.verifyOnPage('Smith, John')
       const filterForm = prisonerAlertsPage.getFilterForm()
@@ -111,16 +91,6 @@ context('A user can view alerts for a prisoner', () => {
       filterForm.toFilter().type('30/11/2020', { force: true }).type('{esc}', { force: true })
       filterForm.applyButton().click()
 
-      cy.task('verifyAlertsBookingGet', {
-        bookingId: 14,
-        alertType: 'M',
-        from: '2020-08-05',
-        to: '2020-11-30',
-        alertStatus: 'INACTIVE',
-        page: 0,
-        sort: 'dateCreated,desc',
-        size: 20,
-      }).then(assertHasRequestCount(1))
       PrisonerAlertsPage.verifyOnPage('Smith, John')
     })
 

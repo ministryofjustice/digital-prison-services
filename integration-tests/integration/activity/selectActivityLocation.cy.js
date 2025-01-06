@@ -8,6 +8,7 @@ context('Select activity location', () => {
     cy.task('stubSignIn', { username: 'ITAG_USER', caseload })
     cy.signIn()
     cy.task('stubActivityLocations')
+    cy.task('stubGetAlerts', { locationId: 'MDI', alerts: [] })
 
     const offenders = [
       {

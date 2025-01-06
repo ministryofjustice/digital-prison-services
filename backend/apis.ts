@@ -23,6 +23,7 @@ import { hmppsManageUsersApiFactory } from './api/hmppsManageUsersApi'
 import { feComponentsApiFactory } from './api/feComponents'
 import { bookAVideoLinkApiFactory } from './api/bookAVideoLinkApi'
 import { nomisMappingClientFactory } from './api/nomisMappingClient'
+import { prisonerAlertsApiFactory } from './api/prisonerAlertsApi'
 
 export const prisonApi = prisonApiFactory(
   clientFactory({
@@ -109,6 +110,13 @@ export const caseNotesApi = caseNotesApiFactory(
   })
 )
 
+export const prisonerAlertsApi = prisonerAlertsApiFactory(
+  clientFactory({
+    baseUrl: config.apis.prisonerAlerts.url,
+    timeout: config.apis.prisonerAlerts.timeoutSeconds * 1000,
+  })
+)
+
 export const tokenVerificationApi = tokenVerificationApiFactory(
   clientFactory({
     baseUrl: config.apis.tokenverification.url,
@@ -185,6 +193,7 @@ export default {
   dataComplianceApi,
   keyworkerApi,
   caseNotesApi,
+  prisonerAlertsApi,
   tokenVerificationApi,
   allocationManagerApi,
   pathfinderApi,

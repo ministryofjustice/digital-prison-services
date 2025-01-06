@@ -279,22 +279,17 @@ context('Current prisoner profile should NOT redirect to the new prisoner profil
         })
         const activeAlerts = [
           {
-            active: true,
-            addedByFirstName: 'John',
-            addedByLastName: 'Smith',
-            alertCode: 'XC',
-            alertCodeDescription: 'Risk to females',
+            isActive: true,
+            createdByDisplayName: 'John Smith',
+            alertCode: { code: 'XC', description: 'Risk to females', alertTypeCode: 'X', alertTypeDescription: 'Security' },
             alertId: 1,
-            alertType: 'X',
-            alertTypeDescription: 'Security',
             bookingId: 14,
-            comment: 'has a large poster on cell wall',
-            dateCreated: '2019-08-20',
-            dateExpires: null,
+            description: 'has a large poster on cell wall',
+            createdAt: '2019-08-20',
+            activeTo: null,
             expired: false,
-            expiredByFirstName: 'John',
-            expiredByLastName: 'Smith',
-            offenderNo: 'G3878UK',
+            activeToLastSetByDisplayName: 'John Smith',
+            prisonNumber: 'G3878UK',
           },
         ]
         cy.task('stubAlertsForBooking', activeAlerts)
