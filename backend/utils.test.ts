@@ -25,6 +25,7 @@ import {
   properCaseName,
   putLastNameFirst,
   stringWithAbbreviationsProcessor,
+  filterNot,
 } from './utils'
 
 class TestError extends Error {
@@ -550,5 +551,29 @@ describe('compareNumbers', () => {
   })
   it('should sort with undefined being equal', () => {
     expect(compareNumbers(undefined, undefined)).toEqual(0)
+  })
+})
+
+describe('filterNot', () => {
+  const values = [{ code: 'A' }, { code: 'B' }, { code: 'C' }]
+
+  it('should exclude A from object array', () => {
+    expect(filterNot(values, 'code', ['A'])).toEqual([{ code: 'B' }, { code: 'C' }])
+  })
+
+  it('should exclude B from object array', () => {
+    expect(filterNot(values, 'code', ['B'])).toEqual([{ code: 'A' }, { code: 'C' }])
+  })
+
+  it('should exclude C from object array', () => {
+    expect(filterNot(values, 'code', ['C'])).toEqual([{ code: 'A' }, { code: 'B' }])
+  })
+
+  it('should exclude A and B from object array', () => {
+    expect(filterNot(values, 'code', ['A', 'B'])).toEqual([{ code: 'C' }])
+  })
+
+  it('should exclude nothing when no match in object array', () => {
+    expect(filterNot(values, 'code', ['X'])).toEqual([{ code: 'A' }, { code: 'B' }, { code: 'C' }])
   })
 })

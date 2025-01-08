@@ -348,6 +348,9 @@ export const isRedirectCaseLoad = (activeCaseLoadId: string): boolean => {
   return !config.app.prisonerProfileRedirect.exemptions?.split(',')?.includes(activeCaseLoadId)
 }
 
+export const filterNot = (array: any[], key: string, neq: unknown[]) =>
+  array.filter((object) => !neq.includes(object[key]))
+
 export default {
   isBeforeToday,
   isToday,
@@ -399,4 +402,5 @@ export default {
   getWith404AsNull,
   stringWithAbbreviationsProcessor,
   isRedirectCaseLoad,
+  filterNot,
 }
