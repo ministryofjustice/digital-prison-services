@@ -16,10 +16,7 @@ context('A user can add a bulk appointment', () => {
       cy.signIn()
     })
     const offenderNo = 'A12345'
-    cy.task('stubAppointmentTypes', [
-      { code: 'ACTI', description: 'Activities' },
-      { code: 'VLB', description: 'Video Link Booking' },
-    ])
+    cy.task('stubAppointmentTypes', [{ code: 'ACTI', description: 'Activities' }])
     cy.task('stubPostAppointments')
     cy.task('stubSchedules', {
       agency: 'MDI',

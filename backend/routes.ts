@@ -17,7 +17,6 @@ import bulkAppointmentsUploadRouter from './routes/appointments/bulkAppointments
 import bulkAppointmentsClashesRouter from './routes/appointments/bulkAppointmentsClashesRouter'
 import changeCaseloadRouter from './routes/changeCaseloadRouter'
 import addAppointmentRouter from './routes/appointments/addAppointmentRouter'
-import prepostAppointmentsRouter from './routes/appointments/prepostAppointmentsRouter'
 import viewAppointments from './controllers/appointments/viewAppointments'
 import confirmAppointmentRouter from './routes/appointments/confirmAppointmentRouter'
 import prisonerProfileRouter from './routes/prisonerProfileRouter'
@@ -37,8 +36,6 @@ import notificationDismiss from './controllers/notificationDismiss'
 import contentfulClient from './contentfulClient'
 import notificationBar from './middleware/notificationHandler'
 import systemOauthClient from './api/systemOauthClient'
-import { notifyClient } from './shared/notifyClient'
-import { raiseAnalyticsEvent } from './raiseAnalyticsEvent'
 import backToStart from './controllers/backToStart'
 import permit from './controllers/permit'
 import appointmentDetailsServiceFactory from './services/appointmentDetailsService'
@@ -307,30 +304,12 @@ const setup = ({
       isAppointmentsRolledOut,
       maintenancePage('Appointment details')
     )
-    router.use(
-      '/offenders/:offenderNo/prepost-appointments',
-      isAppointmentsRolledOut,
-      maintenancePage('Appointment details')
-    )
   } else {
     router.use(
       '/offenders/:offenderNo/add-appointment',
       isCreateIndividualAppointmentRolledOut,
       isPrisonerProfileAppointmentsRolledOut,
       addAppointmentRouter({ systemOauthClient, prisonApi, whereaboutsApi, logError })
-    )
-
-    router.use(
-      '/offenders/:offenderNo/prepost-appointments',
-      isAppointmentsRolledOut,
-      prepostAppointmentsRouter({
-        systemOauthClient,
-        prisonApi,
-        hmppsManageUsersApi,
-        whereaboutsApi,
-        notifyClient,
-        raiseAnalyticsEvent,
-      })
     )
   }
 

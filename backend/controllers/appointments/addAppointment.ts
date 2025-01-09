@@ -276,8 +276,6 @@ export const addAppointmentFactory = (
         bookingId,
       })
 
-      if (appointmentType === 'VLB') return res.redirect(`/offenders/${offenderNo}/prepost-appointments`)
-
       await createAppointments({
         locals: res.locals,
         comments,

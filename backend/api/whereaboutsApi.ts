@@ -59,10 +59,6 @@ export const whereaboutsApiFactory = (client) => {
       `/attendances/offender/${offenderNo}/unacceptable-absences?fromDate=${fromDate}&toDate=${toDate}&page=${page}`
     )
 
-  const getCourtLocations = (context) => get(context, '/court/courts')
-
-  const addVideoLinkBooking = (context, body) => post(context, '/court/video-link-bookings', body)
-
   const getAttendanceChanges = (context, { fromDateTime, toDateTime }, agencyId) => {
     const path =
       `/attendances/changes?fromDateTime=${fromDateTime}&toDateTime=${toDateTime}` +
@@ -122,8 +118,6 @@ export const whereaboutsApiFactory = (client) => {
     getAbsences,
     getUnacceptableAbsences,
     getUnacceptableAbsenceDetail,
-    getCourtLocations,
-    addVideoLinkBooking,
     getAttendanceChanges,
     getCellsWithCapacity,
     moveToCell,
