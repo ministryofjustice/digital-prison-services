@@ -101,7 +101,7 @@
                         label: {
                             text: "Appointment type"
                         },
-                        items: appointmentTypes | addDefaultSelectedVale('Select') | setSelected(appointmentType),
+                        items: appointmentTypes | filterNot('value', ['VLB', 'VLPM']) | addDefaultSelectedVale('Select') | setSelected(appointmentType),
                         errorMessage: errors | findError('appointment-type')
                     }) }}
 
