@@ -97,7 +97,7 @@
                 text: "Type of appointment"
             },
             classes: 'js-appointment-type',
-            items: appointmentTypes | addDefaultSelectedVale('Select') | setSelected(formValues.appointmentType),
+            items: appointmentTypes | filterNot('value', ['VLB', 'VLPM']) | addDefaultSelectedVale('Select') | setSelected(formValues.appointmentType),
             errorMessage: errors | findError('appointment-type')
           }) }}
 

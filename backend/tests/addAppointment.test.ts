@@ -169,18 +169,6 @@ describe('Add appointment', () => {
         const spy = jest.spyOn(Date, 'now')
         spy.mockRestore()
       })
-
-      it('should redirect to the prepost appointment page when the appointment type is "VLB"', async () => {
-        jest.spyOn(Date, 'now').mockImplementation(() => 33103209600000) // Friday 3019-01-01T00:00:00.000Z
-        req.body = { ...validBody, appointmentType: 'VLB', date: moment().format(DAY_MONTH_YEAR) }
-
-        await controller.post(req, res)
-
-        expect(res.redirect).toHaveBeenCalledWith(`/offenders/${offenderNo}/prepost-appointments`)
-
-        const spy = jest.spyOn(Date, 'now')
-        spy.mockRestore()
-      })
     })
 
     describe('when there are API errors', () => {
