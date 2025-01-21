@@ -240,6 +240,7 @@ describe('appointment details', () => {
         }
 
         videoLinkBooking = {
+          bookingType: 'COURT',
           courtDescription: 'Nottingham Justice Centre',
           courtHearingTypeDescription: 'Appeal',
           prisonAppointments: [
@@ -266,6 +267,7 @@ describe('appointment details', () => {
             additionalDetails: {
               courtLocation: 'Nottingham Justice Centre',
               hearingType: 'Appeal',
+              courtHearingLink: 'Not yet known',
               comments: 'VLB comments',
               addedBy: 'Court',
             },

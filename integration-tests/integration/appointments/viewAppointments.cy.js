@@ -66,14 +66,16 @@ context('A user can view list of appointments', () => {
       {
         videoBookingId: 1,
         prisonAppointmentId: 1,
-        bookingType: "COURT",
-        statusCode: "ACTIVE",
-        courtDescription: "Wimbledon",
-        prisonerNumber: "ABC789",
-        startTime: "14:30",
-        endTime: "15:30",
-      }
+        bookingType: 'COURT',
+        statusCode: 'ACTIVE',
+        courtDescription: 'Wimbledon',
+        prisonerNumber: 'ABC789',
+        startTime: '14:30',
+        endTime: '15:30',
+        dpsLocationId: 'abc-123',
+      },
     ])
+    cy.task('stubNomisLocationMapping', { nomisLocationId: 789, dpsLocationId: 'abc-123' })
 
     cy.task('stubAppointmentLocations', {
       agency: 'MDI',

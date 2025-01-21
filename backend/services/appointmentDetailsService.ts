@@ -49,9 +49,6 @@ export default ({
 
     const prepostData = {}
 
-    let addedBy
-    let courtLocation
-
     const createLocationAndTimeString = (appt) =>
       `${locationTypes.find((loc) => Number(loc.locationId) === Number(appt.locationId)).userDescription} - ${getTime(
         appt.startTime
@@ -100,21 +97,23 @@ export default ({
           endTime: postAppointment.endTime,
         })
       }
-
-      addedBy = await (!vlb.createdByPrison ? 'Court' : getAddedByUser(res, vlb.createdBy))
-      courtLocation = vlb.courtDescription
     } else {
       locationType = locationTypes?.find((loc) => Number(loc.locationId) === Number(appointment.locationId))
     }
 
+    const getAddedBy = () => {
+      if (vlb && !vlb.createdByPrison) return vlb.bookingType === 'COURT' ? 'Court' : 'Probation team'
+      return vlb ? getAddedByUser(res, vlb.createdBy) : getAddedByUser(res, appointment.createUserId)
+    }
+
     const additionalDetails = {
-      courtLocation,
+      courtLocation: vlb?.courtDescription,
       probationTeam: vlb?.probationTeamDescription,
       meetingType: vlb?.probationMeetingTypeDescription,
       hearingType: vlb?.courtHearingTypeDescription,
       courtHearingLink: vlb && vlb.bookingType === 'COURT' ? vlb.videoLinkUrl || 'Not yet known' : undefined,
       comments: vlb?.comments || appointment.comment || 'Not entered',
-      addedBy: addedBy || (await getAddedByUser(res, appointment.createUserId)),
+      addedBy: await getAddedBy(),
     }
 
     const basicDetails = {
