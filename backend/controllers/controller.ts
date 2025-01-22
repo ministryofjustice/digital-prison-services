@@ -126,6 +126,7 @@ export const factory = ({
 
     const translateToFirstLast = (lastNameFirstName) => {
       if (!lastNameFirstName) return ''
+      if (!lastNameFirstName.includes(',')) return lastNameFirstName
       const reversed = lastNameFirstName.split(',').reverse()
       return `${reversed[0].trim()}, ${reversed[1].trim()}`
     }
