@@ -323,6 +323,7 @@ const setup = ({
       whereaboutsApi,
       locationsInsidePrisonApi,
       bookAVideoLinkApi,
+      nomisMapping,
     })
   )
 

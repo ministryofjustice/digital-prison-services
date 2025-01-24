@@ -169,40 +169,55 @@ describe('appointment details', () => {
   describe('video link appointment view model request', () => {
     let videoLinkBookingAppointment
 
-    beforeEach(() => {
-      videoLinkBookingService.getVideoLinkBookingFromAppointmentId.mockResolvedValue({
-        bookingType: 'COURT',
-        prisonAppointments: [
-          {
-            appointmentType: 'VLB_COURT_PRE',
-            prisonLocKey: 'ROOM2',
-            appointmentDate: '2024-09-06',
-            startTime: '09:45',
-            endTime: '10:00',
-          },
-          {
-            appointmentType: 'VLB_COURT_MAIN',
-            prisonLocKey: 'ROOM3',
-            appointmentDate: '2024-09-06',
-            startTime: '10:00',
-            endTime: '11:00',
-          },
-          {
-            appointmentType: 'VLB_COURT_POST',
-            prisonLocKey: 'ROOM2',
-            appointmentDate: '2024-09-06',
-            startTime: '11:00',
-            endTime: '11:15',
-          },
-        ],
-        courtCode: 'ABERFC',
-        courtDescription: 'Aberystwyth Family',
-        courtHearingType: 'APPLICATION',
-        courtHearingTypeDescription: 'Application',
-        createdByPrison: true,
-        createdBy: 'TEST_USER',
-      })
+    const buildVideoLinkBooking = (bookingType, createdByPrison) => ({
+      bookingType,
+      prisonAppointments:
+        bookingType === 'COURT'
+          ? [
+              {
+                appointmentType: 'VLB_COURT_PRE',
+                prisonLocKey: 'ROOM2',
+                appointmentDate: '2024-09-06',
+                startTime: '09:45',
+                endTime: '10:00',
+              },
+              {
+                appointmentType: 'VLB_COURT_MAIN',
+                prisonLocKey: 'ROOM3',
+                appointmentDate: '2024-09-06',
+                startTime: '10:00',
+                endTime: '11:00',
+              },
+              {
+                appointmentType: 'VLB_COURT_POST',
+                prisonLocKey: 'ROOM2',
+                appointmentDate: '2024-09-06',
+                startTime: '11:00',
+                endTime: '11:15',
+              },
+            ]
+          : [
+              {
+                appointmentType: 'VLB_PROBATION',
+                prisonLocKey: 'ROOM3',
+                appointmentDate: '2024-09-06',
+                startTime: '10:00',
+                endTime: '11:00',
+              },
+            ],
+      courtCode: bookingType === 'COURT' ? 'ABERFC' : undefined,
+      courtDescription: bookingType === 'COURT' ? 'Aberystwyth Family' : undefined,
+      courtHearingType: bookingType === 'COURT' ? 'APPLICATION' : undefined,
+      courtHearingTypeDescription: bookingType === 'COURT' ? 'Application' : undefined,
+      probationTeamCode: bookingType === 'PROBATION' ? 'BLAPP' : undefined,
+      probationTeamDescription: bookingType === 'PROBATION' ? 'Blackpool' : undefined,
+      probationMeetingType: bookingType === 'PROBATION' ? 'PSR' : undefined,
+      probationMeetingTypeDescription: bookingType === 'PROBATION' ? 'Post sentence recall' : undefined,
+      createdByPrison,
+      createdBy: 'TEST_USER',
+    })
 
+    beforeEach(() => {
       videoLinkBookingAppointment = {
         appointment: {
           ...testAppointment.appointment,
@@ -215,6 +230,10 @@ describe('appointment details', () => {
     })
 
     it('should render with court location and correct vlb locations and types', async () => {
+      videoLinkBookingService.getVideoLinkBookingFromAppointmentId.mockResolvedValue(
+        buildVideoLinkBooking('COURT', false)
+      )
+
       const appointmentDetails = await service.getAppointmentViewModel(res, videoLinkBookingAppointment, 'MDI')
 
       expect(appointmentDetails).toMatchObject({
@@ -223,7 +242,7 @@ describe('appointment details', () => {
           courtLocation: 'Aberystwyth Family',
           courtHearingLink: 'Not yet known',
           comments: 'Test appointment comments',
-          addedBy: 'Test User',
+          addedBy: 'Court',
         },
         basicDetails: {
           date: '20 May 2021',
@@ -237,6 +256,46 @@ describe('appointment details', () => {
         prepostData: {
           'pre-court hearing briefing': 'Gymnasium - 09:45 to 10:00',
           'post-court hearing briefing': 'Gymnasium - 11:00 to 11:15',
+        },
+      })
+    })
+
+    it('should render with probation team and correct vlb locations and types', async () => {
+      videoLinkBookingService.getVideoLinkBookingFromAppointmentId.mockResolvedValue(
+        buildVideoLinkBooking('PROBATION', false)
+      )
+
+      const appointmentDetails = await service.getAppointmentViewModel(res, videoLinkBookingAppointment, 'MDI')
+
+      expect(appointmentDetails).toMatchObject({
+        additionalDetails: {
+          meetingType: 'Post sentence recall',
+          probationTeam: 'Blackpool',
+          comments: 'Test appointment comments',
+          addedBy: 'Probation team',
+        },
+        basicDetails: {
+          date: '20 May 2021',
+          location: 'VCC Room 2',
+          type: 'Video link booking',
+        },
+        timeDetails: {
+          startTime: '10:00',
+          endTime: '11:00',
+        },
+      })
+    })
+
+    it('should render addedBy with the correct username', async () => {
+      videoLinkBookingService.getVideoLinkBookingFromAppointmentId.mockResolvedValue(
+        buildVideoLinkBooking('COURT', true)
+      )
+
+      const appointmentDetails = await service.getAppointmentViewModel(res, videoLinkBookingAppointment, 'MDI')
+
+      expect(appointmentDetails).toMatchObject({
+        additionalDetails: {
+          addedBy: 'Test User',
         },
       })
     })

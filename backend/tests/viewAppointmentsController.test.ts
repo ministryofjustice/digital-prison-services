@@ -16,6 +16,7 @@ describe('View appointments', () => {
     getSearchGroups: jest.fn(),
   }
   const bookAVideoLinkApi = { getPrisonSchedule: jest.fn() }
+  const nomisMapping = { getNomisLocationMappingByDpsLocationId: jest.fn() }
   const systemOauthClient = {
     getClientCredentialsTokens: jest.fn(),
   }
@@ -78,6 +79,7 @@ describe('View appointments', () => {
       whereaboutsApi,
       locationsInsidePrisonApi,
       bookAVideoLinkApi,
+      nomisMapping,
     })
   })
 
@@ -210,7 +212,7 @@ describe('View appointments', () => {
           appointmentTypeDescription: 'Video Link booking',
           appointmentTypeCode: 'VLB',
           locationDescription: 'VCC ROOM',
-          locationId: 789,
+          locationId: 456,
           auditUserId: 'STAFF_3',
           agencyId: 'MDI',
         },
@@ -255,7 +257,7 @@ describe('View appointments', () => {
           appointmentTypeDescription: 'Video Link booking',
           appointmentTypeCode: 'VLB',
           locationDescription: 'VCC ROOM',
-          locationId: 456,
+          locationId: 789,
           auditUserId: 'STAFF_3',
           agencyId: 'MDI',
         },
@@ -299,6 +301,7 @@ describe('View appointments', () => {
           startTime: '14:30',
           endTime: '15:30',
           courtDescription: 'Wimbledon',
+          dpsLocationId: 'abc-123',
         },
         {
           videoBookingId: 1,
@@ -307,6 +310,7 @@ describe('View appointments', () => {
           startTime: '15:30',
           endTime: '15:45',
           courtDescription: 'Wimbledon',
+          dpsLocationId: 'abc-123',
         },
         {
           videoBookingId: 2,
@@ -315,6 +319,7 @@ describe('View appointments', () => {
           startTime: '15:45',
           endTime: '16:45',
           probationTeamDescription: 'Rotherham',
+          dpsLocationId: 'zyx-321',
         },
         {
           videoBookingId: 3,
@@ -325,6 +330,14 @@ describe('View appointments', () => {
           probationTeamDescription: 'Rotherham',
         },
       ])
+
+      nomisMapping.getNomisLocationMappingByDpsLocationId.mockImplementation(
+        async (_, id) =>
+          ({
+            'abc-123': { dpsLocationId: 'abc-123', nomisLocationId: 456 },
+            'zyx-321': { dpsLocationId: 'zyx-321', nomisLocationId: 789 },
+          }[id])
+      )
 
       req.query = {
         date: '02/01/2020',

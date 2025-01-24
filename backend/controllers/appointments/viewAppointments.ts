@@ -40,6 +40,7 @@ export default ({
     whereaboutsApi,
     locationsInsidePrisonApi,
     bookAVideoLinkApi,
+    nomisMapping,
   }) =>
   async (req, res: Response) => {
     // @ts-expect-error ts-migrate(2554) FIXME: Expected 1 arguments, but got 0.
@@ -66,6 +67,12 @@ export default ({
 
     const videoLinkAppointments = await bookAVideoLinkApi.getPrisonSchedule(systemContext, agencyId, searchDate)
 
+    const locationMappings = await Promise.all(
+      [...new Set(videoLinkAppointments.map((vlb) => vlb.dpsLocationId))].map((id) =>
+        nomisMapping.getNomisLocationMappingByDpsLocationId(systemContext, id)
+      )
+    )
+
     const vlbAppointmentMappings = videoLinkAppointments
       .map((vlb) => {
         const appointment = appointments.find(
@@ -73,6 +80,7 @@ export default ({
             vlb.startTime === moment(app.startTime).format('HH:mm') &&
             vlb.endTime === moment(app.endTime).format('HH:mm') &&
             vlb.prisonerNumber === app.offenderNo &&
+            vlb.dpsLocationId === locationMappings.find((m) => m.nomisLocationId === app.locationId)?.dpsLocationId &&
             app.appointmentTypeCode === 'VLB'
         )
 
@@ -85,7 +93,6 @@ export default ({
       })
       .filter(Boolean)
 
-    const videoLinkAppointmentsMadeByTheCourt = videoLinkAppointments.filter((app) => app.madeByTheCourt)
     const videoLinkCourtMappings = vlbAppointmentMappings.map((map) => ({
       appointmentId: map.appointmentId,
       court: map.videoLinkBooking.courtDescription || map.videoLinkBooking.probationTeamDescription,
@@ -105,15 +112,7 @@ export default ({
       const offenderName = `${properCaseName(appointment.lastName)}, ${properCaseName(appointment.firstName)}`
       const offenderUrl = `/prisoner/${offenderNo}`
 
-      const videoLinkLocation =
-        appointment.appointmentTypeCode === 'VLB' &&
-        videoLinkAppointmentsMadeByTheCourt.find(
-          (videoLinkAppointment) => videoLinkAppointment.appointmentId === appointment.id
-        )
-
       const getCourtDescription = () => {
-        if (videoLinkLocation) return `${appointment.locationDescription}</br>with: ${videoLinkLocation.court}`
-
         const courtMapping = videoLinkCourtMappings.find((mapping) => mapping.appointmentId === appointment.id)
 
         return (
