@@ -92,6 +92,7 @@ generic-service:
    PREPARE_SOMEONE_FOR_RELEASE_URL: https://resettlement-passport-ui-dev.hmpps.service.justice.gov.uk
    PRISONER_PROFILE_REDIRECT_EXEMPTIONS: ""
    HOMEPAGE_REDIRECT_EXEMPTIONS: ""
+   VIDEO_CONFERENCE_SCHEDULE_URL: https://video-conference-schedule-dev.prison.service.justice.gov.uk
    CHANGE_SOMEONES_CELL_URL: https://change-someones-cell-dev.prison.service.justice.gov.uk
    SUNSET_BANNER_ENABLED: true
    ALERTS_API_URL: "https://alerts-api-dev.hmpps.service.justice.gov.uk"

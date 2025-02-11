@@ -29,6 +29,7 @@ describe('Homepage', () => {
     res = { locals: {}, render: jest.fn(), redirect: jest.fn() }
     prisonApi.getStaffRoles = jest.fn().mockResolvedValue([])
     oauthApi.userRoles = jest.fn().mockReturnValue([])
+    config.app.videoConferenceScheduleFeatureToggleEnabled = true
   })
 
   const app = express()
