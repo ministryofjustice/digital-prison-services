@@ -538,6 +538,8 @@ module.exports = defineConfig({
         stubPrisonerProfileAlerts: prisonerProfile.stubPrisonerProfileAlerts,
         stubPrisonerProfileOffences: prisonerProfile.stubPrisonerProfileOffences,
         stubPrisonerProfileWorkAndSkills: prisonerProfile.stubPrisonerProfileWorkAndSkills,
+        stubPrisonerProfileAddAppointment: prisonerProfile.stubPrisonerProfileAddAppointment,
+        stubPrisonerProfileSaveBacklink: prisonerProfile.stubPrisonerProfileSaveBacklink,
         stubComponents: components.stubComponents,
         stubComponentsFail: components.stubComponentsFail,
         stubDpsHomepage: stubDpsHomepage,

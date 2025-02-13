@@ -7,7 +7,7 @@ const NotFoundPage = require('../../pages/notFound')
 context('A user can add an alert', () => {
   beforeEach(() => {
     cy.task('resetAndStubTokenVerification')
-    cy.task('stubSignIn', { username: 'ITAG_USER', caseload: 'MDI', roles: ['ROLE_UPDATE_ALERT'] })
+    cy.task('stubSignIn', { username: 'ITAG_USER', caseload: null, caseloads: [], roles: ['ROLE_UPDATE_ALERT'] })
 
     cy.session('hmpps-session-dev', () => {
       cy.clearCookies()
@@ -99,7 +99,7 @@ context('when a user has no permissions ', () => {
   before(() => {
     cy.clearCookies()
     cy.task('resetAndStubTokenVerification')
-    cy.task('stubSignIn', { username: 'ITAG_USER', caseload: 'MDI' })
+    cy.task('stubSignIn', { username: 'ITAG_USER', caseload: null, caseloads: [] })
     cy.signIn()
   })
   beforeEach(() => {

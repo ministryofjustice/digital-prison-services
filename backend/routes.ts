@@ -48,7 +48,6 @@ import asyncMiddleware from './middleware/asyncHandler'
 import videoLinkBookingServiceFactory from './services/videoLinkBookingService'
 
 import whereaboutsRouter from './routes/whereabouts/whereaboutsRouter'
-import { saveBackLink } from './controllers/backLink'
 import maintenancePage from './controllers/maintenancePage'
 import prisonerProfileBackLinkRedirect from './controllers/prisonerProfile/prisonerProfileBackLinkRedirect'
 import config from './config'

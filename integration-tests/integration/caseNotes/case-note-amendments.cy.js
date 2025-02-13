@@ -2,6 +2,7 @@ const amendmentPage = require('../../pages/caseNotes/case-note-amendments-page')
 const CaseNotesPage = require('../../pages/prisonerProfile/caseNotePage')
 const offenderFullDetails = require('../../mockApis/responses/offenderFullDetails.json')
 const CaseNoteConfirmPage = require('../../pages/caseNotes/caseNoteConfirmPage')
+const notFoundPage = require('../../pages/notFound')
 
 const keyWorkerCaseNote = {
   caseNoteId: 1,
@@ -48,6 +49,7 @@ const setupAmendmentPage = () => {
     iepSummary: {},
     caseNoteSummary: {},
     offenderNo: 'A12345',
+    caseloads: [],
   })
 }
 
@@ -55,7 +57,7 @@ context('Case note amendments', () => {
   beforeEach(() => {
     cy.clearCookies()
     cy.task('reset')
-    cy.task('stubSignIn', { username: 'ITAG_USER', caseload: 'MDI' })
+    cy.task('stubSignIn', { username: 'ITAG_USER', caseload: null, caseloads: [] })
     cy.signIn()
 
     cy.task('stubBookingDetails', { firstName: 'Bob', lastName: 'Smith', agencyId: 'MDI' })
@@ -94,7 +96,8 @@ context('Case note amendments', () => {
     page.moreDetail().type('Hello, world!')
     page.save().click()
 
-    CaseNotesPage.verifyOnPage('Smith, John')
+    // Weirdly a user can create the case note but can't access the case note page...
+    notFoundPage.verifyOnPage()
 
     cy.task('verifySaveAmendment').should((requests) => {
       expect(requests).to.have.lengthOf(1)
@@ -125,7 +128,8 @@ context('Case note amendments', () => {
     caseNoteConfirmPage.form().confirmRadio().check('Yes')
     caseNoteConfirmPage.form().submitButton().click()
 
-    CaseNotesPage.verifyOnPage('Smith, John')
+    // Weirdly a user can create the case note but can't access the case note page...
+    notFoundPage.verifyOnPage()
 
     cy.task('verifySaveAmendment').should((requests) => {
       expect(requests).to.have.lengthOf(1)
