@@ -30,7 +30,6 @@ import learnerEmployabilitySkills from '../controllers/prisonerProfile/learnerEm
 import workInsidePrison from '../controllers/prisonerProfile/prisonerWorkInsidePrisonDetails'
 import unacceptableAbsencesDetails from '../controllers/prisonerProfile/unacceptableAbsencesDetails'
 import prisonerProfileRedirect from '../controllers/prisonerProfile/prisonerProfileRedirect'
-import useNewProfile from '../middleware/useNewProfile'
 
 const router = express.Router({ mergeParams: true })
 
@@ -178,7 +177,6 @@ const controller = ({
   router.get('/schedule', prisonerSchedule({ prisonApi, logError }))
   router.get(
     '/professional-contacts',
-    useNewProfile(),
     // @ts-expect-error ts-migrate(2345) FIXME: Argument of type '{ prisonApi: any; personService:... Remove this comment to see the full error message
     prisonerProfessionalContacts({ prisonApi, personService, allocationManagerApi, systemOauthClient, logError })
   )
