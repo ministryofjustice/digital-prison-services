@@ -33,6 +33,7 @@ export const app = {
   prisonerProfileRedirect: {
     url: process.env.PRISONER_PROFILE_REDIRECT_URL || 'http://localhost:3000',
     exemptions: process.env.PRISONER_PROFILE_REDIRECT_EXEMPTIONS || '',
+    oldPrisonerProfileInaccessibleFrom: parseDate(process.env.OLD_PRISONER_PROFILE_INACCESSIBLE_FROM),
   },
   homepageRedirect: {
     url: process.env.HOMEPAGE_REDIRECT_URL,
