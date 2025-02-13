@@ -53,7 +53,6 @@ import maintenancePage from './controllers/maintenancePage'
 import prisonerProfileBackLinkRedirect from './controllers/prisonerProfile/prisonerProfileBackLinkRedirect'
 import config from './config'
 import changeSomeonesCellHasMovedRouter from './routes/changeSomeonesCellHasMovedRouter'
-import { isRedirectCaseLoad } from './utils'
 
 const {
   app: { covidUnitsEnabled, prisonerProfileRedirect },
@@ -93,14 +92,8 @@ const isCreateIndividualAppointmentRolledOut = (req, res, next) => {
   }
 }
 
-const isPrisonerProfileAppointmentsRolledOut = (req, res, next) => {
-  const { activeCaseLoadId } = req.session.userDetails
-  if (isRedirectCaseLoad(activeCaseLoadId)) {
-    const { offenderNo } = req.params
-    res.redirect(`${prisonerProfileRedirect.url}/prisoner/${offenderNo}/add-appointment`)
-  } else {
-    next()
-  }
+const redirectToPrisonerProfileForAppointments = (req, res, next) => {
+  res.redirect(`${prisonerProfileRedirect.url}/prisoner/${req.params.offenderNo}/add-appointment`)
 }
 
 const isCovidUnitsEnabled = (req, res, next) => {
@@ -308,7 +301,7 @@ const setup = ({
     router.use(
       '/offenders/:offenderNo/add-appointment',
       isCreateIndividualAppointmentRolledOut,
-      isPrisonerProfileAppointmentsRolledOut,
+      redirectToPrisonerProfileForAppointments,
       addAppointmentRouter({ systemOauthClient, prisonApi, whereaboutsApi, logError })
     )
   }
@@ -489,7 +482,7 @@ const setup = ({
     )
   }
 
-  router.get('/save-backlink', prisonerProfileBackLinkRedirect(saveBackLink()))
+  router.get('/save-backlink', prisonerProfileBackLinkRedirect)
 
   return router
 }
