@@ -13,7 +13,7 @@ export default ({ path, handler }) => {
     }
 
     if (isInaccessible) {
-      logger.warn(`User '${res.locals.user.username}' has no caseload, presenting no caseload message`)
+      logger.info(`User '${res.locals?.user?.username}' has no caseload, presenting no caseload message`)
       return res.render('prisonerProfile/noCaseLoads.njk')
     }
 
