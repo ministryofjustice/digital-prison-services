@@ -181,13 +181,13 @@ context('Current prisoner profile should redirect to the new prisoner profile', 
 })
 
 context('Current prisoner profile should NOT redirect to the new prisoner profile', () => {
-  context('When the case load IS NOT Leeds', () => {
+  context('When the user has no caseload', () => {
     beforeEach(() => {
       cy.task('reset')
       cy.task('stubPrisonerProfile', {})
       cy.task('stubSignIn', {
         username: 'ITAG_USER',
-        caseload: 'MDI',
+        caseload: null,
         caseloads: [],
         roles: [],
       })
@@ -256,16 +256,6 @@ context('Current prisoner profile should NOT redirect to the new prisoner profil
         })
 
         prisonerQuickLookPage.verifyOnPage('Smith, John')
-      })
-      it('Link should not redirect and land on the personal page', () => {
-        const offenderNo = 'A1234A'
-        cy.visit(`http://localhost:3008/prisoner/${offenderNo}/professional-contacts`)
-        cy.get('[data-test="return-to-profile-personal"]').should('be.visible')
-
-        cy.get('[data-test="return-to-profile-personal"]').click()
-        cy.location().should((location) => {
-          expect(location.pathname).to.eq(`/prisoner/${offenderNo}/personal`)
-        })
       })
     })
     context('Alerts page', () => {

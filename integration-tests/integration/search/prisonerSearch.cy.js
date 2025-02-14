@@ -281,37 +281,6 @@ context('Prisoner search', () => {
           )
         })
       })
-
-      it('should show the correct most recent search link when visiting a profile page from search', () => {
-        const searchUrl = '/prisoner-search?keywords=Saunders&location=MDI&alerts%5B%5D=XA&feature=new'
-
-        cy.task('stubPSInmates', {
-          locationId: 'MDI',
-          count: 1,
-          data: [inmate1],
-        })
-        cy.task('stubPrisonerProfileHeaderData', {
-          offenderBasicDetails,
-          offenderFullDetails,
-          iepSummary: [inmate1Iep],
-          caseNoteSummary: {},
-          offenderNo: 'A12345',
-        })
-        cy.task('stubQuickLook', quickLookFullDetails)
-        cy.task('stubPathFinderOffenderDetails', null)
-        cy.task('stubClientCredentialsRequest')
-        cy.visit(searchUrl)
-
-        cy.get('[data-test="prisoner-search-results-table"]').then(($table) => {
-          cy.get($table)
-            .find('tr')
-            .then(($tableRows) => {
-              cy.get($tableRows).find('a').click()
-            })
-        })
-
-        cy.get('[data-test="back-link"]').should('have.attr', 'href', `http://localhost:3008${searchUrl}`)
-      })
     })
   })
 })

@@ -5,7 +5,7 @@ context('Global errors', () => {
     cy.session('hmpps-session', () => {
       cy.clearCookies()
       cy.task('reset')
-      cy.task('stubSignIn', { username: 'ITAG_USER', caseload: 'MDI' })
+      cy.task('stubSignIn', { username: 'ITAG_USER', caseload: null, caseloads: [] })
       cy.signIn()
     })
 

@@ -7,10 +7,11 @@ const offenderNo = 'A1234A'
 
 context('Backlink in Prisoner Profile', () => {
   beforeEach(() => {
-    cy.session('hmpps-session-dev-no-caseloads', () => {
+    cy.session('hmpps-session-dev-backlink', () => {
       cy.clearCookies()
       cy.task('reset')
-      cy.task('stubSignIn', { username: 'ITAG_USER', caseload: 'MDI', caseloads: [] })
+      cy.task('stubPrisonerProfileSaveBacklink')
+      cy.task('stubSignIn', { username: 'ITAG_USER', caseload: null, caseloads: [] })
       cy.signIn()
     })
     cy.task('stubPrisonerProfileHeaderData', {
@@ -19,56 +20,27 @@ context('Backlink in Prisoner Profile', () => {
       iepSummary: {},
       caseNoteSummary: {},
       offenderNo,
+      caseloads: []
     })
   })
 
   context('digital-prison-services', () => {
-    it('Should display default text when redirected from /save-backlink', () => {
+    it('Should redirect save-backlink to prisoner profile', () => {
       cy.visit(`/save-backlink?service=digital-prison-services&returnPath=/return&redirectPath=/prisoner/${offenderNo}`)
-
-      prisonerQuickLookPage.verifyOnPage('Smith, John')
-
-      cy.get('[data-test="back-link"]')
-        .contains('View most recent search')
-        .should('have.attr', 'href', 'http://localhost:3008/return')
-    })
-
-    it('Should display custom text when redirected from /save-backlink', () => {
-      cy.visit(
-        `/save-backlink?service=digital-prison-services&returnPath=/return-with-custom-text&redirectPath=/prisoner/${offenderNo}&backLinkText=Custom backlink text`
-      )
-
-      prisonerQuickLookPage.verifyOnPage('Smith, John')
-
-      cy.get('[data-test="back-link"]')
-        .contains('Custom backlink text')
-        .should('have.attr', 'href', 'http://localhost:3008/return-with-custom-text')
+      cy.location().should((location) => {
+        expect(location.pathname).contains(`/prisonerprofile/save-backlink`)
+      })
     })
   })
 
   context('welcome-people-into-prison', () => {
-    it('Should display default text when redirected from /save-backlink', () => {
+    it('Should redirect save-backlink to prisoner profile', () => {
       cy.visit(
         `/save-backlink?service=welcome-people-into-prison&returnPath=/return&redirectPath=/prisoner/${offenderNo}`
       )
-
-      prisonerQuickLookPage.verifyOnPage('Smith, John')
-
-      cy.get('[data-test="back-link"]')
-        .contains('Back to Welcome people into prison')
-        .should('have.attr', 'href', 'https://welcome-people-into-prison/return')
-    })
-
-    it('Should display custom text when redirected from /save-backlink', () => {
-      cy.visit(
-        `/save-backlink?service=welcome-people-into-prison&returnPath=/return-with-custom-text&redirectPath=/prisoner/${offenderNo}&backLinkText=Custom backlink text`
-      )
-
-      prisonerQuickLookPage.verifyOnPage('Smith, John')
-
-      cy.get('[data-test="back-link"]')
-        .contains('Custom backlink text')
-        .should('have.attr', 'href', 'https://welcome-people-into-prison/return-with-custom-text')
+      cy.location().should((location) => {
+        expect(location.pathname).contains(`/prisonerprofile/save-backlink`)
+      })
     })
   })
 })
@@ -78,7 +50,7 @@ context('Prisoner quick look data retrieval errors', () => {
     cy.session('hmpps-session-dev-no-caseloads', () => {
       cy.clearCookies()
       cy.task('reset')
-      cy.task('stubSignIn', { username: 'ITAG_USER', caseload: 'MDI', caseloads: [] })
+      cy.task('stubSignIn', { username: 'ITAG_USER', caseload: null, caseloads: [] })
       cy.signIn()
     })
 
@@ -88,6 +60,7 @@ context('Prisoner quick look data retrieval errors', () => {
       iepSummary: {},
       caseNoteSummary: {},
       offenderNo,
+      caseloads: [],
     })
 
     cy.task('stubQuickLookApiErrors')
@@ -163,12 +136,13 @@ context('Prisoner profile header', () => {
     iepSummary: {},
     caseNoteSummary: {},
     offenderNo,
+    caseloads: []
   }
   beforeEach(() => {
     cy.session('hmpps-session-dev-caseloads', () => {
       cy.clearCookies()
       cy.task('reset')
-      cy.task('stubSignIn', { username: 'ITAG_USER', caseload: 'MDI' })
+      cy.task('stubSignIn', { username: 'ITAG_USER', caseload: null, caseloads: [] })
       cy.signIn()
     })
 
@@ -224,7 +198,7 @@ context('Prisoner quick look', () => {
     cy.session('hmpps-session-dev-quick-look', () => {
       cy.clearCookies()
       cy.task('reset')
-      cy.task('stubSignIn', { username: 'ITAG_USER', caseload: 'MDI' })
+      cy.task('stubSignIn', { username: 'ITAG_USER', caseload: null, caseloads: [] })
       cy.signIn()
     })
 
@@ -532,7 +506,7 @@ context('Finances section', () => {
       cy.session('hmpps-session-dev', () => {
         cy.clearCookies()
         cy.task('reset')
-        cy.task('stubSignIn', { username: 'ITAG_USER', caseload: 'MDI' })
+        cy.task('stubSignIn', { username: 'ITAG_USER', caseload: null, caseloads: [] })
         cy.signIn()
       })
 
@@ -576,7 +550,7 @@ context('Finances section', () => {
       cy.task('reset')
       cy.clearCookies()
       cy.task('reset')
-      cy.task('stubSignIn', { username: 'ITAG_USER', caseload: 'MDI' })
+      cy.task('stubSignIn', { username: 'ITAG_USER', caseload: null, caseloads: [] })
       cy.signIn()
 
       quickLookFullDetails.balances.damageObligations = 65
@@ -621,7 +595,7 @@ context('When a user has a SOC role', () => {
     cy.session('hmpps-session-dev-soc', () => {
       cy.clearCookies()
       cy.task('reset')
-      cy.task('stubSignIn', { username: 'ITAG_USER', caseload: 'MDI', caseloads: [], roles: ['ROLE_SOC_CUSTODY'] })
+      cy.task('stubSignIn', { username: 'ITAG_USER', caseload: null, caseloads: [], roles: ['ROLE_SOC_CUSTODY'] })
       cy.signIn()
     })
 
@@ -675,7 +649,7 @@ context('When a user has POM role', () => {
     cy.session('hmpps-session-dev-pom', () => {
       cy.clearCookies()
       cy.task('reset')
-      cy.task('stubSignIn', { username: 'ITAG_USER', caseload: 'MDI', caseloads: [], roles: ['ROLE_POM'] })
+      cy.task('stubSignIn', { username: 'ITAG_USER', caseload: null, caseloads: [], roles: ['ROLE_POM'] })
       cy.signIn()
     })
   })
@@ -734,7 +708,7 @@ context('When a user has VIEW_PROBATION_DOCUMENTS role', () => {
       cy.task('reset')
       cy.task('stubSignIn', {
         username: 'ITAG_USER',
-        caseload: 'MDI',
+        caseload: null,
         caseloads: [],
         roles: ['ROLE_VIEW_PROBATION_DOCUMENTS'],
       })
@@ -785,7 +759,7 @@ context('When a user can view inactive bookings', () => {
       cy.task('reset')
       cy.task('stubSignIn', {
         username: 'ITAG_USER',
-        caseload: 'MDI',
+        caseload: null,
         caseloads: [],
         roles: ['ROLE_INACTIVE_BOOKINGS'],
       })

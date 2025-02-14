@@ -50,7 +50,7 @@ context('Prisoner cell history', () => {
     cy.session('hmpps-session-dev', () => {
       cy.clearCookies()
       cy.task('reset')
-      cy.task('stubSignIn', { username: 'ITAG_USER', caseload: 'MDI' })
+      cy.task('stubSignIn', { username: 'ITAG_USER', caseload: null, caseloads: [], roles: ['ROLE_GLOBAL_SEARCH'] })
       cy.signIn()
     })
   })
@@ -152,7 +152,7 @@ context('with permissions', () => {
   before(() => {
     cy.clearCookies()
     cy.task('reset')
-    cy.task('stubSignIn', { username: 'ITAG_USER', caseload: 'MDI', roles: ['ROLE_CELL_MOVE'] })
+    cy.task('stubSignIn', { username: 'ITAG_USER', caseload: null, caseloads: [], roles: ['ROLE_CELL_MOVE'] })
     cy.signIn()
   })
   beforeEach(() => {

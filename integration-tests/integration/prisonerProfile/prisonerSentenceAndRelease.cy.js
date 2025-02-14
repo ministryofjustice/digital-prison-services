@@ -5,7 +5,7 @@ const offenderFullDetails = require('../../mockApis/responses/offenderFullDetail
 context('Prisoner sentence and release', () => {
   beforeEach(() => {
     cy.task('resetAndStubTokenVerification')
-    cy.task('stubSignIn', { username: 'ITAG_USER', caseload: 'MDI' })
+    cy.task('stubSignIn', { username: 'ITAG_USER', caseload: null, caseloads: [] })
     cy.session('hmpps-session-dev', () => {
       cy.clearCookies()
       cy.signIn()

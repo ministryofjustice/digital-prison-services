@@ -81,6 +81,32 @@ const stubPrisonerProfileWorkAndSkills = () =>
     },
   })
 
+const stubPrisonerProfileAddAppointment = () =>
+  stubFor({
+    request: {
+      method: 'GET',
+      urlPattern: '/prisonerprofile/prisoner/.+?/add-appointment',
+    },
+    response: {
+      status: 200,
+      headers: { 'Content-Type': 'text/html' },
+      body: '<html><body><h1>New Prisoner Profile!</h2><h2>Add appointment</h2></body></html>',
+    },
+  })
+
+const stubPrisonerProfileSaveBacklink = () =>
+  stubFor({
+    request: {
+      method: 'GET',
+      urlPattern: '/prisonerprofile/save-backlink.+?',
+    },
+    response: {
+      status: 200,
+      headers: { 'Content-Type': 'text/html' },
+      body: '<html><body><h1>New Prisoner Profile!</h2><h2>Backlink saved...</h2></body></html>',
+    },
+  })
+
 module.exports = {
   stubPrisonerProfile,
   stubPrisonerProfilePersonal,
@@ -88,4 +114,6 @@ module.exports = {
   stubPrisonerProfileAlerts,
   stubPrisonerProfileOffences,
   stubPrisonerProfileWorkAndSkills,
+  stubPrisonerProfileAddAppointment,
+  stubPrisonerProfileSaveBacklink,
 }

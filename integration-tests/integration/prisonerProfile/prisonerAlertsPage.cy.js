@@ -38,7 +38,7 @@ context('A user can view alerts for a prisoner', () => {
 
   beforeEach(() => {
     cy.task('resetAndStubTokenVerification')
-    cy.task('stubSignIn', { username: 'ITAG_USER', caseload: 'MDI', roles: ['ROLE_UPDATE_ALERT'] })
+    cy.task('stubSignIn', { username: 'ITAG_USER', caseload: null, caseloads: [], roles: ['ROLE_UPDATE_ALERT'] })
     cy.session('hmpps-session-dev', () => {
       cy.clearCookies()
       cy.signIn()
