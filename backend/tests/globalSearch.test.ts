@@ -1,4 +1,5 @@
 import globalSearchController from '../controllers/globalSearch'
+import config from '../config'
 
 describe('Global search', () => {
   const offenderSearchApi = {}
@@ -223,6 +224,8 @@ describe('Global search', () => {
 
     describe('when there is data', () => {
       beforeEach(() => {
+        config.app.prisonerProfileRedirect.oldPrisonerProfileInaccessibleFrom = null
+
         // @ts-expect-error ts-migrate(2339) FIXME: Property 'globalSearch' does not exist on type '{}... Remove this comment to see the full error message
         offenderSearchApi.globalSearch.mockResolvedValue([
           {
@@ -345,6 +348,39 @@ describe('Global search', () => {
             },
           ],
         })
+      })
+
+      it('should not provide profile links for users without a caseload', async () => {
+        config.app.prisonerProfileRedirect.oldPrisonerProfileInaccessibleFrom = Date.now() - 1000
+
+        // @ts-expect-error ts-migrate(2345) FIXME: Argument of type '{ paginationService: {}; offende... Remove this comment to see the full error message
+        controller = globalSearchController({ paginationService, offenderSearchApi, oauthApi, telemetry, logError })
+
+        req.query = {
+          searchText: 'Smith Ben',
+          locationFilter: 'ALL',
+          genderFilter: 'ALL',
+        }
+
+        res = {
+          ...res,
+          locals: {
+            user: { activeCaseLoad: null },
+          },
+        }
+
+        await controller.resultsPage(req, res)
+
+        expect(res.render).toHaveBeenCalledWith(
+          'globalSearch/globalSearchResults.njk',
+          expect.objectContaining({
+            results: [
+              expect.objectContaining({ showProfileLink: false }),
+              expect.objectContaining({ showProfileLink: false }),
+              expect.objectContaining({ showProfileLink: false }),
+            ],
+          })
+        )
       })
 
       it('should call the pagination service', async () => {
