@@ -85,12 +85,26 @@ describe('prisoner profile redirect', () => {
       expect(res.redirect).toHaveBeenCalledWith(`${prisonerProfileUrl}/prisoner/${offenderNo}${path}`)
     })
 
-    it('displays no caseload error page to the user', () => {
-      req = { ...req, session: { userDetails: { activeCaseLoadId: null } } }
+    it('displays no caseload error page to a prison user', () => {
+      req = { ...req, session: { userDetails: { authSource: 'nomis', activeCaseLoadId: null } } }
 
       redirect(req, res, next)
 
-      expect(res.render).toHaveBeenCalledWith('prisonerProfile/noCaseloads.njk')
+      expect(res.render).toHaveBeenCalledWith('prisonerProfile/noCaseloads.njk', {
+        homepageLinkText: 'DPS homepage',
+        homepageUrl: config.app.homepageRedirect.url,
+      })
+    })
+
+    it('displays no caseload error page to a non-prison user', () => {
+      req = { ...req, session: { userDetails: { authSource: 'not-nomis', activeCaseLoadId: null } } }
+
+      redirect(req, res, next)
+
+      expect(res.render).toHaveBeenCalledWith('prisonerProfile/noCaseloads.njk', {
+        homepageLinkText: 'HMPPS Digital Services homepage',
+        homepageUrl: config.apis.oauth2.url,
+      })
     })
   })
 })
