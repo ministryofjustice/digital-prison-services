@@ -14,7 +14,7 @@ export default ({ path, handler }) => {
 
     if (isInaccessible) {
       logger.info(`User '${res.locals?.user?.username}' has no caseload, presenting no caseload message`)
-      return res.render('prisonerProfile/noCaseLoads.njk')
+      return res.render('prisonerProfile/noCaseloads.njk')
     }
 
     return handler(req, res, next)
