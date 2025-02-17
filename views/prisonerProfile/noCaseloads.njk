@@ -6,7 +6,7 @@
  {% block beforeContent %}
      {{ govukBreadcrumbs({
          items: [
-             { text: "Home", href: "/" },
+             { text: "Home", href: homepageUrl },
              { text: title }
          ]
      }) }}
@@ -18,7 +18,7 @@
             <h1 class="govuk-heading-l">{{ title }}</h1>
             <p class="govuk-body">You cannot access prisoner profiles on Digital Prison Services (DPS).</p>
             <p class="govuk-body">To get help, contact the helpdesk by calling 0800 917 5148, or #6598 from inside a prison.</p>
-            <p class="govuk-body"><a class="govuk-link" href="/">DPS homepage</a></p>
+            <p class="govuk-body"><a class="govuk-link" href="{{ homepageUrl }}">{{ homepageLinkText }}</a></p>
         </div>
     </div>
 {% endblock %}
