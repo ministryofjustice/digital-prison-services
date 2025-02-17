@@ -90,7 +90,7 @@ describe('prisoner profile redirect', () => {
 
       redirect(req, res, next)
 
-      expect(res.render).toHaveBeenCalledWith('prisonerProfile/noCaseLoads.njk')
+      expect(res.render).toHaveBeenCalledWith('prisonerProfile/noCaseloads.njk')
     })
   })
 })
