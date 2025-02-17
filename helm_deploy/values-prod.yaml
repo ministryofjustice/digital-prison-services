@@ -7,7 +7,7 @@ generic-service:
     host: digital.prison.service.justice.gov.uk
 
   env:
-    FEATURE_AMEND_APPOINTMENT_TOGGLE_ENABLED: false
+    FEATURE_AMEND_APPOINTMENT_TOGGLE_ENABLED: true
     PRISON_STAFF_HUB_UI_URL: https://digital.prison.service.justice.gov.uk/
     HMPPS_COOKIE_DOMAIN: digital.prison.service.justice.gov.uk
     API_ENDPOINT_URL: https://prison-api.prison.service.justice.gov.uk/
