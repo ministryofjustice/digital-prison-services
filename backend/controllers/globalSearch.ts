@@ -25,10 +25,7 @@ const trackEvent = (telemetry, prisonerResults, searchText, filters, username, a
 }
 
 export default ({ paginationService, offenderSearchApi, oauthApi, telemetry }) => {
-  const {
-    licencesUrl,
-    prisonerProfileRedirect: { oldPrisonerProfileInaccessibleFrom },
-  } = app
+  const { licencesUrl } = app
 
   const searchByOffender = (context, offenderNo, gender, location, dateOfBirth, pageLimit) =>
     offenderSearchApi.globalSearch(
@@ -119,7 +116,6 @@ export default ({ paginationService, offenderSearchApi, oauthApi, telemetry }) =
     const isLicencesUser = userRoles.includes('LICENCE_RO')
     const isLicencesVaryUser = userRoles.includes('LICENCE_VARY')
     const userCanViewInactive = userRoles.includes('INACTIVE_BOOKINGS')
-    const oldProfileAccessible = !oldPrisonerProfileInaccessibleFrom || oldPrisonerProfileInaccessibleFrom > Date.now()
 
     if (prisonerResults?.length > 0) {
       trackEvent(telemetry, prisonerResults, searchText, filters, username, activeCaseLoad)
@@ -146,9 +142,9 @@ export default ({ paginationService, offenderSearchApi, oauthApi, telemetry }) =
         showUpdateLicenceLink:
           isLicencesUser && (prisoner.currentlyInPrison === 'Y' || isLicencesVaryUser) && prisonerBooked(prisoner),
         showProfileLink:
-          (activeCaseLoad || oldProfileAccessible) &&
-          ((userCanViewInactive && prisoner.currentlyInPrison === 'N') || prisoner.currentlyInPrison === 'Y') &&
-          prisonerBooked(prisoner),
+          (activeCaseLoad &&
+            ((userCanViewInactive && prisoner.currentlyInPrison === 'N') || prisoner.currentlyInPrison === 'Y') &&
+            prisonerBooked(prisoner)) === true,
         updateLicenceLink: prisonerBooked(prisoner)
           ? `${licencesUrl}hdc/taskList/${prisoner.latestBookingId}`
           : undefined,
