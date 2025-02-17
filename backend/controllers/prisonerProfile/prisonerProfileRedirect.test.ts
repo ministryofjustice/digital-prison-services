@@ -10,14 +10,12 @@ describe('prisoner profile redirect', () => {
   let req
   let res
   let next
-  let handler
   let redirect
 
   beforeEach(() => {
     config.app.prisonerProfileRedirect.url = prisonerProfileUrl
 
     next = jest.fn()
-    handler = jest.fn()
     res = {
       redirect: jest.fn(),
       render: jest.fn(),
@@ -25,86 +23,36 @@ describe('prisoner profile redirect', () => {
 
     req = { params: { offenderNo } }
 
-    redirect = prisonerProfileRedirect({ path, handler })
+    redirect = prisonerProfileRedirect({ path })
   })
 
-  describe('when no inaccessible date is set', () => {
-    beforeAll(() => {
-      config.app.prisonerProfileRedirect.oldPrisonerProfileInaccessibleFrom = null
-    })
+  it('redirects user with activeCaseload', () => {
+    req = { ...req, session: { userDetails: { activeCaseLoadId } } }
 
-    it('redirects user with activeCaseload', () => {
-      req = { ...req, session: { userDetails: { activeCaseLoadId } } }
+    redirect(req, res, next)
 
-      redirect(req, res, next)
+    expect(res.redirect).toHaveBeenCalledWith(`${prisonerProfileUrl}/prisoner/${offenderNo}${path}`)
+  })
 
-      expect(res.redirect).toHaveBeenCalledWith(`${prisonerProfileUrl}/prisoner/${offenderNo}${path}`)
-    })
+  it('displays no caseload error page to a prison user', () => {
+    req = { ...req, session: { userDetails: { authSource: 'nomis', activeCaseLoadId: null } } }
 
-    it('allows users with no caseload to access the profile', () => {
-      req = { ...req, session: { userDetails: { activeCaseLoadId: null } } }
+    redirect(req, res, next)
 
-      redirect(req, res, next)
-
-      expect(handler).toHaveBeenCalledWith(req, res, next)
+    expect(res.render).toHaveBeenCalledWith('prisonerProfile/noCaseloads.njk', {
+      homepageLinkText: 'DPS homepage',
+      homepageUrl: config.app.homepageRedirect.url,
     })
   })
 
-  describe('when future inaccessible date is set', () => {
-    beforeAll(() => {
-      config.app.prisonerProfileRedirect.oldPrisonerProfileInaccessibleFrom = Date.now() + 1000
-    })
+  it('displays no caseload error page to a non-prison user', () => {
+    req = { ...req, session: { userDetails: { authSource: 'not-nomis', activeCaseLoadId: null } } }
 
-    it('redirects user with activeCaseload', () => {
-      req = { ...req, session: { userDetails: { activeCaseLoadId } } }
+    redirect(req, res, next)
 
-      redirect(req, res, next)
-
-      expect(res.redirect).toHaveBeenCalledWith(`${prisonerProfileUrl}/prisoner/${offenderNo}${path}`)
-    })
-
-    it('allows users with no caseload to access the profile', () => {
-      req = { ...req, session: { userDetails: { activeCaseLoadId: null } } }
-
-      redirect(req, res, next)
-
-      expect(handler).toHaveBeenCalledWith(req, res, next)
-    })
-  })
-
-  describe('when inaccessible date has passed', () => {
-    beforeAll(() => {
-      config.app.prisonerProfileRedirect.oldPrisonerProfileInaccessibleFrom = Date.now() - 1000
-    })
-
-    it('redirects user with activeCaseload', () => {
-      req = { ...req, session: { userDetails: { activeCaseLoadId } } }
-
-      redirect(req, res, next)
-
-      expect(res.redirect).toHaveBeenCalledWith(`${prisonerProfileUrl}/prisoner/${offenderNo}${path}`)
-    })
-
-    it('displays no caseload error page to a prison user', () => {
-      req = { ...req, session: { userDetails: { authSource: 'nomis', activeCaseLoadId: null } } }
-
-      redirect(req, res, next)
-
-      expect(res.render).toHaveBeenCalledWith('prisonerProfile/noCaseloads.njk', {
-        homepageLinkText: 'DPS homepage',
-        homepageUrl: config.app.homepageRedirect.url,
-      })
-    })
-
-    it('displays no caseload error page to a non-prison user', () => {
-      req = { ...req, session: { userDetails: { authSource: 'not-nomis', activeCaseLoadId: null } } }
-
-      redirect(req, res, next)
-
-      expect(res.render).toHaveBeenCalledWith('prisonerProfile/noCaseloads.njk', {
-        homepageLinkText: 'HMPPS Digital Services homepage',
-        homepageUrl: config.apis.oauth2.url,
-      })
+    expect(res.render).toHaveBeenCalledWith('prisonerProfile/noCaseloads.njk', {
+      homepageLinkText: 'HMPPS Digital Services homepage',
+      homepageUrl: config.apis.oauth2.url,
     })
   })
 })
