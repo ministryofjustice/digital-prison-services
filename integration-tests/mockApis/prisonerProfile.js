@@ -42,6 +42,19 @@ const stubPrisonerProfileCaseNotes = () =>
     },
   })
 
+const stubPrisonerProfileAddCaseNote = () =>
+  stubFor({
+    request: {
+      method: 'GET',
+      urlPattern: '/prisonerprofile/prisoner/.+?/add-case-note',
+    },
+    response: {
+      status: 200,
+      headers: { 'Content-Type': 'text/html' },
+      body: '<html><body><h1>New Prisoner Profile!</h2><h2>Add case note</h2></body></html>',
+    },
+  })
+
 const stubPrisonerProfileAlerts = () =>
   stubFor({
     request: {
@@ -94,6 +107,19 @@ const stubPrisonerProfileAddAppointment = () =>
     },
   })
 
+const stubPrisonerProfileLocationDetails = () =>
+  stubFor({
+    request: {
+      method: 'GET',
+      urlPattern: '/prisonerprofile/prisoner/.+?/location-details',
+    },
+    response: {
+      status: 200,
+      headers: { 'Content-Type': 'text/html' },
+      body: '<html><body><h1>New Prisoner Profile!</h2><h2>Location details</h2></body></html>',
+    },
+  })
+
 const stubPrisonerProfileSaveBacklink = () =>
   stubFor({
     request: {
@@ -111,9 +137,11 @@ module.exports = {
   stubPrisonerProfile,
   stubPrisonerProfilePersonal,
   stubPrisonerProfileCaseNotes,
+  stubPrisonerProfileAddCaseNote,
   stubPrisonerProfileAlerts,
   stubPrisonerProfileOffences,
   stubPrisonerProfileWorkAndSkills,
   stubPrisonerProfileAddAppointment,
+  stubPrisonerProfileLocationDetails,
   stubPrisonerProfileSaveBacklink,
 }

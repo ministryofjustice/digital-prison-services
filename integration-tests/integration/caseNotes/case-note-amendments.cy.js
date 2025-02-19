@@ -1,8 +1,7 @@
 const amendmentPage = require('../../pages/caseNotes/case-note-amendments-page')
-const CaseNotesPage = require('../../pages/prisonerProfile/caseNotePage')
 const offenderFullDetails = require('../../mockApis/responses/offenderFullDetails.json')
 const CaseNoteConfirmPage = require('../../pages/caseNotes/caseNoteConfirmPage')
-const notFoundPage = require('../../pages/notFound')
+const noCaseloadsPage = require('../../pages/prisonerProfile/noCaseloads')
 
 const keyWorkerCaseNote = {
   caseNoteId: 1,
@@ -97,7 +96,7 @@ context('Case note amendments', () => {
     page.save().click()
 
     // Weirdly a user can create the case note but can't access the case note page...
-    notFoundPage.verifyOnPage()
+    noCaseloadsPage.verifyOnPage()
 
     cy.task('verifySaveAmendment').should((requests) => {
       expect(requests).to.have.lengthOf(1)
@@ -129,7 +128,7 @@ context('Case note amendments', () => {
     caseNoteConfirmPage.form().submitButton().click()
 
     // Weirdly a user can create the case note but can't access the case note page...
-    notFoundPage.verifyOnPage()
+    noCaseloadsPage.verifyOnPage()
 
     cy.task('verifySaveAmendment').should((requests) => {
       expect(requests).to.have.lengthOf(1)
