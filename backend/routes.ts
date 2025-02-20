@@ -1,7 +1,6 @@
 import express from 'express'
 
 import { logError } from './logError'
-import { alertFactory } from './controllers/alert'
 import { probationDocumentsFactory } from './controllers/probationDocuments'
 import { downloadProbationDocumentFactory } from './controllers/downloadProbationDocument'
 import { attendanceStatisticsFactory } from './controllers/attendance/attendanceStatistics'
@@ -155,29 +154,9 @@ const setup = ({
     })
   )
 
-  router.get(
-    '/edit-alert',
-    alertFactory(oauthApi, systemOauthClient, hmppsManageUsersApi, prisonApi, referenceCodesService(prisonerAlertsApi))
-      .displayEditAlertPage
-  )
-  router.post(
-    '/edit-alert/:bookingId/:alertId',
-    alertFactory(oauthApi, systemOauthClient, hmppsManageUsersApi, prisonApi, referenceCodesService(prisonerAlertsApi))
-      .handleEditAlertForm
-  )
-  router.get(
-    '/offenders/:offenderNo/create-alert',
-    alertFactory(oauthApi, systemOauthClient, hmppsManageUsersApi, prisonApi, referenceCodesService(prisonerAlertsApi))
-      .displayCreateAlertPage
-  )
-  router.post(
-    '/offenders/:offenderNo/create-alert',
-    alertFactory(oauthApi, systemOauthClient, hmppsManageUsersApi, prisonApi, referenceCodesService(prisonerAlertsApi))
-      .handleCreateAlertForm
-  )
   router.use(
     '/prisoner/:offenderNo/add-case-note',
-    createCaseNoteRouter({ prisonApi, caseNotesApi, oauthApi, systemOauthClient, restrictedPatientApi })
+    createCaseNoteRouter({ prisonApi, oauthApi, systemOauthClient, restrictedPatientApi })
   )
 
   if (whereaboutsMaintenanceMode) {
