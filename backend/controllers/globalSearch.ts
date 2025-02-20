@@ -2,7 +2,7 @@ import moment from 'moment'
 import log from '../log'
 import { isPrisonerIdentifier, putLastNameFirst } from '../utils'
 import dobValidation from '../shared/dobValidation'
-import { app } from '../config'
+import config, { app } from '../config'
 
 const trackEvent = (telemetry, prisonerResults, searchText, filters, username, activeCaseLoad) => {
   if (telemetry) {
@@ -141,6 +141,7 @@ export default ({ paginationService, offenderSearchApi, oauthApi, telemetry }) =
         ...prisoner,
         showUpdateLicenceLink:
           isLicencesUser && (prisoner.currentlyInPrison === 'Y' || isLicencesVaryUser) && prisonerBooked(prisoner),
+        prisonerProfileUrl: `${config.app.prisonerProfileRedirect.url}/prisoner/${prisoner.offenderNo}`,
         showProfileLink:
           (activeCaseLoad &&
             ((userCanViewInactive && prisoner.currentlyInPrison === 'N') || prisoner.currentlyInPrison === 'Y') &&
