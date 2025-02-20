@@ -1649,20 +1649,6 @@ module.exports = {
         jsonBody: response,
       },
     }),
-  stubSystemAlerts: (alerts) =>
-    stubFor({
-      request: {
-        method: 'POST',
-        url: '/api/bookings/offenderNo/alerts',
-      },
-      response: {
-        status: 200,
-        headers: {
-          'Content-Type': 'application/json;charset=UTF-8',
-        },
-        jsonBody: alerts || [],
-      },
-    }),
   stubGetPrisonerDamageObligations: (response) =>
     stubFor({
       request: {
