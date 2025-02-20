@@ -67,14 +67,6 @@ module.exports = defineConfig({
         },
         stubAuthHealth: (status) => auth.stubHealth(status),
         stubPrisonApiHealth: (status) => prisonApi.stubHealth(status),
-        stubWhereaboutsHealth: (status) => whereabouts.stubHealth(status),
-        stubLocationsHealth: (status) => locationsInsidePrisonApi.stubHealth(status),
-        stubAllocationManagerHealth: (status) => allocationManager.stubHealth(status),
-        stubKeyworkerHealth: (status) => keyworker.stubHealth(status),
-        stubCaseNotesHealth: (status) => caseNotes.stubHealth(status),
-        stubCommunityHealth: (status) => delius.stubHealth(status),
-        stubTokenverificationHealth: (status) => tokenverification.stubHealth(status),
-        stubOffenderSearchHealth: (status) => offenderSearch.stubHealth(status),
         stubHealthAllHealthy: () =>
           Promise.all([
             auth.stubHealth(),
@@ -499,7 +491,6 @@ module.exports = defineConfig({
           prisonApi.stubMovementsOut({ agencyId, fromDate, movements }),
         stubGetIepSummaryForBookingIds: (body) => incentivesApi.stubGetIepSummaryForBookingIds(body),
         stubSystemAlerts: prisonApi.stubSystemAlerts,
-        stubInReception: ({ agencyId, results }) => prisonApi.stubRollcountByType(agencyId, 'in-reception', results),
         stubEnRoute: ({ agencyId, results }) => prisonApi.stubEnRoute(agencyId, results),
         stubCurrentlyOut: ({ livingUnitId, movements }) => prisonApi.stubCurrentlyOut(livingUnitId, movements),
         stubTotalCurrentlyOut: ({ agencyId, movements }) => prisonApi.stubTotalCurrentlyOut(agencyId, movements),
