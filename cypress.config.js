@@ -318,7 +318,6 @@ module.exports = defineConfig({
         stubPostAttendance: (response) => whereabouts.stubPostAttendance(response),
         stubPutAttendance: (response) => whereabouts.stubPutAttendance(response),
         verifyPostAttendance: () => whereabouts.verifyPostAttendance(),
-        stubSentenceAdjustments: (response) => prisonApi.stubGetSentenceAdjustments(response),
         stubMovementsBetween: prisonApi.stubMovementsBetween,
         stubOffenderBasicDetails: (basicDetails) => Promise.all([prisonApi.stubOffenderBasicDetails(basicDetails)]),
         stubOffenderFullDetails: (fullDetails) => Promise.all([prisonApi.stubOffenderFullDetails(fullDetails)]),

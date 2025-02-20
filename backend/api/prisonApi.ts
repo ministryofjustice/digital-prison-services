@@ -289,8 +289,6 @@ export const prisonApiFactory = (client) => {
 
   const getPrisonerDetails = (context, offenderNo) => get(context, `/api/prisoners/${offenderNo}`)
 
-  const getPrisonerSentenceDetails = (context, offenderNo) => get(context, `/api/offenders/${offenderNo}/sentences`)
-
   const getPrisonerVisitBalances = (context, offenderNo) =>
     get(context, `/api/bookings/offenderNo/${offenderNo}/visit/balances?allowNoContent=true`)
 
@@ -338,19 +336,6 @@ export const prisonApiFactory = (client) => {
 
   const getVisitCompletionReasons = (context) => get(context, '/api/reference-domains/domains/VIS_COMPLETE', 1000)
   const getVisitCancellationReasons = (context) => get(context, '/api/reference-domains/domains/MOVE_CANC_RS', 1000)
-
-  const getSentenceAdjustments = (context, bookingId) => get(context, `/api/bookings/${bookingId}/sentenceAdjustments`)
-
-  const getCourtCases = (context, bookingId) => get(context, `/api/bookings/${bookingId}/court-cases`)
-
-  const getOffenceHistory = (context, offenderNo) =>
-    get(context, `/api/bookings/offenderNo/${offenderNo}/offenceHistory`)
-
-  const getSentenceTerms = (context, bookingId) =>
-    get(
-      context,
-      `/api/offender-sentences/booking/${bookingId}/sentenceTerms?filterBySentenceTermCodes=IMP&filterBySentenceTermCodes=LIC`
-    )
 
   const getScheduledEventsForThisWeek = (context, bookingId) =>
     get(context, `/api/bookings/${bookingId}/events/thisWeek`)
@@ -469,7 +454,6 @@ export const prisonApiFactory = (client) => {
     getStaffRoles,
     getPrisonerBalances,
     getPrisonerDetails,
-    getPrisonerSentenceDetails,
     getPrisonerVisitBalances,
     getScheduledActivities,
     getPhysicalAttributes,
@@ -483,10 +467,6 @@ export const prisonApiFactory = (client) => {
     getPersonEmails,
     getPersonPhones,
     getProfileInformation,
-    getSentenceAdjustments,
-    getCourtCases,
-    getOffenceHistory,
-    getSentenceTerms,
     getScheduledEventsForThisWeek,
     getScheduledEventsForNextWeek,
     getCellAttributes,
