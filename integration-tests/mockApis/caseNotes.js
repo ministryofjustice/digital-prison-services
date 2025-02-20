@@ -99,6 +99,11 @@ module.exports = {
       urlPattern: '/casenotes/case-notes/A12345/1',
       body: response,
     }),
+  stubGetOffenderCaseNote: (offenderId, caseNoteId, caseNoteResponse) =>
+    getFor({
+      urlPattern: `/casenotes/case-notes/${offenderId}/${caseNoteId}`,
+      body: caseNoteResponse,
+    }),
   stubSaveAmendment: () =>
     stubFor({
       request: {

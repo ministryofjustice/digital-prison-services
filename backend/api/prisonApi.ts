@@ -294,10 +294,6 @@ export const prisonApiFactory = (client) => {
   const getPrisonerVisitBalances = (context, offenderNo) =>
     get(context, `/api/bookings/offenderNo/${offenderNo}/visit/balances?allowNoContent=true`)
 
-  const getIdentifiers = (context, bookingId) => get(context, `/api/bookings/${bookingId}/identifiers`)
-
-  const getOffenderAliases = (context, bookingId) => get(context, `/api/bookings/${bookingId}/aliases`)
-
   const getPhysicalAttributes = (context, bookingId) => get(context, `/api/bookings/${bookingId}/physicalAttributes`)
 
   const getPhysicalCharacteristics = (context, bookingId) =>
@@ -335,20 +331,6 @@ export const prisonApiFactory = (client) => {
     get(context, `/api/locations/description/${locationPrefix}/inmates`, 1000)
 
   const getProfileInformation = (context, bookingId) => get(context, `/api/bookings/${bookingId}/profileInformation`)
-
-  const getSecondaryLanguages = (context, bookingId) => get(context, `/api/bookings/${bookingId}/secondary-languages`)
-
-  const getPrisonerAddresses = (context, offenderNo) => get(context, `/api/offenders/${offenderNo}/addresses`)
-
-  const getPersonalCareNeeds = (context, bookingId, types) =>
-    get(context, `/api/bookings/${bookingId}/personal-care-needs?type=${types}`)
-
-  const getReasonableAdjustments = (context, bookingId, types) =>
-    get(context, `/api/bookings/${bookingId}/reasonable-adjustments?type=${types}`)
-
-  const getTreatmentTypes = (context) => get(context, '/api/reference-domains/domains/HEALTH_TREAT', 1000)
-
-  const getHealthTypes = (context) => get(context, '/api/reference-domains/domains/HEALTH', 1000)
 
   const getCellAttributes = (context) => get(context, '/api/reference-domains/domains/HOU_UNIT_ATT', 1000)
 
@@ -489,9 +471,7 @@ export const prisonApiFactory = (client) => {
     getPrisonerDetails,
     getPrisonerSentenceDetails,
     getPrisonerVisitBalances,
-    getIdentifiers,
     getScheduledActivities,
-    getOffenderAliases,
     getPhysicalAttributes,
     getPhysicalCharacteristics,
     getPhysicalMarks,
@@ -503,12 +483,6 @@ export const prisonApiFactory = (client) => {
     getPersonEmails,
     getPersonPhones,
     getProfileInformation,
-    getPrisonerAddresses,
-    getSecondaryLanguages,
-    getPersonalCareNeeds,
-    getReasonableAdjustments,
-    getTreatmentTypes,
-    getHealthTypes,
     getSentenceAdjustments,
     getCourtCases,
     getOffenceHistory,
