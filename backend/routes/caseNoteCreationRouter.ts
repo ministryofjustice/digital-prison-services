@@ -13,7 +13,7 @@ const controller = ({ prisonApi, caseNotesApi, oauthApi, systemOauthClient, rest
     restrictedPatientApi,
   })
 
-  router.get('/', prisonerProfileRedirect({ path: '/add-case-note', handler: index }))
+  router.get('/', prisonerProfileRedirect({ path: '/add-case-note' }))
   router.post('/', post)
   router.get('/confirm', areYouSure)
   router.post('/confirm', confirm)
