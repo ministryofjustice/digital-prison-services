@@ -364,9 +364,6 @@ export const prisonApiFactory = (client) => {
       }
     )
 
-  const getOffenderCellHistory = (context, bookingId, params) =>
-    get(context, `/api/bookings/${bookingId}/cell-history?${mapToQueryString(params)}`)
-
   const getAttributesForLocation = (context, locationId) => get(context, `/api/cell/${locationId}/attributes`)
 
   const getHistoryForLocation = (context, { locationId, fromDate, toDate }) =>
@@ -476,7 +473,6 @@ export const prisonApiFactory = (client) => {
     getCsraAssessments,
     getCsraAssessmentsForPrisoner,
     getCsraReviewForBooking,
-    getOffenderCellHistory,
     getAttributesForLocation,
     getHistoryForLocation,
     getLocationDetails,

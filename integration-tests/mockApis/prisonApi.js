@@ -1136,20 +1136,6 @@ module.exports = {
         jsonBody: details || {},
       },
     }),
-  stubAppointmentsForBooking: (appointments, status = 200) =>
-    stubFor({
-      request: {
-        method: 'POST',
-        urlPattern: '/api/bookings/[0-9]+?/appointments',
-      },
-      response: {
-        status,
-        headers: {
-          'Content-Type': 'application/json;charset=UTF-8',
-        },
-        jsonBody: appointments || [],
-      },
-    }),
   stubUsageAtAgency: (agency, type, locations, status = 200) =>
     stubFor({
       request: {
@@ -1481,20 +1467,6 @@ module.exports = {
       },
     }),
 
-  stubOffenderCellHistory: (history) =>
-    stubFor({
-      request: {
-        method: 'GET',
-        urlPathPattern: '/api/bookings/[0-9]+?/cell-history',
-      },
-      response: {
-        status: 200,
-        headers: {
-          'Content-Type': 'application/json;charset=UTF-8',
-        },
-        jsonBody: history || { content: [] },
-      },
-    }),
   stubHistoryForLocation: (locationHistory) =>
     stubFor({
       request: {
@@ -1521,48 +1493,6 @@ module.exports = {
           'Content-Type': 'application/json;charset=UTF-8',
         },
         jsonBody: locationAttributes || {},
-      },
-    }),
-  stubAssignedMovements: (agencyId, movements) =>
-    stubFor({
-      request: {
-        method: 'GET',
-        url: `/api/movements/rollcount/${agencyId}?unassigned=false`,
-      },
-      response: {
-        status: 200,
-        headers: {
-          'Content-Type': 'application/json;charset=UTF-8',
-        },
-        jsonBody: movements || {},
-      },
-    }),
-  stubUnassignedMovements: (agencyId, movements) =>
-    stubFor({
-      request: {
-        method: 'GET',
-        url: `/api/movements/rollcount/${agencyId}?unassigned=true`,
-      },
-      response: {
-        status: 200,
-        headers: {
-          'Content-Type': 'application/json;charset=UTF-8',
-        },
-        jsonBody: movements || {},
-      },
-    }),
-  stubRollcountByType: (agencyId, type, movements) =>
-    stubFor({
-      request: {
-        method: 'GET',
-        url: `/api/movements/rollcount/${agencyId}/${type}`,
-      },
-      response: {
-        status: 200,
-        headers: {
-          'Content-Type': 'application/json;charset=UTF-8',
-        },
-        jsonBody: movements || {},
       },
     }),
   stubEnRoute: (agencyId, movements) =>
@@ -1605,20 +1535,6 @@ module.exports = {
           'Content-Type': 'application/json;charset=UTF-8',
         },
         jsonBody: {},
-      },
-    }),
-  stubAdjudicationFindingTypes: (types) =>
-    stubFor({
-      request: {
-        method: 'GET',
-        urlPattern: '/api/reference-domains/domains/OIC_FINDING',
-      },
-      response: {
-        status: 200,
-        headers: {
-          'Content-Type': 'application/json;charset=UTF-8',
-        },
-        jsonBody: types,
       },
     }),
   stubPrisonApiGlobalSearch: (response) =>
