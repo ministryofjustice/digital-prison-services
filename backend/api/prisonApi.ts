@@ -126,8 +126,6 @@ export const prisonApiFactory = (client) => {
   const getVisitsForBookingWithVisitors = (context, bookingId, params) =>
     get(context, `/api/bookings/${bookingId}/visits-with-visitors?${mapToQueryString(params)}`)
 
-  const getVisitsSummary = (context, bookingId) => get(context, `/api/bookings/${bookingId}/visits/summary`)
-
   const getVisitsPrisons = (context, bookingId) => get(context, `/api/bookings/${bookingId}/visits/prisons`)
 
   const getAppointments = (context, { agencyId, date, timeSlot, offenderNumbers }) =>
@@ -275,8 +273,6 @@ export const prisonApiFactory = (client) => {
   const getCaseNoteSummaryByTypes = (context, params) =>
     get(context, `/api/case-notes/summary?${mapToQueryString(params)}`)
 
-  const getMainOffence = (context, bookingId) => get(context, `/api/bookings/${bookingId}/mainOffence`)
-
   const getStaffRoles = async (context, staffId, agencyId) => {
     try {
       return await get(context, `/api/staff/${staffId}/${agencyId}/roles`)
@@ -295,16 +291,8 @@ export const prisonApiFactory = (client) => {
 
   const getPrisonerSentenceDetails = (context, offenderNo) => get(context, `/api/offenders/${offenderNo}/sentences`)
 
-  const getPositiveCaseNotes = (context, bookingId, fromDate, toDate) =>
-    get(context, `/api/bookings/${bookingId}/caseNotes/POS/IEP_ENC/count?fromDate=${fromDate}&toDate=${toDate}`)
-
-  const getNegativeCaseNotes = (context, bookingId, fromDate, toDate) =>
-    get(context, `/api/bookings/${bookingId}/caseNotes/NEG/IEP_WARN/count?fromDate=${fromDate}&toDate=${toDate}`)
-
   const getPrisonerVisitBalances = (context, offenderNo) =>
     get(context, `/api/bookings/offenderNo/${offenderNo}/visit/balances?allowNoContent=true`)
-
-  const getEventsForToday = (context, bookingId) => get(context, `/api/bookings/${bookingId}/events/today`)
 
   const getIdentifiers = (context, bookingId) => get(context, `/api/bookings/${bookingId}/identifiers`)
 
@@ -454,7 +442,6 @@ export const prisonApiFactory = (client) => {
     searchActivityLocations,
     getVisits,
     getVisitsForBookingWithVisitors,
-    getVisitsSummary,
     getVisitsPrisons,
     getAppointments,
     getActivities,
@@ -497,15 +484,11 @@ export const prisonApiFactory = (client) => {
     getActivitiesAtLocation,
     addSingleAppointment,
     getCaseNoteSummaryByTypes,
-    getMainOffence,
     getStaffRoles,
     getPrisonerBalances,
     getPrisonerDetails,
     getPrisonerSentenceDetails,
-    getPositiveCaseNotes,
-    getNegativeCaseNotes,
     getPrisonerVisitBalances,
-    getEventsForToday,
     getIdentifiers,
     getScheduledActivities,
     getOffenderAliases,
