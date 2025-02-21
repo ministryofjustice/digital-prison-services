@@ -6,6 +6,7 @@ import { alertFlagLabels, profileAlertCodes } from '../../shared/alertFlagValues
 import { putLastNameFirst, hasLength, formatLocation } from '../../utils'
 import type apis from '../../apis'
 import { Location } from '../../api/prisonApi'
+import config from '../../config'
 
 export const trackEvent = (telemetry, results, searchQueries, username, activeCaseLoad) => {
   if (telemetry) {
@@ -140,6 +141,7 @@ export default ({
       }
 
       return res.render('prisonerSearch/prisonerSearch.njk', {
+        prisonerProfileBaseUrl: config.app.prisonerProfileRedirect.url,
         alertOptions: alertFlagLabels
           // @ts-expect-error ts-migrate(2556) FIXME: Expected 1-2 arguments, but got 0 or more.
           .filter(({ alertCodes }) => profileAlertCodes.includes(...alertCodes))
