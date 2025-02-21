@@ -124,7 +124,7 @@ context('Global search', () => {
         .first()
         .invoke('attr', 'href')
         .then((href) => {
-          expect(href).to.equal('/prisoner/A1234AC')
+          expect(href).to.equal('http://localhost:9191/prisonerprofile/prisoner/A1234AC')
         })
     })
   })
@@ -275,14 +275,14 @@ context('when user can has INACTIVE_BOOKINGS role', () => {
         .first()
         .invoke('attr', 'href')
         .then((href) => {
-          expect(href).to.equal('/prisoner/A1234AC')
+          expect(href).to.equal('http://localhost:9191/prisonerprofile/prisoner/A1234AC')
         })
 
       cy.get($profileLinks)
         .last()
         .invoke('attr', 'href')
         .then((href) => {
-          expect(href).to.equal('/prisoner/A1234AA')
+          expect(href).to.equal('http://localhost:9191/prisonerprofile/prisoner/A1234AA')
         })
     })
   })
