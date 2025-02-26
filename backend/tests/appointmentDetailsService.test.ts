@@ -1,6 +1,7 @@
 import { makeNotFoundError } from './helpers'
 
 import appointmentDetailsServiceFactory from '../services/appointmentDetailsService'
+import config from '../config'
 
 describe('appointment details', () => {
   const testAppointment = {
@@ -44,7 +45,8 @@ describe('appointment details', () => {
     // @ts-expect-error ts-migrate(2339) FIXME: Property 'getAppointmentTypes' does not exist on t... Remove this comment to see the full error message
     prisonApi.getAppointmentTypes = jest.fn().mockResolvedValue([
       { code: 'GYM', description: 'Gym' },
-      { description: 'Video link booking', code: 'VLB' },
+      { description: 'Video Link - Court Hearing', code: 'VLB' },
+      { description: 'Video Link - Probation Meeting', code: 'VLPM' },
     ])
     // @ts-expect-error ts-migrate(2339) FIXME: Property 'getStaffDetails' does not exist on type ... Remove this comment to see the full error message
     prisonApi.getStaffDetails = jest
@@ -244,7 +246,7 @@ describe('appointment details', () => {
         },
         basicDetails: {
           location: 'VCC Room 2',
-          type: 'Video link booking',
+          type: 'Video Link - Court Hearing',
           courtLocation: 'Aberystwyth Family',
           hearingType: 'Application',
         },
@@ -256,32 +258,6 @@ describe('appointment details', () => {
         prepostData: {
           'pre-court hearing briefing': 'Gymnasium - 09:45 to 10:00',
           'post-court hearing briefing': 'Gymnasium - 11:00 to 11:15',
-        },
-      })
-    })
-
-    it('should render with probation team and correct vlb locations and types', async () => {
-      videoLinkBookingService.getVideoLinkBookingFromAppointmentId.mockResolvedValue(
-        buildVideoLinkBooking('PROBATION', false)
-      )
-
-      const appointmentDetails = await service.getAppointmentViewModel(res, videoLinkBookingAppointment, 'MDI')
-
-      expect(appointmentDetails).toMatchObject({
-        additionalDetails: {
-          comments: 'Test appointment comments',
-          addedBy: 'Probation team',
-        },
-        basicDetails: {
-          location: 'VCC Room 2',
-          type: 'Video link booking',
-          probationTeam: 'Blackpool',
-          meetingType: 'Post sentence recall',
-        },
-        timeDetails: {
-          date: '20 May 2021',
-          startTime: '10:00',
-          endTime: '11:00',
         },
       })
     })
@@ -305,6 +281,9 @@ describe('appointment details', () => {
     let videoLinkBookingAppointment
 
     beforeEach(() => {
+      config.app.bvlsMasteredVlpmFeatureToggleEnabled = true
+      config.app.bvlsMasteredAppointmentTypes = ['VLB', 'VLPM']
+
       videoLinkBookingService.getVideoLinkBookingFromAppointmentId.mockResolvedValue({
         bookingType: 'PROBATION',
         prisonAppointments: [
@@ -327,7 +306,7 @@ describe('appointment details', () => {
       videoLinkBookingAppointment = {
         appointment: {
           ...testAppointment.appointment,
-          appointmentTypeCode: 'VLB',
+          appointmentTypeCode: 'VLPM',
           startTime: '2021-05-20T13:00:00',
           endTime: '2021-05-20T14:00:00',
           comment: 'Test appointment comments',
@@ -345,7 +324,7 @@ describe('appointment details', () => {
         },
         basicDetails: {
           location: 'VCC Room 2',
-          type: 'Video link booking',
+          type: 'Video Link - Probation Meeting',
           meetingType: 'Recall hearing',
           probationTeam: 'Aberystwyth Family',
         },
