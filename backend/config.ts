@@ -28,7 +28,6 @@ export const app = {
   keyworkerMaintenanceMode: process.env.KEYWORKER_MAINTENANCE_MODE === 'true' || false,
   covidUnitsEnabled: process.env.COVID_UNITS_ENABLED === 'true' || false,
   amendAppointmentToggleEnabled: process.env.FEATURE_AMEND_APPOINTMENT_TOGGLE_ENABLED === 'true',
-  videoConferenceScheduleFeatureToggleEnabled: process.env.VIDEO_CONFERENCE_SCHEDULE_FEATURE_TOGGLE_ENABLED === 'true',
   videoConferenceScheduleUrl: process.env.VIDEO_CONFERENCE_SCHEDULE_URL,
   prisonerProfileRedirect: {
     url: process.env.PRISONER_PROFILE_REDIRECT_URL || 'http://localhost:3000',
