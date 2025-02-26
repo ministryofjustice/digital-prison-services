@@ -257,7 +257,6 @@ describe('appointment details', () => {
       })
 
       it('should render with court location and correct vlb locations and types', async () => {
-        config.app.amendAppointmentToggleEnabled = true
         await controller(req, res)
 
         expect(res.render).toHaveBeenCalledWith(

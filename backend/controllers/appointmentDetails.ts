@@ -1,5 +1,5 @@
 import { formatName } from '../utils'
-import config from '../config'
+import config, { app } from '../config'
 
 export default ({ oauthApi, prisonApi, whereaboutsApi, appointmentDetailsService }) =>
   async (req, res) => {
@@ -28,9 +28,8 @@ export default ({ oauthApi, prisonApi, whereaboutsApi, appointmentDetailsService
     return res.render('appointmentDetails', {
       appointmentConfirmDeletionLink: canAmendAppointment && `/appointment-details/${id}/confirm-deletion`,
       appointmentAmendLink:
-        config.app.amendAppointmentToggleEnabled &&
         canAmendAppointment &&
-        appointmentDetails.appointment.appointmentTypeCode === 'VLB' &&
+        app.bvlsMasteredAppointmentTypes.includes(appointmentDetails.appointment.appointmentTypeCode) &&
         `${config.app.prisonerProfileRedirect.url}/prisoner/${appointmentDetails.appointment.offenderNo}/edit-appointment/${id}`,
       additionalDetails,
       basicDetails,

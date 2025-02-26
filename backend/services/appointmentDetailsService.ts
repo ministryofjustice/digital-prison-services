@@ -1,6 +1,7 @@
 import moment from 'moment'
 import { endRecurringEndingDate, repeatTypes } from '../shared/appointmentConstants'
 import { formatName, getDate, getTime, getWith404AsNull } from '../utils'
+import { app } from '../config'
 
 export default ({
   prisonApi,
@@ -57,7 +58,7 @@ export default ({
     let vlb
     let locationType
 
-    if (appointmentDetails.appointment.appointmentTypeCode === 'VLB') {
+    if (app.bvlsMasteredAppointmentTypes.includes(appointmentDetails.appointment.appointmentTypeCode)) {
       const systemContext = await getClientCredentialsTokens(res.locals.user.username)
       vlb = await videoLinkBookingService.getVideoLinkBookingFromAppointmentId(systemContext, appointment.id)
     }
@@ -129,7 +130,7 @@ export default ({
         : (appointment.endTime && getTime(appointment.endTime)) || 'Not entered',
     }
 
-    const recurringDetails = appointment.appointmentTypeCode !== 'VLB' && {
+    const recurringDetails = !app.bvlsMasteredAppointmentTypes.includes(appointment.appointmentTypeCode) && {
       recurring: recurring ? 'Yes' : 'No',
       ...(recurring && {
         repeats: repeatTypes.find((repeat) => repeat.value === recurring.repeatPeriod).text,
