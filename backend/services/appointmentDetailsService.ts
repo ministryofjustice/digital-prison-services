@@ -107,23 +107,33 @@ export default ({
       return vlb ? getAddedByUser(res, vlb.createdBy) : getAddedByUser(res, appointment.createUserId)
     }
 
-    const additionalDetails = {
-      courtLocation: vlb?.courtDescription,
-      probationTeam: vlb?.probationTeamDescription,
-      meetingType: vlb?.probationMeetingTypeDescription,
-      hearingType: vlb?.courtHearingTypeDescription,
-      courtHearingLink: vlb && vlb.bookingType === 'COURT' ? vlb.videoLinkUrl || 'Not yet known' : undefined,
-      comments: vlb?.comments || appointment.comment || 'Not entered',
-      addedBy: await getAddedBy(),
-    }
-
     const basicDetails = {
       type: appointmentType?.description,
       location: locationType?.userDescription,
-      date: getDate(appointment.startTime, 'D MMMM YYYY'),
+      prisonVideoLink:
+        app.bvlsMasteredVlpmFeatureToggleEnabled && vlb && vlb.bookingType !== 'COURT'
+          ? vlb.videoLinkUrl || 'None entered'
+          : undefined,
+      courtLocation: vlb?.courtDescription,
+      probationTeam: vlb?.probationTeamDescription,
+      probationOfficer:
+        app.bvlsMasteredVlpmFeatureToggleEnabled && vlb && vlb.bookingType === 'PROBATION'
+          ? vlb.additionalBookingDetails?.contactName || 'Not yet known'
+          : undefined,
+      emailAddress:
+        app.bvlsMasteredVlpmFeatureToggleEnabled && vlb && vlb.bookingType === 'PROBATION'
+          ? vlb.additionalBookingDetails?.contactEmail || 'Not yet known'
+          : undefined,
+      ukPhoneNumber:
+        app.bvlsMasteredVlpmFeatureToggleEnabled && vlb && vlb.bookingType === 'PROBATION'
+          ? vlb.additionalBookingDetails?.contactNumber || 'None entered'
+          : undefined,
+      meetingType: vlb?.probationMeetingTypeDescription,
+      hearingType: vlb?.courtHearingTypeDescription,
     }
 
     const timeDetails = {
+      date: getDate(appointment.startTime, 'D MMMM YYYY'),
       startTime: vlb ? getTime(fetchVlbAppointments(vlb).mainAppointment.startTime) : getTime(appointment.startTime),
       endTime: vlb
         ? getTime(fetchVlbAppointments(vlb).mainAppointment.endTime)
@@ -138,6 +148,12 @@ export default ({
       }),
     }
 
+    const additionalDetails = {
+      courtHearingLink: vlb && vlb.bookingType === 'COURT' ? vlb.videoLinkUrl || 'Not yet known' : undefined,
+      comments: vlb?.comments || appointment.comment || 'Not entered',
+      addedBy: await getAddedBy(),
+    }
+
     return {
       isRecurring: !!recurring,
       additionalDetails,
@@ -145,7 +161,9 @@ export default ({
       prepostData,
       recurringDetails,
       timeDetails,
-      canAmendVlb: vlb ? videoLinkBookingService.bookingIsAmendable(fetchVlbAppointments(vlb), vlb.statusCode) : true,
+      canAmendVlb: vlb
+        ? videoLinkBookingService.bookingIsAmendable(fetchVlbAppointments(vlb), vlb.statusCode)
+        : !app.bvlsMasteredAppointmentTypes.includes(appointment.appointmentTypeCode),
     }
   }
 

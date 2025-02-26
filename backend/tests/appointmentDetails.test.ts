@@ -2,7 +2,6 @@ import { makeNotFoundError } from './helpers'
 
 import appointmentDetails from '../controllers/appointmentDetails'
 import appointmentDetailsServiceFactory from '../services/appointmentDetailsService'
-import config from '../config'
 
 describe('appointment details', () => {
   const testAppointment = {
@@ -138,7 +137,6 @@ describe('appointment details', () => {
           addedBy: 'Test User',
         },
         basicDetails: {
-          date: '20 May 2021',
           location: 'Gymnasium',
           type: 'Gym',
         },
@@ -151,6 +149,7 @@ describe('appointment details', () => {
           recurring: 'No',
         },
         timeDetails: {
+          date: '20 May 2021',
           startTime: '13:00',
           endTime: 'Not entered',
         },
@@ -264,18 +263,18 @@ describe('appointment details', () => {
           expect.objectContaining({
             appointmentAmendLink: 'http://localhost:3000/prisoner/ABC123/edit-appointment/1', // Allowed to edit VLB appointments
             additionalDetails: {
-              courtLocation: 'Nottingham Justice Centre',
-              hearingType: 'Appeal',
               courtHearingLink: 'Not yet known',
               comments: 'VLB comments',
               addedBy: 'Court',
             },
             basicDetails: {
-              date: '20 May 2021',
               location: 'VCC Room 1',
               type: 'Video link booking',
+              courtLocation: 'Nottingham Justice Centre',
+              hearingType: 'Appeal',
             },
             timeDetails: {
+              date: '20 May 2021',
               startTime: '13:00',
               endTime: '14:00',
             },

@@ -120,7 +120,6 @@ describe('appointment details', () => {
           addedBy: 'Test User',
         },
         basicDetails: {
-          date: '20 May 2021',
           location: 'Gymnasium',
           type: 'Gym',
         },
@@ -129,6 +128,7 @@ describe('appointment details', () => {
           recurring: 'No',
         },
         timeDetails: {
+          date: '20 May 2021',
           startTime: '13:00',
           endTime: 'Not entered',
         },
@@ -238,18 +238,18 @@ describe('appointment details', () => {
 
       expect(appointmentDetails).toMatchObject({
         additionalDetails: {
-          hearingType: 'Application',
-          courtLocation: 'Aberystwyth Family',
           courtHearingLink: 'Not yet known',
           comments: 'Test appointment comments',
           addedBy: 'Court',
         },
         basicDetails: {
-          date: '20 May 2021',
           location: 'VCC Room 2',
           type: 'Video link booking',
+          courtLocation: 'Aberystwyth Family',
+          hearingType: 'Application',
         },
         timeDetails: {
+          date: '20 May 2021',
           startTime: '10:00',
           endTime: '11:00',
         },
@@ -269,17 +269,17 @@ describe('appointment details', () => {
 
       expect(appointmentDetails).toMatchObject({
         additionalDetails: {
-          meetingType: 'Post sentence recall',
-          probationTeam: 'Blackpool',
           comments: 'Test appointment comments',
           addedBy: 'Probation team',
         },
         basicDetails: {
-          date: '20 May 2021',
           location: 'VCC Room 2',
           type: 'Video link booking',
+          probationTeam: 'Blackpool',
+          meetingType: 'Post sentence recall',
         },
         timeDetails: {
+          date: '20 May 2021',
           startTime: '10:00',
           endTime: '11:00',
         },
@@ -340,17 +340,17 @@ describe('appointment details', () => {
 
       expect(appointmentDetails).toMatchObject({
         additionalDetails: {
-          meetingType: 'Recall hearing',
-          probationTeam: 'Aberystwyth Family',
           comments: 'Test appointment comments',
           addedBy: 'Test User',
         },
         basicDetails: {
-          date: '20 May 2021',
           location: 'VCC Room 2',
           type: 'Video link booking',
+          meetingType: 'Recall hearing',
+          probationTeam: 'Aberystwyth Family',
         },
         timeDetails: {
+          date: '20 May 2021',
           startTime: '10:00',
           endTime: '11:00',
         },
