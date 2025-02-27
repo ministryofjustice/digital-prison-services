@@ -5,6 +5,9 @@ jest.mock('../utils', () => ({
   getWith404AsNull: jest.fn().mockImplementation((a) => a),
 }))
 jest.mock('../config', () => ({
+  app: {
+    bvlsMasteredAppointmentTypes: ['VLB'],
+  },
   apis: {
     bookAVideoLinkApi: { enabled: true },
   },
@@ -39,7 +42,7 @@ describe('Video Link Booking Service', () => {
   })
 
   describe('getVideoLinkBookingFromAppointmentId', () => {
-    it('should return video link booking when appointment type is VLB and API is enabled', async () => {
+    it('should return video link booking when appointment type is mastered in BVLS and API is enabled', async () => {
       const appointmentDetails = {
         appointment: {
           locationId: 123,
@@ -67,7 +70,7 @@ describe('Video Link Booking Service', () => {
       expect(result).toEqual(videoLinkBooking)
     })
 
-    it('should return null when appointment type is not VLB', async () => {
+    it('should return null when appointment type is not mastered in BVLS', async () => {
       const appointmentDetails = {
         appointment: {
           locationId: 123,

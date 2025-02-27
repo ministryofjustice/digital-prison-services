@@ -78,7 +78,7 @@ export const whereaboutsTasks: TaskType[] = [
     heading: 'Video link daily schedule',
     description: 'View official video link bookings for a VCC, PCVL, or legal visits area, and print off schedules.',
     href: config.app.videoConferenceScheduleUrl,
-    enabled: () => config.app.videoConferenceScheduleFeatureToggleEnabled,
+    enabled: isEnabled,
   },
 ]
 
