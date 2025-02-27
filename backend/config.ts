@@ -27,7 +27,6 @@ export const app = {
   whereaboutsMaintenanceMode: process.env.WHEREABOUTS_MAINTENANCE_MODE === 'true' || false,
   keyworkerMaintenanceMode: process.env.KEYWORKER_MAINTENANCE_MODE === 'true' || false,
   covidUnitsEnabled: process.env.COVID_UNITS_ENABLED === 'true' || false,
-  amendAppointmentToggleEnabled: process.env.FEATURE_AMEND_APPOINTMENT_TOGGLE_ENABLED === 'true',
   videoConferenceScheduleUrl: process.env.VIDEO_CONFERENCE_SCHEDULE_URL,
   prisonerProfileRedirect: {
     url: process.env.PRISONER_PROFILE_REDIRECT_URL || 'http://localhost:3000',
@@ -39,6 +38,11 @@ export const app = {
     scheduleRedirectForPrisons: process.env.HOMEPAGE_SCHEDULE_REDIRECT_FOR_PRISONS || '',
     exemptions: process.env.HOMEPAGE_REDIRECT_EXEMPTIONS || '',
   },
+  bvlsMasteredVlpmFeatureToggleEnabled: process.env.BVLS_MASTERED_VLPM_FEATURE_TOGGLE_ENABLED === 'true',
+  bvlsMasteredAppointmentTypes: [
+    'VLB',
+    process.env.BVLS_MASTERED_VLPM_FEATURE_TOGGLE_ENABLED === 'true' ? 'VLPM' : undefined,
+  ].filter(Boolean),
   gitRef: process.env.GIT_REF || '',
   sunsetBannerEnabled: process.env.SUNSET_BANNER_ENABLED === 'true',
 }

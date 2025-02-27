@@ -1,6 +1,7 @@
 import moment from 'moment'
 import { endRecurringEndingDate, repeatTypes } from '../shared/appointmentConstants'
 import { formatName, getDate, getTime, getWith404AsNull } from '../utils'
+import { app } from '../config'
 
 export default ({
   prisonApi,
@@ -57,7 +58,7 @@ export default ({
     let vlb
     let locationType
 
-    if (appointmentDetails.appointment.appointmentTypeCode === 'VLB') {
+    if (app.bvlsMasteredAppointmentTypes.includes(appointmentDetails.appointment.appointmentTypeCode)) {
       const systemContext = await getClientCredentialsTokens(res.locals.user.username)
       vlb = await videoLinkBookingService.getVideoLinkBookingFromAppointmentId(systemContext, appointment.id)
     }
@@ -106,35 +107,51 @@ export default ({
       return vlb ? getAddedByUser(res, vlb.createdBy) : getAddedByUser(res, appointment.createUserId)
     }
 
-    const additionalDetails = {
-      courtLocation: vlb?.courtDescription,
-      probationTeam: vlb?.probationTeamDescription,
-      meetingType: vlb?.probationMeetingTypeDescription,
-      hearingType: vlb?.courtHearingTypeDescription,
-      courtHearingLink: vlb && vlb.bookingType === 'COURT' ? vlb.videoLinkUrl || 'Not yet known' : undefined,
-      comments: vlb?.comments || appointment.comment || 'Not entered',
-      addedBy: await getAddedBy(),
-    }
-
     const basicDetails = {
       type: appointmentType?.description,
       location: locationType?.userDescription,
-      date: getDate(appointment.startTime, 'D MMMM YYYY'),
+      prisonVideoLink:
+        app.bvlsMasteredVlpmFeatureToggleEnabled && vlb && vlb.bookingType !== 'COURT'
+          ? vlb.videoLinkUrl || 'None entered'
+          : undefined,
+      courtLocation: vlb?.courtDescription,
+      probationTeam: vlb?.probationTeamDescription,
+      probationOfficer:
+        app.bvlsMasteredVlpmFeatureToggleEnabled && vlb && vlb.bookingType === 'PROBATION'
+          ? vlb.additionalBookingDetails?.contactName || 'Not yet known'
+          : undefined,
+      emailAddress:
+        app.bvlsMasteredVlpmFeatureToggleEnabled && vlb && vlb.bookingType === 'PROBATION'
+          ? vlb.additionalBookingDetails?.contactEmail || 'Not yet known'
+          : undefined,
+      ukPhoneNumber:
+        app.bvlsMasteredVlpmFeatureToggleEnabled && vlb && vlb.bookingType === 'PROBATION'
+          ? vlb.additionalBookingDetails?.contactNumber || 'None entered'
+          : undefined,
+      meetingType: vlb?.probationMeetingTypeDescription,
+      hearingType: vlb?.courtHearingTypeDescription,
     }
 
     const timeDetails = {
+      date: getDate(appointment.startTime, 'D MMMM YYYY'),
       startTime: vlb ? getTime(fetchVlbAppointments(vlb).mainAppointment.startTime) : getTime(appointment.startTime),
       endTime: vlb
         ? getTime(fetchVlbAppointments(vlb).mainAppointment.endTime)
         : (appointment.endTime && getTime(appointment.endTime)) || 'Not entered',
     }
 
-    const recurringDetails = appointment.appointmentTypeCode !== 'VLB' && {
+    const recurringDetails = !app.bvlsMasteredAppointmentTypes.includes(appointment.appointmentTypeCode) && {
       recurring: recurring ? 'Yes' : 'No',
       ...(recurring && {
         repeats: repeatTypes.find((repeat) => repeat.value === recurring.repeatPeriod).text,
         lastAppointment: getDate(lastAppointmentDate.endOfPeriod, 'D MMMM YYYY'),
       }),
+    }
+
+    const additionalDetails = {
+      courtHearingLink: vlb && vlb.bookingType === 'COURT' ? vlb.videoLinkUrl || 'Not yet known' : undefined,
+      comments: vlb?.comments || appointment.comment || 'Not entered',
+      addedBy: await getAddedBy(),
     }
 
     return {
@@ -144,7 +161,9 @@ export default ({
       prepostData,
       recurringDetails,
       timeDetails,
-      canAmendVlb: vlb ? videoLinkBookingService.bookingIsAmendable(fetchVlbAppointments(vlb), vlb.statusCode) : true,
+      canAmendVlb: vlb
+        ? videoLinkBookingService.bookingIsAmendable(fetchVlbAppointments(vlb), vlb.statusCode)
+        : !app.bvlsMasteredAppointmentTypes.includes(appointment.appointmentTypeCode),
     }
   }
 
