@@ -64,20 +64,6 @@ module.exports = {
       urlPath: '/casenotes/case-notes/A12345',
       body,
     }),
-  stubCreateCaseNote: (body) =>
-    stubFor({
-      request: {
-        method: 'POST',
-        urlPattern: '/casenotes/case-notes/.+?',
-      },
-      response: {
-        status: 200,
-        headers: {
-          'Content-Type': 'application/json;charset=UTF-8',
-        },
-        jsonBody: body,
-      },
-    }),
   stubDeleteCaseNote: () =>
     stubFor({
       request: {
@@ -132,10 +118,5 @@ module.exports = {
     getMatchingRequests({
       method: 'PUT',
       urlPathPattern: '/casenotes/case-notes/A12345/1',
-    }).then((data) => data.body.requests),
-  verifySaveCaseNote: () =>
-    getMatchingRequests({
-      method: 'POST',
-      urlPattern: '/casenotes/case-notes/.+?',
     }).then((data) => data.body.requests),
 }

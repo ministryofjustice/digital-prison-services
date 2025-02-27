@@ -1,3 +1,5 @@
+import { app } from '../config'
+
 export default ({ whereaboutsApi, appointmentDetailsService, videoLinkBookingService, getClientCredentialsTokens }) => {
   const renderTemplate = (req, res, id, appointmentViewModel, errors) => {
     const { isRecurring, additionalDetails, basicDetails, prepostData, recurringDetails, timeDetails } =
@@ -60,7 +62,7 @@ export default ({ whereaboutsApi, appointmentDetailsService, videoLinkBookingSer
 
       const systemContext = await getClientCredentialsTokens(res.locals.user.username)
 
-      if (appointmentDetails.appointment.appointmentTypeCode === 'VLB') {
+      if (app.bvlsMasteredAppointmentTypes.includes(appointmentDetails.appointment.appointmentTypeCode)) {
         videoLinkBooking = await videoLinkBookingService.getVideoLinkBookingFromAppointmentId(systemContext, id)
       }
 

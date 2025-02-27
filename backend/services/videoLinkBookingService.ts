@@ -1,5 +1,6 @@
 import moment from 'moment'
 import { getWith404AsNull } from '../utils'
+import { app } from '../config'
 
 export default ({ whereaboutsApi, bookAVideoLinkApi, locationsInsidePrisonApi, nomisMapping }) => {
   const getVideoLinkBookingFromAppointmentId = async (
@@ -11,7 +12,7 @@ export default ({ whereaboutsApi, bookAVideoLinkApi, locationsInsidePrisonApi, n
       .getNomisLocationMappingByNomisLocationId(context, appointmentDetails.appointment.locationId)
       .then((mapping) => locationsInsidePrisonApi.getLocationById(context, mapping.dpsLocationId))
 
-    return appointmentDetails.appointment.appointmentTypeCode === 'VLB'
+    return app.bvlsMasteredAppointmentTypes.includes(appointmentDetails.appointment.appointmentTypeCode)
       ? getWith404AsNull(
           bookAVideoLinkApi.matchAppointmentToVideoLinkBooking(context, appointmentDetails.appointment, location)
         )

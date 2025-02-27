@@ -1,14 +1,6 @@
 const moment = require('moment')
-const offenderBasicDetails = require('../../mockApis/responses/offenderBasicDetails.json')
-const offenderFullDetails = require('../../mockApis/responses/offenderFullDetails.json')
-const { quickLookFullDetails } = require('../../mockData/quickLookFullDetails')
 
 context('Prisoner search', () => {
-  const inmate1Iep = {
-    bookingId: 1,
-    iepLevel: 'Standard',
-  }
-
   beforeEach(() => {
     cy.session('hmpps-prisoner-dev', () => {
       cy.clearCookies()
