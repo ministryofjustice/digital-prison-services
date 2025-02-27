@@ -2,6 +2,7 @@ import moment from 'moment'
 import { Response } from 'express'
 import { formatName, getCurrentPeriod, getTime, properCaseName } from '../../utils'
 import { PrisonerSearchResult } from '../../api/offenderSearchApi'
+import config from '../../config'
 
 export const getAgencyGroupLocationPrefix = async (
   systemContext,
@@ -81,7 +82,7 @@ export default ({
             vlb.endTime === moment(app.endTime).format('HH:mm') &&
             vlb.prisonerNumber === app.offenderNo &&
             vlb.dpsLocationId === locationMappings.find((m) => m.nomisLocationId === app.locationId)?.dpsLocationId &&
-            app.appointmentTypeCode === 'VLB'
+            config.app.bvlsMasteredAppointmentTypes.includes(app.appointmentTypeCode)
         )
 
         return appointment
@@ -122,7 +123,7 @@ export default ({
       }
 
       const videoLinkAppointment =
-        appointment.appointmentTypeCode === 'VLB' &&
+        config.app.bvlsMasteredAppointmentTypes.includes(appointment.appointmentTypeCode) &&
         videoLinkAppointments.find((videoLinkAppt) => videoLinkAppt.appointmentId === appointment.id)
 
       return [
