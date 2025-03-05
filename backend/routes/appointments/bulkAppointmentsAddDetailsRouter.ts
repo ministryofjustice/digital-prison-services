@@ -4,8 +4,10 @@ import { appointmentsServiceFactory } from '../../services/appointmentsService'
 
 const router = express.Router()
 
-const controller = ({ prisonApi, oauthApi, logError }) => {
-  const { index, post } = bulkAppointmentsAddDetailsFactory(appointmentsServiceFactory(prisonApi))
+const controller = ({ prisonApi, locationsInsidePrisonApi, oauthApi, logError }) => {
+  const { index, post } = bulkAppointmentsAddDetailsFactory(
+    appointmentsServiceFactory(prisonApi, locationsInsidePrisonApi)
+  )
 
   router.get('/', index)
   router.post('/', post)
