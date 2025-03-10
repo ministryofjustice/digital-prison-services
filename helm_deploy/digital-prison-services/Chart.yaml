@@ -9,5 +9,5 @@ dependencies:
     version: "3.9"
     repository: https://ministryofjustice.github.io/hmpps-helm-charts
   - name: generic-prometheus-alerts
-    version: "1.11.3"
+    version: "1.11.6"
     repository: https://ministryofjustice.github.io/hmpps-helm-charts
