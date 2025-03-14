@@ -9,7 +9,6 @@ generic-service:
   allowlist: false
 
   env:
-   FEATURE_AMEND_APPOINTMENT_TOGGLE_ENABLED: true
    PRISON_STAFF_HUB_UI_URL: https://digital-dev.prison.service.justice.gov.uk/
    HMPPS_COOKIE_DOMAIN: digital-dev.prison.service.justice.gov.uk
    API_ENDPOINT_URL: https://prison-api-dev.prison.service.justice.gov.uk/
@@ -95,3 +94,6 @@ generic-service:
    CHANGE_SOMEONES_CELL_URL: https://change-someones-cell-dev.prison.service.justice.gov.uk
    SUNSET_BANNER_ENABLED: true
    ALERTS_API_URL: "https://alerts-api-dev.hmpps.service.justice.gov.uk"
+
+generic-prometheus-alerts:
+ alertSeverity: digital-prison-service-dev
