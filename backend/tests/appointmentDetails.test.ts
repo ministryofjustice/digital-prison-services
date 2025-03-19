@@ -31,6 +31,8 @@ describe('appointment details', () => {
   const locationsInsidePrisonApi: Partial<ReturnType<typeof locationsInsidePrisonApiFactory>> = {}
   const nomisMapping: Partial<ReturnType<typeof nomisMappingClientFactory>> = {}
   const getClientCredentialsTokens = jest.fn()
+  const systemOauthClient = { getClientCredentialsTokens }
+  const context = {}
 
   let req
   let res
@@ -77,6 +79,7 @@ describe('appointment details', () => {
     )
 
     videoLinkBookingService.bookingIsAmendable = jest.fn(() => true)
+    getClientCredentialsTokens.mockReturnValue(context)
 
     appointmentDetailsService = appointmentDetailsServiceFactory({
       prisonApi: prisonApi as ReturnType<typeof prisonApiFactory>,
@@ -86,7 +89,13 @@ describe('appointment details', () => {
       getClientCredentialsTokens,
     })
 
-    controller = appointmentDetails({ oauthApi, prisonApi, whereaboutsApi, appointmentDetailsService })
+    controller = appointmentDetails({
+      oauthApi,
+      prisonApi,
+      whereaboutsApi,
+      appointmentDetailsService,
+      systemOauthClient,
+    })
   })
 
   describe('viewAppointment', () => {
@@ -96,7 +105,11 @@ describe('appointment details', () => {
       expect(oauthApi.userRoles).toHaveBeenCalledWith(res.locals)
       expect(whereaboutsApi.getAppointment).toHaveBeenCalledWith(res.locals, 1)
       expect(prisonApi.getDetails).toHaveBeenCalledWith(res.locals, 'ABC123')
-      expect(locationsInsidePrisonApi.getLocations).toHaveBeenCalledWith('MDI', NonResidentialUsageType.APPOINTMENT)
+      expect(locationsInsidePrisonApi.getLocations).toHaveBeenCalledWith(
+        context,
+        'MDI',
+        NonResidentialUsageType.APPOINTMENT
+      )
       expect(prisonApi.getAppointmentTypes).toHaveBeenCalledWith(res.locals)
       expect(prisonApi.getStaffDetails).toHaveBeenCalledWith(res.locals, 'TEST_USER')
     })

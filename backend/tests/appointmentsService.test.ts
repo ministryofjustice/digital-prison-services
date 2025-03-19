@@ -44,7 +44,11 @@ describe('Appointments service', () => {
   it('should make a request for appointment locations and types', async () => {
     await service.getAppointmentOptions(context, agency)
 
-    expect(locationsInsidePrisonApi.getLocations).toHaveBeenCalledWith(agency, NonResidentialUsageType.APPOINTMENT)
+    expect(locationsInsidePrisonApi.getLocations).toHaveBeenCalledWith(
+      context,
+      agency,
+      NonResidentialUsageType.APPOINTMENT
+    )
     expect(prisonApi.getAppointmentTypes).toHaveBeenCalledWith(context)
   })
 

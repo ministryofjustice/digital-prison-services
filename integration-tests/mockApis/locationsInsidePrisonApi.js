@@ -30,6 +30,21 @@ module.exports = {
       },
     }),
 
+  stubGetLocations: ({ prisonId, usageType, response }) =>
+    stubFor({
+      request: {
+        method: 'GET',
+        url: `/locations/locations/prison/${prisonId}/non-residential-usage-type/${usageType}`,
+      },
+      response: {
+        status: 200,
+        headers: {
+          'Content-Type': 'application/json;charset=UTF-8',
+        },
+        jsonBody: response,
+      },
+    }),
+
   stubGetAgencyGroupLocations: ({ agencyId, groupName, response }) =>
     stubFor({
       request: {

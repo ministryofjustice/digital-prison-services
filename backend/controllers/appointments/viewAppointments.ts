@@ -71,7 +71,7 @@ export default ({
 
     const [appointmentTypes, appointmentLocations, appointments, residentialLocations] = await Promise.all([
       prisonApi.getAppointmentTypes(res.locals),
-      locationsInsidePrisonApi.getLocations(agencyId, NonResidentialUsageType.APPOINTMENT),
+      locationsInsidePrisonApi.getLocations(systemContext, agencyId, NonResidentialUsageType.APPOINTMENT),
       whereaboutsApi.getAppointments(systemContext, agencyId, {
         date: searchDate,
         timeSlot: timeSlot !== 'All' ? timeSlot : undefined,

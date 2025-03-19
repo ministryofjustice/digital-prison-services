@@ -1,16 +1,17 @@
 import { formatName } from '../utils'
 import config, { app } from '../config'
 
-export default ({ oauthApi, prisonApi, whereaboutsApi, appointmentDetailsService }) =>
+export default ({ oauthApi, prisonApi, whereaboutsApi, appointmentDetailsService, systemOauthClient }) =>
   async (req, res) => {
     const { id } = req.params
     const { activeCaseLoadId } = req.session.userDetails
 
     const appointmentDetails = await whereaboutsApi.getAppointment(res.locals, id)
+    const context = await systemOauthClient.getClientCredentialsTokens(req.session.userDetails.username)
 
     const [prisonerDetails, appointmentViewModel] = await Promise.all([
       prisonApi.getDetails(res.locals, appointmentDetails.appointment.offenderNo),
-      appointmentDetailsService.getAppointmentViewModel(res, appointmentDetails, activeCaseLoadId),
+      appointmentDetailsService.getAppointmentViewModel(context, res, appointmentDetails, activeCaseLoadId),
     ])
 
     const { additionalDetails, basicDetails, prepostData, recurringDetails, timeDetails, canAmendVlb } =

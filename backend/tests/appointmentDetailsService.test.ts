@@ -41,6 +41,7 @@ describe('appointment details', () => {
     getNomisLocationMappingByDpsLocationId: jest.fn(),
   }
   const getClientCredentialsTokens = jest.fn()
+  const context = {}
 
   let res
   let service
@@ -85,6 +86,7 @@ describe('appointment details', () => {
         }[id]
       )
     )
+    getClientCredentialsTokens.mockResolvedValue(context)
 
     service = appointmentDetailsServiceFactory({
       prisonApi: prisonApi as ReturnType<typeof prisonApiFactory>,
@@ -101,17 +103,21 @@ describe('appointment details', () => {
 
   describe('an appointment view model request', () => {
     it('should call the correct prison api methods', async () => {
-      await service.getAppointmentViewModel(res, testAppointment, 'MDI')
+      await service.getAppointmentViewModel(context, res, testAppointment, 'MDI')
 
       expect(prisonApi.getAppointmentTypes).toHaveBeenCalledWith(res.locals)
       expect(prisonApi.getStaffDetails).toHaveBeenCalledWith(res.locals, 'TEST_USER')
-      expect(locationsInsidePrisonApi.getLocations).toHaveBeenCalledWith('MDI', NonResidentialUsageType.APPOINTMENT)
+      expect(locationsInsidePrisonApi.getLocations).toHaveBeenCalledWith(
+        context,
+        'MDI',
+        NonResidentialUsageType.APPOINTMENT
+      )
     })
 
     it('should fall back to the user id if there are errors fetching the user details', async () => {
       prisonApi.getStaffDetails = jest.fn().mockRejectedValue(makeNotFoundError())
 
-      const appointmentDetails = await service.getAppointmentViewModel(res, testAppointment, 'MDI')
+      const appointmentDetails = await service.getAppointmentViewModel(context, res, testAppointment, 'MDI')
 
       expect(appointmentDetails).toMatchObject({
         additionalDetails: {
@@ -124,7 +130,7 @@ describe('appointment details', () => {
 
   describe('single appointment view model request', () => {
     it('should return the correct data', async () => {
-      const appointmentDetails = await service.getAppointmentViewModel(res, testAppointment, 'MDI')
+      const appointmentDetails = await service.getAppointmentViewModel(context, res, testAppointment, 'MDI')
 
       expect(appointmentDetails).toEqual({
         isRecurring: false,
@@ -167,7 +173,7 @@ describe('appointment details', () => {
     })
 
     it('should return the correct data', async () => {
-      const appointmentDetails = await service.getAppointmentViewModel(res, recurringAppointment, 'MDI')
+      const appointmentDetails = await service.getAppointmentViewModel(context, res, recurringAppointment, 'MDI')
 
       expect(appointmentDetails).toMatchObject({
         recurringDetails: {
@@ -247,7 +253,7 @@ describe('appointment details', () => {
         buildVideoLinkBooking('COURT', false)
       )
 
-      const appointmentDetails = await service.getAppointmentViewModel(res, videoLinkBookingAppointment, 'MDI')
+      const appointmentDetails = await service.getAppointmentViewModel(context, res, videoLinkBookingAppointment, 'MDI')
 
       expect(appointmentDetails).toMatchObject({
         additionalDetails: {
@@ -278,7 +284,7 @@ describe('appointment details', () => {
         buildVideoLinkBooking('COURT', true)
       )
 
-      const appointmentDetails = await service.getAppointmentViewModel(res, videoLinkBookingAppointment, 'MDI')
+      const appointmentDetails = await service.getAppointmentViewModel(context, res, videoLinkBookingAppointment, 'MDI')
 
       expect(appointmentDetails).toMatchObject({
         additionalDetails: {
@@ -326,7 +332,7 @@ describe('appointment details', () => {
     })
 
     it('should render with court location and correct vlb locations and types', async () => {
-      const appointmentDetails = await service.getAppointmentViewModel(res, videoLinkBookingAppointment, 'MDI')
+      const appointmentDetails = await service.getAppointmentViewModel(context, res, videoLinkBookingAppointment, 'MDI')
 
       expect(appointmentDetails).toMatchObject({
         additionalDetails: {

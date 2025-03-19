@@ -44,6 +44,7 @@ describe('View appointments', () => {
   } = {
     getClientCredentialsTokens: jest.fn(),
   }
+  const context = {}
 
   let req
   let res
@@ -64,7 +65,7 @@ describe('View appointments', () => {
       },
     }
     res = { locals: {}, render: jest.fn(), status: jest.fn() }
-    systemOauthClient.getClientCredentialsTokens.mockResolvedValue({})
+    systemOauthClient.getClientCredentialsTokens.mockResolvedValue(context)
 
     locationsInsidePrisonApi.getLocations = jest.fn()
     prisonApi.getAppointmentTypes = jest.fn()
@@ -118,6 +119,7 @@ describe('View appointments', () => {
 
       expect(prisonApi.getAppointmentTypes).toHaveBeenCalledWith(res.locals)
       expect(locationsInsidePrisonApi.getLocations).toHaveBeenCalledWith(
+        context,
         activeCaseLoadId,
         NonResidentialUsageType.APPOINTMENT
       )

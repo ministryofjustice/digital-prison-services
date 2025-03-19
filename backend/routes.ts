@@ -409,6 +409,7 @@ const setup = ({
         }),
         videoLinkBookingService,
         getClientCredentialsTokens,
+        systemOauthClient,
       }).index
     )
     router.post(
@@ -425,6 +426,7 @@ const setup = ({
         }),
         videoLinkBookingService,
         getClientCredentialsTokens,
+        systemOauthClient,
       }).post
     )
     router.get(
@@ -456,6 +458,7 @@ const setup = ({
           nomisMapping,
           getClientCredentialsTokens,
         }),
+        systemOauthClient,
       })
     )
   }

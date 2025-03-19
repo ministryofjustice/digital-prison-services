@@ -69,8 +69,10 @@ const mapAppointmentType = (appointment) => ({
 export function mapLocationApiResponse(location) {
   return {
     locationId: location.id,
+    locationType: location.locationType,
     description: location.pathHierarchy,
     agencyId: location.prisonId,
+    parentLocationId: location.parentId,
     locationPrefix: location.key,
     userDescription: location.localName,
   }
@@ -82,7 +84,7 @@ export const appointmentsServiceFactory = (
 ) => {
   const getAppointmentOptions = async (context, agency) => {
     const [locationTypes, appointmentTypes] = await Promise.all([
-      locationsInsidePrisonApi.getLocations(agency, NonResidentialUsageType.APPOINTMENT),
+      locationsInsidePrisonApi.getLocations(context, agency, NonResidentialUsageType.APPOINTMENT),
       prisonApi.getAppointmentTypes(context),
     ])
 

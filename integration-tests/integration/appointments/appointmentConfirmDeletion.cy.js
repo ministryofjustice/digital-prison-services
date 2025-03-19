@@ -23,12 +23,12 @@ context('Confirm appointment deletion page', () => {
       cy.signIn()
     })
 
-    cy.task('stubAppointmentLocations', {
+    cy.task('stubGetLocations', {
       agency: 'MDI',
       locations: [
-        { userDescription: 'VCC Room 1', locationId: 1 },
-        { userDescription: 'Gymnasium', locationId: 2 },
-        { userDescription: 'VCC Room 2', locationId: 3 },
+        { localName: 'VCC Room 1', id: 1 },
+        { localName: 'Gymnasium', id: 2 },
+        { localName: 'VCC Room 2', id: 3 },
       ],
     })
     cy.task('stubAppointmentTypes', [
@@ -117,8 +117,8 @@ context('Confirm appointment deletion page', () => {
         bookingType: 'COURT',
         prisonAppointments: [
           { appointmentType: 'VLB_COURT_PRE', prisonLocKey: 'location-key', startTime: '12:45', endTime: '13:00' },
-          { appointmentType: 'VLB_COURT_MAIN', prisonLocKey: 'location-key', startTime: '13:00', endTime: '14:00'  },
-          { appointmentType: 'VLB_COURT_POST', prisonLocKey: 'location-key', startTime: '14:00', endTime: '14:15'  },
+          { appointmentType: 'VLB_COURT_MAIN', prisonLocKey: 'location-key', startTime: '13:00', endTime: '14:00' },
+          { appointmentType: 'VLB_COURT_POST', prisonLocKey: 'location-key', startTime: '14:00', endTime: '14:15' },
         ],
         courtDescription: 'Nottingham Justice Centre',
         courtHearingTypeDescription: 'Appeal',

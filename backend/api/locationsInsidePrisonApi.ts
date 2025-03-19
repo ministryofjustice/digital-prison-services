@@ -56,12 +56,19 @@ export const locationsInsidePrisonApiFactory = (client: OauthApiClient) => {
   const getLocationByKey = (systemContext, locationKey): Promise<Location> =>
     getWith404AsNull(systemContext, `/locations/key/${locationKey}`)
 
-  async function getLocations(prisonId: string, usageType?: NonResidentialUsageType): Promise<Location[]> {
+  async function getLocations(
+    systemContext,
+    prisonId: string,
+    usageType?: NonResidentialUsageType
+  ): Promise<Location[]> {
     logger.info(`getting locations for prison ${prisonId} and usageType ${usageType}`)
-    return this.restClient.get({
-      path: `/locations/prison/${prisonId}/non-residential-usage-type/${usageType}`,
-      headers: { 'Sort-Fields': 'userDescription' },
-    })
+    return (
+      await client.get(
+        { ...systemContext, customRequestHeaders: { 'Sort-Fields': 'userDescription' } },
+        `/locations/prison/${prisonId}/non-residential-usage-type/${usageType}`,
+        {}
+      )
+    ).body
   }
 
   const getSearchGroups = (context, prisonId): Promise<LocationGroup[]> => {

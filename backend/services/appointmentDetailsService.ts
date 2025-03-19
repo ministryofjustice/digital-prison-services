@@ -42,11 +42,11 @@ export default ({
     }
   }
 
-  const getAppointmentViewModel = async (res, appointmentDetails, activeCaseLoadId) => {
+  const getAppointmentViewModel = async (context, res, appointmentDetails, activeCaseLoadId) => {
     const { appointment, recurring } = appointmentDetails
 
     const [locationTypesUnmapped, appointmentTypes] = await Promise.all([
-      locationsInsidePrisonApi.getLocations(activeCaseLoadId, NonResidentialUsageType.APPOINTMENT),
+      locationsInsidePrisonApi.getLocations(context, activeCaseLoadId, NonResidentialUsageType.APPOINTMENT),
       prisonApi.getAppointmentTypes(res.locals),
     ])
 
