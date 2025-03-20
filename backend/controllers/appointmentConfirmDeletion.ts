@@ -1,12 +1,6 @@
 import { app } from '../config'
 
-export default ({
-  whereaboutsApi,
-  appointmentDetailsService,
-  videoLinkBookingService,
-  getClientCredentialsTokens,
-  systemOauthClient,
-}) => {
+export default ({ whereaboutsApi, appointmentDetailsService, videoLinkBookingService, getClientCredentialsTokens }) => {
   const renderTemplate = (req, res, id, appointmentViewModel, errors) => {
     const { isRecurring, additionalDetails, basicDetails, prepostData, recurringDetails, timeDetails } =
       appointmentViewModel
@@ -29,10 +23,8 @@ export default ({
       const { activeCaseLoadId } = req.session.userDetails
 
       const appointmentDetails = await whereaboutsApi.getAppointment(res.locals, id)
-      const context = await systemOauthClient.getClientCredentialsTokens(req.session.userDetails.username)
 
       const appointmentViewModel = await appointmentDetailsService.getAppointmentViewModel(
-        context,
         res,
         appointmentDetails,
         activeCaseLoadId

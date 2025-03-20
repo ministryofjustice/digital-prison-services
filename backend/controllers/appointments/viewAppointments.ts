@@ -1,22 +1,15 @@
 import moment from 'moment'
 import { Response } from 'express'
 import { formatName, getCurrentPeriod, getTime, properCaseName } from '../../utils'
-import { offenderSearchApiFactory, PrisonerSearchResult } from '../../api/offenderSearchApi'
+import { PrisonerSearchResult } from '../../api/offenderSearchApi'
 import config from '../../config'
-import SystemOauthClient from '../../api/systemOauthClient'
-import { prisonApiFactory } from '../../api/prisonApi'
-import { bookAVideoLinkApiFactory } from '../../api/bookAVideoLinkApi'
-import { nomisMappingClientFactory } from '../../api/nomisMappingClient'
-import { locationsInsidePrisonApiFactory, NonResidentialUsageType } from '../../api/locationsInsidePrisonApi'
-import { whereaboutsApiFactory } from '../../api/whereaboutsApi'
-import { mapLocationApiResponse } from '../../services/appointmentsService'
 
 export const getAgencyGroupLocationPrefix = async (
-  systemContext: Awaited<ReturnType<typeof SystemOauthClient.getClientCredentialsTokens>>,
-  locationsInsidePrisonApi: ReturnType<typeof locationsInsidePrisonApiFactory>,
+  systemContext,
+  locationsInsidePrisonApi,
   locationKey: string,
   userCaseLoad: string
-): Promise<string> => {
+) => {
   const fullLocationPrefix = await locationsInsidePrisonApi.getAgencyGroupLocationPrefix(
     systemContext,
     userCaseLoad,
@@ -49,16 +42,8 @@ export default ({
     locationsInsidePrisonApi,
     bookAVideoLinkApi,
     nomisMapping,
-  }: {
-    systemOauthClient: typeof SystemOauthClient
-    prisonApi: ReturnType<typeof prisonApiFactory>
-    offenderSearchApi: ReturnType<typeof offenderSearchApiFactory>
-    whereaboutsApi: ReturnType<typeof whereaboutsApiFactory>
-    locationsInsidePrisonApi: ReturnType<typeof locationsInsidePrisonApiFactory>
-    bookAVideoLinkApi: ReturnType<typeof bookAVideoLinkApiFactory>
-    nomisMapping: ReturnType<typeof nomisMappingClientFactory>
   }) =>
-  async (req, res: Response): Promise<void> => {
+  async (req, res: Response) => {
     // @ts-expect-error ts-migrate(2554) FIXME: Expected 1 arguments, but got 0.
     const { date, timeSlot = getCurrentPeriod(), type, locationId, residentialLocation } = req.query
     const searchDate = date ? moment(date, 'DD/MM/YYYY').format('YYYY-MM-DD') : moment().format('YYYY-MM-DD')
@@ -71,7 +56,7 @@ export default ({
 
     const [appointmentTypes, appointmentLocations, appointments, residentialLocations] = await Promise.all([
       prisonApi.getAppointmentTypes(res.locals),
-      locationsInsidePrisonApi.getLocations(systemContext, agencyId, NonResidentialUsageType.APPOINTMENT),
+      prisonApi.getLocationsForAppointments(res.locals, agencyId),
       whereaboutsApi.getAppointments(systemContext, agencyId, {
         date: searchDate,
         timeSlot: timeSlot !== 'All' ? timeSlot : undefined,
@@ -179,7 +164,7 @@ export default ({
       value: appointmentType.code,
     }))
 
-    const locations = appointmentLocations.map(mapLocationApiResponse).map((appointmentLocation) => ({
+    const locations = appointmentLocations.map((appointmentLocation) => ({
       text: appointmentLocation.userDescription,
       value: appointmentLocation.locationId,
     }))

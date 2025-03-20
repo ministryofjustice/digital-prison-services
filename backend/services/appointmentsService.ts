@@ -1,9 +1,7 @@
 import moment from 'moment'
-import { endRecurringEndingDate, repeatTypes } from '../shared/appointmentConstants'
+import { repeatTypes, endRecurringEndingDate } from '../shared/appointmentConstants'
 import { DATE_TIME_FORMAT_SPEC, Time } from '../../common/dateHelpers'
 import { properCaseName } from '../utils'
-import { prisonApiFactory } from '../api/prisonApi'
-import { locationsInsidePrisonApiFactory, NonResidentialUsageType } from '../api/locationsInsidePrisonApi'
 
 export const isVideoLinkBooking = (appointmentType) => appointmentType === 'VLB'
 
@@ -66,30 +64,15 @@ const mapAppointmentType = (appointment) => ({
   text: appointment.description,
 })
 
-export function mapLocationApiResponse(location) {
-  return {
-    locationId: location.id,
-    locationType: location.locationType,
-    description: location.pathHierarchy,
-    agencyId: location.prisonId,
-    parentLocationId: location.parentId,
-    locationPrefix: location.key,
-    userDescription: location.localName,
-  }
-}
-
-export const appointmentsServiceFactory = (
-  prisonApi: ReturnType<typeof prisonApiFactory>,
-  locationsInsidePrisonApi: ReturnType<typeof locationsInsidePrisonApiFactory>
-) => {
+export const appointmentsServiceFactory = (prisonApi) => {
   const getAppointmentOptions = async (context, agency) => {
     const [locationTypes, appointmentTypes] = await Promise.all([
-      locationsInsidePrisonApi.getLocations(context, agency, NonResidentialUsageType.APPOINTMENT),
+      prisonApi.getLocationsForAppointments(context, agency),
       prisonApi.getAppointmentTypes(context),
     ])
 
     return {
-      locationTypes: locationTypes && locationTypes.map(mapLocationApiResponse).map(mapLocationType),
+      locationTypes: locationTypes && locationTypes.map(mapLocationType),
       appointmentTypes: appointmentTypes && appointmentTypes.map(mapAppointmentType),
     }
   }
