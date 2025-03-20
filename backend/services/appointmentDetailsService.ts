@@ -2,6 +2,12 @@ import moment from 'moment'
 import { endRecurringEndingDate, repeatTypes } from '../shared/appointmentConstants'
 import { formatName, getDate, getTime, getWith404AsNull } from '../utils'
 import { app } from '../config'
+import { prisonApiFactory } from '../api/prisonApi'
+import VideoLinkBookingService from './videoLinkBookingService'
+import { locationsInsidePrisonApiFactory, NonResidentialUsageType } from '../api/locationsInsidePrisonApi'
+import { nomisMappingClientFactory } from '../api/nomisMappingClient'
+import { getClientCredentialsTokens as GetClientCredentialsToken } from '../api/systemOauthClient'
+import { mapLocationApiResponse } from './appointmentsService'
 
 export default ({
   prisonApi,
@@ -9,6 +15,12 @@ export default ({
   locationsInsidePrisonApi,
   nomisMapping,
   getClientCredentialsTokens,
+}: {
+  prisonApi: ReturnType<typeof prisonApiFactory>
+  videoLinkBookingService: ReturnType<typeof VideoLinkBookingService>
+  locationsInsidePrisonApi: ReturnType<typeof locationsInsidePrisonApiFactory>
+  nomisMapping: ReturnType<typeof nomisMappingClientFactory>
+  getClientCredentialsTokens: typeof GetClientCredentialsToken
 }) => {
   const getAddedByUser = async (res, userId) => {
     const staffDetails = await getWith404AsNull(prisonApi.getStaffDetails(res.locals, userId))
@@ -30,13 +42,15 @@ export default ({
     }
   }
 
-  const getAppointmentViewModel = async (res, appointmentDetails, activeCaseLoadId) => {
+  const getAppointmentViewModel = async (context, res, appointmentDetails, activeCaseLoadId) => {
     const { appointment, recurring } = appointmentDetails
 
-    const [locationTypes, appointmentTypes] = await Promise.all([
-      prisonApi.getLocationsForAppointments(res.locals, activeCaseLoadId),
+    const [locationTypesUnmapped, appointmentTypes] = await Promise.all([
+      locationsInsidePrisonApi.getLocations(context, activeCaseLoadId, NonResidentialUsageType.APPOINTMENT),
       prisonApi.getAppointmentTypes(res.locals),
     ])
+
+    const locationTypes = locationTypesUnmapped.map(mapLocationApiResponse)
 
     const appointmentType = appointmentTypes?.find((type) => type.code === appointment.appointmentTypeCode)
 

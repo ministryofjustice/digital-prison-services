@@ -1,4 +1,5 @@
 import type { OauthApiClient } from './oauthEnabledClient'
+import logger from '../log'
 
 export interface LocationPrefix {
   locationPrefix: string
@@ -16,6 +17,17 @@ export interface LocationGroup {
     key: string
     name: string
   }
+}
+
+export const enum NonResidentialUsageType {
+  ADJUDICATION_HEARING = 'ADJUDICATION_HEARING',
+  APPOINTMENT = 'APPOINTMENT',
+  MOVEMENT = 'MOVEMENT',
+  OCCURRENCE = 'OCCURRENCE',
+  PROGRAMMES_ACTIVITIES = 'PROGRAMMES_ACTIVITIES',
+  PROPERTY = 'PROPERTY',
+  VISIT = 'VISIT',
+  OTHER = 'OTHER',
 }
 
 // eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
@@ -44,6 +56,21 @@ export const locationsInsidePrisonApiFactory = (client: OauthApiClient) => {
   const getLocationByKey = (systemContext, locationKey): Promise<Location> =>
     getWith404AsNull(systemContext, `/locations/key/${locationKey}`)
 
+  async function getLocations(
+    systemContext,
+    prisonId: string,
+    usageType?: NonResidentialUsageType
+  ): Promise<Location[]> {
+    logger.info(`getting locations for prison ${prisonId} and usageType ${usageType}`)
+    return (
+      await client.get(
+        { ...systemContext, customRequestHeaders: { 'Sort-Fields': 'userDescription' } },
+        `/locations/prison/${prisonId}/non-residential-usage-type/${usageType}`,
+        {}
+      )
+    ).body
+  }
+
   const getSearchGroups = (context, prisonId): Promise<LocationGroup[]> => {
     return getWith404AsNull(context, `/locations/prison/${prisonId}/groups`)
   }
@@ -54,6 +81,7 @@ export const locationsInsidePrisonApiFactory = (client: OauthApiClient) => {
     getSearchGroups,
     getLocationById,
     getLocationByKey,
+    getLocations,
   }
 }
 
