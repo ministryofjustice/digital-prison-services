@@ -1,23 +1,14 @@
 import moment from 'moment'
 import { DATE_ONLY_FORMAT_SPEC } from '../../common/dateHelpers'
 import existingEventsService from '../services/existingEventsService'
-import { prisonApiFactory } from '../api/prisonApi'
 
 describe('existing events', () => {
-  const prisonApi: Partial<ReturnType<typeof prisonApiFactory>> & {
-    getActivitiesAtLocation: jest.Mock
-    getActivityList: jest.Mock
-    getLocations: jest.Mock
-    getSentenceData: jest.Mock
-    getVisits: jest.Mock
-    getAppointments: jest.Mock
-    getExternalTransfers: jest.Mock
-    getCourtEvents: jest.Mock
-    getActivities: jest.Mock
-  } = {
+  const prisonApi = {
     getActivitiesAtLocation: jest.fn(),
     getActivityList: jest.fn(),
     getLocations: jest.fn(),
+    getLocationsForAppointments: jest.fn(),
+    getEventsAtLocations: jest.fn(),
     getSentenceData: jest.fn(),
     getVisits: jest.fn(),
     getAppointments: jest.fn(),

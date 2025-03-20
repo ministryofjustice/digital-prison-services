@@ -239,7 +239,7 @@ const setup = ({
   router.use(
     '/bulk-appointments/add-appointment-details',
     isAppointmentsRolledOut,
-    bulkAppointmentsAddDetailsRouter({ prisonApi, locationsInsidePrisonApi, oauthApi, logError })
+    bulkAppointmentsAddDetailsRouter({ prisonApi, oauthApi, logError })
   )
   router.use(
     '/bulk-appointments/appointments-added',
@@ -280,7 +280,7 @@ const setup = ({
       '/offenders/:offenderNo/add-appointment',
       isCreateIndividualAppointmentRolledOut,
       redirectToPrisonerProfileForAppointments,
-      addAppointmentRouter({ systemOauthClient, prisonApi, locationsInsidePrisonApi, whereaboutsApi, logError })
+      addAppointmentRouter({ systemOauthClient, prisonApi, whereaboutsApi, logError })
     )
   }
 
@@ -301,7 +301,7 @@ const setup = ({
   router.use(
     '/offenders/:offenderNo/confirm-appointment',
     isAppointmentsRolledOut,
-    confirmAppointmentRouter({ prisonApi, locationsInsidePrisonApi, logError })
+    confirmAppointmentRouter({ prisonApi, logError })
   )
 
   router.use(
@@ -409,7 +409,6 @@ const setup = ({
         }),
         videoLinkBookingService,
         getClientCredentialsTokens,
-        systemOauthClient,
       }).index
     )
     router.post(
@@ -426,7 +425,6 @@ const setup = ({
         }),
         videoLinkBookingService,
         getClientCredentialsTokens,
-        systemOauthClient,
       }).post
     )
     router.get(
@@ -458,7 +456,6 @@ const setup = ({
           nomisMapping,
           getClientCredentialsTokens,
         }),
-        systemOauthClient,
       })
     )
   }

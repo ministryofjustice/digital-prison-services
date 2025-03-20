@@ -26,12 +26,12 @@ context('Appointment details page', () => {
     })
 
     cy.task('stubOffenderBasicDetails', offenderBasicDetails)
-    cy.task('stubGetLocations', {
+    cy.task('stubAppointmentLocations', {
       agency: 'MDI',
       locations: [
-        { localName: 'VCC Room 1', id: 1 },
-        { localName: 'Gymnasium', id: 2 },
-        { localName: 'VCC Room 2', id: 3 },
+        { userDescription: 'VCC Room 1', locationId: 1 },
+        { userDescription: 'Gymnasium', locationId: 2 },
+        { userDescription: 'VCC Room 2', locationId: 3 },
       ],
     })
     cy.task('stubAppointmentTypes', [
@@ -128,7 +128,7 @@ context('Appointment details page', () => {
             startTime: '2021-05-20T13:00:00',
             endTime: '2021-05-20T14:00:00',
             comment: 'Test appointment comments',
-          },
+          }
         },
       })
       cy.task('stubNomisLocationMapping', { nomisLocationId: 1, dpsLocationId: 'abc-123' })
@@ -139,8 +139,8 @@ context('Appointment details page', () => {
         bookingType: 'COURT',
         prisonAppointments: [
           { appointmentType: 'VLB_COURT_PRE', prisonLocKey: 'location-key', startTime: '12:45', endTime: '13:00' },
-          { appointmentType: 'VLB_COURT_MAIN', prisonLocKey: 'location-key', startTime: '13:00', endTime: '14:00' },
-          { appointmentType: 'VLB_COURT_POST', prisonLocKey: 'location-key', startTime: '14:00', endTime: '14:15' },
+          { appointmentType: 'VLB_COURT_MAIN', prisonLocKey: 'location-key', startTime: '13:00', endTime: '14:00'  },
+          { appointmentType: 'VLB_COURT_POST', prisonLocKey: 'location-key', startTime: '14:00', endTime: '14:15'  },
         ],
         courtDescription: 'Nottingham Justice Centre',
         courtHearingTypeDescription: 'Appeal',
@@ -181,12 +181,12 @@ context('when the user does not have the roles', () => {
   beforeEach(() => {
     cy.task('stubOffenderBasicDetails', offenderBasicDetails)
 
-    cy.task('stubGetLocations', {
+    cy.task('stubAppointmentLocations', {
       agency: 'MDI',
       locations: [
-        { localName: 'VCC Room 1', id: 1 },
-        { localName: 'Gymnasium', id: 2 },
-        { localName: 'VCC Room 2', id: 3 },
+        { userDescription: 'VCC Room 1', locationId: 1 },
+        { userDescription: 'Gymnasium', locationId: 2 },
+        { userDescription: 'VCC Room 2', locationId: 3 },
       ],
     })
     cy.task('stubAppointmentTypes', [

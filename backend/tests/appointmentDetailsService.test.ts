@@ -2,10 +2,6 @@ import { makeNotFoundError } from './helpers'
 
 import appointmentDetailsServiceFactory from '../services/appointmentDetailsService'
 import config from '../config'
-import { prisonApiFactory } from '../api/prisonApi'
-import VideoLinkBookingService from '../services/videoLinkBookingService'
-import { locationsInsidePrisonApiFactory, NonResidentialUsageType } from '../api/locationsInsidePrisonApi'
-import { nomisMappingClientFactory } from '../api/nomisMappingClient'
 
 describe('appointment details', () => {
   const testAppointment = {
@@ -22,26 +18,11 @@ describe('appointment details', () => {
     videoLinkBooking: null,
   }
 
-  const prisonApi: Partial<ReturnType<typeof prisonApiFactory>> = {}
-  const videoLinkBookingService: Partial<ReturnType<typeof VideoLinkBookingService>> & {
-    getVideoLinkBookingFromAppointmentId: jest.Mock
-    bookingIsAmendable: jest.Mock
-  } = {
-    getVideoLinkBookingFromAppointmentId: jest.fn(),
-    bookingIsAmendable: jest.fn(),
-  }
-  const locationsInsidePrisonApi: Partial<ReturnType<typeof locationsInsidePrisonApiFactory>> & {
-    getLocationByKey: jest.Mock
-  } = {
-    getLocationByKey: jest.fn(),
-  }
-  const nomisMapping: Partial<ReturnType<typeof nomisMappingClientFactory>> & {
-    getNomisLocationMappingByDpsLocationId: jest.Mock
-  } = {
-    getNomisLocationMappingByDpsLocationId: jest.fn(),
-  }
+  const prisonApi = {}
+  const videoLinkBookingService = { getVideoLinkBookingFromAppointmentId: jest.fn(), bookingIsAmendable: jest.fn() }
+  const locationsInsidePrisonApi = { getLocationByKey: jest.fn() }
+  const nomisMapping = { getNomisLocationMappingByDpsLocationId: jest.fn() }
   const getClientCredentialsTokens = jest.fn()
-  const context = {}
 
   let res
   let service
@@ -49,16 +30,25 @@ describe('appointment details', () => {
   beforeEach(() => {
     res = { locals: { user: { username: 'USER' } }, render: jest.fn() }
 
+    // @ts-expect-error ts-migrate(2339) FIXME: Property 'getDetails' does not exist on type '{}'.
     prisonApi.getDetails = jest.fn().mockResolvedValue({
       firstName: 'BARRY',
       lastName: 'SMITH',
       offenderNo: 'ABC123',
     })
+    // @ts-expect-error ts-migrate(2339) FIXME: Property 'getLocationsForAppointments' does not ex... Remove this comment to see the full error message
+    prisonApi.getLocationsForAppointments = jest.fn().mockResolvedValue([
+      { locationPrefix: 'ROOM1', userDescription: 'VCC Room 1', locationId: '1' },
+      { locationPrefix: 'ROOM2', userDescription: 'Gymnasium', locationId: '2' },
+      { locationPrefix: 'ROOM3', userDescription: 'VCC Room 2', locationId: '3' },
+    ])
+    // @ts-expect-error ts-migrate(2339) FIXME: Property 'getAppointmentTypes' does not exist on t... Remove this comment to see the full error message
     prisonApi.getAppointmentTypes = jest.fn().mockResolvedValue([
       { code: 'GYM', description: 'Gym' },
       { description: 'Video Link - Court Hearing', code: 'VLB' },
       { description: 'Video Link - Probation Meeting', code: 'VLPM' },
     ])
+    // @ts-expect-error ts-migrate(2339) FIXME: Property 'getStaffDetails' does not exist on type ... Remove this comment to see the full error message
     prisonApi.getStaffDetails = jest
       .fn()
       .mockResolvedValue({ username: 'TEST_USER', firstName: 'TEST', lastName: 'USER' })
@@ -72,12 +62,6 @@ describe('appointment details', () => {
         }[id]
       )
     )
-    locationsInsidePrisonApi.getLocations = jest.fn().mockResolvedValue([
-      { key: 'ROOM1', localName: 'VCC Room 1', id: '1' },
-      { key: 'ROOM2', localName: 'Gymnasium', id: '2' },
-      { key: 'ROOM3', localName: 'VCC Room 2', id: '3' },
-    ])
-
     nomisMapping.getNomisLocationMappingByDpsLocationId.mockImplementation((_, id) =>
       Promise.resolve(
         {
@@ -86,13 +70,12 @@ describe('appointment details', () => {
         }[id]
       )
     )
-    getClientCredentialsTokens.mockResolvedValue(context)
 
     service = appointmentDetailsServiceFactory({
-      prisonApi: prisonApi as ReturnType<typeof prisonApiFactory>,
-      videoLinkBookingService: videoLinkBookingService as ReturnType<typeof VideoLinkBookingService>,
-      locationsInsidePrisonApi: locationsInsidePrisonApi as ReturnType<typeof locationsInsidePrisonApiFactory>,
-      nomisMapping: nomisMapping as ReturnType<typeof nomisMappingClientFactory>,
+      prisonApi,
+      videoLinkBookingService,
+      locationsInsidePrisonApi,
+      nomisMapping,
       getClientCredentialsTokens,
     })
   })
@@ -103,21 +86,21 @@ describe('appointment details', () => {
 
   describe('an appointment view model request', () => {
     it('should call the correct prison api methods', async () => {
-      await service.getAppointmentViewModel(context, res, testAppointment, 'MDI')
+      await service.getAppointmentViewModel(res, testAppointment, 'MDI')
 
+      // @ts-expect-error ts-migrate(2339) FIXME: Property 'getLocationsForAppointments' does not ex... Remove this comment to see the full error message
+      expect(prisonApi.getLocationsForAppointments).toHaveBeenCalledWith(res.locals, 'MDI')
+      // @ts-expect-error ts-migrate(2339) FIXME: Property 'getAppointmentTypes' does not exist on t... Remove this comment to see the full error message
       expect(prisonApi.getAppointmentTypes).toHaveBeenCalledWith(res.locals)
+      // @ts-expect-error ts-migrate(2339) FIXME: Property 'getStaffDetails' does not exist on type ... Remove this comment to see the full error message
       expect(prisonApi.getStaffDetails).toHaveBeenCalledWith(res.locals, 'TEST_USER')
-      expect(locationsInsidePrisonApi.getLocations).toHaveBeenCalledWith(
-        context,
-        'MDI',
-        NonResidentialUsageType.APPOINTMENT
-      )
     })
 
     it('should fall back to the user id if there are errors fetching the user details', async () => {
+      // @ts-expect-error ts-migrate(2339) FIXME: Property 'getStaffDetails' does not exist on type ... Remove this comment to see the full error message
       prisonApi.getStaffDetails = jest.fn().mockRejectedValue(makeNotFoundError())
 
-      const appointmentDetails = await service.getAppointmentViewModel(context, res, testAppointment, 'MDI')
+      const appointmentDetails = await service.getAppointmentViewModel(res, testAppointment, 'MDI')
 
       expect(appointmentDetails).toMatchObject({
         additionalDetails: {
@@ -130,7 +113,7 @@ describe('appointment details', () => {
 
   describe('single appointment view model request', () => {
     it('should return the correct data', async () => {
-      const appointmentDetails = await service.getAppointmentViewModel(context, res, testAppointment, 'MDI')
+      const appointmentDetails = await service.getAppointmentViewModel(res, testAppointment, 'MDI')
 
       expect(appointmentDetails).toEqual({
         isRecurring: false,
@@ -173,7 +156,7 @@ describe('appointment details', () => {
     })
 
     it('should return the correct data', async () => {
-      const appointmentDetails = await service.getAppointmentViewModel(context, res, recurringAppointment, 'MDI')
+      const appointmentDetails = await service.getAppointmentViewModel(res, recurringAppointment, 'MDI')
 
       expect(appointmentDetails).toMatchObject({
         recurringDetails: {
@@ -253,7 +236,7 @@ describe('appointment details', () => {
         buildVideoLinkBooking('COURT', false)
       )
 
-      const appointmentDetails = await service.getAppointmentViewModel(context, res, videoLinkBookingAppointment, 'MDI')
+      const appointmentDetails = await service.getAppointmentViewModel(res, videoLinkBookingAppointment, 'MDI')
 
       expect(appointmentDetails).toMatchObject({
         additionalDetails: {
@@ -284,7 +267,7 @@ describe('appointment details', () => {
         buildVideoLinkBooking('COURT', true)
       )
 
-      const appointmentDetails = await service.getAppointmentViewModel(context, res, videoLinkBookingAppointment, 'MDI')
+      const appointmentDetails = await service.getAppointmentViewModel(res, videoLinkBookingAppointment, 'MDI')
 
       expect(appointmentDetails).toMatchObject({
         additionalDetails: {
@@ -332,7 +315,7 @@ describe('appointment details', () => {
     })
 
     it('should render with court location and correct vlb locations and types', async () => {
-      const appointmentDetails = await service.getAppointmentViewModel(context, res, videoLinkBookingAppointment, 'MDI')
+      const appointmentDetails = await service.getAppointmentViewModel(res, videoLinkBookingAppointment, 'MDI')
 
       expect(appointmentDetails).toMatchObject({
         additionalDetails: {
