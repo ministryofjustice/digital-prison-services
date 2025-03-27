@@ -90,6 +90,7 @@ export const getValidationMessages = (fields) => {
 
 export const addAppointmentFactory = (
   appointmentsService,
+  systemOauthClient,
   existingEventsService,
   prisonApi,
   whereaboutsApi,
@@ -129,9 +130,10 @@ export const addAppointmentFactory = (
 
     return whereaboutsApi.createAppointment(locals, request)
   }
-  const getAppointmentTypesAndLocations = async (locals, prisonerAgencyId) => {
+  const getAppointmentTypesAndLocations = async (locals, context, prisonerAgencyId) => {
     const { appointmentTypes, locationTypes } = await appointmentsService.getAppointmentOptions(
       locals,
+      context,
       prisonerAgencyId
     )
 
@@ -148,7 +150,12 @@ export const addAppointmentFactory = (
       const prePopulatedData: PrePopulatedData = {}
       const { firstName, lastName, bookingId, agencyId } = await prisonApi.getDetails(res.locals, offenderNo)
       const offenderName = `${properCaseName(lastName)}, ${properCaseName(firstName)}`
-      const { appointmentTypes, appointmentLocations } = await getAppointmentTypesAndLocations(res.locals, agencyId)
+      const context = await systemOauthClient.getClientCredentialsTokens()
+      const { appointmentTypes, appointmentLocations } = await getAppointmentTypesAndLocations(
+        res.locals,
+        context,
+        agencyId
+      )
 
       if (formValues && formValues.date) {
         prePopulatedData.offenderEvents = await existingEventsService.getExistingEventsForOffender(

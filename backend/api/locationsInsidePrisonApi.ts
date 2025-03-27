@@ -56,7 +56,7 @@ export const locationsInsidePrisonApiFactory = (client: OauthApiClient) => {
   const getLocationByKey = (systemContext, locationKey): Promise<Location> =>
     getWith404AsNull(systemContext, `/locations/key/${locationKey}`)
 
-  async function getLocations(
+  async function getLocationsByNonResidentialUsageType(
     systemContext,
     prisonId: string,
     usageType?: NonResidentialUsageType
@@ -66,7 +66,8 @@ export const locationsInsidePrisonApiFactory = (client: OauthApiClient) => {
       await client.get(
         { ...systemContext, customRequestHeaders: { 'Sort-Fields': 'userDescription' } },
         `/locations/prison/${prisonId}/non-residential-usage-type/${usageType}`,
-        {}
+        {},
+        'formatLocalName=true&sortByLocalName=true'
       )
     ).body
   }
@@ -81,7 +82,7 @@ export const locationsInsidePrisonApiFactory = (client: OauthApiClient) => {
     getSearchGroups,
     getLocationById,
     getLocationByKey,
-    getLocations,
+    getLocationsByNonResidentialUsageType,
   }
 }
 

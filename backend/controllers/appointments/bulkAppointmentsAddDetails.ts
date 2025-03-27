@@ -22,10 +22,11 @@ const extractHoursMinutes = (dateTime) => {
   }
 }
 
-export const bulkAppointmentsAddDetailsFactory = (appointmentsService) => {
-  const getAppointmentTypesAndLocations = async (locals, activeCaseLoadId) => {
+export const bulkAppointmentsAddDetailsFactory = (appointmentsService, systemOauthClient) => {
+  const getAppointmentTypesAndLocations = async (locals, context, activeCaseLoadId) => {
     const { appointmentTypes, locationTypes } = await appointmentsService.getAppointmentOptions(
       locals,
+      context,
       activeCaseLoadId
     )
 
@@ -36,8 +37,9 @@ export const bulkAppointmentsAddDetailsFactory = (appointmentsService) => {
   }
 
   async function index(req, res) {
+    const context = await systemOauthClient.getClientCredentialsTokens()
     const { activeCaseLoadId } = req.session.userDetails
-    const { appointmentTypes, locations } = await getAppointmentTypesAndLocations(res.locals, activeCaseLoadId)
+    const { appointmentTypes, locations } = await getAppointmentTypesAndLocations(res.locals, context, activeCaseLoadId)
 
     const {
       appointmentType,
@@ -93,7 +95,8 @@ export const bulkAppointmentsAddDetailsFactory = (appointmentsService) => {
       recurring,
     } = req.body || {}
 
-    const { appointmentTypes, locations } = await getAppointmentTypesAndLocations(res.locals, activeCaseLoadId)
+    const context = await systemOauthClient.getClientCredentialsTokens()
+    const { appointmentTypes, locations } = await getAppointmentTypesAndLocations(res.locals, context, activeCaseLoadId)
 
     const startTime = buildDateTime({ date, hours: startTimeHours, minutes: startTimeMinutes })
     const endTime = buildDateTime({ date, hours: endTimeHours, minutes: endTimeMinutes })

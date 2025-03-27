@@ -27,9 +27,12 @@ context('A user can add a bulk appointment', () => {
       activities: [],
     })
     cy.task('stubLocation', { locationId: 123456 })
-    cy.task('stubGetLocations', {
+    cy.task('stubNomisLocationMapping', { nomisLocationId: 1, dpsLocationId: 'dps-1' })
+    cy.task('stubGetLocationsByNonResidentialUsageType', {
       agency: 'MDI',
-      locations: [{ id: 1, locationType: 'ADJU', pathHierarchy: 'Adjudication', localName: 'Adj', prisonId: 'MDI' }],
+      locations: [
+        { id: 'dps-1', locationType: 'ADJU', pathHierarchy: 'Adjudication', localName: 'Adj', prisonId: 'MDI' },
+      ],
     })
     cy.task('stubBookingOffenders', [
       { bookingId: 1, offenderNo, firstName: 'John', lastName: 'Doe', agencyId: 'MDI', assignedLivingUnitId: 123456 },

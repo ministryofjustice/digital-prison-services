@@ -7,7 +7,7 @@ describe('existing events', () => {
   const prisonApi: Partial<ReturnType<typeof prisonApiFactory>> & {
     getActivitiesAtLocation: jest.Mock
     getActivityList: jest.Mock
-    getLocations: jest.Mock
+    getLocationsByNonResidentialUsageType: jest.Mock
     getSentenceData: jest.Mock
     getVisits: jest.Mock
     getAppointments: jest.Mock
@@ -17,7 +17,7 @@ describe('existing events', () => {
   } = {
     getActivitiesAtLocation: jest.fn(),
     getActivityList: jest.fn(),
-    getLocations: jest.fn(),
+    getLocationsByNonResidentialUsageType: jest.fn(),
     getSentenceData: jest.fn(),
     getVisits: jest.fn(),
     getAppointments: jest.fn(),
@@ -36,7 +36,7 @@ describe('existing events', () => {
 
   describe('location availability', () => {
     beforeEach(() => {
-      prisonApi.getLocations.mockReturnValue(Promise.resolve([]))
+      prisonApi.getLocationsByNonResidentialUsageType.mockReturnValue(Promise.resolve([]))
     })
 
     it('should handle time slot where location booking slightly overlap ', async () => {

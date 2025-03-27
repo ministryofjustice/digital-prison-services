@@ -354,9 +354,9 @@ module.exports = defineConfig({
         stubSentenceData: (details) => prisonApi.stubSentenceData(details),
         stubLocation: ({ locationId, locationData }) => Promise.all([prisonApi.stubLocation(locationId, locationData)]),
         stubAgencyDetails: ({ agencyId, details }) => Promise.all([prisonApi.stubAgencyDetails(agencyId, details)]),
-        stubGetLocations: ({ agency, locations }) =>
+        stubGetLocationsByNonResidentialUsageType: ({ agency, locations }) =>
           Promise.all([
-            locationsInsidePrisonApi.stubGetLocations({
+            locationsInsidePrisonApi.stubGetLocationsByNonResidentialUsageType({
               prisonId: agency,
               usageType: NonResidentialUsageType.APPOINTMENT,
               response: locations,

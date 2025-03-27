@@ -26,11 +26,11 @@ describe('View appointments', () => {
 
   const locationsInsidePrisonApi: Partial<ReturnType<typeof locationsInsidePrisonApiFactory>> & {
     getAgencyGroupLocationPrefix: jest.Mock
-    getLocations: jest.Mock
+    getLocationsByNonResidentialUsageType: jest.Mock
     getSearchGroups: jest.Mock
   } = {
     getAgencyGroupLocationPrefix: jest.fn(),
-    getLocations: jest.fn(),
+    getLocationsByNonResidentialUsageType: jest.fn(),
     getSearchGroups: jest.fn(),
   }
   const bookAVideoLinkApi: Partial<ReturnType<typeof bookAVideoLinkApiFactory>> & {
@@ -67,12 +67,14 @@ describe('View appointments', () => {
     res = { locals: {}, render: jest.fn(), status: jest.fn() }
     systemOauthClient.getClientCredentialsTokens.mockResolvedValue(context)
 
-    locationsInsidePrisonApi.getLocations = jest.fn()
+    locationsInsidePrisonApi.getLocationsByNonResidentialUsageType = jest.fn()
     prisonApi.getAppointmentTypes = jest.fn()
     prisonApi.getStaffDetails = jest.fn()
     offenderSearchApi.getPrisonersDetails = jest.fn()
 
-    locationsInsidePrisonApi.getLocations.mockReturnValue([{ localName: 'VCC Room 1', id: '1' }])
+    locationsInsidePrisonApi.getLocationsByNonResidentialUsageType.mockReturnValue([
+      { localName: 'VCC Room 1', id: 'abc-123' },
+    ])
     prisonApi.getAppointmentTypes.mockReturnValue([{ description: 'Video link booking', code: 'VLB' }])
     prisonApi.getStaffDetails.mockResolvedValue([])
     offenderSearchApi.getPrisonersDetails.mockResolvedValue([])
@@ -114,11 +116,21 @@ describe('View appointments', () => {
   })
 
   describe('when the page is first loaded with no results', () => {
+    beforeEach(() => {
+      nomisMapping.getNomisLocationMappingByDpsLocationId.mockImplementation(
+        async (_, id) =>
+          ({
+            'abc-123': { dpsLocationId: 'abc-123', nomisLocationId: 456 },
+            'zyx-321': { dpsLocationId: 'zyx-321', nomisLocationId: 789 },
+          }[id])
+      )
+    })
+
     it('should make the correct API calls', async () => {
       await controller(req, res)
 
       expect(prisonApi.getAppointmentTypes).toHaveBeenCalledWith(res.locals)
-      expect(locationsInsidePrisonApi.getLocations).toHaveBeenCalledWith(
+      expect(locationsInsidePrisonApi.getLocationsByNonResidentialUsageType).toHaveBeenCalledWith(
         context,
         activeCaseLoadId,
         NonResidentialUsageType.APPOINTMENT
@@ -141,7 +153,7 @@ describe('View appointments', () => {
         appointmentRows: [],
         date: '01/01/2020',
         formattedDate: '1 January 2020',
-        locations: [{ text: 'VCC Room 1', value: '1' }],
+        locations: [{ text: 'VCC Room 1', value: 456 }],
         residentialLocationOptions: [
           {
             text: 'Houseblock 1',
@@ -483,7 +495,7 @@ describe('View appointments', () => {
           date: '02/01/2020',
           formattedDate: '2 January 2020',
           locationId: undefined,
-          locations: [{ text: 'VCC Room 1', value: '1' }],
+          locations: [{ text: 'VCC Room 1', value: 456 }],
           residentialLocation: 'H 1',
           residentialLocationOptions: [
             { text: 'Houseblock 1', value: 'H 1' },

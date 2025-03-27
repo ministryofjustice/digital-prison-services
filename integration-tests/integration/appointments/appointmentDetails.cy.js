@@ -26,12 +26,15 @@ context('Appointment details page', () => {
     })
 
     cy.task('stubOffenderBasicDetails', offenderBasicDetails)
-    cy.task('stubGetLocations', {
+    cy.task('stubNomisLocationMapping', { nomisLocationId: 1, dpsLocationId: 'dps-1' })
+    cy.task('stubNomisLocationMapping', { nomisLocationId: 2, dpsLocationId: 'dps-2' })
+    cy.task('stubNomisLocationMapping', { nomisLocationId: 3, dpsLocationId: 'dps-3' })
+    cy.task('stubGetLocationsByNonResidentialUsageType', {
       agency: 'MDI',
       locations: [
-        { localName: 'VCC Room 1', id: 1 },
-        { localName: 'Gymnasium', id: 2 },
-        { localName: 'VCC Room 2', id: 3 },
+        { localName: 'VCC Room 1', id: 'dps-1' },
+        { localName: 'Gymnasium', id: 'dps-2' },
+        { localName: 'VCC Room 2', id: 'dps-3' },
       ],
     })
     cy.task('stubAppointmentTypes', [
@@ -131,9 +134,8 @@ context('Appointment details page', () => {
           },
         },
       })
-      cy.task('stubNomisLocationMapping', { nomisLocationId: 1, dpsLocationId: 'abc-123' })
-      cy.task('stubGetLocationById', { id: 'abc-123', response: { key: 'location-key' } })
-      cy.task('stubGetLocationByKey', { key: 'location-key', response: { id: 'abc-123' } })
+      cy.task('stubGetLocationById', { id: 'dps-1', response: { key: 'location-key' } })
+      cy.task('stubGetLocationByKey', { key: 'location-key', response: { id: 'dps-1' } })
       cy.task('matchAppointmentToVideoLinkBooking', {
         videoLinkBookingId: 1,
         bookingType: 'COURT',
@@ -181,12 +183,15 @@ context('when the user does not have the roles', () => {
   beforeEach(() => {
     cy.task('stubOffenderBasicDetails', offenderBasicDetails)
 
-    cy.task('stubGetLocations', {
+    cy.task('stubNomisLocationMapping', { nomisLocationId: 1, dpsLocationId: 'dps-1' })
+    cy.task('stubNomisLocationMapping', { nomisLocationId: 2, dpsLocationId: 'dps-2' })
+    cy.task('stubNomisLocationMapping', { nomisLocationId: 3, dpsLocationId: 'dps-3' })
+    cy.task('stubGetLocationsByNonResidentialUsageType', {
       agency: 'MDI',
       locations: [
-        { localName: 'VCC Room 1', id: 1 },
-        { localName: 'Gymnasium', id: 2 },
-        { localName: 'VCC Room 2', id: 3 },
+        { localName: 'VCC Room 1', id: 'dps-1' },
+        { localName: 'Gymnasium', id: 'dps-2' },
+        { localName: 'VCC Room 2', id: 'dps-3' },
       ],
     })
     cy.task('stubAppointmentTypes', [

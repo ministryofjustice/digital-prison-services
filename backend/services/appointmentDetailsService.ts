@@ -45,12 +45,22 @@ export default ({
   const getAppointmentViewModel = async (context, res, appointmentDetails, activeCaseLoadId) => {
     const { appointment, recurring } = appointmentDetails
 
-    const [locationTypesUnmapped, appointmentTypes] = await Promise.all([
-      locationsInsidePrisonApi.getLocations(context, activeCaseLoadId, NonResidentialUsageType.APPOINTMENT),
+    const [appointmentLocationsUnmapped, appointmentTypes] = await Promise.all([
+      locationsInsidePrisonApi.getLocationsByNonResidentialUsageType(
+        context,
+        activeCaseLoadId,
+        NonResidentialUsageType.APPOINTMENT
+      ),
       prisonApi.getAppointmentTypes(res.locals),
     ])
 
-    const locationTypes = locationTypesUnmapped.map(mapLocationApiResponse)
+    const appointmentLocations = appointmentLocationsUnmapped.map(mapLocationApiResponse)
+
+    const locationMappings = await Promise.all(
+      [...new Set(appointmentLocations.map((l) => l.locationId))].map((id) =>
+        nomisMapping.getNomisLocationMappingByDpsLocationId(context, id)
+      )
+    )
 
     const appointmentType = appointmentTypes?.find((type) => type.code === appointment.appointmentTypeCode)
 
@@ -65,9 +75,13 @@ export default ({
     const prepostData = {}
 
     const createLocationAndTimeString = (appt) =>
-      `${locationTypes.find((loc) => Number(loc.locationId) === Number(appt.locationId)).userDescription} - ${getTime(
-        appt.startTime
-      )} to ${getTime(appt.endTime)}`
+      `${
+        appointmentLocations.find(
+          (loc) =>
+            locationMappings.find((lm) => lm.dpsLocationId === loc.locationId)?.nomisLocationId ===
+            Number(appt.locationId)
+        ).userDescription
+      } - ${getTime(appt.startTime)} to ${getTime(appt.endTime)}`
 
     let vlb
     let locationType
@@ -83,9 +97,7 @@ export default ({
 
       locationType = await locationsInsidePrisonApi
         .getLocationByKey(systemContext, mainAppointment.prisonLocKey)
-        .then((l) => nomisMapping.getNomisLocationMappingByDpsLocationId(systemContext, l.id))
-        .then((mapping) => mapping.nomisLocationId)
-        .then((id) => locationTypes.find((loc) => Number(loc.locationId) === Number(id)))
+        .then((l) => appointmentLocations.find((loc) => loc.locationId === l.id))
 
       if (preAppointment) {
         const locationId = await locationsInsidePrisonApi
@@ -113,7 +125,11 @@ export default ({
         })
       }
     } else {
-      locationType = locationTypes?.find((loc) => Number(loc.locationId) === Number(appointment.locationId))
+      locationType = appointmentLocations?.find(
+        (loc) =>
+          locationMappings.find((lm) => lm.dpsLocationId === loc.locationId)?.nomisLocationId ===
+          Number(appointment.locationId)
+      )
     }
 
     const getAddedBy = () => {

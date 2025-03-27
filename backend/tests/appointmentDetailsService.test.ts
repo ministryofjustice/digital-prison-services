@@ -67,22 +67,23 @@ describe('appointment details', () => {
     locationsInsidePrisonApi.getLocationByKey.mockImplementation((_, id) =>
       Promise.resolve(
         {
-          ROOM2: { id: 'abc-123' },
+          ROOM2: { id: 'cba-222' },
           ROOM3: { id: 'zyx-321' },
         }[id]
       )
     )
-    locationsInsidePrisonApi.getLocations = jest.fn().mockResolvedValue([
-      { key: 'ROOM1', localName: 'VCC Room 1', id: '1' },
-      { key: 'ROOM2', localName: 'Gymnasium', id: '2' },
-      { key: 'ROOM3', localName: 'VCC Room 2', id: '3' },
+    locationsInsidePrisonApi.getLocationsByNonResidentialUsageType = jest.fn().mockResolvedValue([
+      { key: 'ROOM1', localName: 'VCC Room 1', id: 'abc-123' },
+      { key: 'ROOM2', localName: 'Gymnasium', id: 'cba-222' },
+      { key: 'ROOM3', localName: 'VCC Room 2', id: 'zyx-321' },
     ])
 
     nomisMapping.getNomisLocationMappingByDpsLocationId.mockImplementation((_, id) =>
       Promise.resolve(
         {
-          'abc-123': { nomisLocationId: 2 },
-          'zyx-321': { nomisLocationId: 3 },
+          'abc-123': { nomisLocationId: 1, dpsLocationId: 'abc-123' },
+          'cba-222': { nomisLocationId: 2, dpsLocationId: 'cba-222' },
+          'zyx-321': { nomisLocationId: 3, dpsLocationId: 'zyx-321' },
         }[id]
       )
     )
@@ -107,7 +108,7 @@ describe('appointment details', () => {
 
       expect(prisonApi.getAppointmentTypes).toHaveBeenCalledWith(res.locals)
       expect(prisonApi.getStaffDetails).toHaveBeenCalledWith(res.locals, 'TEST_USER')
-      expect(locationsInsidePrisonApi.getLocations).toHaveBeenCalledWith(
+      expect(locationsInsidePrisonApi.getLocationsByNonResidentialUsageType).toHaveBeenCalledWith(
         context,
         'MDI',
         NonResidentialUsageType.APPOINTMENT

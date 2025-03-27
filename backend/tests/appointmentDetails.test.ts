@@ -68,14 +68,19 @@ describe('appointment details', () => {
     locationsInsidePrisonApi.getLocationByKey = jest.fn(
       async (_, key) => ({ LOCATION_1: { id: 'abc-1' }, LOCATION_3: { id: 'abc-3' } }[key])
     )
-    locationsInsidePrisonApi.getLocations = jest.fn().mockResolvedValue([
-      { localName: 'VCC Room 1', id: '1' },
-      { localName: 'Gymnasium', id: '2' },
-      { localName: 'VCC Room 2', id: '3' },
+    locationsInsidePrisonApi.getLocationsByNonResidentialUsageType = jest.fn().mockResolvedValue([
+      { localName: 'VCC Room 1', id: 'abc-1' },
+      { localName: 'Gymnasium', id: 'abc-2' },
+      { localName: 'VCC Room 2', id: 'abc-3' },
     ])
 
     nomisMapping.getNomisLocationMappingByDpsLocationId = jest.fn(
-      async (_, id) => ({ 'abc-1': { nomisLocationId: 1 }, 'abc-3': { nomisLocationId: 3 } }[id])
+      async (_, id) =>
+        ({
+          'abc-1': { nomisLocationId: 1, dpsLocationId: 'abc-1' },
+          'abc-2': { nomisLocationId: 2, dpsLocationId: 'abc-2' },
+          'abc-3': { nomisLocationId: 3, dpsLocationId: 'abc-3' },
+        }[id])
     )
 
     videoLinkBookingService.bookingIsAmendable = jest.fn(() => true)
@@ -105,7 +110,7 @@ describe('appointment details', () => {
       expect(oauthApi.userRoles).toHaveBeenCalledWith(res.locals)
       expect(whereaboutsApi.getAppointment).toHaveBeenCalledWith(res.locals, 1)
       expect(prisonApi.getDetails).toHaveBeenCalledWith(res.locals, 'ABC123')
-      expect(locationsInsidePrisonApi.getLocations).toHaveBeenCalledWith(
+      expect(locationsInsidePrisonApi.getLocationsByNonResidentialUsageType).toHaveBeenCalledWith(
         context,
         'MDI',
         NonResidentialUsageType.APPOINTMENT

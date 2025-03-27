@@ -69,9 +69,13 @@ export default ({
       ? await getAgencyGroupLocationPrefix(systemContext, locationsInsidePrisonApi, residentialLocation, agencyId)
       : agencyId
 
-    const [appointmentTypes, appointmentLocations, appointments, residentialLocations] = await Promise.all([
+    const [appointmentTypes, appointmentLocationsUnmapped, appointments, residentialLocations] = await Promise.all([
       prisonApi.getAppointmentTypes(res.locals),
-      locationsInsidePrisonApi.getLocations(systemContext, agencyId, NonResidentialUsageType.APPOINTMENT),
+      locationsInsidePrisonApi.getLocationsByNonResidentialUsageType(
+        systemContext,
+        agencyId,
+        NonResidentialUsageType.APPOINTMENT
+      ),
       whereaboutsApi.getAppointments(systemContext, agencyId, {
         date: searchDate,
         timeSlot: timeSlot !== 'All' ? timeSlot : undefined,
@@ -80,13 +84,17 @@ export default ({
       }),
       locationsInsidePrisonApi.getSearchGroups(systemContext, agencyId),
     ])
+    const appointmentLocations = appointmentLocationsUnmapped.map(mapLocationApiResponse)
 
     const videoLinkAppointments = await bookAVideoLinkApi.getPrisonSchedule(systemContext, agencyId, searchDate)
 
     const locationMappings = await Promise.all(
-      [...new Set(videoLinkAppointments.map((vlb) => vlb.dpsLocationId))].map((id) =>
-        nomisMapping.getNomisLocationMappingByDpsLocationId(systemContext, id)
-      )
+      [
+        ...new Set([
+          ...videoLinkAppointments.map((vlb) => vlb.dpsLocationId),
+          ...appointmentLocations.map((l) => l.locationId),
+        ]),
+      ].map((id) => nomisMapping.getNomisLocationMappingByDpsLocationId(systemContext, id))
     )
 
     const vlbAppointmentMappings = videoLinkAppointments
@@ -179,9 +187,9 @@ export default ({
       value: appointmentType.code,
     }))
 
-    const locations = appointmentLocations.map(mapLocationApiResponse).map((appointmentLocation) => ({
+    const locations = appointmentLocations.map((appointmentLocation) => ({
       text: appointmentLocation.userDescription,
-      value: appointmentLocation.locationId,
+      value: locationMappings.find((m) => m.dpsLocationId === appointmentLocation.locationId)?.nomisLocationId,
     }))
 
     return res.render('viewAppointments.njk', {

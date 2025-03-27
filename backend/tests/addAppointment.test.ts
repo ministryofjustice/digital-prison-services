@@ -10,6 +10,8 @@ describe('Add appointment', () => {
   const whereaboutsApi = {} as any
   const offenderNo = 'ABC123'
   const bookingId = 123
+  const context = { _type: 'context' }
+  const systemOauthClient = { getClientCredentialsTokens: () => context }
 
   let req
   let res
@@ -47,7 +49,14 @@ describe('Add appointment', () => {
 
     whereaboutsApi.createAppointment = jest.fn()
 
-    controller = addAppointmentFactory(appointmentsService, existingEventsService, prisonApi, whereaboutsApi, logError)
+    controller = addAppointmentFactory(
+      appointmentsService,
+      systemOauthClient,
+      existingEventsService,
+      prisonApi,
+      whereaboutsApi,
+      logError
+    )
   })
 
   describe('index', () => {
@@ -66,7 +75,7 @@ describe('Add appointment', () => {
         await controller.index(req, res)
 
         expect(prisonApi.getDetails).toHaveBeenCalledWith(res.locals, offenderNo)
-        expect(appointmentsService.getAppointmentOptions).toHaveBeenCalledWith(res.locals, 'MDI')
+        expect(appointmentsService.getAppointmentOptions).toHaveBeenCalledWith(res.locals, context, 'MDI')
         expect(res.render).toHaveBeenCalledWith('addAppointment/addAppointment.njk', {
           bookingId,
           offenderNo,

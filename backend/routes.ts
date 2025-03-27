@@ -239,7 +239,14 @@ const setup = ({
   router.use(
     '/bulk-appointments/add-appointment-details',
     isAppointmentsRolledOut,
-    bulkAppointmentsAddDetailsRouter({ prisonApi, locationsInsidePrisonApi, oauthApi, logError })
+    bulkAppointmentsAddDetailsRouter({
+      prisonApi,
+      locationsInsidePrisonApi,
+      nomisMapping,
+      systemOauthClient,
+      oauthApi,
+      logError,
+    })
   )
   router.use(
     '/bulk-appointments/appointments-added',
@@ -301,7 +308,7 @@ const setup = ({
   router.use(
     '/offenders/:offenderNo/confirm-appointment',
     isAppointmentsRolledOut,
-    confirmAppointmentRouter({ prisonApi, locationsInsidePrisonApi, logError })
+    confirmAppointmentRouter({ prisonApi, locationsInsidePrisonApi, systemOauthClient, logError })
   )
 
   router.use(
