@@ -161,9 +161,12 @@ export default ({
       prepostData,
       recurringDetails,
       timeDetails,
-      canAmendVlb: vlb
+      canAmendAppointment: vlb
         ? videoLinkBookingService.bookingIsAmendable(fetchVlbAppointments(vlb), vlb.statusCode)
-        : !app.bvlsMasteredAppointmentTypes.includes(appointment.appointmentTypeCode),
+        : false,
+      canDeleteAppointment: vlb
+        ? videoLinkBookingService.bookingIsAmendable(fetchVlbAppointments(vlb), vlb.statusCode)
+        : true,
     }
   }
 
